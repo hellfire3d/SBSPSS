@@ -30,7 +30,6 @@ BOOL	Test3dFlag=TRUE;
 /*****************************************************************************/
 CCore::CCore()
 {
-	MouseMode=MOUSE_MODE_NONE;
 	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
 	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
 	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
@@ -51,14 +50,13 @@ int	i;
 void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
-	ActiveLayer=0;
+	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
 	UpdateView();
-
+	RenderFlag=TRUE;
 
 	TileSet.push_back(CTileSet("c:/temp/3/test.gin",this));
-	TRACE1("%i\n",TileSet.size());
 }
 
 /*****************************************************************************/
@@ -68,21 +66,26 @@ void	CCore::Render()
 {
 Vec		&ThisCam=GetCam();
 
-		if (GetTileView())
+		if (RenderFlag)
 		{
-
-		}
-		else
-		{
-			for (int i=0;i<LAYER_TYPE_MAX;i++)
+			RenderFlag=FALSE;
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			if (GetTileView())
 			{
-				if (i==LAYER_TYPE_ACTION)
-					glEnable(GL_DEPTH_TEST);
-
-				Layers[i]->Render(ThisCam,Test3dFlag);
-				glDisable(GL_DEPTH_TEST);
+	
 			}
+			else
+			{
+				for (int i=0;i<LAYER_TYPE_MAX;i++)
+				{
+					Layers[i]->Render(ThisCam,Test3dFlag);
+				}
+			}
+		Layers[ActiveLayer]->RenderGrid(ThisCam);
 		}
+// Calc CursorPos
+		Layers[ActiveLayer]->FindCursorPos(ThisCam,CurrentMousePos);
+
 }
 
 
@@ -117,8 +120,7 @@ void	CCore::MouseWheel(UINT nFlags, short zDelta, CPoint &pt)
 void	CCore::MouseMove(UINT nFlags, CPoint &point) 
 {
 Vec		Ofs(0,0,0);
-//float	XOfs=0;
-//float	YOfs=0;
+
 Vec		&ThisCam=GetCam();
 // check if active doc
 		if (theApp.GetCurrent()!=ParentWindow->GetDocument()) return;
@@ -132,8 +134,8 @@ Vec		&ThisCam=GetCam();
 			RECT	ThisRect;
 
 			ParentWindow->GetWindowRect(&ThisRect);
-			XS=ThisCam.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
-			YS=ThisCam.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			XS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
+			YS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
@@ -144,10 +146,10 @@ Vec		&ThisCam=GetCam();
 			Ofs.x*=XS;
 			Ofs.y*=YS;
 
-			TRACE2("Move %i %i \n",point.x,point.y);
 			UpdateView(Ofs);
 			}
-
+// Mouse has moved, so need to redraw windows, to get CursorPos (And pos render)
+		ParentWindow->Invalidate();
 
 }
 
@@ -176,7 +178,6 @@ CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 
 		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerViewFlag);
 		Frm->ShowControlBar(LayerBar, LayerViewFlag, FALSE);	
-//		UpdateView();
 }
 
 /*****************************************************************************/
@@ -202,7 +203,6 @@ CToolBar	*ToolBar=Frm->GetToolBar();
 /*****************************************************************************/
 GLint	CCore::GetTile(int Bank,int TileNo)
 {
-	TRACE1("%i\n",TileSet.size());
 	return(TileSet[Bank].GetTile(TileNo));
 }
 /*****************************************************************************/
@@ -226,15 +226,20 @@ void	CCore::UpdateAll()
 }
 
 /*****************************************************************************/
+void	CCore::Redraw(BOOL f)
+{
+	RenderFlag=f;
+	if (RenderFlag)
+		ParentWindow->Invalidate();
+}
+
+/*****************************************************************************/
 void	CCore::UpdateView(Vec Ofs)
 {
 Vec		&ThisCam=GetCam();
 
-		ThisCam=ThisCam+Ofs;
+		Ofs.y=-Ofs.y;
+		ThisCam+=Ofs;
 		if (ThisCam.z>-1) ThisCam.z=-1;
-
-		ParentWindow->Invalidate();
-}
-
-	
-
+		Redraw();
+}		

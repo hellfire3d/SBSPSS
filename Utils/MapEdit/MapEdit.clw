@@ -20,10 +20,10 @@ Class8=CMapEditView
 
 ResourceCount=6
 Resource1=IDR_MAPEDITYPE (English (U.S.))
-Resource2=IDR_MAINFRAME (English (U.S.))
+Resource2=IDD_LAYERBAR (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDD_LAYERBAR (English (U.S.))
-Resource5=IDD_ABOUTBOX (English (U.S.))
+Resource4=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDR_MAINFRAME (English (U.S.))
 Class9=CTileWindow
 Resource6=IDD_TILEBAR (English (U.S.))
 

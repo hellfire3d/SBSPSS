@@ -16,6 +16,7 @@
 #define IDC_TILETOOLBAR_COMBO           1013
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
+#define ID_INDICATOR_CURSORXY           59142
 
 // Next default values for new objects
 // 

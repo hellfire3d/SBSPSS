@@ -9,6 +9,13 @@
 #include	"gl3d.h"
 #include	"Map.h"
 
+/*****************************************************************************/
+enum	LAYER_ENUMS
+{
+SELECT_BUFFER_SIZE=16,
+};
+
+/*****************************************************************************/
 enum LAYER_TYPE
 {
 	LAYER_TYPE_BACK=0,
@@ -19,14 +26,6 @@ enum LAYER_TYPE
 	LAYER_TYPE_MAX
 };
 
-/*
-struct	sMapElem
-{
-	int		Bank;
-	int		Tile;
-	int		Flags;
-};
-*/
 
 /*****************************************************************************/
 class	CCore;
@@ -46,19 +45,16 @@ virtual	char			*GetName()=0;
 virtual	void			Render(Vec &MapPos,BOOL Is3d);
 virtual	void			Render2d(Vec &MapPos);
 virtual	void			Render3d(Vec &MapPos);
+virtual	void			RenderGrid(Vec &MapPos);
 
 virtual	float			GetLayerZPosDiv()=0;
 virtual	BOOL			CanRender3d()=0;
-virtual	void			SetTestColor()=0;
 
-// Control
-
+virtual	void			FindCursorPos(Vec &MapPos,CPoint &MousePos);
 
 protected:
-//		float			Width,Height;
+
 		CCore			*Core;
-//		std::vector< std::vector<sMapElem> > Map;
-//		sMapElem		*Map;
 		CMap			Map;
 
 };

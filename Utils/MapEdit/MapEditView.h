@@ -21,6 +21,8 @@ public:
 	CMapEditDoc* GetDocument();
 	void		OnCreateGL();
 	void		OnDrawGL();
+	void		OnSizeGL(int cx, int cy);
+	void		SetupPersMatrix();
 
 // Operations
 public:
@@ -57,6 +59,7 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnToolbarLayerbar();
 	afx_msg void OnToolbarTilepalette();
+	afx_msg void OnStatusCursorXY(CCmdUI *pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -55,17 +55,8 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 			CTile	NewTile;
 			NewTile.Load(Core,this,Scene,ThisNode.PruneChildList[Child]);
 			Tile.push_back(NewTile);
-//			AddTileToSet(Scene,ThisNode.PruneChildList[Child]);
 		}
 
-/*
-std::vector<GString> const &Tex=Scene.GetTexNames();
-	
-	for (i=0;i<Tex.size();i++)
-	{
-		TRACE1("%s\n",Tex[i]);
-	}
-*/
 
 	return(1);
 }

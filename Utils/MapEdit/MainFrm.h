@@ -21,6 +21,7 @@ public:
 	CToolBar	*GetToolBar()	{return(&m_wndToolBar);}
 	CDialogBar	*GetLayerBar()	{return(&m_wndLayerBar);}
 	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
+	CStatusBar	*GetStatusBar()	{return(&m_wndStatusBar);}
 // Operations
 public:
 
@@ -50,6 +51,13 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+};
+
+enum	STATUS_BAR_ENUM
+{
+STATUS_BAR_SEP=0,
+STATUS_BAR_XPOS,
+STATUS_BAR_YPOS,
 };
 
 /////////////////////////////////////////////////////////////////////////////

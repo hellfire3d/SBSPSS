@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TOOLBAR_LAYERBAR, OnToolbarLayerbar)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToolbarTilepalette)
+	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CURSORXY, OnStatusCursorXY)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -80,10 +81,33 @@ void CMapEditView::OnCreateGL()
 
 }
 
+
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnDrawGL()
 {
 		Core.Render();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void CMapEditView::OnSizeGL(int cx, int cy)
+{
+		glViewport(0,0,cx,cy);
+// update the camera
+ 		glPushMatrix();
+			glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				SetupPersMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		Core.Redraw();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void CMapEditView::SetupPersMatrix()
+{
+		gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
+		glTranslatef(0.0f,0.0f,-4.f);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -127,6 +151,17 @@ void CMapEditView::UpdateAll()
 }
 
 /*********************************************************************************/
+void CMapEditView::OnStatusCursorXY(CCmdUI *pCmdUI)
+{
+CPoint	&XY=Core.GetCursorPos();
+CString XYStr;
+		pCmdUI->Enable();
+		if (XY.x!=-1 && XY.y!=-1)
+			XYStr.Format( "%d\t%d", XY.x,XY.y);
+		pCmdUI->SetText(XYStr); 
+}
+
+/*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
 void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{Core.LButtonControl(nFlags,point,TRUE);}
@@ -140,3 +175,5 @@ void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFl
 
 void CMapEditView::OnToolbarLayerbar()									{Core.ToggleLayerView();}
 void CMapEditView::OnToolbarTilepalette()								{Core.ToggleTileView();}
+
+

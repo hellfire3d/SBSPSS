@@ -21,12 +21,14 @@ public:
 		CMap(){};
 		~CMap(){};
 
-		int		GetWidth();
-		int		GetHeight();
+		int			GetWidth();
+		int			GetHeight();
 
-		void	SetSize(int Width,int Height);
-		void	SetWidth(int Width);
-		void	SetHeight(int Height);
+		void		SetSize(int Width,int Height);
+		void		SetWidth(int Width);
+		void		SetHeight(int Height);
+
+		sMapElem	&GetTile(int X,int Y)	{return(Map[X][Y]);}
 
 protected:
 		std::vector< std::vector<sMapElem> > Map;

@@ -14,16 +14,6 @@
 #include	"TileSet.h"
 
 
-/*****************************************************************************/
-enum MOUSE_MODE
-{
-	MOUSE_MODE_NONE=0,
-	MOUSE_MODE_LMB_EDIT,
-	MOUSE_MODE_MMB_EDIT,
-	MOUSE_MODE_RMB_EDIT,
-	
-};
-
 
 /*****************************************************************************/
 class	CMapEditView;
@@ -67,12 +57,15 @@ public:
 		void				UpdateView(Vec Ofs=Vec(0,0,0));
 
 		Vec					&GetCam();
-
+		void				SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
+		CPoint				&GetCursorPos()					{return(CursorPos);}
+		CMapEditView		*GetParentWindow()				{return(ParentWindow);}
+		void				Redraw(BOOL f=TRUE);
 
 private:
 		CMapEditView			*ParentWindow;	
-		MOUSE_MODE				MouseMode;
 		CPoint					CurrentMousePos,LastMousePos;
+		CPoint					CursorPos,LastCursorPos;
 		Vec						MapCam,TileCam;
 
 		CLayer					*Layers[LAYER_TYPE_MAX];
@@ -81,6 +74,7 @@ private:
 		std::vector<CTileSet>	TileSet;
 		CTexCache				TexCache;
 
+		BOOL					RenderFlag;
 		BOOL					TileViewFlag;
 		BOOL					LayerViewFlag;
 

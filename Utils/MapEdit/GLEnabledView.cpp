@@ -216,7 +216,7 @@ void CGLEnabledView::OnDraw(CDC* pDC)
 	wglMakeCurrent(m_pCDC->GetSafeHdc(), m_hRC);
 
 // clear background
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 // call the virtual drawing procedure (to be overridden by user)
 	OnDrawGL();
