@@ -36,7 +36,17 @@
 
 void CNpcBranchPlatform::postInit()
 {
-	CNpcPlatform::postInit();
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, 50 + ( boundingBox.YMax - boundingBox.YMin ) );
+
+	if ( m_reversed )
+	{
+		setCollisionCentreOffset( boundingBox.XMax, 18 + ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) );
+	}
+	else
+	{
+		setCollisionCentreOffset( boundingBox.XMin, 18 + ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) );
+	}
 
 	m_angularVelocity = 0;
 }
@@ -299,4 +309,28 @@ void CNpcBranchPlatform::render()
 			}
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBranchPlatform::calculateBoundingBoxSize()
+{
+	int		angle;
+	DVECTOR	centre;
+	int		length;
+	int		x1,y1,x2,y2;
+
+	angle=getCollisionAngle();
+	centre=getCollisionCentre();
+
+	//halfLength=m_platformWidth/2;
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	length = ( boundingBox.XMax - boundingBox.XMin );
+
+	x1=-length*mcos(angle&4095)>>12;
+	y1=-length*msin(angle&4095)>>12;
+	x2=+length*mcos(angle&4095)>>12;
+	y2=+length*msin(angle&4095)>>12;
+
+	setCollisionSize(abs(x2-x1),50 + abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
 }

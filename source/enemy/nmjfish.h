@@ -24,6 +24,7 @@ protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
 	void				spawnJellyfish( int _frames );
+	virtual void		processUserCollision( CThing *thisThing );
 
 	enum NPC_MOTHER_JELLYFISH_STATE
 	{

@@ -874,12 +874,15 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 									m_oldControlFunc = m_controlFunc;
 									m_controlFunc = NPC_CONTROL_COLLISION;
 
+									processUserCollision( _thisThing );
+
 									break;
 								}
 
 								case DETECT_ATTACK_COLLISION_GENERIC:
 								{
 									processAttackCollision();
+									processUserCollision( _thisThing );
 
 									break;
 								}
@@ -1417,6 +1420,46 @@ int CNpcEnemy::canCollide()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcEnemy::processEnemyCollision( CThing *thisThing )
+{
+	DVECTOR otherPos = thisThing->getPos();
+	DVECTOR otherDelta = thisThing->getPosDelta();
+
+	s32 xDist = Pos.vx - otherPos.vx;
+	s32 yDist = Pos.vy - otherPos.vy;
+
+	s16 headingFromTarget = ratan2( yDist, xDist );
+
+	if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
+	{
+		otherDelta.vx = -otherDelta.vx;
+	}
+
+	if ( ( yDist > 0 && otherDelta.vy < 0 ) || ( yDist < 0 && otherDelta.vy > 0 ) )
+	{
+		otherDelta.vy = -otherDelta.vy;
+	}
+
+	Pos.vx += otherDelta.vx;
+	Pos.vy += otherDelta.vy;
+
+	m_heading = headingFromTarget;
+
+	s32 waypointXDist;
+	s32 waypointYDist;
+
+	m_npcPath.getDistToNextWaypoint( Pos, &waypointXDist, &waypointYDist );
+
+	if ( ( xDist > 0 && waypointXDist < 0 ) || ( xDist < 0 && waypointXDist > 0 ) )
+	{
+		// try next waypoint to get around other enemy
+
+		m_npcPath.incPath();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processUserCollision( CThing *thisThing )
 {
 	DVECTOR otherPos = thisThing->getPos();
 	DVECTOR otherDelta = thisThing->getPosDelta();

@@ -249,6 +249,7 @@ protected:
 	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 	virtual void		processEnemyCollision( CThing *thisThing );
+	virtual void		processUserCollision( CThing *thisThing );
 
 	void				reinit();
 

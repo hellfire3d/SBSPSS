@@ -218,7 +218,7 @@ protected:
 
 protected:
 	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
-	void			calculateBoundingBoxSize();
+	virtual void	calculateBoundingBoxSize();
 
 
 };

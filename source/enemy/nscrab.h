@@ -32,10 +32,18 @@ protected:
 	virtual void		processMovement( int _frames );
 	void				processSpiderCrabInitJumpMovement( int _frames );
 
+	s32					m_attackDist;
+
 	enum NPC_SPIDER_CRAB_STATE
 	{
 		SPIDER_CRAB_DEFAULT = 0,
 		SPIDER_CRAB_INIT_JUMP = 1,
+	};
+
+	enum NPC_SPIDER_CRAB_CONSTANTS
+	{
+		SPIDER_CRAB_EXTENSION = 64,
+		SPIDER_CRAB_HEIGHT = 50,
 	};
 };
 

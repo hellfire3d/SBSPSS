@@ -47,7 +47,7 @@ bool CNpcHermitCrabEnemy::processSensor()
 
 		default:
 		{
-			if ( playerXDistSqr + playerYDistSqr < 400 )
+			if ( playerXDistSqr + playerYDistSqr < 4000 )
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 

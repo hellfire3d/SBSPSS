@@ -28,6 +28,7 @@ protected:
 	virtual void		processMovement( int _frames );
 
 	virtual void		collidedWith(CThing *_thisThing);
+	virtual void		calculateBoundingBoxSize();
 
 	s32					m_angularVelocity;
 	u8					m_reversed;

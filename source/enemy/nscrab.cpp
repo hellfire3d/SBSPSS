@@ -59,7 +59,7 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 		default:
 		{
-			if ( playerXDistSqr + playerYDistSqr < 10000 )
+			if ( abs( playerXDist ) < 64 )
 			{
 				// only attack if within path extents
 
@@ -70,7 +70,7 @@ bool CNpcSpiderCrabEnemy::processSensor()
 				{
 					m_extendDir = EXTEND_LEFT;
 
-					if ( ( Pos.vx + playerXDist - 128 ) < minX )
+					if ( ( Pos.vx + playerXDist ) < minX )
 					{
 						return( false );
 					}
@@ -79,11 +79,13 @@ bool CNpcSpiderCrabEnemy::processSensor()
 				{
 					m_extendDir = EXTEND_RIGHT;
 
-					if ( ( Pos.vx + playerXDist + 128 ) > maxX )
+					if ( ( Pos.vx + playerXDist ) > maxX )
 					{
 						return( false );
 					}
 				}
+
+				m_attackDist = abs( playerXDist );
 
 				m_controlFunc = NPC_CONTROL_CLOSE;
 				m_extension = 0;
@@ -129,19 +131,19 @@ void CNpcSpiderCrabEnemy::processClose( int _frames )
 
 	bool completed = false;
 
-	if ( m_extension > 128 )
+	if ( m_extension > m_attackDist )
 	{
-		m_extension = 128;
+		m_extension = m_attackDist;
 		completed = true;
 	}
-	else if ( m_extension < -128 )
+	else if ( m_extension < -m_attackDist )
 	{
-		m_extension = -128;
+		m_extension = -m_attackDist;
 		completed = true;
 	}
 
 	newPos.vx = m_base.vx + m_extension;
-	newPos.vy = m_base.vy - ( ( 20 * rsin( abs( m_extension ) << 4 ) ) >> 12 );
+	newPos.vy = m_base.vy - ( ( SPIDER_CRAB_HEIGHT * rsin( abs( ( m_extension << 11 ) / m_attackDist ) ) ) >> 12 );
 
 	s32 minX, maxX;
 
