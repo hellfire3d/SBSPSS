@@ -51,6 +51,8 @@ private:
 		STATE__CONTINUE,
 		STATE__CONTINUE_TIMED_OUT,
 		STATE__GAME_OVER,
+		STATE__EXITING_TO_GAME,
+		STATE__EXITING_TO_FRONT_END,
 	} GAMEOVER_STATE;
 
 
@@ -60,7 +62,7 @@ private:
 		CONTINUE_STROBE_SPEED=75,
 		CONTINUE_FONT_SCALE=100,
 		CONTINUE_FONT_BASE_SIZE=400,
-		COUNTDOWN_TIME_MODIFIER=2,		// Seconds last this many times longer
+		COUNTDOWN_TIME_SECOND_LENGTH=100,		// Each 'second' on the countdown lasts this long
 	};
 	void	initContinue();
 	void	thinkContinue(int _frames);
@@ -70,9 +72,18 @@ private:
 	int		m_continueTimer;
 
 	// Game over
+	enum
+	{
+		GAMEOVER_FONT_SCALE=511,
+		GAMEOVER_FONT_GROWSPEED=150,
+		GAMEOVER_FONT_GROWSPACING=900,
+		GAMEOVER_FONT_MAXSIN=1500,
+	};
 	void	initGameOver();
 	void	thinkGameOver(int _frames);
 	void	renderGameOver();
+	int		m_gameOverTimer;
+	int		m_finishedGrowingText;
 
 
 	GAMEOVER_STATE			m_state;

@@ -437,8 +437,16 @@ int ScalableFontBank::printChar( char _char,int _x,int _y )
 {
 	if (_char!=' ')
 	{
+		sFrameHdr	*fh;
+		POLY_FT4	*Ft4;
+
 		if( m_fontData->fontTab[_char]==-1 ) _char='X';
-		POLY_FT4 *Ft4=m_spriteBank.printFT4Scaled(m_fontData->fontTab[_char],_x,_y,0,0,m_ot,m_fontScale);
+
+		fh=m_spriteBank.getFrameHeader(m_fontData->fontTab[_char]);
+		_x+=((fh->W*m_fontScale)>>9)-(fh->W/2);
+		_y-=((fh->H*m_fontScale)>>9)-(fh->H/2);
+
+		Ft4=m_spriteBank.printFT4Scaled(fh,_x,_y,0,0,m_ot,m_fontScale);
 		setRGB0(Ft4,m_r,m_g,m_b);
 		setShadeTex(Ft4,0);
 

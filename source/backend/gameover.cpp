@@ -26,6 +26,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 #ifndef	__FRONTEND_FRONTEND_H__
 #include "frontend\frontend.h"
 #endif
@@ -142,6 +146,12 @@ void CGameOverScene::render()
 		case STATE__GAME_OVER:
 			renderGameOver();
 			break;
+		case STATE__EXITING_TO_GAME:
+			renderContinue();
+			break;
+		case STATE__EXITING_TO_FRONT_END:
+			renderGameOver();
+			break;
 	}
 }
 
@@ -154,16 +164,6 @@ void CGameOverScene::render()
   ---------------------------------------------------------------------- */
 void CGameOverScene::think(int _frames)
 {
-	if(!CFader::isFading()&&!m_readyToExit)
-	{
-		if(PadGetDown(0)&PAD_START)
-		{
-			m_readyToExit=true;
-			CFader::setFadingOut(CFader::BLACK_FADE);
-			GameState::setNextScene(&FrontEndScene);
-		}
-	}
-
 	switch(m_state)
 	{
 		case STATE__CONTINUE:
@@ -176,7 +176,13 @@ void CGameOverScene::think(int _frames)
 		case STATE__GAME_OVER:
 			thinkGameOver(_frames);
 			break;
+		case STATE__EXITING_TO_GAME:
+			thinkContinue(_frames);
+			break;
+		case STATE__EXITING_TO_FRONT_END:
+			break;
 	}
+PAUL_DBGMSG("%d",m_state);
 }
 
 
@@ -202,7 +208,7 @@ void	CGameOverScene::initContinue()
 {
 	m_continueFontSin=0;
 	m_continueFontOffset=100<<2;
-	m_continueTimer=10*GameState::getOneSecondInFrames()*COUNTDOWN_TIME_MODIFIER;
+	m_continueTimer=10*COUNTDOWN_TIME_SECOND_LENGTH;
 }
 void	CGameOverScene::thinkContinue(int _frames)
 {
@@ -231,9 +237,17 @@ void	CGameOverScene::thinkContinue(int _frames)
 				// Countdown ( wait for text to stop first )
 				if(m_continueTimer)
 				{
-					if(PadGetDown(0)&PAD_CROSS)
+					int	pad=PadGetDown(0);
+					if(pad&PAD_CROSS)
 					{
-						m_continueTimer-=m_continueTimer%(GameState::getOneSecondInFrames()*COUNTDOWN_TIME_MODIFIER);
+						m_continueTimer-=m_continueTimer%COUNTDOWN_TIME_SECOND_LENGTH;
+					}
+					else if(pad&PAD_START)
+					{
+						m_readyToExit=true;
+						CFader::setFadingOut(CFader::BLACK_FADE);
+						GameState::setNextScene(&GameScene);
+						m_state=STATE__EXITING_TO_GAME;
 					}
 					else
 					{
@@ -249,22 +263,24 @@ void	CGameOverScene::thinkContinue(int _frames)
 			}
 		}
 	}
-	else if(m_state==STATE__CONTINUE_TIMED_OUT)
+	else if(m_state==STATE__CONTINUE_TIMED_OUT||STATE__EXITING_TO_GAME)
 	{
 		// Slide text back off the screen
-		m_continueFontOffset=m_continueFontOffset-(100<<2);
+		m_continueFontOffset=(100<<2)-m_continueFontOffset;
 		move=m_continueFontOffset/10;
 		if(move==0)
 		{
 			move=1;
 		}
 		m_continueFontOffset-=move;
-		if(m_continueFontOffset>(100<<2))
+		if(m_continueFontOffset<0)
 		{
-			m_continueFontOffset=0;
-			m_state=STATE__GAME_OVER;
+			if(m_state==STATE__CONTINUE_TIMED_OUT)
+			{
+				m_state=STATE__GAME_OVER;
+			}
 		}
-		m_continueFontOffset=m_continueFontOffset+(100<<2);
+		m_continueFontOffset=(100<<2)-m_continueFontOffset;
 	}
 
 	// Change the text size
@@ -272,22 +288,22 @@ void	CGameOverScene::thinkContinue(int _frames)
 }
 void	CGameOverScene::renderContinue()
 {
-	if(!CFader::isFading())
-	{
 		int		yOfs;
 		char	buf[100];
 
-		m_font->setColour(255,255,255);
+		m_font->setColour(242/2,245/2,15/2);
 		yOfs=m_continueFontOffset>>2;
 
 		sprintf(buf,TranslationDatabase::getString(STR__BACKEND__CONTINUE));
 		m_font->setScale(((msin(m_continueFontSin)*CONTINUE_FONT_SCALE)>>12)+CONTINUE_FONT_BASE_SIZE);
 		m_font->print(256,50-m_font->getStringHeight(buf)-yOfs,buf);
 
-		sprintf(buf,"%d",m_continueTimer/(GameState::getOneSecondInFrames()*COUNTDOWN_TIME_MODIFIER));
+		sprintf(buf,"%d",m_continueTimer/COUNTDOWN_TIME_SECOND_LENGTH);
 		m_font->setScale(CONTINUE_FONT_SCALE+CONTINUE_FONT_BASE_SIZE);
 		m_font->print(256,80-m_font->getStringHeight(buf)-yOfs,buf);
 
+	if(!CFader::isFading())
+	{
 		if(m_continueFontSin>512&m_state==STATE__CONTINUE)
 		{
 			sprintf(buf,TranslationDatabase::getString(STR__BACKEND__PRESS_START));
@@ -306,32 +322,67 @@ void	CGameOverScene::renderContinue()
   ---------------------------------------------------------------------- */
 void	CGameOverScene::initGameOver()
 {
+	m_gameOverTimer=0;
+	m_finishedGrowingText=false;
 }
 void	CGameOverScene::thinkGameOver(int _frames)
 {
+	if(!m_finishedGrowingText)
+	{
+		m_gameOverTimer+=_frames;
+	}
+	else
+	{
+		if(!CFader::isFading()&&!m_readyToExit&&
+		   PadGetDown(0)&(PAD_START|PAD_CROSS))
+		{
+			m_readyToExit=true;
+			CFader::setFadingOut(CFader::BLACK_FADE);
+			GameState::setNextScene(&FrontEndScene);
+			m_state=STATE__EXITING_TO_FRONT_END;
+		}
+	}
 }
-int bigscale=510;
 void	CGameOverScene::renderGameOver()
 {
 	char	buf[100],*bufPtr;
 	char	letter[]=" \0";
 	int		i,len,step,x;
 
-	m_font->setColour(255,255,255);
+	m_font->setColour(80/2,143/2,248/2);
 
-	sprintf(buf,"PARTIE TERMINEE");//TranslationDatabase::getString(STR__BACKEND__GAME_OVER));
-	m_font->setScale(bigscale);
+	sprintf(buf,TranslationDatabase::getString(STR__BACKEND__GAME_OVER));
 
 	bufPtr=buf;
 	len=strlen(buf);
 	step=(400<<2)/len;
-	x=256-(((len*step)/2)>>2);
+	x=(256<<2)-(((len-1)*step)/2);
+
 	for(i=0;i<strlen(buf);i++)
 	{
-		letter[0]=*bufPtr++;
-		m_font->print(x-(m_font->getStringWidth(letter)/2),100,letter);
-		DrawLine(x,20,x,236,255,255,255,0);
-		x+=step>>2;
+		int	sin,scale;
+
+		sin=(m_gameOverTimer*GAMEOVER_FONT_GROWSPEED)-(i*GAMEOVER_FONT_GROWSPACING);
+		if(sin>0)
+		{
+			if(sin>GAMEOVER_FONT_MAXSIN)
+			{
+				sin=GAMEOVER_FONT_MAXSIN;
+				if(i==strlen(buf)-1)
+				{
+					m_finishedGrowingText=true;
+				}
+			}
+			scale=(msin(sin)*GAMEOVER_FONT_SCALE)>>12;
+			if(scale>50)
+			{
+				m_font->setScale(scale);
+				letter[0]=*bufPtr;
+				m_font->print(x>>2,100,letter);
+			}
+		}
+		bufPtr++;
+		x+=step;
 	}
 }
 
