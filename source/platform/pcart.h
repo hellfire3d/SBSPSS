@@ -34,6 +34,9 @@ protected:
 	u8					m_inJump;
 	s32					m_vertSpeed;
 	u8					m_playerAttached;
+	u8					m_rebound;
+
+	s32					m_reboundTimer;
 };
 
 #endif

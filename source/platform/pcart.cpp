@@ -45,6 +45,8 @@ void CNpcCartPlatform::postInit()
 	calculateNonRotatedCollisionData();
 
 	m_playerAttached = false;
+	m_rebound = false;
+	m_reboundTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,11 @@ void CNpcCartPlatform::processMovement( int _frames )
 	s32 moveY = 0;
 
 	bool pathComplete;
+
+	if ( m_reboundTimer > 0 )
+	{
+		m_reboundTimer -= _frames;
+	}
 
 	if ( !m_playerAttached )
 	{
@@ -76,20 +83,10 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	if ( m_isActivated )
 	{
-		m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
-
-		if ( !pathComplete )
+		if ( m_rebound )
 		{
-			moveX = ( m_carSpeed >> 8 ) * _frames;
+			moveX = -4 * _frames;
 
-			if ( heading == 2048 )
-			{
-				moveX = -moveX;
-			}
-		}
-
-		if ( m_inJump )
-		{
 			m_vertSpeed += 192;
 
 			if ( m_vertSpeed > ( 5 << 8 ) )
@@ -103,59 +100,102 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 			moveY = ( m_vertSpeed >> 8 ) * _frames;
 
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy + moveY, 16 );
 
 			if ( groundHeight < 0 )
 			{
 				// have touched down
 
-				m_inJump = false;
+				m_rebound = false;
 				moveY += groundHeight;
 			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
 		}
 		else
 		{
-			// check for vertical movement
+			m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
 
-			s32 checkDist = yMovement + 50;
-
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
-
-			if ( groundHeight < checkDist )
+			if ( !pathComplete )
 			{
-				// groundHeight <= yMovement indicates either just above ground or on or below ground
+				moveX = ( m_carSpeed >> 8 ) * _frames;
 
-				moveY = groundHeight;
+				if ( heading == 2048 )
+				{
+					moveX = -moveX;
+				}
+			}
+
+			if ( m_inJump )
+			{
+				m_vertSpeed += 192;
+
+				if ( m_vertSpeed > ( 5 << 8 ) )
+				{
+					m_vertSpeed = 5 << 8;
+				}
+				else if ( m_vertSpeed < -( 6 << 8 ) )
+				{
+					m_vertSpeed = -( 6 << 8 );
+				}
+
+				moveY = ( m_vertSpeed >> 8 ) * _frames;
+
+				groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy + moveY, 16 );
+
+				if ( groundHeight < 0 )
+				{
+					// have touched down
+
+					m_inJump = false;
+					moveY += groundHeight;
+				}
 			}
 			else
 			{
-				// fall
+				// check for vertical movement
 
-				moveY = yMovement;
-			}
+				s32 checkDist = yMovement + 50;
 
-			if ( moveY < 0 )
-			{
-				m_carSpeed -= 1;
+				groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy, checkDist );
 
-				if ( m_carSpeed < ( 2 << 8 ) )
+				if ( groundHeight < checkDist )
 				{
-					m_carSpeed = ( 2 << 8 );
+					// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+					moveY = groundHeight;
+				}
+				else
+				{
+					// fall
+
+					moveY = yMovement;
+				}
+
+				if ( moveY < 0 )
+				{
+					m_carSpeed -= 1;
+
+					if ( m_carSpeed < ( 2 << 8 ) )
+					{
+						m_carSpeed = ( 2 << 8 );
+					}
+				}
+				else if ( moveY > 0 )
+				{
+					m_carSpeed += 20;
+
+					if ( m_carSpeed > ( 6 << 8 ) )
+					{
+						m_carSpeed = ( 6 << 8 );
+					}
 				}
 			}
-			else if ( moveY > 0 )
-			{
-				m_carSpeed += 20;
 
-				if ( m_carSpeed > ( 6 << 8 ) )
-				{
-					m_carSpeed = ( 6 << 8 );
-				}
-			}
+			Pos.vx += moveX;
+			Pos.vy += moveY;
 		}
-
-		Pos.vx += moveX;
-		Pos.vy += moveY;
 
 		// sort out draw rotation
 
@@ -169,7 +209,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 		s32 yDiff;
 
-		yDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
+		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos1.vx, testPos1.vy, sensorDist + 1 );
 
 		if ( yDiff <= sensorDist )
 		{
@@ -178,7 +218,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 			testPos1.vy += yDiff;
 		}
 
-		yDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
+		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
 
 		if ( yDiff <= sensorDist )
 		{
@@ -193,10 +233,29 @@ void CNpcCartPlatform::processMovement( int _frames )
 		heading = ratan2( yDist, xDist );
 
 		setCollisionAngle( heading );
+
+		if ( m_reboundTimer <= 0 )
+		{
+			switch ( CGameScene::getCollision()->getCollisionBlock( testPos2.vx, testPos2.vy - 8 ) & COLLISION_TYPE_MASK )
+			{
+				case COLLISION_TYPE_FLAG_DAMAGE:
+				{
+					m_vertSpeed = -8 << 8;
+					m_reboundTimer = 2 * GameState::getOneSecondInFrames();
+					m_rebound = true;
+					Pos.vy -= 8;
+
+					break;
+				}
+
+				default:
+					break;
+			}
+		}
 	}
 	else
 	{
-		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+		groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx, Pos.vy, yMovement + 16 );
 
 		if ( groundHeight <= yMovement )
 		{
