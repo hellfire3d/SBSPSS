@@ -154,6 +154,8 @@ private:
 	int							m_screenXOff;
 	int							m_screenYOff;
 
+	int							m_musicStarted;
+
 	static int									s_controlStyleValues[];
 	static CGUITextReadout::TextReadoutData		s_controlStyleReadoutText[];
 

@@ -198,7 +198,7 @@ void CFrontEndStart::select()
 	m_slotDrawOffset=0;
 
 	CSoundMediator::setSong(CSoundMediator::SONG_MEMCARD2);
-	CSoundMediator::playSong();
+	m_musicStarted=false;
 }
 
 /*----------------------------------------------------------------------
@@ -409,6 +409,12 @@ void CFrontEndStart::think(int _frames)
 {
 	if(!CFader::isFading())
 	{
+		if(!m_musicStarted)
+		{
+			CSoundMediator::playSong();
+			m_musicStarted=true;
+		}
+
 		if(m_slotDrawOffset==0)
 		{
 			if(m_state==STATE_SELECT)

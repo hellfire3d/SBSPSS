@@ -434,6 +434,14 @@ void CGameScene::render_boss_intro()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
+	if(!m_musicStarted&&!CFader::isFading())
+	{
+		// Song is loaded/dumped by the level, and played from here. This just gives some
+		// better timing over when it starts (pkg)
+		CSoundMediator::playSong();
+		m_musicStarted=true;
+	}
+
 	switch(m_gamestate)
 	{
 		case GAMESTATE_SHOWING_LIVES:
@@ -757,10 +765,10 @@ void	CGameScene::initLevel()
 		m_levelHasTimer=false;
 	}
 
-	// Song is loaded/dumped by the level, and played from here. This just gives some
-	// better timing over when it starts (pkg)
-	CSoundMediator::playSong();
 	CActorPool::SetUpCache();
+
+	m_musicStarted=false;
+
 	SYSTEM_DBGMSG("InitLevelDone\n");
 }
 

@@ -487,7 +487,7 @@ void CFrontEndOptions::select()
 	m_closingDown=false;
 
 	CSoundMediator::setSong(CSoundMediator::SONG_OPTIONS);
-	CSoundMediator::playSong();
+	m_musicStarted=false;
 	
 	CFader::setFadingIn();
 }
@@ -578,6 +578,12 @@ void CFrontEndOptions::think(int _frames)
 
 	if(!CFader::isFading())
 	{
+		if(!m_musicStarted)
+		{
+			CSoundMediator::playSong();
+			m_musicStarted=true;
+		}
+
 		if(m_nextMode!=m_mode)
 		{
 			if(m_nextMode==MODE__LOAD)

@@ -114,6 +114,8 @@ private:
 
 	static const int		s_itemFrames[];
 
+	int						m_musicStarted;
+
 
 };
 

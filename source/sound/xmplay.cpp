@@ -54,6 +54,13 @@
 	Vars
 	---- */
 
+#ifdef __USER_paul__
+static int sounddebug=true;
+#else
+static int sounddebug=false;
+#endif
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -215,6 +222,7 @@ void CXMPlaySound::think()
 
 
 //////////////
+if(sounddebug)
 {
 static const int	colours[6][3]=
 {

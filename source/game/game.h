@@ -136,6 +136,8 @@ static	DVECTOR			s_CamShake;
 		int				m_levelHasTimer;
 		int				m_timer;
 
+		int				m_musicStarted;
+
 };
 
 
