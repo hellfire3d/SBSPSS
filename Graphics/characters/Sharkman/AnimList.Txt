@@ -1,5 +1,5 @@
-Block
-Die
+# Block
+# Die
 # Hit
 Idle1_
 # Idle2_

@@ -1,7 +1,7 @@
-die
+# die
 idle
-jumpend
-jumpstart
+# jumpend
+# jumpstart
 punch
 rollattack
 rollattackend

@@ -1,5 +1,5 @@
 bite
-die
-gethit
+# die
+# gethit
 idle
 swim
