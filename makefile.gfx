@@ -121,7 +121,7 @@ ACTOR_SPRITES :=		Jellyfish1 Squiddart Plankton Butterfly
 
 ACTOR_SPR_LIST :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/$(ACTOR)_*.bmp)
 ACTOR_SPR_DEP :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/*)
-ACTOR_SPR_IN :=			-c+ -z+ $(ACTOR_SPR_LIST)
+ACTOR_SPR_IN :=			-r- -c+ -z+ $(ACTOR_SPR_LIST)
 
 
 ACTOR_LIST :=			$(ACTOR_SPONGEBOB) $(ACTOR_NPC) $(ACTOR_ENEMY)
@@ -236,7 +236,7 @@ INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(ING
 
 INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
 							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) $(UI_GFX_NONTRANS_IN) \
-							-c- -q- -z+ -r- $(INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN)
+							-c- -q- -z+ -r- $(INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN) -q+
 
 #----------------------------------------------------------------------------
 # Front end graphics
