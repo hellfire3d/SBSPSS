@@ -3158,10 +3158,9 @@ void CPlayer::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
 	setCollisionSize(_w,_h);
 	setCollisionCentreOffset(_x,_y);
 }
+
 void CPlayer::getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h)
 {
-//	DVECTOR	offset,size;
-
 DVECTOR const	&offset=getCollisionCentreOffset();
 DVECTOR const	&size=getCollisionSize();
 
@@ -3169,6 +3168,14 @@ DVECTOR const	&size=getCollisionSize();
 	*_y=offset.vy;
 	*_w=size.vx;
 	*_h=size.vy;
+}
+
+void CPlayer::getPlayerNormalCollisionSize(int *_x,int *_y,int *_w,int *_h)
+{
+	*_x=0;
+	*_y=-COLSIZE_BASE_HEIGHT/2;
+	*_w=COLSIZE_BASE_WIDTH;
+	*_h=COLSIZE_BASE_HEIGHT;
 }
 
 /*===========================================================================

@@ -491,6 +491,7 @@ public:
 	void			resetPlayerCollisionSizeToBase();
 	void			setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 	void			getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h);
+	void			getPlayerNormalCollisionSize(int *_x,int *_y,int *_w,int *_h);
 
 
 
