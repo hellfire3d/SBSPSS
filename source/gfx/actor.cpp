@@ -667,6 +667,7 @@ int		AspectX0,AspectX1;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode	*ThisNode=CacheFrame(Anim,Frame);
+			if (!ThisNode) return(0);	// Blank Frame
 POLY_FT4	*Ft4=GetPrimFT4();
 
 			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
