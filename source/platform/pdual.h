@@ -25,6 +25,9 @@ public:
 	void				setOtherPlatform( CNpcDualPlatform *other );
 	void				setMovement( DVECTOR move );
 	virtual u8			canDrop();
+	void				setLineBase( DVECTOR base )							{m_lineBase = base;}
+	DVECTOR				getLineBase()										{return( m_lineBase );}
+	virtual void		render();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
@@ -33,6 +36,7 @@ protected:
 	CNpcDualPlatform	*m_otherPlatform;
 	s32					m_maxExtension;
 	s32					m_extension;
+	DVECTOR				m_lineBase;
 };
 
 #endif
