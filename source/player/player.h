@@ -193,10 +193,12 @@ private:
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 
-	DVECTOR			m_playerScreenGeomPos;
 	DVECTOR			m_cameraPos;
-
+	DVECTOR			m_currentCamFocusPointTarget;
+	DVECTOR			m_currentCamFocusPoint;
 	int				m_facing;
+	int				m_padLookAroundTimer;
+
 
 	enum
 	{
@@ -217,8 +219,6 @@ private:
 	int				m_lives;
 	int				m_health;
 	int				m_healthReactFrames;
-
-	DVECTOR			m_cameraOffset;
 
 	void			updatePadInput();
 protected:
