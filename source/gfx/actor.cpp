@@ -538,7 +538,7 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
-int	asd=0;
+
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
