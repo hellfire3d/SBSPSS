@@ -533,7 +533,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 		NPC_TIMER_NONE,
 		false,
-		3,
+		5,
 		2048,
 		false,
 		DAMAGE__LAVA,

@@ -16,11 +16,11 @@
 #endif
 
 #ifndef __GAME_GAME_H__
-#include	"game\game.h"
+#include "game\game.h"
 #endif
 
 #ifndef	__PLAYER_PLAYER_H__
-#include	"player\player.h"
+#include "player\player.h"
 #endif
 
 
@@ -32,65 +32,57 @@ void CNpc::processCloseSkullStomperAttack( int _frames )
 	}
 	else
 	{
-		s32 velocity;
-		bool pathComplete;
-		bool waypointChange;
-		s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
-		s32 moveX, moveY;
-
-		if ( waypointChange )
+		if ( m_extendDir == EXTEND_DOWN )
 		{
-			if ( !pathComplete )
+			if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + ( m_data[m_type].speed * _frames ) ) >> 4 ) )
 			{
+				// colliding with ground
+
+				s32 distY;
+				s32 lastPointY = 0;
+
+				for ( distY = 1 ; distY <= ( m_data[m_type].speed * _frames ) ; distY++ )
+				{
+					if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + distY ) >> 4 ) )
+					{
+						break;
+					}
+					else
+					{
+						lastPointY++;
+					}
+				}
+
+				Pos.vy += lastPointY;
+
 				// pause and change direction
 
 				m_timerTimer = GameState::getOneSecondInFrames();
 				m_extendDir = EXTEND_UP;
-
-				return;
-			}
-		}
-
-		if ( pathComplete )
-		{
-			m_controlFunc = NPC_CONTROL_MOVEMENT;
-			m_timerFunc = NPC_TIMER_ATTACK_DONE;
-			m_timerTimer = GameState::getOneSecondInFrames();
-			m_sensorFunc = NPC_SENSOR_NONE;
-			m_npcPath.resetPath();
-		}
-		else
-		{
-			s32 preShiftX;
-			s32 preShiftY;
-				
-			m_heading = headingToTarget;
-
-			if ( m_extendDir == EXTEND_DOWN )
-			{
-				preShiftX = _frames * 8 * rcos( m_heading );
-				preShiftY = _frames * 8 * rsin( m_heading );
 			}
 			else
 			{
-				preShiftX = _frames * 2 * rcos( m_heading );
-				preShiftY = _frames * 2 * rsin( m_heading );
-			}
+				// drop down
 
-			moveX = preShiftX >> 12;
-			if ( !moveX && preShiftX )
+				Pos.vy += m_data[m_type].speed * _frames;
+			}
+		}
+		else
+		{
+			if ( m_base.vx - Pos.vx == 0 && m_base.vy - Pos.vy == 0 )
 			{
-				moveX = preShiftX / abs( preShiftX );
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_timerTimer = GameState::getOneSecondInFrames();
+				m_sensorFunc = NPC_SENSOR_NONE;
+				m_npcPath.resetPath();
 			}
-
-			moveY = preShiftY >> 12;
-			if ( !moveY && preShiftY )
+			else
 			{
-				moveY = preShiftY / abs( preShiftY );
-			}
+				// return to original position
 
-			Pos.vx += moveX;
-			Pos.vy += moveY;
+				processGenericGotoTarget( _frames, m_base.vx - Pos.vx, m_base.vy - Pos.vy, 1 );
+			}
 		}
 	}
 }

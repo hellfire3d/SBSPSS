@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_GARY;
+	m_type = NPC_SKULL_STOMPER;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -116,23 +116,7 @@ void CNpc::init()
 
 		case NPC_INIT_SKULL_STOMPER:
 		{
-			m_heading = m_fireHeading = 1024;
-			
-			m_npcPath.initPath();
-
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 100;
-			newPos.vy = 10;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( SINGLE_USE_PATH );
+			m_extendDir = EXTEND_DOWN;
 
 			break;
 		}
