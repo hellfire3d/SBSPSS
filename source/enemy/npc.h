@@ -171,6 +171,7 @@ public:
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
+	void				hasBeenAttacked();
 
 	static void			CacheActor(int Type);
 
