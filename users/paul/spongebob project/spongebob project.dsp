@@ -357,11 +357,11 @@ SOURCE=..\..\..\source\game\pause.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\source\gfx\anim.cpp
+SOURCE=..\..\..\source\gfx\actorpool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\gfx\anim.h
+SOURCE=..\..\..\source\gfx\actorpool.h
 # End Source File
 # Begin Source File
 

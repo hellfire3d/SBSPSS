@@ -40,6 +40,9 @@ virtual	int		canPause();
 	
 protected:
 
+		void			initLevel();
+		void			shutdownLevel();
+
 		CLevel				Level;
 		class CPauseMenu	*m_pauseMenu;
 		class CPlayer		*m_player;

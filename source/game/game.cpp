@@ -85,11 +85,10 @@ int CGameScene::s_levelFinished;
 
 CGameScene	GameScene;
 
+#include "gfx\actorpool.h"
 /*****************************************************************************/
 void 	CGameScene::init()
 {
-		CThingManager::init();
-
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
 
@@ -98,50 +97,17 @@ void 	CGameScene::init()
 		s_genericFont->setColour( 255, 255 , 0 );
 		VidSetClearScreen(1);
 
-		CConversation::init();
-		CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
-
-		Level.init();
-
-#ifdef __USER_charles__		
-		CNpcEnemy	*enemy;
-		enemy=new ("test enemy") CNpcEnemy;
-		enemy->init();
-		enemy->setLayerCollision( Level.getCollisionLayer() );
-#endif
-
-#ifdef __USER_paul__
-		DVECTOR pos={16*10,16*10};
-					createPickup(PICKUP__BIG_HEALTH,&pos);
-		pos.vx+=32;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
-		pos.vx+=32;	createPickup(PICKUP__SMALL_HEALTH,&pos);
-		pos.vx+=32;	createPickup(PICKUP__LIFE,&pos);
-		pos.vx+=32;	createPickup(PICKUP__SPATULA,&pos);
-		pos.vx+=32;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
-		pos.vx+=32;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
-		pos.vx+=32;	createPickup(PICKUP__GLASSES,&pos);		
-		pos.vx+=32;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
-		pos.vx+=32;	createPickup(PICKUP__BALLOON,&pos);		
-		pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
-		pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
-#endif
-
-		createPlayer();
-		m_player->init();
-		m_player->setLayerCollision(Level.getCollisionLayer());
-		m_player->setMapSize(Level.getMapSize());
+		SetGeomOffset( GX, GY );
+		SetGeomScreen(GH);
 
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
 		m_pauseMenu->init();
 
+		s_readyToExit=false;
+
 		CFader::setFadingIn();
 
-		SetGeomOffset( GX, GY );
-		SetGeomScreen(GH);
-
-		s_readyToExit=false;
-		s_levelFinished=false;
-
+		initLevel();
 }
 
 /*****************************************************************************/
@@ -164,13 +130,11 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
-		m_pauseMenu->shutdown();	delete m_pauseMenu;
+	shutdownLevel();
 
-		CThingManager::shutdown();
+	m_pauseMenu->shutdown();	delete m_pauseMenu;
 
-		Level.shutdown();
-		CConversation::shutdown();
-		s_genericFont->dump();		delete s_genericFont;
+	s_genericFont->dump();		delete s_genericFont;
 }
 
 /*****************************************************************************/
@@ -193,6 +157,20 @@ void	CGameScene::think(int _frames)
 //		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
 //	}
 //#endif
+
+	
+	if(s_readyToExit)
+	{
+		// Temporarily.. exiting game scene always goes back to the front end (pkg)
+		GameState::setNextScene(&FrontEndScene);
+	}
+	else if(s_levelFinished)
+	{
+		shutdownLevel();
+		s_globalLevelSelectThing++;
+		initLevel();
+		s_levelFinished=false;
+	}
 
 	
 	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START&&canPause())
@@ -221,19 +199,6 @@ void	CGameScene::think(int _frames)
 			levelFinished();
 		}
 	}
-
-
-	if(s_readyToExit)
-	{
-		// Temporarily.. exiting game scene always goes back to the front end (pkg)
-		GameState::setNextScene(&FrontEndScene);
-	}
-	else if(s_levelFinished)
-	{
-		s_globalLevelSelectThing++;
-		GameState::setNextScene(&GameScene);
-		s_readyToExit=true;
-	}
 }
 
 /*****************************************************************************/
@@ -252,6 +217,57 @@ CPlayer	* CGameScene::getPlayer()
 void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 {
 	CThingManager::processEventAllThings(evt, sourceThing);
+}
+
+
+
+/*****************************************************************************/
+void	CGameScene::initLevel()
+{
+	CThingManager::init();
+
+	CConversation::init();
+	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
+
+#ifdef __USER_charles__		
+	CNpcEnemy	*enemy;
+	enemy=new ("test enemy") CNpcEnemy;
+	enemy->init();
+	enemy->setLayerCollision( Level.getCollisionLayer() );
+#endif
+
+#ifdef __USER_paul__
+	DVECTOR pos={16*10,16*10};
+				createPickup(PICKUP__BIG_HEALTH,&pos);
+	pos.vx+=32;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
+	pos.vx+=32;	createPickup(PICKUP__SMALL_HEALTH,&pos);
+	pos.vx+=32;	createPickup(PICKUP__LIFE,&pos);
+	pos.vx+=32;	createPickup(PICKUP__SPATULA,&pos);
+	pos.vx+=32;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
+	pos.vx+=32;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
+	pos.vx+=32;	createPickup(PICKUP__GLASSES,&pos);		
+	pos.vx+=32;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
+	pos.vx+=32;	createPickup(PICKUP__BALLOON,&pos);		
+	pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
+	pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
+#endif
+
+	s_levelFinished=false;
+	Level.init();
+
+	createPlayer();
+	m_player->init();
+	m_player->setLayerCollision(Level.getCollisionLayer());
+	m_player->setMapSize(Level.getMapSize());
+}
+
+
+/*****************************************************************************/
+void	CGameScene::shutdownLevel()
+{
+	CConversation::shutdown();
+	CThingManager::shutdown();
+	Level.shutdown();
 }
 
 /*****************************************************************************/
