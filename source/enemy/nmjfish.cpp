@@ -82,7 +82,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 
 	targetPos = Pos;
 
-	m_movementTimer = GameState::getOneSecondInFrames() * 5;
+	m_movementTimer = GameState::getOneSecondInFrames() * 2;
 	m_pulsateTimer = GameState::getOneSecondInFrames();
 
 	m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
@@ -188,7 +188,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 						projectile->setSpeed( 6 );
 						projectile->setXScale( 8192 );
 
-						m_movementTimer = GameState::getOneSecondInFrames() * 5;
+						m_movementTimer = GameState::getOneSecondInFrames() * 2;
 						m_pulsateTimer = GameState::getOneSecondInFrames();
 						m_pauseTimer = m_maxPauseTimer;
 
@@ -693,87 +693,94 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 
 void CNpcMotherJellyfishEnemy::collidedWith(CThing *_thisThing)
 {
-	if ( m_state == MOTHER_JELLYFISH_CYCLE )
+	switch( m_state )
 	{
-		if ( m_isActive && !m_isCaught && !m_isDying )
+		case MOTHER_JELLYFISH_CYCLE:
+		case MOTHER_JELLYFISH_STRAFE_START:
+		case MOTHER_JELLYFISH_STRAFE:
 		{
-			switch(_thisThing->getThingType())
+			if ( m_isActive && !m_isCaught && !m_isDying )
 			{
-				case TYPE_PLAYER:
+				switch(_thisThing->getThingType())
 				{
-					CPlayer *player = (CPlayer *) _thisThing;
-
-					ATTACK_STATE playerState = player->getAttackState();
-
-					if(playerState==ATTACK_STATE__NONE)
+					case TYPE_PLAYER:
 					{
-						if ( !player->isRecoveringFromHit() )
+						CPlayer *player = (CPlayer *) _thisThing;
+
+						ATTACK_STATE playerState = player->getAttackState();
+
+						if(playerState==ATTACK_STATE__NONE)
 						{
-							switch( m_data[m_type].detectCollision )
+							if ( !player->isRecoveringFromHit() )
 							{
-								case DETECT_NO_COLLISION:
+								switch( m_data[m_type].detectCollision )
 								{
-									// ignore
+									case DETECT_NO_COLLISION:
+									{
+										// ignore
 
-									break;
-								}
+										break;
+									}
 
-								case DETECT_ALL_COLLISION:
-								{
-									m_oldControlFunc = m_controlFunc;
-									m_controlFunc = NPC_CONTROL_COLLISION;
+									case DETECT_ALL_COLLISION:
+									{
+										m_oldControlFunc = m_controlFunc;
+										m_controlFunc = NPC_CONTROL_COLLISION;
 
-									processUserCollision( _thisThing );
+										processUserCollision( _thisThing );
 
-									break;
-								}
+										break;
+									}
 
-								case DETECT_ATTACK_COLLISION_GENERIC:
-								{
-									processAttackCollision();
-									processUserCollision( _thisThing );
+									case DETECT_ATTACK_COLLISION_GENERIC:
+									{
+										processAttackCollision();
+										processUserCollision( _thisThing );
 
-									break;
+										break;
+									}
 								}
 							}
 						}
-					}
-					else if ( m_invulnerableTimer <= 0 )
-					{
-						// player is attacking, respond appropriately
-
-						if ( m_controlFunc != NPC_CONTROL_SHOT )
+						else if ( m_invulnerableTimer <= 0 )
 						{
-							if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+							// player is attacking, respond appropriately
+
+							if ( m_controlFunc != NPC_CONTROL_SHOT )
 							{
-								player->justButtBouncedABadGuy();
+								if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+								{
+									player->justButtBouncedABadGuy();
+								}
+								m_controlFunc = NPC_CONTROL_SHOT;
+								m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+								drawAttackEffect();
 							}
-							m_controlFunc = NPC_CONTROL_SHOT;
-							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
-
-							drawAttackEffect();
 						}
+
+						break;
 					}
 
-					break;
-				}
-
-				case TYPE_ENEMY:
-				{
-					CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
-
-					if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
+					case TYPE_ENEMY:
 					{
-						processEnemyCollision( _thisThing );
+						CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+						if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
+						{
+							processEnemyCollision( _thisThing );
+						}
+
+						break;
 					}
 
-					break;
+					default:
+						ASSERT(0);
+						break;
 				}
-
-				default:
-					ASSERT(0);
-					break;
 			}
+
+			break;
 		}
 	}
 }
