@@ -192,7 +192,7 @@ INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 +tentacle\
 							+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
 							+health_empty_1 +health_empty_2 +health_empty_3 +health_empty_4 +health_empty_5 \
-							+watermeter +waterhilight +netblob \
+							+watermeter +waterhilight +netblob +aim_arrow \
 							+spike
 INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+water 
 
