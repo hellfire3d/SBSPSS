@@ -17,6 +17,7 @@
 	-------- */
 
 #include "pad\vibe.h"
+#include "pad\pads.h"
 
 #ifndef	__UTILS_HEADER__
 #include "utils\utils.h"
@@ -186,6 +187,7 @@ void	CPadVibrationManager::stopAllVibration()
 		}
 		s_currentIntensityValues[i]=0;
 	}
+	PadUpdate();	// Ensure that pads ARE stopped
 }
 
 /*===========================================================================

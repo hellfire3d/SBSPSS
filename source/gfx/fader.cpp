@@ -31,6 +31,7 @@
 #endif
 
 #include	"system\vid.h"
+#include	"pad\vibe.h"
 
 /*	Std Lib
 	------- */
@@ -237,6 +238,7 @@ void CFader::setFadingOut(FADE_STYLE _style)
 	s_fadeMode=FADING_OUT;
 	s_fadeStyle=_style;
 	s_waitFrames=FRAMES_TO_WAIT;
+	CPadVibrationManager::stopAllVibration();
 }
 
 
@@ -258,6 +260,7 @@ void CFader::setFadingIn(FADE_STYLE _style)
 	s_fadeStyle=_style;
 	s_fadeMode=PAUSE_BEFORE_FADING_IN;
 	s_waitFrames=FRAMES_TO_WAIT;
+	CPadVibrationManager::stopAllVibration();
 }
 
 
