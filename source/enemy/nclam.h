@@ -38,8 +38,10 @@ public:
 	virtual void		postInit();
 	virtual u8			hasBeenAttacked()						{return( false );}
 protected:
+	virtual s32			getFrameShift( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 	virtual void		processClose( int _frames );
+	virtual void		processCollision();
 
 	u8					m_isStunned;
 	u8					m_isAnimating;

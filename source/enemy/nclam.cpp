@@ -44,15 +44,21 @@
 #endif
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcClamEnemy::processEnemyCollision( CThing *thisThing )
 {
 	// do nothing
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcClamEnemy::processUserCollision( CThing *thisThing )
 {
 	// do nothing
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool CNpcClamEnemy::processSensor()
 {
@@ -81,12 +87,16 @@ bool CNpcClamEnemy::processSensor()
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcJumpingClamEnemy::postInit()
 {
 	CNpcClamEnemy::postInit();
 
 	m_drawRotation = m_heading + 1024;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcJumpingClamEnemy::processClose( int _frames )
 {
@@ -151,6 +161,8 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcStaticClamEnemy::postInit()
 {
 	CNpcClamEnemy::postInit();
@@ -170,25 +182,31 @@ void CNpcStaticClamEnemy::postInit()
 	platform->postInit();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcStaticClamEnemy::processClose( int _frames )
 {
-	if ( !m_isAnimating && !m_isStunned )
+	if ( !m_animPlaying && !m_isStunned )
 	{
 		m_animPlaying = true;
 		m_animNo = ANIM_CLAM_SIDESNAP;
 		m_frame = 0;
-		m_isAnimating = true;
 	}
-	else if ( !m_animPlaying )
+	/*else if ( !m_animPlaying )
 	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_animNo = m_data[m_type].initAnim;
 		m_frame = 0;
 		m_isAnimating = false;
-	}
+	}*/
 
-	m_isStunned = false;
+	if ( m_isStunned )
+	{
+		m_isStunned = false;
+	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 {
@@ -198,7 +216,18 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 		{
 			case TYPE_PLAYER:
 			{
-				m_isStunned = true;
+				if ( m_frame < ( 5 << 8 ) )
+				{
+					m_animNo = ANIM_CLAM_SIDESNAP;
+					m_frame = 0;
+					m_isStunned = true;
+					m_animPlaying = false;
+				}
+				else
+				{
+					m_oldControlFunc = m_controlFunc;
+					m_controlFunc = NPC_CONTROL_COLLISION;
+				}
 
 				break;
 			}
@@ -207,4 +236,30 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 				break;
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcStaticClamEnemy::processCollision()
+{
+	CPlayer *player = GameScene.getPlayer();
+
+	player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
+	processUserCollision( (CThing *) player );
+
+	m_controlFunc = m_oldControlFunc;
+
+	if ( !m_animPlaying && !m_isStunned )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_CLAM_SIDESNAP;
+		m_frame = 0;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcStaticClamEnemy::getFrameShift( int _frames )
+{
+	return( ( _frames << 8 ) >> 2 );
 }
