@@ -100,7 +100,7 @@ POLY_FT4	*Ft4=GetPrimFT4();
 			setRGB0(Ft4,128,128,128);
 			setTPage(Ft4,0,0,TexX,TexY);
 			setClut(Ft4, ClutX, ClutY);
-			AddPrimToList(Ft4,0);
+			AddPrimToList(Ft4,10);
 
 			if (Shadow)
 			{
@@ -112,7 +112,7 @@ POLY_FT4	*Ft4=GetPrimFT4();
 				sFt4->y1+=ShadowYOfs;
 				setSemiTrans(sFt4,1);
 				setRGB0(sFt4,0,0,0);
-				AddPrimToList(sFt4,0);
+				AddPrimToList(sFt4,10);
 			}
 
 			return(Ft4);
