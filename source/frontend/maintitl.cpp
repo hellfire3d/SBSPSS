@@ -125,7 +125,7 @@ void CFrontEndMainTitles::init()
 	CGUIFactory::createValueButtonFrame(m_mainMenu,
 										50,40,200,20,
 										STR__FRONTEND__CREDITS,
-										&m_gotoOptionsFlag,true);
+										&m_gotoCreditsFlag,true);
 }
 
 /*----------------------------------------------------------------------
@@ -155,6 +155,7 @@ void CFrontEndMainTitles::select()
 	
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
+	m_gotoCreditsFlag=false;
 
 	m_demoTimeout=0;
 
@@ -269,12 +270,17 @@ rsr=(rsr+(_frames*rspeed))&4095;
 			if(m_startGameFlag)
 			{
 				CFader::setFadingOut();
-				m_mode=MODE__START_GAME;
+				m_mode=MODE__GOTO_CHOOSE_SLOT;
 			}
 			else if(m_gotoOptionsFlag)
 			{
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_OPTIONS;
+			}
+			else if(m_gotoCreditsFlag)
+			{
+				CFader::setFadingOut();
+				m_mode=MODE__GOTO_CREDITS;
 			}
 			break;
 
@@ -309,7 +315,7 @@ rsr=(rsr+(_frames*rspeed))&4095;
   ---------------------------------------------------------------------- */
 int CFrontEndMainTitles::isReadyToExit()
 {
-	return !CFader::isFading()&&(m_mode==MODE__START_GAME||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO);
+	return !CFader::isFading()&&(m_mode==MODE__GOTO_CHOOSE_SLOT||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO||m_mode==MODE__GOTO_CREDITS);
 }
 
 
@@ -331,8 +337,8 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 			ASSERT(0);
 			break;
 
-		case MODE__START_GAME:
-			ret=CFrontEndScene::MODE__MAIN_TITLES;//MODE__CHOOSE_SLOT;
+		case MODE__GOTO_CHOOSE_SLOT:
+			ret=CFrontEndScene::MODE__CHOOSE_SLOT;
 			break;
 
 		case MODE__GOTO_OPTIONS:
@@ -341,6 +347,10 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 
 		case MODE__GOTO_DEMO:
 			ret=CFrontEndScene::MODE__DEMO;
+			break;
+
+		case MODE__GOTO_CREDITS:
+			ret=CFrontEndScene::MODE__CREDITS;
 			break;
 	}
 

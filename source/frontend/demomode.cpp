@@ -133,7 +133,6 @@ void CFrontEndDemoMode::unselect()
 void CFrontEndDemoMode::render()
 {
 	sFrameHdr	*fh;
-	POLY_FT4	*ft4;
 
 	// Game logo/title
 	fh=m_sprites->getFrameHeader(FRM__SBLOGO);

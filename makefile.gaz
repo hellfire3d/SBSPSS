@@ -51,11 +51,13 @@ CD_FILESYS_LIB :=		CMXBoot
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
 
-frontend_src :=		demomode \
+frontend_src :=		credits \
+					demomode \
 					frontend \
-					scrollbg \
 					maintitl \
-					options
+					options \
+					scrollbg \
+					start
 
 game_src :=			game
 

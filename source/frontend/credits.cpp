@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	frontend.cpp
+	credits.cpp
 
 	Author:		PKG
 	Created: 
@@ -16,30 +16,26 @@
 	Includes
 	-------- */
 
-#include "frontend\frontend.h"
-
-#ifndef	__MEMORY_HEADER__
-#include "mem\memory.h"
-#endif
-
-#ifndef	__FRONTEND_MAINTITL_H__
-#include "frontend\maintitl.h"
-#endif
-
-#ifndef	__FRONTEND_OPTIONS_H__
-#include "frontend\options.h"
-#endif
-
-#ifndef	__FRONTEND_START_H__
-#include "frontend\start.h"
-#endif
-
-#ifndef	__FRONTEND_DEMOMODE_H__
-#include "frontend\demomode.h"
-#endif
-
-#ifndef	__FRONTEND_CREDITS_H__
 #include "frontend\credits.h"
+
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
+#ifndef __LOCALE_TEXTDBASE_H__
+#include "locale\textdbase.h"
+#endif
+
+#ifndef	__GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
+
+#ifndef __PRIM_HEADER__
+#include "gfx\prim.h"
+#endif
+
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
 #endif
 
 
@@ -48,6 +44,11 @@
 
 /*	Data
 	---- */
+
+#ifndef __SPR_FRONTEND_H__
+#include <frontend.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -65,126 +66,106 @@
 	Vars
 	---- */
 
-static CFrontEndMainTitles		s_frontEndModeMainTitles;
-static CFrontEndOptions			s_frontEndModeOptions;
-static CFrontEndStart			s_frontEndStart;
-static CFrontEndDemoMode		s_frontEndDemoMode;
-static CFrontEndCredits			s_frontEndCredits;
-
-CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
-{
-	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
-	&s_frontEndModeOptions,			// MODE__GAME_OPTIONS
-	&s_frontEndStart,				// MODE__CHOOSE_SLOT
-	&s_frontEndDemoMode,			// MODE__DEMO
-	&s_frontEndCredits,				// MODE__CREDITS
-
-	NULL,							// MODE__NONE
-};
-
-
-CFrontEndScene	FrontEndScene;
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndScene::init()
+void CFrontEndCredits::init()
 {
-	for(int i=0;i<MODE__NONE;i++)
-	{
-		if(s_modeCodes[i])		// temporary (PKG)
-		s_modeCodes[i]->init();
-	}
-
-	m_mode=MODE__NONE;
-	setMode(MODE__MAIN_TITLES);
 }
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndScene::shutdown()
+void CFrontEndCredits::shutdown()
 {
-	for(int i=0;i<MODE__NONE;i++)
-	{
-		if(s_modeCodes[i])		// temporary (PKG)
-		s_modeCodes[i]->shutdown();
-	}
 }
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndScene::render()
+void CFrontEndCredits::select()
 {
-	s_modeCodes[m_mode]->render();
+	m_shuttingDown=false;
+	CFader::setFadingIn();
 }
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndScene::think(int _frames)
+void CFrontEndCredits::unselect()
 {
-	CFrontEndMode	*mode;
-
-	mode=s_modeCodes[m_mode];
-	mode->think(_frames);
-	if(mode->isReadyToExit())
-	{
-		setMode(mode->getNextMode());
-	}
 }
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CFrontEndScene::readyToShutdown()
+void CFrontEndCredits::render()
 {
-	return false;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndScene::setMode(FrontEndMode _newMode)
-{
-PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
-
-	// Close old mode
-	if(s_modeCodes[m_mode])
-	{
-		s_modeCodes[m_mode]->unselect();
-	}
+	POLY_G4	*g4;
 	
-	// Open new mode
-	m_mode=_newMode;
-	s_modeCodes[m_mode]->select();
+	g4=GetPrimG4();
+	setXYWH(g4,0,0,512,256);
+	setRGB0(g4,99,50,50);
+	setRGB1(g4,50,50,99);
+	setRGB2(g4,50,99,50);
+	setRGB3(g4,99,50,99);
+	AddPrimToList(g4,1001);
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndCredits::think(int _frames)
+{
+	if(!m_shuttingDown)
+	{
+		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
+		{
+			m_shuttingDown=true;
+			CFader::setFadingOut();
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CFrontEndCredits::isReadyToExit()
+{
+	return !CFader::isFading()&&m_shuttingDown;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CFrontEndScene::FrontEndMode CFrontEndCredits::getNextMode()
+{
+	return	CFrontEndScene::MODE__MAIN_TITLES;
+}
 
 /*===========================================================================
  end */

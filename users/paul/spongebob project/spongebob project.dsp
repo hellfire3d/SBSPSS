@@ -125,6 +125,14 @@ SOURCE=..\..\..\source\fileio\pcfile.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\credits.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\credits.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\demomode.cpp
 # End Source File
 # Begin Source File
@@ -162,6 +170,14 @@ SOURCE=..\..\..\source\frontend\scrollbg.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\frontend\scrollbg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\start.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\start.h
 # End Source File
 # End Group
 # Begin Group "game"

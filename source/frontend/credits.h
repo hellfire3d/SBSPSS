@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	demomode.h
+	credits.h
 
 	Author:		PKG
 	Created:
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__FRONTEND_DEMOMODE_H__
-#define __FRONTEND_DEMOMODE_H__
+#ifndef	__FRONTEND_CREDITS_H__
+#define __FRONTEND_CREDITS_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CFrontEndDemoMode : public CFrontEndMode
+class CFrontEndCredits : public CFrontEndMode
 {
 public:
 	void	init();
@@ -49,24 +49,8 @@ public:
 
 
 private:
-	enum
-	{
-		LOGO_CENTRE_Y=74,
-		GAME_TITLE_TEXT_CENTRE_Y=100,
-		GAME_TITLE_TEXT_R=128,
-		GAME_TITLE_TEXT_G=128,
-		GAME_TITLE_TEXT_B=128,
-
-		PRESS_START_TEXT_Y=180,
-		PRESS_START_TEXT_R=150,
-		PRESS_START_TEXT_G=100,
-		PRESS_START_TEXT_B=100,
-	};
-
-	class FontBank		*m_smallFont;
-	class SpriteBank	*m_sprites;
-
 	int					m_shuttingDown;
+
 };
 
 
@@ -80,7 +64,7 @@ private:
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __FRONTEND_DEMOMODE_H__ */
+#endif	/* __FRONTEND_CREDITS_H__ */
 
 /*===========================================================================
  end */

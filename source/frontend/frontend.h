@@ -43,6 +43,7 @@ public:
 		MODE__GAME_OPTIONS,
 		MODE__CHOOSE_SLOT,
 		MODE__DEMO,
+		MODE__CREDITS,
 
 		MODE__NONE,
 	} FrontEndMode;
