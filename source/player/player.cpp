@@ -239,6 +239,9 @@ pint	ledgeShift=1;
 pint	cammove=2;
 
 
+CActorGfx		*m_actorWeaponGfx;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -257,6 +260,9 @@ void	CPlayer::init()
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 	m_layerCollision=NULL;
+
+	CActorPool::AddActor(ACTORS_SPONGEBOB_NET_SBK);
+	m_actorWeaponGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_NET_SBK);
 
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
@@ -946,8 +952,52 @@ void CPlayer::respawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifndef	__ANIM_SPONGEBOB_NET_HEADER__
+#include <ACTOR_SPONGEBOB_NET_Anim.h>
+#endif
+
+static s8 s_animMapNet[]=
+{
+	ANIM_SPONGEBOB_NET_BUTTBOUNCEEND,		// ANIM_SPONGEBOB_BUTTBOUNCEEND=0,
+	ANIM_SPONGEBOB_NET_BUTTBOUNCESTART,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_NET_FALL,				// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_NET_GETUP,				// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_NET_HITGROUND,			// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_NET_IDLEBREATH,			// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_NET_IDLEWIND,			// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_NET_JUMPEND,				// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_NET_JUMP,				// ANIM_SPONGEBOB_JUMP,
+	ANIM_SPONGEBOB_NET_RUN,					// ANIM_SPONGEBOB_RUN,
+	ANIM_SPONGEBOB_NET_RUNSTOP,				// ANIM_SPONGEBOB_RUNSTOP,
+	ANIM_SPONGEBOB_NET_RUNSTART,			// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_NET_SOAKUP,				// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_NET_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_NET_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
+	ANIM_SPONGEBOB_NET_SWIPE,				// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_NET_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,										// ANIM_SPONGEBOB_FIREEND,
+	-1,										// ANIM_SPONGEBOB_FIRESTART,
+	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,										// ANIM_SPONGEBOB_WALK,
+	-1,										// ANIM_SPONGEBOB_KARATE,
+};
+
+
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
+	if(m_currentMode==PLAYER_MODE_NET)
+	{
+		if(s_animMapNet[_animNo]!=-1)
+		{
+			if(_animFrame<m_actorWeaponGfx->getFrameCount(s_animMapNet[_animNo]))
+			{
+				m_actorWeaponGfx->Render(*_pos,s_animMapNet[_animNo],_animFrame,m_facing==FACING_RIGHT?0:1);
+			}
+		}
+	}
+
 	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 }
 
