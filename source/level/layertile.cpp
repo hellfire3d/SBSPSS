@@ -29,12 +29,12 @@ CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_Qu
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
+		PrimGrid=0;
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-		MemFree(PrimGrid);
 }
 
 /*****************************************************************************/
@@ -84,7 +84,7 @@ void	CLayerTile::UpdateWholeMap()
 /*****************************************************************************/
 void	CLayerTile::shutdown()
 {
-
+		if (PrimGrid) MemFree(PrimGrid);
 }
 
 /*****************************************************************************/
