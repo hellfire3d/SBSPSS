@@ -76,42 +76,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ToolBar.SetWindowText("ToolBar");
 	ToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&ToolBar);
-/*	
-#define SNAP_WIDTH 80 //the width of the combo box
-
-    //set up the ComboBox control as a snap mode select box
-    //
-    //First get the index of the placeholder's position in the toolbar
-int	index = 0;
-RECT	rect;
-	while (ToolBar.GetItemID(index)!=ID_TOOLBAR_COMBO) index++;
-
-	//next convert that button to a seperator and get its position
-	ToolBar.SetButtonInfo(index, ID_TOOLBAR_COMBO, TBBS_SEPARATOR, SNAP_WIDTH);
-	ToolBar.GetItemRect(index, &rect);
-
-	//expand the rectangle to allow the combo box room to drop down
-	rect.top+=2;
-	rect.bottom += 200;
-
-	// then .Create the combo box and show it
-
-	if (!ToolBar.m_Combo.Create(WS_CHILD|WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWNLIST | CBS_HASSTRINGS ,rect, &ToolBar, IDC_TOOLBAR_COMBO))
-	{
-	   TRACE0("Failed to create combo-box\n");
-	   return FALSE;
-	}
-	ToolBar.m_Combo.SetFont(ToolBar.GetFont());	// Set to nice font (not playskool font!!)
-	ToolBar.m_Combo.ShowWindow(SW_SHOW);
-
-	//fill the combo box
-	ToolBar.m_Combo.AddString("SNAP OFF");
-	ToolBar.m_Combo.AddString("SNAP GRID");
-	ToolBar.m_Combo.AddString("SNAP RASTER");
-	ToolBar.m_Combo.AddString("SNAP VERTEX");
-	ToolBar.m_Combo.AddString("SNAP LINE");
-	ToolBar.m_Combo.SetCurSel(0);
-*/	
 	return 0;
 }
 

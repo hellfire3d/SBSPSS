@@ -45,9 +45,11 @@ public:
 		void					TileBankLoad(char *Filename);
 		void					TileBankReload();
 		void					TileBankSet();
+		void					MirrorX();
+		void					MirrorY();
 
 // Param Bar
-		void					UpdateParamBar(CMapEditView *View,BOOL ViewFlag);
+		void					UpdateParamBar();
 
 // Layers
 		void					SetActiveLayer(int Layer);

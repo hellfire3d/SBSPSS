@@ -55,8 +55,10 @@ protected:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnToolbarTilepalette();
-	afx_msg void OnToolbarGrid();
+	afx_msg void OnToggleTileview();
+	afx_msg void OnToggleGrid();
+	afx_msg void OnMirrorx();
+	afx_msg void OnMirrory();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

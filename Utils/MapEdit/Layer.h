@@ -57,6 +57,9 @@ virtual	BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint
 virtual	BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
 virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)=0;
 
+virtual	BOOL			MirrorX(){return(FALSE);};
+virtual	BOOL			MirrorY(){return(FALSE);};
+
 protected:
 
 		char			Name[256];

@@ -35,8 +35,12 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToolbarTilepalette)
-	ON_COMMAND(ID_TOOLBAR_GRID, OnToolbarGrid)
+	ON_COMMAND(ID_TOGGLE_TILEVIEW, OnToggleTileview)
+	ON_COMMAND(ID_TOOLBAR_GRID, OnToggleGrid)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
+	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_COMMAND(ID_MIRRORX, OnMirrorx)
+	ON_COMMAND(ID_MIRRORY, OnMirrory)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -147,5 +151,7 @@ BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{GetDocume
 void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,TRUE);}
 void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,FALSE);}
 void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(this,nFlags, point);}
-void CMapEditView::OnToolbarTilepalette()								{GetDocument()->ToggleTileView(this);}
-void CMapEditView::OnToolbarGrid() 										{GetDocument()->ToggleGrid(this);}
+void CMapEditView::OnToggleTileview()									{GetDocument()->ToggleTileView(this);}
+void CMapEditView::OnToggleGrid()										{GetDocument()->ToggleGrid(this);}
+void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX();}
+void CMapEditView::OnMirrory()											{GetDocument()->MirrorY();}

@@ -14,6 +14,12 @@ struct	sMapElem
 	int		Flags;
 };
 
+enum
+{
+	MapElemFlagMirrorX=	1<<0,
+	MapElemFlagMirrorY=	1<<1,
+};
+
 /*****************************************************************************/
 class	CMap
 {

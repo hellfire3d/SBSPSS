@@ -24,12 +24,14 @@ void	CMap::SetSize(int Width,int Height,BOOL Clear)
 	if (Clear)
 	{
 		for (int Y=0;Y<Height;Y++)
+		{
 			for (int X=0;X<Width;X++)
 			{
 				Map[X][Y].Set=0;
-//				Map[X][Y].Tile=(X+Y)%9;
+				Map[X][Y].Flags=0;
 				Map[X][Y].Tile=0;
 			}
+		}
 	}
 
 }

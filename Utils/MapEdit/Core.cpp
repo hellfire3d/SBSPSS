@@ -52,8 +52,9 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 // Add default parram bar items			
 			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
 			ParamBar->Add(Frm->GetTileSetDlg(),IDD_TILESET_DIALOG,TRUE,TRUE);
-			Layers[ActiveLayer]->InitGUI(this);
-			ParamBar->Update();
+			UpdateParamBar();
+//			Layers[ActiveLayer]->InitGUI(this);
+//			ParamBar->Update();
 }
 
 /*****************************************************************************/
@@ -134,7 +135,6 @@ void	CCore::SetMode(int NewMode)
 BOOL	RedrawFlag=FALSE;
 
 		RedrawFlag=Layers[ActiveLayer]->SetMode(NewMode);
-		
 		//if (RedrawFlag) View->Invalidate();
 }
 
@@ -231,11 +231,24 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 /*** Layers ******************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateParamBar(CMapEditView *View,BOOL ViewFlag)
+void	CCore::UpdateParamBar()
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 CMultiBar	*ParamBar=Frm->GetParamBar();
+
+			ParamBar->RemoveAll();
+// Add default parram bar items			
+			if (TileViewFlag)
+			{
+//				TileBank.InitGUI(this);
+			}
+			else
+			{
+				Layers[ActiveLayer]->InitGUI(this);
+			}
+			
+			ParamBar->Update();
 
 }
 
@@ -271,6 +284,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 			if (Toggle) TileViewFlag=!TileViewFlag;
 			ParamBar->RemoveAll();
 			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
+			UpdateParamBar();
 			UpdateView(View);
 }
 
@@ -289,6 +303,7 @@ void	CCore::TileBankReload()
 		TexCache.Purge();
 		UpdateView(NULL);
 }
+
 /*****************************************************************************/
 void	CCore::TileBankSet()
 {
@@ -296,6 +311,18 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 
 		TileBank.SetCurrent(TileSetDlg->TileSetList.GetCurSel());
+}
+
+/*****************************************************************************/
+void	CCore::MirrorX()
+{
+	if (!TileViewFlag) Layers[ActiveLayer]->MirrorX();
+}
+
+/*****************************************************************************/
+void	CCore::MirrorY()
+{
+	if (!TileViewFlag) Layers[ActiveLayer]->MirrorY();
 }
 
 /*****************************************************************************/

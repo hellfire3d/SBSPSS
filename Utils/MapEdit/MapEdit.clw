@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CTileSetDlg
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -19,16 +19,16 @@ Class7=CMapEditView
 
 ResourceCount=9
 Resource1=IDD_TILESET_DIALOG
-Resource2=IDR_MAINFRAME (English (U.S.))
-Resource3=IDR_MAPEDITYPE (English (U.S.))
+Resource2=IDD_LAYER_LIST_DIALOG
+Resource3=IDD_MULTIBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDR_TOOLBAR (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_LAYER_LIST_DIALOG
-Resource7=IDD_MULTIBAR (English (U.S.))
+Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CTileSetDlg
-Resource8=IDR_TOOLBAR (English (U.S.))
+Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
 Resource9=IDD_GFXTOOLBAR
 
@@ -77,7 +77,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_TOOLBAR_GRID
+LastObject=ID_MIRRORY
 Filter=C
 VirtualFilter=VWC
 
@@ -126,31 +126,38 @@ Command10=ID_EDIT_COPY
 Command11=ID_EDIT_PASTE
 Command12=ID_VIEW_TOOLBAR
 Command13=ID_VIEW_STATUS_BAR
-Command14=ID_WINDOW_NEW
-Command15=ID_WINDOW_CASCADE
-Command16=ID_WINDOW_TILE_HORZ
-Command17=ID_WINDOW_ARRANGE
-Command18=ID_APP_ABOUT
-CommandCount=18
+Command14=ID_TOGGLE_GRID
+Command15=ID_TOGGLE_TILEVIEW
+Command16=ID_MIRRORX
+Command17=ID_MIRRORY
+Command18=ID_WINDOW_NEW
+Command19=ID_WINDOW_CASCADE
+Command20=ID_WINDOW_TILE_HORZ
+Command21=ID_WINDOW_ARRANGE
+Command22=ID_APP_ABOUT
+CommandCount=22
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
 Class=?
-Command1=ID_FILE_NEW
-Command2=ID_FILE_OPEN
-Command3=ID_FILE_SAVE
-Command4=ID_FILE_PRINT
-Command5=ID_EDIT_UNDO
-Command6=ID_EDIT_CUT
-Command7=ID_EDIT_COPY
-Command8=ID_EDIT_PASTE
-Command9=ID_EDIT_UNDO
-Command10=ID_EDIT_CUT
-Command11=ID_EDIT_COPY
-Command12=ID_EDIT_PASTE
-Command13=ID_NEXT_PANE
-Command14=ID_PREV_PANE
-CommandCount=14
+Command1=ID_EDIT_COPY
+Command2=ID_TOGGLE_GRID
+Command3=ID_FILE_NEW
+Command4=ID_FILE_OPEN
+Command5=ID_FILE_SAVE
+Command6=ID_EDIT_PASTE
+Command7=ID_EDIT_UNDO
+Command8=ID_EDIT_CUT
+Command9=ID_EDIT_COPY
+Command10=ID_EDIT_PASTE
+Command11=ID_TOGGLE_TILEVIEW
+Command12=ID_NEXT_PANE
+Command13=ID_PREV_PANE
+Command14=ID_MIRRORX
+Command15=ID_EDIT_CUT
+Command16=ID_MIRRORY
+Command17=ID_EDIT_UNDO
+CommandCount=17
 
 [DLG:IDD_ABOUTBOX (English (U.S.))]
 Type=1
@@ -212,7 +219,7 @@ ImplementationFile=TileSetDlg.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_TILESETDLG_BTN_LOAD
+LastObject=IDC_TILESETDLG_COMBO
 
 [CLS:CGfxToolBar]
 Type=0
@@ -220,16 +227,16 @@ HeaderFile=GfxToolBar.h
 ImplementationFile=GfxToolBar.cpp
 BaseClass=CDialog
 Filter=D
-LastObject=IDD_GFXTOOLBAR_MIRRORX
+LastObject=CGfxToolBar
 VirtualFilter=dWC
 
 [DLG:IDD_GFXTOOLBAR]
 Type=1
 Class=CGfxToolBar
 ControlCount=5
-Control1=IDD_GFXTOOLBAR_PAINT,button,1342242816
-Control2=IDD_GFXTOOLBAR_SELECT,button,1342242816
-Control3=IDD_GFXTOOLBAR_PICKER,button,1342242816
-Control4=IDD_GFXTOOLBAR_MIRRORX,button,1342242816
-Control5=IDD_GFXTOOLBAR_MIRRORY,button,1342242816
+Control1=IDD_GFXTOOLBAR_PAINT,button,1342177344
+Control2=IDD_GFXTOOLBAR_SELECT,button,1342177344
+Control3=IDD_GFXTOOLBAR_PICKER,button,1342177344
+Control4=IDD_GFXTOOLBAR_MIRRORX,button,1342177344
+Control5=IDD_GFXTOOLBAR_MIRRORY,button,1342177344
 

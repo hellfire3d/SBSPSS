@@ -28,16 +28,14 @@ public:
 			MouseModeNone=0,
 			MouseModePaint,
 			MouseModeSelect,
-			MouseModeBlockSelect,
 			MouseModePicker,
-			MouseModeMirrorX,
-			MouseModeMirrorY,
+//			MouseModeMirrorX,
+//			MouseModeMirrorY,
 		};
 		enum	MouseFlag
 		{
-			MouseFlagNone=1<<0,
-			MouseFlagMirrorX=1<<1,
-			MouseFlagMirrorY=1<<2,
+			MouseFlagMirrorX=1<<0,
+			MouseFlagMirrorY=1<<1,
 		};
 
 		CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d);	// New Layer
@@ -55,10 +53,15 @@ public:
 		BOOL			SetMode(int NewMode);
 		BOOL			InitMode();
 		BOOL			ExitMode();
+
+		BOOL			SetFlag(int Flag);
+
 		BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point);
 
+		BOOL			MirrorX();
+		BOOL			MirrorY();
 
 protected:
 		void			Render2d(CCore *Core,Vec &CamPos);

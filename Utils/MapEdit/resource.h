@@ -14,8 +14,8 @@
 #define IDI_PAINT                       152
 #define IDI_SELECT                      153
 #define IDI_PICKER                      154
-#define IDI_MIRRORX                     155
-#define IDI_MIRRORY                     156
+#define IDI_MIRRORY                     165
+#define IDI_MIRRORX                     166
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYER_LIST                  1019
 #define IDC_TILESETDLG_BTN_UPDATE       1029
@@ -31,6 +31,11 @@
 #define ID_TOOLBAR_COMBO                32777
 #define ID_TOOLBAR_PARAMBAR             32783
 #define ID_TOOLBAR_GRID                 32784
+#define ID_TOGGLE_TILEVIEW              32785
+#define ID_MAP_TOGGLEGRID               32786
+#define ID_TOGGLE_GRID                  32787
+#define ID_MIRRORX                      32788
+#define ID_MIRRORY                      32789
 #define ID_INDICATOR_CURSORXY           59142
 
 // Next default values for new objects
@@ -38,9 +43,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        163
-#define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1032
+#define _APS_NEXT_RESOURCE_VALUE        167
+#define _APS_NEXT_COMMAND_VALUE         32790
+#define _APS_NEXT_CONTROL_VALUE         1037
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -32,7 +32,7 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d)
 		ZPosDiv=ZDiv;
 		Render3dFlag=Is3d;
 		Mode=MouseModePaint;
-		Flag=MouseFlagNone;
+		Flag=0;
 }
 
 /*****************************************************************************/
@@ -107,7 +107,7 @@ int			MapH=Map.GetHeight();
 float		StartX=CamPos.x/XYDiv;
 float		StartY=CamPos.y/XYDiv;
 CTexCache	&TexCache=Core->GetTexCache();
-		
+
 		glColor3f(0.5,0.5,0.5);
 		glMatrixMode(GL_MODELVIEW);
 
@@ -122,7 +122,7 @@ CTexCache	&TexCache=Core->GetTexCache();
 
 					glLoadIdentity();	// Slow way, but good to go for the mo
 					glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
-					ThisTile.Render();
+					ThisTile.Render(ThisElem.Flags);
 				}
 			}
 		}
@@ -243,6 +243,32 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CLayerTile::UpdateGUI(CCore *Core)
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CGfxToolBar	*GfxDlg=(CGfxToolBar *)Frm->GetDialog(IDD_GFXTOOLBAR);
+
+		if (GfxDlg)
+		{
+			GfxDlg->ResetButtons();
+			switch(Mode)
+			{
+			case MouseModeNone:
+				break;
+			case MouseModePaint:
+				GfxDlg->SetButtonState(CGfxToolBar::PAINT,TRUE);
+				break;
+			case MouseModeSelect:
+				GfxDlg->SetButtonState(CGfxToolBar::SELECT,TRUE);
+				break;
+			case MouseModePicker:
+				GfxDlg->SetButtonState(CGfxToolBar::PICKER,TRUE);
+				break;
+			default:
+				break;
+			}
+			GfxDlg->SetButtonState(CGfxToolBar::MIRRORX,Flag & MouseFlagMirrorX);
+			GfxDlg->SetButtonState(CGfxToolBar::MIRRORY,Flag & MouseFlagMirrorY);
+		}
+
 }
 
 /*****************************************************************************/
@@ -251,53 +277,57 @@ void	CLayerTile::UpdateGUI(CCore *Core)
 BOOL	CLayerTile::SetMode(int NewMode)
 {
 BOOL	Ret=FALSE;
+			
 // Clean up last mode
-	Ret|=ExitMode();
-	Mode=(MouseMode)NewMode;
-	Ret|=InitMode();
-	return(Ret);
+			Ret|=ExitMode();
+			Mode=(MouseMode)NewMode;
+			Ret|=InitMode();
+		return(Ret);
 }
 
 /*****************************************************************************/
 BOOL	CLayerTile::InitMode()
 {
-	switch(Mode)
-	{
-	case MouseModeNone:
-		break;
-	case MouseModePaint:
-		break;
-	case MouseModeSelect:
-		break;
-	case MouseModeBlockSelect:
-		break;
-	case MouseModePicker:
-		break;
-	default:
-		break;
-	}
-	return(FALSE);
+		switch(Mode)
+		{
+		case MouseModeNone:
+			break;
+		case MouseModePaint:
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+		return(FALSE);
 }
 
 /*****************************************************************************/
 BOOL	CLayerTile::ExitMode()
 {
-	switch(Mode)
-	{
-	case MouseModeNone:
-		break;
-	case MouseModePaint:
-		break;
-	case MouseModeSelect:
-		break;
-	case MouseModeBlockSelect:
-		break;
-	case MouseModePicker:
-		break;
-	default:
-		break;
-	}
-	return(FALSE);
+		switch(Mode)
+		{
+		case MouseModeNone:
+			break;
+		case MouseModePaint:
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+		return(FALSE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::SetFlag(int NewFlag)
+{
+		Flag^=NewFlag;
+		return(TRUE);
 }
 
 /*****************************************************************************/
@@ -306,24 +336,22 @@ BOOL	CLayerTile::LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoi
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();
 
-	switch(Mode)
-	{
-	case MouseModeNone:
-		break;
-	case MouseModePaint:
-		if (DownFlag)
-			Ret=Paint(TileBank.GetLTile(),CursorPos);
-		break;
-	case MouseModeSelect:
-		break;
-	case MouseModeBlockSelect:
-		break;
-	case MouseModePicker:
-		break;
-	default:
-		break;
-	}
-	return(Ret);
+		switch(Mode)
+		{
+		case MouseModeNone:
+			break;
+		case MouseModePaint:
+			if (DownFlag)
+				Ret=Paint(TileBank.GetLTile(),CursorPos);
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+		return(Ret);
 }
 
 /*****************************************************************************/
@@ -332,24 +360,22 @@ BOOL	CLayerTile::RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoi
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();
 
-	switch(Mode)
-	{
-	case MouseModeNone:
-		break;
-	case MouseModePaint:
-		if (DownFlag)
-			Ret=Paint(TileBank.GetRTile(),CursorPos);
-		break;
-	case MouseModeSelect:
-		break;
-	case MouseModeBlockSelect:
-		break;
-	case MouseModePicker:
-		break;
-	default:
-		break;
-	}
-	return(Ret);
+		switch(Mode)
+		{
+		case MouseModeNone:
+			break;
+		case MouseModePaint:
+			if (DownFlag)
+				Ret=Paint(TileBank.GetRTile(),CursorPos);
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+		return(Ret);
 }
 
 /*****************************************************************************/
@@ -358,35 +384,51 @@ BOOL	CLayerTile::MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &C
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();
 
-	switch(Mode)
-	{
-	case MouseModeNone:
-		break;
-	case MouseModePaint:
-		if (nFlags & MK_LBUTTON)
-			Ret=Paint(TileBank.GetLTile(),CursorPos);
-		else
-		if (nFlags & MK_RBUTTON)
-			Ret=Paint(TileBank.GetRTile(),CursorPos);
-		break;
-	case MouseModeSelect:
-		break;
-	case MouseModeBlockSelect:
-		break;
-	case MouseModePicker:
-		break;
-	default:
-		break;
-	}
-	return(Ret);
+		switch(Mode)
+		{
+		case MouseModeNone:
+			break;
+		case MouseModePaint:
+			if (nFlags & MK_LBUTTON)
+				Ret=Paint(TileBank.GetLTile(),CursorPos);
+			else
+			if (nFlags & MK_RBUTTON)
+				Ret=Paint(TileBank.GetRTile(),CursorPos);
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+		return(Ret);
 }
 
 /*****************************************************************************/
+BOOL	CLayerTile::MirrorX()
+{
+		SetFlag(MouseFlagMirrorX);
+		return(TRUE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::MirrorY()
+{
+		SetFlag(MouseFlagMirrorY);
+		return(TRUE);
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
 BOOL	CLayerTile::Paint(sMapElem &Tile,CPoint &CursorPos)
 {
 		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
 		if (Tile.Set==-1 || Tile.Tile==-1) return(FALSE);	// Invalid tile?
 
+		Tile.Flags=Flag;
 		Map.SetTile(CursorPos.x,CursorPos.y,Tile);
 
 		return(TRUE);

@@ -156,18 +156,35 @@ void	CMapEditDoc::ToggleTileView(CMapEditView *View)
 {
 		Core.UpdateTileView(View,TRUE);
 		Core.UpdateAll(View);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 {
 		Core.UpdateGrid(View,TRUE);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::MirrorX()
+{
+		Core.MirrorX();
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::MirrorY()
+{
+		Core.MirrorY();
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::SetMode(int NewMode)
 {
 		Core.SetMode(NewMode);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
@@ -184,6 +201,7 @@ char	Filename[256];
 		sprintf(Filename,"%s",Dlg.GetPathName());
 		Core.TileBankLoad(Filename);
 		UpdateAllViews(NULL);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
@@ -191,7 +209,7 @@ void	CMapEditDoc::TileBankReload()
 {
 		Core.TileBankReload();
 		UpdateAllViews(NULL);
-
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
@@ -199,5 +217,6 @@ void	CMapEditDoc::TileBankSet()
 {
 		Core.TileBankSet();
 		UpdateAllViews(NULL);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 

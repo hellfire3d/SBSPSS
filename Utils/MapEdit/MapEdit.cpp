@@ -97,7 +97,7 @@ BOOL CMapEditApp::InitInstance()
 	ParseCommandLine(cmdInfo);
 // Prevent creating new doc on startup (should still open cmd line file tho)
 #ifndef _DEBUG
-	if (cmdInfo.m_nShellCommand==CCommandLineInfo::FileNew) cmdInfo.m_nShellCommand=CCommandLineInfo::FileNothing;
+//	if (cmdInfo.m_nShellCommand==CCommandLineInfo::FileNew) cmdInfo.m_nShellCommand=CCommandLineInfo::FileNothing;
 #endif
 	// Dispatch commands specified on the command line
 	if (!ProcessShellCommand(cmdInfo)) return FALSE;

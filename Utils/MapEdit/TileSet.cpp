@@ -134,6 +134,8 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 int			ListSize=TileSet.size();
 
+	ASSERT(TileSetDlg);
+
 	TileSetDlg->TileSetList.ResetContent();
 	if (ListSize)
 	{
@@ -244,7 +246,6 @@ int			TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			CTile	&ThisTile=Tile[TileID];
 			int		XPos=TileID%TileBrowserWidth;
 			int		YPos=TileID/TileBrowserWidth;
 
@@ -254,8 +255,7 @@ int			TileID=0;
 			RenderMisc(TileID==LTile,TileID==RTile,TileID==CursorPos,GridFlag);
 
 			glColor3f(0.5,0.5,0.5);
-			ThisTile.Render();
-
+			if (TileID) Tile[TileID].Render(0);
 
 			TileID++;
 		}

@@ -112,6 +112,16 @@ BEGIN
         MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
         MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
     END
+    POPUP "&Map"
+    BEGIN
+        MENUITEM "&Toggle Grid",                ID_TOGGLE_GRID
+    END
+    POPUP "&TileBank"
+    BEGIN
+        MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
+        MENUITEM "Mirror &X",                   ID_MIRRORX
+        MENUITEM "Mirror &Y",                   ID_MIRRORY
+    END
     POPUP "&Window"
     BEGIN
         MENUITEM "&New Window",                 ID_WINDOW_NEW
@@ -133,20 +143,24 @@ END
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
-    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
-    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
-    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
-    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "G",            ID_TOGGLE_GRID,         VIRTKEY, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_SPACE,       ID_TOGGLE_TILEVIEW,     VIRTKEY, NOINVERT
+    VK_TAB,         ID_NEXT_PANE,           VIRTKEY, CONTROL, NOINVERT
+    VK_TAB,         ID_PREV_PANE,           VIRTKEY, SHIFT, CONTROL, 
+                                                    NOINVERT
+    "X",            ID_MIRRORX,             VIRTKEY, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Y",            ID_MIRRORY,             VIRTKEY, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -385,6 +399,12 @@ BEGIN
     IDC_TOOLBAR_COMBO       "TileSet Chooser\nWee Wee Wee"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_TOGGLE_TILEVIEW      "Toggle TileView"
+    ID_MAP_TOGGLEGRID       "Toggle Grid On and Off"
+END
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -408,8 +428,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 IDI_PAINT               ICON    DISCARDABLE     "res\\paint.ico"
 IDI_SELECT              ICON    DISCARDABLE     "res\\select.ico"
 IDI_PICKER              ICON    DISCARDABLE     "res\\picker.ico"
-IDI_MIRRORX             ICON    DISCARDABLE     "res\\mirrorx.ico"
 IDI_MIRRORY             ICON    DISCARDABLE     "res\\mirrory.ico"
+IDI_MIRRORX             ICON    DISCARDABLE     "res\\mirrorx.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -436,14 +456,19 @@ BEGIN
 END
 
 IDD_GFXTOOLBAR DIALOG DISCARDABLE  0, 0, 156, 26
-STYLE WS_CHILD
+STYLE DS_CONTROL | WS_CHILD
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "P",IDD_GFXTOOLBAR_PAINT,5,5,15,15
-    PUSHBUTTON      "S",IDD_GFXTOOLBAR_SELECT,20,5,15,15
-    PUSHBUTTON      "Pk",IDD_GFXTOOLBAR_PICKER,35,5,15,15
-    PUSHBUTTON      "X",IDD_GFXTOOLBAR_MIRRORX,50,5,15,15
-    PUSHBUTTON      "Y",IDD_GFXTOOLBAR_MIRRORY,65,5,15,15
+    PUSHBUTTON      "P",IDD_GFXTOOLBAR_PAINT,5,5,15,15,BS_ICON | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "S",IDD_GFXTOOLBAR_SELECT,20,5,15,15,BS_ICON | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Pk",IDD_GFXTOOLBAR_PICKER,35,5,15,15,BS_ICON | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "X",IDD_GFXTOOLBAR_MIRRORX,50,5,15,15,BS_ICON | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Y",IDD_GFXTOOLBAR_MIRRORY,65,5,15,15,BS_ICON | NOT 
+                    WS_TABSTOP
 END
 
 
