@@ -737,51 +737,53 @@ if(newmode!=-1)
 	newmode=-1;
 }
 
-	CThing	*platform;
-	platform=isOnPlatform();
-	if(platform)
+	if(!isDead())
 	{
-		if ( ( (CNpcPlatform *) platform )->isCart() )
+		CThing	*platform;
+		platform=isOnPlatform();
+		if(platform)
 		{
-			if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
+			if ( ( (CNpcPlatform *) platform )->isCart() )
 			{
-				setMode( PLAYER_MODE_CART );
-			}
-		}
-		else
-		{
-			DVECTOR	posDelta;
-			posDelta=platform->getPosDelta();
-			posDelta.vy = 0;
-			shove(posDelta);
-
-			int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
-			int height=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy,16);
-
-			// Hmm.. this *almost* stops him elevating through walls :/
-			if ( platformOffset < height )
-			{
-				int goingToHitWall=false;
-				int	i;
-				for(i=0;i<2;i++)
+				if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
 				{
-					int x=Pos.vx+((i==0?-checkx:+checkx));
-					int	y=Pos.vy-HEIGHT_FOR_HEAD_COLLISION;
-					if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
-					{
-						goingToHitWall=true;
-						break;
-					}
+					setMode( PLAYER_MODE_CART );
 				}
+			}
+			else
+			{
+				DVECTOR	posDelta;
+				posDelta=platform->getPosDelta();
+				posDelta.vy = 0;
+				shove(posDelta);
 
-				if(!goingToHitWall)
+				int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+				int height=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy,16);
+
+				// Hmm.. this *almost* stops him elevating through walls :/
+				if ( platformOffset < height )
 				{
-					Pos.vy += platformOffset;
+					int goingToHitWall=false;
+					int	i;
+					for(i=0;i<2;i++)
+					{
+						int x=Pos.vx+((i==0?-checkx:+checkx));
+						int	y=Pos.vy-HEIGHT_FOR_HEAD_COLLISION;
+						if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
+						{
+							goingToHitWall=true;
+							break;
+						}
+					}
+
+					if(!goingToHitWall)
+					{
+						Pos.vy += platformOffset;
+					}
 				}
 			}
 		}
 	}
-
 
 	m_allowConversation=false;
 
