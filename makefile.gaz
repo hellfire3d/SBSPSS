@@ -175,7 +175,8 @@ fx_src :=			fx \
 					fxnrgbar \
 					fxjfish \
 					fxfallingtile \
-					fxsteam
+					fxsteam \
+					fxlaser
 
 projectl_src :=		projectl \
 					prnpc \
