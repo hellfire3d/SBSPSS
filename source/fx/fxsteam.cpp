@@ -12,7 +12,7 @@
 
 #include	"FX\FXSteam.h"
 
-static const	int		DefSize=4;
+static const	int		DefSize=4*ONE;
 static const	int		DefAngleInc=999;
 static const	int		DefShadeBase=255;
 static const	int		DefShadeDec=8;
@@ -40,6 +40,7 @@ void	CFXSteam::shutdown()
 /*****************************************************************************/
 void	CFXSteam::SetSize(int Size)
 {
+		Size>>=12;
 		ScaleInc=(4096/LIST_SIZE)*Size;
 		BaseVel.vx=0;
 		BaseVel.vy=-Size;

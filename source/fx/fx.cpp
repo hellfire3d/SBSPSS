@@ -15,6 +15,7 @@
 #include	"FX\FXjfish.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
+#include	"FX\FXSplash.h"
 /* FX
 
 	Jellyfish legs
@@ -63,7 +64,9 @@ Level Effect Emitters
 
 */
 
+
 /*****************************************************************************/
+/*
 CFXSteam	*TestFXPtr=0;
 void	TestFX(DVECTOR Pos)
 {
@@ -79,6 +82,13 @@ void	TestFX(DVECTOR Pos)
 			TestFXPtr=0;
 		}
 }
+*/
+/*****************************************************************************/
+void	TestFX(DVECTOR Pos)
+{
+		CFX::Create(CFX::FX_TYPE_SPLASH,Pos);
+//		TestFXPtr->setLife(32);
+}
 
 /*****************************************************************************/
 CFX		*CFX::Create(const FX_TYPE Type)
@@ -88,12 +98,14 @@ CFX		*NewFX;
 		switch(Type)
 		{
 		case FX_TYPE_FALLINGTILE:
-			NewFX=new ("Falling Tile") CFXFallingTile();
+			NewFX=new ("FXFalling Tile") CFXFallingTile();
 			break;
 		case FX_TYPE_STEAM:
-			NewFX=new ("Steam") CFXSteam();
+			NewFX=new ("FXSteam") CFXSteam();
 			break;
-
+		case FX_TYPE_SPLASH:
+			NewFX=new ("FXSplash") CFXSplash();
+			break;
 		case FX_TYPE_JELLYFISH_LEGS:
 //			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			ASSERT(!"FISH LEGS OUT OF STOCK\n");
@@ -114,7 +126,6 @@ CFX		*NewFX;
 			case FX_TYPE_DROP_ACID:
 			case FX_TYPE_DROP_LAVA:
 			case FX_TYPE_DROP_OIL:
-		case FX_TYPE_SPLASH:
 			case FX_TYPE_SPLASH_WATER:
 			case FX_TYPE_SPLASH_ACID:
 			case FX_TYPE_SPLASH_LAVA:
