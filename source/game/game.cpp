@@ -440,6 +440,7 @@ void	CGameScene::think(int _frames)
 		// Song is loaded/dumped by the level, and played from here. This just gives some
 		// better timing over when it starts (pkg)
 		CSoundMediator::playSong();
+		CSoundMediator::setCanPlaySfx(true);
 		m_musicStarted=true;
 	}
 
@@ -702,10 +703,12 @@ int		CGameScene::getTotalSpatCountForThisLevel()
 /*****************************************************************************/
 void	CGameScene::respawnLevel()
 {
+	CSoundMediator::setCanPlaySfx(false);
 	m_player->respawn();
 	Level.respawnLevel();
 	m_gamestate=GAMESTATE_SHOWING_LIVES;
 	m_showingLivesTimer=0;
+	CSoundMediator::setCanPlaySfx(true);
 }
 
 
@@ -733,6 +736,8 @@ void CGameScene::hitBossArenaTrigger()
 /*****************************************************************************/
 void	CGameScene::initLevel()
 {
+	CSoundMediator::setCanPlaySfx(false);
+	
 	SYSTEM_DBGMSG("InitLevel\n");
 	CThingManager::init();
 

@@ -191,22 +191,12 @@ void CXMPlaySound::think()
 			case SILENT:
 				if(!ch->m_locked)
 				{
-					if(XM_GetFeedback(ch->m_internalId,&fb))
+					do
 					{
-///PAUL_DBGMSG("freeing channels:");
-///int j=i;
-						do
-						{
-///PAUL_DBGMSG(" %d (%d)",j++,ch->m_playingId);
-							ch->m_useType=FREE;
-							ch++;
-						}
-						while(ch->m_useType==CONTINUE);
+						ch->m_useType=FREE;
+						ch++;
 					}
-///	else
-///{
-///	PAUL_DBGMSG("channel %d not stopped",i);
-///}
+					while(ch->m_useType==CONTINUE);
 				}
 				break;
 
@@ -215,13 +205,14 @@ void CXMPlaySound::think()
 			case SONG:
 			case SFX:
 				if(XM_GetFeedback(ch->m_internalId,&fb))
+//				XM_GetFeedback(ch->m_internalId,&fb);
+//				if(fb.Status==XM_STOPPED)
 				{
 					// Just mark it as silent, if it's unlocked then it'll die next frame
 					ch->m_useType=SILENT;
 
 					// And kill it in the player
 					XM_Quit(ch->m_internalId);
-///PAUL_DBGMSG("marked %d (%d) as silent",i,ch->m_internalId);
 				}
 				break;
 				
@@ -706,7 +697,6 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
 				   _startPattern);		// Where to start from
 		markChannelsAsActive(baseChannel,channelCount,SONG,retId,id,255);
 		setVolume(retId,MAX_VOLUME);
-		//PAUL_DBGMSG("playSong        %d/%d ( on %d-%d )",retId,id,baseChannel,baseChannel+channelCount-1);
 	}
 	else
 	{
@@ -751,14 +741,8 @@ void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
 	ch=&m_spuChannelUse[_playingId&0xff];
 	if(ch->m_playingId==_playingId)
 	{
-		//PAUL_DBGMSG("unlocking %d",_playingId);
 		ASSERT(ch->m_locked!=false);	// Can't do this on an unlocked sound!
-		do
-		{
-			ch->m_locked=false;
-			ch++;
-		}
-		while(ch->m_useType==CONTINUE);
+		ch->m_locked=false;
 		return;
 	}
 
@@ -785,19 +769,15 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 			case SONG:
 			case SFX:
 				{
-//				XM_Feedback		fb;
-//				do
-//				{
-					XM_PlayStop(ch->m_internalId);
-//					XM_GetFeedback(ch->m_internalId,&fb);
-//				}
-//				while(fb.Status!=XM_STOPPED);
+				XM_PlayStop(ch->m_internalId);
 				XM_Quit(ch->m_internalId);
+				ch->m_useType=SILENT;
 				}
 				break;
 
 			case LOOPINGSFX:
 				XM_StopSample(ch->m_internalId);
+				ch->m_useType=SILENT;
 				break;
 				
 			case SILENT:
@@ -809,7 +789,6 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 				break;
 		}
 
-		ch->m_useType=SILENT;
 		return;
 	}
 
@@ -853,17 +832,16 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPa
 	{
 		retId=getNextSparePlayingId(baseChannel);
 		vab=&m_xmVabs[_sampleId];
-		XM_SetSFXRange(baseChannel,channelCount);
+//		XM_SetSFXRange(baseChannel,channelCount);
 		id=XM_Init(vab->m_vabId,		// id from XM_VABInit
 				   _modId,				// XM id ( as passed to InitXMData )
 				   -1,					// Let xmplay give us a song id
-				   -1,					// Use SFX range to get first channel
+				   baseChannel,			// Base cahnnel to play on
 			       XM_NoLoop,			// One-shot
 				   _playMask,			// Play mask
 				   XM_SFX,				// SFX
 				   _sfxPattern);		// SFX pattern to play
 		XM_ClearSFXRange();
-		//PAUL_DBGMSG("playSfx         %d/%d ( on %d-%d )",retId,id,baseChannel,baseChannel+channelCount-1);
 		markChannelsAsActive(baseChannel,channelCount,SFX,retId,id,_priority);
 		setVolume(retId,MAX_VOLUME);
 	}
@@ -891,7 +869,6 @@ xmPlayingId	CXMPlaySound::playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int
 	if(baseChannel!=-1)
 	{
 		retId=getNextSparePlayingId(baseChannel);
-		//PAUL_DBGMSG("playLoopingSfx  %d/- ( on %d-%d )",retId,baseChannel,baseChannel);
 		XM_PlaySample(XM_GetSampleAddress(_sampleId,_soundId),baseChannel,0x3fff,0x3fff,_pitch);
 		markChannelsAsActive(baseChannel,1,LOOPINGSFX,retId,baseChannel,_priority);
 		setVolume(retId,MAX_VOLUME);

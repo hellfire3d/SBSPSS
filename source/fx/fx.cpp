@@ -307,6 +307,21 @@ CFX		*NewFX=CFX::Create(Type);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+void	CFX::leftThinkZone(int _frames)
+{
+	if(Flags & FX_FLAG_NO_THINK_KILL)
+	{
+		killFX();
+	}
+
+	if( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx(m_soundId);
+		m_soundId=NOT_PLAYING;
+	}
+}
+
+/*****************************************************************************/
 void	CFX::init()
 {
 		CFXThing::init();
@@ -404,13 +419,14 @@ void	CFX::killFX()
 	{
 		CFX::Create((CFX::FX_TYPE)AfterEffect,getPos());
 	}
+	if( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx(m_soundId);
+		m_soundId=NOT_PLAYING;
+	}
 	if (EndSnd)
 	{
 		CSoundMediator::playSfx( (CSoundMediator::SFXID)EndSnd,false);
-	}
-	if( m_soundId != NOT_PLAYING )
-	{
-		CSoundMediator::stopAndUnlockSfx(m_soundId );
 	}
 }
 

@@ -102,7 +102,7 @@ static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
 static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
 
 		bool		alwaysThink()								{return(Flags & FX_FLAG_SCREEN_FX);}
-		void		leftThinkZone(int _frames)					{if (Flags & FX_FLAG_NO_THINK_KILL) killFX();}
+		void		leftThinkZone(int _frames);
 
 		void		init();
 virtual void		init(DVECTOR const &Pos);
