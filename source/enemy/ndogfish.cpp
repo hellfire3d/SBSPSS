@@ -39,7 +39,6 @@
 #include "system\vid.h"
 #endif
 
-#include "fx\fx.h"
 #include "fx\fxnrgbar.h"
 
 
@@ -72,7 +71,7 @@ bool CNpcIronDogfishEnemy::processSensor()
 
 		default:
 		{
-			if ( playerXDistSqr + playerYDistSqr < 5000 )
+			if ( m_movementTimer > 0 && playerXDistSqr + playerYDistSqr < 5000 )
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -140,32 +139,12 @@ void CNpcIronDogfishEnemy::processWalkToUser( int _frames, int speed )
 	if ( playerXDist > 0 )
 	{
 		m_heading = 0;
-
-		if ( Pos.vx + playerXDist > maxX )
-		{
-			// abort
-
-			m_movementTimer = GameState::getOneSecondInFrames() * 3;
-		}
-		else
-		{
-			Pos.vx += _frames * speed;
-		}
+		Pos.vx += _frames * speed;
 	}
 	else
 	{
 		m_heading = 2048;
-
-		if ( Pos.vx + playerXDist < minX )
-		{
-			// abort
-
-			m_movementTimer = GameState::getOneSecondInFrames() * 3;
-		}
-		else
-		{
-			Pos.vx -= _frames * speed;
-		}
+		Pos.vx -= _frames * speed;
 	}
 
 	s32 fallSpeed = 3;
@@ -190,13 +169,18 @@ void CNpcIronDogfishEnemy::processWalkToUser( int _frames, int speed )
 
 void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 {
-	if ( playerXDist > 0 )
+	if ( m_state != IRON_DOGFISH_LASER_EYE_1_WAIT && m_state != IRON_DOGFISH_LASER_EYE_2_WAIT )
 	{
-		m_extendDir = EXTEND_RIGHT;
-	}
-	else
-	{
-		m_extendDir = EXTEND_LEFT;
+		if ( playerXDist > 0 )
+		{
+			m_extendDir = EXTEND_RIGHT;
+			m_heading = 0;
+		}
+		else
+		{
+			m_extendDir = EXTEND_LEFT;
+			m_heading = 2048;
+		}
 	}
 
 	switch( m_state )
@@ -204,7 +188,27 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 		case IRON_DOGFISH_THUMP_1:
 		case IRON_DOGFISH_THUMP_2:
 		{
-			if ( playerXDistSqr > 100 )
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			u8 thump = false;
+
+			if ( playerXDist > 0 )
+			{
+				if ( Pos.vx + playerXDist > maxX )
+				{
+					thump = true;
+				}
+			}
+			else
+			{
+				if ( Pos.vx + playerXDist < minX )
+				{
+					thump = true;
+				}
+			}
+
+			if ( playerXDistSqr > 100 && !thump )
 			{
 				if ( !m_animPlaying )
 				{
@@ -238,23 +242,75 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 		case IRON_DOGFISH_LASER_EYE_1:
 		case IRON_DOGFISH_LASER_EYE_2:
 		{
+			if ( m_animNo != ANIM_IRONDOGFISH_IDLE || !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_IRONDOGFISH_IDLE;
+				m_frame = 0;
+			}
+
 			// fire at user
 
 			s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
-			CProjectile *projectile;
+			/*CProjectile *projectile;
 			projectile = CProjectile::Create();
 			DVECTOR startPos = Pos;
 			startPos.vy -= 20;
-			projectile->init( startPos, headingToPlayer );
+			projectile->init( startPos, headingToPlayer );*/
+
+			m_laserTimer = GameState::getOneSecondInFrames();
+
+			m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
+			DVECTOR targetPos = GameScene.getPlayer()->getPos();
+			targetPos.vy -= 45;
+			m_effect->setTarget( targetPos );
+			DVECTOR offsetPos;
+			if ( m_heading == 0 )
+			{
+				offsetPos.vx = 30;
+			}
+			else
+			{
+				offsetPos.vx = -30;
+			}
+			offsetPos.vy = -45;
+			m_effect->setOffset( offsetPos );
+			m_effect->setRGB( 255, 0, 0 );
 
 			m_state++;
 
-			if ( m_state > IRON_DOGFISH_LASER_EYE_2 )
-			{
-				// return to first state
+			break;
+		}
 
-				m_state = IRON_DOGFISH_THUMP_1;
+		case IRON_DOGFISH_LASER_EYE_1_WAIT:
+		case IRON_DOGFISH_LASER_EYE_2_WAIT:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_IRONDOGFISH_IDLE;
+				m_frame = 0;
+			}
+
+			if ( m_laserTimer > 0 )
+			{
+				m_laserTimer -= _frames;
+			}
+			else
+			{
+				m_effect->killFX();
+
+				m_state++;
+
+				if ( m_state > IRON_DOGFISH_LASER_EYE_2_WAIT )
+				{
+					// return to first state
+
+					m_state = IRON_DOGFISH_THUMP_1;
+				}
+
+				m_movementTimer = GameState::getOneSecondInFrames() * 3;
 			}
 
 			break;
@@ -262,9 +318,27 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 
 		case IRON_DOGFISH_ROLL:
 		{
-			// charge user
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
 
-			if ( playerXDistSqr > 100 )
+			u8 thump = false;
+
+			if ( playerXDist > 0 )
+			{
+				if ( Pos.vx + playerXDist > maxX )
+				{
+					thump = true;
+				}
+			}
+			else
+			{
+				if ( Pos.vx + playerXDist < minX )
+				{
+					thump = true;
+				}
+			}
+
+			if ( playerXDistSqr > 100 && !thump )
 			{
 				if ( !m_animPlaying )
 				{
@@ -517,15 +591,12 @@ void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
 								m_oldControlFunc = m_controlFunc;
 								m_controlFunc = NPC_CONTROL_COLLISION;
 
-								processUserCollision( _thisThing );
-
 								break;
 							}
 
 							case DETECT_ATTACK_COLLISION_GENERIC:
 							{
 								processAttackCollision();
-								processUserCollision( _thisThing );
 
 								break;
 							}
@@ -558,7 +629,7 @@ void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
 
 				if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
 				{
-					processEnemyCollision( _thisThing );
+					//processEnemyCollision( _thisThing );
 				}
 
 				break;
@@ -613,4 +684,13 @@ void CNpcIronDogfishEnemy::render()
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::processCollision()
+{
+	CPlayer *player = GameScene.getPlayer();
+	player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
+	m_controlFunc = m_oldControlFunc;
 }

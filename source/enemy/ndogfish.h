@@ -14,6 +14,9 @@
 #ifndef	__ENEMY_NDOGFISH_H__
 #define	__ENEMY_NDOGFISH_H__
 
+#include "fx\fx.h"
+#include "fx\fxlaser.h"
+
 class CNpcIronDogfishEnemy : public CNpcEnemy
 {
 public:
@@ -27,6 +30,7 @@ protected:
 	virtual void		processMovement( int _frames );
 	void				processStandardIronDogfishAttack( int _frames );
 	void				processWalkToUser( int _frames, int speed );
+	virtual void		processCollision();
 	virtual void		processAttackCollision();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos );
 	virtual void		processShot( int _frames );
@@ -36,14 +40,19 @@ protected:
 	{
 		IRON_DOGFISH_THUMP_1 = 0,
 		IRON_DOGFISH_LASER_EYE_1 = 1,
+		IRON_DOGFISH_LASER_EYE_1_WAIT,
 		IRON_DOGFISH_THUMP_2,
 		IRON_DOGFISH_ROLL,
 		IRON_DOGFISH_LASER_EYE_2,
+		IRON_DOGFISH_LASER_EYE_2_WAIT,
 	};
 
 	s32					m_steamTimer;
 	s32					m_vulnerableTimer;
+	s32					m_laserTimer;
 	bool				m_meterOn;
+
+	CFXLaser			*m_effect;
 };
 
 #endif

@@ -637,6 +637,14 @@ SOURCE=..\..\..\source\fx\fx.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\fx\fxattachanim.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxattachanim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\fx\fxbaseanim.cpp
 # End Source File
 # Begin Source File
@@ -685,6 +693,14 @@ SOURCE=..\..\..\source\fx\fxjfish.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\fx\fxlaser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxlaser.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\fx\fxnrgbar.cpp
 # End Source File
 # Begin Source File
@@ -698,6 +714,14 @@ SOURCE=..\..\..\source\fx\fxsteam.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\fx\fxsteam.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxthwack.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxthwack.h
 # End Source File
 # End Group
 # Begin Group "game"
