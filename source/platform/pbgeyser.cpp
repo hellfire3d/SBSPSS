@@ -49,7 +49,8 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 
 	if ( m_timer < 0 )
 	{
-		m_timer = getRnd() % ( m_data[m_type].initTimer * GameState::getOneSecondInFrames() );
+		//m_timer = getRnd() % ( m_data[m_type].initTimer * GameState::getOneSecondInFrames() );
+		m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
 
 		// generate new falling platform
 
