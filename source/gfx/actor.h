@@ -75,7 +75,7 @@ public:
 
 static	void		Init();
 
-static	int			AddActor(FileEquate Filename);
+static	void		AddActor(FileEquate Filename)		{GetActor(Filename);}
 static	CActorGfx	*GetActor(FileEquate Filename);
 static	void		DumpActors();
 		
