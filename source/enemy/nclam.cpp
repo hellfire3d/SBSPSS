@@ -74,8 +74,6 @@ bool CNpcClamEnemy::processSensor()
 					m_controlFunc = NPC_CONTROL_CLOSE;
 					m_extendDir = EXTEND_UP;
 					m_extension = 0;
-					m_movementTimer = GameState::getOneSecondInFrames() >> 3;
-					m_velocity = ( getRnd() % 6 ) + 1;
 
 					CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_MOVE );
 
@@ -100,11 +98,104 @@ void CNpcJumpingClamEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcJumpingClamEnemy::setupWaypoints( sThingActor *ThisActor )
+{
+	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
+
+	u16 newXPos, newYPos;
+	u16 startXPos, startYPos, endXPos, endYPos;
+
+	startXPos = newXPos = (u16) *PntList;
+	PntList++;
+	startYPos = newYPos = (u16) *PntList;
+	PntList++;
+
+	setStartPos( newXPos, newYPos );
+	addWaypoint( newXPos, newYPos );
+
+	m_maxExtension = 10;
+
+	if ( ThisActor->PointCount > 1 )
+	{
+		for (int pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			addWaypoint( newXPos, newYPos );
+
+			if ( pointNum == 1 )
+			{
+				endXPos = newXPos;
+				endYPos = newYPos;
+
+				setHeading( newXPos, newYPos );
+
+				s32 xDist = ( endXPos - startXPos ) << 4;
+				s32 yDist = ( endYPos - startYPos ) << 4;
+
+				m_maxExtension = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcJumpingClamEnemy::processClose( int _frames )
 {
 	s32 velocity;
 
 	if ( m_extendDir == EXTEND_UP )
+	{
+		velocity = m_speed * _frames;
+
+		m_extension += velocity;
+
+		if ( m_extension > m_maxExtension )
+		{
+			m_extension = m_maxExtension;
+			m_extendDir = EXTEND_DOWN;
+		}
+
+		Pos = m_base;
+		Pos.vx += ( m_extension * rcos( m_heading ) ) >> 12;
+		Pos.vy += ( m_extension * rsin( m_heading ) ) >> 12;
+
+		if ( !m_animPlaying )
+		{
+			m_animPlaying = true;
+			m_animNo = ANIM_CLAM_SNAPUP;
+			m_frame = 0;
+		}
+	}
+	else if ( m_extendDir == EXTEND_DOWN )
+	{
+		velocity = -_frames;
+
+		m_extension += velocity;
+
+		if ( m_extension < 0 )
+		{
+			m_extension = 0;
+
+			if ( !m_animPlaying )
+			{
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_timerTimer = GameState::getOneSecondInFrames();
+				m_sensorFunc = NPC_SENSOR_NONE;
+			}
+		}
+
+		Pos = m_base;
+		Pos.vx += ( m_extension * rcos( m_heading ) ) >> 12;
+		Pos.vy += ( m_extension * rsin( m_heading ) ) >> 12;
+	}
+
+	/*if ( m_extendDir == EXTEND_UP )
 	{
 		m_movementTimer -= _frames;
 
@@ -160,7 +251,7 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 				m_sensorFunc = NPC_SENSOR_NONE;
 			}
 		}
-	}
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

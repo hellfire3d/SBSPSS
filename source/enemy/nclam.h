@@ -30,6 +30,9 @@ public:
 	virtual void		postInit();
 protected:
 	virtual void		processClose( int _frames );
+	virtual void		setupWaypoints( sThingActor *ThisActor );
+
+	s32					m_maxExtension;
 };
 
 class CNpcStaticClamEnemy : public CNpcClamEnemy
