@@ -27,6 +27,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
 #ifndef __HAZARD_HFALLING_H__
 #include "hazard\hfalling.h"
 #endif
@@ -252,6 +256,33 @@ void CNpcHazard::render()
 				m_modelGfx->Render(renderPos);
 				//m_actorGfx->Render(renderPos,0,0,0);
 			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHazard::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				if ( !player->isRecoveringFromHit() )
+				{
+					player->takeDamage( DAMAGE__HIT_ENEMY );
+				}
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
 		}
 	}
 }

@@ -68,6 +68,8 @@ protected:
 
 	virtual void		processMovement( int _frames );
 	virtual void		processTimer( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
+
 	CNpcPath			m_npcPath;
 	//CActorGfx			*m_actorGfx;
 	//SpriteBank			*m_spriteBank;
