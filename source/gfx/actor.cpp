@@ -438,11 +438,14 @@ sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
 			TotalFrames+=ThisAnim->FrameCount;
 		}
 
-// FixUp FrameList
+// FixUp FrameList (not blank ones)
 		for (i=0; i<Spr->FrameCount; i++)
 		{
 			sSpriteFrameGfx	*ThisFrame=&Spr->FrameList[i];
-			ThisFrame->PAKSpr=(u8*)				MakePtr(Spr,(int)ThisFrame->PAKSpr);
+			if (ThisFrame->PAKSpr)
+			{
+				ThisFrame->PAKSpr=(u8*)				MakePtr(Spr,(int)ThisFrame->PAKSpr);
+			}
 		}
 
 // Store it
@@ -474,17 +477,6 @@ void		CActorPool::AddActor(sActorPool *NewActor)
 			LastActor=NewActor;
 }
 
-int		CountSlots(sPoolNode *Node)
-{
-int		Count=0;
-			while (Node)
-			{
-				Count++;
-				Node=Node->Next;
-			}
-	return(Count);
-
-}
 /*****************************************************************************/
 void	CActorPool::CleanUpCache()
 {
@@ -501,17 +493,6 @@ sActorPool	*Actor=ActorList;
 			ASSERT(Actor->GlobalCache->Tail);
 			Actor=Actor->Next;
 		}
-/*
-		for (int i=0;i<CActorPool::Cache.GetSlotCount(); i++)
-		{
-
-			sPoolSlot	&Slot=CActorPool::Cache.GetSlot(i);
-			int			Count=CountSlots(Slot.NodeList.Head);
-
-			DAVE_DBGMSG("SC %i: %i %i\n",i,Slot.SlotCount,Count);
-			ASSERT(Slot.SlotCount==Count);
-		}
-*/
 }
 
 /*****************************************************************************/
@@ -539,11 +520,10 @@ void	CActorGfx::setActor(sActorPool *ThisActor)
 //		ShadowYOfs=DEF_SHADOW_OFS;
 //		ShadowFlag=false;
 		OtPos=OTPOS__ACTOR_POS;
-
 }
 
 /*****************************************************************************/
-
+int	BBX=0;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
@@ -732,8 +712,8 @@ int		YMin,YMax;
 /*****************************************************************************/
 void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip)
 {
-u8		W=CurrentFrameGfx->W;
-u8		H=CurrentFrameGfx->H;
+u8		W=CurrentFrameGfx->W-1;
+u8		H=CurrentFrameGfx->H-1;
 u8		U=Node->U;
 u8		V=Node->V;
 
@@ -741,9 +721,9 @@ u8		V=Node->V;
 			{
 			X-=CurrentFrame->XOfs;
 			X-=W;
-			Ft4->u0=U+W-1;
+			Ft4->u0=U+W;
 			Ft4->u1=U;//-1;//
-			Ft4->u2=U+W-1;
+			Ft4->u2=U+W;
 	 		Ft4->u3=U;//-1;//
 
 			}
@@ -751,9 +731,9 @@ u8		V=Node->V;
 		{
 			X+=CurrentFrame->XOfs;
 			Ft4->u0=U;
-			Ft4->u1=U+W-1;
+			Ft4->u1=U+W;
 			Ft4->u2=U;
- 			Ft4->u3=U+W-1;
+ 			Ft4->u3=U+W;
 
 		}
 
@@ -761,8 +741,8 @@ u8		V=Node->V;
 			{
 			Y-=CurrentFrame->YOfs;
 			Y-=H;
-			Ft4->v0=V+H-1;
-			Ft4->v1=V+H-1;
+			Ft4->v0=V+H;
+			Ft4->v1=V+H;
 			Ft4->v2=V-1;//
 			Ft4->v3=V-1;//
 			}
@@ -771,15 +751,23 @@ u8		V=Node->V;
 			Y+=CurrentFrame->YOfs;
 			Ft4->v0=V;
 			Ft4->v1=V;
-			Ft4->v2=V+H-1;
-			Ft4->v3=V+H-1;
+			Ft4->v2=V+H;
+			Ft4->v3=V+H;
 		}
 
 		setXYWH(Ft4,X,Y,W,H);
-		CorrectAspect(Ft4);
+// Correct Aspect
+		Ft4->x0-=CurrentFrameGfx->AspectX0;
+		Ft4->x1+=CurrentFrameGfx->AspectX1;
+		Ft4->x2-=CurrentFrameGfx->AspectX0;
+		Ft4->x3+=CurrentFrameGfx->AspectX1;
+		
+//		CorrectAspect(Ft4);
 }
 
 
+/*****************************************************************************/
+/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
