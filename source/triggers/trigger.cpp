@@ -35,6 +35,10 @@
 #include "triggers\twater.h"
 #endif
 
+#ifndef	__TRIGGERS_TPLATFRM_H__
+#include "triggers\tplatfrm.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -75,6 +79,10 @@ CTrigger	*trigger;
 			break;
 		case TRIGGER_OUTWATER:
 			trigger=(COutOfWaterTrigger*)new ("OutOfWaterTrigger") COutOfWaterTrigger();
+			break;
+
+		case TRIGGER_PLATFORM:
+			trigger = (CPlatformTrigger*)new ("PlatformTrigger") CPlatformTrigger();
 			break;
 		default:
 			trigger=NULL;
