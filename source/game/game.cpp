@@ -200,6 +200,8 @@ void 	CGameScene::init()
 		CFader::setFadingIn();
 		initLevel();
 
+		m_gamestate=GAMESTATE_SHOWING_LIVES;
+		m_showingLivesTimer=0;
 }
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
@@ -214,7 +216,7 @@ void	CGameScene::createPlayer()
 // This is also to be overloaded for demomode.. to stop the pause menu appearing
 int		CGameScene::canPause()
 {
-		return true;
+		return m_gamestate==GAMESTATE_PLAYING;
 }
 
 
@@ -233,6 +235,71 @@ void	CGameScene::shutdown()
 
 /*****************************************************************************/
 void 	CGameScene::render()
+{
+	switch(m_gamestate)
+	{
+		case GAMESTATE_SHOWING_LIVES:
+			render_showing_lives();
+			break;
+		case GAMESTATE_PLAYING:
+			render_playing();
+			break;
+	}
+}
+
+/*****************************************************************************/
+void CGameScene::render_showing_lives()
+{
+	int			colour;
+	POLY_F4		*f4;
+	POLY_FT3	*ft3;
+
+
+	colour=m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT;
+	if(colour<0)
+	{
+		colour=0;
+	}
+	else
+	{
+		colour*=SPEED_OF_FADE;
+		if(colour>255)
+		{
+			colour=255;
+		}
+	}
+	colour=255-colour;
+
+	// Text
+	s_genericFont->setJustification(FontBank::JUST_CENTRE);
+	s_genericFont->setColour(colour,colour,colour);
+	s_genericFont->setTrans(1);
+	s_genericFont->setSMode(1);
+	s_genericFont->print(256,50,"Now entering:");
+	s_genericFont->print(256,80,Level.getChapterLoadingText());
+	s_genericFont->print(256,100,Level.getLevelLoadingText());
+	s_genericFont->print(256,140,"Lives x 5");
+
+	// Black background
+	f4=GetPrimF4();
+	setXYWH(f4,0,0,512,256);
+	setRGB0(f4,colour,colour,colour);
+	setShadeTex(f4,0);
+	setSemiTrans(f4,1);
+	AddPrimToList(f4,0);
+	ft3=GetPrimFT3();
+	setPolyFT3(ft3);
+	setShadeTex(ft3,1);
+	setSemiTrans(ft3,1);
+	ft3->tpage=2<<5;
+	setXY3(ft3,512,512,512,512,512,512);
+	AddPrimToList(ft3,0);
+
+	render_playing();
+}
+
+/*****************************************************************************/
+void CGameScene::render_playing()
 {
 //		CamMtx.t[2]=ZPos;	// Temp
 
@@ -264,6 +331,50 @@ void 	CGameScene::render()
 
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
+{
+	switch(m_gamestate)
+	{
+		case GAMESTATE_SHOWING_LIVES:
+			think_showing_lives(_frames);
+			break;
+		case GAMESTATE_PLAYING:
+			think_playing(_frames);
+			break;
+	}
+}
+
+/*****************************************************************************/
+void CGameScene::think_showing_lives(int _frames)
+{
+	if(m_showingLivesTimer==0)
+	{
+		think_playing(0);
+	}
+	else if((m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT)*SPEED_OF_FADE>128)
+	{
+		think_playing(_frames);
+	}
+
+	if(PadGetDown(0)&PAD_CROSS&&m_showingLivesTimer<TIME_TO_DISPLAY_LIVES_COUNT)
+	{
+		m_showingLivesTimer=TIME_TO_DISPLAY_LIVES_COUNT;
+		m_player->ignoreNewlyPressedButtonsOnPadThisThink();
+	}
+
+	if(_frames>2)
+	{
+		_frames=2;
+	}
+	m_showingLivesTimer+=_frames;
+	
+	if((m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT)*SPEED_OF_FADE>255)
+	{
+		m_gamestate=GAMESTATE_PLAYING;
+	}
+}
+
+/*****************************************************************************/
+void CGameScene::think_playing(int _frames)
 {
 	if(s_readyToExit)
 	{
@@ -398,7 +509,6 @@ void	CGameScene::think(int _frames)
 	}
 }
 
-
 /*****************************************************************************/
 int		CGameScene::readyToShutdown()
 {
@@ -431,6 +541,8 @@ void	CGameScene::respawnLevel()
 {
 	m_player->respawn();
 	Level.respawnLevel();
+	m_gamestate=GAMESTATE_SHOWING_LIVES;
+	m_showingLivesTimer=0;
 }
 
 

@@ -61,6 +61,30 @@ static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
 static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 
 static	void			dropHealth(DVECTOR &Pos,int Amount,int Vel);
+
+
+private:
+	typedef enum
+	{
+		GAMESTATE_SHOWING_LIVES,
+		GAMESTATE_PLAYING,
+	}GAMESTATE;
+
+	enum
+	{
+		TIME_TO_DISPLAY_LIVES_COUNT=3*60,
+		SPEED_OF_FADE=10,
+	};
+
+	GAMESTATE			m_gamestate;
+	int					m_showingLivesTimer;
+
+	void				think_showing_lives(int _frames);
+	void				think_playing(int _frames);
+	void				render_showing_lives();
+	void				render_playing();
+
+
 protected:
 
 		void			initLevel();

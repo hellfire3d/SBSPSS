@@ -9,7 +9,6 @@ Jump
 Run 
 RunStop
 RunStart
-SoakUp 
 TeeterBack 
 TeeterFront 
 Swipe

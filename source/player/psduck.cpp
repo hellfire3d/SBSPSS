@@ -59,37 +59,8 @@
 	Vars
 	---- */
 
-CPlayerStateDuck			s_stateDuck;
 CPlayerStateSoakUp			s_stateSoakUp;
 CPlayerStateGetUp			s_stateGetUp;
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayerStateDuck::enter(CPlayerModeBase *_playerMode)
-{
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayerStateDuck::think(CPlayerModeBase *_playerMode)
-{
-	_playerMode->slowdown();
-	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
-	{
-		_playerMode->setState(STATE_SOAKUP);
-	}
-}
 
 
 /*----------------------------------------------------------------------
@@ -101,8 +72,7 @@ void CPlayerStateDuck::think(CPlayerModeBase *_playerMode)
 void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->zeroMoveVelocity();	
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
-	_playerMode->setAnimFrame(_playerMode->getAnimFrameCount()-1);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_DONOTDRAW);
 	m_breatheDelayFrames=0;
 }
 

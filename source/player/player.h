@@ -78,7 +78,6 @@ typedef enum
 	STATE_BUTTFALL,
 	STATE_BUTTLAND,
 	STATE_BUTTBOUNCEUP,
-	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
 	STATE_LOOKDOWN,
@@ -173,6 +172,13 @@ typedef enum
 	ATTACK_STATE__KARATE,
 	ATTACK_STATE__BUTT_BOUNCE,
 } ATTACK_STATE;
+
+
+
+
+// Special anim that means SB will not get drawn
+// Just pass it to setAnimNo() like a normal anim
+#define ANIM_SPONGEBOB_DONOTDRAW		-1
 
 
 

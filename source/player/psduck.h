@@ -32,15 +32,6 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerStateDuck : public CPlayerState
-{
-public:
-	void			enter(class CPlayerModeBase *_playerMode);
-	void			think(class CPlayerModeBase *_playerMode);
-
-};
-
-
 class CPlayerStateSoakUp : public CPlayerState
 {
 public:
@@ -74,7 +65,6 @@ public:
 	Globals
 	------- */
 
-extern	CPlayerStateDuck			s_stateDuck;
 extern	CPlayerStateSoakUp			s_stateSoakUp;
 extern	CPlayerStateGetUp			s_stateGetUp;
 

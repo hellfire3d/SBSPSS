@@ -128,7 +128,6 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateButtBounceFall,					// STATE_BUTTFALL
 	&s_stateButtBounceLand,					// STATE_BUTTLAND
 	&s_stateButtBounceUp,					// STATE_BUTTBOUNCEUP
-	&s_stateDuck,							// STATE_DUCK
 	&s_stateSoakUp,							// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
 	&s_stateLookDown,						// STATE_LOOKDOWN
@@ -428,7 +427,6 @@ int		CPlayerModeNet::canSwingNetFromThisState()
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
 		case STATE_BUTTBOUNCEUP:
-		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
 		case STATE_LOOKDOWN:

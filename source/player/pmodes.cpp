@@ -124,7 +124,6 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateButtBounceFall,					// STATE_BUTTFALL
 	&s_stateButtBounceLand,					// STATE_BUTTLAND
 	&s_stateButtBounceUp,					// STATE_BUTTBOUNCEUP
-	&s_stateDuck,							// STATE_DUCK
 	&s_stateSoakUp,							// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
 	&s_stateLookDown,						// STATE_LOOKDOWN
@@ -251,7 +250,6 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
 		case STATE_BUTTBOUNCEUP:
-		case STATE_DUCK:
 		case STATE_GETUP:
 		case STATE_LOOKDOWNRELAX:
 		case STATE_LOOKUPRELAX:
@@ -288,7 +286,6 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 		case STATE_FALL:
 		case STATE_FALLFAR:
 		case STATE_BUTTBOUNCE:
-		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
 		case STATE_LOOKDOWN:
@@ -656,7 +653,6 @@ void	CPlayerModeBase::spring()
 		moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
 	}
 	setMoveVelocity(&moveVel);
-PAUL_DBGMSG("%d",moveVel.vy);
 }
 void	CPlayerModeBase::jumpback()
 {
