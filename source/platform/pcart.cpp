@@ -19,6 +19,14 @@
 #include	"game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcCartPlatform::postInit()
@@ -95,4 +103,107 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	Pos.vx += moveX;
 	Pos.vy += moveY;
+
+	// sort out draw rotation
+
+	DVECTOR testPos1, testPos2;
+
+	testPos1 = testPos2 = Pos;
+	testPos1.vx -= 10;
+	testPos2.vx += 10;
+
+	u8 sensorDist = 16;
+
+	s32 yDiff;
+
+	yDiff = m_layerCollision->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
+
+	if ( yDiff <= sensorDist )
+	{
+		// only use if there is ground present
+
+		testPos1.vy += yDiff;
+	}
+
+	yDiff = m_layerCollision->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
+
+	if ( yDiff <= sensorDist )
+	{
+		// only use if there is ground present
+
+		testPos2.vy += yDiff;
+	}
+
+	s32 xDist = testPos2.vx - testPos1.vx;
+	s32 yDist = testPos2.vy - testPos1.vy;
+
+	heading = ratan2( yDist, xDist );
+
+	setCollisionAngle( heading );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcCartPlatform::render()
+{
+	if ( m_isActive )
+	{
+		CPlatformThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx ;
+		renderPos.vy = Pos.vy - offset.vy ;
+
+		CRECT collisionRect = getCollisionArea();
+		collisionRect.x1 -= Pos.vx;
+		collisionRect.x2 -= Pos.vx;
+		collisionRect.y1 -= Pos.vy;
+		collisionRect.y2 -= Pos.vy;
+
+		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		{
+			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
+			{
+				SVECTOR rotation;
+				rotation.vx = 0;
+				rotation.vy = 0;
+				rotation.vz = getCollisionAngle();
+
+				VECTOR scale;
+				scale.vx = ONE;
+				scale.vy = ONE;
+				scale.vz = ONE;
+
+				m_modelGfx->Render(renderPos,&rotation,&scale);
+
+#if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
+	DVECTOR	centre;
+	int		halfLength;
+	int		x1,y1,x2,y2;
+
+	centre=getCollisionCentre();
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
+
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
+			}
+		}
+	}
 }
