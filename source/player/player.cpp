@@ -71,6 +71,23 @@
 // Two dice.  One says 'Re' on every face, the other says 'boot',
 // 'install', 'try', 'tire', 'sume' and 'number'
 
+/*
+WEAPON MODES
+	unamred				constant
+	karate-chop			constant
+	balloon				timed ( respawn )
+	bubble mixture		(un)limited supply ( respawn )
+	helmet				constant ( respawn )
+	coral blower		constant ( respawn )
+	net					constant
+	jelly launcher		limited supply ( respawn )
+
+POWER-UPS
+	glasses				constant
+	squeaky boots		timed ( respawn )
+	mm & bb ring		timed
+*/
+
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -134,7 +151,6 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 {
 	"BASICUNARMED",
 	"FULLUNARMED",
-	"SQUEAKYBOOTS",
 	"BALLOON",
 	"NET",
 	"CORALBLOWER",
@@ -163,7 +179,6 @@ int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camer
 int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 4 and a bit frames )
 
 
-int angg=900;
 
 
 
@@ -216,6 +231,8 @@ m_skel.setAng(512);
 
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
+
+	m_skel.setAng(900);
 }
 
 /*----------------------------------------------------------------------
@@ -248,7 +265,6 @@ void	CPlayer::think(int _frames)
 	
 	CPlayerThing::think(_frames);
 
-m_skel.setAng(angg);
 
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 {
@@ -268,6 +284,23 @@ if(newmode!=-1)
 		thinkVerticalMovement();
 		thinkHorizontalMovement();
 
+		// Powerups
+		if(m_squeakyBootsTimer)
+		{
+			m_squeakyBootsTimer--;
+		}
+		if(m_invinvibilityRingTimer)
+		{
+			m_invinvibilityRingTimer--;
+		}
+
+		// Flashing..
+		if(m_invincibleFrameCount)
+		{
+			m_invincibleFrameCount--;
+		}
+
+
 #ifdef _STATE_DEBUG_
 sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
 #endif
@@ -277,12 +310,6 @@ if(Pos.vx<64)Pos.vx=64;
 else if(Pos.vx>m_mapEdge.vx-64)Pos.vx=m_mapEdge.vx-64;
 if(Pos.vy<64)Pos.vy=64;
 else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
-
-		// Flashing..
-		if(m_invincibleFrameCount)
-		{
-			m_invincibleFrameCount--;
-		}
 
 		// Teeter if on an edge
 		if(m_currentState==STATE_IDLE&&isOnEdge())
@@ -815,13 +842,14 @@ void CPlayer::setAnimFrame(int _animFrame)
 			if(m_animFrame==frameSfx->m_frame)
 			{
 				CSoundMediator::SFXID sfxId=frameSfx->m_sfxId;
-				if(m_currentMode==PLAYER_MODE_SQUEAKYBOOTS)
+				if(m_squeakyBootsTimer)
 				{
 					// Ugh.. horrible way to change the sfx when wearing squeaky boots (pkg)
 					if(sfxId==CSoundMediator::SFX_SPONGEBOB_WALK_1)sfxId=CSoundMediator::SFX_SPONGEBOB_SQUEAKY_SHOES_1;
 					else if(sfxId==CSoundMediator::SFX_SPONGEBOB_WALK_2)sfxId=CSoundMediator::SFX_SPONGEBOB_SQUEAKY_SHOES_2;
 				}
 				CSoundMediator::playSfx(sfxId);
+				break;
 			}
 			if(m_animFrame<frameSfx->m_frame)
 			{
@@ -1122,8 +1150,8 @@ int invincibleSponge=false;		// NB: This is for debugging purposes only so don't
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {
-	// Don't take damage if still recovering from the last hit
-	if(!m_invincibleFrameCount)
+	if(!m_invincibleFrameCount||	// Don't take damage if still recovering from the last hit
+	   m_invinvibilityRingTimer)	// Or if we have the invincibility ring on
 	{
 		int	ouchThatHurt=true;
 
@@ -1136,7 +1164,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 				break;
 
 			case DAMAGE__ELECTROCUTION:
-				if(m_currentMode==PLAYER_MODE_SQUEAKYBOOTS)
+				if(m_squeakyBootsTimer)
 				{
 					ouchThatHurt=false;
 				}

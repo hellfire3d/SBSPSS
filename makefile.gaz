@@ -167,8 +167,7 @@ player_src :=		demoplay \
 					psrun \
 					pstates \
 					modelist \
-					pmballoon \
-					pmboots
+					pmballoon
 
 script_src :=		script \
 					function

@@ -54,10 +54,13 @@ typedef enum
 {
 	PLAYER_MODE_BASICUNARMED,
 	PLAYER_MODE_FULLUNARMED,
-	PLAYER_MODE_SQUEAKYBOOTS,
 	PLAYER_MODE_BALLOON,
+	//PLAYER_MODE_BUBBLE_MIXTURE,
+	//PLAYER_MODE_HELMET,
 	PLAYER_MODE_NET,
 	PLAYER_MODE_CORALBLOWER,
+	//PLAYER_MODE_JELLY_LAUNCHER,
+
 	PLAYER_MODE_FLY,
 
 	NUM_PLAYERMODES,
@@ -266,7 +269,7 @@ private:
 		LOOKAROUND_MAXSCROLL=60,		// Maximum distance to scroll
 		LOOKAROUND_RESETSPEED=6,		// Speed of scroll back when look around ended
 	};
-	int				m_invincibleFrameCount;
+	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
 
 	void			thinkVerticalMovement();
 	void			thinkHorizontalMovement();
@@ -295,6 +298,23 @@ private:
 	DVECTOR					m_mapEdge;
 	DVECTOR					m_respawnPos;
 
+
+
+	// Powerups
+private:
+	enum
+	{
+		SQUEAKY_BOOTS_TIME=60*10,
+		INVINCIBILITY_RING_TIME=60*10,
+	};
+public:
+	void			giveGlasses()				{m_glassesFlag=true;}
+	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
+	void			giveInvinvibilityRing()		{m_invinvibilityRingTimer=INVINCIBILITY_RING_TIME;}
+private:
+	int				m_glassesFlag;
+	int				m_squeakyBootsTimer;
+	int				m_invinvibilityRingTimer;
 };
 
 

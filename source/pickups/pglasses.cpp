@@ -21,6 +21,10 @@
 
 #include "pickups\pglasses.h"
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -70,6 +74,7 @@ void	CGlassesPickup::init()
   ---------------------------------------------------------------------- */
 void	CGlassesPickup::collect(class CPlayer *_player)
 {
+	_player->giveGlasses();
 	CBasePickup::collect(_player);
 }
 

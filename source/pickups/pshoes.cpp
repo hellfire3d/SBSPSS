@@ -77,7 +77,7 @@ void	CShoesPickup::init()
   ---------------------------------------------------------------------- */
 void	CShoesPickup::collect(class CPlayer *_player)
 {
-	_player->setMode(PLAYER_MODE_SQUEAKYBOOTS);
+	_player->giveSqueakyBoots();
 	CBaseRespawningPickup::collect(_player);
 }
 
