@@ -75,7 +75,7 @@ static PlayerMetrics	s_playerMetrics=
   ---------------------------------------------------------------------- */
 void	CPlayerModeCoralBlower::enter()
 {
-	m_blowerState=BLOWER_STATE__FULL;//BLOWER_STATE__EMPTY;
+	m_blowerState=BLOWER_STATE__EMPTY;
 	CSoundMediator::playSfx(CSoundMediator::SFX_ITEM__CORAL_BLOWER);
 }
 
@@ -115,7 +115,7 @@ void	CPlayerModeCoralBlower::think()
 			{
 				m_blowerState=BLOWER_STATE__FULL;
 			}
-			if(!getPadInputHeld()&PI_ACTION)
+			else if(!(getPadInputHeld()&PI_ACTION))
 			{
 				// Fire!
 				m_blowerState=BLOWER_STATE__EMPTY;
