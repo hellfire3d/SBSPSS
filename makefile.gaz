@@ -57,9 +57,9 @@ enemy_src :=		2denemy \
 					nsjfish \
 					nclam \
 					nscrab \
-					nnsfish \
 					ngpirate \
 					nshrkman \
+					ngeneric \
 					enemy
 
 fileio_src :=		fileio \

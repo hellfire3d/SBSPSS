@@ -65,6 +65,7 @@ protected:
 		NPC_GHOST_PIRATE,
 		NPC_FLAMING_SKULL,
 		NPC_SHARK_MAN,
+		NPC_OIL_BLOB,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -92,6 +93,7 @@ protected:
 		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
 		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
 		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
+		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -100,9 +102,9 @@ protected:
 		NPC_CLOSE_JELLYFISH_EVADE = 1,
 		NPC_CLOSE_CLAM_ATTACK,
 		NPC_CLOSE_SPIDER_CRAB_ATTACK,
-		NPC_CLOSE_NINJA_STARFISH_ATTACK,
 		NPC_CLOSE_GHOST_PIRATE_ATTACK,
 		NPC_CLOSE_SHARK_MAN_ATTACK,
+		NPC_CLOSE_GENERIC_USER_SEEK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -161,6 +163,8 @@ protected:
 	void				processCollision();
 	void				processTimer( int _frames );
 
+	void				processCloseGenericUserSeek( int _frames );
+
 	// small jellyfish functions
 
 	void				processSmallJellyfishSensor();
@@ -174,10 +178,6 @@ protected:
 	// spider crab functions
 
 	void				processCloseSpiderCrabAttack( int _frames );
-
-	// ninja starfish functions
-
-	void				processCloseNinjaStarfishAttack( int _frames );
 
 	// ghost pirate functions
 

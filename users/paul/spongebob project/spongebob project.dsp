@@ -129,6 +129,10 @@ SOURCE=..\..\..\source\enemy\nclam.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ngeneric.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\ngpirate.cpp
 # End Source File
 # Begin Source File

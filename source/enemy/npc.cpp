@@ -300,7 +300,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NINJA_STARFISH_ATTACK,
+		NPC_CLOSE_GENERIC_USER_SEEK,
 		NPC_TIMER_NONE,
 		false,
 		3,
@@ -354,12 +354,24 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		3,
 		2048,
 	},
+
+	{	// NPC_OIL_BLOB
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_GENERIC_USER_SEEK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		64,
+	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_SHARK_MAN;
+	m_type = NPC_OIL_BLOB;
 
 	m_heading = 3072;
 	m_movementTimer = 0;
@@ -538,6 +550,7 @@ bool CNpc::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_OIL_BLOB_USER_CLOSE:
 					case NPC_SENSOR_NINJA_STARFISH_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 10000 )
@@ -843,8 +856,8 @@ void CNpc::processClose(int _frames)
 
 			break;
 
-		case NPC_CLOSE_NINJA_STARFISH_ATTACK:
-			processCloseNinjaStarfishAttack( _frames );
+		case NPC_CLOSE_GENERIC_USER_SEEK:
+			processCloseGenericUserSeek( _frames );
 
 			break;
 
