@@ -66,7 +66,7 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 
 		Pos.vy += m_speed * _frames;
 
-		if ( m_speed < 3 )
+		if ( m_speed < 12 )
 		{
 			m_speed++;
 		}
