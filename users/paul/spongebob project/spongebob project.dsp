@@ -917,6 +917,14 @@ SOURCE=..\..\..\source\hazard\hpendulm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hpswitch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hpswitch.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hrrock.cpp
 # End Source File
 # Begin Source File
@@ -1450,6 +1458,14 @@ SOURCE=..\..\..\source\platform\pseesaw.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\platform\pseesaw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ptrpdoor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ptrpdoor.h
 # End Source File
 # End Group
 # Begin Group "player"

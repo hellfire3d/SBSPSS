@@ -155,6 +155,10 @@
 #include "platform\pbaloon.h"
 #endif
 
+#ifndef __PLATFORM_PTRPDOOR_H__
+#include "platform\ptrpdoor.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -361,6 +365,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_BALLOON_BRIDGE_PLATFORM:
 		{
 			platform = new ("balloon bridge platform") CNpcBalloonBridgePlatform;
+			break;
+		}
+
+		case NPC_TRAPDOOR_PLATFORM:
+		{
+			platform = new ("trapdoor platform") CNpcTrapdoorPlatform;
 			break;
 		}
 
@@ -1077,11 +1087,20 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 
 		// Rotate backwards to find height at current position
 
-		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
+		s16 cosVal = rcos( angle );
 
-		int angleHeight = -( hypotenuse * rsin( angle ) ) >> 12;
+		if ( !cosVal )
+		{
+			return( top.vy - _y );
+		}
+		else
+		{
+			int hypotenuse = ( ( top.vx - _x ) << 12 ) / cosVal;
 
-		return( ( top.vy - _y ) + angleHeight );
+			int angleHeight = -( hypotenuse * rsin( angle ) ) >> 12;
+
+			return( ( top.vy - _y ) + angleHeight );
+		}
 	}
 }
 

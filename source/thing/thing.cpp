@@ -43,6 +43,10 @@
 #include "hazard\hrwheel.h"
 #endif
 
+#ifndef __HAZARD_HPSWITCH_H__
+#include "hazard\hpswitch.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -186,6 +190,53 @@ void		CThingManager::initAllThings()
 			thing->updateCollisionArea();
 			thing=thing->m_nextListThing;
 		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+
+void		CThingManager::matchPressureSwitches()
+{
+	CNpcHazard *hazard;
+
+	hazard = (CNpcHazard *) s_thingLists[CThing::TYPE_HAZARD];
+
+	while( hazard )
+	{
+		if ( hazard->getType() == CNpcHazard::NPC_PRESSURE_SWITCH_HAZARD )
+		{
+			CNpcPressureSwitchHazard *switchHazard = (CNpcPressureSwitchHazard *) hazard;
+
+			DVECTOR triggerPos = switchHazard->getTriggerPos();
+
+			CNpcPlatform *platform;
+
+			platform = (CNpcPlatform *) s_thingLists[CThing::TYPE_PLATFORM];
+
+			while( platform )
+			{
+				if ( platform->getType() == CNpcPlatform::NPC_TRAPDOOR_PLATFORM )
+				{
+					CNpcTrapdoorPlatform *trapdoor = (CNpcTrapdoorPlatform *) platform;
+
+					DVECTOR testPos = trapdoor->getTriggerPos();
+
+					if ( testPos.vx == triggerPos.vx && testPos.vy == triggerPos.vy )
+					{
+						switchHazard->linkToPlatform( trapdoor );
+					}
+				}
+
+				platform = (CNpcPlatform *) platform->m_nextListThing;
+			}
+		}
+
+		hazard = (CNpcHazard *) hazard->m_nextListThing;
 	}
 }
 

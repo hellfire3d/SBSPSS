@@ -83,6 +83,7 @@ public:
 		NPC_FISH_HOOK_3_PLATFORM,
 		NPC_RISING_BRIDGE_PLATFORM,
 		NPC_BALLOON_BRIDGE_PLATFORM,
+		NPC_TRAPDOOR_PLATFORM,
 		NPC_PLAYER_BUBBLE_PLATFORM,
 		NPC_CLAM_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
@@ -108,6 +109,7 @@ public:
 	void				setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		trigger()												{;}
+	NPC_PLATFORM_UNIT_TYPE	getType()											{return( m_type );}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);

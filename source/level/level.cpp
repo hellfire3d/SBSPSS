@@ -555,6 +555,7 @@ void	CLevel::initThings(int _respawningLevel)
 	CJellyfishGenerator::init();
 	CThingManager::initAllThings();
 	CThingManager::matchWheelsAndWeights();
+	CThingManager::matchPressureSwitches();
 }
 
 

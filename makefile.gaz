@@ -124,7 +124,8 @@ platform_src :=		platform \
 					pclam \
 					pfishhk3 \
 					prbridge \
-					pbaloon
+					pbaloon \
+					ptrpdoor
 
 hazard_src :=		hazard \
 					hfalling \
@@ -144,7 +145,8 @@ hazard_src :=		hazard \
 					hrrock \
 					hflytrap \
 					hrweight \
-					hrwheel
+					hrwheel \
+					hpswitch
 
 fx_src :=			fx \
 					fxbaseanim \

@@ -103,6 +103,10 @@
 #include "hazard\hrwheel.h"
 #endif
 
+#ifndef __HAZARD_HPSWITCH_H__
+#include "hazard\hpswitch.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -126,6 +130,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_FLY_TRAP_HAZARD,
 	NPC_RISING_WEIGHT_HAZARD,
 	NPC_RISING_WEIGHT_WHEEL_HAZARD,
+	NPC_PRESSURE_SWITCH_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,6 +248,12 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_RISING_WEIGHT_WHEEL_HAZARD:
 		{
 			hazard = new ("rising weight wheel hazard") CNpcRisingWeightWheelHazard;
+			break;
+		}
+
+		case NPC_PRESSURE_SWITCH_HAZARD:
+		{
+			hazard = new ("pressure switch hazard") CNpcPressureSwitchHazard;
 			break;
 		}
 
