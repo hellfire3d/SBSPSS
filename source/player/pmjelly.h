@@ -42,13 +42,18 @@ public:
 	virtual void				renderModeUi();
 	virtual int					canConverse()						{return m_firingState==FIRING_STATE__NONE;}
 
-	virtual int					setState(int _state);
+	virtual void				setAnimNo(int _animNo);
+	virtual void				setAnimFrame(int _animFrame);
 
 private:
 	enum
 	{
 		TIMEOUT_FOR_BIG_SHOT=60*4,
 		AMMO_AMOUNT_FOR_BIG_SHOT=3,
+
+		// Gun in the UI flashes when powered up..
+		FLASHSPEED=25,
+		FLASHSCALE=75,
 	};
 
 	typedef enum
@@ -56,6 +61,7 @@ private:
 		FIRING_STATE__NONE,
 		FIRING_STATE__POWERINGUP,
 		FIRING_STATE__FIRING,
+		FIRING_STATE__RECOILING,
 	}FIRING_STATE;
 
 	int							canFireFromThisState();
@@ -66,6 +72,8 @@ private:
 	int							m_firingFrame;
 	FIRING_STATE				m_firingState;
 	int							m_firingTime;
+	int							m_colourFlash;
+	int							m_savedAnimNo,m_savedAnimFrame;
 
 protected:
 	virtual class CPlayerState	**getStateTable();
