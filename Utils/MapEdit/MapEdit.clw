@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CNewMapGUI
+LastClass=CProgressDlg
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=13
+ClassCount=14
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -18,22 +18,23 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_LAYER_LIST_DIALOG
-Resource2=IDD_MULTIBAR (English (U.S.))
-Resource3=IDD_MAPSIZE
+Resource1=IDR_MAINFRAME (English (U.S.))
+Resource2=IDR_TOOLBAR (English (U.S.))
+Resource3=IDD_MULTIBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_LAYERTILE_GUI
 Class8=CMultiBar
-Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource6=IDD_NEW_LAYER
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_NEW_LAYER
+Resource8=IDD_LAYER_LIST_DIALOG
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_LAYERTILE_GUI
-Resource10=IDR_MAINFRAME (English (U.S.))
+Resource9=IDD_ABOUTBOX (English (U.S.))
+Resource10=IDD_MAPSIZE
 Class13=CNewMapGUI
+Class14=CProgressDlg
 Resource11=IDD_NEWMAP
 
 [CLS:CChildFrame]
@@ -305,6 +306,15 @@ HeaderFile=NewMapGUI.h
 ImplementationFile=NewMapGUI.cpp
 BaseClass=CDialog
 Filter=D
-LastObject=IDC_MAPSIZE_WIDTH
+LastObject=CNewMapGUI
+VirtualFilter=dWC
+
+[CLS:CProgressDlg]
+Type=0
+HeaderFile=ProgressDlg.h
+ImplementationFile=ProgressDlg.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=IDC_EDIT1
 VirtualFilter=dWC
 

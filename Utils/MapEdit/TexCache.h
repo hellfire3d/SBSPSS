@@ -24,11 +24,9 @@ struct	sRGBData
 struct	sTex
 {
 	char			Filename[_MAX_PATH];
-//	char			Name[_MAX_FNAME];
 	GLuint			TexID;
 	int				Flags;
 	int				TexWidth,TexHeight;
-	int				GLWidth,GLHeight;
 	float			dW,dH;
 	BOOL			Loaded;
 

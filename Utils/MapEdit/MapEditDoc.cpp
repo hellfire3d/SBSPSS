@@ -221,7 +221,7 @@ CFileDialog	Dlg(FALSE,"*.pme",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter
 char	Filename[256];
 		sprintf(Filename,"%s",Dlg.GetPathName());
 		
-		Core.ExportAGB(Filename);
+		Core.ExportPSX(Filename);
 }
 
 /*********************************************************************************/

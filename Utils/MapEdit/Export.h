@@ -7,8 +7,10 @@
 
 #include	"stdafx.h"
 #include	<Vector>
+#include	"mapedit.h"
 
 #include	"Quantize.h"
+#include	"list.h"
 
 
 /*****************************************************************************/
@@ -16,6 +18,7 @@
 /*****************************************************************************/
 class	CCore;
 class	CMap;
+
 class	CTile;
 
 class	CExport
@@ -32,7 +35,9 @@ protected:
 		char		Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		FILE		*File;
 		int			Count;
-		std::vector<sMapElem>	UsedTileList;
+
+		CList<sMapElem>			UsedTileList;
+
 
 };
 

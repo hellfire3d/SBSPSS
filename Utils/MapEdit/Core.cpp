@@ -658,4 +658,6 @@ CExportPSX	Exp(ExportName);
 		Layer[FindActionLayer()]->Export(this,Exp);
 
 		Exp.ExportTiles(this);
+		Exp.ExportTexList(this);
+
 }

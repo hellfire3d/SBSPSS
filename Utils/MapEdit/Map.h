@@ -12,6 +12,12 @@ struct	sMapElem
 	int		Set;
 	int		Tile;
 	int		Flags;
+
+BOOL	operator==(sMapElem const &v1)	// Doesnt Check flags
+		{
+		return(Set==v1.Set && Tile==v1.Tile);
+		}
+
 };
 
 enum

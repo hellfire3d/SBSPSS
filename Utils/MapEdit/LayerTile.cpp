@@ -188,11 +188,11 @@ int			Height=ThisMap.GetHeight();
 		
 		if (Alpha<1)
 		{
-			glColor4f(0.5,0.5,0.5,Alpha);
+			glColor4f(1,1,1,Alpha);
 		}
 		else
 		{
-			glColor3f(0.5,0.5,0.5);
+			glColor3f(1,1,1);
 		}
 
 		glMatrixMode(GL_MODELVIEW);
@@ -229,9 +229,9 @@ float	OverVal=0.5;
 
 		glBegin(GL_LINES); 
 			if (Active)
-				glColor3ub(255,255,255);
+				glColor3f(1,1,1);
 			else
-				glColor3ub(127,127,127);
+				glColor3f(0.5,0.5,0.5);
 			
 			for (int YLoop=0; YLoop<Height+1; YLoop++)
 			{

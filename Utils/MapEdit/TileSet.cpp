@@ -486,7 +486,7 @@ BOOL		ValidTile=TRUE;
 			ValidTile=IsTileValid(TileID);
 			if (TileID && ValidTile) 
 			{
-				glColor3f(0.5,0.5,0.5);
+				glColor3f(1,1,1);
 				Tile[TileID].Render(0,Render3d);
 			}
 
@@ -524,7 +524,7 @@ BOOL		ValidTile=TRUE;
 			if (!ValidTile)
 			{
 				glBegin(GL_LINES); 
-					glColor3ub(255,255,255);
+					glColor3f(1,1,1);
 			
 					glVertex3f( TileBrowserX0,TileBrowserY0,0);
 					glVertex3f( TileBrowserX1,TileBrowserY1,0);
@@ -540,7 +540,7 @@ BOOL		ValidTile=TRUE;
 				CPoint	Pos=GetTilePos(TileID);
 			
 				glBegin(GL_LINES); 
-					glColor3ub(255,255,255);
+					glColor3f(1,1,1);
 			
 					glVertex3f( TileBrowserX0,TileBrowserY0,0);
 					glVertex3f( TileBrowserX1,TileBrowserY0,0);
@@ -621,7 +621,7 @@ int			TileID=1;	// Dont bother with blank, its sorted
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glBegin(GL_LINES); 
-				glColor3ub(255,255,255);
+				glColor3f(1,1,1);
 			
 				glVertex3f( TileBrowserX0,TileBrowserY0,0);
 				glVertex3f( TileBrowserX1,TileBrowserY0,0);
