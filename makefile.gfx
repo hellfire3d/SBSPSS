@@ -97,8 +97,11 @@ GFX_DATA_OUT +=    		$(LEVELS_ALL_OUT)
 levels : $(LEVELS_ALL_OUT)
 	@$(ECHO) Levels made
 
-cleanlevels : 	$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), clean$(CHAPTER)_$(LEVEL)))
+cleanlevels : 	
+				@$(RM) -f $(LEVELS_ALL_OUT)
 				@$(ECHO) Levels cleaned
+
+#$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), clean$(CHAPTER)_$(LEVEL)))
 
 
 #----------------------------------------------------------------------------
