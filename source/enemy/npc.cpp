@@ -913,7 +913,7 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 			{
 				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
 
-				if ( enemy->canCollideWithEnemy() )
+				if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
 				{
 					processEnemyCollision( _thisThing );
 				}

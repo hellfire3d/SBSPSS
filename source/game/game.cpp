@@ -43,6 +43,10 @@
 #include "projectl\projectl.h"
 #endif
 
+#ifndef __JELLFISH_JELLFISH_H__
+#include "jellfish\jellfish.h"
+#endif
+
 #ifndef __GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
@@ -249,6 +253,7 @@ void	CGameScene::think(int _frames)
 	if(!CConversation::isActive()&& !m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
+		CJellyfishGenerator::think( _frames, &Level );
 /*		if (!s_levelFinished) */CThingManager::thinkAllThings(_frames);
 /*		if (!s_levelFinished) */camPos=m_player->getCameraPos();
 /*		if (!s_levelFinished) */CBubicleFactory::setMapOffset(&camPos);

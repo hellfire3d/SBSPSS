@@ -329,6 +329,14 @@ SOURCE=..\..\..\source\enemy\nshrkman.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsjback.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsjback.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
 # Begin Source File
@@ -1866,6 +1874,18 @@ SOURCE=..\..\..\source\fx\fxjfish.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\fx\fxjfish.h
+# End Source File
+# End Group
+# Begin Group "jellfish"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\jellfish\jellfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\jellfish\jellfish.h
 # End Source File
 # End Group
 # End Group

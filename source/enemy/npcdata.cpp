@@ -134,6 +134,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
@@ -155,6 +156,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		FRM_JELLYFISH1_SWIM1,
 		true,
 		true,
+		false,
 		false,
 	},
 
@@ -178,6 +180,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		false,
+		false,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -197,6 +200,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -222,6 +226,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_ANEMONE_3
@@ -241,6 +246,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -266,6 +272,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_CLAM_JUMP
@@ -285,6 +292,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -310,6 +318,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_SQUID_DART
@@ -329,6 +338,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -354,6 +364,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_PRICKLY_BUG
@@ -376,6 +387,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SEA_SNAKE
@@ -398,6 +410,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_PUFFA_FISH
@@ -420,6 +433,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -442,6 +456,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_HERMIT_CRAB
@@ -464,6 +479,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_MINE
@@ -486,6 +502,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_BOOGER_MONSTER
@@ -508,6 +525,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SPIDER_CRAB
@@ -530,6 +548,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SPIDER_CRAB_SPAWNER
@@ -549,6 +568,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_NONE,
 		ANIM_SPIDERCRAB_DIE,
 		ANIM_SPIDERCRAB_HIT,
+		false,
 		false,
 		false,
 		false,
@@ -574,6 +594,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_BABY_OCTOPUS
@@ -596,6 +617,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -618,6 +640,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_NINJA_STARFISH
@@ -640,6 +663,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_GHOST
@@ -662,6 +686,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_GHOST_PIRATE
@@ -684,6 +709,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_FLAMING_SKULL
@@ -706,6 +732,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SHARK_MAN
@@ -728,6 +755,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_OIL_BLOB
@@ -750,6 +778,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SKULL_STOMPER
@@ -769,6 +798,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -794,6 +824,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_SUB_SHARK
@@ -813,6 +844,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -838,6 +870,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_FLYING_DUTCHMAN
@@ -857,6 +890,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		ANIM_FLYINGDUTCHMAN_GETHIT,
+		false,
 		false,
 		false,
 		false,
@@ -882,6 +916,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_PARASITIC_WORM_SEGMENT
@@ -901,6 +936,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 		false,
@@ -926,6 +962,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SHELL
@@ -948,6 +985,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		true,
+		false,
 	},
 
 	{	// NPC_PROJECTILE_JELLYFISH
@@ -970,9 +1008,10 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		true,
 		false,
+		false,
 	},
 
-	{	// NPC_SMALL_JELLYFISH_1
+	{	// NPC_MOTHER_JELLYFISH_BACKGROUND
 		ACTORS_MOTHERJELLYFISH_SBK,
 		ANIM_CLAM_SIDESNAP,
 		NPC_SENSOR_NONE,
@@ -989,6 +1028,30 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
+		false,
+		false,
+		false,
+	},
+
+	{	// NPC_SMALL_JELLYFISH_BACKGROUND
+		0,//ACTORS_JELLYFISH1_SBK,
+		FRM_JELLYFISH1_SWIM1,
+		NPC_SENSOR_USER_CLOSE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+		DETECT_ALL_COLLISION,
+		DAMAGE__SHOCK_ENEMY,
+		16,
+		FRM_JELLYFISH1_SWIM1,
+		NPC_SHOT_GENERIC,
+		0,
+		FRM_JELLYFISH1_SWIM1,
+		true,
 		false,
 		false,
 		false,

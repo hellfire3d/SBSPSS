@@ -77,6 +77,10 @@
 #include "projectl\projectl.h"
 #endif
 
+#ifndef __JELLFISH_JELLFISH_H__
+#include "jellfish\jellfish.h"
+#endif
+
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
 #endif
@@ -525,6 +529,10 @@ void	CLevel::initThings(int _respawningLevel)
 			hazard->setLayerCollision( getCollisionLayer() );
 		}
 	}
+
+	// initialise jellyfish generator
+
+	CJellyfishGenerator::init();
 }
 
 

@@ -81,7 +81,8 @@ enemy_src :=		npc \
 					ndustdev \
 					npbug \
 					nprojjf \
-					nmjback
+					nmjback \
+					nsjback
 
 friend_src :=		friend \
 					fdata \
@@ -180,6 +181,8 @@ gui_src :=			gbubbles \
 					gsprite \
 					gtextbox \
 					gui
+
+jellfish_src :=		jellfish
 
 level_src :=		level \
 					layertile \

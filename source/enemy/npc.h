@@ -82,6 +82,7 @@ public:
 		NPC_SHELL,
 		NPC_PROJECTILE_JELLYFISH,
 		NPC_MOTHER_JELLYFISH_BACKGROUND,
+		NPC_SMALL_JELLYFISH_BACKGROUND,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -225,6 +226,7 @@ protected:
 		u8								canBeNetted;
 		u8								respawning;
 		u8								canBeSuckedUp;
+		u8								canCollideWithEnemy;
 	}
 	NPC_DATA;
 
