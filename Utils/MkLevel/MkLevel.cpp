@@ -1061,6 +1061,9 @@ int			i,ListSize=OutTriList.size();
 		for (i=0;i<ListSize;i++)
 		{
 			sTri	&T=OutTriList[i];
+			T.P0*=4;
+			T.P1*=4;
+			T.P2*=4;
 			fwrite(&T,1,sizeof(sTri),File);
 		}
 		printf("%i Tris\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTri));
@@ -1076,6 +1079,10 @@ int			i,ListSize=OutQuadList.size();
 		for (i=0;i<ListSize;i++)
 		{
 			sQuad	&Q=OutQuadList[i];
+			Q.P0*=4;
+			Q.P1*=4;
+			Q.P2*=4;
+			Q.P3*=4;
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
 		printf("%i Quads\t(%i Bytes)\n",ListSize,ListSize*sizeof(sQuad));
