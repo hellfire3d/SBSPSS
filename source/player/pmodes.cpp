@@ -1,3 +1,4 @@
+//#define SHITE_COLLISION
 /*=========================================================================
 
 	pmodes.cpp
@@ -173,10 +174,12 @@ static	PlayerMetrics	s_playerMetrics=
 
 
 
-//
+#ifdef SHITE_COLLISION
 int checkx=15;
 int checky=15;
+int checkycanmove=16;
 int checkdist=16;
+#endif
 
 
 /*----------------------------------------------------------------------
@@ -377,9 +380,13 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();
-		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0&&
+		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0
+#ifdef SHITE_COLLISION
+			&&
 		   m_player->getHeightFromGround(pos.vx-checkx,pos.vy,1)!=0&&
-		   m_player->getHeightFromGround(pos.vx+checkx,pos.vy,1)!=0)
+		   m_player->getHeightFromGround(pos.vx+checkx,pos.vy,1)!=0
+#endif
+		   )
 		{
 			// Was floating in the air.. fall!
 			setState(STATE_FALL);
@@ -584,14 +591,23 @@ int CPlayerModeBase::canMoveLeft()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getHeightFromGround(pos.vx-checkx,pos.vy,checkdist)>-checky?true:false;
+#ifdef SHITE_COLLISION
+	return m_player->getHeightFromGround(pos.vx-checkx,pos.vy,checkdist)>-checkycanmove?true:false;
+#else
+	return m_player->getHeightFromGround(pos.vx-1,pos.vy,16)>-8?true:false;
+#endif
+
 }
 
 int CPlayerModeBase::canMoveRight()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getHeightFromGround(pos.vx+checkx,pos.vy,checkdist)>-checky?true:false;
+#ifdef SHITE_COLLISION
+	return m_player->getHeightFromGround(pos.vx+checkx,pos.vy,checkdist)>-checkycanmove?true:false;
+#else
+	return m_player->getHeightFromGround(pos.vx+1,pos.vy,16)>-8?true:false;
+#endif
 }
 
 /*----------------------------------------------------------------------
