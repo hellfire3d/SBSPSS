@@ -34,10 +34,13 @@
 class CGUIFactory
 {
 public:
+	// Creates a frame containing a value button with text label
 	static void		createValueButtonFrame(class CGUIObject *_parent,
 										   int _x,int _y,int _w, int _h,
 										   int _textId,
 										   int *_target,int _value);
+
+	// Creates a frame containing a slider button, readout and text label
 	static void		createSliderButtonFrame(class CGUIObject *_parent,
 											int _x,int _y,int _w, int _h,
 											int _textId,
