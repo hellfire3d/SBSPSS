@@ -12,6 +12,7 @@
 #include	<List.h>
 
 /*****************************************************************************/
+#define	EXPORT_LAYER_COUNT	8
 struct	sExpFileHdr
 {
 		int		TileCount;
@@ -24,7 +25,7 @@ struct	sExpFileHdr
 		int		TexNameCount;
 		int		TexNameOfs;
 		int		LayerCount;
-//		int		LayerOfs[n]
+		int		LayerOfs[EXPORT_LAYER_COUNT];
 };
 
 /*****************************************************************************/

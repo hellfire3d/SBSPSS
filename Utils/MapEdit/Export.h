@@ -22,7 +22,7 @@ class	CTile;
 class	CExport
 {
 public:
-		CExport(char *Filename,int LayerCount);
+		CExport(char *Filename);
 		~CExport();
 
 		void	ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map);
@@ -38,7 +38,7 @@ protected:
 
 		sExpFileHdr			FileHdr;
 		
-		int					LayerCount;
+//		int					LayerCount;
 		CList<int>			LayerOfs;
 
 		CList<sExpTri>		TriList;

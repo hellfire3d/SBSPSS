@@ -23,31 +23,31 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CExport::CExport(char *Filename,int _LayerCount)
+CExport::CExport(char *Filename)
 {
-		LayerCount=_LayerCount;
 		File=fopen(Filename,"wb");
 	
 // Write Dummy File Header
 
 		fwrite(&FileHdr,sizeof(sExpFileHdr),1,File);
-		for (int i=0;i<LayerCount; i++) fwrite(&LayerCount,sizeof(int),1,File);
+//		for (int i=0;i<EXPORT_LAYER_COUNT; i++) fwrite(&LayerCount,sizeof(int),1,File);
 }
 
 /*****************************************************************************/
 CExport::~CExport()
 {
-		ASSERT(LayerCount==LayerOfs.size());
+int		LayerCount=LayerOfs.size();
+
 		FileHdr.LayerCount=LayerCount;
-// ReWrite Main Header
-		fseek(File,0,0);
-		fwrite(&FileHdr,sizeof(sExpFileHdr),1,File);
 
 		for (int i=0;i<LayerCount; i++) 
 		{
-			TRACE1("LayerOfs %i\n",LayerOfs[i]);
-			fwrite(&LayerOfs[i],sizeof(int),1,File);
+			FileHdr.LayerOfs[i]=LayerOfs[i];
 		}
+
+// ReWrite Main Header
+		fseek(File,0,0);
+		fwrite(&FileHdr,sizeof(sExpFileHdr),1,File);
 		fclose(File);
 }
 

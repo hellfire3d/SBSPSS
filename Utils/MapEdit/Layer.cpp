@@ -16,12 +16,12 @@
 /*****************************************************************************/
 sLayerInfoTable	CLayer::InfoTable[]=
 {
-	//Type					SubType				Name			delete?Scale	3d		Resizable
-	{LAYER_TYPE_TILE,		LAYERTILE_BACK,		"Back",			true,	4.0f,	false,	false},
-	{LAYER_TYPE_TILE,		LAYERTILE_MID,		"Mid",			true,	2.0f,	false,	true},
-	{LAYER_TYPE_TILE,		LAYERTILE_ACTION,	"Action",		false,	1.0f,	true,	true},
-	{LAYER_TYPE_TILE,		LAYERTILE_FORE,		"Fore",			true,	0.5f,	false,	true},
-	{LAYER_TYPE_COLLISION,	LAYER_SUBTYPE_NONE,	"Collision",	true,	1.0f,	false,	true},
+	//Type					SubType				Name			delete?Scale	3d		Resizable	Export
+	{LAYER_TYPE_TILE,		LAYERTILE_SCRATCH,	"WorkPad",		false,	1.0f,	true,	false,		false,},
+	{LAYER_TYPE_TILE,		LAYERTILE_BACK,		"Back",			true,	4.0f,	false,	false,		true,},
+	{LAYER_TYPE_TILE,		LAYERTILE_MID,		"Mid",			true,	2.0f,	false,	true,		true,},
+	{LAYER_TYPE_TILE,		LAYERTILE_ACTION,	"Action",		false,	1.0f,	true,	true,		true,},
+	{LAYER_TYPE_COLLISION,	LAYER_SUBTYPE_NONE,	"Collision",	true,	1.0f,	false,	true,		true,},
 };
 
 int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);

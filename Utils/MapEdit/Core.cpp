@@ -72,7 +72,8 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION, Width, Height);
-		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
+		AddLayer(LAYER_TYPE_TILE,LAYERTILE_SCRATCH, Width, Height);
+//		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
 
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();
@@ -208,15 +209,28 @@ void	CCore::RenderLayers(CMapEditView *View)
 {
 Vector3	&ThisCam=GetCam();
 int		ListSize=Layer.size();
-	
-		for (int i=0;i<ListSize;i++)
+int		StartLayer,EndLayer;
+
+		StartLayer=0;
+		EndLayer=ListSize;
+
+		while (Layer[StartLayer]->IsUnique()) StartLayer++;
+
+		if (Layer[ActiveLayer]->IsUnique())
+		{
+			StartLayer=ActiveLayer;
+			EndLayer=StartLayer+1;
+		}
+
+		for (int i=StartLayer; i<EndLayer; i++)
 		{
 			if (Layer[i]->IsVisible())
-				{
+			{
 				Layer[i]->Render(this,ThisCam,Is3dFlag);
 				if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
-				}
+			}
 		}
+
 		
 		Layer[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
 		
@@ -469,10 +483,7 @@ CLayer	*Layer;
 				ASSERT(!"AddLayer - Invalid Layer Type");
 				break;
 		}
-
-		
 }
-
 
 /*****************************************************************************/
 void		CCore::AddLayer(int CurrentLayer)
@@ -482,7 +493,6 @@ CAddLayerDlg		Dlg;
 int					NewLayerId=0;
 int					Sel;
 
-		
 // Build Unused List
 		Dlg.Sel=&Sel;
 		Sel=0;
@@ -530,12 +540,12 @@ void		CCore::DeleteLayer(int CurrentLayer)
 /*****************************************************************************/
 void	CCore::UpdateGrid(CMapEditView *View,BOOL Toggle)
 {
-//CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-//CToolBar	*ToolBar=Frm->GetToolBar();
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CToolBar	*ToolBar=Frm->GetToolBar();
 
 			if (Toggle) GridFlag=!GridFlag;
 
-//			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
+			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
 			UpdateView(View);
 }
 
@@ -809,11 +819,14 @@ char	ExportName[256];
 		
 		SetFileExt(Filename,ExportName,"MEX");
 
-CExport	Exp(ExportName,LayerCount);
+CExport	Exp(ExportName);
 
 		for (int i=0;i<LayerCount;i++)
 		{
-			Layer[i]->Export(this,Exp);
+			if (Layer[i]->CanExport())
+			{
+				Layer[i]->Export(this,Exp);
+			}
 		}
 
 		Exp.ExportTiles(this);

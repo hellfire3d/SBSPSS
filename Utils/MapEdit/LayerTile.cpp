@@ -28,11 +28,6 @@
 CLayerTile::CLayerTile(int _SubType,int Width,int Height)
 {
 		SubType=_SubType;
-		if (SubType==LAYERTILE_BACK)	// Back is fixed size
-		{
-			Width=32;
-			Height=32;
-		}
 
 		SetDefaultParams();
 
@@ -42,6 +37,11 @@ CLayerTile::CLayerTile(int _SubType,int Width,int Height)
 		{
 			Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
 			Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
+		}
+		else
+		{
+			Width=32;
+			Height=32;
 		}
 
 		if (Width<TileLayerMinWidth) Width=TileLayerMinWidth;

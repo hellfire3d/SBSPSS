@@ -211,10 +211,6 @@ SOURCE=.\MapEdit.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MapEdit.rc
-# End Source File
-# Begin Source File
-
 SOURCE=.\MapEditDoc.cpp
 # End Source File
 # Begin Source File
@@ -285,6 +281,10 @@ SOURCE=.\res\icon1.ico
 # Begin Source File
 
 SOURCE=.\res\MapEdit.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEdit.rc
 # End Source File
 # Begin Source File
 

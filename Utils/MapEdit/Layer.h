@@ -22,6 +22,7 @@ struct	sLayerInfoTable
 	float			ScaleFactor;
 	bool			Render3dFlag;
 	bool			ResizeFlag;
+	bool			ExportFlag;
 
 };
 
@@ -50,6 +51,8 @@ static	int				GetLayerIdx(int Type,int SubType);
 
 		char			*GetName()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].Name);}
 		bool			CanDelete()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].DeleteFlag);}
+		bool			CanExport()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag);}
+		bool			IsUnique()						{return(!(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag));}
 
 virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
 virtual	BOOL			IsVisible()						{return(VisibleFlag);}
