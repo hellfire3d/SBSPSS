@@ -28,6 +28,7 @@ public:
 	void				setLineBase( DVECTOR base )							{m_lineBase = base;}
 	DVECTOR				getLineBase()										{return( m_lineBase );}
 	virtual void		render();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
