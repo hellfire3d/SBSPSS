@@ -166,11 +166,11 @@ SOURCE=.\utils.h
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\ChildFrm.cpp
+SOURCE=.\CheckList.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExToolbar.cpp
+SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
@@ -211,11 +211,11 @@ SOURCE=.\StdAfx.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ChildFrm.h
+SOURCE=.\CheckList.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExToolbar.h
+SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 

@@ -63,6 +63,7 @@ void	CLayerTile::Render(CCore *Core,Vec &MapPos,BOOL Is3d)
 /*****************************************************************************/
 void	CLayerTile::Render2d(CCore *Core,Vec &MapPos)
 {
+	return;
 float		XYDiv=GetLayerZPosDiv();
 int			MapW=Map.GetWidth();
 int			MapH=Map.GetHeight();
@@ -171,6 +172,7 @@ int		MapH=Map.GetHeight();
 float	StartX=MapPos.x/XYDiv;
 float	StartY=MapPos.y/XYDiv;
 
+		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
 		glRenderMode (GL_SELECT);

@@ -27,6 +27,15 @@ BOOL	Test3dFlag=TRUE;
 CCore::CCore()
 {
 	for (int i=0; i<LAYER_TYPE_MAX; i++) Layers[i]=0;
+
+	RenderFlag=TRUE;
+	TileViewFlag=FALSE;
+	ParamViewFlag=TRUE;
+	CurrentMousePos=CPoint(0,0);
+	ActiveLayer=0;
+	MapCam=Vec(0,0,0);
+	TileCam=Vec(0,0,0);
+
 }
 
 /*****************************************************************************/
@@ -38,17 +47,11 @@ CCore::~CCore()
 /*****************************************************************************/
 void	CCore::NewMap()
 {
-
-	RenderFlag=TRUE;
-
 // To be loaded/created
 	Layers[LAYER_TYPE_BACK]=	new CLayerTile("Back",	32,							32,								4.0f,	FALSE);
 	Layers[LAYER_TYPE_MID]=		new CLayerTile("Mid",	TileLayerDefaultWidth/2.0f,	TileLayerDefaultHeight/2.0f,	2.0f,	FALSE);
 	Layers[LAYER_TYPE_ACTION]=	new CLayerTile("Action",TileLayerDefaultWidth/1.0f,	TileLayerDefaultHeight/1.0f,	1.0f,	TRUE);
 	Layers[LAYER_TYPE_FORE]=	new CLayerTile("Fore",	TileLayerDefaultWidth/0.5f,	TileLayerDefaultHeight/0.5f,	0.5f,	FALSE);
-
-	TileViewFlag=0;
-	ParamViewFlag=1;
 
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
@@ -164,12 +167,12 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::UpdateParamBar(CMapEditView *View,BOOL ViewFlag)
 {
+/*
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
-CParamBar	*ParamBar=Frm->GetParamBar();
-CCheckListBox	*Dlg=(CCheckListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
+CDialogBar	*ParamBar=Frm->GetParamBar();
+CListBox	*Dlg=(CListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
 		
-		Dlg->SetCheck(1,1);
 		ParamViewFlag=ViewFlag;
 		if (ParamViewFlag)
 		{
@@ -186,7 +189,7 @@ CCheckListBox	*Dlg=(CCheckListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST
 		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
 		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
 		if (View) UpdateView(View);
-
+*/
 }
 
 /*****************************************************************************/

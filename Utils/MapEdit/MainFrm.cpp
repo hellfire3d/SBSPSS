@@ -66,6 +66,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndParamBar.EnableDocking( CBRS_ALIGN_ANY);
 	m_wndParamBar.SetWindowText("Param");
 	DockControlBar(&m_wndParamBar);
+	
 
 // ToolBar (plus extra code for extra controls!!)
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
@@ -95,6 +96,7 @@ RECT	rect;
 	rect.bottom += 200;
 
 	// then .Create the combo box and show it
+
 	if (!m_wndToolBar.m_Combo.Create(WS_CHILD|WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWNLIST | CBS_HASSTRINGS ,rect, &m_wndToolBar, IDC_TOOLBAR_COMBO))
 	{
 	   TRACE0("Failed to create combo-box\n");

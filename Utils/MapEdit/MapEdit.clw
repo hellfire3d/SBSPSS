@@ -2,8 +2,8 @@
 
 [General Info]
 Version=1
-LastClass=CAboutDlg
-LastTemplate=CToolBarCtrl
+LastClass=CMainFrame
+LastTemplate=CListBox
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
@@ -22,12 +22,12 @@ ResourceCount=8
 Resource1=IDR_MAPEDITYPE (English (U.S.))
 Resource2=IDD_TILEBAR (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDD_ABOUTBOX (English (U.S.))
-Resource5=IDD_PARAMBAR (English (U.S.))
-Class9=CExToolBar
-Resource6=IDR_TOOLBAR (English (U.S.))
-Resource7=IDR_MAINFRAME (English (U.S.))
-Resource8=IDD_TRASHHEAP
+Resource4=IDR_MAINFRAME (English (U.S.))
+Resource5=IDD_TRASHHEAP
+Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource7=IDR_TOOLBAR (English (U.S.))
+Class9=CCheckList
+Resource8=IDD_PARAMBAR (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
@@ -189,16 +189,9 @@ Class=?
 ControlCount=1
 Control1=IDC_TOOLBAR_COMBO,combobox,1344340226
 
-[CLS:CExToolBar]
-Type=0
-HeaderFile=extoolbar.h
-ImplementationFile=extoolbar.cpp
-BaseClass=CToolBar
-LastObject=IDC_LAYERBAR_LIST
-
 [DLG:IDD_PARAMBAR (English (U.S.))]
 Type=1
-Class=CParamBar
+Class=?
 ControlCount=1
 Control1=IDC_PARAMBAR_LAYER_LIST,listbox,1352728833
 
@@ -208,6 +201,14 @@ HeaderFile=ParamBar.h
 ImplementationFile=ParamBar.cpp
 BaseClass=CDialogBar
 Filter=D
-LastObject=CParamBar
+LastObject=IDC_PARAMBAR_LAYER_LIST
 VirtualFilter=dWC
+
+[CLS:CCheckList]
+Type=0
+HeaderFile=CheckList.h
+ImplementationFile=CheckList.cpp
+BaseClass=CListBox
+Filter=W
+LastObject=CCheckList
 

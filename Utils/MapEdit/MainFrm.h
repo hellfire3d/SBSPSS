@@ -9,12 +9,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include	"ParamBar.h"
-
 /////////////////////////////////////////////////////////////////////////////
 class CMainToolBar : public CToolBar
 {
 public:
+	CMainToolBar(){};
+	~CMainToolBar(){};
 	CComboBox m_Combo;
 };
 
@@ -27,10 +27,9 @@ public:
 
 // Attributes
 public:
-	CToolBar	*GetToolBar()	{return(&m_wndToolBar);}
-	CParamBar	*GetParamBar()	{return(&m_wndParamBar);}
-//	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
-	CStatusBar	*GetStatusBar()	{return(&m_wndStatusBar);}
+	CMainToolBar	*GetToolBar()	{return(&m_wndToolBar);}
+	CDialogBar		*GetParamBar()	{return(&m_wndParamBar);}
+	CStatusBar		*GetStatusBar()	{return(&m_wndStatusBar);}
 // Operations
 public:
 
@@ -51,7 +50,7 @@ public:
 protected:  // control bar embedded members
 	CStatusBar		m_wndStatusBar;
 	CMainToolBar	m_wndToolBar;
-	CParamBar		m_wndParamBar;
+	CDialogBar		m_wndParamBar;
 
 
 // Generated message map functions
