@@ -38,7 +38,7 @@ void CNpcKrustyFriend::postInit()
 {
 	switch( CLevel::getCurrentChapter() )
 	{
-		case 4:
+		case 3:
 		{
 			m_conversation = SCRIPTS_CH4L3_01_DAT;
 			break;
@@ -68,7 +68,7 @@ void CNpcKrustyFriend::startConderversation()
 
 		switch( CLevel::getCurrentChapter() )
 		{
-			case 4:
+			case 3:
 			{
 				if ( m_conversation == SCRIPTS_CH4L3_01_DAT )
 				{

@@ -847,6 +847,8 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
+					CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
 					CConversation::registerConversationScript(SCRIPTS_C3L1_CELEBRATE_DAT);
 					break;
 				}
@@ -897,8 +899,6 @@ void CConversation::registerConversationLevelScripts(int level)
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
 					CConversation::registerConversationScript(SCRIPTS_C4L3_CELEBRATE_DAT);
 					break;
 				}
