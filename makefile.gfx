@@ -157,7 +157,11 @@ cleanactors :
 #----------------------------------------------------------------------------
 SFX_GFX_DIR :=			$(GRAF_DIR)/sfx
 
-SFX_GFX :=				+smoke.bmp
+SFX_GFX :=				+smoke.bmp \
+						+splash001.bmp +splash002.bmp +splash003.bmp +splash004.bmp +splash005.bmp +splash006.bmp \
+						+Star0001.bmp +Star0002.bmp +Star0003.bmp \
+						+Star20001.bmp +Star20002.bmp +Star20003.bmp
+
 SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))
 
 ####
