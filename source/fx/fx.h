@@ -78,12 +78,14 @@ virtual	void		getFXRenderPos(DVECTOR &Pos);
 virtual	bool		getFXParentPos(DVECTOR &Pos);
 
 virtual	void		killFX()						{setToShutdown();}
+virtual void		toggleVisible()					{IsVisible = !IsVisible;}
 
 protected:
 		s32			OtPos;
 		s16			Life;
 
 		bool		RelativeToMap;
+		bool		IsVisible;
 };
 
 /*****************************************************************************/

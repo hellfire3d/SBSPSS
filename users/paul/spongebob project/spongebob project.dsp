@@ -881,6 +881,14 @@ SOURCE=..\..\..\source\hazard\hfan.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hfemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hfirebal.cpp
 # End Source File
 # Begin Source File
@@ -2053,11 +2061,67 @@ SOURCE=..\..\..\source\fx\fx.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\fx\fxbaseanim.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseanim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseemitter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseemitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbasetrail.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbasetrail.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxfallingtile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxfallingtile.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\fx\fxjfish.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\fx\fxjfish.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxnrgbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxnrgbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxsteam.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxsteam.h
 # End Source File
 # End Group
 # Begin Group "jellfish"

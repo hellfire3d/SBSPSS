@@ -60,6 +60,7 @@ public:
 		NPC_PRESSURE_SWITCH_HAZARD,
 		NPC_ROCKSHARD_HAZARD,
 		NPC_INERT_HAZARD,
+		NPC_FLAME_EMITTER_HAZARD,
 
 		NPC_HAZARD_TYPE_MAX,
 	};
@@ -69,7 +70,7 @@ public:
 	};
 
 	virtual void		init();
-	void				setGraphic( sThingHazard *ThisHazard );
+	virtual void		setGraphic( sThingHazard *ThisHazard );
 	void				shutdown();
 	void				think(int _frames);
 	virtual void		render();

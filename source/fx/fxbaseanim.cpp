@@ -96,7 +96,7 @@ void	CFXBaseAnim::render()
 DVECTOR	RenderPos;
 
 		getFXRenderPos(RenderPos);
-		if (!canRender()) return;
+		if (!canRender() || !IsVisible) return;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 

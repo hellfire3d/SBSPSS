@@ -339,6 +339,7 @@ void	CFX::init()
 		OtPos=OTPOS__ACTOR_POS;
 		RelativeToMap=true;
 		Life=-1;	// Set to immortal
+		IsVisible=true;
 }
 
 /*****************************************************************************/
