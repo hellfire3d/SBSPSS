@@ -5,16 +5,57 @@
 #ifndef __PRIM_HEADER__
 #define __PRIM_HEADER__
 
-#ifndef _GLOBAL_HEADER_
+#ifndef		_GLOBAL_HEADER_
 #include	"system\global.h"
 #endif
-#include	"gfx\gpugte.h"
 #include	"gfx\tpage.h"
 
 #define	MAX_OT				(2048)
 #define	MAX_PRIMS			(2048+512)
 
 #define	USE_NTAGS			1
+
+
+/************************************************************************************/
+#define	GPU_PolyF3Tag		(4)
+#define	GPU_PolyF3Code		(0x20)
+#define	GPU_PolyF4Tag		(5)
+#define	GPU_PolyF4Code		(0x28)
+#define	GPU_PolyFT3Tag		(7)
+#define	GPU_PolyFT3Code		(0x24)
+#define	GPU_PolyFT4Tag		(9)
+#define	GPU_PolyFT4Code		(0x2c)
+#define	GPU_PolyG4Tag		(8)
+#define	GPU_PolyG4Code		(0x38)
+#define	GPU_PolyGT3Tag		(9)
+#define	GPU_PolyGT3Code		(0x34)
+#define	GPU_PolyGT4Tag		(12)
+#define	GPU_PolyGT4Code		(0x3c)
+
+#define	GPUCode_ShadeTex	(1<<0)	// Setting this **DISABLES** texture shading.
+#define	GPUCode_SemiTrans	(1<<1)	// Setting this enables semi-transparent mode
+#define	GPUCode_Textured	(1<<2)
+#define	GPUCode_Quad		(1<<3)
+#define	GPUCode_Gouraud		(1<<4)
+#define	GPUCode_Global		(1<<5)
+
+/******************************************************************************/
+#define	GetPrimSpace(primtype,Ptr)		((primtype *)Ptr); Ptr+=sizeof(primtype);
+
+#define setSemiTransPolyF3(p)	setlen(p, 4),  setcode(p, 0x20|GPUCode_SemiTrans)
+#define setSemiTransPolyFT3(p)	setlen(p, 7),  setcode(p, 0x24|GPUCode_SemiTrans)
+#define setSemiTransPolyG3(p)	setlen(p, 6),  setcode(p, 0x30|GPUCode_SemiTrans)
+#define setSemiTransPolyGT3(p)	setlen(p, 9),  setcode(p, 0x34|GPUCode_SemiTrans)
+#define setSemiTransPolyF4(p)	setlen(p, 5),  setcode(p, 0x28|GPUCode_SemiTrans)
+#define setSemiTransPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_SemiTrans)
+#define setSemiTransPolyG4(p)	setlen(p, 8),  setcode(p, 0x38|GPUCode_SemiTrans)
+#define setSemiTransPolyGT4(p)	setlen(p, 12), setcode(p, 0x3c|GPUCode_SemiTrans)
+
+#define setShadeTexPolyFT3(p)	setlen(p, 7),  setcode(p, 0x24|GPUCode_ShadeTex)
+#define setShadeTexPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_ShadeTex)
+
+#define setSemiTransShadeTexPolyFT3(p)	setlen(p, 7),  setcode(p, 0x24|GPUCode_SemiTrans|GPUCode_ShadeTex)
+#define setSemiTransShadeTexPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_SemiTrans|GPUCode_ShadeTex)
 
 /*** Fast Replacements *********************************************************************************/
 #undef	setaddr
