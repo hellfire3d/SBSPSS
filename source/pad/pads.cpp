@@ -11,6 +11,11 @@
 #endif
 
 
+/*****************************************************************************/
+// Yay! Automatic key-repeat stuff!
+#define TYPOMATIC_DELAY	60
+#define TYPOMATIC_RATE	30
+
 
 /*****************************************************************************/
 static sPadConfigTable	PadConfigDefault=

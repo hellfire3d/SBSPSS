@@ -45,9 +45,6 @@
 #define	BUTTON_SELECT	PAD_CROSS
 #define	BUTTON_BACK		PAD_TRIANGLE
 
-#define TYPOMATIC_DELAY	60
-#define TYPOMATIC_RATE	30
-
 
 /*****************************************************************************/
 typedef struct
