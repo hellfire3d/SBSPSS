@@ -11,19 +11,19 @@
 
 ===========================================================================*/
 
-#ifndef __ENEMY_NCPPATH_H__
-#include "enemy\ncppath.h"
+#ifndef __ENEMY_NPCPATH_H__
+#include "enemy\npcpath.h"
 #endif
 
-bool CNpcWaypoint::isPointNear( DVECTOR testPos )
+bool CNpcWaypoint::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 {
 	s32 xDistSqr, yDistSqr;
 
-	xDistSqr = testPos.vx - this->pos.vx;
-	xDistSqr *= xDistSqr;
+	*xDist = testPos.vx - this->pos.vx;
+	xDistSqr = (*xDist) * (*xDist);
 
-	yDistSqr = testPos.vy - this->pos.vy;
-	yDistSqr *= yDistSqr;
+	*yDist = testPos.vy - this->pos.vy;
+	yDistSqr = (*yDist) * (*yDist);
 
 	if ( xDistSqr + yDistSqr < 100 )
 	{
@@ -42,7 +42,7 @@ void CNpcPath::initPath()
 	for ( loop = 0 ; loop < NPC_MAX_WAYPOINTS ; loop++ )
 	{
 		waypoint[loop].pos.vx = 0;
-		waypoint[loop].pox.vy = 0;
+		waypoint[loop].pos.vy = 0;
 	}
 
 	pathType = SINGLE_USE_PATH;
@@ -55,7 +55,7 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 {
 	if ( waypointCount < NPC_MAX_WAYPOINTS )
 	{
-		waypoint[waypointCount] = newPos;
+		waypoint[waypointCount].pos = newPos;
 		waypointCount++;
 	}
 }
@@ -69,7 +69,7 @@ bool CNpcPath::incPath()
 {
 	if ( !reversePath )
 	{
-		if ( currentWaypoint < waypointCount )
+		if ( currentWaypoint < waypointCount - 1 )
 		{
 			currentWaypoint++;
 		}
@@ -117,14 +117,18 @@ bool CNpcPath::incPath()
 	return( false );
 }
 
-void CNpcPath::think( DVECTOR currentPos )
+s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete )
 {
-	CNpcWaypoint *currentWaypoint;
+	s32 xDist, yDist;
 
-	currentWaypoint = &waypoint[currentWaypoint]
+	*pathComplete = false;
 
-	if ( currentWaypoint->isPointNear( currentPos ) )
+	if ( waypoint[currentWaypoint].isPointNear( currentPos, &xDist, &yDist ) )
 	{
-		incPath();
+		*pathComplete = incPath();
 	}
+
+	s32 headingToTarget = ratan2( -yDist, -xDist );
+
+	return( headingToTarget );
 }

@@ -11,13 +11,16 @@
 
 ===========================================================================*/
 
-#ifndef	__NPC_H__
-#define	__NPC_H__
+#ifndef	__ENEMY_NPC_H__
+#define	__ENEMY_NPC_H__
 
 //#include <dstructs.h>
 #include "Game/Thing.h"
 #include "Gfx/Skel.h"
 
+#ifndef __ENEMY_NPCPATH_H__
+#include "enemy\npcpath.h"
+#endif
 
 /*****************************************************************************/
 
@@ -62,6 +65,11 @@ protected:
 		NPC_SENSOR_USER_CLOSE = 1,
 	};
 
+	enum NPC_CLOSE_FUNC
+	{
+		NPC_CLOSE_EVADE = 0,
+	};
+
 	enum NPC_MOVEMENT_FUNC
 	{
 		NPC_MOVEMENT_STATIC = 0,
@@ -74,6 +82,13 @@ protected:
 	{
 		NPC_MOVEMENT_MODIFIER_NONE = 0,
 		NPC_MOVEMENT_MODIFIER_BOB = 1,
+		NPC_MOVEMENT_MODIFIER_JELLYFISH,
+	};
+
+	enum NPC_TIMER_FUNC
+	{
+		NPC_TIMER_NONE = 0,
+		NPC_TIMER_EVADE_DONE = 1,
 	};
 
 
@@ -83,21 +98,34 @@ protected:
 		NPC_SENSOR_FUNC					sensorFunc;
 		NPC_MOVEMENT_FUNC				movementFunc;
 		NPC_MOVEMENT_MODIFIER_FUNC		movementModifierFunc;
+		NPC_CLOSE_FUNC					closeFunc;
+		NPC_TIMER_FUNC					timerFunc;
 		bool							canTalk;
 	}
 	NPC_DATA;
 
-	NPC_UNIT_TYPE		m_type;
-	NPC_CONTROL_FUNC	m_controlFunc;
-
 	bool				processSensor();
-	void				processMovement();
+	void				processMovement(int _frames);
+	void				processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s32 headingChange);
 	void				processShot();
-	void				processClose();
+	void				processClose(int _frames);
 	void				processCollision();
-	void				processTimer();
+	void				processTimer(int _frames);
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
+
+	// internal variables
+	
+	NPC_UNIT_TYPE		m_type;
+	NPC_CONTROL_FUNC	m_controlFunc;
+	NPC_TIMER_FUNC		m_timerFunc;
+	NPC_SENSOR_FUNC		m_sensorFunc;
+	CNpcPath			m_npcPath;
+	s32					m_heading;
+	s32					m_movementTimer;
+	s32					m_velocity;
+	bool				m_evadeClockwise;
+	s32					m_timerTimer;
 };
 
 

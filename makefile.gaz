@@ -53,6 +53,7 @@ backend_src :=		gameover \
 
 enemy_src :=		2denemy \
 					npc \
+					npcpath \
 					enemy
 
 fileio_src :=		fileio \

@@ -11,15 +11,17 @@
 
 ===========================================================================*/
 
-#ifndef __ENEMY_NCPPATH_H__
-#define __ENEMY_NCPPATH_H__
+#ifndef __ENEMY_NPCPATH_H__
+#define __ENEMY_NPCPATH_H__
+
+#include "system\global.h"
 
 class CNpcWaypoint
 {
 public:
 	DVECTOR	pos;
 
-	bool	isPointNear( DVECTOR testPos );
+	bool	isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
 };
 
 enum NPC_PATH_TYPE
@@ -48,7 +50,7 @@ public:
 	void			addWaypoint( DVECTOR newPos );
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
-	void			think( DVECTOR currentPos );
+	s32				think( DVECTOR currentPos, bool *pathComplete );
 };
 
 #endif
