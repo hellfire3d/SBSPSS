@@ -75,6 +75,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__SQUASH_ENEMY,
+		0,
 	},
 
 	{	// NPC_FISH_HOOK
@@ -91,6 +92,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_DUST_DEVIL
@@ -107,6 +109,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_PENDULUM
@@ -123,6 +126,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FIREBALL
@@ -139,6 +143,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__BURN_ENEMY,
+		0,
 	},
 
 	{	// NPC_SAW_BLADE
@@ -155,6 +160,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_LINEAR_PLATFORM
@@ -171,6 +177,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_CIRCULAR_PLATFORM
@@ -187,6 +194,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
@@ -203,6 +211,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__SHOCK_ENEMY,
+		16,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_2
@@ -219,6 +228,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__SHOCK_ENEMY,
+		32,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -235,6 +245,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		16,
 	},
 
 	{	// NPC_ANEMONE_2
@@ -251,6 +262,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		32,
 	},
 
 	{	// NPC_ANEMONE_3
@@ -267,6 +279,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		48,
 	},
 
 	{	// NPC_SKELETAL_FISH
@@ -283,6 +296,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__BITE_ENEMY,
+		0,
 	},
 
 	{	// NPC_CLAM_JUMP
@@ -299,6 +313,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_CLAM_STATIC
@@ -315,6 +330,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_SQUID_DART
@@ -331,6 +347,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 		false,
 		DAMAGE__HIT_ENEMY,
+		16,
 	},
 
 	{	// NPC_FISH_FOLK
@@ -347,6 +364,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_PRICKLY_BUG
@@ -363,6 +381,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__POISON_ENEMY,
+		48,
 	},
 
 	{	// NPC_SEA_SNAKE_1
@@ -379,6 +398,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 		false,
 		DAMAGE__SHOCK_ENEMY,
+		56,
 	},
 
 	{	// NPC_SEA_SNAKE_2
@@ -395,6 +415,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 		false,
 		DAMAGE__SHOCK_ENEMY,
+		56,
 	},
 
 	{	// NPC_PUFFA_FISH
@@ -411,6 +432,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		64,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -427,6 +449,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__NONE,
+		0,
 	},
 
 	{	// NPC_HERMIT_CRAB
@@ -443,6 +466,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_MINE
@@ -459,6 +483,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_BOOGER_MONSTER
@@ -475,6 +500,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__BITE_ENEMY,
+		0,
 	},
 
 	{	// NPC_SPIDER_CRAB
@@ -491,6 +517,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__PINCH_ENEMY,
+		0,
 	},
 
 	{	// NPC_EYEBALL
@@ -507,6 +534,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		32,
 	},
 
 	{	// NPC_BABY_OCTOPUS
@@ -523,6 +551,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		512,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -539,6 +568,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
+		16,
 	},
 
 	{	// NPC_NINJA_STARFISH
@@ -555,6 +585,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		64,
 		false,
 		DAMAGE__HIT_ENEMY,
+		16,
 	},
 
 	{	// NPC_GHOST
@@ -571,6 +602,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_GHOST_PIRATE
@@ -587,6 +619,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		160,
 	},
 
 	{	// NPC_FLAMING_SKULL
@@ -603,6 +636,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__BURN_ENEMY,
+		16,
 	},
 
 	{	// NPC_SHARK_MAN
@@ -619,6 +653,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__BITE_ENEMY,
+		16,
 	},
 
 	{	// NPC_OIL_BLOB
@@ -635,6 +670,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		64,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_SKULL_STOMPER
@@ -651,6 +687,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__SQUASH_ENEMY,
+		0,
 	},
 
 	{	// NPC_MOTHER_JELLYFISH
@@ -667,6 +704,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 		false,
 		DAMAGE__SHOCK_ENEMY,
+		256,
 	},
 
 	{	// NPC_SUB_SHARK
@@ -683,6 +721,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		64,
 		false,
 		DAMAGE__HIT_ENEMY,
+		256,
 	},
 
 	{	// NPC_FLYING_DUTCHMAN
@@ -699,6 +738,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 		false,
 		DAMAGE__HIT_ENEMY,
+		256,
 	},
 
 	{	// NPC_IRON_DOGFISH
@@ -715,5 +755,6 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
+		256,
 	},
 };

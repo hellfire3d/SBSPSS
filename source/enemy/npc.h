@@ -338,6 +338,7 @@ protected:
 		u16								turnSpeed;
 		bool							detectCollision;
 		DAMAGE_TYPE						damageToUserType;
+		u16								initHealth;
 	}
 	NPC_DATA;
 
@@ -479,6 +480,7 @@ protected:
 	u8					m_salvoCount;
 	bool				m_animPlaying;
 	bool				m_reversed;
+	s32					m_health;
 
 	int				m_frame;
 	int				m_animNo;

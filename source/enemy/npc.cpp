@@ -230,6 +230,8 @@ void CNpcEnemy::init()
 	m_rotation = 0;
 	m_reversed = false;
 
+	m_health = m_data[this->m_type].initHealth;
+
 	m_extension = EXTEND_RIGHT;
 
 	Pos.vx = 100;
