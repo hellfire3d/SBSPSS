@@ -488,6 +488,22 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			thing1=thing1->m_nextCollisionThing;
 		}
 
+		// Friend -> Pickup collision
+		thing1=s_CollisionLists[CThing::TYPE_PICKUP];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_NPC];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing1->collidedWith(thing2);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
 		// Player -> Enemy collision
 		thing1=s_CollisionLists[CThing::TYPE_ENEMY];
 		while(thing1)
