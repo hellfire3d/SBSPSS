@@ -79,11 +79,7 @@ MATRIX		CGameScene::CamMtx;
 
 /*****************************************************************************/
 
-#ifndef __USER_paul__
 int s_globalLevelSelectThing=0;
-#else
-int s_globalLevelSelectThing=120;
-#endif
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
 
@@ -207,10 +203,6 @@ void	CGameScene::think(int _frames)
 		DVECTOR	camPos;
 /*		if (!s_levelFinished) */CThingManager::thinkAllThings(_frames);
 /*		if (!s_levelFinished) */camPos=m_player->getCameraPos();
-//PKG
-//		if(camPos.vx<0){camPos.vx=0;PAUL_DBGMSG("cx<0");}
-//		if(camPos.vy<0){camPos.vy=0;PAUL_DBGMSG("cy<0");}
-//PKG
 /*		if (!s_levelFinished) */CBubicleFactory::setMapOffset(&camPos);
 /*		if (!s_levelFinished) */Level.setCameraCentre(camPos);
 /*		if (!s_levelFinished) */Level.think(_frames);
@@ -252,30 +244,6 @@ void	CGameScene::initLevel()
 
 	CConversation::init();
 	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
-
-#ifdef __USER_paul__
-	DVECTOR pos={16*10,16*10};
-				createPickup(PICKUP__BIG_HEALTH,&pos);
-	pos.vx+=64;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
-	pos.vx+=64;	createPickup(PICKUP__SMALL_HEALTH,&pos);
-	pos.vx+=64;	createPickup(PICKUP__LIFE,&pos);
-	pos.vx+=64;	createPickup(PICKUP__SPATULA,&pos);
-	pos.vx+=64;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
-	pos.vx+=64;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);
-	pos.vx+=64;	createPickup(PICKUP__BUBBLE_WAND,&pos);
-	pos.vx+=64;	createPickup(PICKUP__NET,&pos);
-	pos.vx+=64;	createPickup(PICKUP__GLASSES,&pos);
-	pos.vx+=64;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);
-	pos.vx+=64;	createPickup(PICKUP__BALLOON,&pos);
-	pos.vx+=64;	createPickup(PICKUP__HELMET,&pos);
-	pos.vx+=64;	createPickup(PICKUP__CORAL_BLOWER,&pos);
-	pos.vx+=64;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);
-
-//	CNpcPlatform	*platform;
-//	platform=new ("test platform") CNpcPlatform;
-//	platform->init();
-//	platform->setLayerCollision( Level.getCollisionLayer() );
-#endif
 
 	s_levelFinished=false;
 	Level.init(s_globalLevelSelectThing);
