@@ -1313,6 +1313,14 @@ SOURCE=..\..\..\source\platform\pretract.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\psbarrel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\psbarrel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pseesaw.cpp
 # End Source File
 # Begin Source File

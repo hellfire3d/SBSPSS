@@ -131,6 +131,10 @@
 #include "platform\pbwheel.h"
 #endif
 
+#ifndef __PLATFORM_PSBARREL_H__
+#include "platform\psbarrel.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -303,6 +307,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_BIG_WHEEL_PLATFORM:
 		{
 			platform = new ("big wheel platform") CNpcBigWheelPlatform;
+			break;
+		}
+
+		case NPC_STEERABLE_BARREL_PLATFORM:
+		{
+			platform = new ("steerable barrel platform") CNpcSteerableBarrelPlatform;
 			break;
 		}
 

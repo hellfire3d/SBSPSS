@@ -113,7 +113,8 @@ platform_src :=		platform \
 					plantern \
 					pbgeyser \
 					pleaf \
-					pbwheel
+					pbwheel \
+					psbarrel
 
 hazard_src :=		hazard \
 					hfalling \
