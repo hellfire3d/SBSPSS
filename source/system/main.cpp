@@ -154,7 +154,7 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	GenericSpriteBank.load(SPRITES_SPRITES_SPR);
 	CGameScene::setSpriteBank(&GenericSpriteBank);
 	SetUpLoadIcon(GenericSpriteBank.getFrameHeader(FRM__TOKEN));
-//	StartLoad();
+	StartLoad();
 
 	GameState::initialise();
 	CSoundMediator::initialise();
@@ -165,6 +165,7 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	CBubicleFactory::init();
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
+	StopLoad();
 
 	// Autoload? Who wants that in this day and age!? Pah! Autoload.. schmautoload!
 //#if defined(__USER_paul__) || defined(__USER_CDBUILD__)
