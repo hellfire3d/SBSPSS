@@ -59,6 +59,15 @@ CThing		*Parent=getParent();
 		{
 			int		HDiff=TargetHeight-Height;
 			Height+=(HDiff+(GeyserSpeed-1))/GeyserSpeed;
+
+			if ( Height > 10 )
+			{
+				Flags |= FX_FLAG_INJURE_PLAYER;
+			}
+			else
+			{
+				Flags &= ~FX_FLAG_INJURE_PLAYER;
+			}
 		}
 
 // top

@@ -661,6 +661,14 @@ SOURCE=..\..\..\source\fx\fxfallingtile.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\fx\fxgeyser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxgeyser.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\fx\fxjfish.cpp
 # End Source File
 # Begin Source File
@@ -685,6 +693,14 @@ SOURCE=..\..\..\source\fx\fxnrgbar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\fx\fxsmoke.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxsmoke.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\fx\fxsteam.cpp
 # End Source File
 # Begin Source File
@@ -698,6 +714,22 @@ SOURCE=..\..\..\source\fx\fxthwack.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\fx\fxthwack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxtvexplode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxtvexplode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxzzzz.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxzzzz.h
 # End Source File
 # End Group
 # Begin Group "game"
@@ -2374,6 +2406,14 @@ SOURCE=..\..\..\source\triggers\todripemit.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\todripemit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\toilgeyser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\toilgeyser.h
 # End Source File
 # Begin Source File
 
