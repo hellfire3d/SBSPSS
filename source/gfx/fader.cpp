@@ -53,8 +53,9 @@
 	Vars
 	---- */
 
-int					CFader::s_fadeLine=0;	
+int					CFader::s_fadeValue=0;	
 CFader::FADE_MODE	CFader::s_fadeMode=FADED_IN;
+CFader::FADE_STYLE	CFader::s_fadeStyle;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -104,64 +105,120 @@ void CFader::render()
 
 		case FADING_IN:
 			{
-				if(s_fadeLine>0)
+				switch(s_fadeStyle)
 				{
-					POLY_F4		*f4;
-					POLY_G4		*g4;
-					POLY_FT3	*ft3;
+					case BUBBLE_FADE:
+					{				
+						if(s_fadeValue>0)
+						{
+							POLY_F4		*f4;
+							POLY_G4		*g4;
+							POLY_FT3	*ft3;
 
-					f4=GetPrimF4();
-					setXYWH(f4,0,-FADE_BORDER_SIZE,512,s_fadeLine-(FADE_SMOOTH_BORDER_SIZE/2)+FADE_BORDER_SIZE);
-					setRGB0(f4,255,255,255);
-					AddPrimToList(f4,0);
+							f4=GetPrimF4();
+							setXYWH(f4,0,-FADE_BORDER_SIZE,512,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2)+FADE_BORDER_SIZE);
+							setRGB0(f4,255,255,255);
+							AddPrimToList(f4,0);
 
-					g4=GetPrimG4();
-					setXYWH(g4,0,s_fadeLine-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
-					setRGB0(g4,255,255,255);
-					setRGB1(g4,255,255,255);
-					setRGB2(g4,0,0,0);
-					setRGB3(g4,0,0,0);
-					setShadeTex(g4,0);
-					setSemiTrans(g4,1);
-					AddPrimToList(g4,0);
+							g4=GetPrimG4();
+							setXYWH(g4,0,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
+							setRGB0(g4,255,255,255);
+							setRGB1(g4,255,255,255);
+							setRGB2(g4,0,0,0);
+							setRGB3(g4,0,0,0);
+							setShadeTex(g4,0);
+							setSemiTrans(g4,1);
+							AddPrimToList(g4,0);
 
-					ft3=GetPrimFT3();
-					setShadeTex(ft3,1);
-					setSemiTrans(ft3,1);
-					ft3->tpage=(1<<5);
-					setXY3(ft3,512,512,512,512,512,512);
-					AddPrimToList(ft3,0);
+							ft3=GetPrimFT3();
+							setShadeTex(ft3,1);
+							setSemiTrans(ft3,1);
+							ft3->tpage=(1<<5);
+							setXY3(ft3,512,512,512,512,512,512);
+							AddPrimToList(ft3,0);
+						}
+						break;
+					}
+
+					case BLACK_FADE:
+					{
+						POLY_F4		*f4;
+						POLY_FT3	*ft3;
+						f4=GetPrimF4();
+						setXYWH(f4,0,0,511,255);
+						setRGB0(f4,s_fadeValue,s_fadeValue,s_fadeValue);
+						setShadeTex(f4,0);
+						setSemiTrans(f4,1);
+						AddPrimToList(f4,0);
+						ft3=GetPrimFT3();
+						setPolyFT3(ft3);
+						setShadeTex(ft3,1);
+						setSemiTrans(ft3,1);
+						ft3->tpage=(2<<5);
+						setXY3(ft3,512,512,512,512,512,512);
+						AddPrimToList(ft3,0);
+						break;
+					}
 				}
 			}
 			break;
 
 		case FADING_OUT:
 			{
-				POLY_F4		*f4;
-				POLY_G4		*g4;
-				POLY_FT3	*ft3;
-				
-				f4=GetPrimF4();
-				setXYWH(f4,0,s_fadeLine+(FADE_SMOOTH_BORDER_SIZE/2),512,256-s_fadeLine-(FADE_SMOOTH_BORDER_SIZE/2));
-				setRGB0(f4,255,255,255);
-				AddPrimToList(f4,0);
-				
-				g4=GetPrimG4();
-				setXYWH(g4,0,s_fadeLine-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
-				setRGB0(g4,0,0,0);
-				setRGB1(g4,0,0,0);
-				setRGB2(g4,255,255,255);
-				setRGB3(g4,255,255,255);
-				setShadeTex(g4,0);
-				setSemiTrans(g4,1);
-				AddPrimToList(g4,0);
-				
-				ft3=GetPrimFT3();
-				setShadeTex(ft3,1);
-				setSemiTrans(ft3,1);
-				ft3->tpage=(1<<5);
-				setXY3(ft3,512,512,512,512,512,512);
-				AddPrimToList(ft3,0);
+				switch(s_fadeStyle)
+				{
+					case BUBBLE_FADE:
+					{				
+						POLY_F4		*f4;
+						POLY_G4		*g4;
+						POLY_FT3	*ft3;
+						
+						f4=GetPrimF4();
+						setXYWH(f4,0,s_fadeValue+(FADE_SMOOTH_BORDER_SIZE/2),512,256-s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2));
+						setRGB0(f4,255,255,255);
+						AddPrimToList(f4,0);
+						
+						g4=GetPrimG4();
+						setXYWH(g4,0,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
+						setRGB0(g4,0,0,0);
+						setRGB1(g4,0,0,0);
+						setRGB2(g4,255,255,255);
+						setRGB3(g4,255,255,255);
+						setShadeTex(g4,0);
+						setSemiTrans(g4,1);
+						AddPrimToList(g4,0);
+						
+						ft3=GetPrimFT3();
+						setShadeTex(ft3,1);
+						setSemiTrans(ft3,1);
+						ft3->tpage=(1<<5);
+						setXY3(ft3,512,512,512,512,512,512);
+						AddPrimToList(ft3,0);
+						break;
+					}
+
+					case BLACK_FADE:
+					{
+						POLY_F4		*f4;
+						POLY_FT3	*ft3;
+						int			col;
+						col=255-s_fadeValue;
+						f4=GetPrimF4();
+						setXYWH(f4,0,0,511,255);
+						setRGB0(f4,col,col,col);
+						setShadeTex(f4,0);
+						setSemiTrans(f4,1);
+						AddPrimToList(f4,0);
+						ft3=GetPrimFT3();
+						setPolyFT3(ft3);
+						setShadeTex(ft3,1);
+						setSemiTrans(ft3,1);
+						ft3->tpage=(2<<5);
+						setXY3(ft3,512,512,512,512,512,512);
+						AddPrimToList(ft3,0);
+						break;
+					}
+				}
 			}
 			break;
 
@@ -171,16 +228,26 @@ void CFader::render()
 				
 				f4=GetPrimF4();
 				setXYWH(f4,0,0,512,256);
-				setRGB0(f4,255,255,255);
-				AddPrimToList(f4,1);
+				switch(s_fadeStyle)
+				{
+					case BUBBLE_FADE:
+						setRGB0(f4,255,255,255);
+						break;
+					case BLACK_FADE:
+						setRGB0(f4,0,0,0);
+						break;
+				}
+				AddPrimToList(f4,0);
 				return;
 			}
 	}
 
-	s_fadeBubicleSpawner.m_y=s_fadeLine-20;
-	for(int i=0;i<BUBBLES_PER_FRAME;i++)
-		CBubicleFactory::spawnParticle(&s_fadeBubicleSpawner);
-
+	if(s_fadeStyle==BUBBLE_FADE)
+	{
+		s_fadeBubicleSpawner.m_y=s_fadeValue-20;
+		for(int i=0;i<BUBBLES_PER_FRAME;i++)
+			CBubicleFactory::spawnParticle(&s_fadeBubicleSpawner);
+	}
 }
 
 
@@ -194,25 +261,55 @@ void CFader::think(int _frames)
 {
 	if(s_fadeMode!=FADED_IN&&s_fadeMode!=FADED_OUT)
 	{
-		s_fadeLine-=_frames*FADE_SPEED;
-		if(s_fadeLine<-FADE_BORDER_SIZE)
+		s_fadeValue-=_frames*FADE_SPEED;
+		switch(s_fadeStyle)
 		{
-			if(s_fadeMode==FADING_OUT)
+			case BUBBLE_FADE:
 			{
-				s_fadeMode=FADED_OUT;
-				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+				if(s_fadeValue<-FADE_BORDER_SIZE)
+				{
+					if(s_fadeMode==FADING_OUT)
+					{
+						s_fadeMode=FADED_OUT;
+						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+					}
+					else
+					{
+						s_fadeMode=FADED_IN;
+						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
+					}
+				}
+				else
+				{
+					if(s_fadeValue>=0&&s_fadeValue<=255)
+					{
+						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeValue:255-s_fadeValue);
+					}
+				}
+				break;
 			}
-			else
+
+			case BLACK_FADE:
 			{
-				s_fadeMode=FADED_IN;
-				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
-			}
-		}
-		else
-		{
-			if(s_fadeLine>=0&&s_fadeLine<=255)
-			{
-				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeLine:255-s_fadeLine);
+				if(s_fadeValue<0)
+				{
+					s_fadeValue=0;
+					if(s_fadeMode==FADING_OUT)
+					{
+						s_fadeMode=FADED_OUT;
+						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+					}
+					else
+					{
+						s_fadeMode=FADED_IN;
+						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
+					}
+				}
+				else
+				{
+					CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeValue:255-s_fadeValue);
+				}
+				break;
 			}
 		}
 	}
@@ -225,10 +322,20 @@ void CFader::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFader::setFadingOut()
+void CFader::setFadingOut(FADE_STYLE _style)
 {
-	s_fadeLine=256+FADE_BORDER_SIZE;
+	switch(_style)
+	{
+		case BUBBLE_FADE:
+			s_fadeValue=256+FADE_BORDER_SIZE;
+			break;
+		case BLACK_FADE:
+			s_fadeValue=255;
+			break;
+	}
+
 	s_fadeMode=FADING_OUT;
+	s_fadeStyle=_style;
 }
 
 
@@ -238,10 +345,19 @@ void CFader::setFadingOut()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFader::setFadingIn()
+void CFader::setFadingIn(FADE_STYLE _style)
 {
-	s_fadeLine=256+FADE_BORDER_SIZE;
+	switch(_style)
+	{
+		case BUBBLE_FADE:
+			s_fadeValue=256+FADE_BORDER_SIZE;
+			break;
+		case BLACK_FADE:
+			s_fadeValue=255;
+			break;
+	}
 	s_fadeMode=FADING_IN;
+	s_fadeStyle=_style;
 }
 
 
