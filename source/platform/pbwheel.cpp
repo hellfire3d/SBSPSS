@@ -24,13 +24,14 @@
 
 void CNpcBigWheelPlatform::postInit()
 {
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	boundingBox.YMin = boundingBox.YMax - 32;
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) - 8, ( boundingBox.YMax - boundingBox.YMin ) );
-	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	CNpcPlatform::postInit();
+	//sBBox boundingBox = m_modelGfx->GetBBox();
+	//boundingBox.YMin = boundingBox.YMax - 32;
+	//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) - 8, ( boundingBox.YMax - boundingBox.YMin ) );
+	//setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
-	calculateNonRotatedCollisionData();
-	setCollisionAngle( m_tiltAngle >> 8 );
+	//calculateNonRotatedCollisionData();
+	//setCollisionAngle( m_tiltAngle >> 8 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,4 +104,32 @@ const CRECT *CNpcBigWheelPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int	CNpcBigWheelPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
+{
+	DVECTOR top;
+
+	CRECT collisionArea = getCollisionArea();
+
+	top.vy = offsetY + collisionArea.y1;
+
+	s32 centreX = ( ( collisionArea.x1 + collisionArea.x2 ) >> 1 ) + offsetX;
+
+	if ( abs( _x - centreX ) <= 20 )
+	{
+		top.vy = offsetY + collisionArea.y2 - 16;
+	}
+	else
+	{
+		s32 baseY = offsetY + collisionArea.y2 - 16;
+
+		top.vy = baseY + ( ( ( abs( _x - centreX ) - 20 ) * ( offsetY + collisionArea.y1 - baseY ) ) / ( collisionArea.x2 - centreX - 20 ) );
+	}
+
+	// Non-rotated platform
+
+	return( top.vy - _y );
 }

@@ -713,22 +713,18 @@ if(newmode!=-1)
 	platform=isOnPlatform();
 	if(platform)
 	{
+		DVECTOR	posDelta;
+		posDelta=platform->getPosDelta();
+		posDelta.vy = 0;
+		shove(posDelta);
+
 		int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
 		int height=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy,16);
 
 		if ( platformOffset < height )
 		{
 			Pos.vy += platformOffset;
-
-			DVECTOR	posDelta;
-			posDelta=platform->getPosDelta();
-			posDelta.vy = 0;
-			shove(posDelta);
 		}
-		/*if(((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(Pos.vx+posDelta.vx,Pos.vy+posDelta.vy)==0)
-		{
-			shove(posDelta);
-		}*/
 	}
 
 
