@@ -25,6 +25,7 @@
 #include "level\level.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -120,7 +121,7 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 
 	pos.vx=_pos->vx+balloonx;
 	pos.vy=_pos->vy+balloony;
-	m_player->getSpriteBank()->printFT4Scaled(FRM__BALLOON,pos.vx,pos.vy,0,0,5,balloonsize);
+	CGameScene::getSpriteBank()->printFT4Scaled(FRM__BALLOON,pos.vx,pos.vy,0,0,5,balloonsize);
 }
 
 /*----------------------------------------------------------------------

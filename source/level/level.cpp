@@ -284,6 +284,7 @@ void	CLevel::initLayers()
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
+			CGameScene::setCollision(CollisionLayer);
 		}
 		else
 		{
@@ -490,7 +491,6 @@ void	CLevel::initThings(int _respawningLevel)
 					{
 						CNpcEnemy *enemy;
 						enemy=CNpcEnemy::Create(ThisActor);
-						enemy->setLayerCollision( getCollisionLayer() );
 						enemy->setupWaypoints( ThisActor );
 						enemy->postInit();
 
@@ -505,7 +505,6 @@ void	CLevel::initThings(int _respawningLevel)
 					{
 						CNpcFriend *friendNpc;
 						friendNpc=CNpcFriend::Create(ThisActor);
-						friendNpc->setLayerCollision( getCollisionLayer() );
 						friendNpc->postInit();
 					}
 					break;
@@ -524,7 +523,6 @@ void	CLevel::initThings(int _respawningLevel)
 			sThingPlatform *ThisPlatform = platformList[platformNum];
 			CNpcPlatform *platform;
 			platform = CNpcPlatform::Create( ThisPlatform );
-			platform->setLayerCollision( getCollisionLayer() );
 			platform->postInit();
 
 			if ( ThisPlatform->Speed )
@@ -542,7 +540,6 @@ void	CLevel::initThings(int _respawningLevel)
 			sThingHazard *ThisHazard = hazardList[hazardNum];
 			CNpcHazard *hazard;
 			hazard = CNpcHazard::Create( ThisHazard );
-			hazard->setLayerCollision( getCollisionLayer() );
 			if ( ThisHazard->Respawn )
 			{
 				hazard->setRespawnRate( ThisHazard->Respawn );
