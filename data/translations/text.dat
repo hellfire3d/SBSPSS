@@ -114,7 +114,8 @@ eng=SPEECH VOLUME
 
 ; Chapter 1 - Level 1 - Test
 [STR__INGAME__SANDY__TEST1]
-eng=Take that 'ya sorry ol' clam. Y'all need to learn some manners!
+eng=Ahhh, ere we are at Bikini Bottom.. and today we will be following my favourite creature Spongebob SquarePants on his adventures around Bikini Bottom in his search for the Best Birthday Present ever, for his best friend in the whole of Bikini Bottom, Patrick.
+#eng=Take that 'ya sorry ol' clam. Y'all need to learn some manners!
 [STR__INGAME__SANDY__TEST2]
 eng=Hold on there little square dude if you want to defend yourself you need to do this!!!!
 [STR__INGAME__SPONGEBOB__TEST3]
