@@ -69,8 +69,13 @@
   ---------------------------------------------------------------------- */
 void	CLifePickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBasePickup::init();
 	m_sin=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__PANTS);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

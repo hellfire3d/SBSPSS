@@ -69,8 +69,13 @@
   ---------------------------------------------------------------------- */
 void	CShoesPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBaseRespawningPickup::init();
 	m_sin=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__SHOE);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

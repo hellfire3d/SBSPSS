@@ -63,6 +63,22 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CHelmetPickup::init()
+{
+	sFrameHdr	*fh;
+
+	CBasePickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__HELMET);
+	setCollisionSize(fh->W,fh->H);
+}
+	
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR	CHelmetPickup::getSizeForPlacement()
 {
 	DVECTOR		size;

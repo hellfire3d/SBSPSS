@@ -69,8 +69,13 @@
   ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBaseRespawningPickup::init();
 	m_sin=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------
@@ -156,7 +161,12 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 void	CBubbleWandPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBaseRespawningPickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEWAND);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

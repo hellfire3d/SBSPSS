@@ -65,9 +65,14 @@
   ---------------------------------------------------------------------- */
 void	CSpatulaPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBasePickup::init();
 	m_glint=0;
 	m_glintRot=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__SPATULA);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

@@ -63,6 +63,22 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CCoralBlowerPickup::init()
+{
+	sFrameHdr	*fh;
+
+	CBasePickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BLOWER);
+	setCollisionSize(fh->W,fh->H);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR	CCoralBlowerPickup::getSizeForPlacement()
 {
 	DVECTOR		size;

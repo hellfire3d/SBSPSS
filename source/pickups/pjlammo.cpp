@@ -69,8 +69,13 @@
   ---------------------------------------------------------------------- */
 void	CJellyLauncherAmmoPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBasePickup::init();
 	m_rattle=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

@@ -98,8 +98,13 @@ Chapter 5
   ---------------------------------------------------------------------- */
 void	CBaseQuestItemPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBasePickup::init();
 	m_pingFrame=0;
+
+	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------

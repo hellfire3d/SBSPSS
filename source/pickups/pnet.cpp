@@ -63,6 +63,22 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CNetPickup::init()
+{
+	sFrameHdr	*fh;
+
+	CBasePickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__NET);
+	setCollisionSize(fh->W,fh->H);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR	CNetPickup::getSizeForPlacement()
 {
 	DVECTOR		size;

@@ -69,8 +69,13 @@
   ---------------------------------------------------------------------- */
 void	CBaseHealthPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBasePickup::init();
 	m_sin=0;
+
+	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------
