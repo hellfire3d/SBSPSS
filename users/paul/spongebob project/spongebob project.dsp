@@ -120,6 +120,34 @@ SOURCE=..\..\..\source\fileio\pcfile.cpp
 SOURCE=..\..\..\source\fileio\pcfile.h
 # End Source File
 # End Group
+# Begin Group "frontend"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\frontend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\frontend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\maintitl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\maintitl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\scrollbg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\scrollbg.h
+# End Source File
+# End Group
 # Begin Group "game"
 
 # PROP Default_Filter ""
@@ -478,34 +506,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
-# End Source File
-# End Group
-# Begin Group "frontend"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\frontend.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\frontend.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\maintitl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\maintitl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\scrollbg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\scrollbg.h
 # End Source File
 # End Group
 # End Group
