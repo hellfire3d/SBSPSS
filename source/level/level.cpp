@@ -196,12 +196,7 @@ bool	Finished=false;
 			Lvl=0;
 			Finished=true;
 		}
-// End TMP
-/*** E3 Bodge ***/
-#if !defined(__USER_sbart__)
-		if (Lvl>2) Lvl=0;
-#endif
-/****************/
+
 		return(Finished);
 }
 
