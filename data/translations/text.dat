@@ -216,6 +216,9 @@ Chapter 2 - Level 1 - 02
 [STR__INGAME__CH4__L3__KRUSTY2]
 eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
 
+
+
+
 ; ---------------------------------------------------------------
 ; Pause menu
 ; ---------------------------------------------------------------
@@ -227,6 +230,95 @@ eng=QUIT
 [STR__PAUSE_MENU__RESTART_LEVEL]
 eng=RESTART LEVEL
 
+
+
+
+; ---------------------------------------------------------------
+; Map screen
+; ---------------------------------------------------------------
+
+[STR__MAP_SCREEN__LEFT_RIGHT_TO_SELECT_LEVEL]
+eng=Select level
+[STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER]
+eng=Select chapter
+[STR__MAP_SCREEN__X_TO_START]
+eng=Start
+
+
+
+
+; ---------------------------------------------------------------
+; Chapter and level names
+; ---------------------------------------------------------------
+
+[STR__CHAPTER_1]
+eng=Chapter 1
+[STR__CHAPTER_2]
+eng=Chapter 2
+[STR__CHAPTER_3]
+eng=Chapter 3
+[STR__CHAPTER_4]
+eng=Chapter 4
+[STR__CHAPTER_5]
+eng=Chapter 5
+[STR__KELP_WORLD]
+eng=Kelp World
+
+[STR__CHAPTER_1_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_1_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_1_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_1_LEVEL_4]
+eng=Level 4
+
+[STR__CHAPTER_2_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_2_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_2_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_2_LEVEL_4]
+eng=Level 4
+
+[STR__CHAPTER_3_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_3_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_3_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_3_LEVEL_4]
+eng=Level 4
+
+[STR__CHAPTER_4_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_4_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_4_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_4_LEVEL_4]
+eng=Level 4
+
+[STR__CHAPTER_5_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_5_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_5_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_5_LEVEL_4]
+eng=Level 4
+
+[STR__CHAPTER_6_LEVEL_1]
+eng=Level 1
+[STR__CHAPTER_6_LEVEL_2]
+eng=Level 2
+[STR__CHAPTER_6_LEVEL_3]
+eng=Level 3
+[STR__CHAPTER_6_LEVEL_4]
+eng=Level 4
+[STR__CHAPTER_6_LEVEL_5]
+eng=Level 5
 
 
 
@@ -264,7 +356,6 @@ eng=Invincible SpongeBob
 eng=LEVEL SELECT
 [STR__DEBUG__LEVEL_SELECT_START]
 eng=START GAME
-
 [STR__DEBUG__LEVEL_SELECT_C1]
 eng=Chapter 1
 [STR__DEBUG__LEVEL_SELECT_C2]
