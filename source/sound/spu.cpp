@@ -63,7 +63,6 @@ char		CSpuSound::s_spuManagementTable[SPU_MALLOC_RECSIZ*(MAX_SPU_MANAGEMENT+1)];
   ---------------------------------------------------------------------- */
 void CSpuSound::initialise()
 {
-	SpuReverbAttr	rev;
 	SpuEnv			env;
 
 	// SPU setup
@@ -75,18 +74,6 @@ void CSpuSound::initialise()
 	SpuInitMalloc(MAX_SPU_MANAGEMENT,s_spuManagementTable);
 	SpuSetCommonMasterVolume(0x3fff,0x3fff);
 	
-	// Reverb
-	rev.mask=(SPU_REV_MODE|SPU_REV_DEPTHL|SPU_REV_DEPTHR);
-	rev.mode=SPU_REV_MODE_SPACE;
-	rev.depth.left=0x1000;
-	rev.depth.right=0x1000;
-	SpuSetReverbModeParam(&rev);
-	SpuSetReverb(SPU_ON);
-	SpuReserveReverbWorkArea(SPU_ON);
-	SpuSetReverbVoice(SPU_BIT,0x000000);
-	rev.mask=(SPU_REV_DEPTHL|SPU_REV_DEPTHR);
-	SpuSetReverbDepth(&rev);
-
 	// Environment
 	env.mask=SPU_ENV_EVENT_QUEUEING;
 	env.queueing=SPU_OFF;
@@ -108,6 +95,49 @@ void CSpuSound::shutdown()
 	SOUND_DBGMSG("Spu sound shutdown");
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSpuSound::setReverbActive(int _active)
+{
+	SpuReverbAttr	rev;
+
+	if(_active)
+	{
+		// Reverb
+		SpuSetReverbModeType(m_currentDetails.m_type);
+		SpuSetReverb(SPU_ON);
+		SpuReserveReverbWorkArea(SPU_ON);
+		SpuSetReverbVoice(SPU_BIT,0xffffff);
+		SpuSetReverbModeDelayTime(m_currentDetails.m_delay);
+		SpuSetReverbModeDepth(m_currentDetails.m_depth,m_currentDetails.m_depth);
+		SpuSetReverbModeFeedback(m_currentDetails.m_feedback);
+
+		m_reverbActive=true;
+	}
+	else
+	{
+		SpuSetReverb(SPU_OFF);
+
+		m_reverbActive=false;
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSpuSound::setReverbDetails(ReverbDetails *_details)
+{
+	m_currentDetails=*_details;
+}
 
 /*===========================================================================
  end */

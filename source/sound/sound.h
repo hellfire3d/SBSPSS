@@ -77,12 +77,22 @@ public:
 		MAX_VOLUME=255,
 	};
 
+	typedef enum REVERBTYPE
+	{
+		NONE,
+		ECHO_TEST,
+
+		NUM_REVERBTYPES,
+	};
 
 	// General
 	static void			initialise();
 	static void			shutdown();
 	static void			think(int _frames);
 
+
+	// Reverb
+	static void			setReverbType(REVERBTYPE _type);
 
 	// Song interface
 	static void			setSong(SONGID _songId);

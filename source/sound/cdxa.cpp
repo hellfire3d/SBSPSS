@@ -322,11 +322,14 @@ SpuCommonAttr	Attr;
 //		SsSetSerialVol(SS_SERIAL_A,0,0);
 
 		
-		Attr.mask = (SPU_COMMON_CDVOLL|SPU_COMMON_CDVOLR|SPU_COMMON_CDMIX); 
-		Attr.cd.volume.left	=0;
-		Attr.cd.volume.right=0;
-		Attr.cd.mix=SPU_ON;
-		SpuSetCommonAttr(&Attr);
+//		Attr.mask = (SPU_COMMON_CDVOLL|SPU_COMMON_CDVOLR|SPU_COMMON_CDMIX); 
+//		Attr.cd.volume.left	=0;
+//		Attr.cd.volume.right=0;
+//		Attr.cd.mix=SPU_ON;
+//		SpuSetCommonAttr(&Attr);
+SpuSetCommonCDVolume(0,0);
+SpuSetCommonCDMix(SPU_ON);
+
 		CDVol.val0 = 0;		// CdL -> SpuL
 		CDVol.val1 = 0;		// CdL -> SpuR
 		CDVol.val2 = 0;		// CdR -> SpuR

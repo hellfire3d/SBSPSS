@@ -1,5 +1,4 @@
 /*
-reverb ( trigger from map? )
 position
 adjust channels ( watery-mario64 style music changes )
 */
@@ -100,12 +99,18 @@ static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 static SFXDETAILS	s_sfxDetails[]=
 {
 	{	1,	6,	1	},
-	{	1,	1,	0	},
-	{	1,	2,	0	},
+	{	1,	4,	0	},
+	{	1,	5,	0	},
 	{	1,	0,	1	},
 };
 
 
+// Reverb details
+static ReverbDetails	s_reverbDetails[CSoundMediator::NUM_REVERBTYPES]=
+{
+	{	SPU_REV_MODE_OFF,	0,	0,		0	},								// NONE
+	{	SPU_REV_MODE_ECHO,	75,	0x3000,	100	},								// ECHO_TEST
+};
 
 //
 int s_songChannelCount=10;
@@ -127,7 +132,6 @@ void CSoundMediator::initialise()
 	s_spuSound=new ("SPUSound")	CSpuSound();			s_spuSound->initialise();
 	s_xmplaySound=new ("XMPlaySound") CXMPlaySound();	s_xmplaySound->initialise();
 	CXAStream::Init();
-	
 
 	for(i=0;i<NUM_VOLUMETYPES;i++)
 	{
@@ -139,6 +143,8 @@ void CSoundMediator::initialise()
 //	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
 //	ASSERT(CXAStream::MAX_VOLUME==32767);
 
+	// Initial reverb settings
+	setReverbType(ECHO_TEST);
 
 	SOUND_DBGMSG("Sound mediator initialised");
 	s_initialised=true;
@@ -230,6 +236,19 @@ void CSoundMediator::think(int _frames)
 //		CXAStream::SetVolume(vol,vol);
 //		s_volumeDirty[SPEECH]=false;
 //	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::setReverbType(REVERBTYPE _type)
+{
+	s_spuSound->setReverbDetails(&s_reverbDetails[_type]);
+	s_spuSound->setReverbActive(true);
 }
 
 
