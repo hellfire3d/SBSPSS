@@ -252,15 +252,24 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 
 			s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
-			/*CProjectile *projectile;
+			CProjectile *projectile;
 			projectile = CProjectile::Create();
 			DVECTOR startPos = Pos;
-			startPos.vy -= 20;
-			projectile->init( startPos, headingToPlayer );*/
+			if ( m_heading == 0 )
+			{
+				startPos.vx += 60;
+			}
+			else
+			{
+				startPos.vx -= 60;
+			}
+			startPos.vy -= 45;
 
-			m_laserTimer = GameState::getOneSecondInFrames();
+			projectile->init( startPos, headingToPlayer );
 
-			m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
+			m_laserTimer = GameState::getOneSecondInFrames() >> 1;
+
+			/*m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
 
 			DVECTOR offsetPos;
 			if ( m_heading == 0 )
@@ -278,7 +287,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			targetPos.vy -= 45;
 			m_effect->setTarget( targetPos );
 
-			m_effect->setRGB( 255, 0, 0 );
+			m_effect->setRGB( 255, 0, 0 );*/
 
 			m_state++;
 
@@ -301,18 +310,14 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			}
 			else
 			{
-				m_effect->killFX();
+				//m_effect->killFX();
 
 				m_state++;
 
-				if ( m_state > IRON_DOGFISH_LASER_EYE_2_WAIT )
+				if ( m_state == IRON_DOGFISH_LASER_EYE_2_WAIT )
 				{
-					// return to first state
-
-					m_state = IRON_DOGFISH_THUMP_1;
+					m_movementTimer = GameState::getOneSecondInFrames() * 3;
 				}
-
-				m_movementTimer = GameState::getOneSecondInFrames() * 3;
 			}
 
 			break;
@@ -362,7 +367,10 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 				else if ( !m_animPlaying )
 				{
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;
-					m_state++;
+
+					// return to first state
+
+					m_state = IRON_DOGFISH_THUMP_1;
 				}
 			}
 
