@@ -212,9 +212,9 @@ UI_GFX_FONT :=				smallfont/+33	smallfont/+34	smallfont/+37	smallfont/+39	smallf
 							smallfont/+250	smallfont/+251	smallfont/+252	smallfont/+253	smallfont/+255
 UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_FONT_DIR)/$(FILE).bmp)
 
-UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
-							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp \
-							faces\mermaidman.bmp faces\barnacleboy.bmp faces\jack_custard.bmp
+UI_GFX_NONTRANS :=			faces/mr_krabs.bmp faces/patrick.bmp faces/plankton.bmp \
+							faces/sandy.bmp faces/spongebob.bmp faces/squidward.bmp \
+							faces/mermaidman.bmp faces/barnacleboy.bmp faces/jack_custard.bmp
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TRANS :=				+bambootopleft.bmp +bamboobotleft.bmp +bambootopright.bmp +bamboobotright.bmp \
