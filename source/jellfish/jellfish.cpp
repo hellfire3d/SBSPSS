@@ -110,31 +110,7 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 					case 1:
 					{
 						enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
-
-						break;
-					}
-
-					case 2:
-					{
-						enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
-
-						break;
-					}
-
-					case 3:
-					{
-						enemy = new( "butterfly" ) CNpcButterflyBackgroundEnemy;
-
-						break;
-					}
-				}
-
-				ASSERT(enemy);
-
-				switch( m_level )
-				{
-					case 1:
-					{
+						ASSERT(enemy);
 						enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
 
 						break;
@@ -142,13 +118,26 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 
 					case 2:
 					{
-						enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND );
+						if ( getRnd() % 4 == 0 )
+						{
+							enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
+							ASSERT(enemy);
+							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND );
+						}
+						else
+						{
+							enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
+							ASSERT(enemy);
+							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
+						}
 
 						break;
 					}
 
 					case 3:
 					{
+						enemy = new( "butterfly" ) CNpcButterflyBackgroundEnemy;
+						ASSERT(enemy);
 						enemy->setType( CNpcEnemy::NPC_BUTTERFLY_BACKGROUND );
 
 						break;
@@ -162,61 +151,17 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 
 				DVECTOR startPos;
 
-				switch( m_level )
+				CNpcSmallJellyfishBackgroundEnemy *jfish = ( CNpcSmallJellyfishBackgroundEnemy * ) enemy;
+
+				if ( ( getRnd() % 10 ) > 4 )
 				{
-					case 1:
-					{
-						CNpcSmallJellyfishBackgroundEnemy *jfish = ( CNpcSmallJellyfishBackgroundEnemy * ) enemy;
-
-						if ( ( getRnd() % 10 ) > 4 )
-						{
-							jfish->setTargetHeading( 0 );
-							startPos.vx = offset.vx - 20;
-						}
-						else
-						{
-							jfish->setTargetHeading( 2048 );
-							startPos.vx = offset.vx + VidGetScrW() + 20;
-						}
-
-						break;
-					}
-
-					case 2:
-					{
-						CNpcSmallJellyfish2BackgroundEnemy *jfish = ( CNpcSmallJellyfish2BackgroundEnemy * ) enemy;
-
-						if ( ( getRnd() % 10 ) > 4 )
-						{
-							jfish->setTargetHeading( 0 );
-							startPos.vx = offset.vx - 20;
-						}
-						else
-						{
-							jfish->setTargetHeading( 2048 );
-							startPos.vx = offset.vx + VidGetScrW() + 20;
-						}
-
-						break;
-					}
-
-					case 3:
-					{
-						CNpcButterflyBackgroundEnemy *jfish = ( CNpcButterflyBackgroundEnemy * ) enemy;
-
-						if ( ( getRnd() % 10 ) > 4 )
-						{
-							jfish->setTargetHeading( 0 );
-							startPos.vx = offset.vx - 20;
-						}
-						else
-						{
-							jfish->setTargetHeading( 2048 );
-							startPos.vx = offset.vx + VidGetScrW() + 20;
-						}
-
-						break;
-					}
+					jfish->setTargetHeading( 0 );
+					startPos.vx = offset.vx - 20;
+				}
+				else
+				{
+					jfish->setTargetHeading( 2048 );
+					startPos.vx = offset.vx + VidGetScrW() + 20;
 				}
 
 				startPos.vy = offset.vy + ( getRnd() % VidGetScrH() );
