@@ -37,7 +37,7 @@ sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 		Velocity.vx=getRndRange(7)-4;
 		Velocity.vy=FallingTile_DefVY;
 		Life=FallingTile_DefLife;
-		CSoundMediator::playSfx(CSoundMediator::SFX_ANY_OBJECT_FALLING,false);
+		CSoundMediator::playSfx(CSoundMediator::SFX_ANY_OBJECT_FALLING,false,true);
 		Flags |=FX_FLAG_NO_THINK_KILL;
 }
 
