@@ -193,7 +193,7 @@ struct	sTile
 		u16		Pad;	// :o( need this?			// 2
 
 #ifdef	WIN32
-bool	operator==(sTile const &v1)	{return(false);}
+//bool	operator==(sTile const &v1)	{return(false);}
 #endif
 };													// 20
 
@@ -213,11 +213,6 @@ struct	sLayerHdr
 // Header
 struct	sLvlHdr
 {
-	u32		TriList;
-	u32		QuadList;
-	u32		VtxList;
-	u32		TileList;
-// Layers
 	u32		BackLayer;
 	u32		MidLayer;
 	u32		ActionLayer;
@@ -231,6 +226,16 @@ struct	sLvlHdr
 	u32		Pad6;
 	u32		Pad7;
 
+};
+
+//---------------------------------------------------------------------------
+// TileBank
+struct	sTileBankHdr
+{
+	u32		TriList;
+	u32		QuadList;
+	u32		VtxList;
+	u32		TileList;
 };
 
 
