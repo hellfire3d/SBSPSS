@@ -44,12 +44,33 @@ public:
 
 
 private:
-	int						m_active;
-	int						m_exitPauseMenuFlag;
-	int						m_quitGameFlag;
+	typedef enum
+	{
+		STATE__MAIN_MENU,
+		STATE__CONFIRM_QUIT,
+	} STATE;
 
-	class CGUIControlFrame		*m_guiFrame;
-	class CGUISpatCountReadout	*m_guiSpatReadout;
+	enum
+	{
+		RESPONSE__WAITING,
+		RESPONSE__CONTINUE,
+		RESPONSE__QUIT,
+		RESPONSE__CONFIRM_QUIT_YES,
+		RESPONSE__CONFIRM_QUIT_NO,
+	};
+
+
+	void					renderLives();
+
+
+	int						m_active;
+	int						m_responseFlag;
+	STATE					m_currentState;
+
+	class CGUIControlFrame	*m_pauseGuiFrame;
+	class CGUIControlFrame	*m_confirmQuitGuiFrame;
+
+	class FontBank			*m_fontBank;
 
 };
 
