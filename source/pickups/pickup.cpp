@@ -156,10 +156,6 @@ void	CBasePickup::render()
 	{
 		renderPickup(&pos);
 	}
-	/*
-	DrawLine(pos.vx-15,pos.vy-15,pos.vx+15,pos.vy+15,255,255,255,0);
-	DrawLine(pos.vx+15,pos.vy-15,pos.vx-15,pos.vy+15,255,255,255,0);
-	*/
 }
 
 /*----------------------------------------------------------------------
