@@ -256,8 +256,12 @@ GString		Filename;
 _finddata_t Find;
 long		FileHandle;
 int			Error=0;
-GString		BaseName=Name+"_"+ThisAnim.Name;
-int			BaseLen=strlen(BaseName);
+GString		AnimName=Name+"_"+ThisAnim.Name;
+GString		DirName=AnimName+"\\";
+GString		BaseName=DirName+AnimName;
+
+int			CheckLen=strlen(BaseName);
+			BaseName.Upper();
 
 			Filename=SpriteDir+BaseName+"*.bmp";
 
@@ -270,8 +274,8 @@ int			BaseLen=strlen(BaseName);
 			while (Error==0)
 			{
 				sFrame	NewFrame;
-				NewFrame.Filename=Find.name;
-				char	c=NewFrame.Filename[BaseLen];
+				NewFrame.Filename=DirName+Find.name;
+				char	c=NewFrame.Filename[CheckLen];
 				if (c>='0' && c<='9')
 				{
 					ThisAnim.Frames.push_back(NewFrame);
