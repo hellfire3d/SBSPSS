@@ -185,15 +185,15 @@ static PARTY_IMAGE images[]=
 	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT6,		1,1,	NULL,			false,	5,	6	},
 	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT7,		1,1,	NULL,			false,	5,	7	},
 																
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES1,			0,1,	NULL,			false,	4,	0	},
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES2,			0,1,	NULL,			false,	4,	0	},
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES3,			2,1,	NULL,			false,	4,	0	},
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES4,			2,1,	NULL,			false,	4,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES1,			0,1,	NULL,			false,	7,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES2,			0,1,	NULL,			false,	7,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES3,			2,1,	NULL,			false,	7,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES4,			2,1,	NULL,			false,	7,	0	},
 	
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_CUCUMBERSARNIES,	0,1,	NULL,			false,	5,	0	},
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE1,			0,1,	NULL,			false,	5,	0	},
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE2,			0,1,	NULL,			false,	5,	0	},
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE3,			0,1,	NULL,			false,	5,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_CUCUMBERSARNIES,	0,1,	NULL,			false,	8,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE1,			0,1,	NULL,			false,	8,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE2,			0,1,	NULL,			false,	8,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE3,			0,1,	NULL,			false,	8,	0	},
 																
 	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_CHERRYCAKES,		1,1,	NULL,			false,	4,	0	},
 	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT1,		1,1,	NULL,			false,	5,	1	},
@@ -204,9 +204,9 @@ static PARTY_IMAGE images[]=
 	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT6,		1,1,	NULL,			false,	5,	6	},
 	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT7,		1,1,	NULL,			false,	5,	7	},
 																
-	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS1,			1,1,	NULL,			false,	6,	0	},
-	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS2,			1,0,	NULL,			false,	6,	0	},
-	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS3,			2,1,	NULL,			false,	6,	0	},
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS1,			1,1,	NULL,			false,	7,	0	},
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS2,			1,0,	NULL,			false,	7,	0	},
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS3,			2,1,	NULL,			false,	7,	0	},
 };																
 static const int numimages=sizeof(images)/sizeof(PARTY_IMAGE);
 
