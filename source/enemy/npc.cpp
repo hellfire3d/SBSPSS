@@ -832,7 +832,7 @@ void CNpcEnemy::shutdown()
 
 void CNpcEnemy::think(int _frames)
 {
-/*	CEnemyThing::think(_frames);
+	CEnemyThing::think(_frames);
 
 	if ( m_isActive )
 	{
@@ -908,7 +908,7 @@ void CNpcEnemy::think(int _frames)
 	}
 
 	processTimer(_frames);
-*/
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
