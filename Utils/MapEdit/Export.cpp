@@ -56,7 +56,7 @@ int		LayerCount=LayerOfs.size();
 }
 
 /*****************************************************************************/
-void    PadFile(FILE *File)
+void    CExport::PadFile()
 {
 int		Pad=ftell(File) & 3;
 
@@ -75,7 +75,7 @@ void	CExport::Write(void *Addr,int Len)
 /*****************************************************************************/
 int		CExport::ExportLayerHeader(sLayerDef &LayerDef)//(int Type,int SubType,int Width,int Height)
 {
-		PadFile(File);
+		PadFile();
 sExpLayerHdr	LayerHdr;
 int				ThisFilePos=ftell(File);
 
@@ -143,7 +143,10 @@ CTileBank	*TileBank=Core->GetTileBank();
 
 			ASSERT(ThisTile.GetElemWidth()==FileHdr.TileW);
 			ASSERT(ThisTile.GetElemHeight()==FileHdr.TileH);
-			if (ThisTile.IsElem3d()) ExportTile3d(Core,ThisTile,OutTile);
+			if (ThisTile.IsElem3d()) 
+			{
+				ExportTile3d(Core,ThisTile,OutTile);
+			}
 			OutTile.Set=SetNames.Add(SetName);
 			fwrite(&OutTile,sizeof(sExpTile),1,File);
 			fwrite(ThisTile.GetElemRGB(),FileHdr.TileW*FileHdr.TileH*3,1,File);	// Write RGB
@@ -155,13 +158,17 @@ CTileBank	*TileBank=Core->GetTileBank();
 /*****************************************************************************/
 void	CExport::ExportTile3d(CCore *Core,CElem &ThisTile,sExpTile &OutTile)
 {
+		ExportElem3d(Core,ThisTile,OutTile.TriStart,OutTile.TriCount);
+}
+
+/*****************************************************************************/
+void	CExport::ExportElem3d(CCore *Core,CElem &ThisTile,int &TriStart,int &TriCount)
+{
 CTexCache				&TexCache=Core->GetTexCache();
 std::vector<sTriFace>	&TileTriList=ThisTile.GetTriList();
 
-int		TriCount=TileTriList.size();
-
-		OutTile.TriStart=TriList.size();
-		OutTile.TriCount=TriCount;
+		TriStart=TriList.size();
+		TriCount=TileTriList.size();
 
 		for (int T=0; T<TriCount; T++)
 		{

@@ -130,7 +130,8 @@ struct	sLayerThingData
 // Boxes
 	int						Width,Height;
 // Spare
-	int						Spare[4];
+	int						TriStart,TriCount;
+	int						Spare[2];
 
 };
 

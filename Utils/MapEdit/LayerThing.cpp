@@ -720,18 +720,19 @@ int		i,ListSize=ThingList.size();
 		Exp.Write(&ListSize,sizeof(int));
 		for (i=0;i<ListSize; i++)
 		{
-			ExportThing(Exp,ThingList[i]);
+			ExportThing(Core,Exp,ThingList[i]);
 		}
 		ExportThingNames(Exp);
 }
 
 /*****************************************************************************/
-void	CLayerThing::ExportThing(CExport &Exp,sLayerThing &ThisThing)
+void	CLayerThing::ExportThing(CCore *Core,CExport &Exp,sLayerThing &ThisThing)
 {
 int				i,ListSize=ThisThing.XY.size();
 sLayerThingData	OutThing=ThisThing.Data;
 
 		OutThing.WaypointCount=ListSize;
+		ExportThingData(Core,Exp,ThisThing,OutThing);
 		Exp.Write(&OutThing,sizeof(sLayerThingData));
 
 // Point List
@@ -753,3 +754,4 @@ int		i,ListSize=ThingList.size();
 			Exp.Write(Txt,strlen(Txt)+1);		
 		}
 }
+

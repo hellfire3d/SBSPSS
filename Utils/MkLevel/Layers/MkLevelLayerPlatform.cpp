@@ -16,6 +16,18 @@
 /*****************************************************************************/
 void	CMkLevelLayerPlatform::PreProcess(CMkLevel *Core)
 {
+int		i,ListSize;
+		ProcessList(Core);
+
+		ListSize=ThingList.size();
+		RemapTable.resize(ListSize);
+		for (i=0; i<ListSize; i++)
+		{
+			sMkLevelLayerThing	&ThisThing=ThingList[i];
+			RemapTable[i]=Core->AddPlatform(ThisThing);
+		}
+
+		printf("%i Platforms\n",ThingList.size());
 }
 
 /*****************************************************************************/
@@ -25,8 +37,6 @@ void	CMkLevelLayerPlatform::PreProcess(CMkLevel *Core)
 /*****************************************************************************/
 void	CMkLevelLayerPlatform::Process(CMkLevel *Core)
 {
-		ProcessList(Core);
-		printf("%i Platforms\n",ThingList.size());
 }
 
 /*****************************************************************************/
@@ -54,6 +64,7 @@ int			i,ListSize=ThingList.size();
 			OutThing.TurnRate=ThisThing.Data.TurnRate;
 			OutThing.Flags=ThisThing.Data.CollisionFlag;
 			OutThing.PointCount=PointCount;
+			OutThing.Gfx=RemapTable[i];
 			fwrite(&OutThing,sizeof(sThingPlatform),1,File);
 
 			for (p=0;p<PointCount;p++)

@@ -28,10 +28,11 @@ public:
 		void	Write(void *Addr,int Len);
 		int		ExportLayerHeader(sLayerDef &LayerDef);//int Type,int SubType,int Width,int Height);
 		int		AddTile(sExpTile &Tile)					{return(UsedTileList.Add(Tile));}
-
+		void	PadFile();
 		void	ExportTiles(CCore *Core);
 		void	ExportStrList(CCore *Core);
-
+		
+		void	ExportElem3d(CCore *Core,CElem &ThisElem,int &TriStart,int &TriCount);
 protected:
 		void	ExportTile(CCore *Core,sExpTile	&ThisElem);
 		void	ExportTile3d(CCore *Core,CElem &ThisTile,sExpTile &OutTile);

@@ -19,6 +19,8 @@ const	char	*GetTypeName()		{return("PLATFORM");}
 		void	Process(CMkLevel *Core);
 		int		Write(FILE *File,const char *LayerName,const char *MapName);
 
+		CList<int>	RemapTable;
+
 };
 
 /*****************************************************************************/

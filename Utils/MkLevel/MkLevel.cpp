@@ -111,7 +111,6 @@ GFName		Path;
 		FlatFace[1].uv[0][0]=0;		FlatFace[1].uv[0][1]=0;
 		FlatFace[1].uv[1][0]=1;		FlatFace[1].uv[1][1]=1;
 		FlatFace[1].uv[2][0]=0;		FlatFace[1].uv[2][1]=1;
-
 }
 
 //***************************************************************************
@@ -146,7 +145,7 @@ int			Size;
 //***************************************************************************
 void		CMkLevel::LoadStrList(CList<GString> &List,char *TexPtr,int Count)
 {
-char	FullName[256];
+char	FullName[1024];
 GString	FilePath;
 
 		for (int i=0; i<Count; i++)
@@ -154,6 +153,8 @@ GString	FilePath;
 			GString	InName=InPath;
 			InName+=TexPtr;
 			GFName::makeabsolute(InPath,InName,FullName);
+			InName=FullName;
+			_fullpath( FullName, FullName, 1024);
 			List.push_back(GString(FullName));
 			TexPtr+=strlen(TexPtr)+1;
 		}
@@ -264,6 +265,7 @@ u8		*ByteHdr=(u8*)FileHdr;
 		}
 }
 
+
 //***************************************************************************
 //*** Process ***************************************************************
 //***************************************************************************
@@ -320,7 +322,7 @@ int		i,ListSize=Tile2dList.size();
 		for (i=1; i<ListSize; i++)
 		{ // Skip blank
 			sExpLayerTile &ThisTile=Tile2dList[i];
-			ThisTile.Tile=Create2dTex(ThisTile);
+			ThisTile.Tile=Create2dTex(ThisTile.Tile,ThisTile.Flags);
 		}
 }
 
@@ -391,7 +393,61 @@ u8		Outx0, Outy0;
 }
 
 //***************************************************************************
+int		CMkLevel::AddPlatform(sMkLevelLayerThing &ThisThing)
+{
+sMkLevelPlatform	ThisPlatform;
+int				Idx;
+
+		ThisPlatform.Name=ThisThing.Name;
+		Idx=PlatformList.Find(ThisPlatform);
+
+		if (Idx!=-1)
+		{
+			return(Idx);
+		}
+		Idx=PlatformList.size();
+		ThisPlatform.TriStart=OutFaceList.GetFaceCount();
+		ThisPlatform.TriCount=ThisThing.Data.TriCount;
+
+		PlatformList.Add(ThisPlatform);
+
+// Add tri data
+		for (int i=0;i<ThisPlatform.TriCount; i++)
+		{
+//			sExpTri	&ThisTri=InTriList[ThisPlatform.TriStart+i];
+			sExpTri	&ThisTri=InTriList[i];
+			CFace	F;
+
+			ExpTri2Face(ThisTri,F);
+			OutFaceList.AddFace(F);
+		}
+		return(Idx);
+}
+
 //***************************************************************************
+//***************************************************************************
+//***************************************************************************
+void	CMkLevel::ExpTri2Face(sExpTri &ThisTri,CFace &F,bool ImportTex)
+{
+		if (ImportTex)
+		{
+			F.TexName=InTexNameList[ThisTri.TexID];
+			F.Mat=-1;
+		}
+		else
+		{
+			F.Mat=ThisTri.TexID;
+		}
+
+		for (int p=0; p<3; p++)
+		{
+			F.vtx[p]=ThisTri.vtx[p];
+			F.vtx[p].y=F.vtx[p].y;
+			F.uvs[p].u=ThisTri.uv[p][0];
+			F.uvs[p].v=ThisTri.uv[p][1];
+		}
+
+}
 //***************************************************************************
 CMkLevelLayer	*CMkLevel::FindLayer(int Type,int SubType)
 {
@@ -429,13 +485,13 @@ int				TileID=OutTile3dList.size();
 					float	ThisZPos;
 
 					ThisZPos=ThisTri.vtx[0].z;
-					if (ThisZPos>ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
-					if (ThisZPos>ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
+					if (ThisZPos<ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
+					if (ThisZPos<ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
 					
 					ListSize=SortList.size();
 					for (ListPos=0; ListPos<ListSize; ListPos++)
 					{
-						if (ZPosList[ListPos]<ThisZPos) break;
+						if (ZPosList[ListPos]>ThisZPos) break;
 					}
 					SortList.insert(ListPos,ThisTri);
 					ZPosList.insert(ListPos,ThisZPos);
@@ -443,8 +499,8 @@ int				TileID=OutTile3dList.size();
 
 			}
 			else
-			{ // create flat tile
-				int		TexID=Create2dTex(InTile);
+			{ // create flat tile (This is WRONG, flip tex are gen, need to flip goem)
+				int		TexID=Create2dTex(InTile.Tile,InTile.Flags);
 
 				ThisTile.TriCount=2;
 				for (int i=0; i<2; i++)
@@ -452,6 +508,7 @@ int				TileID=OutTile3dList.size();
 						FlatFace[i].TexID=TexID;
 						SortList.push_back(FlatFace[i]);
 					}
+				InTile.Flags=0;
 			}
 
 // Add sorted list to main list
@@ -475,10 +532,10 @@ int				TileID=OutTile3dList.size();
 				for (p=0; p<3; p++)
 				{
 					F.vtx[p]=ThisTri.vtx[p];
+					F.vtx[p].y=F.vtx[p].y;
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
-					// Flip 3d tiles
 
 				if (InTile.Flags & PC_TILE_FLAG_MIRROR_X)
 				{
@@ -495,6 +552,7 @@ int				TileID=OutTile3dList.size();
 					F.vtx[2].y	=1.0-F.vtx[2].y;
 					SwapPnt^=1;
 				}
+
 				if (SwapPnt)
 				{
 					Vector3	TmpV=F.vtx[0];
@@ -504,12 +562,7 @@ int				TileID=OutTile3dList.size();
 					F.uvs[0]=F.uvs[1];
 					F.uvs[1]=TmpUV;
 				}
-// Adjust Depth
-				for (p=0;p<3;p++)
-				{
-//					F.vtx[p].z-=4.0f;
-//				printf("%f\n",F.vtx[p].z);
-				}
+
 
 				OutFaceList.AddFace(F,true);
 			}
@@ -521,15 +574,14 @@ int				TileID=OutTile3dList.size();
 
 
 //***************************************************************************
-int		CMkLevel::Create2dTex(sExpLayerTile &InTile)
+int		CMkLevel::Create2dTex(int Tile,int Flags)
 {
-sExpTile	&SrcTile=InTileList[InTile.Tile];
+sExpTile	&SrcTile=InTileList[Tile];
 int			Idx;
 sMkLevelTex	InTex;
 
-//		InTex.Set=UsedSetNameList.Add(InSetNameList[SrcTile.Set]);
-		InTex.Set=SrcTile.Set;//UsedSetNameList.Add(InSetNameList[SrcTile.Set]);
-		InTex.Flags=InTile.Flags;
+		InTex.Set=SrcTile.Set;
+		InTex.Flags=Flags;
 		InTex.XOfs=SrcTile.XOfs;
 		InTex.YOfs=SrcTile.YOfs;
 		InTex.RGB=SrcTile.RGB;
@@ -550,7 +602,6 @@ sMkLevelTex	InTex;
 //***************************************************************************
 int		CMkLevel::BuildTileTex(sMkLevelTex &InTex)
 {
-		ASSERT(InTex.Set>=0 && InTex.Set<InSetNameList.size())
 Frame			&InFrame=BmpList[InTex.Set];
 Frame			ThisFrame;
 Rect			ThisRect;
@@ -737,6 +788,7 @@ int		i,ListSize;
 
 // VtxList
 		LevelHdr.VtxList=(sVtx*)WriteVtxList();
+//		LevelHdr.VtxList=(sVtx*)OutFaceList.WriteVtxList(File);
 }
 
 
@@ -816,21 +868,21 @@ int		CMkLevel::WriteVtxList()
 vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
 int		i,ListSize=VtxList.size();
 int		Pos=ftell(File);
-sVtx	Ofs;
+//sVtx	Ofs;
 
-		Ofs.vx=-0;
-		Ofs.vy=-0;
-		Ofs.vz=-4*Scale;
+//		Ofs.vx=-0;
+//		Ofs.vy=-0;
+//		Ofs.vz=-4*Scale;
 
 		for (i=0; i<ListSize; i++)
 		{
 			sVtx const	&In=VtxList[i];
 			sVtx		Out;
 
-			Out.vx=+(In.vx+Ofs.vx);
-			Out.vy=-(In.vy+Ofs.vy);
-			Out.vz=+(In.vz+Ofs.vz);
-
+			Out.vx=+In.vx;
+			Out.vy=-In.vy;
+			Out.vz=+In.vz;
+//			printf("%i\n",Out.vz);
 			fwrite(&Out,1,sizeof(sVtx),File);
 		}
 		return(Pos);
@@ -863,6 +915,7 @@ void	CMkLevel::WriteLayers()
 		LevelHdr.PlatformList=WriteThings(LAYER_TYPE_PLATFORM,"Platform List");
 		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER,"Trigger List");
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX,"FX List");
+		LevelHdr.PlatformGfx=(sModel*)WritePlatformGfx();
 }
 
 //***************************************************************************
@@ -897,5 +950,25 @@ int		Ofs;
 		Ofs=ThisLayer->Write(File,LayerName,LevelName);
 //		printf("%s %i\n",LayerName,Ofs);
 		PadFile(File);
+		return(Ofs);
+}
+
+//***************************************************************************
+int		CMkLevel::WritePlatformGfx()
+{
+int		i,ListSize=PlatformList.size();
+int		Ofs=ftell(File);
+
+		for (i=0; i<ListSize; i++)
+		{
+			sModel				Out;
+			sMkLevelPlatform	&ThisPlatform=PlatformList[i];
+
+			Out.TriCount=ThisPlatform.TriCount;
+			Out.TriStart=ThisPlatform.TriStart;
+			printf("Writing Platform %s (%i/%i)- %i Tris\n",ThisPlatform.Name,i+1,ListSize,Out.TriCount);
+			fwrite(&Out,1,sizeof(sModel),File);
+		}
+
 		return(Ofs);
 }

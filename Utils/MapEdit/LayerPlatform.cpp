@@ -67,8 +67,6 @@ CComboBox	&List=GUIPlatform.m_Type;
 			List.AddString("Weighted");
 			List.AddString("Rotating");
 		}
-
-
 }
 
 /*****************************************************************************/
@@ -170,4 +168,19 @@ void	CLayerPlatform::SetThingParams(sLayerThing &Thing)
 
 				break;
 		}
+}
+
+/*****************************************************************************/
+void	CLayerPlatform::Export(CCore *Core,CExport &Exp)
+{
+		CLayerThing::Export(Core,Exp);
+}
+
+/*****************************************************************************/
+void	CLayerPlatform::ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisThing,sLayerThingData &OutThing)
+{
+CElem	&ThisElem=ThingBank->GetElem(ThisThing.ElemID,0);
+
+		Exp.ExportElem3d(Core,ThisElem,OutThing.TriStart,OutThing.TriCount);
+		
 }

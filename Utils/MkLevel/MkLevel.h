@@ -37,6 +37,17 @@ bool	operator ==(sMkLevelTex const &v1)
 };
 
 //***************************************************************************
+struct	sMkLevelPlatform
+{
+		GString	Name;
+		int		TriStart;
+		int		TriCount;
+
+bool	operator ==(sMkLevelPlatform const &v1)		{return(Name==v1.Name);}
+};
+
+//***************************************************************************
+struct	sMkLevelLayerThing;
 class	CMkLevelLayer;
 class	CMkLevel
 {
@@ -50,12 +61,13 @@ public:
 		void			Load();
 
 		void			Process();
-		int				AddTile3d(sExpLayerTile &Tile)	{return(Tile3dList.Add(Tile));}
-		int				AddTile2d(sExpLayerTile &Tile)	{return(Tile2dList.Add(Tile));}
+		int				AddTile3d(sExpLayerTile &Tile)			{return(Tile3dList.Add(Tile));}
+		int				AddTile2d(sExpLayerTile &Tile)			{return(Tile2dList.Add(Tile));}
+		int				AddPlatform(sMkLevelLayerThing &ThisThing);
 
 		void			Write();
 
-		int				Create2dTex(sExpLayerTile &ThisTile);
+		int				Create2dTex(int Tile,int Flags);
 		int				Create3dTile(sExpLayerTile &ThisTile);
 		int				FindRGBMatch(sMkLevelTex &ThisTex);
 		bool			IsRGBSame(const sMkLevelTex &Tile0,const sMkLevelTex &Tile1);
@@ -88,12 +100,15 @@ protected:
 		void			WriteLayers();
 		int				WriteLayer(int Type,int SubType,const char *LayerName);
 		int				WriteThings(int Type,const char *LayerName);
+		int				WritePlatformGfx();
 		int				WriteTriList();
 		int				WriteQuadList();
 		int				WriteVtxList();
 		void			WriteTileBank();
 
 		void            BuildTiles();
+
+		void			ExpTri2Face(sExpTri &In,CFace &Out,bool ImportTex=true);
 
 		FILE					*File;
 		GString					InFilename,InPath,LevelName;
@@ -120,10 +135,10 @@ protected:
 		CTexGrab				TexGrab;
 		CList<Frame>			BmpList;
 
+		CList<sMkLevelPlatform>	PlatformList;
 		vector<CMkLevelLayer*>	LayerList;
 
 		sLevelHdr				LevelHdr;
-//		sTileBankHdr			TileBankHdr;
 		sExpTri					FlatFace[2];
 
 };
