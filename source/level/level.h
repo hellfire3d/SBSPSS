@@ -26,36 +26,36 @@ class CLevel
 public:
 	CLevel();
 // Scene Handlers
-	void		init(int LevelNo);
-	void		shutdown();
-	void		render();
-	void		think(int _frames);
+		void		init(int LevelNo);
+		void		shutdown();
+		void		render();
+		void		think(int _frames);
 
-	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
-	static DVECTOR			getCameraPos()						{return MapPos;}
-	static DVECTOR			getPlayerSpawnPos()					{return s_playerSpawnPos;}
+		void				setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
+static	DVECTOR const		&getCameraPos()						{return MapPos;}
+static	DVECTOR const		&getPlayerSpawnPos()				{return s_playerSpawnPos;}
 
-	static int				getCurrentChapter();
-	static int				getCurrentChapterLevel();
+static int					getCurrentChapter();
+static int					getCurrentChapterLevel();
 
-	int						getActorCount()						{return ActorCount;}
-	sThingActor				**getActorList()					{return ActorList;}
-	int						getPlatformCount()					{return PlatformCount;}
-	sThingPlatform			**getPlatformList()					{return PlatformList;}
-	int						getHazardCount()					{return HazardCount;}
-	sThingHazard			**getHazardList()					{return HazardList;}
+		int					getActorCount()						{return ActorCount;}
+		sThingActor			**getActorList()					{return ActorList;}
+		int					getPlatformCount()					{return PlatformCount;}
+		sThingPlatform		**getPlatformList()					{return PlatformList;}
+		int					getHazardCount()					{return HazardCount;}
+		sThingHazard		**getHazardList()					{return HazardList;}
 
-	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
-	DVECTOR					getMapSize();
+		CLayerCollision		*getCollisionLayer()				{return CollisionLayer;}
+		DVECTOR				getMapSize();
 
-	bool					GetNextLevel(int &Lvl);
+		bool				GetNextLevel(int &Lvl);
 
-	void					respawnLevel();
+		void				respawnLevel();
 
-	static u8				getIsBossRespawn()					{return m_isBossRespawn;}
-	static s32				getBossHealth()						{return m_bossHealth;}
-	static void				setIsBossRespawn( u8 newIsBossRespawn )		{m_isBossRespawn=newIsBossRespawn;}
-	static void				setBossHealth( s32 newBossHealth )			{m_bossHealth=newBossHealth;}
+static u8					getIsBossRespawn()					{return m_isBossRespawn;}
+static s32					getBossHealth()						{return m_bossHealth;}
+static void					setIsBossRespawn( u8 newIsBossRespawn )		{m_isBossRespawn=newIsBossRespawn;}
+static void					setBossHealth( s32 newBossHealth )			{m_bossHealth=newBossHealth;}
 
 	
 private:

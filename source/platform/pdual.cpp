@@ -205,34 +205,15 @@ void CNpcDualPlatform::render()
 {
 	int		x1,y1,x2,y2;
 
-	setOnScreenFlag(false);
 	if ( m_isActive )
 	{
 		CPlatformThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
-
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
-
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		if (canRender())
 		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
-			{
-				setOnScreenFlag(true);
-				m_modelGfx->Render(renderPos);
-//				POLY_F4	*F4=GetPrimF4();
-//				setXYWH(F4,renderPos.vx-32,renderPos.vy-32,64,16);
-//				setRGB0(F4,127,127,64);
-//				AddPrimToList(F4,2);
+			DVECTOR &renderPos=getRenderPos();
+
+			m_modelGfx->Render(renderPos);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
 	DVECTOR size;
@@ -257,9 +238,7 @@ void CNpcDualPlatform::render()
 
 	DrawLine(x1,y1,x2,y2,0,255,0,0);
 #endif
-			}
-		}
-
+/*
 		x1 = Pos.vx - offset.vx;
 		x2 = m_lineBase.vx - offset.vx;
 
@@ -339,6 +318,7 @@ void CNpcDualPlatform::render()
 					DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
 				}
 			}
+*/
 		}
 	}
 }

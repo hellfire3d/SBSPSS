@@ -119,7 +119,7 @@ s16		*dH=HeightTable;
 		_MapOfs.vx+=LX;
 		_MapOfs.vy+=LY;
 
-		if (!Parent->getOnScreenFlag()) return;		
+		if (!Parent->canRender()) return;		
 		MapOfs.vx=_MapOfs.vx+XOfs;
 
 		for (int L=0; L<Width; L++)

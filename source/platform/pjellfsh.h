@@ -21,7 +21,7 @@
 class CNpcJellyfishPlatform : public CNpcPlatform
 {
 public:
-	virtual void		render();
+	
 };
 
 #endif

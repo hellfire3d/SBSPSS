@@ -29,6 +29,8 @@
 #include	"utils\utils.h"
 #endif
 
+#include "level\level.h"
+
 
 /*	Std Lib
 	------- */
@@ -52,8 +54,12 @@
 	Vars
 	---- */
 
-CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE]={NULL,NULL};
+CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];//={NULL,NULL};
+CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
 int				CThingManager::s_initialised=false;
+
+sBBox			CThingManager::m_RenderBBox;
+sBBox			CThingManager::m_ThinkBBox;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -63,13 +69,9 @@ int				CThingManager::s_initialised=false;
   ---------------------------------------------------------------------- */
 void		CThingManager::init()
 {
-	int		i;
-
 	ASSERT(!s_initialised);
-	for(i=0;i<CThing::MAX_TYPE;i++)
-	{
-		s_thingLists[i]=NULL;
-	}
+	initList(s_thingLists);
+	initList(s_CollisionLists);
 	s_initialised=true;
 }
 
@@ -95,6 +97,22 @@ void		CThingManager::shutdown()
 		}
 	}
 	s_initialised=false;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void		CThingManager::initList(CThing **List)
+{
+int		i;
+
+		for(i=0 ;i<CThing::MAX_TYPE; i++)
+		{
+			List[i]=NULL;
+		}
 }
 
 /*----------------------------------------------------------------------
@@ -142,7 +160,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing->think(_frames);
 			thing->updateCollisionArea();
-			thing=thing->m_nextThing;
+			thing=thing->m_nextListThing;
 		}
 	}
 
@@ -168,7 +186,7 @@ void		CThingManager::thinkAllThings(int _frames)
 
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Pickup collision
@@ -181,7 +199,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Enemy collision
@@ -194,7 +212,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Friend collision
@@ -207,7 +225,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Hazard collision
@@ -220,7 +238,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Enemy projectile collision
@@ -233,7 +251,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Player -> Trigger collision
@@ -246,7 +264,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			thing1->collidedWith(thing2);
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Enemy -> Player projectile collision
@@ -262,9 +280,9 @@ void		CThingManager::thinkAllThings(int _frames)
 			{
 				thing1->collidedWith(thing2);
 			}
-			thing2=thing2->m_nextThing;
+			thing2=thing2->m_nextListThing;
 		}
-		thing1=thing1->m_nextThing;
+		thing1=thing1->m_nextListThing;
 	}
 
 	// Enemy -> Enemy collision
@@ -286,10 +304,10 @@ void		CThingManager::thinkAllThings(int _frames)
 				}
 			}
 
-			thing2 = thing2->m_nextThing;
+			thing2 = thing2->m_nextListThing;
 		}
 
-		thing1 = thing1->m_nextThing;
+		thing1 = thing1->m_nextListThing;
 	}
 
 	// Hazard -> Platform collision
@@ -311,10 +329,10 @@ void		CThingManager::thinkAllThings(int _frames)
 				}
 			}
 
-			thing2 = thing2->m_nextThing;
+			thing2 = thing2->m_nextListThing;
 		}
 
-		thing1 = thing1->m_nextThing;
+		thing1 = thing1->m_nextListThing;
 	}
 
 	for(i=0;i<CThing::MAX_TYPE;i++)
@@ -323,7 +341,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		CThing	*nextThing = thing;
 		while(thing)
 		{
-			nextThing=thing->m_nextThing;
+			nextThing=thing->m_nextListThing;
 
 			if ( thing->isSetToShutdown() )
 			{
@@ -342,10 +360,32 @@ void		CThingManager::thinkAllThings(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+static int	s_RenderBBoxX0=0;
+static int	s_RenderBBoxX1=512;
+static int	s_RenderBBoxY0=0;
+static int	s_RenderBBoxY1=256;
+static int	s_ThinkBBoxX0=0-256;
+static int	s_ThinkBBoxX1=512+526;
+static int	s_ThinkBBoxY0=0+128;
+static int	s_ThinkBBoxY1=256+128;
+
 void		CThingManager::renderAllThings()
 {
-	int		i;
-	CThing	*thing;
+// Setup Screen BBox's
+DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+	m_RenderBBox.XMin=s_RenderBBoxX0+CamPos.vx;
+	m_RenderBBox.XMax=s_RenderBBoxX1+CamPos.vx;
+	m_RenderBBox.YMin=s_RenderBBoxY0+CamPos.vy;
+	m_RenderBBox.YMax=s_RenderBBoxY1+CamPos.vy;
+
+	m_ThinkBBox.XMin=s_ThinkBBoxX0+CamPos.vx;
+	m_ThinkBBox.XMax=s_ThinkBBoxX1+CamPos.vx;
+	m_ThinkBBox.YMin=s_ThinkBBoxY0+CamPos.vy;
+	m_ThinkBBox.YMax=s_ThinkBBoxY1+CamPos.vy;
+
+int		i;
+CThing	*thing;
 
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
@@ -353,7 +393,7 @@ void		CThingManager::renderAllThings()
 		while(thing)
 		{
 			thing->render();
-			thing=thing->m_nextThing;
+			thing=thing->m_nextListThing;
 		}
 	}
 }
@@ -375,7 +415,7 @@ void		CThingManager::processEventAllThings(GAME_EVENT _event,CThing *_sourceThin
 		while(thing)
 		{
 			thing->processEvent(_event,_sourceThing);
-			thing=thing->m_nextThing;
+			thing=thing->m_nextListThing;
 		}
 	}
 }
@@ -403,7 +443,7 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
 	if(_continue)
 	{
 		ASSERT(thing);
-		thing=thing->m_nextThing;
+		thing=thing->m_nextListThing;
 	}
 	else
 	{
@@ -416,7 +456,7 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
 		{
 			return thing;
 		}
-		thing=thing->m_nextThing;
+		thing=thing->m_nextListThing;
 	}
 
 	return NULL;
@@ -430,7 +470,7 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
   ---------------------------------------------------------------------- */
 void			CThingManager::addToThingList(CThing *_this)
 {
-	_this->m_nextThing=s_thingLists[_this->getThingType()];
+	_this->m_nextListThing=s_thingLists[_this->getThingType()];
 	s_thingLists[_this->getThingType()]=_this;
 }
 
@@ -449,16 +489,16 @@ void			CThingManager::removeFromThingList(CThing *_this)
 	while(thing!=_this)
 	{
 		prevThing=thing;
-		thing=thing->m_nextThing;
+		thing=thing->m_nextListThing;
 		ASSERT(thing);	// Not in the list!?!?
 	}
 	if(prevThing)
 	{
-		prevThing->m_nextThing=_this->m_nextThing;
+		prevThing->m_nextListThing=_this->m_nextListThing;
 	}
 	else
 	{
-		s_thingLists[_this->getThingType()]=_this->m_nextThing;
+		s_thingLists[_this->getThingType()]=_this->m_nextListThing;
 	}
 }
 
@@ -524,24 +564,48 @@ void	CThing::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#if		!defined(__USER_CDBUILD__)
-#include "gfx\prim.h"
-#include "level\level.h"
+#if defined (__USER_paul__) || defined (__USER_charles__)
+#define	SHOW_BBOX	1
+int showthings=true;
+#endif
 
-	#if defined (__USER_paul__) || defined (__USER_charles__)
-	int showthings=true;
-	#else
-	int showthings=false;
-	#endif
+#if defined (__USER_daveo__)
+#define	SHOW_BBOX	1
+int showthings=false;
+#endif
 
 void	CThing::render()
 {
+// Check Is Onscreen
+CRECT	const	&collisionRect = getCollisionArea();
+sBBox			&ScrBBox=CThingManager::getRenderBBox();
+DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+		m_RenderPos.vx = Pos.vx - CamPos.vx;
+		m_RenderPos.vy = Pos.vy - CamPos.vy;
+
+// Will speed this up
+		m_renderFlag=true;
+		if (collisionRect.x2<ScrBBox.XMin || collisionRect.x1>ScrBBox.XMax) m_renderFlag=false;
+		if (collisionRect.y2<ScrBBox.YMin || collisionRect.y1>ScrBBox.YMax) m_renderFlag=false;
+
+/***/
+#ifdef	SHOW_BBOX
+	if(showthings) ShowBBox();
+#endif
+
+}
+/****************************************************************************************/
+#ifdef	SHOW_BBOX
+#include "gfx\prim.h"
+
+void	CThing::ShowBBox()
+{
 	if(showthings)
 	{
-		DVECTOR	ofs;
+		DVECTOR	const	&ofs=CLevel::getCameraPos();
 		CRECT	area;
 
-		ofs=CLevel::getCameraPos();
 		area=getCollisionArea();
 		area.x1-=ofs.vx;
 		area.y1-=ofs.vy;
@@ -635,10 +699,6 @@ void	CThing::render()
 		}
 */
 	}
-}
-#else
-void	CThing::render()
-{
 }
 #endif
 
