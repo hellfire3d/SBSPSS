@@ -1089,7 +1089,7 @@ u8 CNpcPlatform::checkCollisionDelta( CThing *_thisThing, int threshold, CRECT c
 			if ( otherCollisionArea.x2 >= collisionArea.x1 && otherCollisionArea.x1 <= collisionArea.x2 )
 			{
 				//if ( oldYPos < collisionArea.y1 + threshold ) //&& otherPos.vy > oldCollisionY )
-				if ( getHeightFromPlatformAtPosition( oldXPos, oldYPos, -posDelta.vx, -posDelta.vy ) > 0 )
+				if ( getHeightFromPlatformAtPosition( oldXPos, oldYPos, -posDelta.vx, -posDelta.vy ) >= 0 )
 				{
 					// if object's old position was above old platform collision area,
 					// but is now below current platform collision area, we can assume
