@@ -758,7 +758,7 @@ void CNpcSubSharkEnemy::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
-			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096, true );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
