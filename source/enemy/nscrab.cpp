@@ -45,6 +45,8 @@ void CNpcSpiderCrabEnemy::postInit()
 		m_velocity = 5;
 
 		m_state = SPIDER_CRAB_INIT_JUMP;
+
+		m_initDelay = 2 * GameState::getOneSecondInFrames();
 	}
 	else
 	{
@@ -63,7 +65,7 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 		default:
 		{
-			if ( abs( playerXDist ) < 64 )
+			if ( abs( playerXDist ) < 64 && m_initDelay <= 0 )
 			{
 				// only attack if within path extents
 
@@ -321,6 +323,11 @@ void CNpcSpiderCrabEnemy::processMovement(int _frames)
 	}
 	else
 	{
+		if ( m_initDelay > 0 )
+		{
+			m_initDelay -= _frames;
+		}
+
 		processGenericFixedPathWalk( _frames, &moveX, &moveY );
 
 		if ( !m_animPlaying )

@@ -91,6 +91,8 @@ void CProjectile::init()
 	m_yScale = ONE;
 	m_shock = false;
 	updateCollisionArea();
+	m_highResX = 0;
+	m_highResY = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,8 +385,20 @@ void CProjectile::think(int _frames)
 			}
 			else
 			{
-				Pos.vx += ( _frames * m_speed * rcos( m_heading ) ) >> 12;
-				Pos.vy += ( _frames * m_speed * rsin( m_heading ) ) >> 12;
+				m_highResX += ( _frames * ( m_speed << 8 ) * rcos( m_heading ) ) >> 12;
+				m_highResY += ( _frames * ( m_speed << 8 ) * rsin( m_heading ) ) >> 12;
+
+				if ( abs( m_highResX ) > 256 )
+				{
+					Pos.vx += m_highResX >> 8;
+					m_highResX -= ( m_highResX >> 8 ) << 8;
+				}
+
+				if ( abs( m_highResY ) > 256 )
+				{
+					Pos.vy += m_highResY >> 8;
+					m_highResY -= ( m_highResY >> 8 ) << 8;
+				}
 			}
 
 			break;

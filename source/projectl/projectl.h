@@ -90,6 +90,7 @@ protected:
 	s16											m_xScale;
 	s16											m_yScale;
 	u8											m_shock;
+	s32											m_highResX, m_highResY;
 };
 
 /*****************************************************************************/

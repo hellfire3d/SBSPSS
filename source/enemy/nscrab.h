@@ -34,6 +34,7 @@ protected:
 
 	s32					m_attackDist;
 	int					m_jumpDelay;
+	int					m_initDelay;
 
 	enum NPC_SPIDER_CRAB_STATE
 	{
