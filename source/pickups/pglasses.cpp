@@ -79,7 +79,7 @@ void	CGlassesPickup::init()
 	fh=getSpriteBank()->getFrameHeader(FRM__GLASSES);
 	setCollisionSize(fh->W,fh->H);
 
-	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_BUBBLEWAND);
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_GLASSES);
 }
 
 /*----------------------------------------------------------------------
