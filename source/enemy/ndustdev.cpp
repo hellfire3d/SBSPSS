@@ -24,10 +24,14 @@
 #endif
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcDustDevilEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcDustDevilEnemy::processMovement( int _frames )
 {
@@ -122,6 +126,8 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcDustDevilEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	Pos.vx += distX;
@@ -144,4 +150,11 @@ void CNpcDustDevilEnemy::processMovementModifier( int _frames, s32 distX, s32 di
 	s16 heading = ratan2( yDist, xDist );
 
 	m_drawRotation = heading;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcDustDevilEnemy::getFrameShift( int _frames )
+{
+	return( ( _frames << 8 ) >> 2 );
 }
