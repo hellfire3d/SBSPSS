@@ -54,7 +54,7 @@ int			FYO=0;
 			setRGB0(Frame,FC,FC,FC);
 			setSemiTrans(Frame,1);
 			Frame->tpage|=FT<<5;
-			Frame->u1--; Frame->u2--;
+			Frame->u1--; Frame->u3--;
 			Frame->v2--; Frame->v3--;
 
 			if (CurrentHeading<1024*1)
