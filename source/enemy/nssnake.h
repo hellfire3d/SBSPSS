@@ -53,6 +53,7 @@ public:
 	virtual void		shutdown();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
