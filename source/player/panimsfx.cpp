@@ -162,7 +162,7 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	ANIM_SPONGEBOB_WALK,			s_walkCount,			s_walkSfx				},
 	{	ANIM_SPONGEBOB_SWIPE,			s_swipeCount,			s_swipeSfx				},
 };
-const int				CPlayer::s_numAnimSfx=11;		// Grrrrrrrr! (pkg)
+const int				CPlayer::s_numAnimSfx=10;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
