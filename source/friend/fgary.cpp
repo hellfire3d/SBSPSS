@@ -161,7 +161,9 @@ void CNpcGaryFriend::think( int _frames )
 			case COLLISION_TYPE_FLAG_MOVE_LEFT:
 			{
 				conveyorOverride = true;
-				Pos.vx -= 4;
+				int Time = GameState::getFramesSinceLast();
+
+				Pos.vx -= Time;
 
 				break;
 			}
@@ -169,7 +171,9 @@ void CNpcGaryFriend::think( int _frames )
 			case COLLISION_TYPE_FLAG_MOVE_RIGHT:
 			{
 				conveyorOverride = true;
-				Pos.vx += 4;
+				int Time = GameState::getFramesSinceLast();
+
+				Pos.vx += Time;
 
 				break;
 			}

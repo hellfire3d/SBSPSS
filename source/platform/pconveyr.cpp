@@ -143,15 +143,17 @@ void CNpcConveyorPlatform::processMovement( int _frames )
 		{
 			if ( distX )
 			{
+				int Time = GameState::getFramesSinceLast();
+
 				moveX = distX;
 
-				if ( moveX > 4 )
+				if ( moveX > Time )
 				{
-					moveX = 4;
+					moveX = Time;
 				}
-				else if ( moveX < -4 )
+				else if ( moveX < -Time )
 				{
-					moveX = -4;
+					moveX = -Time;
 				}
 			}
 			else
