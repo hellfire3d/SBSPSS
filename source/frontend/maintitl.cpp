@@ -229,6 +229,7 @@ int ish=56;
 
 void CFrontEndMainTitles::render()
 {
+	CFrontEndScene::renderLogo();
 /*
 	sFrameHdr	*fh;
 	POLY_FT4	*ft4;
