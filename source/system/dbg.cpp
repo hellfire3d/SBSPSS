@@ -259,6 +259,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	FontBank	F;
 	char		Text[2048];
 
+	ClearScreenImage();
 
 	sprintf( Text, "%s\nLine %d in %s", Txt, line, file );
 
