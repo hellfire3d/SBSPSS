@@ -418,12 +418,24 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		3,
 		256,
 	},
+
+	{	// NPC_IRON_DOGFISH
+		NPC_INIT_IRON_DOGFISH,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_IRON_DOGFISH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_IRON_DOGFISH_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_SUB_SHARK;
+	m_type = NPC_IRON_DOGFISH;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -520,6 +532,14 @@ void CNpc::init()
 		case NPC_INIT_SUB_SHARK:
 		{
 			m_state = SUB_SHARK_CYCLE;
+			m_extendDir = EXTEND_RIGHT;
+
+			break;
+		}
+
+		case NPC_INIT_IRON_DOGFISH:
+		{
+			m_state = IRON_DOGFISH_THUMP_1;
 			m_extendDir = EXTEND_RIGHT;
 
 			break;
@@ -793,19 +813,6 @@ bool CNpc::processSensor()
 					}
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
-					{
-						if ( xDistSqr + yDistSqr < 40000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 40000 )
@@ -841,6 +848,20 @@ bool CNpc::processSensor()
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_UP;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_IRON_DOGFISH_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
 
 							return( true );
 						}
@@ -985,6 +1006,13 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_IRON_DOGFISH:
+		{
+			processIronDogfishMovement( _frames );
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -1096,6 +1124,9 @@ void CNpc::processClose(int _frames)
 			processCloseSubSharkAttack( _frames );
 
 			break;
+
+		case NPC_CLOSE_IRON_DOGFISH_ATTACK:
+			processCloseIronDogfishAttack( _frames );
 
 		default:
 			break;

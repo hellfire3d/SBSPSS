@@ -60,6 +60,7 @@ public:
 		NPC_MOTHER_JELLYFISH,
 		NPC_SUB_SHARK,
 		NPC_FLYING_DUTCHMAN,
+		NPC_IRON_DOGFISH,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -83,6 +84,7 @@ protected:
 		NPC_INIT_MOTHER_JELLYFISH,
 		NPC_INIT_SUB_SHARK,
 		NPC_INIT_FLYING_DUTCHMAN,
+		NPC_INIT_IRON_DOGFISH,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -107,6 +109,7 @@ protected:
 		NPC_SENSOR_EYEBALL_USER_CLOSE,
 		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
 		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
+		NPC_SENSOR_IRON_DOGFISH_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -126,6 +129,7 @@ protected:
 		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
 		NPC_CLOSE_SUB_SHARK_ATTACK,
 		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
+		NPC_CLOSE_IRON_DOGFISH_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -137,6 +141,7 @@ protected:
 		NPC_MOVEMENT_MOTHER_JELLYFISH,
 		NPC_MOVEMENT_SUB_SHARK,
 		NPC_MOVEMENT_FLYING_DUTCHMAN,
+		NPC_MOVEMENT_IRON_DOGFISH,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -160,6 +165,13 @@ protected:
 		MOTHER_JELLYFISH_ATTACK_PLAYER,
 	};
 
+	enum NPC_SUB_SHARK_STATE
+	{
+		SUB_SHARK_CYCLE = 0,
+		SUB_SHARK_MINE_1 = 1,
+		SUB_SHARK_MINE_2,
+	};
+
 	enum NPC_FLYING_DUTCHMAN_STATE
 	{
 		FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
@@ -167,11 +179,13 @@ protected:
 		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
 	};
 
-	enum NPC_SUB_SHARK_STATE
+	enum NPC_IRON_DOGFISH_STATE
 	{
-		SUB_SHARK_CYCLE = 0,
-		SUB_SHARK_MINE_1 = 1,
-		SUB_SHARK_MINE_2,
+		IRON_DOGFISH_THUMP_1 = 0,
+		IRON_DOGFISH_LASER_EYE_1 = 1,
+		IRON_DOGFISH_THUMP_2,
+		IRON_DOGFISH_ROLL,
+		IRON_DOGFISH_LASER_EYE_2,
 	};
 
 	enum
@@ -256,15 +270,21 @@ protected:
 	void				processMotherJellyfishMovement( int _frames );
 	void				processCloseMotherJellyfishAttack( int _frames );
 
+	// sub shark functions
+
+	void				processSubSharkMovement( int _frames );
+	void				processCloseSubSharkAttack( int _frames );
+
 	// flying dutchman functions
 
 	void				processFlyingDutchmanMovement( int _frames );
 	void				processCloseFlyingDutchmanAttack( int _frames );
 
-	// sub shark functions
+	// iron dogfish functions
 
-	void				processSubSharkMovement( int _frames );
-	void				processCloseSubSharkAttack( int _frames );
+	void				processIronDogfishMovement( int _frames );
+	void				processStandardIronDogfishAttack( int _frames );
+	void				processCloseIronDogfishAttack( int _frames );
 
 	// data
 

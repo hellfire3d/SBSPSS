@@ -92,19 +92,19 @@ void CNpc::processCloseSubSharkAttack( int _frames )
 	s32 xDist = playerPos.vx - Pos.vx;
 	s32 xDistSqr = xDist * xDist;
 
+	if ( xDist > 0 )
+	{
+		m_extendDir = EXTEND_RIGHT;
+	}
+	else
+	{
+		m_extendDir = EXTEND_LEFT;
+	}
+
 	switch( m_state )
 	{
 		case SUB_SHARK_MINE_1:
 		{
-			if ( xDist > 0 )
-			{
-				m_extendDir = EXTEND_RIGHT;
-			}
-			else
-			{
-				m_extendDir = EXTEND_LEFT;
-			}
-
 			if ( xDistSqr > 100 )
 			{
 				processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
@@ -124,15 +124,6 @@ void CNpc::processCloseSubSharkAttack( int _frames )
 
 		case SUB_SHARK_MINE_2:
 		{
-			if ( xDist > 0 )
-			{
-				m_extendDir = EXTEND_RIGHT;
-			}
-			else
-			{
-				m_extendDir = EXTEND_LEFT;
-			}
-
 			if ( xDistSqr > 100 )
 			{
 				processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
