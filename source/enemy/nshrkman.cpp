@@ -45,6 +45,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSharkManEnemy::postInit()
+{
+	CNpcEnemy::postInit();
+
+	m_fired = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSharkManEnemy::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
@@ -149,9 +158,10 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		m_animNo = ANIM_MANRAY_ATTACK;
 		m_frame = 0;
 	}
-	else if ( !m_animPlaying )
+	else if ( ( ( m_frame >> 8 ) > ( ( 3 * getFrameCount() ) >> 2 ) ) && !m_fired )
 	{
-		// anim finished, fire
+		// fire
+
 		DVECTOR newPos = Pos;
 		newPos.vy -= 50;
 
@@ -170,6 +180,11 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		projectile->init( newPos, heading );
 		projectile->setGraphic( FRM__LIGHTNING2 );
 
+		m_fired = true;
+	}
+	else if ( !m_animPlaying )
+	{
+		// anim finished
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
 		m_timerTimer = GameState::getOneSecondInFrames();
@@ -177,6 +192,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		m_animNo = m_data[m_type].moveAnim;
 		m_animPlaying = true;
 		m_frame = 0;
+		m_fired = false;
 	}
 }
 

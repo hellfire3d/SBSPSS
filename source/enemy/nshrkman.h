@@ -16,9 +16,13 @@
 
 class CNpcSharkManEnemy : public CNpcEnemy
 {
+public:
+	void				postInit();
 protected:
 	void				processClose( int _frames );
 	void				processMovement( int _frames );
+
+	u8					m_fired;
 };
 
 #endif
