@@ -586,7 +586,7 @@ int			m_fallFrames;
 int			m_cameraFallYScrollPos;
 int			m_cameraFallYScrollSpeed;
 int			CAMERA_FALL_DROP_SPEED=6;
-int			CAMERA_FALL_MAX_OFFSET=5*16;
+int			CAMERA_FALL_MAX_OFFSET=4*16;
 int			CAMERA_FALL_FRAME_THRESHOLD=20;
 int			CAMERA_FALL_RETURN_SPEED=1;
 
