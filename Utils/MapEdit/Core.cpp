@@ -33,7 +33,10 @@ CCore::CCore()
 	CurrentMousePos=CPoint(0,0);
 	ActiveLayer=0;
 	MapCam=Vec(0,0,0);
+	MapCamOfs=Vec(-15,10,0);
 	TileCam=Vec(0,0,0);
+	TileCamOfs=Vec(-15,10,0);
+
 	Is3dFlag=TRUE;
 }
 
@@ -64,11 +67,11 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 void	CCore::New()
 {
 // Create Gfx Layers
-//									Name	Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
-	Layer.push_back(new CLayerTile(	"Back",	32,						32,						1.0f,	4.0f,	FALSE,	FALSE));
-	Layer.push_back(new CLayerTile(	"Mid",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE));
-	Layer.push_back(new CLayerTile(	"Action",TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE));
-	Layer.push_back(new CLayerTile(	"Fore",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE));
+//									Name		Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
+	Layer.push_back(new CLayerTile(	"Back",		32,						32,						4.0f,	4.0f,	FALSE,	FALSE));
+	Layer.push_back(new CLayerTile(	"Mid",		TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE));
+	Layer.push_back(new CLayerTile(	"Action",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE));
+//	Layer.push_back(new CLayerTile(	"Fore",		TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE));
 
 	ActiveLayer=LAYER_ACTION;
 	MapCam=Vec(0,0,0);
@@ -113,6 +116,7 @@ int		LayerCount;
 		}
 	TileBank.Load(File,Version);
 	Init();
+	MapCam=Vec(0,0,0);
 
 }
 
@@ -171,14 +175,14 @@ void	CCore::RenderLayers(CMapEditView *View)
 {
 Vec		&ThisCam=GetCam();
 int		ListSize=Layer.size();
-		
+	
 		for (int i=0;i<ListSize;i++)
 		{
 			Layer[i]->Render(this,ThisCam,Is3dFlag);
+			if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
 		}
 		
 		Layer[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
-		if (GridFlag) Layer[ActiveLayer]->RenderGrid(this,ThisCam);
 		
 // Get Cursor Pos
 		LastCursorPos=CursorPos;
@@ -294,8 +298,17 @@ Vec		&ThisCam=GetCam();
 	
 			Ofs.x*=XS;
 			Ofs.y*=YS;
-
-			UpdateView(View,Ofs);
+/*			if (nFlags & MK_CONTROL)
+			{ // Move Ofs
+				Vec	&CamOfs=GetCamOfs();
+				Ofs.y=-Ofs.y;
+				CamOfs+=Ofs;
+				UpdateView(View);
+			}
+			else
+*/			{
+				UpdateView(View,Ofs);
+			}
 			}
 		else
 		{	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
@@ -349,23 +362,21 @@ int			ListSize=Layer.size();
 			for (int i=0; i<ListSize; i++)
 			{
 				List->ListBox.AddString(Layer[i]->GetName());
-//				List->ListBox.SetCheck(i,Layer[i]->IsVisible());
 			}
 // Now sets checks (silly MSoft bug!!)
 			for (i=0; i<ListSize; i++)
 			{
 				List->ListBox.SetCheck(i,Layer[i]->IsVisible());
 			}
-
+			List->ListBox.SetCurSel(ActiveLayer);
 }
 
 /*****************************************************************************/
-/*
-void	CCore::SetActiveLayer(int i)
+void		CCore::SetLayer(int Layer)
 {
-//	UpdateParamBar(NULL,ParamViewFlag);
+		ActiveLayer=Layer;
 }
-*/
+
 /*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/
@@ -468,6 +479,16 @@ Vec		&CCore::GetCam()
 }
 
 /*****************************************************************************/
+Vec		&CCore::GetCamOfs()
+{
+		if (TileViewFlag)
+			return(TileCamOfs);
+		else
+			return(MapCamOfs);
+
+}
+
+/*****************************************************************************/
 void	CCore::UpdateGUI(CMapEditView *View)
 {
 		UpdateLayerGUI(View);
@@ -517,20 +538,40 @@ void	CCore::Toggle2d3d(CMapEditView *View)
 {
 		Is3dFlag=!Is3dFlag;
 		UpdateView(View);
-
-		Export();
 }
 
 /*****************************************************************************/
-void	CCore::Export()
+
+Vec		CCore::OffsetCam(Vec &Cam,float DivVal)
+{
+Vec	ThisCam;
+
+	ThisCam=Cam/DivVal;
+	ThisCam.z=Cam.z;
+	ThisCam+=GetCamOfs();
+
+	return(ThisCam);
+}
+
+/*****************************************************************************/
+void	CCore::ExportAGB(char *Filename)
 {
 int		LayerCount=Layer.size();
-CExportAGB	Exp("c:/temp/test.c");
+char	ExportName[256];
+		
+		SetFileExt(Filename,ExportName,"C");
+
+CExportAGB	Exp(ExportName);
 
 		for (int i=0;i<LayerCount;i++)
 		{
 			Layer[i]->Export(Exp);
 		}
 		Exp.ExportAll(this);
-	
+}
+
+/*****************************************************************************/
+void	CCore::ExportPSX(char *Filename)
+{
+
 }

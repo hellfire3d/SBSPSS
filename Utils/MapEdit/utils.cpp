@@ -298,18 +298,18 @@ int					PaletteSize,ImageSize;
 		if (Pal) fwrite(Pal,sizeof(RGBQUAD),256,File);
 		
 		fwrite(Image,ImageSize,1,File);
-/*		
-		for (int Y=0;Y<Height;Y++)
-		{
-			for (int X=0;X<Width;X++)
-			{
-				TRACE1("%02d ",*Image++);
-
-			}
-			TRACE0("\n");
-		}
-*/
 		fclose(File);
 
 
+}
+
+/**************************************************************************************/
+void	SetFileExt(char *InName,char *OutName,char *Ext)
+{
+char	Drive[_MAX_DRIVE];
+char	Path[_MAX_DIR];
+char	Name[_MAX_FNAME];
+
+		_splitpath(InName,Drive,Path,Name,0);
+		sprintf(OutName,"%s%s%s.%s",Drive,Path,Name,Ext);
 }

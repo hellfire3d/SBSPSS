@@ -82,9 +82,8 @@ void CMapEditView::OnCreateGL()
 		glEnable(GL_COLOR_MATERIAL);						// Enable Material Coloring
 #endif
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-//		glDisable(GL_BLEND);									// Enable Alpha Channel
-//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
-
+		glEnable(GL_BLEND);									// Enable Alpha Channel
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
 }
 
 
@@ -99,6 +98,7 @@ void CMapEditView::OnDrawGL()
 void CMapEditView::OnSizeGL(int cx, int cy)
 {
 		glViewport(0,0,cx,cy);
+
 // update the camera
  		glPushMatrix();
 			glMatrixMode(GL_PROJECTION);
@@ -112,8 +112,22 @@ void CMapEditView::OnSizeGL(int cx, int cy)
 /////////////////////////////////////////////////////////////////////////////
 void	CMapEditView::SetupPersMatrix()
 {
-		gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
-		glTranslatef(0.0f,0.0f,-4.f);
+	gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
+	glTranslatef(0.0f,0.0f,-4.f);
+
+//	GLint viewport[4];
+
+//	glGetIntegerv( GL_VIEWPORT, viewport );
+//	glMatrixMode( GL_PROJECTION );
+//	glLoadIdentity();
+//	glOrtho( 0.0f, viewport[2]-viewport[0],viewport[3]-viewport[1], 0.0f, 0.1f, 100.0f);
+//	glOrtho( 0.0f, +30,+20, 0, 0.1f, 100.0f);
+//	glTranslatef(0.0f,0.0f,-0.f);
+
+//	glMatrixMode( GL_MODELVIEW );
+//	glLoadIdentity();
+//	glTranslatef( 0.375, 0.375, 0.0 );
+
 }
 
 

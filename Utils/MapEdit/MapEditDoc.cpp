@@ -21,6 +21,8 @@ IMPLEMENT_DYNCREATE(CMapEditDoc, CDocument)
 BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	//{{AFX_MSG_MAP(CMapEditDoc)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CURSORXY, OnStatusCursorXY)
+	ON_COMMAND(ID_EXPORT_AGB, OnExportAgb)
+	ON_COMMAND(ID_EXPORT_PSX, OnExportPsx)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -184,6 +186,36 @@ void	CMapEditDoc::SetMode(int NewMode)
 {
 		Core.SetMode(NewMode);
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::SetLayer(int Layer)
+{
+		Core.SetLayer(Layer);
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+}
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+void CMapEditDoc::OnExportAgb() 
+{
+char		BASED_CODE AGBFilter[]= "AGB Data Type (*.c)|*.c|All Files (*.*)|*.*||";
+CFileDialog	Dlg(TRUE,NULL,NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,AGBFilter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+char	Filename[256];
+		sprintf(Filename,"%s",Dlg.GetPathName());
+		
+
+		Core.ExportAGB(Filename);
+}
+
+/*********************************************************************************/
+void CMapEditDoc::OnExportPsx() 
+{
+	
 }
 
 /*********************************************************************************/

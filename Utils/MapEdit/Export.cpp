@@ -17,7 +17,7 @@
 /*****************************************************************************/
 CExport::CExport(char *Filename)
 {
-		_splitpath(Filename,0,0,Name,0);
+		_splitpath(Filename,Drive,Path,Name,Ext);
 }
 
 /*****************************************************************************/
@@ -30,28 +30,42 @@ CExport::~CExport()
 void	CExport::ExportAll(CCore *Core)
 {
 		ExportTiles(Core);
-
 }
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-void	CExport::ExportTileMap(char *LayerName,CMap &Map)
-{
-int		Width=Map.GetWidth();
-int		Height=Map.GetHeight();
 
-		ExportTileMapStart(LayerName,Width,Height);
-		for (int Y=0; Y<Height; Y++)
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CExport::ExportLayerTile(char *LayerName,CMap &Map)
+{
+int			MapWidth=Map.GetWidth();
+int			MapHeight=Map.GetHeight();
+int			MinWidth=GetMinLayerTileWidth();
+int			MinHeight=GetMinLayerTileHeight();
+
+int			ExpWidth=max(MapWidth,MinWidth);
+int			ExpHeight=max(MapHeight,MinHeight);
+
+sMapElem	BlankElem={0,0,0};
+
+		ExportLayerTileStart(LayerName,ExpWidth,ExpHeight);
+		for (int Y=0; Y<ExpHeight; Y++)
 		{
-			for (int X=0; X<Width; X++)
+			for (int X=0; X<ExpWidth; X++)
 			{
-				sMapElem	&ThisElem=Map.Get(X,Y);
-				int	Idx=AddTileToList(ThisElem);
-				ExportTileMap(ThisElem,Idx);
+				if (X<MapWidth && Y<MapHeight)
+					{
+					sMapElem	&ThisElem=Map.Get(X,Y);
+					int	Idx=AddTileToList(ThisElem);
+					ExportLayerTile(ThisElem,Idx);
+				}
+				else
+				{
+					ExportLayerTile(BlankElem,0);
+				}
 			}
 
 		}
-		ExportTileMapEnd(LayerName);
+		ExportLayerTileEnd(LayerName);
 
 }
 
@@ -113,7 +127,7 @@ int			ListSize=UsedTileList.size(),i;
 			ParseTile(ThisTile);
 		}
 		CreateTilePalette();
-		ExportTileStart();
+		ExportTileStart(ListSize);
 		for (i=0; i<ListSize; i++)
 		{
 			sMapElem	&ThisElem=UsedTileList[i];

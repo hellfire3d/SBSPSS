@@ -43,6 +43,7 @@ public:
 	void			TileBankSet();
 
 	void			SetMode(int NewMode);
+	void			SetLayer(int Layer);
 
 // Operations
 public:
@@ -71,6 +72,8 @@ protected:
 protected:
 	//{{AFX_MSG(CMapEditDoc)
 	afx_msg void OnStatusCursorXY(CCmdUI *pCmdUI);
+	afx_msg void OnExportAgb();
+	afx_msg void OnExportPsx();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

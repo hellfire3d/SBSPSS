@@ -322,12 +322,67 @@ void	CTileSet::Load(CCore *Core)
 /*****************************************************************************/
 void	CTileSet::Load2d(CCore *Core)
 {
+char		Filename[_MAX_PATH];
+CTexCache	&TexCache=Core->GetTexCache();
+sRGBData	ThisBmp;
+sRGBData	NewTex;
 
-//		_makepath( Filename, Drive, Path, Name, Ext);
-		
-		Tile.push_back(CTile());	// Insert Blank		
+		_makepath( Filename, Drive, Path, Name, Ext);
+		TexCache.LoadBMP(Filename,ThisBmp);
 
-		Tile.push_back(CTile(Core,this,0,0));
+int		Width=ThisBmp.Width/16;
+int		Height=ThisBmp.Height/16;
+u8		Buffer[16*16*3];
+
+
+		NewTex.Width=16;
+		NewTex.Height=16;
+		NewTex.RGB=Buffer;
+
+		TRACE2("Load 2d TileBank (%i,%i)\n",Width,Height);
+		Tile.push_back(CTile(0));	// Insert Blank		
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				BOOL Data=Create16x16Tile(ThisBmp,Buffer,X,(Height-1)-Y);
+				if (Data)
+				{ // Not Blank
+					char	Name[256];
+					sprintf(Name,"_2d_%s%i",GetName(),X+(Y*Width));
+					int	TexID=TexCache.ProcessTexture(Name,GetPath(),0,&NewTex);
+					Tile.push_back(CTile(Core,this,TexID));
+				}
+				
+			}
+		}
+
+		TexCache.FreeBMP(ThisBmp);
+}
+
+/*****************************************************************************/
+BOOL	CTileSet::Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs)
+{
+BOOL	Data=FALSE;
+
+		for (int Y=0; Y<16; Y++)
+		{
+			for (int X=0; X<16; X++)
+			{
+			u8	*SrcPtr=(u8*)&Src.RGB[((((YOfs*16)+Y)*Src.Width)+(X+(XOfs*16)))*3];
+			u8	R=SrcPtr[0];
+			u8	G=SrcPtr[1];
+			u8	B=SrcPtr[2];
+
+			if (R!=BlankRGB.rgbRed || G!=BlankRGB.rgbGreen || B!=BlankRGB.rgbBlue) Data=TRUE;
+
+			*Dst++=R;
+			*Dst++=G;
+			*Dst++=B;
+			}
+		}
+		return(Data);
 }
 
 /*****************************************************************************/
@@ -342,7 +397,7 @@ CScene	Scene;
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
 		
-		Tile.push_back(CTile());	// Insert Blank		
+		Tile.push_back(CTile(0));	// Insert Blank		
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
 			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
@@ -394,8 +449,6 @@ int			SelFlag;
 
 			if (SelFlag)
 			{
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBegin(GL_QUADS); 
 #ifdef	UseLighting
 				glNormal3f( 1,1,1);
@@ -419,8 +472,6 @@ int			SelFlag;
 				}
 	
 				glEnd();
-				glDisable(GL_BLEND);
-
 			}
 
 			TileID++;
@@ -453,9 +504,6 @@ int		MaxTile=Tile.size();
 
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 		for (int Y=Start.y; Y<=End.y; Y++)
 		{
@@ -476,8 +524,6 @@ int		MaxTile=Tile.size();
 		}
 
 		glEnable(GL_TEXTURE_2D);
-		glDisable(GL_BLEND);
-
 }
 
 /*****************************************************************************/

@@ -43,7 +43,7 @@ virtual	int				GetType()=0;
 virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
 
 virtual	void			Render(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
-virtual	void			RenderGrid(CCore *Core,Vec &CamPos)=0;
+virtual	void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)=0;
 
 virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)=0;
 virtual	void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)=0;

@@ -43,7 +43,7 @@ public:
 		int				GetType()			{return(LAYER_TYPE_TILE);}
 
 		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
-		void			RenderGrid(CCore *Core,Vec &CamPos);
+		void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active);
 
 		void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d);

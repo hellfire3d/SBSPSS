@@ -39,7 +39,8 @@ public:
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);
-		void					Export();
+		void					ExportAGB(char *Filename);
+		void					ExportPSX(char *Filename);
 
 
 // Control
@@ -66,6 +67,7 @@ public:
 		void					UpdateParamBar();
 
 // Layers
+		void					SetLayer(int Layer);
 		void					UpdateLayerGUI(CMapEditView *View);
 //		void					SetActiveLayer(int Layer);
 //		int						GetActiveLayer()				{return(ActiveLayer);}
@@ -84,6 +86,8 @@ public:
 		void					UpdateView(CMapEditView *View,Vec Ofs=Vec(0,0,0));
 
 		Vec						&GetCam();
+		Vec						&GetCamOfs();
+		Vec						OffsetCam(Vec &Cam,float DivVal);
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
@@ -98,6 +102,7 @@ private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
 		Vec						MapCam,TileCam;
+		Vec						MapCamOfs,TileCamOfs;
 
 		std::vector<CLayer*>	Layer;
 		int						ActiveLayer;
@@ -105,6 +110,7 @@ private:
 		CTileBank				TileBank;
 
 		CTexCache				TexCache;
+
 
 		BOOL					TileViewFlag;
 		BOOL					GridFlag;

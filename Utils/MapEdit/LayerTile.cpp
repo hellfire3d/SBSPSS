@@ -63,6 +63,13 @@ void	CLayerTile::Load(CFile *File,float Version)
 		File->Read(&VisibleFlag,sizeof(BOOL));
 		File->Read(&Mode,sizeof(MouseMode));
 		Map.Load(File,Version);
+
+		TRACE1("%s ",Name);
+		TRACE1("Div:%g ",ZPosDiv);
+		TRACE1("Size:%g ",MapSizeDiv);
+		TRACE1("%i\n",VisibleFlag);
+
+
 }
 
 /*****************************************************************************/
@@ -93,8 +100,7 @@ void	CLayerTile::Resize(int Width,int Height)
 /*****************************************************************************/
 void	CLayerTile::Render(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-float	XYDiv=GetLayerZPosDiv();
-Vec		ThisCam=CamPos/XYDiv;
+Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
 
 		if (Is3d && Render3dFlag)
 		{
@@ -112,7 +118,8 @@ Vec		ThisCam=CamPos/XYDiv;
 void	CLayerTile::RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
 CTileBank	&TileBank=Core->GetTileBank();
-Vec			ThisCam=CamPos;
+//Vec			ThisCam=CamPos;
+Vec			ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
 CPoint		&CursPos=Core->GetCursorPos();
 CMap		&Brush=TileBank.GetActiveBrush();
 
@@ -142,8 +149,6 @@ int			Height=ThisMap.GetHeight();
 		
 		if (Alpha<1)
 		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
 			glColor4f(0.5,0.5,0.5,Alpha);
 		}
 		else
@@ -168,30 +173,30 @@ int			Height=ThisMap.GetHeight();
 				}
 			}
 		}
-		glDisable(GL_BLEND);
 	
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos)
+void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)
 {
-float	XYDiv=GetLayerZPosDiv();
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-float	StartX=CamPos.x/XYDiv;
-float	StartY=CamPos.y/XYDiv;
+Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
 float	OverVal=0.5;
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(StartX,StartY,CamPos.z);
+		glTranslatef(ThisCam.x,ThisCam.y,ThisCam.z);
 		glDisable(GL_TEXTURE_2D);
 
 		glBegin(GL_LINES); 
 #ifdef	UseLighting
 			glNormal3f( 1,1,1);
 #endif
-			glColor3ub(255,255,255);
+			if (Active)
+				glColor3ub(255,255,255);
+			else
+				glColor3ub(127,127,127);
 			
 			for (int YLoop=0; YLoop<Height+1; YLoop++)
 			{
@@ -218,11 +223,9 @@ int		HitCount;
 int		TileID=0;
 CPoint	&CursorPos=Core->GetCursorPos();
 
-float	XYDiv=GetLayerZPosDiv();
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-float	StartX=CamPos.x/XYDiv;
-float	StartY=CamPos.y/XYDiv;
+Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
 
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
@@ -240,7 +243,7 @@ float	StartY=CamPos.y/XYDiv;
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(StartX,StartY,CamPos.z);
+		glTranslatef(ThisCam.x,ThisCam.y,ThisCam.z);
 
 		for (int YLoop=0; YLoop<Height; YLoop++)
 		{
@@ -483,12 +486,10 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 		Map.Set(CursorPos.x,CursorPos.y,Blk);
 
 		return(TRUE);
-
-
 }
 
 /*****************************************************************************/
 void	CLayerTile::Export(CExport &Exp)
 {
-		Exp.ExportTileMap(Name,Map);
+		Exp.ExportLayerTile(Name,Map);
 }

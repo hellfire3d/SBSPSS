@@ -95,6 +95,9 @@ BEGIN
         MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
         MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
         MENUITEM SEPARATOR
+        MENUITEM "Export AGB",                  ID_EXPORT_AGB
+        MENUITEM "Export PSX",                  ID_EXPORT_PSX
+        MENUITEM SEPARATOR
         MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       ID_APP_EXIT
@@ -454,7 +457,7 @@ IDD_LAYER_LIST_DIALOG DIALOG DISCARDABLE  0, 0, 155, 94
 STYLE WS_CHILD | WS_BORDER
 FONT 8, "MS Sans Serif"
 BEGIN
-    LISTBOX         IDC_LAYER_LIST,5,5,145,85,LBS_SORT | LBS_OWNERDRAWFIXED | 
+    LISTBOX         IDC_LAYER_LIST,5,5,145,85,LBS_OWNERDRAWFIXED | 
                     LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
                     WS_TABSTOP
 END

@@ -111,6 +111,7 @@ public:
 		void	RenderGrid(Vec &CamPos);
 
 private:
+		BOOL	Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
 
 		char				Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		int					SetNumber;

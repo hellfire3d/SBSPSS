@@ -55,6 +55,8 @@ void SaveTGA(char *Filename,int W,int H,u8 *Data);
 void SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 
 void BGR2RGB(int W,int H,u8 *Data);
+
+void	SetFileExt(char *InName,char *OutName,char *Ext);
 		
 
 
