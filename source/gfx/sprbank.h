@@ -86,7 +86,6 @@ inline	POLY_FT4	*printFT4(int _frame,int _x,int _y,int _xFlip,int _yFlip,int _ot
 inline	POLY_FT4	*printFT4(sFrameHdr *_fh,int _x,int _y,int _xFlip,int _yFlip,int _ot)
 {
 	POLY_FT4	*ft4=GetPrimFT4();
-
 	prepareFT4(ft4,_fh,_x,_y,_xFlip,_yFlip);
 	AddPrimToList(ft4,_ot);
 	return(ft4);
@@ -95,16 +94,29 @@ inline	POLY_FT4	*printFT4Scaled(int _frame,int _x,int _y,int _xFlip,int _yFlip,i
 inline	POLY_FT4	*printFT4Scaled(sFrameHdr *_fh,int _x,int _y,int _xFlip,int _yFlip,int _ot, long _z)
 {
 	POLY_FT4	*ft4=GetPrimFT4();
-
 	prepareFT4Scaled(ft4,_fh,_x,_y,_xFlip,_yFlip,_z );
 	AddPrimToList(ft4,_ot);
 	return(ft4);
 }
-		
+
+inline	POLY_FT4	*printRotatedScaledSprite(sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot,int _ot)
+{
+	ASSERT(_rot>=0);
+	ASSERT(_rot<=4095);
+	POLY_FT4	*ft4=GetPrimFT4();
+	prepareFT4RotatedScaled(ft4,_fh,_xCentre,_yCentre,_xScale,_yScale,_rot);
+	AddPrimToList(ft4,_ot);
+	return(ft4);
+}
+
+
 	// Hmm.. why did these used to be private?
 	void		prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip);
 	void		prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip,long _z);
+	void		prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot);
 	void 		setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yYFlip);
+
+//	void		printRotatedScaledSprite(sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot,int _ot);
 
 
 private:

@@ -32,6 +32,10 @@
 #include "gfx\prim.h"
 #endif
 
+#ifndef __MATHTABLE_HEADER__
+#include "utils\mathtab.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -299,6 +303,78 @@ void SpriteBank::prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bo
 
 /*----------------------------------------------------------------------
 	Function:
+	Purpose:	NB: Still needs to be aspect corrected.. (PKG)
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot)
+{
+	int		halfW,halfH;
+	int		ca,sa;
+	int		cw,ch,sw,sh;
+	int		width,height;
+	int		aspect;
+
+	halfW=(_fh->W*_xScale)>>(12+1);
+	halfH=(_fh->H*_yScale)>>(12+1);
+	ca=mcos(_rot);
+	sa=msin(_rot);
+	cw=(ca*halfW)>>12;
+	ch=(ca*halfH)>>12;
+	sw=(sa*halfW)>>12;
+	sh=(sa*halfH)>>12;
+
+//	aspect=(512<<12)/384;//((_fh->H<<12)/_fh->W)/2;
+//	ch=(ch*aspect)>>12;
+//	sh=(sh*aspect)>>12;
+
+	_ft4->x0=_xCentre-cw+sh;	_ft4->y0=_yCentre-sw-ch;
+	_ft4->x1=_xCentre+cw+sh;	_ft4->y1=_yCentre+sw-ch;
+	_ft4->x2=_xCentre-cw-sh;	_ft4->y2=_yCentre-sw+ch;
+	_ft4->x3=_xCentre+cw-sh;	_ft4->y3=_yCentre+sw+ch;
+
+	setShadeTexPolyFT4(_ft4);
+	setShadeTex(_ft4,0);
+	setRGB0(_ft4,128,128,128);
+//	setUVTp(_fh,_ft4,false,false);
+////////////////////////////////	
+	int		U=_fh->U;
+	int		V=_fh->V;
+	int		W=_fh->W;
+	int		H=_fh->H;
+	
+	if (!_fh->Rotated) 
+	{
+		_ft4->u0=U;
+		_ft4->u1=U+W;
+		_ft4->u2=U;
+		_ft4->u3=U+W;
+
+		_ft4->v0=V;
+		_ft4->v1=V;
+		_ft4->v2=V+H-1;
+		_ft4->v3=V+H-1;
+	} 
+	else 
+	{
+		_ft4->v0=V+W-1;
+		_ft4->v2=V+W-1;
+		_ft4->v1=V-1;
+		_ft4->v3=V-1;
+
+		_ft4->u0=U;
+		_ft4->u1=U;
+		_ft4->u2=U+H;
+		_ft4->u3=U+H;
+	}
+	_ft4->tpage=_fh->TPage;
+	_ft4->clut=_fh->Clut;
+////////////////////////////////	
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
 	Purpose:
 	Params:
 	Returns:
@@ -375,7 +451,3 @@ void SpriteBank::setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yFlip)
 	_ft4->tpage=_fh->TPage;
 	_ft4->clut=_fh->Clut;
 }
-
-
-
-
