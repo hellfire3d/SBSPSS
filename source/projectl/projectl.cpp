@@ -404,6 +404,7 @@ void CPlayerProjectile::init()
 	m_extension = 0;
 	m_frame = 0;
 	m_reversed = 0;
+	m_isShuttingDown = false;
 }
 
 void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
