@@ -769,6 +769,16 @@ void CNpcSubSharkEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSubSharkEnemy::renderOnMapScreen( DVECTOR drawPos )
+{
+	SprFrame = NULL;
+
+	SprFrame = m_actorGfx->Render(drawPos,3,0,false);
+	//m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 {
 	if ( m_isActive && !m_isCaught && !m_isDying )

@@ -205,6 +205,8 @@ s32 CNpcEnemy::playerYDist;
 s32 CNpcEnemy::playerXDistSqr;
 s32 CNpcEnemy::playerYDistSqr;
 
+extern CThing	*g_bossThing;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
@@ -362,12 +364,14 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
 		{
 			enemy = new ("mother jellyfish") CNpcMotherJellyfishEnemy;
+			g_bossThing = (CThing *) enemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SUB_SHARK:
 		{
 			enemy = new ("sub shark") CNpcSubSharkEnemy;
+			g_bossThing = (CThing *) enemy;
 			break;
 		}
 
@@ -380,12 +384,14 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
 		{
 			enemy = new ("flying dutchman") CNpcFlyingDutchmanEnemy;
+			g_bossThing = (CThing *) enemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_IRON_DOGFISH:
 		{
 			enemy = new ("iron dogfish") CNpcIronDogfishEnemy;
+			g_bossThing = (CThing *) enemy;
 			break;
 		}
 
@@ -410,6 +416,7 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_SEA_SNAKE:
 		{
 			enemy = new ("sea snake") CNpcSeaSnakeEnemy;
+			g_bossThing = (CThing *) enemy;
 			break;
 		}
 

@@ -27,6 +27,7 @@ class CNpcIronDogfishEnemy : public CNpcBossEnemy
 public:
 	void				postInit();
 	void				render();
+	void				renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 protected:
 	void				processTimer( int _frames );

@@ -755,6 +755,21 @@ void CNpcMotherJellyfishEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcMotherJellyfishEnemy::renderOnMapScreen( DVECTOR drawPos )
+{
+	SprFrame = NULL;
+
+	SprFrame = m_actorGfx->Render(drawPos,0,0,false);
+	m_actorGfx->RotateScale( SprFrame, drawPos, 0, ONE, ONE );
+	for ( int i = 0 ; i < 4 ; i++ )
+	{
+		legs[i]->renderOnMapScreen( drawPos );
+	}
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /*void CNpcMotherJellyfishEnemy::processUserCollision( CThing *thisThing )
 {
 }*/

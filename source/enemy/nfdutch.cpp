@@ -710,6 +710,20 @@ void CNpcFlyingDutchmanEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcFlyingDutchmanEnemy::renderOnMapScreen( DVECTOR drawPos )
+{
+	SprFrame = NULL;
+
+	SprFrame = m_actorGfx->Render(drawPos,0,0,false);
+	//setShadeTex(SprFrame,0);
+	//setSemiTrans( SprFrame, true );
+	//SprFrame->tpage|=1<<5;
+	m_actorGfx->RotateScale( SprFrame, drawPos, 0, 5120, 5120 );
+	//setRGB0( SprFrame, m_fadeVal, m_fadeVal, m_fadeVal );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 {
 	if ( m_isActive && !m_isCaught && !m_isDying )

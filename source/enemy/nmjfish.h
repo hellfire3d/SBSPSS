@@ -21,7 +21,7 @@
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
-#define MJ_PINK ( 255 + ( 128 << 8 ) + ( 255 << 16 ) )
+#define MJ_PINK ( 127 + ( 127 << 8 ) + ( 127 << 16 ) )
 #define MJ_WHITE ( 255 + ( 255 << 8 ) + ( 255 << 16 ) )
 
 class CNpcMotherJellyfishEnemy : public CNpcBossEnemy
@@ -29,6 +29,7 @@ class CNpcMotherJellyfishEnemy : public CNpcBossEnemy
 public:
 	void				postInit();
 	void				render();
+	void				renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 	void				setupWaypoints( sThingActor *ThisActor );
 protected:

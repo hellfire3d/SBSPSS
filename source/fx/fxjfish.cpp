@@ -33,11 +33,11 @@ void	CFXJellyFishLegs::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool XFlip)
+void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool _XFlip)
 {
 	Ofs.vx=XOfs; 
 	Ofs.vy=YOfs;
-	XFlip=XFlip;
+	XFlip=_XFlip;
 }
 
 /*****************************************************************************/
@@ -88,6 +88,61 @@ int			XInc=LegXInc;
 				POLY_FT4	*Ft4;
 
 				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx+(i*XInc),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
+
+				if (!XFlip)
+				{
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
+				}
+				else
+				{
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
+				}
+
+		
+				Ft4->y2=Ft4->y0+H;
+				Ft4->y3=Ft4->y1+H;
+				RenderPos.vy+=H+ScaleHInc;
+				WOfs+=ScaleWInc;
+
+			}
+}
+
+
+/*****************************************************************************/
+/*** Render on map ***********************************************************/
+/*****************************************************************************/
+void	CFXJellyFishLegs::renderOnMapScreen( DVECTOR drawPos )
+{
+SpriteBank	*SprBank=CGameScene::getSpriteBank();;
+DVECTOR		RenderPos=drawPos;
+int			WOfs=0;	
+int			H;
+int			ThisAngle=0;
+int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
+int			ScaleWInc=(ONE*LegWInc)>>12;
+int			ScaleHInc=(ONE*LegHInc)>>12;
+int			XInc=LegXInc;
+
+			RenderPos.vx+=Ofs.vx;
+			RenderPos.vy+=Ofs.vy;
+
+			if (!XFlip) XInc=-XInc;		
+			for (int i=0; i<LegCount; i++)
+			{
+				ThisAngle+=AngleInc;
+				ThisAngle&=CIRCLE_TAB_MASK;
+				H=LegHeight+(CircleTable[ThisAngle]>>5);
+
+
+				POLY_FT4	*Ft4;
+
+				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx+(i*XInc),RenderPos.vy,XFlip,0,OtPos,ONE>>4);
 
 				if (!XFlip)
 				{

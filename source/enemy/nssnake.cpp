@@ -998,6 +998,72 @@ void CNpcSeaSnakeEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSeaSnakeEnemy::renderOnMapScreen( DVECTOR drawPos )
+{
+	drawPos.vx += 300;
+
+	POLY_FT4 *headSprFrame;
+
+	headSprFrame = m_actorGfx->Render(drawPos,ANIM_SEASNAKE_HEADSNAP,0,0);
+	m_actorGfx->RotateScale( headSprFrame, drawPos, 0, 4096, 4096 );
+
+	int segmentCount;
+	int segmentType;
+	u16 segScale;
+	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
+	int remLength = NPC_SEA_SNAKE_LENGTH - initLength;
+
+	for ( segmentCount = 0 ; segmentCount < NPC_SEA_SNAKE_LENGTH ; segmentCount++ )
+	{
+		drawPos.vx -= 30;
+
+		if ( segmentCount > 3 )
+		{
+			if ( segmentCount == m_segmentCount - 1 )
+			{
+				segmentType = ANIM_SEASNAKE_TAILSTATIC;
+			}
+			else
+			{
+				if ( segmentCount % 2 )
+				{
+					segmentType = ANIM_SEASNAKE_BODY2STATIC;
+				}
+				else
+				{
+					segmentType = ANIM_SEASNAKE_BODY3STATIC;
+				}
+			}
+		}
+		else
+		{
+			segmentType = ANIM_SEASNAKE_BODY1STATIC;
+		}
+
+		if ( segmentCount < initLength )
+		{
+			u16 sum = ONE << 1;
+			u16 start = ONE;
+			u16 end = sum - start;
+
+			segScale = start + ( ( end * segmentCount ) / initLength );
+		}
+		else
+		{
+			u16 sum = ONE << 1;
+			u16 start = ONE >> 1;
+			u16 end = sum - start;
+
+			segScale = start + ( ( end * ( NPC_SEA_SNAKE_LENGTH - segmentCount ) ) / remLength );
+		}
+
+		POLY_FT4 *Ft4= m_actorGfx->Render(drawPos,segmentType,0,0);
+		m_actorGfx->RotateScale( Ft4, drawPos, 0, 4096, segScale );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int CNpcSeaSnakeEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
 //	DVECTOR	pos,thisThingPos;
