@@ -1258,12 +1258,12 @@ int CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 				thatRect = _thisThing->getCollisionArea();
 
 				DVECTOR const &thisPosDelta = getPosDelta();
-				int	ThisAbsY=abs(thisPosDelta.vy)>>1;
+				int	ThisAbsY=abs(thisPosDelta.vy);
 				thisRect.y1 -= ThisAbsY;
 				thisRect.y2 += ThisAbsY;
 
 				DVECTOR const &ThatPosDelta = _thisThing->getPosDelta();
-				int	ThatAbsY=abs(ThatPosDelta.vy)>>1;
+				int	ThatAbsY=abs(ThatPosDelta.vy);
 				thatRect.y1 -= ThatAbsY;
 				thatRect.y2 += ThatAbsY;
 

@@ -236,8 +236,6 @@ void CNpcFriend::shutdown()
 
 void CNpcFriend::think(int _frames)
 {
-	CNpcThing::think(_frames);
-
 	if ( m_animPlaying )
 	{
 		s32 frameCount;
@@ -264,6 +262,8 @@ void CNpcFriend::think(int _frames)
 	}
 
 	m_iconStrobe=(m_iconStrobe+(strobespeed))&4095;
+
+	CNpcThing::think(_frames);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
