@@ -22,8 +22,9 @@ struct	sMkLevelTex
 		int		Tile;
 		int		Flags;
 		int		TexID;
+		int		Height;
 
-bool	operator ==(sMkLevelTex const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags);}
+bool	operator ==(sMkLevelTex const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags && Height==v1.Height);}
 };
 
 //***************************************************************************
@@ -48,8 +49,8 @@ bool	operator ==(sUsedTile2d const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags
 //***************************************************************************
 struct	sUsedTile3d
 {
-		int	Tile;
-		int	Flags;
+		int		Tile;
+		int		Flags;
 
 bool	operator ==(sUsedTile3d const &v1)	{return(Tile==v1.Tile);}
 
@@ -58,6 +59,7 @@ bool	operator ==(sUsedTile3d const &v1)	{return(Tile==v1.Tile);}
 struct sOutElem3d
 {
 		bool			LocalGeom;
+		bool			Model;
 		sElem3d			Elem3d;
 		CFaceStore		FaceStore;
 		vector<sVtx>	LocalVtxList;
@@ -98,10 +100,10 @@ public:
 		void			AddInfItem(const char *Name,int Val);
 		void			Write();
 
-		int				Create2dTile(int Tile,int Flags);
+		int				Create2dTile(int Tile,int Flags,int Height);
 		int				Create3dTile(int Tile,int Flags);
 		void			MakeTexName(sExpTile &SrcTile,int Flags,GString &OutStr);
-		int				BuildTileTex(sExpTile &SrcTile,int Flags);
+		int				BuildTileTex(sExpTile &SrcTile,int Flags,int Height);
 
 		char			*GetConfigStr(const char *Grp,const char *Key)	{return(Config.GetStr(Grp,Key));}
 		int				GetConfigInt(const char *Grp,const char *Key)	{return(Config.GetInt(Grp,Key));}

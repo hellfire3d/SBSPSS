@@ -14,25 +14,44 @@ const u32	XInc=16<<0;
 const u32	YInc=16<<16;
 
 /*****************************************************************************/
-//DVECTOR	TileMapOfs={0,4};	// To line layers up :oP
+static const int	TILE2D_WIDTH=16;
+static const int	TILE2D_HEIGHT=12;
+static const int	SCREEN_TILE2D_WIDTH=((512/TILE2D_WIDTH)+1);
+static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+1);
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+
 CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 {
+int		Count=SCREEN_TILE2D_WIDTH*SCREEN_TILE2D_HEIGHT;
+int		MemSize=Count*sizeof(TSPRT);
+
 		LayerHdr=Hdr;
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
-//		printf("%i %i\n",MapWidth,MapHeight);
 		ElemBank2d=LevelHdr->ElemBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
+		
+		PrimBank=(TSPRT*)MemAlloc(MemSize,"Mid Polyz");
+
+TSPRT	*PrimPtr=PrimBank;
+		for (int i=0; i<Count; i++)
+		{
+			setTSprt(PrimPtr);
+			setTSetShadeTex(PrimPtr,1);
+			PrimPtr->w=TILE2D_WIDTH;
+			PrimPtr->h=TILE2D_HEIGHT;
+			PrimPtr++;
+		}
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
+		MemFree(PrimBank);
 }
 
 /*****************************************************************************/
@@ -58,16 +77,10 @@ int			XPos=MapPos.vx>>MapXYShift;
 int			YPos=MapPos.vy>>MapXYShift;
 
 			MapXY.vx=XPos>>4;
-			MapXY.vy=YPos/12;
+			MapXY.vy=YPos/TILE2D_HEIGHT;
 
-/*			if (LayerHdr->SubType==1)	// BODGE AND A HALF
-			{
-				MapXY.vx+=TileMapOfs.vx; MapXY.vy+=TileMapOfs.vy;
-			}
-*/
 			ShiftX=XPos & 15;
-//			ShiftY=YPos & 15;
-			ShiftY=YPos%12;
+			ShiftY=YPos%TILE2D_HEIGHT;
 
 			if (MapXY.vx+SCREEN_TILE2D_WIDTH<=MapWidth)
 				RenderW=SCREEN_TILE2D_WIDTH;
@@ -84,19 +97,18 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-#if	1	// FT4 version
 void	CLayerTile::render()
 {
-
 sTileMapElem	*MapPtr=GetMapPos();
-u8				*PrimPtr=GetPrimPtr();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
+TSPRT			*PrimPtr=PrimBank;
 
 // Setup shift bits of pos
 		TileY=-ShiftY;
 
 // Render it!!
+
 		for (int Y=0; Y<RenderH; Y++)
 		{
 			sTileMapElem	*MapRow=MapPtr;
@@ -109,68 +121,17 @@ sOT				*ThisOT=OtPtr+LayerOT;
 				if (ThisTile)
 				{
 					sElem2d		*Tile=&ElemBank2d[ThisTile];
-					POLY_FT4	*Ft4=(POLY_FT4*)PrimPtr;
-					setPolyFT4(Ft4);
-					setShadeTex(Ft4,1);
-					setXYWH(Ft4,TileX,TileY,16,12);
-					setUVWH(Ft4,Tile->u0,Tile->v0,15,15);
-					Ft4->tpage=Tile->TPage;
-					Ft4->clut=Tile->Clut;
-//					addPrimNoCheck(ThisOT,Ft4);
-					addPrim(ThisOT,Ft4);
-					PrimPtr+=sizeof(POLY_FT4);
+					PrimPtr->x0=TileX;
+					PrimPtr->y0=TileY;
+					setTSprtTPage(PrimPtr,Tile->TPage);
+					*(u32*)&PrimPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+					addPrim(ThisOT,PrimPtr);
+					PrimPtr++;
 				}
 				TileX+=TILE2D_WIDTH;
 			}
 			MapPtr+=MapWidth;
 			TileY+=TILE2D_HEIGHT;
 		}
-		SetPrimPtr(PrimPtr);
 
 }
-
-#else
-void	CLayerTile::render()
-{
-sTileMapElem	*MapPtr=GetMapPos();
-u8				*PrimPtr=GetPrimPtr();
-s16				TileX,TileY;
-sOT				*ThisOT=OtPtr+LayerOT;
-
-// Setup shift bits of pos
-		TileY=-ShiftY;
-
-// Render it!!
-		for (int Y=0; Y<RenderH; Y++)
-		{
-			sTileMapElem	*MapRow=MapPtr;
-			TileX=-ShiftX;
-
-			for (int X=0; X<RenderW; X++)
-			{
-				int	ThisTile=*MapRow++;
-				if (ThisTile)
-				{
-/**/				sElem2d		*Tile=&ElemBank2d[ThisTile];
-					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
-					setTSprt16(SprPtr);
-					setTSetShadeTex(SprPtr,1);
-/**/				SprPtr->x0=TileX;
-/**/				SprPtr->y0=TileY;
-/**/				setTSprtTPage(SprPtr,Tile->TPage);
-					*(u32*)&SprPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-					addPrimNoCheck(ThisOT,SprPtr);
-					PrimPtr+=sizeof(TSPRT_16);
-				}
-//				MapRow++;
-				TileX+=TILE2D_WIDTH;
-			}
-			MapPtr+=MapWidth;
-			TileY+=TILE2D_HEIGHT;
-		}
-		SetPrimPtr(PrimPtr);
-
-}
-
-
-#endif

@@ -18,20 +18,10 @@ class CLayerTile
 public:
 		enum LAYER_TILE_TYPE
 		{ // Stored reverse for rendering :o)
-			LAYER_TILE_TYPE_FORE,
 			LAYER_TILE_TYPE_ACTION,
 			LAYER_TILE_TYPE_MID,
 			LAYER_TILE_TYPE_BACK,
 			LAYER_TILE_TYPE_MAX
-		};
-
-		enum
-		{
-			TILE2D_WIDTH=16,
-			TILE2D_HEIGHT=12,
-			SCREEN_TILE2D_WIDTH=(32+2),
-			SCREEN_TILE2D_HEIGHT=(22+2),
-			SCREEN_TILE_SIZE=SCREEN_TILE2D_WIDTH*SCREEN_TILE2D_HEIGHT,
 		};
 
 		CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
@@ -58,6 +48,7 @@ protected:
 		u16				ShiftX,ShiftY;
 		
 		sTileMapElem	*Map;
+		TSPRT			*PrimBank;
 };
 
 

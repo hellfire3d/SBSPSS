@@ -53,10 +53,6 @@ int		Count;
 					TextPtr+=strlen(TextPtr)+1;
 					TPH=atol(TextPtr);
 					break;
-//				case 'm':
-//					TpStr= CheckFileString(String);
-//					Level.AddModel(TpStr);
-//					break;
 				case 'i':
 					IncDir= CheckFileString(String);
 					IncDir.Upper();
@@ -104,10 +100,11 @@ void Usage(char *ErrStr)
 	printf("   -o:[FILE]       Set output File (AND Dir)\n");
 	printf("   -s:nn           Set Scaling value\n");
 	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
-//	printf("   -m:             Add Model\n");
 	printf("   -d:             Enable Debug output\n");
+	printf("   -i:             Include Out Dir\n");
 	printf("   -q:             Enable Quadding\n");
 	printf("   -l:             Enable Local Geom\n");
+	printf("   -p:             Level Chunk Pak Info (X,Y) (Default=None(0,0)\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 

@@ -9,7 +9,7 @@
 #include "system\vid.h"
 
 /*****************************************************************************/
-sOT 		*OtList[2],*BaseOtPtr,*GUIOtPtr,*OtPtr;
+sOT 		*OtList[2],*BaseOtPtr,*OtPtr;
 u32			DmaStart[2];
 u8			*PrimBuffer[2],*PrimListStart,*PrimListEnd;
 u8			*CurrPrim,*EndPrim;
@@ -26,8 +26,7 @@ void	PrimInit()
 
 	PrimFlipFlag=0;
 	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
-	GUIOtPtr=BaseOtPtr;
-	OtPtr=GUIOtPtr+MAX_OT_GUI;
+	OtPtr=BaseOtPtr;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
 	EndPrim=CurrPrim+PRIMPOOL_SIZE;
 
@@ -60,8 +59,7 @@ void	PrimDisplay()
 
 	PrimFlipFlag^=1;
 	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
-	GUIOtPtr=BaseOtPtr;
-	OtPtr=GUIOtPtr+MAX_OT_GUI;
+	OtPtr=BaseOtPtr;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
 	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
 	ResetOTagR(BaseOtPtr,MAX_OT_ALL);
@@ -71,8 +69,7 @@ void	PrimDisplay()
 void	FlushPrimPool()
 {
 	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
-	GUIOtPtr=BaseOtPtr;
-	OtPtr=GUIOtPtr+MAX_OT_GUI;
+	OtPtr=BaseOtPtr;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
 	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
 	ResetOTagR(BaseOtPtr,MAX_OT_ALL);

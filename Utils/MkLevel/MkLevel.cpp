@@ -25,6 +25,8 @@
 #include	"Layers\MkLevelLayerTrigger.h"
 #include	"Layers\MkLevelLayerHazard.h"
 
+#define	PSX_TILE2D_HEIGHT	(12)
+#define	PSX_TILE3D_HEIGHT	(16)
 
 //***************************************************************************
 struct	sLayerNameTable
@@ -49,14 +51,13 @@ sLayerNameTable	LayerNameTable[]=
 #define		LayerNameTableSize	sizeof(LayerNameTable)/sizeof(sLayerNameTable)
 
 //***************************************************************************
-int		TSize,QSize,VSize;
-int		Tile2dSize,Tile3dSize;
+int				TSize,QSize,VSize;
+int				Tile2dSize,Tile3dSize;
+const char	*ModelExcludeGroupName="ModelExcludeList";
 
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
 sExpLayerTile	BlankTile={0,0};
-//sExpLayerTile	BlankTile2d={-1,-1};
-//sExpLayerTile	BlankTile3d={0,0};
 
 Vector3	DefVtxTable[8]=
 {
@@ -108,10 +109,25 @@ void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *Inc
 {
 // Setup filenames and paths
 GFName		Path;
+char		*Ptr;
+char		Buffer[256];
 
+			strcpy(Buffer,Filename);
+			Ptr=Buffer;
+			while (*Ptr)
+			{
+				if (*Ptr=='\\' || *Ptr=='/') *Ptr=' ';
+				Ptr++;
+			}
+
+			while (*Ptr!=' ') Ptr--;
+			*Ptr--=0;
+			while (*Ptr!=' ') Ptr--; Ptr--;
+			while (*Ptr!=' ') Ptr--; Ptr++;
+			LevelName=Ptr;
 			InFilename=Filename;
 			Path=Filename;
-			LevelName=Path.File();
+//			LevelName=Path.File();
 			Path.File("");
 			Path.Ext("");
 			InPath=Path.FullName();
@@ -165,7 +181,6 @@ GFName		Path;
 		LocalGeom=_LocalGeom;
 		AddDefVtx(OutVtxList);
 
-
 }
 
 //***************************************************************************
@@ -183,11 +198,16 @@ int		CMkLevel::AddModel(const char *Name,int TriStart,int TriCount)
 {
 sMkLevelModel	ThisModel;
 int				ModelID;
+GString			ModelName=Name;
 
 			ThisModel.Name=Name;
 			ThisModel.TriStart=TriStart;
 			ThisModel.TriCount=TriCount;
 
+			if (Config.FindKey(ModelExcludeGroupName,Name)!=-1)
+			{
+				ThisModel.TriCount=0;
+			}
 			ModelID=ModelList.Add(ThisModel);
 			return(ModelID);
 }
@@ -440,7 +460,7 @@ int		i,ListSize=UsedTile2dList.size();
 		for (i=1; i<ListSize; i++)
 		{ // Skip blank
 			sUsedTile2d &ThisTile=UsedTile2dList[i];
-			ThisTile.TexID=Create2dTile(ThisTile.Tile,ThisTile.Flags);
+			ThisTile.TexID=Create2dTile(ThisTile.Tile,ThisTile.Flags,PSX_TILE2D_HEIGHT);
 		}
 }
 
@@ -513,8 +533,12 @@ CFaceStore	&ThisList=ThisElem.FaceStore;
 
 			ThisElem.Elem3d.TriCount=ThisList.GetTriFaceCount();
 			ThisElem.Elem3d.QuadCount=ThisList.GetQuadFaceCount();
-			if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
-			if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+
+			if (!ThisElem.Model)
+			{ // Gen max polys per tile (NOT MODEL)
+				if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
+				if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+			}
 }
 
 //***************************************************************************
@@ -656,6 +680,10 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 				FaceList.SetTPageFlag(F,ThisTri.Flags);
 				FaceList.AddFace(F,true);
 			}
+		if (IsTile)
+			ThisElem.Model=false;
+		else
+			ThisElem.Model=true;
 		return(ElemID);			
 }
 
@@ -664,7 +692,7 @@ int			CMkLevel::Create2dElem(int Tile,bool Local)
 {
 CFace			F;
 int				i;
-int				TexID=Create2dTile(Tile,0);
+int				TexID=Create2dTile(Tile,0,PSX_TILE3D_HEIGHT);
 int				ElemID=OutElem3d.size();
 				OutElem3d.resize(ElemID+1);
 
@@ -696,123 +724,8 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 			return(ElemID);
 }
 
-/*
-int		CMkLevel::Create3dTile(int Tile,int Flags)
-{
-sExpTile		&SrcTile=InTileList[Tile];
-CFace			F;
-int				i,ListSize,p;
-CList<sExpTri>	SortList;
-CList<float>	ZPosList;
-sTileBank3d		ThisTile;
-int				TileID=OutTileBank3d.size();
-CFaceStore		FaceStore;
-
-
-			ThisTile.TriStart=OutFaceList.GetFaceCount();
-			ThisTile.QuadCount=0;
-			ThisTile.QuadStart=0;
-
-			if (SrcTile.TriCount)
-			{
-				ThisTile.TriCount=SrcTile.TriCount;
-				for (i=0; i<SrcTile.TriCount; i++)
-				{
-					int		ListPos;
-					sExpTri	&ThisTri=InTriList[SrcTile.TriStart+i];
-					float	ThisZPos;
-
-					ThisZPos=ThisTri.vtx[0].z;
-					if (ThisZPos<ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
-					if (ThisZPos<ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
-					
-					ListSize=SortList.size();
-					for (ListPos=0; ListPos<ListSize; ListPos++)
-					{
-						if (ZPosList[ListPos]>ThisZPos) break;
-					}
-					SortList.insert(ListPos,ThisTri);
-					ZPosList.insert(ListPos,ThisZPos);
-				}
-
-			}
-			else
-			{
-				int		TexID=Create2dTile(Tile,0);
-
-				ThisTile.TriCount=2;
-				
-				for (int i=0; i<2; i++)
-					{
-						FlatFace[i].Flags=0;
-						FlatFace[i].TexID=TexID;
-						SortList.push_back(FlatFace[i]);
-					}
-			}
-
-// Add sorted list to main list
-			ListSize=SortList.size();
-			for (i=0; i<ListSize; i++)
-			{
-				sExpTri &ThisTri=SortList[i];
-				CFace	F;
-				bool	SwapPnt=false;
-
-				if (SrcTile.TriCount)
-				{
-					F.TexName=InTexNameList[ThisTri.TexID];
-					F.Mat=-1;
-				}
-				else
-				{
-					F.Mat=ThisTri.TexID;
-				}
-
-				for (p=0; p<3; p++)
-				{
-					F.vtx[p]=ThisTri.vtx[p];
-					F.vtx[p].y=F.vtx[p].y;
-					F.uvs[p].u=ThisTri.uv[p][0];
-					F.uvs[p].v=ThisTri.uv[p][1];
-				}
-
-				if (Flags & PC_TILE_FLAG_MIRROR_X)
-				{
-					F.vtx[0].x=-F.vtx[0].x;
-					F.vtx[1].x=-F.vtx[1].x;
-					F.vtx[2].x=-F.vtx[2].x;
-					SwapPnt^=1;
-				}
-
-				if (Flags & PC_TILE_FLAG_MIRROR_Y)
-				{
-					F.vtx[0].y	=1.0-F.vtx[0].y;
-					F.vtx[1].y	=1.0-F.vtx[1].y;
-					F.vtx[2].y	=1.0-F.vtx[2].y;
-					SwapPnt^=1;
-				}
-
-				if (SwapPnt)
-				{
-					Vector3	TmpV=F.vtx[0];
-					F.vtx[0]=F.vtx[1];
-					F.vtx[1]=TmpV;
-					sUV		TmpUV=F.uvs[0];
-					F.uvs[0]=F.uvs[1];
-					F.uvs[1]=TmpUV;
-				}
-
-				OutFaceList.SetTPageFlag(F,ThisTri.Flags);
-				OutFaceList.AddFace(F,true);
-			}
-
-			OutTileBank3d.push_back(ThisTile);
-			return(TileID);
-}
-
-  */
 //***************************************************************************
-int		CMkLevel::Create2dTile(int Tile,int Flags)
+int		CMkLevel::Create2dTile(int Tile,int Flags,int Height)
 {
 sExpTile	&SrcTile=InTileList[Tile];
 sMkLevelTex	InTex;
@@ -820,6 +733,7 @@ int			Idx;
 
 		InTex.Tile=Tile;
 		InTex.Flags=Flags;
+		InTex.Height=Height;
 		
 		Idx=Tex2dList.Find(InTex);
 
@@ -829,13 +743,13 @@ int			Idx;
 		}
 
 // Must be new, add it
-		InTex.TexID=BuildTileTex(SrcTile,Flags);
+		InTex.TexID=BuildTileTex(SrcTile,Flags,InTex.Height);
 		Tex2dList.push_back(InTex);
 		return(InTex.TexID);
 }
 
 //***************************************************************************
-int		CMkLevel::BuildTileTex(sExpTile	&SrcTile,int Flags)
+int		CMkLevel::BuildTileTex(sExpTile	&SrcTile,int Flags,int Height)
 {
 Frame			&InFrame=BmpList[SrcTile.Set];
 Frame			ThisFrame;
@@ -868,6 +782,11 @@ int				TexID;
 
 				if (Flags& PC_TILE_FLAG_MIRROR_X)		ThisFrame.FlipX();
 				if (Flags & PC_TILE_FLAG_MIRROR_Y)	ThisFrame.FlipY();
+
+				if (Height!=16)
+				{
+					ThisFrame.Resize(16,Height);
+				}
 				
 				TexID=TexGrab.AddMemFrame(TexName,ThisFrame);
 
@@ -1064,8 +983,7 @@ int		Pos=ftell(File);
 			sVtx		Out;
 
 			Out.vx=+In.vx;
-//			Out.vy=-In.vy;//+(Scale/2);	// Offset it so the origin is centre centre
-			Out.vy=+In.vy;//+(Scale/2);	// Offset it so the origin is centre centre
+			Out.vy=+In.vy;
 			Out.vz=+In.vz;
 			Min.vx=__min(Min.vx,Out.vx);
 			Min.vy=__min(Min.vy,Out.vy);
@@ -1171,7 +1089,11 @@ int		Ofs=ftell(File);
 			Out.ElemID=ThisModel.ElemID;
 			Out.BBox=ElemBBox;
 
-			printf("Writing Model %s (%i) (%i %i) (BBox %i,%i->%i,%i)\n",ThisModel.Name,Out.ElemID,ThisElem.Elem3d.TriCount,ThisElem.Elem3d.QuadCount,Out.BBox.XMin,Out.BBox.YMin,Out.BBox.XMax,Out.BBox.YMax);
+			if (ThisModel.TriCount==0)
+				printf("Writing Model E:%i - %s - Dummy --\n",Out.ElemID,ThisModel.Name);
+			else
+				printf("Writing Model E:%i - %s - T:%i Q:%i BBox:%i,%i->%i,%i\n",Out.ElemID,ThisModel.Name,ThisElem.Elem3d.TriCount,ThisElem.Elem3d.QuadCount,Out.BBox.XMin,Out.BBox.YMin,Out.BBox.XMax,Out.BBox.YMax);
+			
 			fwrite(&Out,1,sizeof(sModel),File);
 		}
 

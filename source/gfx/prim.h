@@ -15,11 +15,10 @@
 #include	"gfx\primplus.h"
 #endif
 
-#define	MAX_OT_GUI			(0)
+//#define	MAX_OT_GUI			(0)
 #define	MAX_OT				(16)
-#define	MAX_OT_ALL			(MAX_OT+MAX_OT_GUI)
-#define	MAX_PRIMS			((1024*2)+512)	// Put back after overrender bug found (BAD DAVE!) ( put back in by evilpaul ;)
-// bumped down a lil, cos we need memory hope this value works ok. Be ok once quadding is in
+#define	MAX_OT_ALL			(MAX_OT)
+#define	MAX_PRIMS			((1024*2))		// Took off 512 as mid layer now pre-stored as TSPRTs
 
 //#define	USE_NTAGS			1
 
@@ -308,7 +307,7 @@ typedef	u32	sOT;
 #define	OTLIST_SIZE			(MAX_OT_ALL*sizeof(sOT))
 
 /********************************************************************************************************/
-extern sOT 	*BaseOtPtr,*GUIOtPtr,*OtPtr;
+extern sOT 	*BaseOtPtr,*OtPtr;
 extern u8 	*CurrPrim,*EndPrim;
 extern u8	*PrimListStart,*PrimListEnd;
 //extern int	PrimFlipFlag;
@@ -330,12 +329,13 @@ LINE_G2			*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int
 /********************************************************************************************************/
 /*** Inlines ********************************************************************************************/
 /********************************************************************************************************/
+/*
 inline	void 		AddGUIPrimToList(void *Prim,u32 Depth)
 {
 			ASSERT(Depth<MAX_OT_GUI);
 			addPrim(GUIOtPtr+Depth,(u32*)Prim);
 }
-
+*/
 /*-----------------------------------------------------------------------------------------------------*/
 inline	void 		AddPrimToList(void *Prim,u32 Depth)
 {
