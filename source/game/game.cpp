@@ -91,6 +91,7 @@ void 	CGameScene::init()
 		createPlayer();
 		m_player->init();
 		m_player->setLayerCollision(Level.getCollisionLayer());
+		m_player->setMapSize(Level.getMapSize());
 
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
 		m_pauseMenu->init();
@@ -115,7 +116,7 @@ void	CGameScene::createPlayer()
 
 void	CGameScene::shutdown()
 {
-		m_pauseMenu->shutdown();
+		m_pauseMenu->shutdown();	delete m_pauseMenu;
 
 		m_player->shutdown();		delete m_player;
 		CThing::shutdownAndDeleteAllThings();
@@ -160,8 +161,8 @@ void	CGameScene::think(int _frames)
 		CThing::thinkAllThings(_frames);
 		camPos=m_player->getCameraPos();
 //PKG
-if(camPos.vx<0)camPos.vx=0;
-if(camPos.vy<0)camPos.vy=0;
+//		if(camPos.vx<0){camPos.vx=0;PAUL_DBGMSG("cx<0");}
+//		if(camPos.vy<0){camPos.vy=0;PAUL_DBGMSG("cy<0");}
 //PKG		
 		CBubicleFactory::setMapOffset(&camPos);
 		Level.setCameraCentre(camPos);

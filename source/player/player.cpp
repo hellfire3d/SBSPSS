@@ -79,7 +79,7 @@
 #include "player\demoplay.h"
 
 #define MAX_DEMO_SIZE			512			// So max size of a demo is 1k
-#define MAX_DEMO_TIME_IN_FRAMES	30*60		// Recorded demo will last 60 seconds
+#define MAX_DEMO_TIME_IN_FRAMES	30*60		// Recorded demo will last 30 seconds
 
 static CDemoPlayer::demoPlayerControl s_demoControls[MAX_DEMO_SIZE]={{PI_NONE,0}};
 static int s_demoSize=0;
@@ -140,7 +140,8 @@ FontBank	s_debugFont;
 
 int s_health;
 int s_screenPos;
-int m_cameraScrollPos=0;
+int m_cameraScrollPosX=0;
+int m_cameraScrollPosY=600;
 int m_cameraScrollDir=0;
 
 
@@ -152,17 +153,18 @@ int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-136;
 int MAP2D_BLOCKSTEPSIZE=16;
 
-int CAMERA_SCROLLLIMIT=8;
-int CAMERA_SCROLLTHRESHOLD=6;
-int CAMERA_SCROLLSPEED=60;
-int CAMERA_STARTMOVETHRESHOLD=20;
-int CAMERA_STOPMOVETHRESHOLD=10;
+int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most
+int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
+int CAMERA_STARTMOVETHRESHOLD=20;		// If SB moves faster than this then the camera starts scrolling
+int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camera stops scrolling
+int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 4 and a bit frames )
 
 
 int angg=900;
 
-DVECTOR ppos={0,0};
-DVECTOR ofs={0,0};
+DVECTOR ppos;
+DVECTOR ofs;
+DVECTOR	m_cameraPos;
 
 
 /*----------------------------------------------------------------------
@@ -204,8 +206,6 @@ m_animFrame=0;
 
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
-	m_cameraLookYOffset=0;
-	m_cameraLookTimer=0;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
@@ -242,7 +242,7 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
-
+DVECTOR pos;
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -285,7 +285,6 @@ if(newmode!=-1)
 		// Think
 		updatePadInput();
 		m_currentStateClass->think(this);
-
 
 		// Horizontal movement
 		if(m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-1)>>4))
@@ -401,28 +400,29 @@ if(PadGetDown(0)&PAD_CIRCLE)
 		// Camera scroll..
 		if(m_cameraScrollDir==-1)
 		{
-			if(m_cameraScrollPos>-CAMERA_SCROLLLIMIT<<8)
+			if(m_cameraScrollPosX>-CAMERA_SCROLLLIMIT<<8)
 			{
-				m_cameraScrollPos-=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPos<-CAMERA_SCROLLLIMIT<<8)
+				m_cameraScrollPosX-=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPosX<-CAMERA_SCROLLLIMIT<<8)
 				{
-					m_cameraScrollPos=-CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollPosX=-CAMERA_SCROLLLIMIT<<8;
 					m_cameraScrollDir=0;
 				}
 			}
 		}
 		else if(m_cameraScrollDir==+1)
 		{
-			if(m_cameraScrollPos<(CAMERA_SCROLLLIMIT<<8))
+			if(m_cameraScrollPosX<(CAMERA_SCROLLLIMIT<<8))
 			{
-				m_cameraScrollPos+=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPos>CAMERA_SCROLLLIMIT<<8)
+				m_cameraScrollPosX+=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPosX>CAMERA_SCROLLLIMIT<<8)
 				{
-					m_cameraScrollPos=CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollPosX=CAMERA_SCROLLLIMIT<<8;
 					m_cameraScrollDir=0;
 				}
 			}
 		}
+
 
 
 
@@ -486,17 +486,38 @@ if(PadGetDown(0)&PAD_CIRCLE)
 
 #endif
 	// Move the camera offset
-ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos)>>8);
-ppos.vy=MAP3D_CENTRE_Y;
-ofs.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos))>>8);
-ofs.vy=MAP2D_CENTRE_Y;
+ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPosX)>>8);
+ppos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPosY)>>8);;
+m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosX))>>8);
+m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosY))>>8);;
+ofs=m_cameraOffset;
+pos=Pos;
+
+	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
+	m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
 
 
-	
-	m_cameraOffset=ofs;
-
-	if(Pos.vx<0)Pos.vx=0;
-	if(Pos.vy<0)Pos.vy=0;
+	// Limit camera scroll to the edges of the map
+	if(m_cameraPos.vx<0)
+	{
+		ppos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_cameraPos.vx=0;
+	}
+	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
+	{
+		ppos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_cameraPos.vx=m_mapCameraEdges.vx;
+	}
+	if(m_cameraPos.vy<0)
+	{
+		ppos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_cameraPos.vy=0;
+	}
+	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
+	{
+		ppos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_cameraPos.vy=m_mapCameraEdges.vy;
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -530,7 +551,7 @@ if(eyes!=-1)
 }
 #endif
 
-//int xval=255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos>>8));
+//int xval=(255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosX>>8)));
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
 //DrawLine(xval+7,0,xval+7,255,0,128,255,0);
 
@@ -564,10 +585,21 @@ if(eyes!=-1)
   ---------------------------------------------------------------------- */
 DVECTOR CPlayer::getCameraPos()
 {
-	DVECTOR	cameraPos;
-	cameraPos.vx=Pos.vx+m_cameraOffset.vx;
-	cameraPos.vy=Pos.vy+m_cameraOffset.vy;
-	return cameraPos;
+	return m_cameraPos;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Pre-calcs the visible edges of the map ( ie: the hard limits
+				for the camera pos )
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::setMapSize(DVECTOR _mapSize)
+{
+	m_mapCameraEdges.vx=(_mapSize.vx-34)*MAP2D_BLOCKSTEPSIZE;		// Made up numbers! :) (pkg)
+	m_mapCameraEdges.vy=(_mapSize.vy-18)*MAP2D_BLOCKSTEPSIZE;
 }
 
 
@@ -823,7 +855,7 @@ void CPlayer::moveLeft()
 		m_moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 
-	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos<-CAMERA_SCROLLTHRESHOLD<<8)
+	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPosX<-CAMERA_SCROLLTHRESHOLD<<8)
 	{
 		m_cameraScrollDir=+1;
 	}
@@ -851,7 +883,7 @@ void CPlayer::moveRight()
 		m_moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 
-	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos>CAMERA_SCROLLTHRESHOLD<<8)
+	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPosX>CAMERA_SCROLLTHRESHOLD<<8)
 	{
 		m_cameraScrollDir=-1;
 	}

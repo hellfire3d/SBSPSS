@@ -149,6 +149,7 @@ public:
 	DVECTOR			getCameraPos();
 
 	void			setLayerCollision(class CLayerCollision *_layer)		{m_layerCollision=_layer;}
+	void			setMapSize(DVECTOR _mapSize);
 
 protected:		
 	enum
@@ -249,8 +250,6 @@ private:
 	int				m_lives;
 
 	DVECTOR			m_cameraOffset;
-	int				m_cameraLookYOffset;
-	int				m_cameraLookTimer;
 
 	void			updatePadInput();
 protected:
@@ -261,8 +260,9 @@ private:
 	PLAYERINPUT			m_padInputDown;		// Controls that were pressed this frame
 
 	
-	// Pointer to the collision layer for the current map
+	// Various info about the current map
 	class CLayerCollision	*m_layerCollision;
+	DVECTOR					m_mapCameraEdges;
 };
 
 

@@ -26,6 +26,7 @@ public:
 	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
 	static DVECTOR			getCameraPos()						{return MapPos;}
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
+	DVECTOR					getMapSize();
 
 private:
 	void		initLayers();

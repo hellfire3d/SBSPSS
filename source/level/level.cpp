@@ -148,25 +148,29 @@ sOT		*ThisOT=OtPtr+LayerOT;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int	MapSpd=4;
 void	CLevel::think(int _frames)
 {
-	/*
-int		padh = PadGetHeld( 0 );
-
-		if (padh & PAD_LEFT)	MapPos.vx-=MapSpd;
-		if (padh & PAD_RIGHT)	MapPos.vx+=MapSpd;
-		if (padh & PAD_UP)		MapPos.vy-=MapSpd;
-		if (padh & PAD_DOWN)	MapPos.vy+=MapSpd;
-
-		if (MapPos.vx<0) MapPos.vx=0;
-		if (MapPos.vy<0) MapPos.vy=0;
-
-	*/
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			if (TileLayers[i]) TileLayers[i]->think(MapPos);
 		}
+}
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+DVECTOR	CLevel::getMapSize()
+{
+	DVECTOR		size;
+	sLayerHdr	*layer;
+
+	layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
+	size.vx=layer->Width;
+	size.vy=layer->Height;
+
+	return size;
 }
 
 
