@@ -452,7 +452,7 @@ int CPlayer::getAnimFrame()
 }
 void CPlayer::setAnimFrame(int _animFrame)
 {
-	AnimSfx			*sfx;
+	const AnimSfx	*sfx;
 
 	m_animFrame=_animFrame;
 
@@ -460,8 +460,8 @@ void CPlayer::setAnimFrame(int _animFrame)
 	sfx=&s_animSfx[m_animNo];
 	if(sfx->m_numAnimFrameSfx)
 	{
-		AnimFrameSfx	*frameSfx;
-		int				i;
+		const AnimFrameSfx	*frameSfx;
+		int					i;
 
 		frameSfx=sfx->m_animFrameSfx;
 		for(i=0;i<sfx->m_numAnimFrameSfx;i++)

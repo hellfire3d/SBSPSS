@@ -42,7 +42,7 @@
 
 	
 // ANIM_PLAYER_ANIM_BUTTBOUNCEEND
-static CPlayer::AnimFrameSfx s_buttBounceEndSfx[]=
+static const CPlayer::AnimFrameSfx s_buttBounceEndSfx[]=
 {
 	{	1,	CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE,	},
 };
@@ -72,7 +72,7 @@ static const int	s_buttBounceEndCount=sizeof(s_buttBounceEndSfx)/sizeof(CPlayer:
 // ANIM_PLAYER_ANIM_IDLEWIGGLEARM
 
 // ANIM_PLAYER_ANIM_JUMPEND
-static CPlayer::AnimFrameSfx s_jumpEndSfx[]=
+static const CPlayer::AnimFrameSfx s_jumpEndSfx[]=
 {
 	{	4,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
 	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
@@ -80,7 +80,7 @@ static CPlayer::AnimFrameSfx s_jumpEndSfx[]=
 static const int	s_jumpEndCount=sizeof(s_jumpEndSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 // ANIM_PLAYER_ANIM_KARATE			Might have to go into the CPlayerStateChop::enter code (PKG)
-static CPlayer::AnimFrameSfx s_chopSfx[]=
+static const CPlayer::AnimFrameSfx s_chopSfx[]=
 {
 	{	1,	CSoundMediator::SFX_SPONGEBOB_KARATE_1,		},
 };
@@ -90,7 +90,7 @@ static const int	s_chopCount=sizeof(s_chopSfx)/sizeof(CPlayer::AnimFrameSfx);
 // ANIM_PLAYER_ANIM_KNOCKFORWARD
 
 // ANIM_PLAYER_ANIM_RUN
-static CPlayer::AnimFrameSfx s_runSfx[]=
+static const CPlayer::AnimFrameSfx s_runSfx[]=
 {
 	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
 	{	18,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
@@ -99,7 +99,7 @@ static const int	s_runCount=sizeof(s_runSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 // ANIM_PLAYER_ANIM_RUNSTART
 // ANIM_PLAYER_ANIM_RUNSTOP
-static CPlayer::AnimFrameSfx s_runStopSfx[]=
+static const CPlayer::AnimFrameSfx s_runStopSfx[]=
 {
 	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
 	{	18,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
@@ -121,7 +121,7 @@ static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSf
 
 // This is the table that ties up anims to sfx
 // CPlayer::setAnimFrame() uses this table to generate sfx based upon anim frames
-CPlayer::AnimSfx CPlayer::s_animSfx[]=
+const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 {
 	{	s_buttBounceEndCount,	s_buttBounceEndSfx		},		// ANIM_PLAYER_ANIM_BUTTBOUNCEEND
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_BUTTBOUNCESTART

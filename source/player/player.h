@@ -182,10 +182,10 @@ public:
 private:
 	typedef struct
 	{
-		int						m_numAnimFrameSfx;
-		struct AnimFrameSfx		*m_animFrameSfx;
+		int							m_numAnimFrameSfx;
+		const struct AnimFrameSfx	*m_animFrameSfx;
 	} AnimSfx;
-	static AnimSfx	s_animSfx[];
+	static const AnimSfx	s_animSfx[];
 	int				m_animFrame;
 	int				m_animNo;
 	CSkel			m_skel;
