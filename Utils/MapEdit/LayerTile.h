@@ -7,7 +7,7 @@
 
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"LayerTileToolbar.h"
+#include	"GUIToolbar.h"
 
 /*****************************************************************************/
 class	CCore;
@@ -32,10 +32,7 @@ public:
 		void			InitSubView(CCore *Core);
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
-virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
 virtual	void			RenderSelection(CCore *Core,Vector3 &ThisCam);
-
-		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
 
 virtual	void			GUIInit(CCore *Core);
@@ -83,7 +80,7 @@ protected:
 
 		CTileBank		*TileBank;
 
-		CLayerTileToolbar	ToolBarGUI;
+		CGUIToolBar		GUIToolBar;
 
 };
 

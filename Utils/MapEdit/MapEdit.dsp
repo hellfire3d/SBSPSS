@@ -115,6 +115,14 @@ SOURCE=.\LayerDef.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerItem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerItem.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerShade.cpp
 # End Source File
 # Begin Source File
@@ -168,6 +176,14 @@ SOURCE=.\Elem.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ElemStore.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ElemStore.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Map.cpp
 # End Source File
 # Begin Source File
@@ -202,83 +218,6 @@ SOURCE=.\utils.h
 # Begin Group "Shell"
 
 # PROP Default_Filter ""
-# Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=.\ChildFrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GLEnabledView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEdit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEditDoc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEditView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Select.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\StdAfx.cpp
-# ADD CPP /Yc"stdafx.h"
-# End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "*.h"
-# Begin Source File
-
-SOURCE=.\ChildFrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GLEnabledView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEdit.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEditDoc.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapEditView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Select.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\StdAfx.h
-# End Source File
-# End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
@@ -339,9 +278,99 @@ SOURCE=.\res\select.ico
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # End Group
-# Begin Group "Dlg"
+# Begin Source File
+
+SOURCE=.\ChildFrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ChildFrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GLEnabledView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GLEnabledView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEdit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEdit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEditDoc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEditDoc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEditView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapEditView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Select.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Select.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.cpp
+# ADD CPP /Yc"stdafx.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.h
+# End Source File
+# End Group
+# Begin Group "GUI"
 
 # PROP Default_Filter ""
+# Begin Group "New"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\GUIElemList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIElemList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUITileBank.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUITileBank.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\AddLayerDlg.cpp
@@ -376,14 +405,6 @@ SOURCE=.\LayerShadeGUI.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerTileGUI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerTileGUI.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\LayerTileToolbar.cpp
 # End Source File
 # Begin Source File
@@ -414,7 +435,6 @@ SOURCE=.\NewMapGUI.cpp
 
 SOURCE=.\NewMapGUI.h
 # End Source File
-# End Group
 # End Group
 # End Target
 # End Project

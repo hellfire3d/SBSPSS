@@ -14,18 +14,18 @@
 #include	"MapEditView.h"
 #include	"MainFrm.h"
 
-#include	"NewMapGUI.h"
-#include	"AddLayerDlg.h"
-
 #include	"Core.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
 #include	"LayerCollision.h"
 #include	"LayerShade.h"
+#include	"LayerItem.h"
 #include	"utils.h"
 
 #include	"Export.h"
-#include	"LayerList.h"
+#include	"GUILayerList.h"
+#include	"GUIAddLayer.h"
+#include	"GUINewMap.h"
 
 
 /*****************************************************************************/
@@ -54,7 +54,7 @@ int	ListSize=Layer.size();
 /*****************************************************************************/
 bool	CCore::New()
 {
-CNewMapGUI	Dlg;
+CGUINewMap	Dlg;
 int		Width,Height;
 		Dlg.m_Width=TileLayerMinWidth;
 		Dlg.m_Height=TileLayerMinHeight;
@@ -67,7 +67,7 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
-//		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
+		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
 
 		for (int i=0; i<Layer.size(); i++)
 		{
@@ -132,6 +132,9 @@ int		LayerCount;
 				break;
 			case LAYER_TYPE_SHADE:
 				AddLayer(new CLayerShade(File,Version));
+				break;
+			case LAYER_TYPE_ITEM:
+				AddLayer(new CLayerItem(File,Version));
 				break;
 			default:
 				ASSERT(!"poos");
@@ -412,8 +415,8 @@ bool	RedrawFlag=false;
 /*****************************************************************************/
 void	CCore::UpdateParamBar()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
+CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
+CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 			GUIRemoveAll();
 			GUIAdd(LayerList,IDD_LAYER_LIST_DIALOG);
@@ -426,20 +429,20 @@ void		CCore::UpdateLayerGUI()
 {
 int			ListSize=Layer.size();
 
-			if (LayerList.ListBox)
+			if (LayerList.m_List)
 			{
-				LayerList.ListBox.ResetContent();
+				LayerList.m_List.ResetContent();
 
 				for (int i=0; i<ListSize; i++)
 				{
-					LayerList.ListBox.AddString(Layer[i]->GetName());
+					LayerList.m_List.AddString(Layer[i]->GetName());
 				}
 // Now sets checks (silly MSoft bug!!)
 				for (i=0; i<ListSize; i++)
 				{
-					LayerList.ListBox.SetCheck(i,Layer[i]->IsVisible());
+					LayerList.m_List.SetCheck(i,Layer[i]->IsVisible());
 				}
-				LayerList.ListBox.SetCurSel(ActiveLayer);
+				LayerList.m_List.SetCurSel(ActiveLayer);
 			}
 }
 
@@ -452,10 +455,10 @@ int		LastLayer=ActiveLayer;
 		if (NewLayer<0) NewLayer=0;
 
 // If toggling layer, dont change the layer
-		if ((int)LayerList.ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
+		if ((int)LayerList.m_List.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
 		{
-			Layer[NewLayer]->SetVisible(LayerList.ListBox.GetCheck(NewLayer)!=0);
-			LayerList.ListBox.SetCurSel(ActiveLayer);
+			Layer[NewLayer]->SetVisible(LayerList.m_List.GetCheck(NewLayer)!=0);
+			LayerList.m_List.SetCurSel(ActiveLayer);
 		}
 		else
 		{
@@ -509,6 +512,9 @@ int		Idx;
 			case LAYER_TYPE_SHADE:
 				Idx=AddLayer(new CLayerShade(SubType, Width,Height));
 				break;
+			case LAYER_TYPE_ITEM:
+				Idx=AddLayer(new CLayerItem(SubType, Width,Height));
+				break;
 			default:
 				ASSERT(!"AddLayer - Invalid Layer Type");
 				break;
@@ -521,7 +527,7 @@ int		Idx;
 void		CCore::AddLayer(int CurrentLayer)
 {
 std::vector<int>	List;
-CAddLayerDlg		Dlg;
+CGUIAddLayer		Dlg;
 int					NewLayerId=0;
 int					Sel;
 
@@ -669,8 +675,8 @@ Vector3	&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::GUIAdd(CDialog &Dlg,int ID,bool Visible,bool Lock)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
+CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
+CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 		ParamBar->Add(Dlg,ID,Visible,Lock);
 }
@@ -678,8 +684,8 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIRemove(CDialog &Dlg,int ID,bool Force)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
+CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
+CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->Remove(Dlg,Force);
 }
@@ -687,8 +693,8 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIRemoveAll(bool Force)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
+CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
+CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->RemoveAll(Force);
 }
@@ -696,8 +702,8 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIUpdate()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
+CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
+CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 		UpdateLayerGUI();
 		CurrentLayer->GUIUpdate(this);

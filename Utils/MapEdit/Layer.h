@@ -67,16 +67,16 @@ virtual	int				GetType()=0;
 virtual	int				GetSubType()					{return(LAYER_SUBTYPE_NONE);}
 		float			GetScaleFactor()				{return(ScaleFactor);}
 
-virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d)=0;
-virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)=0;
-virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam)=0;
-virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)=0;
-virtual	void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)=0;
+virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d){};
+virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
+virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam){};
+virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d){};
+virtual	void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 
-virtual	void			GUIInit(CCore *Core)=0;
-virtual	void			GUIKill(CCore *Core)=0;
-virtual	void			GUIUpdate(CCore *Core)=0;
-virtual	void			GUIChanged(CCore *Core)=0;
+virtual	void			GUIInit(CCore *Core){};
+virtual	void			GUIKill(CCore *Core){};
+virtual	void			GUIUpdate(CCore *Core){};
+virtual	void			GUIChanged(CCore *Core){};
 
 virtual	int				GetWidth()						{return(-1);}
 virtual	int				GetHeight()						{return(-1);}

@@ -7,7 +7,7 @@
 
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"LayerShadeGui.h"
+#include	"GUILayerShade.h"
 
 /*****************************************************************************/
 class	CCore;
@@ -31,7 +31,6 @@ public:
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active){};
 		void			RenderSelection(CCore *Core,Vector3 &ThisCam){};
 
-		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos){};
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d){};
 
 		void			GUIInit(CCore *Core);
@@ -49,10 +48,6 @@ public:
 		void			Export(CCore *Core,CExport &Exp);
 
 // Functions
-//		bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)	{return(false);}
-//		bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)	{return(false);}
-//		bool			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)					{return(false);}
-//		bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0){};
 
 protected:
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
@@ -60,7 +55,7 @@ protected:
 		int				Width,Height;
 		int				SubType;
 		
-		CLayerShadeGUI	ShadeDlg;
+		CGUILayerShade	GUI;
 
 		int				Count;
 		int				Pos[LAYER_SHADE_RGB_MAX];

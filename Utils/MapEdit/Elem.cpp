@@ -308,12 +308,14 @@ int		ColFlags=Flags >> PC_TILE_FLAG_COLLISION_SHIFT;
 		{
 			switch (ColFlags)
 			{
-			case PC_TILE_COLLISION_NORMAL:		glColor4f(1,1,1,0.5); break;
-			case PC_TILE_COLLISION_DAMAGE:		glColor4f(1,0,0,0.5); break;
-			case PC_TILE_COLLISION_SLIPPERY:	glColor4f(0,1,0,0.5); break;
-			case PC_TILE_COLLISION_ELECTRIC:	glColor4f(1,0,1,0.5); break;
-			case PC_TILE_COLLISION_STICKY:		glColor4f(1,1,0,0.5); break;
-			case PC_TILE_COLLISION_WATER:		glColor4f(0,0,1,0.5); break;
+			case PC_TILE_COLLISION_NORMAL:		glColor4f(1.0f,1.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_DAMAGE:		glColor4f(1.0f,0.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_SLIPPERY:	glColor4f(0.0f,1.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_ELECTRIC:	glColor4f(1.0f,0.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_STICKY:		glColor4f(1.0f,1.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_WATER:		glColor4f(0.0f,0.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_SOLID:		glColor4f(0.0f,1.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_DEATH:		glColor4f(1.0f,0.5f,0.5f,0.5); break;
 			}
 		}
 

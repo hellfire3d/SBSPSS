@@ -20,7 +20,7 @@
 #include	"Utils.h"
 #include	"Select.h"
 #include	"Export.h"
-#include	"LayerShadeGUI.h"
+#include	"GUILayerShade.h"
 
 
 /*****************************************************************************/
@@ -165,24 +165,24 @@ bool	CLayerShade::Resize(int _Width,int _Height)
 /*****************************************************************************/
 void	CLayerShade::GUIInit(CCore *Core)
 {
-		Core->GUIAdd(ShadeDlg,IDD_LAYERSHADE_GUI);
+		Core->GUIAdd(GUI,IDD_LAYER_SHADE);
 		for (int i=0; i<LAYER_SHADE_MAX; i++) 
 		{
-			ShadeDlg.SetRGB(RGB[i],i);
+			GUI.SetRGB(RGB[i],i);
 		}
-		ShadeDlg.SetCount(Count);
+		GUI.SetCount(Count);
 }
 
 /*****************************************************************************/
 void	CLayerShade::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(ShadeDlg,IDD_LAYERSHADE_GUI);
+		Core->GUIRemove(GUI,IDD_LAYER_SHADE);
 }
 
 /*****************************************************************************/
 void	CLayerShade::GUIUpdate(CCore *Core)
 {
-		ShadeDlg.CheckData();
+		GUI.CheckData();
 }
 
 /*****************************************************************************/
@@ -190,9 +190,9 @@ void	CLayerShade::GUIChanged(CCore *Core)
 {
 		for (int i=0; i<LAYER_SHADE_MAX; i++) 
 		{
-			ShadeDlg.GetRGB(RGB[i],i);
+			GUI.GetRGB(RGB[i],i);
 		}
-		ShadeDlg.GetCount(Count);
+		GUI.GetCount(Count);
 }
 
 /*****************************************************************************/

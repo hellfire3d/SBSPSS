@@ -295,146 +295,6 @@ float		Y1=Rect.bottom-1;
 		glPopMatrix();
 }
 
-/*****************************************************************************/
-void	CLayerTile::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
-{
-Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
-int			MapWidth=Map.GetWidth();
-int			MapHeight=Map.GetHeight();
-float		ZoomW=Core->GetZoomW();
-float		ZoomH=Core->GetZoomH();
-float		ScrOfsX=(ZoomW/2);
-float		ScrOfsY=(ZoomH/2);
-Vector3		&Scale=Core->GetScaleVector();
-float		Col;
-const float	OverVal=0.1f;
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glScalef(Scale.x,Scale.y,Scale.z);
-		glTranslatef(-ThisCam.x,ThisCam.y,0);
-		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
-
-		if (Active) Col=1; else Col=0.5f;
-
-		glBegin(GL_LINES); 
-		
-		glColor3f(Col,Col,Col);
-			
-		for (int YLoop=0; YLoop<MapHeight+1; YLoop++)
-			{
-			glVertex3f( 0-OverVal,			-YLoop+1, 0);
-			glVertex3f( MapWidth+OverVal,	-YLoop+1, 0);
-			}
-
-		for (int XLoop=0; XLoop<MapWidth+1; XLoop++)
-			{
-			glVertex3f( XLoop, 0+1+OverVal,		0);
-			glVertex3f( XLoop, -MapHeight+1-OverVal, 0);
-			}
-		glEnd();
-
-		glPopMatrix();
-}
-
-/*****************************************************************************/
-void	CLayerTile::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
-{
-Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
-int			MapWidth=Map.GetWidth();
-int			MapHeight=Map.GetHeight();
-float		ZoomW=Core->GetZoomW();
-float		ZoomH=Core->GetZoomH();
-float		ScrOfsX=(ZoomW/2);
-float		ScrOfsY=(ZoomH/2);
-Vector3		&Scale=Core->GetScaleVector();
-
-GLint		Viewport[4];
-GLuint		SelectBuffer[SELECT_BUFFER_SIZE];
-int			TileID=0;
-CPoint		&CursorPos=Core->GetCursorPos();
-
-int		StartX=(int)ThisCam.x;
-int		StartY=(int)ThisCam.y;
-float	ShiftX=ThisCam.x - (int)ThisCam.x;
-float	ShiftY=ThisCam.y - (int)ThisCam.y;
-
-		if (StartX<0) StartX=0;
-		if (StartY<0) StartY=0;
-
-int		DrawW=ZoomW+8;
-int		DrawH=ZoomH+8;
-
-		if (StartX+DrawW>MapWidth)	DrawW=MapWidth-StartX;
-		if (StartY+DrawH>MapHeight)	DrawH=MapHeight-StartY;
-		
-		glGetIntegerv(GL_VIEWPORT, Viewport);
-		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
-		glRenderMode (GL_SELECT);
-
-	    glInitNames();
-		glPushName(-1);
-
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
-		Core->GetView()->SetupPersMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glScalef(Scale.x,Scale.y,Scale.z);
-//		glTranslatef(-ThisCam.x,ThisCam.y,0);
-		glTranslatef(-ShiftX,ShiftY,0);
-		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
-
-bool		WrapMap=SubType==LAYER_SUBTYPE_BACK;
-		if (WrapMap)
-		{
-			DrawW=MapWidth;
-			DrawH=MapHeight;
-		}
-				
-		for (int YLoop=0; YLoop<DrawH; YLoop++)
-		{
-			for (int XLoop=0; XLoop<DrawW; XLoop++)
-			{
-				int	XPos=StartX+XLoop;
-				int	YPos=StartY+YLoop;
-				if (WrapMap)
-				{
-					XPos%=MapWidth;
-					YPos%=MapHeight;
-				}
-
-				TileID=(XPos)+(((YPos)*MapWidth));
-				glLoadName (TileID);
-				glBegin (GL_QUADS); 
-					BuildGLQuad(XLoop,XLoop+1,-YLoop,-YLoop+1,0);
-				glEnd();
-				TileID++;
-			}
-		}
-
-		TileID= glRenderMode (GL_RENDER);
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		CursorPos.x=CursorPos.y=-1;
-
-// Process hits
-
-GLuint	*HitPtr=SelectBuffer;
-
-		if (TileID)	// Just take 1st		
-		{
-			int	HitID=HitPtr[3];
-			CursorPos=IDToPoint(HitID,MapWidth);
-		}
-		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
-}
 
 /*****************************************************************************/
 /*** Gui *********************************************************************/
@@ -442,27 +302,27 @@ GLuint	*HitPtr=SelectBuffer;
 void	CLayerTile::GUIInit(CCore *Core)
 {
 		TileBank->GUIInit(Core);
-		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIAdd(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerTile::GUIKill(CCore *Core)
 {
 		TileBank->GUIKill(Core);
-		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerTile::GUIUpdate(CCore *Core)
 {
-		ToolBarGUI.ResetButtons();
+		GUIToolBar.ResetButtons();
 		switch(Mode)
 		{
 		case MouseModePaint:
-			ToolBarGUI.SetButtonState(CLayerTileToolbar::PAINT,TRUE);
+			GUIToolBar.SetButtonState(CGUIToolBar::PAINT,TRUE);
 			break;
 		case MouseModeSelect:
-			ToolBarGUI.SetButtonState(CLayerTileToolbar::SELECT,TRUE);
+			GUIToolBar.SetButtonState(CGUIToolBar::SELECT,TRUE);
 			break;
 		default:
 			break;

@@ -7,7 +7,7 @@
 
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"LayerCollisionGUI.h"
+#include	"GUILayerCollision.h"
 
 /*****************************************************************************/
 class	CCore;
@@ -41,7 +41,7 @@ public:
 protected:
 		void			InitTileBank();
 
-		CLayerCollisionGUI	CollisionGUI;
+		GUILayerCollision	GUI;
 
 };
 

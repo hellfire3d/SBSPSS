@@ -135,15 +135,15 @@ bool	Ret=false;
 /*****************************************************************************/
 void	CLayerCollision::GUIInit(CCore *Core) 
 {
-		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
-		Core->GUIAdd(CollisionGUI,IDD_LAYERCOLLISION_GUI);
+		Core->GUIAdd(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIAdd(GUI,IDD_LAYER_COLLISION);
 }
 
 /*****************************************************************************/
 void	CLayerCollision::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
-		Core->GUIRemove(CollisionGUI,IDD_LAYERCOLLISION_GUI);
+		Core->GUIRemove(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(GUI,IDD_LAYER_COLLISION);
 }
 
 /*****************************************************************************/

@@ -5,7 +5,7 @@
 #include "MapEdit.h"
 
 #include "MapEditDoc.h"
-#include "MapSizeDlg.h"
+#include "GUIResize.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -261,7 +261,7 @@ void	CMapEditDoc::TileBankSet()
 /*********************************************************************************/
 void	CMapEditDoc::OnMapSetSize()
 {
-CMapSizeDlg	Dlg;
+CGUIResize	Dlg;
 
 		Dlg.m_Width=Core.GetMapWidth();
 		Dlg.m_Height=Core.GetMapHeight();

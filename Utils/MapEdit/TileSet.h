@@ -17,7 +17,8 @@
 #include	"Elem.h"
 
 #include	"MapEdit.h"
-#include	"LayerTileGui.h"
+#include	"GUITilebank.h"
+#include	"GUIElemList.h"
 
 /*****************************************************************************/
 enum	TileSetEnum
@@ -92,17 +93,16 @@ protected:
 		bool		Select(int BrushID,bool DownFlag);
 		void		SetBrush(CMap &ThisBrush);
 
-//!!		CList<CTileSet>			TileSet;
-		int						CurrentSet,LastSet;
-		CMap					Brush[2];
-		int						ActiveBrush;
-		int						SelStart,SelEnd;
+		int					CurrentSet,LastSet;
+		CMap				Brush[2];
+		int					ActiveBrush;
+		int					SelStart,SelEnd;
 
-		bool					LoadFlag;
-		int						LastCursorPos,CursorPos;
+		bool				LoadFlag;
+		int					LastCursorPos,CursorPos;
 
-		CLayerTileGUI			TileBankGUI;
-
+		CGUIElemList		GUIElemList;
+		CGUITileBank		GUITileBank;
 };
 
 /*****************************************************************************/

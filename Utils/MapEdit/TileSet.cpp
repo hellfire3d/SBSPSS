@@ -20,7 +20,7 @@
 #include	"MapEditDoc.h"
 #include	"MapEditView.h"
 #include	"MainFrm.h"
-#include	"LayerTileGui.h"
+#include	"GUITileBank.h"
 
 /*****************************************************************************/
 /*** TileBank ****************************************************************/
@@ -468,7 +468,7 @@ bool	CTileBank::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
 			GUIUpdate(Core);
 			break;
 		case CmdMsg_SubViewSet:
-			CurrentSet=TileBankGUI.m_List.GetCurSel();
+			CurrentSet=GUIElemList.m_List.GetCurSel();
 			GUIUpdate(Core);
 			break;
 		case CmdMsg_ActiveBrushLeft:
@@ -487,13 +487,15 @@ bool	CTileBank::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
 /*****************************************************************************/
 void	CTileBank::GUIInit(CCore *Core)
 {
-		Core->GUIAdd(TileBankGUI,IDD_LAYERTILE_GUI);
+		Core->GUIAdd(GUIElemList,IDD_ELEMLIST);
+		Core->GUIAdd(GUITileBank,IDD_TILEBANK);
 }
 
 /*****************************************************************************/
 void	CTileBank::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(TileBankGUI,IDD_LAYERTILE_GUI);
+		Core->GUIRemove(GUIElemList,IDD_ELEMLIST);
+		Core->GUIRemove(GUITileBank,IDD_TILEBANK);
 }
 
 /*****************************************************************************/
@@ -502,22 +504,22 @@ void	CTileBank::GUIUpdate(CCore *Core)
 int			ListSize=GetSetCount();
 bool		IsSubView=Core->IsSubView();
 
-			if (TileBankGUI.m_List)
+			if (GUIElemList.m_List)
 			{
-				TileBankGUI.m_List.ResetContent();
+				GUIElemList.m_List.ResetContent();
 				if (ListSize)
 				{
 					for (int i=0; i<ListSize; i++)
 					{
-						TileBankGUI.m_List.AddString(GetSetName(i));
+						GUIElemList.m_List.AddString(GetSetName(i));
 					}
-					TileBankGUI.m_List.SetCurSel(CurrentSet);
+					GUIElemList.m_List.SetCurSel(CurrentSet);
 				}
 				else
 				{
 					IsSubView=FALSE;
 				}
-				TileBankGUI.m_List.EnableWindow(IsSubView);
+				GUIElemList.m_List.EnableWindow(IsSubView);
 			}
 
 }

@@ -13,8 +13,8 @@
 #include	"TileSet.h"
 
 #include	"MapEdit.h"
-#include	"LayerList.h"
-#include	"LayerTileGUI.h"
+#include	"GUILayerList.h"
+#include	"GUITileBank.h"
 
 #include	"Layer.h"
 #include	"LayerTile.h"
@@ -128,10 +128,9 @@ private:
 		CLayerTile				*ActionLayer;
 		int						ActiveLayer;
 
-//		CTileBank				TileBank;
 		CTexCache				TexCache;
 
-		CLayerListGUI			LayerList;
+		CGUILayerList			LayerList;
 
 		bool					SpareFlag;
 		bool					GridFlag;
