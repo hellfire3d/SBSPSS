@@ -94,6 +94,10 @@
 #include "game/game.h"
 #endif
 
+#ifndef __FX_FX_H__
+#include "fx\fx.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -341,11 +345,20 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			playerHasHitGround();
 		pos=m_player->getPlayerPos();
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
-		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP&&
-		   !m_player->getIsHelmetSoFullThatIDontNeedToSoakUp())
+		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP)
 		{
-			// Hit water - Go into soakup mode
-			setState(STATE_SOAKUP);
+			// Hit water - Make a splash!
+			DVECTOR pos;
+			CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_SPLASH_INTO_WATER);
+			pos=getPlayerPos();
+			pos.vy-=40;
+			CFX::Create(CFX::FX_TYPE_SPLASH_WATER,pos);
+
+			if(!m_player->getIsHelmetSoFullThatIDontNeedToSoakUp())
+			{
+				// Not got full water levels - Go into soakup mode
+				setState(STATE_SOAKUP);
+			}
 		}
 	}
 	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&				// Hmm.. (pkg)
