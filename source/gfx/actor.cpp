@@ -63,7 +63,6 @@ int		SlotW=+32000,SlotH=+32000;
 
 // Find best slot which fits in
 	
-//		ASSERT(!"ReAlloc");
 		for (i=0;i<SlotCount; i++)
 		{
 			int	ThisW=(SlotList[i].Width-W);
@@ -125,52 +124,69 @@ int		Slot=0;
 }
 
 /*****************************************************************************/
-sPoolNode *CActorCache::RemoveHeadNode(sNodeList *Root)
+sPoolNode *CActorCache::RemoveHeadNode(sNodeList *RootNode)
 {
-sPoolNode *Node=Root->Head;
-sPoolNode *Next=Node->Next;
+sPoolNode *ThisNode=RootNode->Head;
+sPoolNode *NextNode=ThisNode->Next;
 
-		Root->Head=Node->Next;
-		Next->Prev=0;
-		Node->Next=0;
-		return(Node);
+		RootNode->Head=NextNode;
+		ThisNode->Next=0;
+		if (NextNode)
+		{
+			NextNode->Prev=0;
+		}
+		else
+		{ // Its Tail Node
+			RootNode->Tail=0;
+		}
+		return(ThisNode);
 }
 
 /*****************************************************************************/
-void	CActorCache::RemoveNode(sPoolNode *Node,sNodeList *Root)
+void	CActorCache::RemoveNode(sPoolNode *ThisNode,sNodeList *RootNode)
 {
-sPoolNode	*Prev=Node->Prev;
-sPoolNode	*Next=Node->Next;
+sPoolNode	*PrevNode=ThisNode->Prev;
+sPoolNode	*NextNode=ThisNode->Next;
 
-		if (Prev)
+		if (PrevNode)
 		{ // Not Head Node
-			Prev->Next=Node->Next;
+			PrevNode->Next=NextNode;
 		}
-		if (Next)
+		else
+		{ // Head Node
+			RootNode->Head=NextNode;
+		}
+
+		if (NextNode)
 		{ // Not Tail Node
-			Next->Prev=Node->Prev;
+			NextNode->Prev=PrevNode;
 		}
+		else
+		{ // Tail Node
+			RootNode->Tail=PrevNode;
+		}
+		ThisNode->Next=0;
+		ThisNode->Prev=0;
 }
 
 /*****************************************************************************/
 // Add node to end of list
-void	CActorCache::AddNode(sPoolNode *Node,sNodeList *Root)
+void	CActorCache::AddNode(sPoolNode *ThisNode,sNodeList *RootNode)
 {
-sPoolNode	*Prev=Root->Tail;
-sPoolNode	*Next=0;
+sPoolNode	*TailNode=RootNode->Tail;
 
-		if (Prev)
-		{ // Not Head Node
-			Prev->Next=Node;
+		if (TailNode)
+		{
+			TailNode->Next=ThisNode;
 		}
 		else
-		{
-			Root->Head=Node;
+		{ // List is empty 
+			RootNode->Head=ThisNode;
 		}
-
-		Node->Prev=Prev;
-		Node->Next=0;
-		Root->Tail=Node;
+		ThisNode->Prev=TailNode;
+		ThisNode->Next=0;
+		ASSERT(ThisNode);
+		RootNode->Tail=ThisNode;
 }
 
 /*****************************************************************************/
@@ -181,24 +197,30 @@ sPoolNode	*SrcHead=Src->Head;
 sPoolNode	*SrcTail=Src->Tail;
 sPoolNode	*DstHead=Dst->Head;
 sPoolNode	*DstTail=Dst->Tail;
-
+/*
 		if (!SrcHead) return;
 
-		if (!DstTail)
-		{
-			Dst->Head=SrcHead;
-			SrcHead->Prev=0;
-		}
-		else
+		if (DstTail)
 		{
 			DstTail->Next=SrcHead;
-			SrcHead->Prev=DstTail;
+		}
+		else
+		{ // List is empty 
+			Dst->Head=SrcHead;
 		}
 
-		SrcTail->Next=0;
+		SrcHead->Prev=DstTail;
 		Dst->Tail=SrcTail;
 		Src->Head=0;
 		Src->Tail=0;
+*/
+		while(SrcHead)
+		{
+			sPoolNode	*Next=SrcHead->Next;
+			AddNode(SrcHead,Dst);
+			SrcHead=Next;
+		}
+
 }
 
 /*****************************************************************************/
@@ -216,7 +238,7 @@ int		TPW=CACHE_W/SlotCount;
 int		MaxW=0;
 int		MaxH=0;
 
-/*		if (TPW<1) */TPW=1;
+		TPW=1;
 
 		ASSERT(SlotCount<=CACHE_W);
 
@@ -241,6 +263,7 @@ sPoolNode	*List;
 
 // Init List
 			
+			ThisSlot->SlotCount=Total;
 			ThisSlot->ListMem=(u8*)MemAlloc(Total*sizeof(sPoolNode),"CacheNodeList");
 			List=(sPoolNode*)ThisSlot->ListMem;
 
@@ -254,7 +277,7 @@ sPoolNode	*List;
 					int	TexX=CACHE_X+CurrentTPX+(U>>2);
 					int	TexY=CACHE_Y+V;
 
-					List->Actor=0;
+					List->Actor=(FileEquate)0;
 					List->TexX=TexX;
 					List->TexY=TexY;
 					List->U=U&255;
@@ -367,9 +390,11 @@ sActorPool	*List=ActorList;
 
 			while (List)
 			{
-				List->PoolCache=Cache.GetSlotList(List->CacheSlot);
-				List->ActorCache.Head=0;
-				List->ActorCache.Tail=0;
+				List->GlobalCache=Cache.GetSlotList(List->CacheSlot);
+				List->LocalCache.Head=0;
+				List->LocalCache.Tail=0;
+				List->LastCache.Head=0;
+				List->LastCache.Tail=0;
 				List=List->Next;
 			}
 }
@@ -469,17 +494,45 @@ void		CActorPool::AddActor(sActorPool *NewActor)
 			Cache.LoadPalette(NewActor);
 			LastActor=NewActor;
 }
+
+int		CountSlots(sPoolNode *Node)
+{
+int		Count=0;
+			while (Node)
+			{
+				Count++;
+				Node=Node->Next;
+			}
+	return(Count);
+
+}
 /*****************************************************************************/
 void	CActorPool::CleanUpCache()
 {
 sActorPool	*Actor=ActorList;
 			
-			while (Actor) 
-			{
-				CActorCache::AddNodeList(&Actor->ActorCache ,Actor->PoolCache);
-				Actor=Actor->Next;
-			}
+		while (Actor) 
+		{
+//			Actor->LastCache.Head=0;//Actor->LocalCache.Head;
+//			Actor->LastCache.Tail=0;//Actor->LocalCache.Tail;
+			CActorCache::AddNodeList(&Actor->LocalCache ,Actor->GlobalCache);
+			Actor->LocalCache.Head=0;
+			Actor->LocalCache.Tail=0;
+//			ASSERT(Actor->GlobalCache->Head);
+//			ASSERT(Actor->GlobalCache->Tail);
+			Actor=Actor->Next;
+		}
+/*
+		for (int i=0;i<CActorPool::Cache.GetSlotCount(); i++)
+		{
 
+			sPoolSlot	&Slot=CActorPool::Cache.GetSlot(i);
+			int			Count=CountSlots(Slot.NodeList.Head);
+
+			printf("SC %i: %i %i\n",i,Slot.SlotCount,Count);
+			ASSERT(Slot.SlotCount==Count);
+		}
+*/
 }
 
 /*****************************************************************************/
@@ -514,55 +567,70 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
+sActorPool		*DbgPool;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
-
-sPoolNode		*ThisNode;;
+sPoolNode		*ThisNode,*FindNode;
 POLY_FT4		*Ft4;
 
+			DbgPool=PoolEntry;
 			CurrentFrame=GetFrame(Anim,Frame);
-// Is cached?
-			ThisNode=PoolEntry->ActorCache.Head;
-			while (ThisNode)
-			{ // Try local Cache (From Head forward)
-				if (ThisNode->Actor==PoolEntry->Filename && ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
-				ThisNode=ThisNode->Next;
-			}
-/*			
-			if (!ThisNode)
-			{ // Try main cache ( from tail back)
-			
-				ThisNode=PoolEntry->PoolCache->Tail;
-				while (ThisNode)
-				{
-					if (ThisNode->Actor==PoolEntry->Filename && ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
-					if (ThisNode->Prev==PoolEntry->PoolCache->Tail) ThisNode->Prev=0;
-					ThisNode=ThisNode->Prev;
+			ThisNode=0;
 
-				}
-				if (ThisNode)
+// Check Local Cache
+			FindNode=PoolEntry->LocalCache.Head;
+			while (FindNode)
+			{ // Try local Cache (From Head forward)
+				if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame) 
 				{
-					CActorCache::RemoveNode(ThisNode,PoolEntry->PoolCache);
-					CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
+					ThisNode=FindNode;
+					break;
+				}
+				FindNode=FindNode->Next;
+			}
+
+// Check Last Cache
+			if (!ThisNode)
+			{
+				FindNode=PoolEntry->LastCache.Head;
+				while (FindNode)
+				{
+					if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame) 
+					{
+						ThisNode=FindNode;
+						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
+						CActorCache::AddNode(ThisNode,&PoolEntry->LocalCache);
+						break;
+					}
+					if (FindNode==PoolEntry->LastCache.Tail) break;
+					FindNode=FindNode->Next;
+				}
+
+			}
+			
+// Check Global Cache
+			if (!ThisNode)
+			{
+				FindNode=PoolEntry->GlobalCache->Tail;
+				while (FindNode)
+				{
+					if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame)
+					{
+						ThisNode=FindNode;
+						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
+						CActorCache::AddNode(ThisNode,&PoolEntry->LocalCache);
+						break;
+					}
+					FindNode=FindNode->Prev;
 				}
 			}
-			else
-			{
-			}
-*/
+
+// Could not find it, get new
 			if (!ThisNode)
 			{ // Not cached frame
-				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->PoolCache);
-				if (ThisNode)
-				{
-					CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
-				}
-				else
-				{
-//					printf("NO FREE NODES\n");
-					ThisNode=PoolEntry->ActorCache.Head;
-				}
+				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->GlobalCache);
 				ASSERT(ThisNode);
+				CActorCache::AddNode(ThisNode,&PoolEntry->LocalCache);
 				RECT	R;
 
 				ThisNode->Actor=PoolEntry->Filename;

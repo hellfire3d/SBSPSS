@@ -56,8 +56,8 @@ void CNpcMotherJellyfishEnemy::postInit()
 		m_health = CLevel::getBossHealth();
 	}
 
-	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->SetUp(128,4,8,16);
+//	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+//	T->SetUp(128,4,8,16);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

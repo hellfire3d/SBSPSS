@@ -165,7 +165,7 @@ bool	Finished=false;
 			if (Lvl>=LvlTableSize) Lvl=0;
 		}
 // End TMP
-//		Lvl&=3;	// Ch1 only Bodge
+		Lvl&=3;	// Ch1 only Bodge
 		return(Finished);
 }
 

@@ -33,9 +33,9 @@ void CNpcMotherJellyfishBackground::postInit()
 {
 	CNpcEnemy::postInit();
 
-	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->SetUp(128,4,8,16);
-	T->SetOtPos( 15 );
+//	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+//	T->SetUp(128,4,8,16);
+//	T->SetOtPos( 15 );
 
 	m_actorGfx->SetOtPos( 15 );
 }

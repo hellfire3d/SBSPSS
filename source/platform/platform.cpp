@@ -507,8 +507,8 @@ void CNpcPlatform::postInit()
 			}
 		}
 
-		CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-		T->SetUp(64,4,8,8);
+//		CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+//		T->SetUp(64,4,8,8);
 	}
 }
 

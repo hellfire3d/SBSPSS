@@ -16,7 +16,7 @@
 // Pack together Actor anim & frame for quicker check later
 struct	sPoolNode
 {
-		u16			Actor;
+		FileEquate	Actor;
 		u16			Anim;
 		u16			Frame;
 		u16			TPage;
@@ -38,6 +38,7 @@ struct	sPoolSlot
 		u16			FrameCount;
 		sNodeList	NodeList;
 		u8			*ListMem;
+		int			SlotCount;
 };
 
 /*****************************************************************************/
@@ -46,8 +47,9 @@ struct	sActorPool
 		FileEquate		Filename;
 		sSpriteAnimBank	*ActorGfx;
 		int				CacheSlot;
-		sNodeList		*PoolCache;
-		sNodeList		ActorCache;
+		sNodeList		*GlobalCache;
+		sNodeList		LocalCache;
+		sNodeList		LastCache;
 		sActorPool		*Next;
 };
 
@@ -86,7 +88,9 @@ public:
 		void		AllocCache();
 		void		Reset();
 		void		LoadPalette(sActorPool *NewActor);
+		sPoolSlot	&GetSlot(int Slot)			{return(SlotList[Slot]);}
 		sNodeList	*GetSlotList(int Slot)		{return(&SlotList[Slot].NodeList);}
+		int			GetSlotCount()				{return(SlotCount);}
 
 static	sPoolNode	*RemoveHeadNode(sNodeList *Root);
 static	void		RemoveNode(sPoolNode *Node,sNodeList *Root);
