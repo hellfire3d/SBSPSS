@@ -113,8 +113,6 @@
 
 #include "gfx\actor.h"
 
-static const int	RenderZ=378;//256; Increased to make depth less, and SB more visible
-
 /*****************************************************************************/
 
 FontBank		*CGameScene::s_genericFont;
@@ -805,8 +803,8 @@ void	CGameScene::thinkCameraShake(int _frames)
 void	CGameScene::setCameraMtx()
 {
 MATRIX			CamMtx;
-		SetIdentTrans(&CamMtx,0,0,RenderZ);
-		SetGeomScreen(RenderZ);
+		SetIdentTrans(&CamMtx,0,0,RENDER_Z);
+		SetGeomScreen(RENDER_Z);
 		SetRotMatrix(&CamMtx);
 		SetTransMatrix(&CamMtx);
 

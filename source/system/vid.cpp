@@ -114,11 +114,12 @@ void	StartLoad(int _loadX,int _loadY)
 /*****************************************************************************/
 void	StopLoad()
 {
+#if	!defined(__VERSION_DEBUG__)
 	while(LoadTime) 
 		{
 		VSync(0);
 		}
-
+#endif
 	Screen[0].Draw.isbg=Screen[1].Draw.isbg=1;
 
 	DrawLoadIcon=0;
