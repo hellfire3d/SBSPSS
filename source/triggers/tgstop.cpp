@@ -88,7 +88,7 @@ void	CGaryStopTrigger::collidedWith(CThing *_thisThing)
 			{
 				CNpcGaryFriend *gary = (CNpcGaryFriend *) _thisThing;
 
-				gary->stop();
+				gary->stop( Pos.vx );
 
 				if ( !m_dropped )
 				{

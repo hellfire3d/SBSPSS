@@ -28,7 +28,7 @@ public:
 	bool				alwaysThink()											{return(true);}
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				start();
-	void				stop();
+	void				stop( int xPos );
 	void				startLeft();
 	void				startRight();
 	void				render();
@@ -49,6 +49,8 @@ protected:
 	u8					m_garyMeow;
 	static u8			m_garySpeech;
 	static u8			m_hasReachedDoor;
+	u8					m_isStopping;
+	int					m_xStopPos;
 };
 
 #endif

@@ -61,6 +61,7 @@ void CNpcGaryFriend::postInit()
 	setCollisionCentreOffset( 0, -14 );
 
 	m_garySpeech = false;
+	m_isStopping = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,13 +228,46 @@ void CNpcGaryFriend::think( int _frames )
 			//return;
 		}
 
+		int garyXMovement = multiplier * GARY_SPEED * _frames;
+		
+		if ( m_isStopping )
+		{
+			int garyRequiredXMovement = m_xStopPos - Pos.vx;
+
+			if ( garyRequiredXMovement > 0 )
+			{
+				if ( garyXMovement > garyRequiredXMovement )
+				{
+					garyXMovement = garyRequiredXMovement;
+				}
+			}
+			else if ( garyRequiredXMovement < 0 )
+			{
+				if ( garyXMovement < garyRequiredXMovement )
+				{
+					garyXMovement = garyRequiredXMovement;
+				}
+			}
+			else
+			{
+				m_isStopping = false;
+				m_startMoving = false;
+				m_started = false;
+				m_animNo = m_data[m_type].idleAnim;
+				m_animPlaying = true;
+				m_frame = 0;
+				m_garyMeow = false;
+				m_garySB = false;
+			}
+		}
+
 		if ( groundHeight <= 0 )
 		{
 			// groundHeight <= 0  indicates either on ground or below ground
 
 			// check horizontal collision
 
-			if ( CGameScene::getCollision()->getHeightFromGroundNonSB( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
+			if ( CGameScene::getCollision()->getHeightFromGroundNonSB( Pos.vx + garyXMovement, Pos.vy ) < -maxHeight )
 			{
 				// reverse direction
 
@@ -255,7 +289,7 @@ void CNpcGaryFriend::think( int _frames )
 
 					if ( !conveyorOverride && !m_obstructed )
 					{
-						Pos.vx += multiplier * GARY_SPEED * _frames;
+						Pos.vx += garyXMovement;
 					}
 				}
 			}
@@ -270,7 +304,7 @@ void CNpcGaryFriend::think( int _frames )
 
 				Pos.vy += groundHeight;
 
-				if ( CGameScene::getCollision()->getHeightFromGroundNonSB( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
+				if ( CGameScene::getCollision()->getHeightFromGroundNonSB( Pos.vx + garyXMovement, Pos.vy ) < -maxHeight )
 				{
 					// reverse direction
 
@@ -287,7 +321,7 @@ void CNpcGaryFriend::think( int _frames )
 
 						if ( !conveyorOverride && !m_obstructed )
 						{
-							Pos.vx += multiplier * GARY_SPEED * _frames;
+							Pos.vx += garyXMovement;
 						}
 					}
 				}
@@ -431,16 +465,11 @@ void CNpcGaryFriend::start()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcGaryFriend::stop()
+void CNpcGaryFriend::stop( int xPos )
 {
-	if ( m_started )
+	if ( m_started && !m_isStopping )
 	{
-		m_started = false;
-		m_startMoving = false;
-		m_animNo = m_data[m_type].idleAnim;
-		m_animPlaying = true;
-		m_frame = 0;
-		m_garyMeow = false;
-		m_garySB = false;
+		m_isStopping = true;
+		m_xStopPos = xPos;
 	}
 }
