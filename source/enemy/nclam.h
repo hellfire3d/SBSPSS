@@ -47,7 +47,7 @@ protected:
 	virtual void		processCollision();
 	virtual void		processAnimFrames( int _frames );
 
-	u8					m_isStunned;
+	s32					m_isStunned;
 };
 
 #endif

@@ -202,7 +202,7 @@ void CNpcStaticClamEnemy::postInit()
 {
 	CNpcClamEnemy::postInit();
 
-	m_isStunned = false;
+	m_isStunned = 0;
 
 	// create platform in same place
 
@@ -221,7 +221,7 @@ void CNpcStaticClamEnemy::postInit()
 
 void CNpcStaticClamEnemy::processClose( int _frames )
 {
-	if ( !m_animPlaying && !m_isStunned )
+	if ( !m_animPlaying && m_isStunned == 0 )
 	{
 		m_animPlaying = true;
 		m_animNo = ANIM_CLAM_SIDESNAP;
@@ -231,7 +231,17 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 
 	if ( m_isStunned )
 	{
-		m_isStunned = false;
+		m_isStunned -= _frames;
+
+		if ( m_isStunned < 0 )
+		{
+			m_isStunned = 0;
+		}
+	}
+
+	if ( !m_isStunned )
+	{
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
 	}
 }
 
@@ -253,7 +263,7 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 						CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK );
 					}
 
-					m_isStunned = true;
+					m_isStunned = 2 * GameState::getOneSecondInFrames();
 					m_animPlaying = false;
 				}
 				else
@@ -282,7 +292,7 @@ void CNpcStaticClamEnemy::processCollision()
 
 	m_controlFunc = m_oldControlFunc;
 
-	if ( !m_animPlaying && !m_isStunned )
+	if ( !m_animPlaying && m_isStunned == 0 )
 	{
 		m_animPlaying = true;
 		m_animNo = ANIM_CLAM_SIDESNAP;
