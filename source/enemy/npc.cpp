@@ -13,6 +13,10 @@
 
 #include "enemy\npc.h"
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef __LEVEL_LEVEL_H__
 #include "level\level.h"
 #endif
@@ -871,6 +875,7 @@ void CNpcEnemy::drawAttackEffect()
 	thwakPos.vy = ( rect.y1 + rect.y2 ) >> 1;
 
 	CFX::Create( CFX::FX_TYPE_THWACK, thwakPos );
+	CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_CHOP);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

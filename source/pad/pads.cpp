@@ -10,6 +10,10 @@
 #include "system\gstate.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 
 /*****************************************************************************/
 // Yay! Automatic key-repeat stuff!
@@ -24,6 +28,15 @@ u8 			PadBuffer[2][34];
 u8 			PadAlign[6]={0,1,0xFF,0xFF,0xFF,0xFF};
 u8			PadMotor[2][2];
 int			PadRepeatTimers[2][16];
+
+typedef struct
+{
+	int	m_vibrationTurnedOn;
+	u8	m_intensityValue;
+} PadVibeData;
+static PadVibeData	s_padVibeData[2]={{false,0},{false,0}};
+int					PadVibrationActive[2]={false,false};
+u8					PadVibrationIntensityValues[2];
 
 /*****************************************************************************/
 // 701
@@ -48,6 +61,10 @@ u16		PADAngeDirTable[16]=
 0,				// 14 LDR
 0,				// 15 LDUR
 };
+
+/*****************************************************************************/
+
+void VibrationHandler(int _port);
 
 /*****************************************************************************/
 
@@ -192,6 +209,7 @@ void	ReadController(int Port)
 u8			*PadBuf=&PadBuffer[Port][0];
 sPadData	*Pad=&PadData[Port];
 int			PortShift=Port<<4;
+int			intensity;
 
 	Pad->IsAnalogue=0;
 	Pad->Status=PadGetState(PortShift);
@@ -232,8 +250,9 @@ int			PortShift=Port<<4;
 			break;
 
 		case PsxPadTypeStandard:		// Standard Sony PAD controller
-//			Pad->Motor0=PadMotor[Port][0];
-//			Pad->Motor1=PadMotor[Port][1];
+			intensity=s_padVibeData[Port].m_intensityValue;
+			Pad->Motor0=intensity&1;
+			Pad->Motor1=intensity&0xff;
 			Pad2Digital(Pad);
 			break;
 
@@ -246,8 +265,9 @@ int			PortShift=Port<<4;
 				Pad->IsAnalogue=1;
 
 			// Set vibration values ( motor 0 is 0..1, motor 1 is 0..255 )
-//			Pad->Motor0 = s_vibData[ Port ].CurrentIntensityValue & 1;
-//			Pad->Motor1 = (s_vibData[ Port ].CurrentIntensityValue >> 1) & 0xff;
+			intensity=s_padVibeData[Port].m_intensityValue;
+			Pad->Motor0=intensity&1;
+			Pad->Motor1=intensity&0xff;
 
 			Pad2Digital(Pad);
 			break;
@@ -366,6 +386,9 @@ void 	PadUpdate()
 
 		UpdateRepeats(0);
 		UpdateRepeats(1);
+
+		VibrationHandler(0);
+		VibrationHandler(1);
 }
 
 
@@ -383,6 +406,41 @@ bool	PadIsConnected(int port)
 	
 	return pad->Status!=PadStateDiscon&&pad->Type;
 }
+
+/*****************************************************************************/
+void		PadSetVibrationIsTurnedOn(int _port,int _status)
+{
+	s_padVibeData[_port].m_vibrationTurnedOn=_status;
+}
+int			PadGetVibrationIsTurnedOn(int _port)
+{
+	return s_padVibeData[_port].m_vibrationTurnedOn;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:	VibrationHandler
+	Purpose:	
+	Params:		
+	Returns:	
+  ---------------------------------------------------------------------- */
+void VibrationHandler(int _port)
+{
+	PadVibeData	*pvd;
+	int			i;
+
+	pvd=s_padVibeData;
+	for(i=0;i<2;i++)
+	{
+		pvd->m_intensityValue=pvd->m_vibrationTurnedOn?CPadVibrationManager::getCurrentVibrationIntensity(i):0;
+		pvd++;
+	}
+}
+
+
+
+
+
 
 
 /*****************************************************************************/

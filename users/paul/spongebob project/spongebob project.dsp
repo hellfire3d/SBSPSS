@@ -1283,6 +1283,14 @@ SOURCE=..\..\..\source\pad\pads.cpp
 
 SOURCE=..\..\..\source\pad\pads.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pad\vibe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pad\vibe.h
+# End Source File
 # End Group
 # Begin Group "paul"
 

@@ -21,6 +21,10 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 // States
 #ifndef __PLAYER__PSLOOK_H__
 #include "player\pslook.h"
@@ -240,6 +244,7 @@ void	CPlayerModeCoralBlower::think()
 						thing=CThingManager::checkCollisionAreaAgainstThings(&suckRect,CThing::TYPE_ENEMY,true);
 					}
 				}
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_CORAL_BLOWER_SUCK);
 			}
 			else
 			{
@@ -249,6 +254,7 @@ void	CPlayerModeCoralBlower::think()
 					m_enemyFrame = m_enemy->getFrame();
 					m_blowerState=BLOWER_STATE__FULL;
 				}
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_CORAL_BLOWER_SUCK);
 			}
 			break;
 		case BLOWER_STATE__FULL:
@@ -291,6 +297,8 @@ void	CPlayerModeCoralBlower::think()
 				//projectile->setGraphic( projectileGfx );
 				projectile->setGraphic( m_enemyFrame );
 				projectile->setHasRGB( false );
+		
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 			}
 			else
 			{

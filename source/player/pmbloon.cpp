@@ -17,6 +17,10 @@
 
 #include "player\pmbloon.h"
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
@@ -103,6 +107,7 @@ void	CPlayerModeBalloon::think()
 		if(!m_playedPopSound)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+			CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
 		}
 		m_player->setMode(PLAYER_MODE_BASICUNARMED);
 	}
@@ -136,6 +141,7 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 		if(!m_playedPopSound)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+			CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
 			m_playedPopSound=true;
 		}
 	}

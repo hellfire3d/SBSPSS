@@ -66,6 +66,10 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -105,6 +109,18 @@ CGUITextReadout::TextReadoutData CFrontEndOptions::s_controlStyleReadoutText[CPa
 	{	1,STR__FRONTEND__B	},
 	{	2,STR__FRONTEND__C	},
 	{	3,STR__FRONTEND__D	},
+};
+
+
+int	CFrontEndOptions::s_vibrationValues[2+1]=
+{
+	false,true,
+	-1
+};
+CGUITextReadout::TextReadoutData CFrontEndOptions::s_vibrationReadoutText[2]=
+{
+	{	false,STR__OFF	},
+	{	true,STR__ON	},
 };
 
 
@@ -255,20 +271,20 @@ void CFrontEndOptions::init()
 
 	// Populate CONTROLS menu
 	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
-										X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),40,
+										X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),25,
 										STR__FRONTEND__CONTROL_STYLE,
 										&m_controlStyle,s_controlStyleValues,s_controlStyleReadoutText);
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(m_modeMenus[MODE__CONTROL]);
-	fr->setObjectXYWH(X_BORDER*2,55,OPTIONS_FRAME_W-(X_BORDER*4),60);	//292
+	fr->setObjectXYWH(X_BORDER,40,OPTIONS_FRAME_W-(X_BORDER*2),60);	//292
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
-		sr->setObjectXYWH(0,0,26,15);	//146
+		sr->setObjectXYWH(0,0,26,15);	//176
 		sr->setReadoutTarget(&m_controlIcons[CONTROL_UP]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(26,0,120,15);
+		tb->setObjectXYWH(26,0,150,15);
 		tb->setText(STR__FRONTEND__UP);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
@@ -277,7 +293,7 @@ void CFrontEndOptions::init()
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(26,15,120,15);
+		tb->setObjectXYWH(26,15,150,15);
 		tb->setText(STR__FRONTEND__DOWN);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
@@ -286,7 +302,7 @@ void CFrontEndOptions::init()
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(26,30,120,15);
+		tb->setObjectXYWH(26,30,150,15);
 		tb->setText(STR__FRONTEND__LEFT);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
@@ -295,44 +311,48 @@ void CFrontEndOptions::init()
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(26,45,120,15);
+		tb->setObjectXYWH(26,45,150,15);
 		tb->setText(STR__FRONTEND__RIGHT);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
-		sr->setObjectXYWH(146,0,26,15);
+		sr->setObjectXYWH(176,0,26,15);
 		sr->setReadoutTarget(&m_controlIcons[CONTROL_JUMP]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(146+26,0,120,15);
+		tb->setObjectXYWH(176+26,0,150,15);
 		tb->setText(STR__FRONTEND__JUMP);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
-		sr->setObjectXYWH(146,15,26,15);
+		sr->setObjectXYWH(176,15,26,15);
 		sr->setReadoutTarget(&m_controlIcons[CONTROL_FIRE]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(146+26,15,120,15);
+		tb->setObjectXYWH(176+26,15,150,15);
 		tb->setText(STR__FRONTEND__FIRE);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
-		sr->setObjectXYWH(146,30,26,15);
+		sr->setObjectXYWH(176,30,26,15);
 		sr->setReadoutTarget(&m_controlIcons[CONTROL_CATCH]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(146+26,30,120,15);
+		tb->setObjectXYWH(176+26,30,150,15);
 		tb->setText(STR__FRONTEND__CATCH);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
-		sr->setObjectXYWH(146,45,26,15);
+		sr->setObjectXYWH(176,45,26,15);
 		sr->setReadoutTarget(&m_controlIcons[CONTROL_WEAPONCHANGE]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(146+26,45,120,15);
+		tb->setObjectXYWH(176+26,45,150,15);
 		tb->setText(STR__FRONTEND__WEAPONCHANGE);
+	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
+										X_BORDER,Y_BORDER+90,OPTIONS_FRAME_W-(X_BORDER*2),25,
+										STR__FRONTEND__VIBRATION,
+										&m_vibrationStatus,s_vibrationValues,s_vibrationReadoutText);
 
 
 	// Populate SCREEN menu
@@ -372,6 +392,7 @@ void CFrontEndOptions::init()
 	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SFX);
 	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH);
 	m_controlStyle=CPadConfig::getConfig();
+	m_vibrationStatus=m_lastVibrationStatus=PadGetVibrationIsTurnedOn(0);
 	m_screenXOff=VidGetXOfs();
 	m_screenYOff=VidGetYOfs();
 }
@@ -487,7 +508,19 @@ void CFrontEndOptions::think(int _frames)
 		}
 		m_modeMenus[m_mode]->think(_frames);
 
-		if(m_mode==MODE__SOUND)
+		if(m_mode==MODE__CONTROL)
+		{
+			if(m_vibrationStatus!=m_lastVibrationStatus)
+			{
+				m_lastVibrationStatus=m_vibrationStatus;
+				PadSetVibrationIsTurnedOn(0,m_vibrationStatus);
+				if(m_vibrationStatus==true)
+				{
+					CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
+				}
+			}
+		}
+		else if(m_mode==MODE__SOUND)
 		{
 			if(m_bgmVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SONG))
 			{

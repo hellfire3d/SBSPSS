@@ -18,6 +18,10 @@
 
 #include "player\psbutt.h"
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef __PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -180,6 +184,10 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 			m_bounceOffFloor=true;
 		}
 	}
+	if(!m_bounceOffFloor)
+	{
+		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
+	}
 }
 
 
@@ -217,6 +225,7 @@ void CPlayerStateButtBounceUp::enter(CPlayerModeBase *_playerMode)
 		DVECTOR	pos;
 		pos=_playerMode->getPlayerPos();
 		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 	}
 
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);

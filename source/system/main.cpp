@@ -7,6 +7,7 @@
 #include 	"system\global.h"
 #include 	"fileio\fileio.h"
 #include 	"pad\pads.h"
+#include 	"pad\vibe.h"
 #include 	"system\vid.h"
 #include 	"gfx\prim.h"
 #include 	"gfx\tpage.h"
@@ -100,6 +101,7 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	MemCardStart();
 	PadsInit();
 	MemCardStop();
+	CPadVibrationManager::init();
 
 	CFileIO::Init();
 	TranslationDatabase::initialise(false);
@@ -182,6 +184,7 @@ void	MainLoop()
 		VidSwapDraw();
 		PrimDisplay();
 
+		CPadVibrationManager::think(frames);
 		PadUpdate();
 
 		DbgPollHost();

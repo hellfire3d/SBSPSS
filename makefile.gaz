@@ -244,7 +244,8 @@ memcard_src :=		md5 \
 					memcard \
 					saveload
 
-pad_src :=			pads
+pad_src :=			pads \
+					vibe
 
 paul_src :=			paul \
 					scenesel \

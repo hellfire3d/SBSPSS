@@ -17,6 +17,10 @@
 
 #include "player\pmjelly.h"
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
@@ -198,10 +202,12 @@ void	CPlayerModeJellyLauncher::think()
 					frame=m_firingTime;
 				}
 				m_player->setAnimFrame(frame);
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM,(m_firingTime*32)/TIMEOUT_FOR_BIG_SHOT);
 			}
 			else
 			{
 				m_firingState=FIRING_STATE__FIRING;
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 				m_player->setAnimNo(ANIM_SPONGEBOB_FIREEND);
 				launchProjectile();
 			}

@@ -93,11 +93,11 @@ u16			PadGetPadAngle(u16 Pad, s16 angleAdjust);
 
 bool		PadIsConnected(int port);
 
-bool		PAD_IsRumbling( int port );
-void		PAD_SetVibrationEnvelope( int Port, int count, const VIBE_DATA * data, int ferocity=255 );
-
+void		PadSetVibrationIsTurnedOn(int _port,int _status);
+int			PadGetVibrationIsTurnedOn(int _port);
 
 /*****************************************************************************/
+
 
 class	CPadConfig
 {

@@ -114,11 +114,15 @@ private:
 	int							m_sfxVolume;
 	int							m_speechVolume;
 	int							m_controlStyle;
+	int							m_vibrationStatus,m_lastVibrationStatus;
 	int							m_screenXOff;
 	int							m_screenYOff;
 
 	static int									s_controlStyleValues[];
 	static CGUITextReadout::TextReadoutData		s_controlStyleReadoutText[];
+
+	static int									s_vibrationValues[];
+	static CGUITextReadout::TextReadoutData		s_vibrationReadoutText[];
 
 	static int									s_buttonOrder[];
 	int											m_controlIcons[CONTROL_COUNT];

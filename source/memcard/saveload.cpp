@@ -42,6 +42,10 @@
 #include <biglump.h>
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -455,6 +459,8 @@ void CSaveLoadDatabase::createData()
 	{
 		m_dataBuffer.m_systemDetails.m_volumes[i]=CSoundMediator::getVolume((CSoundMediator::VOLUMETYPE)i);
 	}
+	m_dataBuffer.m_systemDetails.m_controlStyle=CPadConfig::getConfig();;
+	m_dataBuffer.m_systemDetails.m_vibrationIsTurnedOn=PadGetVibrationIsTurnedOn(0);
 	m_dataBuffer.m_systemDetails.m_language=(char)TranslationDatabase::getLanguage();
 
 	// Game slots
@@ -481,6 +487,8 @@ void CSaveLoadDatabase::restoreData()
 	{
 		CSoundMediator::setVolume((CSoundMediator::VOLUMETYPE)i,m_dataBuffer.m_systemDetails.m_volumes[i]);
 	}
+	CPadConfig::setConfig(m_dataBuffer.m_systemDetails.m_controlStyle);
+	PadSetVibrationIsTurnedOn(0,m_dataBuffer.m_systemDetails.m_vibrationIsTurnedOn);
 	if(!TranslationDatabase::isLoaded())
 	{
 		TranslationDatabase::loadLanguage(m_dataBuffer.m_systemDetails.m_language);

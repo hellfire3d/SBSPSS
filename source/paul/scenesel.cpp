@@ -195,8 +195,13 @@ void CSceneSelector::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#include "pad\vibe.h"
+
 void CSceneSelector::think(int _frames)
 {
+if(PadGetDown(0)&PAD_L1)	CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_LONG_STROBEY);
+if(PadGetDown(0)&PAD_L2)	CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_LONG_STROBEY,127);
+
 	switch(m_state)
 	{
 		case STATE_INIT:

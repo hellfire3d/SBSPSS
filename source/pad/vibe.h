@@ -37,7 +37,22 @@
 class CPadVibrationManager
 {
 public:
-	void		init();
+	typedef enum
+	{
+		VIBE_SHORT,
+		VIBE_MEDIUM,
+		VIBE_LONG,
+		VIBE_LONG_STROBEY,
+		VIBE_CORAL_BLOWER_SUCK,
+		VIBE_CHOP,
+
+		VIBE_MAX_TYPES
+	} VIBE_TYPE;
+
+	static void				init();
+	static void				think(int _frames);
+	static void				setVibration(int _port,VIBE_TYPE _type,u8 _ferocity=255);
+	static u8				getCurrentVibrationIntensity(int _port)			{return s_currentIntensityValues[_port];}
 
 private:
 	enum
@@ -53,8 +68,11 @@ private:
 	} VIBE_CONTROL;
 
 
-	VIBE_CONTROLS	m_vibeControls[2][MAX_VIBES_PER_PAD];
-}
+	static s16				*s_vibeData[VIBE_MAX_TYPES];
+	static VIBE_CONTROL		s_vibeControls[2][MAX_VIBES_PER_PAD];
+	static u8				s_currentIntensityValues[2];
+
+};
 
 
 /*----------------------------------------------------------------------

@@ -22,6 +22,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
 #endif
@@ -2084,6 +2088,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 						break;
 				}
 				dieYouPorousFreak(deathType);
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_LONG_STROBEY);
 			}
 			else
 			{
@@ -2130,6 +2135,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					m_currentPlayerModeClass->setState(STATE_JUMPBACK);
 				}
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
 			}
 		}
 	}

@@ -42,6 +42,7 @@ struct SaveLoad_SystemDetails
 {
 	char						m_screenOffX,m_screenOffY;
 	unsigned char				m_volumes[CSoundMediator::NUM_VOLUMETYPES];
+	unsigned char				m_controlStyle,m_vibrationIsTurnedOn;
 	unsigned char				m_language;
 };
 
