@@ -116,6 +116,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 	},
 
+	{	// NPC_ANEMONE_2
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_ANEMONE_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_ANEMONE_2_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
 	{	// NPC_CLAM
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_CLAM_USER_CLOSE,
@@ -371,9 +383,9 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_OIL_BLOB;
+	m_type = NPC_ANEMONE_2;
 
-	m_heading = 3072;
+	m_heading = m_baseHeading = 3072;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
@@ -686,6 +698,20 @@ bool CNpc::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_ANEMONE_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					default:
 						return( false );
 				}
@@ -870,6 +896,9 @@ void CNpc::processClose(int _frames)
 			processCloseSharkManAttack( _frames );
 
 			break;
+
+		case NPC_CLOSE_ANEMONE_2_ATTACK:
+			processCloseAnemone2Attack( _frames );
 
 		default:
 			break;

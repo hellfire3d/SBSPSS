@@ -125,6 +125,10 @@ SOURCE=..\..\..\source\enemy\enemy.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nanemone.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nclam.cpp
 # End Source File
 # Begin Source File
@@ -818,6 +822,18 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
+# End Source File
+# End Group
+# Begin Group "projectl"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\projectl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\projectl.h
 # End Source File
 # End Group
 # End Group

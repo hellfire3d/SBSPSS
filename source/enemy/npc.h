@@ -45,6 +45,7 @@ protected:
 		NPC_SMALL_JELLYFISH_2,
 		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
+		NPC_ANEMONE_2,
 		NPC_CLAM,
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
@@ -94,6 +95,7 @@ protected:
 		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
 		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
+		NPC_SENSOR_ANEMONE_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -105,6 +107,7 @@ protected:
 		NPC_CLOSE_GHOST_PIRATE_ATTACK,
 		NPC_CLOSE_SHARK_MAN_ATTACK,
 		NPC_CLOSE_GENERIC_USER_SEEK,
+		NPC_CLOSE_ANEMONE_2_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -187,6 +190,10 @@ protected:
 
 	void				processCloseSharkManAttack( int _frames );
 
+	// anemone functions
+
+	void				processCloseAnemone2Attack( int _frames );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -199,6 +206,7 @@ protected:
 	NPC_SENSOR_FUNC		m_sensorFunc;
 	CNpcPath			m_npcPath;
 	s32					m_heading;
+	s32					m_baseHeading;
 	s32					m_movementTimer;
 	s32					m_velocity;
 	bool				m_evadeClockwise;

@@ -22,6 +22,10 @@
 #include "enemy\2denemy.h"
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 #ifndef __GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
@@ -66,6 +70,10 @@ void 	CGameScene::init()
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
+
+		CProjectile	*testProjectile;
+		testProjectile = new( "test projectile" ) CProjectile;
+		testProjectile->init();
 
 		m_player=new ("player") CPlayer();
 		m_player->init();

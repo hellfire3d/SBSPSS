@@ -60,7 +60,10 @@ enemy_src :=		2denemy \
 					ngpirate \
 					nshrkman \
 					ngeneric \
+					nanemone \
 					enemy
+
+projectl_src :=		projectl
 
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
