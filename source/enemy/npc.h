@@ -115,7 +115,7 @@ public:
 
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
-	void				fireAsProjectile( s16 heading );
+	virtual void		fireAsProjectile( s16 heading );
 
 protected:
 	class CLayerCollision	*m_layerCollision;

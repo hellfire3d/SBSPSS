@@ -27,6 +27,13 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PROJECTL_PRNPCSPR_H__
+#include "projectl\prnpcspr.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSquidDartEnemy::render()
 {
 	SprFrame = NULL;
@@ -81,3 +88,26 @@ void CNpcSquidDartEnemy::render()
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSquidDartEnemy::fireAsProjectile( s16 heading )
+{
+	m_isActive = false;
+	setToShutdown();
+
+	DVECTOR newPos = Pos;
+
+	newPos.vy -= 10;
+
+	CEnemyAsSpriteProjectile *projectile;
+	projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
+	projectile->init(	newPos,
+						heading,
+						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+						5*60);
+	projectile->setLayerCollision( m_layerCollision );
+	projectile->setGraphic( FRM_SQUIDDART_SWIM0001 );
+	projectile->setHasRGB( true );
+	projectile->setRGB( 255, 128, 255 );
+}

@@ -128,7 +128,8 @@ hazard_src :=		hazard \
 fx_src :=			fx \
 
 projectl_src :=		projectl \
-					prnpc
+					prnpc \
+					prnpcspr
 
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)

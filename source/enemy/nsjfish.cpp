@@ -35,6 +35,13 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PROJECTL_PRNPCSPR_H__
+#include "projectl\prnpcspr.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSmallJellyfishEnemy::render()
 {
 	SprFrame = NULL;
@@ -101,6 +108,8 @@ void CNpcSmallJellyfishEnemy::render()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSmallJellyfishEnemy::processClose( int _frames )
 {
@@ -235,6 +244,8 @@ void CNpcSmallJellyfishEnemy::processClose( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcSmallJellyfishEnemy::processSensor()
 {
 	switch( m_sensorFunc )
@@ -258,6 +269,8 @@ bool CNpcSmallJellyfishEnemy::processSensor()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSmallJellyfishEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
@@ -345,4 +358,37 @@ void CNpcSmallJellyfishEnemy::processMovementModifier( int _frames, s32 distX, s
 	Pos.vy += newY;
 
 	m_drawRotation = m_heading;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
+{
+	m_isActive = false;
+
+	if ( m_data[m_type].respawning )
+	{
+		m_timerFunc = NPC_TIMER_RESPAWN;
+		m_timerTimer = 4 * GameState::getOneSecondInFrames();
+	}
+	else
+	{
+		setToShutdown();
+	}
+
+	DVECTOR newPos = Pos;
+
+	newPos.vy -= 10;
+
+	CEnemyAsSpriteProjectile *projectile;
+	projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
+	projectile->init(	newPos,
+						heading,
+						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+						5*60);
+	projectile->setLayerCollision( m_layerCollision );
+	projectile->setGraphic( FRM_JELLYFISH1_SWIM1 );
+	projectile->setHasRGB( true );
+	projectile->setRGB( 255, 128, 255 );
 }

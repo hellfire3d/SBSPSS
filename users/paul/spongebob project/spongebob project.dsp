@@ -1473,6 +1473,14 @@ SOURCE=..\..\..\source\projectl\prnpc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\projectl\prnpcspr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\prnpcspr.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\projectl\projectl.cpp
 # End Source File
 # Begin Source File

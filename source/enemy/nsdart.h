@@ -24,6 +24,7 @@ public:
 	void				render();
 	virtual int			getFrameCount()							{return( FRM_SQUIDDART_SWIM0004 - FRM_SQUIDDART_SWIM0001 + 1 );}
 	virtual u8			canCollideWithEnemy()					{return( false );}
+	virtual void		fireAsProjectile( s16 heading );
 };
 
 #endif
