@@ -38,9 +38,9 @@ protected:
 		int		FindClosestRGB(sRGBCol const &RGB);
 
 		CList2d<sRGBElem>		RGBMap;
-		CList<sRGBList>			InRGBList;
-		CList<sRGBList>			SortRGBList;
-		CList<int>				RemapTable;
+//		CList<sRGBList>			InRGBList;
+//		CList<sRGBList>			SortRGBList;
+//		CList<int>				RemapTable;
 		int						ShadeFlag;
 
 		CList2d<u8>				OutMap;

@@ -530,9 +530,8 @@ sBmp	NewBmp;
 		NewBmp.Psx=0;
 
 		CheckAndShrinkFrame(NewBmp,ThisFrame.Filename);
-		ThisFrame.XOfs=NewBmp.CrossHairX;
-		ThisFrame.YOfs=NewBmp.CrossHairY;
-
+		ThisFrame.XOfs=-80;
+		ThisFrame.YOfs=-80;
 // Check Dups
 int		Idx=FindDup(NewBmp);
 
@@ -540,20 +539,66 @@ int		Idx=FindDup(NewBmp);
 		{
 			DupCount++;
 			ThisFrame.FrameIdx=Idx;
+			sBmp	&DupBmp=BmpList[Idx];
+			ThisFrame.XOfs=DupBmp.CrossHairX;
+			ThisFrame.YOfs=DupBmp.CrossHairY;
 			return;
 		}
+// Adjust HotSpot for aspect
+//		int	NXO=(int)(((float)NewBmp.CrossHairX*Aspect));//+(StepX/2));
+//		NewBmp.CrossHairX=NXO;
+		float	hx=NewBmp.CrossHairX;
+		float	StepX=Aspect;
+		hx*=StepX;
+
+//		float IncX=(float)NewX;
+//		IncX/=OldX;
+//		hx+=IncX/2;
+/*
+		float IncX=(float)NewBmp.Frm.GetWidth()*Aspect;
+		IncX/=(float)NewBmp.CrossHairX;//.NewBmp.Frm.GetWidth();
+		hx-=IncX;
+		printf("%i   \n",(int)IncX);
+*/
+		int	NX=NewBmp.CrossHairX-(int)hx;
+//		NewBmp.CrossHairX=(int)hx;
+//		NewBmp.CrossHairX-=NX/2;
+
+/*
+float	StepX=(float)NewX;
+float	StepY=(float)NewY;
+
+		StepX/=OldX;
+		StepY/=OldY;
+		hx*=StepX;
+		hy*=StepY;
+
+		float IncX=(float)NewX;
+		IncX/=OldX;
+		hx+=IncX/2;
+
+		float IncY=(float)NewY;
+		IncY/=OldY;
+		hy+=IncY/2;
+*/
+
+
 // Its unique, add to list
 		BmpList.push_back(NewBmp);
-
 		MakePsxGfx(BmpList[BmpListSize]);
+		ThisFrame.FrameIdx=BmpListSize;
+
+
+// copy XY Info
+		ThisFrame.XOfs=NewBmp.CrossHairX;
+		ThisFrame.YOfs=NewBmp.CrossHairY;
 
 #if	_DEBUG && defined(OutputTGA)
 void	WriteTGA(GString Name,Frame Frm);
 		WriteTGA(Name,NewBmp.Frm);
 #endif
-
-		ThisFrame.FrameIdx=BmpListSize;
 }
+
 
 //***************************************************************************
 void	WriteTGA(GString Name,Frame Frm)
@@ -755,8 +800,18 @@ vector<sSpriteFrameGfx>	Hdrs;
 				int		X0=dW/2;
 				int		X1=dW-X0;
 
-				Hdrs[i].AspectX0=X0;
-				Hdrs[i].AspectX1=X1;
+				int W=ThisBmp.Frm.GetWidth();
+				int	W0=W+ThisBmp.CrossHairX;
+				int	W1=W-W0;
+//				printf("%i %i %i \n",W,W0,W1);
+
+				X0=W0*Aspect;
+				X1=W1*Aspect;
+
+				Hdrs[i].AspectX0=X0-W0;
+				Hdrs[i].AspectX1=X1-W1;
+				
+
 //	printf("%i %i %i\n",Hdrs[i].W,X0,X1);
 				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
 			}

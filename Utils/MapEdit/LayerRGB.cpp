@@ -8,6 +8,8 @@
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	"GLEnabledView.h"
+#include	<io.h>
+#include	<frame.hpp>
 
 #include	"MapEdit.h"
 #include	"MapEditDoc.h"
@@ -24,81 +26,11 @@
 #include	"Elem.h"
 
 /*****************************************************************************/
-char	*CLayerRGB::RGBModeName[CLayerRGB::GUI_MODE_MAX]={"Paint","Tint","Lighten","Darken"};
+char	*CLayerRGB::RGBModeName[CLayerRGB::GUI_MODE_MAX]={"Paint","Lighten","Darken"};
+float	RGBAlpha=0.5f;
+int		RateInc=5;
 
-u8	BrushGfx1[]=
-{
-	1
-};
-
-u8	BrushGfx2[]=
-{
-	1,1,
-	1,1,
-};
-u8	BrushGfx3[]=
-{
-	0,1,0,
-	1,2,1,
-	0,1,0,
-};
-u8	BrushGfx4[]=
-{
-	0,1,1,0,
-	1,2,2,1,
-	1,2,2,1,
-	0,1,1,0,
-};
-u8	BrushGfx5[]=
-{
-	0,0,1,0,0,
-	0,1,2,1,0,
-	1,2,3,2,1,
-	0,1,2,1,0,
-	0,0,1,0,0,
-};
-u8	BrushGfx6[]=
-{
-	0,0,1,1,0,0,
-	0,1,2,2,1,0,
-	1,2,3,3,2,1,
-	1,2,3,3,2,1,
-	0,1,2,2,1,0,
-	0,0,1,1,0,0,
-};
-u8	BrushGfx7[]=
-{
-	0,0,1,1,1,0,0,
-	0,1,2,2,2,1,0,
-	1,2,3,3,3,2,1,
-	1,2,3,4,3,2,1,
-	1,2,3,3,3,2,1,
-	0,1,2,2,2,1,0,
-	0,0,1,1,1,0,0,
-};
-u8	BrushGfx8[]=
-{
-	0,0,1,1,1,1,0,0,
-	0,1,2,2,2,2,1,0,
-	1,2,3,3,3,3,2,1,
-	1,2,3,4,4,3,2,1,
-	1,2,3,4,4,3,2,1,
-	1,2,3,3,3,3,2,1,
-	0,1,2,2,2,2,1,0,
-	0,0,1,1,1,1,0,0,
-};
-
-CLayerRGB::sRGBBrush	CLayerRGB::RGBBrushTable[CLayerRGB::RGB_BRUSH_MAX]=
-{
-	{1,0,BrushGfx1},
-	{2,1,BrushGfx2},
-	{3,1,BrushGfx3},
-	{4,2,BrushGfx4},
-	{5,2,BrushGfx5},
-	{6,3,BrushGfx6},
-	{7,3,BrushGfx7},
-	{8,4,BrushGfx8},
-};
+#define	MAX_UNDO	16
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -113,10 +45,11 @@ CLayerRGB::CLayerRGB(sLayerDef &Def)
 		CurrentRGB.B=128;
 		CurrentMode=0;
 		CurrentBrush=0;
+		CurrentRate=0;
 		ShadeFlag=false;
 		LastCursPos.x=-1;
 		LastCursPos.y=-1;
-
+		CurrentUndo=0;
 }
 
 
@@ -130,7 +63,9 @@ void	CLayerRGB::InitLayer(sLayerDef &Def)
 {
 		CLayer::InitLayer(Def);
 		SetSize(Def.Width,Def.Height,true);
+		BuildBrushList();
 }
+
 /*****************************************************************************/
 void	CLayerRGB::Load(CFile *File,int Version)
 {
@@ -177,6 +112,92 @@ void	CLayerRGB::Save(CFile *File)
 				File->Write(&ThisElem,sizeof(sRGBElem));
 			}
 		}
+}
+
+/*****************************************************************************/
+void	CLayerRGB::BuildBrushList()
+{
+GString		Path;
+GString		Filename;
+_finddata_t Find;
+long		FileHandle;
+int			Error=0;
+
+			BrushList.clear();
+
+			GetExecPath(Path);
+			Path+="\\Brushes\\";
+			Filename=Path+"*.bmp";
+
+			if( (FileHandle= _findfirst( Filename, &Find)) == -1L ) 
+			{
+				ASSERT(!"No Brushes Found :o(\n");
+				return;
+			}
+
+			while (Error==0)
+			{
+				GString	ThisFile=Path+Find.name;
+				LoadBrush(ThisFile);
+				Error=_findnext( FileHandle, &Find);
+			}
+			_findclose( FileHandle);
+
+}
+
+/*****************************************************************************/
+void	CLayerRGB::LoadBrush(const char *Name)
+{
+GFName	Filename=Name;
+int		BrushCount=BrushList.size();
+		BrushList.resize(BrushCount+1);			
+sRGBBrush	&NewBrush=BrushList[BrushCount];
+Frame		Frm;
+int		W,H;
+		NewBrush.Name=Filename.File();
+		Frm.LoadBMP(Name);
+		W=Frm.GetWidth();
+		H=Frm.GetHeight();
+		NewBrush.W=W;
+		NewBrush.H=H;
+		NewBrush.XOfs=W/2;
+		NewBrush.YOfs=H/2;
+		NewBrush.Gfx.resize(W*H);
+
+int		Ofs=0;
+		for (int Y=0;Y<H; Y++)
+		{
+			for (int X=0;X<W; X++)
+			{
+				u8	Col=Frm.GetPixel(X,Y);
+
+				Col=Frm.GetPal()[Col].GetR();
+				NewBrush.Gfx[Ofs++]=Col;
+			}
+		}
+
+		
+
+		TRACE1("%s\n",NewBrush.Name);
+
+}
+
+/*****************************************************************************/
+bool	CLayerRGB::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+{
+bool	Ret=false;
+
+		switch(CmdMsg)
+		{
+		case CmdMsg_Undo:
+			Undo();
+			break;
+		default:
+			break;
+		}
+
+		return(Ret);
+
 }
 
 /*****************************************************************************/
@@ -228,7 +249,7 @@ int		DrawH=ZoomH+8;
 					float	fB=(1.0f/255.0f)*ThisElem.B;
 					glLoadName (0);
 					glBegin (GL_QUADS); 
-						glColor4f(fR,fG,fB,0.5);
+						glColor4f(fR,fG,fB,RGBAlpha);
 						BuildGLQuad(0,1,0,1,0);
 					glEnd();
 				}
@@ -247,21 +268,24 @@ Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		CursPos=Core->GetCursorPos();
 
 			if (CursPos.x<0 || CursPos.y<0) return;
-sRGBBrush	&ThisBrush=RGBBrushTable[CurrentBrush];
+sRGBBrush	&ThisBrush=BrushList[CurrentBrush];
 
-			CursPos.x-=ThisBrush.XYOfs;
-			CursPos.y-=ThisBrush.XYOfs;
+			CursPos.x-=ThisBrush.XOfs;
+			CursPos.y-=ThisBrush.YOfs;
 			CursPos.x-=(int)ThisCam.x;
 			CursPos.y-=(int)ThisCam.y;
 
-float		ZoomW=Core->GetZoomW();
-float		ZoomH=Core->GetZoomH();
-float		ScrOfsX=(ZoomW/2);
-float		ScrOfsY=(ZoomH/2);
-Vector3		&Scale=Core->GetScaleVector();
-float		ShiftX=ThisCam.x - (int)ThisCam.x;
-float		ShiftY=ThisCam.y - (int)ThisCam.y;
-u8			*Gfx=ThisBrush.Gfx;
+float			ZoomW=Core->GetZoomW();
+float			ZoomH=Core->GetZoomH();
+float			ScrOfsX=(ZoomW/2);
+float			ScrOfsY=(ZoomH/2);
+Vector3			&Scale=Core->GetScaleVector();
+float			ShiftX=ThisCam.x - (int)ThisCam.x;
+float			ShiftY=ThisCam.y - (int)ThisCam.y;
+std::vector<u8>	&Gfx=ThisBrush.Gfx;
+int				Ofs=0;
+int				Rate=100-(CurrentRate*RateInc);
+float			fRate=(1.0/100.f)*Rate;
 		
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
@@ -271,45 +295,25 @@ u8			*Gfx=ThisBrush.Gfx;
 		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 		glTranslatef(CursPos.x,-CursPos.y,0);	// Bring to top left corner
 
-		for (int YLoop=0; YLoop<ThisBrush.WH; YLoop++)
+		for (int YLoop=0; YLoop<ThisBrush.H; YLoop++)
 		{
-			for (int XLoop=0; XLoop<ThisBrush.WH; XLoop++)
+			for (int XLoop=0; XLoop<ThisBrush.W; XLoop++)
 			{
-				u8	B=*Gfx++;
-				float	fR,fG,fB,Bi;
-				Bi=(1.0f/8.0f)*(float)B;
+				u8	B=Gfx[Ofs++];
 				
 				if (B)
 				{
-					glLoadName (0);
+					float	fRGB=(1.0f/255.0f)*fRate*B;
+
 					glBegin (GL_QUADS); 
-						switch(CurrentMode)
-						{
-						case GUI_MODE_PAINT:
-							fR=CurrentRGB.R;
-							fG=CurrentRGB.G;
-							fB=CurrentRGB.B;
-							break;
-						case GUI_MODE_TINT:
-							fR=((1.0f/255.0f)*CurrentRGB.R)+Bi;
-							fG=((1.0f/255.0f)*CurrentRGB.G)+Bi;
-							fB=((1.0f/255.0f)*CurrentRGB.B)+Bi;
-							break;
-						case GUI_MODE_LIGHTEN:
-						case GUI_MODE_DARKEN:
-							fR=1;
-							fG=1;
-							fB=1;
-							break;
-						}
-						glColor4f(fR,fG,fB,0.5);
+					glColor4f(fRGB,fRGB,fRGB,RGBAlpha);
 						BuildGLQuad(0,1,0,1,0);
 					glEnd();
 
 				}
 				glTranslatef(1.0f,0,0);	// Next X
 			}
-			glTranslatef(-ThisBrush.WH,-1,0); // Next y, rewind to start X
+			glTranslatef(-ThisBrush.W,-1,0); // Next y, rewind to start X
 		}
 		glPopMatrix();
 
@@ -329,13 +333,27 @@ void	CLayerRGB::CheckLayerSize(int Width,int Height)
 /*****************************************************************************/
 void	CLayerRGB::SetSize(int Width,int Height,BOOL ClearFlag)
 {
-	MapWidth=Width;
-	MapHeight=Height;
-	Map.resize(Width);
-	for (int i=0;i<Width;i++)
-	{
-		Map[i].resize(Height);
-	}
+int	m,i;
+		MapWidth=Width;
+		MapHeight=Height;
+		Map.resize(Width);
+		for (i=0;i<Width;i++)
+		{
+			Map[i].resize(Height);
+		}
+
+		UndoList.resize(MAX_UNDO);
+		TRACE1("%i\n",UndoList.size());
+		for (m=0; m<MAX_UNDO; m++) 
+		{
+			sRGBUndo	&ThisUndo=UndoList[m];
+			ThisUndo.Valid=false;
+			ThisUndo.Map.resize(Width);
+			for (i=0;i<Width;i++)
+			{
+				ThisUndo.Map[i].resize(Height);
+			}
+		}
 
 	if (ClearFlag)	Clear();
 }
@@ -372,21 +390,33 @@ bool	CLayerRGB::Resize(int Width,int Height)
 void	CLayerRGB::GUIInit(CCore *Core)
 {
 
-int		i;
+int		ListSize,i;
 
 		GUIRGB.DisableCallback();
 		Core->GUIAdd(GUIRGB,IDD_LAYER_RGB);
 
+// Init BrushList
+		ListSize=BrushList.size();
+		GUIRGB.m_BrushList.ResetContent();
+		for (i=0; i<ListSize; i++)
+		{
+			GUIRGB.m_BrushList.AddString(BrushList[i].Name);
+		}
 // Init ModeList
 		GUIRGB.m_ModeList.ResetContent();
 		for (i=0; i<GUI_MODE_MAX; i++)
 		{
 			GUIRGB.m_ModeList.AddString(RGBModeName[i]);
 		}
-		GUIRGB.m_RSpin.SetRange(0,255);
-		GUIRGB.m_GSpin.SetRange(0,255);
-		GUIRGB.m_BSpin.SetRange(0,255);
-		GUIRGB.m_BrushSpin.SetRange(0,RGB_BRUSH_MAX-1);
+
+// Init RateList
+		GUIRGB.m_RateList.ResetContent();
+		for (i=0; i<100/RateInc; i++)
+		{
+			char	Str[8];
+			sprintf(Str,"%i%",100-(i*RateInc));
+			GUIRGB.m_RateList.AddString(Str);
+		}
 
 		GUIRGB.EnableCallback();
 		Core->RedrawView();
@@ -406,11 +436,9 @@ void	CLayerRGB::GUIUpdate(CCore *Core)
 		GUIRGB.DisableCallback();
 
 		GUIRGB.m_ModeList.SetCurSel(CurrentMode);
-		GUIRGB.SetRGB(CurrentRGB.R,CurrentRGB.G,CurrentRGB.B);
-		GUIRGB.SetVal(GUIRGB.m_Brush,CurrentBrush);
+		GUIRGB.m_BrushList.SetCurSel(CurrentBrush);
+		GUIRGB.m_RateList.SetCurSel(CurrentRate);
 		GUIRGB.m_Shade.SetCheck(ShadeFlag);
-		
-
 		GUIRGB.EnableCallback();
 }
 
@@ -418,8 +446,8 @@ void	CLayerRGB::GUIUpdate(CCore *Core)
 void	CLayerRGB::GUIChanged(CCore *Core)
 {
 		CurrentMode=GUIRGB.m_ModeList.GetCurSel();
-		GUIRGB.GetRGB(CurrentRGB.R,CurrentRGB.G,CurrentRGB.B);
-		GUIRGB.GetVal(GUIRGB.m_Brush,CurrentBrush);
+		CurrentBrush=GUIRGB.m_BrushList.GetCurSel();
+		CurrentRate=GUIRGB.m_RateList.GetCurSel();
 		ShadeFlag=GUIRGB.m_Shade.GetCheck()!=0;
 }
 
@@ -431,6 +459,9 @@ bool	CLayerRGB::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool D
 {
 		if (DownFlag) 
 		{
+			if (CursorPos.x<0 || CursorPos.x>MapWidth) return(false);
+			if (CursorPos.y<0 || CursorPos.y>MapHeight) return(false);
+			CreateUndo();
 			Paint(Core,CursorPos);
 		}
 		else
@@ -459,68 +490,92 @@ bool	CLayerRGB::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
 }
 
 /*****************************************************************************/
+void	CLayerRGB::CreateUndo()
+{
+sRGBUndo	&ThisUndo=UndoList[CurrentUndo];
+		for (int y=0; y<MapHeight; y++)
+		{
+			for (int x=0; x<MapWidth; x++)
+			{
+				ThisUndo.Map[x][y]=Map[x][y];
+			}
+		}
+		ThisUndo.Valid=true;
+		CurrentUndo++;
+		if (CurrentUndo>=MAX_UNDO) CurrentUndo=0;
+}
+
+/*****************************************************************************/
+void	CLayerRGB::Undo()
+{
+int		Idx=CurrentUndo-1;
+
+		if (Idx<0) Idx+=MAX_UNDO;
+sRGBUndo	&ThisUndo=UndoList[Idx];
+		if (ThisUndo.Valid)
+		{
+			CurrentUndo=Idx;
+			for (int y=0; y<MapHeight; y++)
+			{
+				for (int x=0; x<MapWidth; x++)
+				{
+					Map[x][y]=ThisUndo.Map[x][y];
+				}
+			}
+			ThisUndo.Valid=false;
+		}
+
+}
+/*****************************************************************************/
 void	CLayerRGB::Paint(CCore *Core,CPoint &CursorPos)
 {
-		if (CursorPos.x<0 || CursorPos.x>MapWidth) return;
-		if (CursorPos.y<0 || CursorPos.y>MapHeight) return;
 
 		if (CursorPos.x== LastCursPos.x && CursorPos.y==LastCursPos.y) return;
 		LastCursPos=CursorPos;
 
-sRGBBrush	&ThisBrush=RGBBrushTable[CurrentBrush];
-u8			*Gfx=ThisBrush.Gfx;
+sRGBBrush	&ThisBrush=BrushList[CurrentBrush];
+std::vector<u8>		&Gfx=ThisBrush.Gfx;
 CPoint		CursPos;
+int			Ofs=0;
 
-		CursPos.x=CursorPos.x-ThisBrush.XYOfs;
-		CursPos.y=CursorPos.y-ThisBrush.XYOfs;
+		CursPos.x=CursorPos.x-ThisBrush.XOfs;
+		CursPos.y=CursorPos.y-ThisBrush.YOfs;
 
-		for (int Y=0; Y<ThisBrush.WH; Y++)
+		for (int Y=0; Y<ThisBrush.H; Y++)
 		{
-			for (int X=0; X<ThisBrush.WH; X++)
+			for (int X=0; X<ThisBrush.W; X++)
 			{
 				CPoint	Pos=CursPos;
 				Pos.x+=X; 
 				Pos.y+=Y;
-				int	Blk=*Gfx++;
+				int	Blk=Gfx[Ofs++];
 
 				if (Blk)
-				if (Pos.x>=0 && Pos.x<MapWidth &&
-					Pos.y>=0 && Pos.y<MapHeight)
+				if (Pos.x>=0 && Pos.x<MapWidth && Pos.y>=0 && Pos.y<MapHeight)
 				{
 					sRGBElem	MapElem=GetRGB(Pos.x,Pos.y);
-					int			R=CurrentRGB.R;
-					int			G=CurrentRGB.G;
-					int			B=CurrentRGB.B;
-					int			Br=(R/8)*Blk;
-					int			Bg=(G/8)*Blk;
-					int			Bb=(B/8)*Blk;
+					int			RGB;
+					int			Rate=100-(CurrentRate*RateInc);
+					float		fRate=(1.0/100.f)*Rate;
+					int			RGBInc=(int)(fRate*(float)Blk);
 
 					switch(CurrentMode)
 					{
 					case GUI_MODE_PAINT:
-						break;
-					case GUI_MODE_TINT:
-						R=(MapElem.R+Br);
-						G=(MapElem.G+Bg);
-						B=(MapElem.B+Bb);
+						RGB=RGBInc;
 						break;
 					case GUI_MODE_LIGHTEN:
-						R=MapElem.R+4;
-						G=MapElem.G+4;
-						B=MapElem.B+4;
+						RGB=MapElem.R+RGBInc;
 						break;
 					case GUI_MODE_DARKEN:
-						R=MapElem.R-4;
-						G=MapElem.G-4;
-						B=MapElem.B-4;
+//						RGBInc=255-RGBInc;
+						RGB=MapElem.R-RGBInc;
 						break;
 					}
-					if (R<0) R=0; else if (R>255) R=255;
-					if (G<0) G=0; else if (G>255) G=255;
-					if (B<0) B=0; else if (B>255) B=255;
-					Map[Pos.x][Pos.y].R=R;
-					Map[Pos.x][Pos.y].G=G;
-					Map[Pos.x][Pos.y].B=B;
+					if (RGB<0) RGB=0; else if (RGB>255) RGB=255;
+					Map[Pos.x][Pos.y].R=RGB;
+					Map[Pos.x][Pos.y].G=RGB;
+					Map[Pos.x][Pos.y].B=RGB;
 				}
 			}
 		}
@@ -530,12 +585,13 @@ CPoint		CursPos;
 /*****************************************************************************/
 void	CLayerRGB::Grab(CCore *Core,CPoint &CursorPos)
 {
+/*
 		if (CursorPos.x<0 || CursorPos.x>MapWidth) return;
 		if (CursorPos.y<0 || CursorPos.y>MapHeight) return;
 
 		CurrentRGB=Map[CursorPos.x][CursorPos.y];
 		GUIUpdate(Core);
-
+*/
 }
 /*****************************************************************************/
 void	CLayerRGB::Export(CCore *Core,CExport &Exp)

@@ -16,6 +16,12 @@ struct sRGBElem
 	u8	R,G,B;
 };
 
+struct sRGBUndo
+{
+		bool	Valid;
+		std::vector< std::vector<sRGBElem> > Map;
+};
+
 /*****************************************************************************/
 class	CCore;
 class	CLayerRGB : public CLayer
@@ -25,22 +31,18 @@ public:
 		enum
 		{
 			GUI_MODE_PAINT=0,
-			GUI_MODE_TINT,
 			GUI_MODE_LIGHTEN,
 			GUI_MODE_DARKEN,
 
 			GUI_MODE_MAX
 		};
-		enum
-		{
-			RGB_BRUSH_MAX=8,
-		};
 
 		struct	sRGBBrush
 		{
-				int	WH;
-				int	XYOfs;
-				u8	*Gfx;
+				GString				Name;
+				int					W,H;
+				int					XOfs,YOfs;
+				std::vector<u8>		Gfx;
 		};
 
 
@@ -78,8 +80,14 @@ virtual	void			LoadGfx(CCore *Core){}
 		bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
 		bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
 		bool			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
+		bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
 protected:
+		void			BuildBrushList();
+		void			LoadBrush(const char *Name);
+		void			CreateUndo();
+		void			Undo();
+
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
 		void			Paint(CCore *Core,CPoint &CursorPos);
 		void			Grab(CCore *Core,CPoint &CursorPos);
@@ -90,15 +98,19 @@ protected:
 		sRGBElem		CurrentRGB;
 		int				CurrentBrush;
 		int				CurrentMode;
+		int				CurrentRate;
 		bool			ShadeFlag;
+		int				CurrentUndo;
 
 		int				MapWidth,MapHeight;
 		std::vector< std::vector<sRGBElem> > Map;
 
+		std::vector<sRGBBrush>	BrushList;
+
+		std::vector<sRGBUndo>	UndoList;
+
 		CPoint			LastCursPos;
 static	char			*RGBModeName[GUI_MODE_MAX];
-static	sRGBBrush		RGBBrushTable[CLayerRGB::RGB_BRUSH_MAX];
-
 		
 };
 

@@ -37,9 +37,10 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_RESET_VIEW, OnResetView)
 	ON_COMMAND(ID_RENDER_TO_TGA, OnRenderToTga)
 	ON_COMMAND(ID_ROTATE, OnRotate)
+	ON_COMMAND(ID_REPORT, OnReport)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleSubView)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
-	ON_COMMAND(ID_REPORT, OnReport)
+	ON_COMMAND(ID_EDIT_UNDO, OnEditUndo)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -200,6 +201,8 @@ void	CMapEditDoc::OnEditPaste()												{Command(CmdMsg_Paste);}
 void	CMapEditDoc::OnActivebrushLeft()										{Command(CmdMsg_ActiveBrushLeft);}
 void	CMapEditDoc::OnActivebrushRight() 										{Command(CmdMsg_ActiveBrushRight);}
 
+void CMapEditDoc::OnEditUndo()  												{Command(CmdMsg_Undo);}
+
 void	CMapEditDoc::Command(int CmdMsg,int Param0,int Param1)
 {
 	Core.Command(CmdMsg,Param0,Param1);
@@ -302,6 +305,7 @@ void	CMapEditDoc::FocusView()
 }
 
 /*********************************************************************************/
+
 
 
 

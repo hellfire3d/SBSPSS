@@ -30,32 +30,25 @@ void CGUILayerRGB::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerRGB)
+	DDX_Control(pDX, IDC_LAYERSHADE_RATELIST, m_RateList);
+	DDX_Control(pDX, IDC_LAYERSHADE_BRUSHLIST, m_BrushList);
 	DDX_Control(pDX, IDC_LAYERSHADE_MODELIST, m_ModeList);
 	DDX_Control(pDX, IDC_LAYERSHADE_SHADE, m_Shade);
-	DDX_Control(pDX, IDC_LAYERSHADE_BSPIN, m_BSpin);
-	DDX_Control(pDX, IDC_LAYERSHADE_B, m_B);
-	DDX_Control(pDX, IDC_LAYERSHADE_GSPIN, m_GSpin);
-	DDX_Control(pDX, IDC_LAYERSHADE_G, m_G);
-	DDX_Control(pDX, IDC_LAYERSHADE_RSPIN, m_RSpin);
-	DDX_Control(pDX, IDC_LAYERSHADE_R, m_R);
-	DDX_Control(pDX, IDC_LAYERSHADE_BRUSHSPIN, m_BrushSpin);
-	DDX_Control(pDX, IDC_LAYERSHADE_BRUSH, m_Brush);
 	//}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CGUILayerRGB, CDialog)
 	//{{AFX_MSG_MAP(CGUILayerRGB)
-	ON_EN_CHANGE(IDC_LAYERSHADE_BRUSH, OnParamChange)
-	ON_EN_CHANGE(IDC_LAYERSHADE_R, OnParamChange)
-	ON_EN_CHANGE(IDC_LAYERSHADE_G, OnParamChange)
-	ON_EN_CHANGE(IDC_LAYERSHADE_B, OnParamChange)
 	ON_CBN_SELCHANGE(IDC_LAYERSHADE_MODELIST, OnParamChange)
+	ON_CBN_SELCHANGE(IDC_LAYERSHADE_BRUSHLIST, OnParamChange)
+	ON_CBN_SELCHANGE(IDC_LAYERSHADE_RATELIST, OnParamChange)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+/*
 void	CGUILayerRGB::SetVal(CEdit &Dlg,int &Val,int Min,int Max)
 {
 CString	Str;
@@ -87,6 +80,7 @@ CString	Str;
 /////////////////////////////////////////////////////////////////////////////
 void	CGUILayerRGB::SetRGB(u8 &R,u8 &G,u8 &B)
 {
+
 int		iR,iG,iB;
 		
 		iR=R;
@@ -106,6 +100,7 @@ int		iR,iG,iB;
 /////////////////////////////////////////////////////////////////////////////
 void	CGUILayerRGB::GetRGB(u8 &R,u8 &G,u8 &B)
 {
+
 int		iR,iG,iB;
 		
 		iR=R;
@@ -121,6 +116,6 @@ int		iR,iG,iB;
 		B=iB;
 
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////
 void CGUILayerRGB::OnParamChange()				{if (CallbackFlag) theApp.GetCurrent()->GUIChanged();}

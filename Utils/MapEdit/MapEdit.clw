@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CGUILayerRGB
+LastClass=CMapEditDoc
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -37,27 +37,27 @@ Class25=CMapEditDoc
 Class26=CMapEditView
 
 ResourceCount=22
-Resource1=IDD_LAYER_PLATFORM
-Resource2=IDR_TOOLBAR (English (U.S.))
-Resource3=IDD_ADDLAYER
-Resource4=IDD_LAYER_HAZARD
-Resource5=IDD_LAYER_SHADE
-Resource6=IDD_ELEMLIST
-Resource7=IDD_LAYER_THING_POS
-Resource8=IDD_LAYER_ACTOR
-Resource9=IDD_LAYER_COLLISION
-Resource10=IDR_MAINFRAME (English (U.S.))
-Resource11=IDD_MULTIBAR (English (U.S.))
-Resource12=IDD_LAYER_THING
-Resource13=IDD_TILEBANK
-Resource14=IDD_LAYER_FX
-Resource15=IDD_NEWMAP
-Resource16=IDD_ABOUTBOX (English (U.S.))
+Resource1=IDD_ADDLAYER
+Resource2=IDD_LAYER_COLLISION
+Resource3=IDD_LAYER_FX
+Resource4=IDD_LAYER_SHADE
+Resource5=IDR_MAINFRAME (English (U.S.))
+Resource6=IDD_MULTIBAR (English (U.S.))
+Resource7=IDD_NEWMAP
+Resource8=IDD_LAYER_LIST
+Resource9=IDD_ABOUTBOX (English (U.S.))
+Resource10=IDD_ELEMLIST
+Resource11=IDD_LAYER_THING
+Resource12=IDD_RESIZE
+Resource13=IDD_LAYER_HAZARD
+Resource14=IDD_TOOLBAR
+Resource15=IDD_LAYER_TRIGGER
+Resource16=IDD_LAYER_ACTOR
 Resource17=IDR_MAPEDITYPE (English (U.S.))
-Resource18=IDD_LAYER_TRIGGER
-Resource19=IDD_LAYER_LIST
-Resource20=IDD_RESIZE
-Resource21=IDD_TOOLBAR
+Resource18=IDD_TILEBANK
+Resource19=IDD_LAYER_THING_POS
+Resource20=IDD_LAYER_PLATFORM
+Resource21=IDR_TOOLBAR (English (U.S.))
 Class27=CGUILayerRGB
 Resource22=IDD_LAYER_RGB
 
@@ -207,12 +207,14 @@ Type=0
 BaseClass=CMDIFrameWnd
 HeaderFile=MainFrm.h
 ImplementationFile=MainFrm.cpp
+LastObject=CMainFrame
 
 [CLS:CMapEditApp]
 Type=0
 BaseClass=CWinApp
 HeaderFile=MapEdit.h
 ImplementationFile=MapEdit.cpp
+LastObject=CMapEditApp
 
 [CLS:CAboutDlg]
 Type=0
@@ -228,7 +230,7 @@ HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
 Filter=N
 VirtualFilter=DC
-LastObject=ID_REPORT
+LastObject=ID_EDIT_UNDO
 
 [CLS:CMapEditView]
 Type=0
@@ -617,21 +619,13 @@ ControlCount=0
 [DLG:IDD_LAYER_RGB]
 Type=1
 Class=CGUILayerRGB
-ControlCount=14
+ControlCount=6
 Control1=IDC_LAYERSHADE_BRUSHTEXT,static,1342308352
-Control2=IDC_LAYERSHADE_BRUSH,edit,1350641792
-Control3=IDC_LAYERSHADE_BRUSHSPIN,msctls_updown32,1342177334
-Control4=IDC_LAYERSHADE_MODELIST,combobox,1344339971
-Control5=IDC_LAYERSHADE_RTEXT,static,1342308352
-Control6=IDC_LAYERSHADE_R,edit,1350641792
-Control7=IDC_LAYERSHADE_RSPIN,msctls_updown32,1342177334
-Control8=IDC_LAYERSHADE_GTEXT,static,1342308352
-Control9=IDC_LAYERSHADE_G,edit,1350641792
-Control10=IDC_LAYERSHADE_GSPIN,msctls_updown32,1342177334
-Control11=IDC_LAYERSHADE_BTEXT,static,1342308352
-Control12=IDC_LAYERSHADE_B,edit,1350641792
-Control13=IDC_LAYERSHADE_BSPIN,msctls_updown32,1342177334
-Control14=IDC_LAYERSHADE_SHADE,button,1342242851
+Control2=IDC_LAYERSHADE_MODELIST,combobox,1344339971
+Control3=IDC_LAYERSHADE_SHADE,button,1342242851
+Control4=IDC_LAYERSHADE_MODETEXT,static,1342308352
+Control5=IDC_LAYERSHADE_BRUSHLIST,combobox,1344339971
+Control6=IDC_LAYERSHADE_RATELIST,combobox,1344339971
 
 [CLS:CGUILayerRGB]
 Type=0
@@ -639,6 +633,6 @@ HeaderFile=GUILayerRGB.h
 ImplementationFile=GUILayerRGB.cpp
 BaseClass=CDialog
 Filter=D
-LastObject=IDC_LAYERSHADE_MODELIST
+LastObject=CGUILayerRGB
 VirtualFilter=dWC
 

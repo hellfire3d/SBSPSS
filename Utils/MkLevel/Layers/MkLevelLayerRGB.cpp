@@ -50,6 +50,80 @@ sRGBCol	*RGB=(sRGBCol*)iPtr;
 /*** Pre-Process *************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+#define	NUM_OF_PAL_ENTRIES	256
+#include	<tquant.h>
+void	CMkLevelLayerRGB::PreProcess(CMkLevel *Core)
+{
+int				Size=Width*Height;
+int				X,Y,Ofs;
+vector<u8>		SourcePal;
+vector<u8>		DestPal;
+vector<u8>		RemapMap;
+
+		SourcePal.resize(Width*Height*3);
+		RemapMap.resize(Width*Height);
+		DestPal.resize(NUM_OF_PAL_ENTRIES*3);
+		
+		Ofs=0;
+		for (Y=0; Y<Height; Y++)
+		{
+			for (X=0; X<Width; X++)
+			{
+				sRGBElem	&ThisElem=RGBMap.Get(X,Y);
+				SourcePal[Ofs++]=ThisElem.RGB.R;
+				SourcePal[Ofs++]=ThisElem.RGB.G;
+				SourcePal[Ofs++]=ThisElem.RGB.B;
+			}
+		}
+
+	    tquant(&SourcePal[0],&RemapMap[0],&DestPal[0],NUM_OF_PAL_ENTRIES,Width*Height);
+
+
+
+// Build Out Map And get max color
+int		ColorCount=0;
+		OutMap.SetSize(Width,Height);
+		Ofs=0;
+		for (Y=0; Y<Height; Y++)
+		{
+			for (X=0; X<Width; X++)
+			{
+				sRGBElem	&ThisElem=RGBMap.Get(X,Y);
+				
+				u8	Idx=RemapMap[Ofs++];
+				OutMap.Set(X,Y,Idx);
+				if (ColorCount<Idx) ColorCount=Idx;
+//				if (ThisElem.RGB.R!=DestPal[(Idx*3)+0] || ThisElem.RGB.G!=DestPal[(Idx*3)+1] || ThisElem.RGB.B!=DestPal[(Idx*3)+2])	printf("%3d %3d %3d -> %3d %3d %3d\n",ThisElem.RGB.R,ThisElem.RGB.G,ThisElem.RGB.B,DestPal[(Idx*3)+0],DestPal[(Idx*3)+1],DestPal[(Idx*3)+2]);
+			}
+		}
+		ColorCount++;
+
+		printf("RGB remapped to %i colors\n",ColorCount);
+// Build Out RGB Table
+		OutRGBTable.SetSize(ColorCount,16);
+int		RGBInc=6;
+		if (ShadeFlag) RGBInc=-6;
+		for (int c=0;c<ColorCount;c++)
+		{
+			int		R=DestPal[(c*3)+0];
+			int		G=DestPal[(c*3)+1];
+			int		B=DestPal[(c*3)+2];
+			for (int s=0; s<16; s++)
+			{
+				sRGBCol	RGB;
+				RGB.R=R; RGB.G=G; RGB.B=B;
+				OutRGBTable.Set(c,s,RGB);
+
+				R+=RGBInc;
+				G+=RGBInc;
+				B+=RGBInc;
+				if (R<0) R=0; else if (R>255) R=255;
+				if (G<0) G=0; else if (G>255) G=255;
+				if (B<0) B=0; else if (B>255) B=255;
+			}
+		}
+}
+#if	0
 void	CMkLevelLayerRGB::PreProcess(CMkLevel *Core)
 {
 int		X,Y;
@@ -157,8 +231,18 @@ int		CVal=0;
 
 	for (int i=0; i<256; i++)
 	{
-		int	ThisVal=(SortRGBList[i].RGB.R*SortRGBList[i].RGB.R)+ (SortRGBList[i].RGB.G*SortRGBList[i].RGB.G)+(SortRGBList[i].RGB.B*SortRGBList[i].RGB.B);
-		
+		sRGBCol		&ListRGB=SortRGBList[i].RGB;
+
+		int		Dr=abs(ListRGB.R-RGB.R);
+		int		Dg=abs(ListRGB.G-RGB.G);
+		int		Db=abs(ListRGB.B-RGB.B);
+/*
+		int	ThisVal=(SortRGBList[i].RGB.R*SortRGBList[i].RGB.R)+ 
+					(SortRGBList[i].RGB.G*SortRGBList[i].RGB.G)+
+					(SortRGBList[i].RGB.B*SortRGBList[i].RGB.B);
+*/		
+		int	ThisVal=Dr+Dg+Db;
+					
 		if (CIdx==-1 || ThisVal<CVal)
 		{
 			CIdx=i;
@@ -169,6 +253,7 @@ int		CVal=0;
 
 }
 
+#endif
 /*****************************************************************************/
 /*****************************************************************************/
 /*** Process *****************************************************************/

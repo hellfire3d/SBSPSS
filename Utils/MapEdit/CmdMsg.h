@@ -52,6 +52,7 @@ enum	CmdMsg
 		CmdMsg_ShadeGfxDelete,		// 34
 // Misc
 		CmdMsg_Report,				// 35
+		CmdMsg_Undo,				// 36
 
 };
 #endif

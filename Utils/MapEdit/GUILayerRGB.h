@@ -22,16 +22,10 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerRGB)
 	enum { IDD = IDD_LAYER_RGB };
+	CComboBox	m_RateList;
+	CComboBox	m_BrushList;
 	CComboBox	m_ModeList;
 	CButton	m_Shade;
-	CSpinButtonCtrl	m_BSpin;
-	CEdit	m_B;
-	CSpinButtonCtrl	m_GSpin;
-	CEdit	m_G;
-	CSpinButtonCtrl	m_RSpin;
-	CEdit	m_R;
-	CSpinButtonCtrl	m_BrushSpin;
-	CEdit	m_Brush;
 	//}}AFX_DATA
 
 
@@ -47,10 +41,10 @@ public:
 	void	EnableCallback()		{CallbackFlag=true;}
 	void	DisableCallback()		{CallbackFlag=false;}
 
-	void	SetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
-	void	GetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
-	void	SetRGB(u8 &R,u8 &G,u8 &B);
-	void	GetRGB(u8 &R,u8 &G,u8 &B);
+//	void	SetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+//	void	GetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+//	void	SetRGB(u8 &R,u8 &G,u8 &B);
+//	void	GetRGB(u8 &R,u8 &G,u8 &B);
 
 protected:
 	bool	CallbackFlag;

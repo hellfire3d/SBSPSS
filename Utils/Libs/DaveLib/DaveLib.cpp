@@ -64,10 +64,14 @@ void    PadFile(FILE *File)
 {
 int		Pad=ftell(File) & 3;
 
-		if (Pad)
+		while (ftell(File) &3)
 		{
-			fwrite(&Pad,Pad,1,File);
+			fwrite(&Pad,1,1,File);
 		}
+//		if (Pad)
+//		{
+//			fwrite(&Pad,Pad,1,File);
+//		}
 }
 
 //***************************************************************************

@@ -157,7 +157,8 @@ public:
 	void	FlipY(void);
 
 	void	Resize(int NewWidth,int NewHeight);
-	u8		GetPixel(int PixX,int PixY)		{ return(Buffa[PixX+(PixY*Width)]);}
+	u8		GetPixel(int PixX,int PixY)			{ return(Buffa[PixX+(PixY*Width)]);}
+	void	SetPixel(int PixX,int PixY,u8 Col)	{ Buffa[PixX+(PixY*Width)]=Col;}
 
 protected:
 	void	CopyFrame(Frame const &);
