@@ -123,7 +123,7 @@ cleanactors:	cleanplayer
 # Player
 #----------------------------------------------------------------------------
 
-PLAYER_FILE :=		SpongeBob
+PLAYER_FILE :=		Spongebob
 PLAYER_IN_DIR:=		$(ACTOR_IN_DIR)/$(PLAYER_FILE)
 PLAYER_OUT_DIR :=	$(ACTOR_OUT_DIR)
 
@@ -131,6 +131,20 @@ PLAYER_MOD_IN :=	$(PLAYER_IN_DIR)/$(PLAYER_FILE).Gin
 PLAYER_MOD_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).a3d
 PLAYER_TEX_IN :=	$(PLAYER_IN_DIR)/*.bmp
 PLAYER_TEX_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).Tex
+
+
+PLAYER_EXTRA_TEX :=	SBBackNormal \
+					SBEyesAngry SBEyesBlink SBEyesDown SBEyesfiece SBEyesLeft SBEyesNormal SBEyesRight SBEyesSheepish SBEyesUp SBEyesWorried \
+					SBHandNormal \
+					SBMouthGasp SBMouthNormal SBMouthSheepish SBMouthSmile SBMouthTerror SBMouthWhistle \
+					SBPantsideNormal \
+					SBPantsNormal \
+					SBSideNormal \
+					SBSocksNormal \
+					SBSoleNormal \
+					SBTopNormal
+
+PLAYER_EXTRA_TEX_LIST :=	$(foreach FILE,	$(PLAYER_EXTRA_TEX),-a:$(FILE).bmp)
 
 PLAYER_DEP_IN :=	$(PLAYER_MOD_IN) $(PLAYER_TEX_IN)
 PLAYER_DEP_OUT :=	$(PLAYER_MOD_OUT) $(PLAYER_TEX_OUT)
@@ -142,9 +156,11 @@ cleanplayer:
 	@$(ECHO) Player Cleaned
 	
 $(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
-	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:128
+	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256
 
 GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
+
+#	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256 $(PLAYER_EXTRA_TEX_LIST)
 
 #----------------------------------------------------------------------------
 # Animations
@@ -153,11 +169,10 @@ anims:					playeranims
 cleananims:				cleanplayeranims
 
 ANIM_OUT_DIR :=			$(DATA_OUT)/anims
-PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim
-
-
-PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill float getup hitground01 hover idleboots idlecoral \
-						idlecoral01 idlegeneric01 idlegeneric02 idlegeneric03 idlegeneric04 idlegeneric05 idlelauncher idlenet jumpend jumpstart karate \
+PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim/GinFiles
+# float hitground01 idlegeneric01 idlegeneric02 idlegeneric03 idlegeneric04 idlegeneric05 
+PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill getup hover idleboots idlecoral \
+						idlecoral01 idlelauncher idlenet jumpend jumpstart karate \
 						knockback knockforward netfirelob netswipe netswipejump run runjumpend runjumpstart runstart runstop soakup teeterback teeterfront wakeup 
 
 PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
