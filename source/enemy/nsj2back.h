@@ -21,8 +21,8 @@
 class CNpcSmallJellyfish2BackgroundEnemy : public CNpcSmallJellyfishBackgroundEnemy
 {
 public:
+	virtual void		postInit();
 	virtual void		render();
-	virtual u32			getRGB();
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 };

@@ -42,6 +42,8 @@ void CNpcSmallJellyfishProjectileEnemy::postInit()
 	CNpcEnemy::postInit();
 
 	m_lifetime = 8 * GameState::getOneSecondInFrames();
+
+	m_RGB = 255 + ( 128 << 8 ) + ( 255 << 16 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

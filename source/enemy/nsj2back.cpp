@@ -30,6 +30,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSmallJellyfish2BackgroundEnemy::postInit()
+{
+	CNpcEnemy::postInit();
+
+	m_RGB = 128 + ( 128 << 8 ) + ( 255 << 16 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSmallJellyfish2BackgroundEnemy::render()
 {
 	CPlayer *player = GameScene.getPlayer();
@@ -140,20 +149,4 @@ void CNpcSmallJellyfish2BackgroundEnemy::collidedWith( CThing *_thisThing )
 				break;
 		}
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-u32 CNpcSmallJellyfish2BackgroundEnemy::getRGB()
-{
-	CVECTOR rgb;
-
-	rgb.r = 128;
-	rgb.g = 128;
-	rgb.b = 255;
-
-	u32 rgbVal;
-	rgbVal = rgb.r + ( rgb.g << 8 ) + ( rgb.b << 16 );
-
-	return( rgbVal );
 }

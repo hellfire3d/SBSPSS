@@ -109,8 +109,8 @@ public:
 	void				caughtWithNet();
 	virtual int			getFrameCount();
 	virtual int			getFrame()												{return( m_frame );}
-	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}
-	virtual u32			getRGB();
+	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
+	virtual u32			getRGB()												{return( m_RGB );}
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
 	virtual void		setupWaypoints( sThingActor *ThisActor );
@@ -298,6 +298,7 @@ protected:
 	DVECTOR				m_caughtPos;
 	s16					m_speed;
 	u8					m_isDying;
+	u32					m_RGB;
 
 	s32				m_frame;
 	int				m_animNo;

@@ -42,6 +42,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSmallJellyfishEnemy::postInit()
+{
+	CNpcEnemy::postInit();
+
+	m_RGB = 255 + ( 128 << 8 ) + ( 255 << 16 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSmallJellyfishEnemy::render()
 {
 	SprFrame = NULL;
@@ -375,20 +384,4 @@ void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
 	projectile->setGraphic( FRM_JELLYFISH1_SWIM1 );
 	projectile->setHasRGB( true );
 	projectile->setRGB( 255, 128, 255 );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-u32 CNpcSmallJellyfishEnemy::getRGB()
-{
-	CVECTOR rgb;
-
-	rgb.r = 255;
-	rgb.g = 128;
-	rgb.b = 255;
-
-	u32 rgbVal;
-
-	rgbVal = rgb.r + ( rgb.g << 8 ) + ( rgb.b << 16 );
-	return( rgbVal );
 }

@@ -629,6 +629,7 @@ void CNpcEnemy::init()
 	m_isBlowerOn = false;
 	m_speed = m_data[m_type].speed;
 	m_heading = 0;
+	m_RGB = 0;
 
 	updateCollisionArea();
 }
@@ -1695,11 +1696,4 @@ void CNpcEnemy::processCoralBlower( int _frames )
 	}
 
 	m_isBlowerOn = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-u32 CNpcEnemy::getRGB()
-{
-	return( 0 );
 }
