@@ -49,6 +49,16 @@ XAFileAttributes	Form1	Data
 Source	cdbuild\usa\biglump.bin
 EndFile
 
+File	THQ.STR
+XAFileAttributes
+XaSource cdbuild\usa\thq.str
+EndFile
+
+File	INTRO.STR
+XAFileAttributes
+XaSource cdbuild\usa\intro.str
+EndFile
+
 File	ZZZZZZZZ.ZZZ
 XAFileAttributes	Form1	Data
 Source	cdbuild\usa\ZZZZZZZZ.ZZZ
