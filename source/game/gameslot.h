@@ -66,8 +66,8 @@ public:
 	typedef struct
 	{
 		unsigned char	m_isInUse;
-		unsigned char	m_lives;
-		unsigned char	m_continues;
+		signed char		m_lives;
+		signed char		m_continues;
 		unsigned char	m_hasSeenOpeningFMA;
 		unsigned char	m_spatulaCollectedCounts[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS];
 		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Enuf space for 128 tokens per level

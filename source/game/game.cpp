@@ -87,6 +87,10 @@
 #include "fma\fma.h"
 #endif
 
+#ifndef	__BACKEND_GAMEOVER_H__
+#include "backend\gameover.h"
+#endif
+
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
 #endif
@@ -291,6 +295,7 @@ void 	CGameScene::render()
 void CGameScene::render_showing_lives()
 {
 	int			colour;
+	char		buf[20];
 	POLY_F4		*f4;
 	POLY_FT3	*ft3;
 
@@ -318,7 +323,8 @@ void CGameScene::render_showing_lives()
 	s_genericFont->print(256,50,"Now entering:");
 	s_genericFont->print(256,80,Level.getChapterLoadingText());
 	s_genericFont->print(256,100,Level.getLevelLoadingText());
-	s_genericFont->print(256,140,"Lives x 5");
+	sprintf(buf,"Lives x %d",CGameSlotManager::getSlotData()->m_lives);
+	s_genericFont->print(256,140,buf);
 
 	// Black background
 	f4=GetPrimF4();
@@ -641,14 +647,14 @@ void CGameScene::think_playing(int _frames)
 #endif
 	else if (s_restartLevel)
 	{
-		if(m_player->getLivesLeft()!=0)
+		if(m_player->getLivesLeft()>=0)
 		{
 			respawnLevel();
 		}
 		else
 		{
 			s_readyToExit=true;
-			GameState::setNextScene(&FrontEndScene);
+			GameState::setNextScene(&GameOverScene);
 			CFader::setFadingOut();
 		}
 		s_restartLevel=false;

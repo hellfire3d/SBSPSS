@@ -451,6 +451,8 @@ void CFrontEndStart::think(int _frames)
 						int	chapter,level;
 						gameSlot->getHighestLevelOpen(&chapter,&level);
 						CMapScene::setLevelToStartOn(chapter,level);
+						gameSlot->m_lives=CGameSlotManager::INITIAL_LIVES;
+						gameSlot->m_continues=CGameSlotManager::INITIAL_CONTINUES;
 						m_state=STATE_EXITING_TO_GAME;
 						CFader::setFadingOut();
 						CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);

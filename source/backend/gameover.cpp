@@ -26,8 +26,8 @@
 #include "pad\pads.h"
 #endif
 
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
 #endif
 
 #ifndef	__FRONTEND_FRONTEND_H__
@@ -52,6 +52,10 @@
 
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
+#endif
+
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
 #endif
 
 
@@ -108,7 +112,14 @@ void CGameOverScene::init()
 	initContinue();
 	initGameOver();
 
-	m_state=STATE__CONTINUE;
+	if(CGameSlotManager::getSlotData()->m_continues>=1)
+	{
+		m_state=STATE__CONTINUE;
+	}
+	else
+	{
+		m_state=STATE__GAME_OVER;
+	}
 }
 
 
@@ -245,7 +256,9 @@ void	CGameOverScene::thinkContinue(int _frames)
 					{
 						m_readyToExit=true;
 						CFader::setFadingOut();
-						GameState::setNextScene(&GameScene);
+						GameState::setNextScene(&MapScene);
+						CGameSlotManager::getSlotData()->m_lives=CGameSlotManager::INITIAL_LIVES;
+						CGameSlotManager::getSlotData()->m_continues--;
 						m_state=STATE__EXITING_TO_GAME;
 					}
 					else
@@ -287,19 +300,19 @@ void	CGameOverScene::thinkContinue(int _frames)
 }
 void	CGameOverScene::renderContinue()
 {
-		int		yOfs;
-		char	buf[100];
+	int		yOfs;
+	char	buf[100];
 
-		m_font->setColour(242/2,245/2,15/2);
-		yOfs=m_continueFontOffset>>2;
+	m_font->setColour(242/2,245/2,15/2);
+	yOfs=m_continueFontOffset>>2;
 
-		sprintf(buf,TranslationDatabase::getString(STR__BACKEND__CONTINUE));
-		m_font->setScale(((msin(m_continueFontSin)*CONTINUE_FONT_SCALE)>>12)+CONTINUE_FONT_BASE_SIZE);
-		m_font->print(256,50-m_font->getStringHeight(buf)-yOfs,buf);
+	sprintf(buf,TranslationDatabase::getString(STR__BACKEND__CONTINUE));
+	m_font->setScale(((msin(m_continueFontSin)*CONTINUE_FONT_SCALE)>>12)+CONTINUE_FONT_BASE_SIZE);
+	m_font->print(256,50-m_font->getStringHeight(buf)-yOfs,buf);
 
-		sprintf(buf,"%d",m_continueTimer/COUNTDOWN_TIME_SECOND_LENGTH);
-		m_font->setScale(CONTINUE_FONT_SCALE+CONTINUE_FONT_BASE_SIZE);
-		m_font->print(256,80-m_font->getStringHeight(buf)-yOfs,buf);
+	sprintf(buf,"%d",m_continueTimer/COUNTDOWN_TIME_SECOND_LENGTH);
+	m_font->setScale(CONTINUE_FONT_SCALE+CONTINUE_FONT_BASE_SIZE);
+	m_font->print(256,80-m_font->getStringHeight(buf)-yOfs,buf);
 
 	if(!CFader::isFading())
 	{
@@ -310,6 +323,11 @@ void	CGameOverScene::renderContinue()
 			m_font->print(256,200-m_font->getStringHeight(buf),buf);
 		}
 	}
+
+	sprintf(buf,"%s%d",TranslationDatabase::getString(STR__BACKEND__CONTINUES_REMAINING),CGameSlotManager::getSlotData()->m_continues);
+	m_font->setScale(256);
+	m_font->setColour(100,100,100);
+	m_font->print(490-(m_font->getStringWidth(buf)/2),210,buf);
 }
 
 
@@ -326,19 +344,21 @@ void	CGameOverScene::initGameOver()
 }
 void	CGameOverScene::thinkGameOver(int _frames)
 {
-	if(!m_finishedGrowingText)
+	if(!CFader::isFading())
 	{
-		m_gameOverTimer+=_frames;
-	}
-	else
-	{
-		if(!CFader::isFading()&&!m_readyToExit&&
-		   PadGetDown(0)&(PAD_START|PAD_CROSS))
+		if(!m_finishedGrowingText)
 		{
-			m_readyToExit=true;
-			CFader::setFadingOut();
-			GameState::setNextScene(&FrontEndScene);
-			m_state=STATE__EXITING_TO_FRONT_END;
+			m_gameOverTimer+=_frames;
+		}
+		else
+		{
+			if(!m_readyToExit&&PadGetDown(0)&(PAD_START|PAD_CROSS))
+			{
+				m_readyToExit=true;
+				CFader::setFadingOut();
+				GameState::setNextScene(&FrontEndScene);
+				m_state=STATE__EXITING_TO_FRONT_END;
+			}
 		}
 	}
 }

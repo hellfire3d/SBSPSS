@@ -626,10 +626,8 @@ m_animFrame=0;
 	setFacing(FACING_RIGHT);
 	m_currentPlayerModeClass=NULL;
 	m_lastModeBeforeDeath=PLAYER_MODE_BASICUNARMED;	// Player will then respawn into this mode
-	m_lives++;respawn();
+	respawn();
 	m_canExitLevel=false;
-
-	m_lives=CGameSlotManager::getSlotData()->m_lives;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
@@ -1535,10 +1533,13 @@ int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
   ---------------------------------------------------------------------- */
 void CPlayer::addLife()
 {
-	m_lives++;
-	if(m_lives>MAX_LIVES)
+	CGameSlotManager::GameSlot	*gameSlot;
+
+	gameSlot=CGameSlotManager::getSlotData();
+
+	if(gameSlot->m_lives<MAX_LIVES)
 	{
-		m_lives=MAX_LIVES;
+		gameSlot->m_lives++;
 	}
 }
 
@@ -1833,8 +1834,6 @@ void CPlayer::respawn()
 	clearPlatform();
 
 	updateCollisionArea();
-
-	m_lives--;
 
 	m_ignoreNewlyPressedButtonsOnPadThisThink=true;
 }
@@ -2167,6 +2166,17 @@ void	CPlayer::collectedQuestItem()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int		CPlayer::getLivesLeft()
+{
+	return CGameSlotManager::getSlotData()->m_lives;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 {
 	ASSERT(m_currentMode!=PLAYER_MODE_DEAD);
@@ -2174,6 +2184,10 @@ void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 	m_deathType=_deathType;
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 	setMode(PLAYER_MODE_DEAD);
+
+	// Take a life off..
+	CGameSlotManager::getSlotData()->m_lives--;
+PAUL_DBGMSG("lives now %d",CGameSlotManager::getSlotData()->m_lives);
 }
 
 

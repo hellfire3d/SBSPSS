@@ -299,7 +299,7 @@ public:
 	int				getCanExitLevelNow()								{return m_canExitLevel;}
 	void			collectedQuestItem();
 
-	int				getLivesLeft()										{return m_lives;}
+	int				getLivesLeft();
 
 
 public:
@@ -354,7 +354,6 @@ public:
 	DEATH_TYPE		getDeathType()				{return m_deathType;}
 
 private:
-	int				m_lives;
 	int				m_numSpatulasHeld;
 	int				m_healthWaterLevel;
 	int				m_helmetSoundTimer;			// Timer for breathing sound when using the helmet
