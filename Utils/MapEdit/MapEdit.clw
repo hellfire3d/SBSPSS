@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditView
+LastClass=CMapEditDoc
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -20,26 +20,26 @@ Class7=CMapEditView
 ResourceCount=14
 Resource1=IDD_NEW_LAYER
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_ADDLAYER
+Resource3=IDD_MAPSIZE
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_MAINFRAME (English (U.S.))
+Resource5=IDD_LAYERTILE_TOOLBAR
 Class8=CMultiBar
-Resource6=IDD_LAYER_LIST_DIALOG
-Resource7=IDD_MULTIBAR (English (U.S.))
+Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource7=IDR_MAINFRAME (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_NEWMAP
+Resource8=IDD_LAYER_LIST_DIALOG
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_LAYERTILE_TOOLBAR
-Resource10=IDR_TOOLBAR (English (U.S.))
+Resource9=IDD_ADDLAYER
+Resource10=IDD_LAYERTILE_GUI
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_LAYERTILE_GUI
+Resource11=IDD_NEWMAP
 Class15=CAddLayerDlg
-Resource12=IDD_MAPSIZE
+Resource12=IDD_MULTIBAR (English (U.S.))
 Class16=CLayerTileToolbar
-Resource13=IDD_ABOUTBOX (English (U.S.))
+Resource13=IDR_TOOLBAR (English (U.S.))
 Class17=CLayerShadeGUI
 Resource14=IDD_LAYERSHADE_GUI
 
@@ -93,7 +93,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_TOGGLE_GRID
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 

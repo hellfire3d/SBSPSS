@@ -43,7 +43,6 @@ public:
 			MaxBrush
 		};
 
-		int			FindTileSet(const char *Filename);
 		void		AddTileSet(const char *Filename);
 		int			NeedLoad()							{return(LoadFlag);}
 		void		Delete();
@@ -88,7 +87,8 @@ protected:
 		BOOL		Select(int BrushID,BOOL DownFlag);
 		void		SetBrush(CMap &ThisBrush);
 
-		std::vector<CTileSet>	TileSet;
+//		std::vector<CTileSet>	TileSet;
+		CList<CTileSet>			TileSet;
 		int						CurrentSet,LastSet;
 		CMap					Brush[2];
 		int						ActiveBrush;
@@ -97,7 +97,7 @@ protected:
 		BOOL					LoadFlag;
 		int						LastCursorPos,CursorPos;
 
-		CLayerTileGUI		TileBankGUI;
+		CLayerTileGUI			TileBankGUI;
 
 };
 
@@ -108,37 +108,40 @@ public:
 		CTileSet(const char *_Filename,int Idx);
 		~CTileSet();
 		
-		int		IsLoaded()			{return(Loaded);}
-		int		GetTileCount()		{return(Tile.size());}
+		int			IsLoaded()			{return(Loaded);}
+		int			GetTileCount()		{return(Tile.size());}
 
-		void	Load(CCore *Core);
-		void	Load2d(CCore *Core);
-		void	Load3d(CCore *Core);
+		void		Load(CCore *Core);
+		void		Load2d(CCore *Core);
+		void		Load3d(CCore *Core);
 
-		const char	*GetFilename()		{return(Filename);}
-		const char	*GetName()			{return(Name);}
+const	char		*GetFilename()		{return(Filename);}
+const	char		*GetName()			{return(Name);}
 
-		CTile	&GetTile(int No)	{return(Tile[No]);}
-		void	Purge();
-		int		FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
-		void	Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
-		void	RenderCursor(Vector3 &CamPos,int Pos,int Width, int Height);
-		void	RenderBrush(Vector3 &CamPos,CMap &LBrush,CMap &RBrush);
-		void	RenderGrid(Vector3 &CamPos);
-		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
-		BOOL	IsTileValid(int No);
+		CTile		&GetTile(int No)	{return(Tile[No]);}
+		void		Purge();
+		int			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
+		void		Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
+		void		RenderCursor(Vector3 &CamPos,int Pos,int Width, int Height);
+		void		RenderBrush(Vector3 &CamPos,CMap &LBrush,CMap &RBrush);
+		void		RenderGrid(Vector3 &CamPos);
+		int			GetTileBrowserWidth()		{return(TileBrowserWidth);}
+		BOOL		IsTileValid(int No);
 
+bool			operator==(CTileSet const &v1)		{return (Name==v1.Name);}
+
+//			if (IsStrSame((char*)Name,(char*)v1.Name) return(i);
 
 private:
-		BOOL	Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
-		CPoint	GetTilePos(int ID);
+		BOOL		Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
+		CPoint		GetTilePos(int ID);
 
-		GString				Filename,Name;
+		GString			Filename,Name;
 		
-		int					SetNumber;
-		CList<CTile>		Tile;
-		BOOL				Loaded;
-		int					TileBrowserWidth;
+		int				SetNumber;
+		CList<CTile>	Tile;
+		BOOL			Loaded;
+		int				TileBrowserWidth;
 };
 
 /*****************************************************************************/

@@ -42,7 +42,7 @@ GFName		FName=Filename;
 			int	Idx=GetTexIdx(NewTex);	// Is already loaded?
 			if (Idx!=-1) return(Idx);
 
-//			TRACE1("Loading Texture %s\n",NewTex.Filename);
+			TRACE1("Loading Texture %s\n",NewTex.Filename);
 			
 			if (!LoadBMP(NewTex.Filename,ThisRGB))
 			{
@@ -133,6 +133,7 @@ u8		*Src,*Dst;
 		Buffer=(u8*)malloc(GLWidth*GLHeight*4);
 		Src=TexData->RGB;
 		Dst=&Buffer[0];
+
 		for (int Y=0; Y<TexHeight; Y++)
 		{
 			for (int X=0; X<TexWidth; X++)

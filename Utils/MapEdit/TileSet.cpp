@@ -160,28 +160,11 @@ GString	SavePath;
 /*****************************************************************************/
 void	CTileBank::AddTileSet(const char *Filename)
 {
-int		ListSize=TileSet.size();
+int			ListSize=TileSet.size();
+CTileSet	NewSet(Filename,ListSize);
 
-		if (FindTileSet(Filename) ==-1)
-			{
-			TileSet.push_back(CTileSet(Filename,ListSize));
-			LoadFlag=TRUE;
-			}
-}
-
-/*****************************************************************************/
-int		CTileBank::FindTileSet(const char *Filename)
-{
-int		ListSize=TileSet.size();
-CTileSet	FindSet(Filename,ListSize);
-
-		for (int i=0; i<ListSize; i++)
-		{
-			CTileSet	&ThisSet=TileSet[i];
-
-			if (IsStrSame((char*)FindSet.GetName(),(char*)ThisSet.GetName(),-1)) return(i);
-		}
-		return(-1);
+			TileSet.Add(NewSet);
+			if (TileSet.size()!=ListSize) LoadFlag=TRUE;
 }
 
 /*****************************************************************************/
@@ -214,7 +197,8 @@ int		ListSize=TileSet.size();
 				Brush[i].RemapSet(Set,Set);
 			}
 		}
-		TileSet.erase(TileSet.begin()+CurrentSet);
+//		TileSet.erase(TileSet.begin()+CurrentSet);
+		TileSet.erase(CurrentSet);
 		CurrentSet=0;
 }
 

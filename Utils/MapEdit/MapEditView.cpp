@@ -168,6 +168,7 @@ void CMapEditView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* p
 	{
 		CMapEditDoc	*CurDoc=GetDocument();
 		theApp.SetCurrent(CurDoc);
+		CurDoc->SetView(this);
 		CurDoc->UpdateAll(this);
 	}
 }

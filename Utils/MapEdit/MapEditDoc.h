@@ -19,6 +19,8 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	void			SetView(CMapEditView *View);
+	CMapEditView	*GetView();
 	void			UpdateView(CMapEditView *View);
 	void			Render(CMapEditView *View);
 	void			UpdateAll(CMapEditView *View);

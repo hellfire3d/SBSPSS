@@ -39,7 +39,9 @@ public:
 		void					RenderTileView(CMapEditView *View);
 		void					Export(char *Filename);
 
-
+// View Stuff
+		void					SetView(CMapEditView *View)			{CurrentView=View;}
+		CMapEditView			*GetView()							{return(CurrentView);}
 // Control
 		void					SetMode(int NewMode);
 		void					LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
@@ -119,6 +121,7 @@ public:
 		GString					GetCurrentPath();
 
 private:
+		CMapEditView			*CurrentView;
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
 		Vector3					MapCam,TileCam;
