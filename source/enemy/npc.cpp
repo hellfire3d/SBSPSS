@@ -208,11 +208,9 @@ CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
+CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 {
 	CNpcEnemy *enemy;
-
-	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
 
 	enemy = (CNpcEnemy*)CThingManager::GetThing(TYPE_ENEMY,enemyType);
 	if (!enemy)
@@ -471,10 +469,23 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 
 	ASSERT(enemy);
 
-	enemy->setType( enemyType );
+	enemy->setType( (NPC_UNIT_TYPE)enemyType );
 	enemy->setThingSubType(enemyType);
 
 	enemy->init();
+
+	return(enemy);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
+{
+CNpcEnemy *enemy;
+
+	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
+
+	enemy = (CNpcEnemy*)Create(enemyType);
+	ASSERT(enemy);
 
 	return(enemy);
 }
