@@ -189,6 +189,12 @@ sOT		*ThisOT=OtPtr+LayerOT;
 		{
 			if (TileLayers[i]) TileLayers[i]->render();
 		}
+#ifdef __SHOW_COLLISION__
+		if(CollisionLayer)
+		{
+			CollisionLayer->render(MapPos);
+		}
+#endif
 }
 
 /*****************************************************************************/
