@@ -599,6 +599,8 @@ void CNpcEnemy::init()
 	m_heading = 0;
 	m_RGB = 0;
 
+	m_soundId = (int) NOT_PLAYING;
+
 	updateCollisionArea();
 }
 
@@ -642,11 +644,27 @@ void CNpcEnemy::reinit()
 
 void CNpcEnemy::shutdown()
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+	}
+
 	//m_npcPath.removeAllWaypoints();
 
 	if (m_actorGfx)	delete m_actorGfx;
 
 	CEnemyThing::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::leftThinkZone(int _frames)
+{
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+		m_soundId = NOT_PLAYING;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -719,6 +737,17 @@ void CNpcEnemy::think(int _frames)
 	processGenericGetUserDist( moveFrames, &playerXDist, &playerYDist );
 	playerXDistSqr = playerXDist * playerXDist;
 	playerYDistSqr = playerYDist * playerYDist;
+
+	if ( m_soundId != NOT_PLAYING )
+	{
+		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
 
 	if ( m_isCaught )
 	{
@@ -1060,9 +1089,9 @@ void CNpcEnemy::processMovement(int _frames)
 	s32 moveVel = 0;
 	s32 moveDist = 0;
 
-	if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+	if ( m_soundId == NOT_PLAYING && m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
 	{
-		CSoundMediator::playSfx( m_data[m_type].moveSfx );
+		m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 	}
 
 	switch( m_movementFunc )
@@ -1201,7 +1230,12 @@ void CNpcEnemy::processShot( int _frames )
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
-						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+						if( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						}
+
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
 					}
 
 					m_speed = -5;

@@ -82,6 +82,7 @@ public:
 	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
 	virtual void		trigger()												{}
+	virtual	void		leftThinkZone(int _frames);
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(int Type);
@@ -116,6 +117,7 @@ protected:
 	s32					m_heading;
 	CModelGfx			*m_modelGfx;
 	s16					m_respawnRate;
+	int					m_soundId;
 
 	CThing				*m_platform;
 

@@ -45,7 +45,10 @@ void CNpcSawbladeHazard::processMovement( int _frames )
 
 	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 
-	CSoundMediator::playSfx( CSoundMediator::SFX_SAW );
+	if ( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SAW, true );
+	}
 
 	if ( !pathComplete )
 	{

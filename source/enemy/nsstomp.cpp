@@ -67,7 +67,13 @@ bool CNpcSkullStomperEnemy::processSensor()
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 				m_extendDir = EXTEND_DOWN;
-				CSoundMediator::playSfx( CSoundMediator::SFX_SKULL_ATTACK );
+
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SKULL_ATTACK, true );
 
 				return( true );
 			}

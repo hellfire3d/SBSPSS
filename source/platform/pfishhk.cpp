@@ -64,7 +64,10 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 {
 	if ( m_isMoving )
 	{
-		CSoundMediator::playSfx( CSoundMediator::SFX_FISH_HOOK_MOVE );
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_FISH_HOOK_MOVE, true );
+		}
 
 		if ( m_isResetting )
 		{

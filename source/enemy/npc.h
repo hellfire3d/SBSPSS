@@ -118,6 +118,7 @@ public:
 	virtual int			getFrame()												{return( m_frame );}
 	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
 	virtual u32			getRGB()												{return( m_RGB );}
+	virtual	void		leftThinkZone(int _frames);
 
 	static CNpcEnemy	*Create(int enemyType);
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
@@ -311,6 +312,7 @@ protected:
 	s16					m_speed;
 	u8					m_isDying;
 	u32					m_RGB;
+	int					m_soundId;
 
 	s32				m_frame;
 	int				m_animNo;

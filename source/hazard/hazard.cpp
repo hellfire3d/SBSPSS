@@ -400,6 +400,8 @@ void CNpcHazard::init()
 	m_extendDir = 0;
 	m_heading = 0;
 
+	m_soundId = (int) NOT_PLAYING;
+
 	clearPlatform();
 }
 
@@ -419,6 +421,11 @@ void CNpcHazard::setGraphic( sThingHazard *ThisHazard )
 
 void CNpcHazard::shutdown()
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+	}
+
 	delete m_modelGfx;
 	// remove waypoints
 
@@ -431,8 +438,30 @@ void CNpcHazard::shutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcHazard::leftThinkZone(int _frames)
+{
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+		m_soundId = NOT_PLAYING;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcHazard::think(int _frames)
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
+
 	CHazardThing::think(_frames);
 
 	if ( m_isActive )

@@ -638,7 +638,12 @@ void CNpcParasiticWormEnemy::processShot( int _frames )
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
-						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+						if( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						}
+
+						m_soundId = CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
 					}
 
 					m_isDying = true;

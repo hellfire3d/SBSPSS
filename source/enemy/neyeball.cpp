@@ -119,7 +119,10 @@ CThing	*Next=getNext();
 
 			// sound
 
-			CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK );
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK, true );
+			}
 		}
 	}
 	else
@@ -139,7 +142,10 @@ CThing	*Next=getNext();
 
 		// sound
 
-		CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK );
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK, true );
+		}
 	}
 }
 

@@ -99,7 +99,12 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 				// sound
 
-				CSoundMediator::playSfx( CSoundMediator::SFX_SPIDERCRAB_ATTACK );
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SPIDERCRAB_ATTACK, true );
 
 				return( true );
 			}

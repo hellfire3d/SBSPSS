@@ -67,7 +67,10 @@ void CNpcFlamingSkullEnemy::processClose( int _frames )
 	s32 distX, distY;
 	s32 distXSqr, distYSqr;
 
-	CSoundMediator::playSfx( CSoundMediator::SFX_FLAMING_SKULL_ATTACK );
+	if ( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_FLAMING_SKULL_ATTACK, true );
+	}
 
 	if ( m_state == FLAMING_SKULL_ATTACK )
 	{

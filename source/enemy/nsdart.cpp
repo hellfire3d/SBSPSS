@@ -138,7 +138,12 @@ bool CNpcSquidDartEnemy::processSensor()
 
 				// sound
 
-				CSoundMediator::playSfx( CSoundMediator::SFX_SQUIDDART_ATTACK );
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SQUIDDART_ATTACK, true );
 
 				return( true );
 			}

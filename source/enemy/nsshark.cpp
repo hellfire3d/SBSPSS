@@ -39,6 +39,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxnrgbar.h"
 
@@ -89,6 +93,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 			CProjectile *projectile;
 			projectile = CProjectile::Create();
 			projectile->init( Pos, 1024, CProjectile::PROJECTILE_MINE, CProjectile::PROJECTILE_FINITE_LIFE );
+			projectile->setGraphic( FRM__SHARKMINE );
 
 			m_salvoCount--;
 
@@ -358,7 +363,12 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
-						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+						if( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						}
+
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
 					}
 
 					m_speed = -5;

@@ -261,7 +261,10 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 	if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
 	{
-		CSoundMediator::playSfx( m_data[m_type].moveSfx );
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+		}
 	}
 
 	processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );

@@ -58,7 +58,11 @@ void CNpcRockShardHazard::processMovement( int _frames )
 		{
 			Pos.vx = m_base.vx + ( -3 + ( getRnd() % 7 ) );
 			Pos.vy = m_base.vy + ( -3 + ( getRnd() % 7 ) );
-			CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_RATTLE );
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_RATTLE, true );
+			}
 		}
 	}
 	else
@@ -76,7 +80,11 @@ void CNpcRockShardHazard::processMovement( int _frames )
 			m_isActive = false;
 			m_timerActive = true;
 			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
-			CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_LAND );
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_LAND, true );
+			}
 		}
 		else
 		{

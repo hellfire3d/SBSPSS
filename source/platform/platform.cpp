@@ -607,6 +607,8 @@ void CNpcPlatform::init()
 	m_npcPath.initPath();
 
 	m_speed = m_dataPtr->speed;
+
+	m_soundId = (int) NOT_PLAYING;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -682,11 +684,27 @@ void CNpcPlatform::postInit()
 
 void CNpcPlatform::shutdown()
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+	}
+
 	delete m_modelGfx;
 	//m_npcPath.removeAllWaypoints();
 
 	// temporary
 	CPlatformThing::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::leftThinkZone(int _frames)
+{
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+		m_soundId = NOT_PLAYING;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -747,6 +765,16 @@ void CNpcPlatform::processLifetime( int _frames )
 
 void CNpcPlatform::think(int _frames)
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
 
 	if ( m_isActive )
 	{

@@ -123,6 +123,7 @@ public:
 	virtual void		trigger()												{;}
 	virtual u8			isCart()												{return( false );}
 	virtual void		jump()													{;}
+	virtual	void		leftThinkZone(int _frames);
 	s16					getCollisionAngle()										{return m_collisionAngle;}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
@@ -229,6 +230,8 @@ protected:
 
 	sBBox						m_nonRotatedCollisionArea;
 	DVECTOR						m_nonRotatedCollisionOffset;
+
+	int							m_soundId;
 
 	virtual void		collidedWith(CThing *_thisThing);
 

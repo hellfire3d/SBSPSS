@@ -60,6 +60,12 @@ bool CNpcHermitCrabEnemy::processSensor()
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+					m_soundId = NOT_PLAYING;
+				}
+
 				return( true );
 			}
 			else
@@ -235,7 +241,10 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 
 					// sound
 
-					CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_ATTACK );
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_ATTACK, true );
+					}
 				}
 			}
 		}
@@ -272,5 +281,8 @@ void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 
 	// sound
 
-	CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE );
+	if( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE, true );
+	}
 }

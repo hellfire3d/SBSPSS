@@ -71,7 +71,10 @@ bool CNpcClamEnemy::processSensor()
 					m_extendDir = EXTEND_UP;
 					m_extension = 0;
 
-					CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_MOVE );
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_MOVE, true );
+					}
 
 					return( true );
 				}
@@ -254,7 +257,11 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 					if ( m_frame != 0 )
 					{
 						m_frame = 0;
-						CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK );
+
+						if ( m_soundId == NOT_PLAYING )
+						{
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK, true );
+						}
 					}
 
 					m_isStunned = 2 * GameState::getOneSecondInFrames();
@@ -321,7 +328,11 @@ void CNpcStaticClamEnemy::processAnimFrames( int _frames )
 		{
 			m_frame = 0;
 			m_animPlaying = false;
-			CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK );
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK, true );
+			}
 		}
 	}
 }

@@ -194,7 +194,10 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 			m_drawRotation = ( m_heading + 1024 ) & 4095;
 
-			CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_MOVE );
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_MOVE, true );
+			}
 		}
 
 		if ( withinRange )
@@ -230,7 +233,12 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 			{
 				// if firing anim is complete and user is still in range, fire projectile
 
-				CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL1 );
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL1, true );
 
 				DVECTOR projPos;
 				projPos = Pos;
@@ -331,7 +339,12 @@ void CNpcAnemone2Enemy::processShot( int _frames )
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
-						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+						if( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						}
+
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
 					}
 
 					deleteAllChild();
@@ -402,7 +415,11 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 	}
 	else
 	{
-		CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL2 );
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL2, true );
+		}
+
 		CProjectile *projectile;
 		s16 heading;
 
@@ -579,7 +596,10 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 	}
 	else if ( !m_animPlaying )
 	{
-		CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL3 );
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL3, true );
+		}
 
 		CProjectile *projectile;
 		u8 lifetime = 8;

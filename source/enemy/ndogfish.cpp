@@ -65,7 +65,7 @@ void CNpcIronDogfishEnemy::postInit()
 
 bool CNpcIronDogfishEnemy::processSensor()
 {
-	/*switch( m_sensorFunc )
+	switch( m_sensorFunc )
 	{
 		case NPC_SENSOR_NONE:
 			return( false );
@@ -83,9 +83,7 @@ bool CNpcIronDogfishEnemy::processSensor()
 				return( false );
 			}
 		}
-	}*/
-
-	return( false );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -347,7 +345,9 @@ void CNpcIronDogfishEnemy::hasBeenSteamed( DVECTOR &steamPos )
 	if ( m_steamTimer <= 0 )
 	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_vulnerableTimer = 2 * GameState::getOneSecondInFrames();
+
+		s16 second = GameState::getOneSecondInFrames();
+		m_vulnerableTimer = ( 2 * second ) + ( 2 * second * ( ( m_data[m_type].initHealth - m_health ) / m_data[m_type].initHealth ) );
 
 		//hasBeenAttacked();
 		m_steamTimer = 4 * GameState::getOneSecondInFrames();
@@ -425,7 +425,12 @@ void CNpcIronDogfishEnemy::processShot( int _frames )
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
-						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+						if( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						}
+
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
 					}
 
 					m_speed = -5;

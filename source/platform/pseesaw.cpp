@@ -107,7 +107,11 @@ void CNpcSeesawPlatform::processMovement( int _frames )
 	if ( m_currentAngle != newAngle )
 	{
 		m_currentAngle = newAngle;
-		CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__SEESAW );
+
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__SEESAW, true );
+		}
 	}
 
 	setCollisionAngle( newAngle >> 8 );
