@@ -71,6 +71,7 @@ void CJellyfishGenerator::init()
 				case 2:
 				{
 					m_level = 3;
+					m_on = false;
 
 					break;
 				}

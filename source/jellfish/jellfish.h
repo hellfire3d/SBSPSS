@@ -28,6 +28,7 @@ public:
 	static void			init();
 	static void			think( int _frames, CLevel *level );
 	static void			decCounter();
+	static void			start()										{m_on=true;}
 protected:
 	static u8			m_jellyfishCount;
 	static s32			m_timer;

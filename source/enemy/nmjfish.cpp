@@ -749,6 +749,7 @@ void CNpcMotherJellyfishEnemy::render()
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, m_renderScale, m_renderScale );
 
+			setShadeTex(SprFrame,0);
 			setRGB0( SprFrame, ( m_RGB & 255 ), ( ( m_RGB >> 8 ) & 255 ), ( ( m_RGB >> 16 ) & 255 ) );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();

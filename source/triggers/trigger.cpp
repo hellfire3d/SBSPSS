@@ -167,6 +167,10 @@
 #include "triggers\tlook.h"
 #endif
 
+#ifndef __TRIGGERS_TBUTTFLY_H__
+#include "triggers\tbuttfly.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -433,6 +437,10 @@ CTrigger	*trigger;
 
 		case TRIGGER_CAMERAYPOSITIONTRIGGER:
 			trigger = (CLookTrigger*)new("LookTrigger") CLookTrigger();
+			break;
+
+		case TRIGGER_BUTTERFLY_ON:
+			trigger = (CButterflyTrigger*)new("ButterflyTrigger") CButterflyTrigger();
 			break;
 
 		default:

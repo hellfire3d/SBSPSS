@@ -361,7 +361,8 @@ triggers_src :=		trigger \
 					twindleft \
 					twindright \
 					toilgeyser \
-					tspeech
+					tspeech \
+					tbuttfly
 
 
 utils_src :=		utils \

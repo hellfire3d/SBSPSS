@@ -2313,6 +2313,14 @@ SOURCE=..\..\..\source\triggers\tboss.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tbuttfly.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tbuttfly.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tcamlock.cpp
 # End Source File
 # Begin Source File
