@@ -50,7 +50,7 @@ virtual	int				canPause();
 static void				setReadyToExit()	{s_readyToExit=true;}
 static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}
-
+		CLevel			&GetLevel()			{return(Level);}
 
 //		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}

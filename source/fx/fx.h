@@ -15,6 +15,7 @@ public:
 		enum	FX_TYPE
 		{
 			FX_TYPE_JELLYFISH_LEGS,
+			FX_TYPE_FALLINGTILE,
 			FX_TYPE_BUBBLE,
 				FX_TYPE_BUBBLE_WATER,
 				FX_TYPE_BUBBLE_ACID,
@@ -49,21 +50,24 @@ public:
 			FX_TYPE_DEBRIS,
 		};
 
+static	CFX			*Create(const FX_TYPE Type);
 static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
+static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
 
 virtual void		init();
+virtual void		init(DVECTOR const &Pos){};
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 
 virtual int			canCollide()					{return false;}
+virtual u8			isSetToShutdown()				{return( false );}
 
 virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
 
 protected:
-	
-	SpriteBank	*m_spriteBank;
-	s32			OtPos;
+		SpriteBank	*m_spriteBank;
+		s32			OtPos;
 };
 
 #endif

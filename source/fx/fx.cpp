@@ -13,6 +13,7 @@
 
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
+#include	"FX\FXfallingTile.h"
 /* FX
 
 	Jellyfish legs
@@ -62,7 +63,7 @@ Level Effect Emitters
 */
 
 /*****************************************************************************/
-CFX		*CFX::Create(const FX_TYPE Type,CThing *Parent)
+CFX		*CFX::Create(const FX_TYPE Type)
 {
 CFX		*NewFX;
 
@@ -70,6 +71,9 @@ CFX		*NewFX;
 		{
 		case FX_TYPE_JELLYFISH_LEGS:
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
+			break;
+		case FX_TYPE_FALLINGTILE:
+			NewFX=new ("Falling Tile") CFXFallingTile();
 			break;
 		case FX_TYPE_BUBBLE:
 			case FX_TYPE_BUBBLE_WATER:
@@ -109,14 +113,32 @@ CFX		*NewFX;
 			return NULL;
 	}
 
-	if (Parent)
-	{
-		Parent->addChild(NewFX);
-	}
-
-	NewFX->init();
-
 	return NewFX;
+}
+
+/*****************************************************************************/
+CFX		*CFX::Create(const FX_TYPE Type,CThing *Parent)
+{
+CFX		*NewFX=CFX::Create(Type);
+
+		if (Parent)
+		{
+			Parent->addChild(NewFX);
+		}
+
+		NewFX->init();
+
+		return NewFX;
+}
+
+/*****************************************************************************/
+CFX		*CFX::Create(const FX_TYPE Type,DVECTOR const &Pos)
+{
+CFX		*NewFX=CFX::Create(Type);
+
+		NewFX->init(Pos);
+
+		return NewFX;
 }
 
 /*****************************************************************************/
@@ -147,5 +169,6 @@ void	CFX::think(int _frames)
 /*****************************************************************************/
 void	CFX::render()
 {
+		CFXThing::render();
 }
 
