@@ -75,10 +75,10 @@ void	CPlayerModeDead::enter()
 			m_deathAnim=ANIM_SPONGEBOB_DEATHDRY;
 			break;
 		case DEATHTYPE__SQUASH:
-			m_deathAnim=ANIM_SPONGEBOB_DEATHSQUASH;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
 			break;
 		case DEATHTYPE__LIQUID:
-			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHTAR;
 			break;
 		case DEATHTYPE__FALL_TO_DEATH:
 			m_deathAnim=-1;

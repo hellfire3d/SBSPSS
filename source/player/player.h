@@ -255,6 +255,7 @@ public:
 	int				getSpatulasHeld()									{return m_numSpatulasHeld;}
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
+	int				wasLastHitElectrical()								{ return m_recoveringFromElectrocution;}
 
 	void			registerAddon(PLAYER_ADDONS _addon);
 	DVECTOR			*getMoveVelocity()									{return &m_moveVelocity;}
@@ -352,6 +353,7 @@ private:
 		INVINCIBLE_FRAMES__HIT=120,		// Invincible for this many frames after taking damage
 	};
 	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
+	int				m_recoveringFromElectrocution;		// TRUE is last hit was electrical
 
 	static class CPlayerMode	*s_playerModes[NUM_PLAYERMODES];
 	class CPlayerMode			*m_currentPlayerModeClass;

@@ -11,10 +11,11 @@ TeeterBack
 TeeterFront 
 Walk
 DeathForwards
-DeathSquash 
+DeathTar 
 GetHit
 CrouchDown
 CrouchUp
 LookUp
 Celebrate
 IdleBlink
+Electrocuted

@@ -14,7 +14,7 @@ TeeterBack
 TeeterFront 
 Swipe
 DeathForwards
-DeathSquash
+DeathTar
 GetHit
 CrouchDown
 CrouchUp
@@ -22,3 +22,4 @@ LookUp
 IdleWeapon
 Celebrate
 IdleBlink
+Electrocuted

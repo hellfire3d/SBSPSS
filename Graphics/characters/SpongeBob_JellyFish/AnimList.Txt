@@ -12,7 +12,7 @@ RunStart
 TeeterBack 
 TeeterFront 
 Swipe
-DeathSquash
+DeathTar
 DeathForwards
 GetHit
 CrouchDown
@@ -22,3 +22,4 @@ IdleWeapon
 IdleNet
 Celebrate
 IdleBlink
+Electrocuted

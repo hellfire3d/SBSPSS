@@ -70,7 +70,8 @@ CPlayerStateJumpBack		s_stateJumpBack;
   ---------------------------------------------------------------------- */
 void CPlayerStateJumpBack::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETHIT);
+	_playerMode->setAnimNo(_playerMode->getPlayer()->wasLastHitElectrical()?ANIM_SPONGEBOB_ELECTROCUTED:ANIM_SPONGEBOB_GETHIT);
+
 	if(_playerMode->getState()!=STATE_JUMPBACK)
 	{
 		m_reactFrames=0;

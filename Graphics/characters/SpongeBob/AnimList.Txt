@@ -13,7 +13,7 @@ TeeterBack
 TeeterFront 
 Swipe
 DeathForwards
-DeathSquash 
+DeathTar 
 DeathDry
 balloonJump
 blowbubble
@@ -36,3 +36,4 @@ IdleNoFace
 IdleZorro
 Celebrate
 IdleBlink
+Electrocuted
