@@ -27,6 +27,9 @@ protected:
 	void				processTimer( int _frames );
 
 	s32					m_movementTimer;
+	u8					m_bounceFinish;
+	s32					m_speed;
+	u8					m_bounceDir;
 };
 
 #endif

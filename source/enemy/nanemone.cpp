@@ -252,8 +252,8 @@ void CNpcAnemone2Enemy::postInit()
 
 		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-		xDiff = ( m_scaleY * 40 ) >> 12;
-		yDiff = ( m_scaleX * 40 ) >> 12;
+		xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
+		yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
 
 		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
@@ -280,8 +280,119 @@ void CNpcAnemone2Enemy::postInit()
 
 void CNpcAnemone2Enemy::shutdown()
 {
-	deleteAllChild();
 	CNpcEnemy::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcAnemone2Enemy::processShot( int _frames )
+{
+	switch( m_data[m_type].shotFunc )
+	{
+		case NPC_SHOT_NONE:
+		{
+			// do nothing
+
+			break;
+		}
+
+		case NPC_SHOT_GENERIC:
+		{
+			switch ( m_state )
+			{
+				case NPC_GENERIC_HIT_CHECK_HEALTH:
+				{
+					if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
+					{
+						m_state = NPC_GENERIC_HIT_DEATH_START;
+					}
+					else
+					{
+						m_health -= 5;
+
+						if ( m_health < 0 )
+						{
+							m_state = NPC_GENERIC_HIT_DEATH_START;
+						}
+						else
+						{
+							m_state = NPC_GENERIC_HIT_RECOIL;
+
+							m_animPlaying = true;
+							m_animNo = m_data[m_type].recoilAnim;
+							m_frame = 0;
+						}
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_RECOIL:
+				{
+					if ( !m_animPlaying )
+					{
+						m_state = 0;
+						m_controlFunc = NPC_CONTROL_MOVEMENT;
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_DEATH_START:
+				{
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].dieAnim;
+					m_frame = 0;
+					m_state = NPC_GENERIC_HIT_DEATH_END;
+
+					deleteAllChild();
+					m_isDying = true;
+					m_speed = -5;
+
+					if (m_data[m_type].skelType)
+					{
+						m_actorGfx->SetOtPos( 0 );
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_DEATH_END:
+				{
+					m_drawRotation += 64 * _frames;
+					m_drawRotation &= 4095;
+
+					Pos.vy += m_speed * _frames;
+
+					if ( m_speed < 5 )
+					{
+						m_speed++;
+					}
+
+					DVECTOR	offset = CLevel::getCameraPos();
+
+					if ( Pos.vy - offset.vy > VidGetScrH() )
+					{
+						if ( m_data[m_type].respawning )
+						{
+							m_isActive = false;
+
+							m_timerFunc = NPC_TIMER_RESPAWN;
+							m_timerTimer = 4 * GameState::getOneSecondInFrames();
+						}
+						else
+						{
+							setToShutdown();
+						}
+					}
+
+					break;
+				}
+			}
+
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,8 +465,8 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 			// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-			xDiff = ( m_scaleY * 40 ) >> 12;
-			yDiff = ( m_scaleX * 40 ) >> 12;
+			xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
+			yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
 
 			offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 			offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
@@ -426,8 +537,8 @@ void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 dis
 
 		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-		xDiff = ( m_scaleY * 40 ) >> 12;
-		yDiff = ( m_scaleX * 40 ) >> 12;
+		xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
+		yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
 
 		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;

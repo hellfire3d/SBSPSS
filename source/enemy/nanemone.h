@@ -39,11 +39,17 @@ public:
 	virtual void		postInit();
 	virtual void		shutdown();
 	virtual void		render();
+	virtual void		processShot( int _frames );
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 
 	u16					m_scaleX, m_scaleY;
+
+	enum
+	{
+		SPIKE_RADIUS = 20,
+	};
 };
 
 class	CNpcAnemone3Enemy : public CNpcAnemoneEnemy

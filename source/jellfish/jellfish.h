@@ -32,6 +32,7 @@ protected:
 	static u8			m_jellyfishCount;
 	static s32			m_timer;
 	static u8			m_on;
+	static u8			m_level;
 };
 
 #endif

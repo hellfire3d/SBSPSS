@@ -329,6 +329,14 @@ SOURCE=..\..\..\source\enemy\nshrkman.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsj2back.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsj2back.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsjback.cpp
 # End Source File
 # Begin Source File

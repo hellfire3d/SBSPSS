@@ -82,7 +82,8 @@ enemy_src :=		npc \
 					npbug \
 					nprojjf \
 					nmjback \
-					nsjback
+					nsjback \
+					nsj2back
 
 friend_src :=		friend \
 					fdata \

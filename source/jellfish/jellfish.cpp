@@ -23,6 +23,10 @@
 #include "enemy\nsjback.h"
 #endif
 
+#ifndef __ENEMY_NSJ2BACK_H__
+#include "enemy\nsj2back.h"
+#endif
+
 #ifndef __ENEMY_NPC_H__
 #include "enemy\npc.h"
 #endif
@@ -41,6 +45,7 @@
 u8 CJellyfishGenerator::m_jellyfishCount;
 s32 CJellyfishGenerator::m_timer;
 u8 CJellyfishGenerator::m_on;
+u8 CJellyfishGenerator::m_level;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,6 +55,7 @@ void CJellyfishGenerator::init()
 	m_jellyfishCount = 0;
 
 	m_on = true;
+	m_level = 1;
 
 	switch( CLevel::getCurrentChapter() )
 	{
@@ -60,6 +66,15 @@ void CJellyfishGenerator::init()
 				case 2:
 				{
 					m_on = false;
+
+					break;
+				}
+
+				case 4:
+				{
+					m_level = 2;
+
+					break;
 				}
 			}
 
@@ -85,26 +100,62 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 				m_jellyfishCount++;
 
 				CNpcEnemy *enemy;
-				enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
+
+				if ( m_level == 1 )
+				{
+					enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
+				}
+				else
+				{
+					enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
+				}
+
 				ASSERT(enemy);
-				enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
+
+				if ( m_level == 1 )
+				{
+					enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
+				}
+				else
+				{
+					enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND );
+				}
+
 				enemy->init();
 				enemy->setLayerCollision( level->getCollisionLayer() );
 
 				DVECTOR	offset = CLevel::getCameraPos();
 
 				DVECTOR startPos;
-				if ( ( getRnd() % 10 ) > 4 )
+				if ( m_level == 1 )
 				{
 					CNpcSmallJellyfishBackgroundEnemy *jfish = ( CNpcSmallJellyfishBackgroundEnemy * ) enemy;
-					jfish->setTargetHeading( 0 );
-					startPos.vx = offset.vx - 20;
+
+					if ( ( getRnd() % 10 ) > 4 )
+					{
+						jfish->setTargetHeading( 0 );
+						startPos.vx = offset.vx - 20;
+					}
+					else
+					{
+						jfish->setTargetHeading( 2048 );
+						startPos.vx = offset.vx + VidGetScrW() + 20;
+					}
 				}
 				else
 				{
-					CNpcSmallJellyfishBackgroundEnemy *jfish = ( CNpcSmallJellyfishBackgroundEnemy * ) enemy;
-					jfish->setTargetHeading( 2048 );
-					startPos.vx = offset.vx + VidGetScrW() + 20;
+					CNpcSmallJellyfish2BackgroundEnemy *jfish = ( CNpcSmallJellyfish2BackgroundEnemy * ) enemy;
+
+					if ( ( getRnd() % 10 ) > 4 )
+					{
+						jfish->setTargetHeading( 0 );
+						startPos.vx = offset.vx - 20;
+					}
+					else
+					{
+						jfish->setTargetHeading( 2048 );
+						startPos.vx = offset.vx + VidGetScrW() + 20;
+					}
 				}
 
 				startPos.vy = offset.vy + ( getRnd() % VidGetScrH() );
