@@ -84,6 +84,8 @@ public:
 		void	SetTPage(int Base,int W,int H)			{m_PageBase=Base; m_WidthPages=W; m_HeightPages=H; m_PagePlacements=true;}
 		void	ForceOffsets(int XOfs,int YOfs)			{MyFiles.SetXOff(XOfs); MyFiles.SetYOff(YOfs); MyFiles.SetForceOffsets(true);}
 		
+		vector<FileInfo>	const &CTexGrab::GetTexInfoList();
+
 		std::vector<sTexOutInfo> &GetTexInfo()			{return(TexInfo);}
 
 

@@ -15,7 +15,7 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
+CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,TileBank)
 {
 		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 

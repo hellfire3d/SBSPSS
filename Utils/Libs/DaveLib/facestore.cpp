@@ -15,11 +15,6 @@
 #include <algorithm>
 
 //***************************************************************************
-//vector<GString>			CFaceStore::TexList;
-//CTexGrab				CFaceStore::FaceStoreTexGrab;
-//CTexGrab				*CFaceStore::TexGrab=&FaceStoreTexGrab;
-
-//***************************************************************************
 Vector3 normalise(Vector3 &v)
 {
 	float sqmag = v.x * v.x + v.y * v.y + v.z * v.z;
@@ -108,53 +103,52 @@ CFace	F;
 		}
 
 		F.TexName=Tex;
-//		F.Mat = AddTex(Tex);
-//		F.Normal = crossProduct( F.vtx[0], F.vtx[1], F.vtx[2] );
-//		F.Avail = true;
-//		F.ID=ID;
-		
+		F.Mat = -1;
 		return(AddFace(F));
 }
 
 //***************************************************************************
-CFace	&CFaceStore::AddFace(CFace &Face)
+CFace	&CFaceStore::AddFace(CFace &F,bool ProcessTexFlag)
 {
 int		ListSize=FaceList.size();
 		FaceList.resize(ListSize+1);
-CFace	&F = FaceList[ListSize];
-		F=Face;
 
 // Process Vtx's
 		for (int i=0; i<3; i++)
 		{
-			F.pts[i]=AddVtx(F.vtx[i]*Scale);
+			F.pts[i]=AddVtx(F.vtx[i]);
 		}
 
-		F.Mat=AddTex(Face.TexName);
+		if (ProcessTexFlag && F.Mat==-1)
+		{
+			F.Mat=AddTex(F.TexName);
+		}
 		F.Normal = crossProduct( F.vtx[0], F.vtx[1], F.vtx[2] );
 		F.Avail = true;
+
+		FaceList[ListSize]=F;
 		return(F);
 }
 
 //***************************************************************************
-void	CFaceStore::AddFaces(vector<CFace> &Faces)
+void	CFaceStore::AddFaces(vector<CFace> &Faces,bool ProcessTexFlag)
 {
 int		ListSize=Faces.size();
 
 		for (int i=0 ;i<ListSize ;i++)
 		{
-			AddFace(Faces[i]);
+			AddFace(Faces[i],ProcessTexFlag);
 		}
 }
 
 //***************************************************************************
-void	CFaceStore::AddFaces(CFaceStore &Faces)
+void	CFaceStore::AddFaces(CFaceStore &Faces,bool ProcessTexFlag)
 {
 int		ListSize=Faces.GetFaceCount();
 
 		for (int i=0 ;i<ListSize ;i++)
 		{
-			AddFace(Faces[i]);
+			AddFace(Faces[i],ProcessTexFlag);
 		}
 }
 
@@ -189,30 +183,28 @@ CFace	&F = FaceList[ListSize];
 //***************************************************************************
 int		CFaceStore::AddTex(GString const &TexName)
 {
+static	GString	LastTex;
+static	int		LastIdx=-1;
+vector<FileInfo> const	&TexList=TexGrab->GetTexInfoList();
 int		ListSize=TexList.size();
-GString	Filename=TexName;
-		Filename.Upper();
 
-		for (int i=0; i<ListSize; i++)
+GString	Filename=TexName;
+		Filename.Lower();
+
+		LastTex=Filename;
+
+		for (LastIdx=0; LastIdx<ListSize; LastIdx++)
 		{
-			if (TexList[i].Name==Filename) return(TexList[i].TexGrabId);
+			GString	const &ListName=TexList[LastIdx].GetActualFileName();
+			if (ListName==Filename) return(LastIdx);
 		}
 // Does file exist
 		if (!FindFile(TexName))
 			GObject::Error(ERR_FATAL,"Texture not found %s!!\n",TexName);
 
-
-
-
-		TexList.resize(ListSize+1);
-sFaceTexList	&New=TexList[ListSize];
-
-		New.Name=Filename;
-
-//		printf("Add Tex %s\n",TexName);
-		New.TexGrabId=TexGrab->AddFile(Filename);
-
-		return(New.TexGrabId);
+		TexGrab->AddFile(Filename);
+		LastIdx=ListSize;
+		return(ListSize);
 }
 
 //***************************************************************************
@@ -255,6 +247,7 @@ void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
 {
 vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
 sTexOutInfo			&ThisTex=TexInfo[In.Mat];
+ASSERT(In.Mat<TexInfo.size());
 			
 int		W = ThisTex.w - 1;
 int		H = ThisTex.h - 1;
@@ -326,9 +319,9 @@ int		CFaceStore::AddVtx(Vector3 &InVtx)
 int		ListSize=OutVtxList.size();
 sVtx	ThisVtx;
 
-		ThisVtx.vx=round(InVtx.x);
-		ThisVtx.vy=round(InVtx.y);
-		ThisVtx.vz=round(InVtx.z);
+		ThisVtx.vx=round(InVtx.x*Scale);
+		ThisVtx.vy=round(InVtx.y*Scale);
+		ThisVtx.vz=round(InVtx.z*Scale);
 
 		for (int i=0; i<ListSize; i++)
 		{

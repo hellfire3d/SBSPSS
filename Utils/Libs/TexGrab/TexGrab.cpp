@@ -138,7 +138,13 @@ int		Idx=MyFiles.AddMemFrame(UpperName,Frame);
 		return(Idx);
 }
 
+vector<FileInfo>	const &CTexGrab::GetTexInfoList()
+{
+		return(MyFiles.GetFileInfoVector());
+
+}
 /*
+
 
 /*===========================================================================
  end */

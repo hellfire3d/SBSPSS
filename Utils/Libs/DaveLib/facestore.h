@@ -15,13 +15,31 @@
 using namespace std;
 
 //***************************************************************************
+/*
 struct	sFaceTexList
 {
 	GString		Name;
 	int			TexGrabId;
 };
-
+*/
 //***************************************************************************
+class	CFace
+{
+public:
+//	int				PntCount;
+	int				Mat;
+	Vector3			vtx[4];
+	int				pts[4];
+	int				idx[4];
+	sUV				uvs[4];
+	int				vis[4];
+	Vector3			Normal;
+	bool			Avail;
+	int				ID;
+	GString			TexName;
+};
+
+/*
 class	CFace
 {
 public:
@@ -34,6 +52,7 @@ public:
 	vis.resize(3);
 	}
 
+//	int				PntCount;
 	int				Mat;
 	vector<Vector3>	vtx;
 	vector<int>		pts;
@@ -46,6 +65,7 @@ public:
 	GString			TexName;
 };
 
+*/
 //***************************************************************************
 #ifndef	sTriFace
 struct  sTriFace
@@ -67,9 +87,9 @@ public:
 		~CFaceStore(){};
 
 		CFace					&AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID=0);
-		CFace					&AddFace(CFace &F);
-		void					AddFaces(vector<CFace>&Faces);
-		void					AddFaces(CFaceStore &Faces);
+		CFace					&AddFace(CFace &F,bool TexFlag=true);
+		void					AddFaces(vector<CFace>&Faces,bool TexFlag=true);
+		void					AddFaces(CFaceStore &Faces,bool TexFlag=true);
 
 		CFace					&AddFace(sTriFace &Face,int ID=0);
 
@@ -135,7 +155,7 @@ private:
 		int						MaxStrip;
 
 		vector<CFace>			FaceList;
-		vector<sFaceTexList>	TexList;
+//		vector<sFaceTexList>	TexList;
 		CTexGrab				FaceStoreTexGrab,*TexGrab;
 
 		vector<CFace>			TriFaceList;

@@ -10,7 +10,7 @@
 class CLayerBack : public CLayerTile
 {
 public:
-		CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
+		CLayerBack(sLayerHdr *Hdr,sTile *TileBank);
 		~CLayerBack();
 
 		void	init(DVECTOR &MapPos,int Shift);

@@ -179,7 +179,7 @@ struct	sQuad
 //*** Game Types and Headers ************************************************
 //***************************************************************************
 // Maps
-
+/*
 enum	TILE3D_FLAGS
 {
 	TILE3D_FLAGS_F=0,
@@ -190,17 +190,20 @@ enum	TILE3D_FLAGS
 //	TILE3D_FLAGS_B,	// Should never have back facing polys
 	TILE3D_FLAGS_MAX
 };
-
+*/
+typedef	u16	sTileMapElem;	// Tile or Tri Start
+/*
 struct	sTileMapElem
 {
-		u16		Tile;
+		u16		Elem;	// Tile or Tri Start
 };
-
+*/
+/*
 struct	sTileMapElem3d : public sTileMapElem
 {
 		u16		Flags;
 };
-
+*/
 /*
 struct	sTileTable
 {
@@ -211,9 +214,8 @@ struct	sTileTable
 struct	sTile
 {
 // 3d Tile
-//		sTileTable	TileTable[TILE3D_FLAGS_MAX];	// 20 (4*5)
-		u16		TriStart;							// 2
-		u16		TileTable[TILE3D_FLAGS_MAX];		// 10
+//		u16		TriStart;							// 2
+//		u16		TileTable[TILE3D_FLAGS_MAX];		// 10
 // 2d Tile
 		u8		u0,v0;								// 2
 		u16		Clut;								// 2
@@ -235,6 +237,19 @@ struct	sLayerHdr
 	int		Height;
 
 	/*int	TileData[W][H];....*/
+};
+
+//---------------------------------------------------------------------------
+struct	sLayer3d
+{
+	u16		TriCount;
+	u16		QuadCount;
+	u16		VtxCount;
+	u16		Pad;
+
+	u32		TriList;
+	u32		QuadList;
+	u32		VtxList;
 };
 
 //---------------------------------------------------------------------------
@@ -271,6 +286,7 @@ struct	sLvlHdr
 
 //---------------------------------------------------------------------------
 // TileBank
+/*
 struct	sTileBankHdr
 {
 	u32		TriList;
@@ -278,7 +294,7 @@ struct	sTileBankHdr
 	u32		VtxList;
 	u32		TileList;
 };
-
+*/
 
 //***************************************************************************
 //***************************************************************************

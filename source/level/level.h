@@ -30,7 +30,7 @@ private:
 	void		initLayers();
 
 	sLvlHdr			*LevelHdr;
-	sTileBankHdr	*TileBankHdr;
+	sTile			*TileBank;
 	static DVECTOR	MapPos;
 	static DVECTOR	s_playerSpawnPos;
 

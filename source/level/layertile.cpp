@@ -22,17 +22,14 @@ DVECTOR	TileMapOfs={0,4};	// To line layers up :oP
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList)
+CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileBank)
 {
 		LayerHdr=Hdr;
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
 		printf("%i %i\n",MapWidth,MapHeight);
-		TileList=_TileList;
-		TriList=_TriList;
-		QuadList=_QuadList;
-		VtxList=_VtxList;
+		TileBank=_TileBank;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 }
 
@@ -108,10 +105,10 @@ sOT				*ThisOT=OtPtr+LayerOT;
 
 			for (int X=0; X<RenderW; X++)
 			{
-/**/			sTile		*Tile=&TileList[MapRow->Tile];
-
-				if (Tile->Clut)
+				int	ThisTile=*MapRow++;
+				if (ThisTile)
 				{
+/**/				sTile		*Tile=&TileBank[ThisTile];
 					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
 					setTSprt16(SprPtr);
 					setTSetShadeTex(SprPtr,1);
@@ -122,7 +119,7 @@ sOT				*ThisOT=OtPtr+LayerOT;
 					addPrimNoCheck(ThisOT,SprPtr);
 					PrimPtr+=sizeof(TSPRT_16);
 				}
-				MapRow++;
+//				MapRow++;
 				TileX+=TILE_WIDTH;
 			}
 			MapPtr+=MapWidth;

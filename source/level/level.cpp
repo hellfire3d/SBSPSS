@@ -183,8 +183,8 @@ sLvlTab	LvlTable[]=
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0402_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		300,0,150,50,	368,110},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0403_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		2550,400,100,150,	95,320},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0404_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		2400,450,250,150,	100,272},
-	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0404X_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		0,200,100,100,	144,288},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0405_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		0,600,100,200,	1910,464},
+	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0405X_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		0,200,100,100,	144,288},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0406_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		2000,400,100,100,	568,160},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0407_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		0,0,50,50,	268,160},
 	{LEVELS_CHAPTER03_LEVEL04_TBK,LEVELS_CHAPTER03_LEVEL0408_LVL,LEVELS_CHAPTER03_LEVEL04_TEX,		0,0,50,50,	268,160},
@@ -367,7 +367,7 @@ void 	CLevel::init()
 #endif
 		if (s_globalLevelSelectThing>=LvlTableSize) s_globalLevelSelectThing=0;
 
-		while (CFileIO::getFileSize(LvlTable[s_globalLevelSelectThing ].Level)==2880)	// Dodgy blank level skip
+		while (CFileIO::getFileSize(LvlTable[s_globalLevelSelectThing ].Level)==1492)	// Dodgy blank level skip
 		{
 			s_globalLevelSelectThing++;
 			if (s_globalLevelSelectThing>=LvlTableSize) s_globalLevelSelectThing=0;
@@ -380,14 +380,10 @@ void 	CLevel::init()
 		CollisionLayer=0;
 		MapPos.vx=0;		
 		MapPos.vy=0;
-/*
-		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL04_TBK,"Tile Bank Data");
-		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
-		m_levelTPage=TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
-*/
+
 		sLvlTab	*lvlTab;
 		lvlTab=&LvlTable[s_globalLevelSelectThing];
-		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(lvlTab->TileBank,"Tile Bank Data");
+		TileBank=(sTile *)CFileIO::loadFile(lvlTab->TileBank,"Tile Bank Data");
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(lvlTab->Level,"Level Data");
 		m_levelTPage=TPLoadTex(lvlTab->Tex);
 
@@ -409,17 +405,12 @@ void 	CLevel::init()
 /*****************************************************************************/
 void	CLevel::initLayers()
 {
-sTri	*TriList=(sTri*)MakePtr(TileBankHdr,TileBankHdr->TriList);
-sQuad	*QuadList=(sQuad*)MakePtr(TileBankHdr,TileBankHdr->QuadList);
-sVtx	*VtxList=(sVtx*)MakePtr(TileBankHdr,TileBankHdr->VtxList);
-sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
-
 // Back
 
 		if (LevelHdr->BackLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
-			CLayerTile	*NewLayer=new ("Back Layer") CLayerBack(Layer,  TileList, TriList, QuadList, VtxList);
+			CLayerTile	*NewLayer=new ("Back Layer") CLayerBack(Layer, TileBank);
 			NewLayer->init(MapPos,3);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_BACK]=NewLayer;
 		}
@@ -428,7 +419,7 @@ sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
 		if (LevelHdr->MidLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->MidLayer);
-			CLayerTile *NewLayer=new ("Mid Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
+			CLayerTile *NewLayer=new ("Mid Layer") CLayerTile(Layer, TileBank);
 			NewLayer->init(MapPos,2);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_MID]=NewLayer;
 		}
@@ -437,7 +428,7 @@ sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
 		if (LevelHdr->ActionLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
-			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(Layer, TileList, TriList, QuadList, VtxList);
+			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(Layer, TileBank);
 			NewLayer->init(MapPos,0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
 		}
@@ -476,7 +467,7 @@ void	CLevel::shutdown()
 		{
 			CollisionLayer->shutdown();	MemFree(CollisionLayer);
 		}
-		MemFree(TileBankHdr);
+		MemFree(TileBank);
 		MemFree(LevelHdr);
 }
 

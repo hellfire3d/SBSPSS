@@ -43,6 +43,9 @@ protected:
 
 } ;
 
+#define	ASSERT(x)	if (!(x))  GObject::Error(ERR_FATAL,"%s %s %i\n",#x,__FILE__,__LINE__);
+
+
 //***************************************************************************
 GString CheckFileString(const char * Str);
 bool	CheckPlusMinus(const char * Str);
