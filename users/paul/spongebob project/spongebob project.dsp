@@ -1848,6 +1848,26 @@ SOURCE=..\..\..\source\utils\utils.cpp
 SOURCE=..\..\..\source\utils\utils.h
 # End Source File
 # End Group
+# Begin Group "fx"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxjfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxjfish.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "makefiles"
 
