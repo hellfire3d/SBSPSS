@@ -177,6 +177,10 @@ void	CJellyLauncherPickup::init()
   ---------------------------------------------------------------------- */
 void	CJellyLauncherPickup::collect(class CPlayer *_player)
 {
+	if(!getHasBeenCollected())
+	{
+		_player->giveJellyAmmoFromWeapon();
+	}
 	_player->setMode(PLAYER_MODE_JELLY_LAUNCHER);
 	CBaseWeaponSimplePickup::collect(_player);
 }

@@ -126,10 +126,14 @@ public:
 	virtual void		init();
 	virtual void		think(int _frames);
 
+	void				setHasBeenCollected()				{m_hasBeenCollected=true;}
+	int					getHasBeenCollected()				{return m_hasBeenCollected;}
+
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	int					m_dontAutoPickUpUntilPlayerMovesOffMe;
 	int					m_collidedWithPlayer;
+	int					m_hasBeenCollected;
 
 private:
 	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__POWER_UP_ITEM;}

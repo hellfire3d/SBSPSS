@@ -398,11 +398,11 @@ private:
 		
 		INITIAL_BUBBLE_BLOWER_AMMO=10,
 		BUBBLE_BLOWER_AMMO_IN_PICKUP=10,
-		MAX_BUBBLE_BLOWER_AMMO=99,
+		MAX_BUBBLE_BLOWER_AMMO=20,
 		
 		INITIAL_JELLY_LAUNCHER_AMMO=6,
 		JELLY_LAUNCHER_AMMO_IN_PICKUP=6,
-		MAX_JELLY_LAUNCHER_AMMO=99,
+		MAX_JELLY_LAUNCHER_AMMO=20,
 
 		PANT_FLASH_TIME=128,
 		PANT_FLASH_Y_OFFSET=-90,
@@ -416,13 +416,15 @@ public:
 	void			giveDivingHelmet()						{m_divingHelmet=true;}
 	int				isWearingDivingHelmet()					{return m_divingHelmet;}
 															
-	void			giveBubbleAmmo()						{m_bubbleAmmo+=INITIAL_BUBBLE_BLOWER_AMMO;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
+	void			giveBubbleAmmo()						{m_bubbleAmmo+=BUBBLE_BLOWER_AMMO_IN_PICKUP;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
+	void			giveBubbleAmmoFromWeapon()				{m_bubbleAmmo+=INITIAL_BUBBLE_BLOWER_AMMO;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
 	void			setBubbleAmmo(int _amount)				{m_bubbleAmmo=_amount;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
 	void			useOneBubble()							{m_bubbleAmmo--;}
 	int				getBubbleAmmo()							{return m_bubbleAmmo;}
 	int				isHoldingBubbleWand()					{return m_currentMode==PLAYER_MODE_BUBBLE_MIXTURE;}
 															
 	void			giveJellyAmmo()							{m_jellyAmmo+=JELLY_LAUNCHER_AMMO_IN_PICKUP;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
+	void			giveJellyAmmoFromWeapon()				{m_jellyAmmo+=INITIAL_JELLY_LAUNCHER_AMMO;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
 	void			useOneJelly()							{m_jellyAmmo--;}
 	int				getJellyAmmo()							{return m_jellyAmmo;}
 															

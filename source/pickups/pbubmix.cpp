@@ -179,6 +179,10 @@ void	CBubbleWandPickup::init()
   ---------------------------------------------------------------------- */
 void	CBubbleWandPickup::collect(class CPlayer *_player)
 {
+	if(!getHasBeenCollected())
+	{
+		_player->giveBubbleAmmoFromWeapon();
+	}
 	_player->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
 	CBaseWeaponSimplePickup::collect(_player);
 }

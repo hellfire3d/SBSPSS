@@ -291,6 +291,7 @@ void	CBaseWeaponPickup::init()
 
 	m_dontAutoPickUpUntilPlayerMovesOffMe=true;
 	m_collidedWithPlayer=true;
+	m_hasBeenCollected=false;
 }
 
 

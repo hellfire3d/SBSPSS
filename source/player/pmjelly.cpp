@@ -388,9 +388,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 
 			projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
 			fireHeading+=512;
-#ifndef __USER_paul__
 			m_player->useOneJelly();
-#endif
 		}
 	}
 	else
@@ -405,9 +403,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 						 5*60);
 
 		projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
-#ifndef __USER_paul__
-			m_player->useOneJelly();
-#endif
+		m_player->useOneJelly();
 	}
 }
 

@@ -823,6 +823,7 @@ if(newmode!=-1)
 						pickupPos.vy=Pos.vy-30;
 						pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
 						pickup->setPos(&pickupPos);
+						((CBaseWeaponPickup*)pickup)->setHasBeenCollected();
 					}
 					setMode(PLAYER_MODE_BASICUNARMED);
 				}
@@ -1939,8 +1940,8 @@ void CPlayer::respawn()
 
 	m_squeakyBootsTimer=0;
 	m_invincibilityRingTimer=0;
-	m_bubbleAmmo=INITIAL_BUBBLE_BLOWER_AMMO;
-	m_jellyAmmo=INITIAL_JELLY_LAUNCHER_AMMO;
+	m_bubbleAmmo=0;
+	m_jellyAmmo=0;
 	m_jellyfishAmmoCount=0;
 	m_pantFlashTimer=0;
 	m_hasReceivedExtraLifeFor100Spats=false;
