@@ -570,7 +570,7 @@ void	CPlayerModeBase::fall()
 		}
 	}
 }
-int buttfallspeed=14;
+int buttfallspeed=9;
 void	CPlayerModeBase::buttFall()
 {
 	const PlayerMetrics	*metrics;
