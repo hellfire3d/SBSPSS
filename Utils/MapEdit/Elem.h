@@ -39,13 +39,22 @@ public:
 			ElemType3d,
 			ElemTypeMax
 		};
+		enum CentreMode
+		{
+			CentreModeL	=1<<0,
+			CentreModeR	=1<<1,
+			CentreModeLR=1<<2,
+			CentreModeT	=1<<3,
+			CentreModeB	=1<<4,
+			CentreModeTB=1<<5,
+		};
 		enum
 		{
 			UnitSize=16,
 		};
 
 		CElem(int Width,int Height);																			// Blank (2d)
-		CElem(CCore *Core,const char *Filename,int TexId,int XOfs,int YOfs,int Width,int Height,bool Centre);	// 2d elem
+		CElem(CCore *Core,const char *Filename,int TexId,int XOfs,int YOfs,int Width,int Height,int CentreMode=0);	// 2d elem
 		CElem(CCore *Core,const char *Filename,CScene &ThisScene,int Node);										// 3d elem
 		void	CleanUp();
 
@@ -105,7 +114,7 @@ public:
 			DEF_ELEMBROWSWEWIDTH=8,
 		};
 
-		CElemSet(const char *_Filename,int Idx,int MaxWidth,int MaxHeight,bool CreateBlank,bool Centre);
+		CElemSet(const char *_Filename,int Idx,int MaxWidth,int MaxHeight,bool CreateBlank,int Centre=0);
 		~CElemSet();
 	
 		void		CleanUp();
@@ -136,7 +145,7 @@ private:
 		int				SetNumber;
 		int				MaxWidth,MaxHeight;
 		int				BmpW,BmpH;
-		bool			CentreFlag;
+		int				CentreMode;
 		CList<CElem>	ElemList;
 		bool			Loaded;
 		int				ElemBrowserWidth;
@@ -147,7 +156,7 @@ class	CElemBank : public CLayer
 {
 public:
 // Local
-		CElemBank(int MaxWidth,int MaxHeight,bool Blank,bool Centre);
+		CElemBank(int MaxWidth,int MaxHeight,bool Blank,int Centre=0);
 virtual	~CElemBank();
 		void		CleanUp();
 
@@ -200,7 +209,8 @@ protected:
 		int				CursorPos;
 
 		int				MaxWidth,MaxHeight;
-		bool			BlankFlag,CentreFlag;
+		bool			BlankFlag;
+		int				CentreMode;
 
 		CGUIElemList	GUIElemList;
 

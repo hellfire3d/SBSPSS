@@ -30,6 +30,7 @@ CLayerActor::CLayerActor(sLayerDef &Def)
 /*****************************************************************************/
 void	CLayerActor::InitLayer(sLayerDef &Def)
 {
+		ThingBank=new CElemBank(-1,-1,false,CElem::CentreModeLR | CElem::CentreModeB);
 		CLayerThing::InitLayer(Def);
 		LoadThingScript(theApp.GetConfigStr("LayerScript","ActorScript"));
 }
@@ -82,21 +83,9 @@ CComboBox	&List=GUI.m_List;
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIThingUpdate()
+void	CLayerActor::GUIThingUpdate(bool OnlySel)
 {
-int			i,ListSize;
-CComboBox	&List=GUI.m_LevelList;
-// Setup ThingList
-		ListSize=ThingList.size();
-		TRACE1("%i\n",ListSize);
-		List.ResetContent();
-		for (i=0; i<ListSize; i++)
-		{
-			
-			List.AddString(ThingList[i].Name);
-		}
-		List.SetCurSel(CurrentThing);
-		GUIThingPointUpdate();
+		GUIThingUpdateList(GUI.m_LevelList,false);
 // Params
 		GUI.DisableCallback(true);
 		if (CurrentThing!=-1)
@@ -122,28 +111,9 @@ CComboBox	&List=GUI.m_LevelList;
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIThingPointUpdate()
+void	CLayerActor::GUIThingPointUpdate(bool OnlySel)
 {
-int			i,ListSize;
-sLayerThing	&ThisThing=ThingList[CurrentThing];
-CListBox	&List=GUI.m_PosList;
-
-		List.ResetContent();
-		if (CurrentThing==-1) 
-		{
-		}
-		else
-		{
-// Setup ThingPointList
-		ListSize=ThisThing.XY.size();
-		for (i=0; i<ListSize; i++)
-		{
-			CString	Str;
-			Str.Format("%i: %i, %i",i,ThisThing.XY[i].x,ThisThing.XY[i].y);
-			List.AddString(Str);
-		}
-		List.SetCurSel(CurrentThingPoint);
-		}
+		GUIThingPointUpdateList(GUI.m_PosList,OnlySel);
 }
 
 /*****************************************************************************/

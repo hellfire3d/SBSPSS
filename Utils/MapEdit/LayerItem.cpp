@@ -30,8 +30,11 @@ CLayerItem::CLayerItem(sLayerDef &Def)
 /*****************************************************************************/
 void	CLayerItem::InitLayer(sLayerDef &Def)
 {
+		ThingBank=new CElemBank(-1,-1,false,CElem::CentreModeLR || CElem::CentreModeTB);
 		CLayerThing::InitLayer(Def);
 		LoadThingScript(theApp.GetConfigStr("LayerScript","ItemScript"));
+		DrawPoints=false;
+
 }
 
 /*****************************************************************************/
@@ -82,10 +85,17 @@ CComboBox	&List=GUI.m_List;
 }
 
 /*****************************************************************************/
-void	CLayerItem::GUIThingUpdate()
+void	CLayerItem::GUIThingUpdate(bool OnlySel)
 {
 int			i,ListSize;
 CComboBox	&List=GUI.m_LevelList;
+
+		if (OnlySel)
+		{
+			List.SetCurSel(CurrentThing);
+			return;
+		}
+
 // Setup ThingList
 		ListSize=ThingList.size();
 		TRACE1("%i\n",ListSize);

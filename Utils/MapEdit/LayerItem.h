@@ -28,7 +28,7 @@ public:
 		bool			GUIReady();
 
 		void			GUIThingDefClear();
-		void			GUIThingUpdate();
+		void			GUIThingUpdate(bool OnlySel=false);
 
 		void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
 

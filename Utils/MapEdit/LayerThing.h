@@ -64,8 +64,10 @@ virtual	void			GUIUpdate(CCore *Core);
 virtual	void			GUIChanged(CCore *Core);
 
 virtual	void			GUIThingDefClear(){};
-virtual	void			GUIThingUpdate(){};
-virtual	void			GUIThingPointUpdate(){};
+virtual	void			GUIThingUpdate(bool OnlySel=false){};
+virtual	void			GUIThingUpdateList(CComboBox &List,bool OnlySel=false);
+virtual	void			GUIThingPointUpdate(bool OnlySel=false){};
+virtual	void			GUIThingPointUpdateList(CListBox &List,bool OnlySel=false);
 
 virtual	void			Load(CFile *File,int Version);
 virtual	void			LoadThing(CFile *File,int Version,sLayerThing &ThisThing);
@@ -112,6 +114,7 @@ virtual	void			SetCursor(const char *Name);
 		int					CurrentThing,CurrentThingPoint;
 		MouseMode			Mode;
 		sLayerThing			Cursor;
+		bool				DrawPoints;
 };
 
 /*****************************************************************************/

@@ -40,13 +40,12 @@ void	CLayerThing::InitLayer(sLayerDef &Def)
 {
 		CLayer::InitLayer(Def);
 		Mode=MouseModeNormal;
-		ThingBank=new CElemBank(-1,-1,false,true);
 		Cursor.XY.resize(1);
 		Cursor.ElemID=-1;
 		CurrentDefThing=-1;
 		CurrentThing=-1;
 		CurrentThingPoint=0;
-
+		DrawPoints=true;
 }
 
 /*****************************************************************************/
@@ -244,20 +243,28 @@ int			ListSize=ThisThing.XY.size();
 // Render Thing			
 				glPushMatrix();
 				glTranslatef(ThisThing.XY[i].x,-ThisThing.XY[i].y,0);	// Set Pos
-				if (Selected)
-					glColor4f(1,1,1,1);									// Set default Color
-				else
-					glColor4f(1,1,1,0.5);									
-				
-				Core->RenderNumber(i);
 				if (i==0)
 				{
 					glColor4f(1,1,1,1);									// Set default Color
 					glEnable(GL_DEPTH_TEST);
 					glTranslatef(0,0,ScrOfs.z);
 					ThingBank->RenderElem(ThisThing.ElemID,0,0,Render3d);
-					glTranslatef(0,0,-ScrOfs.z);
 					glDisable(GL_DEPTH_TEST);
+					glTranslatef(0,0,-ScrOfs.z);
+					if (Selected)
+						glColor4f(1,1,0,0.8f);
+					else
+						glColor4f(1,1,0,0.5f);
+					if (DrawPoints) Core->RenderNumber(i);
+
+				}
+				else
+				{
+				if (Selected)
+					glColor4f(1,1,1,1);									// Set default Color
+				else
+					glColor4f(1,1,1,0.5);									
+				if (DrawPoints) Core->RenderNumber(i);
 				}
 				glPopMatrix();
 			}
@@ -288,6 +295,47 @@ void	CLayerThing::GUIChanged(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerThing::GUIThingUpdateList(CComboBox &List,bool OnlySel)
+{
+int			i,ListSize;
+
+		if (!OnlySel)
+		{
+// Setup ThingList
+			ListSize=ThingList.size();
+			List.ResetContent();
+			for (i=0; i<ListSize; i++)
+			{
+				List.AddString(ThingList[i].Name);
+			}
+		}
+		List.SetCurSel(CurrentThing);
+
+}
+
+/*****************************************************************************/
+void	CLayerThing::GUIThingPointUpdateList(CListBox &List,bool OnlySel)
+{
+int			i,ListSize;
+
+		if (!OnlySel)
+		{
+// Setup ThingPointList
+			List.ResetContent();
+			if (CurrentThing==-1) return;
+			sLayerThing	&ThisThing=ThingList[CurrentThing];
+			ListSize=ThisThing.XY.size();
+				for (i=0; i<ListSize; i++)
+				{
+					CString	Str;
+					Str.Format("%i: %i, %i",i,ThisThing.XY[i].x,ThisThing.XY[i].y);
+					List.AddString(Str);
+				}
+		}
+		List.SetCurSel(CurrentThingPoint);
+}
+
+/*****************************************************************************/
 /*** Functions ***************************************************************/
 /*****************************************************************************/
 bool	CLayerThing::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
@@ -299,16 +347,12 @@ bool	Ret=false;
 		{
 		case MouseModeNormal:
 			SelectThing(CursorPos);
-			GUIThingUpdate();
 			break;
 		case MouseModeNew:
 			AddThing(CursorPos);
-			GUIThingDefClear();
-			GUIThingUpdate();
 			break;
 		case MouseModePoints:
 			AddThingPoint(CursorPos);
-			GUIThingPointUpdate();
 			break;
 		default:
 			break;
@@ -320,7 +364,6 @@ bool	Ret=false;
 /*****************************************************************************/
 bool	CLayerThing::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
-		if (!DownFlag) return(false);
 		Cancel();
 		return(true);
 }
@@ -335,7 +378,6 @@ bool		Ret=false;
 			if (nFlags & MK_LBUTTON)	// Drag
 			{
 				UpdatePos(CursorPos,CurrentThing,CurrentThingPoint,(nFlags & MK_CONTROL)!=0);
-				GUIThingPointUpdate();
 				Ret=true;
 			}
 			else
@@ -361,6 +403,7 @@ void	CLayerThing::Cancel()
 			CurrentThingPoint=0;
 			GUIThingDefClear();
 			GUIThingUpdate();
+			GUIThingPointUpdate();
 			break;
 		default:
 			break;
@@ -376,7 +419,6 @@ bool	Ret=false;
 		{
 		case CmdMsg_ThingListDelete:
 			DeleteThing();
-			GUIThingUpdate();
 			break;
 		case CmdMsg_ThingListSelect:
 			CurrentDefThing=Param0;
@@ -385,7 +427,6 @@ bool	Ret=false;
 			break;
 		case CmdMsg_ThingLevelSelect:
 			SelectThing(Param0);
-			GUIThingUpdate();
 			break;
 		case CmdMsg_ThingPosSelect:
 			CurrentThingPoint=Param0;
@@ -479,12 +520,14 @@ void	CLayerThing::AddThing(CPoint &Pos)
 		CurrentThing=SelectThing(Pos);
 		if (CurrentThing!=-1) return;
 
+
 		CurrentThing=ThingList.size();
 		ThingList.resize(CurrentThing+1);
 
 sLayerThing	&ThisThing=ThingList[CurrentThing];
 		ThisThing=Cursor;
 		SelectThing(CurrentThing);
+		GUIThingDefClear();
 }
 
 /*****************************************************************************/
@@ -511,6 +554,8 @@ int		CLayerThing::SelectThing(int Idx)
 			{
 				Mode=MouseModeNormal;
 			}
+		GUIThingUpdate();
+		GUIThingPointUpdate();
 		}
 		return(CurrentThing);
 }
@@ -522,6 +567,7 @@ void	CLayerThing::DeleteThing()
 
 		ThingList.erase(CurrentThing);
 		CurrentThing--;
+		GUIThingUpdate();
 }
 
 
@@ -557,15 +603,22 @@ int			StartIdx=0;
 /*****************************************************************************/
 void	CLayerThing::AddThingPoint(CPoint &Pos)
 {
+	TRACE1("ADDTHINGPOINT %i\n",CurrentThingPoint);
 		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
 		CurrentThingPoint=SelectThingPoint(Pos);
 		
-		if (CurrentThingPoint!=-1) return;
+		if (CurrentThingPoint!=-1) 
+		{
+			GUIThingPointUpdate(true);
+			return;
+		}
 sLayerThing	&ThisThing=ThingList[CurrentThing];
 
 		CurrentThingPoint=ThisThing.XY.size();
 		ThisThing.XY.resize(CurrentThingPoint+1);
 		ThisThing.XY[CurrentThingPoint]=Pos;
+		TRACE0("Add Point\n");
+		GUIThingPointUpdate();
 }
 
 /*****************************************************************************/
@@ -585,6 +638,8 @@ sLayerThing	&ThisThing=ThingList[Thing];
 CPoint		dPos=Pos-ThisThing.XY[PosIdx];
 int			StartIdx=PosIdx,EndIdx=ThisThing.XY.size();
 
+		if (!dPos.x && !dPos.y) return;
+
 		if (!Recurs)
 		{
 			StartIdx=PosIdx;
@@ -595,6 +650,8 @@ int			StartIdx=PosIdx,EndIdx=ThisThing.XY.size();
 		{
 			ThisThing.XY[i]+=dPos;
 		}
+		GUIThingPointUpdate();
+
 }
 
 /*****************************************************************************/

@@ -28,8 +28,8 @@ public:
 		bool			GUIReady();
 
 		void			GUIThingDefClear();
-		void			GUIThingUpdate();
-		void			GUIThingPointUpdate();
+		void			GUIThingUpdate(bool OnlySel=false);
+		void			GUIThingPointUpdate(bool OnlySel=false);
 
 		void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
 

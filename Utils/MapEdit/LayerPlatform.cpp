@@ -30,6 +30,7 @@ CLayerPlatform::CLayerPlatform(sLayerDef &Def)
 /*****************************************************************************/
 void	CLayerPlatform::InitLayer(sLayerDef &Def)
 {
+		ThingBank=new CElemBank(-1,-1,false,0);
 		CLayerThing::InitLayer(Def);
 		LoadThingScript(theApp.GetConfigStr("LayerScript","PlatformScript"));
 }
@@ -86,49 +87,13 @@ CComboBox	&List=GUI.m_List;
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIThingUpdate()
+void	CLayerPlatform::GUIThingUpdate(bool OnlySel)
 {
-/*
-int			i,ListSize;
-CComboBox	&List=GUI.m_LevelList;
-// Setup ThingList
-		ListSize=ThingList.size();
-		TRACE1("%i\n",ListSize);
-		List.ResetContent();
-		for (i=0; i<ListSize; i++)
-		{
-			
-			List.AddString(ThingList[i].Name);
-		}
-		List.SetCurSel(CurrentThing);
-		GUIThingPointUpdate();
-// Params
-		GUI.DisableCallback(true);
-		if (CurrentThing!=-1)
-		{
-			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUI.SetVal(GUI.m_Speed,ThisThing.Data.Speed);
-			GUI.SetVal(GUI.m_TurnRate,ThisThing.Data.TurnRate);
-			GUI.SetVal(GUI.m_Health,ThisThing.Data.Health);
-			GUI.SetVal(GUI.m_Attack,ThisThing.Data.AttackStrength);
-			GUI.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUI.m_Player.SetCheck(ThisThing.Data.PlayerFlag);
-		}
-		else
-		{
-			GUI.m_Speed.SetWindowText("");
-			GUI.m_TurnRate.SetWindowText("");
-			GUI.m_Health.SetWindowText("");
-			GUI.m_Attack.SetWindowText("");
-			GUI.m_Collision.SetCheck(false);
-			GUI.m_Player.SetCheck(false);
-		}
-		GUI.DisableCallback(false);
-*/
+//	CLayerThing::GUIThingUpdateList(GUI.
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIThingPointUpdate()
+void	CLayerPlatform::GUIThingPointUpdate(bool OnlySel)
 {
 /*
 int			i,ListSize;

@@ -105,7 +105,8 @@ GFName		Path=Filename;
 
 /*****************************************************************************/
 // 2d Elem (From Bmp File)
-CElem::CElem(CCore *Core,const char *Filename,int TexID,int XOfs,int YOfs,int Width,int Height,bool Centre)
+// 0,0 1,0 1,1 0,1
+CElem::CElem(CCore *Core,const char *Filename,int TexID,int XOfs,int YOfs,int Width,int Height,int CentreMode)
 {
 CTexCache	&TexCache=Core->GetTexCache();
 GFName		Path=Filename;
@@ -119,10 +120,32 @@ GFName		Path=Filename;
 			TexXOfs=XOfs;
 			TexYOfs=YOfs;
 			Ofs.Zero();
-			if (Centre)
+
+			if (CentreMode & CentreModeL)
 			{
-				Ofs.x=0.5-UnitWidth/2;
-				Ofs.y=-1.0f;
+				// Nothing to do, already there
+			}
+			if (CentreMode & CentreModeR)
+			{
+				Ofs.x-=UnitWidth;
+			}
+
+			if (CentreMode & CentreModeT)
+			{
+				Ofs.y-=UnitHeight;
+			}
+			if (CentreMode & CentreModeB)
+			{
+				// Nothing to do, already there
+			}
+
+			if (CentreMode & CentreModeLR)
+			{
+				Ofs.x-=(UnitWidth-1.0f)/2;
+			}
+			if (CentreMode & CentreModeTB)
+			{
+				Ofs.y-=(UnitHeight-1.0f)/2;
 			}
 			
 			Build2dElem(Core,Path.File(),TexID);
@@ -580,7 +603,7 @@ int		Size=RGBData.TexW*RGBData.TexH;
 /*** Elem Set ****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CElemSet::CElemSet(const char *_Filename,int Idx,int Width,int Height,bool CreateBlank,bool Centre)
+CElemSet::CElemSet(const char *_Filename,int Idx,int Width,int Height,bool CreateBlank,int Centre)
 {
 GFName	FName=_Filename;
 
@@ -589,7 +612,7 @@ GFName	FName=_Filename;
 		
 		MaxWidth=Width;
 		MaxHeight=Height;
-		CentreFlag=Centre;
+		CentreMode=Centre;
 		Loaded=FALSE;
 		SetNumber=Idx;
 
@@ -648,7 +671,7 @@ int			Width,Height;
 		{
 			for (int X=0; X<Width; X++)
 			{
-				ElemList.push_back(CElem(Core,Filename,TexID,X,Y,MaxWidth,MaxHeight,CentreFlag));
+				ElemList.push_back(CElem(Core,Filename,TexID,X,Y,MaxWidth,MaxHeight,CentreMode));
 			}
 		}
 		ElemBrowserWidth=Width;
@@ -707,12 +730,12 @@ int		ListSize=ElemList.size();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CElemBank::CElemBank(int W,int H,bool Blank,bool Centre)
+CElemBank::CElemBank(int W,int H,bool Blank,int Centre)
 {
 		MaxWidth=W; 
 		MaxHeight=H; 
 		BlankFlag=Blank;
-		CentreFlag=Centre;
+		CentreMode=Centre;
 
 		LoadFlag=false;
 		CurrentSet=0;
@@ -810,7 +833,7 @@ GString	SavePath;
 int			CElemBank::AddSet(const char *Filename)
 {
 int			ListSize=SetList.size();
-CElemSet	NewSet(Filename,ListSize,MaxWidth,MaxHeight,BlankFlag,CentreFlag);
+CElemSet	NewSet(Filename,ListSize,MaxWidth,MaxHeight,BlankFlag,CentreMode);
 
 int			Idx=SetList.Add(NewSet);
 			if (SetList.size()!=ListSize) LoadFlag=TRUE;
