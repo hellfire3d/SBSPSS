@@ -296,6 +296,7 @@ void CPauseMenu::select()
 		CXAStream::Pause();
 	}
 
+	CPadVibrationManager::stopAllVibration();
 }
 
 
