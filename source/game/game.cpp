@@ -670,7 +670,7 @@ void	CGameScene::initLevel()
 	s_bossHasBeenKilled=false;
 	s_justHitBossArenaTrigger=false;
 
-	if(getLevelNumber()==5&&getChapterNumber()==2)
+	if(getLevelNumber()==5&&getChapterNumber()==3)
 	{
 		m_levelHasTimer=true;
 		m_timer=30*55;
