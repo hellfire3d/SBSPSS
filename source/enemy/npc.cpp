@@ -248,7 +248,6 @@ void CNpcEnemy::init()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
-	m_attackTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -578,7 +577,6 @@ void CNpcEnemy::reinit()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
-	m_attackTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -720,52 +718,79 @@ void CNpcEnemy::think(int _frames)
 
 void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
-	switch(_thisThing->getThingType())
+	if ( m_isActive )
 	{
-		case TYPE_PLAYER:
+		switch(_thisThing->getThingType())
 		{
-			if ( m_controlFunc != NPC_CONTROL_COLLISION && m_attackTimer == 0 )
+			case TYPE_PLAYER:
 			{
-				// only detect collision if one isn't already happening
+				CPlayer *player = (CPlayer *) _thisThing;
 
-				switch( m_data[m_type].detectCollision && m_isActive )
+				ATTACK_STATE playerState = player->getAttackState();
+
+				switch( playerState )
 				{
-					case DETECT_NO_COLLISION:
+					case ATTACK_STATE__NONE:
 					{
-						// ignore
-
-						break;
-					}
-
-					case DETECT_ALL_COLLISION:
-					{
-						m_oldControlFunc = m_controlFunc;
-						m_controlFunc = NPC_CONTROL_COLLISION;
-
-						break;
-					}
-
-					case DETECT_ATTACK_COLLISION_GENERIC:
-					{
-						if ( m_controlFunc == NPC_CONTROL_CLOSE )
+						if ( !player->isRecoveringFromHit() )
 						{
-							// only detect collision if in attack mode
+							switch( m_data[m_type].detectCollision )
+							{
+								case DETECT_NO_COLLISION:
+								{
+									// ignore
 
-							m_oldControlFunc = m_controlFunc;
-							m_controlFunc = NPC_CONTROL_COLLISION;
+									break;
+								}
+
+								case DETECT_ALL_COLLISION:
+								{
+									m_oldControlFunc = m_controlFunc;
+									m_controlFunc = NPC_CONTROL_COLLISION;
+
+									break;
+								}
+
+								case DETECT_ATTACK_COLLISION_GENERIC:
+								{
+									//if ( m_controlFunc == NPC_CONTROL_CLOSE && m_data[m_type].closeFunc != NPC_CLOSE_NONE )
+									if ( m_controlFunc == NPC_CONTROL_CLOSE )
+									{
+										// only detect collision if in attack mode
+
+										m_oldControlFunc = m_controlFunc;
+										m_controlFunc = NPC_CONTROL_COLLISION;
+									}
+
+									break;
+								}
+							}
+						}
+
+						break;
+					}
+
+					default:
+					{
+						// player is attacking, respond appropriately
+
+						if ( m_controlFunc != NPC_CONTROL_SHOT )
+						{
+							m_controlFunc = NPC_CONTROL_SHOT;
+							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 						}
 
 						break;
 					}
 				}
+
+				break;
 			}
 
-			break;
+			default:
+				ASSERT(0);
+				break;
 		}
-
-		default:
-			ASSERT(0);
-			break;
 	}
 }
 
@@ -1542,8 +1567,6 @@ void CNpcEnemy::processCollision()
 
 			m_controlFunc = m_oldControlFunc;
 
-			m_attackTimer = GameState::getOneSecondInFrames();
-
 			break;
 		}
 
@@ -1560,16 +1583,6 @@ void CNpcEnemy::processCollision()
 
 void CNpcEnemy::processTimer(int _frames)
 {
-	if ( m_attackTimer > 0 )
-	{
-		m_attackTimer -= _frames;
-
-		if ( m_attackTimer < 0 )
-		{
-			m_attackTimer = 0;
-		}
-	}
-
 	if ( m_timerTimer > 0 )
 	{
 		m_timerTimer -= _frames;

@@ -602,7 +602,6 @@ protected:
 	bool				m_reversed;
 	s32					m_health;
 	bool				m_isActive;
-	s32					m_attackTimer;
 
 	s32				m_frame;
 	int				m_animNo;
