@@ -34,32 +34,42 @@ void CNpcEnemy::processFlyingDutchmanMovement( int _frames )
 	{
 		m_movementTimer -= _frames;
 
-		if ( m_extendDir == EXTEND_UP )
-		{
-			s32 yDist = -10 - Pos.vy;
-			s32 yDistSqr = yDist * yDist;
+		s32 xDist = m_extension - Pos.vx;
+		s32 xDistSqr = xDist * xDist;
 
-			if ( yDistSqr > 100 )
-			{
-				processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
-			}
-			else
-			{
-				m_extendDir = EXTEND_DOWN;
-			}
+		if ( xDistSqr > 100 )
+		{
+			processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
 		}
 		else
 		{
-			s32 yDist = 400 - Pos.vy;
-			s32 yDistSqr = yDist * yDist;
-
-			if ( yDistSqr > 100 )
+			if ( m_extendDir == EXTEND_UP )
 			{
-				processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+				s32 yDist = -10 - Pos.vy;
+				s32 yDistSqr = yDist * yDist;
+
+				if ( yDistSqr > 100 )
+				{
+					processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+				}
+				else
+				{
+					m_extendDir = EXTEND_DOWN;
+				}
 			}
 			else
 			{
-				m_extendDir = EXTEND_UP;
+				s32 yDist = 400 - Pos.vy;
+				s32 yDistSqr = yDist * yDist;
+
+				if ( yDistSqr > 100 )
+				{
+					processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+				}
+				else
+				{
+					m_extendDir = EXTEND_UP;
+				}
 			}
 		}
 	}
@@ -129,6 +139,15 @@ void CNpcEnemy::processCloseFlyingDutchmanAttack( int _frames )
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;
 					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
+
+					if ( m_extension == 100 )
+					{
+						m_extension = 400;
+					}
+					else
+					{
+						m_extension = 100;
+					}
 				}
 
 				break;

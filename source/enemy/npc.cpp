@@ -209,7 +209,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_SUB_SHARK;
+	m_type = NPC_FLYING_DUTCHMAN;
 
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
@@ -233,7 +233,7 @@ void CNpcEnemy::init()
 
 	m_health = m_data[this->m_type].initHealth;
 
-	m_extension = EXTEND_RIGHT;
+	m_extendDir = EXTEND_RIGHT;
 
 	Pos.vx = 400;
 	Pos.vy = 100;
@@ -307,6 +307,7 @@ void CNpcEnemy::init()
 		{
 			m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 			m_extendDir = EXTEND_UP;
+			m_extension = 100;
 
 			break;
 		}
