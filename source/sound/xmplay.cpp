@@ -147,7 +147,7 @@ void CXMPlaySound::think()
 		PAUL_DBGMSG("=======");
 		for(int i=0;i<24;i++,ch++)
 		{
-			PAUL_DBGMSG("%02d] u:%s  l:%d  pid:%d",i,text[ch->m_useType],ch->m_locked,ch->m_playingId);
+			PAUL_DBGMSG("%02d] u:%s  l:%d  pid:%04x",i,text[ch->m_useType],ch->m_locked,ch->m_playingId);
 		}
 		PAUL_DBGMSG("=======");
 		dump=false;
@@ -434,12 +434,12 @@ void CXMPlaySound::setStereo(int _stereo)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
 {
-	int				i;
+//	int				i;
 	spuChannelUse	*ch;
 	int				vol;
 	
-	ch=m_spuChannelUse;
-	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	ch=&m_spuChannelUse[_playingId&0xff];
+//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
 	{
 		if(ch->m_playingId==_playingId)
 		{
@@ -464,12 +464,9 @@ void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
 					updateLoopingSfx(ch);
 					break;
 
-				// Shouldn't ever get a locked FREE channel!
 				case FREE:
-					ASSERT(0);
-					break;
-					
 				case CONTINUE:
+					ASSERT(0);
 					break;
 			}
 			return;
@@ -487,11 +484,11 @@ void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 {
-	int				i;
+//	int				i;
 	spuChannelUse	*ch;
 	
-	ch=m_spuChannelUse;
-	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	ch=&m_spuChannelUse[_playingId&0xff];
+//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
 	{
 		if(ch->m_playingId==_playingId)
 		{
@@ -514,12 +511,9 @@ void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 					updateLoopingSfx(ch);
 					break;
 
-				// Shouldn't ever get a locked FREE channel!
 				case FREE:
-					ASSERT(0);
-					break;
-
 				case CONTINUE:
+					ASSERT(0);
 					break;
 			}
 			return;
@@ -582,7 +576,7 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId)
 	baseChannel=findSpareChannels(channelCount,255);
 	if(baseChannel!=-1)
 	{
-		retId=getNextSparePlayingId();
+		retId=getNextSparePlayingId(baseChannel);
 		vab=&m_xmVabs[_sampleId];
 		id=XM_Init(vab->m_vabId,		// id from XM_VABInit
 				   _modId,				// XM id ( as passed to InitXMData )
@@ -644,20 +638,17 @@ void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 {
-	int				i;
+//	int				i;
 	spuChannelUse	*ch;
 	
-	ch=m_spuChannelUse;
-	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	ch=&m_spuChannelUse[_playingId&0xff];
+//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
 	{
 		if(ch->m_playingId==_playingId)
 		{
 			ASSERT(ch->m_locked!=false);			// Cant stop unlocked channels!
 			switch(ch->m_useType)
 			{
-				case SILENT:
-					break;
-
 				case SONG:
 				case SFX:
 					{
@@ -675,6 +666,7 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 					XM_StopSample(ch->m_internalId);
 					break;
 					
+				case SILENT:
 				case FREE:
 				case CONTINUE:
 					ASSERT(0);
@@ -728,7 +720,7 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPa
 	baseChannel=findSpareChannels(channelCount,_priority);
 	if(baseChannel!=-1)
 	{
-		retId=getNextSparePlayingId();
+		retId=getNextSparePlayingId(baseChannel);
 		vab=&m_xmVabs[_sampleId];
 		XM_SetSFXRange(baseChannel,channelCount);
 		id=XM_Init(vab->m_vabId,		// id from XM_VABInit
@@ -767,7 +759,7 @@ xmPlayingId	CXMPlaySound::playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int
 	baseChannel=findSpareChannels(1,_priority);
 	if(baseChannel!=-1)
 	{
-		retId=getNextSparePlayingId();
+		retId=getNextSparePlayingId(baseChannel);
 		//PAUL_DBGMSG("playLoopingSfx  %d/- ( on %d-%d )",retId,baseChannel,baseChannel);
 		XM_PlaySample(XM_GetSampleAddress(_sampleId,_soundId),baseChannel,0x3fff,0x3fff,_pitch);
 		markChannelsAsActive(baseChannel,1,LOOPINGSFX,retId,baseChannel,_priority);
@@ -788,7 +780,7 @@ xmPlayingId	CXMPlaySound::playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId	CXMPlaySound::getNextSparePlayingId()
+xmPlayingId	CXMPlaySound::getNextSparePlayingId(int _baseChannel)
 {
 	xmPlayingId		validId;
 	int				i;
@@ -802,7 +794,7 @@ xmPlayingId	CXMPlaySound::getNextSparePlayingId()
 		nextId=(xmPlayingId)((nextId+1)&0xff);			// gives 256 unique id numbers
 
 		// Is this id still in use?
-		validId=nextId;
+		validId=(xmPlayingId)((nextId<<8)+_baseChannel);
 		ch=m_spuChannelUse;
 		for(i=0;i<NUM_SPU_CHANNELS&&validId!=NOT_PLAYING;i++)
 		{

@@ -35,6 +35,8 @@
 typedef enum	{NO_SAMPLE=-1}		xmSampleId;
 typedef enum	{NO_SONG=-1}		xmModId;
 typedef enum	{NOT_PLAYING=-1}	xmPlayingId;
+// Note that a playing id is a 16 bit value. Top 8 bits are an ( effectively ) random number and the bottom
+// 8 bits are the base channel of the playing sound.
 
 
 /*----------------------------------------------------------------------
@@ -132,7 +134,7 @@ private:
 		u8					m_vol,m_pan;
 	} spuChannelUse;
 
-	xmPlayingId		getNextSparePlayingId();
+	xmPlayingId		getNextSparePlayingId(int _baseChannel);
 	int				findSpareChannels(int _channelCount,int _priority);
 	void			markChannelsAsActive(int _baseChannel,int _channelCount,CHANNELUSETYPE _useType,xmPlayingId _playingId,int _internalId,u8 _priority);
 

@@ -32,21 +32,28 @@
 #endif
 
 /*****************************************************************************/
-XA_MODE			CXAStream::Mode=XA_MODE_NOTINIT;
-int				CXAStream::Status;
-int				CXAStream::StartSector;
-sXAStream		CXAStream::Stream[XA_STREAM_MAX];
-int				CXAStream::CurrentStream;
-int				CXAStream::PauseFlag;
+CXAStream::XA_MODE		CXAStream::Mode=XA_MODE_NOTINIT;
+int						CXAStream::Status;
+int						CXAStream::StartSector;
+CXAStream::sXAStream	CXAStream::Stream[XA_STREAM_MAX];
+int						CXAStream::CurrentStream;
+int						CXAStream::PauseFlag;
 
 // Speech
-SpeechEquate	CXAStream::Queue[XA_QUEUE_MAX];
-u16				CXAStream::QueueCount;
+SpeechEquate			CXAStream::Queue[XA_QUEUE_MAX];
+u16						CXAStream::QueueCount;
+
+
+// Volume
+int CXAStream::s_masterVolumeL=XA_DEFAULT_VOL;
+int CXAStream::s_masterVolumeR=XA_DEFAULT_VOL;
+
+
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void 	XACDReadyCallback(int Intr, u8 *Result)
+void 	CXAStream::XACDReadyCallback(int Intr, u8 *Result)
 {
 static int	ErrorRetry;
 u32			XABuffer[8];
@@ -226,7 +233,7 @@ sXAStream	&ThisStream=Stream[CurrentStream];
 				break;
 			case	XA_MODE_PLAY:
 				if (Status==CdlDiskError) Mode=XA_MODE_RESUME;
-				SetVolume(XA_DEFAULT_VOL,XA_DEFAULT_VOL);
+				SetVolume(s_masterVolumeL,s_masterVolumeL);
 				break;
 			case	XA_MODE_END:
 				SetVolumeOff();
@@ -292,26 +299,15 @@ void	CXAStream::SetVolume(s32 LVol,s32 RVol)
 {
 CdlATV			CDVol;
 SpuCommonAttr	Attr;
-//int				VolumeSetting;
-//
-//		if (CurrentStream==XA_STREAM_SPEECH)
-//			VolumeSetting=CSfxFactory::SNDVOL_SFX;
-//		else
-//			VolumeSetting=CSfxFactory::SNDVOL_MUSIC;
-//
-//		LVol=(LVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
-//		RVol=(RVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
-		Attr.mask = (SPU_COMMON_CDVOLL|SPU_COMMON_CDVOLR|SPU_COMMON_CDMIX); 
-		Attr.cd.volume.left	=LVol;
-		Attr.cd.volume.right=RVol;
-		Attr.cd.mix=SPU_ON;
-		SpuSetCommonAttr(&Attr);
-		CDVol.val0 = 127;		// CdL -> SpuL
-		CDVol.val1 = 127;		// CdL -> SpuR
-		CDVol.val2 = 127;		// CdR -> SpuR
-		CDVol.val3 = 127;		// CdR -> SpuL
-		CdMix(&CDVol);
 
+	SpuSetCommonCDVolume(LVol,RVol);
+	SpuSetCommonCDMix(SPU_ON);
+
+	CDVol.val0 = 127;		// CdL -> SpuL
+	CDVol.val1 = 127;		// CdL -> SpuR
+	CDVol.val2 = 127;		// CdR -> SpuR
+	CDVol.val3 = 127;		// CdR -> SpuL
+	CdMix(&CDVol);
 }
 
 /*****************************************************************************/
@@ -319,23 +315,25 @@ void	CXAStream::SetVolumeOff()
 {
 CdlATV			CDVol;
 SpuCommonAttr	Attr;
-//		SsSetSerialVol(SS_SERIAL_A,0,0);
 
-		
-//		Attr.mask = (SPU_COMMON_CDVOLL|SPU_COMMON_CDVOLR|SPU_COMMON_CDMIX); 
-//		Attr.cd.volume.left	=0;
-//		Attr.cd.volume.right=0;
-//		Attr.cd.mix=SPU_ON;
-//		SpuSetCommonAttr(&Attr);
-SpuSetCommonCDVolume(0,0);
-SpuSetCommonCDMix(SPU_ON);
+	SpuSetCommonCDVolume(0,0);
+	SpuSetCommonCDMix(SPU_ON);
 
-		CDVol.val0 = 0;		// CdL -> SpuL
-		CDVol.val1 = 0;		// CdL -> SpuR
-		CDVol.val2 = 0;		// CdR -> SpuR
-		CDVol.val3 = 0;		// CdR -> SpuL
-		CdMix(&CDVol);
-		
+	CDVol.val0 = 0;		// CdL -> SpuL
+	CDVol.val1 = 0;		// CdL -> SpuR
+	CDVol.val2 = 0;		// CdR -> SpuR
+	CDVol.val3 = 0;		// CdR -> SpuL
+	CdMix(&CDVol);
 }
 
+
+/*****************************************************************************/
+void CXAStream::setMasterVolume(int _volumeL,int _volumeR)
+{
+	ASSERT(_volumeL>=MIN_VOLUME)	ASSERT(_volumeL<=MAX_VOLUME);
+	ASSERT(_volumeR>=MIN_VOLUME)	ASSERT(_volumeR<=MAX_VOLUME);
+
+	s_masterVolumeL=_volumeL;
+	s_masterVolumeR=_volumeR;
+}
 

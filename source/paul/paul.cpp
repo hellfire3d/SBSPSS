@@ -139,6 +139,7 @@ int	pkill=0;
 int mvol=10;
 int svol=255;
 VECTOR ppos;
+int psp=0;
 
 void CPaulScene::think()
 {
@@ -174,9 +175,11 @@ void CPaulScene::think()
 	}
 	if(pad&PAD_START)
 	{
-		PAUL_DBGMSG("stop loopers..");
-		CSoundMediator::stopSfx((xmPlayingId)ploopid1);
-		CSoundMediator::stopSfx((xmPlayingId)ploopid2);
+//		PAUL_DBGMSG("stop loopers..");
+//		CSoundMediator::stopSfx((xmPlayingId)ploopid1);
+//		CSoundMediator::stopSfx((xmPlayingId)ploopid2);
+		PAUL_DBGMSG("speech..\n");
+		CSoundMediator::playSpeech((SpeechEquate)psp);
 	}
 	if(pad&PAD_R2)
 	{
@@ -218,12 +221,12 @@ void CPaulScene::think()
 		if(svol<CSoundMediator::MIN_VOLUME)svol=CSoundMediator::MIN_VOLUME;
 		setSfxVolume=true;
 	}
-	if(setSongVolume)		CSoundMediator::setVolume(CSoundMediator::SONG,mvol);
+	if(setSongVolume)		CSoundMediator::setVolume(CSoundMediator::SPEECH,mvol);
 	if(setSfxVolume)		CSoundMediator::setVolume(CSoundMediator::SFX,svol);
 
 	if(setSongVolume||setSfxVolume)
 	{
-		PAUL_DBGMSG("song:%d   sfx:%d",mvol,svol);
+		PAUL_DBGMSG("speech:%d   sfx:%d",mvol,svol);
 	}
 
 //CXAStream::ControlXA();

@@ -140,8 +140,9 @@ void CSoundMediator::initialise()
 		s_targetVolume[i]=INITIAL_VOLUME;
 		s_volumeDirty[i]=true;
 	}
-//	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
-//	ASSERT(CXAStream::MAX_VOLUME==32767);
+
+	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
+	ASSERT(CXAStream::MAX_VOLUME==32767);
 
 	// Initial reverb settings
 	setReverbType(NONE);//ECHO_TEST);
@@ -212,7 +213,7 @@ void CSoundMediator::think(int _frames)
 	}
 
 	// Update of anything that needs it
-//	CXAStream::ControlXA();
+	CXAStream::ControlXA();
 	s_xmplaySound->think();
 	
 
@@ -227,12 +228,12 @@ void CSoundMediator::think(int _frames)
 		s_xmplaySound->setMasterSfxVolume(s_currentVolume[SFX]);
 		s_volumeDirty[SFX]=false;
 	}
-//	if(s_volumeDirty[SPEECH])
-//	{
-//		int vol=s_currentVolume[SPEECH]<<7;
-//		CXAStream::SetVolume(vol,vol);
-//		s_volumeDirty[SPEECH]=false;
-//	}
+	if(s_volumeDirty[SPEECH])
+	{
+		int vol=s_currentVolume[SPEECH]<<7;
+		CXAStream::setMasterVolume(vol,vol);
+		s_volumeDirty[SPEECH]=false;
+	}
 }
 
 
@@ -414,10 +415,22 @@ void CSoundMediator::stopSfx(xmPlayingId _playingId)
   ---------------------------------------------------------------------- */
 void CSoundMediator::playSpeech(SpeechEquate _speech)
 {
-//	if(CXAStream::IsPlaying())
-//		CXAStream::Stop();
-//	CXAStream::PlaySpeech(_speech);
+	stopSpeech();
+	CXAStream::PlaySpeech(_speech);
 //	s_volumeDirty[SPEECH]=true;		// Force a volume update
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::stopSpeech()
+{
+	if(CXAStream::IsPlaying())
+		CXAStream::Stop();
 }
 
 
@@ -457,6 +470,7 @@ int CSoundMediator::getVolume(VOLUMETYPE _type)
 void CSoundMediator::stopAllSound()
 {
 	s_xmplaySound->stopAndUnlockAllSound();
+	CXAStream::Stop();
 }
 
 
