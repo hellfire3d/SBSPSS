@@ -143,3 +143,24 @@ void CNpcGaryFriend::setupWaypoints( sThingActor *ThisActor )
 		m_triggerPos.vy = newYPos;
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::render()
+{
+	CNpcThing::render();
+
+// Render
+
+	if (canRender())
+	{
+		DVECTOR &renderPos=getRenderPos();
+
+		m_actorGfx->Render(renderPos,m_animNo,(m_frame>>8),m_reversed);
+
+		sBBox boundingBox = m_actorGfx->GetBBox();
+		boundingBox.YMax = 0;
+		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	}
+}
