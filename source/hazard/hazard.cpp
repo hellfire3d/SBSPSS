@@ -107,6 +107,10 @@
 #include "hazard\hpswitch.h"
 #endif
 
+#ifndef __HAZARD_HRCKSHRD_H__
+#include "hazard\hrckshrd.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -131,6 +135,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_RISING_WEIGHT_HAZARD,
 	NPC_RISING_WEIGHT_WHEEL_HAZARD,
 	NPC_PRESSURE_SWITCH_HAZARD,
+	NPC_ROCKSHARD_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +259,12 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_PRESSURE_SWITCH_HAZARD:
 		{
 			hazard = new ("pressure switch hazard") CNpcPressureSwitchHazard;
+			break;
+		}
+
+		case NPC_ROCKSHARD_HAZARD:
+		{
+			hazard = new ("rock shard hazard") CNpcRockShardHazard;
 			break;
 		}
 

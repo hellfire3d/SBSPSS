@@ -929,6 +929,14 @@ SOURCE=..\..\..\source\hazard\hpswitch.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hrckshrd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hrckshrd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hrrock.cpp
 # End Source File
 # Begin Source File

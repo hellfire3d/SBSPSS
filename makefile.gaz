@@ -147,7 +147,8 @@ hazard_src :=		hazard \
 					hflytrap \
 					hrweight \
 					hrwheel \
-					hpswitch
+					hpswitch \
+					hrckshrd
 
 fx_src :=			fx \
 					fxbaseanim \
