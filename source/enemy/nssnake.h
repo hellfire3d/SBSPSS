@@ -97,6 +97,7 @@ protected:
 	u8								m_turnDir;
 	s16								m_circleHeading;
 	s16								m_origHeading;
+	s32								m_waitTimer;
 };
 
 #endif

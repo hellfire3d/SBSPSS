@@ -167,6 +167,7 @@ void CNpcSeaSnakeEnemy::postInit()
 	m_collTimer = 0;
 	m_meterOn=false;
 	m_turnDir = 0;
+	m_waitTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,159 +251,167 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		}
 	}
 
-	switch( m_turnDir )
+	if ( m_waitTimer > 0 )
 	{
-		case NPC_SEA_SNAKE_CIRCLE_CLOCKWISE:
+		m_waitTimer -= _frames;
+	}
+	else
+	{
+		switch( m_turnDir )
 		{
-			m_circleHeading += m_data[m_type].turnSpeed;
-
-			if ( m_circleHeading > 4096 )
+			case NPC_SEA_SNAKE_CIRCLE_CLOCKWISE:
 			{
-				m_circleHeading = 0;
-				m_turnDir = 0;
-			}
+				m_circleHeading += m_data[m_type].turnSpeed;
 
-			m_heading = ( m_origHeading + m_circleHeading ) & 4095;
-
-			s32 preShiftX = _frames * m_speed * rcos( m_heading );
-			s32 preShiftY = _frames * m_speed * rsin( m_heading );
-
-			s32 moveX = preShiftX >> 12;
-			if ( !moveX && preShiftX )
-			{
-				moveX = preShiftX / abs( preShiftX );
-			}
-
-			s32 moveY = preShiftY >> 12;
-			if ( !moveY && preShiftY )
-			{
-				moveY = preShiftY / abs( preShiftY );
-			}
-
-			Pos.vx += moveX;
-			Pos.vy += moveY;
-
-			break;
-		}
-
-		case NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE:
-		{
-			m_circleHeading -= m_data[m_type].turnSpeed;
-
-			if ( m_circleHeading < -4096 )
-			{
-				m_circleHeading = 0;
-				m_turnDir = 0;
-			}
-
-			m_heading = ( m_origHeading + m_circleHeading ) & 4095;
-
-			s32 preShiftX = _frames * m_speed * rcos( m_heading );
-			s32 preShiftY = _frames * m_speed * rsin( m_heading );
-
-			s32 moveX = preShiftX >> 12;
-			if ( !moveX && preShiftX )
-			{
-				moveX = preShiftX / abs( preShiftX );
-			}
-
-			s32 moveY = preShiftY >> 12;
-			if ( !moveY && preShiftY )
-			{
-				moveY = preShiftY / abs( preShiftY );
-			}
-
-			Pos.vx += moveX;
-			Pos.vy += moveY;
-
-			break;
-		}
-
-		default:
-		{
-			DVECTOR waypointPos;
-			m_npcPath.getCurrentWaypointPos( &waypointPos );
-			waypointPos.vy -= 8;
-
-			if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
-			{
-				// waypoint is either start or end waypoint
-
-				s32 distX, distY;
-
-				distX = waypointPos.vx - Pos.vx;
-				distY = waypointPos.vy - Pos.vy;
-
-				if( !distX && !distY )
+				if ( m_circleHeading > 4096 )
 				{
-					if ( isSnakeStopped() )
+					m_circleHeading = 0;
+					m_turnDir = 0;
+				}
+
+				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
+
+				s32 preShiftX = _frames * m_speed * rcos( m_heading );
+				s32 preShiftY = _frames * m_speed * rsin( m_heading );
+
+				s32 moveX = preShiftX >> 12;
+				if ( !moveX && preShiftX )
+				{
+					moveX = preShiftX / abs( preShiftX );
+				}
+
+				s32 moveY = preShiftY >> 12;
+				if ( !moveY && preShiftY )
+				{
+					moveY = preShiftY / abs( preShiftY );
+				}
+
+				Pos.vx += moveX;
+				Pos.vy += moveY;
+
+				break;
+			}
+
+			case NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE:
+			{
+				m_circleHeading -= m_data[m_type].turnSpeed;
+
+				if ( m_circleHeading < -4096 )
+				{
+					m_circleHeading = 0;
+					m_turnDir = 0;
+				}
+
+				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
+
+				s32 preShiftX = _frames * m_speed * rcos( m_heading );
+				s32 preShiftY = _frames * m_speed * rsin( m_heading );
+
+				s32 moveX = preShiftX >> 12;
+				if ( !moveX && preShiftX )
+				{
+					moveX = preShiftX / abs( preShiftX );
+				}
+
+				s32 moveY = preShiftY >> 12;
+				if ( !moveY && preShiftY )
+				{
+					moveY = preShiftY / abs( preShiftY );
+				}
+
+				Pos.vx += moveX;
+				Pos.vy += moveY;
+
+				break;
+			}
+
+			default:
+			{
+				DVECTOR waypointPos;
+				m_npcPath.getCurrentWaypointPos( &waypointPos );
+				waypointPos.vy -= 8;
+
+				if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+				{
+					// waypoint is either start or end waypoint
+
+					s32 distX, distY;
+
+					distX = waypointPos.vx - Pos.vx;
+					distY = waypointPos.vy - Pos.vy;
+
+					if( !distX && !distY )
 					{
-						m_npcPath.incPath();
-
-						m_npcPath.getCurrentWaypointPos( &waypointPos );
-						waypointPos.vy -= 8;
-
-						if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+						if ( isSnakeStopped() )
 						{
-							// if next waypoint is ALSO a start/end waypoint, teleport directly to it
-
-							moveEntireSnake( waypointPos );
-							oldPos.vx = waypointPos.vx;
-							oldPos.vy = waypointPos.vy;
-
-							// increment path
 							m_npcPath.incPath();
 
-							// point snake in correct direction
 							m_npcPath.getCurrentWaypointPos( &waypointPos );
+							waypointPos.vy -= 8;
 
-							m_heading = ratan2( waypointPos.vy - Pos.vy, waypointPos.vx - Pos.vx ) & 4095;
+							if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+							{
+								// if next waypoint is ALSO a start/end waypoint, teleport directly to it
+
+								moveEntireSnake( waypointPos );
+								m_waitTimer = 3 * GameState::getOneSecondInFrames();
+								oldPos.vx = waypointPos.vx;
+								oldPos.vy = waypointPos.vy;
+
+								// increment path
+								m_npcPath.incPath();
+
+								// point snake in correct direction
+								m_npcPath.getCurrentWaypointPos( &waypointPos );
+
+								m_heading = ratan2( waypointPos.vy - Pos.vy, waypointPos.vx - Pos.vx ) & 4095;
+							}
 						}
+					}
+					else
+					{
+						processGenericGotoTarget( _frames, distX, distY, m_speed );
 					}
 				}
 				else
 				{
-					processGenericGotoTarget( _frames, distX, distY, m_speed );
-				}
-			}
-			else
-			{
-				if ( processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist ) )
-				{
-					// path has changed
-
-					DVECTOR newWaypointPos;
-
-					m_npcPath.getCurrentWaypointPos( &newWaypointPos );
-					newWaypointPos.vy -= 8;
-
-					if ( newWaypointPos.vy == waypointPos.vy )
+					if ( processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist ) )
 					{
-						int testDir = newWaypointPos.vx - waypointPos.vx;
+						// path has changed
 
-						if ( testDir > 0 && testDir <= 16 )
+						DVECTOR newWaypointPos;
+
+						m_npcPath.getCurrentWaypointPos( &newWaypointPos );
+						newWaypointPos.vy -= 8;
+
+						if ( newWaypointPos.vy == waypointPos.vy )
 						{
-							// clockwise
+							int testDir = newWaypointPos.vx - waypointPos.vx;
 
-							m_turnDir = NPC_SEA_SNAKE_CIRCLE_CLOCKWISE;
-							m_circleHeading = 0;
-							m_origHeading = m_heading;
-							m_npcPath.incPath();
-						}
-						else if ( testDir < 0 && testDir >= -16 )
-						{
-							// anticlockwise
+							if ( testDir > 0 && testDir <= 16 )
+							{
+								// clockwise
 
-							m_turnDir = NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE;
-							m_circleHeading = 0;
-							m_origHeading = m_heading;
-							m_npcPath.incPath();
+								m_turnDir = NPC_SEA_SNAKE_CIRCLE_CLOCKWISE;
+								m_circleHeading = 0;
+								m_origHeading = m_heading;
+								m_npcPath.incPath();
+							}
+							else if ( testDir < 0 && testDir >= -16 )
+							{
+								// anticlockwise
+
+								m_turnDir = NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE;
+								m_circleHeading = 0;
+								m_origHeading = m_heading;
+								m_npcPath.incPath();
+							}
 						}
 					}
 				}
-			}
 
-			break;
+				break;
+			}
 		}
 	}
 
