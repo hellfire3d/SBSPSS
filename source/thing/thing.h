@@ -182,14 +182,14 @@ public:
 virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
 virtual	bool			alwaysThink()								{return(false);}
+virtual	void			leftThingZone(int _frames)					{}
+virtual	void			enterThingZone(int _frames)					{}
 
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 		int				getCollisionRadius()						{return m_collisionRadius;}
 virtual	CRECT const		&getCollisionArea()							{return m_collisionArea;}
-//!Dave!		s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
-//!Dave!		DVECTOR const	&getNewCollidedPos()							{return m_newCollidedPos;}		// pkg - to be removed?
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}
 
 virtual int				canCollide()								{return true;}
@@ -200,12 +200,12 @@ virtual void			collidedWith(CThing *_thisThing)			{;}
 virtual void			setHasPlatformCollided( bool newVal )		{;}
 virtual bool			getHasPlatformCollided()					{return false;}
 virtual s32				getNewYPos( CThing *_thisThing );
-//!Dave!		void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
 public:
 // Thing states
 		void			setRenderFlag(bool f)						{m_renderFlag=f;}
 		void			setThinkFlag(bool f)						{m_thinkFlag=f;}
+		bool			getThinkFlag()								{return(m_thinkFlag);}
 		bool			canRender()									{return (m_renderFlag);}
 		DVECTOR			&getRenderPos()								{return(m_RenderPos);}
 		bool			canThink()									{return (m_thinkFlag);}
@@ -219,15 +219,13 @@ protected:
 virtual void			setCollisionSize(int _w,int _h);
 virtual void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
 virtual void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
-//!Dave!virtual void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}	// pkg - move to CNpcPlatform?
+
 private:
 		DVECTOR			m_collisionSize;
 		DVECTOR			m_collisionCentreOffset;
 		int				m_collisionRadius;
 		CRECT			m_collisionArea;
 		DVECTOR			m_collisionCentre;
-//!Dave!		s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
-//!Dave!		DVECTOR			m_newCollidedPos;															// pkg - to be removed?
 
 // Free List Stuff
 public:

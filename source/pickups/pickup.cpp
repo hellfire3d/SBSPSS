@@ -208,7 +208,8 @@ void	CBasePickup::setPos(const DVECTOR *_pos)
 void	CBasePickup::collect(class CPlayer *_player)
 {
 	shutdown();
-	delete this;
+	CThingManager::DeleteThing(this);
+//	delete this;
 }
 
 

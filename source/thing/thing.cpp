@@ -11,7 +11,7 @@
 
 ===========================================================================*/
 
-//#define	USE_FREE_LIST
+#define	USE_FREE_LIST
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
@@ -96,6 +96,8 @@ sBBox			CThingManager::m_ThinkBBox;
 #ifdef	USE_FREE_LIST
 CThing			**CThingManager::s_FreeList[CThing::MAX_TYPE];
 CThing			*DuffList;
+int				FreeListCount=0;
+int				DuffListCount=0;
 
 
 struct	sFreeListTable
@@ -349,16 +351,15 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		{
 			// Check If in Thinkable range
 			CRECT	const *ThingRect= thing->getThinkBBox();
-			bool	Flag=true;
+			int		lastFlag=thing->getThinkFlag()<<1;
+			int		Flag=1;
 			// Will speed this up
-
 			if (!thing->alwaysThink())
 			{
-				if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=false;
-				if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=false;
+				if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=0;
+				if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=0;
 			}
 			thing->setThinkFlag(Flag);
-
 			if (Flag)
 			{
 				thing->think(_frames);
@@ -368,6 +369,25 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 					CThingManager::addToCollisionList(thing);
 				}
 			}
+			Flag|=lastFlag;
+			switch (Flag)
+			{			// Last This
+				case 0: // 0    0
+					break;
+				case 1: // 0    1
+					thing->enterThingZone(_frames);
+					break;
+				case 2: // 1    0
+					thing->leftThingZone(_frames);
+					break;
+				case 3: // 1    1
+					break;
+				default:
+					ASSERT("Invalid Think State");
+			}
+
+
+
 /* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
 			thing->updateCollisionArea();
 
@@ -387,7 +407,6 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	if (player && playerThing)
 	{
 		playerThing->setHasPlatformCollided( false );
-//!Dave!		playerThing->setNewCollidedPos( playerThing->getPos() );
 
 		// Player -> Platform collision
 		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
@@ -781,6 +800,7 @@ void	CThingManager::resetFreeList()
 				{
 					CThing	*Next=ThisThing->NextFreeThing;
 					delete ThisThing;
+					FreeListCount--;
 					ThisThing=Next;
 				}
 				List[t]=0;
@@ -791,6 +811,7 @@ void	CThingManager::resetFreeList()
 		{
 			CThing	*next=Duff->NextFreeThing;
 			delete Duff;
+			DuffListCount--;
 			Duff=next;
 		}
 #endif
@@ -816,12 +837,12 @@ CThing	*CThingManager::GetThing(int Type,int SubType)
 CThing	**List=s_FreeList[Type];
 CThing	*Thing=List[SubType];
 
-
 		if (Thing)
 		{
 			List[SubType]=Thing->NextFreeThing;
 			Thing->initDef();
 			Thing->NextFreeThing=0;
+			FreeListCount--;
 		}
 
 		return(Thing);
@@ -840,18 +861,19 @@ CThing	**List=s_FreeList[Type];
 
 // Check its been aquired/set correctly
 // Temp workaround
-//		ASSERT(SubType!=1234);
+		ASSERT(SubType!=1234);
 		if (SubType!=1234)
 		{
 			Thing->NextFreeThing=List[SubType];
 			List[SubType]=Thing;
+			FreeListCount++;
 		}
 		else
 		{
 //			delete Thing;
 			Thing->NextFreeThing=DuffList;
 			DuffList=Thing;
-
+			DuffListCount++;
 		}
 
 #else
@@ -872,10 +894,8 @@ CThing	**List=s_FreeList[Type];
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int	DaveDbg=1;
 void	CThing::init()
 {
-	ASSERT(DaveDbg);
 	ParentThing=NULL;
 	NextThing=NULL;
 	m_numChildren = 0;
@@ -884,7 +904,6 @@ void	CThing::init()
 // These need to stay for init
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
-//!Dave!	setCollisionAngle(0);
 
 // Add to thing list
 	CThingManager::addToThingList(this);
@@ -898,6 +917,7 @@ void	CThing::init()
   ---------------------------------------------------------------------- */
 void	CThing::shutdown()
 {
+	
 	if (ParentThing)
 	{ // Is child
 		ParentThing->removeChild(this);
@@ -922,8 +942,6 @@ void	CThing::think(int _frames)
 	PosDelta.vx=Pos.vx-PosLast.vx;
 	PosDelta.vy=Pos.vy-PosLast.vy;
 	PosLast=Pos;
-
-
 }
 
 /*----------------------------------------------------------------------
