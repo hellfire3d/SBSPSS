@@ -113,15 +113,7 @@ sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
 sOT				*ThisOT;
-//MATRIX			&CamMtx=CGameScene::GetCamMtx();
 VECTOR			BlkPos;
-
-//extern int RenderZ;
-//		CamMtx.t[2]=RenderZ;
-//		SetTransMatrix(&CamMtx);		
-
-//		SetIdentNoTrans(&CamMtx);
-//		SetRotMatrix(&CamMtx);
 
 // Setup Trans Matrix
 		BlkPos.vx=XOfs-(ShiftX);
@@ -154,9 +146,9 @@ VECTOR			BlkPos;
 					*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 					*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 					*(u16*)&TPrimPtr->u2=T2;	// Set UV2
-					if (TList->OTOfs>MAX_OT-1) TList->OTOfs=MAX_OT-1;
-					ThisOT=OtPtr+TList->OTOfs;
 
+					ASSERT(TList->OTOfs<MAX_OT);
+					ThisOT=OtPtr+TList->OTOfs;
 					TList++;
 					gte_nclip_b();
 					gte_stsxy3_ft3(TPrimPtr);

@@ -9,6 +9,7 @@
 #include "utils\pak.h"
 #include "gfx\prim.h"
 #include "gfx\actor.h"
+#include "gfx\otpos.h"
 
 #include <dstructs.h>
 
@@ -466,7 +467,7 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-int	ActorOT=10;
+int	ActorOT=OTPOS__ACTOR_POS;
 
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
@@ -528,7 +529,7 @@ POLY_FT4		*Ft4;
 			setRGB0(Ft4,128,128,128);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
-			AddPrimToList(Ft4,ActorOT);
+			addPrim(OtPtr+ActorOT,Ft4);
 
 			if (ShadowFlag)
 			{
@@ -540,7 +541,7 @@ POLY_FT4		*Ft4;
 				sFt4->y1+=ShadowYOfs;
 				setSemiTrans(sFt4,1);
 				setRGB0(sFt4,0,0,0);
-				AddPrimToList(sFt4,ActorOT);
+				addPrim(OtPtr+ActorOT,sFt4);
 			}
 // Set BBox
 int			HalfW=CurrentFrame->W>>1;
@@ -753,7 +754,8 @@ int			ShiftY=(Pos.vy & 15);
 			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
-			if (TList->OTOfs>MAX_OT-1) TList->OTOfs=MAX_OT-1;
+
+			
 			ThisOT=OtPtr+TList->OTOfs;
 
 			TList++;
