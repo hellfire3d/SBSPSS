@@ -66,7 +66,7 @@ void CNpcBigWheelPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 		init( pivotPos );
 
-		m_rotation = ratan2( abs( yDist ), abs( xDist ) );
+		m_rotation = ratan2( yDist, xDist );
 
 		m_extension = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
 
