@@ -143,8 +143,8 @@ public:
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
-	s16				getCollisionAngle()							{return m_collisionAngle;}
-	DVECTOR			getNewCollidedPos()							{return m_newCollidedPos;}
+	s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
+	DVECTOR			getNewCollidedPos()							{return m_newCollidedPos;}		// pkg - to be removed?
 	DVECTOR			getCollisionSize()							{return m_collisionSize;}
 
 	virtual int		canCollide()								{return true;}
@@ -155,22 +155,22 @@ public:
 	virtual void	setHasPlatformCollided( bool newVal )		{;}
 	virtual bool	getHasPlatformCollided()					{return false;}
 	virtual s32		getNewYPos( CThing *_thisThing );
-	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
+	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
 
 protected:
-	void			setCollisionSize(int _w,int _h);
-	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
-	void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
-	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
+	virtual void	setCollisionSize(int _w,int _h);
+	virtual void	setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
+	virtual void	setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
+	virtual void	setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}	// pkg - move to CNpcPlatform?
 private:
 	DVECTOR			m_collisionSize;
 	DVECTOR			m_collisionCentreOffset;
 	int				m_collisionRadius;
 	CRECT			m_collisionArea;
 	DVECTOR			m_collisionCentre;
-	s16				m_collisionAngle;
-	DVECTOR			m_newCollidedPos;
+	s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
+	DVECTOR			m_newCollidedPos;															// pkg - to be removed?
 
 };
 

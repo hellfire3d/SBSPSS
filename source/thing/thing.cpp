@@ -417,7 +417,7 @@ void	CThing::init()
 
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
-	m_collisionAngle = 0;
+	setCollisionAngle(0);
 }
 
 /*----------------------------------------------------------------------
@@ -468,6 +468,32 @@ void	CThing::render()
 {
 	if(showthings)
 	{
+		DVECTOR	ofs;
+		CRECT	area;
+
+		ofs=CLevel::getCameraPos();
+		area=getCollisionArea();
+		area.x1-=ofs.vx;
+		area.y1-=ofs.vy;
+		area.x2-=ofs.vx;
+		area.y2-=ofs.vy;
+
+		if(area.x1<=511&&area.x2>=0&&
+		   area.y1<=255&&area.y2>=0)
+		{
+			DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
+			DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
+			DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
+			DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
+
+			area.x1=Pos.vx-10-ofs.vx;
+			area.y1=Pos.vy-10-ofs.vy;
+			area.x2=Pos.vx+10-ofs.vx;
+			area.y2=Pos.vy+10-ofs.vy;
+			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
+			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
+		}
+/*
 		DVECTOR	ofs;
 		CRECT	area;
 
@@ -538,6 +564,7 @@ void	CThing::render()
 			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
 			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
 		}
+*/
 	}
 }
 #else
