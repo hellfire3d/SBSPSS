@@ -22,21 +22,13 @@ static sPadConfigTable	PadConfigDefault=
 	PAD_UP,				// PAD_CFG_UP
 	PAD_DOWN,			// PAD_CFG_DOWN
 
-	PAD_START,			// PAD_CFG_START
-	PAD_SELECT,			// PAD_CFG_SELECT
-
-	PAD_CIRCLE,			// PAD_CFG_KICK
-	PAD_CROSS,			// PAD_CFG_PUNCH
-	PAD_SQUARE,			// PAD_CFG_JUMP
-	PAD_TRIANGLE,		// PAD_CFG_BLOCK
-	PAD_L2,				// PAD_CFG_RUN
-	PAD_R2,				// PAD_CFG_SPECIAL
-	PAD_L1,				// PAD_CFG_STEPLEFT
-	PAD_R1				// PAD_CFG_STEPRIGHT
+	PAD_START,			// PAD_CFG_PAUSE,
+	PAD_CIRCLE,			// PAD_CFG_ACTION,
+	PAD_CROSS,			// PAD_CFG_JUMP,
 	}
 };
 
-static sPadConfigTable	BloodyOddPadConfigDefault=
+static sPadConfigTable	PadConfigAlternative=
 {
 	{
 	0,					// PAD_CFG_NONE
@@ -45,17 +37,9 @@ static sPadConfigTable	BloodyOddPadConfigDefault=
 	PAD_UP,				// PAD_CFG_UP
 	PAD_DOWN,			// PAD_CFG_DOWN
 
-	PAD_START,			// PAD_CFG_START
-	PAD_SELECT,			// PAD_CFG_SELECT
-
-	PAD_R2,				// PAD_CFG_KICK
-	PAD_R1,				// PAD_CFG_PUNCH
-	PAD_CROSS,			// PAD_CFG_JUMP
-	PAD_L1,				// PAD_CFG_BLOCK
-	PAD_SQUARE,			// PAD_CFG_RUN
-	PAD_L2,				// PAD_CFG_SPECIAL
-	PAD_TRIANGLE,		// PAD_CFG_STEPLEFT
-	PAD_CIRCLE			// PAD_CFG_STEPRIGHT
+	PAD_START,			// PAD_CFG_PAUSE,
+	PAD_CROSS,			// PAD_CFG_ACTION,
+	PAD_SQUARE,			// PAD_CFG_JUMP,
 	}
 };
 
@@ -437,7 +421,7 @@ bool	PadIsConnected(int port)
 sPadConfigTable *getPadConfigTable(int _padConfig)
 {
 	if(_padConfig==0)return &PadConfigDefault;
-	if(_padConfig==1)return &BloodyOddPadConfigDefault;
+	if(_padConfig==1)return &PadConfigAlternative;
 	ASSERT(0);
 	return &PadConfigDefault;
 }
