@@ -499,11 +499,9 @@ void	CGameScene::initLevel()
 
 
 /*****************************************************************************/
-int	DropAmount=69;
-int	DropVel=1;
 void	CGameScene::dropHealth(DVECTOR &Pos,int Amount,int Vel)
 {
-	m_HealthManager->drop(Pos,DropAmount,DropVel);
+	m_HealthManager->drop(Pos,Amount,Vel);
 }
 
 /*****************************************************************************/

@@ -1927,6 +1927,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					else
 					{
 						// Launch all spatulas!
+						GameScene.dropHealth(Pos,m_numSpatulasHeld,1);
 						m_numSpatulasHeld=0;
 					}
 				}
