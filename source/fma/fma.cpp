@@ -1159,7 +1159,8 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 	s_FMAPartyScript,
 };
 
-static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__CH1FINISHED;
+//CFmaScene::FMA_SCRIPT_NUMBER			(pkg)
+int	s_chosenScript=CFmaScene::FMA_SCRIPT__CH5FINISHED;
 
 /*----------------------------------------------------------------------
 	Function:
