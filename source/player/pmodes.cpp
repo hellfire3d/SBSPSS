@@ -423,7 +423,9 @@ void	CPlayerModeBase::playerHasHitGround()
 		// Landed from a painfully long fall
 		// This no longer hurts as per THQs request..
 		setState(STATE_HITGROUND);
-//		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
+#ifdef __USER_paul__
+		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
+#endif
 		moveVel.vx=0;
 		CGameScene::setCameraShake(0,8);
 	}

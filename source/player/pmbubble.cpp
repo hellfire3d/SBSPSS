@@ -258,7 +258,7 @@ void	CPlayerModeBubbleMixture::renderModeUi()
 	FontBank	*fb;
 
 	sb=CGameScene::getSpriteBank();
-	fh=sb->getFrameHeader(FRM__BUBBLEWAND);
+	fh=sb->getFrameHeader(FRM__SMALL_BUBBLEWAND);
 	sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 
 	fb=m_player->getFontBank();

@@ -342,11 +342,11 @@ void	CPlayerModeCoralBlower::renderModeUi()
 //	char		buf[4];
 
 	sb=CGameScene::getSpriteBank();
-	fh=sb->getFrameHeader(FRM__BLOWER);
+	fh=sb->getFrameHeader(FRM__SMALL_BLOWER);
 	if(m_blowerState==BLOWER_STATE__FULL||m_blowerState==BLOWER_STATE__AIMING)
 	{
 		// Blower has a creature/object inside
-		sb->printFT4Scaled(FRM__BLOWER,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,256+128);
+		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,256+128);
 
 		if(m_blowerState==BLOWER_STATE__AIMING)
 		{

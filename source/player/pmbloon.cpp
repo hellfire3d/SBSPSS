@@ -133,7 +133,7 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 	pos.vy=_pos->vy+balloony;
 	if(m_timer<BALLOON_TIMEOUT-BALLOON_POP_FRAMES)
 	{
-		frame=FRM__BALLOON;
+		frame=FRM__SMALL_BALLOON;
 	}
 	else
 	{
@@ -162,7 +162,7 @@ void	CPlayerModeBalloon::renderModeUi()
 		sFrameHdr	*fh;
 
 		sb=CGameScene::getSpriteBank();
-		fh=sb->getFrameHeader(FRM__BALLOON);
+		fh=sb->getFrameHeader(FRM__SMALL_BALLOON);
 
 		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,384);
 	}

@@ -359,7 +359,7 @@ void	CPlayerModeNet::think()
 	char		buf[4];
 
 	sb=CGameScene::getSpriteBank();
-	fh=sb->getFrameHeader(FRM__NET);
+	fh=sb->getFrameHeader(FRM__SMALL_NET);
 	if(m_player->getJellyFishAmmo())
 	{
 		POLY_FT4	*ft4;
