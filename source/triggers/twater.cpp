@@ -55,7 +55,7 @@ void	CInWaterTrigger::collidedWith(CThing *_thisThing)
 {
 	if(_thisThing->getThingType()==TYPE_PLAYER)
 	{
-//		((CPlayer*)_thisThing)->setCameraBox(camBox);
+		((CPlayer*)_thisThing)->setIsInWater(true);
 	}
 }
 
@@ -69,7 +69,7 @@ void	COutOfWaterTrigger::collidedWith(CThing *_thisThing)
 {
 	if(_thisThing->getThingType()==TYPE_PLAYER)
 	{
-//		((CPlayer*)_thisThing)->setCameraBox(camBox);
+		((CPlayer*)_thisThing)->setIsInWater(false);
 	}
 }
 

@@ -285,18 +285,8 @@ private:
 	int							m_currentMode;
 
 
-public:
-	typedef enum
-	{
-		HEALTH_TYPE__NORMAL,
-		HEALTH_TYPE__OUT_OF_WATER,
-	} HEALTH_TYPE;
-
-	void			setHealthType(HEALTH_TYPE _healthType)			{m_healthType=_healthType;}
-
 private:
 	int				m_lives;
-	HEALTH_TYPE		m_healthType;
 	int				m_health;
 	int				m_healthWaterLevel;
 	int				m_healthReactFrames;
@@ -333,9 +323,9 @@ public:
 	int				isWearingGlasses()			{return m_glassesFlag;}
 	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
 	int				isWearingBoots()			{return m_squeakyBootsTimer;}
-	int				isWearingHelmet()			{return false;}
 	void			giveInvincibilityRing()		{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
+	int				isWearingDivingHelmet()		{return m_divingHelmet;}
 
 	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;if(m_bubbleAmmo>99)m_bubbleAmmo=99;}
 	void			useOneBubble()				{m_bubbleAmmo--;}
@@ -345,6 +335,9 @@ public:
 	void			useOneJelly()				{m_jellyAmmo--;}
 	int				getJellyAmmo()				{return m_jellyAmmo;}
 
+	void			setIsInWater(int _in)			{m_isInWater=_in;}
+	int				getIsInWater()				{return m_isInWater;}
+
 private:
 	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
@@ -352,6 +345,7 @@ private:
 	int				m_divingHelmet;
 	int				m_bubbleAmmo;
 	int				m_jellyAmmo;
+	int				m_isInWater;
 
 	// Platforms
 public:

@@ -315,10 +315,6 @@ void	CGameScene::initLevel()
 	DVECTOR				mapSize=Level.getMapSize();
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);
-	if(s_globalLevelSelectThing==1)
-	{
-		m_player->setHealthType(CPlayer::HEALTH_TYPE__OUT_OF_WATER);
-	}
 
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)

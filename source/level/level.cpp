@@ -35,6 +35,10 @@
 #include "triggers\tcamlock.h"
 #endif
 
+#ifndef	__TRIGGERS_TWATER_H__
+#include "triggers\twater.h"
+#endif
+
 #ifndef __PICKUPS_PICKUP_H__
 #include "pickups\pickup.h"
 #endif
@@ -389,6 +393,14 @@ void	CLevel::initThings(int _respawningLevel)
 				// Camera lock trigger
 				case 3:
 					trigger=NULL;
+					break;
+
+				// In/Out of water triggers
+				case 4:
+					trigger=(CInWaterTrigger*)new ("InWaterTrigger") CInWaterTrigger();
+					break;
+				case 5:
+					trigger=(COutOfWaterTrigger*)new ("OutOfWaterTrigger") COutOfWaterTrigger();
 					break;
 			}
 			if(trigger)

@@ -1771,6 +1771,14 @@ SOURCE=..\..\..\source\triggers\tteleprt.cpp
 
 SOURCE=..\..\..\source\triggers\tteleprt.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twater.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twater.h
+# End Source File
 # End Group
 # Begin Group "utils"
 

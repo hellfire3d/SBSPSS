@@ -486,6 +486,7 @@ m_animFrame=0;
 	resetPlayerCollisionSizeToBase();
 
 	m_divingHelmet=false;
+	setIsInWater(true);
 
 //#ifdef __USER_paul__
 registerAddon(PLAYER_ADDON_NET);
@@ -494,9 +495,6 @@ registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
 registerAddon(PLAYER_ADDON_GLASSES);
 registerAddon(PLAYER_ADDON_BUBBLEWAND);
 //#endif
-
-
-	setHealthType(HEALTH_TYPE__NORMAL);
 }
 
 /*----------------------------------------------------------------------
@@ -546,7 +544,10 @@ void	CPlayer::think(int _frames)
 {
 	int	i;
 
-	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
+	ASSERT(!(getIsInWater()==false&&isWearingDivingHelmet()==false));
+
+	if(isWearingDivingHelmet()&&getIsInWater()==false&&
+	   m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
 	{
 		m_healthWaterLevel-=waterDrainSpeed*_frames;
 		if(m_healthWaterLevel<=0)
@@ -871,7 +872,7 @@ for(int i=0;i<NUM_LASTPOS;i++)
 
 
 	// Health
-	if(m_healthType==HEALTH_TYPE__NORMAL)
+	if(!isWearingDivingHelmet())
 	{
 		// In water - Use normal SB face for health
 		static int	s_fullHealthFrames[]=
@@ -955,12 +956,13 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		m_spriteBank->printFT4(fh,x-2,y-2,0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
-	if(isWearingHelmet())
+	if(isWearingDivingHelmet())
 	{
 		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__HELMET);
 		m_spriteBank->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
+
 }
 
 
@@ -1030,7 +1032,7 @@ int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
   ---------------------------------------------------------------------- */
 void CPlayer::addHealth(int _health)
 {
-	if(m_healthType==HEALTH_TYPE__NORMAL)
+	if(!isWearingDivingHelmet())
 	{
 		m_health+=_health;
 		if(m_health>MAX_HEALTH)
@@ -1389,7 +1391,7 @@ int	CPlayer::canDoLookAround()
   ---------------------------------------------------------------------- */
 void	CPlayer::inSoakUpState()
 {
-	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&
+	if(isWearingDivingHelmet()&&
 	   (m_layerCollision->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER)
 	{
 		m_healthWaterLevel+=waterSoakUpSpeed;
@@ -1446,7 +1448,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 		{
 			int	died=false;
 			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
-			if(m_healthType==HEALTH_TYPE__NORMAL)
+			if(!isWearingDivingHelmet())
 			{
 				m_health--;
 				if(m_health<0)

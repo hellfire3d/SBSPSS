@@ -258,7 +258,8 @@ triggers_src :=		tcamlock \
 					tlevexit \
 					tlook \
 					trestart \
-					tteleprt
+					tteleprt \
+					twater
 
 utils_src :=		utils \
 					sincos \
