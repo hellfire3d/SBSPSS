@@ -244,7 +244,7 @@ void CNpcFriend::think(int _frames)
 
 		frameCount = m_actorGfx->getFrameCount( m_animNo );
 
-		s32 frameShift = ( _frames << 8 ) >> 1;
+		s32 frameShift = _frames << 8;
 
 		if ( ( frameCount << 8 ) - m_frame > frameShift )
 		{
