@@ -61,6 +61,7 @@ enemy_src :=		2denemy \
 					nshrkman \
 					ngeneric \
 					nanemone \
+					neyeball \
 					enemy
 
 projectl_src :=		projectl

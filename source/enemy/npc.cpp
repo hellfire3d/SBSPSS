@@ -3,9 +3,9 @@
 	npc.cpp
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -277,10 +277,10 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 	{	// NPC_EYEBALL
 		NPC_INIT_DEFAULT,
-		NPC_SENSOR_NONE,
+		NPC_SENSOR_EYEBALL_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NONE,
+		NPC_CLOSE_EYEBALL_ATTACK,
 		NPC_TIMER_NONE,
 		false,
 		0,
@@ -387,7 +387,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_GHOST_PIRATE;
+	m_type = NPC_EYEBALL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -718,6 +718,20 @@ bool CNpc::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_EYEBALL_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 40000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					default:
 						return( false );
 				}
@@ -793,7 +807,7 @@ void CNpc::processMovement(int _frames)
 				m_heading += moveDist;
 
 				m_heading = m_heading % ONE;
-				
+
 				s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
 				s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
 
@@ -818,7 +832,7 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_USER_SEEK:
 		{
 			CPlayer *player;
-			
+
 			player = GameScene.getPlayer();
 
 			break;
@@ -913,6 +927,11 @@ void CNpc::processClose(int _frames)
 
 			break;
 
+		case NPC_CLOSE_EYEBALL_ATTACK:
+			processCloseEyeballAttack( _frames );
+
+			break;
+
 		default:
 			break;
 	}
@@ -959,27 +978,48 @@ void CNpc::render()
 
 void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 {
-	if ( m_data[this->m_type].canTalk )
+	switch( evt )
 	{
-		DVECTOR sourcePos;
-		s32 xDiffSqr, yDiffSqr;
-
-		// check talk distance
-
-		sourcePos = sourceThing->getPos();
-
-		xDiffSqr = this->Pos.vx - sourcePos.vx;
-		xDiffSqr *= xDiffSqr;
-
-		yDiffSqr = this->Pos.vy - sourcePos.vy;
-		yDiffSqr *= yDiffSqr;
-
-		if ( xDiffSqr + yDiffSqr < 250 )
+		case USER_REQUEST_TALK_EVENT:
 		{
-			if( !CConversation::isActive() )
+			if ( m_data[this->m_type].canTalk )
 			{
-				CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
+				DVECTOR sourcePos;
+				s32 xDiffSqr, yDiffSqr;
+
+				// check talk distance
+
+				sourcePos = sourceThing->getPos();
+
+				xDiffSqr = this->Pos.vx - sourcePos.vx;
+				xDiffSqr *= xDiffSqr;
+
+				yDiffSqr = this->Pos.vy - sourcePos.vy;
+				yDiffSqr *= yDiffSqr;
+
+				if ( xDiffSqr + yDiffSqr < 250 )
+				{
+					if( !CConversation::isActive() )
+					{
+						CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
+					}
+				}
 			}
+
+			break;
+		}
+
+		case PROJECTILE_RETURNED_TO_SOURCE_EVENT:
+		{
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+
+			removeChild( sourceThing );
+			delete sourceThing;
+
+			break;
 		}
 	}
 }

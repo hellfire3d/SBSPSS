@@ -75,10 +75,6 @@ void 	CGameScene::init()
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
 
-		CProjectile	*testProjectile;
-		testProjectile = new( "test projectile" ) CProjectile;
-		testProjectile->init();
-
 		m_player=new ("player") CPlayer();
 		m_player->init();
 

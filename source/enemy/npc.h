@@ -27,16 +27,6 @@
 class	CNpc : public CThing
 {
 public:
-	void				init();
-	void				shutdown();
-	void				think(int _frames);
-	virtual void		render();
-	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
-
-
-protected:
-	// NPC data structure definitions //
-
 	enum NPC_UNIT_TYPE
 	{
 		NPC_TEST_TYPE = 0,
@@ -70,6 +60,16 @@ protected:
 		NPC_UNIT_TYPE_MAX,
 	};
 
+	void				init();
+	void				shutdown();
+	void				think(int _frames);
+	virtual void		render();
+	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+
+
+protected:
+	// NPC data structure definitions //
+
 	enum NPC_INIT_FUNC
 	{
 		NPC_INIT_DEFAULT = 0,
@@ -97,6 +97,7 @@ protected:
 		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
 		NPC_SENSOR_ANEMONE_USER_CLOSE,
+		NPC_SENSOR_EYEBALL_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -110,6 +111,7 @@ protected:
 		NPC_CLOSE_GENERIC_USER_SEEK,
 		NPC_CLOSE_ANEMONE_1_ATTACK,
 		NPC_CLOSE_ANEMONE_2_ATTACK,
+		NPC_CLOSE_EYEBALL_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -197,6 +199,10 @@ protected:
 	void				processCloseAnemone1Attack( int _frames );
 	void				processCloseAnemone2Attack( int _frames );
 
+	// eyeball functions
+
+	void				processCloseEyeballAttack( int _frames );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -210,9 +216,9 @@ protected:
 	CNpcPath			m_npcPath;
 	s32					m_heading;
 	s32					m_fireHeading;
-	s32					m_movementTimer;
 	s32					m_velocity;
 	bool				m_evadeClockwise;
+	s32					m_movementTimer;
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;
