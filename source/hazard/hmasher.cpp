@@ -29,6 +29,7 @@ void CNpcMasherHazard::init()
 	CNpcHazard::init();
 
 	m_state = MASHER_DROPPING;
+	m_pauseTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,27 +40,34 @@ void CNpcMasherHazard::processMovement( int _frames )
 	{
 		case MASHER_DROPPING:
 		{
-			s8 yMovement = 3 * _frames;
-
-			s8 groundHeight;
-
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
-
-			if ( groundHeight < yMovement )
+			if ( m_pauseTimer <= 0 )
 			{
-				// colliding with ground
+				s8 yMovement = 3 * _frames;
 
-				Pos.vy += groundHeight;
+				s8 groundHeight;
 
-				// pause and change direction
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
-				m_state = MASHER_RISING;
+				if ( groundHeight < yMovement )
+				{
+					// colliding with ground
+
+					Pos.vy += groundHeight;
+
+					// pause and change direction
+
+					m_state = MASHER_RISING;
+				}
+				else
+				{
+					// drop down
+
+					Pos.vy += yMovement;
+				}
 			}
 			else
 			{
-				// drop down
-
-				Pos.vy += yMovement;
+				m_pauseTimer -= _frames;
 			}
 
 			break;
@@ -70,6 +78,8 @@ void CNpcMasherHazard::processMovement( int _frames )
 			if ( m_base.vx - Pos.vx == 0 && m_base.vy - Pos.vy == 0 )
 			{
 				m_state = MASHER_DROPPING;
+
+				m_pauseTimer = GameState::getOneSecondInFrames();
 			}
 			else
 			{

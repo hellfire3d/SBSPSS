@@ -33,6 +33,8 @@ protected:
 	};
 
 	MASHER_STATE		m_state;
+
+	int					m_pauseTimer;
 };
 
 #endif
