@@ -47,6 +47,10 @@
 #include <ACTOR_SPIKEYANENOME_ANIM.h>
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcAnemoneEnemy::postInit()
@@ -223,61 +227,13 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 void CNpcAnemone2Enemy::postInit()
 {
-	CProjectile *projectile;
-	s16 heading;
-
-	MATRIX mtx;
-	SetIdentNoTrans(&mtx );
-	RotMatrixZ( m_heading, &mtx );
-
-	m_radius = 0;
-
-	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
-	{
-		DVECTOR spikePos;
-
-		s16 relativeHeading = -1024 + ( fireLoop * 512 );
-
-		heading = m_heading + relativeHeading;
-		heading &= 4095;
-
-		spikePos = Pos;
-
-		//s16 multiplier, multiplier2;
-		s16 xDiff, yDiff;
-		SVECTOR offset;
-		VECTOR result;
-
-		// move base position
-		
-		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
-		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
-
-		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
-
-		xDiff = ( m_scaleY * m_radius ) >> 12;
-		yDiff = ( m_scaleX * m_radius ) >> 12;
-
-		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
-		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
-
-		ApplyMatrix( &mtx, &offset, &result );
-
-		spikePos.vx += result.vx;
-		spikePos.vy += result.vy;
-
-		projectile = new( "anemone lev2 projectile" ) CProjectile;
-		projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
-		projectile->setLayerCollision( m_layerCollision );
-		projectile->setOt( 15 );
-
-		addChild( projectile );
-	}
-
 	m_drawRotation = m_heading + 1024;
 
 	m_scaleX = ONE;
 	m_scaleY = ONE;
+
+	m_spriteBank=new ("projectile sprites") SpriteBank();
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -418,28 +374,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 		CProjectile *projectile;
 		s16 heading;
 
-		// fire off attached spikes
-
-		CThing *nextThing = Next;
-
-		while ( nextThing )
-		{
-			CProjectile *projectile;
-
-			projectile = (CProjectile *) nextThing;
-
-			if ( projectile->getMovementType() == CProjectile::PROJECTILE_FIXED )
-			{
-				projectile->setMovementType( CProjectile::PROJECTILE_DUMBFIRE );
-				projectile->setLifeTime( CProjectile::PROJECTILE_FINITE_LIFE );
-				projectile->setState( CProjectile::PROJECTILE_ATTACK );
-				projectile->setOt( 0 );
-			}
-
-			nextThing = nextThing->getNext();
-		}
-
-		removeAllChild();
+		// fire off spikes
 
 		m_radius = 0;
 
@@ -467,8 +402,8 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 			// move base position
 			
-			spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
-			spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
+			spikePos.vx += ( SPIKE_DIST * rcos( m_heading ) ) >> 12;
+			spikePos.vy += ( SPIKE_DIST * rsin( m_heading ) ) >> 12;
 
 			// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
@@ -484,11 +419,9 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			spikePos.vy += result.vy;
 
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
-			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+			projectile->init( spikePos, heading, CProjectile::PROJECTILE_DUMBFIRE, CProjectile::PROJECTILE_FINITE_LIFE );
 			projectile->setLayerCollision( m_layerCollision );
-			projectile->setOt( 15 );
-
-			addChild( projectile );
+			projectile->setState( CProjectile::PROJECTILE_ATTACK );
 		}
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
@@ -511,61 +444,9 @@ void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 dis
 		m_movementTimer -= maxTimer;
 	}
 
-	s32 sineVal = ( m_movementTimer * ONE ) / maxTimer;
-
-	m_scaleX = ONE + ( rsin( sineVal ) >> 2 );
-	m_scaleY = ONE + ( rcos( sineVal ) >> 2 );
-
-	CProjectile *projectile;
-	projectile = (CProjectile *) Next;
-
-	MATRIX mtx;
-	SetIdentNoTrans(&mtx );
-	RotMatrixZ( m_heading, &mtx );
-
 	if ( m_radius < SPIKE_RADIUS )
 	{
 		m_radius++;
-	}
-
-	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
-	{
-		DVECTOR spikePos;
-
-		s16 relativeHeading = -1024 + ( fireLoop * 512 );
-		s16 heading = m_heading + relativeHeading;
-		heading &= 4095;
-
-		spikePos = Pos;
-
-		//s16 multiplier, multiplier2;
-		s16 xDiff, yDiff;
-		SVECTOR offset;
-		VECTOR result;
-
-		// move base position
-		
-		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
-		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
-
-		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
-
-		xDiff = ( m_scaleY * m_radius ) >> 12;
-		yDiff = ( m_scaleX * m_radius ) >> 12;
-
-		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
-		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
-
-		ApplyMatrix( &mtx, &offset, &result );
-
-		spikePos.vx += result.vx;
-		spikePos.vy += result.vy;
-
-		if ( projectile )
-		{
-			projectile->setPos( spikePos );
-			projectile = (CProjectile *) projectile->getNext();
-		}
 	}
 }
 
@@ -581,6 +462,67 @@ void CNpcAnemone2Enemy::render()
 
 		if (canRender())
 		{
+			s32 maxTimer = GameState::getOneSecondInFrames() >> 1;
+
+			s32 sineVal = ( m_movementTimer * ONE ) / maxTimer;
+
+			m_scaleX = ONE + ( rsin( sineVal ) >> 2 );
+			m_scaleY = ONE + ( rcos( sineVal ) >> 2 );
+
+			MATRIX mtx;
+			SetIdentNoTrans(&mtx );
+			RotMatrixZ( m_heading, &mtx );
+
+			for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+			{
+				DVECTOR spikePos;
+
+				s16 relativeHeading = -1024 + ( fireLoop * 512 );
+				s16 heading = m_heading + relativeHeading;
+				heading &= 4095;
+
+				spikePos = Pos;
+
+				//s16 multiplier, multiplier2;
+				s16 xDiff, yDiff;
+				SVECTOR posOffset;
+				VECTOR result;
+
+				// move base position
+				
+				spikePos.vx += ( SPIKE_DIST * rcos( m_heading ) ) >> 12;
+				spikePos.vy += ( SPIKE_DIST * rsin( m_heading ) ) >> 12;
+
+				// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
+
+				xDiff = ( m_scaleY * m_radius ) >> 12;
+				yDiff = ( m_scaleX * m_radius ) >> 12;
+
+				posOffset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
+				posOffset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
+
+				ApplyMatrix( &mtx, &posOffset, &result );
+
+				spikePos.vx += result.vx;
+				spikePos.vy += result.vy;
+
+				sFrameHdr	*frameHdr;
+				DVECTOR	offset;
+				int		x,y;
+				int		scrnWidth = VidGetScrW();
+				int		scrnHeight = VidGetScrH();
+				int		spriteWidth = m_spriteBank->getFrameWidth(FRM__SPIKE);
+				int		spriteHeight = m_spriteBank->getFrameHeight(FRM__SPIKE);
+
+				offset = CLevel::getCameraPos();
+
+				x = spikePos.vx - offset.vx;
+				y = spikePos.vy - offset.vy;
+
+				frameHdr = m_spriteBank->getFrameHeader( FRM__SPIKE );
+				m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, heading, 10 );
+			}
+
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);

@@ -53,6 +53,7 @@ protected:
 	enum
 	{
 		SPIKE_RADIUS = 15,
+		SPIKE_DIST = 5,
 	};
 };
 
