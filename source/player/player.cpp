@@ -1924,7 +1924,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 
 			case DAMAGE__ELECTROCUTION:
 			case DAMAGE__SHOCK_ENEMY:
-				if(!isWearingBoots())
+				if(isWearingBoots())
 				{
 					ouchThatHurt=false;
 				}
