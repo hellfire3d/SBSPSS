@@ -43,7 +43,7 @@ public:
 
 protected:
 	const struct PlayerMetrics	*getPlayerMetrics(class CPlayer *_player);
-	void			setState(class CPlayer *_player,int _state);
+	int				setState(class CPlayer *_player,int _state);
 	int				getFacing(class CPlayer *_player);
 	void			setFacing(class CPlayer *_player,int _facing);
 	int				getAnimNo(class CPlayer *_player);

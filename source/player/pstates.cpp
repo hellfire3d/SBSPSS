@@ -63,9 +63,9 @@ const PlayerMetrics *CPlayerState::getPlayerMetrics(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerState::setState(CPlayer *_player,int _state)
+int CPlayerState::setState(CPlayer *_player,int _state)
 {
-	_player->setState((PLAYER_STATE)_state);
+	return _player->setState((PLAYER_STATE)_state);
 }
 
 

@@ -390,9 +390,10 @@ const PlayerMetrics *CPlayer::getPlayerMetrics()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayer::setState(PLAYER_STATE _state)
+int CPlayer::setState(PLAYER_STATE _state)
 {
 	CPlayerState	*nextState;
+	int				ret=false;
 
 	nextState=s_modes[m_currentMode].m_states[_state];
 	if(nextState)
@@ -400,7 +401,9 @@ void	CPlayer::setState(PLAYER_STATE _state)
 		m_currentStateClass=nextState;
 		m_currentStateClass->enter(this);
 		m_currentState=_state;
+		ret=true;
 	}
+	return ret;
 }
 
 
@@ -410,7 +413,7 @@ void	CPlayer::setState(PLAYER_STATE _state)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayer::setMode(PLAYER_MODE _mode)
+void CPlayer::setMode(PLAYER_MODE _mode)
 {
 	m_currentMode=_mode;
 	setState(m_currentState);
@@ -431,20 +434,8 @@ void CPlayer::setFacing(int _facing)
 {
 	if(m_facing!=_facing)
 	{
-		switch(_facing)
-		{
-			case FACING_LEFT:
-				m_facing=FACING_LEFT;
-				m_skel.setAng(512);//1024);
-				break;
-			case FACING_RIGHT:
-				m_facing=FACING_RIGHT;
-				m_skel.setAng(3096+512);//-1024);
-				break;
-			default:
-				ASSERT(0);
-				break;
-		}
+		m_facing=_facing;
+		m_skel.setDir(_facing);
 	}
 }
 int CPlayer::getAnimFrame()

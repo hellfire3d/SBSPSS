@@ -132,7 +132,7 @@ protected:
 	const PlayerMetrics	*getPlayerMetrics();
 
 	// State
-	void			setState(PLAYER_STATE _state);
+	int				setState(PLAYER_STATE _state);
 	void			setMode(PLAYER_MODE _mode);
 	int				getFacing();
 	void			setFacing(int _facing);
