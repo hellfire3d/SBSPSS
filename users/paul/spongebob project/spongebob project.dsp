@@ -1629,6 +1629,14 @@ SOURCE=..\..\..\source\platform\pseesaw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\psswitch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\psswitch.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\ptrpdoor.cpp
 # End Source File
 # Begin Source File

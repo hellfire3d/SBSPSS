@@ -175,6 +175,10 @@
 #include "platform\pdrop.h"
 #endif
 
+#ifndef __PLATFORM_PSSWITCH_H__
+#include "platform\psswitch.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -398,6 +402,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_DROP_PLATFORM:
 		{
 			platform = new ("drop platform") CNpcDropPlatform;
+			break;
+		}
+
+		case NPC_STEAM_SWITCH_PLATFORM:
+		{
+			platform = new ("steam switch platform") CNpcSteamSwitchPlatform;
 			break;
 		}
 

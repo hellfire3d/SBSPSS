@@ -130,7 +130,8 @@ platform_src :=		platform \
 					pconveyr \
 					pplayer \
 					pcbubble \
-					pdrop
+					pdrop \
+					psswitch
 
 hazard_src :=		hazard \
 					hfalling \
