@@ -200,8 +200,11 @@ public:
 	void			setAnimNo(int _animNo);
 
 	void			springPlayerUp();
+	void			teleportTo(int _x,int _y);
+
 private:
 	void			playAnimFrameSfx(int _animNo,int _animFrame);
+	void			calcCameraFocusPointTarget();
 
 	DVECTOR			m_moveVelocity;
 	int				m_allowConversation;

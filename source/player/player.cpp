@@ -750,8 +750,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	else if(m_leftRightScrollPosition>max)m_leftRightScrollPosition=max;
 
 	// Camera focus point stuff
-	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X+(m_leftRightScrollPosition/scspeed);
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
+	calcCameraFocusPointTarget();
 	for(i=0;i<_frames;i++)
 	{
 		m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
@@ -1104,6 +1103,24 @@ void	CPlayer::springPlayerUp()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayer::teleportTo(int _x,int _y)
+{
+	DVECTOR	pos={_x,_y};
+
+	setPos(pos);
+	setRespawnPos(pos);
+
+	m_leftRightScrollPosition=0;
+	calcCameraFocusPointTarget();
+	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
 {
 	static int				lastAnimNo=-1;
@@ -1162,6 +1179,18 @@ void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::calcCameraFocusPointTarget()
+{
+	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X+(m_leftRightScrollPosition/scspeed);
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1188,13 +1217,15 @@ void CPlayer::respawn()
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
-	m_currentCamFocusPoint.vx=Pos.vx+MAP2D_CENTRE_X;
-	m_currentCamFocusPoint.vy=Pos.vy+MAP2D_CENTRE_Y;
+
+	m_leftRightScrollPosition=0;
+	calcCameraFocusPointTarget();
+	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
+
 	m_padLookAroundTimer=0;
 	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
 	m_ledgeLookOffset=0;
 	m_ledgeLookTimer=0;
-	m_leftRightScrollPosition=0;
 
 	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;
