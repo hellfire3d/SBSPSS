@@ -68,6 +68,10 @@ protected:
 	s16					m_renderScale;
 	s32					m_invulnerableTimer;
 	u8					m_attackCounter;
+	u8					m_patternNum;
+	u8					m_patternPoint;
+
+	DVECTOR				m_pattern[3][4];
 
 	CFXJellyFishLegs	*legs[4];
 	DVECTOR				legsPos[4];

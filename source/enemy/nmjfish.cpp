@@ -86,11 +86,13 @@ void CNpcMotherJellyfishEnemy::postInit()
 	m_pulsateTimer = GameState::getOneSecondInFrames();
 
 	m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
-	m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+	m_speed = m_data[m_type].speed + ( ( 2 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	m_pauseTimer = m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
 	m_invulnerableTimer = 0;
 
 	m_attackCounter = 0;
+	m_patternNum = 0;
+	m_patternPoint = 0;
 
 	CNpcBossEnemy::postInit();
 }
@@ -155,6 +157,35 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 	m_thinkArea.x2 = maxX;
 	m_thinkArea.y1 = minY;
 	m_thinkArea.y2 = maxY;
+
+	// setup patterns
+
+	m_pattern[0][0].vx = minX;
+	m_pattern[0][0].vy = maxY;
+	m_pattern[0][1].vx = maxX;
+	m_pattern[0][1].vy = maxY;
+	m_pattern[0][2].vx = minX;
+	m_pattern[0][2].vy = maxY;
+	m_pattern[0][3].vx = maxX;
+	m_pattern[0][3].vy = maxY;
+
+	m_pattern[1][0].vx = minX;
+	m_pattern[1][0].vy = minY;
+	m_pattern[1][1].vx = maxX;
+	m_pattern[1][1].vy = maxY;
+	m_pattern[1][2].vx = maxX;
+	m_pattern[1][2].vy = minY;
+	m_pattern[1][3].vx = minX;
+	m_pattern[1][3].vy = maxY;
+
+	m_pattern[2][0].vx = maxX;
+	m_pattern[2][0].vy = minY;
+	m_pattern[2][1].vx = maxX;
+	m_pattern[2][1].vy = maxY;
+	m_pattern[2][2].vx = minX;
+	m_pattern[2][2].vy = maxY;
+	m_pattern[2][3].vx = minX;
+	m_pattern[2][3].vy = minY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,9 +225,9 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 						m_RGB = MJ_PINK;
 
-						m_attackCounter++;
+						/*m_attackCounter++;
 
-						if ( m_attackCounter > 2 )
+						if ( m_attackCounter > 8 )
 						{
 							m_attackCounter = 0;
 							m_state = MOTHER_JELLYFISH_STRAFE_START;
@@ -208,7 +239,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 							targetPos.vx = minX;
 							targetPos.vy = minY;
-						}
+						}*/
 					}
 					else
 					{
@@ -243,13 +274,25 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 				if( abs( distX ) < 10 && abs( distY ) < 10 )
 				{
-					s32 minX, maxX, minY, maxY;
+					m_patternPoint++;
 
-					m_npcPath.getPathXExtents( &minX, &maxX );
-					m_npcPath.getPathYExtents( &minY, &maxY );
+					if ( m_patternPoint > 3 )
+					{
+						m_state = MOTHER_JELLYFISH_STRAFE_START;
 
-					targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
-					targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+						s32 minX, maxX, minY, maxY;
+
+						m_npcPath.getPathXExtents( &minX, &maxX );
+						m_npcPath.getPathYExtents( &minY, &maxY );
+
+						targetPos.vx = minX;
+						targetPos.vy = minY;
+					}
+					else
+					{
+						targetPos.vx = m_pattern[m_patternNum][m_patternPoint].vx;
+						targetPos.vy = m_pattern[m_patternNum][m_patternPoint].vy;
+					}
 				}
 				else
 				{
@@ -362,13 +405,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if( abs( distX ) < 10 && abs( distY ) < 10 )
 			{
-				s32 minX, maxX, minY, maxY;
+				m_patternNum = getRnd() % 3;
+				m_patternPoint = 0;
 
-				m_npcPath.getPathXExtents( &minX, &maxX );
-				m_npcPath.getPathYExtents( &minY, &maxY );
-
-				targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
-				targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+				targetPos.vx = m_pattern[m_patternNum][m_patternPoint].vx;
+				targetPos.vy = m_pattern[m_patternNum][m_patternPoint].vy;
 
 				m_state = MOTHER_JELLYFISH_CYCLE;
 				m_RGB = MJ_PINK;
@@ -669,7 +710,7 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 				m_health -= 5;
 
 				m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
-				m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+				m_speed = m_data[m_type].speed + ( ( 2 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 				m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
 
 				m_state = MOTHER_JELLYFISH_CYCLE;
