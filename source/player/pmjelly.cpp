@@ -192,7 +192,7 @@ void	CPlayerModeJellyLauncher::think()
 					m_firingTime++;
 				}
 				m_player->setAnimNo(ANIM_SPONGEBOB_FIRESTART);
-				fc=m_player->getAnimFrameCount();
+				fc=m_player->getAnimFrameCount()-1;
 				if(m_firingTime>=fc)
 				{
 					frame=fc;
