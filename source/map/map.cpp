@@ -238,14 +238,11 @@ void CMapScene::init()
 	m_font->setJustification(FontBank::JUST_LEFT);
 
 	m_currentChapterSelection=s_chapterToStartOn;
-/*
+
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
-//	m_mapBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(m_mapBackgroundImage);
-u8	*Back=(u8*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(Back);
-	LZNP_Decode(Back,(u8*)m_screenImage);
-	MemFree(Back);
-*/
-	m_screenImage=(char*)LoadPakScreen(MAP_MAP_BACKGROUND_GFX);
+	ASSERT(m_screenImage);
+	m_packedBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);
+	ASSERT(m_packedBackgroundImage);
 
 // Load level Gfx
 	for (int i=0; i<MAP_GFX_MAX; i++)
@@ -287,7 +284,7 @@ void CMapScene::shutdown()
 	}
 
 	delete m_pointerIcon;
-//	MemFree(m_mapBackgroundImage);
+	MemFree(m_packedBackgroundImage);
 	MemFree(m_screenImage);
 	m_font->dump();				delete m_font;
 }
@@ -564,14 +561,14 @@ void	CMapScene::generateMapScreenImage()
 {
 	int	i;
 
+	LZNP_Decode((u8*)m_packedBackgroundImage,(u8*)m_screenImage);
+
 	m_currentLevelSelection=0;
-//	memcpy(m_screenImage,m_mapBackgroundImage,512*256*2);
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
 		if(isLevelOpen(m_currentChapterSelection,i))
 		{
 			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_Gfx,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
-//			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_mapFile,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
 		}
 	}
 
@@ -593,12 +590,10 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 
 	image=(u8*)MemAlloc(MAP_LEVEL_WIDTH*MAP_LEVEL_HEIGHT*2,"MapLvlBuffer");
 	LZNP_Decode(s_GfxTable[_file].Gfx,image);
-//	image=CFileIO::loadFile((FileEquate)_file);ASSERT(image);
 	src=(u16*)image;
 	dst=(u16*)m_screenImage+(_x+(_y*512));
 	for(y=0;y<_h;y++)
 	{
-//		memcpy(dst,src,_w*2);
 		u32	*S=(u32*)src;
 		u32	*D=(u32*)dst;
 		for (int x=0; x<MAP_LEVEL_WIDTH/2; x++)

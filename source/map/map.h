@@ -142,7 +142,7 @@ private:
 	int					m_musicStarted;
 
 	char				*m_screenImage;
-//	char				*m_mapBackgroundImage;
+	char				*m_packedBackgroundImage;
 
 	int					m_currentChapterSelection;
 	int					m_currentLevelSelection;
