@@ -173,7 +173,8 @@ void CBubicleEmitter::render()
 void CBubicleEmitter::kill()
 {
 	ASSERT(m_active);
-	
+
+	s_numLiveBubicleEmitters--;
 	m_active=false;
 }
 
