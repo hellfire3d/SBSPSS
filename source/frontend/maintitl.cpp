@@ -95,6 +95,7 @@
 	---- */
 
 ///////////////
+/*
 int seaw=1;
 int seah=50;
 int seaspeed=20;
@@ -106,6 +107,7 @@ int colourscale=4000;
 int colourpostscale=10;
 
 int sval=0;
+*/
 ///////////////
 
 
@@ -175,7 +177,7 @@ void CFrontEndMainTitles::select()
 
 	m_demoTimeout=0;
 
-	s_image=CFileIO::loadFile(BACKDROP_SKY_GFX);
+	s_image=CFileIO::loadFile(BACKDROP_START_GFX);
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 
@@ -205,13 +207,16 @@ void CFrontEndMainTitles::unselect()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 int isx=39;
 int isy=3;
 int isw=100;
 int ish=56;
+*/
 
 void CFrontEndMainTitles::render()
 {
+/*
 	sFrameHdr	*fh;
 	POLY_FT4	*ft4;
 
@@ -225,6 +230,7 @@ void CFrontEndMainTitles::render()
 	// Sea
 	renderSeaSection(m_sprites->getFrameHeader(FRM__ISLAND),isx,HORIZON_LEVEL+isy,isw,ish);
 	renderSeaSection(m_sprites->getFrameHeader(FRM_SKY),0,HORIZON_LEVEL,512,256-HORIZON_LEVEL+SEA_OVERLAP);
+*/
 
 	switch(m_mode)
 	{
@@ -250,7 +256,9 @@ void CFrontEndMainTitles::render()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::think(int _frames)
 {
+/*
 	sval=(sval+(seaspeed*_frames))&4095;
+*/
 
 	// Wait until fade in has finished before starting music
 	if(!m_musicStarted&&!CFader::isFading())
@@ -376,6 +384,7 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
 {
 	int			u,v,w,h;
@@ -405,7 +414,7 @@ POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y
 
 	return ft4;
 }
-
+*/
 
 /*----------------------------------------------------------------------
 	Function:
@@ -413,6 +422,7 @@ POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 typedef struct
 {
 	int	x,y;
@@ -482,7 +492,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
 //	AddPrimToList(f4,FE_OT__SEAPOS);
 //	//////////////////////// bg
 }
-
+*/
 
 /*----------------------------------------------------------------------
 	Function:
@@ -496,6 +506,12 @@ void CFrontEndMainTitles::renderPressStart()
 	{
 		m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
+
+		m_smallFont->setColour(0,0,0);
+		m_smallFont->print(256-1,PRESS_START_TEXT_Y-1,STR__FRONTEND__PRESS_START);
+		m_smallFont->print(256+1,PRESS_START_TEXT_Y-1,STR__FRONTEND__PRESS_START);
+		m_smallFont->print(256-1,PRESS_START_TEXT_Y+1,STR__FRONTEND__PRESS_START);
+		m_smallFont->print(256+1,PRESS_START_TEXT_Y+1,STR__FRONTEND__PRESS_START);
 	}
 }
 

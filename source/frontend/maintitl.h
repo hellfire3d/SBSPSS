@@ -60,11 +60,13 @@ private:
 		PRESS_START_TEXT_G=100,
 		PRESS_START_TEXT_B=100,
 
+/*
 		HORIZON_LEVEL=160,
 		SEA_OVERLAP=50,						// Sea is drawn to this many pixels below screen bottom
 
 		ISLAND_LEFT_X=40,					// Island position
 		ISLAND_BOTTOM_Y=HORIZON_LEVEL+10,
+*/
 	};
 
 	enum
@@ -82,9 +84,11 @@ private:
 	{
 		DEMO_TIMEOUT_IN_SECONDS=45,
 	};
-	
+
+/*	
 	POLY_FT4	*prepareSeaPortionFT4(struct sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb);
 	void		renderSeaSection(struct sFrameHdr *fh,int _x,int _y,int _w,int _h);
+*/
 
 	void		renderPressStart();
 
