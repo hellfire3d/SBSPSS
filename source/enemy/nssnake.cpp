@@ -1049,7 +1049,7 @@ void CNpcSeaSnakeEnemy::renderOnMapScreen( DVECTOR drawPos )
 
 		if ( segmentCount > 3 )
 		{
-			if ( segmentCount == m_segmentCount - 1 )
+			if ( segmentCount == NPC_SEA_SNAKE_LENGTH - 1 )
 			{
 				segmentType = ANIM_SEASNAKE_TAILSTATIC;
 			}
