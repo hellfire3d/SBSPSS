@@ -54,6 +54,8 @@ void	CFXJellyFishLegs::think(int _frames)
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
+const int	LegXInc=4;
+
 void	CFXJellyFishLegs::render()
 {
 		CFX::render();
@@ -67,35 +69,25 @@ int			ThisAngle=Angle;
 int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
 int			ScaleWInc=(Scale*LegWInc)>>12;
 int			ScaleHInc=(Scale*LegHInc)>>12;
-		
+int			XInc=LegXInc;
+
 			RenderPos.vx+=Ofs.vx;
 			RenderPos.vy+=Ofs.vy;
 
+			if (!XFlip) XInc=-XInc;		
 			for (int i=0; i<LegCount; i++)
 			{
 				ThisAngle+=AngleInc;
 				ThisAngle&=CIRCLE_TAB_MASK;
 				H=LegHeight+(CircleTable[ThisAngle]>>5);
 
-				int		spriteWidth = ( Scale * CGameScene::getSpriteBank()->getFrameWidth(FRM__LEG) ) >> 12;
 
 				POLY_FT4	*Ft4;
 
-				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos,Scale>>4);
-
-				/*if ( !XFlip )
-				{
-					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx + 6 + ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
-				}
-				else
-				{
-					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx - 6 - ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
-				}*/
+				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx+(i*XInc),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
 
 				if (!XFlip)
 				{
-//					Ft4->x1-=WOfs;
-//					Ft4->x3-=WOfs;
 					Ft4->x0+=WOfs/2;
 					Ft4->x2+=WOfs/2;
 					Ft4->x1-=WOfs/2;
@@ -103,8 +95,6 @@ int			ScaleHInc=(Scale*LegHInc)>>12;
 				}
 				else
 				{
-//					Ft4->x0+=WOfs;
-//					Ft4->x2+=WOfs;
 					Ft4->x0+=WOfs/2;
 					Ft4->x2+=WOfs/2;
 					Ft4->x1-=WOfs/2;
@@ -114,8 +104,6 @@ int			ScaleHInc=(Scale*LegHInc)>>12;
 		
 				Ft4->y2=Ft4->y0+H;
 				Ft4->y3=Ft4->y1+H;
-//				RenderPos.vy+=H+LegHInc;
-//				WOfs+=LegWInc;
 				RenderPos.vy+=H+ScaleHInc;
 				WOfs+=ScaleWInc;
 

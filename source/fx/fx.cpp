@@ -104,7 +104,7 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 */
 /*****************************************************************************/
 
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_FLAMES;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_JELLYFISH_LEGS;
 
 #include	"game\game.h"
 CFXZZZZ	*TFX=0;
@@ -121,7 +121,7 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 			TFX=0;
 		}
 */
-		CFX::Create((CFX::FX_TYPE)FXType,Pos);
+		CFX::Create((CFX::FX_TYPE)FXType,Parent);
 
 }
 
