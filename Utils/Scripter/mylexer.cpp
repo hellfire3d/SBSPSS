@@ -239,7 +239,6 @@ void mylexer::unexpectedChar()
 		{
 			yyunput(*--ptr);
 		}
-		printf("found macro '%s'='%s'\n",name,replacement);
 	}
 }
 
