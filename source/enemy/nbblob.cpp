@@ -47,19 +47,11 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 	s32 waypointHeading;
 	s32 groundHeight;
 
-	if ( !m_animPlaying && m_frame != 0 )
+	if ( !m_animPlaying )
 	{
+		m_animPlaying = true;
 		m_animNo = ANIM_BALLBLOB_IDLE;
 		m_frame = 0;
-	}
-	else if ( m_animNo == ANIM_BALLBLOB_IDLE )
-	{
-		moveX = 0;
-		moveY = 0;
-
-		processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
-
-		return;
 	}
 
 	// deal with vertical
@@ -84,16 +76,10 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 		if ( m_velocity.vy > 0 )
 		{
 			m_velocity.vy = -m_velocity.vy;
-			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_IDLE;
-			m_frame = 0;
 		}
 		else
 		{
 			m_velocity.vy = -( 5 << 8 );
-			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_IDLE;
-			m_frame = 0;
 		}
 
 		moveY = groundHeight;
@@ -103,15 +89,7 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 
 	bool pathComplete;
 	
-	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading ) )
-	{
-		if ( m_animNo != ANIM_BALLBLOB_IDLE)
-		{
-			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_IDLE;
-			m_frame = 0;
-		}
-	}
+	m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading );
 
 	if ( waypointHeading == 0 )
 	{
