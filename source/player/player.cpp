@@ -124,7 +124,7 @@
 #include <ACTOR_SPONGEBOB_GLOVE_Anim.h>
 #endif
 
-
+#include	"fx\fx.h"
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -671,6 +671,13 @@ int scspeed=5;
 void	CPlayer::think(int _frames)
 {
 	int	i;
+
+#ifdef	__USER_daveo__
+if(PadGetDown(0)&PAD_R1)
+{
+	TestFX(getPos());
+}
+#endif
 
 
 if(PadGetDown(0)&PAD_L1&&m_currentMode!=PLAYER_MODE_DEAD)

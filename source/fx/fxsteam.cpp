@@ -12,8 +12,11 @@
 
 #include	"FX\FXSteam.h"
 
-static	const s16	SteamSize=4;
-static	const s16	SteamAngleInc=999;
+static const int		Size=2;
+static const int		AngleInc=999;
+static const int		ShadeBase=255;
+static const int		ShadeDec=8;
+static const int		ShadeDieDec=24;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -22,11 +25,11 @@ void	CFXSteam::init(DVECTOR const &_Pos)
 {
 		CFXTrail::init(_Pos);
 
-		ColBase=255;
-		ColInc=-8;
+		Angle=0;
 		Trans=3;
+		ShadeDec=ShadeDec;
 		DieOut=false;
-		SetSize(SteamSize);
+		SetSize(Size);
 }
 
 /*****************************************************************************/
@@ -39,7 +42,6 @@ void	CFXSteam::shutdown()
 void	CFXSteam::SetSize(int Size)
 {
 		ScaleInc=(4096/LIST_SIZE)*Size;
-		AngleInc=SteamAngleInc;
 		BaseVel.vx=0;
 		BaseVel.vy=-Size;
 }
@@ -49,11 +51,12 @@ void	CFXSteam::setDie()
 {
 	CFXTrail::setDie();
 	for (int i=0; i<LIST_SIZE; i++)
-	{
+	{ // Set drift off
 		sList	&ThisElem=List[i];
-		ThisElem.Vel.vx+=getRndRange(9)-4;	// give is x motion
-		ThisElem.Vel.vy+=getRndRange(ThisElem.Vel.vy/2);	// Slow down y Inc
+		ThisElem.Vel.vx+=getRndRange(9)-4;	// give it x motion
 	}
+	ShadeDec=ShadeDieDec;
+	ScaleInc=0;
 }
 
 /*****************************************************************************/
@@ -61,11 +64,29 @@ void	CFXSteam::setDie()
 /*****************************************************************************/
 void	CFXSteam::think(int _frames)
 {
+int		TotalLife=0;
+
 		CFX::think(_frames);
+
+		Angle+=AngleInc;
+		Angle&=4095;
+		if (!DieOut)
+		{ // Replace Head
+			DVECTOR	Vel=BaseVel;
+			Vel.vx+=getRndRange(3)-1;
+
+			sList	&Head=moveHead();
+			Head.Ofs=Vel;
+			Head.Vel=Vel;
+			Head.Frame=FRM__SMOKE;
+			Head.Shade=ShadeBase;
+			Head.Scale=ScaleInc;
+			Head.Angle=getRndRange(ONE);
+		}
 
 // Move em all
 int		Head=HeadIdx;
-		for (int i=0; i<LIST_SIZE; i++)
+		for (int i=0; i<ListCount; i++)
 		{
 			sList	&ThisElem=List[Head];
 			Head++;
@@ -73,22 +94,20 @@ int		Head=HeadIdx;
 
 			ThisElem.Ofs.vx+=ThisElem.Vel.vx;
 			ThisElem.Ofs.vy+=ThisElem.Vel.vy;
+
+			ThisElem.Angle+=AngleInc;
+			ThisElem.Angle&=4095;
+			ThisElem.Scale+=ScaleInc;
+			if (ThisElem.Scale>ONE*2) ThisElem.Scale=ONE*2;
+					
+			ThisElem.Shade-=ShadeDec;
+			if (ThisElem.Shade<0) ThisElem.Shade=0;
+			TotalLife+=ThisElem.Shade;
 		}
 
-		if (DieOut)
+		if (DieOut && TotalLife==0)
 		{
-			int	Col;
-			Col=ColBase-16;
-			if (Col<0) Col=0;
-			ColBase=Col;
-		}
-		else
-		{
-			DVECTOR	Vel=BaseVel;
-			Vel.vx+=getRndRange(3)-1;
-
-			setHead(Vel,Vel,FRM__SMOKE,1);
-			if (ListCount<LIST_SIZE) ListCount++;
+			setToShutdown();
 		}
 }
 

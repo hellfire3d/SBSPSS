@@ -21,6 +21,10 @@ virtual	void		setDie();
 
 protected:
 		DVECTOR		BaseVel;
+		s16			Angle;
+		s16			ScaleInc;
+		s16			ShadeDec;
+
 };
 
 #endif
