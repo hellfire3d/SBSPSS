@@ -517,6 +517,22 @@ SOURCE=..\..\..\source\gui\gui.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\level\layerback.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layerback.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layercollision.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layercollision.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\level\layertile.cpp
 # End Source File
 # Begin Source File
@@ -718,6 +734,18 @@ SOURCE=..\..\..\source\player\pstates.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pstates.h
+# End Source File
+# End Group
+# Begin Group "projectl"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\projectl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\projectl.h
 # End Source File
 # End Group
 # Begin Group "psxboot"
@@ -942,18 +970,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
-# End Source File
-# End Group
-# Begin Group "projectl"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\projectl\projectl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\projectl\projectl.h
 # End Source File
 # End Group
 # End Group
