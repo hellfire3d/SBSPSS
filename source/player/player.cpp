@@ -559,6 +559,19 @@ int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
 const int	CAMERA_TILESIZE=16;
 
+
+int			m_isFalling;
+int			m_fallFrames;
+int			m_cameraFallYScrollPos;
+int			m_cameraFallYScrollSpeed;
+int			CAMERA_FALL_DROP_SPEED=6;
+int			CAMERA_FALL_MAX_OFFSET=5*16;
+int			CAMERA_FALL_FRAME_THRESHOLD=20;
+int			CAMERA_FALL_RETURN_SPEED=1;
+
+
+
+
 #ifdef CAM_X_AUTO_CENTERING
 int	returnspeed=1500;
 int	returntimeout=25;
@@ -842,6 +855,41 @@ if(newmode!=-1)
 			else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
 			if(Pos.vy<m_playerPosLimitBox.y1)		Pos.vy=m_playerPosLimitBox.y1;
 			else if(Pos.vy>m_playerPosLimitBox.y2)	Pos.vy=m_playerPosLimitBox.y2;
+		}
+
+		// Falling camera lag
+		if(m_isFalling)
+		{
+			if(m_fallFrames>CAMERA_FALL_FRAME_THRESHOLD)
+			{
+				if(m_cameraFallYScrollSpeed<CAMERA_FALL_DROP_SPEED)
+				{
+					m_cameraFallYScrollSpeed++;
+				}
+				m_cameraFallYScrollPos-=m_cameraFallYScrollSpeed;
+				if(m_cameraFallYScrollPos<-CAMERA_FALL_MAX_OFFSET)
+				{
+					m_cameraFallYScrollPos=-CAMERA_FALL_MAX_OFFSET;
+				}
+			}
+			else
+			{
+				m_fallFrames++;
+			}
+			m_isFalling=false;
+		}
+		else
+		{
+			if(m_cameraFallYScrollPos)
+			{
+				m_cameraFallYScrollPos+=CAMERA_FALL_RETURN_SPEED;
+				if(m_cameraFallYScrollPos>0)
+				{
+					m_cameraFallYScrollPos=0;
+				}
+			}
+			m_fallFrames=0;
+			m_cameraFallYScrollSpeed=0;
 		}
 
 		// Look around
@@ -1549,7 +1597,7 @@ void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
 void CPlayer::calcCameraFocusPointTarget()
 {
 	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X-(m_cameraXScrollPos>>CAMERA_ACCURACYSHIFT);
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y-m_cameraFallYScrollPos;
 }
 
 
@@ -1575,6 +1623,12 @@ void CPlayer::respawn()
 	m_lockCamera=false;
 	m_cameraXScrollDir=0;
 	m_cameraXScrollPos=0;
+
+	m_cameraFallYScrollPos=0;
+	m_isFalling=false;
+	m_fallFrames=false;
+	m_cameraFallYScrollSpeed=0;
+
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
@@ -2137,6 +2191,15 @@ void	CPlayer::moveRight()
 	{
 		m_cameraXScrollDir=0;
 	}
+}
+void	CPlayer::fall()
+{
+	m_isFalling=true;
+}
+void	CPlayer::buttFall()
+{
+	m_cameraFallYScrollSpeed=CAMERA_FALL_DROP_SPEED;
+	m_isFalling=true;
 }
 
 

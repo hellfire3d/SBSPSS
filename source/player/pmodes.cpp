@@ -665,6 +665,7 @@ void	CPlayerModeBase::fall()
 		}
 	}
 	setMoveVelocity(&moveVel);
+	m_player->fall();
 }
 int buttfallspeed=9;
 void	CPlayerModeBase::buttFall()
@@ -677,6 +678,7 @@ void	CPlayerModeBase::buttFall()
 //	moveVel.vy=metrics->m_metric[PM__BUTT_FALL_VELOCITY]<<(VELOCITY_SHIFT+1);
 	moveVel.vy=metrics->m_metric[buttfallspeed]<<VELOCITY_SHIFT;
 	setMoveVelocity(&moveVel);
+	m_player->buttFall();
 }
 
 

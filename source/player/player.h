@@ -201,8 +201,10 @@ public:
 	virtual void	render();
 	virtual int		dontKillDuringLevelRespawn()							{return true;}
 	virtual void	shove(DVECTOR move);
-	void			moveLeft();				// This is only for camera scroll right now..
+	void			moveLeft();				// This is only for camera scroll right now
 	void			moveRight();			//	"		"		"		"		"
+	void			fall();					//	"		"		"		"		"
+	void			buttFall();				//	"		"		"		"		"
 	virtual int		moveVertical(int _moveDistance);
 	virtual int		moveHorizontal(int _moveDistance);
 	virtual void	setHasPlatformCollided( bool newVal );
