@@ -2069,6 +2069,14 @@ SOURCE=..\..\..\source\thing\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tabemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tabemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tadripemit.cpp
 # End Source File
 # Begin Source File
@@ -2173,6 +2181,14 @@ SOURCE=..\..\..\source\triggers\tifemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tlbemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tlbemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tldripemit.cpp
 # End Source File
 # Begin Source File
@@ -2194,6 +2210,14 @@ SOURCE=..\..\..\source\triggers\tlook.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tlook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tobemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tobemit.h
 # End Source File
 # Begin Source File
 

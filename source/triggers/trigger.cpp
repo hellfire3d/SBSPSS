@@ -107,6 +107,18 @@
 #include "triggers\tldripemit.h"
 #endif
 
+#ifndef __TRIGGERS_TABEMIT_H__
+#include "triggers\tabemit.h"
+#endif
+
+#ifndef __TRIGGERS_TOBEMIT_H__
+#include "triggers\tobemit.h"
+#endif
+
+#ifndef __TRIGGERS_TLBEMIT_H__
+#include "triggers\tlbemit.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -188,6 +200,21 @@ CTrigger	*trigger;
 		// Bubble emitter
 		case TRIGGER_BUBBLE_EMITTER:
 			trigger=(CBubbleEmitterTrigger*)new( "BubbleEmitterTrigger") CBubbleEmitterTrigger();
+			break;
+
+		// Acid bubble emitter
+		case TRIGGER_ACID_BUBBLE_EMITTER:
+			trigger=(CAcidBubbleEmitterTrigger*)new( "AcidBubbleEmitterTrigger") CAcidBubbleEmitterTrigger();
+			break;
+
+		// Oil bubble emitter
+		case TRIGGER_OIL_BUBBLE_EMITTER:
+			trigger=(COilBubbleEmitterTrigger*)new( "OilBubbleEmitterTrigger") COilBubbleEmitterTrigger();
+			break;
+
+		// Lava bubble emitter
+		case TRIGGER_LAVA_BUBBLE_EMITTER:
+			trigger=(CLavaBubbleEmitterTrigger*)new( "LavaBubbleEmitterTrigger") CLavaBubbleEmitterTrigger();
 			break;
 
 		// Bubble geyser emitter

@@ -308,6 +308,9 @@ triggers_src :=		trigger \
 					tgarygo \
 					tfemit \
 					tbemit \
+					tabemit \
+					tobemit \
+					tlbemit \
 					tifemit \
 					tggleft \
 					tggright \

@@ -213,7 +213,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 		{
 			// fire at user
 
-			s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+			s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 			CProjectile *projectile;
 			projectile = new( "test projectile" ) CProjectile;
