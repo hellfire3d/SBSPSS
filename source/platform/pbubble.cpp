@@ -97,6 +97,15 @@ void CNpcBubblePlatform::processMovement( int _frames )
 				m_pop = true;
 			}
 		}
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos < 0 )
+		{
+			setToShutdown();
+		}
 	}
 }
 

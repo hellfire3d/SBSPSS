@@ -48,12 +48,12 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 	s32 distX, distY, heading;
 	bool pathComplete;
 
+	DVECTOR	offset = CLevel::getCameraPos();
+
 	if ( m_spinFinish )
 	{
 		m_rotation += 64 * _frames;
 		m_rotation &= 4095;
-
-		DVECTOR	offset = CLevel::getCameraPos();
 
 		if ( m_bounceDir )
 		{
@@ -108,6 +108,13 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 					moveX = 2 * _frames;
 				}
 			}
+		}
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos > VidGetScrH() + 100 )
+		{
+			setToShutdown();
 		}
 	}
 
