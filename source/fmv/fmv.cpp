@@ -40,9 +40,9 @@
 #include "..\..\tools\vlc\include\vlc_bit.h"
 
 
-//#if	defined(__USER_paul__)
+#if	defined(__USER_paul__)
 #define	FORCE_FMV	1	
-//#endif
+#endif
 
 #if		__FILE_SYSTEM__==CD | FORCE_FMV
 #define	ENABLE_FMV	
