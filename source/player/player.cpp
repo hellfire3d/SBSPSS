@@ -62,6 +62,8 @@
 #endif 
 
 
+#define SLIPSPEED		10					// Speed that player slips on icy surfaces
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -287,7 +289,7 @@ if(newmode!=-1)
 		m_currentStateClass->think(this);
 
 		// Horizontal movement
-		if(m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-1)>>4))
+		if(m_moveVel.vx&&m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-2)>>4))
 		{
 			// Will hit a wall this frame - Do collision
 			// Move flush with the edge of the obstruction
@@ -328,25 +330,25 @@ if(newmode!=-1)
 		}
 
 		// Vertical movement
+		int	colHeight;
 		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
-		if(isOnSolidGround())
+		if((colHeight=isOnSolidGround()))
 		{
 //stick to ground (PKG)
 //Pos.vy=23*16+1;//16*15;
-int colHeight=16;
-Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
+Pos.vy=((Pos.vy+16)&0xfffffff0)-colHeight;
 
 			if(m_moveVel.vy)
 			{
 				// Was falling.. so we've just hit the ground
 				if(m_currentState==STATE_BUTTFALL)
 				{
-					// landed from a btt bounce
+					// Landed from a butt bounce
 					setState(STATE_BUTTLAND);
 				}
 				else if(m_currentState==STATE_FALLFAR)
 				{
-					// Landed from a painful long fall
+					// Landed from a painfully long fall
 					setState(STATE_IDLE);
 					takeDamage(DAMAGE__FALL);
 					m_moveVel.vx=0;
@@ -359,7 +361,7 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 				}
 				else
 				{
-					// Landed from a standing jump
+					// Landed from a jump with no x movement
 					setState(STATE_IDLE);
 					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
 				}
@@ -797,7 +799,20 @@ PLAYERINPUT CPlayer::getPadInputDown()
 int CPlayer::isOnSolidGround()
 {
 	ASSERT(m_layerCollision);
-	return m_layerCollision->Get(Pos.vx>>4,Pos.vy>>4);
+	return m_layerCollision->Get(Pos.vx>>4,(Pos.vy)>>4)?16:0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int slip=false;
+int CPlayer::isOnSlippySurface()
+{
+	return slip&&isOnSolidGround();
 }
 
 
@@ -910,17 +925,48 @@ void CPlayer::moveRight()
 void CPlayer::slowdown()
 {
 	const PlayerMetrics	*metrics;
+	int					stopSpeed;
 	metrics=getPlayerMetrics();
-	
+	if(isOnSlippySurface())
+	{
+		stopSpeed=SLIPSPEED;
+	}
+	else
+	{
+		stopSpeed=0;
+	}
+
 	if(m_moveVel.vx<0)
 	{
+		if(-stopSpeed<m_moveVel.vx)
+		{
+			stopSpeed=-m_moveVel.vx;
+		}
 		m_moveVel.vx+=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVel.vx>0)m_moveVel.vx=0;
+		if(m_moveVel.vx>-stopSpeed)
+		{
+			m_moveVel.vx=-stopSpeed;
+			if(m_currentState==STATE_RUN)
+			{
+				setState(STATE_IDLE);
+			}
+		}
 	}
 	else if(m_moveVel.vx>0)
 	{
+		if(stopSpeed>m_moveVel.vx)
+		{
+			stopSpeed=m_moveVel.vx;
+		}
 		m_moveVel.vx-=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVel.vx<0)m_moveVel.vx=0;
+		if(m_moveVel.vx<stopSpeed)
+		{
+			m_moveVel.vx=stopSpeed;
+			if(m_currentState==STATE_RUN)
+			{
+				setState(STATE_IDLE);
+			}
+		}
 	}
 }
 
