@@ -176,6 +176,17 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 		m_angularVelocity += angularForce;
 	}
+	else if ( ( getRnd() % 50 ) == 0 )
+	{
+		s16 angularForce = 6 * _frames;
+
+		if ( m_reversed )
+		{
+			angularForce = -angularForce;
+		}
+
+		m_angularVelocity += angularForce;
+	}
 
 	s32 resistance = -( 5 * _frames * newAngle ) >> 8;
 
