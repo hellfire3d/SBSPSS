@@ -38,11 +38,20 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #----------------------------------------------------------------------------
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
-LEVELS_OPTS :=				-t:8,4,1 -s:16 -l -q
+LEVELS_OPTS :=				-t:8,3,1 -s:16 -l -q
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
 LEVELS_DIRS_TO_MAKE :=		$(LEVELS_MAKEFILE_DIR) $(LEVELS_OUT_DIR)
+
+CHAPTER01_LEVEL04_OPTS :=	-t:8,4,1
+CHAPTER02_LEVEL03_OPTS :=	-t:8,2,1
+CHAPTER02_LEVEL04_OPTS :=	-t:8,2,1
+CHAPTER04_LEVEL03_OPTS :=	-t:8,2,1
+CHAPTER05_LEVEL01_OPTS :=	-t:8,2,1
+CHAPTER06_LEVEL03_OPTS :=	-t:8,2,1
+CHAPTER06_LEVEL04_OPTS :=	-t:8,2,1
+FMA_SHADYSHOALS_OPTS :=		-t:8,4,1
 
 LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05 CHAPTER06 FMA
 

@@ -44,6 +44,7 @@ sRGBCol	*RGB=(sRGBCol*)iPtr;
 				
 			}
 		}
+		printf("RGB Fade Col: %i %i %i\n",ShadeRGB.R,ShadeRGB.G,ShadeRGB.B);
 }
 
 /*****************************************************************************/
