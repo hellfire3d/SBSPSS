@@ -33,6 +33,7 @@ public:
 	void				shutdown();
 	void				setupWaypoints( sThingActor *ThisActor );
 	bool				alwaysThink();
+	u8					hasBeenAttacked();
 
 protected:
 	void				processClose( int _frames );

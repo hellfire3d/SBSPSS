@@ -929,3 +929,19 @@ void CNpcMotherJellyfishEnemy::collidedWith(CThing *_thisThing)
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+u8 CNpcMotherJellyfishEnemy::hasBeenAttacked()
+{
+	if ( !alwaysThink() )
+	{
+		if ( m_controlFunc != NPC_CONTROL_SHOT )
+		{
+			m_controlFunc = NPC_CONTROL_SHOT;
+			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+		}
+	}
+
+	return( true );
+}
