@@ -184,6 +184,7 @@ enum
 	FMA_NEXT_SCENE_MAP,
 	FMA_NEXT_SCENE_GAME,
 	FMA_NEXT_SCENE_CREDITS,
+	FMA_NEXT_SCENE_FMA,
 
 	FMA_NUM_NEXT_SCENES
 };
@@ -195,6 +196,7 @@ typedef enum
 	SC_USE_LEVEL,				// levelNumber
 	SC_USE_PARTY,				// 
 	SC_SET_NEXT_SCENE,			// nextScene
+	SC_SET_NEXT_FMA_NUMBER,		// fmaNumber
 
 	SC_SNAP_CAMERA_TO,			// x,y
 	SC_MOVE_CAMERA_TO,			// x,y,frames
@@ -329,6 +331,7 @@ static CScene	*s_nextGameSceneTable[FMA_NUM_NEXT_SCENES]=
 	&MapScene,					// FMA_NEXT_SCENE_MAP
 	&GameScene,					// FMA_NEXT_SCENE_GAME
 	&CreditsScene,				// FMA_NEXT_SCENE_CREDITS
+	&FmaScene,					// FMA_NEXT_SCENE_FMA
 };
 
 
@@ -943,7 +946,8 @@ static const int s_FMAC5EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_03_DAT,
 	SC_USE_LEVEL,				25,
-	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_FMA,
+	SC_SET_NEXT_FMA_NUMBER,		CFmaScene::FMA_SCRIPT__PARTY,
 	SC_START,
 
 // Scene 1 - Shade Shoals
@@ -1643,6 +1647,11 @@ void	CFmaScene::startNextScriptCommand()
 			GameState::setNextScene(s_nextGameSceneTable[*(m_pc++)]);
 			break;
 
+		case SC_SET_NEXT_FMA_NUMBER:	// fmaNumber
+			m_pc++;
+			selectFma((FMA_SCRIPT_NUMBER)*(m_pc++));
+			break;
+
 		case SC_SNAP_CAMERA_TO:			// x,y
 			m_pc++;
 			m_cameraPos.vx=*m_pc++;
@@ -1863,6 +1872,7 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_USE_LEVEL:				// levelNumber
 		case SC_USE_PARTY:				// 
 		case SC_SET_NEXT_SCENE:			// nextScene
+		case SC_SET_NEXT_FMA_NUMBER:	// fmaNumber
 		case SC_SNAP_CAMERA_TO:			// x,y
 		case SC_MOVE_CAMERA_TO:			// x,y,frames
 		case SC_REGISTER_CONVERSATION:	// scriptId
