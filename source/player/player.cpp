@@ -178,6 +178,7 @@ void	CPlayer::think(int _frames)
 	if(padInput&PAD_DOWN)	Pos.vy+=move;
 	if(padInput&PAD_LEFT)	Pos.vx-=move;
 	if(padInput&PAD_RIGHT)	Pos.vx+=move;
+	m_invincibleFrameCount=0;
 #else
 	if(_frames>=3)_frames=2;
 
