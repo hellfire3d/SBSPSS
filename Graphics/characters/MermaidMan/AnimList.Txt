@@ -1,4 +1,5 @@
 Hide
 Idle
 Sit
+SitAsleep
 
