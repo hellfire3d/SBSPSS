@@ -208,6 +208,8 @@ int 	main()
 	
 #ifdef __USER_paul__
 	GameState::setNextScene( &SceneSelector );
+#elif	defined(__USER_daveo__)
+	GameState::setNextScene( &GameScene );
 #else
 	GameState::setNextScene( &FrontEndScene );
 #endif
