@@ -762,6 +762,12 @@ void CGameScene::setReadyToExit()
 }
 
 /*****************************************************************************/
+void CGameScene::setBossHasBeenKilled()
+{
+	s_bossHasBeenKilled=true;
+	s_showBossTextOnRespawn=false;
+}
+/*****************************************************************************/
 void CGameScene::hitBossArenaTrigger()
 {
 	if(!s_showBossTextOnRespawn)

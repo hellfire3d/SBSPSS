@@ -64,7 +64,7 @@ static void				restartlevel()		{s_restartLevel=true;}
 
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 
-static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
+static void				setBossHasBeenKilled();
 static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 
 static	void			dropHealth(DVECTOR const &Pos,int Amount,int Vel);
