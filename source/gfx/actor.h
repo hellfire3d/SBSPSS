@@ -178,7 +178,7 @@ virtual	~CModelGfx(){};
 static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
 		void		SetModel(int Type);
 
-		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0);
+		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,VECTOR *Flip=0);
 		sBBox		&GetBBox()		{return(Model->BBox);}
 
 protected:

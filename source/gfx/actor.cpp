@@ -756,7 +756,7 @@ void	CModelGfx::SetModel(int Type)
 int	PXOfs=-16;
 int	PYOfs=-8;
 
-void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)
+void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,VECTOR *Flip)
 {
 #define	BLOCK_MULT	16
 u8				*PrimPtr=GetPrimPtr();
@@ -771,7 +771,11 @@ int				TriCount=Model->TriCount;
 sTri			*TList=&ModelTriList[Model->TriStart];
 				MATRIX	Mtx;
 
-			SetIdentNoTrans(&Mtx);
+			if (Flip)
+				SetIdentNoTrans(&Mtx,Flip);
+			else
+				SetIdentNoTrans(&Mtx);
+
 			if (Scale || Angle)
 			{
 				if (Angle) RotMatrix(Angle,&Mtx);
@@ -805,7 +809,7 @@ int			ShiftY=(Pos.vy & 15);
 			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
-
+/*
 			if (TList->OTOfs>ActorOT)
 			{
 				ThisOT=OtPtr+(ActorOT+1);
@@ -814,11 +818,16 @@ int			ShiftY=(Pos.vy & 15);
 			{
 				ThisOT=OtPtr+(ActorOT-1);
 			}
-
-//			ThisOT=OtPtr+TList->OTOfs;
+*/
+			ThisOT=OtPtr+TList->OTOfs;
 
 
 			TList++;
+			addPrim(ThisOT,TPrimPtr);
+			gte_stsxy3_ft3(TPrimPtr);
+			TPrimPtr++;
+
+/* Models are not clipped
 			gte_nclip_b();
 			gte_stsxy3_ft3(TPrimPtr);
 			gte_stopz(&ClipZ);
@@ -827,6 +836,7 @@ int			ShiftY=(Pos.vy & 15);
 				addPrim(ThisOT,TPrimPtr);
 				TPrimPtr++;
 			}
+*/
 		}
 
 		SetPrimPtr((u8*)TPrimPtr);
