@@ -203,7 +203,7 @@ void	CLayerTile::render()
 {
 sPrimGridElem	*Grid=GetGridPos(MapX,MapY);
 s16				TileX,TileY;
-
+sOT				*ThisOT=OtPtr+LayerOT;
 // Setup shift bits of pos
 		TileY=-ShiftY;
 
@@ -220,7 +220,7 @@ s16				TileX,TileY;
 				{
 /**/				Prim->x0=TileX;
 /**/				Prim->y0=TileY;
-					addPrimNoCheck(OtPtr,Prim);
+					addPrimNoCheck(ThisOT,Prim);
 				}
 				Grid=Grid->Right;
 				TileX+=TILE_WIDTH;

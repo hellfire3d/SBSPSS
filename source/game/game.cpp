@@ -28,9 +28,12 @@
 
 
 
+int		ZPos=6500;
+
 /*****************************************************************************/
 
-FontBank			*CGameScene::s_genericFont;
+FontBank	*CGameScene::s_genericFont;
+MATRIX		CGameScene::CamMtx;
 
 /*****************************************************************************/
 
@@ -48,6 +51,9 @@ void 	CGameScene::init()
 		Player.init();
 		CAnimDB::LoadAnims();
 
+		SetIdentNoTrans(&CamMtx);
+		CamMtx.t[2]=ZPos;
+
 }
 
 /*****************************************************************************/
@@ -62,6 +68,8 @@ void	CGameScene::shutdown()
 /*****************************************************************************/
 void 	CGameScene::render()
 {
+		CamMtx.t[2]=ZPos;	// Temp
+
 		m_conversation.render();
 		Player.render();
 		Level.render();

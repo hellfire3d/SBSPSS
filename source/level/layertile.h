@@ -5,6 +5,7 @@
 #ifndef __LAYER_TILE_H__
 #define __LAYER_TILE_H__
 
+#include	"gfx\prim.h"
 
 /*****************************************************************************/
 struct	sPrimGridElem
@@ -19,6 +20,9 @@ struct	sPrimGridElem3d : public sPrimGridElem
 	u16				Tile;
 	u16				Flags;
 };
+
+/*****************************************************************************/
+const	s32	LayerOT=MAX_OT-1;
 
 /*****************************************************************************/
 class CLayerTile

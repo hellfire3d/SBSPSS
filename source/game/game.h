@@ -19,17 +19,18 @@ class	FontBank;
 class CGameScene : public CScene
 {
 public:
-			CGameScene()	{;}
-	virtual ~CGameScene()	{;}
+				CGameScene()	{;}
+virtual			~CGameScene()	{;}
 
 
-	void	init();
-	void	shutdown();
-	void	render();
-	void	think(int _frames);
-	int		readyToShutdown();
-	char	*getSceneName()	{return "Game";}
+		void	init();
+		void	shutdown();
+		void	render();
+		void	think(int _frames);
+		int		readyToShutdown();
+		char	*getSceneName()	{return "Game";}
 
+		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 	
 private:
 
@@ -37,6 +38,7 @@ private:
 		CPlayer		Player;
 		CConversation	m_conversation;
 static	FontBank	*s_genericFont;
+static	MATRIX		CamMtx;
 //static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry
 
 };

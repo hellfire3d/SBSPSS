@@ -8,9 +8,11 @@
 #include	"gfx\tpage.h"
 #include	"gfx\prim.h"
 #include	<DStructs.h>
+#include	"game\game.h"
 
 #include	"level\level.h"
 #include	"level\layertile.h"
+#include	"level\layerback.h"
 #include	"level\layertilesolid.h"
 #include	"level\layertile3d.h"
 
@@ -38,12 +40,10 @@ CLevel::~CLevel()
 }
 
 /*****************************************************************************/
-int		ZPos=6500;
-
 void 	CLevel::init()
 {
-		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL04_LEVEL04_LVL,"Level Data");
-		TPLoadTex(LEVEL04_LEVEL04_TEX);
+		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL02_LEVEL02_LVL,"Level Data");
+		TPLoadTex(LEVEL02_LEVEL02_TEX);
 
 		initLayers();
 }
@@ -60,7 +60,8 @@ sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 		if (LevelHdr->BackLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
-			CLayerTile *NewLayer=new ("Back Layer") CLayerTileSolid(Layer,  TileList, TriList, QuadList, VtxList);
+//			CLayerTile *NewLayer=new ("Back Layer") CLayerTileSolid(Layer,  TileList, TriList, QuadList, VtxList);
+			CLayerTile *NewLayer=new ("Back Layer") CLayerBack(Layer,  TileList, TriList, QuadList, VtxList);
 			NewLayer->init(MapPos,3);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_BACK]=NewLayer;
 		}
@@ -107,20 +108,18 @@ void	CLevel::shutdown()
 void 	CLevel::render()
 {
 // Setup Constant Rot Matrix
-MATRIX	Mtx;
+MATRIX	*Mtx=CGameScene::GetCamMtx();
 
-		SetIdent(&Mtx);
-		Mtx.t[2]=ZPos;
-		SetRotMatrix(&Mtx);
-		SetTransMatrix(&Mtx);
+		SetRotMatrix(Mtx);
+		SetTransMatrix(Mtx);
 
 // Setup dummy prim to ensure OtPos 0 is initialised (for fast add)
 TILE_16	*Prim=GetPrimTILE16();
-
+sOT		*ThisOT=OtPtr+LayerOT;
 		Prim->x0=1024;
 		Prim->y0=1024;
-		AddPrim(OtPtr,Prim);
-		ASSERT(OtPtr->FirstPrim);
+		AddPrim(ThisOT,Prim);
+		ASSERT(ThisOT->FirstPrim);
 
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{

@@ -9,18 +9,18 @@
 
 
 #include	"LayerTile.h"
-#include	"LayerTileSolid.h"
+#include	"LayerBack.h"
 
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTileSolid::CLayerTileSolid(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
+CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
 {
 }
 
 /*****************************************************************************/
-CLayerTileSolid::~CLayerTileSolid()
+CLayerBack::~CLayerBack()
 {
 }
 
@@ -28,18 +28,18 @@ CLayerTileSolid::~CLayerTileSolid()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTileSolid::init(DVECTOR &MapPos,int Shift,int Width,int Height)
-{
-		CLayerTile::init(MapPos,Shift,MapWidth,MapHeight);
-}
-
-/*****************************************************************************/
-void	CLayerTileSolid::shutdown()
+void	CLayerBack::init(DVECTOR &MapPos,int Shift,int Width,int Height)
 {
 }
 
 /*****************************************************************************/
-void	CLayerTileSolid::think(DVECTOR &MapPos)
+void	CLayerBack::shutdown()
+{
+}
+
+/*****************************************************************************/
+int	YY;
+void	CLayerBack::think(DVECTOR &MapPos)
 { // Overide default strip scroll update
 int			XPos=MapPos.vx>>MapXYShift;
 int			YPos=MapPos.vy>>MapXYShift;
@@ -49,36 +49,27 @@ int			YPos=MapPos.vy>>MapXYShift;
 
 			MapX=XPos>>4;
 			MapY=YPos>>4;
+
+			YY=MapPos.vy>>2;
 }
 
 /*****************************************************************************/
-void	CLayerTileSolid::render()
+void	CLayerBack::render()
 {
-sPrimGridElem	*Grid=GetGridPos(MapX,MapY);
-s16				TileX,TileY;
-sOT				*ThisOT=OtPtr+LayerOT;
+POLY_G4		*G4;
+sOT			*ThisOT=OtPtr+LayerOT;
+int			Col;
 
-// Setup shift bits of pos
-		TileY=-ShiftY;
+			Col=YY;
+			if (Col>127) Col=127;
 
-// Render it!!
-		for (int Y=0; Y<SCREEN_TILE_HEIGHT; Y++)
-		{
-			sPrimGridElem	*GridDown= Grid->Down;
-			TileX=-ShiftX;
-
-			for (int X=0; X<SCREEN_TILE_WIDTH; X++)
-			{
-				TSPRT_16	*Prim=&Grid->Prim;
-/**/			Prim->x0=TileX;
-/**/			Prim->y0=TileY;
-				addPrimNoCheck(ThisOT,Prim);
-				Grid=Grid->Right;
-				TileX+=TILE_WIDTH;
-			}
-			Grid=GridDown;
-			TileY+=TILE_HEIGHT;
-		}
+			G4=GetPrimG4();
+			setXYWH(G4,0,0,512,256);
+			setRGB0(G4,0,255-Col,255-Col);
+			setRGB1(G4,0,255-Col,255-Col);
+			setRGB2(G4,0,0,128-Col);
+			setRGB3(G4,0,0,128-Col);
+			addPrimNoCheck(ThisOT,G4);
 }
 
 

@@ -151,6 +151,7 @@ sPrimGridElem3d	*Grid=GetGridPos3d(MapX,MapY);
 s16				TileX,TileY;
 VECTOR			BlkPos;
 s32				BlkXStore;
+sOT				*ThisOT=OtPtr+LayerOT;
 
 // Setup shift bits of pos
 		TileY=-ShiftY;
@@ -171,7 +172,7 @@ s32				BlkXStore;
 				{ // Has 2d Data
 /**/				Prim->x0=TileX;
 /**/				Prim->y0=TileY;
-					addPrimNoCheck(OtPtr,Prim);
+					addPrimNoCheck(ThisOT,Prim);
 				}
 				if (Grid->Flags)
 				{ // Has 3d Data
@@ -204,6 +205,7 @@ POLY_FT3	*TPrimPtr=(POLY_FT3*)GetPrimPtr();
 u16			*TileTable=Tile->TileTable;
 u32			T0,T1,T2;
 sTri		*TList=TriList+Tile->TriStart;
+sOT			*ThisOT=OtPtr+LayerOT;
 
 //--- Tris ---------------------------------------------------------------------------
 
@@ -230,7 +232,7 @@ sTri		*TList=TriList+Tile->TriStart;
 						*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
 						TList++;
-						addPrimNoCheck(OtPtr,TPrimPtr);
+						addPrimNoCheck(ThisOT,TPrimPtr);
 						gte_stsxy3_ft3(TPrimPtr);
 						TPrimPtr++;
 						}
