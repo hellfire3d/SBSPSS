@@ -170,6 +170,7 @@ public:
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
 
+	static void			CacheActor(int Type);
 
 private:
 	class CLayerCollision	*m_layerCollision;
