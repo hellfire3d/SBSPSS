@@ -840,6 +840,12 @@ void	CGameScene::initLevel()
 
 
 /*****************************************************************************/
+void	CGameScene::initHealth()
+{
+	m_HealthManager->init();
+}
+
+/*****************************************************************************/
 void	CGameScene::dropHealth(DVECTOR const &Pos,int Amount,int Vel)
 {
 	m_HealthManager->drop(Pos,Amount,Vel);

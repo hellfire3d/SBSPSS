@@ -633,6 +633,7 @@ void	CLevel::initThings(int _respawningLevel)
 	CThingManager::matchWheelsAndWeights();
 	CThingManager::matchPressureSwitches();
 	CThingManager::matchGaryTriggers();
+	GameScene.initHealth();
 }
 
 

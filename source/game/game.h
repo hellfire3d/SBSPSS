@@ -67,6 +67,7 @@ static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 static void				setBossHasBeenKilled();
 static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 
+static	void			initHealth();
 static	void			dropHealth(DVECTOR const &Pos,int Amount,int Vel);
 
 
