@@ -30,10 +30,8 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 
-	DVECTOR				m_circleCentre;
-	s16					m_angularDistance;
-	s16					m_startAngle;
-	s32					m_circleRadius;
+	s32					m_xPos;
+	u8					m_attack;
 };
 
 #endif

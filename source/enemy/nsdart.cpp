@@ -134,18 +134,7 @@ bool CNpcSquidDartEnemy::processSensor()
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 
-				m_circleCentre.vx = Pos.vx + ( playerXDist >> 1 );
-				m_circleCentre.vy = Pos.vy + ( playerYDist >> 1 );
-
-				m_startAngle = ratan2( Pos.vy - m_circleCentre.vy, Pos.vx - m_circleCentre.vx );
-				m_startAngle &= 4095;
-
-				m_circleRadius = isqrt2( playerXDistSqr + playerYDistSqr ) >> 1;
-
-				m_circleCentre.vx = Pos.vx - ( ( m_circleRadius * rcos( m_startAngle ) ) >> 12 );
-				m_circleCentre.vy = Pos.vy - ( ( m_circleRadius * rsin( m_startAngle ) ) >> 12 );
-
-				m_angularDistance = 0;
+				m_attack = false;
 
 				// sound
 
@@ -165,23 +154,66 @@ bool CNpcSquidDartEnemy::processSensor()
 
 void CNpcSquidDartEnemy::processClose( int _frames )
 {
-	s16 m_currentAngle;
+	s32 movement;
+	s32 yAim = playerYDist - 20;
+	s32 maxSpeed = 2 * m_data[m_type].speed * _frames;
 
-	m_currentAngle = ( m_startAngle + m_angularDistance ) & 4095;
-
-	m_heading = ( m_currentAngle + 1024 ) & 4095;
-
-	Pos.vx = m_circleCentre.vx + ( ( m_circleRadius * rcos( m_currentAngle ) ) >> 12 );
-	Pos.vy = m_circleCentre.vy + ( ( m_circleRadius * rsin( m_currentAngle ) ) >> 12 );
-
-	m_angularDistance += 32 * _frames;
-
-	if ( m_angularDistance > 4095 )
+	if ( m_attack )
 	{
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_timerFunc = NPC_TIMER_ATTACK_DONE;
-		m_timerTimer = GameState::getOneSecondInFrames();
-		m_sensorFunc = NPC_SENSOR_NONE;
+		movement = m_xPos - Pos.vx;
+
+		if ( movement )
+		{
+			if ( movement > maxSpeed )
+			{
+				movement = maxSpeed;
+			}
+			else if ( movement < -maxSpeed )
+			{
+				movement = -maxSpeed;
+			}
+
+			Pos.vx += movement;
+		}
+		else
+		{
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+		}
+	}
+	else
+	{
+		if ( yAim )
+		{
+			movement = yAim;
+			
+			if ( movement > maxSpeed )
+			{
+				movement = maxSpeed;
+			}
+			else if ( movement < -maxSpeed )
+			{
+				movement = -maxSpeed;
+			}
+
+			Pos.vy += movement;
+		}
+		else
+		{
+			m_attack = true;
+			m_xPos = Pos.vx + playerXDist;
+		}
+
+		if ( playerXDist > 0 )
+		{
+			m_heading = 0;
+		}
+		else
+		{
+			m_heading = 2048;
+		}
 	}
 
 	if ( !m_animPlaying )
@@ -189,5 +221,6 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 		m_frame = 0;
 		m_animNo = m_data[m_type].moveAnim;
 		m_animPlaying = true;
+
 	}
 }
