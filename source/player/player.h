@@ -246,6 +246,7 @@ private:
 	int				m_ledgeLookAhead,m_lastLedgeLookAhead;
 	int				m_ledgeLookOffset;
 	int				m_ledgeLookTimer;
+	int				m_leftRightScrollPosition;
 
 
 	enum

@@ -540,6 +540,10 @@ int newmode=-1;
 #ifdef _STATE_DEBUG_
 char posBuf[100];
 #endif
+
+int	scmax=160;
+int scspeed=5;
+
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -736,9 +740,14 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	m_lastLedgeLookAhead=m_ledgeLookAhead;
 	m_ledgeLookAhead=0;
 
-	
+	// Left/right scroll as SB moves left/right
+	int max=scmax*scspeed;
+	m_leftRightScrollPosition+=m_moveVelocity.vx;
+	if(m_leftRightScrollPosition<-max)m_leftRightScrollPosition=-max;
+	else if(m_leftRightScrollPosition>max)m_leftRightScrollPosition=max;
+
 	// Camera focus point stuff
-	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X;
+	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X+(m_leftRightScrollPosition/scspeed);
 	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
 	for(i=0;i<_frames;i++)
 	{
@@ -1169,6 +1178,7 @@ void CPlayer::respawn()
 	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
 	m_ledgeLookOffset=0;
 	m_ledgeLookTimer=0;
+	m_leftRightScrollPosition=0;
 
 	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;
