@@ -23,6 +23,10 @@
 #include	"player\player.h"
 #endif
 
+#ifndef	__ANIM_CLAM_HEADER__
+#include <ACTOR_CLAM_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseClamAttack( int _frames )
 {
@@ -42,6 +46,13 @@ void CNpcEnemy::processCloseClamAttack( int _frames )
 
 			Pos.vx += ( velocity * rcos( m_heading ) ) >> 12;
 			Pos.vy += ( velocity * rsin( m_heading ) ) >> 12;
+
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_CLAM_CLAMSIDESNAP;
+				m_frame = 0;
+			}
 		}
 		else
 		{
@@ -69,41 +80,17 @@ void CNpcEnemy::processCloseClamAttack( int _frames )
 		}
 		else
 		{
-			m_controlFunc = NPC_CONTROL_MOVEMENT;
-			m_timerFunc = NPC_TIMER_ATTACK_DONE;
-			m_timerTimer = GameState::getOneSecondInFrames();
-			m_sensorFunc = NPC_SENSOR_NONE;
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_CLAM_CLAMSHUT;
+				m_frame = 0;
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_timerTimer = GameState::getOneSecondInFrames();
+				m_sensorFunc = NPC_SENSOR_NONE;
+			}
 		}
-	}
-}
-
-void CNpcEnemy::processClamRetract( int _frames )
-{
-	s32 velocity;
-
-	// retract
-
-	if ( m_extension > 0 )
-	{
-		velocity = -_frames;
-
-		if ( m_extension < _frames )
-		{
-			velocity = m_extension - _frames;
-		}
-		
-		m_extension += velocity;
-
-
-		Pos.vx += ( velocity * rcos( m_heading ) ) >> 12;
-		Pos.vy += ( velocity * rsin( m_heading ) ) >> 12;
-	}
-	else
-	{
-		// halt clam
-
-		m_controlFunc = NPC_CONTROL_NONE;
-		m_timerFunc = NPC_TIMER_NONE;
-		m_sensorFunc = NPC_SENSOR_NONE;
 	}
 }

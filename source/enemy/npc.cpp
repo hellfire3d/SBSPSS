@@ -206,17 +206,17 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	sActorHdr	*Hdr=m_skel.Load(ACTORS_CLAM_A3D);		
-	m_skel.Init(Hdr);
-	TPLoadTex(ACTORS_ACTOR_ENEMY_TEX);
-	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_CLAM_ABK));
+	m_type = NPC_SUB_SHARK;
+
+	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
+	m_skel.Init( Hdr );
+	TPLoadTex( ACTORS_ACTOR_ENEMY_TEX );
+	m_skel.setAnimDatabase( CAnimDB::Load( m_data[m_type].animData ) );
 	m_skel.setAng(1024);
 
-	// temporary
-	m_animNo = 0;
+	m_animPlaying = true;
+	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
-
-	m_type = NPC_CLAM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -224,6 +224,7 @@ void CNpcEnemy::init()
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
+	m_reversed = false;
 
 	m_extension = EXTEND_RIGHT;
 
@@ -458,6 +459,32 @@ void CNpcEnemy::think(int _frames)
 	playerYDistSqr = playerYDist * playerYDist;
 
 	detectCollisionWithPlayer();
+
+	if ( m_animPlaying )
+	{
+		int frameCount = m_skel.getFrameCount();
+
+		if ( frameCount - m_frame > _frames )
+		{
+			m_frame += _frames;
+		}
+		else
+		{
+			m_frame = frameCount;
+			m_animPlaying = false;
+		}
+	}
+
+	if ( m_heading > 1024 && m_heading < 3072 )
+	{
+		m_skel.setAng( 3072 );
+		m_reversed = true;
+	}
+	else
+	{
+		m_skel.setAng( 1024 );
+		m_reversed = false;
+	}
 
 	switch ( this->m_controlFunc )
 	{
@@ -1130,7 +1157,15 @@ void CNpcEnemy::render()
 	renderPos.vx = ( Pos.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
 	renderPos.vy = ( Pos.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
 
-	m_skel.setZAng( m_heading );
+	if ( m_reversed )
+	{
+		m_skel.setZAng( ( m_heading + 2048 ) & 4095 );
+	}
+	else
+	{
+		m_skel.setZAng( m_heading );
+	}
+
 	m_skel.setPos( renderPos );
 	m_skel.setFrame(m_frame);
 	m_skel.setAnimNo(m_animNo);

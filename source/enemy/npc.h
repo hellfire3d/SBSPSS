@@ -321,6 +321,9 @@ protected:
 
 	typedef struct NPC_DATA_TYPE
 	{
+		FileEquate						skelType;
+		FileEquate						animData;
+		u16								initAnim;
 		NPC_INIT_FUNC					initFunc;
 		NPC_SENSOR_FUNC					sensorFunc;
 		NPC_MOVEMENT_FUNC				movementFunc;
@@ -371,7 +374,6 @@ protected:
 	// clam functions
 
 	void				processCloseClamAttack( int _frames );
-	void				processClamRetract( int _frames );
 
 	// spider crab functions
 
@@ -472,6 +474,8 @@ protected:
 	DVECTOR				m_base;
 	u8					m_state;
 	u8					m_salvoCount;
+	bool				m_animPlaying;
+	bool				m_reversed;
 
 	int				m_frame;
 	int				m_animNo;

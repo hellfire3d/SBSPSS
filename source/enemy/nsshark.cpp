@@ -27,8 +27,20 @@
 #include "projectl\projectl.h"
 #endif
 
+#ifndef	__ANIM_SHARKSUB_HEADER__
+#include <ACTOR_SHARKSUB_ANIM.h>
+#endif
+
+
 void CNpcEnemy::processSubSharkMovement( int _frames )
 {
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SHARKSUB_SHARKSUBSWIM;
+		m_frame = 0;
+	}
+
 	if ( m_timerTimer <= 0 )
 	{
 		if ( m_salvoCount > 0 )
@@ -86,6 +98,13 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 
 void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 {
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SHARKSUB_SHARKSUBCHOMP;
+		m_frame = 0;
+	}
+
 	if ( playerXDist > 0 )
 	{
 		m_extendDir = EXTEND_RIGHT;
