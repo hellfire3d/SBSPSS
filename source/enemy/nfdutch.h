@@ -18,6 +18,8 @@ class CNpcFlyingDutchmanEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
+	void				render();
+	virtual void		shutdown();
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
@@ -31,6 +33,9 @@ protected:
 	};
 
 	s32					m_minY, m_maxY;
+	bool				m_meterOn;
+	u8					m_inRange;
+	u8					m_fireCount;
 };
 
 #endif

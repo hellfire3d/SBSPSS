@@ -43,6 +43,9 @@
 #include <sprites.h>
 #endif
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,6 +59,15 @@ void CNpcFlyingDutchmanEnemy::postInit()
 	m_npcPath.getPathYExtents( &m_minY, &m_maxY );
 
 	m_extension = minX;
+	m_meterOn=false;
+	m_inRange = false;
+
+	if ( CLevel::getIsBossRespawn() )
+	{
+		m_health = CLevel::getBossHealth();
+	}
+
+	m_fireCount = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +152,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 		m_extendDir = EXTEND_UP;
 	}
 
-	if ( playerYDistSqr > 100 )
+	if ( !m_inRange && playerYDistSqr > 100 )
 	{
 		if ( !m_animPlaying )
 		{
@@ -153,43 +165,71 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 	}
 	else
 	{
+		m_inRange = true;
+
 		switch( m_state )
 		{
 			case FLYING_DUTCHMAN_ATTACK_PLAYER_1:
 			case FLYING_DUTCHMAN_ATTACK_PLAYER_2:
 			{
-				if ( m_animNo != ANIM_FLYINGDUTCHMAN_FIREATTACK )
+				if ( m_timerTimer > 0 )
 				{
-					m_animNo = ANIM_FLYINGDUTCHMAN_FIREATTACK;
-					m_animPlaying = true;
-					m_frame = 0;
+					if ( !m_animPlaying )
+					{
+						m_animNo = m_data[m_type].moveAnim;
+						m_animPlaying = true;
+						m_frame = 0;
+					}
+
+					m_timerTimer -= _frames;
 				}
-				else if ( !m_animPlaying )
+				else
 				{
-					// fire at player
-
-					s16 heading;
-
-					if ( playerXDist > 0 )
+					if ( m_animNo != ANIM_FLYINGDUTCHMAN_FIREATTACK )
 					{
-						heading = 0;
+						m_animNo = ANIM_FLYINGDUTCHMAN_FIREATTACK;
+						m_animPlaying = true;
+						m_frame = 0;
 					}
-					else
+					else if ( !m_animPlaying )
 					{
-						heading = 2048;
+						// fire at player
+
+						s16 heading;
+
+						if ( playerXDist > 0 )
+						{
+							heading = 0;
+						}
+						else
+						{
+							heading = 2048;
+						}
+
+						CProjectile *projectile;
+						projectile = CProjectile::Create();
+						DVECTOR newPos = Pos;
+						newPos.vy -= 50;
+						projectile->init( newPos, heading );
+						projectile->setGraphic( FRM__LIGHTNING2 );
+
+						m_fireCount++;
+
+						if ( m_health < ( m_data[m_type].initHealth >> 2 ) && m_fireCount < 2 )
+						{
+							m_timerTimer = GameState::getOneSecondInFrames() >> 2;
+						}
+						else
+						{
+							m_controlFunc = NPC_CONTROL_MOVEMENT;
+							m_movementTimer = GameState::getOneSecondInFrames() * 3;
+
+							m_state++;
+							m_inRange = false;
+							m_timerTimer = 0;
+							m_fireCount = 0;
+						}
 					}
-
-					CProjectile *projectile;
-					projectile = CProjectile::Create();
-					DVECTOR newPos = Pos;
-					newPos.vy -= 50;
-					projectile->init( newPos, heading );
-					projectile->setGraphic( FRM__LIGHTNING2 );
-
-					m_controlFunc = NPC_CONTROL_MOVEMENT;
-					m_movementTimer = GameState::getOneSecondInFrames() * 3;
-
-					m_state++;
 				}
 
 				break;
@@ -215,6 +255,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;
 					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
+					m_inRange = false;
 
 					s32 minX, maxX;
 					m_npcPath.getPathXExtents( &minX, &maxX );
@@ -354,6 +395,50 @@ void CNpcFlyingDutchmanEnemy::processShot( int _frames )
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFlyingDutchmanEnemy::shutdown()
+{
+	if ( m_state != NPC_GENERIC_HIT_DEATH_END )
+	{
+		CLevel::setIsBossRespawn( true );
+		CLevel::setBossHealth( m_health );
+	}
+
+	CNpcEnemy::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFlyingDutchmanEnemy::render()
+{
+	SprFrame = NULL;
+
+	if ( m_isActive )
+	{
+		CEnemyThing::render();
+
+		if (canRender())
+		{
+			if (!m_meterOn)
+			{
+				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				T->SetMax(m_health);
+				m_meterOn=true;
+			}
+
+			DVECTOR &renderPos=getRenderPos();
+
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
 }
