@@ -6,14 +6,15 @@
 #define	__CORE_HEADER__
 
 #include	<Vector>
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	"Layer.h"
 //#include	"LayerTile.h"
 
 #include	"TexCache.h"
 #include	"TileSet.h"
 
-const	float	FileVersion=1.0f;
+const	float	FileVersion=1.01f;
 
 
 /*****************************************************************************/
@@ -78,11 +79,12 @@ public:
 // Misc
 		void					UpdateGUI(CMapEditView *View);
 		void					UpdateAll(CMapEditView *View);
-		void					UpdateView(CMapEditView *View,Vec Ofs=Vec(0,0,0));
+		void					UpdateView(CMapEditView *View);
+		void					UpdateView(CMapEditView *View,Vector3 &Ofs);
 
-		Vec						&GetCam();
-		Vec						&GetCamOfs();
-		Vec						OffsetCam(Vec &Cam,float DivVal);
+		Vector3					&GetCam();
+		Vector3					&GetCamOfs();
+		Vector3					OffsetCam(Vector3 &Cam,float DivVal);
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
@@ -93,12 +95,13 @@ public:
 		void					Toggle2d3d(CMapEditView *View);
 		int						FindLayer(int Type,int SubType=-1);
 		int						FindActionLayer();
-
+		
+		GString					GetCurrentPath();
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
-		Vec						MapCam,TileCam;
-		Vec						MapCamOfs,TileCamOfs;
+		Vector3					MapCam,TileCam;
+		Vector3					MapCamOfs,TileCamOfs;
 
 		std::vector<CLayer*>	Layer;
 		int						ActiveLayer;

@@ -10,7 +10,7 @@
 #include	"mapedit.h"
 
 #include	"Quantize.h"
-#include	"list.h"
+#include	<list.h>
 
 
 /*****************************************************************************/

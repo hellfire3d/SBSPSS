@@ -4,7 +4,8 @@
 
 
 #include	"stdafx.h"
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
@@ -77,11 +78,15 @@ int		Width,Height;
 							Layer.push_back(new CLayerTile(	CLayerTile::Action,		Width,					Height,		1.0f,	TRUE,	TRUE));
 		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	CLayerTile::Fore,		Width,					Height,		0.5f,	FALSE,	TRUE));
 
+Vector3	CamOfs;
+		CamOfs.Zero();
+		CamOfs.x=-15;
+
 		ActiveLayer=FindActionLayer();
-		MapCam=Vec(0,0,0);
-		MapCamOfs=Vec(-15,10,0);
-		TileCam=Vec(0,0,0);
-		TileCamOfs=Vec(-15,10,0);
+		MapCam.Zero();
+		MapCamOfs=CamOfs;
+		TileCam.Zero();
+		TileCamOfs=CamOfs;
 		TileViewFlag=FALSE;
 		GridFlag=TRUE;
 		Is3dFlag=TRUE;
@@ -100,10 +105,10 @@ float	Version;
 
 		if (Version>=1.0)
 		{
-			File->Read(&MapCam,sizeof(Vec));
-			File->Read(&MapCamOfs,sizeof(Vec));
-			File->Read(&TileCam,sizeof(Vec));
-			File->Read(&TileCamOfs,sizeof(Vec));
+			File->Read(&MapCam,sizeof(Vector3));
+			File->Read(&MapCamOfs,sizeof(Vector3));
+			File->Read(&TileCam,sizeof(Vector3));
+			File->Read(&TileCamOfs,sizeof(Vector3));
 	
 			File->Read(&TileViewFlag,sizeof(BOOL));
 			File->Read(&GridFlag,sizeof(BOOL));
@@ -153,10 +158,10 @@ void	CCore::Save(CFile *File)
 // Version 1
 		File->Write(&FileVersion,sizeof(float));
 
-		File->Write(&MapCam,sizeof(Vec));
-		File->Write(&MapCamOfs,sizeof(Vec));
-		File->Write(&TileCam,sizeof(Vec));
-		File->Write(&TileCamOfs,sizeof(Vec));
+		File->Write(&MapCam,sizeof(Vector3));
+		File->Write(&MapCamOfs,sizeof(Vector3));
+		File->Write(&TileCam,sizeof(Vector3));
+		File->Write(&TileCamOfs,sizeof(Vector3));
 
 		File->Write(&TileViewFlag,sizeof(BOOL));
 		File->Write(&GridFlag,sizeof(BOOL));
@@ -200,7 +205,7 @@ void	CCore::Render(CMapEditView *View,BOOL ForceRender)
 /*****************************************************************************/
 void	CCore::RenderLayers(CMapEditView *View)
 {
-Vec		&ThisCam=GetCam();
+Vector3	&ThisCam=GetCam();
 int		ListSize=Layer.size();
 	
 		for (int i=0;i<ListSize;i++)
@@ -222,7 +227,7 @@ int		ListSize=Layer.size();
 /////////////////////////////////////////////////////////////////////////////
 void	CCore::RenderTileView(CMapEditView *View)
 {
-Vec		&ThisCam=GetCam();
+Vector3	&ThisCam=GetCam();
 
 		TileBank.RenderSet(this,ThisCam,Is3dFlag);
 
@@ -299,19 +304,23 @@ BOOL	RedrawFlag=FALSE;
 /*****************************************************************************/
 void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
 {
+Vector3	Ofs;
+		Ofs.Zero();
 		if (zDelta>0)
-			UpdateView(View,Vec(0,0,1.0f));
+			Ofs.z=+1.0f;
 		else
-			UpdateView(View,Vec(0,0,-1.0f));
+			Ofs.z=-1.0f;
+
+		UpdateView(View,Ofs);
 }
 
 /*****************************************************************************/
 void	CCore::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point) 
 {
-Vec		Ofs(0,0,0);
-
-Vec		&ThisCam=GetCam();
+Vector3	Ofs;
+Vector3	&ThisCam=GetCam();
 // check if active doc
+		Ofs.Zero();
 		if (theApp.GetCurrent()!=View->GetDocument()) return;
 
 		CurrentMousePos=point;
@@ -336,7 +345,7 @@ Vec		&ThisCam=GetCam();
 			Ofs.y*=YS;
 /*			if (nFlags & MK_CONTROL)
 			{ // Move Ofs
-				Vec	&CamOfs=GetCamOfs();
+				Vector3	&CamOfs=GetCamOfs();
 				Ofs.y=-Ofs.y;
 				CamOfs+=Ofs;
 				UpdateView(View);
@@ -528,7 +537,7 @@ BOOL	CCore::IsTileValid(int Set,int Tile)
 /*****************************************************************************/
 /*** Misc ********************************************************************/
 /*****************************************************************************/
-Vec		&CCore::GetCam()
+Vector3	&CCore::GetCam()
 {
 		if (TileViewFlag)
 			return(TileCam);
@@ -538,7 +547,7 @@ Vec		&CCore::GetCam()
 }
 
 /*****************************************************************************/
-Vec		&CCore::GetCamOfs()
+Vector3	&CCore::GetCamOfs()
 {
 		if (TileViewFlag)
 			return(TileCamOfs);
@@ -565,16 +574,22 @@ void	CCore::UpdateAll(CMapEditView *View)
 }
 
 /*****************************************************************************/
-void	CCore::UpdateView(CMapEditView *View,Vec Ofs)
+void	CCore::UpdateView(CMapEditView *View)
 {
-Vec		&ThisCam=GetCam();
-
-		Ofs.y=-Ofs.y;
-		ThisCam+=Ofs;
-		if (ThisCam.z>-1) ThisCam.z=-1;
 		if (View) View->Invalidate();
 }		
 
+/*****************************************************************************/
+void	CCore::UpdateView(CMapEditView *View,Vector3 &Ofs)
+{
+Vector3	&ThisCam=GetCam();
+
+		ThisCam.x+=Ofs.x;
+		ThisCam.y-=Ofs.y;
+		ThisCam.z+=Ofs.z;
+		if (ThisCam.z>-1) ThisCam.z=-1;
+		UpdateView(View);
+}		
 
 /*****************************************************************************/
 void	CCore::SetMapSize(CMapEditView *View,int Width,int Height)
@@ -623,9 +638,9 @@ int	Idx=FindLayer(LAYER_TYPE_TILE,CLayerTile::Action);
 
 /*****************************************************************************/
 
-Vec		CCore::OffsetCam(Vec &Cam,float DivVal)
+Vector3	CCore::OffsetCam(Vector3 &Cam,float DivVal)
 {
-Vec	ThisCam;
+Vector3	ThisCam;
 
 	ThisCam=Cam/DivVal;
 	ThisCam.z=Cam.z;
@@ -672,5 +687,15 @@ CExportPSX	Exp(ExportName);
 
 		Exp.ExportTiles(this);
 		Exp.ExportTexList(this);
+
+}
+
+/*****************************************************************************/
+GString	CCore::GetCurrentPath()
+{
+GFName	FullPath=theApp.GetCurrent()->GetPathName();
+GString	Path=FullPath.Dir();
+	
+	return(Path);
 
 }

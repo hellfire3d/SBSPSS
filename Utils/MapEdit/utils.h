@@ -5,7 +5,7 @@
 #ifndef	__UTILS_HEADER__
 #define	__UTILS_HEADER__
 
-#include	"maths.h"
+#include	<vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
@@ -40,16 +40,13 @@ void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z);
 int		LoadGLTexture(char *FileName, GLuint &Text,int &Width,int &Height);
 
-void	TNormalise(TVECTOR &V);
-TVECTOR	TCrossProduct(TVECTOR const &V0,TVECTOR const &V1,const TVECTOR &V2 );
-
 CPoint	IDToPoint(int ID,int Width);
 int		PointToID(CPoint &Pnt,int Width);
 
-void SaveTGA(char *Filename,int W,int H,u8 *Data);
-void SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
+void	SaveTGA(char *Filename,int W,int H,u8 *Data);
+void	SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 
-void BGR2RGB(int W,int H,u8 *Data);
+void	BGR2RGB(int W,int H,u8 *Data);
 
 void	SetFileExt(char *InName,char *OutName,char *Ext);
 		

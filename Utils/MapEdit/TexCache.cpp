@@ -3,7 +3,7 @@
 /*********************/
 
 #include	"stdafx.h"
-#include	"gl3d.h"
+//#include	"gl3d.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>

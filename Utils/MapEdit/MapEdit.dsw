@@ -3,14 +3,22 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "GinLib"=..\GinLib\ginlib.dsp - Package Owner=<4>
+Project: "GLib"=..\Libs\GLib\Glib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    "$/Utils/GinLib", RICAAAAA
-    ..\ginlib
-    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "GinLib"=..\Libs\GinLib\ginlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
 }}}
 
 Package=<4>
@@ -30,11 +38,77 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name GinLib
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name maths
+    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "TexGrab"=..\TexGrab\texgrab.dsp - Package Owner=<4>
+Project: "MkLevel"=..\MkLevel\MkLevel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name GinLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name PsxLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name TexGrab
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "PsxLib"=..\LIBS\PsxLib\PsxLib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "TexGrab"=..\Libs\TexGrab\TexGrab.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "maths"=..\Libs\Maths\maths.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mem"=..\Libs\mem\mem.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -4,7 +4,8 @@
 
 
 #include	"stdafx.h"
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
@@ -137,9 +138,9 @@ int		ThisHeight=Map.GetHeight();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vec &CamPos,BOOL Is3d)
+void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
-Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
 		if (Is3d && Render3dFlag)
 		{
@@ -154,11 +155,10 @@ Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d)
+void	CLayerTile::RenderCursorPaint(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
 CTileBank	&TileBank=Core->GetTileBank();
-//Vec			ThisCam=CamPos;
-Vec			ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
 CMap		&Brush=TileBank.GetActiveBrush();
 
@@ -181,7 +181,7 @@ CMap		&Brush=TileBank.GetActiveBrush();
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vec &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha)
+void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha)
 {
 int			Width=ThisMap.GetWidth();
 int			Height=ThisMap.GetHeight();
@@ -216,11 +216,11 @@ int			Height=ThisMap.GetHeight();
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)
+void	CLayerTile::RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)
 {
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 float	OverVal=0.5;
 
 		glMatrixMode(GL_MODELVIEW);
@@ -249,7 +249,7 @@ float	OverVal=0.5;
 }
 
 /*****************************************************************************/
-void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
+void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
 {
 GLint	Viewport[4];
 GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
@@ -259,7 +259,7 @@ CPoint	&CursorPos=Core->GetCursorPos();
 
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
@@ -452,7 +452,7 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)
+void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
 		switch(Mode)
 		{

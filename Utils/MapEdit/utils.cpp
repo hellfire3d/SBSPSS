@@ -4,13 +4,13 @@
 
 #include	"stdafx.h"
 
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
 #include	<gl\glaux.h>		// Header File For The Glaux Library
 #include	"GLEnabledView.h"
-#include	"maths.h"
 
 #include	"Utils.H"
 
@@ -110,42 +110,6 @@ void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z)
 
 /**************************************************************************************/
 /**************************************************************************************/
-/**************************************************************************************/
-void	TNormalise(TVECTOR &V)
-{
-float	SqMag = V.length2();// v.x * v.x + v.y * v.y + v.z * v.z;
-
-		if (SqMag> 0.001f)
-		{
-			float	Mag = (float)sqrt( SqMag);
-
-			V/=Mag;
-
-		} 
-}
-
-/**************************************************************************************/
-TVECTOR	TCrossProduct(TVECTOR const &V0,TVECTOR const &V1,const TVECTOR &V2 )
-{
-TVECTOR	DV1, DV2;
-TVECTOR	Out;
-
-		DV1.X() = V1.X() - V0.X();
-		DV1.Y() = V1.Y() - V0.Y();
-		DV1.Z() = V1.Z() - V0.Z();
-
-		DV2.X() = V2.X() - V0.X();
-		DV2.Y() = V2.Y() - V0.Y();
-		DV2.Z() = V2.Z() - V0.Z();
-
-		Out.SetX( (DV1.Z() * DV2.Y()) - (DV1.Y() * DV2.Z()) );
-		Out.SetY( (DV1.X() * DV2.Z()) - (DV1.Z() * DV2.X()) );
-		Out.SetZ( (DV1.Y() * DV2.X()) - (DV1.X() * DV2.Y()) );
-
-		TNormalise(Out);
-		return Out;
-}
-
 /**************************************************************************************/
 CPoint	IDToPoint(int ID,int Width)
 {

@@ -3,12 +3,14 @@
 /*********************/
 
 #include	"stdafx.h"
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
 #include	"GLEnabledView.h"
 #include	<Vector>
+#include	<GFName.hpp>
 
 #include	"Core.h"
 #include	"TileSet.h"
@@ -55,6 +57,9 @@ CTileBank::~CTileBank()
 void	CTileBank::Load(CFile *File,float Version)
 {
 int		ListSize;
+GFName	RootPath=File->GetFilePath();
+GString	FilePath=RootPath.Dir();
+		FilePath.Append('\\');
 	
 	File->Read(&ListSize,sizeof(int));
 	File->Read(&CurrentSet,sizeof(int));
@@ -62,21 +67,40 @@ int		ListSize;
 	Brush[0].Load(File,Version);
 	Brush[1].Load(File,Version);
 
-	for (int i=0;i<ListSize;i++)
+	if (Version<=1.00)
 	{
-		char	Filename[256+64];
+		for (int i=0;i<ListSize;i++)
+		{
+			char	Filename[256+64];
 
-		File->Read(Filename,256+64);
-		AddTileSet(Filename);
+			File->Read(Filename,256+64);
+			AddTileSet(Filename);
+		}
 	}
-
-
+	else
+	{ // New Style rel storage
+		for (int i=0;i<ListSize;i++)
+		{
+			char	c=1,RelName[256+64],FullName[256+64];
+			int		Len=0;
+			while (c)
+			{
+				File->Read(&c,1);
+				RelName[Len++]=c;
+			}
+			RootPath.makeabsolute(FilePath,RelName,FullName);
+			AddTileSet(FullName);
+		}
+	}
 }
 
 /*****************************************************************************/
 void	CTileBank::Save(CFile *File)
 {
 int		ListSize=TileSet.size();
+GFName	RootPath=File->GetFilePath();
+GString	FilePath=RootPath.Dir();
+		FilePath.Append('\\');
 
 		File->Write(&ListSize,sizeof(int));
 		File->Write(&CurrentSet,sizeof(int));
@@ -89,8 +113,11 @@ int		ListSize=TileSet.size();
 			CTileSet	&ThisSet=TileSet[i];
 			char	Filename[256+64];
 
-			sprintf(Filename,"%s%s%s",ThisSet.GetPath(),ThisSet.GetName(),ThisSet.GetExt());
-			File->Write(Filename,256+64);		
+		
+			RootPath.makerelative(FilePath,ThisSet.GetFilename(),Filename);	
+//			sprintf(Filename,"%s",ThisSet.GetFilename());
+//			File->Write(Filename,256+64);		
+			File->Write(Filename,strlen(Filename)+1);		
 		}
 
 }
@@ -117,7 +144,7 @@ CTileSet	FindSet(Filename,ListSize);
 		{
 			CTileSet	&ThisSet=TileSet[i];
 
-			if (IsStrSame(FindSet.GetName(),ThisSet.GetName(),-1)) return(i);
+			if (IsStrSame((char*)FindSet.GetName(),(char*)ThisSet.GetName(),-1)) return(i);
 		}
 		return(-1);
 }
@@ -164,7 +191,7 @@ CTile	&CTileBank::GetTile(int Bank,int Tile)
 }
 
 /*****************************************************************************/
-void	CTileBank::RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d)
+void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
 		if (!TileSet.size()) return;	// No tiles, return
 
@@ -184,7 +211,7 @@ void	CTileBank::RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d)
 }
 
 /*****************************************************************************/
-void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
+void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
 {
 		if (!TileSet.size()) return;	// No tiles, return
 		
@@ -318,7 +345,7 @@ BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
 /*****************************************************************************/
 CTileSet::CTileSet(char *_Filename,int Idx)
 {
-		_splitpath(_Filename,Drive,Path,Name,Ext);
+		Filename=_Filename;
 		
 		Loaded=FALSE;
 		SetNumber=Idx;
@@ -336,8 +363,10 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 void	CTileSet::Load(CCore *Core)
 {
+GString	Ext=Filename.Ext();
+		Ext.Upper();
 
-		if (IsStrSame(Ext,".Gin"))
+		if (Ext=="GIN")
 		{
 			Load3d(Core);
 		}
@@ -353,18 +382,15 @@ void	CTileSet::Load(CCore *Core)
 
 void	CTileSet::Load2d(CCore *Core)
 {
-char		Filename[_MAX_PATH];
 CTexCache	&TexCache=Core->GetTexCache();
 
-		_makepath( Filename, Drive, Path, Name, Ext);
-
-int		TexID=TexCache.ProcessTexture(Filename,0);
+int		TexID=TexCache.ProcessTexture((char*)Filename.FullName(),0);
 sTex	&ThisTex=TexCache.GetTex(TexID);
 
 int		Width=ThisTex.TexWidth/16;
 int		Height=ThisTex.TexHeight/16;
 
-		TRACE3("Load 2d TileBank %s (%i,%i)\n",Filename,Width,Height);
+		TRACE3("Load 2d TileBank %s (%i,%i)\n",Filename.FullName(),Width,Height);
 
 		Tile.push_back(CTile(0));	// Insert Blank		
 		
@@ -405,11 +431,9 @@ BOOL	Data=FALSE;
 /*****************************************************************************/
 void	CTileSet::Load3d(CCore *Core)
 {
-char	Filename[_MAX_PATH];
 CScene	Scene;
 
-		_makepath( Filename, Drive, Path, Name, Ext);
-		Scene.Load(Filename);
+		Scene.Load(Filename.FullName());
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -462,7 +486,7 @@ BOOL	CTileSet::IsTileValidGB(int No)
 }
 
 /*****************************************************************************/
-void	CTileSet::Render(Vec &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
+void	CTileSet::Render(Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
@@ -563,7 +587,7 @@ BOOL		ValidTile=TRUE;
 }
 
 /*****************************************************************************/
-void	CTileSet::RenderCursor(Vec &CamPos,int CursorPos,int SelStart,int SelEnd)
+void	CTileSet::RenderCursor(Vector3 &CamPos,int CursorPos,int SelStart,int SelEnd)
 {
 int		ListSize=Tile.size();
 CPoint	Start,End;
@@ -606,7 +630,7 @@ int		MaxTile=Tile.size();
 }
 
 /*****************************************************************************/
-void	CTileSet::RenderGrid(Vec &CamPos)
+void	CTileSet::RenderGrid(Vector3 &CamPos)
 {
 int			ListSize=Tile.size();
 int			TileID=1;	// Dont bother with blank, its sorted
@@ -642,7 +666,7 @@ int			TileID=1;	// Dont bother with blank, its sorted
 }
 
 /*****************************************************************************/
-int		CTileSet::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
+int		CTileSet::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
 {
 int		ListSize=Tile.size();
 GLint	Viewport[4];

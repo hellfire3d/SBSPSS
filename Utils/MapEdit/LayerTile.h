@@ -48,11 +48,11 @@ public:
 		int				GetSubType()		{return(SubType);}
 		char			*GetName()			{return(LayerName[SubType]);}
 
-		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
-		void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active);
+		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
+		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
 
-		void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
-		void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d);
+		void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
+		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
 		void			InitGUI(CCore *Core);
 		void			UpdateGUI(CCore *Core);
@@ -80,8 +80,8 @@ public:
 		BOOL			MirrorY(CCore *Core);
 
 protected:
-		void			Render(CCore *Core,Vec &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f);
-		void			RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d);
+		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f);
+		void			RenderCursorPaint(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
 		BOOL			Paint(CMap &Blk,CPoint &CursorPos);
 

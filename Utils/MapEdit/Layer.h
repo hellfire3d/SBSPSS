@@ -6,7 +6,8 @@
 #define	__LAYER_HEADER__
 
 #include	<Vector>
-#include	"gl3d.h"
+//#include	"gl3d.h"
+#include	<Vector3.h>
 #include	"Map.h"
 
 /*****************************************************************************/
@@ -46,11 +47,11 @@ virtual	int				GetSubType()					{return(-1);}
 
 virtual	float			GetScaleFactor()				{return(ScaleFactor);}
 
-virtual	void			Render(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
-virtual	void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)=0;
+virtual	void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
+virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)=0;
 
-virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)=0;
-virtual	void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
+virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)=0;
+virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 
 virtual	void			InitGUI(CCore *Core)=0;
 virtual	void			UpdateGUI(CCore *Core)=0;

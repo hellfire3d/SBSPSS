@@ -18,24 +18,24 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_MAPSIZE
-Resource2=IDD_LAYERTILE_GUI
-Resource3=IDR_TOOLBAR (English (U.S.))
+Resource1=IDD_MULTIBAR (English (U.S.))
+Resource2=IDD_NEWMAP
+Resource3=IDD_LAYERTILE_GUI
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDD_NEW_LAYER
 Class8=CMultiBar
-Resource6=IDD_LAYER_LIST_DIALOG
+Resource6=IDR_MAINFRAME (English (U.S.))
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDR_MAINFRAME (English (U.S.))
+Resource8=IDD_MAPSIZE
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_NEW_LAYER
-Resource10=IDD_MULTIBAR (English (U.S.))
+Resource9=IDD_LAYER_LIST_DIALOG
+Resource10=IDR_TOOLBAR (English (U.S.))
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_NEWMAP
+Resource11=IDD_ABOUTBOX (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
