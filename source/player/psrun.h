@@ -56,7 +56,7 @@ class CPlayerStateWalk : public CPlayerStateRun
 {
 protected:
 	virtual int		getStartFrame()						{return -1;}
-	virtual int		getLoopFrame()						{return ANIM_SPONGEBOB_WALK;}
+	virtual int		getLoopFrame()						{return ANIM_SPONGEBOB_RUN;}	//{return ANIM_SPONGEBOB_WALK;}
 	virtual int		getEndFrame()						{return -1;}
 };
 

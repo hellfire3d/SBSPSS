@@ -41,22 +41,27 @@ public:
 	virtual void				think();
 	virtual void				renderModeUi();
 
-	virtual void				setAnimNo(int _animNo);
-	virtual void				setAnimFrame(int _animFrame);
+	virtual int					setState(int _state);
 
 private:
+	enum
+	{
+		TIMEOUT_FOR_BIG_SHOT=60*4,
+		AMMO_AMOUNT_FOR_BIG_SHOT=3,
+	};
+
 	typedef enum
 	{
-		NET_STATE__EMPTY,
-		NET_STATE__FULL,
-	} NetState;
+		FIRING_STATE__NONE,
+		FIRING_STATE__POWERINGUP,
+		FIRING_STATE__FIRING,
+	}FIRING_STATE;
 
-	int							canSwingNetFromThisState();
+	int							canFireFromThisState();
 
-	int							m_savedAnimNo,m_savedAnimFrame;
-	int							m_netFrame;
-	int							m_netting;
-	NetState					m_netState;
+	int							m_firingFrame;
+	FIRING_STATE				m_firingState;
+	int							m_firingTime;
 
 };
 

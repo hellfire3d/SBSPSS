@@ -122,7 +122,7 @@ public:
 
 	
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
-	int							setState(int _state);
+	virtual int					setState(int _state);
 	int							getState()				{return m_currentState;}
 //	virtual void			setMode(class CPlayer *_player,int _mode);
 	int							getFacing();

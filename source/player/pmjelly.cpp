@@ -21,6 +21,18 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
+#ifndef	__PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -61,8 +73,8 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeJellyLauncher::enter()
 {
-	m_netting=false;
-	m_netState=NET_STATE__EMPTY;
+	m_firingState=FIRING_STATE__NONE;
+	m_player->giveJellyAmmo();
 }
 
 /*----------------------------------------------------------------------
@@ -71,50 +83,88 @@ void	CPlayerModeJellyLauncher::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-//int netstate;
+DVECTOR	jellyLaunchPos={20,-40};
 void	CPlayerModeJellyLauncher::think()
 {
-	// If we're netting then restore the 'real' anim number/frame before
-	// doing the think so that the rest of the code doesn't know what
-	// is going on ;)
-	if(m_netting)
-	{
-		setAnimNo(m_savedAnimNo);
-		setAnimFrame(m_savedAnimFrame);
-	}
 	CPlayerModeBase::think();
 
-	// Start to net?
-	if(!m_netting&&getPadInputDown()&PI_ACTION&&canSwingNetFromThisState())
+	// Start to fire?
+	switch(m_firingState)
 	{
-		m_netFrame=0;
-		m_netting=true;
-		switch(m_netState)
-		{
-			case NET_STATE__EMPTY:
-				m_netState=NET_STATE__FULL;
-				break;
-			case NET_STATE__FULL:
-				m_netState=NET_STATE__EMPTY;
-				break;
-		}
-	}
+		case FIRING_STATE__NONE:
+			if(getPadInputDown()&PI_ACTION&&m_player->getJellyAmmo()&&canFireFromThisState())
+			{
+				m_firingFrame=0;
+				m_firingTime=0;
+				m_firingState=FIRING_STATE__POWERINGUP;
+			}
+			break;
+		case FIRING_STATE__POWERINGUP:
+			if(getPadInputHeld()&PI_ACTION)
+			{
+				if(m_firingTime<TIMEOUT_FOR_BIG_SHOT)
+				{
+					m_firingTime++;
+				}
+				m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
+			}
+			else
+			{
+				m_firingState=FIRING_STATE__FIRING;
+				m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
+			}
+			break;
+		case FIRING_STATE__FIRING:
+			m_player->setAnimFrame(m_firingFrame++);
+			if(m_firingFrame>=m_player->getAnimFrameCount())
+			{
+				int					playerFacing;
+				DVECTOR				launchPos;
 
-	// Netting?
-	if(m_netting)
-	{
-//!!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
-		m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
-		m_player->setAnimFrame(m_netFrame);
-		m_netFrame++;
-		if(m_netFrame>=m_player->getAnimFrameCount())
-		{
-			m_player->setAnimNo(m_savedAnimNo);
-			m_player->setAnimFrame(m_savedAnimFrame);
-			m_netting=false;
-		}
+				playerFacing=m_player->getFacing();
+				launchPos=getPlayerPos();
+				launchPos.vx+=playerFacing*jellyLaunchPos.vx;
+				launchPos.vy+=jellyLaunchPos.vy;
+				if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>=AMMO_AMOUNT_FOR_BIG_SHOT)
+				{
+					// Powered up, big shot
+					int					fireHeading;
+					CPlayerProjectile	*projectile;
+					int					i;
+
+					fireHeading=1024+(1024*playerFacing)-512;
+					for(i=0;i<3;i++)
+					{
+						projectile=new("JellyProjectile") CPlayerProjectile;
+						projectile->init(launchPos,
+										fireHeading,
+										 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+										5*60);
+						fireHeading+=512;
+						m_player->useOneJelly();
+					}
+				}
+				else
+				{
+					// Normal, small shot
+					int					fireHeading;
+					CPlayerProjectile	*projectile;
+
+					fireHeading=1024+(1024*m_player->getFacing());
+					projectile=new("JellyProjectile") CPlayerProjectile;
+					projectile->init(launchPos,
+									 fireHeading,
+									 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+									 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+									 5*60);
+					m_player->useOneJelly();
+				}
+				setState(STATE_IDLE);
+				m_firingState=FIRING_STATE__NONE;
+			}
+			break;
 	}
-//	netstate=m_netState;
 }
 
 /*----------------------------------------------------------------------
@@ -127,17 +177,80 @@ void	CPlayerModeJellyLauncher::renderModeUi()
 {
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
+	FontBank	*fb;
+	char		buf[4];
 
 	sb=m_player->getSpriteBank();
-	fh=sb->getFrameHeader(FRM__NET);
-	if(m_netState==NET_STATE__FULL)
+	fh=sb->getFrameHeader(FRM__BLOWER);
+	switch(m_firingState)
 	{
-		// Net has a jellyfish inside
-		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,256+128);
+		case FIRING_STATE__NONE:
+		case FIRING_STATE__FIRING:
+			sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+			break;
+		case FIRING_STATE__POWERINGUP:
+			{
+				int	rotRange,scaleBase,scaleRange;
+				int	xs,ys,rot;
+				rotRange=m_firingTime;
+				scaleBase=4096+(m_firingTime*10);
+				scaleRange=m_firingTime*2;
+				rot=(getRndRange(rotRange*2)-rotRange)&4095;
+				xs=scaleBase+getRndRange(scaleRange);
+				ys=scaleBase+getRndRange(scaleRange);
+				sb->printRotatedScaledSprite(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,xs,ys,rot,CPlayer::POWERUPUI_OT);
+			}
+			break;
+	}
+
+	fb=m_player->getFontBank();
+	sprintf(buf,"x%d",m_player->getJellyAmmo());
+	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY-(fb->getCharHeight()/2),buf);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayerModeJellyLauncher::setState(int _state)
+{
+	int	allowChange;
+
+	allowChange=true;
+	if(m_firingState!=FIRING_STATE__NONE)
+	{
+		switch(_state)
+		{
+			case STATE_FALL:
+				// Break out of firing state!
+				m_firingState=FIRING_STATE__NONE;
+				break;
+
+			case STATE_IDLE:
+			case STATE_IDLETEETER:
+			case STATE_JUMP:
+			case STATE_RUN:
+			case STATE_FALLFAR:
+			case STATE_BUTTBOUNCE:
+			case STATE_BUTTFALL:
+			case STATE_BUTTLAND:
+			case STATE_DUCK:
+			case STATE_SOAKUP:
+			case STATE_GETUP:
+				allowChange=false;
+				break;
+		}
+	}
+
+	if(allowChange)
+	{
+		return CPlayerModeBase::setState(_state);
 	}
 	else
 	{
-		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+		return false;
 	}
 }
 
@@ -147,25 +260,7 @@ void	CPlayerModeJellyLauncher::renderModeUi()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeJellyLauncher::setAnimNo(int _animNo)
-{
-	CPlayerModeBase::setAnimNo(_animNo);
-	m_savedAnimNo=_animNo;
-}
-
-void	CPlayerModeJellyLauncher::setAnimFrame(int _animFrame)
-{
-	CPlayerModeBase::setAnimFrame(_animFrame);
-	m_savedAnimFrame=_animFrame;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int		CPlayerModeJellyLauncher::canSwingNetFromThisState()
+int		CPlayerModeJellyLauncher::canFireFromThisState()
 {
 	int	ret=false;
 
@@ -173,12 +268,12 @@ int		CPlayerModeJellyLauncher::canSwingNetFromThisState()
 	{
 		case STATE_IDLE:
 		case STATE_IDLETEETER:
-		case STATE_JUMP:
-		case STATE_RUN:
-		case STATE_FALL:
 			ret=true;
 			break;
 
+		case STATE_JUMP:
+		case STATE_RUN:
+		case STATE_FALL:
 		case STATE_FALLFAR:
 		case STATE_BUTTBOUNCE:
 		case STATE_BUTTFALL:

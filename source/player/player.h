@@ -253,12 +253,18 @@ public:
 	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;if(m_bubbleAmmo>99)m_bubbleAmmo=99;}
 	void			useOneBubble()				{m_bubbleAmmo--;}
 	int				getBubbleAmmo()				{return m_bubbleAmmo;}
+
+	void			giveJellyAmmo()				{m_jellyAmmo+=6;if(m_jellyAmmo>99)m_jellyAmmo=99;}
+	void			useOneJelly()				{m_jellyAmmo--;}
+	int				getJellyAmmo()				{return m_jellyAmmo;}
+
 private:
 	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
 	int				m_invinvibilityRingTimer;
 	int				m_divingHelmet;
 	int				m_bubbleAmmo;
+	int				m_jellyAmmo;
 
 	// Platforms
 public:

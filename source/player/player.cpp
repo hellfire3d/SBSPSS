@@ -246,7 +246,7 @@ void	CPlayer::init()
 		s_playerModes[i]->initialise(this);
 	}
 	m_currentPlayerModeClass=NULL;
-	setMode(PLAYER_MODE_BASICUNARMED);	//PKG
+	setMode(PLAYER_MODE_FULLUNARMED);	//PKG
 
 m_animNo=0;
 m_animFrame=0;
@@ -693,6 +693,7 @@ void CPlayer::respawn()
 	m_squeakyBootsTimer=0;
 	m_invinvibilityRingTimer=0;
 	m_bubbleAmmo=0;
+	m_jellyAmmo=0;
 
 	clearPlatform();
 }

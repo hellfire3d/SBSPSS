@@ -25,6 +25,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -90,6 +94,7 @@ DVECTOR	CJellyLauncherAmmoPickup::getSizeForPlacement()
   ---------------------------------------------------------------------- */
 void	CJellyLauncherAmmoPickup::collect(class CPlayer *_player)
 {
+	_player->giveJellyAmmo();
 	CBasePickup::collect(_player);
 }
 
