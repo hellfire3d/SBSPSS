@@ -1,0 +1,102 @@
+/*=========================================================================
+
+	pseesaw.cpp
+
+	Author:		CRB
+	Created: 
+	Project:	Spongebob
+	Purpose: 
+
+	Copyright (c) 2001 Climax Development Ltd
+
+===========================================================================*/
+
+#ifndef __PLATFORM_PSEESAW_H__
+#include "platform\pseesaw.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+
+void CNpcSeesawPlatform::postInit()
+{
+	CNpcPlatform::postInit();
+
+	m_angularVelocity = 0;
+	m_currentAngle = 0;
+}
+
+void CNpcSeesawPlatform::processMovement( int _frames )
+{
+	s32 forceActing = 0;
+
+	if ( m_contact )
+	{
+		// find if user is to left or right of platform centre
+
+		CPlayer *player = GameScene.getPlayer();
+
+		DVECTOR playerPos = player->getPos();
+
+		s32 distX = playerPos.vx - this->Pos.vx;
+
+		if ( distX > 0 )
+		{
+			forceActing = 64 * _frames;
+
+			m_angularVelocity += forceActing;
+		}
+		else if ( distX < 0 )
+		{
+			forceActing = -64 * _frames;
+
+			m_angularVelocity += forceActing;
+		}
+	}
+
+	if ( !forceActing && m_angularVelocity )
+	{
+		// reduce velocity until 0
+
+		s32 m_angularResistance = -( 64 * _frames * m_angularVelocity ) / abs( m_angularVelocity );
+
+		if ( m_angularResistance < -m_angularVelocity )
+		{
+			m_angularResistance = -m_angularVelocity;
+		}
+		else if ( m_angularResistance > m_angularVelocity )
+		{
+			m_angularResistance = m_angularVelocity;
+		}
+
+		m_angularVelocity += m_angularResistance;
+	}
+
+	if ( m_angularVelocity > ( 20 << 8 ) )
+	{
+		m_angularVelocity = 20 << 8;
+	}
+	else if ( m_angularVelocity < -( 20 << 8 ) )
+	{
+		m_angularVelocity = -( 20 << 8 );
+	}
+
+	s32 newAngle = m_currentAngle + m_angularVelocity;
+
+	if ( newAngle > ( 512 << 8 ) )
+	{
+		newAngle = 512 << 8;
+		m_angularVelocity = 0;
+	}
+	else if ( newAngle < -( 512 << 8 ) )
+	{
+		newAngle = -( 512 << 8 );
+		m_angularVelocity = 0;
+	}
+
+	m_currentAngle = newAngle;
+
+	setCollisionAngle( newAngle >> 8 );
+}
