@@ -58,8 +58,4 @@ void BGR2RGB(int W,int H,u8 *Data);
 
 void	SetFileExt(char *InName,char *OutName,char *Ext);
 		
-
-
-/**************************************************************************************/
-
 #endif

@@ -328,19 +328,19 @@ SOURCE=.\res\Toolbar.bmp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\GfxToolBar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GfxToolBar.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\LayerList.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\LayerList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTileGUI.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTileGUI.h
 # End Source File
 # Begin Source File
 
@@ -360,11 +360,11 @@ SOURCE=.\MultiBar.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\TileSetDlg.cpp
+SOURCE=.\NewMapGUI.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TileSetDlg.h
+SOURCE=.\NewMapGUI.h
 # End Source File
 # End Group
 # End Group

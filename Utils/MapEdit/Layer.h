@@ -33,14 +33,13 @@ public:
 		CLayer(){};
 virtual	~CLayer(){};
 
-virtual	char			*GetName();
-virtual	void			SetName(char *_Name);
-
+virtual	char			*GetName()=0;
 virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
 virtual	BOOL			IsVisible()						{return(VisibleFlag);}
 virtual	int				GetType()=0;
+virtual	int				GetSubType()					{return(-1);}
 
-virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
+virtual	float			GetScaleFactor()				{return(ScaleFactor);}
 
 virtual	void			Render(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
 virtual	void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)=0;
@@ -72,10 +71,8 @@ virtual	BOOL			MirrorX(CCore *Core){return(FALSE);};
 virtual	BOOL			MirrorY(CCore *Core){return(FALSE);};
 
 protected:
-
-		char			Name[256];
 		BOOL			Render3dFlag;
-		float			ZPosDiv,MapSizeDiv;
+		float			ScaleFactor;
 		BOOL			ResizeFlag;
 		BOOL			VisibleFlag;
 

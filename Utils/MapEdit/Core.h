@@ -22,18 +22,11 @@ class	CMapEditView;
 class	CCore
 {
 public:
-	enum
-	{
-		LAYER_BACK=0,
-		LAYER_MID,
-		LAYER_ACTION,
-		LAYER_FORE,
-	};
 		CCore();
 		~CCore();
 
 		void					Init();
-		void					New();
+		BOOL					New();
 		void					Load(CFile *File);
 		void					Save(CFile *File);
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
@@ -71,9 +64,6 @@ public:
 // Layers
 		void					SetLayer(int Layer);
 		void					UpdateLayerGUI(CMapEditView *View);
-//		void					SetActiveLayer(int Layer);
-//		int						GetActiveLayer()				{return(ActiveLayer);}
-//		CLayer					*GetLayer(int i)				{return(Layer[i]);}
 
 // Grid
 		void					UpdateGrid(CMapEditView *View,BOOL Toggle=FALSE);
@@ -94,11 +84,12 @@ public:
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
 		void					SetMapSize(CMapEditView *View,int Width,int Height);
-		int						GetMapWidth()					{return(Layer[LAYER_ACTION]->GetWidth());}
-		int						GetMapHeight()					{return(Layer[LAYER_ACTION]->GetHeight());}
+		int						GetMapWidth()					{return(Layer[FindActionLayer()]->GetWidth());}
+		int						GetMapHeight()					{return(Layer[FindActionLayer()]->GetHeight());}
 
 		void					Toggle2d3d(CMapEditView *View);
-
+		int						FindLayer(int Type,int SubType=-1);
+		int						FindActionLayer();
 
 private:
 		CPoint					CurrentMousePos,LastMousePos;
@@ -118,7 +109,6 @@ private:
 		BOOL					GridFlag;
 		BOOL					Is3dFlag;
 		
-
 };
 
 /*****************************************************************************/

@@ -8,8 +8,6 @@
 #include	"Layer.h"
 
 /*****************************************************************************/
-
-/*****************************************************************************/
 enum	TileLayerEnum
 {
 	TileLayerDefaultWidth=30,
@@ -27,7 +25,6 @@ public:
 		{
 			MouseModePaint=0,
 			MouseModeSelect,
-			MouseModePicker,
 		};
 		enum	MouseFlag
 		{
@@ -35,12 +32,21 @@ public:
 			MouseFlagMirrorY=1<<1,
 			MouseFlagMirrorXY=MouseFlagMirrorX|MouseFlagMirrorY,
 		};
+		enum SubType
+		{
+			Back=0,
+			Mid,
+			Action,
+			Fore,
+		};
 
-		CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable);		// New Layer
+		CLayerTile(int SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable);					// New Layer
 		CLayerTile(CFile *File,int Version);																// Load Layer
 		~CLayerTile();
 
 		int				GetType()			{return(LAYER_TYPE_TILE);}
+		int				GetSubType()		{return(SubType);}
+		char			*GetName()			{return(LayerName[SubType]);}
 
 		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
 		void			RenderGrid(CCore *Core,Vec &CamPos,BOOL Active);
@@ -79,8 +85,11 @@ protected:
 		BOOL			Paint(CMap &Blk,CPoint &CursorPos);
 
 		CMap			Map;
-
+		int				SubType;
 		MouseMode		Mode;
+
+static	char			*LayerName[];
+
 };
 
 /*****************************************************************************/

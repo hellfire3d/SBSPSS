@@ -21,16 +21,24 @@
 #include	"Utils.h"
 #include	"Export.h"
 
+/*****************************************************************************/
+char	*CLayerTile::LayerName[]=
+{
+	"Back",
+	"Mid",
+	"Action",
+	"Fore",
+};
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable)
+CLayerTile::CLayerTile(int _SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable)
 {
-		SetName(_Name);
-		ZPosDiv=ZDiv;
-		MapSizeDiv=MapDiv;
+//		SetName(_Name);
+		SubType=_SubType;
+		ScaleFactor=Scale;
 		ResizeFlag=Resizable;
 		Render3dFlag=Is3d;
 		VisibleFlag=TRUE;
@@ -38,7 +46,7 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,
 
 		if (ResizeFlag)
 		{
-			Map.SetSize(Width/MapDiv,Height/MapDiv,TRUE);
+			Map.SetSize(Width/ScaleFactor,Height/ScaleFactor,TRUE);
 		}
 		else
 		{
@@ -62,18 +70,19 @@ CLayerTile::~CLayerTile()
 void	CLayerTile::Load(CFile *File,float Version)
 {
 // Version 1
-		File->Read(Name,256);
-		File->Read(&Render3dFlag,sizeof(BOOL));
-		File->Read(&ZPosDiv,sizeof(float));
-		File->Read(&MapSizeDiv,sizeof(float));
-		File->Read(&ResizeFlag,sizeof(BOOL));
-		File->Read(&VisibleFlag,sizeof(BOOL));
-		File->Read(&Mode,sizeof(MouseMode));
-		Map.Load(File,Version);
+		if (Version>=1.0)
+		{
+			File->Read(&Render3dFlag,sizeof(BOOL));
+			File->Read(&ScaleFactor,sizeof(float));
+			File->Read(&ResizeFlag,sizeof(BOOL));
+			File->Read(&VisibleFlag,sizeof(BOOL));
+			File->Read(&Mode,sizeof(MouseMode));
+			File->Read(&SubType,sizeof(int));
+			Map.Load(File,Version);
+		}
 
-		TRACE1("%s ",Name);
-		TRACE1("Div:%g ",ZPosDiv);
-		TRACE1("Size:%g ",MapSizeDiv);
+		TRACE1("%s\t",GetName());
+		TRACE1("Scl:%g\t",ScaleFactor);
 		TRACE1("%i\n",VisibleFlag);
 
 
@@ -84,13 +93,12 @@ void	CLayerTile::Save(CFile *File)
 {
 // Always Save current version
 
-		File->Write(Name,256);
 		File->Write(&Render3dFlag,sizeof(BOOL));
-		File->Write(&ZPosDiv,sizeof(float));
-		File->Write(&MapSizeDiv,sizeof(float));
+		File->Write(&ScaleFactor,sizeof(float));
 		File->Write(&ResizeFlag,sizeof(BOOL));
 		File->Write(&VisibleFlag,sizeof(BOOL));
 		File->Write(&Mode,sizeof(MouseMode));
+		File->Write(&SubType,sizeof(SubType));
 		Map.Save(File);
 }
 
@@ -99,7 +107,7 @@ void	CLayerTile::Resize(int Width,int Height)
 {
 		if (!ResizeFlag) return;	// Its a fixed size, so DONT DO IT!
 
-		Map.Resize(Width/MapSizeDiv,Height/MapSizeDiv);
+		Map.Resize(Width/ScaleFactor,Height/ScaleFactor);
 }
 
 /*****************************************************************************/
@@ -107,7 +115,7 @@ void	CLayerTile::Resize(int Width,int Height)
 /*****************************************************************************/
 void	CLayerTile::Render(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
+Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
 		if (Is3d && Render3dFlag)
 		{
@@ -126,7 +134,7 @@ void	CLayerTile::RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
 CTileBank	&TileBank=Core->GetTileBank();
 //Vec			ThisCam=CamPos;
-Vec			ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
+Vec			ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
 CMap		&Brush=TileBank.GetActiveBrush();
 
@@ -188,7 +196,7 @@ void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos,BOOL Active)
 {
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
+Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 float	OverVal=0.5;
 
 		glMatrixMode(GL_MODELVIEW);
@@ -232,8 +240,7 @@ CPoint	&CursorPos=Core->GetCursorPos();
 
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
-Vec		ThisCam=Core->OffsetCam(CamPos,GetLayerZPosDiv());
-
+Vec		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
@@ -483,5 +490,5 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 /*****************************************************************************/
 void	CLayerTile::Export(CExport &Exp)
 {
-		Exp.ExportLayerTile(Name,Map);
+		Exp.ExportLayerTile(GetName(),Map);
 }

@@ -42,30 +42,8 @@ CTileBank::CTileBank()
 		LastCursorPos=CursorPos=-1;
 		ActiveBrush=0;
 		SelStart=-1;
-		SelEnd=1;
+		SelEnd=-1;
 
-#ifdef _DEBUGx
-	AddTileSet("c:/temp/rockp/rockp.gin");
-//	AddTileSet("c:/temp/3/test.gin");
-
-int	W=3;
-int	H=3;
-CMap	&Brush=GetLBrush();
-
-	Brush.SetSize(W,H);
-sMapElem	Blk;
-	Blk.Set=0;
-	Blk.Tile=1;
-	Blk.Flags=0;
-	for (int Y=0; Y<H; Y++)
-	{
-		for (int X=0; X<W; X++)
-		{
-		Brush.Set(X,Y,Blk);
-		Blk.Tile++;
-		}
-	}
-#endif	
 }
 
 /*****************************************************************************/
@@ -106,7 +84,7 @@ int		ListSize=TileSet.size();
 		Brush[0].Save(File);
 		Brush[1].Save(File);
 
-		for (int i=0;i<ListSize;i++)
+		for (int i=0; i<ListSize; i++)
 		{
 			CTileSet	&ThisSet=TileSet[i];
 			char	Filename[256+64];
@@ -224,9 +202,16 @@ BOOL	CTileBank::Select(int BrushID,BOOL DownFlag)
 {
 		if (DownFlag && SelStart==-1)
 		{
-			if (CursorPos==-1) return(FALSE);
+			if (CursorPos<0) return(FALSE);
 			SelStart=CursorPos;
-			TRACE3("Start %i=%i,%i\n",SelStart,SelStart%TileBrowserWidth,SelStart/TileBrowserWidth);
+			if (CursorPos==0)
+			{
+				SetBrush(GetBrush(BrushID));
+				SelStart=-1;
+				TRACE0("Selected Blank\n");
+
+			}
+//			TRACE3("Start %i=%i,%i\n",SelStart,SelStart%TileBrowserWidth,SelStart/TileBrowserWidth);
 		}
 		else
 		if (!DownFlag && SelStart!=-1)
@@ -245,18 +230,22 @@ BOOL	CTileBank::Select(int BrushID,BOOL DownFlag)
 /*****************************************************************************/
 void	CTileBank::SetBrush(CMap &ThisBrush)
 {
+int			BW=TileSet[CurrentSet].GetTileBrowserWidth();
+CPoint		S=IDToPoint(SelStart-1,BW);
+CPoint		E=IDToPoint(SelEnd-1,BW);
 
-CPoint		S=IDToPoint(SelStart,TileBrowserWidth);
-CPoint		E=IDToPoint(SelEnd,TileBrowserWidth);
 
-CPoint		Start=CPoint(min(S.x,E.x), min(S.y,E.y));
-CPoint		End=CPoint(	 max(S.x,E.x), max(S.y,E.y));
-int			Width=(End.x-Start.x)+1;
-int			Height=(End.y-Start.y)+1;
+//CPoint		Start=CPoint(min(S.x,E.x), min(S.y,E.y));
+//CPoint		End=CPoint(	 max(S.x,E.x), max(S.y,E.y));
+//int			Width=(End.x-Start.x)+1;
+//int			Height=(End.y-Start.y)+1;
+int			Width=abs(E.x-S.x)+1;
+int			Height=abs(E.y-S.y)+1;
+
 sMapElem	ThisElem;
 int			MaxTile=TileSet[CurrentSet].GetTileCount();
 
-		if (PointToID(End,TileBrowserWidth)>=MaxTile) SelectCancel();	// Invalid selection
+//		if (PointToID(End,BW)>=MaxTile) SelectCancel();	// Invalid selection
 
 		ThisElem.Set=CurrentSet;
 		ThisElem.Flags=0;
@@ -268,7 +257,8 @@ int			MaxTile=TileSet[CurrentSet].GetTileCount();
 		{
 			for (int X=0; X<Width; X++)
 			{
-				ThisElem.Tile=PointToID(CPoint(Start.x+X,Start.y+Y),TileBrowserWidth);
+//				ThisElem.Tile=PointToID(CPoint(Start.x+X,Start.y+Y),BW);
+				ThisElem.Tile=SelStart+X+(Y*BW);
 				ThisBrush.Set(X,Y,ThisElem);
 			}
 		}
@@ -341,14 +331,15 @@ u8		Buffer[16*16*3];
 		NewTex.RGB=Buffer;
 
 		TRACE2("Load 2d TileBank (%i,%i)\n",Width,Height);
-		Tile.push_back(CTile(0));	// Insert Blank		
 
+		Tile.push_back(CTile(0));	// Insert Blank		
+		
 		for (int Y=0; Y<Height; Y++)
 		{
 			for (int X=0; X<Width; X++)
 			{
 				BOOL Data=Create16x16Tile(ThisBmp,Buffer,X,(Height-1)-Y);
-				if (Data)
+//				if (Data)
 				{ // Not Blank
 					char	Name[256];
 					sprintf(Name,"_2d_%s%i",GetName(),X+(Y*Width));
@@ -360,6 +351,8 @@ u8		Buffer[16*16*3];
 		}
 
 		TexCache.FreeBMP(ThisBmp);
+		TileBrowserWidth=Width;
+
 }
 
 /*****************************************************************************/
@@ -399,10 +392,12 @@ CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
 		
 		Tile.push_back(CTile(0));	// Insert Blank		
+		
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
 			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
 		}
+		TileBrowserWidth=DefTileBrowserWidth;
 
 }
 
@@ -435,8 +430,14 @@ int			SelFlag;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
 
+			if (TileID==0)
+				Pos=CPoint(-1,-1);
+			else
+				Pos=IDToPoint(TileID-1,TileBrowserWidth);
+
+			
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
@@ -450,6 +451,7 @@ int			SelFlag;
 
 			if (SelFlag)
 			{
+				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_QUADS); 
 #ifdef	UseLighting
 				glNormal3f( 1,1,1);
@@ -473,6 +475,7 @@ int			SelFlag;
 				}
 	
 				glEnd();
+				glEnable(GL_TEXTURE_2D);
 			}
 
 			TileID++;
@@ -486,18 +489,27 @@ void	CTileSet::RenderCursor(Vec &CamPos,int CursorPos,int SelStart,int SelEnd)
 int		ListSize=Tile.size();
 CPoint	Start,End;
 int		MaxTile=Tile.size();
-		if (CursorPos<0 || CursorPos>ListSize) return;		
+
+		if (CursorPos<-1 || CursorPos>ListSize) return;		
 
 		if (SelStart==-1)
 		{
-			Start=IDToPoint(CursorPos,TileBrowserWidth);
+			if (CursorPos==0)
+			{
+				Start=CPoint(-1,-1);
+			}
+			else
+			{
+				Start=IDToPoint(CursorPos-1,TileBrowserWidth);
+			}
 			End=Start;
 		}
 		else
 		{
-			CPoint	S=IDToPoint(SelStart,TileBrowserWidth);
-			CPoint	E=IDToPoint(SelEnd,TileBrowserWidth);
 
+			CPoint	S=IDToPoint(SelStart-1,TileBrowserWidth);
+			CPoint	E=IDToPoint(SelEnd-1,TileBrowserWidth);
+			
 			Start=CPoint(	min(S.x,E.x), min(S.y,E.y));
 			End=CPoint(		max(S.x,E.x), max(S.y,E.y));
 			if (PointToID(End,TileBrowserWidth)>=MaxTile) return;		// Invalid selection
@@ -538,7 +550,12 @@ int			TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
+			
+			if (TileID==0)
+				Pos=CPoint(-1,-1);
+			else
+				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
@@ -594,7 +611,12 @@ int		TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
+			
+			if (TileID==0)
+				Pos=CPoint(-1,-1);
+			else
+				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
@@ -614,7 +636,7 @@ int		TileID=0;
 
 GLuint	*HitPtr=SelectBuffer;
 
-		TileID=-1;
+		TileID=-2;
 		if (HitCount)	// Just take 1st		
 		{
 			TileID=HitPtr[3];

@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CLayerTileGUI
+LastClass=CNewMapGUI
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=12
+ClassCount=13
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -17,21 +17,24 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=9
-Resource1=IDR_MAINFRAME (English (U.S.))
-Resource2=IDD_ABOUTBOX (English (U.S.))
-Resource3=IDD_MULTIBAR (English (U.S.))
+ResourceCount=11
+Resource1=IDD_MULTIBAR (English (U.S.))
+Resource2=IDD_LAYERTILE_GUI
+Resource3=IDR_TOOLBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_LAYER_LIST_DIALOG
 Class8=CMultiBar
-Resource6=IDD_LAYER_LIST_DIALOG
+Resource6=IDR_MAINFRAME (English (U.S.))
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_LAYERTILE_GUI
+Resource8=IDD_MAPSIZE
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_MAPSIZE
+Resource9=IDD_NEW_LAYER
+Resource10=IDD_ABOUTBOX (English (U.S.))
+Class13=CNewMapGUI
+Resource11=IDD_NEWMAP
 
 [CLS:CChildFrame]
 Type=0
@@ -263,4 +266,44 @@ BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
 LastObject=IDD_LAYERTILE_LIST
+
+[DLG:IDD_NEW_LAYER]
+Type=1
+Class=?
+ControlCount=12
+Control1=IDOK,button,1342242817
+Control2=IDCANCEL,button,1342242816
+Control3=IDC_NEW_LAYER_TYPE_LIST,combobox,1344340226
+Control4=IDC_NEW_LAYER_TYPE_NAME,static,1342308352
+Control5=IDC_NEW_LAYER_WIDTH_NAME,static,1342308352
+Control6=IDC_NEW_LAYER_HEIGHT_NAME,static,1342308352
+Control7=IDC_NEW_LAYER_WIDTH_EDIT,edit,1350631552
+Control8=IDC_NEW_LAYER_HEIGHT_EDIT,edit,1350631552
+Control9=IDC_NEW_LAYER_NAME_NAME,static,1342308352
+Control10=IDC_NEW_LAYER_NAME_EDIT,edit,1350631552
+Control11=IDC_NEW_LAYER_WIDTH_NAME2,static,1342308352
+Control12=IDC_NEW_LAYER_WIDTH_EDIT2,edit,1350631552
+
+[DLG:IDD_NEWMAP]
+Type=1
+Class=CNewMapGUI
+ControlCount=9
+Control1=IDOK,button,1342177281
+Control2=IDCANCEL,button,1342177280
+Control3=IDC_MAPSIZE_WIDTH_TEXT,static,1342308866
+Control4=IDC_MAPSIZE_WIDTH,edit,1350639744
+Control5=IDC_MAPSIZE_HEIGHT_TEXT,static,1342308866
+Control6=IDC_MAPSIZE_HEIGHT,edit,1350639744
+Control7=IDC_NEWMAP_BACK_CHECK,button,1476460547
+Control8=IDC_NEWMAP_MID_CHECK,button,1476460547
+Control9=IDC_NEWMAP_FORE_CHECK,button,1342242819
+
+[CLS:CNewMapGUI]
+Type=0
+HeaderFile=NewMapGUI.h
+ImplementationFile=NewMapGUI.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=CNewMapGUI
+VirtualFilter=dWC
 

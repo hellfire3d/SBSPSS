@@ -15,6 +15,8 @@
 #include	"MapEditView.h"
 #include	"MainFrm.h"
 
+#include	"NewMapGUI.h"
+
 #include	"Core.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
@@ -28,23 +30,14 @@
 /*****************************************************************************/
 CCore::CCore()
 {
-	TileViewFlag=FALSE;
-	GridFlag=TRUE;
-	CurrentMousePos=CPoint(0,0);
-	ActiveLayer=0;
-	MapCam=Vec(0,0,0);
-	MapCamOfs=Vec(-15,10,0);
-	TileCam=Vec(0,0,0);
-	TileCamOfs=Vec(-15,10,0);
-
-	Is3dFlag=TRUE;
+		CurrentMousePos=CPoint(0,0);
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
 int	ListSize=Layer.size();
-	for (int i=0; i<ListSize; i++) delete Layer[i];
+		for (int i=0; i<ListSize; i++) delete Layer[i];
 }
 
 /*****************************************************************************/
@@ -54,43 +47,71 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->RemoveAll();
-// Add default parram bar items			
+// Add default param bar items			
 			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
 			UpdateParamBar();
 			UpdateAll(NULL);
 }
 
 /*****************************************************************************/
-void	CCore::New()
+BOOL	CCore::New()
 {
-// Create Gfx Layers
-//									Name		Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
-	Layer.push_back(new CLayerTile(	"Back",		32,						32,						4.0f,	4.0f,	FALSE,	FALSE));
-	Layer.push_back(new CLayerTile(	"Mid",		TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE));
-	Layer.push_back(new CLayerTile(	"Action",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE));
-//	Layer.push_back(new CLayerTile(	"Fore",		TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE));
+CNewMapGUI	Dlg;
+int		Width,Height;
+		Dlg.m_Width=TileLayerDefaultWidth;
+		Dlg.m_Height=TileLayerDefaultHeight;
 
-	ActiveLayer=LAYER_ACTION;
-	MapCam=Vec(0,0,0);
-	TileCam=Vec(0,0,0);
-	Init();
+		Dlg.m_Back=TRUE;
+		Dlg.m_Mid=TRUE;
+		Dlg.m_Fore=FALSE;
+		
+		if (Dlg.DoModal()!=IDOK) return FALSE;
+		Width=Dlg.m_Width;
+		Height=Dlg.m_Height;
+
+// Create Tile Layers
+//															Type					Width					Height		Scale	3d?		Resizable?
+		if (Dlg.m_Back)		Layer.push_back(new CLayerTile(	CLayerTile::Back,		32,						32,			4.0f,	FALSE,	FALSE));
+		if (Dlg.m_Mid)		Layer.push_back(new CLayerTile(	CLayerTile::Mid,		Width,					Height,		2.0f,	FALSE,	TRUE));
+							Layer.push_back(new CLayerTile(	CLayerTile::Action,		Width,					Height,		1.0f,	TRUE,	TRUE));
+		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	CLayerTile::Fore,		Width,					Height,		0.5f,	FALSE,	TRUE));
+
+		ActiveLayer=FindActionLayer();
+		MapCam=Vec(0,0,0);
+		MapCamOfs=Vec(-15,10,0);
+		TileCam=Vec(0,0,0);
+		TileCamOfs=Vec(-15,10,0);
+		TileViewFlag=FALSE;
+		GridFlag=TRUE;
+		Is3dFlag=TRUE;
+		Init();
+		return(TRUE);
 }
 
 /*****************************************************************************/
+
 void	CCore::Load(CFile *File)
 {
 float	Version;
 
 		File->Read(&Version,sizeof(float));
+		TRACE1("Load Version %g\n",Version);
 
-		File->Read(&MapCam,sizeof(Vec));
-		File->Read(&TileCam,sizeof(Vec));
+		if (Version>=1.0)
+		{
+			File->Read(&MapCam,sizeof(Vec));
+			File->Read(&MapCamOfs,sizeof(Vec));
+			File->Read(&TileCam,sizeof(Vec));
+			File->Read(&TileCamOfs,sizeof(Vec));
+	
+			File->Read(&TileViewFlag,sizeof(BOOL));
+			File->Read(&GridFlag,sizeof(BOOL));
+			File->Read(&Is3dFlag,sizeof(BOOL));
+		}
+		if (Version>=1.1)
+		{
 
-		File->Read(&TileCam,sizeof(Vec));
-
-		File->Read(&TileViewFlag,sizeof(BOOL));
-		File->Read(&GridFlag,sizeof(BOOL));
-		File->Read(&Is3dFlag,sizeof(BOOL));
+		}
 
 
 // Layers
@@ -111,22 +132,20 @@ int		LayerCount;
 
 			}
 		}
-	TileBank.Load(File,Version);
-	Init();
-	MapCam=Vec(0,0,0);
-
+		TileBank.Load(File,Version);
+		Init();
 }
 
 /*****************************************************************************/
 void	CCore::Save(CFile *File)
 {
-
+// Version 1
 		File->Write(&FileVersion,sizeof(float));
 
 		File->Write(&MapCam,sizeof(Vec));
+		File->Write(&MapCamOfs,sizeof(Vec));
 		File->Write(&TileCam,sizeof(Vec));
-
-		File->Write(&TileCam,sizeof(Vec));
+		File->Write(&TileCamOfs,sizeof(Vec));
 
 		File->Write(&TileViewFlag,sizeof(BOOL));
 		File->Write(&GridFlag,sizeof(BOOL));
@@ -540,6 +559,28 @@ void	CCore::Toggle2d3d(CMapEditView *View)
 {
 		Is3dFlag=!Is3dFlag;
 		UpdateView(View);
+}
+
+/*****************************************************************************/
+int		CCore::FindLayer(int Type,int SubType)
+{
+int	ListSize=Layer.size();
+
+		for (int i=0; i<ListSize; i++)
+		{
+			if (Layer[i]->GetType()==Type)
+				if (SubType==-1 || Layer[i]->GetSubType()==SubType)
+					return(i);
+		}
+	return(-1);
+}
+
+/*****************************************************************************/
+int		CCore::FindActionLayer()
+{
+int	Idx=FindLayer(LAYER_TYPE_TILE,CLayerTile::Action);
+
+	return(Idx);
 }
 
 /*****************************************************************************/

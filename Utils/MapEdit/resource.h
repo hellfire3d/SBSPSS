@@ -13,6 +13,8 @@
 #define IDI_PAINT                       152
 #define IDI_SELECT                      153
 #define IDD_MAPSIZE                     167
+#define IDD_NEW_LAYER                   168
+#define IDD_NEWMAP                      169
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYER_LIST                  1019
 #define IDD_LAYERTILE_BTN_UPDATE        1029
@@ -25,6 +27,19 @@
 #define IDC_MAPSIZE_HEIGHT_TEXT         1039
 #define IDC_MAPSIZE_HEIGHT              1040
 #define IDC_MAPSIZE_WARNING             1041
+#define IDC_NEW_LAYER_TYPE_LIST         1042
+#define IDC_NEW_LAYER_TYPE_NAME         1043
+#define IDC_NEW_LAYER_WIDTH_NAME        1044
+#define IDC_NEW_LAYER_HEIGHT_NAME       1045
+#define IDC_NEW_LAYER_WIDTH_EDIT        1046
+#define IDC_NEW_LAYER_HEIGHT_EDIT       1047
+#define IDC_NEWMAP_BACK_CHECK           1047
+#define IDC_NEW_LAYER_NAME_NAME         1048
+#define IDC_NEW_LAYER_NAME_EDIT         1049
+#define IDC_NEWMAP_MID_CHECK            1050
+#define IDC_NEWMAP_FORE_CHECK           1051
+#define IDC_NEW_LAYER_WIDTH_NAME2       1052
+#define IDC_NEW_LAYER_WIDTH_EDIT2       1053
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -48,9 +63,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        168
+#define _APS_NEXT_RESOURCE_VALUE        169
 #define _APS_NEXT_COMMAND_VALUE         32797
-#define _APS_NEXT_CONTROL_VALUE         1042
+#define _APS_NEXT_CONTROL_VALUE         1048
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

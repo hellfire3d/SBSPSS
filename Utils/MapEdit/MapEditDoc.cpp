@@ -41,9 +41,10 @@ BOOL CMapEditDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument()) return FALSE;
 	TRACE0("New Doc\n");
-	Core.New();
 
-	return TRUE;
+	return(Core.New());
+
+//	return TRUE;
 }
 
 BOOL CMapEditDoc::OnOpenDocument(LPCTSTR lpszPathName) 

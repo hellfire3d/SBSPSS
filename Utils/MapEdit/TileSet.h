@@ -18,7 +18,7 @@
 /*****************************************************************************/
 enum	TileSetEnum
 {
-TileBrowserWidth=8,
+DefTileBrowserWidth=8,
 };
 
 /*****************************************************************************/
@@ -109,7 +109,7 @@ public:
 		void	RenderCursor(Vec &CamPos,int Pos,int Width, int Height);
 		void	RenderBrush(Vec &CamPos,CMap &LBrush,CMap &RBrush);
 		void	RenderGrid(Vec &CamPos);
-
+		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
 private:
 		BOOL	Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
 
@@ -117,6 +117,7 @@ private:
 		int					SetNumber;
 		std::vector<CTile>	Tile;
 		BOOL				Loaded;
+		int					TileBrowserWidth;
 };
 
 /*****************************************************************************/
