@@ -69,7 +69,7 @@ void CGUIObject::init(GUIId _id)
 
 	m_id=_id;
 	m_x=m_y=m_w=m_h=0;
-	m_flags=INITIAL_FLAGS;
+	m_flags=getInitialFlags();
 	m_this=this;
 
 	// Add to the end of the linked list of GUI objects..

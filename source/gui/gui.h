@@ -37,10 +37,8 @@ public:
 	typedef enum
 	{
 		FLAG_SELECTED=		1<<0,
-		FLAG_HIDDEN=		1<<1,
-		FLAG_DRAWBORDER=	1<<2,
-
-		INITIAL_FLAGS=		FLAG_DRAWBORDER,
+		FLAG_HIDDEN=		1<<2,
+		FLAG_DRAWBORDER=	1<<3,
 	} GUI_FLAGS;
 
 	enum
@@ -80,6 +78,9 @@ public:
 
 	
 protected:
+	virtual GUI_FLAGS	getInitialFlags()							{return FLAG_DRAWBORDER;}
+	virtual int			isSelectable()								{return false;}
+
 	int					getX()										{return m_x;}
 	int					getY()										{return m_y;}
 	int					getW()										{return m_w;}
