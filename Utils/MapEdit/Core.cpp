@@ -84,8 +84,8 @@ int		Width,Height;
 #ifdef _DEBUG
 		AddLayer(LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE, Width, Height);
 		AddLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE, Width, Height);
-		AddLayer(LAYER_TYPE_FX,LAYER_SUBTYPE_NONE, Width, Height);
-		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
+//		AddLayer(LAYER_TYPE_FX,LAYER_SUBTYPE_NONE, Width, Height);
+//		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
 #endif
 		for (int i=0; i<Layer.size(); i++)

@@ -647,12 +647,6 @@ vector<sSpriteFrame>	Hdrs;
 			}
 			else
 			{ // Pak
-//				int	XOfs=ThisBmp.Frm.GetX()-(ThisBmp.OrigW/2);
-//				int	YOfs=ThisBmp.Frm.GetY()-(ThisBmp.OrigH);
-				int	OH=ThisBmp.OrigH;
-				int	NH=ThisBmp.Frm.GetHeight();
-//				int	XOfs=ThisBmp.Frm.GetX()-(MaxW/2);
-//				int	YOfs=ThisBmp.Frm.GetY()-(OH-NH);
 				int	XOfs=ThisBmp.CrossHairX;
 				int	YOfs=ThisBmp.CrossHairY;
 
