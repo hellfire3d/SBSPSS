@@ -182,7 +182,7 @@ void 	CGameScene::init()
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
 
-		m_scalableFont=new ("CountdownTimer") ScalableFontBank();
+		m_scalableFont=new ("CountdownTimerFont") ScalableFontBank();
 		m_scalableFont->initialise(&standardFont);
 		m_scalableFont->setColour(255,255,255);
 		m_scalableFont->setScale(511);
@@ -377,6 +377,9 @@ void	CGameScene::think(int _frames)
 		case GAMESTATE_FADING_INTO_BOSS_INTRO:
 			if(!CFader::isFading())
 			{
+				// Swap to the boss tune whilst it's all quiet! :)
+				CSoundMediator::stopSong();
+				CSoundMediator::setSong(CSoundMediator::SONG_CHAPTER1_BOSS);
 				m_gamestate=GAMESTATE_BOSS_INTRO;
 				CFader::setFadingIn();
 			}
@@ -388,6 +391,7 @@ void	CGameScene::think(int _frames)
 			if(!CFader::isFading())
 			{
 				m_gamestate=GAMESTATE_PLAYING;
+				CSoundMediator::playSong();
 				CFader::setFadingIn();
 			}
 			break;
@@ -575,10 +579,13 @@ void CGameScene::think_playing(int _frames)
 /*****************************************************************************/
 void	CGameScene::think_boss_intro(int _frames)
 {
-	if(PadGetDown(0)&PAD_CROSS)
+	if(!CFader::isFading())
 	{
-		m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
-		CFader::setFadingOut();
+		if(PadGetDown(0)&PAD_CROSS)
+		{
+			m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
+			CFader::setFadingOut();
+		}
 	}
 }
 
