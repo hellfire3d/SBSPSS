@@ -54,18 +54,21 @@
   ---------------------------------------------------------------------- */
 void	CBossArenaTrigger::collidedWith(CThing *_thisThing)
 {
-	switch( _thisThing->getThingType() )
+	if ( !GameScene.getBossHasBeenKilled() )
 	{
-		case TYPE_PLAYER:
+		switch( _thisThing->getThingType() )
 		{
-			CGameScene::hitBossArenaTrigger();
-			shutdown();
-			delete this;
-			break;
-		}
+			case TYPE_PLAYER:
+			{
+				CGameScene::hitBossArenaTrigger();
+				shutdown();
+				delete this;
+				break;
+			}
 
-		default:
-			break;
+			default:
+				break;
+		}
 	}
 }
 
