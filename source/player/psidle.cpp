@@ -73,6 +73,8 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 	controlDown=_playerMode->getPadInputDown();
 	controlHeld=_playerMode->getPadInputHeld();
 
+	_playerMode->slowdown();
+
 	if(controlDown&PI_JUMP)
 	{
 		_playerMode->setState(STATE_JUMP);
