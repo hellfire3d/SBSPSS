@@ -34,6 +34,10 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef __SYSTEM_GSTATE_H__
+#include "system\gstate.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -62,6 +66,13 @@
 	Vars
 	---- */
 
+int				CBubicleFactory::s_initialised=false;
+CBubicleEmitter	*CBubicleFactory::s_emitters;
+CBubicle		*CBubicleFactory::s_bubicles;
+SpriteBank		*CBubicleFactory::s_sprites;
+
+
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -69,22 +80,24 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static SpriteBank	*sprites=NULL;
+void CBubicleEmitter::create()
+{
+	m_active=false;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CBubicleEmitter::init(BubicleEmitterData *_init)
 {
-	for(int i=0;i<NUM_BUB;i++)
-	{
-		m_bubicles[i]=NULL;
-	}
-	m_frameCount=0;
-
 	m_data=*_init;
-
-if(sprites==NULL)
-{
-	sprites=new ("bubble sprites") SpriteBank();
-	sprites->load(INGAMEFX_INGAMEFX_SPR);
-}
+	m_frameCount=0;
+	m_spawnFrameCount=0;
+	m_active=true;
 }
 
 /*----------------------------------------------------------------------
@@ -93,40 +106,23 @@ if(sprites==NULL)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CBubicleEmitter::think()
+void CBubicleEmitter::think(int _frames)
 {
-	int	birthAmount;
+	m_frameCount+=_frames;
+	m_spawnFrameCount+=_frames;
 
-
-	birthAmount=0;
-	for(int i=0;i<NUM_BUB;i++)
+	if(m_spawnFrameCount>=m_data.m_birthRate)
 	{
-		if(m_bubicles[i])
+		for(int i=0;i<m_data.m_birthAmount;i++)
 		{
-			m_bubicles[i]->think();
-			if(m_bubicles[i]->isDead())
-			{
-				delete m_bubicles[i];
-				m_bubicles[i]=NULL;
-			}
+			if(CBubicleFactory::spawnParticle(&m_data)==NULL)
+				break;
 		}
-		else
-		{
-			if(m_frameCount>=m_data.m_birthRate)
-			{
-				birthAmount=m_data.m_birthAmount;
-				m_frameCount=0;
-			}
-			if(birthAmount)
-			{
-				m_bubicles[i]=createNewBubicle(&m_data);
-				birthAmount--;
-			}
-		}
+		m_spawnFrameCount=0;
 	}
 
-
-	m_frameCount++;
+	if(m_data.m_life!=-1&&m_frameCount>m_data.m_life)
+		m_active=false;
 }
 
 
@@ -136,14 +132,9 @@ void CBubicleEmitter::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifdef SHOW_BUBICLE_EMITTERS
 void CBubicleEmitter::render()
 {
-	for(int i=0;i<NUM_BUB;i++)
-	{
-		if(m_bubicles[i])
-			m_bubicles[i]->render();
-	}
-
 	POLY_F4		*f4;
 	f4=GetPrimF4();
 	setPolyF4(f4);
@@ -152,6 +143,21 @@ void CBubicleEmitter::render()
 	setShadeTex(f4,0);
 	setRGB0(f4,30,40,50);
 	AddPrimToList(f4,m_data.m_bubicleBase.m_ot+1);
+}
+#endif
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CBubicleEmitter::kill()
+{
+	ASSERT(m_active);
+	
+	m_active=false;
 }
 
 
@@ -163,6 +169,8 @@ void CBubicleEmitter::render()
   ---------------------------------------------------------------------- */
 void CBubicleEmitter::setPos(int _x,int _y)
 {
+	ASSERT(m_active);
+	
 	m_data.m_x=_x;
 	m_data.m_y=_y;
 }
@@ -176,6 +184,8 @@ void CBubicleEmitter::setPos(int _x,int _y)
   ---------------------------------------------------------------------- */
 void CBubicleEmitter::setSize(int _w,int _h)
 {
+	ASSERT(m_active);
+	
 	m_data.m_w=_w;
 	m_data.m_h=_h;
 }
@@ -187,68 +197,11 @@ void CBubicleEmitter::setSize(int _w,int _h)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int fixed=false;
-CBubicle *CBubicleEmitter::createNewBubicle(BubicleEmitterData *_init)
+void CBubicle::create()
 {
-	CBubicle		*newBub;
-	BubicleData		newBubData;
-	int				x,y;
-
-	newBub=new ("CBubicle") CBubicle();
-	
-	x=_init->m_x+getRndRange(_init->m_w);
-	y=_init->m_y+getRndRange(_init->m_h);
-
-if(fixed)
-{
-	newBubData.m_life=_init->m_bubicleBase.m_life;
-	newBubData.m_vx=_init->m_bubicleBase.m_vx;
-	newBubData.m_vdx=_init->m_bubicleBase.m_vdx;
-	newBubData.m_vxmax=_init->m_bubicleBase.m_vxmax;
-	newBubData.m_vy=_init->m_bubicleBase.m_vy;
-	newBubData.m_vdy=_init->m_bubicleBase.m_vdy;
-	newBubData.m_vymax=_init->m_bubicleBase.m_vymax;
-	newBubData.m_w=_init->m_bubicleBase.m_w;
-	newBubData.m_h=_init->m_bubicleBase.m_h;
-	newBubData.m_dvSizeChange=_init->m_bubicleBase.m_dvSizeChange;
-	newBubData.m_theta=_init->m_bubicleBase.m_theta;
-	newBubData.m_vtheta=_init->m_bubicleBase.m_vtheta;
-	newBubData.m_wobbleWidth=_init->m_bubicleBase.m_wobbleWidth;
-	newBubData.m_vwobbleWidth=_init->m_bubicleBase.m_vwobbleWidth;
-	newBubData.m_vdwobbleWidth=_init->m_bubicleBase.m_vdwobbleWidth;
-	newBubData.m_ot=_init->m_bubicleBase.m_ot;
-	newBubData.m_colour.m_r=_init->m_bubicleBase.m_colour.m_r;
-	newBubData.m_colour.m_g=_init->m_bubicleBase.m_colour.m_r;
-	newBubData.m_colour.m_b=_init->m_bubicleBase.m_colour.m_r;
-}
-else
-{
-	newBubData.m_life=_init->m_bubicleBase.m_life+getRndRange(_init->m_bubicleRange.m_life);
-	newBubData.m_vx=_init->m_bubicleBase.m_vx+getRndRange(_init->m_bubicleRange.m_vx);
-	newBubData.m_vdx=_init->m_bubicleBase.m_vdx+getRndRange(_init->m_bubicleRange.m_vdx);
-	newBubData.m_vxmax=_init->m_bubicleBase.m_vxmax+getRndRange(_init->m_bubicleRange.m_vxmax);
-	newBubData.m_vy=_init->m_bubicleBase.m_vy+getRndRange(_init->m_bubicleRange.m_vy);
-	newBubData.m_vdy=_init->m_bubicleBase.m_vdy+getRndRange(_init->m_bubicleRange.m_vdy);
-	newBubData.m_vymax=_init->m_bubicleBase.m_vymax+getRndRange(_init->m_bubicleRange.m_vymax);
-	newBubData.m_w=_init->m_bubicleBase.m_w+getRndRange(_init->m_bubicleRange.m_w);
-	newBubData.m_h=_init->m_bubicleBase.m_h+getRndRange(_init->m_bubicleRange.m_h);
-	newBubData.m_dvSizeChange=_init->m_bubicleBase.m_dvSizeChange+getRndRange(_init->m_bubicleRange.m_dvSizeChange);
-	newBubData.m_theta=_init->m_bubicleBase.m_theta+getRndRange(_init->m_bubicleRange.m_theta);
-	newBubData.m_vtheta=_init->m_bubicleBase.m_vtheta+getRndRange(_init->m_bubicleRange.m_vtheta);
-	newBubData.m_wobbleWidth=_init->m_bubicleBase.m_wobbleWidth+getRndRange(_init->m_bubicleRange.m_wobbleWidth);
-	newBubData.m_vwobbleWidth=_init->m_bubicleBase.m_vwobbleWidth+getRndRange(_init->m_bubicleRange.m_vwobbleWidth);
-	newBubData.m_vdwobbleWidth=_init->m_bubicleBase.m_vdwobbleWidth+getRndRange(_init->m_bubicleRange.m_vdwobbleWidth);
-	newBubData.m_ot=_init->m_bubicleBase.m_ot+getRndRange(_init->m_bubicleRange.m_ot);
-	newBubData.m_colour.m_r=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_r);
-	newBubData.m_colour.m_g=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_g);
-	newBubData.m_colour.m_b=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_b);
+	m_active=false;
 }
 
-	newBub->init(&newBubData,x,y);
-
-	return newBub;
-}
-	
 
 /*----------------------------------------------------------------------
 	Function:
@@ -256,9 +209,10 @@ else
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static int gaycount=0;
 void CBubicle::init(BubicleData *_init,int _x,int _y)
 {
+	static int	frameType=0;
+
 	m_data=*_init;
 
 	m_x=(_x-(m_data.m_w>>1))<<ACCURACY_SHIFT;
@@ -273,10 +227,9 @@ void CBubicle::init(BubicleData *_init,int _x,int _y)
 	m_vSizeChange=0;	
 	m_frameCount=0;
 
-	if((gaycount++)&0x31)
-		m_fhBub=sprites->getFrameHeader(FRM__BUBBLE_SMALL);
-	else
-		m_fhBub=sprites->getFrameHeader(FRM__BUBBLE_FLOWER);
+	m_fhBub=CBubicleFactory::getSprites()->getFrameHeader((frameType++)&0x31?FRM__BUBBLE_SMALL:FRM__BUBBLE_FLOWER);
+
+	m_active=true;
 }
 
 
@@ -286,9 +239,11 @@ void CBubicle::init(BubicleData *_init,int _x,int _y)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CBubicle::think()
+void CBubicle::think(int _frames)
 {
-	if(!isDead())
+	ASSERT(isActive());
+
+	for(int i=0;i<_frames;i++)		// Good or bad way to do this? Alternative is a bunch of multiplies..
 	{
 		if(m_x!=m_data.m_vxmax)
 		{
@@ -323,9 +278,9 @@ void CBubicle::think()
 					m_data.m_vy=m_data.m_vymax;
 			}
 		}
-		
+
 		m_data.m_theta=(m_data.m_theta+m_data.m_vtheta)&4095;
-		
+
 		m_data.m_wobbleWidth+=m_data.m_vwobbleWidth;
 		m_data.m_vwobbleWidth+=m_data.m_vdwobbleWidth;
 
@@ -346,11 +301,13 @@ void CBubicle::think()
 				m_vSizeChange-=m_data.m_dvSizeChange;
 			m_data.m_h+=m_vSizeChange;
 		}
-
-		m_frameCount++;		//PKG
 	}
-}
+	
+	m_frameCount+=_frames;
 
+	if(m_frameCount>m_data.m_life)
+		m_active=false;
+}
 
 
 /*----------------------------------------------------------------------
@@ -361,22 +318,104 @@ void CBubicle::think()
   ---------------------------------------------------------------------- */
 void CBubicle::render()
 {
-	if(!isDead())
+	ASSERT(isActive());
+
+	POLY_FT4	*ft4;
+	int			x,y,w,h;
+
+	x=m_x>>ACCURACY_SHIFT;
+	y=m_y>>ACCURACY_SHIFT;
+	w=m_data.m_w>>ACCURACY_SHIFT;
+	h=m_data.m_h>>ACCURACY_SHIFT;
+
+	x+=(msin(m_data.m_theta)*(m_data.m_wobbleWidth>>ACCURACY_SHIFT))>>12;
+
+	ft4=CBubicleFactory::getSprites()->printFT4(m_fhBub,0,0,0,0,m_data.m_ot);
+	setXYWH(ft4,x,y,w,h);
+	setSemiTrans(ft4,1);
+	setRGB0(ft4,m_data.m_colour.m_r,m_data.m_colour.m_g,m_data.m_colour.m_b);
+}
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CBubicleFactory::init()
+{
+	int				i;
+	CBubicleEmitter	*emt;
+	CBubicle		*bub;
+
+	s_sprites=new ("Bubble Sprites") SpriteBank();
+	s_sprites->load(INGAMEFX_INGAMEFX_SPR);
+
+	emt=s_emitters=(CBubicleEmitter*)MemAlloc(sizeof(CBubicleEmitter)*NUM_EMITTERS,"BubicleEmitters");
+	for(i=0;i<NUM_EMITTERS;i++,emt++)
+		emt->create();
+	
+	bub=s_bubicles=(CBubicle*)MemAlloc(sizeof(CBubicle)*NUM_BUBICLES,"Bubicles");
+	for(i=0;i<NUM_BUBICLES;i++,bub++)
+		bub->create();
+
+	SYSTEM_DBGMSG("CBubicleFactory::init ( allocated %d bytes )",(sizeof(CBubicleEmitter)*NUM_EMITTERS)+(sizeof(CBubicle)*NUM_BUBICLES));
+
+	s_initialised=true;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CBubicleFactory::shutdown()
+{
+	ASSERT(s_initialised);
+	
+	MemFree(s_emitters);
+	MemFree(s_bubicles);
+	s_sprites->dump();			delete 	s_sprites;
+
+	s_initialised=false;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CBubicleFactory::think()
+{
+	ASSERT(s_initialised);
+
+	int				frames;
+	int				i;
+	CBubicleEmitter	*emt;
+	CBubicle		*bub;
+
+	frames=GameState::getFramesSinceLast();
+
+	emt=s_emitters;
+	for(i=0;i<NUM_EMITTERS;i++,emt++)
 	{
-		POLY_FT4	*ft4;
-		int			x,y,w,h;
+		if(emt->isActive())
+			emt->think(frames);
+	}
 
-		x=m_x>>ACCURACY_SHIFT;
-		y=m_y>>ACCURACY_SHIFT;
-		w=m_data.m_w>>ACCURACY_SHIFT;
-		h=m_data.m_h>>ACCURACY_SHIFT;
-
-		x+=(msin(m_data.m_theta)*(m_data.m_wobbleWidth>>ACCURACY_SHIFT))>>12;
-
-		ft4=sprites->printFT4((sFrameHdr*)m_fhBub,0,0,0,0,m_data.m_ot);
-		setXYWH(ft4,x,y,w,h);
-		setSemiTrans(ft4,1);
-		setRGB0(ft4,m_data.m_colour.m_r,m_data.m_colour.m_g,m_data.m_colour.m_b);
+	bub=s_bubicles;
+	for(i=0;i<NUM_BUBICLES;i++,bub++)
+	{
+		if(bub->isActive())
+			bub->think(frames);
 	}
 }
 
@@ -387,9 +426,112 @@ void CBubicle::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CBubicle::isDead()
+void CBubicleFactory::render()
 {
-	return m_frameCount>m_data.m_life||m_y<0;
+	ASSERT(s_initialised);
+
+	int				i;
+	CBubicleEmitter	*emt;
+	CBubicle		*bub;
+
+#ifdef SHOW_BUBICLE_EMITTERS
+	emt=s_emitters;
+	for(i=0;i<NUM_EMITTERS;i++,emt++)
+	{
+		if(emt->isActive())
+			emt->render();
+	}
+#endif
+	
+	bub=s_bubicles;
+	for(i=0;i<NUM_BUBICLES;i++,bub++)
+	{
+		if(bub->isActive())
+			bub->render();
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CBubicleEmitter	*CBubicleFactory::spawnEmitter(BubicleEmitterData *_init)
+{
+	ASSERT(s_initialised);
+
+	int				i;
+	CBubicleEmitter	*emt;
+	
+	emt=s_emitters;
+	for(i=0;i<NUM_EMITTERS;i++,emt++)
+	{
+		if(!emt->isActive())
+		{
+			emt->init(_init);
+			return emt;
+		}
+	}
+
+	SYSTEM_DBGMSG("Out of CBubicleEmitters!");
+	return NULL;
+}
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CBubicle *CBubicleFactory::spawnParticle(BubicleEmitterData *_init)
+{
+	ASSERT(s_initialised);
+
+	int				i;
+	CBubicle		*bub;
+
+	bub=s_bubicles;
+	for(i=0;i<NUM_BUBICLES;i++,bub++)
+	{
+		if(!bub->isActive())
+		{
+			BubicleData		newBubData;
+			int				x,y;
+
+			x=_init->m_x+getRndRange(_init->m_w);
+			y=_init->m_y+getRndRange(_init->m_h);
+
+			newBubData.m_life=_init->m_bubicleBase.m_life+getRndRange(_init->m_bubicleRange.m_life);
+			newBubData.m_vx=_init->m_bubicleBase.m_vx+getRndRange(_init->m_bubicleRange.m_vx);
+			newBubData.m_vdx=_init->m_bubicleBase.m_vdx+getRndRange(_init->m_bubicleRange.m_vdx);
+			newBubData.m_vxmax=_init->m_bubicleBase.m_vxmax+getRndRange(_init->m_bubicleRange.m_vxmax);
+			newBubData.m_vy=_init->m_bubicleBase.m_vy+getRndRange(_init->m_bubicleRange.m_vy);
+			newBubData.m_vdy=_init->m_bubicleBase.m_vdy+getRndRange(_init->m_bubicleRange.m_vdy);
+			newBubData.m_vymax=_init->m_bubicleBase.m_vymax+getRndRange(_init->m_bubicleRange.m_vymax);
+			newBubData.m_w=_init->m_bubicleBase.m_w+getRndRange(_init->m_bubicleRange.m_w);
+			newBubData.m_h=_init->m_bubicleBase.m_h+getRndRange(_init->m_bubicleRange.m_h);
+			newBubData.m_dvSizeChange=_init->m_bubicleBase.m_dvSizeChange+getRndRange(_init->m_bubicleRange.m_dvSizeChange);
+			newBubData.m_theta=_init->m_bubicleBase.m_theta+getRndRange(_init->m_bubicleRange.m_theta);
+			newBubData.m_vtheta=_init->m_bubicleBase.m_vtheta+getRndRange(_init->m_bubicleRange.m_vtheta);
+			newBubData.m_wobbleWidth=_init->m_bubicleBase.m_wobbleWidth+getRndRange(_init->m_bubicleRange.m_wobbleWidth);
+			newBubData.m_vwobbleWidth=_init->m_bubicleBase.m_vwobbleWidth+getRndRange(_init->m_bubicleRange.m_vwobbleWidth);
+			newBubData.m_vdwobbleWidth=_init->m_bubicleBase.m_vdwobbleWidth+getRndRange(_init->m_bubicleRange.m_vdwobbleWidth);
+			newBubData.m_ot=_init->m_bubicleBase.m_ot+getRndRange(_init->m_bubicleRange.m_ot);
+			newBubData.m_colour.m_r=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_r);
+			newBubData.m_colour.m_g=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_g);
+			newBubData.m_colour.m_b=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_b);
+
+			bub->init(&newBubData,x,y);
+
+			return bub;
+		}
+	}
+
+	SYSTEM_DBGMSG("Out of CBubicles!");
+	return NULL;
 }
 
 

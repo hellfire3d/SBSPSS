@@ -102,6 +102,7 @@ void GameState::updateTimer()
 	if (s_timeSinceLast > 4 * 4096)
 	{
 		s_timeSinceLast = 4 * 4096;
+		SYSTEM_DBGMSG("updateTimer loosing frames!");		
 	}
 }
 
