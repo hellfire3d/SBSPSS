@@ -35,7 +35,7 @@ void CNpcSteerableBarrelPlatform::postInit()
 	CNpcPlatform::postInit();
 
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), 50 + ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) - 32 );
 }
 

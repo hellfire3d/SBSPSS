@@ -185,6 +185,7 @@ void CNpcDualPlatform::processMovement( int _frames )
 		slaveMove.vy = -extensionChange;
 
 		m_otherPlatform->setMovement( slaveMove );
+		m_otherPlatform->think(_frames);
 		m_otherPlatform->updateCollisionArea();
 	}
 }
