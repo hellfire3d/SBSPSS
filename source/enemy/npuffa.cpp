@@ -87,7 +87,8 @@ void CNpcPuffaFishEnemy::processClose( int _frames )
 					// reverse puff up
 
 					m_state = PUFFA_FISH_TURN;
-					m_animNo = ANIM_PUFFAFISH_PUFFUP;
+//					m_animNo = ANIM_PUFFAFISH_PUFFUP;
+					m_animNo = ANIM_PUFFAFISH_PUFFUPIDLE;	// Changed by dave, cos anims are the same
 
 					break;
 				}
@@ -112,7 +113,8 @@ void CNpcPuffaFishEnemy::processClose( int _frames )
 			case PUFFA_FISH_TURN:
 			{
 				m_state = PUFFA_FISH_INFLATE;
-				m_animNo = ANIM_PUFFAFISH_PUFFUP;
+//				m_animNo = ANIM_PUFFAFISH_PUFFUP;
+				m_animNo = ANIM_PUFFAFISH_PUFFUPIDLE;	// Changed by dave, cos anims are the same
 
 				break;
 			}
