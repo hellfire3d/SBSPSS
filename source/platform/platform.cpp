@@ -482,12 +482,31 @@ void CNpcPlatform::postInit()
 
 	if ( m_type == NPC_LINEAR_PLATFORM )
 	{
-		if ( ( CLevel::getCurrentChapter() != 5 && CLevel::getCurrentChapterLevel() != 4 ) &&
-			( CLevel::getCurrentChapter() != 6 && CLevel::getCurrentChapterLevel() != 1 ) )
+		switch( CLevel::getCurrentChapter() )
 		{
-			CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-			T->SetUp(64,4,8,8);
+			case 5:
+			{
+				if ( CLevel::getCurrentChapterLevel() == 4 )
+				{
+					return;
+				}
+
+				break;
+			}
+
+			case 6:
+			{
+				if ( CLevel::getCurrentChapterLevel() == 1 )
+				{
+					return;
+				}
+
+				break;
+			}
 		}
+
+		CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+		T->SetUp(64,4,8,8);
 	}
 }
 
