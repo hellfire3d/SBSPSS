@@ -19,11 +19,28 @@
 
 void CNpcBubblePlatform::processMovement( int _frames )
 {
-	Pos.vy -= m_speed * _frames;
-
-	if ( Pos.vy < 0 )
+	if ( !isSetToShutdown() )
 	{
-		setToShutdown();
+		Pos.vy -= m_speed * _frames;
+
+		if ( m_npcPath.getWaypointCount() > 1 )
+		{
+			s32 minY, maxY;
+
+			m_npcPath.getPathYExtents( &minY, &maxY );
+
+			if ( Pos.vy < minY )
+			{
+				setToShutdown();
+			}
+		}
+		else
+		{
+			if ( Pos.vy < 0 )
+			{
+				setToShutdown();
+			}
+		}
 	}
 }
 

@@ -81,8 +81,34 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 		startPos.vx += ( -5 + ( getRnd() % 11 ) );
 		newPlatform->init( startPos );
 
+		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+
+		if ( sourceWaypoint )
+		{
+			while( sourceWaypoint )
+			{
+				newPlatform->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
+				sourceWaypoint = sourceWaypoint->nextWaypoint;
+			}
+		}
+
 		newPlatform->setLayerCollision( m_layerCollision );
 		newPlatform->setTiltable( false );
 		newPlatform->postInit();
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcGeyserPlatformGenerator::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.x1 = thinkBBox.XMin;
+	objThinkBox.x2 = thinkBBox.XMax;
+	objThinkBox.y1 = thinkBBox.YMin;
+	objThinkBox.y2 = thinkBBox.YMax;
+
+	return &objThinkBox;
 }

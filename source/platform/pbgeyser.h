@@ -23,6 +23,7 @@ class CNpcGeyserPlatformGenerator : public CNpcPlatform
 public:
 	void				setTargetType( NPC_PLATFORM_UNIT_TYPE targetType )		{m_targetType = targetType;}
 	virtual void		render();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		think( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
