@@ -72,7 +72,7 @@ void CNpcButterflyBackgroundEnemy::render()
 		{
 			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 			{
-				SprFrame = m_spriteBank->printFT4(FRM_BUTTERFLY_FLAP01 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,!m_reversed,0,10);
+				SprFrame = m_spriteBank->printFT4(FRM_BUTTERFLY_FLAP01 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,!m_reversed,0,15);
 				setRGB0( SprFrame, 255, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)
 
 				// get xmax, xmin, ymax, ymin
