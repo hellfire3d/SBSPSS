@@ -1253,6 +1253,14 @@ SOURCE=..\..\..\source\platform\platform.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pleaf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pleaf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\plinear.cpp
 # End Source File
 # Begin Source File

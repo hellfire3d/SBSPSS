@@ -60,8 +60,8 @@ void CNpcCircularSawHazard::render()
 		{
 			SVECTOR rotation;
 			rotation.vx = 0;
-			rotation.vy = m_rotation;
-			rotation.vz = 0;
+			rotation.vy = 0;
+			rotation.vz = m_rotation;
 
 			VECTOR scale;
 			scale.vx = ONE;

@@ -123,6 +123,9 @@
 #include "platform\pbgeyser.h"
 #endif
 
+#ifndef __PLATFORM_PLEAF_H__
+#include "platform\pleaf.h"
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,6 +287,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_LANTERN_PLATFORM:
 		{
 			platform = new ("lantern platform") CNpcLanternPlatform;
+			break;
+		}
+
+		case NPC_LEAF_PLATFORM:
+		{
+			platform = new ("leaf platform") CNpcLeafPlatform;
 			break;
 		}
 
