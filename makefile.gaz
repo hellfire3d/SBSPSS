@@ -220,8 +220,7 @@ gfx_src :=			prim \
 					bubicles \
 					actor
 
-gui_src :=			gbubbles \
-					gbutton \
+gui_src :=			gbutton \
 					gfactory \
 					gframe \
 					greadout \
