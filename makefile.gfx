@@ -415,6 +415,7 @@ cleanmusic:
 
 $(MUSIC_ALL_OUT) : $(MUSIC_ALL_IN)
 	$(CP) $(MUSIC_ALL_IN) $(MUSIC_OUT_DIR)
+	attrib -r $(MUSIC_OUT_DIR)/*
 
 GRAF_DIRS_TO_MAKE	+=	$(MUSIC_OUT_DIR)
 GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
