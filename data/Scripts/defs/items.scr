@@ -18,5 +18,4 @@
 #define ITEM_JELLYFISH_2			15
 #define ITEM_JELLYFISH_3			16
 #define ITEM_JAM_JAR				17
-#define ITEM_BUBBLE_MIXTURE			18
 

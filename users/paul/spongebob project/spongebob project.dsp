@@ -698,7 +698,23 @@ SOURCE=..\..\..\data\scripts\defs\charanim.scr
 
 SOURCE=..\..\..\data\scripts\defs\defs.scr
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\defs\items.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\defs\response.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\defs\text.scr
+# End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\speechtest.scr
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\data\scripts\test.scr

@@ -5,7 +5,6 @@
 #include	data/scripts/defs/response.scr
 #include	data/scripts/defs/text.scr
 
-
 _setCharacterAnimation(CHAR_SPONGEBOB,ANIM_QUIET);
 _setText(C1_L1__KARATE_MOVES__SANDY_1);
 _setResponseOptions(QUESTION_OK);
@@ -14,5 +13,4 @@ do
 	pause;
 }
 while(_getResponse()!=ANSWER_NONE);
-
 stop;

@@ -172,39 +172,64 @@ void mylexer::unexpectedChar()
 {
 	int		result;
 	char	name[256]="\0";
+	char	*endOfMacro=name;
 	char	*replacement;
 	int		nextChar;
 	char	c[2]="*";	// Err...
-
+	int		extraChars=0;
+	
+	// Search for a macro
 	strcat(name,yytext);
-	do
+	yyunput(*(name+strlen(name)-1));
+	name[strlen(name)-1]='\0';
+	while(1)
 	{
-		replacement=lookupMacro(name,&result);
-		if(replacement)
+		do
 		{
-			break;
-		}
-		nextChar=yygetchar();
-		if(nextChar!=-1)
-		{
-			if(strlen(name)>=255)
+			nextChar=yyinput();
+			if(nextChar!=-1)
 			{
-				printf("OVERFLOW WHILE LOOKING UP MACRO\n");
+				if(strlen(name)>=255)
+				{
+					printf("OVERFLOW WHILE LOOKING UP MACRO\n");
+					error();
+					return;
+				}
+				c[0]=(char)nextChar;
+				strcat(name,c);
+			}
+			else
+			{
+				printf("END OF FILE WHILE LOOKING FOR MACRO\n");
 				error();
 				return;
 			}
-			c[0]=(char)nextChar;
-			strcat(name,c);
+			lookupMacro(name,&result);
+		}
+		while(result==POSSIBLE_KNOWN_MACRO);
+
+		if(result==UNKNOWN_MACRO)
+		{
+			if(endOfMacro!=name)
+			{
+				char	*cp;
+				cp=name+strlen(name)-1;
+				while(cp!=endOfMacro-1)
+				{
+					yyunput(*cp--);
+					name[strlen(name)-1]='\0';
+				}
+			}
+			break;
 		}
 		else
 		{
-			printf("END OF FILE WHILE LOOKING FOR MACRO\n");
-			error();
-			return;
+			endOfMacro=name+strlen(name);
 		}
 	}
-	while(result==POSSIBLE_KNOWN_MACRO);
 
+
+	replacement=lookupMacro(name,&result);
 	if(result==KNOWN_MACRO)
 	{
 		// Err.. shove the string into the input buffer ( is this good? )
@@ -214,11 +239,7 @@ void mylexer::unexpectedChar()
 		{
 			yyunput(*--ptr);
 		}
-	}
-	else
-	{
-		printf("UNEXPECTED STRING: '%s'\n",name);
-		error();
+		printf("found macro '%s'='%s'\n",name,replacement);
 	}
 }
 

@@ -6,7 +6,7 @@
 
 // Answers
 #define	ANSWER_NONE			0
-#defein ANSWER_OK			1
+#define ANSWER_OK			1
 #define ANSWER_YES			2
 #define ANSWER_NO			3
 

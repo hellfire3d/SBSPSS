@@ -299,9 +299,10 @@ GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
 #----------------------------------------------------------------------------
 # Script stuff..
 #----------------------------------------------------------------------------
+SCRIPTS_LIST		:=	test \
+						speechtest
+
 SCRIPTS_IN_DIR		:=	$(GAME_DATA_DIR)/scripts
-SCRIPTS_LIST		:=	test
-SCRIPTS_IN			:=	$(foreach SCRIPT,$(SCRIPTS_LIST),$(SCRIPTS_IN_DIR)/$(SCRIPT).scr)
 
 SCRIPTS_OUT_DIR		:=	$(DATA_OUT)/scripts
 SCRIPTS_OUT			:=	$(foreach SCRIPT,$(SCRIPTS_LIST),$(SCRIPTS_OUT_DIR)/$(SCRIPT).dat)
@@ -311,7 +312,7 @@ scripts : $(SCRIPTS_OUT)
 cleanscripts:
 	@$(RM) -f $(SCRIPTS_OUT)
 
-$(SCRIPTS_OUT) : $(SCRIPTS_IN)
+$(SCRIPTS_OUT_DIR)/%.dat : $(SCRIPTS_IN_DIR)/%.scr
 	@scripter $< $@
 
 GRAF_DIRS_TO_MAKE	+=	$(SCRIPTS_OUT_DIR)
