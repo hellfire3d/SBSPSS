@@ -39,6 +39,7 @@ class CGlassesPickup : public CBasePickup
 public:
 	virtual void		init();
 
+	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:

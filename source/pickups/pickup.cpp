@@ -286,6 +286,7 @@ void	CBaseRespawningPickup::collect(class CPlayer *_player)
 CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 {
 	CBasePickup	*pickup;
+	DVECTOR		pickupPos;
 
 	switch(_type)
 	{
@@ -354,7 +355,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 	}
 
 	pickup->init();
-	pickup->setPos(_pos);
+	pickupPos=pickup->getSizeForPlacement();
+	pickupPos.vx=_pos->vx+(pickupPos.vx/2);
+	pickupPos.vy=_pos->vy+(pickupPos.vy/2)-16;
+	pickup->setPos(&pickupPos);
 
 	return pickup;
 }

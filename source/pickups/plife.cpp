@@ -75,6 +75,23 @@ void	CLifePickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CLifePickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__PANTS);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CLifePickup::collect(class CPlayer *_player)
 {
 	_player->addLife();

@@ -39,6 +39,7 @@ class CBubbleMixturePickup : public CBaseRespawningPickup
 public:
 	virtual void		init();
 
+	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:
@@ -58,6 +59,7 @@ class CBubbleWandPickup : public CBaseRespawningPickup
 public:
 	virtual void		init();
 
+	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:

@@ -92,6 +92,23 @@ void	CBalloonPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CBalloonPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BALLOON);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CBalloonPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_BALLOON);

@@ -75,6 +75,23 @@ void	CBubbleMixturePickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CBubbleMixturePickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::collect(class CPlayer *_player)
 {
 	_player->giveBubbleAmmo();
@@ -136,6 +153,23 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
 void	CBubbleWandPickup::init()
 {
 	CBaseRespawningPickup::init();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR	CBubbleWandPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEWAND);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
 }
 
 /*----------------------------------------------------------------------

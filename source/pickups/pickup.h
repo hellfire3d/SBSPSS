@@ -63,6 +63,7 @@ public:
 	virtual void		think(int _frames);
 	virtual void		render();
 
+	virtual DVECTOR		getSizeForPlacement()=0;
 	void				setPos(const struct DVECTOR *_pos);
 	virtual void		collect(class CPlayer *_player);
 

@@ -37,6 +37,7 @@
 class CCoralBlowerPickup : public CBasePickup
 {
 public:
+	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:

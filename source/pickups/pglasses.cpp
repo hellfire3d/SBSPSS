@@ -73,6 +73,23 @@ void	CGlassesPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CGlassesPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__GLASSES);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CGlassesPickup::collect(class CPlayer *_player)
 {
 	_player->giveGlasses();

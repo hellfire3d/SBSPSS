@@ -173,8 +173,8 @@ int s_health;
 int s_screenPos;
 DVECTOR	m_cameraScrollPos={0,600};
 
-int SCREEN_GEOM_CENTRE_X=256;
-int SCREEN_GEOM_CENTRE_Y=107;
+int SCREEN_GEOM_CENTRE_X=38;
+int SCREEN_GEOM_CENTRE_Y=248;
 int SCREEN_GEOM_PLAYER_OFS_X=9;
 int SCREEN_GEOM_PLAYER_OFS_Y=-26;
 
@@ -450,24 +450,9 @@ m_fontBank->print(40,40,posBuf);
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
-
-//int xval=(255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx>>8)));
-//DrawLine(xval-7,0,xval-7,255,0,128,255,0);
-//DrawLine(xval+7,0,xval+7,255,0,128,255,0);
-
-//!!		SetGeomOffset(SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy);
-//		if(panim!=-1)
-//			m_actorGfx.setAnimNo(panim);
-//		else
-//			m_actorGfx.setAnimNo(m_animNo);
-//!!		m_actorGfx.setFrame(m_animFrame);
-//!!		m_actorGfx.Animate(this);
-//!!		m_actorGfx.Render(this);
-//!!		m_currentPlayerModeClass->render();
-//!!		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
 		DVECTOR	Pos=
 		{
-			SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx-m_actorGfx->getFrameWidth(m_animNo,m_animFrame/2),
+			SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,
 			SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy
 		};
 		m_actorGfx->Render(Pos,m_animNo,m_animFrame>>sbanimspeed,m_facing==FACING_RIGHT?0:1);

@@ -75,6 +75,23 @@ void	CBaseQuestItemPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CBaseQuestItemPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CBaseQuestItemPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

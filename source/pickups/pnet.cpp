@@ -59,6 +59,23 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CNetPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__NET);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CNetPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_NET);

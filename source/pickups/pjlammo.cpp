@@ -71,6 +71,23 @@ void	CJellyLauncherAmmoPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CJellyLauncherAmmoPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CJellyLauncherAmmoPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

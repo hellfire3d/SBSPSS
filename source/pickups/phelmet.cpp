@@ -59,6 +59,23 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CHelmetPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__HELMET);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CHelmetPickup::collect(class CPlayer *_player)
 {
 	_player->giveDivingHelmet();
