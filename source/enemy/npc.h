@@ -350,7 +350,6 @@ protected:
 	void				processClose( int _frames );
 	void				processCollision();
 	void				processTimer( int _frames );
-	void				detectCollisionWithPlayer();
 	bool				isCollisionWithGround();
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
@@ -485,6 +484,8 @@ protected:
 	int				m_animNo;
 	CSkel			m_skel;
 	TPAGE_DESC		m_actorTPage;
+
+	virtual void		collidedWith(CThing *_thisThing);
 };
 
 

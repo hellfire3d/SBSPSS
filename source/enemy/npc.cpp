@@ -453,8 +453,6 @@ void CNpcEnemy::think(int _frames)
 	playerXDistSqr = playerXDist * playerXDist;
 	playerYDistSqr = playerYDist * playerYDist;
 
-	detectCollisionWithPlayer();
-
 	if ( m_animPlaying )
 	{
 		int frameCount = m_skel.getFrameCount();
@@ -519,14 +517,24 @@ void CNpcEnemy::think(int _frames)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEnemy::detectCollisionWithPlayer()
+void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
-	if ( m_data[m_type].detectCollision && playerXDistSqr + playerYDistSqr < 400 )
+	switch(_thisThing->getThingType())
 	{
-		// close enough for collision
+		case TYPE_PLAYER:
+		{
+			if ( m_data[m_type].detectCollision )
+			{
+				m_oldControlFunc = m_controlFunc;
+				m_controlFunc = NPC_CONTROL_COLLISION;
+			}
 
-		m_oldControlFunc = m_controlFunc;
-		m_controlFunc = NPC_CONTROL_COLLISION;
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
 	}
 }
 

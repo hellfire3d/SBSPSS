@@ -1173,9 +1173,20 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 		// Check if we are currently immune to this damage type
 		switch(_damage)
 		{
+			case DAMAGE__NONE:
+				break;
+
 			case DAMAGE__FALL:
 			case DAMAGE__LAVA:
 			case DAMAGE__HIT_ENEMY:
+			case DAMAGE__SHOCK_ENEMY:
+			case DAMAGE__GAS_ENEMY:
+			case DAMAGE__POISON_ENEMY:
+			case DAMAGE__SWALLOW_ENEMY:
+			case DAMAGE__PINCH_ENEMY:
+			case DAMAGE__SQUASH_ENEMY:
+			case DAMAGE__BURN_ENEMY:
+			case DAMAGE__BITE_ENEMY:
 				break;
 
 			case DAMAGE__ELECTROCUTION:
