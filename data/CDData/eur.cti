@@ -9,7 +9,7 @@ EndTrack
 Track XA
 Pause 150
 Volume	ISO9660	CD.ISO
-SystemArea "data\cddata\LICENSEA.RAW"
+SystemArea "data\cddata\LICENSEE.RAW"
 PrimaryVolume
 SystemIdentifier		"PLAYSTATION"
 VolumeIdentifier		"TEMPLATE"
