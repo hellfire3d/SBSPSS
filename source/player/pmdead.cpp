@@ -21,6 +21,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -109,6 +113,9 @@ void	CPlayerModeDead::think()
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&(PI_JUMP|PI_FIRE))||
 	   m_deadTime>DEATH_TIMEOUT)
 	{
+		// Take a life off..
+		CGameSlotManager::getSlotData()->m_lives--;
+
 		CGameScene::restartlevel();
 	}
 }

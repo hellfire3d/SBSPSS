@@ -2247,10 +2247,6 @@ void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 	m_deathType=_deathType;
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 	setMode(PLAYER_MODE_DEAD);
-
-	// Take a life off..
-	CGameSlotManager::getSlotData()->m_lives--;
-PAUL_DBGMSG("lives now %d",CGameSlotManager::getSlotData()->m_lives);
 }
 
 
