@@ -25,7 +25,7 @@ struct	sBmp
 {
 		Frame		Frm;
 		int			OrigW,OrigH;
-//		int			ChkR,ChkG,ChkB;
+		Rect		BBox;
 		u8			*RGB;
 		u8			*Psx;
 		u8			*Pak;
