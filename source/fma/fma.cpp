@@ -272,8 +272,8 @@ typedef struct
 	CActorGfx	*m_gfx[3];
 	u8			m_active;
 
-	s8			m_animState,m_animFrame;
-	s8			m_animLoop;
+	u8			m_animState,m_animFrame;
+	u8			m_animLoop;
 	
 	DVECTOR		m_pos;
 	DVECTOR		m_ItemOfs;
@@ -607,6 +607,7 @@ static const int s_FMAIntroScript[]=
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH1_01_DAT,
 
 // Scene 7 - SB Leaves
+	SC_WAIT_ON_TIMER,			60,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH1_02_DAT,
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_QUICKEXIT,0,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
