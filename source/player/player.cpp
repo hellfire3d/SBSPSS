@@ -156,7 +156,7 @@ if(newmode!=-1)
 	if(padInput&PAD_RIGHT)	Pos.vx+=move;
 	m_invincibleFrameCount=0;
 
-	if ( padInput & PAD_UP ) // not sure where you want to put this, Paul (Charles)
+	if ( padInput & CPadConfig::getButton(CPadConfig::PAD_CFG_UP) ) // not sure where you want to put this, Paul (Charles)
 	{
 		GameScene.sendEvent( USER_REQUEST_TALK_EVENT, this );
 	}
@@ -242,7 +242,11 @@ Pos.vy=23*16+1;//16*15;
 
 		// Look around
 		int	pad=getPadInputHeld();
-		if(pad&PAD_UP)
+if(getPadInputDown()&PAD_CIRCLE)
+{
+	m_skel.blink();
+}
+		if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
 		{
 			if(m_cameraLookTimer<=-LOOKAROUND_DELAY)
 			{
@@ -257,7 +261,7 @@ Pos.vy=23*16+1;//16*15;
 				m_cameraLookTimer--;
 			}
 		}
-		else if(pad&PAD_DOWN)
+		else if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 		{
 			if(m_cameraLookTimer>=LOOKAROUND_DELAY)
 			{
@@ -332,6 +336,9 @@ m_cameraOffset=ofs;
   ---------------------------------------------------------------------- */
 int panim=-1;
 DVECTOR ppos={0,1024};
+#ifdef __USER_paul__
+int mouth=-1,eyes=-1;
+#endif
 void	CPlayer::render()
 {
 	CThing::render();
@@ -339,6 +346,18 @@ void	CPlayer::render()
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
+#ifdef __USER_paul__
+if(mouth!=-1)
+{
+	m_skel.setMouthTex(mouth);
+	mouth=-1;
+}
+if(eyes!=-1)
+{
+	m_skel.setEyeTex(eyes);
+	eyes=-1;
+}
+#endif
 		m_skel.setPos(ppos);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
