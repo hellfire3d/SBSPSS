@@ -11,13 +11,11 @@
 
 /*****************************************************************************/
 // Woo.. this is getting big now isn't it?
+// Nope.. it's shrunk again! :)
 struct	sLvlTab
 {
 	FileEquate				LevelInfo;
 	FileEquate				TileBank,Level,Tex;
-	int						exitX,exitY,exitW,exitH;
-//	int						spawnX,spawnY;
-//	int						Spr0,Spr1;
 	int						songId;
 };
 
@@ -46,8 +44,6 @@ private:
 	void		initLayers();
 	void		initNewLevel(sLvlTab *LevelDat);
 	void		DisplayLoadingScreen();
-
-	void		DoPaulsTempCrap(sLvlTab *LevelDat);
 
 	sLevelInfo		*LevelInfo;
 	u8				*PakBuffer,*LevelBuffer;
