@@ -90,13 +90,14 @@ sFrameHdr *fh=(sFrameHdr*)_fh;
 
 }
 /*****************************************************************************/
+int		OldClearScreen=0;
 void	StartLoad(int _loadX,int _loadY)
 {
 		SYSTEM_DBGMSG("Start Load");
 
 		if (_loadX!=-1) LoadX=_loadX;
 		if (_loadY!=-1) LoadY=_loadY;
-
+		OldClearScreen=Screen[0].Draw.isbg;
 		Screen[0].Draw.isbg=Screen[1].Draw.isbg=0;
 
 		PutDrawEnv(&Screen[FrameFlipFlag^1].Draw);
@@ -127,6 +128,7 @@ void	StopLoad()
 		DrawLoadIcon=0;
 		SYSTEM_DBGMSG("Stop Load");
 	}
+	VidSetClearScreen(OldClearScreen);
 }
 
 /*****************************************************************************/
