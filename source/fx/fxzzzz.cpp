@@ -18,7 +18,7 @@ static const int	FRM_Z=FRM__90;
 static const int	ZLifeInc=-8;
 static const int	ZDelay=32;
 
-static const s16	XT[16]={ 0,+1,+2,+2,+3,+2,+2,+1, 
+static const s8		XT[16]={ 0,+1,+2,+2,+3,+2,+2,+1, 
 							 0,-1,-2,-2,-3,-2,-2,-1};
 
 /*****************************************************************************/
