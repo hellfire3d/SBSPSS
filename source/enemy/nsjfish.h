@@ -22,6 +22,7 @@ class CNpcSmallJellyfishEnemy : public CNpcEnemy
 {
 public:
 	void				render();
+	virtual int			getFrameCount()							{return( 6 );}
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );

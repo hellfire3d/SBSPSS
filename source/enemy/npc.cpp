@@ -830,6 +830,13 @@ void CNpcEnemy::shutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int CNpcEnemy::getFrameCount()
+{
+	return( m_actorGfx->getFrameCount( m_animNo ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::think(int _frames)
 {
 	CEnemyThing::think(_frames);
@@ -843,13 +850,9 @@ void CNpcEnemy::think(int _frames)
 		if ( m_animPlaying )
 		{
 			s32 frameCount;
-// BODGE!!!!!!!!!!!!!!!
-			if (m_actorGfx) 
-				frameCount= m_actorGfx->getFrameCount(m_animNo);
-			else
-				frameCount= 6;
 
-// BODGE END!!!!!!!!!!!
+			frameCount = getFrameCount();
+
 			s32 frameShift = ( _frames << 8 ) >> 1;
 
 			if ( ( frameCount << 8 ) - m_frame > frameShift ) //( _frames >> 1 ) )

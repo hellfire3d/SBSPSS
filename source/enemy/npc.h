@@ -176,6 +176,7 @@ public:
 	void				hasBeenAttacked();
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
+	virtual int			getFrameCount();
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
 
