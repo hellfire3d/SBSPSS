@@ -301,12 +301,12 @@ eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
 ; Pause menu
 ; ---------------------------------------------------------------
 
+[STR__PAUSE_MENU__GAME_PAUSED]
+eng=GAME PAUSED
 [STR__PAUSE_MENU__CONTINUE]
 eng=CONTINUE
 [STR__PAUSE_MENU__QUIT]
 eng=QUIT
-[STR__PAUSE_MENU__RESTART_LEVEL]
-eng=RESTART LEVEL
 
 
 
