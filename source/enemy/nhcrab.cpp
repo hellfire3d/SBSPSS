@@ -259,6 +259,6 @@ void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 
 	if( m_soundId == NOT_PLAYING )
 	{
-		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE, true );
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE, true, true );
 	}
 }
