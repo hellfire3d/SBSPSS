@@ -62,6 +62,7 @@
 CPlayerStateButtBounce		s_stateButtBounce;
 CPlayerStateButtBounceFall	s_stateButtBounceFall;
 CPlayerStateButtBounceLand	s_stateButtBounceLand;
+CPlayerStateButtBounceUp	s_stateButtBounceUp;
 
 
 /*----------------------------------------------------------------------
@@ -142,6 +143,56 @@ void CPlayerStateButtBounceLand::think(CPlayerModeBase *_playerMode)
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
 		_playerMode->setState(STATE_IDLE);
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateButtBounceUp::enter(CPlayerModeBase *_playerMode)
+{
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);
+	m_bounceFrames=0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int bounceUpFrames=5;
+void CPlayerStateButtBounceUp::think(CPlayerModeBase *_playerMode)
+{
+	int					controlHeld;
+
+	controlHeld=_playerMode->getPadInputHeld();
+	if(controlHeld&PI_LEFT)
+	{
+		_playerMode->moveLeft();
+	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		_playerMode->moveRight();
+	}
+	else
+	{
+		_playerMode->slowdown();
+	}
+
+	if(m_bounceFrames<=bounceUpFrames)
+	{
+		m_bounceFrames++;
+		_playerMode->jump();
+	}
+	else
+	{
+		_playerMode->setState(STATE_FALL);
 	}
 }
 

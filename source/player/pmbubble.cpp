@@ -204,6 +204,7 @@ int		CPlayerModeBubbleMixture::canBlowBubbleFromThisState()
 		case STATE_BUTTBOUNCE:
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
+		case STATE_BUTTBOUNCEUP:
 		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:

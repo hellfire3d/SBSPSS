@@ -75,6 +75,7 @@ typedef enum
 	STATE_BUTTBOUNCE,
 	STATE_BUTTFALL,
 	STATE_BUTTLAND,
+	STATE_BUTTBOUNCEUP,
 	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
@@ -355,6 +356,8 @@ public:
 	int				getIsInWater()				{return m_isInWater;}
 
 	int				isHoldingNet()				{return m_currentMode==PLAYER_MODE_NET;}
+
+	void			justButtBouncedABadGuy();	// Also fugly.. :/
 
 private:
 	int				m_glassesFlag;

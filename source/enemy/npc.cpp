@@ -860,55 +860,51 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 				ATTACK_STATE playerState = player->getAttackState();
 
-				switch( playerState )
+				if(playerState==ATTACK_STATE__NONE)
 				{
-					case ATTACK_STATE__NONE:
+					if ( !player->isRecoveringFromHit() )
 					{
-						if ( !player->isRecoveringFromHit() )
+						switch( m_data[m_type].detectCollision )
 						{
-							switch( m_data[m_type].detectCollision )
+							case DETECT_NO_COLLISION:
 							{
-								case DETECT_NO_COLLISION:
-								{
-									// ignore
+								// ignore
 
-									break;
-								}
+								break;
+							}
 
-								case DETECT_ALL_COLLISION:
-								{
-									m_oldControlFunc = m_controlFunc;
-									m_controlFunc = NPC_CONTROL_COLLISION;
+							case DETECT_ALL_COLLISION:
+							{
+								m_oldControlFunc = m_controlFunc;
+								m_controlFunc = NPC_CONTROL_COLLISION;
 
-									processUserCollision( _thisThing );
+								processUserCollision( _thisThing );
 
-									break;
-								}
+								break;
+							}
 
-								case DETECT_ATTACK_COLLISION_GENERIC:
-								{
-									processAttackCollision();
-									processUserCollision( _thisThing );
+							case DETECT_ATTACK_COLLISION_GENERIC:
+							{
+								processAttackCollision();
+								processUserCollision( _thisThing );
 
-									break;
-								}
+								break;
 							}
 						}
-
-						break;
 					}
+				}
+				else
+				{
+					// player is attacking, respond appropriately
 
-					default:
+					if ( m_controlFunc != NPC_CONTROL_SHOT )
 					{
-						// player is attacking, respond appropriately
-
-						if ( m_controlFunc != NPC_CONTROL_SHOT )
+						if(playerState==ATTACK_STATE__BUTT_BOUNCE)
 						{
-							m_controlFunc = NPC_CONTROL_SHOT;
-							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+							player->justButtBouncedABadGuy();
 						}
-
-						break;
+						m_controlFunc = NPC_CONTROL_SHOT;
+						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 					}
 				}
 

@@ -1812,6 +1812,20 @@ PLAYERINPUT CPlayer::readPadInput()
 	return input;
 }
 
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::justButtBouncedABadGuy()
+{
+	m_currentPlayerModeClass->setState(STATE_BUTTBOUNCEUP);
+}
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

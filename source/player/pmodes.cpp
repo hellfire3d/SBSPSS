@@ -107,6 +107,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateButtBounce,						// STATE_BUTTBOUNCE
 	&s_stateButtBounceFall,					// STATE_BUTTFALL
 	&s_stateButtBounceLand,					// STATE_BUTTLAND
+	&s_stateButtBounceUp,					// STATE_BUTTBOUNCEUP
 	&s_stateDuck,							// STATE_DUCK
 	&s_stateSoakUp,							// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
@@ -227,6 +228,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_BUTTBOUNCE:
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
+		case STATE_BUTTBOUNCEUP:
 		case STATE_DUCK:
 		case STATE_GETUP:
 		case STATE_JUMPBACK:
@@ -250,6 +252,7 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 	{
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
+		case STATE_BUTTBOUNCEUP:
 			ret=ATTACK_STATE__BUTT_BOUNCE;
 			break;
 
@@ -283,10 +286,10 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	{
 		playerHasHitGround();
 	}
-	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
+	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&				// Hmm.. (pkg)
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
 			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP&&
-			m_currentState!=STATE_JUMPBACK)
+			m_currentState!=STATE_JUMPBACK&&m_currentState!=STATE_BUTTBOUNCEUP)
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();

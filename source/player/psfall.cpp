@@ -105,7 +105,7 @@ void CPlayerStateFall::think(CPlayerModeBase *_playerMode)
 	}
 	_playerMode->fall();
 
-	if(controlHeld&PI_DOWN)
+	if(controlDown&PI_DOWN)
 	{
 		_playerMode->setState(STATE_BUTTBOUNCE);
 	}

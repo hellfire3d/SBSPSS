@@ -115,6 +115,7 @@ static	CPlayerState	*s_stateTable[]=
 	NULL,									// STATE_BUTTBOUNCE
 	NULL,									// STATE_BUTTFALL
 	NULL,									// STATE_BUTTLAND
+	NULL,									// STATE_BUTTBOUNCEUP
 	NULL,									// STATE_DUCK
 	NULL,									// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP

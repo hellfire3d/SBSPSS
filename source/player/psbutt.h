@@ -53,9 +53,18 @@ class CPlayerStateButtBounceLand : public CPlayerState
 public:
 	virtual void	enter(class CPlayerModeBase *_playerMode);
 	virtual void	think(class CPlayerModeBase *_playerMode);
+	
+};
+
+class CPlayerStateButtBounceUp : public CPlayerState
+{
+public:
+	virtual void	enter(class CPlayerModeBase *_playerMode);
+	virtual void	think(class CPlayerModeBase *_playerMode);
 
 private:
-	
+	int				m_bounceFrames;
+
 };
 
 
@@ -66,6 +75,7 @@ private:
 extern	CPlayerStateButtBounce		s_stateButtBounce;
 extern	CPlayerStateButtBounceFall	s_stateButtBounceFall;
 extern	CPlayerStateButtBounceLand	s_stateButtBounceLand;
+extern	CPlayerStateButtBounceUp	s_stateButtBounceUp;
 
 
 /*----------------------------------------------------------------------
