@@ -418,45 +418,10 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	}
 
 	// Camera focus point stuff
-// are we on a ledge and need to automatically look down?
-int lookDownAmount=0;
-/*
-if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,10)==0)
-{
-	// Near the edge of a ledge?
-	int	dir,x;
-	int	i;
-	dir=getFacing()*16;
-	x=Pos.vx;
-	for(i=0;i<ledgexsearch;i++)
-	{
-		if(m_layerCollision->getCollisionBlock(x,Pos.vy)==0)
-		{
-			int	y,gap;
-			y=Pos.vy;
-			gap=0;
-			for(i=0;i<ledgemaxylook;i++)
-			{
-				if(m_layerCollision->getCollisionBlock(x,y))
-				{
-					lookDownAmount=gap;
-					break;
-				}
-				y+=16;
-				gap+=16;
-			}
-			break;
-		}
-		x-=dir;
-	}
-}
-*/
 	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X;
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y+(lookDownAmount);
-
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
 	m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
 	m_currentCamFocusPoint.vy+=(m_currentCamFocusPointTarget.vy-m_currentCamFocusPoint.vy)>>cammove;
-
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
 	m_cameraPos.vy=m_currentCamFocusPoint.vy+m_cameraLookOffset;
 
@@ -794,8 +759,8 @@ void CPlayer::respawn()
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
-	m_currentCamFocusPoint.vx=0;//Pos.vx+MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-	m_currentCamFocusPoint.vy=0;//Pos.vy+MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8)+m_cameraLookOffset;
+	m_currentCamFocusPoint.vx=Pos.vx+MAP2D_CENTRE_X;
+	m_currentCamFocusPoint.vy=Pos.vy+MAP2D_CENTRE_Y;
 	m_padLookAroundTimer=0;
 
 	m_glassesFlag=0;

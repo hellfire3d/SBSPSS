@@ -228,6 +228,7 @@ sOT		*ThisOT=OtPtr+OTPos;
 int		i,ThisY=-YOfs;
 
 // Render Back Sprites
+#ifndef __USER_paul__
 sBackSprite		*SpritePtr=SpriteList;
 		for (i=0; i<SPRITE_MAX; i++)
 		{
@@ -267,6 +268,8 @@ sBox		Box;
 			AddPrim(ThisOT,Gt4);
 			SpritePtr++;
 		}
+#endif	/* __USER_paul__ */
+
 // Render Back Shade
 		for (i=0; i<BandCount; i++)
 		{
