@@ -21,6 +21,7 @@ void	CFXGeyser::init(DVECTOR const &_Pos)
 		CFX::init(_Pos);
 		Height=TargetHeight=8;
 		currentFrame=FRM__GUSH000;
+/*		m_soundId=*/CSoundMediator::playSfx(CSoundMediator::SFX_WORLD_OBJECT__GEYSER,false);
 }
 
 /*****************************************************************************/

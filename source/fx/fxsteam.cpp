@@ -31,6 +31,7 @@ void	CFXSteam::init(DVECTOR const &_Pos)
 		DieOut=false;
 		SetSize(DefSize);
 		IsHorizontal=false;
+		m_soundId=CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STEAM,true);
 }
 
 /*****************************************************************************/
@@ -113,6 +114,10 @@ int		TotalLife=0;
 
 		if (DieOut && TotalLife==0)
 		{
+			if( m_soundId != NOT_PLAYING )
+			{
+				CSoundMediator::stopAndUnlockSfx(m_soundId );
+			}
 			setToShutdown();
 		}
 }

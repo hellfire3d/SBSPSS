@@ -51,30 +51,35 @@ CFXBaseAnim::sFXBaseData	FXDropBaseData=
 {
 		FRM__DRIP,FRM__DRIP,1,
 		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_HAS_GRAVITY | FX_FLAG_NO_THINK_KILL, 
+		0,CSoundMediator::SFX_HAZARD__ACID_DROP,
 };
 
 CFXBaseAnim::sFXBaseData	FXSplashBaseData=
 {
 		FRM__SPLASH001,FRM__SPLASH006,1,
 		FX_FLAG_NO_THINK_KILL,
+		0,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXExplodeBaseData=
 {
 		FRM__EXPLOSION0001,FRM__EXPLOSION0008,1,
 		FX_FLAG_NO_THINK_KILL,
+		CSoundMediator::SFX_HAZARD__FIREBALL_LAND,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXFireBaseData=
 {
 		FRM__FIRE01,FRM__FIRE08,1,
 		FX_FLAG_LOOP | FX_FLAG_TRANS,
+		0,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXBubbleBaseData=
 {
 		FRM__BUBBLE_2,FRM__BUBBLE_2,1,
 		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_NO_THINK_KILL | FX_FLAG_HAS_LIFE,
+		0,0,
 };
 
 /*****************************************************************************/
@@ -295,6 +300,9 @@ void	CFX::init()
 		OtPos=OTPOS__ACTOR_POS;
 		Flags=0;
 		Velocity.vx=Velocity.vy=0;
+		m_soundId = NOT_PLAYING;
+		EndSnd=0;
+
 }
 
 /*****************************************************************************/
@@ -345,7 +353,9 @@ CThing	*Parent=getParent();
 
 		Pos.vx+=Velocity.vx;
 		Pos.vy+=Velocity.vy;
-		if (Flags & FX_FLAG_COLLIDE_KILL || Flags & FX_FLAG_COLLIDE_BOUNCE)
+		
+		if (Velocity.vy)
+		if (Flags & FX_FLAG_COLLIDE_KILL || Flags )
 		{
 			CLayerCollision	*ColLayer=CGameScene::getCollision();
 			int	DistY = ColLayer->getHeightFromGround( Pos.vx, Pos.vy, 16 );
@@ -360,7 +370,11 @@ CThing	*Parent=getParent();
 				else
 				{
 					Velocity.vx/=2;
-					Velocity.vy=-Velocity.vy>>1;
+					Velocity.vy=-(Velocity.vy/2);
+					if (Velocity.vy)
+					{
+						CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_BLINK,false);
+					}
 				}
 			}
 		}
@@ -376,6 +390,14 @@ void	CFX::killFX()
 	if (AfterEffect!=CFX::FX_TYPE_NONE && canThink())
 	{
 		CFX::Create((CFX::FX_TYPE)AfterEffect,getPos());
+	}
+	if (EndSnd)
+	{
+		CSoundMediator::playSfx( (CSoundMediator::SFXID)EndSnd,false);
+	}
+	if( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx(m_soundId );
 	}
 }
 

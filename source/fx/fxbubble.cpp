@@ -37,6 +37,7 @@ void	CFXBubble::think(int _frames)
 		{
 			if (renderFrame!=FRM__BUBBLEPOP)
 			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP,false);
 				renderFrame=FRM__BUBBLEPOP;
 			}
 			else

@@ -207,6 +207,11 @@ void	MainLoop()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+#if	defined(__USER_daveo__)
+#include	"fma/fma.h"
+int			TestFMA=-1;
+#endif
+
 int 	main()
 {
 	CFileIO::GetAllFilePos();
@@ -215,7 +220,16 @@ int 	main()
 #ifdef __USER_paul__
 	GameState::setNextScene( &SceneSelector );
 #elif	defined(__USER_daveo__)
-	GameState::setNextScene( &GameScene );
+	if (TestFMA==-1)
+	{
+		GameState::setNextScene( &GameScene );
+	}
+	else
+	{
+		FmaScene.selectFma((CFmaScene::FMA_SCRIPT_NUMBER)TestFMA);
+		GameState::setNextScene(&FmaScene);
+
+	}
 #elif	defined(__USER_charles__)
 	GameState::setNextScene( &MapScene );
 #else

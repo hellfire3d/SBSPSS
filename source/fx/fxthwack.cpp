@@ -25,6 +25,7 @@ void	CFXThwack::init(DVECTOR const &_Pos)
 		Angle=getRnd()&4095;
 		Scale=2048+1024+(getRnd()&2047);
 		Flags |=FX_FLAG_HAS_LIFE;
+		CSoundMediator::playSfx(CSoundMediator::SFX_KAPOW_V1,false);
 }
 
 /*****************************************************************************/

@@ -11,6 +11,7 @@
 #include	"level\level.h"
 #include	"game\game.h"
 #include	"level\layercollision.h"
+
 #include	"FX\FXBaseAnim.h"
 
 
@@ -43,6 +44,11 @@ void	CFXBaseAnim::think(int _frames)
 			MaxFrame=((BaseData->EndFrame-BaseData->StartFrame)<<BaseData->FrameShift)-1;
 			Flags|=BaseData->Flags;
 			renderFrame=BaseData->StartFrame;
+			if (BaseData->StartSnd)
+			{
+				CSoundMediator::playSfx((CSoundMediator::SFXID)BaseData->StartSnd,false);
+			}
+			EndSnd=BaseData->EndSnd;
 			HasInit=true;
 		}
 
