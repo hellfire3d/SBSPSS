@@ -545,10 +545,12 @@ BOOTSTRAP_MAP :=	$(TEMP_DIR)/PsxBoot.map
 BOOTSTRAP_SYM :=	$(TEMP_DIR)/PsxBoot.sym
 BOOTSTRAP_EXE :=	$(TEMP_DIR)/PsxBoot.exe
 
-USA_BOOTSTRAP_OUT	:=$(CD_DIR)/BOOTUSA.EXE
+USA_BOOTSTRAP_OUT	:=$(CD_DIR)/SLUS_013.52
 USA_CPE2X_PARAM		:=/CA
 EUR_BOOTSTRAP_OUT	:=$(CD_DIR)/BOOTEUR.EXE
 EUR_CPE2X_PARAM		:=/CE
+
+
 
 cddata:
 ifeq ($(USER_NAME),CDBUILD)
@@ -563,7 +565,6 @@ ifeq ($(USER_NAME),CDBUILD)
 	@$(CP) -u Data/CdData/intro.str $(CD_DIR)/intro.str
 	@$(CP) -u Data/CdData/track1.ixa $(CD_DIR)/track1.ixa
 	@$(RAR) x data/CDData/ZZZZZZZ.RAR $(CD_DIR)/ -y >nul
-	@$(ECHO) HERE
 
 # Compile bootstrap
 	@ccpsx -O2 -g $(BOOTSTRAP_IN) -c -Xo$801c0000 $(COMMON_CCFLAGS) -oPsxBoot.o
