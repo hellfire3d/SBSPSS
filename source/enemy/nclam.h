@@ -14,6 +14,10 @@
 #ifndef	__ENEMY_NCLAM_H__
 #define	__ENEMY_NCLAM_H__
 
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
 class CNpcClamEnemy : public CNpcEnemy
 {
 public:
@@ -39,12 +43,15 @@ class CNpcStaticClamEnemy : public CNpcClamEnemy
 {
 public:
 	void				postInit();
+	void				think( int _frames );
 	u8					hasBeenAttacked()						{return( false );}
 	CRECT const			*getThinkBBox()							{return( CThing::getThinkBBox() );}
+	void				stoodOn();
 protected:
 	s32					getFrameShift( int _frames );
 	void				collidedWith(CThing *_thisThing);
-	void				processClose( int _frames );
+	void				processMovement( int _frames );
+	//void				processClose( int _frames );
 	void				processCollision();
 	void				processAnimFrames( int _frames );
 

@@ -18,13 +18,21 @@
 #include "platform\platform.h"
 #endif
 
+#ifndef __ENEMY_NCLAM_H__
+#include "enemy\nclam.h"
+#endif
+
 class CNpcClamPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
 	void				render();
 	CRECT const			*getThinkBBox()									{return( CThing::getThinkBBox() );}
-	//void				setBBox();
+	void				setClam( CNpcStaticClamEnemy *newClam)			{m_clam=newClam;}
+protected:
+	void				collidedWith(CThing *_thisThing);
+
+	CNpcStaticClamEnemy	*m_clam;
 };
 
 #endif

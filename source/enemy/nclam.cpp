@@ -23,6 +23,10 @@
 #include "platform\platform.h"
 #endif
 
+#ifndef __PLATFORM_PCLAM_H__
+#include "platform\pclam.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -218,21 +222,44 @@ void CNpcStaticClamEnemy::postInit()
 	platform->setTiltable( false );
 	platform->postInit();
 
+	CNpcClamPlatform *clamPlatform;
+	clamPlatform = (CNpcClamPlatform *) platform;
+
+	clamPlatform->setClam( this );
+
 	m_animPlaying = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcStaticClamEnemy::processClose( int _frames )
+void CNpcStaticClamEnemy::stoodOn()
 {
-	if ( !m_animPlaying && m_isStunned == 0 )
+	if ( m_frame < ( 5 << 8 ) )
 	{
-		m_animPlaying = true;
-		m_animNo = ANIM_CLAM_SIDESNAP;
+		if ( m_frame != 0 )
+		{
+			m_frame = 0;
 
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK, true );
+			}
+		}
+
+		m_isStunned = 2 * GameState::getOneSecondInFrames();
+		m_animPlaying = false;
 	}
+	else
+	{
+		m_oldControlFunc = m_controlFunc;
+		m_controlFunc = NPC_CONTROL_COLLISION;
+	}
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcStaticClamEnemy::think( int _frames )
+{
 	if ( m_isStunned )
 	{
 		m_isStunned -= _frames;
@@ -240,15 +267,32 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 		if ( m_isStunned < 0 )
 		{
 			m_isStunned = 0;
+
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_movementTimer = GameState::getOneSecondInFrames();
 		}
 	}
 
-	if ( !m_isStunned )
+	CNpcEnemy::think( _frames );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcStaticClamEnemy::processMovement( int _frames )
+{
+	if ( !m_animPlaying && m_isStunned == 0 )
 	{
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_timerFunc = NPC_TIMER_ATTACK_DONE;
-		m_timerTimer = GameState::getOneSecondInFrames();
-		m_sensorFunc = NPC_SENSOR_NONE;
+		if ( m_movementTimer > 0 )
+		{
+			m_movementTimer -= _frames;
+		}
+		else
+		{
+			m_animPlaying = true;
+			m_animNo = ANIM_CLAM_SIDESNAP;
+
+			m_movementTimer = GameState::getOneSecondInFrames();
+		}
 	}
 }
 
@@ -262,25 +306,18 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 		{
 			case TYPE_PLAYER:
 			{
-				if ( m_frame < ( 5 << 8 ) )
-				{
-					if ( m_frame != 0 )
-					{
-						m_frame = 0;
+				CPlayer *player = (CPlayer *) _thisThing;
 
-						if ( m_soundId == NOT_PLAYING )
+				if ( m_isStunned <= 0 )
+				{
+					if ( !player->isRecoveringFromHit() )
+					{
+						//if ( m_frame >= ( 5 << 8 ) )
 						{
-							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK, true );
+							m_oldControlFunc = m_controlFunc;
+							m_controlFunc = NPC_CONTROL_COLLISION;
 						}
 					}
-
-					m_isStunned = 2 * GameState::getOneSecondInFrames();
-					m_animPlaying = false;
-				}
-				else
-				{
-					m_oldControlFunc = m_controlFunc;
-					m_controlFunc = NPC_CONTROL_COLLISION;
 				}
 
 				break;
