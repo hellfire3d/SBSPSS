@@ -336,3 +336,131 @@ void CProjectile::processEvent( GAME_EVENT evt, CThing *sourceThing )
 }
 
 /*****************************************************************************/
+
+void CPlayerProjectile::init()
+{
+	CPlayerProjectileThing::init();
+
+	m_spriteBank=new ("projectile sprites") SpriteBank();
+	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
+
+	m_heading = 0;
+	m_lifetime = GameState::getOneSecondInFrames() * 2;
+	m_movementType = PLAYER_PROJECTILE_DUMBFIRE;
+	m_lifetimeType = PLAYER_PROJECTILE_FINITE_LIFE;
+	m_turnSpeed = 256;
+	m_extension = 0;
+}
+
+void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
+{
+	init();
+
+	m_heading = initHeading;
+	m_initPos = Pos = initPos;
+}
+
+void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType )
+{
+	init( initPos, initHeading );
+
+	m_movementType = initMoveType;
+	m_lifetimeType = initLifeType;
+}
+
+void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime )
+{
+	init( initPos, initHeading, initMoveType, initLifeType );
+
+	m_lifetime = initLifetime;
+}
+
+void CPlayerProjectile::shutdown()
+{
+	m_spriteBank->dump();		delete m_spriteBank;
+
+	CPlayerProjectileThing::shutdown();
+}
+
+void CPlayerProjectile::setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType )
+{
+	m_movementType = moveType;
+}
+
+CPlayerProjectile::PLAYER_PROJECTILE_MOVEMENT_TYPE CPlayerProjectile::getMovementType()
+{
+	return( m_movementType );
+}
+
+void CPlayerProjectile::setPosition( DVECTOR newPos )
+{
+	Pos = newPos;
+}
+
+void CPlayerProjectile::setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType )
+{
+	m_lifetimeType = lifeType;
+}
+
+void CPlayerProjectile::think(int _frames)
+{
+	CPlayerProjectileThing::think( _frames );
+
+	switch( m_movementType )
+	{
+		case PLAYER_PROJECTILE_DUMBFIRE:
+		default:
+		{
+			Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
+			Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+
+			break;
+		}
+	}
+
+	if ( m_lifetimeType == PLAYER_PROJECTILE_FINITE_LIFE )
+	{
+		m_lifetime -= _frames;
+
+		if ( m_lifetime <= 0 )
+		{
+			shutdown();
+			delete this;
+		}
+	}
+}
+
+void CPlayerProjectile::render()
+{
+	CPlayerProjectileThing::render();
+
+	DVECTOR	offset;
+	int		x,y;
+	int		scrnWidth = VidGetScrW();
+	int		scrnHeight = VidGetScrH();
+	int		spriteWidth = m_spriteBank->getFrameWidth(FRM_BARNACLEBOY);
+	int		spriteHeight = m_spriteBank->getFrameHeight(FRM_BARNACLEBOY);
+
+	offset = getScreenOffset();
+
+	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( spriteWidth >> 1 );
+	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( spriteHeight >> 1 );
+
+	if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
+	{
+		return;
+	}
+
+	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
+}
+
+DVECTOR CPlayerProjectile::getScreenOffset()
+{
+	return CLevel::getCameraPos();
+}
+
+void CPlayerProjectile::processEvent( GAME_EVENT evt, CThing *sourceThing )
+{
+}
+
+/*****************************************************************************/

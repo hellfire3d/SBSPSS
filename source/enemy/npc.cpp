@@ -211,7 +211,7 @@ void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 	Pos.vx = xPos << 4;
 	Pos.vy = yPos << 4;
 
-	m_base = Pos;
+	m_initPos = m_base = Pos;
 }
 
 
@@ -245,6 +245,7 @@ void CNpcEnemy::init()
 	m_rotation = 0;
 	m_reversed = false;
 	m_salvoCount = 0;
+	m_isActive = true;
 
 	m_health = m_data[this->m_type].initHealth;
 
@@ -549,6 +550,36 @@ void CNpcEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::reinit()
+{
+	m_animPlaying = true;
+	m_animNo = m_data[m_type].initAnim;
+	m_frame = 0;
+
+	m_heading = m_fireHeading = 0;
+	m_movementTimer = 0;
+	m_timerTimer = 0;
+	m_velocity = 0;
+	m_extension = 0;
+	m_rotation = 0;
+	m_reversed = false;
+	m_salvoCount = 0;
+	m_isActive = true;
+
+	m_health = m_data[this->m_type].initHealth;
+
+	m_extendDir = EXTEND_RIGHT;
+
+	m_timerFunc = m_data[this->m_type].timerFunc;
+	m_sensorFunc = m_data[this->m_type].sensorFunc;
+
+	m_controlFunc = NPC_CONTROL_MOVEMENT;
+
+	Pos = m_initPos;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::shutdown()
 {
 	// remove waypoints
@@ -581,70 +612,73 @@ void CNpcEnemy::think(int _frames)
 {
 	CEnemyThing::think(_frames);
 
-	processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
-	playerXDistSqr = playerXDist * playerXDist;
-	playerYDistSqr = playerYDist * playerYDist;
-
-	if ( m_animPlaying )
+	if ( m_isActive )
 	{
-		s32 frameCount = m_actorGfx->getFrameCount(m_animNo);
-		s32 frameShift = ( _frames << 8 ) >> 1;
+		processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
+		playerXDistSqr = playerXDist * playerXDist;
+		playerYDistSqr = playerYDist * playerYDist;
 
-		if ( ( frameCount << 8 ) - m_frame > frameShift ) //( _frames >> 1 ) )
+		if ( m_animPlaying )
 		{
-			//m_frame += _frames >> 1;
-			m_frame += frameShift;
-		}
-		else
-		{
-			m_frame = ( frameCount - 1 ) << 8;
-			m_animPlaying = false;
-		}
-	}
+			s32 frameCount = m_actorGfx->getFrameCount(m_animNo);
+			s32 frameShift = ( _frames << 8 ) >> 1;
 
-	switch ( this->m_controlFunc )
-	{
-		case NPC_CONTROL_NONE:
-			return;
-
-		case NPC_CONTROL_MOVEMENT:
-			if ( !processSensor() )
+			if ( ( frameCount << 8 ) - m_frame > frameShift ) //( _frames >> 1 ) )
 			{
-				processMovement(_frames);
+				//m_frame += _frames >> 1;
+				m_frame += frameShift;
 			}
 			else
 			{
-				processClose(_frames);
+				m_frame = ( frameCount - 1 ) << 8;
+				m_animPlaying = false;
 			}
+		}
 
-			break;
+		switch ( this->m_controlFunc )
+		{
+			case NPC_CONTROL_NONE:
+				return;
 
-		case NPC_CONTROL_SHOT:
-			processShot();
+			case NPC_CONTROL_MOVEMENT:
+				if ( !processSensor() )
+				{
+					processMovement(_frames);
+				}
+				else
+				{
+					processClose(_frames);
+				}
 
-			break;
+				break;
 
-		case NPC_CONTROL_CLOSE:
-			processClose(_frames);
+			case NPC_CONTROL_SHOT:
+				processShot();
 
-			break;
+				break;
 
-		case NPC_CONTROL_COLLISION:
-			processCollision();
+			case NPC_CONTROL_CLOSE:
+				processClose(_frames);
 
-			break;
+				break;
+
+			case NPC_CONTROL_COLLISION:
+				processCollision();
+
+				break;
+		}
+
+		if ( m_heading > 1024 && m_heading < 3072 )
+		{
+			m_reversed = true;
+		}
+		else
+		{
+			m_reversed = false;
+		}
 	}
 
 	processTimer(_frames);
-
-	if ( m_heading > 1024 && m_heading < 3072 )
-	{
-		m_reversed = true;
-	}
-	else
-	{
-		m_reversed = false;
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,7 +693,7 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 			{
 				// only detect collision if one isn't already happening
 
-				switch( m_data[m_type].detectCollision )
+				switch( m_data[m_type].detectCollision && m_isActive )
 				{
 					case DETECT_NO_COLLISION:
 					{
@@ -1474,7 +1508,7 @@ void CNpcEnemy::processTimer(int _frames)
 {
 	if ( m_timerTimer > 0 )
 	{
-		this->m_timerTimer -= _frames;
+		m_timerTimer -= _frames;
 	}
 
 	switch( m_timerFunc )
@@ -1489,8 +1523,18 @@ void CNpcEnemy::processTimer(int _frames)
 			{
 				if ( m_timerTimer <= 0 )
 				{
-					this->m_timerFunc = NPC_TIMER_NONE;
-					this->m_sensorFunc = m_data[this->m_type].sensorFunc;
+					m_timerFunc = NPC_TIMER_NONE;
+					m_sensorFunc = m_data[this->m_type].sensorFunc;
+				}
+
+				break;
+			}
+
+		case NPC_TIMER_RESPAWN:
+			{
+				if ( m_timerTimer <= 0 )
+				{
+					reinit();
 				}
 
 				break;
@@ -1505,20 +1549,23 @@ void CNpcEnemy::processTimer(int _frames)
 
 void CNpcEnemy::render()
 {
-	CEnemyThing::render();
-
-	// Render
-	DVECTOR renderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
-
-	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy;
-
-	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+	if ( m_isActive )
 	{
-		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+		CEnemyThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
-			m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			{
+				m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			}
 		}
 	}
 }
@@ -1576,5 +1623,25 @@ void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 			break;
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcEnemy::canBeCaughtByNet()
+{
+	return( m_data[m_type].canBeNetted );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::caughtWithNet()
+{
+	if ( m_isActive )
+	{
+		m_isActive = false;
+
+		m_timerFunc = NPC_TIMER_RESPAWN;
+		m_timerTimer = 4 * GameState::getOneSecondInFrames();
 	}
 }

@@ -72,6 +72,48 @@ protected:
 	u16											m_turnSpeed;
 };
 
+/*****************************************************************************/
+
+class	CPlayerProjectile : public CPlayerProjectileThing
+{
+public:
+	enum PLAYER_PROJECTILE_MOVEMENT_TYPE
+	{
+		PLAYER_PROJECTILE_DUMBFIRE = 0,
+	};
+
+	enum PLAYER_PROJECTILE_LIFETIME_TYPE
+	{
+		PLAYER_PROJECTILE_FINITE_LIFE = 0,
+		PLAYER_PROJECTILE_INFINITE_LIFE = 1,
+	};
+
+	void				init();
+	void				init( DVECTOR initPos, s16 initHeading );
+	void				init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType );
+	void				init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
+	void				shutdown();
+	void				think(int _frames);
+	virtual void		render();
+	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+	void				setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType );
+	PLAYER_PROJECTILE_MOVEMENT_TYPE		getMovementType();
+	void				setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType );
+	void				setPosition( DVECTOR newPos );
+
+protected:
+	DVECTOR				getScreenOffset();
+
+	class SpriteBank							*m_spriteBank;
+	DVECTOR										m_initPos;
+	s16											m_heading;
+	s32											m_lifetime;
+	s32											m_extension;
+	PLAYER_PROJECTILE_MOVEMENT_TYPE				m_movementType;
+	PLAYER_PROJECTILE_LIFETIME_TYPE				m_lifetimeType;
+	u16											m_turnSpeed;
+};
+
 
 /*****************************************************************************/
 #endif

@@ -172,6 +172,8 @@ public:
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
 	void				hasBeenAttacked();
+	bool				canBeCaughtByNet();
+	void				caughtWithNet();
 
 	static void			CacheActor(int Type);
 
@@ -302,6 +304,7 @@ protected:
 		NPC_TIMER_NONE = 0,
 		NPC_TIMER_EVADE_DONE = 1,
 		NPC_TIMER_ATTACK_DONE,
+		NPC_TIMER_RESPAWN,
 	};
 
 	enum NPC_SHOT_FUNC
@@ -427,6 +430,7 @@ protected:
 		u16								dieAnim;
 		u16								recoilAnim;
 		NPC_COLLISION_FUNC				collisionFunc;
+		bool							canBeNetted;
 	}
 	NPC_DATA;
 
@@ -448,6 +452,8 @@ protected:
 	void				processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
+
+	void				reinit();
 
 	// small jellyfish functions
 
@@ -582,11 +588,13 @@ protected:
 	bool				m_extendDir;
 	s16					m_rotation;
 	DVECTOR				m_base;
+	DVECTOR				m_initPos;
 	u8					m_state;
 	u8					m_salvoCount;
 	bool				m_animPlaying;
 	bool				m_reversed;
 	s32					m_health;
+	bool				m_isActive;
 
 	s32				m_frame;
 	int				m_animNo;

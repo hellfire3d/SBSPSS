@@ -36,6 +36,18 @@
 #include <ingamefx.h>
 #endif
 
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
+#ifndef	__PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -114,11 +126,10 @@ void	CPlayerModeNet::think()
 					thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
 					while(thing)
 					{
-//						if((CEnemy*)thing)->canBeCaughtByNet())					( or whatever.. )
-						if(1)		// just to stop the complier complaining until the above line can be put it..
+						if(((CNpcEnemy*)thing)->canBeCaughtByNet())
 						{
 PAUL_DBGMSG("Caught!");
-							//((CEnemy*)thing)->caughtWithNet();				( or whatever.. )
+							((CNpcEnemy*)thing)->caughtWithNet();
 							m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
 							thing=NULL;
 						}
@@ -138,7 +149,20 @@ PAUL_DBGMSG("Caught!");
 				{
 					// Launch projectile at halfway through the swing..
 PAUL_DBGMSG("Released!");
-					// new cprojectile											( or whatever.. )
+					CPlayerProjectile *projectile;
+
+					int playerFacing=m_player->getFacing();
+
+					int fireHeading = 1024 + ( 1024 * playerFacing );
+
+
+					projectile = new( "user projectile" ) CPlayerProjectile;
+					projectile->init(	m_player->getPos(),
+										fireHeading,
+										CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+										5 * GameState::getOneSecondInFrames() );
+
 					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				}
 				break;
