@@ -47,7 +47,7 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
 	int					m_data;
-	static int			m_speechRef[9];
+	static int			s_speechRef[9];
 };
 
 /*----------------------------------------------------------------------

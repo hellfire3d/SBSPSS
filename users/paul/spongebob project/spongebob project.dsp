@@ -2951,6 +2951,42 @@ SOURCE=..\..\..\data\scripts\fma_party.scr
 SOURCE=..\..\..\data\scripts\fma_plankton.scr
 # End Source File
 # End Group
+# Begin Group "speech triggers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_breakfloor.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_bubblegeyser.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_firstbubble.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_firstcoral.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_firstnet.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_garych2l1.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_usebubble.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_weight.scr
+# End Source File
+# End Group
 # End Group
 # Begin Source File
 

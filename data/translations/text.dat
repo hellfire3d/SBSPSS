@@ -327,85 +327,88 @@ eng=Happy Birthday!
 ; ---------------------------------------------------------------
 ; Ingame conversations
 ; ---------------------------------------------------------------
-Chapter 1 - Level 1 - 01
+;Chapter 1 - Level 1 - 01
 [STR__INGAME__CH1__L1__SPONGEY1]
 eng=Hi Squidward !!! Ready for another great day together, friend?
 [STR__INGAME__CH1__L1__SQUIDWARD1]
 eng=Today's Sunday, SpongeBob.  Forget the Krusty Krab. Hey moron, why don't you take your net and go waste somebody else's time!
 
-Chapter 1 - Level 1 - 02
+;Chapter 1 - Level 1 - 02
 [STR__INGAME__CH1__L1__SQUIDWARD2]
 eng=Look SpongeBob, I told you, use your net and GO FISH!
 
 
-Chapter 1 - Level 2 - 01
+;Chapter 1 - Level 2 - 01
 [STR__INGAME__CH1__L2__SANDY1]
 eng=Take that you ' ya sorry ol' clam. Y'all need to learn some manners! Hold on there little square dude if you want to defend yourself you need to do this!!!!
 
-Chapter 1 - Level 2 - 02
+;Chapter 1 - Level 2 - 02
 [STR__INGAME__CH1__L2__SANDY2]
 eng=I like you SpongeBob. We're tighter than bark on a tree.  Why don't y'all borrow my diving hat so your head can stay water logged.
 
-Chapter 1 - Level 2 - 03
+;Chapter 1 - Level 2 - 03
 [STR__INGAME__CH1__L2__SANDY3]
 eng=SpongeBob you silly 'ol sponge, try using your helmet!!!
 
 
-Chapter 1 - Level 4 - 01
+;Chapter 1 - Level 4 - 01
 [STR__INGAME__CH1__L4__KRUSTY1]
 eng=SpongeBob!!! Argh! Where have you been hiding, boy? Take these'ere glasses, lad. You got to see the jellyfish before you can catch'em.
 
-Chapter 1 - Level 4 - 02
+;Chapter 1 - Level 4 - 02
 [STR__INGAME__CH1__L4__KRUSTY2]
 eng=SpongeBob!!! Put yer glasses on lad or I won't let you work during yer vacation!
 
 
-Chapter 2 - Level 1 - 01
+;Chapter 2 - Level 1 - 01
 [STR__INGAME__CH2__L1__KRUSTY1]
 eng=SpongeBob!!! Now listen Boy! I'm countin' on ya to use this ere coral blower to make your way around Bikini Bottom!!! And watch out for that scurvy Plankton he is up to his old tricks again!!!
 
-Chapter 2 - Level 1 - 02
+;Chapter 2 - Level 1 - 02
 [STR__INGAME__CH2__L1__KRUSTY2]
 eng=Use the Coral Blower me boy! Blast away!
 
 
-Chapter 2 - Level 2 - 01
+;Chapter 2 - Level 2 - 01
 [STR__INGAME__CH2__L2__PATRICK1]
 eng=Hey SpongeBob. I got an extra balloon for my birthday. Want it? Ooooo, you're floating away! Hey, where'd my balloon go? SpongeBob!
 
-Chapter 2 - Level 2 - 02
+;Chapter 2 - Level 2 - 02
 [STR__INGAME__CH2__L2__PATRICK2]
 eng=Here best pal you can still use my balloon!!! Happy Birthday to me!
 
-Chapter 3 - Level 2 - 01
+;Chapter 3 - Level 2 - 01
 [STR__INGAME__CH3__L2__SANDY1]
 eng=Hai yah!
 
-Chapter 3 - Level 2 - 02
+;Chapter 3 - Level 2 - 02
 [STR__INGAME__CH3__L2__SANDY2]
 eng=Excellent! You'll be able to use this move on most of the enemies you encounter, as well as special objects.
 
-Chapter 3 - Level 3 - 01
+;Chapter 3 - Level 3 - 01
 [STR__INGAME__CH3__L3__PATRICK1]
 eng=DA DA DA DA DA DUM DUM DUM DUM.... Here you go SpongeBob! One bubblewand dipped and ready to go!!!!  Up, down and all around! I don't know what that means.
 
-Chapter 3 - Level 3 - 02
+;Chapter 3 - Level 3 - 02
 [STR__INGAME__CH3__L3__PATRICK2]
 eng=SpongeBob , Here you go... another  bubblewand dipped and ready to go!!!!  I did it again.
 
 
-Chapter 2 - Level 1 - 01
+;Chapter 2 - Level 1 - 01
 [STR__INGAME__CH4__L3__KRUSTY1]
 eng=SpongeBob!!! Now listen Boy! There are dangerous surfaces that none shall pass unless they have squeaky boots. I happen to have a pair. You can owe me.
 
-Chapter 2 - Level 1 - 02
+;Chapter 2 - Level 1 - 02
 [STR__INGAME__CH4__L3__KRUSTY2]
 eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
+
+
 
 
 ; ---------------------------------------------------------------
 ; End of level celebration text
 ; ---------------------------------------------------------------
+
 [STR__INGAME__CH1__L1__SBCELEBRATE]
 eng=Yippee... Now to find the Jar of Sea-Nut Butter!
 [STR__INGAME__CH1__L2__SBCELEBRATE]
@@ -450,6 +453,30 @@ eng=I need to find an oil can, but the only place is that abandoned oil rig. Hmm
 eng=Now, I need a monkey wrench!!!
 [STR__INGAME__CH5__L4__SBCELEBRATE]
 eng=I got it! Well, celebration time is over! Now back to Bikini Bottom to add the finishing touches for my Birthday surprise!!!
+
+
+
+
+; ---------------------------------------------------------------
+; Speech trigger texts
+; ---------------------------------------------------------------
+
+[STR__INGAME__TRIGGERSPEECH_FIRSTNET]
+eng=Hey, I can use this net to catch jellyfish and throw them at those annoying critters.
+[STR__INGAME__TRIGGERSPEECH_FIRSTCORAL]
+eng=With this coral blower, I can suck up all of those sea shells laying around, and use them to break up the rock walls.
+[STR__INGAME__TRIGGERSPEECH_GARYCH2L1]
+eng=Hmmmm, using the coral blower on those rocks up there should cover up those spikes!
+[STR__INGAME__TRIGGERSPEECH_BUBBLEGEYSER]
+eng=Bubbles! Hey, I wonder if I can jump on them...
+[STR__INGAME__TRIGGERSPEECH_FIRSTBUBBLE]
+eng=I can make bubbles! And what do you know, I can jump on them!
+[STR__INGAME__TRIGGERSPEECH_BREAKFLOOR]
+eng=The floor doesn’t look too stable. A good ol butt bounce should do the trick.
+[STR__INGAME__TRIGGERSPEECH_USEBUBBLE]
+eng=A few bubbles should get me up there...
+[STR__INGAME__TRIGGERSPEECH_WEIGHT]
+eng=I cant't lift that.. hmmmm. those pulleys should do the trick.
 
 
 

@@ -248,15 +248,15 @@ const sSpeechTable	SpeechTable[]=
 {SPEECH_148,-1},
 {SPEECH_149,-1},
 {SPEECH_150,-1},
-{SPEECH_151,-1},
-{SPEECH_152,-1},
-{SPEECH_153,-1},
-{SPEECH_154,-1},
-{SPEECH_155,-1},
+{SPEECH_151,SCRIPTS_TRIGGERSPEECH_FIRSTNET_DAT},
+{SPEECH_152,SCRIPTS_TRIGGERSPEECH_FIRSTCORAL_DAT},
+{SPEECH_153,SCRIPTS_TRIGGERSPEECH_GARYCH2L1_DAT},
+{SPEECH_154,SCRIPTS_TRIGGERSPEECH_BREAKFLOOR_DAT},
+{SPEECH_155,SCRIPTS_TRIGGERSPEECH_BUBBLEGEYSER_DAT},
 {SPEECH_156,-1},
-{SPEECH_157,-1},
-{SPEECH_158,-1},
-{SPEECH_159,-1},
+{SPEECH_157,SCRIPTS_TRIGGERSPEECH_USEBUBBLE_DAT},
+{SPEECH_158,SCRIPTS_TRIGGERSPEECH_FIRSTBUBBLE_DAT},
+{SPEECH_159,SCRIPTS_TRIGGERSPEECH_WEIGHT_DAT},
 };
 const int	SpeechTableSize=sizeof(SpeechTable)/sizeof(sSpeechTable);
 
@@ -759,7 +759,7 @@ void CConversation::dumpConversationScripts()
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
+	Purpose:	God knows..
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -773,32 +773,33 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH1L1_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH1L1_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C1L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTNET_DAT);
+					registerConversationScript(SCRIPTS_CH1L1_01_DAT);
+					registerConversationScript(SCRIPTS_CH1L1_02_DAT);
+					registerConversationScript(SCRIPTS_C1L1_CELEBRATE_DAT);
 					break;
 				}
 
 				case 2:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH1L2_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH1L2_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH1L2_03_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C1L2_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_CH1L2_01_DAT);
+					registerConversationScript(SCRIPTS_CH1L2_02_DAT);
+					registerConversationScript(SCRIPTS_CH1L2_03_DAT);
+					registerConversationScript(SCRIPTS_C1L2_CELEBRATE_DAT);
 					break;
 				}
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C1L3_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C1L3_CELEBRATE_DAT);
 					break;
 				}
 
 				case 4:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH1L4_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH1L4_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C1L4_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_CH1L4_01_DAT);
+					registerConversationScript(SCRIPTS_CH1L4_02_DAT);
+					registerConversationScript(SCRIPTS_C1L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -815,29 +816,33 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH2L1_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH2L1_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C2L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTCORAL_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_GARYCH2L1_DAT);
+					registerConversationScript(SCRIPTS_CH2L1_01_DAT);
+					registerConversationScript(SCRIPTS_CH2L1_02_DAT);
+					registerConversationScript(SCRIPTS_C2L1_CELEBRATE_DAT);
 					break;
 				}
 
 				case 2:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH2L2_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH2L2_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C2L2_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_BUBBLEGEYSER_DAT);
+					registerConversationScript(SCRIPTS_CH2L2_01_DAT);
+					registerConversationScript(SCRIPTS_CH2L2_02_DAT);
+					registerConversationScript(SCRIPTS_C2L2_CELEBRATE_DAT);
 					break;
 				}
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C2L3_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTBUBBLE_DAT);
+					registerConversationScript(SCRIPTS_C2L3_CELEBRATE_DAT);
 					break;
 				}
 				
 				case 4:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C2L4_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C2L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -854,30 +859,32 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C3L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_BREAKFLOOR_DAT);
+					registerConversationScript(SCRIPTS_CH4L3_01_DAT);
+					registerConversationScript(SCRIPTS_CH4L3_02_DAT);
+					registerConversationScript(SCRIPTS_C3L1_CELEBRATE_DAT);
 					break;
 				}
 
 				case 2:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH3L2_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C3L2_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_CH3L2_01_DAT);
+					registerConversationScript(SCRIPTS_C3L2_CELEBRATE_DAT);
 					break;
 				}
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);
-					CConversation::registerConversationScript(SCRIPTS_CH3L3_02_DAT);
-					CConversation::registerConversationScript(SCRIPTS_C3L3_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_USEBUBBLE_DAT);
+					registerConversationScript(SCRIPTS_CH3L3_01_DAT);
+					registerConversationScript(SCRIPTS_CH3L3_02_DAT);
+					registerConversationScript(SCRIPTS_C3L3_CELEBRATE_DAT);
 					break;
 				}
 
 				case 4:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C3L4_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C3L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -894,25 +901,25 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C4L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C4L1_CELEBRATE_DAT);
 					break;
 				}
 
 				case 2:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C4L2_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C4L2_CELEBRATE_DAT);
 					break;
 				}
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C4L3_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C4L3_CELEBRATE_DAT);
 					break;
 				}
 
 				case 4:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C4L4_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C4L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -929,25 +936,42 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C5L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C5L1_CELEBRATE_DAT);
 					break;
 				}
 
 				case 2:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C5L2_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C5L2_CELEBRATE_DAT);
 					break;
 				}
 
 				case 3:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C5L3_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C5L3_CELEBRATE_DAT);
 					break;
 				}
 
 				case 4:
 				{
-					CConversation::registerConversationScript(SCRIPTS_C5L4_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_C5L4_CELEBRATE_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			break;
+		}
+
+		case 6:
+		{
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 5:
+				{
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_WEIGHT_DAT);
 					break;
 				}
 

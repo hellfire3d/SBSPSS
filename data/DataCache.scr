@@ -73,6 +73,14 @@ scripts/c5l2_celebrate.dat
 scripts/c5l3_celebrate.dat
 scripts/c5l4_celebrate.dat
 
+scripts/triggerspeech_firstnet.dat
+scripts/triggerspeech_firstcoral.dat
+scripts/triggerspeech_garych2l1.dat
+scripts/triggerspeech_bubblegeyser.dat
+scripts/triggerspeech_firstbubble.dat
+scripts/triggerspeech_breakfloor.dat
+scripts/triggerspeech_usebubble.dat
+scripts/triggerspeech_weight.dat
 
 translations/swe.dat
 translations/dut.dat
