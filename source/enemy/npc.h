@@ -177,8 +177,6 @@ public:
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
 
-	static void			CacheActor(int Type);
-
 private:
 	class CLayerCollision	*m_layerCollision;
 
