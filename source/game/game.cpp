@@ -134,6 +134,7 @@ CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
 int s_globalLevelSelectThing=0;
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
+int	CGameScene::s_restartLevel;
 
 /*****************************************************************************/
 
@@ -170,6 +171,7 @@ void 	CGameScene::init()
 		m_pauseMenu->init();
 
 		s_readyToExit=false;
+		s_restartLevel=false;
 
 		CFader::setFadingIn();
 		initLevel();
@@ -241,6 +243,11 @@ void	CGameScene::think(int _frames)
 		initLevel();
 		s_levelFinished=false;
 	}
+	else if (s_restartLevel)
+	{
+		respawnLevel();
+		s_restartLevel=false;
+	}
 
 
 	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START&&canPause())
@@ -284,6 +291,7 @@ CPlayer	* CGameScene::getPlayer()
 /*****************************************************************************/
 void	CGameScene::respawnLevel()
 {
+	m_player->respawn();
 	Level.respawnLevel();
 }
 

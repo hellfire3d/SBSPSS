@@ -45,6 +45,7 @@ virtual	int				canPause();
 
 static void				setReadyToExit()	{s_readyToExit=true;}
 static void				levelFinished()		{s_levelFinished=true;}
+static void				restartlevel()		{s_restartLevel=true;}
 	
 //		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
@@ -62,6 +63,7 @@ class	CPlayer			*m_player;
 static	FontBank		*s_genericFont;
 static	MATRIX			CamMtx;
 
+static int				s_restartLevel;
 static int				s_readyToExit;
 static int				s_levelFinished;
 
