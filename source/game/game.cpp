@@ -64,6 +64,12 @@
 #endif
 
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
+
+
 //int		GX=512/2;
 //int		GY=256/;
 int		GH=256;
@@ -135,6 +141,8 @@ int		CGameScene::canPause()
 void	CGameScene::shutdown()
 {
 	shutdownLevel();
+	CSoundMediator::dumpSong();	
+
 
 	m_pauseMenu->shutdown();	delete m_pauseMenu;
 
@@ -162,7 +170,7 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
-	
+
 	if(s_readyToExit)
 	{
 		// Temporarily.. exiting game scene always goes back to the front end (pkg)
@@ -255,6 +263,11 @@ void	CGameScene::initLevel()
 	pos.vx+=32;	createPickup(PICKUP__BALLOON,&pos);		
 	pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
 	pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
+
+//	CNpcPlatform	*platform;
+//	platform=new ("test platform") CNpcPlatform;
+//	platform->init();
+//	platform->setLayerCollision( Level.getCollisionLayer() );
 #endif
 
 	s_levelFinished=false;
@@ -265,6 +278,10 @@ void	CGameScene::initLevel()
 	m_player->init();
 	m_player->setLayerCollision(Level.getCollisionLayer());
 	m_player->setMapSize(Level.getMapSize());
+
+	// Song is loaded/dumped by the level, and played from here. This just gives some
+	// better timing over when it starts (pkg)
+	CSoundMediator::playSong();
 }
 
 
