@@ -117,7 +117,7 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 
 				s32 moveX = 0, moveY = 0;
 				s32 groundHeight;
-				s32 fallSpeed = 2;
+				s32 fallSpeed = 3;
 				s8 yMovement = fallSpeed * _frames;
 
 				moveX = 6 * _frames;
@@ -153,6 +153,12 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 						// groundHeight <= yMovement indicates either just above ground or on or below ground
 
 						moveY = groundHeight;
+					}
+					else
+					{
+						// fall
+
+						moveY = yMovement;
 					}
 
 					Pos.vx = newX;

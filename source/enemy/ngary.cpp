@@ -23,7 +23,7 @@
 void CNpcFriend::processGaryMovement( int _frames )
 {
 	s8 multiplier = -1 + ( 2 * m_extension );
-	s32 maxHeight = 10;
+	s32 maxHeight = 20;
 	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
 	s8 groundHeight;

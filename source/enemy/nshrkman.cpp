@@ -119,8 +119,8 @@ void CNpcEnemy::processCloseSharkManAttack( int _frames )
 	s32 groundHeight;
 	s16 decDir, incDir, moveDist;
 	s32 direction;
-	s32 maxHeight = 10;
-	s32 fallSpeed = 2;
+	s32 maxHeight = 20;
+	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
 
 	s16 headingToPlayer = ratan2( playerYDist, playerXDist );

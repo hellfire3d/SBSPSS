@@ -44,38 +44,42 @@ void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 
 	if ( m_extendDir == EXTEND_RIGHT )
 	{
-		newPos.vx += velocity;
+		m_extension += velocity;
 		m_heading = 0;
 	}
 	else
 	{
-		newPos.vx -= velocity;
+		m_extension -= velocity;
 		m_heading = 2048;
 	}
 
-	s32 horizontalExtension = abs( newPos.vx - m_base.vx );
+	bool completed = false;
 
-	if ( horizontalExtension > 128 )
+	if ( m_extension > 128 )
 	{
-		if ( m_extendDir == EXTEND_RIGHT )
-		{
-			newPos.vx = m_base.vx + 128;
-		}
-		else
-		{
-			newPos.vx = m_base.vx - 128;
-		}
-
-		newPos.vy = m_base.vy;
-
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_timerFunc = NPC_TIMER_ATTACK_DONE;
-		m_timerTimer = GameState::getOneSecondInFrames();
-		m_sensorFunc = NPC_SENSOR_NONE;
+		m_extension = 128;
+		completed = true;
 	}
-	else
+	else if ( m_extension < -128 )
 	{
-		newPos.vy = m_base.vy - ( ( 20 * rsin( horizontalExtension << 4 ) ) >> 12 );
+		m_extension = -128;
+		completed = true;
+	}
+
+	newPos.vx = m_base.vx + m_extension;
+	newPos.vy = m_base.vy - ( ( 20 * rsin( abs( m_extension ) << 4 ) ) >> 12 );
+
+	s32 minX, maxX;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+
+	if ( newPos.vx < minX )
+	{
+		newPos.vx = minX;
+	}
+	else if ( newPos.vx > maxX )
+	{
+		newPos.vx = maxX;
 	}
 
 	// check for collision with ground
@@ -88,9 +92,22 @@ void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
 		m_timerTimer = GameState::getOneSecondInFrames();
 		m_sensorFunc = NPC_SENSOR_NONE;
+
+		m_extension = 0;
+		completed = false;
 	}
 	else
 	{
 		Pos = newPos;
+	}
+
+	if ( completed )
+	{
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+
+		m_extension = 0;
 	}
 }

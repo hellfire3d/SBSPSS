@@ -228,9 +228,9 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 
 void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 {
-	s32 maxHeight = 10;
+	s32 maxHeight = 20;
 	s32 distX, distY;
-	s32 fallSpeed = 2;
+	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
 	s32 groundHeight;
 
