@@ -87,6 +87,10 @@
 #include "fma\fma.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 #include "gfx\actor.h"
 
@@ -258,14 +262,41 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
+		// Do the gameslot stuff..
+		CGameSlotManager::GameSlot	*gameSlot;
+		int							level,chapter;
+		int							openNextLevel,levelToOpen,chapterToOpen;
+		gameSlot=CGameSlotManager::getSlotData();
+		level=getLevelNumber();
+		chapter=getChapterNumber();
+
+		gameSlot->levelHasBeenCompleted(chapter-1,level-1);
+		if(level!=5&&					// Don't open any levels after finishing a bonus level
+		   !(level==4&&chapter==5))		// Don't open any levels after finishing final level
+		{
+			if(level!=4)
+			{
+				// Open next level in this chapter..
+				levelToOpen=level+1;
+				chapterToOpen=chapter;
+			}
+			else
+			{
+				// Open first level in next chapter
+				levelToOpen=1;
+				chapterToOpen=chapter+1;
+			}
+			gameSlot->levelIsNowOpen(chapterToOpen-1,levelToOpen-1);
+		}
+
 		// Level finished - go to map or fma
-		if(getLevelNumber()==4)
+		if(level==4)
 		{
 			GameState::setNextScene(&FmaScene);
 		}
-		else if(getLevelNumber()==5)
+		else if(level==5)
 		{
-			if(getChapterNumber()==5)
+			if(chapter==5)
 			{
 				ShopScene.setGotoPartyScreen();
 			}

@@ -231,34 +231,36 @@ void CMapScene::render()
 	// Render spatula/kelp counts and quest items
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
-		DVECTOR			pos;
-
-		pos=s_mapLevelPositions[i];
-
-		if(!level->m_kelpWorldLevel)
+		if(isLevelOpen(m_currentChapterSelection,i))
 		{
-			sFrameHdr		*fh;
-			POLY_FT4		*ft4;
+			DVECTOR			pos;
 
-			// Normal level
-			m_font->setColour(253,251,67);
-			sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getSpatulaCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
-			fh=sb->getFrameHeader(level->m_questItemFrame);
-			ft4=sb->printFT4(fh,pos.vx+MAP_LEVEL_WIDTH-fh->W,pos.vy+MAP_LEVEL_HEIGHT-fh->H,0,0,10);
-			if(!hasQuestItemBeenCollected(m_currentChapterSelection,i))
+			pos=s_mapLevelPositions[i];
+
+			if(!level->m_kelpWorldLevel)
 			{
-				setRGB0(ft4,50,50,50);
+				sFrameHdr		*fh;
+				POLY_FT4		*ft4;
+
+				// Normal level
+				m_font->setColour(253,251,67);
+				sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getSpatulaCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
+				fh=sb->getFrameHeader(level->m_questItemFrame);
+				ft4=sb->printFT4(fh,pos.vx+MAP_LEVEL_WIDTH-fh->W,pos.vy+MAP_LEVEL_HEIGHT-fh->H,0,0,10);
+				if(!hasQuestItemBeenCollected(m_currentChapterSelection,i))
+				{
+					setRGB0(ft4,50,50,50);
+				}
 			}
-		}
-		else
-		{
-			// Bonuse level
-			m_font->setColour(67,251,67);
-			sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
-		}
+			else
+			{
+				// Bonuse level
+				m_font->setColour(67,251,67);
+				sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
+			}
 
-		m_font->print(pos.vx,pos.vy,buf);
-
+			m_font->print(pos.vx,pos.vy,buf);
+		}
 		level++;
 	}
 
@@ -305,10 +307,15 @@ void CMapScene::renderPointer()
 void CMapScene::renderInstructions()
 {
 	// Instructions
+	int				renderChapterControls;
 	SpriteBank		*sb;
 	sFrameHdr		*fh1,*fh2;
 	int				width;
 	int				x,y;
+
+
+	// If only the first chapter is open then you can't select other ones...
+	renderChapterControls=isChapterOpen(1)?true:false;
 
 	sb=CGameScene::getSpriteBank();
 	m_font->setColour(MAP_INSTRUCTIONS_TEXT_R,MAP_INSTRUCTIONS_TEXT_G,MAP_INSTRUCTIONS_TEXT_B);
@@ -329,11 +336,20 @@ void CMapScene::renderInstructions()
 	fh2=sb->getFrameHeader(FRM__BUTD);
 	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER);
 	x=256-(width/2);
-	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	if(renderChapterControls)
+	{
+		sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	}
 	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
-	sb->printFT4(fh2,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	if(renderChapterControls)
+	{
+		sb->printFT4(fh2,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	}
 	x+=fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_font->print(x,y,STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER);
+	if(renderChapterControls)
+	{
+		m_font->print(x,y,STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER);
+	}
 
 	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTX);
@@ -355,21 +371,50 @@ void CMapScene::think(int _frames)
 {
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
+		int	pad=PadGetDown(0);
+
 		// Change chapter
-		if(PadGetDown(0)&PAD_UP)
+		if(pad&PAD_UP)
 		{
-			if(++m_currentChapterSelection>=MAP_NUM_CHAPTERS)m_currentChapterSelection=0;
+			int nextChapter=m_currentChapterSelection;
+			do
+			{
+				nextChapter++;
+				if(nextChapter==MAP_NUM_CHAPTERS)nextChapter=0;
+			}
+			while(!isChapterOpen(nextChapter));
+			if(nextChapter!=m_currentChapterSelection)
+			{
+				m_currentChapterSelection=nextChapter;
+				generateMapScreenImage();
+			}
+		}
+		else if(pad&PAD_DOWN)
+		{
+			int nextChapter=m_currentChapterSelection;
+			do
+			{
+				nextChapter--;
+				if(nextChapter<0)nextChapter=MAP_NUM_CHAPTERS-1;
+			}
+			while(!isChapterOpen(nextChapter));
+			if(nextChapter!=m_currentChapterSelection)
+			{
+				m_currentChapterSelection=nextChapter;
+				generateMapScreenImage();
+			}
+		}
+#ifdef __VERSION_DEBUG__
+		else if(pad&PAD_L1)
+		{
+			CGameSlotManager::getSlotData()->debugCheatOpenAllLevels();
 			generateMapScreenImage();
 		}
-		else if(PadGetDown(0)&PAD_DOWN)
-		{
-			if(--m_currentChapterSelection<0)m_currentChapterSelection=MAP_NUM_CHAPTERS-1;
-			generateMapScreenImage();
-		}
+#endif
 
 		// Move cursor
 		int	lastLevel=m_currentLevelSelection;
-		if(PadGetDown(0)&PAD_LEFT)
+		if(pad&PAD_LEFT)
 		{
 			do
 			{
@@ -377,7 +422,7 @@ void CMapScene::think(int _frames)
 			}
 			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
 		}
-		else if(PadGetDown(0)&PAD_RIGHT)
+		else if(pad&PAD_RIGHT)
 		{
 			do
 			{
@@ -438,7 +483,7 @@ void CMapScene::think(int _frames)
 		}
 
 		if(m_pointerArrivedAtTarget&&
-		   PadGetDown(0)&PAD_CROSS)
+		   pad&PAD_CROSS)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
@@ -540,7 +585,12 @@ DVECTOR	CMapScene::getPointerTargetPosition()
   ---------------------------------------------------------------------- */
 int		CMapScene::isLevelOpen(unsigned int _chapter,unsigned int _level)
 {
-	return true;
+	return CGameSlotManager::getSlotData()->isLevelOpen(_chapter,_level);
+}
+
+int		CMapScene::isChapterOpen(unsigned int _chapter)
+{
+	return CGameSlotManager::getSlotData()->isLevelOpen(_chapter,0);
 }
 
 int		CMapScene::getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level)
@@ -550,7 +600,7 @@ int		CMapScene::getSpatulaCollectedCount(unsigned int _chapter,unsigned int _lev
 
 int		CMapScene::hasQuestItemBeenCollected(unsigned int _chapter,unsigned int _level)
 {
-	return _level&1;
+	return CGameSlotManager::getSlotData()->hasQustItemBeenCollected(_chapter,_level);
 }
 
 

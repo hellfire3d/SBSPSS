@@ -91,6 +91,7 @@ private:
 	void	copyImageToScreen(int _file,int _x,int _y,int _w,int _h);
 	DVECTOR	getPointerTargetPosition();
 	int		isLevelOpen(unsigned int _chapter,unsigned int _level);
+	int		isChapterOpen(unsigned int _chapter);
 	int		getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level);
 	int		hasQuestItemBeenCollected(unsigned int _chapter,unsigned int _level);
 

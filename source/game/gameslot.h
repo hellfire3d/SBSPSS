@@ -51,6 +51,15 @@ public:
 
 		NUM_CHAPTERS=5,
 		NUM_LEVELS_WITH_SPATULAS=4,
+		NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS=4,
+		NUM_BONUS_LEVELS_PER_CHAPTER=1,
+	};
+
+	enum
+	{
+		LEVELCOMPETESTATE_NOT_OPEN,			// Level is not available to play
+		LEVELCOMPETESTATE_OPEN,				// Level is available to play
+		LEVELCOMPETESTATE_COMPLETED,		// Level has been completed
 	};
 	
 
@@ -64,6 +73,7 @@ public:
 		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Same again..
 		unsigned char	m_kelpTokensHeld;
 		unsigned char	m_partyItemsHeld[CShopScene::NUM_SHOP_ITEM_IDS];
+		unsigned char	m_levelCompletionState[NUM_CHAPTERS*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER)];
 
 		// Spat functions..
 		int				getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level)
@@ -150,6 +160,45 @@ public:
 			ASSERT(!m_partyItemsHeld[_itemNumber]);
 			m_partyItemsHeld[_itemNumber]=true;
 		}
+
+		// Levels
+		int				isLevelOpen(unsigned int _chapter,unsigned int _level)
+		{
+			int	index;
+			index=(_chapter*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER))+_level;
+			return m_levelCompletionState[index]!=(int)LEVELCOMPETESTATE_NOT_OPEN;
+		}
+		int				hasQustItemBeenCollected(unsigned int _chapter,unsigned int _level)
+		{
+			int	index;
+			index=(_chapter*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER))+_level;
+			return m_levelCompletionState[index]==(int)LEVELCOMPETESTATE_COMPLETED;
+		}
+		void			levelIsNowOpen(unsigned int _chapter,unsigned int _level)
+		{
+			int	index;
+			index=(_chapter*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER))+_level;
+			if(m_levelCompletionState[index]==LEVELCOMPETESTATE_NOT_OPEN)
+			{
+				m_levelCompletionState[index]=LEVELCOMPETESTATE_OPEN;
+			}
+		}
+		void			levelHasBeenCompleted(unsigned int _chapter,unsigned int _level)
+		{
+			int	index;
+			index=(_chapter*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER))+_level;
+			m_levelCompletionState[index]=LEVELCOMPETESTATE_COMPLETED;
+		}
+
+#ifdef __VERSION_DEBUG__
+		void			debugCheatOpenAllLevels()
+		{
+			for(int i=1;i<NUM_CHAPTERS*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER);i++)
+			{
+				m_levelCompletionState[i]=LEVELCOMPETESTATE_OPEN;
+			}
+		}
+#endif
 	} GameSlot;
 
 	static void			init();

@@ -130,6 +130,7 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	slot->m_continues=INITIAL_CONTINUES;
 	slot->m_maxLevelCompleted=0;
 
+	// Clear spatula and kelp token flags
 	for(i=0;i<NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS;i++)
 	{
 		for(j=0;j<16;j++)
@@ -137,7 +138,6 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 			slot->m_spatulaCollectedFlags[i][j]=0;
 		}
 	}
-
 	for(i=0;i<NUM_CHAPTERS;i++)
 	{
 		for(j=0;j<16;j++)
@@ -151,11 +151,20 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 #else
 	slot->m_kelpTokensHeld=0;
 #endif
+
+	// No party items held yet
 	for(i=0;i<CShopScene::NUM_SHOP_ITEM_IDS;i++)
 	{
 		slot->m_partyItemsHeld[i]=false;
 	}
 
+	// Mark all levels except first as NOT_OPEN
+	// On a non-cd build, everything starts as open
+	slot->m_levelCompletionState[0]=LEVELCOMPETESTATE_OPEN;
+	for(i=1;i<NUM_CHAPTERS*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER);i++)
+	{
+		slot->m_levelCompletionState[i]=LEVELCOMPETESTATE_NOT_OPEN;
+	}
 }
 
 
