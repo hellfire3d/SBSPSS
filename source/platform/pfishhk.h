@@ -21,12 +21,15 @@
 class CNpcFishHookPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit()							{m_isMoving = false;}
+	virtual void		postInit();
+	void				setToShutdown();
+	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 protected:
 	virtual void		processLifetime( int _frames );
 	virtual void		processMovement( int _frames );
 
-	bool	m_isMoving;
+	u8					m_isMoving;
+	u8					m_isShuttingDown;
 };
 
 #endif

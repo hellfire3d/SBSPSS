@@ -182,6 +182,8 @@ public:
 
 	virtual int			canCollide();
 
+	void				setToShutdown();
+	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 
 protected:
 	class CLayerCollision	*m_layerCollision;

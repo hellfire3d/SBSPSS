@@ -779,38 +779,40 @@ void CNpcEnemy::reinit()
 
 void CNpcEnemy::shutdown()
 {
-	if ( !m_isShuttingDown )
+	if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
+	// remove waypoints
+
+	m_npcPath.removeAllWaypoints();
+
+	// remove position history
+
+	CNpcPositionHistory *currentPosition;
+	CNpcPositionHistory *oldPosition;
+
+	currentPosition = m_positionHistory;
+
+	while( currentPosition )
 	{
-		m_isShuttingDown = true;
+		oldPosition = currentPosition;
+		currentPosition = currentPosition->next;
 
-		if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
-		// remove waypoints
-
-		m_npcPath.removeAllWaypoints();
-
-		// remove position history
-
-		CNpcPositionHistory *currentPosition;
-		CNpcPositionHistory *oldPosition;
-
-		currentPosition = m_positionHistory;
-
-		while( currentPosition )
-		{
-			oldPosition = currentPosition;
-			currentPosition = currentPosition->next;
-
-			delete oldPosition;
-		}
-
-		m_positionHistory = NULL;
-
-		if (m_actorGfx)	delete m_actorGfx;
-
-		deleteAllChild();
-
-		CEnemyThing::shutdown();
+		delete oldPosition;
 	}
+
+	m_positionHistory = NULL;
+
+	if (m_actorGfx)	delete m_actorGfx;
+
+	deleteAllChild();
+
+	CEnemyThing::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::setToShutdown()
+{
+	m_isShuttingDown = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1283,7 +1285,7 @@ void CNpcEnemy::processShot()
 						}
 						else
 						{
-							shutdown();
+							setToShutdown();
 						}
 					}
 
@@ -1479,7 +1481,7 @@ void CNpcEnemy::caughtWithNet()
 	}
 	else
 	{
-		shutdown();
+		setToShutdown();
 	}
 }
 
