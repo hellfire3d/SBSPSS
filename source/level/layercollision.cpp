@@ -25,18 +25,18 @@ u8 CLayerCollision::s_collisionTable[]=
 
 	 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
 	 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	16,16,15,15,14,14,13,13,12,12,11,11,10,10, 9, 9,
+	 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,
 
 	 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,
 	16,16,15,15,14,14,13,13,12,12,11,11,10,10, 9, 9,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
+	 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1,
 
 	 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,
 	16,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	16,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+	 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,
 };
 
 
@@ -83,7 +83,6 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 		maxHeightToCheck=-_maxHeight-16;	// Need to check one block more incase we cross onto a new block
 		while(colHeight==16)
 		{
-			_y-=16;
 			mapY-=MapWidth;
 			distanceFromGround-=16;
 			if(distanceFromGround<=maxHeightToCheck)
@@ -102,7 +101,6 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 		maxHeightToCheck=_maxHeight+16;		// Need to check one block more incase we cross onto a new block
 		while(colHeight==0)
 		{
-			_y+=16;
 			mapY+=MapWidth;
 			distanceFromGround+=16;
 			if(distanceFromGround>=maxHeightToCheck)
@@ -116,6 +114,49 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	}
 
 	return distanceFromGround;
+}
+
+
+/*****************************************************************************/
+int			CLayerCollision::getHeightFromCeiling(int _x,int _y,int _maxHeight)
+{
+	int	mapX,mapY,xFraction,yFraction;
+	int	distanceFromCeiling;
+	int	colHeight;
+	int	maxHeightToCheck;
+
+	mapX=_x>>4;
+	mapY=(_y>>4)*MapWidth;
+	xFraction=_x&0x0f;
+	yFraction=16-(_y&0x0f);
+	distanceFromCeiling=0;
+
+	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+	if(yFraction<colHeight)
+	{
+		// Inside a collision block and under the floor
+		distanceFromCeiling=colHeight-yFraction;
+	}
+	else
+	{
+		// Above the floor or not inside a collision block.. find the nearest ground above this point
+		distanceFromCeiling=_y&0x0f;
+		maxHeightToCheck=_maxHeight+16;
+		colHeight=0;
+		while(colHeight==0)
+		{
+			mapY-=MapWidth;
+			distanceFromCeiling+=16;
+			if(distanceFromCeiling>=maxHeightToCheck)
+			{
+				return _maxHeight;
+			}
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+		}
+		distanceFromCeiling+=colHeight-16;
+	}
+
+	return distanceFromCeiling;
 }
 
 
@@ -152,26 +193,42 @@ int			CLayerCollision::getCollisionType(int _x,int _y)
 #ifdef __SHOW_COLLISION__
 #include "gfx\prim.h"
 #include "pad\pads.h"
-#if defined (__USER_paul__) || (__USER_art__)
-int	showCollision=true;
+typedef struct{int r,g,b;} colrgb;
+const colrgb s_typeColours[]={
+	{90,90,90},
+	{90,0,0},	//damage
+	{0,90,0},	//slippery
+	{90,0,90},	//electric
+	{0,90,90},	//sticky
+	{0,0,90},	//water
+};
+typedef enum {SHOW_NONE,SHOW_OPAQUE,SHOW_SEMITRANS}ColShowType;
+#if defined (__USER_paul__)
+ColShowType	showCollision=SHOW_OPAQUE;
+#elif defined (__USER_art__)
+ColShowType	showCollision=SHOW_SEMITRANS;
 #else
-int	showCollision=false;
+ColShowType showCollision=SHOW_NONE;
 #endif
 void CLayerCollision::render(DVECTOR &MapPos)
 {
 	if(PadGetDown(0)&PAD_TRIANGLE)
 	{
-		showCollision=!showCollision;
+		showCollision=(ColShowType)(showCollision+1);
+		if(showCollision>SHOW_SEMITRANS)showCollision=SHOW_NONE;
 	}
-	if(showCollision)
+	if(showCollision!=SHOW_NONE)
 	{
-		int		x,y;
-		int		mapx,mapy;
-		int		xoff,yoff;
-		u8		*coll;
-		POLY_F4	*f4;
-		POLY_F3	*f3;
+		int				semiTrans;
+		int				x,y;
+		int				mapx,mapy;
+		int				xoff,yoff;
+		u8				*coll;
+		POLY_F4			*f4;
+		POLY_F3			*f3;
+		const colrgb	*colour;
 
+		semiTrans=showCollision==SHOW_SEMITRANS;
 		xoff=MapPos.vx&15;
 		yoff=MapPos.vy&15;
 		mapx=MapPos.vx/16;
@@ -181,6 +238,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 			coll=&Map[mapx+(mapy*MapWidth)];
 			for(x=-xoff;x<(33*16)-xoff;x+=16)
 			{
+				colour=&s_typeColours[((*coll)&COLLISION_TYPE_MASK)>>COLLISION_TYPE_FLAG_SHIFT];
 				switch((*coll)&COLLISION_MASK)
 				{
 					case 0:
@@ -192,9 +250,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 					case 4:
 						f4=GetPrimF4();
 						setXYWH(f4,x,y,16,16);
-						setRGB0(f4,0,0,90);
-						setSemiTrans(f4,true);
-						AddPrimToList(f4,0);
+						setRGB0(f4,colour->r,colour->g,colour->b);
+						setSemiTrans(f4,semiTrans);
+						AddPrimToList(f4,11);
 						break;
 
 					case 5:
@@ -202,9 +260,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x+16,y+16,
 								  x,y+16,
 								  x+16,y+8);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					case 6:
@@ -212,9 +270,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x,y+16,
 								  x+16,y+16,
 								  x,y+8);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					case 9:
@@ -223,9 +281,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x,y+8,
 								  x+16,y+16,
 								  x,y+16);
-						setRGB0(f4,0,0,90);
-						setSemiTrans(f4,true);
-						AddPrimToList(f4,0);
+						setRGB0(f4,colour->r,colour->g,colour->b);
+						setSemiTrans(f4,semiTrans);
+						AddPrimToList(f4,11);
 						break;
 
 					case 10:
@@ -234,9 +292,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x+16,y+8,
 								  x,y+16,
 								  x+16,y+16);
-						setRGB0(f4,0,0,90);
-						setSemiTrans(f4,true);
-						AddPrimToList(f4,0);
+						setRGB0(f4,colour->r,colour->g,colour->b);
+						setSemiTrans(f4,semiTrans);
+						AddPrimToList(f4,11);
 						break;
 
 					case 13:
@@ -244,9 +302,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x+16,y+16,
 								  x,y+16,
 								  x+16,y);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					case 14:
@@ -254,9 +312,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x,y+16,
 								  x+16,y+16,
 								  x,y);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					case 15:
@@ -264,9 +322,9 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x+16,y,
 								  x,y,
 								  x+16,y+16);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					case 16:
@@ -274,17 +332,17 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x,y,
 								  x+16,y,
 								  x,y+16);
-						setRGB0(f3,0,0,90);
-						setSemiTrans(f3,true);
-						AddPrimToList(f3,0);
+						setRGB0(f3,colour->r,colour->g,colour->b);
+						setSemiTrans(f3,semiTrans);
+						AddPrimToList(f3,11);
 						break;
 
 					default:
 						f4=GetPrimF4();
 						setXYWH(f4,x,y,16,16);
-						setRGB0(f4,200,0,0);
-						setSemiTrans(f4,true);
-						AddPrimToList(f4,0);
+						setRGB0(f4,255,0,0);
+						setSemiTrans(f4,semiTrans);
+						AddPrimToList(f4,11);
 						break;
 				}
 				coll++;
