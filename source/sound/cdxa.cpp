@@ -78,7 +78,7 @@ sXAStream	&ThisStream=CXAStream::Stream[CXAStream::CurrentStream];
 			Track = (Track&31744)>>10;
 			if (Track==0)
 				{
-				ThisStream.Entry.CurrentSector++;					// track position
+				ThisStream.Entry.CurrentSector+=32;					// track position
 				}
 			else
 			{
@@ -227,7 +227,6 @@ sXAStream	&ThisStream=Stream[CurrentStream];
 				CdControlB(CdlSetmode,Cmd, 0);
 				CdIntToPos(ThisStream.Entry.CurrentSector+StartSector,&ThisStream.CDPos);
 				theFilter.file=1;
-//				theFilter.chan=ThisStream.BaseChannel+ThisStream.Entry.Channel;
 				theFilter.chan=ThisStream.Entry.Channel;
 				CdControlF(CdlSetfilter, (u8*)&theFilter);
 				CdControlF(CdlReadS,(u8*)&ThisStream.CDPos);
