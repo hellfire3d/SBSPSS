@@ -459,7 +459,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_FISH_HOOK;
+	m_type = NPC_FALLING_ITEM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -516,7 +516,6 @@ void CNpc::init()
 			break;
 
 		case NPC_INIT_SKULL_STOMPER:
-		case NPC_INIT_FALLING_ITEM:
 		{
 			m_heading = m_fireHeading = 1024;
 			
@@ -570,6 +569,24 @@ void CNpc::init()
 			break;
 		}
 
+		case NPC_INIT_FALLING_ITEM:
+		{
+			m_heading = m_fireHeading = 1024;
+			
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			newPos.vy = 200;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
+
 		case NPC_INIT_FISH_HOOK:
 		{
 			m_heading = m_fireHeading = 3072;
@@ -577,11 +594,6 @@ void CNpc::init()
 			m_npcPath.initPath();
 
 			DVECTOR newPos;
-
-			newPos.vx = 100;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 100;
 			newPos.vy = -100;
@@ -866,7 +878,6 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
-					case NPC_SENSOR_FALLING_ITEM_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 40000 )
 						{
@@ -929,6 +940,21 @@ bool CNpc::processSensor()
 						if ( xDistSqr + yDistSqr < 400 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_FALLING_ITEM_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 40000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_movementTimer = GameState::getOneSecondInFrames() * 3;
 
 							return( true );
 						}
