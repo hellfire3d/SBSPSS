@@ -22,8 +22,6 @@
 CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 {
 	{	// NPC_LINEAR_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		1,
 		//512,
 		2048,
@@ -37,8 +35,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CIRCULAR_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -51,8 +47,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_BUBBLE_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -65,8 +59,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_COLLAPSING_BUBBLE_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -79,8 +71,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_FISH_HOOK_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -93,8 +83,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_RETRACTING_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -107,8 +95,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_GEYSER_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		8,
 		128,
 		true,
@@ -121,8 +107,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_BOBBING_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		0,
 		128,
 		true,
@@ -135,8 +119,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_FALLING_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		4,
 		128,
 		true,
@@ -149,8 +131,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CART_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		4,
 		128,
 		true,
@@ -163,8 +143,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_FISH_HOOK_2_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -177,8 +155,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_BRANCH_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -191,8 +167,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_SEESAW_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -205,8 +179,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_OILDRUM_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		2,
 		128,
 		true,
@@ -219,8 +191,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CRATE_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -233,8 +203,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_BOUNCE_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -247,8 +215,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_DUAL_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -261,8 +227,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_OILDRUM_GENERATOR
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		2,
 		128,
 		true,
@@ -275,8 +239,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CRATE_GENERATOR
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -289,8 +251,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_RAFT_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,
@@ -303,8 +263,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_VERTICAL_OILDRUM_GENERATOR
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		2,
 		128,
 		true,
@@ -317,8 +275,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_VERTICAL_OILDRUM_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		2,
 		128,
 		true,
@@ -331,8 +287,6 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_PLAYER_BUBBLE_PLATFORM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
 		3,
 		128,
 		true,

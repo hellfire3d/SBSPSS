@@ -134,9 +134,6 @@ protected:
 
 	typedef struct NPC_PLATFORM_DATA_TYPE
 	{
-		FileEquate						ActorType;
-//		FileEquate						animData;
-		u16								initAnim;
 		u8								speed;
 		u16								turnSpeed;
 		bool							detectCollision;
@@ -184,7 +181,6 @@ protected:
 	DVECTOR						m_base;
 	DVECTOR						m_initPos;
 	u8							m_state;
-	bool						m_animPlaying;
 	bool						m_reversed;
 	s32							m_extension;
 	s32							m_lifetime;
@@ -200,8 +196,6 @@ protected:
 	s32							m_tiltVelocity;
 	bool						m_extendDir;
 
-	int							m_frame;
-	int							m_animNo;
 	CModelGfx					*m_modelGfx;
 	u8							m_isShuttingDown;
 

@@ -345,10 +345,6 @@ void CNpcPlatform::init()
 	CPlatformThing::init();
 
 
-	m_animPlaying = true;
-	m_animNo = m_data[m_type].initAnim;
-	m_frame = 0;
-
 	m_heading = 0;
 	m_velocity = 0;
 	m_rotation = 0;
@@ -398,10 +394,6 @@ void CNpcPlatform::init( DVECTOR initPos, s32 initLifetime )
 
 void CNpcPlatform::reinit()
 {
-	m_animPlaying = true;
-	m_animNo = m_data[m_type].initAnim;
-	m_frame = 0;
-
 	m_heading = 0;
 	m_velocity = 0;
 	m_rotation = 0;
@@ -511,21 +503,6 @@ void CNpcPlatform::think(int _frames)
 		}
 
 		processLifetime( _frames );
-
-		if ( m_animPlaying )
-		{
-/*			int frameCount = m_actorGfx->getFrameCount(m_animNo);
-
-			if ( frameCount - m_frame > _frames )
-			{
-				m_frame += _frames;
-			}
-			else
-			{
-				m_frame = frameCount - 1;
-				m_animPlaying = false;
-			}
-*/		}
 
 		if ( m_heading > 1024 && m_heading < 3072 )
 		{
