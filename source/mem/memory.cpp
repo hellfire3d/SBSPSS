@@ -151,15 +151,13 @@ void dumpDebugMem()
 		u32		byteWidth;
 		MEM_PART *	mem;
 		CVECTOR	black = {0, 0, 0};
+		int		dir=-1;
 
 		padd = PadGetRepeat( 0 );
 		padh = PadGetHeld( 0 );
 
 		if (padh & PAD_CIRCLE)
 		{
-			int		dir;
-
-			dir = 0;
 			if (padd & PAD_LEFT)
 			{
 				dir = -1;
@@ -173,12 +171,12 @@ void dumpDebugMem()
 
 			if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
 			if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
-			while( !memDump[s_currentMemPart].addr )
-			{
-				s_currentMemPart += dir;
-				if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
-				if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
-			}
+		}
+		while( !memDump[s_currentMemPart].addr )
+		{
+			s_currentMemPart += dir;
+			if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
+			if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
 		}
 		/*
 		else if(padh&PAD_TRIANGLE)
