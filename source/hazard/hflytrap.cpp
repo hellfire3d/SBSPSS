@@ -176,6 +176,9 @@ void CNpcFlyTrapHazard::collidedWith( CThing *_thisThing )
 				break;
 			}
 
+			case TYPE_NPC:
+				break;
+
 			default:
 				ASSERT(0);
 				break;
