@@ -121,9 +121,9 @@ ANIM_OUT_DIR :=			$(DATA_OUT)/anims
 PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim
 
 # duff
-# idlegeneric02 idlegeneric05 
+# idlegeneric02 idlegeneric05 idlegeneric03 
 PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill float getup hitground01 hover idleboots idlecoral \
-						idlecoral01 idlegeneric01 idlegeneric03 idlegeneric04 idlelauncher idlenet jumpend jumpstart karate \
+						idlecoral01 idlegeneric01 idlegeneric04 idlelauncher idlenet jumpend jumpstart karate \
 						knockback knockforward netfirelob netswipe netswipejump run runjumpend runjumpstart runstart runstop soakup teeterback teeterfront wakeup 
 
 PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
