@@ -95,6 +95,10 @@
 #include "game\healthman.h"
 #endif
 
+#ifndef __LOCALE_TEXTDBASE_H__
+#include "locale\textdbase.h"
+#endif
+
 
 #include "gfx\actor.h"
 
@@ -166,14 +170,22 @@ int		CGameScene::s_justHitBossArenaTrigger;
 DVECTOR	CGameScene::s_CamShake={0,0};
 
 /*****************************************************************************/
-static const CSoundMediator::SONGID	s_bossMusicIds[]=
+typedef struct
 {
-	CSoundMediator::SONG_CHAPTER1_BOSS,
-	CSoundMediator::SONG_CHAPTER2_BOSS,
-	CSoundMediator::SONG_CHAPTER3_BOSS_ALSEEP,
-	CSoundMediator::SONG_CHAPTER4_BOSS,
-	CSoundMediator::SONG_CHAPTER5_BOSS,
+	u16							m_titleTextId;
+	u16							m_instructionsTextId;
+	CSoundMediator::SONGID		m_songId;
+} BOSS_DATA;
+
+static const BOSS_DATA	s_bossData[]=
+{
+	{	STR__CHAPTER_1__BOSS_TITLE,	STR__CHAPTER_1__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER1_BOSS			},
+	{	STR__CHAPTER_2__BOSS_TITLE,	STR__CHAPTER_2__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER2_BOSS			},
+	{	STR__CHAPTER_3__BOSS_TITLE,	STR__CHAPTER_3__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER3_BOSS_ALSEEP	},
+	{	STR__CHAPTER_4__BOSS_TITLE,	STR__CHAPTER_4__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER4_BOSS			},
+	{	STR__CHAPTER_5__BOSS_TITLE,	STR__CHAPTER_5__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER5_BOSS			},
 };
+
 
 /*****************************************************************************/
 
@@ -351,9 +363,46 @@ void CGameScene::render_playing()
 /*****************************************************************************/
 void CGameScene::render_boss_intro()
 {
-	POLY_G4	*g4;
+	SpriteBank		*sb;
+	sFrameHdr		*fhCorner,*fhSideBorder,*fhTopBorder;
+	int				x,y;
+	POLY_F4			*f4;
+	POLY_G4			*g4;
+	const BOSS_DATA	*bd;
 
-	// Black background
+	// Scroll effect type thingy stuff
+	sb=getSpriteBank();
+	fhCorner=sb->getFrameHeader(FRM__HELPBOX1);
+	fhSideBorder=sb->getFrameHeader(FRM__HELPBOX2);
+	fhTopBorder=sb->getFrameHeader(FRM__HELPBOX3);
+
+	// Corners
+	sb->printFT4(fhCorner,  0,  0,false,false,4);
+	sb->printFT4(fhCorner,512,  0,true ,false,4);
+	sb->printFT4(fhCorner,  0,256,false,true ,4);
+	sb->printFT4(fhCorner,512,256,true ,true ,4);
+
+	// Top/bottom
+	for(x=fhCorner->W;x<512-fhCorner->W;x+=fhTopBorder->W)
+	{
+		sb->printFT4(fhTopBorder,x,  0,false,false,4);
+		sb->printFT4(fhTopBorder,x,256,false,true ,4);
+	}
+
+	// Left/right
+	for(y=fhCorner->H;y<256-fhCorner->H;y+=fhSideBorder->H)
+	{
+		sb->printFT4(fhSideBorder,  0,y,false,false,4);
+		sb->printFT4(fhSideBorder,512,y,true ,false,4);
+	}
+
+	// Middle
+	f4=GetPrimF4();
+	setXYWH(f4,fhCorner->W,fhCorner->H,512-(fhCorner->W*2),256-(fhCorner->H*2));
+	setRGB0(f4,224,184,107);
+	AddPrimToList(f4,5);
+
+	// Background
 	g4=GetPrimG4();
 	setXYWH(g4,0,0,512,256);
 	setRGB0(g4,70,50,60);
@@ -363,17 +412,23 @@ void CGameScene::render_boss_intro()
 	AddPrimToList(g4,5);
 
 	// Instructions..
+	bd=&s_bossData[Level.getCurrentChapter()-1];
 	m_scalableFont->setColour(255,255,255);
 	m_scalableFont->setTrans(0);
 	m_scalableFont->setSMode(0);
 	m_scalableFont->setScale(300);
 	m_scalableFont->setJustification(FontBank::JUST_CENTRE);
-	m_scalableFont->print(256,30,"HOW TO BEAT THE BOSS...");
+	m_scalableFont->setPrintArea(30,0,512-60,256);
+	m_scalableFont->print(256-30,25,bd->m_titleTextId);
+	m_scalableFont->setPrintArea(0,0,256,512);
 
 	s_genericFont->setColour(255,255,255);
 	s_genericFont->setTrans(0);
 	s_genericFont->setSMode(0);
-	s_genericFont->print(256,70,"Blah\nBlah\nBlah");
+	s_genericFont->setJustification(FontBank::JUST_CENTRE);
+	s_genericFont->setPrintArea(30,0,512-60,256);
+	s_genericFont->print(256-30,60,bd->m_instructionsTextId);
+	s_genericFont->setPrintArea(0,0,256,512);
 }
 
 /*****************************************************************************/
@@ -392,7 +447,7 @@ void	CGameScene::think(int _frames)
 			{
 				// Swap to the boss tune whilst it's all quiet! :)
 				CSoundMediator::stopSong();
-				CSoundMediator::setSong(s_bossMusicIds[Level.getCurrentChapter()-1]);
+				CSoundMediator::setSong(s_bossData[Level.getCurrentChapter()-1].m_songId);
 				m_gamestate=GAMESTATE_BOSS_INTRO;
 				CFader::setFadingIn();
 			}
