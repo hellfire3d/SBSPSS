@@ -12,6 +12,15 @@
 #include	"utils\replace.h"
 #include	"utils\utils.h"
 
+//#define	FILEIO_DBG
+
+#ifdef	FILEIO_DBG
+#define	FILEIO_DBGMSG	SYSTEM_DBGMSG
+#else
+#define	FILEIO_DBGMSG	//
+
+#endif
+
 char	*LumpNames[]=
 {
 "BIGLUMP.BIN",
@@ -63,7 +72,7 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 // Read Main FAT (special case load)
 		MainFAT=(sFAT *)MemAlloc( FATSize,"MainFAT");
 
-		SYSTEM_DBGMSG("IoInit:FATSIZE=%i",FATSize);
+		FILEIO_DBGMSG("IoInit:FATSIZE=%i",FATSize);
 		FileIO->Open();
 
 		BigLump.Status = BLStatusOpen;
@@ -395,7 +404,7 @@ u8		*CFileIO::isFileInDataBank(FileEquate File)
 				if (Pos!=-1) return(MakePtr(ThisBank.Data,Pos));
 				}
 			}
-	SYSTEM_DBGMSG("File Not in Cache [%i]",File);
+	FILEIO_DBGMSG("File Not in Cache [%i]",File);
 
 		return(0);
 }
