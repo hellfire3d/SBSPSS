@@ -95,6 +95,7 @@ public:
 	void			addChild(CThing *Child);
 	void			removeChild(CThing *Child);
 	void			removeAllChild();
+	bool			hasChild(CThing *Child);
 
 
 	DVECTOR			getPos()						{return Pos;}
@@ -127,6 +128,8 @@ public:
 	virtual int		checkCollisionAgainst(CThing *_thisThing);
 	void			updateCollisionArea();
 	virtual void	collidedWith(CThing *_thisThing)			{;}
+	s32				getNewYPos( CThing *_thisThing );
+	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
 protected:
 	typedef struct
 	{
@@ -138,8 +141,6 @@ protected:
 	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
 	void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
 	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
-	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
-	void			setCollisionStickyBoundary(int boundary)	{m_collisionStickyBoundary = boundary;}
 	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
@@ -151,7 +152,6 @@ private:
 	DVECTOR			m_collisionSize;
 	DVECTOR			m_collisionCentreOffset;
 	int				m_collisionRadius;
-	int				m_collisionStickyBoundary;	// for platforms
 	CRECT			m_collisionArea;
 	DVECTOR			m_collisionCentre;
 	s16				m_collisionAngle;

@@ -130,13 +130,26 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		thing1->removeAllChild();
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2))
+		//if ( !thing1->hasChild( thing2 ) )
 		{
-			thing1->addChild( thing2 );
-			thing1->collidedWith(thing2);
+			thing1->removeAllChild();
+			if(thing1->canCollide()&&
+			   thing1->checkCollisionAgainst(thing2))
+			{
+				thing1->addChild( thing2 );
+
+				thing1->collidedWith(thing2);
+			}
 		}
+		/*else
+		{
+			DVECTOR thatPos = thing2->getPos();
+
+			thatPos.vy = thing1->getNewYPos( thing2 );
+			thing2->setNewCollidedPos( thatPos );
+			thing1->collidedWith(thing2);
+		}*/
+
 		thing1=thing1->m_nextThing;
 	}
 
@@ -297,7 +310,6 @@ void	CThing::init()
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
 	m_collisionAngle = 0;
-	m_collisionStickyBoundary = 0;
 	m_centreCollision = false;
 }
 
@@ -516,6 +528,29 @@ CThing	*List=Next;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+bool	CThing::hasChild(CThing *Child)
+{
+	CThing *nextChild = Next;
+
+	while( nextChild )
+	{
+		if ( nextChild == Child )
+		{
+			return( true );
+		}
+
+		nextChild = nextChild->Next;
+	}
+
+	return( false );
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CThing::setCollisionSize(int _w,int _h)
 {
 	m_collisionSize.vx=_w;
@@ -552,6 +587,119 @@ void	CThing::updateCollisionArea()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+
+s32		CThing::getNewYPos(CThing *_thisThing)
+{
+	CRECT	thisRect;
+	DVECTOR thatPos = _thisThing->getPos();
+
+	thisRect = getCollisionArea();
+
+	// 'render' collision box at correct angle
+
+	SVECTOR testPointsNonRel[4];
+	VECTOR testPoints[4];
+
+	testPointsNonRel[0].vx = thisRect.x1 - Pos.vx;
+	testPointsNonRel[0].vy = thisRect.y1 - Pos.vy;
+
+	testPointsNonRel[1].vx = thisRect.x2 - Pos.vx;
+	testPointsNonRel[1].vy = thisRect.y1 - Pos.vy;
+
+	testPointsNonRel[2].vx = thisRect.x2 - Pos.vx;
+	testPointsNonRel[2].vy = thisRect.y2 - Pos.vy;
+
+	testPointsNonRel[3].vx = thisRect.x1 - Pos.vx;
+	testPointsNonRel[3].vy = thisRect.y2 - Pos.vy;
+
+	MATRIX mtx;
+	SetIdentNoTrans(&mtx );
+	RotMatrixZ( m_collisionAngle, &mtx );
+
+	int i;
+
+	for ( i = 0 ; i < 4 ; i++ )
+	{
+		ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
+
+		testPoints[i].vx += Pos.vx;
+		testPoints[i].vy += Pos.vy;
+	}
+
+	// now find the highest y pos
+
+	// first set highestY to lowest of the four points
+	
+	s16 highestY = testPoints[0].vy;
+
+	for ( i = 1 ; i < 4 ; i++ )
+	{
+		if ( testPoints[i].vy > highestY ) // remember y is inverted
+		{
+			highestY = testPoints[i].vy;
+		}
+	}
+
+	for ( i = 0 ; i < 4 ; i++ )
+	{
+		int j = i + 1;
+		j %= 4;
+
+		VECTOR highestX, lowestX;
+
+		if ( testPoints[i].vx < testPoints[j].vx )
+		{
+			lowestX = testPoints[i];
+			highestX = testPoints[j];
+		}
+		else
+		{
+			lowestX = testPoints[j];
+			highestX = testPoints[i];
+		}
+
+		if ( highestX.vx == lowestX.vx )
+		{
+			// have to compare heights of both points to get highest
+
+			if ( lowestX.vy < highestY )
+			{
+				highestY = lowestX.vy;
+			}
+
+			if ( highestX.vy < highestY )
+			{
+				highestY = highestX.vy;
+			}
+		}
+		else
+		{
+			if ( thatPos.vx >= lowestX.vx && thatPos.vx <= highestX.vx )
+			{
+				// current position is above or below this line
+
+				s16 testY;
+
+				testY = lowestX.vy + ( ( thatPos.vx - lowestX.vx ) * ( highestX.vy - lowestX.vy ) ) /
+							( highestX.vx - lowestX.vx );
+
+				if ( testY < highestY )
+				{
+					highestY = testY;
+				}
+			}
+		}
+	}
+
+	return( highestY );
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int		CThing::checkCollisionAgainst(CThing *_thisThing)
 {
 	DVECTOR	pos,thisThingPos;
@@ -573,11 +721,6 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 		thisRect=getCollisionArea();
 
 		// ensure user 'sticks' to platform whilst it is moving along
-
-		thisRect.x1 -= m_collisionStickyBoundary;
-		thisRect.y1 -= m_collisionStickyBoundary;
-		thisRect.x2 += m_collisionStickyBoundary;
-		thisRect.y2 += m_collisionStickyBoundary;
 
 		thatRect=_thisThing->getCollisionArea();
 
@@ -633,105 +776,9 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 			if ( ( newPos.vx >= thisRect.x1 && newPos.vx <= thisRect.x2 ) &&
 					( newPos.vy >= thisRect.y1 && newPos.vy <= thisRect.y2 ) )
 			{
-				thisRect=getCollisionArea();
 				_thisThing->setCentreCollision( true );
 
-				// 'render' collision box at correct angle
-
-				SVECTOR testPointsNonRel[4];
-				VECTOR testPoints[4];
-
-				testPointsNonRel[0].vx = thisRect.x1 - Pos.vx;
-				testPointsNonRel[0].vy = thisRect.y1 - Pos.vy;
-
-				testPointsNonRel[1].vx = thisRect.x2 - Pos.vx;
-				testPointsNonRel[1].vy = thisRect.y1 - Pos.vy;
-
-				testPointsNonRel[2].vx = thisRect.x2 - Pos.vx;
-				testPointsNonRel[2].vy = thisRect.y2 - Pos.vy;
-
-				testPointsNonRel[3].vx = thisRect.x1 - Pos.vx;
-				testPointsNonRel[3].vy = thisRect.y2 - Pos.vy;
-
-				SetIdentNoTrans(&mtx );
-				RotMatrixZ( m_collisionAngle, &mtx );
-
-				int i;
-
-				for ( i = 0 ; i < 4 ; i++ )
-				{
-					ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
-
-					testPoints[i].vx += Pos.vx;
-					testPoints[i].vy += Pos.vy;
-				}
-
-				// now find the highest y pos
-
-				// first set highestY to lowest of the four points
-				
-				s16 highestY = testPoints[0].vy;
-
-				for ( i = 1 ; i < 4 ; i++ )
-				{
-					if ( testPoints[i].vy > highestY ) // remember y is inverted
-					{
-						highestY = testPoints[i].vy;
-					}
-				}
-
-				for ( i = 0 ; i < 4 ; i++ )
-				{
-					int j = i + 1;
-					j %= 4;
-
-					VECTOR highestX, lowestX;
-
-					if ( testPoints[i].vx < testPoints[j].vx )
-					{
-						lowestX = testPoints[i];
-						highestX = testPoints[j];
-					}
-					else
-					{
-						lowestX = testPoints[j];
-						highestX = testPoints[i];
-					}
-
-					if ( highestX.vx == lowestX.vx )
-					{
-						// have to compare heights of both points to get highest
-
-						if ( lowestX.vy < highestY )
-						{
-							highestY = lowestX.vy;
-						}
-
-						if ( highestX.vy < highestY )
-						{
-							highestY = highestX.vy;
-						}
-					}
-					else
-					{
-						if ( thatPos.vx >= lowestX.vx && thatPos.vx <= highestX.vx )
-						{
-							// current position is above or below this line
-
-							s16 testY;
-
-							testY = lowestX.vy + ( ( thatPos.vx - lowestX.vx ) * ( highestX.vy - lowestX.vy ) ) /
-										( highestX.vx - lowestX.vx );
-
-							if ( testY < highestY )
-							{
-								highestY = testY;
-							}
-						}
-					}
-				}
-
-				thatPos.vy = highestY;
+				thatPos.vy = getNewYPos( _thisThing );
 
 				_thisThing->setNewCollidedPos( thatPos );
 			}
