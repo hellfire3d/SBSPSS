@@ -73,5 +73,8 @@ void    PadFile(FILE *File);
 char	*FindFile(const char *Name);
 void	SaveTGA(char *Filename,int W,int H,u8 *Data,bool IsBGR=false);
 Vector3 CalcNormal(Vector3 const &v0, Vector3 const &v1, Vector3 const &v2 );
+
+//GString  ReplaceBadFileChars(GString s);
+
 //***************************************************************************
 #endif

@@ -237,3 +237,43 @@ Vector3 CalcNormal(Vector3 const &v0, Vector3 const &v1, Vector3 const &v2 )
 		return out;
 }
 
+//***************************************************
+//***************************************************
+//***************************************************
+/*
+static const char BadFileChars[] =
+{
+        '+',    '-',    '*',    '/',    '\\',   '#',    ',',
+        '.',    '(',    ')',    '!',    '"',    'ú',    '$',
+        '%',    '^',    '&',    '=',    '#',    ':',    ';',    '<',
+        '>',    '?',    '@',    '{',    '}',    '[',    ']',    '¼',
+};
+
+static const int        nbBadFileChars = (sizeof(BadFileChars) / sizeof(char));
+
+GString  ReplaceBadFileChars(GString s)
+{
+        GString out;
+        const char *textin = (const char*)s;
+        char *textout = new char[s.Len()+1];
+        memset(textout, 0, s.Len()+1);
+        int i, p;
+
+        p=0;
+        for (i=0; i<s.Len(); i++)
+        {
+                char    ic;
+
+                ic=textin[i];
+
+                for (int c=0;c<nbBadFileChars;c++)
+                {
+                        if (ic == BadFileChars[c])      ic = '_';
+                }
+                textout[i] = ic;
+        }
+        out = textout;
+        delete textout;
+        return out;
+}
+*/
