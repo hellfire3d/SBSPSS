@@ -62,9 +62,6 @@ void	CCameraLockTrigger::collidedWith(CThing *_thisThing)
 		case TYPE_PLAYER:
 		{
 			((CPlayer*)_thisThing)->setCameraBox(camBox);
-
-PAUL_DBGMSG("HIT CAM BOX TRIGGER");
-
 			break;
 		}
 
