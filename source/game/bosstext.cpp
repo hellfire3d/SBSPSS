@@ -156,7 +156,7 @@ void	CBossText::select(int _dontChangeMusic)
   ---------------------------------------------------------------------- */
 void	CBossText::think(int _frames)
 {
-	if(!CFader::isFading())
+	if(!CFader::isFading() && !m_readyToExit)
 	{
 		int	pad;
 		pad=PadGetDown(0);
@@ -185,7 +185,7 @@ void	CBossText::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	pos={256,170};
+const DVECTOR	pos={256,170};
 void	CBossText::render()
 {
 	SpriteBank		*sb;
@@ -195,6 +195,7 @@ void	CBossText::render()
 	POLY_FT4		*ft4;
 	const BOSS_DATA	*bd;
 
+	if(CFader::isFading() && m_readyToExit) return;
 	// Scroll effect type thingy stuff
 	sb=GameScene.getSpriteBank();
 	fhCorner=sb->getFrameHeader(FRM__HELPBOX1);
