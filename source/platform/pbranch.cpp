@@ -15,89 +15,110 @@
 #include "platform\pbranch.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBranchPlatform::postInit()
 {
-	m_state = NPC_BRANCH_STOP;
+	m_angularVelocity = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBranchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
+
+	u16 initXPos, newXPos, newYPos;
+
+	initXPos = newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	init( startPos );
+
+	if ( ThisPlatform->PointCount > 1 )
+	{
+		newXPos = (u16) *PntList;
+
+		if ( newXPos < initXPos )
+		{
+			m_reversed = true;
+		}
+		else
+		{
+			m_reversed = false;
+		}
+	}
+	else
+	{
+		m_reversed = false;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBranchPlatform::processMovement( int _frames )
 {
-	s16 tilt;
-	s16 maxTilt = 3 * _frames;
+	s16 newAngle = getCollisionAngle();
 
-	switch( m_state )
+	if ( m_contact )
 	{
-		case NPC_BRANCH_STOP:
+		if ( ( m_reversed && newAngle < -256 ) || newAngle > 256 )
 		{
-			if ( m_contact )
-			{
-				m_state = NPC_BRANCH_DIP;
-			}
-			else
-			{
-				if ( getCollisionAngle() )
-				{
-					// go to zero bend
-
-					tilt = -getCollisionAngle();
-
-					if ( tilt > maxTilt )
-					{
-						tilt = maxTilt;
-					}
-					else if ( tilt < -maxTilt )
-					{
-						tilt = -maxTilt;
-					}
-
-					setCollisionAngle( getCollisionAngle() + tilt );
-				}
-			}
-
-			break;
+			// flick player upwards
 		}
 
-		case NPC_BRANCH_DIP:
+		s16 angularForce = 3 * _frames;
+
+		if ( m_reversed )
 		{
-			if ( m_contact )
-			{
-				// bend
-
-				tilt = 3 * _frames;
-
-				s16 newAngle = getCollisionAngle() + tilt;
-
-				if ( newAngle > 256 )
-				{
-					// if bent beyond certain limit, spring
-
-					m_state = NPC_BRANCH_SPRING;
-				}
-
-				setCollisionAngle( newAngle );
-			}
-			else
-			{
-				m_state = NPC_BRANCH_STOP;
-			}
-
-			break;
+			angularForce = -angularForce;
 		}
 
-		case NPC_BRANCH_SPRING:
-		{
-			if ( m_contact )
-			{
-				// spring off player
-			}
-
-			m_state = NPC_BRANCH_STOP;
-
-			break;
-		}
+		m_angularVelocity += angularForce;
 	}
+
+	s32 resistance = -( 10 * newAngle ) >> 8;
+
+	if ( newAngle > 0 && resistance > -2 )
+	{
+		resistance = -2;
+	}
+	else if ( newAngle < 0 && resistance < 2 )
+	{
+		resistance = 2;
+	}
+
+	// get direction of resistance
+
+	m_angularVelocity += resistance;
+
+	newAngle += m_angularVelocity;
+
+	if ( m_angularVelocity )
+	{
+		m_angularVelocity += -m_angularVelocity / abs( m_angularVelocity );
+	}
+
+	/*if ( newAngle > 320 )
+	{
+		newAngle = 320;
+	}
+	else if ( newAngle < -320 )
+	{
+		newAngle = -320;
+	}*/
+
+	setCollisionAngle( newAngle );
 }

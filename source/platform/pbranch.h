@@ -23,14 +23,11 @@ class CNpcBranchPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 protected:
+	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
 
-	enum NPC_BRANCH_STATE
-	{
-		NPC_BRANCH_STOP = 0,
-		NPC_BRANCH_DIP = 1,
-		NPC_BRANCH_SPRING,
-	};
+	s32					m_angularVelocity;
+	u8					m_reversed;
 };
 
 #endif

@@ -83,6 +83,10 @@
 #include "platform\ppendulm.h"
 #endif
 
+#ifndef __PLATFORM_PBRANCH_H__
+#include "platform\pbranch.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -158,6 +162,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_FISH_HOOK_2_PLATFORM:
 		{
 			platform = new ("fish hook 2 platform") CNpcPendulumPlatform;
+			break;
+		}
+
+		case NPC_BRANCH_PLATFORM:
+		{
+			platform = new ("branch platform") CNpcBranchPlatform;
 			break;
 		}
 
