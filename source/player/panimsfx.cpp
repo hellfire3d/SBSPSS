@@ -175,8 +175,8 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	ANIM_SPONGEBOB_RUNSTOP,				s_runStopCount,				s_runStopSfx			},
 	{	ANIM_SPONGEBOB_WALK,				s_walkCount,				s_walkSfx				},
 	{	ANIM_SPONGEBOB_SWIPE,				s_swipeCount,				s_swipeSfx				},
-	{	ANIM_SPONGEBOB_IDLEBIGEYE,			s_idleBigEyeCount,			s_idleBigEyeSfx			},
-	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
+//NOIDLE	{	ANIM_SPONGEBOB_IDLEBIGEYE,			s_idleBigEyeCount,			s_idleBigEyeSfx			},
+//NOIDLE	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
 };
 const int				CPlayer::s_numAnimSfx=12;		// Grrrrrrrr! (pkg)
 
