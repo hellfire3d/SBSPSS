@@ -1284,6 +1284,7 @@ void CNpcEnemy::processCollision()
 	CPlayer *player = GameScene.getPlayer();
 
 	player->takeDamage( m_data[m_type].damageToUserType );
+	processUserCollision( (CThing *) player );
 
 	m_controlFunc = m_oldControlFunc;
 }

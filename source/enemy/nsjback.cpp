@@ -193,6 +193,12 @@ void CNpcSmallJellyfishBackgroundEnemy::processUserCollision( CThing *thisThing 
 		otherDelta.vy = -otherDelta.vy;
 	}
 
+	if ( !otherDelta.vx && !otherDelta.vy )
+	{
+		otherDelta.vx = ( 1 * xDist ) / abs( xDist );
+		otherDelta.vy = ( 1 * yDist ) / abs( yDist );
+	}
+
 	Pos.vx += otherDelta.vx;
 	Pos.vy += otherDelta.vy;
 

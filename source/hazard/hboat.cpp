@@ -27,6 +27,11 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBoatHazard::init()
@@ -179,6 +184,7 @@ void CNpcBoatHazard::collidedWith( CThing *_thisThing )
 			{
 				CPlayer *player = (CPlayer *) _thisThing;
 
+				player->takeDamage( DAMAGE__KILL_OUTRIGHT );
 
 				break;
 			}

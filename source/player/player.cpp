@@ -1493,6 +1493,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 		switch(_damage)
 		{
 			case DAMAGE__NONE:
+				ouchThatHurt=false;
 				break;
 
 			case DAMAGE__ELECTROCUTION:
