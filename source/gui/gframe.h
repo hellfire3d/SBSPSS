@@ -58,6 +58,9 @@ public:
 	virtual void		setFlags(GUI_FLAGS _flags);
 	virtual void		clearFlags(GUI_FLAGS _flags);
 	
+	void				selectPreviousItem();
+	void				selectNextItem();
+
 	
 protected:
 	GUI_FLAGS			getInitialFlags()							{return FLAG_DRAWBORDER;}

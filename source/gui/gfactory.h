@@ -40,22 +40,22 @@ class CGUIFactory
 {
 public:
 	// Creates a frame containing a value button with text label
-	static void		createValueButtonFrame(class CGUIObject *_parent,
-										   int _x,int _y,int _w,int _h,
-										   int _textId,
-										   int *_target,int _value);
+	static CGUIObject	*createValueButtonFrame(class CGUIObject *_parent,
+											    int _x,int _y,int _w,int _h,
+											    int _textId,
+											    int *_target,int _value);
 
 	// Creates a frame containing a cycle button, text readout and text label
-	static void		createCycleButtonFrame(class CGUIObject *_parent,
-										   int _x,int _y,int _w,int _h,
-										   int _textId,
-										   int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData);
+	static CGUIObject	*createCycleButtonFrame(class CGUIObject *_parent,
+											    int _x,int _y,int _w,int _h,
+											    int _textId,
+											    int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData);
 
 	// Creates a frame containing a slider button, readout and text label
-	static void		createSliderButtonFrame(class CGUIObject *_parent,
-											int _x,int _y,int _w,int _h,
-											int _textId,
-											int *_target,int _min,int _max);
+	static CGUIObject	*createSliderButtonFrame(class CGUIObject *_parent,
+												 int _x,int _y,int _w,int _h,
+												 int _textId,
+												 int *_target,int _min,int _max);
 };
 
 

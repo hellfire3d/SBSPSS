@@ -100,15 +100,18 @@ int CGUIGroupFrame::isSelectable()
 	CGUIObject	*pGUI;
 	int			selectable=false;
 	
-	pGUI=getChild();
-	while(pGUI)
+	if(!isHidden())
 	{
-		if(pGUI->isSelectable())
+		pGUI=getChild();
+		while(pGUI)
 		{
-			selectable=true;
-			break;
+			if(pGUI->isSelectable())
+			{
+				selectable=true;
+				break;
+			}
+			pGUI=pGUI->getNext();
 		}
-		pGUI=pGUI->getNext();
 	}
 
 	return selectable;
@@ -143,8 +146,6 @@ int CGUIGroupFrame::isUnselectable()
 
 
 
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -161,71 +162,12 @@ void CGUIControlFrame::think(int _frames)
 	pad=PadGetRepeat(0);
 	if(pad&PAD_DOWN)
 	{
-		CGUIObject	*pGUI;
-		
-		pGUI=getChild();
-		if(pGUI)
-		{
-			// Get current selection and deselect it
-			while(!pGUI->isSelected())
-			{
-				ASSERT(pGUI);
-				pGUI=pGUI->getNext();
-			}
-			if(pGUI->isUnselectable())
-			{
-				pGUI->unselect();
-
-				// Find next selectable object and select it
-				do
-				{
-					pGUI=pGUI->getNext();
-					if(!pGUI)pGUI=getChild();
-				}
-				while(!pGUI->isSelectable());
-				pGUI->select();
-			}
-		}
+		selectNextItem();
 		makeNoise=true;
 	}
 	else if(pad&PAD_UP)
 	{
-		CGUIObject	*pGUI,*prevGUI;
-		
-		pGUI=getChild();
-		prevGUI=0;
-		if(pGUI)
-		{
-			// Get current selection and deselect it
-			while(!pGUI->isSelected())
-			{
-				ASSERT(pGUI);
-				if(pGUI->isSelectable())
-				{
-					prevGUI=pGUI;
-				}
-				pGUI=pGUI->getNext();
-			}
-			if(pGUI->isUnselectable())
-			{
-				pGUI->unselect();
-
-				// Find previous selectable object and select it
-				if(!prevGUI)
-				{
-					do
-					{
-						if(pGUI->isSelectable())
-						{
-							prevGUI=pGUI;
-						}
-						pGUI=pGUI->getNext();
-					}
-					while(pGUI);
-				}
-				prevGUI->select();
-			}
-		}
+		selectPreviousItem();
 		makeNoise=true;
 	}
 
@@ -253,6 +195,89 @@ void CGUIControlFrame::setFlags(GUI_FLAGS _flags)
 	if(_flags&FLAG_SELECTED)
 	{
 		selectFrame();
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIControlFrame::selectPreviousItem()
+{
+	CGUIObject	*pGUI,*prevGUI;
+	
+	pGUI=getChild();
+	prevGUI=0;
+	if(pGUI)
+	{
+		// Get current selection and deselect it
+		while(!pGUI->isSelected())
+		{
+			ASSERT(pGUI);
+			if(pGUI->isSelectable())
+			{
+				prevGUI=pGUI;
+			}
+			pGUI=pGUI->getNext();
+		}
+		if(pGUI->isUnselectable())
+		{
+			pGUI->unselect();
+
+			// Find previous selectable object and select it
+			if(!prevGUI)
+			{
+				do
+				{
+					if(pGUI->isSelectable())
+					{
+						prevGUI=pGUI;
+					}
+					pGUI=pGUI->getNext();
+				}
+				while(pGUI);
+			}
+			prevGUI->select();
+		}
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIControlFrame::selectNextItem()
+{
+	CGUIObject	*pGUI;
+	
+	pGUI=getChild();
+	if(pGUI)
+	{
+		// Get current selection and deselect it
+		while(!pGUI->isSelected())
+		{
+			ASSERT(pGUI);
+			pGUI=pGUI->getNext();
+		}
+		if(pGUI->isUnselectable())
+		{
+			pGUI->unselect();
+
+			// Find next selectable object and select it
+			do
+			{
+				pGUI=pGUI->getNext();
+				if(!pGUI)pGUI=getChild();
+			}
+			while(!pGUI->isSelectable());
+			pGUI->select();
+		}
 	}
 }
 
