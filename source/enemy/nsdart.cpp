@@ -161,7 +161,8 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 {
 	s32 movement;
 	s32 yAim = playerYDist - 10;
-	s32 maxSpeed = 2 * m_data[m_type].speed * _frames;
+	//s32 maxSpeed = m_data[m_type].speed * _frames;
+	s32 maxSpeed = m_speed * _frames;
 
 	if ( m_attack )
 	{
