@@ -46,6 +46,8 @@ public:
 
 
 private:
+	void	renderUi();
+
 	int		isItemAvailableToBut(int _itemNumber);
 
 
@@ -73,6 +75,9 @@ private:
 	class SpriteBank		*m_spriteBank;
 	int						m_readyToExit;
 	unsigned char			*m_image;
+
+	class CGUIGroupFrame	*m_guiFrame;
+
 
 	int						m_currentlySelectedItem;
 	int						m_flashSin;

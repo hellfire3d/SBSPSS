@@ -276,6 +276,8 @@ player_src :=		demoplay \
 script_src :=		script \
 					function
 
+shop_src :=			shop
+
 sound_src :=		sound \
 					spu \
 					xmplay \

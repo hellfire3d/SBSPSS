@@ -516,6 +516,18 @@ SOURCE=..\..\..\source\friend\fsquid.cpp
 SOURCE=..\..\..\source\friend\fsquid.h
 # End Source File
 # End Group
+# Begin Group "fma"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\fma\fma.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fma\fma.h
+# End Source File
+# End Group
 # Begin Group "fmv"
 
 # PROP Default_Filter ""
@@ -602,6 +614,82 @@ SOURCE=..\..\..\source\frontend\start.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\frontend\start.h
+# End Source File
+# End Group
+# Begin Group "fx"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseanim.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseanim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseemitter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbaseemitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbasetrail.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbasetrail.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxfallingtile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxfallingtile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxjfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxjfish.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxnrgbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxnrgbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxsteam.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fx\fxsteam.h
 # End Source File
 # End Group
 # Begin Group "game"
@@ -1002,6 +1090,18 @@ SOURCE=..\..\..\source\hazard\hspikes.h
 # Begin Source File
 
 SOURCE=..\..\..\source\hazard\hstatic.h
+# End Source File
+# End Group
+# Begin Group "jellfish"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\jellfish\jellfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\jellfish\jellfish.h
 # End Source File
 # End Group
 # Begin Group "level"
@@ -1776,6 +1876,18 @@ SOURCE=..\..\..\source\script\script.cpp
 SOURCE=..\..\..\source\script\script.h
 # End Source File
 # End Group
+# Begin Group "shop"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\shop\shop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\shop\shop.h
+# End Source File
+# End Group
 # Begin Group "sound"
 
 # PROP Default_Filter ""
@@ -2128,94 +2240,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 SOURCE=..\..\..\source\utils\utils.h
 # End Source File
 # End Group
-# Begin Group "fx"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbaseanim.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbaseanim.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbaseemitter.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbaseemitter.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbasetrail.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbasetrail.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbubble.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxbubble.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxfallingtile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxfallingtile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxjfish.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxjfish.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxnrgbar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxnrgbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxsteam.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxsteam.h
-# End Source File
-# End Group
-# Begin Group "jellfish"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\jellfish\jellfish.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\jellfish\jellfish.h
-# End Source File
-# End Group
 # End Group
 # Begin Group "makefiles"
 
@@ -2481,6 +2505,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_STOMPER_Anim.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\BigLump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\shop.h
 # End Source File
 # Begin Source File
 

@@ -1,6 +1,7 @@
 { SYSTEM_CACHE 4
 }
 sprites/sprites.spr
+shop/shop.spr
 
 scripts/ch1l1_01.dat
 scripts/ch1l1_02.dat

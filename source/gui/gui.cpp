@@ -185,20 +185,20 @@ void CGUIObject::render()
 		ot=getOt();
 		r=g=b=200;
 
-		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
-		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
-		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
-		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
+		DrawLine(x  ,y  ,x+w,y  ,r,g,b,0);
+		DrawLine(x  ,y  ,x  ,y+h,r,g,b,0);
+		DrawLine(x+w,y  ,x+w,y+h,r,g,b,0);
+		DrawLine(x  ,y+h,x+w,y+h,r,g,b,0);
 		x+=1;y+=1;w-=2;h-=2;
-		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
-		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
-		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
-		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
+		DrawLine(x  ,y  ,x+w,y  ,r,g,b,0);
+		DrawLine(x  ,y  ,x  ,y+h,r,g,b,0);
+		DrawLine(x+w,y  ,x+w,y+h,r,g,b,0);
+		DrawLine(x  ,y+h,x+w,y+h,r,g,b,0);
 		x+=1;y+=1;w+=1;h+=1;
-		DrawLine(x  ,y  ,x+w,y  ,0,0,0,ot);
-		DrawLine(x  ,y  ,x  ,y+h,0,0,0,ot);
-		DrawLine(x+w,y  ,x+w,y+h,0,0,0,ot);
-		DrawLine(x  ,y+h,x+w,y+h,0,0,0,ot);
+		DrawLine(x  ,y  ,x+w,y  ,0,0,0,0);
+		DrawLine(x  ,y  ,x  ,y+h,0,0,0,0);
+		DrawLine(x+w,y  ,x+w,y+h,0,0,0,0);
+		DrawLine(x  ,y+h,x+w,y+h,0,0,0,0);
 	}
 #endif
 }
@@ -463,6 +463,14 @@ void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 			y1+=step;
 		}
 	}
+	else
+	{
+		x1=_x-(vbam->W/2);
+		x2=x1+_w;
+		y1=1+(_y+(corner->H/2)+(vbam->H/2)-(vbam->H/2)+vbam->H-vbam->H-1);
+		s_uiSpriteBank->printFT4(vbam,x1,y1,0,0,_ot);
+		s_uiSpriteBank->printFT4(vbam,x2,y1,0,0,_ot);
+	}
 
 	// Draw Corners
 	corner=s_uiSpriteBank->getFrameHeader(FRM__BAMBOOTOPLEFT);
@@ -496,13 +504,6 @@ _sbb sbb=
 };
 void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 {
-/*
-DrawLine(_x   ,_y   ,_x+_w,_y   ,255,0,255,0);
-DrawLine(_x+_w,_y   ,_x+_w,_y+_h,255,0,255,0);
-DrawLine(_x+_w,_y+_h,_x   ,_y+_h,255,0,255,0);
-DrawLine(_x   ,_y+_h,_x   ,_y   ,255,0,255,0);
-*/
-
 	sFrameHdr	*cornerFh;
 	POLY_FT4	*ft4;
 	LINE_F2		*f2;

@@ -50,6 +50,18 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__GUI_GFRAME_H__
+#include "gui\gframe.h"
+#endif
+
+#ifndef	__GUI_GFACTORY_H__
+#include "gui\gfactory.h"
+#endif
+
+#ifndef	__GUI_GTEXTBOX_H__
+#include "gui\gtextbox.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -111,6 +123,10 @@ CShopScene	ShopScene;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int fx=48;
+int fy=155;
+int fw=416;
+int fh=64;
 void CShopScene::init()
 {
 	m_image=CFileIO::loadFile(BACKDROP_SHOP_GFX);
@@ -124,6 +140,14 @@ void CShopScene::init()
 
 	m_spriteBank=new ("shop sprites") SpriteBank();
 	m_spriteBank->load(SHOP_SHOP_SPR);
+
+	// GUI Frame
+	CGUITextBox			*tb;
+	m_guiFrame=new ("Token Count Frame") CGUIGroupFrame();
+	m_guiFrame->init(0);
+	m_guiFrame->setOt(0);
+	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
+	m_guiFrame->setObjectXYWH(fx,fy,fw,fh);
 
 	m_readyToExit=false;
 	CFader::setFadingIn(CFader::BLACK_FADE);
@@ -141,6 +165,8 @@ void CShopScene::init()
   ---------------------------------------------------------------------- */
 void CShopScene::shutdown()
 {
+	m_guiFrame->shutdown();
+
 	m_spriteBank->dump();		delete m_spriteBank;
 	m_font->dump();				delete m_font;
 
@@ -157,7 +183,7 @@ void CShopScene::shutdown()
 int shopx=180;
 int shopy=38;
 int shopw=512-(180*2);
-int shopygap=50;
+int shopygap=51;
 int shopitemsperrow=4;
 int shopflashspeed=200;
 int shopflashbase=128;
@@ -184,7 +210,7 @@ void CShopScene::render()
 		{
 			SpriteBank	*sb=CGameScene::getSpriteBank();
 			sFrameHdr	*fh=sb->getFrameHeader(FRM__MAPPOINTER);
-			sb->printFT4(fh,x-fh->W,y+25,0,0,0);
+			sb->printFT4(fh,x-fh->W,y+30,0,0,0);
 
 			// Flash selected item
 			int	rgb=((msin(m_flashSin)*shopflashrange)>>12)+shopflashbase;
@@ -208,6 +234,8 @@ void CShopScene::render()
 			x+=gap;
 		}
 	}
+
+	renderUi();
 }
 
 
@@ -241,8 +269,9 @@ void CShopScene::think(int _frames)
 		m_flashSin=0;
 	}
 
-
 	m_flashSin=(m_flashSin+(_frames*shopflashspeed))&4095;
+
+	m_guiFrame->think(_frames);
 }
 
 
@@ -255,6 +284,102 @@ void CShopScene::think(int _frames)
 int CShopScene::readyToShutdown()
 {
 	return m_readyToExit&&!CFader::isFading();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+typedef struct
+{
+	int
+	tokenx,tokeny,
+	pricex,pricey,
+	gaptoreadout,
+	instructionsx,instructionsy,
+	instructionsygap,
+	instructionsbuttonyoffset,
+	instructionsbuttonspace,
+	instructionsbuttongap,
+
+	
+	end;
+} shopdata;
+
+shopdata shop=
+{
+	10,10,	//	tokenx,tokeny,
+	40,10,	//	pricex,pricey,
+	5,		//	gaptoreadout
+	250,7,	//	instructionsx,instructionsy,
+	16,		//	instructionsygap,
+	3,		//	instructionsbuttonyoffset,
+	10,		//	instructionsbuttonspace,
+	5,		//	instructionsbuttongap,
+};
+
+void CShopScene::renderUi()
+{
+	int			xbase,ybase;
+	SpriteBank	*sb;
+	sFrameHdr	*fh1,*fh2;
+	int			x,y;
+	char		buf[10];
+
+	xbase=fx;
+	ybase=fy;
+	sb=CGameScene::getSpriteBank();
+
+	m_font->setJustification(FontBank::JUST_LEFT);
+
+	// Token count
+	fh1=sb->getFrameHeader(FRM__TOKEN);
+	x=xbase+shop.tokenx;
+	y=ybase+shop.tokeny;
+	sb->printFT4(fh1,x,y,0,0,0);
+	sprintf(buf,"x%d",99);
+//	x+=fh1->W+shop.gaptoreadout;
+//	y+=fh1->H+m_font->getStringHeight(buf);
+PAUL_DBGMSG("%d,%d",fh1->H,m_font->getStringHeight(buf));
+	m_font->print(x,y,buf);
+
+
+	// Item price
+	m_font->print(xbase+shop.pricex,ybase+shop.pricey,STR__SHOP_SCREEN__PRICE);
+
+
+	// Instructions
+	x=xbase+shop.instructionsx;
+	y=ybase+shop.instructionsy;
+	m_font->print(x,y,STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM);
+	fh1=sb->getFrameHeader(FRM__BUTL);
+	fh2=sb->getFrameHeader(FRM__BUTR);
+	x-=shop.instructionsbuttonspace+fh2->W;
+	y+=shop.instructionsbuttonyoffset;
+	sb->printFT4(fh2,x,y,0,0,0);
+	x-=shop.instructionsbuttongap+fh1->W;
+	sb->printFT4(fh1,x,y,0,0,0);
+
+	x=xbase+shop.instructionsx;
+	y=ybase+shop.instructionsy+shop.instructionsygap;
+	m_font->print(x,y,STR__SHOP_SCREEN__CROSS_TO_PURCHASE);
+	fh1=sb->getFrameHeader(FRM__BUTX);
+	x-=shop.instructionsbuttonspace+fh2->W;
+	y+=shop.instructionsbuttonyoffset;
+	sb->printFT4(fh1,x,y,0,0,0);
+
+	x=xbase+shop.instructionsx;
+	y=ybase+shop.instructionsy+(shop.instructionsygap*2);
+	m_font->print(x,y,STR__SHOP_SCREEN__TRIANGLE_TO_EXIT);
+	fh1=sb->getFrameHeader(FRM__BUTT);
+	x-=shop.instructionsbuttonspace+fh2->W;
+	y+=shop.instructionsbuttonyoffset;
+	sb->printFT4(fh1,x,y,0,0,0);
+
+	m_guiFrame->render();
 }
 
 

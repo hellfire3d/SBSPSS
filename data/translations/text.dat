@@ -248,6 +248,25 @@ eng=Start
 
 
 ; ---------------------------------------------------------------
+; Shop screen
+; ---------------------------------------------------------------
+[STR__SHOP_SCREEN__TOKENS]
+eng=Tokens
+[STR__SHOP_SCREEN__PRICE]
+eng=Price
+[STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM]
+eng=Select
+[STR__SHOP_SCREEN__CROSS_TO_PURCHASE]
+eng=Purchase
+[STR__SHOP_SCREEN__TRIANGLE_TO_EXIT]
+eng=Exit
+[STR__SHOP_SCREEN__ITEM_ALREADY_PURCHASED]
+eng=Item already purchased
+
+
+
+
+; ---------------------------------------------------------------
 ; Chapter and level names
 ; ---------------------------------------------------------------
 

@@ -296,6 +296,34 @@ FRONTENDGFX_SPR_IN :=		-r- -z+ $(FRONTEND_GFX_TRANS_NO_ROT_IN) -r+ \
 # GRAF_DIRS_TO_MAKE	+=		$(FRONTEND_GFX_OUT_DIR)
 # GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
 
+
+#----------------------------------------------------------------------------
+# Shop icons
+#----------------------------------------------------------------------------
+SHOP_GFX_DIR :=				$(GRAF_DIR)/shop
+SHOP_GFX_OUT_DIR :=			$(DATA_OUT)/shop
+
+SHOP_GFX_TRANS :=			blower cake cupcake jelly2 partyhat prezzie sarnie teddy
+SHOP_GFX_TRANS_IN :=		$(foreach FILE,$(SHOP_GFX_TRANS),$(SHOP_GFX_DIR)/$(FILE).bmp)
+
+SHOP_GFX_TEX_OUT :=			$(SHOP_GFX_OUT_DIR)/shop.spr
+
+SHOP_GFX_HDR_OUT :=			$(INC_DIR)/shop.h
+SHOP_GFX_REP_FILE :=		
+
+cleanshop:
+	@$(RM) -f $(SHOP_GFX_TEX_OUT)
+	@$(ECHO) Shop Cleaned
+
+shop:	$(SHOP_GFX_TEX_IN)
+$(SHOP_GFX_TEX_OUT) :	$(SHOP_GFX_TEX_IN)
+		@parkgrab -z+ $(SHOP_GFX_TRANS_IN) -b+ -t:8,1,1 -l:$(REPORT_DIR)/shop.lbm -o:$(SHOP_GFX_TEX_OUT)
+		@$(MV) -f $(SHOP_GFX_OUT_DIR)/shop.h $(SHOP_GFX_HDR_OUT)
+
+GRAF_DIRS_TO_MAKE	+=		$(SHOP_GFX_OUT_DIR)
+GFX_DATA_OUT		+=		$(SHOP_GFX_TEX_OUT)
+
+
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 SPRITES_OUT_DIR :=		$(DATA_OUT)/sprites

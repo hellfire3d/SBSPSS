@@ -47,6 +47,10 @@
 #include "fma\fma.h"
 #endif
 
+#ifndef __SHOP_SHOP_H__
+#include "shop\shop.h"
+#endif
+
 #ifndef __BACKEND_GAMEOVER_H__
 #include "backend\gameover.h"
 #endif
@@ -94,6 +98,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&GameCompletedScene,
 	&FmaScene,
 	&MapScene,
+	&ShopScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 
