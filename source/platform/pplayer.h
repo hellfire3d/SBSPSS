@@ -24,6 +24,7 @@ public:
 	virtual void		postInit();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	virtual	CRECT const	*getThinkBBox()												{return( CThing::getThinkBBox() );}
 protected:
 	virtual void		processLifetime( int _frames );
 
