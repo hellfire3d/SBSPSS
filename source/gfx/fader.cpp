@@ -30,6 +30,7 @@
 #include "sound\sound.h"
 #endif
 
+#include	"system\vid.h"
 
 /*	Std Lib
 	------- */
@@ -138,7 +139,7 @@ void CFader::render()
 				POLY_F4		*f4;
 				
 				f4=GetPrimF4();
-				setXYWH(f4,0,0,512,256);
+				setXYWH(f4,0,0,VidGetScrW(),VidGetScrH());
 				switch(s_fadeStyle)
 				{
 					case BLACK_FADE:

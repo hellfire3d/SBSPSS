@@ -15,6 +15,7 @@
 	Includes
 	-------- */
 
+#include	"system\vid.h"
 #include "player\player.h"
 
 #ifndef __PAD_PADS_H__
@@ -207,8 +208,8 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 int		s_screenPos;
 int		m_cameraLookOffset;
 
-int MAP2D_CENTRE_X=-256;
-int MAP2D_CENTRE_Y=-170;
+int MAP2D_CENTRE_X=-(INGAME_SCREENW/2);
+int MAP2D_CENTRE_Y=-(INGAME_SCREENH/2)-64;
 int MAP2D_BLOCKSTEPSIZE=16;
 
 CPlayerModeBase				PLAYERMODE;

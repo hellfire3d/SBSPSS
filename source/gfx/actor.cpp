@@ -2,6 +2,7 @@
 /*** Actor Bank ***/
 /******************/
 
+#include "system\vid.h"
 #include "system\global.h"
 #include "mem\memory.h"
 #include "fileio\fileio.h"
@@ -523,7 +524,6 @@ void	CActorGfx::setActor(sActorPool *ThisActor)
 }
 
 /*****************************************************************************/
-int	BBX=0;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
@@ -756,11 +756,14 @@ u8		V=Node->V;
 		}
 
 		setXYWH(Ft4,X,Y,W,H);
+
+#if		INGAME_SCREENW==512
 // Correct Aspect
 		Ft4->x0-=CurrentFrameGfx->AspectX0;
 		Ft4->x1+=CurrentFrameGfx->AspectX1;
 		Ft4->x2-=CurrentFrameGfx->AspectX0;
 		Ft4->x3+=CurrentFrameGfx->AspectX1;
+#endif
 }
 
 
@@ -791,9 +794,6 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-const int	PXOfs=-16;
-const int	PYOfs=-8;
-
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {
 #define	BLOCK_MULT	16
@@ -836,8 +836,8 @@ sTri			*TList=&ModelTriList[Model->TriStart];
 int			ShiftX=(Pos.vx & 15);
 int			ShiftY=(Pos.vy & 15);
 
-			RenderPos.vx=(PXOfs*16)+((MapXY.vx*16)+ShiftX);
-			RenderPos.vy=(PYOfs*16)+((MapXY.vy*16)+ShiftY);
+			RenderPos.vx=INGAME_SCREENOFS_X+((MapXY.vx*16)+ShiftX);
+			RenderPos.vy=INGAME_SCREENOFS_Y+((MapXY.vy*16)+ShiftY);
 
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);

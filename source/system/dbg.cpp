@@ -268,7 +268,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	F.setOt( 0 );
 
 	InitOTag(OtPtr, MAX_OT);
-	F.print( (512 >> 1), (256 >> 1), Text );
+	F.print( (VidGetScrW() >> 1), (VidGetScrH() >> 1), Text );
 
 	VSync(0);
 	VidSwapDraw();
@@ -278,7 +278,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	while(DrawSync(1));
 
 	InitOTag(OtPtr, MAX_OT);
-	F.print( (512 >> 1), (256 >> 1), Text );
+	F.print( (VidGetScrW() >> 1), (VidGetScrH() >> 1), Text );
 
 	VSync(0);
 	VidSwapDraw();

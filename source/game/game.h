@@ -66,8 +66,6 @@ protected:
 		void			initLevel();
 		void			shutdownLevel();
 
-		void			AspectCorrectCamera();
-
 		CLevel			Level;
 class	CPauseMenu		*m_pauseMenu;
 class	CPlayer			*m_player;

@@ -124,7 +124,7 @@ void CNpcFishHookPlatform::render()
 			m_modelGfx->Render(renderPos);
 		}
 // draw Line (Literally!!)
-		if (renderPos.vx>0 && renderPos.vx<512)
+		if (renderPos.vx>0 && renderPos.vx<INGAME_SCREENW)
 		{
 			DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		

@@ -16,6 +16,7 @@
 	Includes
 	-------- */
 
+#include 	"system\vid.h"
 #include "thing\thing.h"
 
 #ifndef	__PLAYER_PLAYER_H__
@@ -88,13 +89,13 @@
 	---- */
 
 static const int	s_RenderBBoxX0=0;
-static const int	s_RenderBBoxX1=512;
+static const int	s_RenderBBoxX1=INGAME_SCREENW;
 static const int	s_RenderBBoxY0=0;
-static const int	s_RenderBBoxY1=256;
-static const int	s_ThinkBBoxX0=0-256;
-static const int	s_ThinkBBoxX1=512+526;
-static const int	s_ThinkBBoxY0=0-128;
-static const int	s_ThinkBBoxY1=256+128;
+static const int	s_RenderBBoxY1=INGAME_SCREENH;
+static const int	s_ThinkBBoxX0=0-(INGAME_SCREENW/2);
+static const int	s_ThinkBBoxX1=INGAME_SCREENW+(INGAME_SCREENW/2);
+static const int	s_ThinkBBoxY0=0-(INGAME_SCREENW/2);
+static const int	s_ThinkBBoxY1=INGAME_SCREENW+(INGAME_SCREENW/2);
 
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];

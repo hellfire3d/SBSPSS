@@ -10,6 +10,12 @@
 /*****************************************************************************/
 #define	GEOM_SCREEN_H	350
 
+#define	INGAME_SCREENW		512
+#define	INGAME_SCREENH		256
+
+#define	INGAME_SCREENOFS_X	-(INGAME_SCREENW/2)
+#define	INGAME_SCREENOFS_Y	-(INGAME_SCREENH/2)		
+
 /*****************************************************************************/
 typedef void (*VbFuncType)(void);
 
@@ -25,12 +31,12 @@ extern int		FrameFlipFlag;
 
 /*****************************************************************************/
 
-void	VidInit();
+void		VidInit();
 
-void	VidScrOn();
-void	VidSetRes(int x, int y);
-void	VidSetClearScreen(int );
-void	VidSetClearColor( const CVECTOR & col );
+void		VidScrOn();
+void		VidSetRes(int x, int y);
+void		VidSetClearScreen(int );
+void		VidSetClearColor( const CVECTOR & col );
 
 int			VidGetXOfs();
 int 		VidGetYOfs();

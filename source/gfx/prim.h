@@ -350,7 +350,6 @@ inline	int		GetFrameClut(sFrameHdr *Fr)							{return(Fr->Clut);}
 inline	int		GetFrameTPage(sFrameHdr *Fr)						{return(Fr->TPage);}
 
 const int		aspectX=4096+1024;//(512<<12)/320;
-//int		aspectY=(256<<12)/320;
 inline	void	CorrectAspect(POLY_FT4 *P)
 {
 int		W=P->x1-P->x0;

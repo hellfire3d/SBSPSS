@@ -13,7 +13,7 @@ class CLayerTile3d : public CLayerTile
 public:
 		CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
 		~CLayerTile3d();
-
+/*
 		enum
 		{
 			TILE3D_WIDTH			=16,
@@ -30,7 +30,7 @@ public:
 			RENDER_Y_OFS			=-(BLOCK_MULT*7)-(SCREEN_TILE_ADJ_UP*BLOCK_MULT)+RENDER_Y_PIX_OFS,
 
 		};
-
+*/
 		void			init(DVECTOR &MapPos,int Shift);
 		void			shutdown();
 		void			think(DVECTOR &MapPos);

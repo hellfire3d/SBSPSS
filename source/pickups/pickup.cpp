@@ -15,6 +15,8 @@
 	Includes
 	-------- */
 
+#include 	"system\vid.h"
+
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"	// Damnit.. include order! :( (pkg)
 #endif
@@ -152,15 +154,10 @@ void	CBasePickup::render()
 	int		visibilityRadius;
 	
 	CPickupThing::render();
-	
-	ofs=CLevel::getCameraPos();
-	pos.vx=Pos.vx-ofs.vx;
-	pos.vy=Pos.vy-ofs.vy;
-	visibilityRadius=getVisibilityRadius();
-	if(pos.vx>0-visibilityRadius&&pos.vx<512+visibilityRadius&&
-	   pos.vy>0-visibilityRadius&&pos.vy<256+visibilityRadius)
+	if (canRender())
 	{
-		renderPickup(&pos);
+		DVECTOR	&renderPos=getRenderPos();
+		renderPickup(&renderPos);
 	}
 }
 
@@ -436,17 +433,13 @@ void	CBaseBouncingPickup::render()
 		int		visibilityRadius;
 		
 		CPickupThing::render();
-		
-		ofs=CLevel::getCameraPos();
-		pos.vx=Pos.vx-ofs.vx;
-		pos.vy=Pos.vy-ofs.vy;
-		visibilityRadius=getVisibilityRadius();
-		if(pos.vx>0-visibilityRadius&&pos.vx<512+visibilityRadius&&
-		   pos.vy>0-visibilityRadius&&pos.vy<256+visibilityRadius)
+		if (canRender())
 		{
-			renderPickup(&pos);
+			DVECTOR	&renderPos=getRenderPos();
+			renderPickup(&renderPos);
 		}
 	}
+
 }
 
 /*----------------------------------------------------------------------

@@ -3,6 +3,7 @@
 /***************************/
 
 #include 	"system\global.h"
+#include	"system\vid.h"
 #include	<DStructs.h>
 #include 	"utils\utils.h"
 #include 	"gfx\prim.h"
@@ -18,6 +19,18 @@
 static		FontBank		*Font;
 #endif
 
+int			BLOCK_SIZE				=16;
+int			SCREEN_TILE_ADJ_U		=2;
+int			SCREEN_TILE_ADJ_D		=2;
+int			SCREEN_TILE_ADJ_L		=2;
+int			SCREEN_TILE_ADJ_R		=3;
+int			SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;	//40;
+int			SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;			//+18;
+int			RENDER_X_PIX_OFS		=8;
+int			RENDER_Y_PIX_OFS		=16;
+
+int			RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
+int			RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -67,8 +80,8 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 			MapXY.vx=MapPos.vx>>4;
 			MapXY.vy=MapPos.vy>>4;
 			
-			MapXY.vx-=SCREEN_TILE_ADJ_LEFT;
-			MapXY.vy-=SCREEN_TILE_ADJ_UP;
+			MapXY.vx-=SCREEN_TILE_ADJ_L;
+			MapXY.vy-=SCREEN_TILE_ADJ_U;
 
 			ShiftX=(MapPos.vx & 15);
 			ShiftY=(MapPos.vy & 15);
@@ -76,12 +89,12 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 			RenderOfs.vx=RenderOfs.vy=0;
 			if (MapXY.vx<0) 
 			{
-				RenderOfs.vx=-MapXY.vx*BLOCK_MULT;
+				RenderOfs.vx=-MapXY.vx*BLOCK_SIZE;
 				MapXY.vx=0;
 			}
 			if (MapXY.vy<0) 
 			{
-				RenderOfs.vy=-MapXY.vy*BLOCK_MULT;
+				RenderOfs.vy=-MapXY.vy*BLOCK_SIZE;
 				MapXY.vy=0;
 			}
 
@@ -101,6 +114,10 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 void	CLayerTile3d::render()
 {
+	SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;	//40;
+	SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;			//+18;
+	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
+	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
 
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
@@ -156,11 +173,11 @@ VECTOR			BlkPos;
 					}
 				}
 				MapRow++;
-				BlkPos.vx+=BLOCK_MULT;
+				BlkPos.vx+=BLOCK_SIZE;
 			}
 			MapPtr+=MapWidth;
 			BlkPos.vx=BlkXOld;
-			BlkPos.vy+=BLOCK_MULT;
+			BlkPos.vy+=BLOCK_SIZE;
 		}
 
 		SetPrimPtr((u8*)TPrimPtr);

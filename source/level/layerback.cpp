@@ -2,6 +2,7 @@
 /*** Shade Layer Class ***/
 /*************************/
 
+#include 	"system\vid.h"
 #include 	"system\global.h"
 #include	<DStructs.h>
 #include 	"utils\utils.h"
@@ -86,8 +87,8 @@ sLayerShadeBackGfx		*GfxList=Data->GfxList;
 			{
 				int			PosX=(GfxList->PosX*BB)-XOfs;
 				int			PosY=(GfxList->PosY*BB)-YOfs;
-				if (PosX>0-64 && PosX<512+64)
-				if (PosY>0-64 && PosY<256+64)
+				if (PosX>0-64 && PosX<INGAME_SCREENW+64)
+				if (PosY>0-64 && PosY<INGAME_SCREENH+64)
 				{
 					POLY_GT4	*sGt4,*Gt4=GetPrimGT4();
 					sLayerShadeBackGfxType	&ThisType=Data->TypeList[GfxList->Type];
@@ -127,7 +128,7 @@ sLayerShadeBackGfx		*GfxList=Data->GfxList;
 //			if (ThisY<0) BandHeight=256;
 		for (i=0; i<BandCount; i++)
 		{
-			setXYWH(&Band[i],0,ThisY,512,BandHeight);
+			setXYWH(&Band[i],0,ThisY,INGAME_SCREENW,BandHeight);
 			addPrim(ThisOT,&Band[i]);
 			ThisY+=BandHeight;
 		}

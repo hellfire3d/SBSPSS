@@ -170,18 +170,6 @@ int	CGameScene::s_bossHasBeenKilled;
 CGameScene	GameScene;
 
 /*****************************************************************************/
-void	CGameScene::AspectCorrectCamera()
-{
-const s32 Scale = (512<<12)/(256);
-
-		CamMtx.m[0][0] = ((s32)CamMtx.m[0][0] * Scale)>>12;
-		CamMtx.m[0][1] = ((s32)CamMtx.m[0][1] * Scale)>>12;
-		CamMtx.m[0][2] = ((s32)CamMtx.m[0][2] * Scale)>>12;
-
-		CamMtx.t[0]  = (CamMtx.t[0] * Scale)>>12;
-}
-
-/*****************************************************************************/
 void 	CGameScene::init()
 {
 // Setup Constant Camera Matrix
@@ -256,7 +244,7 @@ void 	CGameScene::render()
 			timerValue=m_timer/55;
 			if(timerValue<0)timerValue=0;
 			sprintf(buf,"%d",timerValue);
-			m_scalableFont->print(256,30,buf);
+			m_scalableFont->print(VidGetScrW()/2,30,buf);
 		}
 
 		m_pauseMenu->render();

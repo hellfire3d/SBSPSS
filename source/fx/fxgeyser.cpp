@@ -13,7 +13,7 @@
 
 #include	"FX\FXGeyser.h"
 
-int		GeyserSpeed=4;
+static const int	GeyserSpeed=4;
 
 /*****************************************************************************/
 void	CFXGeyser::init(DVECTOR const &_Pos)

@@ -90,8 +90,8 @@ sVidScreen	*Scr=VidGetDrawScreen();
 	Real.x+=Scr->Draw.clip.x;
 	Real.y+=Scr->Draw.clip.y;
 
-	int xLimit=512;
-	int yLimit=((FrameFlipFlag^1)+1)*256;
+	int xLimit=VidGetScrW();
+	int yLimit=((FrameFlipFlag^1)+1)*VidGetScrH();
 	if(Real.x+Real.w>xLimit)Real.w=xLimit-Real.x;
 	if(Real.y+Real.h>yLimit)Real.h=yLimit-Real.y;
 

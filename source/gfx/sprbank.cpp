@@ -268,7 +268,6 @@ void SpriteBank::prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xF
 
 		setXYWH(_ft4,_x,_y,W,H);
 		setUVTp(_fh,_ft4,_xFlip,_yFlip);
-//!!		CorrectAspect(_ft4);
 }
 
 /*----------------------------------------------------------------------
@@ -338,7 +337,6 @@ void SpriteBank::prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bo
 
 	setXYWH(_ft4,_x,_y,W,H);
 	setUVTp(_fh,_ft4,_xFlip,_yFlip);
-//!!	CorrectAspect(_ft4);
 }
 
 
@@ -354,7 +352,6 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 	int		ca,sa;
 	int		cw,ch,sw,sh;
 	int		width,height;
-	int		aspect;
 
 	halfW=(_fh->W*_xScale)>>(12+1);
 	halfH=(_fh->H*_yScale)>>(12+1);
@@ -364,10 +361,6 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 	ch=(ca*halfH)>>12;
 	sw=(sa*halfW)>>12;
 	sh=(sa*halfH)>>12;
-
-//	aspect=(512<<12)/384;//((_fh->H<<12)/_fh->W)/2;
-//	ch=(ch*aspect)>>12;
-//	sh=(sh*aspect)>>12;
 
 	_ft4->x0=_xCentre-cw+sh;	_ft4->y0=_yCentre-sw-ch;
 	_ft4->x1=_xCentre+cw+sh;	_ft4->y1=_yCentre+sw-ch;
@@ -413,7 +406,7 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 	_ft4->tpage=_fh->TPage;
 	_ft4->clut=_fh->Clut;
 ////////////////////////////////	
-//!!	CorrectAspect(_ft4);
+
 
 }
 

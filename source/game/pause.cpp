@@ -16,6 +16,7 @@
 	Includes
 	-------- */
 
+#include 	"system\vid.h"
 #include "game\pause.h"
 
 #ifndef	__GUI_GFRAME_H__
@@ -88,7 +89,7 @@ void CPauseMenu::init()
 {
 	m_guiFrame=new ("Conversation GUI") CGUIControlFrame();
 	m_guiFrame->init(0);
-	m_guiFrame->setObjectXYWH((512-FRAME_WIDTH)/2,(256-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
+	m_guiFrame->setObjectXYWH((INGAME_SCREENW-FRAME_WIDTH)/2,(INGAME_SCREENH-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
 	m_guiFrame->setOt(OT_POS);
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 

@@ -3,6 +3,7 @@
 /******************/
 
 #include 	"system\global.h"
+#include 	"system\vid.h"
 #include	<DStructs.h>
 #include 	"utils\utils.h"
 #include 	"gfx\prim.h"
@@ -16,7 +17,7 @@
 
 int		NRGX=32;
 int		NRGY=188;
-int		NRGW=512-64;
+int		NRGW=INGAME_SCREENW-64;
 
 
 /*****************************************************************************/

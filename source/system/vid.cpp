@@ -204,7 +204,7 @@ void	ClearVRam()
 #if	defined(__VERSION_DEBUG__) && !defined(__USER_CDBUILD__)
 RECT 	Rect;
 //Clear All Videoram
-	setRECT(&Rect,512,0,512,512);
+	setRECT(&Rect,INGAME_SCREENW,0,1024-INGAME_SCREENW,512);
 	ClearImage(&Rect,0,0,0);
 
 int	X;
@@ -311,7 +311,7 @@ void VidInit()
 	InitGeom();
 	SetGeomScreen(GEOM_SCREEN_H);
 
-	VidSetRes( 512, 256 );
+	VidSetRes( INGAME_SCREENW, INGAME_SCREENH);
 	DrawSync(0);
 	VidSwapDraw();
 	DrawSync(0);
@@ -329,8 +329,6 @@ void VidInit()
 }
 
 /*****************************************************************************/
-int pofx=0;
-int pofy=0;
 #ifdef __USER_paul__
 int ScreenClipBox=1;
 #else
@@ -349,8 +347,8 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 		Disp=&Screen[FrameFlipFlag].Disp;
 		Disp->disp.x=0;
 		Disp->disp.y=ScrH;
-		Disp->disp.w=512;
-		Disp->disp.h=256;
+		Disp->disp.w=ScreenW;
+		Disp->disp.h=ScreenH;
 		Disp->screen.x=ScreenXOfs;
 		Disp->screen.y=ScreenYOfs;
 		Disp->screen.w=256;
@@ -364,10 +362,10 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 
 if(ScreenClipBox==1)
 {
-	DrawLine(15,25,512-15,25,255,0,0,0);
-	DrawLine(15,256-25,512-15,256-25,255,0,0,0);
-	DrawLine(15,25,15,256-25,255,0,0,0);
-	DrawLine(512-15,25,512-15,256-25,255,0,0,0);
+	DrawLine(15,25,ScreenW-15,25,255,0,0,0);
+	DrawLine(15,ScreenH-25,ScreenW-15,ScreenH-25,255,0,0,0);
+	DrawLine(15,25,15,ScreenH-25,255,0,0,0);
+	DrawLine(ScreenW-15,25,ScreenW-15,ScreenH-25,255,0,0,0);
 
 	DrawLine(0,0,511,0,0,255,0,0);
 	DrawLine(0,255,511,255,0,255,0,0);
@@ -378,19 +376,19 @@ if(ScreenClipBox==2)
 {
 	POLY_F4 *f4;
 	f4=GetPrimF4();
-	setXYWH(f4,0,0,512,20);
+	setXYWH(f4,0,0,ScreenW,20);
 	setRGB0(f4,50,50,50);
 	AddPrimToList(f4,0);
 	f4=GetPrimF4();
-	setXYWH(f4,0,256-20,512,20);
+	setXYWH(f4,0,ScreenH-20,ScreenW,20);
 	setRGB0(f4,50,50,50);
 	AddPrimToList(f4,0);
 	f4=GetPrimF4();
-	setXYWH(f4,512-10,20,10,256-40);
+	setXYWH(f4,ScreenW-10,20,10,ScreenH-40);
 	setRGB0(f4,50,50,50);
 	AddPrimToList(f4,0);
 	f4=GetPrimF4();
-	setXYWH(f4,0,20,10,256-40);
+	setXYWH(f4,0,20,10,ScreenH-40);
 	setRGB0(f4,50,50,50);
 	AddPrimToList(f4,0);
 }
@@ -435,10 +433,10 @@ int 	OldX=Scr->Disp.disp.x,OldY=Scr->Disp.disp.y;
             if(!(Pad & PAD_SELECT)) Done=1;
 #endif
 
-            if(Pad&PAD_LEFT)	if(Scr->Disp.disp.x) 		Scr->Disp.disp.x--;
-            if(Pad&PAD_RIGHT)	if(Scr->Disp.disp.x<700)	Scr->Disp.disp.x++;
-            if(Pad&PAD_UP) 		if(Scr->Disp.disp.y) 		Scr->Disp.disp.y--;
-            if(Pad&PAD_DOWN)	if(Scr->Disp.disp.y<256) 	Scr->Disp.disp.y++;
+            if(Pad&PAD_LEFT)	if(Scr->Disp.disp.x) 				Scr->Disp.disp.x--;
+            if(Pad&PAD_RIGHT)	if(Scr->Disp.disp.x<1024-ScreenW)	Scr->Disp.disp.x++;
+            if(Pad&PAD_UP) 		if(Scr->Disp.disp.y) 				Scr->Disp.disp.y--;
+            if(Pad&PAD_DOWN)	if(Scr->Disp.disp.y<512-ScreenH) 	Scr->Disp.disp.y++;
             PutDispEnv(&Scr->Disp);
             PutDrawEnv(&Scr->Draw);
 	        }
