@@ -571,9 +571,9 @@ ifeq ($(USER_NAME),CDBUILD)
 	@$(CP) -u Data/CdData/intro.str $(CD_DIR)/intro.str
 	@$(CP) -u Data/CdData/track1.ixa $(CD_DIR)/track1.ixa
 	@$(RAR) x data/CDData/ZZZZZZZ.RAR $(CD_DIR)/ -y >nul
-	ifeq ($(TERRITORY),EUR)
-		@$(CP) -u Data/CdData/demo.str $(CD_DIR)/demo.str
-	endif
+ifeq ($(TERRITORY),EUR)
+	@$(CP) -u Data/CdData/demo.str $(CD_DIR)/demo.str
+endif
 
 
 # Compile bootstrap
