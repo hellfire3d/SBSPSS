@@ -75,7 +75,7 @@ void CNpcBouncingRockHazard::setWaypoints( sThingHazard *ThisHazard )
 	CHazardTrigger *trigger;
 
 	trigger=(CHazardTrigger*)CTrigger::Create(CTrigger::TRIGGER_HAZARD_WALK);
-	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16 - 100, 100, 100 );
+	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16 - 100, 128, 128 );
 	trigger->setHazard( this );
 
 	s32 minX, maxX, minY, maxY;
