@@ -713,7 +713,7 @@ u8		W=CurrentFrameGfx->W-1;
 u8		H=CurrentFrameGfx->H-1;
 u8		U=Node->U;
 u8		V=Node->V;
-
+int		AspectX0,AspectX1;
 		if (XFlip)
 			{
 			X-=CurrentFrame->XOfs;
@@ -722,7 +722,8 @@ u8		V=Node->V;
 			Ft4->u1=U;//-1;//
 			Ft4->u2=U+W;
 	 		Ft4->u3=U;//-1;//
-
+			AspectX0=CurrentFrameGfx->AspectX1;
+			AspectX1=CurrentFrameGfx->AspectX0;
 			}
 		else
 		{
@@ -731,7 +732,8 @@ u8		V=Node->V;
 			Ft4->u1=U+W;
 			Ft4->u2=U;
  			Ft4->u3=U+W;
-
+			AspectX0=CurrentFrameGfx->AspectX0;
+			AspectX1=CurrentFrameGfx->AspectX1;
 		}
 
 		if (YFlip)
@@ -756,10 +758,10 @@ u8		V=Node->V;
 
 #if		INGAME_SCREENW==512
 // Correct Aspect
-		Ft4->x0-=CurrentFrameGfx->AspectX0;
-		Ft4->x1+=CurrentFrameGfx->AspectX1;
-		Ft4->x2-=CurrentFrameGfx->AspectX0;
-		Ft4->x3+=CurrentFrameGfx->AspectX1;
+		Ft4->x0-=AspectX0;
+		Ft4->x1+=AspectX1;
+		Ft4->x2-=AspectX0;
+		Ft4->x3+=AspectX1;
 #endif
 }
 
