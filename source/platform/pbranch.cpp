@@ -37,7 +37,14 @@
 void CNpcBranchPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, PLATFORMCOLLISIONHEIGHT );
+	boundingBox.YMin = ( ( boundingBox.YMin - boundingBox.YMax ) >> 1 ) + boundingBox.YMax;
+	m_boundingBox = boundingBox;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	//CNpcPlatform::postInit();
+
+	/*sBBox boundingBox = m_modelGfx->GetBBox();
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, ( boundingBox.YMax - boundingBox.YMin ) );
 
 	if ( m_reversed )
 	{
@@ -46,7 +53,7 @@ void CNpcBranchPlatform::postInit()
 	else
 	{
 		setCollisionCentreOffset( boundingBox.XMin, 18 + ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) );
-	}
+	}*/
 
 	m_angularVelocity = 0;
 }
@@ -93,7 +100,7 @@ void CNpcBranchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
+/*void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
 {
 	switch(_thisThing->getThingType())
 	{
@@ -134,7 +141,7 @@ void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
 			ASSERT(0);
 			break;
 	}
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -267,68 +274,55 @@ void CNpcBranchPlatform::render()
 			scale.vz = ONE;
 
 			m_modelGfx->Render(renderPos,&rotation,&scale);
-		
-#if defined (__USER_paul__) || defined (__USER_charles__)
-	DVECTOR	offset = CLevel::getCameraPos();
-	DVECTOR size;
-	DVECTOR	centre;
-	int		halfLength;
-	int		x1,y1,x2,y2;
-
-	centre=getCollisionCentre();
-	size=getCollisionSize();
-	halfLength=size.vx>>1;
-
-	x1=0;
-	x2=0;
-	y1=0;
-	y2=0;
-
-	if ( m_reversed )
-	{
-		x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
-		y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
-	}
-	else
-	{
-		x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
-		y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
-	}
-
-	centre.vx-=offset.vx;
-	centre.vy-=offset.vy;
-	x1+=centre.vx;
-	y1+=centre.vy;
-	x2+=centre.vx;
-	y2+=centre.vy;
-
-	DrawLine(x1,y1,x2,y2,0,255,0,0);
-#endif
-
 		}
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcBranchPlatform::calculateBoundingBoxSize()
+sBBox & CNpcBranchPlatform::getBBox()
 {
+	return( m_boundingBox );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
+{
+	DVECTOR top;
 	int		angle;
-	DVECTOR	centre;
-	int		length;
-	int		x1,y1,x2,y2;
+
+	CRECT collisionArea = getCollisionArea();
+
+	if ( m_reversed )
+	{
+		top.vx = offsetX + collisionArea.x2;
+	}
+	else
+	{
+		top.vx = offsetX + collisionArea.x1;
+	}
+
+	//sBBox boundingBox = m_modelGfx->GetBBox();
+	sBBox boundingBox = getBBox();
+	//top.vy = collisionArea.y1;
+	top.vy = boundingBox.YMin + Pos.vy + offsetY;
 
 	angle=getCollisionAngle();
-	centre=getCollisionCentre();
+	if(angle==0)
+	{
+		// Non-rotated platform
+		return( top.vy - _y );
+	}
+	else
+	{
+		// Rotate backwards to find height at current position
+		//return( ( top.vy - _y ) + ( ( top.vx - _x ) * msin( -angle & 4095 ) >> 12 ) );
 
-	//halfLength=m_platformWidth/2;
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	length = ( boundingBox.XMax - boundingBox.XMin );
+		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
 
-	x1=-length*mcos(angle&4095)>>12;
-	y1=-length*msin(angle&4095)>>12;
-	x2=+length*mcos(angle&4095)>>12;
-	y2=+length*msin(angle&4095)>>12;
+		int angleHeight = -( hypotenuse * rsin( angle ) ) >> 12;
 
-	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+		return( ( top.vy - _y ) + angleHeight );
+	}
 }

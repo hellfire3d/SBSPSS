@@ -34,10 +34,6 @@ void CNpcRaftPlatform::postInit()
 
 	m_isActivated = false;
 	m_isSinking = false;
-
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), PLATFORMCOLLISIONHEIGHT + ( boundingBox.YMax - boundingBox.YMin ) );
-	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) - 16 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

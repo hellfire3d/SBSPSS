@@ -489,8 +489,8 @@ void CNpcPlatform::reinit()
 void CNpcPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), PLATFORMCOLLISIONHEIGHT);
-	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, boundingBox.YMin );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
 	/*if ( m_type == NPC_LINEAR_PLATFORM )
 	{
@@ -634,6 +634,9 @@ void CNpcPlatform::think(int _frames)
 
 void CNpcPlatform::setCollisionAngle(int newAngle)
 {
+	CPlatformThing::setCollisionAngle(newAngle);
+	calculateBoundingBoxSize();
+	
 	CPlayer	*player;
 
 	// Is the player stood on this platform as it rotates?
@@ -643,7 +646,12 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 		DVECTOR	playerPos;
 
 		playerPos=player->getPos();
-		if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
+
+		DVECTOR shove;
+		shove.vx = 0;
+		shove.vy = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+		player->shove(shove);
+		/*if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
 		{
 			// Ok.. currently stood on the platform - awkward bastard
 			DVECTOR	centre;
@@ -674,11 +682,8 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 			}
 
 			player->shove(shove);
-		}
+		}*/
 	}
-
-	CPlatformThing::setCollisionAngle(newAngle);
-	calculateBoundingBoxSize();
 }
 
 
@@ -686,7 +691,7 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 
 void CNpcPlatform::calculateBoundingBoxSize()
 {
-	int		angle;
+	/*int		angle;
 	DVECTOR	centre;
 	int		halfLength;
 	int		x1,y1,x2,y2;
@@ -703,11 +708,73 @@ void CNpcPlatform::calculateBoundingBoxSize()
 	x2=+halfLength*mcos(angle&4095)>>12;
 	y2=+halfLength*msin(angle&4095)>>12;
 
-	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+	setCollisionSize( abs(x2-x1), abs(y2-y1) );
 
 	//sBBox boundingBox = m_modelGfx->GetBBox();
 	//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-	//setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	//setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );*/
+
+
+
+
+	//sBBox boundingBox = m_modelGfx->GetBBox();
+	sBBox boundingBox = getBBox();
+
+	// 'render' collision box at correct angle
+
+	SVECTOR testPointsNonRel[4];
+	VECTOR testPoints[4];
+
+	testPointsNonRel[0].vx = boundingBox.XMin;
+	testPointsNonRel[0].vy = boundingBox.YMin;
+
+	testPointsNonRel[1].vx = boundingBox.XMax;
+	testPointsNonRel[1].vy = boundingBox.YMin;
+
+	testPointsNonRel[2].vx = boundingBox.XMax;
+	testPointsNonRel[2].vy = boundingBox.YMax;
+
+	testPointsNonRel[3].vx = boundingBox.XMin;
+	testPointsNonRel[3].vy = boundingBox.YMax;
+
+	MATRIX mtx;
+	SetIdentNoTrans(&mtx );
+	RotMatrixZ( getCollisionAngle(), &mtx );
+
+	int i;
+
+	for ( i = 0 ; i < 4 ; i++ )
+	{
+		ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
+	}
+
+	int x1, x2, y1, y2;
+
+	x1 = x2 = testPoints[0].vx;
+	y1 = y2 = testPoints[0].vy;
+
+	for ( i = 1 ; i < 4 ; i++ )
+	{
+		if ( testPoints[i].vy < y1 )
+		{
+			y1 = testPoints[i].vy;
+		}
+		else if ( testPoints[i].vy > y2 )
+		{
+			y2 = testPoints[i].vy;
+		}
+
+		if ( testPoints[i].vx < x1 )
+		{
+			x1 = testPoints[i].vx;
+		}
+		else if ( testPoints[i].vx > x2 )
+		{
+			x2 = testPoints[i].vx;
+		}
+	}
+
+	setCollisionSize( x2 - x1 + 1, y2 - y1 + 1 );
 }
 
 
@@ -819,6 +886,55 @@ void CNpcPlatform::processTimer( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+u8 CNpcPlatform::checkCollisionDelta( CThing *_thisThing, int threshold, CRECT collisionArea )
+{
+	// check for case of "was not colliding previously because was above" +
+	// "is not colliding now because is below"
+
+	DVECTOR	otherPos = _thisThing->getPos();
+
+	if ( getHeightFromPlatformAtPosition( otherPos.vx, otherPos.vy ) < 0 )
+	{
+		// is currently below platform landing point
+
+		DVECTOR otherPosDelta = _thisThing->getPosDelta();
+		DVECTOR posDelta = getPosDelta();
+
+		if ( otherPosDelta.vy > 0 || posDelta.vy < 0 )
+		{
+			// object is dropping vertically, or platform is rising vertically
+
+			// get both object's previous positions
+
+			s32 oldXPos = otherPos.vx - otherPosDelta.vx;
+			s32 oldYPos = otherPos.vy - otherPosDelta.vy;
+
+			collisionArea.x1 -= posDelta.vx;
+			collisionArea.x2 -= posDelta.vx;
+			collisionArea.y1 -= posDelta.vy;
+			s32 oldCollisionY = collisionArea.y2;
+			collisionArea.y2 -= posDelta.vy;
+
+			if ( oldXPos >= collisionArea.x1 && oldXPos <= collisionArea.x2 )
+			{
+				//if ( oldYPos < collisionArea.y1 + threshold ) //&& otherPos.vy > oldCollisionY )
+				if ( getHeightFromPlatformAtPosition( oldXPos, oldYPos, -posDelta.vx, -posDelta.vy ) > 0 )
+				{
+					// if object's old position was above old platform collision area,
+					// but is now below current platform collision area, we can assume
+					// the player has hit the platform in the intervening time
+
+					return( true );
+				}
+			}
+		}
+	}
+
+	return( false );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPlatform::collidedWith( CThing *_thisThing )
 {
 	switch(_thisThing->getThingType())
@@ -835,14 +951,35 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 				player=(CPlayer*)_thisThing;
 				playerPos=player->getPos();
 				collisionArea=getCollisionArea();
-				if(playerPos.vx>=collisionArea.x1&&playerPos.vx<=collisionArea.x2&&
-				   playerPos.vy>=collisionArea.y1&&playerPos.vy<=collisionArea.y2)
-				{
-					player->setPlatform( this );
 
-					if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
+				s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+				if ( threshold > 16 )
+				{
+					threshold = 16;
+				}
+
+				if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+				{
+					if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
 					{
+						player->setPlatform( this );
+
 						m_contact = true;
+					}
+					else
+					{
+						if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+						{
+							int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+							if ( height >= -threshold && height < 1 )
+							{
+								player->setPlatform( this );
+
+								m_contact = true;
+							}
+						}
 					}
 				}
 			}
@@ -859,14 +996,6 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 			hazard = (CNpcHazard *)_thisThing;
 
 			hazard->setPlatform( this );
-
-			/*DVECTOR newPos = _thisThing->getPos();
-
-			s32 yDiff = getHeightFromPlatformAtPosition( newPos.vx, newPos.vy );
-
-			newPos.vy += yDiff;
-
-			_thisThing->setPos( newPos );*/
 
 			break;
 		}
@@ -897,296 +1026,39 @@ void CNpcPlatform::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			m_modelGfx->Render(renderPos);
-
-#if defined (__USER_paul__) || defined (__USER_charles__)
-	DVECTOR	offset = CLevel::getCameraPos();
-	DVECTOR size;
-	DVECTOR	centre;
-	int		halfLength;
-	int		x1,y1,x2,y2;
-
-	centre=getCollisionCentre();
-	size=getCollisionSize();
-	halfLength=size.vx>>1;
-
-	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
-	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
-	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
-	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
-
-	centre.vx-=offset.vx;
-	centre.vy-=offset.vy;
-	x1+=centre.vx;
-	y1+=centre.vy;
-	x2+=centre.vx;
-	y2+=centre.vy;
-
-	DrawLine(x1,y1,x2,y2,0,255,0,0);
-#endif
 		}
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef REMOVETHIS
-s32	CNpcPlatform::getNewYPos(CThing *_thisThing)
+int CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
-	CRECT	thisRect;
-	DVECTOR thatPos = _thisThing->getPos();
+	int collided = false;
+
+	CRECT thisRect, thatRect;
 
 	thisRect = getCollisionArea();
+	thatRect = _thisThing->getCollisionArea();
 
-	// 'render' collision box at correct angle
+	DVECTOR posDelta = getPosDelta();
 
-	SVECTOR testPointsNonRel[4];
-	VECTOR testPoints[4];
+	thisRect.y1 -= abs( posDelta.vy ) >> 1;
+	thisRect.y2 += abs( posDelta.vy ) >> 1;
 
-	testPointsNonRel[0].vx = thisRect.x1 - Pos.vx;
-	testPointsNonRel[0].vy = thisRect.y1 - Pos.vy;
+	posDelta = _thisThing->getPosDelta();
 
-	testPointsNonRel[1].vx = thisRect.x2 - Pos.vx;
-	testPointsNonRel[1].vy = thisRect.y1 - Pos.vy;
+	thatRect.y1 -= abs( posDelta.vy ) >> 1;
+	thatRect.y2 += abs( posDelta.vy ) >> 1;
 
-	testPointsNonRel[2].vx = thisRect.x2 - Pos.vx;
-	testPointsNonRel[2].vy = thisRect.y2 - Pos.vy;
-
-	testPointsNonRel[3].vx = thisRect.x1 - Pos.vx;
-	testPointsNonRel[3].vy = thisRect.y2 - Pos.vy;
-
-	MATRIX mtx;
-	SetIdentNoTrans(&mtx );
-	RotMatrixZ( getCollisionAngle(), &mtx );
-
-	int i;
-
-	for ( i = 0 ; i < 4 ; i++ )
+	if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+	   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
 	{
-		ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
-
-		testPoints[i].vx += Pos.vx;
-		testPoints[i].vy += Pos.vy;
+		collided = true;
 	}
 
-	// now find the highest y pos
-
-	// first set highestY to lowest of the four points
-
-	s16 highestY = testPoints[0].vy;
-
-	for ( i = 1 ; i < 4 ; i++ )
-	{
-		if ( testPoints[i].vy > highestY ) // remember y is inverted
-		{
-			highestY = testPoints[i].vy;
-		}
-	}
-
-	for ( i = 0 ; i < 4 ; i++ )
-	{
-		int j = i + 1;
-		j %= 4;
-
-		VECTOR highestX, lowestX;
-
-		if ( testPoints[i].vx < testPoints[j].vx )
-		{
-			lowestX = testPoints[i];
-			highestX = testPoints[j];
-		}
-		else
-		{
-			lowestX = testPoints[j];
-			highestX = testPoints[i];
-		}
-
-		if ( highestX.vx == lowestX.vx )
-		{
-			// have to compare heights of both points to get highest
-
-			if ( lowestX.vy < highestY )
-			{
-				highestY = lowestX.vy;
-			}
-
-			if ( highestX.vy < highestY )
-			{
-				highestY = highestX.vy;
-			}
-		}
-		else
-		{
-			if ( thatPos.vx >= lowestX.vx && thatPos.vx <= highestX.vx )
-			{
-				// current position is above or below this line
-
-				s16 testY;
-
-				testY = lowestX.vy + ( ( thatPos.vx - lowestX.vx ) * ( highestX.vy - lowestX.vy ) ) /
-							( highestX.vx - lowestX.vx );
-
-				if ( testY < highestY )
-				{
-					highestY = testY;
-				}
-			}
-		}
-	}
-
-	return( highestY );
+	return( collided );
 }
-#endif // REMOVETHIS
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef REMOVETHIS
-int	CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
-{
-	DVECTOR	pos,thisThingPos;
-	int		radius;
-	int		collided;
-
-	MATRIX mtx;
-
-	pos=getCollisionCentre();
-	thisThingPos=_thisThing->getCollisionCentre();
-
-	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
-	collided=false;
-	if(abs(pos.vx-thisThingPos.vx)<radius&&
-	   abs(pos.vy-thisThingPos.vy)<radius)
-	{
-		CRECT	thisRect,thatRect;
-
-		thisRect=getCollisionArea();
-
-		// ensure user 'sticks' to platform whilst it is moving along
-
-		thatRect=_thisThing->getCollisionArea();
-
-		// rotate thatPos opposite way to this CThing's collision angle, so that we can regard them both as being at 0 rotation
-
-		// get target thing's position
-
-		DVECTOR thatPos = _thisThing->getPos();
-
-		// get target thing's position relative to this thing's position
-
-		SVECTOR relativePos;
-		relativePos.vx = thatPos.vx - Pos.vx;
-		relativePos.vy = thatPos.vy - Pos.vy;
-
-		VECTOR newPos;
-
-		// get target thing's collision area relative to 0
-
-		thatRect.x1 -= thatPos.vx;
-		thatRect.y1 -= thatPos.vy;
-		thatRect.x2 -= thatPos.vx;
-		thatRect.y2 -= thatPos.vy;
-
-		SetIdentNoTrans(&mtx );
-		RotMatrixZ( -getCollisionAngle(), &mtx );
-
-		// rotation target relative position back to 0 by this thing's collision angle
-
-		ApplyMatrix( &mtx, &relativePos, &newPos );
-
-		// add on this thing's position to get new target thing's position after rotation around this thing
-
-		newPos.vx += Pos.vx;
-		newPos.vy += Pos.vy;
-
-		// reposition target thing's collision area
-		// horrible, horrible +2 shite is to deal with useless PSX innacurracies in calculations, which can cause it to
-		// believe that two collision areas are not *quite* colliding, even though they are
-
-		thatRect.x1 += newPos.vx - 2;
-		thatRect.y1 += newPos.vy - 2;
-		thatRect.x2 += newPos.vx + 2;
-		thatRect.y2 += newPos.vy + 2;
-
-		// check to see if bounding boxes collide
-
-		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
-		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
-		{
-			collided=true;
-
-			// check to see if centre point (i.e. where the object is standing) collides too
-
-			if ( ( newPos.vx >= ( thisRect.x1 - 2 ) && newPos.vx <= ( thisRect.x2 + 2 ) ) &&
-					( newPos.vy >= ( thisRect.y1 - 2 ) && newPos.vy <= ( thisRect.y2 + 2 ) ) )
-			{
-				thatPos.vy = getNewYPos( _thisThing );
-
-				// vertical height change is the sum of the maximums of BOTH objects
-				// potentially, one object could be falling down through another object that is moving up
-				// hence we provide a certain leeway to compensate
-
-				s32 thisDeltaX = abs( getPosDelta().vx );
-				s32 thisDeltaY = abs( getPosDelta().vy );
-
-				s32 thisDelta;
-
-				if ( thisDeltaX > thisDeltaY )
-				{
-					thisDelta = thisDeltaX;
-				}
-				else
-				{
-					thisDelta = thisDeltaY;
-				}
-
-				s32 thatDeltaX = abs( _thisThing->getPosDelta().vx );
-				s32 thatDeltaY = abs( _thisThing->getPosDelta().vy );
-
-				s32 thatDelta;
-
-				if ( thatDeltaX > thatDeltaY )
-				{
-					thatDelta = thatDeltaX;
-				}
-				else
-				{
-					thatDelta = thatDeltaY;
-				}
-
-				s32 verticalDelta = thisDelta + thatDelta;
-
-				if ( thatPos.vy - _thisThing->getPos().vy >= -( verticalDelta ) )
-				{
-					if ( _thisThing->getHasPlatformCollided() )
-					{
-						// if this has already collided with a platform, check the current platform is
-						// (a) within 10 units,
-						// (b) higher
-
-						DVECTOR oldCollidedPos = _thisThing->getNewCollidedPos();
-
-						s32 oldY = abs( oldCollidedPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
-						s32 currentY = abs( thatPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
-
-						//if ( thatPos.vy < oldCollidedPos.vy )
-						if ( currentY < oldY )
-						{
-							_thisThing->setNewCollidedPos( thatPos );
-						}
-					}
-					else
-					{
-						_thisThing->setHasPlatformCollided( true );
-
-						_thisThing->setNewCollidedPos( thatPos );
-					}
-				}
-			}
-		}
-	}
-
-	return collided;
-}
-#endif	// REMOVETHIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1197,22 +1069,35 @@ void CNpcPlatform::setTiltable( bool isTiltable )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y)
+int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
 {
-	DVECTOR	centre;
+	DVECTOR top;
 	int		angle;
 
-	centre=getCollisionCentre();
+	CRECT collisionArea = getCollisionArea();
+	top.vx = offsetX + ( ( collisionArea.x1 + collisionArea.x2 ) >> 1 );
+
+	//sBBox boundingBox = m_modelGfx->GetBBox();
+	sBBox boundingBox = getBBox();
+	//top.vy = collisionArea.y1;
+	top.vy = boundingBox.YMin + Pos.vy + offsetY;
+
 	angle=getCollisionAngle();
 	if(angle==0)
 	{
 		// Non-rotated platform
-		return centre.vy-_y;
+		return( top.vy - _y );
 	}
 	else
 	{
 		// Rotate backwards to find height at current position
-		return (centre.vy-_y)+((centre.vx-_x)*msin(-angle&4095)>>12);
+		//return( ( top.vy - _y ) + ( ( top.vx - _x ) * msin( -angle & 4095 ) >> 12 ) );
+
+		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
+
+		int angleHeight = -( hypotenuse * rsin( angle ) ) >> 12;
+
+		return( ( top.vy - _y ) + angleHeight );
 	}
 }
 

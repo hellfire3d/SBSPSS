@@ -189,31 +189,6 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 	m_isStunned = false;
 }
 
-/*void CNpcStaticClamEnemy::processShot( int _frames )
-{
-	if ( !m_isStunned )
-	{
-		switch( m_data[m_type].shotFunc )
-		{
-			case NPC_SHOT_NONE:
-			{
-				// do nothing
-
-				break;
-			}
-
-			case NPC_SHOT_GENERIC:
-			{
-				m_isStunned = true;
-
-				break;
-			}
-		}
-	}
-
-	m_controlFunc = NPC_CONTROL_MOVEMENT;
-}*/
-
 void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 {
 	if ( m_isActive && !m_isCaught && !m_isDying )
@@ -232,56 +207,3 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 		}
 	}
 }
-
-/*int CNpcStaticClamEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
-{
-	DVECTOR	pos,thisThingPos;
-	int		radius;
-	int		collided;
-
-	pos = getCollisionCentre();
-	thisThingPos=_thisThing->getCollisionCentre();
-
-	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
-	collided=false;
-	if(abs(pos.vx-thisThingPos.vx)<radius&&
-	   abs(pos.vy-thisThingPos.vy)<radius)
-	{
-		CRECT	thisRect,thatRect;
-
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
-
-		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
-		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
-		{
-			switch(_thisThing->getThingType())
-			{
-				case TYPE_PLAYER:
-				{
-					if ( m_isStunned && m_isActive )
-					{
-						CPlayer *player = (CPlayer *) _thisThing;
-
-						s32 playerDeltaY = player->getPosDelta().vy;
-
-						if ( thisThingPos.vy - playerDeltaY <= getNewYPos( _thisThing ) )
-						{
-							player->setPlatform( this );
-						}
-					}
-
-					break;
-				}
-
-				default:
-					break;
-			}
-
-			collided=true;
-		}
-	}
-
-	return collided;
-}*/

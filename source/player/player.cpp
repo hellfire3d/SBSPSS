@@ -3,9 +3,9 @@
 	player.cpp
 
 	Author:		PKG
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -694,17 +694,22 @@ if(newmode!=-1)
 	platform=isOnPlatform();
 	if(platform)
 	{
+		int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+		Pos.vy += platformOffset;
+
 		DVECTOR	posDelta;
 		posDelta=platform->getPosDelta();
-		if(((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(Pos.vx+posDelta.vx,Pos.vy+posDelta.vy)==0)
+		posDelta.vy = 0;
+		shove(posDelta);
+		/*if(((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(Pos.vx+posDelta.vx,Pos.vy+posDelta.vy)==0)
 		{
 			shove(posDelta);
-		}
+		}*/
 	}
 
 
 	m_allowConversation=false;
-	
+
 	if(m_healthReactFrames)
 	{
 		m_healthReactFrames-=_frames;
@@ -997,7 +1002,7 @@ if(getPadInputDown())
 	else if(m_cameraPos.vx>m_cameraPosLimitBox.x2)	m_cameraPos.vx=m_cameraPosLimitBox.x2;
 	if(m_cameraPos.vy<m_cameraPosLimitBox.y1)		m_cameraPos.vy=m_cameraPosLimitBox.y1;
 	else if(m_cameraPos.vy>m_cameraPosLimitBox.y2)	m_cameraPos.vy=m_cameraPosLimitBox.y2;
-	
+
 	CPlayerThing::think(_frames);
 }
 
@@ -1156,7 +1161,7 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		POLY_FT4	*ft4;
 		sFrameHdr	*fh;
 		int			V,W,H,partH;
-		
+
 		ft4=m_spriteBank->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
 		setSemiTrans(ft4,true);
 
@@ -1583,7 +1588,7 @@ void CPlayer::respawn()
 	m_jellyfishAmmo=0;
 
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
-	
+
 	clearPlatform();
 
 	updateCollisionArea();
@@ -1937,7 +1942,7 @@ PLAYERINPUT CPlayer::readPadInput()
 
 	input=PI_NONE;
 	pad=PadGetHeld(0);
-	
+
 	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
 	{
 		input=(PLAYERINPUT)(input|PI_UP);
@@ -2294,7 +2299,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 
 				hitWall=true;
 				_moveDistance=0;
-				
+
 				// Get the height at this new position and then try the step-up code below.
 				// Without this, there are problems when you run up a slope and hit a wall at the same time
 				colHeight=getHeightFromGround(pos.vx,pos.vy);
@@ -2340,7 +2345,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 		pos.vx+=_moveDistance;
 		setPlayerPos(&pos);
 	}
-	
+
 	return hitWall;
 }
 

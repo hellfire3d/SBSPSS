@@ -96,11 +96,9 @@ public:
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
-#ifdef REMOVETHIS
-//	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
-	virtual s32			getNewYPos( CThing *_thisThing );
-#endif
-	int					getHeightFromPlatformAtPosition(int _x,int _y);
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	virtual u8			checkCollisionDelta( CThing *_thisThing, int threshold, CRECT collisionArea );
+	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 	void				setTiltable( bool isTiltable );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setGraphic( sThingPlatform *ThisPlatform );
@@ -164,6 +162,7 @@ protected:
 	virtual void		processTimer( int _frames );
 	void				processTilt( int _frames );
 	bool				isCollisionWithGround();
+	virtual sBBox		&getBBox()						{return( m_modelGfx->GetBBox() );}
 
 	// data
 
