@@ -194,7 +194,9 @@ struct	sModel
 {
 		u16		TriCount;
 		u16		TriStart;
+		sBBox	BBox;
 };
+
 //---------------------------------------------------------------------------
 // Header
 struct	sLevelHdr
