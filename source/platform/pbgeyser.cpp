@@ -61,7 +61,8 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 		{
 			case NPC_BUBBLE_PLATFORM:
 			{
-				newPlatform = new ("falling platform") CNpcBubblePlatform;
+				//newPlatform = new ("falling platform") CNpcBubblePlatform;
+				newPlatform = CNpcPlatform::Create( m_targetType );
 				break;
 			}
 

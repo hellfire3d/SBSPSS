@@ -169,11 +169,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
+CNpcPlatform	*CNpcPlatform::Create(int Type)
 {
 	CNpcPlatform *platform;
-
-	NPC_PLATFORM_UNIT_TYPE Type = getTypeFromMapEdit( ThisPlatform->Type );
 
 	platform = (CNpcPlatform*)CThingManager::GetThing(CThing::TYPE_PLATFORM,Type);
 	if (!platform)
@@ -182,7 +180,6 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_LINEAR_PLATFORM:
 		{
 			platform = new ("linear platform") CNpcLinearPlatform;
-
 			break;
 		}
 
@@ -268,19 +265,7 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 
 		case NPC_DUAL_PLATFORM:
 		{
-			CNpcDualPlatform *dualPlatformMaster;
-			platform = dualPlatformMaster = new ("dual platform master") CNpcDualPlatform;
-			dualPlatformMaster->setMaster( true );
-			CNpcDualPlatform *dualPlatformSlave;
-			dualPlatformSlave = new ("dual platform slave") CNpcDualPlatform;
-			dualPlatformSlave->setMaster( false );
-			dualPlatformMaster->setOtherPlatform( dualPlatformSlave );
-			dualPlatformSlave->setOtherPlatform( dualPlatformMaster );
-
-			dualPlatformSlave->setType( Type );
-			dualPlatformSlave->setGraphic( ThisPlatform );
-			dualPlatformSlave->setTiltable( false );
-
+			platform = new ("dual platform master") CNpcDualPlatform;
 			break;
 		}
 
@@ -389,13 +374,51 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 	}
 
 	ASSERT(platform);
-	platform->setType( Type );
+	platform->setType( (NPC_PLATFORM_UNIT_TYPE) Type );
 	platform->setThingSubType( Type );
-	platform->setGraphic( ThisPlatform );
-
-	platform->setWaypoints( ThisPlatform );
-
 	platform->setTiltable( false );
+
+	return( platform );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
+{
+	CNpcPlatform *platform;
+
+	NPC_PLATFORM_UNIT_TYPE Type = getTypeFromMapEdit( ThisPlatform->Type );
+
+	platform=Create(Type);
+
+	switch( Type )
+	{
+		case NPC_DUAL_PLATFORM:
+		{
+			CNpcDualPlatform *dualPlatformMaster = (CNpcDualPlatform *) platform;
+			dualPlatformMaster->setMaster( true );
+
+			CNpcDualPlatform *dualPlatformSlave;
+			dualPlatformSlave = (CNpcDualPlatform *) CNpcPlatform::Create( NPC_DUAL_PLATFORM );
+			dualPlatformSlave->setMaster( false );
+
+			dualPlatformSlave->setType( Type );
+			dualPlatformSlave->setGraphic( ThisPlatform );
+			dualPlatformSlave->setTiltable( false );
+
+			dualPlatformMaster->setOtherPlatform( dualPlatformSlave );
+			dualPlatformSlave->setOtherPlatform( dualPlatformMaster );
+
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	ASSERT(platform);
+	platform->setGraphic( ThisPlatform );
+	platform->setWaypoints( ThisPlatform );
 
 	return( platform );
 }

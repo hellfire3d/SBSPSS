@@ -115,6 +115,7 @@ public:
 	NPC_PLATFORM_UNIT_TYPE	getType()											{return( m_type );}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
+	static CNpcPlatform	*Create(int Type);
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
 	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}

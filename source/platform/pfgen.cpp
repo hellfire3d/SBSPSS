@@ -70,7 +70,8 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 			case NPC_CRATE_PLATFORM:
 			case NPC_VERTICAL_OILDRUM_PLATFORM:
 			{
-				newPlatform = new ("falling platform") CNpcFallingNoRespawnPlatform;
+				//newPlatform = new ("falling platform") CNpcFallingNoRespawnPlatform;
+				newPlatform = CNpcPlatform::Create( m_targetType );
 				break;
 			}
 
