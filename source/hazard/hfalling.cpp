@@ -272,6 +272,9 @@ void CNpcFallingHazard::render()
 	{
 		DVECTOR &renderPos=getRenderPos();
 
+		sBBox boundingBox = m_modelGfx->GetBBox();
+		renderPos.vy -= boundingBox.YMax - boundingBox.YMin;
+
 		SVECTOR rotation;
 		rotation.vx = 0;
 		rotation.vy = 0;
