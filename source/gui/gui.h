@@ -56,7 +56,7 @@ public:
 
 	enum
 	{
-		INITIAL_OT=200,
+		INITIAL_OT=5,
 		BORDERWIDTH=8,
 		BORDERHEIGHT=5,
 	};

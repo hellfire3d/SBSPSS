@@ -62,6 +62,10 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef	__FRONTEND_FRONTEND_H__
+#include "frontend\frontend.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -119,6 +123,7 @@ void CFrontEndMainTitles::init()
 	m_smallFont=new ("MainTitle SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
+	m_smallFont->setOt(5);
 
 	// Create the main menu ( START GAME/OPTIONS/CREDITS )
 	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
@@ -194,16 +199,6 @@ void CFrontEndMainTitles::unselect()
 	MemFree(s_image);	s_image=NULL;
 }
 
-
-// PKG - This is messy... can be fixed when the final art is in
-/*
-typedef struct
-{
-	int	x,y;
-}xy;
-xy pos[10]={{0,0},{3,0},{-3,0},{0,2},{0,-2}};
-int posnum=5;
-*/
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -225,58 +220,9 @@ void CFrontEndMainTitles::render()
 
 	// The island
 	fh=m_sprites->getFrameHeader(FRM__ISLAND);
-	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,201);
+	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,FE_OT__SEAPOS);
 
-	// Sky
-/*	
-//	POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
-if(xstep&&ystep)
-{
-	int			x,y,f;
-	sFrameHdr	*fh;
-	POLY_FT4	*ft4;
-
-	fh=m_sprites->getFrameHeader(FRM_SKY);
-	for(x=0;x<512;x+=xstep)
-	{
-		for(y=0;y<128;y+=ystep)
-		{
-			for(f=0;f<posnum;f++)
-			{
-				ft4=prepareSeaPortionFT4(fh,x>>2,y<<1,xstep>>2,ystep<<1,128);
-				setXYWH(ft4,x+pos[f].x,y+pos[f].y,xstep,ystep);
-				if(f)
-				{
-					setSemiTrans(ft4,true);
-				}
-				AddPrimToList(ft4,1000-f);
-			}
-		}
-	}
-}
-else
-{
-	POLY_G4	*g4;
-	g4=GetPrimG4();
-	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,99,50,50);
-	setRGB1(g4,50,50,99);
-	setRGB2(g4,50,99,50);
-	setRGB3(g4,99,50,99);
-	AddPrimToList(g4,1001);
-}
-*/
-	/*
-	fh=m_sprites->getFrameHeader(FRM_SKY);
-	for(int i=0;i<posnum;i++)
-	{
-		ft4=m_sprites->printFT4(fh,0,0,0,0,1020-i);
-		setXYWH(ft4,pos[i].x,pos[i].y,512,HORIZON_LEVEL);
-		if(i)
-			setSemiTrans(ft4,true);
-	}
-	*/
-
+	// Sea
 	renderSeaSection(m_sprites->getFrameHeader(FRM__ISLAND),isx,HORIZON_LEVEL+isy,isw,ish);
 	renderSeaSection(m_sprites->getFrameHeader(FRM_SKY),0,HORIZON_LEVEL,512,256-HORIZON_LEVEL+SEA_OVERLAP);
 
@@ -522,19 +468,19 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
 			ft4->y3=grid[xloop+1][yloop+1].y;
 			ft4->x2=grid[xloop  ][yloop+1].x;
 			ft4->y2=grid[xloop  ][yloop+1].y;
-			AddPrimToList(ft4,202);
+			AddPrimToList(ft4,FE_OT__SEAPOS);
 			x+=xstep;
 		}
 		y+=ystep;
 	}
 
-	//////////////////////// bg
-	POLY_F4	*f4;
-	f4=GetPrimF4();
-	setXYWH(f4,0,HORIZON_LEVEL,512,256-HORIZON_LEVEL);
-	setRGB0(f4,80,70,60);
-	AddPrimToList(f4,203);
-	//////////////////////// bg
+//	//////////////////////// bg
+//	POLY_F4	*f4;
+//	f4=GetPrimF4();
+//	setXYWH(f4,0,HORIZON_LEVEL,512,256-HORIZON_LEVEL);
+//	setRGB0(f4,80,70,60);
+//	AddPrimToList(f4,FE_OT__SEAPOS);
+//	//////////////////////// bg
 }
 
 
