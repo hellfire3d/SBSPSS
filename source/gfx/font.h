@@ -67,6 +67,8 @@ public:
 
 	int		getStrWrapLen( char *_text,int _maxWidth );
 
+	void	setWobble(int _wobble)					{m_wobble=_wobble;}
+
 private:
 	virtual int		printChar( char _char,int _x,int _y );
 
@@ -79,6 +81,10 @@ private:
 		DEFAULT_OT=1,
 	};
 
+
+	static void	think(int _frames);		// Needed for the wobble only.. call once from main loop or summink..
+	friend void MainLoop();	
+
 protected:
 	FontData		*m_fontData;
 	u8				m_r, m_g, m_b;						// Font colour
@@ -89,6 +95,9 @@ protected:
 	int				m_initialised;
 
 	int				m_trans, m_sMode;
+
+	int				m_wobble;
+	static int		s_wobbleValue;
 
 };
 

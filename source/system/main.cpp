@@ -38,7 +38,13 @@ CPaulScene s_paulScene;
 #include "system\except.h"
 #endif
 
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
 
+#ifndef __GUI_GUI_H__
+#include "gui\gui.h"
+#endif
 
 #define	SCREEN_GRAB
 
@@ -81,6 +87,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CSoundMediator::initialise();
 
+	initGUIStuff();
+
 #ifdef __USER_paul__
 s_paulScene.init();
 #endif
@@ -99,7 +107,8 @@ void	MainLoop()
 		int	frames;
 
 		frames=GameState::getFramesSinceLast();
-		
+
+		FontBank::think(frames);
 		GameState::think();
 		GameState::render();
 

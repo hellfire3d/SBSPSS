@@ -59,6 +59,9 @@
 	Vars
 	---- */
 
+int FontBank::s_wobbleValue=0;
+
+
 /*----------------------------------------------------------------------
 	Data
 	---- */
@@ -86,6 +89,7 @@ void FontBank::initialise( FontData *_fontData )
 	setSMode( 0 );
 
 	m_initialised=true;
+	m_wobble=false;
 }
 
 
@@ -122,6 +126,9 @@ void FontBank::print( int _x, int _y, s32 _textId )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int wstep=50;
+int wspeed=100;
+int wscale=1000;
 void FontBank::print( int _x, int _y, char *_text )
 {
 	ASSERT( m_initialised );
@@ -161,9 +168,14 @@ void FontBank::print( int _x, int _y, char *_text )
 				break;
 			}
 
+		int	fy=_y;
 		while(*_text && Length>0)
 		{
-			Size=printChar(*_text++,_x,_y)+m_fontData->charGapX;
+			if(m_wobble)
+			{
+				fy=_y+(msin((s_wobbleValue+(_x*wstep))&4095)/wscale);
+			}
+			Size=printChar(*_text++,_x,fy)+m_fontData->charGapX;
 			_x+=Size;
 			Length-=Size;
 		}
@@ -337,6 +349,19 @@ int FontBank::getStringWidth( char * text )
 {
 	return getStrWrapLen( text, m_printArea.w );
 }
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:	
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void FontBank::think(int _frames)
+{
+	s_wobbleValue+=(_frames*wspeed)&4095;
+}
+
 
 /*----------------------------------------------------------------------
 	Function:	

@@ -37,6 +37,11 @@
 /*	Data
 	---- */
 
+#ifndef __SPR_UIGFX_H__
+#include <uigfx.h>
+#endif
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -52,6 +57,8 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
+
+static SpriteBank	*s_uiSpriteBank=0;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -140,32 +147,63 @@ void CGUIObject::render()
 		return;
 	}
 
-#ifdef __USER_paul__
-	if(getFlags(FLAG_DRAWBORDER)||forceBorderDraw)
-#else
 	if(getFlags(FLAG_DRAWBORDER))
-#endif
 	{
-		POLY_G4	*g4;
-		int		x,y,w,h;
-		int		r,g,b;
-		int		ot;
+		POLY_F4		*f4;
+		int			x,y,w,h;
+		int			ot;
 
 		x=getX()+getParentX();
 		y=getY()+getParentY();
 		w=getW();
 		h=getH();
-		if(isSelected())
-		{
-			r=g=b=245;
-		}
-		else
-		{
-			r=g=b=110;
-		}
 		ot=getOt();
 
 		// Border
+		drawBambooBorder(x,y,w,h,ot);
+
+		// Background
+		f4=GetPrimF4();
+		setXYWH(f4,x,y,w,h);
+		setRGB0(f4,  0,  0, 90);
+		setSemiTrans(f4,true);
+		AddPrimToList(f4,ot);
+
+		/*
+		g4=GetPrimG4();
+		setXYWH(g4,x,y,w,h/2);
+		setRGB0(g4,107,105, 98);
+		setRGB1(g4,107,105, 98);
+		setRGB2(g4,  0,  0, 90);
+		setRGB3(g4,  0,  0, 90);
+		setSemiTrans(g4,true);
+		AddPrimToList(g4,ot);
+
+		g4=GetPrimG4();
+		setXYWH(g4,x,y+h/2,w,h/2);
+		setRGB0(g4,  0,  0, 90);
+		setRGB1(g4,  0,  0, 90);
+		setRGB2(g4,107,105, 98);
+		setRGB3(g4,107,105, 98);
+		setSemiTrans(g4,true);
+		AddPrimToList(g4,ot);
+		*/
+	}
+
+#ifdef __USER_paul__
+	if(forceBorderDraw)
+	{
+		int			x,y,w,h;
+		int			ot;
+		int			r,g,b;
+
+		x=getX()+getParentX();
+		y=getY()+getParentY();
+		w=getW();
+		h=getH();
+		ot=getOt();
+		r=g=b=200;
+
 		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
 		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
 		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
@@ -180,18 +218,8 @@ void CGUIObject::render()
 		DrawLine(x  ,y  ,x  ,y+h,0,0,0,ot);
 		DrawLine(x+w,y  ,x+w,y+h,0,0,0,ot);
 		DrawLine(x  ,y+h,x+w,y+h,0,0,0,ot);
-		x-=2;y-=2;w+=1;h+=1;
-
-		// Background
-		g4=GetPrimG4();
-		setXYWH(g4,x,y,w,h);
-//		setSemiTrans(g4,true);
-		setRGB0(g4,107,105, 98);
-		setRGB1(g4,107,105, 98);
-		setRGB2(g4,  0,  0, 90);
-		setRGB3(g4,  0,  0, 90);
-		AddPrimToList(g4,ot);
 	}
+#endif
 }
 
 
@@ -283,7 +311,10 @@ void CGUIObjectWithFont::setFlags(GUI_FLAGS _flags)
 	CGUIObject::setFlags(_flags);
 	if(_flags&FLAG_SELECTED)
 	{
-		getFontBank()->setColour(CGUIObjectWithFont::SELECTED_FONT_R,CGUIObjectWithFont::SELECTED_FONT_G,CGUIObjectWithFont::SELECTED_FONT_B);
+		FontBank	*fb=getFontBank();
+		fb->setColour(CGUIObjectWithFont::SELECTED_FONT_R,CGUIObjectWithFont::SELECTED_FONT_G,CGUIObjectWithFont::SELECTED_FONT_B);
+		fb->setWobble(true);
+
 	}
 }
 
@@ -299,7 +330,9 @@ void CGUIObjectWithFont::clearFlags(GUI_FLAGS _flags)
 	CGUIObject::clearFlags(_flags);
 	if(_flags&FLAG_SELECTED)
 	{
-		getFontBank()->setColour(CGUIObjectWithFont::DEFAULT_FONT_R,CGUIObjectWithFont::DEFAULT_FONT_G,CGUIObjectWithFont::DEFAULT_FONT_B);
+		FontBank	*fb=getFontBank();
+		fb->setColour(CGUIObjectWithFont::DEFAULT_FONT_R,CGUIObjectWithFont::DEFAULT_FONT_G,CGUIObjectWithFont::DEFAULT_FONT_B);
+		fb->setWobble(false);
 	}
 }
 
@@ -380,6 +413,79 @@ void CGUIObjectWithSpriteBank::setSpriteBank(FileEquate _fe)
 {
 	m_spriteBank=new ("spritebank") SpriteBank();
 	m_spriteBank->load(_fe);
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	NB: This permenantly keeps a copy of the UI sprite bank
+				loaded in vram! Can be changed if necessary.. (PKG)
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void initGUIStuff()
+{
+	ASSERT(!s_uiSpriteBank);
+
+	s_uiSpriteBank=new ("UI Sprites") SpriteBank();
+	s_uiSpriteBank->load(UI_UIGFX_SPR);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
+{
+	sFrameHdr	*vbam,*hbam;
+	int			totalSize,numSprites,step;
+	int			x1,y1,x2,y2;
+	int			i;
+
+
+	vbam=s_uiSpriteBank->getFrameHeader(FRM__VBAMBOO);
+	hbam=s_uiSpriteBank->getFrameHeader(FRM__HBAMBOO);
+
+	// Top & bottom
+	totalSize=_w-vbam->W-hbam->W;
+	numSprites=(totalSize/hbam->W)+1;
+	if(numSprites>1)
+	{
+		step=(totalSize<<4)/(numSprites-1);
+		x1=(_x+(vbam->W/2)+(hbam->W/2))<<4;
+		y1=_y-(hbam->H/2);
+		y2=y1+_h;
+		for(i=0;i<numSprites;i++)
+		{
+			s_uiSpriteBank->printFT4(hbam,(x1>>4)-(hbam->W/2),y1,0,0,_ot);
+			s_uiSpriteBank->printFT4(hbam,(x1>>4)-(hbam->W/2),y2,0,0,_ot);
+			x1+=step;
+		}
+	}
+
+	// Left & right
+	totalSize=_h-hbam->H-vbam->H;
+	numSprites=(totalSize/vbam->H)+1;
+	if(numSprites>1)
+	{
+		step=(totalSize<<4)/(numSprites-1);
+		y1=(_y+(hbam->H/2)+(vbam->H/2))<<4;
+		x1=_x-(vbam->W/2);
+		x2=x1+_w;
+		for(i=0;i<numSprites;i++)
+		{
+			s_uiSpriteBank->printFT4(vbam,x1,(y1>>4)-(vbam->H/2),0,0,_ot);
+			s_uiSpriteBank->printFT4(vbam,x2,(y1>>4)-(vbam->H/2),0,0,_ot);
+			y1+=step;
+		}
+	}
 }
 
 

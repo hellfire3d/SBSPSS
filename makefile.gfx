@@ -91,7 +91,7 @@ UI_GFX_FONT_IN	:=			$(GRAF_DIR)/ui/font/font.anm
 UI_GFX_NONTRANS :=			
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS :=				+cross.bmp +tick.bmp
+UI_GFX_TRANS :=				+vbamboo.bmp +cross.bmp +tick.bmp +hbamboo.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TEX_IN :=		$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}

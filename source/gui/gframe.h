@@ -45,7 +45,7 @@ public:
 
 	
 protected:
-	GUI_FLAGS			getInitialFlags()							{return FLAG_DRAWBORDER;}
+	GUI_FLAGS			getInitialFlags()							{return FLAG_NONE;}
 
 };
 

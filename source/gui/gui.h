@@ -189,6 +189,10 @@ private:
 	Functions
 	--------- */
 
+extern void initGUIStuff();
+extern void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot);
+
+
 /*---------------------------------------------------------------------- */
 
 #endif	/* __GUI_GUI_H__ */
