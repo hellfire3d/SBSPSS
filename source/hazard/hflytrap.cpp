@@ -38,7 +38,7 @@ void CNpcFlyTrapHazard::init()
 {
 	CNpcHazard::init();
 
-	m_rotation = 0;
+	m_rotation = -1024;
 	m_shut = true;
 	m_contact = false;
 }
@@ -55,9 +55,9 @@ void CNpcFlyTrapHazard::processMovement( int _frames )
 			{
 				m_rotation += 64 * _frames;
 
-				if ( m_rotation > 1024 )
+				if ( m_rotation > 0 )
 				{
-					m_rotation = 1024;
+					m_rotation = 0;
 					m_shut = false;
 					m_contact = false;
 					m_timer = GameState::getOneSecondInFrames();
@@ -80,9 +80,9 @@ void CNpcFlyTrapHazard::processMovement( int _frames )
 		{
 			m_rotation -= 64 * _frames;
 
-			if ( m_rotation < 0 )
+			if ( m_rotation < -1024 )
 			{
-				m_rotation = 0;
+				m_rotation = -1024;
 				m_shut = true;
 			}
 		}
@@ -168,7 +168,7 @@ void CNpcFlyTrapHazard::collidedWith( CThing *_thisThing )
 					}
 				}
 
-				if ( m_rotation > 512 )
+				if ( m_rotation > -512 )
 				{
 					CPlayer *player = (CPlayer *) _thisThing;
 
