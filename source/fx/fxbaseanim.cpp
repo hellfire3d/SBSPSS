@@ -76,8 +76,9 @@ int		ThisFrame=CurrentFrame>>BaseData->FrameShift;
 /*****************************************************************************/
 void	CFXBaseAnim::render()
 {
-DVECTOR	RenderPos;
+		if (!HasInit) return;
 
+DVECTOR	RenderPos;
 		getFXRenderPos(RenderPos);
 		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 

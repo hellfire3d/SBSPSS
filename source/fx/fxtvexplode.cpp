@@ -30,20 +30,29 @@ CFXBaseAnim::sFXBaseData	FXValveBaseData=
 
 
 /*****************************************************************************/
-int		TVExplodeVel=8;
-int		TVExplodeCogs=8;
-int		TVExplodeValves=8;
-void	CFXTVExplode::init(DVECTOR const &Pos)
+static const int		TVExplodeVel=8;
+static const int		TVExplodeCogs=4;
+static const int		TVExplodeValves=4;
+
+/*****************************************************************************/
+void	CFXTVExplode::init(DVECTOR const &_Pos)
+{
+	CFX::init(_Pos);
+}
+
+/*****************************************************************************/
+void	CFXTVExplode::think(int _frames)
 {
 CFX			*NewFX;
 
 int			VelX,VelY;
 
-//			NewFX=CFX::Create(CFX::FX_TYPE_SMOKE,Pos);
 			NewFX=CFX::Create(CFX::FX_TYPE_SMOKE_PUFF,Pos);
+			NewFX->SetOtPos(1);
 
 			NewFX=CFX::Create(CFX::FX_TYPE_EXPLODE,Pos);
 			((CFXBaseAnim*)NewFX)->SetScale(ONE*2);
+			NewFX->SetOtPos(1);
 
 
 			for (int i=0;i<TVExplodeCogs; i++)
@@ -53,6 +62,7 @@ int			VelX,VelY;
 				VelX=getRndRange(TVExplodeVel*2)-TVExplodeVel;
 				VelY=-getRndRange(TVExplodeVel);
 				NewFX->setVelocity(VelX,VelY);
+				NewFX->SetOtPos(1);
 			}
 
 			for (int i=0;i<TVExplodeValves; i++)
@@ -62,7 +72,9 @@ int			VelX,VelY;
 				VelX=getRndRange(TVExplodeVel*2)-TVExplodeVel;
 				VelY=-getRndRange(TVExplodeVel);
 				NewFX->setVelocity(VelX,VelY);
+				NewFX->SetOtPos(1);
 			}
+
 			killFX();
 }
 

@@ -12,6 +12,8 @@ class CFXTVExplode : public CFX
 {
 public:
 		void		init(DVECTOR const &Pos);
+		void		think(int _frames);
+
 };
 
 #endif
