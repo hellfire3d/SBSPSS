@@ -42,12 +42,9 @@ bool	hasParent=getFXParentPos(Pos);
 /*****************************************************************************/
 CFXBaseTrail::sList	&CFXBaseTrail::moveHead()
 {
-		if ( !( Flags & FX_FLAG_HIDDEN ) )
-		{
-			HeadIdx--;
-			if (HeadIdx<0) HeadIdx+=LIST_SIZE;
-			if (ListCount<LIST_SIZE) ListCount++;
-		}
+		HeadIdx--;
+		if (HeadIdx<0) HeadIdx+=LIST_SIZE;
+		if (ListCount<LIST_SIZE) ListCount++;
 
 		return(List[HeadIdx]);
 }
