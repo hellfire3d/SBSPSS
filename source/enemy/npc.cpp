@@ -947,6 +947,20 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_OCTOPUS_USER_CLOSE:
+					{
+						if ( playerXDistSqr + playerYDistSqr < 400 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					default:
 						return( false );
 				}
@@ -1253,6 +1267,11 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 
+		case NPC_CLOSE_OCTOPUS_ATTACK:
+			processCloseOctopusAttack( _frames );
+
+			break;
+
 		default:
 			break;
 	}
@@ -1316,7 +1335,7 @@ void CNpcEnemy::render()
 	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
 
 	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy;
+	renderPos.vy = Pos.vy - offset.vy - 100;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }

@@ -230,6 +230,7 @@ protected:
 		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
 		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
 		NPC_SENSOR_HERMIT_CRAB_USER_CLOSE,
+		NPC_SENSOR_OCTOPUS_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -257,6 +258,7 @@ protected:
 		NPC_CLOSE_FLAMING_SKULL_ATTACK,
 		NPC_CLOSE_SKELETAL_FISH_ATTACK,
 		NPC_CLOSE_HERMIT_CRAB_ATTACK,
+		NPC_CLOSE_OCTOPUS_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -409,6 +411,7 @@ protected:
 	// baby octopus functions
 
 	void				processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange );
+	void				processCloseOctopusAttack( int _frames );
 
 	// fish folk functions
 

@@ -23,28 +23,36 @@
 #include	"player\player.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
+#ifndef __ANIM_BABYOCTOPUS_HEADER__
+#include <ACTOR_BABYOCTOPUS_ANIM.h>
+#endif
 
 void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange )
 {
 	s32 newX, newY;
 	s32 preShiftX, preShiftY;
 
-	u16 octopusData[11] = { 96, 192, 256, 256, 256, 192, 192, 192, 128, 128, 96 };
+	//u16 octopusData[11] = { 96, 192, 256, 256, 256, 192, 192, 192, 128, 128, 96 };
+	u16 octopusData[11] = { 96, 256, 96, 256, 96, 256, 96, 256, 96, 256, 96 };
 
 	u32 dataPoint;
 
 	m_movementTimer += _frames;
 
-	if ( m_movementTimer > ( 3 * GameState::getOneSecondInFrames() ) )
+	if ( m_movementTimer > ( 2 * GameState::getOneSecondInFrames() ) )
 	{
-		m_movementTimer = 0;
+		m_movementTimer -= ( 2 * GameState::getOneSecondInFrames() );
 	}
 
 	dataPoint = 10 * m_movementTimer;
 
 	if ( dataPoint != 0 )
 	{
-		dataPoint /= ( 3 * GameState::getOneSecondInFrames() );
+		dataPoint /= ( 2 * GameState::getOneSecondInFrames() );
 	}
 
 	s32 resistance;
@@ -98,4 +106,46 @@ void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 h
 
 	Pos.vx += newX;
 	Pos.vy += newY;
+}
+
+void CNpcEnemy::processCloseOctopusAttack( int _frames )
+{
+	if ( !m_animPlaying || m_animNo == m_data[m_type].initAnim || m_animNo == m_data[m_type].moveAnim )
+	{
+		// not playing an attack anim, hence choose one
+
+		u8 newAction = getRnd() % 3;
+
+		switch( newAction )
+		{
+			case 0:
+			{
+				m_animNo = ANIM_BABYOCTOPUS_HEAD_BUTT;
+
+				break;
+			}
+
+			case 1:
+			{
+				m_animNo = ANIM_BABYOCTOPUS_HIT;
+
+				break;
+			}
+
+			case 2:
+			{
+				m_animNo = ANIM_BABYOCTOPUS_INK;
+
+				break;
+			}
+		}
+
+		m_animPlaying = true;
+		m_frame = 0;
+
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+	}
 }
