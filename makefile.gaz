@@ -137,7 +137,8 @@ platform_src :=		platform \
 					plurve \
 					psoil \
 					pbubtube \
-					pgbubble
+					pgbubble \
+					pfblock
 
 hazard_src :=		hazard \
 					hfalling \

@@ -1561,6 +1561,14 @@ SOURCE=..\..\..\source\platform\pfallnor.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pfblock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfblock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pfgen.cpp
 # End Source File
 # Begin Source File
