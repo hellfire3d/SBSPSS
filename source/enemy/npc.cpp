@@ -96,6 +96,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 	},
 
+	{	// NPC_PENDULUM
+		NPC_INIT_PENDULUM,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_PENDULUM,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
+
 	{	// NPC_SMALL_JELLYFISH_1
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE,
@@ -471,7 +483,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_DUST_DEVIL;
+	m_type = NPC_PENDULUM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -613,6 +625,15 @@ void CNpc::init()
 			m_npcPath.addWaypoint( newPos );
 
 			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
+
+		case NPC_INIT_PENDULUM:
+		{
+			m_extendDir = EXTEND_LEFT;
+			m_extension = 0;
+			m_heading = 1024;
 
 			break;
 		}
@@ -1114,6 +1135,13 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_IRON_DOGFISH:
 		{
 			processIronDogfishMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_PENDULUM:
+		{
+			processPendulumMovement( _frames );
 
 			break;
 		}
