@@ -603,8 +603,6 @@ void CNpcEnemy::init()
 	m_drawOffset.vx = 0;
 	m_drawOffset.vy = -( ofs.vy >> 1 );
 
-	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
-
 	m_positionHistory = NULL;
 
 	m_isShuttingDown = false;
@@ -1276,6 +1274,10 @@ void CNpcEnemy::render()
 			{
 				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 4096, 4096 );
+
+				sBBox boundingBox = m_actorGfx->GetBBox();
+				setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+				setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 			}
 		}
 	}

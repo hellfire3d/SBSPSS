@@ -37,6 +37,7 @@ void CNpcSquidDartEnemy::render()
 
 		// Render
 		DVECTOR renderPos;
+		DVECTOR origRenderPos;
 		DVECTOR	offset = CLevel::getCameraPos();
 
 		int frame = 6 + ( m_frame >> 8 );
@@ -44,18 +45,21 @@ void CNpcSquidDartEnemy::render()
 		int		spriteWidth = m_spriteBank->getFrameWidth( frame );
 		int		spriteHeight = m_spriteBank->getFrameHeight( frame );
 
-		renderPos.vx = Pos.vx - offset.vx + m_drawOffset.vx;
+		renderPos.vx = Pos.vx - offset.vx;
+		origRenderPos.vx = renderPos.vx;
 
 		if ( m_reversed )
 		{
-			renderPos.vx += spriteWidth >> 1;
+			renderPos.vx += ( spriteWidth >> 1 ) + m_drawOffset.vx;
 		}
 		else
 		{
-			renderPos.vx -= spriteWidth >> 1;
+			renderPos.vx -= ( spriteWidth >> 1 ) + m_drawOffset.vx;
 		}
 
-		renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 ) + m_drawOffset.vy;
+		renderPos.vy = Pos.vy - offset.vy;
+		origRenderPos.vy = renderPos.vy;
+		renderPos.vy += m_drawOffset.vy - ( spriteHeight >> 1 );
 
 		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
@@ -63,6 +67,15 @@ void CNpcSquidDartEnemy::render()
 			{
 				SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
 				setRGB0( SprFrame, 255, 128, 255 );
+
+				s32 XMax = SprFrame->x1 - origRenderPos.vx;
+				s32 XMin = SprFrame->x0 - origRenderPos.vx;
+
+				s32 YMax = SprFrame->y2 - origRenderPos.vy;
+				s32 YMin = SprFrame->y0 - origRenderPos.vy;
+
+				setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
+				setCollisionCentreOffset( ( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
 			}
 		}
 	}

@@ -45,13 +45,18 @@ void CNpcSmallJellyfishEnemy::render()
 
 		// Render
 		DVECTOR renderPos;
+		DVECTOR origRenderPos;
 		DVECTOR	offset = CLevel::getCameraPos();
 		int		spriteWidth = m_spriteBank->getFrameWidth( m_frame >> 8 );
 		int		spriteHeight = m_spriteBank->getFrameHeight( m_frame >> 8 );
 
-		renderPos.vx = Pos.vx - offset.vx + m_drawOffset.vx;
+		renderPos.vx = Pos.vx - offset.vx;
+		origRenderPos.vx = renderPos.vx;
+		renderPos.vx += m_drawOffset.vx;
 
-		renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 ) + m_drawOffset.vy;
+		renderPos.vy = Pos.vy - offset.vy;
+		origRenderPos.vy = renderPos.vy;
+		renderPos.vy += m_drawOffset.vy - ( spriteHeight >> 1 );
 
 		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
@@ -59,6 +64,39 @@ void CNpcSmallJellyfishEnemy::render()
 			{
 				SprFrame = m_spriteBank->printRotatedScaledSprite( m_frame>>8,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 				setRGB0( SprFrame, 255, 128, 255 );
+
+				// get xmax, xmin, ymax, ymin
+
+				s32 XMax;
+				s32 XMin;
+
+				s32 YMax;
+				s32 YMin;
+
+				XMin=SprFrame->x0;
+				if (XMin>SprFrame->x1) XMin=SprFrame->x1;
+				if (XMin>SprFrame->x2) XMin=SprFrame->x2;
+				if (XMin>SprFrame->x3) XMin=SprFrame->x3;
+				XMax=SprFrame->x0;
+				if (XMax<SprFrame->x1) XMax=SprFrame->x1;
+				if (XMax<SprFrame->x2) XMax=SprFrame->x2;
+				if (XMax<SprFrame->x3) XMax=SprFrame->x3;
+				YMin=SprFrame->y0;
+				if (YMin>SprFrame->y1) YMin=SprFrame->y1;
+				if (YMin>SprFrame->y2) YMin=SprFrame->y2;
+				if (YMin>SprFrame->y3) YMin=SprFrame->y3;
+				YMax=SprFrame->y0;
+				if (YMax<SprFrame->y1) YMax=SprFrame->y1;
+				if (YMax<SprFrame->y2) YMax=SprFrame->y2;
+				if (YMax<SprFrame->y3) YMax=SprFrame->y3;
+
+				XMax -= origRenderPos.vx;
+				XMin -= origRenderPos.vx;
+				YMax -= origRenderPos.vy;
+				YMin -= origRenderPos.vy;
+
+				setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
+				setCollisionCentreOffset( ( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
 			}
 		}
 	}

@@ -110,8 +110,6 @@ void CNpcFriend::init()
 
 	m_drawOffset.vx = 0;
 	m_drawOffset.vy = -( ofs.vy >> 1 );
-
-	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +134,13 @@ void CNpcFriend::shutdown()
 
 void CNpcFriend::think(int _frames)
 {
+	if ( _frames > 2 )
+	{
+		// make sure enemies don't go berserk if too many frames are dropped
+
+		_frames = 2;
+	}
+
 	CNpcThing::think(_frames);
 
 	if ( m_animPlaying )
@@ -206,6 +211,10 @@ void CNpcFriend::render()
 		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 		{
 			m_actorGfx->Render(renderPos,m_animNo,(m_frame>>8),m_reversed);
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
 }
