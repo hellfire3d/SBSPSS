@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NPLATFRM_H__
+#include "enemy\nplatfrm.h"
+#endif
+
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -56,6 +60,32 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
+	},
+};
+
+CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
+{
+	{	// NPC_LINEAR_PLATFORM
+		ACTORS_CLAM_A3D,
+		ANIM_CLAM_CLAMSHUT,
+		NPC_PLATFORM_MOVEMENT_FIXED_PATH,
+		3,
+		//512,
+		2048,
+		true,
+		DAMAGE__NONE,
+		0,
+	},
+
+	{	// NPC_CIRCULAR_PLATFORM
+		ACTORS_CLAM_A3D,
+		ANIM_CLAM_CLAMSHUT,
+		NPC_PLATFORM_MOVEMENT_FIXED_CIRCULAR,
+		3,
+		128,
+		false,
+		DAMAGE__NONE,
+		0,
 	},
 };
 
@@ -160,41 +190,6 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
-		0,
-	},
-
-	{	// NPC_LINEAR_PLATFORM
-		ACTORS_CLAM_A3D,
-		ANIM_CLAM_CLAMSHUT,
-		NPC_INIT_DEFAULT,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_FIXED_PATH,
-		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		//512,
-		2048,
-		true,
-		DAMAGE__NONE,
-		0,
-	},
-
-	{	// NPC_CIRCULAR_PLATFORM
-		ACTORS_CLAM_A3D,
-		ANIM_CLAM_CLAMSHUT,
-		NPC_INIT_CIRCULAR_PLATFORM,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_FIXED_CIRCULAR,
-		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		128,
-		false,
-		DAMAGE__NONE,
 		0,
 	},
 

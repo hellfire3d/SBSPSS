@@ -116,8 +116,6 @@ public:
 		NPC_PENDULUM,
 		NPC_FIREBALL,
 		NPC_SAW_BLADE,
-		NPC_LINEAR_PLATFORM,
-		NPC_CIRCULAR_PLATFORM,
 		NPC_SMALL_JELLYFISH_1,
 		NPC_SMALL_JELLYFISH_2,
 		NPC_ANEMONE_1,
@@ -246,7 +244,6 @@ protected:
 		NPC_MOVEMENT_STATIC = 0,
 		NPC_MOVEMENT_FIXED_PATH = 1,
 		NPC_MOVEMENT_FIXED_PATH_WALK,
-		NPC_MOVEMENT_FIXED_CIRCULAR,
 		NPC_MOVEMENT_MOTHER_JELLYFISH,
 		NPC_MOVEMENT_SUB_SHARK,
 		NPC_MOVEMENT_FLYING_DUTCHMAN,
@@ -357,7 +354,6 @@ protected:
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
 	void				processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
-	void				processGenericCircularPath( int _frames );
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 
 	// small jellyfish functions

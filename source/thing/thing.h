@@ -68,12 +68,12 @@ public:
 	typedef enum
 	{
 		TYPE_PICKUP,
+		TYPE_PLATFORM,
 		TYPE_PLAYER,
 		TYPE_PLAYERPROJECTILE,
 		TYPE_NPC,
 		TYPE_ENEMY,
 		TYPE_ENEMYPROJECTILE,
-		TYPE_PLATFORM,
 		TYPE_TRIGGER,
 
 		MAX_TYPE,
@@ -98,6 +98,8 @@ public:
 
 
 	DVECTOR			getPos()						{return Pos;}
+	virtual void	shove(DVECTOR move);
+	CThing			*getNext()						{return Next;}
 
 
 	virtual void	processEvent(GAME_EVENT _event,CThing *_sourceThing);
@@ -135,15 +137,25 @@ protected:
 	void			setCollisionSize(int _w,int _h);
 	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
 	void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
+	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
+	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
+	void			setCollisionStickyBoundary(int boundary)	{m_collisionStickyBoundary = boundary;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
+	s16				getCollisionAngle()							{return m_collisionAngle;}
+	bool			getCentreCollision()						{return m_centreCollision;}
+	DVECTOR			getNewCollidedPos()							{return m_newCollidedPos;}
 private:
 	DVECTOR			m_collisionSize;
 	DVECTOR			m_collisionCentreOffset;
 	int				m_collisionRadius;
+	int				m_collisionStickyBoundary;	// for platforms
 	CRECT			m_collisionArea;
 	DVECTOR			m_collisionCentre;
+	s16				m_collisionAngle;
+	bool			m_centreCollision;
+	DVECTOR			m_newCollidedPos;
 
 };
 

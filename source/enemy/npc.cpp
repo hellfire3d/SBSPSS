@@ -209,7 +209,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_LINEAR_PLATFORM;
+	m_type = NPC_CLAM_STATIC;
 
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
@@ -887,13 +887,6 @@ void CNpcEnemy::processMovement(int _frames)
 		case NPC_MOVEMENT_FIXED_PATH_WALK:
 		{
 			processGenericFixedPathWalk( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_FIXED_CIRCULAR:
-		{
-			processGenericCircularPath( _frames );
 
 			break;
 		}

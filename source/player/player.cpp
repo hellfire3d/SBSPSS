@@ -1336,15 +1336,19 @@ void CPlayer::setPlatform( CThing *newPlatform )
 {
 	int colHeight;
 	int platformHeight;
+	DVECTOR newPos;
+	DVECTOR testPos;
 
 	m_platform = newPlatform;
-	m_onPlatform = true;
+	m_onPlatform = getCentreCollision();
 
 	if ( m_onPlatform )
 	{
+		newPos = getNewCollidedPos();
+
 		colHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
 
-		platformHeight = m_platform->getPos().vy - Pos.vy;
+		platformHeight = newPos.vy - Pos.vy;
 
 		if ( platformHeight > colHeight )
 		{
@@ -1361,7 +1365,7 @@ void CPlayer::setPlatform( CThing *newPlatform )
 		// have collided with a platform
 
 		m_moveVel.vy=0;
-		Pos.vy += colHeight;
+		Pos = newPos;
 
 		if ( !m_prevOnPlatform )
 		{
@@ -1397,7 +1401,7 @@ void CPlayer::setPlatform( CThing *newPlatform )
 		}
 		else
 		{
-			Pos.vx += m_platform->getPos().vx - m_prevPlatformPos.vx;
+			//Pos.vx += m_platform->getPos().vx - m_prevPlatformPos.vx;
 		}
 
 		// Move the camera offset
@@ -1440,6 +1444,33 @@ void CPlayer::setPlatform( CThing *newPlatform )
 		this->updateCollisionArea();
 
 		m_prevPlatformPos = m_platform->getPos();
+	}
+	else
+	{
+		newPlatform->removeChild( this );
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::shove( DVECTOR move )
+{
+	int colHeight = m_layerCollision->getHeightFromGround( Pos.vx + move.vx, Pos.vy + move.vy, 1 );
+
+	if( colHeight < 0 )
+	{
+		// target position in within wall, abort
+
+		return;
+	}
+	else
+	{
+		Pos.vx += move.vx;
+		Pos.vy += move.vy;
 	}
 }
 

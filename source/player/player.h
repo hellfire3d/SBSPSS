@@ -160,6 +160,7 @@ public:
 	virtual void	shutdown();
 	virtual void	think(int _frames);
 	virtual void	render();
+	virtual void	shove(DVECTOR move);
 
 	DVECTOR			getCameraPos();
 

@@ -25,6 +25,8 @@
 #include "game\game.h"
 #endif
 
+#include	"utils\utils.h"
+
 /*	Std Lib
 	------- */
 
@@ -121,6 +123,21 @@ void		CThingManager::thinkAllThings(int _frames)
 	if ( player )
 	{
 		player->clearPlatform();
+	}
+
+	// Player -> Platform collision
+	thing1=s_thingLists[CThing::TYPE_PLATFORM];
+	thing2=s_thingLists[CThing::TYPE_PLAYER];
+	while(thing1&&thing2)
+	{
+		thing1->removeAllChild();
+		if(thing1->canCollide()&&
+		   thing1->checkCollisionAgainst(thing2))
+		{
+			thing1->addChild( thing2 );
+			thing1->collidedWith(thing2);
+		}
+		thing1=thing1->m_nextThing;
 	}
 
 	// Player -> Pickup collision
@@ -277,8 +294,11 @@ void	CThing::init()
 	// Add to thing list
 	CThingManager::addToThingList(this);
 
-	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
+	setCollisionSize(200,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
+	m_collisionAngle = 0;
+	m_collisionStickyBoundary = 0;
+	m_centreCollision = false;
 }
 
 /*----------------------------------------------------------------------
@@ -313,6 +333,9 @@ void	CThing::think(int _frames)
 	DVECTOR	PosLast=Pos; 
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
+
+	m_collisionAngle++;
+	m_collisionAngle %= 4096;
 }
 
 /*----------------------------------------------------------------------
@@ -343,10 +366,54 @@ void	CThing::render()
 		if(area.x1<=511&&area.x2>=0&&
 		   area.y1<=255&&area.y2>=0)
 		{
-			DrawLine(area.x1,area.y1,area.x1,area.y2,255,255,255,0);
-			DrawLine(area.x1,area.y2,area.x2,area.y2,255,255,255,0);
-			DrawLine(area.x2,area.y2,area.x2,area.y1,255,255,255,0);
-			DrawLine(area.x2,area.y1,area.x1,area.y1,255,255,255,0);
+			area=getCollisionArea();
+
+			SVECTOR points[4];
+			VECTOR vecPoints[4];
+
+			points[0].vx = area.x1 - Pos.vx;
+			points[0].vy = area.y1 - Pos.vy;
+
+			points[1].vx = area.x1 - Pos.vx;
+			points[1].vy = area.y2 - Pos.vy;
+
+			points[2].vx = area.x2 - Pos.vx;
+			points[2].vy = area.y2 - Pos.vy;
+
+			points[3].vx = area.x2 - Pos.vx;
+			points[3].vy = area.y1 - Pos.vy;
+
+			MATRIX mtx;
+
+			SetIdentNoTrans(&mtx );
+			RotMatrixZ( m_collisionAngle, &mtx );
+
+			ApplyMatrix( &mtx, &points[0], &vecPoints[0] );
+			ApplyMatrix( &mtx, &points[1], &vecPoints[1] );
+			ApplyMatrix( &mtx, &points[2], &vecPoints[2] );
+			ApplyMatrix( &mtx, &points[3], &vecPoints[3] );
+
+			vecPoints[0].vx += Pos.vx - ofs.vx;
+			vecPoints[0].vy += Pos.vy - ofs.vy;
+
+			vecPoints[1].vx += Pos.vx - ofs.vx;
+			vecPoints[1].vy += Pos.vy - ofs.vy;
+
+			vecPoints[2].vx += Pos.vx - ofs.vx;
+			vecPoints[2].vy += Pos.vy - ofs.vy;
+
+			vecPoints[3].vx += Pos.vx - ofs.vx;
+			vecPoints[3].vy += Pos.vy - ofs.vy;
+
+			//DrawLine(area.x1,area.y1,area.x1,area.y2,255,255,255,0);
+			//DrawLine(area.x1,area.y2,area.x2,area.y2,255,255,255,0);
+			//DrawLine(area.x2,area.y2,area.x2,area.y1,255,255,255,0);
+			//DrawLine(area.x2,area.y1,area.x1,area.y1,255,255,255,0);
+
+			DrawLine( vecPoints[0].vx, vecPoints[0].vy, vecPoints[1].vx, vecPoints[1].vy,255,255,255,0);
+			DrawLine( vecPoints[1].vx, vecPoints[1].vy, vecPoints[2].vx, vecPoints[2].vy,255,255,255,0);
+			DrawLine( vecPoints[2].vx, vecPoints[2].vy, vecPoints[3].vx, vecPoints[3].vy,255,255,255,0);
+			DrawLine( vecPoints[3].vx, vecPoints[3].vy, vecPoints[0].vx, vecPoints[0].vy,255,255,255,0);
 
 			area.x1=Pos.vx-10-ofs.vx;
 			area.y1=Pos.vy-10-ofs.vy;
@@ -494,6 +561,8 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 	int		radius;
 	int		collided;
 
+	MATRIX mtx;
+
 	pos=getCollisionCentre();
 	thisThingPos=_thisThing->getCollisionCentre();
 
@@ -505,12 +574,174 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 		CRECT	thisRect,thatRect;
 
 		thisRect=getCollisionArea();
+
+		// ensure user 'sticks' to platform whilst it is moving along
+
+		thisRect.x1 -= m_collisionStickyBoundary;
+		thisRect.y1 -= m_collisionStickyBoundary;
+		thisRect.x2 += m_collisionStickyBoundary;
+		thisRect.y2 += m_collisionStickyBoundary;
+
 		thatRect=_thisThing->getCollisionArea();
+
+		// rotate thatPos opposite way to this CThing's collision angle, so that we can regard them both as being at 0 rotation
+
+		// get target thing's position
+
+		DVECTOR thatPos = _thisThing->getPos();
+
+		// get target thing's position relative to this thing's position
+
+		SVECTOR relativePos;
+		relativePos.vx = thatPos.vx - Pos.vx;
+		relativePos.vy = thatPos.vy - Pos.vy;
+
+		VECTOR newPos;
+
+		// get target thing's collision area relative to 0
+
+		thatRect.x1 -= thatPos.vx;
+		thatRect.y1 -= thatPos.vy;
+		thatRect.x2 -= thatPos.vx;
+		thatRect.y2 -= thatPos.vy;
+
+		SetIdentNoTrans(&mtx );
+		RotMatrixZ( -m_collisionAngle, &mtx );
+
+		// rotation target relative position back to 0 by this thing's collision angle
+
+		ApplyMatrix( &mtx, &relativePos, &newPos );
+
+		// add on this thing's position to get new target thing's position after rotation around this thing
+
+		newPos.vx += Pos.vx;
+		newPos.vy += Pos.vy;
+
+		// reposition target thing's collision area
+
+		thatRect.x1 += newPos.vx;
+		thatRect.y1 += newPos.vy;
+		thatRect.x2 += newPos.vx;
+		thatRect.y2 += newPos.vy;
+
+		// check to see if bounding boxes collide
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
 		{
 			collided=true;
+
+			// check to see if centre point (i.e. where the object is standing) collides too
+
+			if ( ( newPos.vx >= thisRect.x1 && newPos.vx <= thisRect.x2 ) &&
+					( newPos.vy >= thisRect.y1 && newPos.vy <= thisRect.y2 ) )
+			{
+				thisRect=getCollisionArea();
+				_thisThing->setCentreCollision( true );
+
+				// 'render' collision box at correct angle
+
+				SVECTOR testPointsNonRel[4];
+				VECTOR testPoints[4];
+
+				testPointsNonRel[0].vx = thisRect.x1 - Pos.vx;
+				testPointsNonRel[0].vy = thisRect.y1 - Pos.vy;
+
+				testPointsNonRel[1].vx = thisRect.x2 - Pos.vx;
+				testPointsNonRel[1].vy = thisRect.y1 - Pos.vy;
+
+				testPointsNonRel[2].vx = thisRect.x2 - Pos.vx;
+				testPointsNonRel[2].vy = thisRect.y2 - Pos.vy;
+
+				testPointsNonRel[3].vx = thisRect.x1 - Pos.vx;
+				testPointsNonRel[3].vy = thisRect.y2 - Pos.vy;
+
+				SetIdentNoTrans(&mtx );
+				RotMatrixZ( m_collisionAngle, &mtx );
+
+				int i;
+
+				for ( i = 0 ; i < 4 ; i++ )
+				{
+					ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
+
+					testPoints[i].vx += Pos.vx;
+					testPoints[i].vy += Pos.vy;
+				}
+
+				// now find the highest y pos
+
+				// first set highestY to lowest of the four points
+				
+				s16 highestY = testPoints[0].vy;
+
+				for ( i = 1 ; i < 4 ; i++ )
+				{
+					if ( testPoints[i].vy > highestY ) // remember y is inverted
+					{
+						highestY = testPoints[i].vy;
+					}
+				}
+
+				for ( i = 0 ; i < 4 ; i++ )
+				{
+					int j = i + 1;
+					j %= 4;
+
+					VECTOR highestX, lowestX;
+
+					if ( testPoints[i].vx < testPoints[j].vx )
+					{
+						lowestX = testPoints[i];
+						highestX = testPoints[j];
+					}
+					else
+					{
+						lowestX = testPoints[j];
+						highestX = testPoints[i];
+					}
+
+					if ( highestX.vx == lowestX.vx )
+					{
+						// have to compare heights of both points to get highest
+
+						if ( lowestX.vy < highestY )
+						{
+							highestY = lowestX.vy;
+						}
+
+						if ( highestX.vy < highestY )
+						{
+							highestY = highestX.vy;
+						}
+					}
+					else
+					{
+						if ( thatPos.vx >= lowestX.vx && thatPos.vx <= highestX.vx )
+						{
+							// current position is above or below this line
+
+							s16 testY;
+
+							testY = lowestX.vy + ( ( thatPos.vx - lowestX.vx ) * ( highestX.vy - lowestX.vy ) ) /
+										( highestX.vx - lowestX.vx );
+
+							if ( testY < highestY )
+							{
+								highestY = testY;
+							}
+						}
+					}
+				}
+
+				thatPos.vy = highestY;
+
+				_thisThing->setNewCollidedPos( thatPos );
+			}
+			else
+			{
+				_thisThing->setCentreCollision( false );
+			}
 		}
 	}
 
@@ -526,6 +757,18 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 void	CThing::processEvent(GAME_EVENT _event,CThing *_sourceThing)
 {
 	// do nothing by default - ignore event
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CThing::shove( DVECTOR move )
+{
+	Pos.vx += move.vx;
+	Pos.vy += move.vy;
 }
 
 /*===========================================================================

@@ -27,6 +27,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NPLATFRM_H__
+#include "enemy\nplatfrm.h"
+#endif
+
 #ifndef __PROJECTL_PROJECTL_H__
 #include "projectl\projectl.h"
 #endif
@@ -230,8 +234,8 @@ void	CGameScene::initLevel()
 	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
 
 #ifdef __USER_charles__		
-	CNpcEnemy	*enemy;
-	enemy=new ("test enemy") CNpcEnemy;
+	CNpcPlatform	*enemy;
+	enemy=new ("test enemy") CNpcPlatform;
 	enemy->init();
 	enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif
