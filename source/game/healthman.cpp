@@ -25,22 +25,25 @@ const int	CHealthManager::ItemTableSize=sizeof(CHealthManager::ItemTable)/sizeof
 
 int	HealthManGrav=128;
 int	HealthManShift=9;
-int	HealthManPickUpDelay=16;
+int	HealthManPickUpDelay=32;
 
 /*****************************************************************************/
 void	CHealthManager::init()
 {
+sItem	*list=ItemList;
+
 		FrameHdr=CGameScene::getSpriteBank()->getFrameHeader(FRM__SPATULA);
 		for (int i=0; i<ITEM_MAX; i++)
 		{
-			ItemList[i].Life=0;
-			setTSprt(&ItemList[i].Sprite);
-			setTSprtTPage(&ItemList[i].Sprite,FrameHdr->TPage);
-			ItemList[i].Sprite.clut=FrameHdr->Clut;
-			ItemList[i].Sprite.u0=FrameHdr->U;
-			ItemList[i].Sprite.v0=FrameHdr->V;
-			ItemList[i].Sprite.w=FrameHdr->W;
-			ItemList[i].Sprite.h=FrameHdr->H;
+			list->Life=0;
+			setTSprt(&list->Sprite);
+			setTSprtTPage(&list->Sprite,FrameHdr->TPage);
+			list->Sprite.clut=FrameHdr->Clut;
+			list->Sprite.u0=FrameHdr->U;
+			list->Sprite.v0=FrameHdr->V;
+			list->Sprite.w=FrameHdr->W;
+			list->Sprite.h=FrameHdr->H;
+			list++;
 		}
 
 }
@@ -90,45 +93,55 @@ int		AngleInc=1024/Count;
 void	CHealthManager::addItem(DVECTOR const &Pos,int TableIdx,int Angle,int Vel)
 {
 int		Idx=0;
+sItem	*item;
 
 		while (ItemList[Idx].Life) Idx++;
 		ASSERT(Idx<ITEM_MAX);
 
-		ItemList[Idx].Life=ItemTable[TableIdx].Life;
-		setRGB0(&ItemList[Idx].Sprite,ItemTable[TableIdx].R,ItemTable[TableIdx].G,ItemTable[TableIdx].B);
-		ItemList[Idx].Pos.vx=Pos.vx<<HealthManShift;
-		ItemList[Idx].Pos.vy=Pos.vy<<HealthManShift;
+		item=&ItemList[Idx];
+		item->Life=ItemTable[TableIdx].Life;
+		setRGB0(&item->Sprite,ItemTable[TableIdx].R,ItemTable[TableIdx].G,ItemTable[TableIdx].B);
+		item->Pos.vx=Pos.vx<<HealthManShift;
+		item->Pos.vy=Pos.vy<<HealthManShift;
 
-		ItemList[Idx].Vel.vx=-(msin(Angle)*Vel);//>>1;
-		ItemList[Idx].Vel.vy=-(mcos(Angle)*Vel);
+		item->Vel.vx=-(msin(Angle)*Vel);//>>1;
+		item->Vel.vy=-(mcos(Angle)*Vel);
 
-//		ItemList[Idx].Pos.vx+=ItemList[Idx].Vel.vx;
-//		ItemList[Idx].Pos.vy+=ItemList[Idx].Vel.vy;
+//		item->Pos.vx+=item->Vel.vx;
+//		item->Pos.vy+=item->Vel.vy;
 
-		ItemList[Idx].Count=ItemTable[TableIdx].Count;
+		item->Count=ItemTable[TableIdx].Count;
 }
 
 /*****************************************************************************/
 void	CHealthManager::checkPlayerCol(CPlayer *Player)
 {
-CRECT	const &PRect=Player->getCollisionArea();
+CRECT	PRect=Player->getCollisionArea();
+sItem	*item=ItemList;
+
+
+		PRect.x1+=8;
+		PRect.x2+=8;
+		PRect.y1+=16;
+		PRect.y2+=16;
 
 		for (int i=0; i<ITEM_MAX; i++)
 		{
-			if (ItemList[i].Life  && ItemList[i].Life<256-HealthManPickUpDelay)
+			if (item->Life  && item->Life<256-HealthManPickUpDelay)
 			{
-				if (PRect.x2<ItemList[i].ScrPos.vx || PRect.x1>ItemList[i].ScrPos.vx+16 ||
-					PRect.y2<ItemList[i].ScrPos.vy || PRect.y1>ItemList[i].ScrPos.vy+32)
+				if (PRect.x2<item->ScrPos.vx || PRect.x1>item->ScrPos.vx+16 ||
+					PRect.y2<item->ScrPos.vy || PRect.y1>item->ScrPos.vy+32)
 				{
 				}
 				else
 				{
-					ItemList[i].Life=0;
-					Player->addSpatula(ItemList[i].Count);
+					item->Life=0;
+					Player->addSpatula(item->Count);
 				}
 
 			}
 
+			item++;
 		}
 }
 
@@ -137,39 +150,41 @@ CRECT	const &PRect=Player->getCollisionArea();
 /*****************************************************************************/
 void	CHealthManager::think(int frames)
 {
+sItem	*item=ItemList;
+
 	CLayerCollision	*ColLayer=CGameScene::getCollision();
 
 		for (int i=0; i<ITEM_MAX; i++)
 		{
 			for (int f=0; f<frames; f++)
 			{
-				if (ItemList[i].Life)
+				if (item->Life>1)
 				{
 					int	OldY=ItemList[i].Pos.vy;
-					ItemList[i].Life--;
-					ItemList[i].Pos.vx+=ItemList[i].Vel.vx;
-					ItemList[i].Pos.vy+=ItemList[i].Vel.vy;
-					ItemList[i].ScrPos.vx=ItemList[i].Pos.vx>>HealthManShift;
-					ItemList[i].ScrPos.vy=ItemList[i].Pos.vy>>HealthManShift;
-					ItemList[i].Vel.vy+=HealthManGrav;
+					item->Life--;
+					item->Pos.vx+=item->Vel.vx;
+					item->Pos.vy+=item->Vel.vy;
+					item->ScrPos.vx=item->Pos.vx>>HealthManShift;
+					item->ScrPos.vy=item->Pos.vy>>HealthManShift;
+					item->Vel.vy+=HealthManGrav;
 
-//					if (ItemList[i].Vel.vy>0)
+//					if (item->Vel.vy>0)
 					{ 
-						int	DistY = ColLayer->getHeightFromGround( ItemList[i].ScrPos.vx, ItemList[i].ScrPos.vy, 16 );
+						int	DistY = ColLayer->getHeightFromGround( item->ScrPos.vx, item->ScrPos.vy, 16 );
 						if (DistY<=0)
 						{
-							if (ItemList[i].Vel.vy<0)
+							if (item->Vel.vy<0)
 							{
-								ItemList[i].Pos.vy=OldY;
+								item->Pos.vy=OldY;
 							}
-							ItemList[i].Vel.vy=-ItemList[i].Vel.vy>>1;
-							ItemList[i].Vel.vx>>=1;
-	//						ItemList[i].Pos.vy-=DistY<<(HealthManShift-1);
+							item->Vel.vy=-item->Vel.vy>>1;
+							item->Vel.vx>>=1;
+	//						item->Pos.vy-=DistY<<(HealthManShift-1);
 						}
 					}
 
 					int	XOfs;
-					if (ItemList[i].Vel.vx>0)
+					if (item->Vel.vx>0)
 					{ 
 						XOfs=+16;
 					}
@@ -178,15 +193,21 @@ void	CHealthManager::think(int frames)
 						XOfs=-16;
 					}
 					// Check X collision
-					int	DistX = ColLayer->getHeightFromGround( ItemList[i].ScrPos.vx+XOfs, ItemList[i].ScrPos.vy, 32 );
+					int	DistX = ColLayer->getHeightFromGround( item->ScrPos.vx+XOfs, item->ScrPos.vy, 32 );
 					if (DistX<=0)
 					{
-						ItemList[i].Vel.vx=-ItemList[i].Vel.vx>>1;
-	//					ItemList[i].Pos.vy-=DistY<<(HealthManShift-1);
+						item->Vel.vx=-item->Vel.vx>>1;
+	//					item->Pos.vy-=DistY<<(HealthManShift-1);
 					}
 					
 				}
+				else
+				{
+					item->Life=0;
+				}
 			}
+
+			item++;
 		}
 
 }
@@ -196,19 +217,21 @@ void	CHealthManager::think(int frames)
 /*****************************************************************************/
 void	CHealthManager::render()
 {
+sItem	*list=ItemList;
 sOT		*ThisOT=OtPtr;//+OTPOS__PICKUP_POS;
 DVECTOR	const	&CamPos=CLevel::getCameraPos();
-
 	for (int i=0; i<ITEM_MAX; i++)
 	{
-		if (ItemList[i].Life)
+		int	life=list->Life;
+		if (life&&(life<256-HealthManPickUpDelay||life&3))
 		{
 			// Calc render pos (dont worry about clipping yet)
-			ItemList[i].Sprite.x0 = ItemList[i].ScrPos.vx - CamPos.vx;
-			ItemList[i].Sprite.y0 = (ItemList[i].ScrPos.vy - CamPos.vy)-32;
+			list->Sprite.x0 = list->ScrPos.vx - CamPos.vx;
+			list->Sprite.y0 = (list->ScrPos.vy - CamPos.vy)-32;
 
-			addPrim(ThisOT,&ItemList[i].Sprite);
+			addPrim(ThisOT,&list->Sprite);
 		}
+		list++;
 	}
 
 }
