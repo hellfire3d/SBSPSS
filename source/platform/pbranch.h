@@ -23,6 +23,7 @@ class CNpcBranchPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
+	virtual	CRECT const	*getThinkBBox()							{return( &getCollisionArea() );}
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
