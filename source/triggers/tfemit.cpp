@@ -19,6 +19,7 @@
 #include	"player\player.h"
 #endif
 
+#include	"fx\fxfire.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,9 +28,10 @@ void	CFlameEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 	CTrigger::setPositionAndSize( _x, _y, _w, _h );
 
 	m_effect = CFX::Create( CFX::FX_TYPE_FLAMES, Pos );
-	CFXBaseAnim *m_animEffect = (CFXBaseAnim *) m_effect;
-	m_animEffect->SetScaleX( ( _w * ONE ) >> 5 );
-	m_animEffect->SetScaleY( ( _h * ONE ) >> 5 );
+	CFXFire *FX = (CFXFire *) m_effect;
+	FX->SetSize(_w,_h);
+//	m_animEffect->SetScaleX( ( _w * ONE ) >> 5 );
+//	m_animEffect->SetScaleY( ( _h * ONE ) >> 5 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,9 +46,10 @@ void	CFlameEmitterTrigger::setHeading(int newHeading)
 
 void	CFlameEmitterTrigger::setSize( int _w, int _h )
 {
-	CFXBaseAnim *m_animEffect = (CFXBaseAnim *) m_effect;
-	m_animEffect->SetScaleX( ( _w * ONE ) >> 5 );
-	m_animEffect->SetScaleY( ( _h * ONE ) >> 5 );
+	CFXFire *FX= (CFXFire *) m_effect;
+	FX->SetSize(_w,_h);
+//	m_animEffect->SetScaleX( ( _w * ONE ) >> 5 );
+//	m_animEffect->SetScaleY( ( _h * ONE ) >> 5 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
