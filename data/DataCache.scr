@@ -4,6 +4,12 @@ translations/ita.dat
 translations/ger.dat
 translations/id.dat
 translations/eng.dat
+../../../data/music/hypermmx/hypermmx.pxm
+../../../data/music/hypermmx/hypermmx.vb
+../../../data/music/hypermmx/hypermmx.vh
+../../../data/music/droppop/droppop.pxm
+../../../data/music/droppop/droppop.vb
+../../../data/music/droppop/droppop.vh
 { SYSTEM_CACHE 4
 }
 ui/uigfx.spr

@@ -118,10 +118,37 @@ GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
 
 
 #----------------------------------------------------------------------------
+# SFX
+#----------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------
+#	Music
+#----------------------------------------------------------------------------
+MUSIC_IN_DIR :=		data/music
+MUSIC_OUT_DIR :=	$(DATA_OUT)/music
+
+MUSIC_LIST :=		hypermmx
+
+MUSIC_ALL_IN :=		$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).PXM $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VH $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VB)
+MUSIC_ALL_OUT :=	$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_OUT_DIR)/$(MUSIC).PXM $(MUSIC_OUT_DIR)/$(MUSIC).VH $(MUSIC_OUT_DIR)/$(MUSIC).VB)
+
+music: 	$(MUSIC_ALL_OUT)
+
+cleanmusic:
+	@$(RM) -f $(MUSIC_ALL_OUT)
+
+$(MUSIC_ALL_OUT) : $(MUSIC_ALL_IN)
+	$(CP) $(MUSIC_ALL_IN) $(MUSIC_OUT_DIR)
+
+GRAF_DIRS_TO_MAKE	+=	$(MUSIC_OUT_DIR)
+GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
+
+
+#----------------------------------------------------------------------------
 # Dirs to Make
 #----------------------------------------------------------------------------
 
-GRAF_DIRS_TO_MAKE :=	$(TRANS_OUT_DIR) \
+GRAF_DIRS_TO_MAKE +=	$(TRANS_OUT_DIR) \
 						$(UI_GFX_OUT_DIR)
 
 gdirs : $(GRAF_DIRS_TO_MAKE)
