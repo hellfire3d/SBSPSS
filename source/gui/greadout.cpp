@@ -34,6 +34,10 @@
 #include "gfx\prim.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -186,86 +190,6 @@ void CGUITextReadout::recalc()
 		m_textY=(getH()-(BORDERHEIGHT*2)-fb->getStringHeight(string))/2;
 	}
 }
-
-
-
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUISpatCountReadout::init(CGUIObject *_parent,GUIId _id)
-{
-	CGUIObjectWithFont::init(_parent,_id);
-	m_spatsCollected=m_spatsTotal=0;
-	m_spriteBank=new ("SpatCountReadoutSprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUISpatCountReadout::shutdown()
-{
-	m_spriteBank->dump();	delete m_spriteBank;
-	CGUIObjectWithFont::shutdown();
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUISpatCountReadout::setSpatCounts(int _collected,int _total)
-{
-	m_spatsCollected=_collected;
-	m_spatsTotal=_total;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUISpatCountReadout::render()
-{
-	if(!isHidden())
-	{
-		FontBank	*fb;
-		sFrameHdr	*fh;
-		char		buf[100];
-		int			x,y;
-
-		fb=getFontBank();
-		fh=m_spriteBank->getFrameHeader(FRM__SPATULA);
-
-		sprintf(buf,"%d/%d",m_spatsCollected,m_spatsTotal);
-		x=getW()-fb->getStringWidth(buf);
-		y=(getH()/2)-fb->getCharHeight();
-		fb->print(x,y,buf);
-
-		x=getX()+getParentX();
-		y=getY()+getParentY()+((getH()-fh->H)/2);
-		m_spriteBank->printFT4(fh,x,y,0,0,0);
-	}
-	CGUIObjectWithFont::render();
-}
-
-
-
-
-
 
 
 
@@ -451,20 +375,24 @@ void CGUIBarReadout::setReadoutRange(int _min,int _max)
   ---------------------------------------------------------------------- */
 void CGUIBarReadout::render()
 {
-	POLY_G4	*g4;
-	int		x,y,w,h;
-	int		r,g,b;
-	int		ot;
+	POLY_G4		*g4;
+	int			x,y,w,h;
+	int			r,g,b;
+	int			ot;
+	SpriteBank	*sb;
+	sFrameHdr	*fh;
 
-	x=getX()+getParentX();
-	y=getY()+getParentY();
 	w=getW();
 	h=getH();
+	x=getX()+getParentX();
+	y=getY()+getParentY()+(h/2);
 	r=g=b=isSelected()?245:110;
 	ot=getOt();
 
-	DrawLine(x,y+(h/2),x+w,y+(h/2),r,g,b,ot);
-	DrawLine(x+m_markerOffset,y,x+m_markerOffset,y+h,r,g,b,ot);
+	sb=CGameScene::getSpriteBank();
+	fh=sb->getFrameHeader(FRM__SLIDER_MARKER);
+	sb->printFT4(fh,x+m_markerOffset-(fh->W/2),y-(fh->H/2),0,0,ot);
+	DrawLine(x,y,x+w,y,r,g,b,ot);
 
 	CGUIObject::render();
 }
