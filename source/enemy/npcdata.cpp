@@ -1096,7 +1096,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		FRM_JELLYFISH1_SWIM1,
-		true,
+		false,
 		false,
 		false,
 		false,

@@ -484,9 +484,9 @@ void CPlayerProjectile::think(int _frames)
 
 	m_frame += _frames;
 
-	if ( m_frame > 5 )
+	if ( m_frame > ( FRM_JELLYFISH1_SWIM6 - FRM_JELLYFISH1_SWIM1 ) )
 	{
-		m_frame -= 5;
+		m_frame = 0;
 	}
 
 	switch( m_movementType )
@@ -548,7 +548,7 @@ void CPlayerProjectile::render()
 		return;
 	}
 
-	SprFrame = m_spriteBank->printFT4(m_frame,x,y,m_reversed,0,10);
+	SprFrame = m_spriteBank->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,10);
 	setRGB0( SprFrame, 255, 128, 255 );
 }
 
