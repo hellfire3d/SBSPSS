@@ -375,6 +375,24 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 			}
 		}
 	}
+
+	switch ( CGameScene::getCollision()->getCollisionBlock( Pos.vx + (*moveX), Pos.vy + (*moveY) + 1 ) & COLLISION_TYPE_MASK )
+	{
+		case COLLISION_TYPE_FLAG_DEATH_FALL:
+		case COLLISION_TYPE_FLAG_DEATH_INSTANT:
+		case COLLISION_TYPE_FLAG_DEATH_LIQUID:
+		case COLLISION_TYPE_FLAG_DAMAGE:
+		{
+			m_health = 0;
+			m_controlFunc = NPC_CONTROL_SHOT;
+			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+			break;
+		}
+
+		default:
+			break;
+	}
 }
 
 bool CNpcEnemy::isCollisionWithGround()
