@@ -66,6 +66,10 @@
 #include "triggers\tgarygo.h"
 #endif
 
+#ifndef __PLATFORM_PFBLOCK_H__
+#include "platform\pfblock.h"
+#endif
+
 /*	Std Lib
 	------- */
 
@@ -374,6 +378,52 @@ void		CThingManager::matchGaryTriggers()
 		}
 
 		friendNpc = (CNpcFriend *) friendNpc->m_nextListThing;
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+
+void		CThingManager::shakePlatformLoose()
+{
+	CNpcPlatform *platform;
+
+	int platformCount = getRnd() % 30;
+
+	int platformTest = 0;
+
+	while( platformCount )
+	{
+		platform = (CNpcPlatform *) s_thingLists[CThing::TYPE_PLATFORM];
+
+		while( platform )
+		{
+			if ( platform->getThingSubType() == CNpcPlatform::NPC_FALLING_BLOCK_PLATFORM )
+			{
+				platformCount--;
+				platformTest++;
+
+				if ( !platformCount )
+				{
+					CNpcFallingBlockPlatform *block = (CNpcFallingBlockPlatform *) platform;
+
+					block->trigger();
+
+					return;
+				}
+			}
+
+			platform = (CNpcPlatform *) platform->m_nextListThing;
+		}
+
+		if ( !platformTest )
+		{
+			return;
+		}
 	}
 }
 

@@ -24,6 +24,7 @@ public:
 	void				postInit();
 	CRECT const			*getThinkBBox()												{return( CThing::getThinkBBox() );}
 	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				trigger();
 protected:
 	void				processMovement( int _frames );
 

@@ -40,6 +40,14 @@ void CNpcFallingBlockPlatform::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcFallingBlockPlatform::trigger()
+{
+	m_isTriggered = true;
+	m_timer = GameState::getOneSecondInFrames();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFallingBlockPlatform::processMovement( int _frames )
 {
 	if ( m_isTriggered )
@@ -79,11 +87,6 @@ void CNpcFallingBlockPlatform::processMovement( int _frames )
 
 			Pos.vy += moveY;
 		}
-	}
-	else if ( m_contact )
-	{
-		m_isTriggered = true;
-		m_timer = GameState::getOneSecondInFrames();
 	}
 }
 

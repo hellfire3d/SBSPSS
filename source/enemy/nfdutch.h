@@ -33,6 +33,7 @@ protected:
 	void				processShotRecoil( int _frames );
 	void				processShotDeathEnd( int _frames );
 	void				collidedWith(CThing *_thisThing);
+	void				shakePlatformLoose();
 
 	enum NPC_FLYING_DUTCHMAN_STATE
 	{
@@ -43,6 +44,8 @@ protected:
 		FLYING_DUTCHMAN_ATTACK_PLAYER = 1,
 		FLYING_DUTCHMAN_CHARGE_PLAYER_START,
 		FLYING_DUTCHMAN_CHARGE_PLAYER,
+		FLYING_DUTCHMAN_LEVEL_SHAKE,
+		FLYING_DUTCHMAN_LEVEL_SHAKE_WAIT,
 		FLYING_DUTCHMAN_RETURN,
 	};
 

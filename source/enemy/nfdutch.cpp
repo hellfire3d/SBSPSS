@@ -241,13 +241,30 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 				}
 				else
 				{
-					if ( getRnd() % 2 )
+					int val = getRnd() % 3;
+
+					switch( val )
 					{
-						m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
-					}
-					else
-					{
-						m_state = FLYING_DUTCHMAN_CHARGE_PLAYER_START;
+						case 0:
+						{
+							m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
+
+							break;
+						}
+
+						case 1:
+						{
+							m_state = FLYING_DUTCHMAN_CHARGE_PLAYER_START;
+
+							break;
+						}
+
+						case 2:
+						{
+							m_state = FLYING_DUTCHMAN_LEVEL_SHAKE;
+
+							break;
+						}
 					}
 
 					m_fadeDown = false;
@@ -380,6 +397,54 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 					else
 					{
 						Pos.vx += _frames * m_speed * 2;
+					}
+
+					m_timerTimer -= _frames;
+				}
+				else
+				{
+					m_state = FLYING_DUTCHMAN_RETURN;
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_LEVEL_SHAKE:
+			{
+				if ( m_fadeVal == 128 )
+				{
+					CThingManager::shakePlatformLoose();
+
+					m_timerTimer = 5 * GameState::getOneSecondInFrames();
+
+					m_state = FLYING_DUTCHMAN_LEVEL_SHAKE_WAIT;
+
+					CGameScene::setCameraShake(0,8);
+				}
+				else
+				{
+					if ( !m_animPlaying )
+					{
+						m_animPlaying = true;
+						m_animNo = m_data[m_type].moveAnim;
+						m_frame = 0;
+					}
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_LEVEL_SHAKE_WAIT:
+			{
+				if ( m_timerTimer > 0 )
+				{
+					if ( !m_animPlaying )
+					{
+						m_animNo = m_data[m_type].moveAnim;
+						m_animPlaying = true;
+						m_frame = 0;
+
+						CGameScene::setCameraShake(0,8);
 					}
 
 					m_timerTimer -= _frames;
@@ -610,6 +675,7 @@ void CNpcFlyingDutchmanEnemy::render()
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 			setSemiTrans( SprFrame, true );
+			SprFrame->tpage|=1<<5;
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
 			setRGB0( SprFrame, m_fadeVal, m_fadeVal, m_fadeVal );
 
@@ -730,4 +796,10 @@ u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 	}
 
 	return( true );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFlyingDutchmanEnemy::shakePlatformLoose()
+{
 }

@@ -65,6 +65,7 @@ static	void		initCollision();
 static	void		matchWheelsAndWeights();
 static	void		matchPressureSwitches();
 static	void		matchGaryTriggers();
+static	void		shakePlatformLoose();
 
 static	sBBox		&getRenderBBox()			{return(m_RenderBBox);}
 static	sBBox		&getThinkBBox()				{return(m_ThinkBBox);}

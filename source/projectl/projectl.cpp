@@ -49,6 +49,7 @@
 
 #include "gfx\otpos.h"
 #include "fx\fx.h"
+#include "fx\fxbaseanim.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -405,7 +406,9 @@ void CProjectile::think(int _frames)
 
 			if ( m_movementType == PROJECTILE_MINE )
 			{
-				CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+				CFX *newFX = CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+				((CFXBaseAnim*)newFX)->SetScale(ONE*2);
+
 				CGameScene::setCameraShake(0,8);
 			}
 		}
