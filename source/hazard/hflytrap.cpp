@@ -150,7 +150,7 @@ void CNpcFlyTrapHazard::collidedWith( CThing *_thisThing )
 					{
 						m_contact = true;
 
-						m_timer = GameState::getOneSecondInFrames() >> 1;
+						m_timer = GameState::getOneSecondInFrames();
 					}
 					else
 					{
