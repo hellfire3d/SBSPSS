@@ -35,6 +35,15 @@ question/response
 #include "game\convo.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
+#ifndef __PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
+
 
 /*	Std Lib
 	------- */
@@ -45,6 +54,19 @@ question/response
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
+
+// For getAmmoCount(), setAmmoCount()
+enum
+{
+	AMMO_BUBBLEWAND,
+};
+
+// For isHoldingWeapon()
+enum
+{
+	WEAPON_BUBBLEWAND,
+};
+
 
 /*----------------------------------------------------------------------
 	Structure defintions
@@ -63,13 +85,11 @@ typedef struct
 
 static signed short func_setCharacterAnimation(unsigned short *_args);
 static signed short func_setText(unsigned short *_args);
-static signed short func_giveItem(unsigned short *_args);
-static signed short func_gotItem(unsigned short *_args);
 static signed short func_setResponseOptions(unsigned short *_args);
 static signed short func_getResponse(unsigned short *_args);
-
-static signed short func_drawSprite(unsigned short *_args);
-static signed short func_getFrameTime(unsigned short *_args);
+static signed short func_getAmmoCount(unsigned short *_args);
+static signed short func_setAmmoCount(unsigned short *_args);
+static signed short func_isHoldingWeapon(unsigned short *_args);
 
 
 /*----------------------------------------------------------------------
@@ -80,13 +100,11 @@ static FunctionDef	s_functionDefs[]=
 {
 	{	func_setCharacterAnimation,		2	},		// characterId,animationId
 	{	func_setText,					2	},		// characterId,textId
-	{	func_giveItem,					1	},		// itemId
-	{	func_gotItem,					1	},		// itemId
 	{	func_setResponseOptions,		1	},		// optionsId
 	{	func_getResponse,				0	},		// 
-
-	{	func_drawSprite,				4	},		// frame,x,y,ot
-	{	func_getFrameTime,				0	},		//
+	{	func_getAmmoCount,				1	},		// ammoId
+	{	func_setAmmoCount,				2	},		// ammoId,amount
+	{	func_isHoldingWeapon,			1	},		// weaponId
 };
 static const int	s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
 
@@ -137,31 +155,6 @@ static signed short func_setText(unsigned short *_args)
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	Flag item as collected
-	Params:		itemId
-	Returns:	0
-  ---------------------------------------------------------------------- */
-static signed short func_giveItem(unsigned short *_args)
-{
-	return 0;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:	Test whether an item has been collected or not
-	Params:		itemId
-	Returns:	true/false
-  ---------------------------------------------------------------------- */
-static signed short func_gotItem(unsigned short *_args)
-{
-
-	return false;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
 	Purpose:	Sets the allowable responses for a question
 	Params:		optionsId
 	Returns:	0
@@ -187,35 +180,76 @@ static signed short func_getResponse(unsigned short *_args)
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
-	Params:		frame,x,y,ot
+	Purpose:	
+	Params:		ammoId
+	Returns:	ammoCount
+  ---------------------------------------------------------------------- */
+static signed short func_getAmmoCount(unsigned short *_args)
+{
+	int	ammo=0;
+
+	switch(_args[0])
+	{
+		case AMMO_BUBBLEWAND:
+			ammo=GameScene.getPlayer()->getBubbleAmmo();
+			break;
+
+		default:
+			ASSERT(!"BAD AMMO TYPE IN func_getAmmoCount()");
+			break;
+	}
+
+	return ammo;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	
+	Params:		ammoId,amount
 	Returns:	0
   ---------------------------------------------------------------------- */
-#include "gfx\sprbank.h"
-SpriteBank *sb=NULL;
-static signed short func_drawSprite(unsigned short *_args)
+static signed short func_setAmmoCount(unsigned short *_args)
 {
-	sFrameHdr	*fh;
-	if(!sb)
+	switch(_args[0])
 	{
-		sb=new ("sb") SpriteBank;
-		sb->load(SPRITES_SPRITES_SPR);
+		case AMMO_BUBBLEWAND:
+			GameScene.getPlayer()->setBubbleAmmo(_args[1]);
+			break;
+
+		default:
+			ASSERT(!"BAD AMMO TYPE IN func_setAmmoCount()");
+			break;
 	}
-	fh=sb->getFrameHeader(_args[0]);
-	sb->printFT4(_args[0],_args[1]-(fh->W/2),_args[2]-(fh->H/2),0,0,_args[3]);
 	return 0;
 }
 
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
-	Params:		0
-	Returns:	frameCount
+	Purpose:	
+	Params:		weaponId
+	Returns:	true(1) or false(0)
   ---------------------------------------------------------------------- */
-static signed short func_getFrameTime(unsigned short *_args)
+static signed short func_isHoldingWeapon(unsigned short *_args)
 {
-	return GameState::getFramesSinceLast();
+	int	held=0;
+
+	switch(_args[0])
+	{
+		case WEAPON_BUBBLEWAND:
+			if(GameScene.getPlayer()->isHoldingBubbleWand())
+			{
+				held=1;
+			}
+			break;
+
+		default:
+			ASSERT(!"BAD AMMO TYPE IN func_setAmmoCount()");
+			break;
+	}
+
+	return held;
 }
 
 

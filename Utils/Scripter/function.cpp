@@ -63,13 +63,11 @@ static FunctionDef s_functionNames[]=
 {
 	{	"setCharacterAnimation",		2	},		// characterId,animationId
 	{	"setText",						2	},		// characterId,textId
-	{	"giveItem",						1	},		// itemId
-	{	"gotItem",						1	},		// itemId
 	{	"setResponseOptions",			1	},		// optionsId
 	{	"getResponse",					0	},		// 
-
-	{	"drawSprite",					4	},		// frame,x,y,ot
-	{	"getFrameTime",					0	},		//
+	{	"getAmmoCount",					1	},		// ammoId
+	{	"setAmmoCount",					2	},		// ammoId,amount
+	{	"isHoldingWeapon",				1	},		// weaponId
 };
 static int		s_functionCount=sizeof(s_functionNames)/sizeof(FunctionDef);
 

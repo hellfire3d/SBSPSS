@@ -409,8 +409,10 @@ public:
 	int				isWearingDivingHelmet()					{return m_divingHelmet;}
 															
 	void			giveBubbleAmmo()						{m_bubbleAmmo+=INITIAL_BUBBLE_BLOWER_AMMO;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
+	void			setBubbleAmmo(int _amount)				{m_bubbleAmmo=_amount;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
 	void			useOneBubble()							{m_bubbleAmmo--;}
 	int				getBubbleAmmo()							{return m_bubbleAmmo;}
+	int				isHoldingBubbleWand()					{return m_currentMode==PLAYER_MODE_BUBBLE_MIXTURE;}
 															
 	void			giveJellyAmmo()							{m_jellyAmmo+=JELLY_LAUNCHER_AMMO_IN_PICKUP;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
 	void			useOneJelly()							{m_jellyAmmo--;}
@@ -420,13 +422,12 @@ public:
 	void			useOneJellyFishAmmo()					{m_jellyfishAmmoCount--;}
 	int				isJellyFishAmmoFull()					{return m_jellyfishAmmoCount==MAX_JELLFISH_IN_NET;}
 	int				getJellyFishAmmo()						{return m_jellyfishAmmoCount;}
+	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
 	void			setIsInWater(int _in)					{m_isInWater=_in;m_helmetSoundTimer=0;}
 	int				getIsInWater()							{return m_isInWater;}
 	int				getIsHelmetFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
 	int				getIsHelmetSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOAKUPLEVEL;}
-
-	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
 	void			justButtBouncedABadGuy();	// Also fugly.. :/
 
