@@ -8,9 +8,9 @@
 #include	<dstructs.h>
 
 
-#if	!defined(__USER_CDBUILD__)
+//#if	!defined(__USER_CDBUILD__)
 #define __SHOW_COLLISION__
-#endif
+//#endif
 
 
 /*****************************************************************************/
