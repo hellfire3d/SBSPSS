@@ -34,6 +34,7 @@ void CEnemyAsSpriteProjectile::think( int _frames )
 void CEnemyAsSpriteProjectile::setGraphic( int frame )
 {
 	m_spriteFrame = frame;
+	m_rotation = 0;
 }
 
 void CEnemyAsSpriteProjectile::setRGB( int R, int G, int B )

@@ -113,11 +113,11 @@ ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
 						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Stomper \
-						SharkSub Motherjellyfish SeaSnake Shell
+						SharkSub Motherjellyfish SeaSnake
 
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 
 
-ACTOR_SPRITES :=		Jellyfish1 Squiddart Plankton Butterfly
+ACTOR_SPRITES :=		Jellyfish1 Squiddart Plankton Butterfly Shell
 
 ACTOR_SPR_LIST :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/$(ACTOR)_*.bmp)
 ACTOR_SPR_DEP :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/*)

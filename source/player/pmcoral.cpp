@@ -66,8 +66,8 @@
 #include "game\game.h"
 #endif
 
-#ifndef	__PROJECTL_PRNPC_H__
-#include "projectl\prnpc.h"
+#ifndef	__PROJECTL_PRNPCSPR_H__
+#include "projectl\prnpcspr.h"
 #endif
 
 #ifndef __GFX_FONT_H__
@@ -264,8 +264,8 @@ void	CPlayerModeCoralBlower::think()
 
 				newPos.vy -= 10;
 
-				CEnemyAsProjectile *projectile;
-				projectile = new( "blower projectile" ) CEnemyAsProjectile;
+				CEnemyAsSpriteProjectile *projectile;
+				projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
 				projectile->init(	newPos,
 									1024+(1024*m_player->getFacing()),
 									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
@@ -273,9 +273,11 @@ void	CPlayerModeCoralBlower::think()
 									5*60);
 				projectile->setLayerCollision( m_player->getLayerCollision() );
 
-				CActorGfx *projectileGfx;
-				projectileGfx=CActorPool::GetActor((FileEquate)ACTORS_SHELL_SBK);
-				projectile->setGraphic( projectileGfx );
+				//CActorGfx *projectileGfx;
+				//projectileGfx=CActorPool::GetActor((FileEquate)ACTORS_SHELL_SBK);
+				//projectile->setGraphic( projectileGfx );
+				projectile->setGraphic( FRM_SHELL_STATIC0000 );
+				projectile->setHasRGB( false );
 			}
 			break;
 	}
