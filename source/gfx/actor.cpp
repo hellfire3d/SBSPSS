@@ -248,9 +248,8 @@ int		Y=CurrentPalette/(((CACHE_W*TPAGE_W)/CACHE_PALW)-1);
 /*****************************************************************************/
 void	CActorPool::Init()
 {
-		Cache.Reset();
 		ActorList=0;
-		LastActor=0;
+		Cache.Reset();
 }
 
 /*****************************************************************************/
@@ -272,6 +271,7 @@ sActorPool	*List=ActorList;
 				}
 				List=Next;
 			}
+		LastActor=ActorList;
 		Cache.Reset();
 }
 
