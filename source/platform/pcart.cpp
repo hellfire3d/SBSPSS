@@ -23,14 +23,16 @@
 
 void CNpcCartPlatform::postInit()
 {
-	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
+
+	m_carSpeed = m_data[m_type].speed << 8;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcCartPlatform::processMovement( int _frames )
 {
-	s32 fallSpeed = 3;
+	s32 fallSpeed = 2;
 	s8 yMovement = fallSpeed * _frames;
 	s32 distX, distY, heading;
 	s32 groundHeight;
@@ -41,18 +43,23 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
 
-	moveX = m_data[m_type].speed * _frames;
-
-	if ( heading == 2048 )
+	if ( !pathComplete )
 	{
-		moveX = -moveX;
+		moveX = ( m_carSpeed >> 8 ) * _frames;
+
+		if ( heading == 2048 )
+		{
+			moveX = -moveX;
+		}
 	}
 
 	// check for vertical movement
 
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy, yMovement + 16 );
+	s32 checkDist = yMovement + 50;
 
-	if ( groundHeight <= yMovement )
+	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
+
+	if ( groundHeight < checkDist )
 	{
 		// groundHeight <= yMovement indicates either just above ground or on or below ground
 
@@ -63,6 +70,25 @@ void CNpcCartPlatform::processMovement( int _frames )
 		// fall
 
 		moveY = yMovement;
+	}
+
+	if ( moveY < 0 )
+	{
+		m_carSpeed -= 20;
+
+		if ( m_carSpeed < ( 2 << 8 ) )
+		{
+			m_carSpeed = ( 2 << 8 );
+		}
+	}
+	else if ( moveY > 0 )
+	{
+		m_carSpeed += 20;
+
+		if ( m_carSpeed > ( 6 << 8 ) )
+		{
+			m_carSpeed = ( 6 << 8 );
+		}
 	}
 
 	Pos.vx += moveX;

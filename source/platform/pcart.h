@@ -24,6 +24,8 @@ public:
 	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
+
+	s32					m_carSpeed;
 };
 
 #endif
