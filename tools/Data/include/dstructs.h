@@ -236,7 +236,7 @@ struct	sSpriteAnimBank
 	u16				AnimCount;		// 2
 	u16				FrameCount;		// 2
 	u16				MaxW,MaxH;		// 4
-	u16				Pad;
+	u16				Clut;
 
 	u8				*Palette;		// 4
 	sSpriteAnim		*AnimList;		// 4
