@@ -1338,7 +1338,7 @@ void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 				yDiffSqr = this->Pos.vy - sourcePos.vy;
 				yDiffSqr *= yDiffSqr;
 
-				if ( xDiffSqr + yDiffSqr < 250 )
+				if ( xDiffSqr + yDiffSqr < 10000 )
 				{
 					if( !CConversation::isActive() )
 					{

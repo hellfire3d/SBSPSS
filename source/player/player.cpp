@@ -29,6 +29,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 // to be removed
 #include "gfx\tpage.h"
 
@@ -136,8 +140,6 @@ if(newmode!=-1)
 	newmode=-1;
 }
 
-
-
 #ifndef __USER_paul__
 	int	padInput=PadGetHeld(0);
 	int	move=7*_frames;
@@ -146,6 +148,11 @@ if(newmode!=-1)
 	if(padInput&PAD_LEFT)	Pos.vx-=move;
 	if(padInput&PAD_RIGHT)	Pos.vx+=move;
 	m_invincibleFrameCount=0;
+
+	if ( padInput & PAD_UP ) // not sure where you want to put this, Paul (Charles)
+	{
+		GameScene.sendEvent( USER_REQUEST_TALK_EVENT, this );
+	}
 #else
 	if(_frames>=3)_frames=2;
 
