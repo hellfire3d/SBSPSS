@@ -482,7 +482,7 @@ static void displayValues()
 
 	print("Scene:\n");
 	scene=GameState::getCurrentScene();
-	sprintf(textBuf," Current scene: %s\n",scene->getSceneName());
+	sprintf(textBuf," Current scene: %s\n",scene?scene->getSceneName():"None!?!?");
 	print(textBuf);
 	scene=GameState::getPendingScene();
 	sprintf(textBuf," Pending scene: %s\n",scene?scene->getSceneName():"None");
