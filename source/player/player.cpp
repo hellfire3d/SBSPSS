@@ -1,3 +1,4 @@
+char buf[100];
 /*=========================================================================
 
 	player.cpp
@@ -189,14 +190,10 @@ m_respawnPos.vy=10*16;
 m_animNo=0;
 m_animFrame=0;
 	m_currentMode=PLAYER_MODE_BASICUNARMED;
-	m_moveVel.vx=0;
-	m_moveVel.vy=0;
 	setFacing(FACING_RIGHT);
 	respawn();
 
 	m_lives=CGameSlotManager::getSlotData().m_lives;
-
-
 
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
@@ -255,102 +252,20 @@ if(newmode!=-1)
 	newmode=-1;
 }
 
+if(_frames>3)_frames=3;
 	for(i=0;i<_frames;i++)
 	{
 		// Think
 		updatePadInput();
 		m_currentStateClass->think(this);
+		thinkVerticalMovement();
+		thinkHorizontalMovement();
 
-		// Horizontal movement
-		if(m_moveVel.vx&&m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-2)>>4))
-		{
-			// Will hit a wall this frame - Do collision
-			// Move flush with the edge of the obstruction
-			int	dir,vx,cx,y,i;
-			if(m_moveVel.vx<0)
-			{
-				dir=-1;
-				vx=-m_moveVel.vx;
-			}
-			else
-			{
-				dir=+1;
-				vx=m_moveVel.vx;
-			}
-			cx=Pos.vx;
-			y=(Pos.vy-1)>>4;
-			for(i=0;i<vx;i++)
-			{
-				if(m_layerCollision->Get(cx>>4,y))
-				{
-					break;
-				}
-				cx+=dir;
-			}
-			Pos.vx=cx-dir;
+#ifdef __USER_paul__
+sprintf(buf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
+s_debugFont.print(40,40,buf);
+#endif
 
-			// If running then go to idle, otherwise leave in same state
-			if(m_currentState==STATE_RUN)
-			{
-				setState(STATE_IDLE);
-			}
-			m_moveVel.vx=0;
-		}
-		else
-		{
-			// No obstruction this frame - Do the movement
-			Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
-		}
-
-		// Vertical movement
-		int	colHeight;
-		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
-		if((colHeight=isOnSolidGround()))
-		{
-//stick to ground (PKG)
-//Pos.vy=23*16+1;//16*15;
-Pos.vy=((Pos.vy+16)&0xfffffff0)-colHeight;
-
-			if(m_moveVel.vy)
-			{
-				// Was falling.. so we've just hit the ground
-				if(m_currentState==STATE_BUTTFALL)
-				{
-					// Landed from a butt bounce
-					setState(STATE_BUTTLAND);
-				}
-				else if(m_currentState==STATE_FALLFAR)
-				{
-					// Landed from a painfully long fall
-					setState(STATE_IDLE);
-					takeDamage(DAMAGE__FALL);
-					m_moveVel.vx=0;
-					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-				}
-				else if(m_moveVel.vx)
-				{
-					// Landed from a jump with x movement
-					setState(STATE_RUN);
-				}
-				else
-				{
-					// Landed from a jump with no x movement
-					setState(STATE_IDLE);
-					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
-				}
-				m_moveVel.vy=0;
-				m_fallFrames=0;
-			}
-		}
-		else
-		{
-			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
-			   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-			   m_currentState!=STATE_JUMP)
-			{
-				setState(STATE_FALL);
-			}
-		}
 
 if(Pos.vx<16)Pos.vx=16;
 else if(Pos.vx>m_mapEdge.vx-16)Pos.vx=m_mapEdge.vx-16;
@@ -442,6 +357,181 @@ m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>
 		m_cameraScrollDir=0;
 	}
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::thinkVerticalMovement()
+{
+	int	colHeight;
+	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy);
+	if(colHeight>=0)
+	{
+		// Above or on the ground
+		// Are we falling?
+		if(m_moveVel.vy>0)
+		{
+			// Yes.. Check to see if we're about to hit/go through the ground
+			colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT));
+			if(colHeight<=0)
+			{
+				// Just hit the ground
+				// Stick at ground level
+				Pos.vy+=(m_moveVel.vy>>VELOCITY_SHIFT)+colHeight;
+				m_moveVel.vy=0;
+				m_fallFrames=0;
+				if(m_currentState==STATE_BUTTFALL)
+				{
+					// Landed from a butt bounce
+					setState(STATE_BUTTLAND);
+				}
+				else if(m_currentState==STATE_FALLFAR)
+				{
+					// Landed from a painfully long fall
+					setState(STATE_IDLE);
+					takeDamage(DAMAGE__FALL);
+					m_moveVel.vx=0;
+					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
+				}
+				else if(m_moveVel.vx)
+				{
+					// Landed from a jump with x movement
+					setState(STATE_RUN);
+				}
+				else
+				{
+					// Landed from a jump with no x movement
+					setState(STATE_IDLE);
+					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
+				}
+			}
+		}
+		else if(colHeight)
+		{
+			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
+			   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
+			   m_currentState!=STATE_JUMP)
+			{
+				// Was floating in the air.. fall!
+				setState(STATE_FALL);
+			}
+		}
+	}
+	else
+	{
+/*
+		// Below ground
+		// Perhaps we should be falling?
+		if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
+		   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
+		   m_currentState!=STATE_JUMP)
+		{
+			setState(STATE_FALL);
+		}
+*/
+	}
+
+	Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::thinkHorizontalMovement()
+{
+	if(m_moveVel.vx)
+	{
+		if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy)==0)
+		{
+			// Ok.. we're on the ground. What happens if we move left/right
+			int colHeight;
+			colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy);
+			if(colHeight<-8)
+			{
+				// Big step up. Stop at the edge of the obstruction
+				int	dir,vx,cx,i;
+				if(m_moveVel.vx<0)
+				{
+					dir=-1;
+					vx=-m_moveVel.vx>>VELOCITY_SHIFT;
+				}
+				else
+				{
+					dir=+1;
+					vx=m_moveVel.vx>>VELOCITY_SHIFT;
+				}
+				cx=Pos.vx;
+				for(i=0;i<vx;i++)
+				{
+					if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<-8)
+					{
+						break;
+					}
+					cx+=dir;
+				}
+				Pos.vx=cx-dir;
+
+				// If running then go to idle, otherwise leave in same state
+				if(m_currentState==STATE_RUN)
+				{
+					setState(STATE_IDLE);
+				}
+				m_moveVel.vx=0;
+				
+				// Get the height at this new position and then try the step-up code below.
+				// Without this, there are problems when you run up a slope and hit a wall at the same time
+				colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy);
+			}
+			if(colHeight&&colHeight>=-8&&colHeight<=8)
+			{
+				// Small step up/down. Follow the contour of the level
+				Pos.vy+=colHeight;
+			}
+		}
+		else
+		{
+			// In the air
+			int colHeight;
+			colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy);
+			if(colHeight<0)
+			{
+				// Stop at the edge of the obstruction
+				int	dir,vx,cx,i;
+				if(m_moveVel.vx<0)
+				{
+					dir=-1;
+					vx=-m_moveVel.vx>>VELOCITY_SHIFT;
+				}
+				else
+				{
+					dir=+1;
+					vx=m_moveVel.vx>>VELOCITY_SHIFT;
+				}
+				cx=Pos.vx;
+				for(i=0;i<vx;i++)
+				{
+					if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
+					{
+						break;
+					}
+					cx+=dir;
+				}
+				Pos.vx=cx-dir;
+				m_moveVel.vx=0;
+			}
+		}
+		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
+	}
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -710,8 +800,16 @@ PLAYERINPUT CPlayer::getPadInputDown()
   ---------------------------------------------------------------------- */
 int CPlayer::isOnSolidGround()
 {
+return false;
+/*
 	ASSERT(m_layerCollision);
-	return m_layerCollision->Get(Pos.vx>>4,(Pos.vy)>>4)?16:0;
+	int	collHeight;
+
+	collHeight=m_layerCollision->Get(Pos.vx,Pos.vy);
+
+//	PAUL_DBGMSG("%04d,%04d=%02d",Pos.vx,Pos.vy,collHeight);
+	return collHeight;
+*/
 }
 
 
@@ -724,6 +822,7 @@ int CPlayer::isOnSolidGround()
 int slip=false;
 int CPlayer::isOnSlippySurface()
 {
+return false;
 	return slip&&isOnSolidGround();
 }
 
@@ -739,18 +838,21 @@ int CPlayer::isOnSlippySurface()
 int csize=15;
 int CPlayer::isOnEdge()
 {
+return false;
+/*
 	int	ret=0;
 
 	ASSERT(m_layerCollision);
-	if(!m_layerCollision->Get((Pos.vx-csize)>>4,Pos.vy>>4))
+	if(!m_layerCollision->Get(Pos.vx-csize,Pos.vy))
 	{
 		ret=FACING_LEFT;
 	}
-	else if(!m_layerCollision->Get((Pos.vx+csize)>>4,Pos.vy>>4))
+	else if(!m_layerCollision->Get(Pos.vx+csize,Pos.vy))
 	{
 		ret=FACING_RIGHT;
 	}
 	return ret;
+*/
 }
 
 
@@ -762,13 +864,11 @@ int CPlayer::isOnEdge()
   ---------------------------------------------------------------------- */
 int CPlayer::canMoveLeft()
 {
-	ASSERT(m_layerCollision);
-	return m_layerCollision->Get((Pos.vx-1)>>4,(Pos.vy-1)>>4)==0;
+	return m_layerCollision->getHeightFromGround(Pos.vx-1,Pos.vy)>-8?true:false;
 }
 int CPlayer::canMoveRight()
 {
-	ASSERT(m_layerCollision);
-	return m_layerCollision->Get((Pos.vx+1)>>4,(Pos.vy-1)>>4)==0;
+	return m_layerCollision->getHeightFromGround(Pos.vx+1,Pos.vy)>-8?true:false;
 }
 
 
@@ -921,10 +1021,17 @@ void CPlayer::respawn()
 	{
 		setMode(PLAYER_MODE_FULLUNARMED);
 	}
+	else
+	{
+		setMode(PLAYER_MODE_BASICUNARMED);
+	}
 
 	s_health=5;
 	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
+	m_moveVel.vx=0;
+	m_moveVel.vy=0;
+	m_fallFrames=0;
 }
 
 

@@ -252,6 +252,9 @@ private:
 	};
 	int				m_invincibleFrameCount;
 
+	void			thinkVerticalMovement();
+	void			thinkHorizontalMovement();
+
 	static PlayerMode	s_modes[NUM_PLAYERMODES];
 	int					m_currentMode;
 	class CPlayerState	*m_currentStateClass;
