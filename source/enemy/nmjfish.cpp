@@ -680,6 +680,7 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 			}
 
 			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_RGB = MJ_PINK;
 
 			m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
 
