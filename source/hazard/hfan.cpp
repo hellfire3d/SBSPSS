@@ -39,6 +39,11 @@ void CNpcFanHazard::processMovement( int _frames )
 {
 	m_rotation += 256 * _frames;
 	m_rotation &= 4095;
+
+	if ( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ELECTRIC_FAN, true, true );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
