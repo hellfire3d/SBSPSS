@@ -108,7 +108,7 @@ ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 MKACTOR_OPTS:=			-c:16
 
 ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net SpongeBob_Glove SpongeBob_Wand SpongeBob_JellyFish SpongeBob_FMA SpongeBob_FMA_ITEMOFS
-ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
+ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan MermaidMan_FMA_ITEMOFS
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish \

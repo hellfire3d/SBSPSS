@@ -99,6 +99,7 @@ FX
 #ifndef	__ANIM_MERMAIDMAN_HEADER__
 #include "actor_mermaidman_anim.h"
 #endif
+#include "actor_mermaidman_fma_itemofs_anim.h"
 
 #ifndef	__ANIM_BARNACLEBOY_HEADER__
 #include "actor_barnacleboy_anim.h"
@@ -261,7 +262,6 @@ struct	sFMAAnim
 typedef struct
 {
 	FileEquate		m_file[3];
-	DVECTOR			m_ItemOfs;
 	sFMAAnim		m_anims[FMA_NUM_ANIMS];
 
 } ACTOR_GRAPHICS_DATA;
@@ -336,7 +336,7 @@ static CScene	*s_nextGameSceneTable[FMA_NUM_NEXT_SCENES]=
 static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 {
 	{ // SpongeBob
-		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK,ACTORS_SPONGEBOB_FMA_ITEMOFS_SBK},{-48,-48},	
+		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK,ACTORS_SPONGEBOB_FMA_ITEMOFS_SBK},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_SPONGEBOB_IDLEBREATH,		0,-1},
 /*FMA_ANIM_WALK*/				{0,ANIM_SPONGEBOB_RUN,				2,ANIM_SPONGEBOB_FMA_ITEMOFS_RUN},
@@ -346,7 +346,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 /*FMA_ANIM_IDEA*/				{1,ANIM_SPONGEBOB_FMA_IDEA,			0,-1},
 /*FMA_ANIM_QUICKEXIT*/			{1,ANIM_SPONGEBOB_FMA_QUICKEXIT,	0,-1},
 /*FMA_ANIM_SHOUT*/				{1,ANIM_SPONGEBOB_FMA_SHOUT,		0,-1},
-/*FMA_ANIM_STUMBLE*/			{1,ANIM_SPONGEBOB_FMA_STUMBLE,		0,-1},
+/*FMA_ANIM_STUMBLE*/			{1,ANIM_SPONGEBOB_FMA_STUMBLE,		2,ANIM_SPONGEBOB_FMA_ITEMOFS_STUMBLE},
 /*FMA_ANIM_THROW*/				{1,ANIM_SPONGEBOB_FMA_THROW,		0,-1},
 /*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
 /*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
@@ -358,7 +358,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Barnicle Boy
-		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0,(FileEquate)0},{-32,-48},	
+		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_BARNACLEBOY_IDLE,			0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -380,7 +380,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Mermaid Man
-		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0,(FileEquate)0},{-32,-64},	
+		{ACTORS_MERMAIDMAN_SBK,ACTORS_MERMAIDMAN_FMA_ITEMOFS_SBK,(FileEquate)0},
 		{	
 /*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE,			0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -397,12 +397,12 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 /*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
 /*FMA_ANIM_SIT*/				{0,ANIM_MERMAIDMAN_SIT,				0,-1},
 /*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP,		0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP,		1,ANIM_MERMAIDMAN_FMA_ITEMOFS_SITASLEEP},
 /*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Gary Da Snail
-		{ACTORS_GARY_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_GARY_SBK,		(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_GARY_IDLE,					0,-1},
 /*FMA_ANIM_WALK*/				{0,ANIM_GARY_IDLE,					0,-1},
@@ -424,7 +424,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Plankton
-		{ACTORS_PLANKTON_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_PLANKTON_SBK,		(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_PLANKTON_IDLE,				0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -446,7 +446,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Patrick
-		{ACTORS_PATRICK_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_PATRICK_SBK,		(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_PATRICK_IDLEBREATHE,		0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -468,7 +468,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Krusty
-		{ACTORS_KRUSTY_SBK,			(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_KRUSTY_SBK,			(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_KRUSTY_IDLEBREATHE,			0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -490,7 +490,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Squidward
-		{ACTORS_SQUIDWARD_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_SQUIDWARD_SBK,		(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_SQUIDWARD_IDLEBREATHE,		0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -512,7 +512,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Sandy
-		{ACTORS_SANDY_SBK,			(FileEquate)0,(FileEquate)0},{0,0},	
+		{ACTORS_SANDY_SBK,			(FileEquate)0,(FileEquate)0},
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_SANDY_IDLE,					0,-1},
 /*FMA_ANIM_WALK*/				{0,-1,								0,-1},
@@ -679,8 +679,8 @@ static const int s_FMAC1EndScript[]=
 	SC_WAIT_ON_CAMERA_STOP,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_STUMBLE,0,
-	SC_THROW_ITEM_TO_ACTOR,		0,FMA_ACTOR_MM,48,120,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH2_01_DAT,
+	SC_THROW_ITEM_TO_ACTOR,		0,FMA_ACTOR_MM,48,120,
 
 // scene 6 - sarnie flys thru the air
 //	SC_SPRITE_SHIT
@@ -690,7 +690,6 @@ static const int s_FMAC1EndScript[]=
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,216*16,30*16,56,
 	SC_WAIT_ON_CAMERA_STOP,
 	SC_WAIT_ON_THROWN_ITEM,		0,
-	SC_CARRY_ITEM,				0,FMA_ACTOR_MM,
 
 // Scene 7 - MM Eats sarnie
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
@@ -1290,6 +1289,7 @@ void	CFmaScene::render()
 {
 	int			i;
 	ACTOR_DATA	*actor;
+	sItemData	*item;
 
 	CGameScene::setCameraMtx();
 
@@ -1315,37 +1315,33 @@ void	CFmaScene::render()
 			pos.vx=actor->m_pos.vx-m_cameraPos.vx;
 			pos.vy=actor->m_pos.vy-m_cameraPos.vy;
 			int	AnimNo,AnimBank;
+			int	facing;
 
 			ASSERT(s_actorGraphicsData[i].m_anims[actor->m_animState].Anim!=-1);
 			AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].Anim;
 			AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].Bank;
 			actor->m_gfx[AnimBank]->Render(pos,AnimNo,actor->m_animFrame,actor->m_facing);
-
-			// Is there an item anim for this anim?
-			AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].itemAnim;
-			if(AnimNo!=-1)
-			{
-				// Yeah.. grab the item offsets and remember them
-				int	x,y;
-				AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].itemBank;
-				actor->m_gfx[AnimBank]->getFrameOffsets(AnimNo,actor->m_animFrame,&x,&y);
-				actor->m_ItemOfs.vx=x;
-				actor->m_ItemOfs.vy=y;
-			}
 		}
 		actor++;
 	}
 
+	item=m_itemData;
 	for (i=0; i<FMA_ITEM_MAX; i++)
 	{
-		sItemData	*item=&m_itemData[i];
 		if(item->m_visible)
 		{
-			DVECTOR	pos;
-			pos.vx=item->m_Pos.vx-m_cameraPos.vx;
-			pos.vy=item->m_Pos.vy-m_cameraPos.vy;
-			CGameScene::getSpriteBank()->printFT4(item->m_Frame,pos.vx,pos.vy,item->m_facing,0,OTPOS__PICKUP_POS-3);
+			SpriteBank	*sb;
+			sFrameHdr	*fh;
+			DVECTOR		pos;
+
+			sb=CGameScene::getSpriteBank();
+			fh=sb->getFrameHeader(item->m_Frame);
+			pos.vx=item->m_Pos.vx-m_cameraPos.vx+(fh->W/2);
+			if(!item->m_facing)pos.vx-=fh->W;
+			pos.vy=item->m_Pos.vy-m_cameraPos.vy-fh->H;
+			sb->printFT4(fh,pos.vx,pos.vy,item->m_facing,0,OTPOS__PICKUP_POS-3);
 		}
+		item++;
 	}
 
 	CActorPool::CleanUpCache();
@@ -1450,7 +1446,18 @@ void	CFmaScene::think(int _frames)
 						{ // hold on last frame
 							actor->m_animFrame=LastFrame;
 						}
-						
+					}
+
+					// Is there an item anim for this anim?
+					AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].itemAnim;
+					if(AnimNo!=-1)
+					{
+						// Yeah.. grab the item offsets and remember them
+						int	x,y;
+						AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].itemBank;
+						actor->m_gfx[AnimBank]->getFrameOffsets(AnimNo,actor->m_animFrame,&x,&y);
+						actor->m_ItemOfs.vx=x;
+						actor->m_ItemOfs.vy=y;
 					}
 				}
 
@@ -1516,15 +1523,8 @@ void	CFmaScene::think(int _frames)
 					// Being carried by an actor
 					item->m_Pos=actor->m_pos;
 					item->m_facing=actor->m_facing;
-					if (item->m_facing)
-					{
-						item->m_Pos.vx-=/*actorGraphics->m_ItemOfs.vx+*/actor->m_ItemOfs.vx;
-					}
-					else
-					{
-						item->m_Pos.vx+=/*actorGraphics->m_ItemOfs.vx+*/actor->m_ItemOfs.vx;
-					}
-					item->m_Pos.vy+=/*actorGraphics->m_ItemOfs.vy+*/actor->m_ItemOfs.vy;
+					item->m_Pos.vx=item->m_facing?-actor->m_ItemOfs.vx:actor->m_ItemOfs.vx;
+					item->m_Pos.vy+=actor->m_ItemOfs.vy;
 				}
 			}
 
@@ -1811,17 +1811,17 @@ void	CFmaScene::startNextScriptCommand()
 				item->m_endMoveFrame=m_frameCount+*m_pc++;
 
 				// Calc the positions
-				const ACTOR_GRAPHICS_DATA	*actorGraphics=&s_actorGraphicsData[item->m_TargetActor];
-				item->m_TargetPos=m_actorData[item->m_TargetActor].m_pos;
-				if(m_actorData[item->m_TargetActor].m_facing)
+				const ACTOR_DATA	*actor=&m_actorData[item->m_TargetActor];
+				item->m_TargetPos=actor->m_pos;
+				if(actor->m_facing)
 				{
-					item->m_TargetPos.vx-=actorGraphics->m_ItemOfs.vx;
+					item->m_TargetPos.vx-=actor->m_ItemOfs.vx;
 				}
 				else
 				{
-					item->m_TargetPos.vx+=actorGraphics->m_ItemOfs.vx;
+					item->m_TargetPos.vx+=actor->m_ItemOfs.vx;
 				}
-				item->m_TargetPos.vy+=actorGraphics->m_ItemOfs.vy;
+				item->m_TargetPos.vy+=actor->m_ItemOfs.vy;
 				item->m_startPos=item->m_Pos;
 			}
 			break;
