@@ -37,12 +37,15 @@ public:
 protected:
 	DVECTOR				m_triggerPos;
 	u8					m_started;
+	u8					m_startMoving;
 	u8					m_fallDeath;
 	s16					m_speed;
 	s16					m_drawRotation;
 	int					m_soundId;
 	u8					m_obstructed;
+	u8					m_garySB;
 	u8					m_garyMeow;
+	static u8			m_garySpeech;
 };
 
 #endif
