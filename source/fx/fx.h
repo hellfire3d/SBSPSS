@@ -81,6 +81,12 @@ public:
 			FX_RGB_MAX
 		};
 
+		CFX()
+		{// Sorry, I need this :o(
+			RGB.R=RGB.G=RGB.B=127;
+			AfterEffect=FX_TYPE_NONE;
+		};
+
 static	CFX			*Create(const FX_TYPE Type);
 static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
 static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
