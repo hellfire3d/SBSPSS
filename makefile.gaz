@@ -59,7 +59,8 @@ frontend_src :=		credits \
 					scrollbg \
 					start
 
-game_src :=			game
+game_src :=			game \
+					convo
 
 gfx_src :=			prim \
 					tpage \
