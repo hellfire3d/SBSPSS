@@ -307,7 +307,7 @@ void	CGameScene::initLevel()
 	m_player->init();
 	m_player->setLayerCollision(Level.getCollisionLayer());
 	DVECTOR				mapSize=Level.getMapSize();
-	CPlayer::CameraBox	camBox={0,0,mapSize.vx,mapSize.vy};
+	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);
 	if(s_globalLevelSelectThing==1)
 	{

@@ -31,6 +31,10 @@
 #include "triggers\tteleprt.h"
 #endif
 
+#ifndef	__TRIGGERS_TCAMLOCK_H__
+#include "triggers\tcamlock.h"
+#endif
+
 #ifndef __PICKUPS_PICKUP_H__
 #include "pickups\pickup.h"
 #endif
@@ -302,6 +306,28 @@ void	CLevel::initLayers()
 			for(int i=0;i<TriggerCount;i++)
 			{
 				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
+				if(TriggerList->Type==3)
+				{
+					// Camera lock trigger
+					trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
+					trigger->init();
+					trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
+												TriggerList->Width<<4,TriggerList->Height<<4);
+					trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
+				}
+				TriggerList++;
+			}
+		}
+
+		if (LevelHdr->TriggerList)
+		{
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
+			TriggerCount=Hdr->Count;
+			TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
+
+			for(int i=0;i<TriggerCount;i++)
+			{
+				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
 				switch(TriggerList->Type)
 				{
 					// Exit trigger
@@ -318,11 +344,19 @@ void	CLevel::initLayers()
 					case 2:
 						trigger=(CTeleportTrigger*)new ("TeleportTrigger") CTeleportTrigger();
 						break;
+
+					// Camera lock trigger
+					case 3:
+						trigger=NULL;
+						break;
 				}
-				trigger->init();
-				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-											TriggerList->Width<<4,TriggerList->Height<<4);
-				trigger->setTargetPos(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4);
+				if(trigger)
+				{
+					trigger->init();
+					trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
+												TriggerList->Width<<4,TriggerList->Height<<4);
+					trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
+				}
 				TriggerList++;
 			}
 		}

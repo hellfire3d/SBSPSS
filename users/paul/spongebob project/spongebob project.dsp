@@ -1605,6 +1605,14 @@ SOURCE=..\..\..\source\thing\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tcamlock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tcamlock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tlevexit.cpp
 # End Source File
 # Begin Source File

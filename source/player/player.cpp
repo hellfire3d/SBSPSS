@@ -546,7 +546,7 @@ void	CPlayer::think(int _frames)
 {
 	int	i;
 
-	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&m_currentMode!=PLAYER_MODE_DEAD)
+	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
 	{
 		m_healthWaterLevel-=waterDrainSpeed*_frames;
 		if(m_healthWaterLevel<=0)
@@ -970,23 +970,15 @@ for(int i=0;i<NUM_LASTPOS;i++)
   ---------------------------------------------------------------------- */
   void CPlayer::setCameraBox(CameraBox _cameraBox)
 {
-	_cameraBox.x1*=16;
-	_cameraBox.y1*=16;
-	_cameraBox.x2*=16;
-	_cameraBox.y2*=16;
-//PAUL_DBGMSG("setCameraBox  %d,%d  %d,%d",_cameraBox.x1,_cameraBox.y1,_cameraBox.x2,_cameraBox.y2);
-
 	m_cameraPosLimitBox.x1=_cameraBox.x1;
 	m_cameraPosLimitBox.y1=_cameraBox.y1;
 	m_cameraPosLimitBox.x2=_cameraBox.x2-(32*MAP2D_BLOCKSTEPSIZE);		// Made up numbers! :) (pkg);
 	m_cameraPosLimitBox.y2=_cameraBox.y2-(16*MAP2D_BLOCKSTEPSIZE);
-//PAUL_DBGMSG("m_cameraPosLimitBox  %d,%d  %d,%d",m_cameraPosLimitBox.x1,m_cameraPosLimitBox.y1,m_cameraPosLimitBox.x2,m_cameraPosLimitBox.y2);
 
 	m_playerPosLimitBox.x1=_cameraBox.x1+64;
 	m_playerPosLimitBox.y1=_cameraBox.y1+64;
 	m_playerPosLimitBox.x2=_cameraBox.x2-64;
 	m_playerPosLimitBox.y2=_cameraBox.y2-64;
-//PAUL_DBGMSG("m_playerPosLimitBox  %d,%d  %d,%d",m_playerPosLimitBox.x1,m_playerPosLimitBox.y1,m_playerPosLimitBox.x2,m_playerPosLimitBox.y2);
 }
 
 
@@ -1178,6 +1170,9 @@ void	CPlayer::springPlayerUp()
 void	CPlayer::teleportTo(int _x,int _y)
 {
 	DVECTOR	pos={_x,_y};
+
+	CameraBox	releaseCamBox={0,0,29999,29999};
+	setCameraBox(releaseCamBox);
 
 	setPos(pos);
 	setRespawnPos(pos);

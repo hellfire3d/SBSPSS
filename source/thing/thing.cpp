@@ -881,10 +881,12 @@ void	CTriggerThing::setPositionAndSize(int _x,int _y,int _w,int _h)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CTriggerThing::setTargetPos(int _x,int _y)
+void	CTriggerThing::setTargetBox(int _x,int _y,int _w,int _h)
 {
-	TargetPos.vx=_x;
-	TargetPos.vy=_y;
+	m_boxX1=_x;
+	m_boxY1=_y;
+	m_boxX2=_x+_w;
+	m_boxY2=_y+_h;
 }
 
 /*===========================================================================
