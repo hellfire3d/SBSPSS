@@ -25,7 +25,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
 #include	"utils\utils.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -134,27 +137,12 @@ void		CThingManager::thinkAllThings(int _frames)
 
 	while(thing1&&thing2)
 	{
-		//if ( !thing1->hasChild( thing2 ) )
+		if(thing1->canCollide()&&
+		   thing1->checkCollisionAgainst(thing2, _frames))
 		{
-			//thing1->removeAllChild();
 
-			if(thing1->canCollide()&&
-			   thing1->checkCollisionAgainst(thing2, _frames))
-			{
-				//thing1->addChild( thing2 );
-
-				thing1->collidedWith(thing2);
-			}
-		}
-		/*else
-		{
-			DVECTOR thatPos = thing2->getPos();
-
-			thatPos.vy = thing1->getNewYPos( thing2 );
-			thing2->setNewCollidedPos( thatPos );
 			thing1->collidedWith(thing2);
-		}*/
-
+		}
 		thing1=thing1->m_nextThing;
 	}
 
