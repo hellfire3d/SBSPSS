@@ -220,6 +220,7 @@ void	MainLoop()
 		s_paulScene.render();
 #endif
 
+		while(DrawSync(1));
 		VidSwapDraw();
 		PrimDisplay();
 

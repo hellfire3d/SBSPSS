@@ -41,6 +41,8 @@ static int	DrawLoadIcon=0;
 static RECT	LoadBackRect;
 static int	LoadTime=0;
 static const int	LoadBackInc=8;
+static	DISPENV		*VblDispEnv=0;
+static	DRAWENV		*VblDrawEnv=0;
 
 /*****************************************************************************/
 // Altered to keep aspect ratio
@@ -142,6 +144,18 @@ static void VidVSyncCallback()
 	FrameCounter++;
 	TickCount++;
 	if (DrawLoadIcon) LoadingIcon();
+//	PutDispEnv(&Screen[FrameFlipFlag].Disp); 
+//	PutDrawEnv(&Screen[FrameFlipFlag].Draw);
+	if (VblDispEnv) 
+	{
+		PutDispEnv(VblDispEnv);
+		VblDispEnv=0;
+	}
+	if (VblDrawEnv) 
+	{
+		PutDrawEnv(VblDrawEnv);
+		VblDrawEnv=0;
+	}
 
 	if (VbFunc)
 		{
@@ -339,32 +353,27 @@ int ScreenClipBox=0;
 #endif
 void	VidSwapDraw()
 {
-DRAWENV	*Draw;
-DISPENV *Disp;
 int		LastFrame=FrameFlipFlag;
 int		ScrH=VidGetScrH()*FrameFlipFlag;
-		
+
 		FrameFlipFlag^=1;
 		TickBuffer[FrameFlipFlag]=TickCount; TickCount=0;
-		Draw=&Screen[FrameFlipFlag].Draw;
-		Disp=&Screen[FrameFlipFlag].Disp;
-		Disp->disp.x=0;
-		Disp->disp.y=ScrH;
-		Disp->disp.w=ScreenW;
-		Disp->disp.h=ScreenH;
-		Disp->screen.x=ScreenXOfs;
-		Disp->screen.y=ScreenYOfs;
-		Disp->screen.w=256;
-		Disp->screen.h=256;
-		PutDispEnv(Disp); 
-		PutDrawEnv(Draw);
+		Screen[FrameFlipFlag].Disp.disp.x=0;
+		Screen[FrameFlipFlag].Disp.disp.y=ScrH;
+		Screen[FrameFlipFlag].Disp.disp.w=ScreenW;
+		Screen[FrameFlipFlag].Disp.disp.h=ScreenH;
+		Screen[FrameFlipFlag].Disp.screen.x=ScreenXOfs;
+		Screen[FrameFlipFlag].Disp.screen.y=ScreenYOfs;
+		Screen[FrameFlipFlag].Disp.screen.w=256;
+		Screen[FrameFlipFlag].Disp.screen.h=ScreenH;
+		VblDispEnv=&Screen[FrameFlipFlag].Disp;
+		VblDrawEnv=&Screen[FrameFlipFlag].Draw;
 		VSync(0);	// < -need this here, not in game (vsync miss bug)
-
 // If set, load background screen
 		if (ScreenImage) 
 		{	
 			LoadImage(&Screen[LastFrame].Disp.disp ,(u_long*)ScreenImage);
-			DrawSync(0);
+			while(DrawSync(1));
 		}
 
 
