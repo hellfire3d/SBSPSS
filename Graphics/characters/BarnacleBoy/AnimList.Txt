@@ -6,3 +6,5 @@ SitLookLeft
 hide
 Unhide
 UnhideIdle
+SitAsleep
+RubHead
