@@ -3,9 +3,9 @@
 	platform.h
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -76,8 +76,9 @@ public:
 	void				setTiltable( bool isTiltable );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setGraphic( sThingPlatform *ThisPlatform );
+	void				setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	
+
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
@@ -154,7 +155,7 @@ protected:
 	static class CLayerCollision	*m_layerCollision;
 
 	// internal variables
-	
+
 	NPC_PLATFORM_UNIT_TYPE		m_type;
 	CNpcPath					m_npcPath;
 	s32							m_heading;

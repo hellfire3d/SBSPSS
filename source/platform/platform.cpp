@@ -247,11 +247,19 @@ void CNpcPlatform::setGraphic( sThingPlatform *ThisPlatform )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPlatform::setGraphic( u8 graphicNum )
+{
+	m_modelGfx = new ("ModelGfx") CModelGfx;
+	m_modelGfx->SetModel( graphicNum );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPlatform::init()
 {
 	CPlatformThing::init();
 
-	
+
 	m_animPlaying = true;
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
@@ -412,7 +420,7 @@ void CNpcPlatform::processLifetime( int _frames )
 
 void CNpcPlatform::think(int _frames)
 {
-	
+
 	if ( m_isActive )
 	{
 		if ( m_tiltable )
@@ -650,12 +658,12 @@ void CNpcPlatform::render()
 	centre=getCollisionCentre();
 	area=getCollisionArea();
 	halfLength=(area.x2-area.x1)/2;
-	
+
 	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
 	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
 	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
 	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
-	
+
 	centre.vx-=offset.vx;
 	centre.vy-=offset.vy;
 	x1+=centre.vx;
@@ -714,7 +722,7 @@ s32	CNpcPlatform::getNewYPos(CThing *_thisThing)
 	// now find the highest y pos
 
 	// first set highestY to lowest of the four points
-	
+
 	s16 highestY = testPoints[0].vy;
 
 	for ( i = 1 ; i < 4 ; i++ )

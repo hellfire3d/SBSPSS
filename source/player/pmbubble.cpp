@@ -3,9 +3,9 @@
 	pmbubble.cpp
 
 	Author:		PKG
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -106,6 +106,8 @@ void	CPlayerModeBubbleMixture::think()
 			DVECTOR			pos;
 			bubble=new ("bubble platform") CNpcPlayerBubblePlatform;
 			bubble->setType( CNpcPlatform::NPC_PLAYER_BUBBLE_PLATFORM );
+			bubble->setGraphic( (u8) 0 );
+			bubble->setTiltable( false );
 			pos=m_player->getPos();
 			pos.vx+=buboff.vx*m_player->getFacing();
 			pos.vy+=buboff.vy;
