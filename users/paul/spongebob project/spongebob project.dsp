@@ -89,14 +89,6 @@ CFG=spongebob project - Win32 Debug
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\source\backend\complete.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\backend\complete.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\backend\credits.cpp
 # End Source File
 # Begin Source File

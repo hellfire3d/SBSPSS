@@ -48,8 +48,7 @@ CD_FILESYS_LIB :=		CMXBoot
 #	Source Code to Compile
 #----------------------------------------------------------------------------
 
-backend_src :=		complete \
-					credits \
+backend_src :=		credits \
 					gameover \
 					party
 

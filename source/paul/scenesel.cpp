@@ -55,10 +55,6 @@
 #include "backend\gameover.h"
 #endif
 
-#ifndef __BACKEND_COMPLETE_H__
-#include "backend\complete.h"
-#endif
-
 #ifndef __MAP_MAP_H__
 #include "map\map.h"
 #endif
@@ -108,7 +104,6 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&GameScene,				// First scene in the list is the default scene
 	&FrontEndScene,
 	&GameOverScene,
-	&GameCompletedScene,
 	&FmaScene,
 	&MapScene,
 	&ShopScene,
