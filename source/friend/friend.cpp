@@ -265,22 +265,6 @@ void CNpcFriend::think(int _frames)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef struct
-{
-	int		m_control,m_iconFrame;
-} ICON_MAP;
-static const ICON_MAP	s_iconMap[]=
-{
-	{	PAD_UP,			FRM__BUTU	},
-	{	PAD_DOWN,		FRM__BUTD	},
-	{	PAD_LEFT,		FRM__BUTL	},
-	{	PAD_RIGHT,		FRM__BUTR	},
-	{	PAD_CROSS,		FRM__BUTX	},
-	{	PAD_SQUARE,		FRM__BUTS	},
-	{	PAD_CIRCLE,		FRM__BUTC	},
-	{	PAD_TRIANGLE,	FRM__BUTT	},
-};
-
 void CNpcFriend::render()
 {
 	CNpcThing::render();
@@ -297,28 +281,6 @@ void CNpcFriend::render()
 		boundingBox.YMax = 0;
 		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
-
-		if(m_hasSpokenToSbYet&&!CConversation::isActive())
-		{
-			const ICON_MAP	*map;
-			int				control;
-			sFrameHdr		*fh;
-			int				size;
-			DVECTOR			iconPos;
-
-			map=s_iconMap;
-			control=CPadConfig::getButton(CPadConfig::PAD_CFG_UP);
-			while(map->m_control!=control)
-			{
-				map++;
-			}
-			fh=CGameScene::getSpriteBank()->getFrameHeader(map->m_iconFrame);
-			size=strobebase+((msin(m_iconStrobe)*strobescale)>>12);
-			iconPos=getRenderPos();
-			iconPos.vx-=fh->W/2;
-			iconPos.vy-=getCollisionSize().vy+(fh->H*2);
-			CGameScene::getSpriteBank()->printFT4Scaled(fh,iconPos.vx,iconPos.vy,0,0,0,size);
-		}
 	}
 
 }
