@@ -101,16 +101,15 @@ extern CThing	*g_bossThing;
 int forcelevel=0;
 void	CBossText::init()
 {
-//	if(GameScene.GetLevel().getLevelNumer()
-		m_scalableFontBank=new ("font") ScalableFontBank();
-		m_scalableFontBank->initialise(&standardFont);
-		m_scalableFontBank->setPrintArea(20,0,512-40,256);
-		m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
+	m_scalableFontBank=new ("font") ScalableFontBank();
+	m_scalableFontBank->initialise(&standardFont);
+	m_scalableFontBank->setPrintArea(20,0,512-40,256);
+	m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
 
-		m_fontBank=new ("CGameScene::Init") FontBank();
-		m_fontBank->initialise( &standardFont );
-		m_fontBank->setPrintArea(20,0,512-40,256);
-		m_fontBank->setJustification(FontBank::JUST_CENTRE);
+	m_fontBank=new ("CGameScene::Init") FontBank();
+	m_fontBank->initialise( &standardFont );
+	m_fontBank->setPrintArea(20,0,512-40,256);
+	m_fontBank->setJustification(FontBank::JUST_CENTRE);
 }
 
 /*----------------------------------------------------------------------
@@ -133,13 +132,11 @@ void	CBossText::shutdown()
   ---------------------------------------------------------------------- */
 void	CBossText::select()
 {
-//	ASSERT if(GameScene.GetLevel().getLevelNumer()
-
 	m_readyToExit=false;
 	m_currentPage=0;
 
 	CSoundMediator::stopSong();
-	CSoundMediator::setSong(s_bossData[forcelevel/*GameScene.GetLevel().getCurrentChapter()-1*/].m_songId);
+	CSoundMediator::setSong(s_bossData[GameScene.GetLevel().getCurrentChapter()-1].m_songId);
 	CFader::setFadingIn();
 }
 
@@ -156,14 +153,17 @@ void	CBossText::think(int _frames)
 		int	pad;
 		pad=PadGetDown(0);
 
-		if(pad&PAD_TRIANGLE)
+		if(pad&PAD_CROSS)
 		{
 			exit();
 		}
-
-		if(pad&PAD_CROSS)
+		else if(pad&PAD_DOWN&&m_currentPage==0)
 		{
-			m_currentPage^=1;
+			m_currentPage=1;
+		}
+		else if(pad&PAD_UP&&m_currentPage==1)
+		{
+			m_currentPage=0;
 		}
 	}
 }
@@ -223,7 +223,7 @@ void	CBossText::render()
 	AddPrimToList(f4,MAX_OT-1);
 
 	// Text
-	bd=&s_bossData[forcelevel/*GameScene.GetLevel().getCurrentChapter()-1*/];
+	bd=&s_bossData[GameScene.GetLevel().getCurrentChapter()-1];
 	m_fontBank->setColour(118,118,118);
 	m_fontBank->print(256-20,30,STR__BOSS_TEXT_TITLE);
 	if(m_currentPage==0)
@@ -253,22 +253,32 @@ void	CBossText::render()
 	// Button texts..
 	sFrameHdr		*fh1,*fh2;
 	int				width;
+	int				text;
 
 	m_fontBank->setJustification(FontBank::JUST_LEFT);
 
-	fh1=sb->getFrameHeader(FRM__BUTX);
-	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__CROSS_BUTTON);
+	if(m_currentPage==0)
+	{
+		text=STR__BOSS__NEXT;
+		fh1=sb->getFrameHeader(FRM__BUTD);
+	}
+	else
+	{
+		text=STR__BOSS__PREVIOUS;
+		fh1=sb->getFrameHeader(FRM__BUTU);
+	}
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(text);
 	x=128-(width/2);
 	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__CROSS_BUTTON);
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,text);
 
-	fh1=sb->getFrameHeader(FRM__BUTT);
-	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__TRIANGLE_BUTTON);
+	fh1=sb->getFrameHeader(FRM__BUTX);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__CONTINUE);
 	x=256+128-(width/2);
 	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__TRIANGLE_BUTTON);
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__CONTINUE);
 
 	m_fontBank->setJustification(FontBank::JUST_CENTRE);
 }
