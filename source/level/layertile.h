@@ -7,20 +7,13 @@
 
 
 /*****************************************************************************/
-struct	sTileTableElem
+struct	sPrimGridElem
 {
 	TSPRT_16		Prim;
-	sTile			*Tile;
-	u32				TileFlags;
-	sTileTableElem	*Right;
-	sTileTableElem	*Down;
-};
-
-struct	sTileTable
-{
-	int				MapX,MapY;
-	u32				ShiftXY;
-	sTileTableElem	*Table;
+	u16				Tile;
+	u16				Flags;
+	sPrimGridElem	*Right;
+	sPrimGridElem	*Down;
 };
 
 /*****************************************************************************/
@@ -56,16 +49,15 @@ virtual	void			render();
 
 
 protected:
-		void			UpdateWholeMap(sTileTable &ThisMap);
-		sTileTable		&GetTileTable();
-		int				CalcTableOfs(int X,int Y);
-		int				CalcMapOfs(int X,int Y);
-		void			UpdateRow(int MapX,int MapY,sTileTable &ThisMap);
-		void			UpdateColumn(int MapX,int MapY,sTileTable &ThisMap);
+		void			UpdateWholeMap();
+		sPrimGridElem	*GetGridPos(int X,int Y);
+		sTileMapElem	*GetMapPos(int X,int Y);
+		void			UpdateRow(int MapX,int MapY);
+		void			UpdateColumn(int MapX,int MapY);
 		
 		void			renderSolid();
 		void			render3d();
-		void			RenderBlock(sTile *Tile,u32 Flags);
+		void			RenderBlock(sPrimGridElem *Elem);
 
 		sLayerHdr		*LayerHdr;
 		sTile			*TileList;
@@ -75,8 +67,12 @@ protected:
 		sTileMapElem	*Map;
 
 		int				MapWidth,MapHeight,MapXYShift;
-		int				TileTableWidth,TileTableHeight;
-		sTileTable		TileTable[2];			// Double Buffered
+		int				PrimGridWidth,PrimGridHeight;
+
+		int				MapX,MapY;
+		u16				ShiftX,ShiftY;
+		sPrimGridElem	*PrimGrid;
+
 };
 
 

@@ -25,7 +25,7 @@ CLevel::CLevel()
 		}
 
 		MapPos.vx=0;		
-		MapPos.vy=0;		
+		MapPos.vy=0;
 }
 
 /*****************************************************************************/
@@ -38,12 +38,22 @@ CLevel::~CLevel()
 }
 
 /*****************************************************************************/
+int		ZPos=6500;
+
 void 	CLevel::init()
 {
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL04_LEVEL04_LVL,"Level Data");
 		TPLoadTex(LEVEL04_LEVEL04_TEX);
 
 		initLayers();
+
+// Setup Constand Rot Matrix
+MATRIX	Mtx;
+
+		SetIdent(&Mtx);
+		Mtx.t[2]=ZPos;
+		SetRotMatrix(&Mtx);
+		SetTransMatrix(&Mtx);
 }
 
 /*****************************************************************************/
