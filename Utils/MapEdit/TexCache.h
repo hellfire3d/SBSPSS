@@ -46,7 +46,7 @@ public:
 		int		ProcessTexture(char *Path,int Flags,sRGBData *RGBData=0);
 		void	Purge();
 
-		void	LoadBMP(char *Filename,sRGBData &RGBData);
+		bool	LoadBMP(char *Filename,sRGBData &RGBData);
 		void	FreeBMP(sRGBData &RGBData);
 		void	FixBMP(sRGBData &RGBData);
 		bool	IsSizeOk(int Size);

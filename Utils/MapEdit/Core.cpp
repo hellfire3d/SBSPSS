@@ -313,9 +313,9 @@ Vector3	Ofs;
 void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0) 
-			Zoom(View,+0.1f);
-		else
 			Zoom(View,-0.1f);
+		else
+			Zoom(View,+0.1f);
 }
 
 /*****************************************************************************/
@@ -634,8 +634,11 @@ Vector3	&ThisCam=GetCam();
 		ThisCam.x+=Ofs.x;
 		ThisCam.y+=Ofs.y;
 		ThisCam.z-=Ofs.z;
-		if (ThisCam.x<0) ThisCam.x=0;
-		if (ThisCam.y<0) ThisCam.y=0;
+		if (!TileViewFlag)
+		{
+			if (ThisCam.x<0) ThisCam.x=0;
+			if (ThisCam.y<0) ThisCam.y=0;
+		}
 		if (ThisCam.z<0.1) ThisCam.z=0.1f;
 		TRACE1("ZoomVal %f\n",ThisCam.z);
 

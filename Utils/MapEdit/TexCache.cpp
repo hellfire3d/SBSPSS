@@ -42,7 +42,12 @@ sRGBData	ThisRGB;
 			if (Idx!=-1) return(Idx);
 
 //			TRACE1("Loading Texture %s\n",NewTex.Filename);
-			LoadBMP(NewTex.Filename,ThisRGB);
+			
+			if (!LoadBMP(NewTex.Filename,ThisRGB))
+			{
+				exit(-1);
+				return(ListSize);
+			}
 			RGBData=&ThisRGB;
 			LoadTex(NewTex,RGBData);
 			FreeBMP(ThisRGB);
@@ -76,17 +81,31 @@ int		CTexCache::AlignSize(int Size)
 
 
 /**************************************************************************************/
-void	CTexCache::LoadBMP(char *Filename,sRGBData &RGBData)
+bool	CTexCache::LoadBMP(char *Filename,sRGBData &RGBData)
 {
 Frame	ThisFrame;
-
-		ThisFrame.LoadBMP(Filename);
+FILE	*File;
+// Check File exists
+		File=fopen(Filename,"r");
 		
+		if (!File)
+		{
+			CString mexstr;
+			mexstr.Format("%s Not Found\n", Filename);
+			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
+			exit(EXIT_FAILURE );
+			return(false);
+		}
+
+		fclose(File);		
+		ThisFrame.LoadBMP(Filename);
+				
 		RGBData.Width=ThisFrame.GetWidth();
 		RGBData.Height=ThisFrame.GetHeight();
 		RGBData.RGB=(u8*)malloc(RGBData.Width*RGBData.Height*3);
 		ThisFrame.FlipY();
 		ThisFrame.MakeRGB(RGBData.RGB);
+		return(true);
 }
 
 /**************************************************************************************/

@@ -319,14 +319,14 @@ CMapSizeDlg	Dlg;
 /*********************************************************************************/
 void	CMapEditDoc::OnZoomIn() 
 {
-		Core.Zoom(NULL,+1.0f);
+		Core.Zoom(NULL,-0.1f);
 		UpdateAllViews(NULL);
 }
 
 /*********************************************************************************/
 void CMapEditDoc::OnZoomOut() 
 {
-		Core.Zoom(NULL,-1.0f);
+		Core.Zoom(NULL,+0.1f);
 		UpdateAllViews(NULL);
 }
 

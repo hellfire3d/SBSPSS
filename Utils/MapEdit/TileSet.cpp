@@ -490,7 +490,8 @@ int			TileID=0;
 sMapElem	ThisElem;
 int			SelFlag;
 BOOL		ValidTile=TRUE;
-float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+//float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 
 		ThisElem.Flags=0;
 		ThisElem.Set=SetNumber;
@@ -594,7 +595,8 @@ void	CTileSet::RenderCursor(Vector3 &CamPos,int CursorPos,int SelStart,int SelEn
 int			ListSize=Tile.size();
 CPoint		Start,End;
 int			MaxTile=Tile.size();
-float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+//float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 
 		if (CursorPos<-1 || CursorPos>ListSize) return;		
 
@@ -644,7 +646,8 @@ void	CTileSet::RenderGrid(Vector3 &CamPos)
 {
 int			ListSize=Tile.size();
 int			TileID=1;	// Dont bother with blank, its sorted
-float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+//float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 		
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
@@ -690,7 +693,8 @@ GLint	Viewport[4];
 GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
 int		HitCount;
 int		TileID=0;
-float	Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+//float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
+float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
