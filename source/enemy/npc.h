@@ -97,6 +97,7 @@ protected:
 		NPC_INIT_FIREBALL,
 		NPC_INIT_RETURNING_HAZARD,
 		NPC_INIT_FISH_FOLK,
+		NPC_INIT_FLAMING_SKULL,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -125,6 +126,7 @@ protected:
 		NPC_SENSOR_IRON_DOGFISH_USER_CLOSE,
 		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
 		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
+		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -147,6 +149,7 @@ protected:
 		NPC_CLOSE_IRON_DOGFISH_ATTACK,
 		NPC_CLOSE_FALLING_ITEM_FALL,
 		NPC_CLOSE_FISH_HOOK_RISE,
+		NPC_CLOSE_FLAMING_SKULL_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -208,6 +211,12 @@ protected:
 		IRON_DOGFISH_LASER_EYE_2,
 	};
 
+	enum NPC_FLAMING_SKULL_STATE
+	{
+		FLAMING_SKULL_ATTACK = 0,
+		FLAMING_SKULL_RETURN = 1,
+	};
+
 	enum
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
@@ -244,7 +253,7 @@ protected:
 	void				processTimer( int _frames );
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
-	void				processCloseGenericUserSeek( int _frames );
+	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
 
 	// small jellyfish functions
 
@@ -284,6 +293,10 @@ protected:
 	// eyeball functions
 
 	void				processCloseEyeballAttack( int _frames );
+
+	// flaming skull functions
+
+	void				processCloseFlamingSkullAttack( int _frames );
 
 	// skull stomper functions
 

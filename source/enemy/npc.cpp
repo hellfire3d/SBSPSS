@@ -48,7 +48,7 @@
 
 void CNpc::init()
 {
-	m_type = NPC_SMALL_JELLYFISH_1;
+	m_type = NPC_FLAMING_SKULL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -262,6 +262,13 @@ void CNpc::init()
 			m_npcPath.addWaypoint( newPos );
 
 			m_npcPath.setPathType( PONG_PATH );
+
+			break;
+		}
+
+		case NPC_FLAMING_SKULL:
+		{
+			m_state = FLAMING_SKULL_ATTACK;
 
 			break;
 		}
@@ -539,6 +546,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
+					case NPC_SENSOR_FLAMING_SKULL_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 40000 )
 						{
@@ -849,9 +857,14 @@ void CNpc::processClose(int _frames)
 			break;
 
 		case NPC_CLOSE_GENERIC_USER_SEEK:
-			processCloseGenericUserSeek( _frames );
+		{
+			s32 distX, distY;
+
+			processGenericGetUserDist( _frames, &distX, &distY );
+			processGenericGotoTarget( _frames, distX, distY, m_data[m_type].speed );
 
 			break;
+		}
 
 		case NPC_CLOSE_GHOST_PIRATE_ATTACK:
 			processCloseGhostPirateAttack( _frames );
@@ -915,6 +928,11 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_FISH_HOOK_RISE:
 			processCloseFishHookRise( _frames );
+
+			break;
+
+		case NPC_CLOSE_FLAMING_SKULL_ATTACK:
+			processCloseFlamingSkullAttack( _frames );
 
 			break;
 

@@ -83,7 +83,7 @@ void CNpc::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 spee
 	Pos.vy += moveY;
 }
 
-void CNpc::processCloseGenericUserSeek( int _frames )
+void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 {
 	s32 moveX = 0, moveY = 0;
 
@@ -95,21 +95,6 @@ void CNpc::processCloseGenericUserSeek( int _frames )
 
 	DVECTOR playerPos = player->getPos();
 
-	s32 xDist, yDist;
-	s32 xDistSqr, yDistSqr;
-
-	xDist = playerPos.vx - this->Pos.vx;
-	xDistSqr = xDist * xDist;
-
-	yDist = playerPos.vy - this->Pos.vy;
-	yDistSqr = yDist * yDist;
-
-	//if ( xDistSqr + yDistSqr > 22500 )
-	//{
-		//this->m_controlFunc = NPC_CONTROL_MOVEMENT;
-	//}
-	//else
-	{
-		processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
-	}
+	*distX = playerPos.vx - this->Pos.vx;
+	*distY = playerPos.vy - this->Pos.vy;
 }

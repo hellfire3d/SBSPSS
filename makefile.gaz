@@ -72,6 +72,7 @@ enemy_src :=		2denemy \
 					nhazard \
 					nffolk \
 					nocto \
+					nfskull \
 					enemy
 
 projectl_src :=		projectl
