@@ -136,7 +136,7 @@ virtual	~CActorGfx();
 		void			setActor(sActorPool *ThisActor);
 
 		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false);
-		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale);
+		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale,bool Force=false);
 		void			getFrameOffsets(int _anim,int _frame,int *_x,int *_y);
 
 		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}

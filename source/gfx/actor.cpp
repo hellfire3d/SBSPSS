@@ -694,13 +694,13 @@ int			HalfW=BBoxW>>1;
 static const VECTOR	ZeroPos={0,0,0};
 static const int	ScaleXAspect=2050;	// Odd hard coded number, sorry
 
-POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale)
+POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale,bool Force)
 {
 MATRIX	Mtx;
 VECTOR	Scale;
 
 		Angle&=4095;
-		if (Angle==0 && XScale==ONE && YScale==ONE) return(Ft4);
+		if (Angle==0 && XScale==ONE && YScale==ONE && !Force) return(Ft4);
 
 		Scale.vx=XScale;
 		Scale.vy=YScale;
