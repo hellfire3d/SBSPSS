@@ -88,20 +88,6 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-int		CActorGfx::getFrameWidth(int Anim,int Frame)
-{
-sSpriteFrame	*ThisFrame=GetFrame(Anim,Frame);
-				return(ThisFrame->W);
-}
-
-/*****************************************************************************/
-int		CActorGfx::getFrameHeight(int Anim,int Frame)
-{
-sSpriteFrame	*ThisFrame=GetFrame(Anim,Frame);
-				return(ThisFrame->H);
-}
-
-/*****************************************************************************/
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
@@ -152,6 +138,8 @@ int		H=ThisFrame->H;
 			Ft4->u1=U;
 			Ft4->u2=U+W-1;
 	 		Ft4->u3=U;
+			X-=ThisFrame->XOfs;
+			X-=ThisFrame->W/2;
 		}
 		else
 		{
@@ -159,6 +147,7 @@ int		H=ThisFrame->H;
 			Ft4->u1=U+W;
 			Ft4->u2=U;
  			Ft4->u3=U+W;
+			X+=ThisFrame->XOfs;
 		}
 
 		if (YFlip)
@@ -167,6 +156,8 @@ int		H=ThisFrame->H;
 			Ft4->v1=V+H-1;
 			Ft4->v2=V;
 			Ft4->v3=V;
+			Y-=ThisFrame->YOfs;
+			Y-=ThisFrame->H/2;
 		}
 		else
 		{
@@ -174,10 +165,8 @@ int		H=ThisFrame->H;
 			Ft4->v1=V;
 			Ft4->v2=V+H;
 			Ft4->v3=V+H;
+			Y+=ThisFrame->YOfs;
 		}
-
-		X-=ThisFrame->XOfs;
-		Y-=ThisFrame->YOfs;
 
 		setXYWH(Ft4,X,Y,W,H);
 }

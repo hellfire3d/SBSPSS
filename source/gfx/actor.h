@@ -24,10 +24,8 @@ virtual	~CActorGfx();
 		void		Dump();
 
 		int			getFrameCount(int Anim)		{return(SpriteBank->AnimList[Anim].FrameCount);}
-		int			getFrameWidth(int Anim,int Frame);
-		int			getFrameHeight(int Anim,int Frame);
-
 		FileEquate	GetFilename()	{return(Filename);}
+
 private:
 		void		SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip);
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
