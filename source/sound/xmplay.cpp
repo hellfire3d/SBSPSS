@@ -134,6 +134,8 @@ void CXMPlaySound::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#include "gfx\prim.h"
+
 #ifdef __USER_paul__
 int dump=false;
 #endif
@@ -210,6 +212,57 @@ void CXMPlaySound::think()
 				break;
 		}
 	}
+
+
+//////////////
+{
+static const int	colours[6][3]=
+{
+	{	255,255,255		},			// SONG
+	{	255,  0,255		},			// SFX
+	{	  0,  0,255		},			// LOOPINGSFX
+	{	255,255,  0		},			// SILENT
+	{	  0,255,  0		},			// FREE
+	{	128,128,128		},			// CONTINUE
+};
+int				i,x,free;
+spuChannelUse	*ch;
+POLY_F4			*f4;
+x=50;
+free=0;
+ch=m_spuChannelUse;
+for(i=0;i<NUM_SPU_CHANNELS;i++)
+{
+	const int	*colour=&colours[ch->m_useType][0];
+	f4=GetPrimF4();
+	setXYWH(f4,x,20,8,8);
+	setRGB0(f4,*(colour++),*(colour++),*(colour++));
+	AddPrimToList(f4,0);
+	if(ch->m_locked)
+	{
+		f4=GetPrimF4();
+		setXYWH(f4,x-1,20-1,8+2,8+2);
+		setRGB0(f4,0,0,0);
+		AddPrimToList(f4,0);
+	}
+	if(ch->m_useType==FREE)
+	{
+		free++;
+	}
+
+	x+=10;
+	ch++;
+}
+if(!free)
+{
+	f4=GetPrimF4();
+	setXYWH(f4,50,30,(24*10)-2,4);
+	setRGB0(f4,255,0,0);
+	AddPrimToList(f4,0);
+}
+
+}
+//////////////
 }
 
 
