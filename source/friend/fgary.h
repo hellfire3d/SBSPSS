@@ -42,6 +42,7 @@ protected:
 	s16					m_drawRotation;
 	int					m_soundId;
 	u8					m_obstructed;
+	u8					m_garyMeow;
 };
 
 #endif

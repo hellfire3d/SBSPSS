@@ -46,6 +46,7 @@ void CNpcGaryFriend::postInit()
 	m_fallDeath = false;
 	m_drawRotation = 0;
 	m_obstructed = false;
+	m_garyMeow = false;
 
 	m_soundId = (int) NOT_PLAYING;
 
@@ -77,6 +78,18 @@ void CNpcGaryFriend::think( int _frames )
 
 			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
 			m_soundId = NOT_PLAYING;
+		}
+	}
+
+	if ( m_started )
+	{
+		if ( !m_garyMeow )
+		{
+			if ( !CSoundMediator::isSpeechPlaying() )
+			{
+				m_garyMeow = false;
+				CSoundMediator::playSpeech( SPEECH_029 );
+			}
 		}
 	}
 
@@ -369,6 +382,7 @@ void CNpcGaryFriend::start()
 		m_animNo = ANIM_GARY_SLITHER;
 		m_animPlaying = true;
 		m_frame = 0;
+		CSoundMediator::playSpeech( SPEECH_028 );
 	}
 }
 
@@ -382,5 +396,6 @@ void CNpcGaryFriend::stop()
 		m_animNo = m_data[m_type].idleAnim;
 		m_animPlaying = true;
 		m_frame = 0;
+		m_garyMeow = false;
 	}
 }
