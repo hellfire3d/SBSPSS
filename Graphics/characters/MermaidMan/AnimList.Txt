@@ -1,1 +1,4 @@
-idleBreathe
+Hide
+Idle
+Sit
+
