@@ -296,7 +296,7 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 
 	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
 
-//!!!!!! Sort you life out charles - Unhappy Dave
+//!!!!!! Sort you code out charles - Unhappy Dave
 	if (enemyType==14)
 	{
 		enemyType=CNpcEnemy::NPC_SMALL_JELLYFISH_1;
