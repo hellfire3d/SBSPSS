@@ -725,7 +725,7 @@ void CNpcEnemy::init()
 	DVECTOR ofs = getCollisionSize();
 
 	m_drawOffset.vx = 0;
-	m_drawOffset.vy = 0;
+	m_drawOffset.vy = -( ofs.vy >> 1 );
 
 	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 

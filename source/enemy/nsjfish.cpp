@@ -46,9 +46,21 @@ void CNpcSmallJellyfishEnemy::render()
 		// Render
 		DVECTOR renderPos;
 		DVECTOR	offset = CLevel::getCameraPos();
+		int		spriteWidth = m_spriteBank->getFrameWidth( m_frame >> 8 );
+		int		spriteHeight = m_spriteBank->getFrameHeight( m_frame >> 8 );
 
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
+		renderPos.vx = Pos.vx - offset.vx + m_drawOffset.vx;
+
+		if ( m_reversed )
+		{
+			renderPos.vx += spriteWidth >> 1;
+		}
+		else
+		{
+			renderPos.vx -= spriteWidth >> 1;
+		}
+
+		renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 ) + m_drawOffset.vy;
 
 		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
