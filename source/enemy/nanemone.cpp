@@ -23,6 +23,110 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
+
+void CNpc::processCloseAnemone1Attack( int _frames )
+{
+	s32 moveX, moveY;
+	s16 decDir, incDir, moveDist;
+	CPlayer *player = GameScene.getPlayer();
+	DVECTOR playerPos = player->getPos();
+	s32 xDist, yDist;
+	s16 maxTurnRate = m_data[m_type].turnSpeed;
+	bool withinRange = false;
+
+	xDist = playerPos.vx - this->Pos.vx;
+
+	yDist = playerPos.vy - this->Pos.vy;
+
+	s16 headingToPlayer = ratan2( yDist, xDist );
+
+	decDir = m_baseHeading - headingToPlayer;
+
+	if ( decDir < 0 )
+	{
+		decDir += ONE;
+	}
+
+	incDir = headingToPlayer - m_baseHeading;
+
+	if ( incDir < 0 )
+	{
+		incDir += ONE;
+	}
+
+	if ( decDir < incDir )
+	{
+		moveDist = decDir;
+	}
+	else
+	{
+		moveDist = incDir;
+	}
+
+	// check user is within 45 degrees either way
+
+	if ( moveDist < 512 )
+	{
+		decDir = m_heading - headingToPlayer;
+
+		if ( decDir < 0 )
+		{
+			decDir += ONE;
+		}
+
+		incDir = headingToPlayer - m_heading;
+
+		if ( incDir < 0 )
+		{
+			incDir += ONE;
+		}
+
+		if ( decDir < incDir )
+		{
+			moveDist = decDir;
+		}
+		else
+		{
+			moveDist = incDir;
+		}
+
+		if ( moveDist < -maxTurnRate )
+		{
+			moveDist = -maxTurnRate;
+		}
+		else if ( moveDist > maxTurnRate )
+		{
+			moveDist = maxTurnRate;
+		}
+		else
+		{
+			withinRange = true;
+		}
+
+		m_heading += moveDist;
+
+		m_heading = m_heading % ONE;
+
+		if ( withinRange )
+		{
+			// can fire
+
+			if ( m_timerTimer <= 0 )
+			{
+				CProjectile *projectile;
+				projectile = new( "test projectile" ) CProjectile;
+				projectile->init( Pos, m_heading );
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerTimer = GameState::getOneSecondInFrames();
+			}
+		}
+	}
+}
 
 void CNpc::processCloseAnemone2Attack( int _frames )
 {

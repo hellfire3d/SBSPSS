@@ -107,6 +107,7 @@ protected:
 		NPC_CLOSE_GHOST_PIRATE_ATTACK,
 		NPC_CLOSE_SHARK_MAN_ATTACK,
 		NPC_CLOSE_GENERIC_USER_SEEK,
+		NPC_CLOSE_ANEMONE_1_ATTACK,
 		NPC_CLOSE_ANEMONE_2_ATTACK,
 	};
 
@@ -192,6 +193,7 @@ protected:
 
 	// anemone functions
 
+	void				processCloseAnemone1Attack( int _frames );
 	void				processCloseAnemone2Attack( int _frames );
 
 	// data

@@ -106,10 +106,10 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 	{	// NPC_ANEMONE_1
 		NPC_INIT_DEFAULT,
-		NPC_SENSOR_NONE,
+		NPC_SENSOR_ANEMONE_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NONE,
+		NPC_CLOSE_ANEMONE_1_ATTACK,
 		NPC_TIMER_NONE,
 		false,
 		0,
@@ -383,9 +383,9 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_ANEMONE_2;
+	m_type = NPC_ANEMONE_1;
 
-	m_heading = m_baseHeading = 3072;
+	m_heading = m_baseHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
@@ -700,7 +700,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( xDistSqr + yDistSqr < 40000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -897,8 +897,15 @@ void CNpc::processClose(int _frames)
 
 			break;
 
+		case NPC_CLOSE_ANEMONE_1_ATTACK:
+			processCloseAnemone1Attack( _frames );
+
+			break;
+
 		case NPC_CLOSE_ANEMONE_2_ATTACK:
 			processCloseAnemone2Attack( _frames );
+
+			break;
 
 		default:
 			break;
@@ -911,6 +918,11 @@ void CNpc::processCollision()
 
 void CNpc::processTimer(int _frames)
 {
+	if ( m_timerTimer > 0 )
+	{
+		this->m_timerTimer -= _frames;
+	}
+
 	switch( m_timerFunc )
 	{
 		case NPC_TIMER_NONE:
@@ -921,8 +933,6 @@ void CNpc::processTimer(int _frames)
 		case NPC_TIMER_EVADE_DONE:
 		case NPC_TIMER_ATTACK_DONE:
 			{
-				this->m_timerTimer -= _frames;
-
 				if ( m_timerTimer <= 0 )
 				{
 					this->m_timerFunc = NPC_TIMER_NONE;
