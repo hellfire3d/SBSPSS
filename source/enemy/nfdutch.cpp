@@ -240,7 +240,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 				// charge player
 
-				if ( ( playerXDistSqr + playerYDistSqr ) > 25000 )
+				if ( ( playerXDistSqr + playerYDistSqr ) > 31250 )
 				{
 					processGenericGotoTarget( _frames, playerXDist, playerYDist, 8 );
 				}
@@ -694,11 +694,15 @@ void CNpcFlyingDutchmanEnemy::render()
 			setShadeTex(SprFrame,0);
 			setSemiTrans( SprFrame, true );
 			SprFrame->tpage|=1<<5;
-			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 5120, 5120 );
 			setRGB0( SprFrame, m_fadeVal, m_fadeVal, m_fadeVal );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
-			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+
+			int xSize = boundingBox.XMax - boundingBox.XMin;
+			int ySize = boundingBox.YMax - boundingBox.YMin;
+
+			setCollisionSize( xSize + ( xSize >> 2 ), ySize + ( ySize >> 2 ) );
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
