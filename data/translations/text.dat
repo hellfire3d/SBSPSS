@@ -679,8 +679,8 @@ eng=Producer
 eng=Assistant Producer
 [STR__CREDITS__EXECUTIVE_PRODUCER]
 eng=Executive Producer
-[STR__CREDITS__DESIGNER]
-eng=Designer
+[STR__CREDITS__DESIGNERS]
+eng=Designers
 [STR__CREDITS__LEAD_PROGRAMMER]
 eng=Lead Programmer
 [STR__CREDITS__PROGRAMMING]
@@ -715,6 +715,8 @@ eng=Managing Director
 eng=Development Director
 [STR__CREDITS__CREATIVE_DIRECTOR]
 eng=Creative Director
+[STR__CREDITS__SPECIAL_THANKS_TO]
+eng=Special Thanks to:
 [STR__CREDITS__VERY_SPECIAL_THANKS_INDEED_TO]
 eng=Very Special Thanks Indeed to:
 [STR__CREDITS__EXTRA_THANKS_TO]
@@ -723,12 +725,26 @@ eng=Extra thanks to:
 eng=VP of Product Development
 [STR__CREDITS__PRODUCT_MANAGER]
 eng=Product Manager
+[STR__CREDITS__SENIOR_GROUP_PRODUCT_MANAGER]
+eng=Senior Group Product Manager
 [STR__CREDITS__CREATIVE_SERVICES]
 eng=Creative Services
 [STR__CREDITS__SPECIAL_THANKS_TO]
 eng=Special thanks to:
-[STR__CREDITS__VO_TALENT]
-eng=VO Talent
+[STR__CREDITS__VOICE_OVER]
+eng=Voice Over
+[STR__CREDITS__V_P__OF_INTERACTIVE_PRODUCT_AND_BOOK_PUBLISHING]
+eng=V.P. of Interactive Product and Book Publishing
+[STR__CREDITS__DIRECTOR_OF_MARKETING_AND_NEW_BUSINESS_DEVELOPMENT]
+eng=Director of Marketing and New Business Development
+[STR__CREDITS__DIRECTOR_OF_DEVELOPMENT_AND_PRODUCTION]
+eng=Director of Development and Production
+[STR__CREDITS__PROJECT_COORDINATOR]
+eng=Project Coordinator
+[STR__CREDITS__MARKETING_COORDINATOR]
+eng=Marketing Coordinator
+[STR__CREDITS__NICK_INTERACTIVE_WOULD_LIKE_TO_THANK_]
+eng=Nick Interactive would like to thank:
 
 
 ; Climax
@@ -797,6 +813,8 @@ eng=Neil Campbell
 eng=Matt Cooper-tron
 [STR__CREDITS__LAURA_GALLARDO]
 eng=Laura Gallardo
+[STR__CREDITS__GARY_COLEMAN]
+eng=Gary Coleman
 [STR__CREDITS__CLIMAX_LONDON]
 eng=Climax London
 
@@ -827,12 +845,100 @@ eng=Jason De Heras
 eng=Buster DeGeorge
 [STR__CREDITS__GJALEN_GIVHAN]
 eng=Gjalen Givhan
-[STR__CREDITS__TBD]
-eng=TBD
+[STR__CREDITS__JOHN_ARDELL]
+eng=John Ardell
+[STR__CREDITS__DANIELLE_CONTE]
+eng=Danielle Conte
+[STR__CREDITS__HOWARD_LIEBESKIND]
+eng=Howard Liebeskind
+[STR__CREDITS__KIRK_SOMDAL]
+eng=Kirk Somdal
+[STR__CREDITS__MELISSA_ROTH]
+eng=Melissa Roth
+[STR__CREDITS__MERMAID_MAN___ERNEST_BORGNINE]
+eng=Mermaid Man - Ernest Borgnine
+[STR__CREDITS__BARNACLE_BOY___TIM_CONWAY]
+eng=Barnacle Boy - Tim Conway
+[STR__CREDITS__THE_FLYING_DUTCHMAN___BRIAN_DOYLE_MURRAY]
+eng=The Flying Dutchman - Brian Doyle Murray
+[STR__CREDITS__SPONGEBOB_SQUAREPANTS_GARY_FRENCH_MAN___TOM_KENNY]
+eng=SpongeBob/Gary/French Man - Tom Kenny
+[STR__CREDITS__PATRICK_STAR___BILL_FAGERBAKKE]
+eng=Patrick Star - Bill Fagerbakke
+[STR__CREDITS__SANDY_CHEEKS___CAROLYN_LAWRENCE]
+eng=Sandy Cheeks - Carolyn Lawrence
+[STR__CREDITS__SQUIDWARD___ROGER_BUMPASS]
+eng=Squidward - Roger Bumpass
+[STR__CREDITS__PLANKTON___DOUG_LAWRENCE]
+eng=Plankton - Doug Lawrence
+[STR__CREDITS__MR__KRABS___JOE_WHYTE]
+eng=Mr. Krabs - Joe Whyte
+[STR__CREDITS__BRIAN_FARRELL]
+eng=Brian Farrell
+[STR__CREDITS__JEFFERY_LAPIN]
+eng=Jeffery Lapin
+[STR__CREDITS__ALISON_LOCKE]
+eng=Alison Locke
+[STR__CREDITS__GERMAINE_GIOIA]
+eng=Germaine Gioia
+[STR__CREDITS__PETER_DILLE]
+eng=Peter Dille
+[STR__CREDITS__TIFFANY_TERNAN]
+eng=Tiffany Ternan
+[STR__CREDITS__BECKY_ALLEN]
+eng=Becky Allen
+[STR__CREDITS__AMANDA_WYATT]
+eng=Amanda Wyatt
+[STR__CREDITS__BRIAN_FREDRICKSON]
+eng=Brian Fredrickson
+[STR__CREDITS__STEVE_HILLENBURG]
+eng=Steve Hillenburg
+[STR__CREDITS__ERIC_COLEMAN]
+eng=Eric Coleman
 [STR__CREDITS__THQ_AND_THE_THQ_LOGO_ARE_TRADEMARKS_AND_OR_REGISTERED_TRADEMARKS_OF_THQ_INC]
 eng=THQ and the THQ logo are trademarks and/or registered trademarks of THQ Inc.
 [STR__CREDITS__C_2001_THQ_INC]
 eng=(C) 2001 THQ Inc.
+
+
+; Nick
+
+[STR__CREDITS__NICKELODEON_INTERACTIVE]
+eng=Nickelodeon Interactive
+[STR__CREDITS__STEPHEN_YOUNGWOOD]
+eng=Stephen Youngwood
+[STR__CREDITS__SHERICE_GUILLORY]
+eng=Sherice Guillory
+[STR__CREDITS__ALY_SYLVESTER]
+eng=Aly Sylvester
+[STR__CREDITS__ERIKA__E__ORTIZ]
+eng=Erika "E" Ortiz
+[STR__CREDITS__ERICA_DAVID]
+eng=Erica David
+[STR__CREDITS__DEB_BART]
+eng=Deb Bart
+[STR__CREDITS__TIM_BLANKLEY]
+eng=Tim Blankley
+[STR__CREDITS__LEIGH_ANNE_BRODSKY]
+eng=Leigh Anne Brodsky
+[STR__CREDITS__JENNIFER_DAVIS]
+eng=Jennifer Davis
+[STR__CREDITS__MANNY_GALAN]
+eng=Manny Galan
+[STR__CREDITS__RUSSELL_HICKS]
+eng=Russell Hicks
+[STR__CREDITS__DEB_KRASSNER]
+eng=Deb Krassner
+[STR__CREDITS__GEORGE_LENTINO]
+eng=George Lentino
+[STR__CREDITS__KATE_O_BRIEN]
+eng=Kate O'Brien
+[STR__CREDITS__ERIC_SQUIRES]
+eng=Eric Squires
+[STR__CREDITS__GEOFF_TODEBUSH]
+eng=Geoff Todebush
+[STR__CREDITS__STAVIT_YOUNG]
+eng=Stavit Young
 
 
 
