@@ -59,6 +59,7 @@ protected:
 	s32					m_halfCycleWidth;
 	bool				m_meterOn;
 	s16					m_renderScale;
+	s32					m_invulnerableTimer;
 
 	CFXJellyFishLegs	*legs[4];
 	DVECTOR				legsPos[4];

@@ -17,6 +17,7 @@
 class CNpcFlyingDutchmanEnemy : public CNpcEnemy
 {
 public:
+	virtual void		think( int _frames );
 	virtual void		postInit();
 	void				render();
 	virtual void		shutdown();
@@ -24,6 +25,7 @@ protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
 	virtual void		processShot( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	enum NPC_FLYING_DUTCHMAN_STATE
 	{
@@ -36,6 +38,7 @@ protected:
 	bool				m_meterOn;
 	u8					m_inRange;
 	u8					m_fireCount;
+	s32					m_invulnerableTimer;
 };
 
 #endif

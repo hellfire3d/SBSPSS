@@ -85,6 +85,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 	m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 	m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	m_pauseTimer = m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
+	m_invulnerableTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +154,11 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
+	if ( m_invulnerableTimer > 0 )
+	{
+		m_invulnerableTimer -= _frames;
+	}
+
 	switch( m_state )
 	{
 		case MOTHER_JELLYFISH_CYCLE:
@@ -580,6 +586,8 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 
 			m_controlFunc = NPC_CONTROL_MOVEMENT;
 
+			m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
+
 			break;
 		}
 	}
@@ -591,6 +599,85 @@ void CNpcMotherJellyfishEnemy::collidedWith(CThing *_thisThing)
 {
 	if ( m_state == MOTHER_JELLYFISH_CYCLE )
 	{
-		CNpcEnemy::collidedWith( _thisThing );
+		if ( m_isActive && !m_isCaught && !m_isDying )
+		{
+			switch(_thisThing->getThingType())
+			{
+				case TYPE_PLAYER:
+				{
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					ATTACK_STATE playerState = player->getAttackState();
+
+					if(playerState==ATTACK_STATE__NONE)
+					{
+						if ( !player->isRecoveringFromHit() )
+						{
+							switch( m_data[m_type].detectCollision )
+							{
+								case DETECT_NO_COLLISION:
+								{
+									// ignore
+
+									break;
+								}
+
+								case DETECT_ALL_COLLISION:
+								{
+									m_oldControlFunc = m_controlFunc;
+									m_controlFunc = NPC_CONTROL_COLLISION;
+
+									processUserCollision( _thisThing );
+
+									break;
+								}
+
+								case DETECT_ATTACK_COLLISION_GENERIC:
+								{
+									processAttackCollision();
+									processUserCollision( _thisThing );
+
+									break;
+								}
+							}
+						}
+					}
+					else if ( m_invulnerableTimer <= 0 )
+					{
+						// player is attacking, respond appropriately
+
+						if ( m_controlFunc != NPC_CONTROL_SHOT )
+						{
+							if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+							{
+								player->justButtBouncedABadGuy();
+							}
+							m_controlFunc = NPC_CONTROL_SHOT;
+							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+							drawAttackEffect();
+						}
+					}
+
+					break;
+				}
+
+				case TYPE_ENEMY:
+				{
+					CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+					if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
+					{
+						processEnemyCollision( _thisThing );
+					}
+
+					break;
+				}
+
+				default:
+					ASSERT(0);
+					break;
+			}
+		}
 	}
 }
