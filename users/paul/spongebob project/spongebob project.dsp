@@ -776,6 +776,10 @@ SOURCE=..\..\..\source\player\modelist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmboots.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmboots.h
 # End Source File
 # Begin Source File
