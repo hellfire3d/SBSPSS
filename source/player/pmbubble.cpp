@@ -78,7 +78,7 @@ void	CPlayerModeBubbleMixture::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR buboff={-40,-40};
+DVECTOR buboff={-80,-10};
 int bubam;
 void	CPlayerModeBubbleMixture::think()
 {
