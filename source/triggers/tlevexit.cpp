@@ -22,6 +22,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -101,7 +105,10 @@ void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 		case TYPE_PLAYER:
 		{
 #if !defined (__USER_art__) && !defined (__USER_sbart__)
-			CGameScene::levelFinished();
+			if(((CPlayer*)_thisThing)->getCanExitLevelNow())
+			{
+				CGameScene::levelFinished();
+			}
 #endif
 			break;
 		}

@@ -273,6 +273,8 @@ public:
 	void			takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection=REACT__UP,CThing *_thing=NULL);
 
 	void			respawn();
+	void			setCanExitLevelNow()								{m_canExitLevel=true;}
+	int				getCanExitLevelNow()								{return m_canExitLevel;}
 
 	int				getLivesLeft()										{return m_lives;}
 
@@ -355,6 +357,7 @@ private:
 	CameraBox				m_cameraPosLimitBox;
 	CameraBox				m_playerPosLimitBox;
 	DVECTOR					m_respawnPos;
+	int						m_canExitLevel;
 
 
 

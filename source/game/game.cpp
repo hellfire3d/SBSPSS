@@ -448,6 +448,10 @@ void	CGameScene::initLevel()
 	createPlayer();
 	m_player->setRespawnPos(Level.getPlayerSpawnPos());
 	m_player->init();
+	if(getLevelNumber()==5)
+	{
+		m_player->setCanExitLevelNow();
+	}
 	DVECTOR				mapSize=Level.getMapSize();
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);

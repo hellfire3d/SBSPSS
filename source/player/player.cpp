@@ -637,6 +637,7 @@ m_animFrame=0;
 	m_currentPlayerModeClass=NULL;
 	m_lastModeBeforeDeath=PLAYER_MODE_FULLUNARMED;	// Player will then respawn into this mode
 	m_lives++;respawn();
+	m_canExitLevel=false;
 
 	m_lives=CGameSlotManager::getSlotData()->m_lives;
 

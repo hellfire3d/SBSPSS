@@ -37,6 +37,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -168,7 +172,7 @@ DVECTOR	CQuestItemPickup::getSizeForPlacement()
   ---------------------------------------------------------------------- */
 void	CQuestItemPickup::collect(class CPlayer *_player)
 {
-	CGameScene::levelFinished();
+	_player->setCanExitLevelNow();
 	CBasePickup::collect(_player);
 }
 
