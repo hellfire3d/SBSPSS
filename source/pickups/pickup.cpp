@@ -132,11 +132,6 @@ void	CBasePickup::think(int _frames)
 {
 	CPickupThing::think(_frames);
 	thinkPickup(_frames);
-
-if(PadGetDown(0)&PAD_L2)
-{
-	collect(NULL);
-}
 }
 
 /*----------------------------------------------------------------------
