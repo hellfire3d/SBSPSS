@@ -1545,6 +1545,10 @@ SOURCE=..\..\..\source\map\map.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\friend\fbboy.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\friend\fdata.cpp
 # End Source File
 # Begin Source File
@@ -1557,11 +1561,27 @@ SOURCE=..\..\..\source\friend\fgary.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\friend\fkrusty.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fmman.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fpatrick.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\friend\friend.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\friend\friend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fsandy.h
 # End Source File
 # Begin Source File
 

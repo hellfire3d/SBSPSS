@@ -31,6 +31,30 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __FRIEND_FBBOY_H__
+#include "friend\fbboy.h"
+#endif
+
+#ifndef __FRIEND_FGARY_H__
+#include "friend\fgary.h"
+#endif
+
+#ifndef __FRIEND_FKRUSTY_H__
+#include "friend\fkrusty.h"
+#endif
+
+#ifndef __FRIEND_FMMAN_H__
+#include "friend\fmman.h"
+#endif
+
+#ifndef __FRIEND_FPATRICK_H__
+#include "friend\fpatrick.h"
+#endif
+
+#ifndef __FRIEND_FSANDY_H__
+#include "friend\fsandy.h"
+#endif
+
 #ifndef __FRIEND_FSQUID_H__
 #include "friend\fsquid.h"
 #endif
@@ -47,6 +71,42 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 	switch( friendType )
 	{
+		case CNpcFriend::NPC_FRIEND_BARNACLE_BOY:
+		{
+			friendNpc = new ("barnacle boy") CNpcBarnacleBoyFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_GARY:
+		{
+			friendNpc = new ("gary") CNpcGaryFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_KRUSTY:
+		{
+			friendNpc = new ("krusty") CNpcKrustyFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_MERMAID_MAN:
+		{
+			friendNpc = new ("mermaid man") CNpcMermaidManFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_PATRICK:
+		{
+			friendNpc = new ("patrick") CNpcPatrickFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_SANDY_CHEEKS:
+		{
+			friendNpc = new ("sandy cheeks") CNpcSandyFriend;
+			break;
+		}
+
 		case CNpcFriend::NPC_FRIEND_SQUIDWARD:
 		{
 			friendNpc = new ("squidward") CNpcSquidwardFriend;
