@@ -116,6 +116,9 @@ BANKER :=				banker
 BIGLUMP :=				bl2
 TGA2GFX :=				Tga2Gfx
 
+RAR :=					rar
+BUILDCD :=				buildcd
+STRIPISO :=				stripiso
 
 # PSX and misc tools
 # ------------------
