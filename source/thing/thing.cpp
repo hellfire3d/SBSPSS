@@ -54,10 +54,6 @@
 #include "hazard\hrweight.h"
 #endif
 
-#ifndef __HAZARD_HRWHEEL_H__
-#include "hazard\hrwheel.h"
-#endif
-
 #ifndef __HAZARD_HPSWITCH_H__
 #include "hazard\hpswitch.h"
 #endif
@@ -321,6 +317,7 @@ void		CThingManager::matchWheelsAndWeights()
 					if ( testPos.vx == wheelPos.vx && testPos.vy == wheelPos.vy )
 					{
 						wheel->linkToWeight( weight );
+						weight->linkToWheel( wheel );
 					}
 				}
 

@@ -99,10 +99,6 @@
 #include "hazard\hrweight.h"
 #endif
 
-#ifndef __HAZARD_HRWHEEL_H__
-#include "hazard\hrwheel.h"
-#endif
-
 #ifndef __HAZARD_HPSWITCH_H__
 #include "hazard\hpswitch.h"
 #endif

@@ -157,7 +157,6 @@ hazard_src :=		hazard \
 					hrrock \
 					hflytrap \
 					hrweight \
-					hrwheel \
 					hpswitch \
 					hrckshrd \
 					hinert \

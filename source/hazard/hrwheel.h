@@ -30,6 +30,7 @@ public:
 	void				linkToWeight( CNpcRisingWeightHazard *weight )			{m_weight = weight;}
 	void				render();
 	bool				alwaysThink()											{return(true);}
+	void				weightDrop();
 protected:
 	void				setWaypoints( sThingHazard *ThisHazard );
 	void				collidedWith(CThing *_thisThing);
