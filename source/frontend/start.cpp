@@ -260,12 +260,6 @@ void CFrontEndStart::render()
 			m_createdSlotGuiFrame->render();
 			break;
 	}
-
-#ifdef __USER_paul__
-char buf[100];
-sprintf(buf,"slot %d",m_selectedSlot);
-m_font->print(65,7,buf);
-#endif
 }
 
 /*----------------------------------------------------------------------
@@ -282,6 +276,7 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 	int							x,y;
 	sFrameHdr					*fh;
 	int							i;
+	char						buf[100];
 
 	xbase=_xOff+SLOT_FRAME_X;
 	CGameSlotManager::setActiveSlot(_slotNumber);
@@ -294,10 +289,14 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 	setSemiTrans(f4,true);
 	AddPrimToList(f4,3);
 
+	x=xbase+SLOT_SLOTNUMBER_X;
+	y=SLOT_FRAME_Y+SLOT_SLOTNUMBER_Y;
+	sprintf(buf,TranslationDatabase::getString(STR__SLOT_SELECT_SCREEN__SLOT_NUMBER),_slotNumber+1,4);
+	m_font->print(x,y,buf);
+
 	if(gameSlot->m_isInUse)
 	{
 		int		chapter,level;
-		char	buf[100];
 
 		gameSlot->getHighestLevelOpen(&chapter,&level);
 		sprintf(buf,TranslationDatabase::getString(STR__SLOT_SELECT_SCREEN__LEVEL_REACHED),chapter+1,level+1);
