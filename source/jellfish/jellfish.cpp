@@ -223,6 +223,7 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 
 				enemy->setStartPos( startPos.vx >> 4, startPos.vy >> 4 );
 				enemy->postInit();
+				enemy->updateCollisionArea();
 			}
 		}
 		else

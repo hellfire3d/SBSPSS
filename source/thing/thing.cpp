@@ -191,12 +191,15 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if (Flag)
 			{
 				thing->think(_frames);
-				thing->updateCollisionArea();
+//				thing->updateCollisionArea();
 				if (thing->canCollide())
 				{
 				CThingManager::addToCollisionList(thing);
 				}
 			}
+/* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
+			thing->updateCollisionArea();
+
 			thing=thing->m_nextListThing;
 		}
 	}

@@ -65,6 +65,7 @@ void CProjectile::init()
 	m_turnSpeed = 256;
 	m_extension = 0;
 	m_isShuttingDown = false;
+	updateCollisionArea();
 }
 
 void CProjectile::init( DVECTOR initPos, s16 initHeading )
