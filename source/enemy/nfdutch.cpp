@@ -95,25 +95,24 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 		m_frame = 0;
 	}
 
-	if ( m_movementTimer > 0 )
+	s32 xDist = m_extension - Pos.vx;
+	s32 xDistSqr = xDist * xDist;
+
+	if ( xDistSqr > 100 )
 	{
-		m_movementTimer -= _frames;
-
-		s32 xDist = m_extension - Pos.vx;
-		s32 xDistSqr = xDist * xDist;
-
-		if ( xDistSqr > 100 )
+		processGenericGotoTarget( _frames, xDist, 0, m_speed );
+	}
+	else
+	{
+		if ( m_movementTimer > 0 )
 		{
-			processGenericGotoTarget( _frames, xDist, 0, m_speed );
-		}
-		else
-		{
+			m_movementTimer -= _frames;
+
 			if ( m_extendDir == EXTEND_UP )
 			{
 				s32 yDist = m_minY - Pos.vy;
-				s32 yDistSqr = yDist * yDist;
 
-				if ( yDistSqr > 100 )
+				if ( abs( yDist ) > 10 )
 				{
 					processGenericGotoTarget( _frames, 0, yDist, m_speed );
 				}
@@ -125,9 +124,8 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 			else
 			{
 				s32 yDist = m_maxY - Pos.vy;
-				s32 yDistSqr = yDist * yDist;
 
-				if ( yDistSqr > 100 )
+				if ( abs( yDist ) > 10 )
 				{
 					processGenericGotoTarget( _frames, 0, yDist, m_speed );
 				}
@@ -137,10 +135,25 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 				}
 			}
 		}
-	}
-	else
-	{
-		m_controlFunc = NPC_CONTROL_CLOSE;
+		else
+		{
+			CPlayer *player = GameScene.getPlayer();
+
+			DVECTOR playerPos = player->getPos();
+
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			if ( playerPos.vx >= minX && playerPos.vx <= maxX &&
+					playerPos.vy >= m_minY && playerPos.vy <= m_maxY )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+			}
+			else
+			{
+				m_movementTimer = GameState::getOneSecondInFrames() * 3;
+			}
+		}
 	}
 
 	if ( playerXDist > 0 )
