@@ -64,7 +64,7 @@
 
 #include "pad\pads.h"
 
-#ifdef	__USER_paul__
+#if defined (__USER_paul__) || defined (__USER_daveo__) || defined (__USER_charles__)
 static int sounddebug=true;
 #else
 static int sounddebug=false;
