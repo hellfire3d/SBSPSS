@@ -98,7 +98,8 @@ hazard_src :=		hazard \
 					hpendulm \
 					hfirebal \
 					hsaw \
-					hbarrel
+					hbarrel \
+					hboat
 
 projectl_src :=		projectl
 
