@@ -57,13 +57,13 @@ void CNpcGeyserBubblePlatform::render()
 
 			if ( m_pop )
 			{
-				SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BALLOONBURST, renderPos.vx, renderPos.vy - 16, 4096 << 1, 4096 << 1, 0, 12 );
+				SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BALLOONBURST, renderPos.vx, renderPos.vy - 16, 4096 << 1, 4096 << 1, 0, 6 );
 				setRGB0( SprFrame, 128, 128, 255 );
 			}
 			else
 			{
 				// Evil hard coded Offsets
-				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BUBBLE_1, renderPos.vx, renderPos.vy - 16, m_scale, ONE, 0, 12 );
+				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BUBBLE_1, renderPos.vx, renderPos.vy - 16, m_scale, ONE, 0, 6 );
 				setRGB0( SprFrame, 128, 128, 255 );
 				SprFrame->u1++; SprFrame->u3++;
 				SprFrame->v2++; SprFrame->v3++;
