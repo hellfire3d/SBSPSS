@@ -131,6 +131,11 @@ int			NewY=YPos>>4;
 			ShiftX=XPos & 15;
 			ShiftY=YPos & 15;
 
+#ifdef __USER_paul__
+			MapX=NewX;
+			MapY=NewY;
+			UpdateWholeMap();
+#else
 			if (NewX>MapX)
 			{	// update right column
 				UpdateColumn(NewX+SCREEN_TILE_WIDTH-1,MapY);
@@ -154,6 +159,7 @@ int			NewY=YPos>>4;
 				UpdateRow(MapX,NewY);
 				MapY=NewY;
 			}
+#endif
 }
 
 /*****************************************************************************/
