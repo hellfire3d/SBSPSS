@@ -636,7 +636,7 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 }
 
 //***************************************************************************
-int		OTMin=0;
+int		OTMin=1 ;
 int		OTMax=15-1;
 
 void	CMkLevel::CalcOtOfs(vector<sTri> &PList,vector<sVtx> &VtxList,int Start,int Count)
@@ -664,6 +664,7 @@ int		PntCount=3;
 			OtOfs/=8;
 //			printf("%i\n",P.OTOfs);
 			OtOfs+=P.OTOfs;
+//			OtOfs++;	// Allow for GUI
 
 			if (OtOfs>OTMax) OtOfs=OTMax;
 			if (OtOfs<OTMin) OtOfs=OTMin;
