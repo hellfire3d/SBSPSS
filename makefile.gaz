@@ -134,7 +134,6 @@ platform_src :=		platform \
 					psswitch \
 					plift \
 					plurve \
-					psoil \
 					pbubtube \
 					pgbubble \
 					pfblock \
