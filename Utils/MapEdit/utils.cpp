@@ -101,6 +101,17 @@ void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,
 			glVertex3f( XMax, YMax, ZMax);
 			glVertex3f( XMax, YMax, ZMin);
 }
+
 /**************************************************************************************/
+void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z)
+{
+			// Front Face
+			glNormal3f( 0.0f, 0.0f, 1.0f);
+			glVertex3f( XMin, YMin, Z);
+			glVertex3f( XMax, YMin, Z);
+			glVertex3f( XMax, YMax, Z);
+			glVertex3f( XMin, YMax, Z);
+}
+
 /**************************************************************************************/
 /**************************************************************************************/

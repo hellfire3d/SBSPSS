@@ -21,6 +21,7 @@
 #include	"LayerAction.h"
 #include	"LayerFore.h"
 
+BOOL	Test3dFlag=TRUE;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -44,11 +45,10 @@ CCore::~CCore()
 void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
-
+//	glDisable(GL_DEPTH_TEST);
 	ActiveLayer=0;
 	MapPos.x=MapPos.y=MapPos.z=0;
-
-
+	UpdateView(0,0,0);
 }
 
 /*****************************************************************************/
@@ -59,7 +59,11 @@ void	CCore::Render()
 	
 	for (int i=0;i<LAYER_TYPE_MAX;i++)
 	{
-		Layers[i]->Render(MapPos);
+		if (i==LAYER_TYPE_ACTION)
+			glEnable(GL_DEPTH_TEST);
+
+		Layers[i]->Render(MapPos,Test3dFlag);
+		glDisable(GL_DEPTH_TEST);
 	}
 }
 
@@ -78,19 +82,19 @@ void	CCore::UpdateView(float XOfs,float YOfs,float ZOfs)
 /*****************************************************************************/
 void	CCore::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-//		if (!(nFlags & (MK_MBUTTON | MK_RBUTTON))) Layers[ActiveLayer].MouseMsg(nFlags,point);
 }
 
 /*****************************************************************************/
 void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-//		if (!(nFlags & (MK_LBUTTON | MK_RBUTTON))) Layers[ActiveLayer].MouseMsg(nFlags,point);
+		LastMousePos=point;
 }
 
 /*****************************************************************************/
 void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-//		if (!(nFlags & (MK_LBUTTON | MK_MBUTTON))) Layers[ActiveLayer].MouseMsg(nFlags,point);
+//	Test3dFlag=!Test3dFlag;
+	UpdateView(0,0,0);
 }
 
 /*****************************************************************************/
@@ -111,18 +115,19 @@ float	YOfs=0;
 // check if active doc
 		if (theApp.GetCurrent()!=ParentWindow->GetDocument()) return;
 
-//		Layers[ActiveLayer].MouseMsg(nFlags,point);
-/*
-// Handle Movement
 		CurrentMousePos=point;
+
+// Handle Drag Movement
+		if (nFlags & MK_MBUTTON)
 			{
 			float	XS,YS;
 			RECT	ThisRect;
 
 			ParentWindow->GetWindowRect(&ThisRect);
-
-			XS=MapPos.z/((ThisRect.right-ThisRect.left));
-			YS=MapPos.z/((ThisRect.bottom-ThisRect.top));
+			XS=MapPos.z*Layers[ActiveLayer]->GetLayerZPos();
+			YS=MapPos.z*Layers[ActiveLayer]->GetLayerZPos();
+			XS/=((ThisRect.right-ThisRect.left));
+			YS/=((ThisRect.bottom-ThisRect.top));
 	
 			XOfs=LastMousePos.x-CurrentMousePos.x;
 			YOfs=LastMousePos.y-CurrentMousePos.y;
@@ -131,19 +136,11 @@ float	YOfs=0;
 			XOfs*=XS;
 			YOfs*=YS;
 
-//		TRACE2("Move %i %i,",ThisRect.left,ThisRect.top);
-//		TRACE2("Move %i %i \n",ThisRect.right,ThisRect.bottom);
+			TRACE2("Move %i %i \n",point.x,point.y);
+			UpdateView(+XOfs,-YOfs,0);
 			}
-		UpdateView(-XOfs,-YOfs,0);
-//		if (nFlags & MK_LBUTTON) LButtonControl(nFlags,point,TRUE);
-//		if (nFlags & MK_RBUTTON) RButtonControl(nFlags,point,TRUE);
 
 
-		TRACE2("Move %i %i \n",point.x,point.y);
-*/
-		MapPos.x+=0.01f;
-		UpdateView(0.01f,0,0);
-//Render();
 }
 
 /*****************************************************************************/
