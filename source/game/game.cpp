@@ -115,11 +115,11 @@ const s32 Scale = (512<<12)/(256);
 void 	CGameScene::init()
 {
 // Setup Constant Camera Matrix
-		SetIdentNoTrans(&CamMtx);
-		CamMtx.t[2]=ZPos;
+//		SetIdentNoTrans(&CamMtx);
+//		CamMtx.t[2]=ZPos;
 //		AspectCorrectCamera();
-		SetRotMatrix(&CamMtx);
-		SetTransMatrix(&CamMtx);
+//		SetRotMatrix(&CamMtx);
+//		SetTransMatrix(&CamMtx);
 
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
@@ -137,8 +137,6 @@ void 	CGameScene::init()
 
 		CFader::setFadingIn();
 		initLevel();
-//		CFileIO::EnableASync(true);
-
 }
 
 /*****************************************************************************/
@@ -161,7 +159,6 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
-//		CFileIO::EnableASync(false);
 		shutdownLevel();
 		CSoundMediator::dumpSong();
 
@@ -189,8 +186,6 @@ void	CGameScene::think(int _frames)
 //		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
 //	}
 //#endif
-
-//	CFileIO::LoadASyncFiles();
 
 	if(s_readyToExit)
 	{

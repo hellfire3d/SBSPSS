@@ -6,19 +6,18 @@
 #include	<DStructs.h>
 #include 	"utils\utils.h"
 #include 	"gfx\prim.h"
-
-#if		defined(__USER_sbart__) || defined(__USER_daveo__)
-#define	_SHOW_POLYZ_	1
-#endif
+#include	"game\game.h"
 
 #include	"LayerTile.h"
 #include	"LayerTile3d.h"
 
-#include "gfx\font.h"	
 
-#if		defined(_SHOW_POLYZ_)
+#if		defined(__USER_sbart__) || defined(__USER_daveo__)
+#define	_SHOW_POLYZ_	1
+#include	"gfx\font.h"	
 static		FontBank		*Font;
 #endif
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -63,20 +62,16 @@ void	CLayerTile3d::shutdown()
 }
 
 /*****************************************************************************/
-
 void	CLayerTile3d::think(DVECTOR &MapPos)
 {
-int			XPos=MapPos.vx>>MapXYShift;
-int			YPos=MapPos.vy>>MapXYShift;
-
-			MapXY.vx=XPos>>4;
-			MapXY.vy=YPos>>4;
+			MapXY.vx=MapPos.vx>>4;
+			MapXY.vy=MapPos.vy>>4;
 			
-			MapXY.vx-=SCREEN_TILE_ADJ_LEFT;
-			MapXY.vy-=SCREEN_TILE_ADJ_UP;
+//			MapXY.vx-=SCREEN_TILE_ADJ_LEFT;
+//			MapXY.vy-=SCREEN_TILE_ADJ_UP;
 
-			ShiftX=XPos & 15;
-			ShiftY=YPos & 15;
+			ShiftX=(MapPos.vx & 15);
+			ShiftY=(MapPos.vy & 15);
 
 			RenderOfs.vx=RenderOfs.vy=0;
 			if (MapXY.vx<0) 
@@ -104,33 +99,37 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int	BLOCK_MULTx=1;
 #if	1
 VECTOR	asd={0,0,0};
-
+int	ZP=0;
+sVtx	VO={0,0,0};
 void	CLayerTile3d::render()
 {
-
-const int	XOfs=-(BLOCK_MULT*15)-(SCREEN_TILE_ADJ_LEFT*BLOCK_MULT);
-const int	YOfs=-(BLOCK_MULT*7)-(SCREEN_TILE_ADJ_UP*BLOCK_MULT);
+const int	XOfs=-(BLOCK_MULT*15)-(SCREEN_TILE_ADJ_LEFT*BLOCK_MULT)-SCREEN_TILE_ADJ_LEFT;
+const int	YOfs=-(BLOCK_MULT*7)-(SCREEN_TILE_ADJ_UP*BLOCK_MULT)-SCREEN_TILE_ADJ_UP;
 
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
-VECTOR			BlkPos;
 sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
 sOT				*ThisOT;
+MATRIX			&CamMtx=CGameScene::GetCamMtx();
+VECTOR			BlkPos;
+
+		CamMtx.t[0]=0;
+		CamMtx.t[1]=0;
+		CamMtx.t[2]=ZP;
+		SetIdentNoTrans(&CamMtx);
+		SetRotMatrix(&CamMtx);
+		SetTransMatrix(&CamMtx);
 
 // Setup Trans Matrix
-		BlkPos.vx=XOfs-((MapXY.vx+ShiftX));
-		BlkPos.vy=YOfs-((MapXY.vy+ShiftY));
-		BlkPos.vx+=RenderOfs.vx;
-		BlkPos.vy+=RenderOfs.vy;
-
-		BlkPos.vx+=asd.vx;
-		BlkPos.vy+=asd.vy;
+		BlkPos.vx=XOfs-(ShiftX);
+		BlkPos.vy=YOfs-(ShiftY);
+		BlkPos.vx-=asd.vx;
+		BlkPos.vy-=asd.vy;
 
 
 		for (int Y=0; Y<RenderH; Y++)
@@ -146,7 +145,15 @@ sOT				*ThisOT;
 
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
 				{
+					sVtx	_P0,_P1,_P2;
 					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+					_P0.vx=VtxList[TList->P0].vx+VO.vx; _P0.vy=VtxList[TList->P0].vy+VO.vy; _P0.vz=VtxList[TList->P0].vz+VO.vz; 
+					_P1.vx=VtxList[TList->P1].vx+VO.vx; _P1.vy=VtxList[TList->P1].vy+VO.vy; _P1.vz=VtxList[TList->P1].vz+VO.vz; 
+					_P2.vx=VtxList[TList->P2].vx+VO.vx; _P2.vy=VtxList[TList->P2].vy+VO.vy; _P2.vz=VtxList[TList->P2].vz+VO.vz; 
+					P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+					P0=&_P0;
+					P1=&_P1;
+					P2=&_P2;
 					CMX_SetTransMtxXY(&BlkPos);
 					gte_ldv3(P0,P1,P2);
 					setPolyFT3(TPrimPtr);
