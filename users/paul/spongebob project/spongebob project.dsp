@@ -1249,6 +1249,14 @@ SOURCE=..\..\..\source\platform\pcirculr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pclam.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pclam.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pdual.cpp
 # End Source File
 # Begin Source File

@@ -19,6 +19,14 @@
 #include "enemy\nclam.h"
 #endif
 
+#ifndef __PLATFORM_PCLAM_H__
+#include "platform\pclam.h"
+#endif
+
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -186,6 +194,16 @@ void CNpcStaticClamEnemy::processShot( int _frames )
 			{
 				m_isStunned = true;
 
+				// create platform in same place
+
+				CNpcClamPlatform *platform = new ("clam platform") CNpcClamPlatform;
+
+				platform->setType( CNpcClamPlatform::NPC_CLAM_PLATFORM );
+				platform->setGraphic( (u8) 0 );
+				platform->init( Pos );
+				platform->setTiltable( false );
+				platform->setBBox();
+
 				break;
 			}
 		}
@@ -202,7 +220,7 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 	}
 }
 
-int CNpcStaticClamEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
+/*int CNpcStaticClamEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
 	DVECTOR	pos,thisThingPos;
 	int		radius;
@@ -253,4 +271,4 @@ int CNpcStaticClamEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames 
 	}
 
 	return collided;
-}
+}*/

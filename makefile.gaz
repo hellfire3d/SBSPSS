@@ -119,7 +119,8 @@ platform_src :=		platform \
 					pleaf \
 					pbwheel \
 					psbarrel \
-					pjellfsh
+					pjellfsh \
+					pclam
 
 hazard_src :=		hazard \
 					hfalling \
