@@ -143,9 +143,9 @@ eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
 eng=Loading...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADOK]
-eng=Load complete!\nPress X to continue
+eng=Load complete!\nPress the X button to continue
 [STR__MEMCARD__LOADERROR]
-eng=Load Error!\nPress X to continue
+eng=Load Error!\nPress the X button to continue
 [STR__MEMCARD__NOSPACEONCARD]
 eng=Insufficient free blocks available in MEMORY CARD of MEMORY CARD SLOT 1
 [STR__MEMCARD__DUPLICATESAVENAME]
@@ -155,17 +155,17 @@ eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted. Do you wish to format?
 [STR__MEMCARD__FORMATTINGPLEASEWIAT]
 eng=Formatting... Do not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__FORMATTINGOK]
-eng=Format complete!\n\nPress X to continue
+eng=Format complete!\n\nPress the X button to continue
 [STR__MEMCARD__FORMATTINGERROR]
-eng=Format Error!\n\nPress X to continue
+eng=Format Error!\n\nPress the X button to continue
 [STR__MEMCARD__FORMATTINGINTERRUPTED]
-eng=Operation interrupted!\n\nPress X to continue
+eng=Operation interrupted!\n\nPress the X button to continue
 [STR__MEMCARD__SAVINGPLEASEWAIT]
 eng=Saving...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__SAVEOK]
-eng=Save complete!\n\nPress X to continue
+eng=Save complete!\n\nPress the X button to continue
 [STR__MEMCARD__SAVEERROR]
-eng=Save error!\n\nPress X to continue
+eng=Save error!\n\nPress the X button to continue
 
 
 
