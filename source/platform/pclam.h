@@ -22,6 +22,7 @@ class CNpcClamPlatform : public CNpcPlatform
 {
 public:
 	virtual void		render();
+	virtual	CRECT const	*getThinkBBox()							{return( &getCollisionArea() );}
 	//void				setBBox();
 };
 

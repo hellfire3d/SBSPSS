@@ -87,13 +87,6 @@ void CNpcJellyfishPlatform::collidedWith( CThing *_thisThing )
 						m_contact = true;
 					}
 				}
-
-				if ( height < -30 )
-				{
-					// shock player
-
-					player->takeDamage( DAMAGE__SHOCK_ENEMY, REACT__GET_DIRECTION_FROM_THING, (CThing*)this );
-				}
 			}
 
 			break;
