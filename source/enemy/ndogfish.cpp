@@ -53,7 +53,7 @@ void CNpcIronDogfishEnemy::postInit()
 	if ( CLevel::getIsBossRespawn() )
 	{
 		m_health = CLevel::getBossHealth();
-		m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+		//m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	}
 
 	CNpcBossEnemy::postInit();

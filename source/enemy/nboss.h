@@ -28,6 +28,7 @@ public:
 	virtual void		shutdown();
 protected:
 	void				addHealthMeter();
+	virtual void		processShot( int _frames );
 
 	bool				m_meterOn;
 	CFXNRGBar			*m_energyBar;

@@ -780,9 +780,9 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 	{
 		case NPC_GENERIC_HIT_CHECK_HEALTH:
 		{
-			if ( m_health > 3 )
+			if ( m_health > 1 )
 			{
-				m_health -= 3;
+				m_health--;
 
 				m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 				m_speed = m_data[m_type].speed + ( ( 2 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
