@@ -1120,6 +1120,8 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	if(m_cameraPos.vy<m_cameraPosLimitBox.y1)		m_cameraPos.vy=m_cameraPosLimitBox.y1;
 	else if(m_cameraPos.vy>m_cameraPosLimitBox.y2)	m_cameraPos.vy=m_cameraPosLimitBox.y2;
 
+	m_ignoreNewlyPressedButtonsOnPadThisThink=false;
+
 	CPlayerThing::think(_frames);
 }
 
@@ -1701,6 +1703,8 @@ void CPlayer::respawn()
 	updateCollisionArea();
 
 	m_lives--;
+
+	m_ignoreNewlyPressedButtonsOnPadThisThink=true;
 }
 
 /*----------------------------------------------------------------------
@@ -1825,6 +1829,17 @@ int	CPlayer::canDoLookAround()
 	return m_currentPlayerModeClass->canDoLookAround();
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::ignoreNewlyPressedButtonsOnPadThisThink()
+{
+	m_ignoreNewlyPressedButtonsOnPadThisThink=true;
+}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -2026,7 +2041,14 @@ void CPlayer::updatePadInput()
 {
 	m_lastPadInput=m_padInput;
 	m_padInput=readPadInput();
-	m_padInputDown=(PLAYERINPUT)(m_padInput&(m_lastPadInput^-1));
+	if(!m_ignoreNewlyPressedButtonsOnPadThisThink)
+	{
+		m_padInputDown=(PLAYERINPUT)(m_padInput&(m_lastPadInput^-1));
+	}
+	else
+	{
+		m_padInputDown=PI_NONE;
+	}
 }
 
 
@@ -2036,47 +2058,41 @@ void CPlayer::updatePadInput()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+typedef struct
+{
+	CPadConfig::PAD_CFG	m_input;
+	PLAYERINPUT			m_output;
+} PAD_CONVERSION;
+static const PAD_CONVERSION	s_padConversionTable[]=
+{
+	{	CPadConfig::PAD_CFG_UP,				PI_UP			},
+	{	CPadConfig::PAD_CFG_DOWN,			PI_DOWN			},
+	{	CPadConfig::PAD_CFG_LEFT,			PI_LEFT			},
+	{	CPadConfig::PAD_CFG_RIGHT,			PI_RIGHT		},
+	{	CPadConfig::PAD_CFG_JUMP,			PI_JUMP			},
+	{	CPadConfig::PAD_CFG_FIRE,			PI_FIRE			},
+	{	CPadConfig::PAD_CFG_CATCH,			PI_CATCH		},
+	{	CPadConfig::PAD_CFG_WEAPONCHANGE,	PI_WEAPONCHANGE	},
+};
+static const int s_padConversionTableSize=sizeof(s_padConversionTable)/sizeof(PAD_CONVERSION);
 PLAYERINPUT CPlayer::readPadInput()
 {
-	PLAYERINPUT	input;
-	int			pad;
+	PLAYERINPUT				input;
+	int						pad;
+	const PAD_CONVERSION	*table;
+	int						i;
 
 	input=PI_NONE;
 	pad=PadGetHeld(0);
-
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
+	table=s_padConversionTable;
+	for(i=0;i<s_padConversionTableSize;i++)
 	{
-		input=(PLAYERINPUT)(input|PI_UP);
+		if(pad&CPadConfig::getButton(table->m_input))
+		{
+			input=(PLAYERINPUT)(input|table->m_output);
+		}
+		table++;
 	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
-	{
-		input=(PLAYERINPUT)(input|PI_DOWN);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
-	{
-		input=(PLAYERINPUT)(input|PI_LEFT);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
-	{
-		input=(PLAYERINPUT)(input|PI_RIGHT);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
-	{
-		input=(PLAYERINPUT)(input|PI_JUMP);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_FIRE))
-	{
-		input=(PLAYERINPUT)(input|PI_FIRE);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_CATCH))
-	{
-		input=(PLAYERINPUT)(input|PI_CATCH);
-	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_WEAPONCHANGE))
-	{
-		input=(PLAYERINPUT)(input|PI_WEAPONCHANGE);
-	}
-
 
 #ifdef _RECORD_DEMO_MODE_
 	CDemoPlayer::demoPlayerControl	*crnt;

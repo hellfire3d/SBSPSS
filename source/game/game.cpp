@@ -385,9 +385,15 @@ void	CGameScene::think(int _frames)
 		m_pauseMenu->select();
 	}
 
+	// Conversation think ( with pad debounce stuff.. )
+	if(CConversation::isActive())m_player->ignoreNewlyPressedButtonsOnPadThisThink();
 	CConversation::think(_frames);
+	
+	// Pause menu think ( with pad debounce stuff.. )
+	if(m_pauseMenu->isActive())m_player->ignoreNewlyPressedButtonsOnPadThisThink();
 	m_pauseMenu->think(_frames);
-	if(!CConversation::isActive()&& !m_pauseMenu->isActive())
+
+	if(!CConversation::isActive()&&!m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
 		CJellyfishGenerator::think( _frames, &Level );

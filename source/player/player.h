@@ -265,6 +265,7 @@ private:
 public:
 	DVECTOR			getPlayerPos()										{return Pos;}
 	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
+	void			ignoreNewlyPressedButtonsOnPadThisThink();
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
 	int				tryingToManuallyPickupWeapon()						{return m_tryingToManuallyPickupWeapon;}
@@ -349,6 +350,7 @@ private:
 	PLAYERINPUT			m_padInput;			// Controls that are being held down
 	PLAYERINPUT			m_lastPadInput;		// Last frames controls
 	PLAYERINPUT			m_padInputDown;		// Controls that were pressed this frame
+	int					m_ignoreNewlyPressedButtonsOnPadThisThink;
 	int					m_tryingToManuallyPickupWeapon;
 	int					m_tryingToAutomaticallyPickupWeapon;
 
