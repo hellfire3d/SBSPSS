@@ -367,7 +367,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(1);
 			break;
 		}
 
@@ -375,7 +375,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(2);
 			break;
 		}
 
@@ -383,7 +383,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(3);
 			break;
 		}
 
@@ -391,7 +391,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(4);
 			break;
 		}
 
@@ -399,7 +399,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(5);
 			break;
 		}
 
@@ -407,7 +407,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(6);
 			break;
 		}
 
@@ -415,7 +415,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(7);
 			break;
 		}
 
@@ -423,7 +423,7 @@ CTrigger	*trigger;
 		{
 			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
 			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
-			speechTrigger->setData(0);
+			speechTrigger->setData(8);
 			break;
 		}
 

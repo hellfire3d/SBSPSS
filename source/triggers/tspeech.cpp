@@ -15,7 +15,23 @@
 #include "triggers\tspeech.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
 
+
+int		CSpeechTrigger::m_speechRef[9] =
+{
+	SPEECH_151,
+	SPEECH_152,
+	SPEECH_153,
+	SPEECH_154,
+	SPEECH_155,
+	SPEECH_156,
+	SPEECH_157,
+	SPEECH_158,
+	SPEECH_159,
+};
 
 /*----------------------------------------------------------------------
 	Function:
@@ -29,6 +45,7 @@ void	CSpeechTrigger::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 		{
+			CSoundMediator::playSpeech( m_speechRef[m_data] );
 			setToShutdown();
 
 			break;
