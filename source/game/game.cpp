@@ -197,7 +197,6 @@ int		CGameScene::canPause()
 void	CGameScene::shutdown()
 {
 		shutdownLevel();
-		CSoundMediator::dumpSong();
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 		s_genericFont->dump();		delete s_genericFont;
@@ -389,6 +388,7 @@ void	CGameScene::initLevel()
 /*****************************************************************************/
 void	CGameScene::shutdownLevel()
 {
+	CSoundMediator::dumpSong();
 	CConversation::shutdown();
 	CThingManager::shutdown();
 	Level.shutdown();
