@@ -772,7 +772,7 @@ if(newmode!=-1)
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
 //	CSoundMediator::setVolume(CSoundMediator::VOL_SONG,0);
-	m_currentPlayerModeClass->setState(STATE_CELEBRATE);
+//	m_currentPlayerModeClass->setState(STATE_CELEBRATE);
 }
 #endif
 ///

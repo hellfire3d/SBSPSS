@@ -2615,6 +2615,90 @@ SOURCE=..\..\..\data\scripts\defs\response.scr
 SOURCE=..\..\..\data\scripts\defs\trans.scr
 # End Source File
 # End Group
+# Begin Group "celebration"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c1l1_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c1l2_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c1l3_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c1l4_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c2l1_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c2l2_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c2l3_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c2l4_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c3l1_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c3l2_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c3l3_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c3l4_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c4l1_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c4l2_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c4l3_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c4l4_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c5l1_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c5l2_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c5l3_celebrate.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\c5l4_celebrate.scr
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\..\data\Scripts\ch1l1_01.scr
