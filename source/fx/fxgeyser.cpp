@@ -13,7 +13,6 @@
 
 #include	"FX\FXGeyser.h"
 
-int		MaxHeight=128;
 int		GeyserSpeed=4;
 
 /*****************************************************************************/
@@ -34,7 +33,7 @@ void	CFXGeyser::think(int Frames)
 		{
 			currentFrame=FRM__GUSH000;
 		}
-		TargetHeight=MaxHeight;
+//		TargetHeight=MaxHeight;
 }
 
 /*****************************************************************************/

@@ -147,6 +147,10 @@
 #include "triggers\twindright.h"
 #endif
 
+#ifndef	__TRIGGERS_TOILGEYSER_H__
+#include "triggers\toilgeyser.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -325,6 +329,10 @@ CTrigger	*trigger;
 		// Wind up
 		case TRIGGER_WIND_RIGHT:
 			trigger = (CWindRightTrigger*)new("WindRightTrigger") CWindRightTrigger();
+			break;
+		// Oil Geyser
+		case TRIGGER_OIL_GEYSER:
+			trigger = (COilGeyserTrigger*)new("OilGeyserTrigger") COilGeyserTrigger();
 			break;
 
 		default:

@@ -1,8 +1,8 @@
 /*=========================================================================
 
-	twdripemit.h
+	toilgeysor
 
-	Author:		CRB
+	Author:		Dave - based on the original story by CB
 	Created:	
 	Project:	Spongebob
 	Purpose:	
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__TRIGGERS_TWDRIPEMIT_H__
-#define __TRIGGERS_TWDRIPEMIT_H__
+#ifndef	__TRIGGERS_TOILGEYSER_H__
+#define __TRIGGERS_TOILGEYSER_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -38,25 +38,17 @@
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
-
-class CWaterDripEmitterTrigger : public CTrigger
+class	CFXGeyser;
+class COilGeyserTrigger: public CTrigger
 {
 public:
 	virtual void		think(int _frames);
 	virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
 protected:
 	s32					m_timer;
+	CFXGeyser			*m_FX;
+	int					m_Height;
 };
-
-/*----------------------------------------------------------------------
-	Globals
-	------- */
-
-/*----------------------------------------------------------------------
-	Functions
-	--------- */
-
-/*---------------------------------------------------------------------- */
 
 #endif
 
