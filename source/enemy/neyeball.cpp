@@ -39,6 +39,7 @@ void CNpcEyeballEnemy::processEnemyCollision( CThing *thisThing )
 
 void CNpcEyeballEnemy::postInit()
 {
+return;
 	CProjectile *projectile;
 	projectile = new ( "eyeball projectile" ) CProjectile;
 	projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
@@ -49,6 +50,7 @@ void CNpcEyeballEnemy::postInit()
 
 bool CNpcEyeballEnemy::processSensor()
 {
+return(false);
 	switch( m_sensorFunc )
 	{
 		case NPC_SENSOR_NONE:
@@ -72,6 +74,7 @@ bool CNpcEyeballEnemy::processSensor()
 
 void CNpcEyeballEnemy::processClose( int _frames )
 {
+return;
 	if ( Next )
 	{
 		CProjectile *projectile;
