@@ -323,6 +323,7 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 		ScreenYOfs=0;	// Set screen ofs for PAL
 */
 		// PKG - Changed back 7/9/01
+		// NB: These have also been added to InitSys() in psxboot
 		ScreenYOfs=16;	// Set screen ofs for PAL
 	#endif
 
@@ -342,13 +343,13 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 	DrawSync(0);
 	SetScreenImage(0);
 	MemFree(screenData);
+	VidScrOn();
 
 // Init VBL
 	VbFunc = NULL;
 	for (int i=0; i<MaxVBFuncs; i++) VbFuncList[i] = NULL;
 	VSyncCallback( VidVSyncCallback );
 
-	VidScrOn();			// PKG - Moved to fix a bug with the loading screen jerking onto the screen..
 }
 
 /*****************************************************************************/
