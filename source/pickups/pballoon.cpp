@@ -94,7 +94,7 @@ void	CBalloonPickup::init()
   ---------------------------------------------------------------------- */
 void	CBalloonPickup::collect(class CPlayer *_player)
 {
-	_player->setMode(PLAYER_MODE_BALLOON);
+//	_player->setMode(PLAYER_MODE_BALLOON);
 	CBaseRespawningPickup::collect(_player);
 }
 
