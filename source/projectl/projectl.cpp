@@ -510,8 +510,8 @@ void CPlayerProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth(FRM_BARNACLEBOY);
-	int		spriteHeight = m_spriteBank->getFrameHeight(FRM_BARNACLEBOY);
+	int		spriteWidth = m_spriteBank->getFrameWidth(m_frame);
+	int		spriteHeight = m_spriteBank->getFrameHeight(m_frame);
 
 	offset = getScreenOffset();
 
