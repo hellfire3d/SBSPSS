@@ -13,6 +13,11 @@
 /*
 Sprite/object control - Thrown objects, so need curved path, :o(
 FX
+1	Sandwich
+2	makeup bag
+3	uniform
+4	kelp bar
+5	fix tv
 
 */
 
@@ -54,6 +59,11 @@ FX
 #include	"utils\utils.h"
 #include	"pad\pads.h"
 #include	"gfx\font.h"
+#include	"gfx\otpos.h"
+#include	<sprites.h>
+
+#include	"fx\fx.h"
+#include	"fx\FXTvExplode.h"
 
 /*	Std Lib
 	------- */
@@ -82,6 +92,8 @@ FX
 #include "actor_plankton_anim.h"
 #endif
 
+
+#define	FRM__KELP_BAR	FRM__C4_QUEST_ITEM_2
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -144,10 +156,36 @@ typedef enum
 	SC_SET_ACTOR_ANIM_STATE,	// actor,state,loop
 	SC_WALK_ACTOR_TO_POSITION,	// actor,x,y,frames
 
+	SC_CREATE_FX,				// FxNo, X,Y, FXType
+	SC_KILL_FX,					// FxNo
+
+	SC_SET_ITEM,				// item, Frame
+	SC_CARRY_ITEM,				// item, actor
+
 	SC_STOP,					//
 } SCRIPT_COMMAND;
 
+/*
+struct	sFMAItemTable
+{
+		u16		Frame;
+		DVECTOR	SprOfs;
+};
 
+enum	FMA_ITEM
+{
+	FMA_ITEM_C1,
+	FMA_ITEM_C2,
+	FMA_ITEM_C3,
+	FMA_ITEM_C4,
+	FMA_ITEM_C5,
+	FMA_ITEM_MAX
+}
+
+sFMAItemTable	FMAItemTable[FMA_ITEM_MAX]
+{
+};
+*/
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -161,6 +199,7 @@ struct	sFMAAnim
 typedef struct
 {
 	FileEquate		m_file[2];
+	DVECTOR			m_ItemOfs;
 	sFMAAnim		m_anims[FMA_NUM_ANIMS];
 
 } ACTOR_GRAPHICS_DATA;
@@ -185,6 +224,16 @@ typedef struct
 	u8			m_facing;
 } ACTOR_DATA;
 
+struct	sItemData
+{
+		DVECTOR		m_Pos;
+		s8			m_Actor;
+		u8			m_facing;
+		u16			m_Frame;
+		s8			m_TargetActor;
+		DVECTOR		m_TargetPos;
+};
+
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -193,15 +242,22 @@ typedef struct
 /*----------------------------------------------------------------------
 	Vars
 	---- */
+enum
+{
+	FMA_FX_COUNT=4,
+	FMA_ITEM_MAX=4,
+};
 
 CFmaScene	FmaScene;
+CFX			*m_FXTable[FMA_FX_COUNT];
+sItemData	m_itemData[FMA_ITEM_MAX];
 
 /*****************************************************************************/
 // Actor graphics data
 static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 {
 	{ // SpongeBob
-		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK},	
+		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK},{-48,-48},	
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_SPONGEBOB_IDLEBREATH},
 /*FMA_ANIM_WALK*/				{0,ANIM_SPONGEBOB_RUN},
@@ -221,7 +277,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Mermaid Man
-		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0},
+		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0},{-32,-64},	
 		{	
 /*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE},
 /*FMA_ANIM_WALK*/				{0,-1},
@@ -241,7 +297,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Barnicle Boy
-		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0},
+		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0},{-32,-48},	
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_BARNACLEBOY_IDLE},
 /*FMA_ANIM_WALK*/				{0,-1},
@@ -262,7 +318,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 	},
 
 	{ // Gary Da Snail
-		{ACTORS_GARY_SBK,		(FileEquate)0},
+		{ACTORS_GARY_SBK,		(FileEquate)0},{0,0},	
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_GARY_IDLE},
 /*FMA_ANIM_WALK*/				{0,ANIM_GARY_IDLE},
@@ -282,7 +338,7 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 		},
 	},
 	{ // Plankton
-		{ACTORS_PLANKTON_SBK,		(FileEquate)0},
+		{ACTORS_PLANKTON_SBK,		(FileEquate)0},{0,0},	
 		{
 /*FMA_ANIM_IDLE*/				{0,ANIM_PLANKTON_IDLE},
 /*FMA_ANIM_WALK*/				{0,-1},
@@ -403,6 +459,7 @@ static const int s_FMAC1EndScript[]=
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
 	SC_WAIT_ON_TIMER,			60*2,
+
 // Scene 2 - inside Shady Shoals
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_MM,FMA_ANIM_SIT,1,
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,208*16,(30*16)+8,
@@ -427,6 +484,8 @@ static const int s_FMAC1EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,270*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__SANDWICH,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,260*16,30*16,40,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,230*16,30*16,120,
@@ -438,6 +497,7 @@ static const int s_FMAC1EndScript[]=
 
 // scene 6 - sarnie flys thru the air
 //	SC_SPRITE_SHIT
+	SC_CARRY_ITEM,				0,FMA_ACTOR_MM,
 	SC_MOVE_CAMERA_TO,			197*16,18*16,120,
 	SC_WAIT_ON_CAMERA_STOP,
 
@@ -499,6 +559,8 @@ static const int s_FMAC2EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,270*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__MAKEUPBAG,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,260*16,30*16,40,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH3_00_DAT,
@@ -508,6 +570,7 @@ static const int s_FMAC2EndScript[]=
 	SC_WAIT_ON_CAMERA_STOP,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_BB,
 
 // Scene 7 - BB gives new task
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_SITLOOKLEFT,1,
@@ -544,6 +607,8 @@ static const int s_FMAC3EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,40*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__UNIFORM,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
 
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,14*16,30*16,104,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
@@ -593,6 +658,7 @@ static const int s_FMAC3EndScript[]=
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_UNHIDE,0,
 	SC_WAIT_ON_ACTOR_ANIM,		FMA_ACTOR_BB,
 	SC_WAIT_ON_TIMER,			30,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_BB,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH4_02_DAT,
 
 // Scene 8 - SB Leaves
@@ -625,6 +691,9 @@ static const int s_FMAC4EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,405*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__KELP_BAR,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
+
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_IDLE,1,
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,370*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,0,
@@ -636,6 +705,7 @@ static const int s_FMAC4EndScript[]=
 
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH5_00_DAT,
 // SB throws bar thru window
+	SC_CARRY_ITEM,				0,FMA_ACTOR_BB,
 
 // BB comes to Porthole
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_BB,374*16,30*16,60,
@@ -657,7 +727,6 @@ static const int s_FMAC4EndScript[]=
 /*****************************************************************************/
 /*** C5 End FMA **************************************************************/
 /*****************************************************************************/
-
 static const int s_FMAC5EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_00_DAT,
@@ -674,6 +743,8 @@ static const int s_FMAC5EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,40*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__TOOLBOX,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
 
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,16*16,30*16,96,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
@@ -690,8 +761,10 @@ static const int s_FMAC5EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,220*16,30*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,1,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_BB,true,
+	SC_SET_ITEM,				0,FRM__AUTOGRAPH,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_BB,
 
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,205*16,30*16,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,206*16,30*16,
 
 	SC_SNAP_CAMERA_TO,			197*16,18*16,
 
@@ -707,6 +780,8 @@ static const int s_FMAC5EndScript[]=
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
+
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_QUICKEXIT,0,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
 	SC_WAIT_ON_ACTOR_ANIM,		FMA_ACTOR_SPONGEBOB,
@@ -733,9 +808,11 @@ static const int s_FMAC5EndScript[]=
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,211*16,(30*16)+8,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,0,
 	SC_SNAP_CAMERA_TO,			197*16,18*16,
-	SC_WAIT_ON_TIMER,			120,
+	SC_WAIT_ON_TIMER,			60,
 
 // Scene 7 - TV goes pop
+	SC_CREATE_FX,				0,207*16,28*16,CFX::FX_TYPE_TV_EXPLODE,
+	SC_WAIT_ON_TIMER,			60*3,
 
 // Scene 8 - Outside, MM & BB SCREEEEEEEEEEEEEEEAM
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
@@ -750,8 +827,45 @@ static const int s_FMAC5EndScript[]=
 
 static const int s_FMAPlanktonScript[]=
 {
-	SC_SNAP_CAMERA_TO,			0*16,0*16,
-	SC_WAIT_ON_TIMER,			300000,
+	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_PLANKTON_DAT,
+	SC_SNAP_CAMERA_TO,			0*16,5*16,
+
+	SC_WAIT_ON_TIMER,			60*2,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,0*16,18*16,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+
+	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,18*16,18*16,72,
+	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
+	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,32*16,18*16,56,
+	SC_MOVE_CAMERA_TO,			21*16,5*16,84,
+	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
+	SC_WAIT_ON_CAMERA_STOP,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_PLANKTON,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PLANKTON,42*16,18*16,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_PLANKTON,0,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_PLANKTON,true,
+
+	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_PLANKTON_DAT,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,1,
+	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,80*16,18*16,192,
+	SC_MOVE_CAMERA_TO,			44*16,5*16,92,
+	SC_WAIT_ON_CAMERA_STOP,
+	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
+
+	SC_SNAP_CAMERA_TO,			94*16,5*16,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,114*16,18*16,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
+	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,108*16,18*16,24,
+	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
+
+	SC_WAIT_ON_TIMER,			60,
 
 	SC_STOP
 };
@@ -824,6 +938,16 @@ void	CFmaScene::init()
 		actor->m_facing=0;
 		actor++;
 	}
+
+	for (i=0; i<FMA_FX_COUNT; i++)
+	{
+		m_FXTable[i]=0;
+	}
+	for (i=0; i<FMA_ITEM_MAX; i++)
+	{
+		m_itemData[i].m_Actor=-1;
+	}
+
 	CActorPool::SetUpCache();
 	CActorPool::CleanUpCache();
 
@@ -833,6 +957,8 @@ void	CFmaScene::init()
 	m_pc=s_fmaScripts[s_chosenScript];
 
 	CFader::setFadingIn();
+
+	CSoundMediator::playSong();
 }
 
 
@@ -892,6 +1018,28 @@ void	CFmaScene::render()
 			actor->m_gfx[AnimBank]->Render(pos,AnimNo,actor->m_animFrame,actor->m_facing);
 		}
 		actor++;
+	}
+
+	for (i=0; i<FMA_ITEM_MAX; i++)
+	{
+		sItemData	*item=&m_itemData[i];
+		if (item->m_Actor!=-1)
+		{
+			DVECTOR	pos;
+			pos.vx=item->m_Pos.vx-m_cameraPos.vx;
+			pos.vy=item->m_Pos.vy-m_cameraPos.vy;
+			if (item->m_facing)
+			{
+				pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+			}
+			else
+			{
+				pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+			}
+			pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
+
+			CGameScene::getSpriteBank()->printFT4(item->m_Frame,pos.vx,pos.vy,item->m_facing,0,OTPOS__PICKUP_POS-1);
+		}
 	}
 
 	CActorPool::CleanUpCache();
@@ -1013,6 +1161,25 @@ void	CFmaScene::think(int _frames)
 				{
 					m_cameraPos.vx=m_startCameraPos.vx+(((m_endCameraPos.vx-m_startCameraPos.vx)*currentFrame)/totalFrames);
 					m_cameraPos.vy=m_startCameraPos.vy+(((m_endCameraPos.vy-m_startCameraPos.vy)*currentFrame)/totalFrames);
+				}
+			}
+			// Handle Item
+			for (i=0; i<FMA_ITEM_MAX; i++)
+			{
+				sItemData	*item=&m_itemData[i];
+				if (item->m_Actor!=-1)
+				{
+					DVECTOR	&TargetPos=m_actorData[item->m_Actor].m_pos;
+					DVECTOR	Move;
+
+					Move.vx=TargetPos.vx-item->m_Pos.vx;
+					Move.vy=TargetPos.vy-item->m_Pos.vy;
+
+					item->m_Pos.vx+=Move.vx;
+					item->m_Pos.vy+=Move.vy;
+
+					item->m_facing=m_actorData[item->m_Actor].m_facing;
+
 				}
 			}
 
@@ -1188,6 +1355,50 @@ void	CFmaScene::startNextScriptCommand()
 			}
 			break;
 
+		case SC_CREATE_FX:
+			{
+				int	FXNo;
+				int	FXType;
+				DVECTOR	Pos;
+				m_pc++;
+				
+				FXNo=*m_pc++;
+				Pos.vx=*m_pc++;
+				Pos.vy=*m_pc++;
+				FXType=*m_pc++;
+
+				m_FXTable[FXNo]=CFX::Create((CFX::FX_TYPE)FXType,Pos);
+			}
+			break;
+
+		case SC_KILL_FX:
+			{
+				int	FXNo;
+				m_pc++;
+				
+				FXNo=*m_pc++;
+				m_FXTable[FXNo]->killFX();
+			}
+			break;
+
+		case SC_SET_ITEM:			// item, actor, Frame
+			{
+				sItemData	*item;
+				m_pc++;
+				item=&m_itemData[*m_pc++];
+				item->m_Frame=*m_pc++;
+			}
+			break;
+	
+
+		case SC_CARRY_ITEM:			// item, actor
+			{
+				sItemData	*item;
+				m_pc++;
+				item=&m_itemData[*m_pc++];
+				item->m_Actor=*m_pc++;
+			}
+			break;
 		case SC_STOP:					//
 			m_scriptRunning=false;
 			m_doOtherProcessing=true;

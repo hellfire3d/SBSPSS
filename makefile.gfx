@@ -191,7 +191,9 @@ PICKUP_GFX :=				+spatula +token +pants +glint1 +glint2 +glint3 +glint4 \
 							+c2_l1_quest_item +c2_l2_quest_item +c2_l3_quest_item +c2_l4_quest_item \
 							+c3_l1_quest_item +c3_l2_quest_item +c3_l3_quest_item +c3_l4_quest_item \
 							+c4_quest_item_1 +c4_quest_item_2 \
-							+c5_l1_quest_item +c5_l2_quest_item +c5_l3_quest_item +c5_l4_quest_item 
+							+c5_l1_quest_item +c5_l2_quest_item +c5_l3_quest_item +c5_l4_quest_item \
+							+sandwich +makeupbag +Uniform +toolbox +autograph
+
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
