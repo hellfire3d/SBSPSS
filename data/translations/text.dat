@@ -139,7 +139,7 @@ eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted.\nDo you want to format i
 ; ---------------------------------------------------------------
 
 [STR__MEMCARD__CHECKING_MEM_CARD]
-eng=Checking...\nPlease do not remove the MEMORY CARD in MEMORY CARD slot 1
+eng=Checking...\n\nPlease do not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__UNFORMATTEDCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted
 [STR__MEMCARD__NOFILESONCARD]
@@ -147,11 +147,11 @@ eng=No SpongeBob game data present on MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__NOCARDINSLOT]
 eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
-eng=Loading...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
+eng=Loading...\n\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADOK]
-eng=Load complete!\nPress the X button to continue
+eng=Load complete!\n\nPress the X button to continue
 [STR__MEMCARD__LOADERROR]
-eng=Load Error!\nPress the X button to continue
+eng=Load Error!\n\nPress the X button to continue
 [STR__MEMCARD__NOSPACEONCARD]
 eng=Insufficient free blocks available on MEMORY CARD in MEMORY CARD SLOT 1. One free block required
 [STR__MEMCARD__DUPLICATESAVENAME]
@@ -159,7 +159,7 @@ eng=Are you sure you want to\noverwrite the existing file on the MEMORY CARD in 
 [STR__MEMCARD__DOYOUWANTTOFORMATCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted. Do you wish to format?
 [STR__MEMCARD__FORMATTINGPLEASEWIAT]
-eng=Formatting... Do not remove the MEMORY CARD in MEMORY CARD slot 1
+eng=Formatting...\n\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__FORMATTINGOK]
 eng=Format complete!\n\nPress the X button to continue
 [STR__MEMCARD__FORMATTINGERROR]
@@ -167,7 +167,7 @@ eng=Format Error!\n\nPress the X button to continue
 [STR__MEMCARD__FORMATTINGINTERRUPTED]
 eng=Operation interrupted!\n\nPress the X button to continue
 [STR__MEMCARD__SAVINGPLEASEWAIT]
-eng=Saving...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
+eng=Saving...\n\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__SAVEOK]
 eng=Save complete!\n\nPress the X button to continue
 [STR__MEMCARD__SAVEERROR]
