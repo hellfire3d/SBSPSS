@@ -99,6 +99,10 @@ CConversation::CHAR_ICON_FRAMES	CConversation::s_characterIconFrames[]=
 class CGUIGroupFrame	*CConversation::s_guiFrame=NULL;
 class CGUISprite		*CConversation::s_guiIcon=NULL;
 class CGUITextBox		*CConversation::s_guiText=NULL;
+class FontBank			*CConversation::s_fontBank=NULL;
+
+class CScript			*CConversation::s_currentScript=NULL;
+int						CConversation::s_currentState=STATE_INACTIVE;
 
 int CConversation::s_currentCharacterId=-1;
 int	CConversation::s_currentTextId=-1;
@@ -133,11 +137,11 @@ void CConversation::init()
 		s_guiText->setObjectXYWH(FRAME_HEIGHT,TEXT_BORDER,FRAME_WIDTH-FRAME_HEIGHT-TEXT_BORDER,FRAME_HEIGHT-(TEXT_BORDER*2));
 		s_guiText->setOt(OT_POS);
 
-	m_fontBank=new ("Conversation Font") FontBank();
-	m_fontBank->initialise(&standardFont);
-	m_fontBank->setOt(0);
+	s_fontBank=new ("Conversation Font") FontBank();
+	s_fontBank->initialise(&standardFont);
+	s_fontBank->setOt(0);
 
-	m_currentState=STATE_INACTIVE;
+	s_currentState=STATE_INACTIVE;
 }
 
 
@@ -163,19 +167,19 @@ void CConversation::think(int _frames)
 {
 	if(isActive())
 	{
-		if(m_currentState==STATE_JUST_ACTIVATED)
+		if(s_currentState==STATE_JUST_ACTIVATED)
 		{
-			m_currentState=STATE_ACTIVE;
+			s_currentState=STATE_ACTIVE;
 		}
 
 		s_guiFrame->think(_frames);
 
 		thinkQuestion();
 
-		m_currentScript->run();
-		if(m_currentScript->isFinished())
+		s_currentScript->run();
+		if(s_currentScript->isFinished())
 		{
-			m_currentState=STATE_INACTIVE;
+			s_currentState=STATE_INACTIVE;
 		}
 	}
 }
@@ -189,7 +193,7 @@ void CConversation::think(int _frames)
   ---------------------------------------------------------------------- */
 void CConversation::render()
 {
-	if(m_currentState==STATE_ACTIVE)
+	if(s_currentState==STATE_ACTIVE)
 	{
 		renderQuestion();
 		s_guiFrame->render();
@@ -219,10 +223,10 @@ void CConversation::trigger(FileEquate _feScript)
 {
 	ASSERT(!isActive());
 
-	m_currentScript=new ("script") CScript();
-	m_currentScript->initialise(_feScript);
+	s_currentScript=new ("script") CScript();
+	s_currentScript->initialise(_feScript);
 
-	m_currentState=STATE_JUST_ACTIVATED;
+	s_currentState=STATE_JUST_ACTIVATED;
 }
 
 
@@ -234,7 +238,7 @@ void CConversation::trigger(FileEquate _feScript)
   ---------------------------------------------------------------------- */
 int CConversation::isActive()
 {
-	return m_currentState!=STATE_INACTIVE;
+	return s_currentState!=STATE_INACTIVE;
 }
 
 
@@ -324,15 +328,15 @@ void CConversation::renderQuestion()
 	int	xbase,y;
 
 	xbase=(512-FRAME_WIDTH)/2;
-	y=256-FRAME_BOTTOM_OFFSET-(TEXT_BORDER/2)-(m_fontBank->getCharHeight()/2);
+	y=256-FRAME_BOTTOM_OFFSET-(TEXT_BORDER/2)-(s_fontBank->getCharHeight()/2);
 
 	switch(s_currentQuestion)
 	{
 		case QUESTION_OK:
 			{
-				m_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
-				m_fontBank->setJustification(FontBank::JUST_RIGHT);
-				m_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__OK);
+				s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+				s_fontBank->setJustification(FontBank::JUST_RIGHT);
+				s_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__OK);
 			}
 			break;
 
@@ -340,25 +344,25 @@ void CConversation::renderQuestion()
 			{
 				if(s_currentSelectedAnswer==0)
 				{
-					m_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+					s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
 				}
 				else
 				{
-					m_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
+					s_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
-				m_fontBank->setJustification(FontBank::JUST_LEFT);
-				m_fontBank->print(xbase+FRAME_HEIGHT,y,STR__YES);
+				s_fontBank->setJustification(FontBank::JUST_LEFT);
+				s_fontBank->print(xbase+FRAME_HEIGHT,y,STR__YES);
 
 				if(s_currentSelectedAnswer==1)
 				{
-					m_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+					s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
 				}
 				else
 				{
-					m_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
+					s_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
-				m_fontBank->setJustification(FontBank::JUST_RIGHT);
-				m_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__NO);
+				s_fontBank->setJustification(FontBank::JUST_RIGHT);
+				s_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__NO);
 			}
 			break;
 

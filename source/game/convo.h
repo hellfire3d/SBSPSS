@@ -37,16 +37,16 @@
 class CConversation
 {
 public:
-	void		init();
-	void		shutdown();
+	static void	init();
+	static void	shutdown();
 
-	void		think(int _frames);
-	void		render();
+	static void	think(int _frames);
+	static void	render();
 
-	void		registerConversationScript(FileEquate _feScript);
+	static void	registerConversationScript(FileEquate _feScript);
 
-	void		trigger(FileEquate _feScript);
-	int			isActive();
+	static void	trigger(FileEquate _feScript);
+	static int	isActive();
 
 	static void	setCharacterAndText(int _characterId,int _textId);
 	static void	setResponseOptions(int _responseOptions);
@@ -114,28 +114,25 @@ private:
 	};
 
 
-	void		thinkQuestion();
-	void		renderQuestion();
+	static void		thinkQuestion();
+	static void		renderQuestion();
 
 
-	// PKG - These don't need to be static..
-	// Make the sprites/text readouts maybe?
 	static class CGUIGroupFrame	*s_guiFrame;
 	static class CGUISprite		*s_guiIcon;
 	static class CGUITextBox	*s_guiText;
+	static class FontBank		*s_fontBank;
 
-	class FontBank				*m_fontBank;
+	static CHAR_ICON_FRAMES		s_characterIconFrames[MAX_CHARS];
 
-	static CHAR_ICON_FRAMES	s_characterIconFrames[MAX_CHARS];
+	static class CScript		*s_currentScript;
+	static int					s_currentState;
 
-	class CScript			*m_currentScript;
-	int						m_currentState;
-
-	static int				s_currentCharacterId;
-	static int				s_currentTextId;
-	static int				s_currentQuestion;
-	static int				s_currentAnswer;
-	static int				s_currentSelectedAnswer;
+	static int					s_currentCharacterId;
+	static int					s_currentTextId;
+	static int					s_currentQuestion;
+	static int					s_currentAnswer;
+	static int					s_currentSelectedAnswer;
 };
 
 

@@ -41,6 +41,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 
 CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 {
@@ -955,8 +959,6 @@ void CNpc::render()
 
 void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 {
-	CConversation *currentConversation = GameScene.getConversation();
-
 	if ( m_data[this->m_type].canTalk )
 	{
 		DVECTOR sourcePos;
@@ -974,9 +976,9 @@ void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 		if ( xDiffSqr + yDiffSqr < 250 )
 		{
-			if( !currentConversation->isActive() )
+			if( !CConversation::isActive() )
 			{
-				currentConversation->trigger( SCRIPTS_SPEECHTEST_DAT );
+				CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
 			}
 		}
 	}

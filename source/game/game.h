@@ -8,10 +8,6 @@
 #include	"system\gstate.h"
 #include	"level\level.h"
 
-#ifndef	__GAME_CONVO_H__
-#include "game\convo.h"
-#endif
-
 #ifndef __GAME_EVENT_H__
 #include "game\event.h"
 #endif
@@ -39,16 +35,14 @@ virtual			~CGameScene()	{;}
 
 		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 		class CPlayer	*getPlayer();
-		CConversation	*getConversation();
 		void	sendEvent( GAME_EVENT evt, CThing *sourceThing );
 	
 private:
 
 		CLevel		Level;
 		class CPlayer	*m_player;
-		CConversation	m_conversation;
-static	FontBank	*s_genericFont;
-static	MATRIX		CamMtx;
+		static	FontBank	*s_genericFont;
+		static	MATRIX		CamMtx;
 //static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry
 
 };

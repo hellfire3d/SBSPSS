@@ -14,6 +14,10 @@
 #include	"gfx\font.h"
 #include	"gfx\fdata.h"
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 #ifndef __PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -64,7 +68,7 @@ void 	CGameScene::init()
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
 		VidSetClearScreen(1);
-		m_conversation.init();
+		CConversation::init();
 		Level.init();
 
 		C2dEnemy	*enemy;
@@ -98,7 +102,7 @@ void	CGameScene::shutdown()
 		CThing::shutdownAndDeleteAllThings();
 
 		Level.shutdown();
-		m_conversation.shutdown();
+		CConversation::shutdown();
 		s_genericFont->dump();		delete s_genericFont;
 }
 
@@ -107,7 +111,7 @@ void 	CGameScene::render()
 {
 		CamMtx.t[2]=ZPos;	// Temp
 
-		m_conversation.render();
+		CConversation::render();
 		CThing::renderAllThings();
 		Level.render();
 }
@@ -116,14 +120,14 @@ void 	CGameScene::render()
 void	CGameScene::think(int _frames)
 {
 #ifdef __USER_paul__		
-	if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
+	if(!CConversation::isActive()&&PadGetDown(0)&PAD_START)
 	{
-		m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
+		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
 	}
 #endif
 
-	m_conversation.think(_frames);
-	if(!m_conversation.isActive())
+	CConversation::think(_frames);
+	if(!CConversation::isActive())
 	{
 		CThing::thinkAllThings(_frames);
 		Level.setCameraCentre(m_player->getPos());
@@ -147,12 +151,6 @@ CPlayer	* CGameScene::getPlayer()
 void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 {
 	CThing::processEventAllThings(evt, sourceThing);
-}
-
-/*****************************************************************************/
-CConversation * CGameScene::getConversation ()
-{
-	return( &m_conversation );
 }
 
 /*****************************************************************************/
