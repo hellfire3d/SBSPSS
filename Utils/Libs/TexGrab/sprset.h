@@ -63,6 +63,7 @@ class FileInfo
 			{
 			CrossHair=false;
 			ForceOffsets=false;
+			MemFrame=NULL;
 			}
 
 		FileInfo(FileInfo const & Fi)	
@@ -120,7 +121,7 @@ class FileInfo
 			return out;
 		}
 
-		void SetInfo(const char * NewFileName,bool NewCrossHair,bool NewZeroColZero, bool NewMoveUVs,bool NewAllowRotate,bool NewShrinkToFit,bool allocateAs16Bit,Frame *NewMemFrame=0)
+		void SetInfo(const char * NewFileName,bool NewCrossHair,bool NewZeroColZero, bool NewMoveUVs,bool NewAllowRotate,bool NewShrinkToFit,bool allocateAs16Bit,Frame *NewMemFrame=NULL)
 			{
 			CrossHair=NewCrossHair;
 			ZeroColZero=NewZeroColZero;
@@ -132,7 +133,8 @@ class FileInfo
 			m_allocateAs16Bit=allocateAs16Bit;
 			if (NewMemFrame)
 			{
-				MemFrame=*NewMemFrame;
+				MemFrame=new Frame;
+				*MemFrame=*NewMemFrame;
 			}
 			/*
 			if we're allocating on a 16 bit pixel boundary then
@@ -189,10 +191,11 @@ class FileInfo
 			{return(m_allocateAs16Bit);}
 
 		bool getHasMemFrame(void) const
-			{return(MemFrame.SeeData()!=NULL);}
+			{return(MemFrame!=NULL);}
+//			{return(MemFrame.SeeData()!=NULL);}
 
 		Frame const &getMemFrame() const 
-			{return(MemFrame);}
+			{return(*MemFrame);}
 
 	char const * GetActualName(void) const
 		{return(ActualFileName);}
@@ -215,7 +218,7 @@ class FileInfo
 
 		int		XOff,YOff;
 
-		Frame	MemFrame;
+		Frame	*MemFrame;
 	};
 
 typedef std::vector<FileInfo> FIVec;

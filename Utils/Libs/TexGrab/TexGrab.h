@@ -55,8 +55,8 @@ public:
 		CTexGrab();
 		~CTexGrab();
 
-		void	AddFile(char *Name);
-		void	AddMemFrame(char *Name,Frame &Frame);
+		void	AddFile(const char *Name);
+		void	AddMemFrame(const char *Name,Frame &Frame);
 
 		void	Process();
 
@@ -78,12 +78,12 @@ public:
 		void	MoveUVs(bool f)							{MyFiles.SetMoveUVs(f);}
 		void	ShrinkToFit(bool f)						{MyFiles.SetShrinkToFit(f);}
 
-		void	SetOutFile(char *Name)					{m_OutFile=Name;}
-		void	SetSprFile(char *Name)					{m_SprFile=Name;}
-		void	SetDebugOut(char *Name)					{m_OutLbm=Name;}
-		void	SetRepFile(char *Name)					{m_ReportFile=Name;}
-		void	SetIncFile(char *Name)					{m_IncOutFile=Name;}
-		void	SetRawTPageFile(char *Name)				{m_rawTpageFile=Name;}
+		void	SetOutFile(const char *Name)			{m_OutFile=Name;}
+		void	SetSprFile(const char *Name)			{m_SprFile=Name;}
+		void	SetDebugOut(const char *Name)			{m_OutLbm=Name;}
+		void	SetRepFile(const char *Name)			{m_ReportFile=Name;}
+		void	SetIncFile(const char *Name)			{m_IncOutFile=Name;}
+		void	SetRawTPageFile(const char *Name)		{m_rawTpageFile=Name;}
 
 		void	MaxSize(int Size)						{MyFiles.SetMaxSize(Size);}
 		void	SetTPage(int Base,int W,int H)			{m_PageBase=Base; m_WidthPages=W; m_HeightPages=H; m_PagePlacements=true;}

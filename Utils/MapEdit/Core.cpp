@@ -335,10 +335,15 @@ Vector3	&ThisCam=GetCam();
 			{
 			float	XS,YS;
 			RECT	ThisRect;
+			float	MoveSpd=GetZoomW();
 
+			if (nFlags & MK_CONTROL)
+			{
+				MoveSpd*=4;
+			}
 			View->GetWindowRect(&ThisRect);
-			XS=ThisCam.z*16;
-			YS=ThisCam.z*16;
+			XS=ThisCam.z*MoveSpd;
+			YS=ThisCam.z*MoveSpd;
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	

@@ -443,6 +443,7 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
 		}
 		TileBrowserWidth=DefTileBrowserWidth;
+		TRACE1("%i\n",Tile.size());
 
 }
 
@@ -472,14 +473,17 @@ CPoint	CTileSet::GetTilePos(int ID)
 /*****************************************************************************/
 BOOL	CTileSet::IsTileValid(int No)			
 {
-		ASSERT(No<Tile.size());
+//		ASSERT(No<Tile.size());
+		if (No>Tile.size()) return(FALSE);
 		{return(Tile[No].IsValid());}
 }
 
 /*****************************************************************************/
 BOOL	CTileSet::IsTileValidGB(int No)		
 {
-		ASSERT(No<Tile.size());
+//		ASSERT(No<Tile.size());
+		if (No>Tile.size()) return(FALSE);
+
 		return(Tile[No].IsValidGB());
 }
 

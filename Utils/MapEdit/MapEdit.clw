@@ -25,7 +25,7 @@ Resource4=IDD_DIALOGBAR (English (U.S.))
 Resource5=IDR_MAINFRAME (English (U.S.))
 Class8=CMultiBar
 Resource6=IDD_MAPSIZE
-Resource7=IDR_TOOLBAR (English (U.S.))
+Resource7=IDD_NEWMAP
 Class9=CLayerList
 Class10=CMapSizeDlg
 Resource8=IDD_ABOUTBOX (English (U.S.))
@@ -35,7 +35,7 @@ Resource9=IDD_LAYERTILE_GUI
 Resource10=IDD_MULTIBAR (English (U.S.))
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_NEWMAP
+Resource11=IDR_TOOLBAR (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
@@ -86,7 +86,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_ZOOM_IN
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 

@@ -154,7 +154,7 @@ GString	OutName=OutFile+".A3d";
 
 // Write Tris
 		FileHdr.TriCount=FaceList.GetTriFaceCount();
-		FileHdr.TriList=(sTri*)FaceList.WriteTriList(File);
+		FileHdr.TriList=(sTri*)FaceList.WriteSkinList(File);
 		printf("%i Tris\n",FileHdr.TriCount);
 // Write Quads
 		FileHdr.QuadCount=FaceList.GetQuadFaceCount();

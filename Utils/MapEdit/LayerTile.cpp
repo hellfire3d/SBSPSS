@@ -157,27 +157,33 @@ CTileBank	&TileBank=Core->GetTileBank();
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
 CMap		&Brush=TileBank.GetActiveBrush();
+Vector3		Ofs;
 
 		if (!Brush.IsValid()) return;
 
 		if (CursPos.x<0 || CursPos.y<0) return;
-		ThisCam.x-=CursPos.x;
-		ThisCam.y-=CursPos.y;
+
+		Ofs.x=-(CursPos.x-(int)ThisCam.x);
+		Ofs.y=-(CursPos.y-(int)ThisCam.y);
+		ThisCam.x-=(int)ThisCam.x;
+		ThisCam.y-=(int)ThisCam.y;
+TRACE2("-> %f %f\n",Ofs.x,Ofs.y);
+
 
 		if (Is3d && Render3dFlag)
 		{
 			glEnable(GL_DEPTH_TEST);
-			Render(Core,ThisCam,Brush,TRUE,0.5);
+			Render(Core,ThisCam,Brush,TRUE,0.5,&Ofs);
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			Render(Core,ThisCam,Brush,FALSE,0.5);
+			Render(Core,ThisCam,Brush,FALSE,0.5,&Ofs);
 		}
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,BOOL Render3d,float Alpha)
+void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,BOOL Render3d,float Alpha,Vector3 *Ofs)
 {
 int			MapWidth=ThisMap.GetWidth();
 int			MapHeight=ThisMap.GetHeight();
@@ -187,19 +193,39 @@ float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
 
+int		StartX=(int)ThisCam.x;
+int		StartY=(int)ThisCam.y;
+float	ShiftX=ThisCam.x - (int)ThisCam.x;
+float	ShiftY=ThisCam.y - (int)ThisCam.y;
+
+		if (StartX<0) StartX=0;
+		if (StartY<0) StartY=0;
+
+int		DrawW=ZoomW+8;
+int		DrawH=ZoomH+8;
+
+		if (StartX+DrawW>MapWidth)	DrawW=MapWidth-StartX;
+		if (StartY+DrawH>MapHeight)	DrawH=MapHeight-StartY;
+
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
 		glScalef(Scale.x,Scale.y,Scale.z);
-		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ShiftX,ShiftY,0);		// Set scroll offset
 		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
-		glColor4f(1,1,1,Alpha);
-		for (int YLoop=0; YLoop<MapHeight; YLoop++)
+
+		if (Ofs)
 		{
-			for (int XLoop=0; XLoop<MapWidth; XLoop++)
+		glTranslatef(-Ofs->x,Ofs->y,0);		// Set scroll offset
+		}
+
+		glColor4f(1,1,1,Alpha);
+		for (int YLoop=0; YLoop<DrawH; YLoop++)
+		{
+			for (int XLoop=0; XLoop<DrawW; XLoop++)
 			{
-				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
+				sMapElem	&ThisElem=ThisMap.Get(StartX+XLoop,StartY+YLoop);
 				if (ThisElem.Tile && Core->IsTileValid(ThisElem.Set,ThisElem.Tile))
 				{ // Render Non Zero Tiles
 					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
@@ -208,7 +234,7 @@ Vector3		&Scale=Core->GetScaleVector();
 				}
 				glTranslatef(1.0f,0,0);	// Next X
 			}
-			glTranslatef(-MapWidth,-1,0); // Next y, rewind to start X
+			glTranslatef(-DrawW,-1,0); // Next y, rewind to start X
 		}
 		glPopMatrix();
 }
@@ -306,6 +332,20 @@ GLint		Viewport[4];
 GLuint		SelectBuffer[SELECT_BUFFER_SIZE];
 int			TileID=0;
 CPoint		&CursorPos=Core->GetCursorPos();
+
+int		StartX=(int)ThisCam.x;
+int		StartY=(int)ThisCam.y;
+float	ShiftX=ThisCam.x - (int)ThisCam.x;
+float	ShiftY=ThisCam.y - (int)ThisCam.y;
+
+		if (StartX<0) StartX=0;
+		if (StartY<0) StartY=0;
+
+int		DrawW=ZoomW+8;
+int		DrawH=ZoomH+8;
+
+		if (StartX+DrawW>MapWidth)	DrawW=MapWidth-StartX;
+		if (StartY+DrawH>MapHeight)	DrawH=MapHeight-StartY;
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
@@ -324,13 +364,15 @@ CPoint		&CursorPos=Core->GetCursorPos();
 		glPushMatrix();
 		glLoadIdentity();
 		glScalef(Scale.x,Scale.y,Scale.z);
-		glTranslatef(-ThisCam.x,ThisCam.y,0);
+//		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ShiftX,ShiftY,0);
 		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
-		for (int YLoop=0; YLoop<MapHeight; YLoop++)
+		for (int YLoop=0; YLoop<DrawH; YLoop++)
 		{
-			for (int XLoop=0; XLoop<MapWidth; XLoop++)
+			for (int XLoop=0; XLoop<DrawW; XLoop++)
 			{
+				TileID=(XLoop+StartX)+(((YLoop+StartY)*MapWidth));
 				glLoadName (TileID);
 				glBegin (GL_QUADS); 
 					BuildGLQuad(XLoop,XLoop+1,-YLoop,-YLoop+1,0);

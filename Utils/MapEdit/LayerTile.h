@@ -75,7 +75,7 @@ public:
 
 
 protected:
-		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f);
+		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
 		void			RenderCursorPaint(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
 		BOOL			Paint(CMap &Blk,CPoint &CursorPos);

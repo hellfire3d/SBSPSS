@@ -113,7 +113,7 @@ void	CTexGrab::Process()
 	Purpose:	Add bitmaps to file list
 	Params:		Name = Filename
   ---------------------------------------------------------------------- */
-void	CTexGrab::AddFile(char *Name)
+void	CTexGrab::AddFile(const char *Name)
 {
 GString	UpperName(Name);
 			
@@ -127,7 +127,7 @@ GString	UpperName(Name);
 	Purpose:	
 	Params:		
   ---------------------------------------------------------------------- */
-void	CTexGrab::AddMemFrame(char *Name,Frame &Frame)
+void	CTexGrab::AddMemFrame(const char *Name,Frame &Frame)
 {
 GString	UpperName(Name);
 			
