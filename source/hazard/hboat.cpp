@@ -169,7 +169,7 @@ void CNpcBoatHazard::collidedWith( CThing *_thisThing )
 			{
 				CPlayer *player = (CPlayer *) _thisThing;
 
-				player->takeDamage( DAMAGE__KILL_OUTRIGHT );
+				player->takeDamage( DAMAGE__HIT_ENEMY, REACT__GET_DIRECTION_FROM_THING, this );
 
 				break;
 			}
