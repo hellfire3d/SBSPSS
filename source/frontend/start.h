@@ -22,6 +22,10 @@
 #include "frontend\frontend.h"
 #endif
 
+#ifndef	__GUI_GREADOUT_H__
+#include "gui\greadout.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -57,6 +61,12 @@ private:
 	int					m_selectedSlot;
 	int					m_escapeToTitles;
 	int					m_shuttingDown;
+
+	class CGUIControlFrame					*m_guiFrame;
+	int										m_level;
+	static int								s_levelValues[];
+	static CGUITextReadout::TextReadoutData	s_levelReadoutText[];
+	int										m_startGame;
 
 };
 

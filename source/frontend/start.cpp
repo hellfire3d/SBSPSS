@@ -34,7 +34,13 @@
 #include "gfx\prim.h"
 #endif
 
-#include "gfx\font.h"
+#ifndef __GUI_GFACTORY_H__
+#include "gui\gfactory.h"
+#endif
+
+#ifndef __GUI_GFRAME_H__
+#include "gui\gframe.h"
+#endif
 
 
 /*	Std Lib
@@ -64,19 +70,45 @@
 	Vars
 	---- */
 
+int CFrontEndStart::s_levelValues[]=
+{
+	0,
+	1,
+	2,
+	3,
+};
+CGUITextReadout::TextReadoutData CFrontEndStart::s_levelReadoutText[]=
+{
+	{0,STR__DEBUG__LEVEL_SELECT_00},
+	{1,STR__DEBUG__LEVEL_SELECT_01},
+	{2,STR__DEBUG__LEVEL_SELECT_02},
+	{3,STR__DEBUG__LEVEL_SELECT_03},
+};
+
+extern int s_globalLevelSelectThing;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-FontBank	*s_smallFont;
 void CFrontEndStart::init()
 {
-	s_smallFont=new ("Start SmallFont") FontBank();
-	s_smallFont->initialise(&standardFont);
-	s_smallFont->setJustification(FontBank::JUST_CENTRE);
-	s_smallFont->setOt(5);
+	m_guiFrame=new ("optionsframe") CGUIControlFrame();
+	m_guiFrame->init(NULL);
+	m_guiFrame->setObjectXYWH(50,40,412,100);
+
+	CGUIFactory::createCycleButtonFrame(m_guiFrame,
+										50,10,312,40,
+										STR__DEBUG__LEVEL_SELECT,
+										&m_level,s_levelValues,s_levelReadoutText);
+
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										50,50,312,40,
+										STR__DEBUG__LEVEL_SELECT_START,
+										&m_startGame,true);
 }
 
 /*----------------------------------------------------------------------
@@ -87,7 +119,7 @@ void CFrontEndStart::init()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::shutdown()
 {
-	s_smallFont->dump();		delete s_smallFont;
+	m_guiFrame->shutdown();
 }
 
 /*----------------------------------------------------------------------
@@ -98,10 +130,12 @@ void CFrontEndStart::shutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::select()
 {
+	m_guiFrame->select();
 	m_shuttingDown=false;
 	m_selectedSlot=NO_SLOT_SELECTED;
 	m_escapeToTitles=false;
 	CFader::setFadingIn();
+	m_startGame=false;
 }
 
 /*----------------------------------------------------------------------
@@ -112,6 +146,7 @@ void CFrontEndStart::select()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::unselect()
 {
+	m_guiFrame->unselect();
 }
 
 /*----------------------------------------------------------------------
@@ -132,10 +167,7 @@ void CFrontEndStart::render()
 	setRGB3(g4,50, 0,50);
 	AddPrimToList(g4,MAX_OT-1);
 
-	if(!CFader::isFading())
-	{
-		s_smallFont->print(256,120,"Press START to enter game scene");
-	}
+	m_guiFrame->render();
 }
 
 /*----------------------------------------------------------------------
@@ -144,23 +176,21 @@ void CFrontEndStart::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
 void CFrontEndStart::think(int _frames)
 {
+	if(!CFader::isFading())
+	{
+		m_guiFrame->think(_frames);
+	}
+
 	if(!m_shuttingDown)
 	{
-/////////// PKG		
-		if(PadGetDown(0)&PAD_START&&!CFader::isFading())
-{
-	m_selectedSlot=0;
-}
-/////////// PKG		
-		if(m_selectedSlot!=NO_SLOT_SELECTED||
-		   m_escapeToTitles)
-		{
+		if(/*m_selectedSlot!=NO_SLOT_SELECTED||
+		   m_escapeToTitles||*/
+		   m_startGame)
+		{			
 			m_shuttingDown=true;
+			s_globalLevelSelectThing=m_level;
 			CFader::setFadingOut();
 		}
 	}
