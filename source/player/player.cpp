@@ -155,7 +155,7 @@ void	CPlayer::think(int _frames)
 	}
 #endif
 	if(Pos.vx<0)Pos.vx=0;
-	if(Pos.vy<0)Pos.vy=500;
+	if(Pos.vy<0)Pos.vy=0;
 }
 
 /*----------------------------------------------------------------------
