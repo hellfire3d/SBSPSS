@@ -239,7 +239,7 @@ void	CGameScene::think(int _frames)
 	else if(s_levelFinished)
 	{
 		s_globalLevelSelectThing++;
-		s_globalLevelSelectThing&=3;
+//		s_globalLevelSelectThing&=3;
 
 		shutdownLevel();
 		initLevel();
