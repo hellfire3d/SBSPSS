@@ -57,8 +57,9 @@ void CProjectile::init()
 
 	m_spriteBank=new ("projectile sprites") SpriteBank();
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
+	m_spriteFrame = FRM__SPIKE;
 
-	m_heading = 0;
+	m_initHeading = m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;
 	m_movementType = PROJECTILE_DUMBFIRE;
 	m_lifetimeType = PROJECTILE_FINITE_LIFE;
@@ -74,7 +75,7 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading )
 {
 	init();
 
-	m_heading = initHeading;
+	m_initHeading = m_heading = initHeading;
 	m_initPos = Pos = initPos;
 }
 
@@ -98,6 +99,11 @@ void CProjectile::shutdown()
 	m_spriteBank->dump();		delete m_spriteBank;
 
 	CEnemyProjectileThing::shutdown();
+}
+
+void CProjectile::setGraphic( int frame )
+{
+	m_spriteFrame = frame;
 }
 
 bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
@@ -253,9 +259,10 @@ void CProjectile::think(int _frames)
 				{
 					case PROJECTILE_RETURN:
 					{
-						if ( processTargetSeek( _frames, Parent->getPos() ) )
+						if ( processTargetSeek( _frames, m_initPos ) )
 						{
 							Parent->processEvent( PROJECTILE_RETURNED_TO_SOURCE_EVENT, this );
+							m_heading = m_initHeading;
 						}
 
 						break;
@@ -352,7 +359,7 @@ void CProjectile::render()
 
 	//m_spriteBank->printFT4(FRM__SPIKE,x,y,0,0,0);
 
-	frameHdr = m_spriteBank->getFrameHeader(FRM__SPIKE);
+	frameHdr = m_spriteBank->getFrameHeader( m_spriteFrame );
 
 	m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, m_ot );
 }

@@ -94,7 +94,7 @@ public:
 	virtual u8			canCollideWithEnemy()									{return( true );}
 	virtual void		think(int _frames);
 	virtual void		render();
-	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+	virtual void		processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
 	NPC_UNIT_TYPE		getType()												{return( m_type );}

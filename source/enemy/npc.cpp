@@ -577,7 +577,7 @@ void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 
 void CNpcEnemy::setHeading( s32 xPos, s32 yPos )
 {
-	m_heading = ratan2( ( yPos << 4 ) - Pos.vy, ( xPos << 4 ) - Pos.vx );
+	m_heading = ( ratan2( ( yPos << 4 ) - Pos.vy, ( xPos << 4 ) - Pos.vx ) ) & 4095;
 }
 
 
@@ -628,6 +628,7 @@ void CNpcEnemy::init()
 	m_isCaught = false;
 	m_isBlowerOn = false;
 	m_speed = m_data[m_type].speed;
+	m_heading = 0;
 
 	updateCollisionArea();
 }

@@ -49,7 +49,6 @@ public:
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
 	void				shutdown();
 	void				think(int _frames);
-	void				setPos( DVECTOR newPos )								{Pos = newPos;}
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setMovementType( PROJECTILE_MOVEMENT_TYPE moveType );
@@ -57,8 +56,10 @@ public:
 	void				setState( PROJECTILE_STATE newState );
 	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
+	void				setHeading( s16 newHeading )							{m_heading = newHeading;}
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setOt( u8 newOt )										{m_ot=newOt;}
+	void				setGraphic( int frame );
 
 private:
 	class CLayerCollision	*m_layerCollision;
@@ -71,6 +72,7 @@ protected:
 	class SpriteBank							*m_spriteBank;
 	DVECTOR										m_initPos;
 	s16											m_heading;
+	s16											m_initHeading;
 	s32											m_lifetime;
 	s32											m_extension;
 	PROJECTILE_MOVEMENT_TYPE					m_movementType;
@@ -78,6 +80,7 @@ protected:
 	PROJECTILE_STATE							m_state;
 	u16											m_turnSpeed;
 	u8											m_ot;
+	int											m_spriteFrame;
 };
 
 /*****************************************************************************/
