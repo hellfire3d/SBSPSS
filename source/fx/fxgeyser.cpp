@@ -23,7 +23,7 @@ void	CFXGeyser::init(DVECTOR const &_Pos)
 		currentFrame=FRM__GUSH000;
 		SoundId = NOT_PLAYING;
 		BasePos=_Pos;
-		OtPos++;
+		OtPos+=3;
 }
 
 /*****************************************************************************/
@@ -105,6 +105,12 @@ int			W;
 		W=(Ft4->x1-Ft4->x0)/2;
 		Ft4->x0-=W;	Ft4->x1+=W;
 		Ft4->x2-=W;	Ft4->x3+=W;
+		if (Height<8)
+		{
+			Ft4->x0+=2;	Ft4->x1-=2;
+			Ft4->x2+=2;	Ft4->x3-=2;
+		}
+		
 
 int		FrameW=Ft4->x1-Ft4->x0;
 		setCollisionCentreOffset(FrameW>>1,-Height/2);
