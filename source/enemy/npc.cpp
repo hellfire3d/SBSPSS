@@ -568,6 +568,16 @@ void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::setStartPosHighRes( s32 xPos, s32 yPos )
+{
+	Pos.vx = xPos;
+	Pos.vy = yPos;
+
+	m_initPos = m_base = Pos;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::setHeading( s32 xPos, s32 yPos )
 {
 	m_heading = ( ratan2( ( ( yPos << 4 ) + 16 ) - Pos.vy, ( ( xPos << 4 ) + 8 ) - Pos.vx ) ) & 4095;
@@ -1587,7 +1597,7 @@ bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u
 {
 	s32 moveX, moveY;
 	s16 headingToTarget;
-	
+
 	headingToTarget = ratan2( yDist, xDist );
 
 	s32 preShiftX = _frames * 3 * rcos( headingToTarget );

@@ -110,6 +110,7 @@ public:
 	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
+	void				setStartPosHighRes( s32 xPos, s32 yPos );
 	virtual u8			hasBeenAttacked();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos )						{hasBeenAttacked();}
 	virtual u8			canBeCaughtByNet();
