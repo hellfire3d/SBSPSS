@@ -58,7 +58,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 		DVECTOR *playerVel = player->getMoveVelocity();
 
-		s32 speedChange = -playerVel->vx << 8;
+		/*s32 speedChange = -playerVel->vx << 8;
 
 		if ( speedChange > ( _frames << 5 ) )
 		{
@@ -78,7 +78,9 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		else if ( m_currentSpeed < -( m_speed << 8 ) )
 		{
 			m_currentSpeed = -( m_speed << 8 );
-		}
+		}*/
+
+		m_currentSpeed = -playerVel->vx << 4;
 
 		/*s32 playerX = playerPos.vx - this->Pos.vx;
 
@@ -107,7 +109,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	{
 		// reduce speed
 
-		s32 speedReduce = -m_currentSpeed;
+		/*s32 speedReduce = -m_currentSpeed;
 
 		if ( speedReduce > _frames )
 		{
@@ -118,13 +120,17 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 			speedReduce = -_frames;
 		}
 
-		m_currentSpeed += speedReduce;
+		m_currentSpeed += speedReduce;*/
+
+		m_currentSpeed = 0;
 	}
 
-	m_moveXHighRes += m_currentSpeed * _frames;
+	/*m_moveXHighRes += m_currentSpeed * _frames;
 
 	moveX = m_moveXHighRes >> 8;
-	m_moveXHighRes -= moveX << 8;
+	m_moveXHighRes -= moveX << 8;*/
+
+	moveX = ( m_currentSpeed * _frames ) >> 8;
 
 	// check for collision
 
@@ -148,7 +154,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	if ( m_contact )
 	{
 		DVECTOR shove;
-		shove.vx = moveX * _frames;
+		shove.vx = moveX;
 		shove.vy = 0;
 		player->shove(shove);
 	}
