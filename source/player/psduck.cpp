@@ -23,12 +23,6 @@
 #include "player\player.h"
 #endif
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
-
-
-
 
 /*	Std Lib
 	------- */

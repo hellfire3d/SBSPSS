@@ -23,10 +23,6 @@
 #include "player\player.h"
 #endif
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
-
 #ifndef __GAME_GAMEBUBS_H__
 #include "game\gamebubs.h"
 #endif

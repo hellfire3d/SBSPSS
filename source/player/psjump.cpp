@@ -23,10 +23,6 @@
 #include "player\player.h"
 #endif
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
-
 #ifndef __SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
