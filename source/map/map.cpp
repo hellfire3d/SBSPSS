@@ -134,7 +134,6 @@ void CMapScene::init()
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
 	m_font->setOt(10);
-	m_font->setColour(0,0,0);
 	m_font->setJustification(FontBank::JUST_LEFT);
 
 	m_spriteBank=new ("map screen sprite") SpriteBank();
@@ -183,6 +182,7 @@ void CMapScene::render()
 	POLY_FT4	*ft4;
 	
 	// Render spatula counts and quest items
+	m_font->setColour(253,251,67);
 	i=0;
 	ypos=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER;
 	for(y=0;y<2;y++)
