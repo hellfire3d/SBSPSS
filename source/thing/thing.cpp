@@ -1092,6 +1092,16 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 #endif
 
 }
+
+/****************************************************************************************/
+void	CThing::calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos)
+{
+DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - CamPos.vx;
+		renderPos.vy = Pos.vy - CamPos.vy;
+}
+
 /****************************************************************************************/
 #ifdef	SHOW_BBOX
 #include "gfx\prim.h"

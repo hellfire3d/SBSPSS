@@ -248,52 +248,52 @@ typedef	u32	sOT;
 
 // Extra prims :o)
 #define GetPrimTF3() 		GetPrim(TPOLY_F3);\
-				   			setTPolyF3(CurrPrim-sizeof(TPOLY_F3))
+				   			setTPolyF3((TPOLY_F3*)CurrPrim-sizeof(TPOLY_F3))
 
 #define GetPrimTF4() 		GetPrim(TPOLY_F4);\
-				   			setTPolyF4(CurrPrim-sizeof(TPOLY_F4))
+				   			setTPolyF4((TPOLY_F4*)CurrPrim-sizeof(TPOLY_F4))
 
 #define GetPrimTG3()		GetPrim(TPOLY_G3);\
-				   			setTPolyG3(CurrPrim-sizeof(TPOLY_G3))
+				   			setTPolyG3((TPOLY_G3*)CurrPrim-sizeof(TPOLY_G3))
 
 #define GetPrimTG4() 		GetPrim(TPOLY_G4);\
-				   			setTPolyG4(CurrPrim-sizeof(TPOLY_G4))
+				   			setTPolyG4((TPOLY_G4*)CurrPrim-sizeof(TPOLY_G4))
 
 #define GetPrimTLF2() 		GetPrim(TLINE_F2);  \
-							setTLineF2(CurrPrim-sizeof(TLINE_F2))
+							setTLineF2((TLINE_F2*)CurrPrim-sizeof(TLINE_F2))
 
 #define GetPrimTLF3() 		GetPrim(TLINE_F3);\
-							setTLineF3(CurrPrim-sizeof(TLINE_F3))
+							setTLineF3((TLINE_F3*)CurrPrim-sizeof(TLINE_F3))
 
 #define GetPrimTLF4() 		GetPrim(TLINE_F4);\
 							setTLineF4((TLINE_F4*)CurrPrim-1)
 
 #define GetPrimTLG2() 		GetPrim(TLINE_G2);\
-							setTLineG2(CurrPrim-sizeof(TLINE_G2))
+							setTLineG2((TLINE_G2*)CurrPrim-sizeof(TLINE_G2))
 
 #define GetPrimTLG3() 		GetPrim(TLINE_G3);\
-							setTLineG3(CurrPrim-sizeof(TLINE_G3))
+							setTLineG3((TLINE_G3*)CurrPrim-sizeof(TLINE_G3))
 
 #define GetPrimTLG4() 		GetPrim(TLINE_G4);\
-							setTLineG4(CurrPrim-sizeof(TLINE_G4))
+							setTLineG4((TLINE_G4*)CurrPrim-sizeof(TLINE_G4))
 
 #define GetPrimTSPRT8() 	GetPrim(TSPRT8);\
-							setTSprt8(CurrPrim-sizeof(TSPRT8))
+							setTSprt8((TSPRT8*)CurrPrim-sizeof(TSPRT8))
 
 #define GetPrimTSPRT16() 	GetPrim(TSPRT16);\
-							setTSprt16(CurrPrim-sizeof(TSPRT16))
+							setTSprt16((TSPRT16*)CurrPrim-sizeof(TSPRT16))
 
 #define GetPrimTSPRT() 		GetPrim(TSPRT);\
-							setTSprt(CurrPrim-sizeof(TSPRT))
+							setTSprt((TSPRT*)CurrPrim-sizeof(TSPRT))
 
 #define GetPrimTTILE8() 	GetPrim(TTILE8);\
-							setTile(CurrPrim-sizeof(TTILE8))
+							setTile((TTILE8*)CurrPrim-sizeof(TTILE8))
 
 #define GetPrimTTILE16() 	GetPrim(TTILE16);\
-							setTile(CurrPrim-sizeof(TTILE16))
+							setTile((TTILE16*)CurrPrim-sizeof(TTILE16))
 
 #define GetPrimTTILE() 		GetPrim(TTILE);\
-							setTile(CurrPrim-sizeof(TTILE))
+							setTile((TTILE*)CurrPrim-sizeof(TTILE))
 
 
 /********************************************************************************************************/

@@ -51,50 +51,50 @@ class	CThing;
 class	CThingManager
 {
 public:
-	static void		init();
-	static void		shutdown();
-	static void		killAllThingsForRespawn();
+static	void		init();
+static	void		shutdown();
+static	void		killAllThingsForRespawn();
 
-	static void		initAllThings();
-	static void		thinkAllThings(int _frames);
-	static void		renderAllThings();
-	static void		processEventAllThings(GAME_EVENT _event,CThing *_sourceThing);
+static	void		initAllThings();
+static	void		thinkAllThings(int _frames);
+static	void		renderAllThings();
+static	void		processEventAllThings(GAME_EVENT _event,CThing *_sourceThing);
 
-	static CThing*	checkCollisionAreaAgainstThings(CRECT *_area,int _type,int _continue);
-	static void		initCollision();
-	static void		matchWheelsAndWeights();
-	static void		matchPressureSwitches();
-	static void		matchGaryTriggers();
+static	CThing		*checkCollisionAreaAgainstThings(CRECT *_area,int _type,int _continue);
+static	void		initCollision();
+static	void		matchWheelsAndWeights();
+static	void		matchPressureSwitches();
+static	void		matchGaryTriggers();
 
-	static sBBox	&getRenderBBox()			{return(m_RenderBBox);}
-	static sBBox	&getThinkBBox()				{return(m_ThinkBBox);}
+static	sBBox		&getRenderBBox()			{return(m_RenderBBox);}
+static	sBBox		&getThinkBBox()				{return(m_ThinkBBox);}
 
 protected:
-	static void		initList(CThing **List);
-	static void		addToThingList(CThing *_this);
-	static void		removeFromThingList(CThing *_this);
+static	void		initList(CThing **List);
+static	void		addToThingList(CThing *_this);
+static	void		removeFromThingList(CThing *_this);
 
-	static void		addToCollisionList(CThing *_this);
+static void			addToCollisionList(CThing *_this);
 
-friend class CThing;
+friend	class CThing;
 
 private:
-	static CThing			*s_thingLists[];
-	static int				s_initialised;
+static	CThing		*s_thingLists[];
+static	int			s_initialised;
 
-	static CThing			*s_CollisionLists[];
-	static sBBox			m_RenderBBox;
-	static sBBox			m_ThinkBBox;
+static	CThing		*s_CollisionLists[];
+static	sBBox		m_RenderBBox;
+static	sBBox		m_ThinkBBox;
 public:
 // FreeList Stuff
-	static void		initFreeList();
-	static void		resetFreeList();
-	static void		shutdownFreeList();
-	static	CThing	*GetThing(int Type,int SubType);
-	static	void	DeleteThing(CThing *Thing);
+static	void		initFreeList();
+static	void		resetFreeList();
+static	void		shutdownFreeList();
+static	CThing		*GetThing(int Type,int SubType);
+static	void		DeleteThing(CThing *Thing);
 
 private:
-	static CThing			**s_FreeList[];
+static	CThing		**s_FreeList[];
 };
 
 
@@ -150,6 +150,7 @@ virtual	void	render();
 		void	setToShutdown(bool f=true)								{m_isShuttingDown = f;}
 		u8		isSetToShutdown()										{return( m_isShuttingDown);}
 virtual int		dontKillDuringLevelRespawn()							{return false;}
+		void	calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos);
 
 // Linkage
 		void			addChild(CThing *Child);
