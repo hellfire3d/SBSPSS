@@ -1077,6 +1077,14 @@ SOURCE=..\..\..\source\player\player.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\projectl\prnpc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\projectl\prnpc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\projectl\projectl.cpp
 # End Source File
 # Begin Source File

@@ -116,7 +116,10 @@ public:
 
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
+
+	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
+	void				fireAsProjectile( s16 heading );
 
 protected:
 	class CLayerCollision	*m_layerCollision;
@@ -212,7 +215,7 @@ protected:
 		NPC_MOVEMENT_FUNC				movementFunc;
 		NPC_CLOSE_FUNC					closeFunc;
 		NPC_TIMER_FUNC					timerFunc;
-		bool							canTalk;
+		u8								canTalk;
 		u8								speed;
 		u16								turnSpeed;
 		DETECT_TYPE						detectCollision;
@@ -222,8 +225,9 @@ protected:
 		NPC_SHOT_FUNC					shotFunc;
 		u16								dieAnim;
 		u16								recoilAnim;
-		bool							canBeNetted;
-		bool							respawning;
+		u8								canBeNetted;
+		u8								respawning;
+		u8								canBeSuckedUp;
 	}
 	NPC_DATA;
 
@@ -250,7 +254,7 @@ protected:
 	void				reinit();
 
 	void				processCoralBlower( int _frames );
-	void				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist );
+	bool				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist );
 
 	// data
 

@@ -227,6 +227,11 @@ void CProjectile::setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType )
 
 void CProjectile::think(int _frames)
 {
+	if ( _frames > 2 )
+	{
+		_frames = 2;
+	}
+
 	CEnemyProjectileThing::think( _frames );
 
 	switch( m_movementType )
@@ -469,6 +474,11 @@ void CPlayerProjectile::setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType )
 
 void CPlayerProjectile::think(int _frames)
 {
+	if ( _frames > 2 )
+	{
+		_frames = 2;
+	}
+
 	CPlayerProjectileThing::think( _frames );
 
 	m_frame += _frames;

@@ -51,6 +51,10 @@
 #include "projectl\projectl.h"
 #endif
 
+#ifndef __PROJECTL_PRNPC_H__
+#include "projectl\prnpc.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef __ENEMY_NSJFISH_H__
@@ -700,6 +704,8 @@ void CNpcEnemy::setToShutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool gitTrigger = false;
+
 int CNpcEnemy::getFrameCount()
 {
 	return( m_actorGfx->getFrameCount( m_animNo ) );
@@ -798,6 +804,11 @@ void CNpcEnemy::think(int _frames)
 	if ( !m_isCaught )
 	{
 		processTimer( moveFrames );
+	}
+
+	if ( gitTrigger )
+	{
+		fireAsProjectile( 0 );
 	}
 }
 
@@ -1441,7 +1452,7 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
+bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
 {
 	s32 moveX, moveY;
 	s16 headingToTarget;
@@ -1503,6 +1514,22 @@ void CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
 
 	Pos.vx += moveX;
 	Pos.vy += moveY;
+
+	if ( moveX || moveY )
+	{
+		return( false );
+	}
+	else
+	{
+		return( true );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcEnemy::canBeSuckedUp()
+{
+	return( m_data[m_type].canBeSuckedUp );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1511,6 +1538,8 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos, int _frames )
 {
 	m_isCaught = true;
 	m_isBlowerOn = true;
+
+	bool returnVal = false;
 
 	switch( m_state )
 	{
@@ -1521,7 +1550,7 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos, int _frames )
 			s32 targetXDist = suckPos->vx - Pos.vx;
 			s32 targetYDist = suckPos->vy - Pos.vy;
 
-			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+			returnVal = processCoralBlowerMovement( _frames, targetXDist, targetYDist );
 
 			break;
 		}
@@ -1543,7 +1572,7 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos, int _frames )
 		}
 	}
 
-	return( false );
+	return( returnVal );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1593,4 +1622,26 @@ void CNpcEnemy::processCoralBlower( int _frames )
 	}
 
 	m_isBlowerOn = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::fireAsProjectile( s16 heading )
+{
+	m_isActive = false;
+	setToShutdown();
+
+	DVECTOR newPos = Pos;
+
+	newPos.vy -= 10;
+
+	CEnemyAsProjectile *projectile;
+	projectile = new( "blower projectile" ) CEnemyAsProjectile;
+	projectile->init(	newPos,
+						heading,
+						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+						5*60);
+	projectile->setLayerCollision( m_layerCollision );
+	projectile->setGraphic( m_actorGfx );
 }

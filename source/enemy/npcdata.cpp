@@ -110,48 +110,6 @@
 
 CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 {
-	/*{	// NPC_FALLING_ITEM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
-		NPC_SENSOR_USER_CLOSE,
-		NPC_MOVEMENT_STATIC,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		8,
-		128,
-		DETECT_NO_COLLISION,
-		DAMAGE__SQUASH_ENEMY,
-		0,
-		0,
-		NPC_SHOT_GENERIC,
-		0,
-		0,
-		false,
-		false,
-	},
-
-	{	// NPC_FISH_HOOK
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_STATIC,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		128,
-		DETECT_NO_COLLISION,
-		DAMAGE__NONE,
-		0,
-		0,
-		NPC_SHOT_GENERIC,
-		0,
-		0,
-		false,
-		false,
-	},*/
-
 	{	// NPC_DUST_DEVIL
 		ACTORS_DUSTDEVIL_SBK,
 		ANIM_DUSTDEVIL_TWIST,
@@ -171,70 +129,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
-
-	/*{	// NPC_PENDULUM
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_STATIC,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		2048,
-		DETECT_NO_COLLISION,
-		DAMAGE__HIT_ENEMY,
-		0,
-		0,
-		NPC_SHOT_GENERIC,
-		0,
-		0,
-		false,
-		false,
-	},*/
-
-	/*{	// NPC_FIREBALL
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_STATIC,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		40,
-		2048,
-		DETECT_NO_COLLISION,
-		DAMAGE__BURN_ENEMY,
-		0,
-		0,
-		NPC_SHOT_GENERIC,
-		0,
-		0,
-		false,
-		false,
-	},*/
-
-	/*{	// NPC_SAW_BLADE
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
-		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_STATIC,
-		NPC_CLOSE_NONE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		2048,
-		DETECT_NO_COLLISION,
-		DAMAGE__HIT_ENEMY,
-		0,
-		0,
-		NPC_SHOT_GENERIC,
-		0,
-		0,
-		false,
-		false,
-	},*/
 
 	{	// NPC_SMALL_JELLYFISH_1
 		0,//ACTORS_JELLYFISH1_SBK,
@@ -253,6 +149,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		FRM_JELLYFISH1_SWIM1,
+		true,
 		true,
 		true,
 	},
@@ -276,6 +173,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		true,
+		true,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -295,6 +193,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -318,6 +217,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_ANEMONE_3
@@ -337,6 +237,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -360,6 +261,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_SKELETALFISH_GETHIT,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_CLAM_JUMP
@@ -379,6 +281,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -402,6 +305,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_SQUID_DART
@@ -423,6 +327,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_FISH_FOLK
@@ -442,6 +347,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -465,6 +371,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_CATERPILLAR_GETHIT,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SEA_SNAKE
@@ -484,6 +391,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -507,6 +415,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -526,6 +435,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -549,6 +459,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_HERMITCRAB_DIE,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_MINE
@@ -568,6 +479,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -591,6 +503,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_SPIDER_CRAB
@@ -612,6 +525,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_SPIDERCRAB_HIT,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_SPIDER_CRAB_SPAWNER
@@ -631,6 +545,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_NONE,
 		ANIM_SPIDERCRAB_DIE,
 		ANIM_SPIDERCRAB_HIT,
+		false,
 		false,
 		false,
 	},
@@ -654,6 +569,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_BABY_OCTOPUS
@@ -675,6 +591,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_BABYOCTOPUS_HIT,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -694,6 +611,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -717,6 +635,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		true,
 	},
 
 	{	// NPC_GHOST
@@ -736,6 +655,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -759,6 +679,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_FLAMING_SKULL
@@ -778,6 +699,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -801,6 +723,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_SHARKMAN_BLOCK,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_OIL_BLOB
@@ -820,6 +743,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -843,6 +767,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_MOTHER_JELLYFISH
@@ -862,6 +787,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -885,6 +811,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_PARASITIC_WORM
@@ -904,6 +831,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -927,6 +855,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_FLYINGDUTCHMAN_GETHIT,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_IRON_DOGFISH
@@ -946,6 +875,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		ANIM_IRONDOGFISH_GETHIT,
+		false,
 		false,
 		false,
 	},
@@ -969,6 +899,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		false,
 	},
 
 	{	// NPC_BALL_BLOB
@@ -988,6 +919,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_SHOT_GENERIC,
 		0,
 		0,
+		false,
 		false,
 		false,
 	},
@@ -1011,6 +943,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
+		true,
 	},
 };
 

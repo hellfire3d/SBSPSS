@@ -108,7 +108,8 @@ hazard_src :=		hazard \
 					hbarrel \
 					hboat
 
-projectl_src :=		projectl
+projectl_src :=		projectl \
+					prnpc
 
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)

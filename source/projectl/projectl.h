@@ -103,7 +103,7 @@ public:
 	void				shutdown();
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
-	void				think(int _frames);
+	virtual void		think(int _frames);
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType );
