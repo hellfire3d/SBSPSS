@@ -1485,21 +1485,21 @@ void	CFmaScene::think(int _frames)
 				}
 				else if (item->m_Actor!=-1)
 				{
+					ACTOR_DATA					*actor=&m_actorData[item->m_Actor];
+					const ACTOR_GRAPHICS_DATA	*actorGraphics=&s_actorGraphicsData[item->m_Actor];
+						
 					// Being carried by an actor
-					item->m_Pos=m_actorData[item->m_Actor].m_pos;
-					item->m_facing=m_actorData[item->m_Actor].m_facing;
-
-					item->m_Pos.vx-=m_cameraPos.vx;
-					item->m_Pos.vy-=m_cameraPos.vy;
+					item->m_Pos=actor->m_pos;
+					item->m_facing=actor->m_facing;
 					if (item->m_facing)
 					{
-						item->m_Pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+						item->m_Pos.vx-=actorGraphics->m_ItemOfs.vx;
 					}
 					else
 					{
-						item->m_Pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+						item->m_Pos.vx+=actorGraphics->m_ItemOfs.vx;
 					}
-					item->m_Pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
+					item->m_Pos.vy+=actorGraphics->m_ItemOfs.vy;
 				}
 			}
 
@@ -1782,16 +1782,17 @@ void	CFmaScene::startNextScriptCommand()
 				item->m_endMoveFrame=m_frameCount+*m_pc++;
 
 				// Calc the positions
+				const ACTOR_GRAPHICS_DATA	*actorGraphics=&s_actorGraphicsData[item->m_TargetActor];
 				item->m_TargetPos=m_actorData[item->m_TargetActor].m_pos;
 				if(m_actorData[item->m_TargetActor].m_facing)
 				{
-					item->m_TargetPos.vx-=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
+					item->m_TargetPos.vx-=actorGraphics->m_ItemOfs.vx;
 				}
 				else
 				{
-					item->m_TargetPos.vx+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
+					item->m_TargetPos.vx+=actorGraphics->m_ItemOfs.vx;
 				}
-				item->m_TargetPos.vy+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vy;
+				item->m_TargetPos.vy+=actorGraphics->m_ItemOfs.vy;
 				item->m_startPos=item->m_Pos;
 			}
 			break;
@@ -1867,10 +1868,11 @@ void	CFmaScene::processCurrentScriptCommand()
 
 		case SC_WAIT_ON_ACTOR_ANIM:		// actor
 			{
-				int	ThisActor=*(m_pc+1);
-				ACTOR_DATA	*actor=&m_actorData[ThisActor];
-				int	AnimBank=s_actorGraphicsData[ThisActor].m_anims[actor->m_animState].Bank;
-				int	AnimNo=s_actorGraphicsData[ThisActor].m_anims[actor->m_animState].Anim;
+				int							ThisActor=*(m_pc+1);
+				ACTOR_DATA					*actor=&m_actorData[ThisActor];
+				const ACTOR_GRAPHICS_DATA	*actorGraphics=&s_actorGraphicsData[ThisActor];
+				int	AnimBank=actorGraphics->m_anims[actor->m_animState].Bank;
+				int	AnimNo=actorGraphics->m_anims[actor->m_animState].Anim;
 				int	LastFrame=actor->m_gfx[AnimBank]->getFrameCount(AnimNo)-1;
 				if(actor->m_animFrame>=LastFrame)
 				{
