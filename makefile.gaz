@@ -85,7 +85,8 @@ enemy_src :=		npc \
 					nsjback \
 					nsj2back \
 					nbuttfly \
-					nshell
+					nshell \
+					nssnake
 
 friend_src :=		friend \
 					fdata \

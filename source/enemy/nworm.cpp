@@ -35,15 +35,15 @@
 #include "gfx\prim.h"
 #endif
 
-#ifndef	__ANIM_SEASNAKE_HEADER__
-#include <ACTOR_SEASNAKE_ANIM.h>
+#ifndef	__ANIM_GIANTWORM_HEADER__
+#include <ACTOR_GIANTWORM_ANIM.h>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcParasiticWormSegment::init()
 {
-	m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_SEASNAKE_SBK );
+	m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_GIANTWORM_SBK );
 
 	m_heading = 0;
 	m_nextSegment = NULL;
@@ -587,7 +587,7 @@ void CNpcParasiticWormSegment::render()
 
 	if ( renderFlag )
 	{
-		SprFrame = m_actorGfx->Render(renderPos,ANIM_SEASNAKE_BODYSTATIC,0,0);
+		SprFrame = m_actorGfx->Render(renderPos,ANIM_GIANTWORM_BODYSTATIC,0,0);
 		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
@@ -658,55 +658,128 @@ int CNpcParasiticWormSegment::checkCollisionAgainst( CThing *_thisThing, int _fr
 
 void CNpcParasiticWormEnemy::processShot( int _frames )
 {
-	if ( !m_segment )
+	switch( m_data[m_type].shotFunc )
 	{
-		m_drawRotation += 64 * _frames;
-		m_drawRotation &= 4095;
-
-		Pos.vy += m_speed * _frames;
-
-		if ( m_speed < 5 )
+		case NPC_SHOT_NONE:
 		{
-			m_speed++;
+			// do nothing
+
+			break;
 		}
 
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		if ( Pos.vy - offset.vy > VidGetScrH() )
+		case NPC_SHOT_GENERIC:
 		{
-			setToShutdown();
+			switch ( m_state )
+			{
+				case NPC_GENERIC_HIT_CHECK_HEALTH:
+				{
+					if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
+					{
+						m_state = NPC_GENERIC_HIT_DEATH_START;
+					}
+					else
+					{
+						m_health -= 5;
+
+						if ( m_health < 0 )
+						{
+							m_state = NPC_GENERIC_HIT_DEATH_START;
+						}
+						else
+						{
+							m_state = NPC_GENERIC_HIT_RECOIL;
+
+							m_animPlaying = true;
+							m_animNo = m_data[m_type].recoilAnim;
+							m_frame = 0;
+						}
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_RECOIL:
+				{
+					if ( !m_animPlaying )
+					{
+						m_state = 0;
+						m_controlFunc = NPC_CONTROL_MOVEMENT;
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_DEATH_START:
+				{
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].dieAnim;
+					m_frame = 0;
+					m_state = NPC_GENERIC_HIT_DEATH_END;
+
+					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
+					{
+						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+					}
+
+					m_isDying = true;
+					m_speed = -5;
+
+					if (m_data[m_type].skelType)
+					{
+						m_actorGfx->SetOtPos( 0 );
+					}
+
+					break;
+				}
+
+				case NPC_GENERIC_HIT_DEATH_END:
+				{
+					m_drawRotation += 64 * _frames;
+					m_drawRotation &= 4095;
+
+					Pos.vy += m_speed * _frames;
+
+					// go through segments
+
+					CNpcParasiticWormSegment *segment = m_segment;
+
+					while( segment )
+					{
+						DVECTOR segPos = segment->getPos();
+						segPos.vy += m_speed * _frames;
+						segment->setPos( segPos );
+						segment->updateCollisionArea();
+
+						segment = segment->m_nextSegment;
+					}
+
+					if ( m_speed < 5 )
+					{
+						m_speed++;
+					}
+
+					DVECTOR	offset = CLevel::getCameraPos();
+
+					if ( Pos.vy - offset.vy > VidGetScrH() )
+					{
+						if ( m_data[m_type].respawning )
+						{
+							m_isActive = false;
+
+							m_timerFunc = NPC_TIMER_RESPAWN;
+							m_timerTimer = 4 * GameState::getOneSecondInFrames();
+						}
+						else
+						{
+							setToShutdown();
+						}
+					}
+
+					break;
+				}
+			}
+
+			break;
 		}
-	}
-	else
-	{
-		if ( m_collTimer <= 0 )
-		{
-			// knock segment off end of list
-
-			CNpcParasiticWormSegment *segment = m_segment;
-			CNpcParasiticWormSegment *oldSegment = segment;
-
-			while( segment->m_nextSegment )
-			{
-				oldSegment = segment;
-
-				segment = segment->m_nextSegment;
-			}
-
-			delete segment;
-
-			if ( segment == m_segment )
-			{
-				m_segment = NULL;
-			}
-			else
-			{
-				oldSegment->m_nextSegment = NULL;
-			}
-
-			m_collTimer = GameState::getOneSecondInFrames();
-		}
-
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
 	}
 }

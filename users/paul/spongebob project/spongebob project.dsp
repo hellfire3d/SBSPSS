@@ -381,6 +381,10 @@ SOURCE=..\..\..\source\enemy\nsshark.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nssnake.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nssnake.h
 # End Source File
 # Begin Source File
