@@ -559,10 +559,12 @@ int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
 const int	CAMERA_TILESIZE=16;
 
+#ifdef CAM_X_AUTO_CENTERING
 int	returnspeed=1500;
-int returntimeout=25;
-int returntimeoutcount=0;
+int	returntimeout=25;
+int	returntimeoutcount=0;
 int	returnsafespace=4*16;
+#endif
 
 
 /*----------------------------------------------------------------------
@@ -763,7 +765,9 @@ if(newmode!=-1)
 					m_cameraXScrollDir=0;
 				}
 			}
+#ifdef CAM_X_AUTO_CENTERING
 			returntimeoutcount=0;
+#endif
 		}
 		else if(m_cameraXScrollDir==+1)
 		{
@@ -776,10 +780,12 @@ if(newmode!=-1)
 					m_cameraXScrollDir=0;
 				}
 			}
+#ifdef CAM_X_AUTO_CENTERING
 			returntimeoutcount=0;
+#endif
 		}
-// THISBIT
 
+#ifdef CAM_X_AUTO_CENTERING
 		if(m_moveVelocity.vx==0)
 		{
 			m_cameraXScrollDir=0;
@@ -810,8 +816,7 @@ if(newmode!=-1)
 				}
 			}
 		}
-
-// THISBIT
+#endif
 
 		// Stop the player vanishing off the edge of the telly..
 		if(!m_lockCamera)
