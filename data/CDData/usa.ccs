@@ -1,5 +1,5 @@
 CD-ROM Generator for Windows 1.40
-Thu May 03 13:24:39 2001
+Thu Jul 05 17:19:08 2001
 WE
 Standard
 3
@@ -412,10 +412,48 @@ d:\sbsp\usa\TRACK1.IXA
 0
 0
 \
+CLIMAX.STR;1
+1
+d:\sbsp\usa\CLIMAX.STR
+27115
+0
+0
+50
+50
+14336
+1
+1
+0 0 0 0 0 0 0
+2336
+-1
+0
+-1
+0
+-32275
+1
+0
+0
+-1
+3405888
+994320758
+994320758
+994320758
+1
+0
+-1
+0
+0
+63340640
+0
+0
+0
+0
+0
+\
 ZZZZZZZZ.ZZZ;1
 1
 d:\sbsp\usa\ZZZZZZZZ.ZZZ
-27115
+28573
 0
 0
 50
@@ -443,7 +481,7 @@ d:\sbsp\usa\ZZZZZZZZ.ZZZ
 -1
 0
 0
-63340640
+66746528
 0
 0
 0
