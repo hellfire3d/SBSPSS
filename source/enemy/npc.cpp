@@ -683,6 +683,7 @@ void CNpcEnemy::shutdown()
 		oldPosition = currentPosition;
 		currentPosition = currentPosition->next;
 
+		oldPosition->prev->next = NULL;
 		delete oldPosition;
 	}
 

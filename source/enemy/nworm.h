@@ -34,7 +34,7 @@ protected:
 	};
 };
 
-class CNpcParasiticWormSegment : public CNpcParasiticWormEnemy
+class CNpcParasiticWormSegment : public CNpcEnemy
 {
 public:
 	virtual void		render();
