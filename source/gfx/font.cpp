@@ -129,7 +129,7 @@ void FontBank::print( int _x, int _y, s32 _textId )
 int wstep=50;
 int wspeed=100;
 int wscale=1000;
-void FontBank::print( int _x, int _y, char *_text )
+void FontBank::print( int _x, int _y, const char *_text )
 {
 	ASSERT( m_initialised );
 
@@ -149,7 +149,7 @@ void FontBank::print( int _x, int _y, char *_text )
 	}
 	_x+=m_printArea.x;
 	_y+=m_printArea.y;
-	_y+=m_fontData->charHeight;		// origin at top left please...
+	_y+=getCharHeight();		// origin at top left please...
 	StartX=_x;
 
 	while (*_text)
@@ -175,11 +175,11 @@ void FontBank::print( int _x, int _y, char *_text )
 			{
 				fy=_y+(msin((s_wobbleValue+(_x*wstep))&4095)/wscale);
 			}
-			Size=printChar(*_text++,_x,fy)+m_fontData->charGapX;
+			Size=printChar(*_text++,_x,fy)+getCharGapX();
 			_x+=Size;
 			Length-=Size;
 		}
-		_y+=(m_fontData->charHeight+m_fontData->charGapY);
+		_y+=(getCharHeight());
 		if(*_text=='\n') _text++;		// kill newline if there is one ( preserve multiple \n )
 		while (*_text==' ') _text++;	// kill trailing spaces
 	}
@@ -287,7 +287,7 @@ int FontBank::getCharWidth( char _char )
   ---------------------------------------------------------------------- */
 int FontBank::getCharHeight()
 {
-	return m_fontData->charHeight+m_fontData->charGapY;
+	return m_fontData->charHeight+getCharGapY();
 }
 
 /*----------------------------------------------------------------------
@@ -296,7 +296,7 @@ int FontBank::getCharHeight()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getStringHeight( char *_text )
+int FontBank::getStringHeight( const char *_text )
 {
 	int length=0;
 	int	height=0;
@@ -306,14 +306,34 @@ int FontBank::getStringHeight( char *_text )
 		length=getStrWrapLen(_text,m_printArea.w);
 		while(*_text && length>0)
 		{
-			length-=getCharWidth(*_text++)+m_fontData->charGapX;
+			length-=getCharWidth(*_text++)+getCharGapX();
 		}
-		height+=(m_fontData->charHeight+m_fontData->charGapY);
+		height+=(getCharHeight());
 		if(*_text=='\n') _text++;		// kill newline if there is one ( preserve multiple \n )
 		while (*_text==' ') _text++;	// kill trailing spaces
 	}
 
 	return height;
+}
+int FontBank::getStringHeight( s32 _textId )
+{
+	return getStringHeight( TranslationDatabase::getString(_textId) );
+}
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:	
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		FontBank::getCharGapX()
+{
+	return m_fontData->charGapX;
+}
+int		FontBank::getCharGapY()
+{
+	return m_fontData->charGapY;
 }
 
 
@@ -346,9 +366,13 @@ int FontBank::printChar( char _char,int _x,int _y )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getStringWidth( char * text )
+int FontBank::getStringWidth( const char * text )
 {
 	return getStrWrapLen( text, m_printArea.w );
+}
+int FontBank::getStringWidth( s32 _textId )
+{
+	return getStringWidth( TranslationDatabase::getString(_textId) );
 }
 
 
@@ -370,7 +394,7 @@ void FontBank::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getStrWrapLen( char *_text,int _maxWidth )
+int FontBank::getStrWrapLen( const char *_text,int _maxWidth )
 {
 	int		length=0,spaceW;
 	char	C;
@@ -381,13 +405,87 @@ int FontBank::getStrWrapLen( char *_text,int _maxWidth )
 		C=*_text++;
 		if (C=='\n') break;
 		if (C==' ') spaceW=length;
-		length+=getCharWidth(C)+m_fontData->charGapX;
+		length+=getCharWidth(C)+getCharGapX();
 	}
 	if (length>_maxWidth) length=spaceW;
 	
 	return length;
 }
 
+
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:	
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void ScalableFontBank::initialise( FontData *_fontData )
+{
+	FontBank::initialise(_fontData);
+	setScale(256);
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:	
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int ScalableFontBank::printChar( char _char,int _x,int _y )
+{
+	if (_char!=' ')
+	{
+		if( m_fontData->fontTab[_char]==-1 ) _char='X';
+		POLY_FT4 *Ft4=m_spriteBank.printFT4Scaled(m_fontData->fontTab[_char],_x,_y,0,0,m_ot,m_fontScale);
+		setRGB0(Ft4,m_r,m_g,m_b);
+		setShadeTex(Ft4,0);
+
+		Ft4->tpage|=(m_sMode<<5);
+		setSemiTrans(Ft4,m_trans);
+		setShadeTex(Ft4,0);
+	}
+
+	return getCharWidth(_char);
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int ScalableFontBank::getCharWidth( char _char )
+{
+	return (FontBank::getCharWidth(_char)*m_fontScale)>>8;
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int ScalableFontBank::getCharHeight()
+{
+	return (FontBank::getCharHeight()*m_fontScale)>>8;
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:	
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int	ScalableFontBank::getCharGapX()
+{
+	return (m_fontData->charGapX*m_fontScale)>>8;
+}
+int	ScalableFontBank::getCharGapY()
+{
+	return (m_fontData->charGapY*m_fontScale)>>8;
+}
 
 /*===========================================================================
  end */

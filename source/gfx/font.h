@@ -51,7 +51,7 @@ public:
 	virtual void	initialise( FontData *_fontData );
 	void	dump();
 	int		isInitialised()				{ return m_initialised; }
-	virtual void	print( int _x, int _y, char *_text );
+	virtual void	print( int _x, int _y, const char *_text );
 	void			print( int _x, int _y, s32 _textId );
 	void	setColour( u8 _r, u8 _g, u8 _b );
 	void	setJustification( Justification _justification );
@@ -60,12 +60,17 @@ public:
 	void	setTrans( int _trans );
 	void	setSMode( int _sMode );
 
-	int		getCharWidth( char _char );
-	int		getCharHeight();
-	int		getStringWidth( char * text );
-	int		getStringHeight( char *_text );
+	virtual int		getCharWidth( char _char );
+	virtual int		getCharHeight();
+	int		getStringWidth( const char * text );
+	int		getStringWidth( s32 _textId );
+	int		getStringHeight( const char *_text );
+	int		getStringHeight( s32 _textId );
 
-	int		getStrWrapLen( char *_text,int _maxWidth );
+	virtual int		getCharGapX();
+	virtual int		getCharGapY();
+
+	int		getStrWrapLen( const char *_text,int _maxWidth );
 
 	void	setWobble(int _wobble)					{m_wobble=_wobble;}
 
@@ -99,6 +104,26 @@ protected:
 	int				m_wobble;
 	static int		s_wobbleValue;
 
+};
+
+
+class ScalableFontBank : public FontBank
+{
+public:
+	virtual void	initialise( FontData *_fontData );
+
+	void			setScale(int _newScale)				{m_fontScale=_newScale;}
+
+	virtual int		getCharWidth( char _char );
+	virtual int		getCharHeight();
+
+	virtual int		getCharGapX();
+	virtual int		getCharGapY();
+
+private:
+	virtual int		printChar( char _char,int _x,int _y );
+
+	int				m_fontScale;
 };
 
 
