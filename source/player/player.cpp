@@ -218,7 +218,7 @@ int		s_screenPos;
 int		m_cameraLookOffset;
 
 int MAP2D_CENTRE_X=-(INGAME_SCREENW/2);
-int MAP2D_CENTRE_Y=-(INGAME_SCREENH/2)-64;
+int MAP2D_CENTRE_Y=-(INGAME_SCREENH/2)-32;
 int MAP2D_BLOCKSTEPSIZE=16;
 
 CPlayerModeBase				PLAYERMODE;
@@ -260,8 +260,8 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 pint	sbanimspeed=0;
 
 pint	looktimeout=20;
-pint	lookmaxoffsetup=3*MAP2D_BLOCKSTEPSIZE;
-pint	lookmaxoffsetdown=6*MAP2D_BLOCKSTEPSIZE;
+pint	lookmaxoffsetup=4*MAP2D_BLOCKSTEPSIZE;
+pint	lookmaxoffsetdown=4*MAP2D_BLOCKSTEPSIZE;
 pint	lookspeed=2;
 pint	lookreturnspeed=5;
 
