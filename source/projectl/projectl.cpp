@@ -499,8 +499,8 @@ void CPlayerProjectile::think(int _frames)
 			}
 			else
 			{
-				Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
-				Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+				Pos.vx += ( _frames * 5 * rcos( m_heading ) ) >> 12;
+				Pos.vy += ( _frames * 5 * rsin( m_heading ) ) >> 12;
 			}
 
 			break;
