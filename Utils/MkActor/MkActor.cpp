@@ -15,8 +15,9 @@
 #include	<pak.h>
 
 using namespace std;
-//#define	CheckDups	1
 //#define	OutputTGA
+
+// This has got really messy :o(
 
 //***************************************************************************
 vector<CMkActor>	ActorList;
@@ -27,24 +28,6 @@ GString		RootPath;
 GString		SpritePath;
 GString		OutPath;
 GString		IncludePath;
-
-//***************************************************************************
-void	RepAlign(FILE *File,char *Txt=0)		
-{							
-/*
-int	Align=ftell(File)&3;
-
-	if (Align)
-	{
-		if (Txt)
-			printf("%s MisAlign %i\n",Txt,Align);
-		else
-			printf("%s MisAlign %i\n","File",Align);
-
-	}
-*/
-	PadFile(File);	
-}
 
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
@@ -165,6 +148,8 @@ CMkActor::CMkActor(GString &ActorName,GString &ActorPath,GString &SpritePath)
 		TexGrab.AllowRotate(false);
 
 		DupCount=0;
+		MaxW=0;
+		MaxH=0;
 }
 
 //***************************************************************************
@@ -263,8 +248,11 @@ GString		Filename;
 _finddata_t Find;
 long		FileHandle;
 int			Error=0;
+GString		BaseName=Name+"_"+ThisAnim.Name;
+int			BaseLen=strlen(BaseName);
 
-			Filename=SpriteDir+Name+"_"+ThisAnim.Name+"*.bmp";
+			Filename=SpriteDir+BaseName+"*.bmp";
+
 			if( (FileHandle= _findfirst( Filename, &Find)) == -1L )
 			{
 				GObject::Error(ERR_WARNING,"Cant find Anim %s.\n",ThisAnim.Name);
@@ -275,7 +263,11 @@ int			Error=0;
 			{
 				sFrame	NewFrame;
 				NewFrame.Filename=Find.name;
-				ThisAnim.Frames.push_back(NewFrame);
+				char	c=NewFrame.Filename[BaseLen];
+				if (c>='0' && c<='9')
+				{
+					ThisAnim.Frames.push_back(NewFrame);
+				}
 
 				Error=_findnext( FileHandle, &Find);
 			}
@@ -310,19 +302,8 @@ void	CMkActor::LoadFrame(sFrame &ThisFrame,bool VRamFlag)
 void	CMkActor::MakePsxGfx(sBmp &Bmp)
 {
 // Copied from SprSet 
-// apparantly only works on 16 colors, so I gotta watch it!!
-int		AlignPixels=4;
 int		nfW,nfH,nfLineWidthBytes,nfAreaBytes;
-Frame	&Frm=Bmp.Bmp;
-Rect	OriginalRect;
-
-		OriginalRect=Frm;
-
-		OriginalRect.X=0;
-		OriginalRect.Y=0;
-		OriginalRect.W=GU_AlignVal(OriginalRect.W,AlignPixels);
-
-		Frm.Crop(OriginalRect);
+Frame	Frm=Bmp.Bmp;
 
 		nfW=Frm.GetWidth();
 		nfH=Frm.GetHeight();
@@ -330,6 +311,8 @@ Rect	OriginalRect;
 		nfAreaBytes=nfLineWidthBytes*nfH;
 		Bmp.PsxSize=nfAreaBytes;
 
+		if (nfW>MaxW) MaxW=nfW;
+		if (nfH>MaxH) MaxH=nfH;
 		Bmp.Psx=(u8*)malloc(nfAreaBytes+16);
 		ASSERT(Bmp.Psx);
 
@@ -360,109 +343,147 @@ Rect	OriginalRect;
 }
 
 //***************************************************************************
-int		CMkActor::LoadBmp(GString &Name,bool VRamFlag)
+int		CMkActor::FindDup(sBmp &Bmp)
 {
-GString	Filename=SpriteDir+Name;
+int			i,BmpListSize=BmpList.size();
+int			Size=Bmp.Bmp.GetWidth()*Bmp.Bmp.GetHeight();
 
-int			BmpListSize=BmpList.size();
-sBmp		NewBmp;
-SprFrame	&NewFrame=NewBmp.Bmp;
-FileInfo	ThisInfo;
-
-//			ThisInfo.SetInfo(name,		CrossHair,	ThisZeroColZero,	MoveUVs,	AllowRotate,	ShrinkToFit,	m_allocateAs16bit);
-			ThisInfo.SetInfo(Filename,	false,		true,				false,		false,			true,			false);
-
-			NewBmp.RGB=0;
-			NewBmp.Pak=0;
-			NewBmp.Psx=0;
-			NewBmp.VRamFlag=VRamFlag;
-
-			NewFrame.LoadBMP(Filename);
-int			ColorCount=NewFrame.GetNumOfCols();
-			if (ColorCount>16)
-			{
-				GObject::Error(ERR_WARNING,"%s has %i colors.\n",Name,ColorCount);
-			}
-
-
-#ifdef	CheckDups
-int			Size=NewFrame.GetWidth()*NewFrame.GetHeight();
-			NewBmp.RGB=(u8*)malloc(Size*3);
-			ASSERT(NewBmp.RGB);
-			NewFrame.MakeRGB(NewBmp.RGB);
-
+			Bmp.RGB=(u8*)malloc(Size*3);
+			ASSERT(Bmp.RGB);
+			Bmp.Bmp.MakeRGB(Bmp.RGB);
 // Check for dups (Broken at the mo, ah well)
 // Gen Chksum
-u8		*RGB=NewBmp.RGB;
-		NewBmp.ChkR=NewBmp.ChkG=NewBmp.ChkB=0;
+
+u8		*RGB=Bmp.RGB;
+		Bmp.ChkR=Bmp.ChkG=Bmp.ChkB=0;
 		for (i=0; i<Size; i++)
 		{
-			NewBmp.ChkR+=*RGB++;
-			NewBmp.ChkG+=*RGB++;
-			NewBmp.ChkB+=*RGB++;
+			Bmp.ChkR+=*RGB++;
+			Bmp.ChkG+=*RGB++;
+			Bmp.ChkB+=*RGB++;
 		}
 
-int		Idx=-1;
 // Find existing
-		for (int i=0; i<BmpListSize && Idx==-1; i++)
+		for (i=0; i<BmpListSize; i++)
 		{
 			sBmp	&ThisBmp=BmpList[i];
-//			if (ThisBmp.ChkR==NewBmp.ChkR && ThisBmp.ChkG==NewBmp.ChkG && ThisBmp.ChkB==NewBmp.ChkB)
+			ASSERT(Bmp.RGB);
+			ASSERT(ThisBmp.RGB);
+			if (IsImageSame(ThisBmp,Bmp)) 
 			{
-				if (IsImageSame(ThisBmp,NewBmp)) Idx=i;
+				free(Bmp.RGB);
+				return(i);
 			}
 		}
 
-		if (Idx!=-1)
-		{
-			DupCount++;
-			free(NewBmp.RGB);
-			return(Idx);
-		}
-#endif
-		BmpList.push_back(NewBmp);
-		BmpList[BmpListSize].Bmp.SetFrameAndInfo(BmpList[BmpListSize].Bmp,ThisInfo,0);
-		MakePsxGfx(BmpList[BmpListSize]);
-
-
-#if	_DEBUG && defined(OutputTGA)
-		{
-		Frame	&OutF=BmpList[BmpListSize].Bmp;
-u8		*TGA=(u8*)malloc(OutF.GetWidth()*OutF.GetHeight()*3);
-		ASSERT(TGA);
-		OutF.FlipY();
-		OutF.MakeRGB(TGA);
-		OutF.FlipY();
-
-		char	OutName[256];
-		sprintf(OutName,"\\x\\%s.tga",Name);
-		SaveTGA(OutName,OutF.GetWidth(),OutF.GetHeight(),TGA,true);
-		free(TGA);
-		}
-#endif
-
-		return(BmpListSize);
+		return(-1);
 }
 
 //***************************************************************************
 bool	CMkActor::IsImageSame(sBmp &Bmp0,sBmp &Bmp1)
 {
-int		W0=Bmp0.Bmp.GetOrigW();
-int		H0=Bmp0.Bmp.GetOrigH();
-int		W1=Bmp1.Bmp.GetOrigW();
-int		H1=Bmp1.Bmp.GetOrigH();
-int		Size=W0*H0*3;
-u8		*RGB0=Bmp0.RGB;
-u8		*RGB1=Bmp1.RGB;
+int		W0,H0,W1,H1,Size;
+u8		*RGB0,*RGB1;
+
+		if (Bmp0.ChkR!=Bmp1.ChkR || Bmp0.ChkG!=Bmp1.ChkG || Bmp0.ChkB!=Bmp1.ChkB) return(false);
+		W0=Bmp0.Bmp.GetWidth();
+		H0=Bmp0.Bmp.GetHeight();
+		W1=Bmp1.Bmp.GetWidth();
+		H1=Bmp1.Bmp.GetHeight();
 
 		if (W0!=W1 || H0!=H1) return(false);
-
+		Size=W0*H0*3;
+		RGB0=Bmp0.RGB;
+		RGB1=Bmp1.RGB;
 		for (int i=0; i<Size; i++)
 		{
 			if (*RGB0++!=*RGB1++) return(false);
 
 		}
 		return(true);
+}
+
+//***************************************************************************
+// Shrink frame to extents, aligned for 4 pixels (needed?)
+void	CMkActor::SetAndShrinkFrame(GString &Filename,Frame &Src, SprFrame &Dst)
+{
+FileInfo	ThisInfo;
+Rect		OriginalRect;
+
+// Check Colors
+int		ColorCount=Src.GetNumOfCols();
+		if (ColorCount>16)
+		{
+				GObject::Error(ERR_FATAL,"%s has %i colors.\n",Name,ColorCount);
+		}
+
+//		ThisInfo.SetInfo(name,		CrossHair,	ThisZeroColZero,	MoveUVs,	AllowRotate,	ShrinkToFit,	m_allocateAs16bit);
+		ThisInfo.SetInfo(Filename,	false,		true,				false,		false,			true,			false);
+
+// Copy Frame
+		Dst.SetFrameAndInfo(Src,ThisInfo,0);
+// Align Frame
+
+		OriginalRect=Src;
+		OriginalRect.X=0;
+		OriginalRect.Y=0;
+		OriginalRect.W=GU_AlignVal(OriginalRect.W,4);
+
+		Dst.Crop(OriginalRect);
+
+}
+
+//***************************************************************************
+int		CMkActor::LoadBmp(GString &Name,bool VRamFlag)
+{
+GString	Filename=SpriteDir+Name;
+int		BmpListSize=BmpList.size();
+sBmp	NewBmp;
+Frame	NewFrame;
+
+// Init Frame
+		NewBmp.RGB=0;
+		NewBmp.Pak=0;
+		NewBmp.Psx=0;
+		NewBmp.VRamFlag=VRamFlag;
+
+// Load frame
+		NewFrame.LoadBMP(Filename);
+		SetAndShrinkFrame(Filename,NewFrame,NewBmp.Bmp);
+
+// Check Dups
+int		Idx=FindDup(NewBmp);
+
+		if (Idx!=-1)
+		{
+			DupCount++;
+			return(Idx);
+		}
+// Its unique, add to list
+		BmpList.push_back(NewBmp);
+
+		MakePsxGfx(BmpList[BmpListSize]);
+
+#if	_DEBUG && defined(OutputTGA)
+void	WriteTGA(GString Name,Frame Frm);
+		WriteTGA(Name,NewBmp.Bmp);
+#endif
+
+		return(BmpListSize);
+}
+
+//***************************************************************************
+void	WriteTGA(GString Name,Frame Frm)
+{
+u8		*TGA=(u8*)malloc(Frm.GetWidth()*Frm.GetHeight()*3);
+		ASSERT(TGA);
+		Frm.FlipY();
+		Frm.MakeRGB(TGA);
+
+		char	OutName[256];
+		sprintf(OutName,"\\x\\%s.tga",Name);
+		SaveTGA(OutName,Frm.GetWidth(),Frm.GetHeight(),TGA,true);
+		free(TGA);
 }
 
 //***************************************************************************
@@ -513,16 +534,16 @@ GString			OutName=OutFile+".SBK";
 
 // Write Dummy Hdr
 		fwrite(&FileHdr,1,sizeof(sSpriteAnimBank),File);
-		RepAlign(File,"MainHeader");
+		PadFile(File);
 // Write Palette
 		FileHdr.Palette=(u8*)WritePalette();
-		RepAlign(File,"PaletteHdr");
+		PadFile(File);
 // Write AnimList
 		FileHdr.AnimList=(sSpriteAnim*)WriteAnimList();
-		RepAlign(File,"AnimListHdr");
+		PadFile(File);
 // Write FrameList
 		FileHdr.FrameList=(sSpriteFrame*)WriteFrameList();
-//		RepAlign(File,"FrameHdr");
+//		PadFile(File);
 
 // Rewrite Header
 		fseek(File, 0, SEEK_SET);
@@ -575,7 +596,7 @@ vector<sSpriteAnim>	Hdrs;
 		{
 			fwrite(&Hdrs[i],1,sizeof(sSpriteAnim),File);
 		}
-		RepAlign(File,"AnimListHdr");
+		PadFile(File);
 		
 // Write Frame Lists
 		for (i=0; i<AnimCount; i++)
@@ -592,7 +613,7 @@ vector<sSpriteAnim>	Hdrs;
 				u16	FrameNo=ThisFrame.FrameIdx;
 				fwrite(&FrameNo,1,sizeof(u16),File);
 			}
-			RepAlign(File,"AnimIdx");
+			PadFile(File);
 			
 		}
 
@@ -616,13 +637,15 @@ int		i,FrameCount=BmpList.size();
 vector<sSpriteFrame>	Hdrs;
 
 // Write Dummy Hdrs
+		FileHdr.MaxW=MaxW;
+		FileHdr.MaxH=MaxH;
 		FileHdr.FrameCount=FrameCount;
 		Hdrs.resize(FrameCount);
 		for (i=0; i<FrameCount; i++)
 		{
 			fwrite(&Hdrs[i],1,sizeof(sSpriteFrame),File);
 		}
-		RepAlign(File,"FrameListHdr");
+		PadFile(File);
 		
 // Write Frame Lists
 		for (i=0; i<FrameCount; i++)
@@ -695,4 +718,10 @@ int		ListSize=AnimList.size();
 
 		fclose(File);
 }
-// 
+ 
+
+//platform length on bio dome - collision fix
+//flying things
+//platform gfx
+//look up & down
+

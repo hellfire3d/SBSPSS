@@ -50,10 +50,12 @@ private:
 		void				ReadScript(const char *Filename,vector<GString>	&List);
 		void				BuildFrameList();
 		void				FindFrames(sAnim &ThisAnim);
+		int					FindDup(sBmp &Frm);
 
 		void				LoadFrameList();
 		void				LoadFrame(sFrame &ThisFrame,bool VRamFlag);
 		int					LoadBmp(GString	&Name,bool VRamFlag);
+		void				SetAndShrinkFrame(GString &Filename,Frame &Src,SprFrame &Dst);
 		bool				IsImageSame(sBmp &Bmp0,sBmp &Bmp1);
 		void				MakePsxGfx(sBmp &Bmp);
 		void				ProcessFrames();
@@ -74,6 +76,7 @@ private:
 		vector<sBmp>		BmpList;
 		CTexGrab			TexGrab;
 		int					DupCount;
+		int					MaxW,MaxH;
 };
 
 //***************************************************************************
