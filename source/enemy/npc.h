@@ -30,7 +30,9 @@ public:
 	enum NPC_UNIT_TYPE
 	{
 		NPC_SANDY_CHEEKS = 0,
-		NPC_SMALL_JELLYFISH_1 = 1,
+		NPC_FALLING_ACORN = 1,
+		NPC_FISH_HOOK,
+		NPC_SMALL_JELLYFISH_1,
 		NPC_SMALL_JELLYFISH_2,
 		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
@@ -85,10 +87,13 @@ protected:
 		NPC_INIT_SUB_SHARK,
 		NPC_INIT_FLYING_DUTCHMAN,
 		NPC_INIT_IRON_DOGFISH,
+		NPC_INIT_FALLING_ACORN,
+		NPC_INIT_FISH_HOOK,
 	};
 
 	enum NPC_CONTROL_FUNC
 	{
+		NPC_CONTROL_NONE,
 		NPC_CONTROL_MOVEMENT,
 		NPC_CONTROL_SHOT,
 		NPC_CONTROL_CLOSE,
@@ -110,6 +115,8 @@ protected:
 		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
 		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
 		NPC_SENSOR_IRON_DOGFISH_USER_CLOSE,
+		NPC_SENSOR_FALLING_ACORN_USER_CLOSE,
+		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -130,6 +137,8 @@ protected:
 		NPC_CLOSE_SUB_SHARK_ATTACK,
 		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
 		NPC_CLOSE_IRON_DOGFISH_ATTACK,
+		NPC_CLOSE_FALLING_ACORN_FALL,
+		NPC_CLOSE_FISH_HOOK_RISE,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -285,6 +294,11 @@ protected:
 	void				processIronDogfishMovement( int _frames );
 	void				processStandardIronDogfishAttack( int _frames );
 	void				processCloseIronDogfishAttack( int _frames );
+
+	// hazard functions
+
+	void				processCloseFallingAcornFall( int _frames );
+	void				processCloseFishHookRise( int _frames );
 
 	// data
 

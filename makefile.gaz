@@ -68,6 +68,7 @@ enemy_src :=		2denemy \
 					nfdutch \
 					nsshark \
 					ndogfish \
+					nhazard \
 					enemy
 
 projectl_src :=		projectl

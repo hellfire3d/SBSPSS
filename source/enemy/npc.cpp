@@ -60,6 +60,30 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 	},
 
+	{	// NPC_FALLING_ACORN
+		NPC_INIT_FALLING_ACORN,
+		NPC_SENSOR_FALLING_ACORN_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_FALLING_ACORN_FALL,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		128,
+	},
+
+	{	// NPC_FISH_HOOK
+		NPC_INIT_FISH_HOOK,
+		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_FISH_HOOK_RISE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		128,
+	},
+
 	{	// NPC_SMALL_JELLYFISH_1
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE,
@@ -435,7 +459,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_SKULL_STOMPER;
+	m_type = NPC_FISH_HOOK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -492,6 +516,7 @@ void CNpc::init()
 			break;
 
 		case NPC_INIT_SKULL_STOMPER:
+		case NPC_INIT_FALLING_ACORN:
 		{
 			m_heading = m_fireHeading = 1024;
 			
@@ -545,6 +570,29 @@ void CNpc::init()
 			break;
 		}
 
+		case NPC_INIT_FISH_HOOK:
+		{
+			m_heading = m_fireHeading = 3072;
+			
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 100;
+			newPos.vy = -100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -562,6 +610,9 @@ void CNpc::think(int _frames)
 {
 	switch ( this->m_controlFunc )
 	{
+		case NPC_CONTROL_NONE:
+			return;
+
 		case NPC_CONTROL_MOVEMENT:
 			if ( !processSensor() )
 			{
@@ -815,6 +866,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
+					case NPC_SENSOR_FALLING_ACORN_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 40000 )
 						{
@@ -861,6 +913,20 @@ bool CNpc::processSensor()
 					case NPC_SENSOR_IRON_DOGFISH_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 400 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -1128,6 +1194,18 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_IRON_DOGFISH_ATTACK:
 			processCloseIronDogfishAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_FALLING_ACORN_FALL:
+			processCloseFallingAcornFall( _frames );
+
+			break;
+
+		case NPC_CLOSE_FISH_HOOK_RISE:
+			processCloseFishHookRise( _frames );
+
+			break;
 
 		default:
 			break;
