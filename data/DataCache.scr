@@ -14,6 +14,12 @@ music/droppop.vh
 music/music.pxm
 music/music.vb
 music/music.vh
+music/ingame.pxm
+music/ingame.vb
+music/ingame.vh
+music/title.pxm
+music/title.vb
+music/title.vh
 sfx/ingame.pxm
 sfx/ingame.vb
 sfx/ingame.vh
