@@ -42,7 +42,7 @@ eng=
 ; ---------------------------------------------------------------
 
 [STR__FRONTEND__GAME_TITLE]
-eng=Spongebob SquarePants:\nSuperSponge
+eng=SpongeBob SquarePants:\nSuperSponge
 [STR__FRONTEND__PRESS_START]
 eng=PRESS START
 
@@ -111,7 +111,7 @@ eng=SPEECH VOLUME
 
 ; Load menu ( also some strings in the memcard section )
 [STR__FRONTEND__CONFIRM_LOAD]
-eng=Spongebob game data found.\nAre you sure you want to load?
+eng=SpongeBob game data found.\nAre you sure you want to load?
 
 
 
@@ -137,7 +137,7 @@ eng=Checking...\nPlease do not remove the MEMORY CARD
 [STR__MEMCARD__UNFORMATTEDCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted
 [STR__MEMCARD__NOFILESONCARD]
-eng=No Spongebob game data present
+eng=No SpongeBob game data present
 [STR__MEMCARD__NOCARDINSLOT]
 eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
@@ -203,7 +203,7 @@ eng=Meow!!
 
 ; C1 FMA
 [STR__INGAME__FMA_C1_INTRO0]
-eng=Ahhh, ‘ere we are at Bikini Bottom..and today we will be following my favorite creature Spongebob SquarePants on his adventures around Bikini Bottom.
+eng=Ahhh, ‘ere we are at Bikini Bottom..and today we will be following my favorite creature SpongeBob SquarePants on his adventures around Bikini Bottom.
 [STR__INGAME__FMA_C1_INTRO1]
 eng=Today he is in search of the Best Birthday Present ever, for his best friend Patrick. The question is how far will he go for his best friend?
 [STR__INGAME__FMA_C1_SB0]
@@ -277,7 +277,7 @@ eng=Gee thanks!!!
 [STR__INGAME__FMA_C6_BB1]
 eng=Well, I have learnt today that friendship is something that is priceless! SB is not such a bad sponge afterall!
 [STR__INGAME__FMA_C6_BB_MM0]
-eng=Spongebob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
+eng=SpongeBob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
 
 
 ; ---------------------------------------------------------------
@@ -323,11 +323,11 @@ Chapter 1 - Level 1 - 01
 [STR__INGAME__CH1__L1__SPONGEY1]
 eng=Hi Squidward !!! Ready for another great day together, friend?
 [STR__INGAME__CH1__L1__SQUIDWARD1]
-eng=Today's Sunday, Spongebob.  Forget the Krusty Krab. Hey moron, why don't you take your net and go waste somebody else's time!
+eng=Today's Sunday, SpongeBob.  Forget the Krusty Krab. Hey moron, why don't you take your net and go waste somebody else's time!
 
 Chapter 1 - Level 1 - 02
 [STR__INGAME__CH1__L1__SQUIDWARD2]
-eng=Look Spongebob, I told you, use your net and GO FISH!
+eng=Look SpongeBob, I told you, use your net and GO FISH!
 
 
 Chapter 1 - Level 2 - 01
@@ -336,25 +336,25 @@ eng=Take that you ' ya sorry ol' clam. Y'all need to learn some manners! Hold on
 
 Chapter 1 - Level 2 - 02
 [STR__INGAME__CH1__L2__SANDY2]
-eng=I like you Spongebob. We're tighter than bark on a tree.  Why don't y'all borrow my diving hat so your head can stay water logged.
+eng=I like you SpongeBob. We're tighter than bark on a tree.  Why don't y'all borrow my diving hat so your head can stay water logged.
 
 Chapter 1 - Level 2 - 03
 [STR__INGAME__CH1__L2__SANDY3]
-eng=Spongebob you silly 'ol sponge, try using your helmet!!!
+eng=SpongeBob you silly 'ol sponge, try using your helmet!!!
 
 
 Chapter 1 - Level 4 - 01
 [STR__INGAME__CH1__L4__KRUSTY1]
-eng=Spongebob!!! Argh! Where have you been hiding, boy? Take these'ere glasses, lad. You got to see the jellyfish before you can catch'em.
+eng=SpongeBob!!! Argh! Where have you been hiding, boy? Take these'ere glasses, lad. You got to see the jellyfish before you can catch'em.
 
 Chapter 1 - Level 4 - 02
 [STR__INGAME__CH1__L4__KRUSTY2]
-eng=Spongebob!!! Put yer glasses on lad or I won't let you work during yer vacation!
+eng=SpongeBob!!! Put yer glasses on lad or I won't let you work during yer vacation!
 
 
 Chapter 2 - Level 1 - 01
 [STR__INGAME__CH2__L1__KRUSTY1]
-eng=Spongebob!!! Now listen Boy! I'm countin' on ya to use this ere coral blower to make your way around Bikini Bottom!!! And watch out for that scurvy Plankton he is up to his old tricks again!!!
+eng=SpongeBob!!! Now listen Boy! I'm countin' on ya to use this ere coral blower to make your way around Bikini Bottom!!! And watch out for that scurvy Plankton he is up to his old tricks again!!!
 
 Chapter 2 - Level 1 - 02
 [STR__INGAME__CH2__L1__KRUSTY2]
@@ -363,7 +363,7 @@ eng=Use the Coral Blower me boy! Blast away!
 
 Chapter 2 - Level 2 - 01
 [STR__INGAME__CH2__L2__PATRICK1]
-eng=Hey Spongebob. I got an extra balloon for my birthday. Want it? Ooooo, you're floating away! Hey, where'd my balloon go? Spongebob!
+eng=Hey SpongeBob. I got an extra balloon for my birthday. Want it? Ooooo, you're floating away! Hey, where'd my balloon go? SpongeBob!
 
 Chapter 2 - Level 2 - 02
 [STR__INGAME__CH2__L2__PATRICK2]
@@ -379,16 +379,16 @@ eng=Excellent! You'll be able to use this move on most of the enemies you encoun
 
 Chapter 3 - Level 3 - 01
 [STR__INGAME__CH3__L3__PATRICK1]
-eng=DA DA DA DA DA DUM DUM DUM DUM.... Here you go Spongebob! One bubblewand dipped and ready to go!!!!  Up, down and all around! I don't know what that means.
+eng=DA DA DA DA DA DUM DUM DUM DUM.... Here you go SpongeBob! One bubblewand dipped and ready to go!!!!  Up, down and all around! I don't know what that means.
 
 Chapter 3 - Level 3 - 02
 [STR__INGAME__CH3__L3__PATRICK2]
-eng=Spongebob , Here you go...another  bubblewand dipped and ready to go!!!!  I did it again.
+eng=SpongeBob , Here you go...another  bubblewand dipped and ready to go!!!!  I did it again.
 
 
 Chapter 2 - Level 1 - 01
 [STR__INGAME__CH4__L3__KRUSTY1]
-eng=Spongebob!!! Now listen Boy! There are dangerous surfaces that none shall pass unless they have squeaky boots. I happen to have a pair. You can owe me.
+eng=SpongeBob!!! Now listen Boy! There are dangerous surfaces that none shall pass unless they have squeaky boots. I happen to have a pair. You can owe me.
 
 Chapter 2 - Level 1 - 02
 [STR__INGAME__CH4__L3__KRUSTY2]
