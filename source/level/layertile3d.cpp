@@ -60,6 +60,7 @@ void	CLayerTile3d::shutdown()
 {
 }
 
+int	GHV=256;
 /*****************************************************************************/
 
 void	CLayerTile3d::think(DVECTOR &MapPos)
@@ -88,6 +89,8 @@ int			YPos=MapPos.vy>>MapXYShift;
 				RenderH=SCREEN_TILE_HEIGHT3D;
 			else
 				RenderH=MapHeight-MapXY.vy;
+
+		SetGeomScreen(GHV);
 
 }
 
@@ -159,7 +162,7 @@ int		PolyCount=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
 
 		SetPrimPtr((u8*)TPrimPtr);
 
-#if		defined(__USER_ART__) || defined(__USER_daveo__)
+#if		defined(__USER_art__) || defined(__USER_daveo__)
 char	Txt[256];
 sprintf(Txt,"Poly Count=%i",PolyCount);
 		Font->print( 32, 32, Txt);

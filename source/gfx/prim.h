@@ -58,6 +58,8 @@
 
 #define setShadeTexPolyFT3(p)	setlen(p, 7),  setcode(p, 0x24|GPUCode_ShadeTex)
 #define setShadeTexPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_ShadeTex)
+#define setShadeTexPolyGT3(p)	setlen(p, 9),  setcode(p, 0x34|GPUCode_ShadeTex)
+#define setShadeTexPolyGT4(p)	setlen(p, 12), setcode(p, 0x3c|GPUCode_ShadeTex)
 
 #define setSemiTransShadeTexPolyFT3(p)	setlen(p, 7),  setcode(p, 0x24|GPUCode_SemiTrans|GPUCode_ShadeTex)
 #define setSemiTransShadeTexPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_SemiTrans|GPUCode_ShadeTex)

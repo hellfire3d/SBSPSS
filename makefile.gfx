@@ -38,11 +38,12 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #----------------------------------------------------------------------------
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
-# TEMP!!
 LEVELS_OPTS :=				-t:8,4,1 -s:16
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
+LEVELS_BACK_DIR :=			$(LEVELS_IN_DIR)/backgfx
+LEVELS_BACK_OPTS	:=		-t:12,1,1
 LEVELS_DIRS_TO_MAKE :=		$(LEVELS_MAKEFILE_DIR) $(LEVELS_OUT_DIR)
 
 LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05 CHAPTER06
@@ -91,7 +92,15 @@ $(LEVELS_MAKEFILES):	$(LEVELS_DIRS_TO_MAKE) makefile.gfx $(BUILD_DIR)/mklevel.pl
 
 include $(LEVELS_MAKEFILES)
 
-LEVELS_ALL_OUT :=		$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)),$($(CHAPTER)_$(LEVEL)_OUT)))
+# Levels Back Sprites
+LEVELS_BACK_IN		:=	$(LEVELS_BACK_DIR)/*.bmp
+LEVELS_BACK_OUT		:=	$(LEVELS_OUT_DIR)/LevelBackGfx.spr
+
+$(LEVELS_BACK_OUT) : $(LEVELS_BACK_IN)
+		@parkgrab -c+ -z+ $(LEVELS_BACK_IN) -b+ $(LEVELS_BACK_OPTS) -l:$(LEVELS_OUT_DIR)/LevelBackGfx.lbm -o:$(LEVELS_BACK_OUT)
+		@$(MV) -f $(LEVELS_OUT_DIR)/LevelBackGfx.h $(INC_DIR)
+
+LEVELS_ALL_OUT :=		$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)),$($(CHAPTER)_$(LEVEL)_OUT))) $(LEVELS_BACK_OUT)
 
 GFX_DATA_OUT +=    		$(LEVELS_ALL_OUT)
 
@@ -101,9 +110,6 @@ levels : $(LEVELS_ALL_OUT)
 cleanlevels : 	
 				@$(RM) -f $(LEVELS_ALL_OUT)
 				@$(ECHO) Levels cleaned
-
-#$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), clean$(CHAPTER)_$(LEVEL)))
-
 
 #----------------------------------------------------------------------------
 # Collision data

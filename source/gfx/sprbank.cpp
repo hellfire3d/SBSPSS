@@ -269,6 +269,39 @@ void SpriteBank::prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xF
 		setUVTp(_fh,_ft4,_xFlip,_yFlip);
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void SpriteBank::prepareGT4(POLY_GT4 *_gt4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip)
+{
+		int		W=_fh->W,H=_fh->H;
+
+		setShadeTexPolyGT4(_gt4);
+		setShadeTex(_gt4,0);
+//		setRGB0(_gt4,128,128,128);
+		if (_xFlip)
+			{
+			_x-=_fh->XOfs;
+			_x-=W;
+			}
+		else
+			_x+=_fh->XOfs;
+
+		if (_yFlip)
+			{
+			_y-=_fh->YOfs;
+			_y-=H;
+			}
+		else
+			_y+=_fh->YOfs;
+
+		setXYWH(_gt4,_x,_y,W,H);
+		setUVTp(_fh,_gt4,_xFlip,_yFlip);
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -377,6 +410,33 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 ////////////////////////////////	
 }
 
+void SpriteBank::RotateBox(sBox *B,int W,int H,int _xScale,int _yScale,int _rot)
+{
+int		halfW,halfH;
+int		ca,sa;
+int		cw,ch,sw,sh;
+int		width,height;
+int		aspect;
+
+	halfW=(W*_xScale)>>(12+1);
+	halfH=(H*_yScale)>>(12+1);
+	ca=mcos(_rot);
+	sa=msin(_rot);
+	cw=(ca*halfW)>>12;
+	ch=(ca*halfH)>>12;
+	sw=(sa*halfW)>>12;
+	sh=(sa*halfH)>>12;
+
+//	aspect=(512<<12)/384;//((_fh->H<<12)/_fh->W)/2;
+//	ch=(ch*aspect)>>12;
+//	sh=(sh*aspect)>>12;
+
+	B->x0=-cw+sh;	B->y0=-sw-ch;
+	B->x1=+cw+sh;	B->y1=+sw-ch;
+	B->x2=-cw-sh;	B->y2=-sw+ch;
+	B->x3=+cw-sh;	B->y3=+sw+ch;
+
+}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -455,4 +515,77 @@ void SpriteBank::setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yFlip)
 		}
 	_ft4->tpage=_fh->TPage;
 	_ft4->clut=_fh->Clut;
+}
+
+void SpriteBank::setUVTp(sFrameHdr *_fh,POLY_GT4 *_gt4,int _xFlip,int _yFlip)
+{
+	int		U=_fh->U;
+	int		V=_fh->V;
+	int		W=_fh->W;
+	int		H=_fh->H;
+
+	if (!_fh->Rotated) 
+		{
+		if (_xFlip) 
+			{
+			_gt4->u0=U+W-1;
+			_gt4->u1=U-1;
+			_gt4->u2=U+W-1;
+	 		_gt4->u3=U-1;
+			} 
+		else 
+			{
+			_gt4->u0=U;
+			_gt4->u1=U+W;
+			_gt4->u2=U;
+ 			_gt4->u3=U+W;
+	 		}
+		if (_yFlip) 
+			{
+			_gt4->v0=V+H-1;
+			_gt4->v1=V+H-1;
+			_gt4->v2=V-1;
+			_gt4->v3=V-1;
+			} 
+		else 
+			{
+			_gt4->v0=V;
+			_gt4->v1=V;
+			_gt4->v2=V+H;
+			_gt4->v3=V+H;
+			}
+		} 
+	else 
+		{
+		if (_xFlip) 
+			{
+			_gt4->v0=V;
+			_gt4->v2=V;
+			_gt4->v1=V+W;
+			_gt4->v3=V+W;
+			} 
+		else 
+			{
+			_gt4->v0=V+W-1;
+			_gt4->v2=V+W-1;
+			_gt4->v1=V-1;
+			_gt4->v3=V-1;
+			}
+		if (_yFlip) 
+			{
+			_gt4->u0=U+H-1;
+			_gt4->u1=U+H-1;
+			_gt4->u2=U-1;
+			_gt4->u3=U-1;
+			} 
+		else 
+			{
+			_gt4->u0=U;
+			_gt4->u1=U;
+			_gt4->u2=U+H;
+			_gt4->u3=U+H;
+			}
+		}
+	_gt4->tpage=_fh->TPage;
+	_gt4->clut=_fh->Clut;
 }

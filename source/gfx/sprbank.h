@@ -38,6 +38,13 @@
 	Tyepdefs && Defines
 	------------------- */
 
+struct	sBox
+{
+		s16	x0,y0;
+		s16	x1,y1;
+		s16	x2,y2;
+		s16	x3,y3;
+};
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -82,6 +89,8 @@ public:
 	s32			getFrameWidth( int _frame )			{return (m_SpriteBankInstance->getFrameHeaders()[ _frame ].W);}
 	s32			getFrameHeight( int _frame )		{return (m_SpriteBankInstance->getFrameHeaders()[ _frame ].H);}
 
+	void		RotateBox(sBox *B,int W,int H,int _xScale,int _yScale,int _rot);
+
 inline	POLY_FT4	*printFT4(int _frame,int _x,int _y,int _xFlip,int _yFlip,int _ot)	{return printFT4(&m_SpriteBankInstance->getFrameHeaders()[ _frame ],_x,_y,_xFlip,_yFlip,_ot);}
 inline	POLY_FT4	*printFT4(sFrameHdr *_fh,int _x,int _y,int _xFlip,int _yFlip,int _ot)
 {
@@ -109,12 +118,13 @@ inline	POLY_FT4	*printRotatedScaledSprite(sFrameHdr *_fh,int _xCentre,int _yCent
 	return(ft4);
 }
 
-
 	// Hmm.. why did these used to be private?
 	void		prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip);
+	void		prepareGT4(POLY_GT4 *_gt4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip);
 	void		prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip,long _z);
 	void		prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot);
-	void 		setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yYFlip);
+	void 		setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yFlip);
+	void		setUVTp(sFrameHdr *_fh,POLY_GT4 *_gt4,int _xFlip,int _yFlip);
 
 //	void		printRotatedScaledSprite(sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot,int _ot);
 
