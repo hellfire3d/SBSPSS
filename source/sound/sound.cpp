@@ -277,6 +277,7 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				120,			0	},										// SFX_CLAM_SNAP
 	{	1,				121,			0	},										// SFX_CAR_START
 	{	1,				122,			0	},										// CAR_SLOW_DOWN
+	{	1,				123,			0	},										// SFX_SPONGEBOB_OUCH
 
 };
 
