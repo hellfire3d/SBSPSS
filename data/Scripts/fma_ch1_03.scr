@@ -6,7 +6,7 @@
 #include	data/scripts/defs/trans.scr
 
 
-_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_C1_INTRO0);
+_setText(CHAR_GARY,STR__INGAME__GARY_MEOW);
 _setResponseOptions(QUESTION_OK);
 do
 {
@@ -14,12 +14,5 @@ do
 }
 while(_getResponse()==ANSWER_NONE);
 
-_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_C1_INTRO1);
-_setResponseOptions(QUESTION_OK);
-do
-{
-	pause;
-}
-while(_getResponse()==ANSWER_NONE);
 
 stop;
