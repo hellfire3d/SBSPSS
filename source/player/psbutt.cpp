@@ -31,6 +31,14 @@
 #include "game\gamebubs.h"
 #endif
 
+#ifndef __LEVEL_LEVEL_H__
+#include "level\level.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -128,8 +136,11 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 	if(_playerMode->getIsInWater())
 	{
 		DVECTOR	pos;
+		CLevel	&level=GameScene.GetLevel();
+
 		pos=_playerMode->getPlayerPos();
 		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+		level.destroyMapArea(pos);
 	}
 }
 
