@@ -567,7 +567,7 @@ int			m_cameraXScrollDir;
 int			m_cameraXScrollPos;
 int CAMERA_SCROLLLIMIT=8;							// SB is this many tiles off centre at most
 int CAMERA_SCROLLTHRESHOLD=0;		// (pkg 17/7)	// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
-int CAMERA_STARTMOVETHRESHOLD=90;					// If SB moves faster than this then the camera starts scrolling
+int CAMERA_STARTMOVETHRESHOLD=0;	// (pkg 17/7)	// If SB moves faster than this then the camera starts scrolling
 int CAMERA_STOPMOVETHRESHOLD=0;		// (pkg 17/7)	// If SB moves slower than this then the camera stops scrolling
 int CAMERA_SCROLLSPEED=1000;						// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
