@@ -23,6 +23,7 @@ protected:
 		s16			TargetHeight,Height;
 		u16			currentFrame;
 		int			SoundId;
+		DVECTOR		BasePos;
 };
 
 #endif
