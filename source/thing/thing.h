@@ -69,6 +69,7 @@ static	void		shakePlatformLoose();
 
 static	sBBox		&getRenderBBox()			{return(m_RenderBBox);}
 static	sBBox		&getThinkBBox()				{return(m_ThinkBBox);}
+static	void		setMapWH(DVECTOR const &WH);
 
 protected:
 static	void		initList(CThing **List);
@@ -76,7 +77,6 @@ static	void		addToThingList(CThing *_this);
 static	void		removeFromThingList(CThing *_this);
 
 static void			addToCollisionList(CThing *_this);
-
 friend	class CThing;
 
 private:
@@ -96,6 +96,7 @@ static	void		DeleteThing(CThing *Thing);
 
 private:
 static	CThing		**s_FreeList[];
+static	DVECTOR		MapWH,MapWH16;
 };
 
 

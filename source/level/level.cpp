@@ -385,6 +385,7 @@ void	CLevel::initLayers()
 			MapSize.vy=Layer->Height;
 			MapSize16.vx=Layer->Width*16;
 			MapSize16.vy=Layer->Height*16;
+			CThingManager::setMapWH(MapSize);
 		}
 // Collision
 

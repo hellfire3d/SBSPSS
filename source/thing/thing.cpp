@@ -102,6 +102,7 @@ CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
 int				CThingManager::s_initialised=false;
 sBBox			CThingManager::m_RenderBBox;
 sBBox			CThingManager::m_ThinkBBox;
+DVECTOR			CThingManager::MapWH,CThingManager::MapWH16;
 
 #ifdef	USE_FREE_LIST
 CThing			**CThingManager::s_FreeList[CThing::MAX_TYPE];
@@ -143,6 +144,13 @@ void		CThingManager::init()
 	s_initialised=true;
 }
 
+/************************************************************************/
+void		CThingManager::setMapWH(DVECTOR const &WH)
+{
+	MapWH=WH;
+	MapWH16.vx=MapWH.vx*16;
+	MapWH16.vy=MapWH.vy*16;
+}
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -440,8 +448,9 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	m_ThinkBBox.XMax=s_ThinkBBoxX1+CamPos.vx;
 	m_ThinkBBox.YMin=s_ThinkBBoxY0+CamPos.vy;
 	m_ThinkBBox.YMax=s_ThinkBBoxY1+CamPos.vy;
-CLevel	&Lvl=GameScene.GetLevel();
-DVECTOR	const &MapSize=Lvl.getMapSize16();
+
+//CLevel	&Lvl=GameScene.GetLevel();
+//DVECTOR	const &MapSize=Lvl.getMapSize16();
 
 	int		i;
 	CThing	*thing;
@@ -461,10 +470,10 @@ DVECTOR	const &MapSize=Lvl.getMapSize16();
 			DVECTOR	const &ThingPos=thing->getPos();
 
 			// Will speed this up - doubt it, not now!!
-			if (!thing->allowOffMap() && (ThingPos.vx<0 || ThingPos.vx>=MapSize.vx || ThingPos.vy<0 || ThingPos.vy>=MapSize.vy))
+			if (!thing->allowOffMap() && (ThingPos.vx<0 || ThingPos.vx>=MapWH16.vx || ThingPos.vy<0 || ThingPos.vy>=MapWH16.vy))
 			{
 				thing->setToShutdown();
-				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapSize.vx,MapSize.vy);
+				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapWH16.vx,MapWH16.vy);
 			}
 			else
 			{
