@@ -56,7 +56,8 @@ private:
 	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__LEVEL_ITEM;}
 
 	int					m_hiddenUntilBossDead;
-	int					m_pingFrame;
+	int					m_starSin;
+	int					m_starSinR,m_starSinG,m_starSinB;
 	int					m_gfxFrame;
 
 };

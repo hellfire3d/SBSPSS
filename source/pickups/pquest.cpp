@@ -117,7 +117,6 @@ void	CQuestItemPickup::init()
 
 
 	CBasePickup::init();
-	m_pingFrame=0;
 
 	chapter=GameScene.getChapterNumber();
 	level=GameScene.getLevelNumber();
@@ -145,6 +144,9 @@ void	CQuestItemPickup::init()
 	{
 		m_hiddenUntilBossDead=false;
 	}
+
+	m_starSin=0;
+	m_starSinR=m_starSinG=m_starSinB=0;
 }
 
 /*----------------------------------------------------------------------
@@ -191,15 +193,6 @@ void	CQuestItemPickup::collidedWith(CThing *_thisThing)
 }
 
 
-
-int quest_pingframes=50;
-int quest_pingwaitframes=100;
-int quest_pingsize=100;
-int quest_pingr=0;
-int quest_pingg=255;
-int quest_pingb=0;
-int	quest_pingsegments=16;
-int quest_transmode=1;
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -208,7 +201,7 @@ int quest_transmode=1;
   ---------------------------------------------------------------------- */
 int		CQuestItemPickup::getVisibilityRadius()
 {
-	return quest_pingsize;
+	return 100;
 }
 
 /*----------------------------------------------------------------------
@@ -221,12 +214,10 @@ void	CQuestItemPickup::thinkPickup(int _frames)
 {
 	if(!m_hiddenUntilBossDead)
 	{
-		m_pingFrame+=_frames;
-		if(m_pingFrame>(quest_pingframes+quest_pingwaitframes))
-		{
-			// Do sound too.. (pkg)
-			m_pingFrame=0;
-		}
+		m_starSin=(m_starSin+(65*_frames))&4095;
+		m_starSinR=(m_starSinR+(20*_frames))&4095;
+		m_starSinG=(m_starSinG+(40*_frames))&4095;
+		m_starSinB=(m_starSinB+(70*_frames))&4095;
 	}
 	else if(GameScene.getBossHasBeenKilled())
 	{
@@ -240,10 +231,46 @@ void	CQuestItemPickup::thinkPickup(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+static int s_questStarFrames[4]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4};
 void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 {
 	if(!m_hiddenUntilBossDead)
 	{
+		DVECTOR		pos;
+		SpriteBank	*sprites;
+		sFrameHdr	*fh;
+		int			i;
+		int			x,y;
+		int			angle,colourOfs;
+
+		sprites=CGameScene::getSpriteBank();
+
+		// Quest item graphic
+		fh=sprites->getFrameHeader(m_gfxFrame);
+		x=_pos->vx-(fh->W/2);
+		y=_pos->vy-(fh->H/2);
+		sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+
+		// Stars
+		angle=m_starSin;
+		colourOfs=0;
+		for(i=0;i<4;i++)
+		{
+			POLY_FT4	*ft4;
+			int			r,g,b;
+			fh=sprites->getFrameHeader(s_questStarFrames[i]);
+			x=_pos->vx+((msin(angle)*40)>>12)-(fh->W/2);
+			y=_pos->vy+((mcos(angle)*40)>>12)-(fh->H/2);
+			ft4=sprites->printFT4(fh,x,y,0,0,0);
+			r=((msin((m_starSinR+colourOfs)&4095)*64)>>12)+128;
+			g=((msin((m_starSinG+colourOfs)&4095)*64)>>12)+128;
+			b=((msin((m_starSinB+colourOfs)&4095)*64)>>12)+128;
+			setRGB0(ft4,r,g,b);
+			angle=(angle+300)&4095;
+			colourOfs+=200;
+		}
+
+/*
 		SpriteBank	*sprites;
 		sFrameHdr	*fh;
 		int			x,y;
@@ -297,6 +324,7 @@ void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 			setXY3(ft3,512,512,512,512,512,512);
 			AddPrimToList(ft3,OTPOS__PICKUP_POS+1);
 		}
+*/
 	}
 }
 
