@@ -1,0 +1,12 @@
+// Defs for characters and animations
+// Mainly needed for calls to _setCharacterAnimation()
+
+#define	CHAR_SPONGEBOB		0
+#define	CHAR_SANDY			1
+#define CHAR_PATRICK		2
+#define CHAR_SQUIDWARD		3
+#define CHAR_KRABS			4
+#define CHAR_PLANKTON		5
+
+#define ANIM_QUIET			0
+#define ANIM_TALKING		1
