@@ -489,7 +489,7 @@ int CPlayer::getAnimNo()
 void CPlayer::setAnimNo(int _animNo)
 {
 	m_animNo=_animNo;
-	m_animFrame=0;
+	setAnimFrame(0);
 }
 
 
