@@ -380,6 +380,18 @@ SOURCE=..\..\..\source\PsxBoot\psxboot.cpp
 SOURCE=..\..\..\source\PsxBoot\PSXBOOT.H
 # End Source File
 # End Group
+# Begin Group "script"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\script\script.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\script\script.h
+# End Source File
+# End Group
 # Begin Group "sound"
 
 # PROP Default_Filter ""

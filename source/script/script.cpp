@@ -16,7 +16,7 @@
 	Includes
 	-------- */
 
-#include "paul\script.h"
+#include "script\script.h"
 
 #ifndef	__SYSTEM_DBG_H__
 #include "system\dbg.h"

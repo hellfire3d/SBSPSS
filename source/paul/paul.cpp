@@ -78,8 +78,8 @@
 #include "frontend\scrollbg.h"
 #endif
 
-#ifndef __PAUL_SCRIPT_H__
-#include "paul\script.h"
+#ifndef __SCRIPT_SCRIPT_H__
+#include "script\script.h"
 #endif
 
 
