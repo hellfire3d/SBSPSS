@@ -266,6 +266,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			startPos.vy -= 45;
 
 			projectile->init( startPos, headingToPlayer );
+			projectile->setSpeed( 6 );
 
 			m_laserTimer = GameState::getOneSecondInFrames() >> 1;
 
