@@ -35,11 +35,19 @@
 #include <ACTOR_PATRICK_Anim.h>
 #endif
 
+#ifndef	__ANIM_BARNACLEBOY_HEADER__
+#include <ACTOR_BARNACLEBOY_Anim.h>
+#endif
+
+#ifndef	__ANIM_MERMAIDMAN_HEADER__
+#include <ACTOR_MERMAIDMAN_Anim.h>
+#endif
+
 
 CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 {
 	{	// NPC_FRIEND_BARNACLE_BOY
-		ACTORS_CLAM_SBK,
+		ACTORS_BARNACLEBOY_SBK,
 		3,
 		128,
 		false,
@@ -66,12 +74,12 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_FRIEND_MERMAID_MAN
-		ACTORS_CLAM_SBK,
+		ACTORS_MERMAIDMAN_SBK,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
-		0,
+		ANIM_MERMAIDMAN_IDLEBREATHE,
 	},
 
 	{	// NPC_FRIEND_PATRICK

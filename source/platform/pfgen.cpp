@@ -43,18 +43,17 @@ void CNpcFallingPlatformGenerator::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CNpcPlatform *newPlatform;
-
 void CNpcFallingPlatformGenerator::think( int _frames )
 {
-	/*m_timer -= _frames;
+	m_timer -= _frames;
 
 	if ( m_timer < 0 )
 	{
-		m_timer = GameState::getOneSecondInFrames() + ( getRnd() * ( m_data[m_type].initTimer - 1 ) * GameState::getOneSecondInFrames() );
+		m_timer = GameState::getOneSecondInFrames() + ( getRnd() % ( ( m_data[m_type].initTimer - 1 ) * GameState::getOneSecondInFrames() ) );
 
 		// generate new falling platform
 
+		CNpcPlatform *newPlatform;
 		newPlatform = NULL;
 
 		switch( m_targetType )
@@ -78,28 +77,28 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 		newPlatform->setType( m_targetType );
 		newPlatform->setGraphic( m_graphicNum );
 
-		//CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
 
-		//if ( sourceWaypoint )
+		if ( sourceWaypoint )
 		{
 			DVECTOR startPos;
-			//startPos.vx = sourceWaypoint->pos.vx;
-			//startPos.vy = sourceWaypoint->pos.vy;
-			startPos.vx = 100;
-			startPos.vy = 100;
+			startPos.vx = sourceWaypoint->pos.vx;
+			startPos.vy = sourceWaypoint->pos.vy;
+			//startPos.vx = 100;
+			//startPos.vy = 100;
 
 			newPlatform->init( startPos );
 			ASSERT(m_layerCollision);
 
-			//while( sourceWaypoint )
-			//{
-				//newPlatform->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
-				//sourceWaypoint = sourceWaypoint->nextWaypoint;
-			//}
+			while( sourceWaypoint )
+			{
+				newPlatform->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
+				sourceWaypoint = sourceWaypoint->nextWaypoint;
+			}
 		}
 
 		newPlatform->setLayerCollision( m_layerCollision );
-		//platform->setTiltable( false );
-		//platform->postInit();
-	}*/
+		newPlatform->setTiltable( false );
+		newPlatform->postInit();
+	}
 }

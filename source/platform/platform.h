@@ -82,9 +82,9 @@ public:
 	void				shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
-	void				setLayerCollision( class CLayerCollision *_layer );
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
+	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 #ifdef REMOVETHIS
 //	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	virtual s32			getNewYPos( CThing *_thisThing );
@@ -169,7 +169,7 @@ protected:
 	static s32			playerXDistSqr;
 	static s32			playerYDistSqr;
 
-	static class CLayerCollision	*m_layerCollision;
+	class CLayerCollision	*m_layerCollision;
 
 	// internal variables
 
