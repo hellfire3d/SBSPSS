@@ -148,6 +148,7 @@ protected:
 	s16											m_vertVelocity;
 	u8											m_bounceCount;
 	u8											m_hitTarget;
+	s32											m_highResX, m_highResY;
 };
 
 

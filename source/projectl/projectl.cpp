@@ -516,6 +516,8 @@ void CPlayerProjectile::init()
 	m_extension = 0;
 	m_frame = 0;
 	m_reversed = 0;
+	m_highResX = 0;
+	m_highResY = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -689,8 +691,20 @@ void CPlayerProjectile::think(int _frames)
 			}
 			else
 			{
-				Pos.vx += ( _frames * 5 * rcos( m_heading ) ) >> 12;
-				Pos.vy += ( _frames * 5 * rsin( m_heading ) ) >> 12;
+				m_highResX += ( _frames * ( 5 << 8 ) * rcos( m_heading ) ) >> 12;
+				m_highResY += ( _frames * ( 5 << 8 ) * rsin( m_heading ) ) >> 12;
+
+				if ( abs( m_highResX ) > 256 )
+				{
+					Pos.vx += m_highResX >> 8;
+					m_highResX -= ( m_highResX >> 8 ) << 8;
+				}
+
+				if ( abs( m_highResY ) > 256 )
+				{
+					Pos.vy += m_highResY >> 8;
+					m_highResY -= ( m_highResY >> 8 ) << 8;
+				}
 			}
 
 			break;
