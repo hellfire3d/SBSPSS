@@ -75,7 +75,7 @@ MATRIX		CGameScene::CamMtx;
 #ifndef __USER_paul__
 int s_globalLevelSelectThing=0;
 #else
-int s_globalLevelSelectThing=1;
+int s_globalLevelSelectThing=120;
 #endif
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
