@@ -7,6 +7,12 @@
 
 #include	<dstructs.h>
 
+
+#ifdef __VERSION_debug__
+#define __SHOW_COLLISION__
+#endif
+
+
 /*****************************************************************************/
 class CLayerCollision
 {
@@ -17,6 +23,11 @@ virtual	~CLayerCollision();
 virtual	void			shutdown();
 
 		u8				Get(int X,int Y)	{return(Map[X+(Y*MapWidth)]);}
+
+#ifdef __SHOW_COLLISION__
+		void			render(DVECTOR &MapPos);
+#endif
+
 
 protected:
 		sLayerHdr		*LayerHdr;
