@@ -255,7 +255,8 @@ public:
 	int				getSpatulasHeld()									{return m_numSpatulasHeld;}
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
-	int				wasLastHitElectrical()								{ return m_recoveringFromElectrocution;}
+	int				isDead()											{return m_currentMode==PLAYER_MODE_DEAD;}
+	int				wasLastHitElectrical()								{return m_recoveringFromElectrocution;}
 
 	void			registerAddon(PLAYER_ADDONS _addon);
 	DVECTOR			*getMoveVelocity()									{return &m_moveVelocity;}
