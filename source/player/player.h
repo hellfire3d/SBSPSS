@@ -112,6 +112,7 @@ public:
 protected:		
 	const PlayerMetrics	*getPlayerMetrics();
 
+	// State
 	void			setState(PLAYER_STATE _state);
 	int				getFacing();
 	void			setFacing(int _facing);
@@ -124,8 +125,10 @@ protected:
 	void			setMoveVelocity(DVECTOR *_moveVel);
 	virtual int		getPadInput();
 
+	// Collision
 	int				isOnSolidGround();
 
+	// Movement
 	void moveLeft();
 	void moveRight();
 	void slowdown();

@@ -167,8 +167,8 @@ m_animFrame=0;
 	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 
 #ifdef __USER_paul__
-	Pos.vx=50;
-	Pos.vy=200;
+	Pos.vx=23*16;
+	Pos.vy=23*16;
 #else
 	Pos.vx=10;
 	Pos.vy=10;
@@ -197,7 +197,7 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR ofs={0,0};
+DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -211,6 +211,7 @@ void	CPlayer::think(int _frames)
 	if(padInput&PAD_DOWN)	Pos.vy+=move;
 	if(padInput&PAD_LEFT)	Pos.vx-=move;
 	if(padInput&PAD_RIGHT)	Pos.vx+=move;
+	m_invincibleFrameCount=0;
 #else
 	if(_frames>=3)_frames=2;
 
@@ -218,10 +219,22 @@ void	CPlayer::think(int _frames)
 	{
 		// Think
 		m_currentState->think(this);
-		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
-		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
 
-		// Ground collision
+		// Horizontal movement
+		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
+		if(Pos.vx<350)
+		{
+			if(m_state==STATE_RUN)
+			{
+				setState(STATE_IDLE);
+				setAnimNo(ANIM_PLAYER_ANIM_RUNSTOP);
+			}
+			Pos.vx=350;
+			m_moveVel.vx=0;
+		}
+
+		// Vertical movement
+		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
 		if(isOnSolidGround())
 		{
 			if(m_moveVel.vy)
@@ -278,13 +291,12 @@ void	CPlayer::think(int _frames)
 
 
 #endif
-m_invincibleFrameCount=0;
 	// Move the camera offset
+m_cameraOffsetTarget=ofs;		
+m_cameraOffset=ofs;
+/*
 	for(i=0;i<_frames;i++)
 	{
-		m_cameraOffsetTarget=ofs;		
-		m_cameraOffset=ofs;
-		/*
 		int moveDelta;
 		moveDelta=(m_cameraOffset.vx-m_cameraOffsetTarget.vx);
 		if(moveDelta)
@@ -301,8 +313,8 @@ m_invincibleFrameCount=0;
 					}
 					m_cameraOffset.vx+=moveDelta;
 					}
-		*/
 	}
+*/
 	if(Pos.vx<0)Pos.vx=0;
 	if(Pos.vy<0)Pos.vy=0;
 }
@@ -344,8 +356,8 @@ void	CPlayer::render()
 DVECTOR CPlayer::getCameraPos()
 {
 	DVECTOR	cameraPos;
-	cameraPos.vx=Pos.vx;//+m_cameraOffset.vx;
-	cameraPos.vy=Pos.vy;//+m_cameraOffset.vy;
+	cameraPos.vx=Pos.vx+m_cameraOffset.vx;
+	cameraPos.vy=Pos.vy+m_cameraOffset.vy;
 	return cameraPos;
 }
 
@@ -399,11 +411,11 @@ void CPlayer::setFacing(int _facing)
 		{
 			case FACING_LEFT:
 				m_facing=FACING_LEFT;
-				m_skel.setAng(1024);
+				m_skel.setAng(512);//1024);
 				break;
 			case FACING_RIGHT:
 				m_facing=FACING_RIGHT;
-				m_skel.setAng(-1024);
+				m_skel.setAng(3096+512);//-1024);
 				break;
 			default:
 				ASSERT(0);
@@ -462,11 +474,16 @@ int CPlayer::getPadInput()
 
 int CPlayer::isOnSolidGround()
 {
-	return Pos.vy>16*15;
+	return Pos.vy>23*16;//16*15;
 }
 
 
-
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 
 void CPlayer::moveLeft()
 {
