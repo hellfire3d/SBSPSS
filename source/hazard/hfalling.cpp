@@ -60,20 +60,16 @@ void CNpcFallingHazard::processMovement( int _frames )
 
 		Pos.vy += m_speed * _frames;
 
-		if ( m_speed < 5 )
+		if ( Pos.vy > ( m_bouncePos.vy + 32 ) )
 		{
-			m_speed++;
+			m_bounceFinish = false;
 		}
-
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		s32 yPos = Pos.vy - offset.vy;
-
-		if ( yPos > VidGetScrH() || yPos < 0 )
+		else
 		{
-			m_isActive = false;
-			m_timerActive = true;
-			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
+			if ( m_speed < 3 )
+			{
+				m_speed++;
+			}
 		}
 	}
 	else
@@ -107,6 +103,8 @@ void CNpcFallingHazard::processMovement( int _frames )
 				m_bounceFinish = true;
 				m_speed = -5;
 				m_bounceDir = getRnd() % 2;
+
+				m_bouncePos = Pos;
 			}
 			else
 			{
@@ -115,6 +113,17 @@ void CNpcFallingHazard::processMovement( int _frames )
 				Pos.vy += yMovement;
 			}
 		}
+	}
+
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	s32 yPos = Pos.vy - offset.vy;
+
+	if ( yPos > VidGetScrH() )
+	{
+		m_isActive = false;
+		m_timerActive = true;
+		m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
 	}
 }
 
@@ -135,7 +144,20 @@ void CNpcFallingHazard::processTimer( int _frames )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 {
 	if (!m_bounceFinish && m_movementTimer<=0) CNpcHazard::collidedWith(_thisThing);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcFallingHazard::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.y2 = thinkBBox.YMin + 1;
+
+	return &objThinkBox;
 }

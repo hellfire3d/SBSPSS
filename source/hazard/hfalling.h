@@ -22,6 +22,7 @@ class CNpcFallingHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
@@ -31,6 +32,7 @@ protected:
 	u8					m_bounceFinish;
 	s32					m_speed;
 	u8					m_bounceDir;
+	DVECTOR				m_bouncePos;
 };
 
 #endif
