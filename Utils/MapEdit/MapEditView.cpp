@@ -41,9 +41,10 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_COMMAND(ID_MIRRORY, OnMirrory)
 	ON_COMMAND(ID_ACTIVEBRUSH_LEFT, OnActivebrushLeft)
 	ON_COMMAND(ID_ACTIVEBRUSH_RIGHT, OnActivebrushRight)
+	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
-	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
+	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -167,3 +168,5 @@ void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft(t
 void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight(this);}
 
 void CMapEditView::OnMapSetSize()			 							{GetDocument()->MapSetSize(this);}
+
+void CMapEditView::On2d3dToggle()										{GetDocument()->Toggle2d3d(this);}

@@ -98,12 +98,12 @@ Vec		ThisCam=CamPos/XYDiv;
 		if (Is3d && Render3dFlag)
 		{
 			glEnable(GL_DEPTH_TEST);
-			Render3d(Core,ThisCam,Map);
+			Render(Core,ThisCam,Map,TRUE);
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			Render2d(Core,ThisCam,Map);
+			Render(Core,ThisCam,Map,FALSE);
 		}
 }
 
@@ -124,57 +124,17 @@ CMap		&Brush=TileBank.GetActiveBrush();
 		if (Is3d && Render3dFlag)
 		{
 			glEnable(GL_DEPTH_TEST);
-			Render3d(Core,ThisCam,Brush,0.5);
+			Render(Core,ThisCam,Brush,TRUE,0.5);
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			Render2d(Core,ThisCam,Brush,0.5);
+			Render(Core,ThisCam,Brush,FALSE,0.5);
 		}
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render2d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha)
-{
-	return;
-int			Width=ThisMap.GetWidth();
-int			Height=ThisMap.GetHeight();
-		
-		if (Alpha<1)
-		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
-			glColor4f(0.5,0.5,0.5,Alpha);
-		}
-		else
-		{
-			glColor3f(0.5,0.5,0.5);
-		}
-		glMatrixMode(GL_MODELVIEW);
-
-		for (int YLoop=0; YLoop<Height; YLoop++)
-		{
-			for (int XLoop=0; XLoop<Width; XLoop++)
-			{
-				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
-				CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
-
-				glLoadIdentity();	// Slow way, but good to go for the mo
-				glTranslatef(CamPos.x+XLoop,CamPos.y-YLoop,CamPos.z);
-//				ThisTile.Render();
-int	c=(XLoop+YLoop)&1;
-				glColor3f(c,1,1);
-				glBegin(GL_QUADS);
-					BuildGLQuad(0,1,0,1,0);
-				glEnd();
-
-			}
-		}
-		glDisable(GL_BLEND);
-}
-
-/*****************************************************************************/
-void	CLayerTile::Render3d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha)
+void	CLayerTile::Render(CCore *Core,Vec &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha)
 {
 int			Width=ThisMap.GetWidth();
 int			Height=ThisMap.GetHeight();
@@ -203,7 +163,7 @@ int			Height=ThisMap.GetHeight();
 
 					glLoadIdentity();	// Slow way, but good to go for the mo
 					glTranslatef(CamPos.x+XLoop,CamPos.y-YLoop,CamPos.z);
-					ThisTile.Render(ThisElem.Flags);
+					ThisTile.Render(ThisElem.Flags,Render3d);
 				}
 			}
 		}

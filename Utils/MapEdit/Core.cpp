@@ -510,3 +510,10 @@ int		ListSize=Layer.size();
 
 	UpdateView(View);
 }
+
+/*****************************************************************************/
+void	CCore::Toggle2d3d(CMapEditView *View)
+{
+		Is3dFlag=!Is3dFlag;
+		UpdateView(View);
+}

@@ -70,8 +70,7 @@ public:
 		BOOL			MirrorY(CCore *Core);
 
 protected:
-		void			Render2d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha=1.0f);
-		void			Render3d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha=1.0f);
+		void			Render(CCore *Core,Vec &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f);
 		void			RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d);
 
 		BOOL			Paint(CMap &Blk,CPoint &CursorPos);

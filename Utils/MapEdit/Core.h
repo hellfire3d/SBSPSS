@@ -87,6 +87,9 @@ public:
 		int						GetMapWidth()					{return(Layer[LAYER_ACTION]->GetWidth());}
 		int						GetMapHeight()					{return(Layer[LAYER_ACTION]->GetHeight());}
 
+		void					Toggle2d3d(CMapEditView *View);
+
+
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;

@@ -191,7 +191,7 @@ void	CMapEditDoc::SetMode(int NewMode)
 /*********************************************************************************/
 void	CMapEditDoc::TileBankLoad()
 {
-char		BASED_CODE GinFilter[]= "Gin Files (*.Gin)|*.gin|All Files (*.*)|*.*||";
+char		BASED_CODE GinFilter[]= "All Tile Files (*.Gin; *.Bmp)|*.gin;*.Bmp|3d Tile Files (*.Gin)|*.Gin|2d Tile Files (*.Bmp)|*.Bmp|All Files (*.*)|*.*||";
 CFileDialog	Dlg(TRUE,"Gin",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,GinFilter);
 
 		if (Dlg.DoModal()!=IDOK) return;
@@ -242,4 +242,10 @@ CMapSizeDlg	Dlg;
 		if (Dlg.DoModal()!=IDOK) return;
 
 		Core.SetMapSize(View,Dlg.m_Width,Dlg.m_Height);
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::Toggle2d3d(CMapEditView *View)
+{
+	Core.Toggle2d3d(View);
 }

@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CLayerList
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,19 +18,19 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=10
-Resource1=IDD_MULTIBAR (English (U.S.))
-Resource2=IDD_LAYER_LIST_DIALOG
+Resource1=IDD_ABOUTBOX (English (U.S.))
+Resource2=IDD_MULTIBAR (English (U.S.))
 Resource3=IDD_GFXTOOLBAR
 Resource4=IDD_DIALOGBAR (English (U.S.))
 Resource5=IDR_MAPEDITYPE (English (U.S.))
 Class8=CMultiBar
-Resource6=IDR_MAINFRAME (English (U.S.))
-Resource7=IDR_TOOLBAR (English (U.S.))
+Resource6=IDR_TOOLBAR (English (U.S.))
+Resource7=IDD_TILESET_DIALOG
 Class9=CLayerList
 Class10=CTileSetDlg
-Resource8=IDD_ABOUTBOX (English (U.S.))
+Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
-Resource9=IDD_TILESET_DIALOG
+Resource9=IDD_LAYER_LIST_DIALOG
 Class12=CMapSizeDlg
 Resource10=IDD_MAPSIZE
 
@@ -79,7 +79,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=CMapEditView
+LastObject=ID_2D_3D_TOGGLE
 Filter=C
 VirtualFilter=VWC
 
@@ -135,36 +135,38 @@ Command17=ID_MIRRORY
 Command18=ID_ACTIVEBRUSH_LEFT
 Command19=ID_ACTIVEBRUSH_RIGHT
 Command20=ID_TOGGLE_TILEVIEW
-Command21=ID_WINDOW_NEW
-Command22=ID_WINDOW_CASCADE
-Command23=ID_WINDOW_TILE_HORZ
-Command24=ID_WINDOW_ARRANGE
-Command25=ID_APP_ABOUT
-CommandCount=25
+Command21=ID_2D_3D_TOGGLE
+Command22=ID_WINDOW_NEW
+Command23=ID_WINDOW_CASCADE
+Command24=ID_WINDOW_TILE_HORZ
+Command25=ID_WINDOW_ARRANGE
+Command26=ID_APP_ABOUT
+CommandCount=26
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
 Class=?
 Command1=ID_ACTIVEBRUSH_LEFT
 Command2=ID_ACTIVEBRUSH_RIGHT
-Command3=ID_EDIT_COPY
-Command4=ID_TOGGLE_GRID
-Command5=ID_FILE_NEW
-Command6=ID_FILE_OPEN
-Command7=ID_FILE_SAVE
-Command8=ID_EDIT_PASTE
-Command9=ID_EDIT_UNDO
-Command10=ID_EDIT_CUT
-Command11=ID_EDIT_COPY
-Command12=ID_EDIT_PASTE
-Command13=ID_TOGGLE_TILEVIEW
-Command14=ID_NEXT_PANE
-Command15=ID_PREV_PANE
-Command16=ID_MIRRORX
-Command17=ID_EDIT_CUT
-Command18=ID_MIRRORY
-Command19=ID_EDIT_UNDO
-CommandCount=19
+Command3=ID_2D_3D_TOGGLE
+Command4=ID_EDIT_COPY
+Command5=ID_TOGGLE_GRID
+Command6=ID_FILE_NEW
+Command7=ID_FILE_OPEN
+Command8=ID_FILE_SAVE
+Command9=ID_EDIT_PASTE
+Command10=ID_EDIT_UNDO
+Command11=ID_EDIT_CUT
+Command12=ID_EDIT_COPY
+Command13=ID_EDIT_PASTE
+Command14=ID_TOGGLE_TILEVIEW
+Command15=ID_NEXT_PANE
+Command16=ID_PREV_PANE
+Command17=ID_MIRRORX
+Command18=ID_EDIT_CUT
+Command19=ID_MIRRORY
+Command20=ID_EDIT_UNDO
+CommandCount=20
 
 [DLG:IDD_ABOUTBOX (English (U.S.))]
 Type=1
@@ -209,7 +211,7 @@ ImplementationFile=LayerList.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_LAYER_LIST
+LastObject=CLayerList
 
 [DLG:IDD_TILESET_DIALOG]
 Type=1

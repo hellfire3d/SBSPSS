@@ -93,21 +93,26 @@ public:
 		
 		int		IsLoaded()			{return(Loaded);}
 		int		GetTileCount()		{return(Tile.size());}
+
 		void	Load(CCore *Core);
+		void	Load2d(CCore *Core);
+		void	Load3d(CCore *Core);
+
 		char	*GetPath()			{return(Path);}
 		char	*GetName()			{return(Name);}
+		char	*GetExt()			{return(Ext);}
+
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
 		int		FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
-		void	Render2d(Vec &CamPos,CMap &LBrush,CMap &RBrush);
-		void	Render3d(Vec &CamPos,CMap &LBrush,CMap &RBrush);
+		void	Render(Vec &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
 		void	RenderCursor(Vec &CamPos,int Pos,int Width, int Height);
 		void	RenderBrush(Vec &CamPos,CMap &LBrush,CMap &RBrush);
 		void	RenderGrid(Vec &CamPos);
 
 private:
 
-		char				Path[256],Name[256];
+		char				Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		int					SetNumber;
 		std::vector<CTile>	Tile;
 		BOOL				Loaded;

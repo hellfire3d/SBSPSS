@@ -12,12 +12,20 @@
 #include	<gl\glut.h>
 #include	<Vector>
 
+struct	sRGBData
+{
+	int		Width;
+	int		Height;
+	char	*RGB;
+};
+
 struct	sTex
 {
 	char			Name[256];
 	char			Path[256];
 	GLuint			TexID;
 	int				Flags;
+	int				Width,Height;
 };
 
 /*****************************************************************************/
@@ -27,10 +35,18 @@ class	CTexCache
 {
 public:
 	
-		int		ProcessTexture(char *TexName,char *Path,int Flags);
+		int		GetTexIdx(char *Name,int Flags);
+
+		int		ProcessTexture(char *TexName,char *Path,int Flags,sRGBData *RGBData=0);
+		void	Purge();
+
+		void	LoadBMP(char *Filename,sRGBData &RGBData);
+		void	FreeBMP(sRGBData &RGBData);
+
+		void	LoadTex(sTex &ThisTex,sRGBData *TexData);
+
 		sTex	&GetTex(int Id)						{return(TexList[Id]);}
 		GLuint	GetTexGLId(int Id)					{return(TexList[Id].TexID);}
-		void	Purge();
 
 		std::vector<sTex>		TexList;
 

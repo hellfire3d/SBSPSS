@@ -45,8 +45,8 @@ CTileBank::CTileBank()
 		SelEnd=1;
 
 #ifdef _DEBUG
-//	AddTileSet("c:/temp/rockp/rockp.gin");
-	AddTileSet("c:/temp/3/test.gin");
+	AddTileSet("c:/temp/rockp/rockp.gin");
+//	AddTileSet("c:/temp/3/test.gin");
 
 int	W=3;
 int	H=3;
@@ -167,12 +167,12 @@ void	CTileBank::RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d)
 		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
-			TileSet[CurrentSet].Render3d(CamPos,GetLBrush(),GetRBrush());
+			TileSet[CurrentSet].Render(CamPos,GetLBrush(),GetRBrush(),TRUE);
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			TileSet[CurrentSet].Render2d(CamPos,GetLBrush(),GetRBrush());
+			TileSet[CurrentSet].Render(CamPos,GetLBrush(),GetRBrush(),FALSE);
 		}
 
 		TileSet[CurrentSet].RenderCursor(CamPos,CursorPos,SelStart,SelEnd);
@@ -288,14 +288,8 @@ BOOL	CTileBank::SelectCancel()
 /*****************************************************************************/
 CTileSet::CTileSet(char *_Filename,int Idx)
 {
-char	Drive[_MAX_DRIVE];
-char	Dir[_MAX_DIR];
-char	Fname[_MAX_FNAME];
-char	Ext[_MAX_EXT];
-
-		_splitpath(_Filename,Drive,Dir,Fname,Ext);
-		sprintf(Path,"%s%s",Drive,Dir);
-		sprintf(Name,"%s",Fname);
+		_splitpath(_Filename,Drive,Path,Name,Ext);
+		
 		Loaded=FALSE;
 		SetNumber=Idx;
 }
@@ -312,10 +306,37 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 void	CTileSet::Load(CCore *Core)
 {
-CScene	Scene;
-char	Filename[256+64];
 
-		sprintf(Filename,"%s%s.%s",Path,Name,"Gin");
+		if (IsStrSame(Ext,".Gin"))
+		{
+			Load3d(Core);
+		}
+		else
+		{
+			Load2d(Core);
+		}
+
+		Loaded=TRUE;
+}
+
+/*****************************************************************************/
+void	CTileSet::Load2d(CCore *Core)
+{
+
+//		_makepath( Filename, Drive, Path, Name, Ext);
+		
+		Tile.push_back(CTile());	// Insert Blank		
+
+		Tile.push_back(CTile(Core,this,0,0));
+}
+
+/*****************************************************************************/
+void	CTileSet::Load3d(CCore *Core)
+{
+char	Filename[_MAX_PATH];
+CScene	Scene;
+
+		_makepath( Filename, Drive, Path, Name, Ext);
 		Scene.Load(Filename);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
@@ -327,8 +348,6 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
 		}
 
-
-	Loaded=TRUE;
 }
 
 /*****************************************************************************/
@@ -346,12 +365,7 @@ int	ListSize=Tile.size();
 }
 
 /*****************************************************************************/
-void	CTileSet::Render2d(Vec &CamPos,CMap &LBrush,CMap &RBrush)
-{
-}
-
-/*****************************************************************************/
-void	CTileSet::Render3d(Vec &CamPos,CMap &LBrush,CMap &RBrush)
+void	CTileSet::Render(Vec &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
@@ -371,7 +385,7 @@ int			SelFlag;
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glColor3f(0.5,0.5,0.5);
-			if (TileID) Tile[TileID].Render(0);
+			if (TileID) Tile[TileID].Render(0,Render3d);
 			ThisElem.Tile=TileID;
 			SelFlag=0;
 
@@ -445,7 +459,6 @@ int		MaxTile=Tile.size();
 		{
 			for (int X=Start.x; X<=End.x; X++)
 			{
-//				RenderCursorBlock(CamPos,X,Y);
 				glLoadIdentity();
 				glTranslatef(CamPos.x+X*(1+TileBrowserGap),CamPos.y-Y*(1+TileBrowserGap),CamPos.z);
 	

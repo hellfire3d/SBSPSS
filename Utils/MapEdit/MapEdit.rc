@@ -129,6 +129,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
     END
+    POPUP "Misc"
+    BEGIN
+        MENUITEM "2d/3d Toggle",                ID_2D_3D_TOGGLE
+    END
     POPUP "&Window"
     BEGIN
         MENUITEM "&New Window",                 ID_WINDOW_NEW
@@ -152,6 +156,7 @@ IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE
 BEGIN
     219,            ID_ACTIVEBRUSH_LEFT,    VIRTKEY, NOINVERT
     221,            ID_ACTIVEBRUSH_RIGHT,   VIRTKEY, NOINVERT
+    222,            ID_2D_3D_TOGGLE,        VIRTKEY, NOINVERT
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     "G",            ID_TOGGLE_GRID,         VIRTKEY, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT

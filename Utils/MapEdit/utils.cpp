@@ -176,6 +176,7 @@ int		ID;
 /**************************************************************************************/
 /**************************************************************************************/
 /**************************************************************************************/
+#if	0
 AUX_RGBImageRec *LoadBMP(char *Filename)
 {
 FILE	*File=NULL;
@@ -192,40 +193,50 @@ FILE	*File=NULL;
 }
 
 /**************************************************************************************/
-int		LoadGLTexture(char *FileName, GLuint &Text)
+void	FreeBMP(AUX_RGBImageRec *TextureImage)
 {
-AUX_RGBImageRec	*TextureImage[1];
+	if (TextureImage)									// If Texture Exists
+	{
+		if (TextureImage->data)							// If Texture Image Exists
+		{
+			free(TextureImage->data);					// Free The Texture Image Memory
+		}
+
+		free(TextureImage);								// Free The Image Structure
+	}
+
+}
+
+/**************************************************************************************/
+int		LoadGLTexture(char *FileName, GLuint &Text,int &Width,int &Height)
+{
+AUX_RGBImageRec	*TextureImage;
 int				Status=FALSE;
 
-	memset(TextureImage,0,sizeof(void *)*1);           	// Init Buffer
+	memset(&TextureImage,0,sizeof(void *)*1);           // Init Buffer
 
 	// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
-	if (TextureImage[0]=LoadBMP(FileName))
+	if (TextureImage=LoadBMP(FileName))
 	{
+		Width=TextureImage->sizeX;
+		Height=TextureImage->sizeY;
 		Status=TRUE;									// Set The Status To TRUE
 
 		glGenTextures(1, &Text);						// Create The Texture
 
 		// Typical Texture Generation Using Data From The Bitmap
 		glBindTexture(GL_TEXTURE_2D, Text);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage->sizeX, TextureImage->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	if (TextureImage[0])									// If Texture Exists
-	{
-		if (TextureImage[0]->data)							// If Texture Image Exists
-		{
-			free(TextureImage[0]->data);					// Free The Texture Image Memory
-		}
-
-		free(TextureImage[0]);								// Free The Image Structure
-	}
+	FreeBMP(TextureImage);
 
 	return Status;										// Return The Status
 }
+#endif
 
 /**************************************************************************************/
 struct	sTgaHdr
@@ -246,52 +257,42 @@ struct	sTgaHdr
 
 
 
-void SaveTGA(char *Filename,int SX,int SY,int SW,int SH)
+void SaveTGA(char *Filename,int W,int H,char *Data)
 {
 FILE			*File;
 sTgaHdr			FileHdr;
 
 		File=fopen(Filename,"wb");
 		
-//---------------------------------------------------------------------------
-// Header
 		memset(&FileHdr,0 ,sizeof(sTgaHdr));
 	
 		FileHdr.imagetype= 2;  //imagetype
-		FileHdr.width = SW;
-		FileHdr.height= SH;
+		FileHdr.width = W;
+		FileHdr.height= H;
 		FileHdr.depth=24;
-//		FileHdr.imagedesc=24;
 
 		fwrite(&FileHdr,sizeof(sTgaHdr),1,File);
-		
 
-//---------------------------------------------------------------------------
-// Data
-		for (int Y=0; Y<SH; Y++)
-			{
-			for (int X=0; X<SW; X++)
-				{
-				float	Col[3];
-				unsigned char	R,G,B;
-
-				glReadPixels(X,Y,1,1,GL_RED,	GL_FLOAT,&Col[0]);
-				glReadPixels(X,Y,1,1,GL_GREEN,	GL_FLOAT,&Col[1]);
-				glReadPixels(X,Y,1,1,GL_BLUE,	GL_FLOAT,&Col[2]);
-
-				R=Col[0]*255;
-				G=Col[1]*255;
-				B=Col[2]*255;
-
-				fwrite(&B,1,1,File);
-				fwrite(&G,1,1,File);
-				fwrite(&R,1,1,File);
-				}
-			}
-
-//---------------------------------------------------------------------------
+		fwrite(Data,W*H*3,1,File);
 
 		fclose(File);
 
 
+}
+
+/**************************************************************************************/
+void	BGR2RGB(int W,int H,char *Data)
+{
+		for (int Y=0; Y<H; Y++)
+			{
+			for (int X=0; X<W; X++)
+				{
+				unsigned char	c0,c1;
+				c0=Data[0];
+				c1=Data[2];
+				Data[0]=c1;
+				Data[2]=c0;
+				Data+=3;
+				}
+			}
 }

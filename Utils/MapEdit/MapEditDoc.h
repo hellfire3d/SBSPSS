@@ -36,6 +36,7 @@ public:
 	void			ActiveBrushLeft(CMapEditView *View);
 	void			ActiveBrushRight(CMapEditView *View);
 	void			MapSetSize(CMapEditView *View);
+	void			Toggle2d3d(CMapEditView *View);
 
 	void			TileBankLoad();
 	void			TileBankReload();
