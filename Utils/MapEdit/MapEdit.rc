@@ -120,6 +120,10 @@ BEGIN
         MENUITEM "Set Size",                    ID_MAP_SETSIZE
         MENUITEM SEPARATOR
         MENUITEM "&Toggle Grid",                ID_TOGGLE_GRID
+        MENUITEM SEPARATOR
+        MENUITEM "Zoom In",                     ID_ZOOM_IN
+        MENUITEM "Zoom Out",                    ID_ZOOM_OUT
+        MENUITEM SEPARATOR
     END
     POPUP "&TileBank"
     BEGIN
@@ -157,6 +161,8 @@ END
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
+    187,            ID_ZOOM_IN,             VIRTKEY, NOINVERT
+    189,            ID_ZOOM_OUT,            VIRTKEY, NOINVERT
     219,            ID_ACTIVEBRUSH_LEFT,    VIRTKEY, NOINVERT
     221,            ID_ACTIVEBRUSH_RIGHT,   VIRTKEY, NOINVERT
     222,            ID_2D_3D_TOGGLE,        VIRTKEY, NOINVERT
@@ -166,11 +172,13 @@ BEGIN
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_ADD,         ID_ZOOM_IN,             VIRTKEY, NOINVERT
     VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
     VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
     VK_SPACE,       ID_TOGGLE_TILEVIEW,     VIRTKEY, NOINVERT
+    VK_SUBTRACT,    ID_ZOOM_OUT,            VIRTKEY, NOINVERT
     VK_TAB,         ID_NEXT_PANE,           VIRTKEY, CONTROL, NOINVERT
     VK_TAB,         ID_PREV_PANE,           VIRTKEY, SHIFT, CONTROL, 
                                                     NOINVERT

@@ -83,7 +83,6 @@ int		MapHeight=GetWidth();
 }
 
 /*****************************************************************************/
-
 void	CLayerTile::RenderTileMap2d(int MapX,int MapY)
 {
 sTileMap2dElem	*Table=TileMap2d[FrameFlipFlag].List;
@@ -99,7 +98,7 @@ const u32		YInc=16<<16;
 
 		MapX>>=4;
 		MapY>>=4;
-// Calc Start pos (fully wrapping)
+// Calc (wrapped) Start pos
 /**/	MapX=MapX % TileMapWidth;
 /**/	MapY=MapY % TileMapHeight;
 
@@ -115,7 +114,6 @@ const u32		YInc=16<<16;
 			{
 				TSPRT_16	*TileData=&Table->Tile;
 				*(u32*)&TileData->x0=XYPos;
-/**/			//AddPrimToList(TileData,0);
 /**/			AddPrim(OtPtr,TileData);
 				Table=Table->Right;
 				XYPos+=XInc;

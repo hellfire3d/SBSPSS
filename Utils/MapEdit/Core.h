@@ -44,6 +44,7 @@ public:
 		void					RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		void					MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
 		void					MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
+		void					Zoom(CMapEditView *View,float Dst);
 
 // TileBank
 		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);

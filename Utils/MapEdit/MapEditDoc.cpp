@@ -23,6 +23,8 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CURSORXY, OnStatusCursorXY)
 	ON_COMMAND(ID_EXPORT_AGB, OnExportAgb)
 	ON_COMMAND(ID_EXPORT_PSX, OnExportPsx)
+	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
+	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -301,6 +303,20 @@ CMapSizeDlg	Dlg;
 }
 
 /*********************************************************************************/
+void	CMapEditDoc::OnZoomIn() 
+{
+		Core.Zoom(NULL,+1.0f);
+		UpdateAllViews(NULL);
+}
+
+/*********************************************************************************/
+void CMapEditDoc::OnZoomOut() 
+{
+		Core.Zoom(NULL,-1.0f);
+		UpdateAllViews(NULL);
+}
+
+/*********************************************************************************/
 void	CMapEditDoc::Toggle2d3d(CMapEditView *View)
 {
 	Core.Toggle2d3d(View);
@@ -312,3 +328,4 @@ void	CMapEditDoc::FocusView()
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 		
 }
+

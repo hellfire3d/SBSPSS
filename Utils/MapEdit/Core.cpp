@@ -309,16 +309,22 @@ BOOL	RedrawFlag=FALSE;
 }
 
 /*****************************************************************************/
-void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
+void	CCore::Zoom(CMapEditView *View,float Dst) 
 {
 Vector3	Ofs;
 		Ofs.Zero();
-		if (zDelta>0)
-			Ofs.z=+1.0f;
-		else
-			Ofs.z=-1.0f;
-
+		Ofs.z=Dst;
 		UpdateView(View,Ofs);
+}
+
+
+/*****************************************************************************/
+void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
+{
+		if (zDelta>0) 
+			Zoom(View,+1.0f);
+		else
+			Zoom(View,+1.0f);
 }
 
 /*****************************************************************************/
@@ -726,3 +732,6 @@ GString	Path=FullPath.Dir();
 	return(Path);
 
 }
+
+
+/*****************************************************************************/
