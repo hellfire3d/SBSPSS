@@ -15,6 +15,14 @@
 #include "friend\friend.h"
 #endif
 
+#ifndef	__ANIM_BARNACLEBOY_HEADER__
+#include <ACTOR_BARNACLEBOY_Anim.h>
+#endif
+
+#ifndef	__ANIM_KRUSTY_HEADER__
+#include <ACTOR_KRUSTY_Anim.h>
+#endif
+
 #ifndef	__ANIM_SQUIDWARD_HEADER__
 #include <ACTOR_SQUIDWARD_Anim.h>
 #endif
@@ -28,7 +36,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
-		0,
+		ANIM_BARNACLEBOY_IDLE,
 	},
 
 	{	// NPC_FRIEND_GARY
@@ -48,7 +56,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
-		0,
+		ANIM_KRUSTY_IDLEJIG,
 	},
 
 	{	// NPC_FRIEND_MERMAID_MAN

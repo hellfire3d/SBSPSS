@@ -1680,6 +1680,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_BALLBLOB_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_BARNACLEBOY_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\ACTOR_CATERPILLAR_Anim.h
 # End Source File
 # Begin Source File
@@ -1717,6 +1721,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_IRONDOGFISH_Anim.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\ACTOR_JELLYFISH1_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_KRUSTY_Anim.h
 # End Source File
 # Begin Source File
 

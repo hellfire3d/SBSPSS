@@ -137,7 +137,7 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 	DVECTOR startPos;
 	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vy = ( newYPos + 1 ) << 4;
 
 	friendNpc->init( startPos );
 
@@ -194,13 +194,6 @@ void CNpcFriend::shutdown()
 
 void CNpcFriend::think(int _frames)
 {
-	if ( _frames > 2 )
-	{
-		// make sure enemies don't go berserk if too many frames are dropped
-
-		_frames = 2;
-	}
-
 	CNpcThing::think(_frames);
 
 	if ( m_animPlaying )
@@ -221,35 +214,11 @@ void CNpcFriend::think(int _frames)
 			m_animPlaying = false;
 		}
 	}
-
-	s32 fallSpeed = 3;
-	s8 yMovement = fallSpeed * _frames;
-	s8 groundHeight;
-
-	// check vertical collision
-
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
-
-	if ( groundHeight <= 0 )
-	{
-		// make sure we are on the ground, not below it
-
-		Pos.vy += groundHeight;
-	}
 	else
 	{
-		// above ground
-
-		if ( groundHeight < yMovement )
-		{
-			// colliding with ground
-
-			Pos.vy += groundHeight;
-		}
-		else
-		{
-			Pos.vy += yMovement;
-		}
+		m_animNo = m_data[m_type].idleAnim;
+		m_animPlaying = true;
+		m_frame = 0;
 	}
 }
 
