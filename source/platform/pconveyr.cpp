@@ -222,6 +222,29 @@ void CNpcConveyorPlatform::collidedWith( CThing *_thisThing )
 
 							m_contact = true;
 						}
+						else
+						{
+							int distLeft, distRight;
+
+							DVECTOR playerCollisionSize = player->getCollisionSize();
+
+							distLeft = collisionArea.x1 - playerPos.vx - ( playerCollisionSize.vx >> 1 );
+							distRight = collisionArea.x2 - playerPos.vx + ( playerCollisionSize.vx >> 1 );
+
+							DVECTOR playerShove;
+							playerShove.vy = 0;
+
+							if ( abs( distLeft ) < abs( distRight ) )
+							{
+								playerShove.vx = distLeft;
+							}
+							else
+							{
+								playerShove.vx = distRight;
+							}
+
+							player->shove( playerShove );
+						}
 					}
 				}
 			}
