@@ -50,6 +50,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -417,12 +421,12 @@ int		CMapScene::isLevelOpen(int _chapter,int _level)
 
 int		CMapScene::getSpatulaCollectedCount(int _chapter,int _level)
 {
-	return 0;
+	return CGameSlotManager::getSlotData()->getSpatulaCollectedCount(_chapter,_level);
 }
 
 int		CMapScene::getSpatulaAvailableCount(int _chapter,int _level)
 {
-		return 30;
+	return 99;
 }
 
 int		CMapScene::hasQuestItemBeenCollected(int _chapter,int _level)

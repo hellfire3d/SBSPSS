@@ -46,6 +46,8 @@ public:
 	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
+	void				setSpatulaNumber(int _number)				{m_spatulaNumber=_number;}
+
 protected:
 	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
@@ -53,6 +55,7 @@ protected:
 private:
 	int					m_glint;
 	int					m_glintRot;
+	int					m_spatulaNumber;
 };
 
 class CBalloonAndSpatulaPickup : public CSpatulaPickup

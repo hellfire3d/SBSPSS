@@ -43,6 +43,10 @@
 #include "pickups\pickup.h"
 #endif
 
+#ifndef	__PICKUPS_PSPATULA_H__
+#include "pickups\pspatula.h"
+#endif
+
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
@@ -71,6 +75,10 @@
 
 #ifndef __PROJECTL_PROJECTL_H__
 #include "projectl\projectl.h"
+#endif
+
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
 #endif
 
 
@@ -421,13 +429,24 @@ void	CLevel::initThings(int _respawningLevel)
 			ItemCount=Hdr->Count;
 			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
 			DVECTOR	pos;
+			int		spatNumber=0;
 			for(int i=0;i<ItemCount;i++)
 			{
-				if(!(_respawningLevel&&(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA))
+				int	isSpat=(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA;
+				CBasePickup	*newPickup;
+				if(!isSpat||CGameSlotManager::getSlotData()->isSpatulaUncollected(0,0,spatNumber))
 				{
 					pos.vx=ItemList->Pos.X<<4;
 					pos.vy=ItemList->Pos.Y<<4;
-					createPickup((PICKUP_TYPE)ItemList->Type,&pos);
+					newPickup=createPickup((PICKUP_TYPE)ItemList->Type,&pos);
+					if(isSpat)
+					{
+						((CSpatulaPickup*)newPickup)->setSpatulaNumber(spatNumber);
+					}
+				}
+				if(isSpat)
+				{
+					spatNumber++;
 				}
 				ItemList++;
 			}

@@ -29,6 +29,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -101,6 +105,7 @@ DVECTOR	CSpatulaPickup::getSizeForPlacement()
 void	CSpatulaPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
+	CGameSlotManager::getSlotData()->collectSpatula(0,0,m_spatulaNumber);
 }
 
 /*----------------------------------------------------------------------

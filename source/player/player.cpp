@@ -477,7 +477,7 @@ m_animFrame=0;
 	setFacing(FACING_RIGHT);
 	respawn();
 
-	m_lives=CGameSlotManager::getSlotData().m_lives;
+	m_lives=CGameSlotManager::getSlotData()->m_lives;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 

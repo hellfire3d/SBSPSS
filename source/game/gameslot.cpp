@@ -88,10 +88,10 @@ void CGameSlotManager::setActiveSlot(unsigned int _slot)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-CGameSlotManager::GameSlot CGameSlotManager::getSlotData()
+CGameSlotManager::GameSlot *CGameSlotManager::getSlotData()
 {
 	ASSERT(s_currentGameSlot!=0);
-	return *s_currentGameSlot;
+	return s_currentGameSlot;
 }
 
 
@@ -119,6 +119,7 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	ASSERT(_slot<=NUM_GAME_SLOTS);
 
 	GameSlot	*slot;
+	int			i,j;
 
 	slot=&s_gameSlots[_slot];
 
@@ -126,6 +127,13 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	slot->m_lives=INITIAL_LIVES;
 	slot->m_continues=INITIAL_CONTINUES;
 	slot->m_maxLevelCompleted=0;
+	for(i=0;i<NUM_CHAPTERS*NUM_LEVELS;i++)
+	{
+		for(j=0;j<8;j++)
+		{
+			slot->m_spatulaCollectedFlags[i][j]=0;
+		}
+	}
 }
 
 
