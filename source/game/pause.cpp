@@ -115,11 +115,16 @@ void CPauseMenu::init()
 										STR__DEBUG__BALLOON_MODE,
 										&newmode,PLAYER_MODE_BALLOON);
 	xpos+=TEXT_SPACING;
-//	CGUIFactory::createValueButtonFrame(m_guiFrame,
-//										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-//										STR__DEBUG__CORALBLOWER_MODE,
-//										&newmode,PLAYER_MODE_CORALBLOWER);
-//	xpos+=TEXT_SPACING;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__BUBBLEMIXTURE_MODE,
+										&newmode,PLAYER_MODE_BUBBLE_MIXTURE);
+	xpos+=TEXT_SPACING;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__CORALBLOWER_MODE,
+										&newmode,PLAYER_MODE_CORALBLOWER);
+	xpos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__DEAD_MODE,

@@ -67,7 +67,8 @@ static PlayerMetrics	s_playerMetrics=
   ---------------------------------------------------------------------- */
 void	CPlayerModeCoralBlower::enter()
 {
-	m_chopping=false;
+	m_blowerState=BLOWER_STATE__FULL;//BLOWER_STATE__EMPTY;
+	CSoundMediator::playSfx(CSoundMediator::SFX_ITEM__CORAL_BLOWER);
 }
 
 /*----------------------------------------------------------------------
@@ -76,39 +77,44 @@ void	CPlayerModeCoralBlower::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int cbstate=0;
 void	CPlayerModeCoralBlower::think()
 {
-	// If we're chopping then restore the 'real' anim number/frame before
-	// doing the think so that the rest of the code doesn't know what
-	// is going on ;)
-	if(m_chopping)
-	{
-		setAnimNo(m_savedAnimNo);
-		setAnimFrame(m_savedAnimFrame);
-	}
 	CPlayerModeBase::think();
 
-	// Start to chop?
-	if(!m_chopping&&getPadInputDown()&PI_ACTION&&canAttackFromThisState())
+	switch(m_blowerState)
 	{
-		m_chopFrame=0;
-		m_chopping=true;
+		case BLOWER_STATE__EMPTY:
+			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
+			{
+				m_blowerState=BLOWER_STATE__SUCKING;
+			}
+			break;
+		case BLOWER_STATE__SUCKING:
+			if(!(getPadInputHeld()&PI_ACTION&&getState()==STATE_IDLE))
+			{
+				m_blowerState=BLOWER_STATE__EMPTY;
+			}
+			break;
+		case BLOWER_STATE__FULL:
+			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
+			{
+				m_blowerState=BLOWER_STATE__AIMING;
+			}
+			break;
+		case BLOWER_STATE__AIMING:
+			if(getState()==STATE_IDLE)
+			{
+				m_blowerState=BLOWER_STATE__EMPTY;
+			}
+			if(!getPadInputHeld()&PI_ACTION)
+			{
+				// Fire!
+				m_blowerState=BLOWER_STATE__EMPTY;
+			}
+			break;
 	}
-
-	// Chopping?
-	if(m_chopping)
-	{
-		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
-		m_player->setAnimFrame(m_chopFrame);
-		m_chopFrame++;
-		if(m_chopFrame>=m_player->getAnimFrameCount())
-		{
-PAUL_DBGMSG("restore %d,%d",m_savedAnimNo,m_savedAnimFrame);
-			m_player->setAnimNo(m_savedAnimNo);
-			m_player->setAnimFrame(m_savedAnimFrame);
-			m_chopping=false;
-		}
-	}
+cbstate=m_blowerState;
 }
 
 /*----------------------------------------------------------------------
@@ -120,68 +126,6 @@ PAUL_DBGMSG("restore %d,%d",m_savedAnimNo,m_savedAnimFrame);
 const struct PlayerMetrics	*CPlayerModeCoralBlower::getPlayerMetrics()
 {
 	return &s_playerMetrics;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CPlayerModeCoralBlower::setAnimNo(int _animNo)
-{
-	CPlayerModeBase::setAnimNo(_animNo);
-	m_savedAnimNo=_animNo;
-}
-
-void	CPlayerModeCoralBlower::setAnimFrame(int _animFrame)
-{
-	CPlayerModeBase::setAnimFrame(_animFrame);
-	m_savedAnimFrame=_animFrame;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int		CPlayerModeCoralBlower::isInAttackState()
-{
-	return m_chopping||CPlayerModeBase::isInAttackState();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int		CPlayerModeCoralBlower::canAttackFromThisState()
-{
-	int	ret=false;
-
-	switch(getState())
-	{
-		case STATE_IDLE:
-		case STATE_IDLETEETER:
-		case STATE_JUMP:
-		case STATE_RUN:
-		case STATE_FALL:
-			ret=true;
-			break;
-
-		case STATE_FALLFAR:
-		case STATE_BUTTBOUNCE:
-		case STATE_BUTTFALL:
-		case STATE_BUTTLAND:
-		case STATE_DUCK:
-		case STATE_SOAKUP:
-		case STATE_GETUP:
-			break;
-	}
-
-	return ret;
 }
 
 /*===========================================================================

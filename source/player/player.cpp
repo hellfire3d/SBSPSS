@@ -33,12 +33,20 @@
 #include "player\pmodes.h"
 #endif
 
+#ifndef	__PLAYER_PMBLOON_H__
+#include "player\pmbloon.h"
+#endif
+
+#ifndef	__PLAYER_PMBUBBLE_H__
+#include "player\pmbubble.h"
+#endif
+
 #ifndef	__PLAYER_PMCHOP_H__
 #include "player\pmchop.h"
 #endif
 
-#ifndef	__PLAYER_PMBLOON_H__
-#include "player\pmbloon.h"
+#ifndef	__PLAYER_PMCORAL_H__
+#include "player\pmcoral.h"
 #endif
 
 #ifndef	__PLAYER_PMDEAD_H__
@@ -140,8 +148,9 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"BASICUNARMED",
 	"FULLUNARMED",
 	"BALLOON",
-//	"NET",
-//	"CORALBLOWER",
+	"BUBBLE MIXTURE",
+	"CORALBLOWER",
+	"DEAD",
 	"FLY",
 };
 #include "gfx\font.h"	
@@ -170,17 +179,21 @@ int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 
 
 
 
-CPlayerModeBase		PLAYERMODE;
-CPlayerModeChop		PLAYERMODECHOP;
-CPlayerModeBalloon	PLAYERMODEBALLOON;
-CPlayerModeDead		PLAYERMODEDEAD;
-CPlayerModeFly		PLAYERMODEFLY;
+CPlayerModeBase				PLAYERMODE;
+CPlayerModeChop				PLAYERMODECHOP;
+CPlayerModeBalloon			PLAYERMODEBALLOON;
+CPlayerModeBubbleMixture	PLAYERMODEBUBBLEMIXTURE;
+CPlayerModeCoralBlower		PLAYERMODECORALBLOWER;
+CPlayerModeDead				PLAYERMODEDEAD;
+CPlayerModeFly				PLAYERMODEFLY;
 
 CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 {
 	&PLAYERMODE,				// PLAYER_MODE_BASICUNARMED
 	&PLAYERMODECHOP,			// PLAYER_MODE_FULLUNARMED
 	&PLAYERMODEBALLOON,			// PLAYER_MODE_BALLOON
+	&PLAYERMODEBUBBLEMIXTURE,	// PLAYER_MODE_BUBBLE_MIXTURE
+	&PLAYERMODECORALBLOWER,		// PLAYER_MODE_CORALBLOWER
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };

@@ -25,6 +25,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -61,7 +65,7 @@
   ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::init()
 {
-	CBasePickup::init();
+	CBaseRespawningPickup::init();
 	m_sin=0;
 }
 
@@ -73,7 +77,19 @@ void	CBubbleMixturePickup::init()
   ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::collect(class CPlayer *_player)
 {
-	CBasePickup::collect(_player);
+	_player->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
+	CBaseRespawningPickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CBubbleMixturePickup::getRespawnTime()
+{
+	return 60*10;
 }
 
 /*----------------------------------------------------------------------

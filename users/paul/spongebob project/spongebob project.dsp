@@ -832,11 +832,27 @@ SOURCE=..\..\..\source\player\pmbloon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbubble.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmchop.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pmchop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcoral.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcoral.h
 # End Source File
 # Begin Source File
 

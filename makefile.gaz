@@ -144,6 +144,7 @@ paul_src :=			paul \
 
 pickups_src :=		pickup \
 					pballoon \
+					pblower \
 					pbubmix \
 					pglasses \
 					phealth \
@@ -159,7 +160,9 @@ player_src :=		demoplay \
 					player \
 					pmodes \
 					pmbloon \
+					pmbubble \
 					pmchop \
+					pmcoral \
 					pmdead \
 					pmfly \
 					psbutt \

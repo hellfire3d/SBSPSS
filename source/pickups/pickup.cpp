@@ -47,6 +47,10 @@
 #include "pickups\pbubmix.h"
 #endif
 
+#ifndef	__PICKUPS_PBLOWER_H__
+#include "pickups\pblower.h"
+#endif
+
 #ifndef	__PICKUPS_PGLASSES_H__
 #include "pickups\pglasses.h"
 #endif
@@ -321,6 +325,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 		case PICKUP__HELMET:
 			pickup=new ("HelmetPickup") CHelmetPickup();
+			break;
+
+		case PICKUP__CORAL_BLOWER:
+			pickup=new ("CoralBlowerPickup") CCoralBlowerPickup();
 			break;
 
 		case PICKUP__QUEST_ITEM__TEST:

@@ -42,18 +42,16 @@ public:
 
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 
-	virtual void				setAnimNo(int _animNo);
-	virtual void				setAnimFrame(int _animFrame);
-
-	virtual int					isInAttackState();
-
 private:
-	int							canAttackFromThisState();
+	typedef enum
+	{
+		BLOWER_STATE__EMPTY,
+		BLOWER_STATE__SUCKING,
+		BLOWER_STATE__FULL,
+		BLOWER_STATE__AIMING,
+	} BlowerState;
 
-	int							m_savedAnimNo,m_savedAnimFrame;
-	int							m_chopFrame;
-	int							m_chopping;
-
+	BlowerState					m_blowerState;
 };
 
 

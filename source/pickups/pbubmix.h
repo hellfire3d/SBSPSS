@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CBubbleMixturePickup : public CBasePickup
+class CBubbleMixturePickup : public CBaseRespawningPickup
 {
 public:
 	virtual void		init();
@@ -42,6 +42,8 @@ public:
 	virtual void		collect(class CPlayer *_player);
 
 protected:
+	virtual int			getRespawnTime();
+
 	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
 
