@@ -34,13 +34,18 @@ void		CLayerCollision::shutdown()
 /*****************************************************************************/
 #ifdef __SHOW_COLLISION__
 #include "gfx\prim.h"
-#ifdef __USER_paul__
+#include "pad\pads.h"
+#if defined (__USER_paul__) || (__USER_art__)
 int	showCollision=true;
 #else
 int	showCollision=false;
 #endif
 void CLayerCollision::render(DVECTOR &MapPos)
 {
+	if(PadGetDown(0)&PAD_TRIANGLE)
+	{
+		showCollision=!showCollision;
+	}
 	if(showCollision)
 	{
 		int		x,y;

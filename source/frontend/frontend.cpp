@@ -135,7 +135,11 @@ void CFrontEndScene::init()
 
 	m_exitToGame=false;
 	m_mode=MODE__NONE;
+#ifdef __USER_art__
+	setMode(MODE__CHOOSE_SLOT);
+#else
 	setMode(MODE__MAIN_TITLES);
+#endif
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
 	m_sprites->load(FRONTEND_FRONTEND_SPR);
