@@ -25,6 +25,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -73,6 +77,7 @@ void	CLifePickup::init()
   ---------------------------------------------------------------------- */
 void	CLifePickup::collect(class CPlayer *_player)
 {
+	_player->addLife();
 	CBasePickup::collect(_player);
 }
 
