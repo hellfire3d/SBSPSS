@@ -62,7 +62,7 @@ struct FunctionDef
 static FunctionDef s_functionNames[]=
 {
 	{	"setCharacterAnimation",		2	},		// characterId,animationId
-	{	"setText",						1	},		// textId
+	{	"setText",						2	},		// characterId,textId
 	{	"giveItem",						1	},		// itemId
 	{	"gotItem",						1	},		// itemId
 	{	"setResponseOptions",			1	},		// optionsId
