@@ -588,6 +588,30 @@ CThing	*List=Next;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CThing::deleteAllChild()
+{
+CThing	*List=Next;
+
+		while (List)
+		{
+			CThing	*Next=List->Next;
+			List->Parent=NULL;
+			List->Next=NULL;
+			List->shutdown();
+			delete List;
+			List=Next;
+		}
+		Next=NULL;
+
+		m_numChildren = 0;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int		CThing::getNumChildren()
 {
 	return( m_numChildren );

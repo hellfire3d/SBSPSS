@@ -105,6 +105,7 @@ public:
 	void			addChild(CThing *Child);
 	void			removeChild(CThing *Child);
 	void			removeAllChild();
+	void			deleteAllChild();
 	bool			hasChild(CThing *Child);
 	int				getNumChildren();
 
