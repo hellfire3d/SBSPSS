@@ -5,9 +5,8 @@
 	Author:		PKG
 	Created: 
 	Project:	Spongebob
-	Purpose:	Game Over scene. Shown when out of contiunes or player chooses
-				not to continue any longer
-
+	Purpose:	
+				
 	Copyright (c) 2001 Climax Development Ltd
 
 ===========================================================================*/
