@@ -63,6 +63,7 @@ enemy_src :=		2denemy \
 					nanemone \
 					neyeball \
 					nsstomp \
+					nbooger \
 					enemy
 
 projectl_src :=		projectl

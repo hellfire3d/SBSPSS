@@ -100,6 +100,7 @@ protected:
 		NPC_SENSOR_ANEMONE_USER_CLOSE,
 		NPC_SENSOR_EYEBALL_USER_CLOSE,
 		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
+		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -115,6 +116,7 @@ protected:
 		NPC_CLOSE_ANEMONE_2_ATTACK,
 		NPC_CLOSE_EYEBALL_ATTACK,
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
+		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -142,6 +144,7 @@ protected:
 	enum
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
+		NPC_BOOGER_MONSTER_MAX_EXTENSION = 20,
 		EXTEND_UP = true,
 		EXTEND_DOWN = false,
 		EXTEND_RIGHT = true,
@@ -209,6 +212,10 @@ protected:
 	// skull stomper functions
 
 	void				processCloseSkullStomperAttack( int _frames );
+
+	// booger monster functions
+
+	void				processCloseBoogerMonsterAttack( int _frames );
 
 	// data
 

@@ -69,10 +69,10 @@ void CNpc::processCloseClamAttack( int _frames )
 		}
 		else
 		{
-			this->m_controlFunc = NPC_CONTROL_MOVEMENT;
-			this->m_timerFunc = NPC_TIMER_ATTACK_DONE;
-			this->m_timerTimer = GameState::getOneSecondInFrames();
-			this->m_sensorFunc = NPC_SENSOR_NONE;
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
 		}
 	}
 }

@@ -241,10 +241,10 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 	{	// NPC_BOOGER_MONSTER
 		NPC_INIT_DEFAULT,
-		NPC_SENSOR_NONE,
+		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_NONE,
+		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
 		NPC_TIMER_NONE,
 		false,
 		0,
@@ -387,7 +387,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_SKULL_STOMPER;
+	m_type = NPC_BOOGER_MONSTER;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -774,6 +774,21 @@ bool CNpc::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 400 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_extendDir = EXTEND_UP;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					default:
 						return( false );
 				}
@@ -977,6 +992,13 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_SKULL_STOMPER_ATTACK:
 			processCloseSkullStomperAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_BOOGER_MONSTER_ATTACK:
+			processCloseBoogerMonsterAttack( _frames );
+
+			break;
 
 		default:
 			break;
