@@ -584,6 +584,52 @@ BEGIN
                     WS_TABSTOP
 END
 
+IDD_LAYER_ACTOR DIALOG DISCARDABLE  0, 0, 156, 256
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_LEVEL_ACTOR_LIST,5,25,145,185,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_ACTOR_POS_LIST,5,55,145,55,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Pos Up",IDC_ACTOR_POS_UP,10,110,45,15
+    PUSHBUTTON      "Pos Down",IDC_ACTOR_POS_DOWN,55,110,45,15
+    PUSHBUTTON      "Pos Delete",IDC_ACTOR_POS_DELETE,100,110,45,15
+    RTEXT           "Speed",IDC_ACTOR_SPEED_TEXT,10,130,32,8
+    EDITTEXT        IDC_ACTOR_SPEED,45,130,35,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    CONTROL         "Spin1",IDC_ACTOR_SPEED_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,80,130,11,10
+    RTEXT           "TurnRate",IDC_ACTOR_TURNRATE_TEXT,10,145,31,8
+    EDITTEXT        IDC_ACTOR_TURNRATE,45,145,35,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    CONTROL         "Spin1",IDC_ACTOR_TURNRATE_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,80,145,11,10
+    RTEXT           "Health",IDC_ACTOR_HEALTH_TEXT,10,164,32,8
+    EDITTEXT        IDC_ACTOR_HEALTH,45,164,35,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    CONTROL         "Spin1",IDC_ACTOR_HEALTH_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,80,164,11,10
+    RTEXT           "Attack",IDC_ACTOR_ATTACK_TEXT,10,180,31,8
+    EDITTEXT        IDC_ACTOR_ATTACK,45,180,35,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    CONTROL         "Spin1",IDC_ACTOR_ATTACK_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,80,180,11,10
+    CONTROL         "Player",IDC_ACTOR_PLAYER,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | BS_RIGHT | WS_DISABLED | WS_TABSTOP,95,130,
+                    50,10
+    CONTROL         "Collision",IDC_ACTOR_COLLISION,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | BS_RIGHT | WS_TABSTOP,95,145,50,10
+    GROUPBOX        "",IDC_LAYER_ACTOR_GROUP,0,20,155,175
+    COMBOBOX        IDC_ACTOR_LIST,5,5,145,185,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Delete Actor",IDC_ACTOR_DELETE,5,40,75,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -663,6 +709,14 @@ BEGIN
         RIGHTMARGIN, 149
         TOPMARGIN, 7
         BOTTOMMARGIN, 19
+    END
+
+    IDD_LAYER_ACTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 149
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 249
     END
 END
 #endif    // APSTUDIO_INVOKED

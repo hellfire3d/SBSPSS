@@ -30,9 +30,9 @@ void CGUINewMap::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUINewMap)
 	DDX_Text(pDX, IDC_MAPSIZE_HEIGHT, m_Height);
-	DDV_MinMaxUInt(pDX, m_Height, 34, 1024);
+	DDV_MinMaxUInt(pDX, m_Height, 24, 1024);
 	DDX_Text(pDX, IDC_MAPSIZE_WIDTH, m_Width);
-	DDV_MinMaxUInt(pDX, m_Width, 24, 1024);
+	DDV_MinMaxUInt(pDX, m_Width, 34, 1024);
 	//}}AFX_DATA_MAP
 }
 

@@ -21,8 +21,6 @@
 #include	"Select.h"
 #include	"Export.h"
 
-GString		ColFName="Collision.bmp";
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -48,7 +46,7 @@ GString	Filename;
 		SubView=TileBank;
 
 		Core->GetExecPath(Filename);
-		Filename+=ColFName;
+		Filename+=theApp.GetConfigStr("FileLocation","Collision");
 		TileBank->AddSet(Filename);
 }
 

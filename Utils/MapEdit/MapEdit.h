@@ -14,6 +14,7 @@
 
 #include "resource.h"       // main symbols
 #include "CmdMsg.h"
+#include	"IniClass.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditApp:
@@ -32,6 +33,8 @@ public:
 	{
 		return(CurrentDoc);
 	}
+	char	*GetConfigStr(char *Grp,char *Key);
+	int		GetConfigInt(char *Grp,char *Key);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -50,6 +53,7 @@ public:
 
 private:
 	CMapEditDoc		*CurrentDoc;
+	CIni			MainIni;
 };
 
 

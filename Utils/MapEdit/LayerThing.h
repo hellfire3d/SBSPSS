@@ -11,19 +11,27 @@
 #include	"Elem.h"
 
 /*****************************************************************************/
-struct	sLayerThing
+struct	sLayerThingData
 {
-	std::vector<CPoint>		XY;
-	int						Type;
-	int						SubType;
+	bool					WaypointFlag;
+
+	int						Speed;
+	int						TurnRate;
+	int						Health;
+	int						AttackStrength;
+	bool					CollisionFlag;
+	bool					PlayerFlag;
 	int						Spare[8];
 
-bool		operator==(sLayerThing const &v1)					
+};
+struct	sLayerThing
 {
-	if (XY[0]!=v1.XY[0]) return(false);
-	return(true);
-}
+	GString					Name;
+	CList<CPoint>			XY;
+	int						ElemID;
+	sLayerThingData			Data;
 
+bool	operator==(const char *Name1)	{return (Name==Name1);}
 };
 
 /*****************************************************************************/
@@ -34,6 +42,7 @@ public:
 		enum	MouseMode
 		{
 			MouseModeNormal=0,
+			MouseModeNew,
 			MouseModePoints,
 		};
 
@@ -54,14 +63,21 @@ virtual	void			GUIKill(CCore *Core);
 virtual	void			GUIUpdate(CCore *Core);
 virtual	void			GUIChanged(CCore *Core);
 
-		int				GetWidth()						{return(Width);}
-		int				GetHeight()						{return(Height);}
+virtual	void			GUIThingDefClear(){};
+virtual	void			GUIThingUpdate(){};
+virtual	void			GUIThingPointUpdate(){};
 
 virtual	void			Load(CFile *File,int Version);
+virtual	void			LoadThing(CFile *File,int Version,sLayerThing &ThisThing);
+virtual	void			LoadThingNames(CFile *File,int Version);
 virtual	void			Save(CFile *File);
+virtual	void			SaveThing(CFile *File,sLayerThing &ThisThing);
+virtual	void			SaveThingNames(CFile *File);
 virtual	void			LoadThingScript(const char *Filename);
 
 virtual	void			Export(CCore *Core,CExport &Exp);
+virtual	void			ExportThing(CExport &Exp,sLayerThing &ThisThing)=0;
+virtual	void			ExportThingNames(CExport &Exp);
 
 // Functions
 virtual	bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFlag);
@@ -70,22 +86,32 @@ virtual	bool			MouseMove(CCore *Core,UINT nFlags, CPoint &point);
 virtual	bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
 protected:
+virtual	int				FindDefThing(const char *Name);
+virtual	void			SetCursor(const char *Name);
+
 		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
 		int				CheckThing(CPoint &Pos);
 		void			AddThing(CPoint &Pos);
-		void			SelectThing(CPoint &Pos);
+		int				SelectThing(CPoint &Pos);
+		int				SelectThing(int Idx);
+		void			DeleteThing();
 		int				CheckThingPoint(CPoint &Pos);
 		void			AddThingPoint(CPoint &Pos);
-		void			SelectThingPoint(CPoint &Pos);
+		int				SelectThingPoint(CPoint &Pos);
 
 		void			UpdatePos(CPoint &Pos,int Thing,int PosNo,bool Recurs=false);
+		void			MovePoint(int Dir);
+		void			DeletePoint();
+		void			Cancel();
 
-		int					Width,Height;
 		CIni				ThingScript;
 		CElemBank			*ThingBank;
+		CList<sLayerThing>	DefList;
 		CList<sLayerThing>	ThingList;
-		int					CurrentThing,CurrentPoint;
+		int					CurrentDefThing;
+		int					CurrentThing,CurrentThingPoint;
 		MouseMode			Mode;
+		sLayerThing			Cursor;
 };
 
 /*****************************************************************************/

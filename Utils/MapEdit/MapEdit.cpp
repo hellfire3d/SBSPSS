@@ -19,6 +19,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const char*	ConfigFilename="Mapedit.ini";
+
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditApp
 
@@ -106,6 +108,8 @@ BOOL CMapEditApp::InitInstance()
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 
+
+	MainIni.LoadAndImport(ConfigFilename);
 	return TRUE;
 }
 
@@ -127,6 +131,16 @@ void	CMapEditApp::CloseDoc(CMapEditDoc *Cur)
 	{
 		CurrentDoc=NULL;
 	}
+}
+
+char	*CMapEditApp::GetConfigStr(char *Grp,char *Key)
+{
+		return(MainIni.GetStr(Grp,Key));
+}
+
+int		CMapEditApp::GetConfigInt(char *Grp,char *Key)
+{
+		return(MainIni.GetInt(Grp,Key));
 }
 
 /////////////////////////////////////////////////////////////////////////////

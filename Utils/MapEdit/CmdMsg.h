@@ -27,12 +27,22 @@ enum	CmdMsg
 		CmdMsg_SubViewDelete,		// 14
 		CmdMsg_SubViewUpdate,		// 15
 		CmdMsg_SubViewSet,			// 16
+
 // TileLayer/TileBank
 		CmdMsg_MirrorX,				// 17
 		CmdMsg_MirrorY,				// 18
 		CmdMsg_SetColFlag,			// 19
 		CmdMsg_ActiveBrushLeft,		// 20
 		CmdMsg_ActiveBrushRight,	// 21
+
+// Thing
+		CmdMsg_ThingListDelete,		// 23
+		CmdMsg_ThingListSelect,		// 24
+		CmdMsg_ThingLevelSelect,	// 25
+		CmdMsg_ThingPosSelect,		// 26
+		CmdMsg_ThingPosUp,			// 27
+		CmdMsg_ThingPosDown,		// 28
+		CmdMsg_ThingPosDelete,		// 29
 };
 #endif
 /*****************************************************************************/

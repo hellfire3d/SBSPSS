@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CAboutDlg
+LastClass=CGUINewMap
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=18
+ClassCount=19
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CGUIAddLayer
@@ -28,21 +28,25 @@ Class16=CAboutDlg
 Class17=CMapEditDoc
 Class18=CMapEditView
 
-ResourceCount=14
-Resource1=IDD_ADDLAYER
+ResourceCount=17
+Resource1=IDR_TOOLBAR (English (U.S.))
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_TOOLBAR
-Resource4=IDD_NEWMAP
-Resource5=IDD_LAYER_LIST
-Resource6=IDD_TILEBANK
-Resource7=IDD_RESIZE
-Resource8=IDD_LAYER_SHADE
-Resource9=IDD_LAYER_COLLISION
-Resource10=IDR_TOOLBAR (English (U.S.))
-Resource11=IDR_MAINFRAME (English (U.S.))
-Resource12=IDD_ABOUTBOX (English (U.S.))
-Resource13=IDD_MULTIBAR (English (U.S.))
-Resource14=IDD_ELEMLIST
+Resource3=IDD_NEWMAP
+Resource4=IDD_TOOLBAR
+Resource5=IDD_LAYER_COLLISION
+Resource6=IDD_RESIZE
+Resource7=IDD_ABOUTBOX (English (U.S.))
+Resource8=xxxx
+Resource9=IDD_TILEBANK
+Resource10=IDD_LAYER_SHADE
+Resource11=IDD_ADDLAYER
+Resource12=IDD_MULTIBAR (English (U.S.))
+Resource13=IDD_ELEMLIST
+Resource14=IDD_LAYER_LIST
+Resource15=IDD_LAYER_ACTOR2
+Resource16=IDR_MAINFRAME (English (U.S.))
+Class19=CGUILayerActor
+Resource17=IDD_LAYER_ACTOR
 
 [CLS:CChildFrame]
 Type=0
@@ -79,6 +83,7 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerList.h
 ImplementationFile=GUILayerList.cpp
+LastObject=IDC_LAYERLIST_LIST
 
 [CLS:CGUIMultiBar]
 Type=0
@@ -91,6 +96,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUINewMap.h
 ImplementationFile=GUINewMap.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_MAPSIZE_HEIGHT
 
 [CLS:CGUIResize]
 Type=0
@@ -165,19 +173,6 @@ Type=1
 Class=CGUIElemList
 ControlCount=1
 Control1=IDD_ELEM_LIST,combobox,1344339971
-
-[DLG:IDD_LAYER_COLLISION]
-Type=1
-Class=GUILayerCollision
-ControlCount=8
-Control1=IDC_LAYERCOLLISION_NORMAL,button,1342242816
-Control2=IDC_LAYERCOLLISION_DAMAGE,button,1342242816
-Control3=IDC_LAYERCOLLISION_SLIPPERY,button,1342242816
-Control4=IDC_LAYERCOLLISION_ELECTRIC,button,1342242816
-Control5=IDC_LAYERCOLLISION_STICKY,button,1342242816
-Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
-Control7=IDC_LAYERCOLLISION_SOLID,button,1342242816
-Control8=IDC_LAYERCOLLISION_DEATH,button,1342242816
 
 [DLG:IDD_LAYER_LIST]
 Type=1
@@ -362,4 +357,72 @@ Class=GUIToolBar
 ControlCount=2
 Control1=IDD_LAYERTILE_BTN_PAINT,button,1342177344
 Control2=IDD_LAYERTILE_BTN_SELECT,button,1342177344
+
+[DLG:IDD_LAYER_ACTOR2]
+Type=1
+Class=GUILayerCollision
+ControlCount=8
+Control1=IDC_LAYERCOLLISION_NORMAL,button,1342242816
+Control2=IDC_LAYERCOLLISION_DAMAGE,button,1342242816
+Control3=IDC_LAYERCOLLISION_SLIPPERY,button,1342242816
+Control4=IDC_LAYERCOLLISION_ELECTRIC,button,1342242816
+Control5=IDC_LAYERCOLLISION_STICKY,button,1342242816
+Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
+Control7=IDC_LAYERCOLLISION_SOLID,button,1342242816
+Control8=IDC_LAYERCOLLISION_DEATH,button,1342242816
+
+[DLG:xxxx]
+Type=1
+Class=?
+ControlCount=1
+Control1=IDC_COMBO1,combobox,1344340226
+
+[DLG:IDD_LAYER_COLLISION]
+Type=1
+Class=?
+ControlCount=8
+Control1=IDC_LAYERCOLLISION_NORMAL,button,1342242816
+Control2=IDC_LAYERCOLLISION_DAMAGE,button,1342242816
+Control3=IDC_LAYERCOLLISION_SLIPPERY,button,1342242816
+Control4=IDC_LAYERCOLLISION_ELECTRIC,button,1342242816
+Control5=IDC_LAYERCOLLISION_STICKY,button,1342242816
+Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
+Control7=IDC_LAYERCOLLISION_SOLID,button,1342242816
+Control8=IDC_LAYERCOLLISION_DEATH,button,1342242816
+
+[DLG:IDD_LAYER_ACTOR]
+Type=1
+Class=CGUILayerActor
+ControlCount=22
+Control1=IDC_LEVEL_ACTOR_LIST,combobox,1344339971
+Control2=IDC_ACTOR_POS_LIST,listbox,1352728833
+Control3=IDC_ACTOR_POS_UP,button,1342242816
+Control4=IDC_ACTOR_POS_DOWN,button,1342242816
+Control5=IDC_ACTOR_POS_DELETE,button,1342242816
+Control6=IDC_ACTOR_SPEED_TEXT,static,1342308354
+Control7=IDC_ACTOR_SPEED,edit,1350633600
+Control8=IDC_ACTOR_SPEED_SPIN,msctls_updown32,1342177334
+Control9=IDC_ACTOR_TURNRATE_TEXT,static,1342308354
+Control10=IDC_ACTOR_TURNRATE,edit,1350633600
+Control11=IDC_ACTOR_TURNRATE_SPIN,msctls_updown32,1342177334
+Control12=IDC_ACTOR_HEALTH_TEXT,static,1342308354
+Control13=IDC_ACTOR_HEALTH,edit,1350633600
+Control14=IDC_ACTOR_HEALTH_SPIN,msctls_updown32,1342177334
+Control15=IDC_ACTOR_ATTACK_TEXT,static,1342308354
+Control16=IDC_ACTOR_ATTACK,edit,1350633600
+Control17=IDC_ACTOR_ATTACK_SPIN,msctls_updown32,1342177334
+Control18=IDC_ACTOR_PLAYER,button,1476461091
+Control19=IDC_ACTOR_COLLISION,button,1342243363
+Control20=IDC_LAYER_ACTOR_GROUP,button,1342177287
+Control21=IDC_ACTOR_LIST,combobox,1344339971
+Control22=IDC_ACTOR_DELETE,button,1342242816
+
+[CLS:CGUILayerActor]
+Type=0
+HeaderFile=GUILayerActor.h
+ImplementationFile=GUILayerActor.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=CGUILayerActor
 

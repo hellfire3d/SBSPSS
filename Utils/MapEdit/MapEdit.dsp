@@ -84,7 +84,7 @@ LINK32=link.exe
 ProjDir=.
 TargetDir=.\Debug
 SOURCE="$(InputPath)"
-PostBuild_Cmds=if not exist $(TargetDir)\collision.bmp copy $(ProjDir)\res\collision.bmp $(TargetDir)\collision.bmp	if not exist $(TargetDir)\iconz.bmp copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp
+PostBuild_Cmds=if not exist $(TargetDir)\collision.bmp copy $(ProjDir)\res\collision.bmp $(TargetDir)\collision.bmp	if not exist $(TargetDir)\iconz.bmp copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp	copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp
 # End Special Build Tool
 
 !ENDIF 
@@ -388,6 +388,14 @@ SOURCE=.\GUIElemList.cpp
 # Begin Source File
 
 SOURCE=.\GUIElemList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerActor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerActor.h
 # End Source File
 # Begin Source File
 

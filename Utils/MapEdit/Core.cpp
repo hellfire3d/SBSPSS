@@ -33,7 +33,7 @@
 
 #include	<IniClass.h>
 
-GString		IconzFileName="Iconz.bmp";
+//GString		IconzFileName="Iconz.bmp";
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -53,7 +53,7 @@ GString	Filename;
 		IconBank=new CElemBank(16,16,false,false);
 
 		GetExecPath(Filename);
-		Filename+=IconzFileName;
+		Filename+=theApp.GetConfigStr("FileLocation","Iconz");
 		IconBank->AddSet(Filename);
 }
 
@@ -71,8 +71,8 @@ bool	CCore::New()
 {
 CGUINewMap	Dlg;
 int		Width,Height;
-		Dlg.m_Width=TileLayerMinWidth;
-		Dlg.m_Height=TileLayerMinHeight;
+		Dlg.m_Width=TileLayerMinWidth+2;
+		Dlg.m_Height=TileLayerMinHeight+2;
 
 #ifndef _DEBUG
 		if (Dlg.DoModal()!=IDOK) return FALSE;
@@ -82,7 +82,7 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
-//		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
+		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
 
 		for (int i=0; i<Layer.size(); i++)
 		{
@@ -259,6 +259,20 @@ CLayer	*ThisLayer;
 // Get Cursor Pos
 		LastCursorPos=CursorPos;
 		CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
+
+}
+
+/*****************************************************************************/
+void	CCore::RenderNumber(int No)
+{
+int		T=No/10;
+int		U=No%10;		
+
+		glPushMatrix();
+		IconBank->RenderElem(0,T,0,false);
+		glTranslatef(0.5f,0,0);
+		IconBank->RenderElem(0,U,0,false);
+		glPopMatrix();
 
 }
 
@@ -667,6 +681,7 @@ Vector3	&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::GetExecPath(GString &Path)
 {
+#ifndef _DEBUG
 // Get application path
 char	ExeFilename[2048];
 GFName	Exe;
@@ -675,6 +690,7 @@ GFName	Exe;
 		Exe.File(0);
  		Exe.Ext(0);
 		Path=Exe.FullName();
+#endif
 }
 
 

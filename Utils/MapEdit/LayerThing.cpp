@@ -23,18 +23,10 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-// New Layer
 CLayerThing::CLayerThing(sLayerDef &Def)
 {
 		InitLayer(Def);
 }
-
-/*****************************************************************************/
-// Load Layer
-//CLayerThing::CLayerThing(CFile *File,int Version)
-//{
-		//Load(File,Version);
-//}
 
 /*****************************************************************************/
 CLayerThing::~CLayerThing()
@@ -46,26 +38,116 @@ CLayerThing::~CLayerThing()
 /*****************************************************************************/
 void	CLayerThing::InitLayer(sLayerDef &Def)
 {
+		CLayer::InitLayer(Def);
 		Mode=MouseModeNormal;
-		LayerDef.Width=Width;
-		LayerDef.Height=Height;
 		ThingBank=new CElemBank(-1,-1,false,true);
+		Cursor.XY.resize(1);
+		Cursor.ElemID=-1;
+		CurrentDefThing=-1;
 		CurrentThing=-1;
-		CurrentPoint=0;
+		CurrentThingPoint=0;
 
 }
 
 /*****************************************************************************/
 void	CLayerThing::Load(CFile *File,int Version)
 {
+int		i,ListSize;
+
 		File->Read(&Mode,sizeof(MouseMode));
+		File->Read(&CurrentDefThing,sizeof(int));
+		File->Read(&CurrentThing,sizeof(int));
+		File->Read(&CurrentThingPoint,sizeof(int));
+
+		File->Read(&ListSize,sizeof(int));
+		ThingList.resize(ListSize);
+
+// Load Data
+		for (i=0;i<ListSize;i++)
+		{
+			sLayerThing	&ThisThing=ThingList[i];
+			LoadThing(File,Version,ThisThing);
+			File->Read(&ThisThing.Data,sizeof(sLayerThingData));
+		}
+		LoadThingNames(File,Version);
+}
+
+/*****************************************************************************/
+void	CLayerThing::LoadThing(CFile *File,int Version,sLayerThing &ThisThing)
+{
+int		i,ListSize;
+		File->Read(&ListSize,sizeof(int));
+		ThisThing.XY.resize(ListSize);
+		for (i=0 ;i<ListSize; i++)
+		{
+			File->Read(&ThisThing.XY[i],sizeof(CPoint));
+		}
+}
+
+/*****************************************************************************/
+void	CLayerThing::LoadThingNames(CFile *File,int Version)
+{
+int		i,ListSize=ThingList.size();
+
+		for (i=0;i<ListSize;i++)
+		{
+			char	c=1;
+			sLayerThing	&ThisThing=ThingList[i];
+			GString	&ThisName=ThisThing.Name;
+
+			while (c)
+			{
+				File->Read(&c,1);
+				ThisName.Append(c);
+			}
+			// Update Gfx ID
+			int	Idx=FindDefThing(ThisName);
+			ThisThing.ElemID=DefList[Idx].ElemID;
+		}
 }
 
 /*****************************************************************************/
 void	CLayerThing::Save(CFile *File)
 {
+int		i,ListSize=ThingList.size();
 // Always Save current version
 		File->Write(&Mode,sizeof(MouseMode));
+		File->Write(&CurrentDefThing,sizeof(int));
+		File->Write(&CurrentThing,sizeof(int));
+		File->Write(&CurrentThingPoint,sizeof(int));
+
+		File->Write(&ListSize,sizeof(int));
+		for (i=0;i<ListSize; i++)
+		{
+			sLayerThing	&ThisThing=ThingList[i];
+			SaveThing(File,ThisThing);
+			File->Write(&ThisThing.Data,sizeof(sLayerThingData));
+		}
+		SaveThingNames(File);
+}
+
+/*****************************************************************************/
+void	CLayerThing::SaveThing(CFile *File,sLayerThing &ThisThing)
+{
+int		i,ListSize=ThisThing.XY.size();
+		File->Write(&ListSize,sizeof(int));
+		for (i=0 ;i<ListSize; i++)
+		{
+			File->Write(&ThisThing.XY[i],sizeof(CPoint));
+		}
+}
+
+/*****************************************************************************/
+void	CLayerThing::SaveThingNames(CFile *File)
+{
+int		i,ListSize=ThingList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			char		Txt[256];
+			sprintf(Txt,ThingList[i].Name);
+			File->Write(Txt,strlen(Txt)+1);		
+		}
 }
 
 /*****************************************************************************/
@@ -77,6 +159,40 @@ void	CLayerThing::InitSubView(CCore *Core)
 void	CLayerThing::LoadThingScript(const char *Filename)
 {
 		ThingScript.LoadAndImport(Filename);
+
+int		i,ListSize=ThingScript.GetGroupCount();
+		DefList.resize(ListSize);
+
+		for (i=0; i<ListSize; i++)
+		{
+			sLayerThing	&ThisDef=DefList[i];
+
+			char	*Name=ThingScript.GetGroupName(i);
+			char	*Gfx=ThingScript.GetStr(Name,"gfx");
+
+			ThisDef.Name=Name;
+			ThisDef.Data.WaypointFlag=ThingScript.GetInt(Name,"WayPoints")==1;
+			ThisDef.Data.Speed=ThingScript.GetInt(Name,"Speed");
+			ThisDef.Data.TurnRate=ThingScript.GetInt(Name,"TurnRate");
+			ThisDef.Data.Health=ThingScript.GetInt(Name,"Health");
+			ThisDef.Data.AttackStrength=ThingScript.GetInt(Name,"AttackStrength");
+			ThisDef.Data.PlayerFlag=ThingScript.GetInt(Name,"Player")==1;
+			ThisDef.Data.CollisionFlag=ThingScript.GetInt(Name,"Collision")==1;
+
+			ThisDef.XY.resize(1);
+			TRACE2("%s\t\t%s\n",Name,Gfx);
+			ThisDef.ElemID=ThingBank->GetSetCount();
+			if (Gfx) 
+			{
+				ThingBank->AddSet(Gfx);
+			}
+			else
+			{
+				TRACE1("BAD %s\n",Name);
+			}
+
+		}
+
 }
 
 /*****************************************************************************/
@@ -86,8 +202,7 @@ void	CLayerThing::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 int			i,ListSize=ThingList.size();
-
-//		Is3d&=Render3dFlag;
+		
 		for (i=0; i<ListSize; i++)
 		{
 			RenderThing(Core,ThisCam,ThingList[i],Is3d,i==CurrentThing);
@@ -102,7 +217,6 @@ float		ZoomH=Core->GetZoomH();
 float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
-CElemBank	*IconBank=Core->GetIconBank();
 
 			if (ThingBank->NeedLoad()) ThingBank->LoadAllSets(Core);
 
@@ -126,11 +240,11 @@ int			ListSize=ThisThing.XY.size();
 				else
 					glColor4f(1,1,1,0.5);									
 				
-				IconBank->RenderElem(0,i,0,Render3d);
+				Core->RenderNumber(i);
 				if (i==0)
 				{
 					glColor4f(1,1,1,1);									// Set default Color
-					ThingBank->RenderElem(ThisThing.Type,0,0,Render3d);
+					ThingBank->RenderElem(ThisThing.ElemID,0,0,Render3d);
 				}
 				glPopMatrix();
 			}
@@ -144,6 +258,7 @@ int			ListSize=ThisThing.XY.size();
 void	CLayerThing::GUIInit(CCore *Core)
 {
 //		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
+
 }
 
 /*****************************************************************************/
@@ -169,19 +284,21 @@ bool	CLayerThing::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool
 {
 bool	Ret=false;
 
+		if (!DownFlag) return(false);
 		switch(Mode)
 		{
 		case MouseModeNormal:
-			if (DownFlag)
-			{
-				if (CurrentThing==-1)
-					AddThing(CursorPos);
-				else
-					AddThingPoint(CursorPos);
-
-			}
+			SelectThing(CursorPos);
+			GUIThingUpdate();
+			break;
+		case MouseModeNew:
+			AddThing(CursorPos);
+			GUIThingDefClear();
+			GUIThingUpdate();
 			break;
 		case MouseModePoints:
+			AddThingPoint(CursorPos);
+			GUIThingPointUpdate();
 			break;
 		default:
 			break;
@@ -193,21 +310,9 @@ bool	Ret=false;
 /*****************************************************************************/
 bool	CLayerThing::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
-bool		Ret=FALSE;
-
-		switch(Mode)
-		{
-		case MouseModeNormal:
-			if (DownFlag)
-			{
-				SelectThing(CursorPos);
-			}
-			break;
-		case MouseModePoints:
-			break;
-		}
-
-		return(Ret);
+		if (!DownFlag) return(false);
+		Cancel();
+		return(true);
 }
 
 /*****************************************************************************/
@@ -219,13 +324,14 @@ bool		Ret=false;
 		{
 			if (nFlags & MK_LBUTTON)	// Drag
 			{
-				UpdatePos(CursorPos,CurrentThing,CurrentPoint,true);
+				UpdatePos(CursorPos,CurrentThing,CurrentThingPoint,(nFlags & MK_CONTROL)!=0);
+				GUIThingPointUpdate();
 				Ret=true;
 			}
 			else
 			if (nFlags & MK_RBUTTON)	// Cancel
 			{
-				CurrentThing=-1;
+				Cancel();
 				Ret=true;
 			}
 		}
@@ -233,24 +339,83 @@ bool		Ret=false;
 }
 
 /*****************************************************************************/
-bool	CLayerThing::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+void	CLayerThing::Cancel()
 {
-bool	Ret=false;
-/*
-		switch(CmdMsg)
+		switch(Mode)
 		{
-		case CmdMsg_SetMode:
-//			Mode=(MouseMode)Param0;
-//			Core->GUIUpdate();
-//			break;
-//		case CmdMsg_SubViewSet:
-//			Ret=ThingBank->Command(CmdMsg,Core,Param0,Param1);
+		case MouseModeNormal:
+			CurrentThing=-1;
+		case MouseModeNew:
+		case MouseModePoints:
+			Mode=MouseModeNormal;
+			CurrentThingPoint=0;
+			GUIThingDefClear();
+			GUIThingUpdate();
 			break;
 		default:
 			break;
 		}
-*/
+}
+
+/*****************************************************************************/
+bool	CLayerThing::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+{
+bool	Ret=false;
+
+		switch(CmdMsg)
+		{
+		case CmdMsg_ThingListDelete:
+			DeleteThing();
+			GUIThingUpdate();
+			break;
+		case CmdMsg_ThingListSelect:
+			CurrentDefThing=Param0;
+			SetCursor(DefList[CurrentDefThing].Name);
+			Mode=MouseModeNew;
+			break;
+		case CmdMsg_ThingLevelSelect:
+			SelectThing(Param0);
+			GUIThingUpdate();
+			break;
+		case CmdMsg_ThingPosSelect:
+			CurrentThingPoint=Param0;
+			GUIThingPointUpdate();
+			break;
+		case CmdMsg_ThingPosUp:
+			MovePoint(-1);
+			break;
+		case CmdMsg_ThingPosDown:
+			MovePoint(+1);
+			break;
+		case CmdMsg_ThingPosDelete:
+			DeletePoint();
+			break;
+		default:
+			break;
+		}
+
 		return(Ret);
+}
+
+/*****************************************************************************/
+int		CLayerThing::FindDefThing(const char *Name)
+{
+int		i,ListSize=DefList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			if (DefList[i]==Name) return(i);
+		}
+		return(-1);
+}
+
+/*****************************************************************************/
+void	CLayerThing::SetCursor(const char *Name)
+{
+int		Idx=FindDefThing(Name);
+		if (Idx==-1) return;
+
+		Cursor=DefList[Idx];
 }
 
 /*****************************************************************************/
@@ -258,26 +423,14 @@ void	CLayerThing::RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
-Vector3		Ofs;
+
+		Cursor.XY[0]=CursPos;
 
 		if (CursPos.x<0 || CursPos.y<0) return;
+		if (Mode!=MouseModeNew) return;
+		if (Cursor.ElemID==-1) return;
 
-		Ofs.x=-(CursPos.x-(int)ThisCam.x);
-		Ofs.y=-(CursPos.y-(int)ThisCam.y);
-		ThisCam.x-=(int)ThisCam.x;
-		ThisCam.y-=(int)ThisCam.y;
-
-		Is3d&=GetRender3dFlag();
-		if (Is3d)
-		{
-			glEnable(GL_DEPTH_TEST);
-//			Render(Core,ThisCam,,TRUE,0.5,&Ofs);
-			glDisable(GL_DEPTH_TEST);
-		}
-			else
-		{
-//			Render(Core,ThisCam,Brush,FALSE,0.5,&Ofs);
-		}
+		RenderThing(Core,ThisCam,Cursor,Is3d,true);
 }
 
 /*****************************************************************************/
@@ -313,26 +466,52 @@ int			StartIdx=0;
 void	CLayerThing::AddThing(CPoint &Pos)
 {
 		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
-		CurrentThing=CheckThing(Pos);
-		CurrentPoint=0;
+		CurrentThing=SelectThing(Pos);
 		if (CurrentThing!=-1) return;
 
 		CurrentThing=ThingList.size();
 		ThingList.resize(CurrentThing+1);
 
 sLayerThing	&ThisThing=ThingList[CurrentThing];
-		
-		ThisThing.XY.push_back(Pos);
-		ThisThing.Type=ThingList.size()%22;
-		ThisThing.SubType=0;
+		ThisThing=Cursor;
+		SelectThing(CurrentThing);
 }
 
 /*****************************************************************************/
-void	CLayerThing::SelectThing(CPoint &Pos)
+int		CLayerThing::SelectThing(CPoint &Pos)
 {
-		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
-		CurrentThing=CheckThing(Pos);
-		CurrentPoint=0;
+		if (Pos.x==-1 || Pos.y==-1) return(-1);	// Off Map?
+		SelectThing(CheckThing(Pos));
+		return(CurrentThing);
+}
+
+/*****************************************************************************/
+int		CLayerThing::SelectThing(int Idx)
+{
+		CurrentThing=Idx;
+		CurrentThingPoint=0;
+		if (CurrentThing!=-1)
+		{
+			sLayerThing	&ThisThing=ThingList[CurrentThing];
+			if (ThisThing.Data.WaypointFlag)
+			{
+				Mode=MouseModePoints;
+			}
+			else
+			{
+				Mode=MouseModeNormal;
+			}
+		}
+		return(CurrentThing);
+}
+
+/*****************************************************************************/
+void	CLayerThing::DeleteThing()
+{
+		if (!ThingList.size()) return;
+
+		ThingList.erase(CurrentThing);
+		CurrentThing--;
 }
 
 
@@ -369,21 +548,22 @@ int			StartIdx=0;
 void	CLayerThing::AddThingPoint(CPoint &Pos)
 {
 		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
-		CurrentPoint=CheckThingPoint(Pos);
-
-		if (CurrentPoint!=-1) return;
+		CurrentThingPoint=SelectThingPoint(Pos);
+		
+		if (CurrentThingPoint!=-1) return;
 sLayerThing	&ThisThing=ThingList[CurrentThing];
 
-		CurrentPoint=ThisThing.XY.size();
-		ThisThing.XY.resize(CurrentPoint+1);
-		ThisThing.XY[CurrentPoint]=Pos;
+		CurrentThingPoint=ThisThing.XY.size();
+		ThisThing.XY.resize(CurrentThingPoint+1);
+		ThisThing.XY[CurrentThingPoint]=Pos;
 }
 
 /*****************************************************************************/
-void	CLayerThing::SelectThingPoint(CPoint &Pos)
+int		CLayerThing::SelectThingPoint(CPoint &Pos)
 {
-		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
-		CurrentPoint=CheckThing(Pos);
+		if (Pos.x==-1 || Pos.y==-1) return(-1);	// Off Map?
+		CurrentThingPoint=CheckThingPoint(Pos);
+		return(CurrentThingPoint);
 }
 
 /*****************************************************************************/
@@ -398,7 +578,7 @@ int			StartIdx=PosIdx,EndIdx=ThisThing.XY.size();
 		if (!Recurs)
 		{
 			StartIdx=PosIdx;
-			EndIdx=StartIdx++;
+			EndIdx=StartIdx+1;
 		}
 
 		for (int i=StartIdx; i<EndIdx; i++)
@@ -408,45 +588,62 @@ int			StartIdx=PosIdx,EndIdx=ThisThing.XY.size();
 }
 
 /*****************************************************************************/
+void	CLayerThing::MovePoint(int Dir)
+{
+		if (CurrentThing==-1) return;
+
+int		NewPos=CurrentThingPoint+Dir;
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+
+		if (NewPos<0 || NewPos>=ThisThing.XY.size()) return;
+
+CPoint	Tmp=ThisThing.XY[CurrentThingPoint];
+		ThisThing.XY[CurrentThingPoint]=ThisThing.XY[NewPos];
+		ThisThing.XY[NewPos]=Tmp;
+		CurrentThingPoint=NewPos;
+		GUIThingPointUpdate();
+}
+
+/*****************************************************************************/
+void	CLayerThing::DeletePoint()
+{
+		if (!CurrentThingPoint) return;
+		if (CurrentThing==-1) return;
+
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+
+		ThisThing.XY.erase(CurrentThingPoint);
+		CurrentThingPoint--;
+		if (CurrentThingPoint<0) CurrentThingPoint=0;
+		GUIThingPointUpdate();
+}
+
+/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 void	CLayerThing::Export(CCore *Core,CExport &Exp)
 {
-/*
-int				Width=Map.GetWidth();
-int				Height=Map.GetHeight();
+int		i,ListSize=ThingList.size();
+		Exp.ExportLayerHeader(LayerDef);
 
-		Exp.ExportLayerHeader(LAYER_TYPE_Elem,SubType,Width,Height);
-
-		for (int Y=0; Y<Height; Y++)
+		Exp.Write(&ListSize,sizeof(int));
+		for (i=0;i<ListSize; i++)
 		{
-			for (int X=0; X<Width; X++)
-			{
-				sMapElem		&MapElem=Map.Get(X,Y);
-				sExpLayerThing	OutElem;
-
-				if (MapElem.Set==0 && MapElem.Elem==0)
-				{ // Blank
-					OutElem.Elem=0;
-					OutElem.Flags=0;
-				}
-				else
-				{
-					sExpElem		OutElem;
-					CElem			&ThisElem=ElemBank->GetElem(MapElem.Set,MapElem.Elem);
-
-					OutElem.Set=MapElem.Set;
-					OutElem.Elem=MapElem.Elem;
-					OutElem.TriStart=0;
-					OutElem.TriCount=0;
-					OutElem.XOfs=ThisElem.GetTexXOfs();
-					OutElem.YOfs=ThisElem.GetTexYOfs();
-					OutElem.Elem=Exp.AddElem(OutElem);
-					OutElem.Flags=MapElem.Flags;
-				}
-
-				Exp.Write(&OutElem,sizeof(sExpLayerThing));
-			}
+			ExportThing(Exp,ThingList[i]);
 		}
-*/
+		ExportThingNames(Exp);
+}
+
+
+/*****************************************************************************/
+void	CLayerThing::ExportThingNames(CExport &Exp)
+{
+int		i,ListSize=ThingList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			char		Txt[256];
+			sprintf(Txt,ThingList[i].Name);
+			Exp.Write(Txt,strlen(Txt)+1);		
+		}
 }

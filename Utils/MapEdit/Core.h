@@ -43,6 +43,7 @@ public:
 		bool					Question(char *Txt);
 		void					Render(bool ForceRender=FALSE);
 		void					RenderLayers(bool OneShot=false);
+		void					RenderNumber(int No);
 		void					Export(char *Filename);
 
 // View Stuff
@@ -116,6 +117,7 @@ public:
 		void					ResetView();
 		CElemBank				*GetIconBank()					{return(IconBank);}
 		void					GetExecPath(GString &Path);
+
 private:
 		CMapEditView			*CurrentView;
 		CPoint					CurrentMousePos,LastMousePos;
