@@ -121,14 +121,14 @@
 // 125 tokens in total
 CShopScene::SHOPITEM	CShopScene::s_shopItems[NUM_SHOP_ITEM_IDS]=
 {
-	{	 5,	FRM_TEDDY		},
-	{	 8,	FRM_SARNIE		},
-	{	10,	FRM_CUPCAKE		},
-	{	12,	FRM_PREZZIE		},
-	{	16,	FRM_JELLY2		},
-	{	20,	FRM_CAKE		},
-	{	24,	FRM_BLOWER		},
-	{	30,	FRM_PARTYHAT	},
+	{	 5,	FRM_TEDDY		},			// SHOPITEM_TEDDY
+	{	 8,	FRM_SARNIE		},			// SHOPITEM_SARNIE
+	{	10,	FRM_CUPCAKE		},			// SHOPITEM_CUPCAKE
+	{	12,	FRM_PREZZIE		},			// SHOPITEM_PREZZIE
+	{	16,	FRM_JELLY2		},			// SHOPITEM_JELLY2
+	{	20,	FRM_CAKE		},			// SHOPITEM_CAKE
+	{	24,	FRM_BLOWER		},			// SHOPITEM_BLOWER
+	{	30,	FRM_PARTYHAT	},			// SHOPITEM_PARTYHAT
 };
 
 xmPlayingId	s_playId;

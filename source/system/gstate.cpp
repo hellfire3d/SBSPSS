@@ -139,9 +139,23 @@ void GameState::render()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+// Define this to make the game go to the scene selecter after every scene
+//#define _ALWAYS_GO_BACK_TO_THE_SCENE_SELECTER_
+
+#ifdef _ALWAYS_GO_BACK_TO_THE_SCENE_SELECTER_
+#include "paul\scenesel.h"
+#endif
+
 void GameState::setNextScene( CScene *_nextScene )
 {
 	ASSERT(!s_pendingScene);
+
+#ifdef _ALWAYS_GO_BACK_TO_THE_SCENE_SELECTER_
+	if(s_currentScene!=&SceneSelector)
+	{
+		_nextScene=&SceneSelector;
+	}
+#endif
 
 	s_pendingScene=_nextScene;
 }
