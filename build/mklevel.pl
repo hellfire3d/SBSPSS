@@ -29,7 +29,7 @@ clean$Chapter\_$Level\_LVL :\n\t\$(RM) -f \$($Chapter\_$Level\_OUT) \$($Chapter\
 $Chapter\_$Level\_LVL :\t\$($Chapter\_$Level\_IN)
 
 \$($Chapter\_$Level\_OUT) : \$($Chapter\_$Level\_IN)
-\t\$(MKLEVEL) \$($Chapter\_$Level\_IN) -o:\$(LEVELS_OUT_DIR) -c:$Chapter -l:$Level \$(LEVELS_OPTS)
+\t\@\$(MKLEVEL) \$($Chapter\_$Level\_IN) -o:\$(LEVELS_OUT_DIR) -c:$Chapter -l:$Level \$(LEVELS_OPTS)
 
 eot
 ;
