@@ -185,6 +185,8 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 						DVECTOR newPos = Pos;
 						projectile->init( newPos, heading );
 						projectile->setGraphic( FRM__LIGHTNING1 );
+						projectile->setSpeed( 6 );
+						projectile->setXScale( 8192 );
 
 						m_movementTimer = GameState::getOneSecondInFrames() * 5;
 						m_pulsateTimer = GameState::getOneSecondInFrames();
