@@ -74,7 +74,6 @@ void CPlayerStateJumpBack::enter(CPlayerModeBase *_playerMode)
 	if(_playerMode->getState()!=STATE_JUMPBACK)
 	{
 		m_reactFrames=0;
-		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_OUCH);
 	}
 
 	_playerMode->jumpback();
