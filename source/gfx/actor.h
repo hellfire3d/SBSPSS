@@ -127,5 +127,25 @@ static	u8			UnpackBuffer[CActorPool::MAX_ACTOR_SIZE];
 };
 
 /*****************************************************************************/
+class	CModelGfx
+{
+public:
+		CModelGfx(){};
+virtual	~CModelGfx(){};
+
+static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
+		void		SetModel(int Type);
+
+		void		Render(DVECTOR &Pos);
+
+protected:
+static	sModel		*ModelTable;
+static	sTri		*ModelTriList;
+static	sQuad		*ModelQuadList;
+static	sVtx		*ModelVtxList;
+		sModel		*Model;
+};
+
+/*****************************************************************************/
 
 #endif

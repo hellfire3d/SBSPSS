@@ -182,6 +182,12 @@ struct	sLayerShadeHdr
 };
 
 //---------------------------------------------------------------------------
+struct	sModel
+{
+		u16		TriCount;
+		u16		TriStart;
+};
+//---------------------------------------------------------------------------
 // Header
 struct	sLevelHdr
 {
@@ -203,6 +209,7 @@ struct	sLevelHdr
 	sTri	*TriList;
 	sQuad	*QuadList;
 	sVtx	*VtxList;
+	sModel	*PlatformGfx;
 };
 
 //***************************************************************************
@@ -276,6 +283,8 @@ struct	sThingPlatform
 	u16		Type;
 	u16		Speed;
 	u16		TurnRate;
+	u16		Gfx;
+	u16		Pad;
 	u8		Flags;
 	u8		PointCount;
 	// Point List...

@@ -415,3 +415,93 @@ u8		H=Frame->H;
 }
 
 
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+sModel	*CModelGfx::ModelTable;
+sTri	*CModelGfx::ModelTriList;
+sQuad	*CModelGfx::ModelQuadList;
+sVtx	*CModelGfx::ModelVtxList;
+
+/*****************************************************************************/
+void	CModelGfx::SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList)
+{
+		ModelTable=Table;
+		ModelTriList=TList;
+		ModelQuadList=QList;
+		ModelVtxList=VList;
+}
+
+/*****************************************************************************/
+void	CModelGfx::SetModel(int Type)
+{
+		Model=&CModelGfx::ModelTable[Type];
+}
+
+/*****************************************************************************/
+int	DX=1;
+int	DY=1;
+int	PXOfs=-16;
+int	PYOfs=-6;
+void		CModelGfx::Render(DVECTOR &Pos)
+{
+#define	BLOCK_MULT	16
+u8				*PrimPtr=GetPrimPtr();
+POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
+sVtx			*P0,*P1,*P2;
+u32				T0,T1,T2;
+s32				ClipZ;
+sOT				*ThisOT;
+DVECTOR			MapXY;
+VECTOR			RenderPos;
+int				TriCount=Model->TriCount;				
+sTri			*TList=&ModelTriList[Model->TriStart];
+
+			MapXY.vx=Pos.vx>>4;
+			MapXY.vy=Pos.vy>>4;
+			
+int			ShiftX=(Pos.vx & 15);
+int			ShiftY=(Pos.vy & 15);
+
+			RenderPos.vx=(PXOfs*16)+((MapXY.vx*16)+ShiftX);
+			RenderPos.vy=(PYOfs*16)+((MapXY.vy*16)+ShiftY);
+
+		CMX_SetTransMtxXY(&RenderPos);
+
+		while (TriCount--)
+		{
+			P0=&ModelVtxList[TList->P0]; P1=&ModelVtxList[TList->P1]; P2=&ModelVtxList[TList->P2];
+			gte_ldv3(P0,P1,P2);
+			setPolyFT3(TPrimPtr);
+			setShadeTex(TPrimPtr,1);
+			setlen(TPrimPtr, GPU_PolyFT3Tag);
+			gte_rtpt_b();
+	
+			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
+			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
+			T2=*(u16*)&TList->uv2;		// Get UV2
+			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
+			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
+			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+			if (TList->OTOfs>MAX_OT-1) TList->OTOfs=MAX_OT-1;
+			ThisOT=OtPtr+TList->OTOfs;
+
+			TList++;
+			gte_nclip_b();
+			gte_stsxy3_ft3(TPrimPtr);
+//			if (TriCount==1)
+//			{
+//				printf("%i,%i\n",TPrimPtr->x0,TPrimPtr->y0);
+//
+//			}
+
+			gte_stopz(&ClipZ);
+			if (ClipZ<=0)
+			{
+				addPrim(ThisOT,TPrimPtr);
+				TPrimPtr++;
+			}
+		}
+
+		SetPrimPtr((u8*)TPrimPtr);
+}
