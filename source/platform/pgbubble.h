@@ -21,6 +21,7 @@
 class CNpcGeyserBubblePlatform : public CNpcBubblePlatform
 {
 public:
+	void				render();
 	void				postInit();
 protected:
 	void				processMovement( int _frames );
