@@ -406,17 +406,14 @@ void CFrontEndOptions::think(int _frames)
 			if(m_bgmVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SONG))
 			{
 				CSoundMediator::setVolume(CSoundMediator::VOL_SONG,m_bgmVolume);
-				PAUL_DBGMSG("SONG");
 			}
 			if(m_sfxVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SFX))
 			{
 				CSoundMediator::setVolume(CSoundMediator::VOL_SFX,m_sfxVolume);
-				PAUL_DBGMSG("SFX");
 			}
 			if(m_speechVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH))
 			{
 				CSoundMediator::setVolume(CSoundMediator::VOL_SPEECH,m_speechVolume);
-				PAUL_DBGMSG("SPEECH");
 			}
 		}
 		else if(m_mode==MODE__SCREEN)
