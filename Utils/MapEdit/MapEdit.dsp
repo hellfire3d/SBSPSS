@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\GinLib" /I "..\glibdev\glib\include" /I "..\glibdev\glib\include\pc" /I "..\ginlib" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\libs\glib" /I "..\libs\maths" /I "..\libs\davelib" /I "..\libs\ginlib" /I "..\libs\psxlib" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG" /d "_AFXDLL"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 opengl32.lib glu32.lib win32lib.lib ginlib.lib glaux.lib /nologo /subsystem:windows /machine:I386 /libpath:"..\ginlib\release\\" /libpath:"..\GlibDev\glib\LIB\win32lib\release\\"
+# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
 
 !ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
 
