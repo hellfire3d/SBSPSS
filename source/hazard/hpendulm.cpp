@@ -78,10 +78,12 @@ void CNpcPendulumHazard::setWaypoints( sThingHazard *ThisHazard )
 		m_length = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
 
 		Pos = pivotPos;
+		m_base = pivotPos;
 	}
 	else
 	{
 		Pos = startPos;
+		m_base = Pos;
 	}
 
 	m_thinkArea.x1 = Pos.vx - m_length;
