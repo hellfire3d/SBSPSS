@@ -592,12 +592,14 @@ m_animFrame=0;
 
 	// Always ( cept for one level ) need this
 	registerAddon(PLAYER_ADDON_GLOVE);
-//	registerAddon(PLAYER_ADDON_NET);
-//	registerAddon(PLAYER_ADDON_CORALBLOWER);
-//	registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
-//	registerAddon(PLAYER_ADDON_GLASSES);
-//	registerAddon(PLAYER_ADDON_BUBBLEWAND);
-//	registerAddon(PLAYER_ADDON_JELLYFISHINNET);
+#ifdef __USER_paul__
+registerAddon(PLAYER_ADDON_NET);
+registerAddon(PLAYER_ADDON_CORALBLOWER);
+registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
+registerAddon(PLAYER_ADDON_GLASSES);
+registerAddon(PLAYER_ADDON_BUBBLEWAND);
+registerAddon(PLAYER_ADDON_JELLYFISHINNET);
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -1504,6 +1506,7 @@ void CPlayer::respawn()
 	m_invincibilityRingTimer=0;
 	m_bubbleAmmo=0;
 	m_jellyAmmo=0;
+	m_jellyfishAmmo=0;
 
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
 	
@@ -1524,14 +1527,23 @@ void CPlayer::respawn()
   ---------------------------------------------------------------------- */
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
-	POLY_FT4	*ft4;
+	int			playerMode;
 	int			trans;
 	int			addon;
+	POLY_FT4	*ft4;
 
+	if(m_currentMode==PLAYER_MODE_DEAD)
+	{
+		playerMode=m_lastModeBeforeDeath;
+	}
+	else
+	{
+		playerMode=m_currentMode;
+	}
 	trans=m_invincibleFrameCount||m_invincibilityRingTimer;
 
 	// Render an addon?
-	addon=s_addonNumbers[m_currentMode];
+	addon=s_addonNumbers[playerMode];
 	if(addon!=NO_ADDON)
 	{
 		s8	addonAnimNo=s_animMapNet[addon][_animNo];
@@ -1554,7 +1566,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	}
 
 	// Render JFish in a net?
-	if(m_currentMode==PLAYER_MODE_NET&&m_currentPlayerModeClass->isJellyfishNetFull())
+	if(playerMode==PLAYER_MODE_NET&&getJellyFishAmmo())
 	{
 		s8	addonAnimNo=s_animMapNet[PLAYER_ADDON_JELLYFISHINNET][_animNo];
 		if(addonAnimNo!=-1)
@@ -1575,6 +1587,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 			}
 		}
 	}
+
 	// Render glasses addon?
 	if(isWearingGlasses())
 	{

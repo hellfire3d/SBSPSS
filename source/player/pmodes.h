@@ -93,7 +93,6 @@ public:
 	virtual int		canDoLookAround()					{return false;}
 	virtual void	springPlayerUp()					{;}
 	void			inSoakUpState();
-	virtual int		isJellyfishNetFull()				{ASSERT(0);return false;}		// Fugly..
 
 	virtual int		setState(int _state)				{return 0;}
 	virtual int		getState()							{return STATE_IDLE;}			// ARSE.. states need to go back in CPlayer! (pkg)

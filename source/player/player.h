@@ -360,6 +360,11 @@ public:
 	void			useOneJelly()				{m_jellyAmmo--;}
 	int				getJellyAmmo()				{return m_jellyAmmo;}
 
+	void			giveJellyFishAmmo()			{if(!isJellyFishAmmoFull())m_jellyfishAmmo++;}
+	void			useOneJellyFishAmmo()		{m_jellyfishAmmo--;}
+	int				isJellyFishAmmoFull()		{return m_jellyfishAmmo==5;}
+	int				getJellyFishAmmo()			{return m_jellyfishAmmo;}
+
 	void			setIsInWater(int _in)					{m_isInWater=_in;}
 	int				getIsInWater()							{return m_isInWater;}
 	int				getIsHealthFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
@@ -376,6 +381,7 @@ private:
 	int				m_divingHelmet;
 	int				m_bubbleAmmo;
 	int				m_jellyAmmo;
+	int				m_jellyfishAmmo;
 	int				m_isInWater;
 
 	// Platforms

@@ -88,7 +88,6 @@ void	CPlayerModeNet::enter()
 {
 	CPlayerModeBase::enter();
 	m_netState=NET_STATE__INERT;
-	m_jellyfishHeld=0;
 }
 
 /*----------------------------------------------------------------------
@@ -140,11 +139,11 @@ void	CPlayerModeNet::think()
 				padDown=getPadInputDown();
 				if(padDown&(PI_CATCH|PI_FIRE)&&canSwingNetFromThisState())
 				{
-					if(padDown&PI_CATCH&&m_jellyfishHeld<5)
+					if(padDown&PI_CATCH&&!m_player->isJellyFishAmmoFull())
 					{
 						m_netState=NET_STATE__CATCHING;
 					}
-					else if(padDown&PI_FIRE&&m_jellyfishHeld)
+					else if(padDown&PI_FIRE&&m_player->getJellyFishAmmo())
 					{
 						m_netState=NET_STATE__LAUNCHING;
 					}
@@ -196,11 +195,11 @@ void	CPlayerModeNet::think()
 						((CNpcEnemy*)thing)->caughtWithNet();
 						m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
 						thing=NULL;
-						if(m_jellyfishHeld==0)
+						if(m_player->getJellyFishAmmo()==0)
 						{
 							m_netSin=0;
 						}
-						m_jellyfishHeld++;
+						m_player->giveJellyFishAmmo();
 					}
 					else
 					{
@@ -241,7 +240,7 @@ void	CPlayerModeNet::think()
 				projectile->updateCollisionArea();
 
 				m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
-				m_jellyfishHeld--;
+				m_player->useOneJellyFishAmmo();
 			}
 			break;
 
@@ -263,7 +262,7 @@ void	CPlayerModeNet::think()
 		}
 	}
 
-	if(m_jellyfishHeld)
+	if(m_player->getJellyFishAmmo())
 	{
 		m_netSin=(m_netSin+npspeed)&4095;
 	}
@@ -283,7 +282,7 @@ void	CPlayerModeNet::think()
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__NET);
-	if(m_jellyfishHeld)
+	if(m_player->getJellyFishAmmo())
 	{
 		POLY_FT4	*ft4;
 
@@ -299,7 +298,7 @@ void	CPlayerModeNet::think()
 		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 	}
 
-	sprintf(buf,"x%d",m_jellyfishHeld);
+	sprintf(buf,"x%d",m_player->getJellyFishAmmo());
 	m_player->getFontBank()->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
 }
 

@@ -40,7 +40,6 @@ public:
 	virtual void				enter();
 	virtual void				think();
 	virtual void				renderModeUi();
-	virtual int					isJellyfishNetFull()				{return m_jellyfishHeld!=0;}
 
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
@@ -61,7 +60,6 @@ private:
 	int							m_netFrame;
 	NetState					m_netState;
 	int							m_netSin;
-	int							m_jellyfishHeld;
 
 };
 
