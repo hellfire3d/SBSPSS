@@ -1659,6 +1659,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 			case DAMAGE__SQUASH_ENEMY:
 			case DAMAGE__BURN_ENEMY:
 			case DAMAGE__BITE_ENEMY:
+			case DAMAGE__COLLISION_DAMAGE:
 				break;
 
 			case DAMAGE__KILL_OUTRIGHT:
@@ -2063,17 +2064,27 @@ int		CPlayer::moveVertical(int _moveDistance)
 			}
 		}
 	}
-	else
+	else if(_moveDistance<0)
 	{
 		// Must be below ground
 		// Are we jumping into an impassable block?
-		if(_moveDistance<0&&
-		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
 		{
 			pos.vy=(pos.vy&0xfff0);
 			_moveDistance=0;
 			hitGround=true;
+		}
+	}
+	else
+	{
+		// Stood on any important types of collision?
+		int	colType;
+
+		colType=m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK;
+		if(colType==COLLISION_TYPE_FLAG_DAMAGE)
+		{
+			takeDamage(DAMAGE__COLLISION_DAMAGE);
 		}
 	}
 	pos.vy+=_moveDistance;
