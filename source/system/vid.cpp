@@ -341,7 +341,7 @@ DRAWENV	*Draw;
 DISPENV *Disp;
 int		LastFrame=FrameFlipFlag;
 int		ScrH=VidGetScrH()*FrameFlipFlag;
-
+		
 		FrameFlipFlag^=1;
 		TickBuffer[FrameFlipFlag]=TickCount; TickCount=0;
 		Draw=&Screen[FrameFlipFlag].Draw;
@@ -356,6 +356,7 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 		Disp->screen.h=256;
 		PutDispEnv(Disp); 
 		PutDrawEnv(Draw);
+		VSync(0);	// < -need this here, not in game (vsync miss bug)
 
 // If set, load background screen
 		if (ScreenImage) 
