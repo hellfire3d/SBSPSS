@@ -305,6 +305,18 @@ SOURCE=..\..\..\source\system\dbg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\system\except.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\system\except.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\system\except_a.mip
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\system\global.h
 # End Source File
 # Begin Source File
