@@ -26,18 +26,18 @@ Class14=CMultiBar
 Class15=CNewMapGUI
 
 ResourceCount=13
-Resource1=IDD_MULTIBAR (English (U.S.))
-Resource2=IDR_MAINFRAME (English (U.S.))
+Resource1=IDD_ADDLAYER
+Resource2=IDD_MAPSIZE
 Resource3=IDR_MAPEDITYPE (English (U.S.))
-Resource4=IDD_ABOUTBOX (English (U.S.))
-Resource5=IDD_LAYER_LIST_DIALOG
-Resource6=IDD_ADDLAYER
-Resource7=IDD_NEWMAP
-Resource8=IDD_LAYERTILE_GUI
-Resource9=IDD_LAYERTILE_TOOLBAR
-Resource10=IDD_LAYERSHADE_GUI
-Resource11=IDR_TOOLBAR (English (U.S.))
-Resource12=IDD_MAPSIZE
+Resource4=IDD_NEWMAP
+Resource5=IDD_LAYERTILE_GUI
+Resource6=IDR_TOOLBAR (English (U.S.))
+Resource7=IDD_LAYERSHADE_GUI
+Resource8=IDR_MAINFRAME (English (U.S.))
+Resource9=IDD_ABOUTBOX (English (U.S.))
+Resource10=IDD_MULTIBAR (English (U.S.))
+Resource11=IDD_LAYER_LIST_DIALOG
+Resource12=IDD_LAYERTILE_TOOLBAR
 Class16=CLayerCollisionGUI
 Resource13=IDD_LAYERCOLLISION_GUI
 
@@ -349,5 +349,5 @@ ImplementationFile=layercollisiongui.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_LAYERCOLLISION_DAMAGE
+LastObject=CLayerCollisionGUI
 

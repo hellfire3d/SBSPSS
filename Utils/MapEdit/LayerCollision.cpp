@@ -77,19 +77,29 @@ void	CLayerCollision::Save(CFile *File)
 }
 
 /*****************************************************************************/
-void	CLayerCollision::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+void	CLayerCollision::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
 			CLayerTile::Render(Core,ThisCam,Map,FALSE,0.5f);
 }
-/*****************************************************************************/
-BOOL	CLayerCollision::SetColFlag(CCore *Core,int Flag)
-{
-		TRACE1("HERE!!! %i",Flag);
-		return(TRUE);
-}
 
+/*****************************************************************************/
+/*****************************************************************************/
+bool	CLayerCollision::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+{
+bool	Ret=false;
+		switch(CmdMsg)
+		{
+		case CmdMsg_MirrorY:
+//			Ret=MirrorY(Core);	No longer mirror Y collision tiles
+			break;
+		default:
+			Ret=CLayerTile::Command(CmdMsg,Core,Param0,Param1);
+			break;
+		}
+		return(Ret);
+}
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
@@ -154,14 +164,17 @@ int		Height=Map.GetHeight();
 }
 
 /*****************************************************************************/
+/*
 void	CLayerCollision::DeleteSet(int Set)
 {
 		Map.DeleteSet(Set);
 }
-
+*/
 /*****************************************************************************/
+/*
 void	CLayerCollision::RemapSet(int OrigSet,int NewSet)
 {
 		Map.RemapSet(OrigSet,NewSet);
 
 }
+*/

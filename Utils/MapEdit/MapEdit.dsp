@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\libs\glib" /I "..\libs\maths" /I "..\libs\davelib" /I "..\libs\ginlib" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /Gi /GX /O2 /I "..\libs\glib" /I "..\libs\maths" /I "..\libs\davelib" /I "..\libs\ginlib" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG" /d "_AFXDLL"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /out:"..\..\tools\MapEdit\MapEdit.exe" /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
+# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /incremental:yes /machine:I386 /out:"..\..\tools\MapEdit\MapEdit.exe" /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
 
 !ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
 
@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /Gi /GX /ZI /Od /I "..\libs\glib" /I "..\libs\maths" /I "..\libs\davelib" /I "..\libs\ginlib" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /Gi- /GX /ZI /Od /I "..\libs\glib" /I "..\libs\maths" /I "..\libs\davelib" /I "..\libs\ginlib" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG" /d "_AFXDLL"
@@ -146,6 +146,10 @@ SOURCE=.\Export.h
 SOURCE=.\ExportHdr.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\CmdMsg.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\Core.cpp

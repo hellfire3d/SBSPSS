@@ -63,7 +63,7 @@
 #define ID_TOOLBAR_COMBO                32777
 #define ID_TOOLBAR_PARAMBAR             32783
 #define ID_TOOLBAR_GRID                 32784
-#define ID_TOGGLE_TILEVIEW              32785
+#define ID_TOGGLE_SUBVIEW               32785
 #define ID_MAP_TOGGLEGRID               32786
 #define ID_TOGGLE_GRID                  32787
 #define ID_MIRRORX                      32788

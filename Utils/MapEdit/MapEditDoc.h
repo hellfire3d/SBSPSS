@@ -36,17 +36,8 @@ public:
 	void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
 	void			MouseMove(UINT nFlags, CPoint &point);
 
-	void			TileBankLoad();
-	void			TileBankDelete();
-	void			TileBankReload();
-	void			TileBankSet();
+	void			Command(int CmdMsg,int Param0=0,int Param1=0);
 
-	void			SetMode(int NewMode);
-	void			SetLayer(int Layer);
-	void			AddLayer(int Layer);
-	void			DeleteLayer(int Layer);
-
-	void			SetColFlag(int Flag);
 // Operations
 public:
 
@@ -78,7 +69,7 @@ protected:
 	afx_msg void OnExport();
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
-	afx_msg void OnToggleTileview();
+	afx_msg void OnToggleSubView();
 	afx_msg void OnToggleGrid();
 	afx_msg void OnMirrorx();
 	afx_msg void OnMirrory();

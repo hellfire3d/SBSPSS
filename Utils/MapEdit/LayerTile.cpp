@@ -14,6 +14,8 @@
 #include	"MapEditView.h"
 #include	"MainFrm.h"
 
+#include	"TileSet.h"
+
 #include	"Core.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
@@ -28,6 +30,12 @@
 CLayerTile::CLayerTile(int _SubType,int Width,int Height)
 {
 		SubType=_SubType;
+		TileBank=0;
+		if (SubType==LAYER_SUBTYPE_ACTION)
+			TileBank=new CTileBank;
+		else
+			TileBank=0;
+		SubView=TileBank;
 
 		SetDefaultParams();
 
@@ -48,6 +56,7 @@ CLayerTile::CLayerTile(int _SubType,int Width,int Height)
 		if (Height<TileLayerMinHeight) Height=TileLayerMinHeight;
 
 		Map.SetSize(Width,Height,TRUE);
+
 }
 
 /*****************************************************************************/
@@ -60,6 +69,7 @@ CLayerTile::CLayerTile(CFile *File,int Version)
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
+		if (SubType==LAYER_SUBTYPE_ACTION) delete TileBank;
 }
 
 /*****************************************************************************/
@@ -73,9 +83,13 @@ void	CLayerTile::Load(CFile *File,int Version)
 		File->Read(&SubType,sizeof(int));
 		Map.Load(File,Version);
 
+		if (SubType==LAYER_SUBTYPE_ACTION) 
+			TileBank=new CTileBank;
+		else
+			TileBank=0;
+		SubView=TileBank;
+		
 		TRACE1("%s\t",GetName());
-		TRACE1("Scl:%g\t",ScaleFactor);
-		TRACE1("%i\n",VisibleFlag);
 }
 
 /*****************************************************************************/
@@ -93,6 +107,18 @@ void	CLayerTile::Save(CFile *File)
 }
 
 /*****************************************************************************/
+void	CLayerTile::InitSubView(CCore *Core)
+{
+// Fix up shared layers
+		if (!SubView)
+		{
+			SubView=Core->FindSubView(LAYER_SUBVIEW_TILEBANK);
+		}
+		TileBank=(CTileBank*)SubView;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
 void	CLayerTile::CheckLayerSize(int Width,int Height)
 {
 		if (Resize(Width,Height))
@@ -101,11 +127,10 @@ void	CLayerTile::CheckLayerSize(int Width,int Height)
 			mexstr.Format("%s Layer Resized to Correct Size\nPlease re-save\n", GetName());
 			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
 		}
-		
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::Resize(int Width,int Height)
+bool	CLayerTile::Resize(int Width,int Height)
 {
 		if (!ResizeFlag) return(FALSE);	// Its a fixed size, so DONT DO IT!
 
@@ -125,7 +150,7 @@ int		ThisHeight=Map.GetHeight();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
@@ -142,12 +167,11 @@ Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderCursorPaint(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+void	CLayerTile::RenderCursorPaint(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
-CTileBank	&TileBank=Core->GetTileBank();
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
-CMap		&Brush=TileBank.GetActiveBrush();
+CMap		&Brush=TileBank->GetActiveBrush();
 Vector3		Ofs;
 
 		if (!Brush.IsValid()) return;
@@ -172,7 +196,7 @@ Vector3		Ofs;
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,BOOL Render3d,float Alpha,Vector3 *Ofs)
+void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,bool Render3d,float Alpha,Vector3 *Ofs)
 {
 int			MapWidth=ThisMap.GetWidth();
 int			MapHeight=ThisMap.GetHeight();
@@ -181,7 +205,7 @@ float		ZoomH=Core->GetZoomH();
 float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
-
+bool		WrapMap=SubType==LAYER_SUBTYPE_BACK;
 int		StartX=(int)ThisCam.x;
 int		StartY=(int)ThisCam.y;
 float	ShiftX=ThisCam.x - (int)ThisCam.x;
@@ -209,14 +233,27 @@ int		DrawH=ZoomH+8;
 		glTranslatef(-Ofs->x,Ofs->y,0);		// Set scroll offset
 		}
 
+		if (WrapMap)
+		{
+			DrawW=MapWidth;
+			DrawH=MapHeight;
+		}
 		for (int YLoop=0; YLoop<DrawH; YLoop++)
 		{
 			for (int XLoop=0; XLoop<DrawW; XLoop++)
 			{
-				sMapElem	&ThisElem=ThisMap.Get(StartX+XLoop,StartY+YLoop);
-				if (ThisElem.Tile && Core->IsTileValid(ThisElem.Set,ThisElem.Tile))
+				int	XPos=StartX+XLoop;
+				int	YPos=StartY+YLoop;
+				if (WrapMap)
+				{
+					XPos%=MapWidth;
+					YPos%=MapHeight;
+				}
+				
+				sMapElem	&ThisElem=ThisMap.Get(XPos,YPos);
+				if (ThisElem.Tile && TileBank->IsTileValid(ThisElem.Set,ThisElem.Tile))
 				{ // Render Non Zero Tiles
-					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
+					CTile		&ThisTile=TileBank->GetTile(ThisElem.Set,ThisElem.Tile);
 
 					glColor4f(1,1,1,Alpha);	// Set default Color
 					ThisTile.Render(ThisElem.Flags,Render3d);
@@ -263,7 +300,7 @@ float		Y1=Rect.bottom-1;
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)
+void	CLayerTile::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 int			MapWidth=Map.GetWidth();
@@ -357,11 +394,26 @@ int		DrawH=ZoomH+8;
 		glTranslatef(-ShiftX,ShiftY,0);
 		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
+bool		WrapMap=SubType==LAYER_SUBTYPE_BACK;
+		if (WrapMap)
+		{
+			DrawW=MapWidth;
+			DrawH=MapHeight;
+		}
+				
 		for (int YLoop=0; YLoop<DrawH; YLoop++)
 		{
 			for (int XLoop=0; XLoop<DrawW; XLoop++)
 			{
-				TileID=(XLoop+StartX)+(((YLoop+StartY)*MapWidth));
+				int	XPos=StartX+XLoop;
+				int	YPos=StartY+YLoop;
+				if (WrapMap)
+				{
+					XPos%=MapWidth;
+					YPos%=MapHeight;
+				}
+
+				TileID=(XPos)+(((YPos)*MapWidth));
 				glLoadName (TileID);
 				glBegin (GL_QUADS); 
 					BuildGLQuad(XLoop,XLoop+1,-YLoop,-YLoop+1,0);
@@ -393,14 +445,14 @@ GLuint	*HitPtr=SelectBuffer;
 /*****************************************************************************/
 void	CLayerTile::GUIInit(CCore *Core)
 {
-		Core->TileBankGUIInit();
+		TileBank->GUIInit(Core);
 		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerTile::GUIKill(CCore *Core)
 {
-		Core->TileBankGUIKill();
+		TileBank->GUIKill(Core);
 		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
@@ -419,8 +471,7 @@ void	CLayerTile::GUIUpdate(CCore *Core)
 		default:
 			break;
 		}
-
-		Core->TileBankGUIUpdate();
+		TileBank->GUIUpdate(Core);
 }
 
 /*****************************************************************************/
@@ -431,58 +482,15 @@ void	CLayerTile::GUIChanged(CCore *Core)
 /*****************************************************************************/
 /*** Functions ***************************************************************/
 /*****************************************************************************/
-BOOL	CLayerTile::SetMode(int NewMode)
+bool	CLayerTile::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
-BOOL	Ret=FALSE;
-			
-// Clean up last mode
-			Ret|=ExitMode();
-			Mode=(MouseMode)NewMode;
-			Ret|=InitMode();
-			return(Ret);
-}
-
-/*****************************************************************************/
-BOOL	CLayerTile::InitMode()
-{
-		switch(Mode)
-		{
-		case MouseModePaint:
-			break;
-		case MouseModeSelect:
-			break;
-		default:
-			break;
-		}
-		return(FALSE);
-}
-
-/*****************************************************************************/
-BOOL	CLayerTile::ExitMode()
-{
-		switch(Mode)
-		{
-		case MouseModePaint:
-			break;
-		case MouseModeSelect:
-			break;
-		default:
-			break;
-		}
-		return(FALSE);
-}
-
-/*****************************************************************************/
-BOOL	CLayerTile::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
-{
-BOOL		Ret=FALSE;
-CTileBank	&TileBank=Core->GetTileBank();
+bool	Ret=false;
 
 		switch(Mode)
 		{
 		case MouseModePaint:
 			if (DownFlag)
-				Ret=Paint(TileBank.GetLBrush(),CursorPos);
+				Ret=Paint(TileBank->GetLBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 				Ret=Selection.Handle(CursorPos,nFlags);
@@ -498,16 +506,15 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
+bool	CLayerTile::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
-BOOL		Ret=FALSE;
-CTileBank	&TileBank=Core->GetTileBank();
+bool		Ret=FALSE;
 
 		switch(Mode)
 		{
 		case MouseModePaint:
 			if (DownFlag)
-				Ret=Paint(TileBank.GetRBrush(),CursorPos);
+				Ret=Paint(TileBank->GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 				Ret=Selection.Handle(CursorPos,nFlags);
@@ -523,19 +530,18 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
+bool	CLayerTile::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
 {
-BOOL		Ret=FALSE;
-CTileBank	&TileBank=Core->GetTileBank();
+bool		Ret=FALSE;
 
 		switch(Mode)
 		{
 		case MouseModePaint:
 			if (nFlags & MK_LBUTTON)
-				Ret=Paint(TileBank.GetLBrush(),CursorPos);
+				Ret=Paint(TileBank->GetLBrush(),CursorPos);
 			else
 			if (nFlags & MK_RBUTTON)
-				Ret=Paint(TileBank.GetRBrush(),CursorPos);
+				Ret=Paint(TileBank->GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 			Ret=Selection.Handle(CursorPos,nFlags);
@@ -547,7 +553,45 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+bool	CLayerTile::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+{
+bool	Ret=false;
+		switch(CmdMsg)
+		{
+		case CmdMsg_SetMode:
+			Mode=(MouseMode)Param0;
+			Core->GUIUpdate();
+			break;
+		case CmdMsg_Copy:
+			CopySelection(Core);
+			break;
+		case CmdMsg_Paste:
+			PasteSelection(Core);
+			break;
+		case CmdMsg_MirrorX:
+			Ret=MirrorX(Core);
+			break;
+		case CmdMsg_MirrorY:
+			Ret=MirrorY(Core);
+			break;
+		case CmdMsg_SetColFlag:
+			Ret=SetColFlags(Core,Param0);
+			break;
+		case CmdMsg_SubViewLoad:
+		case CmdMsg_SubViewDelete:
+		case CmdMsg_SubViewUpdate:
+		case CmdMsg_SubViewSet:
+		case CmdMsg_ActiveBrushLeft:
+		case CmdMsg_ActiveBrushRight:
+			Ret=TileBank->Command(CmdMsg,Core,Param0,Param1);
+		default:
+			TRACE3("LayerTile-Unhandled Command %i (%i,%i)\n",CmdMsg,Param0,Param1);
+		}
+		return(Ret);
+}
+
+/*****************************************************************************/
+void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 		switch(Mode)
 		{
@@ -563,16 +607,14 @@ void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MirrorX(CCore *Core)
+bool	CLayerTile::MirrorX(CCore *Core)
 {
 		switch(Mode)
 		{
 		case MouseModePaint:
 			{
-			CTileBank	&TileBank=Core->GetTileBank();
-
-			TileBank.GetLBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
-			TileBank.GetRBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
+			TileBank->GetLBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
+			TileBank->GetRBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
 			}
 			break;
 		case MouseModeSelect:
@@ -585,21 +627,20 @@ BOOL	CLayerTile::MirrorX(CCore *Core)
 		default:
 			break;
 		}
-
+		Core->UpdateView();
 		return(TRUE);
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MirrorY(CCore *Core)
+bool	CLayerTile::MirrorY(CCore *Core)
 {
+//		if (GetType()==LAYER_TYPE_COLLISION) return(false);
 		switch(Mode)
 		{
 		case MouseModePaint:
 			{
-			CTileBank	&TileBank=Core->GetTileBank();
-
-			TileBank.GetLBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
-			TileBank.GetRBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
+			TileBank->GetLBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
+			TileBank->GetRBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
 			}
 			break;
 		case MouseModeSelect:
@@ -612,22 +653,19 @@ BOOL	CLayerTile::MirrorY(CCore *Core)
 		default:
 			break;
 		}
-
-
+		Core->UpdateView();
 		return(TRUE);
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::SetColFlags(CCore *Core,int Flags)
+bool	CLayerTile::SetColFlags(CCore *Core,int Flags)
 {
 		switch(Mode)
 		{
 		case MouseModePaint:
 			{
-			CTileBank	&TileBank=Core->GetTileBank();
-
-			TileBank.GetLBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
-			TileBank.GetRBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
+			TileBank->GetLBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
+			TileBank->GetRBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
 			}
 			break;
 		case MouseModeSelect:
@@ -645,30 +683,28 @@ BOOL	CLayerTile::SetColFlags(CCore *Core,int Flags)
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::CopySelection(CCore *Core)
+bool	CLayerTile::CopySelection(CCore *Core)
 {
 		if (Mode!=MouseModeSelect) return(false);	// Not in select mode
 		if (!Selection.IsValid()) return(false);	// No Selection
 
-CTileBank	&TileBank=Core->GetTileBank();
 CRect		Rect=Selection.GetRect();
 
-		TileBank.GetActiveBrush().Set(Map,Rect.left,Rect.top,Rect.Width(),Rect.Height());
+		TileBank->GetActiveBrush().Set(Map,Rect.left,Rect.top,Rect.Width(),Rect.Height());
 
 		return(true);
 
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::PasteSelection(CCore *Core)
+bool	CLayerTile::PasteSelection(CCore *Core)
 {
 		if (Mode!=MouseModeSelect) return(false);	// Not in select mode
 		if (!Selection.IsValid()) return(false);	// No Selection
 
-CTileBank	&TileBank=Core->GetTileBank();
 CRect		Rect=Selection.GetRect();
 
-		Map.Paste(TileBank.GetActiveBrush(),&Rect);
+		Map.Paste(TileBank->GetActiveBrush(),&Rect);
 		return(true);
 }
 
@@ -676,7 +712,7 @@ CRect		Rect=Selection.GetRect();
 /*****************************************************************************/
 /*****************************************************************************/
 
-BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
+bool	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 {
 		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
 		if (!Blk.IsValid()) return(FALSE);	// Invalid tile?
@@ -691,7 +727,6 @@ void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
 int				Width=Map.GetWidth();
 int				Height=Map.GetHeight();
-CTileBank		&TileBank=Core->GetTileBank();
 sExpTile		BlankElem={0,0,0,0};
 
 		Exp.ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
@@ -703,7 +738,7 @@ sExpTile		BlankElem={0,0,0,0};
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
-				CTile			&ThisTile=Core->GetTile(MapElem.Set,MapElem.Tile);
+				CTile			&ThisTile=TileBank->GetTile(MapElem.Set,MapElem.Tile);
 				sExpLayerTile	OutElem;
 				sExpTile		OutTile;
 

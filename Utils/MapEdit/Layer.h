@@ -23,7 +23,7 @@ struct	sLayerInfoTable
 	bool			Render3dFlag;
 	bool			ResizeFlag;
 	bool			ExportFlag;
-	bool			HasTileView;
+	int				SubView;
 
 };
 
@@ -41,7 +41,7 @@ class	CExport;
 class	CLayer
 {
 public:
-		CLayer(){};
+		CLayer();
 virtual	~CLayer(){};
 
 static	sLayerInfoTable	InfoTable[];
@@ -55,22 +55,23 @@ static	int				GetLayerIdx(int Type,int SubType);
 		bool			CanDelete()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].DeleteFlag);}
 		bool			CanExport()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag);}
 		bool			IsUnique()						{return(!(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag));}
-		bool			HasTileView()					{return((InfoTable[GetLayerIdx(GetType(),GetSubType())].HasTileView));}
+		int				GetSubViewType()				{return((InfoTable[GetLayerIdx(GetType(),GetSubType())].SubView));}
 
-virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
-virtual	BOOL			IsVisible()						{return(VisibleFlag);}
+virtual	void			InitSubView(CCore *Core){};
+virtual	CLayer			*GetSubView()					{return(SubView);}
+
+
+virtual	void			SetVisible(bool f)				{VisibleFlag=f;}
+virtual	bool			IsVisible()						{return(VisibleFlag);}
 virtual	int				GetType()=0;
 virtual	int				GetSubType()					{return(LAYER_SUBTYPE_NONE);}
 		float			GetScaleFactor()				{return(ScaleFactor);}
 
-
-virtual	void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
-virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)=0;
+virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d)=0;
+virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)=0;
 virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam)=0;
-
-
+virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)=0;
 virtual	void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)=0;
-virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 
 virtual	void			GUIInit(CCore *Core)=0;
 virtual	void			GUIKill(CCore *Core)=0;
@@ -80,7 +81,7 @@ virtual	void			GUIChanged(CCore *Core)=0;
 virtual	int				GetWidth()=0;
 virtual	int				GetHeight()=0;
 virtual	void			CheckLayerSize(int Width,int Height){};
-virtual	BOOL			Resize(int Width,int Height)=0;
+virtual	bool			Resize(int Width,int Height)=0;
 
 virtual	void			Load(CFile *File,int Version)=0;
 virtual	void			Save(CFile *File)=0;
@@ -89,31 +90,19 @@ virtual	void			Export(CCore *Core,CExport &Exp)=0;
 
 
 // Functions
-virtual	BOOL			SetMode(int NewMode)=0;
-virtual	BOOL			InitMode()=0;
-virtual	BOOL			ExitMode()=0;
-virtual	BOOL			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
-virtual	BOOL			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
-virtual	BOOL			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)=0;
-
-virtual	BOOL			MirrorX(CCore *Core){return(false);};
-virtual	BOOL			MirrorY(CCore *Core){return(false);};
-virtual	BOOL			SetColFlags(CCore *Core,int Flag){return(false);};
-
-virtual	BOOL			CopySelection(CCore *Core)		{return(false);}
-virtual	BOOL			PasteSelection(CCore *Core)		{return(false);}
-
-
-virtual	void			DeleteSet(int Set){};
-virtual	void			RemapSet(int OrigSet,int NewSet){};
+virtual	bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag){return(false);}
+virtual	bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag){return(false);}
+virtual	bool			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos){return(false);}
+virtual	bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0){return(false);};
 
 protected:
 		float			ScaleFactor;
 		bool			Render3dFlag;
 		bool			ResizeFlag;
 
-		BOOL			VisibleFlag;
+		bool			VisibleFlag;
 		CSelect			Selection;
+		CLayer			*SubView;
 };
 
 

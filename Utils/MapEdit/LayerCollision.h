@@ -21,8 +21,7 @@ public:
 
 		int				GetType()			{return(LAYER_TYPE_COLLISION);}
 
-		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
-		BOOL			SetColFlag(CCore *Core,int Flag);
+		void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 
 		void			GUIInit(CCore *Core);
 		void			GUIKill(CCore *Core);
@@ -33,6 +32,7 @@ public:
 		void			Save(CFile *File);
 
 		void			Export(CCore *Core,CExport &Exp);
+		bool			Command(int CmdMsg,CCore *Core,int Param0,int Param1);
 
 // Functions
 		void			DeleteSet(int Set);

@@ -35,7 +35,14 @@ const Vector3	DefaultCamPos(0.0f,0.0f,0.9f);
 CCore::CCore()
 {
 		CurrentMousePos=CPoint(0,0);
+		MapCam=DefaultCamPos;
+		TileCam=DefaultCamPos;
+		SpareFlag=false;
+		GridFlag=true;
+		Is3dFlag=true;
 		CurrentView=NULL;
+		CursorPos.x=CursorPos.y=0;
+		
 }
 
 /*****************************************************************************/
@@ -46,7 +53,7 @@ int	ListSize=Layer.size();
 }
 
 /*****************************************************************************/
-BOOL	CCore::New()
+bool	CCore::New()
 {
 CNewMapGUI	Dlg;
 int		Width,Height;
@@ -61,21 +68,24 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
-		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
+//		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
+
+		for (int i=0; i<Layer.size(); i++)
+		{
+			Layer[i]->InitSubView(this);
+		}
+
 
 		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
-		MapCam=DefaultCamPos;
-		TileCam=DefaultCamPos;
-		TileViewFlag=FALSE;
-		GridFlag=TRUE;
-		Is3dFlag=TRUE;
+		CurrentLayer=Layer[ActiveLayer];
 		return(TRUE);
 }
 
 /*****************************************************************************/
 void	CCore::Load(CFile *File)
 {
-int		Version;
+int		Version,i;
+BOOL	F;
 
 		File->Read(&Version,sizeof(int));
 		if (Version>100000) Version=1;	// Check fix for changing version to int from float
@@ -95,16 +105,16 @@ int		Version;
 		File->Read(&TileCam,sizeof(Vector3));
 		File->Read(&TileCamOfs,sizeof(Vector3));
 	
-		File->Read(&TileViewFlag,sizeof(BOOL));
-		File->Read(&GridFlag,sizeof(BOOL));
-		File->Read(&Is3dFlag,sizeof(BOOL));
+		File->Read(&F,sizeof(BOOL));  SpareFlag=F!=0;
+		File->Read(&F,sizeof(BOOL));  GridFlag=F!=0;
+		File->Read(&F,sizeof(BOOL));  Is3dFlag=F!=0;
 
 // Layers
 int		LayerCount;
 		File->Read(&LayerCount,sizeof(int));
 		File->Read(&ActiveLayer,sizeof(int));
 
-		for (int i=0;i<LayerCount;i++)
+		for (i=0;i<LayerCount;i++)
 		{
 			int	Type;
 
@@ -124,8 +134,14 @@ int		LayerCount;
 				ASSERT(!"poos");
 			}
 		}
-		TileBank.Load(File,Version);
 
+		for (i=0; i<Layer.size(); i++)
+		{
+			Layer[i]->InitSubView(this);
+		}
+		
+		GetTileBank()->Load(File,Version);
+		CurrentLayer=Layer[ActiveLayer];
 
 // Check Layers
 int		MapWidth=ActionLayer->GetWidth();
@@ -140,6 +156,7 @@ int		MapHeight=ActionLayer->GetHeight();
 /*****************************************************************************/
 void	CCore::Save(CFile *File)
 {
+BOOL	F;
 // Version 1
 		File->Write(&FileVersion,sizeof(int));
 
@@ -148,9 +165,9 @@ void	CCore::Save(CFile *File)
 		File->Write(&TileCam,sizeof(Vector3));
 		File->Write(&TileCamOfs,sizeof(Vector3));
 
-		File->Write(&TileViewFlag,sizeof(BOOL));
-		File->Write(&GridFlag,sizeof(BOOL));
-		File->Write(&Is3dFlag,sizeof(BOOL));
+		F=SpareFlag;	File->Write(&F,sizeof(BOOL));
+		F=GridFlag;		File->Write(&F,sizeof(BOOL));
+		F=Is3dFlag;		File->Write(&F,sizeof(BOOL));
 
 
 // Layers
@@ -164,12 +181,12 @@ int		LayerCount=Layer.size();
 			File->Write(&Type,sizeof(int));
 			Layer[i]->Save(File);
 		}
-	TileBank.Save(File);
+	GetTileBank()->Save(File);
 
 }
 
 /*****************************************************************************/
-BOOL	CCore::Question(char *Txt)
+bool	CCore::Question(char *Txt)
 {
 CString Str;
 	Str.Format(Txt);
@@ -183,25 +200,33 @@ int	Ret=AfxMessageBox(Str,MB_YESNO , MB_ICONQUESTION);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CCore::Render(BOOL ForceRender)
+void	CCore::Render(bool ForceRender)
 {
-		if (!CurrentView) 
+Vector3	&ThisCam=GetCam();
+		if (!CurrentView)
 		{
 			TRACE0("No View\n");
 			UpdateAll();
 			return;
 		}
-		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
+		if (GetTileBank()->NeedLoad()) GetTileBank()->LoadTileSets(this);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
-		if (TileViewFlag)
+
+		if (CurrentLayer!=Layer[ActiveLayer] || CurrentLayer->IsUnique())
 		{
-			RenderTileView();
+			CurrentLayer->Render(this,ThisCam,Is3dFlag);
+			CurrentLayer->RenderGrid(this,ThisCam,true);
+			CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
 		}
 		else
 		{
 			RenderLayers();
 		}
+		CurrentLayer->RenderCursor(this,ThisCam,Is3dFlag);
+// Get Cursor Pos
+		LastCursorPos=CursorPos;
+		CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
 
 }
 
@@ -215,13 +240,13 @@ int		StartLayer,EndLayer;
 		StartLayer=0;
 		EndLayer=ListSize;
 
-		while (Layer[StartLayer]->IsUnique()) StartLayer++;
+//		while (Layer[StartLayer]->IsUnique()) StartLayer++;
 
-		if (Layer[ActiveLayer]->IsUnique())
-		{
-			StartLayer=ActiveLayer;
-			EndLayer=StartLayer+1;
-		}
+//		if (Layer[ActiveLayer]->IsUnique())
+//		{
+//			StartLayer=ActiveLayer;
+//			EndLayer=StartLayer+1;
+//		}
 
 		for (int i=StartLayer; i<EndLayer; i++)
 		{
@@ -232,83 +257,36 @@ int		StartLayer,EndLayer;
 			}
 		}
 
-		
-		Layer[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
-		
-// Get Cursor Pos
-		LastCursorPos=CursorPos;
-		Layer[ActiveLayer]->FindCursorPos(this,GetCam(),CurrentMousePos);
-}
-
-/*****************************************************************************/
-void	CCore::RenderTileView()
-{
-Vector3	&ThisCam=GetCam();
-
-		GetTileBank().RenderSet(this,ThisCam,Is3dFlag);
-		GetTileBank().FindCursorPos(this,GetCam(),CurrentMousePos);
 }
 
 /*****************************************************************************/
 /*** Control *****************************************************************/
 /*****************************************************************************/
-void	CCore::SetMode(int NewMode)
+void	CCore::LButtonControl(UINT nFlags, CPoint &point,bool DownFlag)
 {
-BOOL	RedrawFlag=FALSE;
-		RedrawFlag=Layer[ActiveLayer]->SetMode(NewMode);
+		if (CurrentLayer->IsVisible())
+		{
+			CurrentLayer->LButtonControl(this,nFlags,CursorPos,DownFlag);
+		}
+		Command(CmdMsg_ActiveBrushLeft,0,0);
+
+		RedrawView();
 }
 
 /*****************************************************************************/
-void	CCore::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
-{
-BOOL	RedrawFlag=FALSE;
-
-		if (TileViewFlag)
-		{
-			if (nFlags & MK_RBUTTON)
-				RedrawFlag=GetTileBank().SelectCancel();
-			else
-				RedrawFlag=GetTileBank().SelectL(DownFlag);
-		}
-		else
-		{
-			if (Layer[ActiveLayer]->IsVisible())
-			{
-				RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,nFlags,CursorPos,DownFlag);
-			}
-		}
-		GetTileBank().SetActiveBrushL();
-
-		if (RedrawFlag) RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::MButtonControl(UINT nFlags, CPoint &point,bool DownFlag)
 {
 }
 
 /*****************************************************************************/
-void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::RButtonControl(UINT nFlags, CPoint &point,bool DownFlag)
 {
-BOOL	RedrawFlag=FALSE;
-
-		if (TileViewFlag)
+		if (CurrentLayer->IsVisible())
 		{
-			if (nFlags & MK_LBUTTON)
-				RedrawFlag=GetTileBank().SelectCancel();
-			else
-				RedrawFlag=GetTileBank().SelectR(DownFlag);
+			CurrentLayer->RButtonControl(this,nFlags,CursorPos,DownFlag);
 		}
-		else
-		{
-			if (Layer[ActiveLayer]->IsVisible())
-			{
-				RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,nFlags,CursorPos,DownFlag);
-			}
-		}
-		GetTileBank().SetActiveBrushR();
-
-		if (RedrawFlag) RedrawView();
+		Command(CmdMsg_ActiveBrushRight,0,0);
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -367,15 +345,9 @@ Vector3	&ThisCam=GetCam();
 			}
 		else
 		{	
-			if (TileViewFlag)
+			if (CurrentLayer->IsVisible())
 			{
-			}
-			else
-			{
-				if (Layer[ActiveLayer]->IsVisible())
-				{
-					Layer[ActiveLayer]->MouseMove(this,nFlags,CursorPos);
-				}
+				CurrentLayer->MouseMove(this,nFlags,CursorPos);
 			}
 // Mouse still moved, so need to redraw windows, to get CursorPos
 			RedrawView();
@@ -383,6 +355,52 @@ Vector3	&ThisCam=GetCam();
 		LastMousePos=CurrentMousePos;
 }
 
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CCore::Command(int CmdMsg,int Param0,int Param1)
+{
+bool	RedrawFlag=false;
+		switch(CmdMsg)
+		{
+		case CmdMsg_ToggleSubView:
+			ToggleSubView();
+			break;
+		case CmdMsg_ToggleGrid:		
+			ToggleGrid(); 
+			break;
+		case CmdMsg_Toggle2d:	
+			Toggle2d3d();
+			break;
+		case CmdMsg_ZoomIn:
+			Zoom(-0.1f);
+			break;
+		case CmdMsg_ZoomOut:
+			Zoom(+0.1f);
+			break;
+		case CmdMsg_ResetView:
+			ResetView();
+			break;
+		case CmdMsg_SetLayer:
+			SetLayer(Param0);
+			break;
+		case CmdMsg_AddLayer:
+			AddLayer(Param0);
+			break;
+		case CmdMsg_DeleteLayer:
+			DeleteLayer(Param0);
+			break;
+
+// Pass remaining to Active Layer
+		default:
+			RedrawFlag=CurrentLayer->Command(CmdMsg,this,Param0,Param1);
+			break;
+
+		}
+/*		if (RedrawFlag) */RedrawView();
+
+}
 
 /*****************************************************************************/
 /*** Layers ******************************************************************/
@@ -394,7 +412,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			GUIRemoveAll();
 			GUIAdd(LayerList,IDD_LAYER_LIST_DIALOG);
-			Layer[ActiveLayer]->GUIInit(this);
+			CurrentLayer->GUIInit(this);
 			GUIUpdate();
 }
 
@@ -431,21 +449,21 @@ int		LastLayer=ActiveLayer;
 // If toggling layer, dont change the layer
 		if ((int)LayerList.ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
 		{
-			Layer[NewLayer]->SetVisible(LayerList.ListBox.GetCheck(NewLayer));
+			Layer[NewLayer]->SetVisible(LayerList.ListBox.GetCheck(NewLayer)!=0);
 			LayerList.ListBox.SetCurSel(ActiveLayer);
 		}
 		else
 		{
 			bool	IsCol=Layer[NewLayer]->GetType()==LAYER_TYPE_COLLISION;
-			TileBank.SetCollision(IsCol);
+			GetTileBank()->SetCollision(IsCol);
 			ActiveLayer=NewLayer;
 		}
 
 		if (LastLayer!=ActiveLayer || Force)
 		{
-			if (TileViewFlag) TileViewFlag=false;
-			if (LastLayer<=LayerCount) Layer[LastLayer]->GUIKill(this);
-			Layer[ActiveLayer]->GUIInit(this);
+			if (LastLayer<=LayerCount) CurrentLayer->GUIKill(this);
+			CurrentLayer=Layer[ActiveLayer];
+			CurrentLayer->GUIInit(this);
 			GUIUpdate();
 		}
 		RedrawView();
@@ -468,7 +486,8 @@ int			Idx=ListSize;
 
 		Layer.insert(Layer.begin() + Idx,NewLayer);
 		
-		if (NewLayer->GetType()==LAYER_TYPE_TILE && NewLayer->GetSubType()==LAYER_SUBTYPE_ACTION) ActionLayer=NewLayer;
+		if (NewLayer->GetType()==LAYER_TYPE_TILE && NewLayer->GetSubType()==LAYER_SUBTYPE_ACTION) ActionLayer=(CLayerTile*)NewLayer;
+		NewLayer->InitSubView(this);
 		return(Idx);
 }
 
@@ -547,146 +566,46 @@ void		CCore::DeleteLayer(int CurrentLayer)
 }
 
 /*****************************************************************************/
+CLayer		*CCore::FindSubView(int Type)
+{
+int			i,ListSize=Layer.size();
+
+			for (i=0;i<ListSize;i++)
+			{
+				if (Layer[i]->GetSubViewType()==Type) 
+				{
+					CLayer	*SV=Layer[i]->GetSubView();
+					if (SV) return(SV);
+				}
+			}
+		return(0);
+}
+
+/*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateGrid(BOOL Toggle)
+void	CCore::ToggleGrid()
 {
-			if (Toggle) GridFlag=!GridFlag;
+			GridFlag=!GridFlag;
 			RedrawView();
 }
 
 /*****************************************************************************/
-/*** TileBank ****************************************************************/
+/*** SubView *****************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateTileView(BOOL Toggle)
+void	CCore::ToggleSubView()
 {
-		if (!Layer[ActiveLayer]->HasTileView()) return;
-		if (TileViewFlag && !TileBank.CanClose()) return;
+CLayer	*LastLayer=CurrentLayer;
 
-		if (Toggle) 
+		CurrentLayer=CurrentLayer->GetSubView();	// <-- Funky toggle code of what!!
+		if (!CurrentLayer) CurrentLayer=Layer[ActiveLayer];
+		if (LastLayer!=CurrentLayer)
 		{
-			TileViewFlag=!TileViewFlag;
+			LastLayer->GUIKill(this);
+			CurrentLayer->GUIInit(this);
+			GUIUpdate();
+			RedrawView();
 		}
-
-		if (TileViewFlag)
-		{
-			Layer[ActiveLayer]->GUIKill(this);
-			TileBank.GUIInit(this);
-		}
-		else
-		{
-			TileBank.GUIKill(this);
-			Layer[ActiveLayer]->GUIInit(this);
-		}
-		GUIUpdate();
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::TileBankLoad(char *Filename)
-{
-		TileBank.AddTileSet(Filename);
-		TileBank.GUIUpdate(this);
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::TileBankDelete()
-{
-		if (Question("Delete Current Tile Bank\n\nAll used tiles in current set will be set to blank\nAre you sure?"))
-			{
-			int		SetCount=TileBank.GetSetCount();
-			int		Current=TileBank.GetCurrent();
-			int		i,ListSize=Layer.size();
-
-				for (i=0;i<ListSize;i++)
-				{
-					Layer[i]->DeleteSet(Current);
-				}
-				TileBank.Delete();
-
-				for (int Set=Current+1; Set<SetCount; Set++)
-				{
-		
-					for (i=0;i<ListSize;i++)
-					{
-						Layer[i]->RemapSet(Set,Set-1);
-					}
-				}
-				RedrawView();
-			}
-}
-
-/*****************************************************************************/
-void	CCore::TileBankReload()
-{
-		TileBank.Reload();
-		TexCache.Purge();
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::TileBankSet()
-{
-		TileBank.SetCurrent();
-}
-
-/*****************************************************************************/
-void	CCore::MirrorX()
-{
-		if (TileViewFlag) return;
-		Layer[ActiveLayer]->MirrorX(this);
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::MirrorY()
-{
-		if (TileViewFlag) return;
-		Layer[ActiveLayer]->MirrorY(this);
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::ActiveBrushLeft()
-{
-		GetTileBank().SetActiveBrushL();
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::ActiveBrushRight()
-{
-		GetTileBank().SetActiveBrushR();
-		RedrawView();
-}
-
-/*****************************************************************************/
-BOOL	CCore::IsTileValid(int Set,int Tile)
-{
-		return(TileBank.IsTileValid(Set,Tile));
-}
-
-/*****************************************************************************/
-void	CCore::SetColFlag(int Flag)
-{
-		if (TileViewFlag) return;
-		Layer[ActiveLayer]->SetColFlags(this,Flag);
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::CopySelection()
-{
-		Layer[ActiveLayer]->CopySelection(this);
-		RedrawView();
-}
-
-/*****************************************************************************/
-void	CCore::PasteSelection()
-{
-		Layer[ActiveLayer]->PasteSelection(this);
-		RedrawView();
 }
 
 /*****************************************************************************/
@@ -694,9 +613,9 @@ void	CCore::PasteSelection()
 /*****************************************************************************/
 Vector3	&CCore::GetCam()
 {
-		if (TileViewFlag)
-			return(TileCam);
-		else
+//		if (SubViewFlag)
+//			return(TileCam);
+//		else
 			return(MapCam);
 
 }
@@ -774,15 +693,14 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 		UpdateLayerGUI();
-		UpdateGrid();
-		Layer[ActiveLayer]->GUIUpdate(this);
+		CurrentLayer->GUIUpdate(this);
 		ParamBar->Update();
 }
 
 /*****************************************************************************/
 void	CCore::GUIChanged()
 {
-		Layer[ActiveLayer]->GUIChanged(this);
+		CurrentLayer->GUIChanged(this);
 }
 
 /*****************************************************************************/
@@ -808,11 +726,8 @@ void	CCore::UpdateView(Vector3 *Ofs)
 			ThisCam.x+=Ofs->x;
 			ThisCam.y+=Ofs->y;
 			ThisCam.z-=Ofs->z;
-			if (!TileViewFlag)
-				{
-				if (ThisCam.x<0) ThisCam.x=0;
-				if (ThisCam.y<0) ThisCam.y=0;
-			}
+			if (ThisCam.x<0) ThisCam.x=0;
+			if (ThisCam.y<0) ThisCam.y=0;
 			if (ThisCam.z<0.1) ThisCam.z=0.1f;
 		}
 

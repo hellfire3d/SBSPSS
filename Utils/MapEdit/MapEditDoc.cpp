@@ -24,7 +24,7 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_EXPORT, OnExport)
 	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
 	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
-	ON_COMMAND(ID_TOGGLE_TILEVIEW, OnToggleTileview)
+	ON_COMMAND(ID_TOGGLE_SUBVIEW, OnToggleSubView)
 	ON_COMMAND(ID_TOOLBAR_GRID, OnToggleGrid)
 	ON_COMMAND(ID_MIRRORX, OnMirrorx)
 	ON_COMMAND(ID_MIRRORY, OnMirrory)
@@ -35,7 +35,7 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	ON_COMMAND(ID_RESET_VIEW, OnResetView)
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleSubView)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -111,10 +111,8 @@ void CMapEditDoc::Dump(CDumpContext& dc) const
 /*********************************************************************************/
 void	CMapEditDoc::SetView(CMapEditView *View)
 {
-//CMapEditView *LastView=Core.GetView();
 		Core.SetView(View);
-//		if (LastView!=View) 
-			UpdateView();
+		UpdateView();
 }
 
 /*********************************************************************************/
@@ -171,55 +169,33 @@ void	CMapEditDoc::GUIChanged()
 /*** Windows Message Handlers ****************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-void	CMapEditDoc::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.LButtonControl(nFlags,point,DownFlag);}
-void	CMapEditDoc::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.MButtonControl(nFlags,point,DownFlag);}
-void	CMapEditDoc::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.RButtonControl(nFlags,point,DownFlag);}
+void	CMapEditDoc::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.LButtonControl(nFlags,point,DownFlag!=0);}
+void	CMapEditDoc::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.MButtonControl(nFlags,point,DownFlag!=0);}
+void	CMapEditDoc::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)	{Core.RButtonControl(nFlags,point,DownFlag!=0);}
 void	CMapEditDoc::MouseWheel(UINT nFlags, short zDelta, CPoint &point)		{Core.MouseWheel(nFlags,zDelta,point);}
 void	CMapEditDoc::MouseMove(UINT nFlags, CPoint &point)						{Core.MouseMove(nFlags,point);}
 
-void	CMapEditDoc::OnToggleTileview()											{Core.UpdateTileView(true); FocusView();}
-void	CMapEditDoc::OnToggleGrid()												{Core.UpdateGrid(TRUE); FocusView();}
-void	CMapEditDoc::OnMirrorx()												{Core.MirrorX(); FocusView();}
-void	CMapEditDoc::OnMirrory()												{Core.MirrorY();FocusView();}
-void	CMapEditDoc::OnEditCopy()												{Core.CopySelection(); FocusView();}
-void	CMapEditDoc::OnEditPaste()												{Core.PasteSelection(); FocusView(); }
-void	CMapEditDoc::OnActivebrushLeft()										{Core.ActiveBrushLeft();}
-void	CMapEditDoc::OnActivebrushRight() 										{Core.ActiveBrushRight();}
-void	CMapEditDoc::On2d3dToggle()												{Core.Toggle2d3d();}
-void	CMapEditDoc::OnZoomIn()													{Core.Zoom(-0.1f); UpdateView();}
-void	CMapEditDoc::OnZoomOut()												{Core.Zoom(+0.1f); UpdateView();}
-void	CMapEditDoc::OnResetView()												{Core.ResetView();}
+void	CMapEditDoc::OnToggleSubView()											{Command(CmdMsg_ToggleSubView);}
+void	CMapEditDoc::OnToggleGrid()												{Command(CmdMsg_ToggleGrid);}
+void	CMapEditDoc::On2d3dToggle()												{Command(CmdMsg_Toggle2d);}
 
-/*********************************************************************************/
-/*********************************************************************************/
-/*********************************************************************************/
-void	CMapEditDoc::SetMode(int NewMode)
+void	CMapEditDoc::OnZoomIn()													{Command(CmdMsg_ZoomIn);}
+void	CMapEditDoc::OnZoomOut()												{Command(CmdMsg_ZoomOut);}
+void	CMapEditDoc::OnResetView()												{Command(CmdMsg_ResetView);}
+
+void	CMapEditDoc::OnMirrorx()												{Command(CmdMsg_MirrorX);}
+void	CMapEditDoc::OnMirrory()												{Command(CmdMsg_MirrorY);}
+void	CMapEditDoc::OnEditCopy()												{Command(CmdMsg_Copy);}
+void	CMapEditDoc::OnEditPaste()												{Command(CmdMsg_Paste);}
+void	CMapEditDoc::OnActivebrushLeft()										{Command(CmdMsg_ActiveBrushLeft);}
+void	CMapEditDoc::OnActivebrushRight() 										{Command(CmdMsg_ActiveBrushRight);}
+
+void	CMapEditDoc::Command(int CmdMsg,int Param0,int Param1)
 {
-		Core.SetMode(NewMode);
-		Core.GUIUpdate();
-		FocusView();
+	Core.Command(CmdMsg,Param0,Param1);
+	FocusView();
 }
 
-/*********************************************************************************/
-void	CMapEditDoc::SetLayer(int Layer)
-{
-		Core.SetLayer(Layer);
-		FocusView();
-}
-
-/*********************************************************************************/
-void	CMapEditDoc::AddLayer(int Layer)
-{
-		Core.AddLayer(Layer);
-		FocusView();
-}
-
-/*********************************************************************************/
-void	CMapEditDoc::DeleteLayer(int Layer)
-{
-		Core.DeleteLayer(Layer);
-		FocusView();
-}
 
 /*********************************************************************************/
 /*********************************************************************************/
@@ -240,6 +216,7 @@ char	Filename[256];
 /*********************************************************************************/
 /*** Tilebank Functions **********************************************************/
 /*********************************************************************************/
+/*
 void	CMapEditDoc::TileBankLoad()
 {
 char		BASED_CODE GinFilter[]= "All Tile Files (*.Gin; *.Bmp)|*.gin;*.Bmp|3d Tile Files (*.Gin)|*.Gin|2d Tile Files (*.Bmp)|*.Bmp|All Files (*.*)|*.*||";
@@ -253,30 +230,34 @@ char	Filename[256];
 		UpdateView();
 		FocusView();
 }
-
+*/
 /*********************************************************************************/
+/*
 void	CMapEditDoc::TileBankDelete()
 {
 		Core.TileBankDelete();
 		UpdateView();
 		FocusView();
 }
-
+*/
 /*********************************************************************************/
+/*
 void	CMapEditDoc::TileBankReload()
 {
 		Core.TileBankReload();
 		UpdateView();
 		FocusView();
 }
+*/
 /*********************************************************************************/
+/*
 void	CMapEditDoc::TileBankSet()
 {
 		Core.TileBankSet();
 		UpdateView();
 		FocusView();
 }
-
+*/
 /*********************************************************************************/
 void	CMapEditDoc::OnMapSetSize()
 {
@@ -298,9 +279,3 @@ void	CMapEditDoc::FocusView()
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::SetColFlag(int Flag)
-{
-		Core.SetColFlag(Flag);
-		FocusView();
-}
-

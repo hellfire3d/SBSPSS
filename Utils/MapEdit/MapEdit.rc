@@ -132,7 +132,7 @@ BEGIN
         MENUITEM "View Left Brush",             ID_ACTIVEBRUSH_LEFT
         MENUITEM "View Right Brush",            ID_ACTIVEBRUSH_RIGHT
         MENUITEM SEPARATOR
-        MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
+        MENUITEM "&Toggle SubView",				ID_TOGGLE_SUBVIEW
     END
     POPUP "Misc"
     BEGIN
@@ -176,7 +176,7 @@ BEGIN
     VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
-    VK_SPACE,       ID_TOGGLE_TILEVIEW,     VIRTKEY, NOINVERT
+    VK_SPACE,       ID_TOGGLE_SUBVIEW,		VIRTKEY, NOINVERT
     VK_SUBTRACT,    ID_ZOOM_OUT,            VIRTKEY, NOINVERT
     VK_TAB,         ID_NEXT_PANE,           VIRTKEY, CONTROL, NOINVERT
     VK_TAB,         ID_PREV_PANE,           VIRTKEY, SHIFT, CONTROL, 
@@ -425,7 +425,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_TOGGLE_TILEVIEW      "Toggle TileView"
+    ID_TOGGLE_SUBVIEW		"Toggle SubView"
     ID_MAP_TOGGLEGRID       "Toggle Grid On and Off"
 END
 

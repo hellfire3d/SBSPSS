@@ -12,9 +12,12 @@
 #include	"TexCache.h"
 #include	"TileSet.h"
 
-#include	"MApEdit.h"
+#include	"MapEdit.h"
 #include	"LayerList.h"
 #include	"LayerTileGUI.h"
+
+#include	"Layer.h"
+#include	"LayerTile.h"
 
 const	s32		FileVersion=3;
 
@@ -23,6 +26,7 @@ const	s32		FileVersion=3;
 
 /*****************************************************************************/
 class	CMapEditView;
+
 class	CCore
 {
 public:
@@ -30,13 +34,12 @@ public:
 		~CCore();
 
 		void					Init();
-		BOOL					New();
+		bool					New();
 		void					Load(CFile *File);
 		void					Save(CFile *File);
-		BOOL					Question(char *Txt);
-		void					Render(BOOL ForceRender=FALSE);
+		bool					Question(char *Txt);
+		void					Render(bool ForceRender=FALSE);
 		void					RenderLayers();
-		void					RenderTileView();
 		void					Export(char *Filename);
 
 // View Stuff
@@ -44,33 +47,18 @@ public:
 		CMapEditView			*GetView()							{return(CurrentView);}
 // Control
 		void					SetMode(int NewMode);
-		void					LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-		void					MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-		void					RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void					LButtonControl(UINT nFlags, CPoint &point,bool DownFlag);
+		void					MButtonControl(UINT nFlags, CPoint &point,bool DownFlag);
+		void					RButtonControl(UINT nFlags, CPoint &point,bool DownFlag);
 		void					MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
 		void					MouseMove(UINT nFlags, CPoint &point);
 		void					Zoom(float Dst);
+		void					Command(int CmdMsg,int Param0=0,int Param1=0);
 
-// TileBank
-		CTileBank				&GetTileBank()					{return(TileBank);}
-		void					UpdateTileView(BOOL Toggle=FALSE);
-
-		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
-		void					TileBankLoad(char *Filename);
-		void					TileBankDelete();
-		void					TileBankReload();
-		void					TileBankSet();
-		void					MirrorX();
-		void					MirrorY();
-		void					ActiveBrushLeft();
-		void					ActiveBrushRight();
-		BOOL					IsTileValid(int Set,int Tile);
-		BOOL					IsTileView()					{return(TileViewFlag);}
-		void					TileBankGUIInit()				{TileBank.GUIInit(this);}
-		void					TileBankGUIKill()				{TileBank.GUIKill(this);}
-		void					TileBankGUIUpdate()				{TileBank.GUIUpdate(this);}
-
-		void					SetColFlag(int Flag);
+// Subview & TileBank
+		CTileBank				*GetTileBank()					{return(ActionLayer->GetTileBank());}
+		void					ToggleSubView();
+		CLayer					*FindSubView(int Type);
 
 // GUI 
 		void					UpdateParamBar();
@@ -87,10 +75,12 @@ public:
 		void					AddLayer(int Layer);
 		void					DeleteLayer(int Layer);
 		void					UpdateLayerGUI();
+		int						GetLayerCount()					{return(Layer.size());}
+		CLayer					*GetLayer(int i)				{return(Layer[i]);}
 
 // Grid
-		void					UpdateGrid(BOOL Toggle=FALSE);
-		BOOL					IsGridOn()						{return(GridFlag);}
+		void					ToggleGrid();
+		bool					IsGridOn()						{return(GridFlag);}
 
 // Tex Cache
 		CTexCache				&GetTexCache()					{return(TexCache);}
@@ -111,7 +101,7 @@ public:
 
 		void					Toggle2d3d();
 		int						FindLayer(int Type,int SubType=-1);
-		int						SetActionLayer(CLayer *Lyr)		{ActionLayer=Lyr;}
+		int						SetActionLayer(CLayerTile *Lyr)		{ActionLayer=Lyr;}
 
 		void					SetScale();
 		Vector3					&GetScaleVector()			{return(ScaleVector);}
@@ -132,17 +122,18 @@ private:
 		Vector3					ScaleVector;
 
 		std::vector<CLayer*>	Layer;
-		CLayer					*ActionLayer;
+		CLayer					*CurrentLayer;
+		CLayerTile				*ActionLayer;
 		int						ActiveLayer;
 
-		CTileBank				TileBank;
+//		CTileBank				TileBank;
 		CTexCache				TexCache;
 
 		CLayerListGUI			LayerList;
 
-		BOOL					TileViewFlag;
-		BOOL					GridFlag;
-		BOOL					Is3dFlag;
+		bool					SpareFlag;
+		bool					GridFlag;
+		bool					Is3dFlag;
 		
 };
 

@@ -74,82 +74,15 @@ int				ThisFilePos=ftell(File);
 }
 
 /*****************************************************************************/
-/*** Tile Map ****************************************************************/
-/*****************************************************************************/
-/*
-void	CExport::ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map)
-{
-int				Width=Map.GetWidth();
-int				Height=Map.GetHeight();
-CTileBank		&TileBank=Core->GetTileBank();
-sExpTile		BlankElem={0,0,0,0};
-
-		TRACE1("LayerTile Ofs %i\n",ThisFilePos);
-		ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
-
-		UsedTileList.Add(BlankElem);	// Ensure blank tile is present
-		
-		for (int Y=0; Y<Height; Y++)
-		{
-			for (int X=0; X<Width; X++)
-			{
-				sMapElem		&MapElem=Map.Get(X,Y);
-				CTile			&ThisTile=Core->GetTile(MapElem.Set,MapElem.Tile);
-				sExpLayerTile	OutElem;
-				sExpTile		OutTile;
-
-				OutTile.Set=MapElem.Set;
-				OutTile.Tile=MapElem.Tile;
-				OutTile.TriCount=0;
-				OutTile.XOfs=ThisTile.GetTexXOfs();
-				OutTile.YOfs=ThisTile.GetTexYOfs();
-				
-				OutElem.Tile=UsedTileList.Add(OutTile);
-				OutElem.Flags=MapElem.Flags;
-				fwrite(&OutElem,sizeof(sExpLayerTile),1,File);
-			}
-		}
-}
-*/
-/*****************************************************************************/
-/*** Collision Layer *********************************************************/
-/*****************************************************************************/
-/*
-void	CExport::ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map)
-{
-int				Width=Map.GetWidth();
-int				Height=Map.GetHeight();
-u8				OutElem;
-
-		TRACE1("LayerCollision Ofs %i\n",ThisFilePos);
-	
-		ExportLayerHeader(LAYER_TYPE_COLLISION,SubType,Width,Height);
-
-		for (int Y=0; Y<Height; Y++)
-		{
-			for (int X=0; X<Width; X++)
-			{
-				sMapElem		&MapElem=Map.Get(X,Y);
-				OutElem=0;
-				if (MapElem.Tile)
-				{
-					OutElem=((MapElem.Tile-1)*4)+1;
-					OutElem+=MapElem.Flags & TILE_FLAG_MIRROR_XY;
-				}
-				fwrite(&OutElem,sizeof(u8),1,File);
-			}
-		}
-}
-*/
-/*****************************************************************************/
 /*** Tiles *******************************************************************/
 /*****************************************************************************/
 void	CExport::ExportTiles(CCore *Core)
 {
 int		ListSize,i;
+CTileBank	*TileBank=Core->GetTileBank();
 
-		FileHdr.TileW=Core->GetTile(1,0).GetPCTexW();
-		FileHdr.TileH=Core->GetTile(1,0).GetPCTexH();
+		FileHdr.TileW=TileBank->GetTile(1,0).GetPCTexW();
+		FileHdr.TileH=TileBank->GetTile(1,0).GetPCTexH();
 
 // Write Tiles
 		ListSize=UsedTileList.size();
@@ -174,12 +107,12 @@ int		ListSize,i;
 /*****************************************************************************/
 void	CExport::ExportTile(CCore *Core,sExpTile &OutTile)
 {
-CTile		&ThisTile=Core->GetTile(OutTile.Set,OutTile.Tile);
-CTileBank	&TileBank=Core->GetTileBank();
+CTileBank	*TileBank=Core->GetTileBank();
+CTile		&ThisTile=TileBank->GetTile(OutTile.Set,OutTile.Tile);
 int			RGBW=ThisTile.GetPCTexW();
 int			RGBH=ThisTile.GetPCTexH();
 u8			*RGB=ThisTile.GetPCTexRGB();
-GString		SetName=TileBank.GetSet(OutTile.Set).GetFilename();
+GString		SetName=TileBank->GetSet(OutTile.Set).GetFilename();
 
 		if (ThisTile.IsTile3d())
 		{

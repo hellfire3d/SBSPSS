@@ -113,7 +113,7 @@ void	CLayerShade::Save(CFile *File)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerShade::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+void	CLayerShade::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 float		ZoomW=Core->GetZoomW();
@@ -152,7 +152,7 @@ float		YInc=(float)Height/(float)ThisCount;
 
 
 /*****************************************************************************/
-BOOL	CLayerShade::Resize(int _Width,int _Height)
+bool	CLayerShade::Resize(int _Width,int _Height)
 {
 		Width=TileLayerMinWidth+(_Width-TileLayerMinWidth)/ScaleFactor;
 		Height=TileLayerMinHeight+(_Height-TileLayerMinHeight)/ScaleFactor;

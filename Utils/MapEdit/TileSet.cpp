@@ -63,6 +63,7 @@ char	ExeFilename[2048];
 		SelEnd=-1;
 		TileSet.push_back(CTileSet(Filename,0));
 		LoadFlag=TRUE;
+		VisibleFlag=true;
 }
 
 /*****************************************************************************/
@@ -190,7 +191,7 @@ int		ListSize=TileSet.size();
 }
 
 /*****************************************************************************/
-void	CTileBank::Delete()
+void	CTileBank::DeleteCurrent()
 {
 int		ListSize=TileSet.size();
 // Remap Brushes
@@ -205,13 +206,12 @@ int		ListSize=TileSet.size();
 				Brush[i].RemapSet(Set,Set);
 			}
 		}
-//		TileSet.erase(TileSet.begin()+CurrentSet);
 		TileSet.erase(CurrentSet);
 		CurrentSet=0;
 }
 
 /*****************************************************************************/
-void	CTileBank::Reload()
+void	CTileBank::ReloadAll()
 {
 int		ListSize=TileSet.size();
 
@@ -231,7 +231,7 @@ CTile	&CTileBank::GetTile(int Bank,int Tile)
 }
 
 /*****************************************************************************/
-void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+void	CTileBank::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 		if (!TileSet.size()) return;	// No tiles, return
 
@@ -246,8 +246,17 @@ void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 			TileSet[CurrentSet].Render(Core,CamPos,GetLBrush(),GetRBrush(),FALSE);
 		}
 
+}
+/*****************************************************************************/
+void	CTileBank::RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)
+{
 		TileSet[CurrentSet].RenderCursor(CamPos,CursorPos,SelStart,SelEnd);
-		if (Core->IsGridOn()) TileSet[CurrentSet].RenderGrid(CamPos);
+}
+
+/*****************************************************************************/
+void	CTileBank::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
+{
+		TileSet[CurrentSet].RenderGrid(Core,CamPos,Active);
 }
 
 /*****************************************************************************/
@@ -257,6 +266,68 @@ void	CTileBank::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
 		
 		CursorPos=TileSet[CurrentSet].FindCursorPos(Core,CamPos,MousePos);
 		SelEnd=CursorPos;
+}
+
+/*****************************************************************************/
+bool	CTileBank::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
+{
+		if (nFlags & MK_RBUTTON)
+		{
+			SelectCancel();
+			return(false);
+		}
+		Select(LBrush,DownFlag);
+
+		return(true);	
+}
+
+/*****************************************************************************/
+bool	CTileBank::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
+{
+		if (nFlags & MK_LBUTTON)
+		{
+			SelectCancel();
+			return(false);
+		}
+
+		Select(RBrush,DownFlag);
+
+		return(false);	
+}
+
+/*****************************************************************************/
+bool	CTileBank::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
+{
+	return(false);
+}
+
+/*****************************************************************************/
+bool	CTileBank::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+{
+		switch(CmdMsg)
+		{
+		case CmdMsg_SubViewLoad:
+			LoadSet(Core);
+			break;
+		case CmdMsg_SubViewDelete:
+			DeleteSet(Core);
+			break;
+		case CmdMsg_SubViewUpdate:
+			ReloadAll();
+			Core->GetTexCache().Purge();
+			break;
+		case CmdMsg_SubViewSet:
+			CurrentSet=TileBankGUI.m_List.GetCurSel()+1;
+			break;
+		case CmdMsg_ActiveBrushLeft:
+			ActiveBrush=LBrush;
+			break;
+		case CmdMsg_ActiveBrushRight:
+			ActiveBrush=RBrush;
+		default:
+			TRACE3("TileBank-Unhandled Command %i (%i,%i)\n",CmdMsg,Param0,Param1);
+		}
+		return(true);
 }
 
 /*****************************************************************************/
@@ -277,7 +348,7 @@ void	CTileBank::GUIKill(CCore *Core)
 void	CTileBank::GUIUpdate(CCore *Core)
 {
 int			ListSize=TileSet.size();
-BOOL		IsTileView=Core->IsTileView();
+bool		IsSubView=true;//Core->IsSubView();
 
 			if (TileBankGUI.m_List)
 			{
@@ -292,16 +363,21 @@ BOOL		IsTileView=Core->IsTileView();
 				}
 				else
 				{
-					IsTileView=FALSE;
+					IsSubView=FALSE;
 				}
-				TileBankGUI.m_List.EnableWindow(IsTileView);
+				TileBankGUI.m_List.EnableWindow(IsSubView);
 			}
+}
+
+/*****************************************************************************/
+void	CTileBank::GUIChanged(CCore *Core)
+{
 }
 
 /*****************************************************************************/
 /*** Functions ***************************************************************/
 /*****************************************************************************/
-BOOL	CTileBank::Select(int BrushID,BOOL DownFlag)
+bool	CTileBank::Select(int BrushID,bool DownFlag)
 {
 		if (DownFlag && SelStart==-1)
 		{
@@ -366,7 +442,7 @@ int			MaxTile=TileSet[CurrentSet].GetTileCount();
 }
 
 /*****************************************************************************/
-BOOL	CTileBank::SelectCancel()
+bool	CTileBank::SelectCancel()
 {
 		SelStart=-1;
 		TRACE0("Select Cancelled\n");
@@ -374,13 +450,62 @@ BOOL	CTileBank::SelectCancel()
 }
 
 /*****************************************************************************/
-BOOL	CTileBank::IsTileValid(int Set,int Tile)
+bool	CTileBank::IsTileValid(int Set,int Tile)
 {
  		if (Set<0 || Tile<0) return(FALSE);
 		if (Tile==0) return(TRUE);
 		ASSERT(Set<TileSet.size());
 		
 		return(TileSet[Set].IsTileValid(Tile));
+}
+
+/*****************************************************************************/
+void	CTileBank::LoadSet(CCore *Core)
+{
+char		BASED_CODE GinFilter[]= "All Tile Files (*.Gin; *.Bmp)|*.gin;*.Bmp|3d Tile Files (*.Gin)|*.Gin|2d Tile Files (*.Bmp)|*.Bmp|All Files (*.*)|*.*||";
+CFileDialog	Dlg(TRUE,"Gin",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,GinFilter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+char	Filename[256];
+		sprintf(Filename,"%s",Dlg.GetPathName());
+		AddTileSet(Filename);
+		GUIUpdate(Core);
+}
+
+/*****************************************************************************/
+void	CTileBank::DeleteSet(CCore *Core)
+{
+		if (Core->Question("Delete Current Tile Bank\n\nAll used tiles in current set will be set to blank\nAre you sure?"))
+			{
+			int		SetCount=GetSetCount();
+			int		i,ListSize=Core->GetLayerCount();
+
+				for (i=0;i<ListSize;i++)
+				{
+					CLayerTile	*ThisLayer=(CLayerTile*)Core->GetLayer(i);
+					if (ThisLayer->GetType()==LAYER_TYPE_TILE)
+					{
+					ThisLayer->DeleteSet(CurrentSet);
+					}
+				}
+				DeleteCurrent();
+
+				for (int Set=CurrentSet+1; Set<SetCount; Set++)
+				{
+		
+					for (i=0;i<ListSize;i++)
+					{
+						CLayerTile	*ThisLayer=(CLayerTile*)Core->GetLayer(i);
+						if (ThisLayer->GetType()==LAYER_TYPE_TILE)
+						{
+						ThisLayer->RemapSet(Set,Set-1);
+						}
+					}
+				}
+			}
+		CurrentSet--;
+		GUIUpdate(Core);
 }
 
 /*****************************************************************************/
@@ -498,21 +623,21 @@ CPoint	CTileSet::GetTilePos(int ID)
 }
 
 /*****************************************************************************/
-BOOL	CTileSet::IsTileValid(int No)			
+bool	CTileSet::IsTileValid(int No)			
 {
 //		ASSERT(No<Tile.size());
 		if (No>Tile.size()) return(FALSE);
-		{return(Tile[No].IsValid());}
+		return(Tile[No].IsValid());
 }
 
 /*****************************************************************************/
-void	CTileSet::Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
+void	CTileSet::Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,bool Render3d)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
 sMapElem	ThisElem;
 int			SelFlag;
-BOOL		ValidTile=TRUE;
+bool		ValidTile=TRUE;
 //float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
 float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 
@@ -665,7 +790,7 @@ float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 }
 
 /*****************************************************************************/
-void	CTileSet::RenderGrid(Vector3 &CamPos)
+void	CTileSet::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
 {
 int			ListSize=Tile.size();
 int			TileID=1;	// Dont bother with blank, its sorted
