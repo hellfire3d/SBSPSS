@@ -935,7 +935,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		50,
 		0,
 		NPC_SHOT_GENERIC,
-		0,
+		ANIM_SHARKSUB_DEATH,
 		0,
 		false,
 		false,
@@ -943,7 +943,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		CSoundMediator::NUM_SFXIDS,
 		CSoundMediator::NUM_SFXIDS,
-		false,
+		true,
 	},
 
 	{	// NPC_PARASITIC_WORM
@@ -1013,7 +1013,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		50,
 		ANIM_IRONDOGFISH_WALK,
 		NPC_SHOT_GENERIC,
-		0,
+		ANIM_IRONDOGFISH_DIE,
 		ANIM_IRONDOGFISH_GETHIT,
 		false,
 		false,
@@ -1021,7 +1021,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		CSoundMediator::NUM_SFXIDS,
 		CSoundMediator::NUM_SFXIDS,
-		false,
+		true,
 	},
 
 	{	// NPC_PARASITIC_WORM_SEGMENT

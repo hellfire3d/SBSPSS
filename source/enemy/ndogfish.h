@@ -27,6 +27,7 @@ protected:
 	void				processWalkToUser( int _frames, int speed );
 	virtual void		processAttackCollision();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos );
+	virtual void		processShot( int _frames );
 
 	enum NPC_IRON_DOGFISH_STATE
 	{

@@ -21,6 +21,7 @@ public:
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
+	virtual void		processShot( int _frames );
 
 	enum NPC_SUB_SHARK_STATE
 	{
