@@ -235,7 +235,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 				// charge player
 
-				if ( ( playerXDistSqr + playerYDistSqr ) > 20000 )
+				if ( ( playerXDistSqr + playerYDistSqr ) > 25000 )
 				{
 					processGenericGotoTarget( _frames, playerXDist, playerYDist, 8 );
 				}
