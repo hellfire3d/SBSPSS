@@ -33,8 +33,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -62,7 +62,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateDead::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_DEATHSPIN);
+	setAnimNo(_player,ANIM_SPONGEBOB_DEATHSPIN);
 
 	m_deadCounter=0;
 }

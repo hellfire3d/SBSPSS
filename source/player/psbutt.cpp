@@ -38,8 +38,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -67,7 +67,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounce::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCESTART);
+	setAnimNo(_player,ANIM_SPONGEBOB_BUTTBOUNCESTART);
 }
 
 
@@ -94,7 +94,7 @@ void CPlayerStateButtBounce::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceFall::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCEEND);
+	setAnimNo(_player,ANIM_SPONGEBOB_BUTTBOUNCEEND);
 }
 
 

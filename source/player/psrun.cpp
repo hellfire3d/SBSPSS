@@ -37,8 +37,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -71,11 +71,11 @@ void CPlayerStateRun::enter(CPlayer *_player)
 
 	if(getMoveVelocity(_player).vx)
 	{
-		setAnimNo(_player,ANIM_PLAYER_ANIM_RUN);
+		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
 	}
 	else
 	{
-		setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTART);
+		setAnimNo(_player,ANIM_SPONGEBOB_RUNSTART);
 	}
 
 	if(controlHeld&PI_LEFT)
@@ -131,7 +131,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 			setState(_player,STATE_IDLE);
 			if(m_numberOfTimeAnimHasLooped>=4)
 			{
-				setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
+				setAnimNo(_player,ANIM_SPONGEBOB_RUNSTOP);
 			}
 		}
 		else
@@ -142,7 +142,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
-		setAnimNo(_player,ANIM_PLAYER_ANIM_RUN);
+		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
 		m_numberOfTimeAnimHasLooped++;
 	}
 }

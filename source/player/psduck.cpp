@@ -36,8 +36,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -65,7 +65,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateDuck::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_SOAKUP);
+	setAnimNo(_player,ANIM_SPONGEBOB_SOAKUP);
 }
 
 
@@ -99,7 +99,7 @@ void CPlayerStateSoakUp::enter(CPlayer *_player)
 	move.vx=0;
 	setMoveVelocity(_player,&move);
 	
-	setAnimNo(_player,ANIM_PLAYER_ANIM_GETUP);
+	setAnimNo(_player,ANIM_SPONGEBOB_GETUP);
 }
 
 
@@ -129,7 +129,7 @@ void CPlayerStateSoakUp::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateGetUp::enter(CPlayer *_player)
 {
-	  setAnimNo(_player,ANIM_PLAYER_ANIM_GETUP);
+	  setAnimNo(_player,ANIM_SPONGEBOB_GETUP);
 }
 
 

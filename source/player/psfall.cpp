@@ -35,8 +35,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -64,7 +64,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_HOVER);
+	setAnimNo(_player,ANIM_SPONGEBOB_HOVER);
 }
 
 
@@ -126,7 +126,7 @@ void CPlayerStateFall::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateFallFar::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_FALL);
+	setAnimNo(_player,ANIM_SPONGEBOB_FALL);
 }
 
 

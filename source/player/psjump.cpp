@@ -38,8 +38,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -71,7 +71,7 @@ void CPlayerStateJump::enter(CPlayer *_player)
 
 	metrics=getPlayerMetrics(_player);
 
-	setAnimNo(_player,ANIM_PLAYER_ANIM_HOVER);
+	setAnimNo(_player,ANIM_SPONGEBOB_HOVER);
 	m_jumpFrames=0;
 	DVECTOR	move=getMoveVelocity(_player);
 	move.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<CPlayer::VELOCITY_SHIFT;

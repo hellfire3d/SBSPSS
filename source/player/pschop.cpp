@@ -34,8 +34,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -63,7 +63,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateChop::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_KARATE);
+	setAnimNo(_player,ANIM_SPONGEBOB_KARATE);
 }
 
 

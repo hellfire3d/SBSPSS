@@ -37,8 +37,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -111,11 +111,11 @@ void CPlayerStateTeeterIdle::enter(CPlayer *_player)
 	dir=getFacing(_player);
 	if(edgeType==FACING_LEFT)
 	{
-		anim=dir==FACING_LEFT?ANIM_PLAYER_ANIM_TEETERFRONT:ANIM_PLAYER_ANIM_TEETERBACK;
+		anim=dir==FACING_LEFT?ANIM_SPONGEBOB_TEETERFRONT:ANIM_SPONGEBOB_TEETERBACK;
 	}
 	else
 	{
-		anim=dir==FACING_RIGHT?ANIM_PLAYER_ANIM_TEETERFRONT:ANIM_PLAYER_ANIM_TEETERBACK;
+		anim=dir==FACING_RIGHT?ANIM_SPONGEBOB_TEETERFRONT:ANIM_SPONGEBOB_TEETERBACK;
 	}
 
 	setAnimNo(_player,anim);
@@ -262,12 +262,12 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},	// default
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
-	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEHOOLA,		ANIM_PLAYER_ANIM_FACEBACK,		5	},
-	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEWIGGLEARM,	ANIM_PLAYER_ANIM_FACEBACK,		5	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLELOOK,		-1,								1	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLEWIND,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								4	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								10	},
+	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEHOOLA,		ANIM_SPONGEBOB_FACEBACK,		5	},
+	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEWIGGLEARM,	ANIM_SPONGEBOB_FACEBACK,		5	},
+	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
 };
 //idlekick
 //idlescratch
@@ -295,9 +295,9 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_coralBlowerIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	}, // default
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLELOOK,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								4	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								10	},
+	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
 };
 static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)

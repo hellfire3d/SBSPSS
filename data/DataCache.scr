@@ -117,7 +117,8 @@ collision/colltab.dat
 actors/spongebob.a3d
 actors/spongebob.tex
 
-anims/player.abk
+
+actors/spongebob.abk
 
 { SYSTEM_CACHE 4
 }

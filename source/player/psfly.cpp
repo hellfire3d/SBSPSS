@@ -35,8 +35,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -69,7 +69,7 @@ void CPlayerStateFly::enter(CPlayer *_player)
 	move.vx=0;
 	move.vy=0;
 	setMoveVelocity(_player,&move);
-	setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEHOOLA);
+	setAnimNo(_player,ANIM_SPONGEBOB_IDLEHOOLA);
 }
 
 
