@@ -120,6 +120,10 @@
 #include <ACTOR_SPONGEBOB_JELLYFISH_Anim.h>
 #endif
 
+#ifndef	__ANIM_SPONGEBOB_GLOVE_HEADER__
+#include <ACTOR_SPONGEBOB_GLOVE_Anim.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -263,7 +267,7 @@ pint	ledgeShift=1;
 pint	cammove=2;
 
 pint	waterDrainSpeed=4;
-pint	waterSoakUpSpeed=20;
+pint	waterSoakUpSpeed=40;
 
 
 
@@ -276,6 +280,7 @@ CActorGfx		*s_addonActorGfx[NUM_PLAYER_ADDONS]=
 	NULL,										// PLAYER_ADDON_GLASSES
 	NULL,										// PLAYER_ADDON_BUBBLEWAND
 	NULL,										// PLAYER_ADDON_JELLYFISHINNET
+	NULL,										// PLAYER_ADDON_GLOVE
 };
 FileEquate		s_addonActorPoolNames[NUM_PLAYER_ADDONS]=
 {
@@ -285,6 +290,7 @@ FileEquate		s_addonActorPoolNames[NUM_PLAYER_ADDONS]=
 	ACTORS_SPONGEBOB_GLASSES_SBK,				// PLAYER_ADDON_GLASSES
 	(FileEquate)-1,					// PLAYER_ADDON_BUBBLEWAND
 	ACTORS_SPONGEBOB_JELLYFISH_SBK,				// PLAYER_ADDON_JELLYFISHINNET
+	ACTORS_SPONGEBOB_GLOVE_SBK,					// PLAYER_ADDON_GLOVE
 };
 PLAYER_ADDONS	s_addonNumbers[NUM_PLAYERMODES]=
 {
@@ -468,6 +474,34 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
 	},
+
+	// PLAYER_ADDON_GLOVE
+	{
+	-1,												// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	-1,												// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	-1,												// ANIM_SPONGEBOB_FALL,
+	-1,												// ANIM_SPONGEBOB_GETUP,
+	-1,												// ANIM_SPONGEBOB_HITGROUND,
+	-1,												// ANIM_SPONGEBOB_IDLEBREATH,
+	-1,												// ANIM_SPONGEBOB_IDLEWIND,
+	-1,												// ANIM_SPONGEBOB_JUMPEND,
+	-1,												// ANIM_SPONGEBOB_JUMP,
+	-1,												// ANIM_SPONGEBOB_RUN,
+	-1,												// ANIM_SPONGEBOB_RUNSTOP,
+	-1,												// ANIM_SPONGEBOB_RUNSTART,
+	-1,												// ANIM_SPONGEBOB_SOAKUP,
+	-1,												// ANIM_SPONGEBOB_TEETERBACK,
+	-1,												// ANIM_SPONGEBOB_TEETERFRONT,
+	-1,												// ANIM_SPONGEBOB_SWIPE,
+	-1,												// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,												// ANIM_SPONGEBOB_FIREEND,
+	-1,												// ANIM_SPONGEBOB_FIRESTART,
+	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,												// ANIM_SPONGEBOB_WALK,
+	ANIM_SPONGEBOB_GLOVE_KARATE,					// ANIM_SPONGEBOB_KARATE,
+	},
 };
 
 // -------------------------------------------------------------------------------
@@ -521,13 +555,13 @@ m_animFrame=0;
 	m_divingHelmet=false;
 	setIsInWater(true);
 
-//#ifdef __USER_paul__
-registerAddon(PLAYER_ADDON_NET);
-registerAddon(PLAYER_ADDON_CORALBLOWER);
-registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
-registerAddon(PLAYER_ADDON_GLASSES);
-registerAddon(PLAYER_ADDON_BUBBLEWAND);
-//#endif
+	// Always ( cept for one level ) need this
+	registerAddon(PLAYER_ADDON_GLOVE);
+//	registerAddon(PLAYER_ADDON_NET);
+//	registerAddon(PLAYER_ADDON_CORALBLOWER);
+//	registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
+//	registerAddon(PLAYER_ADDON_GLASSES);
+//	registerAddon(PLAYER_ADDON_BUBBLEWAND);
 }
 
 /*----------------------------------------------------------------------
@@ -1403,15 +1437,17 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 		if(addonAnimNo!=-1)
 		{
 			CActorGfx	*addonGfx=s_addonActorGfx[addon];
-			if(addonGfx&&
-			   _animFrame>=addonGfx->getFrameCount(addonAnimNo))
+			if(addonGfx)
 			{
-				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
-			}
-			else
-			{
-				ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
-				setSemiTrans(ft4,trans);
+				if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
+				{
+					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+				}
+				else
+				{
+					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+					setSemiTrans(ft4,trans);
+				}
 			}
 		}
 	}
@@ -1423,14 +1459,39 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 		if(addonAnimNo!=-1)
 		{
 			CActorGfx	*addonGfx=s_addonActorGfx[PLAYER_ADDON_GLASSES];
-			if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
+			if(addonGfx)
 			{
-				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+				if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
+				{
+					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+				}
+				else
+				{
+					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+					setSemiTrans(ft4,trans);
+				}
 			}
-			else
+		}
+	}
+
+	// Render glove addon?
+	if(m_currentMode==PLAYER_MODE_FULLUNARMED)
+	{
+		s8	addonAnimNo=s_animMapNet[PLAYER_ADDON_GLOVE][_animNo];
+		if(addonAnimNo!=-1)
+		{
+			CActorGfx	*addonGfx=s_addonActorGfx[PLAYER_ADDON_GLOVE];
+			if(addonGfx)
 			{
-				ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
-				setSemiTrans(ft4,trans);
+				if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
+				{
+					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+				}
+				else
+				{
+					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+					setSemiTrans(ft4,trans);
+				}
 			}
 		}
 	}
