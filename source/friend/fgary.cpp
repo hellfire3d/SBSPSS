@@ -3,9 +3,9 @@
 	fgary.cpp
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -33,6 +33,19 @@ void CNpcGaryFriend::think( int _frames )
 	// check vertical collision
 
 	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+	if ( m_platform )
+	{
+		s32 platformHeight = m_platform->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+
+		if ( platformHeight < groundHeight )
+		{
+			groundHeight = platformHeight;
+		}
+
+		//Pos.vy += platformHeight;
+		//return;
+	}
 
 	if ( groundHeight <= 0 )
 	{

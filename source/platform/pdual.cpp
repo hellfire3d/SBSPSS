@@ -15,6 +15,10 @@
 #include "platform\pdual.h"
 #endif
 
+#ifndef __HAZARD_HAZARD_H__
+#include "hazard\hazard.h"
+#endif
+
 #ifndef	__UTILS_HEADER__
 #include	"utils\utils.h"
 #endif
@@ -231,4 +235,77 @@ const CRECT *CNpcDualPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcDualPlatform::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+				{
+					player->setPlatform( this );
+
+					m_contact = true;
+				}
+				else
+				{
+					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+					{
+						int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+						if ( height >= -threshold && height < 1 )
+						{
+							player->setPlatform( this );
+
+							m_contact = true;
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		case TYPE_NPC:
+			break;
+
+		case TYPE_HAZARD:
+		{
+			m_contact = true;
+
+			CNpcHazard *hazard;
+
+			hazard = (CNpcHazard *)_thisThing;
+
+			hazard->setPlatform( this );
+
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
+	}
 }

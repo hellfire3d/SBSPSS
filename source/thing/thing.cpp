@@ -3,9 +3,9 @@
 	thing.cpp
 
 	Author:		PKG
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -39,6 +39,10 @@
 #include	"enemy\npc.h"
 #include	"friend\friend.h"
 #include	"fx\fx.h"
+
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
 
 #ifndef __HAZARD_HRWEIGHT_H__
 #include "hazard\hrweight.h"
@@ -172,7 +176,7 @@ int		i;
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	
+	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -346,7 +350,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			CRECT	const *ThingRect= thing->getThinkBBox();
 			bool	Flag=true;
 			// Will speed this up
-			
+
 			if (!thing->alwaysThink())
 			{
 				if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=false;
@@ -527,6 +531,32 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		while(thing1)
 		{
 			thing2=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing1->collidedWith(thing2);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Friendly npc -> Platform projectile collision - first clear platforms
+
+		CNpcFriend *friendNpc = (CNpcFriend *) s_CollisionLists[CThing::TYPE_NPC];
+		while( friendNpc )
+		{
+			friendNpc->clearPlatform();
+			friendNpc = (CNpcFriend *) friendNpc->m_nextCollisionThing;
+		}
+
+		// now detect new platform
+
+		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_NPC];
 			while(thing2)
 			{
 				if(thing1->checkCollisionAgainst(thing2, _frames))
@@ -753,7 +783,7 @@ void	CThingManager::resetFreeList()
 				}
 				List[t]=0;
 			}
-			
+
 		}
 #endif
 }
@@ -799,7 +829,7 @@ void	CThingManager::DeleteThing(CThing *Thing)
 int		Type=Thing->getThingType();
 int		SubType=Thing->getThingSubType();
 CThing	**List=s_FreeList[Type];
-	
+
 // Check its been aquired/set correctly
 
 		ASSERT(SubType!=1234);
@@ -851,7 +881,7 @@ void	CThing::init()
   ---------------------------------------------------------------------- */
 void	CThing::shutdown()
 {
-	if (ParentThing) 
+	if (ParentThing)
 	{ // Is child
 		ParentThing->removeChild(this);
 	}
@@ -872,7 +902,7 @@ void	CThing::shutdown()
   ---------------------------------------------------------------------- */
 void	CThing::think(int _frames)
 {
-	PosDelta.vx=Pos.vx-PosLast.vx; 
+	PosDelta.vx=Pos.vx-PosLast.vx;
 	PosDelta.vy=Pos.vy-PosLast.vy;
 	PosLast=Pos;
 
@@ -1036,7 +1066,7 @@ CThing	*List=NextThing;
 	if ( List )
 	{
 // Find end of list
-		while (List->NextThing) 
+		while (List->NextThing)
 		{
 			List=List->NextThing;
 		}
@@ -1325,6 +1355,5 @@ void	CTriggerThing::setTargetBox(int _x,int _y,int _w,int _h)
 	m_boxX2=_x+_w;
 	m_boxY2=_y+_h;
 }
-
 
 

@@ -3,9 +3,9 @@
 	friend.h
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -20,6 +20,10 @@
 
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
+#endif
+
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
 #endif
 
 class	CNpcFriend : public CNpcThing
@@ -51,6 +55,8 @@ public:
 
 
 	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
+	void				setPlatform( CNpcPlatform *platform )					{m_platform = platform;}
+	void				clearPlatform()											{m_platform = NULL;}
 
 	static CNpcFriend	*Create(sThingActor *ThisActor);
 	static NPC_FRIEND_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
@@ -90,9 +96,10 @@ protected:
 	};
 
 	// internal variables
-	
+
 	NPC_FRIEND_UNIT_TYPE		m_type;
 	s32							m_extension;
+	CNpcPlatform				*m_platform;
 
 	int				m_frame;
 	int				m_animNo;

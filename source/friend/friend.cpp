@@ -3,9 +3,9 @@
 	friend.cpp
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -174,6 +174,7 @@ void CNpcFriend::init()
 	m_animNo = m_data[m_type].idleAnim;
 	m_frame = 0;
 	m_reversed = false;
+	m_platform = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,6 +246,7 @@ void CNpcFriend::render()
 		m_actorGfx->Render(renderPos,m_animNo,(m_frame>>8),m_reversed);
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
+		boundingBox.YMax = 0;
 		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 	}

@@ -65,7 +65,7 @@ void CNpcSquidDartEnemy::render()
 
 			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
-			SprFrame = CGameScene::getSpriteBank()->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
+			SprFrame = CGameScene::getSpriteBank()->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,0);
 
 			//setRGB0( SprFrame, 255, 128, 255 );
 

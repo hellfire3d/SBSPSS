@@ -32,6 +32,7 @@ public:
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	u8					m_isMaster;
 	CNpcDualPlatform	*m_otherPlatform;
