@@ -369,8 +369,7 @@ ifeq ($(USER_NAME),CDBUILD)
 	@$(MKDIR) -p $(CD_DIR)
 	@$(CPE2BIN) $(CPE_FILE) $(CD_DIR)/$(BIN_OUTFILE)
 	@$(CP) $(BIGLUMP_FILE) $(CD_DIR) -f
-	@alchemy --n -a -15 -^ -o graphics/screens/legal.tga $(TEMP_DIR)/pic.tmp
-	@chopchop $(TEMP_DIR)/pic.tmp $(CD_DIR)/LEGAL.GFX 20 262144
+	@$(TGA2GFX) graphics/screens/legal.tga $(CD_DIR)/LEGAL.GFX
 
 # Compile bootstrap
 	@ccpsx -O2 -g $(BOOTSTRAP_IN) -c -Xo$801c0000 $(COMMON_CCFLAGS) -oPsxBoot.o
