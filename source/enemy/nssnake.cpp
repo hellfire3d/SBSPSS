@@ -737,6 +737,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 				segment = segment->m_nextSegment;
 			}
 
+			segment->shutdown();
 			delete segment;
 
 			if ( segment == m_segment )
