@@ -291,7 +291,7 @@ cleansprites:
 sprites:	$(SPRITES_ALL_DEP)
 
 $(SPRITES_TEX_OUT) : $(SPRITES_ALL_DEP)
-		@$(PARKGRAB) $(SPRITES_ALL_IN) -t:12,4,1 -l:$(SPRITES_OUT_DIR)/sprites.lbm -o:$(SPRITES_TEX_OUT)
+		@$(PARKGRAB) -b+ $(SPRITES_ALL_IN) -t:12,4,1 -l:$(SPRITES_OUT_DIR)/sprites.lbm -o:$(SPRITES_TEX_OUT)
 		@$(MV) -f $(SPRITES_OUT_DIR)/sprites.h $(SPRITES_HDR_OUT)
 		@$(ECHO) Sprites Made
 
