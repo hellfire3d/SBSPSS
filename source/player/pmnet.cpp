@@ -86,6 +86,7 @@ int npsize=40;
   ---------------------------------------------------------------------- */
 void	CPlayerModeNet::enter()
 {
+	CPlayerModeBase::enter();
 	m_netState=NET_STATE__INERT;
 	m_jellyfishHeld=0;
 }

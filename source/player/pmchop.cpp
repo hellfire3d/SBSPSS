@@ -53,6 +53,7 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeChop::enter()
 {
+	CPlayerModeBase::enter();
 	m_chopping=false;
 }
 

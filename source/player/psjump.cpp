@@ -117,10 +117,10 @@ void CPlayerStateJump::think(CPlayerModeBase *_playerMode)
 		_playerMode->slowdown();
 	}
 
-	if(controlDown&PI_DOWN)
-	{
-		_playerMode->setState(STATE_BUTTBOUNCE);
-	}
+//	if(controlDown&PI_DOWN)
+//	{
+//		_playerMode->setState(STATE_BUTTBOUNCE);
+//	}
 }
 
 

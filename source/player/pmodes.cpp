@@ -537,6 +537,7 @@ void	CPlayerModeBase::moveLeft()
 		moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 	setMoveVelocity(&moveVel);
+	m_player->moveLeft();
 }
 
 void	CPlayerModeBase::moveRight()
@@ -560,6 +561,7 @@ void	CPlayerModeBase::moveRight()
 		moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 	setMoveVelocity(&moveVel);
+	m_player->moveRight();
 }
 int		CPlayerModeBase::slowdown()
 {

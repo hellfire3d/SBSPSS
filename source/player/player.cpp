@@ -514,6 +514,16 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 // -------------------------------------------------------------------------------
 
 
+int			m_cameraXScrollDir;
+int			m_cameraXScrollPos;
+int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most
+//int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
+int CAMERA_STARTMOVETHRESHOLD=20;		// If SB moves faster than this then the camera starts scrolling
+int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camera stops scrolling
+int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
+int	CAMERA_ACCURACYSHIFT=8;
+const int	CAMERA_TILESIZE=16;
+
 
 
 /*----------------------------------------------------------------------
@@ -712,6 +722,32 @@ if(newmode!=-1)
 			m_invincibleFrameCount--;
 		}
 
+		// Camera scroll..
+		if(m_cameraXScrollDir==-1)
+		{
+			if(m_cameraXScrollPos>-(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+			{
+				m_cameraXScrollPos-=CAMERA_SCROLLSPEED;
+				if(m_cameraXScrollPos<-(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+				{
+					m_cameraXScrollPos=-(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT;
+					m_cameraXScrollDir=0;
+				}
+			}
+		}
+		else if(m_cameraXScrollDir==+1)
+		{
+			if(m_cameraXScrollPos<((CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT))
+			{
+				m_cameraXScrollPos+=CAMERA_SCROLLSPEED;
+				if(m_cameraXScrollPos>(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+				{
+					m_cameraXScrollPos=(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT;
+					m_cameraXScrollDir=0;
+				}
+			}
+		}
+
 		// Stop the player vanishing off the edge of the telly..
 		if(Pos.vx<m_playerPosLimitBox.x1)		Pos.vx=m_playerPosLimitBox.x1;
 		else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
@@ -844,12 +880,6 @@ if(newmode!=-1)
 	}
 	m_lastLedgeLookAhead=m_ledgeLookAhead;
 	m_ledgeLookAhead=0;
-
-	// Left/right scroll as SB moves left/right
-	int max=scmax*scspeed;
-	m_leftRightScrollPosition+=m_moveVelocity.vx;
-	if(m_leftRightScrollPosition<-max)m_leftRightScrollPosition=-max;
-	else if(m_leftRightScrollPosition>max)m_leftRightScrollPosition=max;
 
 	// Camera focus point stuff
 	calcCameraFocusPointTarget();
@@ -1042,13 +1072,14 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		m_spriteBank->printFT4(fh,x-2,y-2,0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
+/*
 	if(isWearingDivingHelmet())
 	{
 		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__HELMET);
 		m_spriteBank->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
-
+*/
 }
 
 
@@ -1290,7 +1321,6 @@ void	CPlayer::teleportTo(int _x,int _y)
 	setPos(pos);
 	setRespawnPos(pos);
 
-	m_leftRightScrollPosition=0;
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
 }
@@ -1367,7 +1397,7 @@ void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
   ---------------------------------------------------------------------- */
 void CPlayer::calcCameraFocusPointTarget()
 {
-	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X+(m_leftRightScrollPosition/scspeed);
+	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X-(m_cameraXScrollPos>>CAMERA_ACCURACYSHIFT);
 	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
 }
 
@@ -1400,7 +1430,8 @@ void CPlayer::respawn()
 	m_cameraLookOffset=0;
 
 	m_lockCamera=false;
-	m_leftRightScrollPosition=0;
+	m_cameraXScrollDir=0;
+	m_cameraXScrollPos=0;
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
@@ -1909,6 +1940,42 @@ void CPlayer::shove( DVECTOR move )
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::moveLeft()
+{
+	if(m_moveVelocity.vx<-CAMERA_STARTMOVETHRESHOLD)//||m_cameraXScrollPos<-(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+	{
+		m_cameraXScrollDir=+1;
+	}
+	else if(m_moveVelocity.vx>-CAMERA_STOPMOVETHRESHOLD)
+	{
+		m_cameraXScrollDir=0;
+	}
+}
+void	CPlayer::moveRight()
+{
+	if(m_moveVelocity.vx>CAMERA_STARTMOVETHRESHOLD)//||m_cameraXScrollPos>(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+	{
+		m_cameraXScrollDir=-1;
+	}
+	else if(m_moveVelocity.vx<CAMERA_STOPMOVETHRESHOLD)
+	{
+		m_cameraXScrollDir=0;
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::setPlatform(CThing *_newPlatform)
 {
 	m_platform=_newPlatform;

@@ -188,6 +188,8 @@ public:
 	virtual void	think(int _frames);
 	virtual void	render();
 	virtual void	shove(DVECTOR move);
+	void			moveLeft();				// This is only for camera scroll right now..
+	void			moveRight();			//	"		"		"		"		"
 	virtual int		moveVertical(int _moveDistance);
 	virtual int		moveHorizontal(int _moveDistance);
 	virtual void	setHasPlatformCollided( bool newVal );
@@ -288,7 +290,6 @@ private:
 	int				m_ledgeLookAhead,m_lastLedgeLookAhead;
 	int				m_ledgeLookOffset;
 	int				m_ledgeLookTimer;
-	int				m_leftRightScrollPosition;
 
 
 	enum
