@@ -12,7 +12,6 @@
 #include	"LayerTile.h"
 #include	"LayerBack.h"
 
-#include	<levelbackgfx.h>
 #include	"Game\game.h"
 
 sBackRGBTable	CLayerBack::BackRGBTable[]=
