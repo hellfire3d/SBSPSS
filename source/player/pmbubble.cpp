@@ -113,6 +113,7 @@ void	CPlayerModeBubbleMixture::think()
 			pos.vx+=buboff.vx*m_player->getFacing();
 			pos.vy+=buboff.vy;
 			bubble->init(pos,4);
+			bubble->postInit();
 
 			// Start the blowing anim off
 			m_blowFrame=0;
