@@ -54,13 +54,14 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_SMALL_JELLYFISH_1;
+	m_type = NPC_CIRCULAR_PLATFORM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
+	m_rotation = 0;
 
 	m_extension = EXTEND_RIGHT;
 
@@ -246,9 +247,22 @@ void CNpc::init()
 			break;
 		}
 
-		case NPC_FLAMING_SKULL:
+		case NPC_INIT_FLAMING_SKULL:
 		{
 			m_state = FLAMING_SKULL_ATTACK;
+
+			break;
+		}
+
+		case NPC_INIT_CIRCULAR_PLATFORM:
+		{
+			Pos.vx = 300;
+			Pos.vy = 300;
+
+			m_base = Pos;
+
+			m_extendDir = EXTEND_CLOCKWISE;
+			m_extension = 100;
 
 			break;
 		}
@@ -655,6 +669,13 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_FIXED_PATH_WALK:
 		{
 			processGenericFixedPathWalk( _frames, &moveX, &moveY );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_FIXED_CIRCULAR:
+		{
+			processGenericCircularPath( _frames );
 
 			break;
 		}

@@ -295,6 +295,16 @@ void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 	}
 }
 
+void CNpc::processGenericCircularPath( int _frames )
+{
+	m_rotation += m_data[m_type].speed;
+	m_rotation %= 4096;
+
+	Pos.vx = m_base.vx + ( ( m_extension * rcos( m_rotation ) ) >> 12 );
+	Pos.vy = m_base.vy + ( ( m_extension * rsin( m_rotation ) ) >> 12 );
+}
+
+
 bool CNpc::isCollisionWithGround()
 {
 	ASSERT(m_layerCollision);

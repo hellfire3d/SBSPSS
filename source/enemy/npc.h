@@ -41,9 +41,10 @@ public:
 		NPC_PENDULUM,
 		NPC_FIREBALL,
 		NPC_SAW_BLADE,
+		NPC_LINEAR_PLATFORM,
+		NPC_CIRCULAR_PLATFORM,
 		NPC_SMALL_JELLYFISH_1,
 		NPC_SMALL_JELLYFISH_2,
-		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
 		NPC_ANEMONE_2,
 		NPC_ANEMONE_3,
@@ -106,6 +107,7 @@ protected:
 		NPC_INIT_RETURNING_HAZARD,
 		NPC_INIT_FISH_FOLK,
 		NPC_INIT_FLAMING_SKULL,
+		NPC_INIT_CIRCULAR_PLATFORM,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -167,6 +169,7 @@ protected:
 		NPC_MOVEMENT_STATIC = 0,
 		NPC_MOVEMENT_FIXED_PATH = 1,
 		NPC_MOVEMENT_FIXED_PATH_WALK,
+		NPC_MOVEMENT_FIXED_CIRCULAR,
 		NPC_MOVEMENT_MOTHER_JELLYFISH,
 		NPC_MOVEMENT_SUB_SHARK,
 		NPC_MOVEMENT_FLYING_DUTCHMAN,
@@ -238,6 +241,8 @@ protected:
 		EXTEND_DOWN = false,
 		EXTEND_RIGHT = true,
 		EXTEND_LEFT = false,
+		EXTEND_CLOCKWISE = true,
+		EXTEND_ANTICLOCKWISE = false,
 	};
 
 
@@ -273,6 +278,7 @@ protected:
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
 	void				processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
+	void				processGenericCircularPath( int _frames );
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 
 	// small jellyfish functions
@@ -393,6 +399,7 @@ protected:
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;
+	s16					m_rotation;
 	DVECTOR				m_base;
 	u8					m_state;
 	u8					m_salvoCount;
