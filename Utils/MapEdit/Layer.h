@@ -22,6 +22,11 @@ enum LAYER_TYPE
 	LAYER_TYPE_MAX
 };
 
+enum
+{
+	SCREEN_WIDTH_TILE=30,
+	SCREEN_HEIGHT_TILE=20,
+};
 
 /*****************************************************************************/
 class	CCore;
@@ -52,7 +57,8 @@ virtual	void			UpdateGUI(CCore *Core)=0;
 
 virtual	int				GetWidth()=0;
 virtual	int				GetHeight()=0;
-virtual	void			Resize(int Width,int Height)=0;
+virtual	void			CheckLayerSize(int Width,int Height){};
+virtual	BOOL			Resize(int Width,int Height)=0;
 
 virtual	void			Load(CFile *File,float Version)=0;
 virtual	void			Save(CFile *File)=0;

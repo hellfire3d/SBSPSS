@@ -46,12 +46,14 @@ CLayerTile::CLayerTile(int _SubType,int Width,int Height,float Scale,BOOL Is3d,B
 
 		if (ResizeFlag)
 		{
-			Map.SetSize(Width/ScaleFactor,Height/ScaleFactor,TRUE);
+			Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
+			Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
 		}
-		else
-		{
-			Map.SetSize(Width,Height,TRUE);
-		}
+
+		if (Width<TileLayerMinWidth) Width=TileLayerMinWidth;
+		if (Height<TileLayerMinHeight) Height=TileLayerMinHeight;
+
+		Map.SetSize(Width,Height,TRUE);
 }
 
 /*****************************************************************************/
@@ -103,11 +105,33 @@ void	CLayerTile::Save(CFile *File)
 }
 
 /*****************************************************************************/
-void	CLayerTile::Resize(int Width,int Height)
+void	CLayerTile::CheckLayerSize(int Width,int Height)
 {
-		if (!ResizeFlag) return;	// Its a fixed size, so DONT DO IT!
+		if (Resize(Width,Height))
+		{
+			CString mexstr;
+			mexstr.Format("%s Layer Resized to Correct Size\nPlease re-save\n", GetName());
+			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
+		}
+		
+}
 
-		Map.Resize(Width/ScaleFactor,Height/ScaleFactor);
+/*****************************************************************************/
+BOOL	CLayerTile::Resize(int Width,int Height)
+{
+		if (!ResizeFlag) return(FALSE);	// Its a fixed size, so DONT DO IT!
+
+int		ThisWidth=Map.GetWidth();
+int		ThisHeight=Map.GetHeight();
+		Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
+		Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
+
+		if (ThisWidth!=Width || ThisHeight!=Height)
+		{
+			Map.Resize(Width,Height);				
+			return(TRUE);
+		}
+		return(FALSE);
 }
 
 /*****************************************************************************/
@@ -202,12 +226,8 @@ float	OverVal=0.5;
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(ThisCam.x,ThisCam.y,ThisCam.z);
-		glDisable(GL_TEXTURE_2D);
 
 		glBegin(GL_LINES); 
-#ifdef	UseLighting
-			glNormal3f( 1,1,1);
-#endif
 			if (Active)
 				glColor3ub(255,255,255);
 			else
@@ -225,7 +245,6 @@ float	OverVal=0.5;
 			glVertex3f( XLoop, -Height+1-OverVal, 0);
 			}
 		glEnd();
-		glEnable(GL_TEXTURE_2D);
 
 }
 
@@ -490,5 +509,5 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 /*****************************************************************************/
 void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
-		Exp.ExportLayerTile(Core,GetName(),Map);
+		Exp.ExportLayerTile(Core,GetName(),SubType,Map);
 }

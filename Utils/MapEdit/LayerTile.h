@@ -10,8 +10,8 @@
 /*****************************************************************************/
 enum	TileLayerEnum
 {
-	TileLayerDefaultWidth=30,
-	TileLayerDefaultHeight=20,
+	TileLayerMinWidth=32,
+	TileLayerMinHeight=22,
 };
 
 /*****************************************************************************/
@@ -59,10 +59,11 @@ public:
 
 		int				GetWidth()			{return(Map.GetWidth());}
 		int				GetHeight()			{return(Map.GetHeight());}
-		void			Resize(int Width,int Height);
+		BOOL			Resize(int Width,int Height);
 
 		void			Load(CFile *File,float Version);
 		void			Save(CFile *File);
+		void			CheckLayerSize(int Width,int Height);
 
 		void			Export(CCore *Core,CExport &Exp);
 

@@ -24,35 +24,10 @@ public:
 		CExport(char *Filename);
 		~CExport();
 
-		void	ExportLayerTile(CCore *Core,char *LayerName,CMap &Map);
-		void	ExportAll(CCore *Core);
-
-		void	PrintTileList();
+virtual		void	ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map)=0;
+virtual		void	ExportTiles(CCore *Core)=0;
 
 protected:
-		int		FindTileInList(sMapElem &Tile);
-		int		AddTileToList(CCore *Core,sMapElem &Tile);
-
-		void	ExportTiles(CCore *Core);
-		void	ExportPalette(CCore *Core);
-		
-virtual	void	ExportLayerTileStart(char *LayerName,int Width,int Height)=0;
-virtual	void	ExportLayerTile(sMapElem &Elem,int NewIdx)=0;
-virtual	void	ExportLayerTileEnd(char *LayerName)=0;
-virtual	int		GetMinLayerTileWidth()=0;
-virtual	int		GetMinLayerTileHeight()=0;
-virtual BOOL	IsTileValidExport(CCore *Core,sMapElem &Tile)=0;
-
-virtual	void	ExportTileStart(int TileCount)=0;
-virtual	void	ParseTile(CTile &ThisTile)=0;
-virtual	void	CreateTilePalette()=0;
-virtual	void	ExportTile(CTile &ThisTile)=0;
-virtual	void	ExportTileEnd()=0;
-
-virtual	void	ExportPaletteStart()=0;
-virtual	void	ExportPalette()=0;
-virtual	void	ExportPaletteEnd()=0;
-
 
 		char		Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		FILE		*File;
@@ -63,3 +38,4 @@ virtual	void	ExportPaletteEnd()=0;
 
 /*****************************************************************************/
 #endif
+

@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CLayerTileGUI
+LastClass=CNewMapGUI
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,21 +18,21 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_ABOUTBOX (English (U.S.))
-Resource2=IDR_MAINFRAME (English (U.S.))
-Resource3=IDD_LAYER_LIST_DIALOG
+Resource1=IDD_LAYER_LIST_DIALOG
+Resource2=IDD_MULTIBAR (English (U.S.))
+Resource3=IDD_MAPSIZE
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_MAPSIZE
+Resource5=IDR_TOOLBAR (English (U.S.))
 Class8=CMultiBar
-Resource6=IDR_TOOLBAR (English (U.S.))
+Resource6=IDD_ABOUTBOX (English (U.S.))
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_LAYERTILE_GUI
+Resource8=IDD_NEW_LAYER
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_MULTIBAR (English (U.S.))
-Resource10=IDD_NEW_LAYER
+Resource9=IDD_LAYERTILE_GUI
+Resource10=IDR_MAINFRAME (English (U.S.))
 Class13=CNewMapGUI
 Resource11=IDD_NEWMAP
 
@@ -305,6 +305,6 @@ HeaderFile=NewMapGUI.h
 ImplementationFile=NewMapGUI.cpp
 BaseClass=CDialog
 Filter=D
-LastObject=CNewMapGUI
+LastObject=IDC_MAPSIZE_WIDTH
 VirtualFilter=dWC
 

@@ -15,7 +15,6 @@
 
 const	float	FileVersion=1.0f;
 
-//#define	UseLighting
 
 /*****************************************************************************/
 class	CMapEditView;

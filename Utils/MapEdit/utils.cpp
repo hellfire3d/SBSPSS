@@ -33,49 +33,31 @@ char szBuf[256];
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax)
 {
 			// Bottom Face
-#ifdef	UseLighting
-			glNormal3f( 0.0f,-1.0f, 0.0f);
-#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMax, YMin, ZMin);
 			glVertex3f( XMax, YMin, ZMax);
 			glVertex3f( XMin, YMin, ZMax);
 			// Front Face
-#ifdef	UseLighting
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-#endif
 			glVertex3f( XMin, YMin, ZMax);
 			glVertex3f( XMax, YMin, ZMax);
 			glVertex3f( XMax, YMax, ZMax);
 			glVertex3f( XMin, YMax, ZMax);
 			// Back Face
-#ifdef	UseLighting
-			glNormal3f( 0.0f, 0.0f,-1.0f);
-#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMin, YMax, ZMin);
 			glVertex3f( XMax, YMax, ZMin);
 			glVertex3f( XMax, YMin, ZMin);
 			// Right face
-#ifdef	UseLighting
-			glNormal3f( 1.0f, 0.0f, 0.0f);
-#endif
 			glVertex3f( XMax, YMin, ZMin);
 			glVertex3f( XMax, YMax, ZMin);
 			glVertex3f( XMax, YMax, ZMax);
 			glVertex3f( XMax, YMin, ZMax);
 			// Left Face
-#ifdef	UseLighting
-			glNormal3f(-1.0f, 0.0f, 0.0f);
-#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMin, YMin, ZMax);
 			glVertex3f( XMin, YMax, ZMax);
 			glVertex3f( XMin, YMax, ZMin);
 			// Top Face
-#ifdef	UseLighting
-			glNormal3f( 0.0f, 1.0f, 0.0f);
-#endif
 			glVertex3f( XMin, YMax, ZMin);
 			glVertex3f( XMin, YMax, ZMax);
 			glVertex3f( XMax, YMax, ZMax);
@@ -120,9 +102,6 @@ void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,
 /**************************************************************************************/
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z)
 {
-#ifdef	UseLighting
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-#endif
 			glVertex3f( XMin, YMin, Z);
 			glVertex3f( XMax, YMin, Z);
 			glVertex3f( XMax, YMax, Z);

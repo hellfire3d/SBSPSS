@@ -70,17 +70,11 @@ void CMapEditView::VideoMode(ColorsNumber & c, ZAccuracy & z, BOOL & dbuf)
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnCreateGL()
 {
-		glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
 		glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 		glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Background Color
 		glClearDepth(1.0f);									// Depth Buffer Setup
 		glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 		glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-#ifdef	UseLighting
-		glEnable(GL_LIGHT0);								// Quick And Dirty Lighting (Assumes Light0 Is SetUp)
-		glEnable(GL_LIGHTING);								// Enable Lighting
-		glEnable(GL_COLOR_MATERIAL);						// Enable Material Coloring
-#endif
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 		glEnable(GL_BLEND);									// Enable Alpha Channel
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style

@@ -116,8 +116,8 @@ public:
 		void	RenderBrush(Vec &CamPos,CMap &LBrush,CMap &RBrush);
 		void	RenderGrid(Vec &CamPos);
 		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
-		BOOL	IsTileValid(int No)			{return(Tile[No].IsValid());}
-		BOOL	IsTileValidGB(int No)		{return(Tile[No].IsValidGB());}
+		BOOL	IsTileValid(int No);
+		BOOL	IsTileValidGB(int No);
 
 
 private:
@@ -126,7 +126,8 @@ private:
 
 		char				Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		int					SetNumber;
-		std::vector<CTile>	Tile;
+//		std::vector<CTile>	Tile;
+		CList<CTile>		Tile;
 		BOOL				Loaded;
 		int					TileBrowserWidth;
 };

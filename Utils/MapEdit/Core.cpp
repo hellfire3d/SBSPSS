@@ -23,6 +23,7 @@
 #include	"utils.h"
 
 #include	"ExportAGB.h"
+#include	"ExportPSX.h"
 
 
 /*****************************************************************************/
@@ -58,8 +59,8 @@ BOOL	CCore::New()
 {
 CNewMapGUI	Dlg;
 int		Width,Height;
-		Dlg.m_Width=TileLayerDefaultWidth;
-		Dlg.m_Height=TileLayerDefaultHeight;
+		Dlg.m_Width=TileLayerMinWidth;
+		Dlg.m_Height=TileLayerMinHeight;
 
 		Dlg.m_Back=TRUE;
 		Dlg.m_Mid=TRUE;
@@ -133,6 +134,16 @@ int		LayerCount;
 			}
 		}
 		TileBank.Load(File,Version);
+
+
+// Check Layers
+int		MapWidth=Layer[FindActionLayer()]->GetWidth();
+int		MapHeight=Layer[FindActionLayer()]->GetHeight();
+		for (i=0;i<LayerCount;i++)
+		{
+			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
+		}
+
 		Init();
 }
 
@@ -572,6 +583,7 @@ void	CCore::Toggle2d3d(CMapEditView *View)
 {
 		Is3dFlag=!Is3dFlag;
 		UpdateView(View);
+//		ExportPSX("c:/temp/test.pme");
 }
 
 /*****************************************************************************/
@@ -623,11 +635,27 @@ CExportAGB	Exp(ExportName);
 		{
 			Layer[i]->Export(this,Exp);
 		}
-		Exp.ExportAll(this);
+		Exp.ExportTiles(this);
+		Exp.ExportPalette();
 }
 
 /*****************************************************************************/
 void	CCore::ExportPSX(char *Filename)
 {
 
+int		LayerCount=Layer.size();
+char	ExportName[256];
+		
+		SetFileExt(Filename,ExportName,"PME");
+
+CExportPSX	Exp(ExportName);
+
+/*		for (int i=0;i<LayerCount;i++)
+		{
+			Layer[i]->Export(this,Exp);
+		}
+*/
+		Layer[FindActionLayer()]->Export(this,Exp);
+
+		Exp.ExportTiles(this);
 }

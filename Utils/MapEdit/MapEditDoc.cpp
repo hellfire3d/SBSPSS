@@ -198,8 +198,8 @@ void	CMapEditDoc::SetLayer(int Layer)
 /*********************************************************************************/
 void CMapEditDoc::OnExportAgb() 
 {
-char		BASED_CODE AGBFilter[]= "AGB Data Type (*.c)|*.c|All Files (*.*)|*.*||";
-CFileDialog	Dlg(FALSE,"*.c",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,AGBFilter);
+char		BASED_CODE Filter[]= "AGB Data Type (*.c)|*.c|All Files (*.*)|*.*||";
+CFileDialog	Dlg(FALSE,"*.c",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
 
 		if (Dlg.DoModal()!=IDOK) return;
 
@@ -213,7 +213,15 @@ char	Filename[256];
 /*********************************************************************************/
 void CMapEditDoc::OnExportPsx() 
 {
-	
+char		BASED_CODE Filter[]= "PSX Data Type (*.PME)|*.Pme|All Files (*.*)|*.*||";
+CFileDialog	Dlg(FALSE,"*.pme",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+char	Filename[256];
+		sprintf(Filename,"%s",Dlg.GetPathName());
+		
+		Core.ExportAGB(Filename);
 }
 
 /*********************************************************************************/

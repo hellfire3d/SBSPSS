@@ -12,6 +12,7 @@
 #include	<gl\glut.h>
 #include	<Vector>
 #include	"Utils.h"
+#include	"List.h"
 
 struct	sRGBData
 {
@@ -22,11 +23,16 @@ struct	sRGBData
 
 struct	sTex
 {
-	char			Name[256];
-	char			Path[256];
+	char			Filename[_MAX_PATH];
+//	char			Name[_MAX_FNAME];
 	GLuint			TexID;
 	int				Flags;
-	int				Width,Height;
+	int				TexWidth,TexHeight;
+	int				GLWidth,GLHeight;
+	float			dW,dH;
+	BOOL			Loaded;
+
+	BOOL			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
 };
 
 const RGBQUAD	BlankRGB={255,0,255};
@@ -38,20 +44,26 @@ class	CTexCache
 {
 public:
 	
-		int		GetTexIdx(char *Name,int Flags);
+		int		GetTexIdx(sTex &Tex)						{return(TexList.Find(Tex));}
+		int		GetTexIdx(char *Filename,int Flags);
 
-		int		ProcessTexture(char *TexName,char *Path,int Flags,sRGBData *RGBData=0);
+		int		ProcessTexture(char *Path,int Flags,sRGBData *RGBData=0);
 		void	Purge();
 
 		void	LoadBMP(char *Filename,sRGBData &RGBData);
 		void	FreeBMP(sRGBData &RGBData);
+		void	FixBMP(sRGBData &RGBData);
+		BOOL	IsSizeOk(int Size);
+		int		AlignSize(int Size);
 
 		void	LoadTex(sTex &ThisTex,sRGBData *TexData);
+		
 
 		sTex	&GetTex(int Id)						{return(TexList[Id]);}
 		GLuint	GetTexGLId(int Id)					{return(TexList[Id].TexID);}
 
-		std::vector<sTex>		TexList;
+
+		CList<sTex>				TexList;
 
 };
 

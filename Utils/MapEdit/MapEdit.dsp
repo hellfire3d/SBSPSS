@@ -131,6 +131,18 @@ SOURCE=.\ExportAGB.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ExportPSX.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExportPSX.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExportPSXHdr.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Quantize.cpp
 # End Source File
 # Begin Source File
@@ -241,6 +253,10 @@ SOURCE=.\gl3d.h
 # Begin Source File
 
 SOURCE=.\GLEnabledView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\List.h
 # End Source File
 # Begin Source File
 
@@ -368,9 +384,5 @@ SOURCE=.\NewMapGUI.h
 # End Source File
 # End Group
 # End Group
-# Begin Source File
-
-SOURCE=".\!ToDo.txt"
-# End Source File
 # End Target
 # End Project

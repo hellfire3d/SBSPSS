@@ -350,25 +350,21 @@ void	CTileSet::Load(CCore *Core)
 }
 
 /*****************************************************************************/
+
 void	CTileSet::Load2d(CCore *Core)
 {
 char		Filename[_MAX_PATH];
 CTexCache	&TexCache=Core->GetTexCache();
-sRGBData	ThisBmp;
-sRGBData	NewTex;
 
 		_makepath( Filename, Drive, Path, Name, Ext);
-		TexCache.LoadBMP(Filename,ThisBmp);
 
-int		Width=ThisBmp.Width/16;
-int		Height=ThisBmp.Height/16;
-u8		Buffer[16*16*3];
+int		TexID=TexCache.ProcessTexture(Filename,0);
+sTex	&ThisTex=TexCache.GetTex(TexID);
 
-		NewTex.Width=16;
-		NewTex.Height=16;
-		NewTex.RGB=Buffer;
+int		Width=ThisTex.TexWidth/16;
+int		Height=ThisTex.TexHeight/16;
 
-		TRACE2("Load 2d TileBank (%i,%i)\n",Width,Height);
+		TRACE3("Load 2d TileBank %s (%i,%i)\n",Filename,Width,Height);
 
 		Tile.push_back(CTile(0));	// Insert Blank		
 		
@@ -376,17 +372,10 @@ u8		Buffer[16*16*3];
 		{
 			for (int X=0; X<Width; X++)
 			{
-				char	Name[256];
-				Create16x16Tile(ThisBmp,Buffer,X,(Height-1)-Y);
-				sprintf(Name,"_2d_%s_%i_%i",GetName(),SetNumber,X+(Y*Width));
-				int	TexID=TexCache.ProcessTexture(Name,GetPath(),0,&NewTex);
-				Tile.push_back(CTile(Core,this,TexID));
+				Tile.push_back(CTile(Core,this,TexID,X,Y));
 			}
 		}
-
-		TexCache.FreeBMP(ThisBmp);
 		TileBrowserWidth=Width;
-
 }
 
 /*****************************************************************************/
@@ -459,6 +448,20 @@ CPoint	CTileSet::GetTilePos(int ID)
 }
 
 /*****************************************************************************/
+BOOL	CTileSet::IsTileValid(int No)			
+{
+		ASSERT(No<Tile.size());
+		return(Tile[No].IsValid());
+}
+
+/*****************************************************************************/
+BOOL	CTileSet::IsTileValidGB(int No)		
+{
+		ASSERT(No<Tile.size());
+		return(Tile[No].IsValidGB());
+}
+
+/*****************************************************************************/
 void	CTileSet::Render(Vec &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
 int			ListSize=Tile.size();
@@ -475,11 +478,6 @@ BOOL		ValidTile=TRUE;
 		while(TileID!=ListSize)
 		{
 			CPoint	Pos=GetTilePos(TileID);
-
-//			if (TileID==0)
-//				Pos=CPoint(-1,-1);
-//			else
-//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			
 			glLoadIdentity();
@@ -501,11 +499,7 @@ BOOL		ValidTile=TRUE;
 
 			if (SelFlag)
 			{
-				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_QUADS); 
-#ifdef	UseLighting
-				glNormal3f( 1,1,1);
-#endif
 				switch(SelFlag)
 				{
 					case 1: // L
@@ -525,16 +519,11 @@ BOOL		ValidTile=TRUE;
 				}
 	
 				glEnd();
-			glEnable(GL_TEXTURE_2D);
 			}
 // Invalid tile?
 			if (!ValidTile)
 			{
-				glDisable(GL_TEXTURE_2D);
 				glBegin(GL_LINES); 
-#ifdef	UseLighting
-					glNormal3f( 1,1,1);
-#endif
 					glColor3ub(255,255,255);
 			
 					glVertex3f( TileBrowserX0,TileBrowserY0,0);
@@ -544,9 +533,29 @@ BOOL		ValidTile=TRUE;
 					glVertex3f( TileBrowserX0,TileBrowserY1,0);
 
 				glEnd();
-				glEnable(GL_TEXTURE_2D);
 			}
+// Draw Box around bloody Blank so you can see it
+			if (!TileID) 
+			{
+				CPoint	Pos=GetTilePos(TileID);
+			
+				glBegin(GL_LINES); 
+					glColor3ub(255,255,255);
+			
+					glVertex3f( TileBrowserX0,TileBrowserY0,0);
+					glVertex3f( TileBrowserX1,TileBrowserY0,0);
 
+					glVertex3f( TileBrowserX0,TileBrowserY1,0);
+					glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+					glVertex3f( TileBrowserX0,TileBrowserY0,0);
+					glVertex3f( TileBrowserX0,TileBrowserY1,0);
+
+					glVertex3f( TileBrowserX1,TileBrowserY0,0);
+					glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+				glEnd();
+			}
 
 			TileID++;
 		}
@@ -564,14 +573,6 @@ int		MaxTile=Tile.size();
 
 		if (SelStart==-1)
 		{
-//			if (CursorPos==0)
-//			{
-//				Start=CPoint(-1,-1);
-//			}
-//			else
-//			{
-//				Start=IDToPoint(CursorPos-1,TileBrowserWidth);
-//			}
 			Start=GetTilePos(CursorPos);
 			End=Start;
 		}
@@ -587,7 +588,6 @@ int		MaxTile=Tile.size();
 		}
 
 		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_TEXTURE_2D);
 
 		for (int Y=Start.y; Y<=End.y; Y++)
 		{
@@ -597,44 +597,30 @@ int		MaxTile=Tile.size();
 				glTranslatef(CamPos.x+X*(1+TileBrowserGap),CamPos.y-Y*(1+TileBrowserGap),CamPos.z);
 	
 				glBegin(GL_QUADS); 
-#ifdef	UseLighting
-				glNormal3f( 1,1,1);
-#endif	
 				glColor4f(1,1,0,0.5);
 				BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
 				glEnd();
 
 			}
 		}
-
-		glEnable(GL_TEXTURE_2D);
 }
 
 /*****************************************************************************/
 void	CTileSet::RenderGrid(Vec &CamPos)
 {
 int			ListSize=Tile.size();
-int			TileID=0;
+int			TileID=1;	// Dont bother with blank, its sorted
 		
 		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_TEXTURE_2D);
 
 		while(TileID!=ListSize)
 		{
 			CPoint	Pos=GetTilePos(TileID);
 			
-//			if (TileID==0)
-//				Pos=CPoint(-1,-1);
-//			else
-//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
-
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glBegin(GL_LINES); 
-#ifdef	UseLighting
-				glNormal3f( 1,1,1);
-#endif
 				glColor3ub(255,255,255);
 			
 				glVertex3f( TileBrowserX0,TileBrowserY0,0);
@@ -653,7 +639,6 @@ int			TileID=0;
 
 			TileID++;
 		}
-		glEnable(GL_TEXTURE_2D);
 }
 
 /*****************************************************************************/
@@ -684,11 +669,6 @@ int		TileID=0;
 		{
 			CPoint	Pos=GetTilePos(TileID);
 			
-//			if (TileID==0)
-//				Pos=CPoint(-1,-1);
-//			else
-//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
-
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
