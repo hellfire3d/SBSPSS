@@ -68,8 +68,8 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#define FRAME_WIDTH		400
-#define FRAME_HEIGHT	180
+#define FRAME_WIDTH		390
+#define FRAME_HEIGHT	185
 #define TEXT_BOX_WIDTH	300
 #define TEXT_BOX_HEIGHT	20
 #define OT_POS			5
