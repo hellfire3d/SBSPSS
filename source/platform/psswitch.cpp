@@ -174,10 +174,10 @@ void CNpcSteamSwitchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	m_npcPath.getPathXExtents( &minX, &maxX );
 	m_npcPath.getPathYExtents( &minY, &maxY );
 
-	m_thinkArea.x1 = minX;
-	m_thinkArea.x2 = maxX;
-	m_thinkArea.y1 = minY;
-	m_thinkArea.y2 = maxY;
+	m_thinkArea.x1 = startPos.vx;
+	m_thinkArea.x2 = startPos.vx + 1;
+	m_thinkArea.y1 = startPos.vy;
+	m_thinkArea.y2 = startPos.vy + m_maxExtension;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
