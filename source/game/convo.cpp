@@ -272,6 +272,7 @@ CConversation::CHAR_ICON_FRAMES	CConversation::s_characterIconFrames[]=
 	{	FRM_MERMAIDMAN		},			// CHAR_MERMAIDMAN,
 	{	FRM_BARNACLEBOY		},			// CHAR_BARNACLEBOY,
 	{	-1					},			// CHAR_JACKCUSTARD
+	{	FRM_GARY			},			// CHAR_GARY
 
 };
 
@@ -285,16 +286,18 @@ int						CConversation::s_numRegisteredScripts=0;
 class CScript			*CConversation::s_currentScript=NULL;
 int						CConversation::s_currentState=STATE_INACTIVE;
 
-int	CConversation::s_currentQuestion;
-int CConversation::s_currentAnswer;
-int CConversation::s_currentSelectedAnswer;
+int						CConversation::s_currentQuestion;
+int						CConversation::s_currentAnswer;
+int						CConversation::s_currentSelectedAnswer;
+						
+int						CConversation::s_faceFrame;
+int						CConversation::s_speechId;
+int						CConversation::s_textPageOffset;
+int						CConversation::s_maxTextPageOffset;
+SpriteBank				*CConversation::s_sprites;
 
-int	CConversation::s_faceFrame;
-int	CConversation::s_speechId;
-int	CConversation::s_textOffset;
-int	CConversation::s_maxTextOffset;
 
-static xmPlayingId	s_playingSfxId;
+static xmPlayingId		s_playingSfxId;
 
 
 /*----------------------------------------------------------------------
@@ -310,7 +313,6 @@ void CConversation::init()
 	s_textFontBank=new ("Conversation Font") FontBank();
 	s_textFontBank->initialise(&standardFont);
 	s_textFontBank->setOt(0);
-	s_textFontBank->setPrintArea(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT);
 	s_textFontBank->setColour(TEXT_R,TEXT_G,TEXT_B);
 
 	s_questionFontBank=new ("Conversation Font") FontBank();
@@ -319,6 +321,9 @@ void CConversation::init()
 
 	s_currentState=STATE_INACTIVE;
 	s_currentScript=NULL;
+
+	s_sprites=new ("ConvoSprites") SpriteBank();
+	s_sprites->load(SPRITES_SPRITES_SPR);
 }
 
 
@@ -330,6 +335,7 @@ void CConversation::init()
   ---------------------------------------------------------------------- */
 void CConversation::shutdown()
 {
+	s_sprites->dump();						delete s_sprites;
 	s_questionFontBank->dump();				delete s_questionFontBank;
 	s_textFontBank->dump();					delete s_textFontBank;
 	dumpConversationScripts();
@@ -388,7 +394,14 @@ void CConversation::render()
 	{
 		renderText();
 		renderQuestion();
-		drawSpeechBubbleBorder(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,s_faceFrame);
+		if(s_faceFrame!=-1)
+		{
+			drawSpeechBubbleBorder(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,s_faceFrame);
+		}
+		else
+		{
+			drawSpeechBubbleBorder(TEXTBOX_X_FOR_NARRATOR,TEXTBOX_Y,TEXTBOX_WIDTH_FOR_NARRATOR,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,-1);
+		}
 	}
 }
 
@@ -462,11 +475,15 @@ int CConversation::isActive()
   ---------------------------------------------------------------------- */
 void CConversation::setCharacterAndText(int _characterId,int _textId)
 {
+	RECT	clipTextRegion;
+
 	s_faceFrame=(s_characterIconFrames[_characterId].m_frame);
 	s_speechId=_textId;
-	s_textOffset=0;
-	s_maxTextOffset=s_textFontBank->getStringHeight((char*)TranslationDatabase::getString(s_speechId))-TEXTBOX_HEIGHT;
-	if(s_maxTextOffset<0)s_maxTextOffset=0;
+	s_textPageOffset=0;
+	clipTextRegion=getTextRegion();
+	s_textFontBank->setPrintArea(clipTextRegion.x,clipTextRegion.y,clipTextRegion.w,clipTextRegion.h);
+	s_maxTextPageOffset=(s_textFontBank->getStringHeight((char*)TranslationDatabase::getString(s_speechId))-s_textFontBank->getCharHeight())/(s_textFontBank->getCharHeight()*TEXTBOX_FONT_NUM_LINES_IN_BOX);
+	if(s_maxTextPageOffset<0)s_maxTextPageOffset=0;
 
 	for (int i=0; i<SpeechTableSize; i++)
 	{
@@ -517,12 +534,12 @@ void CConversation::thinkText()
 
 	if(PadGetRepeat(0)&PAD_DOWN)
 	{
-		if(s_textOffset<s_maxTextOffset)
+		if(s_textPageOffset<s_maxTextPageOffset)
 		{
-			s_textOffset+=TEXT_STEP_SIZE;
-			if(s_textOffset>s_maxTextOffset)
+			s_textPageOffset++;
+			if(s_textPageOffset>s_maxTextPageOffset)
 			{
-				s_textOffset=s_maxTextOffset;
+				s_textPageOffset=s_maxTextPageOffset;
 			}
 			sfx=CSoundMediator::SFX_FRONT_END__MOVE_CURSOR;
 		}
@@ -533,12 +550,12 @@ void CConversation::thinkText()
 	}
 	else if(PadGetRepeat(0)&PAD_UP)
 	{
-		if(s_textOffset>0)
+		if(s_textPageOffset>0)
 		{
-			s_textOffset-=TEXT_STEP_SIZE;
-			if(s_textOffset<0)
+			s_textPageOffset--;
+			if(s_textPageOffset<0)
 			{
-				s_textOffset=0;
+				s_textPageOffset=0;
 			}
 			sfx=CSoundMediator::SFX_FRONT_END__MOVE_CURSOR;
 		}
@@ -603,11 +620,35 @@ void CConversation::thinkQuestion()
   ---------------------------------------------------------------------- */
 void CConversation::renderText()
 {
-	RECT clipTextRegion={TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
+	RECT	clipTextRegion;
+	char	buf[1024],*pBuf;
+	int		i;
+
+	clipTextRegion=getTextRegion();
 
 	PrimFullScreen(0);
-	s_textFontBank->print(0,-s_textOffset,s_speechId);
+	sprintf(buf,TranslationDatabase::getString(s_speechId));
+	pBuf=buf;
+	for(i=0;i<s_textPageOffset*TEXTBOX_FONT_NUM_LINES_IN_BOX;i++)
+	{
+		// yes.. i know it's gay but it works..
+		pBuf+=s_textFontBank->printTillEndOfLine(0,-50,pBuf);
+	}
+	for(i=0;i<TEXTBOX_FONT_NUM_LINES_IN_BOX&&pBuf;i++)
+	{
+		pBuf+=s_textFontBank->printTillEndOfLine(0,i*TEXTBOX_FONT_LINE_SPACING,pBuf);
+	}
 	PrimClip(&clipTextRegion,0);
+
+	// Render up/down button hints
+	if(s_textPageOffset!=0)
+	{
+		s_sprites->printFT4(FRM__BUTU,clipTextRegion.x+TEXTBOX_BUTTONS_XOFF,TEXTBOX_Y+TEXTBOX_BUTTONS_YOFF,0,0,0);
+	}
+	if(s_textPageOffset<s_maxTextPageOffset)
+	{
+		s_sprites->printFT4(FRM__BUTD,clipTextRegion.x+TEXTBOX_BUTTONS_XOFF+TEXTBOX_BUTTONS_GAP,TEXTBOX_Y+TEXTBOX_BUTTONS_YOFF,0,0,0);
+	}
 }
 
 
@@ -617,7 +658,6 @@ void CConversation::renderText()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-//drawSpeechBubbleBorder(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,s_faceFrame);
 void CConversation::renderQuestion()
 {
 	int	y;
@@ -807,5 +847,26 @@ void CConversation::registerConversationLevelScripts(int level)
 			break;
 	}
 }
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+RECT CConversation::getTextRegion()
+{
+	RECT clipRegion={TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
+
+	if(s_faceFrame==-1)
+	{
+		// Narrators box..
+		clipRegion.x=TEXTBOX_X_FOR_NARRATOR;
+		clipRegion.w=TEXTBOX_WIDTH_FOR_NARRATOR;
+	}
+
+	return clipRegion;
+}
+
 /*===========================================================================
  end */

@@ -192,6 +192,74 @@ void FontBank::print( int _x, int _y, const char *_text )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int FontBank::printTillEndOfLine( int _x, int _y, const char *_text )
+{
+	ASSERT( m_initialised );
+
+	int 	Size;
+	int 	StartX;
+	int 	Length=0;
+	int		RectWidth;
+	int		numCharsPrinted=0;
+
+	switch(m_justification)
+	{
+		case JUST_CENTRE:
+			RectWidth=m_printArea.w;
+			break;
+		default:
+			RectWidth=m_printArea.w-_x;
+			break;
+	}
+	_x+=m_printArea.x;
+	_y+=m_printArea.y;
+	_y+=getCharHeight();		// origin at top left please...
+	StartX=_x;
+
+	while (*_text)
+	{
+		Length=getStrWrapLen(_text,RectWidth);
+		switch (m_justification)
+			{
+			case JUST_LEFT:
+				_x=StartX;
+				break;
+			case JUST_RIGHT:
+				_x=StartX/*+RectWidth*/-Length;
+				break;
+			case JUST_CENTRE:
+				_x=StartX-(Length/2);
+				break;
+			}
+
+		int	fy=_y;
+		while(*_text && Length>0)
+		{
+			if(m_wobble)
+			{
+				fy=_y+(msin((s_wobbleValue+(_x*wstep))&4095)/wscale);
+			}
+			Size=printChar(*_text++,_x,fy)+getCharGapX();
+			numCharsPrinted++;
+			_x+=Size;
+			Length-=Size;
+		}
+		break;
+//		_y+=(getCharHeight());
+//		if(*_text=='\n') _text++;		// kill newline if there is one ( preserve multiple \n )
+//		while (*_text==' ') _text++;	// kill trailing spaces
+	}
+
+	return numCharsPrinted;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void FontBank::setColour( u8 _r, u8 _g, u8 _b )
 {
 	m_r = _r;

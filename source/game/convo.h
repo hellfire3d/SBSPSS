@@ -18,6 +18,10 @@
 	Includes
 	-------- */
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"
+#endif
+
 #ifndef __FILE_EQUATES_H__
 #include <biglump.h>
 #endif
@@ -37,20 +41,21 @@
 class CConversation
 {
 public:
-	static void	init();
-	static void	shutdown();
-
-	static void	think(int _frames);
-	static void	render();
-
-	static void registerConversationLevelScripts(int level);
-	static void	registerConversationScript(FileEquate _feScript);
-	static void	trigger(FileEquate _feScript);
-	static int	isActive();
-
-	static void	setCharacterAndText(int _characterId,int _textId);
-	static void	setResponseOptions(int _responseOptions);
-	static int	getResponse();
+	static void			init();
+	static void			shutdown();
+						
+	static void			think(int _frames);
+	static void			render();
+						
+	static void			registerConversationLevelScripts(int level);
+	static void			registerConversationScript(FileEquate _feScript);
+	static void			trigger(FileEquate _feScript);
+	static int			isActive();
+						
+	static void			setCharacterAndText(int _characterId,int _textId);
+	static void			setResponseOptions(int _responseOptions);
+	static int			getResponse();
+	static RECT			getTextRegion();
 
 
 private:
@@ -58,12 +63,18 @@ private:
 	{
 
 		TEXTBOX_X=125,
-		TEXTBOX_Y=140,
+		TEXTBOX_Y=35,
 		TEXTBOX_WIDTH=357,
-		TEXTBOX_HEIGHT=50,
+		TEXTBOX_HEIGHT=62,
+		TEXTBOX_X_FOR_NARRATOR=512-TEXTBOX_X-TEXTBOX_WIDTH,
+		TEXTBOX_WIDTH_FOR_NARRATOR=512-(TEXTBOX_X_FOR_NARRATOR*2),
 		TEXTBOX_QUESTIONHEIGHT=16,
-		TEXT_STEP_SIZE=5,
 		OT_POS=0,
+		TEXTBOX_FONT_LINE_SPACING=14,
+		TEXTBOX_FONT_NUM_LINES_IN_BOX=4,
+		TEXTBOX_BUTTONS_XOFF=0,
+		TEXTBOX_BUTTONS_YOFF=68,
+		TEXTBOX_BUTTONS_GAP=20,
 		// Main text
 		TEXT_R=120,
 		TEXT_G=115,
@@ -89,6 +100,7 @@ private:
 		CHAR_MERMAIDMAN,
 		CHAR_BARNACLEBOY,
 		CHAR_JACKCUSTARD,
+		CHAR_GARY,
 		MAX_CHARS,
 	};
 	typedef struct
@@ -153,8 +165,9 @@ private:
 
 	static int					s_faceFrame;
 	static int					s_speechId;
-	static int					s_textOffset;
-	static int					s_maxTextOffset;
+	static int					s_textPageOffset;
+	static int					s_maxTextPageOffset;
+	static class SpriteBank		*s_sprites;
 
 };
 

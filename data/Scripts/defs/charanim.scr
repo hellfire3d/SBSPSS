@@ -10,7 +10,7 @@
 #define CHAR_MERMAIDMAN		6
 #define CHAR_BARNACLEBOY	7
 #define CHAR_JACKCUSTARD	8
-#define CHAR_GARY		8
+#define CHAR_GARY			9
 
 #define ANIM_QUIET			0
 #define ANIM_TALKING		1

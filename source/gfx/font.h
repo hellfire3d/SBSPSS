@@ -51,8 +51,9 @@ public:
 	virtual void	initialise( FontData *_fontData );
 	void	dump();
 	int		isInitialised()				{ return m_initialised; }
-	virtual void	print( int _x, int _y, const char *_text );
 	void			print( int _x, int _y, s32 _textId );
+	virtual void	print( int _x, int _y, const char *_text );
+	int				printTillEndOfLine( int _x, int _y, const char *_text );
 	void	setColour( u8 _r, u8 _g, u8 _b );
 	void	setJustification( Justification _justification );
 	void	setOt( u16 _ot );
