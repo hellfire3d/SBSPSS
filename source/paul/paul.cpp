@@ -117,6 +117,7 @@ static CScrollyBackground		*s_bg3;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 unsigned int str=STR__PAULS_TEST_STRING_1;
 int w=150;
 int h=40;
@@ -142,7 +143,7 @@ char textEntry[16+1]="SOME TEXT";
 
 
 CGUIControlFrame	*baseGUIObject;
-
+*/
 
 void CPaulScene::init()
 {

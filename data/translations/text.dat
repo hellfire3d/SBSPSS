@@ -2,7 +2,7 @@
 ; Please 
 ; DO NOT edit this document with Excel/Word
 ; DO NOT add trailing spaces and tabs
-; DO NOT Omit text after identifier
+; DO NOT omit text after identifier
 ; DO NOT add spaces to identifier
 ; DO NOT add duplicate identifiers
 ; DO NOT put - or ; characters in text strings :(
@@ -43,9 +43,12 @@ eng=SPONGEBOBS UNTITLED ADVENTURE
 eng=PRESS START
 
 [STR__FRONTEND__START_GAME]
-eng=Start game
+eng=START GAME
 [STR__FRONTEND__OPTIONS]
-eng=Options
+eng=OPTIONS
+
+[STR__FRONTEND__EXIT]
+eng=EXIT
 
 
 
@@ -53,24 +56,6 @@ eng=Options
 ; Debugging text
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------
-[STR__PAULS_TEST_STRING_1]
-eng=This is a test string.
-[STR__PAULS_TEST_STRING_2]
-eng=This is another test string with more text.
-[STR__PAULS_TEST_STRING_3]
-eng=Finally, another example containing wordage of increased length.
-
-[STR__PAULS_TEST__CONTROL_TYPE]
-eng=CONTROL TYPE
-[STR__PAULS_TEST__MUSIC]
-eng=MUSIC
-[STR__PAULS_TEST__SFX]
-eng=SFX
-[STR__PAULS_TEST__EXIT]
-eng=EXIT
-
-
-
 
 
 
