@@ -104,7 +104,7 @@ public:
 	};
 	enum
 	{ // For Dynamic ThingCache
-		MAX_SUBTYPE	=1,
+		MAX_SUBTYPE	=2,
 	};
 
 	static CPlayerProjectile	*Create();

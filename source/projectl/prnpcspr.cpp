@@ -31,13 +31,14 @@ CEnemyAsSpriteProjectile	*CEnemyAsSpriteProjectile::Create()
 {
 	CEnemyAsSpriteProjectile *projectile;
 
-	projectile = (CEnemyAsSpriteProjectile*)CThingManager::GetThing(TYPE_PLAYERPROJECTILE,0);
+	projectile = (CEnemyAsSpriteProjectile*)CThingManager::GetThing(TYPE_PLAYERPROJECTILE,1);
 	if ( !projectile )
 	{
 		projectile = new ("player projectile") CEnemyAsSpriteProjectile;
 	}
 
 	ASSERT(projectile);
+	projectile->setThingSubType(1);
 
 	return( projectile );
 }
