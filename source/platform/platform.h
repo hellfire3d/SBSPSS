@@ -91,6 +91,7 @@ public:
 	void				shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
+	virtual u8			canDrop()												{return true;}
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}

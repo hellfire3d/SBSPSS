@@ -24,6 +24,7 @@ public:
 	void				setMaster( u8 isMaster );
 	void				setOtherPlatform( CNpcDualPlatform *other );
 	void				setMovement( DVECTOR move );
+	virtual u8			canDrop();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );

@@ -19,6 +19,10 @@
 #include "level\layercollision.h"
 #endif
 
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcDualPlatformBarrelHazard::init()
@@ -45,42 +49,25 @@ void CNpcDualPlatformBarrelHazard::processMovement( int _frames )
 
 	bool pathComplete;
 
-	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &m_heading ) )
+	m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &m_heading );
+
+	if ( pathComplete )
 	{
-		if ( pathComplete )
-		{
-			// reset
+		// reset
 
-			Pos = m_base;
-			m_npcPath.resetPath();
+		Pos = m_base;
+		m_npcPath.resetPath();
 
-			return;
-		}
-		else
-		{
-			// check for vertical movement
-
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
-
-			if ( groundHeight <= yMovement )
-			{
-				// groundHeight <= yMovement indicates either just above ground or on or below ground
-
-				moveY = groundHeight;
-			}
-			else
-			{
-				// fall
-
-				moveY = yMovement;
-			}
-		}
+		return;
 	}
 	else
 	{
 		// check for collision
 
-		distX = distX / abs( distX );
+		if ( distX )
+		{
+			distX = distX / abs( distX );
+		}
 
 		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy ) < -maxHeight )
 		{
@@ -103,9 +90,27 @@ void CNpcDualPlatformBarrelHazard::processMovement( int _frames )
 			}
 			else
 			{
-				// fall
+				CNpcPlatform *platform = (CNpcPlatform *) isOnPlatform();
 
-				moveY = yMovement;
+				if ( platform )
+				{
+					// stick to platform top
+
+					moveY = platform->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy + yMovement );
+
+					if ( !platform->canDrop() )
+					{
+						// if platform cannot drop any further, move in X
+
+						moveX = distX * 3 * _frames;
+					}
+				}
+				else
+				{
+					// fall
+
+					moveY = yMovement;
+				}
 			}
 		}
 	}

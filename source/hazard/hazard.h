@@ -65,6 +65,10 @@ public:
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(sThingHazard *ThisHazard);
 
+	void				setPlatform(CThing *_newPlatform)	{m_platform = _newPlatform;}
+	void				clearPlatform()						{m_platform = NULL;}
+	CThing				*isOnPlatform()						{return m_platform;}
+
 protected:
 	enum
 	{
@@ -92,6 +96,8 @@ protected:
 	bool				m_extendDir;
 	s32					m_heading;
 	CModelGfx			*m_modelGfx;
+
+	CThing				*m_platform;
 
 	static NPC_HAZARD_UNIT_TYPE mapEditConvertTable[NPC_HAZARD_TYPE_MAX];
 };

@@ -83,6 +83,29 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+u8 CNpcDualPlatform::canDrop()
+{
+	if ( m_isMaster )
+	{
+		s32 extensionLeft = m_maxExtension - m_extension;
+
+		if ( extensionLeft == 0 )
+		{
+			return( false );
+		}
+		else
+		{
+			return( true );
+		}
+	}
+	else
+	{
+		return( false );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcDualPlatform::processMovement( int _frames )
 {
 	if ( m_isMaster )

@@ -29,6 +29,10 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __HAZARD_HAZARD_H__
+#include "hazard\hazard.h"
+#endif
+
 #ifndef __ENEMY_NPCPATH_H__
 #include	"enemy\npcpath.h"
 #endif
@@ -825,6 +829,20 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_HAZARD:
 		{
 			m_contact = true;
+
+			CNpcHazard *hazard;
+
+			hazard = (CNpcHazard *)_thisThing;
+
+			hazard->setPlatform( this );
+
+			/*DVECTOR newPos = _thisThing->getPos();
+
+			s32 yDiff = getHeightFromPlatformAtPosition( newPos.vx, newPos.vy );
+
+			newPos.vy += yDiff;
+
+			_thisThing->setPos( newPos );*/
 
 			break;
 		}
