@@ -1,0 +1,36 @@
+// Crappy test program
+// Prints a number based upon another one ( eh? )
+
+#include defs.scr
+
+
+
+// No switch statements here..
+if($tmp1==1)
+{
+	$tmp2=11;
+}
+else if($tmp1==2)
+{
+	$tmp2=22;
+}
+else if($tmp1==3)
+{
+	$tmp2=33;
+}
+else if($tmp1==4)
+{
+	// Stop here!
+	stop;
+}
+
+// Have a rest..
+pause;
+
+// Show result and stop
+if($tmp2!=0)
+	print($tmp2);
+else
+	print(12345);
+stop;
+
