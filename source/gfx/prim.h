@@ -15,9 +15,7 @@
 #include	"gfx\primplus.h"
 #endif
 
-//#define	MAX_OT_GUI			(0)
 #define	MAX_OT				(16)
-#define	MAX_OT_ALL			(MAX_OT)
 #define	MAX_PRIMS			((1024*2))		// Took off 512 as mid layer now pre-stored as TSPRTs
 
 //#define	USE_NTAGS			1
@@ -177,8 +175,8 @@ typedef	u32	sOT;
 #define	InitOTagR(Ot, Count)					ClearOTagR(Ot,Count);
 #define	ResetOTag(Ot, Count)					InitOTag(Ot,Count);
 #define	ResetOTagR(Ot, Count)					InitOTagR(Ot,Count);
-#define	UnlinkOTag(OtPtr, MAX_OT_ALL, Dma)			;
-#define	UnlinkOTagR(OtPtr, MAX_OT_ALL, Dma)			;
+#define	UnlinkOTag(OtPtr, MAX_OT, Dma)			;
+#define	UnlinkOTagR(OtPtr, MAX_OT, Dma)			;
 
 
 #endif
@@ -304,10 +302,10 @@ typedef	u32	sOT;
 /********************************************************************************************************/
 #define	MAX_PRIM_SIZE		(sizeof(POLY_FT4))
 #define	PRIMPOOL_SIZE		(MAX_PRIMS*MAX_PRIM_SIZE)
-#define	OTLIST_SIZE			(MAX_OT_ALL*sizeof(sOT))
+#define	OTLIST_SIZE			(MAX_OT*sizeof(sOT))
 
 /********************************************************************************************************/
-extern sOT 	*BaseOtPtr,*OtPtr;
+extern sOT 	*OtPtr;
 extern u8 	*CurrPrim,*EndPrim;
 extern u8	*PrimListStart,*PrimListEnd;
 //extern int	PrimFlipFlag;
