@@ -35,6 +35,9 @@ static const int	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZ
 static const int	DeltaTableSizeX=SCREEN_TILE3D_WIDTH+1;
 static const int	DeltaTableSizeY=SCREEN_TILE3D_HEIGHT+1;
 
+#ifdef __VERSION_DEBUG__
+int	PretendToBeAPS2=false;
+#endif
 
 /*****************************************************************************/
 // 0 LUF
@@ -276,6 +279,12 @@ s32		*OutPtr;
 /*****************************************************************************/
 void	CLayerTile3d::render()
 {
+#ifdef __VERSION_DEBUG__
+if(PretendToBeAPS2)
+{
+	return;
+}
+#endif
 int				MapOfs=GetMapOfs();
 sTileMapElem	*MapPtr=Map+MapOfs;
 u8				*RGBMapPtr=RGBMap+MapOfs;

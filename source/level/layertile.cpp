@@ -19,6 +19,10 @@ static const int	TILE2D_HEIGHT=12;
 static const int	SCREEN_TILE2D_WIDTH=((512/TILE2D_WIDTH)+1);
 static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+1);
 
+#ifdef __VERSION_DEBUG__
+extern int	PretendToBeAPS2;
+#endif
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -110,6 +114,13 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 void	CLayerTile::render()
 {
+#ifdef __VERSION_DEBUG__
+if(PretendToBeAPS2)
+{
+	return;
+}
+#endif
+
 sTileMapElem	*MapPtr=Map+GetMapOfs();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
