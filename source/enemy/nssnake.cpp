@@ -1238,6 +1238,11 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 
 			m_state = NPC_GENERIC_HIT_DEATH_END;
 
+			if ( !CGameScene::getBossHasBeenKilled() )
+			{
+				CGameScene::setBossHasBeenKilled();
+			}
+
 			DVECTOR const &offset = CLevel::getCameraPos();
 
 			if ( Pos.vy - offset.vy > VidGetScrH() )
@@ -1261,11 +1266,6 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 			m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - ( m_health - 1 ) ) ) / NPC_SEA_SNAKE_LENGTH );
 
 			m_collTimer = GameState::getOneSecondInFrames();
-
-			if ( m_segmentCount <= 0 )
-			{
-				CGameScene::setBossHasBeenKilled();
-			}
 		}
 
 		m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
