@@ -136,6 +136,7 @@ public:
 virtual	~CActorGfx();
 
 		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false,bool Shadow=false);
+		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale);
 
 		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
 		int				GetTotalFrameCount();
@@ -145,6 +146,8 @@ protected:
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
 
 		sActorPool		*PoolEntry;
+		sSpriteFrame	*CurrentFrame;
+
 		sBBox			BBox;
 };
 

@@ -429,18 +429,22 @@ int		Total=0;
 
 /*****************************************************************************/
 int	ActorOT=10;
-
+int	Angle=0;
+int	AngleInc=16;
+int	ScaleX=4095;
+int	ScaleY=4095;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
-sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
+
 sPoolNode		*ThisNode;;
 POLY_FT4		*Ft4;
 
+			CurrentFrame=GetFrame(Anim,Frame);
 // Is cached?
 			ThisNode=PoolEntry->ThisCache.List;
 			while (ThisNode)
 			{
-				if (ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
+				if (ThisNode->Actor==PoolEntry->Filename && ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
 				ThisNode=ThisNode->Next;
 			}
 
@@ -450,19 +454,20 @@ POLY_FT4		*Ft4;
 				CActorCache::AddNode(ThisNode,&PoolEntry->ThisCache);
 				RECT	R;
 
+				ThisNode->Actor=PoolEntry->Filename;
 				ThisNode->Anim=Anim;
 				ThisNode->Frame=Frame;
 
-				PAK_doUnpak(CActorCache::UnpackBuffer,FrameGfx->PAKSpr);
+				PAK_doUnpak(CActorCache::UnpackBuffer,CurrentFrame->PAKSpr);
 				R.x=ThisNode->TexX;
 				R.y=ThisNode->TexY;
-				R.w=FrameGfx->W>>2;	// div 4 cos 16 color
-				R.h=FrameGfx->H;
+				R.w=CurrentFrame->W>>2;	// div 4 cos 16 color
+				R.h=CurrentFrame->H;
 				LoadImage( &R, (u32*)CActorCache::UnpackBuffer);
 			}
 
 			Ft4=GetPrimFT4();
-			SetUpFT4(Ft4,FrameGfx,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
+			SetUpFT4(Ft4,CurrentFrame,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
 			setRGB0(Ft4,128,128,128);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
@@ -481,15 +486,58 @@ POLY_FT4		*Ft4;
 				AddPrimToList(sFt4,ActorOT);
 			}
 // Set BBox
-int			HalfW=FrameGfx->W>>1;
-int			HalfH=FrameGfx->H>>1;
+int			HalfW=CurrentFrame->W>>1;
 
 			BBox.XMin=-HalfW;
 			BBox.XMax=+HalfW;
-			BBox.YMin=-HalfH;
-			BBox.YMax=+HalfH;
+			BBox.YMin=-CurrentFrame->H;
+			BBox.YMax=0;
+
+
+			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
+	Angle+=AngleInc;
 
 			return(Ft4);
+}
+
+/*****************************************************************************/
+POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale)
+{
+int		dX,dY;
+int		CosAngle,SinAngle;
+int		CosX,CosY,SinX,SinY;
+sBBox	SBox,CBox;
+
+
+		Angle&=4095;	
+	
+		dX=(CurrentFrame->W*XScale)>>(12+1);	// +1 for half
+		dY=(CurrentFrame->H*YScale)>>(12);	
+
+		CosAngle=mcos(Angle);
+		SinAngle=msin(Angle);
+
+		SBox.XMin=(SinAngle*-dX)>>12;
+		SBox.XMax=(SinAngle*+dX)>>12;
+		SBox.YMin=(SinAngle*-dY)>>12;
+		SBox.YMax=0;
+
+		CBox.XMin=(CosAngle*-dX)>>12;
+		CBox.XMax=(CosAngle*+dX)>>12;
+		CBox.YMin=(CosAngle*-dY)>>12;
+		CBox.YMax=0;
+
+		Ft4->x0=Pos.vx+CBox.XMin-SBox.YMin; Ft4->y0=Pos.vy+SBox.XMin+CBox.YMin;
+		Ft4->x1=Pos.vx+CBox.XMax-SBox.YMin; Ft4->y1=Pos.vy+SBox.XMax+CBox.YMin;
+		Ft4->x2=Pos.vx+CBox.XMin+SBox.YMax; Ft4->y2=Pos.vy+SBox.XMin-CBox.YMax;
+		Ft4->x3=Pos.vx+CBox.XMax+SBox.YMax; Ft4->y3=Pos.vy+SBox.XMax-CBox.YMax;
+
+// Attempt to fix nasty PSX hardware nastiness :o(
+//		Ft4->u1--;
+//		Ft4->u3--;
+//		Ft4->v2--;
+//		Ft4->v3--;
+		return(Ft4);
 }
 
 /*****************************************************************************/
@@ -534,8 +582,8 @@ u8		V=Node->V;
 			Y+=Frame->YOfs;
 			Ft4->v0=V;
 			Ft4->v1=V;
-			Ft4->v2=V+H;
-			Ft4->v3=V+H;
+			Ft4->v2=V+H-1;
+			Ft4->v3=V+H-1;
 		}
 
 		setXYWH(Ft4,X,Y,W,H);
