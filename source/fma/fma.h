@@ -51,14 +51,29 @@ public:
 private:
 	void	startShutdown();
 
+	void	startNextScriptCommand();
+	void	processCurrentScriptCommand();
+
 
 
 	class CLevel	*m_level;
 
 	DVECTOR			m_cameraPos;
+	
+	int				m_cameraMoving;
+	int				m_startCameraFrame;
+	DVECTOR			m_startCameraPos;
+	int				m_endCameraFrame;
+	DVECTOR			m_endCameraPos;
+
+	int				*m_pc;
+	int				m_scriptRunning;
+	int				m_stillProcessingCommand;
+	int				m_doOtherProcessing;
+	int				m_timer;
+	int				m_frameCount;
 
 	int				m_readyToShutdown;
-
 };
 
 
