@@ -93,7 +93,7 @@ void CNpcJumpingClamEnemy::postInit()
 {
 	CNpcClamEnemy::postInit();
 
-	m_drawRotation = m_heading + 1024;
+	m_drawRotation = ( m_heading + 1024 ) & 4095;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 		if ( !m_animPlaying )
 		{
 			m_animPlaying = true;
-			m_animNo = 0;//ANIM_CLAM_SNAPUP;
+			m_animNo = ANIM_CLAM_SNAPUP;
 			m_frame = 0;
 		}
 	}
