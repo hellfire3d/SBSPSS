@@ -384,6 +384,7 @@ void	CPlayerModeBase::playerHasHitGround()
 		setState(STATE_HITGROUND);
 		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
 		moveVel.vx=0;
+		CGameScene::setCameraShake(0,8);
 	}
 	else if(moveVel.vx)
 	{
