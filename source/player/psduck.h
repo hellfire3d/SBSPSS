@@ -35,8 +35,8 @@
 class CPlayerStateDuck : public CPlayerState
 {
 public:
-	void			enter(class CPlayer *_player);
-	void			think(class CPlayer *_player);
+	void			enter(class CPlayerModeBasic *_playerMode);
+	void			think(class CPlayerModeBasic *_playerMode);
 
 };
 
@@ -44,8 +44,8 @@ public:
 class CPlayerStateSoakUp : public CPlayerState
 {
 public:
-	void			enter(class CPlayer *_player);
-	void			think(class CPlayer *_player);
+	void			enter(class CPlayerModeBasic *_playerMode);
+	void			think(class CPlayerModeBasic *_playerMode);
 
 };
 
@@ -53,8 +53,8 @@ public:
 class CPlayerStateGetUp : public CPlayerState
 {
 public:
-	void			enter(class CPlayer *_player);
-	void			think(class CPlayer *_player);
+	void			enter(class CPlayerModeBasic *_playerMode);
+	void			think(class CPlayerModeBasic *_playerMode);
 
 };
 

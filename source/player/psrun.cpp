@@ -22,6 +22,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -56,27 +60,27 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateRun::enter(CPlayer *_player)
+void CPlayerStateRun::enter(CPlayerModeBasic *_playerMode)
 {
 	int	controlHeld;
-	controlHeld=getPadInputHeld(_player);
+	controlHeld=_playerMode->getPadInputHeld();
 
-	if(getMoveVelocity(_player).vx)
+	if(_playerMode->getMoveVelocity().vx)
 	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUN);
 	}
 	else
 	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUNSTART);
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTART);
 	}
 
 	if(controlHeld&PI_LEFT)
 	{
-		setFacing(_player,FACING_LEFT);
+		_playerMode->setFacing(FACING_LEFT);
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		setFacing(_player,FACING_RIGHT);
+		_playerMode->setFacing(FACING_RIGHT);
 	}
 
 	m_numberOfTimeAnimHasLooped=0;
@@ -89,56 +93,49 @@ void CPlayerStateRun::enter(CPlayer *_player)
   Params:
   Returns:
 ---------------------------------------------------------------------- */
-void CPlayerStateRun::think(CPlayer *_player)
+void CPlayerStateRun::think(CPlayerModeBasic *_playerMode)
 {
 	int	controlDown,controlHeld;
 	int switchedState=false;
-	controlDown=getPadInputDown(_player);
-	controlHeld=getPadInputHeld(_player);
+	controlDown=_playerMode->getPadInputDown();
+	controlHeld=_playerMode->getPadInputHeld();
 
 	if(controlDown&PI_JUMP)
 	{
-		switchedState=setState(_player,STATE_JUMP);
+		switchedState=_playerMode->setState(STATE_JUMP);
 	}
 	if(controlHeld&PI_DOWN)
 	{
-		switchedState=setState(_player,STATE_DUCK);
-	}
-	if(controlDown&PI_ACTION)
-	{
-		switchedState=setState(_player,STATE_RUNATTACK);
+		switchedState=_playerMode->setState(STATE_DUCK);
 	}
 
 	if(controlHeld&PI_LEFT)
 	{
-		moveLeft(_player);
+		_playerMode->moveLeft();
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		moveRight(_player);
+		_playerMode->moveRight();
 	}
 	else
 	{
-		if(getMoveVelocity(_player).vx==0)
+		if(!switchedState)
 		{
-			if(!switchedState)
+			if(_playerMode->slowdown())
 			{
-				setState(_player,STATE_IDLE);
+				_playerMode->setState(STATE_IDLE);
 				if(m_numberOfTimeAnimHasLooped>=4)
 				{
-					setAnimNo(_player,ANIM_SPONGEBOB_RUNSTOP);
+					_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTOP);
 				}
+				return;
 			}
-		}
-		else
-		{
-			slowdown(_player);
 		}
 	}
 
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUN);
 		m_numberOfTimeAnimHasLooped++;
 	}
 }

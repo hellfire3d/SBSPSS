@@ -22,6 +22,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -56,9 +60,9 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::enter(CPlayer *_player)
+void CPlayerStateFall::enter(CPlayerModeBasic *_playerMode)
 {
-	setAnimNo(_player,ANIM_SPONGEBOB_HOVER);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
 }
 
 
@@ -68,47 +72,34 @@ void CPlayerStateFall::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::think(CPlayer *_player)
+void CPlayerStateFall::think(CPlayerModeBasic *_playerMode)
 {
 	const PlayerMetrics	*metrics;
 	int					controlHeld,controlDown;
 	DVECTOR				move;
 
-	metrics=getPlayerMetrics(_player);
-	controlHeld=getPadInputHeld(_player);
-	controlDown=getPadInputDown(_player);
+	metrics=_playerMode->getPlayerMetrics();
+	controlHeld=_playerMode->getPadInputHeld();
+	controlDown=_playerMode->getPadInputDown();
 
 	if(controlHeld&PI_LEFT)
 	{
-		moveLeft(_player);
+		_playerMode->moveLeft();
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		moveRight(_player);
+		_playerMode->moveRight();
 	}
 	else
 	{
-		slowdown(_player);
+		_playerMode->slowdown();
 	}
+	_playerMode->fall();
 
-	fall(_player);
-
-	if(controlDown&PI_ACTION)
+	if(controlHeld&PI_DOWN)
 	{
-		setState(_player,STATE_AIRATTACK);
+		_playerMode->setState(STATE_BUTTBOUNCE);
 	}
-	else if(controlHeld&PI_DOWN)
-	{
-		if(setState(_player,STATE_BUTTBOUNCE))
-		{
-			// Only do this if this mode allows us to go into butt bounce, otherwise
-			// SB just floats in the air :)
-			move.vx=0;
-			move.vy=0;
-			setMoveVelocity(_player,&move);
-		}
-	}
-//	advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }
 
 
@@ -118,9 +109,9 @@ void CPlayerStateFall::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFallFar::enter(CPlayer *_player)
+void CPlayerStateFallFar::enter(CPlayerModeBasic *_playerMode)
 {
-	setAnimNo(_player,ANIM_SPONGEBOB_FALL);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_FALL);
 }
 
 
@@ -130,27 +121,26 @@ void CPlayerStateFallFar::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFallFar::think(CPlayer *_player)
+void CPlayerStateFallFar::think(CPlayerModeBasic *_playerMode)
 {
 	int		controlHeld;
 	DVECTOR	move;
 
-	controlHeld=getPadInputHeld(_player);
+	controlHeld=_playerMode->getPadInputHeld();
 
 	if(controlHeld&PI_LEFT)
 	{
-		moveLeft(_player);
+		_playerMode->moveLeft();
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		moveRight(_player);
+		_playerMode->moveRight();
 	}
 	else
 	{
-		slowdown(_player);
+		_playerMode->slowdown();
 	}
-
-	fall(_player);
+	_playerMode->fall();
 }
 
 

@@ -36,7 +36,7 @@
 class CPlayerStateBaseIdle : public CPlayerState
 {
 public:
-	void			thinkControl(class CPlayer *_player);
+	void			thinkControl(class CPlayerModeBasic *CPlayerMode);
 };
 
 
@@ -44,8 +44,8 @@ public:
 class CPlayerStateTeeterIdle : public CPlayerStateBaseIdle
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter(class CPlayerModeBasic *_playerMode);
+	virtual void	think(class CPlayerModeBasic *_playerMode);
 };
 
 
@@ -62,8 +62,8 @@ typedef struct
 class CPlayerStateIdle : public CPlayerStateBaseIdle
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter(class CPlayerModeBasic *_playerMode);
+	virtual void	think(class CPlayerModeBasic *_playerMode);
 
 private:
 	typedef enum
@@ -73,7 +73,7 @@ private:
 		ANIMSTATE_END,
 	} ANIMSTATE;
 
-	void			setNextIdleAnim(class CPlayer *_player);
+	void			setNextIdleAnim(class CPlayerModeBasic *_playerMode);
 
 	virtual IdleAnims	*getIdleAnimsDb(int _animNo)=0;
 	virtual int			getNumIdleAnims()=0;

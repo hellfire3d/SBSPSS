@@ -50,16 +50,8 @@
 #include "player\psbutt.h"
 #endif
 
-#ifndef __PLAYER__PSCHOP_H__
-#include "player\pschop.h"
-#endif
-
 #ifndef __PLAYER__PSDUCK_H__
 #include "player\psduck.h"
-#endif
-
-#ifndef __PLAYER__PSDEAD_H__
-#include "player\psdead.h"
 #endif
 
 

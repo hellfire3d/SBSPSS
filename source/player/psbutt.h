@@ -35,24 +35,24 @@
 class CPlayerStateButtBounce : public CPlayerState
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter(class CPlayerModeBasic *_playerMode);
+	virtual void	think(class CPlayerModeBasic *_playerMode);
 	
 };
 
 class CPlayerStateButtBounceFall : public CPlayerState
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter(class CPlayerModeBasic *_playerMode);
+	virtual void	think(class CPlayerModeBasic *_playerMode);
 
 };
 
 class CPlayerStateButtBounceLand : public CPlayerState
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter(class CPlayerModeBasic *_playerMode);
+	virtual void	think(class CPlayerModeBasic *_playerMode);
 
 private:
 	

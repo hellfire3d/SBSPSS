@@ -35,8 +35,8 @@
 class CPlayerStateJump : public CPlayerState
 {
 public:
-	void			enter(class CPlayer *_player);
-	void			think(class CPlayer *_player);
+	void			enter(class CPlayerModeBasic *_playerMode);
+	void			think(class CPlayerModeBasic *_playerMode);
 
 private:
 	int				m_jumpFrames;

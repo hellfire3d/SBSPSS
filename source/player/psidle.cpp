@@ -18,8 +18,8 @@
 
 #include "player\psidle.h"
 
-#ifndef __PLAYER_PLAYER_H__
-#include "player\player.h"
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
 #endif
 
 #ifndef	__UTILS_HEADER__
@@ -61,33 +61,33 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateBaseIdle::thinkControl(CPlayer *_player)
+void CPlayerStateBaseIdle::thinkControl(CPlayerModeBasic *_playerMode)
 {
 	int	controlDown,controlHeld;
-	controlDown=getPadInputDown(_player);
-	controlHeld=getPadInputHeld(_player);
+	controlDown=_playerMode->getPadInputDown();
+	controlHeld=_playerMode->getPadInputHeld();
 
 	if(controlDown&PI_JUMP)
 	{
-		setState(_player,STATE_JUMP);
+		_playerMode->setState(STATE_JUMP);
 	}
 	else if(controlHeld&PI_LEFT)
 	{
-		if(canMoveLeft(_player))
-			setState(_player,STATE_RUN);
+		if(_playerMode->canMoveLeft())
+			_playerMode->setState(STATE_RUN);
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		if(canMoveRight(_player))
-			setState(_player,STATE_RUN);
+		if(_playerMode->canMoveRight())
+			_playerMode->setState(STATE_RUN);
 	}
 	else if(controlDown&PI_ACTION)
 	{
-		setState(_player,STATE_ATTACK);
+//		_playerMode->setState(STATE_ATTACK);
 	}
 	else if(controlHeld&PI_DOWN)
 	{
-		setState(_player,STATE_DUCK);
+		_playerMode->setState(STATE_DUCK);
 	}
 }
 
@@ -98,13 +98,13 @@ void CPlayerStateBaseIdle::thinkControl(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateTeeterIdle::enter(CPlayer *_player)
+void CPlayerStateTeeterIdle::enter(CPlayerModeBasic *_playerMode)
 {
 	int	edgeType,dir;
 	int	anim;
 	
-	edgeType=isOnEdge(_player);
-	dir=getFacing(_player);
+	edgeType=_playerMode->isOnEdge();
+	dir=_playerMode->getFacing();
 	if(edgeType==FACING_LEFT)
 	{
 		anim=dir==FACING_LEFT?ANIM_SPONGEBOB_TEETERFRONT:ANIM_SPONGEBOB_TEETERBACK;
@@ -114,7 +114,7 @@ void CPlayerStateTeeterIdle::enter(CPlayer *_player)
 		anim=dir==FACING_RIGHT?ANIM_SPONGEBOB_TEETERFRONT:ANIM_SPONGEBOB_TEETERBACK;
 	}
 
-	setAnimNo(_player,anim);
+	_playerMode->setAnimNo(anim);
 }
 
 
@@ -124,10 +124,10 @@ void CPlayerStateTeeterIdle::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateTeeterIdle::think(CPlayer *_player)
+void CPlayerStateTeeterIdle::think(CPlayerModeBasic *_playerMode)
 {
-	advanceAnimFrameAndCheckForEndOfAnim(_player);
-	thinkControl(_player);
+	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
+	thinkControl(_playerMode);
 }
 
 
@@ -137,13 +137,13 @@ void CPlayerStateTeeterIdle::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::enter(CPlayer *_player)
+void CPlayerStateIdle::enter(CPlayerModeBasic *_playerMode)
 {
 	m_idleTime=0;
 	m_currentIdleAnim=0;
 	m_animState=ANIMSTATE_END;
 
-	setNextIdleAnim(_player);
+	setNextIdleAnim(_playerMode);
 }
 
 
@@ -153,14 +153,13 @@ void CPlayerStateIdle::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::think(CPlayer *_player)
+void CPlayerStateIdle::think(CPlayerModeBasic *_playerMode)
 {
-	thinkControl(_player);
-	
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setNextIdleAnim(_player);
+		setNextIdleAnim(_playerMode);
 	}
+	thinkControl(_playerMode);
 }
 
 
@@ -170,7 +169,7 @@ void CPlayerStateIdle::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
+void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBasic *_playerMode)
 {
 	IdleAnims	*anims;
 	int				finished=false;
@@ -180,7 +179,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 	{
 		case ANIMSTATE_START:
 			m_animState=ANIMSTATE_LOOP;
-			setAnimNo(_player,anims->m_loopFrame);
+			_playerMode->setAnimNo(anims->m_loopFrame);
 			break;		
 		case ANIMSTATE_LOOP:
 			if(--m_loopCount<=0)
@@ -192,12 +191,12 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 				else
 				{
 					m_animState=ANIMSTATE_END;
-					setAnimNo(_player,anims->m_endFrame);
+					_playerMode->setAnimNo(anims->m_endFrame);
 				}
 			}
 			else
 			{
-				setAnimNo(_player,anims->m_loopFrame);
+				_playerMode->setAnimNo(anims->m_loopFrame);
 			}
 			break;		
 		case ANIMSTATE_END:
@@ -242,7 +241,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 			m_animState=ANIMSTATE_START;
 		}
 		m_loopCount=anims->m_loopCount;
-		setAnimNo(_player,animNo);
+		_playerMode->setAnimNo(animNo);
 
 		m_idleTime++;
 	}
@@ -258,18 +257,13 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								4	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								10	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
 	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEHOOLA,		ANIM_SPONGEBOB_FACEBACK,		5	},
 	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEWIGGLEARM,	ANIM_SPONGEBOB_FACEBACK,		5	},
 	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
 };
-//idlekick
-//idlescratch
-//? - idlesleep* - wakeup
-//idlestretch
-//idlewind
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
 {
@@ -291,8 +285,8 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_coralBlowerIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								4	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,	-1,								10	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
 	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
 };
 static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);

@@ -23,6 +23,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 #ifndef __SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
@@ -61,17 +65,12 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateJump::enter(CPlayer *_player)
+void CPlayerStateJump::enter(CPlayerModeBasic *_playerMode)
 {
-	const PlayerMetrics	*metrics;
-
-	metrics=getPlayerMetrics(_player);
-
-	setAnimNo(_player,ANIM_SPONGEBOB_HOVER);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
 	m_jumpFrames=0;
-	DVECTOR	move=getMoveVelocity(_player);
-	move.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
-	setMoveVelocity(_player,&move);
+
+	_playerMode->jump();
 
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
 }
@@ -83,14 +82,14 @@ void CPlayerStateJump::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateJump::think(CPlayer *_player)
+void CPlayerStateJump::think(CPlayerModeBasic *_playerMode)
 {
 	const PlayerMetrics	*metrics;
 	int					controlHeld,controlDown;
 
-	metrics=getPlayerMetrics(_player);
-	controlHeld=getPadInputHeld(_player);
-	controlDown=getPadInputDown(_player);
+	metrics=_playerMode->getPlayerMetrics();
+	controlHeld=_playerMode->getPadInputHeld();
+	controlDown=_playerMode->getPadInputDown();
 
 	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&controlHeld&PI_JUMP)
 	{
@@ -98,24 +97,25 @@ void CPlayerStateJump::think(CPlayer *_player)
 	}
 	else
 	{
-		setState(_player,STATE_FALL);
+		_playerMode->setState(STATE_FALL);
 	}
 
-	if(controlDown&PI_ACTION)
-	{
-		setState(_player,STATE_AIRATTACK);
-	}
 	if(controlHeld&PI_LEFT)
 	{
-		moveLeft(_player);
+		_playerMode->moveLeft();
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		moveRight(_player);
+		_playerMode->moveRight();
 	}
 	else
 	{
-		slowdown(_player);
+		_playerMode->slowdown();
+	}
+
+	if(controlHeld&PI_DOWN)
+	{
+		_playerMode->setState(STATE_BUTTBOUNCE);
 	}
 //	advanceAnimFrameAndCheckForEndOfAnim(_player);
 }

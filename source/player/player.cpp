@@ -25,16 +25,16 @@
 #include "game\gameslot.h"
 #endif
 
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
-#endif
-
 #ifndef __LAYER_COLLISION_H__
-#include "level\collision.h"
+#include "level\layercollision.h"
 #endif
 
 #ifndef	__PLAYER_PMODES_H__
 #include "player\pmodes.h"
+#endif
+
+#ifndef	__PLAYER_PMFLY_H__
+#include "player\pmfly.h"
 #endif
 
 // to be removed
@@ -46,11 +46,6 @@
 
 /*	Data
 	---- */
-
-#ifndef	__ANIM_SPONGEBOB_HEADER__
-#include <ACTOR_SPONGEBOB_ANIM.h>
-#endif
-
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -87,16 +82,6 @@ POWER-UPS
 	squeaky boots		timed ( respawn )
 	mm & bb ring		timed
 */
-
-
-// mode:
-//	enter
-//	think
-//	render
-//	states	setState()
-//	metrics getMetrics()
-// override setAnimNo,setAnimFrame?
-
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -138,32 +123,14 @@ static void writeDemoControls()
 
 
 #ifdef _STATE_DEBUG_
-static const char *s_stateText[NUM_STATES]=
-{
-	"IDLE",
-	"IDLETEETER",
-	"JUMP",
-	"RUN",
-	"FALL",
-	"FALLFAR",
-	"BUTTBOUNCE",
-	"BUTTFALL",
-	"BUTTLAND",
-	"ATTACK",
-	"RUNATTACK",
-	"AIRATTACK",
-	"DUCK",
-	"SOAKUP",
-	"GETUP",
-	"DEAD",
-};
 static const char *s_modeText[NUM_PLAYERMODES]=
 {
 	"BASICUNARMED",
-	"FULLUNARMED",
-	"BALLOON",
-	"NET",
-	"CORALBLOWER",
+//	"FULLUNARMED",
+//	"BALLOON",
+//	"NET",
+//	"CORALBLOWER",
+	"FLY",
 };
 #include "gfx\font.h"	
 FontBank	s_debugFont;
@@ -191,6 +158,14 @@ int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 
 
 
 
+CPlayerModeBasic	PLAYERMODE;
+CPlayerModeFly		PLAYERMODEFLY;
+
+CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
+{
+	&PLAYERMODE,		// PLAYER_MODE_BASICUNARMED
+	&PLAYERMODEFLY,		// PLAYER_MODE_FLY
+};
 
 
 /*----------------------------------------------------------------------
@@ -205,15 +180,21 @@ void	CPlayer::init()
 
 	m_layerCollision=NULL;
 
-	m_onPlatform = false;
-	m_prevOnPlatform = false;
+//	m_onPlatform = false;
+//	m_prevOnPlatform = false;
 	
 	m_skel.Init(ACTORS_SPONGEBOB_A3D);
 	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
 
+	for(int i=0;i<NUM_PLAYERMODES;i++)
+	{
+		s_playerModes[i]->initialise(this);
+	}
+	m_currentPlayerModeClass=NULL;
+	setMode(PLAYER_MODE_BASICUNARMED);
+
 m_animNo=0;
 m_animFrame=0;
-	m_currentMode=PLAYER_MODE_BASICUNARMED;
 	setFacing(FACING_RIGHT);
 	respawn();
 
@@ -289,9 +270,9 @@ if(newmode!=-1)
 	{
 		// Think
 		updatePadInput();
-		m_currentStateClass->think(this);
-		thinkVerticalMovement();
-		thinkHorizontalMovement();
+//		s_modes[m_currentMode].m_modeControl->think();
+//		m_currentStateClass->think(this);
+m_currentPlayerModeClass->think();
 
 		// Powerups
 		if(m_squeakyBootsTimer)
@@ -310,21 +291,11 @@ if(newmode!=-1)
 		}
 
 
-#ifdef _STATE_DEBUG_
-sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
-#endif
-
-
 if(Pos.vx<64)Pos.vx=64;
 else if(Pos.vx>m_mapEdge.vx-64)Pos.vx=m_mapEdge.vx-64;
 if(Pos.vy<64)Pos.vy=64;
 else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
-		// Teeter if on an edge
-		if(m_currentState==STATE_IDLE&&isOnEdge())
-		{
-			setState(STATE_IDLETEETER);
-		}
 
 		// Look around
 		int	pad=getPadInputHeld();
@@ -359,8 +330,6 @@ if(PadGetDown(0)&PAD_CIRCLE)
 				}
 			}
 		}
-
-		s_modes[m_currentMode].m_modeControl->think(this);
 	}
 
 
@@ -410,206 +379,6 @@ if(PadGetDown(0)&PAD_CIRCLE)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayer::thinkVerticalMovement()
-{
-	int	colHeight;
-
-	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,1);
-
-//New collision stuff (pkg)
-//if(m_layerCollision->getCollisionType(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)
-//{
-//	m_moveVel.vy=0;
-//	return;
-//}
-	if(colHeight>=0)
-	{
-		// Above or on the ground
-		// Are we falling?
-		if(m_moveVel.vy>0)
-		{
-			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT),PLAYER_TERMINAL_VELOCITY+1);
-
-			if(colHeight<=0)
-			{
-				// Just hit the ground
-				// Stick at ground level
-				Pos.vy+=(m_moveVel.vy>>VELOCITY_SHIFT)+colHeight;
-				m_moveVel.vy=0;
-				m_fallFrames=0;
-				if(m_currentMode!=PLAYER_MODE_BALLOON)
-				{
-					if(m_currentState==STATE_BUTTFALL)
-					{
-						// Landed from a butt bounce
-						setState(STATE_BUTTLAND);
-					}
-					else if(m_currentState==STATE_FALLFAR)
-					{
-						// Landed from a painfully long fall
-						setState(STATE_IDLE);
-						takeDamage(DAMAGE__FALL);
-						m_moveVel.vx=0;
-						CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-					}
-					else if(m_moveVel.vx)
-					{
-						// Landed from a jump with x movement
-						setState(STATE_RUN);
-					}
-					else
-					{
-						// Landed from a jump with no x movement
-						setState(STATE_IDLE);
-						setAnimNo(ANIM_SPONGEBOB_JUMPEND);
-					}
-				}
-			}
-		}
-		else if(colHeight)
-		{
-			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
-			   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-			   m_currentState!=STATE_JUMP)
-			{
-				// Was floating in the air.. fall!
-
-				if ( !m_onPlatform )
-				{
-					setState(STATE_FALL);
-				}
-			}
-		}
-	}
-	else
-	{
-/*
-		// Below ground
-		// Perhaps we should be falling?
-		if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
-		   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-		   m_currentState!=STATE_JUMP)
-		{
-			setState(STATE_FALL);
-		}
-*/
-	}
-
-	Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayer::thinkHorizontalMovement()
-{
-	if(m_moveVel.vx)
-	{
-//New collision stuff (pkg)
-//if(m_layerCollision->getCollisionType(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy)&COLLISION_TYPE_MASK)
-//{
-//	m_moveVel.vx=0;
-//	return;
-//}
-		int colHeight;
-		colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5);
-		if(colHeight==0)
-		{
-			// Ok.. we're on the ground. What happens if we move left/right
-			colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy);
-			if(colHeight<-8)
-			{
-				// Big step up. Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(m_moveVel.vx<0)
-				{
-					dir=-1;
-					vx=-m_moveVel.vx>>VELOCITY_SHIFT;
-				}
-				else
-				{
-					dir=+1;
-					vx=m_moveVel.vx>>VELOCITY_SHIFT;
-				}
-				cx=Pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<-8)
-					{
-						break;
-					}
-					cx+=dir;
-				}
-				Pos.vx=cx-dir;
-
-				// If running then go to idle, otherwise leave in same state
-				if(m_currentState==STATE_RUN)
-				{
-					setState(STATE_IDLE);
-				}
-				m_moveVel.vx=0;
-				
-				// Get the height at this new position and then try the step-up code below.
-				// Without this, there are problems when you run up a slope and hit a wall at the same time
-				colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy);
-			}
-			if(colHeight&&colHeight>=-8&&colHeight<=8)
-			{
-				// Small step up/down. Follow the contour of the level
-				Pos.vy+=colHeight;
-			}
-		}
-		else
-		{
-			// In the air
-//			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
-			if(colHeight>=0) // Lets you jump through platforms from below
-			{
-				colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy,5);
-				if(colHeight<0)
-				{
-					// Stop at the edge of the obstruction
-					int	dir,vx,cx,i;
-					if(m_moveVel.vx<0)
-					{
-						dir=-1;
-						vx=-m_moveVel.vx>>VELOCITY_SHIFT;
-					}
-					else
-					{
-						dir=+1;
-						vx=m_moveVel.vx>>VELOCITY_SHIFT;
-					}
-					cx=Pos.vx;
-					for(i=0;i<vx;i++)
-					{
-						if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
-						{
-							break;
-						}
-						cx+=dir;
-					}
-					Pos.vx=cx-dir;
-					m_moveVel.vx=0;
-				}
-			}
-		}
-		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
-	}
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
 int healthx=100;
@@ -629,6 +398,7 @@ void	CPlayer::render()
 	CPlayerThing::render();
 	
 #ifdef _STATE_DEBUG_
+sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
 s_debugFont.print(40,40,posBuf);
 #endif
 
@@ -666,8 +436,6 @@ if(eyes!=-1)
 
 #ifdef _STATE_DEBUG_
 	char	buf[128];
-	sprintf(buf,"STATE: %s",s_stateText[m_currentState]);
-	s_debugFont.print(40,200,buf);
 	sprintf(buf,"MODE:  %s",s_modeText[m_currentMode]);
 	s_debugFont.print(40,210,buf);
 #endif
@@ -705,19 +473,6 @@ if(eyes!=-1)
 	sprintf(lifebuf,"x%d",m_lives);
 	s_debugFont.print(livesx,livesy,lifebuf);
 #endif
-}
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-DVECTOR CPlayer::getCameraPos()
-{
-	return m_cameraPos;
 }
 
 
@@ -766,43 +521,6 @@ void CPlayer::addLife()
 	}
 }
 
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-const PlayerMetrics *CPlayer::getPlayerMetrics()
-{
-	return &s_modes[m_currentMode].m_metrics;
-}
-
-
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int CPlayer::setState(PLAYER_STATE _state)
-{
-	CPlayerState	*nextState;
-	int				ret=false;
-
-	nextState=s_modes[m_currentMode].m_states[_state];
-	if(nextState)
-	{
-		m_currentStateClass=nextState;
-		m_currentStateClass->enter(this);
-		m_currentState=_state;
-		ret=true;
-	}
-	return ret;
-}
-
 
 /*----------------------------------------------------------------------
 	Function:
@@ -813,14 +531,8 @@ int CPlayer::setState(PLAYER_STATE _state)
 void CPlayer::setMode(PLAYER_MODE _mode)
 {
 	m_currentMode=_mode;
-// Need to do something about this setState() for when the new mode doesn't have that state (pkg)
-	if(!setState(m_currentState))
-	{
-		m_moveVel.vx=0;
-		m_moveVel.vy=0;
-		setState(STATE_IDLE);
-	}
-	s_modes[m_currentMode].m_modeControl->enter(this);
+	m_currentPlayerModeClass=s_playerModes[_mode];
+	m_currentPlayerModeClass->enter();
 }
 
 
@@ -911,267 +623,24 @@ void CPlayer::setAnimNo(int _animNo)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR CPlayer::getMoveVelocity()
-{
-	return m_moveVel;
-}
-void CPlayer::setMoveVelocity(DVECTOR *_moveVel)
-{
-	m_moveVel=*_moveVel;
-}
-DVECTOR CPlayer::getPlayerPos()
-{
-	return Pos;
-}
-void CPlayer::setPlayerPos(DVECTOR *_pos)
-{
-	Pos=*_pos;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-PLAYERINPUT CPlayer::getPadInputHeld()
-{
-	return m_padInput;
-}
-PLAYERINPUT CPlayer::getPadInputDown()
-{
-	return m_padInputDown;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int CPlayer::isOnSlippySurface()
-{
-	return false;
-	/*	(pkg)
-	int	ret=false;
-
-	if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5)==0&&
-	   m_layerCollision->getCollisionType(Pos.vx,Pos.vy)&COLLISION_TYPE_FLAG_SLIPPERY)
-	{
-		ret=true;
-	}
-
-	return ret;
-	*/
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:	FACING_LEFT if left half of player is hanging, FACING_RIGHT
-				if right half of player is hanging or 0 if no part of the
-				player is hanging
-  ---------------------------------------------------------------------- */
-int csize=5;
-int cheight=15;
-int CPlayer::isOnEdge()
-{
-	int	ret=0;
-
-	if(m_layerCollision->getHeightFromGround(Pos.vx-csize,Pos.vy,cheight+1)>cheight)
-	{
-		ret=FACING_LEFT;
-	}
-	else if(m_layerCollision->getHeightFromGround(Pos.vx+csize,Pos.vy,cheight+1)>cheight)
-	{
-		ret=FACING_RIGHT;
-	}
-	return ret;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int CPlayer::canMoveLeft()
-{
-	return m_layerCollision->getHeightFromGround(Pos.vx-1,Pos.vy,16)>-8?true:false;
-}
-int CPlayer::canMoveRight()
-{
-	return m_layerCollision->getHeightFromGround(Pos.vx+1,Pos.vy,16)>-8?true:false;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayer::moveLeft()
-{
-	const PlayerMetrics	*metrics;
-	metrics=getPlayerMetrics();
-
-	setFacing(FACING_LEFT);
-	if(m_moveVel.vx<=0)
-	{
-		m_moveVel.vx-=metrics->m_metric[PM__RUN_SPEEDUP];
-		if(m_moveVel.vx<-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
-		{
-			m_moveVel.vx=-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
-		}
-	}
-	else
-	{
-		m_moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
-	}
-
-	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx<-CAMERA_SCROLLTHRESHOLD<<8)
-	{
-		m_cameraScrollDir=+1;
-	}
-	else if(m_moveVel.vx>-CAMERA_STOPMOVETHRESHOLD)
-	{
-		m_cameraScrollDir=0;
-	}
-}
-void CPlayer::moveRight()
-{
-	const PlayerMetrics	*metrics;
-	metrics=getPlayerMetrics();
-	
-	setFacing(FACING_RIGHT);
-	if(m_moveVel.vx>=0)
-	{
-		m_moveVel.vx+=metrics->m_metric[PM__RUN_SPEEDUP];
-		if(m_moveVel.vx>metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
-		{
-			m_moveVel.vx=metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
-		}
-	}
-	else
-	{
-		m_moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
-	}
-
-	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx>CAMERA_SCROLLTHRESHOLD<<8)
-	{
-		m_cameraScrollDir=-1;
-	}
-	else if(m_moveVel.vx<CAMERA_STOPMOVETHRESHOLD)
-	{
-		m_cameraScrollDir=0;
-	}
-}
-void CPlayer::slowdown()
-{
-	const PlayerMetrics	*metrics;
-	int					stopSpeed;
-	metrics=getPlayerMetrics();
-	if(isOnSlippySurface())
-	{
-		stopSpeed=SLIPSPEED;
-	}
-	else
-	{
-		stopSpeed=0;
-	}
-
-	if(m_moveVel.vx<0)
-	{
-		if(-stopSpeed<m_moveVel.vx)
-		{
-			stopSpeed=-m_moveVel.vx;
-		}
-		m_moveVel.vx+=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVel.vx>-stopSpeed)
-		{
-			m_moveVel.vx=-stopSpeed;
-			if(m_currentState==STATE_RUN)
-			{
-				setState(STATE_IDLE);
-			}
-		}
-	}
-	else if(m_moveVel.vx>0)
-	{
-		if(stopSpeed>m_moveVel.vx)
-		{
-			stopSpeed=m_moveVel.vx;
-		}
-		m_moveVel.vx-=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVel.vx<stopSpeed)
-		{
-			m_moveVel.vx=stopSpeed;
-			if(m_currentState==STATE_RUN)
-			{
-				setState(STATE_IDLE);
-			}
-		}
-	}
-}
-
-void CPlayer::jump()
-{
-}
-void CPlayer::fall()
-{
-	const PlayerMetrics	*metrics;
-	metrics=getPlayerMetrics();
-	m_moveVel.vy+=PLAYER_GRAVITY;
-	if(m_moveVel.vy>=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT)
-	{
-		m_moveVel.vy=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT;
-		m_fallFrames++;
-		if(m_currentState!=STATE_BUTTFALL)
-		{
-			if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
-			{
-				setState(STATE_FALLFAR);
-			}
-		}
-	}
-}
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void CPlayer::respawn()
 {
-	setState(STATE_IDLE);
+//	setState(STATE_IDLE);
 
 	// Strip any items that the player might be holding
-	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
-	{
-		setMode(PLAYER_MODE_FULLUNARMED);
-	}
-	else
-	{
+//	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
+//	{
+//		setMode(PLAYER_MODE_FULLUNARMED);
+//	}
+//	else
+//	{
 		setMode(PLAYER_MODE_BASICUNARMED);
-	}
+//	}
 
 	s_health=MAX_HEALTH;
 	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
-	m_moveVel.vx=0;
-	m_moveVel.vy=0;
-	m_fallFrames=0;
 }
-
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1229,7 +698,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			else
 			{
 				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
-				setState(STATE_DEAD);
+//				setState(STATE_DEAD);
 			}
 		}
 	}
@@ -1332,11 +801,13 @@ PLAYERINPUT CPlayer::readPadInput()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 void CPlayer::clearPlatform()
 {
 	m_prevOnPlatform = m_onPlatform;
 	m_onPlatform = false;
 }
+*/
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1344,6 +815,7 @@ void CPlayer::clearPlatform()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 void CPlayer::setPlatform( CThing *newPlatform )
 {
 	int colHeight;
@@ -1381,7 +853,7 @@ void CPlayer::setPlatform( CThing *newPlatform )
 
 		if ( !m_prevOnPlatform )
 		{
-			if( m_currentMode != PLAYER_MODE_BALLOON )
+//			if( m_currentMode != PLAYER_MODE_BALLOON )
 			{
 				m_fallFrames=0;
 
@@ -1462,6 +934,7 @@ void CPlayer::setPlatform( CThing *newPlatform )
 		newPlatform->removeChild( this );
 	}
 }
+*/
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1469,6 +942,7 @@ void CPlayer::setPlatform( CThing *newPlatform )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+/*
 void CPlayer::shove( DVECTOR move )
 {
 	DVECTOR newPos;
@@ -1490,6 +964,7 @@ void CPlayer::shove( DVECTOR move )
 		Pos.vy = newPos.vy;
 	}
 }
+*/
 
 /*===========================================================================
 end */

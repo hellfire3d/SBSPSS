@@ -23,6 +23,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 #ifndef __GAME_GAMEBUBS_H__
 #include "game\gamebubs.h"
 #endif
@@ -61,9 +65,10 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounce::enter(CPlayer *_player)
+void CPlayerStateButtBounce::enter(CPlayerModeBasic *_playerMode)
 {
-	setAnimNo(_player,ANIM_SPONGEBOB_BUTTBOUNCESTART);
+	_playerMode->zeroMoveVelocity();	
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCESTART);
 }
 
 
@@ -73,11 +78,11 @@ void CPlayerStateButtBounce::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounce::think(CPlayer *_player)
+void CPlayerStateButtBounce::think(CPlayerModeBasic *_playerMode)
 {
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setState(_player,STATE_BUTTFALL);
+		_playerMode->setState(STATE_BUTTFALL);
 	}
 }
 
@@ -88,9 +93,9 @@ void CPlayerStateButtBounce::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceFall::enter(CPlayer *_player)
+void CPlayerStateButtBounceFall::enter(CPlayerModeBasic *_playerMode)
 {
-	setAnimNo(_player,ANIM_SPONGEBOB_BUTTBOUNCEEND);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);
 }
 
 
@@ -100,9 +105,9 @@ void CPlayerStateButtBounceFall::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceFall::think(CPlayer *_player)
+void CPlayerStateButtBounceFall::think(CPlayerModeBasic *_playerMode)
 {
-	fall(_player);
+	_playerMode->fall();
 }
 
 
@@ -112,12 +117,12 @@ void CPlayerStateButtBounceFall::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceLand::enter(CPlayer *_player)
+void CPlayerStateButtBounceLand::enter(CPlayerModeBasic *_playerMode)
 {
-	DVECTOR	pos;
-
-	pos=getPlayerPos(_player);
-	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+//	DVECTOR	pos;
+//
+//	pos=_playerMode->getPlayerPos();
+//	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
 }
 
 
@@ -127,11 +132,11 @@ void CPlayerStateButtBounceLand::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceLand::think(CPlayer *_player)
+void CPlayerStateButtBounceLand::think(CPlayerModeBasic *_playerMode)
 {
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setState(_player,STATE_IDLE);
+		_playerMode->setState(STATE_IDLE);
 	}
 }
 

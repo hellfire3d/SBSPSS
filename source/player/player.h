@@ -49,12 +49,12 @@
 typedef enum
 {
 	PLAYER_MODE_BASICUNARMED,
-	PLAYER_MODE_FULLUNARMED,
-	PLAYER_MODE_BALLOON,
+//	PLAYER_MODE_FULLUNARMED,
+//	PLAYER_MODE_BALLOON,
 	//PLAYER_MODE_BUBBLE_MIXTURE,
 	//PLAYER_MODE_HELMET,
-	PLAYER_MODE_NET,
-	PLAYER_MODE_CORALBLOWER,
+//	PLAYER_MODE_NET,
+//	PLAYER_MODE_CORALBLOWER,
 	//PLAYER_MODE_JELLY_LAUNCHER,
 
 	PLAYER_MODE_FLY,
@@ -73,14 +73,9 @@ typedef enum
 	STATE_BUTTBOUNCE,
 	STATE_BUTTFALL,
 	STATE_BUTTLAND,
-	STATE_ATTACK,
-	STATE_RUNATTACK,
-	STATE_AIRATTACK,
 	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
-
-	STATE_DEAD,
 
 	NUM_STATES,
 }PLAYER_STATE;
@@ -90,19 +85,6 @@ enum
 	FACING_LEFT=+1,
 	FACING_RIGHT=-1,
 };
-
-typedef enum
-{
-	PM__JUMP_VELOCITY,
-	PM__MAX_JUMP_FRAMES,
-	PM__MAX_SAFE_FALL_FRAMES,
-	PM__MAX_RUN_VELOCITY,
-	PM__RUN_SPEEDUP,
-	PM__RUN_REVERSESLOWDOWN,
-	PM__RUN_SLOWDOWN,
-		
-	NUM_PLAYER_METRICS
-}PLAYER_METRIC;
 
 typedef enum
 {
@@ -142,60 +124,32 @@ typedef enum
 	Structure defintions
 	-------------------- */
 
-struct PlayerMetrics
-{
-	s16		m_metric[NUM_PLAYER_METRICS];
-};
-
-
 class CPlayer : public CPlayerThing
 {
 public:
 	enum
 	{
-		VELOCITY_SHIFT=4,
+		MAX_HEALTH=5,
+		MAX_LIVES=99,
 	};
 
 	virtual void	init();
 	virtual void	shutdown();
 	virtual void	think(int _frames);
 	virtual void	render();
-	virtual void	shove(DVECTOR move);
+//	virtual void	shove(DVECTOR move);
 
-	DVECTOR			getCameraPos();
+	DVECTOR			getCameraPos()										{return m_cameraPos;}
 
-	void			setLayerCollision(class CLayerCollision *_layer)		{m_layerCollision=_layer;}
+	void			setLayerCollision(class CLayerCollision *_layer)	{m_layerCollision=_layer;}
 	void			setMapSize(DVECTOR _mapSize);
-	void			setRespawnPos(DVECTOR _respawn)							{m_respawnPos=_respawn;}
+	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 
-	enum
-	{
-		MAX_HEALTH=5,
-		MAX_LIVES=99,
-	};
 	void			addHealth(int _health);
 	void			addLife();
 
-protected:		
-	enum
-	{
-		DEFAULT_PLAYER_JUMP_VELOCITY=4,
-		DEFAULT_PLAYER_MAX_JUMP_FRAMES=12,
-		DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES=30,
-		DEFAULT_PLAYER_MAX_RUN_VELOCITY=8,
-		DEFAULT_PLAYER_RUN_SPEEDUP=4<<2,
-		DEFAULT_PLAYER_RUN_REVERSESLOWDOWN=3<<2,
-		DEFAULT_PLAYER_RUN_SLOWDOWN=2<<2,
-		PLAYER_GRAVITY=4<<2,
-		PLAYER_TERMINAL_VELOCITY=8,
-	};
-	const PlayerMetrics	*getPlayerMetrics();
-
-	// State
-	int				setState(PLAYER_STATE _state);
 public:
 	void			setMode(PLAYER_MODE _mode);
-private:
 	int				getFacing();
 	void			setFacing(int _facing);
 	int				getAnimFrame();
@@ -203,41 +157,18 @@ private:
 	int				getAnimFrameCount();
 	int				getAnimNo();
 	void			setAnimNo(int _animNo);
-	DVECTOR			getMoveVelocity();
-	void			setMoveVelocity(DVECTOR *_moveVel);
-	DVECTOR			getPlayerPos();
-	void			setPlayerPos(DVECTOR *_pos);
-	PLAYERINPUT		getPadInputHeld();
-	PLAYERINPUT		getPadInputDown();
-
-	// Collision
-	int				isOnSlippySurface();
-	int				isOnEdge();
-	int				canMoveLeft();
-	int				canMoveRight();
-
-	// Movement
-	void moveLeft();
-	void moveRight();
-	void slowdown();
-	void jump();
-	void fall();
-
-	void			respawn();
+	DVECTOR			getPlayerPos()										{return Pos;}
+	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
+	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
+	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
+	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
+																		
 
 	void			takeDamage(DAMAGE_TYPE _damage);
 
-friend class CPlayerState;
-
-
-
 private:
-	typedef struct
-	{
-		PlayerMetrics		m_metrics;
-		class CPlayerMode	*m_modeControl;
-		class CPlayerState	*m_states[NUM_STATES];
-	}PlayerMode;
+	void			respawn();
+
 
 
 public:
@@ -261,9 +192,7 @@ private:
 	DVECTOR			m_cameraPos;
 	int				m_cameraScrollDir;
 
-	DVECTOR			m_moveVel;
 	int				m_facing;
-	int				m_fallFrames;
 
 	enum
 	{
@@ -277,13 +206,9 @@ private:
 	};
 	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
 
-	void			thinkVerticalMovement();
-	void			thinkHorizontalMovement();
-
-	static PlayerMode	s_modes[NUM_PLAYERMODES];
-	int					m_currentMode;
-	class CPlayerState	*m_currentStateClass;
-	PLAYER_STATE		m_currentState;
+	static class CPlayerMode	*s_playerModes[NUM_PLAYERMODES];
+	class CPlayerMode			*m_currentPlayerModeClass;
+	int							m_currentMode;
 
 	int				m_lives;
 
@@ -324,13 +249,17 @@ private:
 
 	// Platforms
 public:
-	void			setPlatform( CThing *newPlatform );
-	void			clearPlatform();
+	void			setPlatform( CThing *newPlatform )	{;}
+	void			clearPlatform()						{;}
+	/*
 private:
 	CThing			*m_platform;
 	bool			m_onPlatform;
 	bool			m_prevOnPlatform;
 	DVECTOR			m_prevPlatformPos;
+	*/
+
+
 };
 
 

@@ -23,6 +23,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -57,9 +61,9 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateDuck::enter(CPlayer *_player)
+void CPlayerStateDuck::enter(CPlayerModeBasic *_playerMode)
 {
-	setAnimNo(_player,ANIM_SPONGEBOB_SOAKUP);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
 }
 
 
@@ -69,12 +73,12 @@ void CPlayerStateDuck::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateDuck::think(CPlayer *_player)
+void CPlayerStateDuck::think(CPlayerModeBasic *_playerMode)
 {
-	slowdown(_player);
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	_playerMode->slowdown();
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setState(_player,STATE_SOAKUP);
+		_playerMode->setState(STATE_SOAKUP);
 	}
 }
 
@@ -85,15 +89,10 @@ void CPlayerStateDuck::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateSoakUp::enter(CPlayer *_player)
+void CPlayerStateSoakUp::enter(CPlayerModeBasic *_playerMode)
 {
-	DVECTOR	move;
-
-	move=getMoveVelocity(_player);
-	move.vx=0;
-	setMoveVelocity(_player,&move);
-	
-	setAnimNo(_player,ANIM_SPONGEBOB_GETUP);
+	_playerMode->zeroMoveVelocity();	
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETUP);
 }
 
 
@@ -103,14 +102,14 @@ void CPlayerStateSoakUp::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateSoakUp::think(CPlayer *_player)
+void CPlayerStateSoakUp::think(CPlayerModeBasic *_playerMode)
 {
 	int	controlHeld;
 
-	controlHeld=getPadInputHeld(_player);
+	controlHeld=_playerMode->getPadInputHeld();
 	if(!(controlHeld&PI_DOWN))
 	{
-		setState(_player,STATE_GETUP);
+		_playerMode->setState(STATE_GETUP);
 	}
 }
 
@@ -121,9 +120,9 @@ void CPlayerStateSoakUp::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateGetUp::enter(CPlayer *_player)
+void CPlayerStateGetUp::enter(CPlayerModeBasic *_playerMode)
 {
-	  setAnimNo(_player,ANIM_SPONGEBOB_GETUP);
+	  _playerMode->setAnimNo(ANIM_SPONGEBOB_GETUP);
 }
 
 
@@ -133,11 +132,11 @@ void CPlayerStateGetUp::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateGetUp::think(CPlayer *_player)
+void CPlayerStateGetUp::think(CPlayerModeBasic *_playerMode)
 {
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		setState(_player,STATE_IDLE);
+		_playerMode->setState(STATE_IDLE);
 	}
 }
 
