@@ -770,7 +770,8 @@ if(newmode!=-1)
 					{
 						int x=Pos.vx+(checkx*i);
 						int	y=Pos.vy-HEIGHT_FOR_HEAD_COLLISION;
-						if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
+						//if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
+						if(getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 						{
 							goingToHitWall=true;
 							setLockoutPlatform( m_platform );
