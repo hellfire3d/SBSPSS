@@ -803,6 +803,14 @@ SOURCE=..\..\..\source\player\psfall.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pshitgnd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pshitgnd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\psidle.cpp
 # End Source File
 # Begin Source File

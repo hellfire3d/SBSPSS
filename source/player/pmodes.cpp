@@ -42,6 +42,10 @@
 #include "player\psfall.h"
 #endif
 
+#ifndef __PLAYER__PSHITGND_H__
+#include "player\pshitgnd.h"
+#endif
+
 #ifndef __PLAYER__PSIDLE_H__
 #include "player\psidle.h"
 #endif
@@ -90,6 +94,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateRun,							// STATE_RUN
 	&s_stateFall,							// STATE_FALL
 	&s_stateFallFar,						// STATE_FALLFAR
+	&s_stateHitGround,						// STATE_HITGROUND
 	&s_stateButtBounce,						// STATE_BUTTBOUNCE
 	&s_stateButtBounceFall,					// STATE_BUTTFALL
 	&s_stateButtBounceLand,					// STATE_BUTTLAND
@@ -409,7 +414,7 @@ void	CPlayerModeBase::playerHasHitGround()
 	else if(m_currentState==STATE_FALLFAR)
 	{
 		// Landed from a painfully long fall
-		setState(STATE_GETUP);
+		setState(STATE_HITGROUND);
 		m_player->takeDamage(DAMAGE__FALL);
 		m_moveVelocity.vx=0;
 		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);

@@ -165,6 +165,7 @@ player_src :=		demoplay \
 					psbutt \
 					psduck \
 					psfall \
+					pshitgnd \
 					psidle \
 					psjump \
 					psrun

@@ -34,6 +34,10 @@
 #include "player\psfall.h"
 #endif
 
+#ifndef __PLAYER__PSHITGND_H__
+#include "player\pshitgnd.h"
+#endif
+
 #ifndef __PLAYER__PSIDLE_H__
 #include "player\psidle.h"
 #endif
@@ -82,6 +86,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateWalk,							// STATE_RUN
 	&s_stateFall,							// STATE_FALL
 	&s_stateFallFar,						// STATE_FALLFAR
+	&s_stateHitGround,						// STATE_HITGROUND
 	NULL,									// STATE_BUTTBOUNCE
 	NULL,									// STATE_BUTTFALL
 	NULL,									// STATE_BUTTLAND
