@@ -100,13 +100,11 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 /*****************************************************************************/
 #if	1
-VECTOR	asd={0,0,0};
-int	ZP=0;
-sVtx	VO={0,0,0};
+
 void	CLayerTile3d::render()
 {
-const int	XOfs=-(BLOCK_MULT*15)-(SCREEN_TILE_ADJ_LEFT*BLOCK_MULT)-SCREEN_TILE_ADJ_LEFT;
-const int	YOfs=-(BLOCK_MULT*7)-(SCREEN_TILE_ADJ_UP*BLOCK_MULT)-SCREEN_TILE_ADJ_UP;
+const int	XOfs=-(BLOCK_MULT*15)-(SCREEN_TILE_ADJ_LEFT*BLOCK_MULT)+24;
+const int	YOfs=-(BLOCK_MULT*7)-(SCREEN_TILE_ADJ_UP*BLOCK_MULT)+32;
 
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
@@ -118,19 +116,12 @@ sOT				*ThisOT;
 MATRIX			&CamMtx=CGameScene::GetCamMtx();
 VECTOR			BlkPos;
 
-		CamMtx.t[0]=0;
-		CamMtx.t[1]=0;
-		CamMtx.t[2]=ZP;
 		SetIdentNoTrans(&CamMtx);
 		SetRotMatrix(&CamMtx);
-		SetTransMatrix(&CamMtx);
 
 // Setup Trans Matrix
 		BlkPos.vx=XOfs-(ShiftX);
 		BlkPos.vy=YOfs-(ShiftY);
-		BlkPos.vx-=asd.vx;
-		BlkPos.vy-=asd.vy;
-
 
 		for (int Y=0; Y<RenderH; Y++)
 		{
@@ -145,15 +136,7 @@ VECTOR			BlkPos;
 
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
 				{
-					sVtx	_P0,_P1,_P2;
 					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
-					_P0.vx=VtxList[TList->P0].vx+VO.vx; _P0.vy=VtxList[TList->P0].vy+VO.vy; _P0.vz=VtxList[TList->P0].vz+VO.vz; 
-					_P1.vx=VtxList[TList->P1].vx+VO.vx; _P1.vy=VtxList[TList->P1].vy+VO.vy; _P1.vz=VtxList[TList->P1].vz+VO.vz; 
-					_P2.vx=VtxList[TList->P2].vx+VO.vx; _P2.vy=VtxList[TList->P2].vy+VO.vy; _P2.vz=VtxList[TList->P2].vz+VO.vz; 
-					P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
-					P0=&_P0;
-					P1=&_P1;
-					P2=&_P2;
 					CMX_SetTransMtxXY(&BlkPos);
 					gte_ldv3(P0,P1,P2);
 					setPolyFT3(TPrimPtr);
@@ -171,13 +154,12 @@ VECTOR			BlkPos;
 					ThisOT=OtPtr+TList->OTOfs;
 
 					TList++;
-//					gte_nclip_b();
+					gte_nclip_b();
 					gte_stsxy3_ft3(TPrimPtr);
-//					gte_stopz(&ClipZ);
-//					if (ClipZ<=0)
+					gte_stopz(&ClipZ);
+					if (ClipZ<=0)
 					{
 						addPrim(ThisOT,TPrimPtr);
-//						addPrimNoCheck(OtPtr,TPrimPtr);
 						TPrimPtr++;
 					}
 				}
