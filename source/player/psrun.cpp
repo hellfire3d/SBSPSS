@@ -106,15 +106,16 @@ void CPlayerStateRun::think(CPlayer *_player)
 	{
 		setState(_player,STATE_JUMP);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		setState(_player,STATE_DUCK);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
 		setState(_player,STATE_RUNATTACK);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}

@@ -98,6 +98,11 @@ void CPlayerStateIdle::think(CPlayer *_player)
 	int	control;
 	control=getPadInput(_player);
 	
+	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	{
+		setNextIdleAnim(_player);
+	}
+
 	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
 	{
 		setState(_player,STATE_JUMP);
@@ -113,10 +118,6 @@ void CPlayerStateIdle::think(CPlayer *_player)
 	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		setState(_player,STATE_DUCK);
-	}
-	else if(advanceAnimFrameAndCheckForEndOfAnim(_player))
-	{
-		setNextIdleAnim(_player);
 	}
 }
 

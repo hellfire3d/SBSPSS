@@ -146,11 +146,11 @@ void	CPlayer::think(int _frames)
 		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
 		if(Pos.vx<350)
 		{
-//			if(m_currentState==STATE_RUN)
-//			{
-//				setState(STATE_IDLE);
+			if(m_currentState==STATE_RUN)
+			{
+				setState(STATE_IDLE);
 //				setAnimNo(ANIM_PLAYER_ANIM_RUNSTOP);
-//			}
+			}
 			Pos.vx=350;
 			m_moveVel.vx=0;
 		}
