@@ -153,6 +153,8 @@ void CGameOverScene::init()
   ---------------------------------------------------------------------- */
 void CGameOverScene::shutdown()
 {
+	CSoundMediator::stopSpeech();
+
 	delete m_anotherGfx;
 	delete m_patrickGfx;
 	CActorPool::Reset();
@@ -272,7 +274,6 @@ void	CGameOverScene::thinkContinue(int _frames)
 			if(!m_hasPlayedFirstSpeech)
 			{
 				CSoundMediator::playSpeech(SPEECH_085);
-PAUL_DBGMSG("WHERE IS EVERYBODY?");
 				m_hasPlayedFirstSpeech=true;
 			}
 
@@ -327,7 +328,6 @@ PAUL_DBGMSG("WHERE IS EVERYBODY?");
 		if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME&&!m_hasPlayedSecondSpeech)
 		{
 			CSoundMediator::playSpeech(SPEECH_086);
-PAUL_DBGMSG("LETS TRY AGAIN!");
 			m_hasPlayedSecondSpeech=true;
 		}
 
