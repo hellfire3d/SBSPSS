@@ -19,6 +19,10 @@
 #include "enemy\nmjfish.h"
 #endif
 
+#ifndef __ENEMY_NPROJJF_H__
+#include "enemy\nprojjf.h"
+#endif
+
 #ifndef __VID_HEADER_
 #include "system\vid.h"
 #endif
@@ -35,10 +39,15 @@
 #define MJ_HALF_CYCLE_WIDTH		( MJ_CYCLE_WIDTH >> 1 )
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcMotherJellyfishEnemy::postInit()
 {
 	m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
+	m_spawnTimer = 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
@@ -102,6 +111,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 					{
 						m_controlFunc = NPC_CONTROL_CLOSE;
 						m_state++;
+						m_jellyfishCount = 3;
 					}
 				}
 			}
@@ -126,6 +136,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 					{
 						m_controlFunc = NPC_CONTROL_CLOSE;
 						m_state++;
+						m_jellyfishCount = 3;
 					}
 				}
 			}
@@ -137,6 +148,8 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			break;
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcMotherJellyfishEnemy::processClose( int _frames )
 {
@@ -191,6 +204,8 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 					Pos.vy = m_base.vy - ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
 
 					m_heading = 0;
+
+					spawnJellyfish( _frames );
 				}
 				else
 				{
@@ -210,6 +225,8 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 					Pos.vy = m_base.vy + ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
 
 					m_heading = 2048;
+
+					spawnJellyfish( _frames );
 				}
 				else
 				{
@@ -219,6 +236,47 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
+{
+	if ( m_jellyfishCount )
+	{
+		if ( m_spawnTimer > 0 )
+		{
+			m_spawnTimer -= _frames;
+		}
+		else
+		{
+			CNpcEnemy *enemy;
+			enemy = new( "jellyfish projectile" ) CNpcSmallJellyfishProjectileEnemy;
+			ASSERT(enemy);
+			enemy->setType( CNpcEnemy::NPC_PROJECTILE_JELLYFISH );
+			enemy->init();
+			enemy->setLayerCollision( m_layerCollision );
+			enemy->setStartPos( Pos.vx >> 4, ( Pos.vy + 20 ) >> 4 );
+
+			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+
+			if ( sourceWaypoint )
+			{
+				while( sourceWaypoint )
+				{
+					enemy->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
+					sourceWaypoint = sourceWaypoint->nextWaypoint;
+				}
+			}
+
+			enemy->setPathType( CNpcPath::PONG_PATH );
+			enemy->postInit();
+
+			m_jellyfishCount--;
+
+			m_spawnTimer = 1 * GameState::getOneSecondInFrames();
 		}
 	}
 }
@@ -244,7 +302,7 @@ void CNpcMotherJellyfishEnemy::render()
 		{
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
-				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
 				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 8192, 8192 );
 
 				sBBox boundingBox = m_actorGfx->GetBBox();

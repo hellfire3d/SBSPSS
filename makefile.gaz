@@ -79,7 +79,8 @@ enemy_src :=		npc \
 					ngen \
 					nsdart \
 					ndustdev \
-					npbug
+					npbug \
+					nprojjf
 
 friend_src :=		friend \
 					fdata \

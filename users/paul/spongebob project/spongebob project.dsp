@@ -277,6 +277,14 @@ SOURCE=..\..\..\source\enemy\npcpath.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nprojjf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nprojjf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npuffa.cpp
 # End Source File
 # Begin Source File

@@ -712,6 +712,20 @@ int CNpcEnemy::getFrameCount()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::processGraphicFlipping()
+{
+	if ( m_heading > 1024 && m_heading < 3072 )
+	{
+		m_reversed = true;
+	}
+	else
+	{
+		m_reversed = false;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::think(int _frames)
 {
 	int moveFrames = _frames;
@@ -789,14 +803,7 @@ void CNpcEnemy::think(int _frames)
 					break;
 			}
 
-			if ( m_heading > 1024 && m_heading < 3072 )
-			{
-				m_reversed = true;
-			}
-			else
-			{
-				m_reversed = false;
-			}
+			processGraphicFlipping();
 		}
 	}
 

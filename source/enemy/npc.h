@@ -80,6 +80,7 @@ public:
 		NPC_PARASITIC_WORM_SEGMENT,
 		NPC_BALL_BLOB,
 		NPC_SHELL,
+		NPC_PROJECTILE_JELLYFISH,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -237,6 +238,7 @@ protected:
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
 	virtual void		processAttackCollision();
+	virtual void		processGraphicFlipping();
 	void				processTimer( int _frames );
 	bool				isCollisionWithGround();
 

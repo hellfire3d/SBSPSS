@@ -22,6 +22,7 @@ public:
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
+	void				spawnJellyfish( int _frames );
 
 	enum NPC_MOTHER_JELLYFISH_STATE
 	{
@@ -35,6 +36,9 @@ protected:
 		MOTHER_JELLYFISH_CYCLE_3,
 		MOTHER_JELLYFISH_ATTACK_PLAYER_SHOCK,
 	};
+
+	int					m_jellyfishCount;
+	s32					m_spawnTimer;
 };
 
 #endif
