@@ -217,6 +217,8 @@ int		CPlayerModeJellyLauncher::setState(int _state)
 			case STATE_GETUP:
 			case STATE_LOOKDOWN:
 			case STATE_LOOKDOWNRELAX:
+			case STATE_LOOKUP:
+			case STATE_LOOKUPRELAX:
 				allowChange=false;
 				break;
 		}
@@ -263,6 +265,8 @@ int		CPlayerModeJellyLauncher::canFireFromThisState()
 		case STATE_GETUP:
 		case STATE_LOOKDOWN:
 		case STATE_LOOKDOWNRELAX:
+		case STATE_LOOKUP:
+		case STATE_LOOKUPRELAX:
 		case STATE_JUMPBACK:
 			break;
 	}

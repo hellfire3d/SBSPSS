@@ -129,6 +129,8 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateGetUp,							// STATE_GETUP
 	&s_stateLookDown,						// STATE_LOOKDOWN
 	&s_stateLookDownRelax,					// STATE_LOOKDOWNRELAX
+	&s_stateLookUp,							// STATE_LOOKUP
+	&s_stateLookUpRelax,					// STATE_LOOKUPRELAX
 	&s_stateJumpBack,						// STATE_JUMPBACK
 	&s_stateCart,							// STATE_CART
 	&s_stateFloat,							// STATE_FLOAT
@@ -235,6 +237,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_IDLETEETER:
 		case STATE_SOAKUP:
 		case STATE_LOOKDOWN:
+		case STATE_LOOKUP:
 			ret=true;
 			break;
 
@@ -251,6 +254,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_DUCK:
 		case STATE_GETUP:
 		case STATE_LOOKDOWNRELAX:
+		case STATE_LOOKUPRELAX:
 		case STATE_JUMPBACK:
 			break;
 	}
@@ -289,6 +293,8 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 		case STATE_GETUP:
 		case STATE_LOOKDOWN:
 		case STATE_LOOKDOWNRELAX:
+		case STATE_LOOKUP:
+		case STATE_LOOKUPRELAX:
 		case STATE_JUMPBACK:
 			break;
 	}

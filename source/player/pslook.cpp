@@ -57,6 +57,8 @@
 
 CPlayerStateLookDown		s_stateLookDown;
 CPlayerStateLookDownRelax	s_stateLookDownRelax;
+CPlayerStateLookUp			s_stateLookUp;
+CPlayerStateLookUpRelax		s_stateLookUpRelax;
 
 
 /*----------------------------------------------------------------------
@@ -93,9 +95,9 @@ void CPlayerStateLookDown::think(CPlayerModeBase *_playerMode)
 	}
 	else
 	{
-		if(!(controlHeld&PI_DOWN))
+		if(!(controlHeld&controlThatMustBeHeld()))
 		{
-			_playerMode->setState(STATE_LOOKDOWNRELAX);
+			_playerMode->setState(getNextState());
 		}
 	}
 
@@ -114,6 +116,24 @@ void CPlayerStateLookDown::think(CPlayerModeBase *_playerMode)
 			_playerMode->setState(STATE_RUN);
 	}
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayerStateLookDown::getNextState()
+{
+	return STATE_LOOKDOWNRELAX;
+}
+int CPlayerStateLookDown::controlThatMustBeHeld()
+{
+	return PI_DOWN;
+}
+
+
 
 
 /*----------------------------------------------------------------------
@@ -160,6 +180,52 @@ void CPlayerStateLookDownRelax::think(CPlayerModeBase *_playerMode)
 			_playerMode->setState(STATE_RUN);
 	}
 }
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateLookUp::enter(CPlayerModeBase *_playerMode)
+{
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_LOOKUP);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayerStateLookUp::getNextState()
+{
+	return STATE_LOOKUPRELAX;
+}
+int CPlayerStateLookUp::controlThatMustBeHeld()
+{
+	return PI_UP;
+}
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateLookUpRelax::enter(CPlayerModeBase *_playerMode)
+{
+//	  _playerMode->setAnimNo(ANIM_SPONGEBOB_CROUCHUP);
+}
+
+
 
 
 /*===========================================================================

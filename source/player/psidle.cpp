@@ -89,6 +89,10 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 	{
 		_playerMode->setState(STATE_LOOKDOWN);
 	}
+	else if(controlHeld&PI_UP&&_playerMode->canDoLookAround())
+	{
+		_playerMode->setState(STATE_LOOKUP);
+	}
 }
 
 

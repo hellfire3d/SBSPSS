@@ -209,6 +209,8 @@ int		CPlayerModeBubbleMixture::canBlowBubbleFromThisState()
 		case STATE_GETUP:
 		case STATE_LOOKDOWN:
 		case STATE_LOOKDOWNRELAX:
+		case STATE_LOOKUP:
+		case STATE_LOOKUPRELAX:
 		case STATE_JUMPBACK:
 			break;
 	}

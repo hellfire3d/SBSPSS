@@ -35,8 +35,12 @@
 class CPlayerStateLookDown : public CPlayerState
 {
 public:
-	void			enter(class CPlayerModeBase *_playerMode);
-	void			think(class CPlayerModeBase *_playerMode);
+	virtual void			enter(class CPlayerModeBase *_playerMode);
+	virtual void			think(class CPlayerModeBase *_playerMode);
+
+protected:
+	virtual int				getNextState();
+	virtual int				controlThatMustBeHeld();
 
 };
 
@@ -44,8 +48,28 @@ public:
 class CPlayerStateLookDownRelax : public CPlayerState
 {
 public:
-	void			enter(class CPlayerModeBase *_playerMode);
-	void			think(class CPlayerModeBase *_playerMode);
+	virtual void			enter(class CPlayerModeBase *_playerMode);
+	virtual void			think(class CPlayerModeBase *_playerMode);
+
+};
+
+
+class CPlayerStateLookUp : public CPlayerStateLookDown
+{
+public:
+	virtual void			enter(class CPlayerModeBase *_playerMode);
+
+protected:
+	virtual int				getNextState();
+	virtual int				controlThatMustBeHeld();
+
+};
+
+
+class CPlayerStateLookUpRelax : public CPlayerStateLookDownRelax
+{
+public:
+	virtual void			enter(class CPlayerModeBase *_playerMode);
 
 };
 
@@ -56,6 +80,8 @@ public:
 
 extern	CPlayerStateLookDown		s_stateLookDown;
 extern	CPlayerStateLookDownRelax	s_stateLookDownRelax;
+extern	CPlayerStateLookUp			s_stateLookUp;
+extern	CPlayerStateLookUpRelax		s_stateLookUpRelax;
 
 
 /*----------------------------------------------------------------------

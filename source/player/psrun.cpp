@@ -119,6 +119,10 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 	{
 		switchedState=_playerMode->setState(STATE_LOOKDOWN);
 	}
+	else if(controlDown&PI_UP)
+	{
+		switchedState=_playerMode->setState(STATE_LOOKUP);
+	}
 
 	if(controlHeld&PI_LEFT)
 	{
