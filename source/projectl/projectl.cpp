@@ -92,14 +92,14 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TY
 
 void CProjectile::shutdown()
 {
-	if ( !m_isShuttingDown )
-	{
-		m_isShuttingDown = true;
+	m_spriteBank->dump();		delete m_spriteBank;
 
-		m_spriteBank->dump();		delete m_spriteBank;
+	CEnemyProjectileThing::shutdown();
+}
 
-		CEnemyProjectileThing::shutdown();
-	}
+void CProjectile::setToShutdown()
+{
+	m_isShuttingDown = true;
 }
 
 bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
@@ -242,7 +242,7 @@ void CProjectile::think(int _frames)
 		{
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
-				shutdown();
+				setToShutdown();
 			}
 			else
 			{
@@ -302,7 +302,7 @@ void CProjectile::think(int _frames)
 		{
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
-				shutdown();
+				setToShutdown();
 			}
 			else
 			{
@@ -320,7 +320,7 @@ void CProjectile::think(int _frames)
 
 		if ( m_lifetime <= 0 )
 		{
-			shutdown();
+			setToShutdown();
 		}
 	}
 }
@@ -375,7 +375,7 @@ void CProjectile::collidedWith(CThing *_thisThing)
 
 			if ( m_lifetimeType != PROJECTILE_INFINITE_LIFE )
 			{
-				shutdown();
+				setToShutdown();
 			}
 
 			break;
@@ -437,14 +437,14 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTIL
 
 void CPlayerProjectile::shutdown()
 {
-	if ( !m_isShuttingDown )
-	{
-		m_isShuttingDown = true;
+	m_spriteBank->dump();		delete m_spriteBank;
 
-		m_spriteBank->dump();		delete m_spriteBank;
+	CPlayerProjectileThing::shutdown();
+}
 
-		CPlayerProjectileThing::shutdown();
-	}
+void CPlayerProjectile::setToShutdown()
+{
+	m_isShuttingDown = true;
 }
 
 void CPlayerProjectile::setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType )
@@ -485,7 +485,7 @@ void CPlayerProjectile::think(int _frames)
 		{
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
-				shutdown();
+				setToShutdown();
 			}
 			else
 			{
@@ -503,7 +503,7 @@ void CPlayerProjectile::think(int _frames)
 
 		if ( m_lifetime <= 0 )
 		{
-			shutdown();
+			setToShutdown();
 		}
 	}
 }

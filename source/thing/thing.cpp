@@ -254,6 +254,23 @@ void		CThingManager::thinkAllThings(int _frames)
 		thing1 = thing1->m_nextThing;
 	}
 
+	for(i=0;i<CThing::MAX_TYPE;i++)
+	{
+		thing=s_thingLists[i];
+		CThing	*nextThing = thing;
+		while(thing)
+		{
+			nextThing=thing->m_nextThing;
+
+			if ( thing->isSetToShutdown() )
+			{
+				thing->shutdown();
+				delete thing;
+			}
+
+			thing = nextThing;
+		}
+	}
 }
 
 /*----------------------------------------------------------------------
