@@ -8,7 +8,7 @@
 
 do
 {
-	_setText(CHAR_SANDY,STR__INGAME__SANDY__TEST1);
+	_setText(CHAR_JACKCUSTARD,STR__INGAME__SANDY__TEST1);
 	_setResponseOptions(QUESTION_OK);
 	do
 	{

@@ -7,6 +7,9 @@
 #define CHAR_SQUIDWARD		3
 #define CHAR_KRABS			4
 #define CHAR_PLANKTON		5
+#define CHAR_MERMAIDMAN		6
+#define CHAR_BARNACLEBOY	7
+#define CHAR_JACKCUSTARD	8
 
 #define ANIM_QUIET			0
 #define ANIM_TALKING		1
