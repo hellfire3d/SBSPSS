@@ -155,5 +155,14 @@ void CNpcJellyfishPlatform::think( int _frames )
 
 	Pos.vy += m_dipOffset;
 
+	s32 minY, maxY;
+
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	if ( Pos.vy > ( maxY + 16 ) )
+	{
+		Pos.vy = maxY + 16;
+	}
+
 	CNpcLinearPlatform::think( _frames );
 }
