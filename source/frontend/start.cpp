@@ -98,6 +98,18 @@
 	Vars
 	---- */
 
+const int CFrontEndStart::s_itemFrames[]=
+{
+	FRM_BLOWER,		// SHOPITEM_BLOWER
+	FRM_CAKE,		// SHOPITEM_CAKE
+	FRM_CUPCAKE,	// SHOPITEM_CUPCAKE
+	FRM_JELLY2,		// SHOPITEM_JELLY2
+	FRM_PARTYHAT,	// SHOPITEM_PARTYHAT
+	FRM_PREZZIE,	// SHOPITEM_PREZZIE
+	FRM_SARNIE,		// SHOPITEM_SARNIE
+	FRM_TEDDY,		// SHOPITEM_TEDDY
+};
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -198,35 +210,6 @@ void CFrontEndStart::unselect()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-typedef struct
-{
-	int	x,y,w,h;
-	int	levelx,levely;
-	int	itemx,itemy,itemgap;
-	int	tokenx,tokeny;
-	int	emptyslotx,emptysloty;
-}SLOTDATA;
-SLOTDATA slotdata=
-{
-	(512-416)/2,30,416,64,		// x,y,w,h
-	15,5,						// levelx,levely
-	16,25,50,					// itemx,itemy,itemgap
-	250,5,						// tokenx,tokeny
-	416/2,15,					// emptyslotx,emptysloty
-};
-
-
-static const int s_itemFrames[]=
-{
-	FRM_BLOWER,		// SHOPITEM_BLOWER
-	FRM_CAKE,		// SHOPITEM_CAKE
-	FRM_CUPCAKE,	// SHOPITEM_CUPCAKE
-	FRM_JELLY2,		// SHOPITEM_JELLY2
-	FRM_PARTYHAT,	// SHOPITEM_PARTYHAT
-	FRM_PREZZIE,	// SHOPITEM_PREZZIE
-	FRM_SARNIE,		// SHOPITEM_SARNIE
-	FRM_TEDDY,		// SHOPITEM_TEDDY
-};
 void CFrontEndStart::render()
 {
 	POLY_G4	*g4;
@@ -291,34 +274,36 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 	POLY_F4						*f4;
 	int							x,y;
 	sFrameHdr					*fh;
-	char						buf[100];
 	int							i;
 
-	xbase=_xOff+slotdata.x;
+	xbase=_xOff+SLOT_FRAME_X;
 	CGameSlotManager::setActiveSlot(_slotNumber);
 	gameSlot=CGameSlotManager::getSlotData();
 
-	drawBambooBorder(xbase,slotdata.y,slotdata.w,slotdata.h,3);
+	drawBambooBorder(xbase,SLOT_FRAME_Y,SLOT_FRAME_W,SLOT_FRAME_H,3);
 	f4=GetPrimF4();
-	setXYWH(f4,xbase,slotdata.y,slotdata.w,slotdata.h);
+	setXYWH(f4,xbase,SLOT_FRAME_Y,SLOT_FRAME_W,SLOT_FRAME_H);
 	setRGB0(f4,  0,  0, 90);
 	setSemiTrans(f4,true);
 	AddPrimToList(f4,3);
 
 	if(gameSlot->m_isInUse)
 	{
-		m_font->print(xbase+slotdata.levelx,slotdata.y+slotdata.levely,"Level 0-0");
+		char	buf[100];
 
-		x=xbase+slotdata.tokenx;
-		y=slotdata.y+slotdata.tokeny;
+		sprintf(buf,TranslationDatabase::getString(STR__SLOT_SELECT_SCREEN__LEVEL_REACHED),0,0);
+		m_font->print(xbase+SLOT_LEVEL_TEXT_X,SLOT_FRAME_Y+SLOT_LEVEL_TEXT_Y,buf);
+
+		x=xbase+SLOT_TOKENCOUNT_X;
+		y=SLOT_FRAME_Y+SLOT_TOKENCOUNT_Y;
 		fh=m_spriteBank->getFrameHeader(FRM_SMALLTOKEN);
 		m_spriteBank->printFT4(fh,x,y,0,0,2);
 		x+=fh->W;
 		sprintf(buf,"x%d",CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld());
 		m_font->print(x,y,buf);
 
-		x=xbase+slotdata.itemx;
-		y=slotdata.y+slotdata.itemy;
+		x=xbase+SLOT_ITEM_X;
+		y=SLOT_FRAME_Y+SLOT_ITEM_Y;
 		for(i=0;i<8;i++)
 		{
 			POLY_FT4	*ft4;
@@ -327,13 +312,13 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 			{
 				setRGB0(ft4,35,35,35);
 			}
-			x+=slotdata.itemgap;
+			x+=SLOT_ITEM_YGAP;
 		}
 	}
 	else
 	{
 		m_font->setJustification(FontBank::JUST_CENTRE);
-		m_font->print(xbase+slotdata.emptyslotx,slotdata.y+slotdata.emptysloty,"EMPTY SLOT");
+		m_font->print(xbase+SLOT_EMPTYTEXT_X,SLOT_FRAME_Y+SLOT_EMPTYTEXT_Y,STR__SLOT_SELECT_SCREEN__EMPTY_SLOT);
 		m_font->setJustification(FontBank::JUST_LEFT);
 	}
 }
@@ -345,14 +330,6 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int MAP_INSTRUCTIONS_YSTART=147;
-int MAP_INSTRUCTIONS_BUTTON_Y_OFFSET=3;
-int MAP_INSTRUCTIONS_TEXT_R=128;
-int MAP_INSTRUCTIONS_TEXT_G=64;
-int MAP_INSTRUCTIONS_TEXT_B=64;
-int MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS=5;
-int MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;
-int MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES=15;
 void CFrontEndStart::drawInstructions()
 {
 	int				slotInUse;
@@ -368,46 +345,46 @@ void CFrontEndStart::drawInstructions()
 	sb=CGameScene::getSpriteBank();
 	m_font->setColour(255,255,255);
 
-	y=MAP_INSTRUCTIONS_YSTART;
+	y=INSTRUCTIONS_YSTART;
 	fh1=sb->getFrameHeader(FRM__BUTL);
 	fh2=sb->getFrameHeader(FRM__BUTR);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT);
 	x=256-(width/2);
-	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
-	sb->printFT4(fh2,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	sb->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
+	sb->printFT4(fh2,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh2->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
 	m_font->print(x,y,STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT);
 
 	text=slotInUse?STR__SLOT_SELECT_SCREEN__CROSS_TO_CONFIRM:STR__SLOT_SELECT_SCREEN__CROSS_TO_CREATE;
-	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
+	y+=INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTX);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(text);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(text);
 	x=256-(width/2);
-	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	sb->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
 	m_font->print(x,y,text);
 
-	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
+	y+=INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTC);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__CIRCLE_TO_ERASE_SLOT);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__CIRCLE_TO_ERASE_SLOT);
 	x=256-(width/2);
 	if(slotInUse)
 	{
-		sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		sb->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	}
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
 	if(slotInUse)
 	{
 		m_font->print(x,y,STR__SLOT_SELECT_SCREEN__CIRCLE_TO_ERASE_SLOT);
 	}
 
-	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
+	y+=INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTT);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__TRIANGLE_TO_EXIT);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__SLOT_SELECT_SCREEN__TRIANGLE_TO_EXIT);
 	x=256-(width/2);
-	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	sb->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
 	m_font->print(x,y,STR__SLOT_SELECT_SCREEN__TRIANGLE_TO_EXIT);
 }
 
@@ -462,6 +439,7 @@ void CFrontEndStart::think(int _frames)
 					else
 					{
 						m_state=STATE_SLOT_CREATED;
+						m_confirmFlag=CONFIRM_NONE;
 						m_createdSlotGuiFrame->select();
 						gameSlot->m_isInUse=true;
 						CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);

@@ -53,6 +53,30 @@ public:
 
 
 private:
+	enum
+	{
+		SLOT_FRAME_X=(512-416)/2,
+		SLOT_FRAME_Y=30,
+		SLOT_FRAME_W=416,
+		SLOT_FRAME_H=64,
+		SLOT_LEVEL_TEXT_X=15,
+		SLOT_LEVEL_TEXT_Y=5,
+		SLOT_ITEM_X=16,
+		SLOT_ITEM_Y=25,
+		SLOT_ITEM_YGAP=50,
+		SLOT_TOKENCOUNT_X=250,
+		SLOT_TOKENCOUNT_Y=5,
+		SLOT_EMPTYTEXT_X=416/2,
+		SLOT_EMPTYTEXT_Y=15,
+
+		INSTRUCTIONS_YSTART=147,
+		INSTRUCTIONS_BUTTON_Y_OFFSET=3,
+		INSTRUCTIONS_GAP_BETWEEN_BUTTONS=5,
+		INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10,
+		INSTRUCTIONS_Y_SPACE_BETWEEN_LINES=15,
+	};
+
+
 	typedef enum
 	{
 		STATE_SELECT,
@@ -87,6 +111,8 @@ private:
 							
 	class SpriteBank		*m_spriteBank;
 	class FontBank			*m_font;
+
+	static const int		s_itemFrames[];
 
 
 };
