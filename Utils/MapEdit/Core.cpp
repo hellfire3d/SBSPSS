@@ -237,9 +237,9 @@ Vec		&ThisCam=GetCam();
 void	CCore::SetMode(int NewMode)
 {
 BOOL	RedrawFlag=FALSE;
-
+		
 		RedrawFlag=Layer[ActiveLayer]->SetMode(NewMode);
-		//if (RedrawFlag) View->Invalidate();
+		
 }
 
 /*****************************************************************************/
@@ -256,7 +256,10 @@ BOOL	RedrawFlag=FALSE;
 		}
 		else
 		{
-			RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			if (Layer[ActiveLayer]->IsVisible())
+			{
+				RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			}
 		}
 		TileBank.SetActiveBrushL();
 
@@ -283,7 +286,10 @@ BOOL	RedrawFlag=FALSE;
 		}
 		else
 		{
-			RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			if (Layer[ActiveLayer]->IsVisible())
+			{
+				RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			}
 		}
 		TileBank.SetActiveBrushR();
 
@@ -341,15 +347,18 @@ Vec		&ThisCam=GetCam();
 			}
 			}
 		else
-		{	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
-			View->Invalidate();
+		{	
 			if (TileViewFlag)
 			{
 			}
 			else
 			{
-			Layer[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
+				if (Layer[ActiveLayer]->IsVisible())
+				{
+					Layer[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
+				}
 			}
+			View->Invalidate();	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
 		}
 
 }
@@ -401,11 +410,15 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 
-		Layer[ActiveLayer]->SetVisible(List->ListBox.GetCheck(ActiveLayer));
-		if (ActiveLayer!=NewLayer)
+// If toggling layer, dont change the layer
+		if (List->ListBox.GetCheck(NewLayer)!=Layer[NewLayer]->IsVisible())
+		{
+			Layer[NewLayer]->SetVisible(List->ListBox.GetCheck(NewLayer));
+			List->ListBox.SetCurSel(ActiveLayer);
+		}
+		else
 		{
 			ActiveLayer=NewLayer;
-			Layer[ActiveLayer]->SetVisible(List->ListBox.GetCheck(ActiveLayer));
 		}
 
 }

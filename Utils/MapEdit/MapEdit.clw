@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CProgressDlg
+LastClass=CLayerList
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,21 +18,21 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDR_MAINFRAME (English (U.S.))
-Resource2=IDR_TOOLBAR (English (U.S.))
-Resource3=IDD_MULTIBAR (English (U.S.))
+Resource1=IDD_MAPSIZE
+Resource2=IDD_LAYERTILE_GUI
+Resource3=IDR_TOOLBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_LAYERTILE_GUI
+Resource5=IDD_ABOUTBOX (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_NEW_LAYER
+Resource6=IDD_LAYER_LIST_DIALOG
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_LAYER_LIST_DIALOG
+Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_ABOUTBOX (English (U.S.))
-Resource10=IDD_MAPSIZE
+Resource9=IDD_NEW_LAYER
+Resource10=IDD_MULTIBAR (English (U.S.))
 Class13=CNewMapGUI
 Class14=CProgressDlg
 Resource11=IDD_NEWMAP
@@ -218,7 +218,7 @@ ImplementationFile=LayerList.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=CLayerList
+LastObject=IDC_LAYER_LIST
 
 [CLS:CGfxToolBar]
 Type=0
