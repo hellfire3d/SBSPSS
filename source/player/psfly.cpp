@@ -64,6 +64,11 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateFly::enter(CPlayer *_player)
 {
+	DVECTOR	move;
+
+	move.vx=0;
+	move.vy=0;
+	setMoveVelocity(_player,&move);
 	setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEHOOLA);
 }
 
