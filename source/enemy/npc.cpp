@@ -66,7 +66,7 @@ void CNpcFriend::init()
 
 	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
-	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
+	m_actorTPage = TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
 	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
 
 	Pos.vx = 100;
@@ -89,6 +89,10 @@ void CNpcFriend::init()
 void CNpcFriend::shutdown()
 {
 	//m_spriteBank->dump();		delete m_spriteBank;
+
+	// temporary
+	//TPFree( m_actorTPage );
+	//CAnimDB::Dump( m_data[m_type].animData );
 
 	CNpcThing::shutdown();
 }
@@ -210,8 +214,9 @@ void CNpcEnemy::init()
 
 	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 	m_skel.Init( Hdr );
-	TPLoadTex( ACTORS_ACTOR_ENEMY_TEX );
+	m_actorTPage = TPLoadTex( ACTORS_ACTOR_ENEMY_TEX );
 	m_skel.setAnimDatabase( CAnimDB::Load( m_data[m_type].animData ) );
+
 	m_skel.setAng(1024);
 
 	m_animPlaying = true;
@@ -444,6 +449,10 @@ m_npcPath.initPath();
 void CNpcEnemy::shutdown()
 {
 	m_npcPath.removeAllWaypoints();
+
+	// temporary
+	TPFree( m_actorTPage );
+	CAnimDB::Dump( m_data[m_type].animData );
 
 	CEnemyThing::shutdown();
 }

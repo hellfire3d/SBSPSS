@@ -50,7 +50,7 @@ public:
 	void				init();
 	void				shutdown();
 	void				think(int _frames);
-	virtual void		render();
+	void				render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 
@@ -102,6 +102,7 @@ protected:
 	int				m_frame;
 	int				m_animNo;
 	CSkel			m_skel;
+	TPAGE_DESC		m_actorTPage;
 };
 
 class	CNpcEnemy : public CEnemyThing
@@ -156,7 +157,7 @@ public:
 	void				init();
 	void				shutdown();
 	void				think(int _frames);
-	virtual void		render();
+	void				render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 
@@ -483,6 +484,7 @@ protected:
 	int				m_frame;
 	int				m_animNo;
 	CSkel			m_skel;
+	TPAGE_DESC		m_actorTPage;
 };
 
 
