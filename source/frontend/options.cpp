@@ -154,6 +154,51 @@ static const int OPTIONS_FRAME_H=160;
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
+	Params:		_hue = 0..4095, _brightness = 0..255, _rgb -> int[3]
+	Returns:
+  ---------------------------------------------------------------------- */
+static void paulColourSpaceToRGB(int _hue,int _brightness,int *_rgb)
+{
+	static const int s_colourTab[16][3]=
+	{
+		{ 255,  0,  0 },
+		{ 255, 97,  0 },
+		{ 255,192,  0 },
+		{ 222,255,  0 },
+		{ 127,255,  0 },
+		{  31,255,  0 },
+		{   0,255, 67 },
+		{   0,255,162 },
+		{   0,252,255 },
+		{   0,157,255 },
+		{   0, 61,255 },
+		{  37,  0,255 },
+		{ 132,  0,255 },
+		{ 228,  0,255 },
+		{ 255,  0,186 },
+		{ 255,  0, 91 },
+	};
+	const int	*c1,*c2;
+	int			*cr;
+	int			i,component;
+
+	c1=&s_colourTab[(_hue>>8)&15][0];
+	c2=&s_colourTab[((_hue>>8)+1)&15][0];
+	cr=_rgb;
+	for(i=0;i<3;i++)
+	{
+		component=*c1+(((*c2-*c1)*(_hue&0xff))>>8);
+		component=(component*_brightness)>>8;
+		*cr=component;
+		c1++;
+		c2++;
+		cr++;
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -358,16 +403,29 @@ void CFrontEndOptions::unselect()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int rh=0;
+int rb=80;
+int rspeed=5;
+int rstep=1024;
 void CFrontEndOptions::render()
 {
 	POLY_G4	*g4;
+	int		rgb[3];
+
+rh+=rspeed;
+rh&=4095;
+paulColourSpaceToRGB(rh,rb,rgb);
 
 	g4=GetPrimG4();
 	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,90, 0, 0);
-	setRGB1(g4, 0, 0,90);
-	setRGB2(g4, 0,90, 0);
-	setRGB3(g4,90, 0,90);
+	paulColourSpaceToRGB(rh,rb,rgb);
+	setRGB0(g4,rgb[0],rgb[1],rgb[2]);
+	paulColourSpaceToRGB(rh+(rstep*1),rb,rgb);
+	setRGB1(g4,rgb[0],rgb[1],rgb[2]);
+	paulColourSpaceToRGB(rh+(rstep*3),rb,rgb);
+	setRGB2(g4,rgb[0],rgb[1],rgb[2]);
+	paulColourSpaceToRGB(rh+(rstep*2),rb,rgb);
+	setRGB3(g4,rgb[0],rgb[1],rgb[2]);
 	AddPrimToList(g4,MAX_OT-1);
 
 	m_background->render();
