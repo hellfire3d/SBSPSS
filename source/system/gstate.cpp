@@ -15,12 +15,26 @@
 #include "system\global.h"
 #include "system\gstate.h"
 
+#ifndef	__MEMORY_HEADER__
+#include "mem\memory.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+
+
+/*****************************************************************************/
+
+
+// Use click counter or vbl counter
+#define USE_CLICK_COUNTER
+
+#ifdef USE_CLICK_COUNTER
 #ifndef __SYSTEM_CLICKCOUNT_H__
 #include "system\clickcount.h"
 #endif
-
-#ifndef	__MEMORY_HEADER__
-#include "mem\memory.h"
 #endif
 
 
@@ -28,8 +42,10 @@
 static CScene	*s_currentScene;
 static CScene	*s_pendingScene;
 
-int		GameState::s_timeSinceLast;
+#ifdef USE_CLICK_COUNTER
 static	CClickCount	s_clickCounter;
+#endif
+int		GameState::s_framesSinceLast=1;
 
 #ifdef __VERSION_DEBUG__
 static int		s_baseMemory=0;
@@ -145,16 +161,13 @@ CScene * GameState::getPendingScene()
 }
 
 /*****************************************************************************/
-static int s_timeSpeed = ONE;
 void GameState::updateTimer()
 {
-	s_timeSinceLast = (s_clickCounter.timeSinceLast() * s_timeSpeed) >> 12;
-	
-	if (s_timeSinceLast > 4 * 4096)
-	{
-		s_timeSinceLast = 4 * 4096;
-		SYSTEM_DBGMSG("updateTimer loosing frames!");		
-	}
+#ifdef USE_CLICK_COUNTER
+	s_framesSinceLast=(s_clickCounter.timeSinceLast()>>12)/4+1;
+#else
+	s_framesSinceLast=VidGetVblsThisFrame();
+#endif
 }
 
 

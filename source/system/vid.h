@@ -42,6 +42,7 @@ sVidScreen	*VidGetDispScreen();
 sVidScreen	*VidGetDrawScreen();
 u32			VidGetFrameCount();
 u32			VidGetTickCount();
+int			VidGetVblsThisFrame();
 
 void		VidSwapDraw();
 

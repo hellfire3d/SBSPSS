@@ -117,7 +117,7 @@ CAnimTex	*ThisTex=AnimTexList;
 RECT		Rect;
 int			Count,CountComp;
 int			H,W;
-int			Time = GameState::getTimeSinceLast();
+int			Time = GameState::getFramesSinceLast();
 
 		while (ThisTex)
 			{
@@ -141,7 +141,7 @@ int			Time = GameState::getTimeSinceLast();
 				Rect.h=CountComp;
 				LoadImage(&Rect,ThisTex->TexData);
 				}
-			ThisTex->Count+=(ThisTex->Speed * Time)>> 12;
+			ThisTex->Count+=(ThisTex->Speed * Time);
 			ThisTex->Count%=(ThisTex->Rect.h<<2);
 			ThisTex=ThisTex->NextTex;
 			}

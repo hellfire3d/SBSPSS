@@ -19,6 +19,7 @@ static void (*VbFunc)(void);
 static VbFuncType VbFuncList[MaxVBFuncs];
 
 static u32			FrameCounter=0,TickCount=0,TickBuffer[2];
+static u32			s_lastFrameCounter=0,s_vblsThisFrame=0;
 static sVidScreen 	Screen[2];
 static int			ScreenXOfs=0,ScreenYOfs=0;
 static int			ScreenW, ScreenH;
@@ -194,6 +195,7 @@ sVidScreen	*VidGetDispScreen()			{return (VidGetScreen());}
 sVidScreen	*VidGetDrawScreen()			{return &Screen[FrameFlipFlag^1];}
 u32			VidGetFrameCount()			{return(FrameCounter);}
 u32			VidGetTickCount()			{return(TickBuffer[FrameFlipFlag^1]);}
+int			VidGetVblsThisFrame()		{return s_vblsThisFrame;}
 
 void		SetScreenImage(u8 *Ptr)		{ScreenImage=Ptr;}
 u8			*GetScreenImage()			{return ScreenImage;}
@@ -396,6 +398,10 @@ if(ScreenClipBox==2)
 	AddPrimToList(f4,0);
 }
 
+	// How many frames since we last flipped the display?
+	int	fc=FrameCounter;
+	s_vblsThisFrame=fc-s_lastFrameCounter;
+	s_lastFrameCounter=fc;
 }
 
 

@@ -20,6 +20,7 @@
 
 
 
+
 /*****************************************************************************/
 class CScene
 {
@@ -48,8 +49,7 @@ public:
 
 	static void		setNextScene( CScene *_nextScene );
 
-	inline static long int	getTimeSinceLast()		{return s_timeSinceLast;}
-	inline static long int	getFramesSinceLast()	{return (s_timeSinceLast>>12)+1;}
+	inline static long int	getFramesSinceLast()	{return s_framesSinceLast;}
 
 	static void		setTimeSpeed( int speed );
 
@@ -67,7 +67,7 @@ private:
 			GameState();
 
 	static void		updateTimer();
-	static	int		s_timeSinceLast;
+	static	int		s_framesSinceLast;
 
 };
 

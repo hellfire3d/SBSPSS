@@ -15,9 +15,10 @@ u32		CClickCount::s_currentTime=0;
 bool	CClickCount::s_initialised=false;
 bool	CClickCount::s_paused=false;
 
-static const int COUNT_DOWN_VAL = 17200;//2150;
-static const int COUNTS_PER_FRAME_INTERNAL = 4;
+static const int COUNT_DOWN_VAL = 17200;
+static const int COUNTS_PER_FRAME_INTERNAL = 2;
 static const int COUNTS_PER_FRAME_EXTERNAL = 4096;
+
 
 /*****************************************************************************/
 void clockTicker()
@@ -48,8 +49,8 @@ u32 CClickCount::timeSinceLast()
 	timeSince=currentTime-m_lastTime;
 
 	m_lastTime=currentTime;
+
 	return((timeSince*COUNTS_PER_FRAME_EXTERNAL)/COUNTS_PER_FRAME_INTERNAL);
-	return(currentTime*4096);
 }
 
 /*****************************************************************************/
