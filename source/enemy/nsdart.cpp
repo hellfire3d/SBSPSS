@@ -60,7 +60,7 @@ void CNpcSquidDartEnemy::render()
 				renderPos.vx -= 32;
 			}
 
-			renderPos.vy -= 6;
+			//renderPos.vy -= 6;
 			// bodge
 
 			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
@@ -83,7 +83,8 @@ void CNpcSquidDartEnemy::render()
 
 			setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
 			// bodge
-			setCollisionCentreOffset( 0, 0 ); //( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
+			//setCollisionCentreOffset( 0, 0 ); //( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
+			setCollisionCentreOffset( 0, ( YMax + YMin ) >> 1 ); //( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
 		}
 	}
 }
