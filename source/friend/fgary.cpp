@@ -164,6 +164,7 @@ void CNpcGaryFriend::think( int _frames )
 				int Time = GameState::getFramesSinceLast();
 
 				Pos.vx -= Time;
+				Pos.vx -= _frames;
 
 				break;
 			}
@@ -174,6 +175,7 @@ void CNpcGaryFriend::think( int _frames )
 				int Time = GameState::getFramesSinceLast();
 
 				Pos.vx += Time;
+				Pos.vx += _frames;
 
 				break;
 			}
