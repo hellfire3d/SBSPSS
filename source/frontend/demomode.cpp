@@ -167,7 +167,7 @@ void CFrontEndDemoMode::render()
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::think(int _frames)
 {
-	if(!m_shuttingDown)
+	if(!m_shuttingDown&&!CFader::isFading())
 	{
 	count+=_frames;	
 		if(PadGetDown(0)&PAD_START||count>60*20)		// OR DEMO ENDED

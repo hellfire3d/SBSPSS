@@ -140,8 +140,8 @@ void CFrontEndScene::init()
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
 
-	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
-	CSoundMediator::playSong();
+//	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
+//	CSoundMediator::playSong();
 }
 
 
@@ -161,7 +161,7 @@ void CFrontEndScene::shutdown()
 		s_modeCodes[i]->shutdown();
 	}
 
-	CSoundMediator::dumpSong();
+//	CSoundMediator::dumpSong();
 }
 
 
