@@ -941,44 +941,41 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 	{
 		case TYPE_PLAYER:
 		{
-			if ( m_detectCollision && m_isActive )
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
 			{
-				CPlayer *player;
-				DVECTOR	playerPos;
-				CRECT	collisionArea;
+				threshold = 16;
+			}
 
-				// Only interested in SBs feet colliding with the box (pkg)
-				player=(CPlayer*)_thisThing;
-				playerPos=player->getPos();
-				collisionArea=getCollisionArea();
-
-				s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
-
-				if ( threshold > 16 )
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
 				{
-					threshold = 16;
+					player->setPlatform( this );
+
+					m_contact = true;
 				}
-
-				if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+				else
 				{
-					if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
 					{
-						player->setPlatform( this );
+						int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
 
-						m_contact = true;
-					}
-					else
-					{
-						if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+						if ( height >= -threshold && height < 1 )
 						{
-							int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+							player->setPlatform( this );
 
-							if ( height >= -threshold && height < 1 )
-							{
-								player->setPlatform( this );
-
-								m_contact = true;
-							}
+							m_contact = true;
 						}
 					}
 				}
@@ -1036,25 +1033,28 @@ int CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
 	int collided = false;
 
-	CRECT thisRect, thatRect;
-
-	thisRect = getCollisionArea();
-	thatRect = _thisThing->getCollisionArea();
-
-	DVECTOR posDelta = getPosDelta();
-
-	thisRect.y1 -= abs( posDelta.vy ) >> 1;
-	thisRect.y2 += abs( posDelta.vy ) >> 1;
-
-	posDelta = _thisThing->getPosDelta();
-
-	thatRect.y1 -= abs( posDelta.vy ) >> 1;
-	thatRect.y2 += abs( posDelta.vy ) >> 1;
-
-	if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
-	   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+	if ( m_detectCollision && m_isActive && !isSetToShutdown() )
 	{
-		collided = true;
+		CRECT thisRect, thatRect;
+
+		thisRect = getCollisionArea();
+		thatRect = _thisThing->getCollisionArea();
+
+		DVECTOR posDelta = getPosDelta();
+
+		thisRect.y1 -= abs( posDelta.vy ) >> 1;
+		thisRect.y2 += abs( posDelta.vy ) >> 1;
+
+		posDelta = _thisThing->getPosDelta();
+
+		thatRect.y1 -= abs( posDelta.vy ) >> 1;
+		thatRect.y2 += abs( posDelta.vy ) >> 1;
+
+		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+		{
+			collided = true;
+		}
 	}
 
 	return( collided );
