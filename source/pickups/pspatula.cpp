@@ -149,21 +149,21 @@ void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 
 
 
-int bspat_height=30;
-int bspat_r1=251;
-int bspat_g1=207;
-int bspat_b1=167;
-int bspat_r2=147;
-int bspat_g2=95;
-int bspat_b2=75;
-int bspat_speed=25;
-int bspat_scale1=5;
-int bspat_scale2=0;//2;
-int bspat_phase=1024;
-int bspat_vissize=40;
-int	bspat_stringx=-3;
-int bspat_stringendxoff=3;
-int bspat_stringendyoff=-6;
+extern int balloon_height;
+extern int balloon_r1;
+extern int balloon_g1;
+extern int balloon_b1;
+extern int balloon_r2;
+extern int balloon_g2;
+extern int balloon_b2;
+extern int balloon_speed;
+extern int balloon_scale1;
+extern int balloon_scale2;
+extern int balloon_phase;
+extern int balloon_vissize;
+extern int	balloon_stringx;
+int bspat_stringendxoff=6;
+int bspat_stringendyoff=-13;
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -185,7 +185,7 @@ void	CBalloonAndSpatulaPickup::init()
 void	CBalloonAndSpatulaPickup::thinkPickup(int _frames)
 {
 	CSpatulaPickup::thinkPickup(_frames);
-	m_sin=(m_sin+(_frames*bspat_speed))&4095;
+	m_sin=(m_sin+(_frames*balloon_speed))&4095;
 }
 
 /*----------------------------------------------------------------------
@@ -196,8 +196,6 @@ void	CBalloonAndSpatulaPickup::thinkPickup(int _frames)
   ---------------------------------------------------------------------- */
 void	CBalloonAndSpatulaPickup::renderPickup(DVECTOR *_pos)
 {
-	CSpatulaPickup::renderPickup(_pos);
-
 	SpriteBank	*sprites;
 	sFrameHdr	*fh,*fhspat;
 	int			xo1,xo2;
@@ -207,18 +205,21 @@ void	CBalloonAndSpatulaPickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(FRM__BALLOON);
 	fhspat=sprites->getFrameHeader(FRM__SPATULA);
 
-	xo1=((msin((m_sin+bspat_phase)&4095)*bspat_scale1)>>12);
-	xo2=((msin(m_sin)*bspat_scale2)>>12);
+	xo1=((msin((m_sin+balloon_phase)&4095)*balloon_scale1)>>12);
+	xo2=((msin(m_sin)*balloon_scale2)>>12);
 	x=_pos->vx-(fh->W/2)+bspat_stringendxoff;
-	y=_pos->vy-(fh->H/2)-(fhspat->H/2)-bspat_height+bspat_stringendyoff;
+	y=_pos->vy-(fh->H/2)-(fhspat->H/2)-balloon_height+bspat_stringendyoff;
 	sprites->printFT4(fh,x+xo1,y,0,0,OTPOS__PICKUP_POS);
-//setCollisionCentreOffset(xo1,0);
+setCollisionCentreOffset(xo2,0);
 
-	x=_pos->vx+bspat_stringx+bspat_stringendxoff;
-	y=_pos->vy+(fh->H/2)-(fhspat->H/2)-bspat_height+bspat_stringendyoff;
-	DrawLine(x+xo1,y,x+xo2,y+bspat_height,bspat_r1,bspat_g1,bspat_b1,OTPOS__PICKUP_POS);
+	x=_pos->vx+balloon_stringx+bspat_stringendxoff;
+	y=_pos->vy+(fh->H/2)-(fhspat->H/2)-balloon_height+bspat_stringendyoff;
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r1,balloon_g1,balloon_b1,OTPOS__PICKUP_POS);
 	x++;
-	DrawLine(x+xo1,y,x+xo2,y+bspat_height,bspat_r2,bspat_g2,bspat_b2,OTPOS__PICKUP_POS);
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r2,balloon_g2,balloon_b2,OTPOS__PICKUP_POS);
+
+	_pos->vx+=xo2;		// This is soooooooo naughty (pkg)
+	CSpatulaPickup::renderPickup(_pos);
 }
 
 /*===========================================================================

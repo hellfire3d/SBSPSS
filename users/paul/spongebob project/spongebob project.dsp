@@ -1364,7 +1364,83 @@ SOURCE=..\..\..\data\DataCache.scr
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\out\USA\include\actor_spongebob.h
+SOURCE=..\..\..\out\USA\include\ACTOR_ANENOMELVL1_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_ANENOMELVL3_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_BABYOCTOPUS_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_BALLBLOB_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_CATERPILLAR_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_CLAM_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_DUSTDEVIL_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_EYEBALL_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_FLAMINGSKULL_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_FLYINGDUTCHMAN_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_GHOST_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_HERMITCRAB_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_IRONDOGFISH_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_JELLYFISH1_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_LRGJELLYFISH_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_PUFFAFISH_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SHARKMAN_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SKELETALFISH_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SPIDERCRAB_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SPIKEYANENOME_Anim.h
 # End Source File
 # Begin Source File
 
@@ -1372,15 +1448,19 @@ SOURCE=..\..\..\out\USA\include\ACTOR_SPONGEBOB_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_SQUIDDART_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_STOMPER_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\BigLump.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\out\USA\include\frontend.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\out\USA\include\ingamefx.h
+SOURCE=..\..\..\out\USA\include\Sprites.h
 # End Source File
 # Begin Source File
 
