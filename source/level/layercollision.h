@@ -8,7 +8,7 @@
 #include	<dstructs.h>
 
 
-#ifdef __VERSION_debug__
+#ifdef __VERSION_DEBUG__
 #define __SHOW_COLLISION__
 #endif
 
