@@ -60,7 +60,7 @@ void	CFXBaseAnim::render()
 		if (!canRender() || isSetToShutdown()) return;
 
 DVECTOR		&RenderPos=getRenderPos();
-int			ThisFrame=(MaxFrame-Frame)>>FrameShift;
+int			ThisFrame=Frame>>FrameShift;
 
 POLY_FT4	*Ft4=m_spriteBank->printRotatedScaledSprite(BaseFrame+ThisFrame,RenderPos.vx,RenderPos.vy,Scale,Scale,0,OtPos*0);
 			setRGB0(Ft4,R,G,B);
