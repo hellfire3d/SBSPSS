@@ -76,9 +76,9 @@ void	CPlayerModeChop::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int chopcsx=-25;
+int chopcsx=-40;
 int chopcsy=-30;
-int chopcsw=80;
+int chopcsw=110;
 int chopcsh=60;
 void	CPlayerModeChop::think()
 {
