@@ -155,6 +155,7 @@ void	CPointerIcon::setTarget(DVECTOR _target)
 	{
 		m_pointerTarget=_target;
 		m_pointerArrivedAtTarget=false;
+		m_pointerSin=0;
 	}
 }
 
@@ -169,6 +170,7 @@ void	CPointerIcon::snapToTarget(DVECTOR _target)
 	m_pointerPos=_target;
 	m_pointerTarget=_target;
 	m_pointerArrivedAtTarget=true;
+	m_pointerSin=0;
 }
 
 /*===========================================================================
