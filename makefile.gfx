@@ -107,7 +107,7 @@ ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
-ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net SpongeBob_Glasses SpongeBob_JellyFish
+ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net SpongeBob_Glove SpongeBob_Glasses SpongeBob_JellyFish
 ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
