@@ -297,7 +297,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 		playerHasHitGround();
 		pos=m_player->getPlayerPos();
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
-		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DEATH_LIQUID&&
+		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP&&
 		   !m_player->getIsHealthSoFullThatIDontNeedToSoakUp())
 		{
 			// Hit water - Go into soakup mode
