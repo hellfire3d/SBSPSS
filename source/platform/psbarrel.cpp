@@ -42,7 +42,7 @@ void CNpcSteerableBarrelPlatform::postInit()
 
 void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 {
-	s32 maxHeight = 20;
+	s32 maxHeight = 8;
 	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
 	s32 groundHeight;
