@@ -88,7 +88,10 @@ vector<int>	Counts;
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
 			bool	Found=Config.GetInt(GetTypeName(),ThisThing.Name,ThisThing.Type);
-			Counts[ThisThing.Type]++;
+
+			int	Idx=Config.FindKey(GetTypeName(),ThisThing.Name);
+			Counts[Idx]++;
+			ASSERT(Idx<KeyCount);
 			if (!Found)
 				GObject::Error(ERR_FATAL,"%s not found in list\n",ThisThing.Name);
 		}
