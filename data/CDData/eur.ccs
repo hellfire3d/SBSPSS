@@ -1,5 +1,5 @@
 CD-ROM Generator for Windows 1.40
-Mon Aug 20 09:34:33 2001
+Wed Aug 29 10:52:24 2001
 E
 Standard
 3
@@ -450,10 +450,48 @@ d:\sbsp\eur\CLIMAX.STR
 0
 0
 \
+DEMO.STR;1
+1
+d:\sbsp\eur\DEMO.STR
+28573
+0
+0
+50
+50
+14336
+1
+1
+0 0 0 0 0 0 0
+2336
+-1
+0
+-1
+0
+-32275
+1
+0
+0
+-1
+16370688
+998986112
+998986112
+998986112
+1
+0
+-1
+0
+0
+66746528
+0
+0
+0
+0
+0
+\
 ZZZZZZZZ.ZZZ;1
 1
 d:\sbsp\eur\ZZZZZZZZ.ZZZ
-28573
+35581
 0
 0
 50
@@ -481,7 +519,7 @@ d:\sbsp\eur\ZZZZZZZZ.ZZZ
 -1
 0
 0
-66746528
+83117216
 0
 0
 0

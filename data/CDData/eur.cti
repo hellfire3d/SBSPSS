@@ -69,6 +69,11 @@ XAFileAttributes
 XaSource cdbuild\EUR\intro.str
 EndFile
 
+File	DEMO.STR
+XAFileAttributes
+XaSource cdbuild\EUR\demo.str
+EndFile
+
 File	ZZZZZZZZ.ZZZ
 XAFileAttributes	Form1	Data
 Source  cdbuild\EUR\ZZZZZZZZ.ZZZ
