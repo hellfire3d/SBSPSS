@@ -57,6 +57,8 @@ void CNpcMasherHazard::processMovement( int _frames )
 					// pause and change direction
 
 					m_state = MASHER_RISING;
+
+					CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FALLING_ROCK_LAND, true, true );
 				}
 				else
 				{
