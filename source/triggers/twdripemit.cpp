@@ -30,7 +30,7 @@ void	CWaterDripEmitterTrigger::think(int _frames)
 	{
 		CFX::Create( CFX::FX_TYPE_DROP_WATER, Pos );
 
-		m_timer = GameState::getOneSecondInFrames() >> 2;
+		m_timer = GameState::getOneSecondInFrames();
 	}
 	else
 	{
