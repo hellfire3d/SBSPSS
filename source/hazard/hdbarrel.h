@@ -22,8 +22,12 @@ class CNpcDualPlatformBarrelHazard : public CNpcHazard
 {
 public:
 	void				init();
+	void				render();
 protected:
 	void				processMovement( int _frames );
+
+	s16					m_rotation;
+	s8					m_rotationDir;
 };
 
 #endif
