@@ -72,6 +72,7 @@ struct  sBBox
 };
 
 //***************************************************************************
+
 struct	sMat
 {
 		u16			TPage;
@@ -137,18 +138,33 @@ struct sBone
 //***************************************************************************
 // Tiles
 
+enum	TILE3D_FLAGS
+{
+	TILE3D_FLAGS_F=0,
+	TILE3D_FLAGS_U,
+	TILE3D_FLAGS_D,
+	TILE3D_FLAGS_L,
+	TILE3D_FLAGS_R,
+//	TILE3D_FLAGS_B,	// Should never have back facing polys
+	TILE3D_FLAGS_MAX
+};
+
 struct	sTileMapElem
 {
 		u16		Tile;
+		u16		Flags;
+};
+
+struct	sTileTable
+{
+		u16		TriList;
+		u16		TriCount;
 };
 
 struct	sTile
 {
 // 3d Tile
-		u16		TriList;
-		u16		TriCount;
-		u16		QuadList;
-		u16		QuadCount;
+		sTileTable	TileTable[TILE3D_FLAGS_MAX];
 // 2d Tile
 		u8		u0,v0;
 		u16		Clut;
@@ -156,18 +172,7 @@ struct	sTile
 		u16		Pad;	// :o( need this?
 
 #ifdef	WIN32
-bool	operator==(sTile const &v1)	
-{
-	if (TriCount!=v1.TriCount) return(false);
-	if (TriList!=v1.TriList) return(false);
-//	if (QuadCount!=v1.QuadCount) return(false);
-//	if (QuadList!=v1.QuadList) return(false);
-
-	if (TPage!=v1.TPage) return(false);
-	if (u0!=v1.u0) return(false);
-	if (v0!=v1.v0) return(false);
-	return(TRUE);
-}
+bool	operator==(sTile const &v1)	{return(false);}
 #endif
 };
 
@@ -187,13 +192,6 @@ struct	sLayerHdr
 // Header
 struct	sLvlHdr
 {
-//	sTri	*TriList;
-//	sQuad	*QuadList;
-//	sVtx	*VtxList;
-//	sMat	*MatList;
-//	sTile	*TileList;
-//	int		LayerCount;
-	/*int	LayerOfs[LayerCount]...*/
 	u32		TriList;
 	u32		QuadList;
 	u32		VtxList;

@@ -9,8 +9,16 @@
 #pragma warning(disable:4201)
 
 // there should be _NO_ constructor 
+// there is now :o)
 struct Vector3
 {
+	Vector3(){};
+	Vector3(real _x,real _y,real _z)
+	{
+		x=_x;
+		y=_y;
+		z=_z;
+	}
 	union
 	{
 		real m_Vec[3];
