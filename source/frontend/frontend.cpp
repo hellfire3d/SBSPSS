@@ -26,6 +26,14 @@
 #include "frontend\maintitl.h"
 #endif
 
+#ifndef	__FRONTEND_FMVTHQ_H__
+#include "frontend\fmvthq.h"
+#endif
+
+#ifndef	__FRONTEND_FMVINTRO_H__
+#include "frontend\fmvintro.h"
+#endif
+
 #ifndef	__FRONTEND_OPTIONS_H__
 #include "frontend\options.h"
 #endif
@@ -90,6 +98,8 @@
 	Vars
 	---- */
 
+static CFrontEndFMVTHQ			s_frontEndFMVTHQ;
+static CFrontEndFMVIntro		s_frontEndFMVIntro;
 static CFrontEndMainTitles		s_frontEndModeMainTitles;
 static CFrontEndOptions			s_frontEndModeOptions;
 static CFrontEndStart			s_frontEndStart;
@@ -98,6 +108,8 @@ static CFrontEndCredits			s_frontEndCredits;
 
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
+	&s_frontEndFMVTHQ,				// MODE__FMV_THQ
+	&s_frontEndFMVIntro,			// MODE__FMV_INTRO
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
 	&s_frontEndModeOptions,			// MODE__GAME_OPTIONS
 	&s_frontEndStart,				// MODE__CHOOSE_SLOT
@@ -119,6 +131,8 @@ CFrontEndScene	FrontEndScene;
 SpriteBank	*m_sprites;
 FontBank	*m_font;
 
+static int	s_runOnce=false;
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -138,7 +152,15 @@ void CFrontEndScene::init()
 #if defined(__USER_art__) || defined(__USER_sbart__)
 	setMode(MODE__CHOOSE_SLOT);
 #else
-	setMode(MODE__MAIN_TITLES);
+	if(s_runOnce)
+	{
+		setMode(MODE__FMV_INTRO);
+	}
+	else
+	{
+		s_runOnce=true;
+		setMode(MODE__FMV_THQ);
+	}
 #endif
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();

@@ -39,6 +39,8 @@ class CFrontEndScene : public CScene
 public:
 	typedef enum
 	{
+		MODE__FMV_THQ,
+		MODE__FMV_INTRO,
 		MODE__MAIN_TITLES,
 		MODE__GAME_OPTIONS,
 		MODE__CHOOSE_SLOT,
@@ -85,12 +87,12 @@ private:
 class CFrontEndMode
 {
 public:
-	virtual void	init()=0;
-	virtual void	shutdown()=0;
-	virtual void	select()=0;
-	virtual void	unselect()=0;
-	virtual void	render()=0;
-	virtual void	think(int _frames)=0;
+	virtual void	init()				{;}
+	virtual void	shutdown()			{;}
+	virtual void	select()			{;}
+	virtual void	unselect()			{;}
+	virtual void	render()			{;}
+	virtual void	think(int _frames)	{;}
 
 	virtual int		isReadyToExit()=0;
 	virtual CFrontEndScene::FrontEndMode	getNextMode()=0;

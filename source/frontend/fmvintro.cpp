@@ -16,7 +16,7 @@
 	Includes
 	-------- */
 
-#include "frontend\fmvthq.h"
+#include "frontend\fmvintro.h"
 
 #ifndef __FMV_HEADER__
 #include "fmv\fmv.h"
@@ -60,7 +60,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool fmvPerFrameFunc()
+static bool fmvPerFrameFunc()
 {
 	PadUpdate();
 	if(PadGetDown(0)&(PAD_START|PAD_CROSS))
@@ -79,7 +79,7 @@ bool fmvPerFrameFunc()
   ---------------------------------------------------------------------- */
 void CFrontEndFMVIntro::select()
 {
-	FMV_play(FMV_THQ,&fmvPerFrameFunc);
+	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
 }
 
 /*----------------------------------------------------------------------

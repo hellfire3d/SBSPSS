@@ -37,20 +37,10 @@
 class CFrontEndFMVTHQ : public CFrontEndMode
 {
 public:
-	void	init();
-	void	shutdown();
 	void	select();
-	void	unselect();
-	void	render();
-	void	think(int _frames);
 
 	int		isReadyToExit();
 	CFrontEndScene::FrontEndMode	getNextMode();
-
-
-private:
-	int					m_shuttingDown;
-
 };
 
 

@@ -88,6 +88,8 @@ fileio_src :=		fileio \
 frontend_src :=		credits \
 					demomode \
 					frontend \
+					fmvthq \
+					fmvintro \
 					maintitl \
 					options \
 					scrollbg \

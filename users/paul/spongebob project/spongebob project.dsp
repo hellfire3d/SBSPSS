@@ -289,6 +289,22 @@ SOURCE=..\..\..\source\frontend\demomode.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\fmvintro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\fmvintro.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\fmvthq.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\fmvthq.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\frontend.cpp
 # End Source File
 # Begin Source File
@@ -1194,6 +1210,18 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
+# End Source File
+# End Group
+# Begin Group "fmv"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\fmv\fmv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fmv\fmv.h
 # End Source File
 # End Group
 # End Group

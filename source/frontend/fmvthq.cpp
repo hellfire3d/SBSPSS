@@ -54,45 +54,21 @@
 	Vars
 	---- */
 
-static	bool s_finished;
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool fmvPerFrameFunc()
+static bool fmvPerFrameFunc()
 {
 	PadUpdate();
 	if(PadGetDown(0)&(PAD_START|PAD_CROSS))
 	{
 		PadUpdate();
-		s_finished=true;
+		return true;
 	}
-	return s_finished;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndFMVTHQ::init()
-{
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndFMVTHQ::shutdown()
-{
+	return false;
 }
 
 /*----------------------------------------------------------------------
@@ -103,39 +79,7 @@ void CFrontEndFMVTHQ::shutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndFMVTHQ::select()
 {
-	s_finished=false;
 	FMV_play(FMV_THQ,&fmvPerFrameFunc);
-	s_finished=true;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndFMVTHQ::unselect()
-{
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndFMVTHQ::render()
-{
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndFMVTHQ::think(int _frames)
-{
 }
 
 /*----------------------------------------------------------------------
@@ -146,7 +90,7 @@ void CFrontEndFMVTHQ::think(int _frames)
   ---------------------------------------------------------------------- */
 int CFrontEndFMVTHQ::isReadyToExit()
 {
-	return s_finished;
+	return true;
 }
 
 /*----------------------------------------------------------------------
@@ -157,7 +101,7 @@ int CFrontEndFMVTHQ::isReadyToExit()
   ---------------------------------------------------------------------- */
 CFrontEndScene::FrontEndMode CFrontEndFMVTHQ::getNextMode()
 {
-	return CFrontEndScene::MODE__MAIN_TITLES;
+	return CFrontEndScene::MODE__FMV_INTRO;
 }
 
 /*===========================================================================

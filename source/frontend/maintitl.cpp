@@ -357,10 +357,12 @@ void CFrontEndMainTitles::think(int _frames)
 			m_demoTimeout+=_frames;
 			if(m_demoTimeout>DEMO_TIMEOUT_IN_SECONDS*GameState::getOneSecondInFrames())
 			{
+/*
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_DEMO;
 				if(m_mainMenu->isSelected())
 					m_mainMenu->unselect();
+*/
 			}
 		}
 		else
