@@ -76,16 +76,17 @@ int		Count;
 CMkActor3d::CMkActor3d(GString const &In,GString const &Out,int TPBase,int TPW,int TPH)
 {
 GFName	File=In;
+
 		InFilename=In;
 		InPath=File.Drive();
 		InPath+=File.Dir();
 		OutDir=Out;
+		OutDir.Append('\\');
 
 		Name=File.File();
 // Create Out Filename from inFilename and outdir
-		OutFile=OutDir;				
-		OutFile.Append('\\');
-		OutFile+=File.File(); 
+		OutFile=OutDir+File.File();
+//		OutFile+=File.File(); 
 		
 		TPageBase=TPBase; 
 		TPageWidth=TPW ;
@@ -102,11 +103,10 @@ void	CMkActor3d::Load()
 //***************************************************************************
 void	CMkActor3d::Process()
 {
-
 		BuildSkin();
 		FaceList.SetTexBasePath(InPath);
-		FaceList.SetTexOut(GString("\\temp\\Test.tex"),1,1,1);
-		FaceList.SetTexDebugOut(GString("\\temp\\Test.Lbm"));
+		FaceList.SetTexOut(OutFile+".Tex",1,1,1);
+		FaceList.SetTexDebugOut(OutFile+".Lbm");
 
 		FaceList.Process();
 }
@@ -136,10 +136,101 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 		for (int Loop=0;Loop<ChildCount ;Loop++) BuildSkin(ThisNode.PruneChildList[Loop]);
 
 }
+
 //***************************************************************************
 void	CMkActor3d::Write()
 {
-		printf("%i Tris\n",FaceList.GetFaceCount());
+GString	OutName=OutFile+".A3d";
+
+		File=fopen(OutName,"wb");
+
+// Write Dummy Hdr
+		fwrite(&FileHdr,1,sizeof(sActor3dHdr),File);
+
+// Write Skeleton
+		FileHdr.NodeData=ftell(File);
+		WriteBone(1);
+
+// Write Tris
+		FileHdr.TriCount=FaceList.GetTriFaceCount();
+		FileHdr.TriData=FaceList.WriteTriList(File);
+		printf("%i Tris\n",FileHdr.TriCount);
+// Write Quads
+		FileHdr.QuadCount=FaceList.GetQuadFaceCount();
+		FileHdr.QuadData=FaceList.WriteQuadList(File);
+		printf("%i Quads\n",FileHdr.QuadCount);
+// Write WeightList
+		FileHdr.WeightCount=WeightList.size();
+		FileHdr.WeightData=WriteWeightList();
+		printf("%i Weight\n",FileHdr.WeightCount);
+
+		printf("Size=%i\n",ftell(File));
+
+// Rewrite Header
+		fseek(File, 0, SEEK_SET);
+		fwrite(&FileHdr,1,sizeof(sActor3dHdr),File);
+
+
+}
+
+//***************************************************************************
+void	CMkActor3d::WriteBone(int Idx)
+{
+sBone		ThisBone;
+CNode		&ThisNode=Scene.GetNode(Idx);
+
+			if (!ThisNode.Pts.size())		// Dont export Skin as bone
+				{
+				BuildBoneOut(ThisBone,ThisNode);
+				ThisBone.WeightList=(sWeight*)WeightList.size();
+				fwrite(&ThisBone, sizeof(sBone), 1, File);
+
+// build Weight List
+				for (int Weight=0; Weight<ThisBone.WeightCount; Weight++)
+					{
+					sWeight	OutWeight;
+					BuildWeightOut(OutWeight,ThisNode.Weights[Weight]);
+					WeightList.push_back(OutWeight);
+					}
+				}
+int		ChildCount=ThisNode.GetPruneChildCount();
+		for (int Loop=0;Loop<ChildCount;Loop++)	WriteBone(ThisNode.PruneChildList[Loop]);
+}
+
+//***************************************************************************
+void    CMkActor3d::BuildBoneOut(sBone &OutBone,CNode const &InNode)
+{
+		OutBone.BoneSize.vx =round(InNode.Pos.x*Scale);
+		OutBone.BoneSize.vy =round(InNode.Pos.y*Scale);
+		OutBone.BoneSize.vz =round(InNode.Pos.z*Scale);
+		OutBone.Idx=InNode.PruneIdx-1;
+		OutBone.Parent=InNode.PruneParentIdx-1;
+		OutBone.WeightCount=InNode.Weights.size();
+}
+
+//***************************************************************************
+void    CMkActor3d::BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight)
+{
+		OutWeight.vx=round(InWeight.Pos.x*Scale);
+		OutWeight.vy=round(InWeight.Pos.y*Scale);
+		OutWeight.vz=round(InWeight.Pos.z*Scale);
+		OutWeight.VtxNo=InWeight.VertNo;
+}
+
+
+//***************************************************************************
+int		CMkActor3d::WriteWeightList()
+{
+int		ListSize=WeightList.size();
+int		Pos=ftell(File);
+
+		for (int i=0; i<ListSize; i++)
+		{
+			sWeight		&OutWeight=WeightList[i];
+			fwrite(&OutWeight, sizeof(sWeight), 1, File);
+		}
+
+		return (Pos);
 }
 
 //***************************************************************************

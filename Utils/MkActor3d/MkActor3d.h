@@ -2,31 +2,11 @@
 /*** SpongeBob 3d Actor Creator ***/
 /**********************************/
 
-
 #include <Vector3.h>
-//#include "Layer.h"
-//#include "LayerTile.h"
 #include <List.h>
 #include <FaceStore.h>
 
 #include "..\mapedit\ExportPSXHdr.h"
-/*
-struct	sTex
-{
-	int		TexId;
-	int		XOfs,YOfs;
-	int		Flags;
-
-	bool operator==(sTex const &v1)	
-	{
-		if (TexId!=v1.TexId) return(FALSE);
-		if (XOfs!=v1.XOfs) return(FALSE);
-		if (YOfs!=v1.YOfs) return(FALSE);
-		if (Flags!=v1.Flags) return(FALSE);
-		return(TRUE);
-	}
-};
-*/
 
 //***************************************************************************
 class	CMkActor3d
@@ -40,14 +20,22 @@ public:
 
 private:
 		void			BuildSkin(int Idx=0);
+		void			WriteBone(int Idx);
+		void			BuildBoneOut(sBone &OutBone,CNode const &InNode);
+		void			BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight);
+		int				WriteWeightList();
 
 		GString			InFilename,InPath,Name,OutFile,OutDir;
 
 		CScene			Scene;
 
 		CFaceStore		FaceList;
+		vector<sWeight> WeightList;
 		CList<sTri>		OutTriList;
 		CList<sVtx>		OutVtxList;
+
+		sActor3dHdr		FileHdr;
+		FILE			*File;
 
 		int				TPageBase;
 		int				TPageWidth,TPageHeight;
