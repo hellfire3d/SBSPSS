@@ -41,7 +41,7 @@ static int	DrawLoadIcon=0;
 static RECT	LoadBackRect;
 static int	LoadTime=0;
 static const int	LoadBackInc=8;
-static	DISPENV		*VblDispEnv=0;
+static	DISPENV		*VblDispEnv=0;	// Disp End used as Vbl flip flag, so MUST be set after DrawEnv
 static	DRAWENV		*VblDrawEnv=0;
 
 /*****************************************************************************/
@@ -149,11 +149,8 @@ static void VidVSyncCallback()
 	if (VblDispEnv) 
 	{
 		PutDispEnv(VblDispEnv);
-		VblDispEnv=0;
-	}
-	if (VblDrawEnv) 
-	{
 		PutDrawEnv(VblDrawEnv);
+		VblDispEnv=0;
 		VblDrawEnv=0;
 	}
 
@@ -368,8 +365,8 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 		Screen[FrameFlipFlag].Disp.screen.y=ScreenYOfs;
 		Screen[FrameFlipFlag].Disp.screen.w=256;
 		Screen[FrameFlipFlag].Disp.screen.h=ScreenH;
-		VblDispEnv=&Screen[FrameFlipFlag].Disp;
 		VblDrawEnv=&Screen[FrameFlipFlag].Draw;
+		VblDispEnv=&Screen[FrameFlipFlag].Disp;
 		VSync(0);	// < -need this here, not in game (vsync miss bug)
 // If set, load background screen
 		if (ScreenImage) 
