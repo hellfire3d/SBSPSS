@@ -609,6 +609,12 @@ void CNpcIronDogfishEnemy::render()
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
 
+			if ( m_vulnerableTimer > 0 && m_invulnerableTimer <= 0 )
+			{
+				setShadeTex(SprFrame,0);
+				setRGB0( SprFrame, 255, 255, 255 );
+			}
+
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
