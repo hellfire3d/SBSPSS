@@ -70,6 +70,8 @@
 void	CGlovePickup::init()
 {
 	CBaseWeaponSimplePickup::init();
+
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_GLOVE);
 }
 
 /*----------------------------------------------------------------------

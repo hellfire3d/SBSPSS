@@ -658,9 +658,8 @@ m_animFrame=0;
 	m_divingHelmet=false;
 	setIsInWater(true);
 
-	// Always ( cept for one level ) need this
-	registerAddon(PLAYER_ADDON_GLOVE);
 #ifdef __USER_paul__
+registerAddon(PLAYER_ADDON_GLOVE);
 registerAddon(PLAYER_ADDON_NET);
 registerAddon(PLAYER_ADDON_CORALBLOWER);
 registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
