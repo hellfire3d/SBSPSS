@@ -19,9 +19,10 @@
 #include	"utils\utils.h"
 #endif
 
+#include	"fx\fxattachAnim.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+const int	DodgyYOffsetCosThePlatformAintInTheRightPosition_SortItOutCharles=32;
 void CNpcGeyserPlatform::postInit()
 {
 	CNpcPlatform::postInit();
@@ -29,6 +30,13 @@ void CNpcGeyserPlatform::postInit()
 	m_isFiring = false;
 
 	m_state = GEYSER_READY;
+// Add fountain stuff
+DVECTOR	Pos=getPos();
+		Pos.vy+=DodgyYOffsetCosThePlatformAintInTheRightPosition_SortItOutCharles;
+CThing	*FX=CFX::Create(CFX::FX_TYPE_FOUNTAIN_OIL,Pos);
+			addChild(FX);
+
+		CHARLES_DBGMSG("CNpcGeyserPlatform::postInit() - Reminder::Sort your platform positions out.\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
