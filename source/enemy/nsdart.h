@@ -19,6 +19,7 @@ class CNpcSquidDartEnemy : public CNpcEnemy
 public:
 	void				render();
 	virtual int			getFrameCount()							{return( 4 );}
+	virtual u8			canCollideWithEnemy()					{return( false );}
 };
 
 #endif
