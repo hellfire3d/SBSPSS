@@ -126,33 +126,35 @@ public:
 
 	// -- Collision --
 public:
-	virtual int		canCollide()								{return true;}
-	virtual int		checkCollisionAgainst(CThing *_thisThing, int _frames);
-	void			updateCollisionArea();
-	virtual void	collidedWith(CThing *_thisThing)			{;}
-	virtual void	setHasPlatformCollided( bool newVal )		{;}
-	virtual bool	getHasPlatformCollided()					{return false;}
-	s32				getNewYPos( CThing *_thisThing );
-	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
-protected:
 	typedef struct
 	{
 		int	x1,y1,x2,y2;
 	}
 	CRECT;
 
-	void			setCollisionSize(int _w,int _h);
-	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
-	void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
-	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
-	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
+
+	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
-	DVECTOR			getCollisionSize()							{return m_collisionSize;}
-	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
 	s16				getCollisionAngle()							{return m_collisionAngle;}
 	bool			getCentreCollision()						{return m_centreCollision;}
 	DVECTOR			getNewCollidedPos()							{return m_newCollidedPos;}
+	DVECTOR			getCollisionSize()							{return m_collisionSize;}
+
+	virtual int		canCollide()								{return true;}
+	virtual int		checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void			updateCollisionArea();
+	virtual void	collidedWith(CThing *_thisThing)			{;}
+	virtual void	setHasPlatformCollided( bool newVal )		{;}
+	virtual bool	getHasPlatformCollided()					{return false;}
+	virtual s32		getNewYPos( CThing *_thisThing );
+	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
+	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
+protected:
+	void			setCollisionSize(int _w,int _h);
+	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
+	void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
+	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
 private:
 	DVECTOR			m_collisionSize;
 	DVECTOR			m_collisionCentreOffset;

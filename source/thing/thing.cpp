@@ -350,6 +350,9 @@ void	CThing::think(int _frames)
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
 	PosLast=Pos;
+
+	//m_collisionAngle += 1;
+	//m_collisionAngle &= 4095;
 }
 
 /*----------------------------------------------------------------------
@@ -596,107 +599,16 @@ void	CThing::updateCollisionArea()
 s32		CThing::getNewYPos(CThing *_thisThing)
 {
 	CRECT	thisRect;
-	DVECTOR thatPos = _thisThing->getPos();
-
 	thisRect = getCollisionArea();
 
-	// 'render' collision box at correct angle
-
-	SVECTOR testPointsNonRel[4];
-	VECTOR testPoints[4];
-
-	testPointsNonRel[0].vx = thisRect.x1 - Pos.vx;
-	testPointsNonRel[0].vy = thisRect.y1 - Pos.vy;
-
-	testPointsNonRel[1].vx = thisRect.x2 - Pos.vx;
-	testPointsNonRel[1].vy = thisRect.y1 - Pos.vy;
-
-	testPointsNonRel[2].vx = thisRect.x2 - Pos.vx;
-	testPointsNonRel[2].vy = thisRect.y2 - Pos.vy;
-
-	testPointsNonRel[3].vx = thisRect.x1 - Pos.vx;
-	testPointsNonRel[3].vy = thisRect.y2 - Pos.vy;
-
-	MATRIX mtx;
-	SetIdentNoTrans(&mtx );
-	RotMatrixZ( m_collisionAngle, &mtx );
-
-	int i;
-
-	for ( i = 0 ; i < 4 ; i++ )
+	if ( thisRect.y1 < thisRect.y2 )
 	{
-		ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
-
-		testPoints[i].vx += Pos.vx;
-		testPoints[i].vy += Pos.vy;
+		return( thisRect.y1 );
 	}
-
-	// now find the highest y pos
-
-	// first set highestY to lowest of the four points
-	
-	s16 highestY = testPoints[0].vy;
-
-	for ( i = 1 ; i < 4 ; i++ )
+	else
 	{
-		if ( testPoints[i].vy > highestY ) // remember y is inverted
-		{
-			highestY = testPoints[i].vy;
-		}
+		return( thisRect.y2 );
 	}
-
-	for ( i = 0 ; i < 4 ; i++ )
-	{
-		int j = i + 1;
-		j %= 4;
-
-		VECTOR highestX, lowestX;
-
-		if ( testPoints[i].vx < testPoints[j].vx )
-		{
-			lowestX = testPoints[i];
-			highestX = testPoints[j];
-		}
-		else
-		{
-			lowestX = testPoints[j];
-			highestX = testPoints[i];
-		}
-
-		if ( highestX.vx == lowestX.vx )
-		{
-			// have to compare heights of both points to get highest
-
-			if ( lowestX.vy < highestY )
-			{
-				highestY = lowestX.vy;
-			}
-
-			if ( highestX.vy < highestY )
-			{
-				highestY = highestX.vy;
-			}
-		}
-		else
-		{
-			if ( thatPos.vx >= lowestX.vx && thatPos.vx <= highestX.vx )
-			{
-				// current position is above or below this line
-
-				s16 testY;
-
-				testY = lowestX.vy + ( ( thatPos.vx - lowestX.vx ) * ( highestX.vy - lowestX.vy ) ) /
-							( highestX.vx - lowestX.vx );
-
-				if ( testY < highestY )
-				{
-					highestY = testY;
-				}
-			}
-		}
-	}
-
-	return( highestY );
 }
 
 /*----------------------------------------------------------------------
@@ -711,8 +623,6 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing, int _frames)
 	int		radius;
 	int		collided;
 
-	MATRIX mtx;
-
 	pos=getCollisionCentre();
 	thisThingPos=_thisThing->getCollisionCentre();
 
@@ -725,106 +635,12 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing, int _frames)
 
 		thisRect=getCollisionArea();
 
-		// ensure user 'sticks' to platform whilst it is moving along
-
 		thatRect=_thisThing->getCollisionArea();
-
-		// rotate thatPos opposite way to this CThing's collision angle, so that we can regard them both as being at 0 rotation
-
-		// get target thing's position
-
-		DVECTOR thatPos = _thisThing->getPos();
-
-		// get target thing's position relative to this thing's position
-
-		SVECTOR relativePos;
-		relativePos.vx = thatPos.vx - Pos.vx;
-		relativePos.vy = thatPos.vy - Pos.vy;
-
-		VECTOR newPos;
-
-		// get target thing's collision area relative to 0
-
-		thatRect.x1 -= thatPos.vx;
-		thatRect.y1 -= thatPos.vy;
-		thatRect.x2 -= thatPos.vx;
-		thatRect.y2 -= thatPos.vy;
-
-		SetIdentNoTrans(&mtx );
-		RotMatrixZ( -m_collisionAngle, &mtx );
-
-		// rotation target relative position back to 0 by this thing's collision angle
-
-		ApplyMatrix( &mtx, &relativePos, &newPos );
-
-		// add on this thing's position to get new target thing's position after rotation around this thing
-
-		newPos.vx += Pos.vx;
-		newPos.vy += Pos.vy;
-
-		// reposition target thing's collision area
-
-		thatRect.x1 += newPos.vx;
-		thatRect.y1 += newPos.vy;
-		thatRect.x2 += newPos.vx;
-		thatRect.y2 += newPos.vy;
-
-		// check to see if bounding boxes collide
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
 		{
 			collided=true;
-
-			// check to see if centre point (i.e. where the object is standing) collides too
-
-			if ( ( newPos.vx >= thisRect.x1 && newPos.vx <= thisRect.x2 ) &&
-					( newPos.vy >= thisRect.y1 && newPos.vy <= thisRect.y2 ) )
-			{
-				thatPos.vy = getNewYPos( _thisThing );
-
-				// vertical height change is the sum of the maximums of BOTH objects
-				// potentially, one object could be falling down through another object that is moving up
-
-				s32 verticalDelta = abs( _thisThing->getPosDelta().vy ) + abs( this->getPosDelta().vy );
-
-				if ( thatPos.vy - _thisThing->getPos().vy >= -verticalDelta )
-				{
-					if ( _thisThing->getHasPlatformCollided() )
-					{
-						// if this has already collided with a platform, check the current platform is
-						// (a) within 10 units,
-						// (b) higher
-
-						DVECTOR oldCollidedPos = _thisThing->getNewCollidedPos();
-
-						s32 oldY = abs( oldCollidedPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
-						s32 currentY = abs( thatPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
-
-						//if ( thatPos.vy < oldCollidedPos.vy )
-						if ( currentY < oldY )
-						{
-							_thisThing->setNewCollidedPos( thatPos );
-						}
-					}
-					else
-					{
-						_thisThing->setHasPlatformCollided( true );
-
-						_thisThing->setCentreCollision( true );
-
-						_thisThing->setNewCollidedPos( thatPos );
-					}
-				}
-				else
-				{
-					_thisThing->setCentreCollision( false );
-				}
-			}
-			else
-			{
-				_thisThing->setCentreCollision( false );
-			}
 		}
 	}
 

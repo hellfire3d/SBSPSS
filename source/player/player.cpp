@@ -508,20 +508,20 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 {
 	int	height;
+	DVECTOR	platformPos;
+	DVECTOR newPos;
 	if(isOnPlatform())
 	{
-		DVECTOR	platformPos;
-		platformPos=m_platform->getPosDelta();
-		DVECTOR newPos = getNewCollidedPos();
+		CThing *platform = isOnPlatform();
+		height = platform->getNewYPos( this ) - Pos.vy;
 
-		// since collision was detected in the LAST frame, we must check to see where the platform has moved to in THIS frame
+		int groundHeight = m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
 
-		height = newPos.vy + platformPos.vy - Pos.vy;
-
-//		if(height<-_maxHeight)
-//		{
-//			height=-_maxHeight;
-//		}
+		if ( groundHeight < height )
+		{
+			height = groundHeight;
+			clearPlatform();
+		}
 	}
 	else
 	{
