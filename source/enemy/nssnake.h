@@ -65,7 +65,9 @@ protected:
 	s32					getFrameShift( int _frames );
 	bool				processSensor();
 	void				processClose( int _frames );
+	void				processFrameClose();
 	void				processMovement( int _frames );
+	void				processFrameMovement();
 	void				processShot( int _frames );
 	void				processEnemyCollision( CThing *thisThing );
 	void				processUserCollision( CThing *thisThing );
@@ -78,7 +80,7 @@ protected:
 
 	enum
 	{
-		NPC_SEA_SNAKE_SPACING = 4,
+		NPC_SEA_SNAKE_SPACING = 8,
 		NPC_SEA_SNAKE_LENGTH = 9,
 		NPC_SEA_SNAKE_CIRCLE_CLOCKWISE = 1,
 		NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE = 2,
@@ -100,22 +102,11 @@ protected:
 		CNpcPositionHistory			*prev;
 	};
 
-	class CNpcSpacingHistory
-	{
-	public:
-		u8							spacing;
-		CNpcSpacingHistory			*next;
-		CNpcSpacingHistory			*prev;
-	};
-
 	u8								m_segmentCount;
 	CNpcSeaSnakeSegment				m_segmentArray[NPC_SEA_SNAKE_LENGTH];
 
 	CNpcPositionHistory				*m_positionHistory;
 	CNpcPositionHistory				m_positionHistoryArray[NPC_SEA_SNAKE_SPACING * NPC_SEA_SNAKE_LENGTH * 2];
-
-	CNpcSpacingHistory				*m_spacingHistory;
-	CNpcSpacingHistory				m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH];
 
 	s32								m_collTimer;
 	s32								m_snapTimer;

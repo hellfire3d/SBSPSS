@@ -117,23 +117,6 @@ void CNpcSeaSnakeEnemy::postInit()
 
 	m_positionHistory = &m_positionHistoryArray[0];
 
-	m_spacingHistoryArray[0].spacing = 2;
-	m_spacingHistoryArray[0].next = &m_spacingHistoryArray[1];
-	m_spacingHistoryArray[0].prev = &m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1];
-
-	for ( histLength = 1 ; histLength < NPC_SEA_SNAKE_LENGTH - 1 ; histLength++ )
-	{
-		m_spacingHistoryArray[histLength].spacing = 2;
-		m_spacingHistoryArray[histLength].next = &m_spacingHistoryArray[histLength + 1];
-		m_spacingHistoryArray[histLength].prev = &m_spacingHistoryArray[histLength - 1];
-	}
-
-	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].spacing = 2;
-	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].next = &m_spacingHistoryArray[0];
-	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].prev = &m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 2];
-
-	m_spacingHistory = &m_spacingHistoryArray[0];
-
 	u16 segScale;
 	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
 	int remLength = NPC_SEA_SNAKE_LENGTH - initLength;
@@ -368,7 +351,7 @@ u8 CNpcSeaSnakeEnemy::processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcSeaSnakeEnemy::processMovement( int _frames )
+void CNpcSeaSnakeEnemy::processFrameMovement()
 {
 	s32 moveX = 0, moveY = 0;
 	s32 moveVel = 0;
@@ -377,7 +360,7 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 	if ( m_snapTimer > 0 )
 	{
-		m_snapTimer -= _frames;
+		m_snapTimer -= 1;
 
 		if ( m_snapTimer > 0 )
 		{
@@ -402,7 +385,7 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 	if ( m_waitTimer > 0 )
 	{
-		m_waitTimer -= _frames;
+		m_waitTimer -= 1;
 	}
 	else
 	{
@@ -420,8 +403,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
 
-				s32 preShiftX = _frames * 3 * rcos( m_heading );
-				s32 preShiftY = _frames * 3 * rsin( m_heading );
+				s32 preShiftX = 3 * rcos( m_heading );
+				s32 preShiftY = 3 * rsin( m_heading );
 
 				s32 moveX = preShiftX >> 12;
 				if ( !moveX && preShiftX )
@@ -453,8 +436,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
 
-				s32 preShiftX = _frames * 3 * rcos( m_heading );
-				s32 preShiftY = _frames * 3 * rsin( m_heading );
+				s32 preShiftX = 3 * rcos( m_heading );
+				s32 preShiftY = 3 * rsin( m_heading );
 
 				s32 moveX = preShiftX >> 12;
 				if ( !moveX && preShiftX )
@@ -519,12 +502,12 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 					}
 					else
 					{
-						processGenericGotoTarget( _frames, distX, distY, m_speed );
+						processGenericGotoTarget( 1, distX, distY, m_speed );
 					}
 				}
 				else
 				{
-					if ( processPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist ) )
+					if ( processPathMove( 1, &moveX, &moveY, &moveVel, &moveDist ) )
 					{
 						// path has changed
 
@@ -614,7 +597,17 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		}
 	}
 
-	updateTail( oldPos, _frames );
+	updateTail( oldPos, 1 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSeaSnakeEnemy::processMovement( int _frames )
+{
+	for ( int frameCount = 0 ; frameCount < _frames ; frameCount++ )
+	{
+		processFrameMovement();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -633,40 +626,10 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 	CNpcPositionHistory *newPos;
 	newPos = m_positionHistory;
 
-	m_spacingHistory = m_spacingHistory->prev;
-
-	CNpcSpacingHistory *spaceHist;
-	spaceHist = m_spacingHistory;
-
-	m_spacingHistory->spacing = _frames;
-
-	int averageFrames = 0;
-
-	for ( int frameCheck = 0 ; frameCheck < NPC_SEA_SNAKE_LENGTH ; frameCheck++ )
-	{
-		averageFrames += m_spacingHistoryArray[frameCheck].spacing << 8;
-	}
-
-	averageFrames /= NPC_SEA_SNAKE_LENGTH;
-
-	int skipDist;
-
-	if ( averageFrames < ( 2 << 8 ) )
-	{
-		skipDist = NPC_SEA_SNAKE_SPACING + 4;
-	}
-	else
-	{
-		skipDist = NPC_SEA_SNAKE_SPACING;
-	}
-
-	//for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
-	for ( skipCounter = 1 ; skipCounter < skipDist ; skipCounter++ )
+	for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
 	{
 		newPos = newPos->next;
 	}
-
-	spaceHist = spaceHist->next;
 
 	oldPos = Pos;
 
@@ -728,13 +691,10 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 		}
 		oldPos = sinPos;
 
-		//for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
-		for ( skipCounter = 0 ; skipCounter < skipDist ; skipCounter++ )
+		for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
 		{
 			newPos = newPos->next;
 		}
-
-		spaceHist = spaceHist->next;
 
 		extension += 1024;
 		extension &= 4095;
@@ -881,7 +841,7 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcSeaSnakeEnemy::processClose( int _frames )
+void CNpcSeaSnakeEnemy::processFrameClose()
 {
 	DVECTOR oldPos = Pos;
 
@@ -891,7 +851,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 		{
 			if ( playerYDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, 0, playerYDist, m_speed );
+				processGenericGotoTarget( 1, 0, playerYDist, m_speed );
 			}
 			else
 			{
@@ -905,7 +865,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 		{
 			if ( playerXDistSqr > 4000 )
 			{
-				processGenericGotoTarget( _frames, playerXDist, 0, m_speed );
+				processGenericGotoTarget( 1, playerXDist, 0, m_speed );
 			}
 			else
 			{
@@ -1000,40 +960,17 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 		}
 	}
 
-	updateTail( oldPos, _frames );
+	updateTail( oldPos, 1 );
+}
 
-	/*
-	// fire at player
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
-	s16 heading = m_heading;
-
-	CProjectile *projectile;
-	projectile = CProjectile::Create();
-	DVECTOR newPos = Pos;
-	newPos.vx += 50 * ( rcos( m_heading ) >> 12 );
-	newPos.vy += 50 * ( rsin( m_heading ) >> 12 );
-
-	int perpHeading = ( heading - 1024 ) & 4095;
-
-	newPos.vx += 20 * ( rcos( perpHeading ) >> 12 );
-	newPos.vy += 20 * ( rsin( perpHeading ) >> 12 );
-
-	projectile->init( newPos, heading );
-	projectile->setGraphic( FRM__SNAKEBILE );
-
-	//resetSeaSnakeHeadToTail();
-
-	m_movementTimer = GameState::getOneSecondInFrames();
-
-	m_controlFunc = NPC_CONTROL_MOVEMENT;
-	m_timerFunc = NPC_TIMER_ATTACK_DONE;
-	m_timerTimer = GameState::getOneSecondInFrames();
-	m_sensorFunc = NPC_SENSOR_NONE;
-
-	m_snapTimer = m_movementTimer;
-	//m_openTimer = GameState::getOneSecondInFrames() >> 2;
-	*/
+void CNpcSeaSnakeEnemy::processClose( int _frames )
+{
+	for ( int frameCount = 0 ; frameCount < _frames ; frameCount++ )
+	{
+		processFrameClose();
+	}
 }
 
 
