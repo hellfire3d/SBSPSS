@@ -57,22 +57,26 @@ void CNpcMotherJellyfishEnemy::postInit()
 		m_health = CLevel::getBossHealth();
 	}
 
-	legsPos[0].vx = 80;
+	legsPos[0].vx = 81;
 	legsPos[0].vy = -5;
 
-	legsPos[1].vx = 40;
+	legsPos[1].vx = 27;
 	legsPos[1].vy = 0;
 
-	legsPos[2].vx = -40;
+	legsPos[2].vx = -27;
 	legsPos[2].vy = -5;
 
-	legsPos[3].vx = -80;
+	legsPos[3].vx = -81;
 	legsPos[3].vy = 0;
+
+	s16 scale;
+	scale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 
 	for ( int i = 0 ; i < 4 ; i++ )
 	{
 		legs[i] = (CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-		legs[i]->Setup( legsPos[i].vx, legsPos[i].vy, i > 1 );
+		legs[i]->Setup( ( legsPos[i].vx * scale ) >> 12, legsPos[i].vy, i > 1 );
+		legs[i]->setScale( scale );
 	}
 
 	m_RGB = MJ_PINK;
