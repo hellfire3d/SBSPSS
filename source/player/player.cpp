@@ -2733,7 +2733,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 	setPlayerPos(&pos);
 
 
-	if(m_currentMode!=PLAYER_MODE_DEAD)
+	if(m_currentMode!=PLAYER_MODE_DEAD&&!isOnPlatform())
 	{
 		switch(hitThisSuspectBlock&COLLISION_TYPE_MASK)
 		{
