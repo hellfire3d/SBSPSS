@@ -71,6 +71,8 @@ void CLayerCollision::render(DVECTOR &MapPos)
 
 					case 1:
 					case 2:
+					case 3:
+					case 4:
 						f4=GetPrimF4();
 						setXYWH(f4,x,y,16,16);
 						setRGB0(f4,0,0,90);
@@ -135,6 +137,26 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXY3(f3,x,y+16,
 								  x+16,y+16,
 								  x,y);
+						setRGB0(f3,0,0,90);
+						setSemiTrans(f3,true);
+						AddPrimToList(f3,0);
+						break;
+
+					case 15:
+						f3=GetPrimF3();
+						setXY3(f3,x+16,y,
+								  x,y,
+								  x+16,y+16);
+						setRGB0(f3,0,0,90);
+						setSemiTrans(f3,true);
+						AddPrimToList(f3,0);
+						break;
+
+					case 16:
+						f3=GetPrimF3();
+						setXY3(f3,x,y,
+								  x+16,y,
+								  x,y+16);
 						setRGB0(f3,0,0,90);
 						setSemiTrans(f3,true);
 						AddPrimToList(f3,0);
