@@ -85,35 +85,35 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=Source\Gal.c
+SOURCE=Gal.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Gmain.c
+SOURCE=Gmain.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Gtimer.c
+SOURCE=Gtimer.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Gutils.c
+SOURCE=Gutils.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Ll.c
+SOURCE=Ll.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Objs.c
+SOURCE=Objs.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Tasker.c
+SOURCE=Tasker.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Tick.c
+SOURCE=Tick.c
 # End Source File
 # End Group
 # Begin Group "Core Headers"
@@ -121,51 +121,51 @@ SOURCE=Source\Tick.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gal.h
+SOURCE=Gal.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gdebug.h
+SOURCE=Gdebug.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gmain.h
+SOURCE=Gmain.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gsys.h
+SOURCE=Gsys.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gtimer.h
+SOURCE=Gtimer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gtimsys.h
+SOURCE=Gtimsys.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gtypes.h
+SOURCE=Gtypes.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Gutils.h
+SOURCE=Gutils.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Ll.h
+SOURCE=Ll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Objs.h
+SOURCE=Objs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Tasker.h
+SOURCE=Tasker.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Tick.h
+SOURCE=Tick.h
 # End Source File
 # End Group
 # Begin Group "PC Source"
@@ -173,67 +173,67 @@ SOURCE=..\..\Glib\Include\Tick.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=Source\Pc\Dpanim.cpp
+SOURCE=Dpanim.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Frame.cpp
+SOURCE=Frame.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Ganim.cpp
+SOURCE=Ganim.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gdebug.c
+SOURCE=Gdebug.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gfname.cpp
+SOURCE=Gfname.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gobject.cpp
+SOURCE=Gobject.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gstring.cpp
+SOURCE=Gstring.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gsys.c
+SOURCE=Gsys.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Gtimsys.c
+SOURCE=Gtimsys.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Iff.cpp
+SOURCE=Iff.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Ilbm.cpp
+SOURCE=Ilbm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Misc.cpp
+SOURCE=Misc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Niff.cpp
+SOURCE=Niff.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\Pal.cpp
+SOURCE=Pal.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=Source\PC\REGEX.C
+SOURCE=REGEX.C
 # End Source File
 # Begin Source File
 
-SOURCE=Source\Pc\tquant.cpp
+SOURCE=tquant.cpp
 # End Source File
 # End Group
 # Begin Group "PC Headers"
@@ -241,59 +241,59 @@ SOURCE=Source\Pc\tquant.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Dpanim.hpp
+SOURCE=Dpanim.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Frame.hpp
+SOURCE=Frame.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Ganim.hpp
+SOURCE=Ganim.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Gfname.hpp
+SOURCE=Gfname.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Gobject.hpp
+SOURCE=Gobject.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Gstring.hpp
+SOURCE=Gstring.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Iff.hpp
+SOURCE=Iff.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Ilbm.hpp
+SOURCE=Ilbm.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Misc.hpp
+SOURCE=Misc.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Mtypes.h
+SOURCE=Mtypes.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Niff.hpp
+SOURCE=Niff.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\Pal.hpp
+SOURCE=Pal.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\GLIB\Include\PC\REGEX.H
+SOURCE=REGEX.H
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Glib\Include\Pc\tquant.h
+SOURCE=tquant.h
 # End Source File
 # End Group
 # Begin Group "Template"
@@ -319,27 +319,27 @@ SOURCE=..\..\Template\Template.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=Source\PC\pcre\chartables.c
+SOURCE=chartables.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\PC\pcre\internal.h
+SOURCE=internal.h
 # End Source File
 # Begin Source File
 
-SOURCE=Source\PC\pcre\maketables.c
+SOURCE=maketables.c
 # End Source File
 # Begin Source File
 
-SOURCE=Source\PC\pcre\pcre.c
+SOURCE=pcre.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\GLIB\Include\PC\pcre.h
+SOURCE=pcre.h
 # End Source File
 # Begin Source File
 
-SOURCE=Source\PC\pcre\study.c
+SOURCE=study.c
 # End Source File
 # End Group
 # End Target
