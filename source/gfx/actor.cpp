@@ -493,9 +493,9 @@ int			HalfW=CurrentFrame->W>>1;
 			BBox.YMin=-CurrentFrame->H;
 			BBox.YMax=0;
 
-
-			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
-	Angle+=AngleInc;
+//
+//			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
+//	Angle+=AngleInc;
 
 			return(Ft4);
 }
@@ -532,11 +532,6 @@ sBBox	SBox,CBox;
 		Ft4->x2=Pos.vx+CBox.XMin+SBox.YMax; Ft4->y2=Pos.vy+SBox.XMin-CBox.YMax;
 		Ft4->x3=Pos.vx+CBox.XMax+SBox.YMax; Ft4->y3=Pos.vy+SBox.XMax-CBox.YMax;
 
-// Attempt to fix nasty PSX hardware nastiness :o(
-//		Ft4->u1--;
-//		Ft4->u3--;
-//		Ft4->v2--;
-//		Ft4->v3--;
 		return(Ft4);
 }
 
