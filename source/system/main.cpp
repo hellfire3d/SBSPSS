@@ -25,11 +25,11 @@
 
 #ifdef __USER_paul__
 #include "paul\paul.h"
+CPaulScene s_paulScene;
 #endif
 
 #if defined (__USER_paul__)||defined (__USER_art__)||defined (__USER_sbart__)
 #include "paul\scenesel.h"
-CPaulScene s_paulScene;
 #endif
 
 #ifdef __USER_charles__
