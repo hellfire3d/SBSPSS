@@ -181,7 +181,7 @@ void	CPlayerModeNet::think()
 					DVECTOR	launchPos;
 
 					playerFacing=m_player->getFacing();
-					fireHeading=1024+(1024*playerFacing);
+					fireHeading=1024+(800*playerFacing);
 					launchPos=m_player->getPos();
 					launchPos.vx+=netLaunchPos.vx*playerFacing;
 					launchPos.vy+=netLaunchPos.vy;
