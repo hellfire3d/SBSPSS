@@ -179,7 +179,8 @@ struct	sElem3d
 		u16		QuadCount;
 		u16		VtxIdxStart;
 		u16		VtxTriCount;
-};											// 12
+		u32		Pad;						// for quicker mult
+};											// 16
 
 //***************************************************************************
 // Layers
