@@ -479,7 +479,7 @@ void CNpcPlatform::reinit()
 void CNpcPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), 50 + ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), PLATFORMCOLLISIONHEIGHT);
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, boundingBox.YMin );
 
 	if ( m_type == NPC_LINEAR_PLATFORM )
@@ -700,7 +700,7 @@ void CNpcPlatform::calculateBoundingBoxSize()
 	x2=+halfLength*mcos(angle&4095)>>12;
 	y2=+halfLength*msin(angle&4095)>>12;
 
-	setCollisionSize(abs(x2-x1),50 + abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
 
 	//sBBox boundingBox = m_modelGfx->GetBBox();
 	//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );

@@ -42,7 +42,7 @@
 
 // The collision box is this high.. if SB keeps falling through platforms then it *should* be sufficient
 // just to up this a bit
-#define PLATFORMCOLLISIONHEIGHT		80
+#define PLATFORMCOLLISIONHEIGHT		90
 
 
 /*****************************************************************************/

@@ -37,7 +37,7 @@
 void CNpcBranchPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, 50 + ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, PLATFORMCOLLISIONHEIGHT );
 
 	if ( m_reversed )
 	{
@@ -319,5 +319,5 @@ void CNpcBranchPlatform::calculateBoundingBoxSize()
 	x2=+length*mcos(angle&4095)>>12;
 	y2=+length*msin(angle&4095)>>12;
 
-	setCollisionSize(abs(x2-x1),50 + abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
 }

@@ -1779,12 +1779,10 @@ int		CPlayer::moveVertical(int _moveDistance)
 		int colHeightBefore,colHeightAfter;
 
 		// Yes.. Check to see if we're about to hit/go through the ground/platform
-		if(!isOnPlatform())
-		{
-			colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
-			colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-		}
-		else
+		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
+		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		if(isOnPlatform()&&
+		   !(colHeightBefore>=0&&colHeightAfter<=0))
 		{
 			colHeightBefore=getHeightFromPlatformNoGround(pos.vx,pos.vy,16);
 			colHeightAfter=getHeightFromPlatformNoGround(pos.vx,pos.vy+_moveDistance,16);
