@@ -22,6 +22,10 @@
 #include "thing/thing.h"
 #endif
 
+#ifndef __TRIGGERS_TRIGGER_H__
+#include "triggers\trigger.h"
+#endif
+
 
 /*	Std Lib
 	------- */

@@ -15,7 +15,6 @@
 	Includes
 	-------- */
 
-#include "triggers\trigger.h"
 #include "triggers\twater.h"
 
 #ifndef	__PLAYER_PLAYER_H__
