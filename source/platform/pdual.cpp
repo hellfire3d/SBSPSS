@@ -79,6 +79,7 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	slavePos.vy = startPos.vy + m_maxExtension;
 
 	m_otherPlatform->init( slavePos );
+	m_otherPlatform->postInit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +146,7 @@ void CNpcDualPlatform::processMovement( int _frames )
 		slaveMove.vy = -extensionChange;
 
 		m_otherPlatform->setMovement( slaveMove );
+		m_otherPlatform->updateCollisionArea();
 	}
 }
 
