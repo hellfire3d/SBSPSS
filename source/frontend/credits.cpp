@@ -84,7 +84,7 @@
   ---------------------------------------------------------------------- */
 #include "memcard\memcard.h"
 #include "memcard\saveload.h"
-SaveLoadDatabase	*sl;
+CSaveLoadDatabase	*sl;
 enum{mode_none,mode_save,mode_load};
 int mode=mode_none;
 void CFrontEndCredits::init()
@@ -111,7 +111,7 @@ static u8 *s_image;
 void CFrontEndCredits::select()
 {
 MemCard::Start();
-sl=new ("sldb") SaveLoadDatabase();
+sl=new ("sldb") CSaveLoadDatabase();
 mode=mode_none;
 	m_shuttingDown=false;
 	s_image=CFileIO::loadFile(BACKDROP_CREDITS_GFX);
@@ -178,9 +178,9 @@ if(mode==mode_none)
 else if(mode==mode_save)
 {
 	int	status=sl->getSaveStatus();
-	if(status!=SaveLoadDatabase::IN_PROGRESS)
+	if(status!=CSaveLoadDatabase::IN_PROGRESS)
 	{
-		if(status==SaveLoadDatabase::FINISHED_OK)
+		if(status==CSaveLoadDatabase::FINISHED_OK)
 		{
 			MEMCARD_DBGMSG("saved ok");
 		}
@@ -194,9 +194,9 @@ else if(mode==mode_save)
 else if(mode==mode_load)
 {
 	int	status=sl->getLoadStatus();
-	if(status!=SaveLoadDatabase::IN_PROGRESS)
+	if(status!=CSaveLoadDatabase::IN_PROGRESS)
 	{
-		if(status==SaveLoadDatabase::FINISHED_OK)
+		if(status==CSaveLoadDatabase::FINISHED_OK)
 		{
 			MEMCARD_DBGMSG("loaded ok");
 		}

@@ -7,7 +7,7 @@
 	Project:	Spongebob
 	Purpose: 
 
-	Copyright (c) 2000 Climax Development Ltd
+	Copyright (c) 2001 Climax Development Ltd
 
 ===========================================================================*/
 

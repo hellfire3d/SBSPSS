@@ -83,11 +83,11 @@ CFG=spongebob project - Win32 Debug
 
 # Begin Group "source"
 
+# PROP Default_Filter ""
 # Begin Group "enemy"
 
 # PROP Default_Filter ""
 # End Group
-# PROP Default_Filter ""
 # Begin Group "fileio"
 
 # PROP Default_Filter ""
@@ -205,6 +205,14 @@ SOURCE=..\..\..\source\game\game.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\game\gameslot.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\gameslot.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\thing.cpp
 # End Source File
 # Begin Source File
@@ -215,6 +223,14 @@ SOURCE=..\..\..\source\game\thing.h
 # Begin Group "gfx"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\anim.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\anim.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\gfx\animtex.cpp
@@ -262,6 +278,18 @@ SOURCE=..\..\..\source\gfx\prim.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\gfx\prim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\primplus.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\skel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\skel.h
 # End Source File
 # Begin Source File
 

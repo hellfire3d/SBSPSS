@@ -62,6 +62,7 @@ frontend_src :=		credits \
 					start
 
 game_src :=			game \
+					gameslot \
 					thing \
 					convo
 

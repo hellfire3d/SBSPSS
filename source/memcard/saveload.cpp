@@ -84,7 +84,7 @@ static int	s_callbackStatus=0;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-SaveLoadDatabase::SaveLoadDatabase()
+CSaveLoadDatabase::CSaveLoadDatabase()
 {
 	m_saving=false;
 	m_loading=false;
@@ -104,7 +104,7 @@ SaveLoadDatabase::SaveLoadDatabase()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-SaveLoadDatabase::~SaveLoadDatabase()
+CSaveLoadDatabase::~CSaveLoadDatabase()
 {
 	MemFree(m_memcardHeader);
 }
@@ -116,7 +116,7 @@ SaveLoadDatabase::~SaveLoadDatabase()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::think()
+void CSaveLoadDatabase::think()
 {
 	MemCard::Handler();
 }
@@ -128,7 +128,7 @@ void SaveLoadDatabase::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::gatherData()
+void CSaveLoadDatabase::gatherData()
 {
 	ASSERT(!m_saving);
 	ASSERT(!m_loading);
@@ -145,7 +145,7 @@ void SaveLoadDatabase::gatherData()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool SaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
+bool CSaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 {
 	char	nameBuf[9]="\0";
 
@@ -189,7 +189,7 @@ bool SaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int SaveLoadDatabase::getSaveStatus()
+int CSaveLoadDatabase::getSaveStatus()
 {
 	int ret=INACTIVE;
 
@@ -231,7 +231,7 @@ MEMCARD_DBGMSG("======= weird card removal - bonus 50 points");
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool SaveLoadDatabase::startLoad(int _file)
+bool CSaveLoadDatabase::startLoad(int _file)
 {
 	ASSERT(!m_saving);
 	ASSERT(!m_loading);
@@ -260,7 +260,7 @@ bool SaveLoadDatabase::startLoad(int _file)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int SaveLoadDatabase::getLoadStatus()
+int CSaveLoadDatabase::getLoadStatus()
 {
 	int ret=INACTIVE;
 
@@ -323,7 +323,7 @@ int SaveLoadDatabase::getLoadStatus()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool SaveLoadDatabase::startFormat()
+bool CSaveLoadDatabase::startFormat()
 {
 	ASSERT(!m_saving);
 	ASSERT(!m_loading);
@@ -349,7 +349,7 @@ MEMCARD_DBGMSG("======= m_formatting=true");
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int SaveLoadDatabase::getFormatStatus()
+int CSaveLoadDatabase::getFormatStatus()
 {
 	int ret=INACTIVE;
 
@@ -389,7 +389,7 @@ MEMCARD_DBGMSG("======= still formatting...");
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::startAutoload()
+void CSaveLoadDatabase::startAutoload()
 {
 	MEMCARD_DBGMSG("Trying autoload..");
 	m_autoloadFrameCounter=0;
@@ -403,7 +403,7 @@ void SaveLoadDatabase::startAutoload()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool SaveLoadDatabase::monitorAutoload()
+bool CSaveLoadDatabase::monitorAutoload()
 {
 	if(m_autoloading)
 	{
@@ -441,7 +441,7 @@ bool SaveLoadDatabase::monitorAutoload()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::createData()
+void CSaveLoadDatabase::createData()
 {
 	int i;
 
@@ -456,6 +456,12 @@ void SaveLoadDatabase::createData()
 		m_dataBuffer.m_systemDetails.m_volumes[i]=CSoundMediator::getVolume((CSoundMediator::VOLUMETYPE)i);
 	}
 	m_dataBuffer.m_systemDetails.m_language=(char)TranslationDatabase::getLanguage();
+
+	// Game slots
+	for(i=0;i<CGameSlotManager::NUM_GAME_SLOTS;i++)
+	{
+		m_dataBuffer.m_gameSlots[i]=CGameSlotManager::getSlotData(i);
+	}
 }
 
 
@@ -465,7 +471,7 @@ void SaveLoadDatabase::createData()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::restoreData()
+void CSaveLoadDatabase::restoreData()
 {
 	int i;
 
@@ -479,6 +485,12 @@ void SaveLoadDatabase::restoreData()
 	{
 		TranslationDatabase::loadLanguage(m_dataBuffer.m_systemDetails.m_language);
 	}
+	
+	// Game slots
+	for(i=0;i<CGameSlotManager::NUM_GAME_SLOTS;i++)
+	{
+		CGameSlotManager::setSlotData(i,&m_dataBuffer.m_gameSlots[i]);
+	}
 }
 
 
@@ -488,7 +500,7 @@ void SaveLoadDatabase::restoreData()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::allocateBuffer()
+void CSaveLoadDatabase::allocateBuffer()
 {
 	ASSERT(!m_tempBuffer);
 
@@ -504,7 +516,7 @@ void SaveLoadDatabase::allocateBuffer()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void SaveLoadDatabase::freeBuffer()
+void CSaveLoadDatabase::freeBuffer()
 {
 	ASSERT(m_tempBuffer);
 	

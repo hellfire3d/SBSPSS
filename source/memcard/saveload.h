@@ -22,6 +22,10 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -36,19 +40,20 @@
 
 struct SaveLoad_SystemDetails
 {
-	char					m_screenOffX,m_screenOffY;
-	unsigned char			m_volumes[CSoundMediator::NUM_VOLUMETYPES];
-	unsigned char			m_language;
+	char						m_screenOffX,m_screenOffY;
+	unsigned char				m_volumes[CSoundMediator::NUM_VOLUMETYPES];
+	unsigned char				m_language;
 };
 
 struct SaveLoad_DataBuffer
 {
-	unsigned char			m_headerId;
-	SaveLoad_SystemDetails	m_systemDetails;
+	unsigned char				m_headerId;
+	SaveLoad_SystemDetails		m_systemDetails;
+	CGameSlotManager::GameSlot	m_gameSlots[CGameSlotManager::NUM_GAME_SLOTS];
 };
 
 
-class SaveLoadDatabase
+class CSaveLoadDatabase
 {
 public:
 	enum
@@ -60,8 +65,8 @@ public:
 	} STATUS;
 
 
-			SaveLoadDatabase();
-			~SaveLoadDatabase();
+			CSaveLoadDatabase();
+			~CSaveLoadDatabase();
 
 	void	think();
 

@@ -53,6 +53,10 @@ CPaulScene s_paulScene;
 #include "gui\gui.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 #ifndef	__GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
@@ -100,10 +104,9 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	SetDispMask(1);
 
 	GameState::initialise();
-
 	CSoundMediator::initialise();
-
 	initGUIStuff();
+	CGameSlotManager::init();
 
 	CBubicleFactory::init();
 
@@ -189,7 +192,7 @@ int 	main()
 	CFileIO::GetAllFilePos();
 	InitSystem();
 	
-#ifdef __USER_paul__
+#ifdef __USER_paul__NOT
 	GameState::setNextScene( &FrontEndScene );
 #else
 	GameState::setNextScene( &GameScene );
