@@ -21,6 +21,8 @@ public:
 	void		render();
 	void		think(int _frames);
 
+	void		setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
+
 private:
 	void		initLayers();
 

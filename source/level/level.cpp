@@ -133,6 +133,7 @@ sOT		*ThisOT=OtPtr+LayerOT;
 int	MapSpd=4;
 void	CLevel::think(int _frames)
 {
+	/*
 int		padh = PadGetHeld( 0 );
 
 		if (padh & PAD_LEFT)	MapPos.vx-=MapSpd;
@@ -143,6 +144,7 @@ int		padh = PadGetHeld( 0 );
 		if (MapPos.vx<0) MapPos.vx=0;
 		if (MapPos.vy<0) MapPos.vy=0;
 
+	*/
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			if (TileLayers[i]) TileLayers[i]->think(MapPos);
