@@ -111,7 +111,6 @@
 	---- */
 static FontBank		s_fontBank;
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -186,7 +185,7 @@ void CPaulScene::think(int _frames)
 	}
 	else if(pad&PAD_UP)
 	{
-		if(++sfxNum>7)sfxNum=7;
+		if(++sfxNum>CSoundMediator::NUM_SFXIDS-1)sfxNum=CSoundMediator::NUM_SFXIDS-1;
 	}
 	else if(pad&PAD_DOWN)
 	{

@@ -61,7 +61,7 @@ private:
 	enum
 	{
 		MAX_SOUND_BANKS=4,
-		MAX_SPU_MANAGEMENT=MAX_SOUND_BANKS+30,
+		MAX_SPU_MANAGEMENT=MAX_SOUND_BANKS+110,
 	};
 
 	static char		s_spuManagementTable[];

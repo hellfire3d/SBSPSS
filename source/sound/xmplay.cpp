@@ -315,6 +315,7 @@ xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 			VhPtr=(u8*)CFileIO::loadFile(_vhFe);
 			VbPtr=(u8*)CFileIO::loadFile(_vbFe);
 			vab->m_vabId=XM_VABInit(VhPtr,VbPtr);
+			ASSERT(vab->m_vabId!=-1);	// Didn't load!
 			MemFree(VhPtr);
 			MemFree(VbPtr);
 			vab->m_vhFile=_vhFe;
@@ -913,6 +914,7 @@ void CXMPlaySound::defragSpuMemory()
 			VhPtr=(u8*)CFileIO::loadFile(vab->m_vhFile);
 			VbPtr=(u8*)CFileIO::loadFile(vab->m_vbFile);
 			vab->m_vabId=XM_VABInit(VhPtr,VbPtr);
+			ASSERT(vab->m_vabId!=-1);	// Didn't load!
 			MemFree(VhPtr);
 			MemFree(VbPtr);
 		}
