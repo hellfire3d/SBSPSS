@@ -210,6 +210,11 @@ void CProjectile::setPosition( DVECTOR newPos )
 	Pos = newPos;
 }
 
+void CProjectile::setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType )
+{
+	m_lifetimeType = lifeType;
+}
+
 void CProjectile::think(int _frames)
 {
 	CEnemyProjectileThing::think( _frames );

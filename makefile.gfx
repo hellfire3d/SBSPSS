@@ -148,7 +148,7 @@ ACTORS_DIRS_TO_MAKE :=	$(ACTOR_OUT_DIR)
 ACTOR_SPONGEBOB :=		SPONGEBOB
 ACTOR_NPC :=			
 #						BarnacleBoy Gary Krusty MermaidMan Patrick Plankton Sandy Squidward
-ACTOR_ENEMY :=			AnenomeLvl1 BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
+ACTOR_ENEMY :=			AnenomeLvl1 AnenomeLvl3 BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Jellyfish1 Lrgjellyfish \
 						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Squiddart Stomper
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 

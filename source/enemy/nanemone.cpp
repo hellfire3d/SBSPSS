@@ -35,6 +35,10 @@
 #include <ACTOR_SPIKEYANENOME_ANIM.h>
 #endif
 
+#ifndef	__ANIM_ANENOMELVL3_HEADER__
+#include <ACTOR_ANENOMELVL3_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 {
@@ -156,13 +160,46 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 	}
 	else
 	{
+		CProjectile *projectile;
+		s16 heading;
+
+		// fire off attached spikes
+
+		CThing *nextThing = Next;
+
+		while ( nextThing )
+		{
+			CProjectile *projectile;
+
+			projectile = (CProjectile *) nextThing;
+
+			if ( projectile->getMovementType() == CProjectile::PROJECTILE_FIXED )
+			{
+				projectile->setMovementType( CProjectile::PROJECTILE_DUMBFIRE );
+				projectile->setLifeTime( CProjectile::PROJECTILE_FINITE_LIFE );
+				projectile->setState( CProjectile::PROJECTILE_ATTACK );
+			}
+
+			nextThing = nextThing->getNext();
+		}
+
+		// attach new spikes
+
 		for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 		{
+			DVECTOR spikePos;
+
 			heading = m_heading - 1024 + ( fireLoop * 512 );
 			heading %= 4096;
 
-			projectile = new( "test projectile" ) CProjectile;
-			projectile->init( Pos, heading );
+			spikePos = Pos;
+			spikePos.vx += ( 10 * rcos( heading ) ) >> 12;
+			spikePos.vy += ( 10 * rsin( heading ) ) >> 12;
+
+			projectile = new( "anemone lev2 projectile" ) CProjectile;
+			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+
+			addChild( projectile );
 		}
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
@@ -174,18 +211,31 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 
 void CNpcEnemy::processCloseAnemone3Attack( int _frames )
 {
-	CProjectile *projectile;
-	u8 lifetime = 8;
+	if ( m_animNo != ANIM_ANENOMELVL3_FIRE )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_ANENOMELVL3_FIRE;
+		m_frame = 0;
+	}
+	else if ( !m_animPlaying )
+	{
+		CProjectile *projectile;
+		u8 lifetime = 8;
 
-	projectile = new( "test projectile" ) CProjectile;
-	projectile->init(	Pos,
-						m_fireHeading,
-						CProjectile::PROJECTILE_GAS_CLOUD,
-						CProjectile::PROJECTILE_FINITE_LIFE,
-						lifetime * GameState::getOneSecondInFrames() );
+		projectile = new( "test projectile" ) CProjectile;
+		projectile->init(	Pos,
+							m_fireHeading,
+							CProjectile::PROJECTILE_GAS_CLOUD,
+							CProjectile::PROJECTILE_FINITE_LIFE,
+							lifetime * GameState::getOneSecondInFrames() );
 
-	m_controlFunc = NPC_CONTROL_MOVEMENT;
-	m_timerFunc = NPC_TIMER_ATTACK_DONE;
-	m_timerTimer = ( lifetime + 4 ) * GameState::getOneSecondInFrames();
-	m_sensorFunc = NPC_SENSOR_NONE;
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = ( lifetime + 4 ) * GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+
+		m_animPlaying = true;
+		m_animNo = ANIM_ANENOMELVL3_BEND;
+		m_frame = 0;
+	}
 }

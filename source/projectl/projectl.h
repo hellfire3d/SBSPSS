@@ -54,6 +54,7 @@ public:
 	void				setMovementType( PROJECTILE_MOVEMENT_TYPE moveType );
 	PROJECTILE_MOVEMENT_TYPE	getMovementType();
 	void				setState( PROJECTILE_STATE newState );
+	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
 
 protected:

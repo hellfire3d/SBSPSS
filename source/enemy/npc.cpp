@@ -250,7 +250,7 @@ void CNpcEnemy::init()
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
 
-	m_heading = m_fireHeading = 128;
+	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
@@ -273,9 +273,9 @@ void CNpcEnemy::init()
 	DVECTOR ofs = getCollisionSize();
 
 	m_drawOffset.vx = 0;
-	m_drawOffset.vy = -( ofs.vy >> 1 );
+	m_drawOffset.vy = 0;
 
-	setCollisionCentreOffset( m_drawOffset.vx, m_drawOffset.vy );
+	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 
 	m_positionHistory = NULL;
 }
@@ -288,6 +288,15 @@ void CNpcEnemy::postInit()
 	{
 		case NPC_INIT_DEFAULT:
 		{
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+			break;
+		}
+
+		case NPC_INIT_BALL_BLOB:
+		{
+			m_heading = m_fireHeading = 128;
+
 			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			break;
@@ -442,6 +451,31 @@ void CNpcEnemy::postInit()
 			projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
 
 			addChild( projectile );
+
+			break;
+		}
+
+		case NPC_INIT_ANEMONE_2:
+		{
+			CProjectile *projectile;
+			s16 heading;
+
+			for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+			{
+				DVECTOR spikePos;
+
+				heading = m_heading - 1024 + ( fireLoop * 512 );
+				heading %= 4096;
+
+				spikePos = Pos;
+				spikePos.vx += ( 10 * rcos( heading ) ) >> 12;
+				spikePos.vy += ( 10 * rsin( heading ) ) >> 12;
+
+				projectile = new( "anemone lev2 projectile" ) CProjectile;
+				projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+
+				addChild( projectile );
+			}
 
 			break;
 		}
@@ -1372,8 +1406,8 @@ void CNpcEnemy::render()
 	//renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) );// * 20;
 	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
 
-	renderPos.vx = Pos.vx + m_drawOffset.vx - offset.vx;
-	renderPos.vy = Pos.vy + m_drawOffset.vy - offset.vy;
+	renderPos.vx = Pos.vx - offset.vx;
+	renderPos.vy = Pos.vy - offset.vy;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
