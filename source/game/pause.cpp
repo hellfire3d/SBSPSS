@@ -414,6 +414,7 @@ void CPauseMenu::think(int _frames)
 						case RESPONSE__CONFIRM_QUIT_YES:
 							m_confirmQuitGuiFrame->unselect();
 							CGameScene::setReadyToExit();
+							CXAStream::Reset();
 							unselect();
 							break;
 

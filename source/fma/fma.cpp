@@ -1316,9 +1316,11 @@ void	CFmaScene::shutdown()
 	}
 
 	CSoundMediator::dumpSong();
+	CSoundMediator::stopAllSound();
 
 	CConversation::shutdown();
 	CThingManager::shutdown();
+
 }
 
 
