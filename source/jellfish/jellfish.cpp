@@ -122,8 +122,6 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 					}
 				}
 
-				//enemy->init();
-
 				DVECTOR	offset = CLevel::getCameraPos();
 
 				DVECTOR startPos;

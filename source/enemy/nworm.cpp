@@ -704,9 +704,6 @@ void CNpcParasiticWormEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_START:
 				{
-					m_animPlaying = true;
-					m_animNo = m_data[m_type].dieAnim;
-					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
@@ -727,9 +724,6 @@ void CNpcParasiticWormEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					m_drawRotation += 64 * _frames;
-					m_drawRotation &= 4095;
-
 					Pos.vy += m_speed * _frames;
 
 					// go through segments

@@ -48,10 +48,7 @@ void CNpcEnemyGenerator::think(int _frames)
 			m_movementTimer = 3 * GameState::getOneSecondInFrames();
 
 			CNpcEnemy *enemy;
-			enemy = new( "spider crab" ) CNpcSpiderCrabEnemy;
-			ASSERT(enemy);
-			enemy->setType( CNpcEnemy::NPC_SPIDER_CRAB );
-			enemy->init();
+			enemy=CNpcEnemy::Create( CNpcEnemy::NPC_SPIDER_CRAB );
 			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
 
 			u16 *waypointPtr = m_npcPath.getWaypointPtr();
@@ -64,8 +61,8 @@ void CNpcEnemyGenerator::think(int _frames)
 			enemy->setWaypointPtr( waypointPtr );
 
 			enemy->setPathType( m_npcPath.getPathType() );
-
 			enemy->postInit();
+			enemy->updateCollisionArea();
 
 			addChild( enemy );
 		}
