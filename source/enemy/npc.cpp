@@ -54,7 +54,7 @@ s32 CNpc::playerYDistSqr;
 
 void CNpc::init()
 {
-	m_type = NPC_FLAMING_SKULL;
+	m_type = NPC_SKELETAL_FISH;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -453,7 +453,7 @@ bool CNpc::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_SHARK_MAN_USER_VISIBLE:
+					case NPC_SENSOR_GENERIC_USER_VISIBLE:
 					{
 						s32 xDistWaypoint, yDistWaypoint;
 
@@ -461,7 +461,7 @@ bool CNpc::processSensor()
 						{
 							// within range
 
-							// make sure user is closer to shark man than next waypoint
+							// make sure user is closer to npc than next waypoint
 
 							s32 xDistWaypoint, yDistWaypoint;
 
@@ -506,7 +506,7 @@ bool CNpc::processSensor()
 								}
 								else
 								{
-									// check if shark man is facing user
+									// check if npc is facing user
 
 									decDir = m_heading - headingToPlayer;
 
@@ -946,6 +946,11 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_FLAMING_SKULL_ATTACK:
 			processCloseFlamingSkullAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_SKELETAL_FISH_ATTACK:
+			processCloseSkeletalFishAttack( _frames );
 
 			break;
 

@@ -209,6 +209,10 @@ SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsklfish.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsshark.cpp
 # End Source File
 # Begin Source File

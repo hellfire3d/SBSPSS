@@ -275,8 +275,8 @@ void CProjectile::render()
 
 	offset = getScreenOffset();
 
-	x = Pos.vx - offset.vx + ( scrnWidth >> 1 ) - ( spriteWidth >> 1 );
-	y = Pos.vy - offset.vy + ( scrnHeight >> 1 ) - ( spriteHeight >> 1 );
+	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( spriteWidth >> 1 );
+	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( spriteHeight >> 1 );
 
 	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
 }

@@ -46,6 +46,7 @@ public:
 		NPC_ANEMONE_1,
 		NPC_ANEMONE_2,
 		NPC_ANEMONE_3,
+		NPC_SKELETAL_FISH,
 		NPC_CLAM,
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
@@ -122,7 +123,7 @@ protected:
 		NPC_SENSOR_SPIDER_CRAB_USER_CLOSE,
 		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
 		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
-		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
+		NPC_SENSOR_GENERIC_USER_VISIBLE,
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
 		NPC_SENSOR_ANEMONE_USER_CLOSE,
 		NPC_SENSOR_EYEBALL_USER_CLOSE,
@@ -156,6 +157,7 @@ protected:
 		NPC_CLOSE_FALLING_ITEM_FALL,
 		NPC_CLOSE_FISH_HOOK_RISE,
 		NPC_CLOSE_FLAMING_SKULL_ATTACK,
+		NPC_CLOSE_SKELETAL_FISH_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -301,6 +303,10 @@ protected:
 	void				processCloseAnemone1Attack( int _frames );
 	void				processCloseAnemone2Attack( int _frames );
 	void				processCloseAnemone3Attack( int _frames );
+
+	// skeletal fish functions
+
+	void				processCloseSkeletalFishAttack( int _frames );
 
 	// eyeball functions
 
