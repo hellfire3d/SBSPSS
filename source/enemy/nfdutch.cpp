@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NFDUTCH_H__
+#include "enemy\nfdutch.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -31,7 +35,18 @@
 #include <ACTOR_FLYINGDUTCHMAN_ANIM.h>
 #endif
 
-void CNpcEnemy::processFlyingDutchmanMovement( int _frames )
+void CNpcFlyingDutchmanEnemy::postInit()
+{
+	m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
+	m_extendDir = EXTEND_UP;
+
+	s32 minX, maxX;
+	m_npcPath.getPathXExtents( &minX, &maxX );
+
+	m_extension = minX;
+}
+
+void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 {
 	if ( !m_animPlaying )
 	{
@@ -98,7 +113,7 @@ void CNpcEnemy::processFlyingDutchmanMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseFlyingDutchmanAttack( int _frames )
+void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 {
 	if ( playerYDist > 0 )
 	{

@@ -16,6 +16,8 @@
 
 class CNpcBallBlobEnemy : public CNpcEnemy
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
 };

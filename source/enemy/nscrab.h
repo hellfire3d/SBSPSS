@@ -21,12 +21,19 @@
 class CNpcSpiderCrabEnemy : public CNpcEnemy
 {
 public:
+	virtual void		postInit();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
 	virtual void		processMovement( int _frames );
 	void				processSpiderCrabInitJumpMovement( int _frames );
+
+	enum NPC_SPIDER_CRAB_STATE
+	{
+		SPIDER_CRAB_DEFAULT = 0,
+		SPIDER_CRAB_INIT_JUMP = 1,
+	};
 };
 
 #endif

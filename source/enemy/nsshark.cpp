@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NSSHARK_H__
+#include "enemy\nsshark.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -32,7 +36,13 @@
 #endif
 
 
-void CNpcEnemy::processSubSharkMovement( int _frames )
+void CNpcSubSharkEnemy::postInit()
+{
+	m_state = SUB_SHARK_MINE_1;
+	m_extendDir = EXTEND_RIGHT;
+}
+
+void CNpcSubSharkEnemy::processMovement( int _frames )
 {
 	if ( !m_animPlaying )
 	{
@@ -116,7 +126,7 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseSubSharkAttack( int _frames )
+void CNpcSubSharkEnemy::processClose( int _frames )
 {
 	if ( m_state != SUB_SHARK_SWALLOW )
 	{

@@ -32,6 +32,8 @@ protected:
 
 class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		processClose( int _frames );
 };

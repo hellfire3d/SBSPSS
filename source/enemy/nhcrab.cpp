@@ -31,6 +31,13 @@
 #include <ACTOR_HERMITCRAB_ANIM.h>
 #endif
 
+void CNpcHermitCrabEnemy::postInit()
+{
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+	m_state = HERMIT_CRAB_NO_ATTACK;
+}
+
 bool CNpcHermitCrabEnemy::processSensor()
 {
 	switch( m_sensorFunc )

@@ -27,6 +27,13 @@
 #include <ACTOR_BALLBLOB_ANIM.h>
 #endif
 
+void CNpcBallBlobEnemy::postInit()
+{
+	m_heading = m_fireHeading = 128;
+
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+}
+
 void CNpcBallBlobEnemy::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;

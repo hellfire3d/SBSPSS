@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NBOOGER_H__
+#include "enemy\nbooger.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -24,7 +28,31 @@
 #endif
 
 
-void CNpcEnemy::processCloseBoogerMonsterAttack( int _frames )
+bool CNpcBoogerMonsterEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 400 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+					m_extendDir = EXTEND_UP;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcBoogerMonsterEnemy::processClose( int _frames )
 {
 	s32 velocity;
 

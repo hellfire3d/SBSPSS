@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NWORM_H__
+#include "enemy\nworm.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -23,7 +27,96 @@
 #include	"player\player.h"
 #endif
 
-void CNpcEnemy::processParasiticWormMovement( int _frames )
+void CNpcParasiticWormEnemy::postInit()
+{
+	DVECTOR newPos;
+
+	newPos.vx = 100;
+	//newPos.vy = 10;
+	newPos.vy = 100;
+
+	m_npcPath.addWaypoint( newPos );
+
+	newPos.vx = 500;
+	//newPos.vy = 10;
+	newPos.vy = 100;
+
+	m_npcPath.addWaypoint( newPos );
+
+	newPos.vx = 500;
+	//newPos.vy = 100;
+	newPos.vy = 300;
+
+	m_npcPath.addWaypoint( newPos );
+
+	newPos.vx = 100;
+	//newPos.vy = 100;
+	newPos.vy = 300;
+
+	m_npcPath.addWaypoint( newPos );
+
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+	// create start of list
+	CNpcPositionHistory *newPosition;
+	newPosition = new ("position history") CNpcPositionHistory;
+	newPosition->pos = Pos;
+	m_positionHistory = newPosition;
+
+	CNpcPositionHistory *currentPosition = m_positionHistory;
+
+	// create rest of list
+
+	for ( int histLength = 1 ; histLength < ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
+	{
+		newPosition = new ("position history") CNpcPositionHistory;
+		newPosition->pos = Pos;
+		newPosition->next = NULL;
+		newPosition->prev = currentPosition;
+
+		currentPosition->next = newPosition;
+		currentPosition = newPosition;
+	}
+
+	// link ends together for circular list
+
+	currentPosition->next = m_positionHistory;
+	m_positionHistory->prev = currentPosition;
+
+	for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
+	{
+		CNpcEnemy *segment;
+		segment = new ("segment") CNpcParasiticWormSegment;
+		segment->setType( CNpcEnemy::NPC_PARASITIC_WORM_SEGMENT );
+		segment->init();
+		segment->setLayerCollision( m_layerCollision );
+		segment->postInit();
+
+		this->addChild( segment );
+	}
+
+	m_movementTimer = 2 * GameState::getOneSecondInFrames();
+}
+
+void CNpcParasiticWormSegment::postInit()
+{
+}
+
+bool CNpcParasiticWormEnemy::processSensor()
+{
+	if ( playerXDistSqr + playerYDistSqr < 40000 )
+	{
+		m_controlFunc = NPC_CONTROL_CLOSE;
+
+		return( true );
+	}
+	else
+	{
+		return( false );
+	}
+}
+
+void CNpcParasiticWormEnemy::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 	s32 moveVel = 0;
@@ -110,7 +203,7 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::resetParasiticWormHeadToTail()
+void CNpcParasiticWormEnemy::resetParasiticWormHeadToTail()
 {
 	DVECTOR startPos;
 	DVECTOR endPos;
@@ -182,7 +275,7 @@ void CNpcEnemy::resetParasiticWormHeadToTail()
 	}
 }
 
-void CNpcEnemy::processCloseParasiticWormAttack( int _frames )
+void CNpcParasiticWormEnemy::processClose( int _frames )
 {
 	resetParasiticWormHeadToTail();
 

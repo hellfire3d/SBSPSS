@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NDOGFISH_H__
+#include "enemy\ndogfish.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -31,7 +35,36 @@
 #include <ACTOR_IRONDOGFISH_ANIM.h>
 #endif
 
-void CNpcEnemy::processIronDogfishMovement( int _frames )
+void CNpcIronDogfishEnemy::postInit()
+{
+	m_state = IRON_DOGFISH_THUMP_1;
+	m_extendDir = EXTEND_RIGHT;
+}
+
+bool CNpcIronDogfishEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr + playerYDistSqr < 10000 )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
+
+void CNpcIronDogfishEnemy::processMovement( int _frames )
 {
 	if ( m_movementTimer > 0 )
 	{
@@ -79,7 +112,7 @@ void CNpcEnemy::processIronDogfishMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
+void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 {
 	if ( playerXDist > 0 )
 	{
@@ -176,7 +209,7 @@ void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseIronDogfishAttack( int _frames )
+void CNpcIronDogfishEnemy::processClose( int _frames )
 {
 	// swipe at player
 

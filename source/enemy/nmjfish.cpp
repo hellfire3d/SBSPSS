@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nnjfish.cpp
+	nmjfish.cpp
 
 	Author:		CRB
 	Created: 
@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NMJFISH_H__
+#include "enemy\nmjfish.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -27,7 +31,12 @@
 #define MJ_HALF_CYCLE_WIDTH		( MJ_CYCLE_WIDTH >> 1 )
 
 
-void CNpcEnemy::processMotherJellyfishMovement( int _frames )
+void CNpcMotherJellyfishEnemy::postInit()
+{
+	m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
+}
+
+void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
 	s32 xDist, yDist;
 	s32 xDistSqr, yDistSqr;
@@ -125,7 +134,7 @@ void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseMotherJellyfishAttack( int _frames )
+void CNpcMotherJellyfishEnemy::processClose( int _frames )
 {
 	switch( m_state )
 	{

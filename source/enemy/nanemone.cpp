@@ -194,6 +194,30 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 	}
 }
 
+void CNpcAnemone2Enemy::postInit()
+{
+	CProjectile *projectile;
+	s16 heading;
+
+	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+	{
+		DVECTOR spikePos;
+
+		heading = m_heading - 1024 + ( fireLoop * 512 );
+		heading &= 4095;
+
+		spikePos = Pos;
+		spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
+		spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
+
+		projectile = new( "anemone lev2 projectile" ) CProjectile;
+		projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+		projectile->setLayerCollision( m_layerCollision );
+
+		addChild( projectile );
+	}
+}
+
 void CNpcAnemone2Enemy::processClose( int _frames )
 {
 	int fireLoop;

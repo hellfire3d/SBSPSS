@@ -28,6 +28,25 @@
 #endif
 
 
+void CNpcFishFolk::postInit()
+{
+	m_heading = m_fireHeading = 0;
+
+	DVECTOR newPos;
+
+	newPos.vx = 200;
+	newPos.vy = 400;
+
+	m_npcPath.addWaypoint( newPos );
+
+	newPos.vx = 500;
+	newPos.vy = 400;
+
+	m_npcPath.addWaypoint( newPos );
+
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+}
+
 void CNpcFishFolk::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	Pos.vy += distY;

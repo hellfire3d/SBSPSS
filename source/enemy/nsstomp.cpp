@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NSSTOMP_H__
+#include "enemy\nsstomp.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -28,7 +32,36 @@
 #endif
 
 
-void CNpcEnemy::processCloseSkullStomperAttack( int _frames )
+void CNpcSkullStomperEnemy::postInit()
+{
+	m_extendDir = EXTEND_DOWN;
+}
+
+bool CNpcSkullStomperEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr < 10000 && playerYDist >= 0 )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+				m_extendDir = EXTEND_DOWN;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
+
+void CNpcSkullStomperEnemy::processClose( int _frames )
 {
 	s8 groundHeight;
 	s8 yMovement;

@@ -34,6 +34,22 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSpiderCrabEnemy::postInit()
+{
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+	if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 ) < 0 )
+	{
+		// starting off below ground, jump initially
+
+		m_velocity = 5;
+
+		m_state = SPIDER_CRAB_INIT_JUMP;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcSpiderCrabEnemy::processSensor()
 {
 	switch( m_sensorFunc )
@@ -247,7 +263,7 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 
 	if ( completed || collision )
 	{
-		m_movementFunc = m_data[m_type].movementFunc;
+		m_state = SPIDER_CRAB_DEFAULT;
 	}
 }
 
@@ -264,7 +280,7 @@ void CNpcSpiderCrabEnemy::processMovement(int _frames)
 	s32 moveVel = 0;
 	s32 moveDist = 0;
 
-	if ( m_movementFunc == NPC_MOVEMENT_SPIDER_CRAB_INITJUMP )
+	if ( m_state == SPIDER_CRAB_INIT_JUMP )
 	{
 		processSpiderCrabInitJumpMovement( _frames );
 	}

@@ -32,6 +32,11 @@
 #endif
 
 
+void CNpcGhostPirateEnemy::postInit()
+{
+	m_heading = m_fireHeading = 3072;
+}
+
 bool CNpcGhostPirateEnemy::processSensor()
 {
 	switch( m_sensorFunc )

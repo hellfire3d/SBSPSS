@@ -129,6 +129,10 @@ SOURCE=..\..\..\source\enemy\nbooger.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nbooger.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nclam.cpp
 # End Source File
 # Begin Source File
@@ -141,6 +145,10 @@ SOURCE=..\..\..\source\enemy\ndogfish.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ndogfish.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\neyeball.cpp
 # End Source File
 # Begin Source File
@@ -150,6 +158,10 @@ SOURCE=..\..\..\source\enemy\neyeball.h
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nfdutch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nfdutch.h
 # End Source File
 # Begin Source File
 
@@ -197,6 +209,10 @@ SOURCE=..\..\..\source\enemy\nhazard.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nhazard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nhcrab.cpp
 # End Source File
 # Begin Source File
@@ -206,6 +222,10 @@ SOURCE=..\..\..\source\enemy\nhcrab.h
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nmjfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nmjfish.h
 # End Source File
 # Begin Source File
 
@@ -289,11 +309,23 @@ SOURCE=..\..\..\source\enemy\nsshark.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsshark.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsstomp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsstomp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nworm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nworm.h
 # End Source File
 # End Group
 # Begin Group "fileio"

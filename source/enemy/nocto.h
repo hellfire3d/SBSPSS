@@ -20,6 +20,11 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+
+	enum
+	{
+		NPC_OCTOPUS_RESISTANCE = 64,
+	};
 };
 
 #endif

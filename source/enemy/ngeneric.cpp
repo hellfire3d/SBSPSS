@@ -73,10 +73,40 @@ void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32
 		moveX = preShiftX / abs( preShiftX );
 	}
 
+	if ( xDist > 0 )
+	{
+		if ( moveX > xDist )
+		{
+			moveX = xDist;
+		}
+	}
+	else
+	{
+		if ( moveX < xDist )
+		{
+			moveX = xDist;
+		}
+	}
+
 	moveY = preShiftY >> 12;
 	if ( !moveY && preShiftY )
 	{
 		moveY = preShiftY / abs( preShiftY );
+	}
+
+	if ( yDist > 0 )
+	{
+		if ( moveY > yDist )
+		{
+			moveY = yDist;
+		}
+	}
+	else
+	{
+		if ( moveY < yDist )
+		{
+			moveY = yDist;
+		}
 	}
 
 	Pos.vx += moveX;

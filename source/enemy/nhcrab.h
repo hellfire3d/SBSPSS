@@ -21,9 +21,17 @@
 class CNpcHermitCrabEnemy : public CNpcEnemy
 {
 public:
+	virtual void		postInit();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
+
+	enum NPC_HERMIT_CRAB_STATE
+	{
+		HERMIT_CRAB_NO_ATTACK = 0,
+		HERMIT_CRAB_PUNCH_ATTACK = 1,
+		HERMIT_CRAB_ROLL_ATTACK,
+	};
 };
 
 #endif

@@ -187,32 +187,6 @@ protected:
 protected:
 	// NPC data structure definitions //
 
-	enum NPC_INIT_FUNC
-	{
-		NPC_INIT_DEFAULT = 0,
-		NPC_INIT_SNAKE = 1,
-		NPC_INIT_ACID,
-		NPC_INIT_GHOST_PIRATE,
-		NPC_INIT_SKULL_STOMPER,
-		NPC_INIT_MOTHER_JELLYFISH,
-		NPC_INIT_SUB_SHARK,
-		NPC_INIT_FLYING_DUTCHMAN,
-		NPC_INIT_IRON_DOGFISH,
-		NPC_INIT_FALLING_ITEM,
-		NPC_INIT_FISH_HOOK,
-		NPC_INIT_PENDULUM,
-		NPC_INIT_FIREBALL,
-		NPC_INIT_RETURNING_HAZARD,
-		NPC_INIT_FISH_FOLK,
-		NPC_INIT_CIRCULAR_PLATFORM,
-		NPC_INIT_PARASITIC_WORM,
-		NPC_INIT_PARASITIC_WORM_SEGMENT,
-		NPC_INIT_HERMIT_CRAB,
-		NPC_INIT_BALL_BLOB,
-		NPC_INIT_ANEMONE_2,
-		NPC_INIT_SPIDER_CRAB,
-	};
-
 	enum NPC_CONTROL_FUNC
 	{
 		NPC_CONTROL_NONE,
@@ -226,31 +200,14 @@ protected:
 	{
 		NPC_SENSOR_NONE = 0,
 		NPC_SENSOR_USER_CLOSE = 1,
-		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
+		NPC_SENSOR_GENERIC_USER_CLOSE,
 		NPC_SENSOR_GENERIC_USER_VISIBLE,
-		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
-		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
-		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
-		NPC_SENSOR_IRON_DOGFISH_USER_CLOSE,
-		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
-		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
-		NPC_SENSOR_PARASITIC_WORM_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
 	{
 		NPC_CLOSE_NONE = 0,
 		NPC_CLOSE_GENERIC_USER_SEEK = 1,
-		NPC_CLOSE_SKULL_STOMPER_ATTACK,
-		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
-		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
-		NPC_CLOSE_SUB_SHARK_ATTACK,
-		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
-		NPC_CLOSE_IRON_DOGFISH_ATTACK,
-		NPC_CLOSE_FALLING_ITEM_FALL,
-		NPC_CLOSE_FISH_HOOK_RISE,
-		NPC_CLOSE_HERMIT_CRAB_ATTACK,
-		NPC_CLOSE_PARASITIC_WORM_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -258,18 +215,7 @@ protected:
 		NPC_MOVEMENT_STATIC = 0,
 		NPC_MOVEMENT_FIXED_PATH = 1,
 		NPC_MOVEMENT_FIXED_PATH_WALK,
-		NPC_MOVEMENT_MOTHER_JELLYFISH,
-		NPC_MOVEMENT_SUB_SHARK,
-		NPC_MOVEMENT_FLYING_DUTCHMAN,
-		NPC_MOVEMENT_IRON_DOGFISH,
-		NPC_MOVEMENT_PENDULUM,
-		NPC_MOVEMENT_FIREBALL,
-		NPC_MOVEMENT_RETURNING_HAZARD,
-		NPC_MOVEMENT_CLAM_RETRACT,
-		NPC_MOVEMENT_PARASITIC_WORM,
 		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
-		NPC_MOVEMENT_RETURNING_HAZARD_GROUND,
-		NPC_MOVEMENT_SPIDER_CRAB_INITJUMP,
 	};
 
 	enum NPC_TIMER_FUNC
@@ -286,50 +232,6 @@ protected:
 		NPC_SHOT_GENERIC = 1,
 	};
 
-	enum NPC_MOTHER_JELLYFISH_STATE
-	{
-		MOTHER_JELLYFISH_RETURN_TO_START_1 = 0,
-		MOTHER_JELLYFISH_CYCLE_1 = 1,	
-		MOTHER_JELLYFISH_ATTACK_PLAYER_SPAWN_1,
-		MOTHER_JELLYFISH_RETURN_TO_START_2,
-		MOTHER_JELLYFISH_CYCLE_2,
-		MOTHER_JELLYFISH_ATTACK_PLAYER_SPAWN_2,
-		MOTHER_JELLYFISH_RETURN_TO_START_3,
-		MOTHER_JELLYFISH_CYCLE_3,
-		MOTHER_JELLYFISH_ATTACK_PLAYER_SHOCK,
-	};
-
-	enum NPC_SUB_SHARK_STATE
-	{
-		SUB_SHARK_MINE_1 = 0,
-		SUB_SHARK_MINE_2 = 1,
-		SUB_SHARK_CYCLE,
-		SUB_SHARK_SWALLOW,
-	};
-
-	enum NPC_FLYING_DUTCHMAN_STATE
-	{
-		FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
-		FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
-		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
-	};
-
-	enum NPC_IRON_DOGFISH_STATE
-	{
-		IRON_DOGFISH_THUMP_1 = 0,
-		IRON_DOGFISH_LASER_EYE_1 = 1,
-		IRON_DOGFISH_THUMP_2,
-		IRON_DOGFISH_ROLL,
-		IRON_DOGFISH_LASER_EYE_2,
-	};
-
-	enum NPC_HERMIT_CRAB_STATE
-	{
-		HERMIT_CRAB_NO_ATTACK = 0,
-		HERMIT_CRAB_PUNCH_ATTACK = 1,
-		HERMIT_CRAB_ROLL_ATTACK,
-	};
-
 	enum NPC_GENERIC_HIT_STATE
 	{
 		NPC_GENERIC_HIT_CHECK_HEALTH = 100,
@@ -340,11 +242,6 @@ protected:
 
 	enum
 	{
-		NPC_JELLYFISH_RESISTANCE = 64,
-		NPC_BOOGER_MONSTER_MAX_EXTENSION = 20,
-		NPC_SUB_SHARK_HIGH_SPEED = 6,
-		NPC_PARASITIC_WORM_SPACING = 6,
-		NPC_PARASITIC_WORM_LENGTH = 10,
 		EXTEND_UP = true,
 		EXTEND_DOWN = false,
 		EXTEND_RIGHT = true,
@@ -368,7 +265,6 @@ protected:
 		int								skelType;
 //		FileEquate						animData;
 		u16								initAnim;
-		NPC_INIT_FUNC					initFunc;
 		NPC_SENSOR_FUNC					sensorFunc;
 		NPC_MOVEMENT_FUNC				movementFunc;
 		NPC_CLOSE_FUNC					closeFunc;
@@ -408,54 +304,6 @@ protected:
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 
 	void				reinit();
-
-	// flaming skull functions
-
-	void				processCloseFlamingSkullAttack( int _frames );
-
-	// skull stomper functions
-
-	void				processCloseSkullStomperAttack( int _frames );
-
-	// booger monster functions
-
-	void				processCloseBoogerMonsterAttack( int _frames );
-
-	// mother jellyfish functions
-
-	void				processMotherJellyfishMovement( int _frames );
-	void				processCloseMotherJellyfishAttack( int _frames );
-
-	// sub shark functions
-
-	void				processSubSharkMovement( int _frames );
-	void				processCloseSubSharkAttack( int _frames );
-
-	// parasitic worm functions
-
-	void				processParasiticWormMovement( int _frames );
-	void				resetParasiticWormHeadToTail();
-	void				processCloseParasiticWormAttack( int _frames );
-
-	// flying dutchman functions
-
-	void				processFlyingDutchmanMovement( int _frames );
-	void				processCloseFlyingDutchmanAttack( int _frames );
-
-	// iron dogfish functions
-
-	void				processIronDogfishMovement( int _frames );
-	void				processStandardIronDogfishAttack( int _frames );
-	void				processCloseIronDogfishAttack( int _frames );
-
-	// hazard functions
-
-	void				processCloseFallingItemFall( int _frames );
-	void				processCloseFishHookRise( int _frames );
-	void				processPendulumMovement( int _frames );
-	void				processFireballMovement( int _frames );
-	void				processReturningHazardMovement( int _frames );
-	void				processReturningHazardMovementGround( int _frames );
 
 	// data
 

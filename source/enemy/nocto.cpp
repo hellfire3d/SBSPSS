@@ -87,7 +87,7 @@ void CNpcBabyOctopusEnemy::processMovementModifier( int _frames, s32 distX, s32 
 	s32 absVelocity = abs( m_velocity );
 	s32 reqVelocity = dist;
 
-	resistance = _frames * NPC_JELLYFISH_RESISTANCE;
+	resistance = _frames * NPC_OCTOPUS_RESISTANCE;
 
 	if ( absVelocity < resistance )
 	{

@@ -114,6 +114,38 @@
 #include "enemy\nfskull.h"
 #endif
 
+#ifndef	__ENEMY_NSSTOMP_H__
+#include "enemy\nsstomp.h"
+#endif
+
+#ifndef	__ENEMY_NBOOGER_H__
+#include "enemy\nbooger.h"
+#endif
+
+#ifndef	__ENEMY_NMJFISH_H__
+#include "enemy\nmjfish.h"
+#endif
+
+#ifndef	__ENEMY_NSSHARK_H__
+#include "enemy\nsshark.h"
+#endif
+
+#ifndef	__ENEMY_NWORM_H__
+#include "enemy\nworm.h"
+#endif
+
+#ifndef	__ENEMY_NFDUTCH_H__
+#include "enemy\nfdutch.h"
+#endif
+
+#ifndef	__ENEMY_NDOGFISH_H__
+#include "enemy\ndogfish.h"
+#endif
+
+#ifndef	__ENEMY_NHAZARD_H__
+#include "enemy\nhazard.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
@@ -375,6 +407,84 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 			break;
 		}
 
+		case CNpcEnemy::NPC_SKULL_STOMPER:
+		{
+			enemy = new ("skull stomper") CNpcSkullStomperEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_BOOGER_MONSTER:
+		{
+			enemy = new ("booger monster") CNpcBoogerMonsterEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
+		{
+			enemy = new ("mother jellyfish") CNpcMotherJellyfishEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SUB_SHARK:
+		{
+			enemy = new ("sub shark") CNpcSubSharkEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_PARASITIC_WORM:
+		{
+			enemy = new ("parasitic worm") CNpcParasiticWormEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
+		{
+			enemy = new ("flying dutchman") CNpcFlyingDutchmanEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_IRON_DOGFISH:
+		{
+			enemy = new ("iron dogfish") CNpcIronDogfishEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_FALLING_ITEM:
+		{
+			enemy = new ("falling item") CNpcFallingItemHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_FISH_HOOK:
+		{
+			enemy = new ("fish hook") CNpcFishHookHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_PENDULUM:
+		{
+			enemy = new ("pendulum") CNpcPendulumHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_FIREBALL:
+		{
+			enemy = new ("fireball") CNpcFireballHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SAW_BLADE:
+		{
+			enemy = new ("saw blade") CNpcReturningHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_DUST_DEVIL:
+		{
+			enemy = new ("dust devil") CNpcReturningGroundHazard;
+			break;
+		}
+
 		default:
 		{
 			enemy = new ("npc enemy") CNpcEnemy;
@@ -513,288 +623,7 @@ void CNpcEnemy::init()
 
 void CNpcEnemy::postInit()
 {
-	switch ( m_data[this->m_type].initFunc )
-	{
-		case NPC_INIT_DEFAULT:
-		{
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			break;
-		}
-
-		case NPC_INIT_BALL_BLOB:
-		{
-			m_heading = m_fireHeading = 128;
-
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			break;
-		}
-
-		case NPC_INIT_HERMIT_CRAB:
-		{
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			m_state = HERMIT_CRAB_NO_ATTACK;
-
-			break;
-		}
-
-		case NPC_INIT_GHOST_PIRATE:
-			m_heading = m_fireHeading = 3072;
-
-			break;
-
-		case NPC_INIT_SKULL_STOMPER:
-		{
-			m_extendDir = EXTEND_DOWN;
-
-			break;
-		}
-
-		case NPC_INIT_MOTHER_JELLYFISH:
-		{
-			m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
-
-			break;
-		}
-
-		case NPC_INIT_FLYING_DUTCHMAN:
-		{
-			m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
-			m_extendDir = EXTEND_UP;
-
-			s32 minX, maxX;
-			m_npcPath.getPathXExtents( &minX, &maxX );
-
-			m_extension = minX;
-
-			break;
-		}
-
-		case NPC_INIT_SUB_SHARK:
-		{
-			m_state = SUB_SHARK_MINE_1;
-			m_extendDir = EXTEND_RIGHT;
-
-			break;
-		}
-
-		case NPC_INIT_IRON_DOGFISH:
-		{
-			m_state = IRON_DOGFISH_THUMP_1;
-			m_extendDir = EXTEND_RIGHT;
-
-			break;
-		}
-
-		case NPC_INIT_FISH_HOOK:
-		{
-			m_heading = m_fireHeading = 3072;
-
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			newPos.vy = -100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-
-			break;
-		}
-
-		case NPC_INIT_PENDULUM:
-		{
-			m_extendDir = EXTEND_LEFT;
-			m_extension = 0;
-			m_heading = 1024;
-
-			break;
-		}
-
-		case NPC_INIT_FIREBALL:
-		{
-			DVECTOR newPos;
-
-			newPos.vx = 300;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-
-			m_extension = 0;
-			m_velocity = m_data[m_type].speed;
-			m_timerTimer = GameState::getOneSecondInFrames() * 4;
-
-			break;
-		}
-
-		case NPC_INIT_RETURNING_HAZARD:
-		{
-			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-
-			break;
-		}
-
-		case NPC_INIT_FISH_FOLK:
-		{
-			m_heading = m_fireHeading = 0;
-
-			DVECTOR newPos;
-
-			newPos.vx = 200;
-			newPos.vy = 400;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			newPos.vy = 400;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			break;
-		}
-
-		case NPC_INIT_ANEMONE_2:
-		{
-			CProjectile *projectile;
-			s16 heading;
-
-			for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
-			{
-				DVECTOR spikePos;
-
-				heading = m_heading - 1024 + ( fireLoop * 512 );
-				heading &= 4095;
-
-				spikePos = Pos;
-				spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
-				spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
-
-				projectile = new( "anemone lev2 projectile" ) CProjectile;
-				projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
-				projectile->setLayerCollision( m_layerCollision );
-
-				addChild( projectile );
-			}
-
-			break;
-		}
-
-		case NPC_INIT_CIRCULAR_PLATFORM:
-		{
-			Pos.vx = 300;
-			Pos.vy = 300;
-
-			m_base = Pos;
-
-			m_extendDir = EXTEND_CLOCKWISE;
-			m_extension = 100;
-
-			break;
-		}
-
-		case NPC_INIT_PARASITIC_WORM:
-		{
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			//newPos.vy = 100;
-			newPos.vy = 300;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 100;
-			//newPos.vy = 100;
-			newPos.vy = 300;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			// create start of list
-			CNpcPositionHistory *newPosition;
-			newPosition = new ("position history") CNpcPositionHistory;
-			newPosition->pos = Pos;
-			m_positionHistory = newPosition;
-
-			CNpcPositionHistory *currentPosition = m_positionHistory;
-
-			// create rest of list
-
-			for ( int histLength = 1 ; histLength < ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
-			{
-				newPosition = new ("position history") CNpcPositionHistory;
-				newPosition->pos = Pos;
-				newPosition->next = NULL;
-				newPosition->prev = currentPosition;
-
-				currentPosition->next = newPosition;
-				currentPosition = newPosition;
-			}
-
-			// link ends together for circular list
-
-			currentPosition->next = m_positionHistory;
-			m_positionHistory->prev = currentPosition;
-
-			for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
-			{
-				CNpcEnemy *segment;
-				segment = new ("segment") CNpcEnemy;
-				segment->setType( CNpcEnemy::NPC_PARASITIC_WORM_SEGMENT );
-				segment->init();
-				segment->setLayerCollision( m_layerCollision );
-
-				this->addChild( segment );
-			}
-
-			m_movementTimer = 2 * GameState::getOneSecondInFrames();
-
-			break;
-		}
-
-		case NPC_INIT_PARASITIC_WORM_SEGMENT:
-		{
-			break;
-		}
-
-		case NPC_INIT_SPIDER_CRAB:
-		{
-			m_npcPath.setPathType( CNpcPath::PONG_PATH );
-
-			if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 ) < 0 )
-			//if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
-			{
-				// starting off below ground, jump initially
-
-				m_velocity = 5;
-
-				m_movementFunc = NPC_MOVEMENT_SPIDER_CRAB_INITJUMP;
-			}
-
-			break;
-		}
-
-		default:
-
-			break;
-	}
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1030,16 +859,6 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 bool CNpcEnemy::processSensor()
 {
-	/*// temporary
-	if ( playerXDistSqr + playerYDistSqr < 10000 )
-	{
-		m_controlFunc = NPC_CONTROL_SHOT;
-		m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
-
-		return( true );
-	}
-	// temporary*/
-
 	switch( m_sensorFunc )
 	{
 		case NPC_SENSOR_NONE:
@@ -1049,8 +868,7 @@ bool CNpcEnemy::processSensor()
 			{
 				switch( m_sensorFunc )
 				{
-					case NPC_SENSOR_OIL_BLOB_USER_CLOSE:
-					case NPC_SENSOR_NINJA_STARFISH_USER_CLOSE:
+					case NPC_SENSOR_GENERIC_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
@@ -1167,93 +985,6 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_PARASITIC_WORM_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 40000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_SKULL_STOMPER_USER_CLOSE:
-					{
-						if ( playerXDistSqr < 10000 && playerYDist >= 0 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extendDir = EXTEND_DOWN;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 400 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extendDir = EXTEND_UP;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_IRON_DOGFISH_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 400 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_FALLING_ITEM_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 40000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_movementTimer = GameState::getOneSecondInFrames() * 3;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					default:
 						return( false );
 				}
@@ -1319,69 +1050,6 @@ void CNpcEnemy::processMovement(int _frames)
 				m_animNo = m_data[m_type].moveAnim;
 				m_frame = 0;
 			}
-
-			break;
-		}
-
-		case NPC_MOVEMENT_MOTHER_JELLYFISH:
-		{
-			processMotherJellyfishMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_FLYING_DUTCHMAN:
-		{
-			processFlyingDutchmanMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_PARASITIC_WORM:
-		{
-			processParasiticWormMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_SUB_SHARK:
-		{
-			processSubSharkMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_IRON_DOGFISH:
-		{
-			processIronDogfishMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_PENDULUM:
-		{
-			processPendulumMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_FIREBALL:
-		{
-			processFireballMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_RETURNING_HAZARD:
-		{
-			processReturningHazardMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_RETURNING_HAZARD_GROUND:
-		{
-			processReturningHazardMovementGround( _frames );
 
 			break;
 		}
@@ -1506,51 +1174,6 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 		}
-
-		case NPC_CLOSE_SKULL_STOMPER_ATTACK:
-			processCloseSkullStomperAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_BOOGER_MONSTER_ATTACK:
-			processCloseBoogerMonsterAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_MOTHER_JELLYFISH_ATTACK:
-			processCloseMotherJellyfishAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_FLYING_DUTCHMAN_ATTACK:
-			processCloseFlyingDutchmanAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_SUB_SHARK_ATTACK:
-			processCloseSubSharkAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_IRON_DOGFISH_ATTACK:
-			processCloseIronDogfishAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_FALLING_ITEM_FALL:
-			processCloseFallingItemFall( _frames );
-
-			break;
-
-		case NPC_CLOSE_FISH_HOOK_RISE:
-			processCloseFishHookRise( _frames );
-
-			break;
-
-		case NPC_CLOSE_PARASITIC_WORM_ATTACK:
-			processCloseParasiticWormAttack( _frames );
-
-			break;
 
 		default:
 			break;
