@@ -252,17 +252,18 @@ void	CGameScene::initLevel()
 #ifdef __USER_paul__
 	DVECTOR pos={16*10,16*10};
 				createPickup(PICKUP__BIG_HEALTH,&pos);
-	pos.vx+=32;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
-	pos.vx+=32;	createPickup(PICKUP__SMALL_HEALTH,&pos);
-	pos.vx+=32;	createPickup(PICKUP__LIFE,&pos);
-	pos.vx+=32;	createPickup(PICKUP__SPATULA,&pos);
-	pos.vx+=32;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
-	pos.vx+=32;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
-	pos.vx+=32;	createPickup(PICKUP__GLASSES,&pos);		
-	pos.vx+=32;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
-	pos.vx+=32;	createPickup(PICKUP__BALLOON,&pos);		
-	pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
-	pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
+	pos.vx+=64;	createPickup(PICKUP__SMALL_HEALTH,&pos);
+	pos.vx+=64;	createPickup(PICKUP__LIFE,&pos);
+	pos.vx+=64;	createPickup(PICKUP__SPATULA,&pos);
+	pos.vx+=64;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
+	pos.vx+=64;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__GLASSES,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__BALLOON,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__HELMET,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__CORAL_BLOWER,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
 
 	CNpcPlatform	*platform;
 	platform=new ("test platform") CNpcPlatform;
