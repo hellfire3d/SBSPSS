@@ -20,6 +20,8 @@
 
 class CNpcBobbingPlatform : public CNpcPlatform
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
 
@@ -28,6 +30,8 @@ protected:
 		NPC_BOB_STOP = 0,
 		NPC_BOB_MOVE = 1,
 	};
+
+	s32					m_vertPos;
 };
 
 #endif

@@ -19,6 +19,16 @@
 #include	"game\game.h"
 #endif
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBobbingPlatform::postInit()
+{
+	CNpcPlatform::postInit();
+
+	m_vertPos = Pos.vy << 3;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBobbingPlatform::processMovement( int _frames )
@@ -36,7 +46,7 @@ void CNpcBobbingPlatform::processMovement( int _frames )
 		{
 			m_velocity = 0;
 		}
-		else if ( m_velocity < 4 )
+		else if ( m_velocity < ( 2 << 2 ) )
 		{
 			if ( height <= 0 )
 			{
@@ -56,7 +66,7 @@ void CNpcBobbingPlatform::processMovement( int _frames )
 		{
 			// otherwise drop velocity and ultimately reverse course
 
-			if ( m_velocity > -2 )
+			if ( m_velocity > -( 2 << 2 ) )
 			{
 				m_velocity--;
 			}
@@ -67,7 +77,20 @@ void CNpcBobbingPlatform::processMovement( int _frames )
 	{
 		s32 moveY = m_velocity * _frames;
 
-		if ( Pos.vy + moveY < m_initPos.vy )
+		m_vertPos += moveY;
+
+		Pos.vy = m_vertPos >> 3;
+
+		if ( Pos.vy < m_initPos.vy )
+		{
+			Pos.vy = m_initPos.vy;
+			m_vertPos = Pos.vy << 3;
+			m_velocity = 0;
+			m_state = NPC_BOB_STOP;
+			moveY = 0;
+		}
+
+		/*if ( Pos.vy + moveY < m_initPos.vy )
 		{
 			Pos.vy = m_initPos.vy;
 			m_velocity = 0;
@@ -77,6 +100,6 @@ void CNpcBobbingPlatform::processMovement( int _frames )
 		else
 		{
 			Pos.vy += moveY;
-		}
+		}*/
 	}
 }
