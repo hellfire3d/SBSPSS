@@ -829,7 +829,12 @@ if(newmode!=-1)
 		// Out of spats?
 		if(m_numSpatulasHeld==0)
 		{
+			int	oldTimer=m_spatulaWarningTimer;
 			m_spatulaWarningTimer++;
+			if((m_spatulaWarningTimer&64)!=(oldTimer&64))
+			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_BEEP10);
+			}
 		}
 
 		// Trying to converate?
@@ -854,32 +859,26 @@ if(newmode!=-1)
 
 
 		// Is player stood on any special collision?
-		if(getHeightFromGroundNoPlatform(Pos.vx,Pos.vy,5)==0)
+		for(int j=0;j<2;j++)
 		{
-			int block;
-			block=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
+			int	x=Pos.vx+((j==0)?-checkx:+checkx);
+			if(getHeightFromGroundNoPlatform(x,Pos.vy,5)==0)
+			{
+				int block;
+				block=CGameScene::getCollision()->getCollisionBlock(x,Pos.vy)&COLLISION_TYPE_MASK;
 
-			// Conveyor belt movement
-			if(block==COLLISION_TYPE_FLAG_MOVE_LEFT)
-			{
-				moveHorizontal(-1);
+				// Conveyor belt movement
+				if(block==COLLISION_TYPE_FLAG_MOVE_LEFT)
+				{
+					moveHorizontal(-1);
+					break;
+				}
+				else if(block==COLLISION_TYPE_FLAG_MOVE_RIGHT)
+				{
+					moveHorizontal(+1);
+					break;
+				}
 			}
-			else if(block==COLLISION_TYPE_FLAG_MOVE_RIGHT)
-			{
-				moveHorizontal(+1);
-			}
-
-			// Death?
-			/*else if(m_currentMode!=PLAYER_MODE_DEAD&&
-					block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
-			{
-				dieYouPorousFreak(DEATHTYPE__LIQUID);
-			}
-			else if(m_currentMode!=PLAYER_MODE_DEAD&&
-					block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
-			{
-				dieYouPorousFreak(DEATHTYPE__NORMAL);
-			}*/
 		}
 
 		// Powerups
@@ -1090,10 +1089,16 @@ if(newmode!=-1)
 			// Out of water and wearing helmet!
 	
 			// Drain water/health
+			int oldLevel=m_healthWaterLevel/WATER_COUNTER_SECONDTIME;
 			m_healthWaterLevel-=waterDrainSpeed*_frames;
+			if(oldLevel<=6&&oldLevel>m_healthWaterLevel/WATER_COUNTER_SECONDTIME)
+			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_BEEP5);
+			}
 			if(m_healthWaterLevel<=0)
 			{
 				dieYouPorousFreak(DEATHTYPE__DRYUP);
+				CSoundMediator::playSfx(CSoundMediator::SFX_BEEP5);
 			}
 
 			// Breath sound
@@ -2779,6 +2784,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int checkside=+1;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
@@ -2796,13 +2802,13 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 		dirToMove=_moveDistance<0?-1:+1;
 		for(i=abs(_moveDistance);i&&!hitWall;i--)
 		{
-			int	touchingGround,x;
+			int	touchingGround,x,x2;
 
 			colHeightEdges[0]=getHeightFromGround(pos.vx-checkx,pos.vy,16);
 			colHeightEdges[1]=getHeightFromGround(pos.vx+checkx,pos.vy,16);
 
 			touchingGround=false;
-			x=pos.vx+dirToMove;
+			x=x2=pos.vx+dirToMove;
 
 			if(dirToMove>0)
 			{
@@ -2811,12 +2817,14 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				{
 					// Right side of SB touching ground
 					x+=checkx;
+					x2-=checkx;
 					touchingGround=true;
 				}
 				else if(colHeightEdges[0]==0)
 				{
 					// Left side of SB touching ground
 					x-=checkx;
+					x2+=checkx;
 					touchingGround=true;
 				}
 			}
@@ -2827,12 +2835,14 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				{
 					// Left side of SB touching ground
 					x-=checkx;
+					x2+=checkx;
 					touchingGround=true;
 				}
 				else if(colHeightEdges[1]==0)
 				{
 					// Right side of SB touching ground
 					x+=checkx;
+					x2-=checkx;
 					touchingGround=true;
 				}
 			}
@@ -2846,6 +2856,13 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 					// Move along the ground
 					pos.vx+=dirToMove;
 					pos.vy+=colHeight;
+
+					// Heh - these 4 lines stop SB going down a slope on the 'wrong edge' :)
+					colHeight=getHeightFromGround(x2,pos.vy,16);
+					if(colHeight<0)
+					{
+						pos.vy+=colHeight;
+					}
 				}
 				else if(colHeight<0)
 				{
@@ -2856,6 +2873,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				{
 					// Moved off edge of ledge
 					pos.vx+=dirToMove;
+
 				}
 			}
 			else
@@ -2869,16 +2887,35 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				{
 					x+=checkx;
 				}
-				colHeight=getHeightFromGround(x,pos.vy,16);
-				if(colHeight>=0)
+
+				// Head collision ( cheers Charles! :)
+				colHeight = getHeightFromGround( x, pos.vy-HEIGHT_FOR_HEAD_COLLISION, 16 );
+				if ( colHeight < 0 )
 				{
-					// Move in air
-					pos.vx+=dirToMove;
+					switch ( CGameScene::getCollision()->getCollisionBlock( x, pos.vy-HEIGHT_FOR_HEAD_COLLISION ) & COLLISION_TYPE_MASK )
+					{
+						case COLLISION_TYPE_NORMAL:
+							break;
+
+						default:
+							hitWall=true;
+							break;
+					}
 				}
-				else
+
+				if ( !hitWall )
 				{
-					// Hit wall
-					hitWall=true;
+					colHeight=getHeightFromGround(x,pos.vy,16);
+					if(colHeight>=0)
+					{
+						// Move in air
+						pos.vx+=dirToMove;
+					}
+					else
+					{
+						// Hit wall
+						hitWall=true;
+					}
 				}
 			}
 		}
