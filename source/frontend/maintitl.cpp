@@ -66,6 +66,10 @@
 #include "frontend\frontend.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -167,6 +171,13 @@ void CFrontEndMainTitles::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 static u8 *s_image;
+static FileEquate	s_imageFiles[4]=
+{
+	BACKDROP_START1_GFX,
+	BACKDROP_START2_GFX,
+	BACKDROP_START3_GFX,
+	BACKDROP_START4_GFX,
+};
 void CFrontEndMainTitles::select()
 {
 	m_mode=MODE__PRESS_START;
@@ -177,7 +188,9 @@ void CFrontEndMainTitles::select()
 
 	m_demoTimeout=0;
 
-	s_image=CFileIO::loadFile(BACKDROP_START_GFX);
+	// Currently the selection of title screens is random.. eventually it will be tied
+	// into how much of the game has been completed (pkg)
+	s_image=CFileIO::loadFile(s_imageFiles[getRndRange(4)]);
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 
