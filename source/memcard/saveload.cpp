@@ -92,6 +92,7 @@ SaveLoadDatabase::SaveLoadDatabase()
 	m_loading=false;
 	m_autoloading=false;
 	m_tempBuffer=NULL;
+	m_memcardHeader=CFileIO::loadFile(MEMCARD_MEMHEAD_BIN);
 
 	gatherData();
 }
@@ -105,6 +106,7 @@ SaveLoadDatabase::SaveLoadDatabase()
   ---------------------------------------------------------------------- */
 SaveLoadDatabase::~SaveLoadDatabase()
 {
+	MemFree(m_memcardHeader);
 }
 
 
@@ -146,7 +148,6 @@ void SaveLoadDatabase::gatherData()
 bool SaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 {
 	char	nameBuf[9]="\0";
-	u8		*hdr;
 
 	ASSERT(!m_saving);
 	ASSERT(!m_loading);
@@ -161,8 +162,7 @@ bool SaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 
 	// Alloc a buffer and copy everything to it
 	allocateBuffer();
-	hdr=CFileIO::loadFile(MEMCARD_MEMHEAD_BIN);
-	memcpy((char*)&m_tempBuffer[0],hdr,256);											// Memcard header
+	memcpy((char*)&m_tempBuffer[0],m_memcardHeader,256);								// Memcard header
 	MemCard::FillHeaderDetails(m_tempBuffer,m_bufferSize,_filename);					// Setup header
 	memcpy((char*)&m_tempBuffer[256],(char*)&m_dataBuffer,sizeof(m_dataBuffer));		// Data
 	MemCard::GiveCheckSum(&m_tempBuffer[m_bufferSize-MD5_CHECKSUM_SIZE],				// Chksum
