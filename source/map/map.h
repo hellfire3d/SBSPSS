@@ -65,8 +65,10 @@ private:
 		MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10,
 		MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES=13,
 
-		MAP_ARROW_PREVIOUS_Y=45,
-		MAP_ARROW_NEXT_Y=180,
+		MAP_CHAPTER_ARROW_XOFF=90,
+		MAP_CHAPTER_ARROW_Y=180,
+		MAP_CHAPTER_ARROW_RGB_UNSELECTED=50,
+		MAP_CHAPTER_ARROW_RGB_SELECTED=150,
 
 		MAP_NUM_CHAPTERS=5,
 		MAP_NUM_LEVELS_PER_CHAPTER=5,
@@ -169,13 +171,14 @@ private:
 	char				*m_packedBackgroundImage;
 
 	int					m_currentChapterSelection;
-	int					m_currentIconSelection,m_previousIconSelection;
+	int					m_currentIconSelection;
 	class CPointerIcon	*m_pointerIcon;
 
 	static sMapLevelGfxTable	s_GfxTable[MAP_GFX_MAX];
 	static sMapLevelData		s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
 	static DVECTOR				s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];
-	static DVECTOR				s_mapPointerPositions[MAP_NUM_LEVELS_PER_CHAPTER];
+	static DVECTOR				s_mapPointerPositions[MAP_NUM_LEVELS_PER_CHAPTER+2];
+	static const int			s_padToIconMappings[4][NUM_MAP_ICONS][NUM_MAP_ICONS];
 
 	static int				s_chapterToStartOn;
 	static int				s_levelToStartOn;

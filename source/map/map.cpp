@@ -218,13 +218,15 @@ DVECTOR						CMapScene::s_mapLevelPositions[CMapScene::MAP_NUM_LEVELS_PER_CHAPTE
 };
 
 // Cursor positions for all icons
-DVECTOR						CMapScene::s_mapPointerPositions[CMapScene::MAP_NUM_LEVELS_PER_CHAPTER]=
+DVECTOR						CMapScene::s_mapPointerPositions[CMapScene::MAP_NUM_LEVELS_PER_CHAPTER+2]=
 {
-	{	42+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_1
-	{	186+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_2
-	{	330+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_3
-	{	42+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_4
-	{	330+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT	},		// MAP_ICON_LEVEL_BONUS
+	{	MAP_CHAPTER_ARROW_XOFF,MAP_CHAPTER_ARROW_Y+25		},		// MAP_ICON_PREVIOUS_CHAPTER
+	{	42+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT			},		// MAP_ICON_LEVEL_1
+	{	186+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT			},		// MAP_ICON_LEVEL_2
+	{	330+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT			},		// MAP_ICON_LEVEL_3
+	{	42+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT			},		// MAP_ICON_LEVEL_4
+	{	330+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_BONUS
+	{	512-MAP_CHAPTER_ARROW_XOFF,MAP_CHAPTER_ARROW_Y+25	},		// MAP_ICON_NEXT_CHAPTER
 };
 
 
@@ -316,10 +318,7 @@ void CMapScene::render()
 	int				i;
 	char			buf[100];
 	
-	if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
-	{
-		m_pointerIcon->render();
-	}
+	m_pointerIcon->render();
 
 	sb=CGameScene::getSpriteBank();
 	level=&s_mapLevelData[m_currentChapterSelection][0];
@@ -446,19 +445,21 @@ void CMapScene::renderChapterArrows()
 
 	if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))
 	{
-		int	scale;
-		scale=m_currentIconSelection==MAP_ICON_PREVIOUS_CHAPTER?383:256;
-		y=MAP_ARROW_PREVIOUS_Y-(fh->H/2);
-		x=256-(fh->W/2);
-		ft4=sb->printFT4Scaled(fh,x,y,0,0,0,scale);
+		int	rgb;
+		rgb=m_currentIconSelection==MAP_ICON_PREVIOUS_CHAPTER?MAP_CHAPTER_ARROW_RGB_SELECTED:MAP_CHAPTER_ARROW_RGB_UNSELECTED;
+		x=MAP_CHAPTER_ARROW_XOFF-(fh->W/2);
+		y=MAP_CHAPTER_ARROW_Y;
+		ft4=sb->printFT4(fh,x,y,0,0,0);
+		setRGB0(ft4,rgb,rgb,rgb);
 	}
 	if(m_currentChapterSelection<5-1&&isChapterOpen(m_currentChapterSelection+1))
 	{
-		int	scale;
-		scale=m_currentIconSelection==MAP_ICON_NEXT_CHAPTER?383:256;
-		y=MAP_ARROW_NEXT_Y-(fh->H/2);
-		x=256-(fh->W/2);
-		ft4=sb->printFT4Scaled(fh,x,y,0,1,0,scale);
+		int	rgb;
+		rgb=m_currentIconSelection==MAP_ICON_NEXT_CHAPTER?MAP_CHAPTER_ARROW_RGB_SELECTED:MAP_CHAPTER_ARROW_RGB_UNSELECTED;
+		x=512-MAP_CHAPTER_ARROW_XOFF-(fh->W/2)+fh->W;
+		y=MAP_CHAPTER_ARROW_Y;
+		ft4=sb->printFT4(fh,x,y,1,0,0);
+		setRGB0(ft4,rgb,rgb,rgb);
 	}
 }
 
@@ -469,6 +470,78 @@ void CMapScene::renderChapterArrows()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+const int	CMapScene::s_padToIconMappings[4][NUM_MAP_ICONS][NUM_MAP_ICONS]=
+{
+	// UP
+	{
+		// MAP_ICON_PREVIOUS_CHAPTER
+		{	MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_PREVIOUS_CHAPTER	},
+		// MAP_ICON_LEVEL_1
+		{	MAP_ICON_LEVEL_1	},
+		// MAP_ICON_LEVEL_2
+		{	MAP_ICON_LEVEL_2	},
+		// MAP_ICON_LEVEL_3
+		{	MAP_ICON_LEVEL_3	},
+		// MAP_ICON_LEVEL_4
+		{	MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_4	},
+		// MAP_ICON_LEVEL_BONUS
+		{	MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_BONUS	},
+		// MAP_ICON_NEXT_CHAPTER
+		{	MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER	},
+	},
+	// DOWN
+	{
+		// MAP_ICON_PREVIOUS_CHAPTER
+		{	MAP_ICON_PREVIOUS_CHAPTER	},
+		// MAP_ICON_LEVEL_1
+		{	MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1	},
+		// MAP_ICON_LEVEL_2
+		{	MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_2	},
+		// MAP_ICON_LEVEL_3
+		{	MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_3	},
+		// MAP_ICON_LEVEL_4
+		{	MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_4	},
+		// MAP_ICON_LEVEL_BONUS
+		{	MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS	},
+		// MAP_ICON_NEXT_CHAPTER
+		{	MAP_ICON_NEXT_CHAPTER	},
+	},
+	// LEFT
+	{
+		// MAP_ICON_PREVIOUS_CHAPTER
+		{	MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER	},
+		// MAP_ICON_LEVEL_1
+		{	MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1	},
+		// MAP_ICON_LEVEL_2
+		{	MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2	},
+		// MAP_ICON_LEVEL_3
+		{	MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3	},
+		// MAP_ICON_LEVEL_4
+		{	MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4	},
+		// MAP_ICON_LEVEL_BONUS
+		{	MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS	},
+		// MAP_ICON_NEXT_CHAPTER
+		{	MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_LEVEL_BONUS,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_1,MAP_ICON_NEXT_CHAPTER	},
+	},
+	// RIGHT
+	{
+		// MAP_ICON_PREVIOUS_CHAPTER
+		{	MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER	},
+		// MAP_ICON_LEVEL_1
+		{	MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1	},
+		// MAP_ICON_LEVEL_2
+		{	MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2	},
+		// MAP_ICON_LEVEL_3
+		{	MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3	},
+		// MAP_ICON_LEVEL_4
+		{	MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4	},
+		// MAP_ICON_LEVEL_BONUS
+		{	MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER,MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS	},
+		// MAP_ICON_NEXT_CHAPTER
+		{	MAP_ICON_LEVEL_1,MAP_ICON_LEVEL_2,MAP_ICON_LEVEL_3,MAP_ICON_LEVEL_4,MAP_ICON_LEVEL_BONUS,MAP_ICON_PREVIOUS_CHAPTER,MAP_ICON_NEXT_CHAPTER	},
+	},
+};
+
 void CMapScene::think(int _frames)
 {
 	if(!CFader::isFading()&&!m_readyToExit)
@@ -492,163 +565,51 @@ void CMapScene::think(int _frames)
 
 		// Move cursor in the gayest way possible..
 		// Hahahaha! It's like a spiders nest! (pkg and proud of it)
-		if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
-		{
-			m_previousIconSelection=m_currentIconSelection;
-		}
-		if(pad&PAD_UP)
-		{
-			cursor=CURSOR_MOVED;
-			switch(m_currentIconSelection)
-			{
-				case MAP_ICON_PREVIOUS_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_1:
-				case MAP_ICON_LEVEL_2:
-				case MAP_ICON_LEVEL_3:
-					if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))m_currentIconSelection=MAP_ICON_PREVIOUS_CHAPTER;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_4:
-					m_currentIconSelection=MAP_ICON_LEVEL_1;
-					break;
-				case MAP_ICON_LEVEL_BONUS:
-					if(isLevelOpen(m_currentChapterSelection,3-1))m_currentIconSelection=MAP_ICON_LEVEL_3;
-					else if(isLevelOpen(m_currentChapterSelection,2-1))m_currentIconSelection=MAP_ICON_LEVEL_2;
-					else m_currentIconSelection=MAP_ICON_LEVEL_1;
-					break;
-				case MAP_ICON_NEXT_CHAPTER:
-					m_currentIconSelection=m_previousIconSelection;
-					if(!isLevelOpen(m_currentChapterSelection,m_currentIconSelection-1))
-					{
-						for(int i=MAP_ICON_LEVEL_BONUS;i>=MAP_ICON_LEVEL_1;i--)
-						{
-							if(isLevelOpen(m_currentChapterSelection,i-1))
-							{
-								m_currentIconSelection=i;
-								m_pointerIcon->setTarget(getPointerTargetPosition());
-								break;
-							}
-						}
-					}
-					break;
-			}
-		}
-		else if(pad&PAD_DOWN)
-		{
-			int nextChapterAvailable=false;
-			if(m_currentChapterSelection<5-1&&isChapterOpen(m_currentChapterSelection+1))nextChapterAvailable=true;
+		const int	*mapBase=NULL;
 
-			cursor=CURSOR_MOVED;
-			switch(m_currentIconSelection)
-			{
-				case MAP_ICON_PREVIOUS_CHAPTER:
-					m_currentIconSelection=m_previousIconSelection;
-					if(!isLevelOpen(m_currentChapterSelection,m_currentIconSelection-1))
-					{
-						m_currentIconSelection=MAP_ICON_LEVEL_1;
-					}
-					break;
-				case MAP_ICON_LEVEL_1:
-				case MAP_ICON_LEVEL_2:
-					if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
-					else if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
-					else if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_3:
-					if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
-					else if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
-					else if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_4:
-				case MAP_ICON_LEVEL_BONUS:
-					if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_NEXT_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-			}
-		}
-		else if(pad&PAD_LEFT)
-		{
-			cursor=CURSOR_MOVED;
-			switch(m_currentIconSelection)
-			{
-				case MAP_ICON_PREVIOUS_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_1:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_2:
-					m_currentIconSelection=MAP_ICON_LEVEL_1;
-					break;
-				case MAP_ICON_LEVEL_3:
-					m_currentIconSelection=MAP_ICON_LEVEL_2;
-					break;
-				case MAP_ICON_LEVEL_4:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_BONUS:
-					if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_NEXT_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-			}
-		}
-		else if(pad&PAD_RIGHT)
-		{
-			cursor=CURSOR_MOVED;
-			switch(m_currentIconSelection)
-			{
-				case MAP_ICON_PREVIOUS_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_1:
-					if(isLevelOpen(m_currentChapterSelection,2-1))m_currentIconSelection=MAP_ICON_LEVEL_2;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_2:
-					if(isLevelOpen(m_currentChapterSelection,3-1))m_currentIconSelection=MAP_ICON_LEVEL_3;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_3:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_4:
-					if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
-					else cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_LEVEL_BONUS:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-				case MAP_ICON_NEXT_CHAPTER:
-					cursor=CURSOR_COULDNT_MOVE;
-					break;
-			}
-		}
+		if(pad&PAD_UP)mapBase=&s_padToIconMappings[0][m_currentIconSelection][0];
+		else if(pad&PAD_DOWN)mapBase=&s_padToIconMappings[1][m_currentIconSelection][0];
+		else if(pad&PAD_LEFT)mapBase=&s_padToIconMappings[2][m_currentIconSelection][0];
+		else if(pad&PAD_RIGHT)mapBase=&s_padToIconMappings[3][m_currentIconSelection][0];
 
-		// What did the cursor do?
-		switch(cursor)
+		if(mapBase)
 		{
-			case CURSOR_DIDNT_MOVE:
-				break;
-			case CURSOR_MOVED:
-				if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
+			int	i,level,isOpen;
+			for(i=0;i<NUM_MAP_ICONS;i++)
+			{
+				level=*mapBase++;
+				if(level==m_currentIconSelection)
 				{
-					m_pointerIcon->setTarget(getPointerTargetPosition());
+					CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__ERROR,false,true);
+					break;
 				}
-				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
-				break;
-			case CURSOR_COULDNT_MOVE:
-				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__ERROR,false,true);
-				break;
+			
+				isOpen=false;
+				switch(level)
+				{
+					case MAP_ICON_PREVIOUS_CHAPTER:
+						if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))isOpen=true;
+						break;
+					case MAP_ICON_LEVEL_1:
+					case MAP_ICON_LEVEL_2:
+					case MAP_ICON_LEVEL_3:
+					case MAP_ICON_LEVEL_4:
+					case MAP_ICON_LEVEL_BONUS:
+						if(isLevelOpen(m_currentChapterSelection,level-1))isOpen=true;
+						break;
+					case MAP_ICON_NEXT_CHAPTER:
+						if(m_currentChapterSelection<5-1&&isChapterOpen(m_currentChapterSelection+1))isOpen=true;
+						break;
+				}
+
+				if(isOpen)
+				{
+					m_currentIconSelection=level;
+					m_pointerIcon->setTarget(getPointerTargetPosition());
+					CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+					break;
+				}
+			}
 		}
 		m_pointerIcon->think(_frames);
 
@@ -793,11 +754,7 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 DVECTOR	CMapScene::getPointerTargetPosition()
 {
 	DVECTOR	pos;
-	
-	ASSERT(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER);
-
-	pos=s_mapPointerPositions[m_currentIconSelection-1];
-
+	pos=s_mapPointerPositions[m_currentIconSelection];
 	return pos;
 }
 
