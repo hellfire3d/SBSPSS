@@ -65,6 +65,9 @@ void CGameSlotManager::init()
 	}
 
 	setActiveSlot(0);
+#ifdef __VERSION_DEBUG__
+	s_gameSlots[0].m_isInUse=true;
+#endif
 }
 
 
@@ -78,7 +81,6 @@ void CGameSlotManager::setActiveSlot(unsigned int _slot)
 {
 	ASSERT(_slot<=NUM_GAME_SLOTS);
 	s_currentGameSlot=&s_gameSlots[_slot];
-	s_currentGameSlot->m_isInUse=true;
 }
 
 

@@ -53,20 +53,41 @@ public:
 
 
 private:
+	typedef enum
+	{
+		STATE_SELECT,
+		STATE_CONFIRM_ERASE,
+		STATE_EXITING_TO_FRONT_END,
+		STATE_EXITING_TO_GAME,
+		STATE_SLOT_CREATED,
+	}STATE;
+
+	void	drawGameSlot(int _xOff,int _slotNumber);
+	void	drawInstructions();
+
+
+	STATE					m_state;
+	int						m_selectedSlot,m_lastSelectedSlot;
+	int						m_slotDrawOffset;
+
+	class CGUIGroupFrame	*m_emptyGuiFrame;
+	class CGUIControlFrame	*m_confirmEraseGuiFrame;
+	class CGUIControlFrame	*m_createdSlotGuiFrame;
+
 	enum
 	{
-		NO_SLOT_SELECTED=-1,
+		CONFIRM_NONE=0,
+		CONFIRM_OK=1,
+		CONFIRM_YES=1,
+		CONFIRM_NO,
 	};
+	int						m_confirmFlag;
+	
+	int						m_startGame;
+							
+	class SpriteBank		*m_spriteBank;
+	class FontBank			*m_font;
 
-	int					m_selectedSlot;
-	int					m_escapeToTitles;
-	int					m_shuttingDown;
-
-	class CGUIControlFrame					*m_guiFrame;
-	int										m_level;
-	static int								s_levelValues[];
-	static CGUITextReadout::TextReadoutData	s_levelReadoutText[];
-	int										m_startGame;
 
 };
 

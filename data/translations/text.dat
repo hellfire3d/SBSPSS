@@ -234,6 +234,27 @@ eng=RESTART LEVEL
 
 
 ; ---------------------------------------------------------------
+; Slot select screen
+; ---------------------------------------------------------------
+
+[STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT]
+eng=Select slot
+[STR__SLOT_SELECT_SCREEN__CROSS_TO_CONFIRM]
+eng=Confirm
+[STR__SLOT_SELECT_SCREEN__CROSS_TO_CREATE]
+eng=Create
+[STR__SLOT_SELECT_SCREEN__CIRCLE_TO_ERASE_SLOT]
+eng=Erase slot
+[STR__SLOT_SELECT_SCREEN__TRIANGLE_TO_EXIT]
+eng=Exit
+[STR__SLOT_SELECT_SCREEN__NEW_SLOT_CREATED]
+eng=New slot created!
+[STR__SLOT_SELECT_SCREEN__CONFIRM_ERASE_GAME]
+eng=Are you sure that you want to erase this slot?
+
+
+
+; ---------------------------------------------------------------
 ; Map screen
 ; ---------------------------------------------------------------
 

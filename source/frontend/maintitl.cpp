@@ -372,7 +372,7 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 			break;
 
 		case MODE__GOTO_CHOOSE_SLOT:
-			ret=CFrontEndScene::MODE__EXIT_TO_MAP;
+			ret=CFrontEndScene::MODE__CHOOSE_SLOT;
 			break;
 
 		case MODE__GOTO_OPTIONS:

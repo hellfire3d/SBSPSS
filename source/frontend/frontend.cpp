@@ -153,9 +153,6 @@ void CFrontEndScene::init()
 
 	m_exitToGame=false;
 	m_mode=MODE__NONE;
-#if defined(__USER_art__) || defined(__USER_sbart__)
-	setMode(MODE__CHOOSE_SLOT);
-#else
 	if(s_runOnce)
 	{
 		setMode(MODE__FMV_INTRO);
@@ -165,7 +162,6 @@ void CFrontEndScene::init()
 		s_runOnce=true;
 		setMode(MODE__FMV_THQ);
 	}
-#endif
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
 	m_sprites->load(SPRITES_SPRITES_SPR);
