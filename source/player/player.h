@@ -276,6 +276,10 @@ public:
 	void			teleportTo(int _x,int _y);
 
 private:
+	void			processTeleportToCommand();
+	int				m_teleportPending;
+	DVECTOR			m_teleportPendingPos;
+
 	void			playAnimFrameSfx(int _animNo,int _animFrame);
 	void			calcCameraFocusPointTarget();
 

@@ -767,6 +767,13 @@ if(newmode!=-1)
 ///
 
 
+	// Pending teleport?
+	if(m_teleportPending)
+	{
+		processTeleportToCommand();
+	}
+
+
 	for(i=0;i<_frames;i++)
 	{
 		updatePadInput();
@@ -1809,15 +1816,25 @@ void	CPlayer::teleportTo(int _x,int _y)
 {
 	DVECTOR	pos={_x,_y};
 
+	m_teleportPendingPos=pos;
+	m_teleportPending=true;
+}
+
+void CPlayer::processTeleportToCommand()
+{
+	ASSERT(m_teleportPending);
+
 	CameraBox	releaseCamBox={0,0,29999,29999};
 	setCameraBox(releaseCamBox);
 
-	setPos(pos);
-	setRespawnPos(pos);
+	setPos(m_teleportPendingPos);
+	setRespawnPos(m_teleportPendingPos);
 
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
+	m_teleportPending=false;
 }
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1954,6 +1971,7 @@ void CPlayer::respawn()
 	m_ignoreNewlyPressedButtonsOnPadThisThink=true;
 
 	m_canExitLevel=false;
+	m_teleportPending=false;
 }
 
 /*----------------------------------------------------------------------
