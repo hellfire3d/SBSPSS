@@ -46,7 +46,7 @@ void CNpcCheckpointHazard::init()
 
 	m_scalableFont=new ("CheckpointFont") ScalableFontBank();
 	m_scalableFont->initialise(&standardFont);
-	m_scalableFont->setColour(255,255,255);
+	m_scalableFont->setColour(255,255,0);
 	m_scalableFont->setScale(511);
 
 	if ( CLevel::getCurrentCheckpoint() == this )
@@ -90,11 +90,11 @@ void CNpcCheckpointHazard::shutdown()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int	CPXO=18;
-int	CPYO=8;
-int	CPOT=13;
-int	CPA=3;
-int	CPZ=50;
+static const int	CPXO=18;
+static const int	CPYO=8;
+static const int	CPOT=13;
+static const int	CPA=3;
+static const int	CPZ=50;
 
 void CNpcCheckpointHazard::render()
 {
@@ -134,17 +134,19 @@ TPOLY_F4		*F4=(TPOLY_F4 *)PrimPtr;
 				SetPrimPtr((u8*)PrimPtr);
 				setTPolyF4(F4);
 
-				F4->x0 = polyArea.x1; F4->y0 = polyArea.y1;
-				F4->x1 = polyArea.x2; F4->y1 = polyArea.y1;
-				F4->x2 = polyArea.x1; F4->y2 = polyArea.y2;
-				F4->x3 = polyArea.x2; F4->y3 = polyArea.y2;
+//				F4->x0 = polyArea.x1; F4->y0 = polyArea.y1;
+//				F4->x1 = polyArea.x2; F4->y1 = polyArea.y1;
+//				F4->x2 = polyArea.x1; F4->y2 = polyArea.y2;
+//				F4->x3 = polyArea.x2; F4->y3 = polyArea.y2;
 long		Tmp;
 SVECTOR		I;
 				I.vz=CPZ;
-				I.vx=polyArea.x1; I.vy=polyArea.y1;	RotTransPers(&I,(long*)&F4->x0,&Tmp,&Tmp);
-				I.vx=polyArea.x2; I.vy=polyArea.y1; RotTransPers(&I,(long*)&F4->x1,&Tmp,&Tmp);
-				I.vx=polyArea.x1; I.vy=polyArea.y2; RotTransPers(&I,(long*)&F4->x2,&Tmp,&Tmp);
-				I.vx=polyArea.x2; I.vy=polyArea.y2; RotTransPers(&I,(long*)&F4->x3,&Tmp,&Tmp);
+				I.vy=polyArea.y1;
+				I.vx=polyArea.x1; RotTransPers(&I,(long*)&F4->x0,&Tmp,&Tmp);
+				I.vx=polyArea.x2; RotTransPers(&I,(long*)&F4->x1,&Tmp,&Tmp);
+				I.vy=polyArea.y2; 
+				I.vx=polyArea.x1; RotTransPers(&I,(long*)&F4->x2,&Tmp,&Tmp);
+				I.vx=polyArea.x2; RotTransPers(&I,(long*)&F4->x3,&Tmp,&Tmp);
 				
 				setTSemiTrans(F4,1);
 				setTABRMode(F4,CPA);
@@ -162,7 +164,9 @@ SVECTOR		I;
 
 void CNpcCheckpointHazard::collidedWith(CThing *_thisThing)
 {
-	if ( m_isActive && !m_triggered )
+
+//	if ( m_isActive && !m_triggered )
+	if ( m_isActive && CLevel::getCurrentCheckpoint() != this )
 	{
 		switch(_thisThing->getThingType())
 		{
