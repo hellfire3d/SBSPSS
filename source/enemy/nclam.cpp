@@ -130,7 +130,7 @@ void CNpcJumpingClamEnemy::setupWaypoints( sThingActor *ThisActor )
 		endXPos = newXPos;
 		endYPos = newYPos;
 
-		setHeading( newXPos, newYPos );
+		setHeading( newXPos, newYPos, startXPos, startYPos );
 
 		s32 xDist = ( endXPos - startXPos ) << 4;
 		s32 yDist = ( endYPos - startYPos ) << 4;

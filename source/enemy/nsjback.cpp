@@ -92,6 +92,8 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 				{
 					m_targetHeading += -1024 + ( getRnd() % 2049 );
 				}
+
+				m_targetHeading &= 4095;
 			}
 		}
 	}
@@ -181,7 +183,7 @@ void CNpcSmallJellyfishBackgroundEnemy::processUserCollision( CThing *thisThing 
 	s32 xDist = Pos.vx - otherPos.vx;
 	s32 yDist = Pos.vy - otherPos.vy;
 
-	s16 headingFromTarget = ratan2( yDist, xDist );
+	s16 headingFromTarget = ratan2( yDist, xDist ) & 4095;
 
 	if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
 	{

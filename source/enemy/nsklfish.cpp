@@ -92,7 +92,7 @@ void CNpcSkeletalFishEnemy::processClose( int _frames )
 		m_chargeTime += _frames;
 	}
 
-	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+	s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 	if ( !m_animPlaying )
 	{

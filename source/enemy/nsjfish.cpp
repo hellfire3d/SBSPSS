@@ -137,7 +137,7 @@ void CNpcSmallJellyfishEnemy::processClose( int _frames )
 				m_frame = 0;
 			}
 
-			s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+			s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 			if ( m_evadeClockwise )
 			{

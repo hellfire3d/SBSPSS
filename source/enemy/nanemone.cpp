@@ -62,9 +62,9 @@ void CNpcAnemoneEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcAnemoneEnemy::setHeading( s32 xPos, s32 yPos )
+void CNpcAnemoneEnemy::setHeading( s32 xPos, s32 yPos, s32 xOrig, s32 yOrig )
 {
-	m_heading = ( ratan2( ( ( yPos << 4 ) + 16 ) - Pos.vy, ( ( xPos << 4 ) + 8 ) - Pos.vx ) ) & 4095;
+	m_heading = ( ratan2( yPos - yOrig, xPos - xOrig ) ) & 4095;
 
 	int newHeading = ( m_heading - 1024 ) & 4095;
 
@@ -121,7 +121,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 	s16 maxTurnRate = m_data[m_type].turnSpeed;
 	bool withinRange = false;
 
-	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+	s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 	decDir = m_fireHeading - headingToPlayer;
 

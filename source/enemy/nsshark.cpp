@@ -876,13 +876,14 @@ void CNpcSubSharkEnemy::setupWaypoints( sThingActor *ThisActor )
 	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
 
 	u16 newXPos, newYPos;
+	u16 startXPos, startYPos;
 
 	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
 
-	newXPos = (u16) *PntList;
+	startXPos = newXPos = (u16) *PntList;
 	setWaypointPtr( PntList );
 	PntList++;
-	newYPos = (u16) *PntList;
+	startYPos = newYPos = (u16) *PntList;
 	PntList++;
 
 	setStartPos( newXPos, newYPos );
@@ -894,7 +895,7 @@ void CNpcSubSharkEnemy::setupWaypoints( sThingActor *ThisActor )
 		newYPos = (u16) *PntList;
 		PntList++;
 
-		setHeading( newXPos, newYPos );
+		setHeading( newXPos, newYPos, startXPos, startYPos );
 	}
 
 	s32 minX, maxX, minY, maxY;

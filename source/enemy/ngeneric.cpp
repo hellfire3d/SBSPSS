@@ -28,7 +28,7 @@ void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32
 {
 	s16 decDir, incDir, moveDist;
 	s32 moveX, moveY;
-	s16 headingToTarget = ratan2( yDist, xDist );
+	s16 headingToTarget = ratan2( yDist, xDist ) & 4095;
 	s16 maxTurnRate = m_data[m_type].turnSpeed;
 
 	decDir = m_heading - headingToTarget;
@@ -166,7 +166,7 @@ bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 
 			*moveX = -(*moveX);
 
-			m_heading = ratan2( *moveY, *moveX );
+			m_heading = ratan2( *moveY, *moveX ) & 4095;
 		}
 		else if ( !xBlocked && yBlocked )
 		{
@@ -174,7 +174,7 @@ bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 
 			*moveY = -(*moveY);
 
-			m_heading = ratan2( *moveY, *moveX );
+			m_heading = ratan2( *moveY, *moveX ) & 4095;
 		}
 		else
 		{

@@ -97,7 +97,7 @@ public:
 	NPC_UNIT_TYPE		getType()												{return( m_type );}
 	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
-	virtual void		setHeading( s32 xPos, s32 yPos );
+	virtual void		setHeading( s32 xPos, s32 yPos, s32 xOrig, s32 yOrig );
 	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
 	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}

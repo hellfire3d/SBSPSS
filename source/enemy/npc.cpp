@@ -487,13 +487,14 @@ void CNpcEnemy::setupWaypoints( sThingActor *ThisActor )
 	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
 
 	u16 newXPos, newYPos;
+	u16 origXPos, origYPos;
 
 	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
 
-	newXPos = (u16) *PntList;
+	origXPos = newXPos = (u16) *PntList;
 	setWaypointPtr( PntList );
 	PntList++;
-	newYPos = (u16) *PntList;
+	origYPos = newYPos = (u16) *PntList;
 	PntList++;
 
 	setStartPos( newXPos, newYPos );
@@ -505,7 +506,7 @@ void CNpcEnemy::setupWaypoints( sThingActor *ThisActor )
 		newYPos = (u16) *PntList;
 		PntList++;
 
-		setHeading( newXPos, newYPos );
+		setHeading( newXPos, newYPos, origXPos, origYPos );
 	}
 
 	setThinkArea();
@@ -548,9 +549,9 @@ void CNpcEnemy::setStartPosHighRes( s32 xPos, s32 yPos )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEnemy::setHeading( s32 xPos, s32 yPos )
+void CNpcEnemy::setHeading( s32 xPos, s32 yPos, s32 xOrig, s32 yOrig )
 {
-	m_heading = ( ratan2( ( ( yPos << 4 ) + 16 ) - Pos.vy, ( ( xPos << 4 ) + 8 ) - Pos.vx ) ) & 4095;
+	m_heading = ( ratan2( yPos - yOrig, xPos - xOrig ) ) & 4095;
 }
 
 
@@ -1016,11 +1017,11 @@ bool CNpcEnemy::processSensor()
 
 							if ( abs( playerXDist ) < abs( xDistWaypoint ) )
 							{
-								s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+								s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 								s16 decDir, incDir, moveDist;
 
-								s32 headingToWaypoint = ratan2( yDistWaypoint, xDistWaypoint );
+								s32 headingToWaypoint = ratan2( yDistWaypoint, xDistWaypoint ) & 4095;
 
 								// check waypoint is in the same direction as the user
 
@@ -1511,7 +1512,7 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 	s32 xDist = Pos.vx - otherPos.vx;
 	s32 yDist = Pos.vy - otherPos.vy;
 
-	s16 headingFromTarget = ratan2( yDist, xDist );
+	s16 headingFromTarget = ratan2( yDist, xDist ) & 4095;
 
 	if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
 	{
@@ -1576,7 +1577,7 @@ void CNpcEnemy::processUserCollision( CThing *thisThing )
 	s32 xDist = Pos.vx - otherPos.vx;
 	s32 yDist = Pos.vy - otherPos.vy;
 
-	s16 headingFromTarget = ratan2( yDist, xDist );
+	s16 headingFromTarget = ratan2( yDist, xDist ) & 4095;
 
 	/*if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
 	{
@@ -1623,7 +1624,7 @@ bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u
 	s32 moveX, moveY;
 	s16 headingToTarget;
 
-	headingToTarget = ratan2( yDist, xDist );
+	headingToTarget = ratan2( yDist, xDist ) & 4095;
 
 	s32 preShiftX = _frames * 5 * rcos( headingToTarget );
 	s32 preShiftY = _frames * 5 * rsin( headingToTarget );

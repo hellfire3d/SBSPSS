@@ -22,7 +22,7 @@ class	CNpcAnemoneEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
-	void				setHeading( s32 xPos, s32 yPos );
+	void				setHeading( s32 xPos, s32 yPos, s32 xOrig, s32 yOrig );
 protected:
 	void				processEnemyCollision( CThing *thisThing );
 	bool				processSensor();

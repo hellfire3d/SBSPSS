@@ -247,7 +247,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		s32 xDist = oldPos.vx - newPos->pos.vx;
 		s32 yDist = oldPos.vy - newPos->pos.vy;
 
-		s16 headingToTarget = ratan2( yDist, xDist );
+		s16 headingToTarget = ratan2( yDist, xDist ) & 4095;
 
 		DVECTOR sinPos;
 
@@ -282,7 +282,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
 
-		s16 headingToPrev = ratan2( yDist, xDist );
+		s16 headingToPrev = ratan2( yDist, xDist ) & 4095;
 		s16 headingFromNext;
 		s16 heading = headingToPrev;
 
@@ -293,7 +293,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 			DVECTOR const &nextPos = m_segmentArray[segmentCount + 1].getPos();
 			xDist = currentPos.vx - nextPos.vx;
 			yDist = currentPos.vy - nextPos.vy;
-			headingFromNext = ratan2( yDist, xDist );
+			headingFromNext = ratan2( yDist, xDist ) & 4095;
 
 			s16 decDir, incDir, moveDist;
 

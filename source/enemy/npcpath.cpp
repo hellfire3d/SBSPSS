@@ -298,7 +298,7 @@ s32 CNpcPath::think( DVECTOR const &currentPos, bool *pathComplete, bool *waypoi
 		*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 	}
 
-	s32 headingToTarget = ratan2( *distY, *distX );
+	s32 headingToTarget = ratan2( *distY, *distX ) & 4095;
 
 	return( headingToTarget );
 }

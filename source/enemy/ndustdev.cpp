@@ -196,7 +196,7 @@ void CNpcDustDevilEnemy::processMovementModifier( int _frames, s32 distX, s32 di
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;
 
-	s16 heading = ratan2( yDist, xDist );
+	s16 heading = ratan2( yDist, xDist ) & 4095;
 
 	m_drawRotation = heading;
 }
