@@ -76,6 +76,14 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 			m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ROLLING_BARREL,true);
 		}
 	}
+	else
+	{
+		if( m_soundId != NOT_PLAYING )
+		{
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
 
 	m_rotation += ( m_currentSpeed * 30 * _frames ) >> 2;
 	m_rotation &= 4095;
