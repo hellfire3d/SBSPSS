@@ -146,6 +146,7 @@ void CPaulScene::shutdown()
 int showDebugLog=false;
 void CPaulScene::render()
 {
+#if defined(__VERSION_DEBUG__)
 	if(showDebugLog)
 	{
 		int		logCount;
@@ -159,6 +160,7 @@ void CPaulScene::render()
 			y+=charHeight;
 		}
 	}
+#endif
 }
 
 

@@ -115,6 +115,7 @@ typedef enum
 	void	DoAssert(const char * Txt, const char * file, const int line);
 	#define	ASSERT(x)							if (!(x)) DoAssert(#x,__FILE__,__LINE__);
 #else
+#define	DbgPollHost()							;
 	#define	ASSERT(x)							;
 #endif
 
