@@ -92,6 +92,8 @@ void	CPlayerModeNet::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	netCatchPos={0,-80};
+DVECTOR netCatchSize={30,30};
 DVECTOR	netLaunchPos={-10,-70};
 void	CPlayerModeNet::think()
 {
@@ -127,10 +129,25 @@ void	CPlayerModeNet::think()
 					playerPos=m_player->getPos();
 					playerFacing=m_player->getFacing();
 
-					netRect.x1=playerPos.vx-20;
-					netRect.y1=playerPos.vy-20-40;
-					netRect.x2=playerPos.vx+20;
-					netRect.y2=playerPos.vy+20-40;
+					netRect.x1=playerPos.vx+(netCatchPos.vx*playerFacing)-(netCatchSize.vx/2);
+					netRect.y1=playerPos.vy+netCatchPos.vy-(netCatchSize.vy/2);
+					netRect.x2=netRect.x1+netCatchSize.vx;
+					netRect.y2=netRect.y1+netCatchSize.vy;
+
+					#ifdef __USER_paul__
+					{
+					CRECT	area=netRect;
+					DVECTOR	ofs=CLevel::getCameraPos();
+					area.x1-=ofs.vx;
+					area.y1-=ofs.vy;
+					area.x2-=ofs.vx;
+					area.y2-=ofs.vy;
+					DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
+					DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
+					DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
+					DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
+					}
+					#endif
 
 					thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
 					while(thing)
