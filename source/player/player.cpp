@@ -2541,7 +2541,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 				if(m_currentMode!=PLAYER_MODE_DEAD)
 				{
 					// Lock the camera, kill the player and let him fall to his death..
-					setMode(PLAYER_MODE_DEAD);
+					dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
 					m_lockCamera=true;
 				}
 			}

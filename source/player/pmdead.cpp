@@ -76,8 +76,15 @@ void	CPlayerModeDead::enter()
 		case DEATHTYPE__LIQUID:
 			deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
 			break;
+		case DEATHTYPE__FALL_TO_DEATH:
+			deathAnim=-1;
+			break;
 	}
-	m_player->setAnimNo(deathAnim);
+
+	if(deathAnim!=-1)
+	{
+		m_player->setAnimNo(deathAnim);
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -89,9 +96,12 @@ void	CPlayerModeDead::enter()
 void	CPlayerModeDead::think()
 {
 	m_deadTime++;
-	if(m_deadTime<m_player->getAnimFrameCount())
+	if(m_player->getDeathType()!=DEATHTYPE__FALL_TO_DEATH)
 	{
-		m_player->setAnimFrame(m_deadTime);
+		if(m_deadTime<m_player->getAnimFrameCount())
+		{
+			m_player->setAnimFrame(m_deadTime);
+		}
 	}
 
 	m_player->moveVertical(5);
