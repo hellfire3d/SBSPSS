@@ -498,7 +498,8 @@ void CPlayer::thinkHorizontalMovement()
 		else
 		{
 			// In the air
-			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
+//			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
+			if(colHeight>=0) // Lets you jump through platforms from below
 			{
 				colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy,5);
 				if(colHeight<0)
@@ -815,7 +816,7 @@ return false;
 				if right half of player is hanging or 0 if no part of the
 				player is hanging
   ---------------------------------------------------------------------- */
-int csize=15;
+int csize=5;
 int cheight=15;
 int CPlayer::isOnEdge()
 {
