@@ -298,15 +298,12 @@ void	CThing::think(int _frames)
 int showthings=true;
 #include "gfx\prim.h"
 #include "level\level.h"
-#endif
 void	CThing::render()
 {
-#ifdef __USER_paul__
 	if(showthings)
 	{
 		DVECTOR	ofs;
 		CRECT	area;
-		int		x1,y1,x2,y2;
 
 		ofs=CLevel::getCameraPos();
 
@@ -315,20 +312,29 @@ void	CThing::render()
 		area.y1-=ofs.vy;
 		area.x2-=ofs.vx;
 		area.y2-=ofs.vy;
-		DrawLine(area.x1,area.y1,area.x1,area.y2,255,255,255,0);
-		DrawLine(area.x1,area.y2,area.x2,area.y2,255,255,255,0);
-		DrawLine(area.x2,area.y2,area.x2,area.y1,255,255,255,0);
-		DrawLine(area.x2,area.y1,area.x1,area.y1,255,255,255,0);
 
-		x1=Pos.vx-10-ofs.vx;
-		y1=Pos.vy-10-ofs.vy;
-		x2=Pos.vx+10-ofs.vx;
-		y2=Pos.vy+10-ofs.vy;
-		DrawLine(x1,y1,x2,y2,255,0,0,0);
-		DrawLine(x2,y1,x1,y2,255,0,0,0);
+		if(area.x1<=511&&area.x2>=0&&
+		   area.y1<=255&&area.y2>=0)
+		{
+			DrawLine(area.x1,area.y1,area.x1,area.y2,255,255,255,0);
+			DrawLine(area.x1,area.y2,area.x2,area.y2,255,255,255,0);
+			DrawLine(area.x2,area.y2,area.x2,area.y1,255,255,255,0);
+			DrawLine(area.x2,area.y1,area.x1,area.y1,255,255,255,0);
+
+			area.x1=Pos.vx-10-ofs.vx;
+			area.y1=Pos.vy-10-ofs.vy;
+			area.x2=Pos.vx+10-ofs.vx;
+			area.y2=Pos.vy+10-ofs.vy;
+			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
+			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
+		}
 	}
-#endif
 }
+#else
+void	CThing::render()
+{
+}
+#endif
 
 /*----------------------------------------------------------------------
 	Function:
