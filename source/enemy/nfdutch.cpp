@@ -336,7 +336,7 @@ void CNpcFlyingDutchmanEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_START:
 				{
-					m_animPlaying = true;
+					//m_animPlaying = true;
 					m_animNo = m_data[m_type].dieAnim;
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
@@ -364,7 +364,7 @@ void CNpcFlyingDutchmanEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					if ( !m_animPlaying )
+					//if ( !m_animPlaying )
 					{
 						m_drawRotation += 64 * _frames;
 						m_drawRotation &= 4095;
