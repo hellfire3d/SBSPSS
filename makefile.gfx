@@ -39,7 +39,7 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
 # TEMP!!
-LEVELS_OPTS :=				-t:8,4,1 -s:256
+LEVELS_OPTS :=				-t:8,3,1 -s:256
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
