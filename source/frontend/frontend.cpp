@@ -299,7 +299,6 @@ void CFrontEndScene::setMode(FrontEndMode _newMode)
 		}
 
 		m_exitToGame=true;
-		
 	}
 	else
 	{
