@@ -6,11 +6,8 @@
 #define	__TEXCACHE_HEADER__
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
-//#include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	<Vector>
 #include	"Utils.h"
 #include	"List.h"
@@ -29,9 +26,9 @@ struct	sTex
 	int				Flags;
 	int				TexWidth,TexHeight;
 	float			dW,dH;
-	BOOL			Loaded;
+	bool			Loaded;
 
-	BOOL			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
+	bool			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
 };
 
 const RGBQUAD	BlankRGB={255,0,255};
@@ -52,7 +49,7 @@ public:
 		void	LoadBMP(char *Filename,sRGBData &RGBData);
 		void	FreeBMP(sRGBData &RGBData);
 		void	FixBMP(sRGBData &RGBData);
-		BOOL	IsSizeOk(int Size);
+		bool	IsSizeOk(int Size);
 		int		AlignSize(int Size);
 
 		void	LoadTex(sTex &ThisTex,sRGBData *TexData);

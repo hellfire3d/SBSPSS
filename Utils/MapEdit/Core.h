@@ -6,16 +6,16 @@
 #define	__CORE_HEADER__
 
 #include	<Vector>
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	"Layer.h"
-//#include	"LayerTile.h"
 
 #include	"TexCache.h"
 #include	"TileSet.h"
 
 const	float	FileVersion=1.01f;
 
+#define	SCREEN_MAP_WIDTH	30
+#define	SCREEN_MAP_HEIGHT	20
 
 /*****************************************************************************/
 class	CMapEditView;
@@ -29,7 +29,7 @@ public:
 		BOOL					New();
 		void					Load(CFile *File);
 		void					Save(CFile *File);
-		bool					Question(char *Txt);
+		BOOL					Question(char *Txt);
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);
@@ -85,7 +85,6 @@ public:
 		void					UpdateView(CMapEditView *View,Vector3 &Ofs);
 
 		Vector3					&GetCam();
-		Vector3					&GetCamOfs();
 		Vector3					OffsetCam(Vector3 &Cam,float DivVal);
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
@@ -97,13 +96,22 @@ public:
 		void					Toggle2d3d(CMapEditView *View);
 		int						FindLayer(int Type,int SubType=-1);
 		int						FindActionLayer();
+
+		void					SetScale();
+		Vector3					&GetScaleVector()			{return(ScaleVector);}
+		float					GetZoomW();
+		float					GetZoomH();
 		
+		void					CopySelection();
+		void					PasteSelection();
+
 		GString					GetCurrentPath();
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
 		Vector3					MapCam,TileCam;
 		Vector3					MapCamOfs,TileCamOfs;
+		Vector3					ScaleVector;
 
 		std::vector<CLayer*>	Layer;
 		int						ActiveLayer;

@@ -3,11 +3,9 @@
 /*********************/
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	"GLEnabledView.h"
 #include	<Vector>
 #include	<GFName.hpp>
@@ -216,15 +214,16 @@ void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
 		if (!TileSet.size()) return;	// No tiles, return
 
+
 		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
-			TileSet[CurrentSet].Render(CamPos,GetLBrush(),GetRBrush(),TRUE);
+			TileSet[CurrentSet].Render(Core,CamPos,GetLBrush(),GetRBrush(),TRUE);
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			TileSet[CurrentSet].Render(CamPos,GetLBrush(),GetRBrush(),FALSE);
+			TileSet[CurrentSet].Render(Core,CamPos,GetLBrush(),GetRBrush(),FALSE);
 		}
 
 		TileSet[CurrentSet].RenderCursor(CamPos,CursorPos,SelStart,SelEnd);
@@ -427,31 +426,6 @@ int		Height=ThisTex.TexHeight/16;
 }
 
 /*****************************************************************************/
-/*
-BOOL	CTileSet::Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs)
-{
-BOOL	Data=FALSE;
-
-		for (int Y=0; Y<16; Y++)
-		{
-			for (int X=0; X<16; X++)
-			{
-			u8	*SrcPtr=(u8*)&Src.RGB[((((YOfs*16)+Y)*Src.Width)+(X+(XOfs*16)))*3];
-			u8	R=SrcPtr[0];
-			u8	G=SrcPtr[1];
-			u8	B=SrcPtr[2];
-
-			if (R!=BlankRGB.rgbRed || G!=BlankRGB.rgbGreen || B!=BlankRGB.rgbBlue) Data=TRUE;
-
-			*Dst++=R;
-			*Dst++=G;
-			*Dst++=B;
-			}
-		}
-		return(Data);
-}
-*/
-/*****************************************************************************/
 void	CTileSet::Load3d(CCore *Core)
 {
 CScene	Scene;
@@ -498,7 +472,7 @@ CPoint	CTileSet::GetTilePos(int ID)
 BOOL	CTileSet::IsTileValid(int No)			
 {
 		ASSERT(No<Tile.size());
-		return(Tile[No].IsValid());
+		{return(Tile[No].IsValid());}
 }
 
 /*****************************************************************************/
@@ -509,26 +483,30 @@ BOOL	CTileSet::IsTileValidGB(int No)
 }
 
 /*****************************************************************************/
-void	CTileSet::Render(Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
+void	CTileSet::Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
 sMapElem	ThisElem;
 int			SelFlag;
 BOOL		ValidTile=TRUE;
+float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
 
 		ThisElem.Flags=0;
 		ThisElem.Set=SetNumber;
 		
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 
 		while(TileID!=ListSize)
 		{
 			CPoint	Pos=GetTilePos(TileID);
+			float	XPos=(float)Pos.x*(1+TileBrowserGap);
+			float	YPos=(float)Pos.y*(1+TileBrowserGap);
 
-			
 			glLoadIdentity();
-			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
+			glScalef(Scale,Scale,Scale);
+			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
 
 			ValidTile=IsTileValid(TileID);
 			if (TileID && ValidTile) 
@@ -551,17 +529,17 @@ BOOL		ValidTile=TRUE;
 				{
 					case 1: // L
 						glColor4f(1,0,0,0.5);
-						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01f);
 						break;
 					case 2: // R
 						glColor4f(0,0,1,0.5);
-						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01f);
 						break;
 					case 3: // LR
 						glColor4f(1,0,0,0.5);
-						BuildGLQuad(TileBrowserX0,0.5,TileBrowserY0,TileBrowserY1,0.01);
+						BuildGLQuad(TileBrowserX0,0.5,TileBrowserY0,TileBrowserY1,0.01f);
 						glColor4f(0,0,1,0.5);
-						BuildGLQuad(0.5,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
+						BuildGLQuad(0.5,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01f);
 						break;
 				}
 	
@@ -606,15 +584,17 @@ BOOL		ValidTile=TRUE;
 
 			TileID++;
 		}
+		glPopMatrix();
 	
 }
 
 /*****************************************************************************/
 void	CTileSet::RenderCursor(Vector3 &CamPos,int CursorPos,int SelStart,int SelEnd)
 {
-int		ListSize=Tile.size();
-CPoint	Start,End;
-int		MaxTile=Tile.size();
+int			ListSize=Tile.size();
+CPoint		Start,End;
+int			MaxTile=Tile.size();
+float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
 
 		if (CursorPos<-1 || CursorPos>ListSize) return;		
 
@@ -635,13 +615,19 @@ int		MaxTile=Tile.size();
 		}
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 
 		for (int Y=Start.y; Y<=End.y; Y++)
 		{
 			for (int X=Start.x; X<=End.x; X++)
 			{
+				float	XPos=(float)X*(1+TileBrowserGap);
+				float	YPos=(float)Y*(1+TileBrowserGap);
+
 				glLoadIdentity();
-				glTranslatef(CamPos.x+X*(1+TileBrowserGap),CamPos.y-Y*(1+TileBrowserGap),CamPos.z);
+				glScalef(Scale,Scale,Scale);
+				glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
+
 	
 				glBegin(GL_QUADS); 
 				glColor4f(1,1,0,0.5);
@@ -650,6 +636,7 @@ int		MaxTile=Tile.size();
 
 			}
 		}
+		glPopMatrix();
 }
 
 /*****************************************************************************/
@@ -657,16 +644,21 @@ void	CTileSet::RenderGrid(Vector3 &CamPos)
 {
 int			ListSize=Tile.size();
 int			TileID=1;	// Dont bother with blank, its sorted
+float		Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
 		
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 
 		while(TileID!=ListSize)
 		{
 			CPoint	Pos=GetTilePos(TileID);
-			
-			glLoadIdentity();
-			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
+			float	XPos=(float)Pos.x*(1+TileBrowserGap);
+			float	YPos=(float)Pos.y*(1+TileBrowserGap);
 
+			glLoadIdentity();
+			glScalef(Scale,Scale,Scale);
+			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
+			
 			glBegin(GL_LINES); 
 				glColor3f(1,1,1);
 			
@@ -686,6 +678,8 @@ int			TileID=1;	// Dont bother with blank, its sorted
 
 			TileID++;
 		}
+		glPopMatrix();
+
 }
 
 /*****************************************************************************/
@@ -696,6 +690,7 @@ GLint	Viewport[4];
 GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
 int		HitCount;
 int		TileID=0;
+float	Scale=1.0f/(float)TileBrowserWidth/CamPos.z;
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
@@ -711,13 +706,17 @@ int		TileID=0;
 		View->SetupPersMatrix();
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 
 		while(TileID!=ListSize)
 		{
 			CPoint	Pos=GetTilePos(TileID);
-			
+			float	XPos=(float)Pos.x*(1+TileBrowserGap);
+			float	YPos=(float)Pos.y*(1+TileBrowserGap);
+
 			glLoadIdentity();
-			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
+			glScalef(Scale,Scale,Scale);
+			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
 
 			glLoadName (TileID);
 			glBegin (GL_QUADS); 
@@ -727,6 +726,7 @@ int		TileID=0;
 		}
 
 		HitCount= glRenderMode (GL_RENDER);
+		glPopMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 

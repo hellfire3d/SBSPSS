@@ -4,11 +4,9 @@
 
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	"GLEnabledView.h"
 
 #include	"MapEdit.h"
@@ -20,6 +18,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 #include	"Utils.h"
+#include	"Select.h"
 #include	"Export.h"
 
 /*****************************************************************************/
@@ -37,7 +36,6 @@ char	*CLayerTile::LayerName[]=
 // New Layer
 CLayerTile::CLayerTile(int _SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable)
 {
-//		SetName(_Name);
 		SubType=_SubType;
 		ScaleFactor=Scale;
 		ResizeFlag=Resizable;
@@ -61,7 +59,7 @@ CLayerTile::CLayerTile(int _SubType,int Width,int Height,float Scale,BOOL Is3d,B
 // Load Layer
 CLayerTile::CLayerTile(CFile *File,int Version)
 {
-	Load(File,Version);
+		Load(File,Version);
 }
 
 /*****************************************************************************/
@@ -87,8 +85,6 @@ void	CLayerTile::Load(CFile *File,float Version)
 		TRACE1("%s\t",GetName());
 		TRACE1("Scl:%g\t",ScaleFactor);
 		TRACE1("%i\n",VisibleFlag);
-
-
 }
 
 /*****************************************************************************/
@@ -140,7 +136,7 @@ int		ThisHeight=Map.GetHeight();
 /*****************************************************************************/
 void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
-Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
 		if (Is3d && Render3dFlag)
 		{
@@ -164,8 +160,8 @@ CMap		&Brush=TileBank.GetActiveBrush();
 
 		if (!Brush.IsValid()) return;
 
-		if (CursPos.x==-1 || CursPos.y==-1) return;
-		ThisCam.x+=CursPos.x;
+		if (CursPos.x<0 || CursPos.y<0) return;
+		ThisCam.x-=CursPos.x;
 		ThisCam.y-=CursPos.y;
 
 		if (Is3d && Render3dFlag)
@@ -181,85 +177,135 @@ CMap		&Brush=TileBank.GetActiveBrush();
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha)
+void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,BOOL Render3d,float Alpha)
 {
-int			Width=ThisMap.GetWidth();
-int			Height=ThisMap.GetHeight();
-		
-		if (Alpha<1)
-		{
-			glColor4f(1,1,1,Alpha);
-		}
-		else
-		{
-			glColor3f(1,1,1);
-		}
+int			MapWidth=ThisMap.GetWidth();
+int			MapHeight=ThisMap.GetHeight();
+float		ZoomW=Core->GetZoomW();
+float		ZoomH=Core->GetZoomH();
+float		ScrOfsX=(ZoomW/2);
+float		ScrOfsY=(ZoomH/2);
+Vector3		&Scale=Core->GetScaleVector();
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glScalef(Scale.x,Scale.y,Scale.z);
+		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
-		for (int YLoop=0; YLoop<Height; YLoop++)
+		glColor4f(1,1,1,Alpha);
+		for (int YLoop=0; YLoop<MapHeight; YLoop++)
 		{
-			for (int XLoop=0; XLoop<Width; XLoop++)
+			for (int XLoop=0; XLoop<MapWidth; XLoop++)
 			{
 				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
 				if (ThisElem.Tile && Core->IsTileValid(ThisElem.Set,ThisElem.Tile))
 				{ // Render Non Zero Tiles
 					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
-					glLoadIdentity();	// Slow way, but good to go for the mo
-					glTranslatef(CamPos.x+XLoop,CamPos.y-YLoop,CamPos.z);
 					ThisTile.Render(ThisElem.Flags,Render3d);
 				}
+				glTranslatef(1.0f,0,0);	// Next X
 			}
+			glTranslatef(-MapWidth,-1,0); // Next y, rewind to start X
 		}
-	
+		glPopMatrix();
+}
+
+/*****************************************************************************/
+void	CLayerTile::RenderSelection(CCore *Core,Vector3 &CamPos)
+{
+CRect		Rect=Selection.GetRect();
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+float		ZoomW=Core->GetZoomW();
+float		ZoomH=Core->GetZoomH();
+float		ScrOfsX=(ZoomW/2);
+float		ScrOfsY=(ZoomH/2);
+Vector3		&Scale=Core->GetScaleVector();
+
+		if (!Selection.IsValid()) return;
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glScalef(Scale.x,Scale.y,Scale.z);
+		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
+
+		glColor4f(1,0,1,0.5f);
+		glBegin (GL_QUADS); 
+float		X0=Rect.left;
+float		X1=Rect.right;
+float		Y0=Rect.top-1;
+float		Y1=Rect.bottom-1;
+			glVertex3f( X0, -Y0, 0);
+			glVertex3f( X1, -Y0, 0);
+			glVertex3f( X1, -Y1, 0);
+			glVertex3f( X0, -Y1, 0);
+		glEnd();
+
+		glPopMatrix();
 }
 
 /*****************************************************************************/
 void	CLayerTile::RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)
 {
-int		Width=Map.GetWidth();
-int		Height=Map.GetHeight();
-Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
-float	OverVal=0.5;
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+int			MapWidth=Map.GetWidth();
+int			MapHeight=Map.GetHeight();
+float		ZoomW=Core->GetZoomW();
+float		ZoomH=Core->GetZoomH();
+float		ScrOfsX=(ZoomW/2);
+float		ScrOfsY=(ZoomH/2);
+Vector3		&Scale=Core->GetScaleVector();
+float		Col;
+const float	OverVal=0.1f;
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		glLoadIdentity();
-		glTranslatef(ThisCam.x,ThisCam.y,ThisCam.z);
+		glScalef(Scale.x,Scale.y,Scale.z);
+		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
+
+		if (Active) Col=1; else Col=0.5f;
 
 		glBegin(GL_LINES); 
-			if (Active)
-				glColor3f(1,1,1);
-			else
-				glColor3f(0.5,0.5,0.5);
+		
+		glColor3f(Col,Col,Col);
 			
-			for (int YLoop=0; YLoop<Height+1; YLoop++)
+		for (int YLoop=0; YLoop<MapHeight+1; YLoop++)
 			{
-			glVertex3f( 0-OverVal,    -YLoop+1, 0);
-			glVertex3f( Width+OverVal, -YLoop+1, 0);
+			glVertex3f( 0-OverVal,			-YLoop+1, 0);
+			glVertex3f( MapWidth+OverVal,	-YLoop+1, 0);
 			}
 
-			for (int XLoop=0; XLoop<Width+1; XLoop++)
+		for (int XLoop=0; XLoop<MapWidth+1; XLoop++)
 			{
 			glVertex3f( XLoop, 0+1+OverVal,		0);
-			glVertex3f( XLoop, -Height+1-OverVal, 0);
+			glVertex3f( XLoop, -MapHeight+1-OverVal, 0);
 			}
 		glEnd();
 
+		glPopMatrix();
 }
 
 /*****************************************************************************/
 void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
 {
-GLint	Viewport[4];
-GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
-int		HitCount;
-int		TileID=0;
-CPoint	&CursorPos=Core->GetCursorPos();
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+int			MapWidth=Map.GetWidth();
+int			MapHeight=Map.GetHeight();
+float		ZoomW=Core->GetZoomW();
+float		ZoomH=Core->GetZoomH();
+float		ScrOfsX=(ZoomW/2);
+float		ScrOfsY=(ZoomH/2);
+Vector3		&Scale=Core->GetScaleVector();
 
-int		Width=Map.GetWidth();
-int		Height=Map.GetHeight();
-Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+GLint		Viewport[4];
+GLuint		SelectBuffer[SELECT_BUFFER_SIZE];
+int			TileID=0;
+CPoint		&CursorPos=Core->GetCursorPos();
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
 		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
@@ -275,12 +321,15 @@ Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 		View->SetupPersMatrix();
 
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		glLoadIdentity();
-		glTranslatef(ThisCam.x,ThisCam.y,ThisCam.z);
+		glScalef(Scale.x,Scale.y,Scale.z);
+		glTranslatef(-ThisCam.x,ThisCam.y,0);
+		glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
-		for (int YLoop=0; YLoop<Height; YLoop++)
+		for (int YLoop=0; YLoop<MapHeight; YLoop++)
 		{
-			for (int XLoop=0; XLoop<Width; XLoop++)
+			for (int XLoop=0; XLoop<MapWidth; XLoop++)
 			{
 				glLoadName (TileID);
 				glBegin (GL_QUADS); 
@@ -290,7 +339,8 @@ Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 			}
 		}
 
-		HitCount= glRenderMode (GL_RENDER);
+		TileID= glRenderMode (GL_RENDER);
+		glPopMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		CursorPos.x=CursorPos.y=-1;
@@ -299,14 +349,12 @@ Vector3	ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
 GLuint	*HitPtr=SelectBuffer;
 
-		if (HitCount)	// Just take 1st		
-
+		if (TileID)	// Just take 1st		
 		{
 			int	HitID=HitPtr[3];
-			CursorPos=IDToPoint(HitID,Width);
+			CursorPos=IDToPoint(HitID,MapWidth);
 		}
 		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
-
 }
 
 /*****************************************************************************/
@@ -401,6 +449,11 @@ CTileBank	&TileBank=Core->GetTileBank();
 				Ret=Paint(TileBank.GetLBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
+				Ret=Selection.Handle(CursorPos,nFlags);
+				if (Selection.HasSelection())
+				{
+					TRACE0("LMB Selection\n");
+				}
 			break;
 		default:
 			break;
@@ -421,6 +474,11 @@ CTileBank	&TileBank=Core->GetTileBank();
 				Ret=Paint(TileBank.GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
+				Ret=Selection.Handle(CursorPos,nFlags);
+				if (Selection.HasSelection())
+				{
+					TRACE0("RMB Selection\n");
+				}
 			break;
 		default:
 			break;
@@ -444,6 +502,7 @@ CTileBank	&TileBank=Core->GetTileBank();
 				Ret=Paint(TileBank.GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
+			Ret=Selection.Handle(CursorPos,nFlags);
 			break;
 		default:
 			break;
@@ -460,6 +519,7 @@ void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 			RenderCursorPaint(Core,CamPos,Is3d);
 			break;
 		case MouseModeSelect:
+			RenderSelection(Core,CamPos);
 			break;
 		default:
 			break;
@@ -469,12 +529,26 @@ void	CLayerTile::RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 /*****************************************************************************/
 BOOL	CLayerTile::MirrorX(CCore *Core)
 {
-CTileBank	&TileBank=Core->GetTileBank();
-CMap		&LBrush=TileBank.GetLBrush();
-CMap		&RBrush=TileBank.GetRBrush();
+		switch(Mode)
+		{
+		case MouseModePaint:
+			{
+			CTileBank	&TileBank=Core->GetTileBank();
 
-			LBrush.MirrorX(TILE_FLAG_MIRROR_X);
-			RBrush.MirrorX(TILE_FLAG_MIRROR_X);
+			TileBank.GetLBrush().MirrorX(TILE_FLAG_MIRROR_X);
+			TileBank.GetRBrush().MirrorX(TILE_FLAG_MIRROR_X);
+			}
+			break;
+		case MouseModeSelect:
+			{
+				if (!Selection.IsValid()) return(false);	// No Selection
+				CRect	R=Selection.GetRect();
+				Map.MirrorX(TILE_FLAG_MIRROR_X,&R);
+			}
+			break;
+		default:
+			break;
+		}
 
 		return(TRUE);
 }
@@ -482,14 +556,54 @@ CMap		&RBrush=TileBank.GetRBrush();
 /*****************************************************************************/
 BOOL	CLayerTile::MirrorY(CCore *Core)
 {
-CTileBank	&TileBank=Core->GetTileBank();
-CMap		&LBrush=TileBank.GetLBrush();
-CMap		&RBrush=TileBank.GetRBrush();
+		switch(Mode)
+		{
+		case MouseModePaint:
+			{
+			CTileBank	&TileBank=Core->GetTileBank();
 
-			LBrush.MirrorY(TILE_FLAG_MIRROR_Y);
-			RBrush.MirrorY(TILE_FLAG_MIRROR_Y);
+			TileBank.GetLBrush().MirrorY(TILE_FLAG_MIRROR_Y);
+			TileBank.GetRBrush().MirrorY(TILE_FLAG_MIRROR_Y);
+			}
+			break;
+		case MouseModeSelect:
+			{
+				if (!Selection.IsValid()) return(false);	// No Selection
+				CRect	R=Selection.GetRect();
+				Map.MirrorY(TILE_FLAG_MIRROR_Y,&R);
+			}
+			break;
+		default:
+			break;
+		}
+
 
 		return(TRUE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::CopySelection(CCore *Core)
+{
+		if (Mode!=MouseModeSelect) return(false);	// Not in select mode
+		if (!Selection.IsValid()) return(false);	// No Selection
+
+CTileBank	&TileBank=Core->GetTileBank();
+CRect		Rect=Selection.GetRect();
+
+		TileBank.GetLBrush().Set(Map,Rect.left,Rect.top,Rect.Width(),Rect.Height());
+
+		return(true);
+
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::PasteSelection(CCore *Core)
+{
+		if (Mode!=MouseModeSelect) return(false);	// Not in select mode
+		if (!Selection.IsValid()) return(false);	// No Selection
+
+		TRACE0("Paste\n");
+		return(true);
 }
 
 /*****************************************************************************/

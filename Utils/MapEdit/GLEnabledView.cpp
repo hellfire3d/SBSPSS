@@ -65,7 +65,7 @@ v 1.4: introduced GL/GLU error checking in OnDraw message handler after scene dr
 
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
+//#include	<gl\glut.h>
 #include "GLEnabledView.h"
 
 #ifdef _DEBUG

@@ -4,7 +4,6 @@
 #include	"stdafx.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	"GLEnabledView.h"
 #include	"MapEdit.h"
 
@@ -62,9 +61,9 @@ CMapEditView::~CMapEditView()
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::VideoMode(ColorsNumber & c, ZAccuracy & z, BOOL & dbuf)
 {
-	c=MILLIONS;	// ask for 65355 colors...
-	z=NORMAL;		// ...16 bit Z-buffer...
-	dbuf=TRUE;		// ...double-buffering
+	c=MILLIONS;
+	z=NORMAL;
+	dbuf=TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -91,6 +90,7 @@ void CMapEditView::OnDrawGL()
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnSizeGL(int cx, int cy)
 {
+//		cy=cx/1.5f;
 		glViewport(0,0,cx,cy);
 
 // update the camera
@@ -107,21 +107,7 @@ void CMapEditView::OnSizeGL(int cx, int cy)
 void	CMapEditView::SetupPersMatrix()
 {
 	gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
-	glTranslatef(0.0f,0.0f,-4.f);
-
-//	GLint viewport[4];
-
-//	glGetIntegerv( GL_VIEWPORT, viewport );
-//	glMatrixMode( GL_PROJECTION );
-//	glLoadIdentity();
-//	glOrtho( 0.0f, viewport[2]-viewport[0],viewport[3]-viewport[1], 0.0f, 0.1f, 100.0f);
-//	glOrtho( 0.0f, +30,+20, 0, 0.1f, 100.0f);
-//	glTranslatef(0.0f,0.0f,-0.f);
-
-//	glMatrixMode( GL_MODELVIEW );
-//	glLoadIdentity();
-//	glTranslatef( 0.375, 0.375, 0.0 );
-
+	glTranslatef(0.0f,0.0f,-1.f);
 }
 
 
@@ -155,7 +141,6 @@ CMapEditDoc	*CurDoc=GetDocument();
 	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
 	CurDoc->UpdateAll(this);
-//	CurDoc->UpdateAllViews(this);
 }
 
 /*********************************************************************************/

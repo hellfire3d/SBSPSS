@@ -37,6 +37,7 @@ public:
 
 		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
+		void			RenderSelection(CCore *Core,Vector3 &ThisCam);
 
 		void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
@@ -65,6 +66,9 @@ public:
 
 		BOOL			MirrorX(CCore *Core);
 		BOOL			MirrorY(CCore *Core);
+
+		BOOL			CopySelection(CCore *Core);
+		BOOL			PasteSelection(CCore *Core);
 
 		void			DeleteSet(int Set);
 		void			RemapSet(int OrigSet,int NewSet);

@@ -36,20 +36,21 @@ public:
 
 		int			GetWidth();
 		int			GetHeight();
-		BOOL		IsValid()			{return(GetHeight());}
+		BOOL		IsValid()			{return(GetHeight()!=0);}
 
 		void		SetSize(int Width,int Height,BOOL Clear=FALSE);
 		void		SetWidth(int Width);
 		void		SetHeight(int Height);
 		void		Clear();
 		void		Delete();
-		void		MirrorX(int Flag);
-		void		MirrorY(int Flag);
+		void		MirrorX(int Flag,CRect *R=NULL);
+		void		MirrorY(int Flag,CRect *R=NULL);
 
 		sMapElem	&Get(int X,int Y);
 		void		Set(int X,int Y,sMapElem &Blk,BOOL Force=FALSE);
 		void		Set(int X,int Y,CMap &Blk,BOOL Force=FALSE);
 		void		Set(CMap &Src,int StartX,int StartY,int Width,int Height,BOOL Force=FALSE);
+		void		Set(CMap &Src,CRect &Rect,BOOL Force=FALSE);
 
 		void		Resize(int Width,int Height);
 

@@ -25,6 +25,8 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_EXPORT_PSX, OnExportPsx)
 	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
 	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
+	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
+	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -319,13 +321,24 @@ void CMapEditDoc::OnZoomOut()
 /*********************************************************************************/
 void	CMapEditDoc::Toggle2d3d(CMapEditView *View)
 {
-	Core.Toggle2d3d(View);
+		Core.Toggle2d3d(View);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::FocusView()
 {
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
-		
 }
 
+
+/*********************************************************************************/
+void CMapEditDoc::OnEditCopy() 
+{
+		Core.CopySelection();
+}
+
+/*********************************************************************************/
+void CMapEditDoc::OnEditPaste() 
+{
+		Core.PasteSelection();
+}

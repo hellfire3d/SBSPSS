@@ -5,7 +5,6 @@
 #include	"stdafx.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	<frame.hpp>
 #include	<Vector>
 
@@ -147,6 +146,8 @@ u8		*Src,*Dst;
 		glTexImage2D(GL_TEXTURE_2D, 0, 4, GLWidth, GLHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &Buffer[0]);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		free(Buffer);
 }

@@ -4,12 +4,9 @@
 
 #include	"stdafx.h"
 
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
-#include	<gl\glaux.h>		// Header File For The Glaux Library
 #include	"GLEnabledView.h"
 
 #include	"Utils.H"

@@ -4,11 +4,9 @@
 
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 
 #include	"Map.h"
 
@@ -180,43 +178,53 @@ void	CMap::Set(CMap &Src,int StartX,int StartY,int Width,int Height,BOOL Force)
 }
 
 /*****************************************************************************/
-void	CMap::MirrorX(int Flag)
+void	CMap::Set(CMap &Src,CRect &Rect,BOOL Force)
 {
-CMap	Old=*this;
-
-int		Width=GetWidth();
-int		Height=GetHeight();
-
-		for (int Y=0; Y<Height; Y++)
-		{
-			for (int X=0; X<Width; X++)
-			{
-				sMapElem	&ThisElem=Old.Get(X,Y);
-				ThisElem.Flags^=Flag;
-				Set((Width-1)-X,Y,ThisElem,true);
-			}
-		}
-
+	Set(Src,Rect.left,Rect.top,Rect.Width(),Rect.Height(),Force);
 }
 
 /*****************************************************************************/
-void	CMap::MirrorY(int Flag)
+void	CMap::MirrorX(int Flag,CRect *R)
 {
 CMap	Old=*this;
 
-int		Width=GetWidth();
-int		Height=GetHeight();
+		if (!R)
+		{ // No rect, use full
+			R=new CRect(0,0,GetWidth(),GetHeight());
+		}
 
-		for (int Y=0; Y<Height; Y++)
+int		Ofs=(R->right+R->left)-1;
+		for (int Y=R->top; Y<R->bottom; Y++)
 		{
-			for (int X=0; X<Width; X++)
+			for (int X=R->left; X<R->right; X++)
 			{
 				sMapElem	&ThisElem=Old.Get(X,Y);
 				ThisElem.Flags^=Flag;
-				Set(X,(Height-1)-Y,ThisElem,true);
+				Set(Ofs-X,Y,ThisElem,true);
 			}
 		}
+}
 
+/*****************************************************************************/
+void	CMap::MirrorY(int Flag,CRect *R)
+{
+CMap	Old=*this;
+
+		if (!R)
+		{ // No rect, use full
+			R=new CRect(0,0,GetWidth(),GetHeight());
+		}
+
+int		Ofs=(R->bottom+R->top)-1;
+		for (int Y=R->top; Y<R->bottom; Y++)
+		{
+			for (int X=R->left; X<R->right; X++)
+			{
+				sMapElem	&ThisElem=Old.Get(X,Y);
+				ThisElem.Flags^=Flag;
+				Set(X,Ofs-Y,ThisElem,true);
+			}
+		}
 }
 
 /*****************************************************************************/

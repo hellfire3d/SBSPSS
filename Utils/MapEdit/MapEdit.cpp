@@ -4,7 +4,6 @@
 #include	"stdafx.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	"GLEnabledView.h"
 
 #include	"MapEdit.h"

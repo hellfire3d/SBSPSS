@@ -23,8 +23,8 @@ CFG=MapEdit - Win32 Debug
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName ""$/Utils/MapEdit", IKCAAAAA"
+# PROP Scc_LocalPath "."
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
@@ -239,6 +239,10 @@ SOURCE=.\MapEditView.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Select.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -252,15 +256,7 @@ SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gl3d.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GLEnabledView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\List.h
 # End Source File
 # Begin Source File
 
@@ -281,6 +277,10 @@ SOURCE=.\MapEditView.h
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Select.h
 # End Source File
 # Begin Source File
 

@@ -6,11 +6,9 @@
 #define	__TILESET_HEADER__
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	<Vector>
 #include	<gfname.hpp>
 
@@ -117,7 +115,7 @@ public:
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
 		int		FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
-		void	Render(Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
+		void	Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
 		void	RenderCursor(Vector3 &CamPos,int Pos,int Width, int Height);
 		void	RenderBrush(Vector3 &CamPos,CMap &LBrush,CMap &RBrush);
 		void	RenderGrid(Vector3 &CamPos);

@@ -6,9 +6,9 @@
 #define	__LAYER_HEADER__
 
 #include	<Vector>
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	"Map.h"
+#include	"Select.h"
 #include	"LayerDef.h"
 
 /*****************************************************************************/
@@ -43,6 +43,8 @@ virtual	float			GetScaleFactor()				{return(ScaleFactor);}
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)=0;
+virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam)=0;
+
 
 virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)=0;
 virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
@@ -68,8 +70,11 @@ virtual	BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint
 virtual	BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
 virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)=0;
 
-virtual	BOOL			MirrorX(CCore *Core){return(FALSE);};
-virtual	BOOL			MirrorY(CCore *Core){return(FALSE);};
+virtual	BOOL			MirrorX(CCore *Core){return(false);};
+virtual	BOOL			MirrorY(CCore *Core){return(false);};
+
+virtual	BOOL			CopySelection(CCore *Core)		{return(false);}
+virtual	BOOL			PasteSelection(CCore *Core)		{return(false);}
 
 
 virtual	void			DeleteSet(int Set){};
@@ -80,7 +85,7 @@ protected:
 		float			ScaleFactor;
 		BOOL			ResizeFlag;
 		BOOL			VisibleFlag;
-
+		CSelect			Selection;
 };
 
 

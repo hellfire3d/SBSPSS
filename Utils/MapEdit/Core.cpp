@@ -4,11 +4,9 @@
 
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
-#include	<gl\glut.h>
 #include	"GLEnabledView.h"
 
 #include	"MapEdit.h"
@@ -78,16 +76,9 @@ int		Width,Height;
 							Layer.push_back(new CLayerTile(	LAYERTILE_ACTION,		Width,					Height,		1.0f,	TRUE,	TRUE));
 		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	LAYERTILE_FORE,			Width,					Height,		0.5f,	FALSE,	TRUE));
 
-Vector3	CamOfs;
-		CamOfs.Zero();
-		CamOfs.x=-15;
-		CamOfs.y=+10;
-
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();
-		MapCamOfs=CamOfs;
 		TileCam.Zero();
-		TileCamOfs=CamOfs;
 		TileViewFlag=FALSE;
 		GridFlag=TRUE;
 		Is3dFlag=TRUE;
@@ -151,6 +142,7 @@ int		MapHeight=Layer[FindActionLayer()]->GetHeight();
 		}
 
 		Init();
+//		MapCam.Zero();
 }
 
 /*****************************************************************************/
@@ -185,7 +177,7 @@ int		LayerCount=Layer.size();
 }
 
 /*****************************************************************************/
-bool	CCore::Question(char *Txt)
+BOOL	CCore::Question(char *Txt)
 {
 	return(theApp.GetCurrent()->Question(Txt));
 }
@@ -321,9 +313,9 @@ Vector3	Ofs;
 void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0) 
-			Zoom(View,+1.0f);
+			Zoom(View,+0.1f);
 		else
-			Zoom(View,-1.0f);
+			Zoom(View,-0.1f);
 }
 
 /*****************************************************************************/
@@ -345,8 +337,8 @@ Vector3	&ThisCam=GetCam();
 			RECT	ThisRect;
 
 			View->GetWindowRect(&ThisRect);
-			XS=ThisCam.z*4;
-			YS=ThisCam.z*4;
+			XS=ThisCam.z*16;
+			YS=ThisCam.z*16;
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
@@ -355,17 +347,7 @@ Vector3	&ThisCam=GetCam();
 	
 			Ofs.x*=XS;
 			Ofs.y*=YS;
-			if (nFlags & MK_CONTROL)
-			{ // Move Ofs
-				Vector3	&CamOfs=GetCamOfs();
-				Ofs.y=-Ofs.y;
-				CamOfs+=Ofs;
-				UpdateView(View);
-			}
-			else
-			{
-				UpdateView(View,Ofs);
-			}
+			UpdateView(View,Ofs);
 			}
 		else
 		{	
@@ -432,7 +414,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 
 // If toggling layer, dont change the layer
-		if (List->ListBox.GetCheck(NewLayer)!=Layer[NewLayer]->IsVisible())
+		if ((int)List->ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
 		{
 			Layer[NewLayer]->SetVisible(List->ListBox.GetCheck(NewLayer));
 			List->ListBox.SetCurSel(ActiveLayer);
@@ -579,13 +561,31 @@ Vector3	&CCore::GetCam()
 }
 
 /*****************************************************************************/
-Vector3	&CCore::GetCamOfs()
+void	CCore::SetScale()
 {
-		if (TileViewFlag)
-			return(TileCamOfs);
-		else
-			return(MapCamOfs);
+float	XS=GetZoomW();
+float	YS=GetZoomH();
+float	ZS=XS/YS;
 
+		ScaleVector.x=1.0f/XS;
+		ScaleVector.y=1.0f/XS;
+		ScaleVector.z=1.0f/XS;//4.0f;
+}
+
+/*****************************************************************************/
+float	CCore::GetZoomW()
+{
+Vector3	&ThisCam=GetCam();
+
+	return((float)SCREEN_MAP_WIDTH/ThisCam.z);
+}
+
+/*****************************************************************************/
+float	CCore::GetZoomH()
+{
+Vector3	&ThisCam=GetCam();
+
+	return((float)SCREEN_MAP_HEIGHT/ThisCam.z);
 }
 
 /*****************************************************************************/
@@ -608,6 +608,7 @@ void	CCore::UpdateAll(CMapEditView *View)
 /*****************************************************************************/
 void	CCore::UpdateView(CMapEditView *View)
 {
+		SetScale();
 		if (View) View->Invalidate();
 }		
 
@@ -617,9 +618,13 @@ void	CCore::UpdateView(CMapEditView *View,Vector3 &Ofs)
 Vector3	&ThisCam=GetCam();
 
 		ThisCam.x+=Ofs.x;
-		ThisCam.y-=Ofs.y;
-		ThisCam.z+=Ofs.z;
-		if (ThisCam.z>-1) ThisCam.z=-1;
+		ThisCam.y+=Ofs.y;
+		ThisCam.z-=Ofs.z;
+		if (ThisCam.x<0) ThisCam.x=0;
+		if (ThisCam.y<0) ThisCam.y=0;
+		if (ThisCam.z<0.1) ThisCam.z=0.1f;
+		TRACE1("ZoomVal %f\n",ThisCam.z);
+
 		UpdateView(View);
 }		
 
@@ -643,7 +648,6 @@ void	CCore::Toggle2d3d(CMapEditView *View)
 {
 		Is3dFlag=!Is3dFlag;
 		UpdateView(View);
-//		ExportPSX("c:/temp/test.pme");
 }
 
 /*****************************************************************************/
@@ -672,11 +676,10 @@ int	Idx=FindLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION);
 
 Vector3	CCore::OffsetCam(Vector3 &Cam,float DivVal)
 {
-Vector3	ThisCam;
+Vector3	ThisCam=Cam;
 
 	ThisCam=Cam/DivVal;
 	ThisCam.z=Cam.z;
-	ThisCam+=GetCamOfs();
 
 	return(ThisCam);
 }
@@ -715,8 +718,6 @@ CExportPSX	Exp(ExportName,LayerCount);
 			Layer[i]->Export(this,Exp);
 		}
 
-//		Layer[FindActionLayer()]->Export(this,Exp);
-
 		Exp.ExportTiles(this);
 		Exp.ExportTexList(this);
 
@@ -734,3 +735,13 @@ GString	Path=FullPath.Dir();
 
 
 /*****************************************************************************/
+void	CCore::CopySelection()
+{
+		Layer[ActiveLayer]->CopySelection(this);
+}
+
+/*****************************************************************************/
+void	CCore::PasteSelection()
+{
+		Layer[ActiveLayer]->PasteSelection(this);
+}
