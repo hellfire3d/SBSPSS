@@ -234,7 +234,7 @@ eng=I’m on my way!!
 
 ; C3 FMA
 [STR__INGAME__FMA_C3_SB0]
-eng=aaah
+eng=aaah!!!
 [STR__INGAME__FMA_C3_BB0]
 eng=That is amazing, how did you manage that!! Reflecto has got nothing on you kid, you must really love your mate Trevor!
 [STR__INGAME__FMA_C3_SB1]
@@ -273,7 +273,7 @@ eng=Anybody around here need a TV fixed??!!
 [STR__INGAME__FMA_C6_SB1]
 eng=Nope, just force that there, hit that, twist that, erm put that there!!
 [STR__INGAME__FMA_C6_BB0]
-eng=Congratulations SpongeyBlob you earned this. Patrick is lucky to have a friend like you!. 
+eng=Congratulations SpongeyBlob you earned this. Patrick is lucky to have a friend like you!
 [STR__INGAME__FMA_C6_SB2]
 eng=Gee thanks!!!
 [STR__INGAME__FMA_C6_BB1]
@@ -295,7 +295,7 @@ eng=Happy Birthday Patrick from all your friends in Bikini Bottom!
 [STR__INGAME__FMA_PARTY_PAT0]
 eng=Today’s my birthday? Hmm. I thought I was born a long time ago in a hospital. Thanks for the signed photo of my favorite superheroes anyhow. This is the best birthday ever!!
 [STR__INGAME__FMA_PARTY_VO0]
-eng=Stand Still while I take your picture
+eng=Stand Still while I take your picture.
 [STR__INGAME__FMA_PARTY_SB]
 eng=Happy Birthday!
 [STR__INGAME__FMA_PARTY_MM]
@@ -397,8 +397,6 @@ Chapter 2 - Level 1 - 02
 eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
 
 
-
-
 ; ---------------------------------------------------------------
 ; End of level celebration text
 ; ---------------------------------------------------------------
@@ -427,7 +425,7 @@ eng=Now to find a pair of Shell slippers..... and in to Kelp Jungle!
 [STR__INGAME__CH3__L3__SBCELEBRATE]
 eng=Uh Oh, those plants are moving! They're not trees....... Hellllllllppppppp!
 [STR__INGAME__CH3__L4__SBCELEBRATE]
-eng=Right, lets get out of here and back to shady shoals!!. What is that smell!!
+eng=Right, lets get out of here and back to shady shoals!! What is that smell!!
 
 [STR__INGAME__CH4__L1__SBCELEBRATE]
 eng=Tartar sauce! It ate my coin. Double Tartar sauce, it's  empty!!

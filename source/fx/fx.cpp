@@ -23,6 +23,7 @@
 #include	"FX\FXLaser.h"
 #include	"FX\FXThwack.h"
 #include	"FX\FXBubble.h"
+#include	"FX\FXFire.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
 #include	"FX\FXGeyser.h"
@@ -103,13 +104,13 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 */
 /*****************************************************************************/
 
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_ZZZZ;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_FLAMES;
 
 #include	"game\game.h"
 CFXZZZZ	*TFX=0;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-		Pos.vy-=16*4;
+/*
 		if (!TFX)
 		{
 			TFX=(CFXZZZZ*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
@@ -119,7 +120,8 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 			TFX->killFX();
 			TFX=0;
 		}
-//		CFX::Create((CFX::FX_TYPE)FXType,Parent);
+*/
+		CFX::Create((CFX::FX_TYPE)FXType,Pos);
 
 }
 
@@ -240,7 +242,7 @@ CFX		*NewFX;
 			ASSERT(!"FX_TYPE_GAS");
 			break;
 		case FX_TYPE_FLAMES:
-			NewFX=new ("FXFlames") CFXBaseAnim();
+			NewFX=new ("FXFlames") CFXFire();
 			NewFX->setBaseData(&FXFireBaseData);
 			break;
 

@@ -1,21 +1,22 @@
-/*****************/
-/*** Bubble FX ***/
-/*****************/
+/***************/
+/*** Fire FX ***/
+/***************/
 
-#ifndef	__FX_FX_BUBBLE_HEADER__
-#define __FX_FX_BUBBLE_HEADER__
+#ifndef	__FX_FX_FIRE_HEADER__
+#define __FX_FX_FIRE_HEADER__
 
 #include "fx/fxbaseanim.h"
 
 /*****************************************************************************/
-class CFXBubble : public CFXBaseAnim
+class CFXFire : public CFXBaseAnim
 {
 public:
 		void		init(DVECTOR const &Pos);
-		void		think(int _frames);
-
+		void		render();
+		void		SetSize(int W,int H)	{SprW=W; SprH=H;}
 protected:
-		u16			XIdx;
+		
+		int			SprW,SprH;
 };
 
 #endif

@@ -173,6 +173,7 @@ fx_src :=			fx \
 					fxbasetrail \
 					fxbaseemitter \
 					fxbubble \
+					fxfire \
 					fxthwack \
 					fxnrgbar \
 					fxjfish \
