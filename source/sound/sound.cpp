@@ -322,6 +322,20 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				157,			0	},										// SFX_JELLYFISH_BOUNCE
 	{	1,				158,			0	},										// SFX_TORNADO
 
+	{	1,				159,			0	},										// SFX_BEEP1
+	{	1,				160,			0	},										// SFX_BEEP2
+	{	1,				161,			0	},										// SFX_BEEP3
+	{	1,				162,			0	},										// SFX_BEEP4
+	{	1,				163,			0	},										// SFX_BEEP5
+	{	1,				164,			0	},										// SFX_BEEP6
+	{	1,				165,			0	},										// SFX_BEEP7
+	{	1,				166,			0	},										// SFX_BEEP8
+	{	1,				167,			0	},										// SFX_BEEP9
+	{	1,				168,			0	},										// SFX_BEEP10
+	{	1,				169,			0	},										// SFX_BEEP11
+	{	1,				170,			0	},										// SFX_BEEP12
+
+
 };
 
 // Reverb details
