@@ -1219,37 +1219,36 @@ if(newmode!=-1)
   ---------------------------------------------------------------------- */
 void	CPlayer::detectHazardousSurface()
 {
-	int	height;
-
-	height=CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy );
-	if ( height <= 0 )
+	// DOn't worry if on platform or already dead
+	if(!isOnPlatform()&&
+	   m_currentMode!=PLAYER_MODE_DEAD)
 	{
-		CThing *platform;
-		platform=isOnPlatform();
-		if(platform)
-		{
-			int platformHeight=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+		int				i;	
+		DVECTOR	const	&pos=getPlayerPos();
 
-			if ( platformHeight < height )
+		for(i=0;i<2;i++)
+		{
+			int				x,height;
+
+			x=pos.vx+(i==0?-checkx:checkx);
+			height=CGameScene::getCollision()->getHeightFromGround(x,pos.vy);
+			if(height<=0)
 			{
-				// on platform, which is higher than ground
-				return;
+				int block;
+				block=CGameScene::getCollision()->getCollisionBlock(x,pos.vy)&COLLISION_TYPE_MASK;
+
+				// Death?
+				if(block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
+				{
+					dieYouPorousFreak(DEATHTYPE__LIQUID);
+					break;
+				}
+				else if(block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
+				{
+					dieYouPorousFreak(DEATHTYPE__NORMAL);
+					break;
+				}
 			}
-		}
-
-		int block;
-		block=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
-
-		// Death?
-		if(m_currentMode!=PLAYER_MODE_DEAD&&
-				block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
-		{
-			dieYouPorousFreak(DEATHTYPE__LIQUID);
-		}
-		else if(m_currentMode!=PLAYER_MODE_DEAD&&
-				block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
-		{
-			dieYouPorousFreak(DEATHTYPE__NORMAL);
 		}
 	}
 }
