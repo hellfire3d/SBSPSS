@@ -139,7 +139,7 @@ CFrontEndScene	FrontEndScene;
 SpriteBank	*m_sprites;
 FontBank	*m_font;
 
-static int	s_runOnce=false;
+CFrontEndScene::FrontEndMode			CFrontEndScene::s_startMode=MODE__NICK_LOGO;
 
 
 /*----------------------------------------------------------------------
@@ -157,15 +157,8 @@ void CFrontEndScene::init()
 
 	m_exitToGame=false;
 	m_mode=MODE__NONE;
-	if(s_runOnce)
-	{
-		setMode(MODE__FMV_INTRO);
-	}
-	else
-	{
-		s_runOnce=true;
-		setMode(MODE__NICK_LOGO);
-	}
+
+	setMode(s_startMode);
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
 	m_sprites->load(SPRITES_SPRITES_SPR);
@@ -191,6 +184,9 @@ void CFrontEndScene::shutdown()
 	{
 		s_modeCodes[i]->shutdown();
 	}
+
+	// Nex time.. go into this mode first
+	setStartMode(MODE__FMV_INTRO);
 }
 
 

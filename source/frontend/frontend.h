@@ -74,6 +74,8 @@ public:
 	void	think(int _frames);
 	int		readyToShutdown();
 	char	*getSceneName()			{return"FrontEnd";}
+	
+	static	void	setStartMode(FrontEndMode _mode)				{s_startMode=_mode;}
 
 	static	void	renderLogo();
 
@@ -87,6 +89,8 @@ private:
 	FrontEndMode				m_mode;
 	class CFrontEndMode			*m_modeCode;
 	static class CFrontEndMode	*s_modeCodes[];
+
+	static FrontEndMode			s_startMode;
 
 };
 

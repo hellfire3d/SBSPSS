@@ -739,6 +739,7 @@ void CGameScene::setReadyToExit()
 {
 	s_readyToExit=true;
 	GameState::setNextScene(&FrontEndScene);
+	CFrontEndScene::setStartMode(CFrontEndScene::MODE__CHOOSE_SLOT);
 	CFader::setFadingOut();
 }
 
