@@ -106,6 +106,7 @@ protected:
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;
+	bool			m_reversed;
 };
 
 class	CNpcEnemy : public CEnemyThing

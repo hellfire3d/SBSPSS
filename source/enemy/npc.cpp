@@ -75,6 +75,7 @@ void CNpcFriend::init()
 	//m_animPlaying = true;
 	m_animNo = 0;
 	m_frame = 0;
+	m_reversed = false;
 
 	DVECTOR ofs = getCollisionSize();
 
@@ -125,26 +126,16 @@ void CNpcFriend::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
-	renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
+	renderPos.vx = Pos.vx - offset.vx;
+	renderPos.vy = Pos.vy - offset.vy;
 
-	m_actorGfx->Render(renderPos,m_frame,m_animNo,false);
-
-	/*s32		x,y;
-	s32		scrnWidth = VidGetScrW();
-	s32		scrnHeight = VidGetScrH();
-	s32		spriteWidth = m_spriteBank->getFrameWidth(FRM_BARNACLEBOY);
-	s32		spriteHeight = m_spriteBank->getFrameHeight(FRM_BARNACLEBOY);
-
-	x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
-	y = Pos.vy - offset.vy - ( spriteHeight >> 1 );
-
-	//if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
-	//{
-		//return;
-	//}
-
-	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);*/
+	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+	{
+		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+		{
+			m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1403,13 +1394,16 @@ void CNpcEnemy::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	//renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) );// * 20;
-	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
-
 	renderPos.vx = Pos.vx - offset.vx;
 	renderPos.vy = Pos.vy - offset.vy;
 
-	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
+	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+	{
+		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+		{
+			m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -287,43 +287,56 @@ void	CGameScene::initLevel()
 	sThingActor **actorList = Level.getActorList();
 	if (actorList)
 	{
-	for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
-	{
-		CNpcEnemy *enemy;
-		enemy = new ("npc enemy") CNpcEnemy;
-		ASSERT(enemy);
-		enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
-		enemy->init();
-		enemy->setLayerCollision( Level.getCollisionLayer() );
-
-		int pointNum;
-		u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
-
-		u16 newXPos, newYPos;
-
-		newXPos = (u16) *PntList;
-		PntList++;
-		newYPos = (u16) *PntList;
-		PntList++;
-
-		enemy->setStartPos( newXPos, newYPos );
-		enemy->addWaypoint( newXPos, newYPos );
-
-		if ( actorList[actorNum]->PointCount > 1 )
+		for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
 		{
-			for ( pointNum = 1 ; pointNum < actorList[actorNum]->PointCount ; pointNum++ )
-			{
-				newXPos = (u16) *PntList;
-				PntList++;
-				newYPos = (u16) *PntList;
-				PntList++;
+			CActorPool::ACTOR_TYPE actorType = CActorPool::getActorType( actorList[actorNum]->Type );
 
-				enemy->addWaypoint( newXPos, newYPos );
+			switch ( actorType )
+			{
+				case CActorPool::ACTOR_ENEMY_NPC:
+				{
+					CNpcEnemy *enemy;
+					enemy = new ("npc enemy") CNpcEnemy;
+					ASSERT(enemy);
+					enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
+					enemy->init();
+					enemy->setLayerCollision( Level.getCollisionLayer() );
+
+					int pointNum;
+					u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
+
+					u16 newXPos, newYPos;
+
+					newXPos = (u16) *PntList;
+					PntList++;
+					newYPos = (u16) *PntList;
+					PntList++;
+
+					enemy->setStartPos( newXPos, newYPos );
+					enemy->addWaypoint( newXPos, newYPos );
+
+					if ( actorList[actorNum]->PointCount > 1 )
+					{
+						for ( pointNum = 1 ; pointNum < actorList[actorNum]->PointCount ; pointNum++ )
+						{
+							newXPos = (u16) *PntList;
+							PntList++;
+							newYPos = (u16) *PntList;
+							PntList++;
+
+							enemy->addWaypoint( newXPos, newYPos );
+						}
+					}
+
+					enemy->postInit();
+
+					break;
+				}
+
+				default:
+					break;
 			}
 		}
-
-		enemy->postInit();
-	}
 	}
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)

@@ -47,6 +47,14 @@ public:
 			MAX_ACTOR_SIZE=128*128,
 		};
 
+		enum ACTOR_TYPE
+		{
+			ACTOR_PLAYER = 0,
+			ACTOR_FRIEND_NPC = 1,
+			ACTOR_ENEMY_NPC,
+			ACTOR_UNKNOWN,
+		};
+
 static	void		Init();
 
 static	void			AddActor(FileEquate Filename)		{GetActor(Filename);}
@@ -55,11 +63,15 @@ static	void			DumpActors();
 		
 static	u8			UnpackBuffer[MAX_ACTOR_SIZE];
 
+static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
+
 private:
 static	int			FindIdx(FileEquate Filename);
 static	int			FindFreeIdx();
 
 static	CActorGfx	*ActorList[MAX_ACTORS];
+
+static	ACTOR_TYPE	actorType[38];
 
 };
 
