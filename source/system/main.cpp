@@ -134,30 +134,34 @@ void	MainLoop()
 
 		frames=GameState::getFramesSinceLast();
 
+// System Think
 		FontBank::think(frames);
-		
-		GameState::think();
-		GameState::render();
-
-		CBubicleFactory::think(frames);
-		CBubicleFactory::render();
-		
-		CFader::think(frames);
-		CFader::render();
-
 		CSoundMediator::think(frames);
-		
+
+// Think States		
+		GameState::think();
+		CBubicleFactory::think(frames);
+		CFader::think(frames);
+
 #ifdef __USER_paul__
 		s_paulScene.think(frames);
-		s_paulScene.render();
 #endif
 
 		while(DrawSync(1));
 
+// Render States		
+		GameState::render();
+		CBubicleFactory::render();
+		CFader::render();
+
+#ifdef __USER_paul__
+		s_paulScene.render();
+#endif
+
+		PrimDisplay();
+		VidSwapDraw();
 		VSync(0);
 
-		VidSwapDraw();
-		PrimDisplay();
 		PadUpdate();
 
 		DbgPollHost();

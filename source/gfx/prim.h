@@ -306,6 +306,8 @@ extern u8	*PrimListStart,*PrimListEnd;
 void 			PrimInit();
 
 void 			PrimDisplay();
+void			PrimDrawCallBack();
+
 void 			PrimClip(RECT *r, u32 Depth);
 void 			PrimFullScreen(int Depth);
 inline	u8		*GetPrimPtr()			{return(CurrPrim);}

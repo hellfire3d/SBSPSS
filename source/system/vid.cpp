@@ -143,6 +143,9 @@ static void VidVSyncCallback()
 	FrameCounter++;
 	TickCount++;
 	if (DrawLoadIcon) LoadingIcon();
+
+	PrimDrawCallBack();
+
 	if (VbFunc)
 		{
 		VbFunc();
