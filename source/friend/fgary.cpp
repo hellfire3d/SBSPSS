@@ -135,7 +135,7 @@ void CNpcGaryFriend::think( int _frames )
 				{
 					CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
 
-					Pos.vx += multiplier * _frames;
+					Pos.vx += multiplier * 2 * _frames;
 				}
 			}
 		}
@@ -161,7 +161,7 @@ void CNpcGaryFriend::think( int _frames )
 					{
 						CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
 
-						Pos.vx += multiplier * _frames;
+						Pos.vx += multiplier * 2 * _frames;
 					}
 				}
 			}

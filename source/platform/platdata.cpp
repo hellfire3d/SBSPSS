@@ -372,7 +372,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_RISING_BRIDGE_PLATFORM
-		3,
+		4,
 		128,
 		true,
 		DAMAGE__NONE,
