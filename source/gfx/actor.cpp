@@ -556,6 +556,8 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 			CurrentFrame=&ThisAnim->Anim[Frame];
 			CurrentFrameGfx=&SpriteBank->FrameList[CurrentFrame->FrameIdx];
 
+			if (!CurrentFrameGfx->PAKSpr) return(0);	// Blank Frame
+
 // Try to find Pre-cached sprite
 			ThisNode=0;
 // Check Local Cache

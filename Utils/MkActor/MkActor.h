@@ -55,10 +55,11 @@ private:
 
 		void				LoadFrameList();
 		void				LoadBmp(sFrame &ThisFrame);
-		void				CheckAndShrinkFrame(sBmp &Bmp);
+		void				CheckAndShrinkFrame(sBmp &Bmp,const char *Filename);
 		bool				IsImageSame(sBmp &Bmp0,sBmp &Bmp1);
 		void				MakePsxGfx(sBmp &Bmp);
 		void				ProcessFrames();
+
 
 		int					WritePalette();
 		int					WriteAnimList();

@@ -18,7 +18,7 @@ using namespace std;
 //#define	OutputTGA
 
 // This has got really messy :o(
-
+ 
 //***************************************************************************
 vector<CMkActor>	ActorList;
 int			TPBase=-1,TPWidth=-1,TPHeight=-1;
@@ -289,6 +289,14 @@ int		i,ListSize=AnimList.size();
 //***************************************************************************
 void	CMkActor::MakePsxGfx(sBmp &Bmp)
 {
+// capture blank frames
+		if (Bmp.Frm.IsBlank())
+		{
+			Bmp.Psx=0;
+			Bmp.PsxSize=0;
+			return;
+		}
+		
 // Copied from SprSet 
 int		nfW,nfH,nfLineWidthBytes,nfAreaBytes;
 Frame	Frm=Bmp.Frm;
@@ -393,13 +401,31 @@ u8		*RGB0,*RGB1;
 }
 
 //***************************************************************************
-void	CMkActor::CheckAndShrinkFrame(sBmp &Bmp)
+void	CMkActor::CheckAndShrinkFrame(sBmp &Bmp,const char *FrameName)
 {
 // Check Colors
 int		ColorCount=Bmp.Frm.GetNumOfCols();
 		if (ColorCount>16)
 		{
 				GObject::Error(ERR_FATAL,"%s has %i colors.\n",Name,ColorCount);
+		}
+// Check Palette
+		if (BmpList.size())
+		{
+			Palette	&BasePal=BmpList[0].Frm.GetPal();
+			Palette	&ThisPal=Bmp.Frm.GetPal();
+			int	Count=__min(BasePal.GetNumOfCols(),ThisPal.GetNumOfCols());
+
+			for (int p=1;p<Count; p++)
+			{
+				if (BasePal[p].GetR()!=ThisPal[p].GetR() ||
+					BasePal[p].GetG()!=ThisPal[p].GetG() ||
+					BasePal[p].GetB()!=ThisPal[p].GetB())
+				{
+					GObject::Error(ERR_WARNING,"Palette MisMatch : %s\n",FrameName);
+					break;
+				}
+			}
 		}
 
 		Bmp.OrigW=Bmp.Frm.GetWidth();
@@ -411,7 +437,7 @@ Rect	BBox;
 		Bmp.Frm.Crop(BBox);
 		Bmp.CrossHairX=BBox.X-(Bmp.OrigW/2);//+)/2;
 		Bmp.CrossHairY=-(Bmp.OrigH-BBox.Y);
-//		printf("%i %i       \n",Bmp.CrossHairX,Bmp.CrossHairY);
+
 }
 
 //***************************************************************************
@@ -427,7 +453,7 @@ sBmp	NewBmp;
 		NewBmp.Pak=0;
 		NewBmp.Psx=0;
 
-		CheckAndShrinkFrame(NewBmp);
+		CheckAndShrinkFrame(NewBmp,ThisFrame.Filename);
 		ThisFrame.XOfs=NewBmp.CrossHairX;
 		ThisFrame.YOfs=NewBmp.CrossHairY;
 
@@ -489,10 +515,18 @@ int		i,ListSize=BmpList.size();
 			sBmp	&ThisBmp=BmpList[i];
 
 			printf("%s - Processing Frame %2d\\%2d\r",Name,i+1,ListSize);
-			ThisBmp.PakSize=PAK_findPakSize(ThisBmp.Psx,ThisBmp.PsxSize);
-			ThisBmp.Pak=(u8*)malloc(ThisBmp.PakSize);
-			ASSERT(ThisBmp.Pak);
-			PAK_doPak(ThisBmp.Pak,ThisBmp.Psx,ThisBmp.PsxSize);
+			if (ThisBmp.Psx)
+			{
+				ThisBmp.PakSize=PAK_findPakSize(ThisBmp.Psx,ThisBmp.PsxSize);
+				ThisBmp.Pak=(u8*)malloc(ThisBmp.PakSize);
+				ASSERT(ThisBmp.Pak);
+				PAK_doPak(ThisBmp.Pak,ThisBmp.Psx,ThisBmp.PsxSize);
+			}
+			else
+			{ // Blank Frame
+				ThisBmp.Pak=0;
+				ThisBmp.PakSize=0;
+			}
 
 			TotalIn+=ThisBmp.PsxSize;
 			TotalOut+=ThisBmp.PakSize;
