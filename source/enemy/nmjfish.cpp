@@ -361,7 +361,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( abs( distX ) > 10 || abs( distY ) > 10 )
 			{
-				processGenericGotoTarget( _frames, distX, distY, m_speed );
+				processGenericGotoTarget( _frames, distX, distY, 1 );//m_speed );
 			}
 			else
 			{
