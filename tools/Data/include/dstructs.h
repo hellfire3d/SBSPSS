@@ -285,7 +285,7 @@ struct	sTileBankHdr
 //***************************************************************************
 // Actors
 
-struct	sActor3dHdr
+struct	sActorHdr
 {
 	u16		BoneCount;
 	u16		TriCount;
@@ -305,7 +305,7 @@ struct	sActor3dHdr
 // Anim
 typedef	u16	AnimIdx;
 
-struct	sAnim3dFileHdr
+struct	sAnimFileHdr
 {
 	u16		BoneCount;
 	u16		AnimCount;
@@ -313,7 +313,7 @@ struct	sAnim3dFileHdr
 //	Anim Hdrs....
 };
 
-struct	sAnim3dHdr
+struct	sAnimHdr
 {
 	u16		FrameCount;
 	u16		Pad;
