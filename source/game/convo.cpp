@@ -971,7 +971,7 @@ void CConversation::registerConversationLevelScripts(int level)
   ---------------------------------------------------------------------- */
 RECT CConversation::getTextRegion()
 {
-	RECT clipRegion={TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
+	RECT clipRegion={TEXTBOX_X,TEXTBOX_Y-3,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
 
 	if(s_faceFrame==-1)
 	{
