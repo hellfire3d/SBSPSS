@@ -43,6 +43,7 @@ void CNpcPath::initPath()
 	lastWaypoint = NULL;
 	waypointCount = 0;
 	reversePath = false;
+	minX = maxX = 0;
 }
 
 void CNpcPath::resetPath()
@@ -74,6 +75,15 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 
 		testWaypoint->nextWaypoint = newWaypoint;
 		waypointCount++;
+
+		if ( newPos.vx < minX )
+		{
+			minX = newPos.vx;
+		}
+		else if ( newPos.vx > maxX )
+		{
+			maxX = newPos.vx;
+		}
 	}
 	else
 	{
@@ -88,7 +98,15 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 		waypointCount++;
 
 		currentWaypoint = this->waypoint;
+
+		minX = maxX = newPos.vx;
 	}
+}
+
+void CNpcPath::getPathXExtents( s32 *minExtent, s32 *maxExtent )
+{
+	*minExtent = minX;
+	*maxExtent = maxX;
 }
 
 void CNpcPath::removeAllWaypoints()

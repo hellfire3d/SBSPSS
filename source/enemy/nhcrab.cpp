@@ -58,7 +58,7 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 
 		case HERMIT_CRAB_ROLL_ATTACK:
 		{
-			if ( !m_animPlaying )
+			if ( !m_animPlaying || m_animNo == m_data[m_type].moveAnim )
 			{
 				switch( m_animNo )
 				{
@@ -67,6 +67,15 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 						m_animPlaying = true;
 						m_animNo = ANIM_HERMITCRAB_ROLLATTACK;
 						m_frame = 0;
+
+						if ( playerXDist > 0 )
+						{
+							m_extendDir = EXTEND_RIGHT;
+						}
+						else
+						{
+							m_extendDir = EXTEND_LEFT;
+						}
 
 						break;
 					}
@@ -97,15 +106,6 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 						m_animNo = ANIM_HERMITCRAB_ROLLATTACKSTART;
 						m_frame = 0;
 
-						if ( playerXDist > 0 )
-						{
-							m_extendDir = EXTEND_RIGHT;
-						}
-						else
-						{
-							m_extendDir = EXTEND_LEFT;
-						}
-
 						break;
 					}
 				}
@@ -130,17 +130,34 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 					m_heading = 2048;
 				}
 
-				groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+				s32 minX, maxX, newX;
 
-				if ( groundHeight <= yMovement )
+				m_npcPath.getPathXExtents( &minX, &maxX );
+
+				newX = Pos.vx + moveX;
+
+				if ( newX < minX || newX > maxX )
 				{
-					// groundHeight <= yMovement indicates either just above ground or on or below ground
+					// moving outside path constraints, abort
 
-					moveY = groundHeight;
+					m_animPlaying = true;
+					m_animNo = ANIM_HERMITCRAB_ROLLATTACKEND;
+					m_frame = 0;
 				}
+				else
+				{
+					groundHeight = m_layerCollision->getHeightFromGround( newX, Pos.vy, yMovement + 16 );
 
-				Pos.vx += moveX;
-				Pos.vy += moveY;
+					if ( groundHeight <= yMovement )
+					{
+						// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+						moveY = groundHeight;
+					}
+
+					Pos.vx = newX;
+					Pos.vy += moveY;
+				}
 			}
 		}
 

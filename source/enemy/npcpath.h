@@ -46,6 +46,7 @@ public:
 	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
 	bool			thinkFlat( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *heading );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
+	void			getPathXExtents( s32 *minExtent, s32 *maxExtent );
 
 private:
 	CNpcWaypoint	*waypoint;
@@ -54,6 +55,7 @@ private:
 	bool			reversePath;
 	CNpcWaypoint	*currentWaypoint;
 	CNpcWaypoint	*lastWaypoint;
+	s32				minX, maxX;
 };
 
 #endif
