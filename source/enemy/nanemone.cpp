@@ -195,8 +195,8 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 			heading &= 4095;
 
 			spikePos = Pos;
-			spikePos.vx += ( 10 * rcos( heading ) ) >> 12;
-			spikePos.vy += ( 10 * rsin( heading ) ) >> 12;
+			spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
+			spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
 
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
