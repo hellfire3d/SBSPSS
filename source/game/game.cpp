@@ -23,8 +23,8 @@
 #endif
 #include "player\demoplay.h"
 
-#ifndef __ENEMY_2DENEMY_H__
-#include "enemy\2denemy.h"
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
 #endif
 
 #ifndef __PROJECTL_PROJECTL_H__

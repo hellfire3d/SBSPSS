@@ -51,8 +51,7 @@ CD_FILESYS_LIB :=		CMXBoot
 backend_src :=		gameover \
 					complete
 
-enemy_src :=		2denemy \
-					npc \
+enemy_src :=		npc \
 					npcdata \
 					npcpath \
 					nsjfish \
@@ -74,8 +73,7 @@ enemy_src :=		2denemy \
 					nocto \
 					nfskull \
 					nsklfish \
-					ngary \
-					enemy
+					ngary
 
 projectl_src :=		projectl
 
