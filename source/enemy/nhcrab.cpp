@@ -82,7 +82,6 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 {
 	if ( m_state == HERMIT_CRAB_NO_ATTACK )
 	{
-		//m_state = ( getRnd() % 2 ) + 1;
 		m_state = HERMIT_CRAB_ROLL_ATTACK_JUMP1;
 		m_movementTimer = 0;
 		m_jumpBase = Pos.vy;
@@ -101,26 +100,6 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 
 	switch( m_state )
 	{
-		case HERMIT_CRAB_PUNCH_ATTACK:
-		{
-			if ( m_animNo != ANIM_HERMITCRAB_PUNCH )
-			{
-				m_animPlaying = true;
-				m_animNo = ANIM_HERMITCRAB_PUNCH;
-				m_frame = 0;
-			}
-			else if ( !m_animPlaying )
-			{
-				m_state = HERMIT_CRAB_NO_ATTACK;
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
-				m_timerFunc = NPC_TIMER_ATTACK_DONE;
-				m_timerTimer = GameState::getOneSecondInFrames();
-				m_sensorFunc = NPC_SENSOR_NONE;
-			}
-
-			break;
-		}
-
 		case HERMIT_CRAB_ROLL_ATTACK_JUMP1:
 		case HERMIT_CRAB_ROLL_ATTACK_JUMP2:
 		{
