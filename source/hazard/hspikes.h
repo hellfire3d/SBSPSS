@@ -22,7 +22,9 @@ class CNpcSpikesHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual	CRECT const		*getThinkBBox();
 protected:
+	virtual void		processTimer( int _frames );
 	void				processMovement( int _frames );
 
 	enum SPIKES_STATE

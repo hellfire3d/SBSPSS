@@ -19,57 +19,101 @@
 #include "level\layercollision.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSpikesHazard::init()
 {
 	CNpcHazard::init();
 
 	m_state = SPIKES_RISING;
+
+	m_respawnRate = 8;
+	m_timerActive = true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSpikesHazard::processMovement( int _frames )
 {
-	s32 minY, maxY;
-	m_npcPath.getPathYExtents( &minY, &maxY );
-
-	switch ( m_state )
+	if ( m_timer <= 0 )
 	{
-		case SPIKES_DROPPING:
+		s32 minY, maxY;
+		m_npcPath.getPathYExtents( &minY, &maxY );
+
+		switch ( m_state )
 		{
-			if ( maxY - Pos.vy == 0 )
+			case SPIKES_DROPPING:
 			{
-				m_state = SPIKES_RISING;
-			}
-			else
-			{
-				Pos.vy += 3 * _frames;
-
-				if ( Pos.vy > maxY )
+				if ( maxY - Pos.vy == 0 )
 				{
-					Pos.vy = maxY;
+					m_state = SPIKES_RISING;
+
+					m_timer = ( m_respawnRate * GameState::getOneSecondInFrames() ) >> 3;
 				}
-			}
-
-
-			break;
-		}
-
-		case SPIKES_RISING:
-		{
-			if ( minY - Pos.vy == 0 )
-			{
-				m_state = SPIKES_DROPPING;
-			}
-			else
-			{
-				Pos.vy -= 3 * _frames;
-
-				if ( Pos.vy < minY )
+				else
 				{
-					Pos.vy = minY;
+					Pos.vy += 8 * _frames;
+
+					if ( Pos.vy > maxY )
+					{
+						Pos.vy = maxY;
+					}
 				}
+
+
+				break;
 			}
 
-			break;
+			case SPIKES_RISING:
+			{
+				if ( minY - Pos.vy == 0 )
+				{
+					m_state = SPIKES_DROPPING;
+
+					m_timer = ( m_respawnRate * GameState::getOneSecondInFrames() ) >> 3;
+				}
+				else
+				{
+					Pos.vy -= 8 * _frames;
+
+					if ( Pos.vy < minY )
+					{
+						Pos.vy = minY;
+					}
+				}
+
+				break;
+			}
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcSpikesHazard::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.x1 = thinkBBox.XMin;
+	objThinkBox.x2 = thinkBBox.XMax;
+	objThinkBox.y1 = thinkBBox.YMin;
+	objThinkBox.y2 = thinkBBox.YMax;
+
+	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpikesHazard::processTimer( int _frames )
+{
+	if ( m_timer > 0 )
+	{
+		m_timer -= _frames;
 	}
 }
