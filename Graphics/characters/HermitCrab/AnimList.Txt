@@ -2,7 +2,7 @@ die
 idle
 # jumpend
 # jumpstart
-punch
+# punch
 rollattack
 rollattackend
 rollattackstart
