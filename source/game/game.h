@@ -12,10 +12,6 @@
 #include "game\event.h"
 #endif
 
-#ifndef __GAME_THING_H__
-#include "game\thing.h"
-#endif
-
 /*****************************************************************************/
 class	FontBank;
 
@@ -37,7 +33,7 @@ virtual	int		canPause();
 
 		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 		class CPlayer	*getPlayer();
-		void	sendEvent( GAME_EVENT evt, CThing *sourceThing );
+		void	sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 		static void		setReadyToExit()	{s_readyToExit=true;}
 	

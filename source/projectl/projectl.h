@@ -14,12 +14,15 @@
 #ifndef	__PROJECTL_PROJECTL_H__
 #define	__PROJECTL_PROJECTL_H__
 
-#include "Game/Thing.h"
+#ifndef __THING_THING_H__
+#include "thing/thing.h"
+#endif
+
 #include "Gfx/Skel.h"
 
 /*****************************************************************************/
 
-class	CProjectile : public CThing
+class	CProjectile : public CEnemyProjectileThing
 {
 public:
 	enum PROJECTILE_MOVEMENT_TYPE

@@ -67,10 +67,14 @@ class CThing
 public:
 	typedef enum
 	{
-		TYPE_THING,		// temp.. (pkg)
 		TYPE_PICKUP,
 		TYPE_PLAYER,
+		TYPE_PLAYERPROJECTILE,
+		TYPE_NPC,
 		TYPE_ENEMY,
+		TYPE_ENEMYPROJECTILE,
+		TYPE_PLATFORM,
+		TYPE_TRIGGER,
 
 		MAX_TYPE,
 	}
@@ -79,7 +83,7 @@ public:
 					CThing()	{;}
 	virtual			~CThing()	{;}
 
-	virtual TYPE	getThingType()					{return TYPE_THING;}	//=0; (pkg)
+	virtual TYPE	getThingType()=0;
 
 
 	virtual	void	init();
@@ -108,8 +112,6 @@ protected:
 // Pos
 		DVECTOR		Pos, PosDelta;
 
-	// Big linked list that contains all CThings ( possibly a temp measure PKG )
-//	static CThing	*s_thingList;
 public:
 		class CThing			*m_nextThing;
 
@@ -119,10 +121,10 @@ public:
 
 	// -- Collision --
 public:
-	DVECTOR			getCollisionSize()							{return m_collisionSize;}
+	virtual int		canCollide()								{return true;}
 	virtual int		checkCollisionAgainst(CThing *_thisThing);
 	void			updateCollisionArea();
-	virtual void	collidedWith(CThing *_thisThing)	{;}	//=0; (pkg)
+	virtual void	collidedWith(CThing *_thisThing)			{;}
 protected:
 	typedef struct
 	{
@@ -143,6 +145,48 @@ private:
 	CRECT			m_collisionArea;
 	DVECTOR			m_collisionCentre;
 
+};
+
+/* These are the individual base classes for each of the seperate thing types */
+class CPickupThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_PICKUP;}
+};
+class CPlayerThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_PLAYER;}
+};
+class CPlayerProjectileThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_PLAYERPROJECTILE;}
+};
+class CNpcThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_NPC;}
+};
+class CEnemyThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_ENEMY;}
+};
+class CEnemyProjectileThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_ENEMYPROJECTILE;}
+};
+class CPlatformThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_PLATFORM;}
+};
+class CTriggerThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_TRIGGER;}
 };
 
 

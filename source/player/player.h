@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef __THING_TPLAYER_H__
-#include "thing/tplayer.h"
+#ifndef __THING_THING_H__
+#include "thing/thing.h"
 #endif
 
 #ifndef __GFX_SKELSPNG_H__
@@ -105,6 +105,7 @@ typedef enum
 	DAMAGE__FALL,
 	DAMAGE__ELECTROCUTION,
 	DAMAGE__LAVA,
+	DAMAGE__HIT_ENEMY,
 }DAMAGE_TYPE;
 
 

@@ -99,18 +99,18 @@ void 	CGameScene::init()
 
 		Level.init();
 
-#ifdef __USER_charles__		
+//#ifdef __USER_charles__		
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
 		enemy->setLayerCollision( Level.getCollisionLayer() );
-#endif
+//#endif
 
 #ifdef __USER_paul__
 		DVECTOR pos={16*10,16*10};
-					createPickup(PICKUP__100_PERCENT_LIFE,&pos);
-		pos.vx+=32;	createPickup(PICKUP__50_PERCENT_LIFE,&pos);
-		pos.vx+=32;	createPickup(PICKUP__25_PERCENT_LIFE,&pos);
+					createPickup(PICKUP__BIG_HEALTH,&pos);
+		pos.vx+=32;	createPickup(PICKUP__MEDIUM_HEALTH,&pos);
+		pos.vx+=32;	createPickup(PICKUP__SMALL_HEALTH,&pos);
 		pos.vx+=32;	createPickup(PICKUP__LIFE,&pos);
 		pos.vx+=32;	createPickup(PICKUP__SPATULA,&pos);
 		pos.vx+=32;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);

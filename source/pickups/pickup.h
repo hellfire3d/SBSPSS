@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef __GAME_TPICKUP_H__
-#include "thing/tpickup.h"
+#ifndef __THING_THING_H__
+#include "thing/thing.h"
 #endif
 
 
@@ -32,9 +32,9 @@
 
 typedef enum
 {
-	PICKUP__100_PERCENT_LIFE,
-	PICKUP__50_PERCENT_LIFE,
-	PICKUP__25_PERCENT_LIFE,
+	PICKUP__BIG_HEALTH,
+	PICKUP__MEDIUM_HEALTH,
+	PICKUP__SMALL_HEALTH,
 	PICKUP__LIFE,
 	PICKUP__SPATULA,
 	PICKUP__JELLY_LAUNCHER_AMMO,
@@ -95,6 +95,7 @@ public:
 
 protected:
 	virtual int			getRespawnTime()=0;
+	virtual int			canCollide()						{return m_respawnTime==0;}
 
 private:
 	int					m_respawnTime;

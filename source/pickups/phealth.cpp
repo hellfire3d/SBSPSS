@@ -116,11 +116,11 @@ void	CBaseHealthPickup::renderPickup(DVECTOR *_pos)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int	C100HealthPickup::getHealthPoints()
+int	CLargeHealthPickup::getHealthPoints()
 {
-	return 100;
+	return 5;
 }
-int	C100HealthPickup::getFrameNumber()
+int	CLargeHealthPickup::getFrameNumber()
 {
 	return FRM__HEALTH100;
 }
@@ -131,11 +131,11 @@ int	C100HealthPickup::getFrameNumber()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int	C50HealthPickup::getHealthPoints()
+int	CMediumHealthPickup::getHealthPoints()
 {
-	return 50;
+	return 3;
 }
-int	C50HealthPickup::getFrameNumber()
+int	CMediumHealthPickup::getFrameNumber()
 {
 	return FRM__HEALTH50;
 }
@@ -146,11 +146,11 @@ int	C50HealthPickup::getFrameNumber()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int	C25HealthPickup::getHealthPoints()
+int	CSmallHealthPickup::getHealthPoints()
 {
-	return 25;
+	return 1;
 }
-int	C25HealthPickup::getFrameNumber()
+int	CSmallHealthPickup::getFrameNumber()
 {
 	return FRM__HEALTH25;
 }

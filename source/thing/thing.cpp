@@ -17,10 +17,6 @@
 
 #include "thing\thing.h"
 
-#ifndef	__THING_TPICKUP_H__
-#include "thing\tpickup.h"
-#endif
-
 
 /*	Std Lib
 	------- */
@@ -118,7 +114,8 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->checkCollisionAgainst(thing2))
+		if(thing1->canCollide()&&
+		   thing1->checkCollisionAgainst(thing2))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -180,6 +177,7 @@ void			CThingManager::addToThingList(CThing *_this)
 {
 	_this->m_nextThing=s_thingLists[_this->getThingType()];
 	s_thingLists[_this->getThingType()]=_this;
+PAUL_DBGMSG("Added thing type %d",_this->getThingType());
 }
 
 /*----------------------------------------------------------------------
@@ -226,10 +224,8 @@ void	CThing::init()
 	// Add to thing list
 	CThingManager::addToThingList(this);
 
-	
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
-m_collisionCentreOffset.vx=m_collisionCentreOffset.vy=0;
 }
 
 /*----------------------------------------------------------------------
@@ -304,7 +300,6 @@ void	CThing::render()
 		y2=Pos.vy+10-ofs.vy;
 		DrawLine(x1,y1,x2,y2,255,0,0,0);
 		DrawLine(x2,y1,x1,y2,255,0,0,0);
-	
 	}
 #endif
 }
@@ -420,8 +415,6 @@ void	CThing::setCollisionSize(int _w,int _h)
   ---------------------------------------------------------------------- */
 void	CThing::updateCollisionArea()
 {
-	DVECTOR	size;
-
 	m_collisionCentre.vx=Pos.vx+m_collisionCentreOffset.vx;
 	m_collisionCentre.vy=Pos.vy+m_collisionCentreOffset.vy;
 	m_collisionArea.x1=m_collisionCentre.vx-(m_collisionSize.vx/2);
@@ -450,29 +443,16 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		DVECTOR	pos,size;
 		CRECT	thisRect,thatRect;
 
 		thisRect=getCollisionArea();
 		thatRect=_thisThing->getCollisionArea();
 
-//static int val=0;
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)))
 		{
-//PAUL_DBGMSG("hit %d",val++);
 			collided=true;
 		}
-		else
-		{
-//PAUL_DBGMSG("close %d",val++);
-		}
-	}
-	else
-	{
-//PAUL_DBGMSG("%03d %03d  ( %d%d )",
-//			abs(Pos.vx-thisThingPos.vx),abs(Pos.vy-thisThingPos.vy),
-//			abs(Pos.vx-thisThingPos.vx)<radius,abs(Pos.vy-thisThingPos.vy)<radius);
 	}
 
 	return collided;

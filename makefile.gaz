@@ -94,8 +94,7 @@ game_src :=			convo \
 					game \
 					gamebubs \
 					gameslot \
-					pause \
-					thing
+					pause
 
 gfx_src :=			prim \
 					tpage \

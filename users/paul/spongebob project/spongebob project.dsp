@@ -367,14 +367,6 @@ SOURCE=..\..\..\source\game\pause.cpp
 
 SOURCE=..\..\..\source\game\pause.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\game\thing.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\game\thing.h
-# End Source File
 # End Group
 # Begin Group "gfx"
 
@@ -1066,14 +1058,6 @@ SOURCE=..\..\..\source\thing\thing.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\thing\thing.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\thing\tpickup.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\thing\tplayer.h
 # End Source File
 # End Group
 # Begin Group "utils"

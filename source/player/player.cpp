@@ -171,7 +171,7 @@ int angg=900;
   ---------------------------------------------------------------------- */
 void	CPlayer::init()
 {
-	CThing::init();
+	CPlayerThing::init();
 
 	m_layerCollision=NULL;
 	
@@ -225,7 +225,7 @@ void	CPlayer::shutdown()
 #ifdef _STATE_DEBUG_
 	s_debugFont.dump();
 #endif
-	CThing::shutdown();
+	CPlayerThing::shutdown();
 }
 
 /*----------------------------------------------------------------------
@@ -242,7 +242,7 @@ void	CPlayer::think(int _frames)
 {
 	int	i;
 	
-	CThing::think(_frames);
+	CPlayerThing::think(_frames);
 
 m_skel.setAng(angg);
 
@@ -552,7 +552,7 @@ int mouth=-1,eyes=-1;
 #endif
 void	CPlayer::render()
 {
-	CThing::render();
+	CPlayerThing::render();
 	
 #ifdef _STATE_DEBUG_
 s_debugFont.print(40,40,posBuf);
@@ -1048,6 +1048,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 		{
 			case DAMAGE__FALL:
 			case DAMAGE__LAVA:
+			case DAMAGE__HIT_ENEMY:
 				break;
 
 			case DAMAGE__ELECTROCUTION:

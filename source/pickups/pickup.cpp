@@ -231,13 +231,15 @@ void	CBaseRespawningPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int respawnFlashFrames=50;
 void	CBaseRespawningPickup::think(int _frames)
 {
-	if(m_respawnTime==0)
+	if(m_respawnTime<=respawnFlashFrames)
 	{
 		CBasePickup::think(_frames);
 	}
-	else
+
+	if(m_respawnTime)
 	{
 		m_respawnTime-=_frames;
 		if(m_respawnTime<0)
@@ -256,7 +258,7 @@ void	CBaseRespawningPickup::think(int _frames)
 void	CBaseRespawningPickup::render()
 {
 	if(m_respawnTime==0||
-	   m_respawnTime<50&&!(m_respawnTime&3))
+	   m_respawnTime<respawnFlashFrames&&!(m_respawnTime&4))
 	{
 		CBasePickup::render();
 	}
@@ -288,14 +290,14 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 	switch(_type)
 	{
-		case PICKUP__100_PERCENT_LIFE:
-			pickup=new ("100HealthPickup") C100HealthPickup();
+		case PICKUP__BIG_HEALTH:
+			pickup=new ("LargeHealthPickup") CLargeHealthPickup();
 			break;
-		case PICKUP__50_PERCENT_LIFE:
-			pickup=new ("15HealthPickup") C50HealthPickup();
+		case PICKUP__MEDIUM_HEALTH:
+			pickup=new ("MediumHealthPickup") CMediumHealthPickup();
 			break;
-		case PICKUP__25_PERCENT_LIFE:
-			pickup=new ("25HealthPickup") C25HealthPickup();
+		case PICKUP__SMALL_HEALTH:
+			pickup=new ("SmallHealthPickup") CSmallHealthPickup();
 			break;
 
 		case PICKUP__LIFE:

@@ -54,6 +54,8 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
+	CEnemyThing::init();
+
 	m_type = NPC_CIRCULAR_PLATFORM;
 
 	m_heading = m_fireHeading = 0;
@@ -77,6 +79,9 @@ void CNpc::init()
 
 	m_layerCollision = NULL;
 
+//pkg
+m_npcPath.initPath();
+//pkg
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
@@ -277,11 +282,15 @@ void CNpc::init()
 void CNpc::shutdown()
 {
 	m_npcPath.removeAllWaypoints();
+
+	CEnemyThing::shutdown();
 }
 
 
 void CNpc::think(int _frames)
 {
+	CEnemyThing::think(_frames);
+
 	processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
 	playerXDistSqr = playerXDist * playerXDist;
 	playerYDistSqr = playerYDist * playerYDist;
@@ -941,6 +950,7 @@ void CNpc::processTimer(int _frames)
 
 void CNpc::render()
 {
+	CEnemyThing::render();
 }
 
 void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )

@@ -15,7 +15,11 @@
 #define	__ENEMY_NPC_H__
 
 //#include <dstructs.h>
-#include "Game/Thing.h"
+
+#ifndef __THING_THING_H__
+#include "thing/thing.h"
+#endif
+
 #include "Gfx/Skel.h"
 
 #ifndef __ENEMY_NPCPATH_H__
@@ -28,7 +32,7 @@
 
 /*****************************************************************************/
 
-class	CNpc : public CThing
+class	CNpc : public CEnemyThing
 {
 public:
 	enum NPC_UNIT_TYPE

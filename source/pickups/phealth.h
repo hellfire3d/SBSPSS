@@ -54,21 +54,21 @@ private:
 };
 
 
-class C100HealthPickup : public CBaseHealthPickup
+class CLargeHealthPickup : public CBaseHealthPickup
 {
 protected:
 	virtual int			getHealthPoints();
 	virtual int			getFrameNumber();
 };
 
-class C50HealthPickup : public CBaseHealthPickup
+class CMediumHealthPickup : public CBaseHealthPickup
 {
 protected:
 	virtual int			getHealthPoints();
 	virtual int			getFrameNumber();
 };
 
-class C25HealthPickup : public CBaseHealthPickup
+class CSmallHealthPickup : public CBaseHealthPickup
 {
 protected:
 	virtual int			getHealthPoints();
