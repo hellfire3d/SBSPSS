@@ -25,6 +25,8 @@ public:
 	void				render();
 	CRECT const			*getThinkBBox();
 	bool				alwaysThink()								{return(false);}
+	bool				allowOffMap()								{return (true);}
+
 protected:
 	void				processLifetime( int _frames );
 	void				processMovement( int _frames );
