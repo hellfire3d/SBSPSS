@@ -1,0 +1,8 @@
+FixTV
+GiveEnd
+GiveStart
+Idea
+QuickExit
+Shout
+Stumble
+Throw
