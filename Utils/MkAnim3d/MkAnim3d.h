@@ -9,7 +9,7 @@
 //***************************************************************************
 struct	sBoneAnim
 {
-		vector<sQuat>		Quat;
+//		vector<sQuat>		Quat;
 		vector<int>			Idx;
 };
 
@@ -17,7 +17,9 @@ struct	sAnim
 {
 		int					FrameCount;
 		vector<sBoneAnim>	BoneAnim;
-		int					FileOfs;
+		vector<s32>			Move;
+		int					AnimOfs;
+		int					MoveOfs;
 };
 
 //***************************************************************************
@@ -33,7 +35,9 @@ public:
 		void			Write(GString &Filename);
 
 private:
-		int				ProcessSkel(CScene &Scene,sAnim &ThisAnim,int Idx);
+		int				ProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx);
+		void			ProcessSkelAnim(CScene &Scene,sAnim &ThisAnim,int Idx);
+		int				WriteMove(sAnim const &ThisAnim);
 		int				WriteAnim(sAnim const &ThisAnim);
 		int				WriteQuatTable();
 

@@ -105,7 +105,7 @@ void	CMkActor3d::Process()
 {
 		BuildSkin();
 		FaceList.SetTexBasePath(InPath);
-		FaceList.SetTexOut(OutFile+".Tex",1,1,1);
+		FaceList.SetTexOut(OutFile+".Tex",TPageBase,TPageWidth,TPageHeight);
 		FaceList.SetTexDebugOut(OutFile+".Lbm");
 
 		FaceList.Process();
@@ -148,20 +148,21 @@ GString	OutName=OutFile+".A3d";
 		fwrite(&FileHdr,1,sizeof(sActor3dHdr),File);
 
 // Write Skeleton
-		FileHdr.NodeData=ftell(File);
+		FileHdr.BoneCount=Scene.GetPruneTreeSize()-1-1;	// Skip Scene & skin
+		FileHdr.BoneList=(sBone*)ftell(File);
 		WriteBone(1);
 
 // Write Tris
 		FileHdr.TriCount=FaceList.GetTriFaceCount();
-		FileHdr.TriData=FaceList.WriteTriList(File);
+		FileHdr.TriList=(sTri*)FaceList.WriteTriList(File);
 		printf("%i Tris\n",FileHdr.TriCount);
 // Write Quads
 		FileHdr.QuadCount=FaceList.GetQuadFaceCount();
-		FileHdr.QuadData=FaceList.WriteQuadList(File);
+		FileHdr.QuadList=(sQuad*)FaceList.WriteQuadList(File);
 		printf("%i Quads\n",FileHdr.QuadCount);
 // Write WeightList
 		FileHdr.WeightCount=WeightList.size();
-		FileHdr.WeightData=WriteWeightList();
+		FileHdr.WeightList=(sWeight*)WriteWeightList();
 		printf("%i Weight\n",FileHdr.WeightCount);
 
 		printf("Size=%i\n",ftell(File));
@@ -198,11 +199,14 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 }
 
 //***************************************************************************
+
 void    CMkActor3d::BuildBoneOut(sBone &OutBone,CNode const &InNode)
 {
-		OutBone.BoneSize.vx =round(InNode.Pos.x*Scale);
-		OutBone.BoneSize.vy =round(InNode.Pos.y*Scale);
-		OutBone.BoneSize.vz =round(InNode.Pos.z*Scale);
+Vector3		const &Vtx=InNode.Pos;
+
+		OutBone.BoneSize.vx =round(Vtx.x*Scale);
+		OutBone.BoneSize.vy =round(Vtx.y*Scale);
+		OutBone.BoneSize.vz =round(Vtx.z*Scale);
 		OutBone.Idx=InNode.PruneIdx-1;
 		OutBone.Parent=InNode.PruneParentIdx-1;
 		OutBone.WeightCount=InNode.Weights.size();
@@ -217,7 +221,6 @@ void    CMkActor3d::BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight
 		OutWeight.VtxNo=InWeight.VertNo;
 }
 
-
 //***************************************************************************
 int		CMkActor3d::WriteWeightList()
 {
@@ -227,6 +230,7 @@ int		Pos=ftell(File);
 		for (int i=0; i<ListSize; i++)
 		{
 			sWeight		&OutWeight=WeightList[i];
+			
 			fwrite(&OutWeight, sizeof(sWeight), 1, File);
 		}
 

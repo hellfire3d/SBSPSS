@@ -35,6 +35,10 @@ char * CycleCommands(char *String,int Num)
 			case 'd':
 				DebugOn =true;
 				break;
+			case 's':
+				TpStr= CheckFileString(String);
+				Scale=atof(TpStr);
+				break;
 			default:
 				GObject::Error(ERR_FATAL,"Unknown switch %s",String);
 				break;
@@ -78,13 +82,32 @@ int		ThisBoneCount;
 // Process Anim
 sAnim	ThisAnim;
 		
-		ThisAnim.FrameCount=ProcessSkel(Scene,ThisAnim,1);
+		ThisAnim.FrameCount=ProcessSkelMove(Scene,ThisAnim,1);
+		ProcessSkelAnim(Scene,ThisAnim,1);
 		AnimList.push_back(ThisAnim);
 }
 
 //***************************************************************************
+int		CMkAnim3d::ProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx)
+{
+CNode					&ThisNode=Scene.GetNode(Idx);
+vector<sGinAnim> const	&NodeAnim=ThisNode.GetAnim();
+int						FrameCount=NodeAnim.size();
+vector<s32>				&Move=ThisAnim.Move;
 
-int		CMkAnim3d::ProcessSkel(CScene &Scene,sAnim &ThisAnim,int Idx)
+		Move.resize(FrameCount);
+		for (int i=0; i<FrameCount; i++)
+		{
+//			Move[i].vx=round(NodeAnim[i].Pos.x*Scale);
+			Move[i]=-round(NodeAnim[i].Pos.y*Scale);
+//			Move[i].vz=round(NodeAnim[i].Pos.z*Scale);
+		}
+
+		return(FrameCount);	
+}
+
+//***************************************************************************
+void	CMkAnim3d::ProcessSkelAnim(CScene &Scene,sAnim &ThisAnim,int Idx)
 {
 CNode					&ThisNode=Scene.GetNode(Idx);
 vector<sGinAnim> const	&NodeAnim=ThisNode.GetAnim();
@@ -99,10 +122,23 @@ int						FrameCount=NodeAnim.size();
 				{
 					sGinAnim const	&InFrame=NodeAnim[i];
 					sQuat			ThisFrame;
-					ThisFrame.vx=round(InFrame.Ang.x*4096);
-					ThisFrame.vy=round(InFrame.Ang.y*4096);
-					ThisFrame.vz=round(InFrame.Ang.z*4096);
-					ThisFrame.vw=round(InFrame.Ang.w*4096);
+					Quaternion		ThisQuat=InFrame.Ang;
+
+/*					if (Idx==1)
+					{
+						Matrix4x4	Mtx;
+						ThisQuat.ToMatrix(Mtx);
+						Mtx.m_M[0][1]=-Mtx.m_M[0][1];
+						Mtx.m_M[1][1]=-Mtx.m_M[1][1];
+						Mtx.m_M[2][1]=-Mtx.m_M[2][1];
+						Mtx.m_M[3][1]=-Mtx.m_M[3][1];
+						Mtx.ToQuaternion(ThisQuat);
+					}
+*/
+					ThisFrame.vx=round(ThisQuat.x*4096);
+					ThisFrame.vy=round(ThisQuat.y*4096);
+					ThisFrame.vz=round(ThisQuat.z*4096);
+					ThisFrame.vw=round(ThisQuat.w*4096);
 					FrameList.Idx[i]=QuatList.Add(ThisFrame);
 					QuatCount++;
 				}
@@ -111,9 +147,7 @@ int						FrameCount=NodeAnim.size();
 
 int			ChildCount=ThisNode.GetPruneChildCount();
 
-			for (int Loop=0;Loop<ChildCount;Loop++)	ProcessSkel(Scene,ThisAnim,ThisNode.PruneChildList[Loop]);
-
-		return(FrameCount);
+			for (int Loop=0;Loop<ChildCount;Loop++)	ProcessSkelAnim(Scene,ThisAnim,ThisNode.PruneChildList[Loop]);
 }
 
 //***************************************************************************
@@ -137,15 +171,22 @@ sAnim3dHdr		Hdr;
 		{
 			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
 		}
-// Write Anims
-		for (Anim=0; Anim<AnimCount; Anim++)
-		{
-			AnimList[Anim].FileOfs=WriteAnim(AnimList[Anim]);
-		}
 
 // Write QuatTable
 		FileHdr.QuatTable=(sQuat*)WriteQuatTable();
-	
+
+// Write Movements
+		for (Anim=0; Anim<AnimCount; Anim++)
+		{
+			AnimList[Anim].MoveOfs=WriteMove(AnimList[Anim]);
+		}
+
+// Write Anims (u16 can cause address errors, so write last
+		for (Anim=0; Anim<AnimCount; Anim++)
+		{
+			AnimList[Anim].AnimOfs=WriteAnim(AnimList[Anim]);
+		}
+
 // ReWrite FileHdr
 		fseek(File, 0, SEEK_SET);
 		fwrite(&FileHdr,1,sizeof(sAnim3dFileHdr),File);
@@ -155,12 +196,30 @@ sAnim3dHdr		Hdr;
 		for (Anim=0; Anim<AnimCount; Anim++)
 		{
 			Hdr.FrameCount=AnimList[Anim].FrameCount;
-			Hdr.Anim=(u16*)AnimList[Anim].FileOfs;
+			Hdr.Move=(s32*)AnimList[Anim].MoveOfs;
+			Hdr.Anim=(u16*)AnimList[Anim].AnimOfs;
 			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
 		}
 	
 		fclose(File);
 
+}
+
+//***************************************************************************
+int		CMkAnim3d::WriteMove(sAnim const &ThisAnim)
+{
+int		Pos=ftell(File);
+
+		for (int Frame=0; Frame<ThisAnim.FrameCount; Frame++)
+		{
+			s32		ThisMove=ThisAnim.Move[Frame];
+			fwrite(&ThisMove,1,sizeof(s32),File);
+
+//			printf("%i %i %i\n",ThisMove.vx,ThisMove.vy,ThisMove.vz);
+
+		}
+
+		return(Pos);
 }
 
 //***************************************************************************
@@ -170,7 +229,6 @@ int		Pos=ftell(File);
 
 		for (int Frame=0; Frame<ThisAnim.FrameCount; Frame++)
 		{
-//			printf("Frame %i/%i\r",Frame,ThisAnim.FrameCount);
 			for (int Bone=0; Bone<BoneCount; Bone++)
 			{
 				u16	ThisIdx=ThisAnim.BoneAnim[Bone].Idx[Frame];
@@ -213,6 +271,7 @@ void Usage(char *ErrStr)
 	printf("Switches:\n");
 	printf("   -o:[FILE]       Set output File\n");
 	printf("   -d:             Enable Debug output\n");
+	printf("   -s:             Set Scale\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 
@@ -235,6 +294,3 @@ vector<GString> const &Files = MyFiles.GetFileInfoVector();
 
 		return 0;
 }
-/*
-c:\spongebob\graphics\characters\spongebob\sbanim\buttbounce.gin c:\spongebob\graphics\characters\spongebob\sbanim\deathelectric.gin c:\spongebob\graphics\characters\spongebob\sbanim\deathfall.gin c:\spongebob\graphics\characters\spongebob\sbanim\electricshock.gin c:\spongebob\graphics\characters\spongebob\sbanim\fall.gin c:\spongebob\graphics\characters\spongebob\sbanim\fireaim.gin c:\spongebob\graphics\characters\spongebob\sbanim\firerecoill.gin c:\spongebob\graphics\characters\spongebob\sbanim\float.gin c:\spongebob\graphics\characters\spongebob\sbanim\getup.gin c:\spongebob\graphics\characters\spongebob\sbanim\hitground01.gin c:\spongebob\graphics\characters\spongebob\sbanim\hover.gin c:\spongebob\graphics\characters\spongebob\sbanim\idleboots.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlecoral.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlecoral01.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric01.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric02.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric03.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric04.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric05.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlelauncher.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlenet.gin -o:\temp\anim.bnk
-*/
