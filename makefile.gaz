@@ -123,8 +123,8 @@ platform_src :=		platform \
 					pjellfsh \
 					pclam \
 					pfishhk3 \
-                                        prbridge \
-                                        pbaloon
+					prbridge \
+					pbaloon
 
 hazard_src :=		hazard \
 					hfalling \
@@ -151,8 +151,11 @@ fx_src :=			fx \
 					fxbasetrail \
 					fxfallingtile \
 					fxsteam \
-					fxsplash
-
+					fxsplash \
+					fxsplashacid \
+					fxsplashlava \
+					fxsplashoil \
+					fxexplode
 
 projectl_src :=		projectl \
 					prnpc \
