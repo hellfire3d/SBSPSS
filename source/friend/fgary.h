@@ -35,6 +35,9 @@ public:
 protected:
 	DVECTOR				m_triggerPos;
 	u8					m_started;
+	u8					m_fallDeath;
+	s16					m_speed;
+	s16					m_drawRotation;
 };
 
 #endif
