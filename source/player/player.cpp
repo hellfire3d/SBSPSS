@@ -142,10 +142,7 @@ FontBank	s_debugFont;
 
 int s_health;
 int s_screenPos;
-int m_cameraScrollPosX=0;
-int m_cameraScrollPosY=600;
-int m_cameraScrollDir=0;
-
+DVECTOR	m_cameraScrollPos={0,600};
 
 int MAP3D_CENTRE_X=170;
 int MAP3D_CENTRE_Y=500;
@@ -164,9 +161,6 @@ int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 
 
 int angg=900;
 
-DVECTOR ppos;
-DVECTOR ofs;
-DVECTOR	m_cameraPos;
 
 
 /*----------------------------------------------------------------------
@@ -187,13 +181,9 @@ void	CPlayer::init()
 	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
 
 
-//!!#ifdef __USER_paul__
-	m_respawnPos.vx=23*16;
-	m_respawnPos.vy=10*16;
-//!!#else
-//!!	m_respawnPos.vx=10;
-//!!	m_respawnPos.vy=10;
-//!!#endif
+// Temporary default respawn pos... should realy be set with setRespawnPos() from the level (pkg)
+m_respawnPos.vx=23*16;
+m_respawnPos.vy=10*16;
 
 
 m_animNo=0;
@@ -210,6 +200,7 @@ m_animFrame=0;
 
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
+	m_cameraScrollDir=0;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
@@ -245,7 +236,7 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
-DVECTOR pos;
+//DVECTOR pos;
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -263,24 +254,6 @@ if(newmode!=-1)
 	setMode((PLAYER_MODE)newmode);
 	newmode=-1;
 }
-/*!!
-#ifndef __USER_paul__
-	int	padInput=PadGetHeld(0);
-	int	move=7*_frames;
-	if(padInput&PAD_UP)		Pos.vy-=move;
-	if(padInput&PAD_DOWN)	Pos.vy+=move;
-	if(padInput&PAD_LEFT)	Pos.vx-=move;
-	if(padInput&PAD_RIGHT)	Pos.vx+=move;
-	m_invincibleFrameCount=0;
-
-	if ( padInput & CPadConfig::getButton(CPadConfig::PAD_CFG_UP) ) // not sure where you want to put this, Paul (Charles)
-	{
-		GameScene.sendEvent( USER_REQUEST_TALK_EVENT, this );
-	}
-#else
-*/
-#if	1
-	if(_frames>=3)_frames=2;
 
 	for(i=0;i<_frames;i++)
 	{
@@ -407,98 +380,37 @@ if(PadGetDown(0)&PAD_CIRCLE)
 		// Camera scroll..
 		if(m_cameraScrollDir==-1)
 		{
-			if(m_cameraScrollPosX>-CAMERA_SCROLLLIMIT<<8)
+			if(m_cameraScrollPos.vx>-CAMERA_SCROLLLIMIT<<8)
 			{
-				m_cameraScrollPosX-=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPosX<-CAMERA_SCROLLLIMIT<<8)
+				m_cameraScrollPos.vx-=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPos.vx<-CAMERA_SCROLLLIMIT<<8)
 				{
-					m_cameraScrollPosX=-CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollPos.vx=-CAMERA_SCROLLLIMIT<<8;
 					m_cameraScrollDir=0;
 				}
 			}
 		}
 		else if(m_cameraScrollDir==+1)
 		{
-			if(m_cameraScrollPosX<(CAMERA_SCROLLLIMIT<<8))
+			if(m_cameraScrollPos.vx<(CAMERA_SCROLLLIMIT<<8))
 			{
-				m_cameraScrollPosX+=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPosX>CAMERA_SCROLLLIMIT<<8)
+				m_cameraScrollPos.vx+=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPos.vx>CAMERA_SCROLLLIMIT<<8)
 				{
-					m_cameraScrollPosX=CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollPos.vx=CAMERA_SCROLLLIMIT<<8;
 					m_cameraScrollDir=0;
 				}
 			}
 		}
-
-
-
-
-
-
-
-/*
-		if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
-		{
-			if(m_cameraLookTimer<=-LOOKAROUND_DELAY)
-			{
-				m_cameraLookYOffset-=LOOKAROUND_SCROLLSPEED;
-				if(m_cameraLookYOffset<-LOOKAROUND_MAXSCROLL)
-				{
-					m_cameraLookYOffset=-LOOKAROUND_MAXSCROLL;
-				}
-			}
-			else
-			{
-				m_cameraLookTimer--;
-			}
-		}
-		else if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
-		{
-			if(m_cameraLookTimer>=LOOKAROUND_DELAY)
-			{
-				m_cameraLookYOffset+=LOOKAROUND_SCROLLSPEED;
-				if(m_cameraLookYOffset>LOOKAROUND_MAXSCROLL)
-				{
-					m_cameraLookYOffset=LOOKAROUND_MAXSCROLL;
-				}
-			}
-			else
-			{
-				m_cameraLookTimer++;
-			}
-		}
-		else
-		{
-			m_cameraLookTimer=0;
-			if(m_cameraLookYOffset<0)
-			{
-				m_cameraLookYOffset+=LOOKAROUND_RESETSPEED;
-				if(m_cameraLookYOffset>0)
-				{
-					m_cameraLookYOffset=0;
-				}
-			}
-			else if(m_cameraLookYOffset>0)
-			{
-				m_cameraLookYOffset-=LOOKAROUND_RESETSPEED;
-				if(m_cameraLookYOffset<0)
-				{
-					m_cameraLookYOffset=0;
-				}
-			}
-		}
-*/
 	}
 
 
-#endif
+	
 	// Move the camera offset
-ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPosX)>>8);
-ppos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPosY)>>8);;
-m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosX))>>8);
-m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosY))>>8);;
-ofs=m_cameraOffset;
-pos=Pos;
+m_playerScreenPos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
+m_playerScreenPos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);;
+m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
+m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);;
 
 	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
 	m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
@@ -507,25 +419,25 @@ pos=Pos;
 	// Limit camera scroll to the edges of the map
 	if(m_cameraPos.vx<0)
 	{
-		ppos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_playerScreenPos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vx=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
 	{
-		ppos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_playerScreenPos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vx=m_mapCameraEdges.vx;
 		m_cameraScrollDir=0;
 	}
 	if(m_cameraPos.vy<0)
 	{
-		ppos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_playerScreenPos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vy=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
 	{
-		ppos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+		m_playerScreenPos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 		m_cameraScrollDir=0;
 	}
@@ -562,11 +474,11 @@ if(eyes!=-1)
 }
 #endif
 
-//int xval=(255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPosX>>8)));
+//int xval=(255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx>>8)));
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
 //DrawLine(xval+7,0,xval+7,255,0,128,255,0);
 
-		m_skel.setPos(ppos);
+		m_skel.setPos(m_playerScreenPos);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
 		else
@@ -885,7 +797,7 @@ void CPlayer::moveLeft()
 		m_moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 
-	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPosX<-CAMERA_SCROLLTHRESHOLD<<8)
+	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx<-CAMERA_SCROLLTHRESHOLD<<8)
 	{
 		m_cameraScrollDir=+1;
 	}
@@ -913,7 +825,7 @@ void CPlayer::moveRight()
 		m_moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
 
-	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPosX>CAMERA_SCROLLTHRESHOLD<<8)
+	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx>CAMERA_SCROLLTHRESHOLD<<8)
 	{
 		m_cameraScrollDir=-1;
 	}

@@ -151,6 +151,7 @@ public:
 
 	void			setLayerCollision(class CLayerCollision *_layer)		{m_layerCollision=_layer;}
 	void			setMapSize(DVECTOR _mapSize);
+	void			setRespawnPos(DVECTOR _respawn)							{m_respawnPos=_respawn;}
 
 protected:		
 	enum
@@ -230,6 +231,10 @@ private:
 	int				m_animFrame;
 	int				m_animNo;
 	CSkelSpongeBob	m_skel;
+
+	DVECTOR			m_playerScreenPos;
+	DVECTOR			m_cameraPos;
+	int				m_cameraScrollDir;
 
 	DVECTOR			m_moveVel;
 	int				m_facing;
