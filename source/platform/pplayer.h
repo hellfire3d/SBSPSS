@@ -14,22 +14,17 @@
 #ifndef __PLATFORM_PPLAYER_H__
 #define __PLATFORM_PPLAYER_H__
 
-#ifndef __PLATFORM_PLATFORM_H__
-#include "platform\platform.h"
+#ifndef __PLATFORM_PBUBBLE_H__
+#include "platform\pbubble.h"
 #endif
 
-class CNpcPlayerBubblePlatform : public CNpcPlatform
+class CNpcPlayerBubblePlatform : public CNpcBubblePlatform
 {
 public:
-	virtual void		postInit();
-	virtual void		render();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	//virtual void		postInit();
 	virtual	CRECT const	*getThinkBBox()												{return( CThing::getThinkBBox() );}
 protected:
 	virtual void		processLifetime( int _frames );
-
-	u8					m_pop;
-	s16					m_scale;
 };
 
 #endif

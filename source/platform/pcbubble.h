@@ -14,22 +14,18 @@
 #ifndef __PLATFORM_PCBUBBLE_H__
 #define __PLATFORM_PCBUBBLE_H__
 
-#ifndef __PLATFORM_PLATFORM_H__
-#include "platform\platform.h"
+#ifndef __PLATFORM_PBUBBLE_H__
+#include "platform\pbubble.h"
 #endif
 
-class CNpcCollapsingBubblePlatform : public CNpcPlatform
+class CNpcCollapsingBubblePlatform : public CNpcBubblePlatform
 {
 public:
-	virtual void		render();
 	virtual void		postInit();
+	virtual	CRECT const	*getThinkBBox()												{return( CThing::getThinkBBox() );}
 protected:
 	virtual void		processLifetime( int _frames );
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
-	u8					m_pop;
 	u8					m_startCollapse;
-	s16					m_scale;
-	POLY_FT4			*SprFrame;
 };
 
 class CNpcCollapsingAcridPlatform : public CNpcCollapsingBubblePlatform

@@ -203,6 +203,10 @@
 #include "platform\pplayer.h"
 #endif
 
+#ifndef __PLATFORM_PGBUBBLE_H__
+#include "platform\pgbubble.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -231,7 +235,7 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 
 		case NPC_BUBBLE_PLATFORM:
 		{
-			platform = new ("bubble platform") CNpcBubblePlatform;
+			platform = new ("geyser bubble platform") CNpcGeyserBubblePlatform;
 			break;
 		}
 

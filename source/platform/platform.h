@@ -117,8 +117,8 @@ public:
 	void				setTiltable( bool isTiltable );
 	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
 	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
-	void				setGraphic( sThingPlatform *ThisPlatform );
-	void				setGraphic( u8 graphicNum );
+	virtual void		setGraphic( sThingPlatform *ThisPlatform );
+	virtual void		setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		trigger()												{;}
 	virtual u8			isCart()												{return( false );}

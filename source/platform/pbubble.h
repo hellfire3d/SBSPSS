@@ -23,11 +23,15 @@ class CNpcBubblePlatform : public CNpcPlatform
 public:
 	virtual void		render();
 	virtual void		postInit();
+	virtual void		shutdown();
+	virtual void		setGraphic( sThingPlatform *ThisPlatform )			{}
+	virtual void		setGraphic( u8 graphicNum )							{}
 protected:
-	virtual void		processLifetime( int _frames );
-	virtual void		processMovement( int _frames );
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 
 	u8					m_pop;
+	s16					m_scale;
+	POLY_FT4			*SprFrame;
 };
 
 #endif

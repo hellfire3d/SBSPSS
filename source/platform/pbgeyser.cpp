@@ -23,10 +23,6 @@
 #include "game\game.h"
 #endif
 
-#ifndef __PLATFORM_PBUBBLE_H__
-#include "platform\pbubble.h"
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcGeyserPlatformGenerator::collidedWith(CThing *_thisThing)

@@ -1617,6 +1617,14 @@ SOURCE=..\..\..\source\platform\pfishhk3.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pgbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pgbubble.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pgeyser.cpp
 # End Source File
 # Begin Source File
