@@ -11,9 +11,13 @@
 #endif
 
 
-#ifdef __VERSION_DEBUG__
+/*****************************************************************************/
+
+#ifdef	__VERSION_DEBUG__
 #define	__DEBUG_MEM__		// Define if you want to debug memory - TS
 #endif
+
+/*****************************************************************************/
 
 
 /*****************************************************************************/
@@ -57,15 +61,10 @@ void	operator delete[](void *Ptr);
 
 
 #ifdef __VERSION_DEBUG__
-
-void	dumpDebugMem();
-
-#define MemAlloc( Size, Name )	MemAllocate( (Size), (Name), __FILE__, __LINE__ )
-
+	void	dumpDebugMem();
+	#define MemAlloc( Size, Name )	MemAllocate( (Size), (Name), __FILE__, __LINE__ )
 #else
-
-#define MemAlloc(Size,Name)	MemAllocate( (Size), NULL, NULL, 0 )
-
+	#define MemAlloc(Size,Name)	MemAllocate( (Size), NULL, NULL, 0 )
 #endif
 
 
