@@ -43,6 +43,10 @@
 #include <ACTOR_MERMAIDMAN_Anim.h>
 #endif
 
+#ifndef __ANIM_GARY_HEADER__
+#include <ACTOR_GARY_Anim.h>
+#endif
+
 
 CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 {
@@ -56,7 +60,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_FRIEND_GARY
-		ACTORS_CLAM_SBK,
+		ACTORS_GARY_SBK,
 		3,
 		128,
 		false,

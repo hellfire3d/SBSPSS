@@ -22,7 +22,7 @@
 
 void CNpcGaryFriend::think( int _frames )
 {
-	CNpcThing::think(_frames);
+	CNpcFriend::think(_frames);
 
 	s8 multiplier = -1 + ( 2 * m_extension );
 	s32 maxHeight = 20;

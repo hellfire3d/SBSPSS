@@ -2016,6 +2016,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_FLYINGDUTCHMAN_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_GARY_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\ACTOR_GHOST_Anim.h
 # End Source File
 # Begin Source File
