@@ -65,7 +65,7 @@ bool CNpcClamEnemy::processSensor()
 
 		default:
 			{
-				if ( playerXDistSqr + playerYDistSqr < 10000 )
+				if ( playerXDistSqr + playerYDistSqr < 40000 )
 				{
 					m_controlFunc = NPC_CONTROL_CLOSE;
 					m_extendDir = EXTEND_UP;
