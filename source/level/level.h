@@ -38,6 +38,9 @@ public:
 	sThingActor				**getActorList()					{return ActorList;}
 	int						getPlatformCount()					{return PlatformCount;}
 	sThingPlatform			**getPlatformList()					{return PlatformList;}
+	int						getHazardCount()					{return HazardCount;}
+	sThingHazard			**getHazardList()					{return HazardList;}
+
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 
@@ -70,6 +73,8 @@ private:
 	sThingTrigger	*TriggerList;
 	int				FXCount;
 	sThingFX		*FXList;
+	int				HazardCount;
+	sThingHazard	**HazardList;
 
 };
 

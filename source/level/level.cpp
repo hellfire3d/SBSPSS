@@ -135,12 +135,6 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
 		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
 
-		printf("ActorList %i\n",(int)LevelHdr->ActorList);
-		printf("ItemList %i\n",(int)LevelHdr->ItemList);
-		printf("Platfrom List %i\n",(int)LevelHdr->PlatformList);
-		printf("TriggerList %i\n",(int)LevelHdr->TriggerList);
-		printf("FXList %i\n",(int)LevelHdr->FXList);
-
 		CModelGfx::SetData(LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
@@ -201,6 +195,7 @@ void	CLevel::initLayers()
 		ItemList=0;
 		PlatformList=0;
 		FXList=0;
+		HazardList=0;
 
 // Back
 		if (LevelHdr->BackLayer) 
@@ -322,6 +317,20 @@ PAUL_DBGMSG("%d triggers",TriggerCount);
 			FXCount=Hdr->Count;
 			FXList=(sThingFX*)MakePtr(Hdr,sizeof(sThingHdr));
 		}
+// Hazards
+		if (LevelHdr->HazardList)
+		{
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->HazardList);
+			HazardCount=Hdr->Count;
+			HazardList=(sThingHazard**)MemAlloc(HazardCount*sizeof(sThingHazard**),"Hazard List");
+			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
+			for (int i=0; i<HazardCount; i++)
+			{
+				HazardList[i]=(sThingHazard*)ThingPtr;
+				ThingPtr+=sizeof(sThingHazard);
+				ThingPtr+=HazardList[i]->PointCount*sizeof(u16)*2;
+			}
+		}
 
 }
 
@@ -348,6 +357,7 @@ void	CLevel::shutdown()
 
 		if (ActorList) MemFree(ActorList);
 		if (PlatformList) MemFree(PlatformList);
+		if (HazardList) MemFree(HazardList);
 
 		MemFree(LevelHdr);
 		CActorPool::Reset();
