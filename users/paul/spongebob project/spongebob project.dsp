@@ -192,6 +192,50 @@ SOURCE=..\..\..\source\gfx\tpage.cpp
 SOURCE=..\..\..\source\gfx\tpage.h
 # End Source File
 # End Group
+# Begin Group "gui"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gbutton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gbutton.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gframe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gframe.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\greadout.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\greadout.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gtextbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gtextbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gui.h
+# End Source File
+# End Group
 # Begin Group "locale"
 
 # PROP Default_Filter ""
@@ -434,50 +478,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
-# End Source File
-# End Group
-# Begin Group "gui"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gbutton.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gbutton.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gframe.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gframe.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\greadout.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\greadout.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gtextbox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gtextbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gui.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gui\gui.h
 # End Source File
 # End Group
 # End Group
