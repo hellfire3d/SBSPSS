@@ -143,7 +143,7 @@ SpriteBank	*m_sprites;
 FontBank	*m_font;
 
 CFrontEndScene::FrontEndMode			CFrontEndScene::s_startMode=MODE__NICK_LOGO;
-
+int		CFrontEndScene::s_bootUp=1;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -153,7 +153,14 @@ CFrontEndScene::FrontEndMode			CFrontEndScene::s_startMode=MODE__NICK_LOGO;
   ---------------------------------------------------------------------- */
 void CFrontEndScene::init()
 {
-	CLevel::DisplayLoadingScreen();
+	if (s_bootUp)
+	{ // Dont display ingame loading screen on bootup
+		s_bootUp=0;
+	}
+	else
+	{
+		CLevel::DisplayLoadingScreen();
+	}
 
 	for(int i=0;i<MODE__NONE;i++)
 	{

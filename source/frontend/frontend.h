@@ -91,6 +91,7 @@ private:
 	static class CFrontEndMode	*s_modeCodes[];
 
 	static FrontEndMode			s_startMode;
+	static int					s_bootUp;
 
 };
 
