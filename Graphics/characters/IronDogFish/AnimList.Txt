@@ -1,4 +1,4 @@
-die
+idle
 gethit
 idle
 punch
