@@ -60,12 +60,12 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 	},
 
-	{	// NPC_FALLING_ACORN
-		NPC_INIT_FALLING_ACORN,
-		NPC_SENSOR_FALLING_ACORN_USER_CLOSE,
+	{	// NPC_FALLING_ITEM
+		NPC_INIT_FALLING_ITEM,
+		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
-		NPC_CLOSE_FALLING_ACORN_FALL,
+		NPC_CLOSE_FALLING_ITEM_FALL,
 		NPC_TIMER_NONE,
 		false,
 		3,
@@ -516,7 +516,7 @@ void CNpc::init()
 			break;
 
 		case NPC_INIT_SKULL_STOMPER:
-		case NPC_INIT_FALLING_ACORN:
+		case NPC_INIT_FALLING_ITEM:
 		{
 			m_heading = m_fireHeading = 1024;
 			
@@ -866,7 +866,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
-					case NPC_SENSOR_FALLING_ACORN_USER_CLOSE:
+					case NPC_SENSOR_FALLING_ITEM_USER_CLOSE:
 					{
 						if ( xDistSqr + yDistSqr < 40000 )
 						{
@@ -1197,8 +1197,8 @@ void CNpc::processClose(int _frames)
 
 			break;
 
-		case NPC_CLOSE_FALLING_ACORN_FALL:
-			processCloseFallingAcornFall( _frames );
+		case NPC_CLOSE_FALLING_ITEM_FALL:
+			processCloseFallingItemFall( _frames );
 
 			break;
 
