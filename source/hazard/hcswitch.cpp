@@ -114,4 +114,6 @@ void CNpcConveyorSwitchHazard::trigger()
 	level.reverseMapConveyor();
 
 	CAnimTex::SetSpeed( -CAnimTex::GetSpeed() );
+
+	CSoundMediator::playSfx(CSoundMediator::SFX_ANEMONE_DEFEATED_LEVEL2);
 }
