@@ -37,7 +37,7 @@ void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool XFlip)
 {
 	Ofs.vx=XOfs; 
 	Ofs.vy=YOfs;
-	this->XFlip=XFlip;
+	XFlip=XFlip;
 }
 
 /*****************************************************************************/
@@ -46,8 +46,6 @@ void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool XFlip)
 
 void	CFXJellyFishLegs::think(int _frames)
 {
-		Pos=getParent()->getPos();
-
 		CFX::think(_frames);
 		Angle++; Angle&=CIRCLE_TAB_MASK;
 		AngleInc=LegAngleInc;

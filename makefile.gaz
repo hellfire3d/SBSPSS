@@ -177,6 +177,8 @@ fx_src :=			fx \
 					fxfallingtile \
 					fxsteam \
 					fxlaser \
+					fxsmoke \
+					fxtvexplode \
 					fxgeyser
 
 projectl_src :=		projectl \

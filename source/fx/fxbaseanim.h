@@ -29,7 +29,7 @@ virtual void		SetScaleY(int S)		{CurrentScaleY=S;}
 virtual void		SetHeading(int H)		{CurrentHeading=H;}
 
 protected:
-
+		bool		HasInit;
 		sFXBaseData	*BaseData;
 		POLY_FT4	*Frame;
 

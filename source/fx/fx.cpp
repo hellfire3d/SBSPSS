@@ -26,8 +26,10 @@
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
 #include	"FX\FXGeyser.h"
+#include	"FX\FXSmoke.h"
 
 #include	"FX\FXNrgBar.h"
+#include	"FX\FXTVExplode.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -59,7 +61,7 @@ CFXBaseAnim::sFXBaseData	FXSplashBaseData=
 
 CFXBaseAnim::sFXBaseData	FXExplodeBaseData=
 {
-		FRM__EXPLOSION0001,FRM__EXPLOSION0006,1,
+		FRM__EXPLOSION0001,FRM__EXPLOSION0008,1,
 		FX_FLAG_NO_THINK_KILL,
 };
 
@@ -95,12 +97,14 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 */
 /*****************************************************************************/
 
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_GEYSER_WATER;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_TV_EXPLODE;
 #include	"game\game.h"
 
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
+		Pos.vy-=16*8;
 		CFX::Create((CFX::FX_TYPE)FXType,Pos);
+//		CFX::Create((CFX::FX_TYPE)FXType,Parent);
 
 }
 
@@ -115,6 +119,10 @@ CFX		*NewFX;
 		{
 		case FX_TYPE_NONE:
 			ASSERT(!"FX NONE CANT BE CREATED!");
+			break;
+
+		case FX_TYPE_BASE_ANIM:
+			NewFX=new ("FXBaseAnim") CFXBaseAnim();
 			break;
 
 		case FX_TYPE_DROP_WATER:
@@ -213,15 +221,19 @@ CFX		*NewFX;
 		case FX_TYPE_STEAM:
 			NewFX=new ("FXSteam") CFXSteam();
 			break;
-		case FX_TYPE_SMOKE:
-			ASSERT(!"FX_TYPE_SMOKE");
-			break;
 		case FX_TYPE_GAS:
 			ASSERT(!"FX_TYPE_GAS");
 			break;
 		case FX_TYPE_FLAMES:
 			NewFX=new ("FXFlames") CFXBaseAnim();
 			NewFX->setBaseData(&FXFireBaseData);
+			break;
+
+		case FX_TYPE_SMOKE:
+			NewFX=new ("FXSmoke") CFXSmoke();
+			break;
+		case FX_TYPE_SMOKE_PUFF:
+			NewFX=new ("FXSmokePuff") CFXSmokePuff();
 			break;
 
 		case FX_TYPE_JELLYFISH_LEGS:
@@ -239,6 +251,9 @@ CFX		*NewFX;
 			break;
 		case FX_TYPE_LASER:
 			NewFX=new ("FX Laser") CFXLaser();
+			break;
+		case FX_TYPE_TV_EXPLODE:
+			NewFX=new ("FX TVExplode") CFXTVExplode();
 			break;
 
 		default:
@@ -305,6 +320,13 @@ void	CFX::shutdown()
 /*****************************************************************************/
 void	CFX::think(int _frames)
 {
+CThing	*Parent=getParent();
+
+		if (Parent)
+		{
+			Pos=Parent->getPos();
+		}
+
 		CFXThing::think(_frames);
 
 		if (Life>0)
@@ -323,15 +345,23 @@ void	CFX::think(int _frames)
 
 		Pos.vx+=Velocity.vx;
 		Pos.vy+=Velocity.vy;
-		if (Flags & FX_FLAG_COLLIDE_KILL)
+		if (Flags & FX_FLAG_COLLIDE_KILL || Flags & FX_FLAG_COLLIDE_BOUNCE)
 		{
 			CLayerCollision	*ColLayer=CGameScene::getCollision();
 			int	DistY = ColLayer->getHeightFromGround( Pos.vx, Pos.vy, 16 );
 			
 			if (DistY<=0) 
 			{
-				Pos.vy-=DistY;
-				killFX();
+				Pos.vy+=DistY;
+				if (Flags & FX_FLAG_COLLIDE_KILL)
+				{
+					killFX();
+				}
+				else
+				{
+					Velocity.vx/=2;
+					Velocity.vy=-Velocity.vy>>1;
+				}
 			}
 		}
 

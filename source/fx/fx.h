@@ -15,6 +15,7 @@ enum FX_FLAG
 	FX_FLAG_HAS_GRAVITY		=1<<2,
 	FX_FLAG_INJURE_PLAYER	=1<<3,
 	FX_FLAG_TRANS			=1<<4,
+	FX_FLAG_COLLIDE_BOUNCE	=1<<5,
 
 	FX_FLAG_NO_THINK_KILL	=1<<13,
 	FX_FLAG_HIDDEN			=1<<14,
@@ -27,6 +28,8 @@ public:
 		enum	FX_TYPE
 		{
 			FX_TYPE_NONE=0,
+
+			FX_TYPE_BASE_ANIM,
 
 			FX_TYPE_DROP_WATER,
 			FX_TYPE_DROP_ACID,
@@ -52,15 +55,19 @@ public:
 			FX_TYPE_LIGHTNING_BOLT,
 
 			FX_TYPE_STEAM,
-			FX_TYPE_SMOKE,
 			FX_TYPE_GAS,
 			FX_TYPE_FLAMES,
+
+			FX_TYPE_SMOKE,
+			FX_TYPE_SMOKE_PUFF,
 
 			FX_TYPE_JELLYFISH_LEGS,
 			FX_TYPE_FALLINGTILE,
 			FX_TYPE_EXPLODE,
 			FX_TYPE_NRG_BAR,
 			FX_TYPE_LASER,
+			FX_TYPE_TV_EXPLODE,
+
 			FX_TYPE_MAX
 		};
 		enum
@@ -123,6 +130,8 @@ public:
 		void		setRGB(FX_RGB T)				{setRGB(FXRGBTable[T]);}
 
 		void		setAfterEffect(FX_TYPE Type)	{AfterEffect=Type;}
+		void		setVelocity(int X,int Y)		{Velocity.vx=X; Velocity.vy=Y;}
+
 //protected:
 		s16			Life;
 		u16			Flags;

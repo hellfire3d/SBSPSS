@@ -1,6 +1,6 @@
-/******************/
-/*** Smoke Puff ***/
-/******************/
+/**************/
+/*** Smoke  ***/
+/**************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -11,22 +11,55 @@
 #include	"level\level.h"
 #include	"game\game.h"
 
-#include	"FX\FXSmokePuff.h"
+#include	"FX\FXSmoke.h"
 
-int		SmokePuffStartScale=ONE*2;
-int		SmokePuffScaleInc=128;
-int		SmokePuffAngleInc=128;
+static const int		SmokeStartRate=32;
+static const int		SmokePuffScaleInc=64;
+static const int		SmokePuffAngleInc=64;
+static const int		SmokePuffRGBDec=4;
 
+/*****************************************************************************/
+void	CFXSmoke::init(DVECTOR const &_Pos)
+{
+		CFX::init(_Pos);
+		Rate=SmokeStartRate;
+		CurrentRate=Rate;
+
+}
+
+/*****************************************************************************/
+/*** Think *******************************************************************/
+/*****************************************************************************/
+void	CFXSmoke::think(int _frames)
+{
+		CFX::think(_frames);
+		Rate=SmokeStartRate;
+
+		CurrentRate+=_frames;
+		if (CurrentRate>=Rate)
+		{
+			CurrentRate=0;
+			CFXSmokePuff *FX=(CFXSmokePuff*)CFX::Create(CFX::FX_TYPE_SMOKE_PUFF,Pos);
+			FX->setRGB(255,255,255);
+		}
+}
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*** Smoke Puff **************************************************************/
+/*****************************************************************************/
 /*****************************************************************************/
 void	CFXSmokePuff::init(DVECTOR const &_Pos)
 {
 		CFX::init(_Pos);
 		Velocity.vy=-1;
 
-		CurrentAngle=0;
-		CurrentScale=SmokePuffStartScale;
-		RGBDec=255/(CurrentScale/SmokePuffScaleInc);
-		RGB.R=RGB.G=RGB.B=255;
+		CurrentAngle=getRndRange(4095);
+		AngleInc=SmokePuffAngleInc+getRndRange(SmokePuffAngleInc);
+		CurrentScale=1024;
+		ScaleInc=SmokePuffScaleInc+getRndRange(SmokePuffScaleInc);
+		setRGB(255,255,255);
 }
 
 /*****************************************************************************/
@@ -36,14 +69,23 @@ void	CFXSmokePuff::think(int _frames)
 {
 		CFX::think(_frames);
 
-		CurrentScale-=SmokePuffScaleInc;
-		RGB.R-=RGBDec;
-		RGB.G-=RGBDec;
-		RGB.B-=RGBDec;
-
-		CurrentAngle+=SmokePuffAngleInc;
+		CurrentScale+=ScaleInc;
+		CurrentAngle+=AngleInc;
 		CurrentAngle&=4095;
-		if (CurrentScale<0)
+
+int		R=RGB.R-SmokePuffRGBDec;
+int		G=RGB.G-SmokePuffRGBDec;
+int		B=RGB.B-SmokePuffRGBDec;
+
+		if (R<0) R=0;
+		if (G<0) G=0;
+		if (B<0) B=0;
+
+		RGB.R=R;
+		RGB.G=G;
+		RGB.B=B;
+
+		if (RGB.R+RGB.G+RGB.B==0)
 		{
 			killFX();
 		}

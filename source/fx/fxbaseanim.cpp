@@ -21,19 +21,8 @@ void	CFXBaseAnim::init(DVECTOR const &_Pos)
 		CurrentFrame=0;
 		CurrentScaleX=CurrentScaleY=ONE;
 		CurrentHeading = 0;
+		HasInit=false;
 
-		MaxFrame=((BaseData->EndFrame-BaseData->StartFrame)<<BaseData->FrameShift)-1;
-		Flags|=BaseData->Flags;
-		renderFrame=BaseData->StartFrame;
-
-		if (Flags & FX_FLAG_LOOP)
-		{
-			Life=-1;
-		}
-		else
-		{
-			Life=MaxFrame;
-		}
 }
 
 /*****************************************************************************/
@@ -48,14 +37,30 @@ void	CFXBaseAnim::setBaseData(void *Data)
 /*****************************************************************************/
 void	CFXBaseAnim::think(int _frames)
 {
+		if (!HasInit)
+		{
+			MaxFrame=((BaseData->EndFrame-BaseData->StartFrame)<<BaseData->FrameShift)-1;
+			Flags|=BaseData->Flags;
+			renderFrame=BaseData->StartFrame;
+
+			if (Flags & FX_FLAG_LOOP)
+			{
+				Life=-1;
+			}
+			else
+			{
+				Life=MaxFrame;
+			}
+			HasInit=true;
+		}
+
 		CFX::think(_frames);
 
 		if (BaseData->StartFrame!=BaseData->EndFrame)
 		{
-//			CurrentFrame+=_frames;
-			CurrentFrame+=1;
+			CurrentFrame++;
 
-			if (CurrentFrame>=MaxFrame)
+			if (CurrentFrame>MaxFrame)
 			{
 				CurrentFrame=0;
 			}

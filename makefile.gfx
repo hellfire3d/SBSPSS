@@ -159,11 +159,12 @@ cleanactors :
 SFX_GFX_DIR :=			$(GRAF_DIR)/sfx
 
 SFX_GFX :=				+smoke.bmp \
-						+explosion0001.bmp +explosion0002.bmp +explosion0003.bmp +explosion0004.bmp +explosion0005.bmp +explosion0006.bmp \
+						+explosion0001.bmp +explosion0002.bmp +explosion0003.bmp +explosion0004.bmp +explosion0005.bmp +explosion0006.bmp +explosion0007.bmp +explosion0008.bmp\
 						+splash001.bmp +splash002.bmp +splash003.bmp +splash004.bmp +splash005.bmp +splash006.bmp \
 						+fire01.bmp +fire02.bmp +fire03.bmp +fire04.bmp +fire05.bmp +fire06.bmp +fire07.bmp +fire08.bmp\
 						+drip.bmp +bubblepop.bmp \
 						+Gush000.bmp +Gush001.bmp +Gush002.bmp +Gush003.bmp +GushBase.bmp \
+						+cog01.bmp +elecvalve.bmp\
 						+leg.bmp +thwack.bmp +lightning1.bmp +lightning2.bmp
 
 SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))
