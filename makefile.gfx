@@ -105,7 +105,7 @@ cleanui :
 ui: 		$(UI_GFX_TEX_IN)
 
 $(UI_GFX_TEX_OUT) :	$(UI_GFX_TEX_IN)
-		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} +c- -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
+		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c- -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
 		@$(MV) -f $(UI_GFX_OUT_DIR)/uigfx.h $(UI_GFX_HDR_FILE)
 
 GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
@@ -167,7 +167,7 @@ cleanfrontend :
 frontend:	$(FRONTEND_GFX_TEX_IN)
 
 $(FRONTEND_GFX_TEX_OUT) :	$(FRONTEND_GFX_TEX_IN)
-		@parkgrab -r- -z+ ${FRONTEND_GFX_TRANS_NO_ROT_IN} -r+ -z+ ${FRONTEND_GFX_TRANS_IN} -z- ${FRONTEND_GFX_NONTRANS_IN} -b+ -t:30,1,1 -l:$(REPORT_DIR)/frontend.lbm -o:$(FRONTEND_GFX_TEX_OUT) -k:$(FRONTEND_GFX_REP_FILE)
+		@parkgrab -r- -z+ ${FRONTEND_GFX_TRANS_NO_ROT_IN} -r+ ${FRONTEND_GFX_TRANS_IN} -z- ${FRONTEND_GFX_NONTRANS_IN} -b+ -t:30,1,1 -l:$(REPORT_DIR)/frontend.lbm -o:$(FRONTEND_GFX_TEX_OUT) -k:$(FRONTEND_GFX_REP_FILE)
 		@$(MV) -f $(FRONTEND_GFX_OUT_DIR)/frontend.h $(FRONTEND_GFX_HDR_FILE)
 
 GRAF_DIRS_TO_MAKE	+=		$(FRONTEND_GFX_OUT_DIR)
