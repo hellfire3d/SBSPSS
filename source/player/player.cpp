@@ -1858,7 +1858,8 @@ int	CPlayer::canDoLookAround()
 void	CPlayer::inSoakUpState()
 {
 	if(isWearingDivingHelmet()&&
-	   (CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DEATH_LIQUID)
+//		(CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DEATH_LIQUID)
+		(CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP)
 	{
 		m_healthWaterLevel+=waterSoakUpSpeed;
 		if(m_healthWaterLevel>WATERMAXHEALTH)
