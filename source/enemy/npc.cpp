@@ -245,15 +245,12 @@ void CNpcEnemy::init()
 
 	m_layerCollision = NULL;
 
-//pkg
-m_npcPath.initPath();
-//pkg
+	m_npcPath.initPath();
+
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
 		{
-			m_npcPath.initPath();
-
 			DVECTOR newPos;
 
 			newPos.vx = 100;
@@ -332,8 +329,6 @@ m_npcPath.initPath();
 		{
 			m_heading = m_fireHeading = 3072;
 			
-			m_npcPath.initPath();
-
 			DVECTOR newPos;
 
 			newPos.vx = 100;
@@ -357,8 +352,6 @@ m_npcPath.initPath();
 
 		case NPC_INIT_FIREBALL:
 		{
-			m_npcPath.initPath();
-
 			DVECTOR newPos;
 
 			newPos.vx = 300;
@@ -376,8 +369,6 @@ m_npcPath.initPath();
 
 		case NPC_INIT_RETURNING_HAZARD:
 		{
-			m_npcPath.initPath();
-
 			DVECTOR newPos;
 
 			newPos.vx = 100;
@@ -399,8 +390,6 @@ m_npcPath.initPath();
 		{
 			m_heading = m_fireHeading = 0;
 			
-			m_npcPath.initPath();
-
 			DVECTOR newPos;
 
 			newPos.vx = 200;
