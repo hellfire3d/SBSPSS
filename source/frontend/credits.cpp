@@ -82,11 +82,13 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifdef __USER_PAUL__
 #include "memcard\memcard.h"
 #include "memcard\saveload.h"
 CSaveLoadDatabase	*sl;
 enum{mode_none,mode_save,mode_load};
 int mode=mode_none;
+#endif
 void CFrontEndCredits::init()
 {
 }
@@ -110,9 +112,11 @@ void CFrontEndCredits::shutdown()
 static u8 *s_image;
 void CFrontEndCredits::select()
 {
+#ifdef __USER_PAUL__
 MemCard::Start();
 sl=new ("sldb") CSaveLoadDatabase();
 mode=mode_none;
+#endif
 	m_shuttingDown=false;
 	s_image=CFileIO::loadFile(BACKDROP_CREDITS_GFX);
 	ASSERT(s_image);
@@ -128,8 +132,10 @@ mode=mode_none;
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::unselect()
 {
+#ifdef __USER_PAUL__
 MemCard::Stop();
 delete sl;	
+#endif
 	ClearScreenImage();
 	MemFree(s_image);	s_image=NULL;
 }
@@ -152,6 +158,7 @@ void CFrontEndCredits::render()
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::think(int _frames)
 {
+#ifdef __USER_PAUL__
 sl->think();
 if(mode==mode_none)
 {
@@ -209,6 +216,7 @@ else if(mode==mode_load)
 }
 
 if(mode==mode_none)
+#endif
 	if(!m_shuttingDown&&!CFader::isFading())
 	{
 		if(PadGetDown(0)&(PAD_CROSS|PAD_START))

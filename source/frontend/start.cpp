@@ -34,6 +34,8 @@
 #include "gfx\prim.h"
 #endif
 
+#include "gfx\font.h"
+
 
 /*	Std Lib
 	------- */
@@ -68,8 +70,13 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+FontBank	*s_smallFont;
 void CFrontEndStart::init()
 {
+	s_smallFont=new ("Start SmallFont") FontBank();
+	s_smallFont->initialise(&standardFont);
+	s_smallFont->setJustification(FontBank::JUST_CENTRE);
+	s_smallFont->setOt(5);
 }
 
 /*----------------------------------------------------------------------
@@ -80,6 +87,7 @@ void CFrontEndStart::init()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::shutdown()
 {
+	s_smallFont->dump();		delete s_smallFont;
 }
 
 /*----------------------------------------------------------------------
@@ -123,6 +131,11 @@ void CFrontEndStart::render()
 	setRGB2(g4, 0,50, 0);
 	setRGB3(g4,50, 0,50);
 	AddPrimToList(g4,MAX_OT-1);
+
+	if(!CFader::isFading())
+	{
+		s_smallFont->print(256,120,"Press START to enter game scene");
+	}
 }
 
 /*----------------------------------------------------------------------

@@ -14,6 +14,10 @@
 #include	"gfx\font.h"
 #include	"gfx\fdata.h"
 
+#ifndef __GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
+
 #include	"level\level.h"
 #include	"player\player.h"
 #include	"gfx\anim.h"
@@ -54,6 +58,7 @@ void 	CGameScene::init()
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
 
+		CFader::setFadingIn();
 }
 
 /*****************************************************************************/
@@ -79,9 +84,9 @@ void 	CGameScene::render()
 void	CGameScene::think(int _frames)
 {
 		m_conversation.think(_frames);
+		Player.think(_frames);
+		Level.setCameraCentre(Player.getMapPos());
 		Level.think(_frames);
-		Player.think();
-		Player.Animate();
 
 		if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
 		{
