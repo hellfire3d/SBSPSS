@@ -31,7 +31,7 @@ void CNpcDustDevilEnemy::postInit()
 
 void CNpcDustDevilEnemy::processMovement( int _frames )
 {
-	s32 maxHeight = 20;
+	s32 maxHeight = 40;
 	s32 distX, distY;
 	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
