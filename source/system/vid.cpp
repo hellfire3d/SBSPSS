@@ -343,13 +343,18 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 	DrawSync(0);
 	SetScreenImage(0);
 	MemFree(screenData);
-	VidScrOn();
 
 // Init VBL
 	VbFunc = NULL;
 	for (int i=0; i<MaxVBFuncs; i++) VbFuncList[i] = NULL;
 	VSyncCallback( VidVSyncCallback );
 
+	// Delay to let the screen stabilise before we put up the loading screen
+	for(int i=0;i<50;i++)
+	{
+		VSync(0);
+	}
+	VidScrOn();
 }
 
 /*****************************************************************************/
