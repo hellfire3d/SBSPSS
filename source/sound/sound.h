@@ -180,6 +180,7 @@ public:
 	// Song interface
 	static void			setSong(SONGID _songId);
 	static void			playSong();
+	static void			stopSong();
 	static void			dumpSong();
 
 	// SFX interface
@@ -187,6 +188,7 @@ public:
 	static xmPlayingId	playSfx(SFXID _sfxId,int _lock=false);
 	static void			setposition(xmPlayingId _playingId,VECTOR *pos);
 	static void			stopSfx(xmPlayingId _playingId);
+	static void			stopAllSfx();
 
 	// Speech interface
 	static void			playSpeech(SpeechEquate _speech);
@@ -214,7 +216,9 @@ private:
 	static int				s_volumeDirty[NUM_VOLUMETYPES];
 
 	static xmSampleId		s_songSampleId;
+	static FileEquate		s_songVh;
 	static xmModId			s_songModId;
+	static FileEquate		s_songPxm;
 	static xmPlayingId		s_songPlayingId;
 	static int				s_songStartPattern;
 

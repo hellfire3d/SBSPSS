@@ -82,7 +82,9 @@ int				CSoundMediator::s_targetVolume[CSoundMediator::NUM_VOLUMETYPES];
 int				CSoundMediator::s_volumeDirty[CSoundMediator::NUM_VOLUMETYPES];
 
 xmSampleId		CSoundMediator::s_songSampleId=NO_SAMPLE;
+FileEquate		CSoundMediator::s_songVh=(FileEquate)-1;
 xmModId			CSoundMediator::s_songModId=NO_SONG;
+FileEquate		CSoundMediator::s_songPxm=(FileEquate)-1;
 xmPlayingId		CSoundMediator::s_songPlayingId=NOT_PLAYING;
 int				CSoundMediator::s_songStartPattern=0;
 xmSampleId		CSoundMediator::s_sfxSampleId=NO_SAMPLE;
@@ -419,12 +421,30 @@ void CSoundMediator::setSong(SONGID _songId)
 {
 	XMSONGDATA		*song;
 
-	ASSERT(s_songSampleId==NO_SAMPLE);
-	ASSERT(s_songModId==NO_SONG);
-
 	song=&s_xmSongData[_songId];
-	s_songModId=s_xmplaySound->loadModData(song->m_pxm);
-	s_songSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
+	
+	if(s_songSampleId!=NO_SAMPLE&&s_songVh!=song->m_vh)
+	{
+		s_xmplaySound->dumpSampleData(s_songSampleId);
+		s_songSampleId=NO_SAMPLE;
+	}
+	if(s_songSampleId==NO_SAMPLE)
+	{
+		s_songSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
+	}
+	s_songVh=song->m_vh;
+
+	if(s_songModId!=NO_SONG&&s_songPxm!=song->m_pxm)
+	{
+		s_xmplaySound->dumpModData(s_songModId);
+		s_songModId=NO_SONG;
+	}
+	if(s_songModId==NO_SONG)
+	{
+		s_songModId=s_xmplaySound->loadModData(song->m_pxm);
+	}
+	s_songPxm=song->m_pxm;
+
 	s_songStartPattern=song->m_startPattern;
 }
 
@@ -452,7 +472,7 @@ void CSoundMediator::playSong()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSoundMediator::dumpSong()
+void CSoundMediator::stopSong()
 {
 	ASSERT(s_songSampleId!=NO_SAMPLE);
 	ASSERT(s_songModId!=NO_SONG);
@@ -462,12 +482,28 @@ void CSoundMediator::dumpSong()
 		s_xmplaySound->stopPlayingId(s_songPlayingId);
 		s_xmplaySound->unlockPlayingId(s_songPlayingId);
 	}
-	s_xmplaySound->dumpSampleData(s_songSampleId);
-	s_xmplaySound->dumpModData(s_songModId);
-
-	s_songSampleId=NO_SAMPLE;
-	s_songModId=NO_SONG;
 	s_songPlayingId=NOT_PLAYING;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::dumpSong()
+{
+	ASSERT(s_songSampleId!=NO_SAMPLE);
+	ASSERT(s_songModId!=NO_SONG);
+
+	stopSong();
+	s_xmplaySound->dumpSampleData(s_songSampleId);
+	s_songSampleId=NO_SAMPLE;
+	s_xmplaySound->dumpModData(s_songModId);
+	s_songModId=NO_SONG;
+	s_songVh=(FileEquate)-1;
+	s_songPxm=(FileEquate)-1;
 }
 
 
@@ -564,6 +600,18 @@ void CSoundMediator::stopSfx(xmPlayingId _playingId)
 {
 	s_xmplaySound->stopPlayingId(_playingId);
 	s_xmplaySound->unlockPlayingId(_playingId);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	NB: Will invalidate any locked sfx!
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::stopAllSfx()
+{
+	s_xmplaySound->stopAndUnlockAllSfx();
 }
 
 
