@@ -16,7 +16,7 @@
 #include	"LayerList.h"
 #include	"LayerTileGUI.h"
 
-const	s32		FileVersion=2;
+const	s32		FileVersion=3;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
@@ -69,6 +69,8 @@ public:
 		void					TileBankGUIInit()				{TileBank.GUIInit(this);}
 		void					TileBankGUIKill()				{TileBank.GUIKill(this);}
 		void					TileBankGUIUpdate()				{TileBank.GUIUpdate(this);}
+
+		void					SetColFlag(int Flag);
 
 // GUI 
 		void					UpdateParamBar();

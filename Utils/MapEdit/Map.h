@@ -19,12 +19,6 @@ BOOL	operator==(sMapElem const &v1)	// Doesnt Check flags
 		}
 };
 
-enum
-{
-	MapElemFlagMirrorX=	1<<0,
-	MapElemFlagMirrorY=	1<<1,
-};
-
 /*****************************************************************************/
 class	CFile;
 class	CPoint;
@@ -45,6 +39,7 @@ public:
 		void		Delete();
 		void		MirrorX(int Flag,CRect *R=NULL);
 		void		MirrorY(int Flag,CRect *R=NULL);
+		void		SetFlags(int Flags,int Mask,CRect *R=NULL);
 
 		sMapElem	&Get(int X,int Y);
 		void		Set(int X,int Y,sMapElem &Blk,BOOL Force=FALSE);

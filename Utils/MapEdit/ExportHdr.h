@@ -47,6 +47,19 @@ bool	operator==(sExpTile const &v1)
 };
 
 /*****************************************************************************/
+struct	sExpColTile
+{
+		u8		Tile;
+		u8		Flags;
+
+bool	operator==(sExpColTile const &v1)
+		{
+		return(Tile==v1.Tile && Flags==v1.Flags);
+		}
+
+};
+
+/*****************************************************************************/
 struct	sExpTri
 {
 		int			TexID;

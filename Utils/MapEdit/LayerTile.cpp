@@ -209,7 +209,6 @@ int		DrawH=ZoomH+8;
 		glTranslatef(-Ofs->x,Ofs->y,0);		// Set scroll offset
 		}
 
-		glColor4f(1,1,1,Alpha);
 		for (int YLoop=0; YLoop<DrawH; YLoop++)
 		{
 			for (int XLoop=0; XLoop<DrawW; XLoop++)
@@ -219,6 +218,7 @@ int		DrawH=ZoomH+8;
 				{ // Render Non Zero Tiles
 					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
+					glColor4f(1,1,1,Alpha);	// Set default Color
 					ThisTile.Render(ThisElem.Flags,Render3d);
 				}
 				glTranslatef(1.0f,0,0);	// Next X
@@ -571,15 +571,15 @@ BOOL	CLayerTile::MirrorX(CCore *Core)
 			{
 			CTileBank	&TileBank=Core->GetTileBank();
 
-			TileBank.GetLBrush().MirrorX(TILE_FLAG_MIRROR_X);
-			TileBank.GetRBrush().MirrorX(TILE_FLAG_MIRROR_X);
+			TileBank.GetLBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
+			TileBank.GetRBrush().MirrorX(PC_TILE_FLAG_MIRROR_X);
 			}
 			break;
 		case MouseModeSelect:
 			{
 				if (!Selection.IsValid()) return(false);	// No Selection
 				CRect	R=Selection.GetRect();
-				Map.MirrorX(TILE_FLAG_MIRROR_X,&R);
+				Map.MirrorX(PC_TILE_FLAG_MIRROR_X,&R);
 			}
 			break;
 		default:
@@ -598,21 +598,48 @@ BOOL	CLayerTile::MirrorY(CCore *Core)
 			{
 			CTileBank	&TileBank=Core->GetTileBank();
 
-			TileBank.GetLBrush().MirrorY(TILE_FLAG_MIRROR_Y);
-			TileBank.GetRBrush().MirrorY(TILE_FLAG_MIRROR_Y);
+			TileBank.GetLBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
+			TileBank.GetRBrush().MirrorY(PC_TILE_FLAG_MIRROR_Y);
 			}
 			break;
 		case MouseModeSelect:
 			{
 				if (!Selection.IsValid()) return(false);	// No Selection
 				CRect	R=Selection.GetRect();
-				Map.MirrorY(TILE_FLAG_MIRROR_Y,&R);
+				Map.MirrorY(PC_TILE_FLAG_MIRROR_Y,&R);
 			}
 			break;
 		default:
 			break;
 		}
 
+
+		return(TRUE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::SetColFlags(CCore *Core,int Flags)
+{
+		switch(Mode)
+		{
+		case MouseModePaint:
+			{
+			CTileBank	&TileBank=Core->GetTileBank();
+
+			TileBank.GetLBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
+			TileBank.GetRBrush().SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY);
+			}
+			break;
+		case MouseModeSelect:
+			{
+				if (!Selection.IsValid()) return(false);	// No Selection
+				CRect	R=Selection.GetRect();
+				Map.SetFlags(Flags<<PC_TILE_FLAG_COLLISION_SHIFT,PC_TILE_FLAG_MIRROR_XY,&R);
+			}
+			break;
+		default:
+			break;
+		}
 
 		return(TRUE);
 }

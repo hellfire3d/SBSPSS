@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CLayerCollisionGUI
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=15
+ClassCount=16
 Class1=CAddLayerDlg
 Class2=CChildFrame
 Class3=CGLEnabledView
@@ -25,19 +25,21 @@ Class13=CMapSizeDlg
 Class14=CMultiBar
 Class15=CNewMapGUI
 
-ResourceCount=12
-Resource1=IDD_MAPSIZE
-Resource2=IDD_NEWMAP
+ResourceCount=13
+Resource1=IDD_MULTIBAR (English (U.S.))
+Resource2=IDR_MAINFRAME (English (U.S.))
 Resource3=IDR_MAPEDITYPE (English (U.S.))
-Resource4=IDD_ADDLAYER
-Resource5=IDD_LAYERTILE_GUI
-Resource6=IDD_LAYERTILE_TOOLBAR
-Resource7=IDR_TOOLBAR (English (U.S.))
-Resource8=IDR_MAINFRAME (English (U.S.))
-Resource9=IDD_ABOUTBOX (English (U.S.))
-Resource10=IDD_MULTIBAR (English (U.S.))
-Resource11=IDD_LAYER_LIST_DIALOG
-Resource12=IDD_LAYERSHADE_GUI
+Resource4=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDD_LAYER_LIST_DIALOG
+Resource6=IDD_ADDLAYER
+Resource7=IDD_NEWMAP
+Resource8=IDD_LAYERTILE_GUI
+Resource9=IDD_LAYERTILE_TOOLBAR
+Resource10=IDD_LAYERSHADE_GUI
+Resource11=IDR_TOOLBAR (English (U.S.))
+Resource12=IDD_MAPSIZE
+Class16=CLayerCollisionGUI
+Resource13=IDD_LAYERCOLLISION_GUI
 
 [CLS:CAddLayerDlg]
 Type=0
@@ -67,6 +69,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=LayerShadeGUI.h
 ImplementationFile=LayerShadeGUI.cpp
+LastObject=IDC_LAYERSHADE_COUNTTEXT
+Filter=D
+VirtualFilter=dWC
 
 [CLS:CLayerTileGUI]
 Type=0
@@ -110,7 +115,7 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=ID_RESET_VIEW
+LastObject=ID_MAP_SETSIZE
 Filter=N
 VirtualFilter=DC
 
@@ -160,15 +165,23 @@ Control3=IDC_LAYERLIST_DELETE,button,1342242816
 [DLG:IDD_LAYERSHADE_GUI]
 Type=1
 Class=CLayerShadeGUI
-ControlCount=8
-Control1=IDC_LAYERSHADE_TEXT0,static,1342308352
-Control2=IDC_LAYERSHADE_EDITR0,edit,1350770688
-Control3=IDC_LAYERSHADE_EDITG0,edit,1350770816
-Control4=IDC_LAYERSHADE_EDITB0,edit,1350770816
-Control5=IDC_LAYERSHADE_TEXT1,static,1342308352
-Control6=IDC_LAYERSHADE_EDITR1,edit,1350639744
-Control7=IDC_LAYERSHADE_EDITG1,edit,1350639744
-Control8=IDC_LAYERSHADE_EDITB1,edit,1350639744
+ControlCount=16
+Control1=IDC_LAYERSHADE_EDITR0,edit,1350770688
+Control2=IDC_LAYERSHADE_EDITG0,edit,1350770816
+Control3=IDC_LAYERSHADE_EDITB0,edit,1350770816
+Control4=IDC_LAYERSHADE_COUNTTEXT,static,1342312449
+Control5=IDC_LAYERSHADE_EDITR1,edit,1350770688
+Control6=IDC_LAYERSHADE_EDITG1,edit,1350770816
+Control7=IDC_LAYERSHADE_EDITB1,edit,1350770816
+Control8=IDC_LAYERSHADE_EDITR2,edit,1350770688
+Control9=IDC_LAYERSHADE_EDITG2,edit,1350770816
+Control10=IDC_LAYERSHADE_EDITB2,edit,1350770816
+Control11=IDC_LAYERSHADE_TEXT7,static,1342312449
+Control12=IDC_LAYERSHADE_EDITR3,edit,1350770688
+Control13=IDC_LAYERSHADE_EDITG3,edit,1350770816
+Control14=IDC_LAYERSHADE_EDITB3,edit,1350770816
+Control15=IDC_LAYERSHADE_COUNTEDIT,edit,1350576256
+Control16=IDC_SPIN2,msctls_updown32,1342177302
 
 [DLG:IDD_LAYERTILE_GUI]
 Type=1
@@ -317,4 +330,24 @@ Control3=IDOK,button,1342373889
 Type=1
 Class=?
 ControlCount=0
+
+[DLG:IDD_LAYERCOLLISION_GUI]
+Type=1
+Class=CLayerCollisionGUI
+ControlCount=6
+Control1=IDC_LAYERCOLLISION_NORMAL,button,1342242816
+Control2=IDC_LAYERCOLLISION_DAMAGE,button,1342242816
+Control3=IDC_LAYERCOLLISION_SLIPPERY,button,1342242816
+Control4=IDC_LAYERCOLLISION_ELECTRIC,button,1342242816
+Control5=IDC_LAYERCOLLISION_STICKY,button,1342242816
+Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
+
+[CLS:CLayerCollisionGUI]
+Type=0
+HeaderFile=layercollisiongui.h
+ImplementationFile=layercollisiongui.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_LAYERCOLLISION_DAMAGE
 

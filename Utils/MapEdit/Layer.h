@@ -98,6 +98,7 @@ virtual	BOOL			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)=0;
 
 virtual	BOOL			MirrorX(CCore *Core){return(false);};
 virtual	BOOL			MirrorY(CCore *Core){return(false);};
+virtual	BOOL			SetColFlags(CCore *Core,int Flag){return(false);};
 
 virtual	BOOL			CopySelection(CCore *Core)		{return(false);}
 virtual	BOOL			PasteSelection(CCore *Core)		{return(false);}

@@ -231,6 +231,26 @@ int		Ofs=(R->bottom+R->top)-1;
 }
 
 /*****************************************************************************/
+void	CMap::SetFlags(int Flags,int Mask,CRect *R)
+{
+		if (!R)
+		{ // No rect, use full
+			R=new CRect(0,0,GetWidth(),GetHeight());
+		}
+
+		for (int Y=R->top; Y<R->bottom; Y++)
+		{
+			for (int X=R->left; X<R->right; X++)
+			{
+				sMapElem	&ThisElem=Get(X,Y);
+				ThisElem.Flags&=Mask;
+				ThisElem.Flags|=Flags;
+			}
+		}
+
+}
+
+/*****************************************************************************/
 void	CMap::Paste(CMap &Src,CRect *R)
 {
 		if (!R)

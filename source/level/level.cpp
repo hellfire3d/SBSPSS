@@ -72,11 +72,11 @@ sLvlTab	LvlTable[]=
 };
 
 extern int	s_globalLevelSelectThing;
-int	Lvl=13;
+//int	Lvl=13;
 /*****************************************************************************/
 void 	CLevel::init()
 {
-	s_globalLevelSelectThing=Lvl;
+//	s_globalLevelSelectThing=Lvl;
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			TileLayers[i]=0;

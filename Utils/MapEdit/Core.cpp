@@ -668,6 +668,14 @@ BOOL	CCore::IsTileValid(int Set,int Tile)
 }
 
 /*****************************************************************************/
+void	CCore::SetColFlag(int Flag)
+{
+		if (TileViewFlag) return;
+		Layer[ActiveLayer]->SetColFlags(this,Flag);
+		RedrawView();
+}
+
+/*****************************************************************************/
 void	CCore::CopySelection()
 {
 		Layer[ActiveLayer]->CopySelection(this);

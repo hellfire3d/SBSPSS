@@ -77,19 +77,33 @@ void	CLayerCollision::Save(CFile *File)
 }
 
 /*****************************************************************************/
+void	CLayerCollision::Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)
+{
+Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+
+			CLayerTile::Render(Core,ThisCam,Map,FALSE,0.5f);
+}
+/*****************************************************************************/
+BOOL	CLayerCollision::SetColFlag(CCore *Core,int Flag)
+{
+		TRACE1("HERE!!! %i",Flag);
+		return(TRUE);
+}
+
+/*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
 void	CLayerCollision::GUIInit(CCore *Core) 
 {
-//		Core->TileBankGUIInit();
 		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIAdd(CollisionGUI,IDD_LAYERCOLLISION_GUI);
 }
 
 /*****************************************************************************/
 void	CLayerCollision::GUIKill(CCore *Core)
 {
-//		Core->TileBankGUIKill();
 		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(CollisionGUI,IDD_LAYERCOLLISION_GUI);
 }
 
 /*****************************************************************************/
@@ -119,14 +133,21 @@ int		Height=Map.GetHeight();
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
-				u8				OutElem=0;
+				sExpColTile		OutElem;
+				
 				if (MapElem.Tile)
 				{
-					OutElem=((MapElem.Tile-1)*4)+1;
-					OutElem+=MapElem.Flags & TILE_FLAG_MIRROR_XY;
+					OutElem.Tile=((MapElem.Tile-1)*4)+1;
+					OutElem.Tile+=MapElem.Flags & PC_TILE_FLAG_MIRROR_XY;
+					OutElem.Flags=MapElem.Flags>>PC_TILE_FLAG_COLLISION_SHIFT;
 				}
-				//fwrite(&OutElem,sizeof(u8),1,File);
-				Exp.Write(&OutElem,sizeof(u8));
+				else
+				{
+					OutElem.Tile=0;
+					OutElem.Flags=0;
+				}
+				
+				Exp.Write(&OutElem,sizeof(sExpColTile));
 			}
 		}
 

@@ -29,9 +29,9 @@ public:
 		int				GetType()			{return(LAYER_TYPE_TILE);}
 		int				GetSubType()		{return(SubType);}
 
-		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
-		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
-		void			RenderSelection(CCore *Core,Vector3 &ThisCam);
+virtual	void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
+virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
+virtual	void			RenderSelection(CCore *Core,Vector3 &ThisCam);
 
 		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
@@ -62,6 +62,7 @@ virtual	void			GUIChanged(CCore *Core);
 
 		BOOL			MirrorX(CCore *Core);
 		BOOL			MirrorY(CCore *Core);
+		BOOL			SetColFlags(CCore *Core,int Flags);
 
 		BOOL			CopySelection(CCore *Core);
 		BOOL			PasteSelection(CCore *Core);

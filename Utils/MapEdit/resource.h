@@ -17,6 +17,7 @@
 #define IDD_LAYERTILE_GUI               173
 #define IDD_LAYERTILE_TOOLBAR           174
 #define IDD_LAYERSHADE_GUI              175
+#define IDD_LAYERCOLLISION_GUI          177
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYER_LIST                  1019
 #define IDD_LAYERTILE_BTN_UPDATE        1029
@@ -41,6 +42,22 @@
 #define IDC_LAYERSHADE_EDITR1           1064
 #define IDC_LAYERSHADE_EDITG1           1065
 #define IDC_LAYERSHADE_EDITB1           1066
+#define IDC_LAYERSHADE_COUNTEDIT        1074
+#define IDC_LAYERSHADE_COUNTTEXT        1075
+#define IDC_SPIN2                       1076
+#define IDC_LAYERCOLLISION_NORMAL       1078
+#define IDC_LAYERSHADE_EDITR2           1081
+#define IDC_LAYERSHADE_EDITG2           1082
+#define IDC_LAYERCOLLISION_DAMAGE       1082
+#define IDC_LAYERSHADE_EDITB2           1083
+#define IDC_LAYERCOLLISION_SLIPPERY     1083
+#define IDC_LAYERCOLLISION_ELECTRIC     1084
+#define IDC_LAYERCOLLISION_STICKY       1085
+#define IDC_LAYERSHADE_TEXT7            1086
+#define IDC_LAYERCOLLISION_WATER        1086
+#define IDC_LAYERSHADE_EDITR3           1087
+#define IDC_LAYERSHADE_EDITG3           1088
+#define IDC_LAYERSHADE_EDITB3           1089
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -66,9 +83,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        177
+#define _APS_NEXT_RESOURCE_VALUE        178
 #define _APS_NEXT_COMMAND_VALUE         32800
-#define _APS_NEXT_CONTROL_VALUE         1070
+#define _APS_NEXT_CONTROL_VALUE         1080
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -116,24 +116,10 @@ SOURCE=.\LayerDef.h
 # Begin Source File
 
 SOURCE=.\LayerShade.cpp
-
-!IF  "$(CFG)" == "MapEdit - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\LayerShade.h
-
-!IF  "$(CFG)" == "MapEdit - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -359,6 +345,14 @@ SOURCE=.\AddLayerDlg.cpp
 # Begin Source File
 
 SOURCE=.\AddLayerDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerCollisionGUI.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerCollisionGUI.h
 # End Source File
 # Begin Source File
 

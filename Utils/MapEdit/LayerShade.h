@@ -64,6 +64,8 @@ protected:
 		
 		CLayerShadeGUI	ShadeDlg;
 
+		int				Count;
+		int				Pos[LAYER_SHADE_RGB_MAX];
 		RGBQUAD			RGB[LAYER_SHADE_RGB_MAX];
 };
 

@@ -36,8 +36,11 @@ CLayerShade::CLayerShade(int _SubType,int _Width,int _Height)
 		Width=TileLayerMinWidth+(_Width-TileLayerMinWidth)/ScaleFactor;
 		Height=TileLayerMinHeight+(_Height-TileLayerMinHeight)/ScaleFactor;
 
-		RGB[0].rgbRed=255; RGB[0].rgbGreen=255; RGB[0].rgbBlue=255;
-		RGB[1].rgbRed=255; RGB[1].rgbGreen=0; RGB[1].rgbBlue=0;
+		RGB[0].rgbRed=255;	RGB[0].rgbGreen=255;	RGB[0].rgbBlue=255;
+		RGB[1].rgbRed=255;	RGB[1].rgbGreen=0;		RGB[1].rgbBlue=0;
+		RGB[2].rgbRed=0;	RGB[2].rgbGreen=255;	RGB[2].rgbBlue=0;
+		RGB[3].rgbRed=0;	RGB[3].rgbGreen=0;		RGB[3].rgbBlue=255;
+		Count=2;
 
 }
 
@@ -64,8 +67,20 @@ void	CLayerShade::Load(CFile *File,int Version)
 		File->Read(&Width,sizeof(int));
 		File->Read(&Height,sizeof(int));
 
-		File->Read(&RGB[0],sizeof(RGBQUAD));
-		File->Read(&RGB[1],sizeof(RGBQUAD));
+		if (Version==2)
+		{
+			File->Read(&RGB[0],sizeof(RGBQUAD));
+			File->Read(&RGB[1],sizeof(RGBQUAD));
+		}
+		else
+		{
+			File->Read(&Count,sizeof(int));
+			for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
+			{
+				File->Read(&Pos[i],sizeof(int));
+				File->Read(&RGB[i],sizeof(RGBQUAD));
+			}
+		}
 
 		TRACE1("%s\t",GetName());
 		TRACE1("Scl:%g\t",ScaleFactor);
@@ -85,8 +100,13 @@ void	CLayerShade::Save(CFile *File)
 		File->Write(&Width,sizeof(int));
 		File->Write(&Height,sizeof(int));
 
-		File->Write(&RGB[0],sizeof(RGBQUAD));
-		File->Write(&RGB[1],sizeof(RGBQUAD));
+		File->Write(&Count,sizeof(int));
+		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
+		{
+			File->Write(&Pos[i],sizeof(int));
+			File->Write(&RGB[i],sizeof(RGBQUAD));
+		}
+
 }
 
 /*****************************************************************************/
@@ -100,11 +120,12 @@ float		ZoomH=Core->GetZoomH();
 float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
+int			ThisCount=Count-1;
+float		X0=0;
+float		X1=Width;
+float		Y=(0+1);
 
-float		x0=0;
-float		x1=x0+Width;
-float		y0=(0+1);
-float		y1=y0-Height;
+float		YInc=(float)Height/(float)ThisCount;
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
@@ -114,14 +135,16 @@ float		y1=y0-Height;
 			glTranslatef(-ScrOfsX,ScrOfsY,0);	// Bring to top left corner
 
 			glBegin (GL_QUADS);
-				glColor3ub(RGB[0].rgbRed,RGB[0].rgbGreen,RGB[0].rgbBlue);
-				glVertex3f( x0,y0,0.0f);
-				glVertex3f( x1,y0,0.0f);
-
-				glColor3ub(RGB[1].rgbRed,RGB[1].rgbGreen,RGB[1].rgbBlue);
-				glVertex3f( x1,y1,0.0f);
-				glVertex3f( x0,y1,0.0f);
-
+			for (int i=0; i<ThisCount; i++)
+			{
+					glColor3ub(RGB[i+0].rgbRed,RGB[i+0].rgbGreen,RGB[i+0].rgbBlue);
+					glVertex3f( X0,Y,0.0f);
+					glVertex3f( X1,Y,0.0f);
+					Y-=YInc;
+					glColor3ub(RGB[i+1].rgbRed,RGB[i+1].rgbGreen,RGB[i+1].rgbBlue);
+					glVertex3f( X1,Y,0.0f);
+					glVertex3f( X0,Y,0.0f);
+			}
 			glEnd();
 		glPopMatrix();
 }
@@ -142,8 +165,11 @@ BOOL	CLayerShade::Resize(int _Width,int _Height)
 void	CLayerShade::GUIInit(CCore *Core)
 {
 		Core->GUIAdd(ShadeDlg,IDD_LAYERSHADE_GUI);
-		ShadeDlg.SetRGB0(RGB[0]);
-		ShadeDlg.SetRGB1(RGB[1]);
+		for (int i=0; i<LAYER_SHADE_MAX; i++) 
+		{
+			ShadeDlg.SetRGB(RGB[i],i);
+		}
+		ShadeDlg.SetCount(Count);
 }
 
 /*****************************************************************************/
@@ -155,13 +181,17 @@ void	CLayerShade::GUIKill(CCore *Core)
 /*****************************************************************************/
 void	CLayerShade::GUIUpdate(CCore *Core)
 {
+		ShadeDlg.CheckData();
 }
 
 /*****************************************************************************/
 void	CLayerShade::GUIChanged(CCore *Core)
 {
-		ShadeDlg.GetRGB0(RGB[0]);
-		ShadeDlg.GetRGB1(RGB[1]);
+		for (int i=0; i<LAYER_SHADE_MAX; i++) 
+		{
+			ShadeDlg.GetRGB(RGB[i],i);
+		}
+		ShadeDlg.GetCount(Count);
 }
 
 /*****************************************************************************/
@@ -170,8 +200,10 @@ void	CLayerShade::GUIChanged(CCore *Core)
 void	CLayerShade::Export(CCore *Core,CExport &Exp)
 {
 		Exp.ExportLayerHeader(LAYER_TYPE_SHADE,SubType,Width,Height);
+		Exp.Write(&Count,sizeof(int));
 		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
+			Exp.Write(&Pos[i],sizeof(int));
 			Exp.Write(&RGB[i],sizeof(RGBQUAD));
 		}
 }

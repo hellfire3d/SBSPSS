@@ -6,6 +6,8 @@
 #define	__LAYER_COLLISION_HEADER__
 
 #include	"Layer.h"
+#include	"MapEdit.h"
+#include	"LayerCollisionGUI.h"
 
 /*****************************************************************************/
 class	CCore;
@@ -18,6 +20,9 @@ public:
 		~CLayerCollision();
 
 		int				GetType()			{return(LAYER_TYPE_COLLISION);}
+
+		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
+		BOOL			SetColFlag(CCore *Core,int Flag);
 
 		void			GUIInit(CCore *Core);
 		void			GUIKill(CCore *Core);
@@ -34,7 +39,8 @@ public:
 		void			RemapSet(int OrigSet,int NewSet);
 protected:
 
-//		CLayerTileToolbar	ToolBarGUI;
+
+		CLayerCollisionGUI	CollisionGUI;
 
 };
 

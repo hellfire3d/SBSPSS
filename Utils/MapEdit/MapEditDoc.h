@@ -35,18 +35,7 @@ public:
 	void			RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
 	void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
 	void			MouseMove(UINT nFlags, CPoint &point);
-/*
-	void			ToggleTileView(CMapEditView *View);
-	void			ToggleGrid(CMapEditView *View);
-	void			MirrorX(CMapEditView *View);
-	void			MirrorY(CMapEditView *View);
-	void			CopySelection(CMapEditView *View);
-	void			PasteSelection(CMapEditView *View);
-	void			ActiveBrushLeft(CMapEditView *View);
-	void			ActiveBrushRight(CMapEditView *View);
-	void			MapSetSize(CMapEditView *View);
-	void			Toggle2d3d(CMapEditView *View);
-*/
+
 	void			TileBankLoad();
 	void			TileBankDelete();
 	void			TileBankReload();
@@ -57,6 +46,7 @@ public:
 	void			AddLayer(int Layer);
 	void			DeleteLayer(int Layer);
 
+	void			SetColFlag(int Flag);
 // Operations
 public:
 
