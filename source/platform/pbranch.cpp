@@ -208,8 +208,8 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int	BX=-20;
-int	BY=-30;
+int	BX=-16;
+int	BY=-16;
 void CNpcBranchPlatform::render()
 {
 	if ( m_isActive )
@@ -238,8 +238,8 @@ void CNpcBranchPlatform::render()
 				}
 				else
 				{
-					rotation.vy = 2048;
-					rotation.vz = -getCollisionAngle();
+					rotation.vy = 0;
+					rotation.vz = getCollisionAngle();
 					renderPos.vx+= BX;
 					renderPos.vy+= BY;
 				}
