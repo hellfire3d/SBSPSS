@@ -26,15 +26,24 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 	{
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_VERTICAL,
+		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
+		false,
+	},
+
+	{
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		true,
 	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_TEST_TYPE;
+	m_type = NPC_SANDY_CHEEKS;
 
 	switch ( m_data[this->m_type].initFunc )
 	{
@@ -172,4 +181,33 @@ void CNpc::processTimer()
 
 void CNpc::render()
 {
+}
+
+void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
+{
+	CConversation *currentConversation = GameScene.getConversation();
+
+	if ( m_data[this->m_type].canTalk )
+	{
+		DVECTOR sourcePos;
+		int xDiffSqr, yDiffSqr;
+
+		// check talk distance
+
+		sourcePos = sourceThing->getPos();
+
+		xDiffSqr = this->Pos.vx - sourcePos.vx;
+		xDiffSqr *= xDiffSqr;
+
+		yDiffSqr = this->Pos.vy - sourcePos.vy;
+		yDiffSqr *= yDiffSqr;
+
+		if ( xDiffSqr + yDiffSqr < 250 )
+		{
+			if( !currentConversation->isActive() )
+			{
+				currentConversation->trigger( SCRIPTS_SPEECHTEST_DAT );
+			}
+		}
+	}
 }

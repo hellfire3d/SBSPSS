@@ -16,6 +16,7 @@ public:
 	void				shutdown();
 	void				think(int _frames);
 	virtual void		render();
+	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 
 
 protected:
@@ -24,6 +25,7 @@ protected:
 	enum NPC_UNIT_TYPE
 	{
 		NPC_TEST_TYPE = 0,
+		NPC_SANDY_CHEEKS = 1,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -69,6 +71,7 @@ protected:
 		NPC_SENSOR_FUNC					sensorFunc;
 		NPC_MOVEMENT_FUNC				movementFunc;
 		NPC_MOVEMENT_MODIFIER_FUNC		movementModifierFunc;
+		bool							canTalk;
 	}
 	NPC_DATA;
 

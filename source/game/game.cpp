@@ -129,3 +129,15 @@ CPlayer	* CGameScene::getPlayer()
 }
 
 /*****************************************************************************/
+void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
+{
+	CThing::processEventAllThings(evt, sourceThing);
+}
+
+/*****************************************************************************/
+CConversation * CGameScene::getConversation ()
+{
+	return( &m_conversation );
+}
+
+/*****************************************************************************/

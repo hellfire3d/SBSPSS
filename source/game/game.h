@@ -12,6 +12,14 @@
 #include "game\convo.h"
 #endif
 
+#ifndef __GAME_EVENT_H__
+#include "game\event.h"
+#endif
+
+#ifndef __GAME_THING_H__
+#include "game\thing.h"
+#endif
+
 /*****************************************************************************/
 class	FontBank;
 
@@ -31,6 +39,8 @@ virtual			~CGameScene()	{;}
 
 		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 		class CPlayer	*getPlayer();
+		CConversation	*getConversation();
+		void	sendEvent( GAME_EVENT evt, CThing *sourceThing );
 	
 private:
 

@@ -241,6 +241,10 @@ SOURCE=..\..\..\source\game\convo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\game\event.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\game.cpp
 # End Source File
 # Begin Source File
