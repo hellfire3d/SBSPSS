@@ -105,34 +105,20 @@ void CNpcBouncePlatform::render()
 	{
 		CPlatformThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
-
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
-
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		if (canRender())
 		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
-			{
-				SVECTOR rotation;
-				rotation.vx = 0;
-				rotation.vy = 0;
-				rotation.vz = 0;
+			DVECTOR &renderPos=getRenderPos();
+			SVECTOR rotation;
+			rotation.vx = 0;
+			rotation.vy = 0;
+			rotation.vz = 0;
 
-				VECTOR scale;
-				scale.vx = ONE;
-				scale.vy = ONE + m_vertScale;
-				scale.vz = ONE;
+			VECTOR scale;
+			scale.vx = ONE;
+			scale.vy = ONE + m_vertScale;
+			scale.vz = ONE;
 
-				m_modelGfx->Render(renderPos,&rotation,&scale);
+			m_modelGfx->Render(renderPos,&rotation,&scale);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
 	DVECTOR	centre;
@@ -158,7 +144,7 @@ void CNpcBouncePlatform::render()
 
 	DrawLine(x1,y1,x2,y2,0,255,0,0);
 #endif
-			}
 		}
+
 	}
 }
