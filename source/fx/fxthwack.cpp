@@ -24,6 +24,7 @@ void	CFXThwack::init(DVECTOR const &_Pos)
 		OtPos=OTPOS__ACTOR_POS-1;
 		Angle=getRnd()&4095;
 		Scale=2048+1024+(getRnd()&2047);
+		Flags |=FX_FLAG_HAS_LIFE;
 }
 
 /*****************************************************************************/

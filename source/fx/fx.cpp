@@ -17,7 +17,7 @@
 #include	"FX\FXjfish.h"
 #include	"FX\FXBaseTrail.h"
 #include	"FX\FXBaseAnim.h"
-#include	"FX\FXBaseEmitter.h"
+//#include	"FX\FXBaseEmitter.h"
 
 
 #include	"FX\FXLaser.h"
