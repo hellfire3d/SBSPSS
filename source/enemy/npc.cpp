@@ -742,19 +742,34 @@ bool CNpcEnemy::processSensor()
 					{
 						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extension = 0;
-							m_velocity = 5;
-							m_base = Pos;
+							// only attack if within path extents
+
+							s32 minX, maxX;
+							m_npcPath.getPathXExtents( &minX, &maxX );
 
 							if ( playerXDist < 0 )
 							{
 								m_extendDir = EXTEND_LEFT;
+
+								if ( ( Pos.vx + playerXDist - 128 ) < minX )
+								{
+									return( false );
+								}
 							}
 							else
 							{
 								m_extendDir = EXTEND_RIGHT;
+
+								if ( ( Pos.vx + playerXDist + 128 ) > maxX )
+								{
+									return( false );
+								}
 							}
+
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_extension = 0;
+							m_velocity = 5;
+							m_base = Pos;
 
 							return( true );
 						}
