@@ -230,6 +230,7 @@ CRECT const &collisionArea=getCollisionArea();
 
 			friendNpc = (CNpcFriend*) _thisThing;
 DVECTOR const &friendPos = friendNpc->getPos();
+CRECT const &friendCollisionArea = friendNpc->getCollisionArea();
 CRECT const &collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
@@ -239,7 +240,7 @@ CRECT const &collisionArea=getCollisionArea();
 				threshold = 16;
 			}
 
-			if( friendPos.vx >= collisionArea.x1 && friendPos.vx <= collisionArea.x2 )
+			if( friendCollisionArea.x2 >= collisionArea.x1 && friendCollisionArea.x1 <= collisionArea.x2 )
 			{
 				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
 				{
