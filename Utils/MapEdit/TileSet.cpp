@@ -19,7 +19,7 @@
 #include	"MapEditDoc.h"
 #include	"MapEditView.h"
 #include	"MainFrm.h"
-#include	"TileSetDlg.h"
+#include	"LayerTileGui.h"
 
 
 /*****************************************************************************/
@@ -100,63 +100,64 @@ void	CTileBank::Save(CFile *File)
 {
 int		ListSize=TileSet.size();
 
-	File->Write(&ListSize,sizeof(int));
-	File->Write(&CurrentSet,sizeof(int));
-	File->Write(&ActiveBrush,sizeof(int));
-	Brush[0].Save(File);
-	Brush[1].Save(File);
+		File->Write(&ListSize,sizeof(int));
+		File->Write(&CurrentSet,sizeof(int));
+		File->Write(&ActiveBrush,sizeof(int));
+		Brush[0].Save(File);
+		Brush[1].Save(File);
 
-	for (int i=0;i<ListSize;i++)
-	{
-		CTileSet	&ThisSet=TileSet[i];
-		char	Filename[256+64];
+		for (int i=0;i<ListSize;i++)
+		{
+			CTileSet	&ThisSet=TileSet[i];
+			char	Filename[256+64];
 
-		sprintf(Filename,"%s%s.%s",ThisSet.GetPath(),ThisSet.GetName(),"Gin");
-		File->Write(Filename,256+64);		
-	}
+			sprintf(Filename,"%s%s%s",ThisSet.GetPath(),ThisSet.GetName(),ThisSet.GetExt());
+			File->Write(Filename,256+64);		
+		}
 
 }
 
 /*****************************************************************************/
 void	CTileBank::AddTileSet(char *Filename)
 {
-int	ListSize=TileSet.size();
-	TileSet.push_back(CTileSet(Filename,ListSize));
-	LoadFlag=TRUE;
+int		ListSize=TileSet.size();
+
+		TileSet.push_back(CTileSet(Filename,ListSize));
+		LoadFlag=TRUE;
 }
 
 /*****************************************************************************/
 void	CTileBank::LoadTileSets(CCore *Core)
 {
-int	ListSize=TileSet.size();
+int		ListSize=TileSet.size();
 	
-	for (int i=0;i<ListSize;i++)
-	{
-		CTileSet	&ThisSet=TileSet[i];
+		for (int i=0;i<ListSize;i++)
+		{
+			CTileSet	&ThisSet=TileSet[i];
 
-		if (!ThisSet.IsLoaded()) ThisSet.Load(Core);
-	}
-	LoadFlag=FALSE;
+			if (!ThisSet.IsLoaded()) ThisSet.Load(Core);
+		}
+		LoadFlag=FALSE;
 }
 
 /*****************************************************************************/
 void	CTileBank::Reload()
 {
-int	ListSize=TileSet.size();
+int		ListSize=TileSet.size();
 
-	for (int i=0; i<ListSize; i++)
-	{
-		TileSet[i].Purge();
-	}
+		for (int i=0; i<ListSize; i++)
+		{
+			TileSet[i].Purge();
+		}
 
-	LoadFlag=TRUE;
+		LoadFlag=TRUE;
 
 }
 
 /*****************************************************************************/
 CTile	&CTileBank::GetTile(int Bank,int Tile)
 {
-	return(TileSet[Bank].GetTile(Tile));
+		return(TileSet[Bank].GetTile(Tile));
 }
 
 /*****************************************************************************/
@@ -193,26 +194,27 @@ void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint 
 /*****************************************************************************/
 void	CTileBank::UpdateGUI(CCore *Core,BOOL IsTileView)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
-int			ListSize=TileSet.size();
+CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CLayerTileGUI	*Dlg=(CLayerTileGUI*)Frm->GetDialog(IDD_LAYERTILE_GUI);
+int				ListSize=TileSet.size();
 
-	ASSERT(TileSetDlg);
-
-	TileSetDlg->TileSetList.ResetContent();
-	if (ListSize)
-	{
-		for (int i=0; i<ListSize; i++)
+		if (Dlg)
 		{
-			TileSetDlg->TileSetList.AddString(TileSet[i].GetName());
+			Dlg->m_List.ResetContent();
+			if (ListSize)
+			{
+				for (int i=0; i<ListSize; i++)
+				{
+					Dlg->m_List.AddString(TileSet[i].GetName());
+				}
+				Dlg->m_List.SetCurSel(CurrentSet);
+			}
+			else
+			{
+				IsTileView=FALSE;
+			}
+			Dlg->m_List.EnableWindow(IsTileView);
 		}
-		TileSetDlg->TileSetList.SetCurSel(CurrentSet);
-	}
-	else
-	{
-		IsTileView=FALSE;
-	}
-	TileSetDlg->TileSetList.EnableWindow(IsTileView);
 }
 
 /*****************************************************************************/
@@ -333,7 +335,6 @@ sRGBData	NewTex;
 int		Width=ThisBmp.Width/16;
 int		Height=ThisBmp.Height/16;
 u8		Buffer[16*16*3];
-
 
 		NewTex.Width=16;
 		NewTex.Height=16;

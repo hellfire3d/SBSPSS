@@ -54,6 +54,8 @@ public:
 // TileBank
 		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
 
+		void					UpdateTileViewGUI()				{TileBank.UpdateGUI(this,TileViewFlag);}
+
 		CTileBank				&GetTileBank()					{return(TileBank);}
 		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 		void					TileBankLoad(char *Filename);

@@ -22,6 +22,7 @@ public:
 	void			UpdateView(CMapEditView *View);
 	void			Render(CMapEditView *View);
 	void			UpdateAll(CMapEditView *View);
+	void			FocusView();
 
 // Windows Messages Thru Point
 	void			LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);

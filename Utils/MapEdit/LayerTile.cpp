@@ -36,7 +36,14 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,
 		VisibleFlag=TRUE;
 		Mode=MouseModePaint;
 
-		Map.SetSize(Width/MapDiv,Height/MapDiv,TRUE);
+		if (ResizeFlag)
+		{
+			Map.SetSize(Width/MapDiv,Height/MapDiv,TRUE);
+		}
+		else
+		{
+			Map.SetSize(Width,Height,TRUE);
+		}
 }
 
 /*****************************************************************************/
@@ -284,34 +291,31 @@ void	CLayerTile::InitGUI(CCore *Core)
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
-			ParamBar->Add(Frm->GetGfxToolBar(),IDD_GFXTOOLBAR,TRUE);
+			ParamBar->Add(Frm->GetLayerTileGUI(),IDD_LAYERTILE_GUI,TRUE);
 }
 
 /*****************************************************************************/
 void	CLayerTile::UpdateGUI(CCore *Core)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CGfxToolBar	*GfxDlg=(CGfxToolBar *)Frm->GetDialog(IDD_GFXTOOLBAR);
+CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CLayerTileGUI	*Dlg=(CLayerTileGUI *)Frm->GetDialog(IDD_LAYERTILE_GUI);
 
-		if (GfxDlg)
+		if (Dlg)
 		{
-			GfxDlg->ResetButtons();
+			Dlg->ResetButtons();
 			switch(Mode)
 			{
 			case MouseModePaint:
-				GfxDlg->SetButtonState(CGfxToolBar::PAINT,TRUE);
+				Dlg->SetButtonState(CLayerTileGUI::PAINT,TRUE);
 				break;
 			case MouseModeSelect:
-				GfxDlg->SetButtonState(CGfxToolBar::SELECT,TRUE);
-				break;
-			case MouseModePicker:
-				GfxDlg->SetButtonState(CGfxToolBar::PICKER,TRUE);
+				Dlg->SetButtonState(CLayerTileGUI::SELECT,TRUE);
 				break;
 			default:
 				break;
 			}
 		}
-
+		Core->UpdateTileViewGUI();
 }
 
 /*****************************************************************************/
@@ -337,8 +341,6 @@ BOOL	CLayerTile::InitMode()
 			break;
 		case MouseModeSelect:
 			break;
-		case MouseModePicker:
-			break;
 		default:
 			break;
 		}
@@ -353,8 +355,6 @@ BOOL	CLayerTile::ExitMode()
 		case MouseModePaint:
 			break;
 		case MouseModeSelect:
-			break;
-		case MouseModePicker:
 			break;
 		default:
 			break;
@@ -376,8 +376,6 @@ CTileBank	&TileBank=Core->GetTileBank();
 			break;
 		case MouseModeSelect:
 			break;
-		case MouseModePicker:
-			break;
 		default:
 			break;
 		}
@@ -397,8 +395,6 @@ CTileBank	&TileBank=Core->GetTileBank();
 				Ret=Paint(TileBank.GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
-			break;
-		case MouseModePicker:
 			break;
 		default:
 			break;
@@ -423,8 +419,6 @@ CTileBank	&TileBank=Core->GetTileBank();
 			break;
 		case MouseModeSelect:
 			break;
-		case MouseModePicker:
-			break;
 		default:
 			break;
 		}
@@ -440,8 +434,6 @@ void	CLayerTile::RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)
 			RenderCursorPaint(Core,CamPos,Is3d);
 			break;
 		case MouseModeSelect:
-			break;
-		case MouseModePicker:
 			break;
 		default:
 			break;

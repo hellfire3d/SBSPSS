@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditView
+LastClass=CLayerTileGUI
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -17,22 +17,21 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=10
+ResourceCount=9
 Resource1=IDR_MAINFRAME (English (U.S.))
-Resource2=IDD_MULTIBAR (English (U.S.))
-Resource3=IDD_GFXTOOLBAR
+Resource2=IDD_ABOUTBOX (English (U.S.))
+Resource3=IDD_MULTIBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_LAYER_LIST_DIALOG
+Resource5=IDR_TOOLBAR (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource6=IDD_LAYER_LIST_DIALOG
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
-Class10=CTileSetDlg
-Resource8=IDD_TILESET_DIALOG
+Class10=CMapSizeDlg
+Resource8=IDD_LAYERTILE_GUI
 Class11=CGfxToolBar
-Resource9=IDR_TOOLBAR (English (U.S.))
-Class12=CMapSizeDlg
-Resource10=IDD_MAPSIZE
+Class12=CLayerTileGUI
+Resource9=IDD_MAPSIZE
 
 [CLS:CChildFrame]
 Type=0
@@ -217,23 +216,6 @@ Filter=D
 VirtualFilter=dWC
 LastObject=CLayerList
 
-[DLG:IDD_TILESET_DIALOG]
-Type=1
-Class=CTileSetDlg
-ControlCount=3
-Control1=IDC_TILESETDLG_COMBO,combobox,1342242819
-Control2=IDC_TILESETDLG_BTN_UPDATE,button,1342242816
-Control3=IDC_TILESETDLG_BTN_LOAD,button,1342242816
-
-[CLS:CTileSetDlg]
-Type=0
-HeaderFile=TileSetDlg.h
-ImplementationFile=TileSetDlg.cpp
-BaseClass=CDialog
-Filter=D
-VirtualFilter=dWC
-LastObject=IDC_TILESETDLG_COMBO
-
 [CLS:CGfxToolBar]
 Type=0
 HeaderFile=GfxToolBar.h
@@ -242,14 +224,6 @@ BaseClass=CDialog
 Filter=D
 LastObject=CGfxToolBar
 VirtualFilter=dWC
-
-[DLG:IDD_GFXTOOLBAR]
-Type=1
-Class=CGfxToolBar
-ControlCount=3
-Control1=IDD_GFXTOOLBAR_PAINT,button,1342177344
-Control2=IDD_GFXTOOLBAR_SELECT,button,1476395072
-Control3=IDD_GFXTOOLBAR_PICKER,button,1476395072
 
 [DLG:IDD_MAPSIZE]
 Type=1
@@ -270,4 +244,23 @@ ImplementationFile=MapSizeDlg.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
+
+[DLG:IDD_LAYERTILE_GUI]
+Type=1
+Class=CLayerTileGUI
+ControlCount=5
+Control1=IDD_LAYERTILE_LIST,combobox,1342242819
+Control2=IDD_LAYERTILE_BTN_UPDATE,button,1342242816
+Control3=IDD_LAYERTILE_BTN_LOAD,button,1342242816
+Control4=IDD_LAYERTILE_BTN_PAINT,button,1342177344
+Control5=IDD_LAYERTILE_BTN_SELECT,button,1476395072
+
+[CLS:CLayerTileGUI]
+Type=0
+HeaderFile=LayerTileGUI.h
+ImplementationFile=LayerTileGUI.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=IDD_LAYERTILE_LIST
 

@@ -56,10 +56,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 			ParamBar->RemoveAll();
 // Add default parram bar items			
 			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
-			ParamBar->Add(Frm->GetTileSetDlg(),IDD_TILESET_DIALOG,TRUE,TRUE);
 			UpdateParamBar();
-//			Layer[ActiveLayer]->InitGUI(this);
-//			ParamBar->Update();
 			UpdateAll(NULL);
 }
 
@@ -338,16 +335,9 @@ CToolBar	*ToolBar=Frm->GetToolBar();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->RemoveAll();
-// Add default parram bar items			
-			if (TileViewFlag)
-			{
-//				TileBank.InitGUI(this);
-			}
-			else
-			{
-				Layer[ActiveLayer]->InitGUI(this);
-			}
-			
+			Layer[ActiveLayer]->InitGUI(this);
+			Layer[ActiveLayer]->UpdateGUI(this);
+
 			ParamBar->Update();
 
 }
@@ -439,10 +429,10 @@ void	CCore::TileBankReload()
 /*****************************************************************************/
 void	CCore::TileBankSet()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
+CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CLayerTileGUI	*Dlg=(CLayerTileGUI*)Frm->GetDialog(IDD_LAYERTILE_GUI);
 
-		TileBank.SetCurrent(TileSetDlg->TileSetList.GetCurSel());
+		TileBank.SetCurrent(Dlg->m_List.GetCurSel());
 }
 
 /*****************************************************************************/
@@ -507,7 +497,6 @@ void	CCore::UpdateGUI(CMapEditView *View)
 		UpdateLayerGUI(View);
 		UpdateGrid(View);
 
-		TileBank.UpdateGUI(this,TileViewFlag);
 		Layer[ActiveLayer]->UpdateGUI(this);
 
 }

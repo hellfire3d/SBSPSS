@@ -157,42 +157,42 @@ void	CMapEditDoc::ToggleTileView(CMapEditView *View)
 {
 		Core.UpdateTileView(View,TRUE);
 		Core.UpdateAll(View);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 {
 		Core.UpdateGrid(View,TRUE);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MirrorX(CMapEditView *View)
 {
 		Core.MirrorX(View);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MirrorY(CMapEditView *View)
 {
 		Core.MirrorY(View);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::SetMode(int NewMode)
 {
 		Core.SetMode(NewMode);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::SetLayer(int Layer)
 {
 		Core.SetLayer(Layer);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
@@ -201,7 +201,7 @@ void	CMapEditDoc::SetLayer(int Layer)
 void CMapEditDoc::OnExportAgb() 
 {
 char		BASED_CODE AGBFilter[]= "AGB Data Type (*.c)|*.c|All Files (*.*)|*.*||";
-CFileDialog	Dlg(TRUE,NULL,NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,AGBFilter);
+CFileDialog	Dlg(FALSE,"*.c",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,AGBFilter);
 
 		if (Dlg.DoModal()!=IDOK) return;
 
@@ -232,7 +232,7 @@ char	Filename[256];
 		sprintf(Filename,"%s",Dlg.GetPathName());
 		Core.TileBankLoad(Filename);
 		UpdateAllViews(NULL);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
@@ -240,7 +240,7 @@ void	CMapEditDoc::TileBankReload()
 {
 		Core.TileBankReload();
 		UpdateAllViews(NULL);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
@@ -248,7 +248,7 @@ void	CMapEditDoc::TileBankSet()
 {
 		Core.TileBankSet();
 		UpdateAllViews(NULL);
-		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		FocusView();
 }
 
 /*********************************************************************************/
@@ -280,4 +280,11 @@ CMapSizeDlg	Dlg;
 void	CMapEditDoc::Toggle2d3d(CMapEditView *View)
 {
 	Core.Toggle2d3d(View);
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::FocusView()
+{
+		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
+		
 }
