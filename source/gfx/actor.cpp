@@ -807,12 +807,26 @@ int				TriCount=Model->TriCount;
 sTri			*TList=&ModelTriList[Model->TriStart];
 				MATRIX	Mtx;
 
-			if (Scale)
-				SetIdentNoTrans(&Mtx,Scale);
+// If has scale && angle then need to use PSX scale matrix, otherwise, force values
+			if (Angle)
+			{
+				RotMatrix_gte(Angle,&Mtx);
+				if (Scale)
+				{
+					ScaleMatrix(&Mtx,Scale);
+				}
+			}
 			else
+			{
+				if (Scale)
+				{
+					SetIdentNoTrans(&Mtx,Scale);
+				}
+				else
+				{
 				SetIdentNoTrans(&Mtx);
-
-			if (Angle) RotMatrix(Angle,&Mtx);
+				}
+			}
 
 			MapXY.vx=Pos.vx>>4;
 			MapXY.vy=Pos.vy>>4;
