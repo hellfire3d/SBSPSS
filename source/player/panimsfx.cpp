@@ -113,6 +113,7 @@ static const CPlayer::AnimFrameSfx s_runSfx[]=
 static const int	s_runCount=sizeof(s_runSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 // ANIM_PLAYER_ANIM_RUNSTART
+
 // ANIM_PLAYER_ANIM_RUNSTOP
 static const CPlayer::AnimFrameSfx s_runStopSfx[]=
 {
@@ -142,6 +143,7 @@ static const int	s_idleWindCount=sizeof(s_idleWindSfx)/sizeof(CPlayer::AnimFrame
 
 // This is the table that ties up anims to sfx
 // CPlayer::setAnimFrame() uses this table to generate sfx based upon anim frames
+// NB: Don't use frame 0 in the AnimFrameSfx lists ot it'll play more than once
 const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 {
 	{	s_buttBounceEndCount,	s_buttBounceEndSfx		},		// ANIM_PLAYER_ANIM_BUTTBOUNCEEND
