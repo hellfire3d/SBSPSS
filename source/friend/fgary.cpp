@@ -31,6 +31,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __ANIM_GARY_HEADER__
+#include <ACTOR_GARY_Anim.h>
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +51,38 @@ void CNpcGaryFriend::postInit()
 
 void CNpcGaryFriend::think( int _frames )
 {
-	CNpcFriend::think(_frames);
+	if ( m_animPlaying )
+	{
+		s32 frameCount;
+
+		frameCount = m_actorGfx->getFrameCount( m_animNo );
+
+		s32 frameShift = ( _frames << 8 ) >> 1;
+
+		if ( ( frameCount << 8 ) - m_frame > frameShift )
+		{
+			m_frame += frameShift;
+		}
+		else
+		{
+			m_frame = ( frameCount - 1 ) << 8;
+			m_animPlaying = false;
+		}
+	}
+	else
+	{
+		if ( m_started )
+		{
+			m_animNo = ANIM_GARY_SLITHER;
+		}
+		else
+		{
+			m_animNo = m_data[m_type].idleAnim;
+		}
+
+		m_animPlaying = true;
+		m_frame = 0;
+	}
 
 	if ( m_fallDeath )
 	{
@@ -258,4 +293,30 @@ const CRECT *CNpcGaryFriend::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::start()
+{
+	if ( !m_started )
+	{
+		m_started = true;
+		m_animNo = ANIM_GARY_SLITHER;
+		m_animPlaying = true;
+		m_frame = 0;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::stop()
+{
+	if ( m_started )
+	{
+		m_started = false;
+		m_animNo = m_data[m_type].idleAnim;
+		m_animPlaying = true;
+		m_frame = 0;
+	}
 }

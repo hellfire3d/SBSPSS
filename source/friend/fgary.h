@@ -26,8 +26,8 @@ public:
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 	virtual	CRECT const		*getThinkBBox();
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
-	void				start()													{m_started = true;}
-	void				stop()													{m_started = false;}
+	void				start();
+	void				stop();
 	void				startLeft();
 	void				startRight();
 	virtual void		render();
