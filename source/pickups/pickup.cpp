@@ -139,7 +139,6 @@ void	CBasePickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#include "pad\pads.h"
 void	CBasePickup::think(int _frames)
 {
 	CPickupThing::think(_frames);
@@ -209,7 +208,6 @@ void	CBasePickup::collect(class CPlayer *_player)
 {
 	shutdown();
 	CThingManager::DeleteThing(this);
-//	delete this;
 }
 
 
@@ -507,9 +505,11 @@ return NULL;
 
 	pickup->setThingSubType(_type);
 	pickup->init();
-	pickupPos=pickup->getSizeForPlacement();
-	pickupPos.vx=_pos->vx+(pickupPos.vx/2);
-	pickupPos.vy=_pos->vy+(pickupPos.vy/2)-16;
+//	pickupPos=pickup->getSizeForPlacement();
+//	pickupPos.vx=_pos->vx-(pickupPos.vx/2);
+//	pickupPos.vy=_pos->vy-(pickupPos.vy);
+	pickupPos=*_pos;
+	pickupPos.vy-=pickup->getSizeForPlacement().vy/2;
 	pickup->setPos(&pickupPos);
 
 	return pickup;
