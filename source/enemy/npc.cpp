@@ -719,7 +719,7 @@ void CNpcEnemy::think(int _frames)
 
 	CEnemyThing::think(_frames);
 
-	processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
+	processGenericGetUserDist( moveFrames, &playerXDist, &playerYDist );
 	playerXDistSqr = playerXDist * playerXDist;
 	playerYDistSqr = playerYDist * playerYDist;
 
@@ -737,7 +737,7 @@ void CNpcEnemy::think(int _frames)
 
 				frameCount = getFrameCount();
 
-				s32 frameShift = ( _frames << 8 ) >> 1;
+				s32 frameShift = ( moveFrames << 8 ) >> 1;
 
 				if ( ( frameCount << 8 ) - m_frame > frameShift )
 				{
@@ -762,7 +762,7 @@ void CNpcEnemy::think(int _frames)
 					}
 					else
 					{
-						processClose(_frames);
+						processClose( moveFrames );
 					}
 
 					break;
@@ -773,7 +773,7 @@ void CNpcEnemy::think(int _frames)
 					break;
 
 				case NPC_CONTROL_CLOSE:
-					processClose(_frames);
+					processClose( moveFrames );
 
 					break;
 
@@ -796,7 +796,7 @@ void CNpcEnemy::think(int _frames)
 
 	if ( !m_isCaught )
 	{
-		processTimer(_frames);
+		processTimer( moveFrames );
 	}
 }
 
