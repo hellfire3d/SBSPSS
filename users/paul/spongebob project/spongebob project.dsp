@@ -185,6 +185,14 @@ SOURCE=..\..\..\source\frontend\start.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\game\convo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\convo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\game.cpp
 # End Source File
 # Begin Source File
