@@ -241,31 +241,11 @@ SOURCE=..\..\..\source\enemy\nghost.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\enemy\ngpirate.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\ngpirate.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\enemy\nhcrab.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nhcrab.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nmine.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nmjback.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nmjback.h
 # End Source File
 # Begin Source File
 
@@ -282,10 +262,6 @@ SOURCE=..\..\..\source\enemy\nocto.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nocto.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\noilblob.h
 # End Source File
 # Begin Source File
 
@@ -418,10 +394,6 @@ SOURCE=..\..\..\source\enemy\nsstomp.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nsstomp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nstrfish.h
 # End Source File
 # Begin Source File
 

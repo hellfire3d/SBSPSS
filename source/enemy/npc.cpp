@@ -99,10 +99,6 @@
 #include "enemy\nbblob.h"
 #endif
 
-#ifndef	__ENEMY_NGPIRATE_H__
-#include "enemy\ngpirate.h"
-#endif
-
 #ifndef	__ENEMY_NPUFFA_H__
 #include "enemy\npuffa.h"
 #endif
@@ -171,20 +167,8 @@
 #include "enemy\nangler.h"
 #endif
 
-#ifndef __ENEMY_NMINE_H__
-#include "enemy\nmine.h"
-#endif
-
-#ifndef __ENEMY_NSTRFISH_H__
-#include "enemy\nstrfish.h"
-#endif
-
 #ifndef __ENEMY_NGHOST_H__
 #include "enemy\nghost.h"
-#endif
-
-#ifndef __ENEMY_NOILBLOB_H__
-#include "enemy\noilblob.h"
 #endif
 
 #ifndef __ENEMY_NSHELL_H__
@@ -312,12 +296,6 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 			break;
 		}
 
-		case CNpcEnemy::NPC_GHOST_PIRATE:
-		{
-			enemy = new ("ghost pirate") CNpcGhostPirateEnemy;
-			break;
-		}
-
 		case CNpcEnemy::NPC_PUFFA_FISH:
 		{
 			enemy = new ("puffa fish") CNpcPuffaFishEnemy;
@@ -420,27 +398,9 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 			break;
 		}
 
-		case CNpcEnemy::NPC_MINE:
-		{
-			enemy = new ("mine") CNpcMineEnemy;
-			break;
-		}
-
-		case CNpcEnemy::NPC_NINJA_STARFISH:
-		{
-			enemy = new ("ninja starfish") CNpcNinjaStarfishEnemy;
-			break;
-		}
-
 		case CNpcEnemy::NPC_GHOST:
 		{
 			enemy = new ("ghost") CNpcGhostEnemy;
-			break;
-		}
-
-		case CNpcEnemy::NPC_OIL_BLOB:
-		{
-			enemy = new ("oil blob") CNpcOilBlobEnemy;
 			break;
 		}
 
