@@ -90,12 +90,15 @@ void CFrontEndNickLogo::unselect()
   ---------------------------------------------------------------------- */
 void CFrontEndNickLogo::think(int _frames)
 {
-	m_frameCount+=_frames;
-
-	if(m_frameCount>DISPLAY_FRAMES&!m_readyToExit)
+	if(!CFader::isFading())
 	{
-		CFader::setFadingOut();
-		m_readyToExit=true;
+		m_frameCount+=_frames;
+
+		if(m_frameCount>DISPLAY_FRAMES&!m_readyToExit)
+		{
+			CFader::setFadingOut();
+			m_readyToExit=true;
+		}
 	}
 }
 
