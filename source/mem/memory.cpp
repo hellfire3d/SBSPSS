@@ -65,6 +65,10 @@ enum MEM_ID
 	MEM_GAME,
 	MEM_GAMEOPTIONS,
 	MEM_SYSTEM,
+	MEM_FMA,
+	MEM_MAP,
+	MEM_SHOP,
+	MEM_PARTY,
 
 	MEM_UNKNOWN,
 
@@ -89,13 +93,13 @@ static bool	s_dumpMem = false;
 
 
 static const int		s_shadeX = 20;
-static const int		s_shadeY = 119;
-static const int		s_shadeW = 400;
-static const int		s_shadeH = 82;
+static const int		s_shadeY = 100;
+static const int		s_shadeW = 572;
+static const int		s_shadeH = 102;
 static const CVECTOR	s_shadeCol = { 0, 0, 0 };
 
 static const int		s_dumpTextX = s_shadeX+12;
-static const int		s_dumpTextY = s_shadeY+1;
+static const int		s_dumpTextY = s_shadeY0;
 
 static const int		s_dumpX = s_shadeX;
 static const int		s_dumpY = s_shadeY+s_shadeH+5;
@@ -111,12 +115,17 @@ static int		s_currentMemPart = 0;
 #ifdef __DEBUG_MEM__
 static const CVECTOR	s_colors[ MEM_ID_MAX ] =
 {
-	{ 255, 0, 0 },		// MEM_BACKEND
-	{ 0, 255, 0 },		// MEM_FRONTEND
-	{ 0, 0, 255 },		// MEM_GAME
-	{ 255, 0, 255 },	// MEM_GAMEOPTIONS
+	{ 255,   0,   0 },	// MEM_BACKEND
+	{   0, 255,   0 },	// MEM_FRONTEND
+	{   0,   0, 255 },	// MEM_GAME
+	{ 255,   0, 255 },	// MEM_GAMEOPTIONS
 	{ 255, 255, 255 },	// MEM_SYSTEM
-	{ 128, 128, 128 },	// MEM_UNKNOWN
+	{ 128, 128, 255 },	// MEM_FMA,
+	{ 255, 128, 128 },	// MEM_MAP,
+	{ 128, 255, 128 },	// MEM_SHOP,
+	{ 128, 255, 255 },	// MEM_PARTY,
+
+	{  64,  64,  64 },	// MEM_UNKNOWN
 };
 
 static const char *	s_sceneNames[] =
@@ -126,6 +135,10 @@ static const char *	s_sceneNames[] =
 	"Game",
 	"GameOptions",
 	"System",
+	"FMA",
+	"Map",
+	"Shop",
+	"Party",
 	"UNKNOWN",
 };
 
@@ -276,7 +289,7 @@ void dumpDebugMem()
 		if (mem->addr)
 		{
 			sprintf( Text, "%sAddr    - %X   Len - %d\n", Text, (int)mem->addr, len );
-			sprintf( Text, "%sAddrEnd - %X\n\n", Text, (int)mem->addr+len );
+			sprintf( Text, "%sAddrEnd - %X\n", Text, (int)mem->addr+len );
 
 			if (mem->name)	sprintf( Text, "%sName - %s\n", Text, mem->name );
 			else			sprintf( Text, "%sName - Undefined", Text );
