@@ -102,14 +102,11 @@ struct sWeight
 struct sBone
 {
 		sVtx		BoneSize;				//  8
-		sQuat		BoneAng;				//  8
 		s16			Parent;					//  2
-//		s16			Idx;					//  2
+		s16			TriStart;				//  2
+		s16			TriCount;				//  2
 		s16			VtxCount;				//  2
-//		sVtx		*VtxList;				//  4
-		s16			TriStart;
-		s16			TriCount;
-};											// 20
+};											// 16
 /*
 struct sBone
 {
