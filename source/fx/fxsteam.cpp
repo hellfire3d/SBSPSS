@@ -60,6 +60,12 @@ void	CFXSteam::killFX()
 		}
 		ShadeDec=DefShadeDieDec;
 		ScaleInc=0;
+
+		if( m_soundId != NOT_PLAYING )
+		{
+			CSoundMediator::stopAndUnlockSfx(m_soundId);
+			m_soundId=NOT_PLAYING;
+		}
 }
 
 /*****************************************************************************/
