@@ -1268,7 +1268,7 @@ typedef struct
 }POSMEM;
 static POSMEM	lastpos[NUM_LASTPOS];
 static int		lastposnum=0;
-int				drawlastpos=false;
+int				drawlastpos=true;
 #endif
 
 #ifdef __USER_paul__
@@ -2616,6 +2616,8 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+extern int checkx;
+extern int checky;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
@@ -2629,49 +2631,36 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 
 		pos=getPlayerPos();
 		colHeight=getHeightFromGround(pos.vx,pos.vy,5);
-		if(colHeight==0)
+//		if(colHeight==0)
 		{
-			// Ok.. we're on the ground. What happens if we move left/right
-			colHeight=getHeightFromGround(pos.vx+_moveDistance,pos.vy);
-			if(colHeight<-8)
-			{
-				// Big step up. Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(_moveDistance<0)
-				{
-					dir=-1;
-					vx=-_moveDistance;
-				}
-				else
-				{
-					dir=+1;
-					vx=_moveDistance;
-				}
-				cx=pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(getHeightFromGround(cx,pos.vy)<-8)
-					{
-						break;
-					}
-					cx+=dir;
-				}
-				if(i)
-					pos.vx=cx-dir;
+			int	vx,targetX,checkOfs,moved,x;
 
-				hitWall=true;
-				_moveDistance=0;
-
-				// Get the height at this new position and then try the step-up code below.
-				// Without this, there are problems when you run up a slope and hit a wall at the same time
-				colHeight=getHeightFromGround(pos.vx,pos.vy);
-			}
-			if(colHeight&&colHeight>=-8&&colHeight<=8)
+			vx=_moveDistance<0?-1:+1;
+			targetX=pos.vx+_moveDistance;
+			checkOfs=vx*checkx;
+			moved=0;
+			for(x=pos.vx;x!=targetX;x+=vx)
 			{
-				// Small step up/down. Follow the contour of the level
-				pos.vy+=colHeight;
+				// Wall?
+				colHeight=getHeightFromGround(x+checkOfs,pos.vy);
+				if(colHeight<-checky)
+				{
+					hitWall=true;
+					break;
+				}
+
+				// Slope?
+				colHeight=getHeightFromGround(x+vx,pos.vy);
+				if(colHeight>=-1&&colHeight<=1)
+				{
+					pos.vy+=colHeight;
+				}
+
+				moved+=vx;
 			}
+			_moveDistance=moved;
 		}
+/*
 		else if(colHeight>0) // Lets you jump through platforms from below
 		{
 			if((CGameScene::getCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
@@ -2704,6 +2693,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				_moveDistance=0;
 			}
 		}
+*/
 		pos.vx+=_moveDistance;
 		setPlayerPos(&pos);
 	}

@@ -171,6 +171,14 @@ static	PlayerMetrics	s_playerMetrics=
 }	};
 
 
+
+
+//
+int checkx=15;
+int checky=16;
+int checkdist=16;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -369,7 +377,9 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();
-		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0)
+		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0&&
+		   m_player->getHeightFromGround(pos.vx-checkx,pos.vy,1)!=0&&
+		   m_player->getHeightFromGround(pos.vx+checkx,pos.vy,1)!=0)
 		{
 			// Was floating in the air.. fall!
 			setState(STATE_FALL);
@@ -574,14 +584,14 @@ int CPlayerModeBase::canMoveLeft()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getHeightFromGround(pos.vx-1,pos.vy,16)>-8?true:false;
+	return m_player->getHeightFromGround(pos.vx-checkx,pos.vy,checkdist)>-checky?true:false;
 }
 
 int CPlayerModeBase::canMoveRight()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getHeightFromGround(pos.vx+1,pos.vy,16)>-8?true:false;
+	return m_player->getHeightFromGround(pos.vx+checkx,pos.vy,checkdist)>-checky?true:false;
 }
 
 /*----------------------------------------------------------------------
