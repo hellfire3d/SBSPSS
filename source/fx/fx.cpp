@@ -74,7 +74,7 @@ CFXBaseAnim::sFXBaseData	FXFireBaseData=
 CFXBaseAnim::sFXBaseData	FXBubbleBaseData=
 {
 		FRM__BUBBLE_2,FRM__BUBBLE_2,1,
-		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_NO_THINK_KILL,
+		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_NO_THINK_KILL | FX_FLAG_HAS_LIFE,
 };
 
 /*****************************************************************************/
@@ -329,7 +329,7 @@ CThing	*Parent=getParent();
 
 		CFXThing::think(_frames);
 
-		if (Life>0)
+		if (Flags & FX_FLAG_HAS_LIFE)
 		{
 			Life-=_frames;
 			if (Life<=0)

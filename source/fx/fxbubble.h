@@ -11,14 +11,12 @@
 class CFXBubble : public CFXBaseAnim
 {
 public:
-virtual void		init(DVECTOR const &Pos);
-virtual void		think(int _frames);
-virtual	void		killFX();
+		void		init(DVECTOR const &Pos);
+		void		think(int _frames);
+		void		killFX(){};
 
 protected:
-		s8			Die;
 		u16			XIdx;
-		s32			Lifetime;
 };
 
 #endif
