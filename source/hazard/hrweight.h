@@ -31,6 +31,7 @@ protected:
 
 	s32					m_maxExtension;
 	DVECTOR				m_wheelPos;
+	DVECTOR				m_pulleyPos;
 	u8					m_triggered;
 };
 

@@ -41,7 +41,7 @@ void CNpcRisingWeightHazard::init()
 
 void CNpcRisingWeightHazard::setWaypoints( sThingHazard *ThisHazard )
 {
-	ASSERT( ThisHazard->PointCount == 3 );
+	ASSERT( ThisHazard->PointCount >= 3 );
 
 	u16	*PntList=(u16*)MakePtr(ThisHazard,sizeof(sThingHazard));
 
@@ -79,6 +79,22 @@ void CNpcRisingWeightHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	m_wheelPos.vx = newXPos;
 	m_wheelPos.vy = newYPos;
+
+	if ( ThisHazard->PointCount > 3 )
+	{
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		m_pulleyPos.vx = ( newXPos << 4 ) + 8;
+		m_pulleyPos.vy = ( newYPos << 4 ) + 16;
+	}
+	else
+	{
+		m_pulleyPos.vx = startPos.vx;
+		m_pulleyPos.vy = startPos.vy - ( m_maxExtension >> 8 );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +128,7 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 void CNpcRisingWeightHazard::render()
 {
 	int		x1,y1,x2,y2;
+	int		minX, maxX, minY, maxY;
 
 	DVECTOR	offset = CLevel::getCameraPos();
 
@@ -126,26 +143,63 @@ void CNpcRisingWeightHazard::render()
 			m_modelGfx->Render(renderPos);
 		}
 
-		x1 = x2 = m_base.vx - offset.vx;
-		y1 = m_base.vy - ( m_maxExtension >> 8 ) - offset.vy;
+		x1 = m_base.vx - offset.vx;
+		x2 = m_pulleyPos.vx - offset.vx;
+		y1 = m_pulleyPos.vy - offset.vy;
 		y2 = Pos.vy - offset.vy;
 
-		if ( x2 >= 0 && x1 <= VidGetScrW() )
+		minX = x1;
+		maxX = x2;
+
+		if ( minX > maxX )
 		{
-			if ( y2 >= 0 && y1 <= VidGetScrH() )
+			minX = x2;
+			maxX = x1;
+		}
+
+		minY = y1;
+		maxY = y2;
+
+		if ( minY > maxY )
+		{
+			minY = y2;
+			maxY = y1;
+		}
+
+		if ( maxX >= 0 && minX <= VidGetScrW() )
+		{
+			if ( maxY >= 0 && minY <= VidGetScrH() )
 			{
 				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
 			}
 		}
 
 		x1 = ( m_wheelPos.vx << 4 ) + 8 - offset.vx;
-		x2 = m_base.vx - offset.vx;
+		x2 = m_pulleyPos.vx - offset.vx;
 		y1 = ( m_wheelPos.vy << 4 ) + 16 - offset.vy;
-		y2 = m_base.vy - ( m_maxExtension >> 8 ) - offset.vy;
+		y2 = m_pulleyPos.vy - offset.vy;
 
-		if ( x2 >= 0 && x1 <= VidGetScrW() )
+		minX = x1;
+		maxX = x2;
+
+		if ( minX > maxX )
 		{
-			if ( y1 >= 0 && y2 <= VidGetScrH() )
+			minX = x2;
+			maxX = x1;
+		}
+
+		minY = y1;
+		maxY = y2;
+
+		if ( minY > maxY )
+		{
+			minY = y2;
+			maxY = y1;
+		}
+
+		if ( maxX >= 0 && minX <= VidGetScrW() )
+		{
+			if ( maxY >= 0 && minY <= VidGetScrH() )
 			{
 				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
 			}
