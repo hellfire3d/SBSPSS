@@ -66,6 +66,10 @@ public:
 		BOOL			MirrorX(CCore *Core);
 		BOOL			MirrorY(CCore *Core);
 
+		void			DeleteSet(int Set);
+		void			RemapSet(int OrigSet,int NewSet);
+
+
 protected:
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f);
 		void			RenderCursorPaint(CCore *Core,Vector3 &CamPos,BOOL Is3d);

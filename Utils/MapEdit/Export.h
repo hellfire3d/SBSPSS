@@ -7,6 +7,7 @@
 
 #include	"stdafx.h"
 #include	<Vector>
+#include	<GFName.hpp>
 #include	"mapedit.h"
 
 #include	"Quantize.h"
@@ -32,11 +33,10 @@ virtual		void	ExportTiles(CCore *Core)=0;
 
 protected:
 
-		char		Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
+		GFName		Filename;
 		FILE		*File;
 		int			Count;
 
-		CList<sMapElem>			UsedTileList;
 
 
 };

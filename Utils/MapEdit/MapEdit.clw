@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CLayerList
+LastClass=CAboutDlg
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -19,23 +19,23 @@ Class7=CMapEditView
 
 ResourceCount=11
 Resource1=IDD_NEW_LAYER
-Resource2=IDD_LAYER_LIST_DIALOG
-Resource3=IDR_MAINFRAME (English (U.S.))
+Resource2=IDR_MAINFRAME (English (U.S.))
+Resource3=IDD_MAPSIZE
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_MULTIBAR (English (U.S.))
+Resource5=IDR_TOOLBAR (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_LAYERTILE_GUI
+Resource6=IDD_LAYER_LIST_DIALOG
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
 Resource8=IDD_ABOUTBOX (English (U.S.))
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_NEWMAP
-Resource10=IDD_MAPSIZE
+Resource9=IDD_LAYERTILE_GUI
+Resource10=IDD_MULTIBAR (English (U.S.))
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDR_TOOLBAR (English (U.S.))
+Resource11=IDD_NEWMAP
 
 [CLS:CChildFrame]
 Type=0
@@ -68,7 +68,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=MapEdit.cpp
 ImplementationFile=MapEdit.cpp
-LastObject=CAboutDlg
+LastObject=IDC_VERSION_LIST
+Filter=D
+VirtualFilter=dWC
 
 [CLS:CMapEditDoc]
 Type=0
@@ -258,7 +260,7 @@ Control2=IDD_LAYERTILE_BTN_UPDATE,button,1342242816
 Control3=IDD_LAYERTILE_BTN_LOAD,button,1342242816
 Control4=IDD_LAYERTILE_BTN_PAINT,button,1342177344
 Control5=IDD_LAYERTILE_BTN_SELECT,button,1476395072
-Control6=IDD_LAYERTILE_BTN_DELETE,button,1476460544
+Control6=IDD_LAYERTILE_BTN_DELETE,button,1342242816
 
 [CLS:CLayerTileGUI]
 Type=0

@@ -511,3 +511,16 @@ void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
 		Exp.ExportLayerTile(Core,GetName(),SubType,Map);
 }
+
+/*****************************************************************************/
+void	CLayerTile::DeleteSet(int Set)
+{
+		Map.DeleteSet(Set);
+}
+
+/*****************************************************************************/
+void	CLayerTile::RemapSet(int OrigSet,int NewSet)
+{
+		Map.RemapSet(OrigSet,NewSet);
+
+}

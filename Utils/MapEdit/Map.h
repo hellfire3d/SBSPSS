@@ -17,7 +17,6 @@ BOOL	operator==(sMapElem const &v1)	// Doesnt Check flags
 		{
 		return(Set==v1.Set && Tile==v1.Tile);
 		}
-
 };
 
 enum
@@ -61,6 +60,7 @@ public:
 
 		void		DeleteSet(int Set);
 		void		RemapSet(int Old,int New);
+
 
 
 inline	void	operator=(CMap &Src)	

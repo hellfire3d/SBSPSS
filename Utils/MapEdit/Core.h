@@ -29,6 +29,7 @@ public:
 		BOOL					New();
 		void					Load(CFile *File);
 		void					Save(CFile *File);
+		bool					Question(char *Txt);
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);

@@ -31,7 +31,7 @@ int	Height;
 			{
 				sMapElem	ThisElem;
 				File->Read(&ThisElem,sizeof(sMapElem));
-				Set(X,Y,ThisElem);
+				Set(X,Y,ThisElem,TRUE);
 			}
 		}
 
@@ -296,5 +296,4 @@ int		Height=GetHeight();
 				}
 			}
 		}
-
 }

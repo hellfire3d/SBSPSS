@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
+# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /out:"..\..\tools\MapEdit.exe" /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
 
 !ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
 

@@ -71,6 +71,10 @@ virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &Cur
 virtual	BOOL			MirrorX(CCore *Core){return(FALSE);};
 virtual	BOOL			MirrorY(CCore *Core){return(FALSE);};
 
+
+virtual	void			DeleteSet(int Set){};
+virtual	void			RemapSet(int OrigSet,int NewSet){};
+
 protected:
 		BOOL			Render3dFlag;
 		float			ScaleFactor;

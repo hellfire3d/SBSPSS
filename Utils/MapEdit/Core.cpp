@@ -81,6 +81,7 @@ int		Width,Height;
 Vector3	CamOfs;
 		CamOfs.Zero();
 		CamOfs.x=-15;
+		CamOfs.y=+10;
 
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();
@@ -181,6 +182,12 @@ int		LayerCount=Layer.size();
 		}
 	TileBank.Save(File);
 
+}
+
+/*****************************************************************************/
+bool	CCore::Question(char *Txt)
+{
+	return(theApp.GetCurrent()->Question(Txt));
 }
 
 /*****************************************************************************/
@@ -343,7 +350,7 @@ Vector3	&ThisCam=GetCam();
 	
 			Ofs.x*=XS;
 			Ofs.y*=YS;
-/*			if (nFlags & MK_CONTROL)
+			if (nFlags & MK_CONTROL)
 			{ // Move Ofs
 				Vector3	&CamOfs=GetCamOfs();
 				Ofs.y=-Ofs.y;
@@ -351,7 +358,7 @@ Vector3	&ThisCam=GetCam();
 				UpdateView(View);
 			}
 			else
-*/			{
+			{
 				UpdateView(View,Ofs);
 			}
 			}
@@ -473,8 +480,28 @@ void	CCore::TileBankLoad(char *Filename)
 /*****************************************************************************/
 void	CCore::TileBankDelete()
 {
-		TileBank.Delete();
-		UpdateView(NULL);
+		if (Question("Delete Current Tile Bank\n\nAll used tiles in current set will be set to blank\nAre you sure?"))
+			{
+			int		SetCount=TileBank.GetSetCount();
+			int		Current=TileBank.GetCurrent();
+			int		i,ListSize=Layer.size();
+
+				for (i=0;i<ListSize;i++)
+				{
+					Layer[i]->DeleteSet(Current);
+				}
+				TileBank.Delete();
+
+				for (int Set=Current+1; Set<SetCount; Set++)
+				{
+		
+					for (i=0;i<ListSize;i++)
+					{
+						Layer[i]->RemapSet(Set,Set-1);
+					}
+				}
+				UpdateView(NULL);
+			}
 }
 
 /*****************************************************************************/
@@ -676,15 +703,14 @@ char	ExportName[256];
 		
 		SetFileExt(Filename,ExportName,"PME");
 
-		LayerCount=1;
 CExportPSX	Exp(ExportName,LayerCount);
 
-/*		for (int i=0;i<LayerCount;i++)
+		for (int i=0;i<LayerCount;i++)
 		{
 			Layer[i]->Export(this,Exp);
 		}
-*/
-		Layer[FindActionLayer()]->Export(this,Exp);
+
+//		Layer[FindActionLayer()]->Export(this,Exp);
 
 		Exp.ExportTiles(this);
 		Exp.ExportTexList(this);

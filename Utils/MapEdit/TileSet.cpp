@@ -58,49 +58,56 @@ void	CTileBank::Load(CFile *File,float Version)
 {
 int		ListSize;
 GFName	RootPath=File->GetFilePath();
-GString	FilePath=RootPath.Dir();
+GString	FilePath;
+
+
+		FilePath=RootPath.Drive();
+		FilePath+=RootPath.Dir();
 		FilePath.Append('\\');
 	
-	File->Read(&ListSize,sizeof(int));
-	File->Read(&CurrentSet,sizeof(int));
-	File->Read(&ActiveBrush,sizeof(int));
-	Brush[0].Load(File,Version);
-	Brush[1].Load(File,Version);
+		File->Read(&ListSize,sizeof(int));
+		File->Read(&CurrentSet,sizeof(int));
+		File->Read(&ActiveBrush,sizeof(int));
+		Brush[0].Load(File,Version);
+		Brush[1].Load(File,Version);
 
-	if (Version<=1.00)
-	{
-		for (int i=0;i<ListSize;i++)
+		if (Version<=1.00)
 		{
-			char	Filename[256+64];
-
-			File->Read(Filename,256+64);
-			AddTileSet(Filename);
-			TRACE1("%s\n",Filename);
-		}
-	}
-	else
-	{ // New Style rel storage
-		for (int i=0;i<ListSize;i++)
-		{
-			char	c=1,RelName[256+64],FullName[256+64];
-			int		Len=0;
-			while (c)
+			for (int i=0;i<ListSize;i++)
 			{
-				File->Read(&c,1);
-				RelName[Len++]=c;
+				char	Filename[256+64];
+
+				File->Read(Filename,256+64);
+				AddTileSet(Filename);
+				TRACE1("%s\n",Filename);
 			}
-			RootPath.makeabsolute(FilePath,RelName,FullName);
-			AddTileSet(FullName);
 		}
-	}
+		else
+		{ // New Style rel storage
+			for (int i=0;i<ListSize;i++)
+			{
+				char	c=1,RelName[256+64],FullName[256+64];
+				int		Len=0;
+				while (c)
+				{
+					File->Read(&c,1);
+					RelName[Len++]=c;
+				}
+				RootPath.makeabsolute(FilePath,RelName,FullName);
+				AddTileSet(FullName);
+			}
+		}
 }
 
 /*****************************************************************************/
 void	CTileBank::Save(CFile *File)
 {
 int		ListSize=TileSet.size();
+GString	FilePath;
 GFName	RootPath=File->GetFilePath();
-GString	FilePath=RootPath.Dir();
+
+		FilePath=RootPath.Drive();
+		FilePath+=RootPath.Dir();
 		FilePath.Append('\\');
 
 		File->Write(&ListSize,sizeof(int));
@@ -116,8 +123,6 @@ GString	FilePath=RootPath.Dir();
 
 		
 			RootPath.makerelative(FilePath,ThisSet.GetFilename(),Filename);	
-//			sprintf(Filename,"%s",ThisSet.GetFilename());
-//			File->Write(Filename,256+64);		
 			File->Write(Filename,strlen(Filename)+1);		
 		}
 
@@ -167,7 +172,22 @@ int		ListSize=TileSet.size();
 /*****************************************************************************/
 void	CTileBank::Delete()
 {
-//		List.erase(List.begin()+CurrentSet);
+int		ListSize=TileSet.size();
+// Remap Brushes
+		for (int i=0; i<MaxBrush; i++) 
+		{
+			Brush[i].DeleteSet(CurrentSet);
+		}
+		for (int Set=CurrentSet; Set<ListSize; Set++)
+		{
+			for (int i=0; i<MaxBrush; i++) 
+			{
+				Brush[i].RemapSet(Set,Set-1);
+			}
+		}
+		TileSet.erase(TileSet.begin()+CurrentSet);
+		CurrentSet=0;
+
 }
 
 /*****************************************************************************/
@@ -326,7 +346,8 @@ BOOL	CTileBank::SelectCancel()
 /*****************************************************************************/
 BOOL	CTileBank::IsTileValid(int Set,int Tile)
 {
- 		if (Set==-1 || Tile==-1) return(FALSE);
+ 		if (Set<0 || Tile<0) return(FALSE);
+		ASSERT(Set<TileSet.size());
 		
 		return(TileSet[Set].IsTileValid(Tile));
 }
@@ -334,7 +355,7 @@ BOOL	CTileBank::IsTileValid(int Set,int Tile)
 /*****************************************************************************/
 BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
 {
-		if (Set==-1 || Tile==-1) return(FALSE);
+ 		if (Set<0 || Tile<0) return(FALSE);
 
 		return(TileSet[Set].IsTileValidGB(Tile));
 }
@@ -406,6 +427,7 @@ int		Height=ThisTex.TexHeight/16;
 }
 
 /*****************************************************************************/
+/*
 BOOL	CTileSet::Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs)
 {
 BOOL	Data=FALSE;
@@ -428,7 +450,7 @@ BOOL	Data=FALSE;
 		}
 		return(Data);
 }
-
+*/
 /*****************************************************************************/
 void	CTileSet::Load3d(CCore *Core)
 {
@@ -529,17 +551,17 @@ BOOL		ValidTile=TRUE;
 				{
 					case 1: // L
 						glColor4f(1,0,0,0.5);
-						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
 						break;
 					case 2: // R
 						glColor4f(0,0,1,0.5);
-						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
 						break;
 					case 3: // LR
 						glColor4f(1,0,0,0.5);
-						BuildGLQuad(TileBrowserX0,0.5,TileBrowserY0,TileBrowserY1,0);
+						BuildGLQuad(TileBrowserX0,0.5,TileBrowserY0,TileBrowserY1,0.01);
 						glColor4f(0,0,1,0.5);
-						BuildGLQuad(0.5,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						BuildGLQuad(0.5,TileBrowserX1,TileBrowserY0,TileBrowserY1,0.01);
 						break;
 				}
 	

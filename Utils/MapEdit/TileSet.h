@@ -51,6 +51,8 @@ public:
 		CTile		&GetTile(int Bank,int Tile);
 		
 		void		SetCurrent(int Set)					{CurrentSet=Set;}
+		int			GetCurrent()						{return(CurrentSet);}
+		int			GetSetCount()						{return(TileSet.size());}
 
 		CMap		&GetLBrush()						{return(Brush[LBrush]);}
 		CMap		&GetRBrush()						{return(Brush[RBrush]);}
