@@ -555,6 +555,12 @@ void CPlayer::thinkHorizontalMovement()
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
+#include "gfx\prim.h"	// (pkg)
+int healthx=100;
+int healthy=20;
+int healthw=10;
+int healthh=10;
+int healthg=2;
 
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
@@ -605,6 +611,31 @@ if(eyes!=-1)
 	sprintf(buf,"MODE:  %s",s_modeText[m_currentMode]);
 	s_debugFont.print(40,210,buf);
 #endif
+
+
+	// Temporary health thing
+	int i,x;
+	x=healthx;
+	for(i=0;i<5;i++)
+	{
+		POLY_F4	*f4;
+		f4=GetPrimF4();
+		setXYWH(f4,x,healthy,healthw,healthh);
+
+		if(i<s_health)
+		{
+			setRGB0(f4,0,255,0);
+		}
+		else
+		{
+			setRGB0(f4,255,0,0);
+		}
+
+		setSemiTrans(f4,true);
+		AddPrimToList(f4,0);
+
+		x+=healthw+healthg;
+	}
 }
 
 
