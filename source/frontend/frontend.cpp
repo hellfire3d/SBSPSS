@@ -240,8 +240,6 @@ void CFrontEndScene::thinkLogo(int _frames)
   ---------------------------------------------------------------------- */
 void CFrontEndScene::setMode(FrontEndMode _newMode)
 {
-PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
-
 	// Close old mode
 	if(m_mode!=MODE__NONE)
 	{
