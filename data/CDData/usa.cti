@@ -29,9 +29,9 @@ XAFileAttributes	Form1	Data
 Source	data\cddata\usa.cnf
 EndFile
 
-File	BOOTUSA.EXE
+File	SLUS_013.52
 XAFileAttributes	Form1	Data
-Source	cdbuild\usa\BOOTUSA.EXE
+Source	cdbuild\usa\SLUS_013.52
 EndFile
 
 File	LEGAL.GFX
