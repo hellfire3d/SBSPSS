@@ -21,6 +21,10 @@
 
 #include "pickups\phelmet.h"
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
