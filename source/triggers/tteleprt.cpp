@@ -73,7 +73,7 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 		{
-			if ( chapter == 1 && level == 5 )
+			if ( chapter == 5 && level == 5 )
 			{
 				if ( !CNpcGaryFriend::hasReachedDoor() )
 				{
@@ -93,7 +93,7 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 		{
 			if ( _thisThing->getThingSubType() == CNpcFriend::NPC_FRIEND_GARY )
 			{
-				if ( chapter == 1 && level == 5 )
+				if ( chapter == 5 && level == 5 )
 				{
 					// if Gary has touched a teleport on chapter 1, level 5, remember that he has done so
 
