@@ -107,6 +107,11 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CBubicleFactory::init();
 
+#if defined(__DEBUG_MEM__)
+	DebugMemFontInit();
+#endif
+
+
 #ifdef __USER_paul__
 s_paulScene.init();
 #endif
@@ -116,7 +121,10 @@ s_paulScene.init();
 /*****************************************************************************/
 /*****************************************************************************/
 static int	s_time = 0;
+#if defined(__DEBUG_MEM__)
 void dumpDebugMem();
+void DebugMemFontInit();
+#endif
 
 void	MainLoop()
 {

@@ -66,9 +66,9 @@
 #include "gui\gbutton.h"
 #endif
 
-#ifndef __GUI_GTEXTENT_H__
-#include "gui\gtextent.h"
-#endif
+//#ifndef __GUI_GTEXTENT_H__
+//#include "gui\gtextent.h"
+//#endif
 
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
@@ -146,6 +146,10 @@ CGUIControlFrame	*baseGUIObject;
 
 void CPaulScene::init()
 {
+	s_fontBank.initialise(&standardFont);
+	s_fontBank.setColour(255,255,255);
+
+	/*	
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;
 	CGUIToggleButton	*tg;
@@ -154,10 +158,7 @@ void CPaulScene::init()
 	CGUIBarReadout		*br;
 	CGUISliderButton	*sl;
 	CGUITextEntry		*te;
-
-	s_fontBank.initialise(&standardFont);
-	s_fontBank.setColour(255,255,255);
-
+	
 int mem=MainRam.TotalRam-MainRam.RamUsed;
 PAUL_DBGMSG("initial mem free=%d",mem);
 	
@@ -252,6 +253,7 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 	s_bg3->init();
 	s_bg3->setSpeed(0,-2);
 	s_bg3->setOt(1002);
+*/
 }
 
 
@@ -264,10 +266,12 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
   ---------------------------------------------------------------------- */
 void CPaulScene::shutdown()
 {
+/*	
 	s_bg3->shutdown();
 	s_bg2->shutdown();
 	s_bg1->shutdown();
 	s_fontBank.dump();
+*/
 }
 
 

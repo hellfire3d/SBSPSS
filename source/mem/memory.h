@@ -11,7 +11,7 @@
 #endif
 
 
-// #define	__DEBUG_MEM__		// Define if you want to debug memory - TS
+#define	__DEBUG_MEM__		// Define if you want to debug memory - TS
 
 
 /*****************************************************************************/

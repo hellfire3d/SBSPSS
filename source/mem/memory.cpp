@@ -252,8 +252,14 @@ void dumpDebugMem()
 		AddPrimToList( F4, 1 );
 
 		mem = &memDump[ s_currentMemPart ];
-		if (mem->addr)	len = *(((u32 *)mem->addr) - 1);
-		else			len = 0;
+		if (mem->addr)
+#ifdef	USE_MEM_GUARDS
+			len = *(((u32 *)mem->addr) - 3);
+#else
+			len = *(((u32 *)mem->addr) - 1);
+#endif
+		else
+			len = 0;
 
 		sprintf( Text, "%d\n", s_currentMemPart );
 		if (mem->addr)
@@ -273,7 +279,7 @@ void dumpDebugMem()
 			sprintf( Text, "%sAddr - NULL\nLen - 0\nName - Undefined\nFile - Undefined, Line - 0", Text );
 		}
 
-		s_debugFont.print( s_dumpTextX, s_dumpTextY, (u8*)Text );
+		s_debugFont.print( s_dumpTextX, s_dumpTextY, Text );
 	  }
 }
 
@@ -296,7 +302,7 @@ void addDebugMem( void * addr, const char * name, const char * file, int line )
 	scene = GameState::getCurrentScene();
 	if (scene)
 	{
-		sname = scene->GetSceneName();
+		sname = scene->getSceneName();
 
 		id = -1;
 		for (int i=0;i<s_nbSceneNames;i++)

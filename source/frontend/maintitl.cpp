@@ -46,6 +46,22 @@
 #include "gfx\fader.h"
 #endif
 
+#ifndef __GUI_GUI_H__
+#include "gui\gui.h"
+#endif
+
+#ifndef __GUI_GTEXTBOX_H__
+#include "gui\gtextbox.h"
+#endif
+
+#ifndef __GUI_GFRAME_H__
+#include "gui\gframe.h"
+#endif
+
+#ifndef __GUI_GBUTTON_H__
+#include "gui\gbutton.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -95,21 +111,60 @@ int sval=0;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int mem;
 void CFrontEndMainTitles::init()
 {
+mem=MainRam.TotalRam-MainRam.RamUsed;
+PAUL_DBGMSG("initial mem free=%d",mem);
+	CGUIGroupFrame		*fr;
+	CGUITextBox			*tb;
+	CGUIToggleButton	*tg;
+
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
 	m_sprites->load(FRONTEND_FRONTEND_SPR);
 
 	m_smallFont=new ("MainTitle SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
-
-	m_bigFont=new ("MainTitle BigFont") FontBank();
-	m_bigFont->initialise(&standardFont);
-	m_bigFont->setJustification(FontBank::JUST_CENTRE);
-	m_bigFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
+	m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 
 	m_mode=MODE__PRESS_START;
+
+	// Create the main menu ( START GAME/OPTIONS )
+	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
+	m_mainMenu->init(NULL);
+	m_mainMenu->setObjectXYWH(106,140,300,40);
+	m_mainMenu->clearFlags(CGUIObject::FLAG_DRAWBORDER);
+PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
+
+/*
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(m_mainMenu);
+	fr->setObjectXYWH(50,0,200,20);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(0,0,200,20);
+		tb->setText(STR__FRONTEND__START_GAME);
+		tg=new ("togglebutton") CGUIToggleButton();
+		tg->init(fr);
+		tg->setButtonTarget(&m_startGameFlag);
+
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(m_mainMenu);
+	fr->setObjectXYWH(50,20,200,20);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(0,0,200,20);
+		tb->setText(STR__FRONTEND__OPTIONS);
+		tg=new ("togglebutton") CGUIToggleButton();
+		tg->init(fr);
+		tg->setButtonTarget(&m_gotoOptionsFlag);
+
+	m_mainMenu->select();
+*/
+	
+	m_startGameFlag=false;
+	m_gotoOptionsFlag=false;
 
 	CFader::setFadingIn();
 }
@@ -123,9 +178,10 @@ void CFrontEndMainTitles::init()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::shutdown()
 {
-	m_bigFont->dump();			delete m_bigFont;
+	m_mainMenu->shutdown();		delete m_mainMenu;
 	m_smallFont->dump();		delete m_smallFont;
 	m_sprites->dump();			delete m_sprites;
+PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 }
 
 
@@ -153,7 +209,7 @@ void CFrontEndMainTitles::render()
 
 	// Game logo/title
 	fh=m_sprites->getFrameHeader(FRM__SBLOGO);
-	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,20);
+	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,220);
 	m_smallFont->setColour(GAME_TITLE_TEXT_R,GAME_TITLE_TEXT_G,GAME_TITLE_TEXT_B);
 	m_smallFont->print(256,GAME_TITLE_TEXT_CENTRE_Y,STR__FRONTEND__GAME_TITLE);
 	m_smallFont->setColour(0,0,0);
@@ -161,7 +217,7 @@ void CFrontEndMainTitles::render()
 
 	// The island
 	fh=m_sprites->getFrameHeader(FRM__ISLAND);
-	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,11);
+	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,221);
 
 	// Sky
 	fh=m_sprites->getFrameHeader(FRM_SKY);
@@ -181,7 +237,12 @@ void CFrontEndMainTitles::render()
 		case MODE__PRESS_START:
 			renderPressStart();
 			break;
+			
 		case MODE__SELECT_OPTION:
+			m_mainMenu->render();
+			break;
+
+		default:
 			break;
 	}
 }
@@ -203,10 +264,24 @@ void CFrontEndMainTitles::think(int _frames)
 			if(!CFader::isFading()&&PadGetDown(0)&PAD_START)
 			{
 				m_mode=MODE__SELECT_OPTION;
-CFader::setFadingOut();
 			}
 			break;
+
 		case MODE__SELECT_OPTION:
+			m_mainMenu->think(_frames);
+			if(m_startGameFlag)
+			{
+//				CFader::setFadingOut();
+				m_mode=MODE__START_GAME;
+			}
+			else if(m_gotoOptionsFlag)
+			{
+				CFader::setFadingOut();
+				m_mode=MODE__GOTO_OPTIONS;
+			}
+			break;
+
+		default:
 			break;
 	}
 }
@@ -218,7 +293,50 @@ CFader::setFadingOut();
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-POLY_FT4	*CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
+int CFrontEndMainTitles::isReadyToExit()
+{
+	return !CFader::isFading()&&(m_mode==MODE__START_GAME||m_mode==MODE__GOTO_OPTIONS);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
+{
+	CFrontEndScene::FrontEndMode	ret;
+
+	ret=CFrontEndScene::MODE__NONE;
+	switch(m_mode)
+	{
+		case MODE__PRESS_START:
+		case MODE__SELECT_OPTION:
+			ASSERT(0);
+			break;
+
+		case MODE__START_GAME:
+			ret=CFrontEndScene::MODE__CHOOSE_SLOT;
+			break;
+
+		case MODE__GOTO_OPTIONS:
+			ret=CFrontEndScene::MODE__GAME_OPTIONS;
+			break;
+	}
+
+	return ret;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
 {
 	int			u,v,w,h;
 	POLY_FT4	*ft4;
@@ -336,7 +454,7 @@ void CFrontEndMainTitles::renderPressStart()
 {
 	if(!CFader::isFading())
 	{
-		m_bigFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
+		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
 	}
 }
 

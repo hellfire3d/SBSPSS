@@ -49,6 +49,19 @@
 	Vars
 	---- */
 
+static CFrontEndMainTitles		s_frontEndModeMainTitles;
+
+CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
+{
+	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
+	&s_frontEndModeMainTitles,//NULL,							// MODE__GAME_OPTIONS
+	&s_frontEndModeMainTitles,//NULL,							// MODE__CHOOSE_SLOT
+	NULL,							// MODE__DEMO
+
+	NULL,							// MODE__NONE
+};
+
+
 CFrontEndScene	FrontEndScene;
 
 
@@ -60,8 +73,8 @@ CFrontEndScene	FrontEndScene;
   ---------------------------------------------------------------------- */
 void CFrontEndScene::init()
 {
-	m_mainTitles=new ("FEMainTitles") CFrontEndMainTitles();
-	m_mainTitles->init();
+	m_mode=MODE__NONE;
+	setMode(MODE__MAIN_TITLES);
 }
 
 
@@ -73,7 +86,6 @@ void CFrontEndScene::init()
   ---------------------------------------------------------------------- */
 void CFrontEndScene::shutdown()
 {
-	m_mainTitles->shutdown();		delete m_mainTitles;
 }
 
 
@@ -85,7 +97,7 @@ void CFrontEndScene::shutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndScene::render()
 {
-	m_mainTitles->render();
+	s_modeCodes[m_mode]->render();
 }
 
 
@@ -97,7 +109,14 @@ void CFrontEndScene::render()
   ---------------------------------------------------------------------- */
 void CFrontEndScene::think(int _frames)
 {
-	  m_mainTitles->think(_frames);
+	CFrontEndMode	*mode;
+
+	mode=s_modeCodes[m_mode];
+	mode->think(_frames);
+	if(mode->isReadyToExit())
+	{
+		setMode(mode->getNextMode());
+	}
 }
 
 
@@ -110,6 +129,30 @@ void CFrontEndScene::think(int _frames)
 int CFrontEndScene::readyToShutdown()
 {
 	return false;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndScene::setMode(FrontEndMode _newMode)
+{
+	PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
+
+	// Close old mode
+	if(s_modeCodes[m_mode])
+	{
+		s_modeCodes[m_mode]->shutdown();
+	}
+	
+	// Open new mode
+	m_mode=_newMode;
+	s_modeCodes[m_mode]->init();
+//	s_modeCodes[m_mode]->shutdown();
+//	ASSERT(0);
 }
 
 
