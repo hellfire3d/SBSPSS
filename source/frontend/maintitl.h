@@ -46,7 +46,7 @@ private:
 	enum
 	{
 		LOGO_CENTRE_Y=74,
-		GAME_TITLE_TEXT_CENTRE_Y=120,
+		GAME_TITLE_TEXT_CENTRE_Y=100,
 		GAME_TITLE_TEXT_R=128,
 		GAME_TITLE_TEXT_G=128,
 		GAME_TITLE_TEXT_B=128,
@@ -57,8 +57,9 @@ private:
 		PRESS_START_TEXT_B=100,
 
 		HORIZON_LEVEL=160,
+		SEA_OVERLAP=50,						// Sea is drawn to this many pixels below screen bottom
 
-		ISLAND_LEFT_X=40,
+		ISLAND_LEFT_X=40,					// Island position
 		ISLAND_BOTTOM_Y=HORIZON_LEVEL+10,
 	};
 
@@ -68,8 +69,8 @@ private:
 		MODE__SELECT_OPTION,
 	};
 
-	POLY_FT4	*prepareSeaPortionFT4(struct sFrameHdr *_fh,int _x,int _y,int _w,int _h);
-	void		renderSea();
+	POLY_FT4	*prepareSeaPortionFT4(struct sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb);
+	void		renderSeaSection(struct sFrameHdr *fh,int _x,int _y,int _w,int _h);
 
 	void		renderPressStart();
 

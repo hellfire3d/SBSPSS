@@ -59,7 +59,7 @@ public:
 
 // Available fonts
 extern FontData	standardFont;			// Crappy old PR font
-extern FontData	largeFont;				// Large SB font
+
 
 /*	Data
 	---- */

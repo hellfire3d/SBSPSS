@@ -75,12 +75,15 @@
 	---- */
 
 ///////////////
-int seaw=10;
-int seah=70;
+int seaw=1;
+int seah=50;
 int seaspeed=20;
 int seagap=120;
-int seascale=4000;
+int seascale=4200;
 int	seascalegrow=-50;
+int colourbase=64;
+int colourscale=4000;
+int colourpostscale=10;
 
 int sval=0;
 ///////////////
@@ -102,7 +105,7 @@ void CFrontEndMainTitles::init()
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
 
 	m_bigFont=new ("MainTitle BigFont") FontBank();
-	m_bigFont->initialise(&largeFont);
+	m_bigFont->initialise(&standardFont);
 	m_bigFont->setJustification(FontBank::JUST_CENTRE);
 	m_bigFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 
@@ -139,6 +142,10 @@ int posnum=5;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int isx=39;
+int isy=3;
+int isw=100;
+int ish=56;
 void CFrontEndMainTitles::render()
 {
 	sFrameHdr	*fh;
@@ -166,7 +173,8 @@ void CFrontEndMainTitles::render()
 			setSemiTrans(ft4,true);
 	}
 
-	renderSea();
+	renderSeaSection(m_sprites->getFrameHeader(FRM__ISLAND),isx,HORIZON_LEVEL+isy,isw,ish);
+	renderSeaSection(m_sprites->getFrameHeader(FRM_SKY),0,HORIZON_LEVEL,512,256-HORIZON_LEVEL+SEA_OVERLAP);
 
 	switch(m_mode)
 	{
@@ -210,7 +218,7 @@ CFader::setFadingOut();
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-POLY_FT4	*CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h)
+POLY_FT4	*CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
 {
 	int			u,v,w,h;
 	POLY_FT4	*ft4;
@@ -224,7 +232,7 @@ POLY_FT4	*CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y
 	ft4=GetPrimFT4();
 	setShadeTexPolyFT4(ft4);
 	setShadeTex(ft4,0);
-	setRGB0(ft4,64,64,64);
+	setRGB0(ft4,_rgb,_rgb,_rgb);
 
 	ft4->u0=u;
 	ft4->u1=u+w;
@@ -247,31 +255,36 @@ POLY_FT4	*CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndMainTitles::renderSea()
+typedef struct
 {
-	sFrameHdr	*fh;
+	int	x,y;
+	int	colour;
+} SeaGrid;
+void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,int _h)
+{
 	int			xloop,yloop;
 	int			xstep,ystep;
 	int			x,y;
 	int			scale;
 	POLY_FT4	*ft4;
-	int			grid[seaw+1][seah+1][2];
+	SeaGrid		grid[seaw+1][seah+1];
 	int			waveval;
 
 
 	// Grow the grid
-	xstep=(512<<8)/seaw;
-	ystep=((256-HORIZON_LEVEL+(2048/(seascale+(seascalegrow*seah))))<<8)/seah;
-	y=HORIZON_LEVEL<<8;
+	xstep=(_w<<8)/seaw;
+	ystep=(_h<<8)/seah;
+	y=_y<<8;
 	waveval=sval;
 	scale=seascale;
 	for(yloop=0;yloop<seah+1;yloop++)
 	{
-		x=0;
+		x=_x<<8;
 		for(xloop=0;xloop<seaw+1;xloop++)
 		{
-			grid[xloop][yloop][0]=(x>>8)+0;
-			grid[xloop][yloop][1]=(y>>8)+(msin(waveval)/scale);
+			grid[xloop][yloop].x=(x>>8)+0;
+			grid[xloop][yloop].y=(y>>8)+(msin(waveval)/scale);
+			grid[xloop][yloop].colour=colourbase+((msin(waveval)/colourscale)*colourpostscale);
 			x+=xstep;
 		}
 		y+=ystep;
@@ -279,15 +292,7 @@ void CFrontEndMainTitles::renderSea()
 		waveval=(waveval+seagap)&4095;
 	}
 
-	// Hmm.. let's stick the top line to the horizon shall we?
-	for(xloop=0;xloop<seaw+1;xloop++)
-	{
-		grid[xloop][yloop][1]=HORIZON_LEVEL;
-	}
-
 	// Draw it
-	fh=m_sprites->getFrameHeader(FRM_SKY);
-	//fh=m_sprites->getFrameHeader(FRM__SBLOGO);
 	xstep=(256<<8)/seaw;
 	ystep=(256<<8)/seah;
 	y=0;
@@ -296,15 +301,15 @@ void CFrontEndMainTitles::renderSea()
 		x=0;
 		for(xloop=0;xloop<seaw;xloop++)
 		{
-			ft4=prepareSeaPortionFT4(fh,x>>8,y>>8,xstep>>8,ystep>>8);
-			ft4->x0=grid[xloop  ][yloop  ][0];
-			ft4->y0=grid[xloop  ][yloop  ][1];
-			ft4->x1=grid[xloop+1][yloop  ][0];
-			ft4->y1=grid[xloop+1][yloop  ][1];
-			ft4->x3=grid[xloop+1][yloop+1][0];
-			ft4->y3=grid[xloop+1][yloop+1][1];
-			ft4->x2=grid[xloop  ][yloop+1][0];
-			ft4->y2=grid[xloop  ][yloop+1][1];
+			ft4=prepareSeaPortionFT4(_fh,x>>8,y>>8,xstep>>8,ystep>>8,64);//grid[xloop][yloop].colour);
+			ft4->x0=grid[xloop  ][yloop  ].x;
+			ft4->y0=grid[xloop  ][yloop  ].y;
+			ft4->x1=grid[xloop+1][yloop  ].x;
+			ft4->y1=grid[xloop+1][yloop  ].y;
+			ft4->x3=grid[xloop+1][yloop+1].x;
+			ft4->y3=grid[xloop+1][yloop+1].y;
+			ft4->x2=grid[xloop  ][yloop+1].x;
+			ft4->y2=grid[xloop  ][yloop+1].y;
 			AddPrimToList(ft4,1000);
 			x+=xstep;
 		}

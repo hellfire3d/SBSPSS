@@ -278,7 +278,7 @@ void CGUIObjectWithFont::init(CGUIObject *_parent,GUIId _id)
 {
 	CGUIObject::init(_parent,_id);
 	m_fontBank=new ("GUIObjectWithFont:fontBank") FontBank();
-	m_fontBank->initialise(&largeFont);
+	m_fontBank->initialise(&standardFont);
 	m_fontBank->setJustification(FontBank::JUST_CENTRE);
 	m_fontBank->setOt(getOt());
 	m_fontBank->setColour(DEFAULT_FONT_R,DEFAULT_FONT_G,DEFAULT_FONT_B);
