@@ -23,9 +23,9 @@ class CNpcFallingBlockPlatform : public CNpcPlatform
 public:
 	void				postInit();
 	CRECT const			*getThinkBBox()												{return( CThing::getThinkBBox() );}
-	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 	void				trigger();
 protected:
+	void				collidedWith(CThing *_thisThing);
 	void				processMovement( int _frames );
 
 	u8					m_isTriggered;

@@ -92,14 +92,68 @@ void CNpcFallingBlockPlatform::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int CNpcFallingBlockPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
+void CNpcFallingBlockPlatform::collidedWith( CThing *_thisThing )
 {
-	if ( m_isFalling )
+	switch(_thisThing->getThingType())
 	{
-		return( false );
-	}
-	else
-	{
-		return( CNpcPlatform::checkCollisionAgainst( _thisThing, _frames ) );
+		case TYPE_PLAYER:
+		{
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( m_isFalling )
+				{
+					int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+					if ( height < -threshold )
+					{
+						player->takeDamage( DAMAGE__HIT_ENEMY, REACT__GET_DIRECTION_FROM_THING, this );
+					}
+				}
+				else
+				{
+					if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+					{
+						player->setPlatform( this );
+
+						m_contact = true;
+					}
+					else
+					{
+						if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+						{
+							int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+							if ( height >= -threshold && height < 1 )
+							{
+								player->setPlatform( this );
+
+								m_contact = true;
+							}
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		default:
+			break;
 	}
 }
