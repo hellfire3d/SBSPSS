@@ -26,42 +26,110 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // Anim Data 
-CFXBaseAnim::sFXData	FXWaterSplashData=
+CFXBaseAnim::sFXAnim	FXWaterSplashData=
 {
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		127,127,255
+		127,127,255,
+		0,
+		{0,0},
+		0,
 };
 
-CFXBaseAnim::sFXData	FXAcidSplashData=
+CFXBaseAnim::sFXAnim	FXAcidSplashData=
 {
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		0,255,0
+		0,255,0,
+		0,
+		{0,0},
+		0
 };
-CFXBaseAnim::sFXData	FXLavaSplashData=
+CFXBaseAnim::sFXAnim	FXLavaSplashData=
 {
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		255,0,0
+		255,0,0,
+		0,
+		{0,0},
+		0
 };
-CFXBaseAnim::sFXData	FXOilSplashData=
+CFXBaseAnim::sFXAnim	FXOilSplashData=
 {
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		0,0,0
+		0,0,0,
+		0,
+		{0,0},
+		CFX::FX_TYPE_EXPLODE,
 };
 
-CFXBaseAnim::sFXData	FXExplodeData=
+CFXBaseAnim::sFXAnim	FXExplodeData=
 {
 		ONE,
 		FRM__EXPLOSION0001,FRM__EXPLOSION0006,
 		1,
-		127,127,127
+		127,127,127,
+		0,
+		{0,0},
+		0
+};
+
+CFXBaseAnim::sFXAnim	FXFireData=
+{
+		ONE,
+		FRM__FIRE01,FRM__FIRE06,
+		1,
+		127,127,127,
+		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		{0,0},
+		0
+};
+
+CFXBaseAnim::sFXAnim	FXWaterDripData=
+{
+		ONE,
+		FRM__DRIP,FRM__DRIP,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
+		{0,1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+
+CFXBaseAnim::sFXAnim	FXAcidDripData=
+{
+		ONE,
+		FRM__DRIP,FRM__DRIP,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+CFXBaseAnim::sFXAnim	FXLavaDripData=
+{
+		ONE,
+		FRM__DRIP,FRM__DRIP,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+CFXBaseAnim::sFXAnim	FXOilDripData=
+{
+		ONE,
+		FRM__DRIP,FRM__DRIP,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,1},
+		CFX::FX_TYPE_SPLASH_WATER
 };
 
 /*****************************************************************************/
@@ -86,7 +154,7 @@ void	TestFX(DVECTOR Pos)
 }
 */
 /*****************************************************************************/
-int	FXType=(CFX::FX_TYPE)0;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_DROP_WATER;
 void	TestFX(DVECTOR Pos)
 {
 		CFX::Create((CFX::FX_TYPE)FXType,Pos);
@@ -128,6 +196,27 @@ CFX		*NewFX;
 			NewFX=new ("FXExplode") CFXBaseAnim();
 			NewFX->setData(&FXExplodeData);
 			break;
+		case FX_TYPE_FLAMES:
+			NewFX=new ("FXFlames") CFXBaseAnim();
+			NewFX->setData(&FXFireData);
+			break;
+
+		case FX_TYPE_DROP_WATER:
+			NewFX=new ("FXWaterDrip") CFXBaseAnim();
+			NewFX->setData(&FXWaterDripData);
+			break;
+		case FX_TYPE_DROP_ACID:
+			NewFX=new ("FXAcidDrip") CFXBaseAnim();
+			NewFX->setData(&FXAcidDripData);
+			break;
+		case FX_TYPE_DROP_LAVA:
+			NewFX=new ("FXLavaDrip") CFXBaseAnim();
+			NewFX->setData(&FXLavaDripData);
+			break;
+		case FX_TYPE_DROP_OIL:
+			NewFX=new ("FXOilDrip") CFXBaseAnim();
+			NewFX->setData(&FXOilDripData);
+			break;
 
 		case FX_TYPE_NRG_BAR:
 			NewFX=new ("NRG Bar") CFXNRGBar();
@@ -149,10 +238,6 @@ CFX		*NewFX;
 		case FX_TYPE_SHOCKWAVE:
 		case FX_TYPE_DAZE:
 
-		case FX_TYPE_DROP_WATER:
-		case FX_TYPE_DROP_ACID:
-		case FX_TYPE_DROP_LAVA:
-		case FX_TYPE_DROP_OIL:
 		case FX_TYPE_CASCADE:		
 		case FX_TYPE_CASCADE_SPLASH:	
 		case FX_TYPE_FIREBALL:
@@ -160,8 +245,7 @@ CFX		*NewFX;
 		case FX_TYPE_SMOKE:
 		case FX_TYPE_GAS:
 
-		case FX_TYPE_FLAMES:
-		
+	
 		default:
 			ASSERT(!"UNKNOWN FX TYPE");
 			return NULL;

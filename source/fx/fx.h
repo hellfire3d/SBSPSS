@@ -8,25 +8,12 @@
 #include "thing/thing.h"
 
 /*****************************************************************************/
-/*
-struct sFXData
-{
-	s16		StartLife;
-	s16		StartScale;
-	s16		StartFrame,EndFrame;
-	DVECTOR	Velocity;
-	u8		R,G,B;
-	u16		Trans;
-
-};
-*/
-/*****************************************************************************/
 class CFX : public CFXThing
 {
 public:
 		enum	FX_TYPE
 		{
-			FX_TYPE_JELLYFISH_LEGS,
+			FX_TYPE_JELLYFISH_LEGS,		// zero also used to chain fx, so first must be unique type (I know what I mean)
 			FX_TYPE_FALLINGTILE,
 
 			FX_TYPE_EXPLODE,
