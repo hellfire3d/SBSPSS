@@ -40,3 +40,17 @@ char	Filename[256];
 		return(Count);
 }
 
+/*****************************************************************************/
+void	CTexCache::Purge()
+{
+int	ListSize=TexList.size();
+
+	TRACE1("Purging %i textures\n",ListSize);
+
+	for (int i=0; i<ListSize; i++)
+	{
+		glDeleteTextures(1,&TexList[i].TexID);
+	}
+
+	TexList.clear();
+}

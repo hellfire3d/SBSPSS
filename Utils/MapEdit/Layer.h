@@ -41,10 +41,13 @@ virtual	void			SetName(char *_Name);
 
 virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
 
-virtual	void			Render(CCore *Core,Vec &MapPos,BOOL Is3d)=0;
-virtual	void			RenderGrid(CCore *Core,Vec &MapPos)=0;
+virtual	void			Render(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
+virtual	void			RenderGrid(CCore *Core,Vec &CamPos)=0;
 
-virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos)=0;
+virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)=0;
+
+virtual	void			InitGUI(CCore *Core)=0;
+virtual	void			UpdateGUI(CCore *Core)=0;
 
 protected:
 		char			Name[256];

@@ -35,8 +35,8 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_TOOLBAR_PARAMBAR, OnToolbarParamBar)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToolbarTilepalette)
+	ON_COMMAND(ID_TOOLBAR_GRID, OnToolbarGrid)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -147,5 +147,5 @@ BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{GetDocume
 void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,TRUE);}
 void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,FALSE);}
 void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(this,nFlags, point);}
-void CMapEditView::OnToolbarParamBar()									{GetDocument()->ToggleParamView(this);}
 void CMapEditView::OnToolbarTilepalette()								{GetDocument()->ToggleTileView(this);}
+void CMapEditView::OnToolbarGrid() 										{GetDocument()->ToggleGrid(this);}

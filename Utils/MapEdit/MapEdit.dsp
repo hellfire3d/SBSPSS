@@ -174,10 +174,6 @@ SOURCE=.\GLEnabledView.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerList.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -195,10 +191,6 @@ SOURCE=.\MapEditDoc.cpp
 # Begin Source File
 
 SOURCE=.\MapEditView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MultiBar.cpp
 # End Source File
 # Begin Source File
 
@@ -223,10 +215,6 @@ SOURCE=.\GLEnabledView.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerList.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\MainFrm.h
 # End Source File
 # Begin Source File
@@ -240,10 +228,6 @@ SOURCE=.\MapEditDoc.h
 # Begin Source File
 
 SOURCE=.\MapEditView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MultiBar.h
 # End Source File
 # Begin Source File
 
@@ -274,6 +258,38 @@ SOURCE=.\res\MapEditDoc.ico
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # End Group
+# Begin Group "Dlg"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\LayerList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MultiBar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MultiBar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TileSetDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TileSetDlg.h
+# End Source File
 # End Group
+# End Group
+# Begin Source File
+
+SOURCE=".\!ToDo.txt"
+# End Source File
 # End Target
 # End Project

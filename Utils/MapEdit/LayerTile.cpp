@@ -10,8 +10,10 @@
 #include	<gl\glut.h>
 #include	"GLEnabledView.h"
 
+#include	"MapEdit.h"
 #include	"MapEditDoc.h"
 #include	"MapEditView.h"
+#include	"MainFrm.h"
 
 #include	"Core.h"
 #include	"Layer.h"
@@ -46,29 +48,29 @@ CLayerTile::~CLayerTile()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::Render(CCore *Core,Vec &MapPos,BOOL Is3d)
+void	CLayerTile::Render(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
 	if (Is3d && Render3dFlag)
 	{
 		glEnable(GL_DEPTH_TEST);
-		Render3d(Core,MapPos);
+		Render3d(Core,CamPos);
 		glDisable(GL_DEPTH_TEST);
 	}
 		else
 	{
-		Render2d(Core,MapPos);
+		Render2d(Core,CamPos);
 	}
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render2d(CCore *Core,Vec &MapPos)
+void	CLayerTile::Render2d(CCore *Core,Vec &CamPos)
 {
 	return;
 float		XYDiv=GetLayerZPosDiv();
 int			MapW=Map.GetWidth();
 int			MapH=Map.GetHeight();
-float		StartX=MapPos.x/XYDiv;
-float		StartY=MapPos.y/XYDiv;
+float		StartX=CamPos.x/XYDiv;
+float		StartY=CamPos.y/XYDiv;
 CTexCache	&TexCache=Core->GetTexCache();
 		
 		glColor3f(0.5,0.5,0.5);
@@ -82,7 +84,7 @@ CTexCache	&TexCache=Core->GetTexCache();
 				CTile		&ThisTile=Core->GetTile(ThisElem.Bank,ThisElem.Tile);
 
 				glLoadIdentity();	// Slow way, but good to go for the mo
-				glTranslatef(StartX+XLoop,StartY-YLoop,MapPos.z);
+				glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
 //				ThisTile.Render();
 int	c=(XLoop+YLoop)&1;
 				glColor3f(c,1,1);
@@ -95,13 +97,13 @@ int	c=(XLoop+YLoop)&1;
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render3d(CCore *Core,Vec &MapPos)
+void	CLayerTile::Render3d(CCore *Core,Vec &CamPos)
 {
 float		XYDiv=GetLayerZPosDiv();
 int			MapW=Map.GetWidth();
 int			MapH=Map.GetHeight();
-float		StartX=MapPos.x/XYDiv;
-float		StartY=MapPos.y/XYDiv;
+float		StartX=CamPos.x/XYDiv;
+float		StartY=CamPos.y/XYDiv;
 CTexCache	&TexCache=Core->GetTexCache();
 		
 		glColor3f(0.5,0.5,0.5);
@@ -115,7 +117,7 @@ CTexCache	&TexCache=Core->GetTexCache();
 				CTile		&ThisTile=Core->GetTile(ThisElem.Bank,ThisElem.Tile);
 
 				glLoadIdentity();	// Slow way, but good to go for the mo
-				glTranslatef(StartX+XLoop,StartY-YLoop,MapPos.z);
+				glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
 				ThisTile.Render();
 			}
 		}
@@ -123,18 +125,18 @@ CTexCache	&TexCache=Core->GetTexCache();
 }
 
 /*****************************************************************************/
-void	CLayerTile::RenderGrid(CCore *Core,Vec &MapPos)
+void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos)
 {
 float	XYDiv=GetLayerZPosDiv();
 int		MapW=Map.GetWidth();
 int		MapH=Map.GetHeight();
-float	StartX=MapPos.x/XYDiv;
-float	StartY=MapPos.y/XYDiv;
+float	StartX=CamPos.x/XYDiv;
+float	StartY=CamPos.y/XYDiv;
 float	OverVal=0.5;
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(StartX,StartY,MapPos.z);
+		glTranslatef(StartX,StartY,CamPos.z);
 		glDisable(GL_TEXTURE_2D);
 
 		glBegin(GL_LINES); 
@@ -158,7 +160,7 @@ float	OverVal=0.5;
 }
 
 /*****************************************************************************/
-void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos)
+void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
 {
 GLint	Viewport[4];
 GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
@@ -169,8 +171,8 @@ CPoint	&CursorPos=Core->GetCursorPos();
 float	XYDiv=GetLayerZPosDiv();
 int		MapW=Map.GetWidth();
 int		MapH=Map.GetHeight();
-float	StartX=MapPos.x/XYDiv;
-float	StartY=MapPos.y/XYDiv;
+float	StartX=CamPos.x/XYDiv;
+float	StartY=CamPos.y/XYDiv;
 
 		
 		glGetIntegerv(GL_VIEWPORT, Viewport);
@@ -188,7 +190,7 @@ float	StartY=MapPos.y/XYDiv;
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(StartX,StartY,MapPos.z);
+		glTranslatef(StartX,StartY,CamPos.z);
 
 		for (int YLoop=0; YLoop<MapH; YLoop++)
 		{
@@ -220,4 +222,21 @@ GLuint	*HitPtr=SelectBuffer;
 		}
 		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
 
+}
+
+/*****************************************************************************/
+/*** Gui *********************************************************************/
+/*****************************************************************************/
+void	CLayerTile::InitGUI(CCore *Core)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
+		ParamBar->RemoveAll();
+		ParamBar->Update();
+}
+
+/*****************************************************************************/
+void	CLayerTile::UpdateGUI(CCore *Core)
+{
 }

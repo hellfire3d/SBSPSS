@@ -19,7 +19,6 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-BOOL	Test3dFlag=TRUE;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -28,13 +27,18 @@ CCore::CCore()
 {
 	for (int i=0; i<LAYER_TYPE_MAX; i++) Layers[i]=0;
 
-	RenderFlag=TRUE;
 	TileViewFlag=FALSE;
-	ParamViewFlag=TRUE;
+	GridFlag=TRUE;
 	CurrentMousePos=CPoint(0,0);
 	ActiveLayer=0;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
+	Is3dFlag=TRUE;
+
+	CurrentTileBank=0;
+	MouseTileL.Bank=0; MouseTileL.Tile=1;
+	MouseTileR.Bank=0; MouseTileR.Tile=1;
+
 
 }
 
@@ -57,6 +61,11 @@ void	CCore::NewMap()
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
 	TileBank.AddTileSet("c:/temp/3/test.gin");
+//	TileBank.AddTileSet("c:/temp/slope/slope.gin");
+//	TileBank.AddTileSet("c:/temp/2/2.gin");
+//	TileBank.AddTileSet("c:/temp/1/1.gin");
+	TileBank.AddTileSet("c:/temp/4/4.gin");
+	TileBank.AddTileSet("c:/temp/5/5.gin");
 }
 
 /*****************************************************************************/
@@ -67,34 +76,47 @@ void	CCore::OpenMap()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CCore::Render(CMapEditView *View)
+void	CCore::Render(CMapEditView *View,BOOL ForceRender)
 {
-
-Vec		&ThisCam=GetCam();
-
 		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
 
-
-		if (RenderFlag)
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
+		if (TileViewFlag)
 		{
-			RenderFlag=FALSE;
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
-			if (GetTileView())
-			{
-	
-			}
-			else
-			{
-				for (int i=0;i<LAYER_TYPE_MAX;i++)
-				{
-					Layers[i]->Render(this,ThisCam,Test3dFlag);
-				}
-			}
-			Layers[ActiveLayer]->RenderGrid(this,ThisCam);
+			RenderTileView(View);
 		}
-// Calc CursorPos
-		Layers[ActiveLayer]->FindCursorPos(this,View,ThisCam,CurrentMousePos);
+		else
+		{
+			RenderLayers(View);
+		}
 
+}
+
+/*****************************************************************************/
+void	CCore::RenderLayers(CMapEditView *View)
+{
+Vec		&ThisCam=GetCam();
+		
+		for (int i=0;i<LAYER_TYPE_MAX;i++)
+		{
+			Layers[i]->Render(this,ThisCam,Is3dFlag);
+		}
+		
+		if (GridFlag) Layers[ActiveLayer]->RenderGrid(this,ThisCam);
+
+// Get Cursor Pos
+		Layers[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
+}
+
+/*****************************************************************************/
+void	CCore::RenderTileView(CMapEditView *View)
+{
+Vec		&ThisCam=GetCam();
+
+		TileBank.RenderSet(this,ThisCam,Is3dFlag);
+
+// Get Cursor Pos
+		TileBank.FindCursorPos(this,View,GetCam(),CurrentMousePos);
 }
 
 /*****************************************************************************/
@@ -102,6 +124,10 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
+		if (TileViewFlag)
+			TileBank.LButtonControl(this,View,nFlags,point,DownFlag);
+		else
+			;
 }
 
 /*****************************************************************************/
@@ -113,6 +139,11 @@ void	CCore::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL Do
 /*****************************************************************************/
 void	CCore::RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
+		if (TileViewFlag)
+			TileBank.RButtonControl(this,View,nFlags,point,DownFlag);
+		else
+			;
+
 }
 
 /*****************************************************************************/
@@ -168,7 +199,6 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::UpdateParamBar(CMapEditView *View,BOOL ViewFlag)
 {
-
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 CMultiBar	*ParamBar=Frm->GetParamBar();
@@ -192,44 +222,69 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 //			Dlg->SetCurSel(ActiveLayer);
 		}
 */
-		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
-		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
-		ParamBar->ShowWindow(SW_SHOW);
-		if (View) UpdateView(View);
-
-}
-
-/*****************************************************************************/
-void	CCore::ToggleParamView(CMapEditView *View)
-{
-	UpdateParamBar(View,!ParamViewFlag);
+//		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
+//		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
+//		ParamBar->ShowWindow(SW_SHOW);
+//		if (View) UpdateView(View);
 }
 
 /*****************************************************************************/
 void	CCore::SetActiveLayer(int i)
 {
-	UpdateParamBar(NULL,ParamViewFlag);
+//	UpdateParamBar(NULL,ParamViewFlag);
 }
 
-
 /*****************************************************************************/
-/*** TileBank ****************************************************************/
+/*** Grid ********************************************************************/
 /*****************************************************************************/
-/*****************************************************************************/
-void	CCore::UpdateTileView(CMapEditView *View,BOOL ViewFlag)
+void	CCore::UpdateGrid(CMapEditView *View,BOOL Toggle)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 
-			TileViewFlag=ViewFlag;
+			if (Toggle) GridFlag=!GridFlag;
+
+			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
+			UpdateView(View);
+}
+
+/*****************************************************************************/
+/*** TileBank ****************************************************************/
+/*****************************************************************************/
+void	CCore::UpdateTileView(CMapEditView *View,BOOL Toggle)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CToolBar	*ToolBar=Frm->GetToolBar();
+
+			if (Toggle) 
+			{
+				TileViewFlag=!TileViewFlag;
+				if (TileViewFlag)
+					TileBank.InitGUI(this);
+				else
+					Layers[ActiveLayer]->InitGUI(this);
+
+			}
+
 			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
 			UpdateView(View);
 }
 
 /*****************************************************************************/
-void	CCore::ToggleTileView(CMapEditView *View)
+void	CCore::ReloadTileBank()
 {
-	UpdateTileView(View,!TileViewFlag);
+		TileBank.Reload();
+		TexCache.Purge();
+		UpdateView(NULL);
+}
+
+/*****************************************************************************/
+void	CCore::ChangeTileBank()
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
+
+		CurrentTileBank=TileSetDlg->TileSetList.GetCurSel();			
 }
 
 /*****************************************************************************/
@@ -237,19 +292,24 @@ void	CCore::ToggleTileView(CMapEditView *View)
 /*****************************************************************************/
 Vec		&CCore::GetCam()
 {
-	if (GetTileView())
-		return(TileCam);
-	else
-		return(MapCam);
+		if (TileViewFlag)
+			return(TileCam);
+		else
+			return(MapCam);
 
 }
 
 /*****************************************************************************/
 void	CCore::UpdateAll(CMapEditView *View)
 {
-	UpdateView(View);
-	UpdateParamBar(View,ParamViewFlag);
-	UpdateTileView(View,TileViewFlag);
+		UpdateView(View);
+		UpdateGrid(View);
+
+		if (TileViewFlag)
+			TileBank.UpdateGUI(this);
+		else
+			Layers[ActiveLayer]->UpdateGUI(this);
+
 }
 
 /*****************************************************************************/
@@ -260,6 +320,5 @@ Vec		&ThisCam=GetCam();
 		Ofs.y=-Ofs.y;
 		ThisCam+=Ofs;
 		if (ThisCam.z>-1) ThisCam.z=-1;
-		RenderFlag=TRUE;
-		View->Invalidate();
+		if (View) View->Invalidate();
 }		

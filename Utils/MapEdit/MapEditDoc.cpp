@@ -152,14 +152,29 @@ void	CMapEditDoc::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ToggleParamView(CMapEditView *View)
+void	CMapEditDoc::ToggleTileView(CMapEditView *View)
 {
-	Core.ToggleParamView(View);
+		Core.UpdateTileView(View,TRUE);
+		Core.UpdateAll(View);
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ToggleTileView(CMapEditView *View)
+void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 {
-	Core.ToggleTileView(View);
+		Core.UpdateGrid(View,TRUE);
 }
 
+/*********************************************************************************/
+void	CMapEditDoc::ReloadTileBank()
+{
+		Core.ReloadTileBank();
+		UpdateAllViews(NULL);
+
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::TileBankChange()
+{
+		Core.ChangeTileBank();
+		UpdateAllViews(NULL);
+}

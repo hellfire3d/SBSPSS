@@ -26,7 +26,9 @@ public:
 		void					Init();
 		void					NewMap();
 		void					OpenMap();
-		void					Render(CMapEditView *View);
+		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
+		void					RenderLayers(CMapEditView *View);
+		void					RenderTileView(CMapEditView *View);
 
 // Control
 		void					LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
@@ -36,20 +38,28 @@ public:
 		void					MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
 
 // TileBank
-		void					UpdateTileView(CMapEditView *View,BOOL ViewFlag);
-		void					ToggleTileView(CMapEditView *View);
-		BOOL					GetTileView()					{return(TileViewFlag);}
+		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
 
 		CTile					GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
+		void					ReloadTileBank();
+		void					ChangeTileBank();
+
+		int						GetCurrentTileBank()			{return(CurrentTileBank);}
+		void					SetCurrentTileBank(int Bnk)		{CurrentTileBank=Bnk;}
+		sMapElem				&GetMouseTileL()				{return(MouseTileL);}
+		sMapElem				&GetMouseTileR()				{return(MouseTileR);}
 
 // Param Bar
 		void					UpdateParamBar(CMapEditView *View,BOOL ViewFlag);
-		void					ToggleParamView(CMapEditView *View);
-		BOOL					GetParamViewFlag()				{return(ParamViewFlag);}
+
 // Layers
 		void					SetActiveLayer(int Layer);
 		int						GetActiveLayer()				{return(ActiveLayer);}
 		CLayer					*GetLayer(int i)				{return(Layers[i]);}
+
+// Grid
+		void					UpdateGrid(CMapEditView *View,BOOL Toggle=FALSE);
+		BOOL					IsGridOn()						{return(GridFlag);}
 
 // Tex Cache
 		CTexCache				&GetTexCache()					{return(TexCache);}
@@ -61,6 +71,7 @@ public:
 		Vec						&GetCam();
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
+
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
@@ -71,10 +82,12 @@ private:
 
 		CTileBank				TileBank;
 		CTexCache				TexCache;
+		int						CurrentTileBank;
+		sMapElem				MouseTileL,MouseTileR;
 
-		BOOL					RenderFlag;
 		BOOL					TileViewFlag;
-		BOOL					ParamViewFlag;
+		BOOL					GridFlag;
+		BOOL					Is3dFlag;
 
 };
 

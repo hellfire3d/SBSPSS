@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CMultiBar
+LastClass=CTileSetDlg
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=9
+ClassCount=10
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -17,19 +17,18 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=10
-Resource1=IDD_TEST1
+ResourceCount=8
+Resource1=IDR_TOOLBAR (English (U.S.))
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_ABOUTBOX (English (U.S.))
+Resource3=IDR_MAINFRAME (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_MAINFRAME (English (U.S.))
+Resource5=IDD_ABOUTBOX (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_TRASHHEAP
-Resource7=IDD_TEST2
-Resource8=IDR_TOOLBAR (English (U.S.))
-Resource9=IDD_MULTIBAR (English (U.S.))
+Resource6=IDD_LAYER_LIST_DIALOG
+Resource7=IDD_MULTIBAR (English (U.S.))
 Class9=CLayerList
-Resource10=IDD_LAYER_LIST_DIALOG
+Class10=CTileSetDlg
+Resource8=IDD_TILESET_DIALOG
 
 [CLS:CChildFrame]
 Type=0
@@ -69,12 +68,16 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
+LastObject=CMapEditDoc
 
 [CLS:CMapEditView]
 Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
+LastObject=ID_TOOLBAR_GRID
+Filter=C
+VirtualFilter=VWC
 
 [DLG:IDD_ABOUTBOX]
 Type=1
@@ -91,10 +94,9 @@ Command5=ID_EDIT_COPY
 Command6=ID_EDIT_PASTE
 Command7=ID_FILE_PRINT
 Command8=ID_APP_ABOUT
-Command9=ID_TOOLBAR_PARAMBAR
-Command10=ID_TOOLBAR_TILEPALETTE
-Command11=ID_TOOLBAR_COMBO
-CommandCount=11
+Command9=ID_TOOLBAR_TILEPALETTE
+Command10=ID_TOOLBAR_GRID
+CommandCount=10
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -163,12 +165,6 @@ Control2=IDC_STATIC,static,1342308480
 Control3=IDC_STATIC,static,1342308352
 Control4=IDOK,button,1342373889
 
-[DLG:IDD_TRASHHEAP]
-Type=1
-Class=?
-ControlCount=1
-Control1=IDC_TOOLBAR_COMBO,combobox,1344340226
-
 [DLG:IDD_DIALOGBAR (English (U.S.))]
 Type=1
 Class=?
@@ -191,41 +187,6 @@ Type=1
 Class=CMultiBar
 ControlCount=0
 
-[DLG:IDD_TEST1]
-Type=1
-Class=?
-ControlCount=9
-Control1=IDC_STATIC,button,1342177287
-Control2=IDC_EDIT1,edit,1350631552
-Control3=IDC_EDIT2,edit,1350631552
-Control4=IDC_EDIT3,edit,1350631552
-Control5=IDC_EDIT4,edit,1350631552
-Control6=IDC_COMBO1,combobox,1344340226
-Control7=IDC_COMBO2,combobox,1344340226
-Control8=IDC_COMBO3,combobox,1344340226
-Control9=IDC_COMBO4,combobox,1344340226
-
-[DLG:IDD_TEST2]
-Type=1
-Class=?
-ControlCount=16
-Control1=IDC_CHECK1,button,1342242819
-Control2=IDC_CHECK2,button,1342242819
-Control3=IDC_CHECK3,button,1342242819
-Control4=IDC_CHECK4,button,1342242819
-Control5=IDC_CHECK5,button,1342242819
-Control6=IDC_CHECK6,button,1342242819
-Control7=IDC_CHECK7,button,1342242819
-Control8=IDC_CHECK8,button,1342242819
-Control9=IDC_CHECK9,button,1342242819
-Control10=IDC_CHECK10,button,1342242819
-Control11=IDC_CHECK11,button,1342242819
-Control12=IDC_CHECK12,button,1342242819
-Control13=IDC_CHECK13,button,1342242819
-Control14=IDC_CHECK14,button,1342242819
-Control15=IDC_CHECK15,button,1342242819
-Control16=IDC_CHECK16,button,1342242819
-
 [DLG:IDD_LAYER_LIST_DIALOG]
 Type=1
 Class=CLayerList
@@ -240,4 +201,20 @@ BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
 LastObject=CLayerList
+
+[DLG:IDD_TILESET_DIALOG]
+Type=1
+Class=CTileSetDlg
+ControlCount=2
+Control1=IDC_TILESETDLG_COMBO,combobox,1342242819
+Control2=IDC_TILESETDLG_BTN_UPDATE,button,1342242816
+
+[CLS:CTileSetDlg]
+Type=0
+HeaderFile=TileSetDlg.h
+ImplementationFile=TileSetDlg.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_TILESETDLG_COMBO
 

@@ -50,39 +50,36 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 
 // Status Bar
-	if (!m_wndStatusBar.Create(this) || !m_wndStatusBar.SetIndicators(indicators,sizeof(indicators)/sizeof(UINT)))
+	if (!StatusBar.Create(this) || !StatusBar.SetIndicators(indicators,sizeof(indicators)/sizeof(UINT)))
 	{
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
 	}
 
 // ParamBar
-	if (!m_wndParamBar.Create(this,IDD_PARAMBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_PARAMBAR))
+	if (!ParamBar.Create(this,IDD_PARAMBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_PARAMBAR))
 	{
 		TRACE0("Failed to create ParamBar\n");
 		return -1;
 	}
 	
-	m_wndParamBar.EnableDocking( CBRS_ALIGN_ANY);
-	m_wndParamBar.SetWindowText("Param");
-	DockControlBar(&m_wndParamBar);
+	ParamBar.EnableDocking( CBRS_ALIGN_ANY);
+	ParamBar.SetWindowText("Param");
+	DockControlBar(&ParamBar);
 
-//	Test1.Create(IDD_TEST1,NULL);
-	m_wndParamBar.AddDialog(LayerList,IDD_LAYER_LIST_DIALOG,TRUE);
-	m_wndParamBar.AddDialog(Test1,IDD_TEST1,TRUE);
-	m_wndParamBar.AddDialog(Test2,IDD_TEST2,TRUE);
+	ParamBar.Add(LayerList,IDD_LAYER_LIST_DIALOG,TRUE,TRUE);	// Add default parram bar item
 
 
 // ToolBar (plus extra code for extra controls!!)
-	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
+	if (!ToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !ToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
 		return -1;      // fail to create
 	}
-	m_wndToolBar.SetWindowText("ToolBar");
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
-	
+	ToolBar.SetWindowText("ToolBar");
+	ToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	DockControlBar(&ToolBar);
+/*	
 #define SNAP_WIDTH 80 //the width of the combo box
 
     //set up the ComboBox control as a snap mode select box
@@ -90,11 +87,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     //First get the index of the placeholder's position in the toolbar
 int	index = 0;
 RECT	rect;
-	while (m_wndToolBar.GetItemID(index)!=ID_TOOLBAR_COMBO) index++;
+	while (ToolBar.GetItemID(index)!=ID_TOOLBAR_COMBO) index++;
 
 	//next convert that button to a seperator and get its position
-	m_wndToolBar.SetButtonInfo(index, ID_TOOLBAR_COMBO, TBBS_SEPARATOR, SNAP_WIDTH);
-	m_wndToolBar.GetItemRect(index, &rect);
+	ToolBar.SetButtonInfo(index, ID_TOOLBAR_COMBO, TBBS_SEPARATOR, SNAP_WIDTH);
+	ToolBar.GetItemRect(index, &rect);
 
 	//expand the rectangle to allow the combo box room to drop down
 	rect.top+=2;
@@ -102,22 +99,22 @@ RECT	rect;
 
 	// then .Create the combo box and show it
 
-	if (!m_wndToolBar.m_Combo.Create(WS_CHILD|WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWNLIST | CBS_HASSTRINGS ,rect, &m_wndToolBar, IDC_TOOLBAR_COMBO))
+	if (!ToolBar.m_Combo.Create(WS_CHILD|WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWNLIST | CBS_HASSTRINGS ,rect, &ToolBar, IDC_TOOLBAR_COMBO))
 	{
 	   TRACE0("Failed to create combo-box\n");
 	   return FALSE;
 	}
-	m_wndToolBar.m_Combo.SetFont(m_wndToolBar.GetFont());	// Set to nice font (not playskool font!!)
-	m_wndToolBar.m_Combo.ShowWindow(SW_SHOW);
+	ToolBar.m_Combo.SetFont(ToolBar.GetFont());	// Set to nice font (not playskool font!!)
+	ToolBar.m_Combo.ShowWindow(SW_SHOW);
 
 	//fill the combo box
-	m_wndToolBar.m_Combo.AddString("SNAP OFF");
-	m_wndToolBar.m_Combo.AddString("SNAP GRID");
-	m_wndToolBar.m_Combo.AddString("SNAP RASTER");
-	m_wndToolBar.m_Combo.AddString("SNAP VERTEX");
-	m_wndToolBar.m_Combo.AddString("SNAP LINE");
-	m_wndToolBar.m_Combo.SetCurSel(0);
-	
+	ToolBar.m_Combo.AddString("SNAP OFF");
+	ToolBar.m_Combo.AddString("SNAP GRID");
+	ToolBar.m_Combo.AddString("SNAP RASTER");
+	ToolBar.m_Combo.AddString("SNAP VERTEX");
+	ToolBar.m_Combo.AddString("SNAP LINE");
+	ToolBar.m_Combo.SetCurSel(0);
+*/	
 	return 0;
 }
 
@@ -151,5 +148,6 @@ void CMainFrame::Dump(CDumpContext& dc) const
 // CMainFrame message handlers
 
 
+/////////////////////////////////////////////////////////////////////////////
 
 

@@ -19,7 +19,6 @@ protected: // create from serialization only
 
 // Attributes
 public:
-//	void			SetupPersMatrix(float _m_dAspectRatio);
 	void			UpdateView(CMapEditView *View);
 	void			Render(CMapEditView *View);
 	void			UpdateAll(CMapEditView *View);
@@ -30,8 +29,11 @@ public:
 	void			RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 	void			MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
 	void			MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
-	void			ToggleParamView(CMapEditView *View);
 	void			ToggleTileView(CMapEditView *View);
+	void			ToggleGrid(CMapEditView *View);
+
+	void			ReloadTileBank();
+	void			TileBankChange();
 
 // Operations
 public:
@@ -55,6 +57,7 @@ public:
 
 protected:
 	CCore		Core;
+
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditDoc)

@@ -7,6 +7,7 @@
 
 #include	"MultiBar.h"
 #include	"LayerList.h"
+#include	"TileSetDlg.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -30,9 +31,15 @@ public:
 
 // Attributes
 public:
-	CStatusBar		*GetStatusBar()	{return(&m_wndStatusBar);}
-	CMainToolBar	*GetToolBar()	{return(&m_wndToolBar);}
-	CMultiBar		*GetParamBar()	{return(&m_wndParamBar);}
+	CStatusBar		*GetStatusBar()			{return(&StatusBar);}
+	CMainToolBar	*GetToolBar()			{return(&ToolBar);}
+	CDialog			*GetDialog(int ID)		{return(ParamBar.GetDialog(ID));}
+
+// Param Bar
+	CMultiBar		*GetParamBar()			{return(&ParamBar);}
+	CDialog			&GetLayerList()			{return(LayerList);}
+	CDialog			&GetTileSetDlg()		{return(TileSetDlg);}
+		
 // Operations
 public:
 
@@ -51,14 +58,13 @@ public:
 #endif
 
 protected:  // control bar embedded members
-	CStatusBar		m_wndStatusBar;
-	CMainToolBar	m_wndToolBar;
+	CStatusBar		StatusBar;
+	CMainToolBar	ToolBar;
 
-	CMultiBar		m_wndParamBar;
+	CMultiBar		ParamBar;
 // Sub Dialogs
 	CLayerList		LayerList;
-	CDialog			Test1;
-	CDialog			Test2;
+	CTileSetDlg		TileSetDlg;
 
 // Generated message map functions
 protected:

@@ -30,7 +30,7 @@ public:
 		int		ProcessTexture(char *TexName,char *Path,int Flags);
 		sTex	&GetTex(int Id)						{return(TexList[Id]);}
 		GLuint	GetTexGLId(int Id)					{return(TexList[Id].TexID);}
-
+		void	Purge();
 
 		std::vector<sTex>		TexList;
 

@@ -25,13 +25,16 @@ public:
 		CLayerTile(char *_Name);											// Load Layer
 		~CLayerTile();
 
-		void			Render(CCore *Core,Vec &MapPos,BOOL Is3d);
-		void			RenderGrid(CCore *Core,Vec &MapPos);
-		void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos);
+		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
+		void			RenderGrid(CCore *Core,Vec &CamPos);
+		void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
+
+		void			InitGUI(CCore *Core);
+		void			UpdateGUI(CCore *Core);
 
 protected:
-		void			Render2d(CCore *Core,Vec &MapPos);
-		void			Render3d(CCore *Core,Vec &MapPos);
+		void			Render2d(CCore *Core,Vec &CamPos);
+		void			Render3d(CCore *Core,Vec &CamPos);
 
 		CMap			Map;
 		
