@@ -99,12 +99,12 @@ void 	CGameScene::init()
 
 		Level.init();
 
-//#ifdef __USER_charles__		
+#ifdef __USER_charles__		
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
 		enemy->setLayerCollision( Level.getCollisionLayer() );
-//#endif
+#endif
 
 #ifdef __USER_paul__
 		DVECTOR pos={16*10,16*10};
