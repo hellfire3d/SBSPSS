@@ -522,6 +522,7 @@ sLvlHdr	*LevelHdr=(sLvlHdr*)LevelBuffer;
 		ActorList=0;
 		ItemList=0;
 		PlatformList=0;
+		FXList=0;
 
 // Back
 
@@ -559,7 +560,6 @@ sLvlHdr	*LevelHdr=(sLvlHdr*)LevelBuffer;
 		}
 
 // Actors
-
 		if (LevelHdr->ActorList)
 		{
 			
@@ -591,6 +591,23 @@ sLvlHdr	*LevelHdr=(sLvlHdr*)LevelBuffer;
 				ItemList++;
 			}
 		}
+// Platforms
+		if (LevelHdr->PlatformList)
+		{
+			
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->PlatformList);
+			PlatformCount=Hdr->Count;
+			PlatformList=(sThingPlatform**)MemAlloc(PlatformCount*sizeof(sThingPlatform**),"Platform List");
+			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
+			for (int i=0; i<PlatformCount; i++)
+			{
+				PlatformList[i]=(sThingPlatform*)ThingPtr;
+				ThingPtr+=sizeof(sThingPlatform);
+				ThingPtr+=PlatformList[i]->PointCount*sizeof(u16)*2;
+			}
+			if (Hdr->Count>8) Hdr->Count=0;
+		}
+
 // Triggers
 		if (LevelHdr->TriggerList)
 		{
@@ -649,6 +666,7 @@ void	CLevel::shutdown(bool CleanUp)
 		VSync(0);CSoundMediator::think(1);		// This is needed to let xmplay kill off the sounds properly (pkg)
 
 		if (ActorList) MemFree(ActorList);
+		if (PlatformList) MemFree(PlatformList);
 
 		if (CleanUp)
 		{
