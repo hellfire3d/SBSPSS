@@ -225,16 +225,16 @@ void	CPlayerModeNet::renderModeUi()
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__NET);
-//	if(m_netState==NET_STATE__FULL)
+	if(m_netState==NET_STATE__FULL)
 	{
 		// Net has a jellyfish inside
 		int size=256+128+((msin(m_netSin)*npsize)>>12);
 		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,size);
 	}
-//	else
-//	{
-//		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
-//	}
+	else
+	{
+		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+	}
 }
 
 /*----------------------------------------------------------------------
