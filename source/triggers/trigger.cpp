@@ -151,6 +151,10 @@
 #include "triggers\toilgeyser.h"
 #endif
 
+#ifndef	__TRIGGERS_TBOSS_H__
+#include "triggers\tboss.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -334,7 +338,10 @@ CTrigger	*trigger;
 		case TRIGGER_OIL_GEYSER:
 			trigger = (COilGeyserTrigger*)new("OilGeyserTrigger") COilGeyserTrigger();
 			break;
-
+		// Boss Arena
+		case TRIGGER_BOSS_ARENA:
+			trigger = (COilGeyserTrigger*)new("BossArenaTrigger") CBossArenaTrigger();
+			break;
 		default:
 			trigger=NULL;
 	}

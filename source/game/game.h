@@ -50,9 +50,13 @@ virtual	int				canPause();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 static void				setReadyToExit();
+static void				hitBossArenaTrigger();
+
 static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}
 		CLevel			&GetLevel()			{return(Level);}
+
+
 
 //		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
@@ -68,6 +72,9 @@ private:
 	{
 		GAMESTATE_SHOWING_LIVES,
 		GAMESTATE_PLAYING,
+		GAMESTATE_FADING_INTO_BOSS_INTRO,
+		GAMESTATE_BOSS_INTRO,
+		GAMESTATE_FADING_OUT_OF_BOSS_INTRO,
 	}GAMESTATE;
 
 	enum
@@ -78,11 +85,14 @@ private:
 
 	GAMESTATE			m_gamestate;
 	int					m_showingLivesTimer;
+	static int			s_justHitBossArenaTrigger;
 
 	void				think_showing_lives(int _frames);
 	void				think_playing(int _frames);
+	void				think_boss_intro(int _frames);
 	void				render_showing_lives();
 	void				render_playing();
+	void				render_boss_intro();
 
 
 protected:

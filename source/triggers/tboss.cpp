@@ -58,6 +58,9 @@ void	CBossArenaTrigger::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 		{
+			CGameScene::hitBossArenaTrigger();
+			shutdown();
+			delete this;
 			break;
 		}
 

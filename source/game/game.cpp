@@ -164,6 +164,7 @@ int CGameScene::s_skipToNextLevel;
 #endif
 int	CGameScene::s_restartLevel;
 int	CGameScene::s_bossHasBeenKilled;
+int	CGameScene::s_justHitBossArenaTrigger;
 
 /*****************************************************************************/
 
@@ -242,7 +243,12 @@ void 	CGameScene::render()
 			render_showing_lives();
 			break;
 		case GAMESTATE_PLAYING:
+		case GAMESTATE_FADING_INTO_BOSS_INTRO:
 			render_playing();
+			break;
+		case GAMESTATE_BOSS_INTRO:
+		case GAMESTATE_FADING_OUT_OF_BOSS_INTRO:
+			render_boss_intro();
 			break;
 	}
 }
@@ -330,6 +336,34 @@ void CGameScene::render_playing()
 }
 
 /*****************************************************************************/
+void CGameScene::render_boss_intro()
+{
+	POLY_G4	*g4;
+
+	// Black background
+	g4=GetPrimG4();
+	setXYWH(g4,0,0,512,256);
+	setRGB0(g4,70,50,60);
+	setRGB1(g4,70,50,60);
+	setRGB2(g4,50,60,70);
+	setRGB3(g4,50,60,70);
+	AddPrimToList(g4,5);
+
+	// Instructions..
+	m_scalableFont->setColour(255,255,255);
+	m_scalableFont->setTrans(0);
+	m_scalableFont->setSMode(0);
+	m_scalableFont->setScale(300);
+	m_scalableFont->setJustification(FontBank::JUST_CENTRE);
+	m_scalableFont->print(256,30,"HOW TO BEAT THE BOSS...");
+
+	s_genericFont->setColour(255,255,255);
+	s_genericFont->setTrans(0);
+	s_genericFont->setSMode(0);
+	s_genericFont->print(256,70,"Blah\nBlah\nBlah");
+}
+
+/*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
 	switch(m_gamestate)
@@ -339,6 +373,23 @@ void	CGameScene::think(int _frames)
 			break;
 		case GAMESTATE_PLAYING:
 			think_playing(_frames);
+			break;
+		case GAMESTATE_FADING_INTO_BOSS_INTRO:
+			if(!CFader::isFading())
+			{
+				m_gamestate=GAMESTATE_BOSS_INTRO;
+				CFader::setFadingIn();
+			}
+			break;
+		case GAMESTATE_BOSS_INTRO:
+			think_boss_intro(_frames);
+			break;
+		case GAMESTATE_FADING_OUT_OF_BOSS_INTRO:
+			if(!CFader::isFading())
+			{
+				m_gamestate=GAMESTATE_PLAYING;
+				CFader::setFadingIn();
+			}
 			break;
 	}
 }
@@ -380,6 +431,14 @@ void CGameScene::think_playing(int _frames)
 	{
 		return;
 	}
+
+	if(s_justHitBossArenaTrigger)
+	{
+		m_gamestate=GAMESTATE_FADING_INTO_BOSS_INTRO;
+		CFader::setFadingOut();
+		s_justHitBossArenaTrigger=false;
+	}
+
 
 	// Auto-timer stuff
 	if(m_levelHasTimer)
@@ -512,6 +571,18 @@ void CGameScene::think_playing(int _frames)
 	}
 }
 
+
+/*****************************************************************************/
+void	CGameScene::think_boss_intro(int _frames)
+{
+	if(PadGetDown(0)&PAD_CROSS)
+	{
+		m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
+		CFader::setFadingOut();
+	}
+}
+
+
 /*****************************************************************************/
 int		CGameScene::readyToShutdown()
 {
@@ -564,6 +635,11 @@ void CGameScene::setReadyToExit()
 	CFader::setFadingOut();
 }
 
+/*****************************************************************************/
+void CGameScene::hitBossArenaTrigger()
+{
+	s_justHitBossArenaTrigger=true;
+}
 
 /*****************************************************************************/
 void	CGameScene::initLevel()
@@ -592,6 +668,7 @@ void	CGameScene::initLevel()
 	m_player->setCameraBox(camBox);
 
 	s_bossHasBeenKilled=false;
+	s_justHitBossArenaTrigger=false;
 
 	if(getLevelNumber()==5&&getChapterNumber()==2)
 	{
