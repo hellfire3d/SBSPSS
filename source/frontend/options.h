@@ -52,12 +52,16 @@ public:
 
 
 private:
+	void	setLoadMode(int _newMode);
+
+
 	enum
 	{
 		MODE__OPTIONS,
 		MODE__CONTROL,
 		MODE__SCREEN,
 		MODE__SOUND,
+		MODE__LOAD,
 
 		MODE__COUNT
 	};
@@ -92,6 +96,29 @@ private:
 
 	enum
 	{
+		LOADMODE__INIT,
+		LOADMODE__CHECKING,
+		LOADMODE__UNFORMATTED,
+		LOADMODE__NODATA,
+		LOADMODE__NOCARD,
+		LOADMODE__CONFIRMLOAD,
+		LOADMODE__LOADING,
+		LOADMODE__LOADOK,
+		LOADMODE__LOADERROR,
+
+		LOADMODE__COUNT,
+	};
+
+	enum
+	{
+		USERRESPONSE__NONE,
+		USERRESPONSE__OK,
+		USERRESPONSE__YES,
+		USERRESPONSE__NO,
+	};
+
+	enum
+	{
 		X_BORDER=30,
 		Y_BORDER=10,
 	};
@@ -106,6 +133,14 @@ private:
 	class CGUIControlFrame		*m_modeMenus[MODE__COUNT];
 	int							m_mode,m_nextMode;
 	static int					s_modeBackground[MODE__COUNT];
+
+	int							m_loadMode;
+	int							m_loadTimeInMode;
+	class CSaveLoadDatabase		*m_saveLoadDatabase;
+	static int					s_loadModeTextIds[LOADMODE__COUNT];
+	class CGUIControlFrame		*m_loadModeConfirmFrame;
+	class CGUIControlFrame		*m_loadModeOKFrame;
+	int							m_loadUserResponse;
 	
 	int							m_exitFlag;
 	int							m_closingDown;

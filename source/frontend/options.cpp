@@ -62,12 +62,16 @@
 #include "system\vid.h"
 #endif
 
-#ifndef	__SOUND_SOUND_H__
-#include "sound\sound.h"
-#endif
-
 #ifndef __PAD_VIBE_H__
 #include "pad\vibe.h"
+#endif
+
+#ifndef __MEMCARD_MEMCARD_H__
+#include "memcard\memcard.h"
+#endif
+
+#ifndef __MEMCARD_SAVELOAD_H__
+#include "memcard\saveload.h"
 #endif
 
 
@@ -167,10 +171,26 @@ static const int OPTIONS_FRAME_H=160;
 // Backgrounds
 int				CFrontEndOptions::s_modeBackground[MODE__COUNT]=
 {
-	FRM__BG1,
-	FRM__BG2,
 	FRM__BG3,
-	FRM__BG4,
+	FRM__BG5,
+	FRM__BG7,
+	FRM__BG8,
+	FRM__BG9,
+};
+
+
+CGUITextBox			*m_loadTextBox;
+int				CFrontEndOptions::s_loadModeTextIds[LOADMODE__COUNT]=
+{
+	STR__MEMCARD__CHECKING_MEM_CARD,		// LOADMODE__INIT
+	STR__MEMCARD__CHECKING_MEM_CARD,		// LOADMODE__CHECKING
+	STR__MEMCARD__UNFORMATTEDCARD,			// LOADMODE__UNFORMATTED
+	STR__MEMCARD__NOFILESONCARD,			// LOADMODE__NODATA
+	STR__MEMCARD__NOCARDINSLOT,				// LOADMODE__NOCARD
+	STR__FRONTEND__CONFIRM_LOAD,			// LOADMODE__CONFIRMLOAD
+	STR__MEMCARD__LOADINGPLEASEWIAT,		// LOADMODE__LOADING
+	STR__MEMCARD__LOADOK,					// LOADMODE__LOADOK
+	STR__MEMCARD__LOADERROR,				// LOADMODE__LOADERROR
 };
 
 
@@ -240,6 +260,7 @@ void CFrontEndOptions::init()
 	m_background->setColour(80,80,80);
 	m_background->setSpeed(1,-1);
 	m_background->setSpeedScale(0);
+	m_background->setFrame(s_modeBackground[MODE__OPTIONS]);
 
 
 	// Create the menu frames
@@ -257,13 +278,17 @@ void CFrontEndOptions::init()
 										STR__FRONTEND__CONTROLS,
 										&m_nextMode,MODE__CONTROL);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,Y_BORDER+30,OPTIONS_FRAME_W-(X_BORDER*2),20,
+										X_BORDER,Y_BORDER+20,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__SCREEN,
 										&m_nextMode,MODE__SCREEN);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,Y_BORDER+60,OPTIONS_FRAME_W-(X_BORDER*2),20,
+										X_BORDER,Y_BORDER+40,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__SOUND,
 										&m_nextMode,MODE__SOUND);
+	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
+										X_BORDER,Y_BORDER+60,OPTIONS_FRAME_W-(X_BORDER*2),20,
+										STR__FRONTEND__LOAD,
+										&m_nextMode,MODE__LOAD);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
 										X_BORDER,OPTIONS_FRAME_H-Y_BORDER-20,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__EXIT,
@@ -379,13 +404,46 @@ void CFrontEndOptions::init()
 										 STR__FRONTEND__SPEECH,
 										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 
+	// Memcard menu
+	m_loadTextBox=new ("textbox") CGUITextBox();
+	m_loadTextBox->init(m_modeMenus[MODE__LOAD]);
+	m_loadTextBox->setObjectXYWH(X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),80);
+	m_loadTextBox->setText(STR__MEMCARD__CHECKING_MEM_CARD);
+
+	// Extra memcard frames..
+	m_loadModeConfirmFrame=new ("loadmodeconfirmframe") CGUIControlFrame();
+	m_loadModeConfirmFrame->init(NULL);
+	m_loadModeConfirmFrame->setObjectXYWH(((512-OPTIONS_FRAME_W)/2)+X_BORDER,((256-OPTIONS_FRAME_H)/2)+OPTIONS_FRAME_H-Y_BORDER-40,OPTIONS_FRAME_W-(X_BORDER*2),40);
+	m_loadModeConfirmFrame->clearFlags(CGUIObject::FLAG_DRAWBORDER);
+		CGUIFactory::createValueButtonFrame(m_loadModeConfirmFrame,
+											0,0,OPTIONS_FRAME_W-(X_BORDER*2),20,
+											STR__YES,
+											&m_loadUserResponse,USERRESPONSE__YES);
+		CGUIFactory::createValueButtonFrame(m_loadModeConfirmFrame,
+											0,20,OPTIONS_FRAME_W-(X_BORDER*2),20,
+											STR__NO,
+											&m_loadUserResponse,USERRESPONSE__NO);
+
+	m_loadModeOKFrame=new ("loadmodeokframe") CGUIControlFrame();
+	m_loadModeOKFrame->init(NULL);
+	m_loadModeOKFrame->setObjectXYWH(((512-OPTIONS_FRAME_W)/2)+X_BORDER,((256-OPTIONS_FRAME_H)/2)+OPTIONS_FRAME_H-Y_BORDER-40,OPTIONS_FRAME_W-(X_BORDER*2),40);
+	m_loadModeOKFrame->clearFlags(CGUIObject::FLAG_DRAWBORDER);
+		CGUIFactory::createValueButtonFrame(m_loadModeOKFrame,
+											0,0,OPTIONS_FRAME_W-(X_BORDER*2),20,
+											STR__OK,
+											&m_loadUserResponse,USERRESPONSE__OK);
+
+
 	// Add BACK to all of the sub menus
 	for(i=1;i<MODE__COUNT;i++)
 	{
-		CGUIFactory::createValueButtonFrame(m_modeMenus[i],
-											X_BORDER,OPTIONS_FRAME_H-Y_BORDER-20,OPTIONS_FRAME_W-(X_BORDER*2),20,
-											STR__FRONTEND__BACK,
-											&m_nextMode,MODE__OPTIONS);
+		if(i!=MODE__LOAD)
+		{
+			CGUIFactory::createValueButtonFrame(m_modeMenus[i],
+												X_BORDER,OPTIONS_FRAME_H-Y_BORDER-20,OPTIONS_FRAME_W-(X_BORDER*2),20,
+												STR__FRONTEND__BACK,
+												&m_nextMode,MODE__OPTIONS);
+		}
 	}
 
 	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SONG);
@@ -395,6 +453,8 @@ void CFrontEndOptions::init()
 	m_vibrationStatus=m_lastVibrationStatus=PadGetVibrationIsTurnedOn(0);
 	m_screenXOff=VidGetXOfs();
 	m_screenYOff=VidGetYOfs();
+
+	m_saveLoadDatabase=NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -465,7 +525,7 @@ void CFrontEndOptions::render()
 
 rh+=rspeed;
 rh&=4095;
-paulColourSpaceToRGB(rh,rb,rgb);
+//paulColourSpaceToRGB(rh,rb,rgb);
 
 	g4=GetPrimG4();
 	setXYWH(g4,0,0,512,256);
@@ -481,6 +541,28 @@ paulColourSpaceToRGB(rh,rb,rgb);
 
 	m_background->render();
 
+	if(m_mode==MODE__LOAD)
+	{
+		switch(m_loadMode)
+		{
+			case LOADMODE__INIT:
+			case LOADMODE__CHECKING:
+			case LOADMODE__LOADING:
+				break;
+
+			case LOADMODE__UNFORMATTED:
+			case LOADMODE__NODATA:
+			case LOADMODE__NOCARD:
+			case LOADMODE__LOADOK:
+			case LOADMODE__LOADERROR:
+				m_loadModeOKFrame->render();
+				break;
+
+			case LOADMODE__CONFIRMLOAD:
+				m_loadModeConfirmFrame->render();
+				break;
+		}
+	}
 	m_modeMenus[m_mode]->render();
 }
 
@@ -501,12 +583,25 @@ void CFrontEndOptions::think(int _frames)
 	{
 		if(m_nextMode!=m_mode)
 		{
-			m_modeMenus[m_mode]->unselect();
+			if(m_nextMode==MODE__LOAD)
+			{
+				// Entering LOAD option
+				setLoadMode(LOADMODE__INIT);
+			}
+			else if(m_mode==MODE__LOAD)
+			{
+				// Leaving LOAD option
+				MemCard::Stop();
+				delete m_saveLoadDatabase;	
+				m_saveLoadDatabase=NULL;
+			}
+
+			if(m_mode!=MODE__LOAD)m_modeMenus[m_mode]->unselect();
 			m_mode=m_nextMode;
-			m_modeMenus[m_mode]->select();
+			if(m_mode!=MODE__LOAD)m_modeMenus[m_mode]->select();
 			m_background->setFrame(s_modeBackground[m_mode]);
 		}
-		m_modeMenus[m_mode]->think(_frames);
+		if(m_mode!=MODE__LOAD)m_modeMenus[m_mode]->think(_frames);
 
 		if(m_mode==MODE__CONTROL)
 		{
@@ -519,6 +614,10 @@ void CFrontEndOptions::think(int _frames)
 					CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 				}
 			}
+		}
+		else if(m_mode==MODE__SCREEN)
+		{
+			VidSetXYOfs(m_screenXOff,m_screenYOff);
 		}
 		else if(m_mode==MODE__SOUND)
 		{
@@ -535,9 +634,124 @@ void CFrontEndOptions::think(int _frames)
 				CSoundMediator::setVolume(CSoundMediator::VOL_SPEECH,m_speechVolume);
 			}
 		}
-		else if(m_mode==MODE__SCREEN)
+		else if(m_mode==MODE__LOAD)
 		{
-			VidSetXYOfs(m_screenXOff,m_screenYOff);
+			if(m_loadModeConfirmFrame->isSelected())m_loadModeConfirmFrame->think(_frames);
+			if(m_loadModeOKFrame->isSelected())m_loadModeOKFrame->think(_frames);
+
+			switch(m_loadMode)
+			{
+				case LOADMODE__INIT:
+					if(m_loadTimeInMode>10)
+					{
+						// If we init the memcard as the load page is selected then there's a small but noticable pause
+						// This hides it a bit..
+						MemCard::Start();
+						m_saveLoadDatabase=new ("saveloaddb") CSaveLoadDatabase();
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					break;
+
+				case LOADMODE__CHECKING:
+					if(MemCard::GetCardStatus(0)==MemCard::CS_CardInserted)
+					{
+						// Scanning a new card..
+						m_loadTimeInMode=0;
+					}
+					else if(m_loadTimeInMode>60)
+					{
+						// Wait for card status to settle for one second before trusting its status
+						if(MemCard::GetCardStatus(0)==MemCard::CS_NoCard)
+						{
+							setLoadMode(LOADMODE__NOCARD);
+						}
+						else if(MemCard::GetCardStatus(0)==MemCard::CS_UnformattedCard)
+						{
+							setLoadMode(LOADMODE__UNFORMATTED);
+						}
+						else if(MemCard::GetFileCountOnCard(0))
+						{
+							setLoadMode(LOADMODE__CONFIRMLOAD);
+						}
+						else
+						{
+							setLoadMode(LOADMODE__NODATA);
+						}
+					}
+					break;
+
+				case LOADMODE__UNFORMATTED:
+				case LOADMODE__NODATA:
+					if(MemCard::GetCardStatus(0)!=MemCard::CS_ValidCard)
+					{
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					else if(m_loadUserResponse==USERRESPONSE__OK)
+					{
+						m_nextMode=MODE__OPTIONS;
+					}
+					break;
+
+				case LOADMODE__NOCARD:
+					if(MemCard::GetCardStatus(0)!=MemCard::CS_NoCard)
+					{
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					else if(m_loadUserResponse==USERRESPONSE__OK)
+					{
+						m_nextMode=MODE__OPTIONS;
+					}
+					break;
+
+				case LOADMODE__CONFIRMLOAD:
+					if(MemCard::GetCardStatus(0)!=MemCard::CS_ValidCard)
+					{
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					else if(m_loadUserResponse==USERRESPONSE__YES)
+					{
+						setLoadMode(LOADMODE__LOADING);
+						m_saveLoadDatabase->startLoad(0);
+					}
+					else if(m_loadUserResponse==USERRESPONSE__NO)
+					{
+						m_nextMode=MODE__OPTIONS;
+					}
+					break;
+
+				case LOADMODE__LOADING:
+					{
+					int stat=m_saveLoadDatabase->getLoadStatus();
+					if(stat==CSaveLoadDatabase::FINISHED_OK)
+					{
+						setLoadMode(LOADMODE__LOADOK);
+					}
+					else if(stat==CSaveLoadDatabase::FAILED)
+					{
+						setLoadMode(LOADMODE__LOADERROR);
+					}
+					}
+					break;
+
+				case LOADMODE__LOADOK:
+					if(m_loadUserResponse==USERRESPONSE__OK)
+					{
+						m_nextMode=MODE__OPTIONS;
+					}
+					break;
+
+				case LOADMODE__LOADERROR:
+					if(m_loadUserResponse==USERRESPONSE__OK)
+					{
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					break;
+			}
+			if(m_saveLoadDatabase)
+			{
+				m_saveLoadDatabase->think();
+			}
+			m_loadTimeInMode+=_frames;
 		}
 	}
 
@@ -583,6 +797,44 @@ int CFrontEndOptions::isReadyToExit()
 CFrontEndScene::FrontEndMode CFrontEndOptions::getNextMode()
 {
 	return CFrontEndScene::MODE__MAIN_TITLES;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CFrontEndOptions::setLoadMode(int _newMode)
+{
+	if(m_loadModeConfirmFrame->isSelected())m_loadModeConfirmFrame->unselect();
+	if(m_loadModeOKFrame->isSelected())m_loadModeOKFrame->unselect();
+
+	m_loadTextBox->setText(s_loadModeTextIds[_newMode]);
+	m_loadMode=_newMode;
+	m_loadTimeInMode=0;
+	m_loadUserResponse=USERRESPONSE__NONE;
+
+	switch(m_loadMode)
+	{
+		case LOADMODE__INIT:
+		case LOADMODE__CHECKING:
+		case LOADMODE__LOADING:
+			break;
+
+		case LOADMODE__UNFORMATTED:
+		case LOADMODE__NODATA:
+		case LOADMODE__NOCARD:
+		case LOADMODE__LOADOK:
+		case LOADMODE__LOADERROR:
+			m_loadModeOKFrame->select();
+			break;
+
+		case LOADMODE__CONFIRMLOAD:
+			m_loadModeConfirmFrame->select();
+			break;
+	}
 }
 
 /*===========================================================================

@@ -65,7 +65,7 @@ void CScrollyBackground::init()
 	setSpeed(DEFAULT_X_SPEED,DEFAULT_Y_SPEED);
 	setSpeedScale(DEFAULT_SPEED_SCALE);
 	setOt(DEFAULT_OT);
-	setFrame(FRM__BG1);
+	setFrame(FRM__BUTX);
 	setTheDrawMode(DRAWMODE_NORMAL);
 	setColour(128,128,128);
 	setScale(NORMAL_SCALE);
