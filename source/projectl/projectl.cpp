@@ -423,8 +423,11 @@ void CProjectile::think(int _frames)
 
 			if ( m_movementType == PROJECTILE_MINE )
 			{
-				CFX *newFX = CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
-				((CFXBaseAnim*)newFX)->SetScale(ONE*2);
+				if (canRender())
+				{
+					CFX *newFX = CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+					((CFXBaseAnim*)newFX)->SetScale(ONE*2);
+				}
 
 				CGameScene::setCameraShake(0,8);
 			}
