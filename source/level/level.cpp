@@ -23,8 +23,8 @@
 #include "triggers\tlevexit.h"
 #endif
 
-#ifndef	__TRIGGERS_TLOOK_H__
-#include "triggers\tlook.h"
+#ifndef	__TRIGGERS_TRESTART_H__
+#include "triggers\trestart.h"
 #endif
 
 #ifndef __PICKUPS_PICKUP_H__
@@ -281,6 +281,7 @@ void	CLevel::initLayers()
 		}
 
 // Triggers
+// Yeah yeah - I'll put this crap into a seperate file when the numbers of trigger types get a bit bigger! (pkg)
 		if (LevelHdr->TriggerList)
 		{
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
@@ -298,9 +299,9 @@ PAUL_DBGMSG("%d triggers",TriggerCount);
 						trigger=(CTriggerThing*)new ("LevelExitTrigger") CLevelExitTrigger();
 						break;
 
-					// Look down trigger
+					// Level respawn trigger
 					case 1:
-						trigger=(CTriggerThing*)new ("LookTrigger") CLookTrigger();
+						trigger=(CRestartPointTrigger*)new ("RestartTrigger") CRestartPointTrigger();
 						break;
 				}
 				trigger->init();

@@ -1275,6 +1275,14 @@ SOURCE=..\..\..\source\triggers\tlook.cpp
 
 SOURCE=..\..\..\source\triggers\tlook.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\trestart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\trestart.h
+# End Source File
 # End Group
 # Begin Group "utils"
 

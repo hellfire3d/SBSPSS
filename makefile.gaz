@@ -207,7 +207,8 @@ system_src :=		main \
 thing_src :=		thing
 
 triggers_src :=		tlevexit \
-					tlook
+					tlook \
+					trestart
 
 utils_src :=		utils \
 					sincos \

@@ -21,6 +21,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -51,16 +55,16 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
+void	CRestartPointTrigger::collidedWith(CThing *_thisThing)
 {
-	CRect	collisionSize;
+	CRECT	collisionArea;
 	DVECTOR	respawnPos;
 
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
 
-	collisionSize=getCollisionSize();
-	respawnPos.vx=collisionSize.x1+((collisionSize.x2-collisionSize.x1)/2);
-	respawnPos.vy=collisionSize.y2;
+	collisionArea=getCollisionArea();
+	respawnPos.vx=collisionArea.x1+((collisionArea.x2-collisionArea.x1)/2);
+	respawnPos.vy=collisionArea.y2;
 	((CPlayer*)_thisThing)->setRespawnPos(respawnPos);
 }
 
