@@ -480,6 +480,11 @@ void	CPlayerModeBase::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
 {
 	m_player->setPlayerCollisionSize(_x,_y,_w,_h);
 }
+void	CPlayerModeBase::getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h)
+{
+	m_player->getPlayerCollisionSize(_x,_y,_w,_h);
+}
+
 
 /*----------------------------------------------------------------------
 	Function:

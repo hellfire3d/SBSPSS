@@ -45,12 +45,16 @@ public:
 
 	virtual ATTACK_STATE		getAttackState();
 
+	virtual void				setPlayerCollisionSize(int _x,int _y,int _w,int _h);
+
 private:
 	int							canAttackFromThisState();
 
 	int							m_savedAnimNo,m_savedAnimFrame;
 	int							m_chopFrame;
 	int							m_chopping;
+
+	int							m_savedCSX,m_savedCSY,m_savedCSW,m_savedCSH;
 
 };
 

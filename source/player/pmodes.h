@@ -146,7 +146,8 @@ public:
 	int							isOnEdge();
 	int							canMoveLeft();
 	int							canMoveRight();
-	void						setPlayerCollisionSize(int _x,int _y,int _w,int _h);
+	virtual void				setPlayerCollisionSize(int _x,int _y,int _w,int _h);
+	virtual void				getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h);
 
 	void						moveLeft();
 	void						moveRight();

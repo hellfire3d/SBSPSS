@@ -62,6 +62,10 @@ void	CPlayerModeChop::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int chopcsx=0;
+int chopcsy=-30;
+int chopcsw=80;
+int chopcsh=60;
 void	CPlayerModeChop::think()
 {
 	// If we're chopping then restore the 'real' anim number/frame before
@@ -78,6 +82,8 @@ void	CPlayerModeChop::think()
 	if(!m_chopping&&getPadInputDown()&PI_ACTION&&canAttackFromThisState())
 	{
 		m_chopFrame=0;
+		getPlayerCollisionSize(&m_savedCSX,&m_savedCSY,&m_savedCSW,&m_savedCSH);
+		setPlayerCollisionSize(chopcsx,chopcsy,chopcsw,chopcsh);
 		m_chopping=true;
 	}
 
@@ -92,6 +98,7 @@ void	CPlayerModeChop::think()
 			m_player->setAnimNo(m_savedAnimNo);
 			m_player->setAnimFrame(m_savedAnimFrame);
 			m_chopping=false;
+			setPlayerCollisionSize(m_savedCSX,m_savedCSY,m_savedCSW,m_savedCSH);
 		}
 	}
 }
@@ -129,6 +136,28 @@ ATTACK_STATE	CPlayerModeChop::getAttackState()
 	else
 	{
 		return CPlayerModeBase::getAttackState();
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeChop::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
+{
+	if(m_chopping)
+	{
+		m_savedCSX=_x;
+		m_savedCSY=_y;
+		m_savedCSW=_w;
+		m_savedCSY=_h;
+	}
+	else
+	{
+		CPlayerModeBase::setPlayerCollisionSize(_x,_y,_w,_h);
 	}
 }
 

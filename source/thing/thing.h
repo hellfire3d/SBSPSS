@@ -141,6 +141,7 @@ public:
 	// -- Collision --
 public:
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
+	DVECTOR			getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
 	s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
