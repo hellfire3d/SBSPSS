@@ -75,7 +75,7 @@ public:
 
 	virtual void		init();
 	virtual void		setGraphic( sThingHazard *ThisHazard );
-	void				shutdown();
+	virtual void		shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
 	virtual void		setWaypoints( sThingHazard *ThisHazard );

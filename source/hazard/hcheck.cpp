@@ -27,6 +27,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,20 +43,45 @@ void CNpcCheckpointHazard::init()
 	m_spriteFrame = 0; // Change by dave cos the checkpoint gfx aint there no more
 	m_timer = 0;
 	m_flick = false;
+
+	m_scalableFont=new ("CheckpointFont") ScalableFontBank();
+	m_scalableFont->initialise(&standardFont);
+	m_scalableFont->setColour(255,255,255);
+	m_scalableFont->setScale(511);
+
+	if ( CLevel::getCurrentCheckpoint() == this )
+	{
+		m_triggered = true;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcCheckpointHazard::think(int _frames)
 {
-	m_timer -= _frames;
-
-	if ( m_timer <= 0 )
+	if ( m_flick )
 	{
-		m_flick = !m_flick;
+		m_timer -= _frames;
 
-		m_timer = GameState::getOneSecondInFrames();
+		if ( m_timer <= 0 )
+		{
+			m_flick = false;
+		}
+		else
+		{
+			m_scalableFont->setJustification(FontBank::JUST_CENTRE);
+			m_scalableFont->print( 256, 50, "Checkpoint!" );
+		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcCheckpointHazard::shutdown()
+{
+	m_scalableFont->dump();	delete m_scalableFont;
+
+	CNpcHazard::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,21 +101,54 @@ void CNpcCheckpointHazard::render()
 
 			m_modelGfx->Render(renderPos);
 
-			if ( m_triggered )
+			if ( CLevel::getCurrentCheckpoint() == this )
 			{
-				int		x,y;
+				int		scrnWidth = VidGetScrW();
+				int		scrnHeight = VidGetScrH();
 
-				DVECTOR const &offset = CLevel::getCameraPos();
+				sBBox boundingBox = m_modelGfx->GetBBox();
 
-				int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_spriteFrame);
-				int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_spriteFrame);
+				CRECT polyArea;
 
-				x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
-				y = Pos.vy - 100 - offset.vy - ( spriteHeight >> 1 );
+				polyArea.x1 = boundingBox.XMin + renderPos.vx;
+				polyArea.y1 = boundingBox.YMin + renderPos.vy;
+				polyArea.x2 = boundingBox.XMax + renderPos.vx;
+				polyArea.y2 = boundingBox.YMax + renderPos.vy;
 
-				frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
-				Ft4 = CGameScene::getSpriteBank()->printFT4( frameHdr, x, y, 0, 0, 10 );
-				setSemiTrans( Ft4, m_flick );
+				if ( polyArea.x1 < 0 )
+				{
+					polyArea.x1 = 0;
+				}
+
+				if ( polyArea.y1 < 0 )
+				{
+					polyArea.y1 = 0;
+				}
+
+				if ( polyArea.x1 > scrnWidth )
+				{
+					polyArea.x1 = scrnWidth;
+				}
+
+				if ( polyArea.y1 > scrnHeight )
+				{
+					polyArea.y1 = scrnHeight;
+				}
+
+				POLY_F4 *coverPoly;
+				coverPoly = GetPrimF4();
+				coverPoly->x0 = polyArea.x1;
+				coverPoly->y0 = polyArea.y1;
+				coverPoly->x1 = polyArea.x2;
+				coverPoly->y1 = polyArea.y1;
+				coverPoly->x2 = polyArea.x1;
+				coverPoly->y2 = polyArea.y2;
+				coverPoly->x3 = polyArea.x2;
+				coverPoly->y3 = polyArea.y2;
+
+				setRGB0( coverPoly, 255, 255, 0 );
+
+				AddPrimToList( coverPoly, 0 );
 			}
 		}
 	}
@@ -108,6 +170,9 @@ void CNpcCheckpointHazard::collidedWith(CThing *_thisThing)
 				respawnPos.vy=collisionArea.y2;
 				((CPlayer*)_thisThing)->setRespawnPosAndRingTelephone(respawnPos);
 				m_triggered = true;
+				m_timer = GameState::getOneSecondInFrames();
+				m_flick = true;
+				CLevel::setCurrentCheckpoint( this );
 
 				break;
 			}

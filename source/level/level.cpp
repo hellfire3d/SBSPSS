@@ -192,6 +192,7 @@ sLevelHdr	*CLevel::LevelHdr;
 
 u8 CLevel::m_isBossRespawn;
 s32 CLevel::m_bossHealth;
+CNpcCheckpointHazard	*CLevel::m_checkpoint;
 
 /*****************************************************************************/
 CLevel::CLevel()
@@ -253,6 +254,7 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		initLayers();
 
 		m_isBossRespawn = false;
+		m_checkpoint = NULL;
 		m_bossHealth = 0;
 
 		int level=GameScene.getLevelNumber();

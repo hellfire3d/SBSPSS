@@ -13,6 +13,10 @@
 #include "level/layertile.h"
 #include "level/layercollision.h"
 
+#ifndef __HAZARD_HCHECK_H__
+#include "hazard\hcheck.h"
+#endif
+
 /*****************************************************************************/
 struct	sLvlTab
 {
@@ -84,6 +88,9 @@ static s32				getBossHealth()							{return m_bossHealth;}
 static void				setIsBossRespawn( u8 newIsBossRespawn)	{m_isBossRespawn=newIsBossRespawn;}
 static void				setBossHealth( s32 newBossHealth )		{m_bossHealth=newBossHealth;}
 
+static CNpcCheckpointHazard		*getCurrentCheckpoint()											{return( m_checkpoint );}
+static void						setCurrentCheckpoint( CNpcCheckpointHazard *newCheckpoint )		{m_checkpoint = newCheckpoint;}
+
 static	void			DisplayLoadingScreen(int LevelNo=25);
 
 private:
@@ -121,6 +128,8 @@ static	DVECTOR			s_playerSpawnPos;
 
 static	u8				m_isBossRespawn;
 static	s32				m_bossHealth;
+
+static	CNpcCheckpointHazard	*m_checkpoint;
 
 // Level Repair stuff
 		void			CreateTileStore();
