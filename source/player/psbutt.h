@@ -54,6 +54,9 @@ public:
 	virtual void	enter(class CPlayerModeBase *_playerMode);
 	virtual void	think(class CPlayerModeBase *_playerMode);
 	
+private:
+	int				m_bounceOffFloor;
+
 };
 
 class CPlayerStateButtBounceUp : public CPlayerState

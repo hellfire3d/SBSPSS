@@ -133,14 +133,19 @@ void CPlayerStateButtBounceFall::think(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 {
+	m_bounceOffFloor=false;
 	if(_playerMode->getIsInWater())
 	{
 		DVECTOR	pos;
-		CLevel	&level=GameScene.GetLevel();
 
 		pos=_playerMode->getPlayerPos();
-		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
-		level.destroyMapArea(pos);
+		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
+		{
+			CLevel	&level=GameScene.GetLevel();
+			CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+			level.destroyMapArea(pos);
+			m_bounceOffFloor=true;
+		}
 	}
 }
 
@@ -153,6 +158,11 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::think(CPlayerModeBase *_playerMode)
 {
+	if(m_bounceOffFloor)
+	{
+		_playerMode->setState(STATE_BUTTBOUNCEUP);
+	}
+
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
 		_playerMode->setState(STATE_IDLE);
