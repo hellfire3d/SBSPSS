@@ -1829,7 +1829,18 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 
 			if(died)
 			{
-				dieYouPorousFreak();
+				DEATH_TYPE	deathType;
+				switch(_damage)
+				{
+					case DAMAGE__SQUASH_ENEMY:
+						deathType=DEATHTYPE__SQUASH;
+						break;
+
+					default:
+						deathType=DEATHTYPE__NORMAL;
+						break;
+				}
+				dieYouPorousFreak(deathType);
 			}
 			else
 			{
