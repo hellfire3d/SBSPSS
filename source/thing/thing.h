@@ -86,6 +86,7 @@ public:
 		TYPE_ENEMYPROJECTILE,
 		TYPE_TRIGGER,
 		TYPE_HAZARD,
+		TYPE_FX,
 
 		MAX_TYPE,
 	}
@@ -224,6 +225,11 @@ class CHazardThing : public CThing
 {
 public:
 	virtual TYPE	getThingType()					{return TYPE_HAZARD;}
+};
+class CFXThing : public CThing
+{
+public:
+	virtual TYPE	getThingType()					{return TYPE_FX;}
 };
 
 

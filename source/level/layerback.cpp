@@ -51,8 +51,7 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 			setRGB3(&Band[i],Data->RGB[i+1][0],Data->RGB[i+1][1],Data->RGB[i+1][2]);
 		}
 
-		PosDx=0;
-		PosDy=0;
+	
 		XOfs=MapPos.vy;
 		YOfs=MapPos.vy;
 }
@@ -65,20 +64,15 @@ void	CLayerBack::shutdown()
 /*****************************************************************************/
 void	CLayerBack::think(DVECTOR &MapPos)
 { 
-int		_XOfs=MapPos.vx>>MapXYShift;
-int		_YOfs=MapPos.vy>>MapXYShift;
+		XOfs=MapPos.vx>>MapXYShift;
+		YOfs=MapPos.vy>>MapXYShift;
 
-		PosDx=(_XOfs-XOfs)<<MOVE_SHIFT;
-		PosDy=(_YOfs-YOfs)<<MOVE_SHIFT;
-
-		XOfs=_XOfs;
-		YOfs=_YOfs;
 		if (YOfs<1) YOfs=1;
 }
 
 /*****************************************************************************/
-int	GfxW=64/16;
-int	GfxH=64/16;
+const int	BM=16;
+const int	BB=16;
 
 void	CLayerBack::render()
 {
@@ -90,27 +84,35 @@ sLayerShadeBackGfx		*GfxList=Data->GfxList;
 
 			for (i=0; i<Data->GfxCount; i++)
 			{
-				POLY_GT4	*Gt4=GetPrimGT4();
-				int			PosX=(GfxList->PosX<<MapXYShift)-XOfs;
-				int			PosY=(GfxList->PosY<<MapXYShift)-YOfs;
+				POLY_GT4	*sGt4,*Gt4=GetPrimGT4();
+				int			PosX=(GfxList->PosX*BB)-XOfs;
+				int			PosY=(GfxList->PosY*BB)-YOfs;
 				sLayerShadeBackGfxType	&ThisType=Data->TypeList[GfxList->Type];
 
-				Gt4->x0=PosX+(GfxList->Ofs[0][0]-(GfxW/2)*16); Gt4->y0=PosY+(GfxList->Ofs[0][1]-(GfxH/2)*16);
-				Gt4->x1=PosX+(GfxList->Ofs[1][0]+(GfxW/2)*16); Gt4->y1=PosY+(GfxList->Ofs[1][1]-(GfxH/2)*16);
-				Gt4->x2=PosX+(GfxList->Ofs[2][0]-(GfxW/2)*16); Gt4->y2=PosY+(GfxList->Ofs[2][1]+(GfxH/2)*16);
-				Gt4->x3=PosX+(GfxList->Ofs[3][0]+(GfxW/2)*16); Gt4->y3=PosY+(GfxList->Ofs[3][1]+(GfxH/2)*16);
+				Gt4->x0=PosX+(GfxList->Ofs[0][0])*BM; Gt4->y0=PosY+(GfxList->Ofs[0][1])*BM;
+				Gt4->x1=PosX+(GfxList->Ofs[1][0])*BM; Gt4->y1=PosY+(GfxList->Ofs[1][1])*BM;
+				Gt4->x2=PosX+(GfxList->Ofs[2][0])*BM; Gt4->y2=PosY+(GfxList->Ofs[2][1])*BM;
+				Gt4->x3=PosX+(GfxList->Ofs[3][0])*BM; Gt4->y3=PosY+(GfxList->Ofs[3][1])*BM;
 
-				setRGB0(Gt4,GfxList->RGB[0][0],GfxList->RGB[0][1],GfxList->RGB[0][2]);
-				setRGB1(Gt4,GfxList->RGB[1][0],GfxList->RGB[1][1],GfxList->RGB[1][2]);
-				setRGB2(Gt4,GfxList->RGB[2][0],GfxList->RGB[2][1],GfxList->RGB[2][2]);
-				setRGB3(Gt4,GfxList->RGB[3][0],GfxList->RGB[3][1],GfxList->RGB[3][2]);
+				setRGB0(Gt4,GfxList->RGB[0][0]>>1,GfxList->RGB[0][1]>>1,GfxList->RGB[0][2]>>1);
+				setRGB1(Gt4,GfxList->RGB[1][0]>>1,GfxList->RGB[1][1]>>1,GfxList->RGB[1][2]>>1);
+				setRGB2(Gt4,GfxList->RGB[2][0]>>1,GfxList->RGB[2][1]>>1,GfxList->RGB[2][2]>>1);
+				setRGB3(Gt4,GfxList->RGB[3][0]>>1,GfxList->RGB[3][1]>>1,GfxList->RGB[3][2]>>1);
 
 				setUVWH(Gt4,ThisType.U,ThisType.V,ThisType.W,ThisType.H);
 				Gt4->u1--; Gt4->u3--;
 				Gt4->v2--; Gt4->v3--;
 				Gt4->clut=ThisType.Clut;
-				Gt4->tpage=ThisType.TPage;
+				setSemiTrans(Gt4,1);
+				Gt4->tpage=ThisType.TPage;// | GfxList->Trans<<5;
 				AddPrim(ThisOT,Gt4);
+/*
+// Bodge it cos artist made the fuckers too big
+				sGt4=GetPrimGT4(); 	*sGt4=*Gt4; 
+				Gt4->x0--; Gt4->y0--; Gt4->x1++; Gt4->y1--; Gt4->x2--; Gt4->y2++; Gt4->x3++; Gt4->y3++;
+				AddPrim(ThisOT,sGt4);
+*/
+
 				GfxList++;
 			}
 

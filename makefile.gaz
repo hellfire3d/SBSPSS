@@ -119,6 +119,8 @@ hazard_src :=		hazard \
 					hboat \
 					hcsaw
 
+fx_src :=			fx \
+
 projectl_src :=		projectl \
 					prnpc
 
