@@ -23,7 +23,6 @@ class CNpcRaftPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
-	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		processMovement( int _frames );
 

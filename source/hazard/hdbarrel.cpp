@@ -178,18 +178,3 @@ void CNpcDualPlatformBarrelHazard::render()
 		m_modelGfx->Render(renderPos,&rotation,&scale);
 	}
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*const CRECT *CNpcDualPlatformBarrelHazard::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}*/

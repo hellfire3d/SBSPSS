@@ -22,7 +22,6 @@ class CNpcFallingHazard : public CNpcHazard
 {
 public:
 	void				init();
-	//virtual	CRECT const		*getThinkBBox();
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				render();
 protected:

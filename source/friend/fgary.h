@@ -24,7 +24,7 @@ public:
 	virtual void		postInit();
 	virtual void		think( int _frames );
 	virtual void		setupWaypoints( sThingActor *ThisActor );
-	virtual	CRECT const		*getThinkBBox();
+	bool				alwaysThink()											{return(true);}
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				start();
 	void				stop();

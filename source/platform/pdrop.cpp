@@ -35,18 +35,3 @@ void CNpcDropPlatform::processMovement( int _frames )
 
 	Pos.vy += moveY;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*const CRECT *CNpcDropPlatform::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}*/

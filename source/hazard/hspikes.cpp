@@ -95,21 +95,6 @@ void CNpcSpikesHazard::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcSpikesHazard::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcSpikesHazard::processTimer( int _frames )
 {
 	if ( m_timer > 0 )

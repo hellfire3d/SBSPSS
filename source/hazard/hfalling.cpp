@@ -225,18 +225,6 @@ void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*const CRECT *CNpcFallingHazard::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.y2 = thinkBBox.YMin + 1;
-
-	return &objThinkBox;
-}*/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
 {
 	int pointNum;

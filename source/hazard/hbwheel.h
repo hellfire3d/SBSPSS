@@ -23,7 +23,7 @@ class CNpcBigWheelHazard : public CNpcHazard
 public:
 	void				init();
 	virtual void		render();
-	virtual	CRECT const		*getThinkBBox();
+	bool				alwaysThink()								{return(true);}
 protected:
 	void				processMovement( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);

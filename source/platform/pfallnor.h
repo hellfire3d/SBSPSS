@@ -22,7 +22,7 @@ class CNpcFallingNoRespawnPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
-	virtual	CRECT const		*getThinkBBox();
+	bool				alwaysThink()												{return(true);}
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	virtual void		render();

@@ -87,21 +87,6 @@ void CNpcConveyorPlatformGenerator::think( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*const CRECT *CNpcConveyorPlatformGenerator::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}*/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcConveyorPlatform::postInit()
 {
 	CNpcPlatform::postInit();
@@ -180,21 +165,6 @@ void CNpcConveyorPlatform::processMovement( int _frames )
 	Pos.vx += moveX;
 	Pos.vy += moveY;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*const CRECT *CNpcConveyorPlatform::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

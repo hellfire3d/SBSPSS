@@ -22,7 +22,6 @@ class CNpcConveyorPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
-	//virtual	CRECT const		*getThinkBBox();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
@@ -37,7 +36,6 @@ class CNpcConveyorPlatformGenerator : public CNpcPlatform
 {
 public:
 	virtual void		render();
-	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		think( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);

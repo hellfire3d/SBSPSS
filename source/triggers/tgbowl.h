@@ -37,7 +37,7 @@
 class CGaryBowlTrigger : public CTrigger
 {
 public:
-	virtual	CRECT const		*getThinkBBox();
+	bool				alwaysThink()								{return(true);}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 };

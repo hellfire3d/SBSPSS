@@ -98,21 +98,6 @@ void CNpcBigWheelPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcBigWheelPlatform::getThinkBBox()
-{
-	CRECT objThinkBox = getCollisionArea();
-
-	sBBox &thinkBBox = CThingManager::getThinkBBox();
-	objThinkBox.x1 = thinkBBox.XMin;
-	objThinkBox.x2 = thinkBBox.XMax;
-	objThinkBox.y1 = thinkBBox.YMin;
-	objThinkBox.y2 = thinkBBox.YMax;
-
-	return &objThinkBox;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 int	CNpcBigWheelPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
 {
 	DVECTOR top;

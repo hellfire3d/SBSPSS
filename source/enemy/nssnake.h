@@ -59,7 +59,6 @@ public:
 	virtual void		shutdown();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
-	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual s32			getFrameShift( int _frames );
 	virtual bool		processSensor();

@@ -22,7 +22,7 @@ class CNpcSpikesHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual	CRECT const	*getThinkBBox();
+	bool				alwaysThink()								{return(true);}
 protected:
 	virtual void		processTimer( int _frames );
 	void				processMovement( int _frames );

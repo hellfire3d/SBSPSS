@@ -29,7 +29,6 @@ public:
 	DVECTOR				getLineBase()										{return( m_lineBase );}
 	virtual void		render();
 	void				setThinkArea( CRECT &newArea );
-	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );

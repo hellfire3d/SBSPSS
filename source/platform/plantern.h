@@ -22,7 +22,7 @@ class CNpcLanternPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
-	virtual	CRECT const		*getThinkBBox();
+	bool				alwaysThink()									{return(true);}
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
