@@ -9,23 +9,30 @@
 // Taken from Map editor  layerdef.h
 enum	PSX_COLLSION_ENUM
 {
-	COLLISION_TYPE_NORMAL			=0,
-	COLLISION_TYPE_DAMAGE			=1,
-	COLLISION_TYPE_SLIPPERY			=2,
-	COLLISION_TYPE_ELECTRIC			=3,
-	COLLISION_TYPE_STICKY			=4,
-	COLLISION_TYPE_WATER			=5,
+	COLLISION_TYPE_BLANK				=0,
+	COLLISION_TYPE_NORMAL				=1,
+	COLLISION_TYPE_DAMAGE				=2,
+	COLLISION_TYPE_SLIPPERY				=3,
+	COLLISION_TYPE_ELECTRIC				=4,
+	COLLISION_TYPE_STICKY				=5,
+	COLLISION_TYPE_WATER				=6,
+	COLLISION_TYPE_SOLID				=7,
+	COLLISION_TYPE_DEATH				=8,
+	COLLISION_TYPE_DESTRUCTABLE			=9,
 
-	COLLISION_TYPE_FLAG_SHIFT		=5,
-	COLLISION_TYPE_FLAG_NORMAL		=COLLISION_TYPE_NORMAL << COLLISION_TYPE_FLAG_SHIFT,
-	COLLISION_TYPE_FLAG_DAMAGE		=COLLISION_TYPE_DAMAGE << COLLISION_TYPE_FLAG_SHIFT,
-	COLLISION_TYPE_FLAG_SLIPPERY	=COLLISION_TYPE_SLIPPERY << COLLISION_TYPE_FLAG_SHIFT,
-	COLLISION_TYPE_FLAG_ELECTRIC	=COLLISION_TYPE_ELECTRIC << COLLISION_TYPE_FLAG_SHIFT,
-	COLLISION_TYPE_FLAG_STICKY		=COLLISION_TYPE_STICKY << COLLISION_TYPE_FLAG_SHIFT,
-	COLLISION_TYPE_FLAG_WATER		=COLLISION_TYPE_WATER << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_SHIFT			=5,
+	COLLISION_TYPE_FLAG_NORMAL			=COLLISION_TYPE_NORMAL << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_DAMAGE			=COLLISION_TYPE_DAMAGE << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_SLIPPERY		=COLLISION_TYPE_SLIPPERY << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_ELECTRIC		=COLLISION_TYPE_ELECTRIC << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_STICKY			=COLLISION_TYPE_STICKY << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_WATER			=COLLISION_TYPE_WATER << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_SOLID			=COLLISION_TYPE_SOLID << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_DEATH			=COLLISION_TYPE_DEATH << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_DESTRUCTABLE	=COLLISION_TYPE_DESTRUCTABLE << COLLISION_TYPE_FLAG_SHIFT,
 
-	COLLISION_TYPE_MASK				= (0xff << COLLISION_TYPE_FLAG_SHIFT)&0xff,
-	COLLISION_MASK					= (0xff-COLLISION_TYPE_MASK)
+	COLLISION_TYPE_MASK					= ((0xff<<COLLISION_TYPE_FLAG_SHIFT)&0xff),
+	COLLISION_TILE_MASK					= (0xff - COLLISION_TYPE_MASK)
 
 };
 enum	PSX_DATA_ENUM
@@ -258,6 +265,13 @@ struct	sSpriteAnimBank
 //***************************************************************************
 //***************************************************************************
 // Things - Must be 4 byte aligned for pos data
+enum	THING_FLAG
+{
+		THING_FLAG_COLLISION=1<<0,
+		THING_FLAG_MIRRORX=1<<1,
+		THING_FLAG_MIRRORY=1<<2,
+};
+
 struct	sThingHdr
 {
 	u16		Count;
@@ -271,13 +285,14 @@ struct	sThingPoint
 
 struct	sThingActor
 {
-	u16		Type;
-	u16		Health;
-	u16		AttackStrength;
-	u16		Speed;
-	u16		TurnRate;
-	u8		Flags;
-	u8		PointCount;
+	u16			Type;
+	u16			Health;
+	u16			AttackStrength;
+	u16			Speed;
+	u16			TurnRate;
+	u8			Flags;
+	u8			Angle;
+	u8			PointCount;
 	// Point List...
 }; // 12
 
@@ -290,13 +305,13 @@ struct	sThingItem
 
 struct	sThingPlatform
 {
-	u16		Gfx;
-	u16		Type;
-	u16		Speed;
-	u16		TurnRate;
-	u16		Param0;
-	u8		Flags;
-	u8		PointCount;
+	u16			Gfx;
+	u16			Type;
+	u16			Speed;
+	u16			TurnRate;
+	u16			Param0;
+	u8			Flags;
+	u8			PointCount;
 	// Point List...
 }; // 10
 
@@ -304,14 +319,16 @@ struct	sThingFX
 {
 	u16			Type;
 	u16			Speed;
+	u8			Flags;
+	u8			Angle;
 	sThingPoint	Pos,Size;
 }; // 8
 
 struct	sThingTrigger
 {
-	u16		Type;
+	u16			Type;
 	sThingPoint	Pos;
-	u8		Width,Height;
+	u8			Width,Height;
 	sThingPoint	TargetPos;
 	sThingPoint	TargetSize;
 }; // 8
@@ -326,6 +343,7 @@ struct	sThingHazard
 	u16		TurnRate;
 	u16		Respawn;
 	u8		Flags;
+	u8		Angle;
 	u8		PointCount;
 	// Point List...
 }; // 12
