@@ -62,6 +62,26 @@ void CNpcAnemoneEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcAnemoneEnemy::setHeading( s32 xPos, s32 yPos )
+{
+	m_heading = ( ratan2( ( ( yPos << 4 ) + 16 ) - Pos.vy, ( ( xPos << 4 ) + 8 ) - Pos.vx ) ) & 4095;
+
+	int newHeading = ( m_heading - 1024 ) & 4095;
+
+	Pos.vy -= 8;
+
+	int offset = 8; // initial y offset
+
+	DVECTOR adjust;
+	adjust.vx = ( offset * rsin( newHeading ) ) >> 12;
+	adjust.vy = -( offset * rcos( newHeading ) ) >> 12;
+
+	Pos.vx += adjust.vx;
+	Pos.vy += adjust.vy;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcAnemoneEnemy::processEnemyCollision( CThing *thisThing )
 {
 	// do nothing
@@ -212,9 +232,15 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 				CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL1 );
 
+				DVECTOR projPos;
+				projPos = Pos;
+
+				projPos.vx += rcos( m_heading ) >> 9;
+				projPos.vy += rsin( m_heading ) >> 9;
+
 				CProjectile *projectile;
 				projectile = new( "test projectile" ) CProjectile;
-				projectile->init( Pos, m_heading );
+				projectile->init( projPos, m_heading );
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_timerTimer = GameState::getOneSecondInFrames();
@@ -560,8 +586,14 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 
 		m_fireHeading = m_heading & 4095;
 
+		DVECTOR projPos;
+		projPos = Pos;
+
+		projPos.vx += rcos( m_heading ) >> 9;
+		projPos.vy += rsin( m_heading ) >> 9;
+
 		projectile = new( "test projectile" ) CProjectile;
-		projectile->init(	Pos,
+		projectile->init(	projPos,
 							m_fireHeading,
 							CProjectile::PROJECTILE_GAS_CLOUD,
 							CProjectile::PROJECTILE_FINITE_LIFE,

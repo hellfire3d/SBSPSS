@@ -103,7 +103,7 @@ public:
 	NPC_UNIT_TYPE		getType()												{return( m_type );}
 	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
-	void				setHeading( s32 xPos, s32 yPos );
+	virtual void		setHeading( s32 xPos, s32 yPos );
 	//void				addWaypoint( u16 *ptr );
 	//void				addWaypoint( u16 *ptrX, u16 *ptrY );
 	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
