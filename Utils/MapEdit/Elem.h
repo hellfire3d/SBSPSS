@@ -51,7 +51,6 @@ public:
 
 		void	Purge();
 		void	Render(int Flags,bool Render3d);
-		void	RenderInvalid();
 
 		int		GetElemWidth()				{return(ElemWidth);}
 		int		GetElemHeight()				{return(ElemHeight);}
@@ -63,8 +62,10 @@ public:
 		int		GetTexXOfs()				{return(TexXOfs);}
 		int		GetTexYOfs()				{return(TexYOfs);}
 
-		void	CreateBlankTileGfx();
-		void	CreateInvalidTileGfx();
+static	void	CreateDefaultTileGfx();
+static	int		BlankID;
+static	int		InvalidID;
+static	bool	DefTexFlag;
 		
 		std::vector<sTriFace> 	&GetTriList() {return(TriList);}
 
@@ -93,7 +94,6 @@ protected:
 		float					UnitWidth,UnitHeight;
 		int						ElemID;
 		u8						*ElemRGB;
-
 };
 
 /*****************************************************************************/
@@ -119,7 +119,6 @@ const	char		*GetName()										{return(Name);}
 		int			GetBrowserWidth()								{return(ElemBrowserWidth);}
 
 		void		RenderElem(int Elem,int Flags,bool Render3d)	{ElemList[Elem].Render(Flags,Render3d);}
-		void		RenderInvalid()									{ElemList[0].RenderInvalid();}
 		CElem		&GetElem(int No)								{return(ElemList[No]);}
 		void		Purge();
 		bool		IsValid(int No);
@@ -163,7 +162,7 @@ virtual	void		Save(CFile *File);
 		CElem		&GetElem(int Set,int Elem)			{return(SetList[Set].GetElem(Elem));}
 		bool		IsValid(int Set,int Elem);
 		void		RenderElem(int Set,int Elem,int Flags,bool Is3d);
-
+		void		RenderInvalid()						{glCallList(CElem::InvalidID);}
 		int			GetSetCount()						{return(SetList.size());}
 
 const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}

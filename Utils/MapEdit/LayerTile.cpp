@@ -28,8 +28,10 @@
 /*****************************************************************************/
 CLayerTile::CLayerTile(sLayerDef &Def)
 {
+		TileBank=0;
 		InitLayer(Def);
-}
+}		
+
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
@@ -47,10 +49,11 @@ void	CLayerTile::InitLayer(sLayerDef &Def)
 		CLayer::InitLayer(Def);
 		Mode=MouseModePaint;
 
-		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION)
+		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION && !TileBank)
+		{
 			TileBank=new CTileBank;
-		else
-			TileBank=0;
+		}
+
 		SubView=TileBank;
 
 		if (!GetResizeFlag())
@@ -67,6 +70,7 @@ void	CLayerTile::Load(CFile *File,int Version)
 {
 		if (Version<=5)
 		{
+			TileBank=0;
 			LayerDef.Type=LAYER_TYPE_TILE;
 			BOOL	DB;
 			float	DF;
@@ -83,13 +87,6 @@ void	CLayerTile::Load(CFile *File,int Version)
 		}
 		InitLayer(LayerDef);
 		Map.Load(File,Version);
-
-//		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION) 
-//			TileBank=new CTileBank;
-//		else
-//			TileBank=0;
-//		SubView=TileBank;
-		
 }
 
 /*****************************************************************************/

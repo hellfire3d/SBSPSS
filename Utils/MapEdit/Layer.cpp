@@ -134,6 +134,7 @@ CLayer	*New;
 
 			File->Read(&ThisDef,sizeof(sLayerDef));
 			New=NewLayer(ThisDef);//Type,SubType,0,0);
+			New->Load(File,Version);
 		}
 		return(New);		
 }

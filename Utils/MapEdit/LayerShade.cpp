@@ -70,7 +70,6 @@ void	CLayerShade::Load(CFile *File,int Version)
 		}
 		InitLayer(LayerDef);
 		File->Read(&Count,sizeof(int));
-		if (Count<2) Count=2;
 		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
 			File->Read(&Pos[i],sizeof(int));

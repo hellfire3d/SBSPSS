@@ -52,7 +52,7 @@ static	int				GetLayerIdx(int Type,int SubType);
 static	CLayer			*NewLayer(sLayerDef &Def);
 static	CLayer			*LoadLayer(CFile *File,int Version);
 
-		char			*GetName()						{TRACE1("%i\n",TableIdx);return(InfoTable[TableIdx].Name);}
+		char			*GetName()						{return(InfoTable[TableIdx].Name);}
 		bool			CanDelete()						{return(InfoTable[TableIdx].DeleteFlag);}
 		float			GetScaleFactor()				{return(InfoTable[TableIdx].ScaleFactor);}
 		bool			GetRender3dFlag()				{return(InfoTable[TableIdx].Render3dFlag);}

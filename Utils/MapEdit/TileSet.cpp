@@ -127,7 +127,9 @@ float		Scale=CamPos.z/(float)BrowserWidth/2.0;
 			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
 
 			glColor3f(1,1,1);
-			ThisSet.RenderElem(TileID,0,Is3d);
+
+			RenderElem(CurrentSet,TileID,0,Is3d);
+
 // Selection
 			ThisElem.Tile=TileID;
 			SelFlag=0;
@@ -158,6 +160,7 @@ float		Scale=CamPos.z/(float)BrowserWidth/2.0;
 	
 				glEnd();
 			}
+
 			TileID++;
 		}
 		glPopMatrix();

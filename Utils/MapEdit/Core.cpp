@@ -55,7 +55,6 @@ GString	Filename;
 		GetExecPath(Filename);
 		Filename+=IconzFileName;
 		IconBank->AddSet(Filename);
-
 }
 
 /*****************************************************************************/
@@ -110,7 +109,6 @@ Vector3	DuffVector;
 			CString mexstr;
 			mexstr.Format("Old File Format\n\nPlease re-save\n");
 			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
-
 		}
 #endif
 
@@ -231,26 +229,31 @@ void	CCore::RenderLayers(bool OneShot)
 Vector3	&ThisCam=GetCam();
 int		ListSize=Layer.size();
 int		StartLayer,EndLayer;
+CLayer	*ThisLayer;
 
 		if (OneShot)
 		{
 			StartLayer=ActiveLayer;
 			EndLayer=StartLayer+1;
+			ThisLayer=CurrentLayer;
 		}
 		else
 		{
-		StartLayer=0;
-		EndLayer=ListSize;
-		while (Layer[StartLayer]->IsUnique()) StartLayer++;
+			StartLayer=0;
+			EndLayer=ListSize;
+			while (Layer[StartLayer]->IsUnique()) StartLayer++;
+			ThisLayer=Layer[StartLayer];
 		}
 
 		for (int i=StartLayer; i<EndLayer; i++)
 		{
-			if (Layer[i]->IsVisible())
+			if (ThisLayer->IsVisible())
 			{
-				Layer[i]->Render(this,ThisCam,Is3dFlag);
-				if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
+				ThisLayer->Render(this,ThisCam,Is3dFlag);
+				if (GridFlag) ThisLayer->RenderGrid(this,ThisCam,i==ActiveLayer);
 			}
+			if (i!=EndLayer) ThisLayer=Layer[i+1];
+			
 		}
 		CurrentLayer->RenderCursor(this,ThisCam,Is3dFlag);
 // Get Cursor Pos

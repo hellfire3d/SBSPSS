@@ -80,6 +80,7 @@ void	CLayerCollision::Load(CFile *File,int Version)
 void	CLayerCollision::Save(CFile *File)
 {
 // Always Save current version
+		File->Write(&Mode,sizeof(MouseMode));
 		Map.Save(File);
 }
 

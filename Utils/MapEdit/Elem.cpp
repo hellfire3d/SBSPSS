@@ -25,6 +25,9 @@
 
 
 const Vector3	DefOfs(+0.5f,0,+4.0f);
+int		CElem::BlankID=-1;
+int		CElem::InvalidID=-1;
+bool	CElem::DefTexFlag=false;
 
 /*****************************************************************************/
 // All Elems MUST run from 0,0 ->
@@ -67,7 +70,7 @@ CElem::CElem(int Width,int Height)
 		Type=ElemType2d;
 		TexXOfs=0;
 		TexYOfs=0;
-		CreateBlankTileGfx();
+		for (int i=0; i<ElemTypeMax; i++) DrawList[i]=BlankID;
 }
 
 /*****************************************************************************/
@@ -92,8 +95,11 @@ GFName		Path=Filename;
 			Ofs.Zero();
 			Create2dTexture(TexCache,Path.File(),Node);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
-			if (!ValidFlag)	CreateInvalidTileGfx();
-
+			if (!ValidFlag)	
+			{
+				Purge();	// Clear whatever is already there
+				for (int i=0; i<ElemTypeMax; i++) DrawList[i]=InvalidID;
+			}
 }
 
 /*****************************************************************************/
@@ -122,7 +128,11 @@ GFName		Path=Filename;
 			Build3dDrawList(TexCache,DrawList[ElemType3d]);
 			Create2dTexture(TexCache,Path.File(),TexID);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
-			if (!ValidFlag)	CreateInvalidTileGfx();
+			if (!ValidFlag)	
+			{
+				Purge();	// Clear whatever is already there
+				for (int i=0; i<ElemTypeMax; i++) DrawList[i]=InvalidID;
+			}
 }
 
 /*****************************************************************************/
@@ -410,26 +420,6 @@ int		ColFlags=Flags >> PC_TILE_FLAG_COLLISION_SHIFT;
 }
 
 /*****************************************************************************/
-void	CElem::RenderInvalid()
-{
-float	X0=0;
-float	X1=UnitWidth;
-float	Y0=0;
-float	Y1=UnitHeight;
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBegin(GL_LINES); 
-			glColor4f(1,1,1,1);
-			
-			glVertex3f( X0,Y0,0);
-			glVertex3f( X1,Y1,0);
-
-			glVertex3f( X1,Y0,0);
-			glVertex3f( X0,Y1,0);
-		glEnd();
-}
-
-/*****************************************************************************/
 void	CElem::Purge()
 {
 		for (int i=0; i<ElemTypeMax; i++)
@@ -439,51 +429,41 @@ void	CElem::Purge()
 
 /*****************************************************************************/
 // Only created for the tile browser, should NEVER appear in main view
-void	CElem::CreateBlankTileGfx()
+void	CElem::CreateDefaultTileGfx()
 {
 float	X0=0;
-float	X1=UnitWidth;
+float	X1=1.0f;
 float	Y0=0;
-float	Y1=UnitHeight;
-
-		Purge();
-		for (int i=0; i<ElemTypeMax; i++)
+float	Y1=1.0f;
+		DefTexFlag=true;
+// Blank
+		if (BlankID==-1)
 		{
-			DrawList[i]=glGenLists(1);
-			glNewList(DrawList[i],GL_COMPILE);
+			BlankID=glGenLists(1);
+			glNewList(BlankID,GL_COMPILE);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glBegin(GL_LINES); 
 				glColor4f(1,1,1,1);
-		
+			
 				glVertex3f( X0,Y0,0);
 				glVertex3f( X1,Y0,0);
-
+	
 				glVertex3f( X0,Y1,0);
 				glVertex3f( X1,Y1,0);
-
+	
 				glVertex3f( X0,Y0,0);
 				glVertex3f( X0,Y1,0);
-
+	
 				glVertex3f( X1,Y0,0);
 				glVertex3f( X1,Y1,0);
 			glEnd();
 			glEndList();
-	}
-}
-
-/*****************************************************************************/
-void	CElem::CreateInvalidTileGfx()
-{
-float	X0=0;
-float	X1=UnitWidth;
-float	Y0=0;
-float	Y1=UnitHeight;
-
-		Purge();
-		for (int i=0; i<ElemTypeMax; i++)
+		}
+// Invalid
+		if (InvalidID==-1)
 		{
-			DrawList[i]=glGenLists(1);
-			glNewList(DrawList[i],GL_COMPILE);
+			InvalidID=glGenLists(1);
+			glNewList(InvalidID,GL_COMPILE);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glBegin(GL_LINES); 
 				glColor4f(1,1,1,1);
@@ -495,8 +475,9 @@ float	Y1=UnitHeight;
 				glVertex3f( X0,Y1,0);
 			glEnd();
 			glEndList();
-	}
+		}
 }
+
 
 /*****************************************************************************/
 void	CElem::RenderElem4Texture(sRGBData &RGBData)
@@ -632,7 +613,7 @@ void	CElemSet::Load(CCore *Core)
 GFName	FName=Filename;
 GString	Ext=FName.Ext();
 		Ext.Upper();
-
+		if (!CElem::DefTexFlag) CElem::CreateDefaultTileGfx();
 		if (Ext=="GIN")
 			Load3d(Core);
 		else
@@ -708,7 +689,7 @@ CPoint	CElemSet::GetElemPos(int ID)
 bool	CElemSet::IsValid(int No)			
 {
 int		ListSize=ElemList.size();
-		if (No>ListSize) return(false);
+		if (No>=ListSize) return(false);
 		return(ElemList[No].IsValid());
 }
 
@@ -880,8 +861,8 @@ bool	CElemBank::IsValid(int Set,int Elem)
 {
  		if (Set<0 || Elem<0) return(false);
 		if (Elem==0) return(true);
-// 		if (Set>=SetList.size()) return(false);
- 		if (Set>SetList.size()) return(false);
+ 		if (Set>=SetList.size()) return(false);
+// 		if (Set>SetList.size()) return(false);
 		ASSERT(Set<SetList.size());
 		return(SetList[Set].IsValid(Elem));
 }
@@ -908,7 +889,7 @@ void	CElemBank::RenderElem(int Set,int Elem,int Flags,bool Is3d)
 		}
 		else
 		{
-			SetList[0].RenderInvalid();
+			RenderInvalid();
 		}
 		
 }

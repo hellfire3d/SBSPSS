@@ -109,6 +109,14 @@ SOURCE=.\Layer.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerActor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerActor.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerCollision.cpp
 # End Source File
 # Begin Source File
@@ -118,6 +126,22 @@ SOURCE=.\LayerCollision.h
 # Begin Source File
 
 SOURCE=.\LayerDef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerItem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerItem.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerPlatform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerPlatform.h
 # End Source File
 # Begin Source File
 

@@ -116,7 +116,6 @@ CElemBank	*IconBank=Core->GetIconBank();
 			glTranslatef(-ScrOfsX,ScrOfsY,0);						// Bring to top left corner
 
 int			ListSize=ThisThing.XY.size();
-TRACE1("%i\n",ListSize);
 			for (int i=0;i<ListSize; i++)
 			{
 // Render Thing			

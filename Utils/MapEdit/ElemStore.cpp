@@ -77,7 +77,7 @@ void	CElemStore::RenderElem(int Set,int Elem,int Flags,bool Is3d)
 		}
 		else
 		{
-			SetList[0].RenderInvalid();
+			RenderInvalid();
 		}
 		
 }
