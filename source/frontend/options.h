@@ -91,7 +91,7 @@ private:
 	enum
 	{
 		X_BORDER=30,
-		Y_BORDER=20,
+		Y_BORDER=10,
 	};
 
 	typedef struct

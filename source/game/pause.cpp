@@ -68,12 +68,12 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#define FRAME_WIDTH		390
-#define FRAME_HEIGHT	185
-#define TEXT_BOX_WIDTH	300
-#define TEXT_BOX_HEIGHT	20
-#define OT_POS			5
-#define TEXT_SPACING	13
+static const int	FRAME_WIDTH		=352;
+static const int	FRAME_HEIGHT	=160;
+static const int	TEXT_BOX_WIDTH	=300;
+static const int	TEXT_BOX_HEIGHT	=20;
+static const int	OT_POS			=5;
+static const int	TEXT_SPACING	=13;
 extern int newmode;
 void CPauseMenu::init()
 {

@@ -146,6 +146,11 @@ CFrontEndOptions::ButtonToIconMap	CFrontEndOptions::s_controlMap[]=
 	{	PAD_TRIANGLE,	ICON_TRIANGLE	},
 };
 
+// Frame dimensions
+static const int OPTIONS_FRAME_W=416;
+static const int OPTIONS_FRAME_H=160;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -170,37 +175,35 @@ void CFrontEndOptions::init()
 		CGUIControlFrame	**mm=&m_modeMenus[i];
 		*mm=new ("optionsframe") CGUIControlFrame();
 		(*mm)->init(NULL);
-		(*mm)->setObjectXYWH(50,40,412,176);
+		(*mm)->setObjectXYWH((512-OPTIONS_FRAME_W)/2,(256-OPTIONS_FRAME_H)/2,OPTIONS_FRAME_W,OPTIONS_FRAME_H);
 	}
-
 
 	// Populate OPTIONS menu
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,Y_BORDER,412-(X_BORDER*2),20,
+										X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__CONTROLS,
 										&m_nextMode,MODE__CONTROL);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,Y_BORDER+30,412-(X_BORDER*2),20,
+										X_BORDER,Y_BORDER+30,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__SCREEN,
 										&m_nextMode,MODE__SCREEN);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,Y_BORDER+60,412-(X_BORDER*2),20,
+										X_BORDER,Y_BORDER+60,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__SOUND,
 										&m_nextMode,MODE__SOUND);
 	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
-										X_BORDER,176-Y_BORDER-20,412-(X_BORDER*2),20,
+										X_BORDER,OPTIONS_FRAME_H-Y_BORDER-20,OPTIONS_FRAME_W-(X_BORDER*2),20,
 										STR__FRONTEND__EXIT,
 										&m_exitFlag,true);
 
-
 	// Populate CONTROLS menu
 	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
-										X_BORDER,Y_BORDER,412-(X_BORDER*2),40,
+										X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),40,
 										STR__FRONTEND__CONTROL_STYLE,
 										&m_controlStyle,s_controlStyleValues,s_controlStyleReadoutText);
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(m_modeMenus[MODE__CONTROL]);
-	fr->setObjectXYWH(X_BORDER*2,65,412-(X_BORDER*4),60);	//292
+	fr->setObjectXYWH(X_BORDER*2,55,OPTIONS_FRAME_W-(X_BORDER*4),60);	//292
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
 		sr->setObjectXYWH(0,0,26,15);	//146
@@ -259,26 +262,25 @@ void CFrontEndOptions::init()
 
 	// Populate SCREEN menu
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
-										 X_BORDER,Y_BORDER,412-(X_BORDER*2),35,
+										 X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__HORIZONTAL_POSITION,
 										 &m_screenXOff,0,64);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
-										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),35,
+										 X_BORDER,Y_BORDER+40,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__VERTICAL_POSITION,
 										 &m_screenYOff,0,32);
 
-
 	// Populate SOUND menu
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER,412-(X_BORDER*2),35,
+										 X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__BGM,
 										 &m_bgmVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),35,
+										 X_BORDER,Y_BORDER+35,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__SFX,
 										 &m_sfxVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER+80,412-(X_BORDER*2),35,
+										 X_BORDER,Y_BORDER+70,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__SPEECH,
 										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 
@@ -286,7 +288,7 @@ void CFrontEndOptions::init()
 	for(i=1;i<MODE__COUNT;i++)
 	{
 		CGUIFactory::createValueButtonFrame(m_modeMenus[i],
-											X_BORDER,176-Y_BORDER-20,412-(X_BORDER*2),20,
+											X_BORDER,OPTIONS_FRAME_H-Y_BORDER-20,OPTIONS_FRAME_W-(X_BORDER*2),20,
 											STR__FRONTEND__BACK,
 											&m_nextMode,MODE__OPTIONS);
 	}
