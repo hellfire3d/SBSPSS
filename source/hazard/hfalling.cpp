@@ -147,7 +147,7 @@ void CNpcFallingHazard::processTimer( int _frames )
 
 void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 {
-	if (!m_bounceFinish && m_movementTimer<=0) CNpcHazard::collidedWith(_thisThing);
+	if (m_movementTimer<=0) CNpcHazard::collidedWith(_thisThing);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,4 +160,43 @@ const CRECT *CNpcFallingHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMin + 1;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisHazard,sizeof(sThingHazard));
+
+	u16 newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	//startPos.vy = newYPos << 4;
+	startPos.vy = -10;
+
+	Pos = startPos;
+	m_base = Pos;
+
+	addWaypoint( newXPos, newYPos );
+
+	if ( ThisHazard->PointCount > 1 )
+	{
+		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			addWaypoint( newXPos, newYPos );
+		}
+	}
 }

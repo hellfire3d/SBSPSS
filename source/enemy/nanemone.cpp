@@ -566,30 +566,16 @@ void CNpcAnemone2Enemy::render()
 	{
 		CEnemyThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
-
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
-
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		if (canRender())
 		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
-			{
-				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
-				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, m_scaleX, m_scaleY );
+			DVECTOR &renderPos=getRenderPos();
 
-				sBBox boundingBox = m_actorGfx->GetBBox();
-				setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-				setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
-			}
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, m_scaleX, m_scaleY );
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
 }

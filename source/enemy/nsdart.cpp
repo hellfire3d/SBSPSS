@@ -42,54 +42,29 @@ void CNpcSquidDartEnemy::render()
 	{
 		CEnemyThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR origRenderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
-
-		int		spriteWidth = m_spriteBank->getFrameWidth( frame );
-		int		spriteHeight = m_spriteBank->getFrameHeight( frame );
-
-		renderPos.vx = Pos.vx - offset.vx;
-		origRenderPos.vx = renderPos.vx;
-
-		if ( m_reversed )
+		if (canRender())
 		{
-			renderPos.vx += ( spriteWidth >> 1 ) + m_drawOffset.vx;
-		}
-		else
-		{
-			renderPos.vx -= ( spriteWidth >> 1 ) + m_drawOffset.vx;
-		}
+			DVECTOR &renderPos=getRenderPos();
 
-		renderPos.vy = Pos.vy - offset.vy;
-		origRenderPos.vy = renderPos.vy;
-		renderPos.vy += m_drawOffset.vy - ( spriteHeight >> 1 );
+			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
+			SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
+			setRGB0( SprFrame, 255, 128, 255 );
 
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
-		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
-			{
-				SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
-				setRGB0( SprFrame, 255, 128, 255 );
+			/*s32 XMax = SprFrame->x1 - origRenderPos.vx;
+			s32 XMin = SprFrame->x0 - origRenderPos.vx;
 
-				s32 XMax = SprFrame->x1 - origRenderPos.vx;
-				s32 XMin = SprFrame->x0 - origRenderPos.vx;
+			s32 YMax = SprFrame->y2 - origRenderPos.vy;
+			s32 YMin = SprFrame->y0 - origRenderPos.vy;*/
 
-				s32 YMax = SprFrame->y2 - origRenderPos.vy;
-				s32 YMin = SprFrame->y0 - origRenderPos.vy;
+			s32 XMax = SprFrame->x1 - renderPos.vx;
+			s32 XMin = SprFrame->x0 - renderPos.vx;
 
-				setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
-				setCollisionCentreOffset( ( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
-			}
+			s32 YMax = SprFrame->y2 - renderPos.vy;
+			s32 YMin = SprFrame->y0 - renderPos.vy;
+
+			setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
+			setCollisionCentreOffset( ( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
 		}
 	}
 }

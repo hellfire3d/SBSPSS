@@ -210,3 +210,15 @@ void CNpcPendulumPlatform::render()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcPendulumPlatform::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.y1 = thinkBBox.YMax - 1;
+
+	return &objThinkBox;
+}

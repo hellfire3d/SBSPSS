@@ -134,40 +134,25 @@ void CNpcBoatHazard::render()
 	{
 		CHazardThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
-
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
-
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		if (canRender())
 		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
+			DVECTOR &renderPos=getRenderPos();
+
+			VECTOR flip;
+
+			if ( m_reversed )
 			{
-				VECTOR flip;
-
-				if ( m_reversed )
-				{
-					flip.vx = ONE;
-				}
-				else
-				{
-					flip.vx = -ONE;
-				}
-
-				flip.vy = ONE;
-				flip.vz = ONE;
-
-				m_modelGfx->Render( renderPos, NULL, &flip );
-				//m_actorGfx->Render(renderPos,0,0,0);
+				flip.vx = ONE;
 			}
+			else
+			{
+				flip.vx = -ONE;
+			}
+
+			flip.vy = ONE;
+			flip.vz = ONE;
+
+			m_modelGfx->Render( renderPos, NULL, &flip );
 		}
 	}
 }

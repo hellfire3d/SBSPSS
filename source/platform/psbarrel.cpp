@@ -118,60 +118,47 @@ void CNpcSteerableBarrelPlatform::render()
 	{
 		CPlatformThing::render();
 
-		// Render
-		DVECTOR renderPos;
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
-
-		CRECT collisionRect = getCollisionArea();
-		collisionRect.x1 -= Pos.vx;
-		collisionRect.x2 -= Pos.vx;
-		collisionRect.y1 -= Pos.vy;
-		collisionRect.y2 -= Pos.vy;
-
-		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		if (canRender())
 		{
-			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
-			{
-				SVECTOR rotation;
-				rotation.vx = 0;
-				rotation.vy = 0;
-				rotation.vz = m_rotation;
+			DVECTOR &renderPos=getRenderPos();
+			DVECTOR	offset = CLevel::getCameraPos();
 
-				VECTOR scale;
-				scale.vx = ONE;
-				scale.vy = ONE;
-				scale.vz = ONE;
+			SVECTOR rotation;
+			rotation.vx = 0;
+			rotation.vy = 0;
+			rotation.vz = m_rotation;
 
-				m_modelGfx->Render(renderPos,&rotation,&scale);
+			VECTOR scale;
+			scale.vx = ONE;
+			scale.vy = ONE;
+			scale.vz = ONE;
 
-	#if defined (__USER_paul__) || defined (__USER_charles__)
-		DVECTOR size;
-		DVECTOR	centre;
-		int		halfLength;
-		int		x1,y1,x2,y2;
+			m_modelGfx->Render(renderPos,&rotation,&scale);
 
-		centre=getCollisionCentre();
-		size=getCollisionSize();
-		halfLength=size.vx>>1;
+#if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
+	DVECTOR	centre;
+	int		halfLength;
+	int		x1,y1,x2,y2;
 
-		x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
-		y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
-		x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
-		y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+	centre=getCollisionCentre();
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
 
-		centre.vx-=offset.vx;
-		centre.vy-=offset.vy;
-		x1+=centre.vx;
-		y1+=centre.vy;
-		x2+=centre.vx;
-		y2+=centre.vy;
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
 
-		DrawLine(x1,y1,x2,y2,0,255,0,0);
-	#endif
-			}
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
 		}
 	}
 }
