@@ -160,8 +160,9 @@ void CConversation::init()
   ---------------------------------------------------------------------- */
 void CConversation::shutdown()
 {
+	s_fontBank->dump();				delete s_fontBank;
 	dumpConversationScripts();
-	s_guiFrame->shutdown();			delete s_guiFrame;
+	s_guiFrame->shutdown();
 }
 
 
@@ -418,6 +419,7 @@ void CConversation::dumpConversationScripts()
 	for(i=0;i<s_numRegisteredScripts;i++)
 	{
 		s_registeredScripts[i]->dump();
+		delete s_registeredScripts[i];
 	}
 	s_currentScript=NULL;
 	s_numRegisteredScripts=0;
