@@ -152,7 +152,7 @@ void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcFallingHazard::getThinkBBox()
+/*const CRECT *CNpcFallingHazard::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -160,7 +160,7 @@ const CRECT *CNpcFallingHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMin + 1;
 
 	return &objThinkBox;
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -179,8 +179,7 @@ void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	DVECTOR startPos;
 	startPos.vx = newXPos << 4;
-	//startPos.vy = newYPos << 4;
-	startPos.vy = -10;
+	startPos.vy = newYPos << 4;
 
 	Pos = startPos;
 	m_base = Pos;
