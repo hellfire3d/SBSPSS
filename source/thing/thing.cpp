@@ -460,8 +460,8 @@ DVECTOR	const &MapSize=Lvl.getMapSize16();
 			int		Flag=1;
 			DVECTOR	const &ThingPos=thing->getPos();
 
-			// Will speed this up
-			if (ThingPos.vx<0 || ThingPos.vx>=MapSize.vx || ThingPos.vy<0 || ThingPos.vy>=MapSize.vy)
+			// Will speed this up - doubt it, not now!!
+			if (i!=CThing::TYPE_PLAYER && (ThingPos.vx<0 || ThingPos.vx>=MapSize.vx || ThingPos.vy<0 || ThingPos.vy>=MapSize.vy))
 			{
 				thing->setToShutdown();
 				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapSize.vx,MapSize.vy);
