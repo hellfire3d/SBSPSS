@@ -68,7 +68,7 @@ void	CLookTrigger::collidedWith(CThing *_thisThing)
 			collArea.y2=collArea.y1+10;
 			if(checkCollisionAgainstArea(&collArea))
 			{
-				((CPlayer*)_thisThing)->setLedgeLookAhead(+4);
+				((CPlayer*)_thisThing)->setLedgeLookAhead(m_val0);
 			}
 
 			break;

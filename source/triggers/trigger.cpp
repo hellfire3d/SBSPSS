@@ -163,6 +163,10 @@
 #include "triggers\tspeech.h"
 #endif
 
+#ifndef	__TRIGGERS_TLOOK_H__
+#include "triggers\tlook.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -427,6 +431,10 @@ CTrigger	*trigger;
 			break;
 		}
 
+		case TRIGGER_CAMERAYPOSITIONTRIGGER:
+			trigger = (CLookTrigger*)new("LookTrigger") CLookTrigger();
+			break;
+
 		default:
 			trigger=NULL;
 	}
@@ -445,6 +453,7 @@ CTrigger	*trigger=Create(ThisTrigger->Type);
 
 			trigger->setPositionAndSize(ThisTrigger->Pos.X<<4,ThisTrigger->Pos.Y<<4,ThisTrigger->Width<<4,ThisTrigger->Height<<4);
 			trigger->setTargetBox(ThisTrigger->TargetPos.X<<4,ThisTrigger->TargetPos.Y<<4,ThisTrigger->TargetSize.X<<4,ThisTrigger->TargetSize.Y<<4);
+			trigger->setVal(ThisTrigger->Val0);
 
 			switch( ThisTrigger->Type )
 			{
@@ -520,4 +529,14 @@ void	CTrigger::setTargetBox(int _x,int _y,int _w,int _h)
 	m_boxY2=_y+_h;
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CTrigger::setVal(int _val)
+{
+	m_val0=_val;
+}
 

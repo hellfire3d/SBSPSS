@@ -701,7 +701,6 @@ void	CPlayer::shutdown()
   ---------------------------------------------------------------------- */
 static int oldmode=-1;
 int newmode=-1;
-
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -1124,7 +1123,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	}
 
 	// Ledge look-ahead stuff
-	if(m_ledgeLookAhead&&m_ledgeLookAhead==m_lastLedgeLookAhead)
+	if(m_ledgeLookAhead)
 	{
 		if(m_ledgeLookTimer<ledgeTimer)
 		{
@@ -1134,25 +1133,22 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		{
 			int limit;
 			limit=(m_ledgeLookAhead*MAP2D_BLOCKSTEPSIZE)<<ledgeShift;
-			if(m_ledgeLookAhead>0)
+			if(m_ledgeLookOffset<limit)
 			{
+				// Look down
+				m_ledgeLookOffset+=ledgeSpeedIn*_frames;
+				if(m_ledgeLookOffset>limit)
+				{
+					m_ledgeLookOffset=limit;
+				}
+			}
+			else if(m_ledgeLookOffset>limit)
+			{
+				// Look up
+				m_ledgeLookOffset-=ledgeSpeedIn*_frames;
 				if(m_ledgeLookOffset<limit)
 				{
-					// Look down
-					m_ledgeLookOffset+=ledgeSpeedIn*_frames;
-					if(m_ledgeLookOffset>limit)
-					{
-						m_ledgeLookOffset=limit;
-					}
-				}
-				else if(m_ledgeLookOffset>limit)
-				{
-					// Look up
-					m_ledgeLookOffset-=ledgeSpeedIn*_frames;
-					if(m_ledgeLookOffset<limit)
-					{
-						m_ledgeLookOffset=limit;
-					}
+					m_ledgeLookOffset=limit;
 				}
 			}
 		}
@@ -1180,8 +1176,6 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 			}
 		}
 	}
-	m_lastLedgeLookAhead=m_ledgeLookAhead;
-	m_ledgeLookAhead=0;
 
 	// Camera focus point stuff
 	calcCameraFocusPointTarget();
@@ -1606,6 +1600,21 @@ int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CPlayer::setLedgeLookAhead(int _lookAhead)
+{
+	if(m_ledgeLookAhead!=_lookAhead)
+	{
+		m_ledgeLookAhead=_lookAhead;
+		m_ledgeLookTimer=0;
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayer::addLife()
 {
 	CGameSlotManager::GameSlot	*gameSlot;
@@ -1898,7 +1907,7 @@ void CPlayer::respawn()
 	m_cameraPos.vy=m_currentCamFocusPoint.vy;
 
 	m_padLookAroundTimer=0;
-	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
+	m_ledgeLookAhead=0;
 	m_ledgeLookOffset=0;
 	m_ledgeLookTimer=0;
 	m_tryingToManuallyPickupWeapon=false;

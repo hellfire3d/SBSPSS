@@ -67,6 +67,7 @@ enum TRIGGER_TYPE
 	TRIGGER_SPEECH_FIRST_BUBBLE,
 	TRIGGER_SPEECH_USE_BUBBLE,
 	TRIGGER_SPEECH_WEIGHT,
+	TRIGGER_CAMERAYPOSITIONTRIGGER,
 
 // Code based triggers
 	TRIGGER_PLATFORM,
@@ -90,11 +91,13 @@ static CTrigger		*Create(int Type);
 static CTrigger		*Create(sThingTrigger *ThisTrigger);
 virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
 virtual void		setTargetBox(int _x,int _y,int _w,int _h);
+		void		setVal(int _val);
 
 protected:
 virtual void		collidedWith(CThing *_thisThing){};
 
 		int			m_boxX1,m_boxY1,m_boxX2,m_boxY2;
+		int			m_val0;
 
 };
 
