@@ -275,7 +275,7 @@ void CNpcEnemy::init()
 	m_drawOffset.vx = 0;
 	m_drawOffset.vy = -( ofs.vy >> 1 );
 
-	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
+	setCollisionCentreOffset( m_drawOffset.vx, m_drawOffset.vy );
 
 	m_positionHistory = NULL;
 }
@@ -1372,8 +1372,8 @@ void CNpcEnemy::render()
 	//renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) );// * 20;
 	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
 
-	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy;
+	renderPos.vx = Pos.vx + m_drawOffset.vx - offset.vx;
+	renderPos.vy = Pos.vy + m_drawOffset.vy - offset.vy;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
