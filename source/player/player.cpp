@@ -812,57 +812,65 @@ if(newmode!=-1)
 
 		// Only do the weapon change stuff on the first frame. As the buttons pressed do not
 		// change over these frames there is no point in doing it every frame
-		if(i==0&&m_currentPlayerModeClass->getState()!=STATE_CELEBRATE)
+		if(m_currentMode!=PLAYER_MODE_DEAD)
 		{
-			m_tryingToManuallyPickupWeapon=false;
-			m_tryingToAutomaticallyPickupWeapon=false;
+			if(i==0&&m_currentPlayerModeClass->getState()!=STATE_CELEBRATE)
+			{
+				m_tryingToManuallyPickupWeapon=false;
+				m_tryingToAutomaticallyPickupWeapon=false;
 
-			// Weapon collect/drop/swap stuff..
-			if(m_currentMode==PLAYER_MODE_BASICUNARMED)
-			{
-				// Always trying to pick up weapon if unarmed... means that when SB walks
-				// over an item whilst unarmed, he automatically picks it up
-				m_tryingToAutomaticallyPickupWeapon=true;
-			}
-			if(m_currentMode!=PLAYER_MODE_CART && getPadInputDown()&PI_WEAPONCHANGE)
-			{
-				// If already armed then drop current weapon
-				if(m_currentMode!=PLAYER_MODE_BASICUNARMED&&
-				   m_currentMode!=PLAYER_MODE_DEAD)
+				// Weapon collect/drop/swap stuff..
+				if(m_currentMode==PLAYER_MODE_BASICUNARMED)
 				{
-					static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
-					{
-						-1,						// PLAYER_MODE_BASICUNARMED
-						-1,						// PLAYER_MODE_FULLUNARMED
-						-1,						// PLAYER_MODE_BALLOON
-						PICKUP__BUBBLE_WAND,	// PLAYER_MODE_BUBBLE_MIXTURE
-						PICKUP__NET,			// PLAYER_MODE_NET
-						PICKUP__CORAL_BLOWER,	// PLAYER_MODE_CORALBLOWER
-						PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
-						-1,						// PLAYER_MODE_DEAD
-						-1,						// PLAYER_MODE_FLY
-						-1,						// PLAYER_MODE_CART
-						-1,						// PLAYER_MODE_SWALLOW
-					};
-
-					int	pickupToDrop;
-					pickupToDrop=s_pickupsToDrop[m_currentMode];
-					if(pickupToDrop!=-1)
-					{
-						DVECTOR	pickupPos;
-						CBasePickup	*pickup;
-						pickupPos.vx=Pos.vx;
-						pickupPos.vy=Pos.vy-30;
-						pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
-						pickup->setPos(&pickupPos);
-						((CBaseWeaponPickup*)pickup)->setHasBeenCollected();
-					}
-					setMode(PLAYER_MODE_BASICUNARMED);
+					// Always trying to pick up weapon if unarmed... means that when SB walks
+					// over an item whilst unarmed, he automatically picks it up
+					m_tryingToAutomaticallyPickupWeapon=true;
 				}
+				if(m_currentMode!=PLAYER_MODE_CART && getPadInputDown()&PI_WEAPONCHANGE)
+				{
+					// If already armed then drop current weapon
+					if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
+					{
+						static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
+						{
+							-1,						// PLAYER_MODE_BASICUNARMED
+							-1,						// PLAYER_MODE_FULLUNARMED
+							-1,						// PLAYER_MODE_BALLOON
+							PICKUP__BUBBLE_WAND,	// PLAYER_MODE_BUBBLE_MIXTURE
+							PICKUP__NET,			// PLAYER_MODE_NET
+							PICKUP__CORAL_BLOWER,	// PLAYER_MODE_CORALBLOWER
+							PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
+							-1,						// PLAYER_MODE_DEAD
+							-1,						// PLAYER_MODE_FLY
+							-1,						// PLAYER_MODE_CART
+							-1,						// PLAYER_MODE_SWALLOW
+						};
 
-				// Now trying to pick up a weapon..
-				m_tryingToManuallyPickupWeapon=true;
+						int	pickupToDrop;
+						pickupToDrop=s_pickupsToDrop[m_currentMode];
+						if(pickupToDrop!=-1)
+						{
+							DVECTOR	pickupPos;
+							CBasePickup	*pickup;
+							pickupPos.vx=Pos.vx;
+							pickupPos.vy=Pos.vy-30;
+							pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
+							pickup->setPos(&pickupPos);
+							((CBaseWeaponPickup*)pickup)->setHasBeenCollected();
+						}
+						setMode(PLAYER_MODE_BASICUNARMED);
+					}
+
+					// Now trying to pick up a weapon..
+					m_tryingToManuallyPickupWeapon=true;
+				}
 			}
+		}
+		else
+		{
+			// Don't try to pick up weapons when dead.. doh!
+			m_tryingToAutomaticallyPickupWeapon=false;
+			m_tryingToManuallyPickupWeapon=false;
 		}
 
 		int level=GameScene.getLevelNumber();
@@ -1009,7 +1017,7 @@ if(newmode!=-1)
 #endif
 
 		// Stop the player vanishing off the edge of the telly..
-		if(!m_lockCamera)
+		if(m_currentMode!=PLAYER_MODE_DEAD)		// Lock camera when player is dead
 		{
 			if(Pos.vx<m_playerPosLimitBox.x1)		Pos.vx=m_playerPosLimitBox.x1;
 			else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
@@ -1228,7 +1236,7 @@ if(newmode!=-1)
 	yoff=m_cameraLookOffset+(m_ledgeLookOffset>>ledgeShift);
 	if(yoff<-camerahardlockup)yoff=-camerahardlockup;
 	else if(yoff>camerahardlockdown)yoff=camerahardlockdown;
-	if(!m_lockCamera)
+	if(m_currentMode!=PLAYER_MODE_DEAD)		// Lock camera when player is dead
 	{
 		m_cameraPos.vx=m_currentCamFocusPoint.vx;
 		m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
@@ -1965,7 +1973,6 @@ void CPlayer::respawn()
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
 
-	m_lockCamera=false;
 	m_cameraXScrollDir=0;
 	m_cameraXScrollPos=0;
 
@@ -2382,7 +2389,6 @@ void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 	m_deathType=_deathType;
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 	setMode(PLAYER_MODE_DEAD);
-	m_lockCamera=true;
 }
 
 

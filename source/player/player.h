@@ -336,7 +336,6 @@ private:
 
 	int				m_cartCamActive;
 	int				m_reverseCameraMovement;
-	int				m_lockCamera;
 	DVECTOR			m_cameraPos;
 	DVECTOR			m_currentCamFocusPointTarget;
 	DVECTOR			m_currentCamFocusPoint;
