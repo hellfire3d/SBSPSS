@@ -881,14 +881,6 @@ SOURCE=..\..\..\source\hazard\hfan.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\hazard\hfemit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hfemit.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\hazard\hfirebal.cpp
 # End Source File
 # Begin Source File
@@ -1925,11 +1917,27 @@ SOURCE=..\..\..\source\triggers\tcamlock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tfemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tfemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tgarygo.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tgarygo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tifemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tifemit.h
 # End Source File
 # Begin Source File
 

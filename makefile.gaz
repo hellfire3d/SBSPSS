@@ -152,8 +152,7 @@ hazard_src :=		hazard \
 					hrwheel \
 					hpswitch \
 					hrckshrd \
-					hinert \
-					hfemit
+					hinert
 
 fx_src :=			fx \
 					fxbaseanim \
@@ -296,7 +295,9 @@ triggers_src :=		trigger \
 					tteleprt \
 					twater \
 					tplatfrm \
-					tgarygo
+					tgarygo \
+					tfemit \
+					tifemit
 
 utils_src :=		utils \
 					sincos \

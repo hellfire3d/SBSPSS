@@ -43,6 +43,14 @@
 #include "triggers\tgarygo.h"
 #endif
 
+#ifndef __TRIGGERS_TFEMIT_H__
+#include "triggers\tfemit.h"
+#endif
+
+#ifndef __TRIGGERS_TIFEMIT_H__
+#include "triggers\tifemit.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -88,6 +96,15 @@ CTrigger	*trigger;
 		// Gary start trigger
 		case TRIGGER_GARYSTART:
 			trigger=(CGaryStartTrigger*)new( "GaryStartTrigger") CGaryStartTrigger();
+			break;
+
+		// Flame emitter
+		case TRIGGER_FLAMEEMITTER:
+			trigger=(CFlameEmitterTrigger*)new( "FlameEmitterTrigger") CFlameEmitterTrigger();
+			break;
+
+		case TRIGGER_INTERMITTENTFLAMEEMITTER:
+			trigger=(CIntermittentFlameEmitterTrigger*)new( "IntermittentFlameEmitterTrigger") CIntermittentFlameEmitterTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:

@@ -115,10 +115,6 @@
 #include "hazard\hinert.h"
 #endif
 
-#ifndef __HAZARD_HFEMIT_H__
-#include "hazard\hfemit.h"
-#endif
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +141,6 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_PRESSURE_SWITCH_HAZARD,
 	NPC_ROCKSHARD_HAZARD,
 	NPC_INERT_HAZARD,
-	NPC_FLAME_EMITTER_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,12 +276,6 @@ CNpcHazard *hazard;
 		case NPC_INERT_HAZARD:
 		{
 			hazard = new ("inert hazard") CNpcInertHazard;
-			break;
-		}
-
-		case NPC_FLAME_EMITTER_HAZARD:
-		{
-			hazard = new ("flame emitter hazard") CNpcFlameEmitterHazard;
 			break;
 		}
 
