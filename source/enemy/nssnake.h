@@ -60,6 +60,7 @@ protected:
 	virtual void		processMovement( int _frames );
 	virtual void		processShot( int _frames );
 	virtual void		processEnemyCollision( CThing *thisThing );
+	virtual void		processUserCollision( CThing *thisThing );
 
 	enum
 	{
@@ -80,6 +81,8 @@ protected:
 	CNpcSeaSnakeSegment				*m_segment;
 	CNpcPositionHistory				*m_positionHistory;
 	s32								m_collTimer;
+	s32								m_snapTimer;
+	s32								m_openTimer;
 };
 
 #endif

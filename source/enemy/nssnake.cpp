@@ -222,7 +222,12 @@ void CNpcSeaSnakeEnemy::shutdown()
 
 bool CNpcSeaSnakeEnemy::processSensor()
 {
-	/*if ( playerXDistSqr + playerYDistSqr < 40000 )
+	if ( m_sensorFunc == NPC_SENSOR_NONE )
+	{
+		return( false );
+	}
+
+	if ( playerXDistSqr + playerYDistSqr < 40000 )
 	{
 		m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -231,9 +236,7 @@ bool CNpcSeaSnakeEnemy::processSensor()
 	else
 	{
 		return( false );
-	}*/
-
-	return( false );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,6 +248,39 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 	s32 moveDist = 0;
 	DVECTOR oldPos = Pos;
 	u8 skipCounter;
+
+	if ( m_snapTimer > 0 )
+	{
+		m_snapTimer -= _frames;
+
+		if ( m_snapTimer <= 0 )
+		{
+			m_animNo = ANIM_SEASNAKE_HEADSTATICMOUTHSHUT;
+			m_animPlaying = true;
+			m_frame = 0;
+		}
+		else
+		{
+			m_openTimer -= _frames;
+
+			if ( m_openTimer <= 0 )
+			{
+				if ( m_animNo == ANIM_SEASNAKE_HEADSTATIC )
+				{
+					m_animNo = ANIM_SEASNAKE_HEADSTATICMOUTHSHUT;
+				}
+				else
+				{
+					m_animNo = ANIM_SEASNAKE_HEADSTATIC;
+				}
+
+				m_animPlaying = true;
+				m_frame = 0;
+
+				m_openTimer = GameState::getOneSecondInFrames() >> 2;
+			}
+		}
+	}
 
 	if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
 	{
@@ -477,6 +513,9 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 	m_timerFunc = NPC_TIMER_ATTACK_DONE;
 	m_timerTimer = GameState::getOneSecondInFrames();
 	m_sensorFunc = NPC_SENSOR_NONE;
+
+	m_snapTimer = m_movementTimer;
+	m_openTimer = GameState::getOneSecondInFrames() >> 2;
 }
 
 
@@ -729,4 +768,10 @@ const CRECT *CNpcSeaSnakeEnemy::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSeaSnakeEnemy::processUserCollision( CThing *thisThing )
+{
 }
