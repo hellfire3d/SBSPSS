@@ -820,6 +820,12 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 			}
 		}
 
+		// Out of spats?
+		if(m_numSpatulasHeld==0)
+		{
+			m_spatulaWarningTimer++;
+		}
+
 		// Trying to converate?
 		if(m_allowConversation==false&&
 		   m_currentPlayerModeClass->canConverse()&&
@@ -1347,17 +1353,22 @@ if(drawlastpos)
 
 
 	// UI
-	int			count;
+	int			count,warn;
 	sFrameHdr	*fh;
 	char		countBuf[5];
 	int			x,y;
 
 	// Spat/token count
+	warn=false;
 	if(GameScene.getLevelNumber()!=5)
 	{
 		// Spat count
 		count=m_numSpatulasHeld;
 		fh=sb->getFrameHeader(FRM__SPATULA);
+		if(m_numSpatulasHeld==0)
+		{
+			warn=true;
+		}
 	}
 	else
 	{
@@ -1370,7 +1381,12 @@ if(drawlastpos)
 	y=SB_UI_YBASE;
 	sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
 	x+=fh->W;
+	if(warn&&m_spatulaWarningTimer&32)
+	{
+		m_fontBank->setColour(255,0,0);
+	}
 	m_fontBank->print(x,y,countBuf);
+	m_fontBank->setColour(128,128,128);
 	x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
 
 	if(isWearingDivingHelmet())
@@ -1823,6 +1839,7 @@ void CPlayer::respawn()
 	m_allowConversation=false;
 
 	m_numSpatulasHeld=0;
+	m_spatulaWarningTimer=0;
 	m_healthWaterLevel=WATERMAXHEALTH;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	m_helmetSoundTimer=0;
@@ -2112,6 +2129,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 						// Launch all spatulas!
 						GameScene.dropHealth(Pos,m_numSpatulasHeld,1);
 						m_numSpatulasHeld=0;
+						m_spatulaWarningTimer=0;
 					}
 				}
 			}

@@ -355,6 +355,7 @@ public:
 
 private:
 	int				m_numSpatulasHeld;
+	int				m_spatulaWarningTimer;
 	int				m_healthWaterLevel;
 	int				m_helmetSoundTimer;			// Timer for breathing sound when using the helmet
 
