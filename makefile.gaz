@@ -313,7 +313,8 @@ triggers_src :=		trigger \
 					thazard \
 					tbgeyser \
 					thazwalk \
-					tsemit
+					tsemit \
+					tsswitch
 
 utils_src :=		utils \
 					sincos \
