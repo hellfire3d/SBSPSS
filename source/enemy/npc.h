@@ -310,6 +310,12 @@ protected:
 		NPC_SHOT_GENERIC = 1,
 	};
 
+	enum NPC_COLLISION_FUNC
+	{
+		NPC_COLLISION_GENERIC = 0,
+		NPC_COLLISION_SPIDER_CRAB_BITE = 1,
+	};
+
 	enum NPC_MOTHER_JELLYFISH_STATE
 	{
 		MOTHER_JELLYFISH_RETURN_TO_START_1 = 0,
@@ -391,6 +397,13 @@ protected:
 		NPC_ENEMY_MAPEDIT_OFFSET = 10,
 	};
 
+	enum DETECT_TYPE
+	{
+		DETECT_NO_COLLISION = 0,
+		DETECT_ALL_COLLISION = 1,
+		DETECT_ATTACK_COLLISION_GENERIC,
+	};
+
 
 	typedef struct NPC_DATA_TYPE
 	{
@@ -406,13 +419,14 @@ protected:
 		bool							canTalk;
 		u8								speed;
 		u16								turnSpeed;
-		bool							detectCollision;
+		DETECT_TYPE						detectCollision;
 		DAMAGE_TYPE						damageToUserType;
 		u16								initHealth;
 		u16								moveAnim;
 		NPC_SHOT_FUNC					shotFunc;
 		u16								dieAnim;
 		u16								recoilAnim;
+		NPC_COLLISION_FUNC				collisionFunc;
 	}
 	NPC_DATA;
 
@@ -462,6 +476,7 @@ protected:
 	// spider crab functions
 
 	void				processCloseSpiderCrabAttack( int _frames );
+	void				processSpiderCrabCollision();
 
 	// hermit crab functions
 

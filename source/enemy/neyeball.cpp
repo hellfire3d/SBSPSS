@@ -42,19 +42,4 @@ void CNpcEnemy::processCloseEyeballAttack( int _frames )
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
 		}
 	}
-
-	/*if ( Next )
-	{
-		// already have child, ignore
-	}
-	else
-	{
-		// create child projectile which will be deleted when the projectile has returned
-
-		CProjectile *projectile;
-		projectile = new ( "test projectile" ) CProjectile;
-		projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
-
-		addChild( projectile );
-	}*/
 }

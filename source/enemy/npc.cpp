@@ -651,20 +651,39 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 	{
 		case TYPE_PLAYER:
 		{
-			if ( m_data[m_type].detectCollision )
+			if ( m_controlFunc != NPC_CONTROL_COLLISION )
 			{
-				if ( m_data[m_type].damageToUserType == DAMAGE__NONE )
-				{
-					// if we can detect a collision, but the collision does no damage, this must be a platform
+				// only detect collision if one isn't already happening
 
-					CPlayer *player = (CPlayer *) _thisThing;
-
-					player->setPlatform( this );
-				}
-				else
+				switch( m_data[m_type].detectCollision )
 				{
-					m_oldControlFunc = m_controlFunc;
-					m_controlFunc = NPC_CONTROL_COLLISION;
+					case DETECT_NO_COLLISION:
+					{
+						// ignore
+
+						break;
+					}
+
+					case DETECT_ALL_COLLISION:
+					{
+						m_oldControlFunc = m_controlFunc;
+						m_controlFunc = NPC_CONTROL_COLLISION;
+
+						break;
+					}
+
+					case DETECT_ATTACK_COLLISION_GENERIC:
+					{
+						if ( m_controlFunc == NPC_CONTROL_CLOSE )
+						{
+							// only detect collision if in attack mode
+
+							m_oldControlFunc = m_controlFunc;
+							m_controlFunc = NPC_CONTROL_COLLISION;
+						}
+
+						break;
+					}
 				}
 			}
 
@@ -1423,11 +1442,26 @@ void CNpcEnemy::processClose(int _frames)
 
 void CNpcEnemy::processCollision()
 {
-	CPlayer *player = GameScene.getPlayer();
+	switch( m_data[m_type].collisionFunc )
+	{
+		case NPC_COLLISION_GENERIC:
+		{
+			CPlayer *player = GameScene.getPlayer();
 
-	//player->takeDamage( m_data[m_type].damageToUserType );
+			//player->takeDamage( m_data[m_type].damageToUserType );
 
-	m_controlFunc = m_oldControlFunc;
+			m_controlFunc = m_oldControlFunc;
+
+			break;
+		}
+
+		case NPC_COLLISION_SPIDER_CRAB_BITE:
+		{
+			processSpiderCrabCollision();
+
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -111,3 +111,39 @@ void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 		m_extension = 0;
 	}
 }
+
+void CNpcEnemy::processSpiderCrabCollision()
+{
+	if ( m_oldControlFunc == NPC_CONTROL_CLOSE )
+	{
+		// bite player
+
+		if ( m_animNo != ANIM_SPIDERCRAB_BITE )
+		{
+			CPlayer *player = GameScene.getPlayer();
+
+			//player->takeDamage( m_data[m_type].damageToUserType );
+
+			m_animNo = ANIM_SPIDERCRAB_BITE;
+			m_animPlaying = true;
+			m_frame = 0;
+		}
+		else if ( !m_animPlaying )
+		{
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+
+			m_extension = 0;
+		}
+	}
+	else
+	{
+		CPlayer *player = GameScene.getPlayer();
+
+		//player->takeDamage( m_data[m_type].damageToUserType );
+
+		m_controlFunc = m_oldControlFunc;
+	}
+}
