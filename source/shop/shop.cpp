@@ -173,15 +173,15 @@ void CShopScene::init()
 	m_guiConfirmPurchaseFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 	m_guiConfirmPurchaseFrame->setObjectXYWH(SHOP_QUERY_UI_X,SHOP_QUERY_UI_Y,SHOP_QUERY_UI_W,SHOP_QUERY_UI_H);
 	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
-										fx,fy,fw,fh,
-										STR__YES,
-										&m_queryAnswer,
-										ANSWER_YES);
-	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
 										fx,fy+fh,fw,fh,
 										STR__NO,
 										&m_queryAnswer,
 										ANSWER_NO);
+	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
+										fx,fy,fw,fh,
+										STR__YES,
+										&m_queryAnswer,
+										ANSWER_YES);
 
 	m_guiCannotAffordFrame=new ("Cannot afford frame") CGUIControlFrame();
 	m_guiCannotAffordFrame->init(0);
