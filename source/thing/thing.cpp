@@ -522,27 +522,32 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 	if (player && playerThing)
 	{
-		// Player -> Platform collision
-		player->clearPlatform();
-		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
-		while(thing1)
-		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
-			{
-				thing1->collidedWith(playerThing);
-			}
-			thing1=thing1->m_nextCollisionThing;
-		}
+		int	playerIsAlive=!player->isDead();
 
-		// Player -> Pickup collision
-		thing1=s_CollisionLists[CThing::TYPE_PICKUP];
-		while(thing1)
+		// Player -> Platform collision
+		if(playerIsAlive)
 		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			player->clearPlatform();
+			thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
+
+			// Player -> Pickup collision
+			thing1=s_CollisionLists[CThing::TYPE_PICKUP];
+			while(thing1)
+			{
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
+			}
 		}
 
 		// Friend -> Pickup collision
@@ -562,69 +567,72 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		}
 
 		// Player -> Enemy collision
-		thing1=s_CollisionLists[CThing::TYPE_ENEMY];
-		while(thing1)
+		if(playerIsAlive)
 		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			thing1=s_CollisionLists[CThing::TYPE_ENEMY];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
-		}
 
-		// Player -> Effect collision
-		thing1=s_CollisionLists[CThing::TYPE_FX];
-		while(thing1)
-		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			// Player -> Effect collision
+			thing1=s_CollisionLists[CThing::TYPE_FX];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
-		}
 
-		// Player -> Friend collision
-		thing1=s_CollisionLists[CThing::TYPE_NPC];
-		while(thing1)
-		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			// Player -> Friend collision
+			thing1=s_CollisionLists[CThing::TYPE_NPC];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
-		}
 
-		// Player -> Hazard collision
-		thing1=s_CollisionLists[CThing::TYPE_HAZARD];
-		while(thing1)
-		{
-		if(thing1->checkCollisionAgainst(playerThing, _frames))
+			// Player -> Hazard collision
+			thing1=s_CollisionLists[CThing::TYPE_HAZARD];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
-			}
-			thing1=thing1->m_nextCollisionThing;
-		}
-
-		// Player -> Enemy projectile collision
-		thing1=s_CollisionLists[CThing::TYPE_ENEMYPROJECTILE];
-		while(thing1)
-		{
 			if(thing1->checkCollisionAgainst(playerThing, _frames))
-			{
-				thing1->collidedWith(playerThing);
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
-		}
 
-		// Player -> Trigger collision
-		thing1=s_CollisionLists[CThing::TYPE_TRIGGER];
-		while(thing1)
-		{
-			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			// Player -> Enemy projectile collision
+			thing1=s_CollisionLists[CThing::TYPE_ENEMYPROJECTILE];
+			while(thing1)
 			{
-				thing1->collidedWith(playerThing);
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
 			}
-			thing1=thing1->m_nextCollisionThing;
+
+			// Player -> Trigger collision
+			thing1=s_CollisionLists[CThing::TYPE_TRIGGER];
+			while(thing1)
+			{
+				if(thing1->checkCollisionAgainst(playerThing, _frames))
+				{
+					thing1->collidedWith(playerThing);
+				}
+				thing1=thing1->m_nextCollisionThing;
+			}
 		}
 
 		// Friend -> Trigger collision
