@@ -15,15 +15,20 @@
 #include "platform\pgeyser.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcGeyserPlatform::postInit()
 {
 	CNpcPlatform::postInit();
 
-	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-
 	m_isFiring = false;
+
+	m_state = GEYSER_READY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,45 +37,85 @@ void CNpcGeyserPlatform::processMovement( int _frames )
 {
 	if ( m_isFiring )
 	{
-		s32 moveY = 0;
-		s32 distX, distY, heading;
-		bool pathComplete;
+		s32 minY, maxY;
+		m_npcPath.getPathYExtents( &minY, &maxY );
 
-		m_npcPath.thinkVertical( Pos, &pathComplete, &distX, &distY, &heading );
-
-		if ( pathComplete )
+		switch ( m_state )
 		{
-			m_npcPath.resetPath();
-			reinit();
-			m_isFiring = false;
-		}
-		else
-		{
-			s32 minY, maxY;
-
-			m_npcPath.getPathYExtents( &minY, &maxY );
-
-			moveY = m_data[m_type].speed * _frames;
-
-			if ( Pos.vy < ( minY + 64 ) )
+			case GEYSER_DROPPING:
 			{
-				s32 multiplier = Pos.vy - minY;
-
-				moveY = ( multiplier * moveY ) >> 6;
-
-				if ( moveY < 1 )
+				if ( maxY - Pos.vy == 0 )
 				{
-					moveY = 1;
+					m_isFiring = false;
+					reinit();
+					m_state = GEYSER_READY;
 				}
+				else
+				{
+					s32 moveY = m_data[m_type].speed * _frames;
+
+					if ( Pos.vy < ( minY + 64 ) )
+					{
+						s32 multiplier = Pos.vy - minY;
+
+						moveY = ( multiplier * moveY ) >> 6;
+
+						if ( moveY < 1 )
+						{
+							moveY = 1;
+						}
+					}
+
+					Pos.vy += moveY;
+
+					if ( Pos.vy > maxY )
+					{
+						Pos.vy = maxY;
+					}
+				}
+
+
+				break;
 			}
 
-			if ( heading == 3072 )
+			case GEYSER_RISING:
 			{
-				moveY = -moveY;
-			}
+				if ( minY - Pos.vy == 0 )
+				{
+					m_state = GEYSER_DROPPING;
+				}
+				else
+				{
+					s32 moveY = m_data[m_type].speed * _frames;
 
-			Pos.vy += moveY;
+					if ( Pos.vy < ( minY + 64 ) )
+					{
+						s32 multiplier = Pos.vy - minY;
+
+						moveY = ( multiplier * moveY ) >> 6;
+
+						if ( moveY < 1 )
+						{
+							moveY = 1;
+						}
+					}
+
+					Pos.vy -= moveY;
+
+					if ( Pos.vy < minY )
+					{
+						Pos.vy = minY;
+					}
+				}
+
+				break;
+			}
 		}
+	}
+	else
+	{
+		Pos.vx = m_base.vx + ( -3 + ( getRnd() % 7 ) );
+		Pos.vy = m_base.vy + ( -3 + ( getRnd() % 7 ) );
 	}
 }
 
@@ -84,6 +129,11 @@ void CNpcGeyserPlatform::processTimer( int _frames )
 	}
 	else
 	{
-		m_isFiring = true;
+		if ( m_state == GEYSER_READY )
+		{
+			m_isFiring = true;
+			Pos = m_base;
+			m_state = GEYSER_RISING;
+		}
 	}
 }

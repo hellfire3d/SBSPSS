@@ -27,6 +27,13 @@ protected:
 	virtual void		processTimer( int _frames );
 
 	bool				m_isFiring;
+
+	enum GEYSER_STATE
+	{
+		GEYSER_READY,
+		GEYSER_RISING,
+		GEYSER_DROPPING,
+	};
 };
 
 #endif
