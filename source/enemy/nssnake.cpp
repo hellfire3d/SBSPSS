@@ -119,12 +119,12 @@ void CNpcSeaSnakeEnemy::postInit()
 	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
 	int remLength = NPC_SEA_SNAKE_LENGTH - initLength;
 
-	m_health = NPC_SEA_SNAKE_LENGTH;
+	m_health = NPC_SEA_SNAKE_LENGTH + 1;
 
 	if ( CLevel::getIsBossRespawn() )
 	{
 		m_health = CLevel::getBossHealth();
-		m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - m_health ) ) / NPC_SEA_SNAKE_LENGTH );
+		m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - ( m_health - 1 ) ) ) / NPC_SEA_SNAKE_LENGTH );
 	}
 
 	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
@@ -158,7 +158,7 @@ void CNpcSeaSnakeEnemy::postInit()
 		}
 	}
 
-	m_segmentCount = m_health;
+	m_segmentCount = m_health - 1;
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 	m_collTimer = 0;
@@ -187,7 +187,7 @@ void CNpcSeaSnakeEnemy::shutdown()
 	}
 	else
 	{
-		CLevel::setBossHealth( -1 );
+		CLevel::setBossHealth( 0 );
 	}
 
 	// delete snake segments
@@ -1139,7 +1139,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 
 			m_segmentCount--;
 			m_health--;
-			m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - m_health ) ) / NPC_SEA_SNAKE_LENGTH );
+			m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - ( m_health - 1 ) ) ) / NPC_SEA_SNAKE_LENGTH );
 
 			m_collTimer = GameState::getOneSecondInFrames();
 		}
