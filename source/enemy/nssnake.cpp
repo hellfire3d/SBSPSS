@@ -1252,60 +1252,63 @@ void CNpcSeaSnakeEnemy::collidedWith( CThing *_thisThing )
 		{
 			case TYPE_PLAYER:
 			{
-				CPlayer *player = (CPlayer *) _thisThing;
-
-				ATTACK_STATE playerState = player->getAttackState();
-
-				if(playerState==ATTACK_STATE__NONE)
+				if ( m_invulnerableTimer <= 0 )
 				{
-					if ( !player->isRecoveringFromHit() )
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					ATTACK_STATE playerState = player->getAttackState();
+
+					if(playerState==ATTACK_STATE__NONE)
 					{
-						switch( m_data[m_type].detectCollision )
+						if ( !player->isRecoveringFromHit() )
 						{
-							case DETECT_NO_COLLISION:
+							switch( m_data[m_type].detectCollision )
 							{
-								// ignore
-
-								break;
-							}
-
-							case DETECT_ALL_COLLISION:
-							{
-								if ( m_controlFunc != NPC_CONTROL_COLLISION )
+								case DETECT_NO_COLLISION:
 								{
-									m_oldControlFunc = m_controlFunc;
-									m_controlFunc = NPC_CONTROL_COLLISION;
+									// ignore
+
+									break;
 								}
 
-								processUserCollision( _thisThing );
+								case DETECT_ALL_COLLISION:
+								{
+									if ( m_controlFunc != NPC_CONTROL_COLLISION )
+									{
+										m_oldControlFunc = m_controlFunc;
+										m_controlFunc = NPC_CONTROL_COLLISION;
+									}
 
-								break;
-							}
+									processUserCollision( _thisThing );
 
-							case DETECT_ATTACK_COLLISION_GENERIC:
-							{
-								processAttackCollision();
-								processUserCollision( _thisThing );
+									break;
+								}
 
-								break;
+								case DETECT_ATTACK_COLLISION_GENERIC:
+								{
+									processAttackCollision();
+									processUserCollision( _thisThing );
+
+									break;
+								}
 							}
 						}
 					}
-				}
-				else if ( m_invulnerableTimer <= 0 )
-				{
-					// player is attacking, respond appropriately
-
-					if ( m_controlFunc != NPC_CONTROL_SHOT )
+					else
 					{
-						if(playerState==ATTACK_STATE__BUTT_BOUNCE)
-						{
-							player->justButtBouncedABadGuy();
-						}
-						m_controlFunc = NPC_CONTROL_SHOT;
-						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+						// player is attacking, respond appropriately
 
-						drawAttackEffect();
+						if ( m_controlFunc != NPC_CONTROL_SHOT )
+						{
+							if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+							{
+								player->justButtBouncedABadGuy();
+							}
+							m_controlFunc = NPC_CONTROL_SHOT;
+							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+							drawAttackEffect();
+						}
 					}
 				}
 
