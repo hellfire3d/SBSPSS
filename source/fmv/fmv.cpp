@@ -41,7 +41,7 @@
 
 
 //#if	defined(__USER_paul__)
-//#define	FORCE_FMV	1	
+#define	FORCE_FMV	1	
 //#endif
 
 #if		__FILE_SYSTEM__==CD | FORCE_FMV
@@ -148,8 +148,8 @@ static u_long		*SectorBuffer;
 
 static const FmvData s_fmvData[MAX_FMVS]=
 {
-	{FILEPOS_THQ_STR,		240-10	},
-	{FILEPOS_INTRO_STR,		615-10	},
+	{FILEPOS_THQ_STR,		240-15	},
+	{FILEPOS_INTRO_STR,		0	},
 };
 
 
@@ -170,7 +170,7 @@ int				YOfs;
 int				frame = 0;
 int				id;
 int				Pad=0;
-	
+RECT			ClearRect={0,0,512,512};	
 #ifdef	FORCE_FMV
 static	int	HasInit=0;
 		if (!HasInit)
@@ -199,6 +199,9 @@ SYSTEM_DBGMSG("[FMV] Start sector %d",startSector);
 
 	VSync(0);
 	SetDispMask(0);
+
+	ClearImage(&ClearRect,0,0,0);
+
 	AniNoFrames	= s_fmvData[fmvNumber].m_numOfFrames;
 	LastFrame=0;
 SYSTEM_DBGMSG("[FMV] Number of frames is %d",AniNoFrames);
@@ -274,9 +277,7 @@ SYSTEM_DBGMSG("[FMV] Number of frames is %d",AniNoFrames);
 
 	SetDispMask(0);
 
-	RECT	r;
-	setRECT(&r,0,0,512,512);
-	ClearImage(&r,0,0,0);
+	ClearImage(&ClearRect,0,0,0);
 	VSync(0);
 	DrawSync(0);
 	SetDispMask(1);
