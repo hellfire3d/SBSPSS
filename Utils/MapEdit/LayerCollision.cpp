@@ -21,7 +21,6 @@
 #include	"Select.h"
 #include	"Export.h"
 
-// Reserve slot 0 for collision :o)
 GString		ColFName="Collision.bmp";
 
 /*****************************************************************************/
@@ -47,32 +46,20 @@ CLayerCollision::CLayerCollision(CFile *File,int Version)
 /*****************************************************************************/
 CLayerCollision::~CLayerCollision()
 {
+		TileBank->CleanUp();
 		delete TileBank;
 }
 
 /*****************************************************************************/
 void	CLayerCollision::InitSubView(CCore *Core)
 {
+GString	Filename;
 		TileBank=new CTileBank;
 		SubView=TileBank;
 
-GFName	ExePath;
-GString	Filename;
-
-// Get application path
-#ifdef _DEBUG
-		ExePath="C:\\Spongebob\\tools\\mapedit\\";
-#else
-char	ExeFilename[2048];
-		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
-		ExePath=ExeFilename;
-		ExePath.File(0);
- 		ExePath.Ext(0);
-#endif
-		Filename=ExePath.FullName();
+		Core->GetExecPath(Filename);
 		Filename+=ColFName;
 		TileBank->AddSet(Filename);
-
 }
 
 /*****************************************************************************/
@@ -135,14 +122,14 @@ bool	Ret=false;
 /*****************************************************************************/
 void	CLayerCollision::GUIInit(CCore *Core) 
 {
-		Core->GUIAdd(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
 		Core->GUIAdd(GUI,IDD_LAYER_COLLISION);
 }
 
 /*****************************************************************************/
 void	CLayerCollision::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(GUIToolBar,IDD_TOOLBAR);
 		Core->GUIRemove(GUI,IDD_LAYER_COLLISION);
 }
 

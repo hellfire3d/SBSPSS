@@ -125,7 +125,7 @@ CTileBank	*TileBank=Core->GetTileBank();
 		}
 		else
 		{
-			CElem		&ThisTile=TileBank->GetTile(OutTile.Set,OutTile.Tile);
+			CElem		&ThisTile=TileBank->GetElem(OutTile.Set,OutTile.Tile);
 			GString		SetName=TileBank->GetSetFilename(OutTile.Set);
 
 			ASSERT(ThisTile.GetElemWidth()==FileHdr.TileW);

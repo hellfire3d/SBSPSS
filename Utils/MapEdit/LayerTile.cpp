@@ -252,7 +252,7 @@ int		DrawH=ZoomH+8;
 				if (ThisElem.Tile>0)
 				{ // Render Non Zero and Valid Tiles
 					glColor4f(1,1,1,Alpha);	// Set default Color
-					TileBank->RenderTile(ThisElem.Set,ThisElem.Tile,ThisElem.Flags,Render3d);
+					TileBank->RenderElem(ThisElem.Set,ThisElem.Tile,ThisElem.Flags,Render3d);
 				}
 				glTranslatef(1.0f,0,0);	// Next X
 			}
@@ -302,14 +302,14 @@ float		Y1=Rect.bottom-1;
 void	CLayerTile::GUIInit(CCore *Core)
 {
 		TileBank->GUIInit(Core);
-		Core->GUIAdd(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerTile::GUIKill(CCore *Core)
 {
 		TileBank->GUIKill(Core);
-		Core->GUIRemove(GUIToolBar,IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
@@ -443,6 +443,7 @@ bool	Ret=false;
 			break;
 		default:
 			TRACE3("LayerTile-Unhandled Command %i (%i,%i)\n",CmdMsg,Param0,Param1);
+			break;
 		}
 		return(Ret);
 }
@@ -601,7 +602,7 @@ int				Height=Map.GetHeight();
 				else
 				{
 					sExpTile		OutTile;
-					CElem			&ThisTile=TileBank->GetTile(MapElem.Set,MapElem.Tile);
+					CElem			&ThisTile=TileBank->GetElem(MapElem.Set,MapElem.Tile);
 
 					OutTile.Set=MapElem.Set;
 					OutTile.Tile=MapElem.Tile;

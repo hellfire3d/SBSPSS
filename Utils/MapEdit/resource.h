@@ -14,7 +14,7 @@
 #define IDD_NEWMAP                      169
 #define IDD_ADDLAYER                    172
 #define IDD_TILEBANK                    173
-#define IDD_LAYER_TOOLBAR               174
+#define IDD_TOOLBAR                     174
 #define IDD_LAYER_SHADE                 175
 #define IDD_LAYER_COLLISION             177
 #define IDD_ELEMLIST                    178

@@ -57,7 +57,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 // ParamBar
-	if (!ParamBar.Create(this,IDD_PARAMBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_PARAMBAR))
+	if (!ParamBar.Create(this,IDD_MULTIBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_MULTIBAR))
 	{
 		TRACE0("Failed to create ParamBar\n");
 		return -1;

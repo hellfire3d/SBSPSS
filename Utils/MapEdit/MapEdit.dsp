@@ -80,6 +80,12 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib maths.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\libs\ginlib\debug\\" /libpath:"..\libs\glib\debug\\" /libpath:"..\libs\maths\debug\\"
+# Begin Special Build Tool
+ProjDir=.
+TargetDir=.\Debug
+SOURCE="$(InputPath)"
+PostBuild_Cmds=if not exist $(TargetDir)\collision.bmp copy $(ProjDir)\res\collision.bmp $(TargetDir)\collision.bmp	if not exist $(TargetDir)\iconz.bmp copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp
+# End Special Build Tool
 
 !ENDIF 
 
@@ -115,19 +121,19 @@ SOURCE=.\LayerDef.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerItem.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerItem.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\LayerShade.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\LayerShade.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerThing.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerThing.h
 # End Source File
 # Begin Source File
 
@@ -173,14 +179,6 @@ SOURCE=.\Elem.cpp
 # Begin Source File
 
 SOURCE=.\Elem.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ElemStore.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ElemStore.h
 # End Source File
 # Begin Source File
 
@@ -351,9 +349,14 @@ SOURCE=.\StdAfx.h
 # Begin Group "GUI"
 
 # PROP Default_Filter ""
-# Begin Group "New"
+# Begin Source File
 
-# PROP Default_Filter ""
+SOURCE=.\GUIAddLayer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIAddLayer.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\GUIElemList.cpp
@@ -364,76 +367,67 @@ SOURCE=.\GUIElemList.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GUILayerCollision.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerCollision.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerShade.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerShade.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIMultibar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIMultibar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUINewMap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUINewMap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIResize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUIResize.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GUITileBank.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GUITileBank.h
 # End Source File
-# End Group
 # Begin Source File
 
-SOURCE=.\AddLayerDlg.cpp
+SOURCE=.\GUIToolBar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AddLayerDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerCollisionGUI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerCollisionGUI.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerList.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerList.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerShadeGUI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerShadeGUI.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerTileToolbar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerTileToolbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapSizeDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MapSizeDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MultiBar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MultiBar.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\NewMapGUI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\NewMapGUI.h
+SOURCE=.\GUIToolBar.h
 # End Source File
 # End Group
 # End Target

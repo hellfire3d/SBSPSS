@@ -1,6 +1,6 @@
-/******************/
-/*** Layer Elem ***/
-/******************/
+/*******************/
+/*** Layer Thing ***/
+/*******************/
 
 
 #include	"stdafx.h"
@@ -14,44 +14,68 @@
 #include	"MapEditView.h"
 #include	"MainFrm.h"
 
-//#include	"ElemSet.h"
-
 #include	"Core.h"
 #include	"Layer.h"
-#include	"LayerElem.h"
+#include	"LayerThing.h"
 #include	"Utils.h"
-//#include	"Select.h"
 #include	"Export.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerElem::CLayerElem(int _SubType,int _Width,int _Height)
+CLayerThing::CLayerThing(int _SubType,int _Width,int _Height)
 {
 		SetDefaultParams();
 
-		Mode=MouseModePaint;
-//		ElemBank=new CElemBank;
+		Mode=MouseModeNormal;
+		Width=_Width;
+		Height=_Height;
+		ThingBank=new CElemBank(-1,-1,false,true);
+		CurrentThing=-1;
+		CurrentPoint=0;
+
+		ThingBank->AddSet("\\spongebob\\graphics\\Babyoctopus.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\barnicleboy.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Caterpillar.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\clam.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Eyeball.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\FlyingDutchman.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\gary.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\GiantWorm.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\HermitCrab.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\IronDogFish.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Krusty.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\MermaidMan.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Neptune.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Patrick.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\plankton.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\PuffaFish.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Sandy.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\SeaSnake.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\SharkSub.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\SpiderCrab.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\spongebob.bmp");
+		ThingBank->AddSet("\\spongebob\\graphics\\Squidward.bmp");
 
 }
 
 /*****************************************************************************/
 // Load Layer
-CLayerElem::CLayerElem(CFile *File,int Version)
+CLayerThing::CLayerThing(CFile *File,int Version)
 {
 		Load(File,Version);
 }
 
 /*****************************************************************************/
-CLayerElem::~CLayerElem()
+CLayerThing::~CLayerThing()
 {
-//		ElemBank->CleanUp();
-//		delete ElemBank;
+		ThingBank->CleanUp();
+		delete ThingBank;
 }
 
 /*****************************************************************************/
-void	CLayerElem::Load(CFile *File,int Version)
+void	CLayerThing::Load(CFile *File,int Version)
 {
 		File->Read(&VisibleFlag,sizeof(BOOL));
 		File->Read(&Mode,sizeof(MouseMode));
@@ -60,7 +84,7 @@ void	CLayerElem::Load(CFile *File,int Version)
 }
 
 /*****************************************************************************/
-void	CLayerElem::Save(CFile *File)
+void	CLayerThing::Save(CFile *File)
 {
 // Always Save current version
 		File->Write(&VisibleFlag,sizeof(BOOL));
@@ -68,39 +92,36 @@ void	CLayerElem::Save(CFile *File)
 }
 
 /*****************************************************************************/
-void	CLayerElem::InitSubView(CCore *Core)
+void	CLayerThing::InitSubView(CCore *Core)
 {
-		ElemBank=&Core->GetIconz();
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerElem::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
+void	CLayerThing::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
+int			i,ListSize=ThingList.size();
 
-		Is3d&=Render3dFlag;
-		for (int x=0; x<20; x++)
+//		Is3d&=Render3dFlag;
+		for (i=0; i<ListSize; i++)
 		{
-			CPoint	XY;
-			XY.x=x;
-			XY.y=0;
-
-			RenderElem(Core,ThisCam,XY,x&7,Is3d);
+			RenderThing(Core,ThisCam,ThingList[i],Is3d,i==CurrentThing);
 		}
 }
 
 /*****************************************************************************/
-void	CLayerElem::RenderElem(CCore *Core,Vector3 &ThisCam,CPoint &Pos,int Elem,bool Render3d,float Alpha)
+void	CLayerThing::RenderThing(CCore *Core,Vector3 &ThisCam,sLayerThing &ThisThing,bool Render3d,bool Selected)
 {
 float		ZoomW=Core->GetZoomW();
 float		ZoomH=Core->GetZoomH();
 float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
+CElemBank	*IconBank=Core->GetIconBank();
 
-			if (ElemBank->NeedLoad()) ElemBank->LoadAllSets(Core);
+			if (ThingBank->NeedLoad()) ThingBank->LoadAllSets(Core);
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
@@ -108,137 +129,150 @@ Vector3		&Scale=Core->GetScaleVector();
 			glLoadIdentity();
 
 			glScalef(Scale.x,Scale.y,Scale.z);
-			glTranslatef(-ThisCam.x,ThisCam.y,0);		// Set scroll offset
-			glTranslatef(-ScrOfsX,ScrOfsY,0);			// Bring to top left corner
-			glTranslatef(Pos.x,Pos.y,0);				// Set Elem Pos
-			glColor4f(1,1,1,Alpha);						// Set default Color
-			ElemBank->RenderElem(0,Elem+1,0,Render3d);
+			glTranslatef(-ThisCam.x,ThisCam.y,0);					// Set scroll offset
+			glTranslatef(-ScrOfsX,ScrOfsY,0);						// Bring to top left corner
+
+int			ListSize=ThisThing.XY.size();
+			TRACE1("%i pts\n",ListSize);
+			for (int i=0;i<ListSize; i++)
+			{
+// Render Thing			
+				glPushMatrix();
+				glTranslatef(ThisThing.XY[i].x,-ThisThing.XY[i].y,0);	// Set Pos
+				if (Selected)
+					glColor4f(1,1,1,1);									// Set default Color
+				else
+					glColor4f(1,1,1,0.5);									
+				
+				IconBank->RenderElem(0,i,0,Render3d);
+				if (i==0)
+				{
+					glColor4f(1,1,1,1);									// Set default Color
+					ThingBank->RenderElem(ThisThing.Type,0,0,Render3d);
+				}
+				glPopMatrix();
+			}
+
 			glPopMatrix();
 }
 
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerElem::GUIInit(CCore *Core)
+void	CLayerThing::GUIInit(CCore *Core)
 {
 //		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
-void	CLayerElem::GUIKill(CCore *Core)
+void	CLayerThing::GUIKill(CCore *Core)
 {
 //		Core->GUIRemove(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
-void	CLayerElem::GUIUpdate(CCore *Core)
+void	CLayerThing::GUIUpdate(CCore *Core)
 {
 }
 
 /*****************************************************************************/
-void	CLayerElem::GUIChanged(CCore *Core)
+void	CLayerThing::GUIChanged(CCore *Core)
 {
 }
 
 /*****************************************************************************/
 /*** Functions ***************************************************************/
 /*****************************************************************************/
-bool	CLayerElem::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
+bool	CLayerThing::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
 bool	Ret=false;
-/*
+
 		switch(Mode)
 		{
-		case MouseModePaint:
+		case MouseModeNormal:
 			if (DownFlag)
-				Ret=Paint(ElemBank->GetLBrush(),CursorPos);
+			{
+				if (CurrentThing==-1)
+					AddThing(CursorPos);
+				else
+					AddThingPoint(CursorPos);
+
+			}
 			break;
-		case MouseModeSelect:
-				Ret=Selection.Handle(CursorPos,nFlags);
-				if (Selection.HasSelection())
-				{
-					TRACE0("LMB Selection\n");
-				}
+		case MouseModePoints:
 			break;
 		default:
 			break;
 		}
-*/
-		return(Ret);
+
+		return(true);
 }
 
 /*****************************************************************************/
-bool	CLayerElem::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
+bool	CLayerThing::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)
 {
 bool		Ret=FALSE;
-/*
+
 		switch(Mode)
 		{
-		case MouseModePaint:
+		case MouseModeNormal:
 			if (DownFlag)
-				Ret=Paint(ElemBank->GetRBrush(),CursorPos);
+			{
+				SelectThing(CursorPos);
+			}
 			break;
-		case MouseModeSelect:
-				Ret=Selection.Handle(CursorPos,nFlags);
-				if (Selection.HasSelection())
-				{
-					TRACE0("RMB Selection\n");
-				}
-			break;
-		default:
+		case MouseModePoints:
 			break;
 		}
-*/
+
 		return(Ret);
 }
 
 /*****************************************************************************/
-bool	CLayerElem::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
+bool	CLayerThing::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
 {
-bool		Ret=FALSE;
-/*
-		switch(Mode)
+bool		Ret=false;
+
+		if (CurrentThing!=-1)
 		{
-		case MouseModePaint:
-			if (nFlags & MK_LBUTTON)
-				Ret=Paint(ElemBank->GetLBrush(),CursorPos);
+			if (nFlags & MK_LBUTTON)	// Drag
+			{
+				UpdatePos(CursorPos,CurrentThing,CurrentPoint,true);
+				Ret=true;
+			}
 			else
-			if (nFlags & MK_RBUTTON)
-				Ret=Paint(ElemBank->GetRBrush(),CursorPos);
-			break;
-		case MouseModeSelect:
-			Ret=Selection.Handle(CursorPos,nFlags);
-			break;
-		default:
-			break;
+			if (nFlags & MK_RBUTTON)	// Cancel
+			{
+				CurrentThing=-1;
+				Ret=true;
+			}
 		}
-*/
 		return(Ret);
 }
 
 /*****************************************************************************/
-bool	CLayerElem::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
+bool	CLayerThing::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
 {
 bool	Ret=false;
-
+/*
 		switch(CmdMsg)
 		{
 		case CmdMsg_SetMode:
-			Mode=(MouseMode)Param0;
-			Core->GUIUpdate();
-			break;
-		case CmdMsg_SubViewSet:
-			Ret=ElemBank->Command(CmdMsg,Core,Param0,Param1);
+//			Mode=(MouseMode)Param0;
+//			Core->GUIUpdate();
+//			break;
+//		case CmdMsg_SubViewSet:
+//			Ret=ThingBank->Command(CmdMsg,Core,Param0,Param1);
 			break;
 		default:
-			TRACE3("LayerElem-Unhandled Command %i (%i,%i)\n",CmdMsg,Param0,Param1);
+			break;
 		}
-
+*/
 		return(Ret);
 }
 
 /*****************************************************************************/
-void	CLayerElem::RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)
+void	CLayerThing::RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 CPoint		&CursPos=Core->GetCursorPos();
@@ -264,19 +298,135 @@ Vector3		Ofs;
 }
 
 /*****************************************************************************/
-bool	CLayerElem::Paint(CMap &Blk,CPoint &CursorPos)
+/*****************************************************************************/
+/*****************************************************************************/
+int		CLayerThing::CheckThing(CPoint &Pos)
 {
+CList<int>	List;
+int			Idx=-1,i,ListSize=ThingList.size();
+int			StartIdx=0;
 
-		if (CursorPos.x==-1 || CursorPos.y==-1) return(false);	// Off Map?
-		if (!Blk.IsValid()) return(false);	// Invalid Elem?
-/*
-		Map.Set(CursorPos.x,CursorPos.y,Blk);
-*/
-		return(true);
+// Build List Of XY Matches
+		for (i=0; i<ListSize; i++)
+		{
+			sLayerThing	&ThisThing=ThingList[i];
+			if (ThisThing.XY[0]==Pos) 
+			{
+				if (i==CurrentThing) StartIdx=List.size();
+				List.push_back(i);
+			}
+		}
+
+		ListSize=List.size();
+		if (ListSize)
+		{
+			StartIdx=(StartIdx+1)%ListSize;
+			Idx=List[StartIdx];
+		}
+		return(Idx);
 }
 
 /*****************************************************************************/
-void	CLayerElem::Export(CCore *Core,CExport &Exp)
+void	CLayerThing::AddThing(CPoint &Pos)
+{
+		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+		CurrentThing=CheckThing(Pos);
+		CurrentPoint=0;
+		if (CurrentThing!=-1) return;
+
+		CurrentThing=ThingList.size();
+		ThingList.resize(CurrentThing+1);
+
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+		
+		ThisThing.XY.push_back(Pos);
+		ThisThing.Type=ThingList.size()%22;
+		ThisThing.SubType=0;
+}
+
+/*****************************************************************************/
+void	CLayerThing::SelectThing(CPoint &Pos)
+{
+		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+		CurrentThing=CheckThing(Pos);
+		CurrentPoint=0;
+}
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+int		CLayerThing::CheckThingPoint(CPoint &Pos)
+{
+CList<int>	List;
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+int			Idx=-1,i,ListSize=ThisThing.XY.size();
+int			StartIdx=0;
+
+// Build List Of XY Matches
+		for (i=0; i<ListSize; i++)
+		{
+			if (ThisThing.XY[i]==Pos) 
+			{
+				if (i==CurrentThing) StartIdx=List.size();
+				List.push_back(i);
+			}
+		}
+
+		ListSize=List.size();
+		if (ListSize)
+		{
+			StartIdx=(StartIdx+1)%ListSize;
+			Idx=List[StartIdx];
+		}
+		return(Idx);
+}
+
+/*****************************************************************************/
+void	CLayerThing::AddThingPoint(CPoint &Pos)
+{
+		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+		CurrentPoint=CheckThingPoint(Pos);
+
+		if (CurrentPoint!=-1) return;
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+
+		CurrentPoint=ThisThing.XY.size();
+		ThisThing.XY.resize(CurrentPoint+1);
+		ThisThing.XY[CurrentPoint]=Pos;
+}
+
+/*****************************************************************************/
+void	CLayerThing::SelectThingPoint(CPoint &Pos)
+{
+		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+		CurrentPoint=CheckThing(Pos);
+}
+
+/*****************************************************************************/
+void	CLayerThing::UpdatePos(CPoint &Pos,int Thing,int PosIdx,bool Recurs)
+{
+		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+
+sLayerThing	&ThisThing=ThingList[Thing];
+CPoint		dPos=Pos-ThisThing.XY[PosIdx];
+int			StartIdx=PosIdx,EndIdx=ThisThing.XY.size();
+
+		if (!Recurs)
+		{
+			StartIdx=PosIdx;
+			EndIdx=StartIdx++;
+		}
+
+		for (int i=StartIdx; i<EndIdx; i++)
+		{
+			ThisThing.XY[i]+=dPos;
+		}
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CLayerThing::Export(CCore *Core,CExport &Exp)
 {
 /*
 int				Width=Map.GetWidth();
@@ -289,7 +439,7 @@ int				Height=Map.GetHeight();
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
-				sExpLayerElem	OutElem;
+				sExpLayerThing	OutElem;
 
 				if (MapElem.Set==0 && MapElem.Elem==0)
 				{ // Blank
@@ -311,7 +461,7 @@ int				Height=Map.GetHeight();
 					OutElem.Flags=MapElem.Flags;
 				}
 
-				Exp.Write(&OutElem,sizeof(sExpLayerElem));
+				Exp.Write(&OutElem,sizeof(sExpLayerThing));
 			}
 		}
 */

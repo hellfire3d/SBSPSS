@@ -15,18 +15,8 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-/*
-int		CTexCache::GetTexIdx(const char *Filename,int Flags)
-{
-sTex	Tex;
-		Tex.Filename=Filename;
-		Tex.Flags=Flags;
-		return(TexList.Find(Tex));
-}
-*/
-/*****************************************************************************/
 // Checks loaded files for dups, assumes all passed RGB is unique
-int		CTexCache::ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData)
+int		CTexCache::ProcessTexture(const char *Filename,sRGBData *RGBData)
 {
 int			ListSize=TexList.size();
 sTex		NewTex;
@@ -35,7 +25,6 @@ GFName		FName=Filename;
 
 		NewTex.Name=FName.File();
 		NewTex.Filename=Filename;
-		NewTex.Flags=Flags;
 
 		if (!RGBData)	// Need to load file
 		{
@@ -124,13 +113,13 @@ void	CTexCache::LoadTex(sTex &ThisTex,sRGBData *TexData)
 u8		*Buffer;
 int		TexWidth=TexData->Width;
 int		TexHeight=TexData->Height;
-int		GLWidth=AlignSize(TexWidth);
-int		GLHeight=AlignSize(TexHeight);
+int		AlignWidth=AlignSize(TexWidth);
+int		AlignHeight=AlignSize(TexHeight);
 u8		*Src,*Dst;
 
 // create RGB & alpha texture & ensuse texture is correct size for GL
 
-		Buffer=(u8*)malloc(GLWidth*GLHeight*4);
+		Buffer=(u8*)malloc(AlignWidth*AlignHeight*4);
 		Src=TexData->RGB;
 		Dst=&Buffer[0];
 
@@ -153,18 +142,18 @@ u8		*Src,*Dst;
 				*Dst++=B;
 				*Dst++=A;
 			}
-			Dst+=(GLWidth-TexWidth)*4;
+			Dst+=(AlignWidth-TexWidth)*4;
 		}
 
 		ThisTex.TexWidth=TexWidth;
 		ThisTex.TexHeight=TexHeight;
 
-		ThisTex.dW=(1.0f)/(float)(GLWidth/16.0f);
-		ThisTex.dH=(1.0f)/(float)(GLHeight/16.0f);
+		ThisTex.ScaleU=(float)TexWidth/(float)AlignWidth;
+		ThisTex.ScaleV=(float)TexHeight/(float)AlignHeight;
 
 		glGenTextures(1, &ThisTex.TexID);
 		glBindTexture(GL_TEXTURE_2D, ThisTex.TexID);
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, GLWidth, GLHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &Buffer[0]);
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, AlignWidth, AlignHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &Buffer[0]);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);

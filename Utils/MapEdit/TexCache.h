@@ -25,12 +25,11 @@ struct	sTex
 	GString			Filename;
 	GString			Name;
 	GLuint			TexID;
-	int				Flags;
 	int				TexWidth,TexHeight;
-	float			dW,dH;
+	float			ScaleU,ScaleV;	// For wrong size textures
 	bool			Loaded;
 
-	bool			operator==(sTex const &v1)		{return (Filename==v1.Filename && Flags==v1.Flags);}
+	bool			operator==(sTex const &v1)		{return (Filename==v1.Filename);}
 };
 
 const RGBQUAD	BlankRGB={255,0,255};
@@ -44,7 +43,7 @@ public:
 	
 		int		GetTexIdx(sTex &Tex)						{return(TexList.Find(Tex));}
 
-		int		ProcessTexture(const char *Name,int Flags,sRGBData *RGBData=0);
+		int		ProcessTexture(const char *Name,sRGBData *RGBData=0);
 		void	Purge();
 
 		bool	LoadBMP(const char *Filename,sRGBData &RGBData);

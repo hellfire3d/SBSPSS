@@ -1,9 +1,9 @@
-/******************/
-/*** Layer Elem ***/
-/******************/
+/*******************/
+/*** Layer Thing ***/
+/*******************/
 
-#ifndef	__LAYER_ELEM_HEADER__
-#define	__LAYER_ELEM_HEADER__
+#ifndef	__LAYER_THING_HEADER__
+#define	__LAYER_THING_HEADER__
 
 #include	"Layer.h"
 #include	"MapEdit.h"
@@ -11,39 +11,50 @@
 #include	"Elem.h"
 
 /*****************************************************************************/
-struct	sLayerElem
+struct	sLayerThing
 {
-	std::vector<CPoint>	XY;
-	int					Type;
-	int					SubType;
-	
+	std::vector<CPoint>		XY;
+	int						Type;
+	int						SubType;
+	int						Spare[8];
+
+bool		operator==(sLayerThing const &v1)					
+{
+	if (XY[0]!=v1.XY[0]) return(false);
+	return(true);
+}
+
 };
 
 /*****************************************************************************/
-class	CLayerElem : public CElemBank
+class	CLayerThing : public CLayer
 {
 public:
 		enum	MouseMode
 		{
-			MouseModePaint=0,
-			MouseModeSelect,
+			MouseModeNormal=0,
+			MouseModePoints,
 		};
 
-		CLayerElem(){};
-		CLayerElem(int SubType,int Width,int Height);					// New Layer
-		CLayerElem(CFile *File,int Version);							// Load Layer
-		~CLayerElem();
+		CLayerThing(){};
+		CLayerThing(int SubType,int Width,int Height);					// New Layer
+		CLayerThing(CFile *File,int Version);							// Load Layer
+		~CLayerThing();
 
 virtual	int				GetType()			{return(LAYER_TYPE_ITEM);}
 virtual	void			InitSubView(CCore *Core);
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
+//		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 
 virtual	void			GUIInit(CCore *Core);
 virtual	void			GUIKill(CCore *Core);
 virtual	void			GUIUpdate(CCore *Core);
 virtual	void			GUIChanged(CCore *Core);
+
+		int				GetWidth()						{return(Width);}
+		int				GetHeight()						{return(Height);}
 
 virtual	void			Load(CFile *File,int Version);
 virtual	void			Save(CFile *File);
@@ -56,17 +67,24 @@ virtual	bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFl
 virtual	bool			MouseMove(CCore *Core,UINT nFlags, CPoint &point);
 virtual	bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
-// Local
-//		CElemBank		*GetElemBank()		{return(ElemBank);}
-
 protected:
-		void			RenderElem(CCore *Core,Vector3 &CamPos,CPoint &Pos,int Elem,bool Render3d,float Alpha=1.0f);
+		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
+		int				CheckThing(CPoint &Pos);
+		void			AddThing(CPoint &Pos);
+		void			SelectThing(CPoint &Pos);
+		int				CheckThingPoint(CPoint &Pos);
+		void			AddThingPoint(CPoint &Pos);
+		void			SelectThingPoint(CPoint &Pos);
 
-		bool			Paint(CMap &Blk,CPoint &CursorPos);
+		void			UpdatePos(CPoint &Pos,int Thing,int PosNo,bool Recurs=false);
 
-		CElemBank			*ElemBank;
-		CList<sLayerElem>	ElemList;
+
+		int					Width,Height;
+		CElemBank			*ThingBank;
+		CList<sLayerThing>	ThingList;
+		int					CurrentThing,CurrentPoint;
 		MouseMode			Mode;
+
 
 		CGUIToolBar			GUIToolBar;
 

@@ -6,6 +6,7 @@
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
+#include	"GLEnabledView.h"
 #include	<Vector>
 #include	<GFName.hpp>
 
@@ -15,7 +16,25 @@
 #include	"GinTex.h"
 #include	"utils.h"
 
+#include	"MapEdit.h"
+#include	"MapEditDoc.h"
+#include	"MapEditView.h"
+#include	"MainFrm.h"
 
+#include	"GUITileBank.h"
+
+
+const Vector3	DefOfs(+0.5f,0,+4.0f);
+
+/*****************************************************************************/
+// All Elems MUST run from 0,0 ->
+
+/*****************************************************************************/
+const float	ElemBrowserGap=0.2f;
+const float	ElemBrowserX0=0-ElemBrowserGap/2;
+const float	ElemBrowserX1=1+ElemBrowserGap/2;
+const float	ElemBrowserY0=0-ElemBrowserGap/2;
+const float	ElemBrowserY1=1+ElemBrowserGap/2;
 
 /*****************************************************************************/
 const float	XFlipMtx[]=
@@ -66,10 +85,11 @@ GFName		Path=Filename;
 			Type=ElemType3d;
 			TexXOfs=-1;
 			TexYOfs=-1;
+			Ofs.Zero();
 			Build3dElem(TexCache,ThisScene,Node);
 			Calc3dSize();
-			Ofs.x=+0.5f; Ofs.y=0; Ofs.z=+4.0f;
 			Build3dDrawList(TexCache,DrawList[ElemType3d]);
+			Ofs.Zero();
 			Create2dTexture(TexCache,Path.File(),Node);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
 			if (!ValidFlag)	CreateInvalidTileGfx();
@@ -78,7 +98,7 @@ GFName		Path=Filename;
 
 /*****************************************************************************/
 // 2d Elem (From Bmp File)
-CElem::CElem(CCore *Core,const char *Filename,int TexID,int XOfs,int YOfs,int Width,int Height)
+CElem::CElem(CCore *Core,const char *Filename,int TexID,int XOfs,int YOfs,int Width,int Height,bool Centre)
 {
 CTexCache	&TexCache=Core->GetTexCache();
 GFName		Path=Filename;
@@ -91,8 +111,15 @@ GFName		Path=Filename;
 			Type=ElemType2d;
 			TexXOfs=XOfs;
 			TexYOfs=YOfs;
-			Build2dElem(Core,Path.File(),TexID);
 			Ofs.Zero();
+			if (Centre)
+			{
+				Ofs.x=0.5-UnitWidth/2;
+//				Ofs.y=0.5-UnitHeight/2;
+				Ofs.y=-1.0f;
+			}
+			
+			Build2dElem(Core,Path.File(),TexID);
 			Build3dDrawList(TexCache,DrawList[ElemType3d]);
 			Create2dTexture(TexCache,Path.File(),TexID);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
@@ -108,10 +135,15 @@ void	CElem::CleanUp()
 /*****************************************************************************/
 void	CElem::Build2dElem(CCore *Core,const char *Filename,int TexID)
 {
-const Vector3	P0(0.0f,0.0f,0.0f);
-const Vector3	P1(1.0f,0.0f,0.0f);
-const Vector3	P2(0.0f,1.0f,0.0f);
-const Vector3	P3(1.0f,1.0f,0.0f);
+float		X0=0;
+float		X1=+UnitWidth;
+float		Y0=0;
+float		Y1=+UnitHeight;
+
+Vector3		P0(X0,Y0,0);
+Vector3		P1(X1,Y0,0);
+Vector3		P2(X0,Y1,0);
+Vector3		P3(X1,Y1,0);
 
 int			ListSize=TriList.size();
 			TriList.resize(ListSize+2);
@@ -121,13 +153,14 @@ sTriFace	&Tri1=TriList[ListSize+1];
 CTexCache	&TexCache=Core->GetTexCache();
 sTex		&ThisTex=TexCache.GetTex(TexID);
 
-float		u0,u1,v0,v1;
-		
-			u0=(TexXOfs)*ThisTex.dW;
-			u1=u0+ThisTex.dW;
+float		dU=1.0/((float)ThisTex.TexWidth/(float)ElemWidth);
+float		dV=1.0/((float)ThisTex.TexHeight/(float)ElemHeight);
 
-			v0=(((ThisTex.TexHeight/UnitSize)-(TexYOfs+1))*ThisTex.dH);
-			v1=v0+ThisTex.dH;
+float		u0=(TexXOfs*dU);
+float		u1=u0+dU;
+
+float		v1=1.0-(TexYOfs*dV);
+float		v0=v1-dV;
 
 			Tri0.Mat=TexID;
 
@@ -151,13 +184,15 @@ float		u0,u1,v0,v1;
 void	CElem::Build3dElem(CTexCache &TexCache,CScene &ThisScene,int Node)
 {
 CNode						&ThisNode=ThisScene.GetNode(Node);
-int							ChildCount=ThisNode.GetChildCount();
+CNode						&ParentNode=ThisScene.GetNode(ThisNode.ParentIdx);
+int							ChildCount=ThisNode.GetPruneChildCount();
 std::vector<sGinTri> const	&NodeTriList=ThisNode.GetTris();
-std::vector<Vector3>const	&NodeVtxList=ThisNode.GetRelPts();
+std::vector<Vector3>const	&NodeVtxList=ThisNode.GetPts();
 std::vector<sUVTri>	const	&NodeUVList=ThisNode.GetUVTris();
 std::vector<int>	const	&NodeTriMat=ThisNode.GetTriMaterial();
-std::vector<GString> const	&TexList= ThisScene.GetTexNames();//List();
-std::vector<Material> const &MatList= ThisScene.GetMaterials();
+
+std::vector<GString> const	&SceneTexList=ThisScene.GetTexList();
+std::vector<int> const		&SceneUsedMatList=ThisScene.GetUsedMaterialIdx();
 
 int			TriCount=NodeTriList.size();
 int			ListSize=TriList.size();
@@ -169,28 +204,38 @@ int			ListSize=TriList.size();
 				sUVTri	const	&ThisUV=NodeUVList[T];
 				sTriFace		&Tri=TriList[ListSize+T];
 				int				ThisMat=NodeTriMat[T];
-				int				TexID=1;
+				int				TexID;
 				
 
-// Sort Textures - Only add the ones that are used :o)
-				TexID=MatList[ThisMat].TexId;
+// Sort Textures - Only add the ones nthat are used :o)
+				TexID=SceneUsedMatList[ThisMat];
+
 				if (TexID!=-1)
 					{
 					GString	ThisName;
 
-					ThisName=SetPath+TexList[TexID];
-					TexID=TexCache.ProcessTexture(ThisName,MatList[ThisMat].Flags);
+					ThisName=SetPath+SceneTexList[TexID];
+					TRACE2("%i !%s!\n",TexID,ThisName);
+					TexID=TexCache.ProcessTexture(ThisName);
 					}
 // Sort Rest of Tri info
+Matrix4x4		TransMtx;
+				TransMtx.Identity();
+				
+				if (ParentNode.GetTris().size() || !ThisNode.ParentIdx)
+				{
+					TransMtx=ThisNode.Mtx;
+					TransMtx.Invert();
+				}
+
 				for (int p=0; p<3; p++)
 				{
-					Tri.vtx[p]=NodeVtxList[ThisTri.p[p]];
+					Tri.vtx[p]=TransMtx*NodeVtxList[ThisTri.p[p]];
 					Tri.uvs[p].u=ThisUV.p[p].u;
 					Tri.uvs[p].v=ThisUV.p[p].v;
 					Tri.Mat=TexID;
 				}
 			}
-
 		for (int Child=0; Child<ChildCount; Child++) Build3dElem(TexCache,ThisScene,ThisNode.PruneChildList[Child]);
 
 }
@@ -198,52 +243,62 @@ int			ListSize=TriList.size();
 /*****************************************************************************/
 void	CElem::Calc3dSize()
 {
-int			ListSize=TriList.size();
-float		XMin=+9999;
-float		XMax=-9999;
-float		YMin=+9999;
-float		YMax=-9999;
+int			i,ListSize=TriList.size();
+Vector3		Min(+32000,+32000,+32000);
+Vector3		Max(-32000,-32000,-32000);
+Vector3		Mid;
 
-		for (int i=0; i<ListSize; i++)
+		for (i=0; i<ListSize; i++)
 		{
 			sTriFace		&Tri=TriList[i];
 			for (int p=0; p<3; p++)
 			{
-				if (XMin>Tri.vtx[p].x) XMin=Tri.vtx[p].x;
-				if (XMax<Tri.vtx[p].x) XMax=Tri.vtx[p].x;
-				if (YMin>Tri.vtx[p].y) YMin=Tri.vtx[p].y;
-				if (YMax<Tri.vtx[p].y) YMax=Tri.vtx[p].y;
+				if (Min.x>Tri.vtx[p].x) Min.x=Tri.vtx[p].x;
+				if (Min.y>Tri.vtx[p].y) Min.y=Tri.vtx[p].y;
+				if (Min.z>Tri.vtx[p].z) Min.z=Tri.vtx[p].z;
+				if (Max.x<Tri.vtx[p].x) Max.x=Tri.vtx[p].x;
+				if (Max.y<Tri.vtx[p].y) Max.y=Tri.vtx[p].y;
+				if (Max.z<Tri.vtx[p].z) Max.z=Tri.vtx[p].z;
 			}
 		}
-		UnitWidth=round(XMax-XMin);
-		UnitHeight=round(YMax-YMin);
+
+		UnitWidth=round(Max.x-Min.x);
+		UnitHeight=round(Max.y-Min.y);
 		if (UnitWidth<1) UnitWidth=1;
 		if (UnitHeight<1) UnitHeight=1;
 		ElemWidth=UnitWidth*UnitSize;
 		ElemHeight=UnitHeight*UnitSize;
-
+		Min.z=0;
+		
+		Ofs=DefOfs;
+//		Ofs.x=+0.5f; Ofs.y=0; Ofs.z=+4.0f;
 }
 
 /*****************************************************************************/
 void	CElem::Build2dDrawList(CTexCache &TexCache,GLint &List)
 {
+float	X0=Ofs.x;
+float	X1=Ofs.x+UnitWidth;
+float	Y0=Ofs.y;
+float	Y1=Ofs.y+UnitHeight;
+float	Z=Ofs.z;
+
 			List=glGenLists(1);
 			glNewList(List,GL_COMPILE);
 
 			glBindTexture(GL_TEXTURE_2D, TexCache.GetTexGLId(ElemID));
 			glBegin (GL_QUADS);
 				glTexCoord2f(0.0f,0.0f);
-				glVertex3f( 0.0f,0.0f,0.0f);
+				glVertex3f(X0,Y0,Z);
 
 				glTexCoord2f(1.0f,0.0f);
-				glVertex3f( UnitWidth,0.0f,0.0f);
+				glVertex3f(X1,Y0,Z);
 
 				glTexCoord2f(1.0f,1.0f);
-				glVertex3f( UnitWidth,UnitHeight,0.0f);
+				glVertex3f(X1,Y1,Z);
 
 				glTexCoord2f(0.0f,1.0f);
-				glVertex3f( 0.0f,UnitHeight,0.0f);
-
+				glVertex3f(X0,Y1,Z);
 			glEnd();
 			glEndList();
 
@@ -255,6 +310,7 @@ void	CElem::Build3dDrawList(CTexCache &TexCache,GLint &List)
 {
 int			TriCount=TriList.size();
 int			LastMat=-1,ThisMat;
+float		ScaleU,ScaleV;
 
 			List=glGenLists(1);
 			glNewList(List,GL_COMPILE);
@@ -265,19 +321,32 @@ int			LastMat=-1,ThisMat;
 				ThisMat=ThisTri.Mat;
 				
 				if (!T || ThisMat!=LastMat)	// First Tri or new material
-					{
+				{
 					if (T) glEnd();	// Not first tri, so end previous mat set
 					glBindTexture(GL_TEXTURE_2D, TexCache.GetTexGLId(ThisMat));
 					glBegin (GL_TRIANGLES);
 					LastMat=ThisMat;
+					sTex &Tex=TexCache.GetTex(ThisMat);
+					int	AW=TexCache.AlignSize(Tex.TexWidth);
+					int	AH=TexCache.AlignSize(Tex.TexHeight);
+					if (AW!=Tex.TexWidth || AH!=Tex.TexHeight)
+					{
+						ScaleU=(float)Tex.TexWidth/(float)AW;
+						ScaleV=(float)Tex.TexHeight/(float)AH;
 					}
+					else
+					{
+						ScaleU=ScaleV=1;
+					}
+				}
+		
 				for (int p=0; p<3; p++)
 				{
 					Vector3	&ThisVtx=ThisTri.vtx[p];
-					glTexCoord2f(ThisTri.uvs[p].u, ThisTri.uvs[p].v); 
-
+					float	u=ThisTri.uvs[p].u*ScaleU;
+					float	v=ThisTri.uvs[p].v*ScaleV;
+					glTexCoord2f(u,v);
 					glVertex3f( (ThisVtx.x+Ofs.x), (ThisVtx.y+Ofs.y), -(ThisVtx.z+Ofs.z));		// Neg Z (cos openGL)
-
 				}
 			}
 
@@ -426,8 +495,11 @@ float	Y1=UnitHeight;
 /*****************************************************************************/
 void	CElem::RenderElem4Texture(sRGBData &RGBData)
 {
+float	W=UnitWidth;
+float	H=UnitHeight;
 
 		glClearColor(1,0,1,1 );
+//		glClearColor(1,1,1,1 );
 		glPushAttrib(GL_VIEWPORT_BIT);
 		glViewport(0,0,RGBData.Width,RGBData.Height);
 
@@ -435,12 +507,12 @@ void	CElem::RenderElem4Texture(sRGBData &RGBData)
  		glPushMatrix();
 
 		glLoadIdentity();
-		glOrtho(-0.5f, +0.5f, -0.5f, +0.5f, -16.0f, +16.0f);
+		glOrtho(0, W, 0, H, -16.0f, +16.0f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
-		glTranslatef(-0.5f,-0.5f,0);
+		glTranslatef(-Ofs.x,-Ofs.y,-Ofs.z);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 
@@ -466,23 +538,22 @@ void	CElem::RenderElem4Texture(sRGBData &RGBData)
 void	CElem::Create2dTexture(CTexCache &TexCache,const char *Filename,int ID)
 {
 sRGBData	RGBData;
+char		TexName[256];
 
+		sprintf(TexName,"_2dPc_%s_%03d",Filename,ID);
 		ElemRGB=(u8*)malloc(ElemWidth*ElemHeight*3);
 
 		RGBData.Width=ElemWidth;
 		RGBData.Height=ElemHeight;
 		RGBData.RGB=ElemRGB;
 		RenderElem4Texture(RGBData);
-		ElemID=TexCache.ProcessTexture("",0,&RGBData);
+		ElemID=TexCache.ProcessTexture(TexName,&RGBData);
 		ValidFlag=CheckHasData(RGBData);
 
 #ifdef _DEBUG
 		if (0)
 		{
 char	Filename[256];
-char	TexName[256];
-static	asd=0;
-		sprintf(TexName,"_2dPc_%s_%03d",Filename,asd++);
 		sprintf(Filename,"/x/%s.Tga",TexName);
 		SaveTGA(Filename,ElemWidth,ElemHeight,ElemRGB);
 		}
@@ -505,7 +576,7 @@ int		Size=RGBData.Width*RGBData.Height;
 			if (R!=255 || G!=0 || B!=255) return(TRUE);
 
 		}
-	return(FALSE);
+	return(false);
 }
 
 /*****************************************************************************/
@@ -513,17 +584,24 @@ int		Size=RGBData.Width*RGBData.Height;
 /*** Elem Set ****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CElemSet::CElemSet(const char *_Filename,int Idx,int Width,int Height)
+CElemSet::CElemSet(const char *_Filename,int Idx,int Width,int Height,bool CreateBlank,bool Centre)
 {
 GFName	FName=_Filename;
 
 		Filename=_Filename;
 		Name=FName.File();
 		
-		DefWidth=Width;
-		DefHeight=Height;
+		MaxWidth=Width;
+		MaxHeight=Height;
+		CentreFlag=Centre;
 		Loaded=FALSE;
 		SetNumber=Idx;
+
+		if (CreateBlank)
+		{
+			ElemList.push_back(CElem(MaxWidth,MaxHeight));	// Insert Blank		
+		}
+
 }
 
 /*****************************************************************************/
@@ -560,18 +638,22 @@ GString	Ext=FName.Ext();
 void	CElemSet::Load2d(CCore *Core)
 {
 CTexCache	&TexCache=Core->GetTexCache();
-int			TexID=TexCache.ProcessTexture(Filename,0);
+int			TexID=TexCache.ProcessTexture(Filename);
 sTex		&ThisTex=TexCache.GetTex(TexID);
-int			Width=ThisTex.TexWidth/DefWidth;
-int			Height=ThisTex.TexHeight/DefHeight;
+int			Width,Height;
 
-		ElemList.push_back(CElem(DefWidth,DefHeight));	// Insert Blank		
-		
+		if (MaxWidth==-1) MaxWidth=ThisTex.TexWidth;
+		if (MaxHeight==-1) MaxHeight=ThisTex.TexHeight;
+
+		Width=ThisTex.TexWidth/MaxWidth;
+		Height=ThisTex.TexHeight/MaxHeight;
+
+
 		for (int Y=0; Y<Height; Y++)
 		{
 			for (int X=0; X<Width; X++)
 			{
-				ElemList.push_back(CElem(Core,Filename,TexID,X,Y,DefWidth,DefHeight));
+				ElemList.push_back(CElem(Core,Filename,TexID,X,Y,MaxWidth,MaxHeight,CentreFlag));
 			}
 		}
 		ElemBrowserWidth=Width;
@@ -586,8 +668,6 @@ CScene	Scene;
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
-		
-		ElemList.push_back(CElem(DefWidth,DefHeight));	// Insert Blank		
 		
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
@@ -632,9 +712,16 @@ int		ListSize=ElemList.size();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CElemBank::CElemBank()
+CElemBank::CElemBank(int W,int H,bool Blank,bool Centre)
 {
-		LoadFlag=FALSE;
+		MaxWidth=W; 
+		MaxHeight=H; 
+		BlankFlag=Blank;
+		CentreFlag=Centre;
+
+		LoadFlag=false;
+		CurrentSet=0;
+		VisibleFlag=true;
 }
 
 /*****************************************************************************/
@@ -666,6 +753,10 @@ char	FixPath[1024];
 		FilePath.Append('\\');
 		FilePath.Upper();
 	
+		if (Version>=5)
+		{
+			File->Read(&CurrentSet,sizeof(int));
+		}
 		File->Read(&ListSize,sizeof(int));
 
 // New Style rel storage
@@ -708,6 +799,7 @@ GString	SavePath;
 
 		SavePath.Upper();
 
+		File->Write(&CurrentSet,sizeof(int));
 		File->Write(&ListSize,sizeof(int));
 
 		for (int i=0; i<ListSize; i++)
@@ -723,7 +815,7 @@ GString	SavePath;
 void	CElemBank::AddSet(const char *Filename)
 {
 int			ListSize=SetList.size();
-CElemSet	NewSet(Filename,ListSize);
+CElemSet	NewSet(Filename,ListSize,MaxWidth,MaxHeight,BlankFlag,CentreFlag);
 
 			SetList.Add(NewSet);
 			if (SetList.size()!=ListSize) LoadFlag=TRUE;
@@ -778,18 +870,197 @@ void	CElemBank::DeleteSet(int Set)
 }
 
 /*****************************************************************************/
-CElem	&CElemBank::GetElem(int Set,int Elem)
-{
-		ASSERT(Set>=0 && Elem>=0);
-		return(SetList[Set].GetElem(Elem));
-}
-
-/*****************************************************************************/
 bool	CElemBank::IsValid(int Set,int Elem)
 {
  		if (Set<0 || Elem<0) return(false);
 		if (Elem==0) return(true);
+ 		if (Set>=SetList.size()) return(false);
 		ASSERT(Set<SetList.size());
 		return(SetList[Set].IsValid(Elem));
 }
 
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+CPoint	CElemBank::GetElemPos(int ID,int Width)
+{
+	if (ID==0)
+		return(CPoint(-1,-1));
+	else
+		return(IDToPoint(ID-1,Width));
+}
+
+/*****************************************************************************/
+void	CElemBank::RenderElem(int Set,int Elem,int Flags,bool Is3d)
+{
+		if (IsValid(Set,Elem))
+		{
+			SetList[Set].RenderElem(Elem,Flags,Is3d);
+		}
+		else
+		{
+			SetList[0].RenderInvalid();
+		}
+		
+}
+
+/*****************************************************************************/
+void	CElemBank::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
+{
+		if (!GetSetCount()) return;
+CElemSet	&ThisSet=SetList[CurrentSet];
+int			ListSize=ThisSet.GetCount();
+int			BrowserWidth=ThisSet.GetBrowserWidth();
+int			TileID=1;	// Dont bother with blank, its sorted
+float		Scale=CamPos.z/(float)BrowserWidth/2.0;
+		
+		if (!ListSize) return;
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+
+		while(TileID!=ListSize)
+		{
+			CPoint	Pos=GetElemPos(TileID,BrowserWidth);
+			float	XPos=(float)Pos.x*(1+ElemBrowserGap);
+			float	YPos=(float)Pos.y*(1+ElemBrowserGap);
+
+			glLoadIdentity();
+			glScalef(Scale,Scale,Scale);
+			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
+			
+			glBegin(GL_LINES); 
+				glColor3f(1,1,1);
+			
+				glVertex3f( ElemBrowserX0,ElemBrowserY0,0);
+				glVertex3f( ElemBrowserX1,ElemBrowserY0,0);
+
+				glVertex3f( ElemBrowserX0,ElemBrowserY1,0);
+				glVertex3f( ElemBrowserX1,ElemBrowserY1,0);
+
+				glVertex3f( ElemBrowserX0,ElemBrowserY0,0);
+				glVertex3f( ElemBrowserX0,ElemBrowserY1,0);
+
+				glVertex3f( ElemBrowserX1,ElemBrowserY0,0);
+				glVertex3f( ElemBrowserX1,ElemBrowserY1,0);
+
+			glEnd();
+
+			TileID++;
+		}
+		glPopMatrix();
+}
+
+/*****************************************************************************/
+void	CElemBank::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
+{
+		if (!GetSetCount()) return;
+CElemSet	&ThisSet=SetList[CurrentSet];
+int			ListSize=ThisSet.GetCount();
+int			BrowserWidth=ThisSet.GetBrowserWidth();
+GLint		Viewport[4];
+GLuint		SelectBuffer[SELECT_BUFFER_SIZE];
+int			HitCount;
+int			TileID=0;
+float		Scale=CamPos.z/(float)BrowserWidth/2.0;
+		
+		if (!ListSize) return;
+		glGetIntegerv(GL_VIEWPORT, Viewport);
+		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
+		glRenderMode (GL_SELECT);
+
+	    glInitNames();
+		glPushName(-1);
+
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
+		Core->GetView()->SetupPersMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+
+		while(TileID!=ListSize)
+		{
+			CPoint	Pos=GetElemPos(TileID,BrowserWidth);
+			float	XPos=(float)Pos.x*(1+ElemBrowserGap);
+			float	YPos=(float)Pos.y*(1+ElemBrowserGap);
+
+			glLoadIdentity();
+			glScalef(Scale,Scale,Scale);
+			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
+
+			glLoadName (TileID);
+			glBegin (GL_QUADS); 
+				BuildGLQuad(ElemBrowserX0,ElemBrowserX1,ElemBrowserY0,ElemBrowserY1,0);
+			glEnd();
+			TileID++;
+		}
+
+		HitCount= glRenderMode (GL_RENDER);
+		glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+// Process hits
+
+GLuint	*HitPtr=SelectBuffer;
+
+		TileID=-2;
+		if (HitCount)	// Just take 1st		
+		{
+			TileID=HitPtr[3];
+		}
+		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
+
+		CursorPos=TileID;
+}
+
+/*****************************************************************************/
+/*** Gui *********************************************************************/
+/*****************************************************************************/
+void	CElemBank::GUIInit(CCore *Core)
+{
+		Core->GUIAdd(GUIElemList,IDD_ELEMLIST);
+}
+
+/*****************************************************************************/
+void	CElemBank::GUIKill(CCore *Core)
+{
+		Core->GUIRemove(GUIElemList,IDD_ELEMLIST);
+}
+
+/*****************************************************************************/
+void	CElemBank::GUIUpdate(CCore *Core)
+{
+int			ListSize=GetSetCount();
+bool		IsSubView=Core->IsSubView();
+
+			if (GUIElemList.m_List)
+			{
+				GUIElemList.m_List.ResetContent();
+				if (ListSize)
+				{
+					for (int i=0; i<ListSize; i++)
+					{
+						GUIElemList.m_List.AddString(GetSetName(i));
+					}
+					GUIElemList.m_List.SetCurSel(CurrentSet);
+				}
+				else
+				{
+					IsSubView=FALSE;
+				}
+				GUIElemList.m_List.EnableWindow(IsSubView);
+			}
+
+}
+
+/*****************************************************************************/
+void	CElemBank::GUIChanged(CCore *Core)
+{
+}
+
+/*****************************************************************************/

@@ -21,16 +21,10 @@
 #include	"GUIElemList.h"
 
 /*****************************************************************************/
-enum	TileSetEnum
-{
-DefTileBrowserWidth=8,
-};
 
 /*****************************************************************************/
 class	CCore;
-
-/*****************************************************************************/
-class	CTileBank : public CLayer, public CElemBank
+class	CTileBank : public CElemBank
 {
 public:
 		CTileBank();
@@ -46,10 +40,10 @@ public:
 		int			GetType()							{return(0);}
 
 		void		Render(CCore *Core,Vector3 &CamPos,bool Is3d);
-		void		RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
+//		void		RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
 		void		RenderSelection(CCore *Core,Vector3 &ThisCam){};
 		void		RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
-		void		FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
+//		void		FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 
 		void		GUIInit(CCore *Core);
 		void		GUIKill(CCore *Core);
@@ -66,12 +60,6 @@ public:
 		bool		MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
 		bool		Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
-// ElemSet Thruput
-const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
-const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
-		CElem		&GetTile(int Set,int Tile)								{return(SetList[Set].GetElem(Tile));}
-		void		RenderTile(int Set,int Elem,int Flags,bool Is3d);
-
 // Local
 		void		DeleteCurrent();
 		
@@ -81,7 +69,6 @@ const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());
 		CMap		&GetActiveBrush()										{return(GetBrush(ActiveBrush));}
 
 		bool		CanClose()												{return(SelStart==-1);}
-		CPoint		GetTilePos(int ID,int Width);
 
 // Functions
 		bool		SelectCancel();
@@ -89,20 +76,15 @@ const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());
 
 
 protected:
-
 		bool		Select(int BrushID,bool DownFlag);
 		void		SetBrush(CMap &ThisBrush);
 
-		int					CurrentSet,LastSet;
-		CMap				Brush[2];
-		int					ActiveBrush;
-		int					SelStart,SelEnd;
+		CMap			Brush[2];
+		int				ActiveBrush;
+		int				SelStart;
 
-		bool				LoadFlag;
-		int					LastCursorPos,CursorPos;
-
-		CGUIElemList		GUIElemList;
-		CGUITileBank		GUITileBank;
+		CGUIElemList	GUIElemList;
+		CGUITileBank	GUITileBank;
 };
 
 /*****************************************************************************/

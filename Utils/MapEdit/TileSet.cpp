@@ -33,16 +33,11 @@ const float	TileBrowserY0=0-TileBrowserGap/2;
 const float	TileBrowserY1=1+TileBrowserGap/2;
 
 /*****************************************************************************/
-CTileBank::CTileBank()
+CTileBank::CTileBank() : CElemBank(16,16,true,false)
 {
-		LoadFlag=false;
-		CurrentSet=0; LastSet=0;
 		for (int i=0; i<MaxBrush; i++) Brush[i].Delete();
-		LastCursorPos=CursorPos=-1;
 		ActiveBrush=0;
 		SelStart=-1;
-		SelEnd=-1;
-		VisibleFlag=true;
 }
 
 /*****************************************************************************/
@@ -55,82 +50,27 @@ void	CTileBank::Load(CFile *File,int Version)
 {
 		if (Version<FileVersion)
 		{
-			int		ListSize;
-			GFName	RootPath=File->GetFilePath();
-			GString	FilePath;
-			char	FixPath[1024];
-
-			FilePath=RootPath.Drive();
-			FilePath+=RootPath.Dir();
-			FilePath.Append('\\');
-			FilePath.Upper();
-		
-			File->Read(&ListSize,sizeof(int));
+			File->Read(&LayerCam,sizeof(Vector3));
 			File->Read(&CurrentSet,sizeof(int));
 			File->Read(&ActiveBrush,sizeof(int));
 			Brush[0].Load(File,Version);
 			Brush[1].Load(File,Version);
-			if (Version<2)
-			{
-				CurrentSet++;
-			}
-
-	// New Style rel storage
-			for (int i=0;i<ListSize;i++)
-			{
-				char	c=1;
-				GString	FullName;
-
-				while (c)
-				{
-					File->Read(&c,1);
-					FullName.Append(c);
-				}
-				FullName.Upper();
-				GFName::makeabsolute(FilePath,FullName,FixPath);
-				FullName=FixPath;
-				_fullpath( FixPath, FullName, 1024);
-				for (int z=0; z<strlen(FixPath); z++) 
-				{// Invalidate any long name short cackness
-					if (FixPath[z]=='~') FixPath[z]='_'; 
-				}
-				FullName=FixPath;
-
-				CheckFilename(FullName);
-				FullName.Upper();
-				AddSet(FullName);
-			}
-
 		}
 		else
 		{
-		File->Read(&LayerCam,sizeof(Vector3));
-		File->Read(&CurrentSet,sizeof(int));
-		File->Read(&ActiveBrush,sizeof(int));
-		Brush[0].Load(File,Version);
-		Brush[1].Load(File,Version);
-
-		CElemBank::Load(File,Version);
+			File->Read(&LayerCam,sizeof(Vector3));
+			File->Read(&ActiveBrush,sizeof(int));
+			Brush[0].Load(File,Version);
+			Brush[1].Load(File,Version);
 		}
 
-
+		CElemBank::Load(File,Version);
 }
 
 /*****************************************************************************/
 void	CTileBank::Save(CFile *File)
 {
-int		ListSize=GetSetCount();
-GFName	RootPath=File->GetFilePath();
-GString	SavePath;
-
-		SavePath=RootPath.Drive();
-		SavePath+=RootPath.Dir();
-		SavePath.Append('\\');
-
-		SavePath.Upper();
-
 		File->Write(&LayerCam,sizeof(Vector3));
-		File->Write(&CurrentSet,sizeof(int));
 		File->Write(&ActiveBrush,sizeof(int));
 		Brush[0].Save(File);
 		Brush[1].Save(File);
@@ -138,19 +78,6 @@ GString	SavePath;
 		CElemBank::Save(File);
 }
 
-/*****************************************************************************/
-void	CTileBank::RenderTile(int Set,int Elem,int Flags,bool Is3d)
-{
-		if (IsValid(Set,Elem))
-		{
-			SetList[Set].RenderElem(Elem,Flags,Is3d);
-		}
-		else
-		{
-			SetList[0].RenderInvalid();
-		}
-		
-}
 /*****************************************************************************/
 void	CTileBank::DeleteCurrent()
 {
@@ -169,15 +96,6 @@ int		ListSize=GetSetCount();
 		}
 		SetList.erase(CurrentSet);
 		if (CurrentSet) CurrentSet--;
-}
-
-/*****************************************************************************/
-CPoint	CTileBank::GetTilePos(int ID,int Width)
-{
-	if (ID==0)
-		return(CPoint(-1,-1));
-	else
-		return(IDToPoint(ID-1,Width));
 }
 
 /*****************************************************************************/
@@ -200,7 +118,7 @@ float		Scale=CamPos.z/(float)BrowserWidth/2.0;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos=GetTilePos(TileID,BrowserWidth);
+			CPoint	Pos=GetElemPos(TileID,BrowserWidth);
 			float	XPos=(float)Pos.x*(1+TileBrowserGap);
 			float	YPos=(float)Pos.y*(1+TileBrowserGap);
 
@@ -263,14 +181,14 @@ float		Scale=CamPos.z/(float)BrowserWidth/2.0;
 
 		if (SelStart==-1)
 		{
-			Start=GetTilePos(CursorPos,BrowserWidth);
+			Start=GetElemPos(CursorPos,BrowserWidth);
 			End=Start;
 		}
 		else
 		{
 
 			CPoint	S=IDToPoint(SelStart-1,BrowserWidth);
-			CPoint	E=IDToPoint(SelEnd-1,BrowserWidth);
+			CPoint	E=IDToPoint(CursorPos-1,BrowserWidth);
 			
 			Start=CPoint(	min(S.x,E.x), min(S.y,E.y));
 			End=CPoint(		max(S.x,E.x), max(S.y,E.y));
@@ -301,119 +219,6 @@ float		Scale=CamPos.z/(float)BrowserWidth/2.0;
 		}
 		glPopMatrix();
 
-}
-
-/*****************************************************************************/
-void	CTileBank::RenderGrid(CCore *Core,Vector3 &CamPos,bool Active)
-{
-		if (!GetSetCount()) return;
-CElemSet	&ThisSet=SetList[CurrentSet];
-int			ListSize=ThisSet.GetCount();
-int			BrowserWidth=ThisSet.GetBrowserWidth();
-int			TileID=1;	// Dont bother with blank, its sorted
-float		Scale=CamPos.z/(float)BrowserWidth/2.0;
-		
-		if (!ListSize) return;
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-
-		while(TileID!=ListSize)
-		{
-			CPoint	Pos=GetTilePos(TileID,BrowserWidth);
-			float	XPos=(float)Pos.x*(1+TileBrowserGap);
-			float	YPos=(float)Pos.y*(1+TileBrowserGap);
-
-			glLoadIdentity();
-			glScalef(Scale,Scale,Scale);
-			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
-			
-			glBegin(GL_LINES); 
-				glColor3f(1,1,1);
-			
-				glVertex3f( TileBrowserX0,TileBrowserY0,0);
-				glVertex3f( TileBrowserX1,TileBrowserY0,0);
-
-				glVertex3f( TileBrowserX0,TileBrowserY1,0);
-				glVertex3f( TileBrowserX1,TileBrowserY1,0);
-
-				glVertex3f( TileBrowserX0,TileBrowserY0,0);
-				glVertex3f( TileBrowserX0,TileBrowserY1,0);
-
-				glVertex3f( TileBrowserX1,TileBrowserY0,0);
-				glVertex3f( TileBrowserX1,TileBrowserY1,0);
-
-			glEnd();
-
-			TileID++;
-		}
-		glPopMatrix();
-}
-
-/*****************************************************************************/
-void	CTileBank::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
-{
-		if (!GetSetCount()) return;
-CElemSet	&ThisSet=SetList[CurrentSet];
-int			ListSize=ThisSet.GetCount();
-int			BrowserWidth=ThisSet.GetBrowserWidth();
-GLint		Viewport[4];
-GLuint		SelectBuffer[SELECT_BUFFER_SIZE];
-int			HitCount;
-int			TileID=0;
-float		Scale=CamPos.z/(float)BrowserWidth/2.0;
-		
-		if (!ListSize) return;
-		glGetIntegerv(GL_VIEWPORT, Viewport);
-		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
-		glRenderMode (GL_SELECT);
-
-	    glInitNames();
-		glPushName(-1);
-
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
-		Core->GetView()->SetupPersMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-
-		while(TileID!=ListSize)
-		{
-			CPoint	Pos=GetTilePos(TileID,BrowserWidth);
-			float	XPos=(float)Pos.x*(1+TileBrowserGap);
-			float	YPos=(float)Pos.y*(1+TileBrowserGap);
-
-			glLoadIdentity();
-			glScalef(Scale,Scale,Scale);
-			glTranslatef(-CamPos.x+XPos,CamPos.y-YPos,0);
-
-			glLoadName (TileID);
-			glBegin (GL_QUADS); 
-				BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
-			glEnd();
-			TileID++;
-		}
-
-		HitCount= glRenderMode (GL_RENDER);
-		glPopMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-
-// Process hits
-
-GLuint	*HitPtr=SelectBuffer;
-
-		TileID=-2;
-		if (HitCount)	// Just take 1st		
-		{
-			TileID=HitPtr[3];
-		}
-		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
-
-		CursorPos=TileID;
-		SelEnd=CursorPos;
 }
 
 /*****************************************************************************/
@@ -567,7 +372,7 @@ void	CTileBank::SetBrush(CMap &ThisBrush)
 {
 int			BW=SetList[CurrentSet].GetBrowserWidth();
 CPoint		S=IDToPoint(SelStart-1,BW);
-CPoint		E=IDToPoint(SelEnd-1,BW);
+CPoint		E=IDToPoint(CursorPos-1,BW);
 
 int			Width=abs(E.x-S.x)+1;
 int			Height=abs(E.y-S.y)+1;

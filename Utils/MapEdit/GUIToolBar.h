@@ -24,7 +24,7 @@ public:
 
 // Dialog Data
 	//{{AFX_DATA(GUIToolBar)
-	enum { IDD = IDD_LAYER_TOOLBAR };
+	enum { IDD = IDD_TOOLBAR };
 	CButton	m_Select;
 	CButton	m_Paint;
 	//}}AFX_DATA

@@ -13,6 +13,10 @@
 #include	"TexCache.h"
 #include	"GinTex.h"
 
+#include	"Layer.h"
+#include	"MapEdit.h"
+#include	"GUIElemList.h"
+
 struct	sTriFace
 {
 	int				Mat;
@@ -40,9 +44,9 @@ public:
 			UnitSize=16,
 		};
 
-		CElem(int Width,int Height);																	// Blank (2d)
-		CElem(CCore *Core,const char *Filename,int TexId,int XOfs,int YOfs,int Width,int Height);		// 2d elem
-		CElem(CCore *Core,const char *Filename,CScene &ThisScene,int Node);								// 3d elem
+		CElem(int Width,int Height);																			// Blank (2d)
+		CElem(CCore *Core,const char *Filename,int TexId,int XOfs,int YOfs,int Width,int Height,bool Centre);	// 2d elem
+		CElem(CCore *Core,const char *Filename,CScene &ThisScene,int Node);										// 3d elem
 		void	CleanUp();
 
 		void	Purge();
@@ -98,12 +102,10 @@ class	CElemSet
 public:
 		enum
 		{
-			DEF_ELEMWIDTH=16,
-			DEF_ELEMHEIGHT=16,
 			DEF_ELEMBROWSWEWIDTH=8,
 		};
 
-		CElemSet(const char *_Filename,int Idx,int Width=DEF_ELEMWIDTH,int Height=DEF_ELEMHEIGHT);
+		CElemSet(const char *_Filename,int Idx,int MaxWidth,int MaxHeight,bool CreateBlank,bool Centre);
 		~CElemSet();
 	
 		void		CleanUp();
@@ -133,22 +135,24 @@ private:
 		GString			Filename,Name;
 		
 		int				SetNumber;
-		int				DefWidth,DefHeight;
+		int				MaxWidth,MaxHeight;
+		bool			CentreFlag;
 		CList<CElem>	ElemList;
 		bool			Loaded;
 		int				ElemBrowserWidth;
 };
 
 /*****************************************************************************/
-class	CElemBank
+class	CElemBank : public CLayer
 {
 public:
-		CElemBank();
-		~CElemBank();
-		void	CleanUp();
+// Local
+		CElemBank(int MaxWidth,int MaxHeight,bool Blank,bool Centre);
+virtual	~CElemBank();
+		void		CleanUp();
 
-		void		Load(CFile *File,int Version);
-		void		Save(CFile *File);
+virtual	void		Load(CFile *File,int Version);
+virtual	void		Save(CFile *File);
 
 		void		AddSet(const char *Filename);
 		void		LoadAllSets(CCore *Core);
@@ -156,16 +160,49 @@ public:
 		void		ReloadAllSets();
 		void		DeleteSet(int Set);
 		int			NeedLoad()							{return(LoadFlag);}
-		CElem		&GetElem(int Set,int Elem);
+		CElem		&GetElem(int Set,int Elem)			{return(SetList[Set].GetElem(Elem));}
 		bool		IsValid(int Set,int Elem);
+		void		RenderElem(int Set,int Elem,int Flags,bool Is3d);
 
 		int			GetSetCount()						{return(SetList.size());}
-	
+
+const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
+const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
+
+// Overloads
+virtual	int			GetType()							{return(0);}
+
+virtual	void		RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
+virtual	void		RenderSelection(CCore *Core,Vector3 &ThisCam){};
+virtual	void		FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
+
+virtual	void		GUIInit(CCore *Core);
+virtual	void		GUIKill(CCore *Core);
+virtual	void		GUIUpdate(CCore *Core);
+virtual	void		GUIChanged(CCore *Core);
+
+virtual	void		Export(CCore *Core,CExport &Exp){};
+
+virtual	bool		LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)	{return(false);}
+virtual	bool		RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag)	{return(false);}
+virtual	bool		MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)						{return(false);}
+virtual	bool		Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0)					{return(false);}
+		CPoint		GetElemPos(int ID,int Width);
+
+// Local
+virtual	bool		CanClose()												{return(true);}
 
 protected:
-
 		CList<CElemSet>	SetList;
+		
 		bool			LoadFlag;
+		int				CurrentSet;
+		int				CursorPos;
+
+		int				MaxWidth,MaxHeight;
+		bool			BlankFlag,CentreFlag;
+
+		CGUIElemList	GUIElemList;
 
 };
 

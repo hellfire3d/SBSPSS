@@ -33,7 +33,7 @@ public:
 
 // Dialog Data
 	//{{AFX_DATA(CGUILayerShade)
-	enum { IDD = IDD_LAYERSHADE_GUI };
+	enum { IDD = IDD_LAYER_SHADE };
 	CEdit	m_R0;
 	CEdit	m_G0;
 	CEdit	m_B0;

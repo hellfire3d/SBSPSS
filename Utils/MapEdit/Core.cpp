@@ -15,11 +15,12 @@
 #include	"MainFrm.h"
 
 #include	"Core.h"
+#include	"Elem.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
 #include	"LayerCollision.h"
 #include	"LayerShade.h"
-#include	"LayerItem.h"
+#include	"LayerThing.h"
 #include	"utils.h"
 
 #include	"Export.h"
@@ -27,6 +28,8 @@
 #include	"GUIAddLayer.h"
 #include	"GUINewMap.h"
 
+
+GString		IconzFileName="Iconz.bmp";
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -41,12 +44,20 @@ CCore::CCore()
 		CurrentView=NULL;
 		CursorPos.x=CursorPos.y=0;
 		CurrentLayer=0;
-		
+
+GString	Filename;
+		IconBank=new CElemBank(16,16,false,false);
+
+		GetExecPath(Filename);
+		Filename+=IconzFileName;
+		IconBank->AddSet(Filename);
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
+		IconBank->CleanUp();
+		delete IconBank;
 int	ListSize=Layer.size();
 		for (int i=0; i<ListSize; i++) delete Layer[i];
 }
@@ -101,7 +112,7 @@ Vector3	DuffVector;
 		TRACE1("Load Version %i\n",Version);
 
 		File->Read(&MapCam,sizeof(Vector3));
-		if (Version<FileVersion)
+		if (Version<4)
 		{
 			File->Read(&MapCamOfs,sizeof(Vector3));
 			File->Read(&DuffVector,sizeof(Vector3));
@@ -134,7 +145,7 @@ int		LayerCount;
 				AddLayer(new CLayerShade(File,Version));
 				break;
 			case LAYER_TYPE_ITEM:
-				AddLayer(new CLayerItem(File,Version));
+				AddLayer(new CLayerThing(File,Version));
 				break;
 			default:
 				ASSERT(!"poos");
@@ -172,7 +183,6 @@ BOOL	F;
 		F=GridFlag;		File->Write(&F,sizeof(BOOL));
 		F=Is3dFlag;		File->Write(&F,sizeof(BOOL));
 
-
 // Layers
 int		LayerCount=Layer.size();
 		File->Write(&LayerCount,sizeof(int));
@@ -185,12 +195,6 @@ int		LayerCount=Layer.size();
 			Layer[i]->Save(File);
 		}
 	GetTileBank()->Save(File);
-/*
-CString	a=File->GetFilePath();
-char	Txt[256];
-		sprintf(Txt,"%s",a);
-	Export(Txt);
-*/
 }
 
 /*****************************************************************************/
@@ -217,44 +221,32 @@ Vector3	&ThisCam=GetCam();
 			UpdateAll();
 			return;
 		}
-//		if (GetTileBank()->NeedLoad()) GetTileBank()->LoadAllSets(this);
+		if (IconBank->NeedLoad()) IconBank->LoadAllSets(this);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 
-		if (IsSubView() || CurrentLayer->IsUnique())
-		{
-			CurrentLayer->Render(this,ThisCam,Is3dFlag);
-			if (GridFlag) CurrentLayer->RenderGrid(this,ThisCam,true);
-			CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
-		}
-		else
-		{
-			RenderLayers();
-		}
-		CurrentLayer->RenderCursor(this,ThisCam,Is3dFlag);
-// Get Cursor Pos
-		LastCursorPos=CursorPos;
-		CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
+		RenderLayers(IsSubView() || CurrentLayer->IsUnique());
 
 }
 
 /*****************************************************************************/
-void	CCore::RenderLayers()
+void	CCore::RenderLayers(bool OneShot)
 {
 Vector3	&ThisCam=GetCam();
 int		ListSize=Layer.size();
 int		StartLayer,EndLayer;
 
+		if (OneShot)
+		{
+			StartLayer=ActiveLayer;
+			EndLayer=StartLayer+1;
+		}
+		else
+		{
 		StartLayer=0;
 		EndLayer=ListSize;
-
-//		while (Layer[StartLayer]->IsUnique()) StartLayer++;
-
-//		if (Layer[ActiveLayer]->IsUnique())
-//		{
-//			StartLayer=ActiveLayer;
-//			EndLayer=StartLayer+1;
-//		}
+		while (Layer[StartLayer]->IsUnique()) StartLayer++;
+		}
 
 		for (int i=StartLayer; i<EndLayer; i++)
 		{
@@ -264,6 +256,10 @@ int		StartLayer,EndLayer;
 				if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
 			}
 		}
+		CurrentLayer->RenderCursor(this,ThisCam,Is3dFlag);
+// Get Cursor Pos
+		LastCursorPos=CursorPos;
+		CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
 
 }
 
@@ -419,7 +415,7 @@ CMainFrame		*Frm=(CMainFrame*)AfxGetMainWnd();
 CGUIMultiBar	*ParamBar=Frm->GetParamBar();
 
 			GUIRemoveAll();
-			GUIAdd(LayerList,IDD_LAYER_LIST_DIALOG);
+			GUIAdd(LayerList,IDD_LAYER_LIST);
 			CurrentLayer->GUIInit(this);
 			GUIUpdate();
 }
@@ -513,7 +509,7 @@ int		Idx;
 				Idx=AddLayer(new CLayerShade(SubType, Width,Height));
 				break;
 			case LAYER_TYPE_ITEM:
-				Idx=AddLayer(new CLayerItem(SubType, Width,Height));
+				Idx=AddLayer(new CLayerThing(SubType, Width,Height));
 				break;
 			default:
 				ASSERT(!"AddLayer - Invalid Layer Type");
@@ -669,6 +665,19 @@ Vector3	&ThisCam=GetCam();
 		ThisCam=DefaultCamPos;
 		UpdateView();
 }
+/*****************************************************************************/
+void	CCore::GetExecPath(GString &Path)
+{
+// Get application path
+char	ExeFilename[2048];
+GFName	Exe;
+		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
+		Exe=ExeFilename;
+		Exe.File(0);
+ 		Exe.Ext(0);
+		Path=Exe.FullName();
+}
+
 
 /*****************************************************************************/
 /*** GUI *********************************************************************/

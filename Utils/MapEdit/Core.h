@@ -19,7 +19,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-const	s32		FileVersion=4;
+const	s32		FileVersion=5;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
@@ -41,7 +41,7 @@ public:
 		void					Save(CFile *File);
 		bool					Question(char *Txt);
 		void					Render(bool ForceRender=FALSE);
-		void					RenderLayers();
+		void					RenderLayers(bool OneShot=false);
 		void					Export(char *Filename);
 
 // View Stuff
@@ -114,7 +114,8 @@ public:
 		void					PasteSelection();
 
 		void					ResetView();
-
+		CElemBank				*GetIconBank()					{return(IconBank);}
+		void					GetExecPath(GString &Path);
 private:
 		CMapEditView			*CurrentView;
 		CPoint					CurrentMousePos,LastMousePos;
@@ -135,7 +136,9 @@ private:
 		bool					SpareFlag;
 		bool					GridFlag;
 		bool					Is3dFlag;
-		
+
+		CElemBank				*IconBank;
+	
 };
 
 /*****************************************************************************/
