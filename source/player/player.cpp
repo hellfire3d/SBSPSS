@@ -1580,6 +1580,18 @@ void	CPlayer::springPlayerUp()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int haha=25;
+void	CPlayer::floatPlayerUp()
+{
+	m_moveVelocity.vy-=haha;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::teleportTo(int _x,int _y)
 {
 	DVECTOR	pos={_x,_y};
@@ -2400,7 +2412,6 @@ int		CPlayer::moveVertical(int _moveDistance)
 	}
 	else if(_moveDistance<0)
 	{
-		// Must be below ground
 		// Are we jumping into an impassable block?
 		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
@@ -2409,6 +2420,14 @@ int		CPlayer::moveVertical(int _moveDistance)
 			_moveDistance=0;
 			hitGround=true;
 		}
+		else if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		   getHeightFromGround(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)<=0)
+		{
+			pos.vy=((pos.vy+_moveDistance)&0xfff0);
+			_moveDistance=0;
+			hitGround=true;
+		}
+	
 	}
 	else
 	{

@@ -244,7 +244,8 @@ public:
 	int				getAnimNo();
 	void			setAnimNo(int _animNo);
 
-	void			springPlayerUp();
+	void			springPlayerUp();		// Springy branches
+	void			floatPlayerUp();		// Geysers
 	void			teleportTo(int _x,int _y);
 
 private:
@@ -425,6 +426,7 @@ public:
 	{
 		COLSIZE_BASE_WIDTH=30,
 		COLSIZE_BASE_HEIGHT=60,
+		HEIGHT_FOR_HEAD_COLLISION=64,
 	};
 	void			resetPlayerCollisionSizeToBase();
 	void			setPlayerCollisionSize(int _x,int _y,int _w,int _h);
