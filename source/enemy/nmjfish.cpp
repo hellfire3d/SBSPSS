@@ -190,6 +190,22 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool CNpcMotherJellyfishEnemy::alwaysThink()
+{
+	switch( m_state )
+	{
+		case MOTHER_JELLYFISH_BEGIN_CIRCLE:
+		case MOTHER_JELLYFISH_CIRCLE:
+		case MOTHER_JELLYFISH_EXIT:
+			return( true );
+
+		default:
+			return( false );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
 	switch( m_state )

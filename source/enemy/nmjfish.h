@@ -32,6 +32,7 @@ public:
 	virtual void		renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 	void				setupWaypoints( sThingActor *ThisActor );
+	bool				alwaysThink();
 protected:
 	void				processClose( int _frames );
 	void				processMovement( int _frames );
