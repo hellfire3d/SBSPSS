@@ -143,7 +143,6 @@ void TranslationDatabase::initialise(bool includeIds)
 		}
 	else
 		s_idDatabase=NULL;
-
 }
 
 /*----------------------------------------------------------------------
@@ -185,11 +184,17 @@ void TranslationDatabase::loadLanguage(unsigned int langType)
 char const * TranslationDatabase::getString(unsigned int strNum)
 {
 	ASSERT(s_loaded);
-	if (s_idShow)
-		return(s_idDatabase->getString(strNum));
+	if(strNum!=NO_STRING)
+	{
+		if (s_idShow)
+			return(s_idDatabase->getString(strNum));
+		else
+			return(s_database->getString(strNum));
+	}
 	else
-		return(s_database->getString(strNum));
-
+	{
+		return "\0";
+	}
 }
 
 /*----------------------------------------------------------------------

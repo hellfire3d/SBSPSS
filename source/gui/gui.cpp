@@ -185,6 +185,18 @@ void CGUIObject::think(int _frames)
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObject::recalc()
+{
+	ASSERT(this==m_this);
+}
+
+
 
 
 /*----------------------------------------------------------------------
@@ -207,7 +219,13 @@ extern void guiOpen()
   ---------------------------------------------------------------------- */
 extern void guiClose()
 {
-	ASSERT(CGUIObject::s_llBase);
+	// Dump everything automatically
+	// Don't walk the linked list here but keep removing the head since frame
+	// objects remove their own children (PKG or do they?)
+	while(CGUIObject::s_llBase)
+	{
+		CGUIObject::s_llBase->shutdown();
+	}
 }
 
 

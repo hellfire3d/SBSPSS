@@ -51,8 +51,9 @@ enum
 	-------------------- */
 class TranslationDatabase
 {
-private:
 public:
+	enum{ NO_STRING=60000 };			// PKG - This is a special ID
+
 	static void initialise(bool includeIds);
 	static void loadLanguage(unsigned int langType);
 	static char const * getString(unsigned int strNum);

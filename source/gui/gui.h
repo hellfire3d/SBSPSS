@@ -54,29 +54,29 @@ public:
 	virtual void		init(GUIId _id);
 	virtual void		shutdown();
 
-	virtual void		setObjectX(int _x)							{m_x=_x;recalc();}
-	virtual void		setObjectY(int _y)							{m_y=_y;recalc();}
-	virtual void		setObjectW(int _w)							{m_w=_w;recalc();}
-	virtual void		setObjectH(int _h)							{m_h=_h;recalc();}
+	void				setObjectX(int _x)							{m_x=_x;recalc();}
+	void				setObjectY(int _y)							{m_y=_y;recalc();}
+	void				setObjectW(int _w)							{m_w=_w;recalc();}
+	void				setObjectH(int _h)							{m_h=_h;recalc();}
 	void				setObjectXY(int _x,int _y)					{setObjectX(_x);setObjectY(_y);}
 	void				setObjectWH(int _w,int _h)					{setObjectW(_w);setObjectH(_h);}
 	void				setObjectXYWH(int _x,int _y,int _w,int _h)	{setObjectXY(_x,_y);setObjectWH(_w,_h);}
 
 	virtual void		render();
 	virtual void		think(int _frames);
-	virtual void		recalc()									{;}
+	virtual void		recalc();
 
 	void				setFlags(GUI_FLAGS _flags)					{m_flags|=_flags;}
 	void				clearFlags(GUI_FLAGS _flags)				{m_flags&=_flags^-1;}
 	int					getFlags(GUI_FLAGS _flags)					{return (m_flags&_flags)!=0;}
 
-	virtual void		select()									{setFlags(FLAG_SELECTED);}
-	virtual void		unselect()									{clearFlags(FLAG_SELECTED);}
-	virtual int			isSelected()								{return getFlags(FLAG_SELECTED);}
-
-	virtual void		hide()										{setFlags(FLAG_HIDDEN);}
-	virtual void		unhide()									{clearFlags(FLAG_HIDDEN);}
-	virtual int			isHidden()									{return getFlags(FLAG_HIDDEN);}
+	// Quick access functions to the most frequently used flags
+	void				select()									{setFlags(FLAG_SELECTED);}
+	void				unselect()									{clearFlags(FLAG_SELECTED);}
+	int					isSelected()								{return getFlags(FLAG_SELECTED);}
+	void				hide()										{setFlags(FLAG_HIDDEN);}
+	void				unhide()									{clearFlags(FLAG_HIDDEN);}
+	int					isHidden()									{return getFlags(FLAG_HIDDEN);}
 
 	
 protected:

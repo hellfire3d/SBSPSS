@@ -39,3 +39,10 @@ eng=
 ; Debugging text
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------
+[STR__PAULS_TEST_STRING_1]
+eng=This is a test string.
+[STR__PAULS_TEST_STRING_2]
+eng=This is another test string with more text.
+[STR__PAULS_TEST_STRING_3]
+eng=Finally, another example containing wordage of increased length.
+

@@ -335,7 +335,7 @@ int FontBank::printChar( char _char,int _x,int _y )
   ---------------------------------------------------------------------- */
 int FontBank::getStringWidth( char * text )
 {
-	return getStrWrapLen( text, VidGetScrW() );
+	return getStrWrapLen( text, m_printArea.w );
 }
 
 /*----------------------------------------------------------------------

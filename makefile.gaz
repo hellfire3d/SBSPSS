@@ -67,6 +67,10 @@ gfx_src :=			prim \
 #					anim \
 #					bilboard
 
+gui_src :=			gui \
+					greadout \
+					gtextbox
+
 locale_src :=		textdbase
 
 mem_src :=			memory
