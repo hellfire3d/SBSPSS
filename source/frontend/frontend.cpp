@@ -173,11 +173,6 @@ void CFrontEndScene::init()
 	m_font=new ("frontendfont") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
-
-#ifndef __E3__
-	CGameSlotManager::eraseGameSlot(0);
-	CGameSlotManager::setActiveSlot(0);
-#endif
 }
 
 

@@ -112,8 +112,8 @@
 #include <ACTOR_SPONGEBOB_GLASSES_Anim.h>
 #endif
 
-//#ifndef	__ANIM_SPONGEBOB_BUBBLEWAND_HEADER__
-//#include <ACTOR_SPONGEBOB_BUBBLEWAND_Anim.h>
+//#ifndef	__ANIM_SPONGEBOB_WAND_HEADER__
+//#include <ACTOR_SPONGEBOB_WAND_Anim.h>
 //#endif
 
 #ifndef	__ANIM_SPONGEBOB_JELLYFISH_HEADER__
@@ -325,7 +325,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_NET_TEETERBACK,					// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_NET_TEETERFRONT,					// ANIM_SPONGEBOB_TEETERFRONT,
 	ANIM_SPONGEBOB_NET_SWIPE,						// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_NET_DEATHFORWARDS,				// ANIM_SPONGEBOB_DEATHFORWARDS,
+	ANIM_SPONGEBOB_NET_DEATHSQUASH,					// ANIM_SPONGEBOB_DEATHSQUASH,
 	ANIM_SPONGEBOB_NET_DEATHSPIN,					// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	-1,												// ANIM_SPONGEBOB_FIREEND,
@@ -356,7 +359,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_CORALBLOWER_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_CORALBLOWER_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
 	-1,												// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_CORALBLOWER_DEATHFORWARDS,		// ANIM_SPONGEBOB_DEATHFORWARDS,
+	ANIM_SPONGEBOB_CORALBLOWER_DEATHSQUASH,			// ANIM_SPONGEBOB_DEATHSQUASH,
 	ANIM_SPONGEBOB_CORALBLOWER_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	ANIM_SPONGEBOB_CORALBLOWER_FIREEND,				// ANIM_SPONGEBOB_FIREEND,
@@ -387,7 +393,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_JELLYLAUNCHER_TEETERBACK,		// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_JELLYLAUNCHER_TEETERFRONT,		// ANIM_SPONGEBOB_TEETERFRONT,
 	-1,												// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_DEATHFORWARDS,		// ANIM_SPONGEBOB_DEATHFORWARDS,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_DEATHSQUASH,		// ANIM_SPONGEBOB_DEATHSQUASH,
 	ANIM_SPONGEBOB_JELLYLAUNCHER_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	ANIM_SPONGEBOB_JELLYLAUNCHER_FIREEND,			// ANIM_SPONGEBOB_FIREEND,
@@ -418,7 +427,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_GLASSES_TEETERBACK,				// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_GLASSES_TEETERFRONT,				// ANIM_SPONGEBOB_TEETERFRONT,
 	ANIM_SPONGEBOB_GLASSES_SWIPE,					// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_GLASSES_DEATHFORWARDS,			// ANIM_SPONGEBOB_DEATHFORWARDS,
+	ANIM_SPONGEBOB_GLASSES_DEATHSQUASH,				// ANIM_SPONGEBOB_DEATHSQUASH,
 	ANIM_SPONGEBOB_GLASSES_DEATHSPIN,				// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	ANIM_SPONGEBOB_GLASSES_BALLOONJUMP,				// ANIM_SPONGEBOB_BALLOONJUMP,
 	ANIM_SPONGEBOB_GLASSES_BLOWBUBBLE,				// ANIM_SPONGEBOB_BLOWBUBBLE,
 	ANIM_SPONGEBOB_GLASSES_FIREEND,					// ANIM_SPONGEBOB_FIREEND,
@@ -433,8 +445,8 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 
 	// PLAYER_ADDON_BUBBLEWAND,
 	{
-	-1,		// ANIM_SPONGEBOB_BUTTBOUNCEEND,
-	-1,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	-1,				// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	-1,			// ANIM_SPONGEBOB_BUTTBOUNCESTART,
 	-1,				// ANIM_SPONGEBOB_FALL,
 	-1,				// ANIM_SPONGEBOB_GETUP,
 	-1,			// ANIM_SPONGEBOB_HITGROUND,
@@ -449,9 +461,12 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,			// ANIM_SPONGEBOB_TEETERBACK,
 	-1,			// ANIM_SPONGEBOB_TEETERFRONT,
 	-1,				// ANIM_SPONGEBOB_SWIPE,
+	-1,			// ANIM_SPONGEBOB_DEATHFORWARDS,
+	-1,				// ANIM_SPONGEBOB_DEATHSQUASH,
 	-1,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
-	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,					// ANIM_SPONGEBOB_BLOWBUBBLE,
 	-1,										// ANIM_SPONGEBOB_FIREEND,
 	-1,										// ANIM_SPONGEBOB_FIRESTART,
 	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
@@ -480,7 +495,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_JELLYFISH_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_JELLYFISH_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
 	ANIM_SPONGEBOB_JELLYFISH_SWIPE,					// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_JELLYFISH_DEATHFORWARDS,			// ANIM_SPONGEBOB_DEATHFORWARDS,
+	ANIM_SPONGEBOB_JELLYFISH_DEATHSQUASH,			// ANIM_SPONGEBOB_DEATHSQUASH,
 	ANIM_SPONGEBOB_JELLYFISH_DEATHSPIN,				// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	-1,												// ANIM_SPONGEBOB_FIREEND,
@@ -511,7 +529,10 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_TEETERBACK,
 	-1,												// ANIM_SPONGEBOB_TEETERFRONT,
 	-1,												// ANIM_SPONGEBOB_SWIPE,
+	-1,												// ANIM_SPONGEBOB_DEATHFORWARDS,
+	-1,												// ANIM_SPONGEBOB_DEATHSQUASH,
 	-1,												// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_DEATHDRY
 	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	-1,												// ANIM_SPONGEBOB_FIREEND,
@@ -650,7 +671,6 @@ void	CPlayer::think(int _frames)
 	int	i;
 
 
-#if		!defined(__USER_CDBUILD__)
 if(PadGetDown(0)&PAD_L1)
 {
 	oldmode=m_currentMode;
@@ -661,7 +681,6 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 	newmode=oldmode;
 	oldmode=-1;
 }
-#endif
 
 #ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
@@ -878,7 +897,7 @@ if(newmode!=-1)
 		m_healthWaterLevel-=waterDrainSpeed*_frames;
 		if(m_healthWaterLevel<=0)
 		{
-			dieYouPorousFreak();
+			dieYouPorousFreak(DEATHTYPE__DRYUP);
 		}
 	}
 
@@ -986,8 +1005,14 @@ int stateDebugY=60;
 #endif
 
 #ifdef __USER_paul__
-#define NUM_LASTPOS	50
-static DVECTOR	lastpos[NUM_LASTPOS];
+#define NUM_LASTPOS	100
+typedef struct
+{
+	int	vx,vy;
+	int	h;
+	int	onp;
+}POSMEM;
+static POSMEM	lastpos[NUM_LASTPOS];
 static int		lastposnum=0;
 #endif
 
@@ -1001,7 +1026,6 @@ void	CPlayer::render()
 	CPlayerThing::render();
 
 
-#ifdef __E3__
 #ifdef _STATE_DEBUG_
 char buf[100];
 #ifdef __USER_paul__
@@ -1011,13 +1035,12 @@ sprintf(buf,"Pos: %04d,%04d",Pos.vx,Pos.vy);
 #endif
 m_fontBank->print(stateDebugX,stateDebugY,buf);
 #endif
-#endif
 
 
 #ifdef __USER_paul__
 if(PadGetDown(0)&PAD_R1)
 {
-	DVECTOR	clear={0,0};
+	POSMEM	clear={0,0,0,false};
 	for(int i=0;i<NUM_LASTPOS;i++)
 	{
 		lastpos[i]=clear;
@@ -1026,15 +1049,38 @@ if(PadGetDown(0)&PAD_R1)
 if(Pos.vx!=lastpos[lastposnum].vx||Pos.vy!=lastpos[lastposnum].vy)
 {
 	lastposnum=(lastposnum+1)%NUM_LASTPOS;
-	lastpos[lastposnum]=Pos;
+	POSMEM	*p=&lastpos[lastposnum];
+	p->vx=Pos.vx;
+	p->vy=Pos.vy;
+	p->onp=isOnPlatform()!=NULL;
+	if(p->onp)
+	{
+		p->h=getHeightFromPlatformNoGround(Pos.vx,Pos.vy,150);
+	}
+	else
+	{
+		p->h=getHeightFromGround(Pos.vx,Pos.vy,150);
+	}
 }
+POSMEM	*p=lastpos;
 for(int i=0;i<NUM_LASTPOS;i++)
 {
 	int	x,y;
-	x=lastpos[i].vx-m_cameraPos.vx;
-	y=lastpos[i].vy-m_cameraPos.vy;
+	x=p->vx-m_cameraPos.vx;
+	y=p->vy-m_cameraPos.vy;
 	DrawLine(x-4,y-4,x+4,y+4,0,0,255,0);
 	DrawLine(x-4,y+4,x+4,y-4,0,0,255,0);
+	y=y+p->h;
+	if(p->onp)
+	{
+		DrawLine(x-6,y,x+6,y,255,0,255,0);
+	}
+	else
+	{
+		DrawLine(x-6,y,x+6,y,128,0,255,0);
+	}
+
+	p++;
 }
 #endif
 
@@ -1304,6 +1350,8 @@ void CPlayer::registerAddon(PLAYER_ADDONS _addon)
   ---------------------------------------------------------------------- */
 void CPlayer::setMode(PLAYER_MODE _mode)
 {
+	int	state;
+
 	if(_mode==PLAYER_MODE_DEAD)
 	{
 		ASSERT(m_currentMode!=PLAYER_MODE_DEAD);
@@ -1311,8 +1359,22 @@ void CPlayer::setMode(PLAYER_MODE _mode)
 	}
 
 	resetPlayerCollisionSizeToBase();
+
+	if(m_currentPlayerModeClass)
+	{
+		state=m_currentPlayerModeClass->getState();
+	}
+	else
+	{
+		state=STATE_IDLE;
+	}
 	m_currentMode=_mode;
 	m_currentPlayerModeClass=s_playerModes[_mode];
+	if(!m_currentPlayerModeClass->setState(state))
+	{
+		m_currentPlayerModeClass->setState(STATE_IDLE);
+		m_moveVelocity.vx=m_moveVelocity.vy=0;
+	}
 	m_currentPlayerModeClass->enter();
 }
 
@@ -1815,10 +1877,11 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayer::dieYouPorousFreak()
+void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 {
 	ASSERT(m_currentMode!=PLAYER_MODE_DEAD);
 
+	m_deathType=_deathType;
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 	setMode(PLAYER_MODE_DEAD);
 }

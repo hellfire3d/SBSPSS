@@ -447,7 +447,9 @@ void	CLevel::initThings(int _respawningLevel)
 					createThisPickup=false;
 				}
 
-				if((PICKUP_TYPE)ItemList->Type==PICKUP__NET&&_respawningLevel)
+				if(((PICKUP_TYPE)ItemList->Type==PICKUP__NET||
+					(PICKUP_TYPE)ItemList->Type==PICKUP__HELMET)&&
+				   _respawningLevel)
 				{
 					createThisPickup=false;
 				}

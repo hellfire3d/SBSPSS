@@ -145,12 +145,10 @@ void CFrontEndMainTitles::init()
 										50,20,200,20,
 										STR__FRONTEND__OPTIONS,
 										&m_gotoOptionsFlag,true);
-#ifdef __E3__
 	CGUIFactory::createValueButtonFrame(m_mainMenu,
 										50,40,200,20,
 										STR__FRONTEND__CREDITS,
 										&m_gotoCreditsFlag,true);
-#endif
 }
 
 /*----------------------------------------------------------------------

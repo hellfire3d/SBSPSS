@@ -183,8 +183,6 @@ void	CPlayerMode::respawn()							{m_player->respawn();}
 void	CPlayerModeBase::enter()
 {
 	m_fallFrames=0;
-	setState(STATE_IDLE);
-	zeroMoveVelocity();
 }
 
 /*----------------------------------------------------------------------

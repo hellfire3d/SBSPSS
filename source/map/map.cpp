@@ -134,7 +134,6 @@ extern int s_globalLevelSelectThing;
   ---------------------------------------------------------------------- */
 void CMapScene::init()
 {
-#ifdef __E3__
 	m_font=new ("map screen font") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
@@ -150,10 +149,9 @@ void CMapScene::init()
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
 	generateMapScreenImage();
 	SetScreenImage((u8*)m_screenImage);
-#endif
 
 	m_readyToExit=false;
-//	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn(CFader::BLACK_FADE);
 }
 
 
@@ -165,12 +163,10 @@ void CMapScene::init()
   ---------------------------------------------------------------------- */
 void CMapScene::shutdown()
 {
-#ifdef __E3__
 	ClearScreenImage();
 	MemFree(m_screenImage);
 	m_spriteBank->dump();		delete m_spriteBank;
 	m_font->dump();				delete m_font;
-#endif
 }
 
 
@@ -182,7 +178,6 @@ void CMapScene::shutdown()
   ---------------------------------------------------------------------- */
 void CMapScene::render()
 {
-#ifdef __E3__
 	int			i,x,y,xpos,ypos;
 	int			compilerGetsComfused;
 	char		spatCount[10];
@@ -223,7 +218,6 @@ m_font->setColour(0,255,0);
 m_font->print(24,24,buf);
 m_font->setColour(0,0,0);
 m_font->print(25,25,buf);
-#endif
 }
 
 
@@ -235,7 +229,6 @@ m_font->print(25,25,buf);
   ---------------------------------------------------------------------- */
 void CMapScene::think(int _frames)
 {
-#ifdef __E3__
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
 		// Change chapter
@@ -314,14 +307,6 @@ void CMapScene::think(int _frames)
 			GameState::setNextScene(&GameScene);
 		}
 	}
-#else
-if(!m_readyToExit)
-{
-	s_globalLevelSelectThing=0;
-	m_readyToExit=true;
-	GameState::setNextScene(&GameScene);
-}
-#endif
 }
 
 

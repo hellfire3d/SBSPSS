@@ -57,8 +57,24 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeDead::enter()
 {
+	int	deathAnim;
+
 	m_deadTime=0;
-	m_player->setAnimNo(ANIM_SPONGEBOB_DEATHSPIN);
+	
+	switch(m_player->getDeathType())
+	{
+		default:
+		case DEATHTYPE__NORMAL:
+			deathAnim=ANIM_SPONGEBOB_DEATHSPIN;
+			break;
+		case DEATHTYPE__DRYUP:
+			deathAnim=ANIM_SPONGEBOB_DEATHDRY;
+			break;
+		case DEATHTYPE__SQUASH:
+			deathAnim=ANIM_SPONGEBOB_DEATHSQUASH;
+			break;
+	}
+	m_player->setAnimNo(deathAnim);
 }
 
 /*----------------------------------------------------------------------

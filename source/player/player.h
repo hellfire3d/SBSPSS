@@ -127,6 +127,13 @@ typedef enum
 
 typedef enum
 {
+	DEATHTYPE__NORMAL,
+	DEATHTYPE__DRYUP,
+	DEATHTYPE__SQUASH,
+} DEATH_TYPE;
+
+typedef enum
+{
 	REACT__LEFT=-1,
 	REACT__UP=0,
 	REACT__RIGHT=+1,
@@ -309,6 +316,8 @@ private:
 	PLAYER_MODE					m_currentMode;
 	PLAYER_MODE					m_lastModeBeforeDeath;
 
+public:
+	DEATH_TYPE		getDeathType()				{return m_deathType;}
 
 private:
 	int				m_lives;
@@ -316,7 +325,8 @@ private:
 	int				m_healthWaterLevel;
 	int				m_healthReactFrames;
 
-	void			dieYouPorousFreak();
+	void			dieYouPorousFreak(DEATH_TYPE _deathType=DEATHTYPE__NORMAL);
+	DEATH_TYPE		m_deathType;
 
 
 	void			updatePadInput();
