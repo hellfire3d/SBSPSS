@@ -147,6 +147,10 @@
 #include "platform\pfishhk3.h"
 #endif
 
+#ifndef __PLATFORM_PRBRIDGE_H__
+#include "platform\prbridge.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -341,6 +345,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_FISH_HOOK_3_PLATFORM:
 		{
 			platform = new ("fish hook 3 platform") CNpcFishHook3Platform;
+			break;
+		}
+
+		case NPC_RISING_BRIDGE_PLATFORM:
+		{
+			platform = new ("rising bridge platform") CNpcRisingBridgePlatform;
 			break;
 		}
 

@@ -122,7 +122,8 @@ platform_src :=		platform \
 					psbarrel \
 					pjellfsh \
 					pclam \
-					pfishhk3
+					pfishhk3 \
+					prbridge
 
 hazard_src :=		hazard \
 					hfalling \
@@ -275,7 +276,8 @@ triggers_src :=		tcamlock \
 					tlook \
 					trestart \
 					tteleprt \
-					twater
+					twater \
+					tplatfrm
 
 utils_src :=		utils \
 					sincos \

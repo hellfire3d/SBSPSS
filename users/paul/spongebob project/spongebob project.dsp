@@ -1397,6 +1397,14 @@ SOURCE=..\..\..\source\platform\praft.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\prbridge.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\prbridge.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pretract.cpp
 # End Source File
 # Begin Source File
@@ -1838,6 +1846,14 @@ SOURCE=..\..\..\source\triggers\tlook.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tlook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tplatfrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tplatfrm.h
 # End Source File
 # Begin Source File
 
