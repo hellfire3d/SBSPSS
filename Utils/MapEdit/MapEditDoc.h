@@ -98,6 +98,7 @@ protected:
 	afx_msg void OnEditCopy();
 	afx_msg void OnEditPaste();
 	afx_msg void On2d3dToggle();
+	afx_msg void OnResetView();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

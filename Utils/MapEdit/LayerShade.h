@@ -15,6 +15,10 @@ class	CLayerShade : public CLayer
 {
 
 public:
+		enum
+		{
+			LAYER_SHADE_RGB_MAX=4,
+		};
 		CLayerShade(){};
 		CLayerShade(int SubType,int Width,int Height);					// New Layer
 		CLayerShade(CFile *File,int Version);							// Load Layer
@@ -60,7 +64,7 @@ protected:
 		
 		CLayerShadeGUI	ShadeDlg;
 
-		RGBQUAD			RGB[2];
+		RGBQUAD			RGB[LAYER_SHADE_RGB_MAX];
 };
 
 /*****************************************************************************/

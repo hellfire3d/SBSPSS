@@ -68,6 +68,7 @@ public:
 		void		GUIUpdate(CCore *Core);
 
 		BOOL		IsTileValid(int Set,int Tile);
+		bool		CanClose()							{return(SelStart==-1);}
 
 		void		SetCollision(bool f);
 		CTileSet	&GetSet(int Set)					{return(TileSet[Set]);}

@@ -108,6 +108,8 @@ BEGIN
     END
     POPUP "&View"
     BEGIN
+        MENUITEM "Reset View",                  ID_RESET_VIEW
+        MENUITEM SEPARATOR
         MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
         MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
     END
@@ -157,6 +159,7 @@ END
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
+    "0",            ID_RESET_VIEW,          VIRTKEY, NOINVERT
     187,            ID_ZOOM_IN,             VIRTKEY, NOINVERT
     189,            ID_ZOOM_OUT,            VIRTKEY, NOINVERT
     219,            ID_ACTIVEBRUSH_LEFT,    VIRTKEY, NOINVERT

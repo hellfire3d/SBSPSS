@@ -662,7 +662,35 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 /*****************************************************************************/
 void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
-		Exp.ExportLayerTile(Core,GetName(),SubType,Map);
+int				Width=Map.GetWidth();
+int				Height=Map.GetHeight();
+CTileBank		&TileBank=Core->GetTileBank();
+sExpTile		BlankElem={0,0,0,0};
+
+		Exp.ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
+
+		Exp.AddTile(BlankElem);	// Ensure blank tile is present
+		
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem		&MapElem=Map.Get(X,Y);
+				CTile			&ThisTile=Core->GetTile(MapElem.Set,MapElem.Tile);
+				sExpLayerTile	OutElem;
+				sExpTile		OutTile;
+
+				OutTile.Set=MapElem.Set;
+				OutTile.Tile=MapElem.Tile;
+				OutTile.TriCount=0;
+				OutTile.XOfs=ThisTile.GetTexXOfs();
+				OutTile.YOfs=ThisTile.GetTexYOfs();
+				
+				OutElem.Tile=Exp.AddTile(OutTile);
+				OutElem.Flags=MapElem.Flags;
+				Exp.Write(&OutElem,sizeof(sExpLayerTile));
+			}
+		}
 }
 
 /*****************************************************************************/

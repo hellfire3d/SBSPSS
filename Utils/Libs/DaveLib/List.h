@@ -46,6 +46,7 @@ public:
 	void	clear()					{List.clear();}
 	void	resize(int i)			{List.resize(i);}
 	void	erase(int i)			{List.erase(List.begin()+i);}
+	void	insert(int i,T &Item)	{List.insert(List.begin()+i,Item);}
 //	int		begin()					{return(List.begin);}
 
 

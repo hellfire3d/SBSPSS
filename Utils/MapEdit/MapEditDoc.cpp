@@ -33,9 +33,10 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
+	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
-	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
+	ON_COMMAND(ID_RESET_VIEW, OnResetView)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -71,6 +72,7 @@ void CMapEditDoc::OnCloseDocument()
 {
 		Core.GUIRemoveAll();	
 		CDocument::OnCloseDocument();
+		theApp.CloseDoc(this);
 }
 
 
@@ -186,7 +188,7 @@ void	CMapEditDoc::OnActivebrushRight() 										{Core.ActiveBrushRight();}
 void	CMapEditDoc::On2d3dToggle()												{Core.Toggle2d3d();}
 void	CMapEditDoc::OnZoomIn()													{Core.Zoom(-0.1f); UpdateView();}
 void	CMapEditDoc::OnZoomOut()												{Core.Zoom(+0.1f); UpdateView();}
-
+void	CMapEditDoc::OnResetView()												{Core.ResetView();}
 
 /*********************************************************************************/
 /*********************************************************************************/
@@ -294,4 +296,3 @@ void	CMapEditDoc::FocusView()
 {
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
-

@@ -26,6 +26,7 @@ public:
 	CMapEditApp();
 
 	void		SetCurrent(CMapEditDoc *Cur);
+	void		CloseDoc(CMapEditDoc *Cur);
 	CMapEditDoc	*GetCurrent()
 	{
 		return(CurrentDoc);

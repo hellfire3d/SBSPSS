@@ -169,6 +169,10 @@ void	CLayerShade::GUIChanged(CCore *Core)
 /*****************************************************************************/
 void	CLayerShade::Export(CCore *Core,CExport &Exp)
 {
-//		Exp.ExportLayerTile(Core,GetName(),SubType,Map);
+		Exp.ExportLayerHeader(LAYER_TYPE_SHADE,SubType,Width,Height);
+		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
+		{
+			Exp.Write(&RGB[i],sizeof(RGBQUAD));
+		}
 }
 

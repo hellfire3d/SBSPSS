@@ -30,7 +30,6 @@ CExport::CExport(char *Filename)
 // Write Dummy File Header
 
 		fwrite(&FileHdr,sizeof(sExpFileHdr),1,File);
-//		for (int i=0;i<EXPORT_LAYER_COUNT; i++) fwrite(&LayerCount,sizeof(int),1,File);
 }
 
 /*****************************************************************************/
@@ -52,25 +51,41 @@ int		LayerCount=LayerOfs.size();
 }
 
 /*****************************************************************************/
-/*** Tile Map ****************************************************************/
+void	CExport::Write(void *Addr,int Len)
+{
+		fwrite(Addr,Len,1,File);
+}
+
 /*****************************************************************************/
-void	CExport::ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map)
+int		CExport::ExportLayerHeader(int Type,int SubType,int Width,int Height)
 {
 sExpLayerHdr	LayerHdr;
+int				ThisFilePos=ftell(File);
+
+		LayerOfs.push_back(ThisFilePos);
+
+		LayerHdr.Type=Type;
+		LayerHdr.SubType=SubType;
+		LayerHdr.Width=Width;
+		LayerHdr.Height=Height;
+		fwrite(&LayerHdr,sizeof(sExpLayerHdr),1,File);
+
+		return(ThisFilePos);
+}
+
+/*****************************************************************************/
+/*** Tile Map ****************************************************************/
+/*****************************************************************************/
+/*
+void	CExport::ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map)
+{
 int				Width=Map.GetWidth();
 int				Height=Map.GetHeight();
-int				ThisFilePos=ftell(File);
 CTileBank		&TileBank=Core->GetTileBank();
 sExpTile		BlankElem={0,0,0,0};
 
 		TRACE1("LayerTile Ofs %i\n",ThisFilePos);
-		LayerOfs.push_back(ThisFilePos);
-
-		LayerHdr.Type=LAYER_TYPE_TILE;
-		LayerHdr.SubType=SubType;
-		LayerHdr.Width=Map.GetWidth();
-		LayerHdr.Height=Map.GetHeight();
-		fwrite(&LayerHdr,sizeof(sExpLayerHdr),1,File);
+		ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
 
 		UsedTileList.Add(BlankElem);	// Ensure blank tile is present
 		
@@ -95,27 +110,21 @@ sExpTile		BlankElem={0,0,0,0};
 			}
 		}
 }
-
+*/
 /*****************************************************************************/
 /*** Collision Layer *********************************************************/
 /*****************************************************************************/
+/*
 void	CExport::ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map)
 {
-sExpLayerHdr	LayerHdr;
 int				Width=Map.GetWidth();
 int				Height=Map.GetHeight();
-int				ThisFilePos=ftell(File);
 u8				OutElem;
 
 		TRACE1("LayerCollision Ofs %i\n",ThisFilePos);
-		LayerOfs.push_back(ThisFilePos);
-
-		LayerHdr.Type=LAYER_TYPE_COLLISION;
-		LayerHdr.SubType=SubType;
-		LayerHdr.Width=Map.GetWidth();
-		LayerHdr.Height=Map.GetHeight();
-		fwrite(&LayerHdr,sizeof(sExpLayerHdr),1,File);
 	
+		ExportLayerHeader(LAYER_TYPE_COLLISION,SubType,Width,Height);
+
 		for (int Y=0; Y<Height; Y++)
 		{
 			for (int X=0; X<Width; X++)
@@ -131,7 +140,7 @@ u8				OutElem;
 			}
 		}
 }
-
+*/
 /*****************************************************************************/
 /*** Tiles *******************************************************************/
 /*****************************************************************************/

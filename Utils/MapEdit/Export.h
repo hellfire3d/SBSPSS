@@ -25,8 +25,9 @@ public:
 		CExport(char *Filename);
 		~CExport();
 
-		void	ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map);
-		void	ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map);
+		void	Write(void *Addr,int Len);
+		int		ExportLayerHeader(int Type,int SubType,int Width,int Height);
+		int		AddTile(sExpTile &Tile)					{return(UsedTileList.Add(Tile));}
 
 		void	ExportTiles(CCore *Core);
 		void	ExportStrList(CCore *Core);
@@ -38,7 +39,6 @@ protected:
 
 		sExpFileHdr			FileHdr;
 		
-//		int					LayerCount;
 		CList<int>			LayerOfs;
 
 		CList<sExpTri>		TriList;

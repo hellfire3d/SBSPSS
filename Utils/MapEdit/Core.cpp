@@ -27,6 +27,8 @@
 #include	"Export.h"
 #include	"LayerList.h"
 
+const Vector3	DefaultCamPos(0.0f,0.0f,0.9f);
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -62,8 +64,8 @@ int		Width,Height;
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
 
 		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
-		MapCam.Zero();
-		TileCam.Zero();
+		MapCam=DefaultCamPos;
+		TileCam=DefaultCamPos;
 		TileViewFlag=FALSE;
 		GridFlag=TRUE;
 		Is3dFlag=TRUE;
@@ -559,6 +561,8 @@ void	CCore::UpdateGrid(BOOL Toggle)
 void	CCore::UpdateTileView(BOOL Toggle)
 {
 		if (!Layer[ActiveLayer]->HasTileView()) return;
+		if (TileViewFlag && !TileBank.CanClose()) return;
+
 		if (Toggle) 
 		{
 			TileViewFlag=!TileViewFlag;
@@ -715,6 +719,15 @@ float	CCore::GetZoomH()
 Vector3	&ThisCam=GetCam();
 
 		return((float)SCREEN_MAP_HEIGHT/ThisCam.z);
+}
+
+/*****************************************************************************/
+void	CCore::ResetView()
+{
+Vector3	&ThisCam=GetCam();
+
+		ThisCam=DefaultCamPos;
+		UpdateView();
 }
 
 /*****************************************************************************/

@@ -119,6 +119,8 @@ public:
 		void					CopySelection();
 		void					PasteSelection();
 
+		void					ResetView();
+
 private:
 		CMapEditView			*CurrentView;
 		CPoint					CurrentMousePos,LastMousePos;

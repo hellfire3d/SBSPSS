@@ -109,7 +109,27 @@ void	CLayerCollision::GUIChanged(CCore *Core)
 /*****************************************************************************/
 void	CLayerCollision::Export(CCore *Core,CExport &Exp)
 {
-		Exp.ExportLayerCollision(Core,GetName(),SubType,Map);
+int		Width=Map.GetWidth();
+int		Height=Map.GetHeight();
+	
+		Exp.ExportLayerHeader(LAYER_TYPE_COLLISION,SubType,Width,Height);
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem		&MapElem=Map.Get(X,Y);
+				u8				OutElem=0;
+				if (MapElem.Tile)
+				{
+					OutElem=((MapElem.Tile-1)*4)+1;
+					OutElem+=MapElem.Flags & TILE_FLAG_MIRROR_XY;
+				}
+				//fwrite(&OutElem,sizeof(u8),1,File);
+				Exp.Write(&OutElem,sizeof(u8));
+			}
+		}
+
 }
 
 /*****************************************************************************/
