@@ -157,13 +157,13 @@ bool CSaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 	ASSERT(!m_loading);
 	ASSERT(!m_formatting);
 	ASSERT(!m_autoloading);
-
+/* hey fool, your blanking out existing filenames!!
 	if(_fileNum!=-1)
 	{
 		strncat(nameBuf,MemCard::GetFileName(0,_fileNum),8);
 		_filename=nameBuf;
 	}
-
+*/
 	// Alloc a buffer and copy everything to it
 	allocateBuffer();
 	memcpy((char*)&m_tempBuffer[0],m_memcardHeader,256);								// Memcard header
