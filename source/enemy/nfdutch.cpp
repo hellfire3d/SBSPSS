@@ -67,6 +67,9 @@ void CNpcFlyingDutchmanEnemy::postInit()
 
 	m_invulnerableTimer = 0;
 
+	m_fadeVal = 128;
+	m_fadeDown = false;
+
 	CNpcBossEnemy::postInit();
 }
 
@@ -77,6 +80,35 @@ void CNpcFlyingDutchmanEnemy::think( int _frames )
 	if ( m_invulnerableTimer > 0 )
 	{
 		m_invulnerableTimer -= _frames;
+	}
+
+	if ( m_fadeDown )
+	{
+		if ( m_fadeVal > 0 )
+		{
+			m_fadeVal -= _frames;
+
+			if ( m_fadeVal < 0 )
+			{
+				m_fadeVal = 0;
+			}
+		}
+		else
+		{
+			m_fadeDown = false;
+		}
+	}
+	else
+	{
+		if ( m_fadeVal < 128 )
+		{
+			m_fadeVal += _frames;
+
+			if ( m_fadeVal > 128 )
+			{
+				m_fadeVal = 128;
+			}
+		}
 	}
 
 	CNpcEnemy::think( _frames );
@@ -275,7 +307,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 				if ( playerXDistSqr + playerYDistSqr > 100 )
 				{
-					processGenericGotoTarget( _frames, playerXDist, playerYDist, 6 );
+					processGenericGotoTarget( _frames, playerXDist, playerYDist, 8 );
 				}
 				else
 				{
@@ -320,6 +352,7 @@ void CNpcFlyingDutchmanEnemy::processShotRecoil( int _frames )
 	{
 		m_state = m_oldState;
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_fadeDown = true;
 	}
 }
 
@@ -368,6 +401,7 @@ void CNpcFlyingDutchmanEnemy::render()
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 			setSemiTrans( SprFrame, true );
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+			setRGB0( SprFrame, m_fadeVal, m_fadeVal, m_fadeVal );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );

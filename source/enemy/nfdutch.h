@@ -46,6 +46,8 @@ protected:
 	u8					m_fireCount;
 	s32					m_invulnerableTimer;
 	u8					m_oldState;
+	s16					m_fadeVal;
+	u8					m_fadeDown;
 };
 
 #endif
