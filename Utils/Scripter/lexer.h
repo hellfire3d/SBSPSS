@@ -34,7 +34,7 @@ public:
 	int		yygetchar();
 
 private:
-	FILE	*m_fhInput;
+//	FILE	*m_fhInput;
 	int		m_charCount;
 	int		m_lineCount;
 	int		m_currentCharOnLine;

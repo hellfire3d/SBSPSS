@@ -19,6 +19,7 @@
 #include "main.h"
 #include "lexer.h"
 #include "parser.h"
+#include "pfile.h"
 
 #ifndef __CODEGEN_H__
 #include "codegen.h"
@@ -109,6 +110,7 @@ extern int main(int argc, char *argv[])
   ---------------------------------------------------------------------- */
 int	mylexer::openInputFile(char *_filename)
 {
+	/*
 	int	ret=1;
 
 	printf("Opening %s..\n",_filename);
@@ -125,6 +127,9 @@ int	mylexer::openInputFile(char *_filename)
 		m_errorCount=0;
 	}
 	return ret;
+	*/
+
+	return openPFile(_filename);	
 }
 
 
@@ -136,6 +141,7 @@ int	mylexer::openInputFile(char *_filename)
   ---------------------------------------------------------------------- */
 int mylexer::closeInputFile()
 {
+	/*
 	printf("Processed %d char(s), %d line(s)\n",m_charCount,m_lineCount);
 	if(m_errorCount)
 	{
@@ -143,6 +149,8 @@ int mylexer::closeInputFile()
 	}
 	fclose(m_fhInput);
 	return 1;
+	*/
+	return closePFile();
 }
 
 
@@ -156,31 +164,46 @@ int mylexer::yygetchar()
 {
 	char	c;
 	int		ret;
+	FILE	*fh;
 
-	if(fread(&c,sizeof(c),1,m_fhInput)==1)
+
+	fh=getPFileFh();
+	if(fh)
 	{
-		m_charCount++;
-		m_currentCharOnLine++;
-		if(c=='\n')
+		if(fread(&c,sizeof(c),1,fh)==1)
 		{
-			m_lineCount++;
-			m_currentCharOnLine=0;
+			m_charCount++;
+			m_currentCharOnLine++;
+			if(c=='\n')
+			{
+				m_lineCount++;
+				m_currentCharOnLine=0;
+			}
+			ret=c;
 		}
-		ret=c;
+		else
+		{
+			ret=-1;
+			if(ferror(fh))
+			{
+				printf("FATAL: Read error!\n");
+			}
+			else
+			{				
+				closePFile();
+				return yygetchar();
+			}
+		}
+
+		// Force compilation to stop after finding errors ( hmm.. )
+		if(m_errorCount)
+		{
+			printf("Stopping compilation!\n");
+			ret=-1;
+		}
 	}
 	else
 	{
-		if(ferror(m_fhInput))
-		{
-			printf("FATAL: Read error!\n");
-		}
-		ret=-1;
-	}
-
-	// Force compilation to stop after finding errors ( hmm.. )
-	if(m_errorCount)
-	{
-		printf("Stopping compilation!\n");
 		ret=-1;
 	}
 	

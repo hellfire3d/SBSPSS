@@ -50,6 +50,9 @@ static FILE	*s_fhOutput=NULL;
 
 CTreeNode	*s_baseTreeNode=NULL;
 
+static mylexer	s_lexer;
+static myparser	s_parser;
+
 
 
 /*----------------------------------------------------------------------
@@ -61,20 +64,18 @@ CTreeNode	*s_baseTreeNode=NULL;
 extern int parseFile(char *_filename,CTreeNode *_baseNode)
 {
 	int		ret;
-	mylexer lexer;
-	myparser parser;
 
 	ret=YYEXIT_FAILURE;
-	if(parser.yycreate(&lexer))
+	if(s_parser.yycreate(&s_lexer))
 	{
-		if(lexer.yycreate(&parser))
+		if(s_lexer.yycreate(&s_parser))
 		{
-			if(lexer.openInputFile(_filename))
+			if(s_lexer.openInputFile(_filename))
 			{
-				parser.setCurrentLexer(&lexer);
-				parser.setBaseNode(_baseNode);
-				ret=parser.yyparse();
-				lexer.closeInputFile();
+				s_parser.setCurrentLexer(&s_lexer);
+				s_parser.setBaseNode(_baseNode);
+				ret=s_parser.yyparse();
+//				s_lexer.closeInputFile();
 			}
 		}
 	}

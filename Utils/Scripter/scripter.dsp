@@ -140,6 +140,14 @@ SOURCE=.\main.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\pfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\pfile.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\prepro.cpp
 # End Source File
 # Begin Source File

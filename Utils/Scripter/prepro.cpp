@@ -17,6 +17,7 @@
 	-------- */
 
 #include "prepro.h"
+#include "pfile.h"
 
 
 /*	Std Lib
@@ -139,9 +140,7 @@ static int ppf_include(char *_cmd)
 	includeFile=strtok(_cmd,s_seps);
 	includeFile=strtok(NULL,s_seps);
 	
-//	printf("include: '%s'\n",includeFile);
-	
-	return 0;
+	return openPFile(includeFile)==1?0:1;
 }
 
 
