@@ -24,7 +24,7 @@
 
 
 /*----------------------------------------------------------------------*/
-PlayerMetrics *CPlayerState::getPlayerMetrics(CPlayer *_player)
+const PlayerMetrics *CPlayerState::getPlayerMetrics(CPlayer *_player)
 {
 	return _player->getPlayerMetrics();
 }

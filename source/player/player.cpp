@@ -25,6 +25,37 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __PLAYER__PSSTATES_H__
+#include "player\pstates.h"
+#endif
+
+#ifndef __PLAYER__PSJUMP_H__
+#include "player\psjump.h"
+#endif
+
+#ifndef __PLAYER__PSRUN_H__
+#include "player\psrun.h"
+#endif
+
+#ifndef __PLAYER__PSFALL_H__
+#include "player\psfall.h"
+#endif
+
+#ifndef __PLAYER__PSBUTT_H__
+#include "player\psbutt.h"
+#endif
+
+#ifndef __PLAYER__PSCHOP_H__
+#include "player\pschop.h"
+#endif
+
+#ifndef __PLAYER__PSDUCK_H__
+#include "player\psduck.h"
+#endif
+
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
 
 // to be removed
 #include "gfx\tpage.h"
@@ -52,19 +83,6 @@
 	Vars
 	---- */
 
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-#include "player\pstates.h"
-#include "player\psjump.h"
-#include "player\psrun.h"
-#include "player\psfall.h"
-#include "player\psbutt.h"
-#include "player\pschop.h"
-#include "player\psduck.h"
 CPlayerStateIdle			stateIdle;
 CPlayerStateJump			stateJump;
 CPlayerStateRun				stateRun;
@@ -79,7 +97,30 @@ CPlayerStateDuck			stateDuck;
 CPlayerStateSoakUp			stateSoackUp;
 CPlayerStateGetUp			stateGetup;
 
+CPlayerState *CPlayer::s_states[NUM_STATES]=
+{
+	&stateIdle,				// STATE_IDLE
+	&stateJump,				// STATE_JUMP
+	&stateRun,				// STATE_RUN
+	&stateFall,				// STATE_FALL
+	&stateFallFar,			// STATE_FALLFAR
+	&stateButtBounce,		// STATE_BUTTBOUNCE
+	&stateButtBounceFall,	// STATE_BUTTFALL
+	&stateButtBounceLand,	// STATE_BUTTLAND
+	&stateChop,				// STATE_CHOP
+	&stateRunChop,			// STATE_RUNCHOP
+	&stateDuck,				// STATE_DUCK
+	&stateSoackUp,			// STATE_SOAKUP
+	&stateGetup,			// STATE_GETUP
+};
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::init()
 {
 	CThing::init();
@@ -95,6 +136,10 @@ m_animFrame=0;
 	m_moveVel.vx=0;
 	m_moveVel.vy=0;
 	setFacing(FACING_RIGHT);
+
+	m_lives=CGameSlotManager::getSlotData().m_lives;
+
+	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 
 #ifdef __USER_paul__
 	Pos.vx=50;
@@ -164,6 +209,11 @@ void	CPlayer::think(int _frames)
 			}
 			m_moveVel.vy=0;
 		}
+
+		if(m_invincibleFrameCount)
+		{
+			m_invincibleFrameCount--;
+		}
 	}
 #endif
 	if(Pos.vx<0)Pos.vx=0;
@@ -177,18 +227,23 @@ void	CPlayer::think(int _frames)
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
+int MASK=2;
 void	CPlayer::render()
 {
 	CThing::render();
 	
 	// Render
-	m_skel.setFrame(m_animFrame);
-	if(panim!=-1)
-		m_skel.setAnimNo(panim);
-	else
-		m_skel.setAnimNo(m_animNo);
-	m_skel.Animate(this);
-	m_skel.Render(this);
+	if(m_invincibleFrameCount==0||
+	   m_invincibleFrameCount&MASK)
+	{
+		m_skel.setFrame(m_animFrame);
+		if(panim!=-1)
+			m_skel.setAnimNo(panim);
+		else
+			m_skel.setAnimNo(m_animNo);
+		m_skel.Animate(this);
+		m_skel.Render(this);
+	}
 }
 
 
@@ -216,7 +271,7 @@ PlayerMetrics s_normalPlayerMetrics=
 		1,		// PM__RUN_SLOWDOWN
 	}
 };
-PlayerMetrics *CPlayer::getPlayerMetrics()
+const PlayerMetrics *CPlayer::getPlayerMetrics()
 {
 	return &s_normalPlayerMetrics;
 }
@@ -231,23 +286,6 @@ PlayerMetrics *CPlayer::getPlayerMetrics()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-CPlayerState *CPlayer::s_states[NUM_STATES]=
-{
-	&stateIdle,				// STATE_IDLE
-	&stateJump,				// STATE_JUMP
-	&stateRun,				// STATE_RUN
-	&stateFall,				// STATE_FALL
-	&stateFallFar,			// STATE_FALLFAR
-	&stateButtBounce,		// STATE_BUTTBOUNCE
-	&stateButtBounceFall,	// STATE_BUTTFALL
-	&stateButtBounceLand,	// STATE_BUTTLAND
-	&stateChop,				// STATE_CHOP
-	&stateRunChop,			// STATE_RUNCHOP
-	&stateDuck,				// STATE_DUCK
-	&stateSoackUp,			// STATE_SOAKUP
-	&stateGetup,			// STATE_GETUP
-};
-
 void	CPlayer::setState(PLAYER_STATE _state)
 {
 	m_currentState=s_states[_state];
@@ -345,7 +383,7 @@ int CPlayer::isOnSolidGround()
 
 void CPlayer::moveLeft()
 {
-	PlayerMetrics	*metrics;
+	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
 
 	setFacing(FACING_LEFT);
@@ -364,7 +402,7 @@ void CPlayer::moveLeft()
 }
 void CPlayer::moveRight()
 {
-	PlayerMetrics	*metrics;
+	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
 	
 	setFacing(FACING_RIGHT);
@@ -383,7 +421,7 @@ void CPlayer::moveRight()
 }
 void CPlayer::slowdown()
 {
-	PlayerMetrics	*metrics;
+	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
 	
 	if(m_moveVel.vx<0)

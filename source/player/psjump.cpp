@@ -63,7 +63,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::enter(CPlayer *_player)
 {
-	PlayerMetrics	*metrics;
+	const PlayerMetrics	*metrics;
 
 	metrics=getPlayerMetrics(_player);
 
@@ -83,8 +83,8 @@ void CPlayerStateJump::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::think(CPlayer *_player)
 {
-	PlayerMetrics	*metrics;
-	int				control;
+	const PlayerMetrics	*metrics;
+	int					control;
 
 	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);

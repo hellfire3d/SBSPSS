@@ -107,7 +107,7 @@ public:
 	void			render();
 
 protected:		
-	PlayerMetrics	*getPlayerMetrics();
+	const PlayerMetrics	*getPlayerMetrics();
 
 	void			setState(PLAYER_STATE _state);
 	int				getFacing();
@@ -143,9 +143,20 @@ private:
 	DVECTOR			m_moveVel;
 	int				m_facing;
 
+	enum
+	{
+		INVIBCIBLE_FRAMES__START=120,	// Invincible for this many frames at start of life
+		INVINCIBLE_FRAMES__HIT=25,		// Invincible for this many frames after taking damage
+	};
+	int				m_invincibleFrameCount;
+
 	static class CPlayerState	*s_states[NUM_STATES];
 
 	class CPlayerState	*m_currentState;
+
+
+
+	int				m_lives;
 
 };
 

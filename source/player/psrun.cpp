@@ -122,9 +122,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 	}
 	else
 	{
-		DVECTOR	move;
-		move=getMoveVelocity(_player);
-		if(move.vx==0)
+		if(getMoveVelocity(_player).vx==0)
 		{
 			setState(_player,STATE_IDLE);
 			setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);

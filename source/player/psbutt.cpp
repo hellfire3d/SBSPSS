@@ -103,9 +103,9 @@ void CPlayerStateButtBounceFall::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceFall::think(CPlayer *_player)
 {
-	PlayerMetrics	*metrics;
-	int				control;
-	DVECTOR			move;
+	const PlayerMetrics	*metrics;
+	int					control;
+	DVECTOR				move;
 
 	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);

@@ -103,22 +103,19 @@ void CPlayerStateRunChop::think(CPlayer *_player)
 	}
 	else
 	{
-		DVECTOR	move;
-		move=getMoveVelocity(_player);
-		if(move.vx==0)
-		{
-			setState(_player,STATE_IDLE);
-			setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
-		}
-		else
-		{
-			slowdown(_player);
-		}
+		slowdown(_player);
 	}
 	
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
-		setState(_player,STATE_RUN);
+		if(getMoveVelocity(_player).vx==0)
+		{
+			setState(_player,STATE_IDLE);
+		}
+		else
+		{
+			setState(_player,STATE_RUN);
+		}
 	}
 }
 

@@ -78,9 +78,9 @@ void CPlayerStateFall::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::think(CPlayer *_player)
 {
-	PlayerMetrics	*metrics;
-	int				control;
-	DVECTOR			move;
+	const PlayerMetrics	*metrics;
+	int					control;
+	DVECTOR				move;
 
 	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);
@@ -111,7 +111,7 @@ void CPlayerStateFall::think(CPlayer *_player)
 		slowdown(_player);
 	}
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION)&&control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		move.vx=0;
 		move.vy=0;
