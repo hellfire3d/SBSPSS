@@ -2272,12 +2272,12 @@ int invincibleSponge=false;		// NB: This is for debugging purposes only so don't
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CThing *_thing)
 {
-	if(m_invincibleFrameCount==0&&								// Don't take damage if still recovering from the last hit
-	   m_invincibilityRingTimer==0&&							// Or if we have the invincibility ring on
-	   m_currentPlayerModeClass->getState()!=STATE_SOAKUP&&		// Or soaking up
-	   m_currentPlayerModeClass->getState()!=STATE_CELEBRATE&&	// Or celebrating
-	   m_currentMode!=PLAYER_MODE_DEAD &&
-	   m_currentMode!=PLAYER_MODE_SWALLOW)							// Or already dead! :)
+	if((m_invincibleFrameCount==0||_damage==DAMAGE__KILL_OUTRIGHT)&&	// Don't take damage if still recovering from the last hit
+	   m_invincibilityRingTimer==0&&									// Or if we have the invincibility ring on
+	   m_currentPlayerModeClass->getState()!=STATE_SOAKUP&&				// Or soaking up
+	   m_currentPlayerModeClass->getState()!=STATE_CELEBRATE&&			// Or celebrating
+	   m_currentMode!=PLAYER_MODE_DEAD &&								// Or already dead! :)
+	   m_currentMode!=PLAYER_MODE_SWALLOW)								
 	{
 		int						ouchThatHurt=true;
 		int						ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
