@@ -101,7 +101,7 @@ void CPauseMenu::init()
 										STR__DEBUG__BASICUNARMED_MODE,
 										&newmode,PLAYER_MODE_BASICUNARMED);
 	xpos+=TEXT_SPACING;
-#if defined(__USER_paul__) || defined(__USER_charles__) || defined(__USER_daveo__)
+//#if defined(__USER_paul__) || defined(__USER_charles__) || defined(__USER_daveo__)
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FULLUNARMED_MODE,
@@ -137,7 +137,7 @@ void CPauseMenu::init()
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;
-#endif
+//#endif
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FLY_MODE,
