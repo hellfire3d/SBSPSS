@@ -125,7 +125,7 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 		}
 		else
 		{
-			if ( m_soundId == NOT_PLAYING )
+			if ( canRender() && m_soundId == NOT_PLAYING )
 			{
 				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_PULLEY, true, true );
 			}
@@ -141,7 +141,7 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 		}
 		else
 		{
-			if ( m_soundId == NOT_PLAYING )
+			if ( canRender() && m_soundId == NOT_PLAYING )
 			{
 				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_PULLEY, true, true );
 			}
