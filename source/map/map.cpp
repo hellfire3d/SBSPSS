@@ -502,6 +502,7 @@ void CMapScene::think(int _frames)
 			switch(m_currentIconSelection)
 			{
 				case MAP_ICON_PREVIOUS_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
 					break;
 				case MAP_ICON_LEVEL_1:
 				case MAP_ICON_LEVEL_2:
@@ -552,6 +553,7 @@ void CMapScene::think(int _frames)
 					else cursor=CURSOR_COULDNT_MOVE;
 					break;
 				case MAP_ICON_NEXT_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
 					break;
 			}
 		}
