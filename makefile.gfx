@@ -259,8 +259,8 @@ UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
 							faces\mermaidman.bmp faces\barnacleboy.bmp faces\jack_custard.bmp
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS :=				+vbamboo.bmp +vbambootl.bmp +vbambootr.bmp +vbamboobl.bmp +vbamboobr.bmp \
-							+hbamboo.bmp +hbambootl.bmp +hbambootr.bmp +hbamboobl.bmp +hbamboobr.bmp \
+UI_GFX_TRANS :=				+bambootopleft.bmp +bamboobotleft.bmp +bambootopright.bmp +bamboobotright.bmp \
+							+bamboohorizontal.bmp +bamboovertical.bmp \
 							+butU.bmp +butD.bmp +butL.bmp +butR.bmp \
 							+butC.bmp +butS.bmp +butX.bmp +butT.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
