@@ -122,7 +122,7 @@ void 	CLevel::init(int LevelNo)
 // Load it
 sLvlTab *lvlTab=&LvlTable[LevelNo];
 
-		CActorGfx::ResetCache();
+		CActorPool::Reset();
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
 		DisplayLoadingScreen(lvlTab);
@@ -345,7 +345,7 @@ void	CLevel::shutdown()
 		if (PlatformList) MemFree(PlatformList);
 
 		MemFree(LevelHdr);
-		CActorPool::DumpActors();
+		CActorPool::Reset();
 		TPFree(m_levelTPage);
 }
 

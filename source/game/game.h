@@ -21,6 +21,13 @@ class CGameScene : public CScene
 public:
 				CGameScene()	{;}
 virtual			~CGameScene()	{;}
+		enum ACTOR_TYPE
+		{
+			ACTOR_PLAYER = 0,
+			ACTOR_FRIEND_NPC = 1,
+			ACTOR_ENEMY_NPC,
+			ACTOR_UNKNOWN,
+		};
 
 
 		void			init();
@@ -35,10 +42,12 @@ virtual	int				canPause();
 		CPlayer			*getPlayer();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
-		static void		setReadyToExit()	{s_readyToExit=true;}
-		static void		levelFinished()		{s_levelFinished=true;}
+static void				setReadyToExit()	{s_readyToExit=true;}
+static void				levelFinished()		{s_levelFinished=true;}
 	
-		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
+//		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
+static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
+
 protected:
 
 		void			initLevel();
@@ -46,14 +55,16 @@ protected:
 
 		void			AspectCorrectCamera();
 
-		CLevel				Level;
-		class CPauseMenu	*m_pauseMenu;
-		class CPlayer		*m_player;
-		static	FontBank	*s_genericFont;
-		static	MATRIX		CamMtx;
+		CLevel			Level;
+class	CPauseMenu		*m_pauseMenu;
+class	CPlayer			*m_player;
+static	FontBank		*s_genericFont;
+static	MATRIX			CamMtx;
 
-		static int			s_readyToExit;
-		static int			s_levelFinished;
+static int				s_readyToExit;
+static int				s_levelFinished;
+
+static	ACTOR_TYPE		actorType[];
 
 };
 

@@ -13,125 +13,233 @@
 #include <dstructs.h>
 
 /*****************************************************************************/
-int		ShadowXOfs=32;
-int		ShadowYOfs=32;
+CActorCache	CActorPool::Cache;
+sActorPool	*CActorPool::ActorList,*CActorPool::LastActor;
+
+u8			CActorGfx::UnpackBuffer[CActorCache::MAX_ACTOR_SIZE];
 
 /*****************************************************************************/
-
-CActorPool::ACTOR_TYPE CActorPool::actorType[39] =
+/*** Cache *******************************************************************/
+/*****************************************************************************/
+CActorCache::CActorCache()
 {
-	ACTOR_PLAYER,				//SpongeBob=0
-	ACTOR_FRIEND_NPC,			//BarnacleBoy=1
-	ACTOR_FRIEND_NPC,			//Gary=2
-	ACTOR_FRIEND_NPC,			//Krusty=3
-	ACTOR_FRIEND_NPC,			//MermaidMan=4
-	ACTOR_FRIEND_NPC,			//Patrick=5
-	ACTOR_FRIEND_NPC,			//Sandy=6
-	ACTOR_FRIEND_NPC,			//Squidward=7
-	ACTOR_FRIEND_NPC,			//Plankton=8
-	ACTOR_UNKNOWN,
-	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level1=10
-	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level2=11
-	ACTOR_ENEMY_NPC,			//Motherjellyfish=12
-	ACTOR_ENEMY_NPC,			//Anenome-Level1=13
-	ACTOR_ENEMY_NPC,			//SpikeyAnenome=14
-	ACTOR_ENEMY_NPC,			//Anenome-Level3=15
-	ACTOR_ENEMY_NPC,			//BabyOctopus=16
-	ACTOR_ENEMY_NPC,			//Ballblob=17
-	ACTOR_ENEMY_NPC,			//Boogermonster=18
-	ACTOR_ENEMY_NPC,			//Caterpillar=19
-	ACTOR_ENEMY_NPC,			//Clam-Level1=20
-	ACTOR_ENEMY_NPC,			//Clam-Level2=21
-	ACTOR_ENEMY_NPC,			//Eyeball=22
-	ACTOR_ENEMY_NPC,			//Flamingskull=23
-	ACTOR_ENEMY_NPC,			//FlyingDutchman=24
-	ACTOR_ENEMY_NPC,			//Ghost=25
-	ACTOR_ENEMY_NPC,			//GiantWorm=26
-	ACTOR_ENEMY_NPC,			//HermitCrab=27
-	ACTOR_ENEMY_NPC,			//IronDogFish=28
-	ACTOR_ENEMY_NPC,			//PuffaFish=29
-	ACTOR_ENEMY_NPC,			//SeaSnake=30
-	ACTOR_ENEMY_NPC,			//Sharkman=31
-	ACTOR_ENEMY_NPC,			//SharkSub=32
-	ACTOR_ENEMY_NPC,			//Skeletalfish=33
-	ACTOR_ENEMY_NPC,			//SpiderCrab=34
-	ACTOR_ENEMY_NPC,			//Squiddart=35
-	ACTOR_ENEMY_NPC,			//Stomper=36
-	ACTOR_ENEMY_NPC,			//DustDevil=37
-	ACTOR_ENEMY_NPC,			//SiderCrabSpawner=38
-};
-
-/*****************************************************************************/
-sActorPool	CActorPool::ActorPool[MAX_ACTORS];
-
-CSlotCache	CActorGfx::SlotCache;
-u8			CActorGfx::UnpackBuffer[CActorPool::MAX_ACTOR_SIZE];
-
-/*****************************************************************************/
-/*** Slot Cache **************************************************************/
-/*****************************************************************************/
-void	CSlotCache::Init()
-{
-		for (int Y=0; Y<DYN_SLOTH; Y++)
+		for (int i=0;i<CACHE_TYPE_MAX; i++)
 		{
-			for (int X=0; X<DYN_SLOTW; X++)
-			{
-				Cache[X][Y].W=0;
-			}
+			SlotList[i].NodeList.List=0;
 		}
 }
 
 /*****************************************************************************/
-bool	CSlotCache::FindSlot(int SprW,int SprH,u16 &TexX,u16 &TexY,u8 &u,u8 &v)
+CActorCache::~CActorCache()
 {
-int		W=(SprW+(DYN_W-1))/DYN_W;
-int		H=(SprH+(DYN_H-1))/DYN_H;
-
-		for (int Y=0; Y<DYN_SLOTH; Y++)
-		{
-			for (int X=0; X<DYN_SLOTW; X++)
-			{
-				if (TakeSlot(X,Y,W,H))
-				{
-					printf("TakeSlot %i %i\n",X,Y);
-					TexX=DYN_SLOTX+(X*DYN_W/4);
-					TexY=DYN_SLOTY+(Y*DYN_H);
-					u=(X&3)*64;
-					v=(Y&3)*64;
-					return(true);
-				}
-				
-			}
-		}
-		return(false);
 }
 
 /*****************************************************************************/
-bool	CSlotCache::TakeSlot(int SX,int SY,int SW,int SH)
+int		CActorCache::GetSizeType(int Size)
 {
-int		W,H;
-		if (SX+SW>DYN_SLOTW) return(false);
-		if (SY+SH>DYN_SLOTH) return(false);
-		if ((SX&3)==3 && SW>1) return(false);
+		if (Size<= 16) return(16);
+		if (Size<= 32) return(32);
+		if (Size<= 64) return(64);
+		if (Size<=128) return(128);
+		if (Size<=256) return(256);
+		ASSERT(!"SPRITE SIZE NOT SUPPORTED");
 
-		for (H=0; H<SH; H++)
-		{
-			for (W=0; W<SW; W++)
-			{
-				if (Cache[SX+W][SY+H].W) return(false);
-			}
+		return(-1);
+}
+
+/*****************************************************************************/
+int		CActorCache::GetSlot(int W,int H)
+{
+int		i;
+int		Slot=0;
+
+		W=GetSizeType(W);
+		H=GetSizeType(H);
+
+		for (i=0; i<SlotCount && !Slot; i++)
+		{ // Slot exist?
+			if (SlotList[i].Width==W && SlotList[i].Height==H) Slot=i;
 		}
-// Slot good
-		for (H=0; H<SH; H++)
-		{
-			for (W=0; W<SW; W++)
-			{
-				Cache[SX+W][SY+H].W=SW;
-				Cache[SX+W][SY+H].H=SH;
-			}
+
+		if (!Slot)
+		{ // Use New Slot
+			ASSERT(SlotCount!=CACHE_TYPE_MAX);
+			Slot=SlotCount;
+			SlotList[Slot].Width=W;
+			SlotList[Slot].Height=H;
+			SlotCount++;
 		}
+		SlotList[Slot].RefCount++;
+
+		return(Slot);
+}
+
+/*****************************************************************************/
+sPoolNode *CActorCache::RemoveHeadNode(sNodeList *Root)
+{
+sPoolNode *Node=Root->List;
+sPoolNode *Next=Node->Next;
+
+		Root->List=Node->Next;
+		Next->Prev=0;
+		Node->Next=0;
+		return(Node);
+}
+
+/*****************************************************************************/
+void	CActorCache::RemoveNode(sPoolNode *Node,sNodeList *Root)
+{
+sPoolNode	*Prev=Node->Prev;
+sPoolNode	*Next=Node->Next;
+
+		if (Prev)
+		{ // Not Head Node
+			Prev->Next=Node->Next;
+		}
+		if (Next)
+		{ // Not Tail Node
+			Next->Prev=Node->Prev;
+		}
+}
+
+/*****************************************************************************/
+// Add node to end of list
+void	CActorCache::AddNode(sPoolNode *Node,sNodeList *Root)
+{
+sPoolNode	*Prev=Root->LastNode;
+sPoolNode	*Next=0;
+
+		if (Prev)
+		{ // Not Head Node
+			Prev->Next=Node;
+		}
+		else
+		{
+			Root->List=Node;
+		}
+
+		Node->Prev=Prev;
+		Node->Next=0;
+		Root->LastNode=Node;
+}
+
+/*****************************************************************************/
+int		CActorCache::ReserveSlot(int W,int H,int FrameCount)
+{
+int		Slot=GetSlot(W,H);
+		SlotList[Slot].FrameCount+=FrameCount;
+		return(Slot);
+}
+
+/*****************************************************************************/
+void	CActorCache::AllocCache()
+{
+int		TPW=CACHE_W/SlotCount;
+		
+		for (int i=0; i<SlotCount; i++)
+		{
+//			printf("Slot %i: (%i) %i %i=%i\n",i,SlotList[i].RefCount,SlotList[i].Width,SlotList[i].Height,SlotList[i].FrameCount);
+			InitCache(i,TPW);
+		}
+}
+
+/*****************************************************************************/
+// This needs improving to 'grab' free areas left from bigger grabs (YIKES!)
+void	CActorCache::InitCache(int Slot,int TPW)
+{
+sPoolSlot	*ThisSlot=&SlotList[Slot];
+int			W=(TPW*(TPAGE_W))/ThisSlot->Width;
+int			H=(TPAGE_H)/ThisSlot->Height;
+int			Total=W*H;
+sPoolNode	*List;
+
+// Init List
 			
-	return(true);
+			List=(sPoolNode*)MemAlloc(Total*sizeof(sPoolNode),"CacheNodeList");
+
+// Create List Entries
+			for (int Y=0; Y<H; Y++)
+			{
+				for (int X=0; X<W; X++)
+				{
+					int	U=(X*ThisSlot->Width);
+					int	V=Y*ThisSlot->Height;
+					int	TexX=CACHE_X+CurrentTPX+(U>>2);
+					int	TexY=CACHE_Y+V;
+
+					List->Actor=0;
+					List->TexX=TexX;
+					List->TexY=TexY;
+					List->U=U&255;
+					List->V=V&255;
+					List->TPage=getTPage(0,0,TexX,TexX);
+					AddNode(List,&ThisSlot->NodeList);
+					List++;
+				}
+			}
+
+			CurrentTPX+=(TPW*TPAGE_W)>>2;
+}
+
+/*****************************************************************************/
+void	CActorCache::Reset()
+{
+// Free and init lists
+		for (int i=0;i<CACHE_TYPE_MAX; i++)
+		{
+			if (SlotList[i].NodeList.List) MemFree(SlotList[i].NodeList.List);
+			SlotList[i].NodeList.List=0;
+			SlotList[i].NodeList.LastNode=0;
+			SlotList[i].RefCount=0;
+			SlotList[i].FrameCount=0;
+			SlotList[i].Width=0;
+			SlotList[i].Height=0;
+		}
+
+// Init VRam Table
+		for (int Y=0; Y<CACHE_TABLE_H; Y++)
+		{
+			for (int X=0; X<CACHE_TABLE_W; X++)
+			{
+				SlotTable[X][Y]=0;
+			}
+		}
+
+		CurrentTPX=0;
+		CurrentPalette=0;
+		SlotCount=0;
+
+// Clear VRam
+RECT	R={512,256,512,250};
+		ClearImage(&R,0,255,0);
+}
+
+/*****************************************************************************/
+void	CActorCache::LoadPalette(sActorPool *Actor)
+{
+RECT	R;
+int		X=CurrentPalette%(((CACHE_W*TPAGE_W)/CACHE_PALW));
+int		Y=CurrentPalette/(((CACHE_W*TPAGE_W)/CACHE_PALW)-1);
+
+// Cheap bodge at mo
+		if (Actor->Filename==ACTORS_SPONGEBOB_SBK)
+		{
+			R.x=512;
+			R.y=511;
+		}
+		else
+		{
+			R.x=CACHE_PALX+(CurrentPalette*CACHE_PALW);
+			R.y=CACHE_PALY-Y;
+		}
+
+		R.w=CACHE_PALW;
+		R.h=CACHE_PALH;
+		DrawSync(0);
+		LoadImage( &R, (u32*)Actor->ActorGfx->Palette);
+
+		Actor->ActorGfx->Clut=getClut(R.x,R.y);
+		CurrentPalette++;
 }
 
 /*****************************************************************************/
@@ -139,54 +247,110 @@ int		W,H;
 /*****************************************************************************/
 void	CActorPool::Init()
 {
+		Cache.Reset();
+		ActorList=0;
+		LastActor=0;
+}
+
+/*****************************************************************************/
+void	CActorPool::Reset()
+{
+sActorPool	*List=ActorList;
+			
+			while (List) 
+			{
+				sActorPool	*Next=List->Next;
+				if (List->Filename!=ACTORS_SPONGEBOB_SBK)
+				{
+					MemFree(List->ActorGfx);
+					delete List;
+				}
+				else
+				{
+					List->Next=0;			
+				}
+				List=Next;
+			}
+		Cache.Reset();
+}
+
+/*****************************************************************************/
+void	CActorPool::SetUpCache()
+{
+		Cache.AllocCache();
+// SetUp Actors
+sActorPool	*List=ActorList;
+
+			while (List)
+			{
+				List->CachePool=Cache.GetSlotList(List->CacheSlot);
+				List->ThisCache.List=0;
+				List->ThisCache.LastNode=0;
+				List=List->Next;
+			}
+}
+
+/*****************************************************************************/
+sActorPool	*CActorPool::FindActor(FileEquate Filename)
+{
+sActorPool	*List=ActorList;
+
+		while (List)
+		{
+			if (List->ActorGfx && List->Filename==Filename) return(List);
+			List=List->Next;
+		}
+		return(0);
+}
+
+/*****************************************************************************/
+CActorGfx	*CActorPool::GetActor(FileEquate Filename)
+{
+sActorPool	*ThisActor;
+CActorGfx	*NewActor;
+int			TotalFrames=0;
+bool		NewFlag=false;
+// Find Actor in Pool
+		ThisActor=FindActor(Filename);
+		if (!ThisActor) 
+		{
+			ThisActor=LoadActor(Filename);
+			NewFlag=true;
+		}
+
+		NewActor=new ("CActorGfx") CActorGfx(ThisActor);
+		if (NewFlag)
+		{
+			TotalFrames=NewActor->GetTotalFrameCount();
+		}
+
+		ThisActor->CacheSlot=Cache.ReserveSlot(ThisActor->ActorGfx->MaxW,ThisActor->ActorGfx->MaxH,TotalFrames);
+
+		return(NewActor);
+}
+
+/*****************************************************************************/
+sActorPool	*CActorPool::LoadActor(FileEquate Filename)
+{
 int		i;
-		for (i=0; i<MAX_ACTORS; i++)
-		{
-			ActorPool[i].SpriteBank=0;
-		}
-		CActorGfx::ResetCache();
-}
-
-/*****************************************************************************/
-int		CActorPool::FindActorInPool(FileEquate Filename)
-{
-		for (int i=0; i<MAX_ACTORS; i++)
-		{
-			if (ActorPool[i].SpriteBank && ActorPool[i].Filename==Filename) return(i);
-		}
-		return(-1);
-}
-
-/*****************************************************************************/
-int		CActorPool::FindFreeActor()
-{
-		for (int i=0; i<MAX_ACTORS; i++)
-		{
-			if (ActorPool[i].SpriteBank==0) return(i);
-		}
-		return(-1);
-}
-
-/*****************************************************************************/
-int		CActorPool::LoadActor(FileEquate Filename)
-{
-int		i;
+int		TotalFrames=0;
 
 sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename);
 
+//		printf("Add Actor %i\n",(int)Filename);
 		Spr->AnimList=(sSpriteAnim*)	MakePtr(Spr,(int)Spr->AnimList);
 		Spr->FrameList=(sSpriteFrame*)	MakePtr(Spr,(int)Spr->FrameList);
 		Spr->Palette=(u8*)				MakePtr(Spr,(int)Spr->Palette);
 
 // FixUp AnimList
-		DAVE_DBGMSG("Anims %i\n",Spr->AnimCount);
 		for (i=0; i<Spr->AnimCount; i++)
 		{
 			sSpriteAnim	*ThisAnim=&Spr->AnimList[i];
 			ThisAnim->Anim=(u16*)	MakePtr(Spr,(int)ThisAnim->Anim);
+			TotalFrames+=ThisAnim->FrameCount;
 		}
+
 // FixUp FrameList
-		DAVE_DBGMSG("Anims %i\n",Spr->FrameCount);
 		for (i=0; i<Spr->FrameCount; i++)
 		{
 			sSpriteFrame	*ThisFrame=&Spr->FrameList[i];
@@ -194,79 +358,32 @@ sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename);
 		}
 
 // Store it
-int		Idx=FindFreeActor();
-		ASSERT(Idx!=-1);
+sActorPool	*NewActor;
 
-sActorPool	&ThisActor=ActorPool[Idx];
+		NewActor=new ("ActorPool") sActorPool();
+		NewActor->Filename=Filename;
+		NewActor->ActorGfx=Spr;
+		AddActor(NewActor);
 
-		ThisActor.Filename=Filename;
-		ThisActor.SpriteBank=Spr;
-		ThisActor.RefCount=1;
-		ThisActor.Clut=LoadPalette(ThisActor,Idx);
-		
-		return(Idx);
+		return(NewActor);
 }
 
 /*****************************************************************************/
-#define	DYN_PALW	64
-#define	DYN_PALH	1
-#define	DYN_PALX	512
-#define	DYN_PALY	511
-
-u16		CActorPool::LoadPalette(sActorPool &ThisActor,int Idx)
+void		CActorPool::AddActor(sActorPool *NewActor)
 {
-RECT	R;
-int		X=Idx&31;
-int		Y=Idx%31;
+// Insert into list
 
-		R.x=DYN_PALX+(Idx*DYN_PALW);
-		R.y=DYN_PALY-Y;
-		R.w=DYN_PALW;
-		R.h=DYN_PALH;
-//		DrawSync(0);
-		LoadImage( &R, (u32*)ThisActor.SpriteBank->Palette);
-
-int		Clut=getClut(R.x,R.y);
-		return(Clut);
-}
-
-/*****************************************************************************/
-CActorGfx	*CActorPool::GetActor(FileEquate Filename)
-{
-CActorGfx	*Actor;
-int			Idx;
-		
-// Find Actor in Pool
-		Idx=FindActorInPool(Filename);
-		if (Idx==-1) 
-		{
-			Idx=LoadActor(Filename);
-		}
-
-sActorPool	&ThisActor=ActorPool[Idx];
-		Actor=new ("CActorGfx") CActorGfx;
-		Actor->SetData(Filename,ThisActor.SpriteBank,ThisActor.Clut);
-		ThisActor.RefCount++;
-		return(Actor);
-}
-
-/*****************************************************************************/
-/*** Dump ********************************************************************/
-/*****************************************************************************/
-// Dumps all apart from spongeybob
-void	CActorPool::DumpActors()
-{
-	printf("DumpActors\n");
-		for (int i=0; i<MAX_ACTORS; i++)
-		{
-			if (ActorPool[i].SpriteBank && ActorPool[i].Filename!=ACTORS_SPONGEBOB_SBK)
-			{
-				if (ActorPool[i].SpriteBank) MemFree(ActorPool[i].SpriteBank);
-				ActorPool[i].SpriteBank=0;
+			if (!LastActor)
+			{ // Empty List
+				ActorList=NewActor;
 			}
-		}
-	printf("DumpActorsDone\n");
-
+			else
+			{ 
+				LastActor->Next=NewActor;
+			}
+			NewActor->Next=0;
+			Cache.LoadPalette(NewActor);
+			LastActor=NewActor;
 }
 
 /*****************************************************************************/
@@ -275,8 +392,10 @@ void	CActorPool::DumpActors()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CActorGfx::CActorGfx()
+/*****************************************************************************/
+CActorGfx::CActorGfx(sActorPool *ThisActor)
 {
+		PoolEntry=ThisActor;
 }
 
 /*****************************************************************************/
@@ -285,70 +404,69 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
-void	CActorGfx::SetData(FileEquate Filename,sSpriteAnimBank *_SpriteBank,u16 _Clut)
-{
-		SpriteBank=_SpriteBank;
-		Clut=_Clut;
-
-		if (Filename!=ACTORS_SPONGEBOB_SBK)
-		{
-			bool	SlotStatus=SlotCache.FindSlot(_SpriteBank->MaxW,_SpriteBank->MaxH,TexX,TexY,U,V);
-			ASSERT(SlotStatus);
-		}
-		else
-		{
-			TexX=512;
-			TexY=256;
-			U=0;
-			V=0;
-		}
-		TPage=getTPage(0,0,TexX,TexY);
-}
-
-/*****************************************************************************/
-void		CActorGfx::ResetCache()
-{
-RECT		R;
-			SlotCache.Init();
-			R.x=512;
-			R.y=256;
-			R.w=512;
-			R.h=250;
-			ClearImage(&R,0,255,0);
-}
-
-/*****************************************************************************/
 sSpriteFrame	*CActorGfx::GetFrame(int Anim,int Frame)
 {
-sSpriteAnim		*ThisAnim=SpriteBank->AnimList+Anim;
+
+sSpriteAnim		*ThisAnim=PoolEntry->ActorGfx->AnimList+Anim;
 u16				ThisFrame=ThisAnim->Anim[Frame];
 	
-				return(SpriteBank->FrameList+ThisFrame);
+				return(PoolEntry->ActorGfx->FrameList+ThisFrame);
 }
 
 /*****************************************************************************/
+int				CActorGfx::GetTotalFrameCount()
+{
+int		Total=0;
+		for (int Anim=0; Anim<PoolEntry->ActorGfx->AnimCount; Anim++)
+		{
+			sSpriteAnim		*ThisAnim=PoolEntry->ActorGfx->AnimList+Anim;
+			Total+=ThisAnim->FrameCount;
+		}
 
+		return(Total);
+}
+
+/*****************************************************************************/
 int	ActorOT=10;
+
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
+sPoolNode		*ThisNode;;
+POLY_FT4		*Ft4;
 
-			PAK_doUnpak(UnpackBuffer,FrameGfx->PAKSpr);
-// Gfx
+// Is cached?
+//			if(this->PoolEntry->Filename==ACTORS_SPONGEBOB_SBK) return(0);
 
-RECT		Rect;
-			Rect.x=TexX;
-			Rect.y=TexY;
-			Rect.w=FrameGfx->W/4;
-			Rect.h=FrameGfx->H;
+			ThisNode=PoolEntry->ThisCache.List;
+			while (ThisNode)
+			{
+				if (ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
+				ThisNode=ThisNode->Next;
+			}
 
-			LoadImage( &Rect, (u32*)UnpackBuffer);
+			if (!ThisNode)
+			{ // Not cached frame
+				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->CachePool);
+				CActorCache::AddNode(ThisNode,&PoolEntry->ThisCache);
+				RECT	R;
 
-POLY_FT4	*Ft4=GetPrimFT4();
-			SetUpFT4(Ft4,FrameGfx,Pos.vx,Pos.vy,XFlip,YFlip);
+				ThisNode->Anim=Anim;
+				ThisNode->Frame=Frame;
+
+				PAK_doUnpak(UnpackBuffer,FrameGfx->PAKSpr);
+				R.x=ThisNode->TexX;
+				R.y=ThisNode->TexY;
+				R.w=FrameGfx->W>>2;	// div 4 cos 16 color
+				R.h=FrameGfx->H;
+				LoadImage( &R, (u32*)UnpackBuffer);
+			}
+
+			Ft4=GetPrimFT4();
+			SetUpFT4(Ft4,FrameGfx,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
 			setRGB0(Ft4,128,128,128);
-			Ft4->tpage=TPage;
-			Ft4->clut=Clut;
+			Ft4->tpage=ThisNode->TPage;
+			Ft4->clut=PoolEntry->ActorGfx->Clut;
 			AddPrimToList(Ft4,ActorOT);
 
 			if (Shadow)
@@ -368,10 +486,12 @@ POLY_FT4	*Ft4=GetPrimFT4();
 }
 
 /*****************************************************************************/
-void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,int X,int Y,bool XFlip,bool YFlip)
+void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip)
 {
 u8		W=Frame->W;
 u8		H=Frame->H;
+u8		U=Node->U;
+u8		V=Node->V;
 
 		if (XFlip)
 			{
@@ -387,9 +507,9 @@ u8		H=Frame->H;
 		{
 			X+=Frame->XOfs;
 			Ft4->u0=U;
-			Ft4->u1=U+W;
+			Ft4->u1=U+W-1;
 			Ft4->u2=U;
- 			Ft4->u3=U+W;
+ 			Ft4->u3=U+W-1;
 
 		}
 
@@ -489,12 +609,6 @@ int			ShiftY=(Pos.vy & 15);
 			TList++;
 			gte_nclip_b();
 			gte_stsxy3_ft3(TPrimPtr);
-//			if (TriCount==1)
-//			{
-//				printf("%i,%i\n",TPrimPtr->x0,TPrimPtr->y0);
-//
-//			}
-
 			gte_stopz(&ClipZ);
 			if (ClipZ<=0)
 			{

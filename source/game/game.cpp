@@ -78,6 +78,50 @@ FontBank	*CGameScene::s_genericFont;
 MATRIX		CGameScene::CamMtx;
 
 /*****************************************************************************/
+CGameScene::ACTOR_TYPE CGameScene::actorType[39] =
+{
+	ACTOR_PLAYER,				//SpongeBob=0
+	ACTOR_FRIEND_NPC,			//BarnacleBoy=1
+	ACTOR_FRIEND_NPC,			//Gary=2
+	ACTOR_FRIEND_NPC,			//Krusty=3
+	ACTOR_FRIEND_NPC,			//MermaidMan=4
+	ACTOR_FRIEND_NPC,			//Patrick=5
+	ACTOR_FRIEND_NPC,			//Sandy=6
+	ACTOR_FRIEND_NPC,			//Squidward=7
+	ACTOR_FRIEND_NPC,			//Plankton=8
+	ACTOR_UNKNOWN,
+	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level1=10
+	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level2=11
+	ACTOR_ENEMY_NPC,			//Motherjellyfish=12
+	ACTOR_ENEMY_NPC,			//Anenome-Level1=13
+	ACTOR_ENEMY_NPC,			//SpikeyAnenome=14
+	ACTOR_ENEMY_NPC,			//Anenome-Level3=15
+	ACTOR_ENEMY_NPC,			//BabyOctopus=16
+	ACTOR_ENEMY_NPC,			//Ballblob=17
+	ACTOR_ENEMY_NPC,			//Boogermonster=18
+	ACTOR_ENEMY_NPC,			//Caterpillar=19
+	ACTOR_ENEMY_NPC,			//Clam-Level1=20
+	ACTOR_ENEMY_NPC,			//Clam-Level2=21
+	ACTOR_ENEMY_NPC,			//Eyeball=22
+	ACTOR_ENEMY_NPC,			//Flamingskull=23
+	ACTOR_ENEMY_NPC,			//FlyingDutchman=24
+	ACTOR_ENEMY_NPC,			//Ghost=25
+	ACTOR_ENEMY_NPC,			//GiantWorm=26
+	ACTOR_ENEMY_NPC,			//HermitCrab=27
+	ACTOR_ENEMY_NPC,			//IronDogFish=28
+	ACTOR_ENEMY_NPC,			//PuffaFish=29
+	ACTOR_ENEMY_NPC,			//SeaSnake=30
+	ACTOR_ENEMY_NPC,			//Sharkman=31
+	ACTOR_ENEMY_NPC,			//SharkSub=32
+	ACTOR_ENEMY_NPC,			//Skeletalfish=33
+	ACTOR_ENEMY_NPC,			//SpiderCrab=34
+	ACTOR_ENEMY_NPC,			//Squiddart=35
+	ACTOR_ENEMY_NPC,			//Stomper=36
+	ACTOR_ENEMY_NPC,			//DustDevil=37
+	ACTOR_ENEMY_NPC,			//SiderCrabSpawner=38
+};
+
+/*****************************************************************************/
 
 int s_globalLevelSelectThing=0;
 int CGameScene::s_readyToExit;
@@ -103,15 +147,9 @@ const s32 Scale = (512<<12)/(256);
 void 	CGameScene::init()
 {
 // Setup Constant Camera Matrix
-//		SetIdentNoTrans(&CamMtx);
-//		CamMtx.t[2]=ZPos;
-//		AspectCorrectCamera();
-//		SetRotMatrix(&CamMtx);
-//		SetTransMatrix(&CamMtx);
-
+		SetIdentTrans(&CamMtx,0,0,RenderZ);
 		SetGeomScreen(RenderZ);
-		CamMtx.t[2]=RenderZ;
-		SetTransMatrix(&CamMtx);
+		SetTransMatrix(&CamMtx);		
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
@@ -127,8 +165,8 @@ void 	CGameScene::init()
 
 		CFader::setFadingIn();
 		initLevel();
-}
 
+}
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
 // the demo mode (pkg)
@@ -164,6 +202,12 @@ void 	CGameScene::render()
 		m_pauseMenu->render();
 		CConversation::render();
 		CThingManager::renderAllThings();
+
+		SetIdentTrans(&CamMtx,0,0,RenderZ);
+		SetGeomScreen(RenderZ);
+		SetRotMatrix(&CamMtx);
+		SetTransMatrix(&CamMtx);
+
 		Level.render();
 }
 
@@ -265,10 +309,10 @@ void	CGameScene::initLevel()
 		for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
 		{
 			sThingActor	*ThisActor=actorList[actorNum];
-			CActorPool::ACTOR_TYPE actorType = CActorPool::getActorType( actorList[actorNum]->Type );
+			CGameScene::ACTOR_TYPE actorType = CGameScene::getActorType( actorList[actorNum]->Type );
 			switch ( actorType )
 			{
-				case CActorPool::ACTOR_ENEMY_NPC:
+				case CGameScene::ACTOR_ENEMY_NPC:
 					{
 						CNpcEnemy *enemy;
 						enemy=CNpcEnemy::Create(ThisActor);
@@ -300,8 +344,8 @@ void	CGameScene::initLevel()
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
+	CActorPool::SetUpCache();
 	printf("InitLevelDone\n");
-
 }
 
 

@@ -12,120 +12,152 @@
 #include <biglump.h>
 #endif
 
-struct	sSlot
+/*****************************************************************************/
+// Pack together Actor anim & frame for quicker check later
+struct	sPoolNode
 {
-		u16		W,H;
+		u16			Actor;
+		u16			Anim;
+		u16			Frame;
+		u16			TPage;
+		u16			TexX,TexY;
+		u8			U,V;
+		sPoolNode	*Prev,*Next;
+};
+
+struct	sNodeList
+{
+		sPoolNode	*List;
+		sPoolNode	*LastNode;
+};
+
+struct	sPoolSlot
+{
+		u16			Width,Height;
+		u16			RefCount;
+		u16			FrameCount;
+		sNodeList	NodeList;
 };
 
 /*****************************************************************************/
 struct	sActorPool
 {
 		FileEquate		Filename;
-		sSpriteAnimBank	*SpriteBank;
-		u16				RefCount;
-		u16				Clut;
+		sSpriteAnimBank	*ActorGfx;
+		int				CacheSlot;
+		sNodeList		*CachePool;
+		sNodeList		ThisCache;
+		sActorPool		*Next;
 };
 
 /*****************************************************************************/
-class	CSlotCache
+class	CActorCache
 {
 public:
 		enum
 		{
-			DYN_W			=64,
-			DYN_H			=64,
-			DYN_TPAGEW		=4*256,
-			DYN_TPAGEH		=1*256,
-			DYN_SLOTW		=(DYN_TPAGEW/DYN_W),
-			DYN_SLOTH		=(DYN_TPAGEH/DYN_H),
-			DYN_SLOTX		=512+256,
-			DYN_SLOTY		=256,
+			TPAGE_W			=256,
+			TPAGE_H			=256-4,
+
+			CACHE_X			=512+256,
+			CACHE_Y			=256,
+			CACHE_W			=4,
+			CACHE_H			=1,
+
+			CACHE_PALX		=CACHE_X,
+			CACHE_PALY		=511,
+			CACHE_PALW		=64,
+			CACHE_PALH		=1,
+
+			CACHE_TABLE_W	=(TPAGE_W*CACHE_W)/32,
+			CACHE_TABLE_H	=(TPAGE_H*CACHE_H)/32,
+
+			CACHE_TYPE_MAX	=8,
+
+			MAX_ACTOR_W		=128,
+			MAX_ACTOR_H		=128,
+			MAX_ACTOR_SIZE	=MAX_ACTOR_W*MAX_ACTOR_H,
 		};
-		CSlotCache(){};
-		~CSlotCache(){};
 
+		CActorCache();
+		~CActorCache();
 
-		void	Init();
-		bool	FindSlot(int SprW,int SprH,u16 &TexX,u16 &TexY,u8 &u,u8 &v);
+		int			ReserveSlot(int W,int H,int FrameCount);
+		void		AllocCache();
+		void		Reset();
+		void		LoadPalette(sActorPool *NewActor);
+		sNodeList	*GetSlotList(int Slot)		{return(&SlotList[Slot].NodeList);}
+
+static	sPoolNode	*RemoveHeadNode(sNodeList *Root);
+static	void		RemoveNode(sPoolNode *Node,sNodeList *Root);
+static	void		AddNode(sPoolNode *Node,sNodeList *Root);
+
 protected:
-		bool	TakeSlot(int SX,int SY,int SW,int SH);
+		int			GetSlot(int W,int H);
+		void		InitCache(int Type,int Count);
+		int			GetSizeType(int Size);
 
-		sSlot	Cache[DYN_SLOTW][DYN_SLOTH];
 
+		u8			SlotTable[CACHE_TABLE_W][CACHE_TABLE_H];
+		sPoolSlot	SlotList[CACHE_TYPE_MAX];
+
+		int			CurrentTPX;
+		int			CurrentPalette;
+		int			SlotCount;
 };
+
 /*****************************************************************************/
 class CActorGfx;
 class CActorPool
 {
 public:
-		enum
-		{
-			MAX_ACTORS		=64,
-			MAX_ACTOR_SIZE=	128*128,
-		};
-
-		enum ACTOR_TYPE
-		{
-			ACTOR_PLAYER = 0,
-			ACTOR_FRIEND_NPC = 1,
-			ACTOR_ENEMY_NPC,
-			ACTOR_UNKNOWN,
-		};
 
 static	void		Init();
+static	void		Reset();
+static	void		SetUpCache();		
 
 static	void		AddActor(FileEquate Filename)		{GetActor(Filename);}
 static	CActorGfx	*GetActor(FileEquate Filename);
-static	void		DumpActors();
-		
-
-static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 
 protected:
-static	int			FindActorInPool(FileEquate Filename);
-static	int			FindFreeActor();
-static	int			LoadActor(FileEquate Filename);
-static	u16			LoadPalette(sActorPool &ThisActor,int Idx);
+static	sActorPool	*FindActor(FileEquate Filename);
+static	sActorPool	*LoadActor(FileEquate Filename);
+static	void		AddActor(sActorPool *ThisActor);
 
-
-static	sActorPool	ActorPool[];
-
-static	ACTOR_TYPE	actorType[];
-
+static	CActorCache	Cache;
+static	sActorPool	*ActorList,*LastActor;
 };
 
 /*****************************************************************************/
 class	CActorGfx
 {
 public:
-		CActorGfx();
+		enum
+		{
+			ShadowXOfs	=32,
+			ShadowYOfs	=32,
+
+		};
+
+		CActorGfx(sActorPool *ThisActor);
 virtual	~CActorGfx();
 
-		void		SetData(FileEquate Filename,sSpriteAnimBank *_SpriteBank,u16 _Clut);
-static	void		ResetCache();
+		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false,bool Shadow=false);
 
-		POLY_FT4	*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false,bool Shadow=false);
-
-		int			getFrameCount(int Anim)		{return(SpriteBank->AnimList[Anim].FrameCount);}
-
+		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
+		int				GetTotalFrameCount();
 
 protected:
-		void		SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip);
+		void			SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
 
-		sSpriteAnimBank	*SpriteBank;
+		sActorPool		*PoolEntry;
 
-//		RECT			DrawRect;
-		u16				Clut;
-		u16				TPage,TexX,TexY;
-		u8				U,V;
-
-static	CSlotCache	SlotCache;
-static	u8			UnpackBuffer[CActorPool::MAX_ACTOR_SIZE];
-
-
+static	u8				UnpackBuffer[CActorCache::MAX_ACTOR_SIZE];
 };
 
+/*****************************************************************************/
+/*****************************************************************************/
 /*****************************************************************************/
 class	CModelGfx
 {
