@@ -640,12 +640,6 @@ void	CPlayerModeBase::jump()
 	{
 		if ( platform->isCart() )
 		{
-			/*Pos.vx = platform->getPos().vx;
-			Pos.vy = platform->getPos().vy;
-
-			int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
-			Pos.vy += platformOffset;*/
-
 			platform->jump();
 
 			return;
