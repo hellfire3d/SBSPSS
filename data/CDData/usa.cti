@@ -1,0 +1,66 @@
+ShowDefines
+
+Disc	CDROMXA_PSX	template.img
+CatalogNumber	000000000000
+LeadIn	XA
+Empty	1000
+PostGap 150
+EndTrack
+Track XA
+Pause 150
+Volume	ISO9660	CD.ISO
+SystemArea "data\cddata\LICENSEA.RAW"
+PrimaryVolume
+SystemIdentifier		"PLAYSTATION"
+VolumeIdentifier		"TEMPLATE"
+LogicalBlockSize		2048
+VolumeSetIdentifier	"VOLUME1"
+PublisherIdentifier	"SONY"
+DataPreparerIdentifier	"EXAMPLE"
+ApplicationIdentifier	"SONY"
+Lpath
+OptionalLpath
+Mpath
+OptionalMpath
+Hierarchy
+
+File	SYSTEM.CNF
+XAFileAttributes	Form1	Data
+Source	data\cddata\usa.cnf
+EndFile
+
+File	BOOTUSA.EXE
+XAFileAttributes	Form1	Data
+Source	cdbuild\usa\BOOTUSA.EXE
+EndFile
+
+File	LEGAL.GFX
+XAFileAttributes	Form1	Data
+Source	cdbuild\usa\Legal.gfx
+EndFile
+
+File	SPONGEY.BIN
+XAFileAttributes	Form1	Data
+Source	cdbuild\usa\spongey.bin
+EndFile
+
+File	BIGLUMP.BIN
+XAFileAttributes	Form1	Data
+Source	cdbuild\usa\biglump.bin
+EndFile
+
+File	ZZZZZZZZ.ZZZ
+XAFileAttributes	Form1	Data
+Source	cdbuild\usa\ZZZZZZZZ.ZZZ
+EndFile
+
+EndHierarchy
+EndPrimaryVolume
+EndVolume
+Empty	300
+PostGap	150
+EndTrack
+Leadout	XA
+Empty	500
+EndTrack
+EndDisc

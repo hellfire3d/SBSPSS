@@ -1,0 +1,91 @@
+ShowDefines
+
+Disc	CDROMXA_PSX	template.img
+CatalogNumber	000000000000
+LeadIn	XA
+Empty	1000
+PostGap 150
+EndTrack
+Track XA
+Pause 150
+Volume	ISO9660	CD.ISO
+SystemArea "makecd\temp\pal.DAT"
+PrimaryVolume
+SystemIdentifier		"PLAYSTATION"
+VolumeIdentifier		"TEMPLATE"
+LogicalBlockSize		2048
+VolumeSetIdentifier	"VOLUME1"
+PublisherIdentifier	"SONY"
+DataPreparerIdentifier	"EXAMPLE"
+ApplicationIdentifier	"SONY"
+Lpath
+OptionalLpath
+Mpath
+OptionalMpath
+Hierarchy
+
+File	SYSTEM.CNF
+XAFileAttributes	Form1	Data
+Source	quad_cd\final\pal\system.cnf
+EndFile
+
+File	SLES_028.22
+XAFileAttributes	Form1	Data
+Source	quad_cd\final\pal\sles_028.22
+EndFile
+
+File	LIVE.CAT
+XAFileAttributes
+XaSource	quad_cd\live.cat
+EndFile
+
+File	DEAD.DOG
+XAFileAttributes
+XaSource	quad_cd\dead.dog
+EndFile
+
+File	LOGO.STR
+XAFileAttributes
+XaSource	quad_cd\logo.str
+EndFile
+
+File	INTRO.STR
+XAFileAttributes
+XaSource	quad_cd\intro.str
+EndFile
+
+File	TRACKSEL.STR
+XAFileAttributes
+XaSource	quad_cd\tracksel.str
+EndFile
+
+File	QUAD.BIN
+XAFileAttributes	Form1	Data
+Source	quad_cd\final\pal\quad.bin
+EndFile
+
+File	FE.BIN
+XAFileAttributes	Form1	Data
+Source	quad_cd\final\pal\fe.bin
+EndFile
+
+File	MAIN.BIN
+XAFileAttributes	Form1	Data
+Source	quad_cd\final\pal\main.bin
+EndFile
+
+File	IAMA.BUS
+XAFileAttributes	Form1	Data
+Source	quad_cd\IAMA.BUS
+EndFile
+
+EndHierarchy
+EndPrimaryVolume
+EndVolume
+Empty	300
+PostGap	150
+EndTrack
+Leadout	XA
+Empty	500
+EndTrack
+EndDisc
