@@ -46,3 +46,15 @@ eng=This is another test string with more text.
 [STR__PAULS_TEST_STRING_3]
 eng=Finally, another example containing wordage of increased length.
 
+[STR__PAULS_TEST__CONTROL_TYPE]
+eng=CONTROL TYPE
+[STR__PAULS_TEST__MUSIC]
+eng=MUSIC
+[STR__PAULS_TEST__SFX]
+eng=SFX
+
+
+
+
+
+

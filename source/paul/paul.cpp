@@ -77,6 +77,11 @@
 /*	Data
 	---- */
 
+#ifndef __SPR_UIGFX_H__
+#include <uigfx.h>
+#endif
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -105,36 +110,104 @@ unsigned int str=STR__PAULS_TEST_STRING_1;
 int w=150;
 int h=40;
 
-int testValue=0;
-CGUITextReadout::TextReadoutData testReadoutData[]=
+CGUITextReadout::TextReadoutData onOffTextReadouts[]=
 {
-	{	1,	STR__PAULS_TEST_STRING_1,	},
-	{	2,	STR__PAULS_TEST_STRING_2,	},
-	{	3,	STR__PAULS_TEST_STRING_3,	},
-	{	0,	0,							},
+	{	0,	STR__ON,	},
+	{	1,	STR__OFF,	},
+	{	0,	0,			},
 };
-int testButtonData[]=
+CGUISpriteReadout::SpriteReadoutData onOffSpriteReadouts[]=
 {
-	1,2,3,
+	{	0,	FRM__CROSS,	},
+	{	1,	FRM__TICK,	},
+	{	0,	0,			},
+};
+int onOffValues[]=
+{
+	0,1,
 	0,
 };
+int musicStatus=0;
+int sfxStatus=0;
+
+
 
 CGUIControlFrame	*baseGUIObject;
 
 
 void CPaulScene::init()
 {
-	CGUITextBox		*tb;
-	CGUITextReadout	*tr;
-	CGUIGroupFrame	*fr;
-	CGUIButton		*bu;
+	CGUIGroupFrame		*fr;
+	CGUITextBox			*tb;
+	CGUIButton			*bu;
+	CGUITextReadout		*tr;
+	CGUISpriteReadout	*sr;
 
 	s_fontBank.initialise(&standardFont);
 
 	baseGUIObject=new ("Uber GUI object") CGUIControlFrame();
-	baseGUIObject->init(NULL,0);
-	baseGUIObject->setObjectXYWH(32,100,512-64,120);
+	baseGUIObject->init(NULL,1);
+	baseGUIObject->setObjectXYWH(32,32,512-64,256-64);
 
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject,2);
+	fr->setObjectXYWH(10,10,448-20,30);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr,20);
+		tb->setObjectXYWH(0,0,300,30);
+		tb->setText(STR__PAULS_TEST__MUSIC);
+		bu=new ("button") CGUIButton();
+		bu->init(fr,21);
+//		bu->setObjectXYWH(0,0,0,0);
+		bu->setButtonTarget(&musicStatus);
+		bu->setButtonData(onOffValues);
+		tr=new ("textreadout") CGUITextReadout();
+		tr->init(fr,22);
+		tr->setObjectXYWH(300,0,128,30);
+		tr->setReadoutTarget(&musicStatus);
+		tr->setReadoutData(onOffTextReadouts);
+
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject,3);
+	fr->setObjectXYWH(10,50,448-20,30);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr,30);
+		tb->setObjectXYWH(0,0,300,30);
+		tb->setText(STR__PAULS_TEST__SFX);
+		bu=new ("button") CGUIButton();
+		bu->init(fr,31);
+//		bu->setObjectXYWH(0,0,0,0);
+		bu->setButtonTarget(&sfxStatus);
+		bu->setButtonData(onOffValues);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr,32);
+		sr->setObjectXYWH(300,0,128,30);
+		sr->setReadoutTarget(&sfxStatus);
+		sr->setReadoutData(onOffSpriteReadouts);
+
+
+
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject,3);
+	fr->setObjectXYWH(10,90,448-20,30);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr,30);
+		tb->setObjectXYWH(0,0,300,30);
+		tb->setText(STR__PAULS_TEST__SFX);
+		bu=new ("button") CGUIButton();
+		bu->init(fr,31);
+//		bu->setObjectXYWH(0,0,0,0);
+		bu->setButtonTarget(&sfxStatus);
+		bu->setButtonData(onOffValues);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr,32);
+		sr->setObjectXYWH(300,0,128,30);
+		sr->setReadoutTarget(&sfxStatus);
+		sr->setReadoutData(onOffSpriteReadouts);
+		
+
+
+/*
 	tb=new ("textbox") CGUITextBox();
 	tb->init(baseGUIObject,1);
 	tb->setObjectXYWH(10,10,400,25);
@@ -158,7 +231,7 @@ void CPaulScene::init()
 	tr->setObjectXYWH(10,70,400,25);
 	tr->setReadoutTarget(&testValue);
 	tr->setReadoutData(testReadoutData);
-
+*/
 	// Heh.. this'll actually work =)
 //	baseGUIObject->shutdown();
 
@@ -185,20 +258,24 @@ void CPaulScene::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int showDebugLog=false;
 void CPaulScene::render()
 {
-	int		logCount;
-	int		i,y,charHeight;
-	
-	logCount=getNumberOfDbgLinesInLog();
-	y=20;
-	charHeight=s_fontBank.getCharHeight();
-	for(i=0;i<logCount;i++)
-	{
-		s_fontBank.print(20,y,getDbgLineFromLog(i));
-		y+=charHeight;
-	}
 
+	if(showDebugLog)
+	{
+		int		logCount;
+		int		i,y,charHeight;
+		logCount=getNumberOfDbgLinesInLog();
+		y=20;
+		charHeight=s_fontBank.getCharHeight();
+		for(i=0;i<logCount;i++)
+		{
+			s_fontBank.print(20,y,getDbgLineFromLog(i));
+			y+=charHeight;
+		}
+	}
+	
 	baseGUIObject->render();
 }
 

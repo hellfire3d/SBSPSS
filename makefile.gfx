@@ -89,18 +89,12 @@ UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 UI_GFX_FONT_IN	:=			$(GRAF_DIR)/ui/font/font.anm
 
 UI_GFX_NONTRANS :=			
-UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_NONTRANS_DIR)/$(FILE))
+UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS :=				
-UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_TRANS_DIR)/$(FILE).bmp)
+UI_GFX_TRANS :=				+cross.bmp +tick.bmp
+UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS2 :=
-UI_GFX_TRANS2_IN :=			$(foreach FILE,$(UI_GFX_TRANS2),$(UI_NONTRANS_DIR)/$(FILE))
-
-UI_GFX_NO_ROT :=
-UI_GFX_NO_ROT_IN :=			
-
-UI_GFX_TEX_IN :=		$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN} ${UI_GFX_TRANS2_IN} ${UI_GFX_NO_ROT_IN}
+UI_GFX_TEX_IN :=		$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}
 UI_GFX_TEX_OUT :=		$(UI_GFX_OUT_DIR)/UIGfx.Spr
 UI_GFX_REP_FILE :=		$(REPORT_DIR)/UIGfx.rep
 UI_GFX_HDR_FILE :=		$(INC_DIR)/UIGfx.h
@@ -111,7 +105,7 @@ cleanuigfx :
 uigfx: 		$(UI_GFX_TEX_IN)
 
 $(UI_GFX_TEX_OUT) :	$(UI_GFX_TEX_IN)
-		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c+ -z- ${UI_GFX_NONTRANS_IN} -c- -z- ${UI_GFX_TRANS2_IN} -r- ${UI_GFX_NO_ROT_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
+		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c+ -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
 		@$(MV) -f $(UI_GFX_OUT_DIR)/uigfx.h $(UI_GFX_HDR_FILE)
 
 GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)

@@ -107,7 +107,6 @@ int CGUIGroupFrame::isSelectable()
 		pGUI=pGUI->getNext();
 	}
 
-GUI_DBGMSG("frame is %s",selectable?"SELECTABLE":"NOT SELECTABLE");	
 	return selectable;
 }
 
@@ -143,17 +142,54 @@ void CGUIControlFrame::think(int _frames)
 				pGUI=pGUI->getNext();
 			}
 			pGUI->unselect();
-GUI_DBGMSG("unselected %d",pGUI->getId());
 
-			// Find next selectbale object and select it
-			while(!pGUI->isSelectable())
+			// Find next selectable object and select it
+			do
 			{
 				pGUI=pGUI->getNext();
 				if(!pGUI)pGUI=getChild();
 			}
+			while(!pGUI->isSelectable());
 			pGUI->select();
-GUI_DBGMSG("selected %d",pGUI->getId());
 		}
+	}
+	else if(pad&PAD_UP)
+	{
+/////////////////////
+		CGUIObject	*pGUI,*prevGUI;
+		
+		pGUI=getChild();
+		prevGUI=0;
+		if(pGUI)
+		{
+			// Get current selection and deselect it
+			while(!pGUI->isSelected())
+			{
+				ASSERT(pGUI);
+				if(pGUI->isSelectable())
+				{
+					prevGUI=pGUI;
+				}
+				pGUI=pGUI->getNext();
+			}
+			pGUI->unselect();
+
+			// Find previous selectable object and select it
+			if(!prevGUI)
+			{
+				do
+				{
+					if(pGUI->isSelectable())
+					{
+						prevGUI=pGUI;
+					}
+					pGUI=pGUI->getNext();
+				}
+				while(pGUI);
+			}
+			prevGUI->select();
+		}
+/////////////////////
 	}
 }
 

@@ -92,8 +92,7 @@ void CGUIObject::init(CGUIObject *_parent,GUIId _id)
 	}
 	else
 	{
-		// PKG - Need to add some code to check that only one bastard ( that is, parentless :) object
-		// is ever in existance.
+		// This object is a bastard :)
 		GUI_DBGMSG("INFO: GUI object without parent created!");
 		setOt(INITIAL_OT);
 	}
@@ -114,22 +113,19 @@ void CGUIObject::shutdown()
 	if(m_next)m_next->shutdown();			m_next=NULL;
 	m_parent=NULL;
 
-	// Is this actually safe? Not really.. (PKG)
+	// Is this actually safe? Not *really* (PKG)
 	delete this;
 }
 
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	NB: The chain of render functions needs to be reversed so
-				that the draworder is correct! Look at any subclasses
-				render() function to see what I mean by this.. (PKG)
-				um.. or does it?
+	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef __USER_paul__
-int forceBorderDraw=true;
+int forceBorderDraw=false;
 #endif
 void CGUIObject::render()
 {

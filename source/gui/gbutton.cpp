@@ -80,6 +80,7 @@ void CGUIButton::think(int _frames)
 	ASSERT(m_target);
 	ASSERT(m_data);
 	
+	CGUIObject::think(_frames);
 	if(isSelected())
 	{
 		int pad;
@@ -89,7 +90,7 @@ void CGUIButton::think(int _frames)
 		{
 			int	*data;
 			int	tmp;
-			GUI_DBGMSG("*C*L*I*C*K");
+
 			data=m_data;
 			tmp=*data;
 			do

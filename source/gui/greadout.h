@@ -67,6 +67,41 @@ private:
 };
 
 
+class CGUISpriteReadout : public CGUIObject
+{
+public:
+	typedef struct
+	{
+		int		m_value;
+		int		m_frame;
+	} SpriteReadoutData;
+
+	
+	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		shutdown();
+
+	virtual void		setReadoutTarget(int *_target);
+	virtual void		setReadoutData(SpriteReadoutData *_data);
+
+	virtual void		render();
+	virtual void		think(int _frames);
+
+
+protected:
+	void				recalc();
+
+	
+private:
+	int					*m_target;
+	SpriteReadoutData	*m_data;
+	class SpriteBank	*m_sprites;
+	int					m_lastValue;
+	int					m_frame;
+	int					m_x,m_y;
+
+};
+
+
 
 
 
