@@ -40,7 +40,7 @@
 CFX::sFXRGB	CFX::FXRGBTable[CFX::FX_RGB_MAX]=
 {
 	{127,127,255},		// Water
-	{127,255,127},		// Acid
+	{0,255,0},		// Acid
 	{255,  0,  0},		// Lava
 	{ 64, 64, 64},		// Oil
 };
