@@ -82,6 +82,17 @@ int			YPos=MapPos.vy>>MapXYShift;
 			ShiftX=XPos & 15;
 			ShiftY=YPos%TILE2D_HEIGHT;
 
+			if (MapXY.vx<0)
+			{
+				MapXY.vx=0;
+				ShiftX=0;
+			}
+			if (MapXY.vy<0) 
+			{
+				MapXY.vy=0;
+				ShiftY=0;
+			}
+
 			if (MapXY.vx+SCREEN_TILE2D_WIDTH<=MapWidth)
 				RenderW=SCREEN_TILE2D_WIDTH;
 			else

@@ -51,36 +51,44 @@ sLayerNameTable	LayerNameTable[]=
 #define		LayerNameTableSize	sizeof(LayerNameTable)/sizeof(sLayerNameTable)
 
 //***************************************************************************
-int				TSize,QSize,VSize;
-int				Tile2dSize,Tile3dSize;
+int			TSize,QSize,VSize;
+int			Tile2dSize,Tile3dSize;
 const char	*ModelExcludeGroupName="ModelExcludeList";
 const char	*ModelOtOfsGroupName="ModelOtOfs";
-
+int			LocalOptCount=0;
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
 sExpLayerTile	BlankTile={0,0};
 
+
+const float	InElemXMin=-0.5f;
+const float	InElemXMax=+0.5f;
+const float	InElemYMin=-0.0f;
+const float	InElemYMax=+1.0f;
+const float	InElemZMin=-4.0f;
+const float	InElemZMax=+4.0f;
+
+const float	OutElemXMin=-0.5f;
+const float	OutElemXMax=+0.5f;
+const float	OutElemYMin=-0.5f;
+const float	OutElemYMax=+0.5f;
+const float	OutElemZMin=-4.0f;
+const float	OutElemZMax=+4.0f;
+
 Vector3	DefVtxTable[8]=
 {
-	Vector3(+0.5f,+1.0f,-4.0f),
-	Vector3(-0.5f,+1.0f,-4.0f),
-	Vector3(+0.5f, 0.0f,-4.0f),
-	Vector3(-0.5f, 0.0f,-4.0f),
+	Vector3(OutElemXMin,OutElemYMin,OutElemZMin),	// FLU
+	Vector3(OutElemXMax,OutElemYMin,OutElemZMin),	// FRU
+	Vector3(OutElemXMin,OutElemYMax,OutElemZMin),	// FLD
+	Vector3(OutElemXMax,OutElemYMax,OutElemZMin),	// FRD
 
-	Vector3(+0.5f,+1.0f,+4.0f),
-	Vector3(-0.5f,+1.0f,+4.0f),
-	Vector3(+0.5f, 0.0f,+4.0f),
-	Vector3(-0.5f, 0.0f,+4.0f),
+	Vector3(OutElemXMin,OutElemYMin,OutElemZMax),	// BLU
+	Vector3(OutElemXMax,OutElemYMin,OutElemZMax),	// BRU
+	Vector3(OutElemXMin,OutElemYMax,OutElemZMax),	// BLD
+	Vector3(OutElemXMax,OutElemYMax,OutElemZMax),	// BRD
 };
 #define	DefVtxTableSize	sizeof(DefVtxTable)/sizeof(Vector3)
 
-float	SnapThresh=0.05f;
-float	SnapXMin=-0.5f;
-float	SnapXMax=+0.5f;
-float	SnapYMin=-0.0f;
-float	SnapYMax=+1.0f;
-float	SnapZMin=-4.0f;
-float	SnapZMax=+4.0f;
 
 //***************************************************************************
 CMkLevel::CMkLevel()
@@ -113,7 +121,7 @@ GFName	Path=AppPath;
 }
 
 //***************************************************************************
-void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int _PakW,int _PakH,bool _LocalGeom)
+void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int _PakW,int _PakH,bool _LocalGeom,float _SnapThresh)
 {
 // Setup filenames and paths
 GFName		Path;
@@ -187,8 +195,8 @@ char		Buffer[256];
 		PakW=_PakW;
 		PakH=_PakH;
 		LocalGeom=_LocalGeom;
+		SnapThresh=_SnapThresh;
 		AddDefVtx(OutVtxList);
-
 }
 
 //***************************************************************************
@@ -403,7 +411,12 @@ u8		*ByteHdr=(u8*)FileHdr;
 void	CMkLevel::SnapTiles()
 {
 int		i,ListSize=InTileList.size();
-int		Count=0;
+float	SnapXMin=InElemXMin+SnapThresh;
+float	SnapXMax=InElemXMax-SnapThresh;
+float	SnapYMin=InElemYMin+SnapThresh;
+float	SnapYMax=InElemYMax-SnapThresh;
+float	SnapZMin=InElemZMin+SnapThresh;
+float	SnapZMax=InElemZMax-SnapThresh;
 
 		for (i=0;i<ListSize;i++)
 		{
@@ -415,20 +428,17 @@ int		Count=0;
 				{
 					Vector3	&V=ThisTri.vtx[p];
 
-					if (V.x<SnapXMin+SnapThresh) {V.x=SnapXMin;Count++;}
-					if (V.x>SnapXMax-SnapThresh) {V.x=SnapXMax;Count++;}
-					if (V.y<SnapYMin+SnapThresh) {V.y=SnapYMin;Count++;}
-					if (V.y>SnapYMax-SnapThresh) {V.y=SnapYMax;Count++;}
-					if (V.z<SnapZMin+SnapThresh) {V.z=SnapZMin;Count++;}
-					if (V.z>SnapZMax-SnapThresh) {V.z=SnapZMax;Count++;}
+					if (V.x<SnapXMin) V.x=InElemXMin;
+					if (V.x>SnapXMax) V.x=InElemXMax;
+					if (V.y<SnapYMin) V.y=InElemYMin;
+					if (V.y>SnapYMax) V.y=InElemYMax;
+					if (V.z<SnapZMin) V.z=InElemZMin;
+					if (V.z>SnapZMax) V.z=InElemZMax;
 				}
 			}
 		}
-		if (Count)
-		{
-			printf("Snapped %i Vtx Coords - Bad Artists\n",Count);
-		}
 }
+
 //***************************************************************************
 //*** Process ***************************************************************
 //***************************************************************************
@@ -540,7 +550,7 @@ int		i,ListSize=UsedTile3dList.size();
 }
 
 //***************************************************************************
-int		MaxElemTri=0,MaxElemQuad=0;
+int		MaxElemTri=0,MaxElemQuad=0,MaxElemVtx=0;
 void	CMkLevel::ProcessElemBank3d()
 {
 //int		i,ListSize=UsedTile3dList.size();	<--- UsedTile3dList is tiles only!!
@@ -550,7 +560,12 @@ int		i,ListSize=OutElem3d.size();
 		{
 			ProcessElem3d(OutElem3d[i]);
 		}
-		printf("Max Elem Tri =%i\tMax Elem Quad =%i\n",MaxElemTri,MaxElemQuad);
+		printf("Max Elem Tri =%i\tMax Elem Quad =%i\tMax Elem Vtx =%i\n",MaxElemTri,MaxElemQuad,MaxElemVtx);
+		if (LocalGeom)
+		{
+			printf("LocalGeom Optimised %i/%i\n",LocalOptCount,ListSize);
+
+		}
 }
 
 //***************************************************************************
@@ -570,19 +585,29 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 			else
 			{ // Local Geom
 				vector<sVtx>	LocalVtxList;
-//				AddDefVtx(LocalVtxList);
+				AddDefVtx(LocalVtxList);
 				ThisList.Process(OutTriList,OutQuadList,LocalVtxList);
 				ThisElem.Elem3d.VtxIdxStart=OutLocalVtxIdxList.size();
-//				printf("%i\n",LocalVtxList.size());
+				
+				int		ListSize=LocalVtxList.size();
+				int		LocalVtxCount=0;
 
-				int VtxListSize=LocalVtxList.size();
-				for (int v=0; v<VtxListSize; v++)
+				for (int v=8; v<ListSize; v++)
 				{
 					u16	Idx=CFaceStore::AddVtx(OutVtxList,LocalVtxList[v]);
+
 					OutLocalVtxIdxList.push_back(Idx);
+					LocalVtxCount++;
 				}
-				ThisElem.Elem3d.VtxTriCount=VtxListSize/3;
-				if (VtxListSize%3) ThisElem.Elem3d.VtxTriCount++;
+				if (LocalVtxCount<=0) 
+				{
+					LocalOptCount++;
+					LocalVtxCount=0;
+				}
+				ThisElem.Elem3d.VtxTriCount=LocalVtxCount/3;
+				if (LocalVtxCount%3) ThisElem.Elem3d.VtxTriCount++;
+//				printf("%i=%i\n",LocalVtxCount,ThisElem.Elem3d.VtxTriCount);
+				
 
 				CalcOtOfs(OutTriList,LocalVtxList,ThisElem.Elem3d.TriStart,ThisList.GetTriFaceCount());
 				CalcOtOfs(OutQuadList,LocalVtxList,ThisElem.Elem3d.QuadStart,ThisList.GetQuadFaceCount());
@@ -595,6 +620,7 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 		{ // Gen max polys per tile (NOT MODEL)
 			if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
 			if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+			if (MaxElemVtx<ThisElem.Elem3d.VtxTriCount*3) MaxElemVtx=ThisElem.Elem3d.VtxTriCount*3;
 		}
 }
 
@@ -1064,8 +1090,11 @@ sVtx	Max={-100,-100,-100};
 		}
 		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));
 
-		printf("Min %i %i %i\n",Min.vx,Min.vy,Min.vz);
-		printf("Max %i %i %i\n",Max.vx,Max.vy,Max.vz);
+		printf("MinX: %i\tMaxX: %i\n",Min.vx,Max.vx);
+		printf("MinY: %i\tMaxY: %i\n",Min.vy,Max.vy);
+		printf("MinZ: %i\tMaxZ: %i\n",Min.vz,Max.vz);
+//		printf("Min %i %i %i\n",Min.vx,Min.vy,Min.vz);
+//		printf("Max %i %i %i\n",Max.vx,Max.vy,Max.vz);
 
 		return(Pos);
 }

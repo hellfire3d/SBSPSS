@@ -88,7 +88,7 @@ public:
 		~CMkLevel();
 
 		void			SetAppDir(const char *Path);
-		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int PakW,int PakH,bool LocalGeom);
+		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int PakW,int PakH,bool LocalGeom,float SnapThesh);
 
 		void			LoadModels();
 		int				AddModel(const char *Name,int TriStart,int TriCount);
@@ -201,6 +201,7 @@ protected:
 
 		int						PakW,PakH;
 		bool					LocalGeom;
+		float					SnapThresh;
 
 		vector<sTri>			OutTriList;
 		vector<sQuad>			OutQuadList;

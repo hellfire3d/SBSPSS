@@ -16,6 +16,7 @@ int			TPBase=-1,TPW=-1,TPH=-1;
 GString		IncDir;
 int			PakW=0,PakH=0;
 bool		LocalGeom=false;
+float		SnapThresh=0;
 
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
@@ -75,6 +76,11 @@ int		Count;
 					TextPtr+=strlen(TextPtr)+1;
 					PakH=atol(TextPtr);
 					break;
+				case 'z':
+					TpStr= CheckFileString(String);
+					SnapThresh=atof(TpStr);
+					break;
+
 				default:
 					GObject::Error(ERR_FATAL,"Unknown switch %s",String);
 					break;
@@ -105,6 +111,7 @@ void Usage(char *ErrStr)
 	printf("   -q:             Enable Quadding\n");
 	printf("   -l:             Enable Local Geom\n");
 	printf("   -p:             Level Chunk Pak Info (X,Y) (Default=None(0,0)\n");
+	printf("   -z:             Snap Threshold\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 
@@ -120,7 +127,7 @@ std::vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		if (Files.size()>1)		Usage("Too many Levels specified\n");
 
 		Level.SetAppDir(argv[0]);
-		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH,PakW,PakH,LocalGeom);
+		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH,PakW,PakH,LocalGeom,SnapThresh);
 		Level.Load();
 		Level.Process();
 		Level.Write();

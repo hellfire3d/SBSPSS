@@ -18,6 +18,7 @@
 struct	sFlipTable
 {
 	s16		Mtx[4];
+	DVECTOR	*DeltaTab[8];
 	s32		ClipCode;
 };
 extern	sFlipTable	FlipTable[];
@@ -37,6 +38,7 @@ public:
 
 protected:
 		void			CacheElemVtx(sElem3d *Elem);
+		void			CalcDelta();
 
 		sElem3d			*ElemBank3d;
 		sTri			*TriList;
@@ -44,6 +46,16 @@ protected:
 		sVtx			*VtxList;
 		u16				*VtxIdxList;
 		DVECTOR			RenderOfs;
+
+		s16				*FTableX[16];
+		s16				*FTableY[16];
+		s16				*BTableX[16];
+		s16				*BTableY[16];
+		DVECTOR			DeltaFOfs;
+		DVECTOR			DeltaBOfs;
+		s16				DeltaF,DeltaB;
+
+
 };
 
 
