@@ -88,11 +88,12 @@ frontend_src :=		credits \
 					scrollbg \
 					start
 
-game_src :=			game \
+game_src :=			convo \
+					game \
 					gamebubs \
 					gameslot \
-					thing \
-					convo
+					pause \
+					thing
 
 gfx_src :=			prim \
 					tpage \

@@ -353,6 +353,14 @@ SOURCE=..\..\..\source\game\gameslot.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\game\pause.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\pause.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\thing.cpp
 # End Source File
 # Begin Source File
