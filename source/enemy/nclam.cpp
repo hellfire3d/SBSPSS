@@ -41,6 +41,11 @@ void CNpcClamEnemy::processEnemyCollision( CThing *thisThing )
 	// do nothing
 }
 
+void CNpcClamEnemy::processUserCollision( CThing *thisThing )
+{
+	// do nothing
+}
+
 bool CNpcClamEnemy::processSensor()
 {
 	switch( m_sensorFunc )
