@@ -122,7 +122,8 @@ level_src :=		level \
 					layertile \
 					layerback \
 					layertilesolid \
-					layertile3d
+					layertile3d \
+					layercollision
 
 locale_src :=		textdbase
 

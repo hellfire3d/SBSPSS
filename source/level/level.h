@@ -6,10 +6,11 @@
 #define __LEVEL_LEVEL_H__
 
 #include "system\global.h"
-#include	"level/layertile.h"
+#include "level/layertile.h"
+#include "level/layercollision.h"
 
 /*****************************************************************************/
-class	CLayer;
+class CLayer;
 class CLevel
 {
 public:
@@ -33,7 +34,9 @@ private:
 
 
 // Tile Layers
-	CLayerTile	*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];
+	CLayerTile		*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];
+// Collision
+	CLayerCollision	*CollisionLayer;
 };
 
 /*****************************************************************************/

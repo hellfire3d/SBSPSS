@@ -15,9 +15,9 @@
 #include	"level\layerback.h"
 #include	"level\layertilesolid.h"
 #include	"level\layertile3d.h"
+#include	"level\layercollision.h"
 
 #include	"pad\pads.h"
-
 
 DVECTOR CLevel::MapPos;
 
@@ -97,6 +97,13 @@ sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_FORE]=NewLayer;
 		}
 */
+// Collision
+		if (LevelHdr->CollisionLayer) 
+		{
+			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
+			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
+		}
+
 }
 
 /*****************************************************************************/

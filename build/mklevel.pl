@@ -21,7 +21,7 @@ make$Chapter\_$Level\:\t$Chapter\_$Level\_LVL\n
 clean$Chapter\_$Level\:\tclean$Chapter\_$Level\_LVL
 
 $Chapter\_$Level\_IN_DIR :=\t\$(LEVELS_IN_DIR)/$Chapter/$Level
-$Chapter\_$Level\_IN  :=\t\$(foreach LVL, \$(LEVELS_$Chapter\_$Level), \$($Chapter\_$Level\_IN_DIR)/$Level\$(LVL).pme)
+$Chapter\_$Level\_IN  :=\t\$(foreach LVL, \$(LEVELS_$Chapter\_$Level), \$($Chapter\_$Level\_IN_DIR)/$Level\$(LVL).mex)
 $Chapter\_$Level\_OUT :=\t\$(foreach LVL, \$(LEVELS_$Chapter\_$Level), \$(LEVELS_OUT_DIR)/$Chapter\_$Level\$(LVL).lvl)
 $Chapter\_$Level\_TEX :=\t\$(LEVELS_OUT_DIR)/$Chapter\_$Level.tex)
 

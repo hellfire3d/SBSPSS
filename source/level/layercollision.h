@@ -1,25 +1,26 @@
 /******************************/
-/*** Solid Tile Layer Class ***/
+/*** Collision  Layer Class ***/
 /******************************/
 
-#ifndef __LAYER_TILE_SOLID_H__
-#define __LAYER_TILE_SOLID_H__
+#ifndef __LAYER_COLLISION_H__
+#define __LAYER_COLLISION_H__
 
+#include	<dstructs.h>
 
 /*****************************************************************************/
-class CLayerTileSolid : public CLayerTile
+class CLayerCollision
 {
 public:
-		CLayerTileSolid(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
-		~CLayerTileSolid();
+		CLayerCollision(sLayerHdr *Hdr);
+virtual	~CLayerCollision();
 
-		void	init(DVECTOR &MapPos,int Shift,int Width,int Height);
-		void	shutdown();
-		void	think(DVECTOR &MapPos);
-		void	render();
+virtual	void			shutdown();
 
 protected:
+		sLayerHdr		*LayerHdr;
+		int				MapWidth,MapHeight;
 
+		u8				*Map;
 };
 
 
