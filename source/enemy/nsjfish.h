@@ -26,7 +26,7 @@ class CNpcSmallJellyfishEnemy : public CNpcEnemy
 {
 public:
 	virtual void		render();
-	virtual int			getFrameCount()							{return( FRM_JELLYFISH1_SWIM6 - FRM_JELLYFISH1_SWIM1 + 1 );}
+	virtual int			getFrameCount()							{return( FRM_JELLYFISH1_SWIM7 - FRM_JELLYFISH1_SWIM1 + 1 );}
 	virtual u8			canCollideWithEnemy()					{return( false );}
 protected:
 	virtual bool		processSensor();

@@ -1456,6 +1456,21 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 	Pos.vx += otherDelta.vx;
 
+	if ( m_npcPath.getWaypointCount() )
+	{
+		s32 minX, maxX;
+		m_npcPath.getPathXExtents( &minX, &maxX );
+
+		if ( Pos.vx < minX )
+		{
+			Pos.vx = minX;
+		}
+		else if ( Pos.vx > maxX )
+		{
+			Pos.vx = maxX;
+		}
+	}
+
 	s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
 
 	if ( groundHeight < 8 )

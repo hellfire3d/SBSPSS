@@ -65,7 +65,21 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 {
 	if ( m_state == HERMIT_CRAB_NO_ATTACK )
 	{
-		m_state = ( getRnd() % 2 ) + 1;
+		//m_state = ( getRnd() % 2 ) + 1;
+		m_state = HERMIT_CRAB_ROLL_ATTACK_JUMP1;
+		m_movementTimer = 0;
+		m_jumpBase = Pos.vy;
+
+		if ( playerXDist > 0 )
+		{
+			m_extendDir = EXTEND_RIGHT;
+			m_heading = 0;
+		}
+		else
+		{
+			m_extendDir = EXTEND_LEFT;
+			m_heading = 2048;
+		}
 	}
 
 	switch( m_state )
@@ -90,7 +104,26 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 			break;
 		}
 
-		case HERMIT_CRAB_ROLL_ATTACK:
+		case HERMIT_CRAB_ROLL_ATTACK_JUMP1:
+		case HERMIT_CRAB_ROLL_ATTACK_JUMP2:
+		{
+			s16 sineVal = ( m_movementTimer << 11 ) / ( GameState::getOneSecondInFrames() >> 3 );
+			Pos.vy = m_jumpBase - ( ( 10 * rsin( sineVal ) ) >> 12 );
+
+			if ( m_movementTimer < ( GameState::getOneSecondInFrames() >> 3 ) )
+			{
+				m_movementTimer++;
+			}
+			else
+			{
+				m_state++;
+				m_movementTimer = 0;
+			}
+
+			break;
+		}
+
+		case HERMIT_CRAB_ROLL_ATTACK_ROLL:
 		{
 			if ( !m_animPlaying || m_animNo == m_data[m_type].moveAnim )
 			{
@@ -101,15 +134,6 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 						m_animPlaying = true;
 						m_animNo = ANIM_HERMITCRAB_ROLLATTACK;
 						m_frame = 0;
-
-						if ( playerXDist > 0 )
-						{
-							m_extendDir = EXTEND_RIGHT;
-						}
-						else
-						{
-							m_extendDir = EXTEND_LEFT;
-						}
 
 						break;
 					}

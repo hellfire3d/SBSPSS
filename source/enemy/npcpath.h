@@ -50,6 +50,7 @@ public:
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 	void			getPathXExtents( s32 *minExtent, s32 *maxExtent );
 	void			getPathYExtents( s32 *minExtent, s32 *maxExtent );
+	u8				getWaypointCount()						{ return( waypointCount ); }
 	CNpcWaypoint	*getWaypointList();
 
 private:

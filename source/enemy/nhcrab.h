@@ -27,11 +27,15 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 
+	s32					m_jumpBase;
+
 	enum NPC_HERMIT_CRAB_STATE
 	{
 		HERMIT_CRAB_NO_ATTACK = 0,
 		HERMIT_CRAB_PUNCH_ATTACK = 1,
-		HERMIT_CRAB_ROLL_ATTACK,
+		HERMIT_CRAB_ROLL_ATTACK_JUMP1,
+		HERMIT_CRAB_ROLL_ATTACK_JUMP2,
+		HERMIT_CRAB_ROLL_ATTACK_ROLL,
 	};
 };
 
