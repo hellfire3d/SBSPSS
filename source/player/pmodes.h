@@ -156,7 +156,6 @@ public:
 
 private:
 	int							m_fallFrames;
-	DVECTOR						m_moveVelocity;
 
 
 protected:

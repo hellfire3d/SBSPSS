@@ -800,6 +800,7 @@ static int		lastposnum=0;
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
+
 void	CPlayer::render()
 {
 	CPlayerThing::render();
@@ -926,11 +927,11 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 {
 	int	height;
-	CThing *platform;
 
-	height=height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
-	if(height<_maxHeight)
+	height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
+	if(height>=_maxHeight)
 	{
+		CThing *platform;
 		platform=isOnPlatform();
 		if(platform)
 		{
@@ -1175,6 +1176,7 @@ void CPlayer::respawn()
 	m_bubbleAmmo=0;
 	m_jellyAmmo=0;
 
+	m_moveVelocity.vx=m_moveVelocity.vy=0;
 	
 	clearPlatform();
 }

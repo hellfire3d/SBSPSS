@@ -154,7 +154,7 @@ void	CPlayerModeBase::enter()
 {
 	m_fallFrames=0;
 	setState(STATE_IDLE);
-	m_moveVelocity.vx=m_moveVelocity.vy=0;
+	zeroMoveVelocity();
 }
 
 /*----------------------------------------------------------------------
@@ -252,7 +252,7 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::thinkVerticalMovement()
 {
-	if(m_player->moveVertical(m_moveVelocity.vy>>VELOCITY_SHIFT))
+	if(m_player->moveVertical(m_player->getMoveVelocity()->vy>>VELOCITY_SHIFT))
 	{
 		playerHasHitGround();
 	}
@@ -278,14 +278,18 @@ void	CPlayerModeBase::thinkVerticalMovement()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::thinkHorizontalMovement()
 {
-	if(m_player->moveHorizontal(m_moveVelocity.vx>>VELOCITY_SHIFT))
+	DVECTOR	moveVel;
+
+	moveVel=*m_player->getMoveVelocity();
+	if(m_player->moveHorizontal(moveVel.vx>>VELOCITY_SHIFT))
 	{
 		// If running then go to idle, otherwise leave in same state
 		if(m_currentState==STATE_RUN)
 		{
 			setState(STATE_IDLE);
 		}
-		m_moveVelocity.vx=0;
+		moveVel.vx=0;
+		setMoveVelocity(&moveVel);
 	}
 }
 
@@ -297,8 +301,10 @@ void	CPlayerModeBase::thinkHorizontalMovement()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::playerHasHitGround()
 {
-	// Grrr!
-	m_moveVelocity.vy=0;
+	DVECTOR	moveVel;
+
+	moveVel=*m_player->getMoveVelocity();
+	moveVel.vy=0;
 	m_fallFrames=0;
 	if(m_currentState==STATE_BUTTFALL)
 	{
@@ -310,9 +316,9 @@ void	CPlayerModeBase::playerHasHitGround()
 		// Landed from a painfully long fall
 		setState(STATE_HITGROUND);
 		m_player->takeDamage(DAMAGE__FALL);
-		m_moveVelocity.vx=0;
+		moveVel.vx=0;
 	}
-	else if(m_moveVelocity.vx)
+	else if(moveVel.vx)
 	{
 		// Landed from a jump with x movement
 		setState(STATE_RUN);
@@ -323,6 +329,7 @@ void	CPlayerModeBase::playerHasHitGround()
 		setState(STATE_IDLE);
 		setAnimNo(ANIM_SPONGEBOB_JUMPEND);
 	}
+	setMoveVelocity(&moveVel);
 }
 
 /*----------------------------------------------------------------------
@@ -402,9 +409,9 @@ int		CPlayerModeBase::advanceAnimFrameAndCheckForEndOfAnim()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CPlayerModeBase::getMoveVelocity()							{return m_moveVelocity;}
-void	CPlayerModeBase::zeroMoveVelocity()							{m_moveVelocity.vx=m_moveVelocity.vy=0;}
-void	CPlayerModeBase::setMoveVelocity(DVECTOR *_moveVel)			{m_moveVelocity=*_moveVel;}
+DVECTOR	CPlayerModeBase::getMoveVelocity()							{return *m_player->getMoveVelocity();}
+void	CPlayerModeBase::zeroMoveVelocity()							{DVECTOR v={0,0};setMoveVelocity(&v);}
+void	CPlayerModeBase::setMoveVelocity(DVECTOR *_moveVel)			{m_player->setMoveVelocity(_moveVel);}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -476,63 +483,72 @@ void	CPlayerModeBase::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
 void	CPlayerModeBase::moveLeft()
 {
 	const PlayerMetrics	*metrics;
-	metrics=getPlayerMetrics();
+	DVECTOR				moveVel;
 
+	metrics=getPlayerMetrics();
+	moveVel=*m_player->getMoveVelocity();
 	setFacing(FACING_LEFT);
-	if(m_moveVelocity.vx<=0)
+	if(moveVel.vx<=0)
 	{
-		m_moveVelocity.vx-=metrics->m_metric[PM__RUN_SPEEDUP];
-		if(m_moveVelocity.vx<-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
+		moveVel.vx-=metrics->m_metric[PM__RUN_SPEEDUP];
+		if(moveVel.vx<-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
 		{
-			m_moveVelocity.vx=-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
+			moveVel.vx=-metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
 		}
 	}
 	else
 	{
-		m_moveVelocity.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
+		moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
+	setMoveVelocity(&moveVel);
 }
 
 void	CPlayerModeBase::moveRight()
 {
 	const PlayerMetrics	*metrics;
+	DVECTOR				moveVel;
+
 	metrics=getPlayerMetrics();
-	
+	moveVel=*m_player->getMoveVelocity();
 	setFacing(FACING_RIGHT);
-	if(m_moveVelocity.vx>=0)
+	if(moveVel.vx>=0)
 	{
-		m_moveVelocity.vx+=metrics->m_metric[PM__RUN_SPEEDUP];
-		if(m_moveVelocity.vx>metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
+		moveVel.vx+=metrics->m_metric[PM__RUN_SPEEDUP];
+		if(moveVel.vx>metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT)
 		{
-			m_moveVelocity.vx=metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
+			moveVel.vx=metrics->m_metric[PM__MAX_RUN_VELOCITY]<<VELOCITY_SHIFT;
 		}
 	}
 	else
 	{
-		m_moveVelocity.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
+		moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
+	setMoveVelocity(&moveVel);
 }
 int		CPlayerModeBase::slowdown()
 {
 	const PlayerMetrics	*metrics;
+	DVECTOR				moveVel;
 	int					ret=false;
-	metrics=getPlayerMetrics();
 
-	if(m_moveVelocity.vx<0)
+	metrics=getPlayerMetrics();
+	moveVel=*m_player->getMoveVelocity();
+
+	if(moveVel.vx<0)
 	{
-		m_moveVelocity.vx+=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVelocity.vx>=0)
+		moveVel.vx+=metrics->m_metric[PM__RUN_SLOWDOWN];
+		if(moveVel.vx>=0)
 		{
-			m_moveVelocity.vx=0;
+			moveVel.vx=0;
 			ret=true;
 		}
 	}
-	else if(m_moveVelocity.vx>0)
+	else if(moveVel.vx>0)
 	{
-		m_moveVelocity.vx-=metrics->m_metric[PM__RUN_SLOWDOWN];
-		if(m_moveVelocity.vx<=0)
+		moveVel.vx-=metrics->m_metric[PM__RUN_SLOWDOWN];
+		if(moveVel.vx<=0)
 		{
-			m_moveVelocity.vx=0;
+			moveVel.vx=0;
 			ret=true;
 		}
 	}
@@ -542,22 +558,28 @@ int		CPlayerModeBase::slowdown()
 		// This should probly be considered a bug.. (pkg)
 		ret=true;
 	}
+	setMoveVelocity(&moveVel);
 	return ret;
 }
 void	CPlayerModeBase::jump()
 {
-	m_moveVelocity.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+	DVECTOR				moveVel;
+	moveVel=*m_player->getMoveVelocity();
+	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+	setMoveVelocity(&moveVel);
 }
 void	CPlayerModeBase::fall()
 {
 	const PlayerMetrics	*metrics;
+	DVECTOR				moveVel;
+
 	metrics=getPlayerMetrics();
+	moveVel=*m_player->getMoveVelocity();
 
-
-	m_moveVelocity.vy+=getPlayerMetrics()->m_metric[PM__GRAVITY];
-	if(m_moveVelocity.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+	moveVel.vy+=getPlayerMetrics()->m_metric[PM__GRAVITY];
+	if(moveVel.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
 	{
-		m_moveVelocity.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
+		moveVel.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
 		if(!canFallForever()&&m_currentState!=STATE_FALLFAR)
 		{
 			const PlayerMetrics	*metrics;
@@ -569,16 +591,19 @@ void	CPlayerModeBase::fall()
 			}
 		}
 	}
+	setMoveVelocity(&moveVel);
 }
 int buttfallspeed=9;
 void	CPlayerModeBase::buttFall()
 {
 	const PlayerMetrics	*metrics;
+	DVECTOR				moveVel;
+
 	metrics=getPlayerMetrics();
-
-
-//	m_moveVelocity.vy=metrics->m_metric[PM__BUTT_FALL_VELOCITY]<<(VELOCITY_SHIFT+1);
-	m_moveVelocity.vy=metrics->m_metric[buttfallspeed]<<VELOCITY_SHIFT;
+	moveVel=*m_player->getMoveVelocity();
+//	moveVel.vy=metrics->m_metric[PM__BUTT_FALL_VELOCITY]<<(VELOCITY_SHIFT+1);
+	moveVel.vy=metrics->m_metric[buttfallspeed]<<VELOCITY_SHIFT;
+	setMoveVelocity(&moveVel);
 }
 
 

@@ -183,6 +183,8 @@ public:
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
 
 	void			registerAddon(PLAYER_ADDONS _addon);
+	DVECTOR			*getMoveVelocity()									{return &m_moveVelocity;}
+	void			setMoveVelocity(const DVECTOR *_moveVelocity)		{m_moveVelocity=*_moveVelocity;}
 
 public:
 	void			setMode(PLAYER_MODE _mode);
@@ -195,6 +197,10 @@ public:
 	void			setAnimNo(int _animNo);
 private:
 	void			playAnimFrameSfx(int _animNo,int _animFrame);
+
+	DVECTOR			m_moveVelocity;
+
+
 
 public:
 	DVECTOR			getPlayerPos()										{return Pos;}

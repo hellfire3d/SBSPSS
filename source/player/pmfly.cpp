@@ -60,6 +60,11 @@ void	CPlayerModeFly::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifdef __USER_paul__
+int playerflyspeed=5;
+#else
+static const int playerflyspeed=5;
+#endif
 void	CPlayerModeFly::think()
 {
 	DVECTOR	pos;
@@ -69,19 +74,19 @@ void	CPlayerModeFly::think()
 	controlHeld=getPadInputHeld();
 	if(controlHeld&PI_LEFT)
 	{
-		pos.vx-=5;
+		pos.vx-=playerflyspeed;
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		pos.vx+=5;
+		pos.vx+=playerflyspeed;
 	}
 	if(controlHeld&PI_UP)
 	{
-		pos.vy-=5;
+		pos.vy-=playerflyspeed;
 	}
 	else if(controlHeld&PI_DOWN)
 	{
-		pos.vy+=5;
+		pos.vy+=playerflyspeed;
 	}
 	setPlayerPos(&pos);
 }
