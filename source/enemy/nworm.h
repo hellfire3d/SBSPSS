@@ -26,12 +26,14 @@ public:
 	virtual DVECTOR		getPos()										{return( Pos );}
 	virtual void		setHeading( s16 newHeading )					{m_heading = newHeading;}
 	void				updateCollisionArea();
-
-protected:
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	virtual void		setCollisionSize(int _w,int _h);
 	virtual void		setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
 	virtual	CRECT const	&getCollisionArea()							{return m_collisionArea;}
+	DVECTOR	const		&getCollisionCentre()						{return m_collisionCentre;}
+	int					getCollisionRadius()						{return m_collisionRadius;}
 
+protected:
 	u16								m_scale;
 	CActorGfx						*m_actorGfx;
 	DVECTOR							Pos;
@@ -49,6 +51,7 @@ public:
 	virtual void		postInit();
 	virtual void		shutdown();
 	virtual void		render();
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );

@@ -35,6 +35,10 @@
 #include "gfx\prim.h"
 #endif
 
+#ifndef	__ANIM_SEASNAKE_HEADER__
+#include <ACTOR_SEASNAKE_ANIM.h>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcParasiticWormSegment::init()
@@ -495,6 +499,52 @@ void CNpcParasiticWormEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int CNpcParasiticWormEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
+{
+	DVECTOR	pos,thisThingPos;
+	int		radius;
+	int		collided;
+
+	pos=getCollisionCentre();
+	thisThingPos=_thisThing->getCollisionCentre();
+
+	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
+	collided=false;
+	if(abs(pos.vx-thisThingPos.vx)<radius&&
+	   abs(pos.vy-thisThingPos.vy)<radius)
+	{
+		CRECT	thisRect,thatRect;
+
+		thisRect=getCollisionArea();
+
+		thatRect=_thisThing->getCollisionArea();
+
+		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+		{
+			collided=true;
+		}
+	}
+
+	// go through segments
+
+	CNpcParasiticWormSegment *segment = m_segment;
+
+	while( segment )
+	{
+		if ( segment->checkCollisionAgainst( _thisThing, _frames ) )
+		{
+			collided = true;
+		}
+
+		segment = segment->m_nextSegment;
+	}
+
+	return collided;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcParasiticWormSegment::render()
 {
 	POLY_FT4 *SprFrame = NULL;
@@ -512,7 +562,7 @@ void CNpcParasiticWormSegment::render()
 
 	if ( renderFlag )
 	{
-		SprFrame = m_actorGfx->Render(renderPos,0,0,0);
+		SprFrame = m_actorGfx->Render(renderPos,ANIM_SEASNAKE_BODYSTATIC,0,0);
 		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
@@ -545,4 +595,36 @@ void CNpcParasiticWormSegment::render()
 		}
 #endif
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int CNpcParasiticWormSegment::checkCollisionAgainst( CThing *_thisThing, int _frames )
+{
+	DVECTOR	pos,thisThingPos;
+	int		radius;
+	int		collided;
+
+	pos = getCollisionCentre();
+	thisThingPos = _thisThing->getCollisionCentre();
+
+	radius = getCollisionRadius() + _thisThing->getCollisionRadius();
+	collided = false;
+	if(abs(pos.vx-thisThingPos.vx)<radius&&
+	   abs(pos.vy-thisThingPos.vy)<radius)
+	{
+		CRECT	thisRect,thatRect;
+
+		thisRect=getCollisionArea();
+
+		thatRect=_thisThing->getCollisionArea();
+
+		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+		{
+			collided=true;
+		}
+	}
+
+	return collided;
 }
