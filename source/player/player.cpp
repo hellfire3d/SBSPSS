@@ -544,7 +544,10 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 	{
 		DVECTOR	platformPos;
 		platformPos=m_platform->getPos();
-		height=platformPos.vy-Pos.vy;
+		DVECTOR newPos = getNewCollidedPos();
+
+		height = newPos.vy - Pos.vy;
+
 //		if(height<-_maxHeight)
 //		{
 //			height=-_maxHeight;
@@ -1088,6 +1091,15 @@ void	CPlayer::clearPlatform()
 	m_platform=NULL;
 }
 
+void	CPlayer::setHasPlatformCollided( bool newVal )
+{
+	m_hasPlatformCollided = newVal;
+}
+
+bool	CPlayer::getHasPlatformCollided()
+{
+	return( m_hasPlatformCollided );
+}
 
 
 /*===========================================================================

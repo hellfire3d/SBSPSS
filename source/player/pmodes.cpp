@@ -319,6 +319,11 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			setState(STATE_FALL);
 		}
 */
+		if ( m_player->isOnPlatform() && m_moveVelocity.vy >= 0 )
+		{
+			pos.vy += colHeight;
+			m_moveVelocity.vy=0;
+		}
 	}
 
 	pos.vy+=m_moveVelocity.vy>>VELOCITY_SHIFT;

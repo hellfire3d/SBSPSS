@@ -129,6 +129,8 @@ public:
 	virtual int		checkCollisionAgainst(CThing *_thisThing);
 	void			updateCollisionArea();
 	virtual void	collidedWith(CThing *_thisThing)			{;}
+	virtual void	setHasPlatformCollided( bool newVal )		{;}
+	virtual bool	getHasPlatformCollided()					{return false;}
 	s32				getNewYPos( CThing *_thisThing );
 	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
 protected:

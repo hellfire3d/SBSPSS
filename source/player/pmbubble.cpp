@@ -16,6 +16,7 @@
 	-------- */
 
 #include "player\pmbubble.h"
+#include "enemy\nplatfrm.h"
 
 
 /*	Std Lib
@@ -94,6 +95,10 @@ void	CPlayerModeBubbleMixture::think()
 			// Start the anim off
 			m_blowFrame=0;
 			m_blowing=true;
+
+			CNpcPlatform *bubble = new ("bubble platform") CNpcPlatform;
+			bubble->setType( CNpcPlatform::NPC_BUBBLE_PLATFORM );
+			bubble->init( m_player->getPos(), 4 );
 		}
 	}
 

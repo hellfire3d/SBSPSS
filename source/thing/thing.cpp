@@ -128,11 +128,16 @@ void		CThingManager::thinkAllThings(int _frames)
 	// Player -> Platform collision
 	thing1=s_thingLists[CThing::TYPE_PLATFORM];
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
+
+	thing2->setHasPlatformCollided( false );
+	thing2->setNewCollidedPos( thing2->getPos() );
+
 	while(thing1&&thing2)
 	{
 		//if ( !thing1->hasChild( thing2 ) )
 		{
 			thing1->removeAllChild();
+
 			if(thing1->canCollide()&&
 			   thing1->checkCollisionAgainst(thing2))
 			{
@@ -776,11 +781,36 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 			if ( ( newPos.vx >= thisRect.x1 && newPos.vx <= thisRect.x2 ) &&
 					( newPos.vy >= thisRect.y1 && newPos.vy <= thisRect.y2 ) )
 			{
-				_thisThing->setCentreCollision( true );
-
 				thatPos.vy = getNewYPos( _thisThing );
 
-				_thisThing->setNewCollidedPos( thatPos );
+				if ( thatPos.vy - _thisThing->getPos().vy >= -10 )
+				{
+					_thisThing->setHasPlatformCollided( true );
+
+					_thisThing->setCentreCollision( true );
+
+					if ( _thisThing->getHasPlatformCollided() )
+					{
+						// if this has already collided with a platform, check the current platform is
+						// (a) within 10 units,
+						// (b) higher
+
+						DVECTOR oldCollidedPos = _thisThing->getNewCollidedPos();
+
+						if ( thatPos.vy < oldCollidedPos.vy )
+						{
+							_thisThing->setNewCollidedPos( thatPos );
+						}
+					}
+					else
+					{
+						_thisThing->setNewCollidedPos( thatPos );
+					}
+				}
+				else
+				{
+					_thisThing->setCentreCollision( false );
+				}
 			}
 			else
 			{

@@ -104,7 +104,7 @@ void CPauseMenu::init()
 										STR__DEBUG__FULLUNARMED_MODE,
 										&newmode,PLAYER_MODE_FULLUNARMED);
 	xpos+=TEXT_SPACING;
-#ifdef __USER_paul__
+#if defined(__USER_paul__) || defined(__USER_charles__)
 //	CGUIFactory::createValueButtonFrame(m_guiFrame,
 //										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 //										STR__DEBUG__NET_MODE,
