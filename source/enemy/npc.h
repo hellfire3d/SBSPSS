@@ -299,6 +299,7 @@ protected:
 	u8					m_isBlowerOn;
 	DVECTOR				m_caughtPos;
 	s16					m_speed;
+	u8					m_isDying;
 
 	s32				m_frame;
 	int				m_animNo;

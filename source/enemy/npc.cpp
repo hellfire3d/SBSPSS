@@ -612,6 +612,7 @@ void CNpcEnemy::init()
 	m_reversed = false;
 	m_salvoCount = 0;
 	m_isActive = true;
+	m_isDying = false;
 
 	m_health = m_data[this->m_type].initHealth;
 
@@ -663,6 +664,7 @@ void CNpcEnemy::reinit()
 	m_reversed = false;
 	m_salvoCount = 0;
 	m_isActive = true;
+	m_isDying = false;
 
 	m_health = m_data[this->m_type].initHealth;
 
@@ -764,7 +766,7 @@ void CNpcEnemy::think(int _frames)
 	{
 		if ( m_isActive )
 		{
-			if ( m_animPlaying )
+			if ( m_animPlaying && !m_isDying )
 			{
 				s32 frameCount;
 
@@ -844,7 +846,7 @@ void CNpcEnemy::processAttackCollision()
 
 void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
-	if ( m_isActive && !m_isCaught )
+	if ( m_isActive && !m_isCaught && !m_isDying )
 	{
 		switch(_thisThing->getThingType())
 		{
@@ -1208,6 +1210,9 @@ void CNpcEnemy::processShot( int _frames )
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
 
+					m_isDying = true;
+					m_speed = -5;
+
 					if (m_data[m_type].skelType)
 					{
 						m_actorGfx->SetOtPos( 0 );
@@ -1218,7 +1223,15 @@ void CNpcEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					Pos.vy += 5 * _frames;
+					m_drawRotation += 64 * _frames;
+					m_drawRotation &= 4095;
+
+					Pos.vy += m_speed * _frames;
+
+					if ( m_speed < 5 )
+					{
+						m_speed++;
+					}
 
 					DVECTOR	offset = CLevel::getCameraPos();
 
@@ -1387,7 +1400,7 @@ void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 bool CNpcEnemy::canBeCaughtByNet()
 {
-	return( m_isActive && m_data[m_type].canBeNetted );
+	return( m_isActive && !m_isDying && m_data[m_type].canBeNetted );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1414,7 +1427,7 @@ void CNpcEnemy::caughtWithNet()
 
 int CNpcEnemy::canCollide()
 {
-	return( m_isActive );
+	return( m_isActive && !m_isDying );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1480,7 +1493,17 @@ void CNpcEnemy::processUserCollision( CThing *thisThing )
 	}
 
 	Pos.vx += otherDelta.vx;
-	Pos.vy += otherDelta.vy;
+
+	s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
+
+	if ( groundHeight < 8 )
+	{
+		Pos.vy += groundHeight;
+	}
+	else
+	{
+		Pos.vy += otherDelta.vy;
+	}
 
 	m_heading = headingFromTarget;
 

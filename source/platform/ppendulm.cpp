@@ -100,7 +100,7 @@ void CNpcPendulumPlatform::processMovement( int _frames )
 		}
 		else
 		{
-			m_extension += _frames << 3;
+			m_extension += m_speed * _frames;
 		}
 	}
 	else
@@ -111,7 +111,7 @@ void CNpcPendulumPlatform::processMovement( int _frames )
 		}
 		else
 		{
-			m_extension -= _frames << 3;
+			m_extension -= m_speed * _frames;
 		}
 	}
 
@@ -125,6 +125,8 @@ void CNpcPendulumPlatform::render()
 {
 	int		x1,y1,x2,y2;
 	int		x1Boundary,y1Boundary,x2Boundary,y2Boundary;
+
+	DVECTOR	offset = CLevel::getCameraPos();
 
 	if ( m_isActive )
 	{
@@ -159,53 +161,52 @@ void CNpcPendulumPlatform::render()
 
 	DrawLine(x1,y1,x2,y2,0,255,0,0);
 #endif
-/*
-			x1 = x1Boundary = Pos.vx - offset.vx;
-			x2 = x2Boundary = m_lineBase.vx - offset.vx;
+		}
 
-			y1 = y1Boundary = Pos.vy - offset.vy;
-			y2 = y2Boundary = m_lineBase.vy - offset.vy;
+		x1 = x1Boundary = Pos.vx - offset.vx;
+		x2 = x2Boundary = m_lineBase.vx - offset.vx;
 
-			int angle = ratan2( x1 - x2, y1 - y2 );
+		y1 = y1Boundary = Pos.vy - offset.vy;
+		y2 = y2Boundary = m_lineBase.vy - offset.vy;
 
-			if ( y2 < 0 )
+		int angle = ratan2( x1 - x2, y1 - y2 );
+
+		if ( y2 < 0 )
+		{
+			int yDiff = -y2;
+			y2 = y2Boundary = 0;
+			int hyp = ( yDiff << 12 ) / rcos( angle );
+			x2 += ( hyp * rsin( angle ) ) >> 12;
+		}
+		
+		if ( y1 > VidGetScrH() )
+		{
+			int yDiff = y1 - VidGetScrH();
+			y1 = y1Boundary = VidGetScrH();
+			int hyp = ( yDiff << 12 ) / rcos( angle );
+			x1 -= ( hyp * rsin( angle ) ) >> 12;
+		}
+
+		if ( x1Boundary > x2Boundary )
+		{
+			int tempX = x1Boundary;
+			x1Boundary = x2Boundary;
+			x2Boundary = tempX;
+		}
+
+		if ( y1Boundary > y2Boundary )
+		{
+			int tempY = y1Boundary;
+			y1Boundary = y2Boundary;
+			y2Boundary = tempY;
+		}
+
+		if ( x2Boundary >= 0 && x1Boundary <= VidGetScrW() )
+		{
+			if ( y2Boundary >= 0 && y1Boundary <= VidGetScrH() )
 			{
-				int yDiff = -y2;
-				y2 = y2Boundary = 0;
-				int hyp = ( yDiff << 12 ) / rcos( angle );
-				x2 += ( hyp * rsin( angle ) ) >> 12;
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
 			}
-			
-			if ( y1 > VidGetScrH() )
-			{
-				int yDiff = y1 - VidGetScrH();
-				y1 = y1Boundary = VidGetScrH();
-				int hyp = ( yDiff << 12 ) / rcos( angle );
-				x1 -= ( hyp * rsin( angle ) ) >> 12;
-			}
-
-			if ( x1Boundary > x2Boundary )
-			{
-				int tempX = x1Boundary;
-				x1Boundary = x2Boundary;
-				x2Boundary = tempX;
-			}
-
-			if ( y1Boundary > y2Boundary )
-			{
-				int tempY = y1Boundary;
-				y1Boundary = y2Boundary;
-				y2Boundary = tempY;
-			}
-
-			if ( x2Boundary >= 0 && x1Boundary <= VidGetScrW() )
-			{
-				if ( y2Boundary >= 0 && y1Boundary <= VidGetScrH() )
-				{
-					DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
-				}
-			}
-*/
 		}
 	}
 }

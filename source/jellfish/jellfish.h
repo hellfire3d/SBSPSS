@@ -31,6 +31,7 @@ public:
 protected:
 	static u8			m_jellyfishCount;
 	static s32			m_timer;
+	static u8			m_on;
 };
 
 #endif

@@ -894,9 +894,9 @@ void CNpcPlatform::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			m_modelGfx->Render(renderPos);
-		}
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR	offset = CLevel::getCameraPos();
 	DVECTOR size;
 	DVECTOR	centre;
 	int		halfLength;
@@ -920,6 +920,7 @@ void CNpcPlatform::render()
 
 	DrawLine(x1,y1,x2,y2,0,255,0,0);
 #endif
+		}
 	}
 }
 

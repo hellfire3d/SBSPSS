@@ -27,6 +27,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +75,23 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 
 			if ( directionChange == 0 )
 			{
-				m_targetHeading += -1024 + ( getRnd() % 2049 );
+				CPlayer *player = GameScene.getPlayer();
+
+				if ( player->isHoldingNet() )
+				{
+					if ( ( getRnd() % 4 ) == 0 )
+					{
+						m_targetHeading = ratan2( playerYDist, playerXDist );
+					}
+					else
+					{
+						m_targetHeading += -1024 + ( getRnd() % 2049 );
+					}
+				}
+				else
+				{
+					m_targetHeading += -1024 + ( getRnd() % 2049 );
+				}
 			}
 		}
 	}
@@ -135,7 +155,7 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 
 	if ( processGroundCollisionReverse( &moveX, &moveY ) )
 	{
-		m_targetHeading += 2048;
+		m_targetHeading += 1024;
 		m_targetHeading &= 4095;
 	}
 

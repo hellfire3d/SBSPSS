@@ -143,7 +143,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_FISH_HOOK_2_PLATFORM
-		3,
+		8,
 		128,
 		true,
 		DAMAGE__NONE,

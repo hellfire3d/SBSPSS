@@ -167,6 +167,7 @@ void CNpcCartPlatform::render()
 			m_modelGfx->Render(renderPos,&rotation,&scale);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR	offset = CLevel::getCameraPos();
 	DVECTOR size;
 	DVECTOR	centre;
 	int		halfLength;

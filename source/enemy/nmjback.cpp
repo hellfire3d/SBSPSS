@@ -68,7 +68,7 @@ void CNpcMotherJellyfishBackground::render()
 			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 			{
 				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
-				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 8192, 8192 );
+				m_actorGfx->RotateScale( SprFrame, renderPos, 0, 8192, 8192 );
 
 				sBBox boundingBox = m_actorGfx->GetBBox();
 				setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
