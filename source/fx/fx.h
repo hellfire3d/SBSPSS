@@ -58,9 +58,12 @@ virtual void		render();
 
 virtual int			canCollide()					{return false;}
 
+virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
+
 protected:
 	
 	SpriteBank	*m_spriteBank;
+	s32			OtPos;
 };
 
 #endif

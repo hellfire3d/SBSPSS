@@ -9,6 +9,7 @@
 #include	"gfx\sprbank.h"
 #include	<sprites.h>
 #include	"level\level.h"
+#include	"gfx\otpos.h"
 
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
@@ -127,10 +128,11 @@ CFX		*NewFX;
 /*****************************************************************************/
 void	CFX::init()
 {
-	CFXThing::init();
+		CFXThing::init();
 
-	m_spriteBank=new ("FX Sprite") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
+		m_spriteBank=new ("FX Sprite") SpriteBank();
+		m_spriteBank->load(SPRITES_SPRITES_SPR);
+		OtPos=OTPOS__ACTOR_POS;
 }
 
 /*****************************************************************************/

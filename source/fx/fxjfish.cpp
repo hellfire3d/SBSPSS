@@ -142,7 +142,7 @@ s16		*dH=HeightTable;
 			for (int i=0; i<Count-1; i++)
 			{
 				if (Idx>=Count) Idx=0;
-				POLY_FT4	*Ft4=m_spriteBank->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,6);
+				POLY_FT4	*Ft4=m_spriteBank->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,OtPos);
 
 				Ft4->x0=LastPos.vx+0+LastdW; Ft4->y0=LastPos.vy;
 				Ft4->x1=LastPos.vx+8-LastdW; Ft4->y1=LastPos.vy;
