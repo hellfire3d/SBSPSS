@@ -482,8 +482,8 @@ void CPlayerProjectile::think(int _frames)
 			}
 			else
 			{
-				Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
-				Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+				Pos.vx += ( _frames * 2 * rcos( m_heading ) ) >> 12;
+				Pos.vy += ( _frames * 2 * rsin( m_heading ) ) >> 12;
 			}
 
 			break;
@@ -523,7 +523,6 @@ void CPlayerProjectile::render()
 		return;
 	}
 
-	//m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
 	SprFrame = m_spriteBank->printFT4(m_frame,x,y,m_reversed,0,10);
 	setRGB0( SprFrame, 255, 128, 255 );
 }

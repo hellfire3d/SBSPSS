@@ -146,6 +146,38 @@
 #include "enemy\nhazard.h"
 #endif
 
+#ifndef __ENEMY_NSDART_H__
+#include "enemy\nsdart.h"
+#endif
+
+#ifndef __ENEMY_NPBUG_H__
+#include "enemy\npbug.h"
+#endif
+
+#ifndef __ENEMY_NSSNAKE_H__
+#include "enemy\nssnake.h"
+#endif
+
+#ifndef __ENEMY_NANGLER_H__
+#include "enemy\nangler.h"
+#endif
+
+#ifndef __ENEMY_NMINE_H__
+#include "enemy\nmine.h"
+#endif
+
+#ifndef __ENEMY_NSTRFISH_H__
+#include "enemy\nstrfish.h"
+#endif
+
+#ifndef __ENEMY_NGHOST_H__
+#include "enemy\nghost.h"
+#endif
+
+#ifndef __ENEMY_NOILBLOB_H__
+#include "enemy\noilblob.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
@@ -296,15 +328,10 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 
 	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
 
-//!!!!!! Sort you code out charles - Unhappy Dave
-	if (enemyType==14)
-	{
-		enemyType=CNpcEnemy::NPC_SMALL_JELLYFISH_1;
-	}
-
 	switch( enemyType )
 	{
 		case CNpcEnemy::NPC_SMALL_JELLYFISH_1:
+		case CNpcEnemy::NPC_SMALL_JELLYFISH_2:
 		{
 			printf("JFish\n");
 			enemy = new ("small jellyfish") CNpcSmallJellyfishEnemy;
@@ -519,6 +546,54 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 		{
 			printf("NPC_DUST_DEVIL\n");
 			enemy = new ("dust devil") CNpcReturningGroundHazard;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SQUID_DART:
+		{
+			enemy = new ("squid dart") CNpcSquidDartEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_PRICKLY_BUG:
+		{
+			enemy = new ("prickly bug") CNpcPricklyBugEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SEA_SNAKE:
+		{
+			enemy = new ("sea snake") CNpcSeaSnakeEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_ANGLER_FISH:
+		{
+			enemy = new ("angler fish") CNpcAnglerFish;
+			break;
+		}
+
+		case CNpcEnemy::NPC_MINE:
+		{
+			enemy = new ("mine") CNpcMineEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_NINJA_STARFISH:
+		{
+			enemy = new ("ninja starfish") CNpcNinjaStarfishEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_GHOST:
+		{
+			enemy = new ("ghost") CNpcGhostEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_OIL_BLOB:
+		{
+			enemy = new ("oil blob") CNpcOilBlobEnemy;
 			break;
 		}
 

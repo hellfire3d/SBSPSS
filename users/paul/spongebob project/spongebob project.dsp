@@ -117,6 +117,10 @@ SOURCE=..\..\..\source\enemy\nanemone.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nangler.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nbblob.cpp
 # End Source File
 # Begin Source File
@@ -197,6 +201,10 @@ SOURCE=..\..\..\source\enemy\ngeneric.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nghost.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\ngpirate.cpp
 # End Source File
 # Begin Source File
@@ -221,6 +229,10 @@ SOURCE=..\..\..\source\enemy\nhcrab.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nmine.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File
@@ -234,6 +246,14 @@ SOURCE=..\..\..\source\enemy\nocto.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nocto.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\noilblob.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\npbug.h
 # End Source File
 # Begin Source File
 
@@ -281,6 +301,14 @@ SOURCE=..\..\..\source\enemy\nscrab.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsdart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsdart.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nshrkman.cpp
 # End Source File
 # Begin Source File
@@ -313,11 +341,19 @@ SOURCE=..\..\..\source\enemy\nsshark.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nssnake.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsstomp.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nsstomp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nstrfish.h
 # End Source File
 # Begin Source File
 
