@@ -254,7 +254,7 @@ UI_GFX_TRANS :=				+bambootopleft.bmp +bamboobotleft.bmp +bambootopright.bmp +ba
 							faces/mermaidman.bmp faces/barnacleboy.bmp faces/gary.bmp \
 							+helpbox1.bmp +helpbox2.bmp +helpbox3.bmp +helpbox4.bmp \
 							+small_balloon.bmp +small_blower.bmp +small_bubblewand.bmp +small_launcher.bmp +small_net.bmp \
-							map\+map_arrow.bmp
+							map/+map_arrow.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 ####
