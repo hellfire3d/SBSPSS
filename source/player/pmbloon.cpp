@@ -86,6 +86,7 @@ void	CPlayerModeBalloon::enter()
 {
 	CPlayerModeBase::enter();
 	m_timer=0;
+	m_playedPopSound=false;
 }
 
 /*----------------------------------------------------------------------
@@ -99,7 +100,10 @@ void	CPlayerModeBalloon::think()
 	CPlayerModeBase::think();
 	if(++m_timer>BALLOON_TIMEOUT)
 	{
-		CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+		if(!m_playedPopSound)
+		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+		}
 		m_player->setMode(PLAYER_MODE_FULLUNARMED);
 	}
 }
@@ -129,6 +133,11 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 	else
 	{
 		frame=FRM__BALLOONBURST;
+		if(!m_playedPopSound)
+		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+			m_playedPopSound=true;
+		}
 	}
 	CGameScene::getSpriteBank()->printFT4Scaled(frame,pos.vx,pos.vy,0,0,5,balloonsize);
 }

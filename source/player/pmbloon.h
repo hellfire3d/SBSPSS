@@ -54,6 +54,7 @@ private:
 		BALLOON_POP_FRAMES=4,
 	};
 	int				m_timer;
+	int				m_playedPopSound;
 
 };
 
