@@ -367,6 +367,7 @@ void	CLevel::initThings(int _respawningLevel)
 			{
 				// Camera lock trigger
 				trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
+				trigger->setThingSubType(0);
 				trigger->init();
 				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
 											TriggerList->Width<<4,TriggerList->Height<<4);
@@ -417,6 +418,7 @@ void	CLevel::initThings(int _respawningLevel)
 			}
 			if(trigger)
 			{
+				trigger->setThingSubType(0);
 				trigger->init();
 				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
 											TriggerList->Width<<4,TriggerList->Height<<4);

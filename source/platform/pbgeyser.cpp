@@ -50,7 +50,7 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 	if ( m_timer < 0 )
 	{
 		//m_timer = getRnd() % ( m_data[m_type].initTimer * GameState::getOneSecondInFrames() );
-		m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
+		m_timer = m_dataPtr->initTimer * GameState::getOneSecondInFrames();
 
 		// generate new falling platform
 
@@ -75,7 +75,7 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 
 		ASSERT(newPlatform);
 
-		newPlatform->setType( m_targetType );
+		newPlatform->setThingSubType( m_targetType );
 		newPlatform->setGraphic( m_graphicNum );
 
 		DVECTOR startPos = Pos;

@@ -103,7 +103,6 @@ public:
 	virtual void		think(int _frames);
 	virtual void		render();
 	virtual u8			canDrop()												{return true;}
-	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	virtual u8			checkCollisionDelta( CThing *_thisThing, int threshold, CRECT collisionArea );
@@ -114,7 +113,6 @@ public:
 	void				setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		trigger()												{;}
-	NPC_PLATFORM_UNIT_TYPE	getType()											{return( m_type );}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(int Type);
@@ -187,7 +185,8 @@ protected:
 
 	// internal variables
 
-	NPC_PLATFORM_UNIT_TYPE		m_type;
+//	NPC_PLATFORM_UNIT_TYPE		m_type;
+	NPC_PLATFORM_DATA			*m_dataPtr;
 	CNpcPath					m_npcPath;
 	s32							m_heading;
 	s32							m_velocity;

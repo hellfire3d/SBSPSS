@@ -57,6 +57,7 @@ void CProjectile::init()
 
 	m_spriteFrame = FRM__SPIKE;
 
+	setThingSubType(0);
 	m_initHeading = m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;
 	m_movementType = PROJECTILE_DUMBFIRE;
@@ -400,7 +401,7 @@ void CProjectile::collidedWith(CThing *_thisThing)
 void CPlayerProjectile::init()
 {
 	CPlayerProjectileThing::init();
-
+	setThingSubType(0);
 	m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;
 	m_movementType = PLAYER_PROJECTILE_DUMBFIRE;

@@ -88,6 +88,7 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	ASSERT( trigger );
 
 	trigger->init();
+	trigger->setThingSubType(0);
 	trigger->setPositionAndSize( newXPos << 4, newYPos << 4, 100, 0 );
 	//trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
 	trigger->setPlatform( this );
@@ -100,7 +101,7 @@ void CNpcRisingBridgePlatform::processMovement( int _frames )
 	if ( m_triggered )
 	{
 		m_triggered = false;
-		m_extension += ( m_data[m_type].speed * _frames ) << 8;
+		m_extension += ( m_dataPtr->speed * _frames ) << 8;
 		if ( m_extension > m_maxExtension )
 		{
 			m_extension = m_maxExtension;

@@ -72,8 +72,6 @@ public:
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
-	void					setType( NPC_HAZARD_UNIT_TYPE type )				{m_type = type;}
-	NPC_HAZARD_UNIT_TYPE	getType()											{return( m_type );}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(sThingHazard *ThisHazard);
@@ -97,9 +95,7 @@ protected:
 	virtual void		processTimer( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 
-	NPC_HAZARD_UNIT_TYPE	m_type;
 	CNpcPath			m_npcPath;
-	//CActorGfx			*m_actorGfx;
 	DVECTOR				m_base;
 	s32					m_timer;
 	bool				m_timerActive;

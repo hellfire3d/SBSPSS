@@ -186,6 +186,7 @@ void 	CGameScene::init()
 void	CGameScene::createPlayer()
 {
 		m_player=new ("player") CPlayer();
+		m_player->setThingSubType(0);
 }
 
 // This is also to be overloaded for demomode.. to stop the pause menu appearing

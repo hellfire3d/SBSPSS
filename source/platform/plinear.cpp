@@ -40,7 +40,7 @@ void CNpcLinearPlatform::processMovement( int _frames )
 	if ( !pathComplete )
 	{
 		s16 decDir, incDir;
-		s16 maxTurnRate = m_data[m_type].turnSpeed;
+		s16 maxTurnRate = m_dataPtr->turnSpeed;
 
 		decDir = m_heading - headingToTarget;
 

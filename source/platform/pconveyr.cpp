@@ -53,7 +53,7 @@ void CNpcConveyorPlatformGenerator::think( int _frames )
 
 		m_timer = second;
 
-		m_timer += m_data[m_type].initTimer * second;
+		m_timer += m_dataPtr->initTimer * second;
 
 		m_timer += second - ( getRnd() % ( 2 * second ) );
 
@@ -66,7 +66,7 @@ void CNpcConveyorPlatformGenerator::think( int _frames )
 
 		ASSERT(newPlatform);
 
-		newPlatform->setType( NPC_CONVEYOR_PLATFORM );
+		newPlatform->setThingSubType( NPC_CONVEYOR_PLATFORM );
 		newPlatform->setGraphic( m_graphicNum );
 
 		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();

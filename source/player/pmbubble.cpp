@@ -107,7 +107,7 @@ void	CPlayerModeBubbleMixture::think()
 			CNpcPlayerBubblePlatform	*bubble;
 			DVECTOR			pos;
 			bubble=new ("bubble platform") CNpcPlayerBubblePlatform;
-			bubble->setType( CNpcPlatform::NPC_PLAYER_BUBBLE_PLATFORM );
+			bubble->setThingSubType( CNpcPlatform::NPC_PLAYER_BUBBLE_PLATFORM );
 			bubble->setGraphic( (u8) 0 );
 			bubble->setTiltable( false );
 			pos=m_player->getPos();

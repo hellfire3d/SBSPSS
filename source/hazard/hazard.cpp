@@ -279,7 +279,6 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 
 	ASSERT( hazard );
 
-	hazard->setType( Type );
 	hazard->setThingSubType(Type);
 	hazard->init();
 	hazard->setWaypoints( ThisHazard );

@@ -394,7 +394,6 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 	}
 
 	ASSERT(platform);
-	platform->setType( (NPC_PLATFORM_UNIT_TYPE) Type );
 	platform->setThingSubType( Type );
 	platform->setTiltable( false );
 
@@ -422,7 +421,7 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			dualPlatformSlave = (CNpcDualPlatform *) CNpcPlatform::Create( NPC_DUAL_PLATFORM );
 			dualPlatformSlave->setMaster( false );
 
-			dualPlatformSlave->setType( Type );
+			dualPlatformSlave->setThingSubType( Type );
 			dualPlatformSlave->setGraphic( ThisPlatform );
 			dualPlatformSlave->setTiltable( false );
 
@@ -504,6 +503,7 @@ void CNpcPlatform::init()
 {
 	CPlatformThing::init();
 
+	m_dataPtr=&m_data[getThingSubType()];
 
 	m_heading = 0;
 	m_velocity = 0;
@@ -511,10 +511,10 @@ void CNpcPlatform::init()
 	m_reversed = false;
 	m_extension = 0;
 	m_contact = false;
-	m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
-	m_timerType = m_data[m_type].initTimerType;
+	m_timer = m_dataPtr->initTimer * GameState::getOneSecondInFrames();
+	m_timerType = m_dataPtr->initTimerType;
 	m_isActive = true;
-	m_detectCollision = m_data[m_type].detectCollision;
+	m_detectCollision = m_dataPtr->detectCollision;
 	m_state = 0;
 	m_tiltAngle = 0;
 	m_tiltVelocity = 0;
@@ -522,13 +522,13 @@ void CNpcPlatform::init()
 	m_initRotation = 0;
 
 	m_lifetime = 0;
-	m_lifetimeType = m_data[m_type].lifetimeType;
+	m_lifetimeType = m_dataPtr->lifetimeType;
 
 	m_isShuttingDown = false;
 
 	m_npcPath.initPath();
 
-	m_speed = m_data[m_type].speed;
+	m_speed = m_dataPtr->speed;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -539,7 +539,7 @@ void CNpcPlatform::init( DVECTOR initPos )
 
 	Pos = m_initPos = m_base = initPos;
 
-	m_initLifetime = m_lifetime = GameState::getOneSecondInFrames() * m_data[m_type].lifetime;
+	m_initLifetime = m_lifetime = GameState::getOneSecondInFrames() * m_dataPtr->lifetime;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -560,10 +560,10 @@ void CNpcPlatform::reinit()
 	m_rotation = 0;
 	m_reversed = false;
 	m_contact = false;
-	m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
-	m_timerType = m_data[m_type].initTimerType;
+	m_timer = m_dataPtr->initTimer * GameState::getOneSecondInFrames();
+	m_timerType = m_dataPtr->initTimerType;
 	m_isActive = true;
-	m_detectCollision = m_data[m_type].detectCollision;
+	m_detectCollision = m_dataPtr->detectCollision;
 	m_state = 0;
 	m_tiltAngle = 0;
 	m_tiltVelocity = 0;
@@ -1205,7 +1205,8 @@ void CNpcPlatform::addWaypoint( s32 xPos, s32 yPos )
 
 void CNpcPlatform::setTypeFromMapEdit( u16 newType )
 {
-	m_type = mapEditConvertTable[newType];
+int	Type= mapEditConvertTable[newType];
+	setThingSubType(Type);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

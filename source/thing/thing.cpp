@@ -244,7 +244,7 @@ void		CThingManager::matchPressureSwitches()
 
 	while( hazard )
 	{
-		if ( hazard->getType() == CNpcHazard::NPC_PRESSURE_SWITCH_HAZARD )
+		if ( hazard->getThingSubType() == CNpcHazard::NPC_PRESSURE_SWITCH_HAZARD )
 		{
 			CNpcPressureSwitchHazard *switchHazard = (CNpcPressureSwitchHazard *) hazard;
 
@@ -256,7 +256,7 @@ void		CThingManager::matchPressureSwitches()
 
 			while( platform )
 			{
-				if ( platform->getType() == CNpcPlatform::NPC_TRAPDOOR_PLATFORM )
+				if ( platform->getThingSubType() == CNpcPlatform::NPC_TRAPDOOR_PLATFORM )
 				{
 					CNpcTrapdoorPlatform *trapdoor = (CNpcTrapdoorPlatform *) platform;
 
@@ -292,7 +292,7 @@ void		CThingManager::matchWheelsAndWeights()
 
 	while( hazard1 )
 	{
-		if ( hazard1->getType() == CNpcHazard::NPC_RISING_WEIGHT_HAZARD )
+		if ( hazard1->getThingSubType() == CNpcHazard::NPC_RISING_WEIGHT_HAZARD )
 		{
 			CNpcRisingWeightHazard *weight = (CNpcRisingWeightHazard *) hazard1;
 			DVECTOR wheelPos = weight->getWheelPos();
@@ -301,7 +301,7 @@ void		CThingManager::matchWheelsAndWeights()
 
 			while( hazard2 )
 			{
-				if ( hazard2->getType() == CNpcHazard::NPC_RISING_WEIGHT_WHEEL_HAZARD )
+				if ( hazard2->getThingSubType() == CNpcHazard::NPC_RISING_WEIGHT_WHEEL_HAZARD )
 				{
 					CNpcRisingWeightWheelHazard *wheel = (CNpcRisingWeightWheelHazard *) hazard2;
 
@@ -860,8 +860,7 @@ int		SubType=Thing->getThingSubType();
 CThing	**List=s_FreeList[Type];
 
 // Check its been aquired/set correctly
-// Temp workaround
-		ASSERT(SubType!=1234);
+//		ASSERT(SubType!=1234);
 		if (SubType!=1234)
 		{
 			Thing->NextFreeThing=List[SubType];
@@ -870,7 +869,8 @@ CThing	**List=s_FreeList[Type];
 		}
 		else
 		{
-//			delete Thing;
+			printf("%i %i\n",Type,SubType);
+			ASSERT(!"Thing not Setup Correctly");
 			Thing->NextFreeThing=DuffList;
 			DuffList=Thing;
 			DuffListCount++;

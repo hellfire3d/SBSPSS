@@ -53,7 +53,7 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 
 		m_timer = second;
 
-		m_timer += m_data[m_type].initTimer * second;
+		m_timer += m_dataPtr->initTimer * second;
 
 		m_timer += second - ( getRnd() % ( 2 * second ) );
 
@@ -84,7 +84,7 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 
 		ASSERT(newPlatform);
 
-		newPlatform->setType( m_targetType );
+		newPlatform->setThingSubType( m_targetType );
 		newPlatform->setGraphic( m_graphicNum );
 
 		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
