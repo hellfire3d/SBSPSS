@@ -38,66 +38,59 @@ void CNpc::processCloseSkullStomperAttack( int _frames )
 		s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
 		s32 moveX, moveY;
 
-		if ( waypointChange && !pathComplete )
+		if ( waypointChange )
 		{
+			if ( !pathComplete )
+			{
+				// pause and change direction
+
+				m_timerTimer = GameState::getOneSecondInFrames();
+				m_extendDir = EXTEND_UP;
+
+				return;
+			}
+		}
+
+		if ( pathComplete )
+		{
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
 			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+			m_npcPath.resetPath();
 		}
 		else
 		{
-			if ( pathComplete )
+			s32 preShiftX;
+			s32 preShiftY;
+				
+			m_heading = headingToTarget;
+
+			if ( m_extendDir == EXTEND_DOWN )
 			{
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
-				m_timerFunc = NPC_TIMER_ATTACK_DONE;
-				m_timerTimer = GameState::getOneSecondInFrames();
-				m_sensorFunc = NPC_SENSOR_NONE;
+				preShiftX = _frames * 8 * rcos( m_heading );
+				preShiftY = _frames * 8 * rsin( m_heading );
 			}
 			else
 			{
-				if ( m_npcPath.currentWaypoint == 0 )
-				{
-					m_heading = headingToTarget;
-
-					s32 preShiftX = _frames * 8 * rcos( m_heading );
-					s32 preShiftY = _frames * 8 * rsin( m_heading );
-
-					moveX = preShiftX >> 12;
-					if ( !moveX && preShiftX )
-					{
-						moveX = preShiftX / abs( preShiftX );
-					}
-
-					moveY = preShiftY >> 12;
-					if ( !moveY && preShiftY )
-					{
-						moveY = preShiftY / abs( preShiftY );
-					}
-
-					Pos.vx += moveX;
-					Pos.vy += moveY;
-				}
-				else
-				{
-					m_heading = headingToTarget;
-
-					s32 preShiftX = _frames * 2 * rcos( m_heading );
-					s32 preShiftY = _frames * 2 * rsin( m_heading );
-
-					moveX = preShiftX >> 12;
-					if ( !moveX && preShiftX )
-					{
-						moveX = preShiftX / abs( preShiftX );
-					}
-
-					moveY = preShiftY >> 12;
-					if ( !moveY && preShiftY )
-					{
-						moveY = preShiftY / abs( preShiftY );
-					}
-
-					Pos.vx += moveX;
-					Pos.vy += moveY;
-				}
+				preShiftX = _frames * 2 * rcos( m_heading );
+				preShiftY = _frames * 2 * rsin( m_heading );
 			}
+
+			moveX = preShiftX >> 12;
+			if ( !moveX && preShiftX )
+			{
+				moveX = preShiftX / abs( preShiftX );
+			}
+
+			moveY = preShiftY >> 12;
+			if ( !moveY && preShiftY )
+			{
+				moveY = preShiftY / abs( preShiftY );
+			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
 		}
 	}
 }

@@ -37,27 +37,72 @@ bool CNpcWaypoint::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 
 void CNpcPath::initPath()
 {
-	int loop;
-
-	for ( loop = 0 ; loop < NPC_MAX_WAYPOINTS ; loop++ )
-	{
-		waypoint[loop].pos.vx = 0;
-		waypoint[loop].pos.vy = 0;
-	}
-
+	waypoint = NULL;
 	pathType = SINGLE_USE_PATH;
-	currentWaypoint = lastWaypoint = 0;
+	currentWaypoint = NULL;
 	waypointCount = 0;
 	reversePath = false;
 }
 
+void CNpcPath::resetPath()
+{
+	currentWaypoint = NULL;
+}
+
 void CNpcPath::addWaypoint( DVECTOR newPos )
 {
-	if ( waypointCount < NPC_MAX_WAYPOINTS )
+	CNpcWaypoint *testWaypoint;
+	CNpcWaypoint *newWaypoint;
+
+	testWaypoint = this->waypoint;
+
+	if ( testWaypoint )
 	{
-		waypoint[waypointCount].pos = newPos;
+		// find end of path
+
+		while ( testWaypoint->nextWaypoint )
+		{
+			testWaypoint = testWaypoint->nextWaypoint;
+		}
+
+		newWaypoint = new( "waypoint" ) CNpcWaypoint;
+		newWaypoint->pos = newPos;
+		newWaypoint->nextWaypoint = NULL;
+		newWaypoint->prevWaypoint = testWaypoint;
+
+		testWaypoint->nextWaypoint = newWaypoint;
 		waypointCount++;
 	}
+	else
+	{
+		// no waypoints exist in this path, create
+
+		newWaypoint = new( "waypoint" ) CNpcWaypoint;
+		newWaypoint->pos = newPos;
+		newWaypoint->nextWaypoint = NULL;
+		newWaypoint->prevWaypoint = NULL;
+
+		this->waypoint = newWaypoint;
+		waypointCount++;
+	}
+}
+
+void CNpcPath::removeAllWaypoints()
+{
+	CNpcWaypoint *testWaypoint;
+	CNpcWaypoint *lastWaypoint;
+
+	testWaypoint = this->waypoint;
+
+	while ( testWaypoint )
+	{
+		lastWaypoint = testWaypoint;
+		testWaypoint = testWaypoint->nextWaypoint;
+
+		delete lastWaypoint;
+	}
+
+	this->waypoint = NULL;
 }
 
 void CNpcPath::setPathType( NPC_PATH_TYPE newPathType )
@@ -69,9 +114,9 @@ bool CNpcPath::incPath()
 {
 	if ( !reversePath )
 	{
-		if ( currentWaypoint < waypointCount - 1 )
+		if ( currentWaypoint->nextWaypoint )
 		{
-			currentWaypoint++;
+			currentWaypoint = currentWaypoint->nextWaypoint;
 		}
 		else
 		{
@@ -85,7 +130,7 @@ bool CNpcPath::incPath()
 				case REPEATING_PATH:
 					// go back to start
 
-					currentWaypoint = 0;
+					currentWaypoint = this->waypoint;
 
 					break;
 
@@ -93,7 +138,11 @@ bool CNpcPath::incPath()
 					// reverse path
 
 					reversePath = !reversePath;
-					currentWaypoint--;
+
+					if ( currentWaypoint->prevWaypoint )
+					{
+						currentWaypoint = currentWaypoint->prevWaypoint;
+					}
 
 					break;
 			}
@@ -103,14 +152,18 @@ bool CNpcPath::incPath()
 	{
 		// must be pong path if reversed
 
-		if ( currentWaypoint > 0 )
+		if ( currentWaypoint->prevWaypoint )
 		{
-			currentWaypoint--;
+			currentWaypoint = currentWaypoint->prevWaypoint;
 		}
 		else
 		{
 			reversePath = !reversePath;
-			currentWaypoint++;
+
+			if ( currentWaypoint->nextWaypoint )
+			{
+				currentWaypoint = currentWaypoint->nextWaypoint;
+			}
 		}
 	}
 
@@ -119,17 +172,29 @@ bool CNpcPath::incPath()
 
 bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY )
 {
-	return( waypoint[currentWaypoint].isPointNear( currentPos, distX, distY ) );
+	return( currentWaypoint->isPointNear( currentPos, distX, distY ) );
 }
 
 s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange )
 {
+	if ( !this->waypoint )
+	{
+		return( 0 );
+	}
+
+	if ( !currentWaypoint )
+	{
+		// if no currentWaypoint set, start it off
+
+		currentWaypoint = this->waypoint;
+	}
+
 	s32 xDist, yDist;
 
 	*pathComplete = false;
 	*waypointChange = false;
 
-	if ( waypoint[currentWaypoint].isPointNear( currentPos, &xDist, &yDist ) )
+	if ( currentWaypoint->isPointNear( currentPos, &xDist, &yDist ) )
 	{
 		*pathComplete = incPath();
 		*waypointChange = true;

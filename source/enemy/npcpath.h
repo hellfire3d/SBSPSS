@@ -20,6 +20,8 @@ class CNpcWaypoint
 {
 public:
 	DVECTOR	pos;
+	CNpcWaypoint *nextWaypoint;
+	CNpcWaypoint *prevWaypoint;
 
 	bool	isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
 };
@@ -33,25 +35,21 @@ enum NPC_PATH_TYPE
 
 class CNpcPath
 {
-	enum
-	{
-		NPC_MAX_WAYPOINTS = 4,
-	};
-
 private:
-	CNpcWaypoint	waypoint[NPC_MAX_WAYPOINTS];
+	CNpcWaypoint	*waypoint;
 	NPC_PATH_TYPE	pathType;
 	u8				waypointCount;
-	u8				lastWaypoint;
 	bool			reversePath;
 
 public:
-	u8				currentWaypoint;
+	CNpcWaypoint	*currentWaypoint;
 
 	void			initPath();
 	void			addWaypoint( DVECTOR newPos );
+	void			removeAllWaypoints();
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
+	void			resetPath();
 	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };

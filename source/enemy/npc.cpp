@@ -435,7 +435,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_IRON_DOGFISH;
+	m_type = NPC_SKULL_STOMPER;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -471,7 +471,7 @@ void CNpc::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			/*newPos.vx = 500;
+			newPos.vx = 500;
 			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
@@ -479,9 +479,9 @@ void CNpc::init()
 			newPos.vx = 100;
 			newPos.vy = 100;
 
-			m_npcPath.addWaypoint( newPos );*/
+			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( REPEATING_PATH );
+			m_npcPath.setPathType( PONG_PATH );
 
 			break;
 		}
@@ -554,6 +554,7 @@ void CNpc::init()
 
 void CNpc::shutdown()
 {
+	m_npcPath.removeAllWaypoints();
 }
 
 
@@ -832,7 +833,7 @@ bool CNpc::processSensor()
 						if ( xDistSqr + yDistSqr < 40000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_npcPath.currentWaypoint = 0;
+							m_extendDir = EXTEND_DOWN;
 
 							return( true );
 						}
