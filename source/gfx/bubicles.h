@@ -170,8 +170,8 @@ public:
 private:
 	enum
 	{
-		NUM_EMITTERS=10,
-		NUM_BUBICLES=250,
+		NUM_EMITTERS=3,
+		NUM_BUBICLES=50,
 	};
 
 							CBubicleFactory()						{;}
