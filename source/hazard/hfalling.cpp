@@ -279,7 +279,7 @@ void CNpcFallingHazard::render()
 
 		VECTOR scale;
 		scale.vx = m_scale;
-		scale.vy = m_scale;
+		scale.vy = -m_scale;
 		scale.vz = m_scale;
 
 		m_modelGfx->Render(renderPos,&rotation,&scale);
