@@ -147,7 +147,6 @@ sTileMapElem3d	*MapPtr=GetMapPos3d(X,Y);
 #define	BLOCK_MULT	16
 void	CLayerTile3d::render()
 {
-
 sPrimGridElem3d	*Grid=GetGridPos3d(MapX,MapY);
 s16				TileX,TileY;
 VECTOR			BlkPos;
@@ -172,7 +171,7 @@ s32				BlkXStore;
 				{ // Has 2d Data
 /**/				Prim->x0=TileX;
 /**/				Prim->y0=TileY;
-/**/				AddPrim(OtPtr,Prim);
+					addPrimNoCheck(OtPtr,Prim);
 				}
 				if (Grid->Flags)
 				{ // Has 3d Data
@@ -231,7 +230,7 @@ sTri		*TList=TriList+Tile->TriStart;
 						*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
 						TList++;
-						addPrim(OtPtr,TPrimPtr);
+						addPrimNoCheck(OtPtr,TPrimPtr);
 						gte_stsxy3_ft3(TPrimPtr);
 						TPrimPtr++;
 						}

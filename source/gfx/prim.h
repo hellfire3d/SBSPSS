@@ -97,6 +97,11 @@ struct sOT
       (OT)->LastPrim = (u32*)(Prim);			\
    (OT)->FirstPrim = (u32*)(Prim);				\
 }
+#define addPrimNoCheck(OT,Prim)					\
+{												\
+	setaddr(((u32*)Prim), (OT)->FirstPrim);		\
+	(OT)->FirstPrim = (u32*)(Prim);				\
+}
 
 #define NTAG_addPrims(_nt,_ps,_pe) 				\
 	{											\
@@ -217,20 +222,20 @@ typedef	u32	sOT;
 #define GetPrimLG4() 		GetPrim(LINE_G4);\
 							setLineG4(CurrPrim-sizeof(LINE_G4))
 
-#define GetPrimSPRT8() 		GetPrim(SPRT8);\
-							setSprt8(CurrPrim-sizeof(SPRT8))
+#define GetPrimSPRT8() 		GetPrim(SPRT_8);\
+							setSprt8(CurrPrim-sizeof(SPRT_8))
 
-#define GetPrimSPRT16() 	GetPrim(SPRT16);\
-							setSprt16(CurrPrim-sizeof(SPRT16))
+#define GetPrimSPRT16() 	GetPrim(SPRT_16);\
+							setSprt16(CurrPrim-sizeof(SPRT_16))
 
 #define GetPrimSPRT() 		GetPrim(SPRT);\
 							setSprt(CurrPrim-sizeof(SPRT))
 
-#define GetPrimTILE8() 		GetPrim(TILE8);\
-							setTile(CurrPrim-sizeof(TILE8))
+#define GetPrimTILE8() 		GetPrim(TILE_8);\
+							setTile(CurrPrim-sizeof(TILE_8))
 
-#define GetPrimTILE16() 	GetPrim(TILE16);\
-							setTile(CurrPrim-sizeof(TILE16))
+#define GetPrimTILE16() 	GetPrim(TILE_16);\
+							setTile(CurrPrim-sizeof(TILE_16))
 
 #define GetPrimTILE() 		GetPrim(TILE);\
 							setTile(CurrPrim-sizeof(TILE))

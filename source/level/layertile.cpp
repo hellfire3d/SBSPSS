@@ -220,7 +220,7 @@ s16				TileX,TileY;
 				{
 /**/				Prim->x0=TileX;
 /**/				Prim->y0=TileY;
-/**/				AddPrim(OtPtr,Prim);
+					addPrimNoCheck(OtPtr,Prim);
 				}
 				Grid=Grid->Right;
 				TileX+=TILE_WIDTH;

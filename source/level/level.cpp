@@ -46,14 +46,6 @@ void 	CLevel::init()
 		TPLoadTex(LEVEL04_LEVEL04_TEX);
 
 		initLayers();
-
-// Setup Constand Rot Matrix
-MATRIX	Mtx;
-
-		SetIdent(&Mtx);
-		Mtx.t[2]=ZPos;
-		SetRotMatrix(&Mtx);
-		SetTransMatrix(&Mtx);
 }
 
 /*****************************************************************************/
@@ -114,6 +106,22 @@ void	CLevel::shutdown()
 /*****************************************************************************/
 void 	CLevel::render()
 {
+// Setup Constant Rot Matrix
+MATRIX	Mtx;
+
+		SetIdent(&Mtx);
+		Mtx.t[2]=ZPos;
+		SetRotMatrix(&Mtx);
+		SetTransMatrix(&Mtx);
+
+// Setup dummy prim to ensure OtPos 0 is initialised (for fast add)
+TILE_16	*Prim=GetPrimTILE16();
+
+		Prim->x0=1024;
+		Prim->y0=1024;
+		AddPrim(OtPtr,Prim);
+		ASSERT(OtPtr->FirstPrim);
+
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			if (TileLayers[i]) TileLayers[i]->render();
@@ -123,7 +131,7 @@ void 	CLevel::render()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int	MapSpd=8;
+int	MapSpd=4;
 void	CLevel::think(int _frames)
 {
 int		padh = PadGetHeld( 0 );
