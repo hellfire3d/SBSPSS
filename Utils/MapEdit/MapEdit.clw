@@ -8,7 +8,7 @@ NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=16
+ClassCount=17
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -17,29 +17,31 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=13
+ResourceCount=14
 Resource1=IDD_NEW_LAYER
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDR_MAINFRAME (English (U.S.))
+Resource3=IDD_ADDLAYER
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_LAYER_LIST_DIALOG
+Resource5=IDR_MAINFRAME (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_ADDLAYER
-Resource7=IDD_NEWMAP
+Resource6=IDD_LAYER_LIST_DIALOG
+Resource7=IDD_MULTIBAR (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_LAYERTILE_TOOLBAR
+Resource8=IDD_NEWMAP
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_MULTIBAR (English (U.S.))
-Resource10=IDD_MAPSIZE
+Resource9=IDD_LAYERTILE_TOOLBAR
+Resource10=IDR_TOOLBAR (English (U.S.))
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_ABOUTBOX (English (U.S.))
+Resource11=IDD_LAYERTILE_GUI
 Class15=CAddLayerDlg
-Resource12=IDD_LAYERTILE_GUI
+Resource12=IDD_MAPSIZE
 Class16=CLayerTileToolbar
-Resource13=IDR_TOOLBAR (English (U.S.))
+Resource13=IDD_ABOUTBOX (English (U.S.))
+Class17=CLayerShadeGUI
+Resource14=IDD_LAYERSHADE_GUI
 
 [CLS:CChildFrame]
 Type=0
@@ -91,7 +93,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_EXPORT
+LastObject=ID_TOGGLE_GRID
 Filter=C
 VirtualFilter=VWC
 
@@ -108,9 +110,7 @@ Command3=ID_FILE_SAVE
 Command4=ID_EDIT_CUT
 Command5=ID_EDIT_COPY
 Command6=ID_EDIT_PASTE
-Command7=ID_TOOLBAR_TILEPALETTE
-Command8=ID_TOOLBAR_GRID
-CommandCount=8
+CommandCount=6
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -262,6 +262,7 @@ ImplementationFile=MapSizeDlg.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
+LastObject=CMapSizeDlg
 
 [DLG:IDD_LAYERTILE_GUI]
 Type=1
@@ -279,7 +280,7 @@ ImplementationFile=LayerTileGUI.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDD_LAYERTILE_BTN_UPDATE
+LastObject=CLayerTileGUI
 
 [DLG:IDD_NEW_LAYER]
 Type=1
@@ -333,7 +334,7 @@ HeaderFile=AddLayerDlg.h
 ImplementationFile=AddLayerDlg.cpp
 BaseClass=CDialog
 Filter=D
-LastObject=IDC_ADDLAYER_LIST
+LastObject=CAddLayerDlg
 VirtualFilter=dWC
 
 [DLG:IDD_ADDLAYER]
@@ -359,4 +360,26 @@ BaseClass=CDialog
 Filter=D
 LastObject=CLayerTileToolbar
 VirtualFilter=dWC
+
+[DLG:IDD_LAYERSHADE_GUI]
+Type=1
+Class=CLayerShadeGUI
+ControlCount=8
+Control1=IDC_LAYERSHADE_TEXT0,static,1342308352
+Control2=IDC_LAYERSHADE_EDITR0,edit,1350770688
+Control3=IDC_LAYERSHADE_EDITG0,edit,1350770816
+Control4=IDC_LAYERSHADE_EDITB0,edit,1350770816
+Control5=IDC_LAYERSHADE_TEXT1,static,1342308352
+Control6=IDC_LAYERSHADE_EDITR1,edit,1350639744
+Control7=IDC_LAYERSHADE_EDITG1,edit,1350639744
+Control8=IDC_LAYERSHADE_EDITB1,edit,1350639744
+
+[CLS:CLayerShadeGUI]
+Type=0
+HeaderFile=LayerShadeGUI.h
+ImplementationFile=LayerShadeGUI.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=CLayerShadeGUI
 

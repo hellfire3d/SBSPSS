@@ -6,9 +6,10 @@
 #define AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_
 
 #include	"MultiBar.h"
-#include	"LayerList.h"
-#include	"LayerTileGUI.h"
-#include	"LayerTileToolbar.h"
+//#include	"LayerList.h"
+//#include	"LayerTileGUI.h"
+//#include	"LayerTileToolbar.h"
+//#include	"LayerShadeGUI.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -34,13 +35,14 @@ public:
 public:
 	CStatusBar		*GetStatusBar()			{return(&StatusBar);}
 	CMainToolBar	*GetToolBar()			{return(&ToolBar);}
-	CDialog			*GetDialog(int ID)		{return(ParamBar.GetDialog(ID));}
+//	CDialog			*GetDialog(int ID)		{return(ParamBar.GetDialog(ID));}
 
 // Param Bar
 	CMultiBar		*GetParamBar()			{return(&ParamBar);}
-	CDialog			&GetLayerList()			{return(LayerList);}
-	CDialog			&GetLayerTileGUI()		{return(LayerTileGUI);}
-	CDialog			&GetLayerTileToolbar()	{return(LayerTileToolBar);}
+//	CDialog			&GetLayerList()			{return(LayerList);}
+//	CDialog			&GetLayerTileGUI()		{return(LayerTileGUI);}
+//	CDialog			&GetLayerTileToolbar()	{return(LayerTileToolBar);}
+//	CDialog			&GetLayerShadeGUI()		{return(LayerShadeGUI);}
 
 // Operations
 public:
@@ -65,9 +67,10 @@ protected:  // control bar embedded members
 
 	CMultiBar			ParamBar;
 // Sub Dialogs
-	CLayerList			LayerList;
-	CLayerTileGUI		LayerTileGUI;
-	CLayerTileToolbar	LayerTileToolBar;
+//	CLayerList			LayerList;
+//	CLayerTileGUI		LayerTileGUI;
+//	CLayerTileToolbar	LayerTileToolBar;
+//	CLayerShadeGUI		LayerShadeGUI;
 
 // Generated message map functions
 protected:

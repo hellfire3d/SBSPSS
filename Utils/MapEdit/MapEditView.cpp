@@ -25,7 +25,6 @@ IMPLEMENT_DYNCREATE(CMapEditView, CGLEnabledView)
 
 BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	//{{AFX_MSG_MAP(CMapEditView)
-	ON_WM_SETFOCUS()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MBUTTONDOWN()
@@ -42,10 +41,10 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_COMMAND(ID_ACTIVEBRUSH_RIGHT, OnActivebrushRight)
 	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
 	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
-	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
+	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -137,14 +136,6 @@ CMapEditDoc* CMapEditView::GetDocument() // non-debug version is inline
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditView message handlers
 
-void CMapEditView::OnSetFocus(CWnd* pOldWnd) 
-{
-CMapEditDoc	*CurDoc=GetDocument();
-	CGLEnabledView::OnSetFocus(pOldWnd);
-	theApp.SetCurrent(CurDoc);
-	CurDoc->UpdateAll(this);
-}
-
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
@@ -169,3 +160,14 @@ void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight
 void CMapEditView::OnMapSetSize()			 							{GetDocument()->MapSetSize(this);}
 
 void CMapEditView::On2d3dToggle()										{GetDocument()->Toggle2d3d(this);}
+
+void CMapEditView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView) 
+{
+	CGLEnabledView::OnActivateView(bActivate, pActivateView, pDeactiveView);
+	if (bActivate)
+	{
+		CMapEditDoc	*CurDoc=GetDocument();
+		theApp.SetCurrent(CurDoc);
+		CurDoc->UpdateAll(this);
+	}
+}

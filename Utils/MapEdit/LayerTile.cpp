@@ -391,38 +391,40 @@ GLuint	*HitPtr=SelectBuffer;
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerTile::InitGUI(CCore *Core)
+void	CLayerTile::GUIInit(CCore *Core)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
-			ParamBar->Add(Frm->GetLayerTileToolbar(),IDD_LAYERTILE_TOOLBAR,TRUE);
-			ParamBar->Add(Frm->GetLayerTileGUI(),IDD_LAYERTILE_GUI,TRUE);
+			Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+			Core->TileBankGUIInit();
 }
 
 /*****************************************************************************/
-void	CLayerTile::UpdateGUI(CCore *Core)
+void	CLayerTile::GUIKill(CCore *Core)
 {
-CMainFrame			*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CLayerTileToolbar	*Bar=(CLayerTileToolbar *)Frm->GetDialog(IDD_LAYERTILE_TOOLBAR);
+		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+}
 
-		if (Bar)
+/*****************************************************************************/
+void	CLayerTile::GUIUpdate(CCore *Core)
+{
+		ToolBarGUI.ResetButtons();
+		switch(Mode)
 		{
-			Bar->ResetButtons();
-			switch(Mode)
-			{
-			case MouseModePaint:
-				Bar->SetButtonState(CLayerTileToolbar::PAINT,TRUE);
-				break;
-			case MouseModeSelect:
-				Bar->SetButtonState(CLayerTileToolbar::SELECT,TRUE);
-				break;
-			default:
-				break;
-			}
+		case MouseModePaint:
+			ToolBarGUI.SetButtonState(CLayerTileToolbar::PAINT,TRUE);
+			break;
+		case MouseModeSelect:
+			ToolBarGUI.SetButtonState(CLayerTileToolbar::SELECT,TRUE);
+			break;
+		default:
+			break;
 		}
 
-		Core->UpdateTileViewGUI();
+		Core->TileBankGUIUpdate();
+}
+
+/*****************************************************************************/
+void	CLayerTile::GUIChanged(CCore *Core)
+{
 }
 
 /*****************************************************************************/
@@ -436,7 +438,7 @@ BOOL	Ret=FALSE;
 			Ret|=ExitMode();
 			Mode=(MouseMode)NewMode;
 			Ret|=InitMode();
-		return(Ret);
+			return(Ret);
 }
 
 /*****************************************************************************/

@@ -30,6 +30,8 @@ public:
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CMapEditView)
+	protected:
+	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -46,7 +48,6 @@ protected:
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditView)
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);

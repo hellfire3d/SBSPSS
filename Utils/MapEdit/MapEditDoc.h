@@ -24,6 +24,8 @@ public:
 	void			UpdateAll(CMapEditView *View);
 	void			FocusView();
 	bool			Question(char *Txt);
+	void			GUIUpdate();
+	void			GUIChanged();
 
 // Windows Messages Thru Point
 	void			LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);

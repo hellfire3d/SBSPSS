@@ -73,9 +73,9 @@ CTileBank::~CTileBank()
 /*****************************************************************************/
 void	CTileBank::SetCollision(bool f)
 {
+		LastSet=CurrentSet;
 		if (f)
 		{ // Is collision
-			LastSet=CurrentSet;
 			CurrentSet=0;
 		}
 		else
@@ -83,7 +83,6 @@ void	CTileBank::SetCollision(bool f)
 			CurrentSet=LastSet;
 		}
 }
-
 
 /*****************************************************************************/
 void	CTileBank::Load(CFile *File,int Version)
@@ -267,30 +266,34 @@ void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPo
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CTileBank::UpdateGUI(CCore *Core,BOOL IsTileView)
+void	CTileBank::GUIInit(CCore *Core)
 {
-CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CLayerTileGUI	*Dlg=(CLayerTileGUI*)Frm->GetDialog(IDD_LAYERTILE_GUI);
-int				ListSize=TileSet.size();
+			Core->GUIAdd(TileBankGUI,IDD_LAYERTILE_GUI);
+}
 
-		if (Dlg)
-		{
-			Dlg->m_List.ResetContent();
-			if (ListSize-1)
+/*****************************************************************************/
+void	CTileBank::GUIUpdate(CCore *Core)
+{
+int			ListSize=TileSet.size();
+BOOL		IsTileView=Core->IsTileView();
+
+			if (TileBankGUI.m_List)
 			{
-				for (int i=1; i<ListSize; i++)
+				TileBankGUI.m_List.ResetContent();
+				if (ListSize-1)
 				{
-					Dlg->m_List.AddString(TileSet[i].GetName());
+					for (int i=1; i<ListSize; i++)
+					{
+						TileBankGUI.m_List.AddString(TileSet[i].GetName());
+					}
+					TileBankGUI.m_List.SetCurSel(CurrentSet-1);
 				}
-				Dlg->m_List.SetCurSel(CurrentSet-1);
+				else
+				{
+					IsTileView=FALSE;
+				}
+				TileBankGUI.m_List.EnableWindow(IsTileView);
 			}
-			else
-			{
-				IsTileView=FALSE;
-			}
-			Dlg->m_List.EnableWindow(IsTileView);
-		}
-		
 }
 
 /*****************************************************************************/

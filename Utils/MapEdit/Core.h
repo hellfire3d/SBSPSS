@@ -12,6 +12,10 @@
 #include	"TexCache.h"
 #include	"TileSet.h"
 
+#include	"MApEdit.h"
+#include	"LayerList.h"
+#include	"LayerTileGUI.h"
+
 const	s32		FileVersion=2;
 
 #define	SCREEN_MAP_WIDTH	30
@@ -43,27 +47,33 @@ public:
 		void					RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		void					MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
 		void					MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
-		void					Zoom(CMapEditView *View,float Dst);
+		void					Zoom(float Dst);
 
 // TileBank
 		CTileBank				&GetTileBank()					{return(TileBank);}
-		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
-
-		void					UpdateTileViewGUI()				{TileBank.UpdateGUI(this,TileViewFlag);}
+		void					UpdateTileView(BOOL Toggle=FALSE);
 
 		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 		void					TileBankLoad(char *Filename);
 		void					TileBankDelete();
 		void					TileBankReload();
 		void					TileBankSet();
-		void					MirrorX(CMapEditView *View);
-		void					MirrorY(CMapEditView *View);
-		void					ActiveBrushLeft(CMapEditView *View);
-		void					ActiveBrushRight(CMapEditView *View);
+		void					MirrorX();
+		void					MirrorY();
+		void					ActiveBrushLeft();
+		void					ActiveBrushRight();
 		BOOL					IsTileValid(int Set,int Tile);
+		BOOL					IsTileView()					{return(TileViewFlag);}
+		void					TileBankGUIInit()				{TileBank.GUIInit(this);}
+		void					TileBankGUIUpdate()				{TileBank.GUIUpdate(this);}
 
-// Param Bar
+// GUI 
 		void					UpdateParamBar();
+		void					GUIAdd(CDialog &Dlg,int ID,bool Visible=true,bool Lock=false);
+		void					GUIRemove(CDialog &Dlg,int ID,bool Force=false);
+		void					GUIRemoveAll(bool Force=false);
+		void					GUIUpdate();
+		void					GUIChanged();
 
 // Layers
 		void					AddLayer(int Type, int SubType, int Width, int Height);
@@ -71,31 +81,30 @@ public:
 		void					SetLayer(int Layer);
 		void					AddLayer(int Layer);
 		void					DeleteLayer(int Layer);
-		void					UpdateLayerGUI(CMapEditView *View);
+		void					UpdateLayerGUI();
 
 // Grid
-		void					UpdateGrid(CMapEditView *View,BOOL Toggle=FALSE);
+		void					UpdateGrid(BOOL Toggle=FALSE);
 		BOOL					IsGridOn()						{return(GridFlag);}
 
 // Tex Cache
 		CTexCache				&GetTexCache()					{return(TexCache);}
 
 // Misc
-		void					UpdateGUI(CMapEditView *View);
-		void					UpdateAll(CMapEditView *View);
-		void					UpdateView(CMapEditView *View);
-		void					UpdateView(CMapEditView *View,Vector3 &Ofs);
+		void					UpdateAll();
+		void					RedrawView();
+		void					UpdateView(Vector3 *Ofs=NULL);
 
 		Vector3					&GetCam();
 		Vector3					OffsetCam(Vector3 &Cam,float DivVal);
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
-		void					SetMapSize(CMapEditView *View,int Width,int Height);
+		void					SetMapSize(int Width,int Height);
 		int						GetMapWidth()					{return(Layer[FindActionLayer()]->GetWidth());}
 		int						GetMapHeight()					{return(Layer[FindActionLayer()]->GetHeight());}
 
-		void					Toggle2d3d(CMapEditView *View);
+		void					Toggle2d3d();
 		int						FindLayer(int Type,int SubType=-1);
 		int						FindActionLayer();
 
@@ -104,10 +113,11 @@ public:
 		float					GetZoomW();
 		float					GetZoomH();
 		
-		void					CopySelection(CMapEditView *View);
-		void					PasteSelection(CMapEditView *View);
+		void					CopySelection();
+		void					PasteSelection();
 
 		GString					GetCurrentPath();
+
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
@@ -119,9 +129,9 @@ private:
 		int						ActiveLayer;
 
 		CTileBank				TileBank;
-
 		CTexCache				TexCache;
 
+		CLayerListGUI			LayerList;
 
 		BOOL					TileViewFlag;
 		BOOL					GridFlag;

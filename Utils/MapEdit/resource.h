@@ -16,6 +16,7 @@
 #define IDD_ADDLAYER                    172
 #define IDD_LAYERTILE_GUI               173
 #define IDD_LAYERTILE_TOOLBAR           174
+#define IDD_LAYERSHADE_GUI              175
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYER_LIST                  1019
 #define IDD_LAYERTILE_BTN_UPDATE        1029
@@ -32,6 +33,14 @@
 #define IDC_LAYERLIST_ADD               1056
 #define IDC_LAYERLIST_DELETE            1057
 #define IDC_ADDLAYER_LIST               1058
+#define IDC_LAYERSHADE_TEXT0            1059
+#define IDC_LAYERSHADE_EDITR0           1060
+#define IDC_LAYERSHADE_EDITG0           1061
+#define IDC_LAYERSHADE_EDITB0           1062
+#define IDC_LAYERSHADE_TEXT1            1063
+#define IDC_LAYERSHADE_EDITR1           1064
+#define IDC_LAYERSHADE_EDITG1           1065
+#define IDC_LAYERSHADE_EDITB1           1066
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -56,9 +65,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        173
+#define _APS_NEXT_RESOURCE_VALUE        177
 #define _APS_NEXT_COMMAND_VALUE         32799
-#define _APS_NEXT_CONTROL_VALUE         1059
+#define _APS_NEXT_CONTROL_VALUE         1070
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

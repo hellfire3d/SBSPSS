@@ -30,6 +30,8 @@ struct	sLayerInfoTable
 enum	LAYER_ENUMS
 {
 SELECT_BUFFER_SIZE=16,
+TileLayerMinWidth=32,
+TileLayerMinHeight=22,
 };
 
 /*****************************************************************************/
@@ -69,8 +71,10 @@ virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam)=0;
 virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)=0;
 virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 
-virtual	void			InitGUI(CCore *Core)=0;
-virtual	void			UpdateGUI(CCore *Core)=0;
+virtual	void			GUIInit(CCore *Core)=0;
+virtual	void			GUIKill(CCore *Core)=0;
+virtual	void			GUIUpdate(CCore *Core)=0;
+virtual	void			GUIChanged(CCore *Core)=0;
 
 virtual	int				GetWidth()=0;
 virtual	int				GetHeight()=0;

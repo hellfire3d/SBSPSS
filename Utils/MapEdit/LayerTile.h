@@ -6,13 +6,8 @@
 #define	__LAYER_TILE_HEADER__
 
 #include	"Layer.h"
-
-/*****************************************************************************/
-enum	TileLayerEnum
-{
-	TileLayerMinWidth=32,
-	TileLayerMinHeight=22,
-};
+#include	"MapEdit.h"
+#include	"LayerTileToolbar.h"
 
 /*****************************************************************************/
 class	CCore;
@@ -42,8 +37,10 @@ public:
 		void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
-		void			InitGUI(CCore *Core);
-		void			UpdateGUI(CCore *Core);
+		void			GUIInit(CCore *Core);
+		void			GUIKill(CCore *Core);
+		void			GUIUpdate(CCore *Core);
+		void			GUIChanged(CCore *Core);
 
 		int				GetWidth()			{return(Map.GetWidth());}
 		int				GetHeight()			{return(Map.GetHeight());}
@@ -84,7 +81,7 @@ protected:
 		int				SubType;
 		MouseMode		Mode;
 
-//static	char			*LayerName[];
+		CLayerTileToolbar	ToolBarGUI;
 
 };
 

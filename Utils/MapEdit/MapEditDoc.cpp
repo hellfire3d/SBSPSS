@@ -91,19 +91,22 @@ void CMapEditDoc::Dump(CDumpContext& dc) const
 /*********************************************************************************/
 void	CMapEditDoc::UpdateView(CMapEditView *View)
 {
-		Core.UpdateView(View);
+CView	*V=(CView*)View;
+		V->Invalidate();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::Render(CMapEditView *View)	
 {
+	if (View)
 		Core.Render(View);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::UpdateAll(CMapEditView *View)
 {
-		Core.UpdateAll(View);
+	if (View)
+		Core.UpdateAll();
 }
 
 /*********************************************************************************/
@@ -128,6 +131,22 @@ int	Ret=AfxMessageBox(Str,MB_YESNO , MB_ICONQUESTION);
 	return(false);
 
 }
+
+/*********************************************************************************/
+void	CMapEditDoc::GUIUpdate()
+{
+		Core.GUIUpdate();
+
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::GUIChanged()
+{
+		Core.GUIChanged();
+		UpdateAllViews(NULL);
+//		theApp.GetMainWnd()->Invalidate();
+}
+
 /*********************************************************************************/
 /*********************************************************************************/
 /*** Windows Message Handlers ****************************************************/
@@ -165,43 +184,43 @@ void	CMapEditDoc::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point)
 /*********************************************************************************/
 void	CMapEditDoc::ToggleTileView(CMapEditView *View)
 {
-		Core.UpdateTileView(View,TRUE);
-		Core.UpdateAll(View);
+		Core.UpdateTileView(true);
+		Core.UpdateAll();
 		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 {
-		Core.UpdateGrid(View,TRUE);
+		Core.UpdateGrid(TRUE);
 		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MirrorX(CMapEditView *View)
 {
-		Core.MirrorX(View);
+		Core.MirrorX();
 		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MirrorY(CMapEditView *View)
 {
-		Core.MirrorY(View);
+		Core.MirrorY();
 		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::CopySelection(CMapEditView *View) 
 {
-		Core.CopySelection(View);
+		Core.CopySelection();
 		FocusView();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::PasteSelection(CMapEditView *View) 
 {
-		Core.PasteSelection(View);
+		Core.PasteSelection();
 		FocusView();
 }
 
@@ -292,13 +311,13 @@ void	CMapEditDoc::TileBankSet()
 /*********************************************************************************/
 void	CMapEditDoc::ActiveBrushLeft(CMapEditView *View)
 {
-		Core.ActiveBrushLeft(View);
+		Core.ActiveBrushLeft();
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::ActiveBrushRight(CMapEditView *View)
 {
-		Core.ActiveBrushRight(View);
+		Core.ActiveBrushRight();
 }
 
 /*********************************************************************************/
@@ -311,27 +330,27 @@ CMapSizeDlg	Dlg;
 		
 		if (Dlg.DoModal()!=IDOK) return;
 
-		Core.SetMapSize(View,Dlg.m_Width,Dlg.m_Height);
+		Core.SetMapSize(Dlg.m_Width,Dlg.m_Height);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::OnZoomIn() 
 {
-		Core.Zoom(NULL,-0.1f);
+		Core.Zoom(-0.1f);
 		UpdateAllViews(NULL);
 }
 
 /*********************************************************************************/
 void CMapEditDoc::OnZoomOut() 
 {
-		Core.Zoom(NULL,+0.1f);
+		Core.Zoom(+0.1f);
 		UpdateAllViews(NULL);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::Toggle2d3d(CMapEditView *View)
 {
-		Core.Toggle2d3d(View);
+		Core.Toggle2d3d();
 }
 
 /*********************************************************************************/

@@ -115,6 +115,28 @@ SOURCE=.\LayerDef.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerShade.cpp
+
+!IF  "$(CFG)" == "MapEdit - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerShade.h
+
+!IF  "$(CFG)" == "MapEdit - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerTile.cpp
 # End Source File
 # Begin Source File
@@ -345,6 +367,14 @@ SOURCE=.\LayerList.cpp
 # Begin Source File
 
 SOURCE=.\LayerList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerShadeGUI.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerShadeGUI.h
 # End Source File
 # Begin Source File
 

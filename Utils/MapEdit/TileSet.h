@@ -15,6 +15,9 @@
 #include	"TexCache.h"
 #include	"Tile.h"
 
+#include	"MapEdit.h"
+#include	"LayerTileGui.h"
+
 /*****************************************************************************/
 enum	TileSetEnum
 {
@@ -48,7 +51,7 @@ public:
 		void		LoadTileSets(CCore *Core);
 		CTile		&GetTile(int Bank,int Tile);
 		
-		void		SetCurrent(int Set)					{CurrentSet=Set+1;}
+		void		SetCurrent()						{CurrentSet=TileBankGUI.m_List.GetCurSel()+1;}
 		int			GetCurrent()						{return(CurrentSet);}
 		int			GetSetCount()						{return(TileSet.size());}
 		
@@ -61,10 +64,10 @@ public:
 		void		FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
 		void		RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
-		void		UpdateGUI(CCore *Core,BOOL IsTileView);
+		void		GUIInit(CCore *Core);
+		void		GUIUpdate(CCore *Core);
 
 		BOOL		IsTileValid(int Set,int Tile);
-//		BOOL		IsTileValidGB(int Set,int Tile);
 
 		void		SetCollision(bool f);
 		CTileSet	&GetSet(int Set)					{return(TileSet[Set]);}
@@ -81,7 +84,7 @@ public:
 		void		Save(CFile *File);
 
 
-private:
+protected:
 		BOOL		Select(int BrushID,BOOL DownFlag);
 		void		SetBrush(CMap &ThisBrush);
 
@@ -93,6 +96,9 @@ private:
 
 		BOOL					LoadFlag;
 		int						LastCursorPos,CursorPos;
+
+		CLayerTileGUI		TileBankGUI;
+
 };
 
 /*****************************************************************************/
@@ -109,12 +115,6 @@ public:
 		void	Load2d(CCore *Core);
 		void	Load3d(CCore *Core);
 
-//		const char	*GetDrive()			{return(Filename.Drive());}
-//		const char	*GetPath()			{return(Filename.Dir());}
-//		const char	*GetName()			{return(Filename.File());}
-//		const char	*GetExt()			{return(Filename.Ext());}
-//		const char	*GetFilename()		{return(Filename.FullName());}
-
 		const char	*GetFilename()		{return(Filename);}
 		const char	*GetName()			{return(Name);}
 
@@ -127,7 +127,6 @@ public:
 		void	RenderGrid(Vector3 &CamPos);
 		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
 		BOOL	IsTileValid(int No);
-//		BOOL	IsTileValidGB(int No);
 
 
 private:

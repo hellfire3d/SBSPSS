@@ -20,8 +20,10 @@ public:
 
 		int				GetType()			{return(LAYER_TYPE_COLLISION);}
 
-		void			InitGUI(CCore *Core);
-		void			UpdateGUI(CCore *Core);
+		void			GUIInit(CCore *Core);
+		void			GUIKill(CCore *Core);
+		void			GUIUpdate(CCore *Core);
+		void			GUIChanged(CCore *Core);
 
 		void			Load(CFile *File,int Version);
 		void			Save(CFile *File);
@@ -32,6 +34,8 @@ public:
 		void			DeleteSet(int Set);
 		void			RemapSet(int OrigSet,int NewSet);
 protected:
+
+//		CLayerTileToolbar	ToolBarGUI;
 
 };
 

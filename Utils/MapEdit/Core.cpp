@@ -21,9 +21,12 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 #include	"LayerCollision.h"
+#include	"LayerShade.h"
 #include	"utils.h"
 
 #include	"Export.h"
+
+#include	"LayerList.h"
 
 
 /*****************************************************************************/
@@ -31,29 +34,15 @@
 /*****************************************************************************/
 CCore::CCore()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
 		CurrentMousePos=CPoint(0,0);
-
-// Add default param bar items			
-		ParamBar->RemoveAll();
-		ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
-
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
+			GUIRemoveAll();
 int	ListSize=Layer.size();
 		for (int i=0; i<ListSize; i++) delete Layer[i];
-}
-
-/*****************************************************************************/
-void	CCore::Init()
-{
-//			UpdateParamBar();
-//			UpdateAll(NULL);
 }
 
 /*****************************************************************************/
@@ -71,8 +60,8 @@ int		Width,Height;
 		Height=Dlg.m_Height;
 
 // Create Tile Layers
-		AddLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION, Width, Height);
-		AddLayer(LAYER_TYPE_TILE,LAYERTILE_SCRATCH, Width, Height);
+		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
+		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
 //		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
 
 		ActiveLayer=FindActionLayer();
@@ -81,7 +70,6 @@ int		Width,Height;
 		TileViewFlag=FALSE;
 		GridFlag=TRUE;
 		Is3dFlag=TRUE;
-		Init();
 		return(TRUE);
 }
 
@@ -130,7 +118,11 @@ int		LayerCount;
 			case LAYER_TYPE_COLLISION:
 				AddLayer(new CLayerCollision(File,Version));
 				break;
-
+			case LAYER_TYPE_SHADE:
+				AddLayer(new CLayerShade(File,Version));
+				break;
+			default:
+				ASSERT(!"poos");
 			}
 		}
 		TileBank.Load(File,Version);
@@ -143,9 +135,6 @@ int		MapHeight=Layer[FindActionLayer()]->GetHeight();
 		{
 			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
 		}
-
-		Init();
-
 }
 
 /*****************************************************************************/
@@ -278,7 +267,7 @@ BOOL	RedrawFlag=FALSE;
 		}
 		GetTileBank().SetActiveBrushL();
 
-		if (RedrawFlag) View->Invalidate();
+		if (RedrawFlag) RedrawView();//View->Invalidate();
 }
 
 /*****************************************************************************/
@@ -307,16 +296,16 @@ BOOL	RedrawFlag=FALSE;
 		}
 		GetTileBank().SetActiveBrushR();
 
-		if (RedrawFlag) View->Invalidate();
+		if (RedrawFlag) RedrawView();//View->Invalidate();
 }
 
 /*****************************************************************************/
-void	CCore::Zoom(CMapEditView *View,float Dst) 
+void	CCore::Zoom(float Dst) 
 {
 Vector3	Ofs;
 		Ofs.Zero();
 		Ofs.z=Dst;
-		UpdateView(View,Ofs);
+		UpdateView(&Ofs);
 }
 
 
@@ -324,9 +313,9 @@ Vector3	Ofs;
 void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0) 
-			Zoom(View,-0.1f);
+			Zoom(-0.1f);
 		else
-			Zoom(View,+0.1f);
+			Zoom(+0.1f);
 }
 
 /*****************************************************************************/
@@ -337,7 +326,6 @@ Vector3	&ThisCam=GetCam();
 // check if active doc
 		Ofs.Zero();
 		if (theApp.GetCurrent()!=View->GetDocument()) return;
-
 		
 		CurrentMousePos=point;
 
@@ -363,7 +351,7 @@ Vector3	&ThisCam=GetCam();
 	
 			Ofs.x*=XS;
 			Ofs.y*=YS;
-			UpdateView(View,Ofs);
+			UpdateView(&Ofs);
 			}
 		else
 		{	
@@ -377,7 +365,8 @@ Vector3	&ThisCam=GetCam();
 					Layer[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
 				}
 			}
-			View->Invalidate();	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
+// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
+			RedrawView();
 		}
 		LastMousePos=CurrentMousePos;
 }
@@ -389,61 +378,56 @@ Vector3	&ThisCam=GetCam();
 void	CCore::UpdateParamBar()
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CToolBar	*ToolBar=Frm->GetToolBar();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
-			ParamBar->RemoveAll();
-			Layer[ActiveLayer]->InitGUI(this);
-			Layer[ActiveLayer]->UpdateGUI(this);
-
-			ParamBar->Update();
-
+			GUIRemoveAll();
+			GUIAdd(LayerList,IDD_LAYER_LIST_DIALOG);
+			Layer[ActiveLayer]->GUIInit(this);
+//			Layer[ActiveLayer]->GUIUpdate(this);
+			GUIUpdate();
 }
 
 /*****************************************************************************/
-void		CCore::UpdateLayerGUI(CMapEditView *View)
+void		CCore::UpdateLayerGUI()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 int			ListSize=Layer.size();
 
-			List->ListBox.ResetContent();
+			if (LayerList.ListBox)
+			{
+				LayerList.ListBox.ResetContent();
 
-			for (int i=0; i<ListSize; i++)
-			{
-				List->ListBox.AddString(Layer[i]->GetName());
-			}
+				for (int i=0; i<ListSize; i++)
+				{
+					LayerList.ListBox.AddString(Layer[i]->GetName());
+				}
 // Now sets checks (silly MSoft bug!!)
-			for (i=0; i<ListSize; i++)
-			{
-				List->ListBox.SetCheck(i,Layer[i]->IsVisible());
+				for (i=0; i<ListSize; i++)
+				{
+					LayerList.ListBox.SetCheck(i,Layer[i]->IsVisible());
+				}
+				LayerList.ListBox.SetCurSel(ActiveLayer);
 			}
-			List->ListBox.SetCurSel(ActiveLayer);
 }
 
 /*****************************************************************************/
 void		CCore::SetLayer(int NewLayer)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
-
 		if (NewLayer<0) NewLayer=0;
+
 // If toggling layer, dont change the layer
-		if ((int)List->ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
+		if ((int)LayerList.ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
 		{
-			Layer[NewLayer]->SetVisible(List->ListBox.GetCheck(NewLayer));
-			List->ListBox.SetCurSel(ActiveLayer);
+			Layer[NewLayer]->SetVisible(LayerList.ListBox.GetCheck(NewLayer));
+			LayerList.ListBox.SetCurSel(ActiveLayer);
 		}
 		else
 		{
 			bool	IsCol=Layer[NewLayer]->GetType()==LAYER_TYPE_COLLISION;
 			TileBank.SetCollision(IsCol);
 			ActiveLayer=NewLayer;
-			UpdateParamBar();
 		}
-
+		UpdateParamBar();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -478,6 +462,9 @@ CLayer	*Layer;
 				break;
 			case LAYER_TYPE_COLLISION:
 				Layer=AddLayer(new CLayerCollision(SubType, Width,Height));
+				break;
+			case LAYER_TYPE_SHADE:
+				Layer=AddLayer(new CLayerShade(SubType, Width,Height));
 				break;
 			default:
 				ASSERT(!"AddLayer - Invalid Layer Type");
@@ -514,8 +501,7 @@ int		Width=Layer[FindActionLayer()]->GetWidth();
 int		Height=Layer[FindActionLayer()]->GetHeight();
 
 		AddLayer(CLayer::InfoTable[NewLayerId].Type,CLayer::InfoTable[NewLayerId].SubType,Width,Height);
-		
-		
+		UpdateAll();
 }
 
 /*****************************************************************************/
@@ -523,10 +509,11 @@ void		CCore::DeleteLayer(int CurrentLayer)
 {
 		if (Layer[CurrentLayer]->CanDelete())
 		{
+			Layer[CurrentLayer]->GUIKill(this);
 			delete Layer[CurrentLayer];
 			Layer.erase(Layer.begin() + CurrentLayer);
 			SetLayer(CurrentLayer-1);
-			UpdateAll(NULL);
+			UpdateAll();
 			TRACE1("Deleted Layer %i\n",CurrentLayer);
 		}
 		else
@@ -538,39 +525,29 @@ void		CCore::DeleteLayer(int CurrentLayer)
 /*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateGrid(CMapEditView *View,BOOL Toggle)
+void	CCore::UpdateGrid(BOOL Toggle)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CToolBar	*ToolBar=Frm->GetToolBar();
-
 			if (Toggle) GridFlag=!GridFlag;
-
-			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
-			UpdateView(View);
+			UpdateView();
 }
 
 /*****************************************************************************/
 /*** TileBank ****************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateTileView(CMapEditView *View,BOOL Toggle)
+void	CCore::UpdateTileView(BOOL Toggle)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CToolBar	*ToolBar=Frm->GetToolBar();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
-			if (Toggle) TileViewFlag=!TileViewFlag;
-			ParamBar->RemoveAll();
-			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
-			UpdateParamBar();
-			UpdateView(View);
+		if (Toggle) TileViewFlag=!TileViewFlag;
+		GUIRemoveAll();
+		UpdateParamBar();
+		UpdateView();
 }
 
 /*****************************************************************************/
 void	CCore::TileBankLoad(char *Filename)
 {
 		TileBank.AddTileSet(Filename);
-		TileBank.UpdateGUI(this,TileViewFlag);
-		UpdateView(NULL);
+		TileBank.GUIUpdate(this);
+		UpdateView();
 }
 
 /*****************************************************************************/
@@ -596,7 +573,7 @@ void	CCore::TileBankDelete()
 						Layer[i]->RemapSet(Set,Set-1);
 					}
 				}
-				UpdateView(NULL);
+				UpdateView();
 			}
 }
 
@@ -605,50 +582,43 @@ void	CCore::TileBankReload()
 {
 		TileBank.Reload();
 		TexCache.Purge();
-		UpdateView(NULL);
+		UpdateView();
 }
 
 /*****************************************************************************/
 void	CCore::TileBankSet()
 {
-CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CLayerTileGUI	*Dlg=(CLayerTileGUI*)Frm->GetDialog(IDD_LAYERTILE_GUI);
-
-		TileBank.SetCurrent(Dlg->m_List.GetCurSel());
+		TileBank.SetCurrent();
 }
 
 /*****************************************************************************/
-void	CCore::MirrorX(CMapEditView *View)
+void	CCore::MirrorX()
 {
-		if (!TileViewFlag) 
-		{
-			Layer[ActiveLayer]->MirrorX(this);
-			UpdateView(View);
-		}
+		if (TileViewFlag) return;
+		Layer[ActiveLayer]->MirrorX(this);
+		UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::MirrorY(CMapEditView *View)
+void	CCore::MirrorY()
 {
-		if (!TileViewFlag) 
-		{
-			Layer[ActiveLayer]->MirrorY(this);
-			UpdateView(View);
-		}
+		if (TileViewFlag) return;
+		Layer[ActiveLayer]->MirrorY(this);
+		UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::ActiveBrushLeft(CMapEditView *View)
+void	CCore::ActiveBrushLeft()
 {
 		GetTileBank().SetActiveBrushL();
-		UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::ActiveBrushRight(CMapEditView *View)
+void	CCore::ActiveBrushRight()
 {
 		GetTileBank().SetActiveBrushR();
-		UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
@@ -658,17 +628,17 @@ BOOL	CCore::IsTileValid(int Set,int Tile)
 }
 
 /*****************************************************************************/
-void	CCore::CopySelection(CMapEditView *View)
+void	CCore::CopySelection()
 {
 		Layer[ActiveLayer]->CopySelection(this);
-		UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::PasteSelection(CMapEditView *View)
+void	CCore::PasteSelection()
 {
 		Layer[ActiveLayer]->PasteSelection(this);
-		UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
@@ -700,7 +670,7 @@ float	CCore::GetZoomW()
 {
 Vector3	&ThisCam=GetCam();
 
-	return((float)SCREEN_MAP_WIDTH/ThisCam.z);
+		return((float)SCREEN_MAP_WIDTH/ThisCam.z);
 }
 
 /*****************************************************************************/
@@ -708,72 +678,116 @@ float	CCore::GetZoomH()
 {
 Vector3	&ThisCam=GetCam();
 
-	return((float)SCREEN_MAP_HEIGHT/ThisCam.z);
+		return((float)SCREEN_MAP_HEIGHT/ThisCam.z);
 }
 
 /*****************************************************************************/
-void	CCore::UpdateGUI(CMapEditView *View)
+/*** GUI *********************************************************************/
+/*****************************************************************************/
+void	CCore::GUIAdd(CDialog &Dlg,int ID,bool Visible,bool Lock)
 {
-		UpdateLayerGUI(View);
-		UpdateGrid(View);
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
 
-		Layer[ActiveLayer]->UpdateGUI(this);
-
+		ParamBar->Add(Dlg,ID,Visible,Lock);
 }
 
 /*****************************************************************************/
-void	CCore::UpdateAll(CMapEditView *View)
+void	CCore::GUIRemove(CDialog &Dlg,int ID,bool Force)
 {
-		UpdateGUI(View);
-		UpdateView(View);
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
+			ParamBar->Remove(Dlg,Force);
 }
 
 /*****************************************************************************/
-void	CCore::UpdateView(CMapEditView *View)
+void	CCore::GUIRemoveAll(bool Force)
 {
-		SetScale();
-		if (View) View->Invalidate();
-}		
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
+			ParamBar->RemoveAll(Force);
+}
 
 /*****************************************************************************/
-void	CCore::UpdateView(CMapEditView *View,Vector3 &Ofs)
+void	CCore::GUIUpdate()
 {
-Vector3	&ThisCam=GetCam();
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
 
-		ThisCam.x+=Ofs.x;
-		ThisCam.y+=Ofs.y;
-		ThisCam.z-=Ofs.z;
-		if (!TileViewFlag)
+		UpdateLayerGUI();
+		UpdateGrid();
+		Layer[ActiveLayer]->GUIUpdate(this);
+		ParamBar->Update();
+}
+
+/*****************************************************************************/
+void	CCore::GUIChanged()
+{
+//		UpdateLayerGUI();
+		Layer[ActiveLayer]->GUIChanged(this);
+}
+
+/*****************************************************************************/
+void	CCore::UpdateAll()
+{
+		UpdateParamBar();
+		GUIUpdate();
+		UpdateView();
+}
+
+/*****************************************************************************/
+void	CCore::RedrawView()
+{
+		if (theApp.GetCurrent())
 		{
-			if (ThisCam.x<0) ThisCam.x=0;
-			if (ThisCam.y<0) ThisCam.y=0;
+			theApp.GetCurrent()->UpdateAllViews(NULL);
 		}
-		if (ThisCam.z<0.1) ThisCam.z=0.1f;
-//		TRACE1("ZoomVal %f\n",ThisCam.z);
+}
 
-		UpdateView(View);
+/*****************************************************************************/
+void	CCore::UpdateView(Vector3 *Ofs)
+{
+		if (Ofs)
+		{
+			Vector3	&ThisCam=GetCam();
+
+			ThisCam.x+=Ofs->x;
+			ThisCam.y+=Ofs->y;
+			ThisCam.z-=Ofs->z;
+			if (!TileViewFlag)
+				{
+				if (ThisCam.x<0) ThisCam.x=0;
+				if (ThisCam.y<0) ThisCam.y=0;
+			}
+			if (ThisCam.z<0.1) ThisCam.z=0.1f;
+		}
+
+		SetScale();
+		RedrawView();
 }		
 
 /*****************************************************************************/
-void	CCore::SetMapSize(CMapEditView *View,int Width,int Height)
+void	CCore::SetMapSize(int Width,int Height)
 {
-	if (Width==GetMapWidth() && Height==GetMapHeight()) return;
+		if (Width==GetMapWidth() && Height==GetMapHeight()) return;
 
 int		ListSize=Layer.size();
 
-	for (int i=0; i<ListSize; i++) 
-	{
-		Layer[i]->Resize(Width,Height);
-	}
+		for (int i=0; i<ListSize; i++) 
+		{
+			Layer[i]->Resize(Width,Height);
+		}
 
-	UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::Toggle2d3d(CMapEditView *View)
+void	CCore::Toggle2d3d()
 {
 		Is3dFlag=!Is3dFlag;
-		UpdateView(View);
+		UpdateView();
 }
 
 /*****************************************************************************/
@@ -793,7 +807,7 @@ int	ListSize=Layer.size();
 /*****************************************************************************/
 int		CCore::FindActionLayer()
 {
-int	Idx=FindLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION);
+int	Idx=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 
 	return(Idx);
 }
@@ -843,5 +857,3 @@ GString	Path=FullPath.Dir();
 	return(Path);
 
 }
-
-

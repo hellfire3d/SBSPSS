@@ -82,18 +82,27 @@ void	CLayerCollision::Save(CFile *File)
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerCollision::InitGUI(CCore *Core) 
+void	CLayerCollision::GUIInit(CCore *Core) 
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
-			ParamBar->Add(Frm->GetLayerTileToolbar(),IDD_LAYERTILE_TOOLBAR,TRUE);
+			Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
-void	CLayerCollision::UpdateGUI(CCore *Core)
+void	CLayerCollision::GUIKill(CCore *Core)
 {
-		CLayerTile::UpdateGUI(Core);
+		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+}
+
+/*****************************************************************************/
+void	CLayerCollision::GUIUpdate(CCore *Core)
+{
+		CLayerTile::GUIUpdate(Core);
+}
+
+/*****************************************************************************/
+void	CLayerCollision::GUIChanged(CCore *Core)
+{
+		CLayerTile::GUIChanged(Core);
 }
 
 /*****************************************************************************/
