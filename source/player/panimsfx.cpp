@@ -146,19 +146,97 @@ static const CPlayer::AnimFrameSfx s_swipeSfx[]=
 };
 static const int	s_swipeCount=sizeof(s_swipeSfx)/sizeof(CPlayer::AnimFrameSfx);
 
-// ANIM_SPONGEBOB_IDLEBIGEYE
-static const CPlayer::AnimFrameSfx s_idleBigEyeSfx[]=
-{
-	{	99,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
-};
-static const int	s_idleBigEyeCount=sizeof(s_idleBigEyeSfx)/sizeof(CPlayer::AnimFrameSfx);
-
 // ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
 static const CPlayer::AnimFrameSfx s_idleFaceUpsideDownSfx[]=
 {
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
 	{	98,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	130,	CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
 };
 static const int	s_idleFaceUpsideDownCount=sizeof(s_idleFaceUpsideDownSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLEBANDAID,
+static const CPlayer::AnimFrameSfx s_idleBandAidSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	98,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	130,	CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+};
+static const int	s_idleBandAidCount=sizeof(s_idleBandAidSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLEMATURE,
+static const CPlayer::AnimFrameSfx s_idleMatureSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	82,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	92,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	129,	CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+};
+static const int	s_idleMatureCount=sizeof(s_idleMatureSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+static const CPlayer::AnimFrameSfx s_idleMoustacheSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	79,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	96,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	125,	CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+};
+static const int	s_idleMoustacheCount=sizeof(s_idleMoustacheSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLENOFACE,
+static const CPlayer::AnimFrameSfx s_idleNoFaceSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+};
+static const int	s_idleNoFaceCount=sizeof(s_idleNoFaceSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLEZORRO,
+static const CPlayer::AnimFrameSfx s_idleZorroSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	8,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	69,		CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	70,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	71,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	79,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	96,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	104,	CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+	{	139,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+	{	141,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
+	{	149,	CSoundMediator::SFX_SPONGEBOB_WALK_1,			},
+};
+static const int	s_idleZorroCount=sizeof(s_idleZorroSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 
 
@@ -175,10 +253,14 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	ANIM_SPONGEBOB_RUNSTOP,				s_runStopCount,				s_runStopSfx			},
 	{	ANIM_SPONGEBOB_WALK,				s_walkCount,				s_walkSfx				},
 	{	ANIM_SPONGEBOB_SWIPE,				s_swipeCount,				s_swipeSfx				},
-//NOIDLE	{	ANIM_SPONGEBOB_IDLEBIGEYE,			s_idleBigEyeCount,			s_idleBigEyeSfx			},
-//NOIDLE	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
+	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
+	{	ANIM_SPONGEBOB_IDLEBANDAID,			s_idleBandAidCount,			s_idleBandAidSfx		},
+	{	ANIM_SPONGEBOB_IDLEMATURE,			s_idleMatureCount,			s_idleMatureSfx			},
+	{	ANIM_SPONGEBOB_IDLEMOUSTACHE,		s_idleMoustacheCount,		s_idleMoustacheSfx		},
+	{	ANIM_SPONGEBOB_IDLENOFACE,			s_idleNoFaceCount,			s_idleNoFaceSfx			},
+	{	ANIM_SPONGEBOB_IDLEZORRO,			s_idleZorroCount,			s_idleZorroSfx			},
 };
-const int				CPlayer::s_numAnimSfx=10;		// Grrrrrrrr! (pkg)
+const int				CPlayer::s_numAnimSfx=16;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
