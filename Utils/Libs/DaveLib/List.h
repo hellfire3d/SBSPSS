@@ -53,7 +53,6 @@ public:
 	int		size()					{return(List.size());}
 
 	std::vector<T>	&GetList()		{return(List);}
-
 	T& operator []( int nIndex )	{return(List[nIndex]);}
 
 private:
