@@ -507,21 +507,25 @@ pos=Pos;
 	{
 		ppos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vx=0;
+		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
 	{
 		ppos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vx=m_mapCameraEdges.vx;
+		m_cameraScrollDir=0;
 	}
 	if(m_cameraPos.vy<0)
 	{
 		ppos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vy=0;
+		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
 	{
 		ppos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
+		m_cameraScrollDir=0;
 	}
 }
 
