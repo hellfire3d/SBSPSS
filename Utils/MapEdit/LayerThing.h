@@ -27,6 +27,7 @@ bool		operator==(sLayerThing const &v1)
 };
 
 /*****************************************************************************/
+class	CIni;
 class	CLayerThing : public CLayer
 {
 public:
@@ -37,16 +38,16 @@ public:
 		};
 
 		CLayerThing(){};
-		CLayerThing(int SubType,int Width,int Height);					// New Layer
-		CLayerThing(CFile *File,int Version);							// Load Layer
+		CLayerThing(sLayerDef &Def);			// New Layer
+		CLayerThing(CFile *File,int Version)	{Load(File,Version);}
 		~CLayerThing();
 
-virtual	int				GetType()			{return(LAYER_TYPE_ITEM);}
+		void			InitLayer(sLayerDef &Def);
+
 virtual	void			InitSubView(CCore *Core);
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
-//		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 
 virtual	void			GUIInit(CCore *Core);
 virtual	void			GUIKill(CCore *Core);
@@ -58,6 +59,7 @@ virtual	void			GUIChanged(CCore *Core);
 
 virtual	void			Load(CFile *File,int Version);
 virtual	void			Save(CFile *File);
+virtual	void			LoadThingScript(const char *Filename);
 
 virtual	void			Export(CCore *Core,CExport &Exp);
 
@@ -78,16 +80,12 @@ protected:
 
 		void			UpdatePos(CPoint &Pos,int Thing,int PosNo,bool Recurs=false);
 
-
 		int					Width,Height;
+		CIni				ThingScript;
 		CElemBank			*ThingBank;
 		CList<sLayerThing>	ThingList;
 		int					CurrentThing,CurrentPoint;
 		MouseMode			Mode;
-
-
-		CGUIToolBar			GUIToolBar;
-
 };
 
 /*****************************************************************************/

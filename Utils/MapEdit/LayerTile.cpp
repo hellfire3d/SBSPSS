@@ -26,50 +26,15 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-// New Layer
-CLayerTile::CLayerTile(int _SubType,int Width,int Height)
+CLayerTile::CLayerTile(sLayerDef &Def)
 {
-		SubType=_SubType;
-		TileBank=0;
-		if (SubType==LAYER_SUBTYPE_ACTION)
-			TileBank=new CTileBank;
-		else
-			TileBank=0;
-		SubView=TileBank;
-
-		SetDefaultParams();
-
-		Mode=MouseModePaint;
-
-		if (ResizeFlag)
-		{
-			Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
-			Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
-		}
-		else
-		{
-			Width=32;
-			Height=32;
-		}
-
-		if (Width<TileLayerMinWidth) Width=TileLayerMinWidth;
-		if (Height<TileLayerMinHeight) Height=TileLayerMinHeight;
-
-		Map.SetSize(Width,Height,TRUE);
-
-}
-
-/*****************************************************************************/
-// Load Layer
-CLayerTile::CLayerTile(CFile *File,int Version)
-{
-		Load(File,Version);
+		InitLayer(Def);
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-		if (SubType==LAYER_SUBTYPE_ACTION) 
+		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION) 
 		{
 			TileBank->CleanUp();
 			delete TileBank;
@@ -77,36 +42,61 @@ CLayerTile::~CLayerTile()
 }
 
 /*****************************************************************************/
-void	CLayerTile::Load(CFile *File,int Version)
+void	CLayerTile::InitLayer(sLayerDef &Def)
 {
-		File->Read(&Render3dFlag,sizeof(BOOL));
-		File->Read(&ScaleFactor,sizeof(float));
-		File->Read(&ResizeFlag,sizeof(BOOL));
-		File->Read(&VisibleFlag,sizeof(BOOL));
-		File->Read(&Mode,sizeof(MouseMode));
-		File->Read(&SubType,sizeof(int));
-		Map.Load(File,Version);
+		CLayer::InitLayer(Def);
+		Mode=MouseModePaint;
 
-		if (SubType==LAYER_SUBTYPE_ACTION) 
+		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION)
 			TileBank=new CTileBank;
 		else
 			TileBank=0;
 		SubView=TileBank;
+
+		if (!GetResizeFlag())
+		{
+			LayerDef.Width=32;
+			LayerDef.Height=32;
+		}
+
+		Resize(LayerDef.Width,LayerDef.Height);
+}
+
+/*****************************************************************************/
+void	CLayerTile::Load(CFile *File,int Version) 
+{
+		if (Version<=5)
+		{
+			LayerDef.Type=LAYER_TYPE_TILE;
+			BOOL	DB;
+			float	DF;
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&DF,sizeof(float));
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&LayerDef.VisibleFlag,sizeof(BOOL));
+			File->Read(&Mode,sizeof(MouseMode));
+			File->Read(&LayerDef.SubType,sizeof(int));
+		}
+		else
+		{
+			File->Read(&Mode,sizeof(MouseMode));
+		}
+		InitLayer(LayerDef);
+		Map.Load(File,Version);
+
+//		if (LayerDef.SubType==LAYER_SUBTYPE_ACTION) 
+//			TileBank=new CTileBank;
+//		else
+//			TileBank=0;
+//		SubView=TileBank;
 		
-		TRACE1("%s\t",GetName());
 }
 
 /*****************************************************************************/
 void	CLayerTile::Save(CFile *File)
 {
 // Always Save current version
-
-		File->Write(&Render3dFlag,sizeof(BOOL));
-		File->Write(&ScaleFactor,sizeof(float));
-		File->Write(&ResizeFlag,sizeof(BOOL));
-		File->Write(&VisibleFlag,sizeof(BOOL));
 		File->Write(&Mode,sizeof(MouseMode));
-		File->Write(&SubType,sizeof(SubType));
 		Map.Save(File);
 }
 
@@ -114,7 +104,7 @@ void	CLayerTile::Save(CFile *File)
 void	CLayerTile::InitSubView(CCore *Core)
 {
 // Fix up shared layers
-		if (SubType!=LAYER_SUBTYPE_ACTION)
+		if (LayerDef.SubType!=LAYER_SUBTYPE_ACTION)
 		{
 			TileBank=Core->GetTileBank();
 			SubView=(CLayer*)TileBank;
@@ -134,21 +124,74 @@ void	CLayerTile::CheckLayerSize(int Width,int Height)
 }
 
 /*****************************************************************************/
+void	CLayerTile::Validate(CCore *Core)
+{
+int		Width=Map.GetWidth();
+int		Height=Map.GetHeight();
+int		Invalid=0;
+int		X,Y;
+bool	Ret=false;
+
+		for (Y=0; Y<Height; Y++)
+		{
+			for (X=0; X<Width; X++)
+			{
+				sMapElem		&MapElem=Map.Get(X,Y);
+				if (!TileBank->IsValid(MapElem.Set,MapElem.Tile)) 
+				{
+					Invalid++;
+				}
+			}
+		}
+		if (Invalid)
+		{
+			char	Txt[256];
+			sprintf(Txt,"Map contains %i invalid tiles\n Do you want them removed?",Invalid);
+			Ret=Core->Question(Txt);
+		
+		}
+		if (Ret)
+		{
+			for (Y=0; Y<Height; Y++)
+			{
+				for (X=0; X<Width; X++)
+				{
+					sMapElem		&MapElem=Map.Get(X,Y);
+					if (!TileBank->IsValid(MapElem.Set,MapElem.Tile))
+					{
+						MapElem.Set=0;
+						MapElem.Tile=0;
+					}
+				}
+			}
+		}
+	
+}
+
+/*****************************************************************************/
 bool	CLayerTile::Resize(int Width,int Height)
 {
-		if (!ResizeFlag) return(FALSE);	// Its a fixed size, so DONT DO IT!
-
 int		ThisWidth=Map.GetWidth();
 int		ThisHeight=Map.GetHeight();
-		Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
-		Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
+bool	Flag=GetResizeFlag();
 
-		if (ThisWidth!=Width || ThisHeight!=Height)
+		Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/GetScaleFactor();
+		Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/GetScaleFactor();
+
+		if (Width<TileLayerMinWidth) Width=TileLayerMinWidth;
+		if (Height<TileLayerMinHeight) Height=TileLayerMinHeight;
+
+		if (!ThisWidth || !ThisHeight) Flag=true;
+
+		if (Flag) 
 		{
-			Map.Resize(Width,Height);				
-			return(TRUE);
+			if (ThisWidth!=Width || ThisHeight!=Height)
+			{
+				Map.Resize(Width,Height);				
+				return(true);
+			}
 		}
-		return(FALSE);
+		return(false);
 }
 
 /*****************************************************************************/
@@ -158,7 +201,7 @@ void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
-		Is3d&=Render3dFlag;
+		Is3d&=GetRender3dFlag();
 		Render(Core,ThisCam,Map,Is3d);
 }
 
@@ -179,7 +222,8 @@ Vector3		Ofs;
 		ThisCam.x-=(int)ThisCam.x;
 		ThisCam.y-=(int)ThisCam.y;
 
-		if (Is3d && Render3dFlag)
+		Is3d&=GetRender3dFlag();
+		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
 			Render(Core,ThisCam,Brush,TRUE,0.5,&Ofs);
@@ -201,13 +245,17 @@ float		ZoomH=Core->GetZoomH();
 float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
-bool		WrapMap=SubType==LAYER_SUBTYPE_BACK;
+bool		WrapMap=LayerDef.SubType==LAYER_SUBTYPE_BACK;
 int			StartX=(int)ThisCam.x;
 int			StartY=(int)ThisCam.y;
 float		ShiftX=ThisCam.x - (int)ThisCam.x;
 float		ShiftY=ThisCam.y - (int)ThisCam.y;
 
-		if (TileBank->NeedLoad()) TileBank->LoadAllSets(Core);
+		if (TileBank->NeedLoad()) 
+		{
+			TileBank->LoadAllSets(Core);
+			Core->Validate(GetType());
+		}
 
 		if (StartX<0) StartX=0;
 		if (StartY<0) StartY=0;
@@ -582,10 +630,12 @@ bool	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 /*****************************************************************************/
 void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
-int				Width=Map.GetWidth();
-int				Height=Map.GetHeight();
+int		Width=Map.GetWidth();
+int		Height=Map.GetHeight();
 
-		Exp.ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
+		LayerDef.Width=Width;
+		LayerDef.Height=Height;
+		Exp.ExportLayerHeader(LayerDef);
 
 		for (int Y=0; Y<Height; Y++)
 		{

@@ -62,17 +62,17 @@ void	CExport::Write(void *Addr,int Len)
 }
 
 /*****************************************************************************/
-int		CExport::ExportLayerHeader(int Type,int SubType,int Width,int Height)
+int		CExport::ExportLayerHeader(sLayerDef &LayerDef)//(int Type,int SubType,int Width,int Height)
 {
 sExpLayerHdr	LayerHdr;
 int				ThisFilePos=ftell(File);
 
 		LayerOfs.push_back(ThisFilePos);
 
-		LayerHdr.Type=Type;
-		LayerHdr.SubType=SubType;
-		LayerHdr.Width=Width;
-		LayerHdr.Height=Height;
+		LayerHdr.Type=LayerDef.Type;
+		LayerHdr.SubType=LayerDef.SubType;
+		LayerHdr.Width=LayerDef.Width;
+		LayerHdr.Height=LayerDef.Height;
 		fwrite(&LayerHdr,sizeof(sExpLayerHdr),1,File);
 
 		return(ThisFilePos);

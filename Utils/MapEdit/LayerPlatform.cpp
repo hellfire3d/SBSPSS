@@ -1,6 +1,6 @@
-/*******************/
-/*** Layer Actor ***/
-/*******************/
+/**********************/
+/*** Layer Platform ***/
+/**********************/
 
 #include	"stdafx.h"
 #include	<Vector3.h>
@@ -15,7 +15,7 @@
 
 #include	"Core.h"
 #include	"LayerThing.h"
-#include	"LayerActor.h"
+#include	"LayerPlatform.h"
 #include	"Utils.h"
 #include	"Export.h"
 
@@ -23,30 +23,35 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerActor::CLayerActor(int _SubType,int _Width,int _Height) : CLayerThing (_SubType,_Width,_Height)
+CLayerPlatform::CLayerPlatform(sLayerDef &Def) : CLayerThing(Def)
 {
 		LoadThingScript("c:\\temp\\character.txt");
 }
 
 /*****************************************************************************/
-void	CLayerActor::Load(CFile *File,int Version) 
+//CLayerPlatform::CLayerPlatform(CFile *File,int Version) :CLayerThing (File,Version)
+//{
+//}
+
+/*****************************************************************************/
+void	CLayerPlatform::Load(CFile *File,int Version) 
 {
 		CLayerThing::Load(File,Version);
 }
 
 /*****************************************************************************/
-void	CLayerActor::Save(CFile *File) 
+void	CLayerPlatform::Save(CFile *File) 
 {
 		CLayerThing::Save(File);
 }
 
 /*****************************************************************************/
-void	CLayerActor::InitSubView(CCore *Core)
+void	CLayerPlatform::InitSubView(CCore *Core)
 {
 }
 
 /*****************************************************************************/
-void	CLayerActor::LoadThingScript(const char *Filename)
+void	CLayerPlatform::LoadThingScript(const char *Filename)
 {
 	CLayerThing::LoadThingScript(Filename);
 //	CLayerThing::ThingScript.LoadAndImport(Filename);
@@ -65,31 +70,31 @@ int	Count=ThingScript.GetGroupCount();
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerActor::GUIInit(CCore *Core)
+void	CLayerPlatform::GUIInit(CCore *Core)
 {
 //		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIKill(CCore *Core)
+void	CLayerPlatform::GUIKill(CCore *Core)
 {
 //		Core->GUIRemove(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIUpdate(CCore *Core)
+void	CLayerPlatform::GUIUpdate(CCore *Core)
 {
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIChanged(CCore *Core)
+void	CLayerPlatform::GUIChanged(CCore *Core)
 {
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerActor::Export(CCore *Core,CExport &Exp)
+void	CLayerPlatform::Export(CCore *Core,CExport &Exp)
 {
 
 }

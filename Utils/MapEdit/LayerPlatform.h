@@ -1,9 +1,9 @@
-/*******************/
-/*** Layer Actor ***/
-/*******************/
+/**********************/
+/*** Layer Platform ***/
+/**********************/
 
-#ifndef	__LAYER_ACTOR_HEADER__
-#define	__LAYER_ACTOR_HEADER__
+#ifndef	__LAYER_PLATFORM_HEADER__
+#define	__LAYER_PLATFORM_HEADER__
 
 #include	"LayerThing.h"
 #include	"Layer.h"
@@ -12,21 +12,13 @@
 #include	"Elem.h"
 
 /*****************************************************************************/
-class	CLayerActor : public CLayerThing
+class	CLayerPlatform : public CLayerThing
 {
 public:
+		CLayerPlatform(sLayerDef &Def);
+		CLayerPlatform(CFile *File,int Version)	{Load(File,Version);}
 
-		CLayerActor(){};
-		CLayerActor(int SubType,int Width,int Height);					// New Layer
-		CLayerActor(CFile *File,int Version);							// Load Layer
-//		~CLayerActor();
-
-		int				GetType()			{return(LAYER_TYPE_ACTOR);}
 		void			InitSubView(CCore *Core);
-
-//virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
-//		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
-//		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 
 		void			GUIInit(CCore *Core);
 		void			GUIKill(CCore *Core);

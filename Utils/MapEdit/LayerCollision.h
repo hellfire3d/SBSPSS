@@ -15,8 +15,9 @@ class	CLayerCollision : public CLayerTile
 {
 
 public:
-		CLayerCollision(int SubType,int Width,int Height);					// New Layer
-		CLayerCollision(CFile *File,int Version);							// Load Layer
+//		CLayerCollision(int Type,int SubType,int Width,int Height);
+		CLayerCollision(sLayerDef &Def);
+		CLayerCollision(CFile *File,int Version) {Load(File,Version);}
 		~CLayerCollision();
 
 		int				GetType()			{return(LAYER_TYPE_COLLISION);}

@@ -19,7 +19,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-const	s32		FileVersion=5;
+const	s32		FileVersion=6;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
@@ -39,6 +39,7 @@ public:
 		bool					New();
 		void					Load(CFile *File);
 		void					Save(CFile *File);
+		void					Validate(int Type);
 		bool					Question(char *Txt);
 		void					Render(bool ForceRender=FALSE);
 		void					RenderLayers(bool OneShot=false);
@@ -60,7 +61,6 @@ public:
 // Subview & TileBank
 		CTileBank				*GetTileBank()					{return(ActionLayer->GetTileBank());}
 		void					ToggleSubView();
-//		CLayer					*FindSubView(int Type);
 		bool					IsSubView()						{return(CurrentLayer!=Layer[ActiveLayer]);}
 // GUI 
 		void					UpdateParamBar();

@@ -15,7 +15,16 @@
 #include	"MainFrm.h"
 
 #include	"Core.h"
+
 #include	"Layer.h"
+#include	"LayerTile.h"
+#include	"LayerCollision.h"
+#include	"LayerShade.h"
+#include	"LayerThing.h"
+#include	"LayerActor.h"
+#include	"LayerItem.h"
+#include	"LayerPlatform.h"
+
 #include	"LayerDef.h"
 #include	"Utils.h"
 
@@ -29,7 +38,9 @@ sLayerInfoTable	CLayer::InfoTable[]=
 	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_MID,		"Mid",			true,	2.0f,	false,	true,		true,	LAYER_SUBVIEW_TILEBANK,},
 	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_ACTION,	"Action",		false,	1.0f,	true,	true,		true,	LAYER_SUBVIEW_TILEBANK,},
 	{LAYER_TYPE_COLLISION,	LAYER_SUBTYPE_NONE,		"Collision",	true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_TILEBANK,},
-	{LAYER_TYPE_ITEM,		LAYER_SUBTYPE_NONE,		"Item",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_TILEBANK,},
+	{LAYER_TYPE_ACTOR,		LAYER_SUBTYPE_NONE,		"Actor",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
+	{LAYER_TYPE_ITEM,		LAYER_SUBTYPE_NONE,		"Item",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
+	{LAYER_TYPE_PLATFORM,	LAYER_SUBTYPE_NONE,		"Platform",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 };
 
 int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);
@@ -37,27 +48,111 @@ int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);
 /*****************************************************************************/
 CLayer::CLayer()
 {
-	SubView=0;
-	LayerCam=DefaultCamPos;
+		SubView=0;
+		LayerCam=DefaultCamPos;
+		LayerDef.VisibleFlag=TRUE;
+		LayerDef.Width=-1;
+		LayerDef.Height=-1;
+		TableIdx=-1;
+}
+
+/*****************************************************************************/
+void	CLayer::InitLayer(sLayerDef &_LayerDef)
+{
+		LayerDef=_LayerDef;
+		TableIdx=CLayer::GetLayerIdx(LayerDef.Type,LayerDef.SubType);
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayer::SetDefaultParams()
+CLayer	*CLayer::NewLayer(sLayerDef &Def)
 {
-int		Idx=CLayer::GetLayerIdx(GetType(),GetSubType());
+CLayer	*New;
 
-		ScaleFactor=InfoTable[Idx].ScaleFactor;
-		ResizeFlag=InfoTable[Idx].ResizeFlag;
-		Render3dFlag=InfoTable[Idx].Render3dFlag;
-		VisibleFlag=TRUE;
+		switch (Def.Type)
+		{
+		case LAYER_TYPE_TILE:
+			New=new CLayerTile(Def);
+			break;
+		case LAYER_TYPE_COLLISION:
+			New=new CLayerCollision(Def);
+			break;
+		case LAYER_TYPE_SHADE:
+			New=new CLayerShade(Def);
+			break;
+		case LAYER_TYPE_ACTOR:
+			New=new CLayerActor(Def);
+			break;
+		case LAYER_TYPE_ITEM:
+			New=new CLayerItem(Def);
+			break;
+		case LAYER_TYPE_PLATFORM:
+			New=new CLayerPlatform(Def);
+			break;
+		default:
+			ASSERT(!"Unknown Layer");
+		}
+		return(New);
+}
+
+/*****************************************************************************/
+CLayer	*CLayer::LoadLayer(CFile *File,int Version)
+{
+CLayer	*New;
+		if (Version<=5)
+		{
+			int	Type;
+			File->Read(&Type,sizeof(int));
+			switch (Type)
+			{
+			case LAYER_TYPE_TILE:
+				New=new CLayerTile(File,Version);
+				break;
+			case LAYER_TYPE_COLLISION:
+				New=new CLayerCollision(File,Version);
+				break;
+			case LAYER_TYPE_SHADE:
+				New=new CLayerShade(File,Version);
+				break;
+			case LAYER_TYPE_ACTOR:
+				New=new CLayerActor(File,Version);
+				break;
+			case LAYER_TYPE_ITEM:
+				New=new CLayerItem(File,Version);
+				break;
+			case LAYER_TYPE_PLATFORM:
+				New=new CLayerPlatform(File,Version);
+				break;
+			default:
+				ASSERT(!"Unknown Layer");
+			}
+		}
+		else
+		{
+			sLayerDef	ThisDef;
+
+			File->Read(&ThisDef,sizeof(sLayerDef));
+			New=NewLayer(ThisDef);//Type,SubType,0,0);
+		}
+		return(New);		
+}
+
+/*****************************************************************************/
+void	CLayer::Load(CFile *File,int Version)
+{
+		File->Read(&LayerDef,sizeof(sLayerDef));
+}
+
+/*****************************************************************************/
+void	CLayer::Save(CFile *File)
+{
+		File->Write(&LayerDef,sizeof(sLayerDef));
 }
 
 /*****************************************************************************/
 int		CLayer::GetLayerIdx(int Type,int SubType)
 {
-
 		for (int i=0; i<InfoTableSize; i++)
 		{
 			if (InfoTable[i].Type==Type && InfoTable[i].SubType==SubType)
@@ -66,7 +161,7 @@ int		CLayer::GetLayerIdx(int Type,int SubType)
 			}
 		}
 
-	return(-1);
+		return(-1);
 }
 
 /*****************************************************************************/

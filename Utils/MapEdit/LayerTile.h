@@ -23,12 +23,12 @@ public:
 		};
 
 		CLayerTile(){};
-		CLayerTile(int SubType,int Width,int Height);					// New Layer
-		CLayerTile(CFile *File,int Version);							// Load Layer
+//		CLayerTile(int Type,int SubType,int Width,int Height);
+		CLayerTile(sLayerDef &Def);
+		CLayerTile(CFile *File,int Version)	{Load(File,Version);}
 		~CLayerTile();
 
-		int				GetType()			{return(LAYER_TYPE_TILE);}
-		int				GetSubType()		{return(SubType);}
+		void			InitLayer(sLayerDef &Def);
 		void			InitSubView(CCore *Core);
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
@@ -47,6 +47,7 @@ virtual	void			GUIChanged(CCore *Core);
 		void			Load(CFile *File,int Version);
 		void			Save(CFile *File);
 		void			CheckLayerSize(int Width,int Height);
+		void			Validate(CCore *Core);
 
 		void			Export(CCore *Core,CExport &Exp);
 
@@ -75,7 +76,6 @@ protected:
 		bool			Paint(CMap &Blk,CPoint &CursorPos);
 
 		CMap			Map;
-		int				SubType;
 		MouseMode		Mode;
 
 		CTileBank		*TileBank;

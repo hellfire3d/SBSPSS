@@ -115,7 +115,6 @@ GFName		Path=Filename;
 			if (Centre)
 			{
 				Ofs.x=0.5-UnitWidth/2;
-//				Ofs.y=0.5-UnitHeight/2;
 				Ofs.y=-1.0f;
 			}
 			
@@ -193,6 +192,7 @@ std::vector<int>	const	&NodeTriMat=ThisNode.GetTriMaterial();
 
 std::vector<GString> const	&SceneTexList=ThisScene.GetTexList();
 std::vector<int> const		&SceneUsedMatList=ThisScene.GetUsedMaterialIdx();
+int							TexCount=SceneTexList.size();
 
 int			TriCount=NodeTriList.size();
 int			ListSize=TriList.size();
@@ -207,17 +207,23 @@ int			ListSize=TriList.size();
 				int				TexID;
 				
 
-// Sort Textures - Only add the ones nthat are used :o)
+// Sort Textures - Only add the ones that are used :o)
 				TexID=SceneUsedMatList[ThisMat];
-
-				if (TexID!=-1)
-					{
-					GString	ThisName;
-
-					ThisName=SetPath+SceneTexList[TexID];
-					TRACE2("%i !%s!\n",TexID,ThisName);
-					TexID=TexCache.ProcessTexture(ThisName);
-					}
+				if (TexID<0 || TexID>=TexCount)
+				{
+					CString mexstr;
+					mexstr.Format("Invalid TexId\n Wanted %i/%i for %s\nThis is gonna hurt!",TexID,TexCount-1,ThisNode.Name);
+					AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
+					TexID=0;
+				}
+				else
+				{
+				GString	ThisName;
+				GString	TexName=SceneTexList[TexID];
+				ThisName=SetPath+TexName;
+				TRACE2("%i !%s!\n",TexID,ThisName);
+				TexID=TexCache.ProcessTexture(ThisName);
+				}
 // Sort Rest of Tri info
 Matrix4x4		TransMtx;
 				TransMtx.Identity();
@@ -721,7 +727,7 @@ CElemBank::CElemBank(int W,int H,bool Blank,bool Centre)
 
 		LoadFlag=false;
 		CurrentSet=0;
-		VisibleFlag=true;
+		LayerDef.VisibleFlag=true;
 }
 
 /*****************************************************************************/
@@ -874,7 +880,8 @@ bool	CElemBank::IsValid(int Set,int Elem)
 {
  		if (Set<0 || Elem<0) return(false);
 		if (Elem==0) return(true);
- 		if (Set>=SetList.size()) return(false);
+// 		if (Set>=SetList.size()) return(false);
+ 		if (Set>SetList.size()) return(false);
 		ASSERT(Set<SetList.size());
 		return(SetList[Set].IsValid(Elem));
 }

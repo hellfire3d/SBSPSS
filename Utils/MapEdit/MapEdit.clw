@@ -29,19 +29,19 @@ Class17=CMapEditDoc
 Class18=CMapEditView
 
 ResourceCount=14
-Resource1=IDD_LAYER_SHADE
+Resource1=IDD_ADDLAYER
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_TILEBANK
-Resource4=IDD_TOOLBAR
-Resource5=IDD_ADDLAYER
-Resource6=IDD_LAYER_COLLISION
-Resource7=IDR_TOOLBAR (English (U.S.))
-Resource8=IDR_MAINFRAME (English (U.S.))
-Resource9=IDD_ABOUTBOX (English (U.S.))
-Resource10=IDD_MULTIBAR (English (U.S.))
-Resource11=IDD_LAYER_LIST
-Resource12=IDD_RESIZE
-Resource13=IDD_NEWMAP
+Resource3=IDD_TOOLBAR
+Resource4=IDD_NEWMAP
+Resource5=IDD_LAYER_LIST
+Resource6=IDD_TILEBANK
+Resource7=IDD_RESIZE
+Resource8=IDD_LAYER_SHADE
+Resource9=IDD_LAYER_COLLISION
+Resource10=IDR_TOOLBAR (English (U.S.))
+Resource11=IDR_MAINFRAME (English (U.S.))
+Resource12=IDD_ABOUTBOX (English (U.S.))
+Resource13=IDD_MULTIBAR (English (U.S.))
 Resource14=IDD_ELEMLIST
 
 [CLS:CChildFrame]
@@ -164,7 +164,7 @@ Control3=IDC_ADDLAYER_LIST,listbox,1352728833
 Type=1
 Class=CGUIElemList
 ControlCount=1
-Control1=IDD_ELEM_LIST,combobox,1342242819
+Control1=IDD_ELEM_LIST,combobox,1344339971
 
 [DLG:IDD_LAYER_COLLISION]
 Type=1

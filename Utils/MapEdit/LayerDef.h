@@ -14,7 +14,9 @@ enum LAYER_TYPE
 	LAYER_TYPE_TILE=0,
 	LAYER_TYPE_COLLISION,
 	LAYER_TYPE_SHADE,
+	LAYER_TYPE_ACTOR,
 	LAYER_TYPE_ITEM,
+	LAYER_TYPE_PLATFORM,
 	LAYER_TYPE_MAX
 };
 
@@ -68,6 +70,14 @@ enum
 	LAYER_SHADE_MAX=4,
 };
 
+struct	sLayerDef
+{
+	int		Type;
+	int		SubType;
+	int		Width;
+	int		Height;
+	bool	VisibleFlag;
+};
 
 /*****************************************************************************/
 #endif

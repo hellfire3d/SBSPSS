@@ -27,14 +27,23 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerShade::CLayerShade(int _SubType,int _Width,int _Height)
+CLayerShade::CLayerShade(sLayerDef &Def)
 {
-		SubType=_SubType;
+		InitLayer(Def);
+}
 
-		SetDefaultParams();
 
-		Width=TileLayerMinWidth+(_Width-TileLayerMinWidth)/ScaleFactor;
-		Height=TileLayerMinHeight+(_Height-TileLayerMinHeight)/ScaleFactor;
+/*****************************************************************************/
+CLayerShade::~CLayerShade()
+{
+}
+
+/*****************************************************************************/
+void	CLayerShade::InitLayer(sLayerDef &Def)
+{
+		CLayer::InitLayer(Def);
+		LayerDef.Width=TileLayerMinWidth+(Def.Width-TileLayerMinWidth)/GetScaleFactor();
+		LayerDef.Height=TileLayerMinHeight+(Def.Height-TileLayerMinHeight)/GetScaleFactor();
 
 		RGB[0].rgbRed=255;	RGB[0].rgbGreen=255;	RGB[0].rgbBlue=255;
 		RGB[1].rgbRed=255;	RGB[1].rgbGreen=0;		RGB[1].rgbBlue=0;
@@ -43,64 +52,37 @@ CLayerShade::CLayerShade(int _SubType,int _Width,int _Height)
 		Count=2;
 
 }
-
-/*****************************************************************************/
-// Load Layer
-CLayerShade::CLayerShade(CFile *File,int Version)
-{
-		Load(File,Version);
-}
-
-/*****************************************************************************/
-CLayerShade::~CLayerShade()
-{
-}
-
 /*****************************************************************************/
 void	CLayerShade::Load(CFile *File,int Version)
 {
-		File->Read(&Render3dFlag,sizeof(BOOL));
-		File->Read(&ScaleFactor,sizeof(float));
-		File->Read(&ResizeFlag,sizeof(BOOL));
-		File->Read(&VisibleFlag,sizeof(BOOL));
-		File->Read(&SubType,sizeof(int));
-		File->Read(&Width,sizeof(int));
-		File->Read(&Height,sizeof(int));
-
-		if (Version==2)
+		if (Version<=5)
 		{
-			File->Read(&RGB[0],sizeof(RGBQUAD));
-			File->Read(&RGB[1],sizeof(RGBQUAD));
+			BOOL	DB;
+			float	DF;
+			LayerDef.Type=LAYER_TYPE_SHADE;
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&DF,sizeof(float));
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&LayerDef.VisibleFlag,sizeof(BOOL));
+			File->Read(&LayerDef.SubType,sizeof(int));
+			File->Read(&LayerDef.Width,sizeof(int));
+			File->Read(&LayerDef.Height,sizeof(int));
 		}
-		else
+		InitLayer(LayerDef);
+		File->Read(&Count,sizeof(int));
+		if (Count<2) Count=2;
+		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
-			File->Read(&Count,sizeof(int));
-			if (Count<2) Count=2;
-			for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
-			{
-				File->Read(&Pos[i],sizeof(int));
-				File->Read(&RGB[i],sizeof(RGBQUAD));
-			}
+			File->Read(&Pos[i],sizeof(int));
+			File->Read(&RGB[i],sizeof(RGBQUAD));
 		}
 
-		TRACE1("%s\t",GetName());
-		TRACE1("Scl:%g\t",ScaleFactor);
-		TRACE1("%i\n",VisibleFlag);
 }
 
 /*****************************************************************************/
 void	CLayerShade::Save(CFile *File)
 {
 // Always Save current version
-
-		File->Write(&Render3dFlag,sizeof(BOOL));
-		File->Write(&ScaleFactor,sizeof(float));
-		File->Write(&ResizeFlag,sizeof(BOOL));
-		File->Write(&VisibleFlag,sizeof(BOOL));
-		File->Write(&SubType,sizeof(SubType));
-		File->Write(&Width,sizeof(int));
-		File->Write(&Height,sizeof(int));
-
 		File->Write(&Count,sizeof(int));
 		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
@@ -123,10 +105,10 @@ float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
 int			ThisCount=Count-1;
 float		X0=0;
-float		X1=Width;
+float		X1=LayerDef.Width;
 float		Y=(0+1);
 
-float		YInc=(float)Height/(float)ThisCount;
+float		YInc=(float)LayerDef.Height/(float)ThisCount;
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
@@ -152,10 +134,10 @@ float		YInc=(float)Height/(float)ThisCount;
 
 
 /*****************************************************************************/
-bool	CLayerShade::Resize(int _Width,int _Height)
+bool	CLayerShade::Resize(int Width,int Height)
 {
-		Width=TileLayerMinWidth+(_Width-TileLayerMinWidth)/ScaleFactor;
-		Height=TileLayerMinHeight+(_Height-TileLayerMinHeight)/ScaleFactor;
+		LayerDef.Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/GetScaleFactor();
+		LayerDef.Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/GetScaleFactor();
 
 		return(true);
 }
@@ -200,7 +182,7 @@ void	CLayerShade::GUIChanged(CCore *Core)
 /*****************************************************************************/
 void	CLayerShade::Export(CCore *Core,CExport &Exp)
 {
-		Exp.ExportLayerHeader(LAYER_TYPE_SHADE,SubType,Width,Height);
+		Exp.ExportLayerHeader(LayerDef);//LAYER_TYPE_SHADE,LayerDef.SubType,LayerDef.Width,LayerDef.Height);
 		Exp.Write(&Count,sizeof(int));
 		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{

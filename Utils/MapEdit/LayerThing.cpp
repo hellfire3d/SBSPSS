@@ -24,48 +24,17 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerThing::CLayerThing(int _SubType,int _Width,int _Height)
+CLayerThing::CLayerThing(sLayerDef &Def)
 {
-		SetDefaultParams();
-
-		Mode=MouseModeNormal;
-		Width=_Width;
-		Height=_Height;
-		ThingBank=new CElemBank(-1,-1,false,true);
-		CurrentThing=-1;
-		CurrentPoint=0;
-
-		ThingBank->AddSet("\\spongebob\\graphics\\Babyoctopus.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\barnicleboy.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Caterpillar.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\clam.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Eyeball.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\FlyingDutchman.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\gary.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\GiantWorm.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\HermitCrab.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\IronDogFish.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Krusty.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\MermaidMan.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Neptune.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Patrick.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\plankton.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\PuffaFish.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Sandy.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\SeaSnake.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\SharkSub.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\SpiderCrab.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\spongebob.bmp");
-		ThingBank->AddSet("\\spongebob\\graphics\\Squidward.bmp");
-
+		InitLayer(Def);
 }
 
 /*****************************************************************************/
 // Load Layer
-CLayerThing::CLayerThing(CFile *File,int Version)
-{
-		Load(File,Version);
-}
+//CLayerThing::CLayerThing(CFile *File,int Version)
+//{
+		//Load(File,Version);
+//}
 
 /*****************************************************************************/
 CLayerThing::~CLayerThing()
@@ -75,25 +44,39 @@ CLayerThing::~CLayerThing()
 }
 
 /*****************************************************************************/
+void	CLayerThing::InitLayer(sLayerDef &Def)
+{
+		Mode=MouseModeNormal;
+		LayerDef.Width=Width;
+		LayerDef.Height=Height;
+		ThingBank=new CElemBank(-1,-1,false,true);
+		CurrentThing=-1;
+		CurrentPoint=0;
+
+}
+
+/*****************************************************************************/
 void	CLayerThing::Load(CFile *File,int Version)
 {
-		File->Read(&VisibleFlag,sizeof(BOOL));
 		File->Read(&Mode,sizeof(MouseMode));
-
-		TRACE1("%s\t",GetName());
 }
 
 /*****************************************************************************/
 void	CLayerThing::Save(CFile *File)
 {
 // Always Save current version
-		File->Write(&VisibleFlag,sizeof(BOOL));
 		File->Write(&Mode,sizeof(MouseMode));
 }
 
 /*****************************************************************************/
 void	CLayerThing::InitSubView(CCore *Core)
 {
+}
+
+/*****************************************************************************/
+void	CLayerThing::LoadThingScript(const char *Filename)
+{
+		ThingScript.LoadAndImport(Filename);
 }
 
 /*****************************************************************************/
@@ -133,7 +116,7 @@ CElemBank	*IconBank=Core->GetIconBank();
 			glTranslatef(-ScrOfsX,ScrOfsY,0);						// Bring to top left corner
 
 int			ListSize=ThisThing.XY.size();
-			TRACE1("%i pts\n",ListSize);
+TRACE1("%i\n",ListSize);
 			for (int i=0;i<ListSize; i++)
 			{
 // Render Thing			
@@ -285,7 +268,8 @@ Vector3		Ofs;
 		ThisCam.x-=(int)ThisCam.x;
 		ThisCam.y-=(int)ThisCam.y;
 
-		if (Is3d && Render3dFlag)
+		Is3d&=GetRender3dFlag();
+		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
 //			Render(Core,ThisCam,,TRUE,0.5,&Ofs);
@@ -353,6 +337,7 @@ void	CLayerThing::SelectThing(CPoint &Pos)
 }
 
 
+/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 int		CLayerThing::CheckThingPoint(CPoint &Pos)

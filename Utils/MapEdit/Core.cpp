@@ -21,6 +21,9 @@
 #include	"LayerCollision.h"
 #include	"LayerShade.h"
 #include	"LayerThing.h"
+#include	"LayerActor.h"
+#include	"LayerItem.h"
+#include	"LayerPlatform.h"
 #include	"utils.h"
 
 #include	"Export.h"
@@ -28,6 +31,7 @@
 #include	"GUIAddLayer.h"
 #include	"GUINewMap.h"
 
+#include	<IniClass.h>
 
 GString		IconzFileName="Iconz.bmp";
 
@@ -51,6 +55,7 @@ GString	Filename;
 		GetExecPath(Filename);
 		Filename+=IconzFileName;
 		IconBank->AddSet(Filename);
+
 }
 
 /*****************************************************************************/
@@ -78,7 +83,7 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
-		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
+//		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
 
 		for (int i=0; i<Layer.size(); i++)
 		{
@@ -130,33 +135,15 @@ int		LayerCount;
 
 		for (i=0;i<LayerCount;i++)
 		{
-			int	Type;
-
-			File->Read(&Type,sizeof(int));
-			switch (Type)
-			{
-			case LAYER_TYPE_TILE:
-				AddLayer(new CLayerTile(File,Version));
-				break;
-			case LAYER_TYPE_COLLISION:
-				AddLayer(new CLayerCollision(File,Version));
-				break;
-			case LAYER_TYPE_SHADE:
-				AddLayer(new CLayerShade(File,Version));
-				break;
-			case LAYER_TYPE_ITEM:
-				AddLayer(new CLayerThing(File,Version));
-				break;
-			default:
-				ASSERT(!"poos");
-			}
+			CLayer	*Lyr=CLayer::LoadLayer(File,Version);
+			TRACE1("Loaded %s\n",Lyr->GetName());
+			AddLayer(Lyr);
 		}
 
 		for (i=0; i<Layer.size(); i++)
 		{
 			Layer[i]->InitSubView(this);
 		}
-		
 		GetTileBank()->Load(File,Version);
 		CurrentLayer=Layer[ActiveLayer];
 
@@ -168,6 +155,16 @@ int		MapHeight=ActionLayer->GetHeight();
 			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
 		}
 
+}
+/*****************************************************************************/
+void	CCore::Validate(int Type)
+{
+int		LayerCount=Layer.size();
+		for (int i=0;i<LayerCount;i++)
+		{
+			if (Layer[i]->GetType()==Type)
+				Layer[i]->Validate(this);
+		}
 }
 
 /*****************************************************************************/
@@ -190,8 +187,7 @@ int		LayerCount=Layer.size();
 
 		for (int i=0;i<LayerCount;i++)
 		{
-			int	Type=Layer[i]->GetType();
-			File->Write(&Type,sizeof(int));
+			Layer[i]->CLayer::Save(File);
 			Layer[i]->Save(File);
 		}
 	GetTileBank()->Save(File);
@@ -497,7 +493,17 @@ int			Idx=ListSize;
 int		CCore::AddLayer(int Type, int SubType, int Width, int Height)
 {
 int		Idx;
-		switch (Type)
+CLayer	*Lyr;
+sLayerDef	ThisDef;
+
+		ThisDef.Type=Type;
+		ThisDef.SubType=SubType;
+		ThisDef.Width=Width;
+		ThisDef.Height=Height;
+
+		Lyr=CLayer::NewLayer(ThisDef);
+		Idx=AddLayer(Lyr);
+/*		switch (Type)
 		{
 			case LAYER_TYPE_TILE:
 				Idx=AddLayer(new CLayerTile(SubType, Width,Height));
@@ -508,13 +514,20 @@ int		Idx;
 			case LAYER_TYPE_SHADE:
 				Idx=AddLayer(new CLayerShade(SubType, Width,Height));
 				break;
+			case LAYER_TYPE_ACTOR:
+				Idx=AddLayer(new CLayerActor(SubType, Width,Height));
+				break;
 			case LAYER_TYPE_ITEM:
-				Idx=AddLayer(new CLayerThing(SubType, Width,Height));
+				Idx=AddLayer(new CLayerItem(SubType, Width,Height));
+				break;
+			case LAYER_TYPE_PLATFORM:
+				Idx=AddLayer(new CLayerPlatform(SubType, Width,Height));
 				break;
 			default:
 				ASSERT(!"AddLayer - Invalid Layer Type");
 				break;
 		}
+*/
 		if (ActionLayer) Layer[Idx]->InitSubView(this);
 		return(Idx);
 }
@@ -571,23 +584,6 @@ void		CCore::DeleteLayer(int ThisLayer)
 		}
 }
 
-/*****************************************************************************/
-/*
-CLayer		*CCore::FindSubView(int Type)
-{
-int			i,ListSize=Layer.size();
-
-			for (i=0;i<ListSize;i++)
-			{
-				if (Layer[i]->GetSubViewType()==Type) 
-				{
-					CLayer	*SV=Layer[i]->GetSubView();
-					if (SV) return(SV);
-				}
-			}
-		return(0);
-}
-*/
 /*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/

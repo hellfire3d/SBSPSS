@@ -26,7 +26,7 @@ public:
 		~CExport();
 
 		void	Write(void *Addr,int Len);
-		int		ExportLayerHeader(int Type,int SubType,int Width,int Height);
+		int		ExportLayerHeader(sLayerDef &LayerDef);//int Type,int SubType,int Width,int Height);
 		int		AddTile(sExpTile &Tile)					{return(UsedTileList.Add(Tile));}
 
 		void	ExportTiles(CCore *Core);

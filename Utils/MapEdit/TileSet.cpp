@@ -48,7 +48,7 @@ CTileBank::~CTileBank()
 /*****************************************************************************/
 void	CTileBank::Load(CFile *File,int Version)
 {
-		if (Version<FileVersion)
+		if (Version<=4)
 		{
 			File->Read(&LayerCam,sizeof(Vector3));
 			File->Read(&CurrentSet,sizeof(int));

@@ -27,20 +27,10 @@ GString		ColFName="Collision.bmp";
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerCollision::CLayerCollision(int _SubType,int Width,int Height)
+//CLayerCollision::CLayerCollision(int Type,int SubType,int Width,int Height) :CLayerTile(LAYER_TYPE_COLLISION,SubType,Width,Height)
+CLayerCollision::CLayerCollision(sLayerDef &Def)
 {
-		SubType=LAYER_SUBTYPE_NONE;
-		SetDefaultParams();
-		Mode=MouseModePaint;
-		Map.SetSize(Width,Height,TRUE);
-		VisibleFlag=true;
-}
-
-/*****************************************************************************/
-// Load Layer
-CLayerCollision::CLayerCollision(CFile *File,int Version)
-{
-		Load(File,Version);
+		InitLayer(Def);
 }
 
 /*****************************************************************************/
@@ -65,31 +55,31 @@ GString	Filename;
 /*****************************************************************************/
 void	CLayerCollision::Load(CFile *File,int Version)
 {
-// Version 2
-		File->Read(&Render3dFlag,sizeof(BOOL));
-		File->Read(&ScaleFactor,sizeof(float));
-		File->Read(&ResizeFlag,sizeof(BOOL));
-		File->Read(&VisibleFlag,sizeof(BOOL));
-		File->Read(&Mode,sizeof(MouseMode));
-		File->Read(&SubType,sizeof(int));
+		if (Version<=5)
+		{
+			BOOL	DB;
+			float	DF;
+			LayerDef.Type=LAYER_TYPE_COLLISION;
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&DF,sizeof(float));
+			File->Read(&DB,sizeof(BOOL));
+			File->Read(&LayerDef.VisibleFlag,sizeof(BOOL));
+			File->Read(&Mode,sizeof(MouseMode));
+			File->Read(&LayerDef.SubType,sizeof(int));
+		}
+		else
+		{
+			File->Read(&Mode,sizeof(MouseMode));
+		}
+		InitLayer(LayerDef);
 		Map.Load(File,Version);
 
-		TRACE1("%s\t",GetName());
-		TRACE1("Scl:%g\t",ScaleFactor);
-		TRACE1("%i\n",VisibleFlag);
 }
 
 /*****************************************************************************/
 void	CLayerCollision::Save(CFile *File)
 {
 // Always Save current version
-
-		File->Write(&Render3dFlag,sizeof(BOOL));
-		File->Write(&ScaleFactor,sizeof(float));
-		File->Write(&ResizeFlag,sizeof(BOOL));
-		File->Write(&VisibleFlag,sizeof(BOOL));
-		File->Write(&Mode,sizeof(MouseMode));
-		File->Write(&SubType,sizeof(SubType));
 		Map.Save(File);
 }
 
@@ -153,7 +143,10 @@ void	CLayerCollision::Export(CCore *Core,CExport &Exp)
 int		Width=Map.GetWidth();
 int		Height=Map.GetHeight();
 	
-		Exp.ExportLayerHeader(LAYER_TYPE_COLLISION,SubType,Width,Height);
+		LayerDef.Width=Width;
+		LayerDef.Height=Height;
+
+		Exp.ExportLayerHeader(LayerDef);//LAYER_TYPE_COLLISION,LayerDef.SubType,Width,Height);
 
 		for (int Y=0; Y<Height; Y++)
 		{

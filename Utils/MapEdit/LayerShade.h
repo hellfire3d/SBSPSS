@@ -19,13 +19,15 @@ public:
 		{
 			LAYER_SHADE_RGB_MAX=4,
 		};
-		CLayerShade(){};
-		CLayerShade(int SubType,int Width,int Height);					// New Layer
-		CLayerShade(CFile *File,int Version);							// Load Layer
+//		CLayerShade(){};
+		CLayerShade(sLayerDef &Def);
+		CLayerShade(CFile *File,int Version)	{Load(File,Version);}
 		~CLayerShade();
 
-		int				GetType()			{return(LAYER_TYPE_SHADE);}
-		int				GetSubType()		{return(SubType);}
+		void			InitLayer(sLayerDef &Def);
+
+//		int				GetType()			{return(LAYER_TYPE_SHADE);}
+//		int				GetSubType()		{return(SubType);}
 
 		void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active){};
@@ -38,9 +40,7 @@ public:
 		void			GUIUpdate(CCore *Core);
 		void			GUIChanged(CCore *Core);
 
-		int				GetWidth()			{return(Width);}
-		int				GetHeight()			{return(Height);}
-		bool			Resize(int _Width,int _Height);
+		bool			Resize(int Width,int Height);
 
 		void			Load(CFile *File,int Version);
 		void			Save(CFile *File);
@@ -52,9 +52,6 @@ public:
 protected:
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
 
-		int				Width,Height;
-		int				SubType;
-		
 		CGUILayerShade	GUI;
 
 		int				Count;
