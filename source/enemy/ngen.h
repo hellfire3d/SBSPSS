@@ -26,6 +26,7 @@ public:
 	void				render();
 	void				think(int _frames);
 	virtual u8			canCollideWithEnemy()									{return( false );}
+	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
 };
 
 #endif

@@ -49,7 +49,7 @@ void CNpcEnemyGenerator::think(int _frames)
 
 			CNpcEnemy *enemy;
 			enemy=CNpcEnemy::Create( CNpcEnemy::NPC_SPIDER_CRAB );
-			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
+			enemy->setStartPos( ( Pos.vx - 8 ) >> 4, ( Pos.vy - 16 ) >> 4 );
 
 			u16 *waypointPtr = m_npcPath.getWaypointPtr();
 
@@ -62,6 +62,7 @@ void CNpcEnemyGenerator::think(int _frames)
 
 			enemy->setPathType( m_npcPath.getPathType() );
 			enemy->postInit();
+			enemy->setThinkArea();
 			enemy->updateCollisionArea();
 
 			addChild( enemy );

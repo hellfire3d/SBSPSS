@@ -520,6 +520,13 @@ void CNpcEnemy::setupWaypoints( sThingActor *ThisActor )
 		setHeading( newXPos, newYPos );
 	}
 
+	setThinkArea();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::setThinkArea()
+{
 	s32 minX, maxX, minY, maxY;
 
 	m_npcPath.getPathXExtents( &minX, &maxX );

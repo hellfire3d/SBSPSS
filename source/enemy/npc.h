@@ -126,6 +126,7 @@ public:
 
 	virtual int			canCollide();
 	virtual	CRECT const	*getThinkBBox()											{return &m_thinkArea;}
+	void				setThinkArea();
 
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
