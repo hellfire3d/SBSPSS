@@ -51,6 +51,7 @@ public:
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
 	s32				think( DVECTOR currentPos, bool *pathComplete );
+	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };
 
 #endif

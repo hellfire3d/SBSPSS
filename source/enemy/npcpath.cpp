@@ -19,10 +19,10 @@ bool CNpcWaypoint::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 {
 	s32 xDistSqr, yDistSqr;
 
-	*xDist = testPos.vx - this->pos.vx;
+	*xDist = this->pos.vx - testPos.vx;
 	xDistSqr = (*xDist) * (*xDist);
 
-	*yDist = testPos.vy - this->pos.vy;
+	*yDist = this->pos.vy - testPos.vy;
 	yDistSqr = (*yDist) * (*yDist);
 
 	if ( xDistSqr + yDistSqr < 100 )
@@ -117,6 +117,11 @@ bool CNpcPath::incPath()
 	return( false );
 }
 
+bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY )
+{
+	return( waypoint[currentWaypoint].isPointNear( currentPos, distX, distY ) );
+}
+
 s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete )
 {
 	s32 xDist, yDist;
@@ -128,7 +133,7 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete )
 		*pathComplete = incPath();
 	}
 
-	s32 headingToTarget = ratan2( -yDist, -xDist );
+	s32 headingToTarget = ratan2( yDist, xDist );
 
 	return( headingToTarget );
 }

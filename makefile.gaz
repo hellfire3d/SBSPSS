@@ -56,6 +56,10 @@ enemy_src :=		2denemy \
 					npcpath \
 					nsjfish \
 					nclam \
+					nscrab \
+					nnsfish \
+					ngpirate \
+					nshrkman \
 					enemy
 
 fileio_src :=		fileio \

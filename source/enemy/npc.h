@@ -49,6 +49,22 @@ protected:
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
 		NPC_PRICKLY_BUG,
+		NPC_SEA_SNAKE_1,
+		NPC_SEA_SNAKE_2,
+		NPC_PUFFA_FISH,
+		NPC_ANGLER_FISH,
+		NPC_HERMIT_CRAB,
+		NPC_MINE,
+		NPC_BOOGER_MONSTER,
+		NPC_SPIDER_CRAB,
+		NPC_EYEBALL,
+		NPC_BABY_OCTOPUS,
+		NPC_ZOMBIE_FISH_FOLK,
+		NPC_NINJA_STARFISH,
+		NPC_GHOST,
+		NPC_GHOST_PIRATE,
+		NPC_FLAMING_SKULL,
+		NPC_SHARK_MAN,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -72,6 +88,10 @@ protected:
 		NPC_SENSOR_NONE = 0,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE = 1,
 		NPC_SENSOR_CLAM_USER_CLOSE,
+		NPC_SENSOR_SPIDER_CRAB_USER_CLOSE,
+		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
+		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
+		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -79,6 +99,10 @@ protected:
 		NPC_CLOSE_NONE = 0,
 		NPC_CLOSE_JELLYFISH_EVADE = 1,
 		NPC_CLOSE_CLAM_ATTACK,
+		NPC_CLOSE_SPIDER_CRAB_ATTACK,
+		NPC_CLOSE_NINJA_STARFISH_ATTACK,
+		NPC_CLOSE_GHOST_PIRATE_ATTACK,
+		NPC_CLOSE_SHARK_MAN_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -106,6 +130,10 @@ protected:
 	enum
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
+		EXTEND_UP = true,
+		EXTEND_DOWN = false,
+		EXTEND_RIGHT = true,
+		EXTEND_LEFT = false,
 	};
 
 
@@ -143,6 +171,22 @@ protected:
 
 	void				processCloseClamAttack( int _frames );
 
+	// spider crab functions
+
+	void				processCloseSpiderCrabAttack( int _frames );
+
+	// ninja starfish functions
+
+	void				processCloseNinjaStarfishAttack( int _frames );
+
+	// ghost pirate functions
+
+	void				processCloseGhostPirateAttack( int _frames );
+
+	// shark man functions
+
+	void				processCloseSharkManAttack( int _frames );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -160,7 +204,8 @@ protected:
 	bool				m_evadeClockwise;
 	s32					m_timerTimer;
 	s32					m_extension;
-	bool				m_extendOut;
+	bool				m_extendDir;
+	DVECTOR				m_extensionBase;
 };
 
 

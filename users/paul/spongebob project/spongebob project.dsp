@@ -129,6 +129,14 @@ SOURCE=..\..\..\source\enemy\nclam.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ngpirate.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nnsfish.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npc.cpp
 # End Source File
 # Begin Source File
@@ -142,6 +150,14 @@ SOURCE=..\..\..\source\enemy\npcpath.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\npcpath.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nscrab.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nshrkman.cpp
 # End Source File
 # Begin Source File
 

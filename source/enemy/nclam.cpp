@@ -28,7 +28,7 @@ void CNpc::processCloseClamAttack( int _frames )
 {
 	s32 velocity;
 
-	if ( m_extendOut )
+	if ( m_extendDir == EXTEND_UP )
 	{
 		m_movementTimer -= _frames;
 
@@ -45,10 +45,10 @@ void CNpc::processCloseClamAttack( int _frames )
 		}
 		else
 		{
-			m_extendOut = false;
+			m_extendDir = EXTEND_DOWN;
 		}
 	}
-	else
+	else if ( m_extendDir == EXTEND_DOWN )
 	{
 		// retract
 

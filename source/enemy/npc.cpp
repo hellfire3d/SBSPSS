@@ -112,7 +112,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
 		false,
-		3,
+		0,
 		128,
 	},
 
@@ -123,7 +123,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_MOVEMENT_MODIFIER_NONE,
 		NPC_CLOSE_CLAM_ATTACK,
 		NPC_TIMER_NONE,
-		3,
+		0,
 		128,
 	},
 
@@ -163,12 +163,203 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 	},
 
+	{	// NPC_SEA_SNAKE_1
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		256,
+	},
+
+	{	// NPC_SEA_SNAKE_2
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		256,
+	},
+
+	{	// NPC_PUFFA_FISH
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_ANGLER_FISH
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		1,
+		128,
+	},
+
+	{	// NPC_HERMIT_CRAB
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_MINE
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
+	{	// NPC_BOOGER_MONSTER
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
+	{	// NPC_SPIDER_CRAB
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_SPIDER_CRAB_USER_CLOSE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_SPIDER_CRAB_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
+
+	{	// NPC_EYEBALL
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
+	{	// NPC_BABY_OCTOPUS
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_ZOMBIE_FISH_FOLK
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_NINJA_STARFISH
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NINJA_STARFISH_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		64,
+	},
+
+	{	// NPC_GHOST
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_GHOST_PIRATE
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_GHOST_PIRATE_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
+	{	// NPC_FLAMING_SKULL
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		0,
+		128,
+	},
+
+	{	// NPC_SHARK_MAN
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_SHARK_MAN_USER_VISIBLE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_SHARK_MAN_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_FISH_FOLK;
+	m_type = NPC_SHARK_MAN;
 
 	m_heading = 3072;
 	m_movementTimer = 0;
@@ -201,7 +392,7 @@ void CNpc::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			newPos.vx = 500;
+			/*newPos.vx = 500;
 			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
@@ -209,7 +400,7 @@ void CNpc::init()
 			newPos.vx = 100;
 			newPos.vy = 100;
 
-			m_npcPath.addWaypoint( newPos );
+			m_npcPath.addWaypoint( newPos );*/
 
 			m_npcPath.setPathType( REPEATING_PATH );
 
@@ -277,13 +468,14 @@ bool CNpc::processSensor()
 
 				DVECTOR playerPos = player->getPos();
 
+				s32 xDist, yDist;
 				s32 xDistSqr, yDistSqr;
 
-				xDistSqr = playerPos.vx - this->Pos.vx;
-				xDistSqr *= xDistSqr;
+				xDist = playerPos.vx - this->Pos.vx;
+				xDistSqr = xDist * xDist;
 
-				yDistSqr = playerPos.vy - this->Pos.vy;
-				yDistSqr *= yDistSqr;
+				yDist = playerPos.vy - this->Pos.vy;
+				yDistSqr = yDist * yDist;
 
 				switch( m_sensorFunc )
 				{
@@ -291,8 +483,8 @@ bool CNpc::processSensor()
 					{
 						if ( xDistSqr + yDistSqr < 10000 )
 						{
-							this->m_controlFunc = NPC_CONTROL_CLOSE;
-							this->m_evadeClockwise = ( getRnd() % 2 ) - 1;
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_evadeClockwise = ( getRnd() % 2 ) - 1;
 
 							return( true );
 						}
@@ -306,13 +498,174 @@ bool CNpc::processSensor()
 					{
 						if ( xDistSqr + yDistSqr < 10000 )
 						{
-							this->m_controlFunc = NPC_CONTROL_CLOSE;
-							this->m_extendOut = true;
-							this->m_extension = 0;
-							this->m_movementTimer = GameState::getOneSecondInFrames() >> 3;
-							this->m_velocity = ( getRnd() % 6 ) + 1;
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_extendDir = EXTEND_UP;
+							m_extension = 0;
+							m_movementTimer = GameState::getOneSecondInFrames() >> 3;
+							m_velocity = ( getRnd() % 6 ) + 1;
 
 							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_SPIDER_CRAB_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_extension = 0;
+							m_velocity = 5;
+							m_extensionBase = Pos;
+
+							if ( playerPos.vx < Pos.vx )
+							{
+								m_extendDir = EXTEND_LEFT;
+							}
+							else
+							{
+								m_extendDir = EXTEND_RIGHT;
+							}
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_NINJA_STARFISH_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_velocity = m_data[m_type].speed;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_GHOST_PIRATE_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 10000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_extendDir = EXTEND_UP;
+							m_extension = 0;
+							m_movementTimer = GameState::getOneSecondInFrames() >> 1;
+							m_velocity = 4;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
+					case NPC_SENSOR_SHARK_MAN_USER_VISIBLE:
+					{
+						s32 xDistWaypoint, yDistWaypoint;
+
+						if ( abs( xDist ) < 500 )
+						{
+							// within range
+
+							// make sure user is closer to shark man than next waypoint
+
+							s32 xDistWaypoint, yDistWaypoint;
+
+							m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
+
+							if ( abs( xDist ) < abs( xDistWaypoint ) )
+							{
+								s16 headingToPlayer = ratan2( yDist, xDist );
+
+								s16 decDir, incDir, moveDist;
+
+								s32 headingToWaypoint = ratan2( yDistWaypoint, xDistWaypoint );
+
+								// check waypoint is in the same direction as the user
+
+								decDir = headingToPlayer - headingToWaypoint;
+
+								if ( decDir < 0 )
+								{
+									decDir += ONE;
+								}
+
+								incDir = headingToWaypoint - headingToPlayer;
+
+								if ( incDir < 0 )
+								{
+									incDir += ONE;
+								}
+
+								if ( decDir < incDir )
+								{
+									moveDist = decDir;
+								}
+								else
+								{
+									moveDist = incDir;
+								}
+
+								if ( moveDist > 512 )
+								{
+									return( false );
+								}
+								else
+								{
+									// check if shark man is facing user
+
+									decDir = m_heading - headingToPlayer;
+
+									if ( decDir < 0 )
+									{
+										decDir += ONE;
+									}
+
+									incDir = headingToPlayer - m_heading;
+
+									if ( incDir < 0 )
+									{
+										incDir += ONE;
+									}
+
+									if ( decDir < incDir )
+									{
+										moveDist = decDir;
+									}
+									else
+									{
+										moveDist = incDir;
+									}
+
+									if ( moveDist < 1024 )
+									{
+										m_controlFunc = NPC_CONTROL_CLOSE;
+										m_velocity = 8;
+
+										return( true );
+									}
+									else
+									{
+										return( false );
+									}
+								}
+							}
+							else
+							{
+								return( false );
+							}
 						}
 						else
 						{
@@ -482,6 +835,26 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_CLAM_ATTACK:
 			processCloseClamAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_SPIDER_CRAB_ATTACK:
+			processCloseSpiderCrabAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_NINJA_STARFISH_ATTACK:
+			processCloseNinjaStarfishAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_GHOST_PIRATE_ATTACK:
+			processCloseGhostPirateAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_SHARK_MAN_ATTACK:
+			processCloseSharkManAttack( _frames );
 
 			break;
 

@@ -61,7 +61,11 @@ void CNpc::processCloseSharkManAttack( int _frames )
 		moveDist = incDir;
 	}
 
-	if ( abs( moveDist ) < 1024 )
+	s32 xDistWaypoint, yDistWaypoint;
+
+	m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
+
+	if ( abs( moveDist ) < 1024 && abs( xDistWaypoint ) >= abs( xDist ) )
 	{
 		// continue charge
 

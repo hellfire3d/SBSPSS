@@ -33,10 +33,12 @@ void CNpc::processCloseSpiderCrabAttack( int _frames )
 	if ( m_extendDir == EXTEND_RIGHT )
 	{
 		Pos.vx += velocity;
+		m_heading = 0;
 	}
 	else
 	{
 		Pos.vx -= velocity;
+		m_heading = 2048;
 	}
 
 	s32 horizontalExtension = abs( Pos.vx - m_extensionBase.vx );
