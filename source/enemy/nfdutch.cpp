@@ -43,6 +43,10 @@
 #include <sprites.h>
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -237,7 +241,15 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 				}
 				else
 				{
-					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
+					if ( getRnd() % 2 )
+					{
+						m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
+					}
+					else
+					{
+						m_state = FLYING_DUTCHMAN_CHARGE_PLAYER_START;
+					}
+
 					m_fadeDown = false;
 				}
 
@@ -300,7 +312,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 							else
 							{
 								m_state = FLYING_DUTCHMAN_RETURN;
-								m_timerTimer = GameState::getOneSecondInFrames();
+								m_timerTimer = 2 * GameState::getOneSecondInFrames();
 							}
 						}
 					}
@@ -313,6 +325,68 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						m_animNo = m_data[m_type].moveAnim;
 						m_frame = 0;
 					}
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_CHARGE_PLAYER_START:
+			{
+				if ( m_fadeVal == 128 )
+				{
+					// charge at player
+
+					if ( playerXDist > 0 )
+					{
+						m_heading = 0;
+					}
+					else
+					{
+						m_heading = 2048;
+					}
+
+					m_state = FLYING_DUTCHMAN_CHARGE_PLAYER;
+
+					m_timerTimer = GameState::getOneSecondInFrames();
+				}
+				else
+				{
+					if ( !m_animPlaying )
+					{
+						m_animPlaying = true;
+						m_animNo = m_data[m_type].moveAnim;
+						m_frame = 0;
+					}
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_CHARGE_PLAYER:
+			{
+				if ( m_timerTimer > 0 )
+				{
+					if ( !m_animPlaying )
+					{
+						m_animNo = m_data[m_type].moveAnim;
+						m_animPlaying = true;
+						m_frame = 0;
+					}
+
+					if ( m_heading )
+					{
+						Pos.vx -= _frames * m_speed * 2;
+					}
+					else
+					{
+						Pos.vx += _frames * m_speed * 2;
+					}
+
+					m_timerTimer -= _frames;
+				}
+				else
+				{
+					m_state = FLYING_DUTCHMAN_RETURN;
 				}
 
 				break;
@@ -484,8 +558,11 @@ void CNpcFlyingDutchmanEnemy::processShotRecoil( int _frames )
 	if ( !m_animPlaying )
 	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_fadeDown = true;
 		m_movementTimer = GameState::getOneSecondInFrames() * 2;
+		m_inRange = false;
+		m_fadeDown = true;
+		m_timerTimer = 0;
+		m_fireCount = 0;
 	}
 }
 
@@ -602,12 +679,8 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 							{
 								player->justButtBouncedABadGuy();
 							}
-							m_controlFunc = NPC_CONTROL_MOVEMENT;
-							m_movementTimer = GameState::getOneSecondInFrames() * 2;
-							m_inRange = false;
-							m_fadeDown = true;
-							m_timerTimer = 0;
-							m_fireCount = 0;
+							m_controlFunc = NPC_CONTROL_SHOT;
+							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 
 							drawAttackEffect();
 						}
@@ -644,12 +717,15 @@ u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 	{
 		if ( m_controlFunc != NPC_CONTROL_SHOT )
 		{
-			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_controlFunc = NPC_CONTROL_SHOT;
+			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+			/*m_controlFunc = NPC_CONTROL_MOVEMENT;
 			m_movementTimer = GameState::getOneSecondInFrames() * 2;
 			m_inRange = false;
 			m_fadeDown = true;
 			m_timerTimer = 0;
-			m_fireCount = 0;
+			m_fireCount = 0;*/
 		}
 	}
 
