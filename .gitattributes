@@ -1,1 +1,2 @@
 '*.Ixa' filter=lfs diff=lfs merge=lfs -text
+*.Ixa filter=lfs diff=lfs merge=lfs -text
