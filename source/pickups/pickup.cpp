@@ -352,6 +352,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			pickup=new ("BalloonAndSpatulaPickup") CBalloonAndSpatulaPickup();
 			break;
 
+		case PICKUP__JELLY_LAUNCHER:
+			pickup=new ("JellylauncherPickup") CJellyLauncherPickup();
+			break;
+
 		default:
 			ASSERT(!"UNKNOWN PICKUP TYPE");
 			return NULL;

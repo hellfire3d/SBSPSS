@@ -74,7 +74,7 @@ void	CJellyLauncherAmmoPickup::init()
 	CBasePickup::init();
 	m_rattle=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -89,7 +89,7 @@ DVECTOR	CJellyLauncherAmmoPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -136,7 +136,7 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 	int			angle;
 
 	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__JELLYAMMO);
+	fh=sprites->getFrameHeader(FRM__LAUNCHER);
 	if(m_rattle<=jlammo_rattlecount*4095)
 	{
 		angle=((msin(m_rattle&4095)*jlammo_rattlescale)>>12)&4095;
@@ -147,6 +147,74 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 	}
 	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,OTPOS__PICKUP_POS);
 }
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CJellyLauncherPickup::init()
+{
+	sFrameHdr	*fh;
+
+	CBasePickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
+	setCollisionSize(fh->W,fh->H);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR	CJellyLauncherPickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CJellyLauncherPickup::collect(class CPlayer *_player)
+{
+	_player->setMode(PLAYER_MODE_JELLY_LAUNCHER);
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CJellyLauncherPickup::renderPickup(DVECTOR *_pos)
+{
+	SpriteBank	*sprites;
+	sFrameHdr	*fh;
+	int			x,y;
+
+	sprites=getSpriteBank();
+	fh=sprites->getFrameHeader(FRM__LAUNCHER);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+}
+
 
 /*===========================================================================
 end */

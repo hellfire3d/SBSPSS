@@ -152,7 +152,7 @@ void	CPlayerModeJellyLauncher::renderModeUi()
 	char		buf[4];
 
 	sb=m_player->getSpriteBank();
-	fh=sb->getFrameHeader(FRM__BLOWER);
+	fh=sb->getFrameHeader(FRM__LAUNCHER);
 	switch(m_firingState)
 	{
 		case FIRING_STATE__NONE:
