@@ -32,6 +32,7 @@ void CNpcFireballHazard::init()
 
 	m_extension = 0;
 	m_velocity = 40;
+	m_height = 50;
 
 	m_respawnRate = 4;
 }
@@ -50,6 +51,8 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
+
+	addWaypoint( newXPos, newYPos );
 
 	DVECTOR startPos;
 	startPos.vx = newXPos << 4;
@@ -74,6 +77,13 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 	{
 		addWaypoint( newXPos, newYPos );
 	}
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_width = maxX - minX;
+	m_npcPath.getPathYExtents( &minY, &maxY );
+	m_height = maxY - minY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,10 +91,6 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 void CNpcFireballHazard::processMovement( int _frames )
 {
 	s32 velocity;
-	s32 distSourceX;
-	s32 distSourceY;
-
-	m_npcPath.getDistToNextWaypoint( m_base, &distSourceX, &distSourceY );
 
 	if ( m_extension < 4096 )
 	{
@@ -110,8 +116,8 @@ void CNpcFireballHazard::processMovement( int _frames )
 		return;
 	}
 
-	Pos.vx = m_base.vx + ( ( distSourceX * m_extension ) >> 12 );
-	Pos.vy = m_base.vy - ( 50 * rsin( m_extension >> 1 ) >> 12 );
+	Pos.vx = m_base.vx + ( ( m_width * m_extension ) >> 12 );
+	Pos.vy = m_base.vy - ( m_height * rsin( m_extension >> 1 ) >> 12 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

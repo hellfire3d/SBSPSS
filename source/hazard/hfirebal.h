@@ -28,6 +28,8 @@ protected:
 	void				processTimer( int _frames );
 
 	s32					m_velocity;
+	s32					m_width;
+	s32					m_height;
 };
 
 #endif
