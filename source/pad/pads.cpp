@@ -18,39 +18,6 @@
 
 
 /*****************************************************************************/
-static sPadConfigTable	PadConfigDefault=
-{
-	{
-	0,					// PAD_CFG_NONE
-	PAD_LEFT,			// PAD_CFG_LEFT
-	PAD_RIGHT,			// PAD_CFG_RIGHT
-	PAD_UP,				// PAD_CFG_UP
-	PAD_DOWN,			// PAD_CFG_DOWN
-
-	PAD_START,			// PAD_CFG_PAUSE,
-	PAD_CIRCLE,			// PAD_CFG_ACTION,
-	PAD_CROSS,			// PAD_CFG_JUMP,
-	}
-};
-
-static sPadConfigTable	PadConfigAlternative=
-{
-	{
-	0,					// PAD_CFG_NONE
-	PAD_LEFT,			// PAD_CFG_LEFT
-	PAD_RIGHT,			// PAD_CFG_RIGHT
-	PAD_UP,				// PAD_CFG_UP
-	PAD_DOWN,			// PAD_CFG_DOWN
-
-	PAD_START,			// PAD_CFG_PAUSE,
-	PAD_CROSS,			// PAD_CFG_ACTION,
-	PAD_SQUARE,			// PAD_CFG_JUMP,
-	}
-};
-
-
-
-
 /*****************************************************************************/
 sPadData	PadData[2];
 u8 			PadBuffer[2][34];
@@ -150,6 +117,8 @@ void	PadsInit()
 	for(int i=0;i<2;i++)
 		for(int j=0;j<16;j++)
 			PadRepeatTimers[i][j]=0;
+
+	CPadConfig::setConfig(0);		
 }
 
 /*****************************************************************************/
@@ -416,36 +385,73 @@ bool	PadIsConnected(int port)
 }
 
 
-
-/*----------------------------------------------------------------------
-	Function:	
-	Purpose:	
-	Params:		
-	Returns:	
-  ---------------------------------------------------------------------- */
-sPadConfigTable *getPadConfigTable(int _padConfig)
-{
-	if(_padConfig==0)return &PadConfigDefault;
-	if(_padConfig==1)return &PadConfigAlternative;
-	ASSERT(0);
-	return &PadConfigDefault;
-}
-
-
 /*****************************************************************************/
-
-
-CPadConfig::CPadConfig()
+int							CPadConfig::s_configNumber=-1;
+CPadConfig::sPadConfigTable	*CPadConfig::s_cfg=NULL;
+CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 {
-	Cfg=&PadConfigDefault;
+	// Config A
+	{{
+		0,					// PAD_CFG_NONE
+		PAD_LEFT,			// PAD_CFG_LEFT
+		PAD_RIGHT,			// PAD_CFG_RIGHT
+		PAD_UP,				// PAD_CFG_UP
+		PAD_DOWN,			// PAD_CFG_DOWN
+
+		PAD_CROSS,			// PAD_CFG_ACTION
+		PAD_SQUARE,			// PAD_CFG_JUMP
+	}},
+	// Config B
+	{{
+		0,					// PAD_CFG_NONE
+		PAD_LEFT,			// PAD_CFG_LEFT
+		PAD_RIGHT,			// PAD_CFG_RIGHT
+		PAD_UP,				// PAD_CFG_UP
+		PAD_DOWN,			// PAD_CFG_DOWN
+
+		PAD_SQUARE,			// PAD_CFG_ACTION
+		PAD_CROSS,			// PAD_CFG_JUMP
+	}},
+	// Config C
+	{{
+		0,					// PAD_CFG_NONE
+		PAD_LEFT,			// PAD_CFG_LEFT
+		PAD_RIGHT,			// PAD_CFG_RIGHT
+		PAD_UP,				// PAD_CFG_UP
+		PAD_DOWN,			// PAD_CFG_DOWN
+
+		PAD_CIRCLE,			// PAD_CFG_ACTION
+		PAD_TRIANGLE,		// PAD_CFG_JUMP
+	}},
+	// Config D
+	{{
+		0,					// PAD_CFG_NONE
+		PAD_SQUARE,			// PAD_CFG_LEFT
+		PAD_CIRCLE,			// PAD_CFG_RIGHT
+		PAD_TRIANGLE,		// PAD_CFG_UP
+		PAD_CROSS,			// PAD_CFG_DOWN
+
+		PAD_LEFT,			// PAD_CFG_ACTION
+		PAD_DOWN,			// PAD_CFG_JUMP
+	}},
+};
+
+
+
+
+void CPadConfig::setConfig(int _config)
+{
+	ASSERT(_config<NUM_PAD_CONFIGS);
+	s_configNumber=_config;
+	s_cfg=&s_padConfigs[_config];
 }
 
-void CPadConfig::SetConfig(sPadConfigTable *NewCfg)
+int CPadConfig::getConfig()
 {
-	Cfg=NewCfg;
+	return s_configNumber;
 }
 
-int CPadConfig::GetButton(PAD_CFG But)
+int CPadConfig::getButton(PAD_CFG _but)
 {
-	return(Cfg->Buttons[But]);
+	return(s_cfg->m_buttons[_but]);
 }

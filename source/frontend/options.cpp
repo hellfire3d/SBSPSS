@@ -42,8 +42,8 @@
 #include "gui\gframe.h"
 #endif
 
-#ifndef __GUI_GREADOUT_H__
-#include "gui\greadout.h"
+#ifndef __GUI_GTEXTBOX_H__
+#include "gui\gtextbox.h"
 #endif
 
 #ifndef __LOCALE_TEXTDBASE_H__
@@ -52,6 +52,10 @@
 
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
+#endif
+
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
 #endif
 
 
@@ -63,6 +67,10 @@
 
 #ifndef __SPR_FRONTEND_H__
 #include <frontend.h>
+#endif
+
+#ifndef __SPR_UIGFX_H__
+#include <uigfx.h>
 #endif
 
 
@@ -82,17 +90,52 @@
 	Vars
 	---- */
 
-int	s_controlButtonData[]=
+int	CFrontEndOptions::s_controlStyleValues[CPadConfig::NUM_PAD_CONFIGS+1]=
 {
 	0,1,2,3,
 	-1
 };
-CGUITextReadout::TextReadoutData s_controlReadoutText[]=
+CGUITextReadout::TextReadoutData CFrontEndOptions::s_controlStyleReadoutText[CPadConfig::NUM_PAD_CONFIGS]=
 {
 	{	0,STR__FRONTEND__A	},
 	{	1,STR__FRONTEND__B	},
 	{	2,STR__FRONTEND__C	},
 	{	3,STR__FRONTEND__D	},
+};
+
+
+int CFrontEndOptions::s_buttonOrder[]=
+{
+	CPadConfig::PAD_CFG_UP,
+	CPadConfig::PAD_CFG_DOWN,
+	CPadConfig::PAD_CFG_LEFT,
+	CPadConfig::PAD_CFG_RIGHT,
+	CPadConfig::PAD_CFG_JUMP,
+	CPadConfig::PAD_CFG_ACTION,
+};
+
+CGUISpriteReadout::SpriteReadoutData	CFrontEndOptions::s_controlReadoutSprites[]=
+{
+	{	ICON_UP,FRM__BUTU		},
+	{	ICON_DOWN,FRM__BUTD		},
+	{	ICON_LEFT,FRM__BUTL		},
+	{	ICON_RIGHT,FRM__BUTR	},
+	{	ICON_CROSS,FRM__BUTX	},
+	{	ICON_CIRCLE,FRM__BUTC	},
+	{	ICON_SQUARE,FRM__BUTS	},
+	{	ICON_TRIANGLE,FRM__BUTT	},
+};
+
+CFrontEndOptions::ButtonToIconMap	CFrontEndOptions::s_controlMap[]=
+{
+	{	PAD_UP,			ICON_UP			},
+	{	PAD_DOWN,		ICON_DOWN		},
+	{	PAD_LEFT,		ICON_LEFT		},
+	{	PAD_RIGHT,		ICON_RIGHT		},
+	{	PAD_CROSS,		ICON_CROSS		},
+	{	PAD_SQUARE,		ICON_SQUARE		},
+	{	PAD_CIRCLE,		ICON_CIRCLE		},
+	{	PAD_TRIANGLE,	ICON_TRIANGLE	},
 };
 
 /*----------------------------------------------------------------------
@@ -104,6 +147,10 @@ CGUITextReadout::TextReadoutData s_controlReadoutText[]=
 void CFrontEndOptions::init()
 {
 	int					i;
+	CGUIGroupFrame		*fr;
+	CGUITextBox			*tb;
+	CGUISpriteReadout	*sr;
+
 
 	m_background=new ("Options Background") CScrollyBackground();
 	m_background->init();
@@ -141,7 +188,64 @@ void CFrontEndOptions::init()
 	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
 										X_BORDER,Y_BORDER,412-(X_BORDER*2),40,
 										STR__FRONTEND__CONTROL_STYLE,
-										&m_controlStyle,s_controlButtonData,s_controlReadoutText);
+										&m_controlStyle,s_controlStyleValues,s_controlStyleReadoutText);
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(m_modeMenus[MODE__CONTROL]);
+	fr->setObjectXYWH(X_BORDER*2,65,412-(X_BORDER*4),60);	//292
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(0,0,26,15);	//146
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_UP]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(26,0,120,15);
+		tb->setText(STR__FRONTEND__UP);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(0,15,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_DOWN]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(26,15,120,15);
+		tb->setText(STR__FRONTEND__DOWN);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(0,30,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_LEFT]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(26,30,120,15);
+		tb->setText(STR__FRONTEND__LEFT);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(0,45,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_RIGHT]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(26,45,120,15);
+		tb->setText(STR__FRONTEND__RIGHT);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(146,0,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_JUMP]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(146+26,0,120,15);
+		tb->setText(STR__FRONTEND__JUMP);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(146,15,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_ACTION]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(146+26,15,120,15);
+		tb->setText(STR__FRONTEND__ACTION);
 
 
 	// Populate SCREEN menu
@@ -173,7 +277,7 @@ void CFrontEndOptions::init()
 	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::SONG);
 	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::SFX);
 	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::SPEECH);
-	m_controlStyle=0;
+	m_controlStyle=CPadConfig::getConfig();
 }
 
 /*----------------------------------------------------------------------
@@ -256,6 +360,9 @@ int oy=-1;
 int os=0;
 void CFrontEndOptions::think(int _frames)
 {
+	int		i,j,button;
+
+
 	m_background->setSpeed(ox,oy);
 	m_background->setSpeedScale(os);
 	m_background->think(_frames);
@@ -296,6 +403,20 @@ void CFrontEndOptions::think(int _frames)
 		m_closingDown=true;
 	}
 
+	// Change the icons on the control display
+	CPadConfig::setConfig(m_controlStyle);
+	for(i=0;i<CONTROL_COUNT;i++)
+	{
+		button=CPadConfig::getButton((CPadConfig::PAD_CFG)s_buttonOrder[i]);
+		for(j=0;j<ICON_COUNT;j++)
+		{
+			if(s_controlMap[j].m_padButton==button)
+			{
+				m_controlIcons[i]=s_controlMap[j].m_icon;
+				break;
+			}
+		}
+	}
 }
 
 /*----------------------------------------------------------------------

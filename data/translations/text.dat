@@ -72,6 +72,18 @@ eng=B
 eng=C
 [STR__FRONTEND__D]
 eng=D
+[STR__FRONTEND__UP]
+eng=UP
+[STR__FRONTEND__DOWN]
+eng=DOWN
+[STR__FRONTEND__LEFT]
+eng=LEFT
+[STR__FRONTEND__RIGHT]
+eng=RIGHT
+[STR__FRONTEND__JUMP]
+eng=JUMP
+[STR__FRONTEND__ACTION]
+eng=ACTION
 
 ; Screen menu
 

@@ -98,48 +98,45 @@ void		PAD_SetVibrationEnvelope( int Port, int count, const VIBE_DATA * data, int
 
 
 /*****************************************************************************/
-#define	PAD_ACCEPT		PAD_CROSS
-#define	PAD_CANCEL		PAD_TRIANGLE
-#define	PAD_UI_LEFT		PAD_LEFT
-#define	PAD_UI_RIGHT	PAD_RIGHT
-#define	PAD_UI_UP		PAD_UP
-#define	PAD_UI_DOWN		PAD_DOWN
-
-enum	PAD_CFG
-{
-	PAD_CFG_NONE=0,
-
-	PAD_CFG_LEFT,
-	PAD_CFG_RIGHT,
-	PAD_CFG_UP,
-	PAD_CFG_DOWN,
-
-	PAD_CFG_PAUSE,
-	PAD_CFG_ACTION,
-	PAD_CFG_JUMP,
-
-	PAD_CFG_MAX
-};
-
-struct	sPadConfigTable
-{
-	u16	Buttons[PAD_CFG_MAX];
-};
 
 class	CPadConfig
 {
 public:
-	CPadConfig();
-	void	SetConfig(sPadConfigTable *NewCfg);
-	int		GetButton(PAD_CFG But);
+	enum
+	{
+		NUM_PAD_CONFIGS=4,
+	};
+
+	enum	PAD_CFG
+	{
+		PAD_CFG_NONE=0,
+
+		PAD_CFG_LEFT,
+		PAD_CFG_RIGHT,
+		PAD_CFG_UP,
+		PAD_CFG_DOWN,
+
+		PAD_CFG_ACTION,
+		PAD_CFG_JUMP,
+
+		PAD_CFG_MAX
+	};
+
+	static void				setConfig(int _config);
+	static int				getConfig();
+	static int				getButton(PAD_CFG _but);
 
 private:
-	sPadConfigTable	*Cfg;
+	struct	sPadConfigTable
+	{
+		u16	m_buttons[PAD_CFG_MAX];
+	};
+
+	static int				s_configNumber;
+	static sPadConfigTable	*s_cfg;
+	static sPadConfigTable	s_padConfigs[NUM_PAD_CONFIGS];
 
 };
-
-extern sPadConfigTable *getPadConfigTable(int _padConfig);
-
 
 
 /*****************************************************************************/
