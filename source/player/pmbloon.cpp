@@ -101,6 +101,7 @@ void	CPlayerModeBalloon::shutdown()
 void	CPlayerModeBalloon::enter()
 {
 	CPlayerModeBase::enter();
+	CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_INFLATE);
 	m_balloonTimer=BALLOON_TIME;
 }
 
@@ -116,6 +117,7 @@ void	CPlayerModeBalloon::think()
 	if(--m_balloonTimer==0||getPadInputDown()&PI_ACTION)
 	{
 		PAUL_DBGMSG("*pop*");
+		CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
 		m_player->setMode(PLAYER_MODE_FULLUNARMED);
 	}
 }
