@@ -763,10 +763,13 @@ if(newmode!=-1)
 		}
 
 		// Stop the player vanishing off the edge of the telly..
-		if(Pos.vx<m_playerPosLimitBox.x1)		Pos.vx=m_playerPosLimitBox.x1;
-		else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
-		if(Pos.vy<m_playerPosLimitBox.y1)		Pos.vy=m_playerPosLimitBox.y1;
-		else if(Pos.vy>m_playerPosLimitBox.y2)	Pos.vy=m_playerPosLimitBox.y2;
+		if(!m_lockCamera)
+		{
+			if(Pos.vx<m_playerPosLimitBox.x1)		Pos.vx=m_playerPosLimitBox.x1;
+			else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
+			if(Pos.vy<m_playerPosLimitBox.y1)		Pos.vy=m_playerPosLimitBox.y1;
+			else if(Pos.vy>m_playerPosLimitBox.y2)	Pos.vy=m_playerPosLimitBox.y2;
+		}
 
 		// Look around
 		int	pad=getPadInputHeld();

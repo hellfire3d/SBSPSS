@@ -75,7 +75,7 @@ void	CPlayerModeDead::think()
 		m_player->setAnimFrame(m_deadTime);
 	}
 
-m_player->moveVertical(5);
+	m_player->moveVertical(5);
 
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&PI_FIRE)||
 	   m_deadTime>DEATH_TIMEOUT)
