@@ -302,7 +302,7 @@ public:
 
 	void			respawn();
 	void			setCanExitLevelNow()								{m_canExitLevel=true;}
-	int				getCanExitLevelNow()								{return m_canExitLevel;}
+	int				getCanExitLevelNow()								{return m_canExitLevel&&getMode()!=PLAYER_MODE_DEAD;}
 	void			collectedQuestItem();
 
 	int				getLivesLeft();
