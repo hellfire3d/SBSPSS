@@ -848,7 +848,8 @@ void CPlayer::shove( DVECTOR move )
 			}
 			cx+=dir;
 		}
-		Pos.vx=cx-dir;
+		if(i)
+			Pos.vx=cx-dir;
 	}
 	else
 	{
@@ -881,7 +882,8 @@ void CPlayer::shove( DVECTOR move )
 			}
 			cy+=dir;
 		}
-		Pos.vy=cy-dir;
+		if(i)
+			Pos.vy=cy-dir;
 	}
 	else
 	{

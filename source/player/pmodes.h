@@ -118,6 +118,7 @@ public:
 
 	void						thinkVerticalMovement();
 	void						thinkHorizontalMovement();
+	void						playerHasHitGround();
 
 	
 	virtual const struct PlayerMetrics	*getPlayerMetrics();

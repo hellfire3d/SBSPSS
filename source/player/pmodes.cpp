@@ -251,32 +251,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 				// Just hit the ground
 				// Stick at ground level
 				pos.vy+=(m_moveVelocity.vy>>VELOCITY_SHIFT)+colHeight;
-				m_moveVelocity.vy=0;
-				m_fallFrames=0;
-				if(m_currentState==STATE_BUTTFALL)
-				{
-					// Landed from a butt bounce
-					setState(STATE_BUTTLAND);
-				}
-				else if(m_currentState==STATE_FALLFAR)
-				{
-					// Landed from a painfully long fall
-					setState(STATE_GETUP);
-					m_player->takeDamage(DAMAGE__FALL);
-					m_moveVelocity.vx=0;
-					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-				}
-				else if(m_moveVelocity.vx)
-				{
-					// Landed from a jump with x movement
-					setState(STATE_RUN);
-				}
-				else
-				{
-					// Landed from a jump with no x movement
-					setState(STATE_IDLE);
-					setAnimNo(ANIM_SPONGEBOB_JUMPEND);
-				}
+				playerHasHitGround();
 			}
 		}
 		else if(colHeight)
@@ -287,54 +262,16 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			{
 				// Was floating in the air.. fall!
 
-//				if ( !m_onPlatform )
-//				{
-					setState(STATE_FALL);
-//				}
+				setState(STATE_FALL);
 			}
 		}
 	}
 	else
 	{
-/*
-		// Below ground
-		// Perhaps we should be falling?
-		if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
-		   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-		   m_currentState!=STATE_JUMP)
-		{
-			setState(STATE_FALL);
-		}
-*/
 		if ( m_player->isOnPlatform() && m_moveVelocity.vy >= 0 )
 		{
 			pos.vy += colHeight;
-			m_moveVelocity.vy=0;
-			m_fallFrames=0;
-			if(m_currentState==STATE_BUTTFALL)
-			{
-				// Landed from a butt bounce
-				setState(STATE_BUTTLAND);
-			}
-			else if(m_currentState==STATE_FALLFAR)
-			{
-				// Landed from a painfully long fall
-				setState(STATE_IDLE);
-				m_player->takeDamage(DAMAGE__FALL);
-				m_moveVelocity.vx=0;
-				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-			}
-			else if(m_moveVelocity.vx)
-			{
-				// Landed from a jump with x movement
-				setState(STATE_RUN);
-			}
-			else
-			{
-				// Landed from a jump with no x movement
-				setState(STATE_IDLE);
-				setAnimNo(ANIM_SPONGEBOB_JUMPEND);
-			}
+			playerHasHitGround();
 		}
 	}
 
@@ -392,7 +329,8 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 					}
 					cx+=dir;
 				}
-				pos.vx=cx-dir;
+				if(i)
+					pos.vx=cx-dir;
 
 				// If running then go to idle, otherwise leave in same state
 				if(m_currentState==STATE_RUN)
@@ -441,13 +379,51 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 						}
 						cx+=dir;
 					}
-					pos.vx=cx-dir;
+					if(i)
+						pos.vx=cx-dir;
 					m_moveVelocity.vx=0;
 				}
 			}
 		}
 		pos.vx+=m_moveVelocity.vx>>VELOCITY_SHIFT;
 		m_player->setPlayerPos(&pos);
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBase::playerHasHitGround()
+{
+	// Grrr!
+	m_moveVelocity.vy=0;
+	m_fallFrames=0;
+	if(m_currentState==STATE_BUTTFALL)
+	{
+		// Landed from a butt bounce
+		setState(STATE_BUTTLAND);
+	}
+	else if(m_currentState==STATE_FALLFAR)
+	{
+		// Landed from a painfully long fall
+		setState(STATE_GETUP);
+		m_player->takeDamage(DAMAGE__FALL);
+		m_moveVelocity.vx=0;
+		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
+	}
+	else if(m_moveVelocity.vx)
+	{
+		// Landed from a jump with x movement
+		setState(STATE_RUN);
+	}
+	else
+	{
+		// Landed from a jump with no x movement
+		setState(STATE_IDLE);
+		setAnimNo(ANIM_SPONGEBOB_JUMPEND);
 	}
 }
 
@@ -649,6 +625,12 @@ int		CPlayerModeBase::slowdown()
 			m_moveVelocity.vx=0;
 			ret=true;
 		}
+	}
+	else
+	{
+		// Hmm.. was already stopped(?)
+		// This should probly be considered a bug.. (pkg)
+		ret=true;
 	}
 	return ret;
 }
