@@ -37,6 +37,7 @@ void	CWindRightTrigger::collidedWith(CThing *_thisThing)
 			move.vy = 0;
 
 			player->shove( move );
+			player->setMoveVelocity( &move );
 			player->setFloating();
 
 			break;

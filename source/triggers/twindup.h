@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef __TRIGGERS_THAZARD_H__
-#include "triggers\thazard.h"
+#ifndef __TRIGGER_TRIGGER_HEADER__
+#include "triggers\trigger.h"
 #endif
 
 /*	Std Lib

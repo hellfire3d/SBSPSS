@@ -39,12 +39,16 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcMotherJellyfishEnemy::postInit()
 {
-	m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
+	m_state = MOTHER_JELLYFISH_CYCLE;
 	m_spawnTimer = 0;
 	m_meterOn=false;
 
@@ -72,6 +76,13 @@ void CNpcMotherJellyfishEnemy::postInit()
 	}
 
 	m_RGB = 255 + ( 128 << 8 ) + ( 255 << 16 );
+
+	targetPos = Pos;
+
+	m_movementTimer = GameState::getOneSecondInFrames() * 5;
+	m_pulsateTimer = GameState::getOneSecondInFrames();
+
+	m_renderScale = 4096;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +141,153 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
-	s32 xDist, yDist;
+	if ( m_movementTimer <= 0 )
+	{
+		if ( m_pulsateTimer <= 0 )
+		{
+			// fire at player
+
+			s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+
+			CProjectile *projectile;
+			projectile = CProjectile::Create();
+			DVECTOR newPos = Pos;
+			projectile->init( newPos, heading );
+			projectile->setGraphic( FRM__LIGHTNING2 );
+
+			m_movementTimer = GameState::getOneSecondInFrames() * 5;
+			m_pulsateTimer = GameState::getOneSecondInFrames();
+		}
+		else
+		{
+			m_pulsateTimer -= _frames;
+
+			m_renderScale = 4096 + ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
+		}
+	}
+	else
+	{
+		m_movementTimer -= _frames;
+
+		s32 distX, distY;
+
+		distX = targetPos.vx - Pos.vx;
+		distY = targetPos.vy - Pos.vy;
+
+		if( abs( distX ) < 10 && abs( distY ) < 10 )
+		{
+			s32 minX, maxX, minY, maxY;
+
+			m_npcPath.getPathXExtents( &minX, &maxX );
+			m_npcPath.getPathYExtents( &minY, &maxY );
+
+			targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
+			targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+		}
+		else
+		{
+			s16 headingToTarget = ratan2( distY, distX );
+			s16 decDir, incDir;
+			s16 moveDist;
+			s16 maxTurnRate = m_data[m_type].turnSpeed;
+			s32 moveX, moveY;
+
+			decDir = m_heading - headingToTarget;
+
+			if ( decDir < 0 )
+			{
+				decDir += ONE;
+			}
+
+			incDir = headingToTarget - m_heading;
+
+			if ( incDir < 0 )
+			{
+				incDir += ONE;
+			}
+
+			if ( decDir < incDir )
+			{
+				moveDist = -decDir;
+			}
+			else
+			{
+				moveDist = incDir;
+			}
+
+			if ( moveDist < -maxTurnRate )
+			{
+				moveDist = -maxTurnRate;
+			}
+			else if ( moveDist > maxTurnRate )
+			{
+				moveDist = maxTurnRate;
+			}
+
+			m_heading += moveDist;
+			m_heading &= 4095;
+
+			s32 preShiftX = _frames * m_speed * rcos( m_heading );
+			s32 preShiftY = _frames * m_speed * rsin( m_heading );
+
+			moveX = preShiftX >> 12;
+			if ( !moveX && preShiftX )
+			{
+				moveX = preShiftX / abs( preShiftX );
+			}
+
+			if ( distX > 0 )
+			{
+				if ( moveX > distX )
+				{
+					moveX = distX;
+				}
+			}
+			else if ( distX < 0 )
+			{
+				if ( moveX < distX )
+				{
+					moveX = distX;
+				}
+			}
+			else
+			{
+				moveX = 0;
+			}
+
+			moveY = preShiftY >> 12;
+			if ( !moveY && preShiftY )
+			{
+				moveY = preShiftY / abs( preShiftY );
+			}
+
+			if ( distY > 0 )
+			{
+				if ( moveY > distY )
+				{
+					moveY = distY;
+				}
+			}
+			else if ( distY < 0 )
+			{
+				if ( moveY < distY )
+				{
+					moveY = distY;
+				}
+			}
+			else
+			{
+				moveY = 0;
+			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
+		}
+	}
+
+
+
+	/*s32 xDist, yDist;
 	s32 xDistSqr, yDistSqr;
 
 	switch( m_state )
@@ -225,14 +382,14 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 		default:
 			break;
-	}
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcMotherJellyfishEnemy::processClose( int _frames )
 {
-	switch( m_state )
+	/*switch( m_state )
 	{
 		case MOTHER_JELLYFISH_ATTACK_PLAYER_SHOCK:
 		{
@@ -286,7 +443,7 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 					m_heading = 0;
 
-					spawnJellyfish( _frames );
+					//spawnJellyfish( _frames );
 				}
 				else
 				{
@@ -307,7 +464,7 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 					m_heading = 2048;
 
-					spawnJellyfish( _frames );
+					//spawnJellyfish( _frames );
 				}
 				else
 				{
@@ -318,7 +475,7 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 			break;
 		}
-	}
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -336,7 +493,7 @@ void CNpcMotherJellyfishEnemy::shutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
+/*void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
 {
 	if ( m_jellyfishCount )
 	{
@@ -361,7 +518,7 @@ void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
 			m_spawnTimer = 1 * GameState::getOneSecondInFrames();
 		}
 	}
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -384,11 +541,8 @@ void CNpcMotherJellyfishEnemy::render()
 
 			DVECTOR &renderPos=getRenderPos();
 
-			s16 scale;
-			scale = 2048 + ( ( ( 8192 - 2048 ) * m_health ) / m_data[m_type].initHealth );
-
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
-			m_actorGfx->RotateScale( SprFrame, renderPos, 0, scale, scale );
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, m_renderScale, m_renderScale );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
@@ -406,12 +560,12 @@ void CNpcMotherJellyfishEnemy::render()
 void CNpcMotherJellyfishEnemy::processShot( int _frames )
 {
 	s16 scale;
-	scale = 2048 + ( ( ( 8192 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+	scale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 
 	for ( int i = 0 ; i < 4 ; i++ )
 	{
-		legs[i]->Setup( ( legsPos[i].vx * scale ) >> 13, legsPos[i].vy, i > 1 );
-		legs[i]->setScale( scale >> 1 );
+		legs[i]->Setup( ( legsPos[i].vx * scale ) >> 12, legsPos[i].vy, i > 1 );
+		legs[i]->setScale( scale );
 	}
 
 	switch ( m_state )
@@ -423,6 +577,8 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 			if ( m_health > 0 )
 			{
 				m_health -= 5;
+
+				m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 			}
 
 			m_state = NPC_GENERIC_HIT_RECOIL;
@@ -445,19 +601,4 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 			break;
 		}
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-u8 CNpcMotherJellyfishEnemy::canBeCaughtByNet()
-{
-	return( m_isActive && !m_isDying && m_health <= 5 );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcMotherJellyfishEnemy::caughtWithNet()
-{
-	setToShutdown();
-	CGameScene::setBossHasBeenKilled();
 }

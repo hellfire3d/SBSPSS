@@ -85,6 +85,7 @@ typedef enum
 	STATE_LOOKDOWNRELAX,
 	STATE_JUMPBACK,
 	STATE_CART,
+	STATE_FLOAT,
 
 	NUM_STATES,
 }PLAYER_STATE;
@@ -397,6 +398,8 @@ public:
 	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
 	void			justButtBouncedABadGuy();	// Also fugly.. :/
+
+	void			setFloating();
 
 private:
 	int				m_squeakyBootsTimer;

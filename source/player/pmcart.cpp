@@ -83,6 +83,9 @@ void	CPlayerModeCart::think()
 		newPos.vy = platform->getPos().vy;
 
 		int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( newPos.vx, newPos.vy );
+		s16 angle = ( ( CNpcPlatform * ) platform )->getCollisionAngle();
+		newPos.vx += ( -platformOffset * rsin( angle ) ) >> 12;
+		platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( newPos.vx, newPos.vy );
 		newPos.vy += platformOffset;
 
 		m_player->setPos( newPos );
@@ -95,24 +98,6 @@ void	CPlayerModeCart::think()
 		setState( STATE_IDLE );
 	}
 }
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void	CPlayerModeDead::render(DVECTOR *_pos)
-{
-	DVECTOR	deadSbPos;
-
-	deadSbPos=*_pos;
-	deadSbPos.vy-=m_deadTime;
-
-	m_player->renderSb(&deadSbPos,ANIM_SPONGEBOB_DEATHANGLE,0);
-}
-*/
 
 /*===========================================================================
 end */

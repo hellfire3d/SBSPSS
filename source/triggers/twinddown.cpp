@@ -37,6 +37,8 @@ void	CWindDownTrigger::collidedWith(CThing *_thisThing)
 			move.vy = 4 * GameState::getFramesSinceLast();
 
 			player->shove( move );
+			move.vx = player->getMoveVelocity()->vx;
+			player->setMoveVelocity( &move );
 			player->setFloating();
 
 			break;

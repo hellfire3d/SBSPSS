@@ -74,6 +74,10 @@
 #include "player\pscart.h"
 #endif
 
+#ifndef __PLAYER_PSFLOAT_H__
+#include "player\psfloat.h"
+#endif
+
 #ifndef __PLATFORM_PLATFORM_H__
 #include "platform\platform.h"
 #endif
@@ -127,6 +131,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateLookDownRelax,					// STATE_LOOKDOWNRELAX
 	&s_stateJumpBack,						// STATE_JUMPBACK
 	&s_stateCart,							// STATE_CART
+	&s_stateFloat,							// STATE_FLOAT
 };
 
 static	PlayerMetrics	s_playerMetrics=
@@ -316,7 +321,8 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&				// Hmm.. (pkg)
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
 			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP&&
-			m_currentState!=STATE_JUMPBACK&&m_currentState!=STATE_BUTTBOUNCEUP)
+			m_currentState!=STATE_JUMPBACK&&m_currentState!=STATE_BUTTBOUNCEUP&&
+			m_currentState!=STATE_FLOAT)
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();

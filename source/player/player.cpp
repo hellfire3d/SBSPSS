@@ -814,7 +814,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		{
 			GameScene.GetLevel().destroyMapTile(oldPos);
 		}
-			
+
 
 		// Is player stood on any special collision?
 		if(getHeightFromGroundNoPlatform(Pos.vx,Pos.vy,5)==0)
@@ -837,12 +837,12 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 					block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
 			{
 				dieYouPorousFreak(DEATHTYPE__LIQUID);
-			}		
+			}
 			else if(m_currentMode!=PLAYER_MODE_DEAD&&
 					block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
 			{
 				dieYouPorousFreak(DEATHTYPE__NORMAL);
-			}		
+			}
 		}
 
 		// Powerups
@@ -1559,6 +1559,17 @@ void	CPlayer::springPlayerUp(int _springHeight)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayer::setFloating()
+{
+	m_currentPlayerModeClass->setFloating();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int haha=25;
 void	CPlayer::floatPlayerUp()
 {
@@ -1814,6 +1825,16 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 
 	// Render SB
 	ft4=m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+	CThing	*platform;
+	platform=isOnPlatform();
+	if(platform)
+	{
+		if ( ( (CNpcPlatform *) platform )->isCart() )
+		{
+			m_actorGfx->RotateScale( ft4, *_pos, ( (CNpcPlatform *) platform )->getCollisionAngle(), ONE, ONE );
+		}
+	}
+
 	setSemiTrans(ft4,trans);
 }
 
@@ -2402,7 +2423,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 			_moveDistance=0;
 			hitGround=true;
 		}
-	
+
 	}
 	else
 	{

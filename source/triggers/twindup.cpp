@@ -33,9 +33,12 @@ void	CWindUpTrigger::collidedWith(CThing *_thisThing)
 			CPlayer *player = (CPlayer *) _thisThing;
 
 			DVECTOR move;
+			move.vx = 0;
 			move.vy = -4 * GameState::getFramesSinceLast();
 
 			player->shove( move );
+			move.vx = player->getMoveVelocity()->vx;
+			player->setMoveVelocity( &move );
 			player->setFloating();
 
 			break;

@@ -131,6 +131,22 @@
 #include "triggers\tsrightemit.h"
 #endif
 
+#ifndef __TRIGGERS_TWINDUP_H__
+#include "triggers\twindup.h"
+#endif
+
+#ifndef __TRIGGERS_TWINDDOWN_H__
+#include "triggers\twinddown.h"
+#endif
+
+#ifndef __TRIGGERS_TWINDLEFT_H__
+#include "triggers\twindleft.h"
+#endif
+
+#ifndef __TRIGGERS_TWINDRIGHT_H__
+#include "triggers\twindright.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -289,6 +305,26 @@ CTrigger	*trigger;
 		// Steam switch emitter
 		case TRIGGER_STEAM_SWITCH_EMITTER:
 			trigger=(CSteamSwitchEmitterTrigger*)new("SteamSwitchEmitterTrigger") CSteamSwitchEmitterTrigger();
+			break;
+
+		// Wind up
+		case TRIGGER_WIND_UP:
+			trigger = (CWindUpTrigger*)new("WindUpTrigger") CWindUpTrigger();
+			break;
+
+		// Wind down
+		case TRIGGER_WIND_DOWN:
+			trigger = (CWindDownTrigger*)new("WindDownTrigger") CWindDownTrigger();
+			break;
+
+		// Wind up
+		case TRIGGER_WIND_LEFT:
+			trigger = (CWindLeftTrigger*)new("WindLeftTrigger") CWindLeftTrigger();
+			break;
+
+		// Wind up
+		case TRIGGER_WIND_RIGHT:
+			trigger = (CWindRightTrigger*)new("WindRightTrigger") CWindRightTrigger();
 			break;
 
 		default:

@@ -123,6 +123,7 @@ public:
 	virtual void		trigger()												{;}
 	virtual u8			isCart()												{return( false );}
 	virtual void		jump()													{;}
+	s16					getCollisionAngle()										{return m_collisionAngle;}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(int Type);
@@ -240,7 +241,6 @@ protected:
 	virtual void	calculateBoundingBoxSize();
 
 	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
-	s16				getCollisionAngle()							{return m_collisionAngle;}
 	s16				m_collisionAngle;
 
 

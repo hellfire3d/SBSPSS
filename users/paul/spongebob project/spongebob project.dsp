@@ -1743,6 +1743,14 @@ SOURCE=..\..\..\source\player\psfall.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\psfloat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psfloat.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pshitgnd.cpp
 # End Source File
 # Begin Source File
@@ -2370,6 +2378,38 @@ SOURCE=..\..\..\source\triggers\twdripemit.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\twdripemit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twinddown.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twinddown.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindleft.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindleft.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindright.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindright.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twindup.h
 # End Source File
 # End Group
 # Begin Group "utils"

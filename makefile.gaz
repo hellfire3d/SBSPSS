@@ -283,7 +283,8 @@ player_src :=		demoplay \
 					psjump \
 					psrun \
 					psspring \
-					pscart
+					pscart \
+					psfloat
 
 script_src :=		script \
 					function
@@ -335,7 +336,11 @@ triggers_src :=		trigger \
 					tldripemit \
 					tsdownemit \
 					tsleftemit \
-					tsrightemit
+					tsrightemit \
+					twindup \
+					twinddown \
+					twindleft \
+					twindright
 
 utils_src :=		utils \
 					sincos \

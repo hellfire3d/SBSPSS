@@ -92,6 +92,7 @@ public:
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 	virtual int		canDoLookAround()					{return false;}
 	virtual void	springPlayerUp(int _springHeight)	{;}
+	virtual void	setFloating()						{;}
 	void			inSoakUpState();
 
 	virtual int		setState(int _state)				{return 0;}
@@ -128,6 +129,7 @@ public:
 	virtual void	render()							{;}
 	virtual int		canDoLookAround();
 	virtual void	springPlayerUp(int _springHeight)	{m_springHeight=_springHeight;setState(STATE_SPRINGUP);}
+	virtual void	setFloating()						{setState( STATE_FLOAT );}
 
 	virtual ATTACK_STATE	getAttackState();
 
