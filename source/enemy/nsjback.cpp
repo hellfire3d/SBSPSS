@@ -267,3 +267,97 @@ void CNpcSmallJellyfishBackgroundEnemy::render()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+u8 CNpcSmallJellyfishBackgroundEnemy::hasBeenAttacked()
+{
+	// do nothing
+
+	return( false );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSmallJellyfishBackgroundEnemy::collidedWith( CThing *_thisThing )
+{
+	// do nothing
+	/*if ( m_isActive && !m_isCaught && !m_isDying )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				ATTACK_STATE playerState = player->getAttackState();
+
+				if(playerState==ATTACK_STATE__NONE)
+				{
+					if ( !player->isRecoveringFromHit() )
+					{
+						switch( m_data[m_type].detectCollision )
+						{
+							case DETECT_NO_COLLISION:
+							{
+								// ignore
+
+								break;
+							}
+
+							case DETECT_ALL_COLLISION:
+							{
+								m_oldControlFunc = m_controlFunc;
+								m_controlFunc = NPC_CONTROL_COLLISION;
+
+								processUserCollision( _thisThing );
+
+								break;
+							}
+
+							case DETECT_ATTACK_COLLISION_GENERIC:
+							{
+								processAttackCollision();
+								processUserCollision( _thisThing );
+
+								break;
+							}
+						}
+					}
+				}
+				else
+				{
+					// player is attacking, respond appropriately
+
+					if ( m_controlFunc != NPC_CONTROL_SHOT )
+					{
+						if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+						{
+							player->justButtBouncedABadGuy();
+						}
+						m_controlFunc = NPC_CONTROL_SHOT;
+						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+					}
+				}
+
+				break;
+			}
+
+			case TYPE_ENEMY:
+			{
+				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+				if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
+				{
+					processEnemyCollision( _thisThing );
+				}
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
+		}
+	}*/
+}

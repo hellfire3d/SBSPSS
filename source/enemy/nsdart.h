@@ -27,6 +27,13 @@ public:
 	virtual void		fireAsProjectile( s16 heading );
 protected:
 	virtual s32			getFrameShift( int _frames );
+	virtual bool		processSensor();
+	virtual void		processClose( int _frames );
+
+	DVECTOR				m_circleCentre;
+	s16					m_angularDistance;
+	s16					m_startAngle;
+	s32					m_circleRadius;
 };
 
 #endif

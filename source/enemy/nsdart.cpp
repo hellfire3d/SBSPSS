@@ -31,6 +31,10 @@
 #include "projectl\prnpcspr.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,10 +49,24 @@ void CNpcSquidDartEnemy::render()
 		if (canRender())
 		{
 			DVECTOR &renderPos=getRenderPos();
+			
+			// bodge
+			if ( m_reversed )
+			{
+				renderPos.vx += 32;
+			}
+			else
+			{
+				renderPos.vx -= 32;
+			}
+
+			renderPos.vy -= 6;
+			// bodge
 
 			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
 			SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
+
 			//setRGB0( SprFrame, 255, 128, 255 );
 
 			/*s32 XMax = SprFrame->x1 - origRenderPos.vx;
@@ -64,7 +82,8 @@ void CNpcSquidDartEnemy::render()
 			s32 YMin = SprFrame->y0 - renderPos.vy;
 
 			setCollisionSize( ( XMax - XMin ), ( YMax - YMin ) );
-			setCollisionCentreOffset( ( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
+			// bodge
+			setCollisionCentreOffset( 0, 0 ); //( XMax + XMin ) >> 1, ( YMax + YMin ) >> 1 );
 		}
 	}
 }
@@ -98,4 +117,66 @@ void CNpcSquidDartEnemy::fireAsProjectile( s16 heading )
 s32 CNpcSquidDartEnemy::getFrameShift( int _frames )
 {
 	return( ( _frames << 8 ) >> 2 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcSquidDartEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr + playerYDistSqr < 20000 )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+
+				m_circleCentre.vx = Pos.vx + ( playerXDist >> 1 );
+				m_circleCentre.vy = Pos.vy + ( playerYDist >> 1 );
+
+				m_startAngle = ratan2( Pos.vy - m_circleCentre.vy, Pos.vx - m_circleCentre.vx );
+				m_startAngle &= 4095;
+
+				m_circleRadius = isqrt2( playerXDistSqr + playerYDistSqr ) >> 1;
+
+				m_circleCentre.vx = Pos.vx - ( ( m_circleRadius * rcos( m_startAngle ) ) >> 12 );
+				m_circleCentre.vy = Pos.vy - ( ( m_circleRadius * rsin( m_startAngle ) ) >> 12 );
+
+				m_angularDistance = 0;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSquidDartEnemy::processClose( int _frames )
+{
+	s16 m_currentAngle;
+
+	m_currentAngle = ( m_startAngle + m_angularDistance ) & 4095;
+
+	m_heading = ( m_currentAngle + 1024 ) & 4095;
+
+	Pos.vx = m_circleCentre.vx + ( ( m_circleRadius * rcos( m_currentAngle ) ) >> 12 );
+	Pos.vy = m_circleCentre.vy + ( ( m_circleRadius * rsin( m_currentAngle ) ) >> 12 );
+
+	m_angularDistance += 64 * _frames;
+
+	if ( m_angularDistance > 4095 )
+	{
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+	}
 }

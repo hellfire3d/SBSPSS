@@ -28,13 +28,13 @@
 
 void CNpcClamPlatform::render()
 {
+	CNpcPlatform::render();
+
 	if (canRender())
 	{
-		//CNpcPlatform::render();
-
+	#if defined (__USER_paul__) || defined (__USER_charles__)
 		DVECTOR &renderPos=getRenderPos();
 
-	#if defined (__USER_paul__) || defined (__USER_charles__)
 		DVECTOR	offset = CLevel::getCameraPos();
 		DVECTOR size;
 		DVECTOR	centre;

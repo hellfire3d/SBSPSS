@@ -104,7 +104,7 @@ public:
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
-	void				hasBeenAttacked();
+	virtual u8			hasBeenAttacked();
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
 	virtual int			getFrameCount();

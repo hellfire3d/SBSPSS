@@ -570,9 +570,10 @@ void CPlayerProjectile::collidedWith(CThing *_thisThing)
 		{
 			CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
 
-			enemy->hasBeenAttacked();
-
-			setToShutdown();
+			if ( enemy->hasBeenAttacked() )
+			{
+				setToShutdown();
+			}
 
 			break;
 		}

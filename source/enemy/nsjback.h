@@ -24,11 +24,13 @@ public:
 	virtual void		render();
 	virtual void		postInit();
 	virtual void		setTargetHeading( s16 newTargetHeading )			{m_targetHeading = newTargetHeading;}
+	virtual u8			hasBeenAttacked();
 protected:
 	virtual bool		processSensor();
 	virtual void		processMovement( int _frames );
 	virtual void		shutdown();
 	virtual void		processUserCollision( CThing *thisThing );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	s16					m_targetHeading;
 };
