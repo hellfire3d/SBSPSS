@@ -19,6 +19,14 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPendulumPlatform::postInit()
@@ -28,6 +36,8 @@ void CNpcPendulumPlatform::postInit()
 	m_extendDir = EXTEND_LEFT;
 	m_extension = 0;
 	m_heading = 1024;
+	m_lineBase.vx = Pos.vx;
+	m_lineBase.vy = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,3 +116,112 @@ void CNpcPendulumPlatform::processMovement( int _frames )
 	Pos.vy = m_base.vy + ( ( m_length * rsin( m_heading + m_extension ) ) >> 12 );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPendulumPlatform::render()
+{
+	int		x1,y1,x2,y2;
+	int		x1Boundary,y1Boundary,x2Boundary,y2Boundary;
+
+	setOnScreenFlag(false);
+	if ( m_isActive )
+	{
+		CPlatformThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		CRECT collisionRect = getCollisionArea();
+		collisionRect.x1 -= Pos.vx;
+		collisionRect.x2 -= Pos.vx;
+		collisionRect.y1 -= Pos.vy;
+		collisionRect.y2 -= Pos.vy;
+
+		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		{
+			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
+			{
+				setOnScreenFlag(true);
+				m_modelGfx->Render(renderPos);
+//				POLY_F4	*F4=GetPrimF4();
+//				setXYWH(F4,renderPos.vx-32,renderPos.vy-32,64,16);
+//				setRGB0(F4,127,127,64);
+//				AddPrimToList(F4,2);
+
+#if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
+	DVECTOR	centre;
+	int		halfLength;
+
+	centre=getCollisionCentre();
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
+
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
+			}
+		}
+
+		x1 = x1Boundary = Pos.vx - offset.vx;
+		x2 = x2Boundary = m_lineBase.vx - offset.vx;
+
+		y1 = y1Boundary = Pos.vy - offset.vy;
+		y2 = y2Boundary = m_lineBase.vy - offset.vy;
+
+		int angle = ratan2( x1 - x2, y1 - y2 );
+
+		if ( y2 < 0 )
+		{
+			int yDiff = -y2;
+			y2 = y2Boundary = 0;
+			int hyp = ( yDiff << 12 ) / rcos( angle );
+			x2 += ( hyp * rsin( angle ) ) >> 12;
+		}
+		
+		if ( y1 > VidGetScrH() )
+		{
+			int yDiff = y1 - VidGetScrH();
+			y1 = y1Boundary = VidGetScrH();
+			int hyp = ( yDiff << 12 ) / rcos( angle );
+			x1 -= ( hyp * rsin( angle ) ) >> 12;
+		}
+
+		if ( x1Boundary > x2Boundary )
+		{
+			int tempX = x1Boundary;
+			x1Boundary = x2Boundary;
+			x2Boundary = tempX;
+		}
+
+		if ( y1Boundary > y2Boundary )
+		{
+			int tempY = y1Boundary;
+			y1Boundary = y2Boundary;
+			y2Boundary = tempY;
+		}
+
+		if ( x2Boundary >= 0 && x1Boundary <= VidGetScrW() )
+		{
+			if ( y2Boundary >= 0 && y1Boundary <= VidGetScrH() )
+			{
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+			}
+		}
+	}
+}

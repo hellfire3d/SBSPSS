@@ -22,12 +22,14 @@ class CNpcPendulumPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
+	virtual void		render();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
 
 	s32					m_length;
 	s32					m_maxExtension;
+	DVECTOR				m_lineBase;
 };
 
 #endif

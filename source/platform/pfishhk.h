@@ -22,11 +22,13 @@ class CNpcFishHookPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
+	virtual void		render();
 protected:
 	virtual void		processLifetime( int _frames );
 	virtual void		processMovement( int _frames );
 
 	u8					m_isMoving;
+	DVECTOR				m_lineBase;
 };
 
 #endif
