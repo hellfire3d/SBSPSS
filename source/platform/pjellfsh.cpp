@@ -39,7 +39,7 @@ void CNpcJellyfishPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
 	boundingBox.YMin += 8;
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) - 16, ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
 	calculateNonRotatedCollisionData();
@@ -87,6 +87,17 @@ CRECT const		&collisionArea=getCollisionArea();
 					if( height == 0 )
 					{
 						m_contact = true;
+
+						DVECTOR playerDelta;
+
+						playerDelta = player->getPosDelta();
+
+						if ( playerDelta.vy == 0 )
+						{
+							// force dip to complete since player is not dropping onto jellyfish
+
+							m_dipCount = GameState::getOneSecondInFrames();
+						}
 
 						if ( m_contactTimeout <= 0 )
 						{

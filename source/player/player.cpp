@@ -2760,8 +2760,19 @@ int		CPlayer::moveVertical(int _moveDistance)
 			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 			{
 				moveRequired[i]=16+colHeightAfter[i];
-				hitGround=true;
+//				hitGround=true;
+
+				// do not call hitground code, because this will set it to STATE_IDLE for a frame
+				// instead, do the appropriate stuff for a fall
+
 				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
+				m_currentPlayerModeClass->setState(STATE_FALL);
+				DVECTOR	moveVel;
+
+				moveVel=*getMoveVelocity();
+				moveVel.vy=0;
+				m_fallFrames=0;
+				setMoveVelocity(&moveVel);
 			}
 			else
 			{
