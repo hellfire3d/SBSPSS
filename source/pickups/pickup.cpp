@@ -162,14 +162,8 @@ void	CBasePickup::render()
 		renderPickup(&pos);
 	}
 	/*
-	DVECTOR	ofs;
-	int		x,y;
-
-	ofs=getRenderOffset();
-	x=Pos.vx-ofs.vx;
-	y=Pos.vy-ofs.vy;
-	DrawLine(x-15,y-15,x+15,y+15,255,255,255,0);
-	DrawLine(x+15,y-15,x-15,y+15,255,255,255,0);
+	DrawLine(pos.vx-15,pos.vy-15,pos.vx+15,pos.vy+15,255,255,255,0);
+	DrawLine(pos.vx+15,pos.vy-15,pos.vx-15,pos.vy+15,255,255,255,0);
 	*/
 }
 
