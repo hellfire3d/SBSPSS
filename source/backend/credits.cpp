@@ -305,11 +305,12 @@ static u16	s_creditData[]=
 
 
 
-int LINE_BREAK_SIZE=10;
-int BIG_TITLE_FONT_SIZE=448;
-int TITLE_FONT_SIZE=384;
-int NAME_FONT_SIZE=256;
-int	DELAY_TIME=4*60;
+const int LINE_BREAK_SIZE=10;
+const int BIG_TITLE_FONT_SIZE=448;
+const int TITLE_FONT_SIZE=352;
+const int TITLE_FONT_OFS=4;
+const int NAME_FONT_SIZE=256;
+const int	DELAY_TIME=4*60;
 
 CCreditsScene	CreditsScene;
 
@@ -575,7 +576,7 @@ void CCreditsScene::renderCreditsListTillEndOfPage(u16 *_list)
 						m_font->setScale(TITLE_FONT_SIZE);
 						if(mode==RENDER)
 						{
-							m_font->print(256,y,data);
+							m_font->print(256,y-TITLE_FONT_OFS,data);
 						}
 						y+=m_font->getStringHeight(data);
 					}
