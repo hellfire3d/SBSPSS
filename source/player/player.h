@@ -89,6 +89,7 @@ typedef enum
 	PLAYER_ADDON_JELLYLAUNCHER,
 	PLAYER_ADDON_GLASSES,
 	PLAYER_ADDON_BUBBLEWAND,
+	PLAYER_ADDON_JELLYFISHINNET,
 
 	NUM_PLAYER_ADDONS,
 	NO_ADDON,
@@ -187,7 +188,9 @@ public:
 	void			setCameraBox(CameraBox _cameraBox);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 
+	// This isn't funny anymore.. :(
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
+	int				getHeightFromPlatformNoGround(int _x,int _y,int _maxHeight=32);
 	int				getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32);
 
 	void			setLedgeLookAhead(int _lookAhead)					{m_ledgeLookAhead=_lookAhead;}
@@ -336,8 +339,10 @@ public:
 	void			useOneJelly()				{m_jellyAmmo--;}
 	int				getJellyAmmo()				{return m_jellyAmmo;}
 
-	void			setIsInWater(int _in)			{m_isInWater=_in;}
+	void			setIsInWater(int _in)		{m_isInWater=_in;}
 	int				getIsInWater()				{return m_isInWater;}
+
+	int				isHoldingNet()				{m_currentMode==PLAYER_MODE_NET;}
 
 private:
 	int				m_glassesFlag;

@@ -108,14 +108,17 @@
 #include <ACTOR_SPONGEBOB_JELLYLAUNCHER_Anim.h>
 #endif
 
-//#ifndef	__ANIM_SPONGEBOB_GLASSES_HEADER__
-//#include <ACTOR_SPONGEBOB_GLASSES_Anim.h>
-//#endif
+#ifndef	__ANIM_SPONGEBOB_GLASSES_HEADER__
+#include <ACTOR_SPONGEBOB_GLASSES_Anim.h>
+#endif
 
 //#ifndef	__ANIM_SPONGEBOB_BUBBLEWAND_HEADER__
 //#include <ACTOR_SPONGEBOB_BUBBLEWAND_Anim.h>
 //#endif
 
+#ifndef	__ANIM_SPONGEBOB_JELLYFISH_HEADER__
+#include <ACTOR_SPONGEBOB_JELLYFISH_Anim.h>
+#endif
 
 
 /*----------------------------------------------------------------------
@@ -272,14 +275,16 @@ CActorGfx		*s_addonActorGfx[NUM_PLAYER_ADDONS]=
 	NULL,										// PLAYER_ADDON_JELLYLAUNCHER
 	NULL,										// PLAYER_ADDON_GLASSES
 	NULL,										// PLAYER_ADDON_BUBBLEWAND
+	NULL,										// PLAYER_ADDON_JELLYFISHINNET
 };
 FileEquate		s_addonActorPoolNames[NUM_PLAYER_ADDONS]=
 {
 	ACTORS_SPONGEBOB_NET_SBK,					// PLAYER_ADDON_NET
 	ACTORS_SPONGEBOB_CORALBLOWER_SBK,			// PLAYER_ADDON_CORALBLOWER
 	ACTORS_SPONGEBOB_JELLYLAUNCHER_SBK,			// PLAYER_ADDON_JELLYLAUNCHER
-	(FileEquate)-1,					// PLAYER_ADDON_GLASSES
+	ACTORS_SPONGEBOB_GLASSES_SBK,				// PLAYER_ADDON_GLASSES
 	(FileEquate)-1,					// PLAYER_ADDON_BUBBLEWAND
+	ACTORS_SPONGEBOB_JELLYFISH_SBK,				// PLAYER_ADDON_JELLYFISHINNET
 };
 PLAYER_ADDONS	s_addonNumbers[NUM_PLAYERMODES]=
 {
@@ -332,13 +337,13 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_CORALBLOWER_GETUP,				// ANIM_SPONGEBOB_GETUP,
 	ANIM_SPONGEBOB_CORALBLOWER_HITGROUND,			// ANIM_SPONGEBOB_HITGROUND,
 	ANIM_SPONGEBOB_CORALBLOWER_IDLEBREATH,			// ANIM_SPONGEBOB_IDLEBREATH,
-	ANIM_SPONGEBOB_CORALBLOWER_IDLEWIND,			// ANIM_SPONGEBOB_IDLEWIND,
+	-1,												// ANIM_SPONGEBOB_IDLEWIND,
 	ANIM_SPONGEBOB_CORALBLOWER_JUMPEND,				// ANIM_SPONGEBOB_JUMPEND,
 	ANIM_SPONGEBOB_CORALBLOWER_JUMP,				// ANIM_SPONGEBOB_JUMP,
 	-1,												// ANIM_SPONGEBOB_RUN,
 	-1,												// ANIM_SPONGEBOB_RUNSTOP,
 	-1,												// ANIM_SPONGEBOB_RUNSTART,
-	ANIM_SPONGEBOB_CORALBLOWER_SOAKUP,				// ANIM_SPONGEBOB_SOAKUP,
+	-1,												// ANIM_SPONGEBOB_SOAKUP,
 	ANIM_SPONGEBOB_CORALBLOWER_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
 	ANIM_SPONGEBOB_CORALBLOWER_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
 	-1,												// ANIM_SPONGEBOB_SWIPE,
@@ -347,7 +352,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
 	ANIM_SPONGEBOB_CORALBLOWER_FIREEND,				// ANIM_SPONGEBOB_FIREEND,
 	ANIM_SPONGEBOB_CORALBLOWER_FIRESTART,			// ANIM_SPONGEBOB_FIRESTART,
-	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	ANIM_SPONGEBOB_CORALBLOWER_IDLEWEAPON,			// ANIM_SPONGEBOB_IDLEWEAPON,
 	ANIM_SPONGEBOB_CORALBLOWER_WALK,				// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
 	},
@@ -382,30 +387,30 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 
 	// PLAYER_ADDON_GLASSES,
 	{
-	-1,		// ANIM_SPONGEBOB_BUTTBOUNCEEND,
-	-1,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
-	-1,				// ANIM_SPONGEBOB_FALL,
-	-1,				// ANIM_SPONGEBOB_GETUP,
-	-1,			// ANIM_SPONGEBOB_HITGROUND,
-	-1,			// ANIM_SPONGEBOB_IDLEBREATH,
-	-1,			// ANIM_SPONGEBOB_IDLEWIND,
-	-1,				// ANIM_SPONGEBOB_JUMPEND,
-	-1,				// ANIM_SPONGEBOB_JUMP,
-	-1,					// ANIM_SPONGEBOB_RUN,
-	-1,				// ANIM_SPONGEBOB_RUNSTOP,
-	-1,			// ANIM_SPONGEBOB_RUNSTART,
-	-1,				// ANIM_SPONGEBOB_SOAKUP,
-	-1,			// ANIM_SPONGEBOB_TEETERBACK,
-	-1,			// ANIM_SPONGEBOB_TEETERFRONT,
-	-1,				// ANIM_SPONGEBOB_SWIPE,
-	-1,			// ANIM_SPONGEBOB_DEATHSPIN,
-	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
-	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
-	-1,										// ANIM_SPONGEBOB_FIREEND,
-	-1,										// ANIM_SPONGEBOB_FIRESTART,
-	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
-	-1,										// ANIM_SPONGEBOB_WALK,
-	-1,										// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_GLASSES_BUTTBOUNCEEND,			// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	ANIM_SPONGEBOB_GLASSES_BUTTBOUNCESTART,			// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_GLASSES_FALL,					// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_GLASSES_GETUP,					// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_GLASSES_HITGROUND,				// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_GLASSES_IDLEBREATH,				// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_GLASSES_IDLEWIND,				// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_GLASSES_JUMPEND,					// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_GLASSES_JUMP,					// ANIM_SPONGEBOB_JUMP,
+	ANIM_SPONGEBOB_GLASSES_RUN,						// ANIM_SPONGEBOB_RUN,
+	ANIM_SPONGEBOB_GLASSES_RUNSTOP,					// ANIM_SPONGEBOB_RUNSTOP,
+	ANIM_SPONGEBOB_GLASSES_RUNSTART,				// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_GLASSES_SOAKUP,					// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_GLASSES_TEETERBACK,				// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_GLASSES_TEETERFRONT,				// ANIM_SPONGEBOB_TEETERFRONT,
+	ANIM_SPONGEBOB_GLASSES_SWIPE,					// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_GLASSES_DEATHSPIN,				// ANIM_SPONGEBOB_DEATHSPIN,
+	ANIM_SPONGEBOB_GLASSES_BALLOONJUMP,				// ANIM_SPONGEBOB_BALLOONJUMP,
+	ANIM_SPONGEBOB_GLASSES_BLOWBUBBLE,				// ANIM_SPONGEBOB_BLOWBUBBLE,
+	ANIM_SPONGEBOB_GLASSES_FIREEND,					// ANIM_SPONGEBOB_FIREEND,
+	ANIM_SPONGEBOB_GLASSES_FIRESTART,				// ANIM_SPONGEBOB_FIRESTART,
+	ANIM_SPONGEBOB_GLASSES_IDLEWEAPON,				// ANIM_SPONGEBOB_IDLEWEAPON,
+	ANIM_SPONGEBOB_GLASSES_WALK,					// ANIM_SPONGEBOB_WALK,
+	ANIM_SPONGEBOB_GLASSES_KARATE,					// ANIM_SPONGEBOB_KARATE,
 	},
 
 	// PLAYER_ADDON_BUBBLEWAND,
@@ -434,6 +439,34 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,										// ANIM_SPONGEBOB_WALK,
 	-1,										// ANIM_SPONGEBOB_KARATE,
+	},
+
+	// PLAYER_ADDON_JELLYFISHINNET
+	{
+	ANIM_SPONGEBOB_JELLYFISH_BUTTBOUNCEEND,			// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	ANIM_SPONGEBOB_JELLYFISH_BUTTBOUNCESTART,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_JELLYFISH_FALL,					// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_JELLYFISH_GETUP,					// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_JELLYFISH_HITGROUND,				// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_JELLYFISH_IDLEBREATH,			// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_JELLYFISH_IDLEWIND,				// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_JELLYFISH_JUMPEND,				// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_JELLYFISH_JUMP,					// ANIM_SPONGEBOB_JUMP,
+	ANIM_SPONGEBOB_JELLYFISH_RUN,					// ANIM_SPONGEBOB_RUN,
+	ANIM_SPONGEBOB_JELLYFISH_RUNSTOP,				// ANIM_SPONGEBOB_RUNSTOP,
+	ANIM_SPONGEBOB_JELLYFISH_RUNSTART,				// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_JELLYFISH_SOAKUP,				// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_JELLYFISH_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_JELLYFISH_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
+	ANIM_SPONGEBOB_JELLYFISH_SWIPE,					// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_JELLYFISH_DEATHSPIN,				// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,												// ANIM_SPONGEBOB_FIREEND,
+	-1,												// ANIM_SPONGEBOB_FIRESTART,
+	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,												// ANIM_SPONGEBOB_WALK,
+	-1,												// ANIM_SPONGEBOB_KARATE,
 	},
 };
 
@@ -846,6 +879,14 @@ m_fontBank->print(stateDebugX,stateDebugY,buf);
 
 
 #ifdef __USER_paul__
+if(PadGetDown(0)&PAD_R1)
+{
+	DVECTOR	clear={0,0};
+	for(int i=0;i<NUM_LASTPOS;i++)
+	{
+		lastpos[i]=clear;
+	}
+}
 if(Pos.vx!=lastpos[lastposnum].vx||Pos.vy!=lastpos[lastposnum].vy)
 {
 	lastposnum=(lastposnum+1)%NUM_LASTPOS;
@@ -1012,6 +1053,28 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 
 	return height;
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayer::getHeightFromPlatformNoGround(int _x,int _y,int _maxHeight)
+{
+	CThing	*platform;
+	int		height;
+
+	platform=isOnPlatform();
+	ASSERT(platform);
+	height=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(_x,_y);
+	if(height>_maxHeight)height=_maxHeight;
+	else if(height<-_maxHeight)height=-_maxHeight;
+
+	return height;
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1333,35 +1396,39 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	addon=s_addonNumbers[m_currentMode];
 	if(addon!=NO_ADDON)
 	{
-		s8	addonAnimFrame=s_animMapNet[addon][_animNo];
-		if(addonAnimFrame!=-1)
+		s8	addonAnimNo=s_animMapNet[addon][_animNo];
+		if(addonAnimNo!=-1)
 		{
 			CActorGfx	*addonGfx=s_addonActorGfx[addon];
 			if(addonGfx&&
-			   _animFrame>=addonGfx->getFrameCount(addonAnimFrame))
+			   _animFrame>=addonGfx->getFrameCount(addonAnimNo))
 			{
-				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!");
-				_animFrame=0;
+				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
 			}
-			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
-			setSemiTrans(ft4,trans);
+			else
+			{
+				ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+				setSemiTrans(ft4,trans);
+			}
 		}
 	}
 
 	// Render glasses addon?
 	if(isWearingGlasses())
 	{
-		s8	addonAnimFrame=s_animMapNet[PLAYER_ADDON_GLASSES][_animNo];
-		if(addonAnimFrame!=-1)
+		s8	addonAnimNo=s_animMapNet[PLAYER_ADDON_GLASSES][_animNo];
+		if(addonAnimNo!=-1)
 		{
 			CActorGfx	*addonGfx=s_addonActorGfx[PLAYER_ADDON_GLASSES];
-			if(_animFrame>=addonGfx->getFrameCount(addonAnimFrame))
+			if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
 			{
-				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!");
-				_animFrame=0;
+				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
 			}
-			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
-			setSemiTrans(ft4,trans);
+			else
+			{
+				ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+				setSemiTrans(ft4,trans);
+			}
 		}
 	}
 
@@ -1711,14 +1778,24 @@ int		CPlayer::moveVertical(int _moveDistance)
 	{
 		int colHeightBefore,colHeightAfter;
 
-		// Yes.. Check to see if we're about to hit/go through the ground
-		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
-		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		// Yes.. Check to see if we're about to hit/go through the ground/platform
+		if(!isOnPlatform())
+		{
+			colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
+			colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		}
+		else
+		{
+			colHeightBefore=getHeightFromPlatformNoGround(pos.vx,pos.vy,16);
+			colHeightAfter=getHeightFromPlatformNoGround(pos.vx,pos.vy+_moveDistance,16);
+		}
+
 		if(colHeightBefore>=0&&colHeightAfter<=0)
 		{
 			// About to hit a 'fall to death' block?
-			if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=(7<<COLLISION_TYPE_FLAG_SHIFT))
+			if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH)
 			{
+				// No
 				// Stick at ground level
 				pos.vy+=colHeightAfter+_moveDistance;
 				_moveDistance=0;
@@ -1726,6 +1803,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 			}
 			else
 			{
+				// Yeah!
 				if(m_currentMode!=PLAYER_MODE_DEAD)
 				{
 					// Lock the camera, kill the player and let him fall to his death..
@@ -1735,7 +1813,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 			}
 		}
 	}
-	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
+	else
 	{
 		// Must be below ground
 		// Are we jumping into an impassable block?
