@@ -67,7 +67,53 @@ $(LEVELS_OUT_DIR)/%.lvl : $(LEVELS_IN_DIR)/%.pme
 GFX_DATA_OUT +=	$(LEVELS_OUT)
 
 #----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+# Actors
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+ACTOR_IN_DIR :=			$(GRAF_DIR)/Characters
+ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
+ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/Actors
+ACTORS_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
+
+# Global flags
+GENERIC_ACT_TEX_FLAGS =	-c+ -t:27,1,1 -w+ -b+
+GEN_GRP_TEX_FLAGS=		-t:28,1,1
+
+actors:			player
+	
+cleanactors:	cleanplayer
+
+#----------------------------------------------------------------------------
+# Player
+#----------------------------------------------------------------------------
+
+PLAYER_FILE :=		SpongeBob
+PLAYER_IN_DIR:=		$(ACTOR_IN_DIR)/$(PLAYER_FILE)
+PLAYER_OUT_DIR :=	$(ACTOR_OUT_DIR)
+
+PLAYER_MOD_IN :=	$(PLAYER_IN_DIR)/$(PLAYER_FILE).Gin
+PLAYER_MOD_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).a3d
+PLAYER_TEX_IN :=	$(PLAYER_IN_DIR)/*.bmp
+PLAYER_TEX_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).Tex
+
+PLAYER_DEP_IN :=	$(PLAYER_MOD_IN) $(PLAYER_TEX_IN)
+PLAYER_DEP_OUT :=	$(PLAYER_MOD_OUT) $(PLAYER_TEX_OUT)
+
+player: $(PLAYER_DEP_OUT)
+	
+cleanplayer:
+	@$(RM) -f $(PLAYER_DEP_OUT)
+	
+$(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
+	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:23,1,1
+
+GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
+
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #	Text translations
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 .PHONY: translate cleantranslate
 
@@ -325,6 +371,7 @@ GFX_DATA_OUT		+=	$(SCRIPTS_OUT)
 
 GRAF_DIRS_TO_MAKE +=	$(TRANS_OUT_DIR) \
 						$(UI_GFX_OUT_DIR) \
+						$(ACTORS_DIRS_TO_MAKE) \
 						$(LEVELS_OUT_DIRS)
 
 gdirs : $(GRAF_DIRS_TO_MAKE)
@@ -364,6 +411,7 @@ $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 # WARNING !!!! BigLump must be the last item that all is dependant on. GRL !!!!
 
 all : 	dirs gdirs \
+		actors \
 		levels \
 		biglump
 		@$(ECHO) Graphics made
