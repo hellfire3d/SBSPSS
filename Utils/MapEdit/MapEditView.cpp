@@ -6,7 +6,6 @@
 #include	<gl\glu.h>
 #include	<gl\glut.h>
 #include	"GLEnabledView.h"
-
 #include	"MapEdit.h"
 
 #include	"MapEditDoc.h"
@@ -26,11 +25,14 @@ IMPLEMENT_DYNCREATE(CMapEditView, CGLEnabledView)
 BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	//{{AFX_MSG_MAP(CMapEditView)
 	ON_WM_SETFOCUS()
+	ON_WM_LBUTTONUP()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MBUTTONDOWN()
+	ON_WM_MBUTTONUP()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
 	//}}AFX_MSG_MAP
-	// Standard printing commands
-	ON_COMMAND(ID_FILE_PRINT, CGLEnabledView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, CGLEnabledView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CGLEnabledView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -38,9 +40,6 @@ END_MESSAGE_MAP()
 
 CMapEditView::CMapEditView()
 {
-	TRACE0("Here");
-	// TODO: add construction code here
-
 }
 
 CMapEditView::~CMapEditView()
@@ -48,22 +47,35 @@ CMapEditView::~CMapEditView()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CMapEditView printing
-
-BOOL CMapEditView::OnPreparePrinting(CPrintInfo* pInfo)
+void CMapEditView::VideoMode(ColorsNumber & c, ZAccuracy & z, BOOL & dbuf)
 {
-	// default preparation
-	return DoPreparePrinting(pInfo);
+	c=THOUSANDS;	// ask for 65355 colors...
+	z=NORMAL;		// ...16 bit Z-buffer...
+	dbuf=TRUE;		// ...double-buffering
 }
 
-void CMapEditView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+/////////////////////////////////////////////////////////////////////////////
+void CMapEditView::OnCreateGL()
 {
-	// TODO: add extra initialization before printing
+		glEnable(GL_TEXTURE_2D);       // Enable Texture Mapping
+		glShadeModel(GL_SMOOTH);       // Enable Smooth Shading
+		glClearColor(0.0f, 0.0f, 0.0f, 0.5f);    // Black Background
+		glClearDepth(1.0f);         // Depth Buffer Setup
+		glEnable(GL_DEPTH_TEST);       // Enables Depth Testing
+		glDepthFunc(GL_LEQUAL);        // The Type Of Depth Testing To Do
+		glEnable(GL_LIGHT0);        // Quick And Dirty Lighting (Assumes Light0 Is SetUp)
+		glEnable(GL_LIGHTING);        // Enable Lighting
+		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
+
+//Core.Init(this);
+
 }
 
-void CMapEditView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+/////////////////////////////////////////////////////////////////////////////
+void CMapEditView::OnDrawGL()
 {
-	// TODO: add cleanup after printing
+//		Core.Render();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -99,3 +111,17 @@ CMapEditDoc	*CurDoc=GetDocument();
 
 	CurDoc->UpdateAll();	// woohoo, that was easy
 }
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{}
+void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{}
+void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{}
+void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{}
+BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{return(0);}
+void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{}
+void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{}
+
+
+/*********************************************************************************/

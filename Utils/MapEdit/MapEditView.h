@@ -5,6 +5,7 @@
 #if !defined(AFX_MAPEDITVIEW_H__DBE61BE7_547C_43E9_BC46_E55636495066__INCLUDED_)
 #define AFX_MAPEDITVIEW_H__DBE61BE7_547C_43E9_BC46_E55636495066__INCLUDED_
 
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -18,17 +19,14 @@ protected: // create from serialization only
 // Attributes
 public:
 	CMapEditDoc* GetDocument();
-
+	void		OnCreateGL();
+	void		OnDrawGL();
 // Operations
 public:
 
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CMapEditView)
-	protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -40,11 +38,18 @@ public:
 #endif
 
 protected:
-
+	void	VideoMode(ColorsNumber &c,ZAccuracy &z,BOOL &dbuf);
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditView)
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMButtonUp(UINT nFlags, CPoint point);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

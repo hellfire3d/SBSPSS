@@ -65,6 +65,7 @@ LINK32=link.exe
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
@@ -77,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 opengl32.lib glu32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
 !ENDIF 
 
@@ -96,8 +97,12 @@ SOURCE=.\Core.cpp
 
 SOURCE=.\Core.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\gl3d.h
+# End Source File
 # End Group
-# Begin Group "Windows"
+# Begin Group "Shell"
 
 # PROP Default_Filter ""
 # Begin Group "Source Files"
@@ -109,19 +114,7 @@ SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\gl3d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\glcam.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\GLEnabledView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\glfrust.cpp
 # End Source File
 # Begin Source File
 
@@ -162,19 +155,7 @@ SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gl3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\glcam.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GLEnabledView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\glfrust.h
 # End Source File
 # Begin Source File
 
