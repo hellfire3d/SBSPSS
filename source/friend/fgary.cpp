@@ -48,6 +48,9 @@ void CNpcGaryFriend::postInit()
 	m_obstructed = false;
 
 	m_soundId = (int) NOT_PLAYING;
+
+	setCollisionSize( 40, 27 );
+	setCollisionCentreOffset( 0, -14 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,11 +336,6 @@ void CNpcGaryFriend::render()
 
 		frame = m_actorGfx->Render(renderPos,m_animNo,(m_frame>>8),m_reversed);
 		m_actorGfx->RotateScale( frame, renderPos, m_drawRotation, 4096, 4096 );
-
-		sBBox boundingBox = m_actorGfx->GetBBox();
-		boundingBox.YMax = 0;
-		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 	}
 }
 
