@@ -637,6 +637,10 @@ SOURCE=..\..\..\source\gfx\font.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gfx\otpos.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gfx\prim.cpp
 # End Source File
 # Begin Source File
@@ -1566,6 +1570,14 @@ SOURCE=..\..\..\source\triggers\trestart.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\trestart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tteleprt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tteleprt.h
 # End Source File
 # End Group
 # Begin Group "utils"

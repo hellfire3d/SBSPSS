@@ -27,6 +27,10 @@
 #include "triggers\trestart.h"
 #endif
 
+#ifndef	__TRIGGERS_TTELEPRT_H__
+#include "triggers\tteleprt.h"
+#endif
+
 #ifndef __PICKUPS_PICKUP_H__
 #include "pickups\pickup.h"
 #endif
@@ -288,7 +292,6 @@ void	CLevel::initLayers()
 			TriggerCount=Hdr->Count;
 			TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
 
-PAUL_DBGMSG("%d triggers",TriggerCount);
 			for(int i=0;i<TriggerCount;i++)
 			{
 				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
@@ -302,6 +305,11 @@ PAUL_DBGMSG("%d triggers",TriggerCount);
 					// Level respawn trigger
 					case 1:
 						trigger=(CRestartPointTrigger*)new ("RestartTrigger") CRestartPointTrigger();
+						break;
+
+					// Teleport trigger
+					case 2:
+						trigger=(CTeleportTrigger*)new ("TeleportTrigger") CTeleportTrigger();
 						break;
 				}
 				trigger->init();

@@ -229,7 +229,8 @@ thing_src :=		thing
 
 triggers_src :=		tlevexit \
 					tlook \
-					trestart
+					trestart \
+					tteleprt
 
 utils_src :=		utils \
 					sincos \
