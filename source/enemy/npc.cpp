@@ -616,6 +616,37 @@ void CNpcEnemy::init()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::setSpeed( s16 newSpeed )
+{
+	switch( m_type )
+	{
+		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
+		case CNpcEnemy::NPC_SUB_SHARK:
+		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
+		case CNpcEnemy::NPC_IRON_DOGFISH:
+		case CNpcEnemy::NPC_SEA_SNAKE:
+		{
+			if ( CLevel::getIsBossRespawn() )
+			{
+				break;
+			}
+			else
+			{
+				m_speed = newSpeed;
+				break;
+			}
+		}
+
+		default:
+		{
+			m_speed = newSpeed;
+			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );

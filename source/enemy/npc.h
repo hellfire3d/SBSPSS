@@ -109,7 +109,7 @@ public:
 	virtual void		caughtWithNet();
 	virtual int			getFrameCount();
 	virtual int			getFrame()												{return( m_frame );}
-	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
+	void				setSpeed( s16 newSpeed );
 	virtual u32			getRGB()												{return( m_RGB );}
 	virtual	void		leftThinkZone(int _frames);
 
