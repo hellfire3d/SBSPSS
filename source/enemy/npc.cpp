@@ -196,6 +196,33 @@ s32 CNpcEnemy::playerYDistSqr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::setTypeFromMapEdit( u16 newType )
+{
+	m_type = mapEditConvertTable[newType - NPC_ENEMY_MAPEDIT_OFFSET];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::addWaypoint( s32 xPos, s32 yPos )
+{
+	DVECTOR newPos;
+
+	newPos.vx = xPos << 4;
+	newPos.vy = yPos << 4;
+
+	m_npcPath.addWaypoint( newPos );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
+{
+	Pos.vx = xPos << 4;
+	Pos.vy = yPos << 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::init()
 {
 	CEnemyThing::init();
@@ -219,11 +246,6 @@ void CNpcEnemy::init()
 
 	m_extendDir = EXTEND_RIGHT;
 
-	//Pos.vx = 400;
-	//Pos.vy = 400;
-	Pos.vx = 100;
-	Pos.vy = 100;
-
 	m_base = Pos;
 
 	m_timerFunc = m_data[this->m_type].timerFunc;
@@ -246,33 +268,7 @@ void CNpcEnemy::init()
 	{
 		case NPC_INIT_DEFAULT:
 		{
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			//newPos.vy = 100;
-			newPos.vy = 300;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 100;
-			//newPos.vy = 100;
-			newPos.vy = 300;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( PONG_PATH );
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			break;
 		}
@@ -293,7 +289,7 @@ void CNpcEnemy::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( PONG_PATH );
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			m_state = HERMIT_CRAB_NO_ATTACK;
 
@@ -355,7 +351,7 @@ void CNpcEnemy::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( SINGLE_USE_PATH );
+			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 			break;
 		}
@@ -377,7 +373,7 @@ void CNpcEnemy::init()
 			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
-			m_npcPath.setPathType( SINGLE_USE_PATH );
+			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 			m_extension = 0;
 			m_velocity = m_data[m_type].speed;
@@ -400,7 +396,7 @@ void CNpcEnemy::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( SINGLE_USE_PATH );
+			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 			break;
 		}
@@ -421,7 +417,7 @@ void CNpcEnemy::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( PONG_PATH );
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			break;
 		}
@@ -474,7 +470,7 @@ void CNpcEnemy::init()
 
 			m_npcPath.addWaypoint( newPos );
 
-			m_npcPath.setPathType( PONG_PATH );
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			// create head of list
 			CNpcPositionHistory *newPosition;

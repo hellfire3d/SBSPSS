@@ -122,9 +122,12 @@ void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
 
 				moveX = 6 * _frames;
 
+				m_heading = 0;
+
 				if ( m_extendDir == EXTEND_LEFT )
 				{
 					moveX = -moveX;
+					m_heading = 2048;
 				}
 
 				groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );

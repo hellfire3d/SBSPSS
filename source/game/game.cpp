@@ -241,14 +241,6 @@ void	CGameScene::initLevel()
 	CConversation::init();
 	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
 
-#ifdef __USER_charles__		
-	CNpcEnemy	*enemy;
-	enemy=new ("test enemy") CNpcEnemy;
-	enemy->setType( CNpcEnemy::NPC_PARASITIC_WORM );
-	enemy->init();
-	enemy->setLayerCollision( Level.getCollisionLayer() );
-#endif
-
 #ifdef __USER_paul__
 	DVECTOR pos={16*10,16*10};
 				createPickup(PICKUP__BIG_HEALTH,&pos);
@@ -281,6 +273,54 @@ void	CGameScene::initLevel()
 	m_player->init();
 	m_player->setLayerCollision(Level.getCollisionLayer());
 	m_player->setMapSize(Level.getMapSize());
+
+#ifdef __USER_charles__		
+	/*CNpcEnemy	*enemy;
+	enemy=new ("test enemy") CNpcEnemy;
+	enemy->setType( CNpcEnemy::NPC_PARASITIC_WORM );
+	enemy->init();
+	enemy->setLayerCollision( Level.getCollisionLayer() );*/
+
+	int actorNum;
+	sThingActor **actorList = Level.getActorList();
+
+	for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
+	{
+		CNpcEnemy *enemy;
+		enemy = new ("npc enemy") CNpcEnemy;
+		enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
+		enemy->init();
+		enemy->setLayerCollision( Level.getCollisionLayer() );
+
+		int pointNum;
+		u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
+
+		u16 newXPos, newYPos;
+
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		enemy->setStartPos( newXPos, newYPos );
+		enemy->addWaypoint( newXPos, newYPos );
+
+		if ( actorList[actorNum]->PointCount > 1 )
+		{
+			for ( pointNum = 1 ; pointNum < actorList[actorNum]->PointCount ; pointNum++ )
+			{
+				newXPos = (u16) *PntList;
+				PntList++;
+				newYPos = (u16) *PntList;
+				PntList++;
+
+				enemy->addWaypoint( newXPos, newYPos );
+			}
+		}
+	}
+
+	//u16	*PntList=(u16*)MakePtr(ThisThing,sizeof(sActorThing);
+#endif
 
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)

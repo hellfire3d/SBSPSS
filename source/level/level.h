@@ -23,6 +23,8 @@ public:
 	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
 	static DVECTOR			getCameraPos()						{return MapPos;}
 	static DVECTOR			getPlayerSpawnPos()					{return s_playerSpawnPos;}
+	int						getActorCount()						{return ActorCount;}
+	sThingActor				**getActorList()					{return ActorList;}
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 

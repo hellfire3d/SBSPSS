@@ -109,9 +109,9 @@ void CNpcPath::removeAllWaypoints()
 	this->waypoint = NULL;
 }
 
-void CNpcPath::setPathType( NPC_PATH_TYPE newPathType )
+void CNpcPath::setPathType( u8 newPathType )
 {
-	pathType = newPathType;
+	pathType = (NPC_PATH_TYPE) newPathType;
 }
 
 bool CNpcPath::incPath()

@@ -154,6 +154,7 @@ public:
 		NPC_FLYING_DUTCHMAN,
 		NPC_IRON_DOGFISH,
 		NPC_PARASITIC_WORM_SEGMENT,
+		NPC_BALL_BLOB,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -164,7 +165,11 @@ public:
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
+	void				setTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
+	void				addWaypoint( s32 xPos, s32 yPos );
+	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
+	void				setStartPos( s32 xPos, s32 yPos );
 
 
 private:
@@ -349,6 +354,8 @@ protected:
 		EXTEND_LEFT = false,
 		EXTEND_CLOCKWISE = true,
 		EXTEND_ANTICLOCKWISE = false,
+
+		NPC_ENEMY_MAPEDIT_OFFSET = 10,
 	};
 
 
@@ -372,6 +379,8 @@ protected:
 		u16								moveAnim;
 	}
 	NPC_DATA;
+
+	static NPC_UNIT_TYPE mapEditConvertTable[NPC_UNIT_TYPE_MAX];
 
 	// functions
 

@@ -26,15 +26,27 @@ public:
 	bool	isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
 };
 
-enum NPC_PATH_TYPE
-{
-	SINGLE_USE_PATH = 0,
-	REPEATING_PATH = 1,
-	PONG_PATH = 2,
-};
-
 class CNpcPath
 {
+public:
+	enum NPC_PATH_TYPE
+	{
+		SINGLE_USE_PATH = 0,
+		REPEATING_PATH = 1,
+		PONG_PATH = 2,
+	};
+
+	void			initPath();
+	void			addWaypoint( DVECTOR newPos );
+	void			removeAllWaypoints();
+	void			setPathType( u8 newPathType );
+	bool			incPath();
+	void			resetPath();
+	void			reversePathDir();
+	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
+	bool			thinkFlat( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *heading );
+	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
+
 private:
 	CNpcWaypoint	*waypoint;
 	NPC_PATH_TYPE	pathType;
@@ -42,18 +54,6 @@ private:
 	bool			reversePath;
 	CNpcWaypoint	*currentWaypoint;
 	CNpcWaypoint	*lastWaypoint;
-
-public:
-	void			initPath();
-	void			addWaypoint( DVECTOR newPos );
-	void			removeAllWaypoints();
-	void			setPathType( NPC_PATH_TYPE newPathType );
-	bool			incPath();
-	void			resetPath();
-	void			reversePathDir();
-	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
-	bool			thinkFlat( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *heading );
-	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };
 
 #endif
