@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	pmballoon.cpp
+	pmfly.cpp
 
 	Author:		PKG
 	Created: 
@@ -15,10 +15,10 @@
 	Includes
 	-------- */
 
-#include "player/pmballoon.h"
+#include "player\pmfly.h"
 
 #ifndef __PLAYER_PLAYER_H__
-#include "player/player.h"
+#include "player\player.h"
 #endif
 
 
@@ -50,10 +50,8 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int balloontime=60*20;
-void	CPlayerModeBalloon::enter(class CPlayer *_player)
+void	CPlayerModeFly::enter()
 {
-	m_timer=balloontime;
 }
 
 /*----------------------------------------------------------------------
@@ -62,12 +60,30 @@ void	CPlayerModeBalloon::enter(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBalloon::think(class CPlayer *_player)
+void	CPlayerModeFly::think()
 {
-	if(--m_timer==0)
+	DVECTOR	pos;
+	int		controlHeld;
+
+	pos=getPlayerPos();
+	controlHeld=getPadInputHeld();
+	if(controlHeld&PI_LEFT)
 	{
-		_player->setMode(PLAYER_MODE_FULLUNARMED);
+		pos.vx-=5;
 	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		pos.vx+=5;
+	}
+	if(controlHeld&PI_UP)
+	{
+		pos.vy-=5;
+	}
+	else if(controlHeld&PI_DOWN)
+	{
+		pos.vy+=5;
+	}
+	setPlayerPos(&pos);
 }
 
 /*===========================================================================

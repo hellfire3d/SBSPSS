@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	psdead.h
+	pmfly.h
 
 	Author:		PKG
 	Created:	
@@ -11,14 +11,16 @@
 
 ===========================================================================*/
 
-#ifndef	__PLAYER_PSDEAD_H__
-#define __PLAYER_PSDEAD_H__
+#ifndef	__PLAYER_PMFLY_H__
+#define __PLAYER_PMFLY_H__
 
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
 
-#include "player\pstates.h"
+#ifndef __PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
 
 
 /*	Std Lib
@@ -32,15 +34,12 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerStateDead : public CPlayerState
+class CPlayerModeFly : public CPlayerModeBasic
 {
 public:
-	virtual void	enter(class CPlayer *_player);
-	virtual void	think(class CPlayer *_player);
+	virtual void	enter();
+	virtual void	think();
 
-
-private:
-	int				m_deadCounter;
 };
 
 
@@ -54,7 +53,7 @@ private:
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __PLAYER_PSDEAD_H__ */
+#endif	/* __PLAYER_PMFLY_H__ */
 
 /*===========================================================================
  end */
