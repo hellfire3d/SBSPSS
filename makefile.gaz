@@ -150,7 +150,8 @@ hazard_src :=		hazard \
 					hrweight \
 					hrwheel \
 					hpswitch \
-					hrckshrd
+					hrckshrd \
+					hinert
 
 fx_src :=			fx \
 					fxbaseanim \

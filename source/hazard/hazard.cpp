@@ -111,6 +111,10 @@
 #include "hazard\hrckshrd.h"
 #endif
 
+#ifndef __HAZARD_HINERT_H__
+#include "hazard\hinert.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -136,6 +140,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_RISING_WEIGHT_WHEEL_HAZARD,
 	NPC_PRESSURE_SWITCH_HAZARD,
 	NPC_ROCKSHARD_HAZARD,
+	NPC_INERT_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,6 +270,12 @@ CNpcHazard *hazard;
 		case NPC_ROCKSHARD_HAZARD:
 		{
 			hazard = new ("rock shard hazard") CNpcRockShardHazard;
+			break;
+		}
+
+		case NPC_INERT_HAZARD:
+		{
+			hazard = new ("inert hazard") CNpcInertHazard;
 			break;
 		}
 

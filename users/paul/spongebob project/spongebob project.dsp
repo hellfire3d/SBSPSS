@@ -897,6 +897,14 @@ SOURCE=..\..\..\source\hazard\hflytrap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hinert.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hinert.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hmasher.cpp
 # End Source File
 # Begin Source File
