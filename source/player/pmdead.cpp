@@ -90,6 +90,9 @@ void	CPlayerModeDead::enter()
 		m_player->setAnimNo(deathAnim);
 	}
 
+	CSoundMediator::stopSpeech();
+
+
 	m_killed=false;
 }
 

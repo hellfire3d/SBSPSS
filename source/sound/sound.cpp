@@ -442,6 +442,12 @@ if(_frames==0)_frames=1;
 		s_volumeDirty[VOL_SPEECH]=true;
 		s_volumeDirty[VOL_FADE]=false;
 	}
+
+	if (isSpeechPlaying())
+	{
+		s_volumeDirty[VOL_SONG]=true;
+		s_currentVolume[VOL_FADE]=128;
+	}
 	if(s_volumeDirty[VOL_SONG])
 	{
 		s_xmplaySound->setMasterSongVolume((s_currentVolume[VOL_SONG]*s_currentVolume[VOL_FADE])>>8);
