@@ -475,7 +475,7 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 								// if next waypoint is ALSO a start/end waypoint, teleport directly to it
 
 								moveEntireSnake( waypointPos );
-								m_waitTimer = 3 * GameState::getOneSecondInFrames();
+								m_waitTimer = GameState::getOneSecondInFrames();
 								oldPos.vx = waypointPos.vx;
 								oldPos.vy = waypointPos.vy;
 
@@ -772,12 +772,20 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 	CProjectile *projectile;
 	projectile = CProjectile::Create();
 	DVECTOR newPos = Pos;
+	newPos.vx += 50 * ( rcos( m_heading ) >> 12 );
+	newPos.vy += 50 * ( rsin( m_heading ) >> 12 );
+
+	int perpHeading = ( heading - 1024 ) & 4095;
+
+	newPos.vx += 20 * ( rcos( perpHeading ) >> 12 );
+	newPos.vy += 20 * ( rsin( perpHeading ) >> 12 );
+
 	projectile->init( newPos, heading );
 	projectile->setGraphic( FRM__SNAKEBILE );
 
 	//resetSeaSnakeHeadToTail();
 
-	m_movementTimer = 2 * GameState::getOneSecondInFrames();
+	m_movementTimer = GameState::getOneSecondInFrames();
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 	m_timerFunc = NPC_TIMER_ATTACK_DONE;
