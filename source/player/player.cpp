@@ -825,8 +825,9 @@ if(newmode!=-1)
 			}
 		}
 
+		int level=GameScene.getLevelNumber();
 		// Out of spats?
-		if(m_numSpatulasHeld==0)
+		if(m_numSpatulasHeld==0 && level!=5)
 		{
 			int	oldTimer=m_spatulaWarningTimer;
 			m_spatulaWarningTimer++;
