@@ -24,6 +24,65 @@
 #endif
 
 
+void CNpc::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed )
+{
+	s16 decDir, incDir, moveDist;
+	s32 moveX, moveY;
+	s16 headingToTarget = ratan2( yDist, xDist );
+	s16 maxTurnRate = m_data[m_type].turnSpeed;
+
+	decDir = m_heading - headingToTarget;
+	if ( decDir < 0 )
+	{
+		decDir += ONE;
+	}
+
+	incDir = headingToTarget - m_heading;
+	if ( incDir < 0 )
+	{
+		incDir += ONE;
+	}
+
+	if ( decDir < incDir )
+	{
+		moveDist = -decDir;
+	}
+	else
+	{
+		moveDist = incDir;
+	}
+
+	if ( moveDist < -maxTurnRate )
+	{
+		moveDist = -maxTurnRate;
+	}
+	else if ( moveDist > maxTurnRate )
+	{
+		moveDist = maxTurnRate;
+	}
+
+	m_heading += moveDist;
+	m_heading = m_heading % ONE;
+
+	s32 preShiftX = _frames * speed * rcos( m_heading );
+	s32 preShiftY = _frames * speed * rsin( m_heading );
+
+	moveX = preShiftX >> 12;
+	if ( !moveX && preShiftX )
+	{
+		moveX = preShiftX / abs( preShiftX );
+	}
+
+	moveY = preShiftY >> 12;
+	if ( !moveY && preShiftY )
+	{
+		moveY = preShiftY / abs( preShiftY );
+	}
+
+	Pos.vx += moveX;
+	Pos.vy += moveY;
+}
+
 void CNpc::processCloseGenericUserSeek( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
@@ -51,64 +110,6 @@ void CNpc::processCloseGenericUserSeek( int _frames )
 	//}
 	//else
 	{
-		bool pathComplete;
-
-		s16 headingToPlayer = ratan2( yDist, xDist );
-		s16 maxTurnRate = m_data[m_type].turnSpeed;
-		s16 decDir, incDir;
-
-		decDir = m_heading - headingToPlayer;
-
-		if ( decDir < 0 )
-		{
-			decDir += ONE;
-		}
-
-		incDir = headingToPlayer - m_heading;
-
-		if ( incDir < 0 )
-		{
-			incDir += ONE;
-		}
-
-		if ( decDir < incDir )
-		{
-			moveDist = -decDir;
-		}
-		else
-		{
-			moveDist = incDir;
-		}
-
-		if ( moveDist < -maxTurnRate )
-		{
-			moveDist = -maxTurnRate;
-		}
-		else if ( moveDist > maxTurnRate )
-		{
-			moveDist = maxTurnRate;
-		}
-
-		m_heading += moveDist;
-
-		m_heading = m_heading % ONE;
-		
-		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
-
-		moveX = preShiftX >> 12;
-		if ( !moveX && preShiftX )
-		{
-			moveX = preShiftX / abs( preShiftX );
-		}
-
-		moveY = preShiftY >> 12;
-		if ( !moveY && preShiftY )
-		{
-			moveY = preShiftY / abs( preShiftY );
-		}
-
-		Pos.vx += moveX;
-		Pos.vy += moveY;
+		processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
 	}
 }

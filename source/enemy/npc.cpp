@@ -382,12 +382,36 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		3,
 		2048,
 	},
+
+	{	// NPC_MOTHER_JELLYFISH
+		NPC_INIT_MOTHER_JELLYFISH,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_MOTHER_JELLYFISH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		256,
+	},
+
+	{	// NPC_FLYING_DUTCHMAN
+		NPC_INIT_FLYING_DUTCHMAN,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FLYING_DUTCHMAN,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		256,
+	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_BOOGER_MONSTER;
+	m_type = NPC_FLYING_DUTCHMAN;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -397,6 +421,8 @@ void CNpc::init()
 
 	Pos.vx = 100;
 	Pos.vy = 100;
+
+	m_base = Pos;
 
 	m_timerFunc = m_data[this->m_type].timerFunc;
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
@@ -460,6 +486,21 @@ void CNpc::init()
 			m_npcPath.addWaypoint( newPos );
 
 			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
+
+		case NPC_INIT_MOTHER_JELLYFISH:
+		{
+			m_state = MOTHER_JELLYFISH_RETURN_TO_START;
+
+			break;
+		}
+
+		case NPC_FLYING_DUTCHMAN:
+		{
+			m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
+			m_extendDir = EXTEND_UP;
 
 			break;
 		}
@@ -576,7 +617,7 @@ bool CNpc::processSensor()
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extension = 0;
 							m_velocity = 5;
-							m_extensionBase = Pos;
+							m_base = Pos;
 
 							if ( playerPos.vx < Pos.vx )
 							{
@@ -903,6 +944,20 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_MOTHER_JELLYFISH:
+		{
+			processMotherJellyfishMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_FLYING_DUTCHMAN:
+		{
+			processFlyingDutchmanMovement( _frames );
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -997,6 +1052,16 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_BOOGER_MONSTER_ATTACK:
 			processCloseBoogerMonsterAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_MOTHER_JELLYFISH_ATTACK:
+			processCloseMotherJellyfishAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_FLYING_DUTCHMAN_ATTACK:
+			processCloseFlyingDutchmanAttack( _frames );
 
 			break;
 

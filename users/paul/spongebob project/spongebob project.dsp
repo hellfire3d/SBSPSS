@@ -141,6 +141,10 @@ SOURCE=..\..\..\source\enemy\neyeball.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nfdutch.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\ngeneric.cpp
 # End Source File
 # Begin Source File
@@ -149,7 +153,7 @@ SOURCE=..\..\..\source\enemy\ngpirate.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\enemy\nnsfish.cpp
+SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File
 

@@ -41,20 +41,20 @@ void CNpc::processCloseSpiderCrabAttack( int _frames )
 		m_heading = 2048;
 	}
 
-	s32 horizontalExtension = abs( Pos.vx - m_extensionBase.vx );
+	s32 horizontalExtension = abs( Pos.vx - m_base.vx );
 
 	if ( horizontalExtension > 128 )
 	{
 		if ( m_extendDir == EXTEND_RIGHT )
 		{
-			Pos.vx = m_extensionBase.vx + 128;
+			Pos.vx = m_base.vx + 128;
 		}
 		else
 		{
-			Pos.vx = m_extensionBase.vx - 128;
+			Pos.vx = m_base.vx - 128;
 		}
 
-		Pos.vy = m_extensionBase.vy;
+		Pos.vy = m_base.vy;
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
@@ -63,6 +63,6 @@ void CNpc::processCloseSpiderCrabAttack( int _frames )
 	}
 	else
 	{
-		Pos.vy = m_extensionBase.vy - ( ( 20 * rsin( horizontalExtension << 4 ) ) >> 12 );
+		Pos.vy = m_base.vy - ( ( 20 * rsin( horizontalExtension << 4 ) ) >> 12 );
 	}
 }

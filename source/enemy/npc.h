@@ -57,6 +57,8 @@ public:
 		NPC_SHARK_MAN,
 		NPC_OIL_BLOB,
 		NPC_SKULL_STOMPER,
+		NPC_MOTHER_JELLYFISH,
+		NPC_FLYING_DUTCHMAN,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -77,6 +79,8 @@ protected:
 		NPC_INIT_ACID,
 		NPC_INIT_GHOST_PIRATE,
 		NPC_INIT_SKULL_STOMPER,
+		NPC_INIT_MOTHER_JELLYFISH,
+		NPC_INIT_FLYING_DUTCHMAN,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -117,6 +121,8 @@ protected:
 		NPC_CLOSE_EYEBALL_ATTACK,
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
+		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
+		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -125,6 +131,8 @@ protected:
 		NPC_MOVEMENT_FIXED_PATH = 1,
 		NPC_MOVEMENT_USER_SEEK,
 		NPC_MOVEMENT_VERTICAL,
+		NPC_MOVEMENT_MOTHER_JELLYFISH,
+		NPC_MOVEMENT_FLYING_DUTCHMAN,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -139,6 +147,20 @@ protected:
 		NPC_TIMER_NONE = 0,
 		NPC_TIMER_EVADE_DONE = 1,
 		NPC_TIMER_ATTACK_DONE,
+	};
+
+	enum NPC_MOTHER_JELLYFISH_STATE
+	{
+		MOTHER_JELLYFISH_RETURN_TO_START = 0,
+		MOTHER_JELLYFISH_CYCLE = 1,	
+		MOTHER_JELLYFISH_ATTACK_PLAYER,
+	};
+
+	enum NPC_FLYING_DUTCHMAN_STATE
+	{
+		FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
+		FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
+		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
 	};
 
 	enum
@@ -176,6 +198,7 @@ protected:
 	void				processCollision();
 	void				processTimer( int _frames );
 
+	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
 	void				processCloseGenericUserSeek( int _frames );
 
 	// small jellyfish functions
@@ -217,6 +240,16 @@ protected:
 
 	void				processCloseBoogerMonsterAttack( int _frames );
 
+	// mother jellyfish functions
+
+	void				processMotherJellyfishMovement( int _frames );
+	void				processCloseMotherJellyfishAttack( int _frames );
+
+	// flying dutchman functions
+
+	void				processFlyingDutchmanMovement( int _frames );
+	void				processCloseFlyingDutchmanAttack( int _frames );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -236,7 +269,8 @@ protected:
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;
-	DVECTOR				m_extensionBase;
+	DVECTOR				m_base;
+	u8					m_state;
 };
 
 

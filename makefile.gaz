@@ -41,7 +41,7 @@ PC_STARTUP_OBJ :=
 PC_FILESYS_LIB :=		libsn
 
 CD_FILESYS_SRC :=		cdfile
-CD_STARTUP_OBJ :=		BootObj\snmain 
+CD_STARTUP_OBJ :=		BootObj\snmain
 CD_FILESYS_LIB :=		CMXBoot
 
 #----------------------------------------------------------------------------
@@ -64,6 +64,8 @@ enemy_src :=		2denemy \
 					neyeball \
 					nsstomp \
 					nbooger \
+					nmjfish \
+					nfdutch \
 					enemy
 
 projectl_src :=		projectl
@@ -115,7 +117,7 @@ level_src :=		level \
 					layerback \
 					layertilesolid \
 					layertile3d
-	
+
 locale_src :=		textdbase
 
 mem_src :=			memory
@@ -356,7 +358,7 @@ ifeq ($(USER_NAME),CDBUILD)
 	@ccpsx -O2 -g $(BOOTSTRAP_IN) -c -Xo$801c0000 $(COMMON_CCFLAGS) -oPsxBoot.o
 	@slink -m -psx -c -v -z -o 0x801c0000 -cpemunge -we -wm -wo @$(BOOTSTRAP_DIR)/psxboot.ln,$(BOOTSTRAP_CPE),$(BOOTSTRAP_SYM),$(BOOTSTRAP_MAP)
 	@$(RM) PsxBoot.o
-	Cpe2Exe $($(TERRITORY)_CPE2X_PARAM) $(BOOTSTRAP_CPE) 
+	Cpe2Exe $($(TERRITORY)_CPE2X_PARAM) $(BOOTSTRAP_CPE)
 	@$(CP) $(BOOTSTRAP_EXE) $($(TERRITORY)_BOOTSTRAP_OUT) -f
 	@$(CP) Data/$(TERRITORY).cnf $(CD_DIR)/SYSTEM.CNF -f
 	@$(ECHO) $(TERRITORY) CD Built
