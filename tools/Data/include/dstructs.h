@@ -166,8 +166,7 @@ struct	sElem2d
 // 2d Tile
 		u8		u0,v0;						// 2
 		u16		Clut;						// 2
-		u16		TPage;						// 2
-		u16		Pad;	// :o( need this?	// 2
+		u32		TPage;						// 4	// due to pre-gen TSPRT tpage
 };											// 8
 
 struct	sElem3d
