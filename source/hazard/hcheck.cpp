@@ -36,6 +36,22 @@ void CNpcCheckpointHazard::init()
 
 	m_triggered = false;
 	m_spriteFrame = FRM__CHECKPOINT;
+	m_timer = 0;
+	m_flick = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcCheckpointHazard::think(int _frames)
+{
+	m_timer -= _frames;
+
+	if ( m_timer <= 0 )
+	{
+		m_flick = !m_flick;
+
+		m_timer = GameState::getOneSecondInFrames();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +59,7 @@ void CNpcCheckpointHazard::init()
 void CNpcCheckpointHazard::render()
 {
 	sFrameHdr	*frameHdr;
+	POLY_FT4	*Ft4;
 
 	if ( m_isActive )
 	{
@@ -67,7 +84,8 @@ void CNpcCheckpointHazard::render()
 				y = Pos.vy - 100 - offset.vy - ( spriteHeight >> 1 );
 
 				frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
-				CGameScene::getSpriteBank()->printFT4( frameHdr, x, y, 0, 0, 10 );
+				Ft4 = CGameScene::getSpriteBank()->printFT4( frameHdr, x, y, 0, 0, 10 );
+				setSemiTrans( Ft4, m_flick );
 			}
 		}
 	}

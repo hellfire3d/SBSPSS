@@ -76,7 +76,7 @@ public:
 	virtual void		init();
 	virtual void		setGraphic( sThingHazard *ThisHazard );
 	void				shutdown();
-	void				think(int _frames);
+	virtual void		think(int _frames);
 	virtual void		render();
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}

@@ -23,11 +23,14 @@ class CNpcCheckpointHazard : public CNpcHazard
 public:
 	void				init();
 	void				render();
+	void				think(int _frames);
 protected:
 	void				collidedWith(CThing *_thisThing);
 
 	u8					m_triggered;
 	int					m_spriteFrame;
+	int					m_timer;
+	u8					m_flick;
 };
 
 #endif
