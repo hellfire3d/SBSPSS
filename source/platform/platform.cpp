@@ -1075,23 +1075,29 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 	int		angle;
 
 	CRECT collisionArea = getCollisionArea();
-	top.vx = offsetX + ( ( collisionArea.x1 + collisionArea.x2 ) >> 1 );
 
-	//sBBox boundingBox = m_modelGfx->GetBBox();
 	sBBox boundingBox = getBBox();
-	//top.vy = collisionArea.y1;
-	top.vy = boundingBox.YMin + Pos.vy + offsetY;
+	top.vy = offsetY + collisionArea.y1;
 
 	angle=getCollisionAngle();
 	if(angle==0)
 	{
 		// Non-rotated platform
+
 		return( top.vy - _y );
 	}
 	else
 	{
+		if ( angle > 0 )
+		{
+			top.vx = offsetX + collisionArea.x1;
+		}
+		else
+		{
+			top.vx = offsetX + collisionArea.x2;
+		}
+
 		// Rotate backwards to find height at current position
-		//return( ( top.vy - _y ) + ( ( top.vx - _x ) * msin( -angle & 4095 ) >> 12 ) );
 
 		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
 

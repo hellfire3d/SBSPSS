@@ -303,10 +303,7 @@ int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offse
 		top.vx = offsetX + collisionArea.x1;
 	}
 
-	//sBBox boundingBox = m_modelGfx->GetBBox();
-	sBBox boundingBox = getBBox();
-	//top.vy = collisionArea.y1;
-	top.vy = boundingBox.YMin + Pos.vy + offsetY;
+	top.vy = offsetY + collisionArea.y1;
 
 	angle=getCollisionAngle();
 	if(angle==0)
@@ -317,7 +314,6 @@ int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offse
 	else
 	{
 		// Rotate backwards to find height at current position
-		//return( ( top.vy - _y ) + ( ( top.vx - _x ) * msin( -angle & 4095 ) >> 12 ) );
 
 		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
 
