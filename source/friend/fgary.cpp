@@ -35,6 +35,8 @@
 #include <ACTOR_GARY_Anim.h>
 #endif
 
+#define GARY_SPEED		1
+
 
 u8 CNpcGaryFriend::m_garySpeech;
 
@@ -216,10 +218,11 @@ void CNpcGaryFriend::think( int _frames )
 
 			if ( platformHeight < groundHeight )
 			{
-				groundHeight = platformHeight;
-			}
+				//groundHeight = platformHeight;
+				groundHeight = 0;
 
-			//Pos.vy += platformHeight;
+				Pos.vy += platformHeight;
+			}
 			//return;
 		}
 
@@ -251,7 +254,7 @@ void CNpcGaryFriend::think( int _frames )
 
 					if ( !conveyorOverride && !m_obstructed )
 					{
-						Pos.vx += multiplier * 2 * _frames;
+						Pos.vx += multiplier * GARY_SPEED * _frames;
 					}
 				}
 			}
@@ -283,7 +286,7 @@ void CNpcGaryFriend::think( int _frames )
 
 						if ( !conveyorOverride && !m_obstructed )
 						{
-							Pos.vx += multiplier * 2 * _frames;
+							Pos.vx += multiplier * GARY_SPEED * _frames;
 						}
 					}
 				}
