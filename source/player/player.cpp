@@ -1363,7 +1363,7 @@ if(drawlastpos)
 		DVECTOR	sbPos=
 		{
 			Pos.vx-m_cameraPos.vx,
-			Pos.vy-m_cameraPos.vy,
+			Pos.vy-m_cameraPos.vy+1,		// Odd.. source sprites were moved up by one pixel at some stage
 		};
 		renderSb(&sbPos,m_animNo,m_animFrame>>sbanimspeed);
 		m_currentPlayerModeClass->render(&sbPos);
@@ -2320,6 +2320,7 @@ void	CPlayer::dieYouPorousFreak(DEATH_TYPE _deathType)
 	m_deathType=_deathType;
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 	setMode(PLAYER_MODE_DEAD);
+	m_lockCamera=true;
 }
 
 
@@ -2590,126 +2591,83 @@ int		CPlayer::moveVertical(int _moveDistance)
 	// Are we falling?
 	if(_moveDistance>0)
 	{
-		int	colHeight;
-		colHeight=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-		if(colHeight<=0)
+//////////
+		int colHeightBefore[3],colHeightAfter[3],moveRequired[3];
+		int	i,xoff;
+		int	safe;
+
+		for(i=0;i<3;i++)
 		{
-			pos.vy+=colHeight+_moveDistance;
-			_moveDistance=0;
-			hitGround=true;
+			int x=pos.vx+((i-1)*checkx);
+			colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
+			colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
+			moveRequired[i]=0;
 		}
-		else
+
+		safe=true;
+		for(i=0;i<3;i++)
 		{
+			if(colHeightBefore[i]>=0)
+			{
+				if(colHeightAfter[i]<0)
+				{
+					moveRequired[i]=colHeightAfter[i];
+					hitGround=true;
+				}
+				else if(colHeightAfter[i]==0)
+				{
+					hitGround=true;
+				}
+			}
+		}
+
+		int	move=0;
+		for(i=0;i<3;i++)
+		{
+			if(moveRequired[i]<move)
+			{
+				moveRequired[i]=move;
+			}
+		}
+
+		_moveDistance+=move;
 /*
-			int	colHeightLeft,colHeightRight;
-			int blockLeft,blockRight;
-			colHeightLeft=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
-			blockLeft=CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+colHeightLeft)&COLLISION_TILE_MASK<=1;
-			colHeightRight=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
-			blockRight=CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+colHeightRight)&COLLISION_TILE_MASK<=1;
-PAUL_DBGMSG("%d,%d   %d,%d",colHeightRight,blockRight,colHeightLeft,blockLeft);
+		do
+		{
+			for(i=0;i<3;i++)
+			{
+				int x=pos.vx+((i-1)*checkx);
+				colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
+				colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
+			}
+
+			safe=true;
+			for(i=0;i<3;i++)
+			{
+				if(colHeightBefore[i]>=0)
+				{
+					if(colHeightAfter[i]<0)
+					{
+						_moveDistance+=colHeightAfter[i];
+						safe=false;
+						hitGround=true;
+						break;
+					}
+					else if(colHeightAfter[i]==0)
+					{
+						hitGround=true;
+					}
+				}
+			}
+		}
+		while(!safe);
 */
-
-			colHeight=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
-			if(colHeight<=0/*&&
-			   CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+colHeight)&COLLISION_TILE_MASK<=1*/)
-			{
-				pos.vy+=colHeight+_moveDistance;
-				_moveDistance=0;
-				hitGround=true;
-			}
-			else
-			{
-				colHeight=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
-				if(colHeight<=0/*&&
-				   CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+colHeight)&COLLISION_TILE_MASK<=1*/)
-				{
-					pos.vy+=colHeight+_moveDistance;
-					_moveDistance=0;
-					hitGround=true;
-				}
-			}
-		}
-
-
-#if 0
-		// Yes - Check to see if players feet have hit anything
-		int colHeightBefore,colHeightAfter;
-
-		// middle
-		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
-		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-		if(colHeightBefore>=0&&colHeightAfter<=0)
-		{
-			pos.vy+=colHeightAfter+_moveDistance;
-			_moveDistance=0;
-			hitGround=true;
-		}
-		else// if(colHeightBefore>=0&&colHeightAfter>=15)
-		{
-			// left
-			colHeightBefore=getHeightFromGround(pos.vx-checkx,pos.vy,16);
-			colHeightAfter=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
-			if(colHeightBefore>=0&&colHeightAfter<=0/*&&
-			   CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
-			{
-				pos.vy+=colHeightAfter+_moveDistance;
-				_moveDistance=0;
-				hitGround=true;
-			}
-			else
-			{
-				// right
-				colHeightBefore=getHeightFromGround(pos.vx+checkx,pos.vy,16);
-				colHeightAfter=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
-				if(colHeightBefore>=0&&colHeightAfter<=0/*&&
-				   CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
-				{
-					pos.vy+=colHeightAfter+_moveDistance;
-					_moveDistance=0;
-					hitGround=true;
-				}
-			}
-		}
-#endif
-
-		int colHeightBefore,colHeightAfter;
-
-		// Yes.. Check to see if we're about to hit/go through the ground/platform
-		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
-		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-		if(isOnPlatform()&&
-		   !(colHeightBefore>=0&&colHeightAfter<=0))
-		{
-			colHeightBefore=getHeightFromPlatformNoGround(pos.vx,pos.vy,16);
-			colHeightAfter=getHeightFromPlatformNoGround(pos.vx,pos.vy+_moveDistance,16);
-		}
-
-		if(colHeightBefore>=0&&colHeightAfter<=0)
-		{
-			// About to hit a 'fall to death' block?
-			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH_FALL)
-			{
-				// No
-				// Stick at ground level
-				pos.vy+=colHeightAfter+_moveDistance;
-				_moveDistance=0;
-				hitGround=true;
-			}
-			else
-			{
-				// Yeah!
-				if(m_currentMode!=PLAYER_MODE_DEAD)
-				{
-					// Lock the camera, kill the player and let him fall to his death..
-					dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
-					m_lockCamera=true;
-				}
-			}
-		}
+//////////
 	}
 	else if(_moveDistance<0)
 	{
+// NEEDS HEAD COLLISION ON THREE POINTS ALSO
+
 		// Are we jumping into an impassable block?
 		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
@@ -2879,9 +2837,11 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef SHITE_COLLISION
+int blah;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
+blah=999;
 
 	hitWall=false;
 	if(_moveDistance)
@@ -2891,8 +2851,13 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 		int				colHeight;
 
 		pos=getPlayerPos();
-		colHeight=getHeightFromGround(pos.vx,pos.vy,5);
+int init=0;
+colHeight=getHeightFromGround(pos.vx-checkx,pos.vy,5);
+if(colHeight==0)init=-checkx;
+colHeight=getHeightFromGround(pos.vx+checkx,pos.vy,5);
+if(colHeight==0)init=+checkx;
 //		if(colHeight==0)
+blah=init;
 		{
 			int	vx,targetX,checkOfs,moved,x;
 
@@ -2900,8 +2865,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 			targetX=pos.vx+_moveDistance;
 			checkOfs=vx*checkx;
 			moved=0;
-int init=checkx*vx;
-			for(x=pos.vx+init;x!=targetX+init;x+=vx)
+			for(x=pos.vx+checkx;x!=targetX+checkx;x+=vx)
 			{
 				// Wall?
 				colHeight=getHeightFromGround(x+checkOfs,pos.vy);
