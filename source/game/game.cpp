@@ -1,3 +1,4 @@
+int counter=0;
 /**********************/
 /*** Main Game File ***/
 /**********************/
@@ -177,6 +178,7 @@ int		CGameScene::s_restartLevel;
 int		CGameScene::s_bossHasBeenKilled;
 int		CGameScene::s_justHitBossArenaTrigger;
 DVECTOR	CGameScene::s_CamShake={0,0};
+int		CGameScene::s_showBossTextOnRespawn;
 
 
 // Evil global pointer to the boss character
@@ -223,6 +225,7 @@ void 	CGameScene::init()
 		m_gamestate=GAMESTATE_SHOWING_LIVES;
 		m_showingLivesTimer=0;
 
+		s_showBossTextOnRespawn=false;
 }
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
@@ -451,6 +454,8 @@ void	CGameScene::think(int _frames)
 #endif
 #endif
 
+
+counter+=_frames;
 }
 
 /*****************************************************************************/
@@ -726,7 +731,15 @@ void	CGameScene::respawnLevel()
 	CSoundMediator::setCanPlaySfx(false);
 	m_player->respawn();
 	Level.respawnLevel();
-	m_gamestate=GAMESTATE_SHOWING_LIVES;
+	if(!s_showBossTextOnRespawn)
+	{
+		m_gamestate=GAMESTATE_SHOWING_LIVES;
+	}
+	else
+	{
+		m_gamestate=GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT;
+		m_bossText->select();
+	}
 	m_showingLivesTimer=0;
 	CSoundMediator::setCanPlaySfx(true);
 }
@@ -751,7 +764,11 @@ void CGameScene::setReadyToExit()
 /*****************************************************************************/
 void CGameScene::hitBossArenaTrigger()
 {
-	s_justHitBossArenaTrigger=true;
+	if(!s_showBossTextOnRespawn)
+	{
+		s_justHitBossArenaTrigger=true;
+		s_showBossTextOnRespawn=true;
+	}
 }
 
 /*****************************************************************************/
