@@ -316,8 +316,10 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 	SetDispMask(0);
 	#if defined(__TERRITORY_USA__) || defined(__TERRITORY_JAP__)
 		SetVideoMode( MODE_NTSC );
+		ScreenYOfs=0;	// Set screen ofs for NTSC
 	#else
 		SetVideoMode( MODE_PAL );
+		ScreenYOfs=16;	// Set screen ofs for PAL
 	#endif
 
 	VSync(0);
@@ -376,6 +378,7 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 			while(DrawSync(1));
 		}
 
+#if	defined(__VERSION_DEBUG__)
 
 if(ScreenClipBox==1)
 {
@@ -409,7 +412,7 @@ if(ScreenClipBox==2)
 	setRGB0(f4,50,50,50);
 	AddPrimToList(f4,0);
 }
-
+#endif
 	// How many frames since we last flipped the display?
 	int	fc=FrameCounter;
 	s_vblsThisFrame=fc-s_lastFrameCounter;
@@ -439,6 +442,8 @@ u8		*Screen=(u8*)MemAlloc(512*256*2,"Screen");
 /*****************************************************************************/
 /*** VRAM VIEWER *************************************************************/
 /*****************************************************************************/
+
+#if	defined(__VERSION_DEBUG__)
 #define	UseVRamViewer
 
 #ifdef		UseVRamViewer
@@ -475,4 +480,5 @@ int 	OldX=Scr->Disp.disp.x,OldY=Scr->Disp.disp.y;
         Scr->Disp.disp.y=OldY;
 
 }
+#endif
 #endif

@@ -16,8 +16,15 @@ const u32	YInc=16<<16;
 /*****************************************************************************/
 static const int	TILE2D_WIDTH=16;
 static const int	TILE2D_HEIGHT=12;
-static const int	SCREEN_TILE2D_WIDTH=((512/TILE2D_WIDTH)+1);
-static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+1);
+#if defined(__TERRITORY_EUR__)
+static const int	SCREEN_TILE_ADJ_W		=1;
+static const int	SCREEN_TILE_ADJ_H		=2; 	// Extra line needed :o(
+#else
+static const int	SCREEN_TILE_ADJ_W		=1;
+static const int	SCREEN_TILE_ADJ_H		=1;
+#endif
+static const int	SCREEN_TILE2D_WIDTH=((512/TILE2D_WIDTH)+SCREEN_TILE_ADJ_W);
+static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+SCREEN_TILE_ADJ_H);
 static const int	PrimCount=SCREEN_TILE2D_WIDTH*SCREEN_TILE2D_HEIGHT;
 static const int	PrimMemSize=PrimCount*sizeof(TSPRT);
 

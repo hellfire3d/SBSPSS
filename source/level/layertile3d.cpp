@@ -23,11 +23,17 @@ int			ShowPolyz=0;
 #endif
 
 static const int	BLOCK_SIZE				=16;
+#if defined(__TERRITORY_EUR__)
+static const int	SCREEN_TILE_ADJ_U		=2;
+static const int	SCREEN_TILE_ADJ_D		=2;	// Extra line needed :o(
+static const int	SCREEN_TILE_ADJ_L		=3;
+static const int	SCREEN_TILE_ADJ_R		=3;
+#else
 static const int	SCREEN_TILE_ADJ_U		=2;
 static const int	SCREEN_TILE_ADJ_D		=1;
 static const int	SCREEN_TILE_ADJ_L		=3;
 static const int	SCREEN_TILE_ADJ_R		=3;
-
+#endif
 static const int	SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;
 static const int	SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;
 
