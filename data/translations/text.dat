@@ -693,6 +693,8 @@ eng=Artists
 eng=Additional Artists
 [STR__CREDITS__ANIMATORS]
 eng=Animators
+[STR__CREDITS__FMV]
+eng=FMV
 [STR__CREDITS__QA_MANAGER]
 eng=QA Manager
 [STR__CREDITS__LEAD_TESTER]
@@ -783,6 +785,16 @@ eng=Peter Chaffey for listening and feeding cats
 eng=Tereza Owens for patience and a beautiful wedding day
 [STR__CREDITS__JENNIFER_PENN_FOR_TAMING_THE_NOMAD]
 eng=Jennifer Penn for taming the nomad
+[STR__CREDITS__PERNILLA_BJARNE]
+eng=Pernilla Bjarne
+[STR__CREDITS__SARAH_RUNDELL]
+eng=Sarah Rundell
+[STR__CREDITS__NEIL_CAMPBELL]
+eng=Neil Campbell
+[STR__CREDITS__MATT_COOPER_TRON]
+eng=Matt Cooper-tron
+[STR__CREDITS__LAURA_GALLARDO]
+eng=Laura Gallardo
 [STR__CREDITS__CLIMAX_LONDON]
 eng=Climax London
 
