@@ -123,7 +123,7 @@ INGAMEFX_GFX_OUT_DIR :=		$(DATA_OUT)/ingamefx
 INGAMEFX_GFX_NONTRANS :=			
 INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_NONTRANS_DIR)/$(FILE))
 
-INGAMEFX_GFX_TRANS :=		+bubble_small.bmp +bubble_flower.bmp
+INGAMEFX_GFX_TRANS :=		+bubble_1.bmp +bubble_2.bmp +bubble_3.bmp
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE))
 
 INGAMEFX_GFX_TEX_IN :=		${INGAMEFX_GFX_NONTRANS_IN} ${INGAMEFX_GFX_TRANS_IN}
@@ -181,7 +181,7 @@ GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
 # Big TGA backdrops
 #----------------------------------------------------------------------------
 BACKDROPS_IN_DIR :=		$(GRAF_DIR)/backdrop
-BACKDROPS_IN :=			credits
+BACKDROPS_IN :=			credits sky
 
 BACKDROPS_OUT_DIR :=	$(DATA_OUT)/backdrop
 BACKDROPS_OUT :=		$(foreach SCREEN,$(BACKDROPS_IN),$(BACKDROPS_OUT_DIR)/$(SCREEN).gfx)

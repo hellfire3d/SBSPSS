@@ -50,6 +50,15 @@ public:
 		MODE__EXIT_TO_GAME,
 	} FrontEndMode;
 
+	enum
+	{
+		LOGO_CENTRE_Y=74,
+		GAME_TITLE_TEXT_CENTRE_Y=100,
+		GAME_TITLE_TEXT_R=128,
+		GAME_TITLE_TEXT_G=128,
+		GAME_TITLE_TEXT_B=128,
+	};
+
 	void	init();
 	void	shutdown();
 	void	render();
@@ -57,8 +66,11 @@ public:
 	int		readyToShutdown();
 	char	*getSceneName()			{return"FrontEnd";}
 
+	static	void	renderLogo();
 
 private:
+	void	thinkLogo(int _frames);
+	
 	void	setMode(FrontEndMode _newMode);
 
 	int							m_exitToGame;

@@ -83,9 +83,6 @@ static int count;
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::init()
 {
-	m_sprites=new ("Demomode Sprites") SpriteBank();
-	m_sprites->load(FRONTEND_FRONTEND_SPR);
-
 	m_smallFont=new ("Demomode SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
@@ -101,7 +98,6 @@ void CFrontEndDemoMode::init()
 void CFrontEndDemoMode::shutdown()
 {
 	m_smallFont->dump();		delete m_smallFont;
-	m_sprites->dump();			delete m_sprites;
 }
 
 /*----------------------------------------------------------------------
@@ -140,12 +136,7 @@ void CFrontEndDemoMode::render()
 	sFrameHdr	*fh;
 
 	// Game logo/title
-	fh=m_sprites->getFrameHeader(FRM__SBLOGO);
-	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,220);
-	m_smallFont->setColour(GAME_TITLE_TEXT_R,GAME_TITLE_TEXT_G,GAME_TITLE_TEXT_B);
-	m_smallFont->print(256,GAME_TITLE_TEXT_CENTRE_Y,STR__FRONTEND__GAME_TITLE);
-	m_smallFont->setColour(0,0,0);
-	m_smallFont->print(256+1,GAME_TITLE_TEXT_CENTRE_Y+1,STR__FRONTEND__GAME_TITLE);
+	CFrontEndScene::renderLogo();
 
 	if(!CFader::isFading())
 	{

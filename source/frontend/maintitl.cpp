@@ -50,6 +50,14 @@
 #include "gui\gframe.h"
 #endif
 
+#ifndef _FILEIO_HEADER_
+#include "fileio\fileio.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -147,6 +155,7 @@ void CFrontEndMainTitles::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+static u8 *s_image;
 void CFrontEndMainTitles::select()
 {
 	m_mode=MODE__PRESS_START;
@@ -159,6 +168,10 @@ void CFrontEndMainTitles::select()
 
 	m_demoTimeout=0;
 
+	s_image=CFileIO::loadFile(BACKDROP_SKY_GFX);
+	ASSERT(s_image);
+	SetScreenImage(s_image);
+
 	CFader::setFadingIn();
 }
 
@@ -170,6 +183,9 @@ void CFrontEndMainTitles::select()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::unselect()
 {
+	ClearScreenImage();
+	MemFree(s_image);	s_image=NULL;
+
 	m_mainMenu->unselect();
 }
 
@@ -192,31 +208,58 @@ int isy=3;
 int isw=100;
 int ish=56;
 
-int rsx=4096;
-int rsy=4096;
-int rsr=0;
-int	rspeed=0;
-
 void CFrontEndMainTitles::render()
 {
 	sFrameHdr	*fh;
 	POLY_FT4	*ft4;
 
 	// Game logo/title
-	fh=m_sprites->getFrameHeader(FRM__SBLOGO);
-//	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,220);
-	m_sprites->printRotatedScaledSprite(fh,256,LOGO_CENTRE_Y,rsx,rsy,rsr,220);
-	m_smallFont->setColour(GAME_TITLE_TEXT_R,GAME_TITLE_TEXT_G,GAME_TITLE_TEXT_B);
-	m_smallFont->print(256,GAME_TITLE_TEXT_CENTRE_Y,STR__FRONTEND__GAME_TITLE);
-	m_smallFont->setColour(0,0,0);
-	m_smallFont->print(256+1,GAME_TITLE_TEXT_CENTRE_Y+1,STR__FRONTEND__GAME_TITLE);
-
+	CFrontEndScene::renderLogo();
 
 	// The island
 	fh=m_sprites->getFrameHeader(FRM__ISLAND);
 	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,221);
 
 	// Sky
+/*	
+//	POLY_FT4 *CFrontEndMainTitles::prepareSeaPortionFT4(sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb)
+if(xstep&&ystep)
+{
+	int			x,y,f;
+	sFrameHdr	*fh;
+	POLY_FT4	*ft4;
+
+	fh=m_sprites->getFrameHeader(FRM_SKY);
+	for(x=0;x<512;x+=xstep)
+	{
+		for(y=0;y<128;y+=ystep)
+		{
+			for(f=0;f<posnum;f++)
+			{
+				ft4=prepareSeaPortionFT4(fh,x>>2,y<<1,xstep>>2,ystep<<1,128);
+				setXYWH(ft4,x+pos[f].x,y+pos[f].y,xstep,ystep);
+				if(f)
+				{
+					setSemiTrans(ft4,true);
+				}
+				AddPrimToList(ft4,1000-f);
+			}
+		}
+	}
+}
+else
+{
+	POLY_G4	*g4;
+	g4=GetPrimG4();
+	setXYWH(g4,0,0,512,256);
+	setRGB0(g4,99,50,50);
+	setRGB1(g4,50,50,99);
+	setRGB2(g4,50,99,50);
+	setRGB3(g4,99,50,99);
+	AddPrimToList(g4,1001);
+}
+*/
+	/*
 	fh=m_sprites->getFrameHeader(FRM_SKY);
 	for(int i=0;i<posnum;i++)
 	{
@@ -225,6 +268,7 @@ void CFrontEndMainTitles::render()
 		if(i)
 			setSemiTrans(ft4,true);
 	}
+	*/
 
 	renderSeaSection(m_sprites->getFrameHeader(FRM__ISLAND),isx,HORIZON_LEVEL+isy,isw,ish);
 	renderSeaSection(m_sprites->getFrameHeader(FRM_SKY),0,HORIZON_LEVEL,512,256-HORIZON_LEVEL+SEA_OVERLAP);
@@ -253,7 +297,6 @@ void CFrontEndMainTitles::render()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::think(int _frames)
 {
-rsr=(rsr+(_frames*rspeed))&4095;
 	sval=(sval+(seaspeed*_frames))&4095;
 
 	switch(m_mode)
@@ -430,7 +473,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
 		{
 			grid[xloop][yloop].x=(x>>8)+0;
 			grid[xloop][yloop].y=(y>>8)+(msin(waveval)/scale);
-			grid[xloop][yloop].colour=colourbase+((msin(waveval)/colourscale)*colourpostscale);
+//			grid[xloop][yloop].colour=colourbase+((msin(waveval)/colourscale)*colourpostscale);
 			x+=xstep;
 		}
 		y+=ystep;

@@ -69,7 +69,18 @@
 int				CBubicleFactory::s_initialised=false;
 CBubicleEmitter	*CBubicleFactory::s_emitters;
 CBubicle		*CBubicleFactory::s_bubicles;
+
 SpriteBank		*CBubicleFactory::s_sprites;
+
+int			CBubicleFactory::s_frameTypeCounter=0;
+const int	CBubicleFactory::s_frameTabSize=8;
+const int	CBubicleFactory::s_frameTabSizeMask=0x07;
+sFrameHdr	*CBubicleFactory::s_frameTab[s_frameTabSize];
+const int	CBubicleFactory::s_frameTabSrc[s_frameTabSize]=
+{
+	FRM__BUBBLE_1,FRM__BUBBLE_2,FRM__BUBBLE_2,FRM__BUBBLE_1,
+	FRM__BUBBLE_2,FRM__BUBBLE_1,FRM__BUBBLE_2,FRM__BUBBLE_3,
+};
 
 int s_numLiveBubicleEmitters=0;
 int s_numLiveBubicles=0;
@@ -217,8 +228,6 @@ void CBubicle::create()
   ---------------------------------------------------------------------- */
 void CBubicle::init(BubicleData *_init,int _x,int _y)
 {
-	static int	frameType=0;
-
 	m_data=*_init;
 
 	m_x=(_x-(m_data.m_w>>1))<<ACCURACY_SHIFT;
@@ -233,7 +242,7 @@ void CBubicle::init(BubicleData *_init,int _x,int _y)
 	m_vSizeChange=0;	
 	m_frameCount=0;
 
-	m_fhBub=CBubicleFactory::getSprites()->getFrameHeader((frameType++)&0x31?FRM__BUBBLE_SMALL:FRM__BUBBLE_FLOWER);
+	m_fhBub=CBubicleFactory::getBubbleFrameHeader();
 
 	m_active=true;
 }
@@ -364,6 +373,11 @@ void CBubicleFactory::init()
 
 	s_sprites=new ("Bubble Sprites") SpriteBank();
 	s_sprites->load(INGAMEFX_INGAMEFX_SPR);
+
+	for(i=0;i<s_frameTabSize;i++)
+	{
+		s_frameTab[i]=s_sprites->getFrameHeader(s_frameTabSrc[i]);
+	}
 
 	emt=s_emitters=(CBubicleEmitter*)MemAlloc(sizeof(CBubicleEmitter)*NUM_EMITTERS,"BubicleEmitters");
 	for(i=0;i<NUM_EMITTERS;i++,emt++)
@@ -551,6 +565,20 @@ CBubicle *CBubicleFactory::spawnParticle(BubicleEmitterData *_init)
 
 	SYSTEM_DBGMSG("Out of CBubicles!");
 	return NULL;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+sFrameHdr *CBubicleFactory::getBubbleFrameHeader()
+{
+	s_frameTypeCounter=(s_frameTypeCounter+1)&s_frameTabSizeMask;
+
+	return s_frameTab[s_frameTypeCounter];
 }
 
 

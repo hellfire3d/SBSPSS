@@ -96,7 +96,7 @@ void CFrontEndCredits::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-u8 *s_image;
+static u8 *s_image;
 void CFrontEndCredits::select()
 {
 	m_shuttingDown=false;

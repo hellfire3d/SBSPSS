@@ -64,7 +64,6 @@ private:
 	};
 
 	class FontBank		*m_smallFont;
-	class SpriteBank	*m_sprites;
 
 	int					m_shuttingDown;
 };

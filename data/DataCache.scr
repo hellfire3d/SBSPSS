@@ -17,6 +17,7 @@ sfx/ingame.pxm
 sfx/ingame.vb
 sfx/ingame.vh
 backdrop/credits.gfx
+backdrop/sky.gfx
 { SYSTEM_CACHE 4
 }
 ui/uigfx.spr

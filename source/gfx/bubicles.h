@@ -161,7 +161,7 @@ public:
 	
 	static CBubicleEmitter	*spawnEmitter(BubicleEmitterData *_init);
 	static CBubicle			*spawnParticle(BubicleEmitterData *_init);
-
+	static sFrameHdr		*getBubbleFrameHeader();
 	static SpriteBank		*getSprites()							{return s_sprites;}
 
 
@@ -178,6 +178,12 @@ private:
 	static CBubicleEmitter	*s_emitters;
 	static CBubicle			*s_bubicles;
 	static SpriteBank		*s_sprites;
+
+	static int				s_frameTypeCounter;
+	static const int		s_frameTabSize;
+	static const int		s_frameTabSizeMask;
+	static sFrameHdr		*s_frameTab[];
+	static const int		s_frameTabSrc[];
 
 };
 
