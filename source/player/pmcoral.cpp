@@ -62,6 +62,10 @@
 #include "projectl\prnpc.h"
 #endif
 
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -158,14 +162,14 @@ void	CPlayerModeCoralBlower::think()
 	switch(m_blowerState)
 	{
 		case BLOWER_STATE__EMPTY:
-			if(getPadInputDown()&PI_FIRE&&getState()==STATE_IDLE)
+			if(getPadInputDown()&PI_CATCH&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__SUCKING;
 				m_enemy=NULL;
 			}
 			break;
 		case BLOWER_STATE__SUCKING:
-			if(!(getPadInputHeld()&PI_FIRE&&getState()==STATE_IDLE))
+			if(!(getPadInputHeld()&PI_CATCH&&getState()==STATE_IDLE))
 			{
 				m_blowerState=BLOWER_STATE__EMPTY;
 			}
@@ -272,6 +276,7 @@ void	CPlayerModeCoralBlower::renderModeUi()
 {
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
+//	char		buf[4];
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__BLOWER);
@@ -284,6 +289,9 @@ void	CPlayerModeCoralBlower::renderModeUi()
 	{
 		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 	}
+
+//	sprintf(buf,"x%d",0);
+//	m_player->getFontBank()->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
 }
 
 /*----------------------------------------------------------------------
