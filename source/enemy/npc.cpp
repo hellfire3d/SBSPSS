@@ -1315,10 +1315,8 @@ void CNpcEnemy::render()
 	//renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) );// * 20;
 	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
 
-	int	W=m_actorGfx->getFrameWidth(m_animNo,m_frame);
-	int	H=m_actorGfx->getFrameHeight(m_animNo,m_frame);
 	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy - H;
+	renderPos.vy = Pos.vy - offset.vy;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
