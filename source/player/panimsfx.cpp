@@ -57,7 +57,7 @@ static const int	s_blowBubbleCount=sizeof(s_blowBubbleSfx)/sizeof(CPlayer::AnimF
 // ANIM_PLAYER_ANIM_BUTTBOUNCEEND
 static const CPlayer::AnimFrameSfx s_buttBounceEndSfx[]=
 {
-	{	0,	CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE,		},
+	{	1,	CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE,		},
 };
 static const int	s_buttBounceEndCount=sizeof(s_buttBounceEndSfx)/sizeof(CPlayer::AnimFrameSfx);
 
