@@ -148,6 +148,7 @@ virtual	~CActorGfx();
 
 
 protected:
+		sPoolNode		*CacheFrame(int Anim,int Frame);
 		void			SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
 
 		sActorPool		*PoolEntry;

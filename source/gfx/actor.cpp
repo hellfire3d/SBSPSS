@@ -11,6 +11,7 @@
 #include "gfx\actor.h"
 #include "gfx\otpos.h"
 #include "gfx\animtex.h"
+#include "game\game.h"
 
 #include <dstructs.h>
 
@@ -521,10 +522,9 @@ void	CActorGfx::setActor(sActorPool *ThisActor)
 }
 
 /*****************************************************************************/
-POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
+sPoolNode	*CActorGfx::CacheFrame(int Anim,int Frame)
 {
 sPoolNode		*ThisNode,*FindNode;
-POLY_FT4		*Ft4;
 
 // Calc Frame Ptrs
 sSpriteAnimBank	*SpriteBank=PoolEntry->ActorGfx;
@@ -599,111 +599,7 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 
 				CPakTex::Add(CurrentFrameGfx->PAKSpr,&ThisNode->DstRect);
 			}
-
-			Ft4=GetPrimFT4();
-			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
-			Ft4->tpage=ThisNode->TPage;
-			Ft4->clut=PoolEntry->ActorGfx->Clut;
-			setShadeTex(Ft4,1);
-			setRGB0(Ft4,127,127,127);
-			addPrim(OtPtr+OtPos,Ft4);
-// Set BBox
-// Sizes now depend on aspect corrected sizes, so get sizes back from poly
-int			BBoxW=Ft4->x1-Ft4->x0;
-int			BBoxH=Ft4->y2-Ft4->y0;
-int			HalfW=BBoxW>>1;
-
-			BBox.XMin=-HalfW+BBOX_ADJ;
-			BBox.XMax=+HalfW-BBOX_ADJ;
-			BBox.YMin=-BBoxH+BBOX_ADJ;
-			BBox.YMax=0-BBOX_ADJ;
-
-			return(Ft4);
-}
-
-/*****************************************************************************/
-POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale)
-{
-int		dX,dY;
-int		CosAngle,SinAngle;
-int		CosX,CosY,SinX,SinY;
-sBBox	SBox,CBox;
-int		W=Ft4->x1-Ft4->x0;
-int		H=Ft4->y2-Ft4->y0;
-
-		Angle&=4095;	
-	
-//		dX=(CurrentFrameGfx->W*XScale)>>(12+1);	// +1 for half
-//		dY=(CurrentFrameGfx->H*YScale)>>(12);	
-
-		dX=(W*XScale)>>(12+1);	// +1 for half
-		dY=(H*YScale)>>(12);	
-
-		CosAngle=mcos(Angle);
-		SinAngle=msin(Angle);
-
-		SBox.XMin=(SinAngle*-dX)>>12;
-		SBox.XMax=(SinAngle*+dX)>>12;
-		SBox.YMin=(SinAngle*-dY)>>12;
-		SBox.YMax=0;
-
-		CBox.XMin=(CosAngle*-dX)>>12;
-		CBox.XMax=(CosAngle*+dX)>>12;
-		CBox.YMin=(CosAngle*-dY)>>12;
-		CBox.YMax=0;
-
-int		x0,x1,x2,x3;
-int		y0,y1,y2,y3;
-int		XMin,XMax;
-int		YMin,YMax;
-
-		x0=CBox.XMin-SBox.YMin; y0=SBox.XMin+CBox.YMin;
-		x1=CBox.XMax-SBox.YMin; y1=SBox.XMax+CBox.YMin;
-		x2=CBox.XMin+SBox.YMax; y2=SBox.XMin-CBox.YMax;
-		x3=CBox.XMax+SBox.YMax; y3=SBox.XMax-CBox.YMax;
-
-		XMin=x0;
-		if (XMin>x1) XMin=x1;
-		if (XMin>x2) XMin=x2;
-		if (XMin>x3) XMin=x3;
-		XMax=x0;
-		if (XMax<x1) XMax=x1;
-		if (XMax<x2) XMax=x2;
-		if (XMax<x3) XMax=x3;
-		YMin=y0;
-		if (YMin>y1) YMin=y1;
-		if (YMin>y2) YMin=y2;
-		if (YMin>y3) YMin=y3;
-		YMax=y0;
-		if (YMax<y1) YMax=y1;
-		if (YMax<y2) YMax=y2;
-		if (YMax<y3) YMax=y3;
-
-		BBox.XMin=XMin+BBOX_ADJ;
-		BBox.XMax=XMax-BBOX_ADJ;
-		BBox.YMin=YMin+BBOX_ADJ;
-		BBox.YMax=YMax-BBOX_ADJ;
-
-		Ft4->x0=Pos.vx+x0; Ft4->y0=Pos.vy+y0;
-		Ft4->x1=Pos.vx+x1; Ft4->y1=Pos.vy+y1;
-		Ft4->x2=Pos.vx+x2; Ft4->y2=Pos.vy+y2;
-		Ft4->x3=Pos.vx+x3; Ft4->y3=Pos.vy+y3;
-
-		return(Ft4);
-}
-
-/*****************************************************************************/
-void	CActorGfx::getFrameOffsets(int _anim,int _frame,int *_x,int *_y)
-{
-	sSpriteAnimBank	*SpriteBank;
-	sSpriteAnim		*ThisAnim;
-	sSpriteFrame	*pFrame;
-
-	SpriteBank=PoolEntry->ActorGfx;
-	ThisAnim=SpriteBank->AnimList+_anim;
-	pFrame=&ThisAnim->Anim[_frame];
-	*_x=pFrame->XOfs;
-	*_y=pFrame->YOfs;
+		return(ThisNode);
 }
 
 /*****************************************************************************/
@@ -714,6 +610,7 @@ u8		H=CurrentFrameGfx->H-1;
 u8		U=Node->U;
 u8		V=Node->V;
 int		AspectX0,AspectX1;
+
 		if (XFlip)
 			{
 			X-=CurrentFrame->XOfs;
@@ -765,6 +662,132 @@ int		AspectX0,AspectX1;
 #endif
 }
 
+/*****************************************************************************/
+
+POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
+{
+sPoolNode	*ThisNode=CacheFrame(Anim,Frame);
+POLY_FT4	*Ft4=GetPrimFT4();
+
+			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
+			Ft4->tpage=ThisNode->TPage;
+			Ft4->clut=PoolEntry->ActorGfx->Clut;
+			setShadeTex(Ft4,1);
+			setRGB0(Ft4,127,127,127);
+			addPrim(OtPtr+OtPos,Ft4);
+
+// Set BBox
+// Sizes now depend on aspect corrected sizes, so get sizes back from poly
+int			BBoxW=Ft4->x1-Ft4->x0;
+int			BBoxH=Ft4->y2-Ft4->y0;
+int			HalfW=BBoxW>>1;
+
+			BBox.XMin=-HalfW+BBOX_ADJ;
+			BBox.XMax=+HalfW-BBOX_ADJ;
+			BBox.YMin=-BBoxH+BBOX_ADJ;
+			BBox.YMax=0-BBOX_ADJ;
+
+			return(Ft4);
+}
+
+/*****************************************************************************/
+static const VECTOR	ZeroPos={0,0,0};
+static const int	ScaleXAspect=2050;	// Odd hard coded number, sorry
+
+POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale)
+{
+MATRIX	Mtx;
+VECTOR	Scale;
+int		ScaleInc=Angle&1023;
+int		Quad=0;
+		XScale+=ScaleXAspect;
+
+		Angle&=4095;
+
+		Quad=Angle>>10;
+		switch(Quad)
+		{
+			case 0:
+				ScaleInc=+ScaleInc; 
+				break;
+			case 1:
+				ScaleInc=1023-ScaleInc; 
+				break;
+			case 2:
+				ScaleInc=+ScaleInc; 
+				break;
+			case 3:
+				ScaleInc=1023-ScaleInc; 
+				break;
+		}
+
+		Scale.vx=XScale-(ScaleInc*2);
+		Scale.vy=YScale+(ScaleInc*2);
+		Scale.vz=ONE;
+		SetIdentNoTrans(&Mtx);
+		ScaleMatrix(&Mtx,&Scale);
+		RotMatrixZ(Angle,&Mtx);
+		gte_SetRotMatrix(&Mtx);
+		CMX_SetTransMtxXY(&ZeroPos);
+
+		
+SVECTOR	I,O;
+s32		Tmp;
+		I.vz=0;
+		I.vy=-CurrentFrameGfx->H;
+		I.vx=-CurrentFrameGfx->W0;	RotTransSV(&I,&O,&Tmp); Ft4->x0=O.vx; Ft4->y0=O.vy;
+		I.vx=+CurrentFrameGfx->W1;	RotTransSV(&I,&O,&Tmp); Ft4->x1=O.vx; Ft4->y1=O.vy;
+		I.vy=0;
+		I.vx=-CurrentFrameGfx->W0;	RotTransSV(&I,&O,&Tmp); Ft4->x2=O.vx; Ft4->y2=O.vy;
+		I.vx=+CurrentFrameGfx->W1;	RotTransSV(&I,&O,&Tmp); Ft4->x3=O.vx; Ft4->y3=O.vy;
+
+// Adjust BBox
+int		XMin,XMax;
+int		YMin,YMax;
+
+		XMin=Ft4->x0;
+		if (XMin>Ft4->x1) XMin=Ft4->x1;
+		if (XMin>Ft4->x2) XMin=Ft4->x2;
+		if (XMin>Ft4->x3) XMin=Ft4->x3;
+		XMax=Ft4->x0;
+		if (XMax<Ft4->x1) XMax=Ft4->x1;
+		if (XMax<Ft4->x2) XMax=Ft4->x2;
+		if (XMax<Ft4->x3) XMax=Ft4->x3;
+		YMin=Ft4->y0;
+		if (YMin>Ft4->y1) YMin=Ft4->y1;
+		if (YMin>Ft4->y2) YMin=Ft4->y2;
+		if (YMin>Ft4->y3) YMin=Ft4->y3;
+		YMax=Ft4->y0;
+		if (YMax<Ft4->y1) YMax=Ft4->y1;
+		if (YMax<Ft4->y2) YMax=Ft4->y2;
+		if (YMax<Ft4->y3) YMax=Ft4->y3;
+
+		BBox.XMin=XMin+BBOX_ADJ;
+		BBox.XMax=XMax-BBOX_ADJ;
+		BBox.YMin=YMin+BBOX_ADJ;
+		BBox.YMax=YMax-BBOX_ADJ;
+
+		Ft4->x0+=Pos.vx; Ft4->y0+=Pos.vy;
+		Ft4->x1+=Pos.vx; Ft4->y1+=Pos.vy;
+		Ft4->x2+=Pos.vx; Ft4->y2+=Pos.vy;
+		Ft4->x3+=Pos.vx; Ft4->y3+=Pos.vy;
+
+		return(Ft4);
+}
+
+/*****************************************************************************/
+void	CActorGfx::getFrameOffsets(int _anim,int _frame,int *_x,int *_y)
+{
+	sSpriteAnimBank	*SpriteBank;
+	sSpriteAnim		*ThisAnim;
+	sSpriteFrame	*pFrame;
+
+	SpriteBank=PoolEntry->ActorGfx;
+	ThisAnim=SpriteBank->AnimList+_anim;
+	pFrame=&ThisAnim->Anim[_frame];
+	*_x=pFrame->XOfs;
+	*_y=pFrame->YOfs;
+}
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -864,6 +887,7 @@ sOT				*ThisOT;
 VECTOR			RenderPos;
 MATRIX			Mtx;
 u32	const		*XYList=(u32*)SCRATCH_RAM;
+
 
 // If has scale && angle then need to use PSX scale matrix, otherwise, force values
 			if (Angle)
