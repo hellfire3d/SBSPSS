@@ -157,7 +157,10 @@ void CPlayerStateNoAnimIdle::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateNoAnimIdle::think(CPlayerModeBase *_playerMode)
 {
-	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+	{
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+	}
 	thinkControl(_playerMode);
 }
 
