@@ -29,6 +29,35 @@
 void CNpcDustDevilEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
+
+	m_fadeVal = 128;
+	m_fadeOut = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcDustDevilEnemy::render()
+{
+	SprFrame = NULL;
+
+	if ( m_isActive )
+	{
+		CEnemyThing::render();
+
+		if (canRender())
+		{
+			DVECTOR &renderPos=getRenderPos();
+
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			setSemiTrans( SprFrame, true );
+			m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 4096, 4096 );
+			setRGB0( SprFrame, m_fadeVal, m_fadeVal, m_fadeVal );
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,73 +86,88 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 		m_animNo = m_data[m_type].moveAnim;
 	}
 
-	// ignore y component of waypoint, since we are stuck to the ground
-
-	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &m_heading ) )
+	if ( m_fadeOut )
 	{
-		// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
+		m_fadeVal -= _frames * 12;
 
-		if ( pathComplete )
+		if ( m_fadeVal < 0 )
 		{
 			m_npcPath.resetPath();
 
 			Pos = m_base;
-		}
-		else
-		{
-			// check for vertical movement
 
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
-
-			if ( groundHeight <= yMovement )
-			{
-				// groundHeight <= yMovement indicates either just above ground or on or below ground
-
-				moveY = groundHeight;
-			}
-			else
-			{
-				// fall
-
-				moveY = yMovement;
-			}
+			m_fadeOut = false;
+			m_fadeVal = 128;
 		}
 	}
 	else
 	{
-		// check for collision
+		// ignore y component of waypoint, since we are stuck to the ground
 
-		distX = distX / abs( distX );
-
-		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
+		if ( m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &m_heading ) )
 		{
-			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
+			// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
 
-			m_npcPath.incPath();
-		}
-		else
-		{
-			// check for vertical movement
-
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
-
-			if ( groundHeight <= yMovement )
+			if ( pathComplete )
 			{
-				// groundHeight <= yMovement indicates either just above ground or on or below ground
-
-				moveX = distX * m_speed * _frames;
-				moveY = groundHeight;
+				m_fadeOut = true;
 			}
 			else
 			{
-				// fall
+				// check for vertical movement
 
-				moveY = yMovement;
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+				if ( groundHeight <= yMovement )
+				{
+					// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+					moveY = groundHeight;
+				}
+				else
+				{
+					// fall
+
+					moveY = yMovement;
+				}
 			}
 		}
-	}
+		else
+		{
+			// check for collision
 
-	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
+			distX = distX / abs( distX );
+
+			if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
+			{
+				// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
+
+				m_npcPath.incPath();
+			}
+			else
+			{
+				// check for vertical movement
+
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+				if ( groundHeight <= yMovement )
+				{
+					// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+					moveX = distX * m_speed * _frames;
+					moveY = groundHeight;
+				}
+				else
+				{
+					// fall
+
+					moveY = yMovement;
+				}
+			}
+		}
+
+		processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
