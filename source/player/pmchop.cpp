@@ -92,9 +92,18 @@ void	CPlayerModeChop::think()
 	{
 		int facing;
 		facing=getFacing();
-		m_chopping=false;	// Oops..
-		setPlayerCollisionSize(chopcsx*facing,chopcsy,chopcsw,chopcsh);
-		m_chopping=true;	// Oops..
+		if(m_chopFrame==CHOP_ATTACK_START_FRAME)
+		{
+			m_chopping=false;	// Oops..
+			setPlayerCollisionSize(chopcsx*facing,chopcsy,chopcsw,chopcsh);
+			m_chopping=true;	// Oops..
+		}
+		else if(m_chopFrame==CHOP_ATTACK_END_FRAME+1)
+		{
+			m_chopping=false;	// Oops..
+			setPlayerCollisionSize(m_savedCSX,m_savedCSY,m_savedCSW,m_savedCSH);
+			m_chopping=true;	// Oops..
+		}
 
 		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
 		m_player->setAnimFrame(m_chopFrame);
@@ -135,7 +144,7 @@ void	CPlayerModeChop::setAnimFrame(int _animFrame)
   ---------------------------------------------------------------------- */
 ATTACK_STATE	CPlayerModeChop::getAttackState()
 {
-	if(m_chopping)
+	if(m_chopping&&m_chopFrame>=CHOP_ATTACK_START_FRAME&&m_chopFrame<=CHOP_ATTACK_END_FRAME)
 	{
 		return ATTACK_STATE__KARATE;
 	}

@@ -48,6 +48,13 @@ public:
 	virtual void				setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 
 private:
+	enum
+	{
+		CHOP_ATTACK_START_FRAME=15,
+		CHOP_ATTACK_END_FRAME=21,
+	};
+
+
 	int							canAttackFromThisState();
 
 	int							m_savedAnimNo,m_savedAnimFrame;
