@@ -38,7 +38,7 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #----------------------------------------------------------------------------
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
-LEVELS_OPTS :=				-t:8,3,1 -s:256
+LEVELS_OPTS :=				-t:8,4,1 -s:256
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
@@ -128,68 +128,54 @@ GFX_DATA_OUT		+=	$(COLLISION_OUT)
 # Actors
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
+SPONGEBOB_ANIM_LIST :=	Spongebob buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
+						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate run \
+						runstart runstop soakup talk01 teeterback teeterfront \
+						idlewind
+
+SPONGEBOB_EXTRA_TEX :=	SBBackNormal \
+						SBEyesAngry SBEyesBlink SBEyesDown SBEyesfiece SBEyesLeft SBEyesNormal SBEyesRight SBEyesSheepish SBEyesUp SBEyesWorried \
+						SBHandNormal \
+						SBMouthGasp SBMouthNormal SBMouthSheepish SBMouthSmile SBMouthTerror SBMouthWhistle \
+						SBPantsideNormal \
+						SBPantsNormal \
+						SBSideNormal \
+						SBSocksNormal \
+						SBSoleNormal \
+						SBTopNormal
+
+#----------------------------------------------------------------------------
 ACTOR_IN_DIR :=			$(GRAF_DIR)/Characters
 ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/Actors
 ACTORS_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
-# Global flags
-GENERIC_ACT_TEX_FLAGS =	-c+ -t:27,1,1 -w+ -b+
-GEN_GRP_TEX_FLAGS=		-t:28,1,1
 
-actors:			player
-	
-cleanactors:	cleanplayer
+ACTORS_LIST :=			SPONGEBOB
+
+ACTORS_MAKEFILES :=		$(foreach ACTOR,$(ACTORS_LIST),$(ACTOR_MAKEFILE_DIR)/$(ACTOR).mak)
+
+$(ACTORS_MAKEFILES):	$(ACTORS_DIRS_TO_MAKE) makefile.gfx $(BUILD_DIR)/mkactor.pl
+	@$(PL) $(BUILD_DIR)/mkactor.pl $@ $(notdir $(basename $@))
+
+include $(ACTORS_MAKEFILES)
+
+ACTORS_ALL_OUT :=		$(foreach ACTOR,$(ACTORS_LIST),$(ACTOR_$(ACTOR)_OUT))
+
+GFX_DATA_OUT +=    		$(ACTORS_ALL_OUT)
+
+actors : $(ACTORS_ALL_OUT)
+	@$(ECHO) Actors made
+
+cleanactors : 	
+		@$(RM) -f $(ACTORS_ALL_OUT)
+		@$(ECHO) Actors cleaned
 
 #----------------------------------------------------------------------------
 # Player
 #----------------------------------------------------------------------------
 
-PLAYER_FILE :=		Spongebob
-PLAYER_IN_DIR:=		$(ACTOR_IN_DIR)/$(PLAYER_FILE)
-PLAYER_OUT_DIR :=	$(ACTOR_OUT_DIR)
 
-PLAYER_MOD_IN :=	$(PLAYER_IN_DIR)/$(PLAYER_FILE).Gin
-PLAYER_MOD_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).a3d
-PLAYER_TEX_DIR :=	$(PLAYER_IN_DIR)/textures
-PLAYER_TEX_IN :=	$(PLAYER_TEX_DIR)/*.bmp
-PLAYER_TEX_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).Tex
-
-PLAYER_ANIM	:=		buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
-					fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate run \
-					runstart runstop soakup talk01 teeterback teeterfront \
-					idlewind
-
-PLAYER_ANIM_LIST :=		$(foreach FILE,	$(PLAYER_ANIM),-a:$(PLAYER_IN_DIR)/$(FILE).gin)
-PLAYER_ANIM_DEP_IN :=	$(foreach FILE,	$(PLAYER_ANIM),$(PLAYER_IN_DIR)/$(FILE).gin)
-PLAYER_ANIM_DEP_OUT :=	$(ANIM_OUT_DIR)/SpongeBob.Abk
-
-PLAYER_EXTRA_TEX :=	SBBackNormal \
-					SBEyesAngry SBEyesBlink SBEyesDown SBEyesfiece SBEyesLeft SBEyesNormal SBEyesRight SBEyesSheepish SBEyesUp SBEyesWorried \
-					SBHandNormal \
-					SBMouthGasp SBMouthNormal SBMouthSheepish SBMouthSmile SBMouthTerror SBMouthWhistle \
-					SBPantsideNormal \
-					SBPantsNormal \
-					SBSideNormal \
-					SBSocksNormal \
-					SBSoleNormal \
-					SBTopNormal
-
-PLAYER_EXTRA_TEX_LIST :=	$(foreach FILE,	$(PLAYER_EXTRA_TEX),-x:textures/$(FILE).bmp)
-
-PLAYER_DEP_IN :=	$(PLAYER_MOD_IN) $(PLAYER_TEX_IN) $(PLAYER_ANIM_IN)
-PLAYER_DEP_OUT :=	$(PLAYER_MOD_OUT) $(PLAYER_TEX_OUT) $(PLAYER_ANIM_OUT)
-
-player: $(PLAYER_DEP_OUT)
-	
-cleanplayer:
-	@$(RM) -f $(PLAYER_DEP_OUT)
-	@$(ECHO) Player Cleaned
-	
-$(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
-	@$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256 -i:$(INC_DIR) $(PLAYER_EXTRA_TEX_LIST) $(PLAYER_ANIM_LIST)
-
-GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

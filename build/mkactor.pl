@@ -1,35 +1,26 @@
 $OutFile=shift(@ARGV);
-$InStr=shift(@ARGV);
+$Actor=shift(@ARGV);
 
-@Tmp=split('_',$InStr);
-$Chapter=shift(@Tmp);
-$Level=shift(@Tmp);
-$LevelDir =$Chapter/\$Level;
-
-# printf("I got\n0: $OutFile\n1: $InStrn\n");
-# printf("Chapter  = $Chapter\n");
-# printf("Level    = $Level\n");
-# printf("LevelDir = $LevelDir\n");
+# printf("I got\n0: $OutFile\n1: $Actor\n");
 
 $OutFile=">$OutFile";
 open(OutFile) || die "Can't create makefile $OutFile; $!";
+# print  <<eot
 print OutFile <<eot
-#print  <<eot
-.PHONY : make$Chapter\_$Level clean$Chapter\_$Level
+ACTOR_$Actor\:\t\$(ACTOR_$Actor\_OUT)
 
-make$Chapter\_$Level\:\t$Chapter\_$Level\_LVL\n
-clean$Chapter\_$Level\:\tclean$Chapter\_$Level\_LVL
+ACTOR_$Actor\_IN_DIR :=\t\$(ACTOR_IN_DIR)/$Actor
+ACTOR_$Actor\_OUT_DIR :=\t\$(ACTOR_OUT_DIR)
 
-$Chapter\_$Level\_IN_DIR :=\t\$(LEVELS_IN_DIR)/$Chapter/$Level
-$Chapter\_$Level\_IN  :=\t\$(foreach LVL, \$(LEVELS_$Chapter\_$Level), \$($Chapter\_$Level\_IN_DIR)/$Level\$(LVL).mex)
-$Chapter\_$Level\_OUT :=\t\$(foreach LVL, \$(LEVELS_$Chapter\_$Level), \$(LEVELS_OUT_DIR)/$Chapter\_$Level\$(LVL).lvl)
-$Chapter\_$Level\_TEX :=\t\$(LEVELS_OUT_DIR)/$Chapter\_$Level.tex)
+ACTOR_$Actor\_IN :=\t\$(ACTOR_$Actor\_IN_DIR)/$Actor.gin
+ACTOR_$Actor\_OUT :=\t\$(ACTOR_$Actor\_OUT_DIR)/$Actor.a3d
 
-clean$Chapter\_$Level\_LVL :\n\t\$(RM) -f \$($Chapter\_$Level\_OUT) \$($Chapter\_$Level\_TEX)
-$Chapter\_$Level\_LVL :\t\$($Chapter\_$Level\_IN)
+ACTOR_$Actor\_ANIM_LIST :=\t\$(foreach FILE, \$($Actor\_ANIM_LIST),-a:\$(ACTOR_$Actor\_IN_DIR)/\$(FILE).gin)
+ACTOR_$Actor\_TEX_LIST :=\t\$(foreach FILE,	\$($Actor\_EXTRA_TEX),-x:textures/\$(FILE).bmp)
 
-\$($Chapter\_$Level\_OUT) : \$($Chapter\_$Level\_IN)
-\t\@\$(MKLEVEL) \$($Chapter\_$Level\_IN) -o:\$(LEVELS_OUT_DIR) -c:$Chapter -l:$Level \$(LEVELS_OPTS)
+\$(ACTOR_$Actor\_OUT) : \$(ACTOR_$Actor\_IN)
+	\@\$(MKACTOR3D) \$(ACTOR_$Actor\_IN) -o:\$(ACTOR_$Actor\_OUT_DIR) -t:24,1,1 -s:256 -i:\$(INC_DIR) \$(ACTOR_$Actor\_TEX_LIST) \$(ACTOR_$Actor\_ANIM_LIST)
+
 
 eot
 ;
