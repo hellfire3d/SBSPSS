@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\glib" /I "..\ginlib" /I "..\maths" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\glib" /I "..\ginlib" /I "..\maths" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -113,19 +113,6 @@ SOURCE=.\grect.cpp
 # Begin Source File
 
 SOURCE=.\grect.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\main.cpp
-
-!IF  "$(CFG)" == "TexGrab - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "TexGrab - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
