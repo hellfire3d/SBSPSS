@@ -175,7 +175,7 @@ static	PlayerMetrics	s_playerMetrics=
 
 //
 int checkx=15;
-int checky=16;
+int checky=15;
 int checkdist=16;
 
 
