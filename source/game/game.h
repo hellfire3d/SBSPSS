@@ -70,6 +70,7 @@ protected:
 class	CPauseMenu		*m_pauseMenu;
 class	CPlayer			*m_player;
 static	FontBank		*s_genericFont;
+		class ScalableFontBank	*m_scalableFont;
 static	MATRIX			CamMtx;
 
 static int				s_restartLevel;
@@ -92,6 +93,10 @@ static	CLayerCollision	*getCollision()						{return(s_GlobalCollision);}
 static	SpriteBank		*s_GlobalSpritebank;
 static	CLayerCollision	*s_GlobalCollision;
 static	int				s_bossHasBeenKilled;
+
+
+		int				m_levelHasTimer;
+		int				m_timer;
 
 };
 

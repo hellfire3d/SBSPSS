@@ -186,9 +186,13 @@ void 	CGameScene::init()
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
+
+		m_scalableFont=new ("CountdownTimer") ScalableFontBank();
+		m_scalableFont->initialise(&standardFont);
+		m_scalableFont->setColour(255,255,255);
+		m_scalableFont->setScale(511);
+
 		VidSetClearScreen(0);
-
-
 
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
 		m_pauseMenu->init();
@@ -224,6 +228,7 @@ void	CGameScene::shutdown()
 		shutdownLevel();
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
+		m_scalableFont->dump();		delete m_scalableFont;
 		s_genericFont->dump();		delete s_genericFont;
 }
 
@@ -231,6 +236,17 @@ void	CGameScene::shutdown()
 void 	CGameScene::render()
 {
 //		CamMtx.t[2]=ZPos;	// Temp
+
+		if(m_levelHasTimer)
+		{
+			int		timerValue;
+			char	buf[10];
+
+			timerValue=m_timer/55;
+			if(timerValue<0)timerValue=0;
+			sprintf(buf,"%d",timerValue);
+			m_scalableFont->print(256,30,buf);
+		}
 
 		m_pauseMenu->render();
 		CConversation::render();
@@ -254,6 +270,16 @@ void	CGameScene::think(int _frames)
 //		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
 //	}
 //#endif
+
+	// Auto-timer stuff
+	if(m_levelHasTimer)
+	{
+		m_timer-=_frames;
+		if(m_timer<0)
+		{
+			s_levelFinished=true;
+		}
+	}
 
 	if(s_readyToExit)
 	{
@@ -287,6 +313,7 @@ void	CGameScene::think(int _frames)
 				chapterToOpen=chapter+1;
 			}
 			gameSlot->levelIsNowOpen(chapterToOpen-1,levelToOpen-1);
+//			CMapScene::setLevelToStartOn(chapterToOpen-1,levelToOpen-1);
 		}
 
 		// Level finished - go to map or fma
@@ -427,12 +454,21 @@ void	CGameScene::initLevel()
 
 	s_bossHasBeenKilled=false;
 
+	if(getLevelNumber()==5&&getChapterNumber()==2)
+	{
+		m_levelHasTimer=true;
+		m_timer=30*55;
+	}
+	else
+	{
+		m_levelHasTimer=false;
+	}
+
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
 	CActorPool::SetUpCache();
 	SYSTEM_DBGMSG("InitLevelDone\n");
-
 }
 
 
