@@ -39,6 +39,7 @@ void CNpcSmallJellyfishEnemy::render()
 	{
 		setRGB0( SprFrame, 255, 128, 255 );
 	}
+
 }
 
 void CNpcSmallJellyfishEnemy::processClose( int _frames )

@@ -11,6 +11,10 @@
 
 ===========================================================================*/
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 #ifndef __ENEMY_NPC_H__
 #include "enemy\npc.h"
 #endif
@@ -71,9 +75,9 @@
 #include <ACTOR_IRONDOGFISH_ANIM.h>
 #endif
 
-#ifndef __ANIM_JELLYFISH1_HEADER__
-#include <ACTOR_JELLYFISH1_ANIM.h>
-#endif
+//#ifndef __ANIM_JELLYFISH1_HEADER__
+//#include <ACTOR_JELLYFISH1_ANIM.h>
+//#endif
 
 #ifndef __ANIM_PUFFAFISH_HEADER__
 #include <ACTOR_PUFFAFISH_ANIM.h>
@@ -91,9 +95,9 @@
 #include <ACTOR_SPIDERCRAB_ANIM.h>
 #endif
 
-#ifndef __ANIM_SQUIDDART_HEADER__
-#include <ACTOR_SQUIDDART_ANIM.h>
-#endif
+//#ifndef __ANIM_SQUIDDART_HEADER__
+//#include <ACTOR_SQUIDDART_ANIM.h>
+//#endif
 
 #ifndef __ANIM_STOMPER_HEADER__
 #include <ACTOR_STOMPER_ANIM.h>
@@ -448,8 +452,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
-		ACTORS_JELLYFISH1_SBK,
-		ANIM_JELLYFISH1_IDLE,
+		0,//ACTORS_JELLYFISH1_SBK,
+		FRM_JELLYFISH1_SWIM1,
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_USER_CLOSE,
 		NPC_MOVEMENT_FIXED_PATH,
@@ -461,10 +465,10 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		DETECT_ALL_COLLISION,
 		DAMAGE__SHOCK_ENEMY,
 		16,
-		ANIM_JELLYFISH1_SWIM,
+		FRM_JELLYFISH1_SWIM1,
 		NPC_SHOT_GENERIC,
 		0,
-		ANIM_JELLYFISH1_SWIM,
+		FRM_JELLYFISH1_SWIM1,
 		true,
 		true,
 	},
@@ -624,8 +628,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_SQUID_DART
-		ACTORS_SQUIDDART_SBK,
-		ANIM_SQUIDDART_SWIM,
+		0,//ACTORS_SQUIDDART_SBK,
+		FRM_SQUIDDART_SWIM0001,
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_NONE,
 		NPC_MOVEMENT_FIXED_PATH,
@@ -637,7 +641,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		DETECT_ALL_COLLISION,
 		DAMAGE__HIT_ENEMY,
 		16,
-		ANIM_SQUIDDART_SWIM,
+		FRM_SQUIDDART_SWIM0001,
 		NPC_SHOT_GENERIC,
 		0,
 		0,

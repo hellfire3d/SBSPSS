@@ -27,66 +27,6 @@
 #include "enemy\npc.h"
 #endif
 
-#ifndef __ENEMY_NSJFISH_H__
-#include "enemy\nsjfish.h"
-#endif
-
-#ifndef __ENEMY_NHCRAB_H__
-#include "enemy\nhcrab.h"
-#endif
-
-#ifndef __ENEMY_NSCRAB_H__
-#include "enemy\nscrab.h"
-#endif
-
-#ifndef __ENEMY_NGEN_H__
-#include "enemy\ngen.h"
-#endif
-
-#ifndef	__ENEMY_NANEMONE_H__
-#include "enemy\nanemone.h"
-#endif
-
-#ifndef	__ENEMY_NCLAM_H__
-#include "enemy\nclam.h"
-#endif
-
-#ifndef	__ENEMY_NOCTO_H__
-#include "enemy\nocto.h"
-#endif
-
-#ifndef __ENEMY_NFFOLK_H__
-#include "enemy\nffolk.h"
-#endif
-
-#ifndef __ENEMY_NBBLOB_H__
-#include "enemy\nbblob.h"
-#endif
-
-#ifndef	__ENEMY_NGPIRATE_H__
-#include "enemy\ngpirate.h"
-#endif
-
-#ifndef	__ENEMY_NPUFFA_H__
-#include "enemy\npuffa.h"
-#endif
-
-#ifndef	__ENEMY_NSHRKMAN_H__
-#include "enemy\nshrkman.h"
-#endif
-
-#ifndef	__ENEMY_NSKLFISH_H__
-#include "enemy\nsklfish.h"
-#endif
-
-#ifndef	__ENEMY_NEYEBALL_H__
-#include "enemy\neyeball.h"
-#endif
-
-#ifndef	__ENEMY_NFSKULL_H__
-#include "enemy\nfskull.h"
-#endif
-
 #ifndef __ENEMY_NPLATFRM_H__
 #include "enemy\nplatfrm.h"
 #endif
@@ -356,173 +296,51 @@ void	CGameScene::initLevel()
 	{
 		for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
 		{
+			sThingActor	*ThisActor=actorList[actorNum];
 			CActorPool::ACTOR_TYPE actorType = CActorPool::getActorType( actorList[actorNum]->Type );
-
 			switch ( actorType )
 			{
 				case CActorPool::ACTOR_ENEMY_NPC:
-				{
-					CNpcEnemy *enemy;
-
-					CNpcEnemy::NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( actorList[actorNum]->Type );
-
-					switch( enemyType )
 					{
-						case CNpcEnemy::NPC_SMALL_JELLYFISH_1:
+						CNpcEnemy *enemy;
+						enemy=CNpcEnemy::Create(ThisActor);
+						enemy->setTypeFromMapEdit( ThisActor->Type );
+						enemy->init();
+						enemy->setLayerCollision( Level.getCollisionLayer() );
+
+						u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
+
+						u16 newXPos, newYPos;
+
+						newXPos = (u16) *PntList;
+						PntList++;
+						newYPos = (u16) *PntList;
+						PntList++;
+
+						enemy->setStartPos( newXPos, newYPos );
+						enemy->addWaypoint( newXPos, newYPos );
+
+						if ( ThisActor->PointCount > 1 )
 						{
-							enemy = new ("small jellyfish") CNpcSmallJellyfishEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_HERMIT_CRAB:
-						{
-							enemy = new ("hermit crab") CNpcHermitCrabEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_SPIDER_CRAB:
-						{
-							enemy = new ("spider crab") CNpcSpiderCrabEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_SPIDER_CRAB_SPAWNER:
-						{
-							enemy = new ("spider crab spawner") CNpcEnemyGenerator;
-							break;
-						}
-
-						case CNpcEnemy::NPC_ANEMONE_1:
-						{
-							enemy = new ("anemone 1") CNpcAnemone1Enemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_ANEMONE_2:
-						{
-							enemy = new ("anemone 2") CNpcAnemone2Enemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_ANEMONE_3:
-						{
-							enemy = new ("anemone 3") CNpcAnemone3Enemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_CLAM_JUMP:
-						{
-							enemy = new ("jumping clam") CNpcJumpingClamEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_CLAM_STATIC:
-						{
-							enemy = new ("static clam") CNpcStaticClamEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_BABY_OCTOPUS:
-						{
-							enemy = new ("baby octopus") CNpcBabyOctopusEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_FISH_FOLK:
-						case CNpcEnemy::NPC_ZOMBIE_FISH_FOLK:
-						{
-							enemy = new ("fish folk") CNpcFishFolk;
-							break;
-						}
-
-						case CNpcEnemy::NPC_BALL_BLOB:
-						{
-							enemy = new ("ball blob") CNpcBallBlobEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_GHOST_PIRATE:
-						{
-							enemy = new ("ghost pirate") CNpcGhostPirateEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_PUFFA_FISH:
-						{
-							enemy = new ("puffa fish") CNpcPuffaFishEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_SHARK_MAN:
-						{
-							enemy = new ("shark man") CNpcSharkManEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_SKELETAL_FISH:
-						{
-							enemy = new ("skeletal fish") CNpcSkeletalFishEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_EYEBALL:
-						{
-							enemy = new ("eyeball") CNpcEyeballEnemy;
-							break;
-						}
-
-						case CNpcEnemy::NPC_FLAMING_SKULL:
-						{
-							enemy = new ("flaming skull") CNpcFlamingSkullEnemy;
-							break;
-						}
-
-						default:
-						{
-							enemy = new ("npc enemy") CNpcEnemy;
-							break;
-						}
-					}
-
-					ASSERT(enemy);
-					enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
-					enemy->init();
-					enemy->setLayerCollision( Level.getCollisionLayer() );
-
-					u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
-
-					u16 newXPos, newYPos;
-
-					newXPos = (u16) *PntList;
-					PntList++;
-					newYPos = (u16) *PntList;
-					PntList++;
-
-					enemy->setStartPos( newXPos, newYPos );
-					enemy->addWaypoint( newXPos, newYPos );
-
-					if ( actorList[actorNum]->PointCount > 1 )
-					{
-						for ( pointNum = 1 ; pointNum < actorList[actorNum]->PointCount ; pointNum++ )
-						{
-							newXPos = (u16) *PntList;
-							PntList++;
-							newYPos = (u16) *PntList;
-							PntList++;
-
-							enemy->addWaypoint( newXPos, newYPos );
-
-							if ( pointNum == 1 )
+							for (pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
 							{
-								enemy->setHeading( newXPos, newYPos );
+								newXPos = (u16) *PntList;
+								PntList++;
+								newYPos = (u16) *PntList;
+								PntList++;
+
+								enemy->addWaypoint( newXPos, newYPos );
+
+								if ( pointNum == 1 )
+								{
+									enemy->setHeading( newXPos, newYPos );
+								}
 							}
 						}
+
+						enemy->postInit();
 					}
-
-					enemy->postInit();
-
 					break;
-				}
 
 				default:
 					break;

@@ -88,7 +88,7 @@ protected:
 
 	static NPC_FRIEND_DATA		m_data[NPC_FRIEND_UNIT_TYPE_MAX];
 
-	//class SpriteBank	*m_spriteBank;
+//	class SpriteBank	*m_spriteBank;
 
 	enum
 	{
@@ -176,6 +176,9 @@ public:
 	void				hasBeenAttacked();
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
+
+	static CNpcEnemy	*Create(sThingActor *ThisActor);
+
 
 protected:
 	class CLayerCollision	*m_layerCollision;
@@ -361,7 +364,7 @@ protected:
 
 	typedef struct NPC_DATA_TYPE
 	{
-		FileEquate						skelType;
+		int								skelType;
 //		FileEquate						animData;
 		u16								initAnim;
 		NPC_INIT_FUNC					initFunc;
@@ -493,6 +496,7 @@ protected:
 	s32				m_frame;
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
+	SpriteBank		*m_spriteBank;
 	DVECTOR			m_drawOffset;
 	POLY_FT4		*SprFrame;
 
