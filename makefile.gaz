@@ -135,7 +135,8 @@ platform_src :=		platform \
 					psswitch \
 					plift \
 					plurve \
-					psoil
+					psoil \
+					pbubtube
 
 hazard_src :=		hazard \
 					hfalling \

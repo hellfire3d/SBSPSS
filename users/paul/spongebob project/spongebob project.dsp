@@ -1425,6 +1425,14 @@ SOURCE=..\..\..\source\platform\pbubble.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pbubtube.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbubtube.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pbwheel.cpp
 # End Source File
 # Begin Source File

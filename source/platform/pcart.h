@@ -27,6 +27,7 @@ protected:
 	virtual void		processMovement( int _frames );
 
 	s32					m_carSpeed;
+	u8					m_isActivated;
 };
 
 #endif

@@ -191,6 +191,10 @@
 #include "platform\psoil.h"
 #endif
 
+#ifndef __PLATFORM_PBUBTUBE_H__
+#include "platform\pbubtube.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -438,6 +442,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_STEERABLE_OILDRUM_PLATFORM:
 		{
 			platform = new ("steerable oildrum platform") CNpcSteerableOildrumPlatform;
+			break;
+		}
+
+		case NPC_BUBBLE_TUBE_PLATFORM:
+		{
+			platform = new ("bubble tube platform") CNpcBubbleTubePlatform;
 			break;
 		}
 

@@ -18,12 +18,14 @@ virtual void		think(int _frames);
 virtual void		render();
 
 		void		Setup(int XOfs,int YOfs,bool XFlip);
+		void		setScale( s16 newScale )					{Scale = newScale;}
 
 protected:
 		DVECTOR		Ofs;
 
 		int			Angle,AngleInc;
 		bool		XFlip;
+		s16			Scale;
 
 };
 

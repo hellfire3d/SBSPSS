@@ -29,6 +29,7 @@ void	CFXJellyFishLegs::init(DVECTOR const &_Pos)
 		Ofs.vx=0; Ofs.vy=0;
 		Angle=getRnd();
 		AngleInc=LegAngleInc+getRndRange(3);
+		Scale = ONE;
 }
 
 /*****************************************************************************/
@@ -72,6 +73,8 @@ int			WOfs=0;
 int			H;
 int			ThisAngle=Angle;
 int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
+int			ScaleWInc=(Scale*LegWInc)>>12;
+int			ScaleHInc=(Scale*LegHInc)>>12;
 		
 			RenderPos.vx+=Ofs.vx;
 			RenderPos.vy+=Ofs.vy;
@@ -82,7 +85,18 @@ int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
 				ThisAngle&=CIRCLE_TAB_MASK;
 				H=LegHeight+(CircleTable[ThisAngle]>>5);
 
-				POLY_FT4	*Ft4=SprBank->printFT4(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos);
+				int		spriteWidth = ( Scale * CGameScene::getSpriteBank()->getFrameWidth(FRM__LEG) ) >> 12;
+
+				POLY_FT4	*Ft4;
+
+				if ( XFlip )
+				{
+					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx + 6 + ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
+				}
+				else
+				{
+					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx - 6 - ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
+				}
 
 				if (!XFlip)
 				{
@@ -98,7 +112,10 @@ int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
 		
 				Ft4->y2=Ft4->y0+H;
 				Ft4->y3=Ft4->y1+H;
-				RenderPos.vy+=H+LegHInc;
-				WOfs+=LegWInc;
+//				RenderPos.vy+=H+LegHInc;
+//				WOfs+=LegWInc;
+				RenderPos.vy+=H+ScaleHInc;
+				WOfs+=ScaleWInc;
+
 			}
 }

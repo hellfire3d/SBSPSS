@@ -36,6 +36,13 @@ void CNpcCartPlatform::postInit()
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 	m_carSpeed = m_speed << 8;
+	m_isActivated = false;
+
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.YMin = boundingBox.YMax - 32;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	calculateNonRotatedCollisionData();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,95 +58,120 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	bool pathComplete;
 
-	m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
-
-	if ( !pathComplete )
+	if ( m_isActivated )
 	{
-		moveX = ( m_carSpeed >> 8 ) * _frames;
+		m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
 
-		if ( heading == 2048 )
+		if ( !pathComplete )
 		{
-			moveX = -moveX;
+			moveX = ( m_carSpeed >> 8 ) * _frames;
+
+			if ( heading == 2048 )
+			{
+				moveX = -moveX;
+			}
 		}
-	}
 
-	// check for vertical movement
+		// check for vertical movement
 
-	s32 checkDist = yMovement + 50;
+		s32 checkDist = yMovement + 50;
 
-	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
+		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
 
-	if ( groundHeight < checkDist )
-	{
-		// groundHeight <= yMovement indicates either just above ground or on or below ground
+		if ( groundHeight < checkDist )
+		{
+			// groundHeight <= yMovement indicates either just above ground or on or below ground
 
-		moveY = groundHeight;
+			moveY = groundHeight;
+		}
+		else
+		{
+			// fall
+
+			moveY = yMovement;
+		}
+
+		if ( moveY < 0 )
+		{
+			m_carSpeed -= 20;
+
+			if ( m_carSpeed < ( 2 << 8 ) )
+			{
+				m_carSpeed = ( 2 << 8 );
+			}
+		}
+		else if ( moveY > 0 )
+		{
+			m_carSpeed += 20;
+
+			if ( m_carSpeed > ( 6 << 8 ) )
+			{
+				m_carSpeed = ( 6 << 8 );
+			}
+		}
+
+		Pos.vx += moveX;
+		Pos.vy += moveY;
+
+		// sort out draw rotation
+
+		DVECTOR testPos1, testPos2;
+
+		testPos1 = testPos2 = Pos;
+		testPos1.vx -= 10;
+		testPos2.vx += 10;
+
+		u8 sensorDist = 16;
+
+		s32 yDiff;
+
+		yDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
+
+		if ( yDiff <= sensorDist )
+		{
+			// only use if there is ground present
+
+			testPos1.vy += yDiff;
+		}
+
+		yDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
+
+		if ( yDiff <= sensorDist )
+		{
+			// only use if there is ground present
+
+			testPos2.vy += yDiff;
+		}
+
+		s32 xDist = testPos2.vx - testPos1.vx;
+		s32 yDist = testPos2.vy - testPos1.vy;
+
+		heading = ratan2( yDist, xDist );
+
+		setCollisionAngle( heading );
 	}
 	else
 	{
-		// fall
+		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
-		moveY = yMovement;
-	}
-
-	if ( moveY < 0 )
-	{
-		m_carSpeed -= 20;
-
-		if ( m_carSpeed < ( 2 << 8 ) )
+		if ( groundHeight <= yMovement )
 		{
-			m_carSpeed = ( 2 << 8 );
+			moveY = groundHeight;
+		}
+		else
+		{
+			// fall
+
+			moveY = yMovement;
+		}
+
+		Pos.vy += moveY;
+
+		if ( m_contact )
+		{
+			m_isActivated = true;
 		}
 	}
-	else if ( moveY > 0 )
-	{
-		m_carSpeed += 20;
-
-		if ( m_carSpeed > ( 6 << 8 ) )
-		{
-			m_carSpeed = ( 6 << 8 );
-		}
-	}
-
-	Pos.vx += moveX;
-	Pos.vy += moveY;
-
-	// sort out draw rotation
-
-	DVECTOR testPos1, testPos2;
-
-	testPos1 = testPos2 = Pos;
-	testPos1.vx -= 10;
-	testPos2.vx += 10;
-
-	u8 sensorDist = 16;
-
-	s32 yDiff;
-
-	yDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
-
-	if ( yDiff <= sensorDist )
-	{
-		// only use if there is ground present
-
-		testPos1.vy += yDiff;
-	}
-
-	yDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
-
-	if ( yDiff <= sensorDist )
-	{
-		// only use if there is ground present
-
-		testPos2.vy += yDiff;
-	}
-
-	s32 xDist = testPos2.vx - testPos1.vx;
-	s32 yDist = testPos2.vy - testPos1.vy;
-
-	heading = ratan2( yDist, xDist );
-
-	setCollisionAngle( heading );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

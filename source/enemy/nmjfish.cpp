@@ -39,11 +39,6 @@
 #include	"player\player.h"
 #endif
 
-#include "fx\fx.h"
-#include "fx\fxjfish.h"
-#include "fx\fxnrgbar.h"
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +53,25 @@ void CNpcMotherJellyfishEnemy::postInit()
 		m_health = CLevel::getBossHealth();
 	}
 
-	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+	legsPos[0].vx = 80;
+	legsPos[0].vy = -5;
+
+	legsPos[1].vx = 40;
+	legsPos[1].vy = 0;
+
+	legsPos[2].vx = -40;
+	legsPos[2].vy = -5;
+
+	legsPos[3].vx = -80;
+	legsPos[3].vy = 0;
+
+	for ( int i = 0 ; i < 4 ; i++ )
+	{
+		legs[i] = (CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+		legs[i]->Setup( legsPos[i].vx, legsPos[i].vy, i > 1 );
+	}
+
+	/*CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
 	T->Setup(80,-5,0);
 
 	T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
@@ -68,7 +81,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 	T->Setup(-40,-5,1);
 
 	T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->Setup(-80,0,1);
+	T->Setup(-80,0,1);*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -384,8 +397,11 @@ void CNpcMotherJellyfishEnemy::render()
 
 			DVECTOR &renderPos=getRenderPos();
 
+			s16 scale;
+			scale = 2048 + ( ( ( 8192 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
-			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 8192, 8192 );
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, scale, scale );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
@@ -396,6 +412,20 @@ void CNpcMotherJellyfishEnemy::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcMotherJellyfishEnemy::processUserCollision( CThing *thisThing )
+/*void CNpcMotherJellyfishEnemy::processUserCollision( CThing *thisThing )
 {
+}*/
+
+void CNpcMotherJellyfishEnemy::processShot( int _frames )
+{
+	s16 scale;
+	scale = 2048 + ( ( ( 8192 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+
+	for ( int i = 0 ; i < 4 ; i++ )
+	{
+		legs[i]->Setup( ( legsPos[i].vx * scale ) >> 13, legsPos[i].vy, i > 1 );
+		legs[i]->setScale( scale >> 1 );
+	}
+
+	CNpcEnemy::processShot( _frames );
 }

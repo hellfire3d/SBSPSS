@@ -33,7 +33,7 @@ void CNpcShellEnemy::postInit()
 
 	m_shellType = FRM_SHELL_STATIC0000 + ( getRnd() % ( FRM_SHELL_STATIC0002 - FRM_SHELL_STATIC0000 + 1 ) );
 
-	Pos.vy -= 12;
+	Pos.vy -= 20;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,6 +14,10 @@
 #ifndef	__ENEMY_NMJFISH_H__
 #define	__ENEMY_NMJFISH_H__
 
+#include "fx\fx.h"
+#include "fx\fxjfish.h"
+#include "fx\fxnrgbar.h"
+
 class CNpcMotherJellyfishEnemy : public CNpcEnemy
 {
 public:
@@ -24,8 +28,9 @@ public:
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
+	virtual void		processShot( int _frames );
 	void				spawnJellyfish( int _frames );
-	virtual void		processUserCollision( CThing *thisThing );
+	//virtual void		processUserCollision( CThing *thisThing );
 
 	enum NPC_MOTHER_JELLYFISH_STATE
 	{
@@ -45,6 +50,9 @@ protected:
 	s32					m_cycleWidth;
 	s32					m_halfCycleWidth;
 	bool				m_meterOn;
+
+	CFXJellyFishLegs	*legs[4];
+	DVECTOR				legsPos[4];
 };
 
 #endif
