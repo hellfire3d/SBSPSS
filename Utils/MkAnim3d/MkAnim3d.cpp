@@ -16,8 +16,16 @@
 using namespace std;
 
 int	QuatCount=0;
+/*
+buttbounceend.gin buttbouncestart.gin deathbackwards.gin deathdry.gin deathfall.gin deathforwards.gin deathspin.gin deathtar.gin electricshock.gin electricshockend.gin electricshockstart.gin faceback.gin facefront.gin fall.gin getup.gin getuprun.gin hitground.gin hover.gin hoverend.gin hoverstart.gin idlebreathe.gin idlehoola.gin idlelook.gin idlewigglearm.gin jumpend.gin karate.gin knockback.gin knockforward.gin run.gin runjumpend.gin runjumpstart.gin runstart.gin runstop.gin soakup.gin talk01.gin talk02.gin talk03.gin talk04.gin teeterback.gin teeterfront.gin
+*/
 
+/* duff anims
+deathfall.gin
+runjumpend.gin
+runjumpstart.gin
 
+*/
 //***************************************************************************
 
 char * CycleCommands(char *String,int Num)
@@ -68,9 +76,19 @@ CScene	Scene;
 int		ThisBoneCount;
 GFName	Name=Filename;
 
-		printf("%s\n",Filename);		
+		printf("%s\t",Name.File());
 		Scene.Load(Filename);
-		ThisBoneCount=Scene.GetPruneTreeSize()-2;
+
+// Process Anim
+sAnim	ThisAnim;
+		ThisAnim.Name=Name.File();
+		ThisAnim.Name.Upper();
+		ThisAnim.FrameCount=ProcessSkelMove(Scene,ThisAnim,1);
+		ProcessSkelAnim(Scene,ThisAnim,1);
+		AnimList.push_back(ThisAnim);
+
+		ThisBoneCount=ThisAnim.BoneAnim.size();
+		printf("\t(%i Bones, %i Frames)\n",ThisBoneCount,ThisAnim.FrameCount);
 
 // Check Skeleton
 		if (BoneCount==-1)
@@ -85,13 +103,6 @@ GFName	Name=Filename;
 			}
 		}
 
-// Process Anim
-sAnim	ThisAnim;
-		ThisAnim.Name=Name.File();
-		ThisAnim.Name.Upper();
-		ThisAnim.FrameCount=ProcessSkelMove(Scene,ThisAnim,1);
-		ProcessSkelAnim(Scene,ThisAnim,1);
-		AnimList.push_back(ThisAnim);
 }
 
 //***************************************************************************
@@ -120,7 +131,8 @@ CNode					&ThisNode=Scene.GetNode(Idx);
 vector<sGinAnim> const	&NodeAnim=ThisNode.GetAnim();
 int						FrameCount=NodeAnim.size();
 
-			if (!ThisNode.Pts.size())		// Dont export Skin as bone
+//			if (!ThisNode.Pts.size())		// Dont export Skin as bone
+			if (!ThisNode.GetTris().size())		// Dont export Skin as bone
 			{
 				sBoneAnim	FrameList;
 				FrameList.Idx.resize(FrameCount);
@@ -131,17 +143,6 @@ int						FrameCount=NodeAnim.size();
 					sQuat			ThisFrame;
 					Quaternion	const	&ThisQuat=InFrame.Ang;
 
-/*					if (Idx==1)
-					{
-						Matrix4x4	Mtx;
-						ThisQuat.ToMatrix(Mtx);
-						Mtx.m_M[0][1]=-Mtx.m_M[0][1];
-						Mtx.m_M[1][1]=-Mtx.m_M[1][1];
-						Mtx.m_M[2][1]=-Mtx.m_M[2][1];
-						Mtx.m_M[3][1]=-Mtx.m_M[3][1];
-						Mtx.ToQuaternion(ThisQuat);
-					}
-*/
 					ThisFrame.vx=round(ThisQuat.x*4096);
 					ThisFrame.vy=round(ThisQuat.y*4096);
 					ThisFrame.vz=round(ThisQuat.z*4096);

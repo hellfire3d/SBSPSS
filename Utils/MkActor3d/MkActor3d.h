@@ -8,37 +8,44 @@
 
 #include "..\mapedit\ExportPSXHdr.h"
 
+struct	sGinSkel
+{
+	sBone		Bone;
+	CFaceStore	FaceList;
+};
+
 //***************************************************************************
 class	CMkActor3d
 {
 public:
 		CMkActor3d(GString const &In,GString const &Out,int TPBase,int TPW,int TPH);
 
-		void			Load();
-		void			Process();
-		void			Write();
+		void				Load();
+		void				Process();
+		void				Write();
 
 private:
-		void			BuildSkin(int Idx=0);
-		void			WriteBone(int Idx);
-		void			BuildBoneOut(sBone &OutBone,CNode const &InNode);
-		void			BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight);
-		int				WriteWeightList();
+		void				ProcessSkel(int Idx,int Parent);
+		void				WriteSkel();
 
-		GString			InFilename,InPath,Name,OutFile,OutDir;
+		void				BuildSkelOut();
+		void				BuildBoneOut(sBone &OutBone,CNode const &InNode,int ParentBoneIdx);
+		int					WriteTexInfoList();
 
-		CScene			Scene;
+		GString				InFilename,InPath,Name,OutFile,OutDir;
 
-		CFaceStore		FaceList;
-		vector<sWeight> WeightList;
-		CList<sTri>		OutTriList;
-		CList<sVtx>		OutVtxList;
+		CScene				Scene;
 
-		sActor3dHdr		FileHdr;
-		FILE			*File;
+		vector<sGinSkel>	Skel;
 
-		int				TPageBase;
-		int				TPageWidth,TPageHeight;
+		CFaceStore			FaceList;
+
+		CTexGrab			TexGrab;
+		sActor3dHdr			FileHdr;
+		FILE				*File;
+
+		int					TPageBase;
+		int					TPageWidth,TPageHeight;
 
 };
 
