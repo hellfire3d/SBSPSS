@@ -334,6 +334,8 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				168,			0	},										// SFX_BEEP10
 	{	1,				169,			0	},										// SFX_BEEP11
 	{	1,				170,			0	},										// SFX_BEEP12
+	{	3,				171,			0	},										// SFX_TELEPORT1*
+	{	3,				172,			0	},										// SFX_TELEPORT2*
 
 
 };

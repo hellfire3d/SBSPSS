@@ -19,7 +19,7 @@
 #include "triggers\tteleprt.h"
 
 #ifndef __GAME_GAME_H__
-#include	"game\game.h"
+#include "game\game.h"
 #endif
 
 #ifndef	__PLAYER_PLAYER_H__
@@ -32,6 +32,10 @@
 
 #ifndef __FRIEND_FGARY_H__
 #include "friend\fgary.h"
+#endif
+
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
 #endif
 
 	
@@ -106,8 +110,21 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 
 				if(GameScene.triggerTeleportEffect())
 				{
+					CSoundMediator::SFXID	sfx;
+
 					((CPlayer*)_thisThing)->clearPlatform();
 					((CPlayer*)_thisThing)->teleportTo(m_boxX1+8,m_boxY1+16);
+					
+					if(chapter==5&&level==4)
+					{
+						sfx=CSoundMediator::SFX_TELEPORT1;
+					}
+					else
+					{
+						sfx=CSoundMediator::SFX_TELEPORT2;
+					}
+
+					CSoundMediator::playSfx(sfx);
 				}
 			}
 			break;
