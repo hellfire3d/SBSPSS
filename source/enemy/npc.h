@@ -293,7 +293,7 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processMovement( int _frames );
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
-	void				processShot();
+	virtual void		processShot();
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
 	void				processTimer( int _frames );

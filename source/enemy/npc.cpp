@@ -833,9 +833,8 @@ void CNpcEnemy::think(int _frames)
 
 			s32 frameShift = ( _frames << 8 ) >> 1;
 
-			if ( ( frameCount << 8 ) - m_frame > frameShift ) //( _frames >> 1 ) )
+			if ( ( frameCount << 8 ) - m_frame > frameShift )
 			{
-				//m_frame += _frames >> 1;
 				m_frame += frameShift;
 			}
 			else
@@ -853,7 +852,16 @@ void CNpcEnemy::think(int _frames)
 			case NPC_CONTROL_MOVEMENT:
 				if ( !processSensor() )
 				{
-					processMovement(_frames);
+					int moveFrames = _frames;
+
+					if ( moveFrames > 2 )
+					{
+						// make sure enemies don't go berserk if too many frames are dropped
+
+						moveFrames = 2;
+					}
+
+					processMovement( moveFrames );
 				}
 				else
 				{
@@ -1122,11 +1130,6 @@ bool CNpcEnemy::processSensor()
 
 void CNpcEnemy::processMovement(int _frames)
 {
-	//if ( _frames > 2 )
-	//{
-		//_frames = 2;
-	//}
-
 	s32 moveX = 0, moveY = 0;
 	s32 moveVel = 0;
 	s32 moveDist = 0;

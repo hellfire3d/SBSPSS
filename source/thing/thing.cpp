@@ -360,11 +360,13 @@ void			CThingManager::addToThingList(CThing *_this)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int testTypeGit;
 void			CThingManager::removeFromThingList(CThing *_this)
 {
 	CThing	*prevThing,*thing;
 
 	prevThing=NULL;
+	testTypeGit = _this->getThingType();
 	thing=s_thingLists[_this->getThingType()];
 	while(thing!=_this)
 	{

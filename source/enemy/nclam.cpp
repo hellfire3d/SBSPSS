@@ -131,14 +131,61 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 	}
 }
 
+void CNpcStaticClamEnemy::postInit()
+{
+	CNpcClamEnemy::postInit();
+
+	m_isStunned = false;
+	m_isAnimating = false;
+}
+
 void CNpcStaticClamEnemy::processClose( int _frames )
 {
-	if ( !m_animPlaying )
+	if ( !m_isAnimating && !m_isStunned )
 	{
 		m_animPlaying = true;
 		m_animNo = ANIM_CLAM_SIDESNAP;
 		m_frame = 0;
+		m_isAnimating = true;
+	}
+	else if ( !m_animPlaying )
+	{
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_animNo = m_data[m_type].initAnim;
+		m_frame = 0;
+		m_isAnimating = false;
+	}
+}
+
+void CNpcStaticClamEnemy::processShot()
+{
+	if ( !m_isStunned )
+	{
+		switch( m_data[m_type].shotFunc )
+		{
+			case NPC_SHOT_NONE:
+			{
+				// do nothing
+
+				break;
+			}
+
+			case NPC_SHOT_GENERIC:
+			{
+				m_isStunned = true;
+
+				break;
+			}
+		}
 	}
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
+}
+
+void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
+{
+	if ( !m_isStunned )
+	{
+		CNpcClamEnemy::collidedWith( _thisThing );
+	}
 }

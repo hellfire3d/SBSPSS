@@ -29,8 +29,15 @@ protected:
 
 class CNpcStaticClamEnemy : public CNpcClamEnemy
 {
+public:
+	virtual void		postInit();
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
+	virtual void		processShot();
 	virtual void		processClose( int _frames );
+
+	u8					m_isStunned;
+	u8					m_isAnimating;
 };
 
 #endif

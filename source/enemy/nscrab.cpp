@@ -271,11 +271,6 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 
 void CNpcSpiderCrabEnemy::processMovement(int _frames)
 {
-	if ( _frames > 2 )
-	{
-		_frames = 2;
-	}
-
 	s32 moveX = 0, moveY = 0;
 	s32 moveVel = 0;
 	s32 moveDist = 0;
