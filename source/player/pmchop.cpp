@@ -89,7 +89,6 @@ void	CPlayerModeChop::think()
 		m_chopFrame++;
 		if(m_chopFrame>=m_player->getAnimFrameCount())
 		{
-PAUL_DBGMSG("restore %d,%d",m_savedAnimNo,m_savedAnimFrame);
 			m_player->setAnimNo(m_savedAnimNo);
 			m_player->setAnimFrame(m_savedAnimFrame);
 			m_chopping=false;
@@ -109,16 +108,8 @@ void	CPlayerModeChop::setAnimNo(int _animNo)
 	m_savedAnimNo=_animNo;
 }
 
-int pdbg=false;
 void	CPlayerModeChop::setAnimFrame(int _animFrame)
 {
-//if(getAnimNo()==12)
-//{
-	if(pdbg)
-	{
-	PAUL_DBGMSG("fallf %d,%d (%c)",getAnimNo(),_animFrame,m_chopping?'M':'-');
-	}
-//}
 	CPlayerModeBase::setAnimFrame(_animFrame);
 	m_savedAnimFrame=_animFrame;
 }
