@@ -103,6 +103,7 @@ private:
 	class CScrollyBackground	*m_background;
 	class CGUIControlFrame		*m_modeMenus[MODE__COUNT];
 	int							m_mode,m_nextMode;
+	static int					s_modeBackground[MODE__COUNT];
 	
 	int							m_exitFlag;
 	int							m_closingDown;
