@@ -493,12 +493,15 @@ MATRIX	*Mtx=CGameScene::GetCamMtx();
 		SetTransMatrix(Mtx);
 
 // Setup dummy prim to ensure OtPos 0 is initialised (for fast add)
-TILE_16	*Prim=GetPrimTILE16();
-sOT		*ThisOT=OtPtr+LayerOT;
-		Prim->x0=1024;
-		Prim->y0=1024;
-		AddPrim(ThisOT,Prim);
-		ASSERT(ThisOT->FirstPrim);
+		for (int i=0;i<8; i++)
+		{
+		TILE_16	*Prim=GetPrimTILE16();
+		sOT		*ThisOT=OtPtr+LayerOT+i-4;
+				Prim->x0=1024;
+				Prim->y0=1024;
+				AddPrim(ThisOT,Prim);
+				ASSERT(ThisOT->FirstPrim);
+		}
 
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
