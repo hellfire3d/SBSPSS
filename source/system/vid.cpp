@@ -18,7 +18,7 @@ static VbFuncType VbFuncList[MaxVBFuncs];
 static u32			FrameCounter=0,TickCount=0,TickBuffer[2];
 static u32			s_lastFrameCounter=0,s_vblsThisFrame=0;
 static sVidScreen 	Screen[2];
-static int			ScreenXOfs=0,ScreenYOfs=0;
+static int			ScreenXOfs=32,ScreenYOfs=16;
 static int			ScreenW, ScreenH;
 static RECT 		ScreenRect;
 /*static*/ int		FrameFlipFlag=0;
