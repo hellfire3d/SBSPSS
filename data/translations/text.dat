@@ -28,7 +28,7 @@ eng=OFF
 [STR__DUMMY]
 eng=???
 [STR__NOW_LOADING]
-eng=NOW LOADING..
+eng=NOW LOADING...
 
 ; NOTE: This string just contains a single space
 [STR__BLANK]
@@ -662,8 +662,8 @@ eng=Umm, we've heard about this thing but never really seen one ourselves. Whoev
 eng=Producer
 [STR__CREDITS__ASSISTANT_PRODUCER]
 eng=Assistant Producer
-[STR__CREDITS__SENIOR_PRODUCER]
-eng=Senior Producer
+[STR__CREDITS__EXECUTIVE_PRODUCER]
+eng=Executive Producer
 [STR__CREDITS__DESIGNER]
 eng=Designer
 [STR__CREDITS__LEAD_PROGRAMMER]
