@@ -197,7 +197,7 @@ void	CLayerTrigger::GUIInit(CCore *Core)
 		GUITrigger.m_TargetYSpin.SetRange(0,32000);
 		GUITrigger.m_TargetWSpin.SetRange(1,32000);
 		GUITrigger.m_TargetHSpin.SetRange(1,32000);
-		GUITrigger.m_ValSpin.SetRange(1,32000);
+		GUITrigger.m_ValSpin.SetRange(-16000,16000);
 }
 
 /*****************************************************************************/
