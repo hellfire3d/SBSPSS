@@ -151,7 +151,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 		xoff=MapPos.vx&15;
 		yoff=MapPos.vy&15;
 		mapx=MapPos.vx/16;
-		mapy=MapPos.vy/16+4;		// (pkg)
+		mapy=MapPos.vy/16;
 		for(y=-yoff;y<(20*16)-yoff;y+=16)
 		{
 			coll=&Map[mapx+(mapy*MapWidth)];

@@ -66,8 +66,11 @@ int			YPos=MapPos.vy>>MapXYShift;
 			MapXY.vx=XPos>>4;
 			MapXY.vy=YPos>>4;
 			
-/**/		MapXY.vx+=TileMapOfs.vx;
-/**/		MapXY.vy+=TileMapOfs.vy;
+			if (LayerHdr->SubType==1)	// BODGE AND A HALF
+			{
+/**/			MapXY.vx+=TileMapOfs.vx;
+/**/			MapXY.vy+=TileMapOfs.vy;
+			}
 
 			ShiftX=XPos & 15;
 			ShiftY=YPos & 15;

@@ -149,7 +149,7 @@ int MAP3D_CENTRE_Y=500;
 int MAP3D_BLOCKSTEPSIZE=315;
 
 int MAP2D_CENTRE_X=-256;
-int MAP2D_CENTRE_Y=-136-(4*16);
+int MAP2D_CENTRE_Y=-136;
 int MAP2D_BLOCKSTEPSIZE=16;
 
 int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most
@@ -321,10 +321,10 @@ if(PadGetDown(0)&PAD_CIRCLE)
 
 	
 	// Move the camera offset
-m_playerScreenPos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
-m_playerScreenPos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);;
-m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);;
+	m_playerScreenPos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
+	m_playerScreenPos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
+	m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
+	m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
 
 	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
 	m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
