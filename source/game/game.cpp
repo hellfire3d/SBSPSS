@@ -480,6 +480,17 @@ void	CGameScene::think(int _frames)
 			}
 			break;
 	}
+
+
+#ifdef __VERSION_DEBUG__
+	char	buf[20];
+	sprintf(buf,"Frames: %d",_frames);
+	m_scalableFont->setTrans(0);
+	m_scalableFont->setSMode(0);
+	m_scalableFont->setColour(128,128,128);
+	m_scalableFont->setScale(300);
+	m_scalableFont->print(40,200,buf);
+#endif
 }
 
 /*****************************************************************************/
