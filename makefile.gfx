@@ -178,6 +178,28 @@ GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
 
 
 #----------------------------------------------------------------------------
+# Big TGA backdrops
+#----------------------------------------------------------------------------
+BACKDROPS_IN_DIR :=		$(GRAF_DIR)/backdrop
+BACKDROPS_IN :=			credits
+
+BACKDROPS_OUT_DIR :=	$(DATA_OUT)/backdrop
+BACKDROPS_OUT :=		$(foreach SCREEN,$(BACKDROPS_IN),$(BACKDROPS_OUT_DIR)/$(SCREEN).gfx)
+
+backdrops : $(BACKDROPS_OUT)
+
+cleanbackdrops :
+	@$(RM) -f $(BACKDROPS_OUT)
+
+$(BACKDROPS_OUT_DIR)/%.gfx : $(BACKDROPS_IN_DIR)/%.tga
+	alchemy --n -a -15 -^ -o $< $(TEMP_FILE)
+	chopchop $(TEMP_FILE) $@ 20 262144
+
+GRAF_DIRS_TO_MAKE +=	$(BACKDROPS_OUT_DIR)
+GFX_DATA_OUT +=			$(BACKDROPS_OUT)
+
+
+#----------------------------------------------------------------------------
 # Sound FX
 #----------------------------------------------------------------------------
 SFX_IN_DIR :=		data/SFX

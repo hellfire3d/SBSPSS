@@ -38,6 +38,14 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef _FILEIO_HEADER_
+#include "fileio\fileio.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -92,9 +100,13 @@ void CFrontEndCredits::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+u8 *s_image;
 void CFrontEndCredits::select()
 {
 	m_shuttingDown=false;
+	s_image=CFileIO::loadFile(BACKDROP_CREDITS_GFX);
+	ASSERT(s_image);
+	SetScreenImage(s_image);
 	CFader::setFadingIn();
 }
 
@@ -106,6 +118,8 @@ void CFrontEndCredits::select()
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::unselect()
 {
+	ClearScreenImage();
+	MemFree(s_image);	s_image=NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -116,6 +130,7 @@ void CFrontEndCredits::unselect()
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::render()
 {
+	/*
 	POLY_G4	*g4;
 	
 	g4=GetPrimG4();
@@ -125,6 +140,7 @@ void CFrontEndCredits::render()
 	setRGB2(g4,50,99,50);
 	setRGB3(g4,99,50,99);
 	AddPrimToList(g4,1001);
+	*/
 }
 
 /*----------------------------------------------------------------------

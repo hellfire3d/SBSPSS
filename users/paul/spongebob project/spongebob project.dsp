@@ -625,5 +625,33 @@ SOURCE=..\..\..\out\USA\include\UIGfx.h
 # End Group
 # End Group
 # End Group
+# Begin Group "build"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\build\ccopt.mak
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\build\getuser.mak
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\build\globals.mak
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\build\lnk.mak
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\build\outdirs.mak
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\build\parse.mak
+# End Source File
+# End Group
 # End Target
 # End Project
