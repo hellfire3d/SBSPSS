@@ -380,9 +380,6 @@ void	CThing::think(int _frames)
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
 	PosLast=Pos;
-
-	//m_collisionAngle += 1;
-	//m_collisionAngle &= 4095;
 }
 
 /*----------------------------------------------------------------------
