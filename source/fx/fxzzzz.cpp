@@ -30,7 +30,7 @@ void	CFXZZZZ::init(DVECTOR const &_Pos)
 		{
 			Z[i].Life=0;
 		}
-		Count=0
+		Count=0;
 		DieFlag=0;
 }
 
