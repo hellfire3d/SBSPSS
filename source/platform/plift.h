@@ -24,6 +24,7 @@ public:
 	virtual void		postInit();
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
 	virtual void		processMovement( int _frames );
 	virtual void		processTimer( int _frames );
 

@@ -87,6 +87,10 @@
 #include "triggers\tsswitch.h"
 #endif
 
+#ifndef __TRIGGERS_TGBOWL_H__
+#include "triggers\tgbowl.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -147,6 +151,11 @@ CTrigger	*trigger;
 		// Gary go right trigger
 		case TRIGGER_GARY_GO_RIGHT:
 			trigger=(CGaryGoRightTrigger*)new("GaryGoRightTrigger") CGaryGoRightTrigger();
+			break;
+
+		// Gary bowl trigger
+		case TRIGGER_GARY_BOWL:
+			trigger=(CGaryBowlTrigger*)new("GaryBowlTrigger") CGaryBowlTrigger();
 			break;
 
 		// Flame emitter

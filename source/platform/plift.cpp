@@ -23,6 +23,10 @@
 #include	"game\game.h"
 #endif
 
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -132,5 +136,107 @@ void CNpcLiftPlatform::processTimer( int _frames )
 	if ( m_timer > 0 )
 	{
 		m_timer -= _frames;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcLiftPlatform::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+				{
+					player->setPlatform( this );
+
+					m_contact = true;
+				}
+				else
+				{
+					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+					{
+						int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+						if ( height >= -threshold && height < 1 )
+						{
+							player->setPlatform( this );
+
+							m_contact = true;
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		case TYPE_NPC:
+		{
+			CNpcFriend *friendNpc;
+			DVECTOR	friendPos;
+			CRECT	collisionArea;
+
+			friendNpc = (CNpcFriend*) _thisThing;
+			friendPos = friendNpc->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( friendPos.vx >= collisionArea.x1 && friendPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+				{
+					int height = getHeightFromPlatformAtPosition( friendPos.vx, friendPos.vy );
+
+					friendNpc->setPlatform( this );
+				}
+				else
+				{
+					if( friendPos.vy >= collisionArea.y1 && friendPos.vy <= collisionArea.y2 )
+					{
+						int height = getHeightFromPlatformAtPosition( friendPos.vx, friendPos.vy );
+
+						if ( height >= -threshold && height < 1 )
+						{
+							friendNpc->setPlatform( this );
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		case TYPE_HAZARD:
+			break;
+
+		default:
+			ASSERT(0);
+			break;
 	}
 }

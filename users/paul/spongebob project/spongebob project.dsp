@@ -2109,6 +2109,14 @@ SOURCE=..\..\..\source\triggers\tgarygo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tgbowl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tgbowl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tggleft.cpp
 # End Source File
 # Begin Source File
