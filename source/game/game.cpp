@@ -67,11 +67,6 @@
 #include "frontend\frontend.h"
 #endif
 
-#ifndef __PICKUPS_PICKUP_H__
-#include "pickups\pickup.h"
-#endif
-
-
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
