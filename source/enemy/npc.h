@@ -105,7 +105,7 @@ public:
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
 	virtual u8			hasBeenAttacked();
-	bool				canBeCaughtByNet();
+	virtual u8			canBeCaughtByNet();
 	void				caughtWithNet();
 	virtual int			getFrameCount();
 	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}

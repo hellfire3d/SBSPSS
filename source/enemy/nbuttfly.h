@@ -27,6 +27,7 @@ class CNpcButterflyBackgroundEnemy : public CNpcSmallJellyfishBackgroundEnemy
 public:
 	virtual void		render();
 	virtual int			getFrameCount()							{return( FRM_BUTTERFLY_FLAP04 - FRM_BUTTERFLY_FLAP01 + 1 );}
+	virtual u8			canBeCaughtByNet()						{return( false );}
 protected:
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 };

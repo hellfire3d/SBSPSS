@@ -1392,7 +1392,7 @@ void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcEnemy::canBeCaughtByNet()
+u8 CNpcEnemy::canBeCaughtByNet()
 {
 	return( m_isActive && !m_isDying && m_data[m_type].canBeNetted );
 }
