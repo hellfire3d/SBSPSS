@@ -188,7 +188,9 @@ void CSoundMediator::think(int _frames)
 
 
 	// Fade to target volume
-	speed=(_frames*VOLUME_CHANGE_SPEED)>>10;
+ASSERT(_frames!=0);
+if(_frames==0)_frames=1;
+	speed=_frames*VOLUME_CHANGE_SPEED;
 	current=s_currentVolume;
 	target=s_targetVolume;
 	dirty=s_volumeDirty;
