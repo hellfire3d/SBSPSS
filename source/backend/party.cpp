@@ -195,7 +195,7 @@ static PARTY_IMAGE images[]=
 static const int numimages=sizeof(images)/sizeof(PARTY_IMAGE);
 
 DVECTOR	sbpos={220,195};
-int sbanim=5,sbfrm=0;
+int sbanim=5,sbfrm=1;
 DVECTOR	patpos={300,200};
 int patanim=0,patfrm=0;
 void CPartyScene::render()
@@ -225,7 +225,7 @@ void CPartyScene::render()
 
 	// Actors
 	m_actorSpongebob->Render(sbpos,sbanim,sbfrm,0,0);
-	sbanim|=1;
+	sbfrm=0;
 	m_actorPatrick->Render(patpos,patanim,patfrm,0,0);
 
 
