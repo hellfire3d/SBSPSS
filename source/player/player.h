@@ -149,6 +149,7 @@ public:
 	virtual void	think(int _frames);
 	virtual void	render();
 	virtual void	shove(DVECTOR move);
+//	virtual int		moveVertical(int _moveDistance);
 	virtual void	setHasPlatformCollided( bool newVal );
 	virtual bool	getHasPlatformCollided();
 
@@ -166,7 +167,7 @@ public:
 	void			addHealth(int _health);
 	void			addLife();
 	ATTACK_STATE	getAttackState();
-	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0;}
+	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
 
 public:
 	void			setMode(PLAYER_MODE _mode);
