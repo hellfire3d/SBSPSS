@@ -78,7 +78,7 @@ void	CJellyLauncherAmmoPickup::init()
 	CBasePickup::init();
 	m_rattle=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
+	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -93,7 +93,7 @@ DVECTOR	CJellyLauncherAmmoPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
+	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -140,7 +140,7 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 	int			angle;
 
 	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__LAUNCHER);
+	fh=sprites->getFrameHeader(FRM__JELLYAMMO);
 	if(m_rattle<=jlammo_rattlecount*4095)
 	{
 		angle=((msin(m_rattle&4095)*jlammo_rattlescale)>>12)&4095;
