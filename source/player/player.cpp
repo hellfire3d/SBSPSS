@@ -566,7 +566,7 @@ void	CPlayer::init()
 
 	m_fontBank=new ("PlayerFont") FontBank();
 	m_fontBank->initialise(&standardFont);
-	m_fontBank->setOt(5);
+	m_fontBank->setOt(POWERUPUI_OT);
 
 
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
@@ -1268,7 +1268,7 @@ if(drawlastpos)
 	x=SB_UI_XBASE;
 	y=SB_UI_YBASE;
 	fh=sb->getFrameHeader(FRM__SPATULA);
-	sb->printFT4(fh,x,y,0,0,0);
+	sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
 	x+=fh->W;
 	m_fontBank->print(x,y,spatCount);
 	x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
@@ -1279,11 +1279,11 @@ if(drawlastpos)
 		POLY_FT4	*ft4;
 		int			V,W,H,partH;
 
-		ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,0);
+		ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,POWERUPUI_OT);
 		setSemiTrans(ft4,true);
 
 		fh=sb->getFrameHeader(FRM__WATER);
-		ft4=sb->printFT4(fh,0,0,0,0,0);
+		ft4=sb->printFT4(fh,0,0,0,0,POWERUPUI_OT);
 		setSemiTrans(ft4,true);
 		V=fh->V;
 		W=fh->W;
@@ -1294,7 +1294,7 @@ if(drawlastpos)
 		ft4->v0=V+(partH);
 		ft4->v1=V+(partH);
 
-		sb->printFT4(FRM__WATERMETER,x,y,0,0,0);
+		sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
 
 		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
 	}
@@ -1303,8 +1303,8 @@ if(drawlastpos)
 		// Boots
 		int			pickupX,pickupY;
 		sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
-		sb->printFT4(fh,x,y,0,0,0);
-		sb->printFT4(fh,x+4,y+4,0,0,0);
+		sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
+		sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
 		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
 	}
 
