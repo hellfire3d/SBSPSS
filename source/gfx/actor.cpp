@@ -761,8 +761,6 @@ u8		V=Node->V;
 		Ft4->x1+=CurrentFrameGfx->AspectX1;
 		Ft4->x2-=CurrentFrameGfx->AspectX0;
 		Ft4->x3+=CurrentFrameGfx->AspectX1;
-		
-//		CorrectAspect(Ft4);
 }
 
 
