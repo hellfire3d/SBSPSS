@@ -310,19 +310,17 @@ s16				TCount=0,QCount=0;
 			{
 				u16			Tile=MapRow->Tile;
 				u16			TileIdx=Tile>>2;
-				u16			Flip=Tile&3;
-				sFlipTable	*FTab=&FlipTable[Flip];
 				sElem3d		*Elem=&ElemBank3d[TileIdx];
 
 				int			TriCount=Elem->TriCount;				
-				sTri		*TList=&TriList[Elem->TriStart];
 				int			QuadCount=Elem->QuadCount;				
-				sQuad		*QList=&QuadList[Elem->QuadStart];
 				int			RGBOfs=*RGBRow++;
-				u8			*RGB=&RGBTable[RGBOfs*(16*4)];
 
 				if (TriCount || QuadCount)	// Blank tiles rejected here, to prevent over processing (as no tri-count)
 				{
+					u8			*RGB=&RGBTable[RGBOfs*(16*4)];
+					sFlipTable	*FTab=&FlipTable[Tile&3];
+
 					CMX_SetTransMtxXY(&BlkPos);
 					CMX_SetRotMatrixXY(&FTab->Mtx);
 
@@ -391,6 +389,7 @@ s16				TCount=0,QCount=0;
 					DP3->vy=BD;
 
 // --- Render Tri's -------------
+					sTri	*TList=&TriList[Elem->TriStart];
 					while (TriCount--)
 					{
 						POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
@@ -439,6 +438,7 @@ s16				TCount=0,QCount=0;
 					}
 
 // --- Render Quads -----------
+					sQuad	*QList=&QuadList[Elem->QuadStart];
 					while (QuadCount--)
 					{
 						POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
