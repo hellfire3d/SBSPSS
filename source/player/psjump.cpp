@@ -94,6 +94,8 @@ void CPlayerStateJump::think(CPlayerModeBase *_playerMode)
 	controlHeld=_playerMode->getPadInputHeld();
 	controlDown=_playerMode->getPadInputDown();
 
+	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
+
 	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&controlHeld&PI_JUMP)
 	{
 		m_jumpFrames++;
@@ -120,7 +122,6 @@ void CPlayerStateJump::think(CPlayerModeBase *_playerMode)
 	{
 		_playerMode->setState(STATE_BUTTBOUNCE);
 	}
-//	advanceAnimFrameAndCheckForEndOfAnim(_player);
 }
 
 

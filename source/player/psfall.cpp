@@ -66,7 +66,10 @@ CPlayerStateFallFar			s_stateFallFar;
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+	if(_playerMode->getAnimNo()!=ANIM_SPONGEBOB_JUMP)
+	{
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+	}
 }
 
 
@@ -85,6 +88,8 @@ void CPlayerStateFall::think(CPlayerModeBase *_playerMode)
 	metrics=_playerMode->getPlayerMetrics();
 	controlHeld=_playerMode->getPadInputHeld();
 	controlDown=_playerMode->getPadInputDown();
+
+	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 
 	if(controlHeld&PI_LEFT)
 	{
