@@ -402,15 +402,11 @@ collision/colltab.dat
 
 actors/actor_spongebob.tex
 actors/spongebob.a3d
-actors/spongebob.abk
 
 actors/actor_enemy.tex
 
 actors/clam.a3d
-actors/clam.abk
-
 actors/SHARKSUB.A3d
-actors/SHARKSUB.Abk
 
 { SYSTEM_CACHE 4
 }

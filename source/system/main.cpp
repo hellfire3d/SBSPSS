@@ -11,9 +11,9 @@
 #include 	"gfx\prim.h"
 #include 	"gfx\tpage.h"
 #include	"utils\utils.h"
+#include	"gfx\actorpool.h"
 
 #include 	"system\gp.h"
-#include	"gfx\anim.h"
 
 // scenes
 #include "game\game.h"
@@ -117,8 +117,9 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CBubicleFactory::init();
 
-	CAnimDB::Init();
-	CAnimDB::Load(ACTORS_SPONGEBOB_ABK);
+	CActorPool::AddActor(ACTORS_SPONGEBOB_A3D);
+//	CAnimDB::Init();
+//	CAnimDB::Load(ACTORS_SPONGEBOB_ABK);
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();

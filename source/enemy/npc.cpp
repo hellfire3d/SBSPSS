@@ -46,7 +46,6 @@
 #endif
 
 #include "Gfx\Skel.h"
-#include "gfx\anim.h"
 
 #ifndef __VID_HEADER_
 #include "system\vid.h"
@@ -64,10 +63,10 @@ void CNpcFriend::init()
 {
 	CNpcThing::init();
 
-	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
-	m_skel.Init(Hdr);
+//	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+//	m_skel.Init(Hdr);
+	m_skel.Init(ACTORS_SPONGEBOB_A3D);
 	m_actorTPage = TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
-	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
 
 	Pos.vx = 100;
 	Pos.vy = 100;
@@ -212,10 +211,10 @@ void CNpcEnemy::init()
 
 	m_type = NPC_CLAM_STATIC;
 
-	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
-	m_skel.Init( Hdr );
+//	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
+//	m_skel.Init( Hdr );
+	m_skel.Init(m_data[m_type].skelType);
 	m_actorTPage = TPLoadTex( ACTORS_ACTOR_ENEMY_TEX );
-	m_skel.setAnimDatabase( CAnimDB::Load( m_data[m_type].animData ) );
 
 	m_skel.setAng(1024);
 
@@ -441,8 +440,6 @@ void CNpcEnemy::shutdown()
 
 	// temporary
 	TPFree( m_actorTPage );
-	CAnimDB::Dump( m_data[m_type].animData );
-
 	CEnemyThing::shutdown();
 }
 

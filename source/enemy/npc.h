@@ -325,7 +325,7 @@ protected:
 	typedef struct NPC_DATA_TYPE
 	{
 		FileEquate						skelType;
-		FileEquate						animData;
+//		FileEquate						animData;
 		u16								initAnim;
 		NPC_INIT_FUNC					initFunc;
 		NPC_SENSOR_FUNC					sensorFunc;

@@ -104,7 +104,7 @@ gfx_src :=			prim \
 					bubicles \
 					skel \
 					skelspng \
-					anim
+					actorpool
 
 #					camera \
 #					basemod \
