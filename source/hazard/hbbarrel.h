@@ -22,10 +22,15 @@ class CNpcBouncingBarrelHazard : public CNpcHazard
 {
 public:
 	void				init();
+	void				render();
 protected:
 	void				processMovement( int _frames );
 
 	DVECTOR				m_lastWaypoint;
+
+	s16					m_rotation;
+	s16					m_rockRotation;
+	u8					m_rockDir;
 };
 
 #endif
