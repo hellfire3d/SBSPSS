@@ -194,7 +194,7 @@ PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+watermeter +waterhilight +netblob \
-							+spike +sharkmine
+							+spike +sharkmine +snakebile
 INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+bubble_1 +bubble_2 +bubble_3 \
 										+water  +aim_arrow
 

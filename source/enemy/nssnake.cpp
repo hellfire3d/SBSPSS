@@ -464,7 +464,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 	projectile = CProjectile::Create();
 	DVECTOR newPos = Pos;
 	projectile->init( newPos, heading );
-	projectile->setGraphic( FRM__LIGHTNING1 );
+	projectile->setGraphic( FRM__SNAKEBILE );
 
 	//resetSeaSnakeHeadToTail();
 
