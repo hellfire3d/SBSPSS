@@ -200,10 +200,43 @@ public:
 #ifdef __VERSION_DEBUG__
 		void			debugCheatOpenAllLevels()
 		{
+///*
 			for(int i=1;i<NUM_CHAPTERS*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER);i++)
 			{
 				m_levelCompletionState[i]=LEVELCOMPETESTATE_OPEN;
 			}
+//*/
+/*
+m_levelCompletionState[ 0]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 1]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 2]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 3]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 4]=LEVELCOMPETESTATE_OPEN;
+
+m_levelCompletionState[ 5]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 6]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 7]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 8]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[ 9]=LEVELCOMPETESTATE_OPEN;
+
+m_levelCompletionState[10]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[11]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[12]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[13]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[14]=LEVELCOMPETESTATE_OPEN;
+
+m_levelCompletionState[15]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[16]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[17]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[18]=LEVELCOMPETESTATE_OPEN;
+m_levelCompletionState[19]=LEVELCOMPETESTATE_OPEN;
+
+//m_levelCompletionState[20]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[21]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[22]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[23]=LEVELCOMPETESTATE_OPEN;
+//m_levelCompletionState[24]=LEVELCOMPETESTATE_OPEN;
+*/
 		}
 #endif
 	} GameSlot;
