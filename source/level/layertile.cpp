@@ -22,13 +22,14 @@ const u32	YInc=16<<16;
 CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList)
 {
 		LayerHdr=Hdr;
+		MapWidth=LayerHdr->Width;
+		MapHeight=LayerHdr->Height;
+
 		TileList=_TileList;
 		TriList=_TriList;
 		QuadList=_QuadList;
 		VtxList=_VtxList;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
-		MapWidth=LayerHdr->Width;
-		MapHeight=LayerHdr->Height;
 		PrimGrid=0;
 }
 

@@ -48,7 +48,6 @@ public:
 			SCREEN_TILE_SIZE=SCREEN_TILE_WIDTH*SCREEN_TILE_HEIGHT
 		};
 
-
 		CLayerTile(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 virtual	~CLayerTile();
 

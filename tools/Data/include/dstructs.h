@@ -6,6 +6,34 @@
 #define		__DATA_STRUCTS_HEADER__
 
 //***************************************************************************
+// Taken from Map editor  layerdef.h
+enum	PSX_COLLSION_ENUM
+{
+	COLLISION_TYPE_NORMAL			=0,
+	COLLISION_TYPE_DAMAGE			=1,
+	COLLISION_TYPE_SLIPPERY			=2,
+	COLLISION_TYPE_ELECTRIC			=3,
+	COLLISION_TYPE_STICKY			=4,
+	COLLISION_TYPE_WATER			=5,
+
+	COLLISION_TYPE_FLAG_SHIFT		=5,
+	COLLISION_TYPE_FLAG_NORMAL		=COLLISION_TYPE_NORMAL << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_DAMAGE		=COLLISION_TYPE_DAMAGE << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_SLIPPERY	=COLLISION_TYPE_SLIPPERY << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_ELECTRIC	=COLLISION_TYPE_ELECTRIC << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_STICKY		=COLLISION_TYPE_STICKY << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_TYPE_FLAG_WATER		=COLLISION_TYPE_WATER << COLLISION_TYPE_FLAG_SHIFT,
+
+	COLLISION_TYPE_MASK				= 255 << COLLISION_TYPE_FLAG_SHIFT,
+	COLLISION_MASK					= (255-COLLISION_TYPE_MASK)
+
+};
+enum	PSX_DATA_ENUM
+{
+	LAYER_SHADE_RGB_MAX=4,
+};
+
+//***************************************************************************
 // biped bone IDs
 /*
 enum BONE_NAME
@@ -207,6 +235,19 @@ struct	sLayerHdr
 	int		Height;
 
 	/*int	TileData[W][H];....*/
+};
+
+//---------------------------------------------------------------------------
+// Shade Layer
+struct	sLayerShade
+{
+	u32		Ofs;
+	u8		RGB[4];
+};
+struct	sLayerShadeHdr
+{
+	u16				Count;
+	sLayerShade		Data[4];
 };
 
 //---------------------------------------------------------------------------

@@ -15,8 +15,24 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
+CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)// : CLayerTile(Hdr)
 {
+//		RGB[0]=(u8*)MakePtr(Hdr,sizeof(sLayerHdr));
+//		RGB[1]=(u8*)MakePtr(RGB[0],3);
+//		RGB[2]=(u8*)MakePtr(RGB[1],3);
+//		RGB[3]=(u8*)MakePtr(RGB[2],3);
+		Data=(sLayerShadeHdr*)(Hdr,sizeof(sLayerHdr));
+
+		for (int i=0; i<Data->Count; i++)
+		{
+			SetPolyG4(&Poly[i]);
+			setRGB0(&Poly[i],Data->Data[i].RGB[0],Data->Data[i].RGB[1],Data->Data[i].RGB[2]);
+			setRGB1(&Poly[i],Data->Data[i].RGB[0],Data->Data[i].RGB[1],Data->Data[i].RGB[2]);
+//			setRGB2(G4,0,0,128-Col);
+//			setRGB3(G4,0,0,128-Col);
+
+		}
+
 }
 
 /*****************************************************************************/
@@ -38,38 +54,20 @@ void	CLayerBack::shutdown()
 }
 
 /*****************************************************************************/
-int	YY;
 void	CLayerBack::think(DVECTOR &MapPos)
-{ // Overide default strip scroll update
-int			XPos=MapPos.vx>>MapXYShift;
-int			YPos=MapPos.vy>>MapXYShift;
-
-			ShiftX=XPos&15;
-			ShiftY=YPos&15;
-
-			MapX=XPos>>4;
-			MapY=YPos>>4;
-
-			YY=MapPos.vy>>2;
+{ 
+		YOfs=MapPos.vy>>2;
 }
 
 /*****************************************************************************/
+int		BH=256;
 void	CLayerBack::render()
 {
-POLY_G4		*G4;
-sOT			*ThisOT=OtPtr+LayerOT;
-int			Col;
+sOT			*ThisOT=OtPtr+(MAX_OT-1);
+//printf("%i %i\n",MapWidth,MapHeight);
+			setXYWH(&Poly[0],0,-YOfs,512,BH);
+			addPrim(ThisOT,&Poly[0]);
 
-			Col=YY;
-			if (Col>127) Col=127;
-
-			G4=GetPrimG4();
-			setXYWH(G4,0,0,512,256);
-			setRGB0(G4,0,255-Col,255-Col);
-			setRGB1(G4,0,255-Col,255-Col);
-			setRGB2(G4,0,0,128-Col);
-			setRGB3(G4,0,0,128-Col);
-			addPrimNoCheck(ThisOT,G4);
 }
 
 

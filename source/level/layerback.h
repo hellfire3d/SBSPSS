@@ -19,6 +19,10 @@ public:
 		void	render();
 
 protected:
+//		u8			*RGB[4];
+		sLayerShadeHdr	*Data;
+		int				YOfs;
+		POLY_G4			Poly[4];
 
 };
 
