@@ -232,7 +232,6 @@ void CMapScene::think(int _frames)
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
 		// Change chapter
-#ifndef __USER_CDBUILD__
 		if(PadGetDown(0)&PAD_UP)
 		{
 			if(++m_currentChapterSelection>4)m_currentChapterSelection=0;
@@ -243,7 +242,6 @@ void CMapScene::think(int _frames)
 			if(--m_currentChapterSelection<0)m_currentChapterSelection=4;
 			generateMapScreenImage();
 		}
-#endif
 
 		// Move cursor
 		if(PadGetDown(0)&PAD_LEFT)
@@ -411,11 +409,7 @@ DVECTOR	CMapScene::getPointerTargetPosition()
   ---------------------------------------------------------------------- */
 int		CMapScene::isLevelOpen(int _chapter,int _level)
 {
-#ifdef __USER_CDBUILD__
-	return _level<4;		// no boss or kelp world for thq
-#else
 	return _level!=4;		// no boss levels atm..
-#endif
 }
 
 int		CMapScene::getSpatulaCollectedCount(int _chapter,int _level)
