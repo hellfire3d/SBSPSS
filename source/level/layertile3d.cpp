@@ -260,7 +260,7 @@ sOT			*ThisOT=OtPtr+LayerOT;
 			{
 				int		TriCount=*TileTable++;		// Get Tri Count
 				sTri	*NextList=TList+TriCount;
-				if (Flags & 1)
+//				if (Flags & 1)
 				{
 					while (TriCount--)
 						{
