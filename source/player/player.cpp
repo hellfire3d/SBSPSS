@@ -1255,7 +1255,7 @@ int panim=-1;
 
 #ifdef _STATE_DEBUG_
 int stateDebugX=280;
-int stateDebugY=60;
+int stateDebugY=180;
 #endif
 
 #ifdef __USER_paul__
@@ -1268,7 +1268,7 @@ typedef struct
 }POSMEM;
 static POSMEM	lastpos[NUM_LASTPOS];
 static int		lastposnum=0;
-int				drawlastpos=true;
+int				drawlastpos=false;
 #endif
 
 #ifdef __USER_paul__
@@ -1300,6 +1300,7 @@ if(PadGetDown(0)&PAD_R1)
 	{
 		lastpos[i]=clear;
 	}
+	drawlastpos=drawlastpos==true?false:true;
 }
 if(Pos.vx!=lastpos[lastposnum].vx||Pos.vy!=lastpos[lastposnum].vy)
 {
