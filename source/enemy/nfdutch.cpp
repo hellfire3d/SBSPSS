@@ -237,7 +237,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						newPos.vy -= 50;
 						projectile->init( newPos, heading );
 						projectile->setGraphic( FRM__SNAKEBILE );
-						projectile->setSpeed( 5 );
+						projectile->setSpeed( 6 );
 
 						m_fireCount++;
 
@@ -315,11 +315,14 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 void CNpcFlyingDutchmanEnemy::processShotDeathEnd( int _frames )
 {
-	CNpcEnemy::processShotDeathEnd( _frames );
-
-	if ( isSetToShutdown() )
+	if ( !m_animPlaying )
 	{
-		CGameScene::setBossHasBeenKilled();
+		CNpcEnemy::processShotDeathEnd( _frames );
+
+		if ( isSetToShutdown() )
+		{
+			CGameScene::setBossHasBeenKilled();
+		}
 	}
 }
 
@@ -423,7 +426,7 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 
 						drawAttackEffect();
 
-						m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
+						m_invulnerableTimer = 4 * GameState::getOneSecondInFrames();
 					}
 				}
 
@@ -457,7 +460,7 @@ u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 	{
 		if ( m_controlFunc != NPC_CONTROL_SHOT )
 		{
-			m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
+			m_invulnerableTimer = 4 * GameState::getOneSecondInFrames();
 
 			m_controlFunc = NPC_CONTROL_SHOT;
 			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
