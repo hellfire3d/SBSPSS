@@ -237,6 +237,11 @@ eng=RESTART LEVEL
 ; Slot select screen
 ; ---------------------------------------------------------------
 
+[STR__SLOT_SELECT_SCREEN__EMPTY_SLOT]
+eng=EMPTY SLOT
+[STR__SLOT_SELECT_SCREEN__LEVEL_REACHED]
+eng=Level %d-%d
+
 [STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT]
 eng=Select slot
 [STR__SLOT_SELECT_SCREEN__CROSS_TO_CONFIRM]
