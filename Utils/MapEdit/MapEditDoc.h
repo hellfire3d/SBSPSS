@@ -80,6 +80,7 @@ protected:
 	afx_msg void OnEditPaste();
 	afx_msg void On2d3dToggle();
 	afx_msg void OnResetView();
+	afx_msg void OnRenderToTga();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

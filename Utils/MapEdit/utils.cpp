@@ -163,9 +163,7 @@ struct	sTgaHdr
 	char	imagedesc;	   // 16
 };
 
-
-
-void SaveTGA(char *Filename,int W,int H,u8 *Data)
+void SaveTGA(const char *Filename,int W,int H,u8 *Data,bool IsBGR)
 {
 FILE			*File;
 sTgaHdr			FileHdr;
@@ -180,8 +178,22 @@ sTgaHdr			FileHdr;
 		FileHdr.depth=24;
 
 		fwrite(&FileHdr,sizeof(sTgaHdr),1,File);
+		if (!IsBGR)
+		{
+			fwrite(Data,W*H*3,1,File);
+		}
+		else
+		{
+			int	Size=W*H;
+			for (int i=0; i<Size;i++)
+			{
+				fwrite(&Data[2],1,1,File);
+				fwrite(&Data[1],1,1,File);
+				fwrite(&Data[0],1,1,File);
+				Data+=3;
 
-		fwrite(Data,W*H*3,1,File);
+			}
+		}
 
 		fclose(File);
 }

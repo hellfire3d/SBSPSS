@@ -342,6 +342,135 @@ float		Y1=Rect.bottom-1;
 
 
 /*****************************************************************************/
+#define	TGA_TILE_SIZE	8
+void	CLayerTile::Render4TGA(const char *Filename)
+{
+u8		*Buffer;
+int		MapW=Map.GetWidth();
+int		MapH=Map.GetHeight();
+int		PixW=MapW*8;
+int		PixH=MapH*8;
+
+		Buffer=(u8*)malloc(PixW*PixH*3);
+		ASSERT(Buffer);
+		memset(Buffer,0,PixW*PixH*3);
+
+u8		*Ptr=Buffer;
+		for (int Y=0; Y<MapH; Y++)
+		{
+			Ptr=&Buffer[((MapH-1)-Y)*PixW*TGA_TILE_SIZE*3];
+			for (int X=0; X<MapW; X++)
+			{
+				sMapElem &Elem=Map.Get(X,Y);
+				if (Elem.Tile!=0)
+				{
+					WriteTile2Buffer(Elem,Ptr,X,Y,PixW,PixH);
+				}
+				Ptr+=(TGA_TILE_SIZE*3);
+			}
+		}
+
+		SaveTGA(Filename,PixW,PixH,Buffer,true);
+		free(Buffer);
+
+}
+
+/*****************************************************************************/
+void	ProcessRGB(u8 *Src,int SrcW,int SrcH,u8 *Dst,int DstW,int DstH)
+{
+		for (int y=0;y<DstH;y++)
+		{
+			for (int x=0;x<DstW;x++)
+			{
+				float	XFrac=float(x)/float(DstW);
+				float	YFrac=float(y)/float(DstH);
+				int		FromX=float(SrcW)*XFrac;
+				int		FromY=float(SrcH)*YFrac;
+
+				u8	R=Src[((FromX+(FromY*SrcW))*3)+0];
+				u8	G=Src[((FromX+(FromY*SrcW))*3)+1];
+				u8	B=Src[((FromX+(FromY*SrcW))*3)+2];
+				if (R==255 && G==0 && B==255)
+				{
+					R=G=B=0;
+				}
+				Dst[((x+(y*DstW))*3)+0]=R;
+				Dst[((x+(y*DstW))*3)+1]=G;
+				Dst[((x+(y*DstW))*3)+2]=B;
+			}
+		}
+}
+
+void	FlipX(u8 *_Src,u8 *_Dst,int W,int H)
+{
+int		RGBW=W*3;
+u8		Tmp[TGA_TILE_SIZE*TGA_TILE_SIZE*3];
+u8		*Dst=Tmp;
+		
+		for (int Y=0; Y<H; Y++)
+		{
+			for (int X=0; X<W; X++)
+			{
+				int	PX=((W-1)-X);
+				u8	*Src=&_Src[(PX*3)+Y*RGBW];
+
+				*Dst++=*Src++;
+				*Dst++=*Src++;
+				*Dst++=*Src++;
+			}
+		}
+		memcpy(_Dst,Tmp,W*H*3);
+}
+
+/*****************************************************************************/
+void	FlipY(u8 *_Src,u8 *_Dst,int W,int H)
+{
+int		RGBW=W*3;
+u8		Tmp[TGA_TILE_SIZE*TGA_TILE_SIZE*3];
+
+		for (int Y=0; Y<H; Y++)
+		{
+			u8	*Src=&_Src[(Y)*RGBW];
+			u8	*Dst= &Tmp[((H-1)-Y)*RGBW];
+
+			memcpy(Dst,Src,RGBW);
+		}
+		memcpy(_Dst,Tmp,W*H*3);
+}
+
+/*****************************************************************************/
+void	CLayerTile::WriteTile2Buffer(sMapElem &Elem,u8 *Out,int XPos,int YPos,int PixW,int PixH)
+{
+u8		LilBlock[TGA_TILE_SIZE*TGA_TILE_SIZE*3];
+CElem	&Tile=TileBank->GetElem(Elem.Set,Elem.Tile);
+int		TileW=Tile.GetElemWidth();
+int		TileH=Tile.GetElemHeight();
+
+		if (TileW>16 || TileH>16 || TileW<0 || TileH<0)
+		{
+			TRACE2("%i %i\n",TileW,TileH);
+			return;
+		}
+		ProcessRGB(Tile.GetElemRGB(),TileW,TileH,LilBlock,TGA_TILE_SIZE,TGA_TILE_SIZE);
+		if (Elem.Flags & PC_TILE_FLAG_MIRROR_X) FlipX(LilBlock,LilBlock,TGA_TILE_SIZE,TGA_TILE_SIZE);
+		if (Elem.Flags & PC_TILE_FLAG_MIRROR_Y) FlipY(LilBlock,LilBlock,TGA_TILE_SIZE,TGA_TILE_SIZE);
+
+u8		*RGB=LilBlock;
+		for (int Y=0; Y<TGA_TILE_SIZE; Y++)
+		{
+			u8	*NextOut=Out+(PixW*3);
+			for (int X=0; X<TGA_TILE_SIZE; X++)
+			{
+				*Out++=*RGB++;
+				*Out++=*RGB++;
+				*Out++=*RGB++;
+			}
+			Out=NextOut;
+		}
+
+}
+
+/*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
 void	CLayerTile::GUIInit(CCore *Core)

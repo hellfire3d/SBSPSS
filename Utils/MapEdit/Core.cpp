@@ -44,7 +44,7 @@ CCore::CCore()
 		GridFlag=true;
 		Is3dFlag=true;
 		CurrentView=NULL;
-		CursorPos.x=CursorPos.y=0;
+		CursorPos.x=CursorPos.y=-1;
 		CurrentLayer=0;
 
 GString	Filename;
@@ -53,6 +53,7 @@ GString	Filename;
 		GetExecPath(Filename);
 		Filename+=theApp.GetConfigStr("FileLocation","Iconz");
 		IconBank->AddSet(Filename);
+		RenderTGAFlag=false;
 }
 
 /*****************************************************************************/
@@ -104,6 +105,7 @@ void	CCore::Load(CFile *File)
 int		Version,i;
 BOOL	F;
 Vector3	DuffVector;
+
 		File->Read(&Version,sizeof(int));
 		if (Version>100000) Version=1;	// Check fix for changing version to int from float
 #ifndef _DEBUG
@@ -155,8 +157,8 @@ int		MapHeight=ActionLayer->GetHeight();
 		{
 			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
 		}
-
 }
+
 /*****************************************************************************/
 void	CCore::Validate(int Type)
 {
@@ -219,11 +221,10 @@ Vector3	&ThisCam=GetCam();
 			return;
 		}
 		if (IconBank->NeedLoad()) IconBank->LoadAllSets(this);
-
+		if (RenderTGAFlag) RenderToTga();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 
 		RenderLayers(IsSubView() || CurrentLayer->IsUnique());
-
 }
 
 /*****************************************************************************/
@@ -833,5 +834,20 @@ CExport	Exp(ExportName);
 		Exp.ExportTiles(this);
 		Exp.ExportStrList(this);
 
+}
+
+/*****************************************************************************/
+void	CCore::RenderToTga(char *Filename)
+{
+		TGAFilename=Filename;
+		RenderTGAFlag=true;
+		RedrawView();
+}
+
+/*****************************************************************************/
+void	CCore::RenderToTga()
+{
+		RenderTGAFlag=false;
+		ActionLayer->Render4TGA(TGAFilename);
 }
 

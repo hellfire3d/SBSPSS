@@ -94,6 +94,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Export ",                     ID_EXPORT
         MENUITEM SEPARATOR
+        MENUITEM "Create Map TGA",              ID_RENDER_TO_TGA
+        MENUITEM SEPARATOR
         MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       ID_APP_EXIT

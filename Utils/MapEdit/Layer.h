@@ -72,6 +72,7 @@ virtual	int				GetSubType()					{return(LayerDef.SubType);}
 
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d){};
+virtual	void			Render4TGA(const char *Filename){}
 virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
 virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam){};
 virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d){};

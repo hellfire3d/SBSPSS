@@ -44,7 +44,9 @@ void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z);
 CPoint	IDToPoint(int ID,int Width);
 int		PointToID(CPoint &Pnt,int Width);
 
-void	SaveTGA(char *Filename,int W,int H,u8 *Data);
+//void	SaveTGA(const char *Filename,int W,int H,u8 *Data);
+void SaveTGA(const char *Filename,int W,int H,u8 *Data,bool IsBGR=false);
+
 void	SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 
 void	BGR2RGB(int W,int H,u8 *Data);

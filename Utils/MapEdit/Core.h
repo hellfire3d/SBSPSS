@@ -45,6 +45,8 @@ public:
 		void					RenderLayers(bool OneShot=false);
 		void					RenderNumber(int No);
 		void					Export(char *Filename);
+		void					RenderToTga(char *Filename);
+		void					RenderToTga();
 
 // View Stuff
 		void					SetView(CMapEditView *View)			{CurrentView=View;}
@@ -139,6 +141,8 @@ private:
 		bool					Is3dFlag;
 
 		CElemBank				*IconBank;
+		bool					RenderTGAFlag;
+		GString					TGAFilename;
 	
 };
 

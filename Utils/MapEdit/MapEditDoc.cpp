@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_RESET_VIEW, OnResetView)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleSubView)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_COMMAND(ID_RENDER_TO_TGA, OnRenderToTga)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -214,6 +215,19 @@ char	Filename[256];
 }
 
 /*********************************************************************************/
+void CMapEditDoc::OnRenderToTga() 
+{
+char		BASED_CODE Filter[]= "TGA File  (*.TGA)|*.TGA||";
+CFileDialog	Dlg(FALSE,"*.TGA",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+char	Filename[256];
+	sprintf(Filename,"%s",Dlg.GetPathName());
+	Core.RenderToTga(Filename);
+}
+
+/*********************************************************************************/
 /*** Tilebank Functions **********************************************************/
 /*********************************************************************************/
 /*
@@ -279,3 +293,4 @@ void	CMapEditDoc::FocusView()
 }
 
 /*********************************************************************************/
+

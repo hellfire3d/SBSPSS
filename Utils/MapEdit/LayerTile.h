@@ -34,6 +34,8 @@ public:
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 virtual	void			RenderSelection(CCore *Core,Vector3 &ThisCam);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
+		void			Render4TGA(const char *Filename);
+		void			WriteTile2Buffer(sMapElem &Elem,u8 *Buffer,int X,int Y,int PixW,int PixH);
 
 virtual	void			GUIInit(CCore *Core);
 virtual	void			GUIKill(CCore *Core);

@@ -69,6 +69,11 @@ int		i,ListSize;
 			File->Read(&ThisThing.Data,sizeof(sLayerThingData));
 		}
 		LoadThingNames(File,Version);
+
+//		CurrentDefThing=-1;
+//		CurrentThing=-1;
+//		CurrentThingPoint=-1;
+
 }
 
 /*****************************************************************************/
@@ -79,7 +84,8 @@ int		i,ListSize;
 		ThisThing.XY.resize(ListSize);
 		for (i=0 ;i<ListSize; i++)
 		{
-			File->Read(&ThisThing.XY[i],sizeof(CPoint));
+			CPoint	&ThisPoint=ThisThing.XY[i];
+			File->Read(&ThisPoint,sizeof(CPoint));
 		}
 }
 
@@ -131,8 +137,9 @@ void	CLayerThing::SaveThing(CFile *File,sLayerThing &ThisThing)
 int		i,ListSize=ThisThing.XY.size();
 		File->Write(&ListSize,sizeof(int));
 		for (i=0 ;i<ListSize; i++)
-		{
-			File->Write(&ThisThing.XY[i],sizeof(CPoint));
+		{	
+			CPoint	&ThisPoint=ThisThing.XY[i];
+			File->Write(&ThisPoint,sizeof(CPoint));
 		}
 }
 
@@ -327,12 +334,14 @@ int			i,ListSize;
 			ListSize=ThisThing.XY.size();
 				for (i=0; i<ListSize; i++)
 				{
+					CPoint	&ThisPoint=ThisThing.XY[i];
 					CString	Str;
-					Str.Format("%i: %i, %i",i,ThisThing.XY[i].x,ThisThing.XY[i].y);
+					Str.Format("%i: %i, %i",i,ThisPoint.x,ThisPoint.y);
 					List.AddString(Str);
 				}
 		}
 		List.SetCurSel(CurrentThingPoint);
+
 }
 
 /*****************************************************************************/
