@@ -83,6 +83,7 @@ int		AngleInc=1024/Count;
 				Angle&=4095;
 			}
 		}
+		think(1);
 }
 
 /*****************************************************************************/
@@ -101,9 +102,8 @@ int		Idx=0;
 		ItemList[Idx].Vel.vx=-(msin(Angle)*Vel);//>>1;
 		ItemList[Idx].Vel.vy=-(mcos(Angle)*Vel);
 
-		ItemList[Idx].Pos.vx+=ItemList[Idx].Vel.vx;
-		ItemList[Idx].Pos.vy+=ItemList[Idx].Vel.vy;
-
+//		ItemList[Idx].Pos.vx+=ItemList[Idx].Vel.vx;
+//		ItemList[Idx].Pos.vy+=ItemList[Idx].Vel.vy;
 
 		ItemList[Idx].Count=ItemTable[TableIdx].Count;
 }
@@ -145,6 +145,7 @@ void	CHealthManager::think(int frames)
 			{
 				if (ItemList[i].Life)
 				{
+					int	OldY=ItemList[i].Pos.vy;
 					ItemList[i].Life--;
 					ItemList[i].Pos.vx+=ItemList[i].Vel.vx;
 					ItemList[i].Pos.vy+=ItemList[i].Vel.vy;
@@ -152,11 +153,15 @@ void	CHealthManager::think(int frames)
 					ItemList[i].ScrPos.vy=ItemList[i].Pos.vy>>HealthManShift;
 					ItemList[i].Vel.vy+=HealthManGrav;
 
-					if (ItemList[i].Vel.vy>0)
-					{ // Check ground collision
+//					if (ItemList[i].Vel.vy>0)
+					{ 
 						int	DistY = ColLayer->getHeightFromGround( ItemList[i].ScrPos.vx, ItemList[i].ScrPos.vy, 16 );
 						if (DistY<=0)
 						{
+							if (ItemList[i].Vel.vy<0)
+							{
+								ItemList[i].Pos.vy=OldY;
+							}
 							ItemList[i].Vel.vy=-ItemList[i].Vel.vy>>1;
 							ItemList[i].Vel.vx>>=1;
 	//						ItemList[i].Pos.vy-=DistY<<(HealthManShift-1);
