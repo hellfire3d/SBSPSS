@@ -5,6 +5,9 @@
 #define	__LAYER_DEFS_HEADER__
 
 /*****************************************************************************/
+
+// Max size is 8 * 6
+
 enum LAYER_TYPE
 {
 	LAYER_TYPE_TILE=0,

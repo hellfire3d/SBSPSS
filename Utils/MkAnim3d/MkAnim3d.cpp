@@ -4,6 +4,7 @@
 
 #include "stdio.h"
 #include <misc.hpp>
+#include <GFName.hpp>
 #include <conio.h>
 #include <iostream.h>
 #include <vector>
@@ -15,6 +16,7 @@
 using namespace std;
 
 int	QuatCount=0;
+
 
 //***************************************************************************
 
@@ -39,6 +41,9 @@ char * CycleCommands(char *String,int Num)
 				TpStr= CheckFileString(String);
 				Scale=atof(TpStr);
 				break;
+			case 'i':
+				IncludeFile= CheckFileString(String);
+				break;
 			default:
 				GObject::Error(ERR_FATAL,"Unknown switch %s",String);
 				break;
@@ -61,6 +66,7 @@ void	CMkAnim3d::Add(GString const &Filename)
 {
 CScene	Scene;
 int		ThisBoneCount;
+GFName	Name=Filename;
 
 		printf("%s\n",Filename);		
 		Scene.Load(Filename);
@@ -81,7 +87,8 @@ int		ThisBoneCount;
 
 // Process Anim
 sAnim	ThisAnim;
-		
+		ThisAnim.Name=Name.File();
+		ThisAnim.Name.Upper();
 		ThisAnim.FrameCount=ProcessSkelMove(Scene,ThisAnim,1);
 		ProcessSkelAnim(Scene,ThisAnim,1);
 		AnimList.push_back(ThisAnim);
@@ -122,7 +129,7 @@ int						FrameCount=NodeAnim.size();
 				{
 					sGinAnim const	&InFrame=NodeAnim[i];
 					sQuat			ThisFrame;
-					Quaternion		ThisQuat=InFrame.Ang;
+					Quaternion	const	&ThisQuat=InFrame.Ang;
 
 /*					if (Idx==1)
 					{
@@ -261,6 +268,43 @@ int		ListSize=QuatList.size();
 }
 
 //***************************************************************************
+void	CMkAnim3d::WriteInclude(GString const &Filename)
+{
+GString	Upper=Filename;
+		Upper.Upper();
+GFName	Name=Upper;
+
+		File=fopen(Filename,"wt");
+
+		fprintf(File,"// %s Header\n",Name.File());
+		fprintf(File,"\n");
+		fprintf(File,"#ifndef\t__ANIM_%s_HEADER__\n",Name.File());
+		fprintf(File,"#define\t__ANIM_%s_HEADER__\n",Name.File());
+		fprintf(File,"\n");
+		fprintf(File,"\n");
+		fprintf(File,"enum\tANIM_%s_LIST\n",Name.File());
+		fprintf(File,"{\n");
+
+int		ListSize=AnimList.size();
+		for (int i=0; i<ListSize; i++)
+		{
+			sAnim	&ThisAnim=AnimList[i];
+			fprintf(File,"\tANIM_%s_%s",Name.File(),ThisAnim.Name);
+			if (i==0)
+			{
+			fprintf(File,"=0");
+			}
+		fprintf(File,",\n");
+		}
+
+		fprintf(File,"};\n");
+		fprintf(File,"\n");
+		fprintf(File,"#endif\n");
+
+		fclose(File);
+}
+
+//***************************************************************************
 //***************************************************************************
 //***************************************************************************
 
@@ -291,6 +335,11 @@ vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		}
 
 		AnimBank.Write(OutStr);
+
+		if (!IncludeFile.Empty())
+		{
+			AnimBank.WriteInclude(IncludeFile);
+		}
 
 		return 0;
 }

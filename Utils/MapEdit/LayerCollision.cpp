@@ -101,7 +101,7 @@ void	CLayerCollision::UpdateGUI(CCore *Core)
 /*****************************************************************************/
 void	CLayerCollision::Export(CCore *Core,CExport &Exp)
 {
-//		Exp.ExportLayerTile(Core,GetName(),SubType,Map);
+		Exp.ExportLayerCollision(Core,GetName(),SubType,Map);
 }
 
 /*****************************************************************************/

@@ -15,6 +15,7 @@ struct	sBoneAnim
 
 struct	sAnim
 {
+		GString				Name;
 		int					FrameCount;
 		vector<sBoneAnim>	BoneAnim;
 		vector<s32>			Move;
@@ -33,6 +34,7 @@ public:
 
 		void			Add(GString const &Filename);
 		void			Write(GString &Filename);
+		void			WriteInclude(GString const &IncludeFile);
 
 private:
 		int				ProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx);

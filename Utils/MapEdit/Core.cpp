@@ -73,7 +73,7 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION, Width, Height);
-//		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
+		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
 
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();

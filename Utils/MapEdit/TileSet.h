@@ -51,7 +51,7 @@ public:
 		void		SetCurrent(int Set)					{CurrentSet=Set+1;}
 		int			GetCurrent()						{return(CurrentSet);}
 		int			GetSetCount()						{return(TileSet.size());}
-
+		
 		CMap		&GetLBrush()						{return(Brush[LBrush]);}
 		CMap		&GetRBrush()						{return(Brush[RBrush]);}
 		CMap		&GetBrush(int i)					{return(Brush[i]);}
@@ -67,6 +67,7 @@ public:
 		BOOL		IsTileValidGB(int Set,int Tile);
 
 		void		SetCollision(bool f);
+		CTileSet	&GetSet(int Set)					{return(TileSet[Set]);}
 
 // Functions
 		BOOL		SelectL(BOOL DownFlag)				{return(Select(LBrush,DownFlag));}

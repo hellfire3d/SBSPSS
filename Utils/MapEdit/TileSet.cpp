@@ -43,7 +43,7 @@ GString	Filename;
 
 // Get application path
 #ifdef _DEBUG
-		ExePath="C:/Spongebob/tools/mapedit/mapedit/";
+		ExePath="C:/Spongebob/tools/mapedit/";
 #else
 char	ExeFilename[2048];
 		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
@@ -85,6 +85,21 @@ void	CTileBank::SetCollision(bool f)
 }
 
 /*****************************************************************************/
+char	*FixName(const char *In)
+{
+char	*Ptr=(char*)In;
+		while (*Ptr)
+		{
+			if (Ptr[0]=='T' &&
+				Ptr[1]=='I' &&
+				Ptr[2]=='L' &&
+				Ptr[3]=='E') return(Ptr);
+			Ptr++;
+		}
+		
+		return(Ptr);
+}
+
 void	CTileBank::Load(CFile *File,int Version)
 {
 int		ListSize;
@@ -105,16 +120,24 @@ GString	FilePath;
 		{
 			CurrentSet++;
 		}
+
 // New Style rel storage
 		for (int i=0;i<ListSize;i++)
 		{
-			char	c=1,RelName[256+64],FullName[256+64];
+			char	c=1,FullName[256+64];
+			GString	RelName;
 			int		Len=0;
 			while (c)
 			{
 				File->Read(&c,1);
-				RelName[Len++]=c;
+				RelName.Append(c);
 			}
+			RelName.Upper();
+
+			{ // Dodgy arse artist fix
+				RelName=FixName(RelName);
+			}
+		
 			RootPath.makeabsolute(FilePath,RelName,FullName);
 			AddTileSet(FullName);
 		}
