@@ -498,17 +498,12 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	}
 
 	CPlayer *player = GameScene.getPlayer();
-
-	if ( player )
-	{
-		player->clearPlatform();
-	}
-
 	playerThing=s_CollisionLists[CThing::TYPE_PLAYER];
 
 	if (player && playerThing)
 	{
 		// Player -> Platform collision
+		player->clearPlatform();
 		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
 		while(thing1)
 		{
@@ -531,15 +526,15 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		}
 
 		// Friend -> Pickup collision
-		thing1=s_CollisionLists[CThing::TYPE_PICKUP];
+		thing1=s_CollisionLists[CThing::TYPE_NPC];
 		while(thing1)
 		{
-			thing2=s_CollisionLists[CThing::TYPE_NPC];
+			thing2=s_CollisionLists[CThing::TYPE_PICKUP];
 			while(thing2)
 			{
-				if(thing1->checkCollisionAgainst(thing2, _frames))
+				if(thing2->checkCollisionAgainst(thing1, _frames))
 				{
-					thing1->collidedWith(thing2);
+					thing2->collidedWith(thing1);
 				}
 				thing2=thing2->m_nextCollisionThing;
 			}
@@ -1408,16 +1403,18 @@ DVECTOR const	&thisThingPos=_thisThing->getCollisionCentre();
 
 	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
 	collided=false;
-	if(abs(pos.vx-thisThingPos.vx)<radius&&
-	   abs(pos.vy-thisThingPos.vy)<radius)
+	if(abs(pos.vx-thisThingPos.vx)<radius && abs(pos.vy-thisThingPos.vy)<radius)
 	{
 //		CRECT	thisRect,thatRect;
 
 CRECT const &thisRect=getCollisionArea();
 CRECT const &thatRect=_thisThing->getCollisionArea();
 
-		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
-		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+//		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+//		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+			if (thisRect.x2<thatRect.x1 || thisRect.x1>thatRect.x2) return(false);
+			if (thisRect.y2<thatRect.y1 || thisRect.y1>thatRect.y2) return(false);
+
 		{
 			collided=true;
 		}
