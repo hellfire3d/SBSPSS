@@ -422,6 +422,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_DUMBFIRE, CProjectile::PROJECTILE_FINITE_LIFE );
 			projectile->setLayerCollision( m_layerCollision );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
+			projectile->setSpeed( 5 );
 		}
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;

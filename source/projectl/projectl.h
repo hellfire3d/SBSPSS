@@ -60,6 +60,7 @@ public:
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setOt( u8 newOt )										{m_ot=newOt;}
 	void				setGraphic( int frame );
+	void				setSpeed( u16 newSpeed )								{m_speed = newSpeed;}
 
 private:
 	class CLayerCollision	*m_layerCollision;
@@ -81,6 +82,7 @@ protected:
 	u16											m_turnSpeed;
 	u8											m_ot;
 	int											m_spriteFrame;
+	u16											m_speed;
 };
 
 /*****************************************************************************/

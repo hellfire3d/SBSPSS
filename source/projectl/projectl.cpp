@@ -68,6 +68,7 @@ void CProjectile::init()
 	m_extension = 0;
 //	m_isShuttingDown = false;
 	m_ot = OTPOS__ACTOR_POS;
+	m_speed = 3;
 	updateCollisionArea();
 }
 
@@ -169,8 +170,8 @@ bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
 
 		m_heading &= 4095;
 		
-		s32 preShiftX = _frames * 3 * rcos( m_heading );
-		s32 preShiftY = _frames * 3 * rsin( m_heading );
+		s32 preShiftX = _frames * m_speed * rcos( m_heading );
+		s32 preShiftY = _frames * m_speed * rsin( m_heading );
 
 		moveX = preShiftX >> 12;
 		if ( !moveX && preShiftX )
@@ -317,8 +318,8 @@ void CProjectile::think(int _frames)
 			}
 			else
 			{
-				Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
-				Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+				Pos.vx += ( _frames * m_speed * rcos( m_heading ) ) >> 12;
+				Pos.vy += ( _frames * m_speed * rsin( m_heading ) ) >> 12;
 			}
 
 			break;
