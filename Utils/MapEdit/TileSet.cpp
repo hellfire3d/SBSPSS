@@ -44,8 +44,9 @@ CTileBank::CTileBank()
 		SelStart=-1;
 		SelEnd=1;
 
-#ifdef _DEBUGx
-	AddTileSet("c:/temp/rockp/rockp.gin");
+#ifdef _DEBUG
+//	AddTileSet("c:/temp/rockp/rockp.gin");
+	AddTileSet("c:/temp/3/test.gin");
 
 int	W=3;
 int	H=3;
@@ -113,6 +114,7 @@ int		ListSize=TileSet.size();
 		sprintf(Filename,"%s%s.%s",ThisSet.GetPath(),ThisSet.GetName(),"Gin");
 		File->Write(Filename,256+64);		
 	}
+
 }
 
 /*****************************************************************************/
@@ -148,6 +150,7 @@ int	ListSize=TileSet.size();
 	}
 
 	LoadFlag=TRUE;
+
 }
 
 /*****************************************************************************/
@@ -323,6 +326,7 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 		{
 			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
 		}
+
 
 	Loaded=TRUE;
 }

@@ -34,6 +34,9 @@ virtual	~CLayer(){};
 
 virtual	char			*GetName();
 virtual	void			SetName(char *_Name);
+
+virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
+virtual	BOOL			IsVisible()						{return(VisibleFlag);}
 virtual	int				GetType()=0;
 
 virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
@@ -71,6 +74,7 @@ protected:
 		BOOL			Render3dFlag;
 		float			ZPosDiv,MapSizeDiv;
 		BOOL			ResizeFlag;
+		BOOL			VisibleFlag;
 
 };
 

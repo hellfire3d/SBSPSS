@@ -3,8 +3,7 @@
 /*************/
 
 #include	"stdafx.h"
-//#include	<windows.h>		// Header File For Windows
-//#include	<stdio.h>			// Header File For Standard Input/Output
+
 #include	"gl3d.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
@@ -210,8 +209,8 @@ int				Status=FALSE;
 		// Typical Texture Generation Using Data From The Bitmap
 		glBindTexture(GL_TEXTURE_2D, Text);
 		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
@@ -226,4 +225,73 @@ int				Status=FALSE;
 	}
 
 	return Status;										// Return The Status
+}
+
+/**************************************************************************************/
+struct	sTgaHdr
+{
+	char	id;			   // 0
+	char	colmaptype;	   // 1
+	char	imagetype;	   // 2
+	char	fei[2];		   // 3
+	char	cml[2];		   // 5
+	char	cmes;		   // 7
+	short	xorig;		   // 8
+	short	yorig;		   // 10
+	short	width;		   // 12
+	short	height;		   // 14
+	char	depth;		   // 15
+	char	imagedesc;	   // 16
+};
+
+
+
+void SaveTGA(char *Filename,int SX,int SY,int SW,int SH)
+{
+FILE			*File;
+sTgaHdr			FileHdr;
+
+		File=fopen(Filename,"wb");
+		
+//---------------------------------------------------------------------------
+// Header
+		memset(&FileHdr,0 ,sizeof(sTgaHdr));
+	
+		FileHdr.imagetype= 2;  //imagetype
+		FileHdr.width = SW;
+		FileHdr.height= SH;
+		FileHdr.depth=24;
+//		FileHdr.imagedesc=24;
+
+		fwrite(&FileHdr,sizeof(sTgaHdr),1,File);
+		
+
+//---------------------------------------------------------------------------
+// Data
+		for (int Y=0; Y<SH; Y++)
+			{
+			for (int X=0; X<SW; X++)
+				{
+				float	Col[3];
+				unsigned char	R,G,B;
+
+				glReadPixels(X,Y,1,1,GL_RED,	GL_FLOAT,&Col[0]);
+				glReadPixels(X,Y,1,1,GL_GREEN,	GL_FLOAT,&Col[1]);
+				glReadPixels(X,Y,1,1,GL_BLUE,	GL_FLOAT,&Col[2]);
+
+				R=Col[0]*255;
+				G=Col[1]*255;
+				B=Col[2]*255;
+
+				fwrite(&B,1,1,File);
+				fwrite(&G,1,1,File);
+				fwrite(&R,1,1,File);
+				}
+			}
+
+//---------------------------------------------------------------------------
+
+		fclose(File);
+
+
 }

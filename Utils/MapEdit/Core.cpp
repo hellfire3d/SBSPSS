@@ -18,6 +18,8 @@
 #include	"Core.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
+#include	"utils.h"
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -182,13 +184,13 @@ int		ListSize=Layer.size();
 		Layer[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
 }
 
-/*****************************************************************************/
+/////////////////////////////////////////////////////////////////////////////
 void	CCore::RenderTileView(CMapEditView *View)
 {
 Vec		&ThisCam=GetCam();
 
 		TileBank.RenderSet(this,ThisCam,Is3dFlag);
-//		TileBank.RenderCursor(this,ThisCam,Is3dFlag);
+
 
 // Get Cursor Pos
 		TileBank.FindCursorPos(this,View,GetCam(),CurrentMousePos);
@@ -334,6 +336,29 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 }
 
 /*****************************************************************************/
+void		CCore::UpdateLayerGUI(CMapEditView *View)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
+int			ListSize=Layer.size();
+
+			List->ListBox.ResetContent();
+
+			for (int i=0; i<ListSize; i++)
+			{
+				List->ListBox.AddString(Layer[i]->GetName());
+//				List->ListBox.SetCheck(i,Layer[i]->IsVisible());
+			}
+// Now sets checks (silly MSoft bug!!)
+			for (i=0; i<ListSize; i++)
+			{
+				List->ListBox.SetCheck(i,Layer[i]->IsVisible());
+			}
+
+}
+
+/*****************************************************************************/
 /*
 void	CCore::SetActiveLayer(int i)
 {
@@ -442,14 +467,21 @@ Vec		&CCore::GetCam()
 }
 
 /*****************************************************************************/
-void	CCore::UpdateAll(CMapEditView *View)
+void	CCore::UpdateGUI(CMapEditView *View)
 {
-		UpdateView(View);
+		UpdateLayerGUI(View);
 		UpdateGrid(View);
 
 		TileBank.UpdateGUI(this,TileViewFlag);
 		Layer[ActiveLayer]->UpdateGUI(this);
 
+}
+
+/*****************************************************************************/
+void	CCore::UpdateAll(CMapEditView *View)
+{
+		UpdateGUI(View);
+		UpdateView(View);
 }
 
 /*****************************************************************************/
@@ -462,6 +494,7 @@ Vec		&ThisCam=GetCam();
 		if (ThisCam.z>-1) ThisCam.z=-1;
 		if (View) View->Invalidate();
 }		
+
 
 /*****************************************************************************/
 void	CCore::SetMapSize(CMapEditView *View,int Width,int Height)

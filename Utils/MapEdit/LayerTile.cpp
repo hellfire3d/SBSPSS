@@ -32,6 +32,7 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,
 		MapSizeDiv=MapDiv;
 		ResizeFlag=Resizable;
 		Render3dFlag=Is3d;
+		VisibleFlag=TRUE;
 		Mode=MouseModePaint;
 
 		Map.SetSize(Width/MapDiv,Height/MapDiv,TRUE);
@@ -58,6 +59,7 @@ void	CLayerTile::Load(CFile *File,float Version)
 		File->Read(&ZPosDiv,sizeof(float));
 		File->Read(&MapSizeDiv,sizeof(float));
 		File->Read(&ResizeFlag,sizeof(BOOL));
+		File->Read(&VisibleFlag,sizeof(BOOL));
 		File->Read(&Mode,sizeof(MouseMode));
 		Map.Load(File,Version);
 }
@@ -72,9 +74,9 @@ void	CLayerTile::Save(CFile *File)
 		File->Write(&ZPosDiv,sizeof(float));
 		File->Write(&MapSizeDiv,sizeof(float));
 		File->Write(&ResizeFlag,sizeof(BOOL));
+		File->Write(&VisibleFlag,sizeof(BOOL));
 		File->Write(&Mode,sizeof(MouseMode));
 		Map.Save(File);
-
 }
 
 /*****************************************************************************/

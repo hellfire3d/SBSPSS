@@ -62,6 +62,7 @@ public:
 		void					UpdateParamBar();
 
 // Layers
+		void					UpdateLayerGUI(CMapEditView *View);
 //		void					SetActiveLayer(int Layer);
 //		int						GetActiveLayer()				{return(ActiveLayer);}
 //		CLayer					*GetLayer(int i)				{return(Layer[i]);}
@@ -74,6 +75,7 @@ public:
 		CTexCache				&GetTexCache()					{return(TexCache);}
 
 // Misc
+		void					UpdateGUI(CMapEditView *View);
 		void					UpdateAll(CMapEditView *View);
 		void					UpdateView(CMapEditView *View,Vec Ofs=Vec(0,0,0));
 

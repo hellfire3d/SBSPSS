@@ -22,6 +22,8 @@ TVECTOR	TCrossProduct(TVECTOR const &V0,TVECTOR const &V1,const TVECTOR &V2 );
 CPoint	IDToPoint(int ID,int Width);
 int		PointToID(CPoint &Pnt,int Width);
 
+void	SaveTGA(char *Filename,int SX,int SY,int SW,int SH);
+
 /**************************************************************************************/
 
 #endif
