@@ -141,7 +141,9 @@ hazard_src :=		hazard \
 
 fx_src :=			fx \
 					fxfallingtile \
-					fxjfish
+					fxcloud \
+					fxsteam
+
 
 projectl_src :=		projectl \
 					prnpc \

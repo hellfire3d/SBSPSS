@@ -164,7 +164,7 @@ SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))
 
 SFXGFX_SPR_DEP :=		$(SFX_GFX_IN)
 
-SFXGFX_SPR_IN :=		-z- $(SFX_GFX_IN)
+SFXGFX_SPR_IN :=		-z- -c+ $(SFX_GFX_IN) -z+ -c-
 
 #----------------------------------------------------------------------------
 # Ingame graphics and UI

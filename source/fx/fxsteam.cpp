@@ -1,6 +1,6 @@
-/************************/
-/*** Cloud Base Class ***/
-/************************/
+/*************/
+/*** Steam ***/
+/*************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -10,133 +10,65 @@
 #include	<sprites.h>
 #include	"level\level.h"
 
-#include	"FX\FXcloud.h"
+#include	"FX\FXSteam.h"
 
+static	s16			SteamSize=1;
+const	s16			SteamAngleInc=1111;
 
-DVECTOR		SmokeVel;
-u16			AngleInc=16;
-
-u8			StartR=255;
-u8			StartG=255;
-u8			StartB=255;
-s8			RInc=-8;
-s8			BInc=-8;
-s8			GInc=-8;
-s16			StartScaleX=256;
-s16			ScaleXInc=256;
-s16			StartScaleY=256;
-s16			ScaleYInc=256;
-
+int	SLife=64;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFXCloud::init(DVECTOR const &_Pos)
+void	CFXSteam::init(DVECTOR const &_Pos)
 {
-		CFX::init();
-		Pos=_Pos;
-		HeadIdx=0;
-		ListCount=1;
-		Angle=0;
+		CFXCloud::init(_Pos);
+		Life=SLife;
+
+		RBase=255;
+		GBase=255;
+		BBase=255;
+		RInc=-8;
+		GInc=-8;
+		BInc=-8;
+
+		Trans=3;
+
+		SetSize(SteamSize);
+
 }
 
 /*****************************************************************************/
-void	CFXCloud::shutdown()
+void	CFXSteam::shutdown()
 {
 		CFX::shutdown();
 }
 
 /*****************************************************************************/
+void	CFXSteam::SetSize(int Size)
+{
+		ScaleInc=(4096/LIST_SIZE)*Size;
+		AngleInc=SteamAngleInc;
+		Vel.vx=0;
+		Vel.vy=-Size;
+}
+
+/*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-int	SS=4;
-void	CFXCloud::think(int _frames)
+int	LifeStart=32;
+
+void	CFXSteam::think(int _frames)
 {
-int		ThisIdx=HeadIdx;
-DVECTOR	Vel=SmokeVel;
-		if (Parent)
+		SetSize(SteamSize);
+		CFXCloud::think(_frames);
+
+		if (!DieOut)
 		{
-			this->setPos(Parent->getPos());
+			setHead(Vel,Vel,LifeStart);
 		}
 
-		CFX::think(_frames);
-
-		HeadIdx--;
-		if (HeadIdx<0) HeadIdx+=ListCount;
-
-		if (Parent)
-		{
-			setPos(Parent->getPos());
-		}
-		List[HeadIdx].Ofs=getPos();
-
-
-		for (int i=0; i<ListCount-1; i++)
-		{
-			sList	&ThisElem=List[ThisIdx++];
-			ThisIdx&=MAX_TRAIL-1;
-			ThisElem.Ofs.vx+=Vel.vx>>SS;
-			ThisElem.Ofs.vy+=Vel.vy>>SS;
-			Vel.vx+=SmokeVel.vx;
-			Vel.vy+=SmokeVel.vy;
-		}
-		ListCount++;
-		if (ListCount>MAX_TRAIL)
-		{
-			ListCount=MAX_TRAIL;
-		}
+		Life--;
+		if (!Life) DieOut=true;
 
 }
 
-/*****************************************************************************/
-/*** Render ******************************************************************/
-/*****************************************************************************/
-int	ST=3;
-
-void	CFXCloud::render()
-{
-		CFX::render();
-
-		if (canRender())
-		{
-			DVECTOR	const &MapOfs=CLevel::getCameraPos();
-			DVECTOR	RenderPos;
-			int		ThisIdx=HeadIdx;
-
-			int		ThisAngle=Angle;
-			int		ThisScaleX=StartScaleX;
-			int		ThisScaleY=StartScaleY;
-			u8		ThisR=StartR;
-			u8		ThisG=StartG;
-			u8		ThisB=StartB;
-			
-			for (int i=0; i<ListCount; i++)
-			{
-				sList		&ThisOfs=List[ThisIdx];
-				POLY_FT4	*Ft4;
-
-				RenderPos.vx=ThisOfs.Ofs.vx-MapOfs.vx;
-				RenderPos.vy=ThisOfs.Ofs.vy-MapOfs.vy;
-
-				Ft4=m_spriteBank->printRotatedScaledSprite(FRM__SMOKE,RenderPos.vx,RenderPos.vy,ThisScaleX,ThisScaleY,ThisAngle,OtPos*0);
-				setShadeTex(Ft4,0);
-				setSemiTrans(Ft4,1);
-				setRGB0(Ft4,ThisR,ThisB,ThisB);
-				Ft4->tpage|=ST<<5;
-
-				ThisR+=RInc;
-				ThisG+=GInc;
-				ThisB+=BInc;
-
-				ThisAngle+=AngleInc;
-				ThisAngle&=4095;
-				ThisScaleX+=ScaleXInc;
-				ThisScaleY+=ScaleYInc;
-
-				ThisIdx++;
-				ThisIdx&=MAX_TRAIL-1;
-			}
-			Angle+=AngleInc/2;
-			Angle&=4095;
-
-		}
-}

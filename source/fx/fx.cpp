@@ -14,6 +14,8 @@
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
 #include	"FX\FXfallingTile.h"
+#include	"FX\FXCloud.h"
+#include	"FX\FXSteam.h"
 /* FX
 
 	Jellyfish legs
@@ -69,12 +71,19 @@ CFX		*NewFX;
 
 		switch(Type)
 		{
-		case FX_TYPE_JELLYFISH_LEGS:
-			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
-			break;
 		case FX_TYPE_FALLINGTILE:
 			NewFX=new ("Falling Tile") CFXFallingTile();
 			break;
+		case FX_TYPE_CLOUD:
+			NewFX=new ("Cloud ") CFXCloud();
+			break;
+			case FX_TYPE_STEAM:
+			NewFX=new ("Steam") CFXSteam();
+			break;
+
+		case FX_TYPE_JELLYFISH_LEGS:
+//			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
+			ASSERT(!"FISH LEGS OUT OF STOCK\n");
 		case FX_TYPE_BUBBLE:
 			case FX_TYPE_BUBBLE_WATER:
 			case FX_TYPE_BUBBLE_ACID:
@@ -100,8 +109,6 @@ CFX		*NewFX;
 		case FX_TYPE_CASCADE:		
 		case FX_TYPE_CASCADE_SPLASH:	
 		case FX_TYPE_FIREBALL:
-		case FX_TYPE_CLOUD:
-			case FX_TYPE_CLOUD_STEAN:
 			case FX_TYPE_CLOUD_SMOKE:
 			case FX_TYPE_CLOUD_GAS:
 		case FX_TYPE_FLAMES:
@@ -121,12 +128,10 @@ CFX		*CFX::Create(const FX_TYPE Type,CThing *Parent)
 {
 CFX		*NewFX=CFX::Create(Type);
 
-		if (Parent)
-		{
-			Parent->addChild(NewFX);
-		}
+		ASSERT(Parent);
 
-		NewFX->init();
+		NewFX->init(Parent->getPos());
+		Parent->addChild(NewFX);
 
 		return NewFX;
 }

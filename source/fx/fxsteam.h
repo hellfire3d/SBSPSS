@@ -1,35 +1,25 @@
-/**********************/
-/*** JellyFish Legs ***/
-/**********************/
+/*************/
+/*** Steam ***/
+/*************/
 
-#ifndef	__FX_FX_CLOUD_HEADER__
-#define __FX_FX_CLOUD_HEADER__
+#ifndef	__FX_FX_STEAM_HEADER__
+#define __FX_FX_STEAM_HEADER__
 
 #include "fx/fx.h"
+#include "fx/fxcloud.h"
 
 /*****************************************************************************/
-class CFXCloud : public CFX
+class CFXSteam : public CFXCloud
 {
 public:
-		struct	sList
-		{
-			DVECTOR	Ofs;
-		};
-		enum
-		{
-			MAX_TRAIL = 16
-		};
-
 virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
-virtual void		render();
 
+		void		SetSize(int Size);
 protected:
-		sList		List[MAX_TRAIL];
-		int			ListCount;
-		int			HeadIdx;
-		int			Angle;
+		int			Life;
+		DVECTOR		Vel;
 };
 
 #endif
