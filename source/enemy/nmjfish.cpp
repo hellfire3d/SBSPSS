@@ -626,6 +626,11 @@ void CNpcMotherJellyfishEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
+	for ( int i = 0 ; i < 4 ; i++ )
+	{
+		legs[i]->killFX();
+	}
+
 	CNpcBossEnemy::shutdown();
 }
 

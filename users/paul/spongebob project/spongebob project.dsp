@@ -617,14 +617,6 @@ SOURCE=..\..\..\source\fx\fx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\fx\fxattachanim.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fx\fxattachanim.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\fx\fxbaseanim.cpp
 # End Source File
 # Begin Source File

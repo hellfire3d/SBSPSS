@@ -30,7 +30,7 @@ void CNpcBossEnemy::shutdown()
 {
 	if ( m_energyBar )
 	{
-		m_energyBar->setToShutdown();
+		m_energyBar->killFX();
 	}
 
 	CNpcEnemy::shutdown();
