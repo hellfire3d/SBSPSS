@@ -173,6 +173,10 @@ SOURCE=..\..\..\source\enemy\npc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\npcdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npcpath.cpp
 # End Source File
 # Begin Source File
