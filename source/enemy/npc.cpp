@@ -222,21 +222,11 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_SUB_SHARK:
 		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
 		case CNpcEnemy::NPC_IRON_DOGFISH:
-		{
-			if ( CLevel::getIsBossRespawn() )
-			{
-				if ( CLevel::getBossHealth() <= 0 )
-				{
-					return( NULL );
-				}
-			}
-		}
-
 		case CNpcEnemy::NPC_SEA_SNAKE:
 		{
 			if ( CLevel::getIsBossRespawn() )
 			{
-				if ( CLevel::getBossHealth() < 0 )
+				if ( CLevel::getBossHealth() <= 0 )
 				{
 					return( NULL );
 				}
