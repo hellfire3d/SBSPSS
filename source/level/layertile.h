@@ -49,7 +49,7 @@ virtual	sTileMapElem	*getMapPtr(int _x,int _y)			{return(&Map[(_x>>4)+((_y>>4)*M
 protected:
 
 		sLayerHdr		*LayerHdr;
-		sTile2d			*TileBank2d;
+		sElem2d			*ElemBank2d;
 
 		int				MapWidth,MapHeight,MapXYShift;
 		int				RenderW,RenderH;

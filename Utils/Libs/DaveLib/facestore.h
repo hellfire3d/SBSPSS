@@ -23,16 +23,17 @@ struct	sFaceTexList
 };
 */
 //***************************************************************************
+/*
 class	CFace
 {
 public:
-//	int				PntCount;
+	int				PntCount;
 	int				Mat;
 	Vector3			vtx[4];
 	int				pts[4];
-	int				idx[4];
+//	int				idx[4];
 	sUV				uvs[4];
-	int				vis[4];
+//	int				vis[4];
 	Vector3			Normal;
 	bool			Avail;
 //	int				ID;
@@ -40,8 +41,8 @@ public:
 	int				TPageFlag;
 
 };
+*/
 
-/*
 class	CFace
 {
 public:
@@ -49,25 +50,20 @@ public:
 	{
 	vtx.resize(3);
 	pts.resize(3);
-	idx.resize(3);
 	uvs.resize(3);
-	vis.resize(3);
 	}
 
-//	int				PntCount;
 	int				Mat;
 	vector<Vector3>	vtx;
 	vector<int>		pts;
-	vector<int>		idx;
 	vector<sUV>		uvs;
-	vector<int>		vis;
 	Vector3			Normal;
 	bool			Avail;
-	int				ID;
 	GString			TexName;
+	int				TPageFlag;
 };
 
-*/
+
 //***************************************************************************
 #ifndef	sTriFace
 struct  sTriFace
@@ -85,8 +81,8 @@ class CFaceStore
 {
 
 public:
-		CFaceStore()			{MaxStrip = 3;TexGrab=&FaceStoreTexGrab;}
-		CFaceStore(int Max)		{MaxStrip=Max;TexGrab=&FaceStoreTexGrab;}
+		CFaceStore()			{MaxStrip = 3;TexGrab=0;}
+		CFaceStore(int Max)		{MaxStrip=Max;TexGrab=0;}
 		~CFaceStore(){};
 
 		void					SetTPageFlag(CFace &F,int MatFlag);
@@ -100,25 +96,7 @@ public:
 		void					SetTexGrab(CTexGrab &NewGrab)						{TexGrab=&NewGrab;}
 		int						AddTex(GString const &TexName);
 
-		void					SetTexOut(GString &Name,int TPBase,int TPW,int TPH)	{TexGrab->SetOutFile(Name); TexGrab->SetTPage(TPBase,TPW,TPH);}
-		void					SetTexInclude(GString &Name)						{TexGrab->SetIncFile(Name);}
-		void					SetTexDebug(bool f)									{TexGrab->SetDebug(f);}
-		void					SetTexDebugOut(GString &Name)						{TexGrab->SetDebugOut(Name);}
-		void					SetTexShrinkToFit(bool f)							{TexGrab->ShrinkToFit(f);}
-		void					SetTexNoSort()										{TexGrab->NoSort();}
-		void					SetTexAnimatedHeadersOnly(bool f)					{TexGrab->AnimatedHeadersOnly(f);}
-		void					SetTexDontOutputBoxes(bool f)						{TexGrab->DontOutputBoxes(f);}
-		void					SetTexAllowRotate(bool f)							{TexGrab->AllowRotate(f);}
-
-		CTexGrab				&GetTexGrab()						{return(FaceStoreTexGrab);}
-		vector<sTexOutInfo>		&GetTexInfo()						{return(TexGrab->GetTexInfo());}
-
-		void					ProcessTextures();
-		void					Process();
-
-		int						WriteTriList(FILE *File)						{return(WriteTriList(File,OutTriList));}
-		int						WriteQuadList(FILE *File)						{return(WriteQuadList(File,OutQuadList));}
-		int						WriteVtxList(FILE *File)						{return(WriteVtxList(File,OutVtxList));}
+		void					Process(vector<sTri> &OutTriList,vector<sQuad> &OutQuadList,vector<sVtx> &OutVtxList);
 
 		int						WriteTriList(FILE *File,vector<sTri> &List);
 		int						WriteQuadList(FILE *File,vector<sQuad> &List);
@@ -133,49 +111,43 @@ public:
 
 		vector<CFace> const		&GetQuadFaceList()				{return(QuadFaceList);}
 		int						GetQuadFaceCount()				{return(QuadFaceList.size());}
-
-		vector<sVtx> const		&GetVtxList()					{return(OutVtxList);}
-		int						GetVtxCount()					{return(OutVtxList.size());}
-		int						AddVtx(Vector3 &Vtx);
+static	int						AddVtx(vector<sVtx> &OutVtxList,Vector3 &Vtx);
+static	int						AddVtx(vector<sVtx> &OutVtxList,sVtx &ThisVtx);
+		void					ParseVtx4BBox(sVtx &Vtx);
 
 		void					setMaxStripLength(int v)		{MaxStrip = v;}
 
 		CFace& operator []( int nIndex )	{return(FaceList[nIndex]);}
 
-		vector<sTri>			GetOutTriList()					{return(OutTriList);}
-		vector<sQuad>			GetOutQuadList()				{return(OutQuadList);}
-
+		sBBox					&GetBBox()	{return(BBox);}
 private:
 		void					Quad();
 		void					SetupUV(CFace const &In, sTri &Out);
 		void					SetupUV(CFace const &In, sQuad &Out);
 
-		void					BuildOutTriLists();
-		void					BuildOutQuadList();
+		void					BuildOutTriList(vector<sTri> &OutTriList,vector<sVtx> &OutVtxList);
+		void					BuildOutQuadList(vector<sQuad> &OutQuadList,vector<sVtx> &OutVtxList);
 
-//		int						QuadGetAttached(int FaceNo);
-//		void					QuadGetPnts(CFace &F,int *Join0,int *Join1,int *Pnt);
-//		void					QuadGetUVs(CFace &F,int *Join0,int *Join1,int *Pnt);
-//		void					OrderPnts( CFace &F ,int unc);
+		int						QuadGetAttached(int FaceNo);
+		void					QuadGetPnts(CFace &F,int *Join0,int *Join1,int *Pnt);
+		void					QuadGetUVs(CFace &F,int *Join0,int *Join1,int *Pnt);
+		void					OrderPnts( CFace &F ,int unc);
 
-//		bool					CanConnect( int f0, int f1 );
-//		int						CountFacesAttached ( int f );
-//		void					FollowFace( int id, CFace &F );
-//		int						GetUnconnectedPoint( int f0, int f1, int &f0p0, int &f0p1 );
-//		bool					GetFace( CFace & F );
+		bool					CanConnect( int f0, int f1 );
+		int						CountFacesAttached ( int f );
+		void					FollowFace( int id, CFace &F );
+		int						GetUnconnectedPoint( int f0, int f1, int &f0p0, int &f0p1 );
+		bool					GetFace( CFace & F );
 
 		int						MaxStrip;
 
 		vector<CFace>			FaceList;
-//		vector<sFaceTexList>	TexList;
-		CTexGrab				FaceStoreTexGrab,*TexGrab;
+		CTexGrab				*TexGrab;
 
 		vector<CFace>			TriFaceList;
 		vector<CFace>			QuadFaceList;
-
-		vector<sTri>			OutTriList;
-		vector<sQuad>			OutQuadList;
-		vector<sVtx>			OutVtxList;
+		vector<sVtx>			VtxList;
+		sBBox					BBox;
 
 };
 

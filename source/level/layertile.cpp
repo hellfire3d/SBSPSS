@@ -26,7 +26,7 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 		MapHeight=LayerHdr->Height;
 
 //		printf("%i %i\n",MapWidth,MapHeight);
-		TileBank2d=LevelHdr->TileBank2d;
+		ElemBank2d=LevelHdr->ElemBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 }
 
@@ -108,7 +108,7 @@ sOT				*ThisOT=OtPtr+LayerOT;
 				MapRow++;
 				if (ThisTile)
 				{
-					sTile2d		*Tile=&TileBank2d[ThisTile];
+					sElem2d		*Tile=&ElemBank2d[ThisTile];
 					POLY_FT4	*Ft4=(POLY_FT4*)PrimPtr;
 					setPolyFT4(Ft4);
 					setShadeTex(Ft4,1);
@@ -151,7 +151,7 @@ sOT				*ThisOT=OtPtr+LayerOT;
 				int	ThisTile=*MapRow++;
 				if (ThisTile)
 				{
-/**/				sTile2d		*Tile=&TileBank2d[ThisTile];
+/**/				sElem2d		*Tile=&ElemBank2d[ThisTile];
 					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
 					setTSprt16(SprPtr);
 					setTSetShadeTex(SprPtr,1);

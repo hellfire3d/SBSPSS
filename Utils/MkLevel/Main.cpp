@@ -15,6 +15,7 @@ CMkLevel	Level;
 int			TPBase=-1,TPW=-1,TPH=-1;
 GString		IncDir;
 int			PakW=0,PakH=0;
+bool		LocalGeom=false;
 
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
@@ -52,10 +53,10 @@ int		Count;
 					TextPtr+=strlen(TextPtr)+1;
 					TPH=atol(TextPtr);
 					break;
-				case 'm':
-					TpStr= CheckFileString(String);
-					Level.AddModel(TpStr);
-					break;
+//				case 'm':
+//					TpStr= CheckFileString(String);
+//					Level.AddModel(TpStr);
+//					break;
 				case 'i':
 					IncDir= CheckFileString(String);
 					IncDir.Upper();
@@ -63,6 +64,9 @@ int		Count;
 					break;
 				case 'q':
 					StripLength=4;
+					break;
+				case 'l':
+					LocalGeom=true;
 					break;
 				case 'p':
 					TpStr= CheckFileString(String);
@@ -100,9 +104,10 @@ void Usage(char *ErrStr)
 	printf("   -o:[FILE]       Set output File (AND Dir)\n");
 	printf("   -s:nn           Set Scaling value\n");
 	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
-	printf("   -m:             Add Model\n");
+//	printf("   -m:             Add Model\n");
 	printf("   -d:             Enable Debug output\n");
 	printf("   -q:             Enable Quadding\n");
+	printf("   -l:             Enable Local Geom\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 
@@ -118,7 +123,7 @@ std::vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		if (Files.size()>1)		Usage("Too many Levels specified\n");
 
 		Level.SetAppDir(argv[0]);
-		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH,PakW,PakH);
+		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH,PakW,PakH,LocalGeom);
 		Level.Load();
 		Level.Process();
 		Level.Write();

@@ -203,14 +203,14 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		DisplayLoadingScreen(lvlTab);
 
 		LevelHdr=(sLevelHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
-		LevelHdr->TileBank2d=(sTile2d*)	MakePtr(LevelHdr,(int)LevelHdr->TileBank2d);
-		LevelHdr->TileBank3d=(sTile3d*)	MakePtr(LevelHdr,(int)LevelHdr->TileBank3d);
+		LevelHdr->ElemBank2d=(sElem2d*)	MakePtr(LevelHdr,(int)LevelHdr->ElemBank2d);
+		LevelHdr->ElemBank3d=(sElem3d*)	MakePtr(LevelHdr,(int)LevelHdr->ElemBank3d);
 		LevelHdr->TriList=(sTri*)		MakePtr(LevelHdr,(int)LevelHdr->TriList);
 		LevelHdr->QuadList=(sQuad*)		MakePtr(LevelHdr,(int)LevelHdr->QuadList);
 		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
 		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
 
-		CModelGfx::SetData(LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
+		CModelGfx::SetData(LevelHdr);//LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
 		s_playerSpawnPos.vx=LevelHdr->PlayerStartX*16;

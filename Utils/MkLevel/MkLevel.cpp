@@ -58,6 +58,21 @@ sExpLayerTile	BlankTile={0,0};
 //sExpLayerTile	BlankTile2d={-1,-1};
 //sExpLayerTile	BlankTile3d={0,0};
 
+Vector3	DefVtxTable[8]=
+{
+	Vector3(+0.5f,+1.0f,-4.0f),
+	Vector3(-0.5f,+1.0f,-4.0f),
+	Vector3(+0.5f, 0.0f,-4.0f),
+	Vector3(-0.5f, 0.0f,-4.0f),
+
+	Vector3(+0.5f,+1.0f,+4.0f),
+	Vector3(-0.5f,+1.0f,+4.0f),
+	Vector3(+0.5f, 0.0f,+4.0f),
+	Vector3(-0.5f, 0.0f,+4.0f),
+};
+#define	DefVtxTableSize	sizeof(DefVtxTable)/sizeof(Vector3)
+
+
 //***************************************************************************
 CMkLevel::CMkLevel()
 {
@@ -66,6 +81,7 @@ CMkLevel::CMkLevel()
 		AddTile2d(BlankTile);
 		AddTile3d(BlankTile);
 		OutElem3d.resize(1);
+
 }
 
 //***************************************************************************
@@ -88,7 +104,7 @@ GFName	Path=AppPath;
 }
 
 //***************************************************************************
-void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int _PakW,int _PakH)
+void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int _PakW,int _PakH,bool _LocalGeom)
 {
 // Setup filenames and paths
 GFName		Path;
@@ -142,130 +158,55 @@ GFName		Path;
 		FlatFace[1].uv[1][0]=1;		FlatFace[1].uv[1][1]=1;
 		FlatFace[1].uv[2][0]=0;		FlatFace[1].uv[2][1]=1;
 		FlatFace[1].Flags=0;
-// Setup Pak Info
+
+// Setup Extra Info
 		PakW=_PakW;
 		PakH=_PakH;
+		LocalGeom=_LocalGeom;
+		AddDefVtx(OutVtxList);
+
+
 }
 
-
 //***************************************************************************
-int		CMkLevel::AddModel(GString &Filename)
+void	CMkLevel::AddDefVtx(vector<sVtx> &VtxList)
 {
-/*
-GFName			Path=Filename;
-sMkLevelModel	ThisModel;
-int				Idx;
-CScene			Scene;
-
-		ThisModel.Name=GFName(Filename).File();
-		Idx=ModelList.Find(ThisModel);
-
-		if (Idx!=-1)
+CFaceStore	F;
+		for (int i=0; i<DefVtxTableSize; i++)
 		{
-			return(Idx);
+			F.AddVtx(VtxList,DefVtxTable[i]);
 		}
-		Idx=ModelList.size();
-
-		Path.File("");
-		Path.Ext("");
-GString	RootPath=Path.FullName();
-// Load Model and add
-int		TriStart=ModelFaceList.GetFaceCount();;
-		Scene.Load(Filename);
-		BuildModel(Scene,RootPath,0);
-		ThisModel.TriStart=TriStart;
-		ThisModel.TriCount=ModelFaceList.GetFaceCount()-TriStart;
-
-		ModelList.Add(ThisModel);
-		return(Idx);
-*/
-		return(0);
-}
-
-//***************************************************************************
-void	CMkLevel::BuildModel(CScene &Scene,GString &RootPath,int Node)
-{
-CNode					&ThisNode=Scene.GetNode(Node);
-vector<sGinTri> const	&NodeTriList =	ThisNode.GetTris();
-vector<Vector3> const	&NodeVtxList =	ThisNode.GetPts();
-vector<int>	const		&NodeMatList =	ThisNode.GetTriMaterial();
-vector<sUVTri> const	&NodeUVList =	ThisNode.GetUVTris();
-vector<GString> const	&SceneTexList=	Scene.GetTexList();
-vector<int> const		&SceneUsedMatList=Scene.GetUsedMaterialIdx();
-vector<Material> const	&SceneMaterials=Scene.GetMaterials();
-
-int			TriCount=NodeTriList.size();
-
-			for (int T=0; T<TriCount; T++)
-			{
-				int		Mat=SceneUsedMatList[NodeMatList[T]];
-				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
-				GString	TexName=RootPath+SceneTexList[Mat];
-				
-				CFace &F=ModelFaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], TexName,SceneMaterials[Mat].Flags,false);
-			}
-
-int		ChildCount=ThisNode.GetPruneChildCount();
-		for (int Loop=0;Loop<ChildCount ; Loop++) BuildModel(Scene,RootPath,ThisNode.PruneChildList[Loop]);
 }
 
 //***************************************************************************
 int		CMkLevel::AddModel(const char *Name,int TriStart,int TriCount)
 {
-/*
 sMkLevelModel	ThisModel;
-int				Idx;
+int				ModelID;
 
-		ThisModel.Name=Name;
-		Idx=ModelList.Find(ThisModel);
-		if (Idx!=-1)
-		{
-			return(Idx);
-		}
-		Idx=ModelList.size();
-		ThisModel.TriStart=ModelFaceList.GetFaceCount();
-		ThisModel.TriCount=TriCount;
+			ThisModel.Name=Name;
+			ThisModel.TriStart=TriStart;
+			ThisModel.TriCount=TriCount;
 
+			ModelID=ModelList.Add(ThisModel);
+			return(ModelID);
+}
 
-// Add tri data
-		for (int i=0;i<TriCount; i++)
-		{
-			sExpTri	&ThisTri=InTriList[TriStart+i];
-			CFace	F;
+//***************************************************************************
+void	CMkLevel::PreProcessModels()
+{
+int			i,ListSize=ModelList.size();
 
-			ExpTri2Face(ThisTri,F);
-			ModelFaceList.SetTPageFlag(F,ThisTri.Flags);
-			ModelFaceList.AddFace(F,false);
-		}
-
-		ModelList.Add(ThisModel);
-		return(Idx);
-*/
-		return(0);
+			for (i=0; i<ListSize; i++)
+			{
+				sMkLevelModel	&ThisModel=ModelList[i];
+				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false);	// always all models as global for the moment
+			}
 }
 
 //***************************************************************************
 void	CMkLevel::ProcessModels()
 {
-/*
-int		i,ListSize;
-int		TriStart=OutFaceList.GetFaceCount();
-
-// Add faces
-		ListSize=ModelFaceList.GetFaceCount();
-		for (i=0; i<ListSize; i++)
-		{
-			OutFaceList.AddFace(ModelFaceList[i],true);
-		}
-
-// Update models
-		ListSize=ModelList.size();
-		for (i=0; i<ListSize; i++)
-		{
-//			printf("%s = %i %i\n",ModelList[i].Name,ModelList[i].TriStart,ModelList[i].TriCount);
-			ModelList[i].TriStart+=TriStart;
-		}
-*/
 }
 
 //***************************************************************************
@@ -307,11 +248,7 @@ GString	FilePath;
 		{
 			GString	InName=InPath;
 			InName+=TexPtr;
-//			sprintf(FullName,"%s",InName);
 			_fullpath( FullName, InName, 1024);
-//			GFName::makeabsolute(InPath,InName,FullName);
-//			InName=FullName;
-//			_fullpath( FullName, FullName, 1024);
 			List.push_back(GString(FullName));
 			TexPtr+=strlen(TexPtr)+1;
 		}
@@ -433,12 +370,20 @@ void	CMkLevel::Process()
 {
 		printf("PreProcess Layers\n");
 		PreProcessLayers();
-		printf("Process Models\n");
-		ProcessModels();
+		printf("PreProcess ElemBanks\n");
+		PreProcessElemBank2d();
+		PreProcessElemBank3d();
+		printf("PreProcess Models\n");
+		PreProcessModels();
+		printf("Process Textures\n");
+		TexGrab.Process();
 		printf("Process ElemBanks\n");
-		ProcessElemBanks();
+		ProcessElemBank2d();
+		ProcessElemBank3d();
 		printf("Process Layers\n");
 		ProcessLayers();
+		printf("Process Models\n");
+		ProcessModels();
 }
 
 //***************************************************************************
@@ -487,21 +432,10 @@ int			TileIdx=(TileID<<2) | (InTile.Flags & PC_TILE_FLAG_MIRROR_XY);
 }
 
 //***************************************************************************
-void	CMkLevel::ProcessElemBanks()
-{
-		PreProcessElemBank2d();
-		PreProcessElemBank3d();
-		TexGrab.Process();
-		ProcessElemBank2d();
-		ProcessElemBank3d();
-}
-
-//***************************************************************************
 void	CMkLevel::PreProcessElemBank2d()
 {
 int		i,ListSize=UsedTile2dList.size();
 
-//		UsedTile2dList[0].Tile=-1;
 // Extract Tex data from list
 		for (i=1; i<ListSize; i++)
 		{ // Skip blank
@@ -540,35 +474,47 @@ int		i,ListSize=UsedTile3dList.size();
 }
 
 //***************************************************************************
+int		MaxElemTri=0,MaxElemQuad=0;
 void	CMkLevel::ProcessElemBank3d()
 {
-int		i,ListSize=UsedTile3dList.size();
-int		MaxElemTri=0,MaxElemQuad=0;
+//int		i,ListSize=UsedTile3dList.size();	<--- UsedTile3dList is tiles only!!
+int		i,ListSize=OutElem3d.size();
+
 		for (i=0; i<ListSize; i++)
 		{
-			sOutElem3d	&ThisElem=OutElem3d[i];
-			CFaceStore	&ThisList=ThisElem.FaceStore;
+			ProcessElem3d(OutElem3d[i]);
+		}
+		printf("Max Elem Tri =%i\tMax Elem Quad =%i\n",MaxElemTri,MaxElemQuad);
+}
+
+//***************************************************************************
+void	CMkLevel::ProcessElem3d(sOutElem3d &ThisElem)
+{
+CFaceStore	&ThisList=ThisElem.FaceStore;
 
 			ThisList.setMaxStripLength(StripLength);
 			ThisElem.Elem3d.TriStart=OutTriList.size();
 			ThisElem.Elem3d.QuadStart=OutQuadList.size();
-			ThisList.Process(OutTriList,OutQuadList,OutVtxList);
+			if (!ThisElem.LocalGeom)
+			{ // Global Geom
+				ThisList.Process(OutTriList,OutQuadList,OutVtxList);
+			}
+			else
+			{ // Local Geom
+				AddDefVtx(ThisElem.LocalVtxList);
+				ThisList.Process(OutTriList,OutQuadList,ThisElem.LocalVtxList);
+				int v,VtxListSize=ThisElem.LocalVtxList.size();
+				for (v=0; v<VtxListSize; v++)
+				{
+					u16	Idx=CFaceStore::AddVtx(OutVtxList,ThisElem.LocalVtxList[v]);
+					ThisElem.LocalVtxIdxList.push_back(Idx);
+				}
+			}
+
 			ThisElem.Elem3d.TriCount=ThisList.GetTriFaceCount();
 			ThisElem.Elem3d.QuadCount=ThisList.GetQuadFaceCount();
 			if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
 			if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
-		}
-		printf("Max Tile Tri =%i\tMax Tile Quad =%i\n",MaxElemTri,MaxElemQuad);
-		for (i=0; i<ListSize; i++)
-		{
-			sOutElem3d	&ThisElem=OutElem3d[i];
-			CFaceStore	&ThisList=ThisElem.FaceStore;
-			for (int c=i; c<ListSize; c++)
-			{
-				sOutElem3d	&CheckElem=OutElem3d[c];
-				CFaceStore	&CheckList=CheckElem.FaceStore;
-			}
-		}
 }
 
 //***************************************************************************
@@ -636,80 +582,107 @@ int		ListSize=LayerList.size();
 //***************************************************************************
 int		CMkLevel::Create3dTile(int Tile,int Flags)
 {
-sExpTile		&SrcTile=InTileList[Tile];
-CFace			F;
-int				i,ListSize,p;
-CList<sExpTri>	SortList;
-CList<float>	ZPosList;
-int				TileID=OutElem3d.size();
-
+sExpTile	&SrcTile=InTileList[Tile];
+int			ElemID;
 			if (SrcTile.TriCount)
 			{
-				for (i=0; i<SrcTile.TriCount; i++)
-				{
-					int		ListPos;
-					sExpTri	&ThisTri=InTriList[SrcTile.TriStart+i];
-					float	ThisZPos;
-
-					ThisZPos=ThisTri.vtx[0].z;
-					if (ThisZPos<ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
-					if (ThisZPos<ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
-					
-					ListSize=SortList.size();
-					for (ListPos=0; ListPos<ListSize; ListPos++)
-					{
-						if (ZPosList[ListPos]>ThisZPos) break;
-					}
-					SortList.insert(ListPos,ThisTri);
-					ZPosList.insert(ListPos,ThisZPos);
-				}
+				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom);
 			}
 			else
 			{
-				int		TexID=Create2dTile(Tile,0);
+				ElemID=Create2dElem(Tile,LocalGeom);
+			}
 
-				for (i=0; i<2; i++)
-					{
-						FlatFace[i].Flags=0;
-						FlatFace[i].TexID=TexID;
-						SortList.push_back(FlatFace[i]);
-					}
+			return(ElemID);
+}
+
+//***************************************************************************
+int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local)
+{
+CFace			F;
+int				i,ListSize;
+CList<sExpTri>	SortList;
+CList<float>	ZPosList;
+int				ElemID=OutElem3d.size();
+				OutElem3d.resize(ElemID+1);
+
+sOutElem3d		&ThisElem=OutElem3d[ElemID];
+CFaceStore		&FaceList=ThisElem.FaceStore;
+				FaceList.SetTexGrab(TexGrab);
+				ThisElem.LocalGeom=Local;
+
+			for (i=0; i<TriCount; i++)
+			{
+				int		ListPos;
+				sExpTri	&ThisTri=InTriList[TriStart+i];
+				float	ThisZPos;
+
+				ThisZPos=ThisTri.vtx[0].z;
+				if (ThisZPos<ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
+				if (ThisZPos<ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
+					
+				ListSize=SortList.size();
+				for (ListPos=0; ListPos<ListSize; ListPos++)
+				{
+					if (ZPosList[ListPos]>ThisZPos) break;
+				}
+				SortList.insert(ListPos,ThisTri);
+				ZPosList.insert(ListPos,ThisZPos);
 			}
 
 // Add sorted list to main list
-			OutElem3d.resize(TileID+1);
-CFaceStore	&FaceList=OutElem3d[TileID].FaceStore;
-			FaceList.SetTexGrab(TexGrab);
 
-			ListSize=SortList.size();
-			for (i=0; i<ListSize; i++)
+			for (i=0; i<TriCount; i++)
 			{
 				sExpTri &ThisTri=SortList[i];
 				CFace	F;
-				bool	SwapPnt=false;
 
-				if (SrcTile.TriCount)
-				{
-					F.TexName=InTexNameList[ThisTri.TexID];
-					F.Mat=-1;
-				}
-				else
-				{
-					F.Mat=ThisTri.TexID;
-				}
+				F.TexName=InTexNameList[ThisTri.TexID];
+				F.Mat=-1;
 
-				for (p=0; p<3; p++)
+				for (int p=0; p<3; p++)
 				{
 					F.vtx[p]=ThisTri.vtx[p];
-					F.vtx[p].y=F.vtx[p].y;
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
 				FaceList.SetTPageFlag(F,ThisTri.Flags);
 				FaceList.AddFace(F,true);
 			}
-			
-			return(TileID);
+		return(ElemID);			
+}
+
+//***************************************************************************
+int			CMkLevel::Create2dElem(int Tile,bool Local)
+{
+CFace			F;
+int				i;
+int				TexID=Create2dTile(Tile,0);
+int				ElemID=OutElem3d.size();
+				OutElem3d.resize(ElemID+1);
+
+sOutElem3d		&ThisElem=OutElem3d[ElemID];
+CFaceStore		&FaceList=ThisElem.FaceStore;
+				FaceList.SetTexGrab(TexGrab);
+				ThisElem.LocalGeom=Local;
+
+			for (i=0; i<2; i++)
+			{
+				sExpTri &ThisTri=FlatFace[i];
+				CFace	F;
+
+				F.Mat=TexID;
+
+				for (int p=0; p<3; p++)
+				{
+					F.vtx[p]=ThisTri.vtx[p];
+					F.uvs[p].u=ThisTri.uv[p][0];
+					F.uvs[p].v=ThisTri.uv[p][1];
+				}
+				FaceList.SetTPageFlag(F,0);
+				FaceList.AddFace(F,true);
+			}
+			return(ElemID);
 }
 
 /*
@@ -976,6 +949,7 @@ int		i,ListSize;
 
 //***************************************************************************
 int		ZMin=9999,ZMax=0;
+int		SnapCount[8]={0,0,0,0,0,0,0,0};
 int		CMkLevel::WriteTriList()
 {
 int				ThisPos=ftell(File);
@@ -992,7 +966,10 @@ int				ZOfs=+4*Scale;
 			Z[0]=OutVtxList[T.P0].vz+ZOfs;
 			Z[1]=OutVtxList[T.P1].vz+ZOfs;
 			Z[2]=OutVtxList[T.P2].vz+ZOfs;
-			
+
+			if (T.P0<8) SnapCount[T.P0]++;
+			if (T.P1<8) SnapCount[T.P1]++;
+			if (T.P2<8) SnapCount[T.P2]++;
 			for (int p=0; p<3; p++)
 			{
 				if (ZMin>Z[p]) ZMin=Z[p];
@@ -1012,6 +989,7 @@ int				ZOfs=+4*Scale;
 			fwrite(&T,1,sizeof(sTri),File);
 		}
 		printf("%i Tris\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTri));
+//		printf("\n"); for (i=0; i<8;i++) printf("Snapped Vtx %i=%i \n",i,SnapCount[i]); printf("\n");
 		return(ThisPos);
 }
 
@@ -1034,6 +1012,10 @@ int				ZOfs=+4*Scale;
 			Z[2]=OutVtxList[Q.P2].vz+ZOfs;
 			Z[3]=OutVtxList[Q.P3].vz+ZOfs;
 			
+			if (Q.P0<8) SnapCount[Q.P0]++;
+			if (Q.P1<8) SnapCount[Q.P1]++;
+			if (Q.P2<8) SnapCount[Q.P2]++;
+			if (Q.P3<8) SnapCount[Q.P3]++;
 			for (int p=0; p<4; p++)
 			{
 				if (ZMin>Z[p]) ZMin=Z[p];
@@ -1053,10 +1035,13 @@ int				ZOfs=+4*Scale;
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
 		printf("%i Quads\t(%i Bytes)\n",ListSize,ListSize*sizeof(sQuad));
+//		printf("\n"); for (i=0; i<8;i++) printf("Snapped Vtx %i=%i \n",i,SnapCount[i]); printf("\n");
 		return(ThisPos);
 }
 
 //***************************************************************************
+sVtx	Min={+100,+100,+100};
+sVtx	Max={-100,-100,-100};
 int		CMkLevel::WriteVtxList()
 {
 int		i,ListSize=OutVtxList.size();
@@ -1070,9 +1055,19 @@ int		Pos=ftell(File);
 			Out.vx=+In.vx;
 			Out.vy=-In.vy+(Scale/2);	// Offset it so the origin is centre centre
 			Out.vz=+In.vz;
+			Min.vx=__min(Min.vx,Out.vx);
+			Min.vy=__min(Min.vy,Out.vy);
+			Min.vz=__min(Min.vz,Out.vz);
+			Max.vx=__max(Max.vx,Out.vx);
+			Max.vy=__max(Max.vy,Out.vy);
+			Max.vz=__max(Max.vz,Out.vz);
 			fwrite(&Out,1,sizeof(sVtx),File);
+//			if (abs(Out.vz)==400) printf("%i %i %i\n",Out.vx,Out.vy,Out.vz);
 		}
 		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));
+
+		printf("Min %i %i %i\n",Min.vx,Min.vy,Min.vz);
+		printf("Max %i %i %i\n",Max.vx,Max.vy,Max.vz);
 
 		return(Pos);
 }
@@ -1106,7 +1101,7 @@ int		ThingStart=ftell(File);
 		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER);
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX);
 		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD);
-//		LevelHdr.ModelList=(sModel*)WriteModelList();
+		LevelHdr.ModelList=(sModel*)WriteModelList();
 		printf("Things =\t(%i Bytes)\n",ftell(File)-ThingStart);
 
 
@@ -1152,7 +1147,6 @@ char	*LayerName=GetLayerName(Type,LAYER_SUBTYPE_NONE);
 //***************************************************************************
 int		CMkLevel::WriteModelList()
 {
-/*
 int		i,ListSize=ModelList.size();
 int		Ofs=ftell(File);
 
@@ -1160,50 +1154,18 @@ int		Ofs=ftell(File);
 		{
 			sModel				Out;
 			sMkLevelModel		&ThisModel=ModelList[i];
+			sOutElem3d			&ThisElem=OutElem3d[ThisModel.ElemID];
+			sBBox				&ElemBBox=ThisElem.FaceStore.GetBBox();
+			Out.ElemID=ThisModel.ElemID;
+			Out.BBox=ElemBBox;
 
-			Out.TriCount=ThisModel.TriCount;
-			Out.TriStart=ThisModel.TriStart;
-			CalcModelBBox(ThisModel,Out.BBox);
-			printf("Writing Model %s (%i/%i) (%i Tris) (BBox %i,%i->%i,%i)\n",ThisModel.Name,i+1,ListSize,Out.TriCount,Out.BBox.XMin,Out.BBox.YMin,Out.BBox.XMax,Out.BBox.YMax);
+			printf("Writing Model %s (%i) (%i %i) (BBox %i,%i->%i,%i)\n",ThisModel.Name,Out.ElemID,ThisElem.Elem3d.TriCount,ThisElem.Elem3d.QuadCount,Out.BBox.XMin,Out.BBox.YMin,Out.BBox.XMax,Out.BBox.YMax);
 			fwrite(&Out,1,sizeof(sModel),File);
 		}
 
 		return(Ofs);
-*/
-		return(0);
 }
 
-//***************************************************************************
-/*
-void	CMkLevel::CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox)
-{
-vector<sTri>		&TriList=OutFaceList.GetOutTriList();
-vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
-int					Vtx[3];
-
-		BBox.XMin=+32000;
-		BBox.XMax=-32000;
-		BBox.YMin=+32000;
-		BBox.YMax=-32000;
-
-		for (int T=0; T<ThisModel.TriCount; T++)
-		{
-			sTri	&ThisTri=TriList[T+ThisModel.TriStart];
-			Vtx[0]=ThisTri.P0;
-			Vtx[1]=ThisTri.P1;
-			Vtx[2]=ThisTri.P2;
-
-			for (int V=0; V<3; V++)
-			{
-				sVtx	const &ThisVtx=VtxList[Vtx[V]];
-				if (BBox.XMin>+ThisVtx.vx) BBox.XMin=+ThisVtx.vx;
-				if (BBox.XMax<+ThisVtx.vx) BBox.XMax=+ThisVtx.vx;
-				if (BBox.YMin>-ThisVtx.vy) BBox.YMin=-ThisVtx.vy;
-				if (BBox.YMax<-ThisVtx.vy) BBox.YMax=-ThisVtx.vy;
-			}
-		}
-}
-*/
 //***************************************************************************
 //*** Inf File **************************************************************
 //***************************************************************************

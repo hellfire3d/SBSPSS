@@ -27,16 +27,6 @@ bool	operator ==(sMkLevelTex const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags
 };
 
 //***************************************************************************
-struct	sMkLevelModel
-{
-		GString	Name;
-		int		TriStart;
-		int		TriCount;
-
-bool	operator ==(sMkLevelModel const &v1)		{return(Name==v1.Name);}
-};
-
-//***************************************************************************
 struct	sInfItem
 {
 	GString	Name;
@@ -67,8 +57,21 @@ bool	operator ==(sUsedTile3d const &v1)	{return(Tile==v1.Tile);}
 
 struct sOutElem3d
 {
-		sElem3d		Elem3d;
-		CFaceStore	FaceStore;
+		bool			LocalGeom;
+		sElem3d			Elem3d;
+		CFaceStore		FaceStore;
+		vector<sVtx>	LocalVtxList;
+		CList<u16>		LocalVtxIdxList;
+};
+
+//***************************************************************************
+struct	sMkLevelModel
+{
+		GString		Name;
+		int			TriStart,TriCount;
+		u16			ElemID;
+
+bool	operator ==(sMkLevelModel const &v1)		{return(Name==v1.Name);}
 };
 
 //***************************************************************************
@@ -81,10 +84,9 @@ public:
 		~CMkLevel();
 
 		void			SetAppDir(const char *Path);
-		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int PakW,int PakH);
+		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int PakW,int PakH,bool LocalGeom);
 
 		void			LoadModels();
-		int				AddModel(GString &Filename);
 		int				AddModel(const char *Name,int TriStart,int TriCount);
 
 		void			Load();
@@ -111,6 +113,10 @@ public:
 		void			GetPakWH(int &W,int &H)				{W=PakW; H=PakH;}
 protected:	
 		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
+
+		int				Create3dElem(int TriCount,int TriStart,bool Local);
+		int				Create2dElem(int Tile,bool Local);
+
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
 		void			LoadStrList(CList<GString> &List,char *TexPtr,int Count);
 
@@ -118,15 +124,20 @@ protected:
 		void			LoadLayers(sExpFileHdr *FileHdr);
 		void			LoadLayer(sExpLayerHdr *LayerHdr);
 
+		void			AddDefVtx(vector<sVtx> &VtxList);
+
 		void			PreProcessLayers();
 		void			ProcessElemBanks();
 		void			PreProcessElemBank2d();
 		void			ProcessElemBank2d();
 		void			PreProcessElemBank3d();
 		void			ProcessElemBank3d();
+		void			ProcessElem3d(sOutElem3d &ThisElem);
+
 		void			ProcessLayers();
 		void            SetUpTileUV(sElem2d &Out, sTexOutInfo &Info);
 
+		void			PreProcessModels();
 		void			ProcessModels();
 		
 		void			WriteLevel();
@@ -138,7 +149,6 @@ protected:
 		int				WriteQuadList();
 		int				WriteVtxList();
 		void			WriteElemBanks();
-		void			CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox);
 		void            BuildTiles();
 
 		void			WriteIncFile();
@@ -161,8 +171,6 @@ protected:
 		CList<GString>			InSetNameList;
 		CList<GString>			InTexNameList;
 
-
-//		CFaceStore				OutFaceList;
 		CList<sElem2d>			OutElem2d;
 		CList<sOutElem3d>		OutElem3d;
 
@@ -184,6 +192,7 @@ protected:
 		CList<sInfItem>			InfList;
 
 		int						PakW,PakH;
+		bool					LocalGeom;
 
 		vector<sTri>			OutTriList;
 		vector<sQuad>			OutQuadList;

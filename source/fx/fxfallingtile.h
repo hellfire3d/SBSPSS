@@ -21,7 +21,7 @@ protected:
 		u16			Tile;
 		DVECTOR		Velocity;
 
-		sTile3d		*TileBank3d;
+		sElem3d		*ElemBank3d;
 		sTri		*TriList;
 		sQuad		*QuadList;
 		sVtx		*VtxList;

@@ -21,23 +21,22 @@ static		FontBank		*Font;
 
 static const int	BLOCK_SIZE				=16;
 static const int	SCREEN_TILE_ADJ_U		=2;
-static const int	SCREEN_TILE_ADJ_D		=2;
+static const int	SCREEN_TILE_ADJ_D		=1;
 static const int	SCREEN_TILE_ADJ_L		=2;
 static const int	SCREEN_TILE_ADJ_R		=3;
+
 static const int	SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;
 static const int	SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;
-static const int	RENDER_X_PIX_OFS		=8;
-static const int	RENDER_Y_PIX_OFS		=16;
 
-static const int	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
-static const int	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
+static const int	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+INGAME_RENDER_OFS_X;
+static const int	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+INGAME_RENDER_OFS_Y;
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr,Hdr)
 {
-		TileBank3d=LevelHdr->TileBank3d;
+		ElemBank3d=LevelHdr->ElemBank3d;
 		TriList=LevelHdr->TriList;
 		QuadList=LevelHdr->QuadList;
 		VtxList=LevelHdr->VtxList;
@@ -112,6 +111,29 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+#define CMX_SetRotMatrixXY( r0 ) __asm__  (       \
+    "lw $12, 0( %0 );"                  \
+    "lw $13, 4( %0 );"                  \
+    "ctc2   $12, $0;"                   \
+    "ctc2   $13, $2;"                   \
+    :                           \
+    : "r"( r0 )                     \
+    : "$12", "$13")
+
+struct	sFlipTable
+{
+	s16		Mtx[4];
+	s32		ClipCode;
+};
+
+sFlipTable	FlipTable[4]=
+{
+	{{+4096,0,+4096,0},0<<31},	//00 <0
+	{{-4096,0,+4096,0},1<<31},	//01 >0
+	{{+4096,0,-4096,0},1<<31},	//10 >0
+	{{-4096,0,-4096,0},0<<31}	//11 <0
+};
+
 void	CLayerTile3d::render()
 {
 sTileMapElem	*MapPtr=GetMapPos();
@@ -134,14 +156,19 @@ VECTOR			BlkPos;
 
 			for (int X=0; X<RenderW; X++)
 			{
-				sTile3d		*Tile=&TileBank3d[MapRow->Tile];
-				int			TriCount=Tile->TriCount;				
-				sTri		*TList=&TriList[Tile->TriStart];
+				u16			Tile=MapRow->Tile;
+				u16			TileIdx=Tile>>2;
+				u16			Flip=Tile&3;
+				sFlipTable	*FTab=&FlipTable[Flip];
+				sElem3d		*Elem=&ElemBank3d[TileIdx];
+				int			TriCount=Elem->TriCount;				
+				sTri		*TList=&TriList[Elem->TriStart];
 
 				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
 				{
 					CMX_SetTransMtxXY(&BlkPos);
+					CMX_SetRotMatrixXY(&FTab->Mtx);
 					gte_ldv3(P0,P1,P2);
 					setlen(TPrimPtr, GPU_PolyFT3Tag);
 					TPrimPtr->code=TList->PolyCode;
@@ -157,11 +184,12 @@ VECTOR			BlkPos;
 
 					ThisOT=OtPtr+TList->OTOfs;
 					TList++;
-					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];	// Pre-fetch next Tri
 					gte_nclip_b();
 					gte_stsxy3_ft3(TPrimPtr);
 					gte_stopz(&ClipZ);
-					if (ClipZ<=0)
+					ClipZ^=FTab->ClipCode;
+					if (ClipZ<0)
 					{
 						addPrim(ThisOT,TPrimPtr);
 						TPrimPtr++;

@@ -174,7 +174,7 @@ public:
 		CModelGfx(){};
 virtual	~CModelGfx(){};
 
-static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
+static	void		SetData(sLevelHdr *LevelHdr);
 		void		SetModel(int Type);
 
 		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0);
@@ -183,9 +183,11 @@ static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
 protected:
 
 static	sModel		*ModelTable;
+static	sElem3d		*ModelElemBank;
 static	sTri		*ModelTriList;
 static	sQuad		*ModelQuadList;
 static	sVtx		*ModelVtxList;
+
 		sModel		*Model;
 };
 

@@ -2,7 +2,7 @@
 /*** Generic Face Compilation Storage ***/
 /****************************************/
 // Contains tri data with texture data
-// Will quad later
+
 
 #include <ginio.h>
 #include <gintex.h>
@@ -100,15 +100,8 @@ CFace	F;
 
 		for (int i=0; i<3; i++)
 		{
-			F.pts[i] = T.p[i];
-			F.vis[i] = T.vis[i];
 			F.uvs[i] = uv.p[i];
 			F.vtx[i] = P[T.p[i]];
-// Limit UV's
-			if (F.uvs[i].u < 0.f) F.uvs[i].u=0.f;
-			if (F.uvs[i].u > 1.f) F.uvs[i].u=1.f;
-			if (F.uvs[i].v < 0.f) F.uvs[i].v=0.f;
-			if (F.uvs[i].v > 1.f) F.uvs[i].v=1.f;
 		}
 		F.TPageFlag=0;
 		F.TexName=Tex;
@@ -119,15 +112,21 @@ CFace	&NF=AddFace(F,ProcessTexFlag);
 }
 
 //***************************************************************************
+// All AddFace's lead to here!
 CFace	&CFaceStore::AddFace(CFace &F,bool ProcessTexFlag)
 {
 int		ListSize=FaceList.size();
 		FaceList.resize(ListSize+1);
 
-// Process Vtx's
+// Process Vtx's (for Quad)
 		for (int i=0; i<3; i++)
 		{
-			F.pts[i]=AddVtx(F.vtx[i]);
+			F.pts[i]=AddVtx(VtxList,F.vtx[i]);
+// Limit UV's
+			if (F.uvs[i].u < 0.f) F.uvs[i].u=0.f;
+			if (F.uvs[i].u > 1.f) F.uvs[i].u=1.f;
+			if (F.uvs[i].v < 0.f) F.uvs[i].v=0.f;
+			if (F.uvs[i].v > 1.f) F.uvs[i].v=1.f;
 		}
 
 		if (ProcessTexFlag && F.Mat==-1)
@@ -164,37 +163,14 @@ int		ListSize=Faces.GetFaceCount();
 }
 
 //***************************************************************************
-/*
-CFace	&CFaceStore::AddFace(sTriFace &Face,int ID)
-{
-int		ListSize = FaceList.size();
-		FaceList.resize(ListSize+1);
-CFace	&F = FaceList[ListSize];
-
-	for (int i=0; i<3; i++)
-	{
-		F.pts[i] = Face.pts[i];
-		F.uvs[i] = Face.uvs[i];
-		F.vtx[i] = Face.vtx[i];
-// Limit UV's
-		if (F.uvs[i].u < 0.f) F.uvs[i].u=0.f;
-		if (F.uvs[i].u > 1.f) F.uvs[i].u=1.f;
-		if (F.uvs[i].v < 0.f) F.uvs[i].v=0.f;
-		if (F.uvs[i].v > 1.f) F.uvs[i].v=1.f;
-	}
-
-	F.Mat = Face.Mat;
-	F.Normal = crossProduct( F.vtx[0], F.vtx[1], F.vtx[2] );
-	F.Avail = true;
-	F.ID=ID;
-	return(F);
-}
-*/
-//***************************************************************************
 //*** Texture Stuff *********************************************************
 //***************************************************************************
 int		CFaceStore::AddTex(GString const &TexName)
 {
+		if (!TexGrab)
+		{
+			GObject::Error(ERR_FATAL,"TexGrab Not Defined!!\n");
+		}
 static	GString	LastTex;
 static	int		LastIdx=-1;
 vector<FileInfo> const	&TexList=TexGrab->GetTexInfoList();
@@ -220,109 +196,21 @@ GString	Filename=TexName;
 }
 
 //***************************************************************************
-void	CFaceStore::ProcessTextures()
+void	CFaceStore::Process(vector<sTri> &OutTriList,vector<sQuad> &OutQuadList,vector<sVtx> &OutVtxList)
 {
-// Set Texgrab Defaults		
-		TexGrab->ShrinkToFit(true);
-		TexGrab->NoSort();
+		BBox.XMin=+30000;
+		BBox.YMin=+30000;
+		BBox.XMax=-30000;
+		BBox.YMax=-30000;
 
-		TexGrab->AnimatedHeadersOnly(true);
-		TexGrab->DontOutputBoxes(true);
-		TexGrab->AllowRotate(true);
-		TexGrab->Process();
-}
-
-//***************************************************************************
-void	CFaceStore::Process()
-{
 		Quad();
-		BuildOutTriLists();
+		BuildOutTriList(OutTriList,OutVtxList);
+		BuildOutQuadList(OutQuadList,OutVtxList);
 }
 
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-void	CFaceStore::Quad()
-{
-int		FaceCount=FaceList.size();
-
-		for (int i=0; i<FaceCount; i++)
-		{
-			TriFaceList.push_back(FaceList[i]);
-		}
-}
-
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-/*
-void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
-{
-vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
-sTexOutInfo			&ThisTex=TexInfo[In.Mat];
-ASSERT(In.Mat<TexInfo.size());
-
-// Uses orig tex size to make sure mapping is corrent on 'shrunk' textures :o)			
-int		W = ThisTex.OrigW - 1;
-int		H = ThisTex.OrigH - 1;
-int		XOfs=0,YOfs=0;
-
-int		uv0[2];
-int		uv1[2];
-int		uv2[2];
-
-		if (ThisTex.Rotated)
-		{
-//			uv0[0] = (ThisTex.u + H) - round(In.uvs[0].v * H);
-//			uv0[1] = (ThisTex.v + W) - round(In.uvs[0].u * W);
-//			uv1[0] = (ThisTex.u + H) - round(In.uvs[1].v * H);
-//			uv1[1] = (ThisTex.v + W) - round(In.uvs[1].u * W);
-//			uv2[0] = (ThisTex.u + H) - round(In.uvs[2].v * H);
-//			uv2[1] = (ThisTex.v + W) - round(In.uvs[2].u * W);
-
-			uv0[0] = (ThisTex.u ) - round(In.uvs[0].v * H);
-			uv0[1] = (ThisTex.v ) - round(In.uvs[0].u * W);
-			uv1[0] = (ThisTex.u ) - round(In.uvs[1].v * H);
-			uv1[1] = (ThisTex.v ) - round(In.uvs[1].u * W);
-			uv2[0] = (ThisTex.u ) - round(In.uvs[2].v * H);
-			uv2[1] = (ThisTex.v ) - round(In.uvs[2].u * W);
-
-			XOfs=H-((ThisTex.OrigW-ThisTex.h));
-			YOfs= +((ThisTex.OrigH-ThisTex.w)-W);
-			ASSERT(!"");
-		} 
-		else
-		{
-			W=ThisTex.w-1;
-			H=ThisTex.h-1;
-//			Out.uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
-//			Out.uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
-//			Out.uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
-//			Out.uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
-//			Out.uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
-//			Out.uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
-
-			uv0[0] = (ThisTex.u) +	round(In.uvs[0].u * W);
-			uv0[1] = (ThisTex.v) -	round(In.uvs[0].v * H);
-			uv1[0] = (ThisTex.u) +	round(In.uvs[1].u * W);
-			uv1[1] = (ThisTex.v) -	round(In.uvs[1].v * H);
-			uv2[0] = (ThisTex.u) +	round(In.uvs[2].u * W);
-			uv2[1] = (ThisTex.v) -	round(In.uvs[2].v * H);
-
-			XOfs=(ThisTex.OrigW-ThisTex.w);
-			YOfs=(ThisTex.OrigH-ThisTex.h)-H;
-			XOfs=0;
-			YOfs=0;
-		}
-
-		Out.uv0[0]=uv0[0]-XOfs; Out.uv0[1]=uv0[1]-YOfs;
-		Out.uv1[0]=uv1[0]-XOfs; Out.uv1[1]=uv1[1]-YOfs;
-		Out.uv2[0]=uv2[0]-XOfs; Out.uv2[1]=uv2[1]-YOfs;
-
-		Out.TPage=ThisTex.Tpage;
-		Out.Clut=ThisTex.Clut;
-}
-*/
 void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
 {
 vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
@@ -347,18 +235,8 @@ int		H = ThisTex.h - 1;
 		} 
 		else
 		{
-//			W=ThisTex.OrigW-1;
-//			H=ThisTex.OrigH-1;
 			if (ThisTex.w!=ThisTex.OrigW) printf("WW");
 			if (ThisTex.h!=ThisTex.OrigH) printf("HH");
-/*
-			uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
-			uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
-			uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
-			uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
-			uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
-			uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
-*/
 int			U=ThisTex.u;
 int			V=ThisTex.v+H;
 
@@ -369,10 +247,6 @@ int			V=ThisTex.v+H;
 			uv2[0] = U +	round(In.uvs[2].u * W);
 			uv2[1] = V -	round(In.uvs[2].v * H);
 
-//			XOfs=(ThisTex.OrigW-ThisTex.w);
-//			XOfs=ThisTex.XOfs;
-//			YOfs=H-(ThisTex.OrigH-ThisTex.h);
-//			YOfs=H;
 		}
 		
 		Out.uv0[0]=(uv0[0]-XOfs); Out.uv0[1]=(uv0[1]-YOfs);
@@ -391,7 +265,6 @@ int			V=ThisTex.v+H;
 				Out.TPage|=In.TPageFlag<<5;
 			}
 		}
-
 }
 
 
@@ -401,7 +274,11 @@ void	CFaceStore::SetupUV(CFace const &In, sQuad &Out)
 {
 vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
 sTexOutInfo			&ThisTex=TexInfo[In.Mat];
+ASSERT(In.Mat<TexInfo.size());
 
+int		uv0[2],uv1[2],uv2[2],uv3[2];
+int		XOfs=0,YOfs=0;
+			
 int		W = ThisTex.w - 1;
 int		H = ThisTex.h - 1;
 
@@ -413,29 +290,49 @@ int		H = ThisTex.h - 1;
 			Out.uv1[1] = (ThisTex.v + W) - round(In.uvs[1].u * W);
 			Out.uv2[0] = (ThisTex.u + H) - round(In.uvs[2].v * H);
 			Out.uv2[1] = (ThisTex.v + W) - round(In.uvs[2].u * W);
-			Out.uv3[0] = (ThisTex.u + H) - round(In.uvs[3].v * H);
-			Out.uv3[1] = (ThisTex.v + W) - round(In.uvs[3].u * W);
+			ASSERT(0==1);
 		} 
 		else
 		{
-			Out.uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
-			Out.uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
-			Out.uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
-			Out.uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
-			Out.uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
-			Out.uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
-			Out.uv3[0] = (ThisTex.u)+		round(In.uvs[3].u * W);
-			Out.uv3[1] = (ThisTex.v + H) -	round(In.uvs[3].v * H);
+			if (ThisTex.w!=ThisTex.OrigW) printf("WW");
+			if (ThisTex.h!=ThisTex.OrigH) printf("HH");
+int			U=ThisTex.u;
+int			V=ThisTex.v+H;
+
+			uv0[0] = U +	round(In.uvs[0].u * W);
+			uv0[1] = V -	round(In.uvs[0].v * H);
+			uv1[0] = U +	round(In.uvs[1].u * W);
+			uv1[1] = V -	round(In.uvs[1].v * H);
+			uv2[0] = U +	round(In.uvs[2].u * W);
+			uv2[1] = V -	round(In.uvs[2].v * H);
+			uv3[0] = U +	round(In.uvs[3].u * W);
+			uv3[1] = V -	round(In.uvs[3].v * H);
+
 		}
+		
+		Out.uv0[0]=(uv0[0]-XOfs); Out.uv0[1]=(uv0[1]-YOfs);
+		Out.uv1[0]=(uv1[0]-XOfs); Out.uv1[1]=(uv1[1]-YOfs);
+		Out.uv2[0]=(uv2[0]-XOfs); Out.uv2[1]=(uv2[1]-YOfs);
+		Out.uv3[0]=(uv3[0]-XOfs); Out.uv3[1]=(uv3[1]-YOfs);
 
 		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
+		Out.PolyCode=GPU_PolyFT3Code;
+
+		if (In.TPageFlag)
+		{
+			Out.PolyCode|=GPUCode_SemiTrans;
+			if (In.TPageFlag!=1)
+			{
+				Out.TPage|=In.TPageFlag<<5;
+			}
+		}
 }
 
 
 
 //***************************************************************************
-int		CFaceStore::AddVtx(Vector3 &InVtx)
+int		CFaceStore::AddVtx(vector<sVtx> &OutVtxList,Vector3 &InVtx)
 {
 int		ListSize=OutVtxList.size();
 sVtx	ThisVtx;
@@ -454,20 +351,46 @@ sVtx	ThisVtx;
 }
 
 //***************************************************************************
-void	CFaceStore::BuildOutTriLists()
+int		CFaceStore::AddVtx(vector<sVtx> &OutVtxList,sVtx &ThisVtx)
+{
+int		ListSize=OutVtxList.size();
+
+		for (int i=0; i<ListSize; i++)
+		{
+			if (OutVtxList[i]==ThisVtx) return(i);
+		}
+
+		OutVtxList.push_back(ThisVtx);
+		return(ListSize);
+}
+
+//***************************************************************************
+void	CFaceStore::ParseVtx4BBox(sVtx &ThisVtx)
+{
+		if (BBox.XMin>+ThisVtx.vx) BBox.XMin=+ThisVtx.vx;
+		if (BBox.XMax<+ThisVtx.vx) BBox.XMax=+ThisVtx.vx;
+		if (BBox.YMin>-ThisVtx.vy) BBox.YMin=-ThisVtx.vy;
+		if (BBox.YMax<-ThisVtx.vy) BBox.YMax=-ThisVtx.vy;
+}
+//***************************************************************************
+void	CFaceStore::BuildOutTriList(vector<sTri> &OutTriList,vector<sVtx> &OutVtxList)
 {
 int		FaceCount=TriFaceList.size();
-
-		OutTriList.resize(FaceCount);
+int		ListSize=OutTriList.size();
+		OutTriList.resize(ListSize+FaceCount);
 
 		for (int i=0; i<FaceCount; i++)
 		{
 			CFace	&InFace=TriFaceList[i];
-			sTri	&OutFace=OutTriList[i];
+			sTri	&OutFace=OutTriList[ListSize+i];
 
-			OutFace.P0=InFace.pts[0];
-			OutFace.P1=InFace.pts[1];
-			OutFace.P2=InFace.pts[2];
+			OutFace.P0=AddVtx(OutVtxList,InFace.vtx[0]);
+			OutFace.P1=AddVtx(OutVtxList,InFace.vtx[1]);
+			OutFace.P2=AddVtx(OutVtxList,InFace.vtx[2]);
+
+			ParseVtx4BBox(OutVtxList[OutFace.P0]);
+			ParseVtx4BBox(OutVtxList[OutFace.P1]);
+			ParseVtx4BBox(OutVtxList[OutFace.P2]);
 // Materials and other shit
 			SetupUV(InFace,OutFace);
 		}
@@ -475,25 +398,30 @@ int		FaceCount=TriFaceList.size();
 }
 
 //***************************************************************************
-void	CFaceStore::BuildOutQuadList()
+void	CFaceStore::BuildOutQuadList(vector<sQuad> &OutQuadList,vector<sVtx> &OutVtxList)
 {
-/*
 int		FaceCount=QuadFaceList.size();
-		OutQuadList.resize(FaceCount);
+int		ListSize=OutQuadList.size();
+		OutQuadList.resize(ListSize+FaceCount);
+
 		for (int i=0; i<FaceCount; i++)
 		{
 			CFace	&InFace=QuadFaceList[i];
-			sQuad	&OutFace=OutQuadList[i];
+			sQuad	&OutFace=OutQuadList[ListSize+i];
 
-			OutFace.P0=AddVtx(InFace.vtx[0]*Scale);
-			OutFace.P1=AddVtx(InFace.vtx[1]*Scale);
-			OutFace.P2=AddVtx(InFace.vtx[2]*Scale);
-			OutFace.P3=AddVtx(InFace.vtx[3]*Scale);
+			OutFace.P0=AddVtx(OutVtxList,InFace.vtx[0]);
+			OutFace.P1=AddVtx(OutVtxList,InFace.vtx[1]);
+			OutFace.P2=AddVtx(OutVtxList,InFace.vtx[2]);
+			OutFace.P3=AddVtx(OutVtxList,InFace.vtx[3]);
+
+			ParseVtx4BBox(OutVtxList[OutFace.P0]);
+			ParseVtx4BBox(OutVtxList[OutFace.P1]);
+			ParseVtx4BBox(OutVtxList[OutFace.P2]);
+			ParseVtx4BBox(OutVtxList[OutFace.P3]);
 
 // Materials and other shit
 			SetupUV(InFace,OutFace);
 		}
-*/
 }
 
 //***************************************************************************
@@ -547,22 +475,17 @@ int		Pos=ftell(File);
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-#if	0	// quadding stuff
 bool CFaceStore::CanConnect( int f0, int f1 )
 {
 	CFace &F0 = FaceList[f0];
 	CFace &F1 = FaceList[f1];
-
-	// check ID's match (used for nodes, weights)
-	if (F0.ID!=F1.ID) return false;
 
 	// check materials match
 	if (F0.Mat != F1.Mat) return false;
 
 	// check normals
 	float dp = dotProduct( F0.Normal, F1.Normal );
-	if (dp < 0.98f)
-		return false;
+	if (dp < 0.98f)	return false;
 
 	// check pnt connections
 	bool found = false;
@@ -629,7 +552,7 @@ int CFaceStore::CountFacesAttached ( int f )
 
 	for (int i=0; i<c; i++)
 	{
-		if (FaceList[i].avail && i!=f)
+		if (FaceList[i].Avail && i!=f)
 		{
 			if (CanConnect(f, i))
 			{
@@ -649,7 +572,7 @@ void CFaceStore::FollowFace( int id, CFace &F )
 	int c = FaceList.size();
 	for (int i=0; i<c; i++)
 	{
-		if (FaceList[i].avail && id != i && CanConnect(id, i))
+		if (FaceList[i].Avail && id != i && CanConnect(id, i))
 		{
 			int fec = CountFacesAttached( i );
 			if (fec < minC)
@@ -716,7 +639,7 @@ void CFaceStore::FollowFace( int id, CFace &F )
 	F.pts[ptc] = nf.pts[unc];
 	F.vtx[ptc] = nf.vtx[unc];
 	F.uvs[ptc] = nf.uvs[unc];
-	nf.avail = false;
+	nf.Avail = false;
 
 	if (minC && MaxStrip>F.pts.size()) FollowFace( minF, F );
 }
@@ -730,7 +653,7 @@ int		c = FaceList.size();
 
 	for (int i=0; i<c; i++)
 		{
-		if (FaceList[i].avail)
+		if (FaceList[i].Avail)
 			{
 			int fec = CountFacesAttached( i );
 			if (fec < minC)
@@ -748,9 +671,8 @@ int		c = FaceList.size();
 	F.pts = FaceList[minF].pts;
 	F.uvs = FaceList[minF].uvs;
 	F.vtx = FaceList[minF].vtx;
-	FaceList[minF].avail = false;
+	FaceList[minF].Avail = false;
 	F.Normal= FaceList[minF].Normal;
-	F.ID= FaceList[minF].ID;
 
 	if (minC && MaxStrip>F.pts.size()) FollowFace( minF, F );
 
@@ -760,142 +682,28 @@ int		c = FaceList.size();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFaceStore::QuadGetPnts(CFace &F,int *Join0,int *Join1,int *Pnt)
+void	CFaceStore::Quad()
 {
-		if (!F.vis[0])
-			{
-			*Join0=	F.pts[0];
-			*Join1=	F.pts[1];
-			*Pnt=	2;
-			}
-		else
-		if (!F.vis[1])
-			{
-			*Join0=	F.pts[1];
-			*Join1=	F.pts[2];
-			*Pnt=	0;
-			}
-		else
-			{
-			*Join0=	F.pts[2];
-			*Join1=	F.pts[0];
-			*Pnt=	1;
-			}
-}
-
-//***************************************************************************
-int		CFaceStore::QuadGetAttached(int FaceNo)
-{
-CFace	ThisFace=FaceList[FaceNo];
-int		Vis=ThisFace.vis[0]+ThisFace.vis[1]+ThisFace.vis[2];
-		if (Vis==7) return(0);	// Pure Tri
-int		FaceCount=FaceList.size();
-int		J00,J01,P0;
-int		J10,J11,P1;
-
-		QuadGetPnts(ThisFace,&J00,&J01,&P0);
-	
-		for (int Loop=FaceNo+1;Loop<FaceCount;Loop++)
-			{
-			CFace	&cFace=FaceList[Loop];
-			if (cFace.avail)
-				{
-				if (ThisFace.Normal.x==cFace.Normal.x &&
-					ThisFace.Normal.y==cFace.Normal.y &&
-					ThisFace.Normal.z==cFace.Normal.z)
-					{
-					if (ThisFace.Mat==cFace.Mat && ThisFace.ID==cFace.ID)
-						{
-						QuadGetPnts(cFace,&J10,&J11,&P1);
-						if ((J00==J10 && J01==J11) || (J00==J11 && J01==J10)) return(Loop);
-						}
-					}
-				}
-			}
-
-	return(0);
-}
-
-//***************************************************************************
-void CFaceStore::OrderPnts( CFace &F ,int unc)
-{
-int	idx;
-	if (!F.vis[0]) idx=2;
-	if (!F.vis[1]) idx=0;
-	if (!F.vis[2]) idx=1;
-
-	{
-		vector<int>::iterator pb, pe, pm;
-		vector<sUV>::iterator ub, ue, um;
-		vector<Vector3>::iterator vb, ve, vm;
-		pb = F.pts.begin();	pe = F.pts.end();
-		ub = F.uvs.begin();	ue = F.uvs.end();
-		vb = F.vtx.begin();	ve = F.vtx.end();
-
-		pm = pb + idx;
-		um = ub + idx;
-		vm = vb + idx;
-
-		rotate(pb, pm, pe);
-		rotate(ub, um, ue);
-		rotate(vb, vm, ve);
-	}
-
-}
-
-//***************************************************************************
-void	CFaceStore::Quad(vector<CFace> &TriList,vector<CFace> &QuadList)
-{
-int	FaceCount=FaceList.size();
-
 	if (MaxStrip==4)
 	{
-//vector<CFace> ThisTriList;
-	for (int Loop=0;Loop<FaceCount;Loop++)
-	{
-		if (FaceList[Loop].avail)
-		{
-			int	Att=QuadGetAttached(Loop);
-			if (Att)
-			{
-				CFace &F=FaceList[Loop];
-				CFace &NF=FaceList[Att];
-				int	J0,J1,P;
-				QuadGetPnts(NF,&J0,&J1,&P);
-				FaceList[Loop].avail=FaceList[Att].avail=false;
-				OrderPnts(F,P);
-				F.pts.push_back(NF.pts[P]);
-				F.vtx.push_back(NF.vtx[P]);
-				F.uvs.push_back(NF.uvs[P]);
-				QuadList.push_back(F);
-			}
-		}
-	}
-
-// Strip remaining tris
-//	for (Loop=0;Loop<FaceCount;Loop++)
-//		{
-//		if (FaceList[Loop].avail) ThisTriList.push_back(FaceList[Loop]);
-//		}
-
 		bool strips = true;
 		while (strips)
-			{
+		{
 			CFace f;
 			strips = GetFace( f );
 			if (strips)
-				{
+			{
 				if (f.pts.size() == 3)
-					TriList.push_back(f); 
+					TriFaceList.push_back(f); 
 				else
-					QuadList.push_back(f); 
-				}
+				QuadFaceList.push_back(f); 
 			}
-//		printf("Quaded %i extra\n",ThisTriList.size()-TriList.size());
 		}
+	}
 	else
-		{	// No quadding, copy direct
-		for (int Loop=0;Loop<FaceCount;Loop++) TriList.push_back(FaceList[Loop]);
-		}
+	{	// No quadding, copy direct
+		int	FaceCount=FaceList.size();
+		for (int Loop=0;Loop<FaceCount;Loop++) TriFaceList.push_back(FaceList[Loop]);
+	}
 }
-#endif
+

@@ -25,7 +25,7 @@ void	CFXFallingTile::init(DVECTOR const &_Pos)
 		CFX::init();
 sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 
-		TileBank3d=LevelHdr->TileBank3d;
+		ElemBank3d=LevelHdr->ElemBank3d;
 		TriList=LevelHdr->TriList;
 		QuadList=LevelHdr->QuadList;
 		VtxList=LevelHdr->VtxList;
@@ -77,7 +77,7 @@ VECTOR		ThisRenderPos;
 			gte_SetRotMatrix(&Mtx);
 			CMX_SetTransMtxXY(&ThisRenderPos);
 
-			sTile3d		*ThisTile=&TileBank3d[Tile];
+			sElem3d		*ThisTile=&ElemBank3d[Tile];
 			int			TriCount=ThisTile->TriCount;
 			sTri		*TList=&TriList[ThisTile->TriStart];
 

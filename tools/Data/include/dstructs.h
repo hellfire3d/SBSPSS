@@ -132,24 +132,13 @@ struct	sQuad
 //*** Game Types and Headers ************************************************
 //***************************************************************************
 // Tiles 
-//typedef	u16	sTileMapElem;
-
 struct	sTileMapElem
 {
 		u16		Tile;
 //		u16		LightIdx;
 };
-/*
-struct	sTile
-{
-// 2d Tile
-		u8		u0,v0;						// 2
-		u16		Clut;						// 2
-		u16		TPage;						// 2
-		u16		Pad;	// :o( need this?	// 2
-};											// 8
-*/
-struct	sTile2d
+
+struct	sElem2d
 {
 // 2d Tile
 		u8		u0,v0;						// 2
@@ -158,14 +147,17 @@ struct	sTile2d
 		u16		Pad;	// :o( need this?	// 2
 };											// 8
 
-struct	sTile3d
+struct	sElem3d
 {
-// 3d Tile
+// 3d Elem (tile/model)
 		u16		TriStart;
 		u16		TriCount;
 		u16		QuadStart;
 		u16		QuadCount;
-};											// 8
+		u16		VtxStart;
+		u16		VtxCount;
+};											// 12
+
 //***************************************************************************
 // Layers
 struct	sLayerHdr
@@ -209,8 +201,8 @@ struct	sLayerShadeHdr
 //---------------------------------------------------------------------------
 struct	sModel
 {
-		u16		TriCount;
-		u16		TriStart;
+		u16		ElemID;
+		u16		Pad;
 		sBBox	BBox;
 };
 
@@ -218,26 +210,26 @@ struct	sModel
 // Header
 struct	sLevelHdr
 {
-	u32		BackLayer;
-	u32		MidLayer;
-	u32		ActionLayer;
-	u32		ForeLayer;
-	u32		CollisionLayer;
-	u32		ActorList;
-	u32		ItemList;
-	u32		PlatformList;
-	u32		TriggerList;
-	u32		FXList;
-	u32		HazardList;
+	u32			BackLayer;
+	u32			MidLayer;
+	u32			ActionLayer;
+	u32			ForeLayer;
+	u32			CollisionLayer;
+	u32			ActorList;
+	u32			ItemList;
+	u32			PlatformList;
+	u32			TriggerList;
+	u32			FXList;
+	u32			HazardList;
 
-	u16		PlayerStartX,PlayerStartY;
+	u16			PlayerStartX,PlayerStartY;
 
-	sTile2d	*TileBank2d;
-	sTile3d	*TileBank3d;
-	sTri	*TriList;
-	sQuad	*QuadList;
-	sVtx	*VtxList;
-	sModel	*ModelList;
+	sElem2d		*ElemBank2d;
+	sElem3d		*ElemBank3d;
+	sTri		*TriList;
+	sQuad		*QuadList;
+	sVtx		*VtxList;
+	sModel		*ModelList;
 };
 
 //***************************************************************************

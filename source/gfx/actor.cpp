@@ -773,18 +773,19 @@ u8		V=Node->V;
 /*****************************************************************************/
 /*****************************************************************************/
 sModel	*CModelGfx::ModelTable;
+sElem3d	*CModelGfx::ModelElemBank;
 sTri	*CModelGfx::ModelTriList;
 sQuad	*CModelGfx::ModelQuadList;
 sVtx	*CModelGfx::ModelVtxList;
 
 /*****************************************************************************/
-void	CModelGfx::SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList)
+void	CModelGfx::SetData(sLevelHdr *LevelHdr)
 {
-		ModelTable=Table;
-		ModelTriList=TList;
-		ModelQuadList=QList;
-		ModelVtxList=VList;
-
+		ModelTable=LevelHdr->ModelList;
+		ModelElemBank=LevelHdr->ElemBank3d;
+		ModelTriList=LevelHdr->TriList;
+		ModelQuadList=LevelHdr->QuadList;
+		ModelVtxList=LevelHdr->VtxList;
 }
 
 /*****************************************************************************/
@@ -794,19 +795,21 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
+static const int	MXO=0;
+static const int	MYO=-8;
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {
 #define	BLOCK_MULT	16
+sElem3d			*Elem=&ModelElemBank[Model->ElemID];
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
 sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
 sOT				*ThisOT;
-DVECTOR			MapXY;
 VECTOR			RenderPos;
-int				TriCount=Model->TriCount;				
-sTri			*TList=&ModelTriList[Model->TriStart];
+int				TriCount=Elem->TriCount;				
+sTri			*TList=&ModelTriList[Elem->TriStart];
 				MATRIX	Mtx;
 
 // If has scale && angle then need to use PSX scale matrix, otherwise, force values
@@ -830,15 +833,9 @@ sTri			*TList=&ModelTriList[Model->TriStart];
 				}
 			}
 
-			MapXY.vx=Pos.vx>>4;
-			MapXY.vy=Pos.vy>>4;
-			
-int			ShiftX=(Pos.vx & 15);
-int			ShiftY=(Pos.vy & 15);
-
-			RenderPos.vx=INGAME_SCREENOFS_X+((MapXY.vx*16)+ShiftX);
-			RenderPos.vy=INGAME_SCREENOFS_Y+((MapXY.vy*16)+ShiftY);
-
+		RenderPos.vx=(INGAME_SCREENOFS_X+MXO)+Pos.vx;
+		RenderPos.vy=(INGAME_SCREENOFS_Y+MYO)+Pos.vy;
+		
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);
 
@@ -857,35 +854,13 @@ int			ShiftY=(Pos.vy & 15);
 			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
-/*
-			if (TList->OTOfs>ActorOT)
-			{
-				ThisOT=OtPtr+(ActorOT+1);
-			}
-			else
-			{
-				ThisOT=OtPtr+(ActorOT-1);
-			}
-*/
 			ThisOT=OtPtr+TList->OTOfs;
-
-
 			TList++;
 			addPrim(ThisOT,TPrimPtr);
 			gte_stsxy3_ft3(TPrimPtr);
 			TPrimPtr++;
-
-/* Models are not clipped
-			gte_nclip_b();
-			gte_stsxy3_ft3(TPrimPtr);
-			gte_stopz(&ClipZ);
-			if (ClipZ<=0)
-			{
-				addPrim(ThisOT,TPrimPtr);
-				TPrimPtr++;
-			}
-*/
 		}
 
 		SetPrimPtr((u8*)TPrimPtr);
+
 }
