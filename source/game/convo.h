@@ -56,10 +56,13 @@ public:
 private:
 	enum
 	{
-		FRAME_WIDTH=400,
-		FRAME_HEIGHT=90,
-		FRAME_BOTTOM_OFFSET=40,
-		TEXT_BORDER=20,
+
+		TEXTBOX_X=125,
+		TEXTBOX_Y=140,
+		TEXTBOX_WIDTH=357,
+		TEXTBOX_HEIGHT=50,
+		TEXTBOX_QUESTIONHEIGHT=16,
+		TEXT_STEP_SIZE=5,
 		OT_POS=0,
 		SELECT_TEXT_R=250,
 		SELECT_TEXT_G=250,
@@ -142,6 +145,12 @@ private:
 	static int					s_currentQuestion;
 	static int					s_currentAnswer;
 	static int					s_currentSelectedAnswer;
+
+	static int					s_faceFrame;
+	static int					s_speechId;
+	static int					s_textOffset;
+	static int					s_maxTextOffset;
+
 };
 
 

@@ -46,8 +46,18 @@
 #include "level\level.h"
 #endif
 
-#include	"sound\sound.h"
-#include	"sound\speech.h"
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
+#ifndef __SPEECH_DEFINES_H__
+#include "sound\speech.h"
+#endif
+
+#ifndef __LOCALE_TEXTDBASE_H__
+#include "locale\textdbase.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -233,13 +243,16 @@ int						CConversation::s_numRegisteredScripts=0;
 class CScript			*CConversation::s_currentScript=NULL;
 int						CConversation::s_currentState=STATE_INACTIVE;
 
-int	CConversation::s_currentQuestion=QUESTION_NONE;
-int CConversation::s_currentAnswer=ANSWER_NONE;
-int CConversation::s_currentSelectedAnswer=0;
+int	CConversation::s_currentQuestion;
+int CConversation::s_currentAnswer;
+int CConversation::s_currentSelectedAnswer;
 
-static int	s_faceFrame=-1;
-static int	s_speechId=-1;
-static int	s_TextOffset=0;
+int	CConversation::s_faceFrame;
+int	CConversation::s_speechId;
+int	CConversation::s_textOffset;
+int	CConversation::s_maxTextOffset;
+
+static xmPlayingId	s_playingSfxId;
 
 
 /*----------------------------------------------------------------------
@@ -255,7 +268,7 @@ void CConversation::init()
 	s_textFontBank=new ("Conversation Font") FontBank();
 	s_textFontBank->initialise(&standardFont);
 	s_textFontBank->setOt(0);
-	s_textFontBank->setPrintArea(125,140,357,60);
+	s_textFontBank->setPrintArea(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT);
 
 	s_questionFontBank=new ("Conversation Font") FontBank();
 	s_questionFontBank->initialise(&standardFont);
@@ -309,6 +322,12 @@ void CConversation::think(int _frames)
 			s_currentScript=NULL;
 			s_currentState=STATE_INACTIVE;
 			CSoundMediator::stopSpeech();
+			if(s_playingSfxId!=NOT_PLAYING)
+			{
+				CSoundMediator::stopAndUnlockSfx(s_playingSfxId);
+				s_playingSfxId=NOT_PLAYING;
+			}
+			s_playingSfxId=CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 		}
 	}
 }
@@ -326,7 +345,7 @@ void CConversation::render()
 	{
 		renderText();
 		renderQuestion();
-		drawSpeechBubbleBorder(125,140,357,80,0,s_faceFrame);
+		drawSpeechBubbleBorder(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,s_faceFrame);
 	}
 }
 
@@ -360,6 +379,8 @@ void CConversation::trigger(FileEquate _feScript)
 	int	i;
 
 	ASSERT(!isActive());
+
+	s_playingSfxId=NOT_PLAYING;
 
 	// Is this script already registered?
 	for(i=0;i<s_numRegisteredScripts;i++)
@@ -400,7 +421,9 @@ void CConversation::setCharacterAndText(int _characterId,int _textId)
 {
 	s_faceFrame=(s_characterIconFrames[_characterId].m_frame);
 	s_speechId=_textId;
-	s_TextOffset=0;
+	s_textOffset=0;
+	s_maxTextOffset=s_textFontBank->getStringHeight((char*)TranslationDatabase::getString(s_speechId))-TEXTBOX_HEIGHT;
+	if(s_maxTextOffset<0)s_maxTextOffset=0;
 
 	for (int i=0; i<SpeechTableSize; i++)
 	{
@@ -447,17 +470,48 @@ int CConversation::getResponse()
   ---------------------------------------------------------------------- */
 void CConversation::thinkText()
 {
+	int	sfx=-1;
+
 	if(PadGetRepeat(0)&PAD_DOWN)
 	{
-		s_TextOffset-=s_textFontBank->getCharHeight();
+		if(s_textOffset<s_maxTextOffset)
+		{
+			s_textOffset+=TEXT_STEP_SIZE;
+			if(s_textOffset>s_maxTextOffset)
+			{
+				s_textOffset=s_maxTextOffset;
+			}
+			sfx=CSoundMediator::SFX_FRONT_END__MOVE_CURSOR;
+		}
+		else
+		{
+			sfx=CSoundMediator::SFX_FRONT_END__ERROR;
+		}
 	}
 	else if(PadGetRepeat(0)&PAD_UP)
 	{
-		s_TextOffset+=s_textFontBank->getCharHeight();
-		if(s_TextOffset>0)
+		if(s_textOffset>0)
 		{
-			s_TextOffset=0;
+			s_textOffset-=TEXT_STEP_SIZE;
+			if(s_textOffset<0)
+			{
+				s_textOffset=0;
+			}
+			sfx=CSoundMediator::SFX_FRONT_END__MOVE_CURSOR;
 		}
+		else
+		{
+			sfx=CSoundMediator::SFX_FRONT_END__ERROR;
+		}
+	}
+
+	if(sfx!=-1)
+	{
+		if(s_playingSfxId!=NOT_PLAYING)
+		{
+			CSoundMediator::stopAndUnlockSfx(s_playingSfxId);
+		}
+		s_playingSfxId=CSoundMediator::playSfx((CSoundMediator::SFXID)sfx,true);
 	}
 }
 
@@ -506,10 +560,10 @@ void CConversation::thinkQuestion()
   ---------------------------------------------------------------------- */
 void CConversation::renderText()
 {
-	RECT clipTextRegion={125,140,357,60};
+	RECT clipTextRegion={TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
 
 	PrimFullScreen(0);
-	s_textFontBank->print(0,s_TextOffset,s_speechId);
+	s_textFontBank->print(0,-s_textOffset,s_speechId);
 	PrimClip(&clipTextRegion,0);
 }
 
@@ -520,12 +574,12 @@ void CConversation::renderText()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+//drawSpeechBubbleBorder(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT,0,s_faceFrame);
 void CConversation::renderQuestion()
 {
-	int	xbase,y;
+	int	y;
 
-	xbase=(512-FRAME_WIDTH)/2;
-	y=256-FRAME_BOTTOM_OFFSET-(TEXT_BORDER/2)-(s_questionFontBank->getCharHeight()/2);
+	y=TEXTBOX_Y+TEXTBOX_HEIGHT+TEXTBOX_QUESTIONHEIGHT-s_questionFontBank->getCharHeight();
 
 	switch(s_currentQuestion)
 	{
@@ -533,7 +587,7 @@ void CConversation::renderQuestion()
 			{
 				s_questionFontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
 				s_questionFontBank->setJustification(FontBank::JUST_RIGHT);
-				s_questionFontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__OK);
+				s_questionFontBank->print(TEXTBOX_X+TEXTBOX_WIDTH,y,STR__OK);
 			}
 			break;
 
@@ -548,7 +602,7 @@ void CConversation::renderQuestion()
 					s_questionFontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
 				s_questionFontBank->setJustification(FontBank::JUST_LEFT);
-				s_questionFontBank->print(xbase+FRAME_HEIGHT,y,STR__YES);
+				s_questionFontBank->print(TEXTBOX_X+TEXTBOX_WIDTH,y,STR__YES);
 
 				if(s_currentSelectedAnswer==1)
 				{
@@ -559,7 +613,7 @@ void CConversation::renderQuestion()
 					s_questionFontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
 				s_questionFontBank->setJustification(FontBank::JUST_RIGHT);
-				s_questionFontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__NO);
+				s_questionFontBank->print(TEXTBOX_X,y,STR__NO);
 			}
 			break;
 

@@ -697,6 +697,8 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 					break;
 					
 				case SILENT:
+					break;
+
 				case FREE:
 				case CONTINUE:
 					ASSERT(0);

@@ -596,7 +596,7 @@ void CSoundMediator::setposition(xmPlayingId _playingId,VECTOR *pos)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSoundMediator::stopSfx(xmPlayingId _playingId)
+void CSoundMediator::stopAndUnlockSfx(xmPlayingId _playingId)
 {
 	s_xmplaySound->stopPlayingId(_playingId);
 	s_xmplaySound->unlockPlayingId(_playingId);

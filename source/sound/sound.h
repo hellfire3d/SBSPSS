@@ -187,7 +187,7 @@ public:
 	static void			setSfxBank(SFXBANKID _bankId);
 	static xmPlayingId	playSfx(SFXID _sfxId,int _lock=false);
 	static void			setposition(xmPlayingId _playingId,VECTOR *pos);
-	static void			stopSfx(xmPlayingId _playingId);
+	static void			stopAndUnlockSfx(xmPlayingId _playingId);
 	static void			stopAllSfx();
 
 	// Speech interface
