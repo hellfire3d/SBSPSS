@@ -947,6 +947,8 @@ PLAYERINPUT CPlayer::getPadInputDown()
   ---------------------------------------------------------------------- */
 int CPlayer::isOnSlippySurface()
 {
+	return false;
+	/*	(pkg)
 	int	ret=false;
 
 	if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5)==0&&
@@ -956,6 +958,7 @@ int CPlayer::isOnSlippySurface()
 	}
 
 	return ret;
+	*/
 }
 
 
