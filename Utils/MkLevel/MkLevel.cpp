@@ -269,9 +269,11 @@ GString	FilePath;
 		{
 			GString	InName=InPath;
 			InName+=TexPtr;
-			GFName::makeabsolute(InPath,InName,FullName);
-			InName=FullName;
-			_fullpath( FullName, FullName, 1024);
+//			sprintf(FullName,"%s",InName);
+			_fullpath( FullName, InName, 1024);
+//			GFName::makeabsolute(InPath,InName,FullName);
+//			InName=FullName;
+//			_fullpath( FullName, FullName, 1024);
 			List.push_back(GString(FullName));
 			TexPtr+=strlen(TexPtr)+1;
 		}

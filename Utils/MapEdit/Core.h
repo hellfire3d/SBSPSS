@@ -19,7 +19,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-const	s32		FileVersion=9;
+const	s32		FileVersion=10;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20

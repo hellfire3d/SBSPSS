@@ -18,7 +18,7 @@
 #define	MAX_OT_GUI			(0)
 #define	MAX_OT				(16)
 #define	MAX_OT_ALL			(MAX_OT+MAX_OT_GUI)
-#define	MAX_PRIMS			((1024*2)+256+1024)			// PKG - TEMPORARY!!!!!
+#define	MAX_PRIMS			((1024*2))	// Put back after overrender bug found (BAD DAVE!)
 
 //#define	USE_NTAGS			1
 

@@ -37,6 +37,9 @@ public:
 		void			Export(CCore *Core,CExport &Exp);
 		void			ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisThing,sLayerThingData &OutThing);
 
+virtual	bool			CanMirror(){return(true);}
+virtual	bool			CanRotate(){return(true);}
+
 protected:
 		CGUILayerHazard		GUIHazard;
 

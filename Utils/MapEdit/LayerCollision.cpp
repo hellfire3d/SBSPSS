@@ -156,9 +156,14 @@ int		Height=Map.GetHeight();
 				
 				if (MapElem.Tile)
 				{
+// new				OutElem.Tile=(MapElem.Tile-1)<<1;
+//					OutElem.Tile+=MapElem.Flags & PC_TILE_FLAG_MIRROR_X;
+//					OutElem.Flags=MapElem.Flags>>PC_TILE_FLAG_COLLISION_SHIFT;
+// Old
 					OutElem.Tile=((MapElem.Tile-1)*4)+1;
 					OutElem.Tile+=MapElem.Flags & PC_TILE_FLAG_MIRROR_XY;
 					OutElem.Flags=MapElem.Flags>>PC_TILE_FLAG_COLLISION_SHIFT;
+
 				}
 				else
 				{

@@ -87,6 +87,7 @@
 #define IDC_LAYERSHADE_SHADEG3          1088
 #define IDC_LAYERSHADE_EDITB3           1089
 #define IDC_LAYERSHADE_SHADEB3          1089
+#define IDC_LAYERCOLLISION_DESTRUCTABLE 1089
 #define IDC_LAYERSHADE_TRANSTEXT        1090
 #define IDC_LAYERSHADE_GFXR0            1091
 #define IDC_ACTOR_SPEED_SPIN            1092
@@ -154,7 +155,6 @@
 #define IDC_FX_SPEED_SPIN               1152
 #define IDC_TRIGGER_HEIGHT_SPIN         1163
 #define IDC_TRIGGER_TARGETY_SPIN        1164
-#define IDC_TRIGGER_TARGETY_SPIN2       1165
 #define IDC_TRIGGER_TARGETH_SPIN        1165
 #define IDC_HAZARD_SPEED_TEXT           1169
 #define IDC_HAZARD_TURNRATE_TEXT        1170
@@ -215,6 +215,7 @@
 #define ID_ZOOM_OUT                     32798
 #define ID_RESET_VIEW                   32799
 #define ID_RENDER_TO_TGA                32800
+#define ID_ROTATE                       32801
 #define ID_INDICATOR_CURSORXY           59142
 
 // Next default values for new objects
@@ -223,7 +224,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        180
-#define _APS_NEXT_COMMAND_VALUE         32801
+#define _APS_NEXT_COMMAND_VALUE         32802
 #define _APS_NEXT_CONTROL_VALUE         1215
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

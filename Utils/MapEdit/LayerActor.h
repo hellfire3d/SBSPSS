@@ -34,6 +34,9 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
+virtual	bool			CanMirror(){return(true);}
+virtual	bool			CanRotate(){return(true);}
+
 protected:
 		CGUILayerActor		GUIActor;
 

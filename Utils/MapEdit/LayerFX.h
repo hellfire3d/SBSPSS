@@ -35,6 +35,9 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
+virtual	bool			CanMirror(){return(true);}
+virtual	bool			CanRotate(){return(true);}
+
 
 protected:
 		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);

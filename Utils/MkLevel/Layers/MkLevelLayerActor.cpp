@@ -76,7 +76,10 @@ int			i,ListSize=ThingList.size();
 			OutThing.AttackStrength=ThisThing.Data.Actor.ActorAttackStrength;
 			OutThing.Speed=ThisThing.Data.Actor.ActorSpeed;
 			OutThing.TurnRate=ThisThing.Data.Actor.ActorTurnRate;
-			OutThing.Flags=ThisThing.Data.Actor.ActorCollisionFlag;
+			OutThing.Flags=0;
+			if (ThisThing.Data.Actor.ActorCollisionFlag) OutThing.Flags|=THING_FLAG_COLLISION;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_X) OutThing.Flags|=THING_FLAG_MIRRORX;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_Y) OutThing.Flags|=THING_FLAG_MIRRORY;
 			OutThing.PointCount=PointCount;
 			fwrite(&OutThing,sizeof(sThingActor),1,File);
 

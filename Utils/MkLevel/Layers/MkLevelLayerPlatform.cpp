@@ -62,7 +62,11 @@ int			i,ListSize=ThingList.size();
 			OutThing.Type=ThisThing.Type;
 			OutThing.Speed=ThisThing.Data.Platform.PlatformSpeed;
 			OutThing.TurnRate=ThisThing.Data.Platform.PlatformTurnRate;
-			OutThing.Flags=ThisThing.Data.Platform.PlatformCollisionFlag;
+			OutThing.Flags=0;
+			if (ThisThing.Data.Platform.PlatformCollisionFlag) OutThing.Flags|=THING_FLAG_COLLISION;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_X) OutThing.Flags|=THING_FLAG_MIRRORX;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_Y) OutThing.Flags|=THING_FLAG_MIRRORY;
+
 			OutThing.PointCount=PointCount;
 			OutThing.Gfx=RemapTable[i];
 			OutThing.Param0=ThisThing.Data.Platform.PlatformParam0;

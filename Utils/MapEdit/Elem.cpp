@@ -449,10 +449,10 @@ int		ColFlags=Flags >> PC_TILE_FLAG_COLLISION_SHIFT;
 			case PC_TILE_COLLISION_STICKY:		glColor4f(1.0f,1.0f,0.0f,0.5); break;
 			case PC_TILE_COLLISION_WATER:		glColor4f(0.0f,0.0f,1.0f,0.5); break;
 			case PC_TILE_COLLISION_SOLID:		glColor4f(0.0f,1.0f,1.0f,0.5); break;
-			case PC_TILE_COLLISION_DEATH:		glColor4f(1.0f,0.5f,0.5f,0.5); break;
+			case PC_TILE_COLLISION_DEATH:		glColor4f(0.0f,0.5f,0.5f,0.5); break;
+			case PC_TILE_COLLISION_DESTRUCTABLE:glColor4f(0.5f,0.7f,0.6f,0.5); break;
 			}
 		}
-
 		glEnable(GL_TEXTURE_2D);
 		if (Render3d) 
 		{

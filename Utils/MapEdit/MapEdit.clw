@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CGUILayerShade
+LastClass=CMapEditDoc
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -37,27 +37,27 @@ Class25=CMapEditDoc
 Class26=CMapEditView
 
 ResourceCount=21
-Resource1=IDD_LAYER_HAZARD
-Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_LAYER_COLLISION
-Resource4=IDD_MULTIBAR (English (U.S.))
-Resource5=IDD_LAYER_ACTOR
-Resource6=IDD_LAYER_THING_POS
-Resource7=IDD_LAYER_FX
-Resource8=IDD_LAYER_PLATFORM
-Resource9=IDD_ADDLAYER
-Resource10=IDD_RESIZE
-Resource11=IDD_LAYER_LIST
-Resource12=IDD_LAYER_TRIGGER
-Resource13=IDD_ELEMLIST
-Resource14=IDR_TOOLBAR (English (U.S.))
-Resource15=IDD_ABOUTBOX (English (U.S.))
-Resource16=IDD_LAYER_THING
-Resource17=IDD_NEWMAP
-Resource18=IDR_MAINFRAME (English (U.S.))
-Resource19=IDD_TILEBANK
-Resource20=IDD_TOOLBAR
-Resource21=IDD_LAYER_SHADE
+Resource1=IDD_LAYER_COLLISION
+Resource2=IDD_LAYER_THING_POS
+Resource3=IDD_MULTIBAR (English (U.S.))
+Resource4=IDD_LAYER_THING
+Resource5=IDD_RESIZE
+Resource6=IDD_ADDLAYER
+Resource7=IDD_LAYER_SHADE
+Resource8=IDD_TILEBANK
+Resource9=IDD_LAYER_TRIGGER
+Resource10=IDD_LAYER_PLATFORM
+Resource11=IDR_MAPEDITYPE (English (U.S.))
+Resource12=IDD_TOOLBAR
+Resource13=IDD_LAYER_LIST
+Resource14=IDD_ABOUTBOX (English (U.S.))
+Resource15=IDD_LAYER_ACTOR
+Resource16=IDD_NEWMAP
+Resource17=IDD_LAYER_FX
+Resource18=IDD_ELEMLIST
+Resource19=IDR_TOOLBAR (English (U.S.))
+Resource20=IDR_MAINFRAME (English (U.S.))
+Resource21=IDD_LAYER_HAZARD
 
 [CLS:CChildFrame]
 Type=0
@@ -94,6 +94,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerCollision.h
 ImplementationFile=GUILayerCollision.cpp
+LastObject=GUILayerCollision
+Filter=D
+VirtualFilter=dWC
 
 [CLS:CGUILayerFX]
 Type=0
@@ -221,6 +224,9 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
+Filter=N
+VirtualFilter=DC
+LastObject=ID_ROTATE
 
 [CLS:CMapEditView]
 Type=0
@@ -264,7 +270,7 @@ Control14=IDC_ACTOR_COLLISION,button,1342243363
 [DLG:IDD_LAYER_COLLISION]
 Type=1
 Class=GUILayerCollision
-ControlCount=8
+ControlCount=9
 Control1=IDC_LAYERCOLLISION_NORMAL,button,1342242816
 Control2=IDC_LAYERCOLLISION_DAMAGE,button,1342242816
 Control3=IDC_LAYERCOLLISION_SLIPPERY,button,1342242816
@@ -273,6 +279,7 @@ Control5=IDC_LAYERCOLLISION_STICKY,button,1342242816
 Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
 Control7=IDC_LAYERCOLLISION_SOLID,button,1342242816
 Control8=IDC_LAYERCOLLISION_DEATH,button,1342242816
+Control9=IDC_LAYERCOLLISION_DESTRUCTABLE,button,1342242816
 
 [DLG:IDD_LAYER_FX]
 Type=1
@@ -540,16 +547,17 @@ Command19=ID_ZOOM_IN
 Command20=ID_ZOOM_OUT
 Command21=ID_MIRRORX
 Command22=ID_MIRRORY
-Command23=ID_ACTIVEBRUSH_LEFT
-Command24=ID_ACTIVEBRUSH_RIGHT
-Command25=ID_TOGGLE_SUBVIEW
-Command26=ID_2D_3D_TOGGLE
-Command27=ID_WINDOW_NEW
-Command28=ID_WINDOW_CASCADE
-Command29=ID_WINDOW_TILE_HORZ
-Command30=ID_WINDOW_ARRANGE
-Command31=ID_APP_ABOUT
-CommandCount=31
+Command23=ID_ROTATE
+Command24=ID_ACTIVEBRUSH_LEFT
+Command25=ID_ACTIVEBRUSH_RIGHT
+Command26=ID_TOGGLE_SUBVIEW
+Command27=ID_2D_3D_TOGGLE
+Command28=ID_WINDOW_NEW
+Command29=ID_WINDOW_CASCADE
+Command30=ID_WINDOW_TILE_HORZ
+Command31=ID_WINDOW_ARRANGE
+Command32=ID_APP_ABOUT
+CommandCount=32
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -564,22 +572,23 @@ Command7=ID_EDIT_COPY
 Command8=ID_TOGGLE_GRID
 Command9=ID_FILE_NEW
 Command10=ID_FILE_OPEN
-Command11=ID_FILE_SAVE
-Command12=ID_EDIT_PASTE
-Command13=ID_ZOOM_IN
-Command14=ID_EDIT_UNDO
-Command15=ID_EDIT_CUT
-Command16=ID_EDIT_COPY
-Command17=ID_EDIT_PASTE
-Command18=ID_TOGGLE_SUBVIEW
-Command19=ID_ZOOM_OUT
-Command20=ID_NEXT_PANE
-Command21=ID_PREV_PANE
-Command22=ID_MIRRORX
-Command23=ID_EDIT_CUT
-Command24=ID_MIRRORY
-Command25=ID_EDIT_UNDO
-CommandCount=25
+Command11=ID_ROTATE
+Command12=ID_FILE_SAVE
+Command13=ID_EDIT_PASTE
+Command14=ID_ZOOM_IN
+Command15=ID_EDIT_UNDO
+Command16=ID_EDIT_CUT
+Command17=ID_EDIT_COPY
+Command18=ID_EDIT_PASTE
+Command19=ID_TOGGLE_SUBVIEW
+Command20=ID_ZOOM_OUT
+Command21=ID_NEXT_PANE
+Command22=ID_PREV_PANE
+Command23=ID_MIRRORX
+Command24=ID_EDIT_CUT
+Command25=ID_MIRRORY
+Command26=ID_EDIT_UNDO
+CommandCount=26
 
 [DLG:IDD_ABOUTBOX (English (U.S.))]
 Type=1

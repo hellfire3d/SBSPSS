@@ -63,7 +63,11 @@ int			i,ListSize=ThingList.size();
 			OutThing.Type=ThisThing.Type;
 			OutThing.Speed=ThisThing.Data.Hazard.HazardSpeed;
 			OutThing.TurnRate=ThisThing.Data.Hazard.HazardTurnRate;
-			OutThing.Flags=ThisThing.Data.Hazard.HazardCollisionFlag;
+			OutThing.Flags=0;
+			if (ThisThing.Data.Hazard.HazardCollisionFlag) OutThing.Flags|=THING_FLAG_COLLISION;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_X) OutThing.Flags|=THING_FLAG_MIRRORX;
+			if (ThisThing.Data.Flip & PC_TILE_FLAG_MIRROR_Y) OutThing.Flags|=THING_FLAG_MIRRORY;
+
 			OutThing.PointCount=PointCount;
 			OutThing.Respawn=ThisThing.Data.Hazard.HazardRespawn;
 			OutThing.Gfx=RemapTable[i];

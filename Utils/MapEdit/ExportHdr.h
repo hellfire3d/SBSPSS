@@ -177,6 +177,24 @@ struct	sLayerThingHazard
 struct	sLayerThingData
 {
 	int						WaypointCount;
+	int						Angle;
+	int						Flip;
+
+	union
+	{
+		sLayerThingDef		RESERVE;
+		sLayerThingActor	Actor;
+		sLayerThingItem		Item;
+		sLayerThingPlatform	Platform;
+		sLayerThingTrigger	Trigger;
+		sLayerThingFX		FX;
+		sLayerThingHazard	Hazard;
+	};
+};
+
+struct	sLayerThingDataV9
+{
+	int						WaypointCount;
 
 	union
 	{

@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(GUILayerCollision, CDialog)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_WATER, OnLayercollisionWater)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_SOLID, OnLayercollisionSolid)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_DEATH, OnLayercollisionDeath)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DESTRUCTABLE, OnLayercollisionDestructable)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -60,3 +61,5 @@ void GUILayerCollision::OnLayercollisionSticky()		{theApp.GetCurrent()->Command(
 void GUILayerCollision::OnLayercollisionWater()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_WATER);}
 void GUILayerCollision::OnLayercollisionSolid()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_SOLID);}
 void GUILayerCollision::OnLayercollisionDeath()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DEATH);}
+void GUILayerCollision::OnLayercollisionDestructable()	{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DESTRUCTABLE);}
+

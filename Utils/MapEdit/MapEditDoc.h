@@ -84,6 +84,7 @@ protected:
 	afx_msg void On2d3dToggle();
 	afx_msg void OnResetView();
 	afx_msg void OnRenderToTga();
+	afx_msg void OnRotate();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

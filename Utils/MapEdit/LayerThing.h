@@ -79,6 +79,8 @@ virtual	void			ExportThing(CCore *Core,CExport &Exp,sLayerThing &ThisThing);
 virtual	void			ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisThing,sLayerThingData &OutThing){}
 virtual	void			ExportThingNames(CExport &Exp);
 
+virtual	bool			CanMirror(){return(false);}
+virtual	bool			CanRotate(){return(false);}
 // Functions
 virtual	bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFlag);
 virtual	bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFlag);

@@ -43,6 +43,7 @@ protected:
 	afx_msg void OnLayercollisionWater();
 	afx_msg void OnLayercollisionSolid();
 	afx_msg void OnLayercollisionDeath();
+	afx_msg void OnLayercollisionDestructable();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

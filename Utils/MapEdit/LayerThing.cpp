@@ -72,7 +72,20 @@ int		i,ListSize;
 			}
 			else
 			{
-				File->Read(&ThisThing.Data,sizeof(sLayerThingData));
+				if (Version==9)
+				{
+					sLayerThingDataV9	V9Data;
+					File->Read(&V9Data,sizeof(sLayerThingDataV9));
+					ThisThing.Data.WaypointCount=V9Data.WaypointCount;
+					ThisThing.Data.Flip=0;
+					ThisThing.Data.Angle=0;
+					ThisThing.Data.RESERVE=V9Data.RESERVE;
+				}
+				else
+				{
+					File->Read(&ThisThing.Data,sizeof(sLayerThingData));
+				}
+				
 			}
 		}
 		LoadThingNames(File,Version);
@@ -186,6 +199,8 @@ int		i,ListSize=ThingScript.GetGroupCount();
 			memset(&ThisDef.Data,0,sizeof(sLayerThingData));
 			ThisDef.Name=Name;
 			ThisDef.Data.WaypointCount=ThingScript.GetInt(Name,"WayPoints");
+			ThisDef.Data.Flip=0;
+			ThisDef.Data.Angle=0;
 
 			LoadDefThing(Name,ThisDef);
 			ThisDef.XY.resize(1);
@@ -249,7 +264,10 @@ int			ListSize=ThisThing.XY.size();
 					glColor4f(1,1,1,1);									// Set default Color
 					glEnable(GL_DEPTH_TEST);
 					glTranslatef(0,0,ScrOfs.z);
-					ThingBank->RenderElem(ThisThing.ElemID,0,0,Render3d);
+					glPushMatrix();
+					glRotatef(ThisThing.Data.Angle,0,0,1);
+					ThingBank->RenderElem(ThisThing.ElemID,0,ThisThing.Data.Flip,Render3d);
+					glPopMatrix();
 					glDisable(GL_DEPTH_TEST);
 					glTranslatef(0,0,-ScrOfs.z);
 					if (Selected)
@@ -421,6 +439,31 @@ bool	Ret=false;
 
 		switch(CmdMsg)
 		{
+		case CmdMsg_MirrorX:
+			if (CanMirror())
+			if (CurrentThing!=-1)
+			{
+				ThingList[CurrentThing].Data.Flip^=PC_TILE_FLAG_MIRROR_X;
+			}
+			break;
+		case CmdMsg_MirrorY:
+			if (CanMirror())
+			if (CurrentThing!=-1)
+			{
+				ThingList[CurrentThing].Data.Flip^=PC_TILE_FLAG_MIRROR_Y;
+			}
+			break;
+		case CmdMsg_Rotate:
+			if (CanRotate())
+			if (CurrentThing!=-1)
+			{
+				ThingList[CurrentThing].Data.Angle+=90;
+				if (ThingList[CurrentThing].Data.Angle>359)
+				{
+					ThingList[CurrentThing].Data.Angle=0;
+				}
+			}
+			break;
 		case CmdMsg_ThingListDelete:
 			DeleteThing();
 			break;

@@ -28,12 +28,13 @@ enum	CmdMsg
 		CmdMsg_SubViewUpdate,		// 15
 		CmdMsg_SubViewSet,			// 16
 
-// TileLayer/TileBank
+// Elem
 		CmdMsg_MirrorX,				// 17
 		CmdMsg_MirrorY,				// 18
-		CmdMsg_SetColFlag,			// 19
-		CmdMsg_ActiveBrushLeft,		// 20
-		CmdMsg_ActiveBrushRight,	// 21
+		CmdMsg_Rotate,				// 19
+		CmdMsg_SetColFlag,			// 20
+		CmdMsg_ActiveBrushLeft,		// 21
+		CmdMsg_ActiveBrushRight,	// 22
 
 // Thing
 		CmdMsg_ThingListDelete,		// 23

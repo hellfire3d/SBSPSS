@@ -35,9 +35,10 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	ON_COMMAND(ID_RESET_VIEW, OnResetView)
+	ON_COMMAND(ID_RENDER_TO_TGA, OnRenderToTga)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleSubView)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
-	ON_COMMAND(ID_RENDER_TO_TGA, OnRenderToTga)
+	ON_COMMAND(ID_ROTATE, OnRotate)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -189,6 +190,8 @@ void	CMapEditDoc::OnResetView()												{Command(CmdMsg_ResetView);}
 
 void	CMapEditDoc::OnMirrorx()												{Command(CmdMsg_MirrorX);}
 void	CMapEditDoc::OnMirrory()												{Command(CmdMsg_MirrorY);}
+void	CMapEditDoc::OnRotate()													{Command(CmdMsg_Rotate);}
+
 void	CMapEditDoc::OnEditCopy()												{Command(CmdMsg_Copy);}
 void	CMapEditDoc::OnEditPaste()												{Command(CmdMsg_Paste);}
 void	CMapEditDoc::OnActivebrushLeft()										{Command(CmdMsg_ActiveBrushLeft);}
@@ -296,4 +299,5 @@ void	CMapEditDoc::FocusView()
 }
 
 /*********************************************************************************/
+
 

@@ -131,6 +131,8 @@ BEGIN
         MENUITEM "Mirror &X",                   ID_MIRRORX
         MENUITEM "Mirror &Y",                   ID_MIRRORY
         MENUITEM SEPARATOR
+        MENUITEM "&Rotate",                     ID_ROTATE
+        MENUITEM SEPARATOR
         MENUITEM "View Left Brush",             ID_ACTIVEBRUSH_LEFT
         MENUITEM "View Right Brush",            ID_ACTIVEBRUSH_RIGHT
         MENUITEM SEPARATOR
@@ -171,6 +173,7 @@ BEGIN
     "G",            ID_TOGGLE_GRID,         VIRTKEY, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_ROTATE,              VIRTKEY, NOINVERT
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
     VK_ADD,         ID_ZOOM_IN,             VIRTKEY, NOINVERT
@@ -669,6 +672,8 @@ BEGIN
     PUSHBUTTON      "Water",IDC_LAYERCOLLISION_WATER,100,15,50,10
     PUSHBUTTON      "Solid",IDC_LAYERCOLLISION_SOLID,0,25,50,10
     PUSHBUTTON      "Death",IDC_LAYERCOLLISION_DEATH,50,25,50,10
+    PUSHBUTTON      "Destructable",IDC_LAYERCOLLISION_DESTRUCTABLE,100,25,50,
+                    10
 END
 
 IDD_ELEMLIST DIALOG DISCARDABLE  0, 0, 156, 26

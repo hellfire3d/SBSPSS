@@ -69,13 +69,13 @@ int			YPos=MapPos.vy>>MapXYShift;
 //			ShiftY=YPos & 15;
 			ShiftY=YPos%12;
 
-			if (MapXY.vx+SCREEN_TILE_WIDTH<=MapWidth)
-				RenderW=SCREEN_TILE_WIDTH;
+			if (MapXY.vx+SCREEN_TILE2D_WIDTH<=MapWidth)
+				RenderW=SCREEN_TILE2D_WIDTH;
 			else
 				RenderW=MapWidth-MapXY.vx;
 
-			if (MapXY.vy+SCREEN_TILE_HEIGHT<=MapHeight)
-				RenderH=SCREEN_TILE_HEIGHT;
+			if (MapXY.vy+SCREEN_TILE2D_HEIGHT<=MapHeight)
+				RenderH=SCREEN_TILE2D_HEIGHT;
 			else
 				RenderH=MapHeight-MapXY.vy;
 
@@ -120,10 +120,10 @@ sOT				*ThisOT=OtPtr+LayerOT;
 					addPrim(ThisOT,Ft4);
 					PrimPtr+=sizeof(POLY_FT4);
 				}
-				TileX+=TILE_WIDTH;
+				TileX+=TILE2D_WIDTH;
 			}
 			MapPtr+=MapWidth;
-			TileY+=TILE_HEIGHT;
+			TileY+=TILE2D_HEIGHT;
 		}
 		SetPrimPtr(PrimPtr);
 
@@ -163,10 +163,10 @@ sOT				*ThisOT=OtPtr+LayerOT;
 					PrimPtr+=sizeof(TSPRT_16);
 				}
 //				MapRow++;
-				TileX+=TILE_WIDTH;
+				TileX+=TILE2D_WIDTH;
 			}
 			MapPtr+=MapWidth;
-			TileY+=TILE_HEIGHT;
+			TileY+=TILE2D_HEIGHT;
 		}
 		SetPrimPtr(PrimPtr);
 
