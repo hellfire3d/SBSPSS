@@ -170,6 +170,10 @@ SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ExToolbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GLEnabledView.cpp
 # End Source File
 # Begin Source File
@@ -204,6 +208,10 @@ SOURCE=.\StdAfx.cpp
 # Begin Source File
 
 SOURCE=.\ChildFrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExToolbar.h
 # End Source File
 # Begin Source File
 

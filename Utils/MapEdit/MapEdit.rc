@@ -36,14 +36,14 @@ IDR_MAPEDITYPE          ICON    DISCARDABLE     "res\\MapEditDoc.ico"
 // Bitmap
 //
 
-IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
+IDR_TOOLBAR             BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Toolbar
 //
 
-IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
+IDR_TOOLBAR TOOLBAR DISCARDABLE  16, 15
 BEGIN
     BUTTON      ID_FILE_NEW
     BUTTON      ID_FILE_OPEN
@@ -59,6 +59,8 @@ BEGIN
     SEPARATOR
     BUTTON      ID_TOOLBAR_LAYERBAR
     BUTTON      ID_TOOLBAR_TILEPALETTE
+    SEPARATOR
+    BUTTON      ID_TOOLBAR_COMBO
 END
 
 
@@ -185,15 +187,6 @@ BEGIN
                     WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_TILEBAR DIALOGEX 0, 0, 186, 12
-STYLE WS_CHILD
-EXSTYLE WS_EX_TOOLWINDOW
-FONT 8, "MS Sans Serif"
-BEGIN
-    COMBOBOX        IDC_TILETOOLBAR_COMBO,0,0,170,14,CBS_DROPDOWNLIST | 
-                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
-END
-
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -216,8 +209,9 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904B0"
+        BLOCK "040904b0"
         BEGIN
+            VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "MapEdit MFC Application\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
@@ -225,8 +219,10 @@ BEGIN
             VALUE "LegalCopyright", "Copyright (C) 2000\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "MapEdit.EXE\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "MapEdit Application\0"
             VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -261,37 +257,8 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 85
     END
-
-    IDD_TILEBAR, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 179
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 5
-    END
 END
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog Info
-//
-
-IDD_TILEBAR DLGINIT
-BEGIN
-    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
-0x0031, 
-    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
-0x0032, 
-    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
-0x0033, 
-    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
-0x0034, 
-    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
-0x0035, 
-    0
-END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -435,6 +402,11 @@ BEGIN
     IDC_LAYERBAR_DOWN       "Move Layer Down List"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDC_TOOLBAR_COMBO       "TileSet Chooser\nWee Wee Wee"
+END
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -447,6 +419,40 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 #pragma code_page(1252)
 #endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TRASHHEAP DIALOG DISCARDABLE  0, 0, 186, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_TOOLBAR_COMBO,7,7,87,34,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_TRASHHEAP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

@@ -5,10 +5,11 @@
 #if !defined(AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_)
 #define AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_
 
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
+#include	"ExToolbar.h"
 
 class CMainFrame : public CMDIFrameWnd
 {
@@ -20,7 +21,7 @@ public:
 public:
 	CToolBar	*GetToolBar()	{return(&m_wndToolBar);}
 	CDialogBar	*GetLayerBar()	{return(&m_wndLayerBar);}
-	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
+//	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
 	CStatusBar	*GetStatusBar()	{return(&m_wndStatusBar);}
 // Operations
 public:
@@ -41,9 +42,9 @@ public:
 
 protected:  // control bar embedded members
 	CStatusBar	m_wndStatusBar;
-	CToolBar	m_wndToolBar;
+	CExToolBar	m_wndToolBar;
 	CDialogBar	m_wndLayerBar;
-	CDialogBar	m_wndTileBar;
+//	CDialogBar	m_wndTileBar;
 
 // Generated message map functions
 protected:

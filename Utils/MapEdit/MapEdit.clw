@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CAboutDlg
-LastTemplate=CDialog
+LastClass=CExToolBar
+LastTemplate=CToolBarCtrl
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=8
+ClassCount=9
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CListBoxEx
@@ -18,13 +18,16 @@ Class6=CAboutDlg
 Class7=CMapEditDoc
 Class8=CMapEditView
 
-ResourceCount=6
+ResourceCount=8
 Resource1=IDR_MAPEDITYPE (English (U.S.))
-Resource2=IDD_ABOUTBOX (English (U.S.))
+Resource2=IDD_TILEBAR (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDD_LAYERBAR (English (U.S.))
-Resource5=IDR_MAINFRAME (English (U.S.))
-Resource6=IDD_TILEBAR (English (U.S.))
+Resource4=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_ABOUTBOX (English (U.S.))
+Class9=CExToolBar
+Resource6=IDD_LAYERBAR (English (U.S.))
+Resource7=IDR_MAINFRAME (English (U.S.))
+Resource8=IDD_TRASHHEAP
 
 [CLS:CChildFrame]
 Type=0
@@ -91,21 +94,6 @@ VirtualFilter=VWC
 [DLG:IDD_ABOUTBOX]
 Type=1
 Class=CAboutDlg
-
-[TB:IDR_MAINFRAME (English (U.S.))]
-Type=1
-Class=?
-Command1=ID_FILE_NEW
-Command2=ID_FILE_OPEN
-Command3=ID_FILE_SAVE
-Command4=ID_EDIT_CUT
-Command5=ID_EDIT_COPY
-Command6=ID_EDIT_PASTE
-Command7=ID_FILE_PRINT
-Command8=ID_APP_ABOUT
-Command9=ID_TOOLBAR_LAYERBAR
-Command10=ID_TOOLBAR_TILEPALETTE
-CommandCount=10
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -191,4 +179,33 @@ Type=1
 Class=?
 ControlCount=1
 Control1=IDC_LAYERBAR_LIST,listbox,1352728833
+
+[TB:IDR_TOOLBAR (English (U.S.))]
+Type=1
+Class=?
+Command1=ID_FILE_NEW
+Command2=ID_FILE_OPEN
+Command3=ID_FILE_SAVE
+Command4=ID_EDIT_CUT
+Command5=ID_EDIT_COPY
+Command6=ID_EDIT_PASTE
+Command7=ID_FILE_PRINT
+Command8=ID_APP_ABOUT
+Command9=ID_TOOLBAR_LAYERBAR
+Command10=ID_TOOLBAR_TILEPALETTE
+Command11=ID_TOOLBAR_COMBO
+CommandCount=11
+
+[DLG:IDD_TRASHHEAP]
+Type=1
+Class=?
+ControlCount=1
+Control1=IDC_TOOLBAR_COMBO,combobox,1344340226
+
+[CLS:CExToolBar]
+Type=0
+HeaderFile=extoolbar.h
+ImplementationFile=extoolbar.cpp
+BaseClass=CToolBar
+LastObject=CExToolBar
 
