@@ -56,7 +56,7 @@
 
 CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 CPlayerStateTeeterIdle		s_stateTeeterIdle;
-CPlayerStateCoralBlowerIdle	s_stateCoralBlowerIdle;
+CPlayerStateWeaponIdle		s_stateWeaponIdle;
 
 
 /*----------------------------------------------------------------------
@@ -257,8 +257,8 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								4	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								10	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								15	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								20	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
 
 };
@@ -280,22 +280,22 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static IdleAnims s_coralBlowerIdleAnims[]=
+static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								4	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								10	},
-//	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								15	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								20	},
+	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,		-1,								1	},
 };
-static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
-IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)
+static int s_numWeaponIdleAnims=sizeof(s_weaponIdleAnims)/sizeof(IdleAnims);
+IdleAnims *CPlayerStateWeaponIdle::getIdleAnimsDb(int _animNo)
 {
 	ASSERT(_animNo<getNumIdleAnims());
-	return &s_coralBlowerIdleAnims[_animNo];
+	return &s_weaponIdleAnims[_animNo];
 }
-int CPlayerStateCoralBlowerIdle::getNumIdleAnims()
+int CPlayerStateWeaponIdle::getNumIdleAnims()
 {
-	return s_numCoralBlowerIdleAnims;
+	return s_numWeaponIdleAnims;
 }
 
 

@@ -80,8 +80,8 @@
 
 static	CPlayerState	*s_stateTable[]=
 {
-	&s_stateCoralBlowerIdle,				// STATE_IDLE
-	&s_stateCoralBlowerIdle,				// STATE_IDLETEETER
+	&s_stateWeaponIdle,						// STATE_IDLE
+	&s_stateWeaponIdle,						// STATE_IDLETEETER
 	&s_stateJump,							// STATE_JUMP
 	&s_stateWalk,							// STATE_RUN
 	&s_stateFall,							// STATE_FALL

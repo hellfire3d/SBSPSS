@@ -94,7 +94,7 @@ private:
 };
 
 
-class CPlayerStateCoralBlowerIdle : public CPlayerStateIdle
+class CPlayerStateWeaponIdle : public CPlayerStateIdle
 {
 private:
 	virtual IdleAnims	*getIdleAnimsDb(int _animNo);
@@ -109,7 +109,7 @@ private:
 
 extern	CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 extern	CPlayerStateTeeterIdle		s_stateTeeterIdle;
-extern	CPlayerStateCoralBlowerIdle	s_stateCoralBlowerIdle;
+extern	CPlayerStateWeaponIdle		s_stateWeaponIdle;
 
 
 /*----------------------------------------------------------------------
