@@ -58,6 +58,12 @@ private:
 	} BOSS_DATA;
 	static const BOSS_DATA	s_bossData[];
 
+	enum
+	{
+		INSTRUCTIONS_Y_POS=215,
+		INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=2,
+		INSTRUCTIONS_BUTTON_Y_OFFSET=3,
+	};
 
 	class FontBank			*m_fontBank;
 	class ScalableFontBank	*m_scalableFontBank;

@@ -254,24 +254,23 @@ void	CBossText::render()
 	sFrameHdr		*fh1,*fh2;
 	int				width;
 
-	y=210;
+	m_fontBank->setJustification(FontBank::JUST_LEFT);
 
-	y+=13;
 	fh1=sb->getFrameHeader(FRM__BUTX);
-	width=fh1->W+10+m_fontBank->getStringWidth(STR__BOSS__CROSS_BUTTON);
-	x=256-(width/2);
-	sb->printFT4(fh1,x,y+3,0,0,0);
-	x+=fh1->W+10;
-	m_fontBank->print(x,y,STR__BOSS__CROSS_BUTTON);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__CROSS_BUTTON);
+	x=128-(width/2);
+	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__CROSS_BUTTON);
 
-	y+=13;
 	fh1=sb->getFrameHeader(FRM__BUTT);
-	width=fh1->W+10+m_fontBank->getStringWidth(STR__BOSS__TRIANGLE_BUTTON);
-	x=256-(width/2);
-	sb->printFT4(fh1,x,y+3,0,0,0);
-	x+=fh1->W+10;
-	m_fontBank->print(x,y,STR__BOSS__TRIANGLE_BUTTON);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__TRIANGLE_BUTTON);
+	x=256+128-(width/2);
+	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__TRIANGLE_BUTTON);
 
+	m_fontBank->setJustification(FontBank::JUST_CENTRE);
 }
 
 /*----------------------------------------------------------------------

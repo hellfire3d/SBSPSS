@@ -212,12 +212,11 @@ void 	CGameScene::init()
 		m_HealthManager= new ("Health Manager") CHealthManager();
 		m_HealthManager->init();
 
-		m_bossText->init();
-
 		s_readyToExit=false;
 		s_restartLevel=false;
 
 		m_bossText=new ("BossText") CBossText();
+		m_bossText->init();
 
 		CFader::setFadingIn();
 		CLevel::setIsBossRespawn(false);
@@ -749,6 +748,7 @@ void	CGameScene::initLevel()
 	m_musicStarted=false;
 	SetPadRescan();
 
+	StopLoad();
 	SYSTEM_DBGMSG("InitLevelDone\n");
 }
 
