@@ -173,6 +173,8 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_OILDRUM_PLATFORM:
+		case NPC_CRATE_PLATFORM:
 		case NPC_FALLING_PLATFORM:
 		{
 			platform = new ("falling platform") CNpcFallingPlatform;
