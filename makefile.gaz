@@ -273,25 +273,26 @@ player_src :=		demoplay \
 					pmodes \
 					pmbloon \
 					pmbubble \
+					pmcart \
 					pmchop \
 					pmcoral \
 					pmdead \
 					pmfly \
 					pmjelly \
 					pmnet \
-					pmcart \
 					psbutt \
-					pslook \
+					pscart \
+					psdance \
 					psduck \
 					psfall \
+					psfloat \
 					pshitgnd \
 					psidle \
 					psjmpbck \
 					psjump \
+					pslook \
 					psrun \
-					psspring \
-					pscart \
-					psfloat
+					psspring
 
 save_src :=			save
 

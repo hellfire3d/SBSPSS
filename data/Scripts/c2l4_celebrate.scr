@@ -1,0 +1,17 @@
+#include	data/scripts/defs/defs.scr
+
+#include	data/scripts/defs/charanim.scr
+#include	data/scripts/defs/items.scr
+#include	data/scripts/defs/response.scr
+#include	data/scripts/defs/trans.scr
+
+
+_setText(CHAR_SPONGEBOB,STR__INGAME__CH2__L4__SBCELEBRATE);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+stop;

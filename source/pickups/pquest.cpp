@@ -189,7 +189,7 @@ void	CQuestItemPickup::collect(class CPlayer *_player)
   ---------------------------------------------------------------------- */
 void	CQuestItemPickup::collidedWith(CThing *_thisThing)
 {
-	if(!m_hiddenUntilBossDead)
+	if(!m_hiddenUntilBossDead&!m_collected)
 	{
 		switch(_thisThing->getThingType())
 		{
@@ -197,7 +197,7 @@ void	CQuestItemPickup::collidedWith(CThing *_thisThing)
 //				collect((CPlayer*)_thisThing);
 				CSoundMediator::playSfx(sfxToPlayWhenCollected());
 				m_collected=true;
-				((CPlayer*)_thisThing)->setCanExitLevelNow();
+				((CPlayer*)_thisThing)->collectedQuestItem();
 				break;
 
 			case TYPE_NPC:

@@ -50,6 +50,28 @@ scripts/fma_ch6_03.dat
 
 scripts/fma_plankton.dat
 
+scripts/c1l1_celebrate.dat
+scripts/c1l2_celebrate.dat
+scripts/c1l3_celebrate.dat
+scripts/c1l4_celebrate.dat
+scripts/c2l1_celebrate.dat
+scripts/c2l2_celebrate.dat
+scripts/c2l3_celebrate.dat
+scripts/c2l4_celebrate.dat
+scripts/c3l1_celebrate.dat
+scripts/c3l2_celebrate.dat
+scripts/c3l3_celebrate.dat
+scripts/c3l4_celebrate.dat
+scripts/c4l1_celebrate.dat
+scripts/c4l2_celebrate.dat
+scripts/c4l3_celebrate.dat
+scripts/c4l4_celebrate.dat
+scripts/c5l1_celebrate.dat
+scripts/c5l2_celebrate.dat
+scripts/c5l3_celebrate.dat
+scripts/c5l4_celebrate.dat
+
+
 translations/swe.dat
 translations/dut.dat
 translations/ita.dat

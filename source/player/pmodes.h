@@ -97,6 +97,7 @@ public:
 
 	virtual int		setState(int _state)				{return 0;}
 	virtual int		getState()							{return STATE_IDLE;}			// ARSE.. states need to go back in CPlayer! (pkg)
+	int				getHeightFromGound();
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
@@ -173,6 +174,7 @@ public:
 	void						spring();
 	void						jumpback();
 	void						fall();
+	void						fallToDance();
 	void						buttFall();
 
 	int							getSpringHeight()		{return m_springHeight;}

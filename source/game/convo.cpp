@@ -110,12 +110,12 @@ const sSpeechTable	SpeechTable[]=
 {SPEECH_010,STR__INGAME__CH1__L1__SPONGEY1},
 {SPEECH_011,STR__INGAME__CH1__L1__SQUIDWARD1},
 {SPEECH_012,STR__INGAME__CH1__L1__SQUIDWARD2},
-{SPEECH_013,-1},
+{SPEECH_013,STR__INGAME__CH1__L1__SBCELEBRATE},
 {SPEECH_014,STR__INGAME__CH1__L2__SANDY1},
 {SPEECH_015,STR__INGAME__CH1__L2__SANDY2},
 {SPEECH_016,STR__INGAME__CH1__L2__SANDY3},
-{SPEECH_017,-1},
-{SPEECH_018,-1},
+{SPEECH_017,STR__INGAME__CH1__L2__SBCELEBRATE},
+{SPEECH_018,STR__INGAME__CH1__L3__SBCELEBRATE},
 {SPEECH_019,STR__INGAME__CH1__L4__KRUSTY1},
 {SPEECH_020,STR__INGAME__CH1__L4__KRUSTY2},
 {SPEECH_021,STR__INGAME__FMA_C2_MM_ZZZ},
@@ -127,42 +127,42 @@ const sSpeechTable	SpeechTable[]=
 {SPEECH_027,STR__INGAME__CH2__L1__KRUSTY2},
 {SPEECH_028,-1},
 {SPEECH_029,-1},	// Another Meow
-{SPEECH_030,-1},
+{SPEECH_030,STR__INGAME__CH2__L1__SBCELEBRATE},
 {SPEECH_031,STR__INGAME__CH2__L2__PATRICK1},
 {SPEECH_032,STR__INGAME__CH2__L2__PATRICK2},
-{SPEECH_033,-1},
-{SPEECH_034,-1},
-{SPEECH_035,-1},
+{SPEECH_033,STR__INGAME__CH2__L2__SBCELEBRATE},
+{SPEECH_034,STR__INGAME__CH2__L3__SBCELEBRATE},
+{SPEECH_035,STR__INGAME__CH2__L4__SBCELEBRATE},
 {SPEECH_036,STR__INGAME__FMA_C3_SB0},
 {SPEECH_037,-1},
 {SPEECH_038,STR__INGAME__FMA_C3_SB1},
 {SPEECH_039,STR__INGAME__FMA_C3_BB1},
 {SPEECH_040,STR__INGAME__FMA_C3_SB2},
 {SPEECH_041,STR__INGAME__FMA_PLANKTON},
-{SPEECH_042,-1},
-{SPEECH_043,-1},
+{SPEECH_042,STR__INGAME__CH3__L1__SBCELEBRATE},
+{SPEECH_043,STR__INGAME__CH3__L2__SBCELEBRATE},
 {SPEECH_044,STR__INGAME__CH3__L3__PATRICK1},
 {SPEECH_045,STR__INGAME__CH3__L3__PATRICK2},
-{SPEECH_046,-1},
-{SPEECH_047,-1},
+{SPEECH_046,STR__INGAME__CH3__L3__SBCELEBRATE},
+{SPEECH_047,STR__INGAME__CH3__L4__SBCELEBRATE},
 {SPEECH_048,STR__INGAME__FMA_C4_SB0},
 {SPEECH_049,STR__INGAME__FMA_C4_MM_GASP},
 {SPEECH_050,STR__INGAME__FMA_C4_BB_GASP},
 {SPEECH_051,STR__INGAME__FMA_C4_SB1},
 {SPEECH_052,STR__INGAME__FMA_C4_BB0},
-{SPEECH_053,-1},
-{SPEECH_054,-1},
+{SPEECH_053,STR__INGAME__CH4__L1__SBCELEBRATE},
+{SPEECH_054,STR__INGAME__CH4__L2__SBCELEBRATE},
 {SPEECH_055,STR__INGAME__CH4__L3__KRUSTY1},
 {SPEECH_056,STR__INGAME__CH4__L3__KRUSTY2},
-{SPEECH_057,-1},
-{SPEECH_058,-1},
+{SPEECH_057,STR__INGAME__CH4__L3__SBCELEBRATE},
+{SPEECH_058,STR__INGAME__CH4__L4__SBCELEBRATE},
 {SPEECH_059,STR__INGAME__FMA_C5_SB0},
 {SPEECH_060,STR__INGAME__FMA_C5_BB0},
 {SPEECH_061,STR__INGAME__FMA_C5_SB1},
-{SPEECH_062,},
-{SPEECH_063,},
-{SPEECH_064,},
-{SPEECH_065,},
+{SPEECH_062,STR__INGAME__CH5__L1__SBCELEBRATE},
+{SPEECH_063,STR__INGAME__CH5__L2__SBCELEBRATE},
+{SPEECH_064,STR__INGAME__CH5__L3__SBCELEBRATE},
+{SPEECH_065,STR__INGAME__CH5__L4__SBCELEBRATE},
 {SPEECH_066,STR__INGAME__FMA_C6_SB0},
 {SPEECH_067,STR__INGAME__FMA_C6_SB1},
 {SPEECH_068,STR__INGAME__FMA_C6_BB0},
@@ -745,6 +745,7 @@ void CConversation::registerConversationLevelScripts(int level)
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH1L1_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH1L1_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C1L1_CELEBRATE_DAT);
 					break;
 				}
 
@@ -753,6 +754,13 @@ void CConversation::registerConversationLevelScripts(int level)
 					CConversation::registerConversationScript(SCRIPTS_CH1L2_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH1L2_02_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH1L2_03_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C1L2_CELEBRATE_DAT);
+					break;
+				}
+
+				case 3:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C1L3_CELEBRATE_DAT);
 					break;
 				}
 
@@ -760,6 +768,7 @@ void CConversation::registerConversationLevelScripts(int level)
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH1L4_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH1L4_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C1L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -778,6 +787,7 @@ void CConversation::registerConversationLevelScripts(int level)
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH2L1_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH2L1_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C2L1_CELEBRATE_DAT);
 					break;
 				}
 
@@ -785,6 +795,19 @@ void CConversation::registerConversationLevelScripts(int level)
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH2L2_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH2L2_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C2L2_CELEBRATE_DAT);
+					break;
+				}
+
+				case 3:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C2L3_CELEBRATE_DAT);
+					break;
+				}
+				
+				case 4:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C2L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -799,16 +822,16 @@ void CConversation::registerConversationLevelScripts(int level)
 		{
 			switch ( CLevel::getCurrentChapterLevel() )
 			{
-// removed as this is an FMA script
-//				case 1:
-//				{
-//					CConversation::registerConversationScript(SCRIPTS_CH3L1_01_DAT);
-//					break;
-//				}
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C3L1_CELEBRATE_DAT);
+					break;
+				}
 
 				case 2:
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH3L2_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C3L2_CELEBRATE_DAT);
 					break;
 				}
 
@@ -816,6 +839,13 @@ void CConversation::registerConversationLevelScripts(int level)
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH3L3_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C3L3_CELEBRATE_DAT);
+					break;
+				}
+
+				case 4:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C3L4_CELEBRATE_DAT);
 					break;
 				}
 
@@ -830,10 +860,64 @@ void CConversation::registerConversationLevelScripts(int level)
 		{
 			switch ( CLevel::getCurrentChapterLevel() )
 			{
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C4L1_CELEBRATE_DAT);
+					break;
+				}
+
+				case 2:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C4L2_CELEBRATE_DAT);
+					break;
+				}
+
 				case 3:
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
 					CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_C4L3_CELEBRATE_DAT);
+					break;
+				}
+
+				case 4:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C4L4_CELEBRATE_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			break;
+		}
+
+		case 5:
+		{
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C5L1_CELEBRATE_DAT);
+					break;
+				}
+
+				case 2:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C5L2_CELEBRATE_DAT);
+					break;
+				}
+
+				case 3:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C5L3_CELEBRATE_DAT);
+					break;
+				}
+
+				case 4:
+				{
+					CConversation::registerConversationScript(SCRIPTS_C5L4_CELEBRATE_DAT);
 					break;
 				}
 

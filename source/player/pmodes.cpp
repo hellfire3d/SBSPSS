@@ -82,7 +82,15 @@
 #include "platform\platform.h"
 #endif
 
-#include	"game/game.h"
+#ifndef __PLAYER_PSDANCE_H__
+#include "player\psdance.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game/game.h"
+#endif
+
+
 /*	Std Lib
 	------- */
 
@@ -133,6 +141,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateJumpBack,						// STATE_JUMPBACK
 	&s_stateCart,							// STATE_CART
 	&s_stateFloat,							// STATE_FLOAT
+	&s_stateDance,							// STATE_CELEBRATE
 };
 
 static	PlayerMetrics	s_playerMetrics=
@@ -161,6 +170,18 @@ static	PlayerMetrics	s_playerMetrics=
   ---------------------------------------------------------------------- */
 int		CPlayerMode::getPadInputHeld()					{return m_player->getPadInputHeld();}
 int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayerMode::getHeightFromGound()
+{
+	DVECTOR	pos=getPlayerPos();
+	return m_player->getHeightFromGround(pos.vx,pos.vy);
+}
 
 
 /*----------------------------------------------------------------------
@@ -311,7 +332,8 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	{
 		DVECTOR	pos;
 
-		playerHasHitGround();
+		if(m_currentState!=STATE_CELEBRATE)
+			playerHasHitGround();
 		pos=m_player->getPlayerPos();
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
 		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP&&
@@ -325,7 +347,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
 			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP&&
 			m_currentState!=STATE_JUMPBACK&&m_currentState!=STATE_BUTTBOUNCEUP&&
-			m_currentState!=STATE_FLOAT)
+			m_currentState!=STATE_FLOAT&&m_currentState!=STATE_CELEBRATE)
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();
@@ -694,6 +716,23 @@ void	CPlayerModeBase::fall()
 				setState(STATE_FALLFAR);
 			}
 		}
+	}
+	setMoveVelocity(&moveVel);
+	m_player->fall();
+}
+// whatever..
+void	CPlayerModeBase::fallToDance()
+{
+	const PlayerMetrics	*metrics;
+	DVECTOR				moveVel;
+
+	metrics=getPlayerMetrics();
+	moveVel=*m_player->getMoveVelocity();
+
+	moveVel.vy+=getPlayerMetrics()->m_metric[PM__GRAVITY];
+	if(moveVel.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+	{
+		moveVel.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
 	}
 	setMoveVelocity(&moveVel);
 	m_player->fall();

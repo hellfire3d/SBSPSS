@@ -771,7 +771,8 @@ if(newmode!=-1)
 #ifdef __USER_paul__
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
-	CSoundMediator::setVolume(CSoundMediator::VOL_SONG,0);
+//	CSoundMediator::setVolume(CSoundMediator::VOL_SONG,0);
+	m_currentPlayerModeClass->setState(STATE_CELEBRATE);
 }
 #endif
 ///
@@ -2145,6 +2146,17 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 			}
 		}
 	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::collectedQuestItem()
+{
+	m_currentPlayerModeClass->setState(STATE_CELEBRATE);
 }
 
 /*----------------------------------------------------------------------

@@ -82,6 +82,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef __PLAYER_PSDANCE_H__
+#include "player\psdance.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -137,6 +141,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateJumpBack,						// STATE_JUMPBACK
 	NULL,									// STATE_CART
 	NULL,									// STATE_FLOAT
+	&s_stateDance,							// STATE_CELEBRATE
 };
 
 

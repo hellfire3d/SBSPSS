@@ -38,6 +38,8 @@ public:
 	void			enter(class CPlayerModeBase *_playerMode);
 	void			think(class CPlayerModeBase *_playerMode);
 
+private:
+	int				m_hitGround;
 };
 
 

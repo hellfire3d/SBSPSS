@@ -366,6 +366,57 @@ eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
 
 
 ; ---------------------------------------------------------------
+; End of level celebration text
+; ---------------------------------------------------------------
+[STR__INGAME__CH1__L1__SBCELEBRATE]
+eng=Yippee... Now to find the Jar of Sea-Nut Butter
+[STR__INGAME__CH1__L2__SBCELEBRATE]
+eng=Yippee... Now to find the Kelp Lettuce...... Off to Fish Hooks Park
+[STR__INGAME__CH1__L3__SBCELEBRATE]
+eng=Now to find the Bread. But where? I know! Bikini Bottom has loads of bread!  
+[STR__INGAME__CH1__L4__SBCELEBRATE]
+eng= 
+
+[STR__INGAME__CH2__L1__SBCELEBRATE]
+eng=Yippee... Now to find the Loofah...... That has to be in Thermal Tunnels
+[STR__INGAME__CH2__L2__SBCELEBRATE]
+eng=Now to find the Mud Pack.... off to those nasty Acrid Air Pockets, better make sure I'm nice and moist!
+[STR__INGAME__CH2__L3__SBCELEBRATE]
+eng=Now to find the False Teeth.... only in the lava fields, better pack some ice - it's gonna be a hot one!
+[STR__INGAME__CH2__L4__SBCELEBRATE]
+eng=Right! Now back to Mermaid Man to receive my new orders!!!
+
+[STR__INGAME__CH3__L1__SBCELEBRATE]
+eng=Now to find the Scallop Bra, the only place is Desert Wasteland. But what if I get stuck in quicksand? Like that's gonna happen.
+[STR__INGAME__CH3__L2__SBCELEBRATE]
+eng=Now to find the a pair of Shell slippers..... and in to Kelp Jungle!
+[STR__INGAME__CH3__L3__SBCELEBRATE]
+eng=Uh Oh, those plants are moving! They're not trees....... Hellllllllppppppp!
+[STR__INGAME__CH3__L4__SBCELEBRATE]
+eng=Right, lets get out of here and back to shady shoals!!. What is that smell!!
+
+[STR__INGAME__CH4__L1__SBCELEBRATE]
+eng=Tartar sauce! It ate my coin. Double Tartar sauce, it's  empty!!
+[STR__INGAME__CH4__L2__SBCELEBRATE]
+eng=This one is empty too?? They really should refill them more often... or at least once....
+[STR__INGAME__CH4__L3__SBCELEBRATE]
+eng=This one too? Who could be eating all these Kandy bars...?
+[STR__INGAME__CH4__L4__SBCELEBRATE]
+eng=I've got a kandy bar for my favorite Super hero!
+
+[STR__INGAME__CH5__L1__SBCELEBRATE]
+eng=Right, now to find an aerial????????
+[STR__INGAME__CH5__L2__SBCELEBRATE]
+eng=I need to find an oil can, but the only place is that abandoned oil rig. Hmmmm. That gives me an idea.
+[STR__INGAME__CH5__L3__SBCELEBRATE]
+eng=Now, I need a monkey wrench!!!
+[STR__INGAME__CH5__L4__SBCELEBRATE]
+eng=I got it! Well, celebration time is over! Now back to Bikini Bottom to add the finishing touches for my Birthday surprise
+
+
+
+
+; ---------------------------------------------------------------
 ; Pause menu
 ; ---------------------------------------------------------------
 

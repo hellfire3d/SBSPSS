@@ -87,6 +87,7 @@ typedef enum
 	STATE_JUMPBACK,
 	STATE_CART,
 	STATE_FLOAT,
+	STATE_CELEBRATE,
 
 	NUM_STATES,
 }PLAYER_STATE;
@@ -293,6 +294,7 @@ public:
 	void			respawn();
 	void			setCanExitLevelNow()								{m_canExitLevel=true;}
 	int				getCanExitLevelNow()								{return m_canExitLevel;}
+	void			collectedQuestItem();
 
 	int				getLivesLeft()										{return m_lives;}
 
@@ -452,7 +454,6 @@ public:
 	void			resetPlayerCollisionSizeToBase();
 	void			setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 	void			getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h);
-
 
 
 

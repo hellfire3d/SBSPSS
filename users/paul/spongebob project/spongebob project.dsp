@@ -1770,6 +1770,87 @@ SOURCE=..\..\..\source\platform\ptrpdoor.h
 # Begin Group "modes"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbloon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbloon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmchop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmchop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcoral.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcoral.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmdead.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmdead.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmfly.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmfly.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmjelly.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmjelly.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmnet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmnet.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmodes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmodes.h
+# End Source File
+# End Group
 # Begin Group "states"
 
 # PROP Default_Filter ""
@@ -1788,6 +1869,14 @@ SOURCE=..\..\..\source\player\pscart.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pscart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psdance.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psdance.h
 # End Source File
 # Begin Source File
 
@@ -1872,87 +1961,6 @@ SOURCE=..\..\..\source\player\psspring.h
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pstates.h
-# End Source File
-# End Group
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmbloon.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmbloon.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmbubble.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmbubble.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmcart.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmcart.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmchop.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmchop.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmcoral.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmcoral.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmdead.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmdead.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmfly.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmfly.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmjelly.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmjelly.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmnet.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmnet.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmodes.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmodes.h
 # End Source File
 # End Group
 # Begin Source File
