@@ -107,8 +107,6 @@ SpriteBank		*CGameScene::s_GlobalSpritebank;
 CLayerCollision	*CGameScene::s_GlobalCollision;
 CHealthManager	*CGameScene::m_HealthManager;
 
-MATRIX			CGameScene::CamMtx;
-
 /*****************************************************************************/
 CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
 {
@@ -186,9 +184,11 @@ CGameScene	GameScene;
 void 	CGameScene::init()
 {
 // Setup Constant Camera Matrix
-		SetIdentTrans(&CamMtx,0,0,RenderZ);
-		SetGeomScreen(RenderZ);
-		SetTransMatrix(&CamMtx);		
+//		SetIdentTrans(&CamMtx,0,0,RenderZ);
+//		SetGeomScreen(RenderZ);
+//		SetTransMatrix(&CamMtx);		
+
+		setCameraMtx();
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
@@ -336,10 +336,11 @@ void CGameScene::render_playing()
 		CConversation::render();
 		CThingManager::renderAllThings();
 
-		SetIdentTrans(&CamMtx,0,0,RenderZ);
-		SetGeomScreen(RenderZ);
-		SetRotMatrix(&CamMtx);
-		SetTransMatrix(&CamMtx);
+		setCameraMtx();
+//		SetIdentTrans(&CamMtx,0,0,RenderZ);
+//		SetGeomScreen(RenderZ);
+//		SetRotMatrix(&CamMtx);
+//		SetTransMatrix(&CamMtx);
 
 		Level.render();
 		m_HealthManager->render();
@@ -763,5 +764,16 @@ void	CGameScene::thinkCameraShake(int _frames)
 			s_CamShake.vy=-(s_CamShake.vy-1);
 		}
 	}
+
+}
+
+/*****************************************************************************/
+void	CGameScene::setCameraMtx()
+{
+MATRIX			CamMtx;
+		SetIdentTrans(&CamMtx,0,0,RenderZ);
+		SetGeomScreen(RenderZ);
+		SetRotMatrix(&CamMtx);
+		SetTransMatrix(&CamMtx);
 
 }

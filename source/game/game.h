@@ -57,8 +57,6 @@ static void				restartlevel()		{s_restartLevel=true;}
 		CLevel			&GetLevel()			{return(Level);}
 
 
-
-//		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 
 static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
@@ -70,6 +68,8 @@ static	void			dropHealth(DVECTOR &Pos,int Amount,int Vel);
 static	void			setCameraShake(s16 X,s16 Y);
 static	void			shakeCamera(DVECTOR &CamPos);
 		void			thinkCameraShake(int _frames);
+
+static	void			setCameraMtx();
 private:
 	typedef enum
 	{
@@ -109,7 +109,6 @@ class	CPlayer			*m_player;
 static	CHealthManager	*m_HealthManager;
 static	FontBank		*s_genericFont;
 		class ScalableFontBank	*m_scalableFont;
-static	MATRIX			CamMtx;
 
 static int				s_restartLevel;
 static int				s_readyToExit;
