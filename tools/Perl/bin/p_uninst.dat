@@ -1,0 +1,17 @@
+$app_name = 'ActivePerl';
+$is_uninstall_string = 'C:\\WINNT\\uninst.exe -fC:\\Perl\\DeIsL1.isu';
+$path_info = [
+               'C:\\Perl\\bin'
+             ];
+$iis_virt_dir = [];
+$iis_script_map = {};
+$ns_config_dir = undef;
+$lines_in_file = {};
+$directory = [
+               'C:\\Perl\\html\\lib'
+             ];
+$file = [
+          'C:\\Perl\\bin\\ppm.bat',
+          'C:\\Perl\\bin\\perlse.pl',
+          'C:\\Perl\\bin/p_uninst.dat'
+        ];

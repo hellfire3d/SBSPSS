@@ -1,0 +1,24 @@
+#!/bin/sh
+
+usage="Usage: $0 [OPTION]...
+Exit unsucessfully.
+
+  --help      display this help and exit
+  --version   output version information and exit
+
+Report bugs to sh-utils-bugs@gnu.ai.mit.edu"
+
+case $# in
+  1 )
+    case "z${1}" in
+      z--help )
+	 echo "$usage"; exit 0 ;;
+      z--version )
+	 echo "false (GNU sh-utils) 1.16"; exit 0 ;;
+      * ) ;;
+    esac
+    ;;
+  * ) ;;
+esac
+
+exit 1

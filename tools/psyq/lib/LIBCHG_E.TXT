@@ -1,0 +1,141 @@
+$PSDocId: Document Release 1.0 for Run-time Library Release 4.6$
+                                                            July, 1999
+
+                                        PlayStation(R) Programmer Tool
+                                           Runtime Library Release 4.6
+
+                             Library Changes, New Additions, and Known
+                                                      from Release 4.5
+----------------------------------------------------------------------
+               Copyright(C) 1997-1999 Sony Computer Entertainment Inc.
+                                                  All Rights Reserved.
+----------------------------------------------------------------------
+
+Known Bugs and Cautions
+----------------------------------------------------------------------
+< Addition of noprint Module >
+- A module to controll the library debug message display, noprint.obj,
+  has been added.  With this module, all the printf()/puts() output
+  used with the library and the program can be controlled.
+
+< Limitations on the HMD Library > 
+- The environment map is provided as a Beta version, because the 
+  format may change in future release without keeping compatibility.
+
+  The Beta-version primitives are not officially supported by SCE at
+  the moment. If you wish to use them for creating titles, please do
+  so on your own responsibility.
+
+< Limitations on Memory Card GUI Module >
+- At the moment, the latest module cannot be utilized for the
+  "CodeWarrior for PlayStation" of Metrowerks Inc. The module for the
+  "CodeWarrior for PlayStation" is planned to be downloaded from the
+  SCE-NET when it is available.
+
+< Limitations on Extended Sound Library >
+- In the Extended Sound Library, noise is not produced properly.
+  Thererfore, when using noise, please use the Basic Sound Libraby
+  (libspu).
+
+All products and company names mentioned herein are the registered 
+trademarks or trademarks of their respective owners.
+
+
+SDevTC Tools
+----------------------------------------------------------------------
+< Files Changed >
+pssn\readme_j.txt             Updated
+pssn\bin\asmpsx.exe           Updated
+pssn\bin\cpppsx.exe           Updated
+pssn\bin\dos\cpppsx.exe       Updated
+pssn\bin\dbugpsx.exe          Updated
+pssn\windbg\dset95_j.txt      Updated
+pssn\windbg\dsetNT_j.txt      Updated
+pssn\windbg\dbgman_j.txt      Updated
+
+< Files Added >
+pssn\windbg\sndbg251.exe      SN Debugger for Windows Ver.2.5 package
+
+
+< Files Deleted >
+pssn\windbg\psx1604.exe       SN Debugger for Windows Ver.2.4 package
+
+
+Standard C Library (libc/libc2)
+----------------------------------------------------------------------
+< Function Specification Changes >
+- A type qualifier, const, has been added to the following prototype 
+  statements:  stdio.h, stdlib.h, convert.h, memory.h, strings.h.
+
+
+Memory Card Library (libcard)
+----------------------------------------------------------------------
+< Library Bug Fix >
+- _card_format() was not able to return the correct value.
+  This problem has been fixed.
+
+
+Basic Graphics Library (libgpu)
+----------------------------------------------------------------------
+< Functions Added >
+- setDrawMode(), the macro version of SetDrawMode(), has been added.
+
+< Library Bug Fix >
+- With GetDrawEnv2() which gets the current drawing environment, it
+  was unable to get the value set in DR_STP.  This problem has been
+  fixed.
+
+
+Extended Graphics Library (libgs)
+----------------------------------------------------------------------
+< Library Bug Fix >
+- Using automatic division in TMD resulted in the specified
+  Semi-transparent flag within the TMD data be invalid.  This problem has
+  been fixed.
+
+
+Extended Memory Card Library (libmcrd)
+----------------------------------------------------------------------
+< Library Bug Fix >
+- An Error Retry malfunction of MemCardReadData() and
+  MemCardWriteData() has been fixed.
+
+
+PDA Library (libmcx)
+----------------------------------------------------------------------
+< Library Bug Fix >
+- When the second argument of McxSync() was zero, the memory address
+  0 was rewritten unintentionally.  This problem has been fixed.
+
+
+Data Compression Library  (libpress)
+----------------------------------------------------------------------
+< Functions Added >
+- SPU ADPCM Encorder EncSPU2(), the better sound quality version of
+  EncSPU(), has been added.
+
+
+Extended Sound Library (libsnd)
+----------------------------------------------------------------------
+< Library Bug Fix >
+- Allowing sound effects volume be changed automatically resulted in
+  the incorrect change during SEQ/SEP data playback.  This problem has
+  been fixed.
+
+- Specifying 0 to delta_time, the argument of SsUtAutoVol(), resulted
+  in a zero divide error.  This problem has been fixed.
+
+- If SsUtAutoVol() and SsUtAutoPan() were concurrently used for sound
+  effects, volume and panning were not correctly changed.  This
+  problem has been fixed. 
+
+
+MEMORY CARD GUI module (mcgui)
+----------------------------------------------------------------------
+< Function Specification Changes >
+- MEMORY CARD GUI module (mcgui) has been changed to be a PAL-compatible.
+
+< Library Bug Fix >
+- Despite a flag was set not to use a mouse, if the mouse was inserted
+  into the console, the cursor appeared on the screen.  This problem
+  has been fixed.
