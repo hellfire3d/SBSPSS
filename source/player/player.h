@@ -177,6 +177,10 @@ public:
 	int				getAnimFrameCount();
 	int				getAnimNo();
 	void			setAnimNo(int _animNo);
+private:
+	void			playAnimFrameSfx(int _animNo,int _animFrame);
+
+public:
 	DVECTOR			getPlayerPos()										{return Pos;}
 	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
@@ -202,10 +206,12 @@ public:
 private:
 	typedef struct
 	{
+		int							m_animNumber;
 		int							m_numAnimFrameSfx;
 		const struct AnimFrameSfx	*m_animFrameSfx;
 	} AnimSfx;
 	static const AnimSfx	s_animSfx[];
+	static const int		s_numAnimSfx;
 	int				m_animFrame;
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;

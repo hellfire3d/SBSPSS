@@ -422,6 +422,9 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 				m_cameraLookOffset=0;
 			}
 		}
+
+		// Automatic anim sfx
+		playAnimFrameSfx(m_animNo,m_animFrame);
 	}
 
 	// Ledge look-ahead stuff
@@ -766,16 +769,61 @@ int CPlayer::getAnimFrame()
 }
 void CPlayer::setAnimFrame(int _animFrame)
 {
-	const AnimSfx	*sfx;
-
 	m_animFrame=_animFrame;
+}
+int CPlayer::getAnimFrameCount()
+{
+	return m_actorGfx->getFrameCount(m_animNo)<<sbanimspeed;
+}
+int CPlayer::getAnimNo()
+{
+	return m_animNo;
+}
+void CPlayer::setAnimNo(int _animNo)
+{
+	m_animNo=_animNo;
+	setAnimFrame(0);
+}
 
-	// Are there any sfx for this frame?
-	sfx=&s_animSfx[m_animNo];
-	if(sfx->m_numAnimFrameSfx)
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
+{
+	static int				lastAnimNo=-1;
+	static const AnimSfx	*sfx;
+
+	if(_animNo!=lastAnimNo)
+	{
+		// Lookup the new anim number and cache it for next time :)
+		int	i;
+		sfx=s_animSfx;
+		for(i=0;i<s_numAnimSfx;i++)
+		{
+			if(sfx->m_animNumber==_animNo)
+			{
+				break;
+			}
+			sfx++;
+		}
+		if(i==s_numAnimSfx)
+		{
+			// No sfx for this anim
+			sfx=NULL;
+		}
+		lastAnimNo=_animNo;
+	}
+
+	// Are there any sounds for this anim at this frame?
+	if(sfx)
 	{
 		const AnimFrameSfx	*frameSfx;
 		int					i;
+
+		ASSERT(sfx->m_numAnimFrameSfx);
 
 		frameSfx=sfx->m_animFrameSfx;
 		for(i=0;i<sfx->m_numAnimFrameSfx;i++)
@@ -799,19 +847,6 @@ void CPlayer::setAnimFrame(int _animFrame)
 			frameSfx++;
 		}
 	}
-}
-int CPlayer::getAnimFrameCount()
-{
-	return m_actorGfx->getFrameCount(m_animNo)<<sbanimspeed;
-}
-int CPlayer::getAnimNo()
-{
-	return m_animNo;
-}
-void CPlayer::setAnimNo(int _animNo)
-{
-	m_animNo=_animNo;
-	setAnimFrame(0);
 }
 
 

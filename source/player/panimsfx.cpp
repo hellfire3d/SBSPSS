@@ -6,6 +6,7 @@
 	Created: 
 	Project:	Spongebob
 	Purpose:	Handles automatically generated sound effects based upon anim frames
+				NB: DON'T FORGET TO CHANGE s_numAnimSfx!!!!!!!
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -24,6 +25,11 @@
 /*	Data
 	---- */
 
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -40,140 +46,100 @@
 	Vars
 	---- */
 
-	
+
+// ANIM_SPONGEBOB_BLOWBUBBLE
+static const CPlayer::AnimFrameSfx s_blowBubbleSfx[]=
+{
+	{	4,	CSoundMediator::SFX_BUBBLE_WAND,				},
+};
+static const int	s_blowBubbleCount=sizeof(s_blowBubbleSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 // ANIM_PLAYER_ANIM_BUTTBOUNCEEND
 static const CPlayer::AnimFrameSfx s_buttBounceEndSfx[]=
 {
-	{	1,	CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE,	},
+	{	0,	CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE,		},
 };
 static const int	s_buttBounceEndCount=sizeof(s_buttBounceEndSfx)/sizeof(CPlayer::AnimFrameSfx);
 
-// ANIM_PLAYER_ANIM_BUTTBOUNCESTART
-// ANIM_PLAYER_ANIM_DEATHBACKWARDS
-// ANIM_PLAYER_ANIM_DEATHDRY
-// ANIM_PLAYER_ANIM_DEATHFORWARDS
-// ANIM_PLAYER_ANIM_DEATHSPIN
-// ANIM_PLAYER_ANIM_DEATHTAR
-// ANIM_PLAYER_ANIM_ELECTRICSHOCK
-// ANIM_PLAYER_ANIM_ELECTRICSHOCKEND
-// ANIM_PLAYER_ANIM_ELECTRICSHOCKSTART
-
-// ANIM_PLAYER_ANIM_FACEBACK
-static const CPlayer::AnimFrameSfx s_faceBackSfx[]=
+// ANIM_SPONGEBOB_HITGROUND
+static const CPlayer::AnimFrameSfx s_hitGroundSfx[]=
 {
-	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
-	{	7,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
+	{	8,	CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL,	},
+	{	28,	CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL,	},
 };
-static const int	s_faceBackCount=sizeof(s_faceBackSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_FACEFRONT
-static const CPlayer::AnimFrameSfx s_faceFrontSfx[]=
-{
-	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
-	{	7,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
-};
-static const int	s_faceFrontCount=sizeof(s_faceFrontSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_FALL
-// ANIM_PLAYER_ANIM_GETUP
-// ANIM_PLAYER_ANIM_GETUPRUN
-// ANIM_PLAYER_ANIM_HITGROUND
-// ANIM_PLAYER_ANIM_HOVER
-// ANIM_PLAYER_ANIM_HOVEREND
-// ANIM_PLAYER_ANIM_HOVERSTART
-// ANIM_PLAYER_ANIM_IDLEBREATHE
-// ANIM_PLAYER_ANIM_IDLEHOOLA
-// ANIM_PLAYER_ANIM_IDLELOOK
-// ANIM_PLAYER_ANIM_IDLEWIGGLEARM
-
-// ANIM_PLAYER_ANIM_JUMPEND
-static const CPlayer::AnimFrameSfx s_jumpEndSfx[]=
-{
-	{	4,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
-	{	5,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
-};
-static const int	s_jumpEndCount=sizeof(s_jumpEndSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_KARATE			Might have to go into the CPlayerStateChop::enter code (PKG)
-static const CPlayer::AnimFrameSfx s_chopSfx[]=
-{
-	{	1,	CSoundMediator::SFX_SPONGEBOB_KARATE_1,		},
-};
-static const int	s_chopCount=sizeof(s_chopSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_RUN
-static const CPlayer::AnimFrameSfx s_runSfx[]=
-{
-	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
-	{	18,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
-};
-static const int	s_runCount=sizeof(s_runSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_RUNSTART
-
-// ANIM_PLAYER_ANIM_RUNSTOP
-static const CPlayer::AnimFrameSfx s_runStopSfx[]=
-{
-	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
-	{	18,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
-};
-static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSfx);
-
-// ANIM_PLAYER_ANIM_SOAKUP
-// ANIM_PLAYER_ANIM_TALK01
-// ANIM_PLAYER_ANIM_TEETERBACK
-// ANIM_PLAYER_ANIM_TEETERFRONT
+static const int	s_hitGroundCount=sizeof(s_hitGroundSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 // ANIM_PLAYER_ANIM_IDLEWIND
 static const CPlayer::AnimFrameSfx s_idleWindSfx[]=
 {
-	{	7,	CSoundMediator::SFX_HAZARD__SWAMP_GAS,		},
-	{	24,	CSoundMediator::SFX_SPONGEBOB_WALK_2,		},
+	{	12,	CSoundMediator::SFX_HAZARD__SWAMP_GAS,			},
+	{	28,	CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
 };
 static const int	s_idleWindCount=sizeof(s_idleWindSfx)/sizeof(CPlayer::AnimFrameSfx);
 
+// ANIM_PLAYER_ANIM_JUMPEND
+static const CPlayer::AnimFrameSfx s_jumpEndSfx[]=
+{
+	{	2,	CSoundMediator::SFX_SPONGEBOB_WALK_2			},
+	{	3,	CSoundMediator::SFX_SPONGEBOB_WALK_1			},
+};
+static const int	s_jumpEndCount=sizeof(s_jumpEndSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_PLAYER_ANIM_RUN
+static const CPlayer::AnimFrameSfx s_runSfx[]=
+{
+	{	3,	CSoundMediator::SFX_SPONGEBOB_WALK_1			},
+	{	11,	CSoundMediator::SFX_SPONGEBOB_WALK_2			},
+};
+static const int	s_runCount=sizeof(s_runSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_PLAYER_ANIM_RUNSTOP
+static const CPlayer::AnimFrameSfx s_runStopSfx[]=
+{
+	{	5,	CSoundMediator::SFX_SPONGEBOB_WALK_1			},
+	{	6,	CSoundMediator::SFX_SPONGEBOB_WALK_2			},
+};
+static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_WALK
+static const CPlayer::AnimFrameSfx s_walkSfx[]=
+{
+	{	8,	CSoundMediator::SFX_SPONGEBOB_WALK_1			},
+	{	15,	CSoundMediator::SFX_SPONGEBOB_WALK_2			},
+};
+static const int	s_walkCount=sizeof(s_walkSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_PLAYER_ANIM_KARATE
+static const CPlayer::AnimFrameSfx s_chopSfx[]=
+{
+	{	12,	CSoundMediator::SFX_SPONGEBOB_KARATE_1,			},
+};
+static const int	s_chopCount=sizeof(s_chopSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_SWIPE
+static const CPlayer::AnimFrameSfx s_swipeSfx[]=
+{
+	{	8,	CSoundMediator::SFX_SPONGEBOB_NET,				},
+};
+static const int	s_swipeCount=sizeof(s_swipeSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 
 
 // This is the table that ties up anims to sfx
-// CPlayer::setAnimFrame() uses this table to generate sfx based upon anim frames
-// NB: Don't use frame 0 in the AnimFrameSfx lists ot it'll play more than once
 const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 {
-	{	s_buttBounceEndCount,	s_buttBounceEndSfx		},		// ANIM_PLAYER_ANIM_BUTTBOUNCEEND
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_BUTTBOUNCESTART
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_DEATHBACKWARDS
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_DEATHDRY
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_DEATHFORWARDS
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_DEATHSPIN
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_DEATHTAR
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCK
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCKEND
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCKSTART
-	{	s_faceBackCount,		s_faceBackSfx			},		// ANIM_PLAYER_ANIM_FACEBACK
-	{	s_faceFrontCount,		s_faceFrontSfx			},		// ANIM_PLAYER_ANIM_FACEFRONT
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_FALL
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_GETUP
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_GETUPRUN
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_HITGROUND
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_HOVER
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_HOVEREND
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_HOVERSTART
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLEBREATHE
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLEHOOLA
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLELOOK
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLEWIGGLEARM
-	{	s_jumpEndCount,			s_jumpEndSfx			},		// ANIM_PLAYER_ANIM_JUMPEND
-	{	s_chopCount,			s_chopSfx				},		// ANIM_PLAYER_ANIM_KARATE
-	{	s_runCount,				s_runSfx				},		// ANIM_PLAYER_ANIM_RUN
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_RUNSTART
-	{	s_runStopCount,			s_runStopSfx			},		// ANIM_PLAYER_ANIM_RUNSTOP
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_SOAKUP
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK01
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERBACK
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERFRONT
-	{	s_idleWindCount,		s_idleWindSfx			},		// ANIM_PLAYER_ANIM_IDLEWIND
+	{	ANIM_SPONGEBOB_BLOWBUBBLE,		s_blowBubbleCount,		s_blowBubbleSfx			},
+	{	ANIM_SPONGEBOB_BUTTBOUNCEEND,	s_buttBounceEndCount,	s_buttBounceEndSfx		},
+	{	ANIM_SPONGEBOB_HITGROUND,		s_hitGroundCount,		s_hitGroundSfx			},
+	{	ANIM_SPONGEBOB_IDLEWIND,		s_idleWindCount,		s_idleWindSfx			},
+	{	ANIM_SPONGEBOB_JUMPEND,			s_jumpEndCount,			s_jumpEndSfx			},
+	{	ANIM_SPONGEBOB_RUN,				s_runCount,				s_runSfx				},
+	{	ANIM_SPONGEBOB_RUNSTOP,			s_runStopCount,			s_runStopSfx			},
+	{	ANIM_SPONGEBOB_WALK,			s_walkCount,			s_walkSfx				},
+	{	ANIM_SPONGEBOB_KARATE,			s_chopCount,			s_chopSfx				},
+	{	ANIM_SPONGEBOB_SWIPE,			s_swipeCount,			s_swipeSfx				},
 };
+const int				CPlayer::s_numAnimSfx=10;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
