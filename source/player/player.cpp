@@ -929,18 +929,14 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 	CThing *platform;
 
 	height=height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
-
-	platform=isOnPlatform();
-	if(platform)
+	if(height<_maxHeight)
 	{
-		int	platformHeight;
-		platformHeight=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(_x,_y);
-		if(platformHeight>_maxHeight)platformHeight=_maxHeight;
-		else if(platformHeight<-_maxHeight)platformHeight=-_maxHeight;
-
-		if(height>platformHeight)
+		platform=isOnPlatform();
+		if(platform)
 		{
-			height=platformHeight;
+			height=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(_x,_y);
+			if(height>_maxHeight)height=_maxHeight;
+			else if(height<-_maxHeight)height=-_maxHeight;
 		}
 	}
 
