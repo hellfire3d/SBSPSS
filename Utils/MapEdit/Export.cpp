@@ -162,17 +162,17 @@ void	CExport::ExportTile3d(CCore *Core,CElem &ThisTile,sExpTile &OutTile)
 }
 
 /*****************************************************************************/
-void	CExport::ExportElem3d(CCore *Core,CElem &ThisTile,int &TriStart,int &TriCount)
+void	CExport::ExportElem3d(CCore *Core,CElem &ThisElem,int &TriStart,int &TriCount)
 {
 CTexCache				&TexCache=Core->GetTexCache();
-std::vector<sTriFace>	&TileTriList=ThisTile.GetTriList();
+std::vector<sTriFace>	&ElemTriList=ThisElem.GetTriList();
 
 		TriStart=TriList.size();
-		TriCount=TileTriList.size();
+		TriCount=ElemTriList.size();
 
 		for (int T=0; T<TriCount; T++)
 		{
-			sTriFace	&InTri=TileTriList[T];
+			sTriFace	&InTri=ElemTriList[T];
 			sExpTri		OutTri;
 			GString		TexName=TexCache.GetTexFilename(InTri.Mat);
 			OutTri.TexID=TexNames.Add(TexName);

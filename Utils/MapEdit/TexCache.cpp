@@ -31,7 +31,7 @@ GFName		FName=Filename;
 			int	Idx=GetTexIdx(NewTex);	// Is already loaded?
 			if (Idx!=-1) return(Idx);
 
-			TRACE1("Loading Texture %s\n",NewTex.Filename);
+//			TRACE1("Loading Texture %s\n",NewTex.Filename);
 			
 			if (!LoadBMP(NewTex.Filename,ThisRGB))
 			{
@@ -210,7 +210,7 @@ void	CTexCache::Purge()
 {
 int	ListSize=TexList.size();
 
-	TRACE1("Purging %i textures\n",ListSize);
+//	TRACE1("Purging %i textures\n",ListSize);
 
 	for (int i=0; i<ListSize; i++)
 	{
