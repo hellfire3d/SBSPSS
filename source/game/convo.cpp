@@ -496,6 +496,15 @@ void CConversation::setCharacterAndText(int _characterId,int _textId)
 	s_maxTextPageOffset=i/TEXTBOX_FONT_NUM_LINES_IN_BOX;
 	s_textPageOffset=0;
 
+	for (int i=0; i<SpeechTableSize; i++)
+	{
+		if (SpeechTable[i].TextID==_textId)
+		{
+			CSoundMediator::playSpeech((SpeechEquate)SpeechTable[i].SpeechID);
+			break;
+		}
+	}
+
 	PAUL_DBGMSG("calced height=%d",s_maxTextPageOffset);
 }
 

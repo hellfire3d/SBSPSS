@@ -64,6 +64,7 @@ private:
 
 
 	int						m_active;
+	int						m_SpeechPlaying;
 	int						m_padDebounce;
 	int						m_responseFlag;
 	STATE					m_currentState;

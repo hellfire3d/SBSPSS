@@ -248,6 +248,13 @@ void CPauseMenu::select()
 
 	chapter=GameScene.getChapterNumber()-1;
 	level=GameScene.getLevelNumber()-1;
+	m_SpeechPlaying=false;
+	if (CXAStream::IsPlaying())
+	{
+		m_SpeechPlaying=true;
+		CXAStream::Pause();
+	}
+
 }
 
 
@@ -260,6 +267,12 @@ void CPauseMenu::select()
 void CPauseMenu::unselect()
 {
 	m_active=false;
+	if (m_SpeechPlaying)
+	{
+		CXAStream::Resume();
+		m_SpeechPlaying=false;
+	}
+
 }
 /*----------------------------------------------------------------------
 	Function:

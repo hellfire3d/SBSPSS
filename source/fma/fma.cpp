@@ -1573,6 +1573,7 @@ void	CFmaScene::selectFma(FMA_SCRIPT_NUMBER _fma)
   ---------------------------------------------------------------------- */
 void	CFmaScene::startShutdown()
 {
+	CSoundMediator::stopSpeech();
 	CFader::setFadingOut();
 	m_readyToShutdown=true;
 }
