@@ -27,6 +27,7 @@ protected:
 	void				processMovement( int _frames );
 
 	u8					m_dropHit;
+	s32					m_initTimer;
 };
 
 #endif
