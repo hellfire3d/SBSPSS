@@ -81,11 +81,17 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 	}
 	else if(controlHeld&PI_LEFT)
 	{
+		CPlayer *player = _playerMode->getPlayer();
+		player->setMoveLeftRight( player->getMoveLeftRight() - 1 );
+
 		if(_playerMode->canMoveLeft())
 			_playerMode->setState(STATE_RUN);
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
+		CPlayer *player = _playerMode->getPlayer();
+		player->setMoveLeftRight( player->getMoveLeftRight() + 1 );
+
 		if(_playerMode->canMoveRight())
 			_playerMode->setState(STATE_RUN);
 	}

@@ -512,9 +512,12 @@ public:
 	// Movement tracking for barrels
 
 	s32				getMovement()						{return( m_xMove );}
+	s8				getMoveLeftRight()					{return( m_moveLeftRight );}
+	void			setMoveLeftRight( s8 newLeftRight )	{m_moveLeftRight = newLeftRight;}
 
 private:
 	s32				m_xMove;
+	s8				m_moveLeftRight;
 };
 
 

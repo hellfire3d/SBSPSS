@@ -773,6 +773,7 @@ if(newmode!=-1)
 	m_allowConversation=false;
 
 	m_xMove = Pos.vx;
+	m_moveLeftRight = 0;
 
 ///
 #ifdef __USER_paul__

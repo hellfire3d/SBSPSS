@@ -126,10 +126,16 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 
 	if(controlHeld&PI_LEFT)
 	{
+		CPlayer *player = _playerMode->getPlayer();
+		player->setMoveLeftRight( player->getMoveLeftRight() - 1 );
+
 		_playerMode->moveLeft();
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
+		CPlayer *player = _playerMode->getPlayer();
+		player->setMoveLeftRight( player->getMoveLeftRight() + 1 );
+
 		_playerMode->moveRight();
 	}
 	else

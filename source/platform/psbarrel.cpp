@@ -60,6 +60,11 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 		s32 playerMovement = player->getMovement();
 
+		if ( !playerMovement )
+		{
+			playerMovement = player->getMoveLeftRight();
+		}
+
 		m_currentSpeed = -playerMovement;
 	}
 	else
