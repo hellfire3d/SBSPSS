@@ -125,6 +125,9 @@ actors/actor_enemy.tex
 actors/clam.a3d
 actors/clam.abk
 
+actors/SHARKSUB.A3d
+actors/SHARKSUB.Abk
+
 { SYSTEM_CACHE 4
 }
 ui/uigfx.spr
