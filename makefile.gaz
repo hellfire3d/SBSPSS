@@ -317,7 +317,11 @@ triggers_src :=		trigger \
 					thazwalk \
 					tsemit \
 					tsswitch \
-					tgbowl
+					tgbowl \
+					twdripemit \
+					tadripemit \
+					todripemit \
+					tldripemit
 
 utils_src :=		utils \
 					sincos \

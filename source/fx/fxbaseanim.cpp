@@ -13,6 +13,10 @@
 #include	"level\layercollision.h"
 #include	"FX\FXBaseAnim.h"
 
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
 
 /*****************************************************************************/
 void	CFXBaseAnim::init(DVECTOR const &_Pos)
@@ -107,4 +111,33 @@ POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderP
 			Ft4->v2--; Ft4->v3--;
 			setShadeTex(Ft4,0);
 			setRGB0(Ft4,DataPtr->R,DataPtr->G,DataPtr->B);
+}
+
+/*****************************************************************************/
+void	CFXBaseAnim::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player = (CPlayer *) _thisThing;
+
+			if ( !player->isRecoveringFromHit() )
+			{
+				if ( DataPtr->Flags & FXANIM_FLAG_KILL_PLAYER )
+				{
+					player->takeDamage( DAMAGE__KILL_OUTRIGHT );
+				}
+				else if ( DataPtr->Flags & FXANIM_FLAG_INJURE_PLAYER )
+				{
+					player->takeDamage( DAMAGE__HIT_ENEMY );
+				}
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
 }

@@ -81,6 +81,7 @@ virtual	void		killFX()						{setToShutdown();}
 virtual void		toggleVisible()					{IsVisible = !IsVisible;}
 
 protected:
+virtual void		collidedWith(CThing *_thisThing);
 		s32			OtPos;
 		s16			Life;
 

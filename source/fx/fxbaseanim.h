@@ -26,6 +26,8 @@ public:
 		FXANIM_FLAG_LOOP			=1<<0,
 		FXANIM_FLAG_COLLIDE_KILL	=1<<1,
 		FXANIM_FLAG_HAS_GRAVITY		=1<<2,
+		FXANIM_FLAG_INJURE_PLAYER	=1<<3,
+		FXANIM_FLAG_KILL_PLAYER		=1<<4,
 	};
 
 virtual void		init(DVECTOR const &Pos);
@@ -33,6 +35,7 @@ virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 virtual	void		killFX();
+virtual int			canCollide()					{return true;}
 
 		void		setData(void *Data)		{DataPtr=(sFXAnim*)Data;}
 
@@ -42,6 +45,8 @@ virtual void		SetScaleY(int S)		{CurrentScaleY=S;}
 virtual void		SetHeading(int H)		{CurrentHeading=H;}
 
 protected:
+virtual void		collidedWith(CThing *_thisThing);
+
 		sFXAnim		*DataPtr;
 		s16			VelY;
 		s16			MaxFrame;

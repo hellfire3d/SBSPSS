@@ -515,6 +515,17 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			thing1=thing1->m_nextCollisionThing;
 		}
 
+		// Player -> Effect collision
+		thing1=s_CollisionLists[CThing::TYPE_FX];
+		while(thing1)
+		{
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
 		// Player -> Friend collision
 		thing1=s_CollisionLists[CThing::TYPE_NPC];
 		while(thing1)

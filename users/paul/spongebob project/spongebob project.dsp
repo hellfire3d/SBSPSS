@@ -2069,6 +2069,14 @@ SOURCE=..\..\..\source\thing\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tadripemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tadripemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tbemit.cpp
 # End Source File
 # Begin Source File
@@ -2165,6 +2173,14 @@ SOURCE=..\..\..\source\triggers\tifemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tldripemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tldripemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tlevexit.cpp
 # End Source File
 # Begin Source File
@@ -2178,6 +2194,14 @@ SOURCE=..\..\..\source\triggers\tlook.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tlook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\todripemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\todripemit.h
 # End Source File
 # Begin Source File
 
@@ -2234,6 +2258,14 @@ SOURCE=..\..\..\source\triggers\twater.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\twater.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twdripemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\twdripemit.h
 # End Source File
 # End Group
 # Begin Group "utils"

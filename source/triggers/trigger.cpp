@@ -91,6 +91,22 @@
 #include "triggers\tgbowl.h"
 #endif
 
+#ifndef __TRIGGERS_TWDRIPEMIT_H__
+#include "triggers\twdripemit.h"
+#endif
+
+#ifndef __TRIGGERS_TADRIPEMIT_H__
+#include "triggers\tadripemit.h"
+#endif
+
+#ifndef __TRIGGERS_TODRIPEMIT_H__
+#include "triggers\todripemit.h"
+#endif
+
+#ifndef __TRIGGERS_TLDRIPEMIT_H__
+#include "triggers\tldripemit.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -182,6 +198,26 @@ CTrigger	*trigger;
 		// Steam emitter
 		case TRIGGER_STEAM_EMITTER:
 			trigger=(CSteamEmitterTrigger*)new("SteamEmitterTrigger") CSteamEmitterTrigger();
+			break;
+
+		// Water drip emitter
+		case TRIGGER_WATER_DRIP_EMITTER:
+			trigger=(CWaterDripEmitterTrigger*)new("WaterDripEmitterTrigger") CWaterDripEmitterTrigger();
+			break;
+
+		// Acid drip emitter
+		case TRIGGER_ACID_DRIP_EMITTER:
+			trigger=(CAcidDripEmitterTrigger*)new("AcidDripEmitterTrigger") CAcidDripEmitterTrigger();
+			break;
+
+		// Oil drip emitter
+		case TRIGGER_OIL_DRIP_EMITTER:
+			trigger=(COilDripEmitterTrigger*)new("OilDripEmitterTrigger") COilDripEmitterTrigger();
+			break;
+
+		// Lava drip emitter
+		case TRIGGER_LAVA_DRIP_EMITTER:
+			trigger=(CLavaDripEmitterTrigger*)new("LavaDripEmitterTrigger") CLavaDripEmitterTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:

@@ -43,7 +43,7 @@ CFXBaseAnim::sFXAnim	FXAcidSplashData=
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		0,255,0,
+		127,255,127,
 		0,
 		{0,0},
 		0
@@ -63,7 +63,7 @@ CFXBaseAnim::sFXAnim	FXOilSplashData=
 		ONE,
 		FRM__SPLASH001,FRM__SPLASH006,
 		1,
-		0,0,0,
+		64,64,64,
 		0,
 		{0,0},
 		CFX::FX_TYPE_EXPLODE,
@@ -107,30 +107,30 @@ CFXBaseAnim::sFXAnim	FXAcidDripData=
 		ONE,
 		FRM__DRIP,FRM__DRIP,
 		1,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
+		127,255,127,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
 		{0,1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_SPLASH_ACID
 };
 CFXBaseAnim::sFXAnim	FXLavaDripData=
 {
 		ONE,
 		FRM__DRIP,FRM__DRIP,
 		1,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
+		255,127,127,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
 		{0,1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_SPLASH_LAVA
 };
 CFXBaseAnim::sFXAnim	FXOilDripData=
 {
 		ONE,
 		FRM__DRIP,FRM__DRIP,
 		1,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
+		64,64,64,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
 		{0,1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_SPLASH_OIL
 };
 // Bubble
 CFXBaseAnim::sFXAnim	FXBubbleWaterData=
@@ -406,4 +406,9 @@ void	CFX::getFXRenderPos(DVECTOR &Pos)
 		{
 			Pos=getPos();
 		}
+}
+
+/*****************************************************************************/
+void	CFX::collidedWith(CThing *_thisThing)
+{
 }
