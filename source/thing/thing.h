@@ -82,6 +82,9 @@ private:
 	static CThing			*s_CollisionLists[];
 	static sBBox			m_RenderBBox;
 	static sBBox			m_ThinkBBox;
+
+//	static CThing			*s_FreeList[];
+
 };
 
 /*----------------------------------------------------------------------*/
@@ -130,24 +133,28 @@ virtual int		dontKillDuringLevelRespawn()							{return false;}
 		DVECTOR const	&getPos()						{return Pos;}
 		void			setPos(DVECTOR newPos)			{Pos=newPos;}
 		DVECTOR			getPosDelta()					{return PosDelta;}
-		CThing			*getNext()						{return Next;}
+		CThing			*getParent()					{return ParentThing;}
+		CThing			*getNext()						{return NextThing;}
 
 virtual void			processEvent(GAME_EVENT _event,CThing *_sourceThing);
 
 protected:
-
-// Parent Child Linkage
-		CThing			*Parent,*Next;
-// Count
-		int				m_numChildren;
 // Pos
 		DVECTOR			Pos, PosLast, PosDelta;
 
-public:
-		CThing			*m_nextListThing;
-		CThing			*m_nextCollisionThing;
+// Parent Child Linkage
+		CThing			*ParentThing,*NextThing;
+		int				m_numChildren;
 
-	// -- Collision --
+public:
+// Collision/List Link List
+		CThing			*m_nextCollisionThing;
+		CThing			*m_nextListThing;
+
+public:
+		CThing			*m_NextFreeThing;
+
+// -- Collision --
 public:
 virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
@@ -172,11 +179,18 @@ virtual bool			getHasPlatformCollided()					{return false;}
 virtual s32				getNewYPos( CThing *_thisThing );
 		void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
+
+public:
+// Thing states
 		void			setRenderFlag(bool f)						{m_renderFlag=f;}
 		void			setThinkFlag(bool f)						{m_thinkFlag=f;}
 		bool			canRender()									{return (m_renderFlag);}
 		DVECTOR			&getRenderPos()								{return(m_RenderPos);}
 		bool			canThink()									{return (m_thinkFlag);}
+protected:
+		bool			m_renderFlag,m_thinkFlag;
+		DVECTOR			m_RenderPos;
+		bool			m_isShuttingDown;
 
 protected:
 virtual void			setCollisionSize(int _w,int _h);
@@ -192,9 +206,9 @@ private:
 		s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
 		DVECTOR			m_newCollidedPos;															// pkg - to be removed?
 
-		bool			m_renderFlag,m_thinkFlag;
-		DVECTOR			m_RenderPos;
-		bool			m_isShuttingDown;
+// Free List Stuff
+public:	
+//virtual	int				getMaxType()=0;
 };
 
 /*---------------------------------------------------------------------- */

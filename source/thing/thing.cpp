@@ -559,8 +559,8 @@ int	Type=thing->getThingType();
   ---------------------------------------------------------------------- */
 void	CThing::init()
 {
-	Parent=NULL;
-	Next=NULL;
+	ParentThing=NULL;
+	NextThing=NULL;
 	m_numChildren = 0;
 
 	Pos.vx=Pos.vy=10;
@@ -582,9 +582,9 @@ void	CThing::init()
   ---------------------------------------------------------------------- */
 void	CThing::shutdown()
 {
-	if (Parent) 
+	if (ParentThing) 
 	{ // Is child
-		Parent->removeChild(this);
+		ParentThing->removeChild(this);
 	}
 	else
 	{ // Is Parent
@@ -762,24 +762,24 @@ void	CThing::ShowBBox()
   ---------------------------------------------------------------------- */
 void	CThing::addChild(CThing *Child)
 {
-CThing	*List=Next;
+CThing	*List=NextThing;
 
 	if ( List )
 	{
 // Find end of list
-		while (List->Next) 
+		while (List->NextThing) 
 		{
-			List=List->Next;
+			List=List->NextThing;
 		}
-		List->Next=Child;
-		Child->Parent=this;
+		List->NextThing=Child;
+		Child->ParentThing=this;
 		m_numChildren++;
 	}
 	else
 	{
 // List does not exist, create
-		Next = Child;
-		Child->Parent=this;
+		NextThing = Child;
+		Child->ParentThing=this;
 		m_numChildren++;
 	}
 }
@@ -792,14 +792,14 @@ CThing	*List=Next;
   ---------------------------------------------------------------------- */
 void	CThing::removeChild(CThing *Child)
 {
-CThing	*List=Next;
+CThing	*List=NextThing;
 CThing	*Last=NULL;
 
 // Find Child
-		while ( List != Child && List->Next )
+		while ( List != Child && List->NextThing )
 		{
 			Last = List;
-			List = List->Next;
+			List = List->NextThing;
 		}
 
 // if there are no more links to continue down, the current 'List' must either be the correct item, or the item does not
@@ -809,16 +809,16 @@ CThing	*Last=NULL;
 
 		if ( Last )
 		{
-			Last->Next = List->Next;
+			Last->NextThing = List->NextThing;
 		}
 		else
 		{
-			this->Next = List->Next;
+			this->NextThing = List->NextThing;
 		}
 
 		m_numChildren--;
 
-		Child->Parent=NULL;
+		Child->ParentThing=NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -829,16 +829,16 @@ CThing	*Last=NULL;
   ---------------------------------------------------------------------- */
 void	CThing::removeAllChild()
 {
-CThing	*List=Next;
+CThing	*List=NextThing;
 
 		while (List)
 		{
-			CThing	*Next=List->Next;
-			List->Parent=NULL;
-			List->Next=NULL;
-			List=Next;
+			CThing	*NextThing=List->NextThing;
+			List->ParentThing=NULL;
+			List->NextThing=NULL;
+			List=NextThing;
 		}
-		Next=NULL;
+		NextThing=NULL;
 
 		m_numChildren = 0;
 }
@@ -851,18 +851,18 @@ CThing	*List=Next;
   ---------------------------------------------------------------------- */
 void	CThing::deleteAllChild()
 {
-CThing	*List=Next;
+CThing	*List=NextThing;
 
 		while (List)
 		{
-			CThing	*Next=List->Next;
-			List->Parent=NULL;
-			List->Next=NULL;
+			CThing	*NextThing=List->NextThing;
+			List->ParentThing=NULL;
+			List->NextThing=NULL;
 			List->shutdown();
 			delete List;
-			List=Next;
+			List=NextThing;
 		}
-		Next=NULL;
+		NextThing=NULL;
 
 		m_numChildren = 0;
 }
@@ -886,7 +886,7 @@ int		CThing::getNumChildren()
   ---------------------------------------------------------------------- */
 bool	CThing::hasChild(CThing *Child)
 {
-	CThing *nextChild = Next;
+CThing *nextChild = NextThing;
 
 	while( nextChild )
 	{
@@ -895,7 +895,7 @@ bool	CThing::hasChild(CThing *Child)
 			return( true );
 		}
 
-		nextChild = nextChild->Next;
+		nextChild = nextChild->NextThing;
 	}
 
 	return( false );
