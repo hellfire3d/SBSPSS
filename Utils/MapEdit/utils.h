@@ -37,7 +37,6 @@ void	DbgMsg(const char * pszFmt,...);
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
 void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z);
-int		LoadGLTexture(char *FileName, GLuint &Text,int &Width,int &Height);
 
 CPoint	IDToPoint(int ID,int Width);
 int		PointToID(CPoint &Pnt,int Width);
@@ -52,5 +51,6 @@ void	SetFileExt(char *InName,char *OutName,char *Ext);
 void	MakeFullFilename(const char *RelName,GString &Out);
 void	MakePathRel2App(const char* In,char *Out);
 GString	GetWorkingPath();
+void	CheckFilename(GString &Filename);
 		
 #endif

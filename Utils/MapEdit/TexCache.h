@@ -22,9 +22,7 @@ struct	sRGBData
 
 struct	sTex
 {
-//	char			Filename[_MAX_PATH];
-	GString			FullFilename;
-	GString			Path;
+	GString			Filename;
 	GString			Name;
 	GLuint			TexID;
 	int				Flags;
@@ -32,8 +30,7 @@ struct	sTex
 	float			dW,dH;
 	bool			Loaded;
 
-//	bool			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
-	bool			operator==(sTex const &v1)		{return (FullFilename==v1.FullFilename && Flags==v1.Flags);}
+	bool			operator==(sTex const &v1)		{return (Filename==v1.Filename && Flags==v1.Flags);}
 };
 
 const RGBQUAD	BlankRGB={255,0,255};
@@ -46,9 +43,8 @@ class	CTexCache
 public:
 	
 		int		GetTexIdx(sTex &Tex)						{return(TexList.Find(Tex));}
-//		int		GetTexIdx(const char *Filename,int Flags);
 
-		int		ProcessTexture(const char *Path,const char *Name,int Flags,sRGBData *RGBData=0);
+		int		ProcessTexture(const char *Name,int Flags,sRGBData *RGBData=0);
 		void	Purge();
 
 		bool	LoadBMP(const char *Filename,sRGBData &RGBData);
@@ -60,6 +56,7 @@ public:
 		void	LoadTex(sTex &ThisTex,sRGBData *TexData);
 		
 		sTex	&GetTex(int Id)						{return(TexList[Id]);}
+		GString	&GetTexFilename(int Id)				{return(TexList[Id].Filename);}
 		GString	&GetTexName(int Id)					{return(TexList[Id].Name);}
 		GLuint	GetTexGLId(int Id)					{return(TexList[Id].TexID);}
 

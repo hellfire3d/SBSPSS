@@ -288,3 +288,35 @@ GString	Path;
 
 	return(Path);
 }
+
+/*****************************************************************************/
+void		CheckFilename(GString &Filename)
+{
+FILE	*File;
+CString mexstr;
+GFName	FName=Filename;
+GString	Name;
+
+// Check File exists
+		File=fopen(Filename,"r");
+		if (File)
+		{
+			fclose(File);
+			return;
+		}
+
+		Name=FName.File();
+		Name.Append('.');
+		Name+=FName.Ext();
+
+		mexstr.Format("%s Not Found.\n\nPlease Locate\n", Filename);
+		AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
+
+char		BASED_CODE Filter[]= "All Files (*.*)|*.*||";
+CFileDialog	Dlg(true,NULL,Name,OFN_HIDEREADONLY | OFN_PATHMUSTEXIST,Filter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+		Filename=Dlg.GetPathName();
+
+}

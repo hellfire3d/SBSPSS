@@ -6,6 +6,7 @@
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<frame.hpp>
+#include	<gfname.hpp>
 #include	<Vector>
 
 #include	"TexCache.h"
@@ -25,17 +26,15 @@ sTex	Tex;
 */
 /*****************************************************************************/
 // Checks loaded files for dups, assumes all passed RGB is unique
-int		CTexCache::ProcessTexture(const char *Path,const char *Name,int Flags,sRGBData *RGBData)
+int		CTexCache::ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData)
 {
-int		ListSize=TexList.size();
-
+int			ListSize=TexList.size();
 sTex		NewTex;
 sRGBData	ThisRGB;
+GFName		FName=Filename;
 
-//		strcpy(NewTex.Filename,Filename);
-		NewTex.Path=Path;
-		NewTex.Name=Name;
-		NewTex.FullFilename=NewTex.Path+NewTex.Name;
+		NewTex.Name=FName.File();
+		NewTex.Filename=Filename;
 		NewTex.Flags=Flags;
 
 		if (!RGBData)	// Need to load file
@@ -45,7 +44,7 @@ sRGBData	ThisRGB;
 
 //			TRACE1("Loading Texture %s\n",NewTex.Filename);
 			
-			if (!LoadBMP(NewTex.FullFilename,ThisRGB))
+			if (!LoadBMP(NewTex.Filename,ThisRGB))
 			{
 				exit(-1);
 				return(ListSize);

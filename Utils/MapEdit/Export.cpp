@@ -210,7 +210,7 @@ int		TriCount=TileTriList.size();
 		{
 			sTriFace	&InTri=TileTriList[T];
 			sExpTri		OutTri;
-			GString		TexName=TexCache.GetTexName(InTri.Mat);
+			GString		TexName=TexCache.GetTexFilename(InTri.Mat);
 			OutTri.TexID=TexNames.Add(TexName);
 
 			for (int p=0; p<3; p++) 
@@ -223,44 +223,14 @@ int		TriCount=TileTriList.size();
 		}
 }
 
-/*
-void	CExport::ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile)
-{
-CTexCache				&TexCache=Core->GetTexCache();
-std::vector<sTriFace>	&TileTriList=ThisTile.GetTriList();
-
-int		TriCount=TileTriList.size();
-
-//		OutTile.TriStart=TriList.size();
-//		OutTile.TriCount=TriCount;
-//		OutTile.XOfs=-1;
-//		OutTile.YOfs=-1;
-//		OutTile.TexId=-1;
-
-		for (int T=0; T<TriCount; T++)
-		{
-			sTriFace	&TileTri=TileTriList[T];
-			sTriFace	OutTri;
-//			sExpTex		OutTex;
-
-			for (int p=0; p<3; p++) 
-			{
-				OutTri=TileTri;
-// Texture
-//				sTex	&TriTex=TexCache.GetTex(TileTri.Mat);
-//				OutTex.Filename=TriTex.Filename;
-//				OutTri.Mat=TexList.Add(OutTex);
-			}
-			TriList.push_back(OutTri);
-		}
-//		return(TriCount);
-
-}
-*/
 /*****************************************************************************/
 void	CExport::ExportStrList(CCore *Core)
 {
-int		ListSize,i;
+int			ListSize,i;
+GString		SavePath=GetWorkingPath();
+char		RelStr[256];
+
+			SavePath.Upper();
 
 // Set List
 		ListSize=SetNames.size();
@@ -269,8 +239,10 @@ int		ListSize,i;
 
 		for (i=0; i<ListSize; i++)
 		{
-			const char	*Str=SetNames[i];
-			fwrite(Str,strlen(Str)+1,1,File);
+			GString	&ThisFile=SetNames[i];
+			ThisFile.Upper();
+			GFName::makerelative(SavePath,ThisFile,RelStr);
+			fwrite(RelStr,strlen(RelStr)+1,1,File);
 		}
 // Tex List
 		ListSize=TexNames.size();
@@ -279,8 +251,10 @@ int		ListSize,i;
 
 		for (i=0; i<ListSize; i++)
 		{
-			const char	*Str=TexNames[i];
-			fwrite(Str,strlen(Str)+1,1,File);
+			GString	&ThisFile=TexNames[i];
+			ThisFile.Upper();
+			GFName::makerelative(SavePath,ThisFile,RelStr);
+			fwrite(RelStr,strlen(RelStr)+1,1,File);
 		}
 
 }

@@ -43,7 +43,7 @@ GString	Filename;
 
 // Get application path
 #ifdef _DEBUG
-		ExePath="C:/Spongebob/tools/mapedit/";
+		ExePath="C:\\Spongebob\\tools\\mapedit\\";
 #else
 char	ExeFilename[2048];
 		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
@@ -84,28 +84,13 @@ void	CTileBank::SetCollision(bool f)
 		}
 }
 
-/*****************************************************************************/
-char	*FixName(const char *In)
-{
-char	*Ptr=(char*)In;
-		while (*Ptr)
-		{
-			if (Ptr[0]=='T' &&
-				Ptr[1]=='I' &&
-				Ptr[2]=='L' &&
-				Ptr[3]=='E') return(Ptr);
-			Ptr++;
-		}
-		
-		return(Ptr);
-}
 
+/*****************************************************************************/
 void	CTileBank::Load(CFile *File,int Version)
 {
 int		ListSize;
 GFName	RootPath=File->GetFilePath();
 GString	FilePath;
-
 
 		FilePath=RootPath.Drive();
 		FilePath+=RootPath.Dir();
@@ -124,22 +109,17 @@ GString	FilePath;
 // New Style rel storage
 		for (int i=0;i<ListSize;i++)
 		{
-			char	c=1;//,FullName[256+64];
-			GString	RelName;
-			int		Len=0;
+			char	c=1;
+			GString	FullName=FilePath;
+
 			while (c)
 			{
 				File->Read(&c,1);
-				RelName.Append(c);
+				FullName.Append(c);
 			}
-//			RelName.Upper();
-
-			{ // Dodgy arse artist fix
-//				RelName=FixName(RelName);
-			}
-		
-//			RootPath.makeabsolute(FilePath,RelName,FullName);
-			AddTileSet(RelName);
+			FullName.Upper();
+			CheckFilename(FullName);
+			AddTileSet(FullName);
 		}
 }
 
@@ -148,12 +128,14 @@ void	CTileBank::Save(CFile *File)
 {
 int		ListSize=TileSet.size();
 int		NewListSize=ListSize-1;
-GString	FilePath;
 GFName	RootPath=File->GetFilePath();
+GString	SavePath;
 
-		FilePath=RootPath.Drive();
-		FilePath+=RootPath.Dir();
-		FilePath.Append('\\');
+		SavePath=RootPath.Drive();
+		SavePath+=RootPath.Dir();
+		SavePath.Append('\\');
+
+		SavePath.Upper();
 
 		File->Write(&NewListSize,sizeof(int));
 		File->Write(&CurrentSet,sizeof(int));
@@ -166,8 +148,7 @@ GFName	RootPath=File->GetFilePath();
 			CTileSet	&ThisSet=TileSet[i];
 			char	Filename[256+64];
 
-		
-			RootPath.makerelative(FilePath,ThisSet.GetFilename(),Filename);	
+			RootPath.makerelative(SavePath,ThisSet.GetFilename(),Filename);	
 			File->Write(Filename,strlen(Filename)+1);		
 		}
 
@@ -398,25 +379,16 @@ BOOL	CTileBank::IsTileValid(int Set,int Tile)
 }
 
 /*****************************************************************************/
-/*
-BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
-{
- 		if (Set<0 || Tile<0) return(FALSE);
-
-		return(TileSet[Set].IsTileValidGB(Tile));
-}
-*/
-/*****************************************************************************/
 /*****************************************************************************/
 /*** TileSet *****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 CTileSet::CTileSet(const char *_Filename,int Idx)
 {
-		if (_Filename)
-		{
-			Filename=_Filename;
-		}
+GFName	FName=_Filename;
+
+		Filename=_Filename;
+		Name=FName.File();
 		
 		Loaded=FALSE;
 		SetNumber=Idx;
@@ -434,7 +406,8 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 void	CTileSet::Load(CCore *Core)
 {
-GString	Ext=Filename.Ext();
+GFName	FName=Filename;
+GString	Ext=FName.Ext();
 		Ext.Upper();
 
 		if (Ext=="GIN")
@@ -455,28 +428,7 @@ void	CTileSet::Load2d(CCore *Core)
 {
 CTexCache	&TexCache=Core->GetTexCache();
 GString		ColTest;
-GString		Path,Name;
-
-		ColTest=Filename.File();
-		ColTest.Append('.');
-		ColTest+=Filename.Ext();
-
-		if (ColTest==ColFName)
-		{// Collision thing (sigh!)
-			Path=Filename.Drive();
-			Path+=Filename.Dir();
-			Path.Append('\\');
-			Name=Filename.File();
-			Name.Append('.');
-			Name+=Filename.Ext();
-		}
-		else
-		{
-			Path=GetWorkingPath();
-			Name=Filename.FullName();
-		}
-
-int		TexID=TexCache.ProcessTexture(Path,Name,0);
+int		TexID=TexCache.ProcessTexture(Filename,0);
 sTex	&ThisTex=TexCache.GetTex(TexID);
 
 int		Width=ThisTex.TexWidth/16;
@@ -500,11 +452,8 @@ int		Height=ThisTex.TexHeight/16;
 void	CTileSet::Load3d(CCore *Core)
 {
 CScene	Scene;
-GString	FullFilename;
 
-		MakeFullFilename(Filename.FullName(),FullFilename);
-
-		Scene.Load(FullFilename);
+		Scene.Load(Filename);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -551,16 +500,6 @@ BOOL	CTileSet::IsTileValid(int No)
 		{return(Tile[No].IsValid());}
 }
 
-/*****************************************************************************/
-/*
-BOOL	CTileSet::IsTileValidGB(int No)		
-{
-//		ASSERT(No<Tile.size());
-		if (No>Tile.size()) return(FALSE);
-
-		return(Tile[No].IsValidGB());
-}
-*/
 /*****************************************************************************/
 void	CTileSet::Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {

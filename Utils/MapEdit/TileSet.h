@@ -115,8 +115,8 @@ public:
 //		const char	*GetExt()			{return(Filename.Ext());}
 //		const char	*GetFilename()		{return(Filename.FullName());}
 
-		const char	*GetFilename()		{return(Filename.FullName());}
-		const char	*GetName()			{return(Filename.File());}
+		const char	*GetFilename()		{return(Filename);}
+		const char	*GetName()			{return(Name);}
 
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
@@ -134,7 +134,7 @@ private:
 		BOOL	Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
 		CPoint	GetTilePos(int ID);
 
-		GFName				Filename;
+		GString				Filename,Name;
 		
 		int					SetNumber;
 		CList<CTile>		Tile;
