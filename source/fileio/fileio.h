@@ -5,6 +5,11 @@
 #ifndef _FILEIO_HEADER_
 #define _FILEIO_HEADER_
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"
+#endif
+
+
 #ifndef		__FILE_EQUATES_H__
 #include 	"BigLump.h"
 #endif
