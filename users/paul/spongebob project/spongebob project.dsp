@@ -131,6 +131,14 @@ SOURCE=..\..\..\source\enemy\npc.cpp
 
 SOURCE=..\..\..\source\enemy\npc.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\npcpath.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\npcpath.h
+# End Source File
 # End Group
 # Begin Group "fileio"
 

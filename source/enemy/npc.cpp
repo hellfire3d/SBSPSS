@@ -1,3 +1,16 @@
+/*=========================================================================
+
+	npc.cpp
+
+	Author:		CRB
+	Created: 
+	Project:	Spongebob
+	Purpose: 
+
+	Copyright (c) 2000 Climax Development Ltd
+
+===========================================================================*/
+
 #include "enemy\npc.h"
 
 #ifndef __LEVEL_LEVEL_H__
@@ -190,7 +203,7 @@ void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 	if ( m_data[this->m_type].canTalk )
 	{
 		DVECTOR sourcePos;
-		int xDiffSqr, yDiffSqr;
+		s32 xDiffSqr, yDiffSqr;
 
 		// check talk distance
 

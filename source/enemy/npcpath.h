@@ -11,6 +11,9 @@
 
 ===========================================================================*/
 
+#ifndef __ENEMY_NCPPATH_H__
+#define __ENEMY_NCPPATH_H__
+
 class CNpcWaypoint
 {
 public:
@@ -38,9 +41,14 @@ private:
 	NPC_PATH_TYPE	pathType;
 	u8				currentWaypoint;
 	u8				waypointCount;
+	bool			reversePath;
 
 public:
+	void			initPath();
 	void			addWaypoint( DVECTOR newPos );
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
+	void			think( DVECTOR currentPos );
 };
+
+#endif
