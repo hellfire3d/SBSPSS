@@ -123,47 +123,7 @@ CMapEditDoc	*CurDoc=GetDocument();
 /*********************************************************************************/
 void CMapEditView::UpdateAll() 
 {
-	UpdateLayerBar();
-
-}
-
-/*********************************************************************************/
-void CMapEditView::UpdateLayerBar()
-{
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CDialogBar	*LayerBar=Frm->GetLayerBar();
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-int			CurSel=Dlg->GetCurSel();
-
-		Dlg->ResetContent();
-
-		for (int i=0;i<LAYER_TYPE_MAX;i++)
-		{
-			CLayer	*ThisLayer=Core.LayerGet(i);
-			Dlg->AddString(ThisLayer->GetName());
-		}
-		Dlg->SetCurSel(CurSel);
-
-}
-
-/*********************************************************************************/
-int	CMapEditView::GetLayerCurSel()
-{
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CDialogBar	*LayerBar=Frm->GetLayerBar();
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-		return(Dlg->GetCurSel());
-
-}
-
-/*********************************************************************************/
-int	CMapEditView::GetLayerCount()
-{
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CDialogBar	*LayerBar=Frm->GetLayerBar();
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-	return(Dlg->GetCount());
-
+	Core.UpdateAll();
 }
 
 /*********************************************************************************/
@@ -178,14 +138,5 @@ void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{Core.RButtonCont
 void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,FALSE);}
 void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point);}
 
-
-
-void CMapEditView::OnToolbarLayerbar() 
-{
-	Core.ToggleLayerPalette();	
-}
-
-void CMapEditView::OnToolbarTilepalette() 
-{
-	Core.ToggleTileView();	
-}
+void CMapEditView::OnToolbarLayerbar()									{Core.ToggleLayerView();}
+void CMapEditView::OnToolbarTilepalette()								{Core.ToggleTileView();}

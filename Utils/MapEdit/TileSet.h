@@ -30,6 +30,7 @@ public:
 		int		Load(CCore *Core,char *_Filename);
 		char	*GetPath()			{return(Path);}
 		char	*GetFilename()		{return(Filename);}
+		GLint	GetTile(int	No)		{return(Tile[No].GetTile());}
 
 private:
 		char	Path[256];

@@ -7,6 +7,7 @@
 
 #include	<Vector>
 #include	"gl3d.h"
+#include	"Map.h"
 
 enum LAYER_TYPE
 {
@@ -18,15 +19,26 @@ enum LAYER_TYPE
 	LAYER_TYPE_MAX
 };
 
-
+/*
+struct	sMapElem
+{
+	int		Bank;
+	int		Tile;
+	int		Flags;
+};
+*/
 
 /*****************************************************************************/
+class	CCore;
+class	CMap;
 class	CLayer
 {
 public:
-		CLayer();
+		CLayer(){ASSERT(1);}
+		CLayer(CCore *_Core);
 		~CLayer();
 
+		void	InitLayer(CCore *_Core);
 
 // Virtual
 virtual	void			Init()=0;
@@ -43,8 +55,14 @@ virtual	void			SetTestColor()=0;
 
 
 protected:
-		float			LayerWidth,LayerHeight;
+//		float			Width,Height;
+		CCore			*Core;
+//		std::vector< std::vector<sMapElem> > Map;
+//		sMapElem		*Map;
+		CMap			Map;
+
 };
+
 
 /*****************************************************************************/
 #endif

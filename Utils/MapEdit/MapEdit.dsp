@@ -143,6 +143,14 @@ SOURCE=.\Core.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Map.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Map.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\TexCache.cpp
 # End Source File
 # Begin Source File

@@ -38,9 +38,6 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 	void		UpdateAll();
-	void		UpdateLayerBar();
-	int			GetLayerCurSel();
-	int			GetLayerCount();
 
 protected:
 	void		VideoMode(ColorsNumber &c,ZAccuracy &z,BOOL &dbuf);

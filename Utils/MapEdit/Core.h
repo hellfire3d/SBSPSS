@@ -32,6 +32,10 @@ class	CCore
 public:
 		CCore();
 		~CCore();
+
+		void				Init(CMapEditView *Wnd);
+		void				Render();
+
 // Control
 		void				LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
 		void				MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
@@ -39,36 +43,37 @@ public:
 		void				MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
 		void				MouseMove(UINT nFlags, CPoint &point);
 
-// Blah
-		void				Init(CMapEditView *Wnd);
-		void				Render();
-		void				UpdateView(float XOfs,float YOfs,float ZOfs);
-		void				SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
+// TileBank
+		void				UpdateTileView(BOOL ViewFlag);
+		BOOL				GetTileView()					{return(TileViewFlag);}
+		void				ToggleTileView()				{UpdateTileView(!TileViewFlag);}
 
-		Vec					&GetCamPos()	{return(CamPos);}
-
-		void				SetTileView(BOOL f);
-		BOOL				GetTileView()				{return(TileViewFlag);}
-		void				ToggleTileView();
-
-		void				SetLayerPalette(BOOL f);
-		BOOL				GetLayerPalette()				{return(LayerPaletteFlag);}
-		void				ToggleLayerPalette();
+		GLint				GetTile(int Bank,int TileNo);
 
 // Layers
-		void				LayerSetActive(int Layer);
-		int					LayerGetActive();
-		CLayer				*LayerGet(int i);
+		void				UpdateLayerBar(BOOL ViewFlag);
+		BOOL				GetLayerViewFlag()				{return(LayerViewFlag);}
+		void				ToggleLayerView()				{UpdateLayerBar(!LayerViewFlag);}
+
+		void				SetActiveLayer(int Layer);
+		int					GetActiveLayer()				{return(ActiveLayer);}
+		CLayer				*GetLayer(int i)				{return(Layers[i]);}
 
 // Tex Cache
 		CTexCache			&GetTexCache()	{return(TexCache);}
+
+// Misc
+		void				UpdateAll();
+		void				UpdateView(Vec Ofs=Vec(0,0,0));
+
+		Vec					&GetCam();
 
 
 private:
 		CMapEditView			*ParentWindow;	
 		MOUSE_MODE				MouseMode;
 		CPoint					CurrentMousePos,LastMousePos;
-		Vec						CamPos;
+		Vec						MapCam,TileCam;
 
 		CLayer					*Layers[LAYER_TYPE_MAX];
 		int						ActiveLayer;
@@ -77,7 +82,7 @@ private:
 		CTexCache				TexCache;
 
 		BOOL					TileViewFlag;
-		BOOL					LayerPaletteFlag;
+		BOOL					LayerViewFlag;
 
 
 };

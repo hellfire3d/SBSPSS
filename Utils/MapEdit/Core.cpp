@@ -24,7 +24,6 @@
 
 
 BOOL	Test3dFlag=TRUE;
-GLint	TestTile;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -32,16 +31,20 @@ GLint	TestTile;
 CCore::CCore()
 {
 	MouseMode=MOUSE_MODE_NONE;
-	Layers[LAYER_TYPE_BACK]=	new CLayerBack;
-	Layers[LAYER_TYPE_MID]=		new CLayerMid;
-	Layers[LAYER_TYPE_ACTION]=	new CLayerAction;
-	Layers[LAYER_TYPE_FORE]=	new CLayerFore;
+	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
+	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
+	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
+	Layers[LAYER_TYPE_FORE]=	new CLayerFore(this);
+
+	TileViewFlag=0;
+	LayerViewFlag=1;
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
-	for (int i=0; i<LAYER_TYPE_MAX; i++) delete Layers[i];
+int	i;
+	for (i=0; i<LAYER_TYPE_MAX; i++) delete Layers[i];
 }
 
 /*****************************************************************************/
@@ -49,46 +52,39 @@ void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
 	ActiveLayer=0;
-	CamPos.x=CamPos.y=CamPos.z=0;
-	UpdateView(0,0,0);
-	CTileSet	NewSet("c:/temp/2/test.gin",this);
-	TileSet.push_back(NewSet);
+	MapCam=Vec(0,0,0);
+	TileCam=Vec(0,0,0);
+	UpdateView();
+
+
+	TileSet.push_back(CTileSet("c:/temp/3/test.gin",this));
+	TRACE1("%i\n",TileSet.size());
 }
-
-
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 void	CCore::Render()
 {
-//	theApp.SetTileView(TRUE);
-	if (GetTileView())
-	{
-	}
-	else
-	{
-		for (int i=0;i<LAYER_TYPE_MAX;i++)
+Vec		&ThisCam=GetCam();
+
+		if (GetTileView())
 		{
-			if (i==LAYER_TYPE_ACTION)
-				glEnable(GL_DEPTH_TEST);
 
-			Layers[i]->Render(CamPos,Test3dFlag);
-			glDisable(GL_DEPTH_TEST);
 		}
-	}
-//		ParentWindow->Invalidate();
+		else
+		{
+			for (int i=0;i<LAYER_TYPE_MAX;i++)
+			{
+				if (i==LAYER_TYPE_ACTION)
+					glEnable(GL_DEPTH_TEST);
+
+				Layers[i]->Render(ThisCam,Test3dFlag);
+				glDisable(GL_DEPTH_TEST);
+			}
+		}
 }
 
-
-/*****************************************************************************/
-void	CCore::UpdateView(float XOfs,float YOfs,float ZOfs)
-{
-		CamPos=CamPos+Vec(XOfs,YOfs,ZOfs);
-		if (CamPos.z>-1) CamPos.z=-1;
-
-		ParentWindow->Invalidate();
-}
 
 /*****************************************************************************/
 /*** Control *****************************************************************/
@@ -106,25 +102,24 @@ void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 /*****************************************************************************/
 void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-//	Test3dFlag=!Test3dFlag;
-	UpdateView(0,0,0);
 }
 
 /*****************************************************************************/
 void	CCore::MouseWheel(UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0)
-			UpdateView(0,0,1.0f);
+			UpdateView(Vec(0,0,1.0f));
 		else
-			UpdateView(0,0,-1.0f);
+			UpdateView(Vec(0,0,-1.0f));
 }
 
 /*****************************************************************************/
 void	CCore::MouseMove(UINT nFlags, CPoint &point) 
 {
-float	XOfs=0;
-float	YOfs=0;
-
+Vec		Ofs(0,0,0);
+//float	XOfs=0;
+//float	YOfs=0;
+Vec		&ThisCam=GetCam();
 // check if active doc
 		if (theApp.GetCurrent()!=ParentWindow->GetDocument()) return;
 
@@ -137,85 +132,109 @@ float	YOfs=0;
 			RECT	ThisRect;
 
 			ParentWindow->GetWindowRect(&ThisRect);
-			XS=CamPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
-			YS=CamPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			XS=ThisCam.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			YS=ThisCam.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
-			XOfs=LastMousePos.x-CurrentMousePos.x;
-			YOfs=LastMousePos.y-CurrentMousePos.y;
+			Ofs.x=LastMousePos.x-CurrentMousePos.x;
+			Ofs.y=LastMousePos.y-CurrentMousePos.y;
 			LastMousePos=CurrentMousePos;
 	
-			XOfs*=XS;
-			YOfs*=YS;
+			Ofs.x*=XS;
+			Ofs.y*=YS;
 
 			TRACE2("Move %i %i \n",point.x,point.y);
-			UpdateView(+XOfs,-YOfs,0);
+			UpdateView(Ofs);
 			}
 
 
 }
 
 /*****************************************************************************/
-/*** Layer Code **************************************************************/
+/*** Layers ******************************************************************/
 /*****************************************************************************/
-void	CCore::LayerSetActive(int i)
+void	CCore::UpdateLayerBar(BOOL ViewFlag)
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CToolBar	*ToolBar=Frm->GetToolBar();
+CDialogBar	*LayerBar=Frm->GetLayerBar();
+CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
+
+		LayerViewFlag=ViewFlag;
+		if (LayerViewFlag)
+		{
+			Dlg->ResetContent();
+
+			for (int i=0;i<LAYER_TYPE_MAX;i++)
+			{
+				CLayer	*ThisLayer=GetLayer(i);
+				Dlg->AddString(ThisLayer->GetName());
+			}
+			Dlg->SetCurSel(ActiveLayer);
+		}
+
+		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerViewFlag);
+		Frm->ShowControlBar(LayerBar, LayerViewFlag, FALSE);	
+//		UpdateView();
 }
 
 /*****************************************************************************/
-int		CCore::LayerGetActive()
+void	CCore::SetActiveLayer(int i)
 {
-	return(ActiveLayer);
+	UpdateLayerBar(LayerViewFlag);
 }
 
-/*****************************************************************************/
-CLayer	*CCore::LayerGet(int i)
-{
-	return(Layers[i]);
-}
 
 /*****************************************************************************/
+/*** TileBank ****************************************************************/
 /*****************************************************************************/
-/*****************************************************************************/
-void	CCore::SetTileView(BOOL f)
+void	CCore::UpdateTileView(BOOL ViewFlag)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 
-			TileViewFlag=f;
+			TileViewFlag=ViewFlag;
 			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
-	
+			UpdateView();
 }
 
 /*****************************************************************************/
-void	CCore::ToggleTileView()
+GLint	CCore::GetTile(int Bank,int TileNo)
 {
-	SetTileView(!TileViewFlag);
+	TRACE1("%i\n",TileSet.size());
+	return(TileSet[Bank].GetTile(TileNo));
 }
-
-
 /*****************************************************************************/
+/*** Misc ********************************************************************/
 /*****************************************************************************/
-/*****************************************************************************/
-void	CCore::SetLayerPalette(BOOL f)
+Vec		&CCore::GetCam()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CToolBar	*ToolBar=Frm->GetToolBar();
-CDialogBar	*LayerPalette=Frm->GetLayerBar();
+	if (GetTileView())
+		return(TileCam);
+	else
+		return(MapCam);
 
-			LayerPaletteFlag=f;
-			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerPaletteFlag);
-			Frm->ShowControlBar(LayerPalette, LayerPaletteFlag, FALSE);	
 }
 
 /*****************************************************************************/
-void	CCore::ToggleLayerPalette()
+void	CCore::UpdateAll()
 {
-		SetLayerPalette(!LayerPaletteFlag);
+	UpdateView();
+	UpdateLayerBar(LayerViewFlag);
+	UpdateTileView(TileViewFlag);
 }
 
 /*****************************************************************************/
+void	CCore::UpdateView(Vec Ofs)
+{
+Vec		&ThisCam=GetCam();
+
+		ThisCam=ThisCam+Ofs;
+		if (ThisCam.z>-1) ThisCam.z=-1;
+
+		ParentWindow->Invalidate();
+}
 
 	
 
