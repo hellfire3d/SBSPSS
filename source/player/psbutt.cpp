@@ -92,13 +92,24 @@ void CPlayerStateButtBounce::think(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CPlayerStateButtBounceFall::enter(CPlayer *_player)
+{
+	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCEEND);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::enter(CPlayer *_player)
 {
 	DVECTOR	pos;
 
 	pos=getPlayerPos(_player);
 	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
-	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCEEND);
 }
 
 
