@@ -56,6 +56,7 @@ int			Tile2dSize,Tile3dSize;
 const char	*ModelExcludeGroupName="ModelExcludeList";
 const char	*ModelOtOfsGroupName="ModelOtOfs";
 int			LocalOptCount=0;
+
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
 sExpLayerTile	BlankTile={0,0};
@@ -625,14 +626,18 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 }
 
 //***************************************************************************
+int		OTMin=0;
+int		OTMax=16-1;
+
 void	CMkLevel::CalcOtOfs(vector<sTri> &PList,vector<sVtx> &VtxList,int Start,int Count)
 {
 int		ZOfs=+4*Scale;
+int		PntCount=3;
 
 		for (int i=0;i<Count;i++)
 		{
 			sTri	&P=PList[Start+i];
-			int		OtOfs=0;
+			float	OtOfs=0;
 			int		Z[3];
 // Get VtxZ
 			
@@ -640,17 +645,17 @@ int		ZOfs=+4*Scale;
 			Z[1]=VtxList[P.P1].vz+ZOfs;
 			Z[2]=VtxList[P.P2].vz+ZOfs;
 
-			for (int p=0; p<3; p++)	
+			for (int p=0; p<PntCount; p++)	
 			{
 				OtOfs+=Z[p]*Z[p];
 			}
-
-			OtOfs=((int)sqrt(OtOfs/3))/8;
-
+			
+			OtOfs=sqrt(OtOfs/PntCount);
+			OtOfs/=8;
 			OtOfs+=P.OTOfs;
 
-			if (OtOfs>15) OtOfs=15;
-			if (OtOfs<0) OtOfs=0;
+			if (OtOfs>OTMax) OtOfs=OTMax;
+			if (OtOfs<OTMin) OtOfs=OTMin;
 
 			P.OTOfs=OtOfs;
 		}
@@ -661,11 +666,12 @@ int		ZOfs=+4*Scale;
 void	CMkLevel::CalcOtOfs(vector<sQuad> &PList,vector<sVtx> &VtxList,int Start,int Count)
 {
 int		ZOfs=+4*Scale;
+int		PntCount=4;
 
 		for (int i=0;i<Count;i++)
 		{
 			sQuad	&P=PList[Start+i];
-			int		OtOfs=0;
+			float	OtOfs=0;
 			int		Z[4];
 // Get VtxZ
 			
@@ -674,14 +680,17 @@ int		ZOfs=+4*Scale;
 			Z[2]=VtxList[P.P2].vz+ZOfs;
 			Z[3]=VtxList[P.P3].vz+ZOfs;
 
-			for (int p=0; p<4; p++)	OtOfs+=Z[p]*Z[p];
+			for (int p=0; p<PntCount; p++)	
+			{
+				OtOfs+=Z[p]*Z[p];
+			}
 
-			OtOfs=((int)sqrt(OtOfs/4))/8;
-
+			OtOfs=sqrt(OtOfs/PntCount);
+			OtOfs/=8;
 			OtOfs+=P.OTOfs;
 
-			if (OtOfs>15) OtOfs=15;
-			if (OtOfs<0) OtOfs=0;
+			if (OtOfs>OTMax) OtOfs=OTMax;
+			if (OtOfs<OTMin) OtOfs=OTMin;
 
 			P.OTOfs=OtOfs;
 		}

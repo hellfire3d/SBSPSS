@@ -318,7 +318,7 @@ int			V=ThisTex.v+H;
 
 		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
-		Out.PolyCode=GPU_PolyFT3Code;
+		Out.PolyCode=GPU_PolyFT4Code;
 
 		if (In.TPageFlag)
 		{
@@ -676,6 +676,7 @@ int		c = FaceList.size();
 	F.vtx = FaceList[minF].vtx;
 	FaceList[minF].Avail = false;
 	F.Normal= FaceList[minF].Normal;
+	F.OtOfs=FaceList[minF].OtOfs;
 
 	if (minC && MaxStrip>F.pts.size()) FollowFace( minF, F );
 

@@ -17,6 +17,7 @@
 #define	_SHOW_POLYZ_	1
 #include	"gfx\font.h"	
 static		FontBank		*Font;
+int			ShowPolyz=0;
 #endif
 
 static const int	BLOCK_SIZE				=16;
@@ -274,17 +275,19 @@ void	CLayerTile3d::render()
 {
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
-POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
 u32				*XYList=(u32*)SCRATCH_RAM;
-u32				T0,T1,T2;
-u32				P0,P1,P2;
+u32				T0,T1,T2,T3;
+u32				P0,P1,P2,P3;
 s32				ClipZ;
 sOT				*ThisOT;
 VECTOR			BlkPos;
 DVECTOR			*DP0,*DP1,*DP2,*DP3;
-
 s16				*DeltaFY=FTableY[ShiftY];
 s16				*DeltaBY=BTableY[ShiftY];
+
+#if		defined(_SHOW_POLYZ_)
+s16				TCount=0,QCount=0;
+#endif
 
 // Setup Trans Matrix
 		BlkPos.vx=RENDER_X_OFS-(ShiftX)+RenderOfs.vx;
@@ -307,8 +310,9 @@ s16				*DeltaBY=BTableY[ShiftY];
 
 				int			TriCount=Elem->TriCount;				
 				sTri		*TList=&TriList[Elem->TriStart];
-
-				if (TriCount)	// Blank tiles rejected here, to prevent over processing (as no tri-count)
+				int			QuadCount=Elem->QuadCount;				
+				sQuad		*QList=&QuadList[Elem->QuadStart];
+				if (TriCount || QuadCount)	// Blank tiles rejected here, to prevent over processing (as no tri-count)
 				{
 					CMX_SetTransMtxXY(&BlkPos);
 					CMX_SetRotMatrixXY(&FTab->Mtx);
@@ -351,6 +355,8 @@ s16				*DeltaBY=BTableY[ShiftY];
 
 					while (TriCount--)
 					{
+						POLY_FT3	*ThisPrim=(POLY_FT3*)PrimPtr;
+
 						P0=XYList[TList->P0]; 
 						P1=XYList[TList->P1]; 
 						P2=XYList[TList->P2];
@@ -358,31 +364,86 @@ s16				*DeltaBY=BTableY[ShiftY];
 						gte_ldsxy1(P1);
 						gte_ldsxy2(P2);
 						
-						setlen(TPrimPtr, GPU_PolyFT3Tag);
-						TPrimPtr->code=TList->PolyCode;
+						setlen(ThisPrim, GPU_PolyFT3Tag);
+						ThisPrim->code=TList->PolyCode;
 						gte_nclip_b();	// 8 cycles
 
-						setShadeTex(TPrimPtr,1);
+						setShadeTex(ThisPrim,1);
+#if		defined(_SHOW_POLYZ_)
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);}
+#endif
 
 						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 						T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-						T2=*(u16*)&TList->uv2;		// Get UV2
-						*(u32*)&TPrimPtr->u0=T0;	// Set UV0
-						*(u32*)&TPrimPtr->u1=T1;	// Set UV1
-						*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+						T2=*(u32*)&TList->uv2;		// Get UV2
+						*(u32*)&ThisPrim->u0=T0;	// Set UV0
+						*(u32*)&ThisPrim->u1=T1;	// Set UV1
+						*(u32*)&ThisPrim->u2=T2;	// Set UV2
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+TList->OTOfs;
 						ClipZ^=FTab->ClipCode;
 						TList++;
 						if (ClipZ<0)
 						{
-							*(u32*)&TPrimPtr->x0=P0;	// Set XY0
-							*(u32*)&TPrimPtr->x1=P1;	// Set XY1
-							*(u32*)&TPrimPtr->x2=P2;	// Set XY2
-							addPrim(ThisOT,TPrimPtr);
-							TPrimPtr++;
+							*(u32*)&ThisPrim->x0=P0;	// Set XY0
+							*(u32*)&ThisPrim->x1=P1;	// Set XY1
+							*(u32*)&ThisPrim->x2=P2;	// Set XY2
+							addPrim(ThisOT,ThisPrim);
+							PrimPtr+=sizeof(POLY_FT3);
+							#if		defined(_SHOW_POLYZ_)
+							TCount++;
+							#endif
+
 						}
 					}
+					while (QuadCount--)
+					{
+						POLY_FT4	*ThisPrim=(POLY_FT4*)PrimPtr;
+
+						P0=XYList[QList->P0]; 
+						P1=XYList[QList->P1]; 
+						P2=XYList[QList->P2];
+						P3=XYList[QList->P3];
+						gte_ldsxy0(P0);
+						gte_ldsxy1(P1);
+						gte_ldsxy2(P2);
+						
+						setlen(ThisPrim, GPU_PolyFT4Tag);
+						ThisPrim->code=QList->PolyCode;
+						gte_nclip_b();	// 8 cycles
+
+						setShadeTex(ThisPrim,1);
+#if		defined(_SHOW_POLYZ_)
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0);}
+#endif
+
+						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
+						T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
+						T2=*(u32*)&QList->uv2;		// Get UV2
+						T3=*(u32*)&QList->uv3;		// Get UV2
+						*(u32*)&ThisPrim->u0=T0;	// Set UV0
+						*(u32*)&ThisPrim->u1=T1;	// Set UV1
+						*(u32*)&ThisPrim->u2=T2;	// Set UV2
+						*(u32*)&ThisPrim->u3=T3;	// Set UV2
+						gte_stopz(&ClipZ);
+						ThisOT=OtPtr+QList->OTOfs;
+						ClipZ^=FTab->ClipCode;
+						QList++;
+						if (ClipZ<0)
+						{
+							*(u32*)&ThisPrim->x0=P0;	// Set XY0
+							*(u32*)&ThisPrim->x1=P1;	// Set XY1
+							*(u32*)&ThisPrim->x2=P2;	// Set XY2
+							*(u32*)&ThisPrim->x3=P3;	// Set XY3
+							addPrim(ThisOT,ThisPrim);
+							PrimPtr+=sizeof(POLY_FT4);
+							#if		defined(_SHOW_POLYZ_)
+							QCount++;
+							#endif
+
+						}
+					}
+
 				}
 				MapRow++;
 				BlkPos.vx+=BLOCK_SIZE;
@@ -394,12 +455,10 @@ s16				*DeltaBY=BTableY[ShiftY];
 			DeltaFY++; DeltaBY++;
 		}
 
-		SetPrimPtr((u8*)TPrimPtr);
+		SetPrimPtr((u8*)PrimPtr);
 
 #if		defined(_SHOW_POLYZ_)
 char	Txt[256];
-int		TCount=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
-int		QCount=0;
 		sprintf(Txt,"TC %i\nQC %i",TCount,QCount);
 		Font->print( 128, 32, Txt);
 #endif
