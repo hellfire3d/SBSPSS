@@ -427,7 +427,7 @@ void	CGameScene::think(int _frames)
 				think_playing(1);
 				think_playing(1);
 				m_gamestate=GAMESTATE_TELEPORT_END;
-				CFader::setFadingIn(CFader::WHITE_FADE);
+				CFader::setFadingIn();
 			}
 			break;
 		case GAMESTATE_TELEPORT_END:
@@ -713,7 +713,7 @@ int		CGameScene::triggerTeleportEffect()
 	if(m_gamestate==GAMESTATE_PLAYING)
 	{
 		m_gamestate=GAMESTATE_TELEPORT_START;
-		CFader::setFadingOut(CFader::WHITE_FADE);
+		CFader::setFadingOut();
 		return true;
 	}
 	return false;
