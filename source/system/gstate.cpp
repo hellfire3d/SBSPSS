@@ -53,6 +53,7 @@ void GameState::think()
 		{
 			if(s_currentScene->readyToShutdown())
 			{
+				SYSTEM_DBGMSG("GameState: Closing down scene..");
 				ASSERT(s_pendingScene);		// There really should be a scene pending before you shutdown..!
 				s_currentScene->shutdown();
 				s_currentScene=NULL;
@@ -60,6 +61,7 @@ void GameState::think()
 		}
 		if(!s_currentScene)
 		{
+			SYSTEM_DBGMSG("GameState: Opening new scene..");
 			s_currentScene=s_pendingScene;
 			s_currentScene->init();
 			s_pendingScene=NULL;

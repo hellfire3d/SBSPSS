@@ -131,10 +131,19 @@ void CFrontEndStart::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
 void CFrontEndStart::think(int _frames)
 {
 	if(!m_shuttingDown)
 	{
+/////////// PKG		
+if(PadGetDown(0)&PAD_START)
+{
+	m_selectedSlot=0;
+}
+/////////// PKG		
 		if(m_selectedSlot!=NO_SLOT_SELECTED||
 		   m_escapeToTitles)
 		{
@@ -163,13 +172,13 @@ int CFrontEndStart::isReadyToExit()
   ---------------------------------------------------------------------- */
 CFrontEndScene::FrontEndMode CFrontEndStart::getNextMode()
 {
-	if(m_selectedSlot!=NO_SLOT_SELECTED)
+	if(m_selectedSlot==NO_SLOT_SELECTED)
 	{
-		return	CFrontEndScene::MODE__MAIN_TITLES;
+		return CFrontEndScene::MODE__MAIN_TITLES;
 	}
 	else
 	{
-		return	CFrontEndScene::MODE__MAIN_TITLES;	// PKG
+		return CFrontEndScene::MODE__EXIT_TO_GAME;
 	}
 }
 

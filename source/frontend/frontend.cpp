@@ -79,7 +79,8 @@ CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 	&s_frontEndDemoMode,			// MODE__DEMO
 	&s_frontEndCredits,				// MODE__CREDITS
 
-	NULL,							// MODE__NONE
+	// NULL,							// MODE__NONE
+	// NULL,							// MODE__EXIT_TO_GAME
 };
 
 
@@ -99,6 +100,7 @@ void CFrontEndScene::init()
 		s_modeCodes[i]->init();
 	}
 
+	m_exitToGame=false;
 	m_mode=MODE__NONE;
 	setMode(MODE__MAIN_TITLES);
 }
@@ -158,7 +160,7 @@ void CFrontEndScene::think(int _frames)
   ---------------------------------------------------------------------- */
 int CFrontEndScene::readyToShutdown()
 {
-	return false;
+	return m_exitToGame;
 }
 
 
@@ -173,14 +175,22 @@ void CFrontEndScene::setMode(FrontEndMode _newMode)
 PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
 
 	// Close old mode
-	if(s_modeCodes[m_mode])
+	if(m_mode!=MODE__NONE)
 	{
 		s_modeCodes[m_mode]->unselect();
 	}
 	
 	// Open new mode
-	m_mode=_newMode;
-	s_modeCodes[m_mode]->select();
+	if(_newMode==MODE__EXIT_TO_GAME)
+	{
+		m_exitToGame=true;
+		GameState::setNextScene(&FrontEndScene);
+	}
+	else
+	{
+		m_mode=_newMode;
+		s_modeCodes[m_mode]->select();
+	}
 }
 
 

@@ -46,6 +46,8 @@ public:
 		MODE__CREDITS,
 
 		MODE__NONE,
+
+		MODE__EXIT_TO_GAME,
 	} FrontEndMode;
 
 	void	init();
@@ -58,6 +60,8 @@ public:
 
 private:
 	void	setMode(FrontEndMode _newMode);
+
+	int							m_exitToGame;
 
 	FrontEndMode				m_mode;
 	class CFrontEndMode			*m_modeCode;
