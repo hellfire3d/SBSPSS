@@ -2413,6 +2413,14 @@ SOURCE=..\..\..\source\triggers\tsdownemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tsecret.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsecret.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tsemit.cpp
 # End Source File
 # Begin Source File

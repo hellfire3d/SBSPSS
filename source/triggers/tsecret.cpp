@@ -18,6 +18,10 @@
 #include "triggers\trigger.h"
 #include "triggers\tsecret.h"
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -54,7 +58,7 @@ void	CSecretAreaTrigger::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 		{
-			CSoundMediator::play
+			CSoundMediator::playSfx(CSoundMediator::SFX_SECRET_AREA);
 			shutdown();
 			delete this;
 			break;

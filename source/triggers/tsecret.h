@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	tboss.h
+	tsecret.h
 
 	Author:		PKG
 	Created:	
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__TRIGGERS_TBOSS_H__
-#define __TRIGGERS_TBOSS_H__
+#ifndef	__TRIGGERS_TSECRET_H__
+#define __TRIGGERS_TSECRET_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CBossArenaTrigger : public CTrigger
+class CSecretAreaTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
@@ -51,7 +51,7 @@ protected:
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __TRIGGERS_TBOSS_H__ */
+#endif	/* __TRIGGERS_TSECRET_H__ */
 
 /*===========================================================================
  end */

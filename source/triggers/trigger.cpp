@@ -79,6 +79,10 @@
 #include "triggers\tbgeyser.h"
 #endif
 
+#ifndef __TRIGGERS_TSECRET_H__
+#include "triggers\tsecret.h"
+#endif
+
 #ifndef __TRIGGERS_TSEMIT_H__
 #include "triggers\tsemit.h"
 #endif
@@ -340,7 +344,11 @@ CTrigger	*trigger;
 			break;
 		// Boss Arena
 		case TRIGGER_BOSS_ARENA:
-			trigger = (COilGeyserTrigger*)new("BossArenaTrigger") CBossArenaTrigger();
+			trigger = (CBossArenaTrigger*)new("BossArenaTrigger") CBossArenaTrigger();
+			break;
+		// Secret Area
+		case TRIGGER_SECRET_AREA:
+			trigger = (CSecretAreaTrigger*)new("SecretAreaTrigger") CSecretAreaTrigger();
 			break;
 		default:
 			trigger=NULL;
