@@ -88,6 +88,7 @@ void CProjectile::init()
 	m_ot = OTPOS__ACTOR_POS;
 	m_speed = 3;
 	m_xScale = ONE;
+	m_yScale = ONE;
 	updateCollisionArea();
 }
 
@@ -443,7 +444,7 @@ void CProjectile::render()
 
 	frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
 
-	CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, m_xScale, 4096, m_heading, m_ot );
+	CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, m_xScale, m_yScale, m_heading, m_ot );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -67,6 +67,7 @@ public:
 	void				setGraphic( int frame );
 	void				setSpeed( u16 newSpeed )								{m_speed = newSpeed;}
 	void				setXScale( s16 newScale )								{m_xScale = newScale;}
+	void				setYScale( s16 newScale )								{m_yScale = newScale;}
 
 protected:
 	DVECTOR				getScreenOffset();
@@ -86,6 +87,7 @@ protected:
 	int											m_spriteFrame;
 	u16											m_speed;
 	s16											m_xScale;
+	s16											m_yScale;
 };
 
 /*****************************************************************************/
