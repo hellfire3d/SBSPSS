@@ -248,7 +248,7 @@ UI_GFX_TRANS :=				+bambootopleft.bmp +bamboobotleft.bmp +bambootopright.bmp +ba
 							+mappointer.bmp +speechbubblecorner.bmp \
 							faces/mr_krabs.bmp faces/patrick.bmp faces/plankton.bmp \
 							faces/sandy.bmp faces/spongebob.bmp faces/squidward.bmp \
-							faces/mermaidman.bmp faces/barnacleboy.bmp faces/jack_custard.bmp
+							faces/mermaidman.bmp faces/barnacleboy.bmp faces/jack_custard.bmp faces/gary.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 ####
