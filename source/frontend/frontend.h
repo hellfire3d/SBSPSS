@@ -46,6 +46,7 @@ class CFrontEndScene : public CScene
 public:
 	typedef enum
 	{
+		MODE__NICK_LOGO,
 		MODE__FMV_THQ,
 		MODE__FMV_INTRO,
 		MODE__MAIN_TITLES,

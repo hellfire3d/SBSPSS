@@ -22,6 +22,10 @@
 #include "mem\memory.h"
 #endif
 
+#ifndef	__FRONTEND_NICKLOGO_H__
+#include "frontend\nicklogo.h"
+#endif
+
 #ifndef	__FRONTEND_MAINTITL_H__
 #include "frontend\maintitl.h"
 #endif
@@ -102,6 +106,7 @@
 	Vars
 	---- */
 
+static CFrontEndNickLogo		s_nickLogo;
 static CFrontEndFMVTHQ			s_frontEndFMVTHQ;
 static CFrontEndFMVIntro		s_frontEndFMVIntro;
 static CFrontEndMainTitles		s_frontEndModeMainTitles;
@@ -111,6 +116,7 @@ static CFrontEndDemoMode		s_frontEndDemoMode;
 
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
+	&s_nickLogo,					// MODE__NICK_LOGO
 	&s_frontEndFMVTHQ,				// MODE__FMV_THQ
 	&s_frontEndFMVIntro,			// MODE__FMV_INTRO
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
@@ -158,7 +164,7 @@ void CFrontEndScene::init()
 	else
 	{
 		s_runOnce=true;
-		setMode(MODE__FMV_THQ);
+		setMode(MODE__NICK_LOGO);
 	}
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();

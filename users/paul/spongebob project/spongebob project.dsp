@@ -577,6 +577,14 @@ SOURCE=..\..\..\source\frontend\maintitl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\nicklogo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\nicklogo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\options.cpp
 # End Source File
 # Begin Source File

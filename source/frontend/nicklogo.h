@@ -37,10 +37,23 @@
 class CFrontEndNickLogo : public CFrontEndMode
 {
 public:
-	void	select();
+	virtual void							select();
+	virtual void							unselect();
+	virtual void							think(int _frames);
 
-	int		isReadyToExit();
-	CFrontEndScene::FrontEndMode	getNextMode();
+	virtual int								isReadyToExit();
+	virtual CFrontEndScene::FrontEndMode	getNextMode();
+
+private:
+	enum
+	{
+		DISPLAY_FRAMES=60*6,
+	};
+
+	int										m_readyToExit;
+	unsigned char							*m_image;
+	int										m_frameCount;
+
 };
 
 

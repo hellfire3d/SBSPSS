@@ -22,8 +22,12 @@
 #include "gfx\fader.h"
 #endif
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
+#ifndef _FILEIO_HEADER_
+#include "fileio\fileio.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
 #endif
 
 
@@ -57,6 +61,42 @@
   ---------------------------------------------------------------------- */
 void CFrontEndNickLogo::select()
 {
+	m_readyToExit=false;
+
+	m_image=CFileIO::loadFile(BACKDROP_NICK_GFX);
+	ASSERT(m_image);
+	SetScreenImage(m_image);
+
+	CFader::setFadingIn();
+	m_frameCount=0;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndNickLogo::unselect()
+{
+	MemFree(m_image);	m_image=NULL;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndNickLogo::think(int _frames)
+{
+	m_frameCount+=_frames;
+
+	if(m_frameCount>DISPLAY_FRAMES&!m_readyToExit)
+	{
+		CFader::setFadingOut();
+		m_readyToExit=true;
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -67,7 +107,7 @@ void CFrontEndNickLogo::select()
   ---------------------------------------------------------------------- */
 int CFrontEndNickLogo::isReadyToExit()
 {
-	return false;
+	return !CFader::isFading()&&m_readyToExit;
 }
 
 /*----------------------------------------------------------------------

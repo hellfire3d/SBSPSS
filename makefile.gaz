@@ -194,6 +194,7 @@ frontend_src :=		demomode \
 					fmvthq \
 					fmvintro \
 					maintitl \
+					nicklogo \
 					options \
 					scrollbg \
 					start
