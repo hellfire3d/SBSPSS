@@ -70,6 +70,7 @@
 #include "fma\fma.h"
 #endif
 
+#include	"utils\lznp.h"
 	
 /*	Std Lib
 	------- */
@@ -131,44 +132,77 @@
 
 CMapScene	MapScene;
 
+CMapScene::sMapLevelGfxTable	CMapScene::s_GfxTable[MAP_GFX_MAX]=
+{
+	{MAP_C1_L1_GFX,0},	
+	{MAP_C1_L2_GFX,0},	
+	{MAP_C1_L3_GFX,0},	
+	{MAP_C1_L4_GFX,0},	
+	{MAP_C1_FAIR_GFX,0},
+
+	{MAP_C2_L1_GFX,0},	
+	{MAP_C2_L2_GFX,0},	
+	{MAP_C2_L3_GFX,0},	
+	{MAP_C2_L4_GFX,0},	
+	{MAP_C2_FAIR_GFX,0},
+
+	{MAP_C3_L1_GFX,0},	
+	{MAP_C3_L2_GFX,0},	
+	{MAP_C3_L3_GFX,0},	
+	{MAP_C3_L4_GFX,0},	
+	{MAP_C3_FAIR_GFX,0},
+
+	{MAP_C4_L1_GFX,0},	
+	{MAP_C4_L2_GFX,0},	
+	{MAP_C4_L3_GFX,0},	
+	{MAP_C4_L4_GFX,0},	
+	{MAP_C4_FAIR_GFX,0},
+
+	{MAP_C5_L1_GFX,0},	
+	{MAP_C5_L2_GFX,0},	
+	{MAP_C5_L3_GFX,0},	
+	{MAP_C5_L4_GFX,0},	
+	{MAP_C5_FAIR_GFX,0},
+};
+
 
 CMapScene::sMapLevelData	CMapScene::s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER]=
 {
-	//		mapFile				globalLevelNumber	spatulaOrTokenCounts								questItemFrame			kelpWorldLevel
+	//		mapFile				Gfx,	globalLevelNumber	spatulaOrTokenCounts								questItemFrame			kelpWorldLevel
 	{
-		{	MAP_C1_L1_GFX,		0,					CHAPTER01_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L1_QUEST_ITEM,	false	},
-		{	MAP_C1_L2_GFX,		1,					CHAPTER01_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L2_QUEST_ITEM,	false	},
-		{	MAP_C1_L3_GFX,		2,					CHAPTER01_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L3_QUEST_ITEM,	false	},
-		{	MAP_C1_L4_GFX,		3,					CHAPTER01_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L4_QUEST_ITEM,	false	},
-		{	MAP_C1_FAIR_GFX,	4,					CHAPTER06_LEVEL01_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
+		{	MAP_GFX_C1_L1,		0,					CHAPTER01_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L1_QUEST_ITEM,	false	},
+		{	MAP_GFX_C1_L2,		1,					CHAPTER01_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L2_QUEST_ITEM,	false	},
+		{	MAP_GFX_C1_L3,		2,					CHAPTER01_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L3_QUEST_ITEM,	false	},
+		{	MAP_GFX_C1_L4,		3,					CHAPTER01_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L4_QUEST_ITEM,	false	},
+		{	MAP_GFX_C1_FAIR,	4,					CHAPTER06_LEVEL01_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 	{
-		{	MAP_C2_L1_GFX,		5,					CHAPTER02_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L1_QUEST_ITEM,	false	},
-		{	MAP_C2_L2_GFX,		6,					CHAPTER02_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L2_QUEST_ITEM,	false	},
-		{	MAP_C2_L3_GFX,		7,					CHAPTER02_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L3_QUEST_ITEM,	false	},
-		{	MAP_C2_L4_GFX,		8,					CHAPTER02_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L4_QUEST_ITEM,	false	},
-		{	MAP_C2_FAIR_GFX,	9,					CHAPTER06_LEVEL02_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
+		{	MAP_GFX_C2_L1,		5,					CHAPTER02_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L1_QUEST_ITEM,	false	},
+		{	MAP_GFX_C2_L2,		6,					CHAPTER02_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L2_QUEST_ITEM,	false	},
+		{	MAP_GFX_C2_L3,		7,					CHAPTER02_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L3_QUEST_ITEM,	false	},
+		{	MAP_GFX_C2_L4,		8,					CHAPTER02_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L4_QUEST_ITEM,	false	},
+		{	MAP_GFX_C2_FAIR,	9,					CHAPTER06_LEVEL02_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 	{
-		{	MAP_C3_L1_GFX,		10,					CHAPTER03_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L1_QUEST_ITEM,	false	},
-		{	MAP_C3_L2_GFX,		11,					CHAPTER03_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L2_QUEST_ITEM,	false	},
-		{	MAP_C3_L3_GFX,		12,					CHAPTER03_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L3_QUEST_ITEM,	false	},
-		{	MAP_C3_L4_GFX,		13,					CHAPTER03_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L4_QUEST_ITEM,	false	},
-		{	MAP_C3_FAIR_GFX,	14,					CHAPTER06_LEVEL03_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
+		{	MAP_GFX_C3_L1,		10,					CHAPTER03_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L1_QUEST_ITEM,	false	},
+		{	MAP_GFX_C3_L2,		11,					CHAPTER03_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L2_QUEST_ITEM,	false	},
+		{	MAP_GFX_C3_L3,		12,					CHAPTER03_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L3_QUEST_ITEM,	false	},
+		{	MAP_GFX_C3_L4,		13,					CHAPTER03_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L4_QUEST_ITEM,	false	},
+		{	MAP_GFX_C3_FAIR,	14,					CHAPTER06_LEVEL03_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 	{
-		{	MAP_C4_L1_GFX,		15,					CHAPTER04_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
-		{	MAP_C4_L2_GFX,		16,					CHAPTER04_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
-		{	MAP_C4_L3_GFX,		17,					CHAPTER04_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
-		{	MAP_C4_L4_GFX,		18,					CHAPTER04_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
-		{	MAP_C4_FAIR_GFX,	19,					CHAPTER06_LEVEL04_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
+		{	MAP_GFX_C4_L1,		15,					CHAPTER04_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_GFX_C4_L2,		16,					CHAPTER04_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_GFX_C4_L3,		17,					CHAPTER04_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_GFX_C4_L4,		18,					CHAPTER04_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_GFX_C4_FAIR,	19,					CHAPTER06_LEVEL04_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 	{
-		{	MAP_C5_L1_GFX,		20,					CHAPTER05_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L1_QUEST_ITEM,	false	},
-		{	MAP_C5_L2_GFX,		21,					CHAPTER05_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L2_QUEST_ITEM,	false	},
-		{	MAP_C5_L3_GFX,		22,					CHAPTER05_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L3_QUEST_ITEM,	false	},
-		{	MAP_C5_L4_GFX,		23,					CHAPTER05_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L4_QUEST_ITEM,	false	},
-		{	MAP_C5_FAIR_GFX,	24,					CHAPTER06_LEVEL05_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
+		{	MAP_GFX_C5_L1,		20,					CHAPTER05_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L1_QUEST_ITEM,	false	},
+		{	MAP_GFX_C5_L2,		21,					CHAPTER05_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L2_QUEST_ITEM,	false	},
+		{	MAP_GFX_C5_L3,		22,					CHAPTER05_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L3_QUEST_ITEM,	false	},
+		{	MAP_GFX_C5_L4,		23,					CHAPTER05_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L4_QUEST_ITEM,	false	},
+		{	MAP_GFX_C5_FAIR,	24,					CHAPTER06_LEVEL05_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 };
 
@@ -205,7 +239,17 @@ void CMapScene::init()
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
 
 	m_currentChapterSelection=s_chapterToStartOn;
-	m_mapBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(m_mapBackgroundImage);
+//	m_mapBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(m_mapBackgroundImage);
+u8	*Back=(u8*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(Back);
+	LZNP_Decode(Back,(u8*)m_screenImage);
+	MemFree(Back);
+
+// Load level Gfx
+	for (int i=0; i<MAP_GFX_MAX; i++)
+	{
+		s_GfxTable[i].Gfx=(u8*)CFileIO::loadFile((FileEquate)s_GfxTable[i].Filename,"MapLevelGfx");
+	}
+
 	generateMapScreenImage();
 	m_currentLevelSelection=s_levelToStartOn;
 
@@ -233,8 +277,14 @@ void CMapScene::shutdown()
 	CSoundMediator::dumpSong();
 
 	ClearScreenImage();
+// Free level Gfx
+	for (int i=0; i<MAP_GFX_MAX; i++)
+	{
+		MemFree(s_GfxTable[i].Gfx);
+	}
+
 	delete m_pointerIcon;
-	MemFree(m_mapBackgroundImage);
+//	MemFree(m_mapBackgroundImage);
 	MemFree(m_screenImage);
 	m_font->dump();				delete m_font;
 }
@@ -512,12 +562,13 @@ void	CMapScene::generateMapScreenImage()
 	int	i;
 
 	m_currentLevelSelection=0;
-	memcpy(m_screenImage,m_mapBackgroundImage,512*256*2);
+//	memcpy(m_screenImage,m_mapBackgroundImage,512*256*2);
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
 		if(isLevelOpen(m_currentChapterSelection,i))
 		{
-			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_mapFile,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
+			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_Gfx,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
+//			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_mapFile,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
 		}
 	}
 
@@ -537,12 +588,20 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 	u16	*src,*dst;
 	int	y;
 
-	image=CFileIO::loadFile((FileEquate)_file);ASSERT(image);
+	image=(u8*)MemAlloc(MAP_LEVEL_WIDTH*MAP_LEVEL_HEIGHT*2,"MapLvlBuffer");
+	LZNP_Decode(s_GfxTable[_file].Gfx,image);
+//	image=CFileIO::loadFile((FileEquate)_file);ASSERT(image);
 	src=(u16*)image;
 	dst=(u16*)m_screenImage+(_x+(_y*512));
 	for(y=0;y<_h;y++)
 	{
-		memcpy(dst,src,_w*2);
+//		memcpy(dst,src,_w*2);
+		u32	*S=(u32*)src;
+		u32	*D=(u32*)dst;
+		for (int x=0; x<MAP_LEVEL_WIDTH/2; x++)
+		{
+			*D++=*S++;
+		}
 		dst+=512;
 		src+=_w;
 	}

@@ -74,14 +74,54 @@ private:
 		MAP_NUM_LEVELS_PER_CHAPTER=5,
 	};
 
+	enum MAP_GFX
+	{
+		MAP_GFX_C1_L1=0,
+		MAP_GFX_C1_L2,
+		MAP_GFX_C1_L3,
+		MAP_GFX_C1_L4,
+		MAP_GFX_C1_FAIR,
+
+		MAP_GFX_C2_L1,
+		MAP_GFX_C2_L2,
+		MAP_GFX_C2_L3,
+		MAP_GFX_C2_L4,
+		MAP_GFX_C2_FAIR,
+
+		MAP_GFX_C3_L1,
+		MAP_GFX_C3_L2,
+		MAP_GFX_C3_L3,
+		MAP_GFX_C3_L4,
+		MAP_GFX_C3_FAIR,
+
+		MAP_GFX_C4_L1,
+		MAP_GFX_C4_L2,
+		MAP_GFX_C4_L3,
+		MAP_GFX_C4_L4,
+		MAP_GFX_C4_FAIR,
+
+		MAP_GFX_C5_L1,
+		MAP_GFX_C5_L2,
+		MAP_GFX_C5_L3,
+		MAP_GFX_C5_L4,
+		MAP_GFX_C5_FAIR,
+
+		MAP_GFX_MAX
+	};
 	typedef struct
 	{
-		int		m_mapFile;
+		MAP_GFX	m_Gfx;
 		int		m_globalLevelNumber;
 		int		m_spatulaOrTokenCounts;
 		int		m_questItemFrame;
 		int		m_kelpWorldLevel;
 	} sMapLevelData;
+
+	struct sMapLevelGfxTable
+	{
+		int	Filename;
+		u8	*Gfx;
+	};
 
 
 	void	renderPointer();
@@ -102,14 +142,15 @@ private:
 	int					m_musicStarted;
 
 	char				*m_screenImage;
-	char				*m_mapBackgroundImage;
+//	char				*m_mapBackgroundImage;
 
 	int					m_currentChapterSelection;
 	int					m_currentLevelSelection;
 	class CPointerIcon	*m_pointerIcon;
 
-	static sMapLevelData	s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
-	static DVECTOR			s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];
+	static sMapLevelGfxTable	s_GfxTable[MAP_GFX_MAX];
+	static sMapLevelData		s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
+	static DVECTOR				s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];
 
 	static int				s_chapterToStartOn;
 	static int				s_levelToStartOn;

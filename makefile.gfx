@@ -492,7 +492,8 @@ cleanmapscreens:
 		@$(ECHO) Map screens Cleaned
 
 $(MAPSCREENS_OUT_DIR)/%.gfx : $(MAPSCREENS_IN_DIR)/%.tga
-	@$(TGA2GFX) $< $@
+	@$(TGA2GFX) $< a.tmp
+	@$(LZNP) a.tmp $@ >nul
 
 GRAF_DIRS_TO_MAKE +=	$(MAPSCREENS_OUT_DIR)
 GFX_DATA_OUT +=			$(MAPSCREENS_OUT)
