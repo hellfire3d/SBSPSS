@@ -39,6 +39,16 @@ void	CSteamEmitterTrigger::think(int _frames)
 	{
 		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STEAM, true );
 	}
+	else
+	{
+		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
 
 	CTrigger::think( _frames );
 }
