@@ -44,6 +44,11 @@ void CNpcFallingBlockPlatform::trigger()
 {
 	m_isTriggered = true;
 	m_timer = GameState::getOneSecondInFrames();
+
+// Clear collision, flagged with normal - cos rest is solid!
+	CLevel	&level=GameScene.GetLevel();
+	level.destroyMapArea(Pos,COLLISION_TYPE_SLIPPERY);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

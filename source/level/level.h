@@ -65,8 +65,8 @@ static int							getChapterLoadingText()					{return LvlTable[s_globalLevelSelec
 static int							getLevelLoadingText()					{return LvlTable[s_globalLevelSelectThing].LevelLoadingText;}
 static CFmaScene::FMA_SCRIPT_NUMBER getFMAToFollow()						{return LvlTable[s_globalLevelSelectThing].FMAToFollow;}
 
-		void			destroyMapArea(DVECTOR const &Pos);
-		void			destroyMapTile(DVECTOR const &Pos);
+		void			destroyMapArea(DVECTOR const &Pos,int ColT=COLLISION_TYPE_DESTRUCTABLE_WALL);
+		void			destroyMapTile(DVECTOR const &Pos,int ColT=COLLISION_TYPE_DESTRUCTABLE_FLOOR);
 
 		void			reverseMapConveyor();
 

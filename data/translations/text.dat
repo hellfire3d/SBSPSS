@@ -157,7 +157,7 @@ eng=Load Error!\n\nPress the X button to continue
 [STR__MEMCARD__NOSPACEONCARD]
 eng=Insufficient free blocks available on MEMORY CARD in MEMORY CARD SLOT 1. One free block required
 [STR__MEMCARD__DUPLICATESAVENAME]
-eng=Are you sure you want to\noverwrite the existing file on the MEMORY CARD in MEMORY CARD slot 1?
+eng=File already exists on the\nMEMORY CARD in MEMORY CARD slot 1\nAre you sure you want to overwrite the previous file?
 [STR__MEMCARD__DOYOUWANTTOFORMATCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted. Do you wish to format?
 [STR__MEMCARD__FORMATTINGPLEASEWIAT]

@@ -745,10 +745,10 @@ sLayerHdr	*layer;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLevel::destroyMapArea(DVECTOR const &Pos)
+void	CLevel::destroyMapArea(DVECTOR const &Pos,int ColT)
 {
 DVECTOR		TL,BR;
-const int			ColT=COLLISION_TYPE_DESTRUCTABLE_WALL;
+//const int			ColT=COLLISION_TYPE_DESTRUCTABLE_WALL;
 
 
 			TL.vx=Pos.vx&-16;;
@@ -775,9 +775,12 @@ DVECTOR		DP;
 					if (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==ColT)
 					{
 						sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(DP.vx,DP.vy);
-						CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,DP);
-						FX->SetTile(MapElem->Tile);
-						MapElem->Tile=0;
+						if (MapElem->Tile)
+						{
+							CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,DP);
+							FX->SetTile(MapElem->Tile);
+							MapElem->Tile=0;
+						}
 						*ColElem=0;
 
 					}
@@ -788,11 +791,11 @@ DVECTOR		DP;
 /*****************************************************************************/
 // fixed now, so takes out whole vertical section, wherever it is hit 
 // Note: relies on tiles not being top or bottom of map tho!!
-void	CLevel::destroyMapTile(DVECTOR const &Pos)
+void	CLevel::destroyMapTile(DVECTOR const &Pos,int ColT)
 {
 int				Width=getMapWidth();
 DVECTOR			MP=Pos;
-const int		ColT=COLLISION_TYPE_DESTRUCTABLE_FLOOR;
+//const int		ColT=COLLISION_TYPE_DESTRUCTABLE_FLOOR;
 
 // Goto Top
 			while (*CollisionLayer->getMapPtr(MP.vx,MP.vy-1)>>COLLISION_TYPE_FLAG_SHIFT==ColT)
@@ -806,9 +809,12 @@ sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(
 // Thrash em down
 			while (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==ColT)
 			{
-				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,MP);
-				FX->SetTile(MapElem->Tile);
-				MapElem->Tile=0;
+				if (MapElem->Tile)
+				{
+					CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,MP);
+					FX->SetTile(MapElem->Tile);
+					MapElem->Tile=0;
+				}
 				*ColElem=0;
 
 				MapElem+=Width;
@@ -851,6 +857,7 @@ DVECTOR		DP;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+// note: slippery used as special type in 4:4 boss arena
 void	CLevel::CreateTileStore()
 {
 int		MapW=getMapWidth();
@@ -866,7 +873,7 @@ int		X,Y;
 			{
 				u8	*ColElem=CollisionLayer->getMapPtr(X*16,Y*16);
 				int	ColT = (*ColElem) & COLLISION_TYPE_MASK;
-				if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
+				if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL || ColT==COLLISION_TYPE_FLAG_SLIPPERY)
 				{
 					m_TileStoreCount++;
 				}
@@ -884,7 +891,7 @@ int		X,Y;
 				{
 					u8	*ColElem=CollisionLayer->getMapPtr(X*16,Y*16);
 					int	ColT = (*ColElem) & COLLISION_TYPE_MASK;
-					if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
+					if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL || ColT==COLLISION_TYPE_FLAG_SLIPPERY)
 					{
 						Ptr->X=X;
 						Ptr->Y=Y;
