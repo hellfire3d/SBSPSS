@@ -83,7 +83,7 @@ void CNpcDualPlatformBarrelHazard::processMovement( int _frames )
 			distX = distX / abs( distX );
 		}
 
-		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy + 14 ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -93,7 +93,7 @@ void CNpcDualPlatformBarrelHazard::processMovement( int _frames )
 		{
 			// check for vertical movement
 
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy + 14, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{
@@ -110,7 +110,7 @@ void CNpcDualPlatformBarrelHazard::processMovement( int _frames )
 				{
 					// stick to platform top
 
-					moveY = platform->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy + yMovement );
+					moveY = platform->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy + 6 + yMovement );
 
 					if ( !platform->canDrop() )
 					{
