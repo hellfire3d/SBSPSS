@@ -354,11 +354,12 @@ void	CGameScene::initLevel()
 			PntList++;
 
 			DVECTOR startPos;
-			startPos.vx = newXPos;
-			startPos.vy = newYPos;
+			startPos.vx = newXPos << 4;
+			startPos.vy = newYPos << 4;
 
 			platform->init( startPos );
 			platform->setLayerCollision( Level.getCollisionLayer() );
+			platform->setTiltable( false );
 
 			platform->addWaypoint( newXPos, newYPos );
 
