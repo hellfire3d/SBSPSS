@@ -1,71 +1,54 @@
-/*=========================================================================
+/******************************/
+/*** Health throw out stuff ***/
+/******************************/
 
-	gamebubs.h
+#ifndef	__GAME_HEALTH_MANAGER_H__
+#define	__GAME_HEALTH_MANAGER_H__
 
-	Author:		PKG
-	Created:
-	Project:	Spongebob
-	Purpose:
-
-	Copyright (c) 2001 Climax Development Ltd
-
-===========================================================================*/
-
-#ifndef	__GAME_GAMEBUBS_H__
-#define	__GAME_GAMEBUBS_H__
-
-/*----------------------------------------------------------------------
-	Includes
-	-------- */
-
-#ifndef	__GFX_BUBICLES_H__
-#include "gfx\bubicles.h"
-#endif
-
-
-/*	Std Lib
-	------- */
-
-/*----------------------------------------------------------------------
-	Tyepdefs && Defines
-	------------------- */
-
-/*----------------------------------------------------------------------
-	Structure defintions
-	-------------------- */
-
-class CGameBubicleFactory
+/*****************************************************************************/
+class	CPlayer;
+class CHealthManager
 {
 public:
-	typedef enum
-	{
-		TYPE_SMALL,
-		TYPE_MEDIUM,
-		TYPE_LARGE,
-		TYPE_SPONGEBOBSOAKUP,
+		enum
+		{
+			ITEM_MAX	=	160,
+		};
 
-		NUM_TYPES
-	}GAMEBUBICLETYPE;
+		struct	sItemTable
+		{
+			u16			Count;
+			u16			Life;
+			u8			R,G,B;
+		};
 
-	static void		spawnBubicles(int _x,int _y,int _w,int _h,GAMEBUBICLETYPE _type);
+		struct	sItem
+		{
+			VECTOR	Pos;
+			VECTOR	Vel;
+			DVECTOR	ScrPos;
+			u16		Life;
+			u16		Count;
+			TSPRT	Sprite;
+		};
 
-private:
-	static struct BubicleEmitterData	s_emitters[NUM_TYPES];
+		void		init();
+		void		shutdown();
 
+		void		drop(DVECTOR &Pos,int Amount,int Vel);
+
+		void		checkPlayerCol(CPlayer *Thing);
+		void		think(int frames);
+		void		render();
+
+protected:
+		void		addItem(DVECTOR &Pos,int TableIdx,int Angle,int Vel);
+
+		sItem		ItemList[ITEM_MAX];
+		sFrameHdr	*FrameHdr;
+
+static	sItemTable	ItemTable[];
+static	const int	ItemTableSize;
 };
 
-
-/*----------------------------------------------------------------------
-	Globals
-	------- */
-
-/*----------------------------------------------------------------------
-	Functions
-	--------- */
-
-/*---------------------------------------------------------------------- */
-
-#endif	/* __GAME_GAMEBUBS_H__ */
-
-/*===========================================================================
- end */
+#endif	

@@ -17,6 +17,7 @@ class	FontBank;
 class	SpriteBank;
 class	CPlayer;
 class	CLayerCollision;
+class	CHealthManager;
 class CGameScene : public CScene
 {
 public:
@@ -59,6 +60,7 @@ static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
 static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 
+static	void			dropHealth(DVECTOR &Pos,int Amount,int Vel);
 protected:
 
 		void			initLevel();
@@ -69,6 +71,7 @@ protected:
 		CLevel			Level;
 class	CPauseMenu		*m_pauseMenu;
 class	CPlayer			*m_player;
+static	CHealthManager	*m_HealthManager;
 static	FontBank		*s_genericFont;
 		class ScalableFontBank	*m_scalableFont;
 static	MATRIX			CamMtx;

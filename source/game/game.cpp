@@ -91,6 +91,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef	__GAME_HEALTH_MANAGER_H__
+#include "game\healthman.h"
+#endif
+
 
 #include "gfx\actor.h"
 
@@ -101,6 +105,8 @@ int			RenderZ=378;//256; Increased to make depth less, and SB more visible
 FontBank		*CGameScene::s_genericFont;
 SpriteBank		*CGameScene::s_GlobalSpritebank;
 CLayerCollision	*CGameScene::s_GlobalCollision;
+CHealthManager	*CGameScene::m_HealthManager;
+
 MATRIX			CGameScene::CamMtx;
 
 /*****************************************************************************/
@@ -197,6 +203,9 @@ void 	CGameScene::init()
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
 		m_pauseMenu->init();
 
+		m_HealthManager= new ("Health Manager") CHealthManager();
+		m_HealthManager->init();
+
 		s_readyToExit=false;
 		s_restartLevel=false;
 
@@ -230,6 +239,8 @@ void	CGameScene::shutdown()
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 		m_scalableFont->dump();		delete m_scalableFont;
 		s_genericFont->dump();		delete s_genericFont;
+		m_HealthManager->shutdown();delete m_HealthManager;
+
 }
 
 /*****************************************************************************/
@@ -258,6 +269,8 @@ void 	CGameScene::render()
 		SetTransMatrix(&CamMtx);
 
 		Level.render();
+		m_HealthManager->render();
+
 		CActorPool::CleanUpCache();
 }
 
@@ -383,6 +396,8 @@ void	CGameScene::think(int _frames)
 		CBubicleFactory::setMapOffset(&camPos);
 		Level.setCameraCentre(camPos);
 		Level.think(_frames);
+		m_HealthManager->think(_frames);
+		m_HealthManager->checkPlayerCol(getPlayer());
 
 #ifdef __VERSION_DEBUG__
 		if(PadGetDown(0)&PAD_R2)
@@ -482,6 +497,14 @@ void	CGameScene::initLevel()
 	SYSTEM_DBGMSG("InitLevelDone\n");
 }
 
+
+/*****************************************************************************/
+int	DropAmount=69;
+int	DropVel=1;
+void	CGameScene::dropHealth(DVECTOR &Pos,int Amount,int Vel)
+{
+	m_HealthManager->drop(Pos,DropAmount,DropVel);
+}
 
 /*****************************************************************************/
 void	CGameScene::shutdownLevel()

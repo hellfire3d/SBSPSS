@@ -200,7 +200,8 @@ game_src :=			convo \
 					game \
 					gamebubs \
 					gameslot \
-					pause
+					pause \
+					healthman
 
 gfx_src :=			prim \
 					tpage \
