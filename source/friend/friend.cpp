@@ -196,7 +196,14 @@ void CNpcFriend::init()
 	m_frame = 0;
 	m_reversed = false;
 	m_platform = NULL;
+
+	// Get rid of the bloody auto-talk-to-npc stuff except in cd builds..
+#if defined(__USER_CDBUILD__)
 	m_hasSpokenToSbYet=false;
+#else
+	m_hasSpokenToSbYet=true;
+#endif
+
 	m_iconStrobe=0;
 }
 
