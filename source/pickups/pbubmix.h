@@ -49,6 +49,8 @@ protected:
 	virtual void		renderPickup(DVECTOR *_pos);
 
 private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__JAMJAR_AMMO;}
+
 	int					m_sin;
 
 };

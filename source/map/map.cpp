@@ -219,9 +219,6 @@ void CMapScene::render()
 	SpriteBank		*sb;
 	sMapLevelData	*level;
 	int				i;
-	sFrameHdr		*fh;
-	DVECTOR			pos;
-	POLY_FT4		*ft4;
 	char			buf[100];
 	
 	sb=CGameScene::getSpriteBank();
@@ -230,10 +227,15 @@ void CMapScene::render()
 	// Render spatula/kelp counts and quest items
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
+		DVECTOR			pos;
+
 		pos=s_mapLevelPositions[i];
 
 		if(!level->m_kelpWorldLevel)
 		{
+			sFrameHdr		*fh;
+			POLY_FT4		*ft4;
+
 			// Normal level
 			m_font->setColour(253,251,67);
 			sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getSpatulaCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
@@ -248,7 +250,7 @@ void CMapScene::render()
 		{
 			// Bonuse level
 			m_font->setColour(67,251,67);
-			sprintf(buf,"-");//"%d/%d",CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
+			sprintf(buf,"%d/%d",CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(m_currentChapterSelection,i),level->m_spatulaOrTokenCounts);
 		}
 
 		m_font->print(pos.vx,pos.vy,buf);

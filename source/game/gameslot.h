@@ -95,8 +95,8 @@ public:
 		// Kelp Token functions..
 		int				getKelpTokenCollectedCount(unsigned int _chapter,unsigned int _level)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS);
-			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS+1);
+			ASSERT(_chapter<=NUM_CHAPTERS);
+			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			int		i,j,count;
 			count=0;
 			for(i=0;i<8;i++)
@@ -112,15 +112,15 @@ public:
 		}
 		void			collectKelpToken(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS);
-			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS+1);
+			ASSERT(_chapter<=NUM_CHAPTERS);
+			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
 			m_kelpTokenCollectedFlags[_level][_token>>3]|=1<<(_token&7);
 		}
 		int				isKelpTokenUncollected(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS);
-			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS+1);
+			ASSERT(_chapter<=NUM_CHAPTERS);
+			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
 			return (m_kelpTokenCollectedFlags[_level][_token>>3]>>(_token&7))&1?false:true;
 		}

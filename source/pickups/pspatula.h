@@ -53,6 +53,8 @@ protected:
 	virtual void		renderPickup(DVECTOR *_pos);
 
 private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__SKILL_ITEM;}
+
 	int					m_glint;
 	int					m_glintRot;
 	int					m_spatulaNumber;

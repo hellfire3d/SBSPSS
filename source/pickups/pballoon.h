@@ -50,6 +50,8 @@ protected:
 	virtual void		renderPickup(DVECTOR *_pos);
 
 private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_BALLOON_INFLATE;}
+
 	int					m_sin;
 
 };

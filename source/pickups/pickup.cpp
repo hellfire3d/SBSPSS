@@ -184,6 +184,7 @@ void	CBasePickup::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 			collect((CPlayer*)_thisThing);
+			CSoundMediator::playSfx(sfxToPlayWhenCollected());
 			break;
 
 		default:
@@ -339,6 +340,7 @@ void	CBaseWeaponPickup::collidedWith(CThing *_thisThing)
 				   (!m_dontAutoPickUpUntilPlayerMovesOffMe&&player->tryingToAutomaticallyPickupWeapon()))
 				{
 					collect(player);
+					CSoundMediator::playSfx(sfxToPlayWhenCollected());
 				}
 				else
 				{

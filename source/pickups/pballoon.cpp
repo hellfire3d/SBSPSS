@@ -117,7 +117,6 @@ DVECTOR	CBalloonPickup::getSizeForPlacement()
 void	CBalloonPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_BALLOON);
-	CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_INFLATE);
 	CBaseWeaponPickup::collect(_player);
 }
 

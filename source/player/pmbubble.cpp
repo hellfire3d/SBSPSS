@@ -67,7 +67,6 @@
 void	CPlayerModeBubbleMixture::enter()
 {
 	CPlayerModeBase::enter();
-	CSoundMediator::playSfx(CSoundMediator::SFX_BUBBLE_WAND);
 	m_blowing=false;
 	m_bubbleDelay=0;
 	m_player->giveBubbleAmmo();

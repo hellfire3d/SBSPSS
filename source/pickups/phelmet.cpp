@@ -101,7 +101,6 @@ void	CHelmetPickup::collect(class CPlayer *_player)
 {
 	_player->giveDivingHelmet();
 	CBasePickup::collect(_player);
-	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DIVING_HELMET);
 }
 
 /*----------------------------------------------------------------------

@@ -50,6 +50,10 @@
 #include "pickups\pspatula.h"
 #endif
 
+#ifndef	__PICKUPS_PKELP_H__
+#include "pickups\pkelp.h"
+#endif
+
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
@@ -413,23 +417,35 @@ void	CLevel::initThings(int _respawningLevel)
 // Items
 		if (LevelHdr->ItemList)
 		{
+			DVECTOR		pos;
+			int			itemNumber;
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
 			ItemCount=Hdr->Count;
 			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
-			DVECTOR	pos;
-			int		spatNumber=0;
+			itemNumber=0;
 			for(int i=0;i<ItemCount;i++)
 			{
 				int			createThisPickup;
-				int			isSpat;
+				int			isNumberedItem;
 				CBasePickup	*newPickup;
 
 				createThisPickup=true;
-
-				isSpat=(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA;
-				if(isSpat&&CGameSlotManager::getSlotData()->isSpatulaUncollected(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,spatNumber)==false)
+				isNumberedItem=false;
+				if((PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA)
 				{
-					createThisPickup=false;
+					isNumberedItem=true;
+					if(CGameSlotManager::getSlotData()->isSpatulaUncollected(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,itemNumber)==false)
+					{
+						createThisPickup=false;
+					}
+				}
+				else if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
+				{
+					isNumberedItem=true;
+					if(CGameSlotManager::getSlotData()->isKelpTokenUncollected(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,itemNumber)==false)
+					{
+						createThisPickup=false;
+					}
 				}
 
 				if((PICKUP_TYPE)ItemList->Type==PICKUP__HELMET&&
@@ -443,19 +459,46 @@ void	CLevel::initThings(int _respawningLevel)
 					pos.vx=ItemList->Pos.X<<4;
 					pos.vy=ItemList->Pos.Y<<4;
 					newPickup=createPickup((PICKUP_TYPE)ItemList->Type,&pos);
-					if(isSpat)
+					if(isNumberedItem)
 					{
-						((CSpatulaPickup*)newPickup)->setSpatulaNumber(spatNumber);
+						if((PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA)
+						{
+							((CSpatulaPickup*)newPickup)->setSpatulaNumber(itemNumber);
+						}
+						else if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
+						{
+							((CKelpTokenPickup*)newPickup)->setTokenNumber(itemNumber);
+						}
+						else
+						{
+							ASSERT(0);
+						}
 					}
 				}
-				if(isSpat)
+				if(isNumberedItem)
 				{
-					spatNumber++;
+					itemNumber++;
 				}
 
 				ItemList++;
 			}
 		}
+
+
+///////
+{
+	int		i;
+	DVECTOR	pos={100,100};
+	for(i=PICKUP__BIG_HEALTH;i<PICKUP__MAX;i++)
+	{
+		if(i!=PICKUP__SPATULA&&i!=PICKUP__KELP_TOKEN&&i!=PICKUP__BALLOON_AND_SPATULA)
+		{
+			createPickup((PICKUP_TYPE)i,&pos);
+			pos.vx+=60;
+		}
+	}
+}
+///////		
 
 // Init actors (needs moving and tidying
 	int actorNum;

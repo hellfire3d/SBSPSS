@@ -679,6 +679,7 @@ void	CPlayer::shutdown()
 static int oldmode=-1;
 int newmode=-1;
 
+
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -1016,10 +1017,19 @@ if(newmode!=-1)
 	if(isWearingDivingHelmet()&&getIsInWater()==false&&
 	   m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
 	{
+		// Drain water/health
 		m_healthWaterLevel-=waterDrainSpeed*_frames;
 		if(m_healthWaterLevel<=0)
 		{
 			dieYouPorousFreak(DEATHTYPE__DRYUP);
+		}
+
+		// Breath sound
+		m_helmetSoundTimer+=_frames;
+		if(m_helmetSoundTimer>150+(m_healthWaterLevel>>WATERLEVELSHIFT))
+		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DIVING_HELMET);
+			m_helmetSoundTimer=0;
 		}
 	}
 
@@ -1305,14 +1315,6 @@ if(drawlastpos)
 		CGameScene::getSpriteBank()->printFT4(fh,x-2,y-2,0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
-/*
-	if(isWearingDivingHelmet())
-	{
-		sFrameHdr	*fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__HELMET);
-		CGameScene::getSpriteBank()->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
-		itemX+=COLLECTEDITEM_GAP;
-	}
-*/
 }
 
 
@@ -1675,6 +1677,7 @@ void CPlayer::respawn()
 	m_healthWaterLevel=WATERMAXHEALTH;
 	m_healthReactFrames=0;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
+	m_helmetSoundTimer=0;
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
 
@@ -2183,6 +2186,7 @@ u32		CPlayer::getColourOfNextJellyfishAmmo()
   ---------------------------------------------------------------------- */
 void CPlayer::justButtBouncedABadGuy()
 {
+	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE);
 	m_currentPlayerModeClass->setState(STATE_BUTTBOUNCEUP);
 }
 

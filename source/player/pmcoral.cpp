@@ -162,7 +162,6 @@ void	CPlayerModeCoralBlower::enter()
 {
 	CPlayerModeBase::enter();
 	m_blowerState=BLOWER_STATE__EMPTY;
-	CSoundMediator::playSfx(CSoundMediator::SFX_ITEM__CORAL_BLOWER);
 }
 
 /*----------------------------------------------------------------------

@@ -22,6 +22,10 @@
 #include "thing/thing.h"
 #endif
 
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -88,7 +92,9 @@ protected:
 
 	virtual void		collidedWith(CThing *_thisThing);
 
+
 private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__ANY_OTHER_ITEM;}
 
 };
 
@@ -122,6 +128,9 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	int					m_dontAutoPickUpUntilPlayerMovesOffMe;
 	int					m_collidedWithPlayer;
+
+private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__POWER_UP_ITEM;}
 
 };
 

@@ -48,6 +48,8 @@ private:
 	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
 
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__LEVEL_ITEM;}
+
 	int					m_pingFrame;
 	int					m_gfxFrame;
 

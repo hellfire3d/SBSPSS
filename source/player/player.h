@@ -327,6 +327,8 @@ private:
 	int				m_health;
 	int				m_healthWaterLevel;
 	int				m_healthReactFrames;
+	int				m_helmetSoundTimer;			// Timer for breathing sound when using the helmet
+
 
 	void			dieYouPorousFreak(DEATH_TYPE _deathType=DEATHTYPE__NORMAL);
 	DEATH_TYPE		m_deathType;
@@ -383,7 +385,7 @@ public:
 	int				getJellyFishAmmo();
 	u32				getColourOfNextJellyfishAmmo();
 
-	void			setIsInWater(int _in)					{m_isInWater=_in;}
+	void			setIsInWater(int _in)					{m_isInWater=_in;m_helmetSoundTimer=0;}
 	int				getIsInWater()							{return m_isInWater;}
 	int				getIsHealthFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
 	int				getIsHealthSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOACKUPLEVEL;}

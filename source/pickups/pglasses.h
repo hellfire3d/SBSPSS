@@ -47,6 +47,8 @@ protected:
 	virtual void		renderPickup(DVECTOR *_pos);
 
 private:
+	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_GLASSES_ON;}
+
 	int					m_glint;
 	int					m_glintRot;
 

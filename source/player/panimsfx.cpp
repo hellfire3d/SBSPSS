@@ -96,8 +96,6 @@ static const int	s_jumpEndCount=sizeof(s_jumpEndSfx)/sizeof(CPlayer::AnimFrameSf
 // ANIM_PLAYER_ANIM_KARATE
 static const CPlayer::AnimFrameSfx s_karateSfx[]=
 {
-	{	12,		CSoundMediator::SFX_SPONGEBOB_WALK_1			},
-	{	13,		CSoundMediator::SFX_SPONGEBOB_WALK_2			},
 	{	13,		CSoundMediator::SFX_SPONGEBOB_KARATE_1			},
 };
 static const int	s_karateCount=sizeof(s_karateSfx)/sizeof(CPlayer::AnimFrameSfx);

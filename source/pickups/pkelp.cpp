@@ -108,7 +108,7 @@ DVECTOR	CKelpTokenPickup::getSizeForPlacement()
 void	CKelpTokenPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
-//	CGameSlotManager::getSlotData()->collectSpatula(GameScene.getChapterNumber(),GameScene.getLevelNumber(),m_spatulaNumber);
+	CGameSlotManager::getSlotData()->collectKelpToken(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,m_tokenNumber);
 }
 
 /*----------------------------------------------------------------------
