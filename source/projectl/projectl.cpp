@@ -214,6 +214,13 @@ void CProjectile::think(int _frames)
 			break;
 		}
 
+		case PROJECTILE_GAS_CLOUD:
+		{
+			// expand but don't move
+
+			break;
+		}
+
 		case PROJECTILE_DUMBFIRE:
 		default:
 		{

@@ -45,6 +45,7 @@ public:
 		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
 		NPC_ANEMONE_2,
+		NPC_ANEMONE_3,
 		NPC_CLAM,
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
@@ -144,6 +145,7 @@ protected:
 		NPC_CLOSE_GENERIC_USER_SEEK,
 		NPC_CLOSE_ANEMONE_1_ATTACK,
 		NPC_CLOSE_ANEMONE_2_ATTACK,
+		NPC_CLOSE_ANEMONE_3_ATTACK,
 		NPC_CLOSE_EYEBALL_ATTACK,
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
@@ -297,6 +299,7 @@ protected:
 
 	void				processCloseAnemone1Attack( int _frames );
 	void				processCloseAnemone2Attack( int _frames );
+	void				processCloseAnemone3Attack( int _frames );
 
 	// eyeball functions
 

@@ -54,7 +54,7 @@ s32 CNpc::playerYDistSqr;
 
 void CNpc::init()
 {
-	m_type = NPC_ANEMONE_1;
+	m_type = NPC_ANEMONE_3;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -891,6 +891,11 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_ANEMONE_2_ATTACK:
 			processCloseAnemone2Attack( _frames );
+
+			break;
+
+		case NPC_CLOSE_ANEMONE_3_ATTACK:
+			processCloseAnemone3Attack( _frames );
 
 			break;
 
