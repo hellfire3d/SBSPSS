@@ -48,11 +48,6 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 
 	bool pathComplete;
 
-	if ( m_reboundTimer > 0 )
-	{
-		m_reboundTimer -= _frames;
-	}
-
 	if ( !m_playerAttached && !m_falling )
 	{
 		m_playerAttached = true;
@@ -253,10 +248,9 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 		{
 			case COLLISION_TYPE_FLAG_DAMAGE:
 			{
-				if ( m_reboundTimer <= 0 )
+				if ( !m_rebound )
 				{
 					m_vertSpeed = -8 << 8;
-					m_reboundTimer = 2 * GameState::getOneSecondInFrames();
 					m_rebound = true;
 					Pos.vy -= 8;
 				}

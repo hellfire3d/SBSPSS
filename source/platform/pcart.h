@@ -37,8 +37,6 @@ protected:
 	u8					m_playerAttached;
 	u8					m_rebound;
 	u8					m_falling;
-
-	s32					m_reboundTimer;
 };
 
 #endif

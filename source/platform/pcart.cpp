@@ -47,7 +47,6 @@ void CNpcCartPlatform::postInit()
 	m_playerAttached = false;
 	m_falling = false;
 	m_rebound = false;
-	m_reboundTimer = 0;
 	m_inJump = false;
 }
 
@@ -63,11 +62,6 @@ void CNpcCartPlatform::processMovement( int _frames )
 	s32 moveY = 0;
 
 	bool pathComplete;
-
-	if ( m_reboundTimer > 0 )
-	{
-		m_reboundTimer -= _frames;
-	}
 
 	if ( !m_playerAttached && !m_falling )
 	{
@@ -262,10 +256,9 @@ void CNpcCartPlatform::processMovement( int _frames )
 		{
 			case COLLISION_TYPE_FLAG_DAMAGE:
 			{
-				if ( m_reboundTimer <= 0 )
+				if ( m_rebound )
 				{
 					m_vertSpeed = -8 << 8;
-					m_reboundTimer = 2 * GameState::getOneSecondInFrames();
 					m_rebound = true;
 					Pos.vy -= 8;
 				}
