@@ -55,9 +55,9 @@ void CNpcFlyTrapHazard::processMovement( int _frames )
 			{
 				m_rotation += 64 * _frames;
 
-				if ( m_rotation > 0 )
+				if ( m_rotation > -256 )
 				{
-					m_rotation = 0;
+					m_rotation = -256;
 					m_shut = false;
 					m_contact = false;
 					m_timer = GameState::getOneSecondInFrames();
