@@ -104,7 +104,7 @@
 
 int	CFrontEndOptions::s_controlStyleValues[CPadConfig::NUM_PAD_CONFIGS+1]=
 {
-	0,1,2,3,
+	0,1,2,
 	-1
 };
 CGUITextReadout::TextReadoutData CFrontEndOptions::s_controlStyleReadoutText[CPadConfig::NUM_PAD_CONFIGS]=
@@ -112,7 +112,6 @@ CGUITextReadout::TextReadoutData CFrontEndOptions::s_controlStyleReadoutText[CPa
 	{	0,STR__FRONTEND__A	},
 	{	1,STR__FRONTEND__B	},
 	{	2,STR__FRONTEND__C	},
-	{	3,STR__FRONTEND__D	},
 };
 
 

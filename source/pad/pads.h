@@ -104,7 +104,7 @@ class	CPadConfig
 public:
 	enum
 	{
-		NUM_PAD_CONFIGS=4,
+		NUM_PAD_CONFIGS=3,
 	};
 
 	enum	PAD_CFG
