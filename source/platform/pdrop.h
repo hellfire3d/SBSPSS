@@ -22,6 +22,7 @@ class CNpcDropPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
+	bool				alwaysThink()									{return(true);}
 protected:
 	void				processMovement( int _frames );
 

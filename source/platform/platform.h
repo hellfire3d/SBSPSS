@@ -136,6 +136,7 @@ public:
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
 	virtual void		setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
+	virtual bool		alwaysThink();
 
 protected:
 	// NPC data structure definitions //

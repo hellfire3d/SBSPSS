@@ -1373,3 +1373,13 @@ CNpcPlatform::NPC_PLATFORM_UNIT_TYPE CNpcPlatform::getTypeFromMapEdit( u16 newTy
 {
 	return( mapEditConvertTable[newType] );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcPlatform::alwaysThink()
+{
+	int chapter=GameScene.getChapterNumber();
+	int level=GameScene.getLevelNumber();
+
+	return( chapter == 1 && level == 5 );
+}

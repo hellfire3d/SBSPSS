@@ -91,7 +91,7 @@ void	CGaryStopTrigger::collidedWith(CThing *_thisThing)
 
 				if ( !m_dropped )
 				{
-					if ( GameScene.getChapterNumber() != 6 )
+					if ( GameScene.getChapterNumber() != 1 )
 					{
 						DVECTOR newPos = Pos;
 						newPos.vy -= 8;
