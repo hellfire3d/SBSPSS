@@ -39,6 +39,10 @@
 #include <ACTOR_FLYINGDUTCHMAN_ANIM.h>
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -177,7 +181,10 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 					CProjectile *projectile;
 					projectile = new( "test projectile" ) CProjectile;
-					projectile->init( Pos, heading );
+					DVECTOR newPos = Pos;
+					newPos.vy -= 50;
+					projectile->init( newPos, heading );
+					projectile->setGraphic( FRM__LIGHTNING2 );
 
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;
