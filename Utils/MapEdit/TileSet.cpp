@@ -40,12 +40,13 @@ CTileBank::CTileBank()
 	CurrentSet=0;
 	LTile.Set=-1;
 	RTile.Set=-1;
-
+#ifdef _DEBUG
 	AddTileSet("c:/temp/rockp/rockp.gin");
 	LTile.Set=0;
 	LTile.Tile=1;
 	RTile.Set=0;
 	RTile.Tile=2;
+#endif
 }
 
 /*****************************************************************************/
@@ -141,7 +142,6 @@ int			ListSize=TileSet.size();
 			TileSetDlg->TileSetList.AddString(TileSet[i].GetName());
 		}
 		TileSetDlg->TileSetList.SetCurSel(CurrentSet);
-//		IsTileView=TRUE;
 	}
 	else
 	{
