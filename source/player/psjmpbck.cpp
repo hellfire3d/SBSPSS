@@ -71,11 +71,14 @@ CPlayerStateJumpBack		s_stateJumpBack;
 void CPlayerStateJumpBack::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETHIT);
-	m_reactFrames=0;
+	if(_playerMode->getState()!=STATE_JUMPBACK)
+	{
+		m_reactFrames=0;
+		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
+	}
 
 	_playerMode->jumpback();
 
-	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
 }
 
 
