@@ -189,7 +189,7 @@ class FileInfo
 			{return(m_allocateAs16Bit);}
 
 		bool getHasMemFrame(void) const
-			{return(MemFrame.SeeData!=0);}
+			{return(MemFrame.SeeData()!=NULL);}
 
 		Frame const &getMemFrame() const 
 			{return(MemFrame);}

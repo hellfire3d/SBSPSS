@@ -269,7 +269,13 @@ BOOL	operator==(sUV const &v1)
 		{
 		return(u==v1.u && v==v1.v);
 		}
-
+/*
+void	operator=(sUV &Src)	
+{
+		u=Src.u;
+		v=Src.v;
+}
+*/
 };
 
 struct sUVTri
@@ -283,6 +289,17 @@ BOOL	operator==(sUVTri const &v1)
 		}
 		return (TRUE);
 		}
+/*
+inline void	operator=(sUVTri &Src)	
+{
+		for (int i=0; i<3; i++) 
+		{
+			//p[i]=Src.p[i];
+			p[i].u=Src.p[i].u;
+			p[i].v=Src.p[i].v;
+		}
+}
+*/
 };
 
 class CUVtri: public GinChunk
@@ -686,15 +703,19 @@ public:
 
 	void	PrintSceneTree(int Idx=0)						
 		{
-//		printf("SceneTree - %i Nodes\n\n",SceneTree.size());
+#ifdef	_CONSOLE
+		printf("SceneTree - %i Nodes\n\n",SceneTree.size());
 		PrintTreeSpace=0;
 		PrintTreeNode(Idx,0);
+#endif
 		}
 	void	PrintPruneTree(int Idx=0)						
 		{
-//		printf("PruneTree - %i Nodes\n\n",PruneTree.size());
+#ifdef	_CONSOLE
+		printf("PruneTree - %i Nodes\n\n",PruneTree.size());
 		PrintTreeSpace=0;
 		PrintTreeNode(Idx,1);
+#endif
 		}
 	void	PrintTreeNode(int Idx,const int);
 

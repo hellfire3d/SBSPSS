@@ -602,7 +602,7 @@ CNode		*ParentNode=&SceneTree[ParentIdx];
 						int tid = Materials->GetTexId(Mat4Id[i].MatId);
 						if (tid >= Strs.size() || tid < 0)
 							{
-							GObject::Error(ERR_WARNING,"Texture index odd (aksed for %d, max is %d) adjusting to 0\n",tid,Strs.size());
+							GObject::Error(ERR_WARNING,"Texture index odd (asked for %d, max is %d) adjusting to 0\n",tid,Strs.size());
 							tid=0;
 							}
 	//					else
@@ -738,7 +738,7 @@ int		PropCount=UserPropChunk.size();
 /*****************************************************************************/
 void	CScene::PrintTreeNode(int Idx,const int Tree)
 {
-/*
+//#ifdef	_CONSOLE
 CNode		&Node=SceneTree[Idx];
 int			NodeIdx,NodeParentIdx;
 std::vector<int>	ChildList;
@@ -763,7 +763,7 @@ int		ChildCount=ChildList.size();
 
 		for (int Child=0;Child<ChildCount;Child++) PrintTreeNode(ChildList[Child],Tree);
 		PrintTreeSpace--;
-*/
+//#endif
 }
 
 /*****************************************************************************/
