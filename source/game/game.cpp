@@ -55,6 +55,9 @@
 #include "frontend\frontend.h"
 #endif
 
+#ifndef __PICKUPS_PICKUP_H__
+#include "pickups\pickup.h"
+#endif
 
 
 int		GX=248;
@@ -71,6 +74,8 @@ MATRIX		CGameScene::CamMtx;
 
 int s_globalLevelSelectThing=0;
 int CGameScene::s_readyToExit;
+int exitToNextLevel;
+
 
 /*****************************************************************************/
 
@@ -99,6 +104,20 @@ void 	CGameScene::init()
 		enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif
 
+#ifdef __USER_paul__
+		DVECTOR pos={16*10,16*10};
+					createPickup(PICKUP__100_PERCENT_LIFE,&pos);
+		pos.vx+=32;	createPickup(PICKUP__50_PERCENT_LIFE,&pos);
+		pos.vx+=32;	createPickup(PICKUP__25_PERCENT_LIFE,&pos);
+		pos.vx+=32;	createPickup(PICKUP__LIFE,&pos);
+		pos.vx+=32;	createPickup(PICKUP__SPATULA,&pos);
+		pos.vx+=32;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
+		pos.vx+=32;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
+		pos.vx+=32;	createPickup(PICKUP__GLASSES,&pos);		
+		pos.vx+=32;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
+		pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
+#endif
+
 		createPlayer();
 		m_player->init();
 		m_player->setLayerCollision(Level.getCollisionLayer());
@@ -113,6 +132,7 @@ void 	CGameScene::init()
 		SetGeomScreen(GH);
 
 		s_readyToExit=false;
+		exitToNextLevel=false;
 }
 
 /*****************************************************************************/
@@ -187,12 +207,24 @@ void	CGameScene::think(int _frames)
 		CBubicleFactory::setMapOffset(&camPos);
 		Level.setCameraCentre(camPos);
 		Level.think(_frames);
+
+		if(PadGetDown(0)&PAD_R2)
+		{
+			exitToNextLevel=true;
+		}
 	}
+
 
 	if(s_readyToExit)
 	{
 		// Temporarily.. exiting game scene always goes back to the front end (pkg)
 		GameState::setNextScene(&FrontEndScene);
+	}
+	else if(exitToNextLevel)
+	{
+		s_globalLevelSelectThing++;
+		GameState::setNextScene(&GameScene);
+		s_readyToExit=true;
 	}
 }
 
