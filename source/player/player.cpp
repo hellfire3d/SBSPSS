@@ -300,8 +300,6 @@ char posBuf[100];
 void	CPlayer::think(int _frames)
 {
 	int	i;
-	
-	CPlayerThing::think(_frames);
 
 
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
@@ -413,6 +411,8 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 		m_cameraScrollDir=0;
 	}
+	
+	CPlayerThing::think(_frames);
 }
 
 

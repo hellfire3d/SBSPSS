@@ -100,6 +100,7 @@ public:
 
 	DVECTOR			getPos()						{return Pos;}
 	void			setPos(DVECTOR newPos)			{Pos=newPos;}
+	DVECTOR			getPosDelta()					{return PosDelta;}
 	virtual void	shove(DVECTOR move);
 	CThing			*getNext()						{return Next;}
 
@@ -114,7 +115,7 @@ protected:
 		CThing		*Parent,*Next;
 
 // Pos
-		DVECTOR		Pos, PosDelta;
+		DVECTOR		Pos, PosLast, PosDelta;
 
 public:
 		class CThing			*m_nextThing;
@@ -126,7 +127,7 @@ public:
 	// -- Collision --
 public:
 	virtual int		canCollide()								{return true;}
-	virtual int		checkCollisionAgainst(CThing *_thisThing);
+	virtual int		checkCollisionAgainst(CThing *_thisThing, int _frames);
 	void			updateCollisionArea();
 	virtual void	collidedWith(CThing *_thisThing)			{;}
 	virtual void	setHasPlatformCollided( bool newVal )		{;}

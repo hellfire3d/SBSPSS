@@ -139,7 +139,7 @@ void		CThingManager::thinkAllThings(int _frames)
 			thing1->removeAllChild();
 
 			if(thing1->canCollide()&&
-			   thing1->checkCollisionAgainst(thing2))
+			   thing1->checkCollisionAgainst(thing2, _frames))
 			{
 				thing1->addChild( thing2 );
 
@@ -164,7 +164,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	while(thing1&&thing2)
 	{
 		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2))
+		   thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -177,7 +177,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	while(thing1&&thing2)
 	{
 		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2))
+		   thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -190,7 +190,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	while(thing1&&thing2)
 	{
 		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2))
+		   thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -203,7 +203,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	while(thing1&&thing2)
 	{
 		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2))
+		   thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -347,9 +347,9 @@ void	CThing::shutdown()
   ---------------------------------------------------------------------- */
 void	CThing::think(int _frames)
 {
-	DVECTOR	PosLast=Pos; 
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
+	PosLast=Pos;
 }
 
 /*----------------------------------------------------------------------
@@ -705,7 +705,7 @@ s32		CThing::getNewYPos(CThing *_thisThing)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CThing::checkCollisionAgainst(CThing *_thisThing)
+int		CThing::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
 	DVECTOR	pos,thisThingPos;
 	int		radius;
@@ -783,12 +783,10 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 			{
 				thatPos.vy = getNewYPos( _thisThing );
 
-				if ( thatPos.vy - _thisThing->getPos().vy >= -10 )
+				s32 verticalDelta = abs( _thisThing->getPosDelta().vy );
+
+				if ( thatPos.vy - _thisThing->getPos().vy >= -verticalDelta )
 				{
-					_thisThing->setHasPlatformCollided( true );
-
-					_thisThing->setCentreCollision( true );
-
 					if ( _thisThing->getHasPlatformCollided() )
 					{
 						// if this has already collided with a platform, check the current platform is
@@ -797,13 +795,21 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing)
 
 						DVECTOR oldCollidedPos = _thisThing->getNewCollidedPos();
 
-						if ( thatPos.vy < oldCollidedPos.vy )
+						s32 oldY = abs( oldCollidedPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
+						s32 currentY = abs( thatPos.vy - ( _thisThing->getPos().vy - verticalDelta ) );
+
+						//if ( thatPos.vy < oldCollidedPos.vy )
+						if ( currentY < oldY )
 						{
 							_thisThing->setNewCollidedPos( thatPos );
 						}
 					}
 					else
 					{
+						_thisThing->setHasPlatformCollided( true );
+
+						_thisThing->setCentreCollision( true );
+
 						_thisThing->setNewCollidedPos( thatPos );
 					}
 				}

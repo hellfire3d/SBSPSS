@@ -323,6 +323,31 @@ void	CPlayerModeBase::thinkVerticalMovement()
 		{
 			pos.vy += colHeight;
 			m_moveVelocity.vy=0;
+			m_fallFrames=0;
+			if(m_currentState==STATE_BUTTFALL)
+			{
+				// Landed from a butt bounce
+				setState(STATE_BUTTLAND);
+			}
+			else if(m_currentState==STATE_FALLFAR)
+			{
+				// Landed from a painfully long fall
+				setState(STATE_IDLE);
+				m_player->takeDamage(DAMAGE__FALL);
+				m_moveVelocity.vx=0;
+				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
+			}
+			else if(m_moveVelocity.vx)
+			{
+				// Landed from a jump with x movement
+				setState(STATE_RUN);
+			}
+			else
+			{
+				// Landed from a jump with no x movement
+				setState(STATE_IDLE);
+				setAnimNo(ANIM_SPONGEBOB_JUMPEND);
+			}
 		}
 	}
 
