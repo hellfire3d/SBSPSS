@@ -168,11 +168,13 @@ int			CLayerCollision::getHeightFromCeiling(int _x,int _y,int _maxHeight)
 typedef struct{int r,g,b;} colrgb;
 const colrgb s_typeColours[]={
 	{90,90,90},
-	{90,0,0},	//damage
-	{0,90,0},	//slippery
-	{90,0,90},	//electric
-	{0,90,90},	//sticky
-	{0,0,90},	//water
+	{90,0,0},	// damage
+	{0,90,0},	// slippery
+	{90,0,90},	// electric
+	{0,90,90},	// sticky
+	{0,0,90},	// water
+	{45,45,90},	// solid
+	{90,45,45},	// death
 };
 typedef enum {SHOW_NONE,SHOW_OPAQUE,SHOW_SEMITRANS}ColShowType;
 #if defined (__USER_paul__)
