@@ -133,6 +133,7 @@ void	CLayerHazard::GUIThingUpdate(bool OnlySel)
 			GUIHazard.SetVal(GUIHazard.m_TurnRate,ThisThing.Data.Hazard.HazardTurnRate);
 			GUIHazard.SetVal(GUIHazard.m_Health,ThisThing.Data.Hazard.HazardHealth);
 			GUIHazard.SetVal(GUIHazard.m_Attack,ThisThing.Data.Hazard.HazardAttackStrength);
+			GUIHazard.SetVal(GUIHazard.m_Respawn,ThisThing.Data.Hazard.HazardRespawn);
 			GUIHazard.m_Collision.SetCheck(ThisThing.Data.Hazard.HazardCollisionFlag);
 		}
 		else
@@ -141,6 +142,7 @@ void	CLayerHazard::GUIThingUpdate(bool OnlySel)
 			GUIHazard.m_TurnRate.SetWindowText("");
 			GUIHazard.m_Health.SetWindowText("");
 			GUIHazard.m_Attack.SetWindowText("");
+			GUIHazard.m_Respawn.SetWindowText("");
 			GUIHazard.m_Collision.SetCheck(false);
 		}
 		GUIHazard.DisableCallback(false);
@@ -162,6 +164,7 @@ void	CLayerHazard::GUIChanged(CCore *Core)
 			ThisThing.Data.Hazard.HazardTurnRate=GUIHazard.GetVal(GUIHazard.m_TurnRate);
 			ThisThing.Data.Hazard.HazardHealth=GUIHazard.GetVal(GUIHazard.m_Health);
 			ThisThing.Data.Hazard.HazardAttackStrength=GUIHazard.GetVal(GUIHazard.m_Attack);
+			ThisThing.Data.Hazard.HazardRespawn=GUIHazard.GetVal(GUIHazard.m_Respawn);
 			ThisThing.Data.Hazard.HazardCollisionFlag=GUIHazard.m_Collision.GetCheck()!=0;
 		}
 

@@ -567,13 +567,12 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-sActorPool		*DbgPool;
+const int		BBOX_ADJ=4;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
 POLY_FT4		*Ft4;
 
-			DbgPool=PoolEntry;
 			CurrentFrame=GetFrame(Anim,Frame);
 			ThisNode=0;
 
@@ -667,10 +666,10 @@ POLY_FT4		*Ft4;
 // Set BBox
 int			HalfW=CurrentFrame->W>>1;
 
-			BBox.XMin=-HalfW;
-			BBox.XMax=+HalfW;
-			BBox.YMin=-CurrentFrame->H;
-			BBox.YMax=0;
+			BBox.XMin=-HalfW+BBOX_ADJ;
+			BBox.XMax=+HalfW-BBOX_ADJ;
+			BBox.YMin=-CurrentFrame->H+BBOX_ADJ;
+			BBox.YMax=0-BBOX_ADJ;
 
 			return(Ft4);
 }
@@ -729,10 +728,10 @@ int		YMin,YMax;
 		if (YMax<y2) YMax=y2;
 		if (YMax<y3) YMax=y3;
 
-		BBox.XMin=XMin;
-		BBox.XMax=XMax;
-		BBox.YMin=YMin;
-		BBox.YMax=YMax;
+		BBox.XMin=XMin+BBOX_ADJ;
+		BBox.XMax=XMax-BBOX_ADJ;
+		BBox.YMin=YMin+BBOX_ADJ;
+		BBox.YMax=YMax-BBOX_ADJ;
 
 		Ft4->x0=Pos.vx+x0; Ft4->y0=Pos.vy+y0;
 		Ft4->x1=Pos.vx+x1; Ft4->y1=Pos.vy+y1;

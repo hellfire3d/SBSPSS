@@ -79,7 +79,7 @@ static bool fmvPerFrameFunc()
   ---------------------------------------------------------------------- */
 void CFrontEndFMVIntro::select()
 {
-	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
+//	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
 }
 
 /*----------------------------------------------------------------------

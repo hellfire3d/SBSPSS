@@ -165,7 +165,9 @@ bool	Finished=false;
 			if (Lvl>=LvlTableSize) Lvl=0;
 		}
 // End TMP
-		Lvl&=3;	// Ch1 only Bodge
+/*** E3 Bodge ***/
+		if (Lvl>2) Lvl=0;
+/****************/
 		return(Finished);
 }
 

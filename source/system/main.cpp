@@ -71,7 +71,7 @@ CPaulScene s_paulScene;
 #if	__FILE_SYSTEM__==PC
 	#if	!defined(__USER_CDBUILD__)
 		#if defined(__VERSION_DEBUG__)
-			#define	SCREEN_GRAB
+			#define	USE_SCREEN_UTILS
 		#endif
 	#endif
 #endif
@@ -188,12 +188,11 @@ void	MainLoop()
 		dumpDebugMem();
 	#endif
 
-	#if		defined(SCREEN_GRAB)
+	#if		defined(USE_SCREEN_UTILS)
 		if (PadGetHeld(0) & PAD_L2)
 			if (PadGetDown(0) & PAD_START) SaveScreen(VidGetScreen()->Draw.clip);
-	#endif
-
 		if (PadGetDown(0) & PAD_SELECT) VRamViewer();
+	#endif
 #endif
 	}
 }
@@ -224,7 +223,7 @@ int 	main()
 }
 
 /*****************************************************************************/
-#if	defined(SCREEN_GRAB)
+#if	defined(USE_SCREEN_UTILS)
 #if defined(__VERSION_DEBUG__)
 struct	sTgaHdr
 {

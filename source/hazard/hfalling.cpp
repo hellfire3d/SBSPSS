@@ -133,3 +133,9 @@ void CNpcFallingHazard::processTimer( int _frames )
 		m_bounceFinish = false;
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CNpcFallingHazard::collidedWith( CThing *_thisThing )
+{
+	if (!m_bounceFinish && m_movementTimer<=0) CNpcHazard::collidedWith(_thisThing);
+}

@@ -25,6 +25,7 @@ public:
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	s32					m_movementTimer;
 	u8					m_bounceFinish;

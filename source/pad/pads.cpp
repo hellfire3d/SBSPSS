@@ -398,9 +398,9 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_UP,				// PAD_CFG_UP
 		PAD_DOWN,			// PAD_CFG_DOWN
 
-		PAD_CROSS,			// PAD_CFG_FIRE
+		PAD_SQUARE,			// PAD_CFG_FIRE
 		PAD_TRIANGLE,		// PAD_CFG_CATCH
-		PAD_SQUARE,			// PAD_CFG_JUMP
+		PAD_CROSS,			// PAD_CFG_JUMP
 	}},
 	// Config B
 	{{

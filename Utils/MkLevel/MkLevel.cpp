@@ -200,7 +200,7 @@ int				Idx;
 			CFace	F;
 
 			ExpTri2Face(ThisTri,F);
-			ModelFaceList.SetTPageFlag(F,ThisTri.Flags*0);
+			ModelFaceList.SetTPageFlag(F,ThisTri.Flags);
 			ModelFaceList.AddFace(F,false);
 		}
 
