@@ -69,7 +69,7 @@ void CNpcPath::initPath()
 	reversePath = false;
 	minX = maxX = minY = maxY = 0;
 	waypointPtr = NULL;
-
+	decLockout = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +77,7 @@ void CNpcPath::initPath()
 void CNpcPath::resetPath()
 {
 	lastWaypoint = currentWaypoint = 0;
+	decLockout = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,6 +169,8 @@ void CNpcPath::setPathExtents()
 
 bool CNpcPath::incPath()
 {
+	decLockout = false;
+
 	if ( !reversePath )
 	{
 		if ( currentWaypoint < waypointCount )
@@ -233,18 +236,27 @@ bool CNpcPath::incPath()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcPath::decPath()
+bool CNpcPath::decPath()
 {
-	if ( currentWaypoint > 0 )
+	if ( !decLockout )
 	{
-		lastWaypoint = currentWaypoint;
-		currentWaypoint--;
+		if ( currentWaypoint > 0 )
+		{
+			lastWaypoint = currentWaypoint;
+			currentWaypoint--;
+		}
+		else
+		{
+			lastWaypoint = currentWaypoint;
+			currentWaypoint = waypointCount;
+		}
+
+		decLockout = true;
+
+		return( true );
 	}
-	else
-	{
-		lastWaypoint = currentWaypoint;
-		currentWaypoint = waypointCount;
-	}
+
+	return( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

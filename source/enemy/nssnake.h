@@ -112,6 +112,8 @@ protected:
 	s16								m_circleHeading;
 	s16								m_origHeading;
 	s32								m_waitTimer;
+	u8								m_collCount;
+	s8								m_sign;
 };
 
 #endif

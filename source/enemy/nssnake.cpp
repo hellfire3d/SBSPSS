@@ -164,6 +164,8 @@ void CNpcSeaSnakeEnemy::postInit()
 	m_collTimer = 0;
 	m_turnDir = 0;
 	m_waitTimer = 0;
+	m_collCount = 0;
+	m_sign = 1;
 
 	CNpcBossEnemy::postInit();
 }
@@ -555,20 +557,34 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 			case COLLISION_TYPE_FLAG_SOLID:
 			{
 				Pos = oldPos;
-				m_heading += 2048;
+
+				if ( m_collCount > 4 )
+				{
+					m_collCount = 0;
+					m_sign = -m_sign;
+				}
+				else
+				{
+					m_collCount++;
+				}
+
+				m_heading += m_sign * 1024;
 				m_heading &= 4095;
 
-				m_npcPath.decPath();
+				bool dec = m_npcPath.decPath();
 
-				DVECTOR waypointPos;
-				m_npcPath.getCurrentWaypointPos( &waypointPos );
-				waypointPos.vy -= 8;
-
-				if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+				if ( dec )
 				{
-					// one of the special 'teleport' waypoints
+					DVECTOR waypointPos;
+					m_npcPath.getCurrentWaypointPos( &waypointPos );
+					waypointPos.vy -= 8;
 
-					m_npcPath.incPath();
+					if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+					{
+						// one of the special 'teleport' waypoints
+
+						m_npcPath.incPath();
+					}
 				}
 
 				break;
@@ -892,20 +908,34 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 				m_sensorFunc = NPC_SENSOR_NONE;
 
 				Pos = oldPos;
-				m_heading += 2048;
+
+				if ( m_collCount > 4 )
+				{
+					m_collCount = 0;
+					m_sign = -m_sign;
+				}
+				else
+				{
+					m_collCount++;
+				}
+
+				m_heading += m_sign * 1024;
 				m_heading &= 4095;
 
-				m_npcPath.decPath();
+				bool dec = m_npcPath.decPath();
 
-				DVECTOR waypointPos;
-				m_npcPath.getCurrentWaypointPos( &waypointPos );
-				waypointPos.vy -= 8;
-
-				if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+				if ( dec )
 				{
-					// one of the special 'teleport' waypoints
+					DVECTOR waypointPos;
+					m_npcPath.getCurrentWaypointPos( &waypointPos );
+					waypointPos.vy -= 8;
 
-					m_npcPath.incPath();
+					if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+					{
+						// one of the special 'teleport' waypoints
+
+						m_npcPath.incPath();
+					}
 				}
 
 				break;

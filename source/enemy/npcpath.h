@@ -30,7 +30,7 @@ public:
 	void			setPathType( u8 newPathType );
 	u8				getPathType();
 	bool			incPath();
-	void			decPath();
+	bool			decPath();
 	void			resetPath();
 	void			reversePathDir();
 	s32				think( DVECTOR const &currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY );
@@ -55,6 +55,7 @@ private:
 	u8				lastWaypoint;
 	s32				minX, maxX;
 	s32				minY, maxY;
+	bool			decLockout;
 
 	u16				*waypointPtr;
 };
