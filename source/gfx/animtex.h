@@ -19,7 +19,8 @@ static	void	AddAnimTex(sFrameHdr *Frame,int Frame,FileEquate Filename);
 static	void	AnimateTex();
 static	void	GetTexData();
 static	void	DumpThisTPage(FileEquate TexName);
-static	void	SetSpeed(FileEquate Filename,int Frm,int Speed);
+static	void	SetSpeed(int Speed);
+static	int		GetSpeed();
 
 private:
 		CAnimTex	*NextTex;

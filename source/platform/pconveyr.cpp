@@ -145,13 +145,13 @@ void CNpcConveyorPlatform::processMovement( int _frames )
 			{
 				moveX = distX;
 
-				if ( moveX > 1 )
+				if ( moveX > 4 )
 				{
-					moveX = 1;
+					moveX = 4;
 				}
-				else if ( moveX < -1 )
+				else if ( moveX < -4 )
 				{
-					moveX = -1;
+					moveX = -4;
 				}
 			}
 			else

@@ -27,6 +27,10 @@
 #include	"game\game.h"
 #endif
 
+#ifndef _ANIMTEX_HEADER_
+#include "gfx\animtex.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -98,23 +102,6 @@ void CNpcConveyorSwitchHazard::setWaypoints( sThingHazard *ThisHazard )
 	trigger=(CHazardTrigger*)CTrigger::Create(CTrigger::TRIGGER_HAZARD);
 	trigger->setPositionAndSize( ( newXPos << 4 ) + 8 - 50, ( newYPos << 4 ) + 16, 100, 0 );
 	trigger->setHazard( this );
-
-	newXPos = (u16) *PntList;
-	PntList++;
-	newYPos = (u16) *PntList;
-	PntList++;
-	m_conveyorPos.vx = ( newXPos << 4 ) + 8;
-	m_conveyorPos.vy = ( newYPos << 4 ) + 8;
-
-	s32 minX, maxX, minY, maxY;
-
-	m_npcPath.getPathXExtents( &minX, &maxX );
-	m_npcPath.getPathYExtents( &minY, &maxY );
-
-	m_thinkArea.x1 = minX;
-	m_thinkArea.x2 = maxX;
-	m_thinkArea.y1 = minY;
-	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,5 +111,7 @@ void CNpcConveyorSwitchHazard::trigger()
 	m_reversed = !m_reversed;
 
 	CLevel &level = GameScene.GetLevel();
-	level.reverseMapConveyor( m_conveyorPos );
+	level.reverseMapConveyor();
+
+	CAnimTex::SetSpeed( -CAnimTex::GetSpeed() );
 }

@@ -25,11 +25,11 @@ public:
 	void				init();
 	void				render();
 	void				trigger();
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
 	void				collidedWith(CThing *_thisThing)		{}
 
 	u8					m_reversed;
-	DVECTOR				m_conveyorPos;
 };
 
 #endif

@@ -54,7 +54,7 @@ static CFmaScene::FMA_SCRIPT_NUMBER getFMAToFollow()						{return LvlTable[s_glo
 		void			destroyMapArea(DVECTOR const &Pos);
 		void			destroyMapTile(DVECTOR const &Pos);
 
-		void			reverseMapConveyor(DVECTOR const &Pos);
+		void			reverseMapConveyor();
 
 		int				getActorCount()							{return ActorCount;}
 		sThingActor		**getActorList()						{return ActorList;}

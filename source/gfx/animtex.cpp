@@ -76,7 +76,7 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 		ThisTex->Rect.w=W;
 		ThisTex->Rect.h=H;
 		ThisTex->TexData=0;
-		ThisTex->Count=0; ThisTex->Speed=-1;
+		ThisTex->Count=0; ThisTex->Speed=-4;
 		ThisTex->TPage=Frame->TPage;
 		ThisTex->TexName=Filename;
 
@@ -152,23 +152,23 @@ int			Time = GameState::getFramesSinceLast();
 }
 
 /*****************************************************************************/
-void	CAnimTex::SetSpeed(FileEquate TexName,int Frm,int Speed)
+int		CAnimTex::GetSpeed()
 {
 CAnimTex	*ThisTex;
 
 	ThisTex=AnimTexList;
 
-	while(ThisTex)
-		{
-		if (ThisTex->TexName==TexName && ThisTex->FrameNo==Frm)
-			{
-			ThisTex->Speed=Speed;
-			return;
-			}
-		ThisTex=ThisTex->NextTex;
-		}
-	ASSERT(!"CAnimTex::SetSpeed - Frame not Found");
+	return(ThisTex->Speed);
+}
 
+/*****************************************************************************/
+void	CAnimTex::SetSpeed(int Speed)
+{
+CAnimTex	*ThisTex;
+
+	ThisTex=AnimTexList;
+
+	ThisTex->Speed=Speed;
 }
 
 /*****************************************************************************/
