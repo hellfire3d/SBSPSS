@@ -11,7 +11,6 @@
 
 /*****************************************************************************/
 class	CCore;
-class	CMapEditView;
 class	CLayerShade : public CLayer
 {
 
@@ -28,7 +27,7 @@ public:
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active){};
 		void			RenderSelection(CCore *Core,Vector3 &ThisCam){};
 
-		void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos){};
+		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos){};
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d){};
 
 		void			GUIInit(CCore *Core);
@@ -49,9 +48,9 @@ public:
 		BOOL			SetMode(int NewMode)	{return(false);}
 		BOOL			InitMode()				{return(false);}
 		BOOL			ExitMode()				{return(false);}
-		BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)	{return(false);}
-		BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)	{return(false);}
-		BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)					{return(false);}
+		BOOL			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)	{return(false);}
+		BOOL			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)	{return(false);}
+		BOOL			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)					{return(false);}
 
 protected:
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,BOOL Render3d,float Alpha=1.0f,Vector3 *Ofs=0);

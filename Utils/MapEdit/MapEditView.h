@@ -30,8 +30,8 @@ public:
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CMapEditView)
-	protected:
-	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
+	public:
+	virtual void OnInitialUpdate();
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -56,16 +56,7 @@ protected:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnToggleTileview();
-	afx_msg void OnToggleGrid();
-	afx_msg void OnMirrorx();
-	afx_msg void OnMirrory();
-	afx_msg void OnActivebrushLeft();
-	afx_msg void OnActivebrushRight();
-	afx_msg void OnMapSetSize();
-	afx_msg void On2d3dToggle();
-	afx_msg void OnEditCopy();
-	afx_msg void OnEditPaste();
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -255,6 +255,7 @@ char	Name[_MAX_FNAME];
 }
 
 /**************************************************************************************/
+/***
 void	MakeFullFilename(const char* In,GString &Out)
 {
 GFName	FName=theApp.GetCurrent()->GetPathName();
@@ -267,15 +268,16 @@ GString	Path;
 		Out=Path;
 		Out+=In;
 }
-
+*/
 /**************************************************************************************/
+/*!!!
 void	MakePathRel2App(const char* In,char *Out)
 {
 GString	RootPath=theApp.GetCurrent()->GetPathName();
 
 		GFName::makerelative(RootPath,In,Out);
 }
-
+*/
 /**************************************************************************************/
 GString	GetWorkingPath()
 {
@@ -320,3 +322,5 @@ CFileDialog	Dlg(true,NULL,Name,OFN_HIDEREADONLY | OFN_PATHMUSTEXIST,Filter);
 		Filename=Dlg.GetPathName();
 
 }
+
+/*****************************************************************************/

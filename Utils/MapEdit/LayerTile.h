@@ -11,7 +11,6 @@
 
 /*****************************************************************************/
 class	CCore;
-class	CMapEditView;
 class	CLayerTile : public CLayer
 {
 
@@ -34,13 +33,13 @@ public:
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
 		void			RenderSelection(CCore *Core,Vector3 &ThisCam);
 
-		void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
+		void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 		void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
-		void			GUIInit(CCore *Core);
-		void			GUIKill(CCore *Core);
-		void			GUIUpdate(CCore *Core);
-		void			GUIChanged(CCore *Core);
+virtual	void			GUIInit(CCore *Core);
+virtual	void			GUIKill(CCore *Core);
+virtual	void			GUIUpdate(CCore *Core);
+virtual	void			GUIChanged(CCore *Core);
 
 		int				GetWidth()			{return(Map.GetWidth());}
 		int				GetHeight()			{return(Map.GetHeight());}
@@ -57,9 +56,9 @@ public:
 		BOOL			InitMode();
 		BOOL			ExitMode();
 
-		BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point);
+		BOOL			LButtonControl(CCore *Core,UINT nFlags, CPoint &point,BOOL DownFlag);
+		BOOL			RButtonControl(CCore *Core,UINT nFlags, CPoint &point,BOOL DownFlag);
+		BOOL			MouseMove(CCore *Core,UINT nFlags, CPoint &point);
 
 		BOOL			MirrorX(CCore *Core);
 		BOOL			MirrorY(CCore *Core);

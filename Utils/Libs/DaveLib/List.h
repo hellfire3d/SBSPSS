@@ -45,6 +45,8 @@ public:
 
 	void	clear()					{List.clear();}
 	void	resize(int i)			{List.resize(i);}
+	void	erase(int i)			{List.erase(List.begin()+i);}
+//	int		begin()					{return(List.begin);}
 
 
 	int		size()					{return(List.size());}

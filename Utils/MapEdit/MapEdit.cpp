@@ -42,12 +42,13 @@ CMapEditApp::CMapEditApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
+	CurrentDoc=0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CMapEditApp object
 
-CMapEditApp theApp;
+	CMapEditApp theApp;
 
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditApp initialization
@@ -104,11 +105,21 @@ BOOL CMapEditApp::InitInstance()
 	// The main window has been initialized, so show and update it.
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
-	
 
 	return TRUE;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void	CMapEditApp::SetCurrent(CMapEditDoc *Cur)
+{
+// prevent over initialisation
+		ASSERT(Cur);
+		if (CurrentDoc!=Cur)
+		{
+			CurrentDoc=Cur;
+			CurrentDoc->UpdateAll();
+		}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
@@ -164,5 +175,4 @@ void CMapEditApp::OnAppAbout()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CMapEditApp message handlers
 

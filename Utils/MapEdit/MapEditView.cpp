@@ -33,18 +33,7 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_TOGGLE_TILEVIEW, OnToggleTileview)
-	ON_COMMAND(ID_TOOLBAR_GRID, OnToggleGrid)
-	ON_COMMAND(ID_MIRRORX, OnMirrorx)
-	ON_COMMAND(ID_MIRRORY, OnMirrory)
-	ON_COMMAND(ID_ACTIVEBRUSH_LEFT, OnActivebrushLeft)
-	ON_COMMAND(ID_ACTIVEBRUSH_RIGHT, OnActivebrushRight)
-	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
-	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
-	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
-	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
-	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -85,7 +74,7 @@ void CMapEditView::OnCreateGL()
 
 void CMapEditView::OnDrawGL()
 {
-	GetDocument()->Render(this);
+	GetDocument()->Render();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,7 +90,7 @@ void CMapEditView::OnSizeGL(int cx, int cy)
 				SetupPersMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
-		GetDocument()->UpdateView(this);
+		GetDocument()->UpdateView();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -136,39 +125,26 @@ CMapEditDoc* CMapEditView::GetDocument() // non-debug version is inline
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditView message handlers
 
-/*********************************************************************************/
-/*********************************************************************************/
-/*********************************************************************************/
-void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(this,nFlags,point,TRUE);}
-void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(this,nFlags,point,FALSE);}
-void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(this,nFlags,point,TRUE);}
-void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(this,nFlags,point,FALSE);}
-BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{GetDocument()->MouseWheel(this,nFlags,zDelta,pt) ;return(0);}
-void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,TRUE);}
-void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,FALSE);}
-void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(this,nFlags, point);}
-void CMapEditView::OnToggleTileview()									{GetDocument()->ToggleTileView(this);}
-void CMapEditView::OnToggleGrid()										{GetDocument()->ToggleGrid(this);}
-void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX(this);}
-void CMapEditView::OnMirrory()											{GetDocument()->MirrorY(this);}
-void CMapEditView::OnEditCopy()											{GetDocument()->CopySelection(this);}
-void CMapEditView::OnEditPaste()										{GetDocument()->PasteSelection(this);}
+void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(nFlags,point,FALSE);}
+void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(nFlags,point,FALSE);}
+BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{GetDocument()->MouseWheel(nFlags,zDelta,pt) ;return(0);}
+void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(nFlags,point,FALSE);}
+void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(nFlags, point);}
 
-void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft(this);}
-void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight(this);}
 
-void CMapEditView::OnMapSetSize()			 							{GetDocument()->MapSetSize(this);}
-
-void CMapEditView::On2d3dToggle()										{GetDocument()->Toggle2d3d(this);}
-
-void CMapEditView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView) 
+void CMapEditView::OnSetFocus(CWnd* pOldWnd) 
 {
-	CGLEnabledView::OnActivateView(bActivate, pActivateView, pDeactiveView);
-	if (bActivate)
-	{
-		CMapEditDoc	*CurDoc=GetDocument();
-		theApp.SetCurrent(CurDoc);
-		CurDoc->SetView(this);
-		CurDoc->UpdateAll(this);
-	}
+		CGLEnabledView::OnSetFocus(pOldWnd);
+		theApp.SetCurrent(GetDocument());
 }
+
+void CMapEditView::OnInitialUpdate() 
+{
+	CGLEnabledView::OnInitialUpdate();
+	GetDocument()->SetView(this);	
+	
+}
+

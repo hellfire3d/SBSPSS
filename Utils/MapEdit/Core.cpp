@@ -25,9 +25,7 @@
 #include	"utils.h"
 
 #include	"Export.h"
-
 #include	"LayerList.h"
-
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -35,12 +33,12 @@
 CCore::CCore()
 {
 		CurrentMousePos=CPoint(0,0);
+		CurrentView=NULL;
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
-			GUIRemoveAll();
 int	ListSize=Layer.size();
 		for (int i=0; i<ListSize; i++) delete Layer[i];
 }
@@ -62,9 +60,8 @@ int		Width,Height;
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_SCRATCH, Width, Height);
-//		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
 
-		ActiveLayer=FindActionLayer();
+		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 		MapCam.Zero();
 		TileCam.Zero();
 		TileViewFlag=FALSE;
@@ -129,12 +126,13 @@ int		LayerCount;
 
 
 // Check Layers
-int		MapWidth=Layer[FindActionLayer()]->GetWidth();
-int		MapHeight=Layer[FindActionLayer()]->GetHeight();
+int		MapWidth=ActionLayer->GetWidth();
+int		MapHeight=ActionLayer->GetHeight();
 		for (i=0;i<LayerCount;i++)
 		{
 			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
 		}
+
 }
 
 /*****************************************************************************/
@@ -171,30 +169,42 @@ int		LayerCount=Layer.size();
 /*****************************************************************************/
 BOOL	CCore::Question(char *Txt)
 {
-	return(theApp.GetCurrent()->Question(Txt));
+CString Str;
+	Str.Format(Txt);
+int	Ret=AfxMessageBox(Str,MB_YESNO , MB_ICONQUESTION);
+	
+	if (Ret==IDYES) return(true);
+	return(false);
+
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CCore::Render(CMapEditView *View,BOOL ForceRender)
+void	CCore::Render(BOOL ForceRender)
 {
+		if (!CurrentView) 
+		{
+			TRACE0("No View\n");
+			UpdateAll();
+			return;
+		}
 		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 		if (TileViewFlag)
 		{
-			RenderTileView(View);
+			RenderTileView();
 		}
 		else
 		{
-			RenderLayers(View);
+			RenderLayers();
 		}
 
 }
 
 /*****************************************************************************/
-void	CCore::RenderLayers(CMapEditView *View)
+void	CCore::RenderLayers()
 {
 Vector3	&ThisCam=GetCam();
 int		ListSize=Layer.size();
@@ -225,16 +235,16 @@ int		StartLayer,EndLayer;
 		
 // Get Cursor Pos
 		LastCursorPos=CursorPos;
-		Layer[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
+		Layer[ActiveLayer]->FindCursorPos(this,GetCam(),CurrentMousePos);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void	CCore::RenderTileView(CMapEditView *View)
+/*****************************************************************************/
+void	CCore::RenderTileView()
 {
 Vector3	&ThisCam=GetCam();
 
 		GetTileBank().RenderSet(this,ThisCam,Is3dFlag);
-		GetTileBank().FindCursorPos(this,View,GetCam(),CurrentMousePos);
+		GetTileBank().FindCursorPos(this,GetCam(),CurrentMousePos);
 }
 
 /*****************************************************************************/
@@ -247,7 +257,7 @@ BOOL	RedrawFlag=FALSE;
 }
 
 /*****************************************************************************/
-void	CCore::LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 BOOL	RedrawFlag=FALSE;
 
@@ -262,21 +272,21 @@ BOOL	RedrawFlag=FALSE;
 		{
 			if (Layer[ActiveLayer]->IsVisible())
 			{
-				RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
+				RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,nFlags,CursorPos,DownFlag);
 			}
 		}
 		GetTileBank().SetActiveBrushL();
 
-		if (RedrawFlag) RedrawView();//View->Invalidate();
+		if (RedrawFlag) RedrawView();
 }
 
 /*****************************************************************************/
-void	CCore::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 }
 
 /*****************************************************************************/
-void	CCore::RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 BOOL	RedrawFlag=FALSE;
 
@@ -291,12 +301,12 @@ BOOL	RedrawFlag=FALSE;
 		{
 			if (Layer[ActiveLayer]->IsVisible())
 			{
-				RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
+				RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,nFlags,CursorPos,DownFlag);
 			}
 		}
 		GetTileBank().SetActiveBrushR();
 
-		if (RedrawFlag) RedrawView();//View->Invalidate();
+		if (RedrawFlag) RedrawView();
 }
 
 /*****************************************************************************/
@@ -310,7 +320,7 @@ Vector3	Ofs;
 
 
 /*****************************************************************************/
-void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
+void	CCore::MouseWheel(UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0) 
 			Zoom(-0.1f);
@@ -319,14 +329,14 @@ void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt)
 }
 
 /*****************************************************************************/
-void	CCore::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point) 
+void	CCore::MouseMove(UINT nFlags, CPoint &point) 
 {
 Vector3	Ofs;
 Vector3	&ThisCam=GetCam();
 // check if active doc
 		Ofs.Zero();
-		if (theApp.GetCurrent()!=View->GetDocument()) return;
-		
+		if (theApp.GetCurrent()!=CurrentView->GetDocument()) return;
+		GetWorkingPath();
 		CurrentMousePos=point;
 
 // Handle Drag Movement
@@ -340,7 +350,7 @@ Vector3	&ThisCam=GetCam();
 			{
 				MoveSpd*=4;
 			}
-			View->GetWindowRect(&ThisRect);
+			CurrentView->GetWindowRect(&ThisRect);
 			XS=ThisCam.z*MoveSpd;
 			YS=ThisCam.z*MoveSpd;
 			XS/=((ThisRect.right-ThisRect.left));
@@ -362,10 +372,10 @@ Vector3	&ThisCam=GetCam();
 			{
 				if (Layer[ActiveLayer]->IsVisible())
 				{
-					Layer[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
+					Layer[ActiveLayer]->MouseMove(this,nFlags,CursorPos);
 				}
 			}
-// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
+// Mouse still moved, so need to redraw windows, to get CursorPos
 			RedrawView();
 		}
 		LastMousePos=CurrentMousePos;
@@ -377,13 +387,12 @@ Vector3	&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::UpdateParamBar()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			GUIRemoveAll();
 			GUIAdd(LayerList,IDD_LAYER_LIST_DIALOG);
 			Layer[ActiveLayer]->GUIInit(this);
-//			Layer[ActiveLayer]->GUIUpdate(this);
 			GUIUpdate();
 }
 
@@ -410,8 +419,11 @@ int			ListSize=Layer.size();
 }
 
 /*****************************************************************************/
-void		CCore::SetLayer(int NewLayer)
+void		CCore::SetLayer(int NewLayer,bool Force)
 {
+int		LayerCount=Layer.size()-1;
+int		LastLayer=ActiveLayer;
+
 		if (NewLayer<0) NewLayer=0;
 
 // If toggling layer, dont change the layer
@@ -426,12 +438,19 @@ void		CCore::SetLayer(int NewLayer)
 			TileBank.SetCollision(IsCol);
 			ActiveLayer=NewLayer;
 		}
-		UpdateParamBar();
+
+		if (LastLayer!=ActiveLayer || Force)
+		{
+			if (TileViewFlag) TileViewFlag=false;
+			if (LastLayer<=LayerCount) Layer[LastLayer]->GUIKill(this);
+			Layer[ActiveLayer]->GUIInit(this);
+			GUIUpdate();
+		}
 		RedrawView();
 }
 
 /*****************************************************************************/
-CLayer		*CCore::AddLayer(CLayer *NewLayer)
+int			CCore::AddLayer(CLayer *NewLayer)
 {
 int			ListSize=Layer.size();
 int			NewIdx=CLayer::GetLayerIdx(NewLayer->GetType(),NewLayer->GetSubType());
@@ -446,30 +465,32 @@ int			Idx=ListSize;
 		}
 
 		Layer.insert(Layer.begin() + Idx,NewLayer);
-
-		return(NewLayer);
+		
+		if (NewLayer->GetType()==LAYER_TYPE_TILE && NewLayer->GetSubType()==LAYER_SUBTYPE_ACTION) ActionLayer=NewLayer;
+		return(Idx);
 }
 
 
 /*****************************************************************************/
-void		CCore::AddLayer(int Type, int SubType, int Width, int Height)
+int		CCore::AddLayer(int Type, int SubType, int Width, int Height)
 {
-CLayer	*Layer;
+int		Idx;
 		switch (Type)
 		{
 			case LAYER_TYPE_TILE:
-				Layer=AddLayer(new CLayerTile(SubType, Width,Height));
+				Idx=AddLayer(new CLayerTile(SubType, Width,Height));
 				break;
 			case LAYER_TYPE_COLLISION:
-				Layer=AddLayer(new CLayerCollision(SubType, Width,Height));
+				Idx=AddLayer(new CLayerCollision(SubType, Width,Height));
 				break;
 			case LAYER_TYPE_SHADE:
-				Layer=AddLayer(new CLayerShade(SubType, Width,Height));
+				Idx=AddLayer(new CLayerShade(SubType, Width,Height));
 				break;
 			default:
 				ASSERT(!"AddLayer - Invalid Layer Type");
 				break;
 		}
+		return(Idx);
 }
 
 /*****************************************************************************/
@@ -497,11 +518,13 @@ int					Sel;
 
 		TRACE2("Add Layer %i %s\n",NewLayerId,CLayer::InfoTable[NewLayerId].Name);
 
-int		Width=Layer[FindActionLayer()]->GetWidth();
-int		Height=Layer[FindActionLayer()]->GetHeight();
+int		Width=ActionLayer->GetWidth();
+int		Height=ActionLayer->GetHeight();
 
-		AddLayer(CLayer::InfoTable[NewLayerId].Type,CLayer::InfoTable[NewLayerId].SubType,Width,Height);
-		UpdateAll();
+int		Idx=AddLayer(CLayer::InfoTable[NewLayerId].Type,CLayer::InfoTable[NewLayerId].SubType,Width,Height);
+		if (ActiveLayer>=Idx) ActiveLayer++;
+
+		SetLayer(Idx,true);
 }
 
 /*****************************************************************************/
@@ -512,8 +535,7 @@ void		CCore::DeleteLayer(int CurrentLayer)
 			Layer[CurrentLayer]->GUIKill(this);
 			delete Layer[CurrentLayer];
 			Layer.erase(Layer.begin() + CurrentLayer);
-			SetLayer(CurrentLayer-1);
-			UpdateAll();
+			SetLayer(CurrentLayer-1,true);
 			TRACE1("Deleted Layer %i\n",CurrentLayer);
 		}
 		else
@@ -528,7 +550,7 @@ void		CCore::DeleteLayer(int CurrentLayer)
 void	CCore::UpdateGrid(BOOL Toggle)
 {
 			if (Toggle) GridFlag=!GridFlag;
-			UpdateView();
+			RedrawView();
 }
 
 /*****************************************************************************/
@@ -536,10 +558,24 @@ void	CCore::UpdateGrid(BOOL Toggle)
 /*****************************************************************************/
 void	CCore::UpdateTileView(BOOL Toggle)
 {
-		if (Toggle) TileViewFlag=!TileViewFlag;
-		GUIRemoveAll();
-		UpdateParamBar();
-		UpdateView();
+		if (!Layer[ActiveLayer]->HasTileView()) return;
+		if (Toggle) 
+		{
+			TileViewFlag=!TileViewFlag;
+		}
+
+		if (TileViewFlag)
+		{
+			Layer[ActiveLayer]->GUIKill(this);
+			TileBank.GUIInit(this);
+		}
+		else
+		{
+			TileBank.GUIKill(this);
+			Layer[ActiveLayer]->GUIInit(this);
+		}
+		GUIUpdate();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -547,7 +583,7 @@ void	CCore::TileBankLoad(char *Filename)
 {
 		TileBank.AddTileSet(Filename);
 		TileBank.GUIUpdate(this);
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -573,7 +609,7 @@ void	CCore::TileBankDelete()
 						Layer[i]->RemapSet(Set,Set-1);
 					}
 				}
-				UpdateView();
+				RedrawView();
 			}
 }
 
@@ -582,7 +618,7 @@ void	CCore::TileBankReload()
 {
 		TileBank.Reload();
 		TexCache.Purge();
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -596,7 +632,7 @@ void	CCore::MirrorX()
 {
 		if (TileViewFlag) return;
 		Layer[ActiveLayer]->MirrorX(this);
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -604,21 +640,21 @@ void	CCore::MirrorY()
 {
 		if (TileViewFlag) return;
 		Layer[ActiveLayer]->MirrorY(this);
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
 void	CCore::ActiveBrushLeft()
 {
 		GetTileBank().SetActiveBrushL();
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
 void	CCore::ActiveBrushRight()
 {
 		GetTileBank().SetActiveBrushR();
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -631,14 +667,14 @@ BOOL	CCore::IsTileValid(int Set,int Tile)
 void	CCore::CopySelection()
 {
 		Layer[ActiveLayer]->CopySelection(this);
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
 void	CCore::PasteSelection()
 {
 		Layer[ActiveLayer]->PasteSelection(this);
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -662,7 +698,7 @@ float	ZS=XS/YS;
 
 		ScaleVector.x=1.0f/XS;
 		ScaleVector.y=1.0f/XS;
-		ScaleVector.z=1.0f/XS;//4.0f;
+		ScaleVector.z=1.0f/XS;
 }
 
 /*****************************************************************************/
@@ -686,7 +722,7 @@ Vector3	&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::GUIAdd(CDialog &Dlg,int ID,bool Visible,bool Lock)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 		ParamBar->Add(Dlg,ID,Visible,Lock);
@@ -695,7 +731,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIRemove(CDialog &Dlg,int ID,bool Force)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->Remove(Dlg,Force);
@@ -704,7 +740,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIRemoveAll(bool Force)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 			ParamBar->RemoveAll(Force);
@@ -713,7 +749,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIUpdate()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMainFrame	*Frm=(CMainFrame*)AfxGetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
 		UpdateLayerGUI();
@@ -725,7 +761,6 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::GUIChanged()
 {
-//		UpdateLayerGUI();
 		Layer[ActiveLayer]->GUIChanged(this);
 }
 
@@ -733,17 +768,13 @@ void	CCore::GUIChanged()
 void	CCore::UpdateAll()
 {
 		UpdateParamBar();
-		GUIUpdate();
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
 void	CCore::RedrawView()
 {
-		if (theApp.GetCurrent())
-		{
-			theApp.GetCurrent()->UpdateAllViews(NULL);
-		}
+		if (CurrentView) CurrentView->Invalidate();
 }
 
 /*****************************************************************************/
@@ -780,14 +811,14 @@ int		ListSize=Layer.size();
 			Layer[i]->Resize(Width,Height);
 		}
 
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
 void	CCore::Toggle2d3d()
 {
 		Is3dFlag=!Is3dFlag;
-		UpdateView();
+		RedrawView();
 }
 
 /*****************************************************************************/
@@ -802,14 +833,6 @@ int	ListSize=Layer.size();
 					return(i);
 		}
 	return(-1);
-}
-
-/*****************************************************************************/
-int		CCore::FindActionLayer()
-{
-int	Idx=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
-
-	return(Idx);
 }
 
 /*****************************************************************************/
@@ -848,12 +871,3 @@ CExport	Exp(ExportName);
 
 }
 
-/*****************************************************************************/
-GString	CCore::GetCurrentPath()
-{
-GFName	FullPath=theApp.GetCurrent()->GetPathName();
-GString	Path=FullPath.Dir();
-	
-	return(Path);
-
-}

@@ -21,20 +21,21 @@ protected: // create from serialization only
 public:
 	void			SetView(CMapEditView *View);
 	CMapEditView	*GetView();
-	void			UpdateView(CMapEditView *View);
-	void			Render(CMapEditView *View);
-	void			UpdateAll(CMapEditView *View);
+	void			UpdateView();
+	void			Render();
+	void			UpdateAll();
 	void			FocusView();
-	bool			Question(char *Txt);
 	void			GUIUpdate();
 	void			GUIChanged();
 
 // Windows Messages Thru Point
-	void			LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-	void			MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-	void			RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-	void			MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
-	void			MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
+
+	void			LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
+	void			MouseMove(UINT nFlags, CPoint &point);
+/*
 	void			ToggleTileView(CMapEditView *View);
 	void			ToggleGrid(CMapEditView *View);
 	void			MirrorX(CMapEditView *View);
@@ -45,7 +46,7 @@ public:
 	void			ActiveBrushRight(CMapEditView *View);
 	void			MapSetSize(CMapEditView *View);
 	void			Toggle2d3d(CMapEditView *View);
-
+*/
 	void			TileBankLoad();
 	void			TileBankDelete();
 	void			TileBankReload();
@@ -66,6 +67,7 @@ public:
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual void Serialize(CArchive& ar);
+	virtual void OnCloseDocument();
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -86,6 +88,16 @@ protected:
 	afx_msg void OnExport();
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
+	afx_msg void OnToggleTileview();
+	afx_msg void OnToggleGrid();
+	afx_msg void OnMirrorx();
+	afx_msg void OnMirrory();
+	afx_msg void OnActivebrushLeft();
+	afx_msg void OnActivebrushRight();
+	afx_msg void OnMapSetSize();
+	afx_msg void OnEditCopy();
+	afx_msg void OnEditPaste();
+	afx_msg void On2d3dToggle();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

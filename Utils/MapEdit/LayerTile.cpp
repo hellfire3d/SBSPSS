@@ -306,7 +306,7 @@ const float	OverVal=0.1f;
 }
 
 /*****************************************************************************/
-void	CLayerTile::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
+void	CLayerTile::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 int			MapWidth=Map.GetWidth();
@@ -347,7 +347,7 @@ int		DrawH=ZoomH+8;
 		glPushMatrix();
 		glLoadIdentity();
 		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
-		View->SetupPersMatrix();
+		Core->GetView()->SetupPersMatrix();
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
@@ -393,13 +393,14 @@ GLuint	*HitPtr=SelectBuffer;
 /*****************************************************************************/
 void	CLayerTile::GUIInit(CCore *Core)
 {
-			Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
-			Core->TileBankGUIInit();
+		Core->TileBankGUIInit();
+		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerTile::GUIKill(CCore *Core)
 {
+		Core->TileBankGUIKill();
 		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
@@ -472,7 +473,7 @@ BOOL	CLayerTile::ExitMode()
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
+BOOL	CLayerTile::LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
 {
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();
@@ -497,7 +498,7 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
+BOOL	CLayerTile::RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
 {
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();
@@ -522,7 +523,7 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)
+BOOL	CLayerTile::MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)
 {
 BOOL		Ret=FALSE;
 CTileBank	&TileBank=Core->GetTileBank();

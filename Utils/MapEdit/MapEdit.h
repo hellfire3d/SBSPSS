@@ -19,16 +19,13 @@
 // See MapEdit.cpp for the implementation of this class
 //
 class CMapEditDoc;
+class CMapEditView;
 class CMapEditApp : public CWinApp
 {
 public:
 	CMapEditApp();
 
-	void		SetCurrent(CMapEditDoc *Cur)	
-	{
-		CurrentDoc=Cur;
-	}
-
+	void		SetCurrent(CMapEditDoc *Cur);
 	CMapEditDoc	*GetCurrent()
 	{
 		return(CurrentDoc);
@@ -50,8 +47,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 private:
-
-	CMapEditDoc	*CurrentDoc;
+	CMapEditDoc		*CurrentDoc;
 };
 
 

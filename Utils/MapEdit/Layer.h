@@ -23,6 +23,7 @@ struct	sLayerInfoTable
 	bool			Render3dFlag;
 	bool			ResizeFlag;
 	bool			ExportFlag;
+	bool			HasTileView;
 
 };
 
@@ -36,7 +37,6 @@ TileLayerMinHeight=22,
 
 /*****************************************************************************/
 class	CCore;
-class	CMapEditView;
 class	CExport;
 class	CLayer
 {
@@ -55,6 +55,7 @@ static	int				GetLayerIdx(int Type,int SubType);
 		bool			CanDelete()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].DeleteFlag);}
 		bool			CanExport()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag);}
 		bool			IsUnique()						{return(!(InfoTable[GetLayerIdx(GetType(),GetSubType())].ExportFlag));}
+		bool			HasTileView()					{return((InfoTable[GetLayerIdx(GetType(),GetSubType())].HasTileView));}
 
 virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
 virtual	BOOL			IsVisible()						{return(VisibleFlag);}
@@ -68,7 +69,7 @@ virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)=0;
 virtual void			RenderSelection(CCore *Core,Vector3 &ThisCam)=0;
 
 
-virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)=0;
+virtual	void			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)=0;
 virtual	void			RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 
 virtual	void			GUIInit(CCore *Core)=0;
@@ -91,9 +92,9 @@ virtual	void			Export(CCore *Core,CExport &Exp)=0;
 virtual	BOOL			SetMode(int NewMode)=0;
 virtual	BOOL			InitMode()=0;
 virtual	BOOL			ExitMode()=0;
-virtual	BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
-virtual	BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
-virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)=0;
+virtual	BOOL			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
+virtual	BOOL			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
+virtual	BOOL			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)=0;
 
 virtual	BOOL			MirrorX(CCore *Core){return(false);};
 virtual	BOOL			MirrorY(CCore *Core){return(false);};

@@ -28,11 +28,8 @@
 CLayerCollision::CLayerCollision(int _SubType,int Width,int Height)
 {
 		SubType=LAYER_SUBTYPE_NONE;
-
 		SetDefaultParams();
-
 		Mode=MouseModePaint;
-
 		Map.SetSize(Width,Height,TRUE);
 }
 
@@ -84,12 +81,14 @@ void	CLayerCollision::Save(CFile *File)
 /*****************************************************************************/
 void	CLayerCollision::GUIInit(CCore *Core) 
 {
-			Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
+//		Core->TileBankGUIInit();
+		Core->GUIAdd(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 
 /*****************************************************************************/
 void	CLayerCollision::GUIKill(CCore *Core)
 {
+//		Core->TileBankGUIKill();
 		Core->GUIRemove(ToolBarGUI,IDD_LAYERTILE_TOOLBAR);
 }
 

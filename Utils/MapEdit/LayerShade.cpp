@@ -128,10 +128,10 @@ float		y1=y0-Height;
 
 
 /*****************************************************************************/
-BOOL	CLayerShade::Resize(int Width,int Height)
+BOOL	CLayerShade::Resize(int _Width,int _Height)
 {
-		Width=TileLayerMinWidth+(Width-TileLayerMinWidth)/ScaleFactor;
-		Height=TileLayerMinHeight+(Height-TileLayerMinHeight)/ScaleFactor;
+		Width=TileLayerMinWidth+(_Width-TileLayerMinWidth)/ScaleFactor;
+		Height=TileLayerMinHeight+(_Height-TileLayerMinHeight)/ScaleFactor;
 
 		return(true);
 }
@@ -149,9 +149,7 @@ void	CLayerShade::GUIInit(CCore *Core)
 /*****************************************************************************/
 void	CLayerShade::GUIKill(CCore *Core)
 {
-			ShadeDlg.GetRGB0(RGB[0]);
-			ShadeDlg.GetRGB1(RGB[1]);
-			Core->GUIRemove(ShadeDlg,IDD_LAYERSHADE_GUI);
+		Core->GUIRemove(ShadeDlg,IDD_LAYERSHADE_GUI);
 }
 
 /*****************************************************************************/
@@ -164,9 +162,6 @@ void	CLayerShade::GUIChanged(CCore *Core)
 {
 		ShadeDlg.GetRGB0(RGB[0]);
 		ShadeDlg.GetRGB1(RGB[1]);
-
-		TRACE3("RGB0 is %i,%i,%i\n",RGB[0].rgbRed,RGB[0].rgbGreen,RGB[0].rgbBlue);
-		TRACE3("RGB1 is %i,%i,%i\n",RGB[1].rgbRed,RGB[1].rgbGreen,RGB[1].rgbBlue);
 }
 
 /*****************************************************************************/

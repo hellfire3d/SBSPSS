@@ -16,13 +16,13 @@
 /*****************************************************************************/
 sLayerInfoTable	CLayer::InfoTable[]=
 {
-	//Type					SubType					Name			delete?	Scale	3d		Resizable	Export
-	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_SCRATCH,	"WorkPad",		false,	1.0f,	true,	false,		false,},
-	{LAYER_TYPE_SHADE,		LAYER_SUBTYPE_BACK,		"Back Shade",	true,	4.0f,	false,	true,		true,},
-	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_BACK,		"Back",			true,	4.0f,	false,	false,		true,},
-	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_MID,		"Mid",			true,	2.0f,	false,	true,		true,},
-	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_ACTION,	"Action",		false,	1.0f,	true,	true,		true,},
-	{LAYER_TYPE_COLLISION,	LAYER_SUBTYPE_NONE,		"Collision",	true,	1.0f,	false,	true,		true,},
+	//Type					SubType					Name			delete?	Scale	3d		Resizable	Export	TileView?
+	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_SCRATCH,	"WorkPad",		true,	1.0f,	true,	false,		false,	true,},
+	{LAYER_TYPE_SHADE,		LAYER_SUBTYPE_BACK,		"Back Shade",	true,	4.0f,	false,	true,		true,	false,},
+	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_BACK,		"Back",			true,	4.0f,	false,	false,		true,	true,},
+	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_MID,		"Mid",			true,	2.0f,	false,	true,		true,	true,},
+	{LAYER_TYPE_TILE,		LAYER_SUBTYPE_ACTION,	"Action",		false,	1.0f,	true,	true,		true,	true,},
+	{LAYER_TYPE_COLLISION,	LAYER_SUBTYPE_NONE,		"Collision",	true,	1.0f,	false,	true,		true,	true,},
 };
 
 int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);

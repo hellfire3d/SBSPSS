@@ -60,10 +60,11 @@ public:
 		CMap		&GetActiveBrush()					{return(GetBrush(ActiveBrush));}
 
 		void		RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d);
-		void		FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
+		void		FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 		void		RenderCursor(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 
 		void		GUIInit(CCore *Core);
+		void		GUIKill(CCore *Core);
 		void		GUIUpdate(CCore *Core);
 
 		BOOL		IsTileValid(int Set,int Tile);
@@ -120,7 +121,7 @@ const	char		*GetName()			{return(Name);}
 
 		CTile		&GetTile(int No)	{return(Tile[No]);}
 		void		Purge();
-		int			FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos);
+		int			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
 		void		Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d);
 		void		RenderCursor(Vector3 &CamPos,int Pos,int Width, int Height);
 		void		RenderBrush(Vector3 &CamPos,CMap &LBrush,CMap &RBrush);

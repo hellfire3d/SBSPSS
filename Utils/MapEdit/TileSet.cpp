@@ -95,6 +95,7 @@ char	FixPath[1024];
 		FilePath=RootPath.Drive();
 		FilePath+=RootPath.Dir();
 		FilePath.Append('\\');
+		FilePath.Upper();
 	
 		File->Read(&ListSize,sizeof(int));
 		File->Read(&CurrentSet,sizeof(int));
@@ -110,7 +111,7 @@ char	FixPath[1024];
 		for (int i=0;i<ListSize;i++)
 		{
 			char	c=1;
-			GString	FullName=FilePath;
+			GString	FullName;//=FilePath;
 
 			while (c)
 			{
@@ -118,10 +119,17 @@ char	FixPath[1024];
 				FullName.Append(c);
 			}
 			FullName.Upper();
+			GFName::makeabsolute(FilePath,FullName,FixPath);
+			FullName=FixPath;
 			_fullpath( FixPath, FullName, 1024);
+			for (int z=0; z<strlen(FixPath); z++) 
+			{// Invalidate any long name short cackness
+				if (FixPath[z]=='~') FixPath[z]='_'; 
+			}
 			FullName=FixPath;
 
 			CheckFilename(FullName);
+			FullName.Upper();
 			AddTileSet(FullName);
 		}
 }
@@ -243,11 +251,11 @@ void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 }
 
 /*****************************************************************************/
-void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
+void	CTileBank::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
 {
 		if (!TileSet.size()) return;	// No tiles, return
 		
-		CursorPos=TileSet[CurrentSet].FindCursorPos(Core,View,CamPos,MousePos);
+		CursorPos=TileSet[CurrentSet].FindCursorPos(Core,CamPos,MousePos);
 		SelEnd=CursorPos;
 }
 
@@ -256,7 +264,13 @@ void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPo
 /*****************************************************************************/
 void	CTileBank::GUIInit(CCore *Core)
 {
-			Core->GUIAdd(TileBankGUI,IDD_LAYERTILE_GUI);
+		Core->GUIAdd(TileBankGUI,IDD_LAYERTILE_GUI);
+}
+
+/*****************************************************************************/
+void	CTileBank::GUIKill(CCore *Core)
+{
+		Core->GUIRemove(TileBankGUI,IDD_LAYERTILE_GUI);
 }
 
 /*****************************************************************************/
@@ -695,7 +709,7 @@ float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 }
 
 /*****************************************************************************/
-int		CTileSet::FindCursorPos(CCore *Core,CMapEditView *View,Vector3 &CamPos,CPoint &MousePos)
+int		CTileSet::FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos)
 {
 int		ListSize=Tile.size();
 GLint	Viewport[4];
@@ -716,7 +730,7 @@ float		Scale=CamPos.z/(float)TileBrowserWidth/2.0;
 		glPushMatrix();
 		glLoadIdentity();
 		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
-		View->SetupPersMatrix();
+		Core->GetView()->SetupPersMatrix();
 
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();

@@ -9,7 +9,6 @@
 
 /*****************************************************************************/
 class	CCore;
-//class	CMapEditView;
 class	CLayerCollision : public CLayerTile
 {
 

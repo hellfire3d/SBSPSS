@@ -32,6 +32,7 @@ typedef u32						U32;
 
 /**************************************************************************************/
 class	GString;
+class	CMapEditDoc;
 void	DbgMsg(const char * pszFmt,...);
 
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
@@ -52,5 +53,6 @@ void	MakeFullFilename(const char *RelName,GString &Out);
 void	MakePathRel2App(const char* In,char *Out);
 GString	GetWorkingPath();
 void	CheckFilename(GString &Filename);
-		
+
+	
 #endif

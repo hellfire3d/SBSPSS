@@ -34,9 +34,9 @@ public:
 		void					Load(CFile *File);
 		void					Save(CFile *File);
 		BOOL					Question(char *Txt);
-		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
-		void					RenderLayers(CMapEditView *View);
-		void					RenderTileView(CMapEditView *View);
+		void					Render(BOOL ForceRender=FALSE);
+		void					RenderLayers();
+		void					RenderTileView();
 		void					Export(char *Filename);
 
 // View Stuff
@@ -44,11 +44,11 @@ public:
 		CMapEditView			*GetView()							{return(CurrentView);}
 // Control
 		void					SetMode(int NewMode);
-		void					LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		void					MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		void					RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		void					MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
-		void					MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
+		void					LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void					MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void					RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void					MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
+		void					MouseMove(UINT nFlags, CPoint &point);
 		void					Zoom(float Dst);
 
 // TileBank
@@ -67,6 +67,7 @@ public:
 		BOOL					IsTileValid(int Set,int Tile);
 		BOOL					IsTileView()					{return(TileViewFlag);}
 		void					TileBankGUIInit()				{TileBank.GUIInit(this);}
+		void					TileBankGUIKill()				{TileBank.GUIKill(this);}
 		void					TileBankGUIUpdate()				{TileBank.GUIUpdate(this);}
 
 // GUI 
@@ -78,9 +79,9 @@ public:
 		void					GUIChanged();
 
 // Layers
-		void					AddLayer(int Type, int SubType, int Width, int Height);
-		CLayer					*AddLayer(CLayer *Layer);
-		void					SetLayer(int Layer);
+		int						AddLayer(int Type, int SubType, int Width, int Height);
+		int						AddLayer(CLayer *Layer);
+		void					SetLayer(int Layer,bool Force=false);
 		void					AddLayer(int Layer);
 		void					DeleteLayer(int Layer);
 		void					UpdateLayerGUI();
@@ -103,12 +104,12 @@ public:
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
 		void					SetMapSize(int Width,int Height);
-		int						GetMapWidth()					{return(Layer[FindActionLayer()]->GetWidth());}
-		int						GetMapHeight()					{return(Layer[FindActionLayer()]->GetHeight());}
+		int						GetMapWidth()					{return(ActionLayer->GetWidth());}
+		int						GetMapHeight()					{return(ActionLayer->GetHeight());}
 
 		void					Toggle2d3d();
 		int						FindLayer(int Type,int SubType=-1);
-		int						FindActionLayer();
+		int						SetActionLayer(CLayer *Lyr)		{ActionLayer=Lyr;}
 
 		void					SetScale();
 		Vector3					&GetScaleVector()			{return(ScaleVector);}
@@ -117,8 +118,6 @@ public:
 		
 		void					CopySelection();
 		void					PasteSelection();
-
-		GString					GetCurrentPath();
 
 private:
 		CMapEditView			*CurrentView;
@@ -129,6 +128,7 @@ private:
 		Vector3					ScaleVector;
 
 		std::vector<CLayer*>	Layer;
+		CLayer					*ActionLayer;
 		int						ActiveLayer;
 
 		CTileBank				TileBank;
