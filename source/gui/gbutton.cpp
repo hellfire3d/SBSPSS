@@ -205,7 +205,7 @@ void CGUICycleButton::think(int _frames)
 		int pad;
 
 		pad=PadGetRepeat(0);
-		if(pad&PAD_CROSS)
+		if(pad&(PAD_CROSS|PAD_RIGHT))
 		{
 			int	*target;
 			int	*data;
@@ -226,6 +226,41 @@ void CGUICycleButton::think(int _frames)
 			if(tmp>*data)
 			{
 				data=getData();
+			}
+			*target=*data;
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
+		}
+		else if(pad&PAD_LEFT)
+		{
+			int	*target;
+			int	*data;
+			int	tmp;
+
+			target=getTarget();
+			data=getData();
+			do
+			{
+				tmp=*data;
+				if(*target==tmp)
+				{
+					break;
+				}
+				data++;
+			}
+			while(tmp<*data);
+			if(data==getData())
+			{
+				do
+				{
+					tmp=*data;
+					data++;
+				}
+				while(tmp<*data);
+				data--;
+			}
+			else
+			{
+				data--;
 			}
 			*target=*data;
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
