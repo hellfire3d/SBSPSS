@@ -193,11 +193,13 @@ void CFrontEndScene::think(int _frames)
 	thinkLogo(_frames);
 	
 	mode=s_modeCodes[m_mode];
-	mode->think(_frames);
 	if(mode->isReadyToExit())
 	{
 		setMode(mode->getNextMode());
+		mode=s_modeCodes[m_mode];
 	}
+
+	mode->think(_frames);
 }
 
 
