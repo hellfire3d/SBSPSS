@@ -264,6 +264,12 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 				break;
 			}
 
+			default:
+				break;
+		}
+
+		switch ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy ) & COLLISION_TYPE_MASK )
+		{
 			case COLLISION_TYPE_FLAG_DEATH_FALL:
 			{
 				m_playerAttached = false;
