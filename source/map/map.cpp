@@ -275,6 +275,7 @@ void CMapScene::init()
 
 	CSoundMediator::setSong(CSoundMediator::SONG_MAPSCREEN);
 	m_musicStarted=false;
+	StopLoad();
 }
 
 

@@ -86,6 +86,10 @@ FX
 #include "save\save.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 
 /*	Std Lib
@@ -1260,6 +1264,7 @@ void	CFmaScene::init()
 
 	m_stillProcessingCommand=false;
 	m_doOtherProcessing=false;
+	StopLoad();
 }
 
 

@@ -78,6 +78,9 @@
 #include "fma\fma.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
 
 /*	Std Lib
 	------- */
@@ -150,6 +153,8 @@ CFrontEndScene::FrontEndMode			CFrontEndScene::s_startMode=MODE__NICK_LOGO;
   ---------------------------------------------------------------------- */
 void CFrontEndScene::init()
 {
+	CLevel::DisplayLoadingScreen();
+
 	for(int i=0;i<MODE__NONE;i++)
 	{
 		s_modeCodes[i]->init();
@@ -166,6 +171,7 @@ void CFrontEndScene::init()
 	m_font=new ("frontendfont") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
+	StopLoad();
 }
 
 

@@ -59,7 +59,7 @@ void 		VidRemoveVSyncFunc(VbFuncType v);
 void 		VRamViewer();
 
 void		SetUpLoadIcon(void *fh);
-void		StartLoad(int _loadX=430,int _loadY=202);
+void		StartLoad(int _loadX=-1,int _loadY=-1);
 void		StopLoad();
 
 void		SetScreenImage(u8 *Ptr);

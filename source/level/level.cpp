@@ -204,7 +204,6 @@ void 	CLevel::init(int LevelNo)
 // Load it
 sLvlTab *lvlTab=&LvlTable[LevelNo];
 
-//		DisplayLoadingScreen(lvlTab);
 
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
@@ -319,6 +318,7 @@ int					i;
 			MemFree(s_image);
 			VSync(20);
 			font.dump();
+			StartLoad();
 }
 
 /*****************************************************************************/

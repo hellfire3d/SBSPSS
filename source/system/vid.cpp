@@ -33,14 +33,14 @@ static const CVECTOR s_defClearCol = {0, 0, 0};
 /*****************************************************************************/
 POLY_FT4	LoadPoly;
 static int	LoadX=430;
-static int	LoadY=161;
+static int	LoadY=192;
+static int	LoadBackY;
 static int	LoadHalfWidth;
 static int	LoadIconSide;
 static int	DrawLoadIcon=0;
 static RECT	LoadBackRect;
-static int	LoadBackY;
 static int	LoadTime=0;
-
+static const int	LoadBackInc=8;
 
 /*****************************************************************************/
 // Altered to keep aspect ratio
@@ -50,6 +50,7 @@ s8	LoadTab[]=
 	 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,17,18,18,19,19,19,20,20,20,20,20,21
 };
 const int	LoadTabSize=sizeof(LoadTab)/sizeof(s8);
+
 /*****************************************************************************/
 void	LoadingIcon()
 {
@@ -65,14 +66,12 @@ POLY_FT4	*PolyPtr=&LoadPoly;
 		rgb=128-(LoadTab[(LoadTime+LoadTabSize/2)%LoadTabSize]*3);
 		setRGB0(PolyPtr,rgb,rgb,rgb);
 
-		MoveImage(&LoadBackRect,LoadX,LoadY+LoadBackY);
-
+		MoveImage(&LoadBackRect,LoadX-LoadBackInc,LoadBackY);
 		PutDrawEnv(&Screen[FrameFlipFlag^1].Draw);
 		DrawPrim(PolyPtr);
 
 		LoadTime++;
 		if (LoadTime>=LoadTabSize)	LoadTime=0;
-//		if(LoadTime==LoadTabSize/2)	LoadIconSide^=1;
 }
 
 /*****************************************************************************/
@@ -86,21 +85,26 @@ sFrameHdr *fh=(sFrameHdr*)_fh;
 		LoadPoly.clut=fh->Clut;
 
 		LoadHalfWidth=fh->W/2;
-		setRECT(&LoadBackRect,LoadX,LoadY+(LoadBackY^256),fh->W+4,fh->H+4);
+		LoadBackRect.w=fh->W+(LoadBackInc*2);
+		LoadBackRect.h=fh->H;
 
 }
 /*****************************************************************************/
 void	StartLoad(int _loadX,int _loadY)
 {
-		LoadX=_loadX;
-		LoadY=_loadY;
+		SYSTEM_DBGMSG("Start Load");
+
+		if (_loadX!=-1) LoadX=_loadX;
+		if (_loadY!=-1) LoadY=_loadY;
 
 		Screen[0].Draw.isbg=Screen[1].Draw.isbg=0;
 
 		PutDrawEnv(&Screen[FrameFlipFlag^1].Draw);
 		PutDispEnv(&Screen[FrameFlipFlag].Disp);
 
-		LoadBackY=Screen[FrameFlipFlag^1].Disp.disp.y;
+		LoadBackRect.x=LoadX-LoadBackInc;
+		LoadBackRect.y=LoadY+((FrameFlipFlag)*256);;
+		LoadBackY=LoadY+((FrameFlipFlag^1)*256);
 
 		LoadTime=0;
 		DrawLoadIcon=1;
@@ -110,7 +114,6 @@ void	StartLoad(int _loadX,int _loadY)
 /*****************************************************************************/
 void	StopLoad()
 {
-
 	while(LoadTime) 
 		{
 		VSync(0);
@@ -119,6 +122,8 @@ void	StopLoad()
 	Screen[0].Draw.isbg=Screen[1].Draw.isbg=1;
 
 	DrawLoadIcon=0;
+	SYSTEM_DBGMSG("Stop Load");
+
 }
 
 /*****************************************************************************/
