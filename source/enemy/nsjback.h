@@ -26,6 +26,8 @@ public:
 	void				shutdown();
 	void				setTargetHeading( s16 newTargetHeading )			{m_targetHeading = newTargetHeading;}
 	u8					hasBeenAttacked();
+	bool				allowOffMap()										{return(true);}
+
 protected:
 	bool				processSensor();
 	void				processMovement( int _frames );

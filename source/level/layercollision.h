@@ -65,8 +65,8 @@ inline	u8				Get(int X,int Y)
 		void			render(DVECTOR &MapPos);
 #endif
 
-		int				getMapWidth()	{return(MapWidth);}
-		int				getMapHeight()	{return(MapHeight);}
+//		int				getMapWidth()	{return(MapWidth);}
+//		int				getMapHeight()	{return(MapHeight);}
 
 protected:
 		sLayerHdr		*LayerHdr;

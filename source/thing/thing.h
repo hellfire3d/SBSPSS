@@ -198,7 +198,8 @@ virtual	void			leftThinkZone(int _frames)					{}
 		CRECT const		&getCollisionArea()							{return m_collisionArea;}
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}
 
-virtual int				canCollide()								{return true;}
+virtual int				canCollide()								{return (true);}
+virtual bool			allowOffMap()								{return (false);}
 virtual int				checkCollisionAgainst(CThing *_thisThing, int _frames);
 		int				checkCollisionAgainstArea(CRECT *_rect);
 		void			updateCollisionArea();
@@ -254,6 +255,7 @@ public:
 	};
 virtual	TYPE		getThingType()					{return TYPE_PLAYER;}
 virtual	bool		alwaysThink()					{return(true);}
+bool				allowOffMap()					{return(true);}
 
 };
 

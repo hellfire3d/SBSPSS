@@ -28,6 +28,8 @@ public:
 	void				render();
 	int					getFrameCount()							{return( FRM_BUTTERFLY_FLAP04 - FRM_BUTTERFLY_FLAP01 + 1 );}
 	u8					canBeCaughtByNet()						{return( false );}
+	bool				allowOffMap()							{return(true);}
+
 protected:
 	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 };

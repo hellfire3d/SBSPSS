@@ -35,13 +35,6 @@ void CNpcButterflyBackgroundEnemy::processMovementModifier(int _frames, s32 dist
 		m_animPlaying = true;
 		m_frame = 0;
 	}
-
-	CLevel &level = GameScene.GetLevel();
-	if ( Pos.vx < 0 || Pos.vx > ( level.getCollisionLayer()->getMapWidth() << 4 ) ||
-			Pos.vy < 0 || Pos.vy > ( level.getCollisionLayer()->getMapHeight() << 4 ) )
-	{
-		setToShutdown();
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

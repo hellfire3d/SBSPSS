@@ -792,7 +792,7 @@ DVECTOR		DP;
 // Note: relies on tiles not being top or bottom of map tho!!
 void	CLevel::destroyMapTile(DVECTOR const &Pos)
 {
-int				Width=CollisionLayer->getMapWidth();
+int				Width=getMapWidth();
 DVECTOR			MP=Pos;
 const int		ColT=COLLISION_TYPE_DESTRUCTABLE_FLOOR;
 
@@ -855,8 +855,8 @@ DVECTOR		DP;
 /*****************************************************************************/
 void	CLevel::CreateTileStore()
 {
-int		MapW=CollisionLayer->getMapWidth();
-int		MapH=CollisionLayer->getMapHeight();
+int		MapW=getMapWidth();
+int		MapH=getMapHeight();
 int		X,Y;
 	
 		m_TileStoreCount=0;

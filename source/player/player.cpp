@@ -719,6 +719,7 @@ if(PadGetDown(0)&PAD_R1)
 #endif
 
 
+#ifdef _STATE_DEBUG_
 if(PadGetDown(0)&PAD_L1&&m_currentMode!=PLAYER_MODE_DEAD)
 {
 	oldmode=m_currentMode;
@@ -729,7 +730,7 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 	newmode=oldmode;
 	oldmode=-1;
 }
-
+#endif
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
