@@ -1377,6 +1377,7 @@ void CPlayer::respawn()
 	clearPlatform();
 
 	GameScene.respawnLevel();
+	updateCollisionArea();
 }
 
 
