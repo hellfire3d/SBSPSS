@@ -197,7 +197,5 @@ void AllFiles::ReadRepFile(char const * Name)
 	cout<<"Read report file "<<Name<<endl;
 }
 
-
-
 /*===========================================================================
  end */

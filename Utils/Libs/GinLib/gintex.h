@@ -377,8 +377,11 @@ public:
 			}
 		}
 
-	Vector3	GetWorldPos(Vector3	&Pos);
-	Quaternion	GetWorldAng(Quaternion &Q);
+//	Vector3	GetWorldPos(Vector3	&Pos);
+//	Quaternion	GetWorldAng(Quaternion &Q);
+	Vector3		GetWorldPos();
+	Quaternion	GetWorldAng();
+
 
 	int							  GetChildCount()			  {return(ChildList.size());}
 	int							  GetPruneChildCount()		  {return(PruneChildList.size());}

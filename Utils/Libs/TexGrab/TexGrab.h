@@ -68,7 +68,7 @@ public:
 		void	AlignHeaders(bool f)					{m_AlignHeaders=f;}
 		void	AllowRotate(bool f)						{MyFiles.SetAllowRotate(f);}
 		void	FileRecursion(bool f)					{MyFiles.SetFileRecursion(f);}
-		void	tNoSort()								{MyFiles.setNoSort();}
+		void	NoSort()								{MyFiles.setNoSort();}
 
 		void	ReadRepFile(GString String)				{MyFiles.ReadRepFile(String);}
 

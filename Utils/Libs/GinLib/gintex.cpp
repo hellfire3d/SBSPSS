@@ -981,7 +981,7 @@ Vector3	GetWorldPos(Matrix4x4 &WorldMtx,Vector3 &ThisPos)
 	return(WorldMtx*ThisPos);
 }
 
-Vector3	CNode::GetWorldPos(Vector3	&Pos)
+Vector3	CNode::GetWorldPos()
 {
 
 	return(::GetWorldPos(WorldMtx,Pos));
