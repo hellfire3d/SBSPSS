@@ -251,7 +251,6 @@ private:
 	int				m_animNo;
 	CSkelSpongeBob	m_skel;
 
-	DVECTOR			m_playerScreenPos;
 	DVECTOR			m_playerScreenGeomPos;
 	DVECTOR			m_cameraPos;
 	int				m_cameraScrollDir;

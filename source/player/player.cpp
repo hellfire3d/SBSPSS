@@ -164,9 +164,10 @@ int s_health;
 int s_screenPos;
 DVECTOR	m_cameraScrollPos={0,600};
 
-int MAP3D_CENTRE_X=170;
-int MAP3D_CENTRE_Y=500;
-int MAP3D_BLOCKSTEPSIZE=315;
+int SCREEN_GEOM_CENTRE_X=248;
+int SCREEN_GEOM_CENTRE_Y=129;
+int SCREEN_GEOM_PLAYER_OFS_X=9;
+int SCREEN_GEOM_PLAYER_OFS_Y=-26;
 
 int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-136;
@@ -232,6 +233,9 @@ m_animFrame=0;
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
 
+	m_glassesFlag=0;
+	m_squeakyBootsTimer=0;
+	m_invinvibilityRingTimer=0;
 }
 
 /*----------------------------------------------------------------------
@@ -255,7 +259,6 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
-DVECTOR asdf={9,-26};
 
 #ifdef _STATE_DEBUG_
 char posBuf[100];
@@ -358,13 +361,11 @@ if(PadGetDown(0)&PAD_CIRCLE)
 
 	
 	// Move the camera offset
-	m_playerScreenPos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
-	m_playerScreenPos.vy=MAP3D_CENTRE_Y+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
+	m_playerScreenGeomPos.vx=SCREEN_GEOM_PLAYER_OFS_X+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
+	m_playerScreenGeomPos.vy=SCREEN_GEOM_PLAYER_OFS_Y+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
 	m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
 	m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
 
-m_playerScreenGeomPos.vx=asdf.vx+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
-m_playerScreenGeomPos.vy=asdf.vy+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
 
 	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
 	m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
@@ -373,29 +374,25 @@ m_playerScreenGeomPos.vy=asdf.vy+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8)
 	// Limit camera scroll to the edges of the map
 	if(m_cameraPos.vx<0)
 	{
-		m_playerScreenPos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
-m_playerScreenGeomPos.vx+=m_cameraPos.vx;
+		m_playerScreenGeomPos.vx+=m_cameraPos.vx;
 		m_cameraPos.vx=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
 	{
-		m_playerScreenPos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
-m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
+		m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
 		m_cameraPos.vx=m_mapCameraEdges.vx;
 		m_cameraScrollDir=0;
 	}
 	if(m_cameraPos.vy<0)
 	{
-		m_playerScreenPos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
-m_playerScreenGeomPos.vy+=m_cameraPos.vy;
+		m_playerScreenGeomPos.vy+=m_cameraPos.vy;
 		m_cameraPos.vy=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
 	{
-		m_playerScreenPos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
-m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
+		m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 		m_cameraScrollDir=0;
 	}
@@ -631,9 +628,7 @@ if(eyes!=-1)
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
 //DrawLine(xval+7,0,xval+7,255,0,128,255,0);
 
-//		int	gx,gy;
-		SetGeomOffset(248+m_playerScreenGeomPos.vx,129+m_playerScreenGeomPos.vy);
-//		m_skel.setPos(m_playerScreenPos);
+		SetGeomOffset(SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
 		else
@@ -641,7 +636,7 @@ if(eyes!=-1)
 		m_skel.setFrame(m_animFrame);
 		m_skel.Animate(this);
 		m_skel.Render(this);
-		SetGeomOffset(248,129);	//(pkg)
+		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
 	}
 
 
