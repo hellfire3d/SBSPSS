@@ -209,6 +209,8 @@ void CNpcDualPlatform::render()
 {
 	int		x1,y1,x2,y2;
 
+	DVECTOR	offset = CLevel::getCameraPos();
+
 	if ( m_isActive )
 	{
 		CPlatformThing::render();
@@ -218,6 +220,87 @@ void CNpcDualPlatform::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			m_modelGfx->Render(renderPos);
+		}
+
+		x1 = Pos.vx - offset.vx;
+		x2 = m_lineBase.vx - offset.vx;
+
+		if ( x1 > x2 )
+		{
+			int tempX = x1;
+			x1 = x2;
+			x2 = tempX;
+		}
+
+		y1 = Pos.vy - offset.vy;
+		y2 = m_lineBase.vy - offset.vy;
+
+		if ( y1 > y2 )
+		{
+			int tempY = y1;
+			y1 = y2;
+			y2 = tempY;
+		}
+
+		if ( y1 < 0 )
+		{
+			y1 = 0;
+		}
+		
+		if ( y2 > VidGetScrH() )
+		{
+			y2 = VidGetScrH();
+		}
+
+		if ( x2 >= 0 && x1 <= VidGetScrW() )
+		{
+			if ( y2 >= 0 && y1 <= VidGetScrH() )
+			{
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+			}
+		}
+
+		if ( m_isMaster )
+		{
+			DVECTOR otherLineBase = m_otherPlatform->getLineBase();
+
+			x1 = otherLineBase.vx - offset.vx;
+			x2 = m_lineBase.vx - offset.vx;
+
+			if ( x1 > x2 )
+			{
+				int tempX = x1;
+				x1 = x2;
+				x2 = tempX;
+			}
+
+			y1 = otherLineBase.vy - offset.vy;
+			y2 = m_lineBase.vy - offset.vy;
+
+			if ( y1 > y2 )
+			{
+				int tempY = y1;
+				y1 = y2;
+				y2 = tempY;
+			}
+
+			if ( x1 < 0 )
+			{
+				x1 = 0;
+			}
+			
+			if ( x2 > VidGetScrW() )
+			{
+				x2 = VidGetScrW();
+			}
+
+			if ( x2 >= 0 && x1 <= VidGetScrW() )
+			{
+				if ( y2 >= 0 && y1 <= VidGetScrH() )
+				{
+					DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+				}
+			}
 		}
 	}
 }
