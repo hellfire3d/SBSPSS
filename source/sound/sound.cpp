@@ -259,6 +259,21 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				106,			0	},										// SFX_FRONT_END__SELECT
 	{	1,				107,			0	},										// SFX_FRONT_END__ERROR
 	{	1,				108,			0	},										// SFX_FRONT_END__OK
+	{	3,				109,			0	},										// SFX_KAPOW_V1*
+	{	3,				110,			0	},										// SFX_KAPOW_V2*
+	{	3,				111,			0	},										// SFX_KAPOW_V3*
+	{	1,				112,			0	},										// SFX_SPLAT
+	{	3,				113,			0	},										// SFX_SECRET_AREA*
+	{	1,				114,			0	},										// SFX_LAND_ON_JELLYFISH
+	{	3,				115,			0	},										// SFX_SPLASH*
+	{	3,				116,			0	},										// SFX_BARREL_V1*
+	{	3,				117,			0	},										// SFX_BARREL_V2*
+	{	1,				118,			0	},										// SFX_ACORN_FALL
+	{	1,				119,			0	},										// SFX_ACORN_BOUNCE
+	{	1,				120,			0	},										// SFX_CLAM_SNAP
+	{	1,				121,			0	},										// SFX_CAR_START
+	{	1,				122,			0	},										// CAR_SLOW_DOWN
+
 };
 
 // Reverb details
