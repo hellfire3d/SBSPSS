@@ -208,7 +208,7 @@ void CNpcStaticClamEnemy::postInit()
 
 	CNpcClamPlatform *platform = new ("clam platform") CNpcClamPlatform;
 
-	platform->setType( CNpcClamPlatform::NPC_CLAM_PLATFORM );
+	platform->setThingSubType(CNpcClamPlatform::NPC_CLAM_PLATFORM);
 	platform->setGraphic( (u8) 0 );
 	platform->init( Pos );
 	platform->setTiltable( false );
