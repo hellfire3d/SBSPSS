@@ -562,8 +562,12 @@ void	CLevel::DisplayLoadingScreen()
 				font.print(256  ,120  ,buf);
 				font.setColour(0,0,0);
 				font.print(256-1,120-1,buf);
-				font.print(256+1,120-1,buf);
+				font.print(256-1,120  ,buf);
 				font.print(256-1,120+1,buf);
+				font.print(256  ,120-1,buf);
+				font.print(256  ,120+1,buf);
+				font.print(256+1,120-1,buf);
+				font.print(256+1,120  ,buf);
 				font.print(256+1,120+1,buf);
 				PrimDisplay();
 				VSync(0);
