@@ -77,6 +77,11 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 
 	bool pathComplete;
 
+	if ( m_soundId == NOT_PLAYING && m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+	}
+
 	// deal with anims
 
 	if ( !m_animPlaying )
