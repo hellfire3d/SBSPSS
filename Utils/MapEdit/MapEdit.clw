@@ -18,17 +18,17 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=9
-Resource1=IDD_MULTIBAR (English (U.S.))
-Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_TILESET_DIALOG
+Resource1=IDD_TILESET_DIALOG
+Resource2=IDR_MAINFRAME (English (U.S.))
+Resource3=IDR_MAPEDITYPE (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_ABOUTBOX (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_ABOUTBOX (English (U.S.))
-Resource7=IDR_MAINFRAME (English (U.S.))
+Resource6=IDD_LAYER_LIST_DIALOG
+Resource7=IDD_MULTIBAR (English (U.S.))
 Class9=CLayerList
 Class10=CTileSetDlg
-Resource8=IDD_LAYER_LIST_DIALOG
+Resource8=IDR_TOOLBAR (English (U.S.))
 Class11=CGfxToolBar
 Resource9=IDD_GFXTOOLBAR
 
@@ -94,24 +94,21 @@ Command3=ID_FILE_SAVE
 Command4=ID_EDIT_CUT
 Command5=ID_EDIT_COPY
 Command6=ID_EDIT_PASTE
-Command7=ID_FILE_PRINT
-Command8=ID_APP_ABOUT
-Command9=ID_TOOLBAR_TILEPALETTE
-Command10=ID_TOOLBAR_GRID
-CommandCount=10
+Command7=ID_TOOLBAR_TILEPALETTE
+Command8=ID_TOOLBAR_GRID
+CommandCount=8
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
 Class=?
 Command1=ID_FILE_NEW
 Command2=ID_FILE_OPEN
-Command3=ID_FILE_PRINT_SETUP
-Command4=ID_FILE_MRU_FILE1
-Command5=ID_APP_EXIT
-Command6=ID_VIEW_TOOLBAR
-Command7=ID_VIEW_STATUS_BAR
-Command8=ID_APP_ABOUT
-CommandCount=8
+Command3=ID_FILE_MRU_FILE1
+Command4=ID_APP_EXIT
+Command5=ID_VIEW_TOOLBAR
+Command6=ID_VIEW_STATUS_BAR
+Command7=ID_APP_ABOUT
+CommandCount=7
 
 [MNU:IDR_MAPEDITYPE (English (U.S.))]
 Type=1
@@ -121,23 +118,20 @@ Command2=ID_FILE_OPEN
 Command3=ID_FILE_CLOSE
 Command4=ID_FILE_SAVE
 Command5=ID_FILE_SAVE_AS
-Command6=ID_FILE_PRINT
-Command7=ID_FILE_PRINT_PREVIEW
-Command8=ID_FILE_PRINT_SETUP
-Command9=ID_FILE_MRU_FILE1
-Command10=ID_APP_EXIT
-Command11=ID_EDIT_UNDO
-Command12=ID_EDIT_CUT
-Command13=ID_EDIT_COPY
-Command14=ID_EDIT_PASTE
-Command15=ID_VIEW_TOOLBAR
-Command16=ID_VIEW_STATUS_BAR
-Command17=ID_WINDOW_NEW
-Command18=ID_WINDOW_CASCADE
-Command19=ID_WINDOW_TILE_HORZ
-Command20=ID_WINDOW_ARRANGE
-Command21=ID_APP_ABOUT
-CommandCount=21
+Command6=ID_FILE_MRU_FILE1
+Command7=ID_APP_EXIT
+Command8=ID_EDIT_UNDO
+Command9=ID_EDIT_CUT
+Command10=ID_EDIT_COPY
+Command11=ID_EDIT_PASTE
+Command12=ID_VIEW_TOOLBAR
+Command13=ID_VIEW_STATUS_BAR
+Command14=ID_WINDOW_NEW
+Command15=ID_WINDOW_CASCADE
+Command16=ID_WINDOW_TILE_HORZ
+Command17=ID_WINDOW_ARRANGE
+Command18=ID_APP_ABOUT
+CommandCount=18
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -161,11 +155,10 @@ CommandCount=14
 [DLG:IDD_ABOUTBOX (English (U.S.))]
 Type=1
 Class=?
-ControlCount=4
+ControlCount=3
 Control1=IDC_STATIC,static,1342177283
 Control2=IDC_STATIC,static,1342308480
-Control3=IDC_STATIC,static,1342308352
-Control4=IDOK,button,1342373889
+Control3=IDOK,button,1342373889
 
 [DLG:IDD_DIALOGBAR (English (U.S.))]
 Type=1
