@@ -151,7 +151,11 @@ private:
 	int							m_fallFrames;
 	DVECTOR						m_moveVelocity;
 
-	static class CPlayerState	*s_stateTable[];
+
+protected:
+	virtual class CPlayerState	**getStateTable();
+
+private:
 	class CPlayerState			*m_currentStateClass;
 	PLAYER_STATE				m_currentState;
 };

@@ -82,36 +82,23 @@
 	Vars
 	---- */
 
-static CPlayerStateUnarmedIdle		stateUnarmedIdle;
-static CPlayerStateTeeterIdle		stateTeeterIdle;
-static CPlayerStateJump				stateJump;
-static CPlayerStateRun				stateRun;
-static CPlayerStateFall				stateFall;
-static CPlayerStateFallFar			stateFallFar;
-static CPlayerStateDuck				stateDuck;
-static CPlayerStateSoakUp			stateSoakUp;
-static CPlayerStateGetUp			stateGetUp;
-static CPlayerStateButtBounce		stateButtBounce;
-static CPlayerStateButtBounceFall	stateButtBounceFall;
-static CPlayerStateButtBounceLand	stateButtBounceLand;
-
-CPlayerState	*CPlayerModeBase::s_stateTable[]=
+static	CPlayerState	*s_stateTable[]=
 {
-	&stateUnarmedIdle,								// STATE_IDLE
-	&stateTeeterIdle,								// STATE_IDLETEETER
-	&stateJump,										// STATE_JUMP
-	&stateRun,										// STATE_RUN
-	&stateFall,										// STATE_FALL
-	&stateFallFar,									// STATE_FALLFAR
-	&stateButtBounce,								// STATE_BUTTBOUNCE
-	&stateButtBounceFall,							// STATE_BUTTFALL
-	&stateButtBounceLand,							// STATE_BUTTLAND
-	&stateDuck,										// STATE_DUCK
-	&stateSoakUp,									// STATE_SOAKUP
-	&stateGetUp,									// STATE_GETUP
+	&s_stateUnarmedIdle,					// STATE_IDLE
+	&s_stateTeeterIdle,						// STATE_IDLETEETER
+	&s_stateJump,							// STATE_JUMP
+	&s_stateRun,							// STATE_RUN
+	&s_stateFall,							// STATE_FALL
+	&s_stateFallFar,						// STATE_FALLFAR
+	&s_stateButtBounce,						// STATE_BUTTBOUNCE
+	&s_stateButtBounceFall,					// STATE_BUTTFALL
+	&s_stateButtBounceLand,					// STATE_BUTTLAND
+	&s_stateDuck,							// STATE_DUCK
+	&s_stateSoakUp,							// STATE_SOAKUP
+	&s_stateGetUp,							// STATE_GETUP
 };
 
-static PlayerMetrics	s_playerMetrics=
+static	PlayerMetrics	s_playerMetrics=
 {	{
 	DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
 	DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
@@ -172,7 +159,7 @@ void	CPlayerModeBase::enter()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::think()
 {
-	s_stateTable[m_currentState]->think(this);
+	getStateTable()[m_currentState]->think(this);
 	thinkVerticalMovement();
 	thinkHorizontalMovement();
 
@@ -274,7 +261,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 				else if(m_currentState==STATE_FALLFAR)
 				{
 					// Landed from a painfully long fall
-					setState(STATE_IDLE);
+					setState(STATE_GETUP);
 					m_player->takeDamage(DAMAGE__FALL);
 					m_moveVelocity.vx=0;
 					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
@@ -486,7 +473,7 @@ int		CPlayerModeBase::setState(int _state)
 	CPlayerState	*nextState;
 	int				ret=false;
 
-	nextState=s_stateTable[_state];
+	nextState=getStateTable()[_state];
 	if(nextState)
 	{
 		m_currentStateClass=nextState;
@@ -618,17 +605,6 @@ void	CPlayerModeBase::moveLeft()
 	{
 		m_moveVelocity.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
-
-	/*
-	if(m_moveVelocity.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx<-CAMERA_SCROLLTHRESHOLD<<8)
-	{
-		m_cameraScrollDir=+1;
-	}
-	else if(m_moveVelocity.vx>-CAMERA_STOPMOVETHRESHOLD)
-	{
-		m_cameraScrollDir=0;
-	}
-	*/
 }
 
 void	CPlayerModeBase::moveRight()
@@ -649,17 +625,6 @@ void	CPlayerModeBase::moveRight()
 	{
 		m_moveVelocity.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
-
-	/*
-	if(m_moveVelocity.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos.vx>CAMERA_SCROLLTHRESHOLD<<8)
-	{
-		m_cameraScrollDir=-1;
-	}
-	else if(m_moveVelocity.vx<CAMERA_STOPMOVETHRESHOLD)
-	{
-		m_cameraScrollDir=0;
-	}
-	*/
 }
 int		CPlayerModeBase::slowdown()
 {
@@ -714,7 +679,16 @@ void	CPlayerModeBase::fall()
 	}
 }
 
-
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CPlayerState	**CPlayerModeBase::getStateTable()
+{
+	return s_stateTable;
+}
 
 /*===========================================================================
 end */

@@ -55,6 +55,11 @@
 	Vars
 	---- */
 
+CPlayerStateDuck			s_stateDuck;
+CPlayerStateSoakUp			s_stateSoakUp;
+CPlayerStateGetUp			s_stateGetUp;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

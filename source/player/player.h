@@ -192,7 +192,6 @@ private:
 
 	DVECTOR			m_playerScreenGeomPos;
 	DVECTOR			m_cameraPos;
-	int				m_cameraScrollDir;
 
 	int				m_facing;
 

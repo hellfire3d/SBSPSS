@@ -54,6 +54,10 @@
 	Vars
 	---- */
 
+CPlayerStateFall			s_stateFall;
+CPlayerStateFallFar			s_stateFallFar;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -124,11 +128,19 @@ void CPlayerStateFallFar::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateFallFar::think(CPlayerModeBase *_playerMode)
 {
+	int		frame;
 	int		controlHeld;
 	DVECTOR	move;
 
+	frame=_playerMode->getAnimFrame();
+	{
+		if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+		{
+			_playerMode->setAnimFrame(frame);
+		}
+	}
+	
 	controlHeld=_playerMode->getPadInputHeld();
-
 	if(controlHeld&PI_LEFT)
 	{
 		_playerMode->moveLeft();

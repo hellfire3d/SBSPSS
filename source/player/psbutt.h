@@ -63,6 +63,11 @@ private:
 	Globals
 	------- */
 
+extern	CPlayerStateButtBounce		s_stateButtBounce;
+extern	CPlayerStateButtBounceFall	s_stateButtBounceFall;
+extern	CPlayerStateButtBounceLand	s_stateButtBounceLand;
+
+
 /*----------------------------------------------------------------------
 	Functions
 	--------- */

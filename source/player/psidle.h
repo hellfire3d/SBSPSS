@@ -107,6 +107,11 @@ private:
 	Globals
 	------- */
 
+extern	CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
+extern	CPlayerStateTeeterIdle		s_stateTeeterIdle;
+extern	CPlayerStateCoralBlowerIdle	s_stateCoralBlowerIdle;
+
+
 /*----------------------------------------------------------------------
 	Functions
 	--------- */

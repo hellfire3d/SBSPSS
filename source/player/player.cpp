@@ -182,14 +182,6 @@ int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-136;
 int MAP2D_BLOCKSTEPSIZE=16;
 
-int CAMERA_SCROLLLIMIT=3;//8;				// SB is this many tiles off centre at most
-int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
-int CAMERA_STARTMOVETHRESHOLD=20;		// If SB moves faster than this then the camera starts scrolling
-int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camera stops scrolling
-int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 4 and a bit frames )
-
-
-
 CPlayerModeBase				PLAYERMODE;
 CPlayerModeChop				PLAYERMODECHOP;
 CPlayerModeBalloon			PLAYERMODEBALLOON;
@@ -254,14 +246,10 @@ m_animFrame=0;
 
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
-	m_cameraScrollDir=0;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
 	s_screenPos=128;
-
-//!!	m_actorGfx.setAng(512);
-//m_actorGfx.setAngInc(678);
 
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
@@ -347,32 +335,6 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
 		// Look around
 		int	pad=getPadInputHeld();
-
-		// Camera scroll..
-		if(m_cameraScrollDir==-1)
-		{
-			if(m_cameraScrollPos.vx>-CAMERA_SCROLLLIMIT<<8)
-			{
-				m_cameraScrollPos.vx-=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPos.vx<-CAMERA_SCROLLLIMIT<<8)
-				{
-					m_cameraScrollPos.vx=-CAMERA_SCROLLLIMIT<<8;
-					m_cameraScrollDir=0;
-				}
-			}
-		}
-		else if(m_cameraScrollDir==+1)
-		{
-			if(m_cameraScrollPos.vx<(CAMERA_SCROLLLIMIT<<8))
-			{
-				m_cameraScrollPos.vx+=CAMERA_SCROLLSPEED;
-				if(m_cameraScrollPos.vx>CAMERA_SCROLLLIMIT<<8)
-				{
-					m_cameraScrollPos.vx=CAMERA_SCROLLLIMIT<<8;
-					m_cameraScrollDir=0;
-				}
-			}
-		}
 	}
 
 
@@ -393,25 +355,21 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	{
 		m_playerScreenGeomPos.vx+=m_cameraPos.vx;
 		m_cameraPos.vx=0;
-		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
 	{
 		m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
 		m_cameraPos.vx=m_mapCameraEdges.vx;
-		m_cameraScrollDir=0;
 	}
 	if(m_cameraPos.vy<0)
 	{
 		m_playerScreenGeomPos.vy+=m_cameraPos.vy;
 		m_cameraPos.vy=0;
-		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
 	{
 		m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
-		m_cameraScrollDir=0;
 	}
 	
 	CPlayerThing::think(_frames);

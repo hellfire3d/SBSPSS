@@ -59,6 +59,9 @@
 	Vars
 	---- */
 
+CPlayerStateJump			s_stateJump;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

@@ -54,6 +54,10 @@
 	Vars
 	---- */
 
+CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
+CPlayerStateTeeterIdle		s_stateTeeterIdle;
+CPlayerStateCoralBlowerIdle	s_stateCoralBlowerIdle;
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -80,10 +84,6 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 	{
 		if(_playerMode->canMoveRight())
 			_playerMode->setState(STATE_RUN);
-	}
-	else if(controlDown&PI_ACTION)
-	{
-//		_playerMode->setState(STATE_ATTACK);
 	}
 	else if(controlHeld&PI_DOWN)
 	{

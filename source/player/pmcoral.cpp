@@ -21,6 +21,27 @@
 #include "gfx\sprbank.h"
 #endif
 
+// States
+#ifndef __PLAYER__PSJUMP_H__
+#include "player\psjump.h"
+#endif
+
+#ifndef __PLAYER__PSRUN_H__
+#include "player\psrun.h"
+#endif
+
+#ifndef __PLAYER__PSFALL_H__
+#include "player\psfall.h"
+#endif
+
+#ifndef __PLAYER__PSIDLE_H__
+#include "player\psidle.h"
+#endif
+
+#ifndef __PLAYER__PSDUCK_H__
+#include "player\psduck.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -53,7 +74,25 @@
 	Vars
 	---- */
 
-static PlayerMetrics	s_playerMetrics=
+static	CPlayerState	*s_stateTable[]=
+{
+	&s_stateCoralBlowerIdle,				// STATE_IDLE
+	&s_stateCoralBlowerIdle,				// STATE_IDLETEETER
+	&s_stateJump,							// STATE_JUMP
+	&s_stateWalk,							// STATE_RUN
+	&s_stateFall,							// STATE_FALL
+	&s_stateFallFar,						// STATE_FALLFAR
+	NULL,									// STATE_BUTTBOUNCE
+	NULL,									// STATE_BUTTFALL
+	NULL,									// STATE_BUTTLAND
+	NULL,									// STATE_DUCK
+	NULL,									// STATE_SOAKUP
+	&s_stateGetUp,							// STATE_GETUP
+};
+
+
+
+static	PlayerMetrics	s_playerMetrics=
 {	{
 	DEFAULT_PLAYER_JUMP_VELOCITY/2,			// PM__JUMP_VELOCITY
 	DEFAULT_PLAYER_MAX_JUMP_FRAMES/2,		// PM__MAX_JUMP_FRAMES
@@ -158,6 +197,17 @@ void	CPlayerModeCoralBlower::renderModeUi()
 const struct PlayerMetrics	*CPlayerModeCoralBlower::getPlayerMetrics()
 {
 	return &s_playerMetrics;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CPlayerState	**CPlayerModeCoralBlower::getStateTable()
+{
+	return s_stateTable;
 }
 
 /*===========================================================================

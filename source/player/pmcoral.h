@@ -43,6 +43,9 @@ public:
 
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 
+protected:
+	virtual class CPlayerState	**getStateTable();
+
 private:
 	typedef enum
 	{

@@ -59,6 +59,11 @@
 	Vars
 	---- */
 
+CPlayerStateButtBounce		s_stateButtBounce;
+CPlayerStateButtBounceFall	s_stateButtBounceFall;
+CPlayerStateButtBounceLand	s_stateButtBounceLand;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

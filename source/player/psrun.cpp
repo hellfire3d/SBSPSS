@@ -33,11 +33,6 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_SPONGEBOB_HEADER__
-#include <ACTOR_SPONGEBOB_ANIM.h>
-#endif
-
-
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -54,6 +49,10 @@
 	Vars
 	---- */
 
+CPlayerStateRun				s_stateRun;
+CPlayerStateWalk			s_stateWalk;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -67,12 +66,17 @@ void CPlayerStateRun::enter(CPlayerModeBase *_playerMode)
 
 	if(_playerMode->getMoveVelocity().vx)
 	{
-		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUN);
+		_playerMode->setAnimNo(getLoopFrame());
 	}
 	else
 	{
-//!!		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTART);
-		_playerMode->setAnimNo(ANIM_SPONGEBOB_FIRE);
+		int	frame;
+		frame=getStartFrame();
+		if(frame==-1)
+		{
+			frame=getLoopFrame();
+		}
+		_playerMode->setAnimNo(frame);
 	}
 
 	if(controlHeld&PI_LEFT)
@@ -84,7 +88,7 @@ void CPlayerStateRun::enter(CPlayerModeBase *_playerMode)
 		_playerMode->setFacing(FACING_RIGHT);
 	}
 
-	m_numberOfTimeAnimHasLooped=0;
+	m_numberOfTimesAnimHasLooped=0;
 }
 
 
@@ -125,10 +129,14 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 			if(_playerMode->slowdown())
 			{
 				_playerMode->setState(STATE_IDLE);
-				if(m_numberOfTimeAnimHasLooped>=4)
+				if(m_numberOfTimesAnimHasLooped>=4)
 				{
-//!!					_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTOP);
-					_playerMode->setAnimNo(ANIM_SPONGEBOB_FIRE);
+					int	frame;
+					frame=getStartFrame();
+					if(frame!=-1)
+					{
+						_playerMode->setAnimNo(getEndFrame());
+					}
 				}
 				return;
 			}
@@ -137,8 +145,8 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
-		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUN);
-		m_numberOfTimeAnimHasLooped++;
+		_playerMode->setAnimNo(getLoopFrame());
+		m_numberOfTimesAnimHasLooped++;
 	}
 }
 

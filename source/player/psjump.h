@@ -48,6 +48,9 @@ private:
 	Globals
 	------- */
 
+extern	CPlayerStateJump			s_stateJump;
+
+
 /*----------------------------------------------------------------------
 	Functions
 	--------- */

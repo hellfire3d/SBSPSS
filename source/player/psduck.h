@@ -63,6 +63,11 @@ public:
 	Globals
 	------- */
 
+extern	CPlayerStateDuck			s_stateDuck;
+extern	CPlayerStateSoakUp			s_stateSoakUp;
+extern	CPlayerStateGetUp			s_stateGetUp;
+
+
 /*----------------------------------------------------------------------
 	Functions
 	--------- */

@@ -54,6 +54,10 @@ private:
 	Globals
 	------- */
 
+extern	CPlayerStateFall			s_stateFall;
+extern	CPlayerStateFallFar			s_stateFallFar;
+
+
 /*----------------------------------------------------------------------
 	Functions
 	--------- */
