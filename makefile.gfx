@@ -220,7 +220,8 @@ UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 UI_GFX_TRANS :=				+bambootopleft.bmp +bamboobotleft.bmp +bambootopright.bmp +bamboobotright.bmp \
 							+bamboohorizontal.bmp +bamboovertical.bmp \
 							+butU.bmp +butD.bmp +butL.bmp +butR.bmp \
-							+butC.bmp +butS.bmp +butX.bmp +butT.bmp
+							+butC.bmp +butS.bmp +butX.bmp +butT.bmp \
+							+mappointer.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 ####
