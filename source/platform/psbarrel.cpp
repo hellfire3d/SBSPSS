@@ -60,77 +60,12 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 		s32 playerMovement = player->getMovement();
 
-		/*s32 speedChange = -playerVel->vx << 8;
-
-		if ( speedChange > ( _frames << 5 ) )
-		{
-			speedChange = _frames << 5;
-		}
-		else if ( speedChange < -( _frames << 5 ) )
-		{
-			speedChange = -_frames << 5;
-		}
-
-		m_currentSpeed += speedChange;
-
-		if ( m_currentSpeed > ( m_speed << 8 ) )
-		{
-			m_currentSpeed = ( m_speed << 8 );
-		}
-		else if ( m_currentSpeed < -( m_speed << 8 ) )
-		{
-			m_currentSpeed = -( m_speed << 8 );
-		}*/
-
 		m_currentSpeed = -playerMovement;
-
-		/*s32 playerX = playerPos.vx - this->Pos.vx;
-
-		if ( playerX > 5 )
-		{
-			// increase barrel speed to right
-
-			m_currentSpeed += _frames << 2;
-
-			if ( m_currentSpeed > ( m_speed << 8 ) )
-			{
-				m_currentSpeed = ( m_speed << 8 );
-			}
-		}
-		else if ( playerX < -5 )
-		{
-			m_currentSpeed -= _frames << 2;
-
-			if ( m_currentSpeed < -( m_speed << 8 ) )
-			{
-				m_currentSpeed = -( m_speed << 8 );
-			}
-		}*/
 	}
 	else
 	{
-		// reduce speed
-
-		/*s32 speedReduce = -m_currentSpeed;
-
-		if ( speedReduce > _frames )
-		{
-			speedReduce = _frames;
-		}
-		else if ( speedReduce < -_frames )
-		{
-			speedReduce = -_frames;
-		}
-
-		m_currentSpeed += speedReduce;*/
-
 		m_currentSpeed = 0;
 	}
-
-	/*m_moveXHighRes += m_currentSpeed * _frames;
-
-	moveX = m_moveXHighRes >> 8;
-	m_moveXHighRes -= moveX << 8;*/
 
 	moveX = m_currentSpeed;
 
@@ -140,14 +75,6 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		{
 			m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ROLLING_BARREL,true);
 		}
-	}
-
-	// check for collision
-
-	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
-	{
-		moveX = 0;
-		m_currentSpeed = 0;
 	}
 
 	m_rotation += ( m_currentSpeed * 30 * _frames ) >> 2;
@@ -160,6 +87,41 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		shove.vy = 0;
 		player->shove(shove);
 	}
+
+	// check for collision
+
+	if ( moveX )
+	{
+		int remainder = abs( moveX );
+		int sign = moveX / abs( moveX );
+		int testX = 0;
+
+		while ( remainder )
+		{
+			if ( remainder > 16 )
+			{
+				remainder -= 16;
+				testX += 16 * sign;
+			}
+			else
+			{
+				testX += remainder * sign;
+				remainder = 0;
+			}
+
+			if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + testX, Pos.vy ) < -maxHeight )
+			{
+				moveX = 0;
+				m_currentSpeed = 0;
+			}
+		}
+	}
+
+	/*if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
+	{
+		moveX = 0;
+		m_currentSpeed = 0;
+	}*/
 
 	// check for vertical movement
 

@@ -20,8 +20,8 @@
 
 class CNpcSteerableOildrumPlatform : public CNpcSteerableBarrelPlatform
 {
-protected:
-	void				processMovement( int _frames );
+//protected:
+	//void				processMovement( int _frames );
 };
 
 #endif
