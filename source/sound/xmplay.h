@@ -95,10 +95,13 @@ private:
 
 	typedef enum
 	{
-		SILENT,
 		SONG,
 		SFX,
 		LOOPINGSFX,
+
+		SILENT,				// Channel is silent
+		FREE,				// Channel is free for re-allocation
+		CONTINUE,			// Channel is a continuation of the previous channel
 	} CHANNELUSETYPE;
 
 	// Internal representation of loaded mods

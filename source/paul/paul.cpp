@@ -74,7 +74,8 @@ char				*s_mem[3];
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int ploopid=0;
+int ploopid1=0;
+int ploopid2=0;
 void CPaulScene::init()
 {
 	s_fontBank.initialise(&standardFont);
@@ -89,7 +90,8 @@ void CPaulScene::init()
 //CXAStream::Init();
 	PAUL_DBGMSG("initialised..");
 
-	ploopid=CSoundMediator::playSfx(0);
+	ploopid1=CSoundMediator::playSfx(0);
+	ploopid2=CSoundMediator::playSfx(0);
 }
 
 
@@ -172,14 +174,22 @@ void CPaulScene::think()
 	}
 	if(pad&PAD_START)
 	{
-		PAUL_DBGMSG("stop %d",pkill);
-		CSoundMediator::stopSfx((xmPlayingId)pkill);
+		PAUL_DBGMSG("stop loopers..");
+		CSoundMediator::stopSfx((xmPlayingId)ploopid1);
+		CSoundMediator::stopSfx((xmPlayingId)ploopid2);
 	}
 	if(pad&PAD_R2)
 	{
 		PAUL_DBGMSG("stop all");
 		CSoundMediator::stopAllSound();
 	}
+#ifdef __USER_paul__
+	if(pad&PAD_L2)
+	{
+		extern int dump;
+		dump=true;
+	}
+#endif
 
 //CSoundMediator::setposition((xmPlayingId)ploopid,&ppos);
 
