@@ -14,7 +14,7 @@ $ActorList\_OUT :=\t\$(foreach ACTOR,\$($ActorList),\$(ACTOR_OUT_DIR)/\$(ACTOR).
 
 
 \$($ActorList\_OUT) : \$($ActorList\_IN)
-	\@\$(MKACTOR3D) \$($ActorList\_IN) -o:\$(ACTOR_OUT_DIR) -t:24,1,1 -s:256 -i:\$(INC_DIR) -g:$ActorList
+	\@\$(MKACTOR3D) \$($ActorList\_IN) -o:\$(ACTOR_OUT_DIR) \$($ActorList\_OPTS) -i:\$(INC_DIR) -g:$ActorList
 
 
 eot
