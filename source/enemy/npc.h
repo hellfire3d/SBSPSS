@@ -116,6 +116,7 @@ public:
 
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
+	bool				suckUp( DVECTOR *suckPos );
 
 protected:
 	class CLayerCollision	*m_layerCollision;
@@ -290,6 +291,7 @@ protected:
 	s32					m_health;
 	bool				m_isActive;
 	u8					m_isCaught;
+	u8					m_isBlowerOn;
 	DVECTOR				m_caughtPos;
 
 	s32				m_frame;

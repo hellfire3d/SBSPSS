@@ -618,6 +618,7 @@ void CNpcEnemy::init()
 	m_isShuttingDown = false;
 	m_drawRotation = 0;
 	m_isCaught = false;
+	m_isBlowerOn = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1506,6 +1507,45 @@ void CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+bool CNpcEnemy::suckUp( DVECTOR *suckPos )
+{
+	m_isCaught = true;
+	m_isBlowerOn = true;
+
+	switch( m_state )
+	{
+		case NPC_CORAL_BLOWER_SUCK:
+		{
+			// go to user
+
+			s32 targetXDist = suckPos.vx - Pos.vx;
+			s32 targetYDist = suckPos.vy - Pos.vy;
+
+			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+
+			break;
+		}
+
+		case NPC_CORAL_BLOWER_RETURN:
+		{
+			m_state = NPC_CORAL_BLOWER_SUCK;
+
+			break;
+		}
+
+		default:
+		{
+			m_state = NPC_CORAL_BLOWER_SUCK;
+			m_oldState = m_state;
+			m_caughtPos = Pos;
+
+			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::processCoralBlower( int _frames )
 {
 	s32 targetXDist, targetYDist;
@@ -1514,12 +1554,10 @@ void CNpcEnemy::processCoralBlower( int _frames )
 	{
 		case NPC_CORAL_BLOWER_SUCK:
 		{
-			// go to user
-
-			targetXDist = playerXDist;
-			targetYDist = playerYDist;
-
-			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+			if ( !m_isBlowerOn )
+			{
+				m_state = NPC_CORAL_BLOWER_RETURN;
+			}
 
 			break;
 		}
@@ -1551,4 +1589,6 @@ void CNpcEnemy::processCoralBlower( int _frames )
 			break;
 		}
 	}
+
+	m_isBlowerOn = false;
 }
