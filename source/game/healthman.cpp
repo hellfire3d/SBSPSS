@@ -156,8 +156,10 @@ sItem	*item=ItemList;
 void	CHealthManager::think(int frames)
 {
 sItem	*item=ItemList;
+int		mapHeight;
 
 	CLayerCollision	*ColLayer=CGameScene::getCollision();
+	mapHeight=GameScene.GetLevel().getMapSize().vy*16;
 
 		for (int i=0; i<ITEM_MAX; i++)
 		{
@@ -176,7 +178,8 @@ sItem	*item=ItemList;
 //					if (item->Vel.vy>0)
 					{ 
 						int	DistY = ColLayer->getHeightFromGround( item->ScrPos.vx, item->ScrPos.vy, 16 );
-						if (DistY<=0)
+						int newBlock=ColLayer->getCollisionBlock(item->ScrPos.vx,item->ScrPos.vy)&COLLISION_TYPE_MASK;
+						if (DistY<=0&&newBlock!=COLLISION_TYPE_FLAG_DEATH_FALL )
 						{
 							if (item->Vel.vy<0)
 							{
@@ -185,6 +188,11 @@ sItem	*item=ItemList;
 							item->Vel.vy=-item->Vel.vy>>1;
 							item->Vel.vx>>=1;
 	//						item->Pos.vy-=DistY<<(HealthManShift-1);
+						}
+
+						if(item->ScrPos.vy>mapHeight)
+						{
+							item->Life=0;
 						}
 					}
 
