@@ -25,6 +25,8 @@ public:
 	void				think( int _frames );
 	void				render();
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
+
 	s32					m_vertScale;
 	s32					m_vertVelocity;
 };
