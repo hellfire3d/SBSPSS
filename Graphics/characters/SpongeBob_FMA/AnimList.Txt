@@ -6,3 +6,4 @@ QuickExit
 Shout
 Stumble
 Throw
+Party
