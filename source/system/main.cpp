@@ -68,9 +68,11 @@ CPaulScene s_paulScene;
 #endif
 
 
-#if	!defined(__USER_CDBUILD__)
-	#if defined(__VERSION_DEBUG__)
-		#define	SCREEN_GRAB
+#if	__FILE_SYSTEM__==PC
+	#if	!defined(__USER_CDBUILD__)
+		#if defined(__VERSION_DEBUG__)
+			#define	SCREEN_GRAB
+		#endif
 	#endif
 #endif
 
