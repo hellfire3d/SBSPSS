@@ -1209,7 +1209,7 @@ void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 d
 
 void CNpcEnemy::hasBeenAttacked()
 {
-	m_controlFunc = NPC_CONTROL_SHOT:
+	m_controlFunc = NPC_CONTROL_SHOT;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
