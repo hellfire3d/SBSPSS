@@ -34,16 +34,14 @@
 	Structure defintions
 	-------------------- */
 
-class CNetPickup : public CBasePickup
+class CNetPickup : public CBaseWeaponSimplePickup
 {
 public:
 	virtual void		init();
-	virtual int			dontKillDuringLevelRespawn()							{return true;}
-	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:
-	virtual void		renderPickup(DVECTOR *_pos);
+	virtual int			getWeaponSpriteFrame();
 
 };
 

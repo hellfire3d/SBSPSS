@@ -401,6 +401,7 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_SQUARE,			// PAD_CFG_FIRE
 		PAD_TRIANGLE,		// PAD_CFG_CATCH
 		PAD_CROSS,			// PAD_CFG_JUMP
+		PAD_CIRCLE,			// PAD_CFG_WEAPONCHANGE
 	}},
 	// Config B
 	{{
@@ -413,6 +414,7 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_CROSS,			// PAD_CFG_FIRE
 		PAD_TRIANGLE,		// PAD_CFG_CATCH
 		PAD_SQUARE,			// PAD_CFG_JUMP
+		PAD_CIRCLE,			// PAD_CFG_WEAPONCHANGE
 	}},
 	// Config C
 	{{
@@ -425,6 +427,7 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_CIRCLE,			// PAD_CFG_FIRE
 		PAD_CROSS,			// PAD_CFG_CATCH
 		PAD_TRIANGLE,		// PAD_CFG_JUMP
+		PAD_SQUARE,			// PAD_CFG_WEAPONCHANGE
 	}},
 	// Config D
 	{{
@@ -437,6 +440,7 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_LEFT,			// PAD_CFG_FIRE
 		PAD_UP,				// PAD_CFG_CATCH
 		PAD_DOWN,			// PAD_CFG_JUMP
+		PAD_RIGHT,			// PAD_CFG_WEAPONCHANGE
 	}},
 };
 

@@ -107,6 +107,31 @@ private:
 
 };
 
+
+class CBaseWeaponPickup : public CBaseRespawningPickup
+{
+protected:
+	virtual void		collidedWith(CThing *_thisThing);
+
+	virtual int			getRespawnTime()					{return 5*60;}
+
+};
+
+
+class CBaseWeaponSimplePickup : public CBaseWeaponPickup
+{
+public:
+	virtual void		init();
+	virtual DVECTOR		getSizeForPlacement();
+
+protected:
+	virtual void		renderPickup(DVECTOR *_pos);
+
+	virtual int			getWeaponSpriteFrame()=0;
+
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */

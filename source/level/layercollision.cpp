@@ -242,7 +242,7 @@ ColShowType showCollision=SHOW_NONE;
 #endif
 void CLayerCollision::render(DVECTOR &MapPos)
 {
-	if(PadGetDown(0)&PAD_CIRCLE)
+	if(PadGetDown(0)&PAD_L2)
 	{
 		showCollision=(ColShowType)(showCollision+1);
 		if(showCollision>SHOW_SEMITRANS)showCollision=SHOW_NONE;

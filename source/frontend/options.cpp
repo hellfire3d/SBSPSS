@@ -117,6 +117,7 @@ int CFrontEndOptions::s_buttonOrder[]=
 	CPadConfig::PAD_CFG_JUMP,
 	CPadConfig::PAD_CFG_FIRE,
 	CPadConfig::PAD_CFG_CATCH,
+	CPadConfig::PAD_CFG_WEAPONCHANGE,
 };
 
 CGUISpriteReadout::SpriteReadoutData	CFrontEndOptions::s_controlReadoutSprites[]=
@@ -318,6 +319,15 @@ void CFrontEndOptions::init()
 		tb->init(fr);
 		tb->setObjectXYWH(146+26,30,120,15);
 		tb->setText(STR__FRONTEND__CATCH);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(146,45,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_WEAPONCHANGE]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(146+26,45,120,15);
+		tb->setText(STR__FRONTEND__WEAPONCHANGE);
 
 
 	// Populate SCREEN menu

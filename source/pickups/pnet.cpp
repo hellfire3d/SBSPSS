@@ -69,12 +69,7 @@
   ---------------------------------------------------------------------- */
 void	CNetPickup::init()
 {
-	sFrameHdr	*fh;
-
-	CBasePickup::init();
-
-	fh=getSpriteBank()->getFrameHeader(FRM__NET);
-	setCollisionSize(fh->W,fh->H);
+	CBaseWeaponSimplePickup::init();
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_NET);
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_JELLYFISHINNET);
@@ -86,27 +81,10 @@ void	CNetPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CNetPickup::getSizeForPlacement()
-{
-	DVECTOR		size;
-	sFrameHdr	*fh;
-
-	fh=getSpriteBank()->getFrameHeader(FRM__NET);
-	size.vx=fh->W;
-	size.vy=fh->H;
-	return size;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CNetPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_NET);
-	CBasePickup::collect(_player);
+	CBaseWeaponSimplePickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------
@@ -115,18 +93,11 @@ void	CNetPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CNetPickup::renderPickup(DVECTOR *_pos)
+int		CNetPickup::getWeaponSpriteFrame()
 {
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__NET);
-	x=_pos->vx-(fh->W/2);
-	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+	return FRM__NET;
 }
+
 
 /*===========================================================================
 end */

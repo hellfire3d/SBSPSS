@@ -83,7 +83,7 @@ void	CBalloonPickup::init()
 {
 	sFrameHdr	*fh;
 
-	CBaseRespawningPickup::init();
+	CBaseWeaponPickup::init();
 	m_sin=0;
 
 	fh=getSpriteBank()->getFrameHeader(FRM__BALLOON);
@@ -117,7 +117,7 @@ void	CBalloonPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_BALLOON);
 	CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_INFLATE);
-	CBaseRespawningPickup::collect(_player);
+	CBaseWeaponPickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------

@@ -25,6 +25,10 @@
 #include "level\level.h"
 #endif
 
+#ifndef __PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 // For the factory..
 
 #ifndef	__PICKUPS_PHEALTH_H__
@@ -272,6 +276,88 @@ void	CBaseRespawningPickup::render()
 void	CBaseRespawningPickup::collect(class CPlayer *_player)
 {
 	m_respawnTime=getRespawnTime();
+}
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseWeaponPickup::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+			if(((CPlayer*)_thisThing)->tryingToPickupWeapon())
+			{
+				collect((CPlayer*)_thisThing);
+			}
+			break;
+
+		default:
+			ASSERT(0);
+			break;
+	}
+}
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseWeaponSimplePickup::init()
+{
+	sFrameHdr	*fh;
+
+	CBaseWeaponPickup::init();
+
+	fh=getSpriteBank()->getFrameHeader(FRM__NET);
+	setCollisionSize(fh->W,fh->H);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR	CBaseWeaponSimplePickup::getSizeForPlacement()
+{
+	DVECTOR		size;
+	sFrameHdr	*fh;
+
+	fh=getSpriteBank()->getFrameHeader(getWeaponSpriteFrame());
+	size.vx=fh->W;
+	size.vy=fh->H;
+	return size;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseWeaponSimplePickup::renderPickup(DVECTOR *_pos)
+{
+	SpriteBank	*sprites;
+	sFrameHdr	*fh;
+	int			x,y;
+
+	sprites=getSpriteBank();
+	fh=sprites->getFrameHeader(getWeaponSpriteFrame());
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 }
 
 

@@ -54,18 +54,14 @@ private:
 };
 
 
-class CBubbleWandPickup : public CBaseRespawningPickup
+class CBubbleWandPickup : public CBaseWeaponSimplePickup
 {
 public:
 	virtual void		init();
-
-	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:
-	virtual int			getRespawnTime();
-
-	virtual void		renderPickup(DVECTOR *_pos);
+	virtual int			getWeaponSpriteFrame();
 
 };
 

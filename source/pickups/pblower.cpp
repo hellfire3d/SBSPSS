@@ -69,31 +69,9 @@
   ---------------------------------------------------------------------- */
 void	CCoralBlowerPickup::init()
 {
-	sFrameHdr	*fh;
-
-	CBasePickup::init();
-
-	fh=getSpriteBank()->getFrameHeader(FRM__BLOWER);
-	setCollisionSize(fh->W,fh->H);
+	CBaseWeaponSimplePickup::init();
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_CORALBLOWER);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-DVECTOR	CCoralBlowerPickup::getSizeForPlacement()
-{
-	DVECTOR		size;
-	sFrameHdr	*fh;
-
-	fh=getSpriteBank()->getFrameHeader(FRM__BLOWER);
-	size.vx=fh->W;
-	size.vy=fh->H;
-	return size;
 }
 
 /*----------------------------------------------------------------------
@@ -105,7 +83,7 @@ DVECTOR	CCoralBlowerPickup::getSizeForPlacement()
 void	CCoralBlowerPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_CORALBLOWER);
-	CBasePickup::collect(_player);
+	CBaseWeaponSimplePickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------
@@ -114,17 +92,9 @@ void	CCoralBlowerPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CCoralBlowerPickup::renderPickup(DVECTOR *_pos)
+int		CCoralBlowerPickup::getWeaponSpriteFrame()
 {
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__BLOWER);
-	x=_pos->vx-(fh->W/2);
-	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+	return FRM__BLOWER;
 }
 
 /*===========================================================================

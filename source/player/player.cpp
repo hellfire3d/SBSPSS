@@ -684,15 +684,6 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 	oldmode=-1;
 }
 
-#ifdef __USER_paul__
-if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
-{
-	if(m_currentMode!=PLAYER_MODE_DEAD)
-	{
-		dieYouPorousFreak();
-	}
-}
-#endif
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
@@ -723,10 +714,26 @@ if(newmode!=-1)
 		}
 	}
 
+	m_tryingToPickupWeapon=false;
 	for(i=0;i<_frames;i++)
 	{
 		// Think
 		updatePadInput();
+if(getPadInputDown())
+{
+	PAUL_DBGMSG("%02x",getPadInputDown());
+}
+		if(getPadInputDown()&PI_WEAPONCHANGE)
+		{
+			if(!m_tryingToPickupWeapon&&
+			   m_currentMode!=PLAYER_MODE_BASICUNARMED&&
+			   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
+			   m_currentMode!=PLAYER_MODE_DEAD)
+			{
+				setMode(PLAYER_MODE_FULLUNARMED);
+			}
+			m_tryingToPickupWeapon=true;
+		}
 
 		// Trying to converate?
 		if(m_allowConversation==false&&
@@ -1958,6 +1965,10 @@ PLAYERINPUT CPlayer::readPadInput()
 	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_CATCH))
 	{
 		input=(PLAYERINPUT)(input|PI_CATCH);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_WEAPONCHANGE))
+	{
+		input=(PLAYERINPUT)(input|PI_WEAPONCHANGE);
 	}
 
 

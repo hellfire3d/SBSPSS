@@ -165,31 +165,9 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 void	CBubbleWandPickup::init()
 {
-	sFrameHdr	*fh;
-
-	CBaseRespawningPickup::init();
-
-	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEWAND);
-	setCollisionSize(fh->W,fh->H);
+	CBaseWeaponSimplePickup::init();
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_BUBBLEWAND);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-DVECTOR	CBubbleWandPickup::getSizeForPlacement()
-{
-	DVECTOR		size;
-	sFrameHdr	*fh;
-
-	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEWAND);
-	size.vx=fh->W;
-	size.vy=fh->H;
-	return size;
 }
 
 /*----------------------------------------------------------------------
@@ -201,7 +179,7 @@ DVECTOR	CBubbleWandPickup::getSizeForPlacement()
 void	CBubbleWandPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
-	CBaseRespawningPickup::collect(_player);
+	CBaseWeaponSimplePickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------
@@ -210,28 +188,9 @@ void	CBubbleWandPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CBubbleWandPickup::getRespawnTime()
+int		CBubbleWandPickup::getWeaponSpriteFrame()
 {
-	return 60*10;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBubbleWandPickup::renderPickup(DVECTOR *_pos)
-{
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__BUBBLEWAND);
-	x=_pos->vx-(fh->W/2);
-	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+	return FRM__BUBBLEWAND;
 }
 
 /*===========================================================================

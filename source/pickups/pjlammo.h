@@ -50,15 +50,14 @@ private:
 };
 
 
-class CJellyLauncherPickup : public CBasePickup
+class CJellyLauncherPickup : public CBaseWeaponSimplePickup
 {
 public:
 	virtual void		init();
-	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
 protected:
-	virtual void		renderPickup(DVECTOR *_pos);
+	virtual int			getWeaponSpriteFrame();
 };
 
 

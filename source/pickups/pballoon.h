@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CBalloonPickup : public CBaseRespawningPickup
+class CBalloonPickup : public CBaseWeaponPickup
 {
 public:
 	virtual void		init();

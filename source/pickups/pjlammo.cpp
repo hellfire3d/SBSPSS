@@ -163,31 +163,9 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 void	CJellyLauncherPickup::init()
 {
-	sFrameHdr	*fh;
-
-	CBasePickup::init();
-
-	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
-	setCollisionSize(fh->W,fh->H);
+	CBaseWeaponSimplePickup::init();
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-DVECTOR	CJellyLauncherPickup::getSizeForPlacement()
-{
-	DVECTOR		size;
-	sFrameHdr	*fh;
-
-	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
-	size.vx=fh->W;
-	size.vy=fh->H;
-	return size;
 }
 
 /*----------------------------------------------------------------------
@@ -199,7 +177,7 @@ DVECTOR	CJellyLauncherPickup::getSizeForPlacement()
 void	CJellyLauncherPickup::collect(class CPlayer *_player)
 {
 	_player->setMode(PLAYER_MODE_JELLY_LAUNCHER);
-	CBasePickup::collect(_player);
+	CBaseWeaponSimplePickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------
@@ -208,17 +186,9 @@ void	CJellyLauncherPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CJellyLauncherPickup::renderPickup(DVECTOR *_pos)
+int		CJellyLauncherPickup::getWeaponSpriteFrame()
 {
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__LAUNCHER);
-	x=_pos->vx-(fh->W/2);
-	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+	return FRM__LAUNCHER;
 }
 
 

@@ -156,6 +156,7 @@ typedef enum
 	PI_JUMP			=1<<4,
 	PI_FIRE			=1<<5,
 	PI_CATCH		=1<<6,
+	PI_WEAPONCHANGE	=1<<7,
 }PLAYERINPUT;
 
 
@@ -258,6 +259,7 @@ public:
 	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
+	int				tryingToPickupWeapon()								{return m_tryingToPickupWeapon;}
 	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
 							
 	void			inSoakUpState();
@@ -336,6 +338,7 @@ private:
 	PLAYERINPUT			m_padInput;			// Controls that are being held down
 	PLAYERINPUT			m_lastPadInput;		// Last frames controls
 	PLAYERINPUT			m_padInputDown;		// Controls that were pressed this frame
+	int					m_tryingToPickupWeapon;
 
 	
 	// Various info about the current map
