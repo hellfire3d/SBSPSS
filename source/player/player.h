@@ -49,13 +49,15 @@
 typedef enum
 {
 	PLAYER_MODE_BASICUNARMED,
-//	PLAYER_MODE_FULLUNARMED,
+	PLAYER_MODE_FULLUNARMED,
 	PLAYER_MODE_BALLOON,
 	//PLAYER_MODE_BUBBLE_MIXTURE,
 	//PLAYER_MODE_HELMET,
 //	PLAYER_MODE_NET,
 //	PLAYER_MODE_CORALBLOWER,
 	//PLAYER_MODE_JELLY_LAUNCHER,
+
+	PLAYER_MODE_DEAD,
 
 	PLAYER_MODE_FLY,
 
@@ -163,10 +165,8 @@ public:
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
 	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
 																		
-
 	void			takeDamage(DAMAGE_TYPE _damage);
 
-private:
 	void			respawn();
 
 

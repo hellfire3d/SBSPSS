@@ -60,11 +60,38 @@ static PlayerMetrics	s_playerMetrics=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::enter()
+{
+	CPlayerModeBase::enter();
+	m_ballonTimer=BALLOON_TIME;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::think()
+{
+	CPlayerModeBase::think();
+	if(--m_ballonTimer==0)
+	{
+		m_player->setMode(PLAYER_MODE_FULLUNARMED);
+		PAUL_DBGMSG("*pop*");
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 const struct PlayerMetrics	*CPlayerModeBalloon::getPlayerMetrics()
 {
 	return &s_playerMetrics;
 }
-
 
 /*===========================================================================
 end */

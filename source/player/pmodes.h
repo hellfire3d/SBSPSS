@@ -88,6 +88,8 @@ protected:
 	DVECTOR			getPlayerPos();
 	void			setPlayerPos(DVECTOR *_pos);
 
+	void			respawn();
+
 	class CPlayer	*m_player;
 
 };
@@ -134,8 +136,6 @@ public:
 	int							slowdown();
 	void						jump();
 	void						fall();
-
-//	virtual void			respawn(class CPlayer *_player);
 
 
 private:

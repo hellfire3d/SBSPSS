@@ -151,8 +151,6 @@ eng=RESTART LEVEL
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------
 
-[STR__DEBUG__FLY_MODE]
-eng=Set FLY mode
 [STR__DEBUG__BASICUNARMED_MODE]
 eng=Set BASICUNARMED mode
 [STR__DEBUG__FULLUNARMED_MODE]
@@ -165,6 +163,10 @@ eng=Set BALLOON mode
 eng=Set NET mode
 [STR__DEBUG__CORALBLOWER_MODE]
 eng=Set CORALBLOWER mode
+[STR__DEBUG__DEAD_MODE]
+eng=Set DEAD mode
+[STR__DEBUG__FLY_MODE]
+eng=Set FLY mode
 
 [STR__DEBUG__LEVEL_SELECT]
 eng=LEVEL SELECT

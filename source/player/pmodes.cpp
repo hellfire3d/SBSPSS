@@ -95,10 +95,6 @@ static CPlayerStateButtBounce		stateButtBounce;
 static CPlayerStateButtBounceFall	stateButtBounceFall;
 static CPlayerStateButtBounceLand	stateButtBounceLand;
 
-/*
-static CPlayerStateDead				stateDead;
-*/
-
 CPlayerState	*CPlayerModeBase::s_stateTable[]=
 {
 	&stateUnarmedIdle,								// STATE_IDLE
@@ -129,16 +125,6 @@ static PlayerMetrics	s_playerMetrics=
 }	};
 
 
-
-
-
-
-
-
-
-
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -149,6 +135,14 @@ int		CPlayerMode::getPadInputHeld()					{return m_player->getPadInputHeld();}
 int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
 DVECTOR	CPlayerMode::getPlayerPos()						{return m_player->getPlayerPos();}
 void	CPlayerMode::setPlayerPos(DVECTOR *_pos)		{m_player->setPlayerPos(_pos);}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerMode::respawn()							{m_player->respawn();}
 
 /*----------------------------------------------------------------------
 	Function:

@@ -33,12 +33,20 @@
 #include "player\pmodes.h"
 #endif
 
-#ifndef	__PLAYER_PMFLY_H__
-#include "player\pmfly.h"
+#ifndef	__PLAYER_PMCHOP_H__
+#include "player\pmchop.h"
 #endif
 
 #ifndef	__PLAYER_PMBLOON_H__
 #include "player\pmbloon.h"
+#endif
+
+#ifndef	__PLAYER_PMDEAD_H__
+#include "player\pmdead.h"
+#endif
+
+#ifndef	__PLAYER_PMFLY_H__
+#include "player\pmfly.h"
 #endif
 
 // to be removed
@@ -130,7 +138,7 @@ static void writeDemoControls()
 static const char *s_modeText[NUM_PLAYERMODES]=
 {
 	"BASICUNARMED",
-//	"FULLUNARMED",
+	"FULLUNARMED",
 	"BALLOON",
 //	"NET",
 //	"CORALBLOWER",
@@ -163,13 +171,17 @@ int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 
 
 
 CPlayerModeBase		PLAYERMODE;
+CPlayerModeChop		PLAYERMODECHOP;
 CPlayerModeBalloon	PLAYERMODEBALLOON;
+CPlayerModeDead		PLAYERMODEDEAD;
 CPlayerModeFly		PLAYERMODEFLY;
 
 CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 {
 	&PLAYERMODE,				// PLAYER_MODE_BASICUNARMED
+	&PLAYERMODECHOP,			// PLAYER_MODE_FULLUNARMED
 	&PLAYERMODEBALLOON,			// PLAYER_MODE_BALLOON
+	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
 
@@ -634,14 +646,14 @@ void CPlayer::respawn()
 //	setState(STATE_IDLE);
 
 	// Strip any items that the player might be holding
-//	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
-//	{
-//		setMode(PLAYER_MODE_FULLUNARMED);
-//	}
-//	else
-//	{
+	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
+	{
+		setMode(PLAYER_MODE_FULLUNARMED);
+	}
+	else
+	{
 		setMode(PLAYER_MODE_BASICUNARMED);
-//	}
+	}
 
 	s_health=MAX_HEALTH;
 	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
@@ -704,6 +716,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			else
 			{
 				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
+				setMode(PLAYER_MODE_DEAD);
 //				setState(STATE_DEAD);
 			}
 		}

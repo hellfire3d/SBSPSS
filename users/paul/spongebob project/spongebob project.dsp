@@ -828,6 +828,22 @@ SOURCE=..\..\..\source\player\pmbloon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmchop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmchop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmdead.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmdead.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmfly.cpp
 # End Source File
 # Begin Source File

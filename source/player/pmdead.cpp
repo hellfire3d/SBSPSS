@@ -17,10 +17,6 @@
 
 #include "player\pmdead.h"
 
-//#ifndef __PLAYER_PLAYER_H__
-//#include "player\player.h"
-//#endif
-
 
 /*	Std Lib
 	------- */
@@ -52,6 +48,7 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeDead::enter()
 {
+	m_deadTime=0;
 }
 
 /*----------------------------------------------------------------------
@@ -62,28 +59,12 @@ void	CPlayerModeDead::enter()
   ---------------------------------------------------------------------- */
 void	CPlayerModeDead::think()
 {
-	DVECTOR	pos;
-	int		controlHeld;
-
-	pos=getPlayerPos();
-	controlHeld=getPadInputHeld();
-	if(controlHeld&PI_LEFT)
+	m_deadTime++;
+	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&PI_ACTION)||
+	   m_deadTime>DEATH_TIMEOUT)
 	{
-		pos.vx-=5;
+		respawn();
 	}
-	else if(controlHeld&PI_RIGHT)
-	{
-		pos.vx+=5;
-	}
-	if(controlHeld&PI_UP)
-	{
-		pos.vy-=5;
-	}
-	else if(controlHeld&PI_DOWN)
-	{
-		pos.vy+=5;
-	}
-	setPlayerPos(&pos);
 }
 
 /*===========================================================================
