@@ -538,10 +538,10 @@ int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
 const int	CAMERA_TILESIZE=16;
 
-int	returnspeed=100;
-int returntimeout=100;
+int	returnspeed=1500;
+int returntimeout=25;
 int returntimeoutcount=0;
-int	returnsafespace=2*16;
+int	returnsafespace=4*16;
 
 
 /*----------------------------------------------------------------------
@@ -647,17 +647,6 @@ void	CPlayer::think(int _frames)
 {
 	int	i;
 
-	ASSERT(!(getIsInWater()==false&&isWearingDivingHelmet()==false));
-
-	if(isWearingDivingHelmet()&&getIsInWater()==false&&
-	   m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
-	{
-		m_healthWaterLevel-=waterDrainSpeed*_frames;
-		if(m_healthWaterLevel<=0)
-		{
-			dieYouPorousFreak();
-		}
-	}
 
 #if		!defined(__USER_CDBUILD__)
 if(PadGetDown(0)&PAD_L1)
@@ -877,6 +866,18 @@ if(newmode!=-1)
 
 		// Automatic anim sfx
 		playAnimFrameSfx(m_animNo,m_animFrame);
+	}
+
+	// Out of water and wearing helmet..?
+	ASSERT(!(getIsInWater()==false&&isWearingDivingHelmet()==false));
+	if(isWearingDivingHelmet()&&getIsInWater()==false&&
+	   m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
+	{
+		m_healthWaterLevel-=waterDrainSpeed*_frames;
+		if(m_healthWaterLevel<=0)
+		{
+			dieYouPorousFreak();
+		}
 	}
 
 	// Ledge look-ahead stuff
