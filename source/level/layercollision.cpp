@@ -76,32 +76,33 @@ void		CLayerCollision::shutdown()
 /*****************************************************************************/
 int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 {
-	int	mapX,mapY,xFraction,yFraction;
-	int	distanceFromGround;
-	int	colHeight;
-	int	maxHeightToCheck;
+int	xFraction,yFraction;
+int	distanceFromGround;
+int	colHeight;
+int	maxHeightToCheck;
+u8	*MapPtr,T;
 
-	mapX=_x>>4;
-//	mapY=(_y>>4)*MapWidth;
-	mapY=GetYPos(_y>>4);
 	xFraction=_x&0x0f;
 	yFraction=16-(_y&0x0f);
+	MapPtr=getMapPtr(_x,_y);
 	distanceFromGround=0;
 
-	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
+	T=*MapPtr;
+	colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
 	if(colHeight)
 	{
 		// Inside a collision block.. find the nearest ground above this point
 		maxHeightToCheck=-_maxHeight-16;	// Need to check one block more incase we cross onto a new block
 		while(colHeight==16)
 		{
-			mapY-=MapWidth;
+			MapPtr-=MapWidth;
 			distanceFromGround-=16;
 			if(distanceFromGround<=maxHeightToCheck)
 			{
 				return -_maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
+			T=*MapPtr;
+			colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround<-_maxHeight)distanceFromGround=-_maxHeight;
@@ -113,13 +114,14 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 		maxHeightToCheck=_maxHeight+16;		// Need to check one block more incase we cross onto a new block
 		while(colHeight==0)
 		{
-			mapY+=MapWidth;
+			MapPtr+=MapWidth;
 			distanceFromGround+=16;
 			if(distanceFromGround>=maxHeightToCheck)
 			{
 				return _maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
+			T=*MapPtr;
+			colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround>_maxHeight)distanceFromGround=_maxHeight;
@@ -131,20 +133,20 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 /*****************************************************************************/
 int			CLayerCollision::getHeightFromGroundExcluding(int _x,int _y,int _exclusion,int _maxHeight=32)
 {
-	int	mapX,mapY,xFraction,yFraction;
-	int	distanceFromGround;
-	int	colHeight;
-	int	maxHeightToCheck;
+int	xFraction,yFraction;
+int	distanceFromGround;
+int	colHeight;
+int	maxHeightToCheck;
+u8	*MapPtr,T;
 
-	mapX=_x>>4;
-//	mapY=(_y>>4)*MapWidth;
-	mapY=GetYPos(_y>>4);
 	xFraction=_x&0x0f;
 	yFraction=16-(_y&0x0f);
+	MapPtr=getMapPtr(_x,_y);
 	distanceFromGround=0;
 
-	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-	if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
+	T=*MapPtr;
+	colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
+	if ( (T & COLLISION_TYPE_MASK) == _exclusion )
 	{
 		colHeight = 0;
 	}
@@ -154,14 +156,15 @@ int			CLayerCollision::getHeightFromGroundExcluding(int _x,int _y,int _exclusion
 		maxHeightToCheck=-_maxHeight-16;	// Need to check one block more incase we cross onto a new block
 		while(colHeight==16)
 		{
-			mapY-=MapWidth;
+			MapPtr-=MapWidth;
 			distanceFromGround-=16;
 			if(distanceFromGround<=maxHeightToCheck)
 			{
 				return -_maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
+			T=*MapPtr;
+			colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
+			if ( (T & COLLISION_TYPE_MASK) == _exclusion )
 			{
 				colHeight = 0;
 			}
@@ -176,14 +179,15 @@ int			CLayerCollision::getHeightFromGroundExcluding(int _x,int _y,int _exclusion
 		maxHeightToCheck=_maxHeight+16;		// Need to check one block more incase we cross onto a new block
 		while(colHeight==0)
 		{
-			mapY+=MapWidth;
+			MapPtr+=MapWidth;
 			distanceFromGround+=16;
 			if(distanceFromGround>=maxHeightToCheck)
 			{
 				return _maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
+			T=*MapPtr;
+			colHeight=s_collisionTable[((T&COLLISION_TILE_MASK)*16)+xFraction];
+			if ( (T & COLLISION_TYPE_MASK) == _exclusion )
 			{
 				colHeight = 0;
 			}
@@ -263,12 +267,6 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 	}
 
 	return distanceFromGround;
-}
-
-/*****************************************************************************/
-int			CLayerCollision::getHeightFromGroundAmmo(int _x,int _y,int _maxHeight)
-{
-	return( CLayerCollision::getHeightFromGroundExcluding( _x, _y, COLLISION_TYPE_FLAG_NORMAL, _maxHeight ) );
 }
 
 /*****************************************************************************/

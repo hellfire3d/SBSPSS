@@ -33,24 +33,28 @@ virtual	void			shutdown();
 		int				getHeightFromGroundExcluding(int _x,int _y,int _exclusion,int _maxHeight=32);
 		int				getHeightFromGroundNonSB(int _x,int _y,int _maxHeight=32)	{return( CLayerCollision::getHeightFromGroundExcluding( _x, _y, COLLISION_TYPE_FLAG_SB_NOMOVE, _maxHeight ) );}
 		int				getHeightFromGroundCart(int _x,int _y,int _maxHeight=32);
-		int				getHeightFromGroundAmmo(int _x,int _y,int _maxHeight=32);
+		int				getHeightFromGroundAmmo(int _x,int _y,int _maxHeight=32)	{return(CLayerCollision::getHeightFromGroundExcluding( _x, _y, COLLISION_TYPE_FLAG_NORMAL, _maxHeight ));}
 
-inline	u8				*getMapPtr(int _x,int _y)			
+inline	u8				*getMapPtr(int X,int Y)			
 		{
-			int		Ofs=(_x>>4)+GetYPos(_y>>4);
+			X>>=4;
+			Y>>=4;
+			ASSERT((Y>=0-COL_Y_OFS) && (Y<MapHeight+COL_Y_OFS));
+			int		Ofs=(X)+GetYPos(Y);
 			return(&Map[Ofs]);
 //			return(&Map[(_x>>4)+((_y>>4)*MapWidth)]);
 		}
 
-inline	int				getCollisionBlock(int _x,int _y)	
+inline	int				getCollisionBlock(int X,int Y)	
 		{
-			u8		Col=*getMapPtr(_x,_y);
+			u8		Col=*getMapPtr(X,Y);
 			return	(Col);
 //			return Map[(_x>>4)+((_y>>4)*MapWidth)];
 		}
 
 inline	u8				Get(int X,int Y)					
 		{
+			ASSERT((Y>=0-COL_Y_OFS) && (Y<MapHeight+COL_Y_OFS));
 			int		Ofs=(X)+GetYPos(Y);
 			return(Map[Ofs] & COLLISION_TILE_MASK);
 //			return(Map[X+(Y*MapWidth)]&COLLISION_TILE_MASK);
