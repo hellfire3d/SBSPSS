@@ -2,8 +2,8 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditView
-LastTemplate=CFrameWnd
+LastClass=CAboutDlg
+LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
@@ -20,10 +20,10 @@ Class8=CMapEditView
 
 ResourceCount=6
 Resource1=IDR_MAPEDITYPE (English (U.S.))
-Resource2=IDR_MAINFRAME (English (U.S.))
+Resource2=IDD_ABOUTBOX (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
 Resource4=IDD_LAYERBAR (English (U.S.))
-Resource5=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDR_MAINFRAME (English (U.S.))
 Resource6=IDD_TILEBAR (English (U.S.))
 
 [CLS:CChildFrame]
@@ -84,7 +84,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_TOOLBAR_LAYERBAR
+LastObject=ID_NEWMAP_OK
 Filter=C
 VirtualFilter=VWC
 

@@ -102,35 +102,11 @@ SOURCE=.\Layer.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerAction.cpp
+SOURCE=.\LayerTile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerAction.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerBack.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerBack.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerFore.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerFore.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerMid.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerMid.h
+SOURCE=.\LayerTile.h
 # End Source File
 # End Group
 # Begin Source File

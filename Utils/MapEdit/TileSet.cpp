@@ -69,10 +69,9 @@ char	Dir[_MAX_DIR];
 char	Fname[_MAX_FNAME];
 char	Ext[_MAX_EXT];
 
-	sprintf(FullName,"%s",_Filename);
 	_splitpath(_Filename,Drive,Dir,Fname,Ext);
 	sprintf(Path,"%s%s",Drive,Dir);
-	sprintf(Filename,"%s%s",Fname,Ext);
+	sprintf(Name,"%s",Fname);
 	Loaded=FALSE;
 }
 
@@ -89,8 +88,10 @@ CTileSet::~CTileSet()
 void	CTileSet::Load(CCore *Core)
 {
 CScene	Scene;
+char	Filename[256+64];
 
-		Scene.Load(FullName);
+		sprintf(Filename,"%s%s.%s",Path,Name,"Gin");
+		Scene.Load(Filename);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();

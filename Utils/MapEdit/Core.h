@@ -8,7 +8,7 @@
 #include	<Vector>
 #include	"gl3d.h"
 #include	"Layer.h"
-#include	"LayerBack.h"
+//#include	"LayerTile.h"
 
 #include	"TexCache.h"
 #include	"TileSet.h"
@@ -69,7 +69,6 @@ private:
 		CLayer					*Layers[LAYER_TYPE_MAX];
 		int						ActiveLayer;
 
-//		std::vector<CTileSet>	TileSet;
 		CTileBank				TileBank;
 		CTexCache				TexCache;
 

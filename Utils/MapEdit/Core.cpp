@@ -17,11 +17,7 @@
 
 #include	"Core.h"
 #include	"Layer.h"
-#include	"LayerBack.h"
-#include	"LayerMid.h"
-#include	"LayerAction.h"
-#include	"LayerFore.h"
-
+#include	"LayerTile.h"
 
 BOOL	Test3dFlag=TRUE;
 
@@ -42,13 +38,14 @@ CCore::~CCore()
 /*****************************************************************************/
 void	CCore::NewMap()
 {
+
 	RenderFlag=TRUE;
 
 // To be loaded/created
-	Layers[LAYER_TYPE_BACK]=	new CLayerBack();
-	Layers[LAYER_TYPE_MID]=		new CLayerMid();
-	Layers[LAYER_TYPE_ACTION]=	new CLayerAction();
-	Layers[LAYER_TYPE_FORE]=	new CLayerFore();
+	Layers[LAYER_TYPE_BACK]=	new CLayerTile("Back",	32,							32,								4.0f,	FALSE);
+	Layers[LAYER_TYPE_MID]=		new CLayerTile("Mid",	TileLayerDefaultWidth/2.0f,	TileLayerDefaultHeight/2.0f,	2.0f,	FALSE);
+	Layers[LAYER_TYPE_ACTION]=	new CLayerTile("Action",TileLayerDefaultWidth/1.0f,	TileLayerDefaultHeight/1.0f,	1.0f,	TRUE);
+	Layers[LAYER_TYPE_FORE]=	new CLayerTile("Fore",	TileLayerDefaultWidth/0.5f,	TileLayerDefaultHeight/0.5f,	0.5f,	FALSE);
 
 	TileViewFlag=0;
 	LayerViewFlag=1;
@@ -69,6 +66,7 @@ void	CCore::OpenMap()
 /*****************************************************************************/
 void	CCore::Render(CMapEditView *View)
 {
+
 Vec		&ThisCam=GetCam();
 
 		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
@@ -186,6 +184,8 @@ CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 
 		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerViewFlag);
 		Frm->ShowControlBar(LayerBar, LayerViewFlag, FALSE);	
+		if (View) UpdateView(View);
+
 }
 
 /*****************************************************************************/

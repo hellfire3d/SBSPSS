@@ -48,12 +48,12 @@ public:
 		int		IsLoaded()			{return(Loaded);}
 		void	Load(CCore *Core);
 		char	*GetPath()			{return(Path);}
-		char	*GetFilename()		{return(Filename);}
+		char	*GetName()			{return(Name);}
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 
 
 private:
-		char				FullName[256],Path[256],Filename[256];
+		char				Path[256],Name[256];
 		std::vector<CTile>	Tile;
 		BOOL				Loaded;
 

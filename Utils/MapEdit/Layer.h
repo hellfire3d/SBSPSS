@@ -29,30 +29,27 @@ enum LAYER_TYPE
 
 /*****************************************************************************/
 class	CCore;
-class	CMap;
 class	CMapEditView;
 class	CLayer
 {
 public:
-		CLayer();
-		~CLayer();
+		CLayer(){};
+virtual	~CLayer(){};
 
-// Virtual
-virtual	void			Init()=0;
-virtual	char			*GetName()=0;
-virtual	void			Render(CCore *Core,Vec &MapPos,BOOL Is3d);
-virtual	void			Render2d(CCore *Core,Vec &MapPos);
-virtual	void			Render3d(CCore *Core,Vec &MapPos);
-virtual	void			RenderGrid(CCore *Core,Vec &MapPos);
+virtual	char			*GetName();
+virtual	void			SetName(char *_Name);
 
-virtual	float			GetLayerZPosDiv()=0;
-virtual	BOOL			CanRender3d()=0;
+virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
 
-virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos);
+virtual	void			Render(CCore *Core,Vec &MapPos,BOOL Is3d)=0;
+virtual	void			RenderGrid(CCore *Core,Vec &MapPos)=0;
+
+virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos)=0;
 
 protected:
-		CMap			Map;
-
+		char			Name[256];
+		BOOL			Render3dFlag;
+		float			ZPosDiv;
 };
 
 
