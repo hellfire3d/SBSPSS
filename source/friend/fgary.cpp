@@ -135,6 +135,7 @@ void CNpcGaryFriend::think( int _frames )
 		s32 fallSpeed = 3;
 		s8 yMovement = fallSpeed * _frames;
 		s8 groundHeight;
+		u8 conveyorOverride = false;
 
 		// check vertical collision
 
@@ -152,6 +153,22 @@ void CNpcGaryFriend::think( int _frames )
 
 				m_speed = -5;
 				m_fallDeath = true;
+
+				break;
+			}
+
+			case COLLISION_TYPE_FLAG_MOVE_LEFT:
+			{
+				conveyorOverride = true;
+				Pos.vx--;
+
+				break;
+			}
+
+			case COLLISION_TYPE_FLAG_MOVE_RIGHT:
+			{
+				conveyorOverride = true;
+				Pos.vx++;
 
 				break;
 			}
@@ -199,7 +216,10 @@ void CNpcGaryFriend::think( int _frames )
 						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
 					}
 
-					Pos.vx += multiplier * 2 * _frames;
+					if ( !conveyorOverride )
+					{
+						Pos.vx += multiplier * 2 * _frames;
+					}
 				}
 			}
 		}
@@ -223,12 +243,15 @@ void CNpcGaryFriend::think( int _frames )
 				{
 					if ( m_started )
 					{
-					if ( m_soundId == NOT_PLAYING )
-					{
-						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
-					}
+						if ( m_soundId == NOT_PLAYING )
+						{
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
+						}
 
-						Pos.vx += multiplier * 2 * _frames;
+						if ( !conveyorOverride )
+						{
+							Pos.vx += multiplier * 2 * _frames;
+						}
 					}
 				}
 			}
