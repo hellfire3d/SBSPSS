@@ -22,6 +22,7 @@ class CNpcBouncingRockHazard : public CNpcBouncingBarrelHazard
 {
 public:
 	void				init();
+	void				render();
 	void				setWaypoints( sThingHazard *ThisHazard );
 	void				trigger();
 protected:

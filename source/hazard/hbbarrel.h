@@ -22,7 +22,7 @@ class CNpcBouncingBarrelHazard : public CNpcHazard
 {
 public:
 	void				init();
-	void				render();
+	virtual void		render();
 protected:
 	void				processMovement( int _frames );
 	void				collidedWith(CThing *_thisThing);
