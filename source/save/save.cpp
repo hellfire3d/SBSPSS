@@ -114,13 +114,13 @@ void CSaveScene::init()
 		tb->setObjectXYWH(0,0,WANT_TO_SAVE__FRAME_W,40);
 		tb->setText(STR__SAVE__DO_YOU_WANT_TO_SAVE);
 		CGUIFactory::createValueButtonFrame(m_wantToSaveFrame,
-											0,50,WANT_TO_SAVE__FRAME_W,20,
-											STR__YES,
-											&m_userResponse,USERRESPONSE__YES);
-		CGUIFactory::createValueButtonFrame(m_wantToSaveFrame,
 											0,70,WANT_TO_SAVE__FRAME_W,20,
 											STR__NO,
 											&m_userResponse,USERRESPONSE__NO);
+		CGUIFactory::createValueButtonFrame(m_wantToSaveFrame,
+											0,50,WANT_TO_SAVE__FRAME_W,20,
+											STR__YES,
+											&m_userResponse,USERRESPONSE__YES);
 
 	m_blankFrame=new ("saveframe") CGUIGroupFrame();
 	m_blankFrame->init(NULL);
@@ -151,13 +151,13 @@ void CSaveScene::init()
 		m_yesNoResponseTextBox->setObjectXYWH(0,0,NORMAL__FRAME_W,80);
 		m_yesNoResponseTextBox->setText(STR__BLANK);
 		CGUIFactory::createValueButtonFrame(m_yesNoResponseFrame,
-											0,NORMAL__FRAME_H-50,WANT_TO_SAVE__FRAME_W,20,
-											STR__YES,
-											&m_userResponse,USERRESPONSE__YES);
-		CGUIFactory::createValueButtonFrame(m_yesNoResponseFrame,
 											0,NORMAL__FRAME_H-30,WANT_TO_SAVE__FRAME_W,20,
 											STR__NO,
 											&m_userResponse,USERRESPONSE__NO);
+		CGUIFactory::createValueButtonFrame(m_yesNoResponseFrame,
+											0,NORMAL__FRAME_H-50,WANT_TO_SAVE__FRAME_W,20,
+											STR__YES,
+											&m_userResponse,USERRESPONSE__YES);
 
 	CFader::setFadingIn();
 
