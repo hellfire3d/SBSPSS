@@ -59,7 +59,7 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
-	virtual void		processShot( int _frames );
+	virtual void		processShotDeathEnd( int _frames );
 	//void				resetParasiticWormHeadToTail();
 	virtual void		processEnemyCollision( CThing *thisThing );
 

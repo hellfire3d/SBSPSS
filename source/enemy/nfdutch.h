@@ -28,7 +28,8 @@ public:
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
-	virtual void		processShot( int _frames );
+	virtual void		processShotRecoil( int _frames );
+	virtual void		processShotDeathEnd( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 
 	enum NPC_FLYING_DUTCHMAN_STATE

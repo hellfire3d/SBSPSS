@@ -35,7 +35,7 @@ protected:
 	virtual void		processCollision();
 	virtual void		processAttackCollision();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos );
-	virtual void		processShot( int _frames );
+	virtual void		processShotDeathEnd( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 
 	enum NPC_IRON_DOGFISH_STATE

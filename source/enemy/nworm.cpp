@@ -595,118 +595,18 @@ int CNpcParasiticWormSegment::checkCollisionAgainst( CThing *_thisThing, int _fr
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcParasiticWormEnemy::processShot( int _frames )
+void CNpcParasiticWormEnemy::processShotDeathEnd( int _frames )
 {
-	switch( m_data[m_type].shotFunc )
+	CNpcEnemy::processShotDeathEnd( _frames );
+
+	// go through segments
+
+	for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 	{
-		case NPC_SHOT_NONE:
-		{
-			// do nothing
-
-			break;
-		}
-
-		case NPC_SHOT_GENERIC:
-		{
-			switch ( m_state )
-			{
-				case NPC_GENERIC_HIT_CHECK_HEALTH:
-				{
-					m_health -= 5;
-
-					if ( m_health < 0 )
-					{
-						m_state = NPC_GENERIC_HIT_DEATH_START;
-					}
-					else
-					{
-						m_state = NPC_GENERIC_HIT_RECOIL;
-
-						m_animPlaying = true;
-						m_animNo = m_data[m_type].recoilAnim;
-						m_frame = 0;
-					}
-
-					break;
-				}
-
-				case NPC_GENERIC_HIT_RECOIL:
-				{
-					if ( !m_animPlaying )
-					{
-						m_state = 0;
-						m_controlFunc = NPC_CONTROL_MOVEMENT;
-					}
-
-					break;
-				}
-
-				case NPC_GENERIC_HIT_DEATH_START:
-				{
-					m_state = NPC_GENERIC_HIT_DEATH_END;
-
-					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
-					{
-						if( m_soundId != NOT_PLAYING )
-						{
-							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
-						}
-
-						m_soundId = CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
-					}
-
-					m_isDying = true;
-					m_speed = -5;
-
-					if (m_data[m_type].skelType)
-					{
-						m_actorGfx->SetOtPos( 0 );
-					}
-
-					break;
-				}
-
-				case NPC_GENERIC_HIT_DEATH_END:
-				{
-					Pos.vy += m_speed * _frames;
-
-					// go through segments
-
-					for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
-					{
-						DVECTOR segPos = m_segmentArray[segCount].getPos();
-						segPos.vy += m_speed * _frames;
-						m_segmentArray[segCount].setPos( segPos );
-						m_segmentArray[segCount].updateCollisionArea();
-					}
-
-					if ( m_speed < 5 )
-					{
-						m_speed++;
-					}
-
-					DVECTOR	offset = CLevel::getCameraPos();
-
-					if ( Pos.vy - offset.vy > VidGetScrH() )
-					{
-						if ( m_data[m_type].respawning )
-						{
-							m_isActive = false;
-
-							m_timerFunc = NPC_TIMER_RESPAWN;
-							m_timerTimer = 4 * GameState::getOneSecondInFrames();
-						}
-						else
-						{
-							setToShutdown();
-						}
-					}
-
-					break;
-				}
-			}
-
-			break;
-		}
+		DVECTOR segPos = m_segmentArray[segCount].getPos();
+		segPos.vy += m_speed * _frames;
+		m_segmentArray[segCount].setPos( segPos );
+		m_segmentArray[segCount].updateCollisionArea();
 	}
 }
+

@@ -1243,77 +1243,98 @@ void CNpcEnemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_RECOIL:
 				{
-					if ( !m_animPlaying )
-					{
-						m_state = 0;
-						m_controlFunc = NPC_CONTROL_MOVEMENT;
-					}
+					processShotRecoil( _frames );
 
 					break;
 				}
 
 				case NPC_GENERIC_HIT_DEATH_START:
 				{
-					m_animPlaying = true;
-					m_animNo = m_data[m_type].dieAnim;
-					m_frame = 0;
-					m_state = NPC_GENERIC_HIT_DEATH_END;
-					m_isDying = true;
-
-					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
-					{
-						if( m_soundId != NOT_PLAYING )
-						{
-							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
-						}
-
-						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
-					}
-
-					m_speed = -5;
-
-					if (m_data[m_type].skelType)
-					{
-						m_actorGfx->SetOtPos( 0 );
-					}
+					processShotDeathStart( _frames );
 
 					break;
 				}
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					m_drawRotation += 64 * _frames;
-					m_drawRotation &= 4095;
-
-					Pos.vy += m_speed * _frames;
-
-					if ( m_speed < 5 )
-					{
-						m_speed++;
-					}
-
-					DVECTOR	offset = CLevel::getCameraPos();
-
-					if ( Pos.vy - offset.vy > VidGetScrH() )
-					{
-						if ( m_data[m_type].respawning )
-						{
-							m_isActive = false;
-
-							m_timerFunc = NPC_TIMER_RESPAWN;
-							m_timerTimer = 4 * GameState::getOneSecondInFrames();
-						}
-						else
-						{
-							setToShutdown();
-						}
-					}
+					processShotDeathEnd( _frames );
 
 					break;
 				}
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processShotRecoil( int _frames )
+{
+	if ( !m_animPlaying )
+	{
+		m_state = 0;
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processShotDeathStart( int _frames )
+{
+	m_animPlaying = true;
+	m_animNo = m_data[m_type].dieAnim;
+	m_frame = 0;
+	m_state = NPC_GENERIC_HIT_DEATH_END;
+	m_isDying = true;
+
+	if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
+	{
+		if( m_soundId != NOT_PLAYING )
+		{
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+		}
+
+		m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].deathSfx, true );
+	}
+
+	m_speed = -5;
+
+	if (m_data[m_type].skelType)
+	{
+		m_actorGfx->SetOtPos( 0 );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processShotDeathEnd( int _frames )
+{
+	m_drawRotation += 64 * _frames;
+	m_drawRotation &= 4095;
+
+	Pos.vy += m_speed * _frames;
+
+	if ( m_speed < 5 )
+	{
+		m_speed++;
+	}
+
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	if ( Pos.vy - offset.vy > VidGetScrH() )
+	{
+		if ( m_data[m_type].respawning )
+		{
+			m_isActive = false;
+
+			m_timerFunc = NPC_TIMER_RESPAWN;
+			m_timerTimer = 4 * GameState::getOneSecondInFrames();
+		}
+		else
+		{
+			setToShutdown();
 		}
 	}
 }

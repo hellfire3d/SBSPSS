@@ -252,6 +252,9 @@ protected:
 	virtual void		processMovement( int _frames );
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	virtual void		processShot( int _frames );
+	virtual void		processShotRecoil( int _frames );
+	virtual void		processShotDeathStart( int _frames );
+	virtual void		processShotDeathEnd( int _frames );
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
 	virtual void		processAttackCollision();

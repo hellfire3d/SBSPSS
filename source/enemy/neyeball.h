@@ -26,7 +26,8 @@ protected:
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
-	virtual void		processShot( int _frames );
+	virtual void		processShotDeathStart( int _frames );
+	virtual void		processShotDeathEnd( int _frames );
 
 	s32					m_fireHeading;
 

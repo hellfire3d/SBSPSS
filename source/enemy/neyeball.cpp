@@ -236,110 +236,49 @@ void CNpcEyeballEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEyeballEnemy::processShot( int _frames )
+void CNpcEyeballEnemy::processShotDeathStart( int _frames )
 {
-	switch ( m_state )
+	CNpcEnemy::processShotDeathStart( _frames );
+
+	CThing	*Next=getNext();
+	if ( Next )
 	{
-		case NPC_GENERIC_HIT_CHECK_HEALTH:
+		CProjectile *projectile;
+
+		projectile = (CProjectile *) Next;
+
+		if ( projectile->getMovementType() != CProjectile::PROJECTILE_FIXED )
 		{
-			m_health -= 5;
+			projectile->setMovementType( CProjectile::PROJECTILE_DUMBFIRE );
+			projectile->setLifeTime( CProjectile::PROJECTILE_FINITE_LIFE );
 
-			if ( m_health < 0 )
-			{
-				m_state = NPC_GENERIC_HIT_DEATH_START;
-			}
-			else
-			{
-				m_state = 0;
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
-			}
-
-			break;
+			removeChild( Next );
 		}
+	}
+}
 
-		case NPC_GENERIC_HIT_DEATH_START:
-		{
-			m_animPlaying = true;
-			m_animNo = m_data[m_type].dieAnim;
-			m_frame = 0;
-			m_state = NPC_GENERIC_HIT_DEATH_END;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			m_isDying = true;
-			m_speed = -5;
+void CNpcEyeballEnemy::processShotDeathEnd( int _frames )
+{
+	CNpcEnemy::processShotDeathEnd( _frames );
 
-			if (m_data[m_type].skelType)
-			{
-				m_actorGfx->SetOtPos( 0 );
-			}
+	m_heading = m_drawRotation - 1024;
+	m_heading &= 4095;
 
-			CThing	*Next=getNext();
-			if ( Next )
-			{
-				CProjectile *projectile;
+	CThing	*Next=getNext();
+	if ( Next )
+	{
+		CProjectile *projectile;
 
-				projectile = (CProjectile *) Next;
+		projectile = (CProjectile *) Next;
 
-				if ( projectile->getMovementType() != CProjectile::PROJECTILE_FIXED )
-				{
-					projectile->setMovementType( CProjectile::PROJECTILE_DUMBFIRE );
-					projectile->setLifeTime( CProjectile::PROJECTILE_FINITE_LIFE );
+		DVECTOR eyeballPos = Pos;
 
-					removeChild( Next );
-				}
-			}
+		eyeballPos.vx += ( EYEBALL_DIST * rcos( m_heading ) ) >> 12;
+		eyeballPos.vy += ( EYEBALL_DIST * rsin( m_heading ) ) >> 12;
 
-			break;
-		}
-
-		case NPC_GENERIC_HIT_DEATH_END:
-		{
-			m_drawRotation += 64 * _frames;
-			m_drawRotation &= 4095;
-
-			m_heading = m_drawRotation - 1024;
-			m_heading &= 4095;
-
-			Pos.vy += m_speed * _frames;
-
-			if ( m_speed < 5 )
-			{
-				m_speed++;
-			}
-
-			CThing	*Next=getNext();
-			if ( Next )
-			{
-				CProjectile *projectile;
-
-				projectile = (CProjectile *) Next;
-
-				DVECTOR eyeballPos = Pos;
-
-				eyeballPos.vx += ( EYEBALL_DIST * rcos( m_heading ) ) >> 12;
-				eyeballPos.vy += ( EYEBALL_DIST * rsin( m_heading ) ) >> 12;
-
-				projectile->setPosition( eyeballPos );
-				projectile->setHeading( m_heading );
-			}
-
-			DVECTOR	offset = CLevel::getCameraPos();
-
-			if ( Pos.vy - offset.vy > VidGetScrH() )
-			{
-				if ( m_data[m_type].respawning )
-				{
-					m_isActive = false;
-
-					m_timerFunc = NPC_TIMER_RESPAWN;
-					m_timerTimer = 4 * GameState::getOneSecondInFrames();
-				}
-				else
-				{
-					setToShutdown();
-				}
-			}
-
-			break;
-		}
+		projectile->setPosition( eyeballPos );
+		projectile->setHeading( m_heading );
 	}
 }
