@@ -43,9 +43,9 @@ public:
 	void			think(class CPlayerModeBase *_playerMode);
 
 protected:
-	virtual int		getStartFrame()						{return ANIM_SPONGEBOB_FIRE;}
+	virtual int		getStartFrame()						{return ANIM_SPONGEBOB_RUNSTART;}
 	virtual int		getLoopFrame()						{return ANIM_SPONGEBOB_RUN;}
-	virtual int		getEndFrame()						{return ANIM_SPONGEBOB_FIRE;}
+	virtual int		getEndFrame()						{return ANIM_SPONGEBOB_RUNSTOP;}
 
 private:
 	int				m_numberOfTimesAnimHasLooped;
