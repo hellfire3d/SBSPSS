@@ -154,14 +154,14 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 		if ( m_reversed )
 		{
-			if ( m_angularVelocity > 20 && newAngle < -64 )
+			if ( m_angularVelocity > 10 && newAngle < -32 )
 			{
 				player->springPlayerUp();
 			}
 		}
 		else
 		{
-			if ( m_angularVelocity < -20 && newAngle > 64 )
+			if ( m_angularVelocity < -10 && newAngle > 32 )
 			{
 				player->springPlayerUp();
 			}
