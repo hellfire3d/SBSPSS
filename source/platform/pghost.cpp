@@ -33,6 +33,7 @@ void CNpcGhostTrainPlatform::postInit()
 	m_speedSetting = GO_DEFAULT;
 
 	m_carSpeed >>= 8;
+	m_trackContact = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +62,8 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 		player->setPlatform( this );
 		m_contact = true;
 	}
+
+	m_trackContact = false;
 
 	if ( m_isActivated )
 	{
@@ -110,6 +113,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 				// have touched down
 
 				m_rebound = false;
+				m_trackContact = true;
 				moveY += groundHeight;
 			}
 
@@ -178,6 +182,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 					// have touched down
 
 					m_inJump = false;
+					m_trackContact = true;
 					moveY += groundHeight;
 				}
 			}
@@ -194,6 +199,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 					// groundHeight <= yMovement indicates either just above ground or on or below ground
 
 					moveY = groundHeight;
+					m_trackContact = true;
 				}
 				else
 				{

@@ -37,6 +37,7 @@ protected:
 	u8					m_playerAttached;
 	u8					m_rebound;
 	u8					m_falling;
+	u8					m_trackContact;
 };
 
 #endif

@@ -350,7 +350,7 @@ void CNpcCartPlatform::render()
 
 void CNpcCartPlatform::jump()
 {
-	if ( !m_inJump && !m_rebound )
+	if ( !m_inJump && !m_rebound && m_trackContact )
 	{
 		m_inJump = true;
 		m_vertSpeed = -8 << 8;
