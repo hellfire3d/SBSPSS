@@ -63,7 +63,7 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 
 		if ( m_extendDir == EXTEND_RIGHT )
 		{
-			s32 xDist = 300 - Pos.vx;
+			s32 xDist = 600 - Pos.vx;
 			s32 xDistSqr = xDist * xDist;
 
 			if ( xDistSqr > 100 )
@@ -77,7 +77,7 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 		}
 		else
 		{
-			s32 xDist = -300 - Pos.vx;
+			s32 xDist = 100 - Pos.vx;
 			s32 xDistSqr = xDist * xDist;
 
 			if ( xDistSqr > 100 )
