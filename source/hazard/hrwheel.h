@@ -29,7 +29,7 @@ public:
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				linkToWeight( CNpcRisingWeightHazard *weight )			{m_weight = weight;}
 	void				render();
-	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	bool				alwaysThink()											{return(true);}
 protected:
 	void				setWaypoints( sThingHazard *ThisHazard );
 	void				collidedWith(CThing *_thisThing);

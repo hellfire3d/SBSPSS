@@ -25,7 +25,7 @@ public:
 	void				render();
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				setTriggered()											{m_triggered = true;}
-	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	bool				alwaysThink()											{return(true);}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	void				setWaypoints( sThingHazard *ThisHazard );
