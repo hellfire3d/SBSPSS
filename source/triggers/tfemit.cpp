@@ -61,7 +61,7 @@ void	CFlameEmitterTrigger::collidedWith(CThing *_thisThing)
 
 			if ( !player->isRecoveringFromHit() )
 			{
-				player->takeDamage( DAMAGE__BURN_ENEMY );
+				player->takeDamage( DAMAGE__KILL_OUTRIGHT );
 			}
 
 			break;
