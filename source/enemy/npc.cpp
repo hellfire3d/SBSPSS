@@ -1507,7 +1507,7 @@ void CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcEnemy::suckUp( DVECTOR *suckPos )
+bool CNpcEnemy::suckUp( DVECTOR *suckPos, int _frames )
 {
 	m_isCaught = true;
 	m_isBlowerOn = true;
@@ -1518,8 +1518,8 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos )
 		{
 			// go to user
 
-			s32 targetXDist = suckPos.vx - Pos.vx;
-			s32 targetYDist = suckPos.vy - Pos.vy;
+			s32 targetXDist = suckPos->vx - Pos.vx;
+			s32 targetYDist = suckPos->vy - Pos.vy;
 
 			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
 
@@ -1542,6 +1542,8 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos )
 			break;
 		}
 	}
+
+	return( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

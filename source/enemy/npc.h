@@ -116,7 +116,7 @@ public:
 
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
-	bool				suckUp( DVECTOR *suckPos );
+	bool				suckUp( DVECTOR *suckPos, int _frames );
 
 protected:
 	class CLayerCollision	*m_layerCollision;
