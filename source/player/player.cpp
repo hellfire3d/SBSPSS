@@ -794,7 +794,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 				// over an item whilst unarmed, he automatically picks it up
 				m_tryingToAutomaticallyPickupWeapon=true;
 			}
-			if(getPadInputDown()&PI_WEAPONCHANGE)
+			if(m_currentMode!=PLAYER_MODE_CART && getPadInputDown()&PI_WEAPONCHANGE)
 			{
 				// If already armed then drop current weapon
 				if(m_currentMode!=PLAYER_MODE_BASICUNARMED&&
