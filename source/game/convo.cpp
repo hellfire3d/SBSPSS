@@ -610,19 +610,19 @@ void CConversation::thinkQuestion()
 
 		if(s_currentQuestion==QUESTION_YES_NO)
 		{
-			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+			if(pad&PAD_CROSS)
 			{
 				s_currentAnswer=s_currentSelectedAnswer==0?ANSWER_YES:ANSWER_NO;
 				s_currentQuestion=QUESTION_NONE;
 			}
-			else if(pad&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
+			else if(pad&(PAD_LEFT|PAD_RIGHT))
 			{
 				s_currentSelectedAnswer^=1;
 			}
 		}
 		else if(s_currentQuestion==QUESTION_OK)
 		{
-			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+			if(pad&PAD_CROSS)
 			{
 				s_currentAnswer=ANSWER_OK;
 				s_currentQuestion=QUESTION_NONE;
