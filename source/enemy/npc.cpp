@@ -423,25 +423,6 @@ void CNpcEnemy::postInit()
 			break;
 		}
 
-		case NPC_INIT_FLAMING_SKULL:
-		{
-			m_state = FLAMING_SKULL_ATTACK;
-
-			break;
-		}
-
-		case NPC_INIT_EYEBALL:
-		{
-			CProjectile *projectile;
-			projectile = new ( "eyeball projectile" ) CProjectile;
-			projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
-			projectile->setLayerCollision( m_layerCollision );
-
-			addChild( projectile );
-
-			break;
-		}
-
 		case NPC_INIT_ANEMONE_2:
 		{
 			CProjectile *projectile;
@@ -821,24 +802,6 @@ bool CNpcEnemy::processSensor()
 			{
 				switch( m_sensorFunc )
 				{
-					case NPC_SENSOR_CLAM_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extendDir = EXTEND_UP;
-							m_extension = 0;
-							m_movementTimer = GameState::getOneSecondInFrames() >> 3;
-							m_velocity = ( getRnd() % 6 ) + 1;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					case NPC_SENSOR_OIL_BLOB_USER_CLOSE:
 					case NPC_SENSOR_NINJA_STARFISH_USER_CLOSE:
 					{
@@ -846,24 +809,6 @@ bool CNpcEnemy::processSensor()
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_velocity = m_data[m_type].speed;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_GHOST_PIRATE_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extendDir = EXTEND_UP;
-							m_extension = 0;
-							m_movementTimer = GameState::getOneSecondInFrames() >> 1;
-							m_velocity = 4;
 
 							return( true );
 						}
@@ -975,8 +920,6 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_EYEBALL_USER_CLOSE:
-					case NPC_SENSOR_FLAMING_SKULL_USER_CLOSE:
 					case NPC_SENSOR_PARASITIC_WORM_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 40000 )
@@ -1035,23 +978,7 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_PUFFA_FISH_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
-						{
-							m_state = PUFFA_FISH_NO_INFLATE;
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
-					case NPC_SENSOR_OCTOPUS_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 400 )
 						{
@@ -1093,10 +1020,10 @@ bool CNpcEnemy::processSensor()
 
 void CNpcEnemy::processMovement(int _frames)
 {
-	if ( _frames > 2 )
-	{
-		_frames = 2;
-	}
+	//if ( _frames > 2 )
+	//{
+		//_frames = 2;
+	//}
 
 	s32 moveX = 0, moveY = 0;
 	s32 moveVel = 0;
@@ -1212,20 +1139,6 @@ void CNpcEnemy::processMovement(int _frames)
 			break;
 		}
 
-		case NPC_MOVEMENT_SHARK_MAN:
-		{
-			processSharkManMovement( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_BALL_BLOB:
-		{
-			processBallBlobMovement( _frames, &moveX, &moveY );
-
-			break;
-		}
-
 		default:
 
 			break;
@@ -1238,35 +1151,8 @@ void CNpcEnemy::processMovement(int _frames)
 
 void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange)
 {
-	switch( m_data[m_type].movementModifierFunc )
-	{
-		case NPC_MOVEMENT_MODIFIER_NONE:
-		{
-			Pos.vx += distX;
-			Pos.vy += distY;
-
-			break;
-		}
-
-		case NPC_MOVEMENT_MODIFIER_BOB:
-		{
-			break;
-		}
-
-		case NPC_MOVEMENT_MODIFIER_FISH_FOLK:
-		{
-			processFishFolkMovementModifier( _frames, distX, distY );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_MODIFIER_OCTOPUS:
-		{
-			processBabyOctopusMovementModifier( _frames, dist, headingChange );
-
-			break;
-		}
-	}
+	Pos.vx += distX;
+	Pos.vy += distY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1367,52 +1253,12 @@ void CNpcEnemy::processClose(int _frames)
 {
 	switch( m_data[this->m_type].closeFunc )
 	{
-		case NPC_CLOSE_CLAM_JUMP_ATTACK:
-			processCloseClamJumpAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_CLAM_SNAP_ATTACK:
-			processCloseClamSnapAttack( _frames );
-
-			break;
-
 		case NPC_CLOSE_GENERIC_USER_SEEK:
 		{
 			processGenericGotoTarget( _frames, playerXDist, playerYDist, m_data[m_type].speed );
 
 			break;
 		}
-
-		case NPC_CLOSE_GHOST_PIRATE_ATTACK:
-			processCloseGhostPirateAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_SHARK_MAN_ATTACK:
-			processCloseSharkManAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_ANEMONE_1_ATTACK:
-			processCloseAnemone1Attack( _frames );
-
-			break;
-
-		case NPC_CLOSE_ANEMONE_2_ATTACK:
-			processCloseAnemone2Attack( _frames );
-
-			break;
-
-		case NPC_CLOSE_ANEMONE_3_ATTACK:
-			processCloseAnemone3Attack( _frames );
-
-			break;
-
-		case NPC_CLOSE_EYEBALL_ATTACK:
-			processCloseEyeballAttack( _frames );
-
-			break;
 
 		case NPC_CLOSE_SKULL_STOMPER_ATTACK:
 			processCloseSkullStomperAttack( _frames );
@@ -1451,26 +1297,6 @@ void CNpcEnemy::processClose(int _frames)
 
 		case NPC_CLOSE_FISH_HOOK_RISE:
 			processCloseFishHookRise( _frames );
-
-			break;
-
-		case NPC_CLOSE_FLAMING_SKULL_ATTACK:
-			processCloseFlamingSkullAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_SKELETAL_FISH_ATTACK:
-			processCloseSkeletalFishAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_OCTOPUS_ATTACK:
-			processCloseOctopusAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_PUFFA_FISH_INFLATE:
-			processClosePuffaFishInflate( _frames );
 
 			break;
 

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nffolk.cpp
+	nfskull.cpp
 
 	Author:		CRB
 	Created: 
@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NFSKULL_H__
+#include "enemy\nfskull.h"
+#endif
+
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -24,7 +28,35 @@
 #endif
 
 
-void CNpcEnemy::processCloseFlamingSkullAttack( int _frames )
+void CNpcFlamingSkullEnemy::postInit()
+{
+	m_state = FLAMING_SKULL_ATTACK;
+}
+
+bool CNpcFlamingSkullEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 40000 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcFlamingSkullEnemy::processClose( int _frames )
 {
 	s32 distX, distY;
 	s32 distXSqr, distYSqr;

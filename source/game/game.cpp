@@ -47,6 +47,46 @@
 #include "enemy\nanemone.h"
 #endif
 
+#ifndef	__ENEMY_NCLAM_H__
+#include "enemy\nclam.h"
+#endif
+
+#ifndef	__ENEMY_NOCTO_H__
+#include "enemy\nocto.h"
+#endif
+
+#ifndef __ENEMY_NFFOLK_H__
+#include "enemy\nffolk.h"
+#endif
+
+#ifndef __ENEMY_NBBLOB_H__
+#include "enemy\nbblob.h"
+#endif
+
+#ifndef	__ENEMY_NGPIRATE_H__
+#include "enemy\ngpirate.h"
+#endif
+
+#ifndef	__ENEMY_NPUFFA_H__
+#include "enemy\npuffa.h"
+#endif
+
+#ifndef	__ENEMY_NSHRKMAN_H__
+#include "enemy\nshrkman.h"
+#endif
+
+#ifndef	__ENEMY_NSKLFISH_H__
+#include "enemy\nsklfish.h"
+#endif
+
+#ifndef	__ENEMY_NEYEBALL_H__
+#include "enemy\neyeball.h"
+#endif
+
+#ifndef	__ENEMY_NFSKULL_H__
+#include "enemy\nfskull.h"
+#endif
+
 #ifndef __ENEMY_NPLATFRM_H__
 #include "enemy\nplatfrm.h"
 #endif
@@ -370,6 +410,73 @@ void	CGameScene::initLevel()
 						case CNpcEnemy::NPC_ANEMONE_3:
 						{
 							enemy = new ("anemone 3") CNpcAnemone3Enemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_CLAM_JUMP:
+						{
+							enemy = new ("jumping clam") CNpcJumpingClamEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_CLAM_STATIC:
+						{
+							enemy = new ("static clam") CNpcStaticClamEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_BABY_OCTOPUS:
+						{
+							enemy = new ("baby octopus") CNpcBabyOctopusEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_FISH_FOLK:
+						case CNpcEnemy::NPC_ZOMBIE_FISH_FOLK:
+						{
+							enemy = new ("fish folk") CNpcFishFolk;
+							break;
+						}
+
+						case CNpcEnemy::NPC_BALL_BLOB:
+						{
+							enemy = new ("ball blob") CNpcBallBlobEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_GHOST_PIRATE:
+						{
+							enemy = new ("ghost pirate") CNpcGhostPirateEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_PUFFA_FISH:
+						{
+							enemy = new ("puffa fish") CNpcPuffaFishEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_SHARK_MAN:
+						{
+							enemy = new ("shark man") CNpcSharkManEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_SKELETAL_FISH:
+						{
+							enemy = new ("skeletal fish") CNpcSkeletalFishEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_EYEBALL:
+						{
+							enemy = new ("eyeball") CNpcEyeballEnemy;
+							break;
+						}
+
+						case CNpcEnemy::NPC_FLAMING_SKULL:
+						{
+							enemy = new ("flaming skull") CNpcFlamingSkullEnemy;
 							break;
 						}
 

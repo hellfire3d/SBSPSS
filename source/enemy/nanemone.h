@@ -26,14 +26,20 @@ protected:
 
 class	CNpcAnemone1Enemy : public CNpcAnemoneEnemy
 {
+protected:
+	virtual void		processClose( int _frames );
 };
 
 class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
 {
+protected:
+	virtual void		processClose( int _frames );
 };
 
 class	CNpcAnemone3Enemy : public CNpcAnemoneEnemy
 {
+protected:
+	virtual void		processClose( int _frames );
 };
 
 #endif

@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NOCTO_H__
+#include "enemy\nocto.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -31,10 +35,34 @@
 #include <ACTOR_BABYOCTOPUS_ANIM.h>
 #endif
 
-void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange )
+bool CNpcBabyOctopusEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 400 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcBabyOctopusEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	s32 newX, newY;
 	s32 preShiftX, preShiftY;
+	s16 headingVal;
 
 	//u16 octopusData[11] = { 96, 192, 256, 256, 256, 192, 192, 192, 128, 128, 96 };
 	u16 octopusData[11] = { 96, 256, 96, 256, 96, 256, 96, 256, 96, 256, 96 };
@@ -77,9 +105,15 @@ void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 h
 
 	m_velocity += resistance;
 
+	headingVal = abs( headingChange );
+	if ( headingVal > 128 )
+	{
+		headingVal = 128;
+	}
+
 	reqVelocity = dist * octopusData[dataPoint];
 	reqVelocity >>= 8;
-	reqVelocity *= 128 + ( 128 - headingChange );
+	reqVelocity *= 128 + ( 128 - headingVal );
 	reqVelocity >>= 8;
 
 	s32 absReqVelocity = abs( reqVelocity );
@@ -108,9 +142,9 @@ void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 h
 	Pos.vy += newY;
 }
 
-void CNpcEnemy::processCloseOctopusAttack( int _frames )
+void CNpcBabyOctopusEnemy::processClose( int _frames )
 {
-	if ( !m_animPlaying || m_animNo == m_data[m_type].initAnim || m_animNo == m_data[m_type].moveAnim )
+	if ( m_animNo == m_data[m_type].initAnim || m_animNo == m_data[m_type].moveAnim )
 	{
 		// not playing an attack anim, hence choose one
 
@@ -142,7 +176,9 @@ void CNpcEnemy::processCloseOctopusAttack( int _frames )
 
 		m_animPlaying = true;
 		m_frame = 0;
-
+	}
+	else if ( !m_animPlaying )
+	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
 		m_timerTimer = GameState::getOneSecondInFrames();

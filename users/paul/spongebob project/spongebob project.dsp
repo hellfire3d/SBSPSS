@@ -121,11 +121,19 @@ SOURCE=..\..\..\source\enemy\nbblob.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nbblob.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nbooger.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nclam.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nclam.h
 # End Source File
 # Begin Source File
 
@@ -137,6 +145,10 @@ SOURCE=..\..\..\source\enemy\neyeball.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\neyeball.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nfdutch.cpp
 # End Source File
 # Begin Source File
@@ -145,7 +157,15 @@ SOURCE=..\..\..\source\enemy\nffolk.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nffolk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nfskull.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nfskull.h
 # End Source File
 # Begin Source File
 
@@ -169,6 +189,10 @@ SOURCE=..\..\..\source\enemy\ngpirate.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ngpirate.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nhazard.cpp
 # End Source File
 # Begin Source File
@@ -186,6 +210,10 @@ SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nocto.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nocto.h
 # End Source File
 # Begin Source File
 
@@ -221,6 +249,10 @@ SOURCE=..\..\..\source\enemy\npuffa.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\npuffa.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nscrab.cpp
 # End Source File
 # Begin Source File
@@ -233,6 +265,10 @@ SOURCE=..\..\..\source\enemy\nshrkman.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nshrkman.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
 # Begin Source File
@@ -242,6 +278,10 @@ SOURCE=..\..\..\source\enemy\nsjfish.h
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nsklfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsklfish.h
 # End Source File
 # Begin Source File
 

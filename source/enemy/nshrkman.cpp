@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NSHRKMAN_H__
+#include "enemy\nshrkman.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -32,15 +36,17 @@
 #endif
 
 
-void CNpcEnemy::processSharkManMovement( int _frames, s32 *moveX, s32 *moveY )
+void CNpcSharkManEnemy::processMovement( int _frames )
 {
+	s32 moveX = 0, moveY = 0;
+
 	if ( m_movementTimer > 0 )
 	{
 		m_movementTimer -= _frames;
 
 		if ( m_animNo == m_data[m_type].moveAnim )
 		{
-			processGenericFixedPathWalk( _frames, moveX, moveY );
+			processGenericFixedPathWalk( _frames, &moveX, &moveY );
 		}
 
 		if ( !m_animPlaying )
@@ -111,9 +117,11 @@ void CNpcEnemy::processSharkManMovement( int _frames, s32 *moveX, s32 *moveY )
 		m_animPlaying = true;
 		m_frame = 0;
 	}
+
+	processMovementModifier( _frames, moveX, moveY, 0, 0 );
 }
 
-void CNpcEnemy::processCloseSharkManAttack( int _frames )
+void CNpcSharkManEnemy::processClose( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 	s32 groundHeight;

@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NCLAM_H__
+#include "enemy\nclam.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -23,12 +27,43 @@
 #include	"player\player.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 #ifndef	__ANIM_CLAM_HEADER__
 #include <ACTOR_CLAM_ANIM.h>
 #endif
 
 
-void CNpcEnemy::processCloseClamJumpAttack( int _frames )
+bool CNpcClamEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 10000 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+					m_extendDir = EXTEND_UP;
+					m_extension = 0;
+					m_movementTimer = GameState::getOneSecondInFrames() >> 3;
+					m_velocity = ( getRnd() % 6 ) + 1;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcJumpingClamEnemy::processClose( int _frames )
 {
 	s32 velocity;
 
@@ -91,7 +126,7 @@ void CNpcEnemy::processCloseClamJumpAttack( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseClamSnapAttack( int _frames )
+void CNpcStaticClamEnemy::processClose( int _frames )
 {
 	if ( !m_animPlaying )
 	{

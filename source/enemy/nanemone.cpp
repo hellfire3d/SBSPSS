@@ -67,7 +67,7 @@ bool CNpcAnemoneEnemy::processSensor()
 	}
 }
 
-void CNpcEnemy::processCloseAnemone1Attack( int _frames )
+void CNpcAnemone1Enemy::processClose( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;
@@ -194,7 +194,7 @@ void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseAnemone2Attack( int _frames )
+void CNpcAnemone2Enemy::processClose( int _frames )
 {
 	int fireLoop;
 	CProjectile *projectile;
@@ -260,7 +260,7 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 	}
 }
 
-void CNpcEnemy::processCloseAnemone3Attack( int _frames )
+void CNpcAnemone3Enemy::processClose( int _frames )
 {
 	if ( m_animNo != ANIM_ANENOMELVL3_FIRE )
 	{

@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NPUFFA_H__
+#include "enemy\npuffa.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -24,7 +28,31 @@
 #endif
 
 
-void CNpcEnemy::processClosePuffaFishInflate( int _frames )
+bool CNpcPuffaFishEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 10000 )
+				{
+					m_state = PUFFA_FISH_NO_INFLATE;
+					m_controlFunc = NPC_CONTROL_CLOSE;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcPuffaFishEnemy::processClose( int _frames )
 {
 	if ( playerXDistSqr + playerYDistSqr > 15000 )
 	{

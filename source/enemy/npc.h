@@ -70,7 +70,6 @@ protected:
 		//NPC_FRIEND_INIT_FUNC					initFunc;
 		//NPC_FRIEND_SENSOR_FUNC					sensorFunc;
 		NPC_FRIEND_MOVEMENT_FUNC				movementFunc;
-		//NPC_FRIEND_MOVEMENT_MODIFIER_FUNC		movementModifierFunc;
 		//NPC_FRIEND_CLOSE_FUNC					closeFunc;
 		//NPC_FRIEND_TIMER_FUNC					timerFunc;
 		bool							canTalk;
@@ -160,7 +159,7 @@ public:
 	};
 
 	void				init();
-	void				postInit();
+	virtual void		postInit();
 	void				shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
@@ -201,12 +200,10 @@ protected:
 		NPC_INIT_FIREBALL,
 		NPC_INIT_RETURNING_HAZARD,
 		NPC_INIT_FISH_FOLK,
-		NPC_INIT_FLAMING_SKULL,
 		NPC_INIT_CIRCULAR_PLATFORM,
 		NPC_INIT_PARASITIC_WORM,
 		NPC_INIT_PARASITIC_WORM_SEGMENT,
 		NPC_INIT_HERMIT_CRAB,
-		NPC_INIT_EYEBALL,
 		NPC_INIT_BALL_BLOB,
 		NPC_INIT_ANEMONE_2,
 		NPC_INIT_SPIDER_CRAB,
@@ -225,35 +222,21 @@ protected:
 	{
 		NPC_SENSOR_NONE = 0,
 		NPC_SENSOR_USER_CLOSE = 1,
-		NPC_SENSOR_CLAM_USER_CLOSE,
 		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
-		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
 		NPC_SENSOR_GENERIC_USER_VISIBLE,
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
-		NPC_SENSOR_EYEBALL_USER_CLOSE,
 		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
 		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
 		NPC_SENSOR_IRON_DOGFISH_USER_CLOSE,
 		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
 		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
-		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
-		NPC_SENSOR_OCTOPUS_USER_CLOSE,
-		NPC_SENSOR_PUFFA_FISH_USER_CLOSE,
 		NPC_SENSOR_PARASITIC_WORM_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
 	{
 		NPC_CLOSE_NONE = 0,
-		NPC_CLOSE_CLAM_JUMP_ATTACK = 1,
-		NPC_CLOSE_CLAM_SNAP_ATTACK,
-		NPC_CLOSE_GHOST_PIRATE_ATTACK,
-		NPC_CLOSE_SHARK_MAN_ATTACK,
-		NPC_CLOSE_GENERIC_USER_SEEK,
-		NPC_CLOSE_ANEMONE_1_ATTACK,
-		NPC_CLOSE_ANEMONE_2_ATTACK,
-		NPC_CLOSE_ANEMONE_3_ATTACK,
-		NPC_CLOSE_EYEBALL_ATTACK,
+		NPC_CLOSE_GENERIC_USER_SEEK = 1,
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
 		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
@@ -262,11 +245,7 @@ protected:
 		NPC_CLOSE_IRON_DOGFISH_ATTACK,
 		NPC_CLOSE_FALLING_ITEM_FALL,
 		NPC_CLOSE_FISH_HOOK_RISE,
-		NPC_CLOSE_FLAMING_SKULL_ATTACK,
-		NPC_CLOSE_SKELETAL_FISH_ATTACK,
 		NPC_CLOSE_HERMIT_CRAB_ATTACK,
-		NPC_CLOSE_OCTOPUS_ATTACK,
-		NPC_CLOSE_PUFFA_FISH_INFLATE,
 		NPC_CLOSE_PARASITIC_WORM_ATTACK,
 	};
 
@@ -285,18 +264,8 @@ protected:
 		NPC_MOVEMENT_CLAM_RETRACT,
 		NPC_MOVEMENT_PARASITIC_WORM,
 		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
-		NPC_MOVEMENT_SHARK_MAN,
-		NPC_MOVEMENT_BALL_BLOB,
 		NPC_MOVEMENT_RETURNING_HAZARD_GROUND,
 		NPC_MOVEMENT_SPIDER_CRAB_INITJUMP,
-	};
-
-	enum NPC_MOVEMENT_MODIFIER_FUNC
-	{
-		NPC_MOVEMENT_MODIFIER_NONE = 0,
-		NPC_MOVEMENT_MODIFIER_BOB = 1,
-		NPC_MOVEMENT_MODIFIER_FISH_FOLK,
-		NPC_MOVEMENT_MODIFIER_OCTOPUS,
 	};
 
 	enum NPC_TIMER_FUNC
@@ -350,24 +319,11 @@ protected:
 		IRON_DOGFISH_LASER_EYE_2,
 	};
 
-	enum NPC_FLAMING_SKULL_STATE
-	{
-		FLAMING_SKULL_ATTACK = 0,
-		FLAMING_SKULL_RETURN = 1,
-	};
-
 	enum NPC_HERMIT_CRAB_STATE
 	{
 		HERMIT_CRAB_NO_ATTACK = 0,
 		HERMIT_CRAB_PUNCH_ATTACK = 1,
 		HERMIT_CRAB_ROLL_ATTACK,
-	};
-
-	enum NPC_PUFFA_FISH_STATE
-	{
-		PUFFA_FISH_NO_INFLATE = 0,
-		PUFFA_FISH_TURN = 1,
-		PUFFA_FISH_INFLATE,
 	};
 
 	enum NPC_GENERIC_HIT_STATE
@@ -411,7 +367,6 @@ protected:
 		NPC_INIT_FUNC					initFunc;
 		NPC_SENSOR_FUNC					sensorFunc;
 		NPC_MOVEMENT_FUNC				movementFunc;
-		NPC_MOVEMENT_MODIFIER_FUNC		movementModifierFunc;
 		NPC_CLOSE_FUNC					closeFunc;
 		NPC_TIMER_FUNC					timerFunc;
 		bool							canTalk;
@@ -449,56 +404,6 @@ protected:
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 
 	void				reinit();
-
-	// small jellyfish functions
-
-	void				processSmallJellyfishSensor();
-	void				processCloseSmallJellyfishEvade( int _frames );
-
-	// baby octopus functions
-
-	void				processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange );
-	void				processCloseOctopusAttack( int _frames );
-
-	// fish folk functions
-
-	void				processFishFolkMovementModifier( int _frames, s32 distX, s32 distY );
-
-	// ball blob functions
-
-	void				processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY );
-
-	// clam functions
-
-	void				processCloseClamJumpAttack( int _frames );
-	void				processCloseClamSnapAttack( int _frames );
-
-	// ghost pirate functions
-
-	void				processCloseGhostPirateAttack( int _frames );
-
-	// puffa fish functions
-
-	void				processClosePuffaFishInflate( int _frames );
-
-	// shark man functions
-
-	void				processSharkManMovement( int _frames, s32 *moveX, s32 *moveY );
-	void				processCloseSharkManAttack( int _frames );
-
-	// anemone functions
-
-	void				processCloseAnemone1Attack( int _frames );
-	void				processCloseAnemone2Attack( int _frames );
-	void				processCloseAnemone3Attack( int _frames );
-
-	// skeletal fish functions
-
-	void				processCloseSkeletalFishAttack( int _frames );
-
-	// eyeball functions
-
-	void				processCloseEyeballAttack( int _frames );
 
 	// flaming skull functions
 

@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NEYEBALL_H__
+#include "enemy\neyeball.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -28,7 +32,40 @@
 #endif
 
 
-void CNpcEnemy::processCloseEyeballAttack( int _frames )
+void CNpcEyeballEnemy::postInit()
+{
+	CProjectile *projectile;
+	projectile = new ( "eyeball projectile" ) CProjectile;
+	projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+	projectile->setLayerCollision( m_layerCollision );
+
+	addChild( projectile );
+}
+
+bool CNpcEyeballEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 40000 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcEyeballEnemy::processClose( int _frames )
 {
 	if ( Next )
 	{
@@ -41,5 +78,15 @@ void CNpcEnemy::processCloseEyeballAttack( int _frames )
 			projectile->setMovementType( CProjectile::PROJECTILE_USER_SEEK );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
 		}
+	}
+	else
+	{
+		CProjectile *projectile;
+		projectile = new ( "eyeball projectile" ) CProjectile;
+		projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_USER_SEEK, CProjectile::PROJECTILE_INFINITE_LIFE );
+		projectile->setLayerCollision( m_layerCollision );
+		projectile->setState( CProjectile::PROJECTILE_ATTACK );
+
+		addChild( projectile );
 	}
 }

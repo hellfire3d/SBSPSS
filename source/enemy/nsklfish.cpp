@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NSKLFISH_H__
+#include "enemy\nsklfish.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -28,7 +32,7 @@
 #endif
 
 
-void CNpcEnemy::processCloseSkeletalFishAttack( int _frames )
+void CNpcSkeletalFishEnemy::processClose( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;

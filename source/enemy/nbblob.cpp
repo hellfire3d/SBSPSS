@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NBBLOB_H__
+#include "enemy\nbblob.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -23,8 +27,11 @@
 #include <ACTOR_BALLBLOB_ANIM.h>
 #endif
 
-void CNpcEnemy::processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY )
+void CNpcBallBlobEnemy::processMovement( int _frames )
 {
+	s32 moveX = 0, moveY = 0;
+	s32 moveVel = 0;
+	s32 moveDist = 0;
 	s32 waypointXDist;
 	s32 waypointYDist;
 	s32 waypointHeading;
@@ -36,8 +43,10 @@ void CNpcEnemy::processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY )
 	}
 	else if ( m_animNo == ANIM_BALLBLOB_BOUNCE )
 	{
-		*moveX = 0;
-		*moveY = 0;
+		moveX = 0;
+		moveY = 0;
+
+		processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 
 		return;
 	}
@@ -97,21 +106,21 @@ void CNpcEnemy::processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY )
 	s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
 	s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
 
-	*moveX = preShiftX >> 12;
-	if ( !(*moveX) && preShiftX )
+	moveX = preShiftX >> 12;
+	if ( !moveX && preShiftX )
 	{
-		*moveX = preShiftX / abs( preShiftX );
+		moveX = preShiftX / abs( preShiftX );
 	}
 
-	*moveY = preShiftY >> 12;
-	if ( !(*moveY) && preShiftY )
+	moveY = preShiftY >> 12;
+	if ( !moveY && preShiftY )
 	{
-		*moveY = preShiftY / abs( preShiftY );
+		moveY = preShiftY / abs( preShiftY );
 	}
 
 	// deal with vertical
 
-	if ( Pos.vy < 0 || m_layerCollision->Get( ( Pos.vx + *moveX ) >> 4, ( Pos.vy + *moveY ) >> 4 ) )
+	if ( Pos.vy < 0 || m_layerCollision->Get( ( Pos.vx + moveX ) >> 4, ( Pos.vy + moveY ) >> 4 ) )
 	{
 		// reflect heading in vertical
 
@@ -126,16 +135,18 @@ void CNpcEnemy::processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY )
 		preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
 		preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
 
-		*moveX = preShiftX >> 12;
-		if ( !(*moveX) && preShiftX )
+		moveX = preShiftX >> 12;
+		if ( !moveX && preShiftX )
 		{
-			*moveX = preShiftX / abs( preShiftX );
+			moveX = preShiftX / abs( preShiftX );
 		}
 
-		*moveY = preShiftY >> 12;
-		if ( !(*moveY) && preShiftY )
+		moveY = preShiftY >> 12;
+		if ( !moveY && preShiftY )
 		{
-			*moveY = preShiftY / abs( preShiftY );
+			moveY = preShiftY / abs( preShiftY );
 		}
 	}
+
+	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }

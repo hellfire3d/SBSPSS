@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nclam.h
+	nfskull.h
 
 	Author:		CRB
 	Created: 
@@ -11,25 +11,21 @@
 
 ===========================================================================*/
 
-#ifndef	__ENEMY_NCLAM_H__
-#define	__ENEMY_NCLAM_H__
+#ifndef	__ENEMY_NFSKULL_H__
+#define	__ENEMY_NFSKULL_H__
 
-class CNpcClamEnemy : public CNpcEnemy
+class CNpcFlamingSkullEnemy : public CNpcEnemy
 {
+	virtual void		postInit();
 protected:
 	virtual bool		processSensor();
-};
-
-class CNpcJumpingClamEnemy : public CNpcClamEnemy
-{
-protected:
 	virtual void		processClose( int _frames );
-};
 
-class CNpcStaticClamEnemy : public CNpcClamEnemy
-{
-protected:
-	virtual void		processClose( int _frames );
+	enum NPC_FLAMING_SKULL_STATE
+	{
+		FLAMING_SKULL_ATTACK = 0,
+		FLAMING_SKULL_RETURN = 1,
+	};
 };
 
 #endif

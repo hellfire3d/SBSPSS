@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NGPIRATE_H__
+#include "enemy\ngpirate.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -28,7 +32,34 @@
 #endif
 
 
-void CNpcEnemy::processCloseGhostPirateAttack( int _frames )
+bool CNpcGhostPirateEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 10000 )
+				{
+					m_controlFunc = NPC_CONTROL_CLOSE;
+					m_extendDir = EXTEND_UP;
+					m_extension = 0;
+					m_movementTimer = GameState::getOneSecondInFrames() >> 1;
+					m_velocity = 4;
+
+					return( true );
+				}
+				else
+				{
+					return( false );
+				}
+			}
+	}
+}
+
+void CNpcGhostPirateEnemy::processClose( int _frames )
 {
 	s32 velocity;
 

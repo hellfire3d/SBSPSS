@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NFFOLK_H__
+#include "enemy\nffolk.h"
+#endif
+
 #ifndef	__UTILS_HEADER__
 #include "utils\utils.h"
 #endif
@@ -24,7 +28,7 @@
 #endif
 
 
-void CNpcEnemy::processFishFolkMovementModifier( int _frames, s32 distX, s32 distY )
+void CNpcFishFolk::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	Pos.vy += distY;
 
