@@ -60,7 +60,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateRun::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateRun::enter(CPlayerModeBase *_playerMode)
 {
 	int	controlHeld;
 	controlHeld=_playerMode->getPadInputHeld();
@@ -93,7 +93,7 @@ void CPlayerStateRun::enter(CPlayerModeBasic *_playerMode)
   Params:
   Returns:
 ---------------------------------------------------------------------- */
-void CPlayerStateRun::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 {
 	int	controlDown,controlHeld;
 	int switchedState=false;

@@ -47,6 +47,8 @@ typedef enum
 	PM__RUN_SPEEDUP,
 	PM__RUN_REVERSESLOWDOWN,
 	PM__RUN_SLOWDOWN,
+	PM__GRAVITY,
+	PM__TERMINAL_VELOCITY,
 		
 	NUM_PLAYER_METRICS
 }PLAYER_METRIC;
@@ -56,6 +58,18 @@ struct PlayerMetrics
 	s16		m_metric[NUM_PLAYER_METRICS];
 };
 
+enum
+{
+	DEFAULT_PLAYER_JUMP_VELOCITY=4,
+	DEFAULT_PLAYER_MAX_JUMP_FRAMES=12,
+	DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES=30,
+	DEFAULT_PLAYER_MAX_RUN_VELOCITY=6,
+	DEFAULT_PLAYER_RUN_SPEEDUP=2<<2,
+	DEFAULT_PLAYER_RUN_REVERSESLOWDOWN=4<<2,
+	DEFAULT_PLAYER_RUN_SLOWDOWN=3<<2,
+	DEFAULT_PLAYER_PLAYER_GRAVITY=4<<2,
+	DEFAULT_PLAYER_TERMINAL_VELOCITY=8,
+};
 
 
 
@@ -79,7 +93,7 @@ protected:
 };
 
 
-class CPlayerModeBasic : public CPlayerMode
+class CPlayerModeBase : public CPlayerMode
 {
 public:
 	enum
@@ -91,15 +105,14 @@ public:
 	virtual void	think();
 	virtual void	render();
 
-//protected:
-	int							canTeeter()				{return m_currentState==STATE_IDLE;}
-	int							canFallForever()		{return m_currentState==STATE_BUTTFALL;}
+	virtual int					canTeeter()				{return m_currentState==STATE_IDLE;}
+	virtual int					canFallForever()		{return m_currentState==STATE_BUTTFALL;}
 
 	void						thinkVerticalMovement();
 	void						thinkHorizontalMovement();
 
 	
-	const struct PlayerMetrics	*getPlayerMetrics();
+	virtual const struct PlayerMetrics	*getPlayerMetrics();
 	int							setState(int _state);
 //	virtual void			setMode(class CPlayer *_player,int _mode);
 	int							getFacing();
@@ -123,20 +136,6 @@ public:
 	void						fall();
 
 //	virtual void			respawn(class CPlayer *_player);
-protected:
-	enum
-	{
-		DEFAULT_PLAYER_JUMP_VELOCITY=4,
-		DEFAULT_PLAYER_MAX_JUMP_FRAMES=12,
-		DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES=30,
-		DEFAULT_PLAYER_MAX_RUN_VELOCITY=6,			//8
-		DEFAULT_PLAYER_RUN_SPEEDUP=2<<2,			//4
-		DEFAULT_PLAYER_RUN_REVERSESLOWDOWN=4<<2,	//3
-		DEFAULT_PLAYER_RUN_SLOWDOWN=3<<2,			//2
-		PLAYER_GRAVITY=4<<2,
-		PLAYER_TERMINAL_VELOCITY=8,
-	};
-
 
 
 private:
@@ -146,8 +145,6 @@ private:
 	static class CPlayerState	*s_stateTable[];
 	class CPlayerState			*m_currentStateClass;
 	PLAYER_STATE				m_currentState;
-
-	static PlayerMetrics		s_playerMetrics;
 };
 
 

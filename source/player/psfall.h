@@ -35,8 +35,8 @@
 class CPlayerStateFall : public CPlayerState
 {
 public:
-	void			enter(class CPlayerModeBasic *_playerMode);
-	void			think(class CPlayerModeBasic *_playerMode);
+	void			enter(class CPlayerModeBase *_playerMode);
+	void			think(class CPlayerModeBase *_playerMode);
 
 };
 
@@ -44,8 +44,8 @@ public:
 class CPlayerStateFallFar : public CPlayerStateFall
 {
 private:
-	void			enter(class CPlayerModeBasic *_playerMode);
-	void			think(class CPlayerModeBasic *_playerMode);
+	void			enter(class CPlayerModeBase *_playerMode);
+	void			think(class CPlayerModeBase *_playerMode);
 
 };
 

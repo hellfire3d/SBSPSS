@@ -820,6 +820,14 @@ SOURCE=..\..\..\source\player\pstates.h
 # End Group
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmbloon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmbloon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmfly.cpp
 # End Source File
 # Begin Source File

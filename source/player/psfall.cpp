@@ -60,7 +60,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateFall::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
 }
@@ -72,7 +72,7 @@ void CPlayerStateFall::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateFall::think(CPlayerModeBase *_playerMode)
 {
 	const PlayerMetrics	*metrics;
 	int					controlHeld,controlDown;
@@ -109,7 +109,7 @@ void CPlayerStateFall::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFallFar::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateFallFar::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_FALL);
 }
@@ -121,7 +121,7 @@ void CPlayerStateFallFar::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFallFar::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateFallFar::think(CPlayerModeBase *_playerMode)
 {
 	int		controlHeld;
 	DVECTOR	move;

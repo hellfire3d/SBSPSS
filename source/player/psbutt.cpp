@@ -65,7 +65,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounce::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounce::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->zeroMoveVelocity();	
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCESTART);
@@ -78,7 +78,7 @@ void CPlayerStateButtBounce::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounce::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounce::think(CPlayerModeBase *_playerMode)
 {
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
@@ -93,7 +93,7 @@ void CPlayerStateButtBounce::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceFall::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounceFall::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);
 }
@@ -105,7 +105,7 @@ void CPlayerStateButtBounceFall::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceFall::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounceFall::think(CPlayerModeBase *_playerMode)
 {
 	_playerMode->fall();
 }
@@ -117,7 +117,7 @@ void CPlayerStateButtBounceFall::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceLand::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 {
 //	DVECTOR	pos;
 //
@@ -132,7 +132,7 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateButtBounceLand::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateButtBounceLand::think(CPlayerModeBase *_playerMode)
 {
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{

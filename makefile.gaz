@@ -157,6 +157,7 @@ player_src :=		demoplay \
 					panimsfx \
 					player \
 					pmodes \
+					pmbloon \
 					pmfly \
 					psbutt \
 					psduck \

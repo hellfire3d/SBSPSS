@@ -61,7 +61,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateBaseIdle::thinkControl(CPlayerModeBasic *_playerMode)
+void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 {
 	int	controlDown,controlHeld;
 	controlDown=_playerMode->getPadInputDown();
@@ -98,7 +98,7 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateTeeterIdle::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateTeeterIdle::enter(CPlayerModeBase *_playerMode)
 {
 	int	edgeType,dir;
 	int	anim;
@@ -124,7 +124,7 @@ void CPlayerStateTeeterIdle::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateTeeterIdle::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateTeeterIdle::think(CPlayerModeBase *_playerMode)
 {
 	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 	thinkControl(_playerMode);
@@ -137,7 +137,7 @@ void CPlayerStateTeeterIdle::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateIdle::enter(CPlayerModeBase *_playerMode)
 {
 	m_idleTime=0;
 	m_currentIdleAnim=0;
@@ -153,7 +153,7 @@ void CPlayerStateIdle::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateIdle::think(CPlayerModeBase *_playerMode)
 {
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
@@ -169,7 +169,7 @@ void CPlayerStateIdle::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBasic *_playerMode)
+void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 {
 	IdleAnims	*anims;
 	int				finished=false;

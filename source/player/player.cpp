@@ -37,6 +37,10 @@
 #include "player\pmfly.h"
 #endif
 
+#ifndef	__PLAYER_PMBLOON_H__
+#include "player\pmbloon.h"
+#endif
+
 // to be removed
 #include "gfx\tpage.h"
 
@@ -127,7 +131,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 {
 	"BASICUNARMED",
 //	"FULLUNARMED",
-//	"BALLOON",
+	"BALLOON",
 //	"NET",
 //	"CORALBLOWER",
 	"FLY",
@@ -158,13 +162,15 @@ int CAMERA_SCROLLSPEED=60;				// Speed of the scroll ( 60=1 tile scrolled every 
 
 
 
-CPlayerModeBasic	PLAYERMODE;
+CPlayerModeBase		PLAYERMODE;
+CPlayerModeBalloon	PLAYERMODEBALLOON;
 CPlayerModeFly		PLAYERMODEFLY;
 
 CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 {
-	&PLAYERMODE,		// PLAYER_MODE_BASICUNARMED
-	&PLAYERMODEFLY,		// PLAYER_MODE_FLY
+	&PLAYERMODE,				// PLAYER_MODE_BASICUNARMED
+	&PLAYERMODEBALLOON,			// PLAYER_MODE_BALLOON
+	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
 
 

@@ -32,8 +32,8 @@
 class CPlayerState
 {
 public:
-	virtual void				enter(class CPlayerModeBasic *_playerMode)		{;}
-	virtual void				think(class CPlayerModeBasic *_playerMode)		{;}
+	virtual void				enter(class CPlayerModeBase *_playerMode)		{;}
+	virtual void				think(class CPlayerModeBase *_playerMode)		{;}
 };
 
 

@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerModeFly : public CPlayerModeBasic
+class CPlayerModeFly : public CPlayerModeBase
 {
 public:
 	virtual void	enter();

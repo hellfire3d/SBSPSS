@@ -94,7 +94,7 @@ void	CBalloonPickup::init()
   ---------------------------------------------------------------------- */
 void	CBalloonPickup::collect(class CPlayer *_player)
 {
-//	_player->setMode(PLAYER_MODE_BALLOON);
+	_player->setMode(PLAYER_MODE_BALLOON);
 	CBaseRespawningPickup::collect(_player);
 }
 
@@ -105,14 +105,18 @@ void	CBalloonPickup::collect(class CPlayer *_player)
 	Returns:
   ---------------------------------------------------------------------- */
 int balloon_height=30;
-int balloon_r=180;
-int balloon_g=180;
-int balloon_b=180;
+int balloon_r1=251;
+int balloon_g1=207;
+int balloon_b1=167;
+int balloon_r2=147;
+int balloon_g2=95;
+int balloon_b2=75;
 int balloon_speed=25;
 int balloon_scale1=5;
 int balloon_scale2=2;
 int balloon_phase=1024;
 int balloon_vissize=40;
+int	balloon_stringx=-3;
 int		CBalloonPickup::getVisibilityRadius()
 {
 	return balloon_vissize;
@@ -163,9 +167,11 @@ void	CBalloonPickup::renderPickup(DVECTOR *_pos)
 	sprites->printFT4(fh,x+xo1,y,0,0,PICKUPS_OT_POS);
 setCollisionCentreOffset(xo1,0);
 
-	x=_pos->vx;
+	x=_pos->vx+balloon_stringx;
 	y=_pos->vy+(fh->H/2);
-	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r,balloon_g,balloon_b,PICKUPS_OT_POS);
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r1,balloon_g1,balloon_b1,PICKUPS_OT_POS);
+	x++;
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r2,balloon_g2,balloon_b2,PICKUPS_OT_POS);
 }
 
 /*===========================================================================

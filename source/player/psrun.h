@@ -35,8 +35,8 @@
 class CPlayerStateRun : public CPlayerState
 {
 public:
-	void			enter(class CPlayerModeBasic *_playerMode);
-	void			think(class CPlayerModeBasic *_playerMode);
+	void			enter(class CPlayerModeBase *_playerMode);
+	void			think(class CPlayerModeBase *_playerMode);
 
 private:
 	int				m_numberOfTimeAnimHasLooped;

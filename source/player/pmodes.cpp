@@ -99,7 +99,7 @@ static CPlayerStateButtBounceLand	stateButtBounceLand;
 static CPlayerStateDead				stateDead;
 */
 
-CPlayerState	*CPlayerModeBasic::s_stateTable[]=
+CPlayerState	*CPlayerModeBase::s_stateTable[]=
 {
 	&stateUnarmedIdle,								// STATE_IDLE
 	&stateTeeterIdle,								// STATE_IDLETEETER
@@ -115,15 +115,17 @@ CPlayerState	*CPlayerModeBasic::s_stateTable[]=
 	&stateGetUp,									// STATE_GETUP
 };
 
-PlayerMetrics	CPlayerModeBasic::s_playerMetrics=
+static PlayerMetrics	s_playerMetrics=
 {	{
 	DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
-	DEFAULT_PLAYER_MAX_JUMP_FRAMES,		// PM__MAX_JUMP_FRAMES
+	DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
 	DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
 	DEFAULT_PLAYER_MAX_RUN_VELOCITY,		// PM__MAX_RUN_VELOCITY
-	DEFAULT_PLAYER_RUN_SPEEDUP,			// PM__RUN_SPEEDUP
-	DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,	// PM__RUN_REVERSESLOWDOWN
+	DEFAULT_PLAYER_RUN_SPEEDUP,				// PM__RUN_SPEEDUP
+	DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
 	DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
+	DEFAULT_PLAYER_PLAYER_GRAVITY,			// PM__GRAVITY
+	DEFAULT_PLAYER_TERMINAL_VELOCITY,		// PM__TERMINAL_VELOCITY
 }	};
 
 
@@ -145,8 +147,8 @@ PlayerMetrics	CPlayerModeBasic::s_playerMetrics=
   ---------------------------------------------------------------------- */
 int		CPlayerMode::getPadInputHeld()					{return m_player->getPadInputHeld();}
 int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
-DVECTOR	CPlayerMode::getPlayerPos()							{return m_player->getPlayerPos();}
-void	CPlayerMode::setPlayerPos(DVECTOR *_pos)			{m_player->setPlayerPos(_pos);}
+DVECTOR	CPlayerMode::getPlayerPos()						{return m_player->getPlayerPos();}
+void	CPlayerMode::setPlayerPos(DVECTOR *_pos)		{m_player->setPlayerPos(_pos);}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -154,7 +156,7 @@ void	CPlayerMode::setPlayerPos(DVECTOR *_pos)			{m_player->setPlayerPos(_pos);}
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::enter()
+void	CPlayerModeBase::enter()
 {
 	m_fallFrames=0;
 	setState(STATE_IDLE);
@@ -167,7 +169,7 @@ void	CPlayerModeBasic::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::think()
+void	CPlayerModeBase::think()
 {
 	s_stateTable[m_currentState]->think(this);
 	thinkVerticalMovement();
@@ -187,7 +189,7 @@ void	CPlayerModeBasic::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::render()
+void	CPlayerModeBase::render()
 {
 }
 
@@ -197,7 +199,7 @@ void	CPlayerModeBasic::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::thinkVerticalMovement()
+void	CPlayerModeBase::thinkVerticalMovement()
 {
 	CLayerCollision	*collision;
 	DVECTOR			pos;
@@ -221,7 +223,7 @@ void	CPlayerModeBasic::thinkVerticalMovement()
 		if(m_moveVelocity.vy>0)
 		{
 			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=collision->getHeightFromGround(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT),PLAYER_TERMINAL_VELOCITY+1);
+			colHeight=collision->getHeightFromGround(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT),getPlayerMetrics()->m_metric[PM__TERMINAL_VELOCITY]+1);
 
 			if(colHeight<=0)
 			{
@@ -295,7 +297,7 @@ void	CPlayerModeBasic::thinkVerticalMovement()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::thinkHorizontalMovement()
+void	CPlayerModeBase::thinkHorizontalMovement()
 {
 	if(m_moveVelocity.vx)
 	{
@@ -404,7 +406,7 @@ void	CPlayerModeBasic::thinkHorizontalMovement()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-const struct PlayerMetrics	*CPlayerModeBasic::getPlayerMetrics()
+const struct PlayerMetrics	*CPlayerModeBase::getPlayerMetrics()
 {
 	return &s_playerMetrics;
 }
@@ -415,7 +417,7 @@ const struct PlayerMetrics	*CPlayerModeBasic::getPlayerMetrics()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeBasic::setState(int _state)
+int		CPlayerModeBase::setState(int _state)
 {
 	CPlayerState	*nextState;
 	int				ret=false;
@@ -437,10 +439,10 @@ int		CPlayerModeBasic::setState(int _state)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeBasic::getFacing()								{return m_player->getFacing();}
-void	CPlayerModeBasic::setFacing(int _facing)						{m_player->setFacing(_facing);}
-void	CPlayerModeBasic::setAnimNo(int _animNo)						{m_player->setAnimNo(_animNo);}
-void	CPlayerModeBasic::setAnimFrame(int _animFrame)				{m_player->setAnimFrame(_animFrame);}
+int		CPlayerModeBase::getFacing()								{return m_player->getFacing();}
+void	CPlayerModeBase::setFacing(int _facing)						{m_player->setFacing(_facing);}
+void	CPlayerModeBase::setAnimNo(int _animNo)						{m_player->setAnimNo(_animNo);}
+void	CPlayerModeBase::setAnimFrame(int _animFrame)				{m_player->setAnimFrame(_animFrame);}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -448,7 +450,7 @@ void	CPlayerModeBasic::setAnimFrame(int _animFrame)				{m_player->setAnimFrame(_
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeBasic::advanceAnimFrameAndCheckForEndOfAnim()
+int		CPlayerModeBase::advanceAnimFrameAndCheckForEndOfAnim()
 {
 	int	animFrame,frameCount;
 	int	looped;
@@ -471,9 +473,9 @@ int		CPlayerModeBasic::advanceAnimFrameAndCheckForEndOfAnim()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CPlayerModeBasic::getMoveVelocity()								{return m_moveVelocity;}
-void	CPlayerModeBasic::zeroMoveVelocity()							{m_moveVelocity.vx=m_moveVelocity.vy=0;}
-void	CPlayerModeBasic::setMoveVelocity(DVECTOR *_moveVel)			{m_moveVelocity=*_moveVel;}
+DVECTOR	CPlayerModeBase::getMoveVelocity()							{return m_moveVelocity;}
+void	CPlayerModeBase::zeroMoveVelocity()							{m_moveVelocity.vx=m_moveVelocity.vy=0;}
+void	CPlayerModeBase::setMoveVelocity(DVECTOR *_moveVel)			{m_moveVelocity=*_moveVel;}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -485,7 +487,7 @@ void	CPlayerModeBasic::setMoveVelocity(DVECTOR *_moveVel)			{m_moveVelocity=*_mo
   ---------------------------------------------------------------------- */
 int csize=5;
 int cheight=15;
-int CPlayerModeBasic::isOnEdge()
+int CPlayerModeBase::isOnEdge()
 {
 	CLayerCollision	*collision;
 	DVECTOR			pos;
@@ -511,14 +513,14 @@ int CPlayerModeBasic::isOnEdge()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayerModeBasic::canMoveLeft()
+int CPlayerModeBase::canMoveLeft()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
 	return m_player->getLayerCollision()->getHeightFromGround(pos.vx-1,pos.vy,16)>-8?true:false;
 }
 
-int CPlayerModeBasic::canMoveRight()
+int CPlayerModeBase::canMoveRight()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
@@ -531,7 +533,7 @@ int CPlayerModeBasic::canMoveRight()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBasic::moveLeft()
+void	CPlayerModeBase::moveLeft()
 {
 	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
@@ -562,7 +564,7 @@ void	CPlayerModeBasic::moveLeft()
 	*/
 }
 
-void	CPlayerModeBasic::moveRight()
+void	CPlayerModeBase::moveRight()
 {
 	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
@@ -592,7 +594,7 @@ void	CPlayerModeBasic::moveRight()
 	}
 	*/
 }
-int		CPlayerModeBasic::slowdown()
+int		CPlayerModeBase::slowdown()
 {
 	const PlayerMetrics	*metrics;
 	int					ret=false;
@@ -618,18 +620,20 @@ int		CPlayerModeBasic::slowdown()
 	}
 	return ret;
 }
-void	CPlayerModeBasic::jump()
+void	CPlayerModeBase::jump()
+{
+	m_moveVelocity.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+}
+void	CPlayerModeBase::fall()
 {
 	const PlayerMetrics	*metrics;
 	metrics=getPlayerMetrics();
-	m_moveVelocity.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
-}
-void	CPlayerModeBasic::fall()
-{
-	m_moveVelocity.vy+=PLAYER_GRAVITY;
-	if(m_moveVelocity.vy>=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT)
+
+
+	m_moveVelocity.vy+=getPlayerMetrics()->m_metric[PM__GRAVITY];
+	if(m_moveVelocity.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
 	{
-		m_moveVelocity.vy=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT;
+		m_moveVelocity.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
 		if(!canFallForever()&&m_currentState!=STATE_FALLFAR)
 		{
 			const PlayerMetrics	*metrics;

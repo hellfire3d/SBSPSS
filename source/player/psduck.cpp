@@ -61,7 +61,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateDuck::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateDuck::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
 }
@@ -73,7 +73,7 @@ void CPlayerStateDuck::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateDuck::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateDuck::think(CPlayerModeBase *_playerMode)
 {
 	_playerMode->slowdown();
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
@@ -89,7 +89,7 @@ void CPlayerStateDuck::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateSoakUp::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->zeroMoveVelocity();	
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETUP);
@@ -102,7 +102,7 @@ void CPlayerStateSoakUp::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateSoakUp::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
 {
 	int	controlHeld;
 
@@ -120,7 +120,7 @@ void CPlayerStateSoakUp::think(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateGetUp::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateGetUp::enter(CPlayerModeBase *_playerMode)
 {
 	  _playerMode->setAnimNo(ANIM_SPONGEBOB_GETUP);
 }
@@ -132,7 +132,7 @@ void CPlayerStateGetUp::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateGetUp::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateGetUp::think(CPlayerModeBase *_playerMode)
 {
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{

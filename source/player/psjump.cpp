@@ -65,7 +65,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateJump::enter(CPlayerModeBasic *_playerMode)
+void CPlayerStateJump::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
 	m_jumpFrames=0;
@@ -82,7 +82,7 @@ void CPlayerStateJump::enter(CPlayerModeBasic *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateJump::think(CPlayerModeBasic *_playerMode)
+void CPlayerStateJump::think(CPlayerModeBase *_playerMode)
 {
 	const PlayerMetrics	*metrics;
 	int					controlHeld,controlDown;

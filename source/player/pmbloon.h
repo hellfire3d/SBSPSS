@@ -34,8 +34,11 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerModeBalloon : public CPlayerModeBasic
+class CPlayerModeBalloon : public CPlayerModeBase
 {
+public:
+	virtual int							canFallForever()		{return true;}
+	virtual const struct PlayerMetrics	*getPlayerMetrics();
 };
 
 
