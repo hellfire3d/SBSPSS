@@ -174,7 +174,7 @@ bool CSaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 
 
 	// Start write to memcard
-	if(!MemCard::WriteFile(0,_fileNum,(u8*)_filename,(void*)m_tempBuffer,m_bufferSize,&callback))
+	if(!MemCard::WriteFile(0,_fileNum,(u8*)NULL,(void*)m_tempBuffer,m_bufferSize,&callback))
 	{
 		MEMCARD_DBGMSG("write error");
 		freeBuffer();

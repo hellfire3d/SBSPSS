@@ -32,7 +32,7 @@
 	Tyepdefs && Defines
 	------------------- */
 
-#define	SAVENAMEHEADER		"SBSP: "
+#define	SAVENAMEHEADER		"SpongeBob"
 
 // for prlsr - use slot 1 only
 #define USE_SLOT_ONE_ONLY
@@ -511,7 +511,8 @@ void MemCard::FillHeaderDetails( unsigned char *HeaderBase, int FileLength, char
 		// Damn fool!
 		return;
 	}
-	sprintf(realFilename,"%s%s",SAVENAMEHEADER,Filename);
+//	sprintf(realFilename,"%s%s",SAVENAMEHEADER,Filename);
+	sprintf(realFilename,"%s",SAVENAMEHEADER);		// (pkg) SBSP modification
 
 	// Fill in the details
 	HeaderBase[ 3 ] = (char)BlockCount;
@@ -1341,16 +1342,18 @@ int MemCard::TestCheckSum(unsigned char *_result,unsigned char *_data,u32 _size)
   ---------------------------------------------------------------------- */
 void MemCard::CreateFName(char *fname)
 {
+	int	i;
+
 	sprintf( s_fnameBase, "%s", MEMCARD_BASE_FILENAME);
 
 	// Finally, add the users savename
-	strcat( s_fnameBase, "--------\0" );
-	for(int i=0;i<strlen(s_userFileName);i++)
+	for(i=0;i<strlen(s_userFileName);i++)
 	{
 		s_fnameBase[12+i]=s_userFileName[i];
 	}
+	s_fnameBase[12+i]='\0';
 
-	
+
 	MEMCARD_DBGMSG("MemCard filename set to '%s'", s_fnameBase );
 }
 
