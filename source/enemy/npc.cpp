@@ -483,7 +483,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_PENDULUM;
+	m_type = NPC_FISH_HOOK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;

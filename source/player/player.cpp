@@ -124,7 +124,9 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+//DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+DVECTOR ofs={0,0}; //temporary
+
 int psize=0;
 int newmode=-1;
 void	CPlayer::think(int _frames)
