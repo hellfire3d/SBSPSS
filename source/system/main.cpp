@@ -89,8 +89,6 @@ s_paulScene.init();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int thing=50;
-int	bug=0;
 static int	s_time = 0;
 void dumpDebugMem();
 
@@ -121,11 +119,6 @@ void	MainLoop()
 		PadUpdate();
 
 		DbgPollHost();
-
-#ifdef __USER_paul__
-		bug=100/thing;
-		thing--;
-#endif
 
 #if defined(__VERSION_DEBUG__)
 
