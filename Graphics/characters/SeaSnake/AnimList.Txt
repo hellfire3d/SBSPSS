@@ -1,3 +1,4 @@
-bodystatic
-headstatic
-headstaticmouthshut
+body1static
+body2static
+body3static
+headsnap

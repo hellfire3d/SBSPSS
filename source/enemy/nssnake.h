@@ -55,6 +55,7 @@ public:
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	//virtual	CRECT const		*getThinkBBox();
 protected:
+	virtual s32			getFrameShift( int _frames );
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
@@ -85,7 +86,7 @@ protected:
 	CNpcPositionHistory				m_positionHistoryArray[NPC_SEA_SNAKE_SPACING * NPC_SEA_SNAKE_LENGTH];
 	s32								m_collTimer;
 	s32								m_snapTimer;
-	s32								m_openTimer;
+	//s32								m_openTimer;
 	bool							m_meterOn;
 };
 

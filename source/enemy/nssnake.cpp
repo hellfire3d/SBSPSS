@@ -230,31 +230,13 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 	{
 		m_snapTimer -= _frames;
 
-		if ( m_snapTimer <= 0 )
+		if ( m_snapTimer > 0 )
 		{
-			m_animNo = ANIM_SEASNAKE_HEADSTATICMOUTHSHUT;
-			m_animPlaying = true;
-			m_frame = 0;
-		}
-		else
-		{
-			m_openTimer -= _frames;
-
-			if ( m_openTimer <= 0 )
+			if ( !m_animPlaying )
 			{
-				if ( m_animNo == ANIM_SEASNAKE_HEADSTATIC )
-				{
-					m_animNo = ANIM_SEASNAKE_HEADSTATICMOUTHSHUT;
-				}
-				else
-				{
-					m_animNo = ANIM_SEASNAKE_HEADSTATIC;
-				}
-
+				m_animNo = ANIM_SEASNAKE_HEADSNAP;
 				m_animPlaying = true;
 				m_frame = 0;
-
-				m_openTimer = GameState::getOneSecondInFrames() >> 2;
 			}
 		}
 	}
@@ -494,7 +476,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 	m_sensorFunc = NPC_SENSOR_NONE;
 
 	m_snapTimer = m_movementTimer;
-	m_openTimer = GameState::getOneSecondInFrames() >> 2;
+	//m_openTimer = GameState::getOneSecondInFrames() >> 2;
 }
 
 
@@ -609,7 +591,7 @@ void CNpcSeaSnakeSegment::render()
 
 	if ( renderFlag )
 	{
-		SprFrame = m_actorGfx->Render(renderPos,ANIM_SEASNAKE_BODYSTATIC,0,0);
+		SprFrame = m_actorGfx->Render(renderPos,ANIM_SEASNAKE_BODY1STATIC,0,0);
 		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
@@ -738,4 +720,11 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 
 void CNpcSeaSnakeEnemy::processUserCollision( CThing *thisThing )
 {
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcSeaSnakeEnemy::getFrameShift( int _frames )
+{
+	return( ( _frames << 8 ) >> 3 );
 }
