@@ -88,7 +88,7 @@ int			W;
 
 				if ( SoundId == NOT_PLAYING )
 				{
-					SoundId = (int) CSoundMediator::playSfx(CSoundMediator::SFX_WORLD_OBJECT__GEYSER,true);
+					SoundId = (int) CSoundMediator::playSfx(CSoundMediator::SFX_OIL_GEYSER,true);
 				}
 			}
 			else
