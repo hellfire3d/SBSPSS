@@ -149,6 +149,12 @@ void CFrontEndMainTitles::init()
 										50,20,200,20,
 										STR__FRONTEND__OPTIONS,
 										&m_gotoOptionsFlag,true);
+#if defined(__TERRITORY_EUR__)
+	CGUIFactory::createValueButtonFrame(m_mainMenu,
+										50,40,200,20,
+										STR__FRONTEND__PLAY_ADVERT,
+										&m_gotoAdvertFlag,true);
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -184,6 +190,9 @@ void CFrontEndMainTitles::select()
 
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
+#if defined(__TERRITORY_EUR__)
+	m_gotoAdvertFlag=false;
+#endif
 
 	m_demoTimeout=0;
 
@@ -303,6 +312,14 @@ void CFrontEndMainTitles::think(int _frames)
 				m_mode=MODE__GOTO_OPTIONS;
 				m_mainMenu->unselect();
 			}
+#if defined(__TERRITORY_EUR__)
+			else if(m_gotoAdvertFlag)
+			{
+				CFader::setFadingOut();
+				m_mode=MODE__GOTO_ADVERT;
+				m_mainMenu->unselect();
+			}
+#endif
 			break;
 
 		default:
@@ -344,7 +361,7 @@ void CFrontEndMainTitles::think(int _frames)
   ---------------------------------------------------------------------- */
 int CFrontEndMainTitles::isReadyToExit()
 {
-	return !CFader::isFading()&&(m_mode==MODE__GOTO_CHOOSE_SLOT||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO);
+	return !CFader::isFading()&&(m_mode==MODE__GOTO_CHOOSE_SLOT||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_ADVERT||m_mode==MODE__GOTO_DEMO);
 }
 
 
@@ -372,6 +389,10 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 
 		case MODE__GOTO_OPTIONS:
 			ret=CFrontEndScene::MODE__GAME_OPTIONS;
+			break;
+
+		case MODE__GOTO_ADVERT:
+			ret=CFrontEndScene::MODE__FMV_ADVERT;
 			break;
 
 		case MODE__GOTO_DEMO:

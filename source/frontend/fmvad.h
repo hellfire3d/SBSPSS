@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CFrontEndFMVIntro : public CFrontEndMode
+class CFrontEndFMVAdvert : public CFrontEndMode
 {
 public:
 	void	select();

@@ -76,6 +76,7 @@ private:
 
 		MODE__GOTO_CHOOSE_SLOT,
 		MODE__GOTO_OPTIONS,
+		MODE__GOTO_ADVERT,
 		MODE__GOTO_DEMO,
 	};
 
@@ -100,6 +101,9 @@ private:
 
 	int						m_startGameFlag;
 	int						m_gotoOptionsFlag;
+#if defined(__TERRITORY_EUR__)
+	int						m_gotoAdvertFlag;
+#endif
 
 	int						m_demoTimeout;
 	int						m_musicStarted;

@@ -545,6 +545,14 @@ SOURCE=..\..\..\source\frontend\demomode.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\fmvad.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\fmvad.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\fmvintro.cpp
 # End Source File
 # Begin Source File

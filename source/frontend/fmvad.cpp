@@ -16,7 +16,7 @@
 	Includes
 	-------- */
 
-#include "frontend\fmvintro.h"
+#include "frontend\fmvad.h"
 
 #ifndef __FMV_HEADER__
 #include "fmv\fmv.h"
@@ -80,10 +80,14 @@ static bool fmvPerFrameFunc()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndFMVIntro::select()
+void CFrontEndFMVAdvert::select()
 {
 	StopLoad();
+#if defined(__TERRITORY_EUR__)
 	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
+#else
+	ASSERT(0);
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -92,7 +96,7 @@ void CFrontEndFMVIntro::select()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CFrontEndFMVIntro::isReadyToExit()
+int CFrontEndFMVAdvert::isReadyToExit()
 {
 	return true;
 }
@@ -103,7 +107,7 @@ int CFrontEndFMVIntro::isReadyToExit()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-CFrontEndScene::FrontEndMode CFrontEndFMVIntro::getNextMode()
+CFrontEndScene::FrontEndMode CFrontEndFMVAdvert::getNextMode()
 {
 	return CFrontEndScene::MODE__MAIN_TITLES;
 }

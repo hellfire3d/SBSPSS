@@ -30,6 +30,10 @@
 #include "frontend\maintitl.h"
 #endif
 
+#ifndef	__FRONTEND_FMVAD_H__
+#include "frontend\fmvad.h"
+#endif
+
 #ifndef	__FRONTEND_FMVTHQ_H__
 #include "frontend\fmvthq.h"
 #endif
@@ -110,6 +114,7 @@
 	---- */
 
 static CFrontEndNickLogo		s_nickLogo;
+static CFrontEndFMVAdvert		s_frontEndFMVAdvert;
 static CFrontEndFMVTHQ			s_frontEndFMVTHQ;
 static CFrontEndFMVIntro		s_frontEndFMVIntro;
 static CFrontEndMainTitles		s_frontEndModeMainTitles;
@@ -120,6 +125,7 @@ static CFrontEndDemoMode		s_frontEndDemoMode;
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
 	&s_nickLogo,					// MODE__NICK_LOGO
+	&s_frontEndFMVAdvert,			// MODE__FMV_ADVERT
 	&s_frontEndFMVTHQ,				// MODE__FMV_THQ
 	&s_frontEndFMVIntro,			// MODE__FMV_INTRO
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES

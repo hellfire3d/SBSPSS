@@ -192,6 +192,7 @@ fileio_src :=		fileio \
 
 frontend_src :=		demomode \
 					frontend \
+					fmvad \
 					fmvthq \
 					fmvintro \
 					maintitl \
