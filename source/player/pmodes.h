@@ -49,6 +49,7 @@ typedef enum
 	PM__RUN_SLOWDOWN,
 	PM__GRAVITY,
 	PM__TERMINAL_VELOCITY,
+	PM__BUTT_FALL_VELOCITY,
 		
 	NUM_PLAYER_METRICS
 }PLAYER_METRIC;
@@ -69,6 +70,7 @@ enum
 	DEFAULT_PLAYER_RUN_SLOWDOWN=3<<2,
 	DEFAULT_PLAYER_PLAYER_GRAVITY=4<<2,
 	DEFAULT_PLAYER_TERMINAL_VELOCITY=8,
+	DEFAULT_BUTT_FALL_VELOCITY=14,
 };
 
 
@@ -146,6 +148,7 @@ public:
 	int							slowdown();
 	void						jump();
 	void						fall();
+	void						buttFall();
 
 
 private:

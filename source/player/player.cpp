@@ -181,6 +181,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 
 int s_screenPos;
 DVECTOR	m_cameraScrollPos={0,600};
+int		m_cameraLookOffset=0;
 
 int SCREEN_GEOM_CENTRE_X=248;
 int SCREEN_GEOM_CENTRE_Y=165;
@@ -289,6 +290,13 @@ void	CPlayer::shutdown()
 	CPlayerThing::shutdown();
 }
 
+
+int looktimeout=80;
+int	lookmaxoffsetup=3*256;
+int	lookmaxoffsetdown=6*256;
+int	lookspeed=40;
+int lookreturnspeed=80;
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -348,15 +356,76 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
 		// Look around
 		int	pad=getPadInputHeld();
+static int padLookAroundTimer=0;
+		if(pad&PI_UP)
+		{
+			if(padLookAroundTimer>0)
+			{
+				padLookAroundTimer=0;
+			}
+			else if(padLookAroundTimer>-looktimeout)
+			{
+				padLookAroundTimer--;
+			}
+			else if(m_cameraLookOffset>-lookmaxoffsetup)
+			{
+				m_cameraLookOffset-=lookspeed;
+				if(m_cameraLookOffset<-lookmaxoffsetup)
+				{
+					m_cameraLookOffset=-lookmaxoffsetup;
+				}
+			}
+		}
+		else if(pad&PI_DOWN)
+		{
+			if(padLookAroundTimer<0)
+			{
+				padLookAroundTimer=0;
+			}
+			else if(padLookAroundTimer<looktimeout)
+			{
+				padLookAroundTimer++;
+			}
+			else if(m_cameraLookOffset<lookmaxoffsetdown)
+			{
+				m_cameraLookOffset+=lookspeed;
+				if(m_cameraLookOffset>lookmaxoffsetdown)
+				{
+					m_cameraLookOffset=lookmaxoffsetdown;
+				}
+			}
+		}
+		else
+		{
+			padLookAroundTimer=0;
+		}
+
+		// Return to centre
+		if(padLookAroundTimer>=0&&m_cameraLookOffset<0)
+		{
+			m_cameraLookOffset+=lookreturnspeed;
+			if(m_cameraLookOffset>0)
+			{
+				m_cameraLookOffset=0;
+			}
+		}
+		if(padLookAroundTimer<=0&&m_cameraLookOffset>0)
+		{
+			m_cameraLookOffset-=lookreturnspeed;
+			if(m_cameraLookOffset<0)
+			{
+				m_cameraLookOffset=0;
+			}
+		}
 	}
 
 
 	
 	// Move the camera offset
 	m_playerScreenGeomPos.vx=SCREEN_GEOM_PLAYER_OFS_X+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
-	m_playerScreenGeomPos.vy=SCREEN_GEOM_PLAYER_OFS_Y+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
+	m_playerScreenGeomPos.vy=SCREEN_GEOM_PLAYER_OFS_Y+((MAP2D_BLOCKSTEPSIZE*(m_cameraScrollPos.vy-m_cameraLookOffset))>>8);
 	m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-	m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
+	m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy+m_cameraLookOffset))>>8);
 
 
 	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
@@ -697,6 +766,8 @@ void CPlayer::respawn()
 	m_bubbleAmmo=0;
 	m_jellyAmmo=0;
 
+	m_cameraLookOffset=0;
+	
 	clearPlatform();
 }
 

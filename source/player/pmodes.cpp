@@ -114,6 +114,7 @@ static	PlayerMetrics	s_playerMetrics=
 	DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
 	DEFAULT_PLAYER_PLAYER_GRAVITY,			// PM__GRAVITY
 	DEFAULT_PLAYER_TERMINAL_VELOCITY,		// PM__TERMINAL_VELOCITY
+	DEFAULT_BUTT_FALL_VELOCITY,				// PM__BUTT_FALL_VELOCITY
 }	};
 
 
@@ -665,6 +666,17 @@ void	CPlayerModeBase::fall()
 		}
 	}
 }
+int buttfallspeed=14;
+void	CPlayerModeBase::buttFall()
+{
+	const PlayerMetrics	*metrics;
+	metrics=getPlayerMetrics();
+
+
+//	m_moveVelocity.vy=metrics->m_metric[PM__BUTT_FALL_VELOCITY]<<(VELOCITY_SHIFT+1);
+	m_moveVelocity.vy=metrics->m_metric[buttfallspeed]<<VELOCITY_SHIFT;
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
