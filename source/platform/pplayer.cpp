@@ -52,7 +52,7 @@ void CNpcPlayerBubblePlatform::processLifetime( int _frames )
 		{
 			m_pop = true;
 
-			m_lifetime = GameState::getOneSecondInFrames() >> 1;
+			m_lifetime = GameState::getOneSecondInFrames() >> 2;
 		}
 	}
 }
@@ -72,7 +72,8 @@ void CNpcPlayerBubblePlatform::render()
 
 			if ( m_pop )
 			{
-				CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BALLOONBURST, renderPos.vx, renderPos.vy - 16, 4096 << 1, 4096 << 1, 0, 10 );
+				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BALLOONBURST, renderPos.vx, renderPos.vy - 16, 4096 << 1, 4096 << 1, 0, 10 );
+				setRGB0( SprFrame, 128, 128, 255 );
 			}
 			else
 			{
