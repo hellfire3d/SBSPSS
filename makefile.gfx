@@ -375,7 +375,7 @@ GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 # Big TGA backdrops
 #----------------------------------------------------------------------------
 BACKDROPS_IN_DIR :=		$(GRAF_DIR)/backdrop
-BACKDROPS_IN :=			credits start1 start2 start3 start4
+BACKDROPS_IN :=			credits start1 start2 start3 start4 gameover
 
 BACKDROPS_OUT_DIR :=	$(DATA_OUT)/backdrop
 BACKDROPS_OUT :=		$(foreach SCREEN,$(BACKDROPS_IN),$(BACKDROPS_OUT_DIR)/$(SCREEN).gfx)
