@@ -1154,19 +1154,26 @@ void CNpcEnemy::processShot()
 			{
 				case NPC_GENERIC_HIT_CHECK_HEALTH:
 				{
-					m_health -= 5;
-
-					if ( m_health < 0 )
+					if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 					}
 					else
 					{
-						m_state = NPC_GENERIC_HIT_RECOIL;
+						m_health -= 5;
 
-						m_animPlaying = true;
-						m_animNo = m_data[m_type].recoilAnim;
-						m_frame = 0;
+						if ( m_health < 0 )
+						{
+							m_state = NPC_GENERIC_HIT_DEATH_START;
+						}
+						else
+						{
+							m_state = NPC_GENERIC_HIT_RECOIL;
+
+							m_animPlaying = true;
+							m_animNo = m_data[m_type].recoilAnim;
+							m_frame = 0;
+						}
 					}
 
 					break;
