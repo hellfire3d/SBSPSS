@@ -77,8 +77,11 @@ protected:
 		CNpcPositionHistory			*prev;
 	};
 
-	CNpcParasiticWormSegment		*m_segment;
+	CNpcParasiticWormSegment		m_segmentArray[NPC_PARASITIC_WORM_LENGTH];
+
 	CNpcPositionHistory				*m_positionHistory;
+	CNpcPositionHistory				m_positionHistoryArray[NPC_PARASITIC_WORM_SPACING * NPC_PARASITIC_WORM_LENGTH];
+
 	s32								m_collTimer;
 };
 

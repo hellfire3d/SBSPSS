@@ -78,8 +78,11 @@ protected:
 		CNpcPositionHistory			*prev;
 	};
 
-	CNpcSeaSnakeSegment				*m_segment;
+	u8								m_segmentCount;
+	CNpcSeaSnakeSegment				m_segmentArray[NPC_SEA_SNAKE_LENGTH];
+
 	CNpcPositionHistory				*m_positionHistory;
+	CNpcPositionHistory				m_positionHistoryArray[NPC_SEA_SNAKE_SPACING * NPC_SEA_SNAKE_LENGTH];
 	s32								m_collTimer;
 	s32								m_snapTimer;
 	s32								m_openTimer;

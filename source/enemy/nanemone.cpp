@@ -239,7 +239,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 				projPos.vy += rsin( m_heading ) >> 9;
 
 				CProjectile *projectile;
-				projectile = new( "test projectile" ) CProjectile;
+				projectile = CProjectile::Create();
 				projectile->init( projPos, m_heading );
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
@@ -450,7 +450,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			spikePos.vx += result.vx;
 			spikePos.vy += result.vy;
 
-			projectile = new( "anemone lev2 projectile" ) CProjectile;
+			projectile = CProjectile::Create();
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_DUMBFIRE, CProjectile::PROJECTILE_FINITE_LIFE );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
 			projectile->setSpeed( 5 );
@@ -592,7 +592,7 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 		projPos.vx += rcos( m_heading ) >> 9;
 		projPos.vy += rsin( m_heading ) >> 9;
 
-		projectile = new( "test projectile" ) CProjectile;
+		projectile = CProjectile::Create();
 		projectile->init(	projPos,
 							m_fireHeading,
 							CProjectile::PROJECTILE_GAS_CLOUD,

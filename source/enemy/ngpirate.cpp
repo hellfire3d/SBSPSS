@@ -102,7 +102,7 @@ void CNpcGhostPirateEnemy::processClose( int _frames )
 
 			CProjectile *projectile;
 
-			projectile = new( "test projectile" ) CProjectile;
+			projectile = CProjectile::Create();
 			projectile->init( Pos, heading );
 		}
 	}

@@ -162,7 +162,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		s16 heading = ratan2( yDist, xDist ) & 4095;
 
 		CProjectile *projectile;
-		projectile = new( "shark man projectile" ) CProjectile;
+		projectile = CProjectile::Create();
 		projectile->init( newPos, heading );
 		projectile->setGraphic( FRM__LIGHTNING2 );
 

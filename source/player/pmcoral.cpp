@@ -276,7 +276,7 @@ void	CPlayerModeCoralBlower::think()
 				launchHeading=(-((m_launchHeading+1024)*facing)-1024)&4095;
 
 				CEnemyAsSpriteProjectile *projectile;
-				projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
+				projectile = CEnemyAsSpriteProjectile::Create();
 				projectile->init(	launchPos,
 									launchHeading,//1024+(1024*facing),
 									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,

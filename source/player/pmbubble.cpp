@@ -17,8 +17,8 @@
 
 #include "player\pmbubble.h"
 
-#ifndef __PLATFORM_PPLAYER_H__
-#include "platform\pplayer.h"
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
 #endif
 
 #ifndef __GFX_FONT_H__
@@ -103,12 +103,9 @@ void	CPlayerModeBubbleMixture::think()
 		if(!m_blowing&&getPadInputDown()&PI_FIRE&&canBlowBubbleFromThisState()&&m_player->getBubbleAmmo())
 		{
 			// Spawn the bubbly platform thingy..!
-			CNpcPlayerBubblePlatform	*bubble;
+			CNpcPlatform	*bubble;
 			DVECTOR			pos;
-			bubble=new ("bubble platform") CNpcPlayerBubblePlatform;
-			bubble->setThingSubType( CNpcPlatform::NPC_PLAYER_BUBBLE_PLATFORM );
-			bubble->setGraphic( (u8) 0 );
-			bubble->setTiltable( false );
+			bubble = CNpcPlatform::Create( CNpcPlatform::NPC_PLAYER_BUBBLE_PLATFORM );
 			pos=m_player->getPos();
 			pos.vx+=buboff.vx*m_player->getFacing();
 			pos.vy+=buboff.vy;

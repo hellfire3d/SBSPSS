@@ -220,7 +220,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
 			CProjectile *projectile;
-			projectile = new( "test projectile" ) CProjectile;
+			projectile = CProjectile::Create();
 			DVECTOR startPos = Pos;
 			startPos.vy -= 20;
 			projectile->init( startPos, headingToPlayer );

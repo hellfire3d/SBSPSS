@@ -19,10 +19,6 @@
 #include "enemy\nclam.h"
 #endif
 
-#ifndef __PLATFORM_PCLAM_H__
-#include "platform\pclam.h"
-#endif
-
 #ifndef __PLATFORM_PLATFORM_H__
 #include "platform\platform.h"
 #endif
@@ -200,9 +196,10 @@ void CNpcStaticClamEnemy::postInit()
 
 	// create platform in same place
 
-	CNpcClamPlatform *platform = new ("clam platform") CNpcClamPlatform;
+	CNpcPlatform *platform;
+	platform = CNpcPlatform::Create( CNpcPlatform::NPC_CLAM_PLATFORM );
 
-	platform->setThingSubType(CNpcClamPlatform::NPC_CLAM_PLATFORM);
+	platform->setThingSubType(CNpcPlatform::NPC_CLAM_PLATFORM);
 	platform->setGraphic( (u8) 0 );
 	platform->init( Pos );
 	platform->setTiltable( false );

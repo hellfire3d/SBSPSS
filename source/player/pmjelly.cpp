@@ -296,7 +296,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 		fireHeading=1024+(1024*playerFacing)-512;
 		for(i=0;i<3;i++)
 		{
-			projectile=new("JellyProjectile") CPlayerProjectile;
+			projectile=CPlayerProjectile::Create();
 			projectile->init(launchPos,
 							fireHeading,
 							 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
@@ -312,7 +312,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 	{
 		// Normal, small shot
 		fireHeading=1024+(1024*m_player->getFacing());
-		projectile=new("JellyProjectile") CPlayerProjectile;
+		projectile=CPlayerProjectile::Create();
 		projectile->init(launchPos,
 						 fireHeading,
 						 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,

@@ -25,6 +25,25 @@
 
 #include	"game/game.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CEnemyAsSpriteProjectile	*CEnemyAsSpriteProjectile::Create()
+{
+	CEnemyAsSpriteProjectile *projectile;
+
+	projectile = (CEnemyAsSpriteProjectile*)CThingManager::GetThing(TYPE_PLAYERPROJECTILE,0);
+	if ( !projectile )
+	{
+		projectile = new ("player projectile") CEnemyAsSpriteProjectile;
+	}
+
+	ASSERT(projectile);
+
+	return( projectile );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CEnemyAsSpriteProjectile::think( int _frames )
 {
 	CPlayerProjectile::think( _frames );
@@ -33,11 +52,15 @@ void CEnemyAsSpriteProjectile::think( int _frames )
 	m_rotation &= 4095;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CEnemyAsSpriteProjectile::setGraphic( int frame )
 {
 	m_spriteFrame = frame;
 	m_rotation = 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CEnemyAsSpriteProjectile::setRGB( int R, int G, int B )
 {
@@ -45,6 +68,8 @@ void CEnemyAsSpriteProjectile::setRGB( int R, int G, int B )
 	m_G = G;
 	m_B = B;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CEnemyAsSpriteProjectile::render()
 {

@@ -60,7 +60,7 @@ void CNpcEyeballEnemy::postInit()
 	eyeballPos.vy += ( EYEBALL_DIST * rsin( m_heading ) ) >> 12;
 
 	CProjectile *projectile;
-	projectile = new ( "eyeball projectile" ) CProjectile;
+	projectile = CProjectile::Create();
 	projectile->init( eyeballPos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
 	projectile->setGraphic( FRM_EYEBALL_STATIC );
 
@@ -130,7 +130,7 @@ CThing	*Next=getNext();
 		eyeballPos.vy += ( EYEBALL_DIST * rsin( m_heading ) ) >> 12;
 
 		CProjectile *projectile;
-		projectile = new ( "eyeball projectile" ) CProjectile;
+		projectile = CProjectile::Create();
 		projectile->init( eyeballPos, m_fireHeading, CProjectile::PROJECTILE_USER_SEEK, CProjectile::PROJECTILE_INFINITE_LIFE );
 		projectile->setGraphic( FRM_EYEBALL_STATIC );
 		projectile->setState( CProjectile::PROJECTILE_ATTACK );

@@ -374,7 +374,7 @@ void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
 	newPos.vy -= 10;
 
 	CEnemyAsSpriteProjectile *projectile;
-	projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
+	projectile = CEnemyAsSpriteProjectile::Create();
 	projectile->init(	newPos,
 						heading,
 						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,

@@ -87,45 +87,32 @@ void CNpcParasiticWormEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::REPEATING_PATH );
 
-	// create start of list
-	CNpcPositionHistory *newPosition;
-	newPosition = new ("position history") CNpcPositionHistory;
-	newPosition->pos = Pos;
-	m_positionHistory = newPosition;
+	s16 maxArraySize = NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING;
 
-	CNpcPositionHistory *currentPosition = m_positionHistory;
+	m_positionHistoryArray[0].pos = Pos;
+	m_positionHistoryArray[0].next = &m_positionHistoryArray[1];
+	m_positionHistoryArray[0].prev = &m_positionHistoryArray[maxArraySize - 1];
 
-	// create rest of list
-
-	for ( int histLength = 1 ; histLength < ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
+	for ( int histLength = 1 ; histLength < maxArraySize - 1 ; histLength++ )
 	{
-		newPosition = new ("position history") CNpcPositionHistory;
-		newPosition->pos = Pos;
-		newPosition->next = NULL;
-		newPosition->prev = currentPosition;
-
-		currentPosition->next = newPosition;
-		currentPosition = newPosition;
+		m_positionHistoryArray[histLength].pos = Pos;
+		m_positionHistoryArray[histLength].next = &m_positionHistoryArray[histLength + 1];
+		m_positionHistoryArray[histLength].prev = &m_positionHistoryArray[histLength - 1];
 	}
 
-	// link ends together for circular list
+	m_positionHistoryArray[maxArraySize - 1].pos = Pos;
+	m_positionHistoryArray[maxArraySize - 1].next = &m_positionHistoryArray[0];
+	m_positionHistoryArray[maxArraySize - 1].prev = &m_positionHistoryArray[maxArraySize - 2];
 
-	currentPosition->next = m_positionHistory;
-	m_positionHistory->prev = currentPosition;
+	m_positionHistory = &m_positionHistoryArray[0];
 
 	u16 segScale;
 	int initLength = NPC_PARASITIC_WORM_LENGTH / 3;
 	int remLength = NPC_PARASITIC_WORM_LENGTH - initLength;
 
-	m_segment = NULL;
-
-	CNpcParasiticWormSegment *currentSegment;
-
 	for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 	{
-		CNpcParasiticWormSegment *wormSegment;
-		wormSegment = new ("segment") CNpcParasiticWormSegment;
-		wormSegment->init();
+		m_segmentArray[segCount].init();
 
 		if ( segCount < initLength )
 		{
@@ -145,26 +132,13 @@ void CNpcParasiticWormEnemy::postInit()
 			segScale = start + ( ( end * ( NPC_PARASITIC_WORM_LENGTH - segCount ) ) / remLength );
 		}
 
-		wormSegment->setScale( segScale );
+		m_segmentArray[segCount].setScale( segScale );
 
-		// attach worm segment
+		// attach snake segment
 
-		if ( m_segment )
+		if ( segCount < NPC_PARASITIC_WORM_LENGTH - 1 )
 		{
-			currentSegment = m_segment;
-
-			while( currentSegment->m_nextSegment )
-			{
-				currentSegment = currentSegment->m_nextSegment;
-			}
-
-			currentSegment->m_nextSegment = wormSegment;
-		}
-		else
-		{
-			// no previous segments
-
-			m_segment = wormSegment;
+			m_segmentArray[segCount].m_nextSegment = &m_segmentArray[segCount + 1];
 		}
 	}
 
@@ -185,36 +159,10 @@ void CNpcParasiticWormEnemy::shutdown()
 {
 	// delete worm segments
 
-	CNpcParasiticWormSegment *currentSegment = m_segment;
-
-	while( currentSegment )
+	for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 	{
-		CNpcParasiticWormSegment *oldSegment;
-
-		oldSegment = currentSegment;
-		currentSegment = currentSegment->m_nextSegment;
-
-		oldSegment->shutdown();
-		delete oldSegment;
+		m_segmentArray[segCount].shutdown();
 	}
-
-	// remove position history
-
-	CNpcPositionHistory *currentPosition;
-	CNpcPositionHistory *oldPosition;
-
-	currentPosition = m_positionHistory;
-
-	while( currentPosition )
-	{
-		oldPosition = currentPosition;
-		currentPosition = currentPosition->next;
-
-		oldPosition->prev->next = NULL;
-		delete oldPosition;
-	}
-
-	m_positionHistory = NULL;
 
 	CNpcEnemy::shutdown();
 }
@@ -265,8 +213,6 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		newPos = newPos->next;
 	}
 
-	CNpcParasiticWormSegment *List = m_segment;
-
 	oldPos = Pos;
 
 	s32 extension = m_extension;
@@ -285,7 +231,9 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 	timeShift = m_movementTimer / GameState::getOneSecondInFrames();
 
-	while( List )
+	int segmentCount;
+
+	for ( segmentCount = 0 ; segmentCount < NPC_PARASITIC_WORM_LENGTH ; segmentCount++ )
 	{
 		s32 xDist = oldPos.vx - newPos->pos.vx;
 		s32 yDist = oldPos.vy - newPos->pos.vy;
@@ -299,17 +247,12 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		sinPos.vx += ( diff * rcos( headingToTarget + 1024 ) ) >> 12;
 		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
 
-		List->setPos( sinPos );
+		m_segmentArray[segmentCount].setPos( sinPos );
 		oldPos = sinPos;
 
-		List = List->m_nextSegment;
-
-		if ( List )
+		for ( skipCounter = 0 ; skipCounter < NPC_PARASITIC_WORM_SPACING ; skipCounter++ )
 		{
-			for ( skipCounter = 0 ; skipCounter < NPC_PARASITIC_WORM_SPACING ; skipCounter++ )
-			{
-				newPos = newPos->next;
-			}
+			newPos = newPos->next;
 		}
 
 		extension += 256;
@@ -321,13 +264,11 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		}
 	}
 
-	List = m_segment;
-
 	oldPos = Pos;
 
-	while( List )
+	for ( segmentCount = 0 ; segmentCount < NPC_PARASITIC_WORM_LENGTH ; segmentCount++ )
 	{
-		DVECTOR currentPos = List->getPos();
+		DVECTOR currentPos = m_segmentArray[segmentCount].getPos();
 
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
@@ -338,13 +279,9 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 		oldPos = currentPos;
 
-		CNpcParasiticWormSegment *oldList = List;
-
-		List = List->m_nextSegment;
-
-		if ( List )
+		if ( segmentCount < NPC_PARASITIC_WORM_LENGTH - 1 )
 		{
-			DVECTOR nextPos = List->getPos();
+			DVECTOR nextPos = m_segmentArray[segmentCount + 1].getPos();
 			xDist = currentPos.vx - nextPos.vx;
 			yDist = currentPos.vy - nextPos.vy;
 			headingFromNext = ratan2( yDist, xDist );
@@ -377,8 +314,8 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 			heading -= moveDist >> 1;
 		}
 
-		oldList->setHeading( heading );
-		oldList->updateCollisionArea();
+		m_segmentArray[segmentCount].setHeading( heading );
+		m_segmentArray[segmentCount].updateCollisionArea();
 	}
 
 	if ( m_collTimer > 0 )
@@ -512,12 +449,9 @@ void CNpcParasiticWormEnemy::render()
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 
-		CNpcParasiticWormSegment *segment = m_segment;
-
-		while( segment )
+		for ( int segmentCount = 0 ; segmentCount < NPC_PARASITIC_WORM_LENGTH ; segmentCount++ )
 		{
-			segment->render();
-			segment = segment->m_nextSegment;
+			m_segmentArray[segmentCount].render();
 		}
 	}
 }
@@ -553,16 +487,12 @@ int CNpcParasiticWormEnemy::checkCollisionAgainst( CThing *_thisThing, int _fram
 
 	// go through segments
 
-	CNpcParasiticWormSegment *segment = m_segment;
-
-	while( segment )
+	for ( int segmentCount = 0 ; segmentCount < NPC_PARASITIC_WORM_LENGTH ; segmentCount++ )
 	{
-		if ( segment->checkCollisionAgainst( _thisThing, _frames ) )
+		if ( m_segmentArray[segmentCount].checkCollisionAgainst( _thisThing, _frames ) )
 		{
 			collided = true;
 		}
-
-		segment = segment->m_nextSegment;
 	}
 
 	return collided;
@@ -728,16 +658,12 @@ void CNpcParasiticWormEnemy::processShot( int _frames )
 
 					// go through segments
 
-					CNpcParasiticWormSegment *segment = m_segment;
-
-					while( segment )
+					for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 					{
-						DVECTOR segPos = segment->getPos();
+						DVECTOR segPos = m_segmentArray[segCount].getPos();
 						segPos.vy += m_speed * _frames;
-						segment->setPos( segPos );
-						segment->updateCollisionArea();
-
-						segment = segment->m_nextSegment;
+						m_segmentArray[segCount].setPos( segPos );
+						m_segmentArray[segCount].updateCollisionArea();
 					}
 
 					if ( m_speed < 5 )

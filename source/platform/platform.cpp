@@ -195,6 +195,14 @@
 #include "platform\pbubtube.h"
 #endif
 
+#ifndef __PLATFORM_PCLAM_H__
+#include "platform\pclam.h"
+#endif
+
+#ifndef __PLATFORM_PPLAYER_H__
+#include "platform\pplayer.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -448,6 +456,19 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_BUBBLE_TUBE_PLATFORM:
 		{
 			platform = new ("bubble tube platform") CNpcBubbleTubePlatform;
+			break;
+		}
+
+		case NPC_CLAM_PLATFORM:
+		{
+			platform = new ("clam platform") CNpcClamPlatform;
+			break;
+		}
+
+		case NPC_PLAYER_BUBBLE_PLATFORM:
+		{
+			platform = new ("player bubble platform") CNpcPlayerBubblePlatform;
+			platform->setGraphic( (u8) 0 );
 			break;
 		}
 

@@ -87,45 +87,32 @@ void CNpcSeaSnakeEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::REPEATING_PATH );
 
-	// create start of list
-	CNpcPositionHistory *newPosition;
-	newPosition = new ("position history") CNpcPositionHistory;
-	newPosition->pos = Pos;
-	m_positionHistory = newPosition;
+	s16 maxArraySize = NPC_SEA_SNAKE_LENGTH * NPC_SEA_SNAKE_SPACING;
 
-	CNpcPositionHistory *currentPosition = m_positionHistory;
+	m_positionHistoryArray[0].pos = Pos;
+	m_positionHistoryArray[0].next = &m_positionHistoryArray[1];
+	m_positionHistoryArray[0].prev = &m_positionHistoryArray[maxArraySize - 1];
 
-	// create rest of list
-
-	for ( int histLength = 1 ; histLength < ( NPC_SEA_SNAKE_LENGTH * NPC_SEA_SNAKE_SPACING ) ; histLength++ )
+	for ( int histLength = 1 ; histLength < maxArraySize - 1 ; histLength++ )
 	{
-		newPosition = new ("position history") CNpcPositionHistory;
-		newPosition->pos = Pos;
-		newPosition->next = NULL;
-		newPosition->prev = currentPosition;
-
-		currentPosition->next = newPosition;
-		currentPosition = newPosition;
+		m_positionHistoryArray[histLength].pos = Pos;
+		m_positionHistoryArray[histLength].next = &m_positionHistoryArray[histLength + 1];
+		m_positionHistoryArray[histLength].prev = &m_positionHistoryArray[histLength - 1];
 	}
 
-	// link ends together for circular list
+	m_positionHistoryArray[maxArraySize - 1].pos = Pos;
+	m_positionHistoryArray[maxArraySize - 1].next = &m_positionHistoryArray[0];
+	m_positionHistoryArray[maxArraySize - 1].prev = &m_positionHistoryArray[maxArraySize - 2];
 
-	currentPosition->next = m_positionHistory;
-	m_positionHistory->prev = currentPosition;
+	m_positionHistory = &m_positionHistoryArray[0];
 
 	u16 segScale;
 	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
 	int remLength = NPC_SEA_SNAKE_LENGTH - initLength;
 
-	m_segment = NULL;
-
-	CNpcSeaSnakeSegment *currentSegment;
-
 	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
 	{
-		CNpcSeaSnakeSegment *snakeSegment;
-		snakeSegment = new ("segment") CNpcSeaSnakeSegment;
-		snakeSegment->init();
+		m_segmentArray[segCount].init();
 
 		if ( segCount < initLength )
 		{
@@ -144,28 +131,17 @@ void CNpcSeaSnakeEnemy::postInit()
 			segScale = start + ( ( end * ( NPC_SEA_SNAKE_LENGTH - segCount ) ) / remLength );
 		}
 
-		snakeSegment->setScale( segScale );
+		m_segmentArray[segCount].setScale( segScale );
 
 		// attach snake segment
 
-		if ( m_segment )
+		if ( segCount < NPC_SEA_SNAKE_LENGTH - 1 )
 		{
-			currentSegment = m_segment;
-
-			while( currentSegment->m_nextSegment )
-			{
-				currentSegment = currentSegment->m_nextSegment;
-			}
-
-			currentSegment->m_nextSegment = snakeSegment;
-		}
-		else
-		{
-			// no previous segments
-
-			m_segment = snakeSegment;
+			m_segmentArray[segCount].m_nextSegment = &m_segmentArray[segCount + 1];
 		}
 	}
+
+	m_segmentCount = NPC_SEA_SNAKE_LENGTH;
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 	m_collTimer = 0;
@@ -184,36 +160,10 @@ void CNpcSeaSnakeEnemy::shutdown()
 {
 	// delete snake segments
 
-	CNpcSeaSnakeSegment *currentSegment = m_segment;
-
-	while( currentSegment )
+	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
 	{
-		CNpcSeaSnakeSegment *oldSegment;
-
-		oldSegment = currentSegment;
-		currentSegment = currentSegment->m_nextSegment;
-
-		oldSegment->shutdown();
-		delete oldSegment;
+		m_segmentArray[segCount].shutdown();
 	}
-
-	// remove position history
-
-	CNpcPositionHistory *currentPosition;
-	CNpcPositionHistory *oldPosition;
-
-	currentPosition = m_positionHistory;
-
-	while( currentPosition )
-	{
-		oldPosition = currentPosition;
-		currentPosition = currentPosition->next;
-
-		oldPosition->prev->next = NULL;
-		delete oldPosition;
-	}
-
-	m_positionHistory = NULL;
 
 	CNpcEnemy::shutdown();
 }
@@ -305,8 +255,6 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		newPos = newPos->next;
 	}
 
-	CNpcSeaSnakeSegment *List = m_segment;
-
 	oldPos = Pos;
 
 	s32 extension = m_extension;
@@ -325,7 +273,9 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 	timeShift = m_movementTimer / GameState::getOneSecondInFrames();
 
-	while( List )
+	int segmentCount;
+
+	for ( segmentCount = 0 ; segmentCount < m_segmentCount ; segmentCount++ )
 	{
 		s32 xDist = oldPos.vx - newPos->pos.vx;
 		s32 yDist = oldPos.vy - newPos->pos.vy;
@@ -339,17 +289,12 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		sinPos.vx += ( diff * rcos( headingToTarget + 1024 ) ) >> 12;
 		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
 
-		List->setPos( sinPos );
+		m_segmentArray[segmentCount].setPos( sinPos );
 		oldPos = sinPos;
 
-		List = List->m_nextSegment;
-
-		if ( List )
+		for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
 		{
-			for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
-			{
-				newPos = newPos->next;
-			}
+			newPos = newPos->next;
 		}
 
 		extension += 1024;
@@ -361,13 +306,11 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		}
 	}
 
-	List = m_segment;
-
 	oldPos = Pos;
 
-	while( List )
+	for ( segmentCount = 0 ; segmentCount < m_segmentCount ; segmentCount++ )
 	{
-		DVECTOR currentPos = List->getPos();
+		DVECTOR currentPos = m_segmentArray[segmentCount].getPos();
 
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
@@ -378,13 +321,9 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 		oldPos = currentPos;
 
-		CNpcSeaSnakeSegment *oldList = List;
-
-		List = List->m_nextSegment;
-
-		if ( List )
+		if ( segmentCount < m_segmentCount - 1 )
 		{
-			DVECTOR nextPos = List->getPos();
+			DVECTOR nextPos = m_segmentArray[segmentCount + 1].getPos();
 			xDist = currentPos.vx - nextPos.vx;
 			yDist = currentPos.vy - nextPos.vy;
 			headingFromNext = ratan2( yDist, xDist );
@@ -417,8 +356,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 			heading -= moveDist >> 1;
 		}
 
-		oldList->setHeading( heading );
-		oldList->updateCollisionArea();
+		m_segmentArray[segmentCount].setHeading( heading );
+		m_segmentArray[segmentCount].updateCollisionArea();
 	}
 
 	if ( m_collTimer > 0 )
@@ -555,12 +494,9 @@ void CNpcSeaSnakeEnemy::render()
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 
-		CNpcSeaSnakeSegment *segment = m_segment;
-
-		while( segment )
+		for ( int segmentCount = 0 ; segmentCount < m_segmentCount ; segmentCount++ )
 		{
-			segment->render();
-			segment = segment->m_nextSegment;
+			m_segmentArray[segmentCount].render();
 		}
 	}
 }
@@ -596,16 +532,12 @@ int CNpcSeaSnakeEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
 
 	// go through segments
 
-	CNpcSeaSnakeSegment *segment = m_segment;
-
-	while( segment )
+	for ( int segmentCount = 0 ; segmentCount < m_segmentCount ; segmentCount++ )
 	{
-		if ( segment->checkCollisionAgainst( _thisThing, _frames ) )
+		if ( m_segmentArray[segmentCount].checkCollisionAgainst( _thisThing, _frames ) )
 		{
 			collided = true;
 		}
-
-		segment = segment->m_nextSegment;
 	}
 
 	return collided;
@@ -701,7 +633,7 @@ int CNpcSeaSnakeSegment::checkCollisionAgainst( CThing *_thisThing, int _frames 
 
 void CNpcSeaSnakeEnemy::processShot( int _frames )
 {
-	if ( !m_segment )
+	if ( !m_segmentCount )
 	{
 		m_drawRotation += 64 * _frames;
 		m_drawRotation &= 4095;
@@ -727,27 +659,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 		{
 			// knock segment off end of list
 
-			CNpcSeaSnakeSegment *segment = m_segment;
-			CNpcSeaSnakeSegment *oldSegment = segment;
-
-			while( segment->m_nextSegment )
-			{
-				oldSegment = segment;
-
-				segment = segment->m_nextSegment;
-			}
-
-			segment->shutdown();
-			delete segment;
-
-			if ( segment == m_segment )
-			{
-				m_segment = NULL;
-			}
-			else
-			{
-				oldSegment->m_nextSegment = NULL;
-			}
+			m_segmentCount--;
 
 			m_collTimer = GameState::getOneSecondInFrames();
 		}

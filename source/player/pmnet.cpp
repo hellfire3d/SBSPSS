@@ -229,7 +229,7 @@ void	CPlayerModeNet::think()
 				launchPos.vy+=netLaunchPos.vy;
 
 
-				projectile = new( "user projectile" ) CPlayerProjectile;
+				projectile = CPlayerProjectile::Create();
 				
 				projectile->init(	launchPos,
 									fireHeading,

@@ -199,6 +199,10 @@
 #include "enemy\nbuttfly.h"
 #endif
 
+#ifndef __ENEMY_NPROJJF_H__
+#include "enemy\nprojjf.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
@@ -447,6 +451,12 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_BUTTERFLY_BACKGROUND:
 		{
 			enemy = new ("butterfly background") CNpcButterflyBackgroundEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_PROJECTILE_JELLYFISH:
+		{
+			enemy = new ("projectile jellyfish") CNpcSmallJellyfishProjectileEnemy;
 			break;
 		}
 

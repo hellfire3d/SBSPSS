@@ -47,6 +47,7 @@ public:
 		MAX_SUBTYPE	=1,
 	};
 
+	static CProjectile	*Create();
 	void				init();
 	void				init( DVECTOR initPos, s16 initHeading );
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType );
@@ -105,6 +106,7 @@ public:
 		MAX_SUBTYPE	=1,
 	};
 
+	static CPlayerProjectile	*Create();
 	void				init();
 	void				init( DVECTOR initPos, s16 initHeading );
 	void				init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType );

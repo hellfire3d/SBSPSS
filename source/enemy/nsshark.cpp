@@ -77,7 +77,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 			// drop mine
 
 			CProjectile *projectile;
-			projectile = new( "test projectile" ) CProjectile;
+			projectile = CProjectile::Create();
 			projectile->init( Pos, 1024 );
 
 			m_salvoCount--;

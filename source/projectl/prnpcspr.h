@@ -29,6 +29,7 @@
 class CEnemyAsSpriteProjectile : public CPlayerProjectile
 {
 public:
+	static CEnemyAsSpriteProjectile		*Create();
 	void			render();
 	void			setGraphic( int frame );
 	void			setRGB( int R, int G, int B );

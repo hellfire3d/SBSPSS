@@ -180,7 +180,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 					}
 
 					CProjectile *projectile;
-					projectile = new( "test projectile" ) CProjectile;
+					projectile = CProjectile::Create();
 					DVECTOR newPos = Pos;
 					newPos.vy -= 50;
 					projectile->init( newPos, heading );

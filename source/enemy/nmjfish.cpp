@@ -347,10 +347,7 @@ void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
 		else
 		{
 			CNpcEnemy *enemy;
-			enemy = new( "jellyfish projectile" ) CNpcSmallJellyfishProjectileEnemy;
-			ASSERT(enemy);
-			enemy->setType( CNpcEnemy::NPC_PROJECTILE_JELLYFISH );
-			enemy->init();
+			enemy = CNpcEnemy::Create( NPC_PROJECTILE_JELLYFISH );
 			enemy->setStartPos( Pos.vx >> 4, ( Pos.vy + 20 ) >> 4 );
 
 			enemy->setWaypointCount( m_npcPath.getWaypointCount() );
