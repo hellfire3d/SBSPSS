@@ -187,7 +187,7 @@ void CNpcGaryFriend::think( int _frames )
 			case COLLISION_TYPE_FLAG_DAMAGE:
 			{
 				CPlayer *player = GameScene.getPlayer();
-				player->takeDamage( DAMAGE__KILL_OUTRIGHT );
+				player->dieYouPorousFreak();
 
 				m_speed = -5;
 				m_fallDeath = true;
