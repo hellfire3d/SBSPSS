@@ -68,7 +68,6 @@ enemy_src :=		npc \
 					nfdutch \
 					nsshark \
 					ndogfish \
-					nhazard \
 					nffolk \
 					nocto \
 					nfskull \
@@ -79,7 +78,8 @@ enemy_src :=		npc \
 					nbblob \
 					npuffa \
 					ngen \
-					nsdart
+					nsdart \
+					ndustdev
 
 platform_src :=		platform \
 					platdata \
@@ -92,6 +92,13 @@ platform_src :=		platform \
 					pfalling \
 					pcart \
 					pretract
+
+hazard_src :=		hazard \
+					hfalling \
+					hpendulm \
+					hfirebal \
+					hsaw \
+					hbarrel
 
 projectl_src :=		projectl
 

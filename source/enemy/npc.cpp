@@ -142,8 +142,8 @@
 #include "enemy\ndogfish.h"
 #endif
 
-#ifndef	__ENEMY_NHAZARD_H__
-#include "enemy\nhazard.h"
+#ifndef	__ENEMY_NDUSTDEV_H__
+#include "enemy\ndustdev.h"
 #endif
 
 #ifndef __ENEMY_NSDART_H__
@@ -507,45 +507,45 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 			break;
 		}
 
-		case CNpcEnemy::NPC_FALLING_ITEM:
+		/*case CNpcEnemy::NPC_FALLING_ITEM:
 		{
 			printf("NPC_FALLING_ITEM\n");
 			enemy = new ("falling item") CNpcFallingItemHazard;
 			break;
-		}
+		}*/
 
-		case CNpcEnemy::NPC_FISH_HOOK:
+		/*case CNpcEnemy::NPC_FISH_HOOK:
 		{
 			printf("NPC_FISH_HOOK\n");
 			enemy = new ("fish hook") CNpcFishHookHazard;
 			break;
-		}
+		}*/
 
-		case CNpcEnemy::NPC_PENDULUM:
+		/*case CNpcEnemy::NPC_PENDULUM:
 		{
 			printf("NPC_PENDULUM\n");
 			enemy = new ("pendulum") CNpcPendulumHazard;
 			break;
-		}
+		}*/
 
-		case CNpcEnemy::NPC_FIREBALL:
+		/*case CNpcEnemy::NPC_FIREBALL:
 		{
 			printf("NPC_FIREBALL\n");
 			enemy = new ("fireball") CNpcFireballHazard;
 			break;
-		}
+		}*/
 
-		case CNpcEnemy::NPC_SAW_BLADE:
+		/*case CNpcEnemy::NPC_SAW_BLADE:
 		{
 			printf("NPC_SAW_BLADE\n");
 			enemy = new ("saw blade") CNpcReturningHazard;
 			break;
-		}
+		}*/
 
 		case CNpcEnemy::NPC_DUST_DEVIL:
 		{
 			printf("NPC_DUST_DEVIL\n");
-			enemy = new ("dust devil") CNpcReturningGroundHazard;
+			enemy = new ("dust devil") CNpcDustDevilEnemy;
 			break;
 		}
 
@@ -601,6 +601,7 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 		{
 			printf("UNKNOWN %i\n",enemyType);
 			enemy = new ("npc enemy") CNpcEnemy;
+			ASSERT(0);
 			break;
 		}
 	}

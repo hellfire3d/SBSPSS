@@ -145,7 +145,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 {
-	{	// NPC_FALLING_ITEM
+	/*{	// NPC_FALLING_ITEM
 		ACTORS_CLAM_SBK,
 		ANIM_CLAM_SIDESNAP,
 		NPC_SENSOR_USER_CLOSE,
@@ -185,7 +185,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-	},
+	},*/
 
 	{	// NPC_DUST_DEVIL
 		ACTORS_DUSTDEVIL_SBK,
@@ -208,7 +208,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 	},
 
-	{	// NPC_PENDULUM
+	/*{	// NPC_PENDULUM
 		ACTORS_CLAM_SBK,
 		ANIM_CLAM_SIDESNAP,
 		NPC_SENSOR_NONE,
@@ -227,9 +227,9 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-	},
+	},*/
 
-	{	// NPC_FIREBALL
+	/*{	// NPC_FIREBALL
 		ACTORS_CLAM_SBK,
 		ANIM_CLAM_SIDESNAP,
 		NPC_SENSOR_NONE,
@@ -248,9 +248,9 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-	},
+	},*/
 
-	{	// NPC_SAW_BLADE
+	/*{	// NPC_SAW_BLADE
 		ACTORS_CLAM_SBK,
 		ANIM_CLAM_SIDESNAP,
 		NPC_SENSOR_NONE,
@@ -269,7 +269,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-	},
+	},*/
 
 	{	// NPC_SMALL_JELLYFISH_1
 		0,//ACTORS_JELLYFISH1_SBK,
@@ -1059,11 +1059,11 @@ CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::mapEditConvertTable[NPC_UNIT_TYPE_MAX] =
 	NPC_SKULL_STOMPER,
 	NPC_DUST_DEVIL,
 	NPC_SPIDER_CRAB_SPAWNER,
-	NPC_FALLING_ITEM,
-	NPC_FISH_HOOK,
-	NPC_PENDULUM,
-	NPC_FIREBALL,
-	NPC_SAW_BLADE,
+	//NPC_FALLING_ITEM,
+	//NPC_FISH_HOOK,
+	//NPC_PENDULUM,
+	//NPC_FIREBALL,
+	//NPC_SAW_BLADE,
 	NPC_FISH_FOLK,
 	NPC_ANGLER_FISH,
 	NPC_MINE,

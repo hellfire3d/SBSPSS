@@ -36,6 +36,16 @@ void CNpcHazard::init()
 
 	Pos.vx = 300;
 	Pos.vy = 300;
+
+	m_base = Pos;
+
+	m_timer = 0;
+	m_timerActive = false;
+	m_isActive = true;
+
+	m_extension = 0;
+	m_extendDir = 0;
+	m_heading = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,26 +67,51 @@ void CNpcHazard::shutdown()
 void CNpcHazard::think(int _frames)
 {
 	CHazardThing::think(_frames);
+
+	if ( m_isActive )
+	{
+		processMovement( _frames );
+	}
+
+	if ( m_timerActive )
+	{
+		processTimer( _frames );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHazard::processMovement( int _frames )
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHazard::processTimer( int _frames )
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcHazard::render()
 {
-	CHazardThing::render();
-
-	// Render
-	DVECTOR renderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
-
-	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy;
-
-	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+	if ( m_isActive )
 	{
-		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+		CHazardThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
-			m_actorGfx->Render(renderPos,0,0,0);
+			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			{
+				m_actorGfx->Render(renderPos,0,0,0);
+			}
 		}
 	}
 }

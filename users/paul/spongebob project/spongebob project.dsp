@@ -153,6 +153,14 @@ SOURCE=..\..\..\source\enemy\ndogfish.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ndustdev.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\ndustdev.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\neyeball.cpp
 # End Source File
 # Begin Source File
@@ -210,14 +218,6 @@ SOURCE=..\..\..\source\enemy\ngpirate.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\ngpirate.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nhazard.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nhazard.h
 # End Source File
 # Begin Source File
 
@@ -1450,6 +1450,58 @@ SOURCE=..\..\..\source\platform\pretract.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\platform\pretract.h
+# End Source File
+# End Group
+# Begin Group "hazard"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hazard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbarrel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbarrel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfalling.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfalling.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfirebal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfirebal.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hpendulm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hpendulm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsaw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsaw.h
 # End Source File
 # End Group
 # End Group
