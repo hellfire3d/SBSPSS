@@ -1159,22 +1159,6 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
-		case NPC_MOVEMENT_USER_SEEK:
-		{
-			CPlayer *player;
-
-			player = GameScene.getPlayer();
-
-			break;
-		}
-
-		case NPC_MOVEMENT_VERTICAL:
-		{
-			Pos.vy--;
-
-			break;
-		}
-
 		case NPC_MOVEMENT_MOTHER_JELLYFISH:
 		{
 			processMotherJellyfishMovement( _frames );
