@@ -147,6 +147,9 @@ public:
 
 	// -- Collision --
 public:
+virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
+virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
+
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}

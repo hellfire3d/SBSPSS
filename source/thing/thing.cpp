@@ -200,12 +200,12 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		while(thing)
 		{
 			// Check If in Thinkable range
-			CRECT	const	&ThingRect= thing->getCollisionArea();
+			CRECT	const *ThingRect= thing->getThinkBBox();
 			bool	Flag=true;
 			// Will speed this up
 			
-			if (ThingRect.x2<m_ThinkBBox.XMin || ThingRect.x1>m_ThinkBBox.XMax) Flag=false;
-			if (ThingRect.y2<m_ThinkBBox.YMin || ThingRect.y1>m_ThinkBBox.YMax) Flag=false;
+			if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=false;
+			if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=false;
 			thing->setThinkFlag(Flag);
 
 			if (thing->getThingType()==CThing::TYPE_PLAYER)
@@ -622,7 +622,7 @@ int showthings=false;
 void	CThing::render()
 {
 // Check Is Onscreen
-CRECT	const	&ThingRect= getCollisionArea();
+CRECT	const	*ThingRect= getRenderBBox();
 sBBox			&ScrBBox=CThingManager::getRenderBBox();
 DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
@@ -631,8 +631,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 // Will speed this up
 		m_renderFlag=true;
-		if (ThingRect.x2<ScrBBox.XMin || ThingRect.x1>ScrBBox.XMax) m_renderFlag=false;
-		if (ThingRect.y2<ScrBBox.YMin || ThingRect.y1>ScrBBox.YMax) m_renderFlag=false;
+		if (ThingRect->x2<ScrBBox.XMin || ThingRect->x1>ScrBBox.XMax) m_renderFlag=false;
+		if (ThingRect->y2<ScrBBox.YMin || ThingRect->y1>ScrBBox.YMax) m_renderFlag=false;
 
 /***/
 #ifdef	SHOW_BBOX
