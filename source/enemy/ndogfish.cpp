@@ -620,6 +620,8 @@ void CNpcIronDogfishEnemy::render()
 
 void CNpcIronDogfishEnemy::renderOnMapScreen( DVECTOR drawPos )
 {
+	drawPos.vy += 10;
+
 	SprFrame = NULL;
 
 	SprFrame = m_actorGfx->Render(drawPos,0,0,false);

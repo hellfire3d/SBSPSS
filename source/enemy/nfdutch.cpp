@@ -712,6 +712,8 @@ void CNpcFlyingDutchmanEnemy::render()
 
 void CNpcFlyingDutchmanEnemy::renderOnMapScreen( DVECTOR drawPos )
 {
+	drawPos.vy += 35;
+
 	SprFrame = NULL;
 
 	SprFrame = m_actorGfx->Render(drawPos,0,0,false);
