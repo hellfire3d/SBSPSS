@@ -98,7 +98,7 @@ bool CNpcAnemoneEnemy::processSensor()
 
 		default:
 		{
-			if ( playerXDistSqr + playerYDistSqr < 40000 )
+			if ( playerXDistSqr + playerYDistSqr < 50000 )
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -123,14 +123,14 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 	s16 headingToPlayer = ratan2( playerYDist, playerXDist ) & 4095;
 
-	decDir = m_fireHeading - headingToPlayer;
+	decDir = m_heading - headingToPlayer;
 
 	if ( decDir < 0 )
 	{
 		decDir += ONE;
 	}
 
-	incDir = headingToPlayer - m_fireHeading;
+	incDir = headingToPlayer - m_heading;
 
 	if ( incDir < 0 )
 	{
@@ -139,25 +139,40 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 	if ( decDir < incDir )
 	{
-		moveDist = decDir;
+		moveDist = -decDir;
 	}
 	else
 	{
 		moveDist = incDir;
 	}
 
-	// check user is within 45 degrees either way
-
-	if ( moveDist < 512 )
+	if ( moveDist < -maxTurnRate )
 	{
-		decDir = m_heading - headingToPlayer;
+		moveDist = -maxTurnRate;
+	}
+	else if ( moveDist > maxTurnRate )
+	{
+		moveDist = maxTurnRate;
+	}
+	else
+	{
+		withinRange = true;
+	}
+
+	if ( moveDist )
+	{
+		m_heading += moveDist;
+
+		m_heading &= 4095;
+
+		decDir = m_fireHeading - m_heading;
 
 		if ( decDir < 0 )
 		{
 			decDir += ONE;
 		}
 
-		incDir = headingToPlayer - m_heading;
+		incDir = m_heading - m_fireHeading;
 
 		if ( incDir < 0 )
 		{
@@ -173,55 +188,41 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 			moveDist = incDir;
 		}
 
-		if ( moveDist < -maxTurnRate )
+		// check user is within 45 degrees either way
+
+		if ( moveDist > 512 )
 		{
-			moveDist = -maxTurnRate;
+			m_heading = m_fireHeading + 512;
+			m_heading &= 4095;
 		}
-		else if ( moveDist > maxTurnRate )
+		else if ( moveDist < -512 )
 		{
-			moveDist = maxTurnRate;
+			m_heading = m_fireHeading - 512;
+			m_heading &= 4095;
 		}
 		else
 		{
-			withinRange = true;
-		}
-
-		if ( moveDist )
-		{
-			m_heading += moveDist;
-
-			m_heading &= 4095;
-
-			m_drawRotation = ( m_heading + 1024 ) & 4095;
-
 			if ( m_soundId == NOT_PLAYING )
 			{
 				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_MOVE, true );
 			}
 		}
 
-		if ( withinRange )
-		{
-			// can fire, start firing anim
-
-			if ( m_timerTimer <= 0 && !m_animPlaying )
-			{
-				if ( m_animNo != ANIM_ANENOME_FIRE )
-				{
-					m_animPlaying = true;
-					m_animNo = ANIM_ANENOME_FIRE;
-					m_frame = 0;
-				}
-			}
-		}
+		m_drawRotation = ( m_heading + 1024 ) & 4095;
 	}
-	else
+
+	if ( withinRange )
 	{
-		if ( !m_animPlaying || m_animNo != ANIM_ANENOME_FIRE )
+		// can fire, start firing anim
+
+		if ( m_timerTimer <= 0 && !m_animPlaying )
 		{
-			m_animPlaying = true;
-			m_animNo = ANIM_ANENOME_FIRE;
-			m_frame = 0;
+			if ( m_animNo != ANIM_ANENOME_FIRE )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_ANENOME_FIRE;
+				m_frame = 0;
+			}
 		}
 	}
 
