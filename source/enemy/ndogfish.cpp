@@ -259,23 +259,26 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			startPos.vy -= 20;
 			projectile->init( startPos, headingToPlayer );*/
 
-			m_laserTimer = GameState::getOneSecondInFrames();
+			m_laserTimer = 60 * GameState::getOneSecondInFrames();
 
 			m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
-			DVECTOR targetPos = GameScene.getPlayer()->getPos();
-			targetPos.vy -= 45;
-			m_effect->setTarget( targetPos );
+
 			DVECTOR offsetPos;
 			if ( m_heading == 0 )
 			{
-				offsetPos.vx = 30;
+				offsetPos.vx = 60;
 			}
 			else
 			{
-				offsetPos.vx = -30;
+				offsetPos.vx = -60;
 			}
 			offsetPos.vy = -45;
 			m_effect->setOffset( offsetPos );
+
+			DVECTOR targetPos = GameScene.getPlayer()->getPos();
+			targetPos.vy -= 45;
+			m_effect->setTarget( targetPos );
+
 			m_effect->setRGB( 255, 0, 0 );
 
 			m_state++;
