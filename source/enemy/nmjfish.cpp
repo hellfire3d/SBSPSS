@@ -304,7 +304,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			{
 				m_isActive = false;
 				setToShutdown();
-				CGameScene::getBossHasBeenKilled();
+				CGameScene::setBossHasBeenKilled();
 			}
 
 			break;
