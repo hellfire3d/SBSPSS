@@ -35,9 +35,33 @@ backdrop/credits.gfx
 backdrop/sky.gfx
 memcard/memhead.bin
 
-levels/chapter02_level04.tex
-levels/chapter02_level0401.lvl
-levels/chapter02_level04.tbk
+levels/CHAPTER03_LEVEL03.TBK
+levels/chapter03_level03.tex
+levels/CHAPTER03_LEVEL0301.Lvl
+levels/CHAPTER03_LEVEL0302.Lvl
+levels/CHAPTER03_LEVEL0303.Lvl
+levels/CHAPTER03_LEVEL0304.Lvl
+levels/CHAPTER03_LEVEL0305.Lvl
+levels/CHAPTER03_LEVEL0306.Lvl
+
+levels/CHAPTER04_LEVEL03.TBK
+levels/chapter04_level03.tex
+levels/CHAPTER04_LEVEL0301.Lvl
+levels/CHAPTER04_LEVEL0302.Lvl
+levels/CHAPTER04_LEVEL0303.Lvl
+levels/CHAPTER04_LEVEL0304.Lvl
+levels/CHAPTER04_LEVEL0305.Lvl
+levels/CHAPTER04_LEVEL0306.Lvl
+
+levels/CHAPTER04_LEVEL04.TBK
+levels/chapter04_level04.tex
+levels/CHAPTER04_LEVEL0401.Lvl
+levels/CHAPTER04_LEVEL0402.Lvl
+levels/CHAPTER04_LEVEL0403.Lvl
+levels/CHAPTER04_LEVEL0404.Lvl
+levels/CHAPTER04_LEVEL0405.Lvl
+levels/CHAPTER04_LEVEL0406.Lvl
+levels/CHAPTER04_LEVEL0407.Lvl
 
 actors/spongebob.a3d
 actors/spongebob.tex
