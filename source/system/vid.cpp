@@ -283,8 +283,8 @@ void VidSetRes(int x, int y)
 void VidInit()
 {
 // Wap up a loading screen
-//u8	*screenData=CFileIO::loadFile(SCREENS_LOADING_GFX,"Loading Screen");
-//	SetScreenImage(screenData);
+u8	*screenData=CFileIO::loadFile(LOADINGSCREENS_BOOTSCREEN_GFX,"Loading Screen");
+	SetScreenImage(screenData);
 
 //	VidSetXYOfs( ScreenXOfs, ScreenYOfs );
 
@@ -310,7 +310,7 @@ void VidInit()
 	VidSwapDraw();
 	DrawSync(0);
 	SetScreenImage(0);
-//	MemFree(screenData);
+	MemFree(screenData);
 	VidScrOn();
 
 // Init VBL
