@@ -45,8 +45,8 @@ private:
 	// Player can press ACTION to respawn after death
 	enum
 	{
-		DEATH_DELAY=2*60,		// Can't force a respawn for this long
-		DEATH_TIMEOUT=5*60,		// SB respawns automatically after this long
+		DEATH_DELAY=1*60,		// Can't force a respawn for this long
+		DEATH_TIMEOUT=4*60,		// SB respawns automatically after this long
 	};
 	int				m_deadTime;
 	int				m_deathAnim;

@@ -124,7 +124,10 @@ void	CPlayerModeDead::think()
 		m_player->setAnimFrame(frame);
 	}
 
-	m_player->moveVertical(5);
+	if(m_player->getPos().vy<(GameScene.GetLevel().getMapSize().vy+4)*16)
+	{
+		m_player->moveVertical(5);
+	}
 
 	if(!m_killed)
 	{
