@@ -12,7 +12,7 @@ class CHealthManager
 public:
 		enum
 		{
-			ITEM_MAX	=	160,
+			ITEM_MAX	=	50,
 		};
 
 		struct	sItemTable
