@@ -93,7 +93,7 @@ static const sQuestItemMap	s_questItemMap[]=
 	{	4,1,	FRM__C4_QUEST_ITEM_1	},
 	{	4,2,	FRM__C4_QUEST_ITEM_1	},
 	{	4,3,	FRM__C4_QUEST_ITEM_1	},
-	{	4,4,	FRM__C4_QUEST_ITEM_2	},
+	{	4,4,	FRM__C4_QUEST_ITEM_1	},
 	{	5,1,	FRM__C5_L1_QUEST_ITEM	},
 	{	5,2,	FRM__C5_L2_QUEST_ITEM	},
 	{	5,3,	FRM__C5_L3_QUEST_ITEM	},
