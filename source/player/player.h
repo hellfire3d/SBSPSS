@@ -62,6 +62,14 @@ typedef enum
 	NUM_STATES,
 }PLAYER_STATE;
 
+typedef enum
+{
+	PLAYER_MODE_BASICUNARMED,
+	PLAYER_MODE_FULLUNARMED,
+
+	NUM_PLAYERMODES,
+}PLAYER_MODE;
+
 enum
 {
 	FACING_LEFT=+1,
@@ -114,6 +122,7 @@ protected:
 
 	// State
 	void			setState(PLAYER_STATE _state);
+	void			setMode(PLAYER_MODE _mode);
 	int				getFacing();
 	void			setFacing(int _facing);
 	int				getAnimFrame();
@@ -123,6 +132,7 @@ protected:
 	void			setAnimNo(int _animNo);
 	DVECTOR			getMoveVelocity();
 	void			setMoveVelocity(DVECTOR *_moveVel);
+	DVECTOR			getPlayerPos();
 	virtual int		getPadInput();
 
 	// Collision
@@ -147,11 +157,9 @@ private:
 		class CPlayerState	*m_states[NUM_STATES];
 	}PlayerMode;
 
-	static PlayerMode		s_modes;
 	
 	int				m_animFrame;
 	int				m_animNo;
-	PLAYER_STATE	m_state;
 	CSkel			m_skel;
 
 	DVECTOR			m_moveVel;
@@ -165,7 +173,10 @@ private:
 	};
 	int				m_invincibleFrameCount;
 
-	class CPlayerState			*m_currentState;
+	static PlayerMode	s_modes[NUM_PLAYERMODES];
+	int					m_currentMode;
+	class CPlayerState	*m_currentStateClass;
+	PLAYER_STATE		m_currentState;
 
 	int				m_lives;
 

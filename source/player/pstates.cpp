@@ -204,6 +204,18 @@ void CPlayerState::setMoveVelocity(CPlayer *_player,DVECTOR *_moveVel)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR CPlayerState::getPlayerPos(CPlayer *_player)
+{
+	return _player->getPlayerPos();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getPadInput(CPlayer *_player)
 {
 	return _player->getPadInput();

@@ -25,38 +25,6 @@
 #include "pad\pads.h"
 #endif
 
-#ifndef __PLAYER__PSSTATES_H__
-#include "player\pstates.h"
-#endif
-
-#ifndef __PLAYER__PSJUMP_H__
-#include "player\psjump.h"
-#endif
-
-#ifndef __PLAYER__PSRUN_H__
-#include "player\psrun.h"
-#endif
-
-#ifndef __PLAYER__PSFALL_H__
-#include "player\psfall.h"
-#endif
-
-#ifndef __PLAYER__PSIDLE_H__
-#include "player\psidle.h"
-#endif
-
-#ifndef __PLAYER__PSBUTT_H__
-#include "player\psbutt.h"
-#endif
-
-#ifndef __PLAYER__PSCHOP_H__
-#include "player\pschop.h"
-#endif
-
-#ifndef __PLAYER__PSDUCK_H__
-#include "player\psduck.h"
-#endif
-
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
 #endif
@@ -92,54 +60,6 @@
 	Vars
 	---- */
 
-CPlayerStateIdle			stateIdle;
-CPlayerStateJump			stateJump;
-CPlayerStateRun				stateRun;
-CPlayerStateFall			stateFall;
-CPlayerStateFallFar			stateFallFar;
-CPlayerStateButtBounce		stateButtBounce;
-CPlayerStateButtBounceFall	stateButtBounceFall;
-CPlayerStateButtBounceLand	stateButtBounceLand;
-CPlayerStateChop			stateChop;
-CPlayerStateRunChop			stateRunChop;
-CPlayerStateAirChop			stateAirChop;
-CPlayerStateDuck			stateDuck;
-CPlayerStateSoakUp			stateSoackUp;
-CPlayerStateGetUp			stateGetup;
-
-// Player with karate chop installed
-CPlayer::PlayerMode CPlayer::s_modes=
-{
-	{	{
-		8,						// PM__JUMP_VELOCITY
-		10,						// PM__MAX_JUMP_FRAMES
-		20,						// PM__MAX_SAFE_FALL_FRAMES
-		4,						// PM__GRAVITY_VALUE
-		8,						// PM__TERMINAL_VELOCITY
-		8,						// PM__MAX_RUN_VELOCITY
-		4,						// PM__RUN_SPEEDUP
-		2,						// PM__RUN_REVERSESLOWDOWN
-		1,						// PM__RUN_SLOWDOWN
-	}	},
-	{
-		&stateIdle,				// STATE_IDLE
-		&stateJump,				// STATE_JUMP
-		&stateRun,				// STATE_RUN
-		&stateFall,				// STATE_FALL
-		&stateFallFar,			// STATE_FALLFAR
-		&stateButtBounce,		// STATE_BUTTBOUNCE
-		&stateButtBounceFall,	// STATE_BUTTFALL
-		&stateButtBounceLand,	// STATE_BUTTLAND
-		&stateChop,				// STATE_ATTACK
-		&stateRunChop,			// STATE_RUNATTACK
-		&stateAirChop,			// STATE_AIRATTACK
-		&stateDuck,				// STATE_DUCK
-		&stateSoackUp,			// STATE_SOAKUP
-		&stateGetup,			// STATE_GETUP
-	}
-};
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -157,6 +77,7 @@ void	CPlayer::init()
 
 m_animNo=0;
 m_animFrame=0;
+	m_currentMode=PLAYER_MODE_BASICUNARMED;
 	setState(STATE_IDLE);
 	m_moveVel.vx=0;
 	m_moveVel.vy=0;
@@ -198,6 +119,7 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+int psize=0;
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -218,17 +140,17 @@ void	CPlayer::think(int _frames)
 	for(i=0;i<_frames;i++)
 	{
 		// Think
-		m_currentState->think(this);
+		m_currentStateClass->think(this);
 
 		// Horizontal movement
 		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
 		if(Pos.vx<350)
 		{
-			if(m_state==STATE_RUN)
-			{
-				setState(STATE_IDLE);
-				setAnimNo(ANIM_PLAYER_ANIM_RUNSTOP);
-			}
+//			if(m_currentState==STATE_RUN)
+//			{
+//				setState(STATE_IDLE);
+//				setAnimNo(ANIM_PLAYER_ANIM_RUNSTOP);
+//			}
 			Pos.vx=350;
 			m_moveVel.vx=0;
 		}
@@ -240,11 +162,11 @@ void	CPlayer::think(int _frames)
 			if(m_moveVel.vy)
 			{
 				// Was falling.. so we've just hit the ground
-				if(m_state==STATE_BUTTFALL)
+				if(m_currentState==STATE_BUTTFALL)
 				{
 					setState(STATE_BUTTLAND);
 				}
-				else if(m_state==STATE_FALLFAR)
+				else if(m_currentState==STATE_FALLFAR)
 				{
 					setState(STATE_IDLE);
 				}
@@ -264,7 +186,7 @@ void	CPlayer::think(int _frames)
 		}
 		else
 		{
-			if(m_state!=STATE_JUMP&&m_state!=STATE_BUTTBOUNCE)
+			if(m_currentState!=STATE_JUMP&&m_currentState!=STATE_BUTTBOUNCE)
 			{
 				// Fall
 				const PlayerMetrics	*metrics;
@@ -372,7 +294,7 @@ DVECTOR CPlayer::getCameraPos()
   ---------------------------------------------------------------------- */
 const PlayerMetrics *CPlayer::getPlayerMetrics()
 {
-	return &s_modes.m_metrics;
+	return &s_modes[m_currentMode].m_metrics;
 }
 
 
@@ -387,9 +309,28 @@ const PlayerMetrics *CPlayer::getPlayerMetrics()
   ---------------------------------------------------------------------- */
 void	CPlayer::setState(PLAYER_STATE _state)
 {
-	m_currentState=s_modes.m_states[_state];
-	m_currentState->enter(this);
-	m_state=_state;
+	CPlayerState	*nextState;
+
+	nextState=s_modes[m_currentMode].m_states[_state];
+	if(nextState)
+	{
+		m_currentStateClass=nextState;
+		m_currentStateClass->enter(this);
+		m_currentState=_state;
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::setMode(PLAYER_MODE _mode)
+{
+	m_currentMode=_mode;
+	setState(m_currentState);
 }
 
 
@@ -451,6 +392,10 @@ DVECTOR CPlayer::getMoveVelocity()
 void CPlayer::setMoveVelocity(DVECTOR *_moveVel)
 {
 	m_moveVel=*_moveVel;
+}
+DVECTOR CPlayer::getPlayerPos()
+{
+	return Pos;
 }
 int CPlayer::getPadInput()
 {

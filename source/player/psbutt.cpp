@@ -27,6 +27,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __GAME_GAMEBUBS_H__
+#include "game\gamebubs.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -90,6 +94,10 @@ void CPlayerStateButtBounce::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::enter(CPlayer *_player)
 {
+	DVECTOR	pos;
+
+	pos=getPlayerPos(_player);
+	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
 	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCE);
 }
 

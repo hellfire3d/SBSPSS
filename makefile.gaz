@@ -135,6 +135,7 @@ paul_src :=			paul \
 					scenesel
 
 player_src :=		player \
+					pmodes \
 					psbutt \
 					pschop \
 					psduck \

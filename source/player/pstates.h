@@ -53,6 +53,7 @@ protected:
 	int				retreatAnimFrameAndCheckForEndOfAnim(class CPlayer *_player);
 	DVECTOR			getMoveVelocity(class CPlayer *_player);
 	void			setMoveVelocity(class CPlayer *_player,DVECTOR *_moveVel);
+	DVECTOR			getPlayerPos(class CPlayer *_player);
 	int				getPadInput(class CPlayer *_player);
 
 	int				isOnSolidGround(class CPlayer *_player);
