@@ -1507,14 +1507,6 @@ SOURCE=..\..\..\source\player\psbutt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\player\pscrouch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pscrouch.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\player\psduck.cpp
 # End Source File
 # Begin Source File
@@ -1560,6 +1552,14 @@ SOURCE=..\..\..\source\player\psjump.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psjump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pslook.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pslook.h
 # End Source File
 # Begin Source File
 
