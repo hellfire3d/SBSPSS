@@ -1487,6 +1487,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 	   m_currentMode!=PLAYER_MODE_DEAD)		// Or already dead! :)
 	{
 		int	ouchThatHurt=true;
+		int	ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
 
 		// Check if we are currently immune to this damage type
 		switch(_damage)
@@ -1513,6 +1514,10 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			case DAMAGE__BURN_ENEMY:
 			case DAMAGE__BITE_ENEMY:
 				break;
+
+			case DAMAGE__KILL_OUTRIGHT:
+				ouchThatHurt=ouchThatHurtSoMuchThatImJustGoingToDieNow=true;
+				break;
 		}
 
 		if(ouchThatHurt)
@@ -1521,7 +1526,14 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
 			if(!isWearingDivingHelmet())
 			{
-				m_health--;
+				if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+				{
+					m_health--;
+				}
+				else
+				{
+					m_health=-1;
+				}
 				if(m_health<0)
 				{
 					died=true;
@@ -1529,7 +1541,14 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			}
 			else
 			{
-				m_healthWaterLevel-=WATERHEALTHPART;
+				if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+				{
+					m_healthWaterLevel-=WATERHEALTHPART;
+				}
+				else
+				{
+					m_health=-1;
+				}
 				if(m_healthWaterLevel<0)
 				{
 					died=true;
