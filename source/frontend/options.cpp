@@ -309,7 +309,7 @@ void CFrontEndOptions::init()
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
 		tb->setObjectXYWH(26,0,150,15);
-		tb->setText(STR__FRONTEND__UP);
+		tb->setText(STR__FRONTEND__LOOK_UP);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
 		sr->setObjectXYWH(0,15,26,15);
@@ -318,7 +318,7 @@ void CFrontEndOptions::init()
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
 		tb->setObjectXYWH(26,15,150,15);
-		tb->setText(STR__FRONTEND__DOWN);
+		tb->setText(STR__FRONTEND__LOOK_DOWN);
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
 		sr->setObjectXYWH(0,30,26,15);

@@ -201,9 +201,9 @@ void 	CLevel::init(int LevelNo)
 // Load it
 sLvlTab *lvlTab=&LvlTable[LevelNo];
 
-		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
+//		DisplayLoadingScreen(lvlTab);
 
-		DisplayLoadingScreen(lvlTab);
+		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
 		LevelHdr=(sLevelHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
 		LevelHdr->ElemBank2d=(sElem2d*)	MakePtr(LevelHdr,(int)LevelHdr->ElemBank2d);
@@ -214,7 +214,34 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		LevelHdr->VtxIdxList=(u16*)		MakePtr(LevelHdr,(int)LevelHdr->VtxIdxList);
 		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
 
-		CModelGfx::SetData(LevelHdr);//LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
+// Deal with RGB Tables (and create if none)
+		if (LevelHdr->RGBLayer)
+		{
+			sLayerRGBHdr	*RGBHdr=(sLayerRGBHdr*)	MakePtr(LevelHdr,(int)LevelHdr->RGBLayer+sizeof(sLayerHdr));
+			m_RGBMap=(u8*)			MakePtr(LevelHdr,(int)RGBHdr->RGBMap);
+			m_RGBTable=(u8*)		MakePtr(LevelHdr,(int)RGBHdr->RGBTable);
+		}
+		else
+		{ // Make blank RGB data
+			sLayerHdr	*LayerLayer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
+				
+			int	LvlSize=LayerLayer->Width*LayerLayer->Height;
+
+			m_RGBMap=(u8*)MemAlloc(LvlSize,"BlankRGBMap"); ASSERT(m_RGBMap);
+			memset(m_RGBMap,0,LvlSize);
+			m_RGBTable=(u8*)MemAlloc(16*4,"BlankRGBTable");	ASSERT(m_RGBTable);
+			u8 RGB=127;
+			for (int c=0; c<16; c++)
+			{
+				m_RGBTable[(c*4)+0]=RGB;
+				m_RGBTable[(c*4)+1]=RGB;
+				m_RGBTable[(c*4)+2]=RGB;
+				m_RGBTable[(c*4)+3]=0;
+				RGB+=6;
+			}
+		}
+
+		CModelGfx::SetData(LevelHdr);
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
 		s_playerSpawnPos.vx=LevelHdr->PlayerStartX*16;
@@ -252,19 +279,20 @@ bool	Finished=false;
 }
 
 /*****************************************************************************/
-void	CLevel::DisplayLoadingScreen(sLvlTab *lvlTab)
+void	CLevel::DisplayLoadingScreen(int LevelNo)
 {
+sLvlTab				*lvlTab=&LvlTable[LevelNo];
 ScalableFontBank	font;
 char				buf[256];
 u8					*s_image;
 int					i;
-
+			
 			font.initialise(&standardFont);
 			font.setJustification(FontBank::JUST_CENTRE);
 			font.setScale(370);
 
 			sprintf(buf,"%s\n\n%s",TranslationDatabase::getString(lvlTab->ChapterLoadingText),TranslationDatabase::getString(lvlTab->LevelLoadingText));
-			s_image=CFileIO::loadFile(loadingScreens[lvlTab->Chapter-1]);
+			s_image=LoadPakScreen(loadingScreens[lvlTab->Chapter-1]);
 			ASSERT(s_image);
 			SetScreenImage(s_image);
 			for(i=0;i<2;i++)
@@ -327,7 +355,7 @@ void	CLevel::initLayers()
 		if (LevelHdr->ActionLayer)
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
-			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(LevelHdr,Layer);
+			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(LevelHdr,Layer,m_RGBMap,m_RGBTable);
 			NewLayer->init(MapPos,0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
 		}
@@ -603,6 +631,11 @@ void	CLevel::shutdown()
 				TileLayers[i]->shutdown();
 				delete TileLayers[i];
 			}
+		}
+		if (!LevelHdr->RGBLayer)
+		{
+			MemFree(m_RGBMap);
+			MemFree(m_RGBTable);
 		}
 
 		if (CollisionLayer)

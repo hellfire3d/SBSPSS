@@ -67,7 +67,7 @@ void CFrontEndNickLogo::select()
 {
 	m_readyToExit=false;
 
-	m_image=CFileIO::loadFile(BACKDROP_NICK_GFX);
+	m_image=LoadPakScreen(BACKDROP_NICK_GFX);
 	ASSERT(m_image);
 	SetScreenImage(m_image);
 

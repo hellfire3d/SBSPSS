@@ -84,13 +84,11 @@ static s32				getBossHealth()							{return m_bossHealth;}
 static void				setIsBossRespawn( u8 newIsBossRespawn)	{m_isBossRespawn=newIsBossRespawn;}
 static void				setBossHealth( s32 newBossHealth )		{m_bossHealth=newBossHealth;}
 
+static	void			DisplayLoadingScreen(int LevelNo=25);
 
 private:
 		void			initLayers();
 		void			initThings(int _respawningLevel);
-
-		void			DisplayLoadingScreen(sLvlTab *lvlTab);
-
 
 static	sLevelHdr		*LevelHdr;
 
@@ -117,6 +115,9 @@ static	DVECTOR			s_playerSpawnPos;
 		sThingFX		*FXList;
 		int				HazardCount;
 		sThingHazard	**HazardList;
+
+		u8				*m_RGBMap;
+		u8				*m_RGBTable;
 
 static	u8				m_isBossRespawn;
 static	s32				m_bossHealth;

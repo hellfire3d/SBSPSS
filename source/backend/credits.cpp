@@ -267,7 +267,8 @@ MemCard::Start();
 sl=new ("sldb") CSaveLoadDatabase();
 mode=mode_none;
 #endif
-	m_image=CFileIO::loadFile(BACKDROP_CREDITS_GFX);
+	m_image=LoadPakScreen(BACKDROP_CREDITS_GFX);
+
 	ASSERT(m_image);
 	SetScreenImage(m_image);
 	CFader::setFadingIn();

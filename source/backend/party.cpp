@@ -92,7 +92,7 @@ static int	s_leftBobSin,s_leftBob,s_rightBobSin,s_rightBob;
   ---------------------------------------------------------------------- */
 void CPartyScene::init()
 {
-	m_image=CFileIO::loadFile(BACKDROP_PARTYBACKDROP_GFX);
+	m_image=LoadPakScreen(BACKDROP_PARTYBACKDROP_GFX);
 	ASSERT(m_image);
 	SetScreenImage((u8*)m_image);
 

@@ -109,7 +109,7 @@ CGameOverScene	GameOverScene;
   ---------------------------------------------------------------------- */
 void CGameOverScene::init()
 {
-	m_image=CFileIO::loadFile(BACKDROP_GAMEOVER_GFX);
+	m_image=LoadPakScreen(BACKDROP_GAMEOVER_GFX);
 	ASSERT(m_image);
 	SetScreenImage((u8*)m_image);
 

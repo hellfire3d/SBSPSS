@@ -150,7 +150,7 @@ int fw=200;
 int fh=20;
 void CShopScene::init()
 {
-	m_image=CFileIO::loadFile(BACKDROP_SHOP_GFX);
+	m_image=LoadPakScreen(BACKDROP_SHOP_GFX);
 	ASSERT(m_image);
 	SetScreenImage((u8*)m_image);
 

@@ -28,7 +28,7 @@ class	FontBank;
 class CLayerTile3d : public CLayerTile
 {
 public:
-		CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
+		CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr,u8 *_RGBMap,u8 *_RGBTable);
 		~CLayerTile3d();
 
 		void			init(DVECTOR &MapPos,int Shift);
@@ -46,6 +46,8 @@ protected:
 		sVtx			*VtxList;
 		u16				*VtxIdxList;
 		DVECTOR			RenderOfs;
+		u8				*RGBMap;
+		u8				*RGBTable;
 
 		s16				*FTableX[16];
 		s16				*FTableY[16];

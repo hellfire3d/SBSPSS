@@ -33,7 +33,7 @@ virtual	void			think(DVECTOR &MapPos);
 virtual	void			render();
 
 		int				GetMapOfs()			{return(MapXY.vx+(MapXY.vy*MapWidth));}
-virtual	sTileMapElem	*GetMapPos()		{return(Map+GetMapOfs());}
+//virtual	sTileMapElem	*GetMapPos()		{return(Map+GetMapOfs());}
 virtual	sTileMapElem	*getMapPtr(int _x,int _y)			{return(&Map[(_x>>4)+((_y>>4)*MapWidth)]);}
 
 protected:

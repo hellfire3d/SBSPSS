@@ -87,27 +87,18 @@ sFlipTable	FlipTable[4]=
 								},0<<31}
 };
 
-u8	RGBTable[16*4];
-int	RS=128;
-int	Ri=-6;
-int	GS=128;
-int	Gi=-6;
-int	BS=128;
-int	Bi=-6;
-int	AS=128;
-int	Ai=-6;
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr,Hdr)
+CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr,u8 *_RGBMap,u8 *_RGBTable) : CLayerTile(LevelHdr,Hdr)
 {
 		ElemBank3d=LevelHdr->ElemBank3d;
 		TriList=LevelHdr->TriList;
 		QuadList=LevelHdr->QuadList;
 		VtxList=LevelHdr->VtxList;
 		VtxIdxList=LevelHdr->VtxIdxList;
-
+		RGBMap=_RGBMap;
+		RGBTable=_RGBTable;
 
 #if		defined(_SHOW_POLYZ_)
 		Font=new ("PrimFont") FontBank;
@@ -115,21 +106,6 @@ CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(Leve
 		Font->setOt( 0 );
 		Font->setTrans(1);
 #endif
-		for (int i=0; i<16; i++)
-		{
-			int	R,G,B;
-			R=RS-(i*Ri);
-			G=GS-(i*Gi);
-			B=BS-(i*Bi);
-			if (R<0) R=0; else if (R>255) R=255;
-			if (G<0) G=0; else if (G>255) G=255;
-			if (B<0) B=0; else if (B>255) B=255;
-
-			RGBTable[(i*4)+0]=R;
-			RGBTable[(i*4)+1]=G;
-			RGBTable[(i*4)+2]=B;
-			RGBTable[(i*4)+3]=0;
-		}
 
 }
 
@@ -263,33 +239,6 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 				RenderH=SCREEN_TILE3D_HEIGHT;
 			else
 				RenderH=MapHeight-MapXY.vy;
-
-#if	defined(__USER_daveo__)
-		if (AS!=-1)
-		{
-			RS=GS=BS=AS;
-		}
-		if (Ai!=-1)
-		{
-			Ri=Gi=Bi=Ai;
-		}
-
-		for (int i=0; i<16; i++)
-		{
-			int	R,G,B;
-			R=RS-(i*Ri);
-			G=GS-(i*Gi);
-			B=BS-(i*Bi);
-			if (R<0) R=0; else if (R>255) R=255;
-			if (G<0) G=0; else if (G>255) G=255;
-			if (B<0) B=0; else if (B>255) B=255;
-
-			RGBTable[(i*4)+0]=R;
-			RGBTable[(i*4)+1]=G;
-			RGBTable[(i*4)+2]=B;
-			RGBTable[(i*4)+3]=0;
-		}
-#endif
 }
 
 /*****************************************************************************/
@@ -322,12 +271,14 @@ s32		*OutPtr;
 			gte_ldv3(V0,V1,V2);
 			gte_stsxy3c(OutPtr);	// read XY back
 		}
-
 }
+
 /*****************************************************************************/
 void	CLayerTile3d::render()
 {
-sTileMapElem	*MapPtr=GetMapPos();
+int				MapOfs=GetMapOfs();
+sTileMapElem	*MapPtr=Map+MapOfs;
+u8				*RGBMapPtr=RGBMap+MapOfs;
 u8				*PrimPtr=GetPrimPtr();
 u32				*XYList=(u32*)SCRATCH_RAM;
 u32				T0,T1,T2,T3;
@@ -350,6 +301,7 @@ s16				TCount=0,QCount=0;
 		for (int Y=0; Y<RenderH; Y++)
 		{
 			sTileMapElem	*MapRow=MapPtr;
+			u8				*RGBRow=RGBMapPtr;
 			s32				BlkXOld=BlkPos.vx;
 			s16				*DeltaFX=FTableX[ShiftX];
 			s16				*DeltaBX=BTableX[ShiftX];
@@ -366,6 +318,9 @@ s16				TCount=0,QCount=0;
 				sTri		*TList=&TriList[Elem->TriStart];
 				int			QuadCount=Elem->QuadCount;				
 				sQuad		*QList=&QuadList[Elem->QuadStart];
+				int			RGBOfs=*RGBRow++;
+				u8			*RGB=&RGBTable[RGBOfs*(16*4)];
+
 				if (TriCount || QuadCount)	// Blank tiles rejected here, to prevent over processing (as no tri-count)
 				{
 					CMX_SetTransMtxXY(&BlkPos);
@@ -472,9 +427,9 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							addPrim(ThisOT,ThisPrim);
 							// lighting
-							T0=*(u32*)&RGBTable[TList->C0];
-							T1=*(u32*)&RGBTable[TList->C1];
-							T2=*(u32*)&RGBTable[TList->C2];
+							T0=*(u32*)&RGB[TList->C0];
+							T1=*(u32*)&RGB[TList->C1];
+							T2=*(u32*)&RGB[TList->C2];
 							*(u32*)&ThisPrim->r0=T0;
 							*(u32*)&ThisPrim->r1=T1;
 							*(u32*)&ThisPrim->r2=T2;
@@ -527,10 +482,10 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							*(u32*)&ThisPrim->x3=P3;	// Set XY3
 							// Lighting
-							T0=*(u32*)&RGBTable[QList->C0];
-							T1=*(u32*)&RGBTable[QList->C1];
-							T2=*(u32*)&RGBTable[QList->C2];
-							T3=*(u32*)&RGBTable[QList->C3];
+							T0=*(u32*)&RGB[QList->C0];
+							T1=*(u32*)&RGB[QList->C1];
+							T2=*(u32*)&RGB[QList->C2];
+							T3=*(u32*)&RGB[QList->C3];
 							*(u32*)&ThisPrim->r0=T0;
 							*(u32*)&ThisPrim->r1=T1;
 							*(u32*)&ThisPrim->r2=T2;
@@ -552,6 +507,7 @@ s16				TCount=0,QCount=0;
 				DeltaFX++; DeltaBX++;
 			}
 			MapPtr+=MapWidth;
+			RGBMapPtr+=MapWidth;
 			BlkPos.vx=BlkXOld;
 			BlkPos.vy+=BLOCK_SIZE;
 			DeltaFY++; DeltaBY++;

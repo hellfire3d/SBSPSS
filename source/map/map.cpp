@@ -231,18 +231,21 @@ extern int s_globalLevelSelectThing;
   ---------------------------------------------------------------------- */
 void CMapScene::init()
 {
+	CLevel::DisplayLoadingScreen();
 	m_font=new ("map screen font") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setOt(10);
 	m_font->setJustification(FontBank::JUST_LEFT);
 
-	m_screenImage=MemAlloc(512*256*2,"MapScreen");
-
 	m_currentChapterSelection=s_chapterToStartOn;
+/*
+	m_screenImage=MemAlloc(512*256*2,"MapScreen");
 //	m_mapBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(m_mapBackgroundImage);
 u8	*Back=(u8*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(Back);
 	LZNP_Decode(Back,(u8*)m_screenImage);
 	MemFree(Back);
+*/
+	m_screenImage=(char*)LoadPakScreen(MAP_MAP_BACKGROUND_GFX);
 
 // Load level Gfx
 	for (int i=0; i<MAP_GFX_MAX; i++)

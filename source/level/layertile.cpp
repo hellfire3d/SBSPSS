@@ -110,7 +110,7 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 void	CLayerTile::render()
 {
-sTileMapElem	*MapPtr=GetMapPos();
+sTileMapElem	*MapPtr=Map+GetMapOfs();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
 TSPRT			*PrimPtr=PrimBank;

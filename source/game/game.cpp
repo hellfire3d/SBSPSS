@@ -752,6 +752,7 @@ void CGameScene::hitBossArenaTrigger()
 void	CGameScene::initLevel()
 {
 	CSoundMediator::setCanPlaySfx(false);
+	Level.DisplayLoadingScreen(s_globalLevelSelectThing);
 	
 	SYSTEM_DBGMSG("InitLevel\n");
 	CThingManager::init();

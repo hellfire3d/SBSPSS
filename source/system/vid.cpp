@@ -6,6 +6,7 @@
 #include "system\vid.h"
 #include "gfx\prim.h"
 #include "fileio\fileio.h"
+#include "utils\lznp.h"
 
 
 /*****************************************************************************/
@@ -283,7 +284,7 @@ void VidSetRes(int x, int y)
 void VidInit()
 {
 // Wap up a loading screen
-u8	*screenData=CFileIO::loadFile(LOADINGSCREENS_BOOTSCREEN_GFX,"Loading Screen");
+u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 	SetScreenImage(screenData);
 
 //	VidSetXYOfs( ScreenXOfs, ScreenYOfs );
@@ -401,6 +402,19 @@ if(ScreenClipBox==2)
 	}
 }
 
+
+
+/*****************************************************************************/
+u8		*LoadPakScreen(int Filename)
+{
+u8		*PakData=CFileIO::loadFile((FileEquate)Filename,"PakScreen");
+u8		*Screen=(u8*)MemAlloc(512*256*2,"Screen");
+
+		LZNP_Decode(PakData,Screen);
+		MemFree(PakData);
+
+		return(Screen);
+}
 
 /*****************************************************************************/
 /*** VRAM VIEWER *************************************************************/

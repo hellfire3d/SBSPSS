@@ -187,7 +187,7 @@ void CFrontEndMainTitles::select()
 
 	m_demoTimeout=0;
 
-	s_image=CFileIO::loadFile(s_imageFiles[CGameSlotManager::getNumberOfFrontendScreenToUse()]);
+	s_image=LoadPakScreen(s_imageFiles[CGameSlotManager::getNumberOfFrontendScreenToUse()]);
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 

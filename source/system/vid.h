@@ -66,4 +66,6 @@ void		SetScreenImage(u8 *Ptr);
 u8			*GetScreenImage();
 void		ClearScreenImage();
 
+u8			*LoadPakScreen(int Filename);
+
 #endif

@@ -222,6 +222,12 @@ struct	sLayerShadeHdr
 };
 
 //---------------------------------------------------------------------------
+struct	sLayerRGBHdr
+{
+	u32		RGBMap;
+	u32		RGBTable;
+};
+//---------------------------------------------------------------------------
 struct	sModel
 {
 		u16		ElemID;
@@ -244,6 +250,7 @@ struct	sLevelHdr
 	u32			TriggerList;
 	u32			FXList;
 	u32			HazardList;
+	u32			RGBLayer;
 
 	u16			PlayerStartX,PlayerStartY;
 
