@@ -32,6 +32,8 @@ virtual	void			shutdown();
 		void			render(DVECTOR &MapPos);
 #endif
 
+		int				getMapWidth()	{return(MapWidth);}
+		int				getMapHeight()	{return(MapHeight);}
 
 protected:
 		sLayerHdr		*LayerHdr;
