@@ -6,7 +6,7 @@
 #include	data/scripts/defs/trans.scr
 
 
-_setText(CHAR_BARNACLEBOY,STR__INGAME__FMA_C6_BB_MM0);
+_setText(CHAR_MERMAIDMAN,STR__INGAME__FMA_C6_BB_MM0);
 _setResponseOptions(QUESTION_OK);
 do
 {
