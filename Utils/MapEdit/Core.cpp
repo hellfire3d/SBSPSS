@@ -421,6 +421,10 @@ bool	RedrawFlag=false;
 			DeleteLayer(Param0);
 			break;
 
+		case CmdMsg_Report:
+			GetTileBank()->Report();
+			break;
+
 // Pass remaining to Active Layer
 		default:
 			RedrawFlag=CurrentLayer->Command(CmdMsg,this,Param0,Param1);

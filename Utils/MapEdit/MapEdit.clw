@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=GUILayerCollision
+LastClass=CMapEditDoc
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -37,26 +37,26 @@ Class25=CMapEditDoc
 Class26=CMapEditView
 
 ResourceCount=21
-Resource1=IDD_ELEMLIST
-Resource2=IDD_LAYER_PLATFORM
-Resource3=IDD_LAYER_LIST
-Resource4=IDD_LAYER_THING_POS
-Resource5=IDD_NEWMAP
-Resource6=IDD_TILEBANK
-Resource7=IDD_LAYER_COLLISION
-Resource8=IDD_TOOLBAR
-Resource9=IDD_ADDLAYER
-Resource10=IDD_LAYER_TRIGGER
-Resource11=IDR_MAPEDITYPE (English (U.S.))
-Resource12=IDD_LAYER_SHADE
-Resource13=IDD_RESIZE
-Resource14=IDD_LAYER_THING
-Resource15=IDD_MULTIBAR (English (U.S.))
-Resource16=IDD_LAYER_FX
-Resource17=IDR_TOOLBAR (English (U.S.))
-Resource18=IDD_LAYER_ACTOR
-Resource19=IDR_MAINFRAME (English (U.S.))
-Resource20=IDD_ABOUTBOX (English (U.S.))
+Resource1=IDD_LAYER_LIST
+Resource2=IDD_TILEBANK
+Resource3=IDD_LAYER_THING_POS
+Resource4=IDD_ADDLAYER
+Resource5=IDD_LAYER_TRIGGER
+Resource6=IDR_TOOLBAR (English (U.S.))
+Resource7=IDD_MULTIBAR (English (U.S.))
+Resource8=IDR_MAINFRAME (English (U.S.))
+Resource9=IDD_LAYER_FX
+Resource10=IDD_TOOLBAR
+Resource11=IDD_LAYER_COLLISION
+Resource12=IDD_ABOUTBOX (English (U.S.))
+Resource13=IDD_LAYER_PLATFORM
+Resource14=IDD_NEWMAP
+Resource15=IDD_LAYER_THING
+Resource16=IDD_LAYER_SHADE
+Resource17=IDR_MAPEDITYPE (English (U.S.))
+Resource18=IDD_RESIZE
+Resource19=IDD_ELEMLIST
+Resource20=IDD_LAYER_ACTOR
 Resource21=IDD_LAYER_HAZARD
 
 [CLS:CChildFrame]
@@ -94,7 +94,7 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerCollision.h
 ImplementationFile=GUILayerCollision.cpp
-LastObject=IDC_LAYERCOLLISION_SB_NOMOVE
+LastObject=ID_APP_EXIT
 Filter=D
 VirtualFilter=dWC
 
@@ -226,7 +226,7 @@ HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
 Filter=N
 VirtualFilter=DC
-LastObject=CMapEditDoc
+LastObject=ID_REPORT
 
 [CLS:CMapEditView]
 Type=0
@@ -557,12 +557,13 @@ Command24=ID_ACTIVEBRUSH_LEFT
 Command25=ID_ACTIVEBRUSH_RIGHT
 Command26=ID_TOGGLE_SUBVIEW
 Command27=ID_2D_3D_TOGGLE
-Command28=ID_WINDOW_NEW
-Command29=ID_WINDOW_CASCADE
-Command30=ID_WINDOW_TILE_HORZ
-Command31=ID_WINDOW_ARRANGE
-Command32=ID_APP_ABOUT
-CommandCount=32
+Command28=ID_REPORT
+Command29=ID_WINDOW_NEW
+Command30=ID_WINDOW_CASCADE
+Command31=ID_WINDOW_TILE_HORZ
+Command32=ID_WINDOW_ARRANGE
+Command33=ID_APP_ABOUT
+CommandCount=33
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1

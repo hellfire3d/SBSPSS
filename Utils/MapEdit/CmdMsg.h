@@ -50,6 +50,8 @@ enum	CmdMsg
 		CmdMsg_ShadeGfxSelect,		// 32
 		CmdMsg_ShadeGfxGoto,		// 33
 		CmdMsg_ShadeGfxDelete,		// 34
+// Misc
+		CmdMsg_Report,				// 35
 
 };
 #endif

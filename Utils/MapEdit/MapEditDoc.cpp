@@ -36,9 +36,10 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	ON_COMMAND(ID_RESET_VIEW, OnResetView)
 	ON_COMMAND(ID_RENDER_TO_TGA, OnRenderToTga)
+	ON_COMMAND(ID_ROTATE, OnRotate)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleSubView)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
-	ON_COMMAND(ID_ROTATE, OnRotate)
+	ON_COMMAND(ID_REPORT, OnReport)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -183,6 +184,8 @@ void	CMapEditDoc::MouseMove(UINT nFlags, CPoint &point)						{Core.MouseMove(nFl
 void	CMapEditDoc::OnToggleSubView()											{Command(CmdMsg_ToggleSubView);}
 void	CMapEditDoc::OnToggleGrid()												{Command(CmdMsg_ToggleGrid);}
 void	CMapEditDoc::On2d3dToggle()												{Command(CmdMsg_Toggle2d);}
+void	CMapEditDoc::OnReport()													{Command(CmdMsg_Report);}
+
 
 void	CMapEditDoc::OnZoomIn()													{Command(CmdMsg_ZoomIn);}
 void	CMapEditDoc::OnZoomOut()												{Command(CmdMsg_ZoomOut);}
@@ -299,5 +302,6 @@ void	CMapEditDoc::FocusView()
 }
 
 /*********************************************************************************/
+
 
 

@@ -85,6 +85,7 @@ protected:
 	afx_msg void OnResetView();
 	afx_msg void OnRenderToTga();
 	afx_msg void OnRotate();
+	afx_msg void OnReport();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

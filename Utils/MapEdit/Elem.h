@@ -89,6 +89,8 @@ static	bool	DefTexFlag;
 		void	SetInvalid();
 		GLint	GetTexID()	{return(TexID);}
 
+		void		Report(FILE *File);
+
 protected:
 		void	Build3dElem(CTexCache &TexCache,CScene &ThisScene,int Node);
 		void	Build2dElem(CCore *Core,const char *Filename,int TexId);
@@ -102,6 +104,7 @@ protected:
 		GString					SetPath;
 
 		std::vector<sTriFace>	TriList;
+		GString					ElemName;
 
 		Vector3					Ofs;
 
@@ -145,6 +148,7 @@ const	char		*GetName()										{return(Name);}
 		bool		IsValid(int No);
 
 		bool		operator==(CElemSet const &v1)					{return (Name==v1.Name);}
+		void		Report(FILE *File);
 
 private:
 		void			Load2d(CCore *Core);
@@ -190,6 +194,7 @@ virtual	void		Save(CFile *File);
 const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
 const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
 
+		void		Report();
 // Overloads
 virtual	int			GetType()							{return(0);}
 

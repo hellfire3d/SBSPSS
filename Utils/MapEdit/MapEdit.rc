@@ -141,6 +141,7 @@ BEGIN
     POPUP "Misc"
     BEGIN
         MENUITEM "2d/3d Toggle",                ID_2D_3D_TOGGLE
+        MENUITEM "Report",                      ID_REPORT
     END
     POPUP "&Window"
     BEGIN

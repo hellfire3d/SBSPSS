@@ -73,6 +73,8 @@ int		AH=AlignSize(ElemHeight);
 		TexXOfs=0;
 		TexYOfs=0;
 		BlankFlag=true;
+		ElemName="BLANK";
+
 }
 
 /*****************************************************************************/
@@ -100,6 +102,7 @@ GFName		Path=Filename;
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
 			BlankFlag=false;
 //			if (!ValidFlag)	SetInvalid();
+			ElemName=ThisScene.GetNode(Node).Name;
 }
 
 /*****************************************************************************/
@@ -605,7 +608,7 @@ int		AH=AlignSize(ElemHeight);
 		RenderElem4Texture(RGBData);
 		ElemID=TexCache.ProcessTexture(TexName,&RGBData);
 		ValidFlag=CheckHasData(RGBData);
-
+		ElemName=TexName;
 #ifdef _DEBUG
 		if (0)
 		{
@@ -633,6 +636,34 @@ int		Size=RGBData.TexW*RGBData.TexH;
 		}
 
 	return(false);
+}
+
+/*****************************************************************************/
+void	CElem::Report(FILE	*File)
+{
+// Check Mid Geom
+int		i,ListSize=TriList.size();
+bool	MidGeom=false;
+		
+		if (!IsElem3d()) return;
+
+		for (i=0; i<ListSize && !MidGeom; i++)
+		{
+			sTriFace	&Tri=TriList[i];
+			for (int p=0; p<3; p++)
+			{
+//				fprintf(File,"%f\n",Tri.vtx[p].z);
+				if (Tri.vtx[p].z>-1.0f && Tri.vtx[p].z<+1.0f) MidGeom=true;
+			}
+		}
+// Basic Stats
+		fprintf(File,"%s\tT:%i",ElemName,TriList.size());
+		if (MidGeom)
+		{
+			fprintf(File,"\t*** MID GEOM ***");
+		}
+		fprintf(File,"\n");
+
 }
 
 /*****************************************************************************/
@@ -776,6 +807,17 @@ bool	CElemSet::IsValid(int No)
 int		ListSize=ElemList.size();
 		if (No>=ListSize) return(false);
 		return(ElemList[No].IsValid());
+}
+
+/*****************************************************************************/
+void	CElemSet::Report(FILE	*File)
+{
+int		i,ListSize=ElemList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			ElemList[i].Report(File);
+		}
 }
 
 /*****************************************************************************/
@@ -1092,6 +1134,19 @@ GLuint	*HitPtr=SelectBuffer;
 		CursorPos=TileID;
 }
 
+/*****************************************************************************/
+void	CElemBank::Report()
+{
+FILE	*File=fopen("\\Report.txt","wt");
+
+int		ListSize=SetList.size();
+		for (int i=0; i<ListSize; i++)
+		{
+			SetList[i].Report(File);
+		}
+
+		fclose(File);
+}
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
