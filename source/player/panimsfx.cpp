@@ -146,23 +146,39 @@ static const CPlayer::AnimFrameSfx s_swipeSfx[]=
 };
 static const int	s_swipeCount=sizeof(s_swipeSfx)/sizeof(CPlayer::AnimFrameSfx);
 
+// ANIM_SPONGEBOB_IDLEBIGEYE
+static const CPlayer::AnimFrameSfx s_idleBigEyeSfx[]=
+{
+	{	99,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+};
+static const int	s_idleBigEyeCount=sizeof(s_idleBigEyeSfx)/sizeof(CPlayer::AnimFrameSfx);
+
+// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+static const CPlayer::AnimFrameSfx s_idleFaceUpsideDownSfx[]=
+{
+	{	98,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+};
+static const int	s_idleFaceUpsideDownCount=sizeof(s_idleFaceUpsideDownSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 
 
 // This is the table that ties up anims to sfx
 const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 {
-	{	ANIM_SPONGEBOB_BALLOONJUMP,		s_balloonJumpCount,		s_balloonJumpSfx		},
-	{	ANIM_SPONGEBOB_BLOWBUBBLE,		s_blowBubbleCount,		s_blowBubbleSfx			},
-	{	ANIM_SPONGEBOB_BUTTBOUNCEEND,	s_buttBounceEndCount,	s_buttBounceEndSfx		},
-	{	ANIM_SPONGEBOB_HITGROUND,		s_hitGroundCount,		s_hitGroundSfx			},
-	{	ANIM_SPONGEBOB_JUMPEND,			s_jumpEndCount,			s_jumpEndSfx			},
-	{	ANIM_SPONGEBOB_KARATE,			s_karateCount,			s_karateSfx				},
-	{	ANIM_SPONGEBOB_RUN,				s_runCount,				s_runSfx				},
-	{	ANIM_SPONGEBOB_RUNSTOP,			s_runStopCount,			s_runStopSfx			},
-	{	ANIM_SPONGEBOB_WALK,			s_walkCount,			s_walkSfx				},
-	{	ANIM_SPONGEBOB_SWIPE,			s_swipeCount,			s_swipeSfx				},
+	{	ANIM_SPONGEBOB_BALLOONJUMP,			s_balloonJumpCount,			s_balloonJumpSfx		},
+	{	ANIM_SPONGEBOB_BLOWBUBBLE,			s_blowBubbleCount,			s_blowBubbleSfx			},
+	{	ANIM_SPONGEBOB_BUTTBOUNCEEND,		s_buttBounceEndCount,		s_buttBounceEndSfx		},
+	{	ANIM_SPONGEBOB_HITGROUND,			s_hitGroundCount,			s_hitGroundSfx			},
+	{	ANIM_SPONGEBOB_JUMPEND,				s_jumpEndCount,				s_jumpEndSfx			},
+	{	ANIM_SPONGEBOB_KARATE,				s_karateCount,				s_karateSfx				},
+	{	ANIM_SPONGEBOB_RUN,					s_runCount,					s_runSfx				},
+	{	ANIM_SPONGEBOB_RUNSTOP,				s_runStopCount,				s_runStopSfx			},
+	{	ANIM_SPONGEBOB_WALK,				s_walkCount,				s_walkSfx				},
+	{	ANIM_SPONGEBOB_SWIPE,				s_swipeCount,				s_swipeSfx				},
+	{	ANIM_SPONGEBOB_IDLEBIGEYE,			s_idleBigEyeCount,			s_idleBigEyeSfx			},
+	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
 };
-const int				CPlayer::s_numAnimSfx=10;		// Grrrrrrrr! (pkg)
+const int				CPlayer::s_numAnimSfx=12;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
