@@ -2027,8 +2027,9 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 	   m_currentMode!=PLAYER_MODE_DEAD &&
 	   m_currentMode!=PLAYER_MODE_SWALLOW)							// Or already dead! :)
 	{
-		int	ouchThatHurt=true;
-		int	ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
+		int						ouchThatHurt=true;
+		int						ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
+		CSoundMediator::SFXID	painSound=CSoundMediator::SFX_SPONGEBOB_OUCH;
 
 		// Check if we are currently immune to this damage type
 		switch(_damage)
@@ -2042,6 +2043,10 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 				if(isWearingBoots())
 				{
 					ouchThatHurt=false;
+				}
+				else
+				{
+					painSound=CSoundMediator::SFX_BOSS_JELLYFISH___SB_GETS_ELECTROCUTED;
 				}
 				break;
 
@@ -2159,6 +2164,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 						case REACT__NO_REACTION:
 							break;
 					}
+					CSoundMediator::playSfx(painSound);
 					m_currentPlayerModeClass->setState(STATE_JUMPBACK);
 				}
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
