@@ -93,8 +93,7 @@
 
 //int		GX=512/2;
 //int		GY=256/;
-int		GH=256;
-int		ZPos=5100/16;
+int			RenderZ=256;
 
 /*****************************************************************************/
 
@@ -137,14 +136,16 @@ void 	CGameScene::init()
 //		SetRotMatrix(&CamMtx);
 //		SetTransMatrix(&CamMtx);
 
+		SetGeomScreen(RenderZ);
+		CamMtx.t[2]=RenderZ;
+		SetTransMatrix(&CamMtx);		
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
 		VidSetClearScreen(0);
 
-//		SetGeomOffset( GX, GY );
-		SetGeomScreen(GH);
+
 
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
 		m_pauseMenu->init();
