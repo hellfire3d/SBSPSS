@@ -153,6 +153,14 @@ SOURCE=..\..\..\source\enemy\nbooger.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nboss.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nboss.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nbuttfly.cpp
 # End Source File
 # Begin Source File
