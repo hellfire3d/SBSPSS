@@ -4,4 +4,4 @@
 
 // For isHoldingWeapon()
 #define WEAPON_BUBBLEWAND			0
-
+#define WEAPON_BALLOON				1

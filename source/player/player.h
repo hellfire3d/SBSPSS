@@ -426,6 +426,8 @@ public:
 	int				getJellyFishAmmo()						{return m_jellyfishAmmoCount;}
 	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
+	int				isHoldingBalloon()						{return m_currentMode==PLAYER_MODE_BALLOON;}
+
 	void			setIsInWater(int _in)					{m_isInWater=_in;m_helmetSoundTimer=0;}
 	int				getIsInWater()							{return m_isInWater;}
 	int				getIsHelmetFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}

@@ -68,6 +68,7 @@ static FunctionDef s_functionNames[]=
 	{	"getAmmoCount",					1	},		// ammoId
 	{	"setAmmoCount",					2	},		// ammoId,amount
 	{	"isHoldingWeapon",				1	},		// weaponId
+	{	"giveWeapon",					1	},		// weaponId
 };
 static int		s_functionCount=sizeof(s_functionNames)/sizeof(FunctionDef);
 

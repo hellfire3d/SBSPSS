@@ -65,6 +65,7 @@ enum
 enum
 {
 	WEAPON_BUBBLEWAND,
+	WEAPON_BALLOON,
 };
 
 
@@ -90,6 +91,7 @@ static signed short func_getResponse(unsigned short *_args);
 static signed short func_getAmmoCount(unsigned short *_args);
 static signed short func_setAmmoCount(unsigned short *_args);
 static signed short func_isHoldingWeapon(unsigned short *_args);
+static signed short func_giveWeapon(unsigned short *_args);
 
 
 /*----------------------------------------------------------------------
@@ -105,6 +107,7 @@ static FunctionDef	s_functionDefs[]=
 	{	func_getAmmoCount,				1	},		// ammoId
 	{	func_setAmmoCount,				2	},		// ammoId,amount
 	{	func_isHoldingWeapon,			1	},		// weaponId
+	{	func_giveWeapon,				1	},		// weaponId
 };
 static const int	s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
 
@@ -244,12 +247,46 @@ static signed short func_isHoldingWeapon(unsigned short *_args)
 			}
 			break;
 
+		case WEAPON_BALLOON:
+			if(GameScene.getPlayer()->isHoldingBalloon())
+			{
+				held=1;
+			}
+			break;
+
 		default:
-			ASSERT(!"BAD AMMO TYPE IN func_setAmmoCount()");
+			ASSERT(!"BAD WEAPON TYPE IN func_isHoldingWeapon()");
 			break;
 	}
 
 	return held;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	
+	Params:		weaponId
+	Returns:	true(1) or false(0)
+  ---------------------------------------------------------------------- */
+static signed short func_giveWeapon(unsigned short *_args)
+{
+	switch(_args[0])
+	{
+		case WEAPON_BUBBLEWAND:
+			GameScene.getPlayer()->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
+			break;
+
+		case WEAPON_BALLOON:
+			GameScene.getPlayer()->setMode(PLAYER_MODE_BALLOON);
+			break;
+
+		default:
+			ASSERT(!"BAD WEAPON TYPE IN func_giveWeapon()");
+			break;
+	}
+
+	return 0;
 }
 
 
