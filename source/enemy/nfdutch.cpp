@@ -226,6 +226,11 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 		{
 			case FLYING_DUTCHMAN_GOTO_PLAYER:
 			{
+				if ( m_soundId == NOT_PLAYING )
+				{
+					m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+				}
+
 				if ( !m_animPlaying )
 				{
 					m_animPlaying = true;
@@ -385,6 +390,11 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 			{
 				if ( m_timerTimer > 0 )
 				{
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+					}
+
 					if ( !m_animPlaying )
 					{
 						m_animNo = m_data[m_type].moveAnim;
@@ -681,6 +691,7 @@ void CNpcFlyingDutchmanEnemy::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			setShadeTex(SprFrame,0);
 			setSemiTrans( SprFrame, true );
 			SprFrame->tpage|=1<<5;
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );

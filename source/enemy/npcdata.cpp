@@ -889,7 +889,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_ANEMONE_MOVE,
 		true,
 	},
 

@@ -35,6 +35,7 @@ void CNpcGhostEnemy::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			setShadeTex(SprFrame,0);
 			setSemiTrans( SprFrame, true );
 			m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 4096, 4096 );
 
