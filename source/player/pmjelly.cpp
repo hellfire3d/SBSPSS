@@ -102,61 +102,35 @@ void	CPlayerModeJellyLauncher::think()
 		case FIRING_STATE__POWERINGUP:
 			if(getPadInputHeld()&PI_ACTION)
 			{
+				int	fc,frame;
 				if(m_firingTime<TIMEOUT_FOR_BIG_SHOT)
 				{
 					m_firingTime++;
 				}
-				m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+				m_player->setAnimNo(ANIM_SPONGEBOB_FIRESTART);
+				fc=m_player->getAnimFrameCount();
+				if(m_firingTime>=fc)
+				{
+					frame=fc;
+				}
+				else
+				{
+					frame=m_firingTime;
+				}
+				m_player->setAnimFrame(frame);
 			}
 			else
 			{
 				m_firingState=FIRING_STATE__FIRING;
-				m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+				m_player->setAnimNo(ANIM_SPONGEBOB_FIREND);
+				launchProjectile();
 			}
 			break;
 		case FIRING_STATE__FIRING:
 			m_player->setAnimFrame(m_firingFrame++);
 			if(m_firingFrame>=m_player->getAnimFrameCount())
 			{
-				int					playerFacing;
-				DVECTOR				launchPos;
-				int					fireHeading;
-				CPlayerProjectile	*projectile;
-
-				playerFacing=m_player->getFacing();
-				launchPos=getPlayerPos();
-				launchPos.vx+=playerFacing*jellyLaunchPos.vx;
-				launchPos.vy+=jellyLaunchPos.vy;
-				if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>=AMMO_AMOUNT_FOR_BIG_SHOT)
-				{
-					// Powered up, big shot
-					int	i;
-
-					fireHeading=1024+(1024*playerFacing)-512;
-					for(i=0;i<3;i++)
-					{
-						projectile=new("JellyProjectile") CPlayerProjectile;
-						projectile->init(launchPos,
-										fireHeading,
-										 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
-										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-										5*60);
-						fireHeading+=512;
-						m_player->useOneJelly();
-					}
-				}
-				else
-				{
-					// Normal, small shot
-					fireHeading=1024+(1024*m_player->getFacing());
-					projectile=new("JellyProjectile") CPlayerProjectile;
-					projectile->init(launchPos,
-									 fireHeading,
-									 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
-									 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-									 5*60);
-					m_player->useOneJelly();
-				}
+				// Finished recoil
 				setState(STATE_IDLE);
 				m_firingState=FIRING_STATE__NONE;
 			}
@@ -282,6 +256,56 @@ int		CPlayerModeJellyLauncher::canFireFromThisState()
 	}
 
 	return ret;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeJellyLauncher::launchProjectile()
+{
+	int					playerFacing;
+	DVECTOR				launchPos;
+	int					fireHeading;
+	CPlayerProjectile	*projectile;
+
+	playerFacing=m_player->getFacing();
+	launchPos=getPlayerPos();
+	launchPos.vx+=playerFacing*jellyLaunchPos.vx;
+	launchPos.vy+=jellyLaunchPos.vy;
+	if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>=AMMO_AMOUNT_FOR_BIG_SHOT)
+	{
+		// Powered up, big shot
+		int	i;
+
+		fireHeading=1024+(1024*playerFacing)-512;
+		for(i=0;i<3;i++)
+		{
+			projectile=new("JellyProjectile") CPlayerProjectile;
+			projectile->init(launchPos,
+							fireHeading,
+							 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+							CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+							5*60);
+			fireHeading+=512;
+			m_player->useOneJelly();
+		}
+	}
+	else
+	{
+		// Normal, small shot
+		fireHeading=1024+(1024*m_player->getFacing());
+		projectile=new("JellyProjectile") CPlayerProjectile;
+		projectile->init(launchPos,
+						 fireHeading,
+						 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+						 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+						 5*60);
+		m_player->useOneJelly();
+	}
 }
 
 /*===========================================================================

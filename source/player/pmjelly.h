@@ -59,6 +59,9 @@ private:
 
 	int							canFireFromThisState();
 
+	void						launchProjectile();
+
+
 	int							m_firingFrame;
 	FIRING_STATE				m_firingState;
 	int							m_firingTime;
