@@ -89,7 +89,7 @@ int glasses_glintframes=16;
 int glasses_glintwait=400;
 int glasses_glintspeed=1;
 int glasses_glintRotSpeed=200;
-DVECTOR glasses_gxy={-3,-4};
+DVECTOR glasses_gxy={2,2};
 static const int glasses_glintFrames[]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4,FRM__GLINT4,FRM__GLINT3,FRM__GLINT2,FRM__GLINT1};
 void	CGlassesPickup::thinkPickup(int _frames)
 {
