@@ -23,6 +23,9 @@
 #include	"player\player.h"
 #endif
 
+#define MJ_CYCLE_WIDTH			400
+#define MJ_HALF_CYCLE_WIDTH		( MJ_CYCLE_WIDTH >> 1 )
+
 
 void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 {
@@ -31,9 +34,11 @@ void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 
 	switch( m_state )
 	{
-		case MOTHER_JELLYFISH_RETURN_TO_START:
+		case MOTHER_JELLYFISH_RETURN_TO_START_1:
+		case MOTHER_JELLYFISH_RETURN_TO_START_2:
+		case MOTHER_JELLYFISH_RETURN_TO_START_3:
 		{
-			xDist = m_base.vx - this->Pos.vx;
+			xDist = m_base.vx - this->Pos.vx - MJ_HALF_CYCLE_WIDTH;
 			xDistSqr = xDist * xDist;
 			yDist = m_base.vy - this->Pos.vy;
 			yDistSqr = yDist * yDist;
@@ -46,56 +51,70 @@ void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 			{
 				// have arrived at base position
 
-				m_movementTimer = GameState::getOneSecondInFrames() * 5;
-				m_state = MOTHER_JELLYFISH_CYCLE;
-				m_extension = 0;
+				m_movementTimer = GameState::getOneSecondInFrames() * 10;
+				m_state++;
+				m_extension = -MJ_HALF_CYCLE_WIDTH;
 				m_extendDir = EXTEND_RIGHT;
 			}
 
 			break;
 		}
 
-		case MOTHER_JELLYFISH_CYCLE:
+		case MOTHER_JELLYFISH_CYCLE_1:
+		case MOTHER_JELLYFISH_CYCLE_2:
+		case MOTHER_JELLYFISH_CYCLE_3:
 		{
-			if ( m_movementTimer > 0 )
+			m_movementTimer -= _frames;
+
+			s32 xExtension;
+
+			if ( m_extendDir == EXTEND_RIGHT )
 			{
-				m_movementTimer -= _frames;
-
-				if ( m_extendDir == EXTEND_RIGHT )
+				if ( m_extension < MJ_HALF_CYCLE_WIDTH )
 				{
-					if ( m_extension < 200 )
-					{
-						m_extension += 3 * _frames;
+					m_extension += 3 * _frames;
 
-						Pos.vx = m_base.vx + m_extension;
+					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
 
-						m_heading = 0;
-					}
-					else
-					{
-						m_extendDir = EXTEND_LEFT;
-					}
+					Pos.vx = m_base.vx + xExtension;
+					Pos.vy = m_base.vy - ( ( 50 * rsin( ( xExtension << 12 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+
+					m_heading = 0;
 				}
 				else
 				{
-					if ( m_extension > -200 )
-					{
-						m_extension -= 3 * _frames;
+					m_extendDir = EXTEND_LEFT;
 
-						Pos.vx = m_base.vx + m_extension;
-
-						m_heading = 2048;
-					}
-					else
+					if ( m_movementTimer < 0 )
 					{
-						m_extendDir = EXTEND_RIGHT;
+						m_controlFunc = NPC_CONTROL_CLOSE;
+						m_state++;
 					}
 				}
 			}
 			else
 			{
-				m_controlFunc = NPC_CONTROL_CLOSE;
-				m_state = MOTHER_JELLYFISH_ATTACK_PLAYER;
+				if ( m_extension > -MJ_HALF_CYCLE_WIDTH )
+				{
+					m_extension -= 3 * _frames;
+
+					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+
+					Pos.vx = m_base.vx + xExtension;
+					Pos.vy = m_base.vy + ( ( 50 * rsin( ( xExtension << 12 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+
+					m_heading = 2048;
+				}
+				else
+				{
+					m_extendDir = EXTEND_RIGHT;
+
+					if ( m_movementTimer < 0 )
+					{
+						m_controlFunc = NPC_CONTROL_CLOSE;
+						m_state++;
+					}
+				}
 			}
 
 			break;
@@ -108,31 +127,85 @@ void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 
 void CNpcEnemy::processCloseMotherJellyfishAttack( int _frames )
 {
-	// seek position above user
-
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-	DVECTOR seekPos;
-	s32 xDist, yDist;
-	s32 xDistSqr, yDistSqr;
-
-	seekPos = playerPos;
-	seekPos.vy -= 100;
-
-	xDist = seekPos.vx - this->Pos.vx;
-	xDistSqr = xDist * xDist;
-	yDist = seekPos.vy - this->Pos.vy;
-	yDistSqr = yDist * yDist;
-
-	if ( xDistSqr + yDistSqr > 400 )
+	switch( m_state )
 	{
-		processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
-	}
-	else
-	{
-		// fire at user
+		case MOTHER_JELLYFISH_ATTACK_PLAYER_SHOCK:
+		{
+			// seek position above user
 
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_state = MOTHER_JELLYFISH_RETURN_TO_START;
+			CPlayer *player = GameScene.getPlayer();
+			DVECTOR playerPos = player->getPos();
+			DVECTOR seekPos;
+			s32 xDist, yDist;
+			s32 xDistSqr, yDistSqr;
+
+			seekPos = playerPos;
+			seekPos.vy -= 100;
+
+			xDist = seekPos.vx - this->Pos.vx;
+			xDistSqr = xDist * xDist;
+			yDist = seekPos.vy - this->Pos.vy;
+			yDistSqr = yDist * yDist;
+
+			if ( xDistSqr + yDistSqr > 400 )
+			{
+				processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
+			}
+			else
+			{
+				// fire at user
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
+			}
+
+			break;
+		}
+
+		default:
+		{
+			s32 xExtension;
+
+			if ( m_extendDir == EXTEND_RIGHT )
+			{
+				if ( m_extension < MJ_HALF_CYCLE_WIDTH )
+				{
+					m_extension += 3 * _frames;
+
+					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+
+					Pos.vx = m_base.vx + xExtension;
+					Pos.vy = m_base.vy - ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+
+					m_heading = 0;
+				}
+				else
+				{
+					m_controlFunc = NPC_CONTROL_MOVEMENT;
+					m_state++;
+				}
+			}
+			else
+			{
+				if ( m_extension > -MJ_HALF_CYCLE_WIDTH )
+				{
+					m_extension -= 3 * _frames;
+
+					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+
+					Pos.vx = m_base.vx + xExtension;
+					Pos.vy = m_base.vy + ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+
+					m_heading = 2048;
+				}
+				else
+				{
+					m_controlFunc = NPC_CONTROL_MOVEMENT;
+					m_state++;
+				}
+			}
+
+			break;
+		}
 	}
 }

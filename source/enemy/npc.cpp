@@ -209,7 +209,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_CLAM_STATIC;
+	m_type = NPC_MOTHER_JELLYFISH;
 
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
@@ -234,7 +234,7 @@ void CNpcEnemy::init()
 
 	m_extension = EXTEND_RIGHT;
 
-	Pos.vx = 100;
+	Pos.vx = 400;
 	Pos.vy = 100;
 
 	m_base = Pos;
@@ -297,7 +297,7 @@ void CNpcEnemy::init()
 
 		case NPC_INIT_MOTHER_JELLYFISH:
 		{
-			m_state = MOTHER_JELLYFISH_RETURN_TO_START;
+			m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
 
 			break;
 		}
