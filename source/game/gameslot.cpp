@@ -1,0 +1,172 @@
+/*=========================================================================
+
+	gameslot.cpp
+
+	Author:		PKG
+	Created: 
+	Project:	Spongebob
+	Purpose: 
+
+	Copyright (c) 2000 Climax Development Ltd
+
+===========================================================================*/
+
+
+/*----------------------------------------------------------------------
+	Includes
+	-------- */
+
+#include "game\gameslot.h"
+
+#ifndef	__SYSTEM_DBG_H__
+#include "system\dbg.h"
+#endif
+
+
+/*	Std Lib
+	------- */
+
+/*	Data
+	---- */
+
+/*----------------------------------------------------------------------
+	Tyepdefs && Defines
+	------------------- */
+
+/*----------------------------------------------------------------------
+	Structure defintions
+	-------------------- */
+
+/*----------------------------------------------------------------------
+	Function Prototypes
+	------------------- */
+
+/*----------------------------------------------------------------------
+	Vars
+	---- */
+
+CGameSlotManager::GameSlot	CGameSlotManager::s_gameSlots[4];
+CGameSlotManager::GameSlot	*CGameSlotManager::s_currentGameSlot=0;
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::init()
+{
+	int			i;
+
+	for(i=0;i<NUM_GAME_SLOTS;i++)
+	{
+		eraseGameSlot(i);
+	}
+
+	setActiveSlot(0);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::setActiveSlot(unsigned int _slot)
+{
+	ASSERT(_slot<=NUM_GAME_SLOTS);
+	s_currentGameSlot=&s_gameSlots[_slot];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CGameSlotManager::GameSlot CGameSlotManager::getSlotData()
+{
+	ASSERT(s_currentGameSlot!=0);
+	return *s_currentGameSlot;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::setSlotData(GameSlot *_data)
+{
+	ASSERT(s_currentGameSlot!=0);
+	*s_currentGameSlot=*_data;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::eraseGameSlot(unsigned int _slot)
+{
+	ASSERT(_slot<=NUM_GAME_SLOTS);
+
+	GameSlot	*slot;
+
+	slot=&s_gameSlots[_slot];
+
+	slot->m_lives=INITIAL_LIVES;
+	slot->m_continues=INITIAL_CONTINUES;
+	slot->m_maxLevelCompleted=0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::copyGameSlot(unsigned int _src,unsigned int _dest)
+{
+	ASSERT(_src<=NUM_GAME_SLOTS);
+	ASSERT(_dest<=NUM_GAME_SLOTS);
+
+	s_gameSlots[_dest]=s_gameSlots[_src];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGameSlotManager::setSlotData(int _slot,GameSlot *_data)
+{
+	ASSERT(_slot<=NUM_GAME_SLOTS);
+	s_gameSlots[_slot]=*_data;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CGameSlotManager::GameSlot CGameSlotManager::getSlotData(int _slot)
+{
+	ASSERT(_slot<=NUM_GAME_SLOTS);
+	return s_gameSlots[_slot];
+}
+
+
+/*===========================================================================
+ end */
