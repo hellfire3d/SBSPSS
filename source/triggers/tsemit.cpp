@@ -19,6 +19,8 @@
 #include	"game\game.h"
 #endif
 
+#include "fx\fxsteam.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +29,6 @@ void	CSteamEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 	CTrigger::setPositionAndSize( _x, _y, _w, _h );
 
 	m_effect = CFX::Create( CFX::FX_TYPE_STEAM, Pos );
-	//CFXBaseAnim *m_animEffect = (CFXBaseAnim *) m_effect;
-	//m_animEffect->SetScaleX( ( _w * ONE ) >> 5 );
-	//m_animEffect->SetScaleY( ( _h * ONE ) >> 5 );
+	CFXSteam *steam = (CFXSteam *) m_effect;
+	steam->SetSize( ( _h >> 4 ) * ONE );
 }

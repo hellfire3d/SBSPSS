@@ -119,6 +119,18 @@
 #include "triggers\tlbemit.h"
 #endif
 
+#ifndef __TRIGGERS_TSDOWNEMIT_H__
+#include "triggers\tsdownemit.h"
+#endif
+
+#ifndef __TRIGGERS_TSLEFTEMIT_H__
+#include "triggers\tsleftemit.h"
+#endif
+
+#ifndef __TRIGGERS_TSRIGHTEMIT_H__
+#include "triggers\tsrightemit.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -225,6 +237,21 @@ CTrigger	*trigger;
 		// Steam emitter
 		case TRIGGER_STEAM_EMITTER:
 			trigger=(CSteamEmitterTrigger*)new("SteamEmitterTrigger") CSteamEmitterTrigger();
+			break;
+
+		// Down steam emitter
+		case TRIGGER_STEAM_DOWN_EMITTER:
+			trigger=(CSteamDownEmitterTrigger*)new("SteamDownEmitterTrigger") CSteamDownEmitterTrigger();
+			break;
+
+		// Left steam emitter
+		case TRIGGER_STEAM_LEFT_EMITTER:
+			trigger=(CSteamLeftEmitterTrigger*)new("SteamLeftEmitterTrigger") CSteamLeftEmitterTrigger();
+			break;
+
+		// Right steam emitter
+		case TRIGGER_STEAM_RIGHT_EMITTER:
+			trigger=(CSteamRightEmitterTrigger*)new("SteamRightEmitterTrigger") CSteamRightEmitterTrigger();
 			break;
 
 		// Water drip emitter

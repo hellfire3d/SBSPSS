@@ -324,7 +324,10 @@ triggers_src :=		trigger \
 					twdripemit \
 					tadripemit \
 					todripemit \
-					tldripemit
+					tldripemit \
+					tsdownemit \
+					tsleftemit \
+					tsrightemit
 
 utils_src :=		utils \
 					sincos \

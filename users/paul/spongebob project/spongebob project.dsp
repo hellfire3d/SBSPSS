@@ -2253,11 +2253,35 @@ SOURCE=..\..\..\source\triggers\trigger.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tsdownemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsdownemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tsemit.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tsemit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsleftemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsleftemit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsrightemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsrightemit.h
 # End Source File
 # Begin Source File
 

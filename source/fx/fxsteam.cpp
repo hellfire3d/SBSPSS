@@ -30,6 +30,7 @@ void	CFXSteam::init(DVECTOR const &_Pos)
 		ShadeDec=DefShadeDec;
 		DieOut=false;
 		SetSize(DefSize);
+		IsHorizontal=false;
 }
 
 /*****************************************************************************/
@@ -45,6 +46,13 @@ void	CFXSteam::SetSize(int Size)
 		ScaleInc=(4096/LIST_SIZE)*Size;
 		BaseVel.vx=0;
 		BaseVel.vy=-Size;
+}
+
+/*****************************************************************************/
+void	CFXSteam::SetVel(DVECTOR const &Velocity)
+{
+	BaseVel.vx=Velocity.vx;
+	BaseVel.vy=Velocity.vy;
 }
 
 /*****************************************************************************/
@@ -70,7 +78,14 @@ void	CFXSteam::think(int _frames)
 		if (!DieOut)
 		{ // Replace Head
 			DVECTOR	Vel=BaseVel;
-			Vel.vx+=getRndRange(3)-1;
+			if ( IsHorizontal )
+			{
+				Vel.vy+=getRndRange(3)-1;
+			}
+			else
+			{
+				Vel.vx+=getRndRange(3)-1;
+			}
 
 			sList	&Head=moveHead();
 			Head.Ofs=Vel;
