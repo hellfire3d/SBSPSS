@@ -92,20 +92,21 @@ void CPlayerStateRun::enter(CPlayer *_player)
 void CPlayerStateRun::think(CPlayer *_player)
 {
 	int	controlDown,controlHeld;
+	int switchedState=false;
 	controlDown=getPadInputDown(_player);
 	controlHeld=getPadInputHeld(_player);
 
 	if(controlDown&PI_JUMP)
 	{
-		setState(_player,STATE_JUMP);
+		switchedState=setState(_player,STATE_JUMP);
 	}
 	if(controlHeld&PI_DOWN)
 	{
-		setState(_player,STATE_DUCK);
+		switchedState=setState(_player,STATE_DUCK);
 	}
 	if(controlDown&PI_ACTION)
 	{
-		setState(_player,STATE_RUNATTACK);
+		switchedState=setState(_player,STATE_RUNATTACK);
 	}
 
 	if(controlHeld&PI_LEFT)
@@ -120,10 +121,13 @@ void CPlayerStateRun::think(CPlayer *_player)
 	{
 		if(getMoveVelocity(_player).vx==0)
 		{
-			setState(_player,STATE_IDLE);
-			if(m_numberOfTimeAnimHasLooped>=4)
+			if(!switchedState)
 			{
-				setAnimNo(_player,ANIM_SPONGEBOB_RUNSTOP);
+				setState(_player,STATE_IDLE);
+				if(m_numberOfTimeAnimHasLooped>=4)
+				{
+					setAnimNo(_player,ANIM_SPONGEBOB_RUNSTOP);
+				}
 			}
 		}
 		else
