@@ -40,6 +40,7 @@ public:
 	virtual void	enter();
 	virtual void	think();
 	virtual void	render(DVECTOR *_pos);
+	virtual void	renderModeUi();
 
 	virtual int							canFallForever()		{return true;}
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
@@ -52,6 +53,7 @@ private:
 	{
 		BALLOON_TIMEOUT=8*60,
 		BALLOON_POP_FRAMES=4,
+		BALLOON_FLASH_TIME=2*60,
 	};
 	int				m_timer;
 	int				m_playedPopSound;

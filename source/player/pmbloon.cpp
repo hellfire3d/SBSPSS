@@ -148,6 +148,26 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::renderModeUi()
+{
+	if(m_timer<BALLOON_TIMEOUT-BALLOON_FLASH_TIME||m_timer&2)
+	{
+		SpriteBank	*sb;
+		sFrameHdr	*fh;
+
+		sb=CGameScene::getSpriteBank();
+		fh=sb->getFrameHeader(FRM__BALLOON);
+
+		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,384);
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 const struct PlayerMetrics	*CPlayerModeBalloon::getPlayerMetrics()
 {
 	return &s_playerMetrics;
