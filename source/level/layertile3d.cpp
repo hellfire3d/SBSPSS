@@ -138,15 +138,15 @@ VECTOR			BlkPos;
 				int			TriCount=Tile->TriCount;				
 				sTri		*TList=&TriList[Tile->TriStart];
 
+				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
 				{
-					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
 					CMX_SetTransMtxXY(&BlkPos);
 					gte_ldv3(P0,P1,P2);
 					setlen(TPrimPtr, GPU_PolyFT3Tag);
 					TPrimPtr->code=TList->PolyCode;
-					setRGB0(TPrimPtr,128,128,128);
 					gte_rtpt_b();
+					setShadeTex(TPrimPtr,1);
 			
 					T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 					T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
@@ -155,9 +155,9 @@ VECTOR			BlkPos;
 					*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 					*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
-					ASSERT(TList->OTOfs<MAX_OT);
 					ThisOT=OtPtr+TList->OTOfs;
 					TList++;
+					P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
 					gte_nclip_b();
 					gte_stsxy3_ft3(TPrimPtr);
 					gte_stopz(&ClipZ);
