@@ -73,7 +73,8 @@ struct	sExpMapElem
 
 BOOL	operator==(sExpMapElem const &v1)	// Does Check flags
 		{
-		return(Set==v1.Set && Tile==v1.Tile && Flags==v1.Flags);
+		return(Set==v1.Set && Tile==v1.Tile);
+//		return(Set==v1.Set && Tile==v1.Tile && Flags==v1.Flags);
 		}
 };
 

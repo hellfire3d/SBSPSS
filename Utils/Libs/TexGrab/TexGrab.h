@@ -55,8 +55,8 @@ public:
 		CTexGrab();
 		~CTexGrab();
 
-		void	AddFile(const char *Name);
-		void	AddMemFrame(const char *Name,Frame &Frame);
+		int		AddFile(const char *Name);
+		int		AddMemFrame(const char *Name,Frame &Frame);
 
 		void	Process();
 

@@ -76,8 +76,8 @@ public:
 	void setNoSort(void)							{m_noSort=true;}
 
 	void	SortOrder();
-	void	AddFile(const char * Name);
-	void	AddMemFrame(char const * FName,Frame &Frame);
+	int		AddFile(const char * Name);
+	int		AddMemFrame(char const * FName,Frame &Frame);
 	void	ReadRepFile(char const * Name);
 
 

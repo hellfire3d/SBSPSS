@@ -269,13 +269,13 @@ BOOL	operator==(sUV const &v1)
 		{
 		return(u==v1.u && v==v1.v);
 		}
-/*
-void	operator=(sUV &Src)	
+
+inline	operator=(sUV const &Src)	
 {
 		u=Src.u;
 		v=Src.v;
 }
-*/
+
 };
 
 struct sUVTri
@@ -289,17 +289,15 @@ BOOL	operator==(sUVTri const &v1)
 		}
 		return (TRUE);
 		}
-/*
-inline void	operator=(sUVTri &Src)	
+
+inline operator=(sUVTri const &Src)	
 {
 		for (int i=0; i<3; i++) 
 		{
-			//p[i]=Src.p[i];
-			p[i].u=Src.p[i].u;
-			p[i].v=Src.p[i].v;
+			p[i]=Src.p[i];
 		}
 }
-*/
+
 };
 
 class CUVtri: public GinChunk

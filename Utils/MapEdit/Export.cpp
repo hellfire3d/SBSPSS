@@ -79,11 +79,12 @@ sExpMapElem		BlankElem={0,0,0};
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
 				sExpMapElem		TileElem;
+				sExpLayerTile	OutElem;
 
 				TileElem.Tile=MapElem.Tile;
 				TileElem.Set=MapElem.Set;
 				TileElem.Flags=MapElem.Flags;
-				sExpLayerTile	OutElem;
+				
 				OutElem.Tile=UsedTileList.Add(TileElem);
 				OutElem.Flags=MapElem.Flags;
 				fwrite(&OutElem,sizeof(sExpLayerTile),1,File);

@@ -34,9 +34,11 @@
 				properties that the AllFiles object has.
 	Params:		Name of file to add
   ---------------------------------------------------------------------- */
-void AllFiles::AddFile(const char * Name)
+int	AllFiles::AddFile(const char * Name)
 {
+int	ListSize=AllFileInfos.size();
 	DoCycle(Name,RecurseFiles);
+	return(ListSize);
 }
 
 /*----------------------------------------------------------------------
@@ -118,7 +120,7 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 		}
 }
 
-void AllFiles::AddMemFrame(char const * FName,Frame &Frame)
+int	AllFiles::AddMemFrame(char const * FName,Frame &Frame)
 {
 	FileInfo	MyInfo;
 	bool		ThisZeroColZero;
@@ -148,10 +150,10 @@ void AllFiles::AddMemFrame(char const * FName,Frame &Frame)
 
 		if (ForceOffsets)
 			MyInfo.SetForceOffsets(XOff,YOff);
-		
-		AllFileInfos.resize(AllFileInfos.size()+1);
-		AllFileInfos[AllFileInfos.size()-1]=MyInfo;
-
+int	ListSize=AllFileInfos.size();
+		AllFileInfos.resize(ListSize+1);
+		AllFileInfos[ListSize]=MyInfo;
+	return(ListSize);
 }
 
 /*----------------------------------------------------------------------
