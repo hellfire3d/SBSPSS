@@ -653,6 +653,7 @@ m_animFrame=0;
 
 	resetPlayerCollisionSizeToBase();
 
+	m_lockoutPlatform = NULL;
 	m_divingHelmet=false;
 	setIsInWater(true);
 
@@ -765,13 +766,14 @@ if(newmode!=-1)
 				{
 					int goingToHitWall=false;
 					int	i;
-					for(i=0;i<2;i++)
+					for(i=-1;i<2;i++)
 					{
-						int x=Pos.vx+((i==0?-checkx:+checkx));
+						int x=Pos.vx+(checkx*i);
 						int	y=Pos.vy-HEIGHT_FOR_HEAD_COLLISION;
 						if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 						{
 							goingToHitWall=true;
+							setLockoutPlatform( m_platform );
 							break;
 						}
 					}
@@ -2680,11 +2682,39 @@ void	CPlayer::buttFall()
   ---------------------------------------------------------------------- */
 void	CPlayer::setPlatform(CThing *_newPlatform)
 {
-	m_platform=_newPlatform;
+	if ( _newPlatform != m_lockoutPlatform )
+	{
+		m_platform=_newPlatform;
+		m_lockoutPlatform = NULL;
+	}
 }
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::clearPlatform()
 {
 	m_platform=NULL;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::setLockoutPlatform(CThing *_newPlatform)
+{
+	// this platform is not to be used until the player has hit either
+	// (a) another platform
+	// (b) the ground
+
+	// should stop player-platform interaction when he is knocked off by collision
+
+	m_lockoutPlatform = _newPlatform;
 }
 
 
@@ -2766,23 +2796,23 @@ int		CPlayer::moveVertical(int _moveDistance)
 	}
 	else if(_moveDistance<0)
 	{
-		int colHeightBefore[2],colHeightAfter[2],blockAfter[2],moveRequired[2];
+		int colHeightBefore[3],colHeightAfter[3],blockAfter[3],moveRequired[3];
 		int	i;
 		int	move;
 
 		// -------------- Jumping - See if the feet have hit anything --------------
 
 		// Get heights of the two edges
-		for(i=0;i<+2;i++)
+		for(i=-1;i<+2;i++)
 		{
-			int x=pos.vx+((i==0?-checkx:+checkx));
-			colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
-			colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
-			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,pos.vy+_moveDistance);
+			int x=pos.vx+(checkx*i);
+			colHeightBefore[i+1]=getHeightFromGround(x,pos.vy,16);
+			colHeightAfter[i+1]=getHeightFromGround(x,pos.vy+_moveDistance,16);
+			blockAfter[i+1]=CGameScene::getCollision()->getCollisionBlock(x,pos.vy+_moveDistance);
 		}
 
 		// See if either side is about to go through the ground
-		for(i=0;i<2;i++)
+		for(i=0;i<3;i++)
 		{
 			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 			{
@@ -2798,7 +2828,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 
 		// Find the smallest move required to hit ground
 		move=0;
-		for(i=0;i<2;i++)
+		for(i=0;i<3;i++)
 		{
 			if(moveRequired[i]<move)
 			{
@@ -2813,20 +2843,21 @@ int		CPlayer::moveVertical(int _moveDistance)
 		
 		// Get heights of the two edges
 		int	y=pos.vy-HEIGHT_FOR_HEAD_COLLISION;
-		for(i=0;i<+2;i++)
+		for(i=-1;i<+2;i++)
 		{
-			int x=pos.vx+((i==0?-checkx:+checkx));
-			colHeightBefore[i]=getHeightFromGround(x,y,16);
-			colHeightAfter[i]=getHeightFromGround(x,y+_moveDistance,16);
-			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,y+_moveDistance);
+			int x=pos.vx+(checkx*i);
+			colHeightBefore[i+1]=getHeightFromGround(x,y,16);
+			colHeightAfter[i+1]=getHeightFromGround(x,y+_moveDistance,16);
+			blockAfter[i+1]=CGameScene::getCollision()->getCollisionBlock(x,y+_moveDistance);
 		}
 
 		// See if either side is about to go through the ground
-		for(i=0;i<2;i++)
+		for(i=0;i<3;i++)
 		{
 			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 			{
-				moveRequired[i]=16+colHeightAfter[i];
+				//moveRequired[i]=16+colHeightAfter[i];
+				moveRequired[i]=colHeightAfter[i];
 //				hitGround=true;
 
 				// do not call hitground code, because this will set it to STATE_IDLE for a frame
@@ -2849,7 +2880,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 
 		// Find the smallest move required to hit ground
 		move=0;
-		for(i=0;i<2;i++)
+		for(i=0;i<3;i++)
 		{
 			if(moveRequired[i]<move)
 			{

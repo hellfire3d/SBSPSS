@@ -433,6 +433,9 @@ void	CPlayerModeBase::playerHasHitGround()
 	moveVel=*m_player->getMoveVelocity();
 	moveVel.vy=0;
 	m_fallFrames=0;
+
+	m_player->setLockoutPlatform( NULL );
+
 	if(m_currentState==STATE_BUTTFALL)
 	{
 		// Landed from a butt bounce

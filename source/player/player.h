@@ -470,11 +470,13 @@ private:
 	// Platforms
 public:
 	void			setPlatform(CThing *_newPlatform);
+	void			setLockoutPlatform(CThing *_newPlatform);
 	void			clearPlatform();
 	CThing			*isOnPlatform()						{return m_platform;}
 
 private:
 	CThing			*m_platform;
+	CThing			*m_lockoutPlatform;
 
 
 	// Player collision size
