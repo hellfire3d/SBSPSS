@@ -38,10 +38,18 @@ public:
 	void			enter(class CPlayerModeBase *_playerMode);
 	void			think(class CPlayerModeBase *_playerMode);
 
+private:
+	enum
+	{
+		BUTT_BOUNCE_TIMEOUT=45,
+	};
+
+	unsigned int	m_buttBounceTimer;
+
 };
 
 
-class CPlayerStateFallFar : public CPlayerStateFall
+class CPlayerStateFallFar : public CPlayerState
 {
 private:
 	void			enter(class CPlayerModeBase *_playerMode);

@@ -66,10 +66,15 @@ CPlayerStateFallFar			s_stateFallFar;
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::enter(CPlayerModeBase *_playerMode)
 {
-	if(_playerMode->getAnimNo()!=ANIM_SPONGEBOB_JUMP)
+	// If already in this state then don't do the entry code
+	if(_playerMode->getState()!=STATE_JUMP)
 	{
-		_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+		if(_playerMode->getAnimNo()!=ANIM_SPONGEBOB_JUMP)
+		{
+			_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+		}
 	}
+	m_buttBounceTimer=0;
 }
 
 
@@ -105,9 +110,21 @@ void CPlayerStateFall::think(CPlayerModeBase *_playerMode)
 	}
 	_playerMode->fall();
 
-	if(controlDown&PI_DOWN)
+	// Double-tap for butt bounce
+	if(m_buttBounceTimer)
 	{
-		_playerMode->setState(STATE_BUTTBOUNCE);
+		m_buttBounceTimer--;
+	}
+	if(controlDown&PI_JUMP)
+	{
+		if(m_buttBounceTimer==0)
+		{
+			m_buttBounceTimer=BUTT_BOUNCE_TIMEOUT;
+		}
+		else
+		{
+			_playerMode->setState(STATE_BUTTBOUNCE);
+		}
 	}
 }
 
