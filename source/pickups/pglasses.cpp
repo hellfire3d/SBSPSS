@@ -55,7 +55,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CSpatulaPickup::render()
+void	CGlassesPickup::render()
 {
 	DVECTOR		ofs;
 	SpriteBank	*sprites;
@@ -64,12 +64,23 @@ void	CSpatulaPickup::render()
 
 	ofs=getRenderOffset();
 	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__SPATULA);
+	fh=sprites->getFrameHeader(FRM__GLASSES);
 	x=Pos.vx-ofs.vx-(fh->W/2);
 	y=Pos.vy-ofs.vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,2);
+	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 
 	CBasePickup::render();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CGlassesPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
 }
 
 /*===========================================================================

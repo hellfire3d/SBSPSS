@@ -144,6 +144,16 @@ pad_src :=			pads
 paul_src :=			paul \
 					scenesel
 
+pickups_src :=		pickup \
+					pbubmix \
+					pglasses \
+					phealth \
+					pjlammo \
+					plife \
+					pquest \
+					pshoes \
+					pspatula
+
 player_src :=		demoplay \
 					panimsfx \
 					player \

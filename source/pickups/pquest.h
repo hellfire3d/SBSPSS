@@ -47,6 +47,9 @@ public:
 protected:
 	virtual int			getFrameNumber()=0;
 
+private:
+	int					m_pingFrame;
+
 };
 
 class CTestQuestItemPickup : public CBaseQuestItemPickup

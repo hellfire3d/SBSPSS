@@ -108,7 +108,7 @@ void	CBubbleMixturePickup::render()
 	fh=sprites->getFrameHeader(FRM__BUBBLEMIXTURE);
 	x=Pos.vx-ofs.vx-(fh->W/2);
 	y=Pos.vy-ofs.vy-(fh->H/2)+((msin(m_sin)*bubmix_bobscale)>>12);
-	sprites->printFT4(fh,x,y,0,0,2);
+	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 
 	CBasePickup::render();
 }

@@ -37,6 +37,11 @@ typedef enum
 	PICKUP__25_PERCENT_LIFE,
 	PICKUP__LIFE,
 	PICKUP__SPATULA,
+	PICKUP__JELLY_LAUNCHER_AMMO,
+	PICKUP__BUBBLE_MIXTURE,
+	PICKUP__GLASSES,
+	PICKUP__SQUEAKY_SHOES,
+	PICKUP__QUEST_ITEM__TEST,	// Needs to be one of these for each quest item ( I think )
 }
 PICKUP_TYPE;
 
@@ -57,6 +62,11 @@ public:
 	virtual void		collect(class CPlayer *_player);
 
 protected:
+	enum
+	{
+		PICKUPS_OT_POS=15,
+	};
+
 	class SpriteBank	*getSpriteBank()					{return m_spriteBank;}
 	DVECTOR				getRenderOffset();
 

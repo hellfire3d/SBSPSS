@@ -110,7 +110,7 @@ void	CBaseHealthPickup::render()
 	x=Pos.vx-ofs.vx;
 	y=Pos.vy-ofs.vy;
 	angle=((msin(m_sin)*health_rotatescale)>>12)&4095;
-	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,0);
+	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,PICKUPS_OT_POS);
 
 	CBasePickup::render();
 }

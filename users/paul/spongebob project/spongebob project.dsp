@@ -680,6 +680,82 @@ SOURCE=..\..\..\source\paul\scenesel.cpp
 SOURCE=..\..\..\source\paul\scenesel.h
 # End Source File
 # End Group
+# Begin Group "pickups"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pbubmix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pbubmix.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pglasses.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pglasses.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\phealth.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\phealth.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pickup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pickup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pjlammo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pjlammo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\plife.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\plife.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pquest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pquest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pshoes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pshoes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pspatula.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pspatula.h
+# End Source File
+# End Group
 # Begin Group "player"
 
 # PROP Default_Filter ""

@@ -19,7 +19,7 @@
 #include "gfx\sprbank.h"	// Damnit.. include order! :( (pkg)
 #endif
 
-#include "pickups\pbubmix.h"
+#include "pickups\pshoes.h"
 
 #ifndef __MATHTABLE_HEADER__
 #include "utils\mathtab.h"
@@ -59,7 +59,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBubbleMixturePickup::init()
+void	CShoesPickup::init()
 {
 	CBasePickup::init();
 	m_sin=0;
@@ -71,7 +71,7 @@ void	CBubbleMixturePickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBubbleMixturePickup::shutdown()
+void	CShoesPickup::shutdown()
 {
 	CBasePickup::shutdown();
 }
@@ -82,12 +82,13 @@ void	CBubbleMixturePickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int bubmix_bobspeed=10;
-int bubmix_bobscale=3;
-void	CBubbleMixturePickup::think(int _frames)
+int shoes_bobspeed=100;
+int shoes_bobscale=2;
+int shoes_seperation=4;
+void	CShoesPickup::think(int _frames)
 {
 	CBasePickup::think(_frames);
-	m_sin=(m_sin+(_frames*bubmix_bobspeed))&4095;
+	m_sin=(m_sin+(_frames*shoes_bobspeed))&4095;
 }
 
 /*----------------------------------------------------------------------
@@ -96,19 +97,21 @@ void	CBubbleMixturePickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBubbleMixturePickup::render()
+void	CShoesPickup::render()
 {
 	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
-	int			x,y;
+	int			x,y,yoff;
 
 	ofs=getRenderOffset();
 	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__BUBBLEMIXTURE);
+	fh=sprites->getFrameHeader(FRM__SHOE);
 	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2)+((msin(m_sin)*bubmix_bobscale)>>12);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+	y=Pos.vy-ofs.vy-(fh->H/2);
+	yoff=((msin(m_sin)*shoes_bobscale)>>12);
+	sprites->printFT4(fh,x+shoes_seperation,y+yoff,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x-shoes_seperation,y-yoff,0,0,PICKUPS_OT_POS);
 
 	CBasePickup::render();
 }
@@ -119,7 +122,7 @@ void	CBubbleMixturePickup::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBubbleMixturePickup::collect(class CPlayer *_player)
+void	CShoesPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
 }

@@ -39,6 +39,26 @@
 #include "pickups\pspatula.h"
 #endif
 
+#ifndef	__PICKUPS_PJLAMMO_H__
+#include "pickups\pjlammo.h"
+#endif
+
+#ifndef	__PICKUPS_PBUBMIX_H__
+#include "pickups\pbubmix.h"
+#endif
+
+#ifndef	__PICKUPS_PGLASSES_H__
+#include "pickups\pglasses.h"
+#endif
+
+#ifndef	__PICKUPS_PSHOES_H__
+#include "pickups\pshoes.h"
+#endif
+
+#ifndef	__PICKUPS_PQUEST_H__
+#include "pickups\pquest.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -163,7 +183,7 @@ DVECTOR	CBasePickup::getRenderOffset()
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	This is basicially a factory method for making pickups :)
+	Purpose:	This is basically a factory method for making pickups :)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -189,6 +209,26 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 		case PICKUP__SPATULA:
 			pickup=new ("SpatulaPickup") CSpatulaPickup();
+			break;
+
+		case PICKUP__JELLY_LAUNCHER_AMMO:
+			pickup=new ("JellyLauncherAmmoPickup") CJellyLauncherAmmoPickup();
+			break;
+
+		case PICKUP__BUBBLE_MIXTURE:
+			pickup=new ("BubbleAmmoPickup") CBubbleMixturePickup();
+			break;
+
+		case PICKUP__GLASSES:
+			pickup=new ("GlassesPickup") CGlassesPickup();
+			break;
+
+		case PICKUP__SQUEAKY_SHOES:
+			pickup=new ("ShoesPickup") CShoesPickup();
+			break;
+
+		case PICKUP__QUEST_ITEM__TEST:
+			pickup=new ("QuestItemPickup") CTestQuestItemPickup();
 			break;
 
 		default:

@@ -82,15 +82,15 @@ void	CJellyLauncherAmmoPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int rattlespeed=500;
-int rattlescale=90;
-int rattlecount=5;
-int waitcount=10;
+int jlammo_rattlespeed=500;
+int jlammo_rattlescale=90;
+int jlammo_rattlecount=5;
+int jlammo_waitcount=10;
 void	CJellyLauncherAmmoPickup::think(int _frames)
 {
 	CBasePickup::think(_frames);
-	m_rattle+=rattlespeed*_frames;
-	if(m_rattle>(rattlecount+waitcount)*4095)m_rattle=0;
+	m_rattle+=jlammo_rattlespeed*_frames;
+	if(m_rattle>(jlammo_rattlecount+jlammo_waitcount)*4095)m_rattle=0;
 }
 
 /*----------------------------------------------------------------------
@@ -112,15 +112,15 @@ void	CJellyLauncherAmmoPickup::render()
 	fh=sprites->getFrameHeader(FRM__JELLYAMMO);
 	x=Pos.vx-ofs.vx;
 	y=Pos.vy-ofs.vy;
-	if(m_rattle<=rattlecount*4095)
+	if(m_rattle<=jlammo_rattlecount*4095)
 	{
-		angle=((msin(m_rattle&4095)*rattlescale)>>12)&4095;
+		angle=((msin(m_rattle&4095)*jlammo_rattlescale)>>12)&4095;
 	}
 	else
 	{
 		angle=0;
 	}
-	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,2);
+	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,PICKUPS_OT_POS);
 
 	CBasePickup::render();
 }

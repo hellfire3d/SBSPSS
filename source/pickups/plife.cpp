@@ -110,7 +110,7 @@ void	CLifePickup::render()
 	x=Pos.vx-ofs.vx-(fh->W/2);
 	y=Pos.vy-ofs.vy-(fh->H/2);
 	size=256+((msin(m_sin)*life_pulsescale)>>12);
-	sprites->printFT4Scaled(fh,x,y,0,0,0,size);
+	sprites->printFT4Scaled(fh,x,y,0,0,PICKUPS_OT_POS,size);
 
 	CBasePickup::render();
 }

@@ -41,7 +41,6 @@ public:
 
 	virtual void		collect(class CPlayer *_player);
 
-private:
 };
 
 
