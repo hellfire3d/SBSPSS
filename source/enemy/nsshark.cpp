@@ -32,7 +32,7 @@
 #endif
 
 #ifndef	__ANIM_SHARKSUB_HEADER__
-#include <ACTOR_CLAM_ANIM.h>
+#include <ACTOR_SHARKSUB_ANIM.h>
 #endif
 
 
@@ -40,6 +40,7 @@ void CNpcSubSharkEnemy::postInit()
 {
 	m_state = SUB_SHARK_MINE_1;
 	m_extendDir = EXTEND_RIGHT;
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 }
 
 void CNpcSubSharkEnemy::processMovement( int _frames )
@@ -49,13 +50,13 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 		if ( playerXDistSqr + playerYDistSqr < 100 && !m_salvoCount )
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_CLAM_SIDESNAP;
+			m_animNo = ANIM_SHARKSUB_SWIPE;
 			m_frame = 0;
 		}
 		else
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_CLAM_SIDESNAP;
+			m_animNo = ANIM_SHARKSUB_SWIM;
 			m_frame = 0;
 		}
 	}
@@ -82,7 +83,32 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 		m_movementTimer -= _frames;
 	}
 
-	if ( m_extendDir == EXTEND_RIGHT )
+	s32 moveX = 0, moveY = 0;
+	s32 moveVel = 0;
+	s32 moveDist = 0;
+
+	processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
+
+	if ( moveX > 0 )
+	{
+		m_extendDir = EXTEND_RIGHT;
+	}
+	else
+	{
+		m_extendDir = EXTEND_LEFT;
+	}
+
+	Pos.vx += moveX;
+	Pos.vy += moveY;
+
+	if ( m_movementTimer <= 0 )
+	{
+		m_controlFunc = NPC_CONTROL_CLOSE;
+	}
+
+
+
+	/*if ( m_extendDir == EXTEND_RIGHT )
 	{
 		s32 xDist = 600 - Pos.vx;
 		s32 xDistSqr = xDist * xDist;
@@ -123,7 +149,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 				m_controlFunc = NPC_CONTROL_CLOSE;
 			}
 		}
-	}
+	}*/
 }
 
 void CNpcSubSharkEnemy::processClose( int _frames )
@@ -145,6 +171,13 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 		case SUB_SHARK_MINE_1:
 		case SUB_SHARK_MINE_2:
 		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
 			processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
 
 			if ( playerXDistSqr < 100 )
@@ -167,7 +200,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_SIDESNAP;
+				m_animNo = ANIM_SHARKSUB_SPRINTOPEN;
 				m_frame = 0;
 			}
 
@@ -176,7 +209,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			if ( playerXDistSqr < 10000 )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_SIDESNAP;
+				m_animNo = ANIM_SHARKSUB_CHOMP;
 				m_frame = 0;
 
 				m_state = SUB_SHARK_SWALLOW;
@@ -222,7 +255,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_SIDESNAP;
+				m_animNo = ANIM_SHARKSUB_SWIM;
 				m_frame = 0;
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_movementTimer = GameState::getOneSecondInFrames() * 8;

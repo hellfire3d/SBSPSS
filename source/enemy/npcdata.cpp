@@ -103,9 +103,9 @@
 #include <ACTOR_BALLBLOB_ANIM.h>
 #endif
 
-//#ifndef	__ANIM_SHARKSUB_HEADER__
-//#include <ACTOR_SHARKSUB_ANIM.h>
-//#endif
+#ifndef	__ANIM_SHARKSUB_HEADER__
+#include <ACTOR_SHARKSUB_ANIM.h>
+#endif
 
 
 CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
@@ -793,8 +793,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_SUB_SHARK
-		ACTORS_CLAM_SBK,
-		ANIM_CLAM_SIDESNAP,
+		ACTORS_SHARKSUB_SBK,
+		ANIM_SHARKSUB_SWIM,
 		NPC_SENSOR_NONE,
 		NPC_MOVEMENT_STATIC,
 		NPC_CLOSE_NONE,

@@ -270,7 +270,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 		0,
 		4,
 		NPC_PLATFORM_INFINITE_LIFE,
-		4,
+		2,
 		NPC_PLATFORM_TIMER_NONE,
 	},
 
@@ -284,7 +284,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 		0,
 		4,
 		NPC_PLATFORM_INFINITE_LIFE,
-		4,
+		2,
 		NPC_PLATFORM_TIMER_NONE,
 	},
 

@@ -42,12 +42,7 @@ class	CNpcEnemy : public CEnemyThing
 public:
 	enum NPC_UNIT_TYPE
 	{
-		//NPC_FALLING_ITEM = 0,
-		//NPC_FISH_HOOK = 1,
 		NPC_DUST_DEVIL = 0,
-		//NPC_PENDULUM,
-		//NPC_FIREBALL,
-		//NPC_SAW_BLADE,
 		NPC_SMALL_JELLYFISH_1 = 1,
 		NPC_SMALL_JELLYFISH_2,
 		NPC_ANEMONE_1,

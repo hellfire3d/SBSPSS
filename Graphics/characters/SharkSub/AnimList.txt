@@ -1,8 +1,7 @@
-sharksubchomp
-sharksubdeath
-sharksubidle
-sharksubspit
-sharksubsprintclosed
-sharksubsprintopen
-sharksubswim
-sharksubswipe
+chomp
+death
+gethit
+sprintclosed
+sprintopen
+swim
+swipe
