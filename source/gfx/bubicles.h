@@ -31,9 +31,7 @@
 	------------------- */
 
 // Uncomment to see the emitters on screen
-#ifdef __USER_paul__
-#define SHOW_BUBICLE_EMITTERS
-#endif
+//#define SHOW_BUBICLE_EMITTERS
 
 
 
