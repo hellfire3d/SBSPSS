@@ -636,14 +636,14 @@ sLayerHdr	*layer;
 void	CLevel::destroyMapArea(DVECTOR const &Pos)
 {
 DVECTOR		TL,BR;
-const int			ColT=COLLISION_TYPE_DESTRUCTABLE;
+const int			ColT=COLLISION_TYPE_DESTRUCTABLE_WALL;
 
 
 			TL.vx=Pos.vx&-16;;
 			TL.vy=Pos.vy&-16;;
 			BR=TL;
 
-			if (CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT)printf ("!!");
+//			if (CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT)printf ("!!");
 
 // Left
 			while (CollisionLayer->getCollisionBlock(TL.vx-16,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vx-=16;

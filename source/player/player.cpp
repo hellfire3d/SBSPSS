@@ -1838,7 +1838,7 @@ int	CPlayer::canDoLookAround()
 void	CPlayer::inSoakUpState()
 {
 	if(isWearingDivingHelmet()&&
-	   (CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER)
+	   (CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DEATH_LIQUID)
 	{
 		m_healthWaterLevel+=waterSoakUpSpeed;
 		if(m_healthWaterLevel>WATERMAXHEALTH)
@@ -2344,7 +2344,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 		if(colHeightBefore>=0&&colHeightAfter<=0)
 		{
 			// About to hit a 'fall to death' block?
-			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH)
+			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH_FALL)
 			{
 				// No
 				// Stick at ground level

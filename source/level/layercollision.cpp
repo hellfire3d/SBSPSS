@@ -70,9 +70,9 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		map=Map;
 		for(i=0;i<MapWidth*MapHeight;i++)
 		{
-			originalTile=*map;
-			finalTile=(originalTile&0xe0)|s_collisionTileRemapTable[originalTile&0x1f];
-			*map++=finalTile;
+//			originalTile=*map;
+//			finalTile=(originalTile&0xe0)|s_collisionTileRemapTable[originalTile&0x1f];
+//			*map++=finalTile;
 		}
 }
 

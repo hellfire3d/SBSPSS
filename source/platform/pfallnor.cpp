@@ -60,7 +60,7 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 
 		if ( groundHeight < moveY )
 		{
-			if ( ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK ) != COLLISION_TYPE_FLAG_DEATH )
+			if ( ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK ) != COLLISION_TYPE_FLAG_DEATH_FALL )
 			{
 				moveY = groundHeight;
 				moveX = 2 * _frames;
