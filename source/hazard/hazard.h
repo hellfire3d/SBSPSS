@@ -39,6 +39,9 @@ public:
 		NPC_FALLING_HAZARD = 0,
 		NPC_PENDULUM_HAZARD = 1,
 		NPC_BOAT_HAZARD,
+		NPC_BARREL_HAZARD,
+		NPC_STATIC_HAZARD,
+		NPC_CIRCULAR_SAW_HAZARD,
 
 		NPC_HAZARD_TYPE_MAX,
 	};
@@ -47,7 +50,7 @@ public:
 	void				setGraphic( sThingHazard *ThisHazard );
 	void				shutdown();
 	void				think(int _frames);
-	void				render();
+	virtual void		render();
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				addWaypoint( s32 xPos, s32 yPos );

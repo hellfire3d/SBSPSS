@@ -113,7 +113,8 @@ hazard_src :=		hazard \
 					hfirebal \
 					hsaw \
 					hbarrel \
-					hboat
+					hboat \
+					hcsaw
 
 projectl_src :=		projectl \
 					prnpc

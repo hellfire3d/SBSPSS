@@ -785,6 +785,14 @@ SOURCE=..\..\..\source\hazard\hboat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hcsaw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hcsaw.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hfalling.cpp
 # End Source File
 # Begin Source File
@@ -814,6 +822,10 @@ SOURCE=..\..\..\source\hazard\hsaw.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\hazard\hsaw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hstatic.h
 # End Source File
 # End Group
 # Begin Group "level"

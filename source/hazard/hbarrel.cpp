@@ -25,22 +25,6 @@ void CNpcBarrelHazard::init()
 {
 	CNpcHazard::init();
 
-	DVECTOR newPos;
-
-	Pos.vx = 100;
-	Pos.vy = 100;
-	m_base = Pos;
-
-	newPos.vx = 600;
-	newPos.vy = 100;
-
-	m_npcPath.addWaypoint( newPos );
-
-	newPos.vx = 50;
-	newPos.vy = 100;
-
-	m_npcPath.addWaypoint( newPos );
-
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 }
 

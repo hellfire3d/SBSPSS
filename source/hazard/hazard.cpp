@@ -43,6 +43,18 @@
 #include "hazard\hboat.h"
 #endif
 
+#ifndef __HAZARD_HBARREL_H__
+#include "hazard\hbarrel.h"
+#endif
+
+#ifndef __HAZARD_HSTATIC_H__
+#include "hazard\hstatic.h"
+#endif
+
+#ifndef __HAZARD_HCSAW_H__
+#include "hazard\hcsaw.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE_MAX] =
@@ -50,6 +62,9 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_FALLING_HAZARD,
 	NPC_PENDULUM_HAZARD,
 	NPC_BOAT_HAZARD,
+	NPC_BARREL_HAZARD,
+	NPC_STATIC_HAZARD,
+	NPC_CIRCULAR_SAW_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +92,24 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_BOAT_HAZARD:
 		{
 			hazard = new ("boat hazard") CNpcBoatHazard;
+			break;
+		}
+
+		case NPC_BARREL_HAZARD:
+		{
+			hazard = new ("barrel hazard") CNpcBarrelHazard;
+			break;
+		}
+
+		case NPC_STATIC_HAZARD:
+		{
+			hazard = new ("static hazard") CNpcStaticHazard;
+			break;
+		}
+
+		case NPC_CIRCULAR_SAW_HAZARD:
+		{
+			hazard = new ("circular saw hazard") CNpcCircularSawHazard;
 			break;
 		}
 
