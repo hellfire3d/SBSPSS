@@ -403,11 +403,11 @@ GFX_DATA_OUT +=			$(BACKDROPS_OUT)
 #----------------------------------------------------------------------------
 MAPSCREENS_IN_DIR :=		$(GRAF_DIR)/ui/map
 MAPSCREENS_IN :=			map_background \
-							c1_l1 c1_l2 c1_l3 c1_l4 c1_boss c1_fair \
-							c2_l1 c2_l2 c2_l3 c2_l4 c2_boss c2_fair \
-							c3_l1 c3_l2 c3_l3 c3_l4 c3_boss c3_fair \
-							c4_l1 c4_l2 c4_l3 c4_l4 c4_boss c4_fair \
-							c5_l1 c5_l2 c5_l3 c5_l4 c5_boss c5_fair
+							c1_l1 c1_l2 c1_l3 c1_l4 c1_fair \
+							c2_l1 c2_l2 c2_l3 c2_l4 c2_fair \
+							c3_l1 c3_l2 c3_l3 c3_l4 c3_fair \
+							c4_l1 c4_l2 c4_l3 c4_l4 c4_fair \
+							c5_l1 c5_l2 c5_l3 c5_l4 c5_fair
 
 MAPSCREENS_OUT_DIR :=	$(DATA_OUT)/ui/map
 MAPSCREENS_OUT :=		$(foreach SCREEN,$(MAPSCREENS_IN),$(MAPSCREENS_OUT_DIR)/$(SCREEN).gfx)

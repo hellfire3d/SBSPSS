@@ -69,6 +69,33 @@
 #include <sprites.h>
 #endif
 
+// Level data include files:
+#include <CHAPTER01_LEVEL01_INF.h>
+#include <CHAPTER01_LEVEL02_INF.h>
+#include <CHAPTER01_LEVEL03_INF.h>
+#include <CHAPTER01_LEVEL04_INF.h>
+#include <CHAPTER02_LEVEL01_INF.h>
+#include <CHAPTER02_LEVEL02_INF.h>
+#include <CHAPTER02_LEVEL03_INF.h>
+#include <CHAPTER02_LEVEL04_INF.h>
+#include <CHAPTER03_LEVEL01_INF.h>
+#include <CHAPTER03_LEVEL02_INF.h>
+#include <CHAPTER03_LEVEL03_INF.h>
+#include <CHAPTER03_LEVEL04_INF.h>
+#include <CHAPTER04_LEVEL01_INF.h>
+#include <CHAPTER04_LEVEL02_INF.h>
+#include <CHAPTER04_LEVEL03_INF.h>
+#include <CHAPTER04_LEVEL04_INF.h>
+#include <CHAPTER05_LEVEL01_INF.h>
+#include <CHAPTER05_LEVEL02_INF.h>
+#include <CHAPTER05_LEVEL03_INF.h>
+#include <CHAPTER05_LEVEL04_INF.h>
+#include <CHAPTER06_LEVEL01_INF.h>
+#include <CHAPTER06_LEVEL02_INF.h>
+#include <CHAPTER06_LEVEL03_INF.h>
+#include <CHAPTER06_LEVEL04_INF.h>
+#include <CHAPTER06_LEVEL05_INF.h>
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -89,39 +116,56 @@
 CMapScene	MapScene;
 
 
-CMapScene::sMapLevelData	CMapScene::s_mapLevelData[5]=
+CMapScene::sMapLevelData	CMapScene::s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER]=
 {
-	// Chapter 1
+	//		mapFile				globalLevelNumber	spatularOrTokenCounts								questItemFrame			kelpWorldLevel
 	{
-		{	MAP_C1_L1_GFX,			MAP_C1_L2_GFX,			MAP_C1_L3_GFX,			MAP_C1_L4_GFX,			MAP_C1_BOSS_GFX,		MAP_C1_FAIR_GFX	},
-		{	0,						1,						2,						3,						-1,						20				},
-		{	FRM__C1_L1_QUEST_ITEM,	FRM__C1_L2_QUEST_ITEM,	FRM__C1_L3_QUEST_ITEM,	FRM__C1_L4_QUEST_ITEM},
+		{	MAP_C1_L1_GFX,		0,					CHAPTER01_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L1_QUEST_ITEM,	false	},
+		{	MAP_C1_L2_GFX,		1,					CHAPTER01_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L2_QUEST_ITEM,	false	},
+		{	MAP_C1_L3_GFX,		2,					CHAPTER01_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L3_QUEST_ITEM,	false	},
+		{	MAP_C1_L4_GFX,		3,					CHAPTER01_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C1_L4_QUEST_ITEM,	false	},
+		{	MAP_C1_FAIR_GFX,	20,					CHAPTER06_LEVEL01_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
-	// Chapter 2
 	{
-		{	MAP_C2_L1_GFX,			MAP_C2_L2_GFX,			MAP_C2_L3_GFX,			MAP_C2_L4_GFX,			MAP_C2_BOSS_GFX,		MAP_C2_FAIR_GFX	},
-		{	4,						5,						6,						7,						-1,						21				},
-		{	FRM__C2_L1_QUEST_ITEM,	FRM__C2_L2_QUEST_ITEM,	FRM__C2_L3_QUEST_ITEM,	FRM__C2_L4_QUEST_ITEM},
+		{	MAP_C2_L1_GFX,		4,					CHAPTER02_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L1_QUEST_ITEM,	false	},
+		{	MAP_C2_L2_GFX,		5,					CHAPTER02_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L2_QUEST_ITEM,	false	},
+		{	MAP_C2_L3_GFX,		6,					CHAPTER02_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L3_QUEST_ITEM,	false	},
+		{	MAP_C2_L4_GFX,		7,					CHAPTER02_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C2_L4_QUEST_ITEM,	false	},
+		{	MAP_C2_FAIR_GFX,	21,					CHAPTER06_LEVEL02_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
-	// Chapter 3
 	{
-		{	MAP_C3_L1_GFX,			MAP_C3_L2_GFX,			MAP_C3_L3_GFX,			MAP_C3_L4_GFX,			MAP_C3_BOSS_GFX,		MAP_C3_FAIR_GFX	},
-		{	8,						9,						10,						11,						-1,						22				},
-		{	FRM__C3_L1_QUEST_ITEM,	FRM__C3_L2_QUEST_ITEM,	FRM__C3_L3_QUEST_ITEM,	FRM__C3_L4_QUEST_ITEM},
+		{	MAP_C3_L1_GFX,		8,					CHAPTER03_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L1_QUEST_ITEM,	false	},
+		{	MAP_C3_L2_GFX,		9,					CHAPTER03_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L2_QUEST_ITEM,	false	},
+		{	MAP_C3_L3_GFX,		10,					CHAPTER03_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L3_QUEST_ITEM,	false	},
+		{	MAP_C3_L4_GFX,		11,					CHAPTER03_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C3_L4_QUEST_ITEM,	false	},
+		{	MAP_C3_FAIR_GFX,	22,					CHAPTER06_LEVEL03_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
-	// Chapter 4
 	{
-		{	MAP_C4_L1_GFX,			MAP_C4_L2_GFX,			MAP_C4_L3_GFX,			MAP_C4_L4_GFX,			MAP_C4_BOSS_GFX,		MAP_C4_FAIR_GFX	},
-		{	12,						13,						14,						15,						-1,						23				},
-		{	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_2		},	
+		{	MAP_C4_L1_GFX,		12,					CHAPTER04_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_C4_L2_GFX,		13,					CHAPTER04_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_C4_L3_GFX,		14,					CHAPTER04_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_1,	false	},
+		{	MAP_C4_L4_GFX,		15,					CHAPTER04_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C4_QUEST_ITEM_2,	false	},
+		{	MAP_C4_FAIR_GFX,	23,					CHAPTER06_LEVEL04_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
-	// Chapter 5
 	{
-		{	MAP_C5_L1_GFX,			MAP_C5_L2_GFX,			MAP_C5_L3_GFX,			MAP_C5_L4_GFX,			MAP_C5_BOSS_GFX,		MAP_C5_FAIR_GFX	},
-		{	16,						17,						18,						19,						-1,						24				},
-		{	FRM__C5_L1_QUEST_ITEM,	FRM__C5_L2_QUEST_ITEM,	FRM__C5_L3_QUEST_ITEM,	FRM__C5_L4_QUEST_ITEM},
+		{	MAP_C5_L1_GFX,		16,					CHAPTER05_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L1_QUEST_ITEM,	false	},
+		{	MAP_C5_L2_GFX,		17,					CHAPTER05_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L2_QUEST_ITEM,	false	},
+		{	MAP_C5_L3_GFX,		18,					CHAPTER05_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L3_QUEST_ITEM,	false	},
+		{	MAP_C5_L4_GFX,		19,					CHAPTER05_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA,	FRM__C5_L4_QUEST_ITEM,	false	},
+		{	MAP_C5_FAIR_GFX,	24,					CHAPTER06_LEVEL05_INF_TOTAL_ITEM_KELP_TOKEN,		-1,						true	},
 	},
 };
+
+
+DVECTOR						CMapScene::s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER]=
+{
+	{	42,49	},
+	{	186,49	},
+	{	330,49	},
+	{	42,113	},
+	{	330,113	},
+};
+
 
 extern int s_globalLevelSelectThing;
 
@@ -173,41 +217,48 @@ void CMapScene::shutdown()
   ---------------------------------------------------------------------- */
 void CMapScene::render()
 {
-	int			i,x,y,xpos,ypos;
-	int			compilerGetsComfused;
-	char		spatCount[10];
-	sFrameHdr	*fh;
-	POLY_FT4	*ft4;
+	sMapLevelData	*level;
+	int				i;
+	sFrameHdr		*fh;
+	DVECTOR			pos;
+	char			buf[100];
 	
-	// Render spatula counts and quest items
-	m_font->setColour(253,251,67);
-	i=0;
-	ypos=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER;
-	for(y=0;y<2;y++)
+	level=&s_mapLevelData[m_currentChapterSelection][0];
+
+	// Render spatula/kelp counts and quest items
+	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
-		xpos=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING;
-		compilerGetsComfused=y==0?3:1;		// 3 on top row, 1 on bottom - put this in the for loop and the complier breaks :o
-		for(x=0;x<compilerGetsComfused;x++)
+		pos=s_mapLevelPositions[i];
+
+		if(!level->m_kelpWorldLevel)
 		{
-			sprintf(spatCount,"%d/%d",getSpatulaCollectedCount(m_currentChapterSelection,i),getSpatulaAvailableCount(m_currentChapterSelection,i));
-			m_font->print(xpos,ypos,spatCount);
-			fh=CGameScene::getSpriteBank()->getFrameHeader(s_mapLevelData[m_currentChapterSelection].m_questItemFrames[i]);
-			ft4=CGameScene::getSpriteBank()->printFT4Scaled(fh,xpos+MAP_LEVEL_WIDTH-fh->W,ypos+MAP_LEVEL_HEIGHT-fh->H,0,0,10,128);
+			// Normal level
+			POLY_FT4		*ft4;
+			m_font->setColour(253,251,67);
+			sprintf(buf,"00/%d",level->m_spatularOrTokenCounts);
+			fh=CGameScene::getSpriteBank()->getFrameHeader(level->m_questItemFrame);
+			ft4=CGameScene::getSpriteBank()->printFT4(fh,pos.vx+MAP_LEVEL_WIDTH-fh->W,pos.vy+MAP_LEVEL_HEIGHT-fh->H,0,0,10);
 			if(!hasQuestItemBeenCollected(m_currentChapterSelection,i))
 			{
-				setRGB0(ft4,10,10,10);
+				setRGB0(ft4,50,50,50);
 			}
-			i++;
-			xpos+=MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING;
 		}
-		ypos+=MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING;
+		else
+		{
+			// Bonuse level
+			m_font->setColour(67,251,67);
+			sprintf(buf,"00/%d",level->m_spatularOrTokenCounts);
+		}
+
+		m_font->print(pos.vx,pos.vy,buf);
+
+		level++;
 	}
 
 	// Selection cursor
 	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__MAPPOINTER);
 	CGameScene::getSpriteBank()->printFT4(fh,m_pointerPos.vx-(fh->W/2),m_pointerPos.vy-(fh->H/2),0,0,9);
 
-char buf[100];
 sprintf(buf,"Chapter %d, Level %d",m_currentChapterSelection+1,m_currentLevelSelection+1);
 m_font->setColour(0,255,0);
 m_font->print(24,24,buf);
@@ -229,12 +280,12 @@ void CMapScene::think(int _frames)
 		// Change chapter
 		if(PadGetDown(0)&PAD_UP)
 		{
-			if(++m_currentChapterSelection>4)m_currentChapterSelection=0;
+			if(++m_currentChapterSelection>=MAP_NUM_CHAPTERS)m_currentChapterSelection=0;
 			generateMapScreenImage();
 		}
 		else if(PadGetDown(0)&PAD_DOWN)
 		{
-			if(--m_currentChapterSelection<0)m_currentChapterSelection=4;
+			if(--m_currentChapterSelection<0)m_currentChapterSelection=MAP_NUM_CHAPTERS-1;
 			generateMapScreenImage();
 		}
 
@@ -243,7 +294,7 @@ void CMapScene::think(int _frames)
 		{
 			do
 			{
-				if(--m_currentLevelSelection<0)m_currentLevelSelection=5;
+				if(--m_currentLevelSelection<0)m_currentLevelSelection=MAP_NUM_LEVELS_PER_CHAPTER-1;
 			}
 			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
 		}
@@ -251,7 +302,7 @@ void CMapScene::think(int _frames)
 		{
 			do
 			{
-				if(++m_currentLevelSelection>5)m_currentLevelSelection=0;
+				if(++m_currentLevelSelection>=MAP_NUM_LEVELS_PER_CHAPTER)m_currentLevelSelection=0;
 			}
 			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
 		}
@@ -294,7 +345,7 @@ void CMapScene::think(int _frames)
 
 		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
 		{
-			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection].m_globalLevelNumbers[m_currentLevelSelection];
+			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
 			m_readyToExit=true;
 //			CFader::setFadingOut(CFader::BLACK_FADE);
 			GameState::setNextScene(&GameScene);
@@ -323,27 +374,18 @@ int CMapScene::readyToShutdown()
   ---------------------------------------------------------------------- */
 void	CMapScene::generateMapScreenImage()
 {
-	int	i,x,y,xpos,ypos;
+	int	i;
 
 
 	m_currentLevelSelection=0;
 	memset(m_screenImage,0,512*256*2);
 	copyImageToScreen(MAP_MAP_BACKGROUND_GFX,MAP_PARCHMENT_START_X,MAP_PARCHMENT_START_Y,MAP_PARCHMENT_WIDTH,MAP_PARCHMENT_HEIGHT);
-	i=0;
-	ypos=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER;
-	for(y=0;y<2;y++)
+	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
-		xpos=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING;
-		for(x=0;x<3;x++)
+		if(isLevelOpen(m_currentChapterSelection,i))
 		{
-			if(isLevelOpen(m_currentChapterSelection,i))
-			{
-				copyImageToScreen(s_mapLevelData[m_currentChapterSelection].m_mapFiles[i],xpos,ypos,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
-			}
-			i++;
-			xpos+=MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING;
+			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_mapFile,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
 		}
-		ypos+=MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING;
 	}
 
 	m_pointerPos=getPointerTargetPosition();
@@ -385,13 +427,11 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 DVECTOR	CMapScene::getPointerTargetPosition()
 {
 	DVECTOR	pos;
-	pos.vx=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING+
-		   ((m_currentLevelSelection%3)*(MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING))+
-		   (MAP_LEVEL_WIDTH/2);
-	pos.vy=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER+
-		   ((m_currentLevelSelection/3)*(MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING))+
-		   (MAP_LEVEL_HEIGHT)+
-		   (msin(m_pointerSin)*4>>12);
+	
+	pos=s_mapLevelPositions[m_currentLevelSelection];
+	pos.vx+=(MAP_LEVEL_WIDTH/2);
+	pos.vy+=MAP_LEVEL_HEIGHT+(msin(m_pointerSin)*4>>12);
+
 	return pos;
 }
 
@@ -402,24 +442,31 @@ DVECTOR	CMapScene::getPointerTargetPosition()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CMapScene::isLevelOpen(int _chapter,int _level)
+int		CMapScene::isLevelOpen(unsigned int _chapter,unsigned int _level)
 {
-	return _level!=4;		// no boss levels atm..
+	return true;
 }
 
-int		CMapScene::getSpatulaCollectedCount(int _chapter,int _level)
+int		CMapScene::getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level)
 {
 	return CGameSlotManager::getSlotData()->getSpatulaCollectedCount(_chapter,_level);
 }
 
-int		CMapScene::getSpatulaAvailableCount(int _chapter,int _level)
+int		CMapScene::getSpatulaAvailableCount(unsigned int _chapter,unsigned int _level)
 {
-	return 99;
+	ASSERT(!s_mapLevelData[_chapter][_level].m_kelpWorldLevel);
+	return s_mapLevelData[_chapter][_level].m_spatularOrTokenCounts;
 }
 
-int		CMapScene::hasQuestItemBeenCollected(int _chapter,int _level)
+int		CMapScene::getKelpTokenAvailableCount(unsigned int _chapter,unsigned int _level)
 {
-	return true;
+	ASSERT(s_mapLevelData[_chapter][_level].m_kelpWorldLevel);
+	return s_mapLevelData[_chapter][_level].m_spatularOrTokenCounts;
+}
+
+int		CMapScene::hasQuestItemBeenCollected(unsigned int _chapter,unsigned int _level)
+{
+	return _level&1;
 }
 
 
