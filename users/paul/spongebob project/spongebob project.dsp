@@ -1290,10 +1290,6 @@ SOURCE=..\..\..\out\USA\include\ingamefx.h
 
 SOURCE=..\..\..\out\USA\include\trans.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\..\out\USA\include\UIGfx.h
-# End Source File
 # End Group
 # End Group
 # End Group

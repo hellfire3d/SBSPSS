@@ -83,6 +83,11 @@
 /*	Data
 	---- */
 
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
+#endif
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -391,14 +396,11 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
   ---------------------------------------------------------------------- */
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
-int healthx=100;
-int healthy=27;
-int healthw=10;
-int healthh=10;
-int healthg=2;
-int livesx=162;
-int livesy=28;
-
+int healthx=400;
+int healthy=30;
+int healthr=200;
+int healthg=75;
+int healthb=75;
 
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
@@ -432,38 +434,49 @@ m_fontBank->print(40,40,posBuf);
 #endif
 
 
-	// Temporary health/lives thing
-#ifdef __USER_paul__
-	int i,x;
-	x=healthx;
-	for(i=0;i<5;i++)
+	// Health
 	{
-		POLY_F4	*f4;
-		f4=GetPrimF4();
-		setXYWH(f4,x,healthy,healthw,healthh);
-		if(i<s_health)
+		static int	s_fullHealthFrames[]=
 		{
-			setRGB0(f4,0,255,0);
+			FRM__HEALTH_FULL_1,
+			FRM__HEALTH_FULL_2,
+			FRM__HEALTH_FULL_3,
+			FRM__HEALTH_FULL_4,
+			FRM__HEALTH_FULL_5,
+		};
+		static int	s_emptyHealthFrames[]=
+		{
+			FRM__HEALTH_EMPTY_1,
+			FRM__HEALTH_EMPTY_2,
+			FRM__HEALTH_EMPTY_3,
+			FRM__HEALTH_EMPTY_4,
+			FRM__HEALTH_EMPTY_5,
+		};
+		int			i,x,y;
+		POLY_FT4	*ft4;
+		int			*frames;
+
+		x=healthx;
+		y=healthy;
+		if(s_health)
+		{
+			frames=s_fullHealthFrames;
 		}
 		else
 		{
-			setRGB0(f4,255,0,0);
+			frames=s_emptyHealthFrames;
 		}
-		setSemiTrans(f4,true);
-		AddPrimToList(f4,0);
 
-		f4=GetPrimF4();
-		setXYWH(f4,x+1,healthy+1,healthw,healthh);
-		setRGB0(f4,0,0,0);
-		setSemiTrans(f4,true);
-		AddPrimToList(f4,1);
-
-		x+=healthw+healthg;
+		for(i=5;i>0;i--)
+		{
+			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,5);
+			if(i>s_health)
+			{
+				setRGB0(ft4,healthr,healthg,healthb);
+			}
+			y+=9;
+		}
 	}
-	char lifebuf[5];
-	sprintf(lifebuf,"x%d",m_lives);
-	m_fontBank->print(livesx,livesy,lifebuf);
-#endif
 
 	// Mode specific ui
 	m_currentPlayerModeClass->renderModeUi();

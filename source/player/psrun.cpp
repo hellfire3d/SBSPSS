@@ -110,7 +110,7 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 	{
 		switchedState=_playerMode->setState(STATE_JUMP);
 	}
-	if(controlHeld&PI_DOWN)
+	if(controlDown&PI_DOWN)
 	{
 		switchedState=_playerMode->setState(STATE_DUCK);
 	}
