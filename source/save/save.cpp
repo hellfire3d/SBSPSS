@@ -229,6 +229,7 @@ void CSaveScene::render()
 		case MODE__FORMATTING:
 		case MODE__CHECKINGFORMAT:
 		case MODE__SAVING:
+		case MODE__READYTOEXIT:
 			break;
 
 		case MODE__CONFIRMSAVE:
@@ -240,7 +241,6 @@ void CSaveScene::render()
 		case MODE__CONFIRMOVERWRITE:
 		case MODE__SAVEOK:
 		case MODE__SAVEERROR:
-		case MODE__READYTOEXIT:
 			renderButtonPrompts();
 			break;
 	}
@@ -514,6 +514,7 @@ void CSaveScene::think(int _frames)
 			case MODE__FORMATTING:
 			case MODE__CHECKINGFORMAT:
 			case MODE__SAVING:
+			case MODE__READYTOEXIT:
 				break;
 
 			case MODE__CONFIRMSAVE:
@@ -529,7 +530,6 @@ void CSaveScene::think(int _frames)
 			case MODE__CONFIRMOVERWRITE:
 			case MODE__SAVEOK:
 			case MODE__SAVEERROR:
-			case MODE__READYTOEXIT:
 				setMode(MODE__CONFIRMSAVE);
 				break;
 		}
