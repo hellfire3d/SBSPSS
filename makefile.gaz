@@ -85,7 +85,8 @@ system_src :=		main \
 					vid \
 					dbg \
 					vsprintf \
-					clickcount
+					clickcount \
+					except
 
 utils_src :=		utils \
 					sincos
@@ -94,7 +95,8 @@ utils_src_mip :=	quatmip \
 					mathmip \
 					replace
 
-system_src_mip :=	gp \
+system_src_mip :=	except_a \
+					gp \
 					lnkopt \
 					$(VERSION)/$(TERRITORY)/$(FILE_SYSTEM)/info
 

@@ -313,6 +313,10 @@ SOURCE=..\..\..\source\system\gp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\system\gp.mip
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\system\gstate.cpp
 # End Source File
 # Begin Source File
@@ -330,6 +334,10 @@ SOURCE=..\..\..\source\system\info.h
 # Begin Source File
 
 SOURCE=..\..\..\source\system\lnkopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\system\lnkopt.mip
 # End Source File
 # Begin Source File
 
@@ -365,11 +373,19 @@ SOURCE=..\..\..\source\utils\fixed.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\utils\gpu.inc
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\utils\gtemisc.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\mathmip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\utils\mathmip.mip
 # End Source File
 # Begin Source File
 
@@ -381,7 +397,15 @@ SOURCE=..\..\..\source\utils\quat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\utils\quatmip.mip
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\utils\replace.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\utils\replace.mip
 # End Source File
 # Begin Source File
 

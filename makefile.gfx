@@ -140,7 +140,7 @@ cleaningamefx :
 ingamefx:		$(INGAMEFX_GFX_TEX_IN)
 
 $(INGAMEFX_GFX_TEX_OUT) :	$(INGAMEFX_GFX_TEX_IN)
-		@parkgrab -c+ -z+ ${INGAMEFX_GFX_TRANS_IN} -c+ -z- ${INGAMEFX_GFX_NONTRANS_IN} -b+ -t:9,4,1 -l:$(REPORT_DIR)/ingamefx.lbm -o:$(INGAMEFX_GFX_TEX_OUT) -k:$(INGAMEFX_GFX_REP_FILE)
+		@parkgrab -c+ -z+ ${INGAMEFX_GFX_TRANS_IN} -c+ -z- ${INGAMEFX_GFX_NONTRANS_IN} -b+ -t:8,4,1 -l:$(REPORT_DIR)/ingamefx.lbm -o:$(INGAMEFX_GFX_TEX_OUT) -k:$(INGAMEFX_GFX_REP_FILE)
 		@$(MV) -f $(INGAMEFX_GFX_OUT_DIR)/ingamefx.h $(INGAMEFX_GFX_HDR_FILE)
 
 GRAF_DIRS_TO_MAKE	+=		$(INGAMEFX_GFX_OUT_DIR)

@@ -29,14 +29,18 @@
 #include "sound\sound.h"
 #endif
 
-
-
-#define	SCREEN_GRAB
-
 #ifdef __USER_paul__
 #include "paul\paul.h"
 CPaulScene s_paulScene;
 #endif
+
+#ifndef __SYSTEM_EXCEPT_H__
+#include "system\except.h"
+#endif
+
+
+
+#define	SCREEN_GRAB
 
 
 /*****************************************************************************/
@@ -65,6 +69,10 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	TPInit();
 	VidInit();
 
+#ifdef __USER_paul__
+	installExceptionHandler();			// Where is the earliest we can do this?
+#endif
+
 	setRndSeed( VidGetTickCount() );
 
 	SetDispMask(1);
@@ -81,7 +89,8 @@ s_paulScene.init();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-
+int thing=50;
+int	bug=0;
 static int	s_time = 0;
 void dumpDebugMem();
 
@@ -112,6 +121,9 @@ void	MainLoop()
 		PadUpdate();
 
 		DbgPollHost();
+
+		bug=100/thing;
+		thing--;
 
 #if defined(__VERSION_DEBUG__)
 
