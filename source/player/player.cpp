@@ -209,7 +209,7 @@ void	CPlayer::init()
 		s_playerModes[i]->initialise(this);
 	}
 	m_currentPlayerModeClass=NULL;
-	setMode(PLAYER_MODE_BASICUNARMED);
+	setMode(PLAYER_MODE_FULLUNARMED);	//PKG
 
 m_animNo=0;
 m_animFrame=0;
@@ -250,6 +250,11 @@ m_animFrame=0;
   ---------------------------------------------------------------------- */
 void	CPlayer::shutdown()
 {
+	for(int i=0;i<NUM_PLAYERMODES;i++)
+	{
+		s_playerModes[i]->shutdown();
+	}
+
 #ifdef _STATE_DEBUG_
 	s_debugFont.dump();
 #endif
@@ -290,7 +295,7 @@ if(newmode!=-1)
 		updatePadInput();
 //		s_modes[m_currentMode].m_modeControl->think();
 //		m_currentStateClass->think(this);
-m_currentPlayerModeClass->think();
+		m_currentPlayerModeClass->think();
 
 		// Powerups
 		if(m_squeakyBootsTimer)
@@ -448,7 +453,9 @@ if(eyes!=-1)
 		m_skel.setFrame(m_animFrame);
 		m_skel.Animate(this);
 		m_skel.Render(this);
+		m_currentPlayerModeClass->render();
 		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
+
 	}
 
 
@@ -622,7 +629,7 @@ void CPlayer::setAnimFrame(int _animFrame)
 }
 int CPlayer::getAnimFrameCount()
 {
-	return m_skel.getFrameCount();
+	return m_skel.getFrameCount(m_animNo);
 }
 int CPlayer::getAnimNo()
 {
@@ -643,8 +650,6 @@ void CPlayer::setAnimNo(int _animNo)
   ---------------------------------------------------------------------- */
 void CPlayer::respawn()
 {
-//	setState(STATE_IDLE);
-
 	// Strip any items that the player might be holding
 	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
 	{
@@ -656,7 +661,7 @@ void CPlayer::respawn()
 	}
 
 	s_health=MAX_HEALTH;
-	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
+	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 }
 
