@@ -285,6 +285,11 @@ void SpriteBank::prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bo
 	W>>=8;
 	H>>=8;
 
+	// Why not center the thing in here!? (pkg)
+	_x-=(((_fh->W*_z)>>8)-_fh->W)/2;
+	_y-=(((_fh->H*_z)>>8)-_fh->H)/2;
+
+
 	setShadeTexPolyFT4(_ft4);
 	if (_xFlip)
 		{
