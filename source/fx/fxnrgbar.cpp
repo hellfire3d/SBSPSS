@@ -15,10 +15,11 @@
 #include	"FX\FXNRGBar.h"
 #include	"enemy\npc.h"
 
-int		NRGX=32;
-int		NRGY=188;
-int		NRGW=INGAME_SCREENW-64;
+#include	"FX\FXBubble.h"
 
+const int		NRGX=32;
+const int		NRGY=188;
+const int		NRGW=INGAME_SCREENW-64;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -30,32 +31,45 @@ SpriteBank	*SprBank=CGameScene::getSpriteBank();
 
 		GfxW=SprBank->getFrameWidth(FRM__BUBBLE_1);
 		GfxHalfW=GfxW/2;
-		DrawW=NRGW;
+		CurrentHealth=0;
+}
+
+/*****************************************************************************/
+void	CFXNRGBar::SetMax(int Max)
+{
+		MaxHealth=Max;
+		Scale=((NRGW*4096)/32)/MaxHealth;
+		XInc=NRGW/MaxHealth;
+		CurrentHealth=Max;
 }
 
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-
+//int		NRGMax=16;
+//int		NRGH=NRGMax;
 void	CFXNRGBar::think(int _frames)
 {
-
 CNpcEnemy	*P=(CNpcEnemy*)ParentThing;
-int		Health=P->getHealth();
-		if ( Health < 0 )
+int			Health=P->getHealth();
+
+//		SetMax(NRGMax);
+//		Health=NRGH;
+
+		if (CurrentHealth<Health) CurrentHealth=Health;
+		if (CurrentHealth>Health)
 		{
-			Health = 0;
-		}
+			CurrentHealth--;
+			for (int b=0; b<4; b++)
+			{
+				DVECTOR	Pos;
+				Pos.vx=NRGX+(CurrentHealth*XInc);
+				Pos.vy=NRGY;
 
-		CurrentW=((NRGW/MaxHealth)*Health);
-
-int		Diff=DrawW-CurrentW;
-
-		DrawW-=(Diff+1)>>1;
-		if (DrawW<=0 && Health==0)
-		{
-			//setToShutdown();
-			DrawW = 0;
+				CFXBubble	*FX=(CFXBubble*)CFX::Create(CFX::FX_TYPE_BUBBLE_WATER,Pos);
+				FX->Flags|=FX_FLAG_SCREEN_FX;
+				FX->SetOtPos(0);
+			}
 		}
 
 }
@@ -67,29 +81,14 @@ void	CFXNRGBar::render()
 {
 //		CFX::render();
 
+int			x=NRGX;
+
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 POLY_FT4	*Ft4;
-// Draw Start
-			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX,NRGY,0,0,0);
-			Ft4->x1-=GfxHalfW;
-			Ft4->x3-=GfxHalfW;
-			Ft4->u1-=GfxHalfW;
-			Ft4->u3-=GfxHalfW;
-
-// Draw Start
-			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX+GfxHalfW,NRGY,0,0,0);
-			Ft4->x1+=DrawW-GfxW;
-			Ft4->x3+=DrawW-GfxW;
-			Ft4->u0+=GfxHalfW-1;
-			Ft4->u1-=GfxHalfW-1;
-			Ft4->u2+=GfxHalfW-1;
-			Ft4->u3-=GfxHalfW-1;
-
-// Draw End
-			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX+DrawW+GfxHalfW,NRGY,0,0,0);
-			Ft4->x1-=GfxHalfW;
-			Ft4->x3-=GfxHalfW;
-			Ft4->u0+=GfxHalfW;
-			Ft4->u2+=GfxHalfW;
+			for (int i=0; i<CurrentHealth; i++)
+			{
+				Ft4=SprBank->printRotatedScaledSprite(FRM__BUBBLE_1,x,NRGY,Scale,Scale,0,0);
+				x+=XInc;
+			}
 
 }

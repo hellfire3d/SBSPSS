@@ -16,14 +16,16 @@ public:
 /*virtual*/ void		think(int _frames);
 /*virtual*/ void		render();
 
-		void		SetMax(int Max)	{MaxHealth=Max-1;}
+		void		SetMax(int Max);
 		bool		alwaysThink()								{return(true);}
 
 protected:
 		int			GfxW,GfxHalfW;
 
 		int			MaxHealth;
-		int			CurrentW,DrawW;
+		int			CurrentHealth;
+		int			Scale;
+		int			XInc;
 };
 
 #endif
