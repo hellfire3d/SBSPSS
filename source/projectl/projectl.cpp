@@ -496,24 +496,24 @@ void CPlayerProjectile::think(int _frames)
 		{
 			if ( !m_hitTarget )
 			{
-				Pos.vx += ( _frames * 4 * rcos( m_heading ) ) >> 12;
+				Pos.vx += ( _frames * 5 * rcos( m_heading ) ) >> 12;
 
-				m_vertVelocity += 192;
+				m_vertVelocity += 3 << 7;
 
-				if ( m_vertVelocity > ( 5 << 8 ) )
+				if ( m_vertVelocity > ( 7 << 8 ) )
 				{
-					m_vertVelocity = 5 << 8;
+					m_vertVelocity = 7 << 8;
 				}
-				else if ( m_vertVelocity < -( 5 << 8 ) )
+				else if ( m_vertVelocity < -( 7 << 8 ) )
 				{
-					m_vertVelocity = -( 5 << 8 );
+					m_vertVelocity = -( 7 << 8 );
 				}
 
 				s16 moveY = ( m_vertVelocity >> 8 ) * _frames;
 
-				s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy + moveY, 32 );
+				s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, moveY );
 
-				if ( groundHeight < 0 )
+				if ( groundHeight < moveY )
 				{
 					// destroy destructable tiles
 

@@ -109,61 +109,20 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 				switch( m_level )
 				{
 					case 1:
-					{
-						enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
-						if (!enemy)
-						{
-							enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
-							ASSERT(enemy);
-						}
-						enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
-						enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
-						break;
-					}
-
 					case 2:
 					{
-						if ( getRnd() % 4 == 0 )
-						{
-							enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND);
-							if (!enemy)
-							{
-								enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
-								ASSERT(enemy);
-							}
-							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND );
-							enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND);
-						}
-						else
-						{
-							enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
-							if (!enemy)
-							{
-								enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
-								ASSERT(enemy);
-							}
-							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
-							enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
-						}
-
+						enemy=CNpcEnemy::Create( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
 						break;
 					}
 
 					case 3:
 					{
-						enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_BUTTERFLY_BACKGROUND);
-						if (!enemy)
-						{
-							enemy = new( "butterfly" ) CNpcButterflyBackgroundEnemy;
-							ASSERT(enemy);
-						}
-						enemy->setType( CNpcEnemy::NPC_BUTTERFLY_BACKGROUND );
-						enemy->setThingSubType(CNpcEnemy::NPC_BUTTERFLY_BACKGROUND);
+						enemy=CNpcEnemy::Create( CNpcEnemy::NPC_BUTTERFLY_BACKGROUND );
 						break;
 					}
 				}
 
-				enemy->init();
+				//enemy->init();
 
 				DVECTOR	offset = CLevel::getCameraPos();
 

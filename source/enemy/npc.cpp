@@ -191,6 +191,14 @@
 #include "enemy\nmjback.h"
 #endif
 
+#ifndef __ENEMY_NSJBACK_H__
+#include "enemy\nsjback.h"
+#endif
+
+#ifndef __ENEMY_NBUTTFLY_H__
+#include "enemy\nbuttfly.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
@@ -427,6 +435,18 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 		case CNpcEnemy::NPC_SHELL:
 		{
 			enemy = new ("shell") CNpcShellEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND:
+		{
+			enemy = new ("small jellyfish background") CNpcSmallJellyfishBackgroundEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_BUTTERFLY_BACKGROUND:
+		{
+			enemy = new ("butterfly background") CNpcButterflyBackgroundEnemy;
 			break;
 		}
 
