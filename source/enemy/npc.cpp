@@ -1072,6 +1072,13 @@ void CNpcEnemy::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_SHARK_MAN:
+		{
+			processSharkManMovement( _frames, &moveX, &moveY );
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -1310,8 +1317,8 @@ void CNpcEnemy::render()
 
 	int	W=m_actorGfx->getFrameWidth(m_animNo,m_frame);
 	int	H=m_actorGfx->getFrameHeight(m_animNo,m_frame);
-	renderPos.vx = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( W >> 1 );
-	renderPos.vy = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( H >> 1 );
+	renderPos.vx = Pos.vx - offset.vx;
+	renderPos.vy = Pos.vy - offset.vy - H;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }

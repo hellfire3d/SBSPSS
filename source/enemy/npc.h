@@ -274,6 +274,7 @@ protected:
 		NPC_MOVEMENT_CLAM_RETRACT,
 		NPC_MOVEMENT_PARASITIC_WORM,
 		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
+		NPC_MOVEMENT_SHARK_MAN,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -432,6 +433,7 @@ protected:
 
 	// shark man functions
 
+	void				processSharkManMovement( int _frames, s32 *moveX, s32 *moveY );
 	void				processCloseSharkManAttack( int _frames );
 
 	// anemone functions
