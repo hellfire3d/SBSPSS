@@ -18,6 +18,16 @@ void	MemRemoveNode(sLList *LList,u_short Node);
 sLList		MainRam;
 int			MemNodeCount=0;
 
+#define	USE_MEM_GUARDS
+
+#ifdef	USE_MEM_GUARDS
+static const unsigned int	HEAD_GUARD_FILL_PATTERN	=0x3c3c3c3c;
+static const unsigned int	MEM_FILL_PATTERN		=0x3d3d3d3d;
+static const unsigned int	TAIL_GUARD_FILL_PATTERN	=0x3e3e3e3e;
+static const unsigned int	MEM_GUARD_SIZE=sizeof(int)*2;
+#endif	/* USE_MEM_GUARDS */
+
+
 /*****************************************************************************/
 
 #ifdef __DEBUG_MEM__
@@ -113,6 +123,8 @@ static const char *	s_sceneNames[] =
 static const int s_nbSceneNames = sizeof(s_sceneNames) / sizeof(char *);
 
 static FontBank s_debugFont;
+
+
 
 
 
@@ -386,6 +398,9 @@ u32		Len = ((TLen + 3) & 0xfffffffc);
 int		BestNode,FirstNode;
 
 		Len += 4;			//add on 4 to store Addr !
+#ifdef	USE_MEM_GUARDS
+		Len+=(MEM_GUARD_SIZE*2);
+#endif	/* USE_MEM_GUARDS */
 
 // Find First (and possably only)
 		while (Head != 0xffff && mem->Nodes[ Head ].Len<Len) Head = mem->Nodes[ Head ].Next;
@@ -411,8 +426,30 @@ int		BestNode,FirstNode;
 		mem->Nodes[BestNode].Len -= Len;
 	 	mem->Nodes[BestNode].Addr += Len;
 	 	if (mem->Nodes[BestNode].Len == 0) MemRemoveNode( mem, BestNode);
+
+
 		*(u32*)Addr = Len;
 		Addr += 4;
+
+#ifdef	USE_MEM_GUARDS
+		unsigned int	i;
+		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(int))
+		{
+			*(int*)(Addr+i)=HEAD_GUARD_FILL_PATTERN;
+		}
+		Addr+=MEM_GUARD_SIZE;
+
+		for(i=0;i<((TLen+3)&0xfffffffc);i+=sizeof(int))
+		{
+			*(int*)(Addr+i)=MEM_FILL_PATTERN;
+		}
+
+		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(int))
+		{
+			*(int*)(Addr+((TLen+3)&0xfffffffc)+i)=TAIL_GUARD_FILL_PATTERN;
+		}
+#endif	/* USE_MEM_GUARDS */
+
 		mem->RamUsed += Len;
 		}
 
@@ -435,9 +472,35 @@ char	*Addr = (char*)Address;
 
 // If file from Databank, dont try and clear it (simple!!)
 		if (CFileIO::IsFromDataBank(Address)) return;
+#ifdef	USE_MEM_GUARDS
+		Addr-=MEM_GUARD_SIZE;
+#endif	/* USE_MEM_GUARDS */
 		Addr -= 4;
-
 		Len = *(u32*)Addr;
+		
+#ifdef	USE_MEM_GUARDS
+		// Check that the guards are intact
+		unsigned int	i;
+		unsigned int	*guardAddr;
+		guardAddr=(unsigned int*)(Addr+4);
+		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(unsigned int),guardAddr++)
+		{
+			if(*guardAddr!=HEAD_GUARD_FILL_PATTERN)
+			{
+				ASSERT(!"Memory guard trashed (head)");
+				break;
+			}
+		}
+		guardAddr=(unsigned int*)(Addr+Len-MEM_GUARD_SIZE);
+		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(unsigned int),guardAddr++)
+		{
+			if(*guardAddr!=TAIL_GUARD_FILL_PATTERN)
+			{
+				ASSERT(!"Memory guard trashed (tail)");
+				break;
+			}
+		}
+#endif	/* USE_MEM_GUARDS */
 
 		mem->RamUsed -= Len;
 

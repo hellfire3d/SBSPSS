@@ -26,6 +26,14 @@
 #include "gfx\font.h"
 #endif
 
+#ifndef	__MEMORY_HEADER__
+#include "mem\memory.h"
+#endif
+
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -49,6 +57,7 @@
 	Vars
 	---- */
 static FontBank		s_fontBank;
+char				*s_mem[3];
 
 
 /*----------------------------------------------------------------------
@@ -65,6 +74,7 @@ void CPaulScene::init()
 	PAUL_DBGMSG("this is a message.. 3");
 
 	s_fontBank.initialise(&standardFont);
+
 }
 
 
@@ -106,11 +116,34 @@ void CPaulScene::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int trashoff=-1;
+int trash=false;
 void CPaulScene::think()
 {
 //	static int	arse=0;
 //	PAUL_DBGMSG("%d\n",arse++);
 //	ASSERT(arse<100);
+
+	int	i;
+	int	size[3];
+
+	for(i=0;i<3;i++)
+	{
+		size[i]=32763;//getRndRange(32768);
+		s_mem[i]=MemAlloc(size[i],"Test");
+	}
+	PAUL_DBGMSG("%d %d %d",size[0],size[1],size[2]);
+
+	if(trash)
+	{
+		*(s_mem[0]+trashoff)=123;
+		trash=false;
+	}
+
+	for(i=0;i<3;i++)
+	{
+		MemFree(s_mem[i]);
+	}
 }
 
 
