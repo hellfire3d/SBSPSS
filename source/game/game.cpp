@@ -60,12 +60,12 @@ void 	CGameScene::init()
 		m_conversation.init();
 		Level.init();
 
-		m_player=new ("player") CPlayer();
-		m_player->init();
-
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
+
+		m_player=new ("player") CPlayer();
+		m_player->init();
 
 		CAnimDB::LoadAnims();
 
@@ -80,6 +80,7 @@ void 	CGameScene::init()
 void	CGameScene::shutdown()
 {
 		m_player->shutdown();		delete m_player;
+		CThing::shutdownAndDeleteAllThings();
 
 		Level.shutdown();
 		m_conversation.shutdown();
@@ -99,17 +100,20 @@ void 	CGameScene::render()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
-		m_conversation.think(_frames);
+#ifdef __USER_paul__		
+	if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
+	{
+		m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
+	}
+#endif
+
+	m_conversation.think(_frames);
+	if(!m_conversation.isActive())
+	{
 		CThing::thinkAllThings(_frames);
 		Level.setCameraCentre(m_player->getPos());
 		Level.think(_frames);
-
-#ifdef __USER_paul__		
-		if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
-		{
-			m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
-		}
-#endif
+	}
 }
 
 /*****************************************************************************/
