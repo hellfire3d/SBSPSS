@@ -16,6 +16,9 @@
 
 class CNpcEyeballEnemy : public CNpcEnemy
 {
+public:
+	virtual void		render(){}
+
 	virtual void		postInit();
 protected:
 	virtual void		processEnemyCollision( CThing *thisThing );
