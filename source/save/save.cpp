@@ -518,6 +518,7 @@ void CSaveScene::think(int _frames)
 				break;
 
 			case MODE__CONFIRMSAVE:
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 				setMode(MODE__READYTOEXIT);
 				CFader::setFadingOut();
 				break;
@@ -530,6 +531,7 @@ void CSaveScene::think(int _frames)
 			case MODE__CONFIRMOVERWRITE:
 			case MODE__SAVEOK:
 			case MODE__SAVEERROR:
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 				setMode(MODE__CONFIRMSAVE);
 				break;
 		}

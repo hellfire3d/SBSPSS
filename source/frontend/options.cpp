@@ -658,6 +658,7 @@ void CFrontEndOptions::think(int _frames)
 		{
 			if(m_mode==MODE__OPTIONS)
 			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 				m_exitFlag=true;
 			}
 			else if(m_mode==MODE__LOAD)
@@ -676,12 +677,14 @@ void CFrontEndOptions::think(int _frames)
 					case LOADMODE__CONFIRMLOAD:
 					case LOADMODE__LOADOK:
 					case LOADMODE__LOADERROR:
+						CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 						m_nextMode=MODE__OPTIONS;
 						break;
 				}
 			}
 			else
 			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 				m_nextMode=MODE__OPTIONS;
 			}
 		}
