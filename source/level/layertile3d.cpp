@@ -19,18 +19,18 @@
 static		FontBank		*Font;
 #endif
 
-int			BLOCK_SIZE				=16;
-int			SCREEN_TILE_ADJ_U		=2;
-int			SCREEN_TILE_ADJ_D		=2;
-int			SCREEN_TILE_ADJ_L		=2;
-int			SCREEN_TILE_ADJ_R		=3;
-int			SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;	//40;
-int			SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;			//+18;
-int			RENDER_X_PIX_OFS		=8;
-int			RENDER_Y_PIX_OFS		=16;
+static const int	BLOCK_SIZE				=16;
+static const int	SCREEN_TILE_ADJ_U		=2;
+static const int	SCREEN_TILE_ADJ_D		=2;
+static const int	SCREEN_TILE_ADJ_L		=2;
+static const int	SCREEN_TILE_ADJ_R		=3;
+static const int	SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;
+static const int	SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;
+static const int	RENDER_X_PIX_OFS		=8;
+static const int	RENDER_Y_PIX_OFS		=16;
 
-int			RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
-int			RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
+static const int	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
+static const int	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -114,11 +114,6 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 void	CLayerTile3d::render()
 {
-	SCREEN_TILE3D_WIDTH		=(INGAME_SCREENW/BLOCK_SIZE)+SCREEN_TILE_ADJ_L+SCREEN_TILE_ADJ_R;	//40;
-	SCREEN_TILE3D_HEIGHT	=(INGAME_SCREENH/BLOCK_SIZE)+SCREEN_TILE_ADJ_U+SCREEN_TILE_ADJ_D;			//+18;
-	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZE)+RENDER_X_PIX_OFS;
-	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+RENDER_Y_PIX_OFS;
-
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
