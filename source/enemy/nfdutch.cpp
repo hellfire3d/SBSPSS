@@ -670,11 +670,6 @@ void CNpcFlyingDutchmanEnemy::processShotDeathEnd( int _frames )
 	if ( !m_animPlaying )
 	{
 		CNpcEnemy::processShotDeathEnd( _frames );
-
-		if ( isSetToShutdown() )
-		{
-			CGameScene::setBossHasBeenKilled();
-		}
 	}
 }
 

@@ -670,6 +670,7 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 						m_isDying = true;
+						CGameScene::setBossHasBeenKilled();
 					}
 					else
 					{
@@ -709,11 +710,6 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 					if ( !m_animPlaying )
 					{
 						CNpcEnemy::processShotDeathEnd( _frames );
-
-						if ( isSetToShutdown() )
-						{
-							CGameScene::setBossHasBeenKilled();
-						}
 					}
 
 					break;

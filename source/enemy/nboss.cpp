@@ -92,6 +92,7 @@ void CNpcBossEnemy::processShot( int _frames )
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 						m_isDying = true;
 						m_health = 0;
+						CGameScene::setBossHasBeenKilled();
 					}
 					else
 					{
