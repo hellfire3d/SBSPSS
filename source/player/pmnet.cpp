@@ -21,6 +21,19 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
+#ifndef	__PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
+
 
 /*	Std Lib
 	------- */
@@ -34,18 +47,6 @@
 
 #ifndef __SPR_INGAMEFX_H__
 #include <ingamefx.h>
-#endif
-
-#ifndef	__ENEMY_NPC_H__
-#include "enemy\npc.h"
-#endif
-
-#ifndef	__PROJECTL_PROJECTL_H__
-#include "projectl\projectl.h"
-#endif
-
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
 #endif
 
 
@@ -84,6 +85,7 @@ void	CPlayerModeNet::enter()
 	Returns:
   ---------------------------------------------------------------------- */
 int netstate;
+DVECTOR	netLaunchPos={-10,-70};
 void	CPlayerModeNet::think()
 {
 	// If we're netting then restore the 'real' anim number/frame before
@@ -128,7 +130,6 @@ void	CPlayerModeNet::think()
 					{
 						if(((CNpcEnemy*)thing)->canBeCaughtByNet())
 						{
-PAUL_DBGMSG("Caught!");
 							((CNpcEnemy*)thing)->caughtWithNet();
 							m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
 							thing=NULL;
@@ -148,20 +149,25 @@ PAUL_DBGMSG("Caught!");
 				if(m_netFrame==0)
 				{
 					// Launch projectile at halfway through the swing..
-PAUL_DBGMSG("Released!");
 					CPlayerProjectile *projectile;
 
-					int playerFacing=m_player->getFacing();
+					int		playerFacing;
+					int		fireHeading;
+					DVECTOR	launchPos;
 
-					int fireHeading = 1024 + ( 1024 * playerFacing );
+					playerFacing=m_player->getFacing();
+					fireHeading=1024+(1024*playerFacing);
+					launchPos=m_player->getPos();
+					launchPos.vx+=netLaunchPos.vx*playerFacing;
+					launchPos.vy+=netLaunchPos.vy;
 
 
 					projectile = new( "user projectile" ) CPlayerProjectile;
-					projectile->init(	m_player->getPos(),
+					projectile->init(	launchPos,
 										fireHeading,
 										CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-										5 * GameState::getOneSecondInFrames() );
+										5*60);
 
 					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				}
