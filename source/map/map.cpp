@@ -34,6 +34,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __SAVE_SAVE_H__
+#include "save\save.h"
+#endif
+
 #ifndef	__GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
@@ -352,6 +356,14 @@ void CMapScene::renderInstructions()
 	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
 	m_font->print(x,y,STR__MAP_SCREEN__X_TO_START);
+
+	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
+	fh1=sb->getFrameHeader(FRM__BUTT);
+	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__MAP_SCREEN__TRIANGLE_TO_SAVE);
+	x=256-(width/2);
+	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_font->print(x,y,STR__MAP_SCREEN__TRIANGLE_TO_SAVE);
 }
 
 
@@ -440,6 +452,13 @@ void CMapScene::think(int _frames)
 			m_readyToExit=true;
 			CFader::setFadingOut();
 			GameState::setNextScene(&GameScene);
+		}
+		else if(pad&PAD_TRIANGLE)
+		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
+			m_readyToExit=true;
+			CFader::setFadingOut();
+			GameState::setNextScene(&SaveScene);
 		}
 	}
 }

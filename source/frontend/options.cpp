@@ -663,7 +663,7 @@ void CFrontEndOptions::think(int _frames)
 					}
 					else if(m_loadTimeInMode>60)
 					{
-						// Wait for card status to settle for one second before trusting its status
+						// Wait for card status to settle for one second before trusting it
 						if(MemCard::GetCardStatus(0)==MemCard::CS_NoCard)
 						{
 							setLoadMode(LOADMODE__NOCARD);
@@ -684,6 +684,16 @@ void CFrontEndOptions::think(int _frames)
 					break;
 
 				case LOADMODE__UNFORMATTED:
+					if(MemCard::GetCardStatus(0)!=MemCard::CS_UnformattedCard)
+					{
+						setLoadMode(LOADMODE__CHECKING);
+					}
+					else if(m_loadUserResponse==USERRESPONSE__OK)
+					{
+						m_nextMode=MODE__OPTIONS;
+					}
+					break;
+
 				case LOADMODE__NODATA:
 					if(MemCard::GetCardStatus(0)!=MemCard::CS_ValidCard)
 					{
@@ -714,7 +724,10 @@ void CFrontEndOptions::think(int _frames)
 					else if(m_loadUserResponse==USERRESPONSE__YES)
 					{
 						setLoadMode(LOADMODE__LOADING);
-						m_saveLoadDatabase->startLoad(0);
+						if(!m_saveLoadDatabase->startLoad(0))
+						{
+							setLoadMode(LOADMODE__LOADERROR);
+						}
 					}
 					else if(m_loadUserResponse==USERRESPONSE__NO)
 					{

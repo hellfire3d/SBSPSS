@@ -115,9 +115,23 @@ eng=SpongeBob game data found.\nAre you sure you want to load?
 
 
 
+
+; ---------------------------------------------------------------
+; Save scene ( also see memcard section )
+; ---------------------------------------------------------------
+
+[STR__SAVE__DO_YOU_WANT_TO_SAVE]
+eng=Do you want to save?
+[STR__SAVE__UNFORMATTEDCARD]
+eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted.\nDo you want to format it now?
+
+
+
+
 ; ---------------------------------------------------------------
 ; Memcard
 ; ---------------------------------------------------------------
+
 [STR__MEMCARD__CHECKING_MEM_CARD]
 eng=Checking...\nPlease do not remove the MEMORY CARD
 [STR__MEMCARD__UNFORMATTEDCARD]
@@ -129,9 +143,9 @@ eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
 eng=Loading...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADOK]
-eng=Load complete!
+eng=Load complete!\nPress X to continue
 [STR__MEMCARD__LOADERROR]
-eng=Load Error!
+eng=Load Error!\nPress X to continue
 [STR__MEMCARD__NOSPACEONCARD]
 eng=Insufficient free blocks available in MEMORY CARD of MEMORY CARD SLOT 1
 [STR__MEMCARD__DUPLICATESAVENAME]
@@ -146,14 +160,12 @@ eng=Format complete!\n\nPress X to continue
 eng=Format Error!\n\nPress X to continue
 [STR__MEMCARD__FORMATTINGINTERRUPTED]
 eng=Operation interrupted!\n\nPress X to continue
-[STR__MEMCARD__SAVEINGPLEASEWIAT]
+[STR__MEMCARD__SAVINGPLEASEWAIT]
 eng=Saving...\nDo not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__SAVEOK]
 eng=Save complete!\n\nPress X to continue
 [STR__MEMCARD__SAVEERROR]
 eng=Save error!\n\nPress X to continue
-
-
 
 
 
@@ -406,6 +418,8 @@ eng=Select level
 eng=Select chapter
 [STR__MAP_SCREEN__X_TO_START]
 eng=Start
+[STR__MAP_SCREEN__TRIANGLE_TO_SAVE]
+eng=Save
 
 
 

@@ -291,6 +291,8 @@ player_src :=		demoplay \
 					pscart \
 					psfloat
 
+save_src :=			save
+
 script_src :=		script \
 					function
 

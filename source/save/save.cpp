@@ -204,6 +204,7 @@ void CSaveScene::render()
 
 		case MODE__CHECKING:
 		case MODE__FORMATTING:
+		case MODE__CHECKINGFORMAT:
 		case MODE__SAVING:
 			m_blankFrame->render();
 			break;
@@ -214,8 +215,6 @@ void CSaveScene::render()
 			break;
 
 		case MODE__FORMATOK:
-			break;
-
 		case MODE__FORMATERROR:
 		case MODE__NOCARD:
 		case MODE__NOSPACE:
@@ -265,7 +264,7 @@ void CSaveScene::think(int _frames)
 				}
 				else if(m_timeInMode>60)
 				{
-					// Wait for card status to settle for one second before trusting its status
+					// Wait for card status to settle for one second before trusting it
 					if(MemCard::GetCardStatus(0)==MemCard::CS_NoCard)
 					{
 						setMode(MODE__NOCARD);
@@ -294,7 +293,7 @@ void CSaveScene::think(int _frames)
 				break;
 
 			case MODE__UNFORMATTED:
-				if(MemCard::GetCardStatus(0)!=MemCard::CS_ValidCard)
+				if(MemCard::GetCardStatus(0)!=MemCard::CS_UnformattedCard)
 				{
 					setMode(MODE__CHECKING);
 				}
@@ -321,7 +320,8 @@ void CSaveScene::think(int _frames)
 				int stat=m_saveLoadDatabase->getFormatStatus();
 				if(stat==CSaveLoadDatabase::FINISHED_OK)
 				{
-					setMode(MODE__FORMATOK);
+					MemCard::InvalidateCard(0);
+					setMode(MODE__CHECKINGFORMAT);
 				}
 				else if(stat==CSaveLoadDatabase::FAILED)
 				{
@@ -330,7 +330,57 @@ void CSaveScene::think(int _frames)
 				}
 				break;
 
+			case MODE__CHECKINGFORMAT:
+				if(MemCard::GetCardStatus(0)==MemCard::CS_CardInserted)
+				{
+					// Scanning a new card..
+					m_timeInMode=0;
+				}
+				else if(m_timeInMode>240)
+				{
+					// Wait for card status to settle for one second before trusting it
+					if(MemCard::GetCardStatus(0)==MemCard::CS_NoCard)
+					{
+						setMode(MODE__NOCARD);
+					}
+					else if(MemCard::GetCardStatus(0)==MemCard::CS_UnformattedCard)
+					{
+						setMode(MODE__UNFORMATTED);
+					}
+					else if(MemCard::GetFileCountOnCard(0))
+					{
+						setMode(MODE__CONFIRMOVERWRITE);
+					}
+					else if(MemCard::GetFreeBlocksOnCard(0)==0)
+					{
+						setMode(MODE__NOSPACE);
+					}
+					else
+					{
+						setMode(MODE__FORMATOK);
+					}
+				}
+				break;
+
 			case MODE__FORMATOK:
+				if(MemCard::GetCardStatus(0)!=MemCard::CS_ValidCard)
+				{
+					setMode(MODE__CHECKING);
+				}
+				else
+				{
+					m_okResponseFrame->think(_frames);
+					if(m_userResponse==USERRESPONSE__OK)
+					{
+						setMode(MODE__SAVING);
+						if(!m_saveLoadDatabase->startSave("blah"))
+						{
+							setMode(MODE__SAVEERROR);
+						}
+					}
+				}
+				break;
+
 			case MODE__FORMATERROR:
 			case MODE__NOSPACE:
 			case MODE__SAVEERROR:
@@ -446,9 +496,14 @@ void CSaveScene::setMode(MODE _newMode)
 
 		case MODE__UNFORMATTED:
 			m_yesNoResponseTextBox->setText(STR__SAVE__UNFORMATTEDCARD);
+			m_yesNoResponseFrame->select();
 			break;
 
 		case MODE__FORMATTING:
+			m_blankTextBox->setText(STR__MEMCARD__FORMATTINGPLEASEWIAT);
+			break;
+
+		case MODE__CHECKINGFORMAT:
 			m_blankTextBox->setText(STR__MEMCARD__FORMATTINGPLEASEWIAT);
 			break;
 
@@ -509,6 +564,7 @@ static const char *text[]=
 		"MODE__CHECKING",
 		"MODE__UNFORMATTED",
 		"MODE__FORMATTING",
+		"MODE__CHECKINGFORMAT",
 		"MODE__FORMATOK",
 		"MODE__FORMATERROR",
 		"MODE__NOCARD",
