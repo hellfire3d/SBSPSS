@@ -493,6 +493,7 @@ CActorGfx::CActorGfx(sActorPool *ThisActor)
 		ShadowXOfs=DEF_SHADOW_OFS;
 		ShadowYOfs=DEF_SHADOW_OFS;
 		ShadowFlag=false;
+		OtPos=OTPOS__ACTOR_POS;
 }
 
 /*****************************************************************************/
@@ -511,8 +512,6 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-int	ActorOT=OTPOS__ACTOR_POS;
-
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 
@@ -581,7 +580,7 @@ POLY_FT4		*Ft4;
 			setRGB0(Ft4,128,128,128);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
-			addPrim(OtPtr+ActorOT,Ft4);
+			addPrim(OtPtr+OtPos,Ft4);
 
 			if (ShadowFlag)
 			{
@@ -593,7 +592,7 @@ POLY_FT4		*Ft4;
 				sFt4->y1+=ShadowYOfs;
 				setSemiTrans(sFt4,1);
 				setRGB0(sFt4,0,0,0);
-				addPrim(OtPtr+ActorOT,sFt4);
+				addPrim(OtPtr+OtPos,sFt4);
 			}
 // Set BBox
 int			HalfW=CurrentFrame->W>>1;
@@ -755,8 +754,8 @@ void	CModelGfx::SetModel(int Type)
 /*****************************************************************************/
 int	PXOfs=-16;
 int	PYOfs=-8;
-
-void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,VECTOR *Flip)
+VECTOR	_Flip={0,0,0};
+void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {
 #define	BLOCK_MULT	16
 u8				*PrimPtr=GetPrimPtr();
@@ -771,15 +770,16 @@ int				TriCount=Model->TriCount;
 sTri			*TList=&ModelTriList[Model->TriStart];
 				MATRIX	Mtx;
 
-			if (Flip)
-				SetIdentNoTrans(&Mtx,Flip);
+			Scale=&_Flip;
+			if (Scale)
+				SetIdentNoTrans(&Mtx,Scale);
 			else
 				SetIdentNoTrans(&Mtx);
 
-			if (Scale || Angle)
+			if (Angle)
 			{
 				if (Angle) RotMatrix(Angle,&Mtx);
-				if (Scale) ScaleMatrix(&Mtx,Scale);
+//				if (Scale) ScaleMatrix(&Mtx,Scale);
 			}
 
 			MapXY.vx=Pos.vx>>4;

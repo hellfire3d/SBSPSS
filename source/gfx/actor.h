@@ -153,6 +153,7 @@ virtual	~CActorGfx();
 
 		void			SetShadow(bool f)			{ShadowFlag=f;}
 		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
+		void			SetOtPos(int Ot)			{OtPos=Ot;}
 
 protected:
 		void			SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
@@ -164,6 +165,7 @@ protected:
 		sBBox			BBox;
 		bool			ShadowFlag;
 		s16				ShadowXOfs,ShadowYOfs;
+		u32				OtPos;
 };
 
 /*****************************************************************************/
@@ -178,7 +180,7 @@ virtual	~CModelGfx(){};
 static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
 		void		SetModel(int Type);
 
-		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,VECTOR *Flip=0);
+		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0);
 		sBBox		&GetBBox()		{return(Model->BBox);}
 
 protected:
