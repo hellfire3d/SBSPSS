@@ -69,6 +69,7 @@ void	CGaryStopTrigger::init()
 	CTrigger::init();
 
 	m_dropped = false;
+	Pos.vx += 8;
 }
 
 /*----------------------------------------------------------------------
