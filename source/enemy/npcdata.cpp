@@ -155,7 +155,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		FRM_JELLYFISH1_SWIM1,
 		true,
 		true,
-		true,
+		false,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_2
@@ -177,7 +177,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		true,
-		true,
+		false,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -331,7 +331,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_FISH_FOLK
@@ -375,7 +375,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_CATERPILLAR_GETHIT,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_SEA_SNAKE
@@ -463,7 +463,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_HERMITCRAB_DIE,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_MINE
@@ -529,7 +529,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_SPIDERCRAB_HIT,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_SPIDER_CRAB_SPAWNER
@@ -595,7 +595,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		ANIM_BABYOCTOPUS_HIT,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -639,7 +639,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		false,
 		false,
-		true,
+		false,
 	},
 
 	{	// NPC_GHOST
@@ -969,7 +969,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		FRM_JELLYFISH1_SWIM1,
 		true,
 		true,
-		true,
+		false,
 	},
 };
 
