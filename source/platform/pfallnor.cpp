@@ -60,8 +60,11 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 
 		if ( groundHeight < moveY )
 		{
-			moveY = groundHeight;
-			moveX = 2 * _frames;
+			if ( ( m_layerCollision->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK ) != (7<<COLLISION_TYPE_FLAG_SHIFT) )
+			{
+				moveY = groundHeight;
+				moveX = 2 * _frames;
+			}
 		}
 
 		Pos.vx += moveX;
