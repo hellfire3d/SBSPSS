@@ -679,6 +679,7 @@ void CSoundMediator::stopAllSound()
 {
 	s_xmplaySound->stopAndUnlockAllSound();
 	CXAStream::Stop();
+	s_songPlayingId=NOT_PLAYING;
 }
 
 
