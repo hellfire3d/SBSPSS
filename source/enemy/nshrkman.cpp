@@ -152,6 +152,26 @@ void CNpcSharkManEnemy::processMovement( int _frames )
 
 void CNpcSharkManEnemy::processClose( int _frames )
 {
+	s32 xDist, yDist;
+
+	DVECTOR newPos = Pos;
+	newPos.vy -= 50;
+
+	CPlayer *player = GameScene.getPlayer();
+	DVECTOR playerPos = player->getPos();
+
+	xDist = playerPos.vx - newPos.vx;
+	yDist = playerPos.vy - newPos.vy;
+
+	if ( xDist > 0 )
+	{
+		m_heading = 0;
+	}
+	else
+	{
+		m_heading = 2048;
+	}
+
 	if ( m_animNo != ANIM_MANRAY_ATTACK )
 	{
 		m_animPlaying = true;
@@ -161,17 +181,6 @@ void CNpcSharkManEnemy::processClose( int _frames )
 	else if ( ( ( m_frame >> 8 ) > ( ( 2 * getFrameCount() ) >> 2 ) ) && !m_fired )
 	{
 		// fire
-
-		DVECTOR newPos = Pos;
-		newPos.vy -= 50;
-
-		s32 xDist, yDist;
-
-		CPlayer *player = GameScene.getPlayer();
-		DVECTOR playerPos = player->getPos();
-
-		xDist = playerPos.vx - newPos.vx;
-		yDist = playerPos.vy - newPos.vy;
 
 		s16 heading = ratan2( yDist, xDist ) & 4095;
 
