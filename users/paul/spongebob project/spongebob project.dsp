@@ -109,22 +109,6 @@ SOURCE=..\..\..\source\backend\gameover.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\source\enemy\2denemy.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\2denemy.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\enemy.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\enemy.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\enemy\nanemone.cpp
 # End Source File
 # Begin Source File
