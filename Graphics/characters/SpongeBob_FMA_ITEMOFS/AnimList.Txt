@@ -1,2 +1,4 @@
+IdleBreath
+QuickExit
 Run
 Stumble

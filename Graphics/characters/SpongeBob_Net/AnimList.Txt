@@ -20,3 +20,4 @@ CrouchUp
 LookUp
 IdleNet
 IdleWeapon
+Celebrate

@@ -18,3 +18,4 @@ DeathSquash
 GetHit
 CrouchDown
 CrouchUp
+Celebrate

@@ -16,3 +16,4 @@ GetHit
 CrouchDown
 CrouchUp
 LookUp
+Celebrate
