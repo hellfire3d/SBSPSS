@@ -9,17 +9,11 @@
 #include	<List2d.h>
 
 /*****************************************************************************/
-struct	SMkLayerShadeRGB
-{
-		int	Pos;
-		u8	RGB[3];
-};
-
-/*****************************************************************************/
 struct  sBackGfxList
 {
-		GString		Name;
-		int			TexID;
+		GString					Name;
+		int						TexID;
+		sLayerShadeBackGfxType	Out;
 
 bool	operator ==(sBackGfxList const &v1)		{return(Name==v1.Name);}
 };
@@ -33,18 +27,16 @@ public:
 		void	PreProcess(CMkLevel *Core);
 		void	Process(CMkLevel *Core);
 		int		Write(FILE *File,const char *LayerName,const char *MapName);
-		int		AddBackGfx(CMkLevel *Core,const char *Filename);
 
 protected:
-			int		Count;
-			vector<SMkLayerShadeRGB>	List;
-			GString						BackGfx[2];
-			int							Flags[2];
-			int							Trans[2];
+		int		WriteTypeList(FILE *File);
+		int		WriteGfxList(FILE *File);
 
-			CList<sBackGfxList>			BackGfxList;
-			int							TexID[2];
-			sLayerShadeHdr				Data;
+		CList<GString>			TypeNameList;
+		CList<sLayerShadeGfx>	GfxList;
+
+		CList<sBackGfxList>		OutTypeList;
+		sLayerShadeHdr			ShadeHdr;
 };
 
 /*****************************************************************************/

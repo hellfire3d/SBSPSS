@@ -60,7 +60,8 @@ public:
 
 		void			LoadModels();
 		int				AddModel(GString &Filename);
-		int				AddModel(sMkLevelLayerThing &ThisThing);
+		int				AddModel(const char *Name,int TriStart,int TriCount);
+
 		void			Load();
 
 		void			Process();

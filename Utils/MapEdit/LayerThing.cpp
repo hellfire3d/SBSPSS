@@ -66,7 +66,14 @@ int		i,ListSize;
 		{
 			sLayerThing	&ThisThing=ThingList[i];
 			LoadThing(File,Version,ThisThing);
-			File->Read(&ThisThing.Data,sizeof(sLayerThingData));
+			if (Version<9)
+			{
+				LoadOldThing(File,ThisThing);
+			}
+			else
+			{
+				File->Read(&ThisThing.Data,sizeof(sLayerThingData));
+			}
 		}
 		LoadThingNames(File,Version);
 
@@ -179,13 +186,8 @@ int		i,ListSize=ThingScript.GetGroupCount();
 			memset(&ThisDef.Data,0,sizeof(sLayerThingData));
 			ThisDef.Name=Name;
 			ThisDef.Data.WaypointCount=ThingScript.GetInt(Name,"WayPoints");
-			ThisDef.Data.Speed=ThingScript.GetInt(Name,"Speed");
-			ThisDef.Data.TurnRate=ThingScript.GetInt(Name,"TurnRate");
-			ThisDef.Data.Health=ThingScript.GetInt(Name,"Health");
-			ThisDef.Data.AttackStrength=ThingScript.GetInt(Name,"AttackStrength");
-			ThisDef.Data.PlayerFlag=ThingScript.GetInt(Name,"Player")==1;
-			ThisDef.Data.CollisionFlag=ThingScript.GetInt(Name,"Collision")==1;
 
+			LoadDefThing(Name,ThisDef);
 			ThisDef.XY.resize(1);
 			TRACE2("%s\t\t%s\n",Name,Gfx);
 			if (Gfx) 

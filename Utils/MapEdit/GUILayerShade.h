@@ -7,6 +7,9 @@
 // LayerShadeGUI.h : header file
 //
 
+#ifndef	u8
+typedef	unsigned char	u8;
+#endif
 /////////////////////////////////////////////////////////////////////////////
 // CGUILayerShade dialog
 
@@ -16,50 +19,60 @@ class CGUILayerShade : public CDialog
 public:
 	CGUILayerShade(CWnd* pParent = NULL);   // standard constructor
 
-	void	SetVal(CEdit &Dlg,int &Val);
-	void	GetVal(CEdit &Dlg,int &Val);
-	void	LimitVal(int Min,int Max,CEdit &Dlg);
-
-	void	SetRGB(RGBQUAD &RGB,int Set);
-	void	GetRGB(RGBQUAD &RGB,int Set);
-
-	void	SetCount(int &Count)	{SetVal(m_Count,Count);}
-	void	GetCount(int &Count)	{GetVal(m_Count,Count);}
-
-	void	CheckData();
-	void	CheckRGB(int Set);
-
-	void	SetStatus(int Set,bool f);
-
 // Dialog Data
 	//{{AFX_DATA(CGUILayerShade)
 	enum { IDD = IDD_LAYER_SHADE };
-	CSpinButtonCtrl	m_CountSpin;
-	CButton	m_Spin1;
-	CButton	m_Spin0;
-	CButton	m_Scale1;
-	CButton	m_Scale0;
-	CButton	m_Move1;
-	CButton	m_Move0;
-	CButton	m_Color1;
-	CButton	m_Color0;
-	CComboBox	m_Trans1;
-	CComboBox	m_Trans0;
-	CComboBox	m_Gfx1;
-	CComboBox	m_Gfx0;
-	CEdit	m_R0;
-	CEdit	m_G0;
-	CEdit	m_B0;
-	CEdit	m_R1;
-	CEdit	m_G1;
-	CEdit	m_B1;
-	CEdit	m_R2;
-	CEdit	m_G2;
-	CEdit	m_B2;
-	CEdit	m_R3;
-	CEdit	m_G3;
-	CEdit	m_B3;
-	CEdit	m_Count;
+	CComboBox	m_DefList;
+	CSpinButtonCtrl	m_ShadeCountSpin;
+	CEdit			m_ShadeCount;
+	CEdit			m_ShadeR0;
+	CEdit			m_ShadeG0;
+	CEdit			m_ShadeB0;
+	CEdit			m_ShadeR1;
+	CEdit			m_ShadeG1;
+	CEdit			m_ShadeB1;
+	CEdit			m_ShadeR2;
+	CEdit			m_ShadeG2;
+	CEdit			m_ShadeB2;
+	CEdit			m_ShadeR3;
+	CEdit			m_ShadeG3;
+	CEdit			m_ShadeB3;
+	CSpinButtonCtrl	m_GfxCurrentSpin;
+	CEdit			m_GfxCurrent;
+	CComboBox		m_GfxBankList;
+	CEdit			m_GfxPosXSpin;
+	CEdit			m_GfxPosX;
+	CEdit			m_GfxPosYSpin;
+	CEdit			m_GfxPosY;
+	CSpinButtonCtrl	m_GfxSpinx0;
+	CSpinButtonCtrl	m_GfxSpiny0;
+	CEdit			m_Gfxx0;
+	CEdit			m_Gfxy0;
+	CEdit			m_GfxR0;
+	CEdit			m_GfxG0;
+	CEdit			m_GfxB0;
+	CSpinButtonCtrl	m_GfxSpinx1;
+	CSpinButtonCtrl	m_GfxSpiny1;
+	CEdit			m_Gfxx1;
+	CEdit			m_Gfxy1;
+	CEdit			m_GfxR1;
+	CEdit			m_GfxG1;
+	CEdit			m_GfxB1;
+	CSpinButtonCtrl	m_GfxSpinx2;
+	CSpinButtonCtrl	m_GfxSpiny2;
+	CEdit			m_Gfxx2;
+	CEdit			m_Gfxy2;
+	CEdit			m_GfxR2;
+	CEdit			m_GfxG2;
+	CEdit			m_GfxB2;
+	CSpinButtonCtrl	m_GfxSpinx3;
+	CSpinButtonCtrl	m_GfxSpiny3;
+	CEdit			m_Gfxx3;
+	CEdit			m_Gfxy3;
+	CEdit			m_GfxR3;
+	CEdit			m_GfxG3;
+	CEdit			m_GfxB3;
+	CComboBox		m_GfxTransList;
 	//}}AFX_DATA
 
 	void OnOK();
@@ -72,17 +85,32 @@ public:
 	//}}AFX_VIRTUAL
 
 // Implementation
+public:
+	void	EnableCallback()		{CallbackFlag=true;}
+	void	DisableCallback()		{CallbackFlag=false;}
+	void	SetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+	void	GetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+	void	SetRGB(CEdit &RDlg,CEdit &GDlg,CEdit &BDlg,u8 &R,u8 &G,u8 &B);
+	void	GetRGB(CEdit &RDlg,CEdit &GDlg,CEdit &BDlg,u8 &R,u8 &G,u8 &B);
+
+	void	SetShadeRGB(int idx,u8 &R,u8 &G,u8 &B);
+	void	GetShadeRGB(int idx,u8 &R,u8 &G,u8 &B);
+	void	SetGfxRGB(int idx,u8 &R,u8 &G,u8 &B);
+	void	GetGfxRGB(int idx,u8 &R,u8 &G,u8 &B);
+
 protected:
+	bool	CallbackFlag;
 
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerShade)
-	afx_msg void OnChangeLayershadeEdit();
 	afx_msg void OnChangeParam();
+	afx_msg void OnGoto();
+	afx_msg void OnDelete();
+	afx_msg void OnChangeCurrent();
+	afx_msg void OnNew();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-	bool	SetFlag;
 
-	CEdit	*Map[4][4];
 };
 
 //{{AFX_INSERT_LOCATION}}

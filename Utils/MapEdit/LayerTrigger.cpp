@@ -41,6 +41,24 @@ void	CLayerTrigger::InitSubView(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerTrigger::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+}
+
+/*****************************************************************************/
+void	CLayerTrigger::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+		ThisThing.Data.Trigger.TriggerWidth=OldThing.Width;
+		ThisThing.Data.Trigger.TriggerHeight=OldThing.Height;
+		ThisThing.Data.Trigger.TriggerTargetX=OldThing.TargetX;
+		ThisThing.Data.Trigger.TriggerTargetY=OldThing.TargetY;
+}
+
+
+/*****************************************************************************/
 void	CLayerTrigger::RenderThing(CCore *Core,Vector3 &ThisCam,sLayerThing &ThisThing,bool Render3d,bool Selected)
 {
 float		ZoomW=Core->GetZoomW();
@@ -71,8 +89,8 @@ float		Col=0.8f,A=0.8f;
 			Core->RenderNumber(0);
 			glEnable(GL_DEPTH_TEST);
 
-float	W=(ThisThing.Data.Width);
-float	H=-(ThisThing.Data.Height);
+float	W=(ThisThing.Data.Trigger.TriggerWidth);
+float	H=-(ThisThing.Data.Trigger.TriggerHeight);
 // Draw Box
 			glBegin (GL_QUADS);
 				glColor4f(0,Col-0.25f,0,A);
@@ -96,8 +114,33 @@ float	H=-(ThisThing.Data.Height);
 
 				glVertex3f( 0,H+1,0);
 				glVertex3f( 0,0+1,0);
-
 			glEnd();
+
+			if (Selected && ThingScript.GetInt(ThisThing.Name,"HasTarget"))
+			{ // Draw Target
+				float	ox,oy;
+				float	tx,ty;
+
+				ox=W/2.0f;
+				oy=H/2.0f;
+				tx=ThisThing.Data.Trigger.TriggerTargetX-ThisThing.XY[0].x;
+				ty=ThisThing.XY[0].y-ThisThing.Data.Trigger.TriggerTargetY;
+				glBegin(GL_LINES); 
+					glColor4f(Col,Col,Col,A);
+					glVertex3f( ox,oy+1.0f,0);
+					glVertex3f( tx+0.5f,ty+0.5f,0);
+				glEnd();
+				glBegin (GL_QUADS);
+					glColor4f(Col,0,Col,A);
+					glVertex3f(tx+0,ty+0,0);
+					glVertex3f(tx+1,ty+0,0);
+					glVertex3f(tx+1,ty+1,0);
+					glVertex3f(tx+0,ty+1,0);
+				glEnd();
+
+				
+			}
+
 
 			glDisable(GL_DEPTH_TEST);
 
@@ -109,13 +152,15 @@ float	H=-(ThisThing.Data.Height);
 /*****************************************************************************/
 void	CLayerTrigger::GUIInit(CCore *Core)
 {
+		
 		GUITrigger.DisableCallback(true);
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 		Core->GUIAdd(GUITrigger,IDD_LAYER_TRIGGER);
 		GUITrigger.DisableCallback(false);
 		GUITrigger.m_WidthSpin.SetRange(1,255);
 		GUITrigger.m_HeightSpin.SetRange(1,255);
-
+		GUITrigger.m_TargetXSpin.SetRange(0,32000);
+		GUITrigger.m_TargetYSpin.SetRange(0,32000);
 }
 
 /*****************************************************************************/
@@ -154,20 +199,36 @@ CComboBox	&List=GUIThing.m_DefList;
 /*****************************************************************************/
 void	CLayerTrigger::GUIThingUpdate(bool OnlySel)
 {
+int		TargetMode=SW_SHOW;
+
 		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
 		GUITrigger.DisableCallback(true);
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUITrigger.SetVal(GUITrigger.m_Width,ThisThing.Data.Width);
-			GUITrigger.SetVal(GUITrigger.m_Height,ThisThing.Data.Height);
+			GUITrigger.SetVal(GUITrigger.m_Width,ThisThing.Data.Trigger.TriggerWidth);
+			GUITrigger.SetVal(GUITrigger.m_Height,ThisThing.Data.Trigger.TriggerHeight);
+			GUITrigger.SetVal(GUITrigger.m_TargetX,ThisThing.Data.Trigger.TriggerTargetX);
+			GUITrigger.SetVal(GUITrigger.m_TargetY,ThisThing.Data.Trigger.TriggerTargetY);
+			if (ThingScript.GetInt(ThisThing.Name,"HasTarget")==0)
+			{
+				TargetMode=SW_HIDE;
+			}
 		}
 		else
 		{
 			GUITrigger.m_Width.SetWindowText("");
 			GUITrigger.m_Height.SetWindowText("");
+			TargetMode=SW_HIDE;
 		}
+
+		GUITrigger.m_TargetTxt.ShowWindow(TargetMode);
+		GUITrigger.m_TargetX.ShowWindow(TargetMode);
+		GUITrigger.m_TargetY.ShowWindow(TargetMode);
+		GUITrigger.m_TargetXSpin.ShowWindow(TargetMode);
+		GUITrigger.m_TargetYSpin.ShowWindow(TargetMode);
+
 		GUITrigger.DisableCallback(false);
 }
 
@@ -183,8 +244,10 @@ void	CLayerTrigger::GUIChanged(CCore *Core)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Width=GUITrigger.GetVal(GUITrigger.m_Width);
-			ThisThing.Data.Height=GUITrigger.GetVal(GUITrigger.m_Height);
+			ThisThing.Data.Trigger.TriggerWidth=GUITrigger.GetVal(GUITrigger.m_Width);
+			ThisThing.Data.Trigger.TriggerHeight=GUITrigger.GetVal(GUITrigger.m_Height);
+			ThisThing.Data.Trigger.TriggerTargetX=GUITrigger.GetVal(GUITrigger.m_TargetX);
+			ThisThing.Data.Trigger.TriggerTargetY=GUITrigger.GetVal(GUITrigger.m_TargetY);
 		}
 }
 
@@ -192,7 +255,6 @@ void	CLayerTrigger::GUIChanged(CCore *Core)
 void	CLayerTrigger::SetThingParams(sLayerThing &Thing)
 {
 		Thing.Data.WaypointCount=1;
-		if (Thing.Data.Width<1) Thing.Data.Width=1;
-		if (Thing.Data.Height<1) Thing.Data.Height=1;
-//		Thing.XY.resize(1);
+		if (Thing.Data.Trigger.TriggerWidth<1) Thing.Data.Trigger.TriggerWidth=1;
+		if (Thing.Data.Trigger.TriggerHeight<1) Thing.Data.Trigger.TriggerHeight=1;
 }

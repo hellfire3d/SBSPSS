@@ -19,6 +19,11 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerTrigger)
 	enum { IDD = IDD_LAYER_TRIGGER };
+	CStatic	m_TargetTxt;
+	CSpinButtonCtrl	m_TargetYSpin;
+	CSpinButtonCtrl	m_TargetXSpin;
+	CEdit	m_TargetY;
+	CEdit	m_TargetX;
 	CSpinButtonCtrl	m_WidthSpin;
 	CSpinButtonCtrl	m_HeightSpin;
 	CEdit	m_Width;

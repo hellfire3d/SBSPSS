@@ -356,6 +356,7 @@ bool		NewFlag=false;
 		}
 
 		NewActor=new ("CActorGfx") CActorGfx(ThisActor);
+
 		if (NewFlag)
 		{
 			TotalFrames=NewActor->GetTotalFrameCount();
@@ -444,6 +445,8 @@ sActorPool	*Actor=ActorList;
 CActorGfx::CActorGfx(sActorPool *ThisActor)
 {
 		PoolEntry=ThisActor;
+		ShadowXOfs=DEF_SHADOW_OFS;
+		ShadowYOfs=DEF_SHADOW_OFS;
 }
 
 /*****************************************************************************/
@@ -462,22 +465,9 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-int				CActorGfx::GetTotalFrameCount()
-{
-int		Total=0;
-		for (int Anim=0; Anim<PoolEntry->ActorGfx->AnimCount; Anim++)
-		{
-			sSpriteAnim		*ThisAnim=PoolEntry->ActorGfx->AnimList+Anim;
-			Total+=ThisAnim->FrameCount;
-		}
-
-		return(Total);
-}
-
-/*****************************************************************************/
 int	ActorOT=10;
 
-POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
+POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 
 sPoolNode		*ThisNode;;
@@ -539,7 +529,7 @@ POLY_FT4		*Ft4;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
 			AddPrimToList(Ft4,ActorOT);
 
-			if (Shadow)
+			if (ShadowFlag)
 			{
 				POLY_FT4	*sFt4=GetPrimFT4();
 				*sFt4=*Ft4;

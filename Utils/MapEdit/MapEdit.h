@@ -33,8 +33,8 @@ public:
 	{
 		return(CurrentDoc);
 	}
-	char	*GetConfigStr(char *Grp,char *Key);
-	int		GetConfigInt(char *Grp,char *Key);
+	char	*GetConfigStr(const char *Grp,const char *Key);
+	int		GetConfigInt(const char *Grp,const char *Key);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

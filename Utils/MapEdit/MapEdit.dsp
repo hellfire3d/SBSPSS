@@ -131,6 +131,14 @@ SOURCE=.\LayerFX.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerHazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerHazard.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerItem.cpp
 # End Source File
 # Begin Source File
@@ -425,6 +433,14 @@ SOURCE=.\GUILayerFX.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GUILayerHazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerHazard.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GUILayerList.cpp
 # End Source File
 # Begin Source File
@@ -518,7 +534,15 @@ SOURCE=..\..\tools\MapEdit\actor.ini
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\tools\MapEdit\BackGfx.ini
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\tools\MapEdit\fx.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\Hazard.ini
 # End Source File
 # Begin Source File
 

@@ -8,6 +8,17 @@
 #include	"Layer.h"
 #include	"MapEdit.h"
 #include	"GUILayerShade.h"
+#include	"Elem.h"
+#include	"ExportHdr.h"
+
+
+/*****************************************************************************/
+struct	sBackList
+{
+		GString	Name;
+		int		ElemID;
+};
+
 
 /*****************************************************************************/
 class	CCore;
@@ -18,11 +29,6 @@ public:
 		enum
 		{
 			LAYER_SHADE_RGB_MAX=4,
-
-			SpinFlag=1<<0,
-			ScaleFlag=1<<1,
-			MoveFlag=1<<2,
-			ColorFlag=1<<3,
 		};
 
 		CLayerShade(sLayerDef &Def);
@@ -35,13 +41,16 @@ public:
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active){};
 		void			RenderSelection(CCore *Core,Vector3 &ThisCam){};
 
-		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d){};
+		void			RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
 
 		void			GUIInit(CCore *Core);
 		void			GUIKill(CCore *Core);
 		void			GUIUpdate(CCore *Core);
 		void			GUIChanged(CCore *Core);
 
+//		int				GetWidth()						{return(LayerDef.Width);}
+//		int				GetHeight()						{return(LayerDef.Height);}
+		void			CheckLayerSize(int Width,int Height);
 		bool			Resize(int Width,int Height);
 
 		void			Load(CFile *File,int Version);
@@ -50,21 +59,30 @@ public:
 		void			Export(CCore *Core,CExport &Exp);
 
 // Functions
+		bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
+		bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
+		bool			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
+		bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
 protected:
+		void			LoadGfx();
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
-		void			InitGfxList();
+		void			RenderBackGfx(CCore *Core,Vector3 &ThisCam,sLayerShadeGfx &ThisGfx);
+		void			AddGfx(CCore *Core);
+		void			GotoGfx(CCore *Core);
+		void			DeleteGfx(CCore *Core);
 
-		CGUILayerShade	GUI;
-		CIni			Script;
-		CList<GString>	BackGfx;
-		int				Back0,Back1;
-		int				TransMode0,TransMode1;
-		int				Flags0,Flags1;
+		CGUILayerShade		GUIShade;
+		CIni				Script;
+		CList<sBackList>	BankList;
+		CElemBank			*GfxBank;
+		sLayerShadeGfx			Cursor;
 
-		int				Count;
-		int				Pos[LAYER_SHADE_RGB_MAX];
-		RGBQUAD			RGB[LAYER_SHADE_RGB_MAX];
+		int					ShadeCount;
+		sRGBCol				ShadeRGB[LAYER_SHADE_RGB_MAX];
+
+		CList<sLayerShadeGfx>		GfxList;
+		int					CurrentGfx;
 
 };
 

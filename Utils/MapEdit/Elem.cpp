@@ -350,6 +350,7 @@ float	v1=1.0f;//Tex.ScaleU;
 			List=glGenLists(1);
 			glNewList(List,GL_COMPILE);
 
+			TexID=Tex.TexID;
 			glBindTexture(GL_TEXTURE_2D, Tex.TexID);
 			glBegin (GL_QUADS);
 				glTexCoord2f(u0,v0);

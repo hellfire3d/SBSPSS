@@ -41,6 +41,28 @@ void	CLayerPlatform::InitSubView(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerPlatform::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+}
+
+/*****************************************************************************/
+void	CLayerPlatform::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+		ThisThing.Data.Platform.PlatformSpeed=OldThing.Speed;
+		ThisThing.Data.Platform.PlatformTurnRate=OldThing.TurnRate;
+		ThisThing.Data.Platform.PlatformType=OldThing.PlatformType;
+		ThisThing.Data.Platform.PlatformMoveType=OldThing.MoveType;
+		ThisThing.Data.Platform.PlatformCollisionFlag=OldThing.CollisionFlag;
+		ThisThing.Data.Platform.PlatformTriCount=OldThing.TriCount;	// Not needed but what the hell!!
+		ThisThing.Data.Platform.PlatformTriStart=OldThing.TriStart;	// Not needed but what the hell!!
+
+}
+
+
+/*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
 void	CLayerPlatform::GUIInit(CCore *Core)
@@ -112,11 +134,11 @@ void	CLayerPlatform::GUIThingUpdate(bool OnlySel)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUIPlatform.SetVal(GUIPlatform.m_Speed,ThisThing.Data.Speed);
-			GUIPlatform.SetVal(GUIPlatform.m_TurnRate,ThisThing.Data.TurnRate);
-			GUIPlatform.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUIPlatform.m_MoveList.SetCurSel(ThisThing.Data.MoveType);
-			GUIPlatform.m_Type.SetCurSel(ThisThing.Data.PlatformType);
+			GUIPlatform.SetVal(GUIPlatform.m_Speed,ThisThing.Data.Platform.PlatformSpeed);
+			GUIPlatform.SetVal(GUIPlatform.m_TurnRate,ThisThing.Data.Platform.PlatformTurnRate);
+			GUIPlatform.m_Collision.SetCheck(ThisThing.Data.Platform.PlatformCollisionFlag);
+			GUIPlatform.m_MoveList.SetCurSel(ThisThing.Data.Platform.PlatformMoveType);
+			GUIPlatform.m_Type.SetCurSel(ThisThing.Data.Platform.PlatformType);
 		}
 		else
 		{
@@ -141,11 +163,11 @@ void	CLayerPlatform::GUIChanged(CCore *Core)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUIPlatform.GetVal(GUIPlatform.m_Speed);
-			ThisThing.Data.TurnRate=GUIPlatform.GetVal(GUIPlatform.m_TurnRate);
-			ThisThing.Data.CollisionFlag=GUIPlatform.m_Collision.GetCheck()!=0;
-			ThisThing.Data.MoveType=GUIPlatform.m_MoveList.GetCurSel();
-			ThisThing.Data.PlatformType=GUIPlatform.m_Type.GetCurSel();
+			ThisThing.Data.Platform.PlatformSpeed=GUIPlatform.GetVal(GUIPlatform.m_Speed);
+			ThisThing.Data.Platform.PlatformTurnRate=GUIPlatform.GetVal(GUIPlatform.m_TurnRate);
+			ThisThing.Data.Platform.PlatformCollisionFlag=GUIPlatform.m_Collision.GetCheck()!=0;
+			ThisThing.Data.Platform.PlatformMoveType=GUIPlatform.m_MoveList.GetCurSel();
+			ThisThing.Data.Platform.PlatformType=GUIPlatform.m_Type.GetCurSel();
 			SetThingParams(ThisThing);
 		}
 }
@@ -153,7 +175,7 @@ void	CLayerPlatform::GUIChanged(CCore *Core)
 /*****************************************************************************/
 void	CLayerPlatform::SetThingParams(sLayerThing &Thing)
 {
-		switch(Thing.Data.MoveType)
+		switch(Thing.Data.Platform.PlatformMoveType)
 		{
 			case MoveTypeLinear:
 				Thing.Data.WaypointCount=16;
@@ -181,6 +203,6 @@ void	CLayerPlatform::ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisT
 {
 CElem	&ThisElem=ThingBank->GetElem(ThisThing.ElemID,0);
 
-		Exp.ExportElem3d(Core,ThisElem,OutThing.TriStart,OutThing.TriCount);
+		Exp.ExportElem3d(Core,ThisElem,OutThing.Platform.PlatformTriStart,OutThing.Platform.PlatformTriCount);
 		
 }

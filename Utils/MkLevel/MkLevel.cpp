@@ -23,6 +23,7 @@
 #include	"Layers\MkLevelLayerPlatform.h"
 #include	"Layers\MkLevelLayerFX.h"
 #include	"Layers\MkLevelLayerTrigger.h"
+#include	"Layers\MkLevelLayerHazard.h"
 
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
@@ -172,12 +173,12 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 }
 
 //***************************************************************************
-int		CMkLevel::AddModel(sMkLevelLayerThing &ThisThing)
+int		CMkLevel::AddModel(const char *Name,int TriStart,int TriCount)
 {
 sMkLevelModel	ThisModel;
 int				Idx;
 
-		ThisModel.Name=ThisThing.Name;
+		ThisModel.Name=Name;
 		Idx=ModelList.Find(ThisModel);
 
 		if (Idx!=-1)
@@ -186,13 +187,13 @@ int				Idx;
 		}
 		Idx=ModelList.size();
 		ThisModel.TriStart=ModelFaceList.GetFaceCount();
-		ThisModel.TriCount=ThisThing.Data.TriCount;
+		ThisModel.TriCount=TriCount;
 
 
 // Add tri data
-		for (int i=0;i<ThisModel.TriCount; i++)
+		for (int i=0;i<TriCount; i++)
 		{
-			sExpTri	&ThisTri=InTriList[ThisThing.Data.TriStart+i];
+			sExpTri	&ThisTri=InTriList[TriStart+i];
 			CFace	F;
 
 			ExpTri2Face(ThisTri,F);
@@ -370,6 +371,9 @@ u8		*ByteHdr=(u8*)FileHdr;
 				break;
 			case LAYER_TYPE_FX:
 				LayerList.push_back(new CMkLevelLayerFX(LayerHdr));
+				break;
+			case LAYER_TYPE_HAZARD:
+				LayerList.push_back(new CMkLevelLayerHazard(LayerHdr));
 				break;
 			default:
 				GObject::Error(ERR_FATAL,"Unknown Layer Type\n");
@@ -997,6 +1001,7 @@ void	CMkLevel::WriteLayers()
 		LevelHdr.PlatformList=WriteThings(LAYER_TYPE_PLATFORM,"Platform List");
 		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER,"Trigger List");
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX,"FX List");
+		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD,"Hazard List");
 		LevelHdr.ModelList=(sModel*)WriteModelList();
 }
 

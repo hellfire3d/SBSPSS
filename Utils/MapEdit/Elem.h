@@ -81,6 +81,8 @@ static	bool	DefTexFlag;
 
 		void	SetBlank();
 		void	SetInvalid();
+		GLint	GetTexID()	{return(TexID);}
+
 protected:
 		void	Build3dElem(CTexCache &TexCache,CScene &ThisScene,int Node);
 		void	Build2dElem(CCore *Core,const char *Filename,int TexId);
@@ -106,6 +108,7 @@ protected:
 		float					UnitWidth,UnitHeight;
 		int						ElemID;
 		u8						*ElemRGB;
+		GLint					TexID;
 };
 
 /*****************************************************************************/

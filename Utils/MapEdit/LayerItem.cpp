@@ -43,6 +43,20 @@ void	CLayerItem::InitSubView(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerItem::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+}
+
+/*****************************************************************************/
+void	CLayerItem::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+}
+
+
+/*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
 void	CLayerItem::GUIInit(CCore *Core)

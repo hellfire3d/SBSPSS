@@ -20,6 +20,9 @@ public:
 		void			InitLayer(sLayerDef &Def);
 		void			InitSubView(CCore *Core);
 
+		void			LoadDefThing(const char *Name,sLayerThing &ThisDef);
+		void			LoadOldThing(CFile *File,sLayerThing &ThisThing);
+
 		void			GUIInit(CCore *Core);
 		void			GUIKill(CCore *Core);
 		void			GUIUpdate(CCore *Core);

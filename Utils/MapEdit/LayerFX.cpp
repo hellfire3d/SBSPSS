@@ -41,6 +41,22 @@ void	CLayerFX::InitSubView(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerFX::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+}
+
+/*****************************************************************************/
+void	CLayerFX::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+		ThisThing.Data.FX.FXSpeed=OldThing.Speed;
+		ThisThing.Data.FX.FXWidth=OldThing.Width;
+		ThisThing.Data.FX.FXHeight=OldThing.Height;
+}
+
+/*****************************************************************************/
 void	CLayerFX::RenderThing(CCore *Core,Vector3 &ThisCam,sLayerThing &ThisThing,bool Render3d,bool Selected)
 {
 float		ZoomW=Core->GetZoomW();
@@ -71,8 +87,8 @@ float		Col=0.8f,A=0.8f;
 			Core->RenderNumber(0);
 			glEnable(GL_DEPTH_TEST);
 
-float	W=(ThisThing.Data.Width);
-float	H=-(ThisThing.Data.Height);
+float	W=(ThisThing.Data.FX.FXWidth);
+float	H=-(ThisThing.Data.FX.FXHeight);
 // Draw Box
 			glBegin (GL_QUADS);
 				glColor4f(0,0,Col-0.25f,A);
@@ -162,9 +178,9 @@ void	CLayerFX::GUIThingUpdate(bool OnlySel)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUIFX.SetVal(GUIFX.m_Speed,ThisThing.Data.Speed);
-			GUIFX.SetVal(GUIFX.m_Width,ThisThing.Data.Width);
-			GUIFX.SetVal(GUIFX.m_Height,ThisThing.Data.Height);
+			GUIFX.SetVal(GUIFX.m_Speed,ThisThing.Data.FX.FXSpeed);
+			GUIFX.SetVal(GUIFX.m_Width,ThisThing.Data.FX.FXWidth);
+			GUIFX.SetVal(GUIFX.m_Height,ThisThing.Data.FX.FXHeight);
 		}
 		else
 		{
@@ -186,9 +202,9 @@ void	CLayerFX::GUIChanged(CCore *Core)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUIFX.GetVal(GUIFX.m_Speed);
-			ThisThing.Data.Width=GUIFX.GetVal(GUIFX.m_Width);
-			ThisThing.Data.Height=GUIFX.GetVal(GUIFX.m_Height);
+			ThisThing.Data.FX.FXSpeed=GUIFX.GetVal(GUIFX.m_Speed);
+			ThisThing.Data.FX.FXWidth=GUIFX.GetVal(GUIFX.m_Width);
+			ThisThing.Data.FX.FXHeight=GUIFX.GetVal(GUIFX.m_Height);
 		}
 }
 
@@ -196,6 +212,6 @@ void	CLayerFX::GUIChanged(CCore *Core)
 void	CLayerFX::SetThingParams(sLayerThing &Thing)
 {
 		Thing.Data.WaypointCount=1;
-		if (Thing.Data.Width<1) Thing.Data.Width=1;
-		if (Thing.Data.Height<1) Thing.Data.Height=1;
+		if (Thing.Data.FX.FXWidth<1) Thing.Data.FX.FXWidth=1;
+		if (Thing.Data.FX.FXHeight<1) Thing.Data.FX.FXHeight=1;
 }

@@ -24,7 +24,7 @@ int		i,ListSize;
 		for (i=0; i<ListSize; i++)
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
-			RemapTable[i]=Core->AddModel(ThisThing);
+			RemapTable[i]=Core->AddModel(ThisThing.Name,ThisThing.Data.Platform.PlatformTriStart,ThisThing.Data.Platform.PlatformTriCount);
 		}
 
 		printf("%i Platforms\n",ThingList.size());
@@ -60,9 +60,9 @@ int			i,ListSize=ThingList.size();
 			sThingPlatform			OutThing;
 
 			OutThing.Type=ThisThing.Type;
-			OutThing.Speed=ThisThing.Data.Speed;
-			OutThing.TurnRate=ThisThing.Data.TurnRate;
-			OutThing.Flags=ThisThing.Data.CollisionFlag;
+			OutThing.Speed=ThisThing.Data.Platform.PlatformSpeed;
+			OutThing.TurnRate=ThisThing.Data.Platform.PlatformTurnRate;
+			OutThing.Flags=ThisThing.Data.Platform.PlatformCollisionFlag;
 			OutThing.PointCount=PointCount;
 			OutThing.Gfx=RemapTable[i];
 			fwrite(&OutThing,sizeof(sThingPlatform),1,File);

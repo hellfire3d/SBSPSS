@@ -41,10 +41,10 @@ CLayerBack::CLayerBack(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr
 {
 		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 
-		ASSERT(Data->Count<=LAYER_SHADE_RGB_MAX);
-		BandCount=Data->Count-1;
+		ASSERT(Data->BandCount<=LAYER_SHADE_RGB_MAX);
+		BandCount=Data->BandCount-1;
 // Setup back gfx
-		
+/*		
 		for (int i=0; i<SPRITE_MAX; i++)
 		{
 			int	Type=i&1;
@@ -79,7 +79,7 @@ CLayerBack::CLayerBack(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr
 			SpriteList[i].Pos.vx=getRndRange(512<<MOVE_SHIFT);
 			SpriteList[i].Pos.vy=getRndRange(256<<MOVE_SHIFT);
 		}
-
+*/
 
 }
 
@@ -101,10 +101,10 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 		for (int i=0; i<BandCount; i++)
 		{
 			SetPolyG4(&Band[i]);
-			setRGB0(&Band[i],Data->Data[i+0].RGB[0],Data->Data[i+0].RGB[1],Data->Data[i+0].RGB[2]);
-			setRGB1(&Band[i],Data->Data[i+0].RGB[0],Data->Data[i+0].RGB[1],Data->Data[i+0].RGB[2]);
-			setRGB2(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
-			setRGB3(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
+			setRGB0(&Band[i],Data->RGB[i+0][0],Data->RGB[i+0][1],Data->RGB[i+0][2]);
+			setRGB1(&Band[i],Data->RGB[i+0][0],Data->RGB[i+0][1],Data->RGB[i+0][2]);
+			setRGB2(&Band[i],Data->RGB[i+1][0],Data->RGB[i+1][1],Data->RGB[i+1][2]);
+			setRGB3(&Band[i],Data->RGB[i+1][0],Data->RGB[i+1][1],Data->RGB[i+1][2]);
 		}
 
 		PosDx=0;
@@ -121,6 +121,7 @@ void	CLayerBack::shutdown()
 /*****************************************************************************/
 void	CLayerBack::InitSprite(sBackSprite *SpritePtr)
 {
+/*
 int		StartPos=getRnd();
 int		Pos=getRnd();
 
@@ -199,7 +200,7 @@ int	i;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r2=BackRGBTable[i].R; SpritePtr->Poly.g2=BackRGBTable[i].G; SpritePtr->Poly.b2=BackRGBTable[i].B;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r3=BackRGBTable[i].R; SpritePtr->Poly.g3=BackRGBTable[i].G; SpritePtr->Poly.b3=BackRGBTable[i].B;
 		}
-
+*/
 
 }
 
@@ -226,7 +227,7 @@ void	CLayerBack::render()
 const	int	OTPos=(MAX_OT-1);
 sOT		*ThisOT=OtPtr+OTPos;
 int		i,ThisY=-YOfs;
-
+/*
 // Render Back Sprites
 #if	0
 sBackSprite		*SpritePtr=SpriteList;
@@ -270,7 +271,7 @@ sBox		Box;
 			SpritePtr++;
 		}
 #endif	
-
+*/
 // Render Back Shade
 		for (i=0; i<BandCount; i++)
 		{

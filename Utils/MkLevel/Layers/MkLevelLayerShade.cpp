@@ -13,9 +13,9 @@
 /*****************************************************************************/
 CMkLevelLayerShade::CMkLevelLayerShade(sExpLayerHdr *LayerHdr)
 {
+int		i,ListSize;
 int		*iPtr;
 u8		*Ptr=(u8*)LayerHdr;
-u8		*RGB;
 
 		Type=LayerHdr->Type;
 		SubType=LayerHdr->SubType;
@@ -24,31 +24,36 @@ u8		*RGB;
 
 		iPtr=(int*)(Ptr+sizeof(sExpLayerHdr));
 
-		Count=*iPtr++;
-		List.resize(LAYER_SHADE_RGB_MAX);
-		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
+		ShadeHdr.BandCount=*iPtr++;
+sRGBCol	*RGB=(sRGBCol*)iPtr;
+		for (i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
-			List[i].Pos=*iPtr++;
-			RGB=(u8*)(iPtr);
-			List[i].RGB[0]=RGB[0];
-			List[i].RGB[1]=RGB[1];
-			List[i].RGB[2]=RGB[2];
-			iPtr+=4/sizeof(int);
+			ShadeHdr.RGB[i][0]=RGB->R;
+			ShadeHdr.RGB[i][1]=RGB->G;
+			ShadeHdr.RGB[i][2]=RGB->B;
+			RGB++;
 		}
 
-		Trans[0]=*iPtr++;
-		Flags[0]=*iPtr++;
-		Trans[1]=*iPtr++;
-		Flags[1]=*iPtr++;
+		iPtr=(int*)RGB;
 
-// Load back gfx
-char	*c=(char*)iPtr;
-		BackGfx[0]=c;  
-		c+=strlen(c)+1;
-		BackGfx[1]=c;  
+		ListSize=*iPtr++;
+		GfxList.resize(ListSize);
+sLayerShadeGfx	*GfxPtr=(sLayerShadeGfx*)iPtr;
+		for (i=0; i<ListSize; i++)
+		{
+			GfxList[i]=*GfxPtr++;
+		}
+		iPtr=(int*)GfxPtr;
 
+		ListSize=*iPtr++;
+		TypeNameList.resize(ListSize);
+char	*TypePtr=(char*)iPtr;
+		for (i=0; i<ListSize; i++)
+		{
+			TypeNameList[i]=TypePtr;
+			TypePtr+=strlen(TypePtr)+1;
+		}
 }
-
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -58,40 +63,29 @@ char	*c=(char*)iPtr;
 // Build unique tiles, including pre-genned flips, and replace tile idx with new one
 void	CMkLevelLayerShade::PreProcess(CMkLevel *Core)
 {
-GString	Path=Core->GetConfigStr("MISC","BackGfxDir");
+int			i,ListSize=GfxList.size();
+int			Idx;
+GString		Path=Core->GetConfigStr("MISC","BackGfxDir");
+CTexGrab	&TexGrab=Core->GetTexGrab();
 
-	for (int i=0; i<2; i++)
-	{
-		if (!BackGfx[i].Empty())
+		for (i=0; i<ListSize; i++)
 		{
-			TexID[i]=AddBackGfx(Core,Path+BackGfx[i]+".Bmp");
-		}
-		else
-		{
-			TexID[i]=-1;
-		}
-	}
-}
+			sLayerShadeGfx	&ThisGfx=GfxList[i];
+			sBackGfxList	NewType;
+				
+			NewType.Name=Path+TypeNameList[ThisGfx.Gfx]+".Bmp";
+			Idx=OutTypeList.Find(NewType);
 
-/*****************************************************************************/
-int		CMkLevelLayerShade::AddBackGfx(CMkLevel *Core,const char *Filename)
-{
-sBackGfxList	NewGfx;
-CTexGrab		&TexGrab=Core->GetTexGrab();
-
-			NewGfx.Name=Filename;
-			NewGfx.TexID=-1;
-
-int			Idx=BackGfxList.Add(NewGfx);
-
-			if (BackGfxList[Idx].TexID==-1)
+			if (Idx==-1)
 			{
 				TexGrab.ZeroColZero(true);
-				BackGfxList[Idx].TexID=TexGrab.AddFile(BackGfxList[Idx].Name);
+				NewType.TexID=TexGrab.AddFile(NewType.Name);
 				TexGrab.ZeroColZero(false);
+
+				Idx=OutTypeList.Add(NewType);
 			}
-			
-			return(BackGfxList[Idx].TexID);
+			ThisGfx.Gfx=Idx;
+		}
 
 }
 
@@ -102,30 +96,24 @@ int			Idx=BackGfxList.Add(NewGfx);
 /*****************************************************************************/
 void	CMkLevelLayerShade::Process(CMkLevel *Core)
 {
+int			i,ListSize=OutTypeList.size();
 CTexGrab	&TexGrab=Core->GetTexGrab();
 
 		//printf("Process Shade Layer\n");
-		for (int i=0; i<2; i++)
+		for (i=0; i<ListSize; i++)
 		{
-			sLayerShadeGfx	&ThisGfx=Data.BackGfx[i];
-			if (TexID[i]==-1)
-			{
-				ThisGfx.TPage=0;
-			}
-			else
-			{
-				sTexOutInfo	&ThisTex=TexGrab.GetTexInfo()[TexID[i]];
-				ThisGfx.TPage=ThisTex.Tpage;
-				ThisGfx.Clut=ThisTex.Clut;
-				ThisGfx.U=ThisTex.u;
-				ThisGfx.V=ThisTex.v;
-				ThisGfx.W=ThisTex.w;
-				ThisGfx.H=ThisTex.h;
-				ThisGfx.TPage|=Trans[i]<<5;
-				ThisGfx.Flags=Flags[i];
-			}
+			sBackGfxList	&ThisType=OutTypeList[i];
 
+			sTexOutInfo	&ThisTex=TexGrab.GetTexInfo()[ThisType.TexID];
+			ThisType.Out.TPage=ThisTex.Tpage;
+			ThisType.Out.Clut=ThisTex.Clut;
+			ThisType.Out.U=ThisTex.u;
+			ThisType.Out.V=ThisTex.v;
+			ThisType.Out.W=ThisTex.w;
+			ThisType.Out.H=ThisTex.h;
+//			ThisType.TPage|=Trans[i]<<5;
 		}
+
 }
 
 /*****************************************************************************/
@@ -144,19 +132,57 @@ int				ThisPos=ftell(File);
 		Hdr.Height=Height;
 		fwrite(&Hdr,sizeof(sLayerHdr),1,File);
 
-		Data.Count=Count;
-		for (int i=0; i<Count; i++)
-		{
-			Data.Data[i].Ofs=List[i].Pos;
-			Data.Data[i].RGB[0]=List[i].RGB[0];
-			Data.Data[i].RGB[1]=List[i].RGB[1];
-			Data.Data[i].RGB[2]=List[i].RGB[2];
-		}
+// Write Gfx Stuff
+		ShadeHdr.TypeList=(sLayerShadeBackGfxType*)WriteTypeList(File);
+		ShadeHdr.GfxList=(sLayerShadeBackGfx*)WriteGfxList(File);
 
-		fwrite(&Data,sizeof(sLayerShadeHdr),1,File);
+
+		fwrite(&ShadeHdr,sizeof(sLayerShadeHdr),1,File);
 		PadFile(File);
 
 		return(ThisPos);
 }
 
 /*****************************************************************************/
+int		CMkLevelLayerShade::WriteTypeList(FILE *File)
+{
+int		Pos=ftell(File);
+int		i,ListSize=OutTypeList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			sBackGfxList	&ThisType=OutTypeList[i];
+
+			fwrite(&ThisType.Out,sizeof(sLayerShadeBackGfxType),1,File);
+		}
+		return(Pos);
+}
+
+/*****************************************************************************/
+int		CMkLevelLayerShade::WriteGfxList(FILE *File)
+{
+int		Pos=ftell(File);
+int		i,ListSize=GfxList.size();
+
+		ShadeHdr.GfxCount=GfxList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			sLayerShadeGfx	&ThisGfx=GfxList[i];
+			sLayerShadeBackGfx	Out;
+			
+			Out.Type=ThisGfx.Gfx;
+			Out.PosX=ThisGfx.Pos.x;
+			Out.PosY=ThisGfx.Pos.y;
+			Out.Trans=ThisGfx.TransMode;
+			for (int p=0; p<4; p++)
+			{
+				Out.Ofs[i][0]=ThisGfx.Ofs[i].x;
+				Out.Ofs[i][1]=ThisGfx.Ofs[i].y;
+				Out.RGB[i][0]=ThisGfx.RGB[i].R;
+				Out.RGB[i][1]=ThisGfx.RGB[i].G;
+				Out.RGB[i][2]=ThisGfx.RGB[i].B;
+			}
+		}
+		return(Pos);
+}

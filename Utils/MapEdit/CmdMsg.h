@@ -44,6 +44,12 @@ enum	CmdMsg
 		CmdMsg_ThingPosUp,			// 28
 		CmdMsg_ThingPosDown,		// 29
 		CmdMsg_ThingPosDelete,		// 30
+// Shade
+		CmdMsg_ShadeGfxNew,			// 31
+		CmdMsg_ShadeGfxSelect,		// 32
+		CmdMsg_ShadeGfxGoto,		// 33
+		CmdMsg_ShadeGfxDelete,		// 34
+
 };
 #endif
 /*****************************************************************************/

@@ -50,11 +50,11 @@ int			i,ListSize=ThingList.size();
 			sThingFX			OutThing;
 
 			OutThing.Type=ThisThing.Type;
-			OutThing.Speed=ThisThing.Data.Speed;
+			OutThing.Speed=ThisThing.Data.FX.FXSpeed;
 			OutThing.Pos.X=ThisThing.XY[0].x;
 			OutThing.Pos.Y=ThisThing.XY[0].y;
-			OutThing.Size.X=ThisThing.Data.Width;
-			OutThing.Size.Y=ThisThing.Data.Height;
+			OutThing.Size.X=ThisThing.Data.FX.FXWidth;
+			OutThing.Size.Y=ThisThing.Data.FX.FXHeight;
 			fwrite(&OutThing,sizeof(sThingFX),1,File);
 
 		}

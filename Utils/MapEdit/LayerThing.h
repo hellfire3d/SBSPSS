@@ -64,11 +64,13 @@ virtual	void			GUIThingPointUpdateList(CListBox &List,bool OnlySel=false);
 
 virtual	void			Load(CFile *File,int Version);
 virtual	void			LoadThing(CFile *File,int Version,sLayerThing &ThisThing);
+virtual	void			LoadOldThing(CFile *File,sLayerThing &ThisThing)=0;
 virtual	void			LoadThingNames(CFile *File,int Version);
 virtual	void			Save(CFile *File);
 virtual	void			SaveThing(CFile *File,sLayerThing &ThisThing);
 virtual	void			SaveThingNames(CFile *File);
 virtual	void			LoadThingScript(const char *Filename);
+virtual	void			LoadDefThing(const char *Name,sLayerThing &ThisDef)=0;
 
 virtual	void			Export(CCore *Core,CExport &Exp);
 virtual	void			ExportThing(CCore *Core,CExport &Exp,sLayerThing &ThisThing);

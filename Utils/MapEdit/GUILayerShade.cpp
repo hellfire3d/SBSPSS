@@ -23,12 +23,6 @@ CGUILayerShade::CGUILayerShade(CWnd* pParent /*=NULL*/)
 {
 	//{{AFX_DATA_INIT(CGUILayerShade)
 	//}}AFX_DATA_INIT
-	SetFlag=true;
-	Map[0][0]=&m_R0; Map[0][1]=&m_G0;	Map[0][2]=&m_B0;
-	Map[1][0]=&m_R1; Map[1][1]=&m_G1;	Map[1][2]=&m_B1;
-	Map[2][0]=&m_R2; Map[2][1]=&m_G2;	Map[2][2]=&m_B2;
-	Map[3][0]=&m_R3; Map[3][1]=&m_G3;	Map[3][2]=&m_B3;
-
 }
 
 
@@ -36,63 +30,105 @@ void CGUILayerShade::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerShade)
-	DDX_Control(pDX, IDC_SPIN2, m_CountSpin);
-	DDX_Control(pDX, IDC_LAYERSHADE_SPIN1, m_Spin1);
-	DDX_Control(pDX, IDC_LAYERSHADE_SPIN0, m_Spin0);
-	DDX_Control(pDX, IDC_LAYERSHADE_SCALE1, m_Scale1);
-	DDX_Control(pDX, IDC_LAYERSHADE_SCALE0, m_Scale0);
-	DDX_Control(pDX, IDC_LAYERSHADE_MOVE1, m_Move1);
-	DDX_Control(pDX, IDC_LAYERSHADE_MOVE0, m_Move0);
-	DDX_Control(pDX, IDC_LAYERSHADE_COLOR1, m_Color1);
-	DDX_Control(pDX, IDC_LAYERSHADE_COLOR0, m_Color0);
-	DDX_Control(pDX, IDC_LAYERSHADE_TRANS1, m_Trans1);
-	DDX_Control(pDX, IDC_LAYERSHADE_TRANS0, m_Trans0);
-	DDX_Control(pDX, IDC_LAYERSHADE_BACKGFX1, m_Gfx1);
-	DDX_Control(pDX, IDC_LAYERSHADE_BACKGFX0, m_Gfx0);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITR0, m_R0);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITG0, m_G0);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITB0, m_B0);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITR1, m_R1);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITG1, m_G1);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITB1, m_B1);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITR2, m_R2);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITG2, m_G2);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITB2, m_B2);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITR3, m_R3);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITG3, m_G3);
-	DDX_Control(pDX, IDC_LAYERSHADE_EDITB3, m_B3);
-	DDX_Control(pDX, IDC_LAYERSHADE_COUNTEDIT, m_Count);
+	DDX_Control(pDX, IDC_LAYERSHADE_DEF_LIST, m_DefList);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADECOUNT_SPIN, m_ShadeCountSpin);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADECOUNT, m_ShadeCount);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADER0, m_ShadeR0);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEG0, m_ShadeG0);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEB0, m_ShadeB0);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADER1, m_ShadeR1);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEG1, m_ShadeG1);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEB1, m_ShadeB1);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADER2, m_ShadeR2);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEG2, m_ShadeG2);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEB2, m_ShadeB2);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADER3, m_ShadeR3);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEG3, m_ShadeG3);
+	DDX_Control(pDX, IDC_LAYERSHADE_SHADEB3, m_ShadeB3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_CURRENT_SPIN, m_GfxCurrentSpin);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_CURRENT, m_GfxCurrent);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_LIST, m_GfxBankList);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_XSPIN, m_GfxPosXSpin);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X, m_GfxPosX);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_YSPIN, m_GfxPosYSpin);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y, m_GfxPosY);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_X0, m_GfxSpinx0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_Y0, m_GfxSpiny0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X0, m_Gfxx0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y0, m_Gfxy0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXR0, m_GfxR0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXG0, m_GfxG0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXB0, m_GfxB0);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_X1, m_GfxSpinx1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_Y1, m_GfxSpiny1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X1, m_Gfxx1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y1, m_Gfxy1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXR1, m_GfxR1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXG1, m_GfxG1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXB1, m_GfxB1);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_X2, m_GfxSpinx2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_Y2, m_GfxSpiny2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X2, m_Gfxx2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y2, m_Gfxy2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXR2, m_GfxR2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXG2, m_GfxG2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXB2, m_GfxB2);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_X3, m_GfxSpinx3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_Y3, m_GfxSpiny3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X3, m_Gfxx3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y3, m_Gfxy3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXR3, m_GfxR3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXG3, m_GfxG3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFXB3, m_GfxB3);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_TRANSLIST, m_GfxTransList);
 	//}}AFX_DATA_MAP
 }
 
-
 BEGIN_MESSAGE_MAP(CGUILayerShade, CDialog)
 	//{{AFX_MSG_MAP(CGUILayerShade)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITB0, OnChangeLayershadeEdit)
-	ON_CBN_SELCHANGE(IDC_LAYERSHADE_BACKGFX0, OnChangeParam)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITB1, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITG0, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITG1, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITR0, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITR1, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITB2, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITB3, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITG2, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITG3, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITR2, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_EDITR3, OnChangeLayershadeEdit)
-	ON_EN_CHANGE(IDC_LAYERSHADE_COUNTEDIT, OnChangeLayershadeEdit)
-	ON_CBN_SELCHANGE(IDC_LAYERSHADE_BACKGFX1, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_COLOR0, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_COLOR1, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_MOVE0, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_MOVE1, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_SCALE0, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_SCALE1, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_SPIN0, OnChangeParam)
-	ON_BN_CLICKED(IDC_LAYERSHADE_SPIN1, OnChangeParam)
-	ON_CBN_SELCHANGE(IDC_LAYERSHADE_TRANS0, OnChangeParam)
-	ON_CBN_SELCHANGE(IDC_LAYERSHADE_TRANS1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADECOUNT, OnChangeParam)
+	ON_BN_CLICKED(IDC_LAYERSHADE_GFX_GOTO, OnGoto)
+	ON_BN_CLICKED(IDC_LAYERSHADE_GFX_DELETE, OnDelete)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_CURRENT, OnChangeCurrent)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADER0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEG0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEB0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADER1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEG1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEB1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADER2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEG2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEB2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADER3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEG3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_SHADEB3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_XSPIN, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_X, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_YSPIN, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_Y, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_X0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_Y0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXR0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXG0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXB0, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_X1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_Y1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXR1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXG1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXB1, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_X2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_Y2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXR2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXG2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXB2, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_X3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFX_Y3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXR3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXG3, OnChangeParam)
+	ON_EN_CHANGE(IDC_LAYERSHADE_GFXB3, OnChangeParam)
+	ON_CBN_SELCHANGE(IDC_LAYERSHADE_GFX_LIST, OnChangeParam)
+	ON_CBN_SELCHANGE(IDC_LAYERSHADE_GFX_TRANSLIST, OnChangeParam)
+	ON_CBN_SELCHANGE(IDC_LAYERSHADE_DEF_LIST, OnNew)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -104,110 +140,123 @@ void	CGUILayerShade::OnOK()
 }	
 
 /////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::SetVal(CEdit &Dlg,int &Val)
+void	CGUILayerShade::SetVal(CEdit &Dlg,int &Val,int Min,int Max)
 {
 CString	Str;
+bool	CF=CallbackFlag;
 		if (!Dlg) return;
-		SetFlag=true;
+		if (Min!=-1 && Val<Min) Val=Min;
+		if (Max!=-1 && Val>Max) Val=Max;
+		CallbackFlag=false;
 		Str.Format("%i",Val); 
 		Dlg.SetWindowText(Str); 
-		SetFlag=false;
+		CallbackFlag=CF;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::GetVal(CEdit &Dlg,int &Val)
+void	CGUILayerShade::GetVal(CEdit &Dlg,int &Val,int Min,int Max)
 {
 CString	Str;
+		Val=0;
 		if (!Dlg) return;
-		
 		Dlg.GetWindowText(Str); 
 		if (Str.GetLength()) 
-			Val=atoi(Str);
-		else
-			Val=0;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::LimitVal(int Min,int Max,CEdit &Dlg)
-{
-int		Val;
-		if (!Dlg) return;
-DWORD	Sel=Dlg.GetSel();	// Retain cursor pos :o), Im getting good at this!
-
-		GetVal(Dlg,Val);
-		if (Val<Min) Val=Min;
-		if (Val>Max) Val=Max;
-
-		SetVal(Dlg,Val);
-
-		Dlg.SetSel(Sel);
-
-}
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::SetRGB(RGBQUAD &RGB,int Set)
-{
-int		Val;
-
-		Val=RGB.rgbRed;		SetVal(*Map[Set][0],Val); 
-		Val=RGB.rgbGreen;	SetVal(*Map[Set][1],Val);
-		Val=RGB.rgbBlue;	SetVal(*Map[Set][2],Val);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::GetRGB(RGBQUAD &RGB,int Set)
-{
-int		Val;
-		GetVal(*Map[Set][0],Val);	RGB.rgbRed=Val;		
-		GetVal(*Map[Set][1],Val);	RGB.rgbGreen=Val;	
-		GetVal(*Map[Set][2],Val);	RGB.rgbBlue=Val;	
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::CheckRGB(int Set)
-{
-		LimitVal(0,255,*Map[Set][0]);
-		LimitVal(0,255,*Map[Set][1]);
-		LimitVal(0,255,*Map[Set][2]);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::SetStatus(int Set,bool f)
-{
-		Map[Set][0]->SetReadOnly(f);
-		Map[Set][1]->SetReadOnly(f);
-		Map[Set][2]->SetReadOnly(f);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void	CGUILayerShade::CheckData()
-{
-int		i;
-int		Count;
-
-		SetFlag=true;
-		LimitVal(2,4,m_Count);
-		GetCount(Count);
-		for (i=0; i<4; i++) 
 		{
-			CheckRGB(i);
-			SetStatus(i,i>=Count);
+			Val=atoi(Str);
+			if (Min!=-1 && Val<Min) {Val=Min;SetVal(Dlg,Val,Min,Max);}
+			if (Max!=-1 && Val>Max) {Val=Max;SetVal(Dlg,Val,Min,Max);}
 		}
-
-		SetFlag=false;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-
-void CGUILayerShade::OnChangeLayershadeEdit() 
+void	CGUILayerShade::SetRGB(CEdit &DlgR,CEdit &DlgG,CEdit &DlgB,u8 &R,u8 &G,u8 &B)
 {
-	if (SetFlag) return;
+int		iR,iG,iB;
+		
+		iR=R;
+		iG=G;
+		iB=B;
 
-	if (theApp.GetCurrent() && m_R0)
-	{
-		CheckData();
-		theApp.GetCurrent()->GUIChanged();
-	}	
+		SetVal(DlgR,iR,0,255);
+		SetVal(DlgG,iG,0,255);
+		SetVal(DlgB,iB,0,255);
+
+		R=iR;
+		G=iG;
+		B=iB;
+
 }
 
-void CGUILayerShade::OnChangeParam()					{if (!SetFlag) theApp.GetCurrent()->GUIChanged();}
+/////////////////////////////////////////////////////////////////////////////
+void	CGUILayerShade::GetRGB(CEdit &DlgR,CEdit &DlgG,CEdit &DlgB,u8 &R,u8 &G,u8 &B)
+{
+int		iR,iG,iB;
+		
+		iR=R;
+		iG=G;
+		iB=B;
+	
+		GetVal(DlgR,iR,0,255);
+		GetVal(DlgG,iG,0,255);
+		GetVal(DlgB,iB,0,255);
+	
+		R=iR;
+		G=iG;
+		B=iB;
 
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void	CGUILayerShade::SetShadeRGB(int idx,u8 &R,u8 &G,u8 &B)
+{
+		switch(idx)
+		{
+		case 0: SetRGB(m_ShadeR0,m_ShadeG0,m_ShadeB0,R,G,B); break;
+		case 1: SetRGB(m_ShadeR1,m_ShadeG1,m_ShadeB1,R,G,B); break;
+		case 2: SetRGB(m_ShadeR2,m_ShadeG2,m_ShadeB2,R,G,B); break;
+		case 3: SetRGB(m_ShadeR3,m_ShadeG3,m_ShadeB3,R,G,B); break;
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void	CGUILayerShade::GetShadeRGB(int idx,u8 &R,u8 &G,u8 &B)
+{
+		switch(idx)
+		{
+		case 0: GetRGB(m_ShadeR0,m_ShadeG0,m_ShadeB0,R,G,B); break;
+		case 1: GetRGB(m_ShadeR1,m_ShadeG1,m_ShadeB1,R,G,B); break;
+		case 2: GetRGB(m_ShadeR2,m_ShadeG2,m_ShadeB2,R,G,B); break;
+		case 3: GetRGB(m_ShadeR3,m_ShadeG3,m_ShadeB3,R,G,B); break;
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void	CGUILayerShade::SetGfxRGB(int idx,u8 &R,u8 &G,u8 &B)
+{
+		switch(idx)
+		{
+		case 0: SetRGB(m_GfxR0,m_GfxG0,m_GfxB0,R,G,B); break;
+		case 1: SetRGB(m_GfxR1,m_GfxG1,m_GfxB1,R,G,B); break;
+		case 2: SetRGB(m_GfxR2,m_GfxG2,m_GfxB2,R,G,B); break;
+		case 3: SetRGB(m_GfxR3,m_GfxG3,m_GfxB3,R,G,B); break;
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void	CGUILayerShade::GetGfxRGB(int idx,u8 &R,u8 &G,u8 &B)
+{
+		switch(idx)
+		{
+		case 0: GetRGB(m_GfxR0,m_GfxG0,m_GfxB0,R,G,B); break;
+		case 1: GetRGB(m_GfxR1,m_GfxG1,m_GfxB1,R,G,B); break;
+		case 2: GetRGB(m_GfxR2,m_GfxG2,m_GfxB2,R,G,B); break;
+		case 3: GetRGB(m_GfxR3,m_GfxG3,m_GfxB3,R,G,B); break;
+		}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void CGUILayerShade::OnChangeParam()				{if (CallbackFlag) theApp.GetCurrent()->GUIChanged();}
+void CGUILayerShade::OnGoto()						{theApp.GetCurrent()->Command(CmdMsg_ShadeGfxGoto);}
+void CGUILayerShade::OnDelete()						{theApp.GetCurrent()->Command(CmdMsg_ShadeGfxDelete);}
+void CGUILayerShade::OnChangeCurrent()				{if (CallbackFlag) theApp.GetCurrent()->Command(CmdMsg_ShadeGfxSelect);}
+void CGUILayerShade::OnNew()						{theApp.GetCurrent()->Command(CmdMsg_ShadeGfxNew,m_DefList.GetCurSel());}

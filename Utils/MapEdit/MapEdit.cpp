@@ -133,12 +133,12 @@ void	CMapEditApp::CloseDoc(CMapEditDoc *Cur)
 	}
 }
 
-char	*CMapEditApp::GetConfigStr(char *Grp,char *Key)
+char	*CMapEditApp::GetConfigStr(const char *Grp,const char *Key)
 {
 		return(MainIni.GetStr(Grp,Key));
 }
 
-int		CMapEditApp::GetConfigInt(char *Grp,char *Key)
+int		CMapEditApp::GetConfigInt(const char *Grp,const char *Key)
 {
 		return(MainIni.GetInt(Grp,Key));
 }

@@ -10,6 +10,17 @@
 #include	<List.h>
 
 /*****************************************************************************/
+struct	sRGBCol
+{
+		u8	R,G,B,P;
+};
+
+struct	sXY
+{
+		int	x,y;
+};
+
+/*****************************************************************************/
 #define	EXPORT_LAYER_COUNT	16
 struct	sExpFileHdr
 {
@@ -87,33 +98,95 @@ bool	operator ==(sExpLayerTile const &v1)	{return(Tile==v1.Tile && Flags==v1.Fla
 
 };
 
-
 /*****************************************************************************/
-/*
-struct	sExpTex
+/*****************************************************************************/
+/*****************************************************************************/
+struct	sLayerShadeGfx
 {
-	char			*Filename;
-
-	BOOL			operator==(sExpTex const &v1)		{return (!strcmp(Filename,v1.Filename));}
+	sRGBCol		RGB[4];
+	int			Gfx;
+	sXY			Pos;
+	sXY			Ofs[4];
+	int			TransMode;
 };
-*/
-/*
-struct	sExpMapElem
-{
-	u16		Set;
-	u16		Tile;
-	u16		Flags;
 
-BOOL	operator==(sExpMapElem const &v1)
-		{
-		return(Set==v1.Set && Tile==v1.Tile);
-		}
-};
-*/
 /*****************************************************************************/
 /*** Things ******************************************************************/
 /*****************************************************************************/
+struct	sLayerThingDef
+{
+	int		Store[32];
+};
+
+struct	sLayerThingActor
+{
+	int						ActorSpeed;
+	int						ActorTurnRate;
+	int						ActorHealth;
+	int						ActorAttackStrength;
+	bool					ActorCollisionFlag;
+};
+
+struct	sLayerThingItem
+{
+};
+
+struct	sLayerThingPlatform
+{
+	int						PlatformSpeed;
+	int						PlatformTurnRate;
+	int						PlatformCollisionFlag;
+	int						PlatformType;
+	int						PlatformMoveType;
+	int						PlatformTriStart;
+	int						PlatformTriCount;
+};
+
+struct	sLayerThingTrigger
+{
+	int						TriggerWidth;
+	int						TriggerHeight;
+	int						TriggerTargetX;
+	int						TriggerTargetY;
+};
+
+struct	sLayerThingFX
+{
+	int						FXSpeed;
+	int						FXWidth;
+	int						FXHeight;
+};
+
+struct	sLayerThingHazard
+{
+	int						HazardSpeed;
+	int						HazardTurnRate;
+	int						HazardHealth;
+	int						HazardAttackStrength;
+	int						HazardRespawn;
+	bool					HazardCollisionFlag;
+	int						HazardTriStart;
+	int						HazardTriCount;
+
+};
+
 struct	sLayerThingData
+{
+	int						WaypointCount;
+
+	union
+	{
+		sLayerThingDef		RESERVE;
+		sLayerThingActor	Actor;
+		sLayerThingItem		Item;
+		sLayerThingPlatform	Platform;
+		sLayerThingTrigger	Trigger;
+		sLayerThingFX		FX;
+		sLayerThingHazard	Hazard;
+	};
+};
+
+struct	sLayerThingDataOLD
 {
 	int						WaypointCount;
 
@@ -129,11 +202,11 @@ struct	sLayerThingData
 	int						PlatformType;
 // Boxes
 	int						Width,Height;
-// Spare
 	int						TriStart,TriCount;
-	int						Spare[2];
-
+	int						TargetX,TargetY;
+// NO SPARE!!
 };
+
 
 #endif
 

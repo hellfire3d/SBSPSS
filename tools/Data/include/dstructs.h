@@ -159,26 +159,30 @@ struct	sLayerHdr
 
 //---------------------------------------------------------------------------
 // Shade Layer
-struct	sLayerShade
-{
-	u32		Ofs;
-	u8		RGB[4];
-};
-
-struct	sLayerShadeGfx
+struct	sLayerShadeBackGfxType
 {
 		u16			TPage;
 		u16			Clut;
 		u8			U,V;
 		u8			W,H;
-		u16			Flags;
+};
+
+struct	sLayerShadeBackGfx
+{
+		u16			Type;
+		u16			Trans;
+		u16			PosX,PosY;
+		s8			Ofs[4][2];
+		u8			RGB[4][3];
 };
 
 struct	sLayerShadeHdr
 {
-	u16				Count;
-	sLayerShade		Data[LAYER_SHADE_RGB_MAX];
-	sLayerShadeGfx	BackGfx[2];
+	u16						BandCount;
+	u16						GfxCount;
+	u8						RGB[4][3];
+	sLayerShadeBackGfxType	*TypeList;
+	sLayerShadeBackGfx		*GfxList;
 };
 
 //---------------------------------------------------------------------------
@@ -201,6 +205,7 @@ struct	sLevelHdr
 	u32		PlatformList;
 	u32		TriggerList;
 	u32		FXList;
+	u32		HazardList;
 
 	u16		PlayerStartX,PlayerStartY;
 
@@ -279,10 +284,10 @@ struct	sThingItem
 
 struct	sThingPlatform
 {
+	u16		Gfx;
 	u16		Type;
 	u16		Speed;
 	u16		TurnRate;
-	u16		Gfx;
 	u16		Pad;
 	u8		Flags;
 	u8		PointCount;
@@ -302,6 +307,20 @@ struct	sThingTrigger
 	sThingPoint	Pos;
 	u8		Width,Height;
 }; // 8
+
+struct	sThingHazard
+{
+	u16		Gfx;
+	u16		Type;
+	u16		Health;
+	u16		AttackStrength;
+	u16		Speed;
+	u16		TurnRate;
+	u16		Respawn;
+	u8		Flags;
+	u8		PointCount;
+	// Point List...
+}; // 12
 
 //***************************************************************************
 #endif

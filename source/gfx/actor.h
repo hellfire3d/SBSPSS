@@ -136,20 +136,23 @@ class	CActorGfx
 public:
 		enum
 		{
-			ShadowXOfs	=32,
-			ShadowYOfs	=32,
+			DEF_SHADOW_OFS=32,
 		};
 
 		CActorGfx(sActorPool *ThisActor);
 virtual	~CActorGfx();
 
-		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false,bool Shadow=false);
+		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false);
 		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale);
 
 		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
-		int				GetTotalFrameCount();
+		int				GetTotalFrameCount()		{return(PoolEntry->ActorGfx->FrameCount);}
 
 		sBBox			&GetBBox()					{return(BBox);}
+
+		void			SetShadow(bool f)			{ShadowFlag=f;}
+		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
+
 protected:
 		void			SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
@@ -158,6 +161,8 @@ protected:
 		sSpriteFrame	*CurrentFrame;
 
 		sBBox			BBox;
+		bool			ShadowFlag;
+		s16				ShadowXOfs,ShadowYOfs;
 };
 
 /*****************************************************************************/

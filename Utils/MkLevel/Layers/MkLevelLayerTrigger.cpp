@@ -52,8 +52,8 @@ int			i,ListSize=ThingList.size();
 			OutThing.Type=ThisThing.Type;
 			OutThing.Pos.X=ThisThing.XY[0].x;
 			OutThing.Pos.Y=ThisThing.XY[0].y;
-			OutThing.Width=ThisThing.Data.Width;
-			OutThing.Height=ThisThing.Data.Height;
+			OutThing.Width=ThisThing.Data.Trigger.TriggerWidth;
+			OutThing.Height=ThisThing.Data.Trigger.TriggerHeight;
 			fwrite(&OutThing,sizeof(sThingTrigger),1,File);
 		}
 

@@ -1,12 +1,12 @@
 /**********************/
-/*** Layer Platform ***/
+/*** Layer Hazard ***/
 /**********************/
 
 #include	<Davelib.h>
 #include	<List2d.h>
 
 //#include	"MkLevel.h"
-#include	"MkLevelLayerPlatform.h"
+#include	"MkLevelLayerHazard.h"
 
 
 /*****************************************************************************/
@@ -14,7 +14,7 @@
 /*** Pre-Process *************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CMkLevelLayerPlatform::PreProcess(CMkLevel *Core)
+void	CMkLevelLayerHazard::PreProcess(CMkLevel *Core)
 {
 int		i,ListSize;
 		ProcessList(Core);
@@ -24,10 +24,11 @@ int		i,ListSize;
 		for (i=0; i<ListSize; i++)
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
-			RemapTable[i]=Core->AddModel(ThisThing);
+			RemapTable[i]=Core->AddModel(ThisThing.Name,ThisThing.Data.Hazard.HazardTriStart,ThisThing.Data.Hazard.HazardTriCount);
+
 		}
 
-		printf("%i Platforms\n",ThingList.size());
+		printf("%i Hazards\n",ThingList.size());
 }
 
 /*****************************************************************************/
@@ -35,7 +36,7 @@ int		i,ListSize;
 /*** Process *****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CMkLevelLayerPlatform::Process(CMkLevel *Core)
+void	CMkLevelLayerHazard::Process(CMkLevel *Core)
 {
 }
 
@@ -44,7 +45,7 @@ void	CMkLevelLayerPlatform::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerPlatform::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerHazard::Write(FILE *File,const char *LayerName,const char *MapName)
 {
 int			ThisPos=ftell(File);
 sThingHdr	Hdr;
@@ -57,15 +58,16 @@ int			i,ListSize=ThingList.size();
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
 			int					p,PointCount=ThisThing.XY.size();
-			sThingPlatform			OutThing;
+			sThingHazard			OutThing;
 
 			OutThing.Type=ThisThing.Type;
-			OutThing.Speed=ThisThing.Data.Platform.PlatformSpeed;
-			OutThing.TurnRate=ThisThing.Data.Platform.PlatformTurnRate;
-			OutThing.Flags=ThisThing.Data.Platform.PlatformCollisionFlag;
+			OutThing.Speed=ThisThing.Data.Hazard.HazardSpeed;
+			OutThing.TurnRate=ThisThing.Data.Hazard.HazardTurnRate;
+			OutThing.Flags=ThisThing.Data.Hazard.HazardCollisionFlag;
 			OutThing.PointCount=PointCount;
+			OutThing.Respawn=ThisThing.Data.Hazard.HazardRespawn;
 			OutThing.Gfx=RemapTable[i];
-			fwrite(&OutThing,sizeof(sThingPlatform),1,File);
+			fwrite(&OutThing,sizeof(sThingHazard),1,File);
 
 			for (p=0;p<PointCount;p++)
 			{

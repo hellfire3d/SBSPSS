@@ -41,6 +41,31 @@ void	CLayerActor::InitSubView(CCore *Core)
 }
 
 /*****************************************************************************/
+void	CLayerActor::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+		ThisDef.Data.Actor.ActorSpeed=ThingScript.GetInt(Name,"Speed");
+		ThisDef.Data.Actor.ActorTurnRate=ThingScript.GetInt(Name,"TurnRate");
+		ThisDef.Data.Actor.ActorHealth=ThingScript.GetInt(Name,"Health");
+		ThisDef.Data.Actor.ActorAttackStrength=ThingScript.GetInt(Name,"AttackStrength");
+		ThisDef.Data.Actor.ActorCollisionFlag=ThingScript.GetInt(Name,"Collision")==1;
+}
+
+/*****************************************************************************/
+void	CLayerActor::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+
+		ThisThing.Data.Actor.ActorSpeed=OldThing.Speed;
+		ThisThing.Data.Actor.ActorTurnRate=OldThing.TurnRate;
+		ThisThing.Data.Actor.ActorHealth=OldThing.Health;
+		ThisThing.Data.Actor.ActorAttackStrength=OldThing.AttackStrength;
+		ThisThing.Data.Actor.ActorCollisionFlag=OldThing.CollisionFlag;
+
+}
+
+/*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
 void	CLayerActor::GUIInit(CCore *Core)
@@ -101,12 +126,13 @@ void	CLayerActor::GUIThingUpdate(bool OnlySel)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUIActor.SetVal(GUIActor.m_Speed,ThisThing.Data.Speed);
-			GUIActor.SetVal(GUIActor.m_TurnRate,ThisThing.Data.TurnRate);
-			GUIActor.SetVal(GUIActor.m_Health,ThisThing.Data.Health);
-			GUIActor.SetVal(GUIActor.m_Attack,ThisThing.Data.AttackStrength);
-			GUIActor.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUIActor.m_Player.SetCheck(ThisThing.Data.PlayerFlag);
+			GUIActor.SetVal(GUIActor.m_Speed,ThisThing.Data.Actor.ActorSpeed);
+			GUIActor.SetVal(GUIActor.m_TurnRate,ThisThing.Data.Actor.ActorTurnRate);
+			GUIActor.SetVal(GUIActor.m_Health,ThisThing.Data.Actor.ActorHealth);
+			GUIActor.SetVal(GUIActor.m_Attack,ThisThing.Data.Actor.ActorAttackStrength);
+			GUIActor.m_Collision.SetCheck(ThisThing.Data.Actor.ActorCollisionFlag);
+			bool	IsPlayer=ThingScript.GetInt(ThisThing.Name,"Player")==1;
+			GUIActor.m_Player.SetCheck(IsPlayer);
 		}
 		else
 		{
@@ -132,12 +158,11 @@ void	CLayerActor::GUIChanged(CCore *Core)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUIActor.GetVal(GUIActor.m_Speed);
-			ThisThing.Data.TurnRate=GUIActor.GetVal(GUIActor.m_TurnRate);
-			ThisThing.Data.Health=GUIActor.GetVal(GUIActor.m_Health);
-			ThisThing.Data.AttackStrength=GUIActor.GetVal(GUIActor.m_Attack);
-			ThisThing.Data.CollisionFlag=GUIActor.m_Collision.GetCheck()!=0;
-			ThisThing.Data.PlayerFlag=GUIActor.m_Player.GetCheck()!=0;
+			ThisThing.Data.Actor.ActorSpeed=GUIActor.GetVal(GUIActor.m_Speed);
+			ThisThing.Data.Actor.ActorTurnRate=GUIActor.GetVal(GUIActor.m_TurnRate);
+			ThisThing.Data.Actor.ActorHealth=GUIActor.GetVal(GUIActor.m_Health);
+			ThisThing.Data.Actor.ActorAttackStrength=GUIActor.GetVal(GUIActor.m_Attack);
+			ThisThing.Data.Actor.ActorCollisionFlag=GUIActor.m_Collision.GetCheck()!=0;
 		}
 
 }

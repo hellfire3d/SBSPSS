@@ -1,6 +1,6 @@
-/*******************/
-/*** Layer Actor ***/
-/*******************/
+/********************/
+/*** Layer Hazard ***/
+/********************/
 
 #include	"stdafx.h"
 #include	<Vector3.h>
@@ -15,64 +15,92 @@
 
 #include	"Core.h"
 #include	"LayerThing.h"
-#include	"LayerActor.h"
+#include	"LayerHazard.h"
 #include	"Utils.h"
 #include	"Export.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerActor::CLayerActor(sLayerDef &Def)
+CLayerHazard::CLayerHazard(sLayerDef &Def)
 {
 		InitLayer(Def);
 }
 
 /*****************************************************************************/
-void	CLayerActor::InitLayer(sLayerDef &Def)
+void	CLayerHazard::InitLayer(sLayerDef &Def)
 {
 		ThingBank=new CElemBank(-1,-1,false,CElem::CentreModeLR | CElem::CentreModeB);
 		CLayerThing::InitLayer(Def);
-		LoadThingScript(theApp.GetConfigStr("LayerScript","ActorScript"));
+		LoadThingScript(theApp.GetConfigStr("LayerScript","HazardScript"));
 }
 
 /*****************************************************************************/
-void	CLayerActor::InitSubView(CCore *Core)
+void	CLayerHazard::InitSubView(CCore *Core)
 {
 }
+
+/*****************************************************************************/
+void	CLayerHazard::LoadDefThing(const char *Name,sLayerThing &ThisDef)
+{
+		ThisDef.Data.Hazard.HazardSpeed=ThingScript.GetInt(Name,"Speed");
+		ThisDef.Data.Hazard.HazardTurnRate=ThingScript.GetInt(Name,"TurnRate");
+		ThisDef.Data.Hazard.HazardHealth=ThingScript.GetInt(Name,"Health");
+		ThisDef.Data.Hazard.HazardAttackStrength=ThingScript.GetInt(Name,"AttackStrength");
+		ThisDef.Data.Hazard.HazardRespawn=ThingScript.GetInt(Name,"Respawn");
+		ThisDef.Data.Hazard.HazardCollisionFlag=ThingScript.GetInt(Name,"Collision")==1;
+
+}
+
+/*****************************************************************************/
+void	CLayerHazard::LoadOldThing(CFile *File,sLayerThing &ThisThing)
+{
+sLayerThingDataOLD	OldThing;
+
+		File->Read(&OldThing,sizeof(sLayerThingDataOLD));
+		ThisThing.Data.Hazard.HazardSpeed=OldThing.Speed;
+		ThisThing.Data.Hazard.HazardTurnRate=OldThing.TurnRate;
+		ThisThing.Data.Hazard.HazardHealth=OldThing.Health;
+		ThisThing.Data.Hazard.HazardAttackStrength=OldThing.AttackStrength;
+		ThisThing.Data.Hazard.HazardRespawn=OldThing.Speed;
+		ThisThing.Data.Hazard.HazardCollisionFlag=OldThing.CollisionFlag;
+}
+
 
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerActor::GUIInit(CCore *Core)
+void	CLayerHazard::GUIInit(CCore *Core)
 {
-		GUIActor.DisableCallback(true);
+		GUIHazard.DisableCallback(true);
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 		Core->GUIAdd(GUIThingPos,IDD_LAYER_THING_POS);
-		Core->GUIAdd(GUIActor,IDD_LAYER_ACTOR);
-		GUIActor.DisableCallback(false);
+		Core->GUIAdd(GUIHazard,IDD_LAYER_HAZARD);
+		GUIHazard.DisableCallback(false);
 
-		GUIActor.m_HealthSpin.SetRange(0,255);
-		GUIActor.m_AttackSpin.SetRange(0,255);
-		GUIActor.m_SpeedSpin.SetRange(0,255);
-		GUIActor.m_TurnRateSpin.SetRange(0,255);
+		GUIHazard.m_HealthSpin.SetRange(0,255);
+		GUIHazard.m_AttackSpin.SetRange(0,255);
+		GUIHazard.m_SpeedSpin.SetRange(0,255);
+		GUIHazard.m_TurnRateSpin.SetRange(0,255);
+		GUIHazard.m_RespawnSpin.SetRange(0,255);
 
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIKill(CCore *Core)
+void	CLayerHazard::GUIKill(CCore *Core)
 {
 		Core->GUIRemove(GUIThing,IDD_LAYER_THING);
 		Core->GUIRemove(GUIThingPos,IDD_LAYER_THING_POS);
-		Core->GUIRemove(GUIActor,IDD_LAYER_ACTOR);
+		Core->GUIRemove(GUIHazard,IDD_LAYER_HAZARD);
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIUpdate(CCore *Core)
+void	CLayerHazard::GUIUpdate(CCore *Core)
 {
 int			i,ListSize;
 CComboBox	&List=GUIThing.m_DefList;
 
-// Setup Def Actor List
+// Setup Def Hazard List
 		ListSize=DefList.size();
 		List.ResetContent();
 		for (i=0; i<ListSize; i++)
@@ -85,7 +113,7 @@ CComboBox	&List=GUIThing.m_DefList;
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIThingDefClear()
+void	CLayerHazard::GUIThingDefClear()
 {
 CComboBox	&List=GUIThing.m_DefList;
 		CurrentDefThing=-1;
@@ -93,51 +121,48 @@ CComboBox	&List=GUIThing.m_DefList;
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIThingUpdate(bool OnlySel)
+void	CLayerHazard::GUIThingUpdate(bool OnlySel)
 {
 		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
-		GUIActor.DisableCallback(true);
+		GUIHazard.DisableCallback(true);
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUIActor.SetVal(GUIActor.m_Speed,ThisThing.Data.Speed);
-			GUIActor.SetVal(GUIActor.m_TurnRate,ThisThing.Data.TurnRate);
-			GUIActor.SetVal(GUIActor.m_Health,ThisThing.Data.Health);
-			GUIActor.SetVal(GUIActor.m_Attack,ThisThing.Data.AttackStrength);
-			GUIActor.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUIActor.m_Player.SetCheck(ThisThing.Data.PlayerFlag);
+			GUIHazard.SetVal(GUIHazard.m_Speed,ThisThing.Data.Hazard.HazardSpeed);
+			GUIHazard.SetVal(GUIHazard.m_TurnRate,ThisThing.Data.Hazard.HazardTurnRate);
+			GUIHazard.SetVal(GUIHazard.m_Health,ThisThing.Data.Hazard.HazardHealth);
+			GUIHazard.SetVal(GUIHazard.m_Attack,ThisThing.Data.Hazard.HazardAttackStrength);
+			GUIHazard.m_Collision.SetCheck(ThisThing.Data.Hazard.HazardCollisionFlag);
 		}
 		else
 		{
-			GUIActor.m_Speed.SetWindowText("");
-			GUIActor.m_TurnRate.SetWindowText("");
-			GUIActor.m_Health.SetWindowText("");
-			GUIActor.m_Attack.SetWindowText("");
-			GUIActor.m_Collision.SetCheck(false);
-			GUIActor.m_Player.SetCheck(false);
+			GUIHazard.m_Speed.SetWindowText("");
+			GUIHazard.m_TurnRate.SetWindowText("");
+			GUIHazard.m_Health.SetWindowText("");
+			GUIHazard.m_Attack.SetWindowText("");
+			GUIHazard.m_Collision.SetCheck(false);
 		}
-		GUIActor.DisableCallback(false);
+		GUIHazard.DisableCallback(false);
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIThingPointUpdate(bool OnlySel)
+void	CLayerHazard::GUIThingPointUpdate(bool OnlySel)
 {
 		GUIThingPointUpdateList(GUIThingPos.m_List,OnlySel);
 }
 
 /*****************************************************************************/
-void	CLayerActor::GUIChanged(CCore *Core)
+void	CLayerHazard::GUIChanged(CCore *Core)
 {
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUIActor.GetVal(GUIActor.m_Speed);
-			ThisThing.Data.TurnRate=GUIActor.GetVal(GUIActor.m_TurnRate);
-			ThisThing.Data.Health=GUIActor.GetVal(GUIActor.m_Health);
-			ThisThing.Data.AttackStrength=GUIActor.GetVal(GUIActor.m_Attack);
-			ThisThing.Data.CollisionFlag=GUIActor.m_Collision.GetCheck()!=0;
-			ThisThing.Data.PlayerFlag=GUIActor.m_Player.GetCheck()!=0;
+			ThisThing.Data.Hazard.HazardSpeed=GUIHazard.GetVal(GUIHazard.m_Speed);
+			ThisThing.Data.Hazard.HazardTurnRate=GUIHazard.GetVal(GUIHazard.m_TurnRate);
+			ThisThing.Data.Hazard.HazardHealth=GUIHazard.GetVal(GUIHazard.m_Health);
+			ThisThing.Data.Hazard.HazardAttackStrength=GUIHazard.GetVal(GUIHazard.m_Attack);
+			ThisThing.Data.Hazard.HazardCollisionFlag=GUIHazard.m_Collision.GetCheck()!=0;
 		}
 
 }

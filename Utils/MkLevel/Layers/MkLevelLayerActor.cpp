@@ -72,11 +72,11 @@ int			i,ListSize=ThingList.size();
 			sThingActor			OutThing;
 
 			OutThing.Type=ThisThing.Type;
-			OutThing.Health=ThisThing.Data.Health;
-			OutThing.AttackStrength=ThisThing.Data.AttackStrength;
-			OutThing.Speed=ThisThing.Data.Speed;
-			OutThing.TurnRate=ThisThing.Data.TurnRate;
-			OutThing.Flags=ThisThing.Data.CollisionFlag;
+			OutThing.Health=ThisThing.Data.Actor.ActorHealth;
+			OutThing.AttackStrength=ThisThing.Data.Actor.ActorAttackStrength;
+			OutThing.Speed=ThisThing.Data.Actor.ActorSpeed;
+			OutThing.TurnRate=ThisThing.Data.Actor.ActorTurnRate;
+			OutThing.Flags=ThisThing.Data.Actor.ActorCollisionFlag;
 			OutThing.PointCount=PointCount;
 			fwrite(&OutThing,sizeof(sThingActor),1,File);
 
