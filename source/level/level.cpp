@@ -423,7 +423,13 @@ void 	CLevel::init()
 			SetScreenImage(s_image);
 			for(i=0;i<2;i++)
 			{
-				font.print(256,128,buf);
+				font.setColour(255,255,255);
+				font.print(256  ,120  ,buf);
+				font.setColour(0,0,0);
+				font.print(256-1,120-1,buf);
+				font.print(256+1,120-1,buf);
+				font.print(256-1,120+1,buf);
+				font.print(256+1,120+1,buf);
 				PrimDisplay();
 				VSync(0);
 				VidSwapDraw();
