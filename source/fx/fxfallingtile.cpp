@@ -38,7 +38,6 @@ sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 		Velocity.vy=FallingTile_DefVY;
 		Life=FallingTile_DefLife;
 		CSoundMediator::playSfx(CSoundMediator::SFX_ANY_OBJECT_FALLING,false,true);
-		Flags |=FX_FLAG_NO_THINK_KILL;
 }
 
 /*****************************************************************************/
@@ -46,10 +45,13 @@ sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 /*****************************************************************************/
 void	CFXFallingTile::think(int _frames)
 {
+		if (Tile==0) setToShutdown();
 		CFX::think(_frames);
 		Pos.vx+=Velocity.vx;
 		Pos.vy+=Velocity.vy;
 		Velocity.vy++;
+		Flags |=FX_FLAG_NO_THINK_KILL;
+
 }
 
 /*****************************************************************************/
@@ -65,43 +67,4 @@ DVECTOR		&RenderPos=getRenderPos();
 
 			u16			TileIdx=Tile>>2;
 			CModelGfx::RenderTile(RenderPos,TileIdx);
-/*			u16			Flip=Tile&3;
-			sFlipTable	*FTab=&FlipTable[Flip];
-			sElem3d		*Elem=&ElemBank3d[TileIdx];
-			int			TriCount=Elem->TriCount;				
-			sTri		*TList=&TriList[Elem->TriStart];
-
-			CMX_SetTransMtxXY(&ThisRenderPos);
-			CMX_SetRotMatrixXY(&FTab->Mtx);
-			while (TriCount--)
-			{
-				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
-				gte_ldv3(P0,P1,P2);
-				setlen(TPrimPtr, GPU_PolyFT3Tag);
-				TPrimPtr->code=TList->PolyCode;
-				gte_rtpt_b();
-				setShadeTex(TPrimPtr,1);
-			
-				T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
-				T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-				T2=*(u16*)&TList->uv2;		// Get UV2
-				*(u32*)&TPrimPtr->u0=T0;	// Set UV0
-				*(u32*)&TPrimPtr->u1=T1;	// Set UV1
-				*(u16*)&TPrimPtr->u2=T2;	// Set UV2
-
-				ThisOT=OtPtr+TList->OTOfs;
-				TList++;
-				gte_nclip_b();
-				gte_stsxy3_ft3(TPrimPtr);
-				gte_stopz(&ClipZ);
-				ClipZ^=FTab->ClipCode;
-				if (ClipZ<0)
-				{
-					addPrim(ThisOT,TPrimPtr);
-					TPrimPtr++;
-				}
-			}
-
-		SetPrimPtr((u8*)TPrimPtr);
-*/
 }

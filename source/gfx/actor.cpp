@@ -700,10 +700,10 @@ MATRIX	Mtx;
 VECTOR	Scale;
 int		ScaleInc=Angle&1023;
 int		Quad=0;
-		XScale+=ScaleXAspect;
 
 		Angle&=4095;
-
+		if (Angle==0 && XScale==YScale==ONE) return(Ft4);
+		XScale+=ScaleXAspect;
 		Quad=Angle>>10;
 		switch(Quad)
 		{
@@ -881,12 +881,12 @@ void		CModelGfx::RenderElem(sElem3d *ThisElem,DVECTOR &Pos,SVECTOR *Angle,VECTOR
 {
 u8				*PrimPtr=GetPrimPtr();
 u32				T0,T1,T2,T3;
-u32				P0,P1,P2,P3;
 s32				ClipZ;
 sOT				*ThisOT;
 VECTOR			RenderPos;
 MATRIX			Mtx;
-u32	const		*XYList=(u32*)SCRATCH_RAM;
+//u32	const		*XYList=(u32*)SCRATCH_RAM;
+u8 const		*XYList=(u8*)SCRATCH_RAM;
 
 
 // If has scale && angle then need to use PSX scale matrix, otherwise, force values
@@ -950,12 +950,12 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 		{
 			POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
-			P0=XYList[TList->P0]; 
-			P1=XYList[TList->P1]; 
-			P2=XYList[TList->P2];
-			gte_ldsxy0(P0);
-			gte_ldsxy1(P1);
-			gte_ldsxy2(P2);
+			T0=*(u32*)(XYList+TList->P0); 
+			T1=*(u32*)(XYList+TList->P1); 
+			T2=*(u32*)(XYList+TList->P2);
+			gte_ldsxy0(T0);
+			gte_ldsxy1(T1);
+			gte_ldsxy2(T2);
 
 			setlen(ThisPrim, GPU_PolyGT3Tag);
 			ThisPrim->code=TList->PolyCode;
@@ -963,12 +963,12 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 
 			setShadeTex(ThisPrim,1);
 
+			*(u32*)&ThisPrim->x0=T0;	// Set XY0
+			*(u32*)&ThisPrim->x1=T1;	// Set XY1
+			*(u32*)&ThisPrim->x2=T2;	// Set XY2
 			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
 			T2=*(u32*)&TList->uv2;		// Get UV2
-			*(u32*)&ThisPrim->u0=T0;	// Set UV0
-			*(u32*)&ThisPrim->u1=T1;	// Set UV1
-			*(u32*)&ThisPrim->u2=T2;	// Set UV2
 
 			gte_stopz(&ClipZ);
 			ThisOT=OtPtr+TList->OTOfs;
@@ -976,9 +976,9 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 			TList++;
 			if (ClipZ<0)
 			{
-				*(u32*)&ThisPrim->x0=P0;	// Set XY0
-				*(u32*)&ThisPrim->x1=P1;	// Set XY1
-				*(u32*)&ThisPrim->x2=P2;	// Set XY2
+				*(u32*)&ThisPrim->u0=T0;	// Set UV0
+				*(u32*)&ThisPrim->u1=T1;	// Set UV1
+				*(u32*)&ThisPrim->u2=T2;	// Set UV2
 				addPrim(ThisOT,ThisPrim);
 				PrimPtr+=sizeof(POLY_GT3);
 			}
@@ -991,13 +991,13 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 		{
 			POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
-			P0=XYList[QList->P0]; 
-			P1=XYList[QList->P1]; 
-			P2=XYList[QList->P2];
-			P3=XYList[QList->P3];
-			gte_ldsxy0(P0);
-			gte_ldsxy1(P1);
-			gte_ldsxy2(P2);
+			T0=*(u32*)(XYList+QList->P0); 
+			T1=*(u32*)(XYList+QList->P1); 
+			T2=*(u32*)(XYList+QList->P2);
+			T3=*(u32*)(XYList+QList->P3);
+			gte_ldsxy0(T0);
+			gte_ldsxy1(T1);
+			gte_ldsxy2(T2);
 			
 			setlen(ThisPrim, GPU_PolyGT4Tag);
 			ThisPrim->code=QList->PolyCode;
@@ -1005,24 +1005,24 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 
 			setShadeTex(ThisPrim,1);
 
+			*(u32*)&ThisPrim->x0=T0;	// Set XY0
+			*(u32*)&ThisPrim->x1=T1;	// Set XY1
+			*(u32*)&ThisPrim->x2=T2;	// Set XY2
+			*(u32*)&ThisPrim->x3=T3;	// Set XY3
 			T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
 			T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
 			T2=*(u32*)&QList->uv2;		// Get UV2
 			T3=*(u32*)&QList->uv3;		// Get UV2
-			*(u32*)&ThisPrim->u0=T0;	// Set UV0
-			*(u32*)&ThisPrim->u1=T1;	// Set UV1
-			*(u32*)&ThisPrim->u2=T2;	// Set UV2
-			*(u32*)&ThisPrim->u3=T3;	// Set UV2
 			gte_stopz(&ClipZ);
 			ThisOT=OtPtr+QList->OTOfs;
 			ClipZ|=ClipFlag;			// <-- Evil!!
 			QList++;
 			if (ClipZ<0)
 			{
-				*(u32*)&ThisPrim->x0=P0;	// Set XY0
-				*(u32*)&ThisPrim->x1=P1;	// Set XY1
-				*(u32*)&ThisPrim->x2=P2;	// Set XY2
-				*(u32*)&ThisPrim->x3=P3;	// Set XY3
+				*(u32*)&ThisPrim->u0=T0;	// Set UV0
+				*(u32*)&ThisPrim->u1=T1;	// Set UV1
+				*(u32*)&ThisPrim->u2=T2;	// Set UV2
+				*(u32*)&ThisPrim->u3=T3;	// Set UV2
 				addPrim(ThisOT,ThisPrim);
 				PrimPtr+=sizeof(POLY_GT4);
 			}

@@ -13,11 +13,13 @@
 #include	"LayerTile3d.h"
 
 
+#if		1
 #if		defined(__USER_sbart__) || defined(__USER_daveo__)
 #define	_SHOW_POLYZ_	1
 #include	"gfx\font.h"	
 static		FontBank		*Font;
 int			ShowPolyz=0;
+#endif
 #endif
 
 static const int	BLOCK_SIZE				=16;
@@ -279,9 +281,8 @@ int				MapOfs=GetMapOfs();
 sTileMapElem	*MapPtr=Map+MapOfs;
 u8				*RGBMapPtr=RGBMap+MapOfs;
 u8				*PrimPtr=GetPrimPtr();
-u32				*XYList=(u32*)SCRATCH_RAM;
+u8	const		*XYList=(u8*)SCRATCH_RAM;
 u32				T0,T1,T2,T3;
-u32				P0,P1,P2,P3;
 s32				ClipZ;
 sOT				*ThisOT;
 VECTOR			BlkPos;
@@ -326,7 +327,6 @@ s16				TCount=0,QCount=0;
 					CMX_SetRotMatrixXY(&FTab->Mtx);
 
 // --- Cache Vtx ----------
-//					CacheElemVtx(Elem);
 					{
 					int		Count=Elem->VtxTriCount;
 					sVtx	*V0,*V1,*V2;
@@ -355,7 +355,6 @@ s16				TCount=0,QCount=0;
 							}
 
 					}
-
 
 					s16	FL=DeltaFX[0]+DeltaFOfs.vx;
 					s16	FR=DeltaFX[1]+DeltaFOfs.vx;
@@ -396,12 +395,12 @@ s16				TCount=0,QCount=0;
 					{
 						POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
-						P0=XYList[TList->P0]; 
-						P1=XYList[TList->P1]; 
-						P2=XYList[TList->P2];
-						gte_ldsxy0(P0);
-						gte_ldsxy1(P1);
-						gte_ldsxy2(P2);
+						T0=*(u32*)(XYList+TList->P0); 
+						T1=*(u32*)(XYList+TList->P1); 
+						T2=*(u32*)(XYList+TList->P2);
+						gte_ldsxy0(T0);
+						gte_ldsxy1(T1);
+						gte_ldsxy2(T2);
 						
 						setlen(ThisPrim, GPU_PolyGT3Tag);
 						gte_nclip_b();	// 8 cycles
@@ -410,20 +409,20 @@ s16				TCount=0,QCount=0;
 						if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0);}
 #endif
 
+						*(u32*)&ThisPrim->x0=T0;	// Set XY0
+						*(u32*)&ThisPrim->x1=T1;	// Set XY1
+						*(u32*)&ThisPrim->x2=T2;	// Set XY2
 						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 						T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
 						T2=*(u32*)&TList->uv2;		// Get UV2
-						*(u32*)&ThisPrim->u0=T0;	// Set UV0
-						*(u32*)&ThisPrim->u1=T1;	// Set UV1
-						*(u32*)&ThisPrim->u2=T2;	// Set UV2
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+TList->OTOfs;
 						ClipZ^=FTab->ClipCode;
 						if (ClipZ<0)
 						{
-							*(u32*)&ThisPrim->x0=P0;	// Set XY0
-							*(u32*)&ThisPrim->x1=P1;	// Set XY1
-							*(u32*)&ThisPrim->x2=P2;	// Set XY2
+							*(u32*)&ThisPrim->u0=T0;	// Set UV0
+							*(u32*)&ThisPrim->u1=T1;	// Set UV1
+							*(u32*)&ThisPrim->u2=T2;	// Set UV2
 							addPrim(ThisOT,ThisPrim);
 							
 #if		defined(_SHOW_POLYZ_)
@@ -453,13 +452,13 @@ s16				TCount=0,QCount=0;
 					{
 						POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
-						P0=XYList[QList->P0]; 
-						P1=XYList[QList->P1]; 
-						P2=XYList[QList->P2];
-						P3=XYList[QList->P3];
-						gte_ldsxy0(P0);
-						gte_ldsxy1(P1);
-						gte_ldsxy2(P2);
+						T0=*(u32*)(XYList+(QList->P0/*4*/)); 
+						T1=*(u32*)(XYList+(QList->P1/*4*/)); 
+						T2=*(u32*)(XYList+(QList->P2/*4*/));
+						T3=*(u32*)(XYList+(QList->P3/*4*/));
+						gte_ldsxy0(T0);
+						gte_ldsxy1(T1);
+						gte_ldsxy2(T2);
 						
 						setlen(ThisPrim, GPU_PolyGT4Tag);
 						gte_nclip_b();	// 8 cycles
@@ -468,23 +467,23 @@ s16				TCount=0,QCount=0;
 						if (ShowPolyz)	{setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0);}
 #endif
 
+						*(u32*)&ThisPrim->x0=T0;	// Set XY0
+						*(u32*)&ThisPrim->x1=T1;	// Set XY1
+						*(u32*)&ThisPrim->x2=T2;	// Set XY2
+						*(u32*)&ThisPrim->x3=T3;	// Set XY3
 						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
 						T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
 						T2=*(u32*)&QList->uv2;		// Get UV2
 						T3=*(u32*)&QList->uv3;		// Get UV2
-						*(u32*)&ThisPrim->u0=T0;	// Set UV0
-						*(u32*)&ThisPrim->u1=T1;	// Set UV1
-						*(u32*)&ThisPrim->u2=T2;	// Set UV2
-						*(u32*)&ThisPrim->u3=T3;	// Set UV2
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+QList->OTOfs;
 						ClipZ^=FTab->ClipCode;
 						if (ClipZ<0)
 						{
-							*(u32*)&ThisPrim->x0=P0;	// Set XY0
-							*(u32*)&ThisPrim->x1=P1;	// Set XY1
-							*(u32*)&ThisPrim->x2=P2;	// Set XY2
-							*(u32*)&ThisPrim->x3=P3;	// Set XY3
+							*(u32*)&ThisPrim->u0=T0;	// Set UV0
+							*(u32*)&ThisPrim->u1=T1;	// Set UV1
+							*(u32*)&ThisPrim->u2=T2;	// Set UV2
+							*(u32*)&ThisPrim->u3=T3;	// Set UV2
 #if		defined(_SHOW_POLYZ_)
 						if (!ShowPolyz)
 #endif
