@@ -172,7 +172,7 @@ void CPauseMenu::init()
 										STR__PAUSE_MENU__QUIT,
 										&m_responseFlag,RESPONSE__QUIT);
 
-#ifdef __VERSION_DEBUG__o
+#ifdef __VERSION_DEBUG__
 	ypos+=8;
 	CGUIFactory::createCycleButtonFrame(m_pauseGuiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
