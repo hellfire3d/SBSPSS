@@ -27,6 +27,7 @@ protected:
 	virtual void		processMovement( int _frames );
 
 	s32					m_length;
+	s32					m_maxExtension;
 };
 
 #endif

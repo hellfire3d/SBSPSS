@@ -58,7 +58,12 @@ void CNpcPendulumPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 		pivotPos.vx = newXPos << 4;
 		pivotPos.vy = newYPos << 4;
 
-		m_length = startPos.vy - pivotPos.vy;
+		s32 xDist = startPos.vx - pivotPos.vx;
+		s32 yDist = startPos.vy - pivotPos.vy;
+
+		m_maxExtension = 1024 - ratan2( abs( yDist ), abs( xDist ) );
+
+		m_length = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
 
 		init( pivotPos );
 	}
@@ -74,7 +79,7 @@ void CNpcPendulumPlatform::processMovement( int _frames )
 {
 	if ( m_extendDir == EXTEND_LEFT )
 	{
-		if ( m_extension > 512 )
+		if ( m_extension > m_maxExtension )
 		{
 			m_extendDir = EXTEND_RIGHT;
 		}
@@ -85,7 +90,7 @@ void CNpcPendulumPlatform::processMovement( int _frames )
 	}
 	else
 	{
-		if ( m_extension < -512 )
+		if ( m_extension < -m_maxExtension )
 		{
 			m_extendDir = EXTEND_LEFT;
 		}
