@@ -223,6 +223,7 @@ void 	CGameScene::init()
 		s_restartLevel=false;
 
 		CFader::setFadingIn();
+		CLevel::setIsBossRespawn(false);
 		initLevel();
 
 		m_gamestate=GAMESTATE_SHOWING_LIVES;
@@ -742,6 +743,7 @@ void	CGameScene::initLevel()
 #ifdef __VERSION_DEBUG__
 	s_skipToNextLevel=false;
 #endif
+	CActorPool::Reset();
 	Level.init(s_globalLevelSelectThing);
 
 	createPlayer();

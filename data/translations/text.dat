@@ -282,11 +282,24 @@ eng=SpongeBob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
 [STR__INGAME__FMA_PLANKTON]
 eng=Blast you SpongeBreath, you have found my secret time machine! Whatever you do make sure you fill it up before you bring it back!!!!
 
+
 ; ---------------------------------------------------------------
-[STR__INGAME__GENERIC__CHECK1]
-eng=Did that make sense..?
+; End party FMA
+[STR__INGAME__FMA_PARTY_SB0]
+eng=Happy Birthday Patrick from all your friends in Bikini Bottom!
+[STR__INGAME__FMA_PARTY_PAT0]
+eng=Today’s my birthday? Hmm. I thought I was born a long time ago in a hospital. Thanks for the signed photo of my favorite superheroes anyhow. This the best birthday ever!!
+[STR__INGAME__FMA_PARTY_VO0]
+eng=Stand Still while I take your picture
+[STR__INGAME__FMA_PARTY_ALL]
+eng=Happy Birthday!
 
 
+
+
+; ---------------------------------------------------------------
+; Ingame conversations
+; ---------------------------------------------------------------
 Chapter 1 - Level 1 - 01
 [STR__INGAME__CH1__L1__SPONGEY1]
 eng=Hi Squidward !!! Ready for another great day together, friend?

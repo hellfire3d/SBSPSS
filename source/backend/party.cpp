@@ -18,24 +18,8 @@
 
 #include "backend\party.h"
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
-
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
-#endif
-
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
-#endif
-
-#ifndef	__FRONTEND_FRONTEND_H__
-#include "frontend\frontend.h"
-#endif
-
-#ifndef	__GFX_FADER_H__
-#include "gfx\fader.h"
 #endif
 
 #ifndef _FILEIO_HEADER_
@@ -52,14 +36,6 @@
 
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
-#endif
-
-#ifndef __ACTOR_HEADER__
-#include "gfx\actor.h"
-#endif
-
-#ifndef	__BACKEND_CREDITS_H__
-#include "backend\credits.h"
 #endif
 
 #ifndef __MATHTABLE_HEADER__
@@ -104,10 +80,8 @@
 
 static int	s_leftBobSin,s_leftBob,s_rightBobSin,s_rightBob;
 
-CPartyScene	PartyScene;
-
-CActorGfx	*m_actorSpongebob;
-CActorGfx	*m_actorPatrick;
+//CActorGfx	*m_actorSpongebob;
+//CActorGfx	*m_actorPatrick;
 
 
 /*----------------------------------------------------------------------
@@ -122,29 +96,12 @@ void CPartyScene::init()
 	ASSERT(m_image);
 	SetScreenImage((u8*)m_image);
 
-//	m_font=new ("game over font") ScalableFontBank();
-//	m_font->initialise(&standardFont);
-//	m_font->setJustification(ScalableFontBank::JUST_CENTRE);
-//	m_font->setOt(5);
-
 	m_sprites=new ("Party sprites") SpriteBank();
 	m_sprites->load(PARTY_PARTY_SPR);
-
-	m_readyToExit=false;
-	CFader::setFadingIn();
-
-	CActorPool::Reset();
-	m_actorSpongebob=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
-	m_actorSpongebob->SetOtPos(5);
-	m_actorPatrick=CActorPool::GetActor(ACTORS_PATRICK_SBK);
-	m_actorPatrick->SetOtPos(5);
-	CActorPool::SetUpCache();
-	CActorPool::CleanUpCache();
 
 	s_leftBobSin=s_leftBob=s_rightBobSin=s_rightBob=0;
 
 	CSoundMediator::setSong(CSoundMediator::SONG_PARTY);
-	CSoundMediator::playSong();
 }
 
 
@@ -156,14 +113,7 @@ void CPartyScene::init()
   ---------------------------------------------------------------------- */
 void CPartyScene::shutdown()
 {
-	CSoundMediator::dumpSong();
-
-	delete m_actorPatrick;
-	delete m_actorSpongebob;
-	CActorPool::Reset();
-
 	m_sprites->dump();			delete m_sprites;
-//	m_font->dump();				delete m_font;
 
 	MemFree(m_image);
 }
@@ -260,10 +210,6 @@ static PARTY_IMAGE images[]=
 };																
 static const int numimages=sizeof(images)/sizeof(PARTY_IMAGE);
 
-DVECTOR	sbpos={220,195};
-int sbanim=5,sbfrm=1;
-DVECTOR	patpos={300,200};
-int patanim=0,patfrm=0;
 void CPartyScene::render()
 {
 	int							i;
@@ -281,7 +227,7 @@ void CPartyScene::render()
 	for(i=0;i<numimages;i++)
 	{
 		ASSERT(pimage->m_fh<=FRM_TABLESIDE3);
-		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_elementId])
+//		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_elementId])
 		{
 			int		x,y;
 			x=pimage->m_xOffsetBroken*256;
@@ -298,14 +244,6 @@ void CPartyScene::render()
 		}
 		pimage++;
 	}
-
-	// Actors
-	m_actorSpongebob->Render(sbpos,sbanim,sbfrm,0,0);
-	sbfrm=0;
-	m_actorPatrick->Render(patpos,patanim,patfrm,0,0);
-
-
-	CActorPool::CleanUpCache();
 }
 
 
@@ -317,32 +255,10 @@ void CPartyScene::render()
   ---------------------------------------------------------------------- */
 void CPartyScene::think(int _frames)
 {
-	if(!CFader::isFading())
-	{
-		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
-		{
-			m_readyToExit=true;
-			CFader::setFadingOut();
-			GameState::setNextScene(&CreditsScene);
-		}
-	}
-
 	s_leftBobSin=(s_leftBobSin+(_frames*20))&4095;
 	s_rightBobSin=(s_rightBobSin+(_frames*16))&4095;
 	s_leftBob=(msin(s_leftBobSin)*2)>>12;
 	s_rightBob=(msin(s_rightBobSin)*2)>>12;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int CPartyScene::readyToShutdown()
-{
-	return m_readyToExit&&!CFader::isFading();
 }
 
 

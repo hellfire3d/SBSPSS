@@ -74,12 +74,12 @@
 #include "map\map.h"
 #endif
 
-#ifndef	__BACKEND_PARTY_H__
-#include "backend\party.h"
-#endif
-
 #ifndef	__GUI_POINTER_H__
 #include "gui\pointer.h"
+#endif
+
+#ifndef	__FMA_FMA_H__
+#include "fma\fma.h"
 #endif
 
 
@@ -411,7 +411,8 @@ void CShopScene::think(int _frames)
 			if(s_gotoPartyScreen)
 			{
 				s_gotoPartyScreen=false;
-				GameState::setNextScene(&PartyScene);
+				CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__PARTY);
+				GameState::setNextScene(&FmaScene);
 			}
 			else
 			{

@@ -18,11 +18,6 @@
 	Includes
 	-------- */
 
-#ifndef __SYSTEM_GSTATE_H__
-#include "system\gstate.h"
-#endif
-
-
 /*	Std Lib
 	------- */
 
@@ -34,20 +29,16 @@
 	Structure defintions
 	-------------------- */
 
-class CPartyScene: public CScene
+class CPartyScene
 {
 public:
 	void	init();
 	void	shutdown();
 	void	render();
 	void	think(int _frames);
-	int		readyToShutdown();
-	char	*getSceneName()			{return"Party";}
-
 
 private:
 	class SpriteBank		*m_sprites;
-	int						m_readyToExit;
 	unsigned char			*m_image;
 
 };
@@ -56,9 +47,6 @@ private:
 /*----------------------------------------------------------------------
 	Globals
 	------- */
-
-extern CPartyScene	PartyScene;
-
 
 /*----------------------------------------------------------------------
 	Functions

@@ -85,7 +85,7 @@ void CFader::render()
 						POLY_F4		*f4;
 						POLY_FT3	*ft3;
 						f4=GetPrimF4();
-						setXYWH(f4,0,0,511,255);
+						setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH()+1);
 						setRGB0(f4,s_fadeValue,s_fadeValue,s_fadeValue);
 						setShadeTex(f4,0);
 						setSemiTrans(f4,1);
@@ -116,7 +116,7 @@ void CFader::render()
 						int			col;
 						col=255-s_fadeValue;
 						f4=GetPrimF4();
-						setXYWH(f4,0,0,511,255);
+						setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH()+1);
 						setRGB0(f4,col,col,col);
 						setShadeTex(f4,0);
 						setSemiTrans(f4,1);
@@ -139,7 +139,7 @@ void CFader::render()
 				POLY_F4		*f4;
 				
 				f4=GetPrimF4();
-				setXYWH(f4,0,0,VidGetScrW(),VidGetScrH());
+				setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH());
 				switch(s_fadeStyle)
 				{
 					case BLACK_FADE:

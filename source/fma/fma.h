@@ -50,6 +50,7 @@ public:
 		FMA_SCRIPT__CH4FINISHED,
 		FMA_SCRIPT__CH5FINISHED,
 		FMA_SCRIPT__PLANKTON,
+		FMA_SCRIPT__PARTY,
 		NUM_FMA_SCRIPTS,
 		FMA_SCRIPT__NONE,
 	}FMA_SCRIPT_NUMBER;
@@ -72,7 +73,8 @@ private:
 
 
 
-	class CLevel	*m_level;
+	class CLevel		*m_level;
+	class CPartyScene	*m_party;
 
 	DVECTOR			m_cameraPos;
 	
@@ -88,6 +90,9 @@ private:
 	int				m_doOtherProcessing;
 	int				m_timer;
 	int				m_frameCount;
+
+	int				m_tuneLoaded;
+	int				m_musicPlaying;
 
 	int				m_readyToShutdown;
 };

@@ -197,7 +197,6 @@ void 	CLevel::init(int LevelNo)
 // Load it
 sLvlTab *lvlTab=&LvlTable[LevelNo];
 
-		CActorPool::Reset();
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
 		DisplayLoadingScreen(lvlTab);

@@ -63,10 +63,6 @@
 #include "map\map.h"
 #endif
 
-#ifndef __BACKEND_PARTY_H__
-#include "backend\party.h"
-#endif
-
 #ifndef __BACKEND_CREDITS_H__
 #include "backend\credits.h"
 #endif
@@ -116,7 +112,6 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&FmaScene,
 	&MapScene,
 	&ShopScene,
-	&PartyScene,
 	&CreditsScene,
 	&AnimTestScene,
 	&SaveScene,

@@ -31,16 +31,16 @@ FX
 #include "level\level.h"
 #endif
 
+#ifndef __BACKEND_PARTY_H__
+#include "backend\party.h"
+#endif
+
 #ifndef __THING_THING_H__
 #include "thing\thing.h"
 #endif
 
 #ifndef	__GAME_CONVO_H__
 #include "game\convo.h"
-#endif
-
-#ifndef __MAP_MAP_H__
-#include "map\map.h"
 #endif
 
 #ifndef	__SOUND_SOUND_H__
@@ -64,6 +64,25 @@ FX
 
 #include	"fx\fx.h"
 #include	"fx\FXTvExplode.h"
+
+#ifndef __MATHTABLE_HEADER__
+#include "utils\mathtab.h"
+#endif
+
+// Game scenes..
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
+#endif
+
+#ifndef __FRONTEND_CREDITS_H__
+#include "backend\credits.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
+
 
 /*	Std Lib
 	------- */
@@ -92,6 +111,21 @@ FX
 #include "actor_plankton_anim.h"
 #endif
 
+#ifndef	__ANIM_PATRICK_HEADER__
+#include "actor_patrick_anim.h"
+#endif
+
+#ifndef	__ANIM_KRUSTY_HEADER__
+#include "actor_krusty_anim.h"
+#endif
+
+#ifndef	__ANIM_squidward_HEADER__
+#include "actor_squidward_anim.h"
+#endif
+
+#ifndef	__ANIM_SANDY_HEADER__
+#include "actor_sandy_anim.h"
+#endif
 
 #define	FRM__KELP_BAR	FRM__C4_QUEST_ITEM_2
 
@@ -107,6 +141,10 @@ enum
 	FMA_ACTOR_BB,
 	FMA_ACTOR_GARY,
 	FMA_ACTOR_PLANKTON,
+	FMA_ACTOR_PATRICK,
+	FMA_ACTOR_KRABS,
+	FMA_ACTOR_SQUIDWARD,
+	FMA_ACTOR_SANDY,
 
 	FMA_NUM_ACTORS
 };
@@ -137,10 +175,24 @@ enum
 	FMA_NUM_ANIMS,
 };
 
+// Next scene types
+enum
+{
+	FMA_NEXT_SCENE_MAP,
+	FMA_NEXT_SCENE_GAME,
+	FMA_NEXT_SCENE_CREDITS,
+
+	FMA_NUM_NEXT_SCENES
+};
+
 
 // Available script commands
 typedef enum
 {
+	SC_USE_LEVEL,				// levelNumber
+	SC_USE_PARTY,				// 
+	SC_SET_NEXT_SCENE,			// nextScene
+
 	SC_SNAP_CAMERA_TO,			// x,y
 	SC_MOVE_CAMERA_TO,			// x,y,frames
 
@@ -151,6 +203,7 @@ typedef enum
 	SC_WAIT_ON_ACTOR_ANIM,		// actor						(nonblocking)
 	SC_WAIT_ON_CAMERA_STOP,		//								(nonblocking)
 	SC_WAIT_ON_CONVERSATION,	// scriptId						(nonblocking)
+	SC_WAIT_ON_THROWN_ITEM,		// item
 	
 	SC_SET_ACTOR_VISIBILITY,	// actor,on/off
 	SC_SET_ACTOR_POSITION,		// actor,x,y
@@ -161,10 +214,13 @@ typedef enum
 	SC_CREATE_FX,				// FxNo, X,Y, FXType
 	SC_KILL_FX,					// FxNo
 
-	SC_SET_ITEM,				// item, Frame
-	SC_CARRY_ITEM,				// item, actor
+	SC_SET_ITEM,				// item,frame
+	SC_CARRY_ITEM,				// item,actor
+	SC_HIDE_ITEM,				// item
+	SC_THROW_ITEM_TO_ACTOR,		// item,targetActor,arcHeight,frames
 
-	SC_STOP,					//
+	SC_START,					// 
+	SC_STOP,					// 
 } SCRIPT_COMMAND;
 
 /*
@@ -228,12 +284,19 @@ typedef struct
 
 struct	sItemData
 {
+		s8			m_visible;
+
 		DVECTOR		m_Pos;
 		s8			m_Actor;
 		u8			m_facing;
 		u16			m_Frame;
+
 		s8			m_TargetActor;
+		DVECTOR		m_startPos;
 		DVECTOR		m_TargetPos;
+		u16			m_startMoveFrame;
+		u16			m_endMoveFrame;
+		s8			m_throwArcHeight;
 };
 
 
@@ -253,6 +316,15 @@ enum
 CFmaScene	FmaScene;
 CFX			*m_FXTable[FMA_FX_COUNT];
 sItemData	m_itemData[FMA_ITEM_MAX];
+
+/*****************************************************************************/
+static CScene	*s_nextGameSceneTable[FMA_NUM_NEXT_SCENES]=
+{
+	&MapScene,					// FMA_NEXT_SCENE_MAP
+	&GameScene,					// FMA_NEXT_SCENE_GAME
+	&CreditsScene,				// FMA_NEXT_SCENE_CREDITS
+};
+
 
 /*****************************************************************************/
 // Actor graphics data
@@ -369,6 +441,94 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 /*FMA_ANIM_RUBHEAD*/			{0,-1},
 		},
 	},
+	{ // Patrick
+		{ACTORS_PATRICK_SBK,		(FileEquate)0},{0,0},	
+		{
+/*FMA_ANIM_IDLE*/				{0,ANIM_PATRICK_IDLEBREATHE},
+/*FMA_ANIM_WALK*/				{0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1},
+/*FMA_ANIM_THROW*/				{0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
+/*FMA_ANIM_SIT*/				{0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1},
+		},
+	},
+	{ // Krusty
+		{ACTORS_KRUSTY_SBK,			(FileEquate)0},{0,0},	
+		{
+/*FMA_ANIM_IDLE*/				{0,ANIM_KRUSTY_IDLEBREATHE},
+/*FMA_ANIM_WALK*/				{0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1},
+/*FMA_ANIM_THROW*/				{0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
+/*FMA_ANIM_SIT*/				{0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1},
+		},
+	},
+	{ // Squidward
+		{ACTORS_SQUIDWARD_SBK,		(FileEquate)0},{0,0},	
+		{
+/*FMA_ANIM_IDLE*/				{0,ANIM_SQUIDWARD_IDLEBREATHE},
+/*FMA_ANIM_WALK*/				{0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1},
+/*FMA_ANIM_THROW*/				{0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
+/*FMA_ANIM_SIT*/				{0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1},
+		},
+	},
+	{ // Sandy
+		{ACTORS_SANDY_SBK,			(FileEquate)0},{0,0},	
+		{
+/*FMA_ANIM_IDLE*/				{0,ANIM_SANDY_IDLE},
+/*FMA_ANIM_WALK*/				{0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1},
+/*FMA_ANIM_THROW*/				{0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
+/*FMA_ANIM_SIT*/				{0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1},
+		},
+	},
 };
 
 
@@ -384,6 +544,10 @@ static const int s_FMAIntroScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH1_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH1_02_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH1_03_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
+
 
 // Scene 1 - SB & Gary outside house
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
@@ -468,6 +632,9 @@ static const int s_FMAC1EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH2_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH2_02_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH2_03_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
 
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
@@ -546,6 +713,9 @@ static const int s_FMAC2EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH3_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH3_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH3_02_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
 
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
@@ -612,6 +782,9 @@ static const int s_FMAC3EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH4_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH4_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH4_02_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
 
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
@@ -697,6 +870,9 @@ static const int s_FMAC4EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH5_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH5_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH5_02_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
 
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			369*16,18*16,
@@ -750,6 +926,9 @@ static const int s_FMAC5EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_01_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_03_DAT,
+	SC_USE_LEVEL,				25,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_MAP,
+	SC_START,
 
 // Scene 1 - Shade Shoals
 	SC_SNAP_CAMERA_TO,			4*16,18*16,
@@ -845,6 +1024,11 @@ static const int s_FMAC5EndScript[]=
 static const int s_FMAPlanktonScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_PLANKTON_DAT,
+	SC_USE_LEVEL,				26,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_GAME,
+	SC_START,
+
+
 	SC_SNAP_CAMERA_TO,			0*16,5*16,
 
 	SC_WAIT_ON_TIMER,			60*2,
@@ -887,6 +1071,84 @@ static const int s_FMAPlanktonScript[]=
 	SC_STOP
 };
 
+/*****************************************************************************/
+/*** Part FMA ****************************************************************/
+/*****************************************************************************/
+
+static const int s_FMAPartyScript[]=
+{
+	// Init
+	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_PARTY_DAT,
+	SC_USE_PARTY,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_CREDITS,
+	SC_SNAP_CAMERA_TO,			0,0,
+	SC_START,
+
+	// Party scene
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,150,150,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
+	SC_SET_ITEM,				0,FRM__SANDWICH,
+	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
+
+	/*
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_MM,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,175,150,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_MM,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_MM,true,
+	*/
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,300,200,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_BB,true,
+
+	/*
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_GARY,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_GARY,225,150,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_GARY,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_GARY,true,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_PLANKTON,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PLANKTON,250,150,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_PLANKTON,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_PLANKTON,true,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_PATRICK,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PATRICK,250,200,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_PATRICK,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_PATRICK,true,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_KRABS,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_KRABS,275,200,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_KRABS,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_KRABS,true,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SQUIDWARD,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SQUIDWARD,300,200,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SQUIDWARD,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SQUIDWARD,true,
+
+	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SANDY,FMA_ANIM_IDLE,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SANDY,325,150,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SANDY,1,
+	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SANDY,true,
+	*/
+
+	SC_WAIT_ON_TIMER,			240,
+
+	SC_THROW_ITEM_TO_ACTOR,		0,FMA_ACTOR_BB,0,120,
+	SC_WAIT_ON_THROWN_ITEM,		0,
+
+	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_PARTY_DAT,
+	SC_HIDE_ITEM,				0,
+	SC_WAIT_ON_TIMER,			60*600,
+
+	SC_STOP
+};
+
+
 static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 {
 	s_FMAIntroScript,
@@ -896,9 +1158,10 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 	s_FMAC4EndScript,
 	s_FMAC5EndScript,
 	s_FMAPlanktonScript,
+	s_FMAPartyScript,
 };
 
-static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__INTRO;
+static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__PARTY;//FMA_SCRIPT__INTRO;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -911,20 +1174,10 @@ void	CFmaScene::init()
 	int			i;
 	ACTOR_DATA	*actor;
 
+	m_level=NULL;
 
 	CThingManager::init();
 	CConversation::init();
-
-	m_level=new ("FMALevel") CLevel();
-	if (s_chosenScript==FMA_SCRIPT__PLANKTON)
-	{
-		m_level->init(26);
-	}
-	else
-	{
-		m_level->init(25);
-	}
-	
 
 	m_cameraPos.vx=30;
 	m_cameraPos.vy=280;
@@ -962,7 +1215,9 @@ void	CFmaScene::init()
 	}
 	for (i=0; i<FMA_ITEM_MAX; i++)
 	{
+		m_itemData[i].m_visible=false;
 		m_itemData[i].m_Actor=-1;
+		m_itemData[i].m_TargetActor=-1;
 	}
 
 	CActorPool::SetUpCache();
@@ -973,9 +1228,8 @@ void	CFmaScene::init()
 	m_scriptRunning=true;
 	m_pc=s_fmaScripts[s_chosenScript];
 
-	CFader::setFadingIn();
-
-	CSoundMediator::playSong();
+	m_musicPlaying=false;
+	m_tuneLoaded=false;
 }
 
 
@@ -996,7 +1250,17 @@ void	CFmaScene::shutdown()
 	}
 	CActorPool::Reset();
 
-	m_level->shutdown();	delete m_level;
+	if(m_level)
+	{
+		m_level->shutdown();
+		delete m_level;
+	}
+	if(m_party)
+	{
+		m_party->shutdown();
+		delete m_party;
+	}
+
 	CSoundMediator::dumpSong();
 
 	CConversation::shutdown();
@@ -1019,7 +1283,15 @@ void	CFmaScene::render()
 
 	CThingManager::renderAllThings();
 	CConversation::render();
-	m_level->render();
+
+	if(m_level)
+	{
+		m_level->render();
+	}
+	else if(m_party)
+	{
+		m_party->render();
+	}
 
 	actor=m_actorData;
 	for(i=0;i<FMA_NUM_ACTORS;i++)
@@ -1040,21 +1312,30 @@ void	CFmaScene::render()
 	for (i=0; i<FMA_ITEM_MAX; i++)
 	{
 		sItemData	*item=&m_itemData[i];
-		if (item->m_Actor!=-1)
+		if(item->m_visible)
 		{
 			DVECTOR	pos;
-			pos.vx=item->m_Pos.vx-m_cameraPos.vx;
-			pos.vy=item->m_Pos.vy-m_cameraPos.vy;
-			if (item->m_facing)
+			if(item->m_TargetActor!=-1)
 			{
-				pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+				// Being thrown to an actor
+				pos.vx=item->m_Pos.vx-m_cameraPos.vx;
+				pos.vy=item->m_Pos.vy-m_cameraPos.vy;
 			}
-			else
+			if (item->m_Actor!=-1)
 			{
-				pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+				// Attached to an actor
+				pos.vx=item->m_Pos.vx-m_cameraPos.vx;
+				pos.vy=item->m_Pos.vy-m_cameraPos.vy;
+				if (item->m_facing)
+				{
+					pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+				}
+				else
+				{
+					pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+				}
+				pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
 			}
-			pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
-
 			CGameScene::getSpriteBank()->printFT4(item->m_Frame,pos.vx,pos.vy,item->m_facing,0,OTPOS__PICKUP_POS-1);
 		}
 	}
@@ -1091,6 +1372,12 @@ void	CFmaScene::think(int _frames)
 		if(PadGetHeld(0)&PAD_RIGHT)	m_cameraPos.vx+=16;
 	}
 #endif
+
+	if(!CFader::isFading()&&m_tuneLoaded&&!m_musicPlaying)
+	{
+		CSoundMediator::playSong();
+		m_musicPlaying=true;
+	}
 
 	if(PadGetHeld(0) & PAD_START)
 	{ // Give player an exit option!!
@@ -1184,19 +1471,51 @@ void	CFmaScene::think(int _frames)
 			for (i=0; i<FMA_ITEM_MAX; i++)
 			{
 				sItemData	*item=&m_itemData[i];
-				if (item->m_Actor!=-1)
+				if(item->m_TargetActor!=-1)
 				{
-					DVECTOR	&TargetPos=m_actorData[item->m_Actor].m_pos;
-					DVECTOR	Move;
+					// Being thrown to an actor
+					int	totalFrames,currentFrame;
+					totalFrames=item->m_endMoveFrame-item->m_startMoveFrame;
+					currentFrame=totalFrames-(item->m_endMoveFrame-m_frameCount);
+					if(currentFrame==0)
+					{
+						item->m_Pos=item->m_startPos;
+					}
+					else if(currentFrame>=totalFrames)
+					{
+						item->m_Pos=item->m_TargetPos;
+						item->m_Actor=item->m_TargetActor;
+						item->m_TargetActor=-1;
+					}
+					else
+					{
+						int	sin,yoff;
+						item->m_Pos.vx=item->m_startPos.vx+(((item->m_TargetPos.vx-item->m_startPos.vx)*currentFrame)/totalFrames);
+						item->m_Pos.vy=item->m_startPos.vy+(((item->m_TargetPos.vy-item->m_startPos.vy)*currentFrame)/totalFrames);
+						sin=((currentFrame*2048)/totalFrames);
+						yoff=-(msin(sin)*item->m_throwArcHeight)>>12;
+						item->m_Pos.vy+=yoff;
+///
+//item->m_Pos=item->m_TargetPos;
+///
+					}
+				}
+				else if (item->m_Actor!=-1)
+				{
+					// Being carried by an actor
+//					DVECTOR	&TargetPos=m_actorData[item->m_Actor].m_pos;
+//					DVECTOR	Move;
+//
+//					Move.vx=TargetPos.vx-item->m_Pos.vx;
+//					Move.vy=TargetPos.vy-item->m_Pos.vy;
+//
+//					item->m_Pos.vx+=Move.vx;
+//					item->m_Pos.vy+=Move.vy;
+//
+//					item->m_facing=m_actorData[item->m_Actor].m_facing;
 
-					Move.vx=TargetPos.vx-item->m_Pos.vx;
-					Move.vy=TargetPos.vy-item->m_Pos.vy;
-
-					item->m_Pos.vx+=Move.vx;
-					item->m_Pos.vy+=Move.vy;
-
+					item->m_Pos=m_actorData[item->m_Actor].m_pos;
 					item->m_facing=m_actorData[item->m_Actor].m_facing;
-
 				}
 			}
 
@@ -1220,8 +1539,16 @@ void	CFmaScene::think(int _frames)
 
 	CThingManager::thinkAllThings(_frames);
 	CConversation::think(_frames);
-	m_level->setCameraCentre(m_cameraPos);
-	m_level->think(_frames);
+	
+	if(m_level)
+	{
+		m_level->setCameraCentre(m_cameraPos);
+		m_level->think(_frames);
+	}
+	else if(m_party)
+	{
+		m_party->think(_frames);
+	}
 }
 
 
@@ -1258,7 +1585,6 @@ void	CFmaScene::selectFma(FMA_SCRIPT_NUMBER _fma)
 void	CFmaScene::startShutdown()
 {
 	CFader::setFadingOut();
-	GameState::setNextScene(&MapScene);
 	m_readyToShutdown=true;
 }
 
@@ -1276,6 +1602,28 @@ void	CFmaScene::startNextScriptCommand()
 
 	switch(*m_pc)
 	{
+		case SC_USE_LEVEL:
+			ASSERT(!m_level);
+			ASSERT(!m_party);
+			m_pc++;
+			m_level=new ("FMALevel") CLevel();
+			m_level->init(*(m_pc++));
+			m_tuneLoaded=true;
+			break;
+
+		case SC_USE_PARTY:				// 
+			ASSERT(!m_level);
+			ASSERT(!m_party);
+			m_pc++;
+			m_party=new ("FMAParty") CPartyScene();
+			m_party->init();
+			break;
+
+		case SC_SET_NEXT_SCENE:			// nextScene
+			m_pc++;
+			GameState::setNextScene(s_nextGameSceneTable[*(m_pc++)]);
+			break;
+
 		case SC_SNAP_CAMERA_TO:			// x,y
 			m_pc++;
 			m_cameraPos.vx=*m_pc++;
@@ -1316,6 +1664,10 @@ void	CFmaScene::startNextScriptCommand()
 
 		case SC_WAIT_ON_CONVERSATION:	// scriptId
 			CConversation::trigger((FileEquate)*(m_pc+1));
+			m_stillProcessingCommand=true;
+			break;
+
+		case SC_WAIT_ON_THROWN_ITEM:	// item
 			m_stillProcessingCommand=true;
 			break;
 
@@ -1398,7 +1750,7 @@ void	CFmaScene::startNextScriptCommand()
 			}
 			break;
 
-		case SC_SET_ITEM:			// item, actor, Frame
+		case SC_SET_ITEM:				// item, Frame
 			{
 				sItemData	*item;
 				m_pc++;
@@ -1408,15 +1760,70 @@ void	CFmaScene::startNextScriptCommand()
 			break;
 	
 
-		case SC_CARRY_ITEM:			// item, actor
+		case SC_CARRY_ITEM:				// item, actor
 			{
 				sItemData	*item;
 				m_pc++;
 				item=&m_itemData[*m_pc++];
 				item->m_Actor=*m_pc++;
+				item->m_visible=true;
 			}
 			break;
-		case SC_STOP:					//
+
+		case SC_HIDE_ITEM:				// item
+			m_pc++;
+			m_itemData[*m_pc++].m_visible=false;
+			break;
+
+		case SC_THROW_ITEM_TO_ACTOR:	// item,targetActor,arcHeight,frames
+			{
+				sItemData	*item;
+				m_pc++;
+				item=&m_itemData[*m_pc++];
+				ASSERT(item->m_Actor!=-1);
+				item->m_TargetActor=*m_pc++;
+				ASSERT(item->m_Actor!=item->m_TargetActor);
+				item->m_throwArcHeight=*(m_pc++);
+				item->m_startMoveFrame=m_frameCount;
+				item->m_endMoveFrame=m_frameCount+*m_pc++;
+
+				// Calc the positions
+				item->m_TargetPos=m_actorData[item->m_TargetActor].m_pos;
+				/*
+				if(m_actorData[item->m_TargetActor].m_facing)
+				{
+					item->m_TargetPos.vx-=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
+				}
+				else
+				{
+					item->m_TargetPos.vx+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
+				}
+				item->m_TargetPos.vy+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vy;
+				*/
+				item->m_startPos=item->m_Pos;
+			}
+/*
+pos.vx=item->m_Pos.vx-m_cameraPos.vx;
+pos.vy=item->m_Pos.vy-m_cameraPos.vy;
+if (item->m_facing)
+{
+	pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+}
+else
+{
+	pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+}
+pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
+*/
+			break;
+
+		case SC_START:					// 
+			m_pc++;
+			CFader::setFadingIn();
+			m_doOtherProcessing=true;
+			break;
+
+		case SC_STOP:					// nextScene
 			m_scriptRunning=false;
 			m_doOtherProcessing=true;
 			break;
@@ -1438,6 +1845,9 @@ void	CFmaScene::processCurrentScriptCommand()
 {
 	switch(*m_pc)
 	{
+		case SC_USE_LEVEL:				// levelNumber
+		case SC_USE_PARTY:				// 
+		case SC_SET_NEXT_SCENE:			// nextScene
 		case SC_SNAP_CAMERA_TO:			// x,y
 		case SC_MOVE_CAMERA_TO:			// x,y,frames
 		case SC_REGISTER_CONVERSATION:	// scriptId
@@ -1446,7 +1856,8 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_SET_ACTOR_FACING:		// actor,facing
 		case SC_SET_ACTOR_ANIM_STATE:	// actor,state
 		case SC_WALK_ACTOR_TO_POSITION:	// actor,x,y,frames
-		case SC_STOP:					//
+		case SC_START:					// 
+		case SC_STOP:					// nextScene
 			ASSERT(!"Shouldn't be here..");
 			break;
 
@@ -1508,6 +1919,18 @@ void	CFmaScene::processCurrentScriptCommand()
 
 		case SC_WAIT_ON_CONVERSATION:	// scriptId
 			if(!CConversation::isActive())
+			{
+				m_pc+=2;
+				m_stillProcessingCommand=false;
+			}
+			else
+			{
+				m_doOtherProcessing=true;
+			}
+			break;
+
+		case SC_WAIT_ON_THROWN_ITEM:	// item
+			if(m_itemData[*(m_pc+1)].m_TargetActor==-1)
 			{
 				m_pc+=2;
 				m_stillProcessingCommand=false;
