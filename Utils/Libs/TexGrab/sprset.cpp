@@ -516,7 +516,7 @@ int	FrameCount=AllSprFrames.size();
 		thisPos=Out.tellp();
 		if (m_AnimatedHeadersOnly)
 			{
-			printf("Writing only animated headers (%i).\n",FrameCount);
+//			printf("Writing only animated headers (%i).\n",FrameCount);
 			for (f=0;f<AllSprFrames.size();f++)	// Write Animated headers only
 				{
 				if (AllSprFrames[f].IsAnimated()) AllSprFrames[f].WriteHeader(Out);
@@ -539,7 +539,7 @@ int	FrameCount=AllSprFrames.size();
 
 		if (m_DontOutputBoxes)
 			{
-			printf("Skipping spare boxes.\n");
+//			printf("Skipping spare boxes.\n");
 			}
 		else
 			{
@@ -555,7 +555,7 @@ int	FrameCount=AllSprFrames.size();
 
 		if (m_AlignHeaders)
 			{
-			printf("Aligning headers to 2k chunk.\n");
+//			printf("Aligning headers to 2k chunk.\n");
 			Out.Align(2048);
 			}
 		

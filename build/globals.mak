@@ -82,7 +82,6 @@ DATA_INC_DIR :=			$(DATA_TOOL_DIR)/include
 
 MKLEVEL :=				$(DATA_BIN_DIR)/MkLevel
 MKACTOR3D :=			$(DATA_BIN_DIR)/MkActor3d
-MKANIM3D :=				$(DATA_BIN_DIR)/MkAnim3d
 
 # Cygwin
 # ------

@@ -9,10 +9,10 @@
 //***************************************************************************
 struct	sBoneAnim
 {
-//		vector<sQuat>		Quat;
 		vector<int>			Idx;
 };
 
+//***************************************************************************
 struct	sAnim
 {
 		GString				Name;
@@ -32,20 +32,20 @@ public:
 			BoneCount=-1;
 		}
 
-		void			Add(GString const &Filename);
-		void			Write(GString &Filename);
-		void			WriteInclude(GString const &IncludeFile);
+/*Anim*/void			Add(GString const &Filename);
+/*Anim*/void			Write(GString &Filename);
+/*Anim*/void			WriteInclude(GString const &IncludeFile);
 
 private:
-		int				ProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx);
-		void			ProcessSkelAnim(CScene &Scene,sAnim &ThisAnim,int Idx);
-		int				WriteMove(sAnim const &ThisAnim);
-		int				WriteAnim(sAnim const &ThisAnim);
-		int				WriteQuatTable();
+/*Anim*/int				ProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx);
+/*Anim*/void			ProcessSkelAnim(CScene &Scene,sAnim &ThisAnim,int Idx);
+/*Anim*/int				WriteMove(sAnim const &ThisAnim);
+/*Anim*/int				WriteAnim(sAnim const &ThisAnim);
+/*Anim*/int				WriteQuatTable();
 
-		int				BoneCount;
-		vector<sAnim>	AnimList;
-		CList<sQuat>	QuatList;
+/*Anim*/int				BoneCount;
+/*Anim*/vector<sAnim>	AnimList;
+/*Anim*/CList<sQuat>	QuatList;
 		FILE			*File;
 
 };

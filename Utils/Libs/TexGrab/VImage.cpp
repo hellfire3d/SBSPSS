@@ -370,7 +370,7 @@ void VRAMImage::SaveAs16ColLbm(const char * Name)
 	ThisFr.SetFrame(lbmData,W,H,GazPalette);
 	ThisFr.SaveLbm(Name);
 
-	cout<<"Written "<<Name<<endl;
+//	cout<<"Written "<<Name<<endl;
 }
 
 /*----------------------------------------------------------------------

@@ -162,8 +162,8 @@ int			ChildCount=ThisNode.GetPruneChildCount();
 void	CMkAnim3d::Write(GString &Filename)
 {
 int				Anim,AnimCount=AnimList.size();
-sAnim3dFileHdr	FileHdr;
-sAnim3dHdr		Hdr;
+sAnimFileHdr	FileHdr;
+sAnimHdr		Hdr;
 
 		File=fopen(Filename,"wb");
 
@@ -171,13 +171,13 @@ sAnim3dHdr		Hdr;
 // Write Dummy FileHdr		
 		FileHdr.AnimCount=AnimCount;
 		FileHdr.BoneCount=BoneCount;
-		fwrite(&FileHdr,1,sizeof(sAnim3dFileHdr),File);
+		fwrite(&FileHdr,1,sizeof(sAnimFileHdr),File);
 
 // Write Dummy AnimHdrs
 
 		for (Anim=0; Anim<AnimCount; Anim++)
 		{
-			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
+			fwrite(&Hdr,1,sizeof(sAnimHdr),File);
 		}
 
 // Write QuatTable
@@ -197,7 +197,7 @@ sAnim3dHdr		Hdr;
 
 // ReWrite FileHdr
 		fseek(File, 0, SEEK_SET);
-		fwrite(&FileHdr,1,sizeof(sAnim3dFileHdr),File);
+		fwrite(&FileHdr,1,sizeof(sAnimFileHdr),File);
 
 // Rewrite Dummy AnimHdrs
 
@@ -206,7 +206,7 @@ sAnim3dHdr		Hdr;
 			Hdr.FrameCount=AnimList[Anim].FrameCount;
 			Hdr.Move=(s32*)AnimList[Anim].MoveOfs;
 			Hdr.Anim=(u16*)AnimList[Anim].AnimOfs;
-			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
+			fwrite(&Hdr,1,sizeof(sAnimHdr),File);
 		}
 	
 		fclose(File);
@@ -222,9 +222,7 @@ int		Pos=ftell(File);
 		{
 			s32		ThisMove=ThisAnim.Move[Frame];
 			fwrite(&ThisMove,1,sizeof(s32),File);
-
 //			printf("%i %i %i\n",ThisMove.vx,ThisMove.vy,ThisMove.vz);
-
 		}
 
 		return(Pos);
