@@ -115,6 +115,9 @@ PARKGRAB :=				parkgrab
 BANKER :=				banker
 BIGLUMP :=				bl2
 
+ALCHEMY :=				alchemy
+CHOPCHOP :=				chopchop
+
 # PSX and misc tools
 # ------------------
 LNK :=					slink

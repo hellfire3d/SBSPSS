@@ -343,8 +343,8 @@ cleanbackdrops :
 		@$(ECHO) Backdrops Cleaned
 
 $(BACKDROPS_OUT_DIR)/%.gfx : $(BACKDROPS_IN_DIR)/%.tga
-	alchemy --n -a -15 -^ -o $< $(TEMP_FILE)
-	chopchop $(TEMP_FILE) $@ 20 262144
+	$(ALCHEMY) --n -a -15 -^ -o $< $(TEMP_FILE)
+	$(CHOPCHOP) $(TEMP_FILE) $@ 20 262144
 
 GRAF_DIRS_TO_MAKE +=	$(BACKDROPS_OUT_DIR)
 GFX_DATA_OUT +=			$(BACKDROPS_OUT)
