@@ -186,6 +186,8 @@ system_src :=		main \
 					clickcount \
 					except
 
+thing_src :=		thing
+
 utils_src :=		utils \
 					sincos
 

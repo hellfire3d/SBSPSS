@@ -71,17 +71,6 @@ void	CShoesPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CShoesPickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CShoesPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

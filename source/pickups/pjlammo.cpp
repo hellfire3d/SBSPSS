@@ -71,17 +71,6 @@ void	CJellyLauncherAmmoPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CJellyLauncherAmmoPickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CJellyLauncherAmmoPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef __GAME_THING_H__
-#include "game/thing.h"
+#ifndef __THING_TPLAYER_H__
+#include "thing/tplayer.h"
 #endif
 
 #ifndef __GFX_SKELSPNG_H__
@@ -134,7 +134,7 @@ struct PlayerMetrics
 };
 
 
-class CPlayer : public CThing
+class CPlayer : public CPlayerThing
 {
 public:
 	enum
@@ -277,6 +277,7 @@ private:
 	DVECTOR					m_mapCameraEdges;
 	DVECTOR					m_mapEdge;
 	DVECTOR					m_respawnPos;
+
 };
 
 

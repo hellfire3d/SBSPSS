@@ -71,17 +71,6 @@ void	CBubbleMixturePickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBubbleMixturePickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

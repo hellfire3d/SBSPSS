@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef __GAME_THING_H__
-#include "game/thing.h"
+#ifndef __GAME_TPICKUP_H__
+#include "thing/tpickup.h"
 #endif
 
 
@@ -52,7 +52,7 @@ PICKUP_TYPE;
 	Structure defintions
 	-------------------- */
 
-class CBasePickup : public CThing
+class CBasePickup : public CPickupThing
 {
 public:
 	virtual void		init();
@@ -75,6 +75,8 @@ protected:
 
 	virtual void		thinkPickup(int _Frames)			{;}
 	virtual void		renderPickup(DVECTOR *_pos)=0;
+
+	virtual void		collidedWith(CThing *_thisThing);
 
 private:
 	class SpriteBank	*m_spriteBank;

@@ -84,6 +84,8 @@ CGameScene	GameScene;
 /*****************************************************************************/
 void 	CGameScene::init()
 {
+		CThingManager::init();
+
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
 
@@ -159,8 +161,7 @@ void	CGameScene::shutdown()
 {
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 
-		m_player->shutdown();		delete m_player;
-		CThing::shutdownAndDeleteAllThings();
+		CThingManager::shutdown();
 
 		Level.shutdown();
 		CConversation::shutdown();
@@ -174,7 +175,7 @@ void 	CGameScene::render()
 
 		m_pauseMenu->render();
 		CConversation::render();
-		CThing::renderAllThings();
+		CThingManager::renderAllThings();
 		Level.render();
 }
 
@@ -200,7 +201,7 @@ void	CGameScene::think(int _frames)
 	   !m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
-		CThing::thinkAllThings(_frames);
+		CThingManager::thinkAllThings(_frames);
 		camPos=m_player->getCameraPos();
 //PKG
 //		if(camPos.vx<0){camPos.vx=0;PAUL_DBGMSG("cx<0");}
@@ -245,7 +246,7 @@ CPlayer	* CGameScene::getPlayer()
 /*****************************************************************************/
 void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 {
-	CThing::processEventAllThings(evt, sourceThing);
+	CThingManager::processEventAllThings(evt, sourceThing);
 }
 
 /*****************************************************************************/

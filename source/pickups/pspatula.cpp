@@ -67,17 +67,6 @@ void	CSpatulaPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CSpatulaPickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CSpatulaPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

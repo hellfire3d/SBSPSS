@@ -47,8 +47,8 @@
 /*	Data
 	---- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
 
@@ -178,7 +178,7 @@ void	CPlayer::init()
 	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
 	TPLoadTex(ACTORS_SPONGEBOB_TEX);
-	m_skel.setAnimDatabase(CAnimDB::Load(ANIMS_PLAYER_ABK));
+	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
 
 
 // Temporary default respawn pos... should realy be set with setRespawnPos() from the level (pkg)
@@ -209,6 +209,9 @@ m_skel.setAng(512);
 	s_debugFont.initialise(&standardFont);
 	s_debugFont.setJustification(FontBank::JUST_LEFT);
 #endif
+
+	setCollisionSize(25,50);
+	setCollisionCentreOffset(0,-25);
 }
 
 /*----------------------------------------------------------------------
@@ -405,7 +408,7 @@ void CPlayer::thinkVerticalMovement()
 				{
 					// Landed from a jump with no x movement
 					setState(STATE_IDLE);
-					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
+					setAnimNo(ANIM_SPONGEBOB_JUMPEND);
 				}
 			}
 		}
@@ -1161,7 +1164,6 @@ PLAYERINPUT CPlayer::readPadInput()
 
 	return input;
 }
-
 
 /*===========================================================================
 end */

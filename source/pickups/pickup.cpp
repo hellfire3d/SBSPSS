@@ -103,7 +103,7 @@
   ---------------------------------------------------------------------- */
 void	CBasePickup::init()
 {
-	CThing::init();
+	CPickupThing::init();
 
 	m_spriteBank=new ("pickup sprite") SpriteBank();
 	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
@@ -118,7 +118,7 @@ void	CBasePickup::init()
 void	CBasePickup::shutdown()
 {
 	m_spriteBank->dump();	delete m_spriteBank;
-	CThing::shutdown();
+	CPickupThing::shutdown();
 }
 
 /*----------------------------------------------------------------------
@@ -130,7 +130,7 @@ void	CBasePickup::shutdown()
 #include "pad\pads.h"
 void	CBasePickup::think(int _frames)
 {
-	CThing::think(_frames);
+	CPickupThing::think(_frames);
 	thinkPickup(_frames);
 
 if(PadGetDown(0)&PAD_L2)
@@ -150,7 +150,7 @@ void	CBasePickup::render()
 	DVECTOR	ofs,pos;
 	int		visibilityRadius;
 	
-	CThing::render();
+	CPickupThing::render();
 	
 	ofs=CLevel::getCameraPos();
 	pos.vx=Pos.vx-ofs.vx;
@@ -165,6 +165,26 @@ void	CBasePickup::render()
 	DrawLine(pos.vx-15,pos.vy-15,pos.vx+15,pos.vy+15,255,255,255,0);
 	DrawLine(pos.vx+15,pos.vy-15,pos.vx-15,pos.vy+15,255,255,255,0);
 	*/
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBasePickup::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+			collect((CPlayer*)_thisThing);
+			break;
+
+		default:
+			ASSERT(0);
+			break;
+	}
 }
 
 /*----------------------------------------------------------------------

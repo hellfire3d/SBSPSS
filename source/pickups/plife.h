@@ -38,7 +38,6 @@ class CLifePickup : public CBasePickup
 {
 public:
 	virtual void		init();
-	virtual void		shutdown();
 
 	virtual void		collect(class CPlayer *_player);
 

@@ -56,6 +56,7 @@ protected:
 
 private:
 	static class CThing			*s_thingLists[];
+	static int					s_initialised;
 
 };
 

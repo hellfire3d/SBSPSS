@@ -75,17 +75,6 @@ void	CBaseQuestItemPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CBaseQuestItemPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);

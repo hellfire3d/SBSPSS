@@ -73,8 +73,13 @@
   ---------------------------------------------------------------------- */
 void	CBalloonPickup::init()
 {
+	sFrameHdr	*fh;
+
 	CBaseRespawningPickup::init();
 	m_sin=0;
+
+	fh=getSpriteBank()->getFrameHeader(FRM__BALLOON);
+	setCollisionSize(fh->W,fh->H);
 }
 
 /*----------------------------------------------------------------------
@@ -151,6 +156,7 @@ void	CBalloonPickup::renderPickup(DVECTOR *_pos)
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
 	sprites->printFT4(fh,x+xo1,y,0,0,PICKUPS_OT_POS);
+setCollisionCentreOffset(xo1,0);
 
 	x=_pos->vx;
 	y=_pos->vy+(fh->H/2);

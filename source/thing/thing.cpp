@@ -45,6 +45,7 @@
 	---- */
 
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE]={NULL,NULL};
+int				CThingManager::s_initialised=false;
 
 
 /*----------------------------------------------------------------------
@@ -57,10 +58,12 @@ void		CThingManager::init()
 {
 	int		i;
 
+	ASSERT(!s_initialised);
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
 		s_thingLists[i]=NULL;
 	}
+	s_initialised=true;
 }
 
 /*----------------------------------------------------------------------
@@ -74,6 +77,7 @@ void		CThingManager::shutdown()
 	int		i;
 	CThing	*thing;
 
+	ASSERT(!s_initialised);
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
 		while(s_thingLists[i])
@@ -83,6 +87,7 @@ void		CThingManager::shutdown()
 			delete thing;
 		}
 	}
+	s_initialised=false;
 }
 
 /*----------------------------------------------------------------------

@@ -1056,6 +1056,26 @@ SOURCE=..\..\..\source\system\vsprintf.cpp
 SOURCE=..\..\..\source\system\vsprintf.h
 # End Source File
 # End Group
+# Begin Group "thing"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\thing\thing.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\thing\thing.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\thing\tpickup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\thing\tplayer.h
+# End Source File
+# End Group
 # Begin Group "utils"
 
 # PROP Default_Filter ""
@@ -1196,6 +1216,10 @@ SOURCE=..\..\..\out\USA\include\actor_spongebob.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_SPONGEBOB_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\BigLump.h
 # End Source File
 # Begin Source File
@@ -1205,10 +1229,6 @@ SOURCE=..\..\..\out\USA\include\frontend.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\ingamefx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\out\USA\include\Player_Anim.h
 # End Source File
 # Begin Source File
 

@@ -71,17 +71,6 @@ void	CBaseHealthPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseHealthPickup::shutdown()
-{
-	CBasePickup::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CBaseHealthPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
