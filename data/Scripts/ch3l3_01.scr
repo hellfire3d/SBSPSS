@@ -6,10 +6,10 @@
 #include	data/scripts/defs/trans.scr
 
 
-if(_isHoldingWeapon(WEAPON_BUBBLEWAND)==TRUE)
-{
-	if(_getAmmoCount(AMMO_BUBBLEWAND)<10)
-	{
+;if(_isHoldingWeapon(WEAPON_BUBBLEWAND)==TRUE)
+;{
+;	if(_getAmmoCount(AMMO_BUBBLEWAND)<10)
+;	{
 		_setText(CHAR_PATRICK,STR__INGAME__CH3__L3__PATRICK1);
 		_setResponseOptions(QUESTION_OK);
 		do
@@ -18,7 +18,7 @@ if(_isHoldingWeapon(WEAPON_BUBBLEWAND)==TRUE)
 		}
 		while(_getResponse()==ANSWER_NONE);
 		_setAmmoCount(AMMO_BUBBLEWAND,10);
-	}
-}
+;	}
+;}
 
 stop;
