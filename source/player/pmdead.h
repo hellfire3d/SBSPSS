@@ -53,6 +53,8 @@ private:
 	void			fall();
 	int				m_yVelocity;
 
+	int				m_killed;
+
 };
 
 

@@ -89,6 +89,8 @@ void	CPlayerModeDead::enter()
 	{
 		m_player->setAnimNo(deathAnim);
 	}
+
+	m_killed=false;
 }
 
 /*----------------------------------------------------------------------
@@ -110,6 +112,7 @@ void	CPlayerModeDead::think()
 
 	m_player->moveVertical(5);
 
+	if(!m_killed)
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&(PI_JUMP|PI_FIRE))||
 	   m_deadTime>DEATH_TIMEOUT)
 	{
@@ -117,6 +120,7 @@ void	CPlayerModeDead::think()
 		CGameSlotManager::getSlotData()->m_lives--;
 
 		CGameScene::restartlevel();
+		m_killed=true;
 	}
 }
 
