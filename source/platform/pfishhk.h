@@ -31,6 +31,7 @@ protected:
 	u8					m_isMoving;
 	u8					m_isResetting;
 	DVECTOR				m_lineBase;
+	s32					m_bobTimer;
 };
 
 #endif

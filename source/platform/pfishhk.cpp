@@ -45,6 +45,7 @@ void CNpcFishHookPlatform::postInit()
 	m_isShuttingDown = false;
 	m_lineBase.vx = Pos.vx;
 	m_lineBase.vy = 0;
+	m_bobTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +87,21 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 				m_isResetting = true;
 			}
 		}
+	}
+	else
+	{
+		int second = GameState::getOneSecondInFrames();
+
+		m_bobTimer += _frames;
+
+		if ( m_bobTimer >  ( 3 * second ) )
+		{
+			m_bobTimer -= 3 * second;
+		}
+
+		s16 sineVal = ( m_bobTimer << 12 ) / ( 3 * second );
+
+		Pos.vy = m_base.vy + ( ( 5 * rsin( sineVal ) ) >> 12 );
 	}
 }
 
