@@ -203,8 +203,6 @@ virtual int				checkCollisionAgainst(CThing *_thisThing, int _frames);
 		int				checkCollisionAgainstArea(CRECT *_rect);
 		void			updateCollisionArea();
 virtual void			collidedWith(CThing *_thisThing)			{;}
-virtual void			setHasPlatformCollided( bool newVal )		{;}
-virtual bool			getHasPlatformCollided()					{return false;}
 //virtual s32				getNewYPos( CThing *_thisThing );
 
 public:

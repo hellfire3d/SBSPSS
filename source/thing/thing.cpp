@@ -464,8 +464,6 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 	if (player && playerThing)
 	{
-		playerThing->setHasPlatformCollided( false );
-
 		// Player -> Platform collision
 		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
 		while(thing1)

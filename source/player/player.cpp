@@ -2396,16 +2396,6 @@ void	CPlayer::clearPlatform()
 	m_platform=NULL;
 }
 
-void	CPlayer::setHasPlatformCollided( bool newVal )
-{
-	m_hasPlatformCollided = newVal;
-}
-
-bool	CPlayer::getHasPlatformCollided()
-{
-	return( m_hasPlatformCollided );
-}
-
 
 
 

@@ -228,8 +228,6 @@ public:
 	void			buttFall();				//	"		"		"		"		"
 	virtual int		moveVertical(int _moveDistance);
 	virtual int		moveHorizontal(int _moveDistance);
-	virtual void	setHasPlatformCollided( bool newVal );
-	virtual bool	getHasPlatformCollided();
 
 	int				isTryingToConversateWithFriend()					{return m_allowConversation;}
 
@@ -440,9 +438,6 @@ public:
 
 private:
 	CThing			*m_platform;
-
-private:
-	bool			m_hasPlatformCollided;
 
 
 	// Player collision size
