@@ -388,6 +388,7 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 							else
 							{
 								setToShutdown();
+								CGameScene::setBossHasBeenKilled();
 							}
 						}
 					}

@@ -26,6 +26,7 @@ public:
 	virtual void		shutdown();
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 	virtual u8			canBeCaughtByNet();
+	virtual void		caughtWithNet();
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );

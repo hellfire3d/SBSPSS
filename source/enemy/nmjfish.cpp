@@ -456,3 +456,11 @@ u8 CNpcMotherJellyfishEnemy::canBeCaughtByNet()
 {
 	return( m_isActive && !m_isDying && m_health <= 5 );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcMotherJellyfishEnemy::caughtWithNet()
+{
+	setToShutdown();
+	CGameScene::setBossHasBeenKilled();
+}

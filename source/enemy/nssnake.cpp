@@ -679,6 +679,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 		if ( Pos.vy - offset.vy > VidGetScrH() )
 		{
 			setToShutdown();
+			CGameScene::setBossHasBeenKilled();
 		}
 	}
 	else

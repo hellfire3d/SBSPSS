@@ -438,6 +438,7 @@ void CNpcIronDogfishEnemy::processShot( int _frames )
 							else
 							{
 								setToShutdown();
+								CGameScene::setBossHasBeenKilled();
 							}
 						}
 					}

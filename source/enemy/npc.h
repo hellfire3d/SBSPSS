@@ -113,7 +113,7 @@ public:
 	virtual u8			hasBeenAttacked();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos )						{hasBeenAttacked();}
 	virtual u8			canBeCaughtByNet();
-	void				caughtWithNet();
+	virtual void		caughtWithNet();
 	virtual int			getFrameCount();
 	virtual int			getFrame()												{return( m_frame );}
 	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
