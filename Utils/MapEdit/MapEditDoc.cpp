@@ -234,13 +234,20 @@ char	Filename[256];
 }
 
 /*********************************************************************************/
+void	CMapEditDoc::TileBankDelete()
+{
+		Core.TileBankDelete();
+		UpdateAllViews(NULL);
+		FocusView();
+}
+
+/*********************************************************************************/
 void	CMapEditDoc::TileBankReload()
 {
 		Core.TileBankReload();
 		UpdateAllViews(NULL);
 		FocusView();
 }
-
 /*********************************************************************************/
 void	CMapEditDoc::TileBankSet()
 {

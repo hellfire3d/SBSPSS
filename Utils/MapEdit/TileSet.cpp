@@ -100,8 +100,26 @@ void	CTileBank::AddTileSet(char *Filename)
 {
 int		ListSize=TileSet.size();
 
-		TileSet.push_back(CTileSet(Filename,ListSize));
-		LoadFlag=TRUE;
+		if (FindTileSet(Filename) ==-1)
+			{
+			TileSet.push_back(CTileSet(Filename,ListSize));
+			LoadFlag=TRUE;
+			}
+}
+
+/*****************************************************************************/
+int		CTileBank::FindTileSet(char *Filename)
+{
+int		ListSize=TileSet.size();
+CTileSet	FindSet(Filename,ListSize);
+
+		for (int i=0; i<ListSize; i++)
+		{
+			CTileSet	&ThisSet=TileSet[i];
+
+			if (IsStrSame(FindSet.GetName(),ThisSet.GetName(),-1)) return(i);
+		}
+		return(-1);
 }
 
 /*****************************************************************************/
@@ -116,6 +134,12 @@ int		ListSize=TileSet.size();
 			if (!ThisSet.IsLoaded()) ThisSet.Load(Core);
 		}
 		LoadFlag=FALSE;
+}
+
+/*****************************************************************************/
+void	CTileBank::Delete()
+{
+//		List.erase(List.begin()+CurrentSet);
 }
 
 /*****************************************************************************/
@@ -135,6 +159,7 @@ int		ListSize=TileSet.size();
 /*****************************************************************************/
 CTile	&CTileBank::GetTile(int Bank,int Tile)
 {
+		ASSERT(Bank>=0 && Tile>=0);
 		return(TileSet[Bank].GetTile(Tile));
 }
 
@@ -252,7 +277,11 @@ int			MaxTile=TileSet[CurrentSet].GetTileCount();
 			for (int X=0; X<Width; X++)
 			{
 				ThisElem.Tile=SelStart+X+(Y*BW);
-				ThisBrush.Set(X,Y,ThisElem);
+				if (!IsTileValid(CurrentSet,ThisElem.Tile))
+				{
+					ThisElem.Tile=-1;
+				}
+				ThisBrush.Set(X,Y,ThisElem,TRUE);
 			}
 		}
 			
@@ -264,6 +293,22 @@ BOOL	CTileBank::SelectCancel()
 		SelStart=-1;
 		TRACE0("Select Cancelled\n");
 		return(TRUE);
+}
+
+/*****************************************************************************/
+BOOL	CTileBank::IsTileValid(int Set,int Tile)
+{
+ 		if (Set==-1 || Tile==-1) return(FALSE);
+		
+		return(TileSet[Set].IsTileValid(Tile));
+}
+
+/*****************************************************************************/
+BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
+{
+		if (Set==-1 || Tile==-1) return(FALSE);
+
+		return(TileSet[Set].IsTileValidGB(Tile));
 }
 
 /*****************************************************************************/
@@ -331,15 +376,11 @@ u8		Buffer[16*16*3];
 		{
 			for (int X=0; X<Width; X++)
 			{
-				BOOL Data=Create16x16Tile(ThisBmp,Buffer,X,(Height-1)-Y);
-//				if (Data)
-				{ // Not Blank
-					char	Name[256];
-					sprintf(Name,"_2d_%s%i",GetName(),X+(Y*Width));
-					int	TexID=TexCache.ProcessTexture(Name,GetPath(),0,&NewTex);
-					Tile.push_back(CTile(Core,this,TexID));
-				}
-				
+				char	Name[256];
+				Create16x16Tile(ThisBmp,Buffer,X,(Height-1)-Y);
+				sprintf(Name,"_2d_%s_%i_%i",GetName(),SetNumber,X+(Y*Width));
+				int	TexID=TexCache.ProcessTexture(Name,GetPath(),0,&NewTex);
+				Tile.push_back(CTile(Core,this,TexID));
 			}
 		}
 
@@ -409,12 +450,22 @@ int	ListSize=Tile.size();
 }
 
 /*****************************************************************************/
+CPoint	CTileSet::GetTilePos(int ID)
+{
+	if (ID==0)
+		return(CPoint(-1,-1));
+	else
+		return(IDToPoint(ID-1,TileBrowserWidth));
+}
+
+/*****************************************************************************/
 void	CTileSet::Render(Vec &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
 sMapElem	ThisElem;
 int			SelFlag;
+BOOL		ValidTile=TRUE;
 
 		ThisElem.Flags=0;
 		ThisElem.Set=SetNumber;
@@ -423,19 +474,25 @@ int			SelFlag;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos=GetTilePos(TileID);
 
-			if (TileID==0)
-				Pos=CPoint(-1,-1);
-			else
-				Pos=IDToPoint(TileID-1,TileBrowserWidth);
+//			if (TileID==0)
+//				Pos=CPoint(-1,-1);
+//			else
+//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
-			glColor3f(0.5,0.5,0.5);
-			if (TileID) Tile[TileID].Render(0,Render3d);
+			ValidTile=IsTileValid(TileID);
+			if (TileID && ValidTile) 
+			{
+				glColor3f(0.5,0.5,0.5);
+				Tile[TileID].Render(0,Render3d);
+			}
+
+// Selection
 			ThisElem.Tile=TileID;
 			SelFlag=0;
 
@@ -468,8 +525,28 @@ int			SelFlag;
 				}
 	
 				glEnd();
+			glEnable(GL_TEXTURE_2D);
+			}
+// Invalid tile?
+			if (!ValidTile)
+			{
+				glDisable(GL_TEXTURE_2D);
+				glBegin(GL_LINES); 
+#ifdef	UseLighting
+					glNormal3f( 1,1,1);
+#endif
+					glColor3ub(255,255,255);
+			
+					glVertex3f( TileBrowserX0,TileBrowserY0,0);
+					glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+					glVertex3f( TileBrowserX1,TileBrowserY0,0);
+					glVertex3f( TileBrowserX0,TileBrowserY1,0);
+
+				glEnd();
 				glEnable(GL_TEXTURE_2D);
 			}
+
 
 			TileID++;
 		}
@@ -487,14 +564,15 @@ int		MaxTile=Tile.size();
 
 		if (SelStart==-1)
 		{
-			if (CursorPos==0)
-			{
-				Start=CPoint(-1,-1);
-			}
-			else
-			{
-				Start=IDToPoint(CursorPos-1,TileBrowserWidth);
-			}
+//			if (CursorPos==0)
+//			{
+//				Start=CPoint(-1,-1);
+//			}
+//			else
+//			{
+//				Start=IDToPoint(CursorPos-1,TileBrowserWidth);
+//			}
+			Start=GetTilePos(CursorPos);
 			End=Start;
 		}
 		else
@@ -543,12 +621,12 @@ int			TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos=GetTilePos(TileID);
 			
-			if (TileID==0)
-				Pos=CPoint(-1,-1);
-			else
-				Pos=IDToPoint(TileID-1,TileBrowserWidth);
+//			if (TileID==0)
+//				Pos=CPoint(-1,-1);
+//			else
+//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
@@ -604,12 +682,12 @@ int		TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			CPoint	Pos;//=IDToPoint(TileID,TileBrowserWidth);
+			CPoint	Pos=GetTilePos(TileID);
 			
-			if (TileID==0)
-				Pos=CPoint(-1,-1);
-			else
-				Pos=IDToPoint(TileID-1,TileBrowserWidth);
+//			if (TileID==0)
+//				Pos=CPoint(-1,-1);
+//			else
+//				Pos=IDToPoint(TileID-1,TileBrowserWidth);
 
 			glLoadIdentity();
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);

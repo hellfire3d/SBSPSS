@@ -178,7 +178,7 @@ int			Height=ThisMap.GetHeight();
 			for (int XLoop=0; XLoop<Width; XLoop++)
 			{
 				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
-				if (ThisElem.Tile)
+				if (ThisElem.Tile && Core->IsTileValid(ThisElem.Set,ThisElem.Tile))
 				{ // Render Non Zero Tiles
 					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
@@ -488,7 +488,7 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 }
 
 /*****************************************************************************/
-void	CLayerTile::Export(CExport &Exp)
+void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
-		Exp.ExportLayerTile(GetName(),Map);
+		Exp.ExportLayerTile(Core,GetName(),Map);
 }

@@ -128,10 +128,13 @@ sMapElem	&CMap::Get(int X,int Y)
 }
 
 /*****************************************************************************/
-void	CMap::Set(int X,int Y,sMapElem &Blk)
+void	CMap::Set(int X,int Y,sMapElem &Blk,BOOL Force)
 {
 int		Width=GetWidth();
 int		Height=GetHeight();
+
+		if (!Force) // if bank or tile invalid
+			if (Blk.Set==-1 || Blk.Tile==-1) return;
 
 // Make sure within map
 		if ((X>=0 && X<Width) && (Y>=0 && Y<Height))
@@ -145,7 +148,7 @@ int		Height=GetHeight();
 }
 
 /*****************************************************************************/
-void	CMap::Set(int StartX,int StartY,CMap &Blk)
+void	CMap::Set(int StartX,int StartY,CMap &Blk,BOOL Force)
 {
 int		Width=Blk.GetWidth();
 int		Height=Blk.GetHeight();
@@ -154,13 +157,13 @@ int		Height=Blk.GetHeight();
 		{
 			for (int X=0; X<Width; X++)
 			{
-				Set(StartX+X,StartY+Y,Blk.Get(X,Y));
+				Set(StartX+X,StartY+Y,Blk.Get(X,Y),Force);
 			}
 		}
 }
 
 /*****************************************************************************/
-void	CMap::Set(CMap &Src,int StartX,int StartY,int Width,int Height)
+void	CMap::Set(CMap &Src,int StartX,int StartY,int Width,int Height,BOOL Force)
 {
 		Delete();
 		SetSize(Width,Height);
@@ -169,7 +172,7 @@ void	CMap::Set(CMap &Src,int StartX,int StartY,int Width,int Height)
 		{
 			for (int X=0; X<Width; X++)
 			{
-				Set(X,Y,Src.Get(StartX+X,StartY+Y));
+				Set(X,Y,Src.Get(StartX+X,StartY+Y),Force);
 			}
 		}
 
@@ -252,4 +255,45 @@ int		MinH=min(Height,OldHeight);
 				Set(X,Y,Old.Get(X,Y));
 			}
 		}
+}
+
+/*****************************************************************************/
+void	CMap::DeleteSet(int Set)
+{
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem	&ThisElem=Get(X,Y);
+				if (ThisElem.Set==Set)
+				{
+					ThisElem.Set=0;
+					ThisElem.Tile=0;
+					ThisElem.Flags=0;
+				}
+			}
+		}
+}
+
+/*****************************************************************************/
+void	CMap::RemapSet(int Old,int New)
+{
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem	&ThisElem=Get(X,Y);
+				if (ThisElem.Set==Old)
+				{
+					ThisElem.Set=New;
+				}
+			}
+		}
+
 }

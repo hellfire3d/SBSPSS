@@ -26,6 +26,7 @@ class	CCore;
 class	CTile;
 
 /*****************************************************************************/
+class	CTileSet;
 class	CTileBank
 {
 public:
@@ -39,8 +40,10 @@ public:
 			MaxBrush
 		};
 
+		int			FindTileSet(char *Filename);
 		void		AddTileSet(char *Filename);
 		int			NeedLoad()							{return(LoadFlag);}
+		void		Delete();
 		void		Reload();
 		void		LoadTileSets(CCore *Core);
 		CTile		&GetTile(int Bank,int Tile);
@@ -57,6 +60,9 @@ public:
 		void		RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d);
 
 		void		UpdateGUI(CCore *Core,BOOL IsTileView);
+
+		BOOL		IsTileValid(int Set,int Tile);
+		BOOL		IsTileValidGB(int Set,int Tile);
 
 // Functions
 		BOOL		SelectL(BOOL DownFlag)				{return(Select(LBrush,DownFlag));}
@@ -110,8 +116,13 @@ public:
 		void	RenderBrush(Vec &CamPos,CMap &LBrush,CMap &RBrush);
 		void	RenderGrid(Vec &CamPos);
 		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
+		BOOL	IsTileValid(int No)			{return(Tile[No].IsValid());}
+		BOOL	IsTileValidGB(int No)		{return(Tile[No].IsValidGB());}
+
+
 private:
 		BOOL	Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
+		CPoint	GetTilePos(int ID);
 
 		char				Drive[_MAX_DRIVE],Path[_MAX_DIR],Name[_MAX_FNAME],Ext[_MAX_EXT];
 		int					SetNumber;

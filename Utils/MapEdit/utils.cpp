@@ -120,10 +120,9 @@ void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,
 /**************************************************************************************/
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z)
 {
-			// Front Face
-//#ifdef	UseLighting
+#ifdef	UseLighting
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-//#endif
+#endif
 			glVertex3f( XMin, YMin, Z);
 			glVertex3f( XMax, YMin, Z);
 			glVertex3f( XMax, YMax, Z);

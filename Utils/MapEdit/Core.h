@@ -52,12 +52,16 @@ public:
 		CTileBank				&GetTileBank()					{return(TileBank);}
 		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 		void					TileBankLoad(char *Filename);
+		void					TileBankDelete();
 		void					TileBankReload();
 		void					TileBankSet();
 		void					MirrorX(CMapEditView *View);
 		void					MirrorY(CMapEditView *View);
 		void					ActiveBrushLeft(CMapEditView *View);
 		void					ActiveBrushRight(CMapEditView *View);
+		BOOL					IsTileValid(int Set,int Tile);
+
+
 // Param Bar
 		void					UpdateParamBar();
 

@@ -35,7 +35,7 @@ void	CExport::ExportAll(CCore *Core)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CExport::ExportLayerTile(char *LayerName,CMap &Map)
+void	CExport::ExportLayerTile(CCore *Core,char *LayerName,CMap &Map)
 {
 int			MapWidth=Map.GetWidth();
 int			MapHeight=Map.GetHeight();
@@ -55,7 +55,7 @@ sMapElem	BlankElem={0,0,0};
 				if (X<MapWidth && Y<MapHeight)
 					{
 					sMapElem	&ThisElem=Map.Get(X,Y);
-					int	Idx=AddTileToList(ThisElem);
+					int	Idx=AddTileToList(Core,ThisElem);
 					ExportLayerTile(ThisElem,Idx);
 				}
 				else
@@ -97,9 +97,22 @@ int		ListSize=UsedTileList.size();
 }
 
 /*****************************************************************************/
-int		CExport::AddTileToList(sMapElem &Tile)
+int		CExport::AddTileToList(CCore *Core,sMapElem &Tile)
 {
-int		Idx=FindTileInList(Tile);
+int		Idx;
+		if (!IsTileValidExport(Core,Tile))
+		{
+			sMapElem	Blank;
+			Blank.Set=0;
+			Blank.Tile=0;
+			Blank.Flags=0;
+			Idx=FindTileInList(Blank);
+		}
+		else
+		{
+			Idx=FindTileInList(Tile);
+		}
+		
 
 		if (Idx==-1)
 		{ // New tile!!

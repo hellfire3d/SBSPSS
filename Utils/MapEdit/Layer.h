@@ -57,7 +57,7 @@ virtual	void			Resize(int Width,int Height)=0;
 virtual	void			Load(CFile *File,float Version)=0;
 virtual	void			Save(CFile *File)=0;
 
-virtual	void			Export(CExport &Exp)=0;
+virtual	void			Export(CCore *Core,CExport &Exp)=0;
 
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;

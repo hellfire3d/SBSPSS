@@ -40,6 +40,7 @@ public:
 	void			Toggle2d3d(CMapEditView *View);
 
 	void			TileBankLoad();
+	void			TileBankDelete();
 	void			TileBankReload();
 	void			TileBankSet();
 

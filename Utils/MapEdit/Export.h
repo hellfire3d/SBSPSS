@@ -24,14 +24,14 @@ public:
 		CExport(char *Filename);
 		~CExport();
 
-		void	ExportLayerTile(char *LayerName,CMap &Map);
+		void	ExportLayerTile(CCore *Core,char *LayerName,CMap &Map);
 		void	ExportAll(CCore *Core);
 
 		void	PrintTileList();
 
 protected:
 		int		FindTileInList(sMapElem &Tile);
-		int		AddTileToList(sMapElem &Tile);
+		int		AddTileToList(CCore *Core,sMapElem &Tile);
 
 		void	ExportTiles(CCore *Core);
 		void	ExportPalette(CCore *Core);
@@ -41,6 +41,7 @@ virtual	void	ExportLayerTile(sMapElem &Elem,int NewIdx)=0;
 virtual	void	ExportLayerTileEnd(char *LayerName)=0;
 virtual	int		GetMinLayerTileWidth()=0;
 virtual	int		GetMinLayerTileHeight()=0;
+virtual BOOL	IsTileValidExport(CCore *Core,sMapElem &Tile)=0;
 
 virtual	void	ExportTileStart(int TileCount)=0;
 virtual	void	ParseTile(CTile &ThisTile)=0;

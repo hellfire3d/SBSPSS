@@ -46,11 +46,6 @@ TVECTOR	TCrossProduct(TVECTOR const &V0,TVECTOR const &V1,const TVECTOR &V2 );
 CPoint	IDToPoint(int ID,int Width);
 int		PointToID(CPoint &Pnt,int Width);
 
-//AUX_RGBImageRec *LoadBMP(char *Filename);
-//void	FreeBMP(AUX_RGBImageRec *TextureImage);
-
-
-//void	SaveTGA(char *Filename,int SX,int SY,int SW,int SH);
 void SaveTGA(char *Filename,int W,int H,u8 *Data);
 void SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 

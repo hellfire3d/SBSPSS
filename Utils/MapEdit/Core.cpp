@@ -438,6 +438,13 @@ void	CCore::TileBankLoad(char *Filename)
 }
 
 /*****************************************************************************/
+void	CCore::TileBankDelete()
+{
+		TileBank.Delete();
+		UpdateView(NULL);
+}
+
+/*****************************************************************************/
 void	CCore::TileBankReload()
 {
 		TileBank.Reload();
@@ -486,6 +493,12 @@ void	CCore::ActiveBrushRight(CMapEditView *View)
 {
 		TileBank.SetActiveBrushR();
 		UpdateView(View);
+}
+
+/*****************************************************************************/
+BOOL	CCore::IsTileValid(int Set,int Tile)
+{
+		return(TileBank.IsTileValid(Set,Tile));
 }
 
 /*****************************************************************************/
@@ -602,13 +615,13 @@ void	CCore::ExportAGB(char *Filename)
 int		LayerCount=Layer.size();
 char	ExportName[256];
 		
-		SetFileExt(Filename,ExportName,"C");
+		SetFileExt(Filename,ExportName,"c");
 
 CExportAGB	Exp(ExportName);
 
 		for (int i=0;i<LayerCount;i++)
 		{
-			Layer[i]->Export(Exp);
+			Layer[i]->Export(this,Exp);
 		}
 		Exp.ExportAll(this);
 }

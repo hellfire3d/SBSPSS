@@ -21,6 +21,7 @@
 #define IDD_LAYERTILE_LIST              1030
 #define IDD_LAYERTILE_BTN_LOAD          1031
 #define IDD_LAYERTILE_BTN_SELECT        1032
+#define IDD_LAYERTILE_BTN_DELETE        1033
 #define IDD_LAYERTILE_BTN_PAINT         1034
 #define IDC_MAPSIZE_WIDTH               1037
 #define IDC_MAPSIZE_WIDTH_TEXT          1038

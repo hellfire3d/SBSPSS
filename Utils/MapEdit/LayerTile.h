@@ -64,7 +64,7 @@ public:
 		void			Load(CFile *File,float Version);
 		void			Save(CFile *File);
 
-		void			Export(CExport &Exp);
+		void			Export(CCore *Core,CExport &Exp);
 
 // Functions
 		BOOL			SetMode(int NewMode);

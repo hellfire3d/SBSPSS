@@ -40,9 +40,9 @@ public:
 		void		MirrorY(int Flag);
 
 		sMapElem	&Get(int X,int Y);
-		void		Set(int X,int Y,sMapElem &Blk);
-		void		Set(int X,int Y,CMap &Blk);
-		void		Set(CMap &Src,int StartX,int StartY,int Width,int Height);
+		void		Set(int X,int Y,sMapElem &Blk,BOOL Force=FALSE);
+		void		Set(int X,int Y,CMap &Blk,BOOL Force=FALSE);
+		void		Set(CMap &Src,int StartX,int StartY,int Width,int Height,BOOL Force=FALSE);
 
 		void		Resize(int Width,int Height);
 
@@ -50,6 +50,9 @@ public:
 
 		void		Load(CFile *File,float Version);
 		void		Save(CFile *File);
+
+		void		DeleteSet(int Set);
+		void		RemapSet(int Old,int New);
 
 
 inline	void	operator=(CMap &Src)	

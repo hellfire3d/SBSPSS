@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CNewMapGUI
+LastClass=CLayerTileGUI
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,21 +18,21 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_LAYER_LIST_DIALOG
-Resource2=IDD_MAPSIZE
-Resource3=IDR_MAINFRAME (English (U.S.))
+Resource1=IDD_ABOUTBOX (English (U.S.))
+Resource2=IDR_MAINFRAME (English (U.S.))
+Resource3=IDD_LAYER_LIST_DIALOG
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_LAYERTILE_GUI
+Resource5=IDD_MAPSIZE
 Class8=CMultiBar
-Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource6=IDR_TOOLBAR (English (U.S.))
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_NEW_LAYER
+Resource8=IDD_LAYERTILE_GUI
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDR_TOOLBAR (English (U.S.))
-Resource10=IDD_MULTIBAR (English (U.S.))
+Resource9=IDD_MULTIBAR (English (U.S.))
+Resource10=IDD_NEW_LAYER
 Class13=CNewMapGUI
 Resource11=IDD_NEWMAP
 
@@ -251,12 +251,13 @@ VirtualFilter=dWC
 [DLG:IDD_LAYERTILE_GUI]
 Type=1
 Class=CLayerTileGUI
-ControlCount=5
+ControlCount=6
 Control1=IDD_LAYERTILE_LIST,combobox,1342242819
 Control2=IDD_LAYERTILE_BTN_UPDATE,button,1342242816
 Control3=IDD_LAYERTILE_BTN_LOAD,button,1342242816
 Control4=IDD_LAYERTILE_BTN_PAINT,button,1342177344
 Control5=IDD_LAYERTILE_BTN_SELECT,button,1476395072
+Control6=IDD_LAYERTILE_BTN_DELETE,button,1476460544
 
 [CLS:CLayerTileGUI]
 Type=0
@@ -265,7 +266,7 @@ ImplementationFile=LayerTileGUI.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDD_LAYERTILE_LIST
+LastObject=IDD_LAYERTILE_BTN_DELETE
 
 [DLG:IDD_NEW_LAYER]
 Type=1
