@@ -295,7 +295,7 @@ private:
 	enum
 	{
 		INVINCIBLE_FRAMES__START=200,	// Invincible for this many frames at start of life
-		INVINCIBLE_FRAMES__HIT=60,		// Invincible for this many frames after taking damage
+		INVINCIBLE_FRAMES__HIT=120,		// Invincible for this many frames after taking damage
 	};
 	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
 

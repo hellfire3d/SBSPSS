@@ -40,7 +40,7 @@
 #include "..\..\tools\vlc\include\vlc_bit.h"
 
 
-#if	defined(__USER_paul__)
+#ifndef	__USER_paul__
 #define	FORCE_FMV	1	
 #endif
 
