@@ -1255,7 +1255,7 @@ void	CFmaScene::shutdown()
 {
 	for(int i=0;i<FMA_NUM_ACTORS;i++)
 	{
-		for (int b=0; b<2; b++)
+		for (int b=0; b<3; b++)
 		{
 			if (m_actorData[i].m_gfx[b]) delete m_actorData[i].m_gfx[b];
 		}
