@@ -855,7 +855,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 			}
 
 			// Death?
-			else if(m_currentMode!=PLAYER_MODE_DEAD&&
+			/*else if(m_currentMode!=PLAYER_MODE_DEAD&&
 					block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
 			{
 				dieYouPorousFreak(DEATHTYPE__LIQUID);
@@ -864,7 +864,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 					block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
 			{
 				dieYouPorousFreak(DEATHTYPE__NORMAL);
-			}
+			}*/
 		}
 
 		// Powerups
@@ -1172,6 +1172,49 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	CPlayerThing::think(_frames);
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::detectHazardousSurface()
+{
+	int	height;
+
+	height=CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy );
+	if ( height <= 0 )
+	{
+		CThing *platform;
+		platform=isOnPlatform();
+		if(platform)
+		{
+			int platformHeight=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+
+			if ( platformHeight < height )
+			{
+				// on platform, which is higher than ground
+				return;
+			}
+		}
+
+		int block;
+		block=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
+
+		// Death?
+		if(m_currentMode!=PLAYER_MODE_DEAD&&
+				block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
+		{
+			dieYouPorousFreak(DEATHTYPE__LIQUID);
+		}
+		else if(m_currentMode!=PLAYER_MODE_DEAD&&
+				block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
+		{
+			dieYouPorousFreak(DEATHTYPE__NORMAL);
+		}
+	}
+}
 
 /*----------------------------------------------------------------------
 	Function:

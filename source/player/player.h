@@ -219,6 +219,7 @@ public:
 	virtual void	init();
 	virtual void	shutdown();
 	virtual void	think(int _frames);
+	void			detectHazardousSurface();
 	virtual void	render();
 	virtual int		dontKillDuringLevelRespawn()							{return true;}
 	virtual void	shove(DVECTOR move);

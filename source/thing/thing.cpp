@@ -702,6 +702,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			}
 			thing1=thing1->m_nextCollisionThing;
 		}
+
+		player->detectHazardousSurface();
 	}
 // Shut emm down, sh sh shut em down, we shutem down
 	for(i=0;i<CThing::MAX_TYPE;i++)
