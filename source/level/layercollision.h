@@ -51,7 +51,8 @@ inline	int				getCollisionBlock(int _x,int _y)
 
 inline	u8				Get(int X,int Y)					
 		{
-			return(getCollisionBlock(X,Y) & COLLISION_TILE_MASK);
+			int		Ofs=(X)+GetYPos(Y);
+			return(Map[Ofs] & COLLISION_TILE_MASK);
 //			return(Map[X+(Y*MapWidth)]&COLLISION_TILE_MASK);
 		}
 
