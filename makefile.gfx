@@ -303,7 +303,7 @@ FRONTENDGFX_SPR_IN :=		-r- -z+ $(FRONTEND_GFX_TRANS_NO_ROT_IN) -r+ \
 SHOP_GFX_DIR :=				$(GRAF_DIR)/shop
 SHOP_GFX_OUT_DIR :=			$(DATA_OUT)/shop
 
-SHOP_GFX_TRANS :=			blower cake cupcake jelly2 partyhat prezzie sarnie teddy
+SHOP_GFX_TRANS :=			blower cake cupcake jelly2 partyhat prezzie sarnie teddy smalltoken
 SHOP_GFX_TRANS_IN :=		$(foreach FILE,$(SHOP_GFX_TRANS),$(SHOP_GFX_DIR)/$(FILE).bmp)
 
 SHOP_GFX_TEX_OUT :=			$(SHOP_GFX_OUT_DIR)/shop.spr

@@ -250,10 +250,8 @@ eng=Start
 ; ---------------------------------------------------------------
 ; Shop screen
 ; ---------------------------------------------------------------
-[STR__SHOP_SCREEN__TOKENS]
-eng=Tokens
 [STR__SHOP_SCREEN__PRICE]
-eng=Price
+eng=Price:
 [STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM]
 eng=Select
 [STR__SHOP_SCREEN__CROSS_TO_PURCHASE]
@@ -262,6 +260,10 @@ eng=Purchase
 eng=Exit
 [STR__SHOP_SCREEN__ITEM_ALREADY_PURCHASED]
 eng=Item already purchased
+[STR__SHOP_SCREEN__CONFIRM_PURCHASE]
+eng=This item costs %d tokens, you currently have %d tokens. Are you sure that you want to purchase it?
+[STR__SHOP_SCREEN__CANNOT_AFFORD_PURCHASE]
+eng=This item costs %d tokens, you currently have %d tokens. You cannot afford to purchase it.
 
 
 
