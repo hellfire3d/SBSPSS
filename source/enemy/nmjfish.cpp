@@ -56,17 +56,17 @@ void CNpcMotherJellyfishEnemy::postInit()
 		m_health = CLevel::getBossHealth();
 	}
 
-	legsPos[0].vx = 81;
+	legsPos[0].vx = 69;
 	legsPos[0].vy = -5;
 
-	legsPos[1].vx = 27;
-	legsPos[1].vy = 0;
+	legsPos[1].vx = 23;
+	legsPos[1].vy = -10;
 
-	legsPos[2].vx = -27;
+	legsPos[2].vx = -23;
 	legsPos[2].vy = -5;
 
-	legsPos[3].vx = -81;
-	legsPos[3].vy = 0;
+	legsPos[3].vx = -69;
+	legsPos[3].vy = -10;
 
 	s16 scale;
 	scale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );

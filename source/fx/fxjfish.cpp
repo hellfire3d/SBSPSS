@@ -81,16 +81,16 @@ int			ScaleHInc=(Scale*LegHInc)>>12;
 
 				POLY_FT4	*Ft4;
 
-				//Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos,Scale>>4);
+				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos,Scale>>4);
 
-				if ( !XFlip )
+				/*if ( !XFlip )
 				{
 					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx + 6 + ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
 				}
 				else
 				{
 					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx - 6 - ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
-				}
+				}*/
 
 				if (!XFlip)
 				{
