@@ -294,10 +294,8 @@ static IdleAnims s_unarmedIdleAnims[]=
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*6/*0*/	},	// default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEBIGEYE,			-1,								1		},
 //NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
 //NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEBANDAID,			-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEEYEPOP,			-1,								1		},
 //NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEINHAT,			-1,								1		},
 //NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEMATURE,			-1,								1		},
 //NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEMOUSTACHE,		-1,								1		},

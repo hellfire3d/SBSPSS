@@ -26,10 +26,8 @@ GetHit
 CrouchDown
 CrouchUp
 LookUp
-#IdleBigEye
 #IdleFaceUpSideDown
 #IdleBandAid
-#IdleEyePop
 #IdleInHat
 #IdleMature
 #IdleMoustache
