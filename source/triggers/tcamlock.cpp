@@ -57,11 +57,20 @@ void	CCameraLockTrigger::collidedWith(CThing *_thisThing)
 {
 	CPlayer::CameraBox	camBox={m_boxX1,m_boxY1,m_boxX2,m_boxY2};
 
-	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
-
-	((CPlayer*)_thisThing)->setCameraBox(camBox);
+	switch( _thisThing->getThingType() )
+	{
+		case TYPE_PLAYER:
+		{
+			((CPlayer*)_thisThing)->setCameraBox(camBox);
 
 PAUL_DBGMSG("HIT CAM BOX TRIGGER");
+
+			break;
+		}
+
+		default:
+			break;
+	}
 }
 
 /*===========================================================================

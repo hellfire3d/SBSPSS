@@ -1,8 +1,8 @@
 /*=========================================================================
 
-	tplatfrm.cpp
+	tggleft.cpp
 
-	Author:		PKG
+	Author:		CRB
 	Created: 
 	Project:	Spongebob
 	Purpose: 
@@ -16,10 +16,18 @@
 	-------- */
 
 #include "triggers\trigger.h"
-#include "triggers\tplatfrm.h"
+#include "triggers\tggleft.h"
 
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
+#endif
+
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
+#ifndef __FRIEND_FGARY_H__
+#include "friend\fgary.h"
 #endif
 
 	
@@ -54,7 +62,7 @@
   ---------------------------------------------------------------------- */
 #if defined (__USER_art__) || defined (__USER_sbart__)
 #include "gfx\prim.h"
-void	CPlatformTrigger::render()
+void	CGaryGoLeftTrigger::render()
 {
 	DVECTOR	ofs;
 	CRECT	area;
@@ -94,18 +102,17 @@ void	CPlatformTrigger::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlatformTrigger::collidedWith(CThing *_thisThing)
+void	CGaryGoLeftTrigger::collidedWith(CThing *_thisThing)
 {
 	switch( _thisThing->getThingType() )
 	{
-		case TYPE_PLAYER:
+		case TYPE_NPC:
 		{
-			CPlayer *player = (CPlayer *) _thisThing;
-			ATTACK_STATE playerState = player->getAttackState();
-
-			if ( playerState == ATTACK_STATE__BUTT_BOUNCE )
+			if ( _thisThing->getThingSubType() == CNpcFriend::NPC_FRIEND_GARY )
 			{
-				m_platform->trigger();
+				CNpcGaryFriend *gary = (CNpcGaryFriend *) _thisThing;
+
+				gary->startLeft();
 			}
 
 			break;

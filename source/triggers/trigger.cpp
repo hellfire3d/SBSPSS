@@ -51,6 +51,14 @@
 #include "triggers\tifemit.h"
 #endif
 
+#ifndef __TRIGGERS_TGGLEFT_H__
+#include "triggers\tggleft.h"
+#endif
+
+#ifndef __TRIGGERS_TGSTOP_H__
+#include "triggers\tgstop.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -95,12 +103,22 @@ CTrigger	*trigger;
 
 		// Gary start trigger
 		case TRIGGER_GARYSTART:
-			trigger=(CGaryStartTrigger*)new( "GaryStartTrigger") CGaryStartTrigger();
+			trigger=(CGaryStartTrigger*)new("GaryStartTrigger") CGaryStartTrigger();
 			break;
 
 		// Flame emitter
 		case TRIGGER_FLAMEEMITTER:
 			trigger=(CFlameEmitterTrigger*)new( "FlameEmitterTrigger") CFlameEmitterTrigger();
+			break;
+
+		// Gary stop trigger
+		case TRIGGER_GARYSTOP:
+			trigger=(CGaryStopTrigger*)new("GaryStopTrigger") CGaryStopTrigger();
+			break;
+
+		// Gary go left trigger
+		case TRIGGER_GARYGOLEFT:
+			trigger=(CGaryGoLeftTrigger*)new("GaryGoLeftTrigger") CGaryGoLeftTrigger();
 			break;
 
 		case TRIGGER_INTERMITTENTFLAMEEMITTER:

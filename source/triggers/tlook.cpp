@@ -56,17 +56,26 @@ void	CLookTrigger::collidedWith(CThing *_thisThing)
 	DVECTOR	collCentre;
 	CRECT	collArea;
 
-	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
-
-	// Only collide if players feet are inside the trigger
-	collCentre=((CPlayer*)_thisThing)->getCollisionCentre();
-	collArea.x1=collCentre.vx-5;
-	collArea.y1=collCentre.vy-5;
-	collArea.x2=collArea.x1+10;
-	collArea.y2=collArea.y1+10;
-	if(checkCollisionAgainstArea(&collArea))
+	switch( _thisThing->getThingType() )
 	{
-		((CPlayer*)_thisThing)->setLedgeLookAhead(+4);
+		case TYPE_PLAYER:
+		{
+			// Only collide if players feet are inside the trigger
+			collCentre=((CPlayer*)_thisThing)->getCollisionCentre();
+			collArea.x1=collCentre.vx-5;
+			collArea.y1=collCentre.vy-5;
+			collArea.x2=collArea.x1+10;
+			collArea.y2=collArea.y1+10;
+			if(checkCollisionAgainstArea(&collArea))
+			{
+				((CPlayer*)_thisThing)->setLedgeLookAhead(+4);
+			}
+
+			break;
+		}
+
+		default:
+			break;
 	}
 }
 

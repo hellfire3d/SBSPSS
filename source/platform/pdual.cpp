@@ -31,6 +31,10 @@
 #include	"game\game.h"
 #endif
 
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -372,7 +376,50 @@ void CNpcDualPlatform::collidedWith( CThing *_thisThing )
 		}
 
 		case TYPE_NPC:
+		{
+			CNpcFriend *friendNpc;
+			DVECTOR	friendPos;
+			CRECT	collisionArea;
+
+			friendNpc = (CNpcFriend*) _thisThing;
+			friendPos = friendNpc->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( friendPos.vx >= collisionArea.x1 && friendPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+				{
+					int height = getHeightFromPlatformAtPosition( friendPos.vx, friendPos.vy );
+
+					friendNpc->setPlatform( this );
+
+					m_contact = true;
+				}
+				else
+				{
+					if( friendPos.vy >= collisionArea.y1 && friendPos.vy <= collisionArea.y2 )
+					{
+						int height = getHeightFromPlatformAtPosition( friendPos.vx, friendPos.vy );
+
+						if ( height >= -threshold && height < 1 )
+						{
+							friendNpc->setPlatform( this );
+
+							m_contact = true;
+						}
+					}
+				}
+			}
+
 			break;
+		}
 
 		case TYPE_HAZARD:
 		{

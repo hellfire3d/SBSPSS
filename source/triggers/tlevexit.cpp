@@ -96,11 +96,19 @@ void	CLevelExitTrigger::render()
   ---------------------------------------------------------------------- */
 void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 {
-	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
-
+	switch( _thisThing->getThingType() )
+	{
+		case TYPE_PLAYER:
+		{
 #if !defined (__USER_art__) && !defined (__USER_sbart__)
-	CGameScene::levelFinished();
+			CGameScene::levelFinished();
 #endif
+			break;
+		}
+
+		default:
+			break;
+	}
 }
 
 /*===========================================================================

@@ -297,7 +297,9 @@ triggers_src :=		trigger \
 					tplatfrm \
 					tgarygo \
 					tfemit \
-					tifemit
+					tifemit \
+					tggleft \
+					tgstop
 
 utils_src :=		utils \
 					sincos \

@@ -26,6 +26,8 @@ public:
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				start()													{m_started = true;}
+	void				stop()													{m_started = false;}
+	void				startLeft();
 	virtual void		render();
 
 protected:

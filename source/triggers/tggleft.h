@@ -1,33 +1,30 @@
 /*=========================================================================
 
-	tteleprt.cpp
+	tggleft.h
 
-	Author:		PKG
-	Created: 
+	Author:		Charles Blair
+	Created:	
 	Project:	Spongebob
-	Purpose: 
+	Purpose:	
 
 	Copyright (c) 2001 Climax Development Ltd
 
 ===========================================================================*/
 
+#ifndef	__TRIGGERS_TGGLEFT_H__
+#define __TRIGGERS_TGGLEFT_H__
+
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
 
-#include "triggers\trigger.h"
-#include "triggers\tteleprt.h"
-
-#ifndef	__PLAYER_PLAYER_H__
-#include "player\player.h"
+#ifndef __THING_THING_H__
+#include "thing/thing.h"
 #endif
 
-	
+
 /*	Std Lib
 	------- */
-
-/*	Data
-	---- */
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -37,38 +34,27 @@
 	Structure defintions
 	-------------------- */
 
-/*----------------------------------------------------------------------
-	Function Prototypes
-	------------------- */
-
-/*----------------------------------------------------------------------
-	Vars
-	---- */
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CTeleportTrigger::collidedWith(CThing *_thisThing)
+class CGaryGoLeftTrigger : public CTrigger
 {
-	switch( _thisThing->getThingType() )
-	{
-		case TYPE_PLAYER:
-		{
-			((CPlayer*)_thisThing)->teleportTo(m_boxX1+8,m_boxY1+16);
+public:
+#if defined (__USER_art__) || defined (__USER_sbart__)
+	virtual void		render();
+#endif
+protected:
+	virtual void		collidedWith(CThing *_thisThing);
+};
 
-PAUL_DBGMSG("HIT TELEPORT TRIGGER");
+/*----------------------------------------------------------------------
+	Globals
+	------- */
 
-			break;
-		}
+/*----------------------------------------------------------------------
+	Functions
+	--------- */
 
-		default:
-			break;
-	}
-}
+/*---------------------------------------------------------------------- */
+
+#endif	/* __TRIGGERS_TPLATFRM_H__ */
 
 /*===========================================================================
-end */
+ end */

@@ -169,3 +169,13 @@ void CNpcGaryFriend::render()
 		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::startLeft()
+{
+	start();
+
+	m_extension = EXTEND_LEFT;
+	m_reversed = true;
+}

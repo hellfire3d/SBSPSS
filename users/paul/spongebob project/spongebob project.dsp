@@ -1933,6 +1933,22 @@ SOURCE=..\..\..\source\triggers\tgarygo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tggleft.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tggleft.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tgstop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tgstop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tifemit.cpp
 # End Source File
 # Begin Source File

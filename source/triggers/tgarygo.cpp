@@ -2,7 +2,7 @@
 
 	tgarygo.cpp
 
-	Author:		PKG
+	Author:		CRB
 	Created: 
 	Project:	Spongebob
 	Purpose: 
@@ -96,10 +96,18 @@ void	CGaryStartTrigger::render()
   ---------------------------------------------------------------------- */
 void	CGaryStartTrigger::collidedWith(CThing *_thisThing)
 {
-	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
+	switch( _thisThing->getThingType() )
+	{
+		case TYPE_PLAYER:
+		{
+			m_gary->start();
 
-	CPlayer *player = (CPlayer *) _thisThing;
-	m_gary->start();
+			break;
+		}
+
+		default:
+			break;
+	}
 }
 
 /*===========================================================================
