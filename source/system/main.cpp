@@ -248,11 +248,11 @@ int				W=SR.w;
 int				H=SR.h;
 char			Filename[32];
 
-		sprintf( Filename, "PRLSR%04d.tga", ScreenNo );
+		sprintf( Filename, "SBSP%04d.tga", ScreenNo );
 		while (FileExists( Filename ) )
 			{
 			ScreenNo++;
-			sprintf( Filename, "PRLSR%04d.tga", ScreenNo );
+			sprintf( Filename, "SBSP%04d.tga", ScreenNo );
 			}
 
 		FileHnd=PCcreat((char *)Filename,0);
