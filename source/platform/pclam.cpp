@@ -28,7 +28,7 @@
 
 void CNpcClamPlatform::render()
 {
-	CNpcPlatform::render();
+	CPlatformThing::render();
 
 	if (canRender())
 	{
