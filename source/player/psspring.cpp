@@ -94,7 +94,7 @@ void CPlayerStateSpring::think(CPlayerModeBase *_playerMode)
 
 	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 
-	if(m_springFrames<=maxspring)
+	if(m_springFrames<=maxplayerspringframes)
 	{
 		m_springFrames++;
 	}
