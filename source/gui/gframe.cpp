@@ -22,6 +22,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -150,6 +154,7 @@ int CGUIGroupFrame::isUnselectable()
 void CGUIControlFrame::think(int _frames)
 {
 	int	pad;
+	int	makeNoise=false;
 
 	CGUIObject::think(_frames);
 
@@ -181,6 +186,7 @@ void CGUIControlFrame::think(int _frames)
 				pGUI->select();
 			}
 		}
+		makeNoise=true;
 	}
 	else if(pad&PAD_UP)
 	{
@@ -220,6 +226,12 @@ void CGUIControlFrame::think(int _frames)
 				prevGUI->select();
 			}
 		}
+		makeNoise=true;
+	}
+
+	if(makeNoise)
+	{
+		CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
 	}
 }
 

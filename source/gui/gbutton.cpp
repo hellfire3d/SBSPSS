@@ -22,6 +22,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -98,6 +102,7 @@ void CGUIToggleButton::think(int _frames)
 			{
 				*target=true;
 			}
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
 		}
 	}
 }
@@ -145,9 +150,10 @@ void CGUIValueButton::think(int _frames)
 	CGUIObject::think(_frames);
 	if(isSelected())
 	{
-		if(PadGetRepeat(0)&PAD_CROSS)
+		if(PadGetDown(0)&PAD_CROSS)
 		{
 			*getTarget()=m_value;
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
 		}
 	}
 }
@@ -222,6 +228,7 @@ void CGUICycleButton::think(int _frames)
 				data=getData();
 			}
 			*target=*data;
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
 		}
 	}
 }
@@ -286,28 +293,48 @@ void CGUISliderButton::think(int _frames)
 	{
 		int padRepeat,padDown;
 		int	*target=getTarget();
+		int	makeNoise=false;
+		CSoundMediator::SFXID	noise=CSoundMediator::SFX_FRONT_END__SELECT;
 		
 		padRepeat=PadGetRepeat(0);
 		padDown=PadGetDown(0);
 		if(padDown&PAD_LEFT)
 		{
 			*target-=1;
+			makeNoise=true;
+			noise=CSoundMediator::SFX_FRONT_END__SELECT;
 		}
 		else if(padDown&PAD_RIGHT)
 		{
 			*target+=1;
+			makeNoise=true;
 		}
 		else if(padRepeat&PAD_LEFT)
 		{
 			*target-=(_frames*m_scrollSpeed);
+			makeNoise=true;
 		}
 		else if(padRepeat&PAD_RIGHT)
 		{
 			*target+=(_frames*m_scrollSpeed);
+			makeNoise=true;
 		}
 
-		if(*target<m_min)*target=m_min;
-		else if(*target>m_max)*target=m_max;
+		if(*target<m_min)
+		{
+			*target=m_min;
+			noise=CSoundMediator::SFX_FRONT_END__ERROR;
+		}
+		else if(*target>m_max)
+		{
+			*target=m_max;
+			noise=CSoundMediator::SFX_FRONT_END__ERROR;
+		}
+
+		if(makeNoise)
+		{
+			CSoundMediator::playSfx(noise);
+		}
 	}
 }
 

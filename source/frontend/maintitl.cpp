@@ -311,6 +311,7 @@ void CFrontEndMainTitles::think(int _frames)
 		case MODE__PRESS_START:
 			if(!CFader::isFading()&&PadGetDown(0)&PAD_START)
 			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 				m_mode=MODE__SELECT_OPTION;
 				m_mainMenu->select();
 			}
