@@ -26,6 +26,7 @@ public:
 	int					getFrameCount()							{return( 1 );}
 	int					getFrame()								{return( m_shellType );}
 	u8					hasBeenAttacked()						{return( false );}
+	virtual u8			canCollideWithEnemy()					{return( false );}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
