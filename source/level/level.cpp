@@ -45,8 +45,8 @@ CLevel::~CLevel()
 /*****************************************************************************/
 void 	CLevel::init()
 {
-		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL02_LEVEL02_LVL,"Level Data");
-		TPLoadTex(LEVEL02_LEVEL02_TEX);
+		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
+		TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
 
 		initLayers();
 }

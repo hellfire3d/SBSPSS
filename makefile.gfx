@@ -41,45 +41,64 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 LEVELS_OPTS :=				-t:8,2,1 -s:256
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
+LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
+LEVELS_DIRS_TO_MAKE :=		$(LEVELS_MAKEFILE_DIR) $(LEVELS_OUT_DIR)
 
 LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05
+
 LEVELS_CHAPTER01 :=			
 LEVELS_CHAPTER01_LEVEL01 :=
+LEVELS_CHAPTER01_LEVEL02 :=
+LEVELS_CHAPTER01_LEVEL03 :=
+LEVELS_CHAPTER01_LEVEL04 :=
 
 LEVELS_CHAPTER02 :=			LEVEL04
+LEVELS_CHAPTER02_LEVEL01 :=
+LEVELS_CHAPTER02_LEVEL02 :=
+LEVELS_CHAPTER02_LEVEL03 :=
 LEVELS_CHAPTER02_LEVEL04 :=	01
 
 LEVELS_CHAPTER03 :=			
+LEVELS_CHAPTER03_LEVEL01 :=
+LEVELS_CHAPTER03_LEVEL02 :=
+LEVELS_CHAPTER03_LEVEL03 :=
+LEVELS_CHAPTER03_LEVEL04 :=
 
 LEVELS_CHAPTER04 :=			
+LEVELS_CHAPTER04_LEVEL01 :=
+LEVELS_CHAPTER04_LEVEL02 :=
+LEVELS_CHAPTER04_LEVEL03 :=
+LEVELS_CHAPTER04_LEVEL04 :=
 
 LEVELS_CHAPTER05 :=			
+LEVELS_CHAPTER05_LEVEL01 :=
+LEVELS_CHAPTER05_LEVEL02 :=
+LEVELS_CHAPTER05_LEVEL03 :=
+LEVELS_CHAPTER05_LEVEL04 :=
+
+LEVELS_CHAPTER06 :=			
+LEVELS_CHAPTER06_LEVEL01 :=
+LEVELS_CHAPTER06_LEVEL02 :=
+LEVELS_CHAPTER06_LEVEL03 :=
+LEVELS_CHAPTER06_LEVEL04 :=
 
 
-LEVELS_OUT_DIRS :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(LEVELS_OUT_DIR)/$(CHAPTER)/$(LEVEL) ))
-ALL_LEVELS :=				$(foreach CHAPTER, $(LEVELS_CHAPTERS), \
-								$(foreach LEVEL, $(LEVELS_$(CHAPTER)), \
-									$(foreach SUBLEVEL, $(LEVELS_$(CHAPTER)_$(LEVEL)), \
-										$(CHAPTER)/$(LEVEL)/$(LEVEL)$(SUBLEVEL) )))
+LEVELS_MAKEFILES :=		$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)),$(LEVELS_MAKEFILE_DIR)/$(CHAPTER)_$(LEVEL).mak))
 
-ALL_LEVELS_IN :=				$(foreach LEVEL,$(ALL_LEVELS),$(LEVELS_IN_DIR)/$(LEVEL).pme)
-ALL_LEVELS_OUT :=				$(foreach LEVEL,$(ALL_LEVELS),$(LEVELS_OUT_DIR)/$(LEVEL).lvl)
+$(LEVELS_MAKEFILES):	$(LEVELS_DIRS_TO_MAKE) makefile.gfx $(BUILD_DIR)/mklevel.pl
+	@$(PL) $(BUILD_DIR)/mklevel.pl $@ $(notdir $(basename $@))
 
-levels : $(LEVELS_OUT)
+include $(LEVELS_MAKEFILES)
 
-cleanlevels :
-	@$(RM) -f $(LEVELS_OUT)
-	@$(ECHO) Cleaned levels
+LEVELS_ALL_OUT :=		$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)),$($(CHAPTER)_$(LEVEL)_OUT)))
 
-# $(ALL_LEVELS_OUT) : $(ALL_LEVELS__IN)
-#	$(MKLEVEL) $(ALL_LEVELS__IN) -o:$(LEVELS_OUT_DIR)/LEVEL04 -t:24,1,1
+GFX_DATA_OUT +=    		$(LEVELS_ALL_OUT)
 
-$(LEVELS_OUT_DIR)/%.lvl : $(LEVELS_IN_DIR)/%.pme
-	@$(ECHO) Building $< $@
-	$(MKLEVEL) $< -o:$@ $(LEVELS_OPTS)
-#	$(MKLEVEL) $< -o:$(dir $(basename $@))/level04.tex $(LEVELS_OPTS)
+levels : $(LEVELS_ALL_OUT)
+	@$(ECHO) Levels made
 
-GFX_DATA_OUT +=	$(ALL_LEVELS_OUT)
+cleanlevels : 	$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), clean$(CHAPTER)_$(LEVEL)))
+				@$(ECHO) Levels cleaned
 
 
 #----------------------------------------------------------------------------
@@ -138,9 +157,11 @@ PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim
 
 # duff
 # idlegeneric02 idlegeneric05 idlegeneric03 
-PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill float getup hitground01 hover idleboots idlecoral \
-						idlecoral01 idlegeneric01 idlegeneric04 idlelauncher idlenet jumpend jumpstart karate \
-						knockback knockforward netfirelob netswipe netswipejump run runjumpend runjumpstart runstart runstop soakup teeterback teeterfront wakeup 
+# PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill float getup hitground01 hover idleboots idlecoral \
+#						idlecoral01 idlegeneric01 idlegeneric04 idlelauncher idlenet jumpend jumpstart karate \
+#						knockback knockforward netfirelob netswipe netswipejump run runjumpend runjumpstart runstart runstop soakup teeterback teeterfront wakeup 
+
+PLAYER_ANIM_LIST :=		idlegeneric04 idlelauncher runstart run runstop
 
 PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
 PLAYER_ANIM_OUT :=		$(ANIM_OUT_DIR)/Player.Abk
@@ -434,7 +455,7 @@ GRAF_DIRS_TO_MAKE +=	$(TRANS_OUT_DIR) \
 						$(UI_GFX_OUT_DIR) \
 						$(ACTORS_DIRS_TO_MAKE) \
 						$(ANIM_OUT_DIR) \
-						$(LEVELS_OUT_DIRS)
+						$(LEVELS_DIRS_TO_MAKE)
 
 gdirs : $(GRAF_DIRS_TO_MAKE)
 

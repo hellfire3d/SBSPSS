@@ -28,8 +28,8 @@ backdrop/credits.gfx
 backdrop/sky.gfx
 memcard/memhead.bin
 
-levels/chapter03/level02/level02.lvl
-levels/chapter03/level02/level02.tex
+levels/chapter02_level04.tex
+levels/chapter02_level0401.lvl
 
 actors/spongebob.a3d
 actors/spongebob.tex
