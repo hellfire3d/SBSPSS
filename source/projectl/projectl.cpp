@@ -497,6 +497,12 @@ void CPlayerProjectile::think(int _frames)
 		{
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
+				// destroy destructable tiles
+
+				CLevel &level = GameScene.GetLevel();
+				
+				level.destroyMapArea( Pos );
+
 				setToShutdown();
 			}
 			else
