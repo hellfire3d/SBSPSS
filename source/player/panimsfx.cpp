@@ -178,7 +178,7 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 //NOIDLE	{	ANIM_SPONGEBOB_IDLEBIGEYE,			s_idleBigEyeCount,			s_idleBigEyeSfx			},
 //NOIDLE	{	ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	s_idleFaceUpsideDownCount,	s_idleFaceUpsideDownSfx	},
 };
-const int				CPlayer::s_numAnimSfx=12;		// Grrrrrrrr! (pkg)
+const int				CPlayer::s_numAnimSfx=10;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
