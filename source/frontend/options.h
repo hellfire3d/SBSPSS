@@ -54,6 +54,7 @@ public:
 private:
 	void	getValues();
 	void	setLoadMode(int _newMode);
+	void	renderButtonPrompts();
 
 
 	enum
@@ -167,6 +168,9 @@ private:
 	int											m_controlIcons[CONTROL_COUNT];
 	static CGUISpriteReadout::SpriteReadoutData	s_controlReadoutSprites[ICON_COUNT];
 	static ButtonToIconMap						s_controlMap[ICON_COUNT];
+
+	class FontBank								*m_fontBank;
+	class SpriteBank							*m_spriteBank;
 
 };
 

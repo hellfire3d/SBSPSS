@@ -22,6 +22,10 @@
 #include "mem\memory.h"
 #endif
 
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
+
 #ifndef	__GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
@@ -448,6 +452,12 @@ void CFrontEndOptions::init()
 	getValues();
 
 	m_saveLoadDatabase=NULL;
+
+	m_fontBank=new ("CGameScene::Init") FontBank();
+	m_fontBank->initialise( &standardFont );
+
+	m_spriteBank=new ("options sprites") SpriteBank();
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 /*----------------------------------------------------------------------
@@ -459,6 +469,9 @@ void CFrontEndOptions::init()
 void CFrontEndOptions::shutdown()
 {
 	int		i;
+
+	m_spriteBank->dump();		delete m_spriteBank;
+	m_fontBank->dump();				delete m_fontBank;
 
 	m_loadModeConfirmFrame->shutdown();
 	m_loadModeOKFrame->shutdown();
@@ -560,6 +573,39 @@ rh&=4095;
 		}
 	}
 	m_modeMenus[m_mode]->render();
+
+
+	// Button prompts
+	int	renderButtons=true;
+	switch(m_mode)
+	{
+		case MODE__OPTIONS:
+		case MODE__CONTROL:
+		case MODE__SCREEN:
+		case MODE__SOUND:
+			break;
+		case MODE__LOAD:
+			switch(m_loadMode)
+			{
+				case LOADMODE__INIT:
+				case LOADMODE__CHECKING:
+				case LOADMODE__LOADING:
+					renderButtons=false;
+					break;
+
+				case LOADMODE__UNFORMATTED:
+				case LOADMODE__NODATA:
+				case LOADMODE__NOCARD:
+				case LOADMODE__CONFIRMLOAD:
+				case LOADMODE__LOADOK:
+				case LOADMODE__LOADERROR:
+					break;
+			}
+	}
+	if(renderButtons)
+	{
+		renderButtonPrompts();
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -918,6 +964,36 @@ void	CFrontEndOptions::setLoadMode(int _newMode)
 			m_loadModeConfirmFrame->select();
 			break;
 	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CFrontEndOptions::renderButtonPrompts()
+{
+	sFrameHdr		*fh1,*fh2;
+	int				x,y,width;
+
+int	INSTRUCTIONS_Y_POS=213;
+int INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;		// Eh!? (pkg)
+int INSTRUCTIONS_BUTTON_Y_OFFSET=4;
+
+	fh1=m_spriteBank->getFrameHeader(FRM__BUTX);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__CROSS_TO_SELECT);
+	x=128-(width/2);
+	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__CROSS_TO_SELECT);
+
+	fh1=m_spriteBank->getFrameHeader(FRM__BUTT);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+	x=256+128-(width/2);
+	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
 }
 
 /*===========================================================================
