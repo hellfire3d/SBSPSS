@@ -304,9 +304,11 @@ eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
 [STR__PAUSE_MENU__GAME_PAUSED]
 eng=GAME PAUSED
 [STR__PAUSE_MENU__CONTINUE]
-eng=CONTINUE
+eng=Continue
 [STR__PAUSE_MENU__QUIT]
-eng=QUIT
+eng=Quit
+[STR__PAUSE_MENU__CONFIRM_QUIT]
+eng=CONFIRM QUIT?
 
 
 
