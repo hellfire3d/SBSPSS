@@ -30,6 +30,7 @@
 
 #include	"FX\FXNrgBar.h"
 #include	"FX\FXTVExplode.h"
+#include	"FX\FXZzzz.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -102,13 +103,22 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 */
 /*****************************************************************************/
 
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_TV_EXPLODE;
-#include	"game\game.h"
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_ZZZZ;
 
+#include	"game\game.h"
+CFXZZZZ	*TFX=0;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-		Pos.vy-=16*8;
-		CFX::Create((CFX::FX_TYPE)FXType,Pos);
+		Pos.vy-=16*4;
+		if (!TFX)
+		{
+			TFX=(CFXZZZZ*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+		}
+		else
+		{
+			TFX->killFX();
+			TFX=0;
+		}
 //		CFX::Create((CFX::FX_TYPE)FXType,Parent);
 
 }
@@ -259,6 +269,9 @@ CFX		*NewFX;
 			break;
 		case FX_TYPE_TV_EXPLODE:
 			NewFX=new ("FX TVExplode") CFXTVExplode();
+			break;
+		case FX_TYPE_ZZZZ:
+			NewFX=new ("FX ZZZZ") CFXZZZZ();
 			break;
 
 		default:

@@ -69,6 +69,7 @@ public:
 /* 28*/		FX_TYPE_NRG_BAR,
 /* 29*/		FX_TYPE_LASER,
 /* 30*/		FX_TYPE_TV_EXPLODE,
+/* 31*/		FX_TYPE_ZZZZ,
 
 			FX_TYPE_MAX
 		};

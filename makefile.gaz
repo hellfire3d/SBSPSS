@@ -177,8 +177,9 @@ fx_src :=			fx \
 					fxsteam \
 					fxlaser \
 					fxsmoke \
+					fxgeyser \
 					fxtvexplode \
-					fxgeyser
+					fxzzzz
 
 projectl_src :=		projectl \
 					prnpc \
