@@ -620,6 +620,40 @@ void CFrontEndOptions::think(int _frames)
 		}
 		if(m_mode!=MODE__LOAD)m_modeMenus[m_mode]->think(_frames);
 
+		
+		if(PadGetDown(0)&PAD_TRIANGLE)
+		{
+			if(m_mode==MODE__OPTIONS)
+			{
+				m_exitFlag=true;
+			}
+			else if(m_mode==MODE__LOAD)
+			{
+				switch(m_loadMode)
+				{
+					case LOADMODE__INIT:
+					case LOADMODE__CHECKING:
+					case LOADMODE__LOADING:
+					default:
+						break;
+
+					case LOADMODE__UNFORMATTED:
+					case LOADMODE__NODATA:
+					case LOADMODE__NOCARD:
+					case LOADMODE__CONFIRMLOAD:
+					case LOADMODE__LOADOK:
+					case LOADMODE__LOADERROR:
+						m_nextMode=MODE__OPTIONS;
+						break;
+				}
+			}
+			else
+			{
+				m_nextMode=MODE__OPTIONS;
+			}
+		}
+
+
 		if(m_mode==MODE__CONTROL)
 		{
 			if(m_vibrationStatus!=m_lastVibrationStatus)
@@ -791,6 +825,8 @@ void CFrontEndOptions::think(int _frames)
 		CFader::setFadingOut();
 		m_closingDown=true;
 	}
+
+
 
 	// Change the icons on the control display
 	CPadConfig::setConfig(m_controlStyle);
