@@ -95,6 +95,10 @@ static const int	NORMAL__FRAME_H=160;
 static const int	WANT_TO_SAVE__FRAME_W=NORMAL__FRAME_W;
 static const int	WANT_TO_SAVE__FRAME_H=96;
 
+#define		SAVENAME		"SBSP"
+
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -289,7 +293,7 @@ void CSaveScene::think(int _frames)
 					else
 					{
 						setMode(MODE__SAVING);
-						if(!m_saveLoadDatabase->startSave("blah"))
+						if(!m_saveLoadDatabase->startSave(SAVENAME))
 						{
 							setMode(MODE__SAVEERROR);
 						}
@@ -378,7 +382,7 @@ void CSaveScene::think(int _frames)
 					if(m_userResponse==USERRESPONSE__OK)
 					{
 						setMode(MODE__SAVING);
-						if(!m_saveLoadDatabase->startSave("blah"))
+						if(!m_saveLoadDatabase->startSave(SAVENAME))
 						{
 							setMode(MODE__SAVEERROR);
 						}
@@ -422,7 +426,7 @@ void CSaveScene::think(int _frames)
 					if(m_userResponse==USERRESPONSE__YES)
 					{
 						setMode(MODE__SAVING);
-						if(!m_saveLoadDatabase->startSave("blah",0))
+						if(!m_saveLoadDatabase->startSave(SAVENAME,0))
 						{
 							setMode(MODE__SAVEERROR);
 						}

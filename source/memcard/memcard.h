@@ -92,7 +92,7 @@ public:
 */
 // Memcard filenames (not using else, to make sure its correct)
 #if defined(__TERRITORY_USA__)
-#define	MEMCARD_BASE_FILENAME		"BASLUS-00000"
+#define	MEMCARD_BASE_FILENAME		"BASLUS-01352"
 #endif
 #if defined(__TERRITORY_UK__)
 #define	MEMCARD_BASE_FILENAME		"BESLES-00000"
