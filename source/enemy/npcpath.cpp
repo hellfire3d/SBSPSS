@@ -271,7 +271,7 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 	return( headingToTarget );
 }
 
-bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading )
+bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist )
 {
 	bool pointChange = false;
 
@@ -292,7 +292,7 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 	*distX = currentWaypoint->pos.vx - currentPos.vx;
 	*distY = currentWaypoint->pos.vy - currentPos.vy;
 
-	if ( abs( *distX ) < 10 )
+	if ( abs( *distX ) < waypointDist )
 	{
 		pointChange = true;
 		*pathComplete = incPath();

@@ -57,7 +57,7 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 
 	bool pathComplete;
 	
-	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading ) )
+	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading, 1 ) )
 	{
 		if ( pathComplete )
 		{
@@ -68,7 +68,12 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 		m_lastWaypoint = Pos;
 	}
 
-	moveX = 3 * _frames;
+	moveX = 4 * _frames;
+
+	if ( moveX > abs( waypointXDist ) )
+	{
+		moveX = abs( waypointXDist );
+	}
 
 	if ( waypointHeading == 2048 )
 	{
@@ -110,15 +115,22 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 	nextWaypoint.vx = waypointXDist + Pos.vx;
 	nextWaypoint.vy = waypointYDist + Pos.vy;
 
+	s32 waypointDist = abs( nextWaypoint.vx - m_lastWaypoint.vx );
+
+	if ( waypointDist < 1 )
+	{
+		waypointDist = 1;
+	}
+
 	if ( waypointYDist > 0 )
 	{
-		s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) * 1024 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
+		s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) * 1024 ) / waypointDist;
 
 		Pos.vy = nextWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
 	}
 	else if ( waypointYDist < 0 )
 	{
-		s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) * 1024 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
+		s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) * 1024 ) / waypointDist;
 
 		Pos.vy = m_lastWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
 	}
