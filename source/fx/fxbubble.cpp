@@ -23,7 +23,6 @@ void	CFXBubble::init(DVECTOR const &_Pos)
 		Velocity.vy=-(getRndRange(4)+1);
 		CurrentScaleX=CurrentScaleY=getRndRange(ONE/2)+(ONE/2);
 		XIdx=getRnd()&15;
-		
 }
 
 /*****************************************************************************/
@@ -33,16 +32,16 @@ static const s16	XT[16]={ 0,+1,+0,+1,+0, 0,-1,+0,-1,+0,0,+1,+0,+1,+0,};
 
 void	CFXBubble::think(int _frames)
 {
+		Life-=_frames;
 		if (Life<=0)
 		{
 			if (renderFrame!=FRM__BUBBLEPOP)
 			{
-//				CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP,false);
 				renderFrame=FRM__BUBBLEPOP;
 			}
 			else
 			{
-				setToShutdown();
+				killFX();
 			}
 		}
 		else

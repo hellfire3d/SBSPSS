@@ -13,7 +13,6 @@ class CFXBubble : public CFXBaseAnim
 public:
 		void		init(DVECTOR const &Pos);
 		void		think(int _frames);
-		void		killFX(){};
 
 protected:
 		u16			XIdx;
