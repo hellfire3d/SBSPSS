@@ -338,13 +338,13 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 	DrawSync(0);
 	SetScreenImage(0);
 	MemFree(screenData);
-	VidScrOn();
 
 // Init VBL
 	VbFunc = NULL;
 	for (int i=0; i<MaxVBFuncs; i++) VbFuncList[i] = NULL;
 	VSyncCallback( VidVSyncCallback );
 
+	VidScrOn();			// PKG - Moved to fix a bug with the loading screen jerking onto the screen..
 }
 
 /*****************************************************************************/
