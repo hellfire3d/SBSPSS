@@ -316,7 +316,10 @@ u8	*screenData=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
 		ScreenYOfs=0;	// Set screen ofs for NTSC
 	#else
 		SetVideoMode( MODE_PAL );
+/* changed cos the recomended amount was too bloody low!!
 		ScreenYOfs=16;	// Set screen ofs for PAL
+*/
+		ScreenYOfs=0;	// Set screen ofs for PAL
 	#endif
 
 	VSync(0);
