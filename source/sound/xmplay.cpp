@@ -225,12 +225,16 @@ static const int	colours[6][3]=
 	{	  0,255,  0		},			// FREE
 	{	128,128,128		},			// CONTINUE
 };
+static int			frameFlag=0;
+
 int				i,x,free;
 spuChannelUse	*ch;
 POLY_F4			*f4;
+
 x=50;
 free=0;
 ch=m_spuChannelUse;
+
 for(i=0;i<NUM_SPU_CHANNELS;i++)
 {
 	const int	*colour=&colours[ch->m_useType][0];
@@ -253,6 +257,20 @@ for(i=0;i<NUM_SPU_CHANNELS;i++)
 	x+=10;
 	ch++;
 }
+
+f4=GetPrimF4();
+setXYWH(f4,50,15,(24*10)-2,2);
+if(frameFlag)
+{
+	setRGB0(f4,255,255,255);
+}
+else
+{
+	setRGB0(f4,0,0,0);
+}
+AddPrimToList(f4,0);
+frameFlag^=1;
+
 if(!free)
 {
 	f4=GetPrimF4();
