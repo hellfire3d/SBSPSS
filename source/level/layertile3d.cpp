@@ -87,6 +87,16 @@ sFlipTable	FlipTable[4]=
 								},0<<31}
 };
 
+u8	RGBTable[16*4];
+int	RS=128;
+int	Ri=-6;
+int	GS=128;
+int	Gi=-6;
+int	BS=128;
+int	Bi=-6;
+int	AS=128;
+int	Ai=-6;
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -98,12 +108,29 @@ CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(Leve
 		VtxList=LevelHdr->VtxList;
 		VtxIdxList=LevelHdr->VtxIdxList;
 
+
 #if		defined(_SHOW_POLYZ_)
 		Font=new ("PrimFont") FontBank;
 		Font->initialise( &standardFont );
 		Font->setOt( 0 );
 		Font->setTrans(1);
 #endif
+		for (int i=0; i<16; i++)
+		{
+			int	R,G,B;
+			R=RS-(i*Ri);
+			G=GS-(i*Gi);
+			B=BS-(i*Bi);
+			if (R<0) R=0; else if (R>255) R=255;
+			if (G<0) G=0; else if (G>255) G=255;
+			if (B<0) B=0; else if (B>255) B=255;
+
+			RGBTable[(i*4)+0]=R;
+			RGBTable[(i*4)+1]=G;
+			RGBTable[(i*4)+2]=B;
+			RGBTable[(i*4)+3]=0;
+		}
+
 }
 
 /*****************************************************************************/
@@ -236,6 +263,33 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 				RenderH=SCREEN_TILE3D_HEIGHT;
 			else
 				RenderH=MapHeight-MapXY.vy;
+
+#if	defined(__USER_daveo__)
+		if (AS!=-1)
+		{
+			RS=GS=BS=AS;
+		}
+		if (Ai!=-1)
+		{
+			Ri=Gi=Bi=Ai;
+		}
+
+		for (int i=0; i<16; i++)
+		{
+			int	R,G,B;
+			R=RS-(i*Ri);
+			G=GS-(i*Gi);
+			B=BS-(i*Bi);
+			if (R<0) R=0; else if (R>255) R=255;
+			if (G<0) G=0; else if (G>255) G=255;
+			if (B<0) B=0; else if (B>255) B=255;
+
+			RGBTable[(i*4)+0]=R;
+			RGBTable[(i*4)+1]=G;
+			RGBTable[(i*4)+2]=B;
+			RGBTable[(i*4)+3]=0;
+		}
+#endif
 }
 
 /*****************************************************************************/
@@ -386,7 +440,7 @@ s16				TCount=0,QCount=0;
 // --- Render Tri's -------------
 					while (TriCount--)
 					{
-						POLY_FT3	*ThisPrim=(POLY_FT3*)PrimPtr;
+						POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
 						P0=XYList[TList->P0]; 
 						P1=XYList[TList->P1]; 
@@ -395,13 +449,14 @@ s16				TCount=0,QCount=0;
 						gte_ldsxy1(P1);
 						gte_ldsxy2(P2);
 						
-						setlen(ThisPrim, GPU_PolyFT3Tag);
+						setlen(ThisPrim, GPU_PolyGT3Tag);
 						ThisPrim->code=TList->PolyCode;
 						gte_nclip_b();	// 8 cycles
 
 						setShadeTex(ThisPrim,1);
+
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0);}
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0);}
 #endif
 
 						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
@@ -413,25 +468,35 @@ s16				TCount=0,QCount=0;
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+TList->OTOfs;
 						ClipZ^=FTab->ClipCode;
-						TList++;
 						if (ClipZ<0)
 						{
 							*(u32*)&ThisPrim->x0=P0;	// Set XY0
 							*(u32*)&ThisPrim->x1=P1;	// Set XY1
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							addPrim(ThisOT,ThisPrim);
-							PrimPtr+=sizeof(POLY_FT3);
+							// lighting
+							setShadeTex(ThisPrim,0);
+							T0=*(u32*)&RGBTable[TList->C0];
+							T1=*(u32*)&RGBTable[TList->C1];
+							T2=*(u32*)&RGBTable[TList->C2];
+							*(u32*)&ThisPrim->r0=T0;
+							*(u32*)&ThisPrim->r1=T1;
+							*(u32*)&ThisPrim->r2=T2;
+							ThisPrim->code=TList->PolyCode;
+
+							PrimPtr+=sizeof(POLY_GT3);
 							#if		defined(_SHOW_POLYZ_)
 							TCount++;
 							#endif
 
 						}
+						TList++;
 					}
 
 // --- Render Quads -----------
 					while (QuadCount--)
 					{
-						POLY_FT4	*ThisPrim=(POLY_FT4*)PrimPtr;
+						POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
 						P0=XYList[QList->P0]; 
 						P1=XYList[QList->P1]; 
@@ -441,13 +506,13 @@ s16				TCount=0,QCount=0;
 						gte_ldsxy1(P1);
 						gte_ldsxy2(P2);
 						
-						setlen(ThisPrim, GPU_PolyFT4Tag);
+						setlen(ThisPrim, GPU_PolyGT4Tag);
 						ThisPrim->code=QList->PolyCode;
 						gte_nclip_b();	// 8 cycles
 
 						setShadeTex(ThisPrim,1);
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);}
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0);}
 #endif
 
 						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
@@ -461,20 +526,31 @@ s16				TCount=0,QCount=0;
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+QList->OTOfs;
 						ClipZ^=FTab->ClipCode;
-						QList++;
 						if (ClipZ<0)
 						{
 							*(u32*)&ThisPrim->x0=P0;	// Set XY0
 							*(u32*)&ThisPrim->x1=P1;	// Set XY1
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							*(u32*)&ThisPrim->x3=P3;	// Set XY3
+							// Lighting
+							setShadeTex(ThisPrim,0);
+							T0=*(u32*)&RGBTable[QList->C0];
+							T1=*(u32*)&RGBTable[QList->C1];
+							T2=*(u32*)&RGBTable[QList->C2];
+							T3=*(u32*)&RGBTable[QList->C3];
+							*(u32*)&ThisPrim->r0=T0;
+							*(u32*)&ThisPrim->r1=T1;
+							*(u32*)&ThisPrim->r2=T2;
+							*(u32*)&ThisPrim->r3=T3;
+							ThisPrim->code=QList->PolyCode;
+
 							addPrim(ThisOT,ThisPrim);
-							PrimPtr+=sizeof(POLY_FT4);
+							PrimPtr+=sizeof(POLY_GT4);
 							#if		defined(_SHOW_POLYZ_)
 							QCount++;
 							#endif
-
 						}
+						QList++;
 					}
 
 				}

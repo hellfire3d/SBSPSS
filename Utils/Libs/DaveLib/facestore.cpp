@@ -256,7 +256,8 @@ int			V=ThisTex.v+H;
 
 		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
-		Out.PolyCode=GPU_PolyFT3Code;
+//		Out.PolyCode=GPU_PolyFT3Code;
+		Out.PolyCode=GPU_PolyGT3Code;
 
 		if (In.TPageFlag)
 		{
@@ -319,7 +320,8 @@ int			V=ThisTex.v+H;
 
 		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
-		Out.PolyCode=GPU_PolyFT4Code;
+//		Out.PolyCode=GPU_PolyFT4Code;
+		Out.PolyCode=GPU_PolyGT4Code;
 
 		if (In.TPageFlag)
 		{
@@ -393,9 +395,29 @@ int		ListSize=OutTriList.size();
 			ParseVtx4BBox(OutVtxList[OutFace.P0]);
 			ParseVtx4BBox(OutVtxList[OutFace.P1]);
 			ParseVtx4BBox(OutVtxList[OutFace.P2]);
+
 // Materials and other shit
 			SetupUV(InFace,OutFace);
 			OutFace.OTOfs=InFace.OtOfs;
+
+// RGB Shite
+int			ZOfs=+4*Scale;
+			int		Z[3];
+
+			Z[0]=(OutVtxList[OutFace.P0].vz+ZOfs)/8;
+			Z[1]=(OutVtxList[OutFace.P1].vz+ZOfs)/8;
+			Z[2]=(OutVtxList[OutFace.P2].vz+ZOfs)/8;
+
+			for (int p=0; p<3; p++)
+			{
+				if (Z[p]<0 ) Z[p]=0;
+				if (Z[p]>15) Z[p]=15;
+
+			}
+			
+			OutFace.C0=Z[0]*4;
+			OutFace.C1=Z[1]*4;
+			OutFace.C2=Z[2]*4;
 		}
 
 }
@@ -425,6 +447,26 @@ int		ListSize=OutQuadList.size();
 // Materials and other shit
 			SetupUV(InFace,OutFace);
 			OutFace.OTOfs=InFace.OtOfs;
+// RGB Shite
+int			ZOfs=+4*Scale;
+			int		Z[4];
+
+			Z[0]=(OutVtxList[OutFace.P0].vz+ZOfs)/8;
+			Z[1]=(OutVtxList[OutFace.P1].vz+ZOfs)/8;
+			Z[2]=(OutVtxList[OutFace.P2].vz+ZOfs)/8;
+			Z[3]=(OutVtxList[OutFace.P3].vz+ZOfs)/8;
+
+			for (int p=0; p<4; p++)
+			{
+				if (Z[p]<0 ) Z[p]=0;
+				if (Z[p]>15) Z[p]=15;
+
+			}
+			
+			OutFace.C0=Z[0]*4;
+			OutFace.C1=Z[1]*4;
+			OutFace.C2=Z[2]*4;
+			OutFace.C3=Z[3]*4;
 		}
 }
 

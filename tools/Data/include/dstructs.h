@@ -63,7 +63,7 @@ struct sShortXYZ
 //***************************************************************************
 struct	sVtx
 {
-		s16	vx, vy, vz, pad;
+		s16	vx, vy, vz, rgb;
 
 #ifdef	WIN32
 bool	operator==(sVtx const &v1)	{return((vx==v1.vx) && (vy==v1.vy) && (vz==v1.vz));}
@@ -108,7 +108,9 @@ struct	sTri
 		s16			OTOfs;					//  2
 		u8			PolyCode;				//  1
 		u8			Pad;					//  1
-};											// 20
+		u8			C0,C1,C2;
+		u8			Pad2;				
+};											// 24
 
 //---------------------------------------------------------------------------
 struct	sQuad
@@ -126,7 +128,8 @@ struct	sQuad
 		s16			OTOfs;					//  2
 		u8			PolyCode;				//  1
 		u8			Pad;					//  1
-};											// 24
+		u8			C0,C1,C2,C3;
+};											// 28
 
 
 struct	sPoly

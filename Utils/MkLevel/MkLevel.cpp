@@ -1050,8 +1050,8 @@ int		i,ListSize;
 //***************************************************************************
 int		CMkLevel::WriteTriList()
 {
-int				ThisPos=ftell(File);
-int				i,ListSize=OutTriList.size();
+int			ThisPos=ftell(File);
+int			i,ListSize=OutTriList.size();
 
 		for (i=0;i<ListSize;i++)
 		{
@@ -1065,8 +1065,8 @@ int				i,ListSize=OutTriList.size();
 //***************************************************************************
 int		CMkLevel::WriteQuadList()
 {
-int				ThisPos=ftell(File);
-int				i,ListSize=OutQuadList.size();
+int			ThisPos=ftell(File);
+int			i,ListSize=OutQuadList.size();
 
 		for (i=0;i<ListSize;i++)
 		{
@@ -1099,6 +1099,8 @@ sVtx	Max={-100,-100,-100};
 			Max.vx=__max(Max.vx,Out.vx);
 			Max.vy=__max(Max.vy,Out.vy);
 			Max.vz=__max(Max.vz,Out.vz);
+//			Out.rgb=(Out.vz+64)/8;
+//			printf("%i\n",Out.rgb);
 			fwrite(&Out,1,sizeof(sVtx),File);
 		}
 		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));

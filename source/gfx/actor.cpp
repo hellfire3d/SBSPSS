@@ -605,6 +605,7 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
 			setShadeTex(Ft4,1);
+			setRGB0(Ft4,127,127,127);
 			addPrim(OtPtr+OtPos,Ft4);
 // Set BBox
 // Sizes now depend on aspect corrected sizes, so get sizes back from poly
@@ -921,7 +922,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 		sTri	*TList=&TriList[ThisElem->TriStart];
 		while (TriCount--)
 		{
-			POLY_FT3	*ThisPrim=(POLY_FT3*)PrimPtr;
+			POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
 			P0=XYList[TList->P0]; 
 			P1=XYList[TList->P1]; 
@@ -930,7 +931,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 			gte_ldsxy1(P1);
 			gte_ldsxy2(P2);
 
-			setlen(ThisPrim, GPU_PolyFT3Tag);
+			setlen(ThisPrim, GPU_PolyGT3Tag);
 			ThisPrim->code=TList->PolyCode;
 			gte_nclip_b();	// 8 cycles
 
@@ -953,7 +954,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 				*(u32*)&ThisPrim->x1=P1;	// Set XY1
 				*(u32*)&ThisPrim->x2=P2;	// Set XY2
 				addPrim(ThisOT,ThisPrim);
-				PrimPtr+=sizeof(POLY_FT3);
+				PrimPtr+=sizeof(POLY_GT3);
 			}
 		}
 
@@ -962,7 +963,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 		sQuad	*QList=&QuadList[ThisElem->QuadStart];
 		while (QuadCount--)
 		{
-			POLY_FT4	*ThisPrim=(POLY_FT4*)PrimPtr;
+			POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
 			P0=XYList[QList->P0]; 
 			P1=XYList[QList->P1]; 
@@ -972,7 +973,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 			gte_ldsxy1(P1);
 			gte_ldsxy2(P2);
 			
-			setlen(ThisPrim, GPU_PolyFT4Tag);
+			setlen(ThisPrim, GPU_PolyGT4Tag);
 			ThisPrim->code=QList->PolyCode;
 			gte_nclip_b();	// 8 cycles
 
@@ -997,7 +998,7 @@ u32	const		*XYList=(u32*)SCRATCH_RAM;
 				*(u32*)&ThisPrim->x2=P2;	// Set XY2
 				*(u32*)&ThisPrim->x3=P3;	// Set XY3
 				addPrim(ThisOT,ThisPrim);
-				PrimPtr+=sizeof(POLY_FT4);
+				PrimPtr+=sizeof(POLY_GT4);
 			}
 		}
 
