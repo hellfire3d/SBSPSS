@@ -413,7 +413,6 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			{
 				m_isActive = false;
 				setToShutdown();
-				CGameScene::setBossHasBeenKilled();
 			}
 
 			if ( m_soundId == NOT_PLAYING )
@@ -819,6 +818,7 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 			{
 				m_health = 0;
 				m_state = MOTHER_JELLYFISH_BEGIN_CIRCLE;
+				CGameScene::setBossHasBeenKilled();
 			}
 
 			m_controlFunc = NPC_CONTROL_MOVEMENT;
