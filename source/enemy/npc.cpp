@@ -120,6 +120,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 	},
 
+	{	// NPC_SAW_BLADE
+		NPC_INIT_RETURNING_HAZARD,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_RETURNING_HAZARD,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
+
 	{	// NPC_SMALL_JELLYFISH_1
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE,
@@ -495,7 +507,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_DUST_DEVIL;
+	m_type = NPC_SAW_BLADE;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
