@@ -101,7 +101,7 @@ public:
 			count=0;
 			for(i=0;i<8;i++)
 			{
-				unsigned char	flags=m_kelpTokenCollectedFlags[_level][i];
+				unsigned char	flags=m_kelpTokenCollectedFlags[_chapter][i];
 				for(j=0;j<8;j++)
 				{
 					if(flags&1)count++;
@@ -115,14 +115,14 @@ public:
 			ASSERT(_chapter<=NUM_CHAPTERS);
 			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
-			m_kelpTokenCollectedFlags[_level][_token>>3]|=1<<(_token&7);
+			m_kelpTokenCollectedFlags[_chapter][_token>>3]|=1<<(_token&7);
 		}
 		int				isKelpTokenUncollected(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
 			ASSERT(_chapter<=NUM_CHAPTERS);
-			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
+			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
-			return (m_kelpTokenCollectedFlags[_level][_token>>3]>>(_token&7))&1?false:true;
+			return (m_kelpTokenCollectedFlags[_chapter][_token>>3]>>(_token&7))&1?false:true;
 		}
 	} GameSlot;
 
