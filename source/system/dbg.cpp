@@ -53,13 +53,11 @@ Available options are:
 
 #ifdef	__USER_charles__
 	#define DBG_OUTPUT_TO_DEBUGGER
-	#define	DBG_MAX_MESSAGE_LENGTH	256
 	#define DBG_SHOW_MESSAGE_ORIGIN
 	#define	DBG_FILENAME_LENGTH		16
 	#define DBG_DEFAULT_CHANNEL		DC_CHARLES|DC_SYSTEM
 #elif	__USER_daveo__
 	#define DBG_OUTPUT_TO_DEBUGGER
-	#define	DBG_MAX_MESSAGE_LENGTH	256
 	#define DBG_SHOW_MESSAGE_ORIGIN
 	#define	DBG_FILENAME_LENGTH		16
 	#define DBG_DEFAULT_CHANNEL		DC_DAVE|DC_SYSTEM
@@ -179,7 +177,7 @@ void __writeDbgMessage(const char *_format,...)
 {
 	if(s_dbgTransientChannelFlags&s_activeChannelFlags)
 	{
-		char		messageBuffer[DBG_MAX_MESSAGE_LENGTH+1];
+		char		messageBuffer[256];
 		__va_list	va;
 		int			start;//,len;
 		
