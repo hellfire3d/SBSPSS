@@ -218,7 +218,7 @@ void CShopScene::render()
 		}
 
 		// Darken item if already bought
-		if(!isItemAvailableToBut(i))
+		if(!isItemAvailableToBuy(i))
 		{
 			setRGB0(ft4,shopboughtrgb,shopboughtrgb,shopboughtrgb);
 		}
@@ -289,7 +289,7 @@ int CShopScene::readyToShutdown()
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
+	Purpose:	Ugh...
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -297,13 +297,16 @@ typedef struct
 {
 	int
 	tokenx,tokeny,
+	itemx,itemy,
 	pricex,pricey,
+	boxx,boxy,boxw,boxh,
 	gaptoreadout,
-	instructionsx,instructionsy,
+	instructionsy,
 	instructionsygap,
 	instructionsbuttonyoffset,
 	instructionsbuttonspace,
 	instructionsbuttongap,
+	xborder,
 
 	
 	end;
@@ -311,48 +314,45 @@ typedef struct
 
 shopdata shop=
 {
-	10,10,	//	tokenx,tokeny,
-	40,10,	//	pricex,pricey,
-	5,		//	gaptoreadout
-	250,7,	//	instructionsx,instructionsy,
-	16,		//	instructionsygap,
-	3,		//	instructionsbuttonyoffset,
-	10,		//	instructionsbuttonspace,
-	5,		//	instructionsbuttongap,
+	10,42,			//	tokenx,tokeny,
+	10,6,			//	itemx,itemy,
+	110,17,			//	pricex,pricey,
+	10,5,180,500,	//	boxx,boxy,boxw,boxh,
+	5,				//	gaptoreadout
+	7,				//	instructionsy,
+	16,				//	instructionsygap,
+	3,				//	instructionsbuttonyoffset,
+	10,				//	instructionsbuttonspace,
+	5,				//	instructionsbuttongap,
+	10,				//	xborder,
 };
 
 void CShopScene::renderUi()
 {
 	int			xbase,ybase;
 	SpriteBank	*sb;
+	int			w1,w2,w3,instructionsWidth,instructionsXBase;
 	sFrameHdr	*fh1,*fh2;
 	int			x,y;
-	char		buf[10];
+	char		buf[100];
+
 
 	xbase=fx;
 	ybase=fy;
 	sb=CGameScene::getSpriteBank();
 
+	// Instructions
 	m_font->setJustification(FontBank::JUST_LEFT);
 
-	// Token count
-	fh1=sb->getFrameHeader(FRM__TOKEN);
-	x=xbase+shop.tokenx;
-	y=ybase+shop.tokeny;
-	sb->printFT4(fh1,x,y,0,0,0);
-	sprintf(buf,"x%d",99);
-//	x+=fh1->W+shop.gaptoreadout;
-//	y+=fh1->H+m_font->getStringHeight(buf);
-PAUL_DBGMSG("%d,%d",fh1->H,m_font->getStringHeight(buf));
-	m_font->print(x,y,buf);
+	w1=m_font->getStringWidth(STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM);
+	w2=m_font->getStringWidth(STR__SHOP_SCREEN__CROSS_TO_PURCHASE);
+	w3=m_font->getStringWidth(STR__SHOP_SCREEN__TRIANGLE_TO_EXIT);
+	instructionsWidth=w1;
+	if(w2>instructionsWidth)instructionsWidth=w2;
+	if(w3>instructionsWidth)instructionsWidth=w3;
+	instructionsXBase=fw-instructionsWidth-shop.xborder;
 
-
-	// Item price
-	m_font->print(xbase+shop.pricex,ybase+shop.pricey,STR__SHOP_SCREEN__PRICE);
-
-
-	// Instructions
-	x=xbase+shop.instructionsx;
+	x=xbase+instructionsXBase;
 	y=ybase+shop.instructionsy;
 	m_font->print(x,y,STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM);
 	fh1=sb->getFrameHeader(FRM__BUTL);
@@ -362,22 +362,63 @@ PAUL_DBGMSG("%d,%d",fh1->H,m_font->getStringHeight(buf));
 	sb->printFT4(fh2,x,y,0,0,0);
 	x-=shop.instructionsbuttongap+fh1->W;
 	sb->printFT4(fh1,x,y,0,0,0);
+int maxInstructionsWidth=xbase+fy-x;
 
-	x=xbase+shop.instructionsx;
+	x=xbase+instructionsXBase;
 	y=ybase+shop.instructionsy+shop.instructionsygap;
 	m_font->print(x,y,STR__SHOP_SCREEN__CROSS_TO_PURCHASE);
 	fh1=sb->getFrameHeader(FRM__BUTX);
 	x-=shop.instructionsbuttonspace+fh2->W;
 	y+=shop.instructionsbuttonyoffset;
-	sb->printFT4(fh1,x,y,0,0,0);
+	sb->printFT4(fh1,x-1,y,0,0,0);
 
-	x=xbase+shop.instructionsx;
+	x=xbase+instructionsXBase;
 	y=ybase+shop.instructionsy+(shop.instructionsygap*2);
 	m_font->print(x,y,STR__SHOP_SCREEN__TRIANGLE_TO_EXIT);
 	fh1=sb->getFrameHeader(FRM__BUTT);
 	x-=shop.instructionsbuttonspace+fh2->W;
 	y+=shop.instructionsbuttonyoffset;
-	sb->printFT4(fh1,x,y,0,0,0);
+	sb->printFT4(fh1,x-1,y,0,0,0);
+
+
+	// Item price
+	int		x1,x2;
+	x1=shop.xborder;
+	x2=fy-maxInstructionsWidth-(shop.xborder*1);
+	m_font->setJustification(FontBank::JUST_CENTRE);
+	if(isItemAvailableToBuy(m_currentlySelectedItem))
+	{
+		SHOPITEM	*shopItem;
+		shopItem=&s_shopItems[m_currentlySelectedItem];
+		fh1=m_spriteBank->getFrameHeader(shopItem->m_frame);
+		x=xbase+shop.itemx;
+		y=ybase+shop.itemy;
+		sb->printFT4(fh1,x,y,0,0,0);
+
+		x1+=32;
+
+		m_font->setPrintArea(xbase+x1,ybase,x2-x1,100);
+		m_font->print((x2-x1)/2,3,STR__SHOP_SCREEN__PRICE);
+
+		sprintf(buf,"%d",shopItem->m_cost);
+		m_font->print((x2-x1)/2,5+m_font->getStringHeight(STR__SHOP_SCREEN__PRICE),buf);
+	}
+	else
+	{
+		m_font->setPrintArea(xbase+x1,ybase,x2-x1,100);
+		m_font->print((x2-x1)/2,3,STR__SHOP_SCREEN__ITEM_ALREADY_PURCHASED);
+	}
+	m_font->setPrintArea(0,0,512,256);
+
+	// Available token count
+	x=xbase+shop.tokenx;
+	y=ybase+shop.tokeny;
+	fh1=m_spriteBank->getFrameHeader(FRM_SMALLTOKEN);
+	m_spriteBank->printFT4(fh1,x,y,0,0,0);
+	x+=fh1->W;
+	sprintf(buf,"x%d",99);
+	m_font->setJustification(FontBank::JUST_LEFT);
+	m_font->print(x,y,buf);
 
 	m_guiFrame->render();
 }
@@ -389,7 +430,7 @@ PAUL_DBGMSG("%d,%d",fh1->H,m_font->getStringHeight(buf));
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CShopScene::isItemAvailableToBut(int _itemNumber)
+int CShopScene::isItemAvailableToBuy(int _itemNumber)
 {
 	return _itemNumber!=3;
 }
