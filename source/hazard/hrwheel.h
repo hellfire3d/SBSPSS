@@ -29,6 +29,7 @@ public:
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				linkToWeight( CNpcRisingWeightHazard *weight )			{m_weight = weight;}
 	virtual void		render();
+	virtual	CRECT const	*getThinkBBox()											{return( &getCollisionArea() );}
 protected:
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	virtual void		collidedWith(CThing *_thisThing);

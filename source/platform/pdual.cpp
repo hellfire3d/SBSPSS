@@ -128,15 +128,18 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 		m_otherPlatform->setLineBase( slavePos );
 	}
 
-	s32 minX, maxX, minY, maxY;
+	m_thinkArea.x1 = startPos.vx;
+	m_thinkArea.x2 = slavePos.vx;
 
-	m_npcPath.getPathXExtents( &minX, &maxX );
-	m_npcPath.getPathYExtents( &minY, &maxY );
+	if ( m_thinkArea.x1 > m_thinkArea.x2 )
+	{
+		int temp = m_thinkArea.x2;
+		m_thinkArea.x2 = m_thinkArea.x1;
+		m_thinkArea.x1 = temp;
+	}
 
-	m_thinkArea.x1 = minX;
-	m_thinkArea.x2 = maxX;
-	m_thinkArea.y1 = minY;
-	m_thinkArea.y2 = maxY;
+	m_thinkArea.y1 = startPos.vy;
+	m_thinkArea.y2 = startPos.vy + m_maxExtension;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

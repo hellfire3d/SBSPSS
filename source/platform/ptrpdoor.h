@@ -25,6 +25,7 @@ public:
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				setTriggered()											{m_triggered = true;}
 	virtual void		render();
+	virtual	CRECT const	*getThinkBBox()											{return( &getCollisionArea() );}
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );

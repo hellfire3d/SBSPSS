@@ -23,6 +23,7 @@ class CNpcSteerableBarrelPlatform : public CNpcPlatform
 public:
 	virtual void		render();
 	virtual void		postInit();
+	virtual	CRECT const	*getThinkBBox()											{return( &getCollisionArea() );}
 protected:
 	virtual void		processMovement( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);

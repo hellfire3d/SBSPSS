@@ -36,6 +36,7 @@ public:
 	virtual void		postInit();
 	virtual void		render();
 	virtual void		shutdown();
+	virtual	CRECT const	*getThinkBBox()									{return( &getCollisionArea() );}
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
