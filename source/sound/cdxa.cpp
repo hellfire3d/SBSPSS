@@ -12,9 +12,9 @@
 #include 	<libcd.h>
 #include 	<libsnd.h>
 
-#ifndef __SOUND_SNDBANK_H__
-#include "sound\sndbank.h"
-#endif
+//#ifndef __SOUND_SNDBANK_H__
+//#include "sound\sndbank.h"
+//#endif
 
 
 // Add this to have CDXA on PC build!!
@@ -292,15 +292,15 @@ void	CXAStream::SetVolume(s32 LVol,s32 RVol)
 {
 CdlATV			CDVol;
 SpuCommonAttr	Attr;
-int				VolumeSetting;
-
-		if (CurrentStream==XA_STREAM_SPEECH)
-			VolumeSetting=CSfxFactory::SNDVOL_SFX;
-		else
-			VolumeSetting=CSfxFactory::SNDVOL_MUSIC;
-
-		LVol=(LVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
-		RVol=(RVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
+//int				VolumeSetting;
+//
+//		if (CurrentStream==XA_STREAM_SPEECH)
+//			VolumeSetting=CSfxFactory::SNDVOL_SFX;
+//		else
+//			VolumeSetting=CSfxFactory::SNDVOL_MUSIC;
+//
+//		LVol=(LVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
+//		RVol=(RVol*CSfxFactory::getVolumeLevel(VolumeSetting))/256;
 		Attr.mask = (SPU_COMMON_CDVOLL|SPU_COMMON_CDVOLR|SPU_COMMON_CDMIX); 
 		Attr.cd.volume.left	=LVol;
 		Attr.cd.volume.right=RVol;
