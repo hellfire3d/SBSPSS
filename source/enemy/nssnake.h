@@ -86,6 +86,7 @@ protected:
 	s32								m_collTimer;
 	s32								m_snapTimer;
 	s32								m_openTimer;
+	bool							m_meterOn;
 };
 
 #endif

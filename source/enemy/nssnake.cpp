@@ -39,6 +39,18 @@
 #include <ACTOR_SEASNAKE_ANIM.h>
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSeaSnakeSegment::init()
@@ -110,6 +122,14 @@ void CNpcSeaSnakeEnemy::postInit()
 	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
 	int remLength = NPC_SEA_SNAKE_LENGTH - initLength;
 
+	m_health = NPC_SEA_SNAKE_LENGTH;
+
+	if ( CLevel::getIsBossRespawn() )
+	{
+		m_health = CLevel::getBossHealth();
+		m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - m_health ) ) / NPC_SEA_SNAKE_LENGTH );
+	}
+
 	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
 	{
 		m_segmentArray[segCount].init();
@@ -141,10 +161,11 @@ void CNpcSeaSnakeEnemy::postInit()
 		}
 	}
 
-	m_segmentCount = NPC_SEA_SNAKE_LENGTH;
+	m_segmentCount = m_health;
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 	m_collTimer = 0;
+	m_meterOn=false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +179,12 @@ void CNpcSeaSnakeSegment::shutdown()
 
 void CNpcSeaSnakeEnemy::shutdown()
 {
+	if ( m_state != NPC_GENERIC_HIT_DEATH_END )
+	{
+		CLevel::setIsBossRespawn( true );
+		CLevel::setBossHealth( m_health );
+	}
+
 	// delete snake segments
 
 	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
@@ -444,6 +471,16 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 void CNpcSeaSnakeEnemy::processClose( int _frames )
 {
+	// fire at player
+
+	s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+
+	CProjectile *projectile;
+	projectile = CProjectile::Create();
+	DVECTOR newPos = Pos;
+	projectile->init( newPos, heading );
+	projectile->setGraphic( FRM__LIGHTNING1 );
+
 	//resetSeaSnakeHeadToTail();
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
@@ -484,6 +521,13 @@ void CNpcSeaSnakeEnemy::render()
 
 		if (canRender())
 		{
+			if (!m_meterOn)
+			{
+				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				T->SetMax( NPC_SEA_SNAKE_LENGTH );
+				m_meterOn=true;
+			}
+
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),0);
@@ -651,6 +695,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 		{
 			setToShutdown();
 			CGameScene::setBossHasBeenKilled();
+			m_state = NPC_GENERIC_HIT_DEATH_END;
 		}
 	}
 	else
@@ -660,6 +705,8 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 			// knock segment off end of list
 
 			m_segmentCount--;
+			m_health--;
+			m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - m_health ) ) / NPC_SEA_SNAKE_LENGTH );
 
 			m_collTimer = GameState::getOneSecondInFrames();
 		}
