@@ -74,10 +74,9 @@ void	CLayerBack::think(DVECTOR &MapPos)
 /*****************************************************************************/
 const int	BM=16;
 const int	BB=16;
-int	RB=1;
+
 void	CLayerBack::render()
 {
-	if (!RB) return;
 sOT			*ThisOT=OtPtr+(MAX_OT-1);
 int			i,ThisY=-YOfs;
 // Render Back Sprites
