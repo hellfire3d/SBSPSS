@@ -339,6 +339,7 @@ triggers_src :=		trigger \
 					thazard \
 					tbgeyser \
 					thazwalk \
+					tsecret \
 					tsemit \
 					tsswitch \
 					tgbowl \
