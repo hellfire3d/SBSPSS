@@ -467,6 +467,9 @@ void CFrontEndOptions::shutdown()
 {
 	int		i;
 
+	m_loadModeConfirmFrame->shutdown();
+	m_loadModeOKFrame->shutdown();
+
 	for(i=0;i<MODE__COUNT;i++)
 	{
 		m_modeMenus[i]->shutdown();
