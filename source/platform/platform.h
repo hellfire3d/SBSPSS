@@ -161,7 +161,6 @@ protected:
 	bool				processSensor();
 	virtual void		processMovement( int _frames );
 	virtual void		processLifetime( int _frames );
-	void				processShot();
 	void				processClose( int _frames );
 	void				processCollision();
 	virtual void		processTimer( int _frames );

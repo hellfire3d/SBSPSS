@@ -164,7 +164,7 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 	}
 }
 
-void CNpcStaticClamEnemy::processShot()
+void CNpcStaticClamEnemy::processShot( int _frames )
 {
 	if ( !m_isStunned )
 	{

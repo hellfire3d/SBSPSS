@@ -801,7 +801,7 @@ void CNpcEnemy::think(int _frames)
 					break;
 
 				case NPC_CONTROL_SHOT:
-					processShot();
+					processShot( moveFrames );
 
 					break;
 
@@ -1145,7 +1145,7 @@ void CNpcEnemy::hasBeenAttacked()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEnemy::processShot()
+void CNpcEnemy::processShot( int _frames )
 {
 	switch( m_data[m_type].shotFunc )
 	{
@@ -1205,12 +1205,21 @@ void CNpcEnemy::processShot()
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
 
+					if (m_data[m_type].skelType)
+					{
+						m_actorGfx->SetOtPos( 0 );
+					}
+
 					break;
 				}
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					if ( !m_animPlaying )
+					Pos.vy += 5 * _frames;
+
+					DVECTOR	offset = CLevel::getCameraPos();
+
+					if ( Pos.vy - offset.vy > VidGetScrH() )
 					{
 						if ( m_data[m_type].respawning )
 						{

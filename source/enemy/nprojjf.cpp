@@ -108,7 +108,7 @@ void CNpcSmallJellyfishProjectileEnemy::think(int _frames)
 					break;
 
 				case NPC_CONTROL_SHOT:
-					processShot();
+					processShot( moveFrames );
 
 					break;
 
