@@ -55,6 +55,8 @@
 #include "projectl\prnpc.h"
 #endif
 
+#include "fx\fx.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef __ENEMY_NSJFISH_H__
@@ -757,6 +759,46 @@ void CNpcEnemy::processAttackCollision()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::drawAttackEffect()
+{
+	CRECT rect;
+	rect = getCollisionArea();
+
+	DVECTOR thwakPos;
+
+	s32 xDist;
+
+	CPlayer *player = GameScene.getPlayer();
+	DVECTOR playerPos = player->getPos();
+
+	xDist = playerPos.vx - this->Pos.vx;
+
+	if ( xDist > 0 )
+	{
+		thwakPos.vx = rect.x2;
+
+		if ( rect.x1 > thwakPos.vx )
+		{
+			thwakPos.vx = rect.x1;
+		}
+	}
+	else
+	{
+		thwakPos.vx = rect.x1;
+
+		if ( rect.x2 < thwakPos.vx )
+		{
+			thwakPos.vx = rect.x2;
+		}
+	}
+
+	thwakPos.vy = ( rect.y1 + rect.y2 ) >> 1;
+
+	CFX::Create( CFX::FX_TYPE_THWACK, thwakPos );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
 	if ( m_isActive && !m_isCaught && !m_isDying )
@@ -814,6 +856,8 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 						}
 						m_controlFunc = NPC_CONTROL_SHOT;
 						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+						drawAttackEffect();
 					}
 				}
 
@@ -1076,6 +1120,7 @@ void CNpcEnemy::processShot( int _frames )
 		case NPC_SHOT_NONE:
 		{
 			// do nothing
+			m_controlFunc = m_oldControlFunc;
 
 			break;
 		}

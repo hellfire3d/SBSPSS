@@ -270,6 +270,8 @@ protected:
 	void				processCoralBlower( int _frames );
 	bool				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u8 destroyAtTarget );
 
+	void				drawAttackEffect();
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];

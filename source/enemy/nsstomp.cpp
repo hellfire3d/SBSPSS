@@ -164,3 +164,44 @@ const CRECT *CNpcSkullStomperEnemy::getThinkBBox()
 
 	return &objThinkBox;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSkullStomperEnemy::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive && !m_isCaught && !m_isDying )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				ATTACK_STATE playerState = player->getAttackState();
+
+				if(playerState==ATTACK_STATE__NONE)
+				{
+					if ( !player->isRecoveringFromHit() )
+					{
+						CPlayer *player = GameScene.getPlayer();
+
+						player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
+					}
+				}
+				else
+				{
+					drawAttackEffect();
+				}
+
+				break;
+			}
+
+			case TYPE_ENEMY:
+				break;
+
+			default:
+				ASSERT(0);
+				break;
+		}
+	}
+}
