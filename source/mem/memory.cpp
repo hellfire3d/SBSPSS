@@ -26,7 +26,8 @@ int			MemNodeCount=0;
 static const unsigned int	HEAD_GUARD_FILL_PATTERN	=0x3c3c3c3c;
 static const unsigned int	MEM_FILL_PATTERN		=0x3d3d3d3d;
 static const unsigned int	TAIL_GUARD_FILL_PATTERN	=0x3e3e3e3e;
-static const unsigned int	MEM_GUARD_SIZE=sizeof(int)*2;
+static const unsigned int	NUM_MEM_GUARDS=2;
+static const unsigned int	MEM_GUARD_SIZE=sizeof(int)*NUM_MEM_GUARDS;
 #endif	/* USE_MEM_GUARDS */
 
 
@@ -86,26 +87,28 @@ static MEM_PART	memDump[ MAX_MEM_DUMP ];
 
 static bool	s_dumpMem = false;
 
-static const int	s_dumpX = 16;
-static const int	s_dumpY = 190;
-static const int	s_dumpWidth = 400;
-static const int	s_dumpHeight = 32;
-static const int	s_dumpScale = ONE;
 
-static const int	s_dumpTextX = 32;
-static const int	s_dumpTextY = 120;
-
-static const int s_dumpShift = 20;
-
-static const int s_shadeX = 16;
-static const int s_shadeY = 115;
-static const int s_shadeW = 400;
-static const int s_shadeH = 80;
+static const int		s_shadeX = 20;
+static const int		s_shadeY = 119;
+static const int		s_shadeW = 400;
+static const int		s_shadeH = 82;
 static const CVECTOR	s_shadeCol = { 0, 0, 0 };
+
+static const int		s_dumpTextX = s_shadeX+12;
+static const int		s_dumpTextY = s_shadeY+1;
+
+static const int		s_dumpX = s_shadeX;
+static const int		s_dumpY = s_shadeY+s_shadeH+5;
+static const int		s_dumpWidth = s_shadeW;
+static const int		s_dumpHeight = 16;
+static const int		s_dumpScale = ONE;
+static const int		s_dumpShift = 20;
+
 
 
 static int		s_currentMemPart = 0;
 
+#ifdef __DEBUG_MEM__
 static const CVECTOR	s_colors[ MEM_ID_MAX ] =
 {
 	{ 255, 0, 0 },		// MEM_BACKEND
@@ -125,6 +128,7 @@ static const char *	s_sceneNames[] =
 	"System",
 	"UNKNOWN",
 };
+#endif	/* __DEBUG_MEM__ */
 
 static const int s_nbSceneNames = sizeof(s_sceneNames) / sizeof(char *);
 
@@ -135,6 +139,7 @@ static FontBank s_debugFont;
 
 
 
+#ifdef __DEBUG_MEM__
 void dumpDebugMem()
 {
 	if (s_dumpMem)
@@ -194,7 +199,6 @@ void dumpDebugMem()
 
 		mem = memDump;
 		
-/*
 		for (int i=0;i<MAX_MEM_DUMP;i++)
 		{
 			if (mem->addr)
@@ -202,7 +206,7 @@ void dumpDebugMem()
 				u32			len;
 				u32 *		addr;
 				POLY_F4 *	F4;
-				CVECTOR *	col;
+				const CVECTOR *	col;
 
 				addr = (u32 *)mem->addr;
 
@@ -213,34 +217,43 @@ void dumpDebugMem()
 				x >>= s_dumpShift;
 				x += s_dumpX;
 
+#ifdef	USE_MEM_GUARDS
+				len = *(addr - (NUM_MEM_GUARDS+1));
+#else
 				len = *(addr - 1);
+#endif
 				len *= s_dumpScale;
 				len >>= 12;
 				len *= byteWidth;
 				len >>= s_dumpShift;
+				if(len==0)len=1;
 
 				col = &s_colors[ mem->id ];
 
-				if (i == s_currentMemPart)
-				{
-					col = &black;
-				}
-
 				F4 = GetPrimF4();
 				setPolyF4( F4 );
-				setXY4( F4, x, y,
-							x + len, y,
-							x, y + s_dumpHeight,
-							x + len, y + s_dumpHeight );
-				setSemiTrans( F4, 0 );
-				setShadeTex( F4, 0 );
+				setXYWH(F4,x,y,len,s_dumpHeight);
 				setRGB0( F4, col->r, col->g, col->b );
 				AddPrimToList( F4, 0 );
-			}
 
+				if (i == s_currentMemPart)
+				{
+					F4 = GetPrimF4();
+					setPolyF4( F4 );
+					setXYWH(F4,x,y+s_dumpHeight,len,2);
+					setRGB0( F4, 255,0,0 );
+					AddPrimToList( F4, 0 );
+					F4 = GetPrimF4();
+					setPolyF4( F4 );
+					setXYWH(F4,x-1,y+s_dumpHeight,len+2,2+1);
+					setRGB0( F4, 0,0,0 );
+					AddPrimToList( F4, 0 );
+				}
+			}
 			mem++;
 		}
-*/		int			len;
+
+		int			len;
 		char		Text[ 2048 ];
 		char *		name;
 		char *		file;
@@ -257,7 +270,7 @@ void dumpDebugMem()
 		mem = &memDump[ s_currentMemPart ];
 		if (mem->addr)
 #ifdef	USE_MEM_GUARDS
-			len = *(((u32 *)mem->addr) - 3);
+			len = *(((u32 *)mem->addr) - (NUM_MEM_GUARDS+1));
 #else
 			len = *(((u32 *)mem->addr) - 1);
 #endif
@@ -275,7 +288,7 @@ void dumpDebugMem()
 
 			sprintf( Text, "%sFile - %s, Line - %d\n", Text, mem->file, mem->line );
 			sprintf( Text, "%sScene - %s\n", Text, s_sceneNames[ mem->id ] );
-//			sprintf( Text, "%sTime - %lu", Text, mem->frameTime );
+			sprintf( Text, "%sTime - %lu", Text, mem->frameTime );
 		}
 		else
 		{
@@ -285,6 +298,7 @@ void dumpDebugMem()
 		s_debugFont.print( s_dumpTextX, s_dumpTextY, Text );
 	  }
 }
+#endif	/* __DEBUG_MEM__ */
 
 
 void resetDebugMem()
