@@ -82,6 +82,9 @@ struct	sExpLayerTile
 		u16		Tile;
 		u16		Flags;
 //		bool	operator==(sExpLayerTile const &v1)	{return (Tile==v1.Tile);}
+//bool	operator==(sExpLayerTile const &v1)	{return (Tile==v1.Tile);}
+bool	operator ==(sExpLayerTile const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags);}
+
 };
 
 

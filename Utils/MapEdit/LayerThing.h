@@ -53,6 +53,9 @@ virtual	void			GUIKill(CCore *Core);
 virtual	void			GUIUpdate(CCore *Core);
 virtual	void			GUIChanged(CCore *Core);
 
+		int				GetWidth();
+		int				GetHeight();
+
 virtual	void			GUIThingDefClear(){};
 virtual	void			GUIThingUpdate(bool OnlySel=false){};
 virtual	void			GUIThingUpdateList(CComboBox &List,bool OnlySel=false);

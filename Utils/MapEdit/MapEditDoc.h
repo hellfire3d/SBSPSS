@@ -28,6 +28,9 @@ public:
 	void			GUIUpdate();
 	void			GUIChanged();
 
+	int				GetMapWidth()	{return(Core.GetMapWidth());}
+	int				GetMapHeight()	{return(Core.GetMapHeight());}
+
 // Windows Messages Thru Point
 
 	void			LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);

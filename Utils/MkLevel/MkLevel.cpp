@@ -854,8 +854,6 @@ void	CMkLevel::WriteLayers()
 		LevelHdr.MidLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_MID,"Mid");
 // Action
 		LevelHdr.ActionLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION,"Action");
-// Fore
-//		LevelHdr.ForeLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_FORE,"Fore");
 // Collision
 		LevelHdr.CollisionLayer=WriteLayer(LAYER_TYPE_COLLISION,LAYER_SUBTYPE_NONE,"Collision");
 
