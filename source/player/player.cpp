@@ -27,40 +27,32 @@
 
 
 /*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-CPlayer::CPlayer()
-{
-//		SetControlObj(&m_playerControl);
-//		SetRenderObj(&m_skel);
-};
-
-/*****************************************************************************/
-CPlayer::~CPlayer()
-{
-}
-
-/*****************************************************************************/
 void	CPlayer::init()
 {
-sActor3dHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
-		m_skel.Init(Hdr);
-		TPLoadTex(ACTORS_SPONGEBOB_TEX);
-		m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
+	CThing::init();
+	
+	sActor3dHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+	m_skel.Init(Hdr);
+	TPLoadTex(ACTORS_SPONGEBOB_TEX);
+	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
 
-		setState(STATE_IDLE);
-		m_facing=-1;
+	setState(STATE_IDLE);
+	m_runVel=0;
+	m_facing=-1;
 }
 
 /*****************************************************************************/
 void	CPlayer::shutdown()
 {
+	CThing::shutdown();
 }
 
 
 /*****************************************************************************/
 void	CPlayer::think(int _frames)
 {
+	CThing::think(_frames);
+
 	int	padInput;
 
 if(_frames>=3)_frames=2;
@@ -193,6 +185,8 @@ if(_frames>=3)_frames=2;
 /*****************************************************************************/
 void	CPlayer::render()
 {
+	CThing::render();
+	
 	// Render
 	m_skel.setFrame(m_frame);
 	m_skel.setAnimNo(m_animNo);
@@ -213,7 +207,6 @@ int	CPlayer::s_stateAnims[NUM_STATES]=
 int panim=-1;
 void	CPlayer::setState(PLAYER_STATE _state)
 {
-PAUL_DBGMSG("set state %d",_state);	
 	m_state=_state;
 	m_animNo=s_stateAnims[_state];
 if(panim!=-1)m_animNo=panim;

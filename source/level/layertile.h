@@ -5,7 +5,9 @@
 #ifndef __LAYER_TILE_H__
 #define __LAYER_TILE_H__
 
+#include	<dstructs.h>
 #include	"gfx\prim.h"
+
 
 /*****************************************************************************/
 struct	sPrimGridElem

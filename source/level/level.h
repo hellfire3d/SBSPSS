@@ -5,6 +5,7 @@
 #ifndef __LEVEL_LEVEL_H__
 #define __LEVEL_LEVEL_H__
 
+#include "system\global.h"
 #include	"level/layertile.h"
 
 /*****************************************************************************/
@@ -21,13 +22,14 @@ public:
 	void		render();
 	void		think(int _frames);
 
-	void		setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
+	void				setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
+	static DVECTOR		getCameraPos()						{return MapPos;}
 
 private:
 	void		initLayers();
 
-	sLvlHdr		*LevelHdr;
-	DVECTOR		MapPos;
+	sLvlHdr			*LevelHdr;
+	static DVECTOR	MapPos;
 
 
 // Tile Layers

@@ -7,7 +7,6 @@
 
 #include	"system\gstate.h"
 #include	"level\level.h"
-#include	"player\player.h"
 
 #ifndef	__GAME_CONVO_H__
 #include "game\convo.h"
@@ -35,7 +34,7 @@ virtual			~CGameScene()	{;}
 private:
 
 		CLevel		Level;
-		CPlayer		Player;
+		class CPlayer	*m_player;
 		CConversation	m_conversation;
 static	FontBank	*s_genericFont;
 static	MATRIX		CamMtx;

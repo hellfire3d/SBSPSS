@@ -14,12 +14,19 @@
 #include	"gfx\font.h"
 #include	"gfx\fdata.h"
 
+#ifndef __PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
+#ifndef __ENEMY_2DENEMY_H__
+#include "enemy\2denemy.h"
+#endif
+
 #ifndef __GFX_FADER_H__
 #include "gfx\fader.h"
 #endif
 
 #include	"level\level.h"
-#include	"player\player.h"
 #include	"gfx\anim.h"
 
 #ifndef __GFX_BUBICLES__
@@ -52,7 +59,14 @@ void 	CGameScene::init()
 		VidSetClearScreen(1);
 		m_conversation.init();
 		Level.init();
-		Player.init();
+
+		m_player=new ("player") CPlayer();
+		m_player->init();
+
+		C2dEnemy	*enemy;
+		enemy=new ("test enemy") C2dEnemy;
+		enemy->init();
+
 		CAnimDB::LoadAnims();
 
 		SetIdentNoTrans(&CamMtx);
@@ -65,6 +79,8 @@ void 	CGameScene::init()
 
 void	CGameScene::shutdown()
 {
+		m_player->shutdown();		delete m_player;
+
 		Level.shutdown();
 		m_conversation.shutdown();
 		s_genericFont->dump();		delete s_genericFont;
@@ -76,7 +92,7 @@ void 	CGameScene::render()
 		CamMtx.t[2]=ZPos;	// Temp
 
 		m_conversation.render();
-		Player.render();
+		CThing::renderAllThings();
 		Level.render();
 }
 
@@ -84,15 +100,16 @@ void 	CGameScene::render()
 void	CGameScene::think(int _frames)
 {
 		m_conversation.think(_frames);
-		Player.think(_frames);
-		Level.setCameraCentre(Player.getMapPos());
+		CThing::thinkAllThings(_frames);
+		Level.setCameraCentre(m_player->getPos());
 		Level.think(_frames);
 
+#ifdef __USER_paul__		
 		if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
 		{
 			m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
 		}
-
+#endif
 }
 
 /*****************************************************************************/
