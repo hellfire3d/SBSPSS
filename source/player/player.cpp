@@ -731,10 +731,6 @@ if(newmode!=-1)
 	{
 		// Think
 		updatePadInput();
-if(getPadInputDown())
-{
-	PAUL_DBGMSG("%02x",getPadInputDown());
-}
 		if(getPadInputDown()&PI_WEAPONCHANGE)
 		{
 			if(!m_tryingToPickupWeapon&&
