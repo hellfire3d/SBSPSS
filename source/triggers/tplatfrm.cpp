@@ -111,6 +111,14 @@ void	CPlatformTrigger::collidedWith(CThing *_thisThing)
 			break;
 		}
 
+		case TYPE_PLAYERPROJECTILE:
+		{
+			m_platform->trigger();
+			_thisThing->setToShutdown();
+
+			break;
+		}
+
 		default:
 			break;
 	}

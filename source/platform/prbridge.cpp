@@ -87,7 +87,7 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 //	trigger = new ("PlatformTrigger") CPlatformTrigger();
 	trigger=(CPlatformTrigger*)CTrigger::Create(CTrigger::TRIGGER_PLATFORM);
-	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16, 100, 0 );
+	trigger->setPositionAndSize( ( newXPos << 4 ) + 8 - 20, ( newYPos << 4 ) + 16 - 20, 40, 40 );
 	//trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
 	trigger->setPlatform( this );
 

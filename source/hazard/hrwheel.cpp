@@ -94,11 +94,17 @@ void CNpcRisingWeightWheelHazard::collidedWith( CThing *_thisThing )
 				break;
 			}
 
-			case TYPE_NPC:
-				break;
+			case TYPE_PLAYERPROJECTILE:
+			{
+				m_weight->setTriggered();
+
+				m_rotation += 128;
+				m_rotation &= 4095;
+
+				_thisThing->setToShutdown();
+			}
 
 			default:
-				ASSERT(0);
 				break;
 		}
 	}

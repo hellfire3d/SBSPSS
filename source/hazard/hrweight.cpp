@@ -268,7 +268,6 @@ void CNpcRisingWeightHazard::collidedWith( CThing *_thisThing )
 			}
 
 			default:
-				ASSERT(0);
 				break;
 		}
 	}

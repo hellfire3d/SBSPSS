@@ -724,6 +724,38 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			thing1=thing1->m_nextCollisionThing;
 		}
 
+		// Trigger -> Player projectile collision
+		thing1=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_TRIGGER];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing2->collidedWith(thing1);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Hazard -> Player projectile collision
+		thing1=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_HAZARD];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing2->collidedWith(thing1);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
 		// Friendly npc -> Platform projectile collision - first clear platforms
 
 		CNpcFriend *friendNpc = (CNpcFriend *) s_CollisionLists[CThing::TYPE_NPC];
