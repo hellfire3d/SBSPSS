@@ -39,6 +39,7 @@ class CPlayerModeDead : public CPlayerMode
 public:
 	virtual void	enter();
 	virtual void	think();
+//	virtual void	render(DVECTOR *_pos);
 
 private:
 	// Player can press ACTION to respawn after death

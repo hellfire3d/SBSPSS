@@ -24,6 +24,11 @@
 /*	Data
 	---- */
 
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -66,6 +71,25 @@ void	CPlayerModeDead::think()
 		respawn();
 	}
 }
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+/*
+void	CPlayerModeDead::render(DVECTOR *_pos)
+{
+	DVECTOR	deadSbPos;
+
+	deadSbPos=*_pos;
+	deadSbPos.vy-=m_deadTime;
+
+	m_player->renderSb(&deadSbPos,ANIM_SPONGEBOB_DEATHANGLE,0);
+}
+*/
+
 
 /*===========================================================================
 end */

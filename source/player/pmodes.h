@@ -80,7 +80,7 @@ public:
 	virtual void	shutdown()							{;}
 	virtual void	enter()								{;}
 	virtual void	think()								{;}
-	virtual void	render()							{;}
+	virtual void	render(DVECTOR *_pos)				{;}
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 
 	int				getPadInputHeld();

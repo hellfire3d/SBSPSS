@@ -37,24 +37,12 @@
 class CPlayerModeBalloon : public CPlayerModeBase
 {
 public:
-	virtual void	initialise(class CPlayer *_player);
-	virtual void	shutdown();
 	virtual void	enter();
 	virtual void	think();
-	virtual void	render();
+	virtual void	render(DVECTOR *_pos);
 
 	virtual int							canFallForever()		{return true;}
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
-
-private:
-	enum
-	{
-		BALLOON_TIME=10*60,
-		BALLOON_FLASH_TIME=2*60,
-	};
-	int					m_balloonTimer;
-
-	class SpriteBank	*m_sprites;
 };
 
 

@@ -73,36 +73,10 @@ static PlayerMetrics	s_playerMetrics=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBalloon::initialise(class CPlayer *_player)
-{
-	CPlayerModeBase::initialise(_player);
-	m_sprites=new ("BalloonSprite") SpriteBank();
-	m_sprites->load(INGAMEFX_INGAMEFX_SPR);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CPlayerModeBalloon::shutdown()
-{
-	m_sprites->dump();		delete m_sprites;
-	CPlayerModeBase::shutdown();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CPlayerModeBalloon::enter()
 {
 	CPlayerModeBase::enter();
 	CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_INFLATE);
-	m_balloonTimer=BALLOON_TIME;
 }
 
 /*----------------------------------------------------------------------
@@ -114,12 +88,6 @@ void	CPlayerModeBalloon::enter()
 void	CPlayerModeBalloon::think()
 {
 	CPlayerModeBase::think();
-	if(--m_balloonTimer==0||getPadInputDown()&PI_ACTION)
-	{
-		PAUL_DBGMSG("*pop*");
-		CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
-		m_player->setMode(PLAYER_MODE_FULLUNARMED);
-	}
 }
 
 /*----------------------------------------------------------------------
@@ -129,21 +97,17 @@ void	CPlayerModeBalloon::think()
 	Returns:
   ---------------------------------------------------------------------- */
 int balloonx=-14;
-int balloony=-90;
-void	CPlayerModeBalloon::render()
+int balloony=-120;
+int balloonsize=350;
+void	CPlayerModeBalloon::render(DVECTOR *_pos)
 {
-	DVECTOR	ofs,pos;
+	DVECTOR	pos;
+
 	CPlayerModeBase::render();
 
-	if(m_balloonTimer>BALLOON_FLASH_TIME||
-	   m_balloonTimer&2)
-	{
-		ofs=CLevel::getCameraPos();
-		pos=m_player->getPlayerPos();
-		pos.vx+=balloonx-ofs.vx;
-		pos.vy+=balloony-ofs.vy;
-		m_sprites->printFT4(FRM__BALLOON,pos.vx,pos.vy,0,0,0);
-	}
+	pos.vx=_pos->vx+balloonx;
+	pos.vy=_pos->vy+balloony;
+	m_player->getSpriteBank()->printFT4Scaled(FRM__BALLOON,pos.vx,pos.vy,0,0,5,balloonsize);
 }
 
 /*----------------------------------------------------------------------

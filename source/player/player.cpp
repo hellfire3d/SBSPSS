@@ -417,13 +417,13 @@ m_fontBank->print(40,40,posBuf);
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
-		DVECTOR	Pos=
+		DVECTOR	sbPos=
 		{
 			SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,
 			SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy
 		};
-		m_actorGfx->Render(Pos,m_animNo,m_animFrame>>sbanimspeed,m_facing==FACING_RIGHT?0:1);
-		m_currentPlayerModeClass->render();
+		renderSb(&sbPos,m_animNo,m_animFrame>>sbanimspeed);
+		m_currentPlayerModeClass->render(&sbPos);
 	}
 
 
@@ -679,6 +679,19 @@ void CPlayer::respawn()
 
 	clearPlatform();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
+{
+	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+}
+
 
 /*----------------------------------------------------------------------
 	Function:

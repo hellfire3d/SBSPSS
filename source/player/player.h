@@ -180,6 +180,7 @@ public:
 		int						m_frame;
 		CSoundMediator::SFXID	m_sfxId;
 	} AnimFrameSfx;
+	void			renderSb(DVECTOR *_pos,int _animNo,int _animFrame);
 private:
 	typedef struct
 	{
