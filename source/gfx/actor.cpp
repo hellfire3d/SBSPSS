@@ -23,11 +23,19 @@ void	CActorGfx::Init(FileEquate _Filename)
 		CActorPool::GetActor(Filename);
 }
 
+int		DefTPX=512;
+int		DefTPY=256;
+int		ShadowXOfs=32;
+int		ShadowYOfs=32;
+int		TPInc=64;
+
 /*****************************************************************************/
-CActorGfx::CActorGfx(FileEquate _Filename)
+CActorGfx::CActorGfx(FileEquate _Filename,int Idx)
 {
 int		i;
+
 		Filename=_Filename;
+		ActorNo=Idx;
 		SpriteBank=(sSpriteAnimBank*)CFileIO::loadFile(Filename);
 
 		SpriteBank->AnimList=(sSpriteAnim*)		MakePtr(SpriteBank,(int)SpriteBank->AnimList);
@@ -35,19 +43,32 @@ int		i;
 		SpriteBank->Palette=(u8*)				MakePtr(SpriteBank,(int)SpriteBank->Palette);
 
 // FixUp AnimList
+		DAVE_DBGMSG("Anims %i\n",SpriteBank->AnimCount);
 		for (i=0; i<SpriteBank->AnimCount; i++)
 		{
 			sSpriteAnim	*ThisAnim=&SpriteBank->AnimList[i];
 			ThisAnim->Anim=(u16*)	MakePtr(SpriteBank,(int)ThisAnim->Anim);
 		}
 // FixUp FrameList
+		DAVE_DBGMSG("Anims %i\n",SpriteBank->FrameCount);
 		for (i=0; i<SpriteBank->FrameCount; i++)
 		{
 			sSpriteFrame	*ThisFrame=&SpriteBank->FrameList[i];
 			ThisFrame->PAKSpr=(u8*)				MakePtr(SpriteBank,(int)ThisFrame->PAKSpr);
 		}
 
-		DAVE_DBGMSG("Anims %i\n",SpriteBank->AnimCount);
+		TexX=DefTPX+(TPInc*ActorNo);
+		TexY=DefTPY+4;
+		ClutX=TexX;
+		ClutY=DefTPY;
+
+// upload clut
+RECT		Rect;
+			Rect.x=ClutX;
+			Rect.y=ClutY;
+			Rect.w=SpriteBank->ColorCount;
+			Rect.h=1;
+			LoadImage( &Rect, (u32*)SpriteBank->Palette);
 }
 
 /*****************************************************************************/
@@ -57,13 +78,6 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
-int		TPP=0;
-int		TPA=0;
-int		TPX=512;
-int		TPY=256;
-int		ShadowXOfs=32;
-int		ShadowYOfs=32;
-
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
@@ -72,17 +86,11 @@ sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
 u8				Buffer[64*64];
 
 			PAK_doUnpak(Buffer,ThisFrame.PAKSpr);
-// clut
-RECT		Rect;
-			Rect.x=512;
-			Rect.y=TPY;
-			Rect.w=SpriteBank->ColorCount;
-			Rect.h=1;
-			LoadImage( &Rect, (u32*)SpriteBank->Palette);
 		
 // Gfx
-			Rect.x=512;
-			Rect.y=TPY+4;
+RECT		Rect;
+			Rect.x=TexX;
+			Rect.y=TexY;
 			Rect.w=ThisFrame.W/4;
 			Rect.h=ThisFrame.H;
 			LoadImage( &Rect, (u32*)Buffer);
@@ -90,8 +98,8 @@ RECT		Rect;
 POLY_FT4	*Ft4=GetPrimFT4();
 			SetUpFT4(Ft4,&ThisFrame,Pos.vx,Pos.vy,XFlip,YFlip);
 			setRGB0(Ft4,128,128,128);
-			setTPage(Ft4,0,0,TPX,TPY+4);
-			setClut(Ft4, TPX, TPY);
+			setTPage(Ft4,0,0,TexX,TexY);
+			setClut(Ft4, ClutX, ClutY);
 			AddPrimToList(Ft4,0);
 
 			if (Shadow)
@@ -148,8 +156,8 @@ int		H=ThisFrame->H;
 			Ft4->v3=V+H;
 		}
 
-		X+=ThisFrame->XOfs;
-		Y+=ThisFrame->YOfs;
+		X-=ThisFrame->XOfs;
+		Y-=ThisFrame->YOfs;
 
 		setXYWH(Ft4,X,Y,W,H);
 }
@@ -159,6 +167,24 @@ int		H=ThisFrame->H;
 void	CActorGfx::Dump()
 {
 }
+/*****************************************************************************/
+int		CActorGfx::getFrameWidth(int Anim,int Frame)
+{
+sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
+u16				FrameNo=ThisAnim.Anim[Frame];
+sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
+				return(ThisFrame.W);
+}
+
+/*****************************************************************************/
+int		CActorGfx::getFrameHeight(int Anim,int Frame)
+{
+sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
+u16				FrameNo=ThisAnim.Anim[Frame];
+sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
+				return(ThisFrame.H);
+}
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -198,6 +224,7 @@ CActorGfx	*CActorPool::GetActor(FileEquate Filename)
 {
 CActorGfx	*NewActor;
 int			Idx;
+		
 // Already Loaded?
 		Idx=FindIdx(Filename);
 		if (Idx!=-1) return(ActorList[Idx]);
@@ -206,7 +233,7 @@ int			Idx;
 		Idx=FindFreeIdx();
 		ASSERT(Idx!=-1);
 
-		NewActor=new ("ActorPool") CActorGfx(Filename);
+		NewActor=new ("ActorPool") CActorGfx(Filename,Idx);
 		ActorList[Idx]=NewActor;
 
 		return(NewActor);

@@ -16,7 +16,7 @@
 class	CActorGfx
 {
 public:
-		CActorGfx(FileEquate Filename);
+		CActorGfx(FileEquate Filename,int No);
 virtual	~CActorGfx();
 
 		void		Init(FileEquate _Filename);
@@ -24,6 +24,8 @@ virtual	~CActorGfx();
 		void		Dump();
 
 		int			getFrameCount(int Anim)		{return(SpriteBank->AnimList[Anim].FrameCount);}
+		int			getFrameWidth(int Anim,int Frame);
+		int			getFrameHeight(int Anim,int Frame);
 
 		FileEquate	GetFilename()	{return(Filename);}
 private:
@@ -31,6 +33,9 @@ private:
 
 		FileEquate		Filename;
 		sSpriteAnimBank	*SpriteBank;
+		int				ActorNo;	// qwik bodge for mo :oP
+		int				TexX,TexY;
+		int				ClutX,ClutY;
 };
 
 /*****************************************************************************/
