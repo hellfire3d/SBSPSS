@@ -605,7 +605,8 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 
 			Ft4=GetPrimFT4();
 			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
-			setRGB0(Ft4,128,128,128);
+extern u8	GlobalRGB[];
+			setRGB0(Ft4,GlobalRGB[0],GlobalRGB[0],GlobalRGB[0]);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
 			addPrim(OtPtr+OtPos,Ft4);

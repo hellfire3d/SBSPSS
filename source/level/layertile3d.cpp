@@ -159,7 +159,7 @@ VECTOR			BlkPos;
 					setlen(TPrimPtr, GPU_PolyFT3Tag);
 					TPrimPtr->code=TList->PolyCode;
 					gte_rtpt_b();
-					setShadeTex(TPrimPtr,1);
+//					setShadeTex(TPrimPtr,1);
 			
 					T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 					T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
@@ -167,6 +167,8 @@ VECTOR			BlkPos;
 					*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 					*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 					*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+extern u8 GlobalRGB[];
+					setRGB0(TPrimPtr,GlobalRGB[1],GlobalRGB[1],GlobalRGB[1]);
 
 					ThisOT=OtPtr+TList->OTOfs;
 					TList++;
