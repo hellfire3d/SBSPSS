@@ -466,24 +466,24 @@ eng=CONFIRM QUIT?
 ; ---------------------------------------------------------------
 
 [STR__SLOT_SELECT_SCREEN__EMPTY_SLOT]
-eng=EMPTY SLOT
+eng=EMPTY GAME
 [STR__SLOT_SELECT_SCREEN__LEVEL_REACHED]
 eng=Level %d-%d
 
 [STR__SLOT_SELECT_SCREEN__LEFT_RIGHT_TO_SELECT_SLOT]
-eng=Select slot
+eng=Select game
 [STR__SLOT_SELECT_SCREEN__CROSS_TO_CONFIRM]
 eng=Confirm
 [STR__SLOT_SELECT_SCREEN__CROSS_TO_CREATE]
 eng=Create
 [STR__SLOT_SELECT_SCREEN__CIRCLE_TO_ERASE_SLOT]
-eng=Erase slot
+eng=Erase game
 [STR__SLOT_SELECT_SCREEN__TRIANGLE_TO_EXIT]
 eng=Exit
 [STR__SLOT_SELECT_SCREEN__NEW_SLOT_CREATED]
-eng=New slot created!
+eng=New game created!
 [STR__SLOT_SELECT_SCREEN__CONFIRM_ERASE_GAME]
-eng=Are you sure that you want to erase this slot?
+eng=Are you sure that you want to erase this game?
 
 
 
