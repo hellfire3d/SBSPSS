@@ -179,6 +179,10 @@
 #include "platform\psswitch.h"
 #endif
 
+#ifndef __PLATFORM_PLIFT_H__
+#include "platform\plift.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -408,6 +412,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_STEAM_SWITCH_PLATFORM:
 		{
 			platform = new ("steam switch platform") CNpcSteamSwitchPlatform;
+			break;
+		}
+
+		case NPC_LIFT_PLATFORM:
+		{
+			platform = new ("lift platform") CNpcLiftPlatform;
 			break;
 		}
 

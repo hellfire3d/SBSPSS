@@ -131,7 +131,8 @@ platform_src :=		platform \
 					pplayer \
 					pcbubble \
 					pdrop \
-					psswitch
+					psswitch \
+					plift
 
 hazard_src :=		hazard \
 					hfalling \

@@ -1565,6 +1565,14 @@ SOURCE=..\..\..\source\platform\pleaf.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\plift.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plift.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\plinear.cpp
 # End Source File
 # Begin Source File
