@@ -546,6 +546,26 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 	Pos.vx += moveX;
 	Pos.vy += moveY;
 
+	// check for hitting ground
+
+	if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+	{
+		switch ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy ) & COLLISION_TYPE_MASK )
+		{
+			case COLLISION_TYPE_FLAG_SOLID:
+			{
+				Pos = oldPos;
+				m_heading += 1024;
+				m_heading &= 4095;
+
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
+
 	updateTail( oldPos, _frames );
 }
 
@@ -840,6 +860,33 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 			}
 
 			break;
+		}
+	}
+
+	// check for hitting ground
+
+	if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+	{
+		switch ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy ) & COLLISION_TYPE_MASK )
+		{
+			case COLLISION_TYPE_FLAG_SOLID:
+			{
+				m_movementTimer = GameState::getOneSecondInFrames();
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_timerTimer = 5 * GameState::getOneSecondInFrames();
+				m_sensorFunc = NPC_SENSOR_NONE;
+
+				Pos = oldPos;
+				m_heading += 1024;
+				m_heading &= 4095;
+
+				break;
+			}
+
+			default:
+				break;
 		}
 	}
 
