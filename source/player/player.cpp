@@ -948,7 +948,7 @@ void CPlayer::respawn()
   ---------------------------------------------------------------------- */
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
-//pkg	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 }
 
 
