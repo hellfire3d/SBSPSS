@@ -39,7 +39,7 @@ class CGUIToggleButton : public CGUIObject
 public:
 	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
-	virtual void		setButtonTarget(int *_target);
+	void				setButtonTarget(int *_target);
 	
 	virtual void		think(int _frames);
 	
@@ -60,7 +60,7 @@ class CGUICycleButton : public CGUIToggleButton
 public:
 	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
-	virtual void		setButtonData(int *_data);
+	void				setButtonData(int *_data);
 
 	virtual void		think(int _frames);
 
@@ -85,8 +85,8 @@ public:
 
 	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
-	virtual void		setButtonRange(int _min,int _max);
-	virtual void		setScrollSpeed(int _scrollSpeed);
+	void				setButtonRange(int _min,int _max);
+	void				setScrollSpeed(int _scrollSpeed);
 
 	virtual void		think(int _frames);
 

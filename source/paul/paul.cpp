@@ -66,6 +66,10 @@
 #include "gui\gbutton.h"
 #endif
 
+#ifndef __GUI_GTEXTENT_H__
+#include "gui\gtextent.h"
+#endif
+
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
 #endif
@@ -126,6 +130,7 @@ int musicStatus=false;
 int sfxStatus=false;
 int readyToExit=false;
 int	musicVol=0;
+char textEntry[16+1]="SOME TEXT";
 
 
 
@@ -141,9 +146,13 @@ void CPaulScene::init()
 	CGUISpriteReadout	*sr;
 	CGUIBarReadout		*br;
 	CGUISliderButton	*sl;
+	CGUITextEntry		*te;
 
 	s_fontBank.initialise(&standardFont);
 
+int mem=MainRam.TotalRam-MainRam.RamUsed;
+PAUL_DBGMSG("initial mem free=%d",mem);
+	
 	baseGUIObject=new ("Uber GUI object") CGUIControlFrame();
 	baseGUIObject->init(NULL);
 	baseGUIObject->setObjectXYWH(32,32,512-64,256-64);
@@ -180,35 +189,46 @@ void CPaulScene::init()
 		sr->setReadoutTarget(&sfxStatus);
 		sr->setReadoutData(onOffSpriteReadouts);
 
-		fr=new ("frame") CGUIGroupFrame();
-		fr->init(baseGUIObject);
-		fr->setObjectXYWH(10,90,448-20,30);
-			sl=new("sliderbutton") CGUISliderButton();
-			sl->init(fr);
-			sl->setButtonTarget(&musicVol);
-			sl->setButtonRange(0,255);
-			br=new ("spritereadout") CGUIBarReadout();
-			br->init(fr);
-			br->setObjectXYWH(0,0,448-20,30);
-			br->setReadoutTarget(&musicVol);
-			br->setReadoutRange(0,255);
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject);
+	fr->setObjectXYWH(10,90,448-20,30);
+		sl=new("sliderbutton") CGUISliderButton();
+		sl->init(fr);
+		sl->setButtonTarget(&musicVol);
+		sl->setButtonRange(0,255);
+		br=new ("spritereadout") CGUIBarReadout();
+		br->init(fr);
+		br->setObjectXYWH(0,0,448-20,30);
+		br->setReadoutTarget(&musicVol);
+		br->setReadoutRange(0,255);
 
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(baseGUIObject);
-	fr->setObjectXYWH(10,155,448-20,30);
+	fr->setObjectXYWH(10,155,200,30);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
-		tb->setObjectXYWH(0,0,428,30);
+		tb->setObjectXYWH(0,0,200,30);
 		tb->setText(STR__PAULS_TEST__EXIT);
 		tg=new ("togglebutton") CGUIToggleButton();
 		tg->init(fr);
 		tg->setButtonTarget(&readyToExit);
 
-	// Heh.. this'll actually work =)
-//	baseGUIObject->shutdown();
-
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject);
+	fr->setObjectXYWH(220,155,200,30);
+		te=new ("textentry") CGUITextEntry();
+		te->init(fr);
+		te->setObjectXYWH(0,0,200,30);
+		te->setTextDetails(textEntry,16);
 
 	baseGUIObject->select();
+
+	// Heh.. this'll actually work =)
+//ASSERT(0);	
+//	baseGUIObject->shutdown();
+//	baseGUIObject=0;
+	
+PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 }
 
 

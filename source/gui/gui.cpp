@@ -112,8 +112,9 @@ void CGUIObject::shutdown()
 	if(m_child)m_child->shutdown();			m_child=NULL;
 	if(m_next)m_next->shutdown();			m_next=NULL;
 	m_parent=NULL;
+	m_this=NULL;
 
-	// Is this actually safe? Not *really* (PKG)
+	// Is this actually safe? Possibly not.. (PKG)
 	delete this;
 }
 
@@ -303,6 +304,18 @@ void CGUIObjectWithFont::clearFlags(GUI_FLAGS _flags)
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObjectWithFont::setOt(int _ot)
+{
+	CGUIObject::setOt(_ot);
+	getFontBank()->setOt(_ot);
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -320,7 +333,6 @@ void CGUIObjectWithFont::recalc()
 	w=getW()-(BORDERWIDTH*2);
 	h=getH()-(BORDERHEIGHT*2);
 	getFontBank()->setPrintArea(x,y,w,h);
-
 }
 
 

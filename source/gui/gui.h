@@ -91,8 +91,14 @@ public:
 	CGUIObject			*getChild()									{return m_child;}
 	CGUIObject			*getNext()									{return m_next;}
 	virtual int			isSelectable()								{return false;}
+	virtual int			isUnselectable()							{return true;}
 
+	void				setOt(int _ot)								{m_ot=_ot;}
+	int					getOt()										{return m_ot;}
+	
+// PKG - Do we really need ids!?	
 int getId() {return m_id;}
+
 
 protected:
 	virtual void		recalc();
@@ -106,9 +112,6 @@ protected:
 
 	int					getParentX()								{if(m_parent)return m_parent->getX()+m_parent->getParentX();else return 0;}
 	int					getParentY()								{if(m_parent)return m_parent->getY()+m_parent->getParentY();else return 0;}
-
-	void				setOt(int _ot)								{m_ot=_ot;}
-	int					getOt()										{return m_ot;}
 
 
 private:
@@ -133,6 +136,8 @@ public:
 	virtual void		setFlags(GUI_FLAGS _flags);
 	virtual void		clearFlags(GUI_FLAGS _flags);
 	
+	void				setOt(int _ot);
+
 	
 protected:
 	enum

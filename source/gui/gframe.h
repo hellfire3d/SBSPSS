@@ -41,6 +41,7 @@ public:
 	virtual void		clearFlags(GUI_FLAGS _flags);
 
 	virtual int			isSelectable();
+	virtual int			isUnselectable();
 
 	
 protected:

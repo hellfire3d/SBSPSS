@@ -71,7 +71,8 @@ gui_src :=			gui \
 					gbutton \
 					gframe \
 					greadout \
-					gtextbox
+					gtextbox \
+					gtextent
 
 locale_src :=		textdbase
 

@@ -77,8 +77,6 @@ void CGUITextBox::init(CGUIObject *_parent,GUIId _id)
   ---------------------------------------------------------------------- */
 void CGUITextBox::setText(unsigned int _textId)
 {
-	FontBank	*fb;
-
 	m_textId=_textId;
 	recalc();
 }
@@ -92,8 +90,6 @@ void CGUITextBox::setText(unsigned int _textId)
   ---------------------------------------------------------------------- */
 void CGUITextBox::render()
 {
-	FontBank	*fb;
-
 	if(!isHidden())
 	{
 		getFontBank()->print((getW()-(BORDERWIDTH*2))/2,m_textY,m_textId);
