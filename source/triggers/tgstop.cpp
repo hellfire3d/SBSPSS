@@ -69,7 +69,19 @@ void	CGaryStopTrigger::init()
 	CTrigger::init();
 
 	m_dropped = false;
-	Pos.vx += 8;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CGaryStopTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
+{
+	Pos.vx=_x+(_w/2) - 8;
+	Pos.vy=_y+(_h/2);
+	setCollisionSize(4,_h);
 }
 
 /*----------------------------------------------------------------------

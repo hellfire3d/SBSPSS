@@ -38,6 +38,7 @@ class CGaryStopTrigger : public CTrigger
 {
 public:
 	void				init();
+	void				setPositionAndSize(int _x,int _y,int _w,int _h);
 	bool				alwaysThink()							{return(true);}
 protected:
 	void				collidedWith(CThing *_thisThing);
