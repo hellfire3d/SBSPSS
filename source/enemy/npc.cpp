@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_SMALL_JELLYFISH_1;
+	m_type = NPC_FISH_FOLK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -231,13 +231,13 @@ void CNpc::init()
 
 			DVECTOR newPos;
 
-			newPos.vx = 100;
-			newPos.vy = 100;
+			newPos.vx = 200;
+			newPos.vy = 400;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 500;
-			newPos.vy = 100;
+			newPos.vy = 400;
 
 			m_npcPath.addWaypoint( newPos );
 
@@ -717,6 +717,13 @@ void CNpc::processMovement(int _frames)
 
 				moveVel = ( _frames * m_data[m_type].speed ) << 8;
 			}
+
+			break;
+		}
+
+		case NPC_MOVEMENT_FIXED_PATH_WALK:
+		{
+			processGenericFixedPathWalk( _frames, &moveX, &moveY );
 
 			break;
 		}

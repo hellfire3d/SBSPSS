@@ -52,6 +52,7 @@ public:
 	void			resetPath();
 	void			reversePathDir();
 	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
+	bool			think2D( DVECTOR currentPos, s32 *distX, s32 *distY );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };
 

@@ -230,3 +230,31 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 
 	return( headingToTarget );
 }
+
+bool CNpcPath::think2D( DVECTOR currentPos, s32 *distX, s32 *distY )
+{
+	bool pointChange = false;
+
+	if ( !this->waypoint )
+	{
+		return( true );
+	}
+
+	if ( !currentWaypoint )
+	{
+		// if no currentWaypoint set, start it off
+
+		currentWaypoint = this->waypoint;
+	}
+
+	*distX = currentWaypoint->pos.vx - currentPos.vx;
+	*distY = currentWaypoint->pos.vy - currentPos.vy;
+
+	if ( abs( *distX ) < 10 )
+	{
+		pointChange = true;
+		incPath();
+	}
+
+	return( pointChange );
+}

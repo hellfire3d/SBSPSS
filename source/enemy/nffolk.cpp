@@ -26,10 +26,11 @@
 
 void CNpc::processFishFolkMovementModifier( int _frames, s32 distX, s32 distY )
 {
+	Pos.vy += distY;
+
 	if ( m_movementTimer > 0 )
 	{
 		Pos.vx += distX;
-		Pos.vy += distY;
 
 		m_movementTimer -= _frames;
 
