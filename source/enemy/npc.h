@@ -304,6 +304,12 @@ protected:
 		NPC_TIMER_ATTACK_DONE,
 	};
 
+	enum NPC_SHOT_FUNC
+	{
+		NPC_SHOT_NONE = 0,
+		NPC_SHOT_GENERIC_DIE = 1,
+	};
+
 	enum NPC_MOTHER_JELLYFISH_STATE
 	{
 		MOTHER_JELLYFISH_RETURN_TO_START_1 = 0,
@@ -361,6 +367,12 @@ protected:
 		PUFFA_FISH_INFLATE,
 	};
 
+	enum NPC_GENERIC_DEATH_STATE
+	{
+		NPC_GENERIC_DEATH_START = 100,
+		NPC_GENERIC_DEATH_END = 101,
+	};
+
 	enum
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
@@ -396,6 +408,8 @@ protected:
 		DAMAGE_TYPE						damageToUserType;
 		u16								initHealth;
 		u16								moveAnim;
+		NPC_SHOT_FUNC					shotFunc;
+		u16								dieAnim;
 	}
 	NPC_DATA;
 

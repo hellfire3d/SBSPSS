@@ -568,7 +568,6 @@ void CNpcEnemy::shutdown()
 
 	m_positionHistory = NULL;
 
-	// temporary
 	CEnemyThing::shutdown();
 }
 
@@ -682,6 +681,16 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 bool CNpcEnemy::processSensor()
 {
+	// temporary
+	if ( playerXDistSqr + playerYDistSqr < 10000 )
+	{
+		m_controlFunc = NPC_CONTROL_SHOT;
+		m_state = NPC_GENERIC_DEATH_START;
+
+		return( true );
+	}
+	// temporary
+
 	switch( m_sensorFunc )
 	{
 		case NPC_SENSOR_NONE:
@@ -1207,6 +1216,43 @@ void CNpcEnemy::hasBeenAttacked()
 
 void CNpcEnemy::processShot()
 {
+	switch( m_data[m_type].shotFunc )
+	{
+		case NPC_SHOT_NONE:
+		{
+			// do nothing
+
+			break;
+		}
+
+		case NPC_SHOT_GENERIC_DIE:
+		{
+			switch ( m_state )
+			{
+				case NPC_GENERIC_DEATH_START:
+				{
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].dieAnim;
+					m_frame = 0;
+					m_state = NPC_GENERIC_DEATH_END;
+
+					break;
+				}
+
+				case NPC_GENERIC_DEATH_END:
+				{
+					if ( !m_animPlaying )
+					{
+						this->shutdown();
+					}
+
+					break;
+				}
+			}
+
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
