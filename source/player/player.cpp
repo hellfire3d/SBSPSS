@@ -745,9 +745,26 @@ if(newmode!=-1)
 			int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
 			int height=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy,16);
 
+			// Hmm.. this *almost* stops him elevating through walls :/
 			if ( platformOffset < height )
 			{
-				Pos.vy += platformOffset;
+				int goingToHitWall=false;
+				int	i;
+				for(i=0;i<2;i++)
+				{
+					int x=Pos.vx+((i==0?-checkx:+checkx));
+					int	y=Pos.vy-HEIGHT_FOR_HEAD_COLLISION;
+					if(getHeightFromGroundNoPlatform(x,y,16)>=0&&getHeightFromGroundNoPlatform(x,y+platformOffset,16)<=0&&((CGameScene::getCollision()->getCollisionBlock(x,y+platformOffset)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
+					{
+						goingToHitWall=true;
+						break;
+					}
+				}
+
+				if(!goingToHitWall)
+				{
+					Pos.vy += platformOffset;
+				}
 			}
 		}
 	}
