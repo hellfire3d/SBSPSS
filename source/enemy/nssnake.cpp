@@ -503,7 +503,7 @@ void CNpcSeaSnakeEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),0);
 			m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, 4096 );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
