@@ -60,6 +60,7 @@ public:
 		NPC_PRESSURE_SWITCH_HAZARD,
 		NPC_ROCKSHARD_HAZARD,
 		NPC_INERT_HAZARD,
+		NPC_CONVEYOR_SWITCH_HAZARD,
 
 		NPC_HAZARD_TYPE_MAX,
 	};
@@ -77,6 +78,7 @@ public:
 	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
 	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
+	virtual void		trigger()												{}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(int Type);

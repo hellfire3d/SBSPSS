@@ -152,7 +152,8 @@ hazard_src :=		hazard \
 					hrwheel \
 					hpswitch \
 					hrckshrd \
-					hinert
+					hinert \
+					hcswitch
 
 fx_src :=			fx \
 					fxbaseanim \
@@ -303,7 +304,8 @@ triggers_src :=		trigger \
 					tifemit \
 					tggleft \
 					tggright \
-					tgstop
+					tgstop \
+					thazard
 
 utils_src :=		utils \
 					sincos \

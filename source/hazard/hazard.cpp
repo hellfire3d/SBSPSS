@@ -115,6 +115,10 @@
 #include "hazard\hinert.h"
 #endif
 
+#ifndef __HAZARD_HCSWITCH_H__
+#include "hazard\hcswitch.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -141,6 +145,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_PRESSURE_SWITCH_HAZARD,
 	NPC_ROCKSHARD_HAZARD,
 	NPC_INERT_HAZARD,
+	NPC_CONVEYOR_SWITCH_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,6 +281,12 @@ CNpcHazard *hazard;
 		case NPC_INERT_HAZARD:
 		{
 			hazard = new ("inert hazard") CNpcInertHazard;
+			break;
+		}
+
+		case NPC_CONVEYOR_SWITCH_HAZARD:
+		{
+			hazard = new ("conveyor switch hazard") CNpcConveyorSwitchHazard;
 			break;
 		}
 

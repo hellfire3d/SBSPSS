@@ -19,7 +19,8 @@ void	CFXBaseAnim::init(DVECTOR const &_Pos)
 {
 		CFX::init(_Pos);
 		CurrentFrame=0;
-		CurrentScale=DataPtr->Scale;
+		CurrentScaleX=CurrentScaleY=DataPtr->Scale;
+		CurrentHeading = 0;
 		MaxFrame=((DataPtr->EndFrame-DataPtr->StartFrame)<<DataPtr->FrameShift)-1;
 		if (DataPtr->Flags & FXANIM_FLAG_LOOP)
 		{ // Looping Anim, so let it live forever!
@@ -100,7 +101,8 @@ DVECTOR	RenderPos;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 
-POLY_FT4	*Ft4=SprBank->printFT4Scaled(renderFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,CurrentScale>>4);
+//POLY_FT4	*Ft4=SprBank->printFT4Scaled(renderFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,CurrentScale>>4);
+POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderPos.vy,CurrentScaleX,CurrentScaleY,CurrentHeading,OtPos*0);
 			Ft4->u1--; Ft4->u3--;
 			Ft4->v2--; Ft4->v3--;
 			setShadeTex(Ft4,0);

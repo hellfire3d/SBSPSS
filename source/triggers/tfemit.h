@@ -27,6 +27,7 @@
 #endif
 
 #include "fx\fx.h"
+#include "fx\fxbaseanim.h"
 
 /*	Std Lib
 	------- */
@@ -43,6 +44,8 @@ class CFlameEmitterTrigger : public CTrigger
 {
 public:
 	virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
+	void				setHeading(int newHeading);
+	void				setSize( int _w, int _h );
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	CFX					*m_effect;

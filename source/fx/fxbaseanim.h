@@ -36,7 +36,10 @@ virtual	void		killFX();
 
 		void		setData(void *Data)		{DataPtr=(sFXAnim*)Data;}
 
-virtual	void		SetScale(int S)			{CurrentScale=S;}
+virtual	void		SetScale(int S)			{CurrentScaleX=CurrentScaleY=S;}
+virtual void		SetScaleX(int S)		{CurrentScaleX=S;}
+virtual void		SetScaleY(int S)		{CurrentScaleY=S;}
+virtual void		SetHeading(int H)		{CurrentHeading=H;}
 
 protected:
 		sFXAnim		*DataPtr;
@@ -44,7 +47,9 @@ protected:
 		s16			MaxFrame;
 		s16			CurrentFrame;
 		u16			renderFrame;
-		s16			CurrentScale;
+		s32			CurrentScaleX;
+		s32			CurrentScaleY;
+		s16			CurrentHeading;
 };
 
 #endif

@@ -857,6 +857,14 @@ SOURCE=..\..\..\source\hazard\hcsaw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hcswitch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hcswitch.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hdbarrel.cpp
 # End Source File
 # Begin Source File
@@ -1962,6 +1970,14 @@ SOURCE=..\..\..\source\triggers\tgstop.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tgstop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\thazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\thazard.h
 # End Source File
 # Begin Source File
 

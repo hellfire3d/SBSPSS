@@ -2,7 +2,7 @@
 
 	tplatfrm.cpp
 
-	Author:		PKG
+	Author:		CRB
 	Created: 
 	Project:	Spongebob
 	Purpose: 

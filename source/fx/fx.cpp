@@ -82,7 +82,7 @@ CFXBaseAnim::sFXAnim	FXExplodeData=
 
 CFXBaseAnim::sFXAnim	FXFireData=
 {
-		ONE << 1,
+		ONE,
 		FRM__FIRE01,FRM__FIRE06,
 		1,
 		127,127,127,

@@ -67,6 +67,10 @@
 #include "triggers\tgstop.h"
 #endif
 
+#ifndef __TRIGGERS_THAZARD_H__
+#include "triggers\thazard.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -135,6 +139,8 @@ CTrigger	*trigger;
 			break;
 
 		case TRIGGER_INTERMITTENTFLAMEEMITTER:
+		case TRIGGER_INTERMITTENTLEFTFLAMEEMITTER:
+		case TRIGGER_INTERMITTENTDOWNFLAMEEMITTER:
 			trigger=(CIntermittentFlameEmitterTrigger*)new( "IntermittentFlameEmitterTrigger") CIntermittentFlameEmitterTrigger();
 			break;
 
@@ -146,6 +152,11 @@ CTrigger	*trigger;
 		case TRIGGER_PLATFORM:
 			trigger = (CPlatformTrigger*)new ("PlatformTrigger") CPlatformTrigger();
 			break;
+
+		case TRIGGER_HAZARD:
+			trigger = (CHazardTrigger*)new("HazardTrigger") CHazardTrigger();
+			break;
+
 		default:
 			trigger=NULL;
 	}
@@ -161,8 +172,34 @@ CTrigger	*trigger;
 CTrigger	*CTrigger::Create(sThingTrigger *ThisTrigger)
 {
 CTrigger	*trigger=Create(ThisTrigger->Type);
+
 			trigger->setPositionAndSize(ThisTrigger->Pos.X<<4,ThisTrigger->Pos.Y<<4,ThisTrigger->Width<<4,ThisTrigger->Height<<4);
 			trigger->setTargetBox(ThisTrigger->TargetPos.X<<4,ThisTrigger->TargetPos.Y<<4,ThisTrigger->TargetSize.X<<4,ThisTrigger->TargetSize.Y<<4);
+
+			switch( ThisTrigger->Type )
+			{
+				case TRIGGER_INTERMITTENTLEFTFLAMEEMITTER:
+				{
+					CIntermittentFlameEmitterTrigger *m_flameEmitter = (CIntermittentFlameEmitterTrigger *) trigger;
+
+					m_flameEmitter->setHeading( 3072 );
+					m_flameEmitter->setSize( ThisTrigger->Height<<4, ThisTrigger->Width<<4 );
+
+					break;
+				}
+
+				case TRIGGER_INTERMITTENTDOWNFLAMEEMITTER:
+				{
+					CIntermittentFlameEmitterTrigger *m_flameEmitter = (CIntermittentFlameEmitterTrigger *) trigger;
+
+					m_flameEmitter->setHeading( 2048 );
+
+					break;
+				}
+
+				default:
+					break;
+			}
 
 		return( trigger);
 }
