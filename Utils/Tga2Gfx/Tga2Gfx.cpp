@@ -28,8 +28,8 @@ struct	sTgaHdr
 	short	yorig;		   // 10
 	short	width;		   // 12
 	short	height;		   // 14
-	char	depth;		   // 15
-	char	imagedesc;	   // 16
+	char	depth;		   // 16
+	char	imagedesc;	   // 17
 };
 
 
@@ -71,7 +71,7 @@ short	*Dst=Buffer;
 */
 		for (int Y=0; Y<TGA->height; Y++)
 		{
-			unsigned char	*Src=&InSrc[(TGA->height-Y)*(TGA->width*3)];	// Flip Image
+			unsigned char	*Src=&InSrc[(TGA->height-Y-1)*(TGA->width*3)];	// Flip Image
 			for (int X=0; X<TGA->width; X++)
 			{
 				int		B=*Src++;
