@@ -95,6 +95,7 @@ static	void		AddNodeList(sNodeList *Src,sNodeList *Dst);
 static	u8			*UnpackBuffer;
 
 protected:
+		int			ReAllocSlot(int W,int H);
 		int			GetSlot(int W,int H);
 		void		InitCache(int Type,int Count);
 		int			GetSizeType(int Size);

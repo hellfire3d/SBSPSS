@@ -55,6 +55,43 @@ int		CActorCache::GetSizeType(int Size)
 }
 
 /*****************************************************************************/
+int		CActorCache::ReAllocSlot(int W,int H)
+{
+int		i;
+int		Slot=-1;
+int		SlotW=+32000,SlotH=+32000;
+
+// Find best slot which fits in
+	
+//		ASSERT(!"ReAlloc");
+		for (i=0;i<SlotCount; i++)
+		{
+			int	ThisW=(SlotList[i].Width-W);
+			int	ThisH=(SlotList[i].Height-H);
+
+			if (ThisW<SlotW || ThisH<SlotH)
+			{
+				Slot=i;
+				SlotW=ThisW;
+				SlotH=ThisH;
+			}
+		}
+
+		if (SlotList[Slot].Width<W) 
+		{
+//			printf("Adjusted Slot Width from %i to %i\n",SlotList[Slot].Width,W);
+			SlotList[Slot].Width=W; 
+		}
+		if (SlotList[Slot].Height<H) 
+		{
+//			printf("Adjusted Slot Height from %i to %i\n",SlotList[Slot].Height,H);
+			SlotList[Slot].Height=H;
+		}
+
+		return(Slot);
+}
+
+/*****************************************************************************/
 int		CActorCache::GetSlot(int W,int H)
 {
 int		i;
@@ -70,15 +107,17 @@ int		Slot=0;
 
 		if (!Slot)
 		{ // Use New Slot
-			ASSERT(SlotCount!=CACHE_TYPE_MAX);
+			if (SlotCount>=CACHE_TYPE_MAX)
+			{ // No free slots, grab an existing one, and alter size to fit
+				Slot=ReAllocSlot(W,H);
+			}
+			else
+			{
 			Slot=SlotCount;
 			SlotList[Slot].Width=W;
 			SlotList[Slot].Height=H;
-
-			printf("Get Slot %i Slots\n",SlotCount);
-
-/*bodge*/	//if (SlotCount<CACHE_W-1)
 			SlotCount++;
+			}
 		}
 		SlotList[Slot].RefCount++;
 
@@ -179,7 +218,7 @@ int		MaxH=0;
 
 /*		if (TPW<1) */TPW=1;
 
-		ASSERT(SlotCount<CACHE_W);
+		ASSERT(SlotCount<=CACHE_W);
 
 		for (int i=0; i<SlotCount; i++)
 		{
