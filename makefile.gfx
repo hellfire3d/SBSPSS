@@ -233,7 +233,8 @@ UI_GFX_FONT :=				smallfont/+33	smallfont/+34	smallfont/+37	smallfont/+39	smallf
 							smallfont/+230	smallfont/+232	smallfont/+233	smallfont/+234	smallfont/+235	\
 							smallfont/+236	smallfont/+237	smallfont/+238	smallfont/+239	smallfont/+242	\
 							smallfont/+243	smallfont/+244	smallfont/+245	smallfont/+246	smallfont/+249	\
-							smallfont/+250	smallfont/+251	smallfont/+252	smallfont/+253	smallfont/+255
+							smallfont/+250	smallfont/+251	smallfont/+252	smallfont/+253	smallfont/+255	\
+							smallfont/+error
 UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_FONT_DIR)/$(FILE).bmp)
 
 UI_GFX_NONTRANS :=			

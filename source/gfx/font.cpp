@@ -268,7 +268,7 @@ int FontBank::getCharWidth( char _char )
 
 	if( _char!=' ' )
 	{
-		if( m_fontData->fontTab[_char]==-1 ) _char='X';
+		if( m_fontData->fontTab[_char]==-1 ) _char=1;		// Error - Chartacter does not eixst!
 		size=m_spriteBank.getFrameWidth( m_fontData->fontTab[_char] );
 	}
 	else
@@ -347,7 +347,7 @@ int FontBank::printChar( char _char,int _x,int _y )
 {
 	if (_char!=' ')
 	{
-		if( m_fontData->fontTab[_char]==-1 ) _char='X';
+		if( m_fontData->fontTab[_char]==-1 ) _char=1;		// Error - Chartacter does not eixst!
 		POLY_FT4 *Ft4=m_spriteBank.printFT4(m_fontData->fontTab[_char],_x,_y,0,0,m_ot);
 		setRGB0(Ft4,m_r,m_g,m_b);
 		setShadeTex(Ft4,0);
@@ -440,7 +440,7 @@ int ScalableFontBank::printChar( char _char,int _x,int _y )
 		sFrameHdr	*fh;
 		POLY_FT4	*Ft4;
 
-		if( m_fontData->fontTab[_char]==-1 ) _char='X';
+		if( m_fontData->fontTab[_char]==-1 ) _char=1;		// Error - Chartacter does not eixst!
 
 		fh=m_spriteBank.getFrameHeader(m_fontData->fontTab[_char]);
 		_x+=((fh->W*m_fontScale)>>9)-(fh->W/2);
