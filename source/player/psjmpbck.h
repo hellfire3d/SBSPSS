@@ -48,7 +48,7 @@ private:
 	Globals
 	------- */
 
-extern	CPlayerStateJumpBack		s_stateJump;
+extern	CPlayerStateJumpBack		s_stateJumpBack;
 
 
 /*----------------------------------------------------------------------

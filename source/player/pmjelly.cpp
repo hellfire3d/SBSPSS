@@ -195,6 +195,7 @@ int		CPlayerModeJellyLauncher::setState(int _state)
 		switch(_state)
 		{
 			case STATE_FALL:
+			case STATE_JUMPBACK:
 				// Break out of firing state!
 				m_firingState=FIRING_STATE__NONE;
 				break;
@@ -254,6 +255,7 @@ int		CPlayerModeJellyLauncher::canFireFromThisState()
 		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
+		case STATE_JUMPBACK:
 			break;
 	}
 

@@ -61,6 +61,7 @@
 CPlayerStateJumpBack		s_stateJumpBack;
 
 
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -69,10 +70,10 @@ CPlayerStateJumpBack		s_stateJumpBack;
   ---------------------------------------------------------------------- */
 void CPlayerStateJumpBack::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETHIT);
 	m_reactFrames=0;
 
-	_playerMode->jump();
+	_playerMode->jumpback();
 
 	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
 }
@@ -87,39 +88,19 @@ void CPlayerStateJumpBack::enter(CPlayerModeBase *_playerMode)
 void CPlayerStateJumpBack::think(CPlayerModeBase *_playerMode)
 {
 	const PlayerMetrics	*metrics;
-	int					controlHeld,controlDown;
+	int					xvel;
 
 	metrics=_playerMode->getPlayerMetrics();
-	controlHeld=_playerMode->getPadInputHeld();
-	controlDown=_playerMode->getPadInputDown();
 
 	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 
-	if(m_reactFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&controlHeld&PI_JUMP)
+	if(m_reactFrames<=metrics->m_metric[PM__HITREACT_FRAMES])
 	{
 		m_reactFrames++;
 	}
 	else
 	{
 		_playerMode->setState(STATE_FALL);
-	}
-
-	if(controlHeld&PI_LEFT)
-	{
-		_playerMode->moveLeft();
-	}
-	else if(controlHeld&PI_RIGHT)
-	{
-		_playerMode->moveRight();
-	}
-	else
-	{
-		_playerMode->slowdown();
-	}
-
-	if(controlDown&PI_DOWN)
-	{
-		_playerMode->setState(STATE_BUTTBOUNCE);
 	}
 }
 

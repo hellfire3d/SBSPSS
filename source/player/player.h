@@ -78,6 +78,7 @@ typedef enum
 	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
+	STATE_JUMPBACK,
 
 	NUM_STATES,
 }PLAYER_STATE;
@@ -119,6 +120,15 @@ typedef enum
 	DAMAGE__BITE_ENEMY,
 	DAMAGE__KILL_OUTRIGHT,
 }DAMAGE_TYPE;
+
+typedef enum
+{
+	REACT__LEFT=-1,
+	REACT__UP=0,
+	REACT__RIGHT=+1,
+	REACT__GET_DIRECTION_FROM_THING=123,
+	REACT__NO_REACTION=234,
+}REACT_DIRECTION;
 
 
 // The input from the control pad is remapped to this rather than keeping it in the
@@ -234,9 +244,9 @@ public:
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
 	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
-								
+							
 	void			inSoakUpState();
-	void			takeDamage(DAMAGE_TYPE _damage);
+	void			takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection=REACT__UP,CThing *_thing=NULL);
 
 	void			respawn();
 
@@ -282,7 +292,7 @@ private:
 	enum
 	{
 		INVINCIBLE_FRAMES__START=200,	// Invincible for this many frames at start of life
-		INVINCIBLE_FRAMES__HIT=100,		// Invincible for this many frames after taking damage
+		INVINCIBLE_FRAMES__HIT=30,		// Invincible for this many frames after taking damage
 	};
 	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
 

@@ -26,6 +26,10 @@
 #include "player\psjump.h"
 #endif
 
+#ifndef __PLAYER__PSJMPBCK_H__
+#include "player\psjmpbck.h"
+#endif
+
 #ifndef __PLAYER__PSRUN_H__
 #include "player\psrun.h"
 #endif
@@ -114,6 +118,7 @@ static	CPlayerState	*s_stateTable[]=
 	NULL,									// STATE_DUCK
 	NULL,									// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
+	&s_stateJumpBack,						// STATE_JUMPBACK
 };
 
 
@@ -130,6 +135,9 @@ static	PlayerMetrics	s_playerMetrics=
 	DEFAULT_PLAYER_PLAYER_GRAVITY,			// PM__GRAVITY
 	DEFAULT_PLAYER_TERMINAL_VELOCITY,		// PM__TERMINAL_VELOCITY
 	DEFAULT_BUTT_FALL_VELOCITY,				// PM__BUTT_FALL_VELOCITY
+	DEFAULT_HITREACT_XVELOCITY,				// PM__HITREACT_XVELOCITY
+	DEFAULT_HITREACT_YVELOCITY,				// PM__HITREACT_YVELOCITY
+	DEFAULT_HITREACT_FRAMES,				// PM__HITREACT_FRAMES
 }	};
 
 

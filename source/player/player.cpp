@@ -333,6 +333,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,												// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_NET_GETHIT,						// ANIM_SPONGEBOB_GETHIT
 	},
 
 	//	PLAYER_ADDON_CORALBLOWER,
@@ -361,6 +362,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_CORALBLOWER_IDLEWEAPON,			// ANIM_SPONGEBOB_IDLEWEAPON,
 	ANIM_SPONGEBOB_CORALBLOWER_WALK,				// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_CORALBLOWER_GETHIT,				// ANIM_SPONGEBOB_GETHIT
 	},
 
 	// PLAYER_ADDON_JELLYLAUNCHER,
@@ -389,6 +391,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,												// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_GETHIT,			// ANIM_SPONGEBOB_GETHIT
 	},
 
 	// PLAYER_ADDON_GLASSES,
@@ -417,6 +420,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_GLASSES_IDLEWEAPON,				// ANIM_SPONGEBOB_IDLEWEAPON,
 	ANIM_SPONGEBOB_GLASSES_WALK,					// ANIM_SPONGEBOB_WALK,
 	ANIM_SPONGEBOB_GLASSES_KARATE,					// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_GLASSES_GETHIT,					// ANIM_SPONGEBOB_GETHIT
 	},
 
 	// PLAYER_ADDON_BUBBLEWAND,
@@ -445,6 +449,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,										// ANIM_SPONGEBOB_WALK,
 	-1,										// ANIM_SPONGEBOB_KARATE,
+	-1,					// ANIM_SPONGEBOB_GETHIT
 	},
 
 	// PLAYER_ADDON_JELLYFISHINNET
@@ -473,6 +478,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,												// ANIM_SPONGEBOB_WALK,
 	-1,												// ANIM_SPONGEBOB_KARATE,
+	ANIM_SPONGEBOB_JELLYFISH_GETHIT,				// ANIM_SPONGEBOB_GETHIT
 	},
 
 	// PLAYER_ADDON_GLOVE
@@ -501,6 +507,7 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
 	-1,												// ANIM_SPONGEBOB_WALK,
 	ANIM_SPONGEBOB_GLOVE_KARATE,					// ANIM_SPONGEBOB_KARATE,
+	-1,												// ANIM_SPONGEBOB_GETHIT
 	},
 };
 
@@ -1561,7 +1568,8 @@ void	CPlayer::inSoakUpState()
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
-	Params:
+	Params:		When _reactDirection is REACT__GET_DIRECTION_FROM_THING then
+				_thing must point to the thing that caused the damage
 	Returns:
   ---------------------------------------------------------------------- */
 #if	defined(__USER_daveo__)
@@ -1569,7 +1577,7 @@ int invincibleSponge=true;		// NB: This is for debugging purposes only so don't 
 #else
 int invincibleSponge=false;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
 #endif
-void CPlayer::takeDamage(DAMAGE_TYPE _damage)
+void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CThing *_thing)
 {
 	if(m_invincibleFrameCount==0&&			// Don't take damage if still recovering from the last hit
 	   m_invincibilityRingTimer==0&&		// Or if we have the invincibility ring on
@@ -1613,35 +1621,41 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 		if(ouchThatHurt)
 		{
 			int	died=false;
-			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
-			if(!isWearingDivingHelmet())
+			if(invincibleSponge)
 			{
-				if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
-				{
-					m_health--;
-				}
-				else
-				{
-					m_health=-1;
-				}
-				if(m_health<0)
-				{
-					died=true;
-				}
+				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
 			}
 			else
 			{
-				if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+				if(!isWearingDivingHelmet())
 				{
-					m_healthWaterLevel-=WATERHEALTHPART;
+					if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+					{
+						m_health--;
+					}
+					else
+					{
+						m_health=-1;
+					}
+					if(m_health<0)
+					{
+						died=true;
+					}
 				}
 				else
 				{
-					m_health=-1;
-				}
-				if(m_healthWaterLevel<0)
-				{
-					died=true;
+					if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+					{
+						m_healthWaterLevel-=WATERHEALTHPART;
+					}
+					else
+					{
+						m_health=-1;
+					}
+					if(m_healthWaterLevel<0)
+					{
+						died=true;
+					}
 				}
 			}
 
@@ -1651,6 +1665,37 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			}
 			else
 			{
+				if(_reactDirection!=REACT__NO_REACTION)
+				{
+					if(_reactDirection==REACT__GET_DIRECTION_FROM_THING)
+					{
+						ASSERT(_thing);
+						if(Pos.vx<_thing->getPos().vx)
+						{
+							_reactDirection=REACT__LEFT;
+						}
+						else
+						{
+							_reactDirection=REACT__RIGHT;
+						}
+					}
+
+					m_moveVelocity.vx=((int)_reactDirection);
+					switch(_reactDirection)
+					{
+						case REACT__LEFT:
+							setFacing(FACING_RIGHT);
+							break;
+						case REACT__RIGHT:
+							setFacing(FACING_LEFT);
+							break;
+						case REACT__UP:
+						case REACT__GET_DIRECTION_FROM_THING:
+						case REACT__NO_REACTION:
+							break;
+					}
+					m_currentPlayerModeClass->setState(STATE_JUMPBACK);
+				}
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
 				m_healthReactFrames=25;
 			}

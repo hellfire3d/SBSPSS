@@ -238,6 +238,7 @@ player_src :=		demoplay \
 					psfall \
 					pshitgnd \
 					psidle \
+					psjmpbck \
 					psjump \
 					psrun \
 					psspring

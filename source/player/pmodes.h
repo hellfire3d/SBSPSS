@@ -50,6 +50,9 @@ typedef enum
 	PM__GRAVITY,
 	PM__TERMINAL_VELOCITY,
 	PM__BUTT_FALL_VELOCITY,
+	PM__HITREACT_XVELOCITY,
+	PM__HITREACT_YVELOCITY,
+	PM__HITREACT_FRAMES,
 		
 	NUM_PLAYER_METRICS
 }PLAYER_METRIC;
@@ -71,6 +74,9 @@ enum
 	DEFAULT_PLAYER_PLAYER_GRAVITY=2<<2,
 	DEFAULT_PLAYER_TERMINAL_VELOCITY=8,
 	DEFAULT_BUTT_FALL_VELOCITY=14,
+	DEFAULT_HITREACT_XVELOCITY=5,
+	DEFAULT_HITREACT_YVELOCITY=3,
+	DEFAULT_HITREACT_FRAMES=15,
 };
 
 
@@ -89,6 +95,7 @@ public:
 	void			inSoakUpState();
 	virtual int		isJellyfishNetFull()				{ASSERT(0);return false;}		// Fugly..
 
+	virtual int		setState(int _state)				{return 0;}
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
@@ -155,6 +162,7 @@ public:
 	void						moveRight();
 	int							slowdown();
 	void						jump();
+	void						jumpback();
 	void						fall();
 	void						buttFall();
 

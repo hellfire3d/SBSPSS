@@ -34,6 +34,10 @@
 #include "player\psjump.h"
 #endif
 
+#ifndef __PLAYER__PSJMPBCK_H__
+#include "player\psjmpbck.h"
+#endif
+
 #ifndef __PLAYER__PSRUN_H__
 #include "player\psrun.h"
 #endif
@@ -106,6 +110,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateDuck,							// STATE_DUCK
 	&s_stateSoakUp,							// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
+	&s_stateJumpBack,						// STATE_JUMPBACK
 };
 
 static	PlayerMetrics	s_playerMetrics=
@@ -120,6 +125,9 @@ static	PlayerMetrics	s_playerMetrics=
 	DEFAULT_PLAYER_PLAYER_GRAVITY,			// PM__GRAVITY
 	DEFAULT_PLAYER_TERMINAL_VELOCITY,		// PM__TERMINAL_VELOCITY
 	DEFAULT_BUTT_FALL_VELOCITY,				// PM__BUTT_FALL_VELOCITY
+	DEFAULT_HITREACT_XVELOCITY,				// PM__HITREACT_XVELOCITY
+	DEFAULT_HITREACT_YVELOCITY,				// PM__HITREACT_YVELOCITY
+	DEFAULT_HITREACT_FRAMES,				// PM__HITREACT_FRAMES
 }	};
 
 
@@ -221,6 +229,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_BUTTLAND:
 		case STATE_DUCK:
 		case STATE_GETUP:
+		case STATE_JUMPBACK:
 			break;
 	}
 
@@ -255,6 +264,7 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
+		case STATE_JUMPBACK:
 			break;
 	}
 
@@ -275,7 +285,8 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	}
 	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP)
+			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP&&
+			m_currentState!=STATE_JUMPBACK)
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();
@@ -332,7 +343,7 @@ void	CPlayerModeBase::playerHasHitGround()
 	{
 		// Landed from a painfully long fall
 		setState(STATE_HITGROUND);
-		m_player->takeDamage(DAMAGE__FALL);
+		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
 		moveVel.vx=0;
 	}
 	else if(moveVel.vx)
@@ -588,6 +599,24 @@ void	CPlayerModeBase::jump()
 	DVECTOR				moveVel;
 	moveVel=*m_player->getMoveVelocity();
 	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+	setMoveVelocity(&moveVel);
+}
+int barg=5;
+void	CPlayerModeBase::jumpback()
+{
+	DVECTOR				moveVel;
+	int					xvel;
+	moveVel=*m_player->getMoveVelocity();
+	moveVel.vy=-getPlayerMetrics()->m_metric[PM__HITREACT_YVELOCITY]<<VELOCITY_SHIFT;
+	xvel=getPlayerMetrics()->m_metric[PM__HITREACT_XVELOCITY]<<VELOCITY_SHIFT;
+	if(moveVel.vx<0)
+	{
+		moveVel.vx=-xvel;
+	}
+	else if(moveVel.vx>0)
+	{
+		moveVel.vx=xvel;
+	}
 	setMoveVelocity(&moveVel);
 }
 void	CPlayerModeBase::fall()
