@@ -306,6 +306,7 @@ struct	sThingTrigger
 	u16		Type;
 	sThingPoint	Pos;
 	u8		Width,Height;
+	sThingPoint	TargetPos;
 }; // 8
 
 struct	sThingHazard
