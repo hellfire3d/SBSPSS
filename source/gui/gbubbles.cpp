@@ -132,7 +132,6 @@ void CGUIBubbles::startEmitter()
 		s_emitterData.m_h=getH();
 		s_emitterData.m_bubicleBase.m_ot=getOt()+1;
 		m_emitter=CBubicleFactory::spawnEmitter(&s_emitterData);
-PAUL_DBGMSG("emitter started..");
 	}
 }
 
@@ -147,7 +146,6 @@ void CGUIBubbles::stopEmitter()
 {
 	m_emitter->kill();
 	m_emitter=NULL;
-PAUL_DBGMSG("emitter stopped..");
 }
 
 
