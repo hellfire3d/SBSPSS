@@ -1,4 +1,3 @@
-unsigned char	*xmPtr;
 /*=========================================================================
 
 	spu.cpp
@@ -96,14 +95,14 @@ void CXMPlaySound::initialise()
 	size=XM_GetSongSize();
 	for(i=0;i<MAX_SONG_HEADERS;i++)
 	{
-		s_songPtr[i]=(u8*)MemAlloc(size,"XMSong");
-		XM_SetSongAddress(s_songPtr[i]);
+		m_songPtr[i]=(u8*)MemAlloc(size,"XMSong");
+		XM_SetSongAddress(m_songPtr[i]);
 	}
 	size=XM_GetFileHeaderSize();
 	for(i=0;i<MAX_XM_HEADERS;i++)
 	{
-		s_fhPtr[i]=(u8*)MemAlloc(size,"XMHeader");
-		XM_SetFileHeaderAddress(s_fhPtr[i]);
+		m_fhPtr[i]=(u8*)MemAlloc(size,"XMHeader");
+		XM_SetFileHeaderAddress(m_fhPtr[i]);
 	}
 	VidAddVSyncFunc(XM_Update);
 
@@ -119,6 +118,13 @@ void CXMPlaySound::initialise()
 		XMVab	*vab=&s_xmVabs[i];
 		vab->m_refCount=0;
 	}
+
+	for(i=0;i<NUM_SPU_CHANNELS;i++)
+	{
+		m_spuChannelUse[i].m_useType=SILENT;
+		m_spuChannelUse[i].m_locked=false;
+	}
+
 
 	SOUND_DBGMSG("XMPlay sound initialised");
 }
@@ -141,8 +147,55 @@ void CXMPlaySound::shutdown()
 	Purpose:
 	Params:
 	Returns:
+  ---------------------------------------------------------------------- */
+int spuflags[24];
+void CXMPlaySound::think()
+{
+	int				i;
+	int				id;
+	spuChannelUse	*ch;
+	XM_Feedback		fb;
+
+	// Check to see if any of the sounds have finished
+	id=-1;
+	ch=m_spuChannelUse;
+	for(i=0;i<NUM_SPU_CHANNELS;i++)
+	{
+//pkg tidy		
+		// Only unlocked SFX need to be checked
+		if(ch->m_locked==false&&ch->m_useType==SFX)
+		{
+			id=ch->m_playingId;
+			if(id!=-1)
+			{
+				if(XM_GetFeedback(ch->m_internalId,&fb))
+				{
+PAUL_DBGMSG("%d finished.. ( was on chnl %d )",id,i);
+					while(ch->m_playingId==id&&i<NUM_SPU_CHANNELS)
+					{
+						ch->m_useType=SILENT;
+						ch++;
+						i++;
+					}
+					ch--;
+				}
+			}
+		}
+		ch++;
+	}
+
+for(i=0;i<24;i++)
+	spuflags[i]=m_spuChannelUse[i].m_useType;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
 ---------------------------------------------------------------------- */
-xmSampleId CXMPlaySound::loadSamples(FileEquate _vhFe,FileEquate _vbFe)
+xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 {
 	int				vabId;
 	XMVab			*vab;
@@ -195,7 +248,7 @@ xmSampleId CXMPlaySound::loadSamples(FileEquate _vhFe,FileEquate _vbFe)
 	Params:
 	Returns:
 ---------------------------------------------------------------------- */
-xmSongId CXMPlaySound::loadSongData(FileEquate _songFe)
+xmModId CXMPlaySound::loadModData(FileEquate _songFe)
 {
 	int		songId;	
 	XMSong	*song;
@@ -208,7 +261,7 @@ xmSongId CXMPlaySound::loadSongData(FileEquate _songFe)
 		{
 			// Yup..
 			song->m_refCount++;
-			return(xmSongId)songId;
+			return(xmModId)songId;
 		}
 	}
 
@@ -231,7 +284,7 @@ xmSongId CXMPlaySound::loadSongData(FileEquate _songFe)
 		songId++;song++;
 	}
 
-	return (xmSongId)songId;
+	return (xmModId)songId;
 }
 
 
@@ -241,7 +294,7 @@ xmSongId CXMPlaySound::loadSongData(FileEquate _songFe)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::dumpSamples(xmSampleId _sampleId)
+void CXMPlaySound::dumpSampleData(xmSampleId _sampleId)
 {
 	XMVab	*vab;
 
@@ -260,7 +313,7 @@ void CXMPlaySound::dumpSamples(xmSampleId _sampleId)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::dumpSongData(xmSongId _songId)
+void CXMPlaySound::dumpModData(xmModId _songId)
 {
 	XMSong	*song;
 
@@ -294,7 +347,7 @@ void CXMPlaySound::setStereo(int _stereo)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::setVolume(xmPlayingSongId _songId,unsigned char _volume)
+void CXMPlaySound::setVolume(xmPlayingId _songId,unsigned char _volume)
 {
 	XM_SetMasterVol(_songId,_volume>>1);
 }
@@ -306,7 +359,7 @@ void CXMPlaySound::setVolume(xmPlayingSongId _songId,unsigned char _volume)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::setPanning(xmPlayingSongId _songId,char _pan)
+void CXMPlaySound::setPanning(xmPlayingId _songId,char _pan)
 {
 	XM_SetMasterPan(_songId,_pan);
 }
@@ -318,28 +371,40 @@ void CXMPlaySound::setPanning(xmPlayingSongId _songId,char _pan)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-//int sid=0;
-//int chan=0;
-xmPlayingSongId CXMPlaySound::playSong(xmSampleId _sampleId,xmSongId _songId,int _baseChannel)
+xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _songId,int _channelCount)
 {
-	XMVab	*vab;
-	int		id;
+	int				baseChannel;
+	XMVab			*vab;
+	int				id;
+	xmPlayingId		retId;
 
 	ASSERT(s_xmVabs[_sampleId].m_refCount!=0);
 	ASSERT(s_xmSongs[_songId].m_refCount!=0);
-	
-	vab=&s_xmVabs[_sampleId];
-	id=XM_Init(vab->m_vabId,	// id from XM_VABInit
-			   _songId,			// XM id ( as passed to InitXMData )
-			   0,				// Song id
-			   _baseChannel,	// First channel
-			   XM_Loop,			// Loop 
-			   -1,				// Play mask
-			   XM_Music,		// Music
-			   0);				// Pattern to start at
 
-	return (xmPlayingSongId)id;
+	baseChannel=findSpareChannels(_channelCount,255);
+	if(baseChannel!=-1)
+	{
+		retId=getNextSparePlayingId();
+		vab=&s_xmVabs[_sampleId];
+		id=XM_Init(vab->m_vabId,	// id from XM_VABInit
+				_songId,			// XM id ( as passed to InitXMData )
+				   -1,//baseChannel,//0,				// Song id
+				baseChannel,		// First channel
+				XM_Loop,			// Loop 
+				-1,				// Play mask
+				XM_Music,		// Music
+				0);				// Pattern to start at
+		markChannelsAsActive(baseChannel,_channelCount,SONG,retId,id,255);
+PAUL_DBGMSG("playSong        %d/%d ( on %d-%d )",retId,id,baseChannel,baseChannel+_channelCount-1);
+	}
+	else
+	{
+		retId=NOT_PLAYING;
+	}
+
+	return retId;
 }
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -347,9 +412,27 @@ xmPlayingSongId CXMPlaySound::playSong(xmSampleId _sampleId,xmSongId _songId,int
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::stopSong(xmPlayingSongId _songId)
+void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
 {
-	XM_PlayStop(_songId);
+	int				i;
+	spuChannelUse	*ch;
+
+	ch=m_spuChannelUse;
+	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	{
+		if(ch->m_playingId==_playingId)
+		{
+PAUL_DBGMSG("unlocking %d",_playingId);
+			ASSERT(ch->m_locked!=false);
+			while(ch->m_playingId==_playingId)
+			{
+				ch->m_locked=false;
+				ch++;
+			}
+			return;
+		}
+	}
+	ASSERT(0);			// Couldn't find the sound to unlock it!
 }
 
 
@@ -359,45 +442,108 @@ void CXMPlaySound::stopSong(xmPlayingSongId _songId)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-//int sid=0;
-//int chan=0;
-int SONGNUM=1;
-xmPlayingSongId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmSongId _songId,int _baseChannel,int _sfxPattern,int _playMask=-1)
+void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 {
-//	XM_PlaySample(XM_GetSampleAddress(_sampleId,_sfxPattern),23,0x3fff,0x3fff,0x800);
-//	return (xmPlayingSongId)0;
+//	ASSERT(m_spuChannelUse[_playingId].m_locked!=true);		// Unlock channel first!
+
+
+	int				i;
+	spuChannelUse	*ch;
 	
-	int		i, maskCopy,channelCount=0;
-	XMVab	*vab;
-	int		id;
+	ch=m_spuChannelUse;
+	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	{
+		if(ch->m_playingId==_playingId)
+		{
+			switch(ch->m_useType)
+			{
+				case SILENT:
+					PAUL_DBGMSG("stopping.. woah! %d is already stopped",_playingId);
+					break;
+
+				case SONG:
+					PAUL_DBGMSG("stopping song on %d",_playingId);
+					XM_PlayStop(ch->m_internalId);
+					break;
+
+				case SFX:
+					PAUL_DBGMSG("stopping sfx on %d",_playingId);
+					XM_PlayStop(ch->m_internalId);
+					break;
+
+				case LOOPINGSFX:
+					PAUL_DBGMSG("stopping loopingsfx on %d",_playingId);
+					XM_StopSample(ch->m_internalId);
+					break;
+			}
+			
+			while(ch->m_playingId==_playingId)
+			{
+				ch->m_useType=SILENT;
+				ch++;
+			}
+			return;
+		}
+	}
+	ASSERT(0);			// Couldn't find the sound to stop it!
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _songId,int _sfxPattern,int _playMask,u8 _priority)
+{
+	int				i,j;
+	int				maskCopy,channelCount;
+	int				valid;
+	int				baseChannel;
+	XMVab			*vab;
+	int				songId;
+	int				id;
+	xmPlayingId		retId;
 
 	ASSERT(s_xmVabs[_sampleId].m_refCount!=0);
 	ASSERT(s_xmSongs[_songId].m_refCount!=0);
 
-
+	// Count channels
 	maskCopy=_playMask;
-	for(i=0;i<24&&maskCopy;i++)
+	channelCount=0;
+	for(i=0;i<NUM_SPU_CHANNELS&&maskCopy;i++)
 	{
 		if(maskCopy&1)
 			channelCount++;
 		maskCopy>>=1;
 	}
 
-	vab=&s_xmVabs[_sampleId];
-	XM_SetSFXRange(_baseChannel,channelCount);
-	id=XM_Init(vab->m_vabId,	// id from XM_VABInit
-				 _songId,		// XM id ( as passed to InitXMData )
-				 SONGNUM,		// Song id
-				 -1,			// First channel
-				 XM_NoLoop,		// Loop 
-				 _playMask,		// Play mask
-				 XM_SFX,		// Music
-				 _sfxPattern);	// Pattern to start at
-
-SONGNUM++;	
-if(SONGNUM>=24)SONGNUM=1;
-//PAUL_DBGMSG("sfx - ret:%d",id);	
-	return (xmPlayingSongId)id;
+	// Play the sound
+	baseChannel=findSpareChannels(channelCount,_priority);
+	if(baseChannel!=-1)
+	{
+		retId=getNextSparePlayingId();
+		vab=&s_xmVabs[_sampleId];
+		XM_SetSFXRange(baseChannel,channelCount);
+		id=XM_Init(vab->m_vabId,	// id from XM_VABInit
+					 _songId,		// XM id ( as passed to InitXMData )
+					 -1,//baseChannel,//SONGNUM,		// Song id
+					 -1,			// First channel
+					 XM_NoLoop,		// Loop 
+					 _playMask,		// Play mask
+					 XM_SFX,		// Music
+					 _sfxPattern);	// Pattern to start at
+		XM_ClearSFXRange();
+PAUL_DBGMSG("playSfx         %d/%d ( on %d-%d )",retId,id,baseChannel,baseChannel+channelCount-1);
+		markChannelsAsActive(baseChannel,channelCount,SFX,retId,id,_priority);
+	}
+	else
+	{
+		retId=NOT_PLAYING;
+	}
+	
+	return retId;
 }
 
 
@@ -407,11 +553,139 @@ if(SONGNUM>=24)SONGNUM=1;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CXMPlaySound::isSfxActive(xmPlayingSongId _id)
+xmPlayingId	CXMPlaySound::playLoopingSfx(xmSampleId _sampleId,xmModId _songId,int _soundId,u8 _priority,int _pitch)
 {
-	XM_Feedback	fb;
+	int				baseChannel;
+	xmPlayingId		retId;
 
-	return XM_GetFeedback(_id,&fb)==0;
+	baseChannel=findSpareChannels(1,_priority);
+	if(baseChannel!=-1)
+	{
+		retId=getNextSparePlayingId();
+PAUL_DBGMSG("playLoopingSfx  %d/- ( on %d-%d )",retId,baseChannel,baseChannel);
+		XM_PlaySample(XM_GetSampleAddress(_sampleId,_soundId),baseChannel,0x3fff,0x3fff,_pitch);
+		markChannelsAsActive(baseChannel,1,LOOPINGSFX,retId,baseChannel,_priority);
+	}
+	else
+	{
+		retId=NOT_PLAYING;
+	}
+
+	return retId;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+xmPlayingId	CXMPlaySound::getNextSparePlayingId()
+{
+	xmPlayingId		validId;
+	int				i;
+	spuChannelUse	*ch;
+	static xmPlayingId	nextId=(xmPlayingId)(0-1);		// fudge to make first id=0
+
+
+	validId=NOT_PLAYING;
+	while(validId==NOT_PLAYING)
+	{
+		nextId=(xmPlayingId)((nextId+1)&0xff);			// gives 256 unique id numbers
+
+		// Is this id still in use?
+		validId=nextId;
+		ch=m_spuChannelUse;
+		for(i=0;i<NUM_SPU_CHANNELS&&validId!=NOT_PLAYING;i++)
+		{
+			if(ch->m_playingId==validId&&!(ch->m_locked==false&&ch->m_useType==SILENT))
+				validId=NOT_PLAYING;
+			ch++;
+		}
+	}
+
+	return validId;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Returns the base channel of a slot big enuf for the
+				requested number of channels
+	Params:
+	Returns:	baseChannel or -1 if no space
+  ---------------------------------------------------------------------- */
+int CXMPlaySound::findSpareChannels(int _channelCount,int _priority)
+{
+	int			i,j;
+	int			valid;
+	
+	// First we search for channels that are marked as unused
+	valid=false;
+	for(i=0;i<NUM_SPU_CHANNELS-_channelCount+1&&valid==false;)
+	{
+		valid=true;
+		for(j=i;j<i+_channelCount&&valid;j++)
+		{
+			if(m_spuChannelUse[j].m_useType!=SILENT) valid=false;			// pkg - tidy up
+		}
+		if(valid) return i;
+		i=j;
+	}
+
+/*
+	// Couldn't find one.. can we kill off a lower priority sound?
+	if(valid==false)
+	{
+		int		lowestPrioity=_priority;
+		int		possibleBase=-1;
+		int		id;
+		
+		// Find the lowest priority sound with enuf spare channels
+		i=0;
+		while(i<24)
+		{
+			if(m_spuChannelUse[i].m_priority<=lowestPriority&&m_spuChannelUse[j].m_useType!=SILENT)
+			{
+				valid=true;
+				id=m_spuChannelUse[i].m_id;
+				for(j=i;j<i+_channelCount&&valid;j++)
+				{
+					if(m_spuChannelUse[j].m_id!=id) valid=false;
+				}
+
+			}
+			i++;
+		}
+	}
+*/
+	// Can't play it :(
+	return -1;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CXMPlaySound::markChannelsAsActive(int _baseChannel,int _channelCount,CHANNELUSETYPE _useType,xmPlayingId _playingId,int _internalId,u8 _priority)
+{
+	int				i;
+	spuChannelUse	*ch,details;
+
+
+	details.m_useType=_useType;
+	details.m_internalId=_internalId;
+	details.m_playingId=_playingId;
+	details.m_priority=_priority;
+	details.m_locked=true;
+
+	ch=&m_spuChannelUse[_baseChannel];
+	for(i=_baseChannel;i<_baseChannel+_channelCount;i++,ch++)
+		*ch=details;
 }
 
 

@@ -79,55 +79,53 @@ public:
 
 
 	// General
-	static void		initialise();
-	static void		shutdown();
-	static void		think(int _frames);
+	static void			initialise();
+	static void			shutdown();
+	static void			think(int _frames);
 
 
 	// Song interface
-	static void		setSong(SONGID _songId);
-	static void		playSong();
-	static void		dumpSong();
-	static void		setSongToFadedOut()				{setVolume(SONGFADE,0);}
-	static void		setSongToFadedIn()				{setVolume(SONGFADE,255);}
+	static void			setSong(SONGID _songId);
+	static void			playSong();
+	static void			dumpSong();
+	static void			setSongToFadedOut()				{setVolume(SONGFADE,0);}
+	static void			setSongToFadedIn()				{setVolume(SONGFADE,255);}
 
 	// SFX interface
-	static void		setSfxBank(SFXBANKID _bankId);
-	static int		playSfx(int _sfxId);
-//	static void		stopSfx(int _id);
+	static void			setSfxBank(SFXBANKID _bankId);
+	static xmPlayingId	playSfx(int _sfxId);
+//	static void			setposition(int _playId,vector pos );
+	static void			stopSfx(xmPlayingId _id);
 
 	// Speech interface
-	static void		playSpeech(SpeechEquate _speech);
+	static void			playSpeech(SpeechEquate _speech);
 
 	// Control
-	static void		setVolume(VOLUMETYPE _type,int _val);
-	static int		getVolume(VOLUMETYPE _type);
-//	static void		stopAllSound();
+	static void			setVolume(VOLUMETYPE _type,int _val);
+	static int			getVolume(VOLUMETYPE _type);
+//	static void			stopAllSound();
 
 
 private:
 	enum
 	{
-		NUM_SPU_CHANNELS=24,
-
-		SONG_BASE_CHANNEL	=0,
-		SONG_CHANNELS		=10,
-		SONG_MAX_CHANNEL	=SONG_BASE_CHANNEL+SONG_CHANNELS-1,
-
-		SFX_BASE_CHANNEL	=SONG_MAX_CHANNEL+1,
-		SFX_CHANNELS		=NUM_SPU_CHANNELS-SFX_BASE_CHANNEL,
-		SFX_MAX_CHANNEL		=SFX_BASE_CHANNEL+SFX_CHANNELS-1,
-
 		VOLUME_CHANGE_SPEED=2,
 		INITIAL_VOLUME=192,
 	};
-	
+
 					CSoundMediator()			{;}
 
-	static int		s_initialised;
+	static int				s_initialised;
 
-//	static int		s_currentVolume[NUM_VOLUMETYPES];
-//	static int		s_targetVolume[NUM_VOLUMETYPES];
+	static int				s_currentVolume[NUM_VOLUMETYPES];
+	static int				s_targetVolume[NUM_VOLUMETYPES];
+	static int				s_volumeDirty[NUM_VOLUMETYPES];
+
+	static xmSampleId		s_songSampleId;
+	static xmModId			s_songModId;
+	static xmPlayingId		s_songPlayingId;
+	static xmSampleId		s_sfxSampleId;
+	static xmModId			s_sfxModId;
 
 };
 

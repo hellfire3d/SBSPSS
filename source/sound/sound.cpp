@@ -43,8 +43,8 @@ typedef struct XMFILEDATA
 
 typedef struct SFXDETAILS
 {
-	int			m_channels;
-	int			m_pattern;
+	int			m_channelMask;
+	int			m_pattern;			// ..or instrument for loopers
 	int			m_looping;
 };
 
@@ -71,10 +71,10 @@ static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 
 static SFXDETAILS	s_sfxDetails[]=
 {
-	{	1,	0,	0	},
+	{	1,	6,	1	},
 	{	1,	1,	0	},
 	{	1,	2,	0	},
-	{	1,	3,	0	},
+	{	1,	0,	1	},
 };
 
 
@@ -90,22 +90,21 @@ static SFXDETAILS	s_sfxDetails[]=
 
 
 
-int			CSoundMediator::s_initialised=false;
-int			/*CSoundMediator::*/s_currentVolume[CSoundMediator::NUM_VOLUMETYPES];
-int			/*CSoundMediator::*/s_targetVolume[CSoundMediator::NUM_VOLUMETYPES];
-int			/*CSoundMediator::*/s_volumeDirty[CSoundMediator::NUM_VOLUMETYPES];
+int				CSoundMediator::s_initialised=false;
 
+int				CSoundMediator::s_currentVolume[CSoundMediator::NUM_VOLUMETYPES];
+int				CSoundMediator::s_targetVolume[CSoundMediator::NUM_VOLUMETYPES];
+int				CSoundMediator::s_volumeDirty[CSoundMediator::NUM_VOLUMETYPES];
+
+xmSampleId		CSoundMediator::s_songSampleId=NO_SAMPLE;
+xmModId			CSoundMediator::s_songModId=NO_SONG;
+xmPlayingId		CSoundMediator::s_songPlayingId=NOT_PLAYING;
+xmSampleId		CSoundMediator::s_sfxSampleId=NO_SAMPLE;
+xmModId			CSoundMediator::s_sfxModId=NO_SONG;
 
 static CSpuSound		*s_spuSound;
-
 static CXMPlaySound		*s_xmplaySound;
 
-static xmSampleId		s_songSampleId=NO_SAMPLE;
-static xmSongId			s_songDataId=NO_SONG;
-static xmPlayingSongId	s_songPlayingId=NOT_PLAYING;
-
-static xmSampleId		s_sfxSampleId=NO_SAMPLE;
-static xmSongId			s_sfxDataId=NO_SONG;
 
 
 
@@ -123,7 +122,7 @@ void CSoundMediator::initialise()
 	ASSERT(!s_initialised);
 
 	s_spuSound=new ("SPUSound")	CSpuSound();			s_spuSound->initialise();
-	s_xmplaySound=new  ("XMPlaySound") CXMPlaySound();	s_xmplaySound->initialise();
+	s_xmplaySound=new ("XMPlaySound") CXMPlaySound();	s_xmplaySound->initialise();
 	CXAStream::Init();
 	
 
@@ -137,9 +136,6 @@ void CSoundMediator::initialise()
 //	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
 //	ASSERT(CXAStream::MAX_VOLUME==32767);
 
-
-PAUL_DBGMSG("song:   %d-%d  (%d)",SONG_BASE_CHANNEL,SONG_MAX_CHANNEL,SONG_CHANNELS);
-PAUL_DBGMSG("sfx:    %d-%d  (%d)",SFX_BASE_CHANNEL,SFX_MAX_CHANNEL,SFX_CHANNELS);
 
 	SOUND_DBGMSG("Sound mediator initialised");
 	s_initialised=true;
@@ -172,13 +168,6 @@ ASSERT(0);
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int tgt=255;
-int val;
-static int	s_spuChannelUse[24]={-1,-1,-1,-1,-1,-1,
-									-1,-1,-1,-1,-1,-1,
-									-1,-1,-1,-1,-1,-1,
-									-1,-1,-1,-1,-1,-1};
-
 void CSoundMediator::think(int _frames)
 {
 	int			i;
@@ -186,61 +175,6 @@ void CSoundMediator::think(int _frames)
 	int			*current,*target,*dirty;
 
 	ASSERT(s_initialised);
-
-
-{
-int id;
-
-id=-1;
-for(i=SONG_CHANNELS;i<24;i++)
-{
-	if(id!=s_spuChannelUse[i])
-	{
-		id=s_spuChannelUse[i];
-		if(id!=-1)
-		{
-/*
-			if(id>=5000)
-			{
-PAUL_DBGMSG("%d is now free.. ( was on chnl %d )",id-5000,i);
-				while(s_spuChannelUse[i]==id&&i<24)
-				{
-					s_spuChannelUse[i++]=-1;
-				}
-				i--;
-			}
-			else if(id>=100)
-			{
-				while(s_spuChannelUse[i]==id&&i<24)
-				{
-					s_spuChannelUse[i++]+=100;
-				}
-				i--;
-			}
-			else 
-*/
-			if(!s_xmplaySound->isSfxActive((xmPlayingSongId)id))
-			{
-PAUL_DBGMSG("%d end.. ( was on chnl %d )",id,i);
-				while(s_spuChannelUse[i]==id&&i<24)
-				{
-					s_spuChannelUse[i++]=-1;
-				}
-				i--;
-			}
-//else
-//{
-//	PAUL_DBGMSG("channel %d playing",i);
-//}
-		}
-	}
-
-}
-}
-
-
-
-
 
 
 	// Fade to target volume
@@ -270,6 +204,8 @@ PAUL_DBGMSG("%d end.. ( was on chnl %d )",id,i);
 
 	// Manual update of anything that needs it
 //	CXAStream::ControlXA();
+	s_xmplaySound->think();
+	
 
 	// Push through any changes in volume
 	if(s_volumeDirty[SONG]||s_volumeDirty[SONGFADE])
@@ -305,11 +241,11 @@ void CSoundMediator::setSong(SONGID _songId)
 	XMFILEDATA		*song;
 
 	ASSERT(s_songSampleId==NO_SAMPLE);
-	ASSERT(s_songDataId==NO_SONG);
+	ASSERT(s_songModId==NO_SONG);
 
 	song=&s_xmSongData[_songId];
-	s_songDataId=s_xmplaySound->loadSongData(song->m_pxm);
-	s_songSampleId=s_xmplaySound->loadSamples(song->m_vh,song->m_vb);
+	s_songModId=s_xmplaySound->loadModData(song->m_pxm);
+	s_songSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
 }
 
 
@@ -322,10 +258,10 @@ void CSoundMediator::setSong(SONGID _songId)
 void CSoundMediator::playSong()
 {
 	ASSERT(s_songSampleId!=NO_SAMPLE);
-	ASSERT(s_songDataId!=NO_SONG);
+	ASSERT(s_songModId!=NO_SONG);
 	ASSERT(s_songPlayingId==NOT_PLAYING);
 
-	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songDataId,SONG_BASE_CHANNEL);
+	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId,10);		// pkg !?
 	s_volumeDirty[SONG]=true;		// Force a volume update
 }
 
@@ -339,14 +275,18 @@ void CSoundMediator::playSong()
 void CSoundMediator::dumpSong()
 {
 	ASSERT(s_songSampleId!=NO_SAMPLE);
-	ASSERT(s_songDataId!=NO_SONG);
+	ASSERT(s_songModId!=NO_SONG);
 
-	if(s_songPlayingId!=NOT_PLAYING)s_xmplaySound->stopSong(s_songPlayingId);
-	s_xmplaySound->dumpSamples(s_songSampleId);
-	s_xmplaySound->dumpSongData(s_songDataId);
+	if(s_songPlayingId!=NOT_PLAYING)
+	{
+		s_xmplaySound->stopPlayingId(s_songPlayingId);
+		s_xmplaySound->unlockPlayingId(s_songPlayingId);
+	}
+	s_xmplaySound->dumpSampleData(s_songSampleId);
+	s_xmplaySound->dumpModData(s_songModId);
 
 	s_songSampleId=NO_SAMPLE;
-	s_songDataId=NO_SONG;
+	s_songModId=NO_SONG;
 	s_songPlayingId=NOT_PLAYING;
 }
 
@@ -362,11 +302,11 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 	XMFILEDATA		*song;
 	
 	ASSERT(s_sfxSampleId==NO_SAMPLE);
-	ASSERT(s_sfxDataId==NO_SONG);
+	ASSERT(s_sfxModId==NO_SONG);
 	
 	song=&s_xmSfxData[_bankId];
-	s_sfxDataId=s_xmplaySound->loadSongData(song->m_pxm);
-	s_sfxSampleId=s_xmplaySound->loadSamples(song->m_vh,song->m_vb);
+	s_sfxModId=s_xmplaySound->loadModData(song->m_pxm);
+	s_sfxSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
 }
 
 
@@ -376,60 +316,42 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-
-
-int CSoundMediator::playSfx(int _sfxId)
+xmPlayingId CSoundMediator::playSfx(int _sfxId)
 {
+	int			sfxChannelMask;
+	xmPlayingId	playId;
+	SFXDETAILS	*sfx;
+
 	ASSERT(s_sfxSampleId!=NO_SAMPLE);
-	ASSERT(s_sfxDataId!=NO_SONG);
-
-	int			baseChannel;
-	int			channelCount=0;
-	int			sfxChannelMask,maskCopy;
-	int			i,j;
-	int			valid;
-	int			maskCheck=1;
-	int			playId;
-
-sfxChannelMask=3;
-
-	// Count channels
-	maskCopy=sfxChannelMask;
-	for(i=0;i<24&&maskCopy;i++)
-	{
-		if(maskCopy&1)
-			channelCount++;
-		maskCopy>>=1;
-	}
-
-	// Find some spare channels to play on
-	valid=false;
-	for(i=SFX_BASE_CHANNEL;i<NUM_SPU_CHANNELS-channelCount+1&&valid==false;i++)
-	{
-		valid=true;
-		for(j=i;j<i+channelCount&&valid;j++)
-		{
-			if(s_spuChannelUse[j]!=-1) valid=false;			// pkg - tidy up
-		}
-	}
-	ASSERT(valid!=false);
-	baseChannel=i-1;
+	ASSERT(s_sfxModId!=NO_SONG);
 
 	// Play!
-	playId=s_xmplaySound->playSfx(s_sfxSampleId,s_sfxDataId,baseChannel,_sfxId,sfxChannelMask);
+	sfx=&s_sfxDetails[_sfxId];
+	if(sfx->m_looping)
+	{
+		playId=s_xmplaySound->playLoopingSfx(s_sfxSampleId,s_sfxModId,sfx->m_pattern,10);
+	}
+	else
+	{
+		playId=s_xmplaySound->playSfx(s_sfxSampleId,s_sfxModId,sfx->m_pattern,sfx->m_channelMask,20);
+		if(playId!=NOT_PLAYING)s_xmplaySound->unlockPlayingId(playId);		// We really don't care about one-shot sfx..
+	}
 	s_volumeDirty[SFX]=true;		// Force a volume update
 
-// Clear any dead channels
-//for(i=SFX_BASE_CHANNEL;i<NUM_SPU_CHANNELS;i++)
-//	if(s_spuChannelUse[i]==playId)s_spuChannelUse[i]=-1;
+	return playId;
+}
 
-	// Mark channels as active
-	for(i=baseChannel;i<baseChannel+channelCount;i++)
-	{
-		s_spuChannelUse[i]=playId;
-	}
 
-	return 0;
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::stopSfx(xmPlayingId _id)
+{
+	s_xmplaySound->stopPlayingId(_id);
+	s_xmplaySound->unlockPlayingId(_id);
 }
 
 
