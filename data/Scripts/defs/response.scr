@@ -1,0 +1,12 @@
+// Question and answer responses
+
+// Questions
+#define	QUESTION_OK			0
+#define	QUESTION_YES_NO		1
+
+// Answers
+#define	ANSWER_NONE			0
+#defein ANSWER_OK			1
+#define ANSWER_YES			2
+#define ANSWER_NO			3
+
