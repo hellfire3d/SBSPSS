@@ -34,7 +34,7 @@
 #ifndef	__ANIM_PATRICK_HEADER__
 #include <ACTOR_PATRICK_Anim.h>
 #endif
-
+/*
 #ifndef	__ANIM_BARNACLEBOY_HEADER__
 #include <ACTOR_BARNACLEBOY_Anim.h>
 #endif
@@ -42,7 +42,7 @@
 #ifndef	__ANIM_MERMAIDMAN_HEADER__
 #include <ACTOR_MERMAIDMAN_Anim.h>
 #endif
-
+*/
 #ifndef __ANIM_GARY_HEADER__
 #include <ACTOR_GARY_Anim.h>
 #endif
@@ -56,7 +56,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
-		ANIM_BARNACLEBOY_IDLE,
+		0,//ANIM_BARNACLEBOY_IDLE,
 	},
 
 	{	// NPC_FRIEND_GARY
@@ -83,7 +83,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
-		ANIM_MERMAIDMAN_IDLE,
+		0,//ANIM_MERMAIDMAN_IDLE,
 	},
 
 	{	// NPC_FRIEND_PATRICK

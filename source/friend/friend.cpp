@@ -26,11 +26,11 @@
 #ifndef	__UTILS_HEADER__
 #include	"utils\utils.h"
 #endif
-
+/*
 #ifndef __FRIEND_FBBOY_H__
 #include "friend\fbboy.h"
 #endif
-
+*/
 #ifndef __FRIEND_FGARY_H__
 #include "friend\fgary.h"
 #endif
@@ -38,11 +38,11 @@
 #ifndef __FRIEND_FKRUSTY_H__
 #include "friend\fkrusty.h"
 #endif
-
+/*
 #ifndef __FRIEND_FMMAN_H__
 #include "friend\fmman.h"
 #endif
-
+*/
 #ifndef __FRIEND_FPATRICK_H__
 #include "friend\fpatrick.h"
 #endif
@@ -96,7 +96,8 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 	{
 		case CNpcFriend::NPC_FRIEND_BARNACLE_BOY:
 		{
-			friendNpc = new ("barnacle boy") CNpcBarnacleBoyFriend;
+			ASSERT(!"Friend removed");
+//			friendNpc = new ("barnacle boy") CNpcBarnacleBoyFriend;
 			break;
 		}
 
@@ -114,7 +115,8 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 		case CNpcFriend::NPC_FRIEND_MERMAID_MAN:
 		{
-			friendNpc = new ("mermaid man") CNpcMermaidManFriend;
+			ASSERT(!"Friend removed");
+//			friendNpc = new ("mermaid man") CNpcMermaidManFriend;
 			break;
 		}
 
@@ -138,7 +140,8 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 		case CNpcFriend::NPC_FRIEND_PLANKTON:
 		{
-			friendNpc = new ("plankton") CNpcPlanktonFriend;
+			ASSERT(!"Friend removed");
+//			friendNpc = new ("plankton") CNpcPlanktonFriend;
 			break;
 		}
 

@@ -652,6 +652,7 @@ vector<sSpriteAnim>	Hdrs;
 				OutFrame.FrameIdx=ThisFrame.FrameIdx;
 				OutFrame.XOfs=ThisFrame.XOfs;
 				OutFrame.YOfs=ThisFrame.YOfs;
+
 				fwrite(&OutFrame,1,sizeof(sSpriteFrame),File);
 			}
 			PadFile(File);
