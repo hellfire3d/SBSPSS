@@ -61,6 +61,11 @@ void CNpcFlyTrapHazard::processMovement( int _frames )
 					m_shut = false;
 					m_contact = false;
 					m_timer = GameState::getOneSecondInFrames();
+
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK, true );
+					}
 				}
 			}
 			else

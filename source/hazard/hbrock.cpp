@@ -115,6 +115,11 @@ void CNpcBouncingRockHazard::processMovement( int _frames )
 
 		// deal with horizontal
 
+		if ( m_soundId == NOT_PLAYING )
+		{
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ROLLING_ROCK, true );
+		}
+
 		bool pathComplete;
 		
 		if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading, 1 ) )

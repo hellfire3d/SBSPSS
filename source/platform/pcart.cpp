@@ -344,6 +344,7 @@ void CNpcCartPlatform::jump()
 	{
 		m_inJump = true;
 		m_vertSpeed = -8 << 8;
+		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
 	}
 }
 
