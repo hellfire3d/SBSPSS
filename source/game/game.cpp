@@ -264,10 +264,10 @@ void	CGameScene::initLevel()
 	pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
 	pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
 
-//	CNpcPlatform	*platform;
-//	platform=new ("test platform") CNpcPlatform;
-//	platform->init();
-//	platform->setLayerCollision( Level.getCollisionLayer() );
+	CNpcPlatform	*platform;
+	platform=new ("test platform") CNpcPlatform;
+	platform->init();
+	platform->setLayerCollision( Level.getCollisionLayer() );
 #endif
 
 	s_levelFinished=false;

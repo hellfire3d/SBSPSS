@@ -421,7 +421,7 @@ void	CPlayer::render()
 	CPlayerThing::render();
 	
 #ifdef _STATE_DEBUG_
-sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
+sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy));
 s_debugFont.print(40,40,posBuf);
 #endif
 
@@ -514,6 +514,33 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 	m_mapCameraEdges.vy=(_mapSize.vy-18)*MAP2D_BLOCKSTEPSIZE;
 	m_mapEdge.vx=_mapSize.vx*MAP2D_BLOCKSTEPSIZE;
 	m_mapEdge.vy=_mapSize.vy*MAP2D_BLOCKSTEPSIZE;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
+{
+	int	height;
+	if(isOnPlatform())
+	{
+		DVECTOR	platformPos;
+		platformPos=m_platform->getPos();
+		height=platformPos.vy-Pos.vy;
+//		if(height<-_maxHeight)
+//		{
+//			height=-_maxHeight;
+//		}
+	}
+	else
+	{
+		height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
+	}
+	return height;
 }
 
 /*----------------------------------------------------------------------
@@ -663,6 +690,8 @@ void CPlayer::respawn()
 	s_health=MAX_HEALTH;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
+
+	clearPlatform();
 }
 
 /*----------------------------------------------------------------------
@@ -722,7 +751,6 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			{
 				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
 				setMode(PLAYER_MODE_DEAD);
-//				setState(STATE_DEAD);
 			}
 		}
 	}
@@ -966,7 +994,6 @@ void CPlayer::setPlatform( CThing *newPlatform )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-/*
 void CPlayer::shove( DVECTOR move )
 {
 	DVECTOR newPos;
@@ -987,8 +1014,87 @@ void CPlayer::shove( DVECTOR move )
 		Pos.vx = newPos.vx;
 		Pos.vy = newPos.vy;
 	}
-}
+/*
+	int		colHeight;
+
+	// X movement
+	colHeight=m_layerCollision->getHeightFromGround(Pos.vx+move.vx,Pos.vy,5);
+	if(colHeight<0)
+	{
+		// Stop at the edge of the obstruction
+		int	dir,vx,cx,i;
+		if(move.vx<0)
+		{
+			dir=-1;
+			vx=move.vx;
+		}
+		else
+		{
+			dir=+1;
+			vx=move.vx;
+		}
+		cx=Pos.vx;
+		for(i=0;i<vx;i++)
+		{
+			if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
+			{
+				break;
+			}
+			cx+=dir;
+		}
+		Pos.vx=cx-dir;
+	}
+	else
+	{
+		// No obstruction
+		Pos.vx+=move.vx;
+	}
+
+	// Y movement
+	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+move.vy,5);
+	if(colHeight<0)
+	{
+		// Stop at the edge of the obstruction
+		int	dir,vy,cy,i;
+		if(move.vy<0)
+		{
+			dir=-1;
+			vy=move.vy;
+		}
+		else
+		{
+			dir=+1;
+			vy=move.vy;
+		}
+		cy=Pos.vy;
+		for(i=0;i<vy;i++)
+		{
+			if(m_layerCollision->getHeightFromGround(Pos.vx,cy)<0)
+			{
+				break;
+			}
+			cy+=dir;
+		}
+		Pos.vy=cy-dir;
+	}
+	else
+	{
+		// No obstruction
+		Pos.vy+=move.vy;
+	}
 */
+}
+
+void	CPlayer::setPlatform(CThing *_newPlatform)
+{
+	m_platform=_newPlatform;
+}
+void	CPlayer::clearPlatform()
+{
+	m_platform=NULL;
+}
+
+
 
 /*===========================================================================
 end */

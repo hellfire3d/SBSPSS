@@ -242,7 +242,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	collision=m_player->getLayerCollision();
 	pos=m_player->getPlayerPos();
 
-	colHeight=collision->getHeightFromGround(pos.vx,pos.vy,1);
+	colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,1);
 
 //New collision stuff (pkg)
 //if(m_layerCollision->getCollisionType(Pos.vx,Pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)
@@ -257,7 +257,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 		if(m_moveVelocity.vy>0)
 		{
 			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=collision->getHeightFromGround(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT),getPlayerMetrics()->m_metric[PM__TERMINAL_VELOCITY]+1);
+			colHeight=m_player->getHeightFromGround(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT),getPlayerMetrics()->m_metric[PM__TERMINAL_VELOCITY]+1);
 
 			if(colHeight<=0)
 			{
@@ -347,11 +347,11 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 //	return;
 //}
 		int colHeight;
-		colHeight=collision->getHeightFromGround(pos.vx,pos.vy,5);
+		colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,5);
 		if(colHeight==0)
 		{
 			// Ok.. we're on the ground. What happens if we move left/right
-			colHeight=collision->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy);
+			colHeight=m_player->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy);
 			if(colHeight<-8)
 			{
 				// Big step up. Stop at the edge of the obstruction
@@ -369,7 +369,7 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 				cx=pos.vx;
 				for(i=0;i<vx;i++)
 				{
-					if(collision->getHeightFromGround(cx,pos.vy)<-8)
+					if(m_player->getHeightFromGround(cx,pos.vy)<-8)
 					{
 						break;
 					}
@@ -386,7 +386,7 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 				
 				// Get the height at this new position and then try the step-up code below.
 				// Without this, there are problems when you run up a slope and hit a wall at the same time
-				colHeight=collision->getHeightFromGround(pos.vx,pos.vy);
+				colHeight=m_player->getHeightFromGround(pos.vx,pos.vy);
 			}
 			if(colHeight&&colHeight>=-8&&colHeight<=8)
 			{
@@ -400,7 +400,7 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 //			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
 			if(colHeight>=0) // Lets you jump through platforms from below
 			{
-				colHeight=collision->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy,5);
+				colHeight=m_player->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy,5);
 				if(colHeight<0)
 				{
 					// Stop at the edge of the obstruction
@@ -408,7 +408,7 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 					if(m_moveVelocity.vx<0)
 					{
 						dir=-1;
-						vx=-m_moveVelocity.vx>>VELOCITY_SHIFT;
+						vx=m_moveVelocity.vx>>VELOCITY_SHIFT;
 					}
 					else
 					{
@@ -418,7 +418,7 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 					cx=pos.vx;
 					for(i=0;i<vx;i++)
 					{
-						if(collision->getHeightFromGround(cx,pos.vy)<0)
+						if(m_player->getHeightFromGround(cx,pos.vy)<0)
 						{
 							break;
 						}
@@ -533,11 +533,11 @@ int CPlayerModeBase::isOnEdge()
 	collision=m_player->getLayerCollision();
 	pos=m_player->getPlayerPos();
 	ret=0;
-	if(collision->getHeightFromGround(pos.vx-csize,pos.vy,cheight+1)>cheight)
+	if(m_player->getHeightFromGround(pos.vx-csize,pos.vy,cheight+1)>cheight)
 	{
 		ret=FACING_LEFT;
 	}
-	else if(collision->getHeightFromGround(pos.vx+csize,pos.vy,cheight+1)>cheight)
+	else if(m_player->getHeightFromGround(pos.vx+csize,pos.vy,cheight+1)>cheight)
 	{
 		ret=FACING_RIGHT;
 	}
@@ -554,14 +554,14 @@ int CPlayerModeBase::canMoveLeft()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getLayerCollision()->getHeightFromGround(pos.vx-1,pos.vy,16)>-8?true:false;
+	return m_player->getHeightFromGround(pos.vx-1,pos.vy,16)>-8?true:false;
 }
 
 int CPlayerModeBase::canMoveRight()
 {
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
-	return m_player->getLayerCollision()->getHeightFromGround(pos.vx+1,pos.vy,16)>-8?true:false;
+	return m_player->getHeightFromGround(pos.vx+1,pos.vy,16)>-8?true:false;
 }
 
 /*----------------------------------------------------------------------

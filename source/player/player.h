@@ -139,13 +139,15 @@ public:
 	virtual void	shutdown();
 	virtual void	think(int _frames);
 	virtual void	render();
-//	virtual void	shove(DVECTOR move);
+	virtual void	shove(DVECTOR move);
 
 	DVECTOR			getCameraPos()										{return m_cameraPos;}
 
 	void			setLayerCollision(class CLayerCollision *_layer)	{m_layerCollision=_layer;}
 	void			setMapSize(DVECTOR _mapSize);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
+
+	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
 
 	void			addHealth(int _health);
 	void			addLife();
@@ -249,8 +251,12 @@ private:
 
 	// Platforms
 public:
-	void			setPlatform( CThing *newPlatform )	{;}
-	void			clearPlatform()						{;}
+	void			setPlatform(CThing *_newPlatform);
+	void			clearPlatform();
+	CThing			*isOnPlatform()						{return m_platform;}
+
+private:
+	CThing			*m_platform;
 	/*
 private:
 	CThing			*m_platform;
