@@ -349,20 +349,22 @@ void CGameScene::render_playing()
 {
 //		CamMtx.t[2]=ZPos;	// Temp
 #ifdef	USE_GLOBAL_RGB
-	
-		s_genericFont->setTrans(0);
-		s_genericFont->setSMode(0);
+		if (PadIsConnected(1))
+		{	
+			s_genericFont->setTrans(0);
+			s_genericFont->setSMode(0);
 
-		for (int i=0; i<3; i++)
-		{
-			char	Buf[32];
-			if (i==GlobalRGBSel)
-				s_genericFont->setColour(255,255,255);
-			else
-				s_genericFont->setColour(64,64,64);
-			
-			sprintf(Buf,"%s: %i",GlobalRGBName[i],GlobalRGB[i]);
-			s_genericFont->print(GlobalRGBX,GlobalRGBY+(i*16),Buf);
+			for (int i=0; i<3; i++)
+			{
+				char	Buf[32];
+				if (i==GlobalRGBSel)
+					s_genericFont->setColour(255,255,255);
+				else
+					s_genericFont->setColour(64,64,64);
+				
+				sprintf(Buf,"%s: %i",GlobalRGBName[i],GlobalRGB[i]);
+				s_genericFont->print(GlobalRGBX,GlobalRGBY+(i*16),Buf);
+			}
 		}
 	
 #endif
@@ -542,13 +544,16 @@ void CGameScene::think_showing_lives(int _frames)
 void CGameScene::think_playing(int _frames)
 {
 #ifdef	USE_GLOBAL_RGB
-		if (PadGetDown(1) & PAD_UP)		GlobalRGBSel--;
-		if (PadGetDown(1) & PAD_DOWN)	GlobalRGBSel++;
-		GlobalRGBSel&=3;
+		if (PadIsConnected(1))
+		{	
+			if (PadGetDown(1) & PAD_UP)		GlobalRGBSel--;
+			if (PadGetDown(1) & PAD_DOWN)	GlobalRGBSel++;
+			GlobalRGBSel%=3;
 
-		if(PadGetHeld(1)&PAD_LEFT ) GlobalRGB[GlobalRGBSel]--;
-		if(PadGetHeld(1)&PAD_RIGHT ) GlobalRGB[GlobalRGBSel]++;
-		GlobalRGB[GlobalRGBSel]&=255;
+			if(PadGetHeld(1)&PAD_LEFT ) GlobalRGB[GlobalRGBSel]--;
+			if(PadGetHeld(1)&PAD_RIGHT ) GlobalRGB[GlobalRGBSel]++;
+			GlobalRGB[GlobalRGBSel]&=255;
+		}
 #endif
 
 	if(s_readyToExit)
