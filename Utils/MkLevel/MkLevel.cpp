@@ -652,6 +652,7 @@ int		PntCount=3;
 			
 			OtOfs=sqrt(OtOfs/PntCount);
 			OtOfs/=8;
+//			printf("%i\n",P.OTOfs);
 			OtOfs+=P.OTOfs;
 
 			if (OtOfs>OTMax) OtOfs=OTMax;
