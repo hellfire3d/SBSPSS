@@ -447,6 +447,7 @@ CActorGfx::CActorGfx(sActorPool *ThisActor)
 		PoolEntry=ThisActor;
 		ShadowXOfs=DEF_SHADOW_OFS;
 		ShadowYOfs=DEF_SHADOW_OFS;
+		ShadowFlag=false;
 }
 
 /*****************************************************************************/
