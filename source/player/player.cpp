@@ -240,6 +240,7 @@ m_animFrame=0;
 	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;
 	m_invinvibilityRingTimer=0;
+	m_divingHelmet=false;
 }
 
 /*----------------------------------------------------------------------
