@@ -74,16 +74,7 @@ u8										CPadVibrationManager::s_currentIntensityValues[2];
   ---------------------------------------------------------------------- */
 void	CPadVibrationManager::init()
 {
-	int		i,j;
-
-	for(i=0;i<2;i++)
-	{
-		for(j=0;j<MAX_VIBES_PER_PAD;j++)
-		{
-			s_vibeControls[i][j].m_active=false;
-		}
-		s_currentIntensityValues[i]=0;
-	}
+	stopAllVibration();
 }
 
 /*----------------------------------------------------------------------
@@ -175,6 +166,26 @@ void	CPadVibrationManager::setVibration(int _port,VIBE_TYPE _type,u8 _ferocity)
 	vc->m_active=true;
 	vc->m_vibeData=s_vibeData[_type];
 	vc->m_ferocity=_ferocity;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPadVibrationManager::stopAllVibration()
+{
+	int		i,j;
+
+	for(i=0;i<2;i++)
+	{
+		for(j=0;j<MAX_VIBES_PER_PAD;j++)
+		{
+			s_vibeControls[i][j].m_active=false;
+		}
+		s_currentIntensityValues[i]=0;
+	}
 }
 
 /*===========================================================================

@@ -54,6 +54,8 @@ public:
 	static void				setVibration(int _port,VIBE_TYPE _type,u8 _ferocity=255);
 	static u8				getCurrentVibrationIntensity(int _port)			{return s_currentIntensityValues[_port];}
 
+	static void				stopAllVibration();
+
 private:
 	enum
 	{

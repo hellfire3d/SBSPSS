@@ -23,6 +23,13 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
+#ifndef	__PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
 
 
 /*****************************************************************************/
@@ -89,6 +96,8 @@ void GameState::think()
 #endif
 				ASSERT(s_pendingScene);		// There really should be a scene pending before you shutdown..!
 				s_currentScene->shutdown();
+				CPadVibrationManager::stopAllVibration();
+				PadUpdate();
 #ifdef __VERSION_DEBUG__
 				int loss;
 				loss=MainRam.RamUsed-s_baseMemory;
