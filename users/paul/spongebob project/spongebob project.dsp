@@ -83,6 +83,10 @@ CFG=spongebob project - Win32 Debug
 
 # Begin Group "source"
 
+# Begin Group "enemy"
+
+# PROP Default_Filter ""
+# End Group
 # PROP Default_Filter ""
 # Begin Group "fileio"
 
@@ -198,6 +202,14 @@ SOURCE=..\..\..\source\game\game.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\game\game.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\thing.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\thing.h
 # End Source File
 # End Group
 # Begin Group "gfx"
@@ -442,6 +454,18 @@ SOURCE=..\..\..\source\paul\paul.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\paul\paul.h
+# End Source File
+# End Group
+# Begin Group "player"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\player\player.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\player.h
 # End Source File
 # End Group
 # Begin Group "psxboot"
