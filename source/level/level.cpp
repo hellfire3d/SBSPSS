@@ -324,12 +324,13 @@ void	CLevel::initLayers()
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
 			CGameScene::setCollision(CollisionLayer);
+			CreateTileStore();
 		}
 		else
 		{
 			ASSERT(!"Where is the collision, moron!");
 		}
-
+		
 // Actors
 		if (LevelHdr->ActorList)
 		{
@@ -574,6 +575,7 @@ void	CLevel::respawnLevel()
 
 	CThingManager::killAllThingsForRespawn();
 	initThings(true);
+	ApplyTileStore();	// Put dem tiles back
 }
 
 
@@ -604,6 +606,7 @@ void	CLevel::shutdown()
 		if (ActorList) MemFree(ActorList);
 		if (PlatformList) MemFree(PlatformList);
 		if (HazardList) MemFree(HazardList);
+		if (m_TileStore) MemFree(m_TileStore);
 
 		MemFree(LevelHdr);
 		CActorPool::Reset();
@@ -670,8 +673,6 @@ const int			ColT=COLLISION_TYPE_DESTRUCTABLE_WALL;
 			TL.vx=Pos.vx&-16;;
 			TL.vy=Pos.vy&-16;;
 			BR=TL;
-
-//			if (CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT)printf ("!!");
 
 // Left
 			while (CollisionLayer->getCollisionBlock(TL.vx-16,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vx-=16;
@@ -766,3 +767,67 @@ DVECTOR		DP;
 			}
 }
 
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CLevel::CreateTileStore()
+{
+int		MapW=CollisionLayer->getMapWidth();
+int		MapH=CollisionLayer->getMapHeight();
+int		X,Y;
+	
+		m_TileStoreCount=0;
+		m_TileStore=0;
+// CountEm
+		for (Y=0; Y<MapH; Y++)
+		{
+			for (X=0; X<MapW; X++)
+			{
+				u8	*ColElem=CollisionLayer->getMapPtr(X*16,Y*16);
+				int	ColT = (*ColElem) & COLLISION_TYPE_MASK;
+				if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
+				{
+					m_TileStoreCount++;
+				}
+			}
+		}
+// StoreEm
+		if (m_TileStoreCount)
+		{
+			m_TileStore=(sTileStore*)MemAlloc(m_TileStoreCount*sizeof(sTileStore),"TileStoreList");
+
+			sTileStore	*Ptr=m_TileStore;
+			for (Y=0; Y<MapH; Y++)
+			{
+				for (X=0; X<MapW; X++)
+				{
+					u8	*ColElem=CollisionLayer->getMapPtr(X*16,Y*16);
+					int	ColT = (*ColElem) & COLLISION_TYPE_MASK;
+					if ( ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR || ColT==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
+					{
+						Ptr->X=X;
+						Ptr->Y=Y;
+						Ptr->Col=*ColElem;
+						Ptr->Tile=*TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(X*16,Y*16);
+						Ptr++;
+					}
+				}
+			}
+		}
+}
+
+/*****************************************************************************/
+void	CLevel::ApplyTileStore()
+{
+sTileStore	*Ptr=m_TileStore;
+
+		for (int i=0; i<m_TileStoreCount; i++)
+		{
+			u8				*ColElem=CollisionLayer->getMapPtr(Ptr->X*16,Ptr->Y*16);
+			sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Ptr->X*16,Ptr->Y*16);
+
+			*ColElem=Ptr->Col;
+			*MapElem=Ptr->Tile;
+			Ptr++;
+		}
+}

@@ -61,6 +61,7 @@ public:
 	bool			Avail;
 	GString			TexName;
 	int				TPageFlag;
+	int				OtOfs;
 };
 
 

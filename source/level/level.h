@@ -29,6 +29,14 @@ extern int		s_globalLevelSelectThing;
 extern sLvlTab	LvlTable[];
 
 /*****************************************************************************/
+struct	sTileStore
+{
+	u16				X,Y;
+	sTileMapElem	Tile;
+	u8				Col;
+};
+
+/*****************************************************************************/
 class CLayer;
 class CLevel
 {
@@ -83,6 +91,7 @@ private:
 
 		void			DisplayLoadingScreen(sLvlTab *lvlTab);
 
+
 static	sLevelHdr		*LevelHdr;
 
 static	DVECTOR			MapPos;
@@ -112,7 +121,11 @@ static	DVECTOR			s_playerSpawnPos;
 static	u8				m_isBossRespawn;
 static	s32				m_bossHealth;
 
-
+// Level Repair stuff
+		void			CreateTileStore();
+		void			ApplyTileStore();
+		int				m_TileStoreCount;
+		sTileStore		*m_TileStore;
 };
 
 /*****************************************************************************/

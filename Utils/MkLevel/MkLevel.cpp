@@ -54,6 +54,7 @@ sLayerNameTable	LayerNameTable[]=
 int				TSize,QSize,VSize;
 int				Tile2dSize,Tile3dSize;
 const char	*ModelExcludeGroupName="ModelExcludeList";
+const char	*ModelOtOfsGroupName="ModelOtOfs";
 
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
@@ -220,7 +221,14 @@ int			i,ListSize=ModelList.size();
 			for (i=0; i<ListSize; i++)
 			{
 				sMkLevelModel	&ThisModel=ModelList[i];
-				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false,false);	// always all models as global for the moment
+				int		OtOfs=0;
+				
+				Config.GetInt(ModelOtOfsGroupName,ThisModel.Name,OtOfs);
+
+				if (OtOfs)
+					printf("ModelOTOfs %s %i\n",ThisModel.Name,OtOfs);
+			
+				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false,false,OtOfs);	// always all models as global for the moment
 			}
 }
 
@@ -254,6 +262,7 @@ int			Size;
 
 			LoadTiles(FileHdr);
 			LoadLayers(FileHdr);
+			SnapTiles();
 
 			free(FileHdr);
 }
@@ -383,6 +392,44 @@ u8		*ByteHdr=(u8*)FileHdr;
 }
 
 
+//***************************************************************************
+float	SnapThresh=0.05f;
+float	SnapXMin=-0.5f;
+float	SnapXMax=+0.5f;
+float	SnapYMin=-0.0f;
+float	SnapYMax=+1.0f;
+float	SnapZMin=-4.0f;
+float	SnapZMax=+4.0f;
+
+void	CMkLevel::SnapTiles()
+{
+int		i,ListSize=InTileList.size();
+int		Count=0;
+
+		for (i=0;i<ListSize;i++)
+		{
+			sExpTile	&ThisTile=InTileList[i];
+			for (int T=0; T<ThisTile.TriCount; T++)
+			{
+				sExpTri	&ThisTri=InTriList[ThisTile.TriStart+T];
+				for (int p=0;p<3; p++)
+				{
+					Vector3	&V=ThisTri.vtx[p];
+
+					if (V.x<SnapXMin+SnapThresh) {V.x=SnapXMin;Count++;}
+					if (V.x>SnapXMax-SnapThresh) {V.x=SnapXMax;Count++;}
+					if (V.y<SnapYMin+SnapThresh) {V.y=SnapYMin;Count++;}
+					if (V.y>SnapYMax-SnapThresh) {V.y=SnapYMax;Count++;}
+					if (V.z<SnapZMin+SnapThresh) {V.z=SnapZMin;Count++;}
+					if (V.z>SnapZMax-SnapThresh) {V.z=SnapZMax;Count++;}
+				}
+			}
+		}
+		if (Count)
+		{
+			printf("Snapped %i Vtx Coords - Bad Artists\n",Count);
+		}
+}
 //***************************************************************************
 //*** Process ***************************************************************
 //***************************************************************************
@@ -521,13 +568,17 @@ CFaceStore	&ThisList=ThisElem.FaceStore;
 			}
 			else
 			{ // Local Geom
-				AddDefVtx(ThisElem.LocalVtxList);
-				ThisList.Process(OutTriList,OutQuadList,ThisElem.LocalVtxList);
-				int v,VtxListSize=ThisElem.LocalVtxList.size();
+				vector<sVtx>	LocalVtxList;
+				AddDefVtx(LocalVtxList);
+				ThisList.Process(OutTriList,OutQuadList,LocalVtxList);
+				ThisElem.LocalVtxIdxStart=OutLocalVtxIdxList.size();
+				printf("%i\n",LocalVtxList.size());
+
+				int v,VtxListSize=LocalVtxList.size();
 				for (v=0; v<VtxListSize; v++)
 				{
-					u16	Idx=CFaceStore::AddVtx(OutVtxList,ThisElem.LocalVtxList[v]);
-					ThisElem.LocalVtxIdxList.push_back(Idx);
+					u16	Idx=CFaceStore::AddVtx(OutVtxList,LocalVtxList[v]);
+					OutLocalVtxIdxList.push_back(Idx);
 				}
 			}
 
@@ -610,7 +661,7 @@ sExpTile	&SrcTile=InTileList[Tile];
 int			ElemID;
 			if (SrcTile.TriCount)
 			{
-				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom,true);
+				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom,true,0);
 			}
 			else
 			{
@@ -621,7 +672,7 @@ int			ElemID;
 }
 
 //***************************************************************************
-int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile)
+int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile,int OtOfs)
 {
 CFace			F;
 int				i,ListSize;
@@ -677,8 +728,10 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
+				F.OtOfs=OtOfs;
 				FaceList.SetTPageFlag(F,ThisTri.Flags);
 				FaceList.AddFace(F,true);
+				
 			}
 		if (IsTile)
 			ThisElem.Model=false;
@@ -718,6 +771,7 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
+				F.OtOfs=0;
 				FaceList.SetTPageFlag(F,0);
 				FaceList.AddFace(F,true);
 			}
@@ -911,6 +965,8 @@ int				ZOfs=+4*Scale;
 			OtOfs/=8;
 			if (MinOT>OtOfs) MinOT=OtOfs;
 			if (MaxOT<OtOfs) MaxOT=OtOfs;
+
+			OtOfs+=T.OTOfs;
 			if (OtOfs>15) OtOfs=15;
 			if (OtOfs<0) OtOfs=0;
 

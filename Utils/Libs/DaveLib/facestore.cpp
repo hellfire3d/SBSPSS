@@ -104,6 +104,7 @@ CFace	F;
 			F.vtx[i] = P[T.p[i]];
 		}
 		F.TPageFlag=0;
+		F.OtOfs=0;
 		F.TexName=Tex;
 		F.Mat = -1;
 		SetTPageFlag(F,MatFlag);
@@ -135,7 +136,7 @@ int		ListSize=FaceList.size();
 		}
 		F.Normal = crossProduct( F.vtx[0], F.vtx[1], F.vtx[2] );
 		F.Avail = true;
-
+		
 		FaceList[ListSize]=F;
 		return(F);
 }
@@ -393,6 +394,7 @@ int		ListSize=OutTriList.size();
 			ParseVtx4BBox(OutVtxList[OutFace.P2]);
 // Materials and other shit
 			SetupUV(InFace,OutFace);
+			OutFace.OTOfs=InFace.OtOfs;
 		}
 
 }
@@ -421,6 +423,7 @@ int		ListSize=OutQuadList.size();
 
 // Materials and other shit
 			SetupUV(InFace,OutFace);
+			OutFace.OTOfs=InFace.OtOfs;
 		}
 }
 

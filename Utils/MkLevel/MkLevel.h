@@ -62,8 +62,10 @@ struct sOutElem3d
 		bool			Model;
 		sElem3d			Elem3d;
 		CFaceStore		FaceStore;
-		vector<sVtx>	LocalVtxList;
-		CList<u16>		LocalVtxIdxList;
+//		CList<u16>		LocalVtxIdxList;
+		int				LocalVtxIdxStart;
+		int				LocalVtxIdxCount;
+		int				OTOfs;
 };
 
 //***************************************************************************
@@ -116,7 +118,7 @@ public:
 protected:	
 		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
 
-		int				Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile);
+		int				Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile,int OtOfs);
 		int				Create2dElem(int Tile,bool Local);
 
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
@@ -126,6 +128,7 @@ protected:
 		void			LoadLayers(sExpFileHdr *FileHdr);
 		void			LoadLayer(sExpLayerHdr *LayerHdr);
 
+		void			SnapTiles();
 		void			AddDefVtx(vector<sVtx> &VtxList);
 
 		void			PreProcessLayers();
@@ -199,6 +202,7 @@ protected:
 		vector<sTri>			OutTriList;
 		vector<sQuad>			OutQuadList;
 		vector<sVtx>			OutVtxList;
+		vector<u16>				OutLocalVtxIdxList;
 
 };
 
