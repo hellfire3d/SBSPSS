@@ -232,6 +232,9 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
+#ifdef _STATE_DEBUG_
+char posBuf[100];
+#endif
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -258,10 +261,8 @@ if(newmode!=-1)
 		thinkVerticalMovement();
 		thinkHorizontalMovement();
 
-#ifdef __USER_paul__
-char buf[100];
-sprintf(buf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
-s_debugFont.print(40,40,buf);
+#ifdef _STATE_DEBUG_
+sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
 #endif
 
 
@@ -550,6 +551,10 @@ void	CPlayer::render()
 {
 	CThing::render();
 	
+#ifdef _STATE_DEBUG_
+s_debugFont.print(40,40,posBuf);
+#endif
+
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
