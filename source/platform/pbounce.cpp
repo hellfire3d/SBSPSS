@@ -95,6 +95,12 @@ void CNpcBouncePlatform::think( int _frames )
 
 	sBBox boundingBox = m_modelGfx->GetBBox();
 
+	if ( ( boundingBox.YMax - boundingBox.YMin ) < 24 )
+	{
+		boundingBox.YMax = 24;
+		boundingBox.YMin = 0;
+	}
+
 	s32 newCollisionHeight = ( ( ONE + m_vertScale ) * ( boundingBox.YMax - boundingBox.YMin ) ) >> 12;
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), newCollisionHeight - 2 );
 
