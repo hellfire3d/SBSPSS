@@ -102,6 +102,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -1355,111 +1359,115 @@ if(drawlastpos)
 
 
 	// UI
-	int			count,warn;
-	sFrameHdr	*fh;
-	char		countBuf[5];
-	int			x,y;
-
-	// Spat/token count
-	warn=false;
-	if(GameScene.getLevelNumber()!=5)
+	// Don't draw it when the conversations are active - it's messy :/
+	if(!CConversation::isActive())
 	{
-		// Spat count
-		count=m_numSpatulasHeld;
-		fh=sb->getFrameHeader(FRM__SPATULA);
-		if(m_numSpatulasHeld==0)
+		int			count,warn;
+		sFrameHdr	*fh;
+		char		countBuf[5];
+		int			x,y;
+
+		// Spat/token count
+		warn=false;
+		if(GameScene.getLevelNumber()!=5)
 		{
-			warn=true;
+			// Spat count
+			count=m_numSpatulasHeld;
+			fh=sb->getFrameHeader(FRM__SPATULA);
+			if(m_numSpatulasHeld==0)
+			{
+				warn=true;
+			}
 		}
-	}
-	else
-	{
-		// Token count
-		count=CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1);
-		fh=sb->getFrameHeader(FRM__TOKEN);
-	}
-	sprintf(countBuf,"x%d",count);
-	x=SB_UI_XBASE;
-	y=SB_UI_YBASE;
-	sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
-	x+=fh->W;
-	if(warn&&m_spatulaWarningTimer&32)
-	{
-		m_fontBank->setColour(255,0,0);
-	}
-	m_fontBank->print(x,y,countBuf);
-	m_fontBank->setColour(128,128,128);
-	x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
-
-	if(isWearingDivingHelmet())
-	{
-		// Helmet
-		POLY_FT4	*ft4;
-		int			V,W,H,partH;
-
-		ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,POWERUPUI_OT);
-		setSemiTrans(ft4,true);
-
-		fh=sb->getFrameHeader(FRM__WATER);
-		ft4=sb->printFT4(fh,0,0,0,0,POWERUPUI_OT);
-		setSemiTrans(ft4,true);
-		V=fh->V;
-		W=fh->W;
-		H=fh->H;
-		partH=(H*(255-(m_healthWaterLevel>>WATERLEVELSHIFT)))>>8;
-		if(partH>H)partH=H;
-		setXYWH(ft4,x,y+(partH),W,H-partH);
-		ft4->v0=V+(partH);
-		ft4->v1=V+(partH);
-
-		sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
-
-		if(!getIsInWater()&&m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6)&&m_currentPlayerModeClass->getState()!=STATE_SOAKUP)
+		else
 		{
-			int		digit;
-			DVECTOR	src={x+(W/2),y+(H/2)};
-			DVECTOR	dst={INGAME_SCREENW/2,(INGAME_SCREENH/3)*1};
-			int		frame;
-			int		digitX,digitY,scale;
-			char	buf[4];
-			int		r,g,b;
-
-			digit=m_healthWaterLevel/WATER_COUNTER_SECONDTIME;
-			if(digit<0)digit=0;
-
-			frame=WATER_COUNTER_SECONDTIME-(m_healthWaterLevel%WATER_COUNTER_SECONDTIME);
-			if(frame>WATER_COUNTER_MOVINGTIME)frame=WATER_COUNTER_MOVINGTIME;
-			digitX=src.vx+(((dst.vx-src.vx)*frame)/WATER_COUNTER_MOVINGTIME);
-			digitY=src.vy+(((dst.vy-src.vy)*frame)/WATER_COUNTER_MOVINGTIME);
-			scale=WATER_COUNTER_STARTSCALE+(((WATER_COUNTER_ENDSCALE-WATER_COUNTER_STARTSCALE)*frame)/WATER_COUNTER_MOVINGTIME);
-
-			sprintf(buf,"%d",digit);
-			m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
-			m_scalableFontBank->setScale(scale);
-			r=WATER_COUNTER_R2-(((WATER_COUNTER_R2-WATER_COUNTER_R1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
-			g=WATER_COUNTER_G2-(((WATER_COUNTER_G2-WATER_COUNTER_G1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
-			b=WATER_COUNTER_B2-(((WATER_COUNTER_B2-WATER_COUNTER_B1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
-			m_scalableFontBank->setColour(r,g,b);
-			m_scalableFontBank->print(digitX,digitY,buf);
+			// Token count
+			count=CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1);
+			fh=sb->getFrameHeader(FRM__TOKEN);
 		}
-
-		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
-	}
-	if(isWearingBoots())
-	{
-		// Boots
-		int			pickupX,pickupY;
-		sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
-		if(m_squeakyBootsTimer>SQUEAKY_BOOTS_FLASH_TIME||m_squeakyBootsTimer&2)
+		sprintf(countBuf,"x%d",count);
+		x=SB_UI_XBASE;
+		y=SB_UI_YBASE;
+		sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
+		x+=fh->W;
+		if(warn&&m_spatulaWarningTimer&32)
 		{
-			sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
-			sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
+			m_fontBank->setColour(255,0,0);
 		}
-		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
-	}
+		m_fontBank->print(x,y,countBuf);
+		m_fontBank->setColour(128,128,128);
+		x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
 
-	// Mode specific ui
-	m_currentPlayerModeClass->renderModeUi();
+		if(isWearingDivingHelmet())
+		{
+			// Helmet
+			POLY_FT4	*ft4;
+			int			V,W,H,partH;
+
+			ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,POWERUPUI_OT);
+			setSemiTrans(ft4,true);
+
+			fh=sb->getFrameHeader(FRM__WATER);
+			ft4=sb->printFT4(fh,0,0,0,0,POWERUPUI_OT);
+			setSemiTrans(ft4,true);
+			V=fh->V;
+			W=fh->W;
+			H=fh->H;
+			partH=(H*(255-(m_healthWaterLevel>>WATERLEVELSHIFT)))>>8;
+			if(partH>H)partH=H;
+			setXYWH(ft4,x,y+(partH),W,H-partH);
+			ft4->v0=V+(partH);
+			ft4->v1=V+(partH);
+
+			sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
+
+			if(!getIsInWater()&&m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6)&&m_currentPlayerModeClass->getState()!=STATE_SOAKUP)
+			{
+				int		digit;
+				DVECTOR	src={x+(W/2),y+(H/2)};
+				DVECTOR	dst={INGAME_SCREENW/2,(INGAME_SCREENH/3)*1};
+				int		frame;
+				int		digitX,digitY,scale;
+				char	buf[4];
+				int		r,g,b;
+
+				digit=m_healthWaterLevel/WATER_COUNTER_SECONDTIME;
+				if(digit<0)digit=0;
+
+				frame=WATER_COUNTER_SECONDTIME-(m_healthWaterLevel%WATER_COUNTER_SECONDTIME);
+				if(frame>WATER_COUNTER_MOVINGTIME)frame=WATER_COUNTER_MOVINGTIME;
+				digitX=src.vx+(((dst.vx-src.vx)*frame)/WATER_COUNTER_MOVINGTIME);
+				digitY=src.vy+(((dst.vy-src.vy)*frame)/WATER_COUNTER_MOVINGTIME);
+				scale=WATER_COUNTER_STARTSCALE+(((WATER_COUNTER_ENDSCALE-WATER_COUNTER_STARTSCALE)*frame)/WATER_COUNTER_MOVINGTIME);
+
+				sprintf(buf,"%d",digit);
+				m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
+				m_scalableFontBank->setScale(scale);
+				r=WATER_COUNTER_R2-(((WATER_COUNTER_R2-WATER_COUNTER_R1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+				g=WATER_COUNTER_G2-(((WATER_COUNTER_G2-WATER_COUNTER_G1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+				b=WATER_COUNTER_B2-(((WATER_COUNTER_B2-WATER_COUNTER_B1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+				m_scalableFontBank->setColour(r,g,b);
+				m_scalableFontBank->print(digitX,digitY,buf);
+			}
+
+			x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
+		}
+		if(isWearingBoots())
+		{
+			// Boots
+			int			pickupX,pickupY;
+			sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
+			if(m_squeakyBootsTimer>SQUEAKY_BOOTS_FLASH_TIME||m_squeakyBootsTimer&2)
+			{
+				sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
+				sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
+			}
+			x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
+		}
+
+		// Mode specific ui
+		m_currentPlayerModeClass->renderModeUi();
+	}
 }
 
 
