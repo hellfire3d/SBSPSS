@@ -43,6 +43,9 @@ public:
 
 	virtual int							canFallForever()		{return true;}
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
+
+	virtual void				setAnimNo(int _animNo);
+
 };
 
 

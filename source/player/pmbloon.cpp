@@ -32,6 +32,10 @@
 /*	Data
 	---- */
 
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
 #ifndef __SPR_INGAMEFX_H__
 #include <ingamefx.h>
 #endif
@@ -119,6 +123,23 @@ void	CPlayerModeBalloon::render(DVECTOR *_pos)
 const struct PlayerMetrics	*CPlayerModeBalloon::getPlayerMetrics()
 {
 	return &s_playerMetrics;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::setAnimNo(int _animNo)
+{
+	// I think I'll overload the JUMP anim to the BALLOONJUMP here..
+	// Just 'cos I can :)
+	if(_animNo==ANIM_SPONGEBOB_JUMP)
+	{
+		_animNo=ANIM_SPONGEBOB_BALLOONJUMP;
+	}
+	CPlayerModeBase::setAnimNo(_animNo);
 }
 
 /*===========================================================================

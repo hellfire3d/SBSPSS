@@ -177,8 +177,7 @@ void	CPlayerModeNet::think()
 				break;
 		}
 
-		//!!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
-		m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+		m_player->setAnimNo(ANIM_SPONGEBOB_SWIPE);
 		m_player->setAnimFrame(m_netFrame);
 		m_netFrame++;
 		if(m_netFrame>=m_player->getAnimFrameCount())

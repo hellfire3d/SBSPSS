@@ -214,7 +214,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
 
-int	sbanimspeed=1;
+int	sbanimspeed=0;
 
 
 /*----------------------------------------------------------------------
