@@ -63,7 +63,10 @@ void CNpcBubblePlatform::render()
 			}
 			else
 			{
-				m_modelGfx->Render(renderPos);
+				// Evil hard coded Offsets
+				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printFT4( FRM__BUBBLE_1, renderPos.vx-16, renderPos.vy-32, 0, 0, 10 );
+				setRGB0( SprFrame, 128, 128, 255 );
+//				m_modelGfx->Render(renderPos);
 			}
 		}
 	}

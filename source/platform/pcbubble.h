@@ -27,6 +27,7 @@ protected:
 	virtual void		processLifetime( int _frames );
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	u8					m_pop;
+	POLY_FT4			*SprFrame;
 };
 
 class CNpcCollapsingAcridPlatform : public CNpcCollapsingBubblePlatform
