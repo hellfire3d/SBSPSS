@@ -305,6 +305,7 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+static int oldmode=-1;
 int newmode=-1;
 
 #ifdef _STATE_DEBUG_
@@ -313,6 +314,18 @@ char posBuf[100];
 void	CPlayer::think(int _frames)
 {
 	int	i;
+
+
+if(PadGetDown(0)&PAD_L1)
+{
+	oldmode=m_currentMode;
+	newmode=PLAYER_MODE_FLY;
+}
+else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
+{
+	newmode=oldmode;
+	oldmode=-1;
+}
 
 
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
