@@ -681,6 +681,14 @@ SOURCE=..\..\..\source\pickups\pballoon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\pickups\pblower.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pblower.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\pickups\pbubmix.cpp
 # End Source File
 # Begin Source File
