@@ -426,13 +426,18 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x1=P1;	// Set XY1
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							addPrim(ThisOT,ThisPrim);
-							// lighting
+							
+#if		defined(_SHOW_POLYZ_)
+						if (!ShowPolyz)
+#endif
+						{ // lighting
 							T0=*(u32*)&RGB[TList->C0];
 							T1=*(u32*)&RGB[TList->C1];
 							T2=*(u32*)&RGB[TList->C2];
 							*(u32*)&ThisPrim->r0=T0;
 							*(u32*)&ThisPrim->r1=T1;
 							*(u32*)&ThisPrim->r2=T2;
+						}
 							ThisPrim->code=TList->PolyCode;
 
 							PrimPtr+=sizeof(POLY_GT3);
@@ -481,7 +486,10 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x1=P1;	// Set XY1
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							*(u32*)&ThisPrim->x3=P3;	// Set XY3
-							// Lighting
+#if		defined(_SHOW_POLYZ_)
+						if (!ShowPolyz)
+#endif
+						{ // Lighting
 							T0=*(u32*)&RGB[QList->C0];
 							T1=*(u32*)&RGB[QList->C1];
 							T2=*(u32*)&RGB[QList->C2];
@@ -490,6 +498,7 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->r1=T1;
 							*(u32*)&ThisPrim->r2=T2;
 							*(u32*)&ThisPrim->r3=T3;
+						}
 							ThisPrim->code=QList->PolyCode;
 
 							addPrim(ThisOT,ThisPrim);
