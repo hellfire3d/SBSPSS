@@ -49,11 +49,12 @@ class CSoundMediator
 public:
 	typedef enum SONGID
 	{
-		SONG_HYPERMMX,
-		SONG_DROPPOP,
-		SONG_MUSIC,
 		SONG_INGAME,
 		SONG_TITLE,
+		SONG_OPTIONS,
+		SONG_MEMORYCARD,
+		SONG_GAMECOMPLETE,
+		SONG_GAMEOVER,
 		NUM_SONGIDS,
 	};
 	typedef enum SFXBANKID
@@ -135,6 +136,8 @@ private:
 	static xmSampleId		s_songSampleId;
 	static xmModId			s_songModId;
 	static xmPlayingId		s_songPlayingId;
+	static int				s_songStartPattern;
+
 	static xmSampleId		s_sfxSampleId;
 	static xmModId			s_sfxModId;
 

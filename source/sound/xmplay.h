@@ -75,7 +75,7 @@ public:
 
 	void			stopAndUnlockAllSound();
 
-	xmPlayingId		playSong(xmSampleId _sampleId,xmModId _modId);
+	xmPlayingId		playSong(xmSampleId _sampleId,xmModId _modId,int _startPattern=0);
 	xmPlayingId		playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPattern,int _playMask,u8 _priority);
 	xmPlayingId		playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int _soundId,u8 _priority,int _pitch=0x400);
 

@@ -47,11 +47,17 @@ adjust channels ( watery-mario64 style music changes )
 	Structure defintions
 	-------------------- */
 
-typedef struct XMFILEDATA
+typedef struct XMSONGDATA
+{
+	FileEquate	m_vh,m_vb,m_pxm;
+	int			m_startPattern;
+};
+
+
+typedef struct XMSFXFILEDATA
 {
 	FileEquate	m_vh,m_vb,m_pxm;
 };
-
 typedef struct SFXDETAILS
 {
 	int			m_channelMask;
@@ -78,6 +84,7 @@ int				CSoundMediator::s_volumeDirty[CSoundMediator::NUM_VOLUMETYPES];
 xmSampleId		CSoundMediator::s_songSampleId=NO_SAMPLE;
 xmModId			CSoundMediator::s_songModId=NO_SONG;
 xmPlayingId		CSoundMediator::s_songPlayingId=NOT_PLAYING;
+int				CSoundMediator::s_songStartPattern=0;
 xmSampleId		CSoundMediator::s_sfxSampleId=NO_SAMPLE;
 xmModId			CSoundMediator::s_sfxModId=NO_SONG;
 
@@ -86,17 +93,18 @@ static CXMPlaySound		*s_xmplaySound;
 
 
 // Songs
-static XMFILEDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
+static XMSONGDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
 {
-	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// SONG_HYPERMMX
-	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// SONG_DROPPOP
-	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// SONG_MUSIC
-	{	MUSIC_INGAME_VH,		MUSIC_INGAME_VB,		MUSIC_INGAME_PXM	},		// SONG_INGAME
-	{	MUSIC_TITLE_VH,			MUSIC_TITLE_VB,			MUSIC_TITLE_PXM		},		// SONG_TITLE
+	{	MUSIC_INGAME_VH,		MUSIC_INGAME_VB,		MUSIC_INGAME_PXM,		0		},		// SONG_INGAME
+	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0		},		// SONG_TITLE
+	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0xa		},		// SONG_OPTIONS
+	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x13	},		// SONG_MEMORYCARD
+	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x14	},		// SONG_GAMECOMPLETE
+	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x23	},		// SONG_GAMEOVER
 };
 
 // SFX banks
-static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
+static XMSFXFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 {
 	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// SFX_INGAME
 };
@@ -268,7 +276,7 @@ void CSoundMediator::setReverbType(REVERBTYPE _type)
   ---------------------------------------------------------------------- */
 void CSoundMediator::setSong(SONGID _songId)
 {
-	XMFILEDATA		*song;
+	XMSONGDATA		*song;
 
 	ASSERT(s_songSampleId==NO_SAMPLE);
 	ASSERT(s_songModId==NO_SONG);
@@ -276,6 +284,7 @@ void CSoundMediator::setSong(SONGID _songId)
 	song=&s_xmSongData[_songId];
 	s_songModId=s_xmplaySound->loadModData(song->m_pxm);
 	s_songSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
+	s_songStartPattern=song->m_startPattern;
 }
 
 
@@ -291,7 +300,7 @@ void CSoundMediator::playSong()
 	ASSERT(s_songModId!=NO_SONG);
 	ASSERT(s_songPlayingId==NOT_PLAYING);
 
-	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId);
+	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId,s_songStartPattern);
 //	s_volumeDirty[SONG]=true;		// Force a volume update
 }
 
@@ -329,14 +338,14 @@ void CSoundMediator::dumpSong()
   ---------------------------------------------------------------------- */
 void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 {
-	XMFILEDATA		*song;
+	XMSFXFILEDATA		*sfx;
 	
 	ASSERT(s_sfxSampleId==NO_SAMPLE);
 	ASSERT(s_sfxModId==NO_SONG);
 	
-	song=&s_xmSfxData[_bankId];
-	s_sfxModId=s_xmplaySound->loadModData(song->m_pxm);
-	s_sfxSampleId=s_xmplaySound->loadSampleData(song->m_vh,song->m_vb);
+	sfx=&s_xmSfxData[_bankId];
+	s_sfxModId=s_xmplaySound->loadModData(sfx->m_pxm);
+	s_sfxSampleId=s_xmplaySound->loadSampleData(sfx->m_vh,sfx->m_vb);
 }
 
 

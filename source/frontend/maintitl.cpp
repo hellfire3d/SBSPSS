@@ -58,6 +58,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -170,6 +174,9 @@ void CFrontEndMainTitles::select()
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 
+	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
+	CSoundMediator::playSong();
+	
 	CFader::setFadingIn();
 }
 
@@ -181,6 +188,8 @@ void CFrontEndMainTitles::select()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::unselect()
 {
+	CSoundMediator::dumpSong();
+
 	ClearScreenImage();
 	MemFree(s_image);	s_image=NULL;
 }

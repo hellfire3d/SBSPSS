@@ -62,6 +62,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -327,6 +331,9 @@ void CFrontEndOptions::select()
 	m_exitFlag=false;
 	m_closingDown=false;
 
+	CSoundMediator::setSong(CSoundMediator::SONG_OPTIONS);
+	CSoundMediator::playSong();
+	
 	CFader::setFadingIn();
 }
 
@@ -338,6 +345,8 @@ void CFrontEndOptions::select()
   ---------------------------------------------------------------------- */
 void CFrontEndOptions::unselect()
 {
+	CSoundMediator::dumpSong();
+
 	m_modeMenus[m_mode]->unselect();
 }
 

@@ -559,7 +559,7 @@ void CXMPlaySound::stopAndUnlockAllSound()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId)
+xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _startPattern)
 {
 	int				channelCount,baseChannel;
 	XMVab			*vab;
@@ -585,7 +585,7 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId)
 				   XM_Loop,				// Play song continuously
 				   -1,					// Play all channels
 				   XM_Music,			// Music
-				   0);					// Begin at the beginning
+				   _startPattern);		// Where to start from
 		markChannelsAsActive(baseChannel,channelCount,SONG,retId,id,255);
 		setVolume(retId,MAX_VOLUME);
 		//PAUL_DBGMSG("playSong        %d/%d ( on %d-%d )",retId,id,baseChannel,baseChannel+channelCount-1);

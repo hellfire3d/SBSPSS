@@ -80,7 +80,7 @@ private:
 
 	enum
 	{
-		DEMO_TIMEOUT_IN_SECONDS=30,
+		DEMO_TIMEOUT_IN_SECONDS=45,
 	};
 	
 	POLY_FT4	*prepareSeaPortionFT4(struct sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb);
