@@ -276,7 +276,7 @@ m_cameraOffset=ofs;
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
-SVECTOR ppos={0,1024,5000};
+DVECTOR ppos={0,1024};
 void	CPlayer::render()
 {
 	CThing::render();
@@ -284,7 +284,7 @@ void	CPlayer::render()
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
-		m_skel.setPos(&ppos);
+		m_skel.setPos(ppos);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
 		else
