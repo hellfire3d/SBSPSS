@@ -25,8 +25,9 @@ class	CProjectile : public CEnemyProjectileThing
 public:
 	enum PROJECTILE_MOVEMENT_TYPE
 	{
-		PROJECTILE_DUMBFIRE = 0,
-		PROJECTILE_USER_SEEK = 1,
+		PROJECTILE_FIXED = 0,
+		PROJECTILE_DUMBFIRE = 1,
+		PROJECTILE_USER_SEEK,
 		PROJECTILE_GAS_CLOUD,
 	};
 
@@ -50,6 +51,10 @@ public:
 	void				think(int _frames);
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+	void				setMovementType( PROJECTILE_MOVEMENT_TYPE moveType );
+	PROJECTILE_MOVEMENT_TYPE	getMovementType();
+	void				setState( PROJECTILE_STATE newState );
+	void				setPosition( DVECTOR newPos );
 
 protected:
 	DVECTOR				getScreenOffset();

@@ -52,6 +52,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,7 +278,12 @@ void CNpcEnemy::init()
 	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 
 	m_positionHistory = NULL;
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::postInit()
+{
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
@@ -426,6 +435,17 @@ void CNpcEnemy::init()
 			break;
 		}
 
+		case NPC_INIT_EYEBALL:
+		{
+			CProjectile *projectile;
+			projectile = new ( "eyeball projectile" ) CProjectile;
+			projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+
+			addChild( projectile );
+
+			break;
+		}
+
 		case NPC_INIT_CIRCULAR_PLATFORM:
 		{
 			Pos.vx = 300;
@@ -557,9 +577,9 @@ void CNpcEnemy::think(int _frames)
 	{
 		int frameCount = m_actorGfx->getFrameCount(m_animNo);
 
-		if ( frameCount - m_frame > _frames )
+		if ( frameCount - m_frame > _frames >> 1 )
 		{
-			m_frame += _frames;
+			m_frame += _frames >> 1;
 		}
 		else
 		{
@@ -1400,9 +1420,14 @@ void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 			m_timerTimer = GameState::getOneSecondInFrames();
 			m_sensorFunc = NPC_SENSOR_NONE;
 
-			removeChild( sourceThing );
-			sourceThing->shutdown();
-			delete sourceThing;
+			//removeChild( sourceThing );
+			//sourceThing->shutdown();
+			//delete sourceThing;
+
+			CProjectile *projectile;
+			projectile = (CProjectile *) sourceThing;
+			projectile->setMovementType( CProjectile::PROJECTILE_FIXED );
+			projectile->setPosition( Pos );
 
 			break;
 		}

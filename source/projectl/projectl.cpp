@@ -190,12 +190,39 @@ bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
 	}
 }
 
+void CProjectile::setMovementType( PROJECTILE_MOVEMENT_TYPE moveType )
+{
+	m_movementType = moveType;
+}
+
+CProjectile::PROJECTILE_MOVEMENT_TYPE CProjectile::getMovementType()
+{
+	return( m_movementType );
+}
+
+void CProjectile::setState( PROJECTILE_STATE newState )
+{
+	m_state = newState;
+}
+
+void CProjectile::setPosition( DVECTOR newPos )
+{
+	Pos = newPos;
+}
+
 void CProjectile::think(int _frames)
 {
 	CEnemyProjectileThing::think( _frames );
 
 	switch( m_movementType )
 	{
+		case PROJECTILE_FIXED:
+		{
+			// don't move at all
+
+			break;
+		}
+
 		case PROJECTILE_USER_SEEK:
 		{
 			switch( m_state )

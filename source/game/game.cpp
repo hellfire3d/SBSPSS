@@ -309,6 +309,8 @@ void	CGameScene::initLevel()
 				enemy->addWaypoint( newXPos, newYPos );
 			}
 		}
+
+		enemy->postInit();
 	}
 
 	// Song is loaded/dumped by the level, and played from here. This just gives some

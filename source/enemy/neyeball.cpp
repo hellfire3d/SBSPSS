@@ -32,6 +32,19 @@ void CNpcEnemy::processCloseEyeballAttack( int _frames )
 {
 	if ( Next )
 	{
+		CProjectile *projectile;
+
+		projectile = (CProjectile *) Next;
+
+		if ( projectile->getMovementType() == CProjectile::PROJECTILE_FIXED )
+		{
+			projectile->setMovementType( CProjectile::PROJECTILE_USER_SEEK );
+			projectile->setState( CProjectile::PROJECTILE_ATTACK );
+		}
+	}
+
+	/*if ( Next )
+	{
 		// already have child, ignore
 	}
 	else
@@ -40,8 +53,8 @@ void CNpcEnemy::processCloseEyeballAttack( int _frames )
 
 		CProjectile *projectile;
 		projectile = new ( "test projectile" ) CProjectile;
-		projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_USER_SEEK, CProjectile::PROJECTILE_INFINITE_LIFE );
+		projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
 
 		addChild( projectile );
-	}
+	}*/
 }

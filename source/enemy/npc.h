@@ -158,6 +158,7 @@ public:
 	};
 
 	void				init();
+	void				postInit();
 	void				shutdown();
 	void				think(int _frames);
 	void				render();
@@ -200,6 +201,7 @@ protected:
 		NPC_INIT_PARASITIC_WORM,
 		NPC_INIT_PARASITIC_WORM_SEGMENT,
 		NPC_INIT_HERMIT_CRAB,
+		NPC_INIT_EYEBALL,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -554,7 +556,6 @@ protected:
 	};
 
 	CNpcPositionHistory		*m_positionHistory;
-
 };
 
 
