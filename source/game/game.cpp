@@ -64,7 +64,7 @@ void 	CGameScene::render()
 {
 		m_conversation.render();
 		Player.render();
-//		Level.render();
+		Level.render();
 }
 
 /*****************************************************************************/
