@@ -42,7 +42,6 @@ void CNpcFishHookPlatform::postInit()
 
 	m_isMoving = false;
 	m_isResetting = false;
-	m_isShuttingDown = false;
 	m_lineBase.vx = Pos.vx;
 	m_lineBase.vy = 0;
 	m_bobTimer = 0;

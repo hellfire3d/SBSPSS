@@ -45,12 +45,37 @@ void CNpcGaryFriend::postInit()
 	m_started = false;
 	m_fallDeath = false;
 	m_drawRotation = 0;
+
+	m_soundId = (int) NOT_PLAYING;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::shutdown()
+{
+	if ( m_soundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+	}
+
+	CNpcFriend::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcGaryFriend::think( int _frames )
 {
+	if ( m_soundId != NOT_PLAYING )
+	{
+		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			m_soundId = NOT_PLAYING;
+		}
+	}
+
 	if ( m_animPlaying )
 	{
 		s32 frameCount;
@@ -169,7 +194,10 @@ void CNpcGaryFriend::think( int _frames )
 
 				if ( m_started )
 				{
-					//CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
+					}
 
 					Pos.vx += multiplier * 2 * _frames;
 				}
@@ -195,7 +223,10 @@ void CNpcGaryFriend::think( int _frames )
 				{
 					if ( m_started )
 					{
-						//CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
+					}
 
 						Pos.vx += multiplier * 2 * _frames;
 					}

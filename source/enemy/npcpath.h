@@ -27,7 +27,6 @@ public:
 	};
 
 	void			initPath();
-	void			removeAllWaypoints();
 	void			setPathType( u8 newPathType );
 	u8				getPathType();
 	bool			incPath();

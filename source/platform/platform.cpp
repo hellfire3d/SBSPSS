@@ -611,8 +611,6 @@ void CNpcPlatform::init()
 	m_lifetime = 0;
 	m_lifetimeType = m_dataPtr->lifetimeType;
 
-	m_isShuttingDown = false;
-
 	m_npcPath.initPath();
 
 	m_speed = m_dataPtr->speed;
@@ -699,7 +697,6 @@ void CNpcPlatform::shutdown()
 	}
 
 	delete m_modelGfx;
-	//m_npcPath.removeAllWaypoints();
 
 	// temporary
 	CPlatformThing::shutdown();

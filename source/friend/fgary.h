@@ -22,6 +22,7 @@ class CNpcGaryFriend : public CNpcFriend
 {
 public:
 	virtual void		postInit();
+	virtual void		shutdown();
 	virtual void		think( int _frames );
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 	bool				alwaysThink()											{return(true);}
@@ -38,6 +39,7 @@ protected:
 	u8					m_fallDeath;
 	s16					m_speed;
 	s16					m_drawRotation;
+	int					m_soundId;
 };
 
 #endif

@@ -225,7 +225,6 @@ protected:
 	s16							m_initRotation;
 
 	CModelGfx					*m_modelGfx;
-	u8							m_isShuttingDown;
 
 	int							m_graphicNum;
 

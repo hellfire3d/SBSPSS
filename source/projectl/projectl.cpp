@@ -84,7 +84,6 @@ void CProjectile::init()
 	m_state = PROJECTILE_ATTACK;
 	m_turnSpeed = 256;
 	m_extension = 0;
-//	m_isShuttingDown = false;
 	m_ot = OTPOS__ACTOR_POS;
 	m_speed = 3;
 	updateCollisionArea();
@@ -502,7 +501,6 @@ void CPlayerProjectile::init()
 	m_extension = 0;
 	m_frame = 0;
 	m_reversed = 0;
-//	m_isShuttingDown = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

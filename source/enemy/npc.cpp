@@ -544,20 +544,6 @@ void CNpcEnemy::setThinkArea()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*void CNpcEnemy::addWaypoint( u16 *ptr )
-{
-	m_npcPath.addWaypoint( ptr );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcEnemy::addWaypoint( u16 *ptrX, u16 *ptrY )
-{
-	m_npcPath.addWaypoint( ptrX, ptrY );
-}*/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 {
 	Pos.vx = ( xPos << 4 ) + 8;
@@ -622,7 +608,6 @@ void CNpcEnemy::init()
 
 	m_npcPath.initPath();
 
-//	m_isShuttingDown = false;
 	m_drawRotation = 0;
 	m_isCaught = false;
 	m_isBlowerOn = false;
@@ -679,8 +664,6 @@ void CNpcEnemy::shutdown()
 	{
 		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
 	}
-
-	//m_npcPath.removeAllWaypoints();
 
 	if (m_actorGfx)	delete m_actorGfx;
 

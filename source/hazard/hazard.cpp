@@ -437,9 +437,6 @@ void CNpcHazard::shutdown()
 	}
 
 	delete m_modelGfx;
-	// remove waypoints
-
-	//m_npcPath.removeAllWaypoints();
 
 	//if (m_actorGfx)	delete m_actorGfx;
 
