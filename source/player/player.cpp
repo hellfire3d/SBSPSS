@@ -613,6 +613,8 @@ m_animFrame=0;
 	m_divingHelmet=false;
 	setIsInWater(true);
 
+	m_glassesFlag=0;
+
 	// Always ( cept for one level ) need this
 	registerAddon(PLAYER_ADDON_GLOVE);
 #ifdef __USER_paul__
@@ -1583,7 +1585,6 @@ void CPlayer::respawn()
 	m_ledgeLookOffset=0;
 	m_ledgeLookTimer=0;
 
-	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;
 	m_invincibilityRingTimer=0;
 	m_bubbleAmmo=0;
