@@ -83,7 +83,7 @@ void	CPlayerModeJellyLauncher::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	jellyLaunchPos={20,-40};
+DVECTOR	jellyLaunchPos={-20,-40};
 void	CPlayerModeJellyLauncher::think()
 {
 	CPlayerModeBase::think();
@@ -106,12 +106,12 @@ void	CPlayerModeJellyLauncher::think()
 				{
 					m_firingTime++;
 				}
-				m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
+				m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
 			}
 			else
 			{
 				m_firingState=FIRING_STATE__FIRING;
-				m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
+				m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
 			}
 			break;
 		case FIRING_STATE__FIRING:
@@ -120,6 +120,8 @@ void	CPlayerModeJellyLauncher::think()
 			{
 				int					playerFacing;
 				DVECTOR				launchPos;
+				int					fireHeading;
+				CPlayerProjectile	*projectile;
 
 				playerFacing=m_player->getFacing();
 				launchPos=getPlayerPos();
@@ -128,9 +130,7 @@ void	CPlayerModeJellyLauncher::think()
 				if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>=AMMO_AMOUNT_FOR_BIG_SHOT)
 				{
 					// Powered up, big shot
-					int					fireHeading;
-					CPlayerProjectile	*projectile;
-					int					i;
+					int	i;
 
 					fireHeading=1024+(1024*playerFacing)-512;
 					for(i=0;i<3;i++)
@@ -148,9 +148,6 @@ void	CPlayerModeJellyLauncher::think()
 				else
 				{
 					// Normal, small shot
-					int					fireHeading;
-					CPlayerProjectile	*projectile;
-
 					fireHeading=1024+(1024*m_player->getFacing());
 					projectile=new("JellyProjectile") CPlayerProjectile;
 					projectile->init(launchPos,

@@ -178,7 +178,7 @@ void	CPlayerModeNet::think()
 		}
 
 		//!!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
-		m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
+		m_player->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
 		m_player->setAnimFrame(m_netFrame);
 		m_netFrame++;
 		if(m_netFrame>=m_player->getAnimFrameCount())
