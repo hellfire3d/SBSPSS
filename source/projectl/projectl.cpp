@@ -48,6 +48,8 @@
 
 void CProjectile::init()
 {
+	CEnemyProjectileThing::init();
+
 	m_spriteBank=new ("projectile sprites") SpriteBank();
 	m_spriteBank->load(UI_UIGFX_SPR);
 
@@ -86,6 +88,8 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TY
 void CProjectile::shutdown()
 {
 	m_spriteBank->dump();		delete m_spriteBank;
+
+	CEnemyProjectileThing::shutdown();
 }
 
 bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
@@ -188,6 +192,8 @@ bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
 
 void CProjectile::think(int _frames)
 {
+	CEnemyProjectileThing::think( _frames );
+
 	switch( m_movementType )
 	{
 		case PROJECTILE_USER_SEEK:
@@ -266,6 +272,8 @@ void CProjectile::think(int _frames)
 
 void CProjectile::render()
 {
+	CEnemyProjectileThing::render();
+
 	DVECTOR	offset;
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
