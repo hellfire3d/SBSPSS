@@ -48,7 +48,7 @@ void CNpcEnemy::processSmallJellyfishMovementModifier( int _frames, s32 distX, s
 		dataPoint /= GameState::getOneSecondInFrames();
 	}
 
-	m_frame = ( m_movementTimer * m_actorGfx->getFrameCount(m_animNo) ) / GameState::getOneSecondInFrames();
+	m_frame = ( m_movementTimer * ( m_actorGfx->getFrameCount(m_animNo) - 1 ) ) / GameState::getOneSecondInFrames();
 
 	s32 resistance;
 	s32 absVelocity = abs( m_velocity );
