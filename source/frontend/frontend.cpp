@@ -30,6 +30,10 @@
 #include "frontend\options.h"
 #endif
 
+#ifndef	__FRONTEND_DEMOMODE_H__
+#include "frontend\demomode.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -55,13 +59,14 @@
 
 static CFrontEndMainTitles		s_frontEndModeMainTitles;
 static CFrontEndOptions			s_frontEndModeOptions;
+static CFrontEndDemoMode		s_frontEndDemoMode;
 
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
 	&s_frontEndModeOptions,			// MODE__GAME_OPTIONS
 	NULL,							// MODE__CHOOSE_SLOT
-	NULL,							// MODE__DEMO
+	&s_frontEndDemoMode,			// MODE__DEMO
 
 	NULL,							// MODE__NONE
 };

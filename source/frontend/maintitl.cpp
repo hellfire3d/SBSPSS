@@ -156,6 +156,8 @@ void CFrontEndMainTitles::select()
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
 
+	m_demoTimeout=0;
+
 	CFader::setFadingIn();
 }
 
@@ -279,6 +281,23 @@ rsr=(rsr+(_frames*rspeed))&4095;
 		default:
 			break;
 	}
+
+	if(m_mode==MODE__PRESS_START||m_mode==MODE__SELECT_OPTION)
+	{
+		if(!PadGetHeld(0))
+		{
+			m_demoTimeout+=_frames;
+			if(m_demoTimeout>DEMO_TIMEOUT_IN_SECONDS*GameState::getOneSecondInFrames())
+			{
+				CFader::setFadingOut();
+				m_mode=MODE__GOTO_DEMO;
+			}
+		}
+		else
+		{
+			m_demoTimeout=0;
+		}
+	}
 }
 
 
@@ -290,7 +309,7 @@ rsr=(rsr+(_frames*rspeed))&4095;
   ---------------------------------------------------------------------- */
 int CFrontEndMainTitles::isReadyToExit()
 {
-	return !CFader::isFading()&&(m_mode==MODE__START_GAME||m_mode==MODE__GOTO_OPTIONS);
+	return !CFader::isFading()&&(m_mode==MODE__START_GAME||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO);
 }
 
 
@@ -318,6 +337,10 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 
 		case MODE__GOTO_OPTIONS:
 			ret=CFrontEndScene::MODE__GAME_OPTIONS;
+			break;
+
+		case MODE__GOTO_DEMO:
+			ret=CFrontEndScene::MODE__DEMO;
 			break;
 	}
 

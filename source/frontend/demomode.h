@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	maintitl.h
+	demomode.h
 
 	Author:		PKG
 	Created:
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__FRONTEND_MAINTITL_H__
-#define __FRONTEND_MAINTITL_H__
+#ifndef	__FRONTEND_DEMOMODE_H__
+#define __FRONTEND_DEMOMODE_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -38,7 +38,7 @@
 	Structure defintions
 	-------------------- */
 
-class CFrontEndMainTitles : public CFrontEndMode
+class CFrontEndDemoMode : public CFrontEndMode
 {
 public:
 	void	init();
@@ -65,46 +65,12 @@ private:
 		PRESS_START_TEXT_R=150,
 		PRESS_START_TEXT_G=100,
 		PRESS_START_TEXT_B=100,
-
-		HORIZON_LEVEL=160,
-		SEA_OVERLAP=50,						// Sea is drawn to this many pixels below screen bottom
-
-		ISLAND_LEFT_X=40,					// Island position
-		ISLAND_BOTTOM_Y=HORIZON_LEVEL+10,
 	};
 
-	enum
-	{
-		MODE__PRESS_START,
-		MODE__SELECT_OPTION,
-		MODE__START_GAME,
-		
-		MODE__GOTO_OPTIONS,
-		MODE__GOTO_DEMO,
-	};
+	class FontBank		*m_smallFont;
+	class SpriteBank	*m_sprites;
 
-	enum
-	{
-		DEMO_TIMEOUT_IN_SECONDS=30,
-	};
-	
-	POLY_FT4	*prepareSeaPortionFT4(struct sFrameHdr *_fh,int _x,int _y,int _w,int _h,int _rgb);
-	void		renderSeaSection(struct sFrameHdr *fh,int _x,int _y,int _w,int _h);
-
-	void		renderPressStart();
-
-	class SpriteBank		*m_sprites;
-	class FontBank			*m_smallFont;
-
-	class CGUIControlFrame	*m_mainMenu;
-
-	int						m_mode;
-
-	int						m_startGameFlag;
-	int						m_gotoOptionsFlag;
-
-	int						m_demoTimeout;
-
+	int					m_shuttingDown;
 };
 
 
@@ -118,7 +84,7 @@ private:
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __FRONTEND_MAINTITL_H__ */
+#endif	/* __FRONTEND_DEMOMODE_H__ */
 
 /*===========================================================================
  end */

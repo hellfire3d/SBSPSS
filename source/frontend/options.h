@@ -18,7 +18,7 @@
 	Includes
 	-------- */
 
-#ifndef	__FRONTEND_FRONTENTD_H__
+#ifndef	__FRONTEND_FRONTEND_H__
 #include "frontend\frontend.h"
 #endif
 

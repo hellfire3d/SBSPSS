@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__FRONTEND_FRONTENTD_H__
-#define	__FRONTEND_FRONTENTD_H__
+#ifndef	__FRONTEND_FRONTEND_H__
+#define	__FRONTEND_FRONTEND_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -29,14 +29,6 @@
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
-typedef enum
-{
-	EXITCODE__NONE,
-
-	EXITCODE__START_GAME,
-	EXITCODE__GOTO_OPTIONS,
-} MainTitleExitCode;
-
 
 /*----------------------------------------------------------------------
 	Structure defintions
@@ -102,7 +94,7 @@ extern CFrontEndScene	FrontEndScene;
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __FRONTEND_FRONTENTD_H__ */
+#endif	/* __FRONTEND_FRONTEND_H__ */
 
 /*===========================================================================
  end */

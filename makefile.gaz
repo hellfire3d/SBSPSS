@@ -51,7 +51,8 @@ CD_FILESYS_LIB :=		CMXBoot
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
 
-frontend_src :=		frontend \
+frontend_src :=		demomode \
+					frontend \
 					scrollbg \
 					maintitl \
 					options
