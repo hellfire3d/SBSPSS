@@ -188,12 +188,16 @@ void	CPlayerModeNet::think()
 
 
 					projectile = new( "user projectile" ) CPlayerProjectile;
+					
 					projectile->init(	launchPos,
 										fireHeading,
 										CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 										5*60);
 					projectile->setLayerCollision( m_player->getLayerCollision() );
+					projectile->updateCollisionArea();
+					
+
 
 					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				}
