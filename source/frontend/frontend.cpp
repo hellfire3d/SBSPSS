@@ -220,7 +220,7 @@ void CFrontEndScene::renderLogo()
 	sFrameHdr	*fh;
 
 	fh=m_sprites->getFrameHeader(FRM__SBLOGO);
-	m_sprites->printRotatedScaledSprite(fh,256,LOGO_CENTRE_Y,rsx,rsy,rsr,220);
+	m_sprites->printRotatedScaledSprite(fh,256,LOGO_CENTRE_Y,rsx,rsy,rsr,20);
 	m_font->setColour(GAME_TITLE_TEXT_R,GAME_TITLE_TEXT_G,GAME_TITLE_TEXT_B);
 	m_font->print(256,GAME_TITLE_TEXT_CENTRE_Y,STR__FRONTEND__GAME_TITLE);
 	m_font->setColour(0,0,0);
