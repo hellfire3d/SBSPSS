@@ -763,8 +763,6 @@ if(newmode!=-1)
 #ifdef __USER_paul__
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
-	CLevel	&level=GameScene.GetLevel();
-	level.destroyMapTile(Pos);
 }
 #endif
 ///
@@ -827,7 +825,17 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		}
 
 		// Think for the current player mode
+		int		oldBlock;
+		DVECTOR	oldPos;
+		oldBlock=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
+		oldPos=Pos;
 		m_currentPlayerModeClass->think();
+		if(oldBlock==COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR&&
+		   (Pos.vx>>4!=oldPos.vx>>4||Pos.vy>>4!=oldPos.vy>>4))
+		{
+			GameScene.GetLevel().destroyMapTile(oldPos);
+		}
+			
 
 		// Is player stood on any special collision?
 		if(getHeightFromGroundNoPlatform(Pos.vx,Pos.vy,5)==0)
@@ -1389,7 +1397,7 @@ if(drawlastpos)
   ---------------------------------------------------------------------- */
 void	CPlayer::setRespawnPosAndRingTelephone(DVECTOR _respawn)
 {
-	if(m_respawnPos.vx!=_respawn.vx&&
+	if(m_respawnPos.vx!=_respawn.vx||
 	   m_respawnPos.vy!=_respawn.vy)
 	{
 		CSoundMediator::playSfx(CSoundMediator::SFX_TELEPHONE_BOX);
