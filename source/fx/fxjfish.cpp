@@ -122,7 +122,7 @@ int			XInc=LegXInc;
 /*****************************************************************************/
 /*** Render on map ***********************************************************/
 /*****************************************************************************/
-void	CFXJellyFishLegs::renderOnMapScreen( DVECTOR drawPos )
+void	CFXJellyFishLegs::renderOnMapScreen( DVECTOR drawPos, int XOfs, int YOfs )
 {
 SpriteBank	*SprBank=CGameScene::getSpriteBank();;
 DVECTOR		RenderPos=drawPos;
@@ -134,8 +134,8 @@ int			ScaleWInc=(ONE*LegWInc)>>12;
 int			ScaleHInc=(ONE*LegHInc)>>12;
 int			XInc=LegXInc;
 
-			RenderPos.vx+=Ofs.vx;
-			RenderPos.vy+=Ofs.vy;
+			RenderPos.vx+=XOfs;
+			RenderPos.vy+=YOfs;
 
 			if (!XFlip) XInc=-XInc;		
 			for (int i=0; i<LegCount; i++)

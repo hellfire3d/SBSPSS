@@ -763,7 +763,7 @@ void CNpcMotherJellyfishEnemy::renderOnMapScreen( DVECTOR drawPos )
 	m_actorGfx->RotateScale( SprFrame, drawPos, 0, ONE, ONE );
 	for ( int i = 0 ; i < 4 ; i++ )
 	{
-		legs[i]->renderOnMapScreen( drawPos );
+		legs[i]->renderOnMapScreen( drawPos, legsPos[i].vx, legsPos[i].vy );
 	}
 
 }

@@ -15,7 +15,7 @@ public:
 /*virtual */void		init(DVECTOR const &Pos);
 /*virtual */void		think(int _frames);
 /*virtual */void		render();
-			void		renderOnMapScreen( DVECTOR drawPos );
+			void		renderOnMapScreen( DVECTOR drawPos, int XOfs, int YOfs );
 
 		void		Setup(int XOfs,int YOfs,bool XFlip);
 		void		setScale( s16 newScale )					{Scale = newScale;}
