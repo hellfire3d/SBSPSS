@@ -37,6 +37,8 @@ virtual	void	createPlayer();
 		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 		class CPlayer	*getPlayer();
 		void	sendEvent( GAME_EVENT evt, CThing *sourceThing );
+
+		static void		setReadyToExit()	{s_readyToExit=true;}
 	
 protected:
 
@@ -45,7 +47,8 @@ protected:
 		class CPlayer		*m_player;
 		static	FontBank	*s_genericFont;
 		static	MATRIX		CamMtx;
-//static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry
+
+		static int			s_readyToExit;
 
 };
 

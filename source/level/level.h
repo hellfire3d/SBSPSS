@@ -14,9 +14,6 @@ class CLayer;
 class CLevel
 {
 public:
-			CLevel();
-	virtual ~CLevel();
-
 // Scene Handlers
 	void		init();
 	void		shutdown();

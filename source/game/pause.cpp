@@ -73,7 +73,6 @@
 #define TEXT_BOX_WIDTH	300
 #define TEXT_BOX_HEIGHT	20
 #define OT_POS			5
-int m_exitFlag;
 extern int newmode;
 void CPauseMenu::init()
 {
@@ -86,27 +85,33 @@ void CPauseMenu::init()
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,10,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__CONTINUE,
-										&m_exitFlag,true);
+										&m_exitPauseMenuFlag,true);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,40,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,30,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__PAUSE_MENU__QUIT,
+										&m_quitGameFlag,true);
+#ifdef __USER_paul__
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,60,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BASICUNARMED_MODE,
 										&newmode,0);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,60,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,80,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FULLUNARMED_MODE,
 										&newmode,1);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,80,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,100,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__SQUEAKYBOOTS_MODE,
 										&newmode,2);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,100,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,120,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__NET_MODE,
 										&newmode,3);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,120,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,140,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__CORALBLOWER_MODE,
 										&newmode,4);
+#endif
 
 	m_active=false;
 }
@@ -133,7 +138,8 @@ void CPauseMenu::shutdown()
 void CPauseMenu::select()
 {
 	m_active=true;
-	m_exitFlag=false;
+	m_exitPauseMenuFlag=false;
+	m_quitGameFlag=false;
 	m_guiFrame->select();
 }
 
@@ -147,7 +153,6 @@ void CPauseMenu::select()
 void CPauseMenu::unselect()
 {
 	m_active=false;
-	m_exitFlag=false;
 	m_guiFrame->unselect();
 }
 /*----------------------------------------------------------------------
@@ -163,8 +168,14 @@ void CPauseMenu::think(int _frames)
 	if(m_active)
 	{
 		m_guiFrame->think(_frames);
-		if(m_exitFlag||newmode!=-1)
+		if(m_exitPauseMenuFlag||
+		   m_quitGameFlag||
+		   newmode!=-1)
 		{
+			if(m_quitGameFlag)
+			{
+				CGameScene::setReadyToExit();
+			}
 			unselect();
 		}
 	}

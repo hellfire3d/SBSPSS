@@ -22,33 +22,15 @@
 DVECTOR CLevel::MapPos;
 
 /*****************************************************************************/
-CLevel::CLevel()
+void 	CLevel::init()
 {
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			TileLayers[i]=0;
 		}
-
 		MapPos.vx=0;		
 		MapPos.vy=0;
-}
 
-/*****************************************************************************/
-CLevel::~CLevel()
-{
-		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
-		{
-			if (TileLayers[i])
-			{
-				TileLayers[i]->shutdown();
-				delete TileLayers[i];
-			}
-		}
-}
-
-/*****************************************************************************/
-void 	CLevel::init()
-{
 		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL04_TBK,"Tile Bank Data");
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
 		m_levelTPage=TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
@@ -114,6 +96,15 @@ sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
 /*****************************************************************************/
 void	CLevel::shutdown()
 {
+		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
+		{
+			if (TileLayers[i])
+			{
+				TileLayers[i]->shutdown();
+				delete TileLayers[i];
+			}
+		}
+
 		TPFree(m_levelTPage);
 		CollisionLayer->shutdown();	MemFree(CollisionLayer);
 		MemFree(TileBankHdr);

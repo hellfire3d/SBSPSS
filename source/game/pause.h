@@ -45,6 +45,8 @@ public:
 
 private:
 	int						m_active;
+	int						m_exitPauseMenuFlag;
+	int						m_quitGameFlag;
 
 	class CGUIControlFrame	*m_guiFrame;
 

@@ -51,6 +51,11 @@
 #include "game\pause.h"
 #endif
 
+#ifndef	__FRONTEND_FRONTEND_H__
+#include "frontend\frontend.h"
+#endif
+
+
 
 int		GX=248;
 int		GY=129;
@@ -65,6 +70,7 @@ MATRIX		CGameScene::CamMtx;
 /*****************************************************************************/
 
 int s_globalLevelSelectThing=0;
+int CGameScene::s_readyToExit;
 
 /*****************************************************************************/
 
@@ -104,6 +110,8 @@ void 	CGameScene::init()
 
 		SetGeomOffset( GX, GY );
 		SetGeomScreen(GH);
+
+		s_readyToExit=false;
 }
 
 /*****************************************************************************/
@@ -172,12 +180,18 @@ void	CGameScene::think(int _frames)
 		Level.setCameraCentre(camPos);
 		Level.think(_frames);
 	}
+
+	if(s_readyToExit)
+	{
+		// Temporarily.. exiting game scene always goes back to the front end (pkg)
+		GameState::setNextScene(&FrontEndScene);
+	}
 }
 
 /*****************************************************************************/
 int		CGameScene::readyToShutdown()
 {
-	return false;
+	return s_readyToExit;
 }
 
 /*****************************************************************************/
