@@ -165,9 +165,15 @@ void CNpcSmallJellyfishProjectileEnemy::render()
 		origRenderPos.vy = renderPos.vy;
 		renderPos.vy += m_drawOffset.vy - ( spriteHeight >> 1 );
 
-		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+		CRECT collisionRect = getCollisionArea();
+		collisionRect.x1 -= Pos.vx;
+		collisionRect.x2 -= Pos.vx;
+		collisionRect.y1 -= Pos.vy;
+		collisionRect.y2 -= Pos.vy;
+
+		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
 		{
-			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 			{
 				SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 				setRGB0( SprFrame, 255, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)

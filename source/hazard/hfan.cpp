@@ -54,9 +54,15 @@ void CNpcFanHazard::render()
 	renderPos.vx = Pos.vx - offset.vx;
 	renderPos.vy = Pos.vy - offset.vy;
 
-	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+	CRECT collisionRect = getCollisionArea();
+	collisionRect.x1 -= Pos.vx;
+	collisionRect.x2 -= Pos.vx;
+	collisionRect.y1 -= Pos.vy;
+	collisionRect.y2 -= Pos.vy;
+
+	if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
 	{
-		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+		if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 		{
 			SVECTOR rotation;
 			rotation.vx = m_rotation;
