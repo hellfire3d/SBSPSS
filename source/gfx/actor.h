@@ -60,7 +60,7 @@ class CActorPool
 public:
 		enum
 		{
-			MAX_ACTORS		=32,
+			MAX_ACTORS		=64,
 			MAX_ACTOR_SIZE=	128*128,
 		};
 

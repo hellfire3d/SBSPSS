@@ -209,17 +209,20 @@ sActorPool	&ThisActor=ActorPool[Idx];
 /*****************************************************************************/
 #define	DYN_PALW	64
 #define	DYN_PALH	1
-#define	DYN_PALX	DYN_PALW*(8+4)
+#define	DYN_PALX	512
 #define	DYN_PALY	511
 
 u16		CActorPool::LoadPalette(sActorPool &ThisActor,int Idx)
 {
 RECT	R;
+int		X=Idx&31;
+int		Y=Idx%31;
 
 		R.x=DYN_PALX+(Idx*DYN_PALW);
-		R.y=DYN_PALY;
+		R.y=DYN_PALY-Y;
 		R.w=DYN_PALW;
 		R.h=DYN_PALH;
+//		DrawSync(0);
 		LoadImage( &R, (u32*)ThisActor.SpriteBank->Palette);
 
 int		Clut=getClut(R.x,R.y);
@@ -260,6 +263,7 @@ sActorPool	&ThisActor=ActorPool[Idx];
 // Dumps all apart from spongeybob
 void	CActorPool::DumpActors()
 {
+	printf("DumpActors\n");
 		for (int i=0; i<MAX_ACTORS; i++)
 		{
 			if (ActorPool[i].SpriteBank && ActorPool[i].Filename!=ACTORS_SPONGEBOB_SBK)
@@ -268,6 +272,8 @@ void	CActorPool::DumpActors()
 				ActorPool[i].SpriteBank=0;
 			}
 		}
+	printf("DumpActorsDone\n");
+
 }
 
 /*****************************************************************************/
@@ -341,6 +347,7 @@ RECT		Rect;
 			Rect.y=TexY;
 			Rect.w=FrameGfx->W/4;
 			Rect.h=FrameGfx->H;
+
 			LoadImage( &Rect, (u32*)UnpackBuffer);
 
 POLY_FT4	*Ft4=GetPrimFT4();
