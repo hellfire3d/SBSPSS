@@ -1064,13 +1064,20 @@ u8 CNpcPlatform::checkCollisionDelta( CThing *_thisThing, int threshold, CRECT c
 			s32 oldXPos = otherPos.vx - otherPosDelta.vx;
 			s32 oldYPos = otherPos.vy - otherPosDelta.vy;
 
+			CRECT otherCollisionArea = _thisThing->getCollisionArea();
+			otherCollisionArea.x1 -= otherPosDelta.vx;
+			otherCollisionArea.x2 -= otherPosDelta.vx;
+			otherCollisionArea.y1 -= otherPosDelta.vy;
+			otherCollisionArea.y2 -= otherPosDelta.vy;
+
 			collisionArea.x1 -= posDelta.vx;
 			collisionArea.x2 -= posDelta.vx;
 			collisionArea.y1 -= posDelta.vy;
 			s32 oldCollisionY = collisionArea.y2;
 			collisionArea.y2 -= posDelta.vy;
 
-			if ( oldXPos >= collisionArea.x1 && oldXPos <= collisionArea.x2 )
+			//if ( oldXPos >= collisionArea.x1 && oldXPos <= collisionArea.x2 )
+			if ( otherCollisionArea.x2 >= collisionArea.x1 && otherCollisionArea.x1 <= collisionArea.x2 )
 			{
 				//if ( oldYPos < collisionArea.y1 + threshold ) //&& otherPos.vy > oldCollisionY )
 				if ( getHeightFromPlatformAtPosition( oldXPos, oldYPos, -posDelta.vx, -posDelta.vy ) > 0 )
@@ -1099,10 +1106,12 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 			CPlayer *player;
 			DVECTOR	playerPos;
 			CRECT	collisionArea;
+			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
 			playerPos=player->getPos();
+			playerCollisionArea = player->getCollisionArea();
 			collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
@@ -1112,7 +1121,8 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 				threshold = 16;
 			}
 
-			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			//if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			if( playerCollisionArea.x2 >= collisionArea.x1 && playerCollisionArea.x1 <= collisionArea.x2 )
 			{
 				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
 				{
@@ -1294,6 +1304,15 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 		else
 		{
 			top.vx = offsetX + collisionArea.x2;
+		}
+
+		if ( _x > collisionArea.x2 )
+		{
+			_x = collisionArea.x2;
+		}
+		else if ( _x < collisionArea.x1 )
+		{
+			_x = collisionArea.x1;
 		}
 
 		// Rotate backwards to find height at current position

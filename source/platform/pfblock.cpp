@@ -101,10 +101,12 @@ void CNpcFallingBlockPlatform::collidedWith( CThing *_thisThing )
 			CPlayer *player;
 			DVECTOR	playerPos;
 			CRECT	collisionArea;
+			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
 			playerPos=player->getPos();
+			playerCollisionArea = player->getCollisionArea();
 			collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
@@ -114,7 +116,8 @@ void CNpcFallingBlockPlatform::collidedWith( CThing *_thisThing )
 				threshold = 16;
 			}
 
-			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			//if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			if( playerCollisionArea.x2 >= collisionArea.x1 && playerCollisionArea.x1 <= collisionArea.x2 )
 			{
 				if ( m_isFalling )
 				{

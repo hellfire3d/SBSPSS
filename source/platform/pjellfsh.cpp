@@ -75,7 +75,7 @@ void CNpcJellyfishPlatform::collidedWith( CThing *_thisThing )
 
 				s32 height = getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy);
 
-				if(playerPos.vx>=collisionArea.x1&&playerPos.vx<=collisionArea.x2&&
+				if(playerArea.x2>=collisionArea.x1&&playerArea.x1<=collisionArea.x2&&
 				   playerPos.vy>=collisionArea.y1&&playerPos.vy<=collisionArea.y2)
 				//if(((playerArea.x1>=collisionArea.x1&&playerArea.x1<=collisionArea.x2)||(playerArea.x2>=collisionArea.x1&&playerArea.x2<=collisionArea.x2)||(playerArea.x1<=collisionArea.x1&&playerArea.x2>=collisionArea.x2))&&
 				   //((playerArea.y1>=thatRect.y1&&playerArea.y1<=thatRect.y2)||(playerArea.y2>=thatRect.y1&&playerArea.y2<=thatRect.y2)||(playerArea.y1<=thatRect.y1&&playerArea.y2>=thatRect.y2)))
