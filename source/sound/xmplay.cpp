@@ -531,6 +531,34 @@ void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CXMPlaySound::stopAndUnlockAllSfx()
+{
+	int				i;
+	spuChannelUse 	*ch;
+	
+	ch=m_spuChannelUse;
+	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	{
+		if(ch->m_useType==SFX||
+		   ch->m_useType==LOOPINGSFX)
+		{
+			ch->m_locked=true;				// hmm.. not too ugly I suppose
+			setVolume(ch->m_playingId,0);
+			stopPlayingId(ch->m_playingId);
+
+			// Need to unlock too
+			unlockPlayingId(ch->m_playingId);
+		}
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CXMPlaySound::stopAndUnlockAllSound()
 {
 	int				i;
@@ -544,7 +572,7 @@ void CXMPlaySound::stopAndUnlockAllSound()
 		   ch->m_useType==LOOPINGSFX)
 		{
 			ch->m_locked=true;				// hmm.. not too ugly I suppose
-			setVolume(ch->m_playingId,0);
+//			setVolume(ch->m_playingId,0);
 			stopPlayingId(ch->m_playingId);
 
 			// Need to unlock too
@@ -608,11 +636,11 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
   ---------------------------------------------------------------------- */
 void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
 {
-	int				i;
+//	int				i;
 	spuChannelUse	*ch;
 
-	ch=m_spuChannelUse;
-	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	ch=&m_spuChannelUse[_playingId&0xff];
+//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
 	{
 		if(ch->m_playingId==_playingId)
 		{
@@ -660,6 +688,7 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 						XM_GetFeedback(ch->m_internalId,&fb);
 					}
 					while(fb.Status!=XM_STOPPED);
+					XM_Quit(ch->m_internalId);
 					}
 					break;
 
@@ -863,7 +892,7 @@ void CXMPlaySound::markChannelsAsActive(int _baseChannel,int _channelCount,CHANN
 	ch->m_pan=PAN_CENTRE;
 
 	ch++;
-	for(i=_baseChannel+1;i<_baseChannel+_channelCount;i++,ch++)
+	for(i=_baseChannel;i<_baseChannel+_channelCount-1;i++,ch++)
 	{
 		ch->m_useType=CONTINUE;
 #ifdef __VERSION_DEBUG__

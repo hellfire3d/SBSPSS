@@ -73,6 +73,7 @@ public:
 	void			setVolume(xmPlayingId _playingId,unsigned char _volume);
 	void			setPanning(xmPlayingId _playingId,char _pan);
 
+	void			stopAndUnlockAllSfx();
 	void			stopAndUnlockAllSound();
 
 	xmPlayingId		playSong(xmSampleId _sampleId,xmModId _modId,int _startPattern=0);
