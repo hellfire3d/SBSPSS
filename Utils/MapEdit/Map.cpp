@@ -137,7 +137,6 @@ int		Height=GetHeight();
 		if ((X>=0 && X<Width) && (Y>=0 && Y<Height))
 		{
 			Map[X][Y]=Blk;
-			TRACE2("%i %i\n",Blk.Set,Blk.Tile);
 			if (Blk.Tile==0)
 			{ // Only use one zero tile
 				Map[X][Y].Set=0;
