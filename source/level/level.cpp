@@ -396,12 +396,10 @@ void 	CLevel::init()
 if(lvlTab->exitX==0&&lvlTab->exitY==0)
 {
 	PAUL_DBGMSG("-- NO LEVEL EXIT DEFINED FOR %d",s_globalLevelSelectThing);
-	ASSERT(!"NO EXIT");
 }
 if(lvlTab->spawnX==268&&lvlTab->spawnY==160)
 {
 	PAUL_DBGMSG("-- NO LEVEL START DEFINED FOR %d",s_globalLevelSelectThing);
-	ASSERT(!"NO START");
 }
 #endif
 		ex=lvlTab->exitX;
