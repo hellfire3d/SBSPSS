@@ -322,6 +322,7 @@ void 			PrimClip(RECT *r, u32 Depth);
 void 			PrimFullScreen(int Depth);
 inline	u8		*GetPrimPtr()			{return(CurrPrim);}
 inline	void	SetPrimPtr(u8 *Ptr)		{CurrPrim=Ptr;}
+void			FlushPrimPool();
 
 LINE_F2			*DrawLine(int _x0,int _y0,int _x1,int _y1,int _r,int _g,int _b,int _ot);
 LINE_G2			*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int _r2,int _g2,int _b2,int _ot);

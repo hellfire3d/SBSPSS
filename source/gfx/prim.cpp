@@ -67,6 +67,18 @@ void	PrimDisplay()
 	ResetOTagR(BaseOtPtr,MAX_OT_ALL);
 }
 
+/*****************************************************************************/
+void	FlushPrimPool()
+{
+	printf("%x %x\n",(int)CurrPrim,(int)PrimBuffer[PrimFlipFlag]);
+	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
+	GUIOtPtr=BaseOtPtr;
+	OtPtr=GUIOtPtr+MAX_OT_GUI;
+	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
+	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
+	ResetOTagR(BaseOtPtr,MAX_OT_ALL);
+}
+
 /*** Clipping ****************************************************************/
 void	PrimClip(RECT *R, u32 Depth)
 {
