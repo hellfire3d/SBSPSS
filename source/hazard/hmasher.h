@@ -22,6 +22,7 @@ class CNpcMasherHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual void		setGraphic( sThingHazard *ThisHazard );
 protected:
 	void				processMovement( int _frames );
 

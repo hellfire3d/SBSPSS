@@ -21,12 +21,17 @@
 
 #include	"game\game.h"
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcMasherHazard::init()
 {
 	CNpcHazard::init();
 
 	m_state = MASHER_DROPPING;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcMasherHazard::processMovement( int _frames )
 {
@@ -81,4 +86,17 @@ void CNpcMasherHazard::processMovement( int _frames )
 			break;
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcMasherHazard::setGraphic( sThingHazard *ThisHazard )
+{
+	m_modelGfx = new ("ModelGfx") CModelGfx;
+	m_modelGfx->SetModel( ThisHazard->Gfx );
+
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.YMin = boundingBox.YMax - 18;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 }
