@@ -67,6 +67,9 @@ static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 static	void			dropHealth(DVECTOR &Pos,int Amount,int Vel);
 
 
+static	void			setCameraShake(s16 X,s16 Y);
+static	void			shakeCamera(DVECTOR &CamPos);
+		void			thinkCameraShake(int _frames);
 private:
 	typedef enum
 	{
@@ -128,6 +131,7 @@ static	CLayerCollision	*getCollision()						{return(s_GlobalCollision);}
 static	SpriteBank		*s_GlobalSpritebank;
 static	CLayerCollision	*s_GlobalCollision;
 static	int				s_bossHasBeenKilled;
+static	DVECTOR			s_CamShake;
 
 
 		int				m_levelHasTimer;

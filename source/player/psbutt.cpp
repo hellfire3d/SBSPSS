@@ -187,6 +187,7 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 	if(!m_bounceOffFloor)
 	{
 		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
+		CGameScene::setCameraShake(0,8);
 	}
 }
 
@@ -226,6 +227,7 @@ void CPlayerStateButtBounceUp::enter(CPlayerModeBase *_playerMode)
 		pos=_playerMode->getPlayerPos();
 		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
 		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
+		CGameScene::setCameraShake(0,8);
 	}
 
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);

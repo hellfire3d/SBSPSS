@@ -156,15 +156,16 @@ CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
 
 /*****************************************************************************/
 
-int s_globalLevelSelectThing=0;
-int CGameScene::s_readyToExit;
-int CGameScene::s_levelFinished;
+int		s_globalLevelSelectThing=0;
+int		CGameScene::s_readyToExit;
+int		CGameScene::s_levelFinished;
 #ifdef __VERSION_DEBUG__
-int CGameScene::s_skipToNextLevel;
+int		CGameScene::s_skipToNextLevel;
 #endif
-int	CGameScene::s_restartLevel;
-int	CGameScene::s_bossHasBeenKilled;
-int	CGameScene::s_justHitBossArenaTrigger;
+int		CGameScene::s_restartLevel;
+int		CGameScene::s_bossHasBeenKilled;
+int		CGameScene::s_justHitBossArenaTrigger;
+DVECTOR	CGameScene::s_CamShake={0,0};
 
 /*****************************************************************************/
 static const CSoundMediator::SONGID	s_bossMusicIds[]=
@@ -574,6 +575,7 @@ void CGameScene::think_playing(int _frames)
 		CBubicleFactory::setMapOffset(&camPos);
 		Level.setCameraCentre(camPos);
 		Level.think(_frames);
+		thinkCameraShake(_frames);
 		m_HealthManager->think(_frames);
 		m_HealthManager->checkPlayerCol(getPlayer());
 
@@ -722,3 +724,43 @@ void	CGameScene::shutdownLevel()
 }
 
 /*****************************************************************************/
+void	CGameScene::setCameraShake(s16 X,s16 Y)
+{
+	s_CamShake.vx=X;
+	s_CamShake.vy=Y;
+}
+
+/*****************************************************************************/
+void	CGameScene::shakeCamera(DVECTOR &CamPos)
+{
+	CamPos.vx+=s_CamShake.vx;
+	CamPos.vy+=s_CamShake.vy;
+}
+
+/*****************************************************************************/
+void	CGameScene::thinkCameraShake(int _frames)
+{
+	if (s_CamShake.vx)
+	{
+		if (s_CamShake.vx<0)
+		{
+			s_CamShake.vx=-(s_CamShake.vx+1);
+		}
+		else
+		{
+			s_CamShake.vx=-(s_CamShake.vx-1);
+		}
+	}
+	if (s_CamShake.vy)
+	{
+		if (s_CamShake.vy<0)
+		{
+			s_CamShake.vy=-(s_CamShake.vy+1);
+		}
+		else
+		{
+			s_CamShake.vy=-(s_CamShake.vy-1);
+		}
+	}
+
+}

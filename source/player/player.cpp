@@ -1161,6 +1161,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	{
 		m_cameraPos.vx=m_currentCamFocusPoint.vx;
 		m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
+		CGameScene::shakeCamera(m_cameraPos);
 	}
 
 	// Limit camera scroll to the edges of the map
