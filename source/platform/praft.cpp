@@ -31,6 +31,10 @@ void CNpcRaftPlatform::postInit()
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 	m_isActivated = false;
+
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) - 16 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
