@@ -1,8 +1,8 @@
 Block
 Die
-Hit
+# Hit
 Idle1_
-Idle2_
-Kick_Sand
-Pushups
+# Idle2_
+# Kick_Sand
+# Pushups
 Run
