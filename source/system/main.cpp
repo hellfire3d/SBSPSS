@@ -73,6 +73,15 @@ CPaulScene s_paulScene;
 
 #include	<sprites.h>
 
+#ifndef __MEMCARD_MEMCARD_H__
+#include "memcard\memcard.h"
+#endif
+
+#ifndef __MEMCARD_SAVELOAD_H__
+#include "memcard\saveload.h"
+#endif
+
+
 #if	__FILE_SYSTEM__==PC
 	#if	!defined(__USER_CDBUILD__)
 		#if defined(__VERSION_DEBUG__)
@@ -88,6 +97,26 @@ static SpriteBank	GenericSpriteBank;
 /*****************************************************************************/
 
 void	SaveScreen(RECT R);
+
+/*****************************************************************************/
+static void DoAutoLoad()
+{
+	MemCard::Start();
+	CSaveLoadDatabase	autoloadDb;
+
+	autoloadDb.startAutoload();
+
+	while(1)
+	{
+		MemCard::Handler();
+		autoloadDb.think();
+		if(!autoloadDb.monitorAutoload())
+			break;
+		VSync(0);
+	}
+
+	MemCard::Stop();
+}
 
 /*****************************************************************************/
 void	InitSystem()	// reordered to reduce black screen (hope all is well
@@ -133,6 +162,10 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	CBubicleFactory::init();
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
+
+#if defined(__USER_paul__) || defined(__USER_cdbuild__)
+	DoAutoLoad();
+#endif
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();
