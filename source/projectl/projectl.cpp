@@ -531,8 +531,16 @@ void CPlayerProjectile::render()
 
 	offset = getScreenOffset();
 
-	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( spriteWidth >> 1 );
-	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( spriteHeight >> 1 );
+	if ( m_reversed )
+	{
+		x = Pos.vx - offset.vx + ( spriteWidth >> 1 );
+	}
+	else
+	{
+		x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
+	}
+
+	y = Pos.vy - offset.vy - ( spriteHeight >> 1 );
 
 	if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
 	{
@@ -561,6 +569,8 @@ void CPlayerProjectile::collidedWith(CThing *_thisThing)
 			CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
 
 			enemy->hasBeenAttacked();
+
+			setToShutdown();
 
 			break;
 		}
