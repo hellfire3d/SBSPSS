@@ -371,13 +371,13 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 	launchPos=getPlayerPos();
 	launchPos.vx+=playerFacing*jellyLaunchPos.vx;
 	launchPos.vy+=jellyLaunchPos.vy;
-	if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>=AMMO_AMOUNT_FOR_BIG_SHOT)
+	if(m_firingTime==TIMEOUT_FOR_BIG_SHOT&&m_player->getJellyAmmo()>1)
 	{
 		// Powered up, big shot
 		int	i;
 
 		fireHeading=1024+(1024*playerFacing)-POWER_UP_SHOT_ANGLE;
-		for(i=0;i<3;i++)
+		for(i=0;i<3&&m_player->getJellyAmmo();i++)
 		{
 			projectile=CPlayerProjectile::Create();
 			projectile->init(launchPos,
