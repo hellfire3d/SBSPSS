@@ -1,0 +1,33 @@
+#include	data/scripts/defs/defs.scr
+
+#include	data/scripts/defs/charanim.scr
+#include	data/scripts/defs/items.scr
+#include	data/scripts/defs/response.scr
+#include	data/scripts/defs/trans.scr
+
+
+_setText(CHAR_BARNACLEBOY,STR__INGAME__FMA_C6_BB0);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+_setText(CHAR_SPONGEBOB,STR__INGAME__FMA_C6_SB2);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+_setText(CHAR_BARNACLEBOY,STR__INGAME__FMA_C6_BB1);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+stop;
