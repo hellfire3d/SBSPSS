@@ -248,7 +248,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 		case IRON_DOGFISH_LASER_EYE_1:
 		case IRON_DOGFISH_LASER_EYE_2:
 		{
-			if ( playerYDistSqr > 250000 )
+			if ( playerYDistSqr > 50000 )
 			{
 				m_movementTimer = GameState::getOneSecondInFrames() * 3;
 				m_state = IRON_DOGFISH_THUMP_2;
