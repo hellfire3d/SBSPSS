@@ -268,6 +268,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 				bubblePos.vy -= getRnd() % 50;
 				CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
 
+				if ( m_soundId == NOT_PLAYING )
+				{
+					m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SPLASH, true );
+				}
+
 				m_timerTimer = GameState::getOneSecondInFrames() >> 8;
 			}
 
