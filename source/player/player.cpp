@@ -600,6 +600,11 @@ int	returnsafespace=4*16;
 #endif
 
 
+extern int checkx;
+extern int checky;
+
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -2525,6 +2530,47 @@ int		CPlayer::moveVertical(int _moveDistance)
 	// Are we falling?
 	if(_moveDistance>0)
 	{
+#if 0
+		// Yes - Check to see if players feet have hit anything
+		int colHeightBefore,colHeightAfter;
+
+		// middle
+		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
+		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		if(colHeightBefore>=0&&colHeightAfter<=0)
+		{
+			pos.vy+=colHeightAfter+_moveDistance;
+			_moveDistance=0;
+			hitGround=true;
+		}
+		else// if(colHeightBefore>=0&&colHeightAfter>=15)
+		{
+			// left
+			colHeightBefore=getHeightFromGround(pos.vx-checkx,pos.vy,16);
+			colHeightAfter=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
+			if(colHeightBefore>=0&&colHeightAfter<=0/*&&
+			   CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
+			{
+				pos.vy+=colHeightAfter+_moveDistance;
+				_moveDistance=0;
+				hitGround=true;
+			}
+			else
+			{
+				// right
+				colHeightBefore=getHeightFromGround(pos.vx+checkx,pos.vy,16);
+				colHeightAfter=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
+				if(colHeightBefore>=0&&colHeightAfter<=0/*&&
+				   CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
+				{
+					pos.vy+=colHeightAfter+_moveDistance;
+					_moveDistance=0;
+					hitGround=true;
+				}
+			}
+		}
+#endif
+
 		int colHeightBefore,colHeightAfter;
 
 		// Yes.. Check to see if we're about to hit/go through the ground/platform
@@ -2625,8 +2671,6 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern int checkx;
-extern int checky;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
