@@ -43,10 +43,10 @@ void CNpcSteamSwitchPlatform::processMovement( int _frames )
 		{
 			if ( m_contact )
 			{
-				CPlayer *player = GameScene.getPlayer();
-				ATTACK_STATE playerState = player->getAttackState();
+				//CPlayer *player = GameScene.getPlayer();
+				//ATTACK_STATE playerState = player->getAttackState();
 
-				if ( playerState == ATTACK_STATE__BUTT_BOUNCE )
+				//if ( playerState == ATTACK_STATE__BUTT_BOUNCE )
 				{
 					m_state = NPC_STEAM_SWITCH_DEPRESS;
 				}
