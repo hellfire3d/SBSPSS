@@ -153,6 +153,20 @@ cleanactors :
 #----------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------
+# Special Effect graphics
+#----------------------------------------------------------------------------
+SFX_GFX_DIR :=			$(GRAF_DIR)/sfx
+
+SFX_GFX :=				+smoke.bmp
+SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))
+
+####
+
+SFXGFX_SPR_DEP :=		$(SFX_GFX_IN)
+
+SFXGFX_SPR_IN :=		-z- $(SFX_GFX_IN)
+
+#----------------------------------------------------------------------------
 # Ingame graphics and UI
 #----------------------------------------------------------------------------
 INGAMEFX_GFX_NONTRANS_DIR :=$(GRAF_DIR)/ingamefx
@@ -232,7 +246,7 @@ UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 ####
 
 INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN) \
-							$(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN)
+							$(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN) 
 
 INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
 							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) $(UI_GFX_NONTRANS_IN) \
@@ -280,11 +294,13 @@ SPRITES_OUT_DIR :=		$(DATA_OUT)/sprites
 
 SPRITES_ALL_DEP	:=		$(INGAMEGFX_SPR_DEP) \
 						$(FRONTENDGFX_SPR_DEP) \
-						$(ACTOR_SPR_DEP)
+						$(ACTOR_SPR_DEP) \
+						$(SFXGFX_SPR_DEP)
  
 SPRITES_ALL_IN :=		$(INGAMEGFX_SPR_IN) \
  						$(FRONTENDGFX_SPR_IN) \
-						$(ACTOR_SPR_IN)
+						$(ACTOR_SPR_IN) \
+						$(SFXGFX_SPR_IN)
 
 SPRITES_TEX_OUT :=		$(SPRITES_OUT_DIR)/Sprites.Spr
 
