@@ -95,6 +95,7 @@ sBBox			CThingManager::m_ThinkBBox;
 
 #ifdef	USE_FREE_LIST
 CThing			**CThingManager::s_FreeList[CThing::MAX_TYPE];
+CThing			*DuffList;
 
 
 struct	sFreeListTable
@@ -759,6 +760,7 @@ void		CThingManager::initFreeList()
 			s_FreeList[ThisType.Type]=List;
 
 		}
+		DuffList=0;
 #endif
 }
 
@@ -783,7 +785,13 @@ void	CThingManager::resetFreeList()
 				}
 				List[t]=0;
 			}
-
+		}
+		CThing	*Duff=DuffList;
+		while (Duff)
+		{
+			CThing	*next=Duff->NextFreeThing;
+			delete Duff;
+			Duff=next;
 		}
 #endif
 }
@@ -831,11 +839,20 @@ int		SubType=Thing->getThingSubType();
 CThing	**List=s_FreeList[Type];
 
 // Check its been aquired/set correctly
+// Temp workaround
+//		ASSERT(SubType!=1234);
+		if (SubType!=1234)
+		{
+			Thing->NextFreeThing=List[SubType];
+			List[SubType]=Thing;
+		}
+		else
+		{
+//			delete Thing;
+			Thing->NextFreeThing=DuffList;
+			DuffList=Thing;
 
-		ASSERT(SubType!=1234);
-
-		Thing->NextFreeThing=List[SubType];
-		List[SubType]=Thing;
+		}
 
 #else
 		delete Thing;
