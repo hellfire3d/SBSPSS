@@ -206,16 +206,17 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+	sActorHdr	*Hdr=m_skel.Load(ACTORS_CLAM_A3D);		
 	m_skel.Init(Hdr);
-	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
-	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
+	TPLoadTex(ACTORS_ACTOR_ENEMY_TEX);
+	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_CLAM_ABK));
+	m_skel.setAng(1024);
 
 	// temporary
 	m_animNo = 0;
 	m_frame = 0;
 
-	m_type = NPC_CIRCULAR_PLATFORM;
+	m_type = NPC_CLAM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -1126,9 +1127,10 @@ void CNpcEnemy::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	renderPos.vx = ( Pos.vx - offset.vx ) * 20;
-	renderPos.vy = ( Pos.vy - offset.vy ) * 20;
+	renderPos.vx = ( Pos.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
+	renderPos.vy = ( Pos.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
 
+	m_skel.setZAng( m_heading );
 	m_skel.setPos( renderPos );
 	m_skel.setFrame(m_frame);
 	m_skel.setAnimNo(m_animNo);

@@ -256,6 +256,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_MOVEMENT_MODIFIER_NONE,
 		NPC_CLOSE_CLAM_ATTACK,
 		NPC_TIMER_NONE,
+		false,
 		0,
 		128,
 		false,
