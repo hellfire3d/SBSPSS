@@ -294,7 +294,7 @@ void	CThing::init()
 	// Add to thing list
 	CThingManager::addToThingList(this);
 
-	setCollisionSize(200,20);	// Some temporary defaults.. (pkg)
+	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
 	m_collisionAngle = 0;
 	m_collisionStickyBoundary = 0;
@@ -333,9 +333,6 @@ void	CThing::think(int _frames)
 	DVECTOR	PosLast=Pos; 
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
-
-	m_collisionAngle++;
-	m_collisionAngle %= 4096;
 }
 
 /*----------------------------------------------------------------------

@@ -140,6 +140,7 @@ protected:
 	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
 	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
 	void			setCollisionStickyBoundary(int boundary)	{m_collisionStickyBoundary = boundary;}
+	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
