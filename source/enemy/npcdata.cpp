@@ -58,7 +58,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_FALLING_ITEM_FALL,
 		NPC_TIMER_NONE,
 		false,
-		3,
+		8,
 		128,
 		false,
 		DAMAGE__LAVA,

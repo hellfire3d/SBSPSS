@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_SKULL_STOMPER;
+	m_type = NPC_FALLING_ITEM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
