@@ -51,11 +51,11 @@
 	Structure defintions
 	-------------------- */
 
-#define ANIM_IDLE_SHORT		15
-#define ANIM_IDLE_LONG		16
-#define ANIM_RUNSTART		29
-#define ANIM_RUN			26
-#define ANIM_RUNSTOP		30
+#define ANIM_IDLE_SHORT		0
+#define ANIM_IDLE_LONG		0
+#define ANIM_RUNSTART		0
+#define ANIM_RUN			0
+#define ANIM_RUNSTOP		0
 
 
 /*----------------------------------------------------------------------
