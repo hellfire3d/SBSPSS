@@ -1,0 +1,8 @@
+sharksubchomp
+sharksubdeath
+sharksubidle
+sharksubspit
+sharksubsprintclosed
+sharksubsprintopen
+sharksubswim
+sharksubswipe
