@@ -252,6 +252,18 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 		setCollisionAngle( heading );
 
+		testPos2 = Pos;
+		testPos2.vx += 32;
+
+		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
+
+		if ( yDiff <= sensorDist )
+		{
+			// only use if there is ground present
+
+			testPos2.vy += yDiff;
+		}
+
 		switch ( CGameScene::getCollision()->getCollisionBlock( testPos2.vx, testPos2.vy - 8 ) & COLLISION_TYPE_MASK )
 		{
 			case COLLISION_TYPE_FLAG_DAMAGE:
