@@ -139,6 +139,10 @@
 #include "platform\psbarrel.h"
 #endif
 
+#ifndef __PLATFORM_PJELLFSH_H__
+#include "platform\pjellfsh.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -324,6 +328,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_JELLYFISH_PLATFORM:
+		{
+			platform = new ("jellyfish platform") CNpcJellyfishPlatform;
+			break;
+		}
+
 		default:
 		{
 			ASSERT( 0 );
@@ -482,7 +492,7 @@ void CNpcPlatform::postInit()
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), PLATFORMCOLLISIONHEIGHT);
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, boundingBox.YMin );
 
-	if ( m_type == NPC_LINEAR_PLATFORM )
+	/*if ( m_type == NPC_LINEAR_PLATFORM )
 	{
 		switch( CLevel::getCurrentChapter() )
 		{
@@ -509,7 +519,7 @@ void CNpcPlatform::postInit()
 
 //		CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
 //		T->SetUp(64,4,8,8);
-	}
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

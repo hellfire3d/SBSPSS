@@ -87,6 +87,11 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 				m_attackDist = abs( playerXDist );
 
+				if ( abs( m_attackDist ) < 1 )
+				{
+					m_attackDist = 1;
+				}
+
 				m_controlFunc = NPC_CONTROL_CLOSE;
 				m_extension = 0;
 				m_velocity = 5;
