@@ -2592,6 +2592,13 @@ int		CPlayer::moveVertical(int _moveDistance)
 	// Are we falling?
 	if(_moveDistance>0)
 	{
+		if ( isOnPlatform() )
+		{
+			// must also detect that we have landed on platform
+
+			return( true );
+		}
+
 		int colHeightBefore[2],colHeightAfter[2],blockAfter[2],moveRequired[2];
 		int	i;
 		int	move;
