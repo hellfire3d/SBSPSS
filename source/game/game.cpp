@@ -407,7 +407,7 @@ void	CGameScene::think(int _frames)
 	}
 
 //
-#if defined (__USER_paul__) || defined (__USER_charles__)
+#if defined (__USER_paul__)
 if(PadGetDown(0)&PAD_UP)
 {
 	s_justHitBossArenaTrigger=true;
