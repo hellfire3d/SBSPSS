@@ -559,7 +559,7 @@ void CPlayerProjectile::render()
 		return;
 	}
 
-	SprFrame = m_spriteBank->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,10);
+	SprFrame = m_spriteBank->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
 	setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 }
 
