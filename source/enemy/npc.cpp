@@ -638,6 +638,10 @@ void CNpcEnemy::init()
 	m_isCaught = false;
 	m_isBlowerOn = false;
 	m_speed = m_data[m_type].speed;
+
+	setCollisionSize( 100, 100 );
+
+	updateCollisionArea();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
