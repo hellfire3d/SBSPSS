@@ -131,6 +131,9 @@
 #include <CHAPTER06_LEVEL04_INF.h>
 #include <CHAPTER06_LEVEL05_INF.h>
 
+#ifdef __VERSION_DEBUG__
+int	PretendToBeAPS2=false;
+#endif
 
 /*****************************************************************************/
  sLvlTab	LvlTable[]=
@@ -665,10 +668,18 @@ void	CLevel::shutdown()
 /*****************************************************************************/
 void 	CLevel::render()
 {
-		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
-		{
-			if (TileLayers[i]) TileLayers[i]->render();
-		}
+#ifdef __VERSION_DEBUG__
+// Clever code to make code not so confusing!!
+// Emulate a PS2 by forcing it to run in 50/60 fps...by not drawing much!!
+		VidSetClearScreen(PretendToBeAPS2);
+		if(!PretendToBeAPS2)
+#endif
+// Render Layers
+			for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
+			{
+				if (TileLayers[i]) TileLayers[i]->render();
+			}
+
 
 #ifdef __SHOW_COLLISION__
 		if(CollisionLayer)
