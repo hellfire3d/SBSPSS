@@ -88,7 +88,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 			CProjectile *projectile;
 			projectile = CProjectile::Create();
-			projectile->init( Pos, 1024 );
+			projectile->init( Pos, 1024, CProjectile::PROJECTILE_MINE, CProjectile::PROJECTILE_FINITE_LIFE );
 
 			m_salvoCount--;
 

@@ -46,7 +46,9 @@
 #ifndef	__ENEMY_NPC_H__
 #include "enemy\npc.h"
 #endif
+
 #include "gfx\otpos.h"
+#include "fx\fx.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -347,6 +349,20 @@ void CProjectile::think(int _frames)
 			break;
 		}
 
+		case PROJECTILE_MINE:
+		{
+			s32 moveY = _frames * m_speed;
+
+			s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy + moveY, 16 );
+
+			if ( groundHeight < 0 )
+			{
+				moveY = groundHeight;
+			}
+
+			Pos.vy += moveY;
+		}
+
 		case PROJECTILE_DUMBFIRE:
 		default:
 		{
@@ -371,6 +387,11 @@ void CProjectile::think(int _frames)
 		if ( m_lifetime <= 0 )
 		{
 			setToShutdown();
+
+			if ( m_movementType == PROJECTILE_MINE )
+			{
+				CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+			}
 		}
 	}
 }
@@ -434,6 +455,11 @@ void CProjectile::collidedWith(CThing *_thisThing)
 			if ( m_lifetimeType != PROJECTILE_INFINITE_LIFE )
 			{
 				setToShutdown();
+
+				if ( m_movementType == PROJECTILE_MINE )
+				{
+					CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+				}
 			}
 
 			break;
