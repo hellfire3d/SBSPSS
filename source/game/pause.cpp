@@ -91,7 +91,6 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,TEXT_SPACING*2,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__QUIT,
 										&m_quitGameFlag,true);
-
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,TEXT_SPACING*4,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FLY_MODE,
@@ -100,6 +99,7 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,TEXT_SPACING*5,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BASICUNARMED_MODE,
 										&newmode,PLAYER_MODE_BASICUNARMED);
+/*
 #ifdef __USER_paul__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,TEXT_SPACING*6,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
@@ -118,6 +118,7 @@ void CPauseMenu::init()
 										STR__DEBUG__CORALBLOWER_MODE,
 										&newmode,PLAYER_MODE_CORALBLOWER);
 #endif
+*/
 
 	m_active=false;
 }
