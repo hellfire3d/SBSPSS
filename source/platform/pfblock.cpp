@@ -60,6 +60,13 @@ void CNpcFallingBlockPlatform::processMovement( int _frames )
 			{
 				Pos = m_base;
 				m_isFalling = true;
+
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ANY_OBJECT_FALLING, true );
 			}
 			else
 			{
