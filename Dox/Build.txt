@@ -1,0 +1,48 @@
+To create a build.
+
+
+Use the Art Viewer in the code area.
+While doing build, make sure no-one messes with it.
+
+
+Preperation
+1.	Do a full get
+2.	Ensure that all data is in sync (either deltree graphics dir, or do recurs diff)
+
+Pre-build Check
+1.	Deltree out dir
+2.	create a normal devkit build
+3.	quickly go thru every level, and every aspect to make sure nothing obvious is going to go wrong (asserts, memory, crashes)
+	If anything is wrong, assess the need to correct it. No-one should have left until the build is done, and if they have, hopefully someone else can attend to the problem
+
+Creating build
+1.		Simply run the batchfile, MakeUSA.bat
+		As long as there are no build errors, this will build the project, for CD, and create the 2 CD Images that are needed
+		These Images are put into a folder, in the spongebob dir, called CdBuild
+	
+Sending Build
+1.		Goto spongebob\Cdbuild
+2.		RAR (not zip) up the USA dir AND the CCS file into a archive, called SBSPmmddyy.rar (mmddyy is american date format)
+		I recomend you use maximum compression for this, (I will set this up as default)
+3.		When this is completed, copy this RAR file to the project drive, under deliverables
+
+
+Burning a Build
+This is the fucker, cos the burning software is flakey!! Follow precisely, or you will hang the burner PC (MY PC!!)
+1.		copy the ISO cdbuild to the burn machine
+2.		open the burner draw, and put a blank CD in (DO NOT CLOSE IT AT ALL)
+3.		double click on the ISO file, this will open up EZCD burning software
+4.		Set the number of copies to ONE MORE than you need.
+5.		ensure TRACK AT ONCE is checked.
+6.		click record.
+7.		It will say the is no Cd in the drive, click retry
+
+8.		When the burn is done, place another blank CD in the drawer but DO NOT CLOSE IT
+9.		Click on retry, and repeat from 8 until all copies needed are burnt.
+
+10.		DO NOT CLOSE THE DRAWER YET
+11		Cancel the burn box, and close down EZCD
+12		Wait a bit, then close the drawer.
+
+13		You now have builds on CD, managed to not crash my PC AND worked around some very nasty Win2k Bugs
+		Well done!!
