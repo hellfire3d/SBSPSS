@@ -138,7 +138,7 @@ public:
 	virtual void	shutdown();
 	virtual void	think(int _frames);
 	virtual void	render();
-	virtual void	shove(DVECTOR move);
+	//virtual void	shove(DVECTOR move);
 	virtual void	setHasPlatformCollided( bool newVal );
 	virtual bool	getHasPlatformCollided();
 

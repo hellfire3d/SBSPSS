@@ -136,12 +136,12 @@ void		CThingManager::thinkAllThings(int _frames)
 	{
 		//if ( !thing1->hasChild( thing2 ) )
 		{
-			thing1->removeAllChild();
+			//thing1->removeAllChild();
 
 			if(thing1->canCollide()&&
 			   thing1->checkCollisionAgainst(thing2, _frames))
 			{
-				thing1->addChild( thing2 );
+				//thing1->addChild( thing2 );
 
 				thing1->collidedWith(thing2);
 			}
@@ -729,11 +729,11 @@ void	CThing::processEvent(GAME_EVENT _event,CThing *_sourceThing)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CThing::shove( DVECTOR move )
+/*void	CThing::shove( DVECTOR move )
 {
 	Pos.vx += move.vx;
 	Pos.vy += move.vy;
-}
+}*/
 
 /*===========================================================================
 end */

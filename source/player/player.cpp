@@ -873,7 +873,7 @@ PLAYERINPUT CPlayer::readPadInput()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayer::shove( DVECTOR move )
+/*void CPlayer::shove( DVECTOR move )
 {
 	int		colHeight;
 
@@ -944,7 +944,7 @@ void CPlayer::shove( DVECTOR move )
 		// No obstruction
 		Pos.vy+=move.vy;
 	}
-}
+}*/
 
 void	CPlayer::setPlatform(CThing *_newPlatform)
 {

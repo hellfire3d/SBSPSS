@@ -111,7 +111,7 @@ public:
 	DVECTOR			getPos()						{return Pos;}
 	void			setPos(DVECTOR newPos)			{Pos=newPos;}
 	DVECTOR			getPosDelta()					{return PosDelta;}
-	virtual void	shove(DVECTOR move);
+	//virtual void	shove(DVECTOR move);
 	CThing			*getNext()						{return Next;}
 
 
