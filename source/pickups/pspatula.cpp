@@ -21,6 +21,10 @@
 
 #include "pickups\pspatula.h"
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -127,14 +131,14 @@ void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(FRM__SPATULA);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 
 	if(m_glint<=255)
 	{
 		fh=sprites->getFrameHeader(spat_glintFrames[(m_glint>>spat_glintgrowspeed)&0x07]);
 		x=x+(((spat_gxy2.vx-spat_gxy1.vx)*m_glint)>>8)+spat_gxy1.vx;
 		y=y+(((spat_gxy2.vy-spat_gxy1.vy)*m_glint)>>8)+spat_gxy1.vy;
-		sprites->printRotatedScaledSprite(fh,x,y,4095,4095,m_glintRot,PICKUPS_OT_POS-1);
+		sprites->printRotatedScaledSprite(fh,x,y,4095,4095,m_glintRot,OTPOS__PICKUP_POS-1);
 	}
 }
 

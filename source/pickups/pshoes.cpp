@@ -29,6 +29,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -140,8 +144,8 @@ void	CShoesPickup::renderPickup(DVECTOR *_pos)
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
 	yoff=((msin(m_sin)*shoes_bobscale)>>12);
-	sprites->printFT4(fh,x+shoes_seperation,y+yoff,0,0,PICKUPS_OT_POS);
-	sprites->printFT4(fh,x-shoes_seperation,y-yoff,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x+shoes_seperation,y+yoff,0,0,OTPOS__PICKUP_POS);
+	sprites->printFT4(fh,x-shoes_seperation,y-yoff,0,0,OTPOS__PICKUP_POS);
 }
 
 /*===========================================================================

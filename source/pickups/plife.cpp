@@ -29,6 +29,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -129,7 +133,7 @@ void	CLifePickup::renderPickup(DVECTOR *_pos)
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
 	size=256+((msin(m_sin)*life_pulsescale)>>12);
-	sprites->printFT4Scaled(fh,x,y,0,0,PICKUPS_OT_POS,size);
+	sprites->printFT4Scaled(fh,x,y,0,0,OTPOS__PICKUP_POS,size);
 }
 
 /*===========================================================================

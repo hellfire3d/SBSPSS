@@ -29,6 +29,10 @@
 #include "gfx\prim.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -177,7 +181,7 @@ void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(getFrameNumber());
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 
 	if(m_pingFrame<quest_pingframes)
 	{
@@ -210,7 +214,7 @@ void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
 			setRGB2(g3,endr,endg,endb);
 			setShadeTex(g3,0);
 			setSemiTrans(g3,1);
-			AddPrimToList(g3,PICKUPS_OT_POS+1);
+			AddPrimToList(g3,OTPOS__PICKUP_POS+1);
 			p1=p2;
 		}
 
@@ -220,7 +224,7 @@ void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
 		setSemiTrans(ft3,1);
 		ft3->tpage=(quest_transmode<<5);
 		setXY3(ft3,512,512,512,512,512,512);
-		AddPrimToList(ft3,PICKUPS_OT_POS+1);
+		AddPrimToList(ft3,OTPOS__PICKUP_POS+1);
 	}
 }
 

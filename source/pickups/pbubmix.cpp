@@ -29,6 +29,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -138,7 +142,7 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(FRM__BUBBLEMIXTURE);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2)+((msin(m_sin)*bubmix_bobscale)>>12);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 }
 
 
@@ -211,7 +215,7 @@ void	CBubbleWandPickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(FRM__BUBBLEWAND);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 }
 
 /*===========================================================================

@@ -29,6 +29,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -136,7 +140,7 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 	{
 		angle=0;
 	}
-	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,PICKUPS_OT_POS);
+	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,OTPOS__PICKUP_POS);
 }
 
 /*===========================================================================

@@ -71,7 +71,6 @@ public:
 protected:
 	enum
 	{
-		PICKUPS_OT_POS=15,
 		DEFAULT_VISIBILITY_RADIUS=32,
 	};
 

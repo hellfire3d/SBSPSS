@@ -41,6 +41,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -182,14 +186,14 @@ void	CBalloonPickup::renderPickup(DVECTOR *_pos)
 	xo2=((msin(m_sin)*balloon_scale2)>>12);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x+xo1,y,0,0,PICKUPS_OT_POS);
+	sprites->printFT4(fh,x+xo1,y,0,0,OTPOS__PICKUP_POS);
 setCollisionCentreOffset(xo1,0);
 
 	x=_pos->vx+balloon_stringx;
 	y=_pos->vy+(fh->H/2);
-	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r1,balloon_g1,balloon_b1,PICKUPS_OT_POS);
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r1,balloon_g1,balloon_b1,OTPOS__PICKUP_POS);
 	x++;
-	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r2,balloon_g2,balloon_b2,PICKUPS_OT_POS);
+	DrawLine(x+xo1,y,x+xo2,y+balloon_height,balloon_r2,balloon_g2,balloon_b2,OTPOS__PICKUP_POS);
 }
 
 /*===========================================================================
