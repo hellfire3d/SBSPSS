@@ -306,24 +306,29 @@ void CProjectile::render()
 {
 	CEnemyProjectileThing::render();
 
+	sFrameHdr	*frameHdr;
 	DVECTOR	offset;
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth(FRM_BARNACLEBOY);
-	int		spriteHeight = m_spriteBank->getFrameHeight(FRM_BARNACLEBOY);
+	int		spriteWidth = m_spriteBank->getFrameWidth(FRM__SPIKE);
+	int		spriteHeight = m_spriteBank->getFrameHeight(FRM__SPIKE);
 
 	offset = getScreenOffset();
 
-	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( spriteWidth >> 1 );
-	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( spriteHeight >> 1 );
+	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 ) - ( spriteWidth >> 1 )*/;
+	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 ) - ( spriteHeight >> 1 )*/;
 
 	if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
 	{
 		return;
 	}
 
-	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
+	//m_spriteBank->printFT4(FRM__SPIKE,x,y,0,0,0);
+
+	frameHdr = m_spriteBank->getFrameHeader(FRM__SPIKE);
+
+	m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, 0 );
 }
 
 DVECTOR CProjectile::getScreenOffset()
