@@ -55,6 +55,23 @@
 #include "hazard\hcsaw.h"
 #endif
 
+#ifndef __HAZARD_HMOWER_H__
+#include "hazard\hmower.h"
+#endif
+
+#ifndef __HAZARD_HMASHER_H__
+#include "hazard\hmasher.h"
+#endif
+
+#ifndef __HAZARD_HFAN_H__
+#include "hazard\hfan.h"
+#endif
+
+#ifndef __HAZARD_HSPIKES_H__
+#include "hazard\hspikes.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE_MAX] =
@@ -65,6 +82,10 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_BARREL_HAZARD,
 	NPC_STATIC_HAZARD,
 	NPC_CIRCULAR_SAW_HAZARD,
+	NPC_MOWER_HAZARD,
+	NPC_MASHER_HAZARD,
+	NPC_FAN_HAZARD,
+	NPC_SPIKES_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,6 +131,30 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_CIRCULAR_SAW_HAZARD:
 		{
 			hazard = new ("circular saw hazard") CNpcCircularSawHazard;
+			break;
+		}
+
+		case NPC_MOWER_HAZARD:
+		{
+			hazard = new ("mower hazard") CNpcMowerHazard;
+			break;
+		}
+
+		case NPC_MASHER_HAZARD:
+		{
+			hazard = new ("masher hazard") CNpcMasherHazard;
+			break;
+		}
+
+		case NPC_FAN_HAZARD:
+		{
+			hazard = new ("fan hazard") CNpcFanHazard;
+			break;
+		}
+
+		case NPC_SPIKES_HAZARD:
+		{
+			hazard = new ("spikes hazard") CNpcSpikesHazard;
 			break;
 		}
 

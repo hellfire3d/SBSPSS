@@ -809,11 +809,35 @@ SOURCE=..\..\..\source\hazard\hfalling.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hfan.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfan.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hfirebal.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\hazard\hfirebal.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hmasher.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hmasher.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hmower.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hmower.h
 # End Source File
 # Begin Source File
 
@@ -830,6 +854,14 @@ SOURCE=..\..\..\source\hazard\hsaw.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\hazard\hsaw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hspikes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hspikes.h
 # End Source File
 # Begin Source File
 

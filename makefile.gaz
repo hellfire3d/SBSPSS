@@ -119,7 +119,11 @@ hazard_src :=		hazard \
 					hsaw \
 					hbarrel \
 					hboat \
-					hcsaw
+					hcsaw \
+					hmower \
+					hmasher \
+					hfan \
+					hspikes
 
 fx_src :=			fx \
 
