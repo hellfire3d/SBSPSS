@@ -33,6 +33,7 @@ protected:
 	void				processSpiderCrabInitJumpMovement( int _frames );
 
 	s32					m_attackDist;
+	int					m_jumpDelay;
 
 	enum NPC_SPIDER_CRAB_STATE
 	{
@@ -43,7 +44,7 @@ protected:
 	enum NPC_SPIDER_CRAB_CONSTANTS
 	{
 		SPIDER_CRAB_EXTENSION = 64,
-		SPIDER_CRAB_HEIGHT = 50,
+		SPIDER_CRAB_HEIGHT = 40,
 	};
 };
 

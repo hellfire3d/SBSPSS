@@ -46,6 +46,10 @@ void CNpcSpiderCrabEnemy::postInit()
 
 		m_state = SPIDER_CRAB_INIT_JUMP;
 	}
+	else
+	{
+		m_velocity = m_data[m_type].speed;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +100,8 @@ bool CNpcSpiderCrabEnemy::processSensor()
 				m_extension = 0;
 				m_velocity = 5;
 				m_base = Pos;
+				m_jumpDelay = GameState::getOneSecondInFrames() >> 1;
+				m_animPlaying = false;
 
 				// sound
 
@@ -120,90 +126,97 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 void CNpcSpiderCrabEnemy::processClose( int _frames )
 {
-	s32 velocity;
-	DVECTOR newPos = Pos;
-
-	if ( m_animNo != ANIM_SPIDERCRAB_JUMP )
+	if ( m_jumpDelay > 0 )
 	{
-		m_animPlaying = true;
-		m_animNo = ANIM_SPIDERCRAB_JUMP;
-		m_frame = 0;
-	}
-
-	velocity = m_velocity * _frames;
-
-	if ( m_extendDir == EXTEND_RIGHT )
-	{
-		m_extension += velocity;
-		m_heading = 0;
+		m_jumpDelay -= _frames;
 	}
 	else
 	{
-		m_extension -= velocity;
-		m_heading = 2048;
-	}
+		s32 velocity;
+		DVECTOR newPos = Pos;
 
-	bool completed = false;
+		if ( m_animNo != ANIM_SPIDERCRAB_JUMP )
+		{
+			m_animPlaying = true;
+			m_animNo = ANIM_SPIDERCRAB_JUMP;
+			m_frame = 0;
+		}
 
-	if ( m_extension > m_attackDist )
-	{
-		m_extension = m_attackDist;
-		completed = true;
-	}
-	else if ( m_extension < -m_attackDist )
-	{
-		m_extension = -m_attackDist;
-		completed = true;
-	}
+		velocity = ( m_velocity * _frames ) >> 1;
 
-	newPos.vx = m_base.vx + m_extension;
-	newPos.vy = m_base.vy - ( ( SPIDER_CRAB_HEIGHT * rsin( abs( ( m_extension << 11 ) / m_attackDist ) ) ) >> 12 );
+		if ( m_extendDir == EXTEND_RIGHT )
+		{
+			m_extension += velocity;
+			m_heading = 0;
+		}
+		else
+		{
+			m_extension -= velocity;
+			m_heading = 2048;
+		}
 
-	s32 minX, maxX;
+		bool completed = false;
 
-	m_npcPath.getPathXExtents( &minX, &maxX );
+		if ( m_extension > m_attackDist )
+		{
+			m_extension = m_attackDist;
+			completed = true;
+		}
+		else if ( m_extension < -m_attackDist )
+		{
+			m_extension = -m_attackDist;
+			completed = true;
+		}
 
-	if ( newPos.vx < minX )
-	{
-		newPos.vx = minX;
-	}
-	else if ( newPos.vx > maxX )
-	{
-		newPos.vx = maxX;
-	}
+		newPos.vx = m_base.vx + m_extension;
+		newPos.vy = m_base.vy - ( ( SPIDER_CRAB_HEIGHT * rsin( abs( ( m_extension << 11 ) / m_attackDist ) ) ) >> 12 );
 
-	// check for collision with ground
+		s32 minX, maxX;
 
-	s16 extensionDist = abs( newPos.vy - ( m_base.vy - SPIDER_CRAB_HEIGHT ) );
-	s16 groundHeight = CGameScene::getCollision()->getHeightFromGround( newPos.vx, m_base.vy - SPIDER_CRAB_HEIGHT, extensionDist );
+		m_npcPath.getPathXExtents( &minX, &maxX );
 
-	if ( groundHeight < extensionDist )
-	{
-		// abort jump
+		if ( newPos.vx < minX )
+		{
+			newPos.vx = minX;
+		}
+		else if ( newPos.vx > maxX )
+		{
+			newPos.vx = maxX;
+		}
 
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_timerFunc = NPC_TIMER_ATTACK_DONE;
-		m_timerTimer = GameState::getOneSecondInFrames();
-		m_sensorFunc = NPC_SENSOR_NONE;
+		// check for collision with ground
 
-		m_extension = 0;
-		completed = false;
-		Pos = newPos;
-		Pos.vy = m_base.vy - SPIDER_CRAB_HEIGHT + groundHeight;
-	}
-	else
-	{
-		Pos = newPos;
-	}
+		s16 extensionDist = abs( newPos.vy - ( m_base.vy - SPIDER_CRAB_HEIGHT ) );
+		s16 groundHeight = CGameScene::getCollision()->getHeightFromGround( newPos.vx, m_base.vy - SPIDER_CRAB_HEIGHT, extensionDist );
 
-	if ( completed )
-	{
-		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_timerFunc = NPC_TIMER_ATTACK_DONE;
-		m_timerTimer = GameState::getOneSecondInFrames();
-		m_sensorFunc = NPC_SENSOR_NONE;
+		if ( groundHeight < extensionDist )
+		{
+			// abort jump
 
-		m_extension = 0;
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+
+			m_extension = 0;
+			completed = false;
+			Pos = newPos;
+			Pos.vy = m_base.vy - SPIDER_CRAB_HEIGHT + groundHeight;
+		}
+		else
+		{
+			Pos = newPos;
+		}
+
+		if ( completed )
+		{
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_timerFunc = NPC_TIMER_ATTACK_DONE;
+			m_timerTimer = GameState::getOneSecondInFrames();
+			m_sensorFunc = NPC_SENSOR_NONE;
+
+			m_extension = 0;
+		}
 	}
 }
 
@@ -290,6 +303,7 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 	if ( m_extension > 64 )
 	{
 		m_state = SPIDER_CRAB_DEFAULT;
+		m_velocity = m_data[m_type].speed;
 	}
 }
 
@@ -324,6 +338,8 @@ void CNpcSpiderCrabEnemy::processMovement(int _frames)
 
 void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
+	int groundDist;
+
 	Pos.vx += distX;
 	Pos.vy += distY;
 
@@ -335,8 +351,25 @@ void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	testPos1.vy += CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 12 );
+
+	if ( abs( groundDist ) > 12 )
+	{
+		m_drawRotation = 0;
+		return;
+	}
+
+	testPos1.vy += groundDist;
+
+	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 12 );
+
+	if ( abs( groundDist ) > 12 )
+	{
+		m_drawRotation = 0;
+		return;
+	}
+
+	testPos2.vy += groundDist;
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;
