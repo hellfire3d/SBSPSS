@@ -241,7 +241,7 @@ SYSTEM_DBGMSG("[FMV] Number of frames is %d",AniNoFrames);
 
 		disp.screen.x = VidGetXOfs();
 		disp.screen.y = YOfs+VidGetYOfs();
-		disp.screen.h = FMVHeight;
+		disp.screen.h = FMVHeight-1; // update for PAL, to stop last row corruption, may work!!
 		PutDispEnv(&disp);
 		PutDrawEnv(&draw);
 		SetDispMask(1);
