@@ -20,6 +20,8 @@
 
 class CNpcSquidwardFriend : public CNpcFriend
 {
+public:
+	virtual void		think(int _frames);
 };
 
 #endif

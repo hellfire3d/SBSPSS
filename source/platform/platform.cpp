@@ -698,7 +698,10 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 				{
 					player->setPlatform( this );
 
-					m_contact = true;
+					if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
+					{
+						m_contact = true;
+					}
 				}
 			}
 

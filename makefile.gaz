@@ -83,7 +83,8 @@ enemy_src :=		npc \
 
 friend_src :=		friend \
 					fdata \
-					fgary
+					fgary \
+					fsquid
 
 platform_src :=		platform \
 					platdata \

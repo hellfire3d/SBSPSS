@@ -83,10 +83,27 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 	if ( m_contact )
 	{
-		if ( ( m_reversed && newAngle < -256 ) || newAngle > 256 )
-		{
+		//if ( ( m_reversed && newAngle < -256 ) || newAngle > 256 )
+		//{
 			// flick player upwards
-			GameScene.getPlayer()->springPlayerUp();
+			//GameScene.getPlayer()->springPlayerUp();
+		//}
+
+		CPlayer *player = GameScene.getPlayer();
+
+		if ( m_reversed )
+		{
+			if ( m_angularVelocity > 20 && newAngle < -64 )
+			{
+				player->springPlayerUp();
+			}
+		}
+		else
+		{
+			if ( m_angularVelocity < -20 && newAngle > 64 )
+			{
+				player->springPlayerUp();
+			}
 		}
 
 		s16 angularForce = 3 * _frames;
@@ -99,7 +116,7 @@ void CNpcBranchPlatform::processMovement( int _frames )
 		m_angularVelocity += angularForce;
 	}
 
-	s32 resistance = -( 10 * newAngle ) >> 8;
+	s32 resistance = -( 5 * _frames * newAngle ) >> 8;
 
 	if ( newAngle > 0 && resistance > -2 )
 	{
@@ -119,6 +136,15 @@ void CNpcBranchPlatform::processMovement( int _frames )
 	if ( m_angularVelocity )
 	{
 		m_angularVelocity += -m_angularVelocity / abs( m_angularVelocity );
+
+		if ( m_angularVelocity > 40 )
+		{
+			m_angularVelocity = 40;
+		}
+		else if ( m_angularVelocity < -40 )
+		{
+			m_angularVelocity = -40;
+		}
 	}
 
 	/*if ( newAngle > 320 )

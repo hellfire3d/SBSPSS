@@ -441,6 +441,10 @@ SOURCE=..\..\..\source\friend\fsandy.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\friend\fsquid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\friend\fsquid.h
 # End Source File
 # End Group
