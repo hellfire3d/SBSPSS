@@ -53,7 +53,7 @@ private:
 		// Bubble style
 		FADE_BORDER_SIZE=80,
 		FADE_SMOOTH_BORDER_SIZE=60,
-		BUBBLES_PER_FRAME=30,
+		BUBBLES_PER_FRAME=15,
 
 		// Both styles
 		FADE_SPEED=3,

@@ -76,7 +76,7 @@ BubicleEmitterData	s_fadeBubicleSpawner=
 		10,							// m_life
 		0,0,0,						// m_vx,m_vdx,m_vxmax
 		-200,0,0,					// m_vy,m_vdy,m_vymax
-		18,12,						// m_w,m_h
+		27,18,						// m_w,m_h
 		0,							// m_dvSizeChange
 		0,0,						// m_theta,m_vtheta
 		0,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
@@ -88,7 +88,7 @@ BubicleEmitterData	s_fadeBubicleSpawner=
 		10,							// m_life
 		0,0,0,						// m_vx,m_vdx,m_vxmax
 		50,0,0,						// m_vy,m_vdy,m_vymax
-		3,3,						// m_w,m_h
+		4,4,						// m_w,m_h
 		0,							// m_dvSizeChange
 		0,100,						// m_theta,m_vtheta
 		10,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
