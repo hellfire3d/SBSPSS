@@ -44,7 +44,7 @@ bool CNpcBabyOctopusEnemy::processSensor()
 
 		default:
 			{
-				if ( playerXDistSqr + playerYDistSqr < 4000 )
+				if ( playerXDistSqr + playerYDistSqr < 3200 )
 				{
 					m_controlFunc = NPC_CONTROL_CLOSE;
 
