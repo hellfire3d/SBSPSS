@@ -185,13 +185,13 @@ void	CPlayer::init()
 	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
 
 
-#ifdef __USER_paul__
+//!!#ifdef __USER_paul__
 	m_respawnPos.vx=23*16;
 	m_respawnPos.vy=10*16;
-#else
-	m_respawnPos.vx=10;
-	m_respawnPos.vy=10;
-#endif
+//!!#else
+//!!	m_respawnPos.vx=10;
+//!!	m_respawnPos.vy=10;
+//!!#endif
 
 
 m_animNo=0;
@@ -264,7 +264,7 @@ if(newmode!=-1)
 	setMode((PLAYER_MODE)newmode);
 	newmode=-1;
 }
-
+/*!!
 #ifndef __USER_paul__
 	int	padInput=PadGetHeld(0);
 	int	move=7*_frames;
@@ -279,6 +279,8 @@ if(newmode!=-1)
 		GameScene.sendEvent( USER_REQUEST_TALK_EVENT, this );
 	}
 #else
+*/
+#if	1
 	if(_frames>=3)_frames=2;
 
 	for(i=0;i<_frames;i++)
