@@ -42,7 +42,7 @@ sRGBData	ThisRGB;
 			int	Idx=GetTexIdx(NewTex);	// Is already loaded?
 			if (Idx!=-1) return(Idx);
 
-			TRACE1("Loading Texture %s\n",NewTex.Filename);
+//			TRACE1("Loading Texture %s\n",NewTex.Filename);
 			LoadBMP(NewTex.Filename,ThisRGB);
 			RGBData=&ThisRGB;
 			LoadTex(NewTex,RGBData);

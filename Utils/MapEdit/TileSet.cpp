@@ -79,7 +79,7 @@ GString	FilePath;
 
 				File->Read(Filename,256+64);
 				AddTileSet(Filename);
-				TRACE1("%s\n",Filename);
+//				TRACE1("%s\n",Filename);
 			}
 		}
 		else
