@@ -178,7 +178,6 @@ DVECTOR	CQuestItemPickup::getSizeForPlacement()
   ---------------------------------------------------------------------- */
 void	CQuestItemPickup::collect(class CPlayer *_player)
 {
-	_player->setCanExitLevelNow();
 	CBasePickup::collect(_player);
 }
 
@@ -198,6 +197,7 @@ void	CQuestItemPickup::collidedWith(CThing *_thisThing)
 //				collect((CPlayer*)_thisThing);
 				CSoundMediator::playSfx(sfxToPlayWhenCollected());
 				m_collected=true;
+				((CPlayer*)_thisThing)->setCanExitLevelNow();
 				break;
 
 			case TYPE_NPC:
