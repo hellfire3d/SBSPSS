@@ -58,6 +58,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -249,6 +253,14 @@ void CFrontEndOptions::init()
 
 
 	// Populate SCREEN menu
+	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
+										 X_BORDER,Y_BORDER,412-(X_BORDER*2),35,
+										 STR__FRONTEND__HORIZONTAL_POSITION,
+										 &m_screenXOff,0,64);
+	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
+										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),35,
+										 STR__FRONTEND__VERTICAL_POSITION,
+										 &m_screenYOff,0,32);
 
 
 	// Populate SOUND menu
@@ -278,6 +290,8 @@ void CFrontEndOptions::init()
 	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::SFX);
 	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::SPEECH);
 	m_controlStyle=CPadConfig::getConfig();
+	m_screenXOff=VidGetXOfs();
+	m_screenYOff=VidGetYOfs();
 }
 
 /*----------------------------------------------------------------------
@@ -394,6 +408,10 @@ void CFrontEndOptions::think(int _frames)
 				CSoundMediator::setVolume(CSoundMediator::SPEECH,m_speechVolume);
 				PAUL_DBGMSG("SPEECH");
 			}
+		}
+		else if(m_mode==MODE__SCREEN)
+		{
+			VidSetXYOfs(m_screenXOff,m_screenYOff);
 		}
 	}
 
