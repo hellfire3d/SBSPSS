@@ -326,6 +326,8 @@ private:
 public:
 	void			setPlatform( CThing *newPlatform );
 	void			clearPlatform();
+	int				xHighRes;
+	int				yHighRes;
 private:
 	CThing			*m_platform;
 	bool			m_onPlatform;

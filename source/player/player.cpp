@@ -219,6 +219,9 @@ m_animFrame=0;
 
 	m_lives=CGameSlotManager::getSlotData().m_lives;
 
+	xHighRes = 0;
+	yHighRes = 0;
+
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
 	m_cameraScrollDir=0;
@@ -1459,7 +1462,21 @@ void CPlayer::setPlatform( CThing *newPlatform )
   ---------------------------------------------------------------------- */
 void CPlayer::shove( DVECTOR move )
 {
-	int colHeight = m_layerCollision->getHeightFromGround( Pos.vx + move.vx, Pos.vy + move.vy, 1 );
+	DVECTOR newPos;
+
+	/*xHighRes += move.vx % 4096;
+	yHighRes += move.vy % 4096;
+
+	newPos.vx = Pos.vx + ( move.vx >> 12 ) + ( xHighRes >> 12 );
+	newPos.vy = Pos.vy + ( move.vy >> 12 ) + ( yHighRes >> 12 );
+
+	xHighRes %= 4096;
+	yHighRes %= 4096;*/
+
+	newPos.vx = Pos.vx + move.vx;
+	newPos.vy = Pos.vy + move.vy;
+
+	int colHeight = m_layerCollision->getHeightFromGround( newPos.vx, newPos.vy, 1 );
 
 	if( colHeight < 0 )
 	{
@@ -1469,8 +1486,8 @@ void CPlayer::shove( DVECTOR move )
 	}
 	else
 	{
-		Pos.vx += move.vx;
-		Pos.vy += move.vy;
+		Pos.vx = newPos.vx;
+		Pos.vy = newPos.vy;
 	}
 }
 
