@@ -253,6 +253,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 						}
 
 						m_pauseTimer -= _frames;
+
+						if ( m_soundId == NOT_PLAYING )
+						{
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_ATTACK, true );
+						}
 					}
 				}
 				else
@@ -261,6 +266,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 					m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 					m_renderScale += ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
+
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_NAUTILUS_ATTACK, true );
+					}
 				}
 			}
 			else
@@ -298,6 +308,22 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				{
 					processGenericGotoTarget( _frames, distX, distY, m_speed );
 				}
+
+				if ( m_movementTimer > 0 )
+				{
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+					}
+				}
+				else
+				{
+					if ( m_soundId != NOT_PLAYING )
+					{
+						CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+						m_soundId = NOT_PLAYING;
+					}
+				}
 			}
 
 			break;
@@ -318,6 +344,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			{
 				m_state = MOTHER_JELLYFISH_CIRCLE;
 				m_extension = 0;
+			}
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
 			}
 
 			break;
@@ -341,6 +372,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				m_state = MOTHER_JELLYFISH_EXIT;
 			}
 
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+			}
+
 			break;
 		}
 
@@ -355,6 +391,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				m_isActive = false;
 				setToShutdown();
 				CGameScene::setBossHasBeenKilled();
+			}
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
 			}
 
 			break;
@@ -384,6 +425,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				processGenericGotoTarget( _frames, distX, distY, m_speed );
 			}
 
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+			}
+
 			break;
 		}
 
@@ -396,6 +442,11 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			else
 			{
 				m_RGB = MJ_PINK;
+			}
+
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_ATTACK, true );
 			}
 
 			s32 distX, distY;
