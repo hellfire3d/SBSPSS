@@ -26,12 +26,12 @@ GetHit
 CrouchDown
 CrouchUp
 LookUp
-#IdleFaceUpSideDown
-#IdleBandAid
-#IdleInHat
-#IdleMature
-#IdleMoustache
-#IdleNoFace
-#IdleNet
-#IdleZorro
+IdleFaceUpSideDown
+IdleBandAid
+# IdleInHat
+IdleMature
+IdleMoustache
+IdleNoFace
+# IdleNet
+IdleZorro
 Celebrate
