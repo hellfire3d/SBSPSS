@@ -590,7 +590,6 @@ void CNpcEnemy::init()
 	{
 		m_actorGfx=CActorPool::GetActor((FileEquate)m_data[m_type].skelType);
 		m_spriteBank=0;
-
 	}
 	else
 	{
@@ -639,8 +638,6 @@ void CNpcEnemy::init()
 	m_isCaught = false;
 	m_isBlowerOn = false;
 	m_speed = m_data[m_type].speed;
-
-	setCollisionSize( 100, 100 );
 
 	updateCollisionArea();
 }
@@ -746,6 +743,13 @@ void CNpcEnemy::processGraphicFlipping()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+s32 CNpcEnemy::getFrameShift( int _frames )
+{
+	return( ( _frames << 8 ) >> 1 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::think(int _frames)
 {
 	int moveFrames = _frames;
@@ -777,7 +781,7 @@ void CNpcEnemy::think(int _frames)
 
 				frameCount = getFrameCount();
 
-				s32 frameShift = ( moveFrames << 8 ) >> 1;
+				s32 frameShift = getFrameShift( moveFrames );
 
 				if ( ( frameCount << 8 ) - m_frame > frameShift )
 				{

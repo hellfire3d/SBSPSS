@@ -92,3 +92,10 @@ void CNpcSquidDartEnemy::fireAsProjectile( s16 heading )
 	projectile->setHasRGB( true );
 	projectile->setRGB( 255, 128, 255 );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcSquidDartEnemy::getFrameShift( int _frames )
+{
+	return( ( _frames << 8 ) >> 2 );
+}

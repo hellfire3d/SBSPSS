@@ -254,6 +254,7 @@ protected:
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual void		processUserCollision( CThing *thisThing );
+	virtual s32			getFrameShift( int _frames );
 
 	void				reinit();
 
