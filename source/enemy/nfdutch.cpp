@@ -202,6 +202,23 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 		m_extendDir = EXTEND_UP;
 	}
 
+	CPlayer *player = GameScene.getPlayer();
+
+	DVECTOR const &playerPos = player->getPos();
+
+	s32 minX, maxX;
+	m_npcPath.getPathXExtents( &minX, &maxX );
+
+	if ( playerPos.vx < minX || playerPos.vx > maxX ||
+			playerPos.vy < m_minY || playerPos.vy > m_maxY )
+	{
+		if ( m_state != FLYING_DUTCHMAN_RETURN )
+		{
+			m_state = FLYING_DUTCHMAN_RETURN;
+			m_timerTimer = 2 * GameState::getOneSecondInFrames();
+		}
+	}
+
 	if ( !m_inRange )
 	{
 		if ( playerYDistSqr > 100 )
