@@ -398,7 +398,8 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_UP,				// PAD_CFG_UP
 		PAD_DOWN,			// PAD_CFG_DOWN
 
-		PAD_CROSS,			// PAD_CFG_ACTION
+		PAD_CROSS,			// PAD_CFG_FIRE
+		PAD_TRIANGLE,		// PAD_CFG_CATCH
 		PAD_SQUARE,			// PAD_CFG_JUMP
 	}},
 	// Config B
@@ -409,7 +410,8 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_UP,				// PAD_CFG_UP
 		PAD_DOWN,			// PAD_CFG_DOWN
 
-		PAD_SQUARE,			// PAD_CFG_ACTION
+		PAD_SQUARE,			// PAD_CFG_FIRE
+		PAD_TRIANGLE,		// PAD_CFG_CATCH
 		PAD_CROSS,			// PAD_CFG_JUMP
 	}},
 	// Config C
@@ -420,7 +422,8 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_UP,				// PAD_CFG_UP
 		PAD_DOWN,			// PAD_CFG_DOWN
 
-		PAD_CIRCLE,			// PAD_CFG_ACTION
+		PAD_CIRCLE,			// PAD_CFG_FIRE
+		PAD_CROSS,			// PAD_CFG_CATCH
 		PAD_TRIANGLE,		// PAD_CFG_JUMP
 	}},
 	// Config D
@@ -431,7 +434,8 @@ CPadConfig::sPadConfigTable	CPadConfig::s_padConfigs[NUM_PAD_CONFIGS]=
 		PAD_TRIANGLE,		// PAD_CFG_UP
 		PAD_CROSS,			// PAD_CFG_DOWN
 
-		PAD_LEFT,			// PAD_CFG_ACTION
+		PAD_LEFT,			// PAD_CFG_FIRE
+		PAD_UP,				// PAD_CFG_CATCH
 		PAD_DOWN,			// PAD_CFG_JUMP
 	}},
 };

@@ -92,7 +92,7 @@ void	CPlayerModeJellyLauncher::think()
 	switch(m_firingState)
 	{
 		case FIRING_STATE__NONE:
-			if(getPadInputDown()&PI_ACTION&&m_player->getJellyAmmo()&&canFireFromThisState())
+			if(getPadInputDown()&PI_FIRE&&m_player->getJellyAmmo()&&canFireFromThisState())
 			{
 				m_firingFrame=0;
 				m_firingTime=0;
@@ -100,7 +100,7 @@ void	CPlayerModeJellyLauncher::think()
 			}
 			break;
 		case FIRING_STATE__POWERINGUP:
-			if(getPadInputHeld()&PI_ACTION)
+			if(getPadInputHeld()&PI_FIRE)
 			{
 				int	fc,frame;
 				if(m_firingTime<TIMEOUT_FOR_BIG_SHOT)

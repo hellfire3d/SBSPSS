@@ -79,7 +79,7 @@ void	CPlayerModeChop::think()
 	CPlayerModeBase::think();
 
 	// Start to chop?
-	if(!m_chopping&&getPadInputDown()&PI_ACTION&&canAttackFromThisState())
+	if(!m_chopping&&getPadInputDown()&PI_FIRE&&canAttackFromThisState())
 	{
 		m_chopFrame=0;
 		getPlayerCollisionSize(&m_savedCSX,&m_savedCSY,&m_savedCSW,&m_savedCSH);

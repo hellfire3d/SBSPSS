@@ -108,7 +108,7 @@ void	CPlayerModeNet::think()
 	CPlayerModeBase::think();
 
 	// Start to net?
-	if(!m_netting&&getPadInputDown()&PI_ACTION&&canSwingNetFromThisState())
+	if(!m_netting&&getPadInputDown()&PI_FIRE&&canSwingNetFromThisState())
 	{
 		m_netFrame=0;
 		m_netting=true;

@@ -158,14 +158,14 @@ void	CPlayerModeCoralBlower::think()
 	switch(m_blowerState)
 	{
 		case BLOWER_STATE__EMPTY:
-			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
+			if(getPadInputDown()&PI_FIRE&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__SUCKING;
 				m_enemy=NULL;
 			}
 			break;
 		case BLOWER_STATE__SUCKING:
-			if(!(getPadInputHeld()&PI_ACTION&&getState()==STATE_IDLE))
+			if(!(getPadInputHeld()&PI_FIRE&&getState()==STATE_IDLE))
 			{
 				m_blowerState=BLOWER_STATE__EMPTY;
 			}
@@ -225,7 +225,7 @@ void	CPlayerModeCoralBlower::think()
 			}
 			break;
 		case BLOWER_STATE__FULL:
-			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
+			if(getPadInputDown()&PI_FIRE&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__AIMING;
 			}
@@ -235,7 +235,7 @@ void	CPlayerModeCoralBlower::think()
 			{
 				m_blowerState=BLOWER_STATE__FULL;
 			}
-			else if(!(getPadInputHeld()&PI_ACTION))
+			else if(!(getPadInputHeld()&PI_FIRE))
 			{
 				// Fire!
 				m_blowerState=BLOWER_STATE__EMPTY;

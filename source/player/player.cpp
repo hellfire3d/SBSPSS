@@ -1545,9 +1545,13 @@ PLAYERINPUT CPlayer::readPadInput()
 	{
 		input=(PLAYERINPUT)(input|PI_JUMP);
 	}
-	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_FIRE))
 	{
-		input=(PLAYERINPUT)(input|PI_ACTION);
+		input=(PLAYERINPUT)(input|PI_FIRE);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_CATCH))
+	{
+		input=(PLAYERINPUT)(input|PI_CATCH);
 	}
 
 

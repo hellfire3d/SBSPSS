@@ -130,7 +130,8 @@ typedef enum
 	PI_LEFT			=1<<2,
 	PI_RIGHT		=1<<3,
 	PI_JUMP			=1<<4,
-	PI_ACTION		=1<<5,
+	PI_FIRE			=1<<5,
+	PI_CATCH		=1<<6,
 }PLAYERINPUT;
 
 

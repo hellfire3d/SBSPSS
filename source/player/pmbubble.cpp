@@ -99,7 +99,7 @@ void	CPlayerModeBubbleMixture::think()
 	else
 	{
 		// Start to blow?
-		if(!m_blowing&&getPadInputDown()&PI_ACTION&&canBlowBubbleFromThisState()&&m_player->getBubbleAmmo())
+		if(!m_blowing&&getPadInputDown()&PI_FIRE&&canBlowBubbleFromThisState()&&m_player->getBubbleAmmo())
 		{
 			// Spawn the bubbly platform thingy..!
 			CNpcPlayerBubblePlatform	*bubble;

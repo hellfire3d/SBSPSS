@@ -530,7 +530,7 @@ void CConversation::thinkQuestion()
 
 		if(s_currentQuestion==QUESTION_YES_NO)
 		{
-			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_FIRE))
 			{
 				s_currentAnswer=s_currentSelectedAnswer==0?ANSWER_YES:ANSWER_NO;
 				s_currentQuestion=QUESTION_NONE;
@@ -542,7 +542,7 @@ void CConversation::thinkQuestion()
 		}
 		else if(s_currentQuestion==QUESTION_OK)
 		{
-			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+			if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_FIRE))
 			{
 				s_currentAnswer=ANSWER_OK;
 				s_currentQuestion=QUESTION_NONE;

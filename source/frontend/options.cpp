@@ -115,7 +115,8 @@ int CFrontEndOptions::s_buttonOrder[]=
 	CPadConfig::PAD_CFG_LEFT,
 	CPadConfig::PAD_CFG_RIGHT,
 	CPadConfig::PAD_CFG_JUMP,
-	CPadConfig::PAD_CFG_ACTION,
+	CPadConfig::PAD_CFG_FIRE,
+	CPadConfig::PAD_CFG_CATCH,
 };
 
 CGUISpriteReadout::SpriteReadoutData	CFrontEndOptions::s_controlReadoutSprites[]=
@@ -302,12 +303,21 @@ void CFrontEndOptions::init()
 		sr=new ("spritereadout") CGUISpriteReadout();
 		sr->init(fr);
 		sr->setObjectXYWH(146,15,26,15);
-		sr->setReadoutTarget(&m_controlIcons[CONTROL_ACTION]);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_FIRE]);
 		sr->setReadoutData(s_controlReadoutSprites);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
 		tb->setObjectXYWH(146+26,15,120,15);
-		tb->setText(STR__FRONTEND__ACTION);
+		tb->setText(STR__FRONTEND__FIRE);
+		sr=new ("spritereadout") CGUISpriteReadout();
+		sr->init(fr);
+		sr->setObjectXYWH(146,30,26,15);
+		sr->setReadoutTarget(&m_controlIcons[CONTROL_CATCH]);
+		sr->setReadoutData(s_controlReadoutSprites);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(146+26,30,120,15);
+		tb->setText(STR__FRONTEND__CATCH);
 
 
 	// Populate SCREEN menu
