@@ -82,7 +82,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __USER_PAUL__
+#ifdef __USER_paul__
 #include "memcard\memcard.h"
 #include "memcard\saveload.h"
 CSaveLoadDatabase	*sl;
@@ -112,7 +112,7 @@ void CFrontEndCredits::shutdown()
 static u8 *s_image;
 void CFrontEndCredits::select()
 {
-#ifdef __USER_PAUL__
+#ifdef __USER_paul__
 MemCard::Start();
 sl=new ("sldb") CSaveLoadDatabase();
 mode=mode_none;
@@ -132,7 +132,7 @@ mode=mode_none;
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::unselect()
 {
-#ifdef __USER_PAUL__
+#ifdef __USER_paul__
 MemCard::Stop();
 delete sl;	
 #endif
@@ -158,7 +158,7 @@ void CFrontEndCredits::render()
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::think(int _frames)
 {
-#ifdef __USER_PAUL__
+#ifdef __USER_paul__
 sl->think();
 if(mode==mode_none)
 {
