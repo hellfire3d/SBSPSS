@@ -44,7 +44,7 @@ bool CNpcBabyOctopusEnemy::processSensor()
 
 		default:
 			{
-				if ( playerXDistSqr + playerYDistSqr < 400 )
+				if ( playerXDistSqr + playerYDistSqr < 4000 )
 				{
 					m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -183,5 +183,10 @@ void CNpcBabyOctopusEnemy::processClose( int _frames )
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
 		m_timerTimer = GameState::getOneSecondInFrames();
 		m_sensorFunc = NPC_SENSOR_NONE;
+	}
+
+	if ( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_NAUTILUS_ATTACK, true );
 	}
 }

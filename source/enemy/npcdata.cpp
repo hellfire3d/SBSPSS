@@ -291,7 +291,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_FISH_FOLK_MOVE_1,
 		false,
 	},
 
@@ -655,7 +655,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_NAUTILUS_MOVE,
 		true,
 	},
 
