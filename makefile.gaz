@@ -156,19 +156,14 @@ pickups_src :=		pickup \
 player_src :=		demoplay \
 					panimsfx \
 					player \
-					psballoon \
+					pmodes \
+					pmfly \
 					psbutt \
-					pschop \
-					psdead \
 					psduck \
 					psfall \
-					psfly \
 					psidle \
 					psjump \
-					psrun \
-					pstates \
-					modelist \
-					pmballoon
+					psrun
 
 script_src :=		script \
 					function

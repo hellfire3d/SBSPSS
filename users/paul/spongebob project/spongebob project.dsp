@@ -762,34 +762,9 @@ SOURCE=..\..\..\source\pickups\pspatula.h
 # Begin Group "modes"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\player\modelist.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmballoon.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmballoon.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pmodes.h
-# End Source File
-# End Group
 # Begin Group "states"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psballoon.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psballoon.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psbutt.cpp
@@ -797,22 +772,6 @@ SOURCE=..\..\..\source\player\psbutt.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psbutt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pschop.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\pschop.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psdead.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psdead.h
 # End Source File
 # Begin Source File
 
@@ -829,14 +788,6 @@ SOURCE=..\..\..\source\player\psfall.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psfall.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psfly.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\psfly.h
 # End Source File
 # Begin Source File
 
@@ -864,11 +815,24 @@ SOURCE=..\..\..\source\player\psrun.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\player\pstates.cpp
+SOURCE=..\..\..\source\player\pstates.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmfly.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\player\pstates.h
+SOURCE=..\..\..\source\player\pmfly.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmodes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmodes.h
 # End Source File
 # End Group
 # Begin Source File
