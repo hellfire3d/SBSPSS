@@ -925,6 +925,22 @@ SOURCE=..\..\..\source\hazard\hrrock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hrweight.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hrweight.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hrwheel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hrwheel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hsaw.cpp
 # End Source File
 # Begin Source File

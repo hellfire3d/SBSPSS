@@ -62,6 +62,7 @@ public:
 
 	static CThing*	checkCollisionAreaAgainstThings(CRECT *_area,int _type,int _continue);
 	static void		initCollision();
+	static void		matchWheelsAndWeights();
 
 	static sBBox	&getRenderBBox()			{return(m_RenderBBox);}
 	static sBBox	&getThinkBBox()				{return(m_ThinkBBox);}

@@ -95,6 +95,14 @@
 #include "hazard\hflytrap.h"
 #endif
 
+#ifndef __HAZARD_HRWEIGHT_H__
+#include "hazard\hrweight.h"
+#endif
+
+#ifndef __HAZARD_HRWHEEL_H__
+#include "hazard\hrwheel.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -116,6 +124,8 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_FIREBALL_HAZARD,
 	NPC_ROLLING_ROCK_HAZARD,
 	NPC_FLY_TRAP_HAZARD,
+	NPC_RISING_WEIGHT_HAZARD,
+	NPC_RISING_WEIGHT_WHEEL_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,6 +234,18 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 			break;
 		}
 
+		case NPC_RISING_WEIGHT_HAZARD:
+		{
+			hazard = new ("rising weight hazard") CNpcRisingWeightHazard;
+			break;
+		}
+
+		case NPC_RISING_WEIGHT_WHEEL_HAZARD:
+		{
+			hazard = new ("rising weight wheel hazard") CNpcRisingWeightWheelHazard;
+			break;
+		}
+
 		default:
 		{
 			hazard = NULL;
@@ -233,6 +255,7 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 
 	ASSERT( hazard );
 
+	hazard->setType( hazardType );
 	hazard->init();
 	hazard->setWaypoints( ThisHazard );
 	hazard->setGraphic( ThisHazard );

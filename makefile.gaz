@@ -141,7 +141,9 @@ hazard_src :=		hazard \
 					hdbarrel \
 					hbbarrel \
 					hrrock \
-					hflytrap
+					hflytrap \
+					hrweight \
+					hrwheel
 
 fx_src :=			fx \
 					fxtrail \

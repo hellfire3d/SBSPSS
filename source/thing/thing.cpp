@@ -31,6 +31,18 @@
 
 #include "level\level.h"
 
+#ifndef __HAZARD_HAZARD_H__
+#include "hazard\hazard.h"
+#endif
+
+#ifndef __HAZARD_HRWEIGHT_H__
+#include "hazard\hrweight.h"
+#endif
+
+#ifndef __HAZARD_HRWHEEL_H__
+#include "hazard\hrwheel.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -174,6 +186,51 @@ void		CThingManager::initAllThings()
 			thing->updateCollisionArea();
 			thing=thing->m_nextListThing;
 		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+
+void		CThingManager::matchWheelsAndWeights()
+{
+	CNpcHazard *hazard1;
+	CNpcHazard *hazard2;
+
+	hazard1 = (CNpcHazard *) s_thingLists[CThing::TYPE_HAZARD];
+
+	while( hazard1 )
+	{
+		if ( hazard1->getType() == CNpcHazard::NPC_RISING_WEIGHT_HAZARD )
+		{
+			CNpcRisingWeightHazard *weight = (CNpcRisingWeightHazard *) hazard1;
+			DVECTOR wheelPos = weight->getWheelPos();
+
+			hazard2 = (CNpcHazard *) s_thingLists[CThing::TYPE_HAZARD];
+
+			while( hazard2 )
+			{
+				if ( hazard2->getType() == CNpcHazard::NPC_RISING_WEIGHT_WHEEL_HAZARD )
+				{
+					CNpcRisingWeightWheelHazard *wheel = (CNpcRisingWeightWheelHazard *) hazard2;
+
+					DVECTOR testPos = wheel->getWheelPos();
+
+					if ( testPos.vx == wheelPos.vx && testPos.vy == wheelPos.vy )
+					{
+						wheel->linkToWeight( weight );
+					}
+				}
+
+				hazard2 = (CNpcHazard *) hazard2->m_nextListThing;
+			}
+		}
+
+		hazard1 = (CNpcHazard *) hazard1->m_nextListThing;
 	}
 }
 
