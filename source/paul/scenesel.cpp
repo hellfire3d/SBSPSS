@@ -71,6 +71,9 @@
 #include "save\save.h"
 #endif
 
+#ifndef __GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
 
 
 /*	Std Lib
@@ -133,6 +136,8 @@ void CSceneSelector::init()
 	m_currentSelection=0;
 	m_state=STATE_INIT;
 	m_countdown=2;				// Need a couple of frames for the pad handler to wake up..
+
+	CFader::setFadingIn();
 }
 
 
