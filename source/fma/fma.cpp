@@ -209,6 +209,8 @@ typedef enum
 
 	SC_SET_FADE_TO_BLACK,		//
 	SC_SET_FADE_TO_WHITE,		//
+	SC_SET_FADE_FROM_WHITE,		//
+	SC_SET_DRAW_SCREEN_AS_WHITE,// on/off
 
 	SC_SNAP_CAMERA_TO,			// x,y
 	SC_MOVE_CAMERA_TO,			// x,y,frames
@@ -1170,8 +1172,17 @@ static const int s_FMAPartyScript[]=
 
 	SC_WAIT_ON_TIMER,			60*2,
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_PARTY_DAT,
+
+	SC_WAIT_ON_TIMER,			60*2,
+
 	SC_SET_GLOBAL_ANIMATION,	false,
-	SC_WAIT_ON_TIMER,			60*10,
+	SC_WAIT_ON_TIMER,			60*1,
+	SC_SET_DRAW_SCREEN_AS_WHITE,true,
+	SC_WAIT_ON_TIMER,			60*1,
+	SC_SET_FADE_FROM_WHITE,
+	SC_SET_DRAW_SCREEN_AS_WHITE,false,
+
+	SC_WAIT_ON_TIMER,			60*5,
 	SC_STOP
 };
 
@@ -1190,7 +1201,7 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 
 
 
-int	s_chosenScript=CFmaScene::FMA_SCRIPT__PLANKTON;
+int	s_chosenScript=CFmaScene::FMA_SCRIPT__PARTY;
 
 
 /*----------------------------------------------------------------------
@@ -1694,6 +1705,16 @@ void	CFmaScene::startNextScriptCommand()
 			CFader::setFadingOut(CFader::WHITE_FADE);
 			break;
 
+		case SC_SET_FADE_FROM_WHITE:	//
+			m_pc++;
+			CFader::setFadingIn(CFader::WHITE_FADE);
+			break;
+
+		case SC_SET_DRAW_SCREEN_AS_WHITE:// on/off
+			m_pc++;
+			m_drawScreenAsWhite=*m_pc++;
+			break;
+
 		case SC_SNAP_CAMERA_TO:			// x,y
 			m_pc++;
 			m_cameraPos.vx=*m_pc++;
@@ -1921,6 +1942,8 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_SET_NEXT_FMA_NUMBER:	// fmaNumber
 		case SC_SET_FADE_TO_BLACK:		//
 		case SC_SET_FADE_TO_WHITE:		//
+		case SC_SET_FADE_FROM_WHITE:	//
+		case SC_SET_DRAW_SCREEN_AS_WHITE:// on/off
 		case SC_SNAP_CAMERA_TO:			// x,y
 		case SC_MOVE_CAMERA_TO:			// x,y,frames
 		case SC_REGISTER_CONVERSATION:	// scriptId

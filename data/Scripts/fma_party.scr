@@ -21,13 +21,6 @@ do
 }
 while(_getResponse()==ANSWER_NONE);
 
-_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_PARTY_VO0);
-_setResponseOptions(QUESTION_OK);
-do
-{
-	pause;
-}
-while(_getResponse()==ANSWER_NONE);
 
 ; Happy birthday!
 _setText(CHAR_SPONGEBOB,STR__INGAME__FMA_PARTY_SB);
@@ -94,4 +87,16 @@ do
 }
 while(_getResponse()==ANSWER_NONE);
 
+
+; Take a picture
+_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_PARTY_VO0);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+
 stop;
+
