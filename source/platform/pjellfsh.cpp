@@ -37,7 +37,15 @@
 
 void CNpcJellyfishPlatform::postInit()
 {
-	CNpcLinearPlatform::postInit();
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.YMin += 8;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+
+	calculateNonRotatedCollisionData();
+	setCollisionAngle( m_tiltAngle >> 8 );
+
+	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 	m_vertScale = 0;
 	m_dipCount = 0;
