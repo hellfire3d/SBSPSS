@@ -15,16 +15,19 @@
 using namespace std;
 
 //***************************************************************************
-CMkActor3d	ThisActor;
+vector<CMkActor3d>	ActorList;
+int		TPBase=-1,TPWidth=-1,TPHeight=-1;
+GString	TPOutStr;
 //std::vector<GString>	ExtraTex;
+
+CTexGrab	CMkActor3d::TexGrab;
 
 //***************************************************************************
 
 char * CycleCommands(char *String,int Num)
 {
-int		TPBase=-1,TPWidth=-1,TPHeight=-1;
 char	Text[2048],*TextPtr;
-int		Count,i;
+int		Count;
 
 	if (String[0]=='-' || String[0]=='/')
 		{
@@ -34,9 +37,13 @@ int		Count,i;
 				// Switches 
 			case 'o':
 				OutStr = CheckFileString(String);
+				OutStr.Upper();
+				OutStr.Append('\\');
 				break;
 			case 'i':
 				IncludeFile = CheckFileString(String);
+				IncludeFile.Upper();
+				IncludeFile.Append('\\');
 				break;
 			case 'd':
 				DebugOn =true;
@@ -44,6 +51,9 @@ int		Count,i;
 			case 's':
 				TpStr= CheckFileString(String);
 				Scale=atof(TpStr);
+				break;
+			case 'g':
+				TPOutStr= CheckFileString(String);
 				break;
 			case 't':
 				TpStr= CheckFileString(String);
@@ -56,29 +66,6 @@ int		Count,i;
 				TPWidth=atol(TextPtr);
 				TextPtr+=strlen(TextPtr)+1;
 				TPHeight=atol(TextPtr);
-				ThisActor.SetTPData(TPBase,TPWidth,TPHeight);
-				break;
-			case 'x':
-				TpStr= CheckFileString(String);
-				TextPtr=Text;
-				strcpy(TextPtr,TpStr);
-				Count=ZeroAndCountCommas(TextPtr);
-				for (i=0; i<Count+1; i++)
-				{
-					ThisActor.AddTex(TextPtr);
-					TextPtr+=strlen(TextPtr)+1;
-				}
-				break;
-			case 'a':
-				TpStr= CheckFileString(String);
-				TextPtr=Text;
-				strcpy(TextPtr,TpStr);
-				Count=ZeroAndCountCommas(TextPtr);
-				for (i=0; i<Count+1; i++)
-				{
-					ThisActor.AddAnim(TextPtr);
-					TextPtr+=strlen(TextPtr)+1;
-				}
 				break;
 			case 'q':
 				StripLength=4;
@@ -90,7 +77,9 @@ int		Count,i;
 		} 
 	else
 		{
-		ThisActor.SetInName(String);
+			GString	UpperName(String);
+			UpperName.Upper();
+			MyFiles.AddFile(UpperName);
 		}
 
 	return(String);
@@ -100,15 +89,13 @@ int		Count,i;
 
 void Usage(char *ErrStr)
 {
-	printf("\nMkActor3d: by Dave\n");
+	printf("\nMkActor3d (usese scripts): by Dave\n");
 	printf("Usage: MkActor3d <file> [ <file>.. ] [ switches.. ]\n");
 	printf("Switches:\n");
 	printf("   -o:[FILE]       Set output Dir\n");
 	printf("   -s:nn           Set Scaling value\n");
 	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
 	printf("   -d:             Enable Debug output\n");
-	printf("   -x:             Add Texture\n");
-	printf("   -d:             Add Anim\n");
 	printf("   -q:             Enable Quadding\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
@@ -116,11 +103,34 @@ void Usage(char *ErrStr)
 //***************************************************************************
 int	main (int argc, char *argv[])
 {
+int		i,ListSize;
+
 		CommandLine(argc,argv,CycleCommands);
 		if (OutStr.Empty()) Usage("No Output File Set\n");
+vector<GString> const &Files = MyFiles.GetFileInfoVector();
 
-		ThisActor.ProcessActor();
-		ThisActor.ProcessAnim();
+
+		for (i=0; i<Files.size(); i++)
+		{
+			ActorList.push_back(CMkActor3d(Files[i]));
+		}
+
+		CMkActor3d::SetTPData(TPOutStr,TPBase,TPWidth,TPHeight);
+
+		ListSize=ActorList.size();
+		for (i=0; i<ListSize; i++)
+		{
+			ActorList[i].ActorLoad();
+			ActorList[i].ActorProcess();
+			ActorList[i].AnimLoad();
+		}
+		CMkActor3d::TexProcess();
+
+		for (i=0; i<ListSize; i++)
+		{
+			ActorList[i].ActorWrite();
+			ActorList[i].AnimWrite();
+		}
 
 		return 0;
 }
@@ -128,7 +138,7 @@ int	main (int argc, char *argv[])
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-void	CMkActor3d::SetInName(GString const &String)
+CMkActor3d::CMkActor3d(GString const &String)
 {
 GString	UpperName(String);
 		UpperName.Upper();
@@ -138,57 +148,80 @@ GFName	File=UpperName;
 		InPath=File.Drive();
 		InPath+=File.Dir();
 		Name=File.File();
-
 }
 
 //***************************************************************************
-void	CMkActor3d::SetTPData(int TPBase,int TPW,int TPH)
+void	CMkActor3d::SetTPData(const char *Name,int TPBase,int TPW,int TPH)
 {
-		TPageBase=TPBase; 
-		TPageWidth=TPW ;
-		TPageHeight=TPH;
-}
+GString	Filename=OutStr+Name;
+GString	IncName;
 
-//***************************************************************************
-void	CMkActor3d::AddAnim(const char *Name)
-{
-		InAnimList.push_back(Name);
-}
+		IncName=IncludeFile;
+		IncName+=Name;
 
-//***************************************************************************
-void	CMkActor3d::AddTex(const char *Name)
-{
-		InTexList.push_back(Name);
-}
-
-//***************************************************************************
-void	CMkActor3d::ProcessActor()
-{
-		ThisActor.ActorLoad();
-		ThisActor.ActorProcess();
-		ThisActor.ActorWrite();
-}
-
-//***************************************************************************
-void	CMkActor3d::ProcessAnim()
-{
-		ThisActor.AnimLoad();
-		ThisActor.AnimWrite();
+		TexGrab.SetTPage(TPBase,TPW,TPH);
+		TexGrab.SetOutFile(Filename+".Tex");
+		TexGrab.SetDebugOut(Filename+".Lbm");
+		TexGrab.SetIncFile(IncName+".h");
+		TexGrab.NoSort();
+		TexGrab.AnimatedHeadersOnly(true);
+		TexGrab.DontOutputBoxes(true);
+		TexGrab.AllowRotate(true);
 }
 
 //***************************************************************************
 void	CMkActor3d::ActorLoad()
 {
-		OutStr.Upper();
-		OutStr.Append('\\');
 		OutFile=OutStr+Name;
-		IncludeFile.Upper();
-		IncludeFile.Append('\\');
 		IncFile=IncludeFile;
 		IncFile+="ACTOR_";
 		IncFile+=Name;
-
 		Scene.Load(InFilename);
+		ReadScript(InPath+"TexList.Txt",InTexList);
+		ReadScript(InPath+"AnimList.Txt",InAnimList);
+}
+
+//***************************************************************************
+void	CMkActor3d::ReadScript(const char *Filename,vector<GString>	&List)
+{
+char	*Script,*Ptr;
+int		Size;
+		File=fopen(Filename,"rb");
+		if (!File) return;
+		fseek(File,0,SEEK_END);
+		Size=ftell(File);
+		fseek(File,0,SEEK_SET);
+		Script=(char*)malloc(Size+1);
+		// Load It
+		fread(Script,Size,1,File);
+		fclose(File);
+
+// Extract Names
+		Ptr=Script;
+		Script[Size]=0;
+		while (*Ptr)
+		{
+			GString	Str;
+
+			while (*Ptr=='\n' || *Ptr=='\r'|| *Ptr==' ') *Ptr++; // Skip gaff
+			if (*Ptr)
+			{
+				if (*Ptr=='#')
+				{ // Skip commented lines
+					while (*Ptr!='\n' && *Ptr) Ptr++;
+				}
+				else
+				{ // Read data
+					while (*Ptr!=' ' && *Ptr!='\n' && *Ptr!='\r' && *Ptr)
+					{
+						Str.Append(*Ptr++);
+					}
+					List.push_back(Str);
+				}
+			}
+		}
+
+		free(Script);
 }
 
 //***************************************************************************
@@ -311,12 +344,8 @@ int		ListSize=Skel.size();
 //***************************************************************************
 void	CMkActor3d::ActorProcess()
 {
-GString	IncName=IncFile+".h";
-
+		FaceList.SetTexGrab(TexGrab);
 		FaceList.SetTexBasePath(InPath);
-		FaceList.SetTexOut(OutFile+".Tex",TPageBase,TPageWidth,TPageHeight);
-		FaceList.SetTexDebugOut(OutFile+".Lbm");
-		if (!IncludeFile.Empty()) FaceList.SetTexInclude(IncName);
 
 		ProcessSkel(1,-1);
 		BuildSkelOut();
@@ -325,11 +354,11 @@ GString	IncName=IncFile+".h";
 int		ListSize=InTexList.size();
 		for (int i=0; i<ListSize; i++)
 		{
-			FaceList.AddTex(InTexList[i]);
+			GString	Filename;
+			Filename="Textures/";
+			Filename+=InTexList[i]+".Bmp";
+			FaceList.AddTex(Filename);
 		}
-		
-		FaceList.ProcessTextures();
-		FaceList.Process();
 }
 
 
@@ -338,6 +367,9 @@ void	CMkActor3d::ActorWrite()
 {
 GString	OutName=OutFile+".A3d";
 
+		FaceList.Process();
+
+		printf("Write %s:\t",Name);
 		File=fopen(OutName,"wb");
 
 // Write Dummy Hdr
@@ -351,20 +383,20 @@ GString	OutName=OutFile+".A3d";
 // Write Tris
 		FileHdr.TriCount=FaceList.GetTriFaceCount();
 		FileHdr.TriList=(sTri*)FaceList.WriteTriList(File);
-		printf("%i Tris\n",FileHdr.TriCount);
+		printf("T:%i\t",FileHdr.TriCount);
 // Write Quads
 		FileHdr.QuadCount=FaceList.GetQuadFaceCount();
 		FileHdr.QuadList=(sQuad*)FaceList.WriteQuadList(File);
-		printf("%i Quads\n",FileHdr.QuadCount);
+		printf("Q:%i\t",FileHdr.QuadCount);
 // Write VtxList
 		FileHdr.VtxCount=FaceList.GetVtxCount();
 		FileHdr.VtxList=(sVtx*)FaceList.WriteVtxList(File);
-		printf("%i Vtx\n",FileHdr.VtxCount);
+		printf("V:%i\t",FileHdr.VtxCount);
 
 // Write TexList
 		FileHdr.TexInfo=(sTexInfo*)WriteTexInfoList();
 
-		printf("Size=%i\n",ftell(File));
+		printf("S:%i\n",ftell(File));
 
 // Rewrite Header
 		fseek(File, 0, SEEK_SET);
@@ -443,10 +475,12 @@ int		ListSize=InAnimList.size();
 		{
 			CScene	Scene;
 			int		ThisBoneCount;
-			GFName	Name=InAnimList[i];
+			GString	Filename=InPath+InAnimList[i]+".Gin";
+			GFName	Name=Filename;
 
 			printf("%s\t",Name.File());
-			Scene.Load(InAnimList[i]);
+
+			Scene.Load(Filename);
 
 // Process Anim
 			sAnim	ThisAnim;
@@ -464,6 +498,7 @@ int		ListSize=InAnimList.size();
 			{
 				GObject::Error(ERR_FATAL,"Invalid skeleton\n");
 			}
+
 		}
 
 }
@@ -526,6 +561,7 @@ int				Anim,AnimCount=AnimList.size();
 sAnimFileHdr	FileHdr;
 sAnimHdr		Hdr;
 
+		if (!AnimCount) return;	// No anims, dont bother
 		File=fopen(OutName,"wb");
 
 // Write Dummy FileHdr		

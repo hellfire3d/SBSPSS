@@ -36,18 +36,20 @@ struct	sAnim
 class	CMkActor3d
 {
 public:
-		void				SetInName(GString const &In);
-		void				SetTPData(int TPBase,int TPW,int TPH);
+		CMkActor3d(GString const &In);
+
+static	void				SetTPData(const char *Name,int TPBase,int TPW,int TPH);
+static	void				TexProcess()			{TexGrab.Process();}
 		
-		void				AddAnim(const char *Name);
-		void				AddTex(const char *Name);
-		
-		void				ProcessActor();
-		void				ProcessAnim();
-private:
 		void				ActorLoad();
 		void				ActorProcess();
 		void				ActorWrite();
+
+		void				AnimLoad();
+		void				AnimWrite();
+
+private:
+		void				ReadScript(const char *Filename,vector<GString>	&List);
 
 		void				ProcessSkel(int Idx,int Parent);
 		void				WriteSkel();
@@ -68,13 +70,9 @@ private:
 
 		std::vector<GString>	InTexList;
 		std::vector<GString>	InAnimList;
-
-		int					TPageBase;
-		int					TPageWidth,TPageHeight;
+static	CTexGrab				TexGrab;
 
 /*Anim*/
-		void				AnimLoad();
-		void				AnimWrite();
 		void				AnimWriteInclude();
 		int					AnimProcessSkelMove(CScene &Scene,sAnim &ThisAnim,int Idx);
 		void				AnimProcessSkelAnim(CScene &Scene,sAnim &ThisAnim,int Idx);

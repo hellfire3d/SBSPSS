@@ -177,7 +177,7 @@ void	CPlayer::init()
 	
 	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
-	TPLoadTex(ACTORS_SPONGEBOB_TEX);
+	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
 	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
 
 
