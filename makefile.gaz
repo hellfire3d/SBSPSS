@@ -560,6 +560,8 @@ cddata:
 ifeq ($(USER_NAME),CDBUILD)
 	@$(MKDIR) -p $(CD_DIR)
 	@$(CPE2BIN) $(CPE_FILE) $(CD_DIR)/$(BIN_OUTFILE)
+	@$(CP) $(MAP_FILE) $(CD_DIR)/$(PROJ).map
+	@$(CP) $(SYM_FILE) $(CD_DIR)/$(PROJ).sym
 	@$(CP) -u $(BIGLUMP_FILE) $(CD_DIR) -f
 	@$(TGA2GFX) graphics/screens/legal.tga $(CD_DIR)/LEGAL.GFX
 	@$(CP) -u Data/CdData/$(TERRITORY).cnf $(CD_DIR)/SYSTEM.CNF -f

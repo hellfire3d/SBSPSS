@@ -708,6 +708,7 @@ void	CPlayer::shutdown()
   ---------------------------------------------------------------------- */
 static int oldmode=-1;
 int newmode=-1;
+
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -842,53 +843,53 @@ if(newmode!=-1)
 					// over an item whilst unarmed, he automatically picks it up
 					m_tryingToAutomaticallyPickupWeapon=true;
 				}
-				if(m_currentMode!=PLAYER_MODE_CART && getPadInputDown()&PI_WEAPONCHANGE)
+				bool	CanChange=true;
+				switch(m_currentPlayerModeClass->getState())
+				{
+					case STATE_BUTTBOUNCE:
+					case STATE_BUTTFALL:
+					case STATE_BUTTLAND:
+					case STATE_BUTTBOUNCEUP:
+						CanChange=false;
+						break;
+
+					default:
+						break;
+				}
+
+				if(CanChange && (m_currentMode!=PLAYER_MODE_CART && getPadInputDown()&PI_WEAPONCHANGE))
 				{
 					// If already armed then drop current weapon
 					if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
 					{
-						switch(m_currentPlayerModeClass->getState())
+						static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
 						{
-							case STATE_BUTTBOUNCE:
-							case STATE_BUTTFALL:
-							case STATE_BUTTLAND:
-							case STATE_BUTTBOUNCEUP:
-								break;
+							-1,						// PLAYER_MODE_BASICUNARMED
+							-1,						// PLAYER_MODE_FULLUNARMED
+							-1,						// PLAYER_MODE_BALLOON
+							PICKUP__BUBBLE_WAND,	// PLAYER_MODE_BUBBLE_MIXTURE
+							PICKUP__NET,			// PLAYER_MODE_NET
+							PICKUP__CORAL_BLOWER,	// PLAYER_MODE_CORALBLOWER
+							PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
+							-1,						// PLAYER_MODE_DEAD
+							-1,						// PLAYER_MODE_FLY
+							-1,						// PLAYER_MODE_CART
+							-1,						// PLAYER_MODE_SWALLOW
+						};
 
-							default:
-								{
-									static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
-									{
-										-1,						// PLAYER_MODE_BASICUNARMED
-										-1,						// PLAYER_MODE_FULLUNARMED
-										-1,						// PLAYER_MODE_BALLOON
-										PICKUP__BUBBLE_WAND,	// PLAYER_MODE_BUBBLE_MIXTURE
-										PICKUP__NET,			// PLAYER_MODE_NET
-										PICKUP__CORAL_BLOWER,	// PLAYER_MODE_CORALBLOWER
-										PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
-										-1,						// PLAYER_MODE_DEAD
-										-1,						// PLAYER_MODE_FLY
-										-1,						// PLAYER_MODE_CART
-										-1,						// PLAYER_MODE_SWALLOW
-									};
-
-									int	pickupToDrop;
-									pickupToDrop=s_pickupsToDrop[m_currentMode];
-									if(pickupToDrop!=-1)
-									{
-										DVECTOR	pickupPos;
-										CBasePickup	*pickup;
-										pickupPos.vx=Pos.vx;
-										pickupPos.vy=Pos.vy-30;
-										pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
-										pickup->setPos(&pickupPos);
-										((CBaseWeaponPickup*)pickup)->setHasBeenCollected();
-									}
-									setMode(PLAYER_MODE_BASICUNARMED);
-
-									break;
-								}
+						int	pickupToDrop;
+						pickupToDrop=s_pickupsToDrop[m_currentMode];
+						if(pickupToDrop!=-1)
+						{
+							DVECTOR	pickupPos;
+							CBasePickup	*pickup;
+							pickupPos.vx=Pos.vx;
+							pickupPos.vy=Pos.vy-30;
+							pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
+							pickup->setPos(&pickupPos);
+							((CBaseWeaponPickup*)pickup)->setHasBeenCollected();
 						}
+						setMode(PLAYER_MODE_BASICUNARMED);
 					}
 
 					// Now trying to pick up a weapon..
