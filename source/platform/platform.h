@@ -35,6 +35,16 @@
 #include "gfx\sprbank.h"
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// All platforms are fied to this width at the minute..
+#define PLATFORMWIDTH				80
+
+// The collision box is this high.. if SB keeps falling through platforms then it *should* be sufficient
+// just to up this a bit
+#define PLATFORMCOLLISIONHEIGHT		80
+
+
 /*****************************************************************************/
 
 class	CNpcPlatform : public CPlatformThing
@@ -68,7 +78,7 @@ public:
 	virtual void		postInit();
 	void				shutdown();
 	void				think(int _frames);
-	void				render();
+	virtual void		render();
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );

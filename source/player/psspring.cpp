@@ -82,7 +82,7 @@ void CPlayerStateSpring::enter(CPlayerModeBase *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int maxplayerspringframes=40;
+int maxplayerspringframes=50;
 void CPlayerStateSpring::think(CPlayerModeBase *_playerMode)
 {
 	const PlayerMetrics	*metrics;

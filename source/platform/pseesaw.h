@@ -22,6 +22,7 @@ class CNpcSeesawPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
+	virtual void		render();
 protected:
 	virtual void		processMovement( int _frames );
 

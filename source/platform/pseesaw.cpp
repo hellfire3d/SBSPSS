@@ -19,6 +19,14 @@
 #include	"game\game.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 void CNpcSeesawPlatform::postInit()
 {
@@ -99,4 +107,62 @@ void CNpcSeesawPlatform::processMovement( int _frames )
 	m_currentAngle = newAngle;
 
 	setCollisionAngle( newAngle >> 8 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSeesawPlatform::render()
+{
+	if ( m_isActive )
+	{
+		CPlatformThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+		{
+			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			{
+				SVECTOR rotation;
+				rotation.vx = 0;
+				rotation.vy = 0;
+				rotation.vz = getCollisionAngle();
+
+				VECTOR scale;
+				scale.vx = ONE;
+				scale.vy = ONE;
+				scale.vz = ONE;
+
+				m_modelGfx->Render(renderPos,&rotation,&scale);
+
+#if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR	centre;
+	int		halfLength;
+	int		x1,y1,x2,y2;
+
+	centre=getCollisionCentre();
+	halfLength=PLATFORMWIDTH/2;
+
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
+			}
+		}
+	}
 }
