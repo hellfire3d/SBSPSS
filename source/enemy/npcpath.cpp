@@ -45,6 +45,20 @@ bool CNpcPath::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPath::getCurrentWaypointPos( DVECTOR *waypointPos )
+{
+	u16 *waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
+
+	waypointPos->vx = ( *waypoint << 4 ) + 8;
+
+	waypoint++;
+
+	waypointPos->vy = ( *waypoint << 4 ) + 16;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPath::initPath()
 {
 	//waypoint = NULL;

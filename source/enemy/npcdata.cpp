@@ -435,7 +435,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_TIMER_NONE,
 		false,
 		3,
-		256,
+		64,
 		DETECT_ALL_COLLISION,
 		DAMAGE__SHOCK_ENEMY,
 		1,

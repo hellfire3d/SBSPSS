@@ -64,11 +64,15 @@ protected:
 	virtual void		processShot( int _frames );
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual void		processUserCollision( CThing *thisThing );
+	u8					isSnakeStopped();
+	void				moveEntireSnake( DVECTOR newPos );
 
 	enum
 	{
 		NPC_SEA_SNAKE_SPACING = 6,
 		NPC_SEA_SNAKE_LENGTH = 10,
+		NPC_SEA_SNAKE_CIRCLE_CLOCKWISE = 1,
+		NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE = 2,
 	};
 
 	// position history stuff
@@ -90,6 +94,9 @@ protected:
 	s32								m_snapTimer;
 	//s32								m_openTimer;
 	bool							m_meterOn;
+	u8								m_turnDir;
+	s16								m_circleHeading;
+	s16								m_origHeading;
 };
 
 #endif

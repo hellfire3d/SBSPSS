@@ -192,7 +192,7 @@ bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 	return( xBlocked | yBlocked );
 }
 
-void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
+u8 CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
 {
 	bool pathComplete;
 	bool waypointChange;
@@ -302,6 +302,8 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 
 		//processGroundCollisionReverse( moveX, moveY );
 	}
+
+	return( waypointChange );
 }
 
 void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )

@@ -45,6 +45,7 @@ public:
 	void			setPathExtents();
 	u16				*getWaypointPtr()						{ return( waypointPtr ); }
 	bool			isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
+	void			getCurrentWaypointPos( DVECTOR *waypointPos );
 
 private:
 	NPC_PATH_TYPE	pathType;
