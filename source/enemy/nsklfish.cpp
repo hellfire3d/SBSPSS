@@ -32,10 +32,65 @@
 #endif
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcSkeletalFishEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+			{
+				if ( playerXDistSqr + playerYDistSqr < 10000 )
+				{
+					s32 xDistWaypoint, yDistWaypoint;
+
+					m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
+
+					if ( abs( xDistWaypoint ) >= abs( playerXDist ) )
+					{
+						m_controlFunc = NPC_CONTROL_CLOSE;
+						m_velocity = 0;
+						m_chargeTime = 0;
+						m_sensorFunc = NPC_SENSOR_NONE;
+
+						return( true );
+					}
+					else
+					{
+						return( false );
+					}
+				}
+				else
+				{
+					return( false );
+				}
+
+				break;
+			}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSkeletalFishEnemy::processClose( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;
+
+	if ( m_chargeTime > GameState::getOneSecondInFrames() )
+	{
+		if ( m_velocity < SKELETAL_FISH_CHARGE_VELOCITY )
+		{
+			m_velocity++;
+		}
+	}
+	else
+	{
+		m_chargeTime += _frames;
+	}
 
 	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
@@ -73,7 +128,7 @@ void CNpcSkeletalFishEnemy::processClose( int _frames )
 
 	m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
 
-	if ( abs( moveDist ) < 1024 && abs( xDistWaypoint ) >= abs( playerXDist ) )
+	if ( ( playerXDistSqr + playerYDistSqr > 100 ) && abs( xDistWaypoint ) >= abs( playerXDist ) )
 	{
 		// continue charge
 
@@ -82,5 +137,21 @@ void CNpcSkeletalFishEnemy::processClose( int _frames )
 	else
 	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_chargeTime = m_timerTimer = GameState::getOneSecondInFrames();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcSkeletalFishEnemy::getFrameShift( int _frames )
+{
+	if ( m_chargeTime < GameState::getOneSecondInFrames() )
+	{
+		return( _frames << 8 );
+	}
+	else
+	{
+		return( ( _frames << 8 ) >> 2 );
 	}
 }
