@@ -44,9 +44,10 @@ int		CActorCache::GetSizeType(int Size)
 //		if (Size<= 64) return(64);
 //		if (Size<=128) return(128);
 //		if (Size<=256) return(256);
+		return((Size+15)&-16);
 //	Size>>=4;
 //	Size<<=4;
-		return(Size);
+//		return(Size);
 		ASSERT(!"SPRITE SIZE NOT SUPPORTED");
 
 		return(-1);
@@ -170,7 +171,10 @@ void	CActorCache::AllocCache()
 int		TPW=CACHE_W/SlotCount;
 int		MaxW=0;
 int		MaxH=0;
-		
+
+/*		if (TPW<1) */TPW=1;
+		ASSERT(SlotCount<CACHE_W);
+
 		for (int i=0; i<SlotCount; i++)
 		{
 			if (MaxW<SlotList[i].Width)		MaxW=SlotList[i].Width;
@@ -210,7 +214,7 @@ sPoolNode	*List;
 					List->TexY=TexY;
 					List->U=U&255;
 					List->V=V&255;
-					List->TPage=getTPage(0,0,TexX,TexX);
+					List->TPage=getTPage(0,0,TexX,TexY);
 					AddNode(List,&ThisSlot->NodeList);
 					List++;
 				}
@@ -242,7 +246,7 @@ void	CActorCache::Reset()
 		SlotCount=0;
 
 // Clear VRam
-RECT	R={512,256,512,250};
+RECT	R={CACHE_X,CACHE_Y,TPAGE_W*CACHE_W,TPAGE_H*CACHE_H};
 		ClearImage(&R,0,255,0);
 }
 
