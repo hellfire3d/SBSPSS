@@ -306,6 +306,7 @@ void CGameScene::render_showing_lives()
 	colour=255-colour;
 
 	// Text
+	m_scalableFont->setPrintArea(0,0,512,256);
 	s_genericFont->setJustification(FontBank::JUST_CENTRE);
 	s_genericFont->setColour(colour,colour,colour);
 	s_genericFont->setTrans(1);
