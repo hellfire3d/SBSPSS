@@ -42,7 +42,7 @@
 	------------------- */
 
 //#define FULL_CODE_OUTPUT
-//#define	SHOW_RUN_COUNT
+//#define SHOW_RUN_COUNT
 
 
 /*----------------------------------------------------------------------
@@ -258,6 +258,24 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 #endif
 			push(val1!=val2);
 			break;
+
+		case OP_IS_LESSTHAN_VALUE:	//								value, value			pushes result ( 0 or 1 ) to stack
+			val1=pop();
+			val2=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("OP_IS_LESSTHAN_VALUE %d,%d",val1,val2);
+#endif
+			push(val1<val2);
+			break;
+			
+		case OP_IS_GREATERTHAN_VALUE://								value, value			pushes result ( 0 or 1 ) to stack
+			val1=pop();
+			val2=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("OP_IS_GREATERTHAN_VALUE %d,%d",val1,val2);
+#endif
+			push(val1>val2);
+			break;
 			
 		case OP_ASSIGN:				//								varidx, value
 			val1=pop();
@@ -276,7 +294,15 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 #endif
 			push(val1+val2);
 			break;
-			
+
+		case OP_NEG:				//								value					pushes result to stack
+			val1=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("NEG %d",val1);
+#endif
+			push(-val1);
+			break;
+
 		case OP_PRINT:				//								value
 			val1=pop();
 			PAUL_DBGMSG("PRINT %d",val1);
@@ -291,7 +317,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			ASSERT(val2<MAX_FUNCTION_ARGS);		// Too many args.. just increase the #define to fix this
 			for(i=0;i<val2;i++)
 			{
-				s_argBuffer[i]=pop();
+				s_argBuffer[val2-i-1]=pop();
 			}
 			val3=callFunction(val1,val2,s_argBuffer);
 #ifdef FULL_CODE_OUTPUT

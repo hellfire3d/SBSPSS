@@ -61,8 +61,10 @@ struct FunctionDef
 	---- */
 static FunctionDef s_functionNames[]=
 {
-	{ "setCharacterAnimation",	2,	},		// character, animation
-	{ "setText",				1,	},		// textId
+	{ "setCharacterAnimation",	2	},		// character,animation
+	{ "setText",				1	},		// textId
+	{ "drawSprite",				4	},		// frame,x,y,ot
+	{ "getFrameTime",			0	},		//
 };
 static int		s_functionCount=sizeof(s_functionNames)/sizeof(FunctionDef);
 

@@ -68,17 +68,22 @@ YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
 stop						{return STOP;}
 if							{return IF;}
 else						{return ELSE;}
+while						{return WHILE;}
+do							{return DO;}
 pause						{return PAUSE;}
 print						{return PRINT;}
 =							{return ASSIGN;}
 ==							{return EQUAL;}
 !=							{return NOTEQUAL;}
+\<							{return LESSTHAN;}
+\>							{return GREATERTHAN;}
 \+							{return PLUS;}
+\-							{return SUBTRACT;}
 ;							{return END_STMT;}
 \(							{return OPEN_PAR;}
 \)							{return CLOSE_PAR;}
 \{							{return BEGIN_CS;}
-\}							{return END_CS;}
+\}							{return END_CS;} 
 ,							{return COMMA;}
 
 

@@ -445,6 +445,14 @@ SOURCE=..\..\..\source\sound\xmplay.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\system\clickcount.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\system\clickcount.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\system\dbg.cpp
 # End Source File
 # Begin Source File
@@ -647,10 +655,18 @@ SOURCE=..\..\..\data\translations\text.dat
 # Begin Group "scripts"
 
 # PROP Default_Filter ""
+# Begin Group "defs"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\defs.scr
+SOURCE=..\..\..\data\scripts\defs\charanim.scr
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\defs\defs.scr
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\..\data\scripts\test.scr

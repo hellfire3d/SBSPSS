@@ -66,12 +66,17 @@ private:
 %token	STOP
 %token	IF
 %token	ELSE
+%token	WHILE
+%token	DO
 %token	PAUSE
 %token	PRINT
 %token	ASSIGN
 %token	EQUAL
 %token	NOTEQUAL
+%token	LESSTHAN
+%token	GREATERTHAN
 %token	PLUS
+%token	SUBTRACT
 %token	END_STMT
 %token	OPEN_PAR
 %token	CLOSE_PAR
@@ -85,7 +90,7 @@ private:
 
 %type	<treenode>		program statement_list statement
 %type	<treenode>		assign_expression
-%type	<treenode>		expression equal_expression notequal_expression
+%type	<treenode>		expression equal_expression notequal_expression lessthan_expression greaterthan_expression
 %type	<treenode>		variable
 %type	<treenode>		value
 %type	<treenode>		function
@@ -115,6 +120,8 @@ statement
 	|assign_expression END_STMT							{$$=$1;}
 	|IF OPEN_PAR expression CLOSE_PAR statement			{$$=new CTreeNode(IF_STMT,$3,$5);}
 	|IF OPEN_PAR expression CLOSE_PAR statement ELSE statement	{$$=new CTreeNode(IFELSE_STMT,$3,$5,$7);}
+	|WHILE OPEN_PAR expression CLOSE_PAR statement		{$$=new CTreeNode(WHILE_STMT,$3,$5);}
+	|DO statement WHILE OPEN_PAR expression CLOSE_PAR END_STMT	{$$=new CTreeNode(DOWHILE_STMT,$2,$5);}
 	|BEGIN_CS statement_list END_CS						{$$=new CTreeNode(STMT_LIST,$2);}
 	|function END_STMT									{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(POP_STMT));}
 	;
@@ -129,6 +136,8 @@ expression
 	:OPEN_PAR expression CLOSE_PAR						{$$=$2;}
 	|equal_expression									{$$=$1;}
 	|notequal_expression								{$$=$1;}
+	|lessthan_expression								{$$=$1;}
+	|greaterthan_expression								{$$=$1;}
 	;													
 														
 equal_expression										
@@ -139,6 +148,14 @@ notequal_expression
 	:value NOTEQUAL value								{$$=new CTreeNode(NOTEQUAL_EXPR,$1,$3);}
 	;													
 														
+lessthan_expression										
+	:value LESSTHAN value								{$$=new CTreeNode(LESSTHAN_EXPR,$1,$3);}
+	;													
+														
+greaterthan_expression										
+	:value GREATERTHAN value							{$$=new CTreeNode(GREATERTHAN_EXPR,$1,$3);}
+	;													
+														
 														
 variable												
 	:VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable id
@@ -147,7 +164,10 @@ variable
 value													
 	:VALUE												{$$=new CTreeNode(VALUE_EXPR,$1);}
 	|VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable value
+//	|PLUS value											{$$=$2;}
+//	|SUBTRACT value										{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(
 	|value PLUS value									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
+	|value SUBTRACT value								{$$=new CTreeNode(SUBTRACT_EXPR,$1,$3);}
 	|function											{$$=$1;}
 	;													
 

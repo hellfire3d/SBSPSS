@@ -35,6 +35,7 @@
 	------- */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /*	Data
@@ -204,6 +205,7 @@ CTreeNode::CTreeNode(NodeType _type,int _data)
 int CTreeNode::generateCode(int _write)
 {
 	int	codeSize=0;
+	int	tmp1,tmp2;
 	
 	switch(m_type)
 	{
@@ -248,11 +250,33 @@ int CTreeNode::generateCode(int _write)
 			codeSize+=m_children[2]->generateCode(_write);
 			break;
 
+		case WHILE_STMT:		// while [expression, code]
+			tmp1=m_children[1]->generateCode(false);
+			tmp2=codeSize;
+			codeSize=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)tmp1+3,_write);
+			codeSize+=emit(OP_JMPF,_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)-(codeSize-tmp2+2),_write);
+			codeSize+=emit(OP_JMP,_write);
+			break;
+
+		case DOWHILE_STMT:		// do [code] while [expression]
+			tmp1=m_children[0]->generateCode(false)+m_children[1]->generateCode(false)+3;
+			codeSize=m_children[0]->generateCode(_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)-tmp1,_write);
+			codeSize+=emit(OP_JMPT,_write);
+			break;
+			
 		case POP_STMT:			// pop
 			codeSize+=emit(OP_POP,_write);
 			break;
 
-		case ASSIGN_EXPR:		// assign [ variable, number ]
+		case ASSIGN_EXPR:		// assign [variable, number]
 			codeSize+=m_children[1]->generateCode(_write);
 			codeSize+=emit(OP_PUSHVALUE,_write);
 			codeSize+=emit(m_children[0]->getVariableIdx(),_write);
@@ -260,17 +284,29 @@ int CTreeNode::generateCode(int _write)
 			break;
 			
 		case EQUAL_EXPR:		// == [variable, value]
-			codeSize+=m_children[0]->generateCode(_write);
 			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
 			codeSize+=emit(OP_IS_EQUAL_VALUE,_write);
 			break;
 			
 		case NOTEQUAL_EXPR:		// != [variable, value]
-			codeSize+=m_children[0]->generateCode(_write);
 			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
 			codeSize+=emit(OP_IS_NOTEQUAL_VALUE,_write);
 			break;
 
+		case LESSTHAN_EXPR:		//  [variable, value]
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_IS_LESSTHAN_VALUE,_write);
+			break;
+
+		case GREATERTHAN_EXPR:	//  [variable, value]
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_IS_GREATERTHAN_VALUE,_write);
+			break;
+			
 		case VARIABLE_EXPR:		// variable
 		case VALUE_EXPR:		// value
 			if(m_numChildren)
@@ -280,11 +316,18 @@ int CTreeNode::generateCode(int _write)
 			break;
 
 		case PLUS_EXPR:			// + [value, value]
-			codeSize+=emitValue(m_children[0],_write);
-			codeSize+=emitValue(m_children[1],_write);
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=m_children[1]->generateCode(_write);
 			codeSize+=emit(OP_ADD,_write);
 			break;
-
+			
+		case SUBTRACT_EXPR:		// - [value, value]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_NEG,_write);
+			codeSize+=emit(OP_ADD,_write);
+			break;
+			
 		case FUNCTION_EXPR:		// function [functionNumber]
 			codeSize+=emit(OP_CALL_FUNCTION,_write);
 			codeSize+=emit(getFunctionNumber(),_write);
@@ -293,6 +336,7 @@ int CTreeNode::generateCode(int _write)
 
 		default:
 			printf("UNHANDLED CASE %d\n",m_type);
+			exit(-2);
 			break;
 	}
 	
@@ -316,7 +360,7 @@ int CTreeNode::emit(unsigned short _data,int _write)
 }
 int CTreeNode::emitValue(CTreeNode *_child,int _write)
 {
-	int codeSize;
+	int codeSize=0;
 
 	switch(_child->getType())
 	{
@@ -328,7 +372,7 @@ int CTreeNode::emitValue(CTreeNode *_child,int _write)
 			break;
 		default:
 			printf("INTERNAL ERROR IN emitValue() :(\n");
-			codeSize=0;
+			exit(-2);
 			break;
 	}
 	return codeSize;

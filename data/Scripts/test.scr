@@ -1,10 +1,74 @@
-#include	data/scripts/defs.scr
+#include	data/scripts/defs/defs.scr
+#include	data/scripts/defs/charanim.scr
 
 
-//$tmp1=11;
-//$tmp2=22;
-//$tmp3=_setCharacterExpression(1,2);
-//$tmp3=_setCharacterExpression($tmp1,$tmp2);
-print($tmp3);
-$tmp3=_setText(123);
+//do
+//{
+//	print($tmp1);
+//	$tmp1=$tmp1+1;
+//	pause;
+//}
+//while($tmp1<1);
+//print(112-_setText(1));
+//do
+//{
+//	print($tmp1);
+//	$tmp1=$tmp1+1;
+//	pause;
+//}
+//while($tmp1<2);
+//print(222);
+//stop;
+
+
+//_setCharacterAnimation(CHAR_SPONGEBOB,ANIM_QUIET);
+//_setText(123);
+//pause;
+
+#define		x			$tmp1
+#define		y			$tmp2
+#define		vx			$tmp3
+#define		vy			$tmp4
+#define		velocity	5
+
+x=100;
+y=100;
+vx=velocity;
+vy=velocity;
+while(1==1)
+{
+	_drawSprite(0,x,y,100);
+
+	$tmp0=_getFrameTime();
+	print($tmp0);
+	do
+	{
+		x=x+vx;
+		if(x>512)
+		{
+			vx=0-velocity;
+			x=x-velocity;
+		}
+		else if(x<0)
+		{
+			vx=velocity;
+			x=x+velocity;
+		}
+
+		y=y+vy;
+		if(y>256)
+		{
+			vy=0-velocity;
+			y=y-velocity;
+		}
+		else if(y<0)
+		{
+			vy=velocity;
+			y=y+velocity;
+		}
+		$tmp0=$tmp0-1;
+	}
+	while($tmp0>0);
+	pause;
+}
 stop;

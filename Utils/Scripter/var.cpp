@@ -57,9 +57,16 @@ static int s_numGlobalVarNames=sizeof(s_globalVarNames)/sizeof(char *);
 
 static char *s_localVarNames[]=
 {
+	"tmp0",
 	"tmp1",
 	"tmp2",
 	"tmp3",
+	"tmp4",
+	"tmp5",
+	"tmp6",
+	"tmp7",
+	"tmp8",
+	"tmp9",
 };
 static int s_numLocalVarNames=sizeof(s_localVarNames)/sizeof(char *);
 

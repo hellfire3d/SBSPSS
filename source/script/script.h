@@ -55,9 +55,16 @@ private:
 	// Local vars
 	enum
 	{
+		TMP0,
 		TMP1,
 		TMP2,
 		TMP3,
+		TMP4,
+		TMP5,
+		TMP6,
+		TMP7,
+		TMP8,
+		TMP9,
 		NUM_LOCAL_VARS,
 	};
 
@@ -93,8 +100,11 @@ private:
 		OP_JMPT,				//								jump, value
 		OP_IS_EQUAL_VALUE,		//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_IS_NOTEQUAL_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_LESSTHAN_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_GREATERTHAN_VALUE,//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_ASSIGN,				//								varidx, value
 		OP_ADD,					//								value, value			pushes result to stack
+		OP_NEG,					//								value					pushes result to stack
 		OP_PRINT,				//								value
 		OP_CALL_FUNCTION,		//	functionnumber, argcount	args					pushes return value to stack
 	};

@@ -35,15 +35,20 @@ typedef enum
 	PAUSE_STMT,				// pause
 	IF_STMT,				// if [expression, ifcode]
 	IFELSE_STMT,			// if [expression, ifcode, elsecode]
+	WHILE_STMT,				// while [expression, code]
+	DOWHILE_STMT,			// do [code] while [expression]
 	POP_STMT,				// pop
 		
 	// Expressions
 	ASSIGN_EXPR,			// assignment [variable, value]
 	EQUAL_EXPR,				// == [variable, value]
 	NOTEQUAL_EXPR,			// != [variable, value]
+	LESSTHAN_EXPR,			// < [variable, value]
+	GREATERTHAN_EXPR,		// > [variable, value]
 	VARIABLE_EXPR,			// variable
 	VALUE_EXPR,				// value
 	PLUS_EXPR,				// + [value, value]
+	SUBTRACT_EXPR,			// - [value, value]
 	FUNCTION_EXPR,			// function [functionNumber]
 }NodeType;
 
@@ -85,8 +90,11 @@ private:
 		OP_JMPT,				//								jump, value
 		OP_IS_EQUAL_VALUE,		//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_IS_NOTEQUAL_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_LESSTHAN_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_GREATERTHAN_VALUE,//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_ASSIGN,				//								varidx, value
 		OP_ADD,					//								value, value			pushes result to stack
+		OP_NEG,					//								value					pushes result to stack
 		OP_PRINT,				//								value
 		OP_CALL_FUNCTION,		//	functionNumber, argcount	args					pushes return value to stack
 	};

@@ -22,6 +22,10 @@
 #include "system\dbg.h"
 #endif
 
+#ifndef __SYSTEM_GSTATE_H__
+#include "system\gstate.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -48,8 +52,10 @@ typedef struct
 	Function Prototypes
 	------------------- */
 
-static signed short func_setCharacterExpression(unsigned short *_args);
+static signed short func_setCharacterAnimation(unsigned short *_args);
 static signed short func_setText(unsigned short *_args);
+static signed short func_drawSprite(unsigned short *_args);
+static signed short func_getFrameTime(unsigned short *_args);
 
 
 /*----------------------------------------------------------------------
@@ -58,8 +64,10 @@ static signed short func_setText(unsigned short *_args);
 
 static FunctionDef	s_functionDefs[]=
 {
-	{	func_setCharacterExpression,	2	},		// character, expression
+	{	func_setCharacterAnimation,		2	},		// character,animation
 	{	func_setText,					1	},		// textId
+	{	func_drawSprite,				4	},		// frame,x,y,ot
+	{	func_getFrameTime,				0	},		//
 };
 static const int	s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
 
@@ -86,10 +94,10 @@ signed short callFunction(int _functionNumber,int _argCount,unsigned short *_arg
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
-	Params:
+	Params:		character,animation
 	Returns:
   ---------------------------------------------------------------------- */
-static signed short func_setCharacterExpression(unsigned short *_args)
+static signed short func_setCharacterAnimation(unsigned short *_args)
 {
 	return _args[0];
 }
@@ -98,12 +106,46 @@ static signed short func_setCharacterExpression(unsigned short *_args)
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
-	Params:
+	Params:		textid
 	Returns:
   ---------------------------------------------------------------------- */
 static signed short func_setText(unsigned short *_args)
 {
 	return _args[0];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:		frame,x,y,ot
+	Returns:
+  ---------------------------------------------------------------------- */
+#include "gfx\sprbank.h"
+SpriteBank *sb=NULL;
+static signed short func_drawSprite(unsigned short *_args)
+{
+	sFrameHdr	*fh;
+	if(!sb)
+	{
+		sb=new ("sb") SpriteBank;
+		sb->load(UI_UIGFX_SPR);
+	}
+	fh=sb->getFrameHeader(_args[0]);
+	sb->printFT4(_args[0],_args[1]-(fh->W/2),_args[2]-(fh->H/2),0,0,_args[3]);
+	return 0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:		textid
+	Returns:
+  ---------------------------------------------------------------------- */
+static signed short func_getFrameTime(unsigned short *_args)
+{
+	return GameState::getFramesSinceLast();
 }
 
 
