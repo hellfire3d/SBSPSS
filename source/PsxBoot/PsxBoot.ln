@@ -34,20 +34,20 @@ memend		group	bss
 	include PsxBoot.o
 
 ; Libs
-	inclib /prlsr/tools/psyq/lib/libc.lib
-	inclib /prlsr/tools/psyq/lib/libapi.lib
-	inclib /prlsr/tools/psyq/lib/libetc.lib
-	inclib /prlsr/tools/psyq/lib/libspu.lib
-	inclib /prlsr/tools/psyq/lib/libsnd.lib
-	inclib /prlsr/tools/psyq/lib/libgpu.lib
-	inclib /prlsr/tools/psyq/lib/libcard.lib
-	inclib /prlsr/tools/psyq/lib/libpress.lib
-	inclib /prlsr/tools/psyq/lib/libcd.lib
-	inclib /prlsr/tools/psyq/lib/libtap.lib
-	inclib /prlsr/tools/psyq/lib/libcomb.lib
-	inclib /prlsr/tools/psyq/lib/libmcrd.lib
-	inclib /prlsr/tools/psyq/lib/libgte.lib
-	inclib /prlsr/tools/psyq/lib/libpad.lib
-	inclib /prlsr/tools/psyq/lib/libsn.lib
+	inclib ./tools/psyq/lib/libc.lib
+	inclib ./tools/psyq/lib/libapi.lib
+	inclib ./tools/psyq/lib/libetc.lib
+	inclib ./tools/psyq/lib/libspu.lib
+	inclib ./tools/psyq/lib/libsnd.lib
+	inclib ./tools/psyq/lib/libgpu.lib
+	inclib ./tools/psyq/lib/libcard.lib
+	inclib ./tools/psyq/lib/libpress.lib
+	inclib ./tools/psyq/lib/libcd.lib
+	inclib ./tools/psyq/lib/libtap.lib
+	inclib ./tools/psyq/lib/libcomb.lib
+	inclib ./tools/psyq/lib/libmcrd.lib
+	inclib ./tools/psyq/lib/libgte.lib
+	inclib ./tools/psyq/lib/libpad.lib
+	inclib ./tools/psyq/lib/libsn.lib
 
 

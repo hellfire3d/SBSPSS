@@ -17,7 +17,7 @@
 #define	PiracyFilename	"\\PIRACY.GFX;1"
 #define	LegalFilename	"\\LEGAL.GFX;1"
 #define	ScreenDelay		50*(5-2)
-#define	ExeFilename		"\\PRLSR.BIN;1"
+#define	ExeFilename		"\\SPONGEY.BIN;1"
 
 #define CHUNKSIZE	2048
 

@@ -12,7 +12,7 @@
 /*****************************************************************************/
 CCDFileIO::CCDFileIO(u32 FilePos,sBigLump *BigLumpPtr)
 {
-		DbgMsg0("CD FILE SYSTEM\n");	
+//		DbgMsg0("CD FILE SYSTEM\n");	
 		while (!CdInit());
 
 #if		!defined(__USER_CDBUILD__)
