@@ -31,12 +31,21 @@
 #include <ACTOR_HERMITCRAB_ANIM.h>
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcHermitCrabEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 	m_state = HERMIT_CRAB_NO_ATTACK;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool CNpcHermitCrabEnemy::processSensor()
 {
@@ -60,6 +69,8 @@ bool CNpcHermitCrabEnemy::processSensor()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcHermitCrabEnemy::processClose( int _frames )
 {
@@ -234,6 +245,8 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	Pos.vx += distX;
@@ -260,4 +273,109 @@ void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	// sound
 
 	CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHermitCrabEnemy::processShot( int _frames )
+{
+	switch ( m_state )
+	{
+		case NPC_GENERIC_HIT_CHECK_HEALTH:
+		{
+			if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
+			{
+				m_state = NPC_GENERIC_HIT_DEATH_START;
+			}
+			else
+			{
+				m_health -= 5;
+
+				if ( m_health < 0 )
+				{
+					m_state = NPC_GENERIC_HIT_DEATH_START;
+
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].dieAnim;
+					m_frame = 0;
+				}
+				else
+				{
+					m_state = NPC_GENERIC_HIT_RECOIL;
+
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].recoilAnim;
+					m_frame = 0;
+				}
+			}
+
+			break;
+		}
+
+		case NPC_GENERIC_HIT_RECOIL:
+		{
+			if ( !m_animPlaying )
+			{
+				m_state = 0;
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+			}
+
+			break;
+		}
+
+		case NPC_GENERIC_HIT_DEATH_START:
+		{
+			if ( !m_animPlaying )
+			{
+				m_state = NPC_GENERIC_HIT_DEATH_END;
+
+				if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
+				{
+					CSoundMediator::playSfx( m_data[m_type].deathSfx );
+				}
+
+				m_isDying = true;
+				m_speed = -5;
+
+				if (m_data[m_type].skelType)
+				{
+					m_actorGfx->SetOtPos( 0 );
+				}
+			}
+
+			break;
+		}
+
+		case NPC_GENERIC_HIT_DEATH_END:
+		{
+			m_drawRotation += 64 * _frames;
+			m_drawRotation &= 4095;
+
+			Pos.vy += m_speed * _frames;
+
+			if ( m_speed < 5 )
+			{
+				m_speed++;
+			}
+
+			DVECTOR	offset = CLevel::getCameraPos();
+
+			if ( Pos.vy - offset.vy > VidGetScrH() )
+			{
+				if ( m_data[m_type].respawning )
+				{
+					m_isActive = false;
+
+					m_timerFunc = NPC_TIMER_RESPAWN;
+					m_timerTimer = 4 * GameState::getOneSecondInFrames();
+				}
+				else
+				{
+					setToShutdown();
+				}
+			}
+
+			break;
+		}
+	}
 }

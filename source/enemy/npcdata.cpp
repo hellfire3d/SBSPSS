@@ -403,7 +403,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		9,
 		ANIM_CATERPILLAR_CRAWL,
 		NPC_SHOT_GENERIC,
-		0,
+		ANIM_CATERPILLAR_DIE,
 		0,
 		false,
 		false,

@@ -25,6 +25,7 @@ public:
 protected:
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	virtual bool		processSensor();
+	virtual void		processShot( int _frames );
 	virtual void		processClose( int _frames );
 
 	s32					m_jumpBase;

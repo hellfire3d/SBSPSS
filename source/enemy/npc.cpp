@@ -368,36 +368,6 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 			break;
 		}
 
-		/*case CNpcEnemy::NPC_FALLING_ITEM:
-		{
-			enemy = new ("falling item") CNpcFallingItemHazard;
-			break;
-		}*/
-
-		/*case CNpcEnemy::NPC_FISH_HOOK:
-		{
-			enemy = new ("fish hook") CNpcFishHookHazard;
-			break;
-		}*/
-
-		/*case CNpcEnemy::NPC_PENDULUM:
-		{
-			enemy = new ("pendulum") CNpcPendulumHazard;
-			break;
-		}*/
-
-		/*case CNpcEnemy::NPC_FIREBALL:
-		{
-			enemy = new ("fireball") CNpcFireballHazard;
-			break;
-		}*/
-
-		/*case CNpcEnemy::NPC_SAW_BLADE:
-		{
-			enemy = new ("saw blade") CNpcReturningHazard;
-			break;
-		}*/
-
 		case CNpcEnemy::NPC_DUST_DEVIL:
 		{
 			enemy = new ("dust devil") CNpcDustDevilEnemy;
