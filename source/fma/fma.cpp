@@ -1185,6 +1185,10 @@ int	s_chosenScript=CFmaScene::FMA_SCRIPT__CH1FINISHED;
   ---------------------------------------------------------------------- */
 void	CFmaScene::init()
 {
+//	if (s_chosenScript==FMA_SCRIPT__INTRO)
+	{ // Put up loading screen
+		CLevel::DisplayLoadingScreen();
+	}
 	int			i;
 	ACTOR_DATA	*actor;
 
