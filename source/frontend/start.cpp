@@ -152,7 +152,7 @@ void CFrontEndStart::think(int _frames)
 	if(!m_shuttingDown)
 	{
 /////////// PKG		
-if(PadGetDown(0)&PAD_START)
+		if(PadGetDown(0)&PAD_START&&!CFader::isFading())
 {
 	m_selectedSlot=0;
 }
