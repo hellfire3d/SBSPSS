@@ -277,6 +277,10 @@ eng=Well, I have learnt today that friendship is something that is priceless! SB
 eng=SpongeBob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
 
 
+; ---------------------------------------------------------------
+; Plankton FMA
+[STR__INGAME__FMA_PLANKTON]
+eng=Blast you SpongeBreath, you have found my secret time machine! Whatever you do make sure you fill it up before you bring it back!!!!
 
 ; ---------------------------------------------------------------
 [STR__INGAME__GENERIC__CHECK1]
@@ -362,8 +366,6 @@ eng=Spongebob!!! Now listen Boy! There are dangerous surfaces that none shall pa
 Chapter 2 - Level 1 - 02
 [STR__INGAME__CH4__L3__KRUSTY2]
 eng=I ain't telling you again lad! Wear your boots and you'll go far! Argh!
-
-
 
 
 ; ---------------------------------------------------------------

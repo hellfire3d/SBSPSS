@@ -601,7 +601,8 @@ SCRIPTS_LIST		:=	ch1l1_01 ch1l1_02 ch1l2_01 ch1l2_02 ch1l2_03 ch1l4_01 ch1l4_02 
 						fma_ch3_00 fma_ch3_01 fma_ch3_02 \
 						fma_ch4_00 fma_ch4_01 fma_ch4_02 \
 						fma_ch5_00 fma_ch5_01 fma_ch5_02 \
-						fma_ch6_00 fma_ch6_01 fma_ch6_02 fma_ch6_03
+						fma_ch6_00 fma_ch6_01 fma_ch6_02 fma_ch6_03 \
+						fma_plankton
  
 SCRIPTS_IN_DIR		:=	$(GAME_DATA_DIR)/scripts
  
