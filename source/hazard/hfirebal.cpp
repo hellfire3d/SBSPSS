@@ -114,7 +114,7 @@ void CNpcFireballHazard::processMovement( int _frames )
 
 		if ( m_soundId == NOT_PLAYING )
 		{
-			m_soundId = CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAND, true );
+			m_soundId = CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAND, true, true );
 		}
 
 		return;
@@ -137,7 +137,7 @@ void CNpcFireballHazard::processTimer( int _frames )
 
 		if ( m_soundId == NOT_PLAYING )
 		{
-			m_soundId = CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAUNCH, true );
+			m_soundId = CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAUNCH, true, true );
 		}
 	}
 }

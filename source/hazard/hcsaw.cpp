@@ -42,7 +42,7 @@ void CNpcCircularSawHazard::processMovement( int _frames )
 
 	if ( m_soundId == NOT_PLAYING )
 	{
-		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SAW, true );
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SAW, true, true );
 	}
 }
 

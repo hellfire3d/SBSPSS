@@ -117,7 +117,7 @@ void CNpcBouncingRockHazard::processMovement( int _frames )
 
 		if ( m_soundId == NOT_PLAYING )
 		{
-			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ROLLING_ROCK, true );
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_ROLLING_ROCK, true, true );
 		}
 
 		bool pathComplete;
