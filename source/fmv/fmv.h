@@ -39,6 +39,7 @@
 enum
 {
 	FMV_THQ,
+	FMV_CLIMAX,
 	FMV_INTRO,
 	MAX_FMVS,
 };

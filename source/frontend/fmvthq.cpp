@@ -80,6 +80,7 @@ static bool fmvPerFrameFunc()
 void CFrontEndFMVTHQ::select()
 {
 	FMV_play(FMV_THQ,&fmvPerFrameFunc);
+	FMV_play(FMV_CLIMAX,&fmvPerFrameFunc);
 }
 
 /*----------------------------------------------------------------------

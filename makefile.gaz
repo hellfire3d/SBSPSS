@@ -559,6 +559,7 @@ ifeq ($(USER_NAME),CDBUILD)
 	@$(CP) -u Data/CdData/$(TERRITORY).cnf $(CD_DIR)/SYSTEM.CNF -f
 	@$(CP) -u Data/CdData/$(TERRITORY).ccs $(CD_BUILD_DIR)/$(TERRITORY).ccs
 	@$(CP) -u Data/CdData/thq.str $(CD_DIR)/thq.str
+	@$(CP) -u Data/CdData/climax.str $(CD_DIR)/climax.str
 	@$(CP) -u Data/CdData/intro.str $(CD_DIR)/intro.str
 	@$(CP) -u Data/CdData/track1.ixa $(CD_DIR)/track1.ixa
 	@$(RAR) x data/CDData/ZZZZZZZ.RAR $(CD_DIR)/ -y >nul
