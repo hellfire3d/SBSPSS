@@ -155,7 +155,8 @@ struct	sElem3d
 		u16		QuadStart;
 		u16		QuadCount;
 		u16		VtxStart;
-		u16		VtxCount;
+		u8		TVtxCount;
+		u8		SVtxCount;
 };											// 12
 
 //***************************************************************************
