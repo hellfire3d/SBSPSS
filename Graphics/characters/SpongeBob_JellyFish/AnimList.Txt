@@ -13,7 +13,6 @@ TeeterBack
 TeeterFront 
 Swipe
 DeathTar
-DeathForwards
 GetHit
 CrouchDown
 CrouchUp
@@ -23,3 +22,4 @@ IdleNet
 Celebrate
 IdleBlink
 Electrocuted
+DeathBounce

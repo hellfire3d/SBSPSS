@@ -14,7 +14,6 @@ RunStop
 RunStart
 TeeterBack
 TeeterFront
-DeathForwards
 DeathTar
 GetHit
 CrouchDown
@@ -22,3 +21,4 @@ CrouchUp
 Celebrate
 IdleBlink
 Electrocuted
+DeathBounce

@@ -10,7 +10,6 @@ Jump
 TeeterBack 
 TeeterFront 
 Walk
-DeathForwards
 DeathTar 
 GetHit
 CrouchDown
@@ -19,3 +18,4 @@ LookUp
 Celebrate
 IdleBlink
 Electrocuted
+DeathBounce

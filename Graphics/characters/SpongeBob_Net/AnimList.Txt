@@ -1,4 +1,3 @@
-
 ButtBounceEnd 
 ButtBounceStart 
 Fall 
@@ -13,7 +12,6 @@ RunStart
 TeeterBack 
 TeeterFront 
 Swipe
-DeathForwards
 DeathTar
 GetHit
 CrouchDown
@@ -23,3 +21,4 @@ IdleWeapon
 Celebrate
 IdleBlink
 Electrocuted
+DeathBounce

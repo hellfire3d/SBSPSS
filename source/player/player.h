@@ -364,6 +364,11 @@ public:
 	DEATH_TYPE		getDeathType()				{return m_deathType;}
 	void			dieYouPorousFreak(DEATH_TYPE _deathType=DEATHTYPE__NORMAL);
 
+	void			setSBOTPosToFront();
+private:
+	void			setSBOTPos(int _ot);
+
+
 private:
 	int				m_numSpatulasHeld;
 	int				m_spatulaWarningTimer;

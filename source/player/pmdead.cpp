@@ -53,8 +53,6 @@
 	Vars
 	---- */
 
-static int anim=0;
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -69,19 +67,21 @@ void	CPlayerModeDead::enter()
 	{
 		default:
 		case DEATHTYPE__NORMAL:
-			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
-			break;
 		case DEATHTYPE__DRYUP:
-			m_deathAnim=ANIM_SPONGEBOB_DEATHDRY;
-			break;
 		case DEATHTYPE__SQUASH:
-			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHBOUNCE;
+			m_deathMovementType=BOUNCE_OFF_SCREEN;
+			m_bounceVelocity.vx=BOUNCE_INITIALX*m_player->getFacing();
+			m_bounceVelocity.vy=BOUNCE_INITIALY;
+			m_player->setSBOTPosToFront();
 			break;
 		case DEATHTYPE__LIQUID:
 			m_deathAnim=ANIM_SPONGEBOB_DEATHTAR;
+			m_deathMovementType=STAY_STILL;
 			break;
 		case DEATHTYPE__FALL_TO_DEATH:
 			m_deathAnim=-1;
+			m_deathMovementType=FALL_TO_DEATH;
 			break;
 	}
 
@@ -126,7 +126,44 @@ void	CPlayerModeDead::think()
 
 	if(m_player->getPos().vy<(GameScene.GetLevel().getMapHeight()+4)*16)
 	{
-		m_player->moveVertical(5);
+		if(m_deathMovementType==FALL_TO_DEATH)
+		{
+			m_player->moveVertical(5);
+		}
+		else if(m_deathMovementType==BOUNCE_OFF_SCREEN)
+		{
+			DVECTOR	pos=m_player->getPos();
+			pos.vx+=m_bounceVelocity.vx>>BOUNCE_VELOCITY_SHIFT;
+			pos.vy+=m_bounceVelocity.vy>>BOUNCE_VELOCITY_SHIFT;
+			if(pos.vy<0)pos.vy=0;
+			m_player->setPos(pos);
+
+			if(m_bounceVelocity.vy<BOUNCE_MAXY)
+			{
+				m_bounceVelocity.vy+=BOUNCE_MOVEY;
+				if(m_bounceVelocity.vy>BOUNCE_MAXY)
+				{
+					m_bounceVelocity.vy=BOUNCE_MAXY;
+				}
+			}
+
+			if(m_bounceVelocity.vx<0)
+			{
+				m_bounceVelocity.vx+=BOUNCE_MOVEX;
+				if(m_bounceVelocity.vx>0)
+				{
+					m_bounceVelocity.vx=0;
+				}
+			}
+			else if(m_bounceVelocity.vx>0)
+			{
+				m_bounceVelocity.vx-=BOUNCE_MOVEX;
+				if(m_bounceVelocity.vx<0)
+				{
+					m_bounceVelocity.vx=0;
+				}
+			}
+		}
 	}
 
 	if(!m_killed)
@@ -145,43 +182,5 @@ void	CPlayerModeDead::think()
 		}
 	}
 }
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void	CPlayerModeDead::render(DVECTOR *_pos)
-{
-	DVECTOR	deadSbPos;
-
-	deadSbPos=*_pos;
-	deadSbPos.vy-=m_deadTime;
-
-	m_player->renderSb(&deadSbPos,ANIM_SPONGEBOB_DEATHANGLE,0);
-}
-*/
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CPlayerModeDead::fall()
-{
-	/*
-	m_yVelocity+=getPlayerMetrics()->m_metric[DEFAULT_PLAYER_PLAYER_GRAVITY];
-	if(m_yVelocity>=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
-	{
-		m_yVelocity=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
-	}
-	*/
-}
-
 /*===========================================================================
 end */

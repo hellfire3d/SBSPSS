@@ -12,9 +12,7 @@ RunStart
 TeeterBack 
 TeeterFront 
 Swipe
-DeathForwards
 DeathTar 
-DeathDry
 balloonJump
 blowbubble
 FireEnd
@@ -37,3 +35,5 @@ IdleZorro
 Celebrate
 IdleBlink
 Electrocuted
+DeathBounce
+
