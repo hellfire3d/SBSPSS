@@ -156,6 +156,7 @@ void CPaulScene::init()
 	CGUITextEntry		*te;
 
 	s_fontBank.initialise(&standardFont);
+	s_fontBank.setColour(255,255,255);
 
 int mem=MainRam.TotalRam-MainRam.RamUsed;
 PAUL_DBGMSG("initial mem free=%d",mem);
@@ -279,7 +280,6 @@ void CPaulScene::shutdown()
 int showDebugLog=false;
 void CPaulScene::render()
 {
-/*
 	if(showDebugLog)
 	{
 		int		logCount;
@@ -294,6 +294,7 @@ void CPaulScene::render()
 		}
 	}
 
+	/*
 	if(baseGUIObject)	
 		baseGUIObject->render();
 
@@ -312,6 +313,12 @@ void CPaulScene::render()
   ---------------------------------------------------------------------- */
 void CPaulScene::think(int _frames)
 {
+	if(PadGetHeld(0)&PAD_R1&&PadGetDown(0)&PAD_R2)
+	{
+		showDebugLog=!showDebugLog;
+	}
+
+	/*		
 	if(readyToExit)
 	{
 		baseGUIObject->shutdown();
@@ -319,13 +326,14 @@ void CPaulScene::think(int _frames)
 		baseGUIObject=NULL;
 		readyToExit=0;
 	}
-		
+
 	if(baseGUIObject)
 		baseGUIObject->think(_frames);
 
 	s_bg1->think(_frames);
 	s_bg2->think(_frames);
 	s_bg3->think(_frames);
+*/
 }
 
 
