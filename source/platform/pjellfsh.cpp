@@ -15,6 +15,18 @@
 #include "platform\pjellfsh.h"
 #endif
 
+#ifndef __LEVEL_LEVEL_H__
+#include "level\level.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -809,6 +809,14 @@ SOURCE=..\..\..\source\hazard\hcsaw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hdbarrel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hdbarrel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hfalling.cpp
 # End Source File
 # Begin Source File
@@ -1246,6 +1254,14 @@ SOURCE=..\..\..\source\platform\pgeyser.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\platform\pgeyser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pjellfsh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pjellfsh.h
 # End Source File
 # Begin Source File
 

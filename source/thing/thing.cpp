@@ -292,6 +292,31 @@ void		CThingManager::thinkAllThings(int _frames)
 		thing1 = thing1->m_nextThing;
 	}
 
+	// Hazard -> Platform collision
+	thing1=s_thingLists[CThing::TYPE_PLATFORM];
+	while(thing1)
+	{
+		thing2=s_thingLists[CThing::TYPE_HAZARD];
+
+		while(thing2)
+		{
+			if ( thing1 != thing2 )
+			{
+				if ( thing1->canCollide() &&
+						thing2->canCollide() &&
+						thing1->checkCollisionAgainst( thing2, _frames ) )
+				{
+					thing1->collidedWith( thing2 );
+					//thing2->collidedWith( thing1 );
+				}
+			}
+
+			thing2 = thing2->m_nextThing;
+		}
+
+		thing1 = thing1->m_nextThing;
+	}
+
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
 		thing=s_thingLists[i];

@@ -135,6 +135,9 @@
 #include "platform\psbarrel.h"
 #endif
 
+#include "fx\fx.h"
+#include "fx\fxjfish.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -149,6 +152,7 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_LINEAR_PLATFORM:
 		{
 			platform = new ("linear platform") CNpcLinearPlatform;
+
 			break;
 		}
 
@@ -471,6 +475,15 @@ void CNpcPlatform::postInit()
 	sBBox boundingBox = m_modelGfx->GetBBox();
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+
+	if ( m_type == NPC_LINEAR_PLATFORM )
+	{
+		if ( CLevel::getCurrentChapter() != 5 && CLevel::getCurrentChapterLevel() != 4 )
+		{
+			CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+			T->SetUp(64,4,8,8);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -801,6 +814,13 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 					}
 				}
 			}
+
+			break;
+		}
+
+		case TYPE_HAZARD:
+		{
+			m_contact = true;
 
 			break;
 		}

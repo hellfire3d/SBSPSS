@@ -114,7 +114,8 @@ platform_src :=		platform \
 					pbgeyser \
 					pleaf \
 					pbwheel \
-					psbarrel
+					psbarrel \
+					pjellfsh
 
 hazard_src :=		hazard \
 					hfalling \
@@ -128,7 +129,8 @@ hazard_src :=		hazard \
 					hmasher \
 					hfan \
 					hspikes \
-					hbwheel
+					hbwheel \
+					hdbarrel
 
 fx_src :=			fx \
 					fxjfish
