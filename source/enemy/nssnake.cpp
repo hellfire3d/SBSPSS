@@ -1035,7 +1035,7 @@ void CNpcSeaSnakeEnemy::renderOnMapScreen( DVECTOR drawPos )
 	POLY_FT4 *headSprFrame;
 
 	headSprFrame = m_actorGfx->Render(drawPos,ANIM_SEASNAKE_HEADSNAP,0,0);
-	m_actorGfx->RotateScale( headSprFrame, drawPos, 0, 4096, 4096 );
+	m_actorGfx->RotateScale( headSprFrame, drawPos, 0, 4096, 4096,true );
 
 	int segmentCount;
 	int segmentType;
