@@ -357,6 +357,10 @@ SOURCE=..\..\..\source\system\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\system\types.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\system\vid.cpp
 # End Source File
 # Begin Source File
@@ -435,6 +439,14 @@ SOURCE=..\..\..\source\utils\utils.h
 # Begin Group "gui"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gframe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gframe.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\gui\greadout.cpp

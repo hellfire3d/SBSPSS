@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CGUITextReadout : public CGUIObject
+class CGUITextReadout : public CGUIObjectWithFont
 {
 public:
 	typedef struct
@@ -44,11 +44,10 @@ public:
 	} TextReadoutData;
 
 	
-	virtual void		init(GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id);
 
 	virtual void		setReadoutTarget(int *_target);
 	virtual void		setReadoutData(TextReadoutData *_data);
-
 
 	virtual void		render();
 	virtual void		think(int _frames);
@@ -56,14 +55,12 @@ public:
 
 protected:
 	void				recalc();
-	class FontBank		*getFontBank()							{return m_fontBank;}
 
 	
 private:
 	int					*m_target;
 	TextReadoutData		*m_data;
 	int					m_lastValue;
-	class FontBank		*m_fontBank;
 	unsigned int		m_textId;
 	int					m_textY;
 

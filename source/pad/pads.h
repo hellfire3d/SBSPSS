@@ -5,6 +5,11 @@
 #ifndef __PAD_PADS_H__
 #define __PAD_PADS_H__
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"
+#endif
+
+
 /*****************************************************************************/
 #define DUALSHOCKMODE ((u_long *)0x80010000)
 
@@ -40,8 +45,8 @@
 #define	BUTTON_SELECT	PAD_CROSS
 #define	BUTTON_BACK		PAD_TRIANGLE
 
-#define TYPOMATIC_DELAY	75
-#define TYPOMATIC_RATE	50
+#define TYPOMATIC_DELAY	60
+#define TYPOMATIC_RATE	30
 
 
 /*****************************************************************************/

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	gui.cpp
+	greadout.cpp
 
 	Author:		PKG
 	Created: 
@@ -25,7 +25,6 @@
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
 #endif
-
 
 
 /*	Std Lib
@@ -56,16 +55,12 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUITextReadout::init(GUIId _id)
+void CGUITextReadout::init(CGUIObject *_parent,GUIId _id)
 {
-	CGUIObject::init(_id);
+	CGUIObjectWithFont::init(_parent,_id);
 	m_target=0;
 	m_data=0;
 	m_textId=TranslationDatabase::NO_STRING;
-	m_fontBank=new ("TextBox-Font") FontBank();
-	m_fontBank->initialise(&standardFont);
-	m_fontBank->setJustification(FontBank::JUST_CENTRE);
-	m_fontBank->setOt(CGUIObject::DEFAULT_OT);
 }
 
 
@@ -109,7 +104,7 @@ void CGUITextReadout::render()
 	{
 		getFontBank()->print((getW()-(BORDERWIDTH*2))/2,m_textY,m_textId);
 	}
-	CGUIObject::render();
+	CGUIObjectWithFont::render();
 }
 
 
@@ -121,7 +116,7 @@ void CGUITextReadout::render()
   ---------------------------------------------------------------------- */
 void CGUITextReadout::think(int _frames)
 {
-	CGUIObject::think(_frames);
+	CGUIObjectWithFont::think(_frames);
 	if(*m_target!=m_lastValue)
 	{
 		recalc();
@@ -137,7 +132,7 @@ void CGUITextReadout::think(int _frames)
   ---------------------------------------------------------------------- */
 void CGUITextReadout::recalc()
 {
-	CGUIObject::recalc();
+	CGUIObjectWithFont::recalc();
 
 	if(m_data)
 	{
@@ -150,7 +145,6 @@ void CGUITextReadout::recalc()
 		m_textId=4;
 
 		fb=getFontBank();
-		fb->setPrintArea(getX()+BORDERWIDTH,getY()+BORDERHEIGHT,getW()-(BORDERWIDTH*2),getH()-(BORDERHEIGHT*2));
 
 		m_textId=STR__DUMMY;
 		data=m_data;

@@ -34,11 +34,10 @@
 	Structure defintions
 	-------------------- */
 
-class CGUITextBox : public CGUIObject
+class CGUITextBox : public CGUIObjectWithFont
 {
 public:
-	virtual void		init(GUIId _id);
-	virtual void		shutdown();
+	virtual void		init(CGUIObject *_parent,GUIId _id);
 
 	virtual void		setText(unsigned int _textId);
 
@@ -47,11 +46,9 @@ public:
 
 protected:
 	void				recalc();
-	class FontBank		*getFontBank()							{return m_fontBank;}
 
 
 private:
-	class FontBank		*m_fontBank;
 	unsigned int		m_textId;
 	int					m_textY;
 

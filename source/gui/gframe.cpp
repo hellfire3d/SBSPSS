@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	gui.cpp
+	gbutton.cpp
 
 	Author:		PKG
 	Created: 
@@ -45,10 +45,6 @@
 	Vars
 	---- */
 
-
-
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -57,18 +53,15 @@
   ---------------------------------------------------------------------- */
 void CGUIGroupFrame::setFlags(GUI_FLAGS _flags)
 {
-//	int	childFlags;
-
-//	childFlags=_flags&(-1^FLAG_SELECTED);	// Don't propogate the SELECTED flag
-
+	CGUIObject	*pGUI;
+	
 	CGUIObject::setFlags(_flags);
-	if(getChild())getChild()->setFlags(_flags);
-//	if(getNext())getNext()->setFlags(_flags);
-
-//	if(_flags&FLAG_SELECTED)
-//	{
-//		selectFrame();
-//	}
+	pGUI=getChild();
+	while(pGUI)
+	{
+		pGUI->setFlags(_flags);
+		pGUI=pGUI->getNext();
+	}
 }
 
 
@@ -80,62 +73,16 @@ void CGUIGroupFrame::setFlags(GUI_FLAGS _flags)
   ---------------------------------------------------------------------- */
 void CGUIGroupFrame::clearFlags(GUI_FLAGS _flags)
 {
-//	int	childFlags;
-	
-//	childFlags=_flags&(-1^FLAG_SELECTED);	// Don't propogate the SELECTED flag
-	
+	CGUIObject	*pGUI;
+
 	CGUIObject::clearFlags(_flags);
-	if(getChild())getChild()->clearFlags(_flags);
-//	if(getNext())getNext()->clearFlags(_flags);
-	
-//	if(_flags&FLAG_SELECTED)
-//	{
-//		unselectFrame();
-//	}
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void CGUIGroupFrame::selectFrame()
-{
-	CGUIObject	*pGUI;
-	
 	pGUI=getChild();
-	if(pGUI)
+	while(pGUI)
 	{
-		pGUI->select();
+		pGUI->clearFlags(_flags);
 		pGUI=pGUI->getNext();
 	}
 }
-*/
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void CGUIGroupFrame::unselectFrame()
-{
-	CGUIObject	*pGUI;
-	
-	pGUI=getChild();
-	if(pGUI)
-	{
-		pGUI->unselect();
-		pGUI=pGUI->getNext();
-	}
-}
-*/
-
 
 
 
@@ -194,7 +141,6 @@ void CGUIControlFrame::setFlags(GUI_FLAGS _flags)
 	CGUIObject::setFlags(_flags);
 	childFlags=(GUI_FLAGS)(_flags&(-1^FLAG_SELECTED));	// Don't propogate the SELECTED flag
 	if(getChild())getChild()->setFlags(childFlags);
-//	if(getNext())getNext()->setFlags(_flags);
 
 	if(_flags&FLAG_SELECTED)
 	{
@@ -216,7 +162,6 @@ void CGUIControlFrame::clearFlags(GUI_FLAGS _flags)
 	CGUIObject::clearFlags(_flags);
 	childFlags=(GUI_FLAGS)(_flags&(-1^FLAG_SELECTED));	// Don't propogate the SELECTED flag
 	if(getChild())getChild()->clearFlags(childFlags);
-//	if(getNext())getNext()->clearFlags(_flags);
 	
 	if(_flags&FLAG_SELECTED)
 	{

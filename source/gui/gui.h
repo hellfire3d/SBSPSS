@@ -36,6 +36,7 @@ public:
 
 	typedef enum
 	{
+		FLAG_NONE=			0,
 		FLAG_SELECTED=		1<<0,
 		FLAG_HIDDEN=		1<<2,
 		FLAG_DRAWBORDER=	1<<3,
@@ -43,13 +44,13 @@ public:
 
 	enum
 	{
-		DEFAULT_OT=20,
+		INITIAL_OT=200,
 		BORDERWIDTH=8,
 		BORDERHEIGHT=5,
 	};
 
-	
-	virtual void		init(GUIId _id);
+
+	virtual void		init(CGUIObject *_parent,GUIId _id);
 	virtual void		shutdown();
 
 	void				setObjectX(int _x)							{m_x=_x;recalc();}
@@ -62,10 +63,9 @@ public:
 
 	virtual void		render();
 	virtual void		think(int _frames);
-	virtual void		recalc();
 
-	void				setFlags(GUI_FLAGS _flags)					{m_flags|=_flags;}
-	void				clearFlags(GUI_FLAGS _flags)				{m_flags&=_flags^-1;}
+	virtual void		setFlags(GUI_FLAGS _flags)					{m_flags|=_flags;}
+	virtual void		clearFlags(GUI_FLAGS _flags)				{m_flags&=_flags^-1;}
 	int					getFlags(GUI_FLAGS _flags)					{return (m_flags&_flags)!=0;}
 
 	// Quick access functions to the most frequently used flags
@@ -76,38 +76,73 @@ public:
 	void				unhide()									{clearFlags(FLAG_HIDDEN);}
 	int					isHidden()									{return getFlags(FLAG_HIDDEN);}
 
-	
+	CGUIObject			*getChild()									{return m_child;}
+	CGUIObject			*getNext()									{return m_next;}
+
+int getId() {return m_id;}
+
 protected:
-	virtual GUI_FLAGS	getInitialFlags()							{return FLAG_DRAWBORDER;}
+	virtual void		recalc();
+
+	virtual GUI_FLAGS	getInitialFlags()							{return FLAG_NONE;}
 	virtual int			isSelectable()								{return false;}
 
 	int					getX()										{return m_x;}
 	int					getY()										{return m_y;}
 	int					getW()										{return m_w;}
 	int					getH()										{return m_h;}
-	
+
+	int					getParentX()								{if(m_parent)return m_parent->getX()+m_parent->getParentX();else return 0;}
+	int					getParentY()								{if(m_parent)return m_parent->getY()+m_parent->getParentY();else return 0;}
+
+	void				setOt(int _ot)								{m_ot=_ot;}
+	int					getOt()										{return m_ot;}
+
 
 private:
 	GUIId				m_id;
 	int					m_x,m_y,m_w,m_h;
 	int					m_flags;
+	int					m_ot;
 
-	CGUIObject			*m_this;
-	CGUIObject			*m_llNext;
-	static CGUIObject	*s_llBase;
-
-
-	// ..don't like using friends for this :(
-	friend void			guiOpen();
-	friend void			guiClose();
-	friend void			guiThink(int _frames);
-	friend void			guiRender();
-	friend CGUIObject	*guiGetItem(CGUIObject::GUIId _searchId);
-
+	CGUIObject			*m_this;									// Used to check that that the object has been initialised
+	CGUIObject			*m_parent;									// Parent object
+	CGUIObject			*m_child;									// First child
+	CGUIObject			*m_next;									// Next item at this level
 };
 
 
+class CGUIObjectWithFont : public CGUIObject
+{
+public:
+	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		shutdown();
 
+	virtual void		setFlags(GUI_FLAGS _flags);
+	virtual void		clearFlags(GUI_FLAGS _flags);
+	
+	
+protected:
+	enum
+	{
+		DEFAULT_FONT_R=150,
+		DEFAULT_FONT_G=100,
+		DEFAULT_FONT_B=100,
+		SELECTED_FONT_R=175,
+		SELECTED_FONT_G=225,
+		SELECTED_FONT_B=175,
+	};
+
+	virtual void		recalc();
+
+	class FontBank		*getFontBank()							{return m_fontBank;}
+
+
+private:
+	class FontBank		*m_fontBank;
+
+
+};
 
 
 /*----------------------------------------------------------------------
@@ -117,12 +152,6 @@ private:
 /*----------------------------------------------------------------------
 	Functions
 	--------- */
-
-extern void			guiOpen();
-extern void			guiClose();
-extern void			guiThink(int _frames);
-extern void			guiRender();
-extern CGUIObject	*guiGetItem(CGUIObject::GUIId _searchId);
 
 /*---------------------------------------------------------------------- */
 

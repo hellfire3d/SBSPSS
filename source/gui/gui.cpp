@@ -53,17 +53,13 @@
 	Vars
 	---- */
 
-CGUIObject	*CGUIObject::s_llBase=NULL;
-
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUIObject::init(GUIId _id)
+void CGUIObject::init(CGUIObject *_parent,GUIId _id)
 {
 	ASSERT(this!=m_this);
 
@@ -71,25 +67,36 @@ void CGUIObject::init(GUIId _id)
 	m_x=m_y=m_w=m_h=0;
 	m_flags=getInitialFlags();
 	m_this=this;
+	m_parent=_parent;
+	m_child=NULL;
+	m_next=NULL;
 
-	// Add to the end of the linked list of GUI objects..
-	// Also check for duplicate IDs
-	if(s_llBase)
+	// Link in with the parent
+	if(m_parent)
 	{
-		CGUIObject *pGUI;
-		pGUI=s_llBase;
-		while(pGUI->m_llNext)
+		if(m_parent->m_child)
 		{
-			ASSERT(pGUI->m_id==_id);
-			pGUI=pGUI->m_llNext;
+			CGUIObject *pGUI;
+			pGUI=m_parent->m_child;
+			while(pGUI->m_next)
+			{
+				pGUI=pGUI->m_next;
+			}
+			pGUI->m_next=this;
 		}
-		pGUI->m_llNext=this;
+		else
+		{
+			m_parent->m_child=this;
+		}
+		setOt(m_parent->getOt()-1);
 	}
 	else
 	{
-		s_llBase=this;
+		// PKG - Need to add some code to check that only one bastard ( that is, parentless :) object
+		// is ever in existance.
+		GUI_DBGMSG("INFO: GUI object without parent created!");
+		setOt(INITIAL_OT);
 	}
-	m_llNext=0;
 }
 
 
@@ -101,20 +108,14 @@ void CGUIObject::init(GUIId _id)
   ---------------------------------------------------------------------- */
 void CGUIObject::shutdown()
 {
-	CGUIObject *pGUI;
-
 	ASSERT(this==m_this);
 
-	m_this=0;
+	if(m_child)m_child->shutdown();			m_child=NULL;
+	if(m_next)m_next->shutdown();			m_next=NULL;
+	m_parent=NULL;
 
-	// Remove from linked list of GUI objects..
-	pGUI=s_llBase;
-	while(pGUI->m_llNext!=this);
-	{
-		ASSERT(pGUI);	// Huh? Couldn't find this item in the list!?!?!
-		pGUI=pGUI->m_llNext;
-	}
-	pGUI->m_llNext=this->m_llNext;
+	// Is this actually safe? Not really.. (PKG)
+	delete this;
 }
 
 
@@ -123,41 +124,61 @@ void CGUIObject::shutdown()
 	Purpose:	NB: The chain of render functions needs to be reversed so
 				that the draworder is correct! Look at any subclasses
 				render() function to see what I mean by this.. (PKG)
+				um.. or does it?
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#ifdef __USER_paul__
+int forceBorderDraw=true;
+#endif
 void CGUIObject::render()
 {
 	ASSERT(this==m_this);
+
+	if(m_child)m_child->render();
+	if(m_next)m_next->render();
 
 	if(isHidden())
 	{
 		return;
 	}
 
+#ifdef __USER_paul__
+	if(getFlags(FLAG_DRAWBORDER)||forceBorderDraw)
+#else
 	if(getFlags(FLAG_DRAWBORDER))
+#endif
 	{
 		POLY_G4	*g4;
-		int	x,y,w,h;
-		int	r,g,b;
+		int		x,y,w,h;
+		int		r,g,b;
+		int		ot;
 
-		x=getX();
-		y=getY();
+		x=getX()+getParentX();
+		y=getY()+getParentY();
 		w=getW();
 		h=getH();
-		r=g=b=240;
+		if(isSelected())
+		{
+			r=g=b=225;
+		}
+		else
+		{
+			r=g=b=150;
+		}
+		ot=getOt();
 
 		// Border
-		DrawLine(x  ,y  ,x+w,y  ,r,g,b,DEFAULT_OT);
-		DrawLine(x  ,y  ,x  ,y+h,r,g,b,DEFAULT_OT);
-		DrawLine(x+w,y  ,x+w,y+h,r,g,b,DEFAULT_OT);
-		DrawLine(x  ,y+h,x+w,y+h,r,g,b,DEFAULT_OT);
+		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
+		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
+		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
+		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
 
 		x+=3;y+=2;w-=6;h-=4;
-		DrawLine(x  ,y  ,x+w,y  ,r,g,b,DEFAULT_OT);
-		DrawLine(x  ,y  ,x  ,y+h,r,g,b,DEFAULT_OT);
-		DrawLine(x+w,y  ,x+w,y+h,r,g,b,DEFAULT_OT);
-		DrawLine(x  ,y+h,x+w,y+h,r,g,b,DEFAULT_OT);
+		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
+		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
+		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
+		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
 		x-=3;y-=2;w+=6;h+=4;
 
 		// Background
@@ -168,7 +189,7 @@ void CGUIObject::render()
 		setRGB1(g4,250,125, 15);
 		setRGB2(g4, 15,250,125);
 		setRGB3(g4, 15,125,250);
-		AddPrimToList(g4,DEFAULT_OT);
+		AddPrimToList(g4,ot);
 	}
 }
 
@@ -179,9 +200,21 @@ void CGUIObject::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#include "utils\utils.h"
+int wob=0;
 void CGUIObject::think(int _frames)
 {
 	ASSERT(this==m_this);
+
+
+if(m_id==0&&++wob==20)
+{
+	setObjectXYWH(16+getRndRange(10),100+getRndRange(5),512-64,120);
+	wob=0;
+}
+
+	if(m_child)m_child->think(_frames);
+	if(m_next)m_next->think(_frames);
 }
 
 
@@ -194,7 +227,14 @@ void CGUIObject::think(int _frames)
 void CGUIObject::recalc()
 {
 	ASSERT(this==m_this);
+
+	if(m_child)m_child->recalc();
+	if(m_next)m_next->recalc();
 }
+
+
+
+
 
 
 
@@ -205,9 +245,14 @@ void CGUIObject::recalc()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern void guiOpen()
+void CGUIObjectWithFont::init(CGUIObject *_parent,GUIId _id)
 {
-	ASSERT(!CGUIObject::s_llBase);
+	CGUIObject::init(_parent,_id);
+	m_fontBank=new ("GUIObjectWithFont:fontBank") FontBank();
+	m_fontBank->initialise(&standardFont);
+	m_fontBank->setJustification(FontBank::JUST_CENTRE);
+	m_fontBank->setOt(getOt());
+	m_fontBank->setColour(DEFAULT_FONT_R,DEFAULT_FONT_G,DEFAULT_FONT_B);
 }
 
 
@@ -217,14 +262,27 @@ extern void guiOpen()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern void guiClose()
+void CGUIObjectWithFont::shutdown()
 {
-	// Dump everything automatically
-	// Don't walk the linked list here but keep removing the head since frame
-	// objects remove their own children (PKG or do they?)
-	while(CGUIObject::s_llBase)
+	CGUIObject::shutdown();
+	m_fontBank->dump();
+	delete(m_fontBank);
+	m_fontBank=NULL;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObjectWithFont::setFlags(GUI_FLAGS _flags)
+{
+	CGUIObject::setFlags(_flags);
+	if(_flags&FLAG_SELECTED)
 	{
-		CGUIObject::s_llBase->shutdown();
+		getFontBank()->setColour(CGUIObjectWithFont::SELECTED_FONT_R,CGUIObjectWithFont::SELECTED_FONT_G,CGUIObjectWithFont::SELECTED_FONT_B);
 	}
 }
 
@@ -235,16 +293,15 @@ extern void guiClose()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern void	guiThink(int _frames)
+void CGUIObjectWithFont::clearFlags(GUI_FLAGS _flags)
 {
-	CGUIObject *pGUI;
-	pGUI=CGUIObject::s_llBase;
-	while(pGUI)
+	CGUIObject::clearFlags(_flags);
+	if(_flags&FLAG_SELECTED)
 	{
-		pGUI->think(_frames);
-		pGUI=pGUI->m_llNext;
+		getFontBank()->setColour(CGUIObjectWithFont::DEFAULT_FONT_R,CGUIObjectWithFont::DEFAULT_FONT_G,CGUIObjectWithFont::DEFAULT_FONT_B);
 	}
 }
+
 
 
 /*----------------------------------------------------------------------
@@ -253,40 +310,17 @@ extern void	guiThink(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern void	guiRender()
+void CGUIObjectWithFont::recalc()
 {
-	CGUIObject *pGUI;
-	pGUI=CGUIObject::s_llBase;
-	while(pGUI)
-	{
-		pGUI->render();
-		pGUI=pGUI->m_llNext;
-	}
-}
+	int	x,y,w,h;
 
+	CGUIObject::recalc();
+	x=getX()+getParentX()+BORDERWIDTH;
+	y=getY()+getParentY()+BORDERHEIGHT;
+	w=getW()-(BORDERWIDTH*2);
+	h=getH()-(BORDERHEIGHT*2);
+	getFontBank()->setPrintArea(x,y,w,h);
 
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-extern CGUIObject *guiGetItem(CGUIObject::GUIId _searchId)
-{
-	CGUIObject *pGUI;
-	pGUI=CGUIObject::s_llBase;
-	while(pGUI)
-	{
-		if(pGUI->m_id==_searchId)
-		{
-			return pGUI;
-		}
-		pGUI=pGUI->m_llNext;
-	}
-
-	// Bwah!
-	ASSERT(0);
-	return NULL;
 }
 
 

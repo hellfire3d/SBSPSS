@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	gui.cpp
+	gtextbox.cpp
 
 	Author:		PKG
 	Created: 
@@ -62,28 +62,10 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUITextBox::init(GUIId _id)
+void CGUITextBox::init(CGUIObject *_parent,GUIId _id)
 {
-	CGUIObject::init(_id);
+	CGUIObjectWithFont::init(_parent,_id);
 	m_textId=TranslationDatabase::NO_STRING;
-	m_fontBank=new ("TextBox-Font") FontBank();
-	m_fontBank->initialise(&standardFont);
-	m_fontBank->setJustification(FontBank::JUST_CENTRE);
-	m_fontBank->setOt(CGUIObject::DEFAULT_OT);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUITextBox::shutdown()
-{
-	CGUIObject::shutdown();
-	m_fontBank->dump();
-	m_fontBank=NULL;
 }
 
 
@@ -116,7 +98,7 @@ void CGUITextBox::render()
 	{
 		getFontBank()->print((getW()-(BORDERWIDTH*2))/2,m_textY,m_textId);
 	}
-	CGUIObject::render();
+	CGUIObjectWithFont::render();
 }
 
 
@@ -131,9 +113,8 @@ void CGUITextBox::recalc()
 	FontBank	*fb;
 	char		*string;
 
-	CGUIObject::recalc();
+	CGUIObjectWithFont::recalc();
 	fb=getFontBank();
-	fb->setPrintArea(getX()+BORDERWIDTH,getY()+BORDERHEIGHT,getW()-(BORDERWIDTH*2),getH()-(BORDERHEIGHT*2));
 	string=(char*)TranslationDatabase::getString(m_textId);
 		
 #ifdef __VERSION_DEBUG__

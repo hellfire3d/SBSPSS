@@ -30,7 +30,7 @@ SpriteBank			*CGameScene::s_sprites;
 
 BubicleEmitterData bubData=
 {
-	206,200,55,45,		// m_x,m_y,m_w,m_h
+	206,200,60,60,		// m_x,m_y,m_w,m_h
 	10,1,				// m_birthRate,m_birthAmount
 	-1,					// m_life
 	{					// m_bubicleBase
@@ -112,9 +112,9 @@ void	CGameScene::think(int _frames)
 	for(int i=0;i<_frames;i++)
 	{
 		X+=Dx; Y+=Dy;
-		if (X<0+64)		{X=0+64;	Dx=getRndRange(5)+1;}
+		if (X<0+4)		{X=0+4;		Dx=getRndRange(5)+1;}
 		if (X>512-64)	{X=512-64;	Dx=-(getRndRange(5)+1);}
-		if (Y<0+64)		{Y=0+64;	Dy=getRndRange(5)+1;}
+		if (Y<+4)		{Y=0+4;		Dy=getRndRange(5)+1;}
 		if (Y>256-64)	{Y=256-64;	Dy=-(getRndRange(5)+1);}
 	}
 

@@ -43,9 +43,6 @@ public:
 
 protected:
 	GUI_FLAGS			getInitialFlags()							{return FLAG_DRAWBORDER;}
-	
-//	void				selectFrame();
-//	void				unselectFrame();
 
 };
 

@@ -54,8 +54,16 @@
 #include "gui\gtextbox.h"
 #endif
 
+#ifndef __GUI_GFRAME_H__
+#include "gui\gframe.h"
+#endif
+
 #ifndef __GUI_GREADOUT_H__
 #include "gui\greadout.h"
+#endif
+
+#ifndef __GUI_GBUTTON_H__
+#include "gui\gbutton.h"
 #endif
 
 #ifndef __LOCALE_TEXTDBASE_H__
@@ -97,33 +105,65 @@ unsigned int str=STR__PAULS_TEST_STRING_1;
 int w=150;
 int h=40;
 
-int testValue=1;
-CGUITextReadout::TextReadoutData testData[]=
+int testValue=0;
+CGUITextReadout::TextReadoutData testReadoutData[]=
 {
 	{	1,	STR__PAULS_TEST_STRING_1,	},
 	{	2,	STR__PAULS_TEST_STRING_2,	},
 	{	3,	STR__PAULS_TEST_STRING_3,	},
 	{	0,	0,							},
 };
+int testButtonData[]=
+{
+	1,2,3,
+	0,
+};
 
+CGUIControlFrame	*baseGUIObject;
 
 
 void CPaulScene::init()
 {
-	s_fontBank.initialise(&standardFont);
-	guiOpen();
-
 	CGUITextBox		*tb;
-	tb=new ("textbox") CGUITextBox();
-	tb->init(1);
-	tb->setObjectXY(200,130);
-
 	CGUITextReadout	*tr;
+	CGUIGroupFrame	*fr;
+	CGUIButton		*bu;
+
+	s_fontBank.initialise(&standardFont);
+
+	baseGUIObject=new ("Uber GUI object") CGUIControlFrame();
+	baseGUIObject->init(NULL,0);
+	baseGUIObject->setObjectXYWH(32,100,512-64,120);
+
+	tb=new ("textbox") CGUITextBox();
+	tb->init(baseGUIObject,1);
+	tb->setObjectXYWH(10,10,400,25);
+	tb->setText(STR__PAULS_TEST_STRING_1);
+
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(baseGUIObject,2);
+	fr->setObjectXYWH(10,40,400,25);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr,20);
+		tb->setObjectXYWH(50,1,300,22);
+		tb->setText(STR__PAULS_TEST_STRING_1);
+		bu=new ("button") CGUIButton();
+		bu->init(fr,21);
+		bu->setObjectXYWH(50,1,10,10);
+		bu->setButtonTarget(&testValue);
+		bu->setButtonData(testButtonData);
+
 	tr=new ("textreadout") CGUITextReadout();
-	tr->init(2);
-	tr->setObjectXYWH(40,130,120,80);
+	tr->init(baseGUIObject,3);
+	tr->setObjectXYWH(10,70,400,25);
 	tr->setReadoutTarget(&testValue);
-	tr->setReadoutData(testData);
+	tr->setReadoutData(testReadoutData);
+
+	// Heh.. this'll actually work =)
+//	baseGUIObject->shutdown();
+
+
+	baseGUIObject->select();
 }
 
 
@@ -136,7 +176,6 @@ void CPaulScene::init()
 void CPaulScene::shutdown()
 {
 	s_fontBank.dump();
-	guiClose();
 }
 
 
@@ -159,8 +198,8 @@ void CPaulScene::render()
 		s_fontBank.print(20,y,getDbgLineFromLog(i));
 		y+=charHeight;
 	}
-	
-	guiRender();
+
+	baseGUIObject->render();
 }
 
 
@@ -172,12 +211,14 @@ void CPaulScene::render()
   ---------------------------------------------------------------------- */
 void CPaulScene::think(int _frames)
 {
+	/*
 	CGUITextBox		*tb;
 	tb=(CGUITextBox *)guiGetItem(1);
 	tb->setObjectWH(w,h);
 	tb->setText(str);
+	*/
 
-	guiThink(GameState::getFramesSinceLast());
+	baseGUIObject->think(_frames);
 }
 
 

@@ -68,6 +68,8 @@ gfx_src :=			prim \
 #					bilboard
 
 gui_src :=			gui \
+					gbutton \
+					gframe \
 					greadout \
 					gtextbox
 
