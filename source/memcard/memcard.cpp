@@ -32,7 +32,7 @@
 	Tyepdefs && Defines
 	------------------- */
 
-#define	SAVENAMEHEADER		"SpongeBob"
+#define	SAVENAMEHEADER		"SpongeBob_SuperSponge"
 
 // for prlsr - use slot 1 only
 #define USE_SLOT_ONE_ONLY
