@@ -23,6 +23,7 @@ class CNpcBarrelHazard : public CNpcHazard
 public:
 	void				init();
 	void				render();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	void				processMovement( int _frames );
 
