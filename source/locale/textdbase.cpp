@@ -28,16 +28,16 @@
 /*	Local
 	----- */
 
-#ifndef	__MEMORY_HEADER__
-#include "mem\memory.h"
+#ifndef		__MEMORY_HEADER__
+#include	"mem\memory.h"
 #endif
 
-#ifndef __BigLump_H__
-#include <biglump.h>
+#ifndef		__FILE_EQUATES_H__
+#include	<biglump.h>
 #endif
 
-#ifndef _FILEIO_HEADER_
-#include "fileio\fileio.h"
+#ifndef		_FILEIO_HEADER_
+#include	"fileio\fileio.h"
 #endif
 
 

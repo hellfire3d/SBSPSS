@@ -2,10 +2,12 @@
 /*** PSX Vram Stuff ***/
 /**********************/
 
-#ifndef __VRAM_H__
-#define __VRAM_H__
+#ifndef		__TPAGE_H__
+#define		__TPAGE_H__
 
+#ifndef		__FILE_EQUATES_H__
 #include	<BigLump.h>
+#endif
 
 /*************************************************************************************************/
 #define	TPAGE_MAX_ANIM_TEX	8

@@ -50,8 +50,6 @@ DataBankEquate	CFileIO::CurrentDataBank=DATABANK_MAX;
 //sFAT	*FAT;
 void	CFileIO::Init()
 {
-		DBG_MSG0("IO INIT!!!!\n");
-
 #if		__FILE_SYSTEM__==PC
 		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
 #else
@@ -63,7 +61,7 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 // Read Main FAT (special case load)
 		MainFAT=(sFAT *)MemAlloc( FATSize,"MainFAT");
 
-		DBG_MSG1("FATSIZE=%i\n",FATSize);
+		DBG_MSG1("IoInit:FATSIZE=%i",FATSize);
 		FileIO->Open();
 
 		BigLump.Status = BLStatusOpen;

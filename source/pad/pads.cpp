@@ -303,8 +303,6 @@ int			PortShift=Port<<4;
 	}
 	if ( Pad->Send==0 )
 		{
-printf("%d,%d\n",Pad->Motor0,Pad->Motor1);
-
 		PadSetAct(PortShift,&(Pad->Motor0),2);
 
 		if (Pad->Status == PadStateFindCTP1)

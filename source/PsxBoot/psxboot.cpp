@@ -237,7 +237,6 @@ int		main()
 		ShowScreen(LegalFilename,-1,0);
 		CalcFilePos((int*)SCRATCH_RAM);
 int		*Ptr=(int*)SCRATCH_RAM;
-//		for (int Loop=0;Loop<FILEPOS_MAX;Loop++)	printf("%i\n",*Ptr++);
 		while (1)
 			{
 			int count = VSync( -1 );

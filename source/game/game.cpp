@@ -28,7 +28,8 @@ void 	CGameScene::Init()
 {
 	s_genericFont=new ("CGameScene::Init") FontBank();
 	s_genericFont->initialise( &standardFont );
-	s_genericFont->setColour( 128, 80, 100 );
+	s_genericFont->setColour( 255, 255 , 0 );
+	VidSetClearScreen(1);
 }
 
 /*****************************************************************************/
@@ -38,8 +39,23 @@ void CGameScene::Shutdown()
 }
 
 /*****************************************************************************/
+int		X=512/2;
+int		Y=256/2;
+int		Dx=+7;
+int		Dy=-3;
+
 void 	CGameScene::Render()
 {
+char	*Str="Sponge\nBob\nSquare\nPants";
+
+	X+=Dx; Y+=Dy;
+	if (X<0+64)		{X=0+64;	Dx=-Dx;}
+	if (X>512-64)	{X=512-64;	Dx=-Dx;}
+	if (Y<0+64)		{Y=0+64;	Dy=-Dy;}
+	if (Y>256-64)	{Y=256-64;	Dy=-Dy;}
+
+
+	s_genericFont->print(X,Y,(u8*)Str);
 }
 
 /*****************************************************************************/

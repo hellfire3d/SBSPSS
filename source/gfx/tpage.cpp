@@ -176,14 +176,14 @@ sTPageInfo	*Cache;
 
 		if (TPage)	// Is in cache, no need to load it again :o)
 			{
-			DBG_MSG2("TPLoadTex Cached (%i,%i)",TPage,Half);
+//			DBG_MSG2("TPLoadTex Cached (%i,%i)",TPage,Half);
 			s_TPCache[TPage].Info[Half].RefCount++;
 			Cache=&s_TPCache[TPage].Info[Half];
 			FramePtr=&Cache->AnimTexFrame[0];
 			}
 		else
 			{		// Better load it then
-			DBG_MSG0("TPLoadTex");
+//			DBG_MSG0("TPLoadTex");
 			TPHdr=(sTPageHdr*)CFileIO::loadFile(Filename,"TPLoadTEX");
 			ASSERT(!TPHdr->NumOfSpareBoxes);
 			FramePtr=(sFrameHdr*)	MakePtr(TPHdr,sizeof(sTPageHdr));
@@ -230,13 +230,13 @@ int			ReadLeft;
 
 	if (TPage)	// Found one!!
 		{
-		DBG_MSG2("TPLoadTexWithHeaders Cached (%i,%i)",TPage,Half);
+//		DBG_MSG2("TPLoadTexWithHeaders Cached (%i,%i)",TPage,Half);
 		s_TPCache[TPage].Info[Half].RefCount++;
 		Cache=&s_TPCache[TPage].Info[Half];
 		}
 	else
 		{
-		DBG_MSG0("TPLoadTexWithHeaders");
+//		DBG_MSG0("TPLoadTexWithHeaders");
 		CFileIO::OpenFile(Filename);
 // Load Main Header
 		CFileIO::ReadFile((void*)&TPHdr,sizeof(sTPageHdr));

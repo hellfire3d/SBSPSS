@@ -5,7 +5,9 @@
 #ifndef _FILEIO_HEADER_
 #define _FILEIO_HEADER_
 
+#ifndef		__FILE_EQUATES_H__
 #include 	"BigLump.h"
+#endif
 #include	"fileio\filetab.h"
 
 /*****************************************************************************/

@@ -18,7 +18,9 @@
 
 #include "gfx\fdata.h"
 
+#ifndef		__FILE_EQUATES_H__
 #include	"biglump.h"
+#endif
 
 #include	<UiGfx.h>
 

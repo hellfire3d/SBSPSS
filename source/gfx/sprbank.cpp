@@ -61,8 +61,6 @@
 static SpriteBankInstance	*s_bankList = NULL;
 
 
-//#define SPRITE_BANK_DEBUG
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -71,9 +69,6 @@ static SpriteBankInstance	*s_bankList = NULL;
   ---------------------------------------------------------------------- */
 SpriteBankInstance::SpriteBankInstance( SpriteBankInstance *_next )
 {
-#ifdef SPRITE_BANK_DEBUG
-printf("SpriteBankInstance()\n");
-#endif
 	m_frameHdr=NULL;
 	m_file=FileEquate( -1 );
 	m_refCount=0;
@@ -88,9 +83,6 @@ printf("SpriteBankInstance()\n");
   ---------------------------------------------------------------------- */
 SpriteBankInstance::~SpriteBankInstance()
 {
-#ifdef SPRITE_BANK_DEBUG
-printf("~SpriteBankInstance() file=%d\n",m_file);
-#endif
 	ASSERT( !m_frameHdr );
 }
 
@@ -100,19 +92,13 @@ printf("~SpriteBankInstance() file=%d\n",m_file);
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int loadcount=0;
+
 void SpriteBankInstance::load( FileEquate _file )
 {
-#ifdef SPRITE_BANK_DEBUG
-printf("SpriteBankInstance::load() file=%d\n",_file);
-#endif
 	if( m_refCount )
 	{
 		ASSERT( _file == m_file );
 		m_refCount++;
-#ifdef SPRITE_BANK_DEBUG
-printf("  loaded reference" );
-#endif
 	}
 	else
 	{
@@ -120,15 +106,8 @@ printf("  loaded reference" );
 
 		m_file=_file;
 		m_refCount=1;
-#ifdef SPRITE_BANK_DEBUG
-printf("  loaded physical %d",m_file );
-#endif
 	}
-#ifdef SPRITE_BANK_DEBUG
-printf(" - refcount=%d\n",m_refCount);
-#endif
 
-loadcount++;
 }
 
 /*----------------------------------------------------------------------
@@ -139,30 +118,17 @@ loadcount++;
   ---------------------------------------------------------------------- */
 int SpriteBankInstance::dump()
 {
-#ifdef SPRITE_BANK_DEBUG
-printf("SpriteBankInstance::dump() file=%d\n",m_file);
-#endif
 	int ret=false;
 	ASSERT(m_frameHdr);
 
 	m_refCount--;
-#ifdef SPRITE_BANK_DEBUG
-printf("  refcount now %d",m_refCount);
-#endif
 	if( m_refCount == 0 )
 	{
-#ifdef SPRITE_BANK_DEBUG
-printf(" ..freeing\n");
-#endif
 		TPFree(m_tpageDesc);
 		MemFree(m_frameHdr);
 		m_frameHdr=NULL;
 		ret=true;
 	}
-#ifdef SPRITE_BANK_DEBUG
-printf("\n");
-#endif
-loadcount--;
 	return ret;
 }
 

@@ -8,10 +8,12 @@
 #ifndef		_GLOBAL_HEADER_
 #include	"system\global.h"
 #endif
+#ifndef		__TPAGE_H__
 #include	"gfx\tpage.h"
+#endif
 
 #define	MAX_OT				(2048)
-#define	MAX_PRIMS			(2048+512)
+#define	MAX_PRIMS			(1024)
 
 #define	USE_NTAGS			1
 

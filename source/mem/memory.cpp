@@ -402,20 +402,6 @@ int		BestNode,FirstNode;
 				}
 			Head = mem->Nodes[ Head ].Next;
 			}
-//--------------------
-#ifdef	MemPrintx
-		if (Len>300000) 
-		{
-		Head=mem->Head;
-		while (Head != 0xffff)
-			{
-			printf("%i %i\n",Head,(int)mem->Nodes[Head].Len);
-			Head = mem->Nodes[ Head ].Next;
-			}
-		}
-		if (FirstNode!=BestNode)	
-			printf("Need %i, %i (%i) \t%i (%i) \n",(int)Len,FirstNode,(int)mem->Nodes[FirstNode].Len, BestNode,(int)mem->Nodes[BestNode].Len);
-#endif
 		
 //--------------------
 // Alloc it

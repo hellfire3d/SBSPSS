@@ -18,11 +18,14 @@
 	Includes
 	-------- */
 
-#ifndef _GLOBAL_HEADER_
-#include "system\global.h"
+#ifndef		_GLOBAL_HEADER_
+#include	"system\global.h"
 #endif
 
+#ifndef		__FILE_EQUATES_H__
 #include	<biglump.h>
+#endif
+
 /*	Std Lib
 	------- */
 
