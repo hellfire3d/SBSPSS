@@ -122,10 +122,10 @@ UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
 UI_GFX_NONTRANS :=			
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS :=				+vbamboo.bmp +hbamboo.bmp \
+UI_GFX_TRANS :=				+vbamboo.bmp +vbambootl.bmp +vbambootr.bmp +vbamboobl.bmp +vbamboobr.bmp \
+							+hbamboo.bmp +hbambootl.bmp +hbambootr.bmp +hbamboobl.bmp +hbamboobr.bmp \
 							+butU.bmp +butD.bmp +butL.bmp +butR.bmp \
 							+butC.bmp +butS.bmp +butX.bmp +butT.bmp
-# +cross.bmp +tick.bmp 
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TEX_IN :=			$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}
@@ -139,7 +139,7 @@ cleanui :
 ui: 		$(UI_GFX_TEX_IN)
 
 $(UI_GFX_TEX_OUT) :	$(UI_GFX_TEX_IN)
-		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c- -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
+		@parkgrab -c+ -z+ $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c- -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
 		@$(MV) -f $(UI_GFX_OUT_DIR)/uigfx.h $(UI_GFX_HDR_FILE)
 
 GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
