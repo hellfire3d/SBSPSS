@@ -14,6 +14,7 @@
 #include <gfname.hpp>
 #include "psxtypes.h"
 #include "FaceStore.h"
+#include <io.h>
 
 #include "..\..\..\tools\data\include\dStructs.h"
 
@@ -100,3 +101,50 @@ int NumOfCommas=0;
 	return(NumOfCommas);
 }
 
+//***************************************************************************
+char	*FindFile(const char *Name)
+{
+int 		Handle;
+GFName		DirName(Name);
+GString		Filename,Path;
+_finddata_t FindBlock;
+int			Status;
+
+// Does this file exist
+FILE	*File=fopen(Name,"rb");
+		if (File)
+		{
+			fclose(File);
+			return((char*)Name);
+		}
+
+// Recurse dirs to find file
+		Filename=DirName.File();
+		Filename+=".";
+		Filename+=DirName.Ext();
+		DirName.File("*");
+		DirName.Ext("*");
+		Path=DirName.FullName();
+
+		Name=0;
+		Status=Handle= _findfirst(Path,&FindBlock);
+
+		while (Status!=-1 && !Name)
+		{
+			if (FindBlock.attrib&_A_SUBDIR)
+			{
+				if (strcmp(FindBlock.name,".") && strcmp(FindBlock.name,".."))
+				{
+					GString	NewName;
+					NewName=DirName.Drive();
+					NewName+=DirName.Dir();
+					NewName+=FindBlock.name;
+					NewName+="/";
+					NewName+=Filename;
+					Name=FindFile(NewName);
+				}
+			}
+		if (!Name) Status=_findnext(Handle,&FindBlock);
+		}
+		return((char*)Name);
+}

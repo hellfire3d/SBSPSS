@@ -190,21 +190,27 @@ CFace	&F = FaceList[ListSize];
 int		CFaceStore::AddTex(GString const &TexName)
 {
 int		ListSize=TexList.size();
-GString	UpperName=TexBasePath+TexName;
-		UpperName.Upper();
+GString	Filename=TexName;
+		Filename.Upper();
 
 		for (int i=0; i<ListSize; i++)
 		{
-			if (TexList[i].Name==UpperName) return(TexList[i].TexGrabId);
+			if (TexList[i].Name==Filename) return(TexList[i].TexGrabId);
 		}
+// Does file exist
+		if (!FindFile(TexName))
+			GObject::Error(ERR_FATAL,"Texture not found %s!!\n",TexName);
+
+
+
 
 		TexList.resize(ListSize+1);
 sFaceTexList	&New=TexList[ListSize];
 
-		New.Name=UpperName;
+		New.Name=Filename;
 
 //		printf("Add Tex %s\n",TexName);
-		New.TexGrabId=TexGrab->AddFile(UpperName);
+		New.TexGrabId=TexGrab->AddFile(Filename);
 
 		return(New.TexGrabId);
 }

@@ -75,7 +75,7 @@ public:
 
 		void					SetTexGrab(CTexGrab &NewGrab)						{TexGrab=&NewGrab;}
 		int						AddTex(GString const &TexName);
-		void					SetTexBasePath(GString &Path)						{TexBasePath=Path;}
+
 		void					SetTexOut(GString &Name,int TPBase,int TPW,int TPH)	{TexGrab->SetOutFile(Name); TexGrab->SetTPage(TPBase,TPW,TPH);}
 		void					SetTexInclude(GString &Name)						{TexGrab->SetIncFile(Name);}
 		void					SetTexDebug(bool f)									{TexGrab->SetDebug(f);}
@@ -137,7 +137,6 @@ private:
 		vector<CFace>			FaceList;
 		vector<sFaceTexList>	TexList;
 		CTexGrab				FaceStoreTexGrab,*TexGrab;
-		GString					TexBasePath;
 
 		vector<CFace>			TriFaceList;
 		vector<CFace>			QuadFaceList;

@@ -38,12 +38,12 @@ int		Count;
 			case 'o':
 				OutStr = CheckFileString(String);
 				OutStr.Upper();
-				OutStr.Append('\\');
+				OutStr.Append('/');
 				break;
 			case 'i':
 				IncludeFile = CheckFileString(String);
 				IncludeFile.Upper();
-				IncludeFile.Append('\\');
+				IncludeFile.Append('/');
 				break;
 			case 'd':
 				DebugOn =true;
@@ -167,6 +167,7 @@ GString	IncName;
 		TexGrab.AnimatedHeadersOnly(true);
 		TexGrab.DontOutputBoxes(true);
 		TexGrab.AllowRotate(true);
+		TexGrab.FileRecursion(true);
 }
 
 //***************************************************************************
@@ -290,8 +291,8 @@ Matrix4x4	PMtx=ParentNode.Mtx;
 				int		Mat=SceneUsedMatList[NodeMatList[T]];
 
 				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
-
-				ParentBone.FaceList.AddFace( VtxList, NodeTriList[T], NodeUVList[T], SceneTexList[Mat]);
+				GString	TexName=InPath+SceneTexList[Mat];
+				ParentBone.FaceList.AddFace( VtxList, NodeTriList[T], NodeUVList[T], TexName);
 			}
 		}
 
@@ -345,7 +346,6 @@ int		ListSize=Skel.size();
 void	CMkActor3d::ActorProcess()
 {
 		FaceList.SetTexGrab(TexGrab);
-		FaceList.SetTexBasePath(InPath);
 
 		ProcessSkel(1,-1);
 		BuildSkelOut();
@@ -354,9 +354,10 @@ void	CMkActor3d::ActorProcess()
 int		ListSize=InTexList.size();
 		for (int i=0; i<ListSize; i++)
 		{
-			GString	Filename;
-			Filename="Textures/";
+			GString	Filename=InPath;
+			Filename+="Textures/";
 			Filename+=InTexList[i]+".Bmp";
+			Filename.Upper();
 			FaceList.AddTex(Filename);
 		}
 }
@@ -446,7 +447,6 @@ int		PixPerWord;
 //***************************************************************************
 int		CMkActor3d::WriteTexInfoList()
 {
-CTexGrab					&TexGrab=FaceList.GetTexGrab();
 std::vector<sTexOutInfo>	&TexList=TexGrab.GetTexInfo();
 int		ListSize=TexList.size();
 int		Pos=ftell(File);
@@ -456,6 +456,7 @@ int		Pos=ftell(File);
 			sTexInfo	OutTex;
 			
 			CalcTPXY(TexList[i],OutTex);
+//			printf("%i %i %i %i\n",OutTex.x,OutTex.y,OutTex.w,OutTex.h);
 			fwrite(&OutTex, sizeof(sTexInfo), 1, File);
 		}
 //		printf("%i Materials\n",ListSize);

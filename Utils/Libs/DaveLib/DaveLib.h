@@ -65,5 +65,7 @@ int		round(float f);
 
 void	alignFile( FILE *f, int align );
 
+char	*FindFile(const char *Name);
+
 //***************************************************************************
 #endif
