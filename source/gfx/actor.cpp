@@ -538,6 +538,7 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
+int	asd=0;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
@@ -635,11 +636,15 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 				addPrim(OtPtr+OtPos,sFt4);
 			}
 // Set BBox
-int			HalfW=CurrentFrameGfx->W>>1;
+//int			HalfW=CurrentFrameGfx->W>>1;
+// Sizes now depend on aspect corrected sizes, so get sizes back from poly
+int			BBoxW=Ft4->x1-Ft4->x0;
+int			BBoxH=Ft4->y2-Ft4->y0;
+int			HalfW=BBoxW>>1;
 
 			BBox.XMin=-HalfW+BBOX_ADJ;
 			BBox.XMax=+HalfW-BBOX_ADJ;
-			BBox.YMin=-CurrentFrameGfx->H+BBOX_ADJ;
+			BBox.YMin=-BBoxH+BBOX_ADJ;
 			BBox.YMax=0-BBOX_ADJ;
 
 			return(Ft4);
