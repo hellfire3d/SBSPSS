@@ -54,6 +54,8 @@ backend_src :=		gameover \
 enemy_src :=		2denemy \
 					npc \
 					npcpath \
+					nsjfish \
+					nclam \
 					enemy
 
 fileio_src :=		fileio \

@@ -41,6 +41,9 @@ protected:
 	{
 		NPC_TEST_TYPE = 0,
 		NPC_SANDY_CHEEKS = 1,
+		NPC_SMALL_JELLYFISH_1,
+		NPC_ANEMONE_1,
+		NPC_CLAM,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -62,12 +65,15 @@ protected:
 	enum NPC_SENSOR_FUNC
 	{
 		NPC_SENSOR_NONE = 0,
-		NPC_SENSOR_USER_CLOSE = 1,
+		NPC_SENSOR_JELLYFISH_USER_CLOSE = 1,
+		NPC_SENSOR_CLAM_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
 	{
-		NPC_CLOSE_EVADE = 0,
+		NPC_CLOSE_NONE = 0,
+		NPC_CLOSE_JELLYFISH_EVADE = 1,
+		NPC_CLOSE_CLAM_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -89,6 +95,12 @@ protected:
 	{
 		NPC_TIMER_NONE = 0,
 		NPC_TIMER_EVADE_DONE = 1,
+		NPC_TIMER_ATTACK_DONE,
+	};
+
+	enum
+	{
+		NPC_JELLYFISH_RESISTANCE = 64,
 	};
 
 
@@ -104,13 +116,27 @@ protected:
 	}
 	NPC_DATA;
 
+	// functions
+
 	bool				processSensor();
-	void				processMovement(int _frames);
-	void				processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s32 headingChange);
+	void				processMovement( int _frames );
+	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	void				processShot();
-	void				processClose(int _frames);
+	void				processClose( int _frames );
 	void				processCollision();
-	void				processTimer(int _frames);
+	void				processTimer( int _frames );
+
+	// small jellyfish functions
+
+	void				processSmallJellyfishSensor();
+	void				processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+	void				processCloseSmallJellyfishEvade( int _frames );
+
+	// clam functions
+
+	void				processCloseClamAttack( int _frames );
+
+	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
 
@@ -126,6 +152,8 @@ protected:
 	s32					m_velocity;
 	bool				m_evadeClockwise;
 	s32					m_timerTimer;
+	s32					m_extension;
+	bool				m_extendOut;
 };
 
 

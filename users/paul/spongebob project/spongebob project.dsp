@@ -125,6 +125,10 @@ SOURCE=..\..\..\source\enemy\enemy.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nclam.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npc.cpp
 # End Source File
 # Begin Source File
@@ -138,6 +142,10 @@ SOURCE=..\..\..\source\enemy\npcpath.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\npcpath.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
 # End Group
 # Begin Group "fileio"
