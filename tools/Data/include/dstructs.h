@@ -246,9 +246,9 @@ struct	sLevelHdr
 // Actors
 struct	sSpriteFrameGfx
 {
-		u8			*PAKSpr;	// 4	Needs to be u32, so might as well make it a ptr
-		u16			Pad;		// 2 :o(
-		u8			W,H;		// 2
+		u8			*PAKSpr;			// 4	Needs to be u32, so might as well make it a ptr
+		s8			AspectX0,AspectX1;	// 2	Aspect correction value 
+		u8			W,H;				// 2
 };
 
 struct	sSpriteFrame
@@ -366,4 +366,31 @@ struct	sThingHazard
 }; // 12
 
 //***************************************************************************
+//*** FX Stuff **************************************************************
+//***************************************************************************
+#if	0
+enum FX_FLAG
+{
+	FX_FLAG_LOOP			=1<<0,
+	FX_FLAG_COLLIDE_KILL	=1<<1,
+	FX_FLAG_HAS_GRAVITY		=1<<2,
+	FX_FLAG_INJURE_PLAYER	=1<<3,
+	FX_FLAG_TRANS			=1<<4,
+};
+
+//***************************************************************************
+struct sFXData
+{
+	s16				Scale;
+//	s16				StartFrame,EndFrame;
+//	s8				FrameShift;
+//	u8				R,G,B;
+	u16				Flags;
+//	DVECTOR			Velocity;
+	u16				Velocity,Heading;
+//	u16				EndFX;
+};
+#endif
+//***************************************************************************
+
 #endif

@@ -88,7 +88,7 @@ CFXBaseAnim::sFXAnim	FXExplodeData=
 CFXBaseAnim::sFXAnim	FXFireData=
 {
 		ONE,
-		FRM__FIRE01,FRM__FIRE06,
+		FRM__FIRE01,FRM__FIRE08,
 		1,
 		127,127,127,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_TRANS,
@@ -140,7 +140,7 @@ CFXBaseAnim::sFXAnim	FXOilDripData=
 // Bubble
 CFXBaseAnim::sFXAnim	FXBubbleWaterData=
 {
-		ONE/2,
+		ONE,
 		FRM__BUBBLE_2,FRM__BUBBLE_2,
 		1,
 		127,127,255,
@@ -151,7 +151,7 @@ CFXBaseAnim::sFXAnim	FXBubbleWaterData=
 
 CFXBaseAnim::sFXAnim	FXBubbleAcidData=
 {
-		ONE/2,
+		ONE,
 		FRM__BUBBLE_2,FRM__BUBBLE_2,
 		1,
 		0,255,0,
@@ -161,7 +161,7 @@ CFXBaseAnim::sFXAnim	FXBubbleAcidData=
 };
 CFXBaseAnim::sFXAnim	FXBubbleLavaData=
 {
-		ONE/2,
+		ONE,
 		FRM__BUBBLE_2,FRM__BUBBLE_2,
 		1,
 		255,0,0,
@@ -171,7 +171,7 @@ CFXBaseAnim::sFXAnim	FXBubbleLavaData=
 };
 CFXBaseAnim::sFXAnim	FXBubbleOilData=
 {
-		ONE/2,
+		ONE,
 		FRM__BUBBLE_2,FRM__BUBBLE_2,
 		1,
 		32,32,32,
@@ -183,7 +183,7 @@ CFXBaseAnim::sFXAnim	FXBubbleOilData=
 CFXBaseAnim::sFXAnim	FXWaterFountainData=
 {
 		ONE,
-		FRM__GUSH000,FRM__GUSH002,
+		FRM__GUSH000,FRM__GUSH003,
 		3,
 		127,127,255,
 		CFXBaseAnim::FXANIM_FLAG_LOOP,

@@ -79,6 +79,7 @@ private:
 		int					DupCount;
 		int					MaxW,MaxH;
 		int					TotalIn,TotalOut;
+		int					BlankCount;
 };
 
 //***************************************************************************

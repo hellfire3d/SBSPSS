@@ -29,11 +29,14 @@ GString		SpritePath;
 GString		OutPath;
 GString		IncludePath;
 
+float		Aspect=512.0f/320.0f;
+
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
 {
 char	Text[2048],*TextPtr;
 int		Count;
+
 
 	if (String[0]=='-' || String[0]=='/')
 		{
@@ -63,6 +66,10 @@ int		Count;
 				RootPath=CheckFileString(String);
 				RootPath.Upper();
 				RootPath.Append('\\');
+				break;
+			case 'a':
+				TpStr= CheckFileString(String);
+				Aspect=(float)atof(TpStr);
 				break;
 			case 't':
 				TpStr= CheckFileString(String);
@@ -103,6 +110,7 @@ void Usage(char *ErrStr)
 	printf("   -s:nn           Sprite Dir\n");
 	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
 	printf("   -d:             Enable Debug output\n");
+	printf("   -a:             Aspect Ratio\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 
@@ -150,6 +158,8 @@ CMkActor::CMkActor(GString &ActorName,GString &ActorPath,GString &SpritePath)
 		DupCount=0;
 		MaxW=0;
 		MaxH=0;
+		BlankCount=0;
+
 }
 
 //***************************************************************************
@@ -294,6 +304,7 @@ void	CMkActor::MakePsxGfx(sBmp &Bmp)
 		{
 			Bmp.Psx=0;
 			Bmp.PsxSize=0;
+			BlankCount++;
 			return;
 		}
 		
@@ -563,7 +574,7 @@ GString			OutName=OutFile+".SBK";
 		fclose(File);
 
 		WriteInclude();
-		printf("%s. %i Dups, (In %i Out %i = Saved %i) (MaxWH %i %i)\n",Name,DupCount,TotalIn,TotalOut,TotalIn-TotalOut,FileHdr.MaxW,FileHdr.MaxH);
+		printf("%s. D=%i B=%i - WH=%i %i - In=%i Out=%i Sv=%i \n",Name,DupCount,BlankCount,FileHdr.MaxW,FileHdr.MaxH,TotalIn,TotalOut,TotalIn-TotalOut);
 
 }
 
@@ -666,12 +677,28 @@ vector<sSpriteFrameGfx>	Hdrs;
 		{
 			sBmp	&ThisBmp=BmpList[i];
 
-			Hdrs[i].PAKSpr=(u8*)ftell(File);
-//			Hdrs[i].XOfs=ThisBmp.CrossHairX;
-//			Hdrs[i].YOfs=ThisBmp.CrossHairY;
-			Hdrs[i].W=ThisBmp.Frm.GetWidth();
-			Hdrs[i].H=ThisBmp.Frm.GetHeight();
-			fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
+			if (ThisBmp.Pak)
+			{
+				Hdrs[i].PAKSpr=(u8*)ftell(File);
+				Hdrs[i].W=ThisBmp.Frm.GetWidth();
+				Hdrs[i].H=ThisBmp.Frm.GetHeight();
+				// aspect
+				float	aW=Hdrs[i].W*Aspect;
+				int		dW=(int)aW-Hdrs[i].W;
+				int		X0=dW/2;
+				int		X1=dW-X0;
+
+				Hdrs[i].AspectX0=X0;
+				Hdrs[i].AspectX1=X1;
+//	printf("%i %i %i\n",Hdrs[i].W,X0,X1);
+				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
+			}
+			else
+			{
+				Hdrs[i].PAKSpr=0;
+				Hdrs[i].W=0;
+				Hdrs[i].H=0;
+			}
 		}
 // ReWrite Headers
 int		SavePos=ftell(File);
