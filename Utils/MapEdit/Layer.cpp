@@ -21,7 +21,7 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayer::CLayer(CCore *_Core)
+CLayer::CLayer()
 {
 }
 
@@ -31,23 +31,13 @@ CLayer::~CLayer()
 }
 
 /*****************************************************************************/
-void	CLayer::InitLayer(CCore *_Core)
+void	CLayer::Render(CCore *Core,Vec &MapPos,BOOL Is3d)
 {
-int		Width=Map.GetWidth();
-int		Height=Map.GetHeight();
-
-	Core=_Core;
-	TRACE3("%i x %i = %i\t",Width,Height,Width*Height);
+		Render2d(Core,MapPos);
 }
 
 /*****************************************************************************/
-void	CLayer::Render(Vec &MapPos,BOOL Is3d)
-{
-		Render2d(MapPos);
-}
-
-/*****************************************************************************/
-void	CLayer::Render2d(Vec &MapPos)
+void	CLayer::Render2d(CCore *Core,Vec &MapPos)
 {
 float	XYDiv=GetLayerZPosDiv();
 return;
@@ -69,13 +59,14 @@ int		Height=Map.GetHeight();
 }
 
 /*****************************************************************************/
-void	CLayer::Render3d(Vec &MapPos)
+void	CLayer::Render3d(CCore *Core,Vec &MapPos)
 {
-float	XYDiv=GetLayerZPosDiv();
-int		MapW=Map.GetWidth();
-int		MapH=Map.GetHeight();
-float	StartX=MapPos.x/XYDiv;
-float	StartY=MapPos.y/XYDiv;
+float		XYDiv=GetLayerZPosDiv();
+int			MapW=Map.GetWidth();
+int			MapH=Map.GetHeight();
+float		StartX=MapPos.x/XYDiv;
+float		StartY=MapPos.y/XYDiv;
+CTexCache	&TexCache=Core->GetTexCache();
 
 		glMatrixMode(GL_MODELVIEW);
 
@@ -83,18 +74,19 @@ float	StartY=MapPos.y/XYDiv;
 		{
 			for (int XLoop=0; XLoop<MapW; XLoop++)
 			{
-				sMapElem	&ThisTile=Map.GetTile(XLoop,YLoop);
+				sMapElem	&ThisElem=Map.GetTile(XLoop,YLoop);
+				CTile		&ThisTile=Core->GetTile(ThisElem.Bank,ThisElem.Tile);
 
 				glLoadIdentity();	// Slow way, but good to go for the mo
 				glTranslatef(StartX+XLoop,StartY-YLoop,MapPos.z);
-				glCallList(Core->GetTile(ThisTile.Bank,ThisTile.Tile));
+				ThisTile.Render();
 			}
 		}
 	
 }
 
 /*****************************************************************************/
-void	CLayer::RenderGrid(Vec &MapPos)
+void	CLayer::RenderGrid(CCore *Core,Vec &MapPos)
 {
 float	XYDiv=GetLayerZPosDiv();
 int		MapW=Map.GetWidth();
@@ -129,7 +121,7 @@ float	OverVal=0.5;
 }
 
 /*****************************************************************************/
-void	CLayer::FindCursorPos(Vec &MapPos,CPoint &MousePos)
+void	CLayer::FindCursorPos(CCore *Core,CMapEditView *View,Vec &MapPos,CPoint &MousePos)
 {
 GLint	Viewport[4];
 GLuint	SelectBuffer[SELECT_BUFFER_SIZE];
@@ -154,7 +146,7 @@ float	StartY=MapPos.y/XYDiv;
 		glPushMatrix();
 		glLoadIdentity();
 		gluPickMatrix( MousePos.x ,(Viewport[3]-MousePos.y),5.0,5.0,Viewport);
-		Core->GetParentWindow()->SetupPersMatrix();
+		View->SetupPersMatrix();
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();

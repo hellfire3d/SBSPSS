@@ -14,28 +14,48 @@
 
 #include	"TexCache.h"
 #include	"Tile.h"
-//#include	"GinTex.h"
 
 
-/*****************************************************************************/
-/*****************************************************************************/
 /*****************************************************************************/
 class	CCore;
+class	CTile;
+
+/*****************************************************************************/
+class	CTileBank
+{
+public:
+	CTileBank();
+	~CTileBank();
+
+	void	AddTileSet(char *Filename);
+	int		NeedLoad()					{return(LoadFlag);}
+	void	LoadTileSets(CCore *Core);
+	CTile	&GetTile(int Bank,int Tile);
+
+private:
+		std::vector<CTileSet>	TileSet;
+		BOOL					LoadFlag;
+
+};
+
+/*****************************************************************************/
 class	CTileSet
 {
 public:
-		CTileSet(char *_Filename,CCore *Core);
+		CTileSet(char *_Filename);
 		~CTileSet();
 		
-		int		Load(CCore *Core,char *_Filename);
+		int		IsLoaded()			{return(Loaded);}
+		void	Load(CCore *Core);
 		char	*GetPath()			{return(Path);}
 		char	*GetFilename()		{return(Filename);}
-		GLint	GetTile(int	No)		{return(Tile[No].GetTile());}
+		CTile	&GetTile(int No)	{return(Tile[No]);}
+
 
 private:
-		char	Path[256];
-		char	Filename[256];
+		char				FullName[256],Path[256],Filename[256];
 		std::vector<CTile>	Tile;
+		BOOL				Loaded;
 
 };
 

@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CMapEditView
 LastTemplate=CFrameWnd
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -84,7 +84,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=CMapEditView
+LastObject=ID_TOOLBAR_LAYERBAR
 Filter=C
 VirtualFilter=VWC
 

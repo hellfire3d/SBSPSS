@@ -30,37 +30,25 @@ BOOL	Test3dFlag=TRUE;
 /*****************************************************************************/
 CCore::CCore()
 {
-	/*
-	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
-	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
-	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
-	Layers[LAYER_TYPE_FORE]=	new CLayerFore(this);
-
-	TileViewFlag=0;
-	LayerViewFlag=1;
-*/
+	for (int i=0; i<LAYER_TYPE_MAX; i++) Layers[i]=0;
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
-int	i;
-	for (i=0; i<LAYER_TYPE_MAX; i++) delete Layers[i];
+	for (int i=0; i<LAYER_TYPE_MAX; i++) if (Layers[i]) delete Layers[i];
 }
 
 /*****************************************************************************/
-void	CCore::Init(CMapEditView *Wnd)
+void	CCore::NewMap()
 {
-	ParentWindow=Wnd;
-
 	RenderFlag=TRUE;
-	UpdateView();
 
 // To be loaded/created
-	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
-	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
-	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
-	Layers[LAYER_TYPE_FORE]=	new CLayerFore(this);
+	Layers[LAYER_TYPE_BACK]=	new CLayerBack();
+	Layers[LAYER_TYPE_MID]=		new CLayerMid();
+	Layers[LAYER_TYPE_ACTION]=	new CLayerAction();
+	Layers[LAYER_TYPE_FORE]=	new CLayerFore();
 
 	TileViewFlag=0;
 	LayerViewFlag=1;
@@ -68,20 +56,27 @@ void	CCore::Init(CMapEditView *Wnd)
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
-	TileSet.push_back(CTileSet("c:/temp/3/test.gin",this));
+	TileBank.AddTileSet("c:/temp/3/test.gin");
+}
+
+/*****************************************************************************/
+void	CCore::OpenMap()
+{
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CCore::Render()
+void	CCore::Render(CMapEditView *View)
 {
 Vec		&ThisCam=GetCam();
+
+		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
 
 		if (RenderFlag)
 		{
 			RenderFlag=FALSE;
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 			if (GetTileView())
 			{
 	
@@ -90,52 +85,51 @@ Vec		&ThisCam=GetCam();
 			{
 				for (int i=0;i<LAYER_TYPE_MAX;i++)
 				{
-					Layers[i]->Render(ThisCam,Test3dFlag);
+					Layers[i]->Render(this,ThisCam,Test3dFlag);
 				}
 			}
-		Layers[ActiveLayer]->RenderGrid(ThisCam);
+			Layers[ActiveLayer]->RenderGrid(this,ThisCam);
 		}
 // Calc CursorPos
-		Layers[ActiveLayer]->FindCursorPos(ThisCam,CurrentMousePos);
+		Layers[ActiveLayer]->FindCursorPos(this,View,ThisCam,CurrentMousePos);
 
 }
-
 
 /*****************************************************************************/
 /*** Control *****************************************************************/
 /*****************************************************************************/
-void	CCore::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 }
 
 /*****************************************************************************/
-void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 		LastMousePos=point;
 }
 
 /*****************************************************************************/
-void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
+void	CCore::RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 }
 
 /*****************************************************************************/
-void	CCore::MouseWheel(UINT nFlags, short zDelta, CPoint &pt) 
+void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt) 
 {
 		if (zDelta>0)
-			UpdateView(Vec(0,0,1.0f));
+			UpdateView(View,Vec(0,0,1.0f));
 		else
-			UpdateView(Vec(0,0,-1.0f));
+			UpdateView(View,Vec(0,0,-1.0f));
 }
 
 /*****************************************************************************/
-void	CCore::MouseMove(UINT nFlags, CPoint &point) 
+void	CCore::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point) 
 {
 Vec		Ofs(0,0,0);
 
 Vec		&ThisCam=GetCam();
 // check if active doc
-		if (theApp.GetCurrent()!=ParentWindow->GetDocument()) return;
+		if (theApp.GetCurrent()!=View->GetDocument()) return;
 
 		CurrentMousePos=point;
 
@@ -145,7 +139,7 @@ Vec		&ThisCam=GetCam();
 			float	XS,YS;
 			RECT	ThisRect;
 
-			ParentWindow->GetWindowRect(&ThisRect);
+			View->GetWindowRect(&ThisRect);
 			XS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
 			YS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
@@ -158,17 +152,19 @@ Vec		&ThisCam=GetCam();
 			Ofs.x*=XS;
 			Ofs.y*=YS;
 
-			UpdateView(Ofs);
+			UpdateView(View,Ofs);
 			}
-// Mouse has moved, so need to redraw windows, to get CursorPos (And pos render)
-		ParentWindow->Invalidate();
+		else
+		{	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
+			View->Invalidate();
+		}
 
 }
 
 /*****************************************************************************/
 /*** Layers ******************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateLayerBar(BOOL ViewFlag)
+void	CCore::UpdateLayerBar(CMapEditView *View,BOOL ViewFlag)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
@@ -193,30 +189,38 @@ CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 }
 
 /*****************************************************************************/
+void	CCore::ToggleLayerView(CMapEditView *View)
+{
+	UpdateLayerBar(View,!LayerViewFlag);
+}
+
+/*****************************************************************************/
 void	CCore::SetActiveLayer(int i)
 {
-	UpdateLayerBar(LayerViewFlag);
+	UpdateLayerBar(NULL,LayerViewFlag);
 }
 
 
 /*****************************************************************************/
 /*** TileBank ****************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateTileView(BOOL ViewFlag)
+/*****************************************************************************/
+void	CCore::UpdateTileView(CMapEditView *View,BOOL ViewFlag)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 
 			TileViewFlag=ViewFlag;
 			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
-			UpdateView();
+			UpdateView(View);
 }
 
 /*****************************************************************************/
-GLint	CCore::GetTile(int Bank,int TileNo)
+void	CCore::ToggleTileView(CMapEditView *View)
 {
-	return(TileSet[Bank].GetTile(TileNo));
+	UpdateTileView(View,!TileViewFlag);
 }
+
 /*****************************************************************************/
 /*** Misc ********************************************************************/
 /*****************************************************************************/
@@ -230,28 +234,21 @@ Vec		&CCore::GetCam()
 }
 
 /*****************************************************************************/
-void	CCore::UpdateAll()
+void	CCore::UpdateAll(CMapEditView *View)
 {
-	UpdateView();
-	UpdateLayerBar(LayerViewFlag);
-	UpdateTileView(TileViewFlag);
+	UpdateView(View);
+	UpdateLayerBar(View,LayerViewFlag);
+	UpdateTileView(View,TileViewFlag);
 }
 
 /*****************************************************************************/
-void	CCore::Redraw(BOOL f)
-{
-	RenderFlag=f;
-	if (RenderFlag)
-		ParentWindow->Invalidate();
-}
-
-/*****************************************************************************/
-void	CCore::UpdateView(Vec Ofs)
+void	CCore::UpdateView(CMapEditView *View,Vec Ofs)
 {
 Vec		&ThisCam=GetCam();
 
 		Ofs.y=-Ofs.y;
 		ThisCam+=Ofs;
 		if (ThisCam.z>-1) ThisCam.z=-1;
-		Redraw();
+		RenderFlag=TRUE;
+		View->Invalidate();
 }		

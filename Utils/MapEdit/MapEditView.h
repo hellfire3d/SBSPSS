@@ -39,11 +39,9 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	void		UpdateAll();
 
 protected:
 	void		VideoMode(ColorsNumber &c,ZAccuracy &z,BOOL &dbuf);
-	CCore		Core;
 
 // Generated message map functions
 protected:
@@ -59,7 +57,6 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnToolbarLayerbar();
 	afx_msg void OnToolbarTilepalette();
-	afx_msg void OnStatusCursorXY(CCmdUI *pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

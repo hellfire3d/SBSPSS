@@ -9,6 +9,7 @@
 #include	<gl\glut.h>
 #include	<Vector>
 
+#include	"Core.h"
 #include	"TileSet.h"
 #include	"GinTex.h"
 #include	"utils.h"
@@ -16,19 +17,63 @@
 
 /*****************************************************************************/
 /*****************************************************************************/
+/*** TileBank ****************************************************************/
 /*****************************************************************************/
-CTileSet::CTileSet(char *_Filename,CCore *Core)
+/*****************************************************************************/
+CTileBank::CTileBank()
+{
+	LoadFlag=FALSE;
+}
+
+/*****************************************************************************/
+CTileBank::~CTileBank()
+{
+}
+
+/*****************************************************************************/
+void	CTileBank::AddTileSet(char *Filename)
+{
+	TileSet.push_back(CTileSet(Filename));
+	LoadFlag=TRUE;
+}
+
+/*****************************************************************************/
+void	CTileBank::LoadTileSets(CCore *Core)
+{
+int	ListSize=TileSet.size();
+	
+	for (int i=0;i<ListSize;i++)
+	{
+		CTileSet	&ThisSet=TileSet[i];
+
+		if (!ThisSet.IsLoaded()) ThisSet.Load(Core);
+	}
+	LoadFlag=FALSE;
+}
+
+/*****************************************************************************/
+CTile	&CTileBank::GetTile(int Bank,int Tile)
+{
+	return(TileSet[Bank].GetTile(Tile));
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*** TileSet *****************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+CTileSet::CTileSet(char *_Filename)
 {
 char	Drive[_MAX_DRIVE];
 char	Dir[_MAX_DIR];
 char	Fname[_MAX_FNAME];
 char	Ext[_MAX_EXT];
 
+	sprintf(FullName,"%s",_Filename);
 	_splitpath(_Filename,Drive,Dir,Fname,Ext);
 	sprintf(Path,"%s%s",Drive,Dir);
 	sprintf(Filename,"%s%s",Fname,Ext);
-
-	Load(Core,_Filename);
+	Loaded=FALSE;
 }
 
 /*****************************************************************************/
@@ -41,11 +86,11 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CTileSet::Load(CCore *Core,char *_Filename)
+void	CTileSet::Load(CCore *Core)
 {
-		CScene	Scene;
+CScene	Scene;
 
-		Scene.Load(_Filename);
+		Scene.Load(FullName);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -57,7 +102,7 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 			Tile.push_back(NewTile);
 		}
 
-
-	return(1);
+	Loaded=TRUE;
 }
 
+/*****************************************************************************/

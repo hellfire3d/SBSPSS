@@ -19,6 +19,19 @@ protected: // create from serialization only
 
 // Attributes
 public:
+//	void			SetupPersMatrix(float _m_dAspectRatio);
+	void			UpdateView(CMapEditView *View);
+	void			Render(CMapEditView *View);
+	void			UpdateAll(CMapEditView *View);
+
+// Windows Messages Thru Point
+	void			LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
+	void			MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
+	void			MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
+	void			ToggleLayerView(CMapEditView *View);
+	void			ToggleTileView(CMapEditView *View);
 
 // Operations
 public:
@@ -28,8 +41,8 @@ public:
 	//{{AFX_VIRTUAL(CMapEditDoc)
 	public:
 	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual void Serialize(CArchive& ar);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -41,11 +54,11 @@ public:
 #endif
 
 protected:
-
-	
+	CCore		Core;
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditDoc)
+	afx_msg void OnStatusCursorXY(CCmdUI *pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

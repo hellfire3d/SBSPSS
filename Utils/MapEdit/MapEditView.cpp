@@ -37,7 +37,6 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TOOLBAR_LAYERBAR, OnToolbarLayerbar)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToolbarTilepalette)
-	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CURSORXY, OnStatusCursorXY)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -46,9 +45,6 @@ END_MESSAGE_MAP()
 
 CMapEditView::CMapEditView()
 {
-//CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-//CDialogBar	*LayerBar=Frm->GetLayerBar();
-
 }
 
 CMapEditView::~CMapEditView()
@@ -76,16 +72,14 @@ void CMapEditView::OnCreateGL()
 		glEnable(GL_LIGHTING);        // Enable Lighting
 		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
-
-		Core.Init(this);
-
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
+
 void CMapEditView::OnDrawGL()
 {
-		Core.Render();
+	GetDocument()->Render(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -99,16 +93,16 @@ void CMapEditView::OnSizeGL(int cx, int cy)
 				SetupPersMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
-		Core.Redraw();
+		GetDocument()->UpdateView(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void CMapEditView::SetupPersMatrix()
+void	CMapEditView::SetupPersMatrix()
 {
 		gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
 		glTranslatef(0.0f,0.0f,-4.f);
-
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditView diagnostics
@@ -139,41 +133,19 @@ void CMapEditView::OnSetFocus(CWnd* pOldWnd)
 CMapEditDoc	*CurDoc=GetDocument();
 	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
-	UpdateAll();
+	CurDoc->UpdateAll(this);
 }
 
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-void CMapEditView::UpdateAll() 
-{
-	Core.UpdateAll();
-}
-
-/*********************************************************************************/
-void CMapEditView::OnStatusCursorXY(CCmdUI *pCmdUI)
-{
-CPoint	&XY=Core.GetCursorPos();
-CString XYStr;
-		pCmdUI->Enable();
-		if (XY.x!=-1 && XY.y!=-1)
-			XYStr.Format( "%d\t%d", XY.x,XY.y);
-		pCmdUI->SetText(XYStr); 
-}
-
-/*********************************************************************************/
-/*********************************************************************************/
-/*********************************************************************************/
-void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{Core.LButtonControl(nFlags,point,TRUE);}
-void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{Core.LButtonControl(nFlags,point,FALSE);}
-void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{Core.MButtonControl(nFlags,point,TRUE);}
-void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{Core.MButtonControl(nFlags,point,FALSE);}
-BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{Core.MouseWheel(nFlags,zDelta,pt) ;return(0);}
-void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,TRUE);}
-void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,FALSE);}
-void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point);}
-
-void CMapEditView::OnToolbarLayerbar()									{Core.ToggleLayerView();}
-void CMapEditView::OnToolbarTilepalette()								{Core.ToggleTileView();}
-
-
+void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(this,nFlags,point,TRUE);}
+void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{GetDocument()->LButtonControl(this,nFlags,point,FALSE);}
+void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(this,nFlags,point,TRUE);}
+void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{GetDocument()->MButtonControl(this,nFlags,point,FALSE);}
+BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{GetDocument()->MouseWheel(this,nFlags,zDelta,pt) ;return(0);}
+void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,TRUE);}
+void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RButtonControl(this,nFlags,point,FALSE);}
+void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(this,nFlags, point);}
+void CMapEditView::OnToolbarLayerbar()									{GetDocument()->ToggleLayerView(this);}
+void CMapEditView::OnToolbarTilepalette()								{GetDocument()->ToggleTileView(this);}
