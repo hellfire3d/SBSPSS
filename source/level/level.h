@@ -44,7 +44,8 @@ public:
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 
-	int						GetNextLevel(int Lvl);
+	bool					GetNextLevel(int &Lvl);
+	
 private:
 	void					initLayers();
 	void					DisplayLoadingScreen(sLvlTab *lvlTab);

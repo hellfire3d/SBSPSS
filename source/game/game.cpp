@@ -238,12 +238,10 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
-		s_globalLevelSelectThing++;
-//		s_globalLevelSelectThing&=3;	// Ch1 only Bodge
-
+		bool	Finished=Level.GetNextLevel(s_globalLevelSelectThing);
 		shutdownLevel();
 		initLevel();
-	s_levelFinished=false;
+		s_levelFinished=false;
 	}
 
 

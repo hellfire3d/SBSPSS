@@ -105,8 +105,9 @@ CLevel::CLevel()
 }
 
 /*****************************************************************************/
-int		CLevel::GetNextLevel(int Lvl)
+bool	CLevel::GetNextLevel(int &Lvl)
 {
+bool	Finished=false;
 		Lvl++;
 // TMP
 		if (Lvl>=LvlTableSize) Lvl=0;
@@ -117,7 +118,8 @@ int		CLevel::GetNextLevel(int Lvl)
 			if (Lvl>=LvlTableSize) Lvl=0;
 		}
 // End TMP
-		return(Lvl);
+//		Lvl&=3;	// Ch1 only Bodge
+		return(Finished);
 }
 
 /*****************************************************************************/
