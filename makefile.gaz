@@ -48,6 +48,8 @@ CD_FILESYS_LIB :=		CMXBoot
 #	Source Code to Compile
 #----------------------------------------------------------------------------
 
+enemy_src :=		
+
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
 
@@ -60,6 +62,7 @@ frontend_src :=		credits \
 					start
 
 game_src :=			game \
+					thing \
 					convo
 
 gfx_src :=			prim \
@@ -69,7 +72,9 @@ gfx_src :=			prim \
 					fader \
 					fdata \
 					font \
-					bubicles
+					bubicles \
+					skel \
+					anim
 
 #					camera \
 #					basemod \
@@ -101,6 +106,8 @@ memcard_src :=		md5 \
 pad_src :=			pads
 
 paul_src :=			paul
+
+player_src :=		player
 
 script_src :=		script \
 					function
