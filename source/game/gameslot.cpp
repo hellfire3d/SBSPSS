@@ -93,9 +93,6 @@ void CGameSlotManager::init()
 	}
 
 	setActiveSlot(0);
-#ifdef __USER_CDBUILD__
-	s_gameSlots[0].m_isInUse=true;
-#endif
 }
 
 
