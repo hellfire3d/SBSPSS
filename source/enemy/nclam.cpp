@@ -194,64 +194,6 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 		Pos.vx += ( m_extension * rcos( m_heading ) ) >> 12;
 		Pos.vy += ( m_extension * rsin( m_heading ) ) >> 12;
 	}
-
-	/*if ( m_extendDir == EXTEND_UP )
-	{
-		m_movementTimer -= _frames;
-
-		if ( m_movementTimer > 0 )
-		{
-			// extend
-
-			velocity = m_velocity * _frames;
-
-			m_extension += velocity;
-
-			Pos.vx += ( velocity * rcos( m_heading ) ) >> 12;
-			Pos.vy += ( velocity * rsin( m_heading ) ) >> 12;
-
-			if ( !m_animPlaying )
-			{
-				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_SNAPUP;
-				m_frame = 0;
-			}
-		}
-		else
-		{
-			m_extendDir = EXTEND_DOWN;
-		}
-	}
-	else if ( m_extendDir == EXTEND_DOWN )
-	{
-		// retract
-
-		if ( m_extension > 0 )
-		{
-			velocity = -_frames;
-
-			if ( m_extension < _frames )
-			{
-				velocity = m_extension - _frames;
-			}
-			
-			m_extension += velocity;
-
-
-			Pos.vx += ( velocity * rcos( m_heading ) ) >> 12;
-			Pos.vy += ( velocity * rsin( m_heading ) ) >> 12;
-		}
-		else
-		{
-			if ( !m_animPlaying )
-			{
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
-				m_timerFunc = NPC_TIMER_ATTACK_DONE;
-				m_timerTimer = GameState::getOneSecondInFrames();
-				m_sensorFunc = NPC_SENSOR_NONE;
-			}
-		}
-	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
