@@ -1159,7 +1159,7 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 	s_FMAPartyScript,
 };
 
-static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__PARTY;//FMA_SCRIPT__INTRO;
+static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__CH4FINISHED;//FMA_SCRIPT__INTRO;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1799,7 +1799,7 @@ void	CFmaScene::startNextScriptCommand()
 			m_doOtherProcessing=true;
 			break;
 
-		case SC_STOP:					// nextScene
+		case SC_STOP:					// 
 			m_scriptRunning=false;
 			m_doOtherProcessing=true;
 			break;
@@ -1819,6 +1819,16 @@ void	CFmaScene::startNextScriptCommand()
   ---------------------------------------------------------------------- */
 void	CFmaScene::processCurrentScriptCommand()
 {
+{
+char		buf[100];
+FontBank	f;
+sprintf(buf,"pc:%d\ncmd:%d",
+		m_pc-s_fmaScripts[s_chosenScript],
+		*m_pc);
+f.initialise(&standardFont);
+f.print(20,20,buf);
+f.dump();
+}
 	switch(*m_pc)
 	{
 		case SC_USE_LEVEL:				// levelNumber
@@ -1834,8 +1844,9 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_WALK_ACTOR_TO_POSITION:	// actor,x,y,frames
 		case SC_SET_GLOBAL_ANIMATION:	// on/off
 		case SC_START:					// 
-		case SC_STOP:					// nextScene
-			ASSERT(!"Shouldn't be here..");
+		case SC_STOP:					// 
+//			ASSERT(!"Shouldn't be here..");
+			m_doOtherProcessing=true;
 			break;
 
 		case SC_WAIT_ON_TIMER:			// frames
