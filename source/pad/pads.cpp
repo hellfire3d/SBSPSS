@@ -28,13 +28,14 @@ u8 			PadBuffer[2][34];
 u8 			PadAlign[6]={0,1,0xFF,0xFF,0xFF,0xFF};
 u8			PadMotor[2][2];
 int			PadRepeatTimers[2][16];
+int			PadRescan=0;
 
 typedef struct
 {
 	int	m_vibrationTurnedOn;
 	u8	m_intensityValue;
 } PadVibeData;
-#ifdef __USER_CDBUILD__
+#if		defined(__USER_CDBUILD__ )
 static PadVibeData	s_padVibeData[2]={{true,0},{true,0}};
 #else
 static PadVibeData	s_padVibeData[2]={{false,0},{false,0}};
@@ -208,6 +209,12 @@ int 	PadIsDualShock(int Port)
 }
 
 /*****************************************************************************/
+void	SetPadRescan()
+{
+		PadRescan=1;
+}
+
+/*****************************************************************************/
 void	ReadController(int Port)
 {
 u8			*PadBuf=&PadBuffer[Port][0];
@@ -287,8 +294,9 @@ int			intensity;
 	{
 		Pad->Send = 0;
 	}
-	if ( Pad->Send==0 )
+	if ( Pad->Send==0 || PadRescan)
 		{
+		PadRescan=0;
 		PadSetAct(PortShift,&(Pad->Motor0),2);
 
 		if (Pad->Status == PadStateFindCTP1)

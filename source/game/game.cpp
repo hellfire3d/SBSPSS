@@ -793,6 +793,7 @@ void	CGameScene::initLevel()
 	CActorPool::SetUpCache();
 
 	m_musicStarted=false;
+	SetPadRescan();
 
 	SYSTEM_DBGMSG("InitLevelDone\n");
 }

@@ -79,6 +79,7 @@ void		PadsInit();
 void		PadClear(int Port);
 void		PadUpdate();
 
+void		SetPadRescan();
 sPadData 	*PadGet(int Port);
 
 u16 		PadGetUp(int Port);
