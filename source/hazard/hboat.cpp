@@ -160,7 +160,7 @@ void CNpcBoatHazard::render()
 				flip.vy = ONE;
 				flip.vz = ONE;
 
-				m_modelGfx->Render( renderPos, NULL, NULL, &flip );
+				m_modelGfx->Render( renderPos, NULL, &flip );
 				//m_actorGfx->Render(renderPos,0,0,0);
 			}
 		}
