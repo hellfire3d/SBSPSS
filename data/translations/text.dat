@@ -252,73 +252,73 @@ eng=Start
 ; ---------------------------------------------------------------
 
 [STR__CHAPTER_1]
-eng=Chapter 1
+eng=Bikini Bottom
 [STR__CHAPTER_2]
-eng=Chapter 2
+eng=To the Centre of the Earth
 [STR__CHAPTER_3]
-eng=Chapter 3
+eng=Bikini Bottom Prehistoric Times
 [STR__CHAPTER_4]
-eng=Chapter 4
+eng=Rock Bottom
 [STR__CHAPTER_5]
-eng=Chapter 5
+eng=Industrial
 [STR__KELP_WORLD]
 eng=Kelp World
 
 [STR__CHAPTER_1_LEVEL_1]
-eng=Level 1
+eng=Jelly Fields
 [STR__CHAPTER_1_LEVEL_2]
-eng=Level 2
+eng=Sandy's Bio-Dome
 [STR__CHAPTER_1_LEVEL_3]
-eng=Level 3
+eng=Fish Hooks Park
 [STR__CHAPTER_1_LEVEL_4]
-eng=Level 4
+eng=Bikini Bottom Town
 
 [STR__CHAPTER_2_LEVEL_1]
-eng=Level 1
+eng=Cavernous Canyons
 [STR__CHAPTER_2_LEVEL_2]
-eng=Level 2
+eng=Thermal Tunnels
 [STR__CHAPTER_2_LEVEL_3]
-eng=Level 3
+eng=Acrid Air Pockets
 [STR__CHAPTER_2_LEVEL_4]
-eng=Level 4
+eng=Lava Fields
 
 [STR__CHAPTER_3_LEVEL_1]
-eng=Level 1
+eng=Precipice Canyon
 [STR__CHAPTER_3_LEVEL_2]
-eng=Level 2
+eng=Desert Wasteland
 [STR__CHAPTER_3_LEVEL_3]
-eng=Level 3
+eng=Kelp Jungle
 [STR__CHAPTER_3_LEVEL_4]
-eng=Level 4
+eng=Inside the Whale
 
 [STR__CHAPTER_4_LEVEL_1]
-eng=Level 1
+eng=Road to the bottom of Rock Bottom
 [STR__CHAPTER_4_LEVEL_2]
-eng=Level 2
+eng=Lonely Souls
 [STR__CHAPTER_4_LEVEL_3]
-eng=Level 3
+eng=Graveyard
 [STR__CHAPTER_4_LEVEL_4]
-eng=Level 4
+eng=Last Stop
 
 [STR__CHAPTER_5_LEVEL_1]
-eng=Level 1
+eng=Jelly Fields
 [STR__CHAPTER_5_LEVEL_2]
-eng=Level 2
+eng=Polluted Seabed
 [STR__CHAPTER_5_LEVEL_3]
-eng=Level 3
+eng=Oil Rig
 [STR__CHAPTER_5_LEVEL_4]
-eng=Level 4
+eng=Tuna Canning Ship
 
 [STR__CHAPTER_6_LEVEL_1]
-eng=Level 1
+eng=Snail Race
 [STR__CHAPTER_6_LEVEL_2]
-eng=Level 2
+eng=Roller Coaster
 [STR__CHAPTER_6_LEVEL_3]
-eng=Level 3
+eng=Big Wheel
 [STR__CHAPTER_6_LEVEL_4]
-eng=Level 4
+eng=Ghost Train
 [STR__CHAPTER_6_LEVEL_5]
-eng=Level 5
+eng=Tunnel of Love
 
 
 
