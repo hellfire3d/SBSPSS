@@ -158,7 +158,7 @@ void		CThingManager::killAllThingsForRespawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool	FO=false;
+
 void		CThingManager::thinkAllThings(int _frames)
 {
 // Setup Screen BBox's
@@ -171,7 +171,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 	int		i;
 	CThing	*thing;
-	CThing	*thing1,*thing2;
+	CThing	*thing1,*thing2,*playerThing;
+	initList(s_CollisionLists);
 
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
@@ -191,6 +192,10 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			{
 				thing->think(_frames);
 				thing->updateCollisionArea();
+				if (thing->canCollide())
+				{
+				CThingManager::addToCollisionList(thing);
+				}
 			}
 			thing=thing->m_nextListThing;
 		}
@@ -203,160 +208,155 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 		player->clearPlatform();
 	}
 
-	// Player -> Platform collision
-	thing1=s_thingLists[CThing::TYPE_PLATFORM];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
+	playerThing=s_CollisionLists[CThing::TYPE_PLAYER];
 
-	thing2->setHasPlatformCollided( false );
-	thing2->setNewCollidedPos( thing2->getPos() );
-
-	while(thing1&&thing2)
+	if (playerThing)
 	{
-		if(thing1->canCollide() &&  thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
+		playerThing->setHasPlatformCollided( false );
+		playerThing->setNewCollidedPos( playerThing->getPos() );
 
-	// Player -> Pickup collision
-	thing1=s_thingLists[CThing::TYPE_PICKUP];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
+		// Player -> Platform collision
+		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
+		while(thing1)
 		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Player -> Enemy collision
-	thing1=s_thingLists[CThing::TYPE_ENEMY];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Player -> Friend collision
-	thing1=s_thingLists[CThing::TYPE_NPC];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Player -> Hazard collision
-	thing1=s_thingLists[CThing::TYPE_HAZARD];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Player -> Enemy projectile collision
-	thing1=s_thingLists[CThing::TYPE_ENEMYPROJECTILE];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Player -> Trigger collision
-	thing1=s_thingLists[CThing::TYPE_TRIGGER];
-	thing2=s_thingLists[CThing::TYPE_PLAYER];
-	while(thing1&&thing2)
-	{
-		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
-		{
-			thing1->collidedWith(thing2);
-		}
-		thing1=thing1->m_nextListThing;
-	}
-
-	// Enemy -> Player projectile collision
-	thing1=s_thingLists[CThing::TYPE_PLAYERPROJECTILE];
-	thing2=s_thingLists[CThing::TYPE_ENEMY];
-	while(thing1)
-	{
-		while(thing2)
-		{
-			if(thing1->canCollide()&& thing2->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
 			{
-				thing1->collidedWith(thing2);
+				thing1->collidedWith(playerThing);
 			}
-			thing2=thing2->m_nextListThing;
+			thing1=thing1->m_nextCollisionThing;
 		}
-		thing1=thing1->m_nextListThing;
-	}
 
-	// Enemy -> Enemy collision
-	thing1=s_thingLists[CThing::TYPE_ENEMY];
-	while(thing1)
-	{
-		thing2=s_thingLists[CThing::TYPE_ENEMY];
-
-		while(thing2)
+		// Player -> Pickup collision
+		thing1=s_CollisionLists[CThing::TYPE_PICKUP];
+		while(thing1)
 		{
-			if ( thing1 != thing2 )
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
 			{
-				if ( thing1->canCollide() && thing2->canCollide() && thing1->checkCollisionAgainst( thing2, _frames ) )
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Player -> Enemy collision
+		thing1=s_CollisionLists[CThing::TYPE_ENEMY];
+		while(thing1)
+		{
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Player -> Friend collision
+		thing1=s_CollisionLists[CThing::TYPE_NPC];
+		while(thing1)
+		{
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Player -> Hazard collision
+		thing1=s_CollisionLists[CThing::TYPE_HAZARD];
+		while(thing1)
+		{
+		if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Player -> Enemy projectile collision
+		thing1=s_CollisionLists[CThing::TYPE_ENEMYPROJECTILE];
+		while(thing1)
+		{
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Player -> Trigger collision
+		thing1=s_CollisionLists[CThing::TYPE_TRIGGER];
+		while(thing1)
+		{
+			if(thing1->checkCollisionAgainst(playerThing, _frames))
+			{
+				thing1->collidedWith(playerThing);
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
+		// Enemy -> Player projectile collision
+		thing1=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
+		thing2=s_CollisionLists[CThing::TYPE_ENEMY];
+		while(thing1)
+		{
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
 				{
-					thing1->collidedWith( thing2 );
-					//thing2->collidedWith( thing1 );
+					thing1->collidedWith(thing2);
 				}
+				thing2=thing2->m_nextCollisionThing;
 			}
-
-			thing2 = thing2->m_nextListThing;
+			thing1=thing1->m_nextCollisionThing;
 		}
 
-		thing1 = thing1->m_nextListThing;
-	}
-
-	// Hazard -> Platform collision
-	thing1=s_thingLists[CThing::TYPE_PLATFORM];
-	while(thing1)
-	{
-		thing2=s_thingLists[CThing::TYPE_HAZARD];
-
-		while(thing2)
+		// Enemy -> Enemy collision
+		thing1=s_CollisionLists[CThing::TYPE_ENEMY];
+		while(thing1)
 		{
-			if ( thing1 != thing2 )
-			{
-				if ( thing1->canCollide() && thing2->canCollide() && thing1->checkCollisionAgainst( thing2, _frames ) )
-				{
-					thing1->collidedWith( thing2 );
-					//thing2->collidedWith( thing1 );
-				}
-			}
+			thing2=thing1->m_nextCollisionThing;//s_CollisionLists[CThing::TYPE_ENEMY];
 
-			thing2 = thing2->m_nextListThing;
+			while(thing2)
+			{
+				ASSERT(thing1 != thing2 );
+//				if ( thing1 != thing2 )
+				{
+					if (thing1->checkCollisionAgainst( thing2, _frames ) )
+					{
+						thing1->collidedWith( thing2 );
+						//thing2->collidedWith( thing1 );
+					}
+				}
+				thing2 = thing2->m_nextCollisionThing;
+			}
+			thing1 = thing1->m_nextCollisionThing;
 		}
 
-		thing1 = thing1->m_nextListThing;
-	}
+		// Hazard -> Platform collision
+		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_HAZARD];
 
+			while(thing2)
+			{
+				if ( thing1 != thing2 )
+				{
+					if (thing1->checkCollisionAgainst( thing2, _frames ) )
+					{
+						thing1->collidedWith( thing2 );
+						//thing2->collidedWith( thing1 );
+					}
+				}
+
+				thing2 = thing2->m_nextCollisionThing;
+			}
+
+			thing1 = thing1->m_nextCollisionThing;
+		}
+	}
 // Shut emm down, sh sh shut em down, we shutem down
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
-		thing=s_thingLists[i];
+		thing=s_CollisionLists[i];
 		CThing	*nextThing = thing;
 		while(thing)
 		{
@@ -454,8 +454,7 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
 	}
 	while(thing)
 	{
-		if(thing->canCollide()&&
-		   thing->checkCollisionAgainstArea(_area))
+		if(thing->canCollide() && thing->checkCollisionAgainstArea(_area))
 		{
 			return thing;
 		}
@@ -471,10 +470,11 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void			CThingManager::addToThingList(CThing *_this)
+void	CThingManager::addToThingList(CThing *_this)
 {
-	_this->m_nextListThing=s_thingLists[_this->getThingType()];
-	s_thingLists[_this->getThingType()]=_this;
+int	Type=_this->getThingType();
+	_this->m_nextListThing=s_thingLists[Type];
+	s_thingLists[Type]=_this;
 }
 
 /*----------------------------------------------------------------------
@@ -483,7 +483,7 @@ void			CThingManager::addToThingList(CThing *_this)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void			CThingManager::removeFromThingList(CThing *_this)
+void	CThingManager::removeFromThingList(CThing *_this)
 {
 	CThing	*prevThing,*thing;
 
@@ -503,6 +503,21 @@ void			CThingManager::removeFromThingList(CThing *_this)
 	{
 		s_thingLists[_this->getThingType()]=_this->m_nextListThing;
 	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CThingManager::addToCollisionList(CThing *_this)
+{
+int	Type=_this->getThingType();
+
+		_this->m_nextCollisionThing=s_CollisionLists[Type];
+		s_CollisionLists[Type]=_this;
+
 }
 
 /*----------------------------------------------------------------------
