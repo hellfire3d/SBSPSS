@@ -8,6 +8,7 @@
 #include	<gl\glu.h>
 #include	"GLEnabledView.h"
 #include	<Vector>
+//#include	<direct.h>
 #include	<GFName.hpp>
 
 #include	"Core.h"
@@ -21,8 +22,9 @@
 #include	"MainFrm.h"
 #include	"LayerTileGui.h"
 
+// Reserve slot 0 for collision :o)
+char		*ColFName="Collision.bmp";
 
-/*****************************************************************************/
 /*****************************************************************************/
 /*** TileBank ****************************************************************/
 /*****************************************************************************/
@@ -36,14 +38,31 @@ const float	TileBrowserY1=1+TileBrowserGap/2;
 /*****************************************************************************/
 CTileBank::CTileBank()
 {
+GFName	ExePath;
+GString	Filename;
+
+// Get application path
+#ifdef _DEBUG
+		ExePath="C:/Spongebob/tools/mapedit/mapedit/";
+#else
+char	ExeFilename[2048];
+		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
+		ExePath=ExeFilename;
+		ExePath.File(0);
+ 		ExePath.Ext(0);
+#endif
+		Filename=ExePath.FullName();
+		Filename+=ColFName;
+
 		LoadFlag=FALSE;
-		CurrentSet=0;
+		CurrentSet=0; LastSet=0;
 		for (int i=0; i<MaxBrush; i++) Brush[i].Delete();
 		LastCursorPos=CursorPos=-1;
 		ActiveBrush=0;
 		SelStart=-1;
 		SelEnd=-1;
-
+		TileSet.push_back(CTileSet(Filename,0));
+		LoadFlag=TRUE;
 }
 
 /*****************************************************************************/
@@ -52,7 +71,21 @@ CTileBank::~CTileBank()
 }
 
 /*****************************************************************************/
-void	CTileBank::Load(CFile *File,float Version)
+void	CTileBank::SetCollision(bool f)
+{
+		if (f)
+		{ // Is collision
+			LastSet=CurrentSet;
+			CurrentSet=0;
+		}
+		else
+		{
+			CurrentSet=LastSet;
+		}
+}
+
+/*****************************************************************************/
+void	CTileBank::Load(CFile *File,int Version)
 {
 int		ListSize;
 GFName	RootPath=File->GetFilePath();
@@ -68,32 +101,22 @@ GString	FilePath;
 		File->Read(&ActiveBrush,sizeof(int));
 		Brush[0].Load(File,Version);
 		Brush[1].Load(File,Version);
-
-		if (Version<=1.00)
+		if (Version<2)
 		{
-			for (int i=0;i<ListSize;i++)
-			{
-				char	Filename[256+64];
-
-				File->Read(Filename,256+64);
-				AddTileSet(Filename);
-//				TRACE1("%s\n",Filename);
-			}
+			CurrentSet++;
 		}
-		else
-		{ // New Style rel storage
-			for (int i=0;i<ListSize;i++)
+// New Style rel storage
+		for (int i=0;i<ListSize;i++)
+		{
+			char	c=1,RelName[256+64],FullName[256+64];
+			int		Len=0;
+			while (c)
 			{
-				char	c=1,RelName[256+64],FullName[256+64];
-				int		Len=0;
-				while (c)
-				{
-					File->Read(&c,1);
-					RelName[Len++]=c;
-				}
-				RootPath.makeabsolute(FilePath,RelName,FullName);
-				AddTileSet(FullName);
+				File->Read(&c,1);
+				RelName[Len++]=c;
 			}
+			RootPath.makeabsolute(FilePath,RelName,FullName);
+			AddTileSet(FullName);
 		}
 }
 
@@ -101,6 +124,7 @@ GString	FilePath;
 void	CTileBank::Save(CFile *File)
 {
 int		ListSize=TileSet.size();
+int		NewListSize=ListSize-1;
 GString	FilePath;
 GFName	RootPath=File->GetFilePath();
 
@@ -108,13 +132,13 @@ GFName	RootPath=File->GetFilePath();
 		FilePath+=RootPath.Dir();
 		FilePath.Append('\\');
 
-		File->Write(&ListSize,sizeof(int));
+		File->Write(&NewListSize,sizeof(int));
 		File->Write(&CurrentSet,sizeof(int));
 		File->Write(&ActiveBrush,sizeof(int));
 		Brush[0].Save(File);
 		Brush[1].Save(File);
 
-		for (int i=0; i<ListSize; i++)
+		for (int i=1; i<ListSize; i++)
 		{
 			CTileSet	&ThisSet=TileSet[i];
 			char	Filename[256+64];
@@ -127,7 +151,7 @@ GFName	RootPath=File->GetFilePath();
 }
 
 /*****************************************************************************/
-void	CTileBank::AddTileSet(char *Filename)
+void	CTileBank::AddTileSet(const char *Filename)
 {
 int		ListSize=TileSet.size();
 
@@ -139,7 +163,7 @@ int		ListSize=TileSet.size();
 }
 
 /*****************************************************************************/
-int		CTileBank::FindTileSet(char *Filename)
+int		CTileBank::FindTileSet(const char *Filename)
 {
 int		ListSize=TileSet.size();
 CTileSet	FindSet(Filename,ListSize);
@@ -180,12 +204,11 @@ int		ListSize=TileSet.size();
 		{
 			for (int i=0; i<MaxBrush; i++) 
 			{
-				Brush[i].RemapSet(Set,Set-1);
+				Brush[i].RemapSet(Set,Set);
 			}
 		}
 		TileSet.erase(TileSet.begin()+CurrentSet);
 		CurrentSet=0;
-
 }
 
 /*****************************************************************************/
@@ -199,7 +222,6 @@ int		ListSize=TileSet.size();
 		}
 
 		LoadFlag=TRUE;
-
 }
 
 /*****************************************************************************/
@@ -213,7 +235,6 @@ CTile	&CTileBank::GetTile(int Bank,int Tile)
 void	CTileBank::RenderSet(CCore *Core,Vector3 &CamPos,BOOL Is3d)
 {
 		if (!TileSet.size()) return;	// No tiles, return
-
 
 		if (Is3d)
 		{
@@ -251,13 +272,13 @@ int				ListSize=TileSet.size();
 		if (Dlg)
 		{
 			Dlg->m_List.ResetContent();
-			if (ListSize)
+			if (ListSize-1)
 			{
-				for (int i=0; i<ListSize; i++)
+				for (int i=1; i<ListSize; i++)
 				{
 					Dlg->m_List.AddString(TileSet[i].GetName());
 				}
-				Dlg->m_List.SetCurSel(CurrentSet);
+				Dlg->m_List.SetCurSel(CurrentSet-1);
 			}
 			else
 			{
@@ -265,6 +286,7 @@ int				ListSize=TileSet.size();
 			}
 			Dlg->m_List.EnableWindow(IsTileView);
 		}
+		
 }
 
 /*****************************************************************************/
@@ -365,7 +387,7 @@ BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
 /*** TileSet *****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CTileSet::CTileSet(char *_Filename,int Idx)
+CTileSet::CTileSet(const char *_Filename,int Idx)
 {
 		Filename=_Filename;
 		

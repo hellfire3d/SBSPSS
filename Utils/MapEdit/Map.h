@@ -57,7 +57,7 @@ public:
 
 		BOOL		DoesContainTile(sMapElem &Tile);
 
-		void		Load(CFile *File,float Version);
+		void		Load(CFile *File,int Version);
 		void		Save(CFile *File);
 
 		void		DeleteSet(int Set);

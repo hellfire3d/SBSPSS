@@ -40,15 +40,15 @@ public:
 			MaxBrush
 		};
 
-		int			FindTileSet(char *Filename);
-		void		AddTileSet(char *Filename);
+		int			FindTileSet(const char *Filename);
+		void		AddTileSet(const char *Filename);
 		int			NeedLoad()							{return(LoadFlag);}
 		void		Delete();
 		void		Reload();
 		void		LoadTileSets(CCore *Core);
 		CTile		&GetTile(int Bank,int Tile);
 		
-		void		SetCurrent(int Set)					{CurrentSet=Set;}
+		void		SetCurrent(int Set)					{CurrentSet=Set+1;}
 		int			GetCurrent()						{return(CurrentSet);}
 		int			GetSetCount()						{return(TileSet.size());}
 
@@ -66,6 +66,8 @@ public:
 		BOOL		IsTileValid(int Set,int Tile);
 		BOOL		IsTileValidGB(int Set,int Tile);
 
+		void		SetCollision(bool f);
+
 // Functions
 		BOOL		SelectL(BOOL DownFlag)				{return(Select(LBrush,DownFlag));}
 		BOOL		SelectR(BOOL DownFlag)				{return(Select(RBrush,DownFlag));}
@@ -74,7 +76,7 @@ public:
 		void		SetActiveBrushL()					{ActiveBrush=LBrush;}
 		void		SetActiveBrushR()					{ActiveBrush=RBrush;}
 
-		void		Load(CFile *File,float Version);
+		void		Load(CFile *File,int Version);
 		void		Save(CFile *File);
 
 
@@ -83,7 +85,7 @@ private:
 		void		SetBrush(CMap &ThisBrush);
 
 		std::vector<CTileSet>	TileSet;
-		int						CurrentSet;
+		int						CurrentSet,LastSet;
 		CMap					Brush[2];
 		int						ActiveBrush;
 		int						SelStart,SelEnd;
@@ -96,7 +98,7 @@ private:
 class	CTileSet
 {
 public:
-		CTileSet(char *_Filename,int Idx);
+		CTileSet(const char *_Filename,int Idx);
 		~CTileSet();
 		
 		int		IsLoaded()			{return(Loaded);}

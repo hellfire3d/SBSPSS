@@ -8,6 +8,7 @@
 #include	"MultiBar.h"
 #include	"LayerList.h"
 #include	"LayerTileGUI.h"
+#include	"LayerTileToolbar.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -39,6 +40,7 @@ public:
 	CMultiBar		*GetParamBar()			{return(&ParamBar);}
 	CDialog			&GetLayerList()			{return(LayerList);}
 	CDialog			&GetLayerTileGUI()		{return(LayerTileGUI);}
+	CDialog			&GetLayerTileToolbar()	{return(LayerTileToolBar);}
 
 // Operations
 public:
@@ -58,13 +60,14 @@ public:
 #endif
 
 protected:  // control bar embedded members
-	CStatusBar		StatusBar;
-	CMainToolBar	ToolBar;
+	CStatusBar			StatusBar;
+	CMainToolBar		ToolBar;
 
-	CMultiBar		ParamBar;
+	CMultiBar			ParamBar;
 // Sub Dialogs
-	CLayerList		LayerList;
-	CLayerTileGUI	LayerTileGUI;
+	CLayerList			LayerList;
+	CLayerTileGUI		LayerTileGUI;
+	CLayerTileToolbar	LayerTileToolBar;
 
 // Generated message map functions
 protected:

@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CLayerList
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=14
+ClassCount=16
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -17,31 +17,36 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=11
+ResourceCount=13
 Resource1=IDD_NEW_LAYER
 Resource2=IDR_MAPEDITYPE (English (U.S.))
 Resource3=IDD_ABOUTBOX (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_LAYER_LIST_DIALOG
+Resource5=IDD_MAPSIZE
 Class8=CMultiBar
-Resource6=IDD_LAYERTILE_GUI
-Resource7=IDD_MULTIBAR (English (U.S.))
+Resource6=IDR_TOOLBAR (English (U.S.))
+Resource7=IDD_LAYERTILE_GUI
 Class9=CLayerList
 Class10=CMapSizeDlg
 Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDR_TOOLBAR (English (U.S.))
-Resource10=IDD_MAPSIZE
+Resource9=IDD_LAYER_LIST_DIALOG
+Resource10=IDD_NEWMAP
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_NEWMAP
+Resource11=IDD_MULTIBAR (English (U.S.))
+Class15=CAddLayerDlg
+Resource12=IDD_ADDLAYER
+Class16=CLayerTileToolbar
+Resource13=IDD_LAYERTILE_TOOLBAR
 
 [CLS:CChildFrame]
 Type=0
 BaseClass=CMDIChildWnd
 HeaderFile=ChildFrm.h
 ImplementationFile=ChildFrm.cpp
+LastObject=CChildFrame
 
 [CLS:CGLEnabledView]
 Type=0
@@ -77,7 +82,7 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=ID_EXPORT_AGB
+LastObject=CMapEditDoc
 Filter=N
 VirtualFilter=DC
 
@@ -228,7 +233,7 @@ ImplementationFile=LayerList.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_LAYERLIST_ADD
+LastObject=IDC_LAYER_LIST
 
 [CLS:CGfxToolBar]
 Type=0
@@ -262,13 +267,11 @@ VirtualFilter=dWC
 [DLG:IDD_LAYERTILE_GUI]
 Type=1
 Class=CLayerTileGUI
-ControlCount=6
+ControlCount=4
 Control1=IDD_LAYERTILE_LIST,combobox,1342242819
 Control2=IDD_LAYERTILE_BTN_UPDATE,button,1342242816
 Control3=IDD_LAYERTILE_BTN_LOAD,button,1342242816
-Control4=IDD_LAYERTILE_BTN_PAINT,button,1342177344
-Control5=IDD_LAYERTILE_BTN_SELECT,button,1342177344
-Control6=IDD_LAYERTILE_BTN_DELETE,button,1342242816
+Control4=IDD_LAYERTILE_BTN_DELETE,button,1342242816
 
 [CLS:CLayerTileGUI]
 Type=0
@@ -277,7 +280,7 @@ ImplementationFile=LayerTileGUI.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDD_LAYERTILE_BTN_DELETE
+LastObject=IDD_LAYERTILE_BTN_UPDATE
 
 [DLG:IDD_NEW_LAYER]
 Type=1
@@ -299,16 +302,13 @@ Control12=IDC_NEW_LAYER_WIDTH_EDIT2,edit,1350631552
 [DLG:IDD_NEWMAP]
 Type=1
 Class=CNewMapGUI
-ControlCount=9
+ControlCount=6
 Control1=IDOK,button,1342177281
 Control2=IDCANCEL,button,1342177280
 Control3=IDC_MAPSIZE_WIDTH_TEXT,static,1342308866
 Control4=IDC_MAPSIZE_WIDTH,edit,1350639744
 Control5=IDC_MAPSIZE_HEIGHT_TEXT,static,1342308866
 Control6=IDC_MAPSIZE_HEIGHT,edit,1350639744
-Control7=IDC_NEWMAP_BACK_CHECK,button,1476460547
-Control8=IDC_NEWMAP_MID_CHECK,button,1476460547
-Control9=IDC_NEWMAP_FORE_CHECK,button,1342242819
 
 [CLS:CNewMapGUI]
 Type=0
@@ -326,5 +326,38 @@ ImplementationFile=ProgressDlg.cpp
 BaseClass=CDialog
 Filter=D
 LastObject=IDC_EDIT1
+VirtualFilter=dWC
+
+[CLS:CAddLayerDlg]
+Type=0
+HeaderFile=AddLayerDlg.h
+ImplementationFile=AddLayerDlg.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=IDC_ADDLAYER_LIST
+VirtualFilter=dWC
+
+[DLG:IDD_ADDLAYER]
+Type=1
+Class=CAddLayerDlg
+ControlCount=3
+Control1=IDOK,button,1342242817
+Control2=IDCANCEL,button,1342242816
+Control3=IDC_ADDLAYER_LIST,listbox,1352728833
+
+[DLG:IDD_LAYERTILE_TOOLBAR]
+Type=1
+Class=CLayerTileToolbar
+ControlCount=2
+Control1=IDD_LAYERTILE_BTN_PAINT,button,1342177344
+Control2=IDD_LAYERTILE_BTN_SELECT,button,1342177344
+
+[CLS:CLayerTileToolbar]
+Type=0
+HeaderFile=LayerTileToolbar.h
+ImplementationFile=LayerTileToolbar.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=CLayerTileToolbar
 VirtualFilter=dWC
 

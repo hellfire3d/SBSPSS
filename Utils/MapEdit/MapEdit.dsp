@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /out:"..\..\tools\MapEdit.exe" /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
+# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /machine:I386 /out:"..\..\tools\MapEdit\MapEdit.exe" /libpath:"..\libs\ginlib\release\\" /libpath:"..\libs\glib\release\\" /libpath:"..\libs\maths\release\\"
 
 !ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
 
@@ -100,6 +100,14 @@ SOURCE=.\Layer.cpp
 # Begin Source File
 
 SOURCE=.\Layer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerCollision.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerCollision.h
 # End Source File
 # Begin Source File
 
@@ -348,6 +356,14 @@ SOURCE=.\res\Toolbar.bmp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\AddLayerDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\AddLayerDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerList.cpp
 # End Source File
 # Begin Source File
@@ -361,6 +377,14 @@ SOURCE=.\LayerTileGUI.cpp
 # Begin Source File
 
 SOURCE=.\LayerTileGUI.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTileToolbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTileToolbar.h
 # End Source File
 # Begin Source File
 

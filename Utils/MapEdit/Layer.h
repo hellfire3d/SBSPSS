@@ -12,15 +12,23 @@
 #include	"LayerDef.h"
 
 /*****************************************************************************/
+struct	sLayerInfoTable
+{
+	LAYER_TYPE		Type;
+	LAYER_SUBTYPE	SubType;
+	char			*Name;
+
+	bool			DeleteFlag;
+	float			ScaleFactor;
+	bool			Render3dFlag;
+	bool			ResizeFlag;
+
+};
+
+/*****************************************************************************/
 enum	LAYER_ENUMS
 {
 SELECT_BUFFER_SIZE=16,
-};
-
-enum
-{
-	SCREEN_WIDTH_TILE=30,
-	SCREEN_HEIGHT_TILE=20,
 };
 
 /*****************************************************************************/
@@ -33,13 +41,22 @@ public:
 		CLayer(){};
 virtual	~CLayer(){};
 
-virtual	char			*GetName()=0;
+static	sLayerInfoTable	InfoTable[];
+static	int				InfoTableSize;
+
+static	int				GetLayerIdx(int Type,int SubType);
+
+		void			SetDefaultParams();		
+
+		char			*GetName()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].Name);}
+		bool			CanDelete()						{return(InfoTable[GetLayerIdx(GetType(),GetSubType())].DeleteFlag);}
+
 virtual	void			SetVisible(BOOL f)				{VisibleFlag=f;}
 virtual	BOOL			IsVisible()						{return(VisibleFlag);}
 virtual	int				GetType()=0;
-virtual	int				GetSubType()					{return(-1);}
+virtual	int				GetSubType()					{return(LAYER_SUBTYPE_NONE);}
+		float			GetScaleFactor()				{return(ScaleFactor);}
 
-virtual	float			GetScaleFactor()				{return(ScaleFactor);}
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d)=0;
 virtual	void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active)=0;
@@ -57,12 +74,11 @@ virtual	int				GetHeight()=0;
 virtual	void			CheckLayerSize(int Width,int Height){};
 virtual	BOOL			Resize(int Width,int Height)=0;
 
-virtual	void			Load(CFile *File,float Version)=0;
+virtual	void			Load(CFile *File,int Version)=0;
 virtual	void			Save(CFile *File)=0;
 
 virtual	void			Export(CCore *Core,CExport &Exp)=0;
 
-virtual bool			CanDelete()=0;
 
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;
@@ -83,9 +99,10 @@ virtual	void			DeleteSet(int Set){};
 virtual	void			RemapSet(int OrigSet,int NewSet){};
 
 protected:
-		BOOL			Render3dFlag;
 		float			ScaleFactor;
-		BOOL			ResizeFlag;
+		bool			Render3dFlag;
+		bool			ResizeFlag;
+
 		BOOL			VisibleFlag;
 		CSelect			Selection;
 };

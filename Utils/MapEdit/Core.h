@@ -12,7 +12,7 @@
 #include	"TexCache.h"
 #include	"TileSet.h"
 
-const	float	FileVersion=1.01f;
+const	s32		FileVersion=2;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
@@ -47,11 +47,11 @@ public:
 		void					Zoom(CMapEditView *View,float Dst);
 
 // TileBank
+		CTileBank				&GetTileBank()					{return(TileBank);}
 		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
 
 		void					UpdateTileViewGUI()				{TileBank.UpdateGUI(this,TileViewFlag);}
 
-		CTileBank				&GetTileBank()					{return(TileBank);}
 		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 		void					TileBankLoad(char *Filename);
 		void					TileBankDelete();
@@ -63,11 +63,12 @@ public:
 		void					ActiveBrushRight(CMapEditView *View);
 		BOOL					IsTileValid(int Set,int Tile);
 
-
 // Param Bar
 		void					UpdateParamBar();
 
 // Layers
+		void					AddLayer(int Type, int SubType, int Width, int Height);
+		CLayer					*AddLayer(CLayer *Layer);
 		void					SetLayer(int Layer);
 		void					AddLayer(int Layer);
 		void					DeleteLayer(int Layer);

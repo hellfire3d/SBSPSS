@@ -15,10 +15,12 @@
 #include	"MainFrm.h"
 
 #include	"NewMapGUI.h"
+#include	"AddLayerDlg.h"
 
 #include	"Core.h"
 #include	"Layer.h"
 #include	"LayerTile.h"
+#include	"LayerCollision.h"
 #include	"utils.h"
 
 #include	"ExportAGB.h"
@@ -30,7 +32,15 @@
 /*****************************************************************************/
 CCore::CCore()
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
 		CurrentMousePos=CPoint(0,0);
+
+// Add default param bar items			
+		ParamBar->RemoveAll();
+		ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
+
 }
 
 /*****************************************************************************/
@@ -43,14 +53,8 @@ int	ListSize=Layer.size();
 /*****************************************************************************/
 void	CCore::Init()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
-			ParamBar->RemoveAll();
-// Add default param bar items			
-			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
 			UpdateParamBar();
-			UpdateAll(NULL);
+//			UpdateAll(NULL);
 }
 
 /*****************************************************************************/
@@ -61,10 +65,6 @@ int		Width,Height;
 		Dlg.m_Width=TileLayerMinWidth;
 		Dlg.m_Height=TileLayerMinHeight;
 
-		Dlg.m_Back=TRUE;
-		Dlg.m_Mid=TRUE;
-		Dlg.m_Fore=FALSE;
-		
 #ifndef _DEBUG
 		if (Dlg.DoModal()!=IDOK) return FALSE;
 #endif
@@ -72,11 +72,12 @@ int		Width,Height;
 		Height=Dlg.m_Height;
 
 // Create Tile Layers
-//															Type					Width					Height		Scale	3d?		Resizable?
-		if (Dlg.m_Back)		Layer.push_back(new CLayerTile(	LAYERTILE_BACK,			32,						32,			4.0f,	FALSE,	FALSE));
-		if (Dlg.m_Mid)		Layer.push_back(new CLayerTile(	LAYERTILE_MID,			Width,					Height,		2.0f,	FALSE,	TRUE));
-							Layer.push_back(new CLayerTile(	LAYERTILE_ACTION,		Width,					Height,		1.0f,	TRUE,	TRUE));
-		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	LAYERTILE_FORE,			Width,					Height,		0.5f,	FALSE,	TRUE));
+//													Type					Width					Height		Scale	3d?		Resizable?
+//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_BACK,32,32);
+//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_MID,	Width, Height);
+		AddLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION, Width, Height);
+//		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
+//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_FORE, Width, Height);
 
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();
@@ -89,30 +90,31 @@ int		Width,Height;
 }
 
 /*****************************************************************************/
-
 void	CCore::Load(CFile *File)
 {
-float	Version;
+int		Version;
 
-		File->Read(&Version,sizeof(float));
-		TRACE1("Load Version %g\n",Version);
+		File->Read(&Version,sizeof(int));
+		if (Version>100000) Version=1;	// Check fix for changing version to int from float
 
-		if (Version>=1.0)
+		if (Version<FileVersion)
 		{
-			File->Read(&MapCam,sizeof(Vector3));
-			File->Read(&MapCamOfs,sizeof(Vector3));
-			File->Read(&TileCam,sizeof(Vector3));
-			File->Read(&TileCamOfs,sizeof(Vector3));
+			CString mexstr;
+			mexstr.Format("Old File Format\n\nPlease re-save\n");
+			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
+
+		}
+
+		TRACE1("Load Version %i\n",Version);
+
+		File->Read(&MapCam,sizeof(Vector3));
+		File->Read(&MapCamOfs,sizeof(Vector3));
+		File->Read(&TileCam,sizeof(Vector3));
+		File->Read(&TileCamOfs,sizeof(Vector3));
 	
-			File->Read(&TileViewFlag,sizeof(BOOL));
-			File->Read(&GridFlag,sizeof(BOOL));
-			File->Read(&Is3dFlag,sizeof(BOOL));
-		}
-		if (Version>=1.1)
-		{
-
-		}
-
+		File->Read(&TileViewFlag,sizeof(BOOL));
+		File->Read(&GridFlag,sizeof(BOOL));
+		File->Read(&Is3dFlag,sizeof(BOOL));
 
 // Layers
 int		LayerCount;
@@ -127,7 +129,10 @@ int		LayerCount;
 			switch (Type)
 			{
 			case LAYER_TYPE_TILE:
-				Layer.push_back(new CLayerTile(File,Version));
+				AddLayer(new CLayerTile(File,Version));
+				break;
+			case LAYER_TYPE_COLLISION:
+				AddLayer(new CLayerCollision(File,Version));
 				break;
 
 			}
@@ -144,14 +149,14 @@ int		MapHeight=Layer[FindActionLayer()]->GetHeight();
 		}
 
 		Init();
-//		MapCam.Zero();
+
 }
 
 /*****************************************************************************/
 void	CCore::Save(CFile *File)
 {
 // Version 1
-		File->Write(&FileVersion,sizeof(float));
+		File->Write(&FileVersion,sizeof(int));
 
 		File->Write(&MapCam,sizeof(Vector3));
 		File->Write(&MapCamOfs,sizeof(Vector3));
@@ -230,11 +235,8 @@ void	CCore::RenderTileView(CMapEditView *View)
 {
 Vector3	&ThisCam=GetCam();
 
-		TileBank.RenderSet(this,ThisCam,Is3dFlag);
-
-
-// Get Cursor Pos
-		TileBank.FindCursorPos(this,View,GetCam(),CurrentMousePos);
+		GetTileBank().RenderSet(this,ThisCam,Is3dFlag);
+		GetTileBank().FindCursorPos(this,View,GetCam(),CurrentMousePos);
 }
 
 /*****************************************************************************/
@@ -243,9 +245,7 @@ Vector3	&ThisCam=GetCam();
 void	CCore::SetMode(int NewMode)
 {
 BOOL	RedrawFlag=FALSE;
-		
 		RedrawFlag=Layer[ActiveLayer]->SetMode(NewMode);
-		
 }
 
 /*****************************************************************************/
@@ -256,9 +256,9 @@ BOOL	RedrawFlag=FALSE;
 		if (TileViewFlag)
 		{
 			if (nFlags & MK_RBUTTON)
-				RedrawFlag=TileBank.SelectCancel();
+				RedrawFlag=GetTileBank().SelectCancel();
 			else
-				RedrawFlag=TileBank.SelectL(DownFlag);
+				RedrawFlag=GetTileBank().SelectL(DownFlag);
 		}
 		else
 		{
@@ -267,7 +267,7 @@ BOOL	RedrawFlag=FALSE;
 				RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
 			}
 		}
-		TileBank.SetActiveBrushL();
+		GetTileBank().SetActiveBrushL();
 
 		if (RedrawFlag) View->Invalidate();
 }
@@ -285,9 +285,9 @@ BOOL	RedrawFlag=FALSE;
 		if (TileViewFlag)
 		{
 			if (nFlags & MK_LBUTTON)
-				RedrawFlag=TileBank.SelectCancel();
+				RedrawFlag=GetTileBank().SelectCancel();
 			else
-				RedrawFlag=TileBank.SelectR(DownFlag);
+				RedrawFlag=GetTileBank().SelectR(DownFlag);
 		}
 		else
 		{
@@ -296,7 +296,7 @@ BOOL	RedrawFlag=FALSE;
 				RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
 			}
 		}
-		TileBank.SetActiveBrushR();
+		GetTileBank().SetActiveBrushR();
 
 		if (RedrawFlag) View->Invalidate();
 }
@@ -429,20 +429,88 @@ CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 		}
 		else
 		{
+			bool	IsCol=Layer[NewLayer]->GetType()==LAYER_TYPE_COLLISION;
+			TileBank.SetCollision(IsCol);
 			ActiveLayer=NewLayer;
+			UpdateParamBar();
 		}
 
 }
 
 /*****************************************************************************/
+CLayer		*CCore::AddLayer(CLayer *NewLayer)
+{
+int			ListSize=Layer.size();
+int			NewIdx=CLayer::GetLayerIdx(NewLayer->GetType(),NewLayer->GetSubType());
+int			Idx=ListSize;
+
+		TRACE3("Add Layer %i %i @ %i\n",NewLayer->GetType(),NewLayer->GetSubType(),NewIdx);
+
+		for (Idx=0; Idx<ListSize; Idx++)
+		{
+			int ListIdx=CLayer::GetLayerIdx(Layer[Idx]->GetType(),Layer[Idx]->GetSubType());
+			if (NewIdx<ListIdx) break;
+		}
+
+		Layer.insert(Layer.begin() + Idx,NewLayer);
+
+		return(NewLayer);
+}
+
+
+/*****************************************************************************/
+void		CCore::AddLayer(int Type, int SubType, int Width, int Height)
+{
+CLayer	*Layer;
+		switch (Type)
+		{
+			case LAYER_TYPE_TILE:
+				Layer=AddLayer(new CLayerTile(SubType, Width,Height));
+				break;
+			case LAYER_TYPE_COLLISION:
+				Layer=AddLayer(new CLayerCollision(SubType, Width,Height));
+				break;
+			default:
+				ASSERT(!"AddLayer - Invalid Layer Type");
+				break;
+		}
+
+		
+}
+
+
+/*****************************************************************************/
 void		CCore::AddLayer(int CurrentLayer)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
+std::vector<int>	List;
+CAddLayerDlg		Dlg;
+int					NewLayerId=0;
+int					Sel;
 
-		TRACE1("Add Layer %i\n",CurrentLayer);
+		
+// Build Unused List
+		Dlg.Sel=&Sel;
+		Sel=0;
+		for (int i=0; i<CLayer::InfoTableSize; i++)
+		{
+			if (FindLayer(CLayer::InfoTable[i].Type,CLayer::InfoTable[i].SubType)==-1)
+			{
+				List.push_back(i);
+				Dlg.StrList.push_back(CLayer::InfoTable[i].Name);
+			}
+		}
+		if (Dlg.DoModal()!=IDOK) return;
 
+		NewLayerId=List[Sel];
+
+		TRACE2("Add Layer %i %s\n",NewLayerId,CLayer::InfoTable[NewLayerId].Name);
+
+int		Width=Layer[FindActionLayer()]->GetWidth();
+int		Height=Layer[FindActionLayer()]->GetHeight();
+
+		AddLayer(CLayer::InfoTable[NewLayerId].Type,CLayer::InfoTable[NewLayerId].SubType,Width,Height);
+		
+		
 }
 
 /*****************************************************************************/
@@ -467,12 +535,12 @@ void		CCore::DeleteLayer(int CurrentLayer)
 /*****************************************************************************/
 void	CCore::UpdateGrid(CMapEditView *View,BOOL Toggle)
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CToolBar	*ToolBar=Frm->GetToolBar();
+//CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+//CToolBar	*ToolBar=Frm->GetToolBar();
 
 			if (Toggle) GridFlag=!GridFlag;
 
-			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
+//			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_GRID,GridFlag);
 			UpdateView(View);
 }
 
@@ -567,14 +635,14 @@ void	CCore::MirrorY(CMapEditView *View)
 /*****************************************************************************/
 void	CCore::ActiveBrushLeft(CMapEditView *View)
 {
-		TileBank.SetActiveBrushL();
+		GetTileBank().SetActiveBrushL();
 		UpdateView(View);
 }
 
 /*****************************************************************************/
 void	CCore::ActiveBrushRight(CMapEditView *View)
 {
-		TileBank.SetActiveBrushR();
+		GetTileBank().SetActiveBrushR();
 		UpdateView(View);
 }
 
@@ -676,7 +744,7 @@ Vector3	&ThisCam=GetCam();
 			if (ThisCam.y<0) ThisCam.y=0;
 		}
 		if (ThisCam.z<0.1) ThisCam.z=0.1f;
-		TRACE1("ZoomVal %f\n",ThisCam.z);
+//		TRACE1("ZoomVal %f\n",ThisCam.z);
 
 		UpdateView(View);
 }		

@@ -12,11 +12,14 @@
 
 
 /*****************************************************************************/
-void	CMap::Load(CFile *File,float Version)
+void	CMap::Load(CFile *File,int Version)
 {
 // Version 1
 int	Width;
 int	Height;
+int	VFix=0;	// Fix for colliison tileset
+
+		if (Version<2) VFix=1;
 
 		File->Read(&Width,sizeof(int));
 		File->Read(&Height,sizeof(int));
@@ -29,10 +32,10 @@ int	Height;
 			{
 				sMapElem	ThisElem;
 				File->Read(&ThisElem,sizeof(sMapElem));
+				ThisElem.Set+=VFix;
 				Set(X,Y,ThisElem,TRUE);
 			}
 		}
-
 }
 
 /*****************************************************************************/

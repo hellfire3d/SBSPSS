@@ -27,13 +27,13 @@ public:
 			MouseModeSelect,
 		};
 
-		CLayerTile(int SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable);					// New Layer
-		CLayerTile(CFile *File,int Version);																// Load Layer
+		CLayerTile(){};
+		CLayerTile(int SubType,int Width,int Height);					// New Layer
+		CLayerTile(CFile *File,int Version);							// Load Layer
 		~CLayerTile();
 
 		int				GetType()			{return(LAYER_TYPE_TILE);}
 		int				GetSubType()		{return(SubType);}
-		char			*GetName()			{return(LayerName[SubType]);}
 
 		void			Render(CCore *Core,Vector3 &CamPos,BOOL Is3d);
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,BOOL Active);
@@ -49,12 +49,11 @@ public:
 		int				GetHeight()			{return(Map.GetHeight());}
 		BOOL			Resize(int Width,int Height);
 
-		void			Load(CFile *File,float Version);
+		void			Load(CFile *File,int Version);
 		void			Save(CFile *File);
 		void			CheckLayerSize(int Width,int Height);
 
 		void			Export(CCore *Core,CExport &Exp);
-		bool			CanDelete()			{if (SubType==LAYERTILE_FORE) return(true); else return(false);}
 
 // Functions
 		BOOL			SetMode(int NewMode);
@@ -85,7 +84,7 @@ protected:
 		int				SubType;
 		MouseMode		Mode;
 
-static	char			*LayerName[];
+//static	char			*LayerName[];
 
 };
 

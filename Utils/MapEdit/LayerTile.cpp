@@ -22,25 +22,20 @@
 #include	"Export.h"
 
 /*****************************************************************************/
-char	*CLayerTile::LayerName[]=
-{
-	"Back",
-	"Mid",
-	"Action",
-	"Fore",
-};
-
-/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerTile::CLayerTile(int _SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable)
+CLayerTile::CLayerTile(int _SubType,int Width,int Height)
 {
 		SubType=_SubType;
-		ScaleFactor=Scale;
-		ResizeFlag=Resizable;
-		Render3dFlag=Is3d;
-		VisibleFlag=TRUE;
+		if (SubType==LAYERTILE_BACK)	// Back is fixed size
+		{
+			Width=32;
+			Height=32;
+		}
+
+		SetDefaultParams();
+
 		Mode=MouseModePaint;
 
 		if (ResizeFlag)
@@ -68,19 +63,15 @@ CLayerTile::~CLayerTile()
 }
 
 /*****************************************************************************/
-void	CLayerTile::Load(CFile *File,float Version)
+void	CLayerTile::Load(CFile *File,int Version)
 {
-// Version 1
-		if (Version>=1.0)
-		{
-			File->Read(&Render3dFlag,sizeof(BOOL));
-			File->Read(&ScaleFactor,sizeof(float));
-			File->Read(&ResizeFlag,sizeof(BOOL));
-			File->Read(&VisibleFlag,sizeof(BOOL));
-			File->Read(&Mode,sizeof(MouseMode));
-			File->Read(&SubType,sizeof(int));
-			Map.Load(File,Version);
-		}
+		File->Read(&Render3dFlag,sizeof(BOOL));
+		File->Read(&ScaleFactor,sizeof(float));
+		File->Read(&ResizeFlag,sizeof(BOOL));
+		File->Read(&VisibleFlag,sizeof(BOOL));
+		File->Read(&Mode,sizeof(MouseMode));
+		File->Read(&SubType,sizeof(int));
+		Map.Load(File,Version);
 
 		TRACE1("%s\t",GetName());
 		TRACE1("Scl:%g\t",ScaleFactor);
@@ -407,30 +398,32 @@ void	CLayerTile::InitGUI(CCore *Core)
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
+			ParamBar->Add(Frm->GetLayerTileToolbar(),IDD_LAYERTILE_TOOLBAR,TRUE);
 			ParamBar->Add(Frm->GetLayerTileGUI(),IDD_LAYERTILE_GUI,TRUE);
 }
 
 /*****************************************************************************/
 void	CLayerTile::UpdateGUI(CCore *Core)
 {
-CMainFrame		*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CLayerTileGUI	*Dlg=(CLayerTileGUI *)Frm->GetDialog(IDD_LAYERTILE_GUI);
+CMainFrame			*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CLayerTileToolbar	*Bar=(CLayerTileToolbar *)Frm->GetDialog(IDD_LAYERTILE_TOOLBAR);
 
-		if (Dlg)
+		if (Bar)
 		{
-			Dlg->ResetButtons();
+			Bar->ResetButtons();
 			switch(Mode)
 			{
 			case MouseModePaint:
-				Dlg->SetButtonState(CLayerTileGUI::PAINT,TRUE);
+				Bar->SetButtonState(CLayerTileToolbar::PAINT,TRUE);
 				break;
 			case MouseModeSelect:
-				Dlg->SetButtonState(CLayerTileGUI::SELECT,TRUE);
+				Bar->SetButtonState(CLayerTileToolbar::SELECT,TRUE);
 				break;
 			default:
 				break;
 			}
 		}
+
 		Core->UpdateTileViewGUI();
 }
 
