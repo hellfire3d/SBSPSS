@@ -71,10 +71,9 @@ void CFader::render()
 	switch(s_fadeMode)
 	{
 		case FADED_IN:
-		case PAUSE_BEFORE_FADING_IN:
-		case PAUSE_BEFORE_FADING_OUT:
 			return;
 
+		case PAUSE_BEFORE_FADING_IN:
 		case FADING_IN:
 			{
 				switch(s_fadeStyle)
@@ -164,12 +163,6 @@ void CFader::render()
   ---------------------------------------------------------------------- */
 void CFader::think(int _frames)
 {
-	if(s_waitFrames)
-	{
-		s_waitFrames--;
-		return;
-	}
-
 	switch(s_fadeMode)
 	{
 		case FADING_IN:
@@ -185,9 +178,9 @@ void CFader::think(int _frames)
 						s_fadeValue=0;
 						if(s_fadeMode==FADING_OUT)
 						{
-							s_fadeMode=FADED_OUT;
-							CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
 							s_waitFrames=FRAMES_TO_WAIT;
+							s_fadeMode=PAUSE_AFTER_FADING_OUT;
+							CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
 						}
 						else
 						{
@@ -207,21 +200,14 @@ void CFader::think(int _frames)
 		case PAUSE_BEFORE_FADING_IN:
 			if(--s_waitFrames==0)
 			{
-				s_fadeMode==FADING_IN;
-			}
-			break;
-
-		case PAUSE_BEFORE_FADING_OUT:
-			if(--s_waitFrames==0)
-			{
-				s_fadeMode==FADING_OUT;
+				s_fadeMode=FADING_IN;
 			}
 			break;
 
 		case PAUSE_AFTER_FADING_OUT:
 			if(--s_waitFrames==0)
 			{
-				s_fadeMode==FADED_OUT;
+				s_fadeMode=FADED_OUT;
 			}
 			break;
 
@@ -247,6 +233,7 @@ void CFader::setFadingOut(FADE_STYLE _style)
 			break;
 	}
 
+
 	s_fadeMode=FADING_OUT;
 	s_fadeStyle=_style;
 	s_waitFrames=FRAMES_TO_WAIT;
@@ -268,8 +255,8 @@ void CFader::setFadingIn(FADE_STYLE _style)
 			s_fadeValue=255;
 			break;
 	}
-	s_fadeMode=FADING_IN;
 	s_fadeStyle=_style;
+	s_fadeMode=PAUSE_BEFORE_FADING_IN;
 	s_waitFrames=FRAMES_TO_WAIT;
 }
 
@@ -282,7 +269,7 @@ void CFader::setFadingIn(FADE_STYLE _style)
   ---------------------------------------------------------------------- */
 int CFader::isFading()
 {
-	return s_fadeMode==FADING_IN||s_fadeMode==FADING_OUT;
+	return s_fadeMode!=FADED_IN&&s_fadeMode!=FADED_OUT;
 }
 
 
