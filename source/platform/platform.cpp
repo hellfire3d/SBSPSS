@@ -841,6 +841,7 @@ void CNpcPlatform::processMovement( int _frames )
 
 void CNpcPlatform::render()
 {
+	setOnScreenFlag(false);
 	if ( m_isActive )
 	{
 		CPlatformThing::render();
@@ -862,6 +863,7 @@ void CNpcPlatform::render()
 		{
 			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 			{
+				setOnScreenFlag(true);
 				m_modelGfx->Render(renderPos);
 //				POLY_F4	*F4=GetPrimF4();
 //				setXYWH(F4,renderPos.vx-32,renderPos.vy-32,64,16);

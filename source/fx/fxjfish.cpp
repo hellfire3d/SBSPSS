@@ -25,6 +25,11 @@ void	CFXJellyFishLegs::init()
 /*****************************************************************************/
 void	CFXJellyFishLegs::shutdown()
 {
+		for (int L=0; L<Width; L++)
+		{
+			MemFree(FXList[L]);
+		}
+
 		MemFree(FXList);
 		MemFree(WidthTable);
 		MemFree(HeightTable);
@@ -66,7 +71,7 @@ int		AInc=1024/Width;
 			dH*=2;
 			if (dH>8) dH=8;
 			HeightTable[H]=(s16)dH;
-			printf("%i %i =%i\n",H,Ofs,HeightTable[H]);
+//			printf("%i %i =%i\n",H,Ofs,HeightTable[H]);
 		}
 
 }
@@ -99,7 +104,10 @@ void	CFXJellyFishLegs::think(int _frames)
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-int	Trans=0;
+const int	Trans=3;
+int	LX=8;
+int	LY=32;
+
 void	CFXJellyFishLegs::render()
 {
 DVECTOR	_MapOfs=CLevel::getCameraPos();
@@ -107,6 +115,10 @@ DVECTOR	MapOfs;
 int		dRGB=256/Count;
 s16		*dH=HeightTable;		
 
+		_MapOfs.vx+=LX;
+		_MapOfs.vy+=LY;
+
+		if (!Parent->getOnScreenFlag()) return;		
 		MapOfs.vx=_MapOfs.vx+XOfs;
 
 		for (int L=0; L<Width; L++)
@@ -129,7 +141,7 @@ s16		*dH=HeightTable;
 			for (int i=0; i<Count-1; i++)
 			{
 				if (Idx>=Count) Idx=0;
-				POLY_FT4	*Ft4=m_spriteBank->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,0);
+				POLY_FT4	*Ft4=m_spriteBank->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,6);
 
 				Ft4->x0=LastPos.vx+0+LastdW; Ft4->y0=LastPos.vy;
 				Ft4->x1=LastPos.vx+8-LastdW; Ft4->y1=LastPos.vy;
@@ -148,24 +160,3 @@ s16		*dH=HeightTable;
 			MapOfs.vx+=Gap;
 		}
 }
-/*
-			for (int i=0; i<Count-1; i++)
-			{
-				if (Idx>=Count) Idx=0;
-				POLY	*Ft4=m_spriteBank->printFT4(LastPos.vx,LastPos.vy);
-				LINE_F2	*P=GetPrimLF2();
-				P->x0=LastPos.vx;
-				P->y0=LastPos.vy;
-				LastPos.vx=List[Idx].Ofs.vx-MapOfs.vx;
-				LastPos.vy=List[Idx].Ofs.vy-MapOfs.vy;
-				P->x1=LastPos.vx;
-				P->y1=LastPos.vy;
-				setRGB0(P,C,C,C);
-				C-=dRGB;
-				if (!i)	setRGB0(P,255,0,0);
-				AddPrim(OtPtr,P);
-				MapOfs.vy-=Length;
-				Idx++;
-			}
-
-*/

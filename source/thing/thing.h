@@ -160,6 +160,9 @@ public:
 	virtual s32		getNewYPos( CThing *_thisThing );
 	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
+	bool			IsOnScreen()	{return(m_OnScreenFlag);/* Put check code here */}
+	bool			getOnScreenFlag()							{return(m_OnScreenFlag);}
+	void			setOnScreenFlag(bool f)						{m_OnScreenFlag=f;}
 
 protected:
 	virtual void	setCollisionSize(int _w,int _h);
@@ -174,6 +177,7 @@ private:
 	DVECTOR			m_collisionCentre;
 	s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
 	DVECTOR			m_newCollidedPos;															// pkg - to be removed?
+	bool			m_OnScreenFlag;
 
 };
 

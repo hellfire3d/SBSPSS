@@ -119,9 +119,12 @@ sLayerShadeBackGfx		*GfxList=Data->GfxList;
 // Render Back Shade
 
 
+//			printf("%i %i\n",ThisY,BandHeight);
+			if (BandHeight>256) BandHeight=256;
+//			if (ThisY<0) BandHeight=256;
 		for (i=0; i<BandCount; i++)
 		{
-			setXYWH(&Band[i],0,ThisY,512,BandHeight*2);
+			setXYWH(&Band[i],0,ThisY,512,BandHeight);
 			addPrim(ThisOT,&Band[i]);
 			ThisY+=BandHeight;
 		}
