@@ -61,6 +61,7 @@ public:
 	void				selectPreviousItem();
 	void				selectNextItem();
 
+	GUIId				getIdOfSelectedItem();
 	
 protected:
 	GUI_FLAGS			getInitialFlags()							{return FLAG_DRAWBORDER;}

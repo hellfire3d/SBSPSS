@@ -197,6 +197,17 @@ int				CFrontEndOptions::s_loadModeTextIds[LOADMODE__COUNT]=
 };
 
 
+
+enum
+{
+	ID_SCREEN_X_SLIDER=10,
+	ID_SCREEN_Y_SLIDER,
+	ID_SOUND_BGM_SLIDER,
+	ID_SOUND_SFX_SLIDER,
+	ID_SOUND_SPEECH_SLIDER,
+};
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -387,25 +398,30 @@ void CFrontEndOptions::init()
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
 										 X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__HORIZONTAL_POSITION,
-										 &m_screenXOff,0,64);
+										 &m_screenXOff,0,64,
+										 ID_SCREEN_X_SLIDER);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SCREEN],
 										 X_BORDER,Y_BORDER+40,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__VERTICAL_POSITION,
-										 &m_screenYOff,0,32);
+										 &m_screenYOff,0,32,
+										 ID_SCREEN_Y_SLIDER);
 
 	// Populate SOUND menu
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
 										 X_BORDER,Y_BORDER,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__BGM,
-										 &m_bgmVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+										 &m_bgmVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME,
+										 ID_SOUND_BGM_SLIDER);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
 										 X_BORDER,Y_BORDER+35,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__SFX,
-										 &m_sfxVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+										 &m_sfxVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME,
+										 ID_SOUND_SFX_SLIDER);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
 										 X_BORDER,Y_BORDER+70,OPTIONS_FRAME_W-(X_BORDER*2),35,
 										 STR__FRONTEND__SPEECH,
-										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME,
+										 ID_SOUND_SPEECH_SLIDER);
 
 	// Memcard menu
 	m_loadTextBox=new ("textbox") CGUITextBox();
@@ -532,7 +548,6 @@ void CFrontEndOptions::render()
 {
 	POLY_G4	*g4;
 	int		rgb[3];
-	int		renderButtons=true;
 
 rh+=rspeed;
 rh&=4095;
@@ -553,35 +568,7 @@ rh&=4095;
 	m_background->render();
 
 	// Button prompts
-	switch(m_mode)
-	{
-		case MODE__OPTIONS:
-		case MODE__CONTROL:
-		case MODE__SCREEN:
-		case MODE__SOUND:
-			break;
-		case MODE__LOAD:
-			switch(m_loadMode)
-			{
-				case LOADMODE__INIT:
-				case LOADMODE__CHECKING:
-				case LOADMODE__LOADING:
-					renderButtons=false;
-					break;
-
-				case LOADMODE__UNFORMATTED:
-				case LOADMODE__NODATA:
-				case LOADMODE__NOCARD:
-				case LOADMODE__CONFIRMLOAD:
-				case LOADMODE__LOADOK:
-				case LOADMODE__LOADERROR:
-					break;
-			}
-	}
-	if(renderButtons)
-	{
-		renderButtonPrompts();
-	}
+	renderButtonPrompts();
 
 	// UI
 	if(m_mode==MODE__LOAD)
@@ -974,22 +961,103 @@ void	CFrontEndOptions::setLoadMode(int _newMode)
   ---------------------------------------------------------------------- */
 void	CFrontEndOptions::renderButtonPrompts()
 {
-	sFrameHdr		*fh1,*fh2;
-	int				x,y,width;
+	CGUIObject::GUIId	id;
+	int					renderCross=false;
+	int					renderArrows=false;
+	int					renderTriangle=false;
+	sFrameHdr			*fh1,*fh2;
+	int					x,y,width;
 
-	fh1=m_spriteBank->getFrameHeader(FRM__BUTX);
-	width=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__CROSS_TO_SELECT);
-	x=128-(width/2);
-	m_spriteBank->printFT4(fh1,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,OPTIONS_INSTRUCTIONS_Y_POS,STR__FRONTEND__CROSS_TO_SELECT);
 
-	fh1=m_spriteBank->getFrameHeader(FRM__BUTT);
-	width=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__TRIANGLE_TO_GO_BACK);
-	x=256+128-(width/2);
-	m_spriteBank->printFT4(fh1,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,OPTIONS_INSTRUCTIONS_Y_POS,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+	// What shall we draw today?
+	switch(m_mode)
+	{
+		case MODE__OPTIONS:
+		case MODE__CONTROL:
+			renderCross=true;
+			renderTriangle=true;
+			break;
+
+		case MODE__SCREEN:
+			id=m_modeMenus[MODE__SCREEN]->getIdOfSelectedItem();
+			if(id==ID_SCREEN_X_SLIDER||id==ID_SCREEN_Y_SLIDER)
+			{
+				renderArrows=true;
+			}
+			else
+			{
+				renderCross=true;
+			}
+			renderTriangle=true;
+			break;
+
+		case MODE__SOUND:
+			id=m_modeMenus[MODE__SOUND]->getIdOfSelectedItem();
+			if(id==ID_SOUND_BGM_SLIDER||id==ID_SOUND_SFX_SLIDER||id==ID_SOUND_SPEECH_SLIDER)
+			{
+				renderArrows=true;
+			}
+			else
+			{
+				renderCross=true;
+			}
+			renderTriangle=true;
+			break;
+
+		case MODE__LOAD:
+			switch(m_loadMode)
+			{
+				case LOADMODE__INIT:
+				case LOADMODE__CHECKING:
+				case LOADMODE__LOADING:
+					break;
+
+				case LOADMODE__UNFORMATTED:
+				case LOADMODE__NODATA:
+				case LOADMODE__NOCARD:
+				case LOADMODE__CONFIRMLOAD:
+				case LOADMODE__LOADOK:
+				case LOADMODE__LOADERROR:
+					renderCross=true;
+					renderTriangle=true;
+					break;
+			}
+			break;
+	}
+
+
+	if(renderCross)
+	{
+		fh1=m_spriteBank->getFrameHeader(FRM__BUTX);
+		width=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__CROSS_TO_SELECT);
+		x=128-(width/2);
+		m_spriteBank->printFT4(fh1,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		x+=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+		m_fontBank->print(x,OPTIONS_INSTRUCTIONS_Y_POS,STR__FRONTEND__CROSS_TO_SELECT);
+	}
+
+	if(renderArrows)
+	{
+		fh1=m_spriteBank->getFrameHeader(FRM__BUTL);
+		fh2=m_spriteBank->getFrameHeader(FRM__BUTR);
+		width=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__ARROWS_TO_ADJUST);
+		x=128-(width/2);
+		m_spriteBank->printFT4(fh1,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		x+=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
+		m_spriteBank->printFT4(fh2,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		x+=fh2->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+		m_fontBank->print(x,OPTIONS_INSTRUCTIONS_Y_POS,STR__FRONTEND__ARROWS_TO_ADJUST);
+	}
+
+	if(renderTriangle)
+	{
+		fh1=m_spriteBank->getFrameHeader(FRM__BUTT);
+		width=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+		x=256+128-(width/2);
+		m_spriteBank->printFT4(fh1,x,OPTIONS_INSTRUCTIONS_Y_POS+OPTIONS_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		x+=fh1->W+OPTIONS_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+		m_fontBank->print(x,OPTIONS_INSTRUCTIONS_Y_POS,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+	}
 }
 
 /*===========================================================================

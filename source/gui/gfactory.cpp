@@ -18,10 +18,6 @@
 
 #include "gui\gfactory.h"
 
-#ifndef __GUI_GUI_H__
-#include "gui\gui.h"
-#endif
-
 #ifndef __GUI_GTEXTBOX_H__
 #include "gui\gtextbox.h"
 #endif
@@ -74,14 +70,15 @@
 CGUIObject	*CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
 										 int _x,int _y,int _w,int _h,
 										 int _textId,
-										 int *_target,int _value)
+										 int *_target,int _value,
+										 CGUIObject::GUIId _id)
 {
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;
 	CGUIValueButton		*vb;
 
 	fr=new ("frame") CGUIGroupFrame();
-	fr->init(_parent);
+	fr->init(_parent,_id);
 	fr->setObjectXYWH(_x,_y,_w,_h);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
@@ -104,7 +101,8 @@ CGUIObject	*CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
 CGUIObject	*CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
 										 int _x,int _y,int _w,int _h,
 										 int _textId,
-										 int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData)
+										 int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData,
+										 CGUIObject::GUIId _id)
 {
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;
@@ -112,7 +110,7 @@ CGUIObject	*CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
 	CGUITextReadout		*tr;
 
 	fr=new ("frame") CGUIGroupFrame();
-	fr->init(_parent);
+	fr->init(_parent,_id);
 	fr->setObjectXYWH(_x,_y,_w,_h);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);
@@ -140,7 +138,8 @@ CGUIObject	*CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
 CGUIObject	*CGUIFactory::createSliderButtonFrame(class CGUIObject *_parent,
 										  int _x,int _y,int _w,int _h,
 										  int _textId,
-										  int *_target,int _min,int _max)
+										  int *_target,int _min,int _max,
+										  CGUIObject::GUIId _id)
 {
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;
@@ -148,7 +147,7 @@ CGUIObject	*CGUIFactory::createSliderButtonFrame(class CGUIObject *_parent,
 	CGUIBarReadout		*br;
 
 	fr=new ("frame") CGUIGroupFrame();
-	fr->init(_parent);
+	fr->init(_parent,_id);
 	fr->setObjectXYWH(_x,_y,_w,_h);
 		tb=new ("textbox") CGUITextBox();
 		tb->init(fr);

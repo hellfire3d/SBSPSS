@@ -20,6 +20,10 @@
 	Includes
 	-------- */
 
+#ifndef __GUI_GUI_H__
+#include "gui\gui.h"
+#endif
+
 #ifndef __GUI_GREADOUT_H__
 #include "gui\greadout.h"
 #endif
@@ -40,22 +44,25 @@ class CGUIFactory
 {
 public:
 	// Creates a frame containing a value button with text label
-	static CGUIObject	*createValueButtonFrame(class CGUIObject *_parent,
+	static CGUIObject	*createValueButtonFrame(CGUIObject *_parent,
 											    int _x,int _y,int _w,int _h,
 											    int _textId,
-											    int *_target,int _value);
+											    int *_target,int _value,
+												CGUIObject::GUIId _id=CGUIObject::noId);
 
 	// Creates a frame containing a cycle button, text readout and text label
-	static CGUIObject	*createCycleButtonFrame(class CGUIObject *_parent,
+	static CGUIObject	*createCycleButtonFrame(CGUIObject *_parent,
 											    int _x,int _y,int _w,int _h,
 											    int _textId,
-											    int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData);
+											    int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData,
+												CGUIObject::GUIId _id=CGUIObject::noId);
 
 	// Creates a frame containing a slider button, readout and text label
-	static CGUIObject	*createSliderButtonFrame(class CGUIObject *_parent,
+	static CGUIObject	*createSliderButtonFrame(CGUIObject *_parent,
 												 int _x,int _y,int _w,int _h,
 												 int _textId,
-												 int *_target,int _min,int _max);
+												 int *_target,int _min,int _max,
+												 CGUIObject::GUIId _id=CGUIObject::noId);
 };
 
 

@@ -95,8 +95,9 @@ public:
 
 	int					getOt()										{return 0;}
 	
-// PKG - Do we really need ids!?	
-int getId() {return m_id;}
+	// PKG - Do we really need ids!?
+	// Yes! =)
+	int					getId()										{return m_id;}
 
 
 protected:

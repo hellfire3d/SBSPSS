@@ -288,6 +288,31 @@ void CGUIControlFrame::selectNextItem()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+CGUIObject::GUIId CGUIControlFrame::getIdOfSelectedItem()
+{
+	CGUIObject	*pGUI;
+	
+	pGUI=getChild();
+	if(pGUI)
+	{
+		while(!pGUI->isSelected())
+		{
+			ASSERT(pGUI);
+			pGUI=pGUI->getNext();
+		}
+		return pGUI->getId();
+	}
+
+	return CGUIObject::noId;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CGUIControlFrame::clearFlags(GUI_FLAGS _flags)
 {
 	GUI_FLAGS	childFlags;
