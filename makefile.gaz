@@ -93,6 +93,10 @@ locale_src :=		textdbase
 
 mem_src :=			memory
 
+memcard_src :=		md5 \
+					memcard \
+					saveload
+
 pad_src :=			pads
 
 paul_src :=			paul

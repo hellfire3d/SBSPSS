@@ -19,6 +19,7 @@ sfx/ingame.vb
 sfx/ingame.vh
 backdrop/credits.gfx
 backdrop/sky.gfx
+memcard/memhead.bin
 
 levels/chapter01/level01/level01.lvl
 levels/chapter01/level01/level01.tex

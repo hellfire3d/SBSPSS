@@ -58,6 +58,8 @@ public:
 	static void loadLanguage(unsigned int langType);
 	static char const * getString(unsigned int strNum);
 	static void setShowIds(bool idShowVal);
+	static int isLoaded();
+	static int getLanguage();
 };
 
 /*----------------------------------------------------------------------

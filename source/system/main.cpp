@@ -79,10 +79,10 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 //	SetDispMask(0);
 
 	MemInit();
-//	MemCardInit( 1 );
-//	MemCardStart();
+	MemCardInit( 1 );
+	MemCardStart();
 	PadsInit();
-//	MemCardStop();
+	MemCardStop();
 
 	CFileIO::Init();
 	TranslationDatabase::initialise(false);

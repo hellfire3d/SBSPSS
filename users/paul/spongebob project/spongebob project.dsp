@@ -320,6 +320,42 @@ SOURCE=..\..\..\source\gui\gui.cpp
 SOURCE=..\..\..\source\gui\gui.h
 # End Source File
 # End Group
+# Begin Group "level"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertile3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertile3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertilesolid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\layertilesolid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\level.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\level\level.h
+# End Source File
+# End Group
 # Begin Group "locale"
 
 # PROP Default_Filter ""
@@ -342,6 +378,38 @@ SOURCE=..\..\..\source\mem\memory.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\mem\memory.h
+# End Source File
+# End Group
+# Begin Group "memcard"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\md5.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\md5.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\md5global.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\memcard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\memcard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\saveload.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\memcard\saveload.h
 # End Source File
 # End Group
 # Begin Group "pad"
@@ -590,42 +658,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
-# End Source File
-# End Group
-# Begin Group "level"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertile3d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertile3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertilesolid.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertilesolid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\level.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\level.h
 # End Source File
 # End Group
 # End Group

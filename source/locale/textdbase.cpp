@@ -88,6 +88,7 @@ static void dumpDatabase(void);
 	---- */
 static TransHeader *	s_database;
 static bool				s_loaded;
+static int				s_langType;
 static TransHeader *	s_idDatabase;
 static bool				s_idShow;
 /*----------------------------------------------------------------------
@@ -171,7 +172,7 @@ void TranslationDatabase::loadLanguage(unsigned int langType)
 		dumpDatabase();
 
 	loadDatabase(FileEquate(s_languageFileEquates[langType]));
-
+	s_langType=langType;
 	s_loaded=true;
 }
 
@@ -196,6 +197,34 @@ char const * TranslationDatabase::getString(unsigned int strNum)
 		return "\0";
 	}
 }
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int TranslationDatabase::isLoaded(void)
+{
+	return s_loaded;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int TranslationDatabase::getLanguage(void)
+{
+	ASSERT(s_loaded);
+
+	return s_langType;
+}
+
+
 
 /*----------------------------------------------------------------------
 	Function:	
@@ -228,6 +257,7 @@ static void dumpDatabase(void)
 
 	s_loaded=false;
 }
+
 
 /*===========================================================================
  end */
