@@ -133,6 +133,7 @@ void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 					CProjectile *projectile;
 					projectile = new( "test projectile" ) CProjectile;
 					projectile->init( Pos, m_heading );
+					projectile->setLayerCollision( m_layerCollision );
 
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
 					m_timerTimer = GameState::getOneSecondInFrames();
@@ -200,6 +201,7 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+			projectile->setLayerCollision( m_layerCollision );
 
 			addChild( projectile );
 		}
@@ -230,6 +232,7 @@ void CNpcEnemy::processCloseAnemone3Attack( int _frames )
 							CProjectile::PROJECTILE_GAS_CLOUD,
 							CProjectile::PROJECTILE_FINITE_LIFE,
 							lifetime * GameState::getOneSecondInFrames() );
+		projectile->setLayerCollision( m_layerCollision );
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;

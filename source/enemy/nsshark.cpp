@@ -59,6 +59,7 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 			CProjectile *projectile;
 			projectile = new( "test projectile" ) CProjectile;
 			projectile->init( Pos, 1024 );
+			projectile->setLayerCollision( m_layerCollision );
 
 			m_salvoCount--;
 

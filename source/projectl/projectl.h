@@ -56,6 +56,10 @@ public:
 	void				setState( PROJECTILE_STATE newState );
 	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
+	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+
+private:
+	class CLayerCollision	*m_layerCollision;
 
 protected:
 	DVECTOR				getScreenOffset();
@@ -100,6 +104,10 @@ public:
 	PLAYER_PROJECTILE_MOVEMENT_TYPE		getMovementType();
 	void				setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
+	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+
+private:
+	class CLayerCollision	*m_layerCollision;
 
 protected:
 	DVECTOR				getScreenOffset();

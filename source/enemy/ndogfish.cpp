@@ -136,6 +136,7 @@ void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
 			CProjectile *projectile;
 			projectile = new( "test projectile" ) CProjectile;
 			projectile->init( Pos, headingToPlayer );
+			projectile->setLayerCollision( m_layerCollision );
 
 			m_state++;
 

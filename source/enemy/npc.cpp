@@ -437,6 +437,7 @@ void CNpcEnemy::postInit()
 			CProjectile *projectile;
 			projectile = new ( "eyeball projectile" ) CProjectile;
 			projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+			projectile->setLayerCollision( m_layerCollision );
 
 			addChild( projectile );
 
@@ -461,6 +462,7 @@ void CNpcEnemy::postInit()
 
 				projectile = new( "anemone lev2 projectile" ) CProjectile;
 				projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
+				projectile->setLayerCollision( m_layerCollision );
 
 				addChild( projectile );
 			}

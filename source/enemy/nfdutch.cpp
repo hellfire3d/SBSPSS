@@ -151,6 +151,7 @@ void CNpcEnemy::processCloseFlyingDutchmanAttack( int _frames )
 					CProjectile *projectile;
 					projectile = new( "test projectile" ) CProjectile;
 					projectile->init( Pos, heading );
+					projectile->setLayerCollision( m_layerCollision );
 
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;

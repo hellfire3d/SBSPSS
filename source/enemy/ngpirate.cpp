@@ -68,6 +68,7 @@ void CNpcEnemy::processCloseGhostPirateAttack( int _frames )
 
 			projectile = new( "test projectile" ) CProjectile;
 			projectile->init( Pos, heading );
+			projectile->setLayerCollision( m_layerCollision );
 		}
 	}
 	else if ( m_extendDir == EXTEND_DOWN )

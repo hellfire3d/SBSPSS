@@ -230,30 +230,38 @@ void CProjectile::think(int _frames)
 
 		case PROJECTILE_USER_SEEK:
 		{
-			switch( m_state )
+			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
-				case PROJECTILE_RETURN:
+				shutdown();
+				delete this;
+			}
+			else
+			{
+				switch( m_state )
 				{
-					if ( processTargetSeek( _frames, Parent->getPos() ) )
+					case PROJECTILE_RETURN:
 					{
-						Parent->processEvent( PROJECTILE_RETURNED_TO_SOURCE_EVENT, this );
+						if ( processTargetSeek( _frames, Parent->getPos() ) )
+						{
+							Parent->processEvent( PROJECTILE_RETURNED_TO_SOURCE_EVENT, this );
+						}
+
+						break;
 					}
 
-					break;
-				}
-
-				case PROJECTILE_ATTACK:
-				default:
-				{
-					CPlayer *player = GameScene.getPlayer();
-					DVECTOR playerPos = player->getPos();
-
-					if ( processTargetSeek( _frames, playerPos ) )
+					case PROJECTILE_ATTACK:
+					default:
 					{
-						m_state = PROJECTILE_RETURN;
-					}
+						CPlayer *player = GameScene.getPlayer();
+						DVECTOR playerPos = player->getPos();
 
-					break;
+						if ( processTargetSeek( _frames, playerPos ) )
+						{
+							m_state = PROJECTILE_RETURN;
+						}
+
+						break;
+					}
 				}
 			}
 
@@ -283,8 +291,16 @@ void CProjectile::think(int _frames)
 		case PROJECTILE_DUMBFIRE:
 		default:
 		{
-			Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
-			Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			{
+				shutdown();
+				delete this;
+			}
+			else
+			{
+				Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
+				Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+			}
 
 			break;
 		}
@@ -416,8 +432,16 @@ void CPlayerProjectile::think(int _frames)
 		case PLAYER_PROJECTILE_DUMBFIRE:
 		default:
 		{
-			Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
-			Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			{
+				shutdown();
+				delete this;
+			}
+			else
+			{
+				Pos.vx += ( _frames * 3 * rcos( m_heading ) ) >> 12;
+				Pos.vy += ( _frames * 3 * rsin( m_heading ) ) >> 12;
+			}
 
 			break;
 		}
