@@ -180,7 +180,10 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 
 			processGenericGotoTarget( _frames, playerXDist, 0, m_speed );
 
-			if ( playerXDistSqr < 100 )
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			if ( Pos.vx < minX || Pos.vx > maxX || playerXDistSqr < 100 )
 			{
 				// fire at player
 
@@ -206,7 +209,10 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 
 			processGenericGotoTarget( _frames, playerXDist, 0, NPC_SUB_SHARK_HIGH_SPEED );
 
-			if ( playerXDistSqr < 10000 )
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			if ( Pos.vx < minX || Pos.vx > maxX || playerXDistSqr < 10000 )
 			{
 				m_animPlaying = true;
 				m_animNo = ANIM_SHARKSUB_CHOMP;
@@ -223,9 +229,13 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			// if ( collision )
 			// else
 
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
 			if ( m_extendDir == EXTEND_RIGHT )
 			{
-				s32 xDist = 600 - Pos.vx;
+				//s32 xDist = 600 - Pos.vx;
+				s32 xDist = maxX - Pos.vx;
 				s32 xDistSqr = xDist * xDist;
 
 				if ( xDistSqr > 100 )
@@ -239,7 +249,8 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			}
 			else
 			{
-				s32 xDist = 100 - Pos.vx;
+				//s32 xDist = 100 - Pos.vx;
+				s32 xDist = minX - Pos.vx;
 				s32 xDistSqr = xDist * xDist;
 
 				if ( xDistSqr > 100 )
