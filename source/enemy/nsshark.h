@@ -22,17 +22,22 @@ public:
 	void				render();
 	virtual void		shutdown();
 protected:
-	virtual void		processClose( int _frames );
+	//virtual void		processClose( int _frames );
+	virtual s32			getFrameShift( int _frames );
 	virtual void		processMovement( int _frames );
 	virtual void		processShot( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
+	virtual void		setupWaypoints( sThingActor *ThisActor );
 
 	enum NPC_SUB_SHARK_STATE
 	{
 		SUB_SHARK_MINE_1 = 0,
 		SUB_SHARK_MINE_2 = 1,
-		SUB_SHARK_CYCLE,
-		SUB_SHARK_SWALLOW,
+		SUB_SHARK_GOTO_CHARGE,
+		SUB_SHARK_DROP,
+		SUB_SHARK_START_CHARGE,
+		SUB_SHARK_CHARGE,
+		SUB_SHARK_END_CHARGE,
 	};
 
 	enum
@@ -43,6 +48,7 @@ protected:
 	u8					m_salvoCount;
 	bool				m_meterOn;
 	s32					m_invulnerableTimer;
+	DVECTOR				m_targetPos;
 };
 
 #endif

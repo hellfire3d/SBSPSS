@@ -39,6 +39,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 #ifndef __SPR_SPRITES_H__
 #include <sprites.h>
 #endif
@@ -64,6 +68,10 @@ void CNpcSubSharkEnemy::postInit()
 	}
 
 	m_invulnerableTimer = 0;
+
+	m_timerTimer = 0;
+	m_salvoCount = 5;
+	m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +90,245 @@ void CNpcSubSharkEnemy::think( int _frames )
 
 void CNpcSubSharkEnemy::processMovement( int _frames )
 {
-	if ( !m_animPlaying )
+	if ( m_movementTimer > 0 )
+	{
+		m_movementTimer -= _frames;
+	}
+
+	switch( m_state )
+	{
+		case SUB_SHARK_MINE_1:
+		case SUB_SHARK_MINE_2:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			if ( m_timerTimer <= 0 )
+			{
+				if ( m_salvoCount > 0 )
+				{
+					// drop mine
+
+					CProjectile *projectile;
+					projectile = CProjectile::Create();
+					projectile->init( Pos, 1024, CProjectile::PROJECTILE_MINE, CProjectile::PROJECTILE_FINITE_LIFE );
+					projectile->setGraphic( FRM__SHARKMINE );
+
+					m_salvoCount--;
+
+					m_timerTimer = ( GameState::getOneSecondInFrames() >> 2 ) * ( 1 + ( ( 3 * m_health ) / m_data[m_type].initHealth ) );
+				}
+			}
+
+			if ( m_movementTimer <= 0 && m_salvoCount <= 0 )
+			{
+				m_state++;
+				m_timerTimer = 0;
+				m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
+				m_salvoCount = 5;
+
+				if ( m_state == SUB_SHARK_GOTO_CHARGE )
+				{
+					s32 minX, maxX, minY, maxY;
+
+					m_npcPath.getPathXExtents( &minX, &maxX );
+					m_npcPath.getPathYExtents( &minY, &maxY );
+
+					m_targetPos.vx = minX;
+					m_targetPos.vy = minY;
+				}
+			}
+
+			s32 moveX = 0, moveY = 0;
+			s32 moveVel = 0;
+			s32 moveDist = 0;
+
+			processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
+
+			if ( moveX > 0 )
+			{
+				m_extendDir = EXTEND_RIGHT;
+			}
+			else
+			{
+				m_extendDir = EXTEND_LEFT;
+			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
+
+			break;
+		}
+
+		case SUB_SHARK_GOTO_CHARGE:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			s32 distX, distY;
+
+			distX = m_targetPos.vx - Pos.vx;
+			distY = m_targetPos.vy - Pos.vy;
+
+			if ( distX > 0 )
+			{
+				m_extendDir = EXTEND_RIGHT;
+			}
+			else
+			{
+				m_extendDir = EXTEND_LEFT;
+			}
+
+			if( abs( distX ) < 10 && abs( distY ) < 10 )
+			{
+				s32 minX, maxX, minY, maxY;
+
+				m_npcPath.getPathXExtents( &minX, &maxX );
+				m_npcPath.getPathYExtents( &minY, &maxY );
+
+				m_targetPos.vx = minX;
+				m_targetPos.vy = maxY;
+
+				m_state = SUB_SHARK_DROP;
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
+			}
+
+			break;
+		}
+
+		case SUB_SHARK_DROP:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			s32 distX, distY;
+
+			distX = m_targetPos.vx - Pos.vx;
+			distY = m_targetPos.vy - Pos.vy;
+
+			m_extendDir = EXTEND_RIGHT;
+
+			if( abs( distY ) == 0 )
+			{
+				m_state = SUB_SHARK_START_CHARGE;
+				m_timerTimer = GameState::getOneSecondInFrames();
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
+			}
+
+			break;
+		}
+
+		case SUB_SHARK_START_CHARGE:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			if ( m_timerTimer > 0 )
+			{
+				m_timerTimer -= _frames;
+			}
+			else
+			{
+				s32 minX, maxX, minY, maxY;
+
+				m_npcPath.getPathXExtents( &minX, &maxX );
+				m_npcPath.getPathYExtents( &minY, &maxY );
+
+				m_targetPos.vx = maxX;
+				m_targetPos.vy = maxY;
+
+				m_state = SUB_SHARK_CHARGE;
+			}
+
+			break;
+		}
+
+		case SUB_SHARK_CHARGE:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			s32 distX, distY;
+
+			distX = m_targetPos.vx - Pos.vx;
+			distY = m_targetPos.vy - Pos.vy;
+
+			if( abs( distX ) < 10 && abs( distY ) < 10 )
+			{
+				s32 minX, maxX, minY, maxY;
+
+				m_npcPath.getPathXExtents( &minX, &maxX );
+				m_npcPath.getPathYExtents( &minY, &maxY );
+
+				m_targetPos.vx = maxX;
+				m_targetPos.vy = minY;
+
+				m_state = SUB_SHARK_END_CHARGE;
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed << 1 );
+			}
+
+			break;
+		}
+
+		case SUB_SHARK_END_CHARGE:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_frame = 0;
+			}
+
+			s32 distX, distY;
+
+			distX = m_targetPos.vx - Pos.vx;
+			distY = m_targetPos.vy - Pos.vy;
+
+			if( abs( distX ) < 10 && abs( distY ) < 10 )
+			{
+				m_state = SUB_SHARK_MINE_1;
+				m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
+			}
+
+			break;
+		}
+	}
+
+
+	/*if ( !m_animPlaying )
 	{
 		if ( playerXDistSqr + playerYDistSqr < 100 && !m_salvoCount )
 		{
@@ -141,7 +387,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 	if ( m_movementTimer <= 0 && m_salvoCount < 1 )
 	{
 		m_controlFunc = NPC_CONTROL_CLOSE;
-	}
+	}*/
 
 
 
@@ -191,7 +437,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcSubSharkEnemy::processClose( int _frames )
+/*void CNpcSubSharkEnemy::processClose( int _frames )
 {
 	if ( m_state != SUB_SHARK_SWALLOW )
 	{
@@ -315,7 +561,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 			break;
 		}
 	}
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -501,33 +747,8 @@ void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 				{
 					if ( !player->isRecoveringFromHit() )
 					{
-						switch( m_data[m_type].detectCollision )
-						{
-							case DETECT_NO_COLLISION:
-							{
-								// ignore
-
-								break;
-							}
-
-							case DETECT_ALL_COLLISION:
-							{
-								m_oldControlFunc = m_controlFunc;
-								m_controlFunc = NPC_CONTROL_COLLISION;
-
-								processUserCollision( _thisThing );
-
-								break;
-							}
-
-							case DETECT_ATTACK_COLLISION_GENERIC:
-							{
-								processAttackCollision();
-								processUserCollision( _thisThing );
-
-								break;
-							}
-						}
+						CPlayer *player = GameScene.getPlayer();
+						player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
 					}
 				}
 				else if ( m_invulnerableTimer <= 0 )
@@ -567,4 +788,59 @@ void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 				break;
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcSubSharkEnemy::getFrameShift( int _frames )
+{
+	if ( m_state == SUB_SHARK_START_CHARGE )
+	{
+		return( ( _frames << 8 ) << 1 );
+	}
+	else
+	{
+		return( ( _frames << 8 ) >> 1 );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSubSharkEnemy::setupWaypoints( sThingActor *ThisActor )
+{
+	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
+
+	u16 newXPos, newYPos;
+
+	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
+
+	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	setStartPos( newXPos, newYPos );
+
+	if ( ThisActor->PointCount > 1 )
+	{
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		setHeading( newXPos, newYPos );
+	}
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
+
+	m_npcPath.setWaypointCount( ThisActor->PointCount - 2 );
 }
