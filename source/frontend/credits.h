@@ -22,6 +22,10 @@
 #include "frontend\frontend.h"
 #endif
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -49,7 +53,19 @@ public:
 
 
 private:
-	int					m_shuttingDown;
+	void	renderCreditsListTillEndOfPage(u16 *_list);
+
+
+	class ScalableFontBank		*m_font;
+	class CScrollyBackground	*m_background1;
+	class CScrollyBackground	*m_background2;
+	u8							*m_image;
+	u16							*m_currentPage;
+	u16							*m_lastPage;
+	int							m_frame;
+								
+								
+	int							m_shuttingDown;
 
 };
 

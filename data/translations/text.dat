@@ -345,6 +345,164 @@ eng=Tunnel of Love
 
 
 ; ---------------------------------------------------------------
+; Game credits
+; ---------------------------------------------------------------
+
+; Titles
+
+[STR__CREDITS__PRODUCER]
+eng=Producer
+[STR__CREDITS__ASSOCIATE_PRODUCER]
+eng=Associate Producer
+[STR__CREDITS__ASSISTANT_PRODUCER]
+eng=Assistant Producer
+[STR__CREDITS__SENIOR_PRODUCER]
+eng=Senior Producer
+[STR__CREDITS__DESIGNER]
+eng=Designer
+[STR__CREDITS__LEAD_PROGRAMMER]
+eng=Lead Programmer
+[STR__CREDITS__PROGRAMMING]
+eng=Programming
+[STR__CREDITS__LEAD_ARTIST]
+eng=Lead Artist
+[STR__CREDITS__SENIOR_ARTIST]
+eng=Senior Artist
+[STR__CREDITS__ARTISTS]
+eng=Artists
+[STR__CREDITS__ADDITIONAL_ARTISTS]
+eng=Additional Artists
+[STR__CREDITS__ANIMATORS]
+eng=Animators
+[STR__CREDITS__QA_MANAGER]
+eng=QA Manager
+[STR__CREDITS__LEAD_TESTER]
+eng=Lead Tester
+[STR__CREDITS__TESTER]
+eng=Tester
+[STR__CREDITS__TESTERS]
+eng=Testers
+[STR__CREDITS__MUSIC_SFX]
+eng=Music SFX
+[STR__CREDITS__PRESIDENT]
+eng=President
+[STR__CREDITS__MANAGING_DIRECTOR]
+eng=Managing Director
+[STR__CREDITS__DEVELOPMENT_DIRECTOR]
+eng=Development Director
+[STR__CREDITS__CREATIVE_DIRECTOR]
+eng=Creative Director
+[STR__CREDITS__VERY_SPECIAL_THANKS_INDEED_TO]
+eng=Very Special Thanks Indeed to:
+[STR__CREDITS__EXTRA_THANKS_TO]
+eng=Extra thanks to:
+[STR__CREDITS__VP_OF_PRODUCT_DEVELOPMENT]
+eng=VP of Product Development
+[STR__CREDITS__PRODUCT_MANAGER]
+eng=Product Manager
+[STR__CREDITS__CREATIVE_SERVICES]
+eng=Creative Services
+[STR__CREDITS__SPECIAL_THANKS_TO]
+eng=Special thanks to:
+[STR__CREDITS__VO_TALENT]
+eng=VO Talent
+
+
+; Climax
+
+[STR__CREDITS__CLIMAX_GROUP]
+eng=Climax Group
+[STR__CREDITS__TREENA_SEYMOUR]
+eng=Treena Seymour
+[STR__CREDITS__NICK_DRY]
+eng=Nick Dry
+[STR__CREDITS__MARK_DAVIES]
+eng=Mark Davies
+[STR__CREDITS__DAVE_OWENS]
+eng=Dave Owens
+[STR__CREDITS__PAUL_GRENFELL]
+eng=Paul Grenfell
+[STR__CREDITS__CHARLES_BLAIR]
+eng=Charles Blair
+[STR__CREDITS__KEVIN_MARTIN]
+eng=Kevin Martin
+[STR__CREDITS__CHRIS_RUNDELL]
+eng=Chris Rundell
+[STR__CREDITS__SHAUN_PEARSON]
+eng=Shaun Pearson
+[STR__CREDITS__ROB_WILMOT]
+eng=Rob Wilmot
+[STR__CREDITS__WAI_HUNG_WAN]
+eng=Wai Hung Wan
+[STR__CREDITS__RICHARD_EDWARDS]
+eng=Richard Edwards
+[STR__CREDITS__KELVIN_LIEW]
+eng=Kelvin Liew
+[STR__CREDITS__NICK_THOMAS]
+eng=Nick Thomas
+[STR__CREDITS__ANTONY_SMITH]
+eng=Antony Smith
+[STR__CREDITS__STEVE_CROCKER]
+eng=Steve Crocker
+[STR__CREDITS__NIGEL_APPERLY]
+eng=Nigel Apperly
+[STR__CREDITS__BARRY_MARTIN]
+eng=Barry Martin
+[STR__CREDITS__MATT_SIMMONDS]
+eng=Matt Simmonds
+[STR__CREDITS__KARL_JEFFREY]
+eng=Karl Jeffrey
+[STR__CREDITS__GARY_LIDDON]
+eng=Gary Liddon
+[STR__CREDITS__JIM_GARDNER]
+eng=Jim Gardner
+[STR__CREDITS__JOE_CAVALLA]
+eng=Joe Cavalla
+[STR__CREDITS__PETER_CHAFFEY_FOR_LISTENING_AND_FEEDING_CATS]
+eng=Peter Chaffey for listening and feeding cats
+[STR__CREDITS__TEREZA_OWENS_FOR_PATIENCE_AND_A_BEAUTIFUL_WEDDING_DAY]
+eng=Tereza Owens for patience and a beautiful wedding day
+[STR__CREDITS__JENNIFER_PENN_FOR_TAMING_THE_NOMAD]
+eng=Jennifer Penn for taming the nomad
+[STR__CREDITS__CLIMAX_LONDON]
+eng=Climax London
+
+
+; THQ
+
+[STR__CREDITS__THQ]
+eng=THQ
+[STR__CREDITS__PETRO_PIASECKYJ]
+eng=Petro Piaseckyj
+[STR__CREDITS__RYAN_CAMU]
+eng=Ryan Camu
+[STR__CREDITS__CAROLINA_BEROZA]
+eng=Carolina Beroza
+[STR__CREDITS__MICHAEL_RUBINELLI]
+eng=Michael Rubinelli
+[STR__CREDITS__JEREMY_BARNES]
+eng=Jeremy Barnes
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__TBD]
+eng=TBD
+[STR__CREDITS__THQ_AND_THE_THQ_LOGO_ARE_TRADEMARKS_AND_OR_REGISTERED_TRADEMARKS_OF_THQ_INC]
+eng=THQ and the THQ logo are trademarks and/or registered trademarks of THQ Inc.
+[STR__CREDITS__C_2001_THQ_INC]
+eng=(C) 2001 THQ Inc.
+
+
+
+
+; ---------------------------------------------------------------
 ; Debugging text
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------

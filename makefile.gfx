@@ -269,7 +269,7 @@ FRONTEND_GFX_DIR :=			$(GRAF_DIR)/frontend
 FRONTEND_GFX_NONTRANS :=	
 FRONTEND_GFX_NONTRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_NONTRANS),$(FRONTEND_GFX_DIR)/$(FILE))
 
-FRONTEND_GFX_TRANS :=		+bg1.bmp +bg2.bmp +bg3.bmp +bg4.bmp
+FRONTEND_GFX_TRANS :=		+bg1.bmp +bg2.bmp +bg3.bmp +bg4.bmp +caustic1.bmp +caustic2.bmp
 FRONTEND_GFX_TRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_TRANS),$(FRONTEND_GFX_DIR)/$(FILE))
 
 FRONTEND_GFX_TRANS_NO_ROT :=		+sblogo.bmp

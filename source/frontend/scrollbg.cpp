@@ -68,6 +68,7 @@ void CScrollyBackground::init()
 	setFrame(FRM__BG1);
 	setTheDrawMode(DRAWMODE_NORMAL);
 	setColour(128,128,128);
+	setScale(NORMAL_SCALE);
 }
 
 
@@ -109,25 +110,32 @@ void CScrollyBackground::render()
 	}
 
 	fh=m_sprites->getFrameHeader(m_frame);
-	w=fh->W;
-	h=fh->H;
+	w=(fh->W*m_scale)>>8;
+	h=(fh->H*m_scale)>>8;
 	y=(m_yOff>>m_speedScale)-h;
 	do
 	{
 		x=(m_xOff>>m_speedScale)-w;
 		do
 		{
-			ft4=m_sprites->printFT4(fh,x,y,0,0,m_ot);
+			if(m_scale==NORMAL_SCALE)
+			{
+				ft4=m_sprites->printFT4(fh,x,y,0,0,m_ot);
+			}
+			else
+			{
+				ft4=m_sprites->printFT4Scaled(fh,x,y,0,0,m_ot,m_scale);
+			}
 			setShadeTex(ft4,0);
 			setSemiTrans(ft4,true);
 			ft4->tpage|=(smode<<5);
 			setRGB0(ft4,m_r,m_g,m_b);
 			x+=w;
 		}
-		while(x<512);
+		while(x<512+64);
 		y+=h;
 	}
-	while(y<256);
+	while(y<256+64);
 }
 
 
@@ -140,11 +148,14 @@ void CScrollyBackground::render()
 void CScrollyBackground::think(int _frames)
 {
 	sFrameHdr	*fh;
+	int			w,h;
 
 	fh=m_sprites->getFrameHeader(m_frame);
+	w=(fh->W*m_scale)>>8;
+	h=(fh->H*m_scale)>>8;
 
-	m_xOff=(m_xOff+(_frames*m_xSpeed))%(fh->W<<m_speedScale);
-	m_yOff=(m_yOff+(_frames*m_ySpeed))%(fh->H<<m_speedScale);
+	m_xOff=(m_xOff+(_frames*m_xSpeed))%(w<<m_speedScale);
+	m_yOff=(m_yOff+(_frames*m_ySpeed))%(h<<m_speedScale);
 }
 
 
