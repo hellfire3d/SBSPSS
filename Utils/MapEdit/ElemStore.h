@@ -1,0 +1,108 @@
+/***********************/
+/*** ElemSotre Stuph ***/
+/***********************/
+
+#ifndef	__ELEMSTORE_HEADER__
+#define	__ELEMSTORE_HEADER__
+
+#include	"stdafx.h"
+#include	<Vector3.h>
+#include	<gl\gl.h>
+#include	<gl\glu.h>
+#include	<Vector>
+#include	<gfname.hpp>
+
+#include	"Layer.h"
+#include	"TexCache.h"
+#include	"Elem.h"
+
+#include	"MapEdit.h"
+#include	"LayerTileGui.h"
+
+/*****************************************************************************/
+enum	ElemStoreEnum
+{
+DefBrowserWidth=8,
+};
+
+/*****************************************************************************/
+class	CCore;
+
+/*****************************************************************************/
+class	CElemStore : public CLayer, public CElemBank
+{
+public:
+		CElemStore();
+		~CElemStore();
+
+		enum	BrushEnum
+		{
+			LBrush=0,
+			RBrush,
+			MaxBrush
+		};
+// Overloads
+		int			GetType()							{return(0);}
+
+		void		Render(CCore *Core,Vector3 &CamPos,bool Is3d);
+		void		RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
+		void		RenderSelection(CCore *Core,Vector3 &ThisCam){};
+		void		RenderCursor(CCore *Core,Vector3 &CamPos,bool Is3d);
+		void		FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
+
+		void		GUIInit(CCore *Core);
+		void		GUIKill(CCore *Core);
+		void		GUIUpdate(CCore *Core);
+		void		GUIChanged(CCore *Core);
+
+		void		Load(CFile *File,int Version);
+		void		Save(CFile *File);
+
+		void		Export(CCore *Core,CExport &Exp){};
+
+		bool		LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
+		bool		RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
+		bool		MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
+		bool		Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
+
+// ElemSet Thruput
+const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
+const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
+		CElem		&GetElem(int Set,int Elem)								{return(SetList[Set].GetElem(Elem));}
+		void		RenderElem(int Set,int Elem,int Flags,bool Is3d);
+
+// Local
+		void		DeleteCurrent();
+		
+		CMap		&GetLBrush()											{return(Brush[LBrush]);}
+		CMap		&GetRBrush()											{return(Brush[RBrush]);}
+		CMap		&GetBrush(int i)										{return(Brush[i]);}
+		CMap		&GetActiveBrush()										{return(GetBrush(ActiveBrush));}
+
+		bool		CanClose()												{return(SelStart==-1);}
+		CPoint		GetElemPos(int ID,int Width);
+
+// Functions
+		bool		SelectCancel();
+		void		DeleteSet(CCore *Core);
+
+
+protected:
+
+		bool		Select(int BrushID,bool DownFlag);
+		void		SetBrush(CMap &ThisBrush);
+
+		int						CurrentSet,LastSet;
+		CMap					Brush[2];
+		int						ActiveBrush;
+		int						SelStart,SelEnd;
+
+		bool					LoadFlag;
+		int						LastCursorPos,CursorPos;
+
+		CLayerTileGUI			ElemStoreGUI;
+
+};
+
+/*****************************************************************************/
+#endif
