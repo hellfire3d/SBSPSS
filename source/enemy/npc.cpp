@@ -275,20 +275,6 @@ void CNpcEnemy::init()
 
 		case NPC_INIT_HERMIT_CRAB:
 		{
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			//newPos.vy = 10;
-			newPos.vy = 100;
-
-			m_npcPath.addWaypoint( newPos );
-
 			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
 			m_state = HERMIT_CRAB_NO_ATTACK;
@@ -571,17 +557,6 @@ void CNpcEnemy::think(int _frames)
 		}
 	}
 
-	if ( m_heading > 1024 && m_heading < 3072 )
-	{
-//!!		m_actorGfx.setAng( 3072 );
-		m_reversed = true;
-	}
-	else
-	{
-//!!		m_actorGfx.setAng( 1024 );
-		m_reversed = false;
-	}
-
 	switch ( this->m_controlFunc )
 	{
 		case NPC_CONTROL_NONE:
@@ -616,6 +591,15 @@ void CNpcEnemy::think(int _frames)
 	}
 
 	processTimer(_frames);
+
+	if ( m_heading > 1024 && m_heading < 3072 )
+	{
+		m_reversed = true;
+	}
+	else
+	{
+		m_reversed = false;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1328,16 +1312,6 @@ void CNpcEnemy::render()
 	int	H=m_actorGfx->getFrameHeight(m_animNo,m_frame);
 	renderPos.vx = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( W >> 1 );
 	renderPos.vy = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( H >> 1 );
-
-	if ( m_reversed )
-	{
-//!!		m_actorGfx.setZAng( ( m_heading + 2048 ) & 4095 );
-	}
-	else
-	{
-//!!		m_actorGfx.setZAng( m_heading );
-	}
-	
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
