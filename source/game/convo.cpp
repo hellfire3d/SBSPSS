@@ -295,6 +295,8 @@ int						CConversation::s_textPageOffset;
 int						CConversation::s_maxTextPageOffset;
 SpriteBank				*CConversation::s_sprites;
 
+int						CConversation::s_ignoreNewlyPressedButtonsOnPadThisThink;
+
 
 static xmPlayingId		s_playingSfxId;
 
@@ -323,6 +325,8 @@ void CConversation::init()
 
 	s_sprites=new ("ConvoSprites") SpriteBank();
 	s_sprites->load(SPRITES_SPRITES_SPR);
+
+	s_ignoreNewlyPressedButtonsOnPadThisThink=false;
 }
 
 
@@ -361,8 +365,11 @@ void CConversation::think(int _frames)
 			s_currentState=STATE_ACTIVE;
 		}
 
-		thinkText();
-		thinkQuestion();
+		if(!s_ignoreNewlyPressedButtonsOnPadThisThink)
+		{
+			thinkText();
+			thinkQuestion();
+		}
 
 		s_currentScript->run();
 		if(s_currentScript->isFinished())
@@ -377,6 +384,8 @@ void CConversation::think(int _frames)
 			}
 			s_playingSfxId=CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 		}
+
+		s_ignoreNewlyPressedButtonsOnPadThisThink=false;
 	}
 }
 
@@ -972,6 +981,17 @@ RECT CConversation::getTextRegion()
 	}
 
 	return clipRegion;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CConversation::ignoreNewlyPressedButtonsOnPadThisThink()
+{
+	s_ignoreNewlyPressedButtonsOnPadThisThink=true;
 }
 
 /*===========================================================================

@@ -627,7 +627,15 @@ void CGameScene::think_playing(int _frames)
 
 	// Conversation think ( with pad debounce stuff.. )
 	if(CConversation::isActive())m_player->ignoreNewlyPressedButtonsOnPadThisThink();
-	CConversation::think(_frames);
+	if(!m_pauseMenu->isActive())
+	{
+		CConversation::think(_frames);
+	}
+	else
+	{
+		// Must be a better way to do this? :/
+		CConversation::ignoreNewlyPressedButtonsOnPadThisThink();
+	}
 	
 	// Pause menu think ( with pad debounce stuff.. )
 	if(m_pauseMenu->isActive())m_player->ignoreNewlyPressedButtonsOnPadThisThink();

@@ -57,6 +57,8 @@ public:
 	static int			getResponse();
 	static RECT			getTextRegion();
 
+	static void			ignoreNewlyPressedButtonsOnPadThisThink();
+
 
 private:
 	enum
@@ -169,6 +171,8 @@ private:
 	static int					s_textPageOffset;
 	static int					s_maxTextPageOffset;
 	static class SpriteBank		*s_sprites;
+
+	static int					s_ignoreNewlyPressedButtonsOnPadThisThink;
 
 };
 
