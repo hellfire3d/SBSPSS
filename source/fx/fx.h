@@ -33,6 +33,11 @@ public:
 			FX_TYPE_DROP_LAVA,
 			FX_TYPE_DROP_OIL,
 
+			FX_TYPE_FOUNTAIN_WATER,
+			FX_TYPE_FOUNTAIN_ACID,
+			FX_TYPE_FOUNTAIN_LAVA,
+			FX_TYPE_FOUNTAIN_OIL,
+
 			FX_TYPE_LIGHTNING_BOLT,
 			FX_TYPE_LIGHTNING_SHEET,
 			FX_TYPE_LIGHTNING_BLAST,
@@ -92,6 +97,6 @@ virtual void		collidedWith(CThing *_thisThing);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	TestFX(DVECTOR Pos);
+void	TestFX(DVECTOR Pos,CThing *Parent);
 
 #endif

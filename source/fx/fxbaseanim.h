@@ -49,6 +49,7 @@ protected:
 virtual void		collidedWith(CThing *_thisThing);
 
 		sFXAnim		*DataPtr;
+		POLY_FT4	*Frame;
 		s16			VelY;
 		s16			MaxFrame;
 		s16			CurrentFrame;

@@ -17,6 +17,8 @@
 #include	"FX\FXBaseAnim.h"
 #include	"FX\FXBaseEmitter.h"
 
+#include	"FX\FXAttachAnim.h"
+
 #include	"FX\FXBubble.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
@@ -27,6 +29,7 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // Anim Data 
+
 CFXBaseAnim::sFXAnim	FXWaterSplashData=
 {
 		ONE,
@@ -175,6 +178,47 @@ CFXBaseAnim::sFXAnim	FXBubbleOilData=
 		CFX::FX_TYPE_SPLASH_WATER
 };
 
+CFXBaseAnim::sFXAnim	FXWaterFountainData=
+{
+		ONE,
+		FRM__GUSH000,FRM__GUSH002,
+		3,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		{0,0},
+		0,
+};
+CFXBaseAnim::sFXAnim	FXAcidFountainData=
+{
+		ONE,
+		FRM__GUSH000,FRM__GUSH002,
+		3,
+		0,255,0,
+		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		{0,0},
+		0,
+};
+CFXBaseAnim::sFXAnim	FXLavaFountainData=
+{
+		ONE,
+		FRM__GUSH000,FRM__GUSH002,
+		3,
+		255,0,0,
+		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		{0,0},
+		0,
+};
+CFXBaseAnim::sFXAnim	FXOilFountainData=
+{
+		ONE,
+		FRM__GUSH000,FRM__GUSH002,
+		3,
+		32,32,32,
+		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		{0,0},
+		0,
+};
+
 /*****************************************************************************/
 /*
 CFXSteam	*TestFXPtr=0;
@@ -197,10 +241,11 @@ void	TestFX(DVECTOR Pos)
 }
 */
 /*****************************************************************************/
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_BUBBLE_WATER;
-void	TestFX(DVECTOR Pos)
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_FOUNTAIN_WATER;
+void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-		CFX::Create((CFX::FX_TYPE)FXType,Pos);
+CFXAttachAnim	*FX=(CFXAttachAnim*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+		Parent->addChild(FX);
 //		TestFXPtr->setLife(32);
 }
 
@@ -260,6 +305,7 @@ CFX		*NewFX;
 			NewFX=new ("FXOilDrip") CFXBaseAnim();
 			NewFX->setData(&FXOilDripData);
 			break;
+
 		case FX_TYPE_BUBBLE_WATER:
 			NewFX=new ("FXBubbleWater") CFXBubble();
 			NewFX->setData(&FXBubbleWaterData);
@@ -275,6 +321,23 @@ CFX		*NewFX;
 		case FX_TYPE_BUBBLE_OIL:
 			NewFX=new ("FXBubbleOil") CFXBubble();
 			NewFX->setData(&FXBubbleOilData);
+			break;
+
+		case FX_TYPE_FOUNTAIN_WATER:
+			NewFX=new ("FXWaterFountain") CFXAttachAnim();
+			NewFX->setData(&FXWaterFountainData);
+			break;
+		case FX_TYPE_FOUNTAIN_ACID:
+			NewFX=new ("FXAcidFountain") CFXAttachAnim();
+			NewFX->setData(&FXAcidFountainData);
+			break;
+		case FX_TYPE_FOUNTAIN_LAVA:
+			NewFX=new ("FXLavaFountain") CFXAttachAnim();
+			NewFX->setData(&FXLavaFountainData);
+			break;
+		case FX_TYPE_FOUNTAIN_OIL:
+			NewFX=new ("FXOilFountain") CFXAttachAnim();
+			NewFX->setData(&FXOilFountainData);
 			break;
 
 		case FX_TYPE_NRG_BAR:

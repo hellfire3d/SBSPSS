@@ -108,6 +108,7 @@ POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderP
 			setShadeTex(Ft4,0);
 			setRGB0(Ft4,DataPtr->R,DataPtr->G,DataPtr->B);
 			setSemiTrans(Ft4,DataPtr->Flags & FXANIM_FLAG_TRANS);
+			Frame=Ft4;
 }
 
 /*****************************************************************************/
