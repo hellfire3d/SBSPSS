@@ -468,7 +468,6 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_PLAYER_BUBBLE_PLATFORM:
 		{
 			platform = new ("player bubble platform") CNpcPlayerBubblePlatform;
-			platform->setGraphic( (u8) 0 );
 			break;
 		}
 

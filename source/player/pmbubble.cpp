@@ -187,6 +187,7 @@ void	CPlayerModeBubbleMixture::think()
 			pos=m_player->getPos();
 			pos.vx+=buboff.vx*m_player->getFacing();
 			pos.vy+=buboff.vy;
+			bubble->setGraphic( (u8) 0 );
 			bubble->init(pos,4);
 			bubble->postInit();
 
