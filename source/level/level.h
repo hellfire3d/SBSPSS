@@ -30,6 +30,7 @@ private:
 	void		initLayers();
 
 	sLvlHdr			*LevelHdr;
+	sTileBankHdr	*TileBankHdr;
 	static DVECTOR	MapPos;
 
 

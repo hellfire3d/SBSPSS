@@ -45,6 +45,7 @@ CLevel::~CLevel()
 /*****************************************************************************/
 void 	CLevel::init()
 {
+		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL04_TBK,"Tile Bank Data");
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
 		TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
 
@@ -54,10 +55,10 @@ void 	CLevel::init()
 /*****************************************************************************/
 void	CLevel::initLayers()
 {
-sTri	*TriList=(sTri*)MakePtr(LevelHdr,LevelHdr->TriList);
-sQuad	*QuadList=(sQuad*)MakePtr(LevelHdr,LevelHdr->QuadList);
-sVtx	*VtxList=(sVtx*)MakePtr(LevelHdr,LevelHdr->VtxList);
-sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
+sTri	*TriList=(sTri*)MakePtr(TileBankHdr,TileBankHdr->TriList);
+sQuad	*QuadList=(sQuad*)MakePtr(TileBankHdr,TileBankHdr->QuadList);
+sVtx	*VtxList=(sVtx*)MakePtr(TileBankHdr,TileBankHdr->VtxList);
+sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
 
 // Back
 		if (LevelHdr->BackLayer) 
