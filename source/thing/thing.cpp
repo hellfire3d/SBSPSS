@@ -77,7 +77,7 @@ void		CThingManager::shutdown()
 	int		i;
 	CThing	*thing;
 
-	ASSERT(!s_initialised);
+	ASSERT(s_initialised);
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
 		while(s_thingLists[i])
