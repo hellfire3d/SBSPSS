@@ -2754,10 +2754,10 @@ int		CPlayer::moveVertical(int _moveDistance)
 			case COLLISION_TYPE_FLAG_DEATH_INSTANT:
 				dieYouPorousFreak(DEATHTYPE__NORMAL);
 				break;
+				*/
 			case COLLISION_TYPE_FLAG_DEATH_FALL:
 				dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
 				break;
-				*/
 			default:
 				break;
 		}
