@@ -198,6 +198,12 @@ int isx=39;
 int isy=3;
 int isw=100;
 int ish=56;
+
+int rsx=4096;
+int rsy=4096;
+int rsr=0;
+int	rspeed=0;
+
 void CFrontEndMainTitles::render()
 {
 	sFrameHdr	*fh;
@@ -205,11 +211,13 @@ void CFrontEndMainTitles::render()
 
 	// Game logo/title
 	fh=m_sprites->getFrameHeader(FRM__SBLOGO);
-	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,220);
+//	m_sprites->printFT4(fh,256-(fh->W/2),LOGO_CENTRE_Y-(fh->H/2),0,0,220);
+	m_sprites->printRotatedScaledSprite(fh,256,LOGO_CENTRE_Y,rsx,rsy,rsr,220);
 	m_smallFont->setColour(GAME_TITLE_TEXT_R,GAME_TITLE_TEXT_G,GAME_TITLE_TEXT_B);
 	m_smallFont->print(256,GAME_TITLE_TEXT_CENTRE_Y,STR__FRONTEND__GAME_TITLE);
 	m_smallFont->setColour(0,0,0);
 	m_smallFont->print(256+1,GAME_TITLE_TEXT_CENTRE_Y+1,STR__FRONTEND__GAME_TITLE);
+
 
 	// The island
 	fh=m_sprites->getFrameHeader(FRM__ISLAND);
@@ -252,6 +260,7 @@ void CFrontEndMainTitles::render()
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::think(int _frames)
 {
+rsr=(rsr+(_frames*rspeed))&4095;
 	sval=(sval+(seaspeed*_frames))&4095;
 
 	switch(m_mode)
