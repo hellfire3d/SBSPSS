@@ -466,7 +466,7 @@ static int padLookAroundTimer=0;
   ---------------------------------------------------------------------- */
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
-int healthx=435;
+int healthx=40;
 int healthy=40;
 int healthr=200;
 int healthg=75;
