@@ -46,6 +46,8 @@ static int				getTotalSpatCount()						{return( LvlTable[s_globalLevelSelectThin
 		void			destroyMapArea(DVECTOR const &Pos);
 		void			destroyMapTile(DVECTOR const &Pos);
 
+		void			reverseMapConveyor(DVECTOR const &Pos);
+
 		int				getActorCount()							{return ActorCount;}
 		sThingActor		**getActorList()						{return ActorList;}
 		int				getPlatformCount()						{return PlatformCount;}

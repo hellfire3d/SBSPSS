@@ -23,6 +23,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,8 +96,15 @@ void CNpcConveyorSwitchHazard::setWaypoints( sThingHazard *ThisHazard )
 	CHazardTrigger *trigger;
 
 	trigger=(CHazardTrigger*)CTrigger::Create(CTrigger::TRIGGER_HAZARD);
-	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16, 100, 0 );
+	trigger->setPositionAndSize( ( newXPos << 4 ) + 8 - 50, ( newYPos << 4 ) + 16, 100, 0 );
 	trigger->setHazard( this );
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+	m_conveyorPos.vx = ( newXPos << 4 ) + 8;
+	m_conveyorPos.vy = ( newYPos << 4 ) + 8;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,4 +112,7 @@ void CNpcConveyorSwitchHazard::setWaypoints( sThingHazard *ThisHazard )
 void CNpcConveyorSwitchHazard::trigger()
 {
 	m_reversed = !m_reversed;
+
+	CLevel &level = GameScene.GetLevel();
+	level.reverseMapConveyor( m_conveyorPos );
 }

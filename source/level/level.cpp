@@ -709,6 +709,57 @@ DVECTOR		DP;
 }
 
 /*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CLevel::reverseMapConveyor(DVECTOR const &Pos)
+{
+DVECTOR		TL,BR;
+
+
+			TL.vx=Pos.vx&-16;;
+			TL.vy=Pos.vy&-16;;
+			BR=TL;
+
+int			ColT=CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT;
+
+//			if (CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT)printf ("!!");
+
+// Left
+			while (CollisionLayer->getCollisionBlock(TL.vx-16,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vx-=16;
+// Top
+			while (CollisionLayer->getCollisionBlock(TL.vx,TL.vy-16)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vy-=16;
+// Right
+			while (CollisionLayer->getCollisionBlock(BR.vx+16,BR.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) BR.vx+=16;
+// Bottom
+			while (CollisionLayer->getCollisionBlock(BR.vx,BR.vy+16)>>COLLISION_TYPE_FLAG_SHIFT==ColT) BR.vy+=16;
+
+DVECTOR		DP;
+
+			for (DP.vy=TL.vy; DP.vy<=BR.vy; DP.vy+=16)
+			{
+				for (DP.vx=TL.vx; DP.vx<=BR.vx; DP.vx+=16)
+				{
+					u8	*ColElem=CollisionLayer->getMapPtr(DP.vx,DP.vy);
+
+					if (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==ColT)
+					{
+						if ( ColT == COLLISION_TYPE_MOVE_LEFT )
+						{
+							*ColElem &= ~COLLISION_TYPE_FLAG_MOVE_LEFT;
+							*ColElem |= COLLISION_TYPE_FLAG_MOVE_RIGHT;
+						}
+						else if ( ColT == COLLISION_TYPE_MOVE_RIGHT )
+						{
+							*ColElem &= ~COLLISION_TYPE_FLAG_MOVE_RIGHT;
+							*ColElem |= COLLISION_TYPE_FLAG_MOVE_LEFT;
+						}
+					}
+
+				}
+			}
+}
+
+/*****************************************************************************/
 void	CLevel::destroyMapTile(DVECTOR const &Pos)
 {
 u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
