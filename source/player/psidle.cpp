@@ -58,6 +58,16 @@
 	Vars
 	---- */
 
+CPlayerStateIdle::IdleAnims	CPlayerStateIdle::s_idleAnims[]=
+{
+	//	start frame						loop frame						end frame						loop count
+	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								10	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC03,	-1,								3	},
+};
+int CPlayerStateIdle::s_numIdleAnims=sizeof(CPlayerStateIdle::s_idleAnims)/sizeof(CPlayerStateIdle::IdleAnims);
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -66,7 +76,11 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateIdle::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC04);
+	m_idleTime=0;
+	m_currentIdleAnim=0;
+	m_animState=ANIMSTATE_END;
+
+	setNextIdleAnim(_player);
 }
 
 
@@ -99,11 +113,97 @@ void CPlayerStateIdle::think(CPlayer *_player)
 	}
 	else if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
-		if(getRndRange(100)<95)
-			setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC04);
-		else
-			setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC03);
+		setNextIdleAnim(_player);
 	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
+{
+	IdleAnims	*anims;
+	int			finished=false;
+
+	anims=&s_idleAnims[m_currentIdleAnim];
+	switch(m_animState)
+	{
+		case ANIMSTATE_START:
+			m_animState=ANIMSTATE_LOOP;
+			setAnimNo(_player,anims->m_loopFrame);
+			break;		
+		case ANIMSTATE_LOOP:
+			if(--m_loopCount<=0)
+			{
+				if(anims->m_endFrame==-1)
+				{
+					finished=true;
+				}
+				else
+				{
+					m_animState=ANIMSTATE_END;
+					setAnimNo(_player,anims->m_endFrame);
+				}
+			}
+			else
+			{
+				setAnimNo(_player,anims->m_loopFrame);
+			}
+			break;		
+		case ANIMSTATE_END:
+			finished=true;
+			break;		
+	}
+
+	if(finished)
+	{
+		int	animNo;
+		if(m_idleTime<5)
+		{
+			m_currentIdleAnim=0;		// First anim in list is the default idle
+		}
+		else
+		{
+			if(s_numIdleAnims)
+			{
+				// Randomly choose the next anim to run
+				int lastAnim;
+				lastAnim=m_currentIdleAnim;
+				do
+				{
+					m_currentIdleAnim=getRndRange(s_numIdleAnims);
+				}while(m_currentIdleAnim==lastAnim);
+			}
+			else
+			{
+				m_currentIdleAnim=0;
+			}
+		}
+
+		// Start playing the anim
+		anims=&s_idleAnims[m_currentIdleAnim];
+		if(anims->m_startFrame==-1)
+		{
+			// No start anim - go straight into loop
+			animNo=anims->m_loopFrame;
+			m_animState=ANIMSTATE_LOOP;
+		}
+		else
+		{
+			// Play start anim for this idle
+			animNo=anims->m_startFrame;
+			m_animState=ANIMSTATE_START;
+		}
+		m_loopCount=anims->m_loopCount;
+		setAnimNo(_player,animNo);
+
+		m_idleTime++;
+	}
+
 }
 
 
