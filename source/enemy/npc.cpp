@@ -48,7 +48,7 @@
 
 void CNpc::init()
 {
-	m_type = NPC_FISH_FOLK;
+	m_type = NPC_ZOMBIE_FISH_FOLK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
