@@ -243,7 +243,7 @@ char	Str[32];
 		return(UpdateKey(GroupEntry,KeyEntry,Str));
 }
 
-private:
+//private:
 /*----------------------------------------------------------------------------*/
 bool	IsWhiteSpace(char c)	{return(c==' ' || c=='\n' || c==0xa || c=='\r');}
 

@@ -55,9 +55,9 @@ Resource15=IDD_LAYER_ACTOR
 Resource16=IDD_NEWMAP
 Resource17=IDD_LAYER_FX
 Resource18=IDD_ELEMLIST
-Resource19=IDR_TOOLBAR (English (U.S.))
+Resource19=IDD_LAYER_HAZARD
 Resource20=IDR_MAINFRAME (English (U.S.))
-Resource21=IDD_LAYER_HAZARD
+Resource21=IDR_TOOLBAR (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
@@ -226,7 +226,7 @@ HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
 Filter=N
 VirtualFilter=DC
-LastObject=ID_ROTATE
+LastObject=CMapEditDoc
 
 [CLS:CMapEditView]
 Type=0
