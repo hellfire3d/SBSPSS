@@ -271,6 +271,8 @@ pint	sbanimspeed=0;
 pint	looktimeout=20;
 pint	lookmaxoffsetup=4*MAP2D_BLOCKSTEPSIZE;
 pint	lookmaxoffsetdown=4*MAP2D_BLOCKSTEPSIZE;
+pint	camerahardlockup=3*MAP2D_BLOCKSTEPSIZE;
+pint	camerahardlockdown=3*MAP2D_BLOCKSTEPSIZE;
 pint	lookspeed=2;
 pint	lookreturnspeed=5;
 
@@ -1224,8 +1226,8 @@ if(newmode!=-1)
 	// Final camera position
 	int yoff;
 	yoff=m_cameraLookOffset+(m_ledgeLookOffset>>ledgeShift);
-	if(yoff<-lookmaxoffsetup)yoff=-lookmaxoffsetup;
-	else if(yoff>lookmaxoffsetdown)yoff=lookmaxoffsetdown;
+	if(yoff<-camerahardlockup)yoff=-camerahardlockup;
+	else if(yoff>camerahardlockdown)yoff=camerahardlockdown;
 	if(!m_lockCamera)
 	{
 		m_cameraPos.vx=m_currentCamFocusPoint.vx;
