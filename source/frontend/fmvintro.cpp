@@ -22,6 +22,9 @@
 #include "fmv\fmv.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
 
 #ifndef	__GFX_FADER_H__
 #include "gfx\fader.h"
@@ -79,6 +82,7 @@ static bool fmvPerFrameFunc()
   ---------------------------------------------------------------------- */
 void CFrontEndFMVIntro::select()
 {
+	StopLoad();
 	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
 }
 

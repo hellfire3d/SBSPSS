@@ -114,18 +114,19 @@ void	StartLoad(int _loadX,int _loadY)
 /*****************************************************************************/
 void	StopLoad()
 {
-
+	if(DrawLoadIcon)
+	{
 #if	defined(__USER_CDBUILD__)
-	while(LoadTime) 
-		{
-		VSync(0);
-		}
+		while(LoadTime) 
+			{
+			VSync(0);
+			}
 #endif
-	Screen[0].Draw.isbg=Screen[1].Draw.isbg=1;
+		Screen[0].Draw.isbg=Screen[1].Draw.isbg=1;
 
-	DrawLoadIcon=0;
-	SYSTEM_DBGMSG("Stop Load");
-
+		DrawLoadIcon=0;
+		SYSTEM_DBGMSG("Stop Load");
+	}
 }
 
 /*****************************************************************************/
