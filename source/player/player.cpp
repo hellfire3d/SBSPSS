@@ -179,8 +179,8 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 #endif
 
 
-int s_screenPos;
-int		m_cameraLookOffset=0;
+int		s_screenPos;
+int		m_cameraLookOffset;
 
 int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-170;
@@ -286,12 +286,12 @@ int looktimeout=20;
 int	lookmaxoffsetup=3*MAP2D_BLOCKSTEPSIZE;
 int	lookmaxoffsetdown=6*MAP2D_BLOCKSTEPSIZE;
 int	lookspeed=2;
-int lookreturnspeed=80;
+int lookreturnspeed=5;
 
-int ledgeTimer=25;
+int ledgeTimer=50;
 int	ledgeSpeedIn=1;
 int ledgeSpeedOut=3;
-int	ledgeShift=2;
+int	ledgeShift=1;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -401,7 +401,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		}
 
 		// Return to centre
-		if(m_padLookAroundTimer>=0&&m_cameraLookOffset<0)
+		if(m_padLookAroundTimer==0&&m_cameraLookOffset<0)
 		{
 			m_cameraLookOffset+=lookreturnspeed;
 			if(m_cameraLookOffset>0)
@@ -409,7 +409,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 				m_cameraLookOffset=0;
 			}
 		}
-		if(m_padLookAroundTimer<=0&&m_cameraLookOffset>0)
+		if(m_padLookAroundTimer==0&&m_cameraLookOffset>0)
 		{
 			m_cameraLookOffset-=lookreturnspeed;
 			if(m_cameraLookOffset<0)
@@ -422,21 +422,33 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	// Ledge look-ahead stuff
 	if(m_ledgeLookAhead&&m_ledgeLookAhead==m_lastLedgeLookAhead)
 	{
-		// timer..
 		if(m_ledgeLookTimer<ledgeTimer)
 		{
-			m_ledgeLookTimer+=ledgeSpeedIn*_frames;
+			m_ledgeLookTimer+=_frames;
 		}
 		else
 		{
 			int limit;
 			limit=(m_ledgeLookAhead*MAP2D_BLOCKSTEPSIZE)<<ledgeShift;
-			if(m_ledgeLookOffset<limit)
+			if(m_ledgeLookAhead>0)
 			{
-				m_ledgeLookOffset+=_frames;
-				if(m_ledgeLookOffset>limit)
+				if(m_ledgeLookOffset<limit)
 				{
-					m_ledgeLookOffset=limit;
+					// Look down
+					m_ledgeLookOffset+=ledgeSpeedIn*_frames;
+					if(m_ledgeLookOffset>limit)
+					{
+						m_ledgeLookOffset=limit;
+					}
+				}
+				else if(m_ledgeLookOffset>limit)
+				{
+					// Look up
+					m_ledgeLookOffset-=ledgeSpeedIn*_frames;
+					if(m_ledgeLookOffset<limit)
+					{
+						m_ledgeLookOffset=limit;
+					}
 				}
 			}
 		}
@@ -445,6 +457,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	{
 		if(m_ledgeLookOffset>0)
 		{
+			// Relax from look down
 			m_ledgeLookOffset-=ledgeSpeedOut*_frames;
 			if(m_ledgeLookOffset<=0)
 			{
@@ -454,6 +467,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		}
 		else if(m_ledgeLookOffset<0)
 		{
+			// Relax from look up
 			m_ledgeLookOffset+=ledgeSpeedOut*_frames;
 			if(m_ledgeLookOffset>=0)
 			{
@@ -468,14 +482,20 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	
 	// Camera focus point stuff
 	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X;
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y+(m_ledgeLookOffset>>ledgeShift);
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
 	for(i=0;i<_frames;i++)
 	{
 		m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
 		m_currentCamFocusPoint.vy+=(m_currentCamFocusPointTarget.vy-m_currentCamFocusPoint.vy)>>cammove;
 	}
+
+	// Final camera position
+	int yoff;
+	yoff=m_cameraLookOffset+(m_ledgeLookOffset>>ledgeShift);
+	if(yoff<-lookmaxoffsetup)yoff=-lookmaxoffsetup;
+	else if(yoff>lookmaxoffsetdown)yoff=lookmaxoffsetdown;
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
-	m_cameraPos.vy=m_currentCamFocusPoint.vy+m_cameraLookOffset;
+	m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
 
 
 	// Limit camera scroll to the edges of the map

@@ -56,9 +56,23 @@
   ---------------------------------------------------------------------- */
 void	CLookTrigger::collidedWith(CThing *_thisThing)
 {
+	CPlayer	*player;
+	DVECTOR	collCentre;
+	CRECT	collArea;
+
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
 
-	GameScene.getPlayer()->setLedgeLookAhead(+4);
+	// Only collide if players feet are inside the trigger
+	player=GameScene.getPlayer();
+	collCentre=player->getCollisionCentre();
+	collArea.x1=collCentre.vx-5;
+	collArea.y1=collCentre.vy-5;
+	collArea.x2=collArea.x1+10;
+	collArea.y2=collArea.y1+10;
+	if(checkCollisionAgainstArea(&collArea))
+	{
+		player->setLedgeLookAhead(+4);
+	}
 }
 
 /*===========================================================================

@@ -561,14 +561,6 @@ SOURCE=..\..\..\source\level\layertile3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\level\layertilesolid.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\level\layertilesolid.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\level\level.cpp
 # End Source File
 # Begin Source File
@@ -1134,6 +1126,14 @@ SOURCE=..\..\..\source\triggers\tlevexit.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\tlevexit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tlook.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tlook.h
 # End Source File
 # End Group
 # Begin Group "utils"
