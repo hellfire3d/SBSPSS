@@ -212,6 +212,9 @@ void CMapScene::init()
 
 	m_readyToExit=false;
 	CFader::setFadingIn();
+
+	CSoundMediator::setSong(CSoundMediator::SONG_MAPSCREEN);
+	CSoundMediator::playSong();
 }
 
 
@@ -223,6 +226,8 @@ void CMapScene::init()
   ---------------------------------------------------------------------- */
 void CMapScene::shutdown()
 {
+	CSoundMediator::dumpSong();
+
 	ClearScreenImage();
 	delete m_pointerIcon;
 	MemFree(m_mapBackgroundImage);
