@@ -251,6 +251,7 @@ private:
 	{
 		VOLUME_CHANGE_SPEED=2,
 		INITIAL_VOLUME=192,
+		INITIAL_SPEECH_VOLUME=255,
 	};
 
 					CSoundMediator()			{;}

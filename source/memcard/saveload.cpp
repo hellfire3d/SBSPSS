@@ -457,6 +457,7 @@ void CSaveLoadDatabase::createData()
 	m_dataBuffer.m_systemDetails.m_screenOffY=VidGetYOfs();
 	for(i=0;i<=CSoundMediator::NUM_VOLUMETYPESTOSAVE;i++)
 	{
+PAUL_DBGMSG("createData:  %d=%d",i,CSoundMediator::getVolume((CSoundMediator::VOLUMETYPE)i));
 		m_dataBuffer.m_systemDetails.m_volumes[i]=CSoundMediator::getVolume((CSoundMediator::VOLUMETYPE)i);
 	}
 	m_dataBuffer.m_systemDetails.m_controlStyle=CPadConfig::getConfig();;
@@ -485,6 +486,7 @@ void CSaveLoadDatabase::restoreData(int _loadSettingsOnly)
 	VidSetXYOfs(m_dataBuffer.m_systemDetails.m_screenOffX,m_dataBuffer.m_systemDetails.m_screenOffY);
 	for(i=0;i<=CSoundMediator::NUM_VOLUMETYPESTOSAVE;i++)
 	{
+PAUL_DBGMSG("restoreData:  %d=%d",i,m_dataBuffer.m_systemDetails.m_volumes[i]);
 		CSoundMediator::setVolume((CSoundMediator::VOLUMETYPE)i,m_dataBuffer.m_systemDetails.m_volumes[i]);
 	}
 	CPadConfig::setConfig(m_dataBuffer.m_systemDetails.m_controlStyle);

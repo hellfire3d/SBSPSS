@@ -92,7 +92,7 @@ private:
 
 	enum
 	{
-		SAVELOAD_HEADERID=4,
+		SAVELOAD_HEADERID=5,
 	};
 
 
