@@ -1,0 +1,86 @@
+ShowDefines
+
+Disc	CDROMXA_PSX	template.img
+CatalogNumber	000000000000
+LeadIn	XA
+Empty	1000
+PostGap 150
+EndTrack
+Track XA
+Pause 150
+Volume	ISO9660	CD.ISO
+SystemArea "data\cddata\LICENSEA.RAW"
+PrimaryVolume
+SystemIdentifier		"PLAYSTATION"
+VolumeIdentifier		"TEMPLATE"
+LogicalBlockSize		2048
+VolumeSetIdentifier	"VOLUME1"
+PublisherIdentifier	"SONY"
+DataPreparerIdentifier	"EXAMPLE"
+ApplicationIdentifier	"SONY"
+Lpath
+OptionalLpath
+Mpath
+OptionalMpath
+Hierarchy
+
+File	SYSTEM.CNF
+XAFileAttributes	Form1	Data
+Source  data\cddata\EUR.cnf
+EndFile
+
+File    SLES_037.04
+XAFileAttributes	Form1	Data
+Source  cdbuild\EUR\SLES_037.04
+EndFile
+
+File	LEGAL.GFX
+XAFileAttributes	Form1	Data
+Source  cdbuild\EUR\Legal.gfx
+EndFile
+
+File	SPONGEY.BIN
+XAFileAttributes	Form1	Data
+Source  cdbuild\EUR\spongey.bin
+EndFile
+
+File	BIGLUMP.BIN
+XAFileAttributes	Form1	Data
+Source  cdbuild\EUR\biglump.bin
+EndFile
+
+File	THQ.STR
+XAFileAttributes
+XaSource cdbuild\EUR\thq.str
+EndFile
+
+File	CLIMAX.STR
+XAFileAttributes
+XaSource cdbuild\EUR\climax.str
+EndFile
+
+File	TRACK1.IXA
+XAFileAttributes
+XaSource cdbuild\EUR\track1.ixa
+EndFile
+
+File	INTRO.STR
+XAFileAttributes
+XaSource cdbuild\EUR\intro.str
+EndFile
+
+File	ZZZZZZZZ.ZZZ
+XAFileAttributes	Form1	Data
+Source  cdbuild\EUR\ZZZZZZZZ.ZZZ
+EndFile
+
+EndHierarchy
+EndPrimaryVolume
+EndVolume
+Empty	300
+PostGap	150
+EndTrack
+Leadout	XA
+Empty	500
+EndTrack
+EndDisc
