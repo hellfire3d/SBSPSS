@@ -584,15 +584,17 @@ void CNpcEnemy::think(int _frames)
 
 	if ( m_animPlaying )
 	{
-		int frameCount = m_actorGfx->getFrameCount(m_animNo);
+		s32 frameCount = m_actorGfx->getFrameCount(m_animNo);
+		s32 frameShift = ( _frames << 8 ) >> 1;
 
-		if ( frameCount - m_frame > _frames >> 1 )
+		if ( ( frameCount << 8 ) - m_frame > frameShift ) //( _frames >> 1 ) )
 		{
-			m_frame += _frames >> 1;
+			//m_frame += _frames >> 1;
+			m_frame += frameShift;
 		}
 		else
 		{
-			m_frame = frameCount - 1;
+			m_frame = ( frameCount - 1 ) << 8;
 			m_animPlaying = false;
 		}
 	}
@@ -930,20 +932,6 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_HERMIT_CRAB_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 400 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					case NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 400 )
@@ -973,7 +961,24 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_PUFFA_FISH_USER_CLOSE:
+					{
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
+						{
+							m_state = PUFFA_FISH_NO_INFLATE;
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
+					case NPC_SENSOR_OCTOPUS_USER_CLOSE:
+					case NPC_SENSOR_HERMIT_CRAB_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 400 )
 						{
@@ -993,20 +998,6 @@ bool CNpcEnemy::processSensor()
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_movementTimer = GameState::getOneSecondInFrames() * 3;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_OCTOPUS_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 400 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
 
 							return( true );
 						}
@@ -1341,6 +1332,11 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 
+		case NPC_CLOSE_PUFFA_FISH_INFLATE:
+			processClosePuffaFishInflate( _frames );
+
+			break;
+
 		default:
 			break;
 	}
@@ -1407,7 +1403,7 @@ void CNpcEnemy::render()
 	{
 		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 		{
-			m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
+			m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 		}
 	}
 }

@@ -237,6 +237,7 @@ protected:
 		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
 		NPC_SENSOR_HERMIT_CRAB_USER_CLOSE,
 		NPC_SENSOR_OCTOPUS_USER_CLOSE,
+		NPC_SENSOR_PUFFA_FISH_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -265,6 +266,7 @@ protected:
 		NPC_CLOSE_SKELETAL_FISH_ATTACK,
 		NPC_CLOSE_HERMIT_CRAB_ATTACK,
 		NPC_CLOSE_OCTOPUS_ATTACK,
+		NPC_CLOSE_PUFFA_FISH_INFLATE,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -349,7 +351,14 @@ protected:
 	{
 		HERMIT_CRAB_NO_ATTACK = 0,
 		HERMIT_CRAB_PUNCH_ATTACK = 1,
-		HERMIT_CRAB_ROLL_ATTACK = 2,
+		HERMIT_CRAB_ROLL_ATTACK,
+	};
+
+	enum NPC_PUFFA_FISH_STATE
+	{
+		PUFFA_FISH_NO_INFLATE = 0,
+		PUFFA_FISH_TURN = 1,
+		PUFFA_FISH_INFLATE,
 	};
 
 	enum
@@ -444,6 +453,10 @@ protected:
 	// ghost pirate functions
 
 	void				processCloseGhostPirateAttack( int _frames );
+
+	// puffa fish functions
+
+	void				processClosePuffaFishInflate( int _frames );
 
 	// shark man functions
 
@@ -543,7 +556,7 @@ protected:
 	bool				m_reversed;
 	s32					m_health;
 
-	int				m_frame;
+	s32				m_frame;
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;

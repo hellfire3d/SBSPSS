@@ -201,6 +201,10 @@ SOURCE=..\..\..\source\enemy\nplatfrm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\npuffa.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nscrab.cpp
 # End Source File
 # Begin Source File

@@ -77,7 +77,8 @@ enemy_src :=		npc \
 					nplatfrm \
 					nworm \
 					nhcrab \
-					nbblob
+					nbblob \
+					npuffa
 
 projectl_src :=		projectl
 
