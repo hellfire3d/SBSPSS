@@ -614,9 +614,9 @@ eng=Snail Race
 eng=Boss Hints From Mermaid Man and Barnacle Boy's Superhero Handbook
 
 [STR__BOSS__CROSS_BUTTON]
-eng=Continue
-[STR__BOSS__TRIANGLE_BUTTON]
 eng=Next page
+[STR__BOSS__TRIANGLE_BUTTON]
+eng=Continue
 
 
 [STR__CHAPTER_1__BOSS_TITLE]
