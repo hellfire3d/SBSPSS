@@ -33,6 +33,17 @@ eng=NOW LOADING..
 eng= 
 
 
+; ---------------------------------------------------------------
+; Front end
+; ---------------------------------------------------------------
+
+[STR__FRONTEND__GAME_TITLE]
+eng=SPONGEBOBS UNTITLED ADVENTURE
+[STR__FRONTEND__PRESS_START]
+eng=PRESS START
+
+
+
 
 
 ; ---------------------------------------------------------------

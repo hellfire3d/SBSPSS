@@ -156,7 +156,7 @@ class CBubicleFactory
 public:
 	static void	init();
 	static void	shutdown();
-	static void	think();
+	static void	think(int _frames);
 	static void	render();
 	
 	static CBubicleEmitter	*spawnEmitter(BubicleEmitterData *_init);
@@ -169,7 +169,7 @@ private:
 	enum
 	{
 		NUM_EMITTERS=10,
-		NUM_BUBICLES=100,
+		NUM_BUBICLES=150,
 	};
 
 							CBubicleFactory()						{;}

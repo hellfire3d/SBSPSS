@@ -45,7 +45,7 @@ public:
 
 
 private:
-	class SpriteBank		*m_sprites;
+	class CFrontEndMainTitles	*m_mainTitles;
 };
 
 

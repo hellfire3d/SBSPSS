@@ -485,6 +485,22 @@ SOURCE=..\..\..\source\utils\utils.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\frontend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\frontend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\maintitl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\maintitl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\scrollbg.cpp
 # End Source File
 # Begin Source File

@@ -393,7 +393,7 @@ void CBubicleFactory::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CBubicleFactory::think()
+void CBubicleFactory::think(int _frames)
 {
 	ASSERT(s_initialised);
 
@@ -402,20 +402,18 @@ void CBubicleFactory::think()
 	CBubicleEmitter	*emt;
 	CBubicle		*bub;
 
-	frames=GameState::getFramesSinceLast();
-
 	emt=s_emitters;
 	for(i=0;i<NUM_EMITTERS;i++,emt++)
 	{
 		if(emt->isActive())
-			emt->think(frames);
+			emt->think(_frames);
 	}
 
 	bub=s_bubicles;
 	for(i=0;i<NUM_BUBICLES;i++,bub++)
 	{
 		if(bub->isActive())
-			bub->think(frames);
+			bub->think(_frames);
 	}
 }
 

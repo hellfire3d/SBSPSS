@@ -17,6 +17,17 @@
 // scenes
 #include "game\game.h"
 
+#ifndef __FRONTEND_FRONTEND_H__
+#include "frontend\frontend.h"
+#endif
+
+#ifdef __USER_paul__
+#include "paul\paul.h"
+CPaulScene s_paulScene;
+#endif
+
+
+
 #ifndef __SYSTEM_GSTATE_H__
 #include "system\gstate.h"
 #endif
@@ -29,10 +40,6 @@
 #include "sound\sound.h"
 #endif
 
-#ifdef __USER_paul__
-#include "paul\paul.h"
-CPaulScene s_paulScene;
-#endif
 
 #ifndef __SYSTEM_EXCEPT_H__
 #include "system\except.h"
@@ -45,6 +52,15 @@ CPaulScene s_paulScene;
 #ifndef __GUI_GUI_H__
 #include "gui\gui.h"
 #endif
+
+#ifndef	__GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
+
+#ifndef __GFX_BUBICLES_H__
+#include "gfx\bubicles.h"
+#endif
+
 
 #define	SCREEN_GRAB
 
@@ -89,6 +105,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	initGUIStuff();
 
+	CBubicleFactory::init();
+
 #ifdef __USER_paul__
 s_paulScene.init();
 #endif
@@ -109,8 +127,15 @@ void	MainLoop()
 		frames=GameState::getFramesSinceLast();
 
 		FontBank::think(frames);
+		
 		GameState::think();
 		GameState::render();
+
+		CBubicleFactory::think(frames);
+		CBubicleFactory::render();
+		
+		CFader::think(frames);
+		CFader::render();
 
 		CSoundMediator::think(frames);
 		
@@ -153,7 +178,11 @@ int 	main()
 	CFileIO::GetAllFilePos();
 	InitSystem();
 	
+#ifdef __USER_paul__
+	GameState::setNextScene( &FrontEndScene );
+#else
 	GameState::setNextScene( &GameScene );
+#endif
 
 //	CXAStream::Init();			// PKG - Stuck here so that it doesn't affect any startup stuff (7/8/00)
 	MainLoop();
