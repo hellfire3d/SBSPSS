@@ -584,19 +584,17 @@ if(newmode!=-1)
 	}
 
 
+	m_allowConversation=false;
 	for(i=0;i<_frames;i++)
 	{
 		// Think
 		updatePadInput();
 
 		// Trying to converate?
-		if(getPadInputDown()&PI_UP)
+		if(m_allowConversation==false&&
+		   getPadInputDown()&PI_UP)
 		{
 			m_allowConversation=true;
-		}
-		else
-		{
-			m_allowConversation=false;
 		}
 
 		m_currentPlayerModeClass->think();
@@ -1241,7 +1239,8 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!");
 				_animFrame=0;
 			}
-			addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
+			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
+			setSemiTrans(ft4,flash);
 		}
 	}
 
@@ -1257,12 +1256,14 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!");
 				_animFrame=0;
 			}
-			addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
+			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
+			setSemiTrans(ft4,flash);
 		}
 	}
 
 	// Render SB
-	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+	ft4=m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+	setSemiTrans(ft4,flash);
 }
 
 
