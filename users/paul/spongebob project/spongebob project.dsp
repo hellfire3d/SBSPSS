@@ -181,6 +181,14 @@ SOURCE=..\..\..\source\gfx\bubicles.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gfx\fader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\fader.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gfx\fdata.cpp
 # End Source File
 # Begin Source File
