@@ -669,6 +669,28 @@ void Frame::MakeRGBA(u8 * Dest,bool ZeroIsTrans)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void Frame::MakeRGB(u8 * Dest)
+{
+	if (Buffa)
+		{
+		int		Area;
+		Area=Width*Height;
+		
+		for (int f=0;f<Area;f++)
+			{
+			Dest[f*3+0]=MyPal[Buffa[f]].GetR();
+			Dest[f*3+1]=MyPal[Buffa[f]].GetG();
+			Dest[f*3+2]=MyPal[Buffa[f]].GetB();
+			}
+		}
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void Frame::Plot(Frame & Dest,int X,int Y)
 {
 	if (Buffa && Dest.Buffa)

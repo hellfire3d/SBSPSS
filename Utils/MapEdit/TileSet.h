@@ -108,6 +108,7 @@ public:
 		void	Load2d(CCore *Core);
 		void	Load3d(CCore *Core);
 
+		const char	*GetDrive()			{return(Filename.Drive());}
 		const char	*GetPath()			{return(Filename.Dir());}
 		const char	*GetName()			{return(Filename.File());}
 		const char	*GetExt()			{return(Filename.Ext());}

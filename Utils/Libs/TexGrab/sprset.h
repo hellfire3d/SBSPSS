@@ -515,6 +515,7 @@ public:
 		{
 		Vi=NULL;
 		MaxSize=0;
+		DebugFlag=false;
 		}
 
 	void	SetMaxSize(int New)
@@ -549,6 +550,8 @@ public:
 
 	void	setNoWriteTpages(bool newVal)
 		{m_noWriteTpages=newVal;}
+	void	setDebug(bool f)
+		{DebugFlag=f;}
 
 protected:
 	void	WriteHeaderFile(char const * HName);
@@ -578,6 +581,7 @@ protected:
 	bool	m_halfTpage;
 	bool	m_compressTpages;
 	bool	m_noWriteTpages;
+	bool	DebugFlag;
 
 	SprFrVec	AllSprFrames;
 	SprPalVec	AllSprPals;

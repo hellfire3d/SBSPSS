@@ -53,6 +53,7 @@ public:
 		m_allocateAs16bit=false;
 		MaxSize=0;
 		m_noSort=false;
+		DebugFlag=false;
 		}
 
 	void	SetFileRecursion(bool NewRecurseFiles)	{RecurseFiles=NewRecurseFiles;}
@@ -65,6 +66,7 @@ public:
 	void	SetXOff(int NewXOff)					{XOff=NewXOff;}
 	void	SetYOff(int NewYOff)					{YOff=NewYOff;}
 	void	SetMaxSize(int New)						{MaxSize=New;}
+	void	SetDebug(bool f)						{DebugFlag=f;}
 
 	int		GetMaxSize(void) const					{return(MaxSize);}
 
@@ -100,6 +102,7 @@ protected:
 
 	FIVec	AllFileInfos;
 	int		MaxSize;
+	bool	DebugFlag;
 };
 
 

@@ -82,7 +82,7 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 		for (f=0;f<NewEntrys.size();f++)
 			FileCallback(NewEntrys[f],0);
 
-		cout<<"Read gin file *"<<FName<<"*"<<endl;
+		if (DebugFlag) cout<<"Read gin file *"<<FName<<"*"<<endl;
 		}
 	else
 		{
@@ -108,7 +108,7 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 		TheFile.Lower();
 			
 		MyInfo.SetInfo(TheFile,CrossHair,ThisZeroColZero,MoveUVs,AllowRotate,ShrinkToFit,m_allocateAs16bit);
-		cout<<"Add image file "<<TheFile<<endl;
+		if (DebugFlag) cout<<"Add image file "<<TheFile<<endl;
 
 		if (ForceOffsets)
 			MyInfo.SetForceOffsets(XOff,YOff);
@@ -144,7 +144,7 @@ void AllFiles::AddMemFrame(char const * FName,Frame &Frame)
 		TheFile.Lower();
 			
 		MyInfo.SetInfo(TheFile,CrossHair,ThisZeroColZero,MoveUVs,AllowRotate,ShrinkToFit,m_allocateAs16bit,&Frame);
-		cout<<"Add MemFrame "<<TheFile<<endl;
+		if (DebugFlag) cout<<"Add MemFrame "<<TheFile<<endl;
 
 		if (ForceOffsets)
 			MyInfo.SetForceOffsets(XOff,YOff);
@@ -194,7 +194,7 @@ void AllFiles::ReadRepFile(char const * Name)
 	for (int f=0;f<MyItems.size();f++)
 		AllExternalSharedTextures.push_back(MyItems[f].m_texName);
 
-	cout<<"Read report file "<<Name<<endl;
+	if (DebugFlag) cout<<"Read report file "<<Name<<endl;
 }
 
 /*===========================================================================

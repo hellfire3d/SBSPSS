@@ -24,79 +24,97 @@ CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_Qu
 	QuadList=_QuadList;
 	VtxList=_VtxList;
 	Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
+	MapWidth=LayerHdr->Width;
+	MapHeight=LayerHdr->Height;
 
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-	if (TileMap2d[0].List) MemFree(TileMap2d[0].List);
-	if (TileMap2d[1].List) MemFree(TileMap2d[1].List);
+	if (TileTable[0].Table) MemFree(TileTable[0].Table);
+	if (TileTable[1].Table) MemFree(TileTable[1].Table);
 }
 
 /*****************************************************************************/
-sTileMap2d	&CLayerTile::GetTileMap()
+sTileTable	&CLayerTile::GetTileTable()
 {
-	return(TileMap2d[FrameFlipFlag]);
+	return(TileTable[FrameFlipFlag]);
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-// NEED TO UPDATE FOR DIFF MAP POS's
 void	CLayerTile::init(VECTOR &MapPos,int Shift,int Width,int Height)
 {
 int		Size=Width*Height;
-int		MapWidth=GetWidth();
-int		MapHeight=GetWidth();
 
 		ASSERT(Width>=SCREEN_TILE_WIDTH);
 		ASSERT(Height>=SCREEN_TILE_HEIGHT);
 
-		MapShift=Shift;
-		TileMapWidth=Width;
-		TileMapHeight=Height;
+		MapXYShift=Shift;
+		TileTableWidth=Width;
+		TileTableHeight=Height;
 
 		for (int Buffer=0; Buffer<2; Buffer++)
 		{
-			sTileMap2dElem	*List=(sTileMap2dElem*) MemAlloc(Size*sizeof(sTileMap2dElem),"2d TileMap");
-			TileMap2d[Buffer].List=List;
-			TileMap2d[Buffer].MapX=0;
-			TileMap2d[Buffer].MapY=0;
+			sTileTableElem	*Table=(sTileTableElem*) MemAlloc(Size*sizeof(sTileTableElem),"2d TileTable");
+			TileTable[Buffer].Table=Table;
+			TileTable[Buffer].MapX=0;
+			TileTable[Buffer].MapY=0;
 
 			for (int Y=0; Y<Height; Y++)
 			{
 
 				for (int X=0; X<Width; X++)
 				{
-					sTileMapElem	*MapPtr=&Map[X+(Y*MapWidth)];
-					sTileMap2dElem	*ThisElem=&List[X+(Y*Width)];
+					sTileTableElem	*ThisElem=&Table[X+(Y*Width)];
 // Tile prim
-					TSPRT_16	*ThisTile=&ThisElem->Tile;
-					sTile		*SrcTile=&TileList[MapPtr->Tile];
-					setTSprt16(ThisTile);
-					setTSprtTPage(ThisTile,SrcTile->TPage);
-					ThisTile->r0=128;
-					ThisTile->g0=128;
-					ThisTile->b0=128;
-					ThisTile->clut=SrcTile->Clut;
-					ThisTile->u0=SrcTile->uv0[0];
-					ThisTile->v0=SrcTile->uv0[1];
-					if (!MapPtr->Tile)
-						ThisTile->clut=0;
-
+					TSPRT_16		*Prim=&ThisElem->Prim;
+					setTSprt16(Prim);
+					setTSetShadeTex(Prim,1);
 // Table			
 					int TableR=(X+1) % Width;
 					int TableD=(Y+1) % Height;
-					ThisElem->Right=&List[TableR+(Y*Width)];
-					ThisElem->Down=&List[X+(TableD*Width)];
-
-//					MapPtr++;
+					ThisElem->Right=&Table[TableR+(Y*Width)];
+					ThisElem->Down=&Table[X+(TableD*Width)];
 				}
 
 			}
+			UpdateWholeMap(TileTable[Buffer]);		
 		}
-		
+}
+
+/*****************************************************************************/
+void	CLayerTile::UpdateWholeMap(sTileTable &ThisTable)
+{
+sTileTableElem	*Table=ThisTable.Table;
+sTileMapElem	*MapPtr=Map;
+
+// Calc (wrapped) Map/Table pos
+			Table+=CalcTableOfs(ThisTable.MapX,ThisTable.MapY);
+			MapPtr+=CalcMapOfs(ThisTable.MapX,ThisTable.MapY);
+
+			for (int Y=0; Y<TileTableHeight; Y++)
+			{
+				sTileTableElem	*TableDown=Table->Down;
+				sTileMapElem	*MapDown=MapPtr+MapWidth;
+				
+				for (int X=0; X<TileTableWidth; X++)
+				{
+					TSPRT_16	*Prim=&Table->Prim;
+/**/				sTile		*Tile=&TileList[MapPtr->Tile];
+					setTSprtTPage(Prim,Tile->TPage);
+					*(u32*)&Prim->u0=*(u32*)&Tile->u0;			// copy uv AND clut
+					Table->Tile=Tile;
+					Table->TileFlags=Tile->TriCount;
+					Table++;
+					MapPtr++;
+				}
+				Table=TableDown;
+				MapPtr=MapDown;
+			}
+				
 }
 
 /*****************************************************************************/
@@ -108,18 +126,16 @@ void	CLayerTile::shutdown()
 /*****************************************************************************/
 int		CLayerTile::CalcTableOfs(int X,int Y)
 {
-/**/	X%=TileMapWidth;
-/**/	Y%=TileMapHeight;
+/**/	X%=TileTableWidth;
+/**/	Y%=TileTableHeight;
 
-/**/	return(X+(Y*TileMapWidth));
+/**/	return(X+(Y*TileTableWidth));
 
 }
 
 /*****************************************************************************/
 int		CLayerTile::CalcMapOfs(int X,int Y)
 {
-int		MapWidth=GetWidth();
-int		MapHeight=GetHeight();
 /**/	X%=MapWidth;
 /**/	Y%=MapHeight;
 
@@ -133,9 +149,9 @@ int		MapHeight=GetHeight();
 void	CLayerTile::think(VECTOR &MapPos)
 {
 // Update rows and Columns :o)
-sTileMap2d	&ThisTable=TileMap2d[FrameFlipFlag];
-int			XPos=MapPos.vx>>MapShift;
-int			YPos=MapPos.vy>>MapShift;
+sTileTable	&ThisTable=TileTable[FrameFlipFlag];
+int			XPos=MapPos.vx>>MapXYShift;
+int			YPos=MapPos.vy>>MapXYShift;
 int			ShiftX=15-(XPos&15);
 int			ShiftY=15-(YPos&15);
 
@@ -158,7 +174,7 @@ int			OldY=ThisTable.MapY;
 
 			if (NewY>OldY)
 			{	// update bottom row
-				UpdateRow(NewX,NewY+SCREEN_TILE_HEIGHT-1,ThisTable);
+				UpdateRow(NewX,NewY+SCREEN_TILE_HEIGHT-2,ThisTable);
 			}
 			else
 			if (NewY<OldY)
@@ -169,30 +185,30 @@ int			OldY=ThisTable.MapY;
 			ThisTable.MapX=NewX;
 			ThisTable.MapY=NewY;
 
+			ThisTable.MapX=NewX;
+			ThisTable.MapY=NewY;
+
 }
 
 /*****************************************************************************/
-void	CLayerTile::UpdateRow(int MapX,int MapY,sTileMap2d &ThisTable)
+void	CLayerTile::UpdateRow(int MapX,int MapY,sTileTable &ThisTable)
 {
-sTileMap2dElem	*Table=ThisTable.List;
+sTileTableElem	*Table=ThisTable.Table;
 sTileMapElem	*MapPtr=Map;
-//int				MapWidth=GetWidth();
 
 // Calc (wrapped) Map/Table pos
 		Table+=CalcTableOfs(MapX,MapY);
 		MapPtr+=CalcMapOfs(MapX,MapY);
 
-		for (int i=0; i<SCREEN_TILE_WIDTH-1; i++)
+		for (int i=0; i<SCREEN_TILE_WIDTH; i++)
 		{
 // Tile prim
-			TSPRT_16	*ThisTile=&Table->Tile;
-			sTile		*SrcTile=&TileList[MapPtr->Tile];
-
-			setTSprtTPage(ThisTile,SrcTile->TPage);
-			ThisTile->clut=SrcTile->Clut;
-			ThisTile->u0=SrcTile->uv0[0];
-			ThisTile->v0=SrcTile->uv0[1];
-
+			TSPRT_16	*Prim=&Table->Prim;
+/**/		sTile		*Tile=&TileList[MapPtr->Tile];
+/**/		setTSprtTPage(Prim,Tile->TPage);
+			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+			Table->Tile=Tile;
+			Table->TileFlags=Tile->TriCount;
 			MapPtr+=1;
 			Table=Table->Right;
 		}
@@ -200,12 +216,10 @@ sTileMapElem	*MapPtr=Map;
 }
 
 /*****************************************************************************/
-// As column is smaller than row, it takes the corner tiles on, to balance the flow
-void	CLayerTile::UpdateColumn(int MapX,int MapY,sTileMap2d &ThisTable)
+void	CLayerTile::UpdateColumn(int MapX,int MapY,sTileTable &ThisTable)
 {
-sTileMap2dElem	*Table=ThisTable.List;
+sTileTableElem	*Table=ThisTable.Table;
 sTileMapElem	*MapPtr=Map;
-int				MapWidth=GetWidth();
 
 // Calc (wrapped) Map/Table pos
 		Table+=CalcTableOfs(MapX,MapY);
@@ -214,13 +228,13 @@ int				MapWidth=GetWidth();
 		for (int i=0; i<SCREEN_TILE_HEIGHT; i++)
 		{
 // Tile prim
-			TSPRT_16	*ThisTile=&Table->Tile;
-			sTile		*SrcTile=&TileList[MapPtr->Tile];
+			TSPRT_16	*Prim=&Table->Prim;
+/**/		sTile		*Tile=&TileList[MapPtr->Tile];
+/**/		setTSprtTPage(Prim,Tile->TPage);
+			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+			Table->Tile=Tile;
+			Table->TileFlags=Tile->TriCount;
 
-			setTSprtTPage(ThisTile,SrcTile->TPage);
-			ThisTile->clut=SrcTile->Clut;
-			ThisTile->u0=SrcTile->uv0[0];
-			ThisTile->v0=SrcTile->uv0[1];
 
 			MapPtr+=MapWidth;
 			Table=Table->Down;
@@ -232,8 +246,8 @@ int				MapWidth=GetWidth();
 /*****************************************************************************/
 void	CLayerTile::render()
 {
-sTileMap2d		&ThisTable=TileMap2d[FrameFlipFlag];
-sTileMap2dElem	*Table=ThisTable.List;
+sTileTable		&ThisTable=TileTable[FrameFlipFlag];
+sTileTableElem	*Table=ThisTable.Table;
 u32				XYPos;
 
 // Setup shift bits of pos
@@ -245,15 +259,15 @@ u32				XYPos;
 // Render it!!		
 		for (int TileY=0; TileY<SCREEN_TILE_HEIGHT; TileY++)
 		{
-			sTileMap2dElem	*TableDown=Table->Down;
+			sTileTableElem	*TableDown=Table->Down;
 			u32				XYPosDown=XYPos+YInc;
 			for (int TileX=0; TileX<SCREEN_TILE_WIDTH; TileX++)
 			{
-				TSPRT_16	*Tile=&Table->Tile;
-				if (Tile->clut)
+				TSPRT_16	*Prim=&Table->Prim;
+				if (Prim->clut)
 				{
-					*(u32*)&Tile->x0=XYPos;
-/**/				AddPrim(OtPtr,Tile);
+					*(u32*)&Prim->x0=XYPos;
+/**/				AddPrim(OtPtr,Prim);
 				}
 				Table=Table->Right;
 				XYPos+=XInc;
@@ -266,8 +280,8 @@ u32				XYPos;
 /*****************************************************************************/
 void	CLayerTile::renderSolid()
 {
-sTileMap2d		&ThisTable=TileMap2d[FrameFlipFlag];
-sTileMap2dElem	*Table=ThisTable.List;
+sTileTable		&ThisTable=TileTable[FrameFlipFlag];
+sTileTableElem	*Table=ThisTable.Table;
 u32				XYPos;
 
 // Setup shift bits of pos
@@ -279,13 +293,64 @@ u32				XYPos;
 // Render it!!		
 		for (int TileY=0; TileY<SCREEN_TILE_HEIGHT; TileY++)
 		{
-			sTileMap2dElem	*TableDown=Table->Down;
+			sTileTableElem	*TableDown=Table->Down;
 			u32				XYPosDown=XYPos+YInc;
 			for (int TileX=0; TileX<SCREEN_TILE_WIDTH; TileX++)
 			{
-				TSPRT_16	*Tile=&Table->Tile;
-				*(u32*)&Tile->x0=XYPos;
-/**/			AddPrim(OtPtr,Tile);
+				TSPRT_16	*Prim=&Table->Prim;
+				*(u32*)&Prim->x0=XYPos;
+/**/			AddPrim(OtPtr,Prim);
+				Table=Table->Right;
+				XYPos+=XInc;
+			}
+			Table=TableDown;
+			XYPos=XYPosDown;
+		}
+}
+
+
+/*****************************************************************************/
+VECTOR	asd={0,0,512};
+
+void	CLayerTile::render3d()
+{
+sTileTable		&ThisTable=TileTable[FrameFlipFlag];
+sTileTableElem	*Table=ThisTable.Table;
+u32				XYPos,XYPos3d;
+MATRIX			_Mtx,*Mtx=&_Mtx;
+	
+		SetIdent(Mtx);
+		Mtx->t[2]=asd.vz;
+		gte_SetRotMatrix(Mtx);
+
+// Setup shift bits of pos
+		XYPos=ThisTable.ShiftXY;
+
+// Calc (wrapped) Start pos
+		Table+=CalcTableOfs(ThisTable.MapX,ThisTable.MapY);
+
+// Render it!!		
+		for (int TileY=0; TileY<SCREEN_TILE_HEIGHT; TileY++)
+		{
+			sTileTableElem	*TableDown=Table->Down;
+			u32				XYPosDown=XYPos+YInc;
+			for (int TileX=0; TileX<SCREEN_TILE_WIDTH; TileX++)
+			{
+				TSPRT_16	*Prim=&Table->Prim;
+				if (Prim->clut)
+				{ // 2d tile
+					*(u32*)&Prim->x0=XYPos;
+/**/				AddPrim(OtPtr,Prim);
+				}
+				if (Table->TileFlags)
+				{ // 3d tile
+					u32	SX=(ThisTable.ShiftXY &15);
+					u32	SY=(ThisTable.ShiftXY>>16);
+					Mtx->t[0]=((TileX-15)*16)+SX;
+					Mtx->t[1]=((TileY-10)*16)+SY;
+					gte_SetTransMatrix(Mtx);
+					RenderBlock(Table->Tile,Table->TileFlags);
+				}
 				Table=Table->Right;
 				XYPos+=XInc;
 			}
@@ -295,3 +360,41 @@ u32				XYPos;
 }
 
 /*****************************************************************************/
+// NOTE: Tiles will be sorted by z order (cos they 'should' be simple objects
+// NOTE: Tiles will be split into facing strips, to reduce overdraw :o)
+// NOTE: Matrix already setup for tile
+void	CLayerTile::RenderBlock(sTile *Tile,u32 Flags)
+{
+sVtx		*P0,*P1,*P2;
+s32			ClipZ=0;
+POLY_FT3	*TPrimPtr=(POLY_FT3*)GetPrimPtr();
+int			TriCount=Tile->TriCount;
+sTri		*TList=TriList+Tile->TriList;
+u32			T0,T1,T2;
+
+//--- Tris ---------------------------------------------------------------------------
+			
+			while (TriCount--)
+		        {
+				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+				gte_ldv3(P0,P1,P2);
+				setPolyFT3(TPrimPtr);
+				setShadeTex(TPrimPtr,1);
+				setlen( TPrimPtr, GPU_PolyFT3Tag);
+				gte_rtpt_b();
+
+				T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
+				T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
+				T2=*(u16*)&TList->uv2;		// Get UV2
+				*(u32*)&TPrimPtr->u0=T0;	// Set UV0
+				*(u32*)&TPrimPtr->u1=T1;	// Set UV1
+				*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+
+			    TList++;
+				addPrim(OtPtr,TPrimPtr);
+				gte_stsxy3_ft3(TPrimPtr);
+				TPrimPtr++;
+		        }
+
+		SetPrimPtr((u8*)TPrimPtr);
+}

@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib glaux.lib maths.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\libs\ginlib\debug\\" /libpath:"..\libs\glib\debug\\" /libpath:"..\libs\maths\debug\\"
+# ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib maths.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\libs\ginlib\debug\\" /libpath:"..\libs\glib\debug\\" /libpath:"..\libs\maths\debug\\"
 
 !ENDIF 
 

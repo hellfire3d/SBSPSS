@@ -65,6 +65,7 @@ CTexGrab::~CTexGrab()
   ---------------------------------------------------------------------- */
 void	CTexGrab::Process()
 {
+		MySprSet.setDebug(DebugFlag);
 		MySprSet.setHalfTpage(m_useHalfTpage);
 		MySprSet.setAnimatedHeader(m_AnimatedHeadersOnly);
 		MySprSet.setDontOutputBoxes(m_DontOutputBoxes);

@@ -69,6 +69,7 @@ public:
 		void	AllowRotate(bool f)						{MyFiles.SetAllowRotate(f);}
 		void	FileRecursion(bool f)					{MyFiles.SetFileRecursion(f);}
 		void	NoSort()								{MyFiles.setNoSort();}
+		void	SetDebug(bool f)						{DebugFlag=f;}
 
 		void	ReadRepFile(GString String)				{MyFiles.ReadRepFile(String);}
 
@@ -114,7 +115,7 @@ protected:
 		bool		m_AnimatedHeadersOnly;
 		bool		m_DontOutputBoxes;
 		bool		m_AlignHeaders;
-		
+		bool		DebugFlag;		
 		std::vector<sTexOutInfo> TexInfo;
 
 };

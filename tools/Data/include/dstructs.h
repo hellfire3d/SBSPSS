@@ -82,12 +82,14 @@ struct	sMat
 //***************************************************************************
 struct	sTri
 {
-		u16			P0,P1,P2;				//  6
-		u16			TPage;					//  2
+		u16			P0;						//  2
+		u16			P1;						//  2
 		u8			uv0[2];					//  2
-		u8			uv1[2];					//  2
-		u8			uv2[2];					//  2
 		u16			Clut;					//  2
+		u8			uv1[2];					//  2
+		u16			TPage;					//  2
+		u8			uv2[2];					//  2
+		u16			P2;						//  2
 };											// 16
 
 //		u8			r0, g0, b0, code;		//  4
@@ -137,7 +139,7 @@ struct sBone
 
 struct	sTileMapElem
 {
-	u16		Tile;
+		u16		Tile;
 };
 
 struct	sTile
@@ -148,14 +150,10 @@ struct	sTile
 		u16		QuadList;
 		u16		QuadCount;
 // 2d Tile
-//		s16		Mat2d;
-//		s8		XOfs,YOfs;
-		u16		TPage;
+		u8		u0,v0;
 		u16		Clut;
-		u8		uv0[2];
-		u8		uv1[2];
-		u8		uv2[2];
-		u8		uv3[2];
+		u16		TPage;
+		u16		Pad;	// :o( need this?
 
 #ifdef	WIN32
 bool	operator==(sTile const &v1)	
@@ -166,15 +164,8 @@ bool	operator==(sTile const &v1)
 //	if (QuadList!=v1.QuadList) return(false);
 
 	if (TPage!=v1.TPage) return(false);
-//	if (Mat!=v1.Mat) return(false);
-	if (uv0[0]!=v1.uv0[0]) return(false);
-	if (uv0[1]!=v1.uv0[1]) return(false);
-	if (uv1[0]!=v1.uv1[0]) return(false);
-	if (uv1[1]!=v1.uv1[1]) return(false);
-	if (uv2[0]!=v1.uv2[0]) return(false);
-	if (uv2[1]!=v1.uv2[1]) return(false);
-	if (uv3[0]!=v1.uv3[0]) return(false);
-	if (uv3[1]!=v1.uv3[1]) return(false);
+	if (u0!=v1.u0) return(false);
+	if (v0!=v1.v0) return(false);
 	return(TRUE);
 }
 #endif

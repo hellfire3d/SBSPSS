@@ -11,7 +11,8 @@
 
 #include	"level\level.h"
 #include	"level\layertile.h"
-#include	"level\layerback.h"
+#include	"level\layertilesolid.h"
+#include	"level\layertile3d.h"
 
 #include	"pad\pads.h"
 
@@ -22,8 +23,7 @@ CLevel::CLevel()
 		{
 			TileLayers[i]=0;
 		}
-		DAVE_DBGMSG("sizeof(POLY_FT4)=%i",sizeof(POLY_FT4));
-		DAVE_DBGMSG("sizeof(TSPRT)=%i",sizeof(TSPRT));
+
 		MapPos.vx=0;		
 		MapPos.vy=0;		
 }
@@ -58,7 +58,7 @@ sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 		if (LevelHdr->BackLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
-			CLayerTile *NewLayer=new ("Back Layer") CLayerBack(Layer,  TileList, TriList, QuadList, VtxList);
+			CLayerTile *NewLayer=new ("Back Layer") CLayerTileSolid(Layer,  TileList, TriList, QuadList, VtxList);
 			NewLayer->init(MapPos,3);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_BACK]=NewLayer;
 		}
@@ -71,16 +71,17 @@ sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 			NewLayer->init(MapPos,2);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_MID]=NewLayer;
 		}
-/*
+
 // Action
 		if (LevelHdr->ActionLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
-			CLayerTile *NewLayer=new ("Action Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
-			NewLayer->init();
-			NewLayer->SetMapShift(0);
+			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(Layer, TileList, TriList, QuadList, VtxList);
+			NewLayer->init(MapPos,0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
 		}
+
+/*
 // Fore
 		if (LevelHdr->ForeLayer) 
 		{

@@ -210,7 +210,7 @@ void SprSet::AddAnm(FileInfo const & ThisInfo)
 		AddFrame(ThisAnim[f],TempFileInfo);
 		}
 
-	cout<<"Added anim file "<<ThisInfo.GetFileName()<<" ("<<ThisAnim.NumOfFrames()<<" frames)"<<endl;
+	if (DebugFlag) cout<<"Added anim file "<<ThisInfo.GetFileName()<<" ("<<ThisAnim.NumOfFrames()<<" frames)"<<endl;
 }
 
 /*----------------------------------------------------------------------
@@ -287,7 +287,7 @@ void SprSet::ProcessPals(void)
 		AllSprPals[PalIndex].SetPalIndex(PalIndex);
 		}
 
-	cout<<"Found "<<AllSprPals.size()<<" unique pal(s)"<<endl;
+	if (DebugFlag) cout<<"Found "<<AllSprPals.size()<<" unique pal(s)"<<endl;
 }
 
 /*----------------------------------------------------------------------
@@ -533,7 +533,7 @@ int	FrameCount=AllSprFrames.size();
 			}
 
 		size=int(Out.tellp())-thisPos;
-		cout<<"size of headers == "<<size<<endl;
+		if (DebugFlag) cout<<"size of headers == "<<size<<endl;
 
 		Out.Align(sizeof(u32));
 
@@ -944,7 +944,7 @@ void SprFrame::SetFrameAndInfo(Frame const & Fr,FileInfo const & NewMyFileInfo,i
 			cout<<"Reducing frame "<<GetFileInfo()->GetActualFileName()<<endl;
 			ResizeAndReduce(*this,GetNumOfCols(),float(NewWidth)/float(GetWidth()),float(NewHeight)/float(GetHeight()),MyFileInfo.GetZeroColZero());
 
-#if 1
+#if 0
 			char	Name[1024];
 			static int Val;
 			sprintf(Name,"c:\\data\\%d.lbm",Val);

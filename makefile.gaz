@@ -86,8 +86,8 @@ gui_src :=			gbutton \
 
 level_src :=		level \
 					layertile \
-					layerback \
-					layeraction
+					layertilesolid \
+					layertile3d
 	
 locale_src :=		textdbase
 

@@ -1,17 +1,17 @@
-/*******************************/
-/*** Action Tile Layer Class ***/
-/*******************************/
+/***************************/
+/*** 3d Tile Layer Class ***/
+/***************************/
 
-#ifndef __LAYER_ACTION_H__
-#define __LAYER_ACTION_H__
+#ifndef __LAYER_TILE_3D_H__
+#define __LAYER_TILE_3D_H__
 
 
 /*****************************************************************************/
-class CLayerAction : public CLayerTile
+class CLayerTile3d : public CLayerTile
 {
 public:
-		CLayerAction(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
-		~CLayerAction();
+		CLayerTile3d(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
+		~CLayerTile3d();
 
 		void	init(VECTOR &MapPos,int Shift,int Width,int Height);
 		void	shutdown();

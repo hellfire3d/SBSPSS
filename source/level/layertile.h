@@ -7,18 +7,20 @@
 
 
 /*****************************************************************************/
-struct	sTileMap2dElem
+struct	sTileTableElem
 {
-	TSPRT_16		Tile;
-	sTileMap2dElem	*Right;
-	sTileMap2dElem	*Down;
+	TSPRT_16		Prim;
+	sTile			*Tile;
+	u32				TileFlags;
+	sTileTableElem	*Right;
+	sTileTableElem	*Down;
 };
 
-struct	sTileMap2d
+struct	sTileTable
 {
 	int				MapX,MapY;
 	u32				ShiftXY;
-	sTileMap2dElem	*List;
+	sTileTableElem	*Table;
 };
 
 /*****************************************************************************/
@@ -52,19 +54,18 @@ virtual	void			shutdown();
 virtual	void			think(VECTOR &MapPos);
 virtual	void			render();
 
-		void			SetMapShift(int Shift)	{MapShift=Shift;}
-		int				GetWidth()				{return(LayerHdr->Width);}
-		int				GetHeight()				{return(LayerHdr->Height);}
-
 
 protected:
-		sTileMap2d		&GetTileMap();
+		void			UpdateWholeMap(sTileTable &ThisMap);
+		sTileTable		&GetTileTable();
 		int				CalcTableOfs(int X,int Y);
 		int				CalcMapOfs(int X,int Y);
-		void			UpdateRow(int MapX,int MapY,sTileMap2d &ThisMap);
-		void			UpdateColumn(int MapX,int MapY,sTileMap2d &ThisMap);
+		void			UpdateRow(int MapX,int MapY,sTileTable &ThisMap);
+		void			UpdateColumn(int MapX,int MapY,sTileTable &ThisMap);
 		
 		void			renderSolid();
+		void			render3d();
+		void			RenderBlock(sTile *Tile,u32 Flags);
 
 		sLayerHdr		*LayerHdr;
 		sTile			*TileList;
@@ -73,9 +74,9 @@ protected:
 		sVtx			*VtxList;
 		sTileMapElem	*Map;
 
-		int				MapShift;
-		int				TileMapWidth,TileMapHeight;
-		sTileMap2d		TileMap2d[2];			// Double Buffered
+		int				MapWidth,MapHeight,MapXYShift;
+		int				TileTableWidth,TileTableHeight;
+		sTileTable		TileTable[2];			// Double Buffered
 };
 
 

@@ -93,6 +93,7 @@ public:
 	void	Expand(int BorderWidth,bool DupeEdges);
 	void	AddPixelSurround(int Col);
 
+	void	MakeRGB(u8 * Dest);
 	void	MakeRGBA(u8 * Dest,bool ZeroIsTrans=true);
 
 	Frame(void);

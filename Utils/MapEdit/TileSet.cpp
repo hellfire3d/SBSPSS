@@ -412,7 +412,7 @@ sTex	&ThisTex=TexCache.GetTex(TexID);
 int		Width=ThisTex.TexWidth/16;
 int		Height=ThisTex.TexHeight/16;
 
-		TRACE3("Load 2d TileBank %s (%i,%i)\n",Filename.FullName(),Width,Height);
+//		TRACE3("Load 2d TileBank %s (%i,%i)\n",Filename.FullName(),Width,Height);
 
 		Tile.push_back(CTile(0));	// Insert Blank		
 		

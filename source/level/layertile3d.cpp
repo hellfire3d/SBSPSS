@@ -1,6 +1,6 @@
-/*******************************/
-/*** Action Tile Layer Class ***/
-/*******************************/
+/***************************/
+/*** 3d Tile Layer Class ***/
+/***************************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -9,18 +9,18 @@
 
 
 #include	"LayerTile.h"
-#include	"LayerAction.h"
+#include	"LayerTile3d.h"
 
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerAction::CLayerAction(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
+CLayerTile3d::CLayerTile3d(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
 {
 }
 
 /*****************************************************************************/
-CLayerAction::~CLayerAction()
+CLayerTile3d::~CLayerTile3d()
 {
 }
 
@@ -28,18 +28,18 @@ CLayerAction::~CLayerAction()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerAction::init(VECTOR &MapPos,int Shift,int Width,int Height)
+void	CLayerTile3d::init(VECTOR &MapPos,int Shift,int Width,int Height)
 {
 		CLayerTile::init(MapPos,Shift);
 }
 
 /*****************************************************************************/
-void	CLayerAction::shutdown()
+void	CLayerTile3d::shutdown()
 {
 }
 
 /*****************************************************************************/
-void	CLayerAction::render()
+void	CLayerTile3d::render()
 {
 //		CLayerTile::render();
 		CLayerTile::render3d();
