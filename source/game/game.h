@@ -139,6 +139,7 @@ static	CLayerCollision	*s_GlobalCollision;
 static	int				s_bossHasBeenKilled;
 static	DVECTOR			s_CamShake;
 static	int				s_showBossTextOnRespawn;
+		int				m_playingBossMusic;
 
 
 		int				m_levelHasTimer;

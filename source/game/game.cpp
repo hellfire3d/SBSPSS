@@ -226,6 +226,7 @@ void 	CGameScene::init()
 		m_showingLivesTimer=0;
 
 		s_showBossTextOnRespawn=false;
+		m_playingBossMusic=false;
 }
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
@@ -419,7 +420,11 @@ void	CGameScene::think(int _frames)
 			if(m_bossText->isReadyToExit())
 			{
 				m_gamestate=GAMESTATE_PLAYING;
-				CSoundMediator::playSong();
+				if(!m_playingBossMusic)
+				{
+					CSoundMediator::playSong();
+					m_playingBossMusic=true;
+				}
 				sendEvent( BOSS_FOUND_EVENT, NULL );
 				CFader::setFadingIn();
 			}
@@ -739,7 +744,7 @@ void	CGameScene::respawnLevel()
 	else
 	{
 		m_gamestate=GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT;
-		m_bossText->select();
+		m_bossText->select(m_playingBossMusic);
 	}
 	m_showingLivesTimer=0;
 	CSoundMediator::setCanPlaySfx(true);

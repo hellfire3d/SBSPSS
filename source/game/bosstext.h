@@ -40,7 +40,7 @@ public:
 	void			init();
 	void			shutdown();
 
-	void			select();
+	void			select(int _dontChangeMusic=false);
 	void			think(int _frames);
 	void			render();
 	int				isReadyToExit();

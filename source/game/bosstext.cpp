@@ -133,13 +133,16 @@ void	CBossText::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBossText::select()
+void	CBossText::select(int _dontChangeMusic)
 {
 	m_readyToExit=false;
 	m_currentPage=0;
 
-	CSoundMediator::stopSong();
-	CSoundMediator::setSong(s_bossData[GameScene.GetLevel().getCurrentChapter()-1].m_songId);
+	if(!_dontChangeMusic)
+	{
+		CSoundMediator::stopSong();
+		CSoundMediator::setSong(s_bossData[GameScene.GetLevel().getCurrentChapter()-1].m_songId);
+	}
 }
 
 /*----------------------------------------------------------------------
