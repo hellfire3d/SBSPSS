@@ -1182,6 +1182,9 @@ CRECT const &collisionArea=getCollisionArea();
 					int height = getHeightFromPlatformAtPosition( friendPos.vx, friendPos.vy );
 
 					friendNpc->setPlatform( this );
+					DVECTOR friendPos = friendNpc->getPos();
+					friendPos.vy += height;
+					friendNpc->setPos( friendPos );
 
 					m_contact = true;
 				}
@@ -1194,6 +1197,9 @@ CRECT const &collisionArea=getCollisionArea();
 						if ( height >= -threshold && height < 1 )
 						{
 							friendNpc->setPlatform( this );
+							DVECTOR friendPos = friendNpc->getPos();
+							friendPos.vy += height;
+							friendNpc->setPos( friendPos );
 
 							m_contact = true;
 						}

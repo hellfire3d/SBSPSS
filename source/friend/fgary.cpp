@@ -348,6 +348,7 @@ void CNpcGaryFriend::think( int _frames )
 	if ( abs( groundDist ) > 15 )
 	{
 		m_drawRotation = 0;
+		CNpcThing::think(_frames);
 		return;
 	}
 
@@ -358,6 +359,7 @@ void CNpcGaryFriend::think( int _frames )
 	if ( abs( groundDist ) > 15 )
 	{
 		m_drawRotation = 0;
+		CNpcThing::think(_frames);
 		return;
 	}
 
