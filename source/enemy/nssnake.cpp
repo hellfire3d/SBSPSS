@@ -692,13 +692,14 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 			m_speed++;
 		}
 
+		m_state = NPC_GENERIC_HIT_DEATH_END;
+
 		DVECTOR	offset = CLevel::getCameraPos();
 
 		if ( Pos.vy - offset.vy > VidGetScrH() )
 		{
 			setToShutdown();
 			CGameScene::setBossHasBeenKilled();
-			m_state = NPC_GENERIC_HIT_DEATH_END;
 		}
 	}
 	else
