@@ -174,6 +174,13 @@ void CNpcParasiticWormEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcParasiticWormSegment::shutdown()
+{
+	delete m_actorGfx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcParasiticWormEnemy::shutdown()
 {
 	// delete worm segments
@@ -186,6 +193,8 @@ void CNpcParasiticWormEnemy::shutdown()
 
 		oldSegment = currentSegment;
 		currentSegment = currentSegment->m_nextSegment;
+
+		oldSegment->shutdown();
 		delete oldSegment;
 	}
 

@@ -18,6 +18,7 @@ class CNpcParasiticWormSegment
 {
 public:
 	virtual void		init();
+	virtual void		shutdown();
 	virtual void		render();
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual void		setScale( u16 scale )							{m_scale = scale;}
