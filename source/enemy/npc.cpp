@@ -1484,7 +1484,7 @@ void CNpcEnemy::processUserCollision( CThing *thisThing )
 
 	s16 headingFromTarget = ratan2( yDist, xDist );
 
-	if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
+	/*if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
 	{
 		otherDelta.vx = -otherDelta.vx;
 	}
@@ -1505,7 +1505,7 @@ void CNpcEnemy::processUserCollision( CThing *thisThing )
 	else
 	{
 		Pos.vy += otherDelta.vy;
-	}
+	}*/
 
 	m_heading = headingFromTarget;
 

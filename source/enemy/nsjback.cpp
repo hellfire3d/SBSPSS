@@ -153,11 +153,11 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 
 	moveVel = ( _frames * m_speed ) << 8;
 
-	if ( processGroundCollisionReverse( &moveX, &moveY ) )
+	/*if ( processGroundCollisionReverse( &moveX, &moveY ) )
 	{
 		m_targetHeading += 1024;
 		m_targetHeading &= 4095;
-	}
+	}*/
 
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }
