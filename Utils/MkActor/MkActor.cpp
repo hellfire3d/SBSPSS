@@ -762,7 +762,10 @@ vector<sSpriteFrameGfx>	Hdrs;
 
 				Hdrs[i].AspectX0=X0;
 				Hdrs[i].AspectX1=X1;
-				
+				Hdrs[i].OW=ThisBmp.OrigW;
+				Hdrs[i].OH=ThisBmp.OrigH;
+				Hdrs[i].W0=W0;
+				Hdrs[i].W1=W1;				
 
 //	printf("%i %i %i\n",Hdrs[i].W,X0,X1);
 				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);

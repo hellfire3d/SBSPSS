@@ -272,6 +272,8 @@ struct	sSpriteFrameGfx
 		u8			*PAKSpr;			// 4	Needs to be u32, so might as well make it a ptr
 		s8			AspectX0,AspectX1;	// 2	Aspect correction value 
 		u8			W,H;				// 2
+		u8			W0,W1;				// 2	Need these for rotating :o(
+		u8			OW,OH;				// 2	So might as well pad with these :o(
 };
 
 struct	sSpriteFrame
