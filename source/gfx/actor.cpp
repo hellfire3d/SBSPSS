@@ -323,7 +323,7 @@ void	CActorCache::LoadPalette(sActorPool *Actor)
 			R.y=CACHE_PALY-Y;
 			R.w=CACHE_PALW;
 			R.h=CACHE_PALH;
-			DrawSync(0);
+			while(DrawSync(1));
 			LoadImage( &R, (u32*)Actor->ActorGfx->Palette);
 			Actor->ActorGfx->Clut=getClut(R.x,R.y);
 			CurrentPalette++;
