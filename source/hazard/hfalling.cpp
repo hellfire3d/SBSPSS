@@ -132,20 +132,37 @@ void CNpcFallingHazard::processMovement( int _frames )
 
 				if ( groundHeight < yMovement )
 				{
-					if ( m_soundId == NOT_PLAYING )
+					switch ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK )
 					{
-						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
+						case COLLISION_TYPE_FLAG_SOLID:
+						{
+							// drop down
+
+							Pos.vy += yMovement;
+
+							break;
+						}
+
+						default:
+						{
+							if ( m_soundId == NOT_PLAYING )
+							{
+								m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
+							}
+
+							// colliding with ground
+
+							Pos.vy += groundHeight;
+
+							m_bounceFinish = true;
+							m_speed = -5;
+							m_bounceDir = getRnd() % 2;
+
+							m_bouncePos = Pos;
+
+							break;
+						}
 					}
-
-					// colliding with ground
-
-					Pos.vy += groundHeight;
-
-					m_bounceFinish = true;
-					m_speed = -5;
-					m_bounceDir = getRnd() % 2;
-
-					m_bouncePos = Pos;
 				}
 				else
 				{

@@ -24,6 +24,7 @@ public:
 	void				init();
 	void				setWaypoints( sThingHazard *ThisHazard );
 	void				render();
+	bool				alwaysThink()											{return(m_bounceFinish);}
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
