@@ -1321,6 +1321,14 @@ SOURCE=..\..\..\source\platform\pclam.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pconveyr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pconveyr.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pdual.cpp
 # End Source File
 # Begin Source File

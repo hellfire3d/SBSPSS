@@ -163,6 +163,14 @@
 #include "platform\ptrpdoor.h"
 #endif
 
+#ifndef __PLATFORM_PCONVEYR_H__
+#include "platform\pconveyr.h"
+#endif
+
+#ifndef __PLATFORM_PFALLNOR_H__
+#include "platform\pfallnor.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -229,7 +237,7 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_CRATE_PLATFORM:
 		case NPC_FALLING_PLATFORM:
 		{
-			platform = new ("falling platform") CNpcFallingPlatform;
+			platform = new ("falling platform") CNpcFallingNoRespawnPlatform;
 			break;
 		}
 
@@ -362,6 +370,18 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_TRAPDOOR_PLATFORM:
 		{
 			platform = new ("trapdoor platform") CNpcTrapdoorPlatform;
+			break;
+		}
+
+		case NPC_CONVEYOR_GENERATOR:
+		{
+			platform = new ("conveyor generator") CNpcConveyorPlatformGenerator;
+			break;
+		}
+
+		case NPC_CONVEYOR_PLATFORM:
+		{
+			platform = new ("conveyor platform") CNpcConveyorPlatform;
 			break;
 		}
 
