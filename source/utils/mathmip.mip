@@ -3,7 +3,7 @@
 ;****************************
 
 	include	gtereg.h
-	include	source\gfx\gpu.inc
+
 
 	opt	at-
 	section	.text

@@ -17,18 +17,24 @@
 CAnimTex	*AnimTexList=0;
 
 /*****************************************************************************/
+CAnimTex::CAnimTex()
+{
+		NextTex=0;
+}
 
-// If this function changes then DumpThisTPage() will probly need to change too  (PKG)
+/*****************************************************************************/
+CAnimTex::~CAnimTex()
+{
+	if (TexData) MemFree(TexData);
+}
 
+/*****************************************************************************/
 void	CAnimTex::AddAnimTex(sFrameHdr *Frame,FileEquate Filename)
 {
 int			TPageX,TPageY,X,Y,W,H;
 CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 
-		if(AnimTexList)
-			{
-			ThisTex->NextTex=AnimTexList;
-			}
+		ThisTex->NextTex=AnimTexList;
 		AnimTexList=ThisTex;
 
 		X=(u8)Frame->U;
@@ -36,7 +42,6 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 		W=(u8)Frame->W;
 		H=(u8)Frame->H;
 		
-		ThisTex->PixPerWord=0;
 		switch (((Frame->TPage)>>7)&0x003)
 			{
 			case 0:
@@ -77,80 +82,32 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 
 }
 
-
-/*****************************************************************************/
-/*
-void		CAnimTex::GetTexData()
-{
-CAnimTex	*ThisTex=AnimTexList;
-
-		while (ThisTex)
-			{
-			if (!ThisTex->TexData)
-				{
-				RECT	Rect=ThisTex->Rect;
-				ThisTex->TexData=(u32*)MemAlloc((Rect.w*Rect.h)*sizeof(u16), "AnTx");
-				DrawSync(0);
-				StoreImage(&Rect,(u32*)ThisTex->TexData);
-				}
-			ThisTex=ThisTex->NextTex;
-			}
-}
-*/
 /*****************************************************************************/
 
 void	CAnimTex::DumpThisTPage(FileEquate TexName)
 {
-	CAnimTex	*prevTex, *thisTex,*nextTex;
+CAnimTex	*PrevTex, *ThisTex, *NextTex;
 
-	prevTex=NULL;
-	thisTex=AnimTexList;
+	PrevTex=NULL;
+	ThisTex=AnimTexList;
 
-	while(thisTex)
-	{
-		nextTex=thisTex->NextTex;
-		if(thisTex->TexName==TexName)
+	while(ThisTex)
 		{
-			if(prevTex)
-				prevTex->NextTex=nextTex;
-			if(thisTex->TexData)
-				MemFree(thisTex->TexData);
-			if(thisTex==AnimTexList)
-				AnimTexList=nextTex;
-			delete thisTex;
-		}
+		NextTex=ThisTex->NextTex;
+		if(ThisTex->TexName==TexName)
+			{
+			if (PrevTex) PrevTex->NextTex=NextTex;
+			if (ThisTex==AnimTexList) AnimTexList=NextTex;
+			delete ThisTex;
+			}
 		else
-		{
-			prevTex=thisTex;
+			{
+			PrevTex=ThisTex;
+			}
+		ThisTex=NextTex;
 		}
-		thisTex=nextTex;
-	}
-//	CAnimTex::DumpAll();
 }
 
-/*****************************************************************************/
-void	CAnimTex::DumpAll()
-{
-	ASSERT(!"DONT USE CAnimTex::DumpAll()");	
-}
-/*
-void	CAnimTex::DumpAll()
-{
-	CAnimTex	*thisTex,*nextTex;
-
-	thisTex=AnimTexList;
-	while(thisTex)
-	{
-		nextTex=thisTex->NextTex;
-		if(thisTex->TexData)
-			MemFree(thisTex->TexData);
-		delete thisTex;
-		thisTex=nextTex;
-	}
-	AnimTexList=NULL;
-}
-
-*/
 /*****************************************************************************/
 
 
@@ -187,7 +144,6 @@ int			Time = GameState::getTimeSinceLast();
 			ThisTex->Count+=(ThisTex->Speed * Time)>> 12;
 			ThisTex->Count%=(ThisTex->Rect.h<<2);
 			ThisTex=ThisTex->NextTex;
-
 			}
 
 }

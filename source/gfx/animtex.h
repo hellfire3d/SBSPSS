@@ -11,16 +11,13 @@
 class CAnimTex
 {
 public:
-		CAnimTex()
-			{
-			NextTex=0;
-			}
+		CAnimTex();
+		~CAnimTex();
+		
 static	void	AddAnimTex(sFrameHdr *Frame,FileEquate Filename);
 static	void	AnimateTex();
 static	void	GetTexData();
-//static	void	DumpThisTPage(int _tpage);
 static	void	DumpThisTPage(FileEquate TexName);
-static	void	DumpAll();
 
 private:
 	CAnimTex	*NextTex;
@@ -32,26 +29,6 @@ private:
 	u8			TPage;
 
 };
-/*
-typedef struct
-	{
-	u16	TPage;
-	u16	Clut;
-	s8	XOfs;
-	s8	YOfs;
-
-	s8	W;
-	s8	H;
-	u8	U;
-	u8	V;
-	u8	Rotated;
-	u8	Cycle;
-	} sFrameHdr;
-
-
-*/
-
-
 
 /*****************************************************************************/
 

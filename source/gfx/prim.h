@@ -12,7 +12,7 @@
 #include	"gfx\tpage.h"
 #endif
 
-#define	MAX_OT				(2048)
+#define	MAX_OT				(1024)
 #define	MAX_PRIMS			(1024)
 
 #define	USE_NTAGS			1
@@ -229,24 +229,19 @@ typedef	u32	sOT;
 extern sOT 	*OtPtr;
 extern u8 	*CurrPrim,*EndPrim;
 extern u8	*PrimListStart,*PrimListEnd;
-extern int	PrimFlipFlag;
+//extern int	PrimFlipFlag;
 
 /********************************************************************************************************/
-const u32 PrimSXY_ClipCode = (256 << 16) | 512;
+void 			PrimInit();
 
-/********************************************************************************************************/
-void 		PrimInit();
+void 			PrimDisplay();
+void 			PrimClip(RECT *r, u32 Depth);
+void 			PrimFullScreen(int Depth);
+inline	u8		*GetPrimPtr()			{return(CurrPrim);}
+inline	void	SetPrimPtr(u8 *Ptr)		{CurrPrim=Ptr;}
 
-void 		PrimDisplay();
-void 		PrimClip(RECT *r, u32 Depth);
-void 		PrimFullScreen(int Depth);
-inline	u8			*GetPrimPtr()			{return(CurrPrim);}
-inline	void		SetPrimPtr(u8 *Ptr)		{CurrPrim=Ptr;}
-
-void		SetPrimCheck();
-
-LINE_F2		*DrawLine(int _x0,int _y0,int _x1,int _y1,int _r,int _g,int _b,int _ot);
-LINE_G2		*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int _r2,int _g2,int _b2,int _ot);
+LINE_F2			*DrawLine(int _x0,int _y0,int _x1,int _y1,int _r,int _g,int _b,int _ot);
+LINE_G2			*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int _r2,int _g2,int _b2,int _ot);
 
 /********************************************************************************************************/
 /*** Inlines ********************************************************************************************/
@@ -258,40 +253,11 @@ inline	void 		AddPrimToList(void *Prim,u32 Depth)
 }
 
 /*-----------------------------------------------------------------------------------------------------*/
-inline	void		GetFrameUV(sFrameHdr *Fr, u8 *U,u8 *V)
-{
-			*U=Fr->U;
-			*V=Fr->V;
-}
-
-/*-----------------------------------------------------------------------------------------------------*/
-inline	void		GetFrameUVWH(sFrameHdr *Fr,u8 *U,u8 *V,u8 *W,u8 *H)
-{
-			*U=Fr->U;
-			*V=Fr->V;
-			*W=Fr->W;
-			*H=Fr->H;
-}
-
-/*-----------------------------------------------------------------------------------------------------*/
-inline	void		GetFrameWH(sFrameHdr *Fr,u8 *W,u8 *H)
-{
-			*W=Fr->W;
-			*H=Fr->H;
-}
-
-/*-----------------------------------------------------------------------------------------------------*/
-inline	int			GetFrameClut(sFrameHdr *Fr)
-{
-			return(Fr->Clut);
-}
-
-
-/*-----------------------------------------------------------------------------------------------------*/
-inline	int			GetFrameTPage(sFrameHdr *Fr)
-{
-			return(Fr->TPage);
-}
+inline	void	GetFrameUV(sFrameHdr *Fr, u8 *U,u8 *V)	{*U=Fr->U;*V=Fr->V;}
+inline	void	GetFrameUVWH(sFrameHdr *Fr,u8 *U,u8 *V,u8 *W,u8 *H)	{*U=Fr->U; *V=Fr->V; *W=Fr->W; *H=Fr->H; }
+inline	void	GetFrameWH(sFrameHdr *Fr,u8 *W,u8 *H)				{*W=Fr->W; *H=Fr->H;}
+inline	int		GetFrameClut(sFrameHdr *Fr)							{return(Fr->Clut);}
+inline	int		GetFrameTPage(sFrameHdr *Fr)						{return(Fr->TPage);}
 
 #endif
 
