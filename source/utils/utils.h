@@ -37,69 +37,35 @@ void	RotateBox(sBox *B,int W,int H,int _xScale,int _yScale,int _rot);
 /*****************************************************************************/
 /*** Loads of inlines ********************************************************/
 /*****************************************************************************/
-inline	void	SetIdent(MATRIX *Mtx)
+inline	void	SetIdentTrans(MATRIX *Mtx,s32 AX,s32 AY,s32 AZ,s32 TX,s32 TY,s32 TZ)
 {
-	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
-	Mtx->t[0]=0;		Mtx->t[1]=0;		Mtx->t[2]=0;
+	Mtx->m[0][0]=AX; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
+	Mtx->m[1][0]=0; 	Mtx->m[1][1]=AY;	Mtx->m[1][2]=0;
+	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=AZ;
+	Mtx->t[0]=TX;		Mtx->t[1]=TY;		Mtx->t[2]=TZ;
 }
 
+inline	void	SetIdentTrans(MATRIX *Mtx)												{SetIdentTrans(Mtx,	ONE,ONE,ONE,		0,0,0);}
+inline	void	SetIdentTrans(MATRIX *Mtx,VECTOR *T)									{SetIdentTrans(Mtx,	ONE,ONE,ONE,		T->vx,T->vy,T->vz);}
+inline	void	SetIdentTrans(MATRIX *Mtx,s32 TX,s32 TY,s32 TZ)							{SetIdentTrans(Mtx,	ONE,ONE,ONE,		TX,TY,TZ);}
+inline	void	SetIdentTrans(MATRIX *Mtx,VECTOR *S,VECTOR *T)							{SetIdentTrans(Mtx,	S->vx,S->vy,S->vz,	T->vx,T->vy,T->vz);}
+inline	void	SetIdentTrans(MATRIX *Mtx,VECTOR *S,s32 TX,s32 TY,s32 TZ)				{SetIdentTrans(Mtx,	S->vx,S->vy,S->vz,	TX,TY,TZ);}
+inline	void	SetIdentTrans(MATRIX *Mtx,s32 SX,s32 SY, s32 SZ,VECTOR *T)				{SetIdentTrans(Mtx,	SX,SY,SZ,			T->vx,T->vy,T->vz);}
+//inline	void	SetIdent(MATRIX *Mtx,s32 SX,s32 SY, s32 SZ,s32 TX,s32 TY,s32 TZ)	{SetIdentTrans(Mtx,	SX,SY,SZ,			TX,TY,TZ);}
 
 /*****************************************************************************/
-inline	void	SetIdentTrans(MATRIX *Mtx,VECTOR *T)
+inline	void	SetIdentNoTrans(MATRIX *Mtx,s32 AX,s32 AY,s32 AZ)
 {
-	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
-	Mtx->t[0]=T->vx;	Mtx->t[1]=T->vy;	Mtx->t[2]=T->vz;
+	Mtx->m[0][0]=AX; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
+	Mtx->m[1][0]=0; 	Mtx->m[1][1]=AY;	Mtx->m[1][2]=0;
+	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=AZ;
+//	Mtx->t[0]=TX;		Mtx->t[1]=TY;		Mtx->t[2]=TZ;
 }
 
-/*****************************************************************************/
-inline	void	SetIdentTrans(MATRIX *Mtx,s32 X,s32 Y,s32 Z)
-{
-	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
-	Mtx->t[0]=X;		Mtx->t[1]=Y;		Mtx->t[2]=Z;
-}
+inline	void	SetIdentNoTrans(MATRIX *Mtx)										{SetIdentNoTrans(Mtx,	ONE,ONE,ONE);}
+inline	void	SetIdentNoTrans(MATRIX *Mtx,VECTOR *S)								{SetIdentNoTrans(Mtx,	S->vx,S->vy,S->vz);}
+//inline	void	SetIdentNoTrans(MATRIX *Mtx,s32 SX,s32 SY, s32 SZ)				{SetIdentNoTrans(Mtx,	SX,SY,SZ);}
 
-/*****************************************************************************/
-inline	void	SetIdentNoTrans(MATRIX *Mtx)
-{
-	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
-//	Mtx->t[0]=0;		Mtx->t[1]=0;		Mtx->t[2]=0;
-}
-
-
-/*****************************************************************************/
-inline	void	SetIdentScale(MATRIX *Mtx,u32 Scale)
-{
-	Mtx->m[0][0]=Scale;	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=Scale;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=Scale;
-	Mtx->t[0]=0;		Mtx->t[1]=0;		Mtx->t[2]=0;
-}
-
-/*****************************************************************************/
-inline	void	SetIdentScaleNoTrans(MATRIX *Mtx,u32 Scale)
-{
-	Mtx->m[0][0]=Scale;	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 	Mtx->m[1][1]=Scale;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=Scale;
-//	Mtx->t[0]=0;		Mtx->t[1]=0;		Mtx->t[2]=0;
-}
-
-/*****************************************************************************/
-inline	void	SetIdentScaleNoTrans(MATRIX *Mtx,SVECTOR *Scale)
-{
-	Mtx->m[0][0]=Scale->vx;	Mtx->m[0][1]=0;			Mtx->m[0][2]=0;
-	Mtx->m[1][0]=0; 		Mtx->m[1][1]=Scale->vy;	Mtx->m[1][2]=0;
-	Mtx->m[2][0]=0; 		Mtx->m[2][1]=0;			Mtx->m[2][2]=Scale->vz;
-
-}
 
 /*****************************************************************************/
 inline	void InverseMatrix(MATRIX *m, MATRIX &im)	//assumes no scale, just transformation and rotation
