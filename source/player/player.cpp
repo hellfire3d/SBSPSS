@@ -659,7 +659,7 @@ void	CPlayer::think(int _frames)
 		}
 	}
 
-/*
+#if		!defined(__USER_CDBUILD__)
 if(PadGetDown(0)&PAD_L1)
 {
 	oldmode=m_currentMode;
@@ -670,7 +670,7 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 	newmode=oldmode;
 	oldmode=-1;
 }
-*/
+#endif
 
 #ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
@@ -769,6 +769,7 @@ if(newmode!=-1)
 			returntimeoutcount=0;
 		}
 // THISBIT
+
 		if(m_moveVelocity.vx==0)
 		{
 			m_cameraXScrollDir=0;
@@ -799,6 +800,7 @@ if(newmode!=-1)
 				}
 			}
 		}
+
 // THISBIT
 
 		// Stop the player vanishing off the edge of the telly..
