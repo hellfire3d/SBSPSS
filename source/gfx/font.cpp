@@ -221,6 +221,7 @@ void FontBank::setJustification( Justification _justification )
 void FontBank::setOt( u16 _ot )
 {
 	m_ot = _ot;
+	m_ot=0; // Sorry!!
 }
 
 

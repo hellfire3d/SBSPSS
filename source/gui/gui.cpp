@@ -434,6 +434,7 @@ void initGUIStuff()
   ---------------------------------------------------------------------- */
 void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 {
+	_ot=0;	// Sorry again
 	sFrameHdr	*vbam,*hbam,*corner;
 	int			totalSize,numSprites,step;
 	int			x1,y1,x2,y2;

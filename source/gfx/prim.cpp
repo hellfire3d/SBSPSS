@@ -9,7 +9,7 @@
 #include "system\vid.h"
 
 /*****************************************************************************/
-sOT 		*OtList[2],*OtPtr;
+sOT 		*OtList[2],*BaseOtPtr,*GUIOtPtr,*OtPtr;
 u32			DmaStart[2];
 u8			*PrimBuffer[2],*PrimListStart,*PrimListEnd;
 u8			*CurrPrim,*EndPrim;
@@ -19,21 +19,23 @@ int			PrimFlipFlag;
 void	PrimInit()
 {
 // Alloc Lists
-	OtList[0]=(sOT*)MemAlloc(MAX_OT*2*sizeof(sOT), "-Ot-");
-	OtList[1]=OtList[0]+MAX_OT;
+	OtList[0]=(sOT*)MemAlloc(OTLIST_SIZE*2, "-Ot-");
+	OtList[1]=OtList[0]+MAX_OT_ALL;
 	PrimBuffer[0]=(u8*)MemAlloc(PRIMPOOL_SIZE*2, "Prim");
 	PrimBuffer[1]=PrimBuffer[0]+(PRIMPOOL_SIZE);
 
 	PrimFlipFlag=0;
-	OtPtr=(sOT*)OtList[PrimFlipFlag];
+	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
+	GUIOtPtr=BaseOtPtr;
+	OtPtr=GUIOtPtr+MAX_OT_GUI;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
 	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
 
 	PrimListStart=PrimBuffer[0];
 	PrimListEnd=PrimListStart+(PRIMPOOL_SIZE*2);
 
-	InitOTagR(OtList[0],MAX_OT);
-	InitOTagR(OtList[1],MAX_OT);
+	InitOTagR(OtList[0],MAX_OT_ALL);
+	InitOTagR(OtList[1],MAX_OT_ALL);
 
 }
 
@@ -42,19 +44,21 @@ void	PrimInit()
 void	PrimDisplay()
 {
 	CAnimTex::AnimateTex();
-	UnlinkOTagR(OtPtr, MAX_OT, &DmaStart[PrimFlipFlag]);
+	UnlinkOTagR(BaseOtPtr, MAX_OT_ALL, &DmaStart[PrimFlipFlag]);
 
 #ifdef	USE_NTAGS
 	DrawOTag((u32*)&DmaStart[PrimFlipFlag]);
 #else
-	DrawOTag(OtPtr+(MAX_OT-1));
+	DrawOTag(BaseOtPtr+(MAX_OT_ALL-1));
 #endif
 
 	PrimFlipFlag^=1;
-	OtPtr=(sOT*)OtList[PrimFlipFlag];
+	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
+	GUIOtPtr=BaseOtPtr;
+	OtPtr=GUIOtPtr+MAX_OT_GUI;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
 	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
-	ResetOTagR(OtPtr,MAX_OT);
+	ResetOTagR(BaseOtPtr,MAX_OT_ALL);
 }
 
 /*** Clipping ****************************************************************/

@@ -166,9 +166,9 @@ void	MainLoop()
 		while(DrawSync(1));
 
 // Render States		
+		CFader::render();
 		GameState::render();
 		CBubicleFactory::render();
-		CFader::render();
 
 #ifdef __USER_paul__
 		s_paulScene.render();

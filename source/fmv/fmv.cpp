@@ -183,7 +183,7 @@ static	int	HasInit=0;
 // Cos it uses prim pool, best check its big enough
 	CdReadyCallback(0);	// clear it in case XA is being naughty
 	ASSERT(PRIMPOOL_SIZE>FMVWidth*(FMVHeight+1));
-	InitOTagR(OtPtr,MAX_OT);	// Ensure no prims need the Prim Pool
+	InitOTagR(BaseOtPtr,MAX_OT_ALL);	// Ensure no prims need the Prim Pool
 		
 SYSTEM_DBGMSG("[FMV] Playing fmv %d ( fid:%d )",fmvNumber,s_fmvData[fmvNumber].m_filename);
 	startSector=CFileIO::GetFilePos(s_fmvData[fmvNumber].m_filename);

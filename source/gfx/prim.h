@@ -15,7 +15,9 @@
 #include	"gfx\primplus.h"
 #endif
 
+#define	MAX_OT_GUI			(0)
 #define	MAX_OT				(16)
+#define	MAX_OT_ALL			(MAX_OT+MAX_OT_GUI)
 #define	MAX_PRIMS			((1024*2)+256)
 
 //#define	USE_NTAGS			1
@@ -175,8 +177,8 @@ typedef	u32	sOT;
 #define	InitOTagR(Ot, Count)					ClearOTagR(Ot,Count);
 #define	ResetOTag(Ot, Count)					InitOTag(Ot,Count);
 #define	ResetOTagR(Ot, Count)					InitOTagR(Ot,Count);
-#define	UnlinkOTag(OtPtr, MAX_OT, Dma)			;
-#define	UnlinkOTagR(OtPtr, MAX_OT, Dma)			;
+#define	UnlinkOTag(OtPtr, MAX_OT_ALL, Dma)			;
+#define	UnlinkOTagR(OtPtr, MAX_OT_ALL, Dma)			;
 
 
 #endif
@@ -302,10 +304,10 @@ typedef	u32	sOT;
 /********************************************************************************************************/
 #define	MAX_PRIM_SIZE		(sizeof(POLY_FT4))
 #define	PRIMPOOL_SIZE		(MAX_PRIMS*MAX_PRIM_SIZE)
-#define	OTLIST_SIZE			(MAX_OT*sizeof(sOT))
+#define	OTLIST_SIZE			(MAX_OT_ALL*sizeof(sOT))
 
 /********************************************************************************************************/
-extern sOT 	*OtPtr;
+extern sOT 	*BaseOtPtr,*GUIOtPtr,*OtPtr;
 extern u8 	*CurrPrim,*EndPrim;
 extern u8	*PrimListStart,*PrimListEnd;
 //extern int	PrimFlipFlag;
@@ -326,12 +328,18 @@ LINE_G2			*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int
 /********************************************************************************************************/
 /*** Inlines ********************************************************************************************/
 /********************************************************************************************************/
+inline	void 		AddGUIPrimToList(void *Prim,u32 Depth)
+{
+			ASSERT(Depth<MAX_OT_GUI);
+			addPrim(GUIOtPtr+Depth,(u32*)Prim);
+}
+
+/*-----------------------------------------------------------------------------------------------------*/
 inline	void 		AddPrimToList(void *Prim,u32 Depth)
 {
 			ASSERT(Depth<MAX_OT);
 			addPrim(OtPtr+Depth,(u32*)Prim);
 }
-
 /*-----------------------------------------------------------------------------------------------------*/
 inline	void	GetFrameUV(sFrameHdr *Fr, u8 *U,u8 *V)	{*U=Fr->U;*V=Fr->V;}
 inline	void	GetFrameUVWH(sFrameHdr *Fr,u8 *U,u8 *V,u8 *W,u8 *H)	{*U=Fr->U; *V=Fr->V; *W=Fr->W; *H=Fr->H; }
