@@ -41,7 +41,7 @@ void	PrimInit()
 /*****************************************************************************/
 void	PrimDisplay()
 {
-//	CAnimTex::AnimateTex();
+	CAnimTex::AnimateTex();
 	UnlinkOTagR(OtPtr, MAX_OT, &DmaStart[PrimFlipFlag]);
 
 #ifdef	USE_NTAGS

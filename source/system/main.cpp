@@ -157,9 +157,9 @@ void	MainLoop()
 		s_paulScene.render();
 #endif
 
-		PrimDisplay();
 		VSync(0);
 		VidSwapDraw();
+		PrimDisplay();
 
 		PadUpdate();
 

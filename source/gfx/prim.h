@@ -15,8 +15,8 @@
 #include	"gfx\primplus.h"
 #endif
 
-#define	MAX_OT				(1024)
-#define	MAX_PRIMS			(1024*2)
+#define	MAX_OT				(1024/2)
+#define	MAX_PRIMS			(1024*1)
 
 #define	USE_NTAGS			1
 
