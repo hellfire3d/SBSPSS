@@ -72,97 +72,17 @@
 
 int CFrontEndStart::s_levelValues[]=
 {
-	 0,
-	 1,
-	 2,
-	 3,
-	 4,
-	 5,
-	 6,
-	 7,
-	 8,
-	 9,
-	10,
-	11,
-	12,
-	13,
-	14,
-	15,
-	16,
-	17,
-	18,
-	19,
-	20,
-	21,
-	22,
-	23,
-	24,
-	25,
-	26,
-	27,
-	28,
-	29,
-	30,
-	31,
-	32,
-	33,
-	34,
-	35,
-	36,
-	37,
-	38,
-	39,
-	40,
-	41,
-	42,
-	43,
-	44,
-	45,
-	46,
-	47,
+	0,48,96,144,192,240,
 	-1,
 };
 CGUITextReadout::TextReadoutData CFrontEndStart::s_levelReadoutText[]=
 {
-	{ 0,STR__DEBUG__LEVEL_SELECT_C3L301},
-	{ 1,STR__DEBUG__LEVEL_SELECT_C3L302},
-	{ 2,STR__DEBUG__LEVEL_SELECT_C3L303},
-	{ 3,STR__DEBUG__LEVEL_SELECT_C3L304},
-	{ 4,STR__DEBUG__LEVEL_SELECT_C3L305},
-	{ 5,STR__DEBUG__LEVEL_SELECT_C3L306},
-
-	{ 6,STR__DEBUG__LEVEL_SELECT_C3L401},
-	{ 7,STR__DEBUG__LEVEL_SELECT_C3L402},
-	{ 8,STR__DEBUG__LEVEL_SELECT_C3L403},
-	{ 9,STR__DEBUG__LEVEL_SELECT_C3L404},
-	{10,STR__DEBUG__LEVEL_SELECT_C3L404X},
-	{11,STR__DEBUG__LEVEL_SELECT_C3L405},
-	{12,STR__DEBUG__LEVEL_SELECT_C3L406},
-
-	{13,STR__DEBUG__LEVEL_SELECT_C4L101},
-	{14,STR__DEBUG__LEVEL_SELECT_C4L102},
-	{15,STR__DEBUG__LEVEL_SELECT_C4L103},
-	{16,STR__DEBUG__LEVEL_SELECT_C4L104},
-
-	{17,STR__DEBUG__LEVEL_SELECT_C4L201},
-	{18,STR__DEBUG__LEVEL_SELECT_C4L202},
-	{19,STR__DEBUG__LEVEL_SELECT_C4L203},
-	{20,STR__DEBUG__LEVEL_SELECT_C4L204},
-
-	{21,STR__DEBUG__LEVEL_SELECT_C4L301},
-	{22,STR__DEBUG__LEVEL_SELECT_C4L302},
-	{23,STR__DEBUG__LEVEL_SELECT_C4L303},
-	{24,STR__DEBUG__LEVEL_SELECT_C4L304},
-	{25,STR__DEBUG__LEVEL_SELECT_C4L305},
-	{26,STR__DEBUG__LEVEL_SELECT_C4L306},
-
-	{27,STR__DEBUG__LEVEL_SELECT_C4L401},
-	{28,STR__DEBUG__LEVEL_SELECT_C4L402},
-	{29,STR__DEBUG__LEVEL_SELECT_C4L403},
-	{30,STR__DEBUG__LEVEL_SELECT_C4L404},
-	{31,STR__DEBUG__LEVEL_SELECT_C4L405},
-	{32,STR__DEBUG__LEVEL_SELECT_C4L406},
-	{33,STR__DEBUG__LEVEL_SELECT_C4L407},
+	{ 0,	STR__DEBUG__LEVEL_SELECT_C1 },
+	{ 48,	STR__DEBUG__LEVEL_SELECT_C2 },
+	{ 96,	STR__DEBUG__LEVEL_SELECT_C3 },
+	{ 144,	STR__DEBUG__LEVEL_SELECT_C4 },
+	{ 192,	STR__DEBUG__LEVEL_SELECT_C5 },
+	{ 240,	STR__DEBUG__LEVEL_SELECT_C6 },
 };
 
 extern int s_globalLevelSelectThing;
@@ -178,15 +98,15 @@ void CFrontEndStart::init()
 {
 	m_guiFrame=new ("optionsframe") CGUIControlFrame();
 	m_guiFrame->init(NULL);
-	m_guiFrame->setObjectXYWH(50,40,412,100);
+	m_guiFrame->setObjectXYWH((512-352)/2,50,352,96);
 
 	CGUIFactory::createCycleButtonFrame(m_guiFrame,
-										50,10,312,40,
+										10,10,332,40,
 										STR__DEBUG__LEVEL_SELECT,
 										&m_level,s_levelValues,s_levelReadoutText);
 
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										50,50,312,40,
+										10,50,332,40,
 										STR__DEBUG__LEVEL_SELECT_START,
 										&m_startGame,true);
 }
