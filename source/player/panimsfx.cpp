@@ -101,9 +101,6 @@ static const CPlayer::AnimFrameSfx s_chopSfx[]=
 };
 static const int	s_chopCount=sizeof(s_chopSfx)/sizeof(CPlayer::AnimFrameSfx);
 
-// ANIM_PLAYER_ANIM_KNOCKBACK
-// ANIM_PLAYER_ANIM_KNOCKFORWARD
-
 // ANIM_PLAYER_ANIM_RUN
 static const CPlayer::AnimFrameSfx s_runSfx[]=
 {
@@ -124,9 +121,6 @@ static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSf
 
 // ANIM_PLAYER_ANIM_SOAKUP
 // ANIM_PLAYER_ANIM_TALK01
-// ANIM_PLAYER_ANIM_TALK02
-// ANIM_PLAYER_ANIM_TALK03
-// ANIM_PLAYER_ANIM_TALK04
 // ANIM_PLAYER_ANIM_TEETERBACK
 // ANIM_PLAYER_ANIM_TEETERFRONT
 
@@ -171,16 +165,11 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLEWIGGLEARM
 	{	s_jumpEndCount,			s_jumpEndSfx			},		// ANIM_PLAYER_ANIM_JUMPEND
 	{	s_chopCount,			s_chopSfx				},		// ANIM_PLAYER_ANIM_KARATE
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_KNOCKBACK
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_KNOCKFORWARD
 	{	s_runCount,				s_runSfx				},		// ANIM_PLAYER_ANIM_RUN
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_RUNSTART
 	{	s_runStopCount,			s_runStopSfx			},		// ANIM_PLAYER_ANIM_RUNSTOP
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_SOAKUP
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK01
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK02
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK03
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK04
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERBACK
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERFRONT
 	{	s_idleWindCount,		s_idleWindSfx			},		// ANIM_PLAYER_ANIM_IDLEWIND
