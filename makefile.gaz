@@ -161,7 +161,9 @@ hazard_src :=		hazard \
 					hrckshrd \
 					hinert \
 					hcswitch \
-					hbrock
+					hbrock \
+					hlog \
+					hsrdfish
 
 fx_src :=			fx \
 					fxbaseanim \

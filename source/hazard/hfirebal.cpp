@@ -68,6 +68,16 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 	m_width = maxX - minX;
 	m_npcPath.getPathYExtents( &minY, &maxY );
 	m_height = maxY - minY;
+
+	if ( ThisHazard->PointCount > 1 )
+	{
+		newXPos = (u16) *PntList;
+
+		if ( ( ( newXPos << 4 ) + 8 ) < startPos.vx )
+		{
+			m_width = -m_width;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

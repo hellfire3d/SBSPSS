@@ -1017,6 +1017,14 @@ SOURCE=..\..\..\source\hazard\hinert.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hlog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hlog.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hmasher.cpp
 # End Source File
 # Begin Source File
@@ -1094,6 +1102,14 @@ SOURCE=..\..\..\source\hazard\hspikes.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\hazard\hspikes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsrdfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsrdfish.h
 # End Source File
 # Begin Source File
 

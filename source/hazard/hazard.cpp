@@ -123,6 +123,14 @@
 #include "hazard\hbrock.h"
 #endif
 
+#ifndef __HAZARD_HSRDFISH_H__
+#include "hazard\hsrdfish.h"
+#endif
+
+#ifndef __HAZARD_HLOG_H__
+#include "hazard\hlog.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -151,6 +159,8 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_INERT_HAZARD,
 	NPC_CONVEYOR_SWITCH_HAZARD,
 	NPC_BOUNCING_ROCK_HAZARD,
+	NPC_SWORDFISH_HAZARD,
+	NPC_LOG_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,6 +308,18 @@ CNpcHazard *hazard;
 		case NPC_BOUNCING_ROCK_HAZARD:
 		{
 			hazard = new ("bouncing rock hazard") CNpcBouncingRockHazard;
+			break;
+		}
+
+		case NPC_SWORDFISH_HAZARD:
+		{
+			hazard = new ("swordfish hazard") CNpcSwordfishHazard;
+			break;
+		}
+
+		case NPC_LOG_HAZARD:
+		{
+			hazard = new ("log hazard") CNpcLogHazard;
 			break;
 		}
 
