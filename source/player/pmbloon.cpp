@@ -116,12 +116,21 @@ int balloonsize=350;
 void	CPlayerModeBalloon::render(DVECTOR *_pos)
 {
 	DVECTOR	pos;
+	int		frame;
 
 	CPlayerModeBase::render();
 
 	pos.vx=_pos->vx+balloonx;
 	pos.vy=_pos->vy+balloony;
-	CGameScene::getSpriteBank()->printFT4Scaled(FRM__BALLOON,pos.vx,pos.vy,0,0,5,balloonsize);
+	if(m_timer<BALLOON_TIMEOUT-BALLOON_POP_FRAMES)
+	{
+		frame=FRM__BALLOON;
+	}
+	else
+	{
+		frame=FRM__BALLOONBURST;
+	}
+	CGameScene::getSpriteBank()->printFT4Scaled(frame,pos.vx,pos.vy,0,0,5,balloonsize);
 }
 
 /*----------------------------------------------------------------------

@@ -51,6 +51,7 @@ private:
 	enum
 	{
 		BALLOON_TIMEOUT=5*60,
+		BALLOON_POP_FRAMES=4,
 	};
 	int				m_timer;
 
