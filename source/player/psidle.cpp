@@ -208,9 +208,9 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBOOTS,		-1,								4	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								10	},
-	{	-1,								ANIM_PLAYER_ANIM_WAKEUP,		-1,								1	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								1	},
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
@@ -233,7 +233,7 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_coralBlowerIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								1	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								1	},
 };
 static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)

@@ -1028,6 +1028,10 @@ SOURCE=..\..\..\out\USA\include\ingamefx.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\Player_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\trans.h
 # End Source File
 # Begin Source File

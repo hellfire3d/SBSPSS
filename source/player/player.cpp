@@ -195,7 +195,7 @@ if(newmode!=-1)
 				else if(m_moveVel.vx)
 				{
 					setState(STATE_RUN);
-					setAnimNo(ANIM_PLAYER_ANIM_RUNJUMPEND);
+//					setAnimNo(ANIM_PLAYER_ANIM_RUNJUMPEND);
 				}
 				else
 				{

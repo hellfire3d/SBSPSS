@@ -67,7 +67,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounce::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCE);
+	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCESTART);
 }
 
 
@@ -98,7 +98,7 @@ void CPlayerStateButtBounceLand::enter(CPlayer *_player)
 
 	pos=getPlayerPos(_player);
 	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
-	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCE);
+	setAnimNo(_player,ANIM_PLAYER_ANIM_BUTTBOUNCEEND);
 }
 
 
