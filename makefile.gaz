@@ -167,7 +167,6 @@ player_src :=		demoplay \
 					psrun \
 					pstates \
 					modelist \
-					pmodes \
 					pmballoon \
 					pmboots
 

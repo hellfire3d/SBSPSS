@@ -776,10 +776,6 @@ SOURCE=..\..\..\source\player\pmboots.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\player\pmodes.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\player\pmodes.h
 # End Source File
 # End Group
