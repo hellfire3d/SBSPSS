@@ -80,7 +80,8 @@ enemy_src :=		npc \
 					nsdart \
 					ndustdev \
 					npbug \
-					nprojjf
+					nprojjf \
+					nmjback
 
 friend_src :=		friend \
 					fdata \

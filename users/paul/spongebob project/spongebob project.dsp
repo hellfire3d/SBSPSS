@@ -229,6 +229,14 @@ SOURCE=..\..\..\source\enemy\nmine.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nmjback.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nmjback.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File

@@ -185,6 +185,10 @@
 #include "enemy\nshell.h"
 #endif
 
+#ifndef	__ENEMY_NMJBACK_H__
+#include "enemy\nmjback.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
@@ -357,7 +361,17 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
 		{
 			printf("NPC_MOTHER_JELLYFISH\n");
-			enemy = new ("mother jellyfish") CNpcMotherJellyfishEnemy;
+
+			if ( CLevel::getCurrentChapterLevel() == 4 )
+			{
+				enemy = new ("mother jellyfish background") CNpcMotherJellyfishBackground;
+				enemyType = NPC_MOTHER_JELLYFISH_BACKGROUND;
+			}
+			else
+			{
+				enemy = new ("mother jellyfish") CNpcMotherJellyfishEnemy;
+			}
+
 			break;
 		}
 

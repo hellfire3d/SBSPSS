@@ -22,8 +22,11 @@ class CNpcBoatHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual void		render();
 protected:
 	void				processMovement( int _frames );
+
+	u8					m_reversed;
 };
 
 #endif

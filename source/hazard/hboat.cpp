@@ -19,6 +19,14 @@
 #include "level\layercollision.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBoatHazard::init()
@@ -72,6 +80,15 @@ void CNpcBoatHazard::processMovement( int _frames )
 
 		distX = distX / abs( distX );
 
+		if ( distX > 0 )
+		{
+			m_reversed = false;
+		}
+		else
+		{
+			m_reversed = true;
+		}
+
 		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
@@ -102,4 +119,50 @@ void CNpcBoatHazard::processMovement( int _frames )
 
 	Pos.vx += moveX;
 	Pos.vy += moveY;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBoatHazard::render()
+{
+	if ( m_isActive )
+	{
+		CHazardThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		CRECT collisionRect = getCollisionArea();
+		collisionRect.x1 -= Pos.vx;
+		collisionRect.x2 -= Pos.vx;
+		collisionRect.y1 -= Pos.vy;
+		collisionRect.y2 -= Pos.vy;
+
+		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		{
+			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
+			{
+				VECTOR flip;
+
+				if ( m_reversed )
+				{
+					flip.vx = ONE;
+				}
+				else
+				{
+					flip.vx = -ONE;
+				}
+
+				flip.vy = ONE;
+				flip.vz = ONE;
+
+				m_modelGfx->Render( renderPos, NULL, NULL, &flip );
+				//m_actorGfx->Render(renderPos,0,0,0);
+			}
+		}
+	}
 }
