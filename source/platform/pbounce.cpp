@@ -28,6 +28,8 @@
 #endif
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcBouncePlatform::postInit()
 {
 	CNpcPlatform::postInit();
@@ -44,12 +46,9 @@ void CNpcBouncePlatform::think( int _frames )
 	{
 		CPlayer *player = GameScene.getPlayer();
 
-		if ( m_vertVelocity > 20 && m_vertScale < -100 )
-		{
-			player->springPlayerUp();
-		}
+		player->springPlayerUp();
 
-		s16 vertForce = -30 * _frames;
+		s16 vertForce = -180 * _frames;
 
 		m_vertVelocity += vertForce;
 
