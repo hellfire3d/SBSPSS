@@ -60,8 +60,10 @@ void	CPlayerModeFly::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __USER_paul__
+#if	defined(__USER_paul__) 
 int playerflyspeed=5;
+#elif	defined(__USER_daveo__)
+int playerflyspeed=10;
 #else
 static const int playerflyspeed=5;
 #endif

@@ -1408,7 +1408,11 @@ void	CPlayer::inSoakUpState()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#if	defined(__USER_daveo__)
+int invincibleSponge=true;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
+#else
 int invincibleSponge=false;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
+#endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {
 	if(m_invincibleFrameCount==0&&			// Don't take damage if still recovering from the last hit

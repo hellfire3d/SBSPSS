@@ -58,7 +58,7 @@ public:
 		enum
 		{
 			TPAGE_W			=256,
-			TPAGE_H			=256-4,
+			TPAGE_H			=256-2,	// (allow for 2 lines of palettes)
 
 			CACHE_X			=512,
 			CACHE_Y			=256,
@@ -71,8 +71,8 @@ public:
 			CACHE_H			=1,
 
 */
-			CACHE_PALX		=CACHE_X+64,
-			CACHE_PALY		=511,
+			CACHE_PALX		=CACHE_X,
+			CACHE_PALY		=510,
 			CACHE_PALW		=64,
 			CACHE_PALH		=1,
 

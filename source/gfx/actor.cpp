@@ -299,22 +299,24 @@ RECT	R={CACHE_X,CACHE_Y,TPAGE_W*CACHE_W,TPAGE_H*CACHE_H};
 void	CActorCache::LoadPalette(sActorPool *Actor)
 {
 		if (!Actor->ActorGfx->Clut)
-		{ // Cheap bodge at mo
+		{
 			RECT	R;
-			int		X=CurrentPalette%(((CACHE_W*TPAGE_W)/CACHE_PALW));
-			int		Y=CurrentPalette/(((CACHE_W*TPAGE_W)/CACHE_PALW)-1);
+			int	PalNo;
 
 			if (Actor->Filename==ACTORS_SPONGEBOB_SBK)
 			{
-				R.x=512;
-				R.y=511;
+				PalNo=0;
 			}
 			else
 			{
-				R.x=CACHE_PALX+(CurrentPalette*CACHE_PALW);
-				R.y=CACHE_PALY-Y;
+				PalNo=CurrentPalette+1;
 			}
 
+			int		X=PalNo%CACHE_W;
+			int		Y=PalNo/CACHE_W;
+
+			R.x=CACHE_PALX+(X*CACHE_PALW);
+			R.y=CACHE_PALY-Y;
 			R.w=CACHE_PALW;
 			R.h=CACHE_PALH;
 			DrawSync(0);
@@ -754,7 +756,7 @@ void	CModelGfx::SetModel(int Type)
 /*****************************************************************************/
 int	PXOfs=-16;
 int	PYOfs=-8;
-VECTOR	_Flip={0,0,0};
+
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {
 #define	BLOCK_MULT	16
@@ -770,17 +772,12 @@ int				TriCount=Model->TriCount;
 sTri			*TList=&ModelTriList[Model->TriStart];
 				MATRIX	Mtx;
 
-			Scale=&_Flip;
 			if (Scale)
 				SetIdentNoTrans(&Mtx,Scale);
 			else
 				SetIdentNoTrans(&Mtx);
 
-			if (Angle)
-			{
-				if (Angle) RotMatrix(Angle,&Mtx);
-//				if (Scale) ScaleMatrix(&Mtx,Scale);
-			}
+			if (Angle) RotMatrix(Angle,&Mtx);
 
 			MapXY.vx=Pos.vx>>4;
 			MapXY.vy=Pos.vy>>4;
