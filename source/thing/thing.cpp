@@ -1185,6 +1185,23 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 }
 
 /****************************************************************************************/
+bool	CThing::isOnScreen(DVECTOR Pos)
+{
+// Check Is Onscreen
+sBBox			&ScrBBox=CThingManager::getRenderBBox();
+DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+		Pos.vx-=CamPos.vx;
+		Pos.vy-=CamPos.vy;
+
+		if (Pos.vx<ScrBBox.XMin) return(false);
+		if (Pos.vx>ScrBBox.XMax) return(false);
+		if (Pos.vy<ScrBBox.YMin) return(false);
+		if (Pos.vy>ScrBBox.YMax) return(false);
+		return(true);
+}
+
+/****************************************************************************************/
 void	CThing::calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos)
 {
 DVECTOR	const	&CamPos=CLevel::getCameraPos();

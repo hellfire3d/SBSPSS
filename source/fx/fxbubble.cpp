@@ -23,6 +23,7 @@ void	CFXBubble::init(DVECTOR const &_Pos)
 		Velocity.vy=-(getRndRange(4)+1);
 		CurrentScaleX=CurrentScaleY=getRndRange(ONE/2)+(ONE/2);
 		XIdx=getRnd()&15;
+		if (!isOnScreen(_Pos)) setToShutdown();
 }
 
 /*****************************************************************************/

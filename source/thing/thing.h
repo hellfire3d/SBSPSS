@@ -151,7 +151,8 @@ virtual	void			render();
 		u8				isSetToShutdown()										{return( m_isShuttingDown);}
 virtual int				dontKillDuringLevelRespawn()							{return false;}
 		void			calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos);
-
+		bool			isOnScreen(DVECTOR Pos);
+		
 // Linkage
 		void			addChild(CThing *Child);
 		void			removeChild(CThing *Child);
