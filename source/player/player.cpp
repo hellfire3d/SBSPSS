@@ -588,6 +588,17 @@ if(newmode!=-1)
 	{
 		// Think
 		updatePadInput();
+
+		// Trying to converate?
+		if(getPadInputDown()&PI_UP)
+		{
+			m_allowConversation=true;
+		}
+		else
+		{
+			m_allowConversation=false;
+		}
+
 		m_currentPlayerModeClass->think();
 
 		// Powerups
@@ -782,17 +793,6 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 	}
 	
-	// Trying to converate?
-	if(getPadInputDown()&PI_DOWN)
-	{
-		m_allowConversation=true;
-	}
-	else
-	{
-		m_allowConversation=false;
-	}
-
-	
 	CPlayerThing::think(_frames);
 }
 
@@ -848,16 +848,13 @@ for(int i=0;i<NUM_LASTPOS;i++)
 #endif
 
 	// Render
-	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
+	DVECTOR	sbPos=
 	{
-		DVECTOR	sbPos=
-		{
-			Pos.vx-m_cameraPos.vx,
-			Pos.vy-m_cameraPos.vy,
-		};
-		renderSb(&sbPos,m_animNo,m_animFrame>>sbanimspeed);
-		m_currentPlayerModeClass->render(&sbPos);
-	}
+		Pos.vx-m_cameraPos.vx,
+		Pos.vy-m_cameraPos.vy,
+	};
+	renderSb(&sbPos,m_animNo,m_animFrame>>sbanimspeed);
+	m_currentPlayerModeClass->render(&sbPos);
 
 
 #ifdef _STATE_DEBUG_
@@ -1224,7 +1221,11 @@ void CPlayer::respawn()
   ---------------------------------------------------------------------- */
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
-	int addon;
+	POLY_FT4	*ft4;
+	int			flash;
+	int			addon;
+
+	flash=m_invincibleFrameCount&2==2;
 
 	// Render an addon?
 	addon=s_addonNumbers[m_currentMode];
