@@ -46,8 +46,7 @@
 #define ID_ACTIVEBRUSH_RIGHT            32791
 #define ID_MAP_SETSIZE                  32792
 #define ID_2D_3D_TOGGLE                 32794
-#define ID_EXPORT_AGB                   32795
-#define ID_EXPORT_PSX                   32796
+#define ID_EXPORT                       32795
 #define ID_ZOOM_IN                      32797
 #define ID_ZOOM_OUT                     32798
 #define ID_INDICATOR_CURSORXY           59142

@@ -36,6 +36,9 @@ int		Count,i;
 			case 'o':
 				OutStr = CheckFileString(String);
 				break;
+			case 'i':
+				IncludeFile = CheckFileString(String);
+				break;
 			case 'd':
 				DebugOn =true;
 				break;
@@ -102,7 +105,6 @@ GFName	File=In;
 		Name=File.File();
 // Create Out Filename from inFilename and outdir
 		OutFile=OutDir+File.File();
-//		OutFile+=File.File(); 
 		
 		TPageBase=TPBase; 
 		TPageWidth=TPW ;
@@ -124,10 +126,6 @@ void    CMkActor3d::BuildBoneOut(sBone &OutBone,CNode const &InNode,int ParentBo
 		OutBone.BoneSize.vx =round(InNode.Pos.x*Scale);
 		OutBone.BoneSize.vy =round(InNode.Pos.y*Scale);
 		OutBone.BoneSize.vz =round(InNode.Pos.z*Scale);
-		OutBone.BoneAng.vx=round(InNode.Ang.x*4096);
-		OutBone.BoneAng.vy=round(InNode.Ang.y*4096);
-		OutBone.BoneAng.vz=round(InNode.Ang.z*4096);
-		OutBone.BoneAng.vw=round(InNode.Ang.w*4096);
 		OutBone.Parent=ParentBoneIdx;
 		OutBone.VtxCount=0;
 		OutBone.TriCount=0;
@@ -140,7 +138,7 @@ void	CMkActor3d::ProcessSkel(int Idx,int ParentIdx)
 CNode					&ThisNode=Scene.GetNode(Idx);
 CNode					&ParentNode=Scene.GetNode(ThisNode.ParentIdx);
 vector<sGinTri> const	&NodeTriList =	ThisNode.GetTris();
-vector<Vector3> const	&NodeVtxList =	ThisNode.GetRelPts();
+vector<Vector3> const	&NodeVtxList =	ThisNode.GetPts();
 vector<int>	const		&NodeMatList =	ThisNode.GetTriMaterial();
 vector<sUVTri> const	&NodeUVList =	ThisNode.GetUVTris();
 vector<GString> const	&SceneTexList=	Scene.GetTexList();
@@ -150,8 +148,6 @@ int						TriCount=NodeTriList.size();
 int						ThisIdx=Skel.size();
 sGinSkel				&ParentBone=Skel[ParentIdx];
 vector<Vector3>			VtxList;
-
-
 
 		if (!TriCount)
 		{ // Its a Bone!!
@@ -165,41 +161,23 @@ int			WeightCount=ThisNode.Weights.size();
 				for (int i=0; i<WeightCount; i++)
 				{
 					sGinWeight	&ThisWeight=ThisNode.Weights[i];
-					printf("%i %f %f %f\t\n",ThisWeight.VertNo,NodeVtxList[ThisWeight.VertNo].x,NodeVtxList[ThisWeight.VertNo].y,NodeVtxList[ThisWeight.VertNo].z);
-					ThisBone.FaceList.AddVtx((Vector3) NodeVtxList[ThisWeight.VertNo]);
+//					printf("%i %f %f %f\t\n",ThisWeight.VertNo,NodeVtxList[ThisWeight.VertNo].x,NodeVtxList[ThisWeight.VertNo].y,NodeVtxList[ThisWeight.VertNo].z);
+//					ThisBone.FaceList.AddVtx((Vector3) NodeVtxList[ThisWeight.VertNo]);
 				}
-			printf("%i\n",ThisBone.FaceList.GetVtxCount());
 			}
-
 			Skel.push_back(ThisBone);
-
 		}
 		else
 		{ // Model, attach to parent bone
 // build TX Vtx List
+
 			int	ListSize=NodeVtxList.size();
 			VtxList.resize(ListSize);
-Matrix4x4	Mtx=ThisNode.Mtx;
 Matrix4x4	PMtx=ParentNode.Mtx;
 			PMtx.Invert();
 			for (int i=0; i<ListSize; i++)
 			{
-				Vector3	Vtx=NodeVtxList[i];
-				Vtx=Mtx*Vtx;
-				Vtx=PMtx*Vtx;
-				VtxList[i]=Vtx;
-			}
-
-int			WeightCount=ParentNode.Weights.size();
-			if (WeightCount) 
-			{
-				printf("%s %i\n",ParentNode.Name,WeightCount);
-				for (int i=0; i<WeightCount; i++)
-				{
-					sGinWeight	&ThisWeight=ParentNode.Weights[i];
-					printf("%i %f %f %f\t\n",ThisWeight.VertNo,VtxList[ThisWeight.VertNo].x,VtxList[ThisWeight.VertNo].y,VtxList[ThisWeight.VertNo].z);
-				}
-//			printf("%i\n",ThisBone.FaceList.GetVtxCount());
+				VtxList[i]=PMtx*NodeVtxList[i];
 			}
 
 			for (int T=0; T<TriCount; T++)
@@ -233,7 +211,6 @@ int		ListSize=Skel.size();
 				for (int F=0; F<FaceListSize; F++)
 				{
 					FaceList.AddFace(ThisBone.FaceList[F]);
-//					FaceList.ProcessVtx(ThisBone.FaceList[F]);
 				}
 			ThisBone.Bone.VtxCount=FaceList.GetVtxCount()-VtxStart;
 			}
@@ -250,8 +227,6 @@ int		ListSize=Skel.size();
 			sBone	&ThisBone=Skel[i].Bone;
 
 			fwrite(&ThisBone, sizeof(sBone), 1, File);
-//			printf("%i %i %i\n",i,ThisBone.TriStart,ThisBone.TriCount);
-//			printf("%i %i\n",i,ThisBone.VtxCount);
 		}
 }
 
@@ -266,6 +241,7 @@ void	CMkActor3d::Process()
 		FaceList.SetTexBasePath(InPath);
 		FaceList.SetTexOut(OutFile+".Tex",TPageBase,TPageWidth,TPageHeight);
 		FaceList.SetTexDebugOut(OutFile+".Lbm");
+		if (!IncludeFile.Empty()) FaceList.SetTexInclude(IncludeFile);
 
 int		ListSize=ExtraTex.size();
 		for (int i=0; i<ListSize; i++)

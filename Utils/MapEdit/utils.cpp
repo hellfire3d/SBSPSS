@@ -3,11 +3,16 @@
 /*************/
 
 #include	"stdafx.h"
+#include	"MapEdit.h"
+#include	"MapEditDoc.h"
 
 #include	<Vector3.h>
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	"GLEnabledView.h"
+
+#include	<Misc.hpp>
+#include	<GFName.hpp>
 
 #include	"Utils.H"
 
@@ -247,5 +252,29 @@ char	Name[_MAX_FNAME];
 
 		_splitpath(InName,Drive,Path,Name,0);
 		sprintf(OutName,"%s%s%s.%s",Drive,Path,Name,Ext);
+}
+
+/**************************************************************************************/
+void	MakeFullFilename(const char* In,GString &Out)
+{
+GFName	FName=theApp.GetCurrent()->GetPathName();
+GString	Path;
+
+		Path=FName.Drive();
+		Path+=FName.Dir();
+		Path.Append('\\');
+
+		Out=Path;
+		Out+=In;
+
+
+}
+
+/**************************************************************************************/
+void	MakePathRel2App(const char* In,char *Out)
+{
+GString	RootPath=theApp.GetCurrent()->GetPathName();
+
+		GFName::makerelative(RootPath,In,Out);
 }
 

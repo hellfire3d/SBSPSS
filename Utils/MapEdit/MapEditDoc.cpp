@@ -21,8 +21,7 @@ IMPLEMENT_DYNCREATE(CMapEditDoc, CDocument)
 BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	//{{AFX_MSG_MAP(CMapEditDoc)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_CURSORXY, OnStatusCursorXY)
-	ON_COMMAND(ID_EXPORT_AGB, OnExportAgb)
-	ON_COMMAND(ID_EXPORT_PSX, OnExportPsx)
+	ON_COMMAND(ID_EXPORT, OnExport)
 	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
 	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
 	//}}AFX_MSG_MAP
@@ -237,32 +236,17 @@ void	CMapEditDoc::DeleteLayer(int Layer)
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-void CMapEditDoc::OnExportAgb() 
+void CMapEditDoc::OnExport() 
 {
-char		BASED_CODE Filter[]= "AGB Data Type (*.c)|*.c|All Files (*.*)|*.*||";
-CFileDialog	Dlg(FALSE,"*.c",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
+char		BASED_CODE Filter[]= "Export Data Type (*.MEX)|*.MEX|All Files (*.*)|*.*||";
+CFileDialog	Dlg(FALSE,"*.MEX",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
 
 		if (Dlg.DoModal()!=IDOK) return;
 
 char	Filename[256];
 		sprintf(Filename,"%s",Dlg.GetPathName());
 		
-
-		Core.ExportAGB(Filename);
-}
-
-/*********************************************************************************/
-void CMapEditDoc::OnExportPsx() 
-{
-char		BASED_CODE Filter[]= "PSX Data Type (*.PME)|*.Pme|All Files (*.*)|*.*||";
-CFileDialog	Dlg(FALSE,"*.pme",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,Filter);
-
-		if (Dlg.DoModal()!=IDOK) return;
-
-char	Filename[256];
-		sprintf(Filename,"%s",Dlg.GetPathName());
-		
-		Core.ExportPSX(Filename);
+		Core.Export(Filename);
 }
 
 /*********************************************************************************/

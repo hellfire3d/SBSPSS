@@ -14,9 +14,8 @@
 /*****************************************************************************/
 struct	sExpFileHdr
 {
-		int		Version;
 		int		TileCount;
-		int		TileW,TileH;
+//		int		TileW,TileH;
 		int		TileOfs;
 		int		TriCount;
 		int		TriOfs;
@@ -35,6 +34,7 @@ struct	sExpTile			//	2d	3d
 		int		TexId;		//	 n	-1
 		int		Flags;
 		int		W,H;
+		u8		*RGB;		// Used in MkLevel
 };
 
 /*****************************************************************************/

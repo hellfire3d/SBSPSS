@@ -43,7 +43,7 @@ public:
 		int		GetTexIdx(sTex &Tex)						{return(TexList.Find(Tex));}
 		int		GetTexIdx(char *Filename,int Flags);
 
-		int		ProcessTexture(char *Path,int Flags,sRGBData *RGBData=0);
+		int		ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData=0);
 		void	Purge();
 
 		bool	LoadBMP(char *Filename,sRGBData &RGBData);

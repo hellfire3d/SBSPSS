@@ -24,7 +24,7 @@ sTex	Tex;
 
 /*****************************************************************************/
 // Checks loaded files for dups, assumes all passed RGB is unique
-int		CTexCache::ProcessTexture(char *Filename,int Flags,sRGBData *RGBData)
+int		CTexCache::ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData)
 {
 int		ListSize=TexList.size();
 

@@ -64,7 +64,7 @@ public:
 		void		UpdateGUI(CCore *Core,BOOL IsTileView);
 
 		BOOL		IsTileValid(int Set,int Tile);
-		BOOL		IsTileValidGB(int Set,int Tile);
+//		BOOL		IsTileValidGB(int Set,int Tile);
 
 		void		SetCollision(bool f);
 		CTileSet	&GetSet(int Set)					{return(TileSet[Set]);}
@@ -109,11 +109,14 @@ public:
 		void	Load2d(CCore *Core);
 		void	Load3d(CCore *Core);
 
-		const char	*GetDrive()			{return(Filename.Drive());}
-		const char	*GetPath()			{return(Filename.Dir());}
-		const char	*GetName()			{return(Filename.File());}
-		const char	*GetExt()			{return(Filename.Ext());}
+//		const char	*GetDrive()			{return(Filename.Drive());}
+//		const char	*GetPath()			{return(Filename.Dir());}
+//		const char	*GetName()			{return(Filename.File());}
+//		const char	*GetExt()			{return(Filename.Ext());}
+//		const char	*GetFilename()		{return(Filename.FullName());}
+
 		const char	*GetFilename()		{return(Filename.FullName());}
+		const char	*GetName()			{return(Filename.File());}
 
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
@@ -124,7 +127,7 @@ public:
 		void	RenderGrid(Vector3 &CamPos);
 		int		GetTileBrowserWidth()		{return(TileBrowserWidth);}
 		BOOL	IsTileValid(int No);
-		BOOL	IsTileValidGB(int No);
+//		BOOL	IsTileValidGB(int No);
 
 
 private:
@@ -132,6 +135,7 @@ private:
 		CPoint	GetTilePos(int ID);
 
 		GFName				Filename;
+		
 		int					SetNumber;
 		CList<CTile>		Tile;
 		BOOL				Loaded;

@@ -6,42 +6,51 @@
 #define	__EXPORT_HEADER__
 
 #include	"stdafx.h"
-#include	<Vector>
-#include	<GFName.hpp>
 #include	"mapedit.h"
+#include	<Vector>
+//#include	"GinTex.h"
+//#include	"Tile.h"
 
-#include	"Quantize.h"
-#include	<list.h>
-
+#include	<List.h>
+#include	"ExportHdr.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 class	CCore;
 class	CMap;
-
 class	CTile;
 
 class	CExport
 {
 public:
-		CExport(char *Filename);
+		CExport(char *Filename,int LayerCount);
 		~CExport();
 
-virtual		void	ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map)=0;
-virtual		void	ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map)=0;
+		void	ExportLayerTile(CCore *Core,char *LayerName,int SubType,CMap &Map);
+		void	ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map);
 
-virtual		void	ExportTiles(CCore *Core)=0;
+		void	ExportTiles(CCore *Core);
+		void	ExportTexList(CCore *Core);
 
 protected:
-		void		BuildColTable(CTile &ThisTile);
+		void	ExportTile(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
+		void	ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
+		void	ExportTile2d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
 
-		GFName				Filename;
+		sExpFileHdr			FileHdr;
+		
+		int					LayerCount;
+		CList<int>			LayerOfs;
+
+		CList<sTriFace>		TriList;
+		CList<sExpTex>		TexList;
+
+		CList<sExpMapElem>	UsedTileList;
+
+//		GString				Filename;
 		FILE				*File;
-		int					Count;
-
-		std::vector<int>	ColTable;
-
+//		int					Count;
 
 };
 

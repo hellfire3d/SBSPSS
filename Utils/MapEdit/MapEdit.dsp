@@ -135,31 +135,7 @@ SOURCE=.\Export.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ExportAGB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ExportAGB.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ExportPSX.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ExportPSX.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ExportPSXHdr.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Quantize.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Quantize.h
+SOURCE=.\ExportHdr.h
 # End Source File
 # End Group
 # Begin Source File

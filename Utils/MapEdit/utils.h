@@ -31,6 +31,7 @@ typedef u32						U32;
 //typedef u64						U64;
 
 /**************************************************************************************/
+class	GString;
 void	DbgMsg(const char * pszFmt,...);
 
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
@@ -47,5 +48,8 @@ void	SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 void	BGR2RGB(int W,int H,u8 *Data);
 
 void	SetFileExt(char *InName,char *OutName,char *Ext);
+
+void	MakeFullFilename(const char *RelName,GString &Out);
+void	MakePathRel2App(const char* In,char *Out);
 		
 #endif

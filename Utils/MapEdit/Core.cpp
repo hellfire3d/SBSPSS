@@ -23,8 +23,7 @@
 #include	"LayerCollision.h"
 #include	"utils.h"
 
-#include	"ExportAGB.h"
-#include	"ExportPSX.h"
+#include	"Export.h"
 
 
 /*****************************************************************************/
@@ -53,7 +52,7 @@ int	ListSize=Layer.size();
 /*****************************************************************************/
 void	CCore::Init()
 {
-			UpdateParamBar();
+//			UpdateParamBar();
 //			UpdateAll(NULL);
 }
 
@@ -802,33 +801,15 @@ Vector3	ThisCam=Cam;
 }
 
 /*****************************************************************************/
-void	CCore::ExportAGB(char *Filename)
-{
-int		LayerCount=Layer.size();
-char	ExportName[256];
-		
-		SetFileExt(Filename,ExportName,"c");
-
-CExportAGB	Exp(ExportName);
-
-		for (int i=0;i<LayerCount;i++)
-		{
-			Layer[i]->Export(this,Exp);
-		}
-		Exp.ExportTiles(this);
-		Exp.ExportPalette();
-}
-
-/*****************************************************************************/
-void	CCore::ExportPSX(char *Filename)
+void	CCore::Export(char *Filename)
 {
 
 int		LayerCount=Layer.size();
 char	ExportName[256];
 		
-		SetFileExt(Filename,ExportName,"PME");
+		SetFileExt(Filename,ExportName,"MEX");
 
-CExportPSX	Exp(ExportName,LayerCount);
+CExport	Exp(ExportName,LayerCount);
 
 		for (int i=0;i<LayerCount;i++)
 		{

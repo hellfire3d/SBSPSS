@@ -33,8 +33,7 @@ public:
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);
-		void					ExportAGB(char *Filename);
-		void					ExportPSX(char *Filename);
+		void					Export(char *Filename);
 
 
 // Control

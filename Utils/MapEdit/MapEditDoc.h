@@ -79,8 +79,7 @@ protected:
 protected:
 	//{{AFX_MSG(CMapEditDoc)
 	afx_msg void OnStatusCursorXY(CCmdUI *pCmdUI);
-	afx_msg void OnExportAgb();
-	afx_msg void OnExportPsx();
+	afx_msg void OnExport();
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
 	//}}AFX_MSG

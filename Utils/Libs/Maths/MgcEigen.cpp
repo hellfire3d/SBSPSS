@@ -68,10 +68,10 @@ void MgcEigen::Tridiagonal3 (real** m_aafMat, real* m_afDiag,
     if ( fM02 != 0.0 )
     {
         real fLength = (real)sqrt(fM01*fM01+fM02*fM02);
-        real fInvLength = 1.0/fLength;
+        real fInvLength = 1.0f/fLength;
         fM01 *= fInvLength;
         fM02 *= fInvLength;
-        real fQ = 2.0*fM01*fM12+fM02*(fM22-fM11);
+        real fQ = 2.0f*fM01*fM12+fM02*(fM22-fM11);
         m_afDiag[1] = fM11+fM02*fQ;
         m_afDiag[2] = fM22-fM02*fQ;
         m_afSubd[0] = fLength;
@@ -128,7 +128,7 @@ void MgcEigen::Tridiagonal4 (real** m_aafMat, real* m_afDiag,
 
         // build column Q1
         fLength = (real)sqrt(fM01*fM01+fM02*fM02+fM03*fM03);
-        fInvLength = 1.0/fLength;
+        fInvLength = 1.0f/fLength;
         fQ11 = fM01*fInvLength;
         fQ21 = fM02*fInvLength;
         fQ31 = fM03*fInvLength;
@@ -149,7 +149,7 @@ void MgcEigen::Tridiagonal4 (real** m_aafMat, real* m_afDiag,
         fLength = (real)sqrt(fQ13*fQ13+fQ23*fQ23+fQ33*fQ33);
         if ( fLength > 0.0 )
         {
-            fInvLength = 1.0/fLength;
+            fInvLength = 1.0f/fLength;
             fQ13 *= fInvLength;
             fQ23 *= fInvLength;
             fQ33 *= fInvLength;
@@ -179,15 +179,15 @@ void MgcEigen::Tridiagonal4 (real** m_aafMat, real* m_afDiag,
             fLength = fQ21*fQ21+fQ31*fQ31;
             if ( fLength > 0.0 )
             {
-                fInvLength = 1.0/fLength;
-                real fTmp = fQ11-1.0;
+                fInvLength = 1.0f/fLength;
+                real fTmp = fQ11-1.0f;
                 fQ12 = -fQ21;
-                fQ22 = 1.0+fTmp*fQ21*fQ21*fInvLength;
+                fQ22 = 1.0f+fTmp*fQ21*fQ21*fInvLength;
                 fQ32 = fTmp*fQ21*fQ31*fInvLength;
 
                 fQ13 = -fQ31;
                 fQ23 = fQ32;
-                fQ33 = 1.0+fTmp*fQ31*fQ31*fInvLength;
+                fQ33 = 1.0f+fTmp*fQ31*fQ31*fInvLength;
 
                 fV0 = fQ12*fM11+fQ22*fM12+fQ32*fM13;
                 fV1 = fQ12*fM12+fQ22*fM22+fQ32*fM23;
@@ -227,10 +227,10 @@ void MgcEigen::Tridiagonal4 (real** m_aafMat, real* m_afDiag,
         if ( fM13 != 0.0 )
         {
             fLength = (real)sqrt(fM12*fM12+fM13*fM13);
-            fInvLength = 1.0/fLength;
+            fInvLength = 1.0f/fLength;
             fM12 *= fInvLength;
             fM13 *= fInvLength;
-            real fQ = 2.0*fM12*fM23+fM13*(fM33-fM22);
+            real fQ = 2.0f*fM12*fM23+fM13*(fM33-fM22);
 
             m_afDiag[2] = fM22+fM13*fQ;
             m_afDiag[3] = fM33-fM13*fQ;
@@ -271,14 +271,14 @@ void MgcEigen::TridiagonalN (int iSize, real** m_aafMat,
         if ( i3 > 0 )
         {
             for (i2 = 0; i2 <= i3; i2++)
-                fScale += abs(m_aafMat[i0][i2]);
+                fScale += (real)fabs(m_aafMat[i0][i2]);
             if ( fScale == 0 )
             {
                 m_afSubd[i0] = m_aafMat[i0][i3];
             }
             else
             {
-                float fInvScale = 1.0/fScale;
+                float fInvScale = 1.0f/fScale;
                 for (i2 = 0; i2 <= i3; i2++)
                 {
                     m_aafMat[i0][i2] *= fInvScale;
@@ -292,7 +292,7 @@ void MgcEigen::TridiagonalN (int iSize, real** m_aafMat,
                 fH -= fF*fG;
                 m_aafMat[i0][i3] = fF-fG;
                 fF = 0.0;
-                float fInvH = 1.0/fH;
+                float fInvH = 1.0f/fH;
                 for (i1 = 0; i1 <= i3; i1++)
                 {
                     m_aafMat[i1][i0] = m_aafMat[i0][i1]*fInvH;
@@ -304,7 +304,7 @@ void MgcEigen::TridiagonalN (int iSize, real** m_aafMat,
                     m_afSubd[i1] = fG*fInvH;
                     fF += m_afSubd[i1]*m_aafMat[i0][i1];
                 }
-                real fHalfFdivH = 0.5*fF*fInvH;
+                real fHalfFdivH = 0.5f*fF*fInvH;
                 for (i1 = 0; i1 <= i3; i1++)
                 {
                     fF = m_aafMat[i0][i1];
@@ -365,15 +365,14 @@ bool MgcEigen::QLAlgorithm (int iSize, real* m_afDiag, real* m_afSubd,
             int i2;
             for (i2 = i0; i2 <= iSize-2; i2++)
             {
-                real fTmp =
-                    abs(m_afDiag[i2])+abs(m_afDiag[i2+1]);
-                if ( abs(m_afSubd[i2]) + fTmp == fTmp )
+                real fTmp = (real) (fabs(m_afDiag[i2])+fabs(m_afDiag[i2+1]));
+                if ( fabs(m_afSubd[i2]) + fTmp == fTmp )
                     break;
             }
             if ( i2 == i0 )
                 break;
 
-            real fG = (m_afDiag[i0+1]-m_afDiag[i0])/(2.0*m_afSubd[i0]);
+            real fG = (m_afDiag[i0+1]-m_afDiag[i0])/(2.0f*m_afSubd[i0]);
             real fR = (real)sqrt(fG*fG+1.0);
             if ( fG < 0.0 )
                 fG = m_afDiag[i2]-m_afDiag[i0]+m_afSubd[i0]/(fG-fR);
@@ -384,12 +383,12 @@ bool MgcEigen::QLAlgorithm (int iSize, real* m_afDiag, real* m_afSubd,
             {
                 real fF = fSin*m_afSubd[i3];
                 real fB = fCos*m_afSubd[i3];
-                if ( abs(fF) >= abs(fG) )
+                if ( fabs(fF) >= fabs(fG) )
                 {
                     fCos = fG/fF;
                     fR = (real)sqrt(fCos*fCos+1.0);
                     m_afSubd[i3+1] = fF*fR;
-                    fSin = 1.0/fR;
+                    fSin = 1.0f/fR;
                     fCos *= fSin;
                 }
                 else
@@ -397,11 +396,11 @@ bool MgcEigen::QLAlgorithm (int iSize, real* m_afDiag, real* m_afSubd,
                     fSin = fF/fG;
                     fR = (real)sqrt(fSin*fSin+1.0);
                     m_afSubd[i3+1] = fG*fR;
-                    fCos = 1.0/fR;
+                    fCos = 1.0f/fR;
                     fSin *= fCos;
                 }
                 fG = m_afDiag[i3+1]-fP;
-                fR = (m_afDiag[i3]-fG)*fSin+2.0*fB*fCos;
+                fR = (m_afDiag[i3]-fG)*fSin+2.0f*fB*fCos;
                 fP = fSin*fR;
                 m_afDiag[i3+1] = fG+fP;
                 fG = fCos*fR-fB;

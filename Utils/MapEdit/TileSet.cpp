@@ -8,7 +8,7 @@
 #include	<gl\glu.h>
 #include	"GLEnabledView.h"
 #include	<Vector>
-//#include	<direct.h>
+
 #include	<GFName.hpp>
 
 #include	"Core.h"
@@ -23,7 +23,7 @@
 #include	"LayerTileGui.h"
 
 // Reserve slot 0 for collision :o)
-char		*ColFName="Collision.bmp";
+GString		ColFName="Collision.bmp";
 
 /*****************************************************************************/
 /*** TileBank ****************************************************************/
@@ -124,7 +124,7 @@ GString	FilePath;
 // New Style rel storage
 		for (int i=0;i<ListSize;i++)
 		{
-			char	c=1,FullName[256+64];
+			char	c=1;//,FullName[256+64];
 			GString	RelName;
 			int		Len=0;
 			while (c)
@@ -132,14 +132,14 @@ GString	FilePath;
 				File->Read(&c,1);
 				RelName.Append(c);
 			}
-			RelName.Upper();
+//			RelName.Upper();
 
 			{ // Dodgy arse artist fix
-				RelName=FixName(RelName);
+//				RelName=FixName(RelName);
 			}
 		
-			RootPath.makeabsolute(FilePath,RelName,FullName);
-			AddTileSet(FullName);
+//			RootPath.makeabsolute(FilePath,RelName,FullName);
+			AddTileSet(RelName);
 		}
 }
 
@@ -398,13 +398,14 @@ BOOL	CTileBank::IsTileValid(int Set,int Tile)
 }
 
 /*****************************************************************************/
+/*
 BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
 {
  		if (Set<0 || Tile<0) return(FALSE);
 
 		return(TileSet[Set].IsTileValidGB(Tile));
 }
-
+*/
 /*****************************************************************************/
 /*****************************************************************************/
 /*** TileSet *****************************************************************/
@@ -412,7 +413,10 @@ BOOL	CTileBank::IsTileValidGB(int Set,int Tile)
 /*****************************************************************************/
 CTileSet::CTileSet(const char *_Filename,int Idx)
 {
-		Filename=_Filename;
+		if (_Filename)
+		{
+			Filename=_Filename;
+		}
 		
 		Loaded=FALSE;
 		SetNumber=Idx;
@@ -450,8 +454,22 @@ GString	Ext=Filename.Ext();
 void	CTileSet::Load2d(CCore *Core)
 {
 CTexCache	&TexCache=Core->GetTexCache();
+GString		FullFilename;
+GString		ColTest;
+		ColTest=Filename.File();
+		ColTest.Append('.');
+		ColTest+=Filename.Ext();
 
-int		TexID=TexCache.ProcessTexture((char*)Filename.FullName(),0);
+		if (ColTest==ColFName)
+		{// Collision thing (sigh!)
+			FullFilename=Filename.FullName();
+		}
+		else
+		{
+			MakeFullFilename(Filename.FullName(),FullFilename);
+		}
+
+int		TexID=TexCache.ProcessTexture(FullFilename,0);
 sTex	&ThisTex=TexCache.GetTex(TexID);
 
 int		Width=ThisTex.TexWidth/16;
@@ -475,8 +493,11 @@ int		Height=ThisTex.TexHeight/16;
 void	CTileSet::Load3d(CCore *Core)
 {
 CScene	Scene;
+GString	FullFilename;
 
-		Scene.Load(Filename.FullName());
+		MakeFullFilename(Filename.FullName(),FullFilename);
+
+		Scene.Load(FullFilename);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -524,6 +545,7 @@ BOOL	CTileSet::IsTileValid(int No)
 }
 
 /*****************************************************************************/
+/*
 BOOL	CTileSet::IsTileValidGB(int No)		
 {
 //		ASSERT(No<Tile.size());
@@ -531,7 +553,7 @@ BOOL	CTileSet::IsTileValidGB(int No)
 
 		return(Tile[No].IsValidGB());
 }
-
+*/
 /*****************************************************************************/
 void	CTileSet::Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,BOOL Render3d)
 {
