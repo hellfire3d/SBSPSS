@@ -30,6 +30,10 @@
 #include "friend\fgary.h"
 #endif
 
+#ifndef __PICKUPS_PICKUP_H__
+#include "pickups\pickup.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -60,6 +64,19 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CGaryStopTrigger::init()
+{
+	CTrigger::init();
+
+	m_dropped = false;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CGaryStopTrigger::collidedWith(CThing *_thisThing)
 {
 	switch( _thisThing->getThingType() )
@@ -71,6 +88,19 @@ void	CGaryStopTrigger::collidedWith(CThing *_thisThing)
 				CNpcGaryFriend *gary = (CNpcGaryFriend *) _thisThing;
 
 				gary->stop();
+
+				if ( !m_dropped )
+				{
+					if ( GameScene.getChapterNumber() != 6 )
+					{
+						DVECTOR newPos = Pos;
+						newPos.vy -= 8;
+
+						createPickup(PICKUP__LIFE,&newPos);
+					}
+
+					m_dropped = true;
+				}
 			}
 
 			break;

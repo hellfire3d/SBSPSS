@@ -36,8 +36,12 @@
 
 class CGaryStopTrigger : public CTrigger
 {
+public:
+	void				init();
 protected:
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
+
+	u8					m_dropped;
 };
 
 /*----------------------------------------------------------------------
