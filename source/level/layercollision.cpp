@@ -76,7 +76,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
 
-	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
 	if(colHeight)
 	{
 		// Inside a collision block.. find the nearest ground above this point
@@ -89,7 +89,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return -_maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround<-_maxHeight)distanceFromGround=-_maxHeight;
@@ -107,7 +107,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return _maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround>_maxHeight)distanceFromGround=_maxHeight;
@@ -116,6 +116,62 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	return distanceFromGround;
 }
 
+/*
+int			CLayerCollision::getHeightFromGround(int X,int Y,int _MaxHeight)
+{
+int		MapX,MapY,XOfs,YOfs;
+int		Dist,MaxIt;
+u8		*MapPtr,ColTile;
+
+int		MapOfs,DistOfs;
+int		MaxHeight=128;
+
+		MapX=X>>4;
+		MapY=Y>>4;
+		XOfs=X&0x0f;
+		YOfs=16-(Y&0x0f);
+		Dist=0;
+
+
+		MapPtr=&Map[MapX+(MapY*MapWidth)];
+		MaxIt=MaxHeight>>4;
+		ColTile=*MapPtr;
+
+		MaxIt=8;
+
+		if(ColTile)
+		{ // In collision, search up
+			MapPtr-=MapWidth;
+			while (*MapPtr!=0 && MaxIt--)
+			{
+				ColTile=*MapPtr;
+				MapPtr-=MapWidth;
+				Dist-=16;
+			}
+		}
+		else
+		{ // No collision, search down
+			MapPtr+=MapWidth;
+			while (*MapPtr==0 && MaxIt--)
+			{
+				ColTile=*MapPtr;
+				MapPtr+=MapWidth;
+				Dist+=16;
+			}
+		}
+			
+//		ColTile=*MapPtr;
+		
+		if (ColTile)
+		{
+			int	Tile=ColTile & COLLISION_TYPE_MASK;
+			Dist-=s_collisionTable[(Tile*16)+XOfs];
+		}
+
+		return Dist;
+}
+
+*/
 
 /*****************************************************************************/
 /*
@@ -132,7 +188,7 @@ int			CLayerCollision::getHeightFromCeiling(int _x,int _y,int _maxHeight)
 	yFraction=16-(_y&0x0f);
 	distanceFromCeiling=0;
 
-	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
 	if(yFraction<colHeight)
 	{
 		// Inside a collision block and under the floor
@@ -152,7 +208,7 @@ int			CLayerCollision::getHeightFromCeiling(int _x,int _y,int _maxHeight)
 			{
 				return _maxHeight;
 			}
-			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
 		}
 		distanceFromCeiling+=colHeight-16;
 	}
@@ -213,7 +269,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 			for(x=-xoff;x<(33*16)-xoff;x+=16)
 			{
 				colour=&s_typeColours[((*coll)&COLLISION_TYPE_MASK)>>COLLISION_TYPE_FLAG_SHIFT];
-				switch((*coll)&COLLISION_MASK)
+				switch((*coll)&COLLISION_TILE_MASK)
 				{
 					case 0:
 						break;
