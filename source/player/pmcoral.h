@@ -55,7 +55,11 @@ private:
 		BLOWER_STATE__AIMING,
 	} BlowerState;
 
+	DVECTOR						*getSuckUpPoint();
+
 	BlowerState					m_blowerState;
+	class CNpcEnemy				*m_enemy;	
+
 };
 
 

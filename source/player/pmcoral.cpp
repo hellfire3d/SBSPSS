@@ -50,6 +50,14 @@
 #include "player\psspring.h"
 #endif
 
+#ifndef __ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -136,6 +144,9 @@ void	CPlayerModeCoralBlower::enter()
 	Returns:
   ---------------------------------------------------------------------- */
 int cbstate=0;
+DVECTOR	blowerCatchPos={-110,-20};
+DVECTOR blowerCatchSize={180,150};
+DVECTOR blowerSuckUpPoint={-40,-20};
 void	CPlayerModeCoralBlower::think()
 {
 	CPlayerModeBase::think();
@@ -146,6 +157,7 @@ void	CPlayerModeCoralBlower::think()
 			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__SUCKING;
+				m_enemy=NULL;
 			}
 			break;
 		case BLOWER_STATE__SUCKING:
@@ -153,14 +165,70 @@ void	CPlayerModeCoralBlower::think()
 			{
 				m_blowerState=BLOWER_STATE__EMPTY;
 			}
+			else if(m_enemy==NULL)
+			{
+				// Search for an enemy..
+				DVECTOR	playerPos;
+				int		playerFacing;
+				CRECT	suckRect;
+				CThing	*thing;
+
+				playerPos=m_player->getPos();
+				playerFacing=m_player->getFacing();
+
+				suckRect.x1=playerPos.vx+(blowerCatchPos.vx*playerFacing)-(blowerCatchSize.vx/2);
+				suckRect.y1=playerPos.vy+blowerCatchPos.vy-(blowerCatchSize.vy/2);
+				suckRect.x2=suckRect.x1+blowerCatchSize.vx;
+				suckRect.y2=suckRect.y1+blowerCatchSize.vy;
+
+				#ifdef __USER_paul__
+				{
+				CRECT	area=suckRect;
+				DVECTOR	ofs=CLevel::getCameraPos();
+				area.x1-=ofs.vx;
+				area.y1-=ofs.vy;
+				area.x2-=ofs.vx;
+				area.y2-=ofs.vy;
+				DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
+				DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
+				DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
+				DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
+				}
+				#endif
+
+
+				thing=CThingManager::checkCollisionAreaAgainstThings(&suckRect,CThing::TYPE_ENEMY,false);
+				while(thing)
+				{
+					if(((CNpcEnemy*)thing)->canBeSuckedUp())
+					{
+						m_enemy=(CNpcEnemy*)thing;
+						thing=NULL;
+					}
+					else
+					{
+						thing=CThingManager::checkCollisionAreaAgainstThings(&suckRect,CThing::TYPE_ENEMY,true);
+					}
+				}
+			}
+			else
+			{
+				// Got an enemy.. suck him up
+				if(m_enemy->suckUp(getSuckUpPoint(),1))
+				{
+					m_blowerState=BLOWER_STATE__FULL;
+				}
+			}
 			break;
 		case BLOWER_STATE__FULL:
+			m_enemy->suckUp(getSuckUpPoint(),1);
 			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__AIMING;
 			}
 			break;
 		case BLOWER_STATE__AIMING:
+			m_enemy->suckUp(getSuckUpPoint(),1);
 			if(getState()!=STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__FULL;
@@ -169,6 +237,7 @@ void	CPlayerModeCoralBlower::think()
 			{
 				// Fire!
 				m_blowerState=BLOWER_STATE__EMPTY;
+				m_enemy->fireAsProjectile(1024+(1024*m_player->getFacing()));
 			}
 			break;
 	}
@@ -220,6 +289,24 @@ CPlayerState	**CPlayerModeCoralBlower::getStateTable()
 {
 	return s_stateTable;
 }
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR			*CPlayerModeCoralBlower::getSuckUpPoint()
+{
+	static DVECTOR	suckUpPoint;
+
+	suckUpPoint=getPlayerPos();
+	suckUpPoint.vx+=blowerSuckUpPoint.vx*m_player->getFacing();
+	suckUpPoint.vy+=blowerSuckUpPoint.vy;
+
+	return &suckUpPoint;
+}
+
 
 /*===========================================================================
 end */
