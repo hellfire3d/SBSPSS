@@ -187,6 +187,8 @@ system_src :=		main \
 
 thing_src :=		thing
 
+triggers_src :=		tlevexit
+
 utils_src :=		utils \
 					sincos
 
