@@ -18,4 +18,12 @@
 
 void CNpc::processGaryMovement( int _frames )
 {
+	if ( isCollisionWithGround() )
+	{
+		Pos.vx += _frames;
+	}
+	else
+	{
+		Pos.vy += _frames;
+	}
 }

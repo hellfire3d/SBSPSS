@@ -98,3 +98,9 @@ void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 	*distX = playerPos.vx - this->Pos.vx;
 	*distY = playerPos.vy - this->Pos.vy;
 }
+
+bool CNpc::isCollisionWithGround()
+{
+	ASSERT(m_layerCollision);
+	return m_layerCollision->Get(Pos.vx>>4,Pos.vy>>4);
+}

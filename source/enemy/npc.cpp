@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_SKELETAL_FISH;
+	m_type = NPC_GARY;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;

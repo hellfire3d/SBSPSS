@@ -266,6 +266,7 @@ protected:
 	void				processCollision();
 	void				processTimer( int _frames );
 	void				detectCollisionWithPlayer();
+	bool				isCollisionWithGround();
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
