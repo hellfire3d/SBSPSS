@@ -31,6 +31,7 @@ void CNpcPlayerBubblePlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_pop = false;
+	m_scale = ONE;
 
 	setCollisionSize( 30, 30 );
 	setCollisionCentreOffset( 0, -15 );
@@ -59,6 +60,10 @@ void CNpcPlayerBubblePlatform::processLifetime( int _frames )
 
 			m_lifetime = GameState::getOneSecondInFrames() >> 2;
 		}
+		else if ( m_lifetime <= ( GameState::getOneSecondInFrames() >> 1 ) )
+		{
+			m_scale = ONE + ( ( 256 * rsin( ( m_lifetime << 14 ) / ( GameState::getOneSecondInFrames() >> 1 ) ) ) >> 12 );
+		}
 	}
 }
 
@@ -83,9 +88,8 @@ void CNpcPlayerBubblePlatform::render()
 			else
 			{
 				// Evil hard coded Offsets
-				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printFT4( FRM__BUBBLE_1, renderPos.vx-16, renderPos.vy-32, 0, 0, 10 );
+				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BUBBLE_1, renderPos.vx, renderPos.vy - 16, m_scale, ONE, 0, 10 );
 				setRGB0( SprFrame, 128, 128, 255 );
-//				m_modelGfx->Render(renderPos);
 			}
 		}
 	}

@@ -31,6 +31,8 @@ void CNpcCollapsingBubblePlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_pop = false;
+	m_scale = ONE;
+	m_startCollapse = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,9 +56,8 @@ void CNpcCollapsingBubblePlatform::render()
 			else
 			{
 				// Evil hard coded Offsets
-				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printFT4( FRM__BUBBLE_1, renderPos.vx-16, renderPos.vy-32, 0, 0, 10 );
+				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BUBBLE_1, renderPos.vx, renderPos.vy - 16, m_scale, ONE, 0, 10 );
 				setRGB0( SprFrame, 128, 128, 255 );
-//				m_modelGfx->Render(renderPos);
 			}
 		}
 	}
@@ -106,11 +107,13 @@ void CNpcCollapsingBubblePlatform::processLifetime( int _frames )
 					m_timer = 3 * GameState::getOneSecondInFrames();
 					m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
 					m_pop = false;
+					m_scale = ONE;
+					m_startCollapse = false;
 				}
 			}
 			else
 			{
-				if ( m_contact )
+				if ( m_contact || m_startCollapse )
 				{
 					m_lifetime -= _frames;
 
@@ -118,6 +121,12 @@ void CNpcCollapsingBubblePlatform::processLifetime( int _frames )
 					{
 						m_lifetime = GameState::getOneSecondInFrames() >> 2;
 						m_pop = true;
+					}
+					else if ( m_lifetime <= ( GameState::getOneSecondInFrames() >> 1 ) )
+					{
+						m_startCollapse = true;
+
+						m_scale = ONE + ( ( 256 * rsin( ( m_lifetime << 14 ) / ( GameState::getOneSecondInFrames() >> 1 ) ) ) >> 12 );
 					}
 				}
 			}

@@ -27,6 +27,8 @@ protected:
 	virtual void		processLifetime( int _frames );
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	u8					m_pop;
+	u8					m_startCollapse;
+	s16					m_scale;
 	POLY_FT4			*SprFrame;
 };
 

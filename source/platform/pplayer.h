@@ -29,6 +29,7 @@ protected:
 	virtual void		processLifetime( int _frames );
 
 	u8					m_pop;
+	s16					m_scale;
 };
 
 #endif
