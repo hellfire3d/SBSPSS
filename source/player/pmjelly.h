@@ -51,6 +51,8 @@ private:
 		TIMEOUT_FOR_BIG_SHOT=60*4,
 		AMMO_AMOUNT_FOR_BIG_SHOT=3,
 
+		POWER_UP_SHOT_ANGLE=128,
+
 		// Gun in the UI flashes when powered up..
 		FLASHSPEED=25,
 		FLASHSCALE=75,

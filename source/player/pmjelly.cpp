@@ -376,7 +376,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 		// Powered up, big shot
 		int	i;
 
-		fireHeading=1024+(1024*playerFacing)-256;
+		fireHeading=1024+(1024*playerFacing)-POWER_UP_SHOT_ANGLE;
 		for(i=0;i<3;i++)
 		{
 			projectile=CPlayerProjectile::Create();
@@ -387,7 +387,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 							(2*GameState::getOneSecondInFrames()));
 
 			projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
-			fireHeading+=256;
+			fireHeading+=POWER_UP_SHOT_ANGLE;
 			m_player->useOneJelly();
 		}
 	}
