@@ -169,6 +169,10 @@ SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nocto.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npc.cpp
 # End Source File
 # Begin Source File

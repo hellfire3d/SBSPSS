@@ -48,7 +48,7 @@
 
 void CNpc::init()
 {
-	m_type = NPC_ZOMBIE_FISH_FOLK;
+	m_type = NPC_SMALL_JELLYFISH_1;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -661,6 +661,11 @@ void CNpc::processMovement(int _frames)
 
 			s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
 
+			if ( waypointChange )
+			{
+				m_movementTimer = 0;
+			}
+
 			if ( !pathComplete )
 			{
 				s16 decDir, incDir;
@@ -807,6 +812,13 @@ void CNpc::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, 
 		case NPC_MOVEMENT_MODIFIER_FISH_FOLK:
 		{
 			processFishFolkMovementModifier( _frames, distX, distY );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_MODIFIER_OCTOPUS:
+		{
+			processBabyOctopusMovementModifier( _frames, dist, headingChange );
 
 			break;
 		}

@@ -168,6 +168,7 @@ protected:
 		NPC_MOVEMENT_MODIFIER_BOB = 1,
 		NPC_MOVEMENT_MODIFIER_JELLYFISH,
 		NPC_MOVEMENT_MODIFIER_FISH_FOLK,
+		NPC_MOVEMENT_MODIFIER_OCTOPUS,
 	};
 
 	enum NPC_TIMER_FUNC
@@ -250,6 +251,10 @@ protected:
 	void				processSmallJellyfishSensor();
 	void				processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	void				processCloseSmallJellyfishEvade( int _frames );
+
+	// baby octopus functions
+
+	void				processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange );
 
 	// fish folk functions
 
