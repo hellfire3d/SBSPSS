@@ -30,7 +30,7 @@
 
 void CNpcFishFolk::postInit()
 {
-	m_heading = m_fireHeading = 0;
+	m_heading = 0;
 
 	DVECTOR newPos;
 

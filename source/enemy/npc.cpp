@@ -602,14 +602,11 @@ void CNpcEnemy::init()
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
 
-	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
-	m_rotation = 0;
 	m_reversed = false;
-	m_salvoCount = 0;
 	m_isActive = true;
 	m_isDying = false;
 
@@ -625,13 +622,6 @@ void CNpcEnemy::init()
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 
 	m_npcPath.initPath();
-
-	DVECTOR ofs = getCollisionSize();
-
-	m_drawOffset.vx = 0;
-	m_drawOffset.vy = -( ofs.vy >> 1 );
-
-	m_positionHistory = NULL;
 
 	m_isShuttingDown = false;
 	m_drawRotation = 0;
@@ -657,14 +647,11 @@ void CNpcEnemy::reinit()
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
 
-	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
-	m_rotation = 0;
 	m_reversed = false;
-	m_salvoCount = 0;
 	m_isActive = true;
 	m_isDying = false;
 
@@ -689,24 +676,6 @@ void CNpcEnemy::shutdown()
 	// remove waypoints
 
 	m_npcPath.removeAllWaypoints();
-
-	// remove position history
-
-	CNpcPositionHistory *currentPosition;
-	CNpcPositionHistory *oldPosition;
-
-	currentPosition = m_positionHistory;
-
-	while( currentPosition )
-	{
-		oldPosition = currentPosition;
-		currentPosition = currentPosition->next;
-
-		oldPosition->prev->next = NULL;
-		delete oldPosition;
-	}
-
-	m_positionHistory = NULL;
 
 	if (m_actorGfx)	delete m_actorGfx;
 

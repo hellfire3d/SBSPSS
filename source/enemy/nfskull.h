@@ -22,6 +22,8 @@ protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 
+	s32					m_fireHeading;
+
 	enum NPC_FLAMING_SKULL_STATE
 	{
 		FLAMING_SKULL_ATTACK = 0,

@@ -41,6 +41,7 @@ void CNpcSubSharkEnemy::postInit()
 	m_state = SUB_SHARK_MINE_1;
 	m_extendDir = EXTEND_RIGHT;
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+	m_salvoCount = 0;
 }
 
 void CNpcSubSharkEnemy::processMovement( int _frames )

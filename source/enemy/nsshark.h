@@ -34,6 +34,8 @@ protected:
 	{
 		NPC_SUB_SHARK_HIGH_SPEED = 6,
 	};
+
+	u8					m_salvoCount;
 };
 
 #endif

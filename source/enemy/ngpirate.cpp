@@ -34,7 +34,7 @@
 
 void CNpcGhostPirateEnemy::postInit()
 {
-	m_heading = m_fireHeading = 3072;
+	m_heading = 3072;
 }
 
 bool CNpcGhostPirateEnemy::processSensor()

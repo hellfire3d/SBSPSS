@@ -38,6 +38,8 @@ protected:
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
 	};
+
+	bool				m_evadeClockwise;
 };
 
 #endif

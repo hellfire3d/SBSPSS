@@ -171,11 +171,6 @@ void CNpcFriend::init()
 	m_animNo = m_data[m_type].idleAnim;
 	m_frame = 0;
 	m_reversed = false;
-
-	DVECTOR ofs = getCollisionSize();
-
-	m_drawOffset.vx = 0;
-	m_drawOffset.vy = -( ofs.vy >> 1 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

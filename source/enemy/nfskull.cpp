@@ -36,6 +36,7 @@ void CNpcFlamingSkullEnemy::processEnemyCollision( CThing *thisThing )
 void CNpcFlamingSkullEnemy::postInit()
 {
 	m_state = FLAMING_SKULL_ATTACK;
+	m_fireHeading = m_heading;
 }
 
 bool CNpcFlamingSkullEnemy::processSensor()

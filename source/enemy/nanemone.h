@@ -25,6 +25,8 @@ public:
 protected:
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual bool		processSensor();
+
+	s32					m_fireHeading;
 };
 
 class	CNpcAnemone1Enemy : public CNpcAnemoneEnemy

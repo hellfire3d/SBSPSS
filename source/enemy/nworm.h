@@ -66,9 +66,19 @@ protected:
 		NPC_PARASITIC_WORM_LENGTH = 10,
 	};
 
-	CNpcParasiticWormSegment		*m_segment;
+	// position history stuff
 
-	s32					m_collTimer;
+	class CNpcPositionHistory
+	{
+	public:
+		DVECTOR						pos;
+		CNpcPositionHistory			*next;
+		CNpcPositionHistory			*prev;
+	};
+
+	CNpcParasiticWormSegment		*m_segment;
+	CNpcPositionHistory				*m_positionHistory;
+	s32								m_collTimer;
 };
 
 #endif

@@ -96,7 +96,6 @@ protected:
 	int				m_animNo;
 	u8				m_animPlaying;
 	CActorGfx		*m_actorGfx;
-	DVECTOR			m_drawOffset;
 	bool			m_reversed;
 };
 

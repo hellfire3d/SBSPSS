@@ -40,6 +40,7 @@ void CNpcEyeballEnemy::processEnemyCollision( CThing *thisThing )
 void CNpcEyeballEnemy::postInit()
 {
 return;
+	m_fireHeading = m_heading;
 	CProjectile *projectile;
 	projectile = new ( "eyeball projectile" ) CProjectile;
 	projectile->init( Pos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );

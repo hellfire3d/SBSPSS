@@ -29,7 +29,7 @@
 
 void CNpcBallBlobEnemy::postInit()
 {
-	m_heading = m_fireHeading = 128;
+	m_heading = 128;
 
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 

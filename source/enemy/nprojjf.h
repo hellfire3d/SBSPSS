@@ -41,6 +41,7 @@ protected:
 	};
 
 	s32					m_lifetime;
+	bool				m_evadeClockwise;
 };
 
 #endif

@@ -281,19 +281,15 @@ protected:
 	NPC_MOVEMENT_FUNC	m_movementFunc;
 	CNpcPath			m_npcPath;
 	s32					m_heading;
-	s32					m_fireHeading;
 	s32					m_velocity;
-	bool				m_evadeClockwise;
 	s32					m_movementTimer;
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;
-	s16					m_rotation;
 	DVECTOR				m_base;
 	DVECTOR				m_initPos;
 	u8					m_state;
 	u8					m_oldState;
-	u8					m_salvoCount;
 	bool				m_animPlaying;
 	bool				m_reversed;
 	s32					m_health;
@@ -308,25 +304,12 @@ protected:
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 	SpriteBank		*m_spriteBank;
-	DVECTOR			m_drawOffset;
 	POLY_FT4		*SprFrame;
 
 	virtual void		collidedWith(CThing *_thisThing);
 
 	u8					m_isShuttingDown;
 	s16					m_drawRotation;
-
-	// position history stuff
-
-	class CNpcPositionHistory
-	{
-	public:
-		DVECTOR						pos;
-		CNpcPositionHistory			*next;
-		CNpcPositionHistory			*prev;
-	};
-
-	CNpcPositionHistory		*m_positionHistory;
 };
 
 /*****************************************************************************/

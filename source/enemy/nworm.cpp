@@ -48,14 +48,6 @@ void CNpcParasiticWormSegment::init()
 	m_heading = 0;
 	m_nextSegment = NULL;
 
-	/*DVECTOR ofs = getCollisionSize();
-
-	m_drawOffset.vx = 0;
-	m_drawOffset.vy = -( ofs.vy >> 1 );
-
-	updateCollisionArea();*/
-
-	//sBBox boundingBox = m_actorGfx->GetBBox();
 	setCollisionSize( 20, 20 );
 	setCollisionCentreOffset( 10, 10 );
 	updateCollisionArea();
@@ -196,6 +188,24 @@ void CNpcParasiticWormEnemy::shutdown()
 		currentSegment = currentSegment->m_nextSegment;
 		delete oldSegment;
 	}
+
+	// remove position history
+
+	CNpcPositionHistory *currentPosition;
+	CNpcPositionHistory *oldPosition;
+
+	currentPosition = m_positionHistory;
+
+	while( currentPosition )
+	{
+		oldPosition = currentPosition;
+		currentPosition = currentPosition->next;
+
+		oldPosition->prev->next = NULL;
+		delete oldPosition;
+	}
+
+	m_positionHistory = NULL;
 
 	CNpcEnemy::shutdown();
 }
