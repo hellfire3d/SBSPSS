@@ -51,6 +51,8 @@ CD_FILESYS_LIB :=		CMXBoot
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
 
+frontend_src :=		scrollbg
+
 game_src :=			game
 
 gfx_src :=			prim \

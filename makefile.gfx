@@ -85,7 +85,7 @@ GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 UI_GFX_DIR :=				$(GRAF_DIR)/ui
 UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 
-UI_GFX_FONT :=				font
+UI_GFX_FONT :=				font sbfontan
 UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
 
 UI_GFX_NONTRANS :=			
@@ -99,13 +99,13 @@ UI_GFX_TEX_OUT :=			$(UI_GFX_OUT_DIR)/UIGfx.Spr
 UI_GFX_REP_FILE :=			$(REPORT_DIR)/UIGfx.rep
 UI_GFX_HDR_FILE :=			$(INC_DIR)/UIGfx.h
 
-cleanuigfx :
+cleanui :
 		$(RM) -f $(UI_GFX_TEX_OUT)
 
-uigfx: 		$(UI_GFX_TEX_IN)
+ui: 		$(UI_GFX_TEX_IN)
 
 $(UI_GFX_TEX_OUT) :	$(UI_GFX_TEX_IN)
-		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c+ -z- ${UI_GFX_NONTRANS_IN} -b+ -t:31,1,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
+		@parkgrab  -c+ -z+  $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} -c+ -z- ${UI_GFX_NONTRANS_IN} -b+ -t:30,2,1 -l:$(REPORT_DIR)/ui.lbm -o:$(UI_GFX_TEX_OUT) -k:$(UI_GFX_REP_FILE)
 		@$(MV) -f $(UI_GFX_OUT_DIR)/uigfx.h $(UI_GFX_HDR_FILE)
 
 GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
@@ -120,7 +120,7 @@ INGAMEFX_GFX_OUT_DIR :=		$(DATA_OUT)/ingamefx
 INGAMEFX_GFX_NONTRANS :=			
 INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_NONTRANS_DIR)/$(FILE))
 
-INGAMEFX_GFX_TRANS :=		+bubble_small.bmp +bubble_flower.bmp background.bmp
+INGAMEFX_GFX_TRANS :=		+bubble_small.bmp +bubble_flower.bmp
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE))
 
 INGAMEFX_GFX_TEX_IN :=		${INGAMEFX_GFX_NONTRANS_IN} ${INGAMEFX_GFX_TRANS_IN}
@@ -139,6 +139,36 @@ $(INGAMEFX_GFX_TEX_OUT) :	$(INGAMEFX_GFX_TEX_IN)
 
 GRAF_DIRS_TO_MAKE	+=		$(INGAMEFX_GFX_OUT_DIR)
 GFX_DATA_OUT		+=		$(INGAMEFX_GFX_TEX_OUT)
+
+
+#----------------------------------------------------------------------------
+# Front end graphics
+#----------------------------------------------------------------------------
+FRONTEND_GFX_DIR :=			$(GRAF_DIR)/frontend
+FRONTEND_GFX_OUT_DIR :=		$(DATA_OUT)/frontend
+
+FRONTEND_GFX_NONTRANS :=			
+FRONTEND_GFX_NONTRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_NONTRANS),$(FRONTEND_NONTRANS_DIR)/$(FILE))
+
+FRONTEND_GFX_TRANS :=		+bg1.bmp +sblogo.bmp
+FRONTEND_GFX_TRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_TRANS),$(FRONTEND_GFX_DIR)/$(FILE))
+
+FRONTEND_GFX_TEX_IN :=		${FRONTEND_GFX_NONTRANS_IN} ${FRONTEND_GFX_TRANS_IN}
+FRONTEND_GFX_TEX_OUT :=		$(FRONTEND_GFX_OUT_DIR)/frontend.Spr
+FRONTEND_GFX_REP_FILE :=	$(REPORT_DIR)/frontend.rep
+FRONTEND_GFX_HDR_FILE :=	$(INC_DIR)/frontend.h
+
+cleanfrontend :
+		$(RM) -f $(FRONTEND_GFX_TEX_OUT)
+
+frontend:	$(FRONTEND_GFX_TEX_IN)
+
+$(FRONTEND_GFX_TEX_OUT) :	$(FRONTEND_GFX_TEX_IN)
+		@parkgrab -c+ -z+ ${FRONTEND_GFX_TRANS_IN} -c+ -z- ${FRONTEND_GFX_NONTRANS_IN} -b+ -t:29,1,1 -l:$(REPORT_DIR)/frontend.lbm -o:$(FRONTEND_GFX_TEX_OUT) -k:$(FRONTEND_GFX_REP_FILE)
+		@$(MV) -f $(FRONTEND_GFX_OUT_DIR)/frontend.h $(FRONTEND_GFX_HDR_FILE)
+
+GRAF_DIRS_TO_MAKE	+=		$(FRONTEND_GFX_OUT_DIR)
+GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
 
 
 #----------------------------------------------------------------------------
@@ -231,7 +261,6 @@ $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 # WARNING !!!! BigLump must be the last item that all is dependant on. GRL !!!!
 
 all : 	dirs gdirs \
-		uigfx \
 		biglump
 		@$(ECHO) Graphics made
 

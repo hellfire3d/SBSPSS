@@ -480,6 +480,18 @@ SOURCE=..\..\..\source\utils\utils.cpp
 SOURCE=..\..\..\source\utils\utils.h
 # End Source File
 # End Group
+# Begin Group "frontend"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\scrollbg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\scrollbg.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "makefiles"
 
@@ -521,6 +533,10 @@ SOURCE=..\..\..\data\DataCache.scr
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\BigLump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\frontend.h
 # End Source File
 # Begin Source File
 

@@ -74,6 +74,10 @@
 #include "locale\textdbase.h"
 #endif
 
+#ifndef	__FRONTEND_SCROLLBG_H__
+#include "frontend\scrollbg.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -102,6 +106,9 @@
 	Vars
 	---- */
 static FontBank		s_fontBank;
+static CScrollyBackground		*s_bg1;
+static CScrollyBackground		*s_bg2;
+static CScrollyBackground		*s_bg3;
 
 
 /*----------------------------------------------------------------------
@@ -229,7 +236,23 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 //	baseGUIObject=0;
 	
 PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
+
+
+	s_bg1=new ("scrolly background") CScrollyBackground();
+	s_bg1->init();
+	s_bg1->setSpeed(+2,+2);
+
+	s_bg2=new ("scrolly background") CScrollyBackground();
+	s_bg2->init();
+	s_bg2->setSpeed(-2,0);
+	s_bg2->setOt(1001);
+
+	s_bg3=new ("scrolly background") CScrollyBackground();
+	s_bg3->init();
+	s_bg3->setSpeed(0,-2);
+	s_bg3->setOt(1002);
 }
+
 
 
 /*----------------------------------------------------------------------
@@ -240,6 +263,9 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
   ---------------------------------------------------------------------- */
 void CPaulScene::shutdown()
 {
+	s_bg3->shutdown();
+	s_bg2->shutdown();
+	s_bg1->shutdown();
 	s_fontBank.dump();
 }
 
@@ -253,7 +279,7 @@ void CPaulScene::shutdown()
 int showDebugLog=false;
 void CPaulScene::render()
 {
-
+/*
 	if(showDebugLog)
 	{
 		int		logCount;
@@ -270,6 +296,11 @@ void CPaulScene::render()
 
 	if(baseGUIObject)	
 		baseGUIObject->render();
+
+	s_bg1->render();
+	s_bg2->render();
+	s_bg3->render();
+*/
 }
 
 
@@ -291,8 +322,59 @@ void CPaulScene::think(int _frames)
 		
 	if(baseGUIObject)
 		baseGUIObject->think(_frames);
+
+	s_bg1->think(_frames);
+	s_bg2->think(_frames);
+	s_bg3->think(_frames);
 }
 
 
 /*===========================================================================
  end */
+
+
+
+/*
+BubicleEmitterData bubData=
+{
+	206,200,60,60,		// m_x,m_y,m_w,m_h
+	10,1,				// m_birthRate,m_birthAmount
+	-1,					// m_life
+	{					// m_bubicleBase
+		100,				// m_life
+		0,0,0,				// m_vx,m_vdx,m_vxmax
+		-40,-15,-100,		// m_vy,m_vdy,m_vymax
+		13,10,				// m_w,m_h
+		10,					// m_dvSizeChange
+		0,100,				// m_theta,m_vtheta
+		100,2,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
+		40,					// m_ot
+		{ 128,128,128,	}	// m_colour
+	},
+	{					// m_bubicleRange
+		100,				// m_life
+		0,0,0,				// m_vx,m_vdx,m_vxmax
+		20,10,0,			// m_vy,m_vdy,m_vymax
+		5,5,				// m_w,m_h
+		10,					// m_dvSizeChange
+		4095,50,			// m_theta,m_vtheta
+		100,5,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
+		0,					// m_ot
+		{   0, 64,127,	}	// m_colour
+	}
+};
+CBubicleEmitter	*testBub;
+
+
+  CBubicleFactory::init();
+  testBub=CBubicleFactory::spawnEmitter(&bubData);
+
+  CBubicleFactory::shutdown();
+
+  testBub->setPos(X,Y);
+  
+	CBubicleFactory::render();
+	CBubicleFactory::think();
+  
+
+*/

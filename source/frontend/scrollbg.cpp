@@ -62,6 +62,13 @@
   ---------------------------------------------------------------------- */
 void CScrollyBackground::init()
 {
+	m_sprites=new ("Scrolly Background sprites") SpriteBank;
+	m_sprites->load(FRONTEND_FRONTEND_SPR);
+	m_xOff=m_yOff=0;
+
+	setSpeed(DEFAULT_X_SPEED,DEFAULT_Y_SPEED);
+	setSpeedScale(DEFAULT_SPEED_SCALE);
+	setOt(DEFAULT_OT);
 }
 
 
@@ -73,6 +80,7 @@ void CScrollyBackground::init()
   ---------------------------------------------------------------------- */
 void CScrollyBackground::shutdown()
 {
+	m_sprites->dump();	delete m_sprites;	m_sprites=NULL;
 }
 
 
@@ -84,6 +92,27 @@ void CScrollyBackground::shutdown()
   ---------------------------------------------------------------------- */
 void CScrollyBackground::render()
 {
+	POLY_FT4	*ft4;
+	sFrameHdr	*fh;
+	int			x,y,w,h;
+
+	fh=m_sprites->getFrameHeader(FRM__BG1);
+	w=fh->W;
+	h=fh->H;
+	y=(m_yOff>>m_speedScale)-h;
+	do
+	{
+		x=(m_xOff>>m_speedScale)-w;
+		do
+		{
+			ft4=m_sprites->printFT4(fh,x,y,0,0,m_ot);
+			setSemiTrans(ft4,true);
+			x+=w;
+		}
+		while(x<512);
+		y+=h;
+	}
+	while(y<256);
 }
 
 
@@ -95,6 +124,12 @@ void CScrollyBackground::render()
   ---------------------------------------------------------------------- */
 void CScrollyBackground::think(int _frames)
 {
+	sFrameHdr	*fh;
+
+	fh=m_sprites->getFrameHeader(FRM__BG1);
+
+	m_xOff=(m_xOff+(_frames*m_xSpeed))%(fh->W<<m_speedScale);
+	m_yOff=(m_yOff+(_frames*m_ySpeed))%(fh->H<<m_speedScale);
 }
 
 
