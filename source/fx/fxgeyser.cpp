@@ -93,7 +93,7 @@ int			W;
 			{
 				Flags |= FX_FLAG_INJURE_PLAYER;
 
-				if ( SoundId == NOT_PLAYING )
+				if ( SoundId == NOT_PLAYING && !GameScene.getIsPaused() )
 				{
 					SoundId = (int) CSoundMediator::playSfx(CSoundMediator::SFX_OIL_GEYSER,true);
 				}

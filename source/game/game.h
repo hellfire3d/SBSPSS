@@ -148,6 +148,10 @@ static	int				s_showBossTextOnRespawn;
 
 		int				m_musicStarted;
 
+public:
+		int				getIsPaused()						{return(m_isPaused);}
+protected:		
+		int				m_isPaused;
 };
 
 

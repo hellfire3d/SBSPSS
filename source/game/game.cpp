@@ -227,6 +227,8 @@ void 	CGameScene::init()
 
 		s_showBossTextOnRespawn=false;
 		m_playingBossMusic=false;
+
+		m_isPaused=false;
 }
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
@@ -650,6 +652,9 @@ void CGameScene::think_playing(int _frames)
 			m_pauseMenu->select();
 		}
 	}
+
+	// paused for pause menu or conversation?
+	m_isPaused = m_pauseMenu->isActive() || CConversation::isActive();
 
 	// Conversation think ( with pad debounce stuff.. )
 	if(CConversation::isActive())m_player->ignoreNewlyPressedButtonsOnPadThisThink();
