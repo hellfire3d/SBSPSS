@@ -44,6 +44,9 @@ public:
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
 
+protected:
+	virtual class CPlayerState	**getStateTable();
+
 private:
 	typedef enum
 	{

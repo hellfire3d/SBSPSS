@@ -57,6 +57,7 @@
 CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 CPlayerStateTeeterIdle		s_stateTeeterIdle;
 CPlayerStateWeaponIdle		s_stateWeaponIdle;
+CPlayerStateNetIdle			s_stateNetIdle;
 
 
 /*----------------------------------------------------------------------
@@ -265,8 +266,14 @@ static IdleAnims s_unarmedIdleAnims[]=
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBIGEYE,			-1,								1		},
-	{	-1,								ANIM_SPONGEBOB_IDLEBIGEYE,			-1,								1		},
 	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEBANDAID,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEEYEPOP,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEINHAT,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEMATURE,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEMOUSTACHE,		-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLENOFACE,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEZORRO,			-1,								1		},
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
@@ -303,6 +310,33 @@ IdleAnims *CPlayerStateWeaponIdle::getIdleAnimsDb(int _animNo)
 int CPlayerStateWeaponIdle::getNumIdleAnims()
 {
 	return s_numWeaponIdleAnims;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static IdleAnims s_netIdleAnims[]=
+{
+	//	start frame						loop frame							end frame						loop count
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLENET,				-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
+};
+static int s_numNetIdleAnims=sizeof(s_netIdleAnims)/sizeof(IdleAnims);
+IdleAnims *CPlayerStateNetIdle::getIdleAnimsDb(int _animNo)
+{
+	ASSERT(_animNo<getNumIdleAnims());
+	return &s_netIdleAnims[_animNo];
+}
+int CPlayerStateNetIdle::getNumIdleAnims()
+{
+	return s_numNetIdleAnims;
 }
 
 

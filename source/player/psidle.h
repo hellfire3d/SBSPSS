@@ -103,6 +103,15 @@ private:
 };
 
 
+class CPlayerStateNetIdle : public CPlayerStateIdle
+{
+private:
+	virtual IdleAnims	*getIdleAnimsDb(int _animNo);
+	virtual int			getNumIdleAnims();
+
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */
@@ -110,6 +119,7 @@ private:
 extern	CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 extern	CPlayerStateTeeterIdle		s_stateTeeterIdle;
 extern	CPlayerStateWeaponIdle		s_stateWeaponIdle;
+extern	CPlayerStateNetIdle			s_stateNetIdle;
 
 
 /*----------------------------------------------------------------------
