@@ -178,7 +178,7 @@ void	CPlayer::init()
 	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
 	TPLoadTex(ACTORS_SPONGEBOB_TEX);
-	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
+	m_skel.setAnimDatabase(CAnimDB::Load(ANIMS_PLAYER_ABK));
 
 
 // Temporary default respawn pos... should realy be set with setRespawnPos() from the level (pkg)
