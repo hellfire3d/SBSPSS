@@ -217,6 +217,7 @@ public:
 
 	void			setCameraBox(CameraBox _cameraBox);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
+	void			setRespawnPosAndRingTelephone(DVECTOR _respawn);
 
 	// This isn't funny anymore.. :(
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);

@@ -741,7 +741,8 @@ if(newmode!=-1)
 #ifdef __USER_paul__
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
-	springPlayerUp();
+	CLevel	&level=GameScene.GetLevel();
+	level.destroyMapTile(Pos);
 }
 #endif
 ///
@@ -1355,6 +1356,24 @@ if(drawlastpos)
 	m_playerPosLimitBox.y2=_cameraBox.y2-64;
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Like the normal setRespawnPos() but plays the telephone ring sound if
+				this is not the current respawn point. To be used from the respawn triggers
+				so that they make the ring sound
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::setRespawnPosAndRingTelephone(DVECTOR _respawn)
+{
+	if(m_respawnPos.vx!=_respawn.vx&&
+	   m_respawnPos.vy!=_respawn.vy)
+	{
+		CSoundMediator::playSfx(CSoundMediator::SFX_TELEPHONE_BOX);
+		setRespawnPos(_respawn);
+	}
+}
 
 /*----------------------------------------------------------------------
 	Function:

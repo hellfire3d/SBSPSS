@@ -64,7 +64,7 @@ void	CRestartPointTrigger::collidedWith(CThing *_thisThing)
 			collisionArea=getCollisionArea();
 			respawnPos.vx=collisionArea.x1+((collisionArea.x2-collisionArea.x1)/2);
 			respawnPos.vy=collisionArea.y2;
-			((CPlayer*)_thisThing)->setRespawnPos(respawnPos);
+			((CPlayer*)_thisThing)->setRespawnPosAndRingTelephone(respawnPos);
 
 			break;
 		}
