@@ -17,9 +17,10 @@
 	-------- */
 
 #include "main.h"
+
+#ifndef _LEXER_H
 #include "lexer.h"
-#include "parser.h"
-#include "pfile.h"
+#endif
 
 #ifndef __CODEGEN_H__
 #include "codegen.h"
@@ -50,7 +51,6 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
-
 
 /*----------------------------------------------------------------------
 	Function:
@@ -96,174 +96,6 @@ extern int main(int argc, char *argv[])
 		{
 			ret=-1;
 		}
-	}
-
-	return ret;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int	mylexer::openInputFile(char *_filename)
-{
-	/*
-	int	ret=1;
-
-	printf("Opening %s..\n",_filename);
-	if((m_fhInput=fopen(_filename,"rt"))==NULL)
-	{
-		printf("FATAL: Couldn't open file for reading\n");
-		ret=0;
-	}
-	else
-	{
-		m_charCount=0;
-		m_lineCount=0;
-		m_currentCharOnLine=0;
-		m_errorCount=0;
-	}
-	return ret;
-	*/
-
-	return openPFile(_filename);	
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int mylexer::closeInputFile()
-{
-	/*
-	printf("Processed %d char(s), %d line(s)\n",m_charCount,m_lineCount);
-	if(m_errorCount)
-	{
-		printf("Found %d error(s) :(\n",m_errorCount);
-	}
-	fclose(m_fhInput);
-	return 1;
-	*/
-	return closePFile();
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int mylexer::yygetchar()
-{
-	char	c;
-	int		ret;
-	FILE	*fh;
-
-
-	fh=getPFileFh();
-	if(fh)
-	{
-		if(fread(&c,sizeof(c),1,fh)==1)
-		{
-			m_charCount++;
-			m_currentCharOnLine++;
-			if(c=='\n')
-			{
-				m_lineCount++;
-				m_currentCharOnLine=0;
-			}
-			ret=c;
-		}
-		else
-		{
-			ret=-1;
-			if(ferror(fh))
-			{
-				printf("FATAL: Read error!\n");
-			}
-			else
-			{				
-				closePFile();
-				return yygetchar();
-			}
-		}
-
-		// Force compilation to stop after finding errors ( hmm.. )
-		if(m_errorCount)
-		{
-			printf("Stopping compilation!\n");
-			ret=-1;
-		}
-	}
-	else
-	{
-		ret=-1;
-	}
-	
-	return ret;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void myparser::setCurrentLexer(mylexer *_lexer)
-{
-	m_currentLexer=_lexer;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void myparser::setBaseNode(class CTreeNode *_baseNode)
-{
-	m_baseNode=_baseNode;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void myparser::yyerror(const char *_text)
-{
-	fprintf(yyparseerr,"ERROR: %s\n",_text);
-	fprintf(yyparseerr,"       line %d char %d\n",m_currentLexer->getCurrentLine(),m_currentLexer->getCurrentCharOnLine());
-	m_currentLexer->error();
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int myparser::yyparse()
-{
-	int	ret=YYEXIT_FAILURE;
-
-	if(yysetup()==0&&
-	   yywork()==YYEXIT_SUCCESS&&
-	   m_currentLexer->getErrorCount()==0)
-	{
-		ret=YYEXIT_SUCCESS;
 	}
 
 	return ret;

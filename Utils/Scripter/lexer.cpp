@@ -28,7 +28,7 @@ Date: 07 December 2000
 YYLEXNAME::YYLEXNAME()
 {
 	yytables();
-#line 52 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 51 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 	// place any extra initialisation code here
 
@@ -78,7 +78,7 @@ void YYLEXNAME::yyunput(int ch)
 
 int YYLEXNAME::yyaction(int action)
 {
-#line 64 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 63 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 // extract yylval for use later on in actions
 YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
@@ -88,154 +88,154 @@ YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
 	switch (action) {
 	case 1:
 		{
-#line 71 "C:\\spongebob\\Utils\\scripter\\lexer.l"
-if(preprocessorCmd(yytext+1)!=0)error();
+#line 70 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+if(preprocessorCmd(yytext+1)!=true)error();
 #line 94 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 2:
 		{
-#line 72 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 71 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 printf("# commands must be at start of line! ( line %d )\n",getCurrentLine());error();
 #line 101 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 3:
 		{
-#line 74 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 73 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return STOP;
 #line 108 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 4:
 		{
-#line 75 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 74 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return IF;
 #line 115 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 5:
 		{
-#line 76 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 75 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return ELSE;
 #line 122 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 6:
 		{
-#line 77 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 76 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PAUSE;
 #line 129 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 7:
 		{
-#line 78 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 77 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PRINT;
 #line 136 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 8:
 		{
-#line 79 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 78 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return ASSIGN;
 #line 143 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 9:
 		{
-#line 80 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 79 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return EQUAL;
 #line 150 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 10:
 		{
-#line 81 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 80 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return NOTEQUAL;
 #line 157 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 11:
 		{
-#line 82 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 81 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PLUS;
 #line 164 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 12:
 		{
-#line 83 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 82 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return END_STMT;
 #line 171 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 13:
 		{
-#line 84 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 83 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return OPEN_PAR;
 #line 178 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 14:
 		{
-#line 85 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 84 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return CLOSE_PAR;
 #line 185 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 15:
 		{
-#line 86 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 85 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return BEGIN_CS;
 #line 192 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 16:
 		{
-#line 87 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 86 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return END_CS;
 #line 199 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 17:
 		{
-#line 89 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 88 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 yylval.variableIdx=lookupVarName(yytext+1);return VARIABLE;
 #line 206 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 18:
 		{
-#line 90 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 89 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 yylval.value=atoi(yytext);return VALUE;
 #line 213 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 19:
 		{
-#line 93 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 92 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 #line 220 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 20:
 		{
-#line 94 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 93 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 #line 227 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 21:
 		{
-#line 95 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 94 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 #line 234 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 22:
 		{
-#line 97 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 96 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 printf("UNEXPECTED CHAR: '%s' in line %d ( char %d )\n",yytext,getCurrentLine(),getCurrentCharOnLine());error();
 #line 241 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
@@ -253,7 +253,7 @@ printf("UNEXPECTED CHAR: '%s' in line %d ( char %d )\n",yytext,getCurrentLine(),
 #pragma warn .rch		// <warning: unreachable code> to the old state
 #endif
 #endif
-#line 99 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 98 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 
 

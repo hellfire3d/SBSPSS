@@ -17,8 +17,14 @@
 	-------- */
 
 #include "codegen.h"
+
+#ifndef _LEXER_H
 #include "lexer.h"
+#endif
+
+#ifndef _PARSER_H
 #include "parser.h"
+#endif
 
 
 /*	Std Lib
@@ -70,7 +76,7 @@ extern int parseFile(char *_filename,CTreeNode *_baseNode)
 	{
 		if(s_lexer.yycreate(&s_parser))
 		{
-			if(s_lexer.openInputFile(_filename))
+			if(s_lexer.openInputFile(_filename)==true)
 			{
 				s_parser.setCurrentLexer(&s_lexer);
 				s_parser.setBaseNode(_baseNode);

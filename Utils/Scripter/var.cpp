@@ -74,7 +74,7 @@ extern int lookupVarName(char *_name)
 	// Global vars
 	for(i=0;i<s_numGlobalVarNames;i++,vnum++)
 	{
-		if(stricmp(_name,s_globalVarNames[i])==0)
+		if(strcmp(_name,s_globalVarNames[i])==0)
 		{
 			return vnum;
 		}
@@ -83,7 +83,7 @@ extern int lookupVarName(char *_name)
 	// Local vars
 	for(i=0;i<s_numLocalVarNames;i++,vnum++)
 	{
-		if(stricmp(_name,s_localVarNames[i])==0)
+		if(strcmp(_name,s_localVarNames[i])==0)
 		{
 			return vnum;
 		}

@@ -32,8 +32,7 @@ Date: 07 December 2000
 	int		getCurrentCharOnLine()	{return m_currentCharOnLine;}
 	int		getErrorCount()			{return m_errorCount;}
 
-	void	error()					{m_errorCount++;}
-
+	void	error();
 
 	// Overridden lexer functions
 	int		yygetchar();
@@ -68,7 +67,7 @@ YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
 
 // place your Lex rules here
 
-^#.*						{if(preprocessorCmd(yytext+1)!=0)error();}
+^#.*						{if(preprocessorCmd(yytext+1)!=true)error();}
 #							{printf("# commands must be at start of line! ( line %d )\n",getCurrentLine());error();}
 
 stop						{return STOP;}

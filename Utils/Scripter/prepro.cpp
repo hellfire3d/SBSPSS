@@ -17,7 +17,10 @@
 	-------- */
 
 #include "prepro.h"
+
+#ifndef __PFILE_H__
 #include "pfile.h"
+#endif
 
 
 /*	Std Lib
@@ -57,11 +60,13 @@ typedef struct _macro
 	Function Prototypes
 	------------------- */
 
-static int	ppf_define(char *_cmd);
-static int	ppf_include(char *_cmd);
-static int	ppf_print(char *_cmd);
+static int ppf_define(char *_cmd);
+static int ppf_include(char *_cmd);
+static int ppf_print(char *_cmd);
+static int ppf_undefine(char *_cmd);
 
 static int addMacro(char *_name,char *_replacement);
+static int removeMacro(char *_name);
 
 
 /*----------------------------------------------------------------------
@@ -69,9 +74,10 @@ static int addMacro(char *_name,char *_replacement);
 	---- */
 static PreproCmd s_preproCmds[]=
 {
-	{	"define",	ppf_define	},
-	{	"include",	ppf_include	},
-	{	"print",	ppf_print	},
+	{	"define",	ppf_define		},
+	{	"include",	ppf_include		},
+	{	"print",	ppf_print		},
+	{	"undef",	ppf_undefine	},
 };
 static int		s_numPreproCmds=sizeof(s_preproCmds)/sizeof(PreproCmd);
 
@@ -86,7 +92,7 @@ static char	s_seps[]=" \t";
 	Function:
 	Purpose:
 	Params:
-	Returns:
+	Returns:	true on success, false on failure
   ---------------------------------------------------------------------- */
 extern int preprocessorCmd(char *_cmd)
 {
@@ -96,7 +102,7 @@ extern int preprocessorCmd(char *_cmd)
 	pp=s_preproCmds;
 	for(i=0;i<s_numPreproCmds;i++)
 	{
-		if(strnicmp(_cmd,pp->m_cmd,strlen(pp->m_cmd))==0)
+		if(strncmp(_cmd,pp->m_cmd,strlen(pp->m_cmd))==0)
 		{
 			return pp->m_func(_cmd);
 		}
@@ -104,7 +110,7 @@ extern int preprocessorCmd(char *_cmd)
 	}
 
 	printf("UNKNOWN PREPROCESSOR CMD '%s'\n",_cmd);
-	return 1;
+	return true;
 }
 
 
@@ -140,7 +146,7 @@ static int ppf_include(char *_cmd)
 	includeFile=strtok(_cmd,s_seps);
 	includeFile=strtok(NULL,s_seps);
 	
-	return openPFile(includeFile)==1?0:1;
+	return openPFile(includeFile);
 }
 
 
@@ -156,13 +162,28 @@ static int ppf_print(char *_cmd)
 	
 	printMessage=strtok(_cmd,s_seps);
 	printMessage=strtok(NULL,s_seps);
-	
+
 	printf("#print %s\n",printMessage);
 	
-	return 0;
+	return true;
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static int ppf_undefine(char *_cmd)
+{
+	char	*macroName;
+	
+	macroName=strtok(_cmd,s_seps);
+	macroName=strtok(NULL,s_seps);
+	
+	return removeMacro(macroName);
+}
 
 
 /*----------------------------------------------------------------------
@@ -176,24 +197,63 @@ static int addMacro(char *_name,char *_replacement)
 	Macro	*mac,*newMac;
 
 	mac=s_macros;
-	while(mac&&mac->m_next)
+	while(mac)
 	{
-		if(strcmp(_name,mac->m_replacement)==0)
+		if(strcmp(_name,mac->m_name)==0)
 		{
 			printf("MACRO '%s' ALREADY DEFINED\n",_name);
-			return -1;
+			return false;
 		}
+		mac=mac->m_next;
 	}
 
 	newMac=(Macro*)malloc(sizeof(Macro));
-	newMac->m_name=(char*)malloc(strlen(_name+1));
-	newMac->m_replacement=(char*)malloc(strlen(_name+1));
+	newMac->m_name=(char*)malloc(strlen(_name)+1);
+	newMac->m_replacement=(char*)malloc(strlen(_replacement)+1);
 	strcpy(newMac->m_name,_name);
 	strcpy(newMac->m_replacement,_replacement);
 	newMac->m_next=s_macros;
 	s_macros=newMac;
 
-	return 0;
+	return true;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static int removeMacro(char *_name)
+{
+	Macro	*mac,*prev;
+
+	mac=s_macros;
+	prev=NULL;
+	while(mac)
+	{
+		if(strcmp(_name,mac->m_name)==0)
+		{
+			if(prev)
+			{
+				prev->m_next=mac->m_next;
+			}
+			else
+			{
+				s_macros=mac->m_next;
+			}
+			free(mac->m_name);
+			free(mac->m_replacement);
+			free(mac);
+			return true;
+		}
+		prev=mac;
+		mac=mac->m_next;
+	}
+
+	printf("MACRO '%s' NOT DEFINED, CANNOT UNDEF IT\n",_name);
+	return false;
 }
 
 
@@ -207,7 +267,6 @@ extern char *lookupMacro(char *_name)
 {
 	return NULL;
 }
-
 
 
 /*===========================================================================

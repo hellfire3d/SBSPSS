@@ -27,8 +27,7 @@ public:
 	int		getCurrentCharOnLine()	{return m_currentCharOnLine;}
 	int		getErrorCount()			{return m_errorCount;}
 
-	void	error()					{m_errorCount++;}
-
+	void	error();
 
 	// Overridden lexer functions
 	int		yygetchar();
@@ -42,7 +41,7 @@ private:
 
 	class myparser	*m_currentParser;
 
-#line 46 "C:\\spongebob\\Utils\\scripter\\lexer.h"
+#line 45 "C:\\spongebob\\Utils\\scripter\\lexer.h"
 };
 
 #ifndef YYLEXNAME

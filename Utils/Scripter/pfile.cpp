@@ -152,13 +152,13 @@ CPFile::CPFile()
   ---------------------------------------------------------------------- */
 int CPFile::open(char *_filename)
 {
-	int	ret=1;
+	int	ret;
 	
 	printf("Opening %s..\n",_filename);
 	if((m_fh=fopen(_filename,"rt"))==NULL)
 	{
 		printf("FATAL: Couldn't open file for reading\n");
-		ret=0;
+		ret=false;
 	}
 	else
 	{
@@ -166,7 +166,9 @@ int CPFile::open(char *_filename)
 		strcpy(m_filename,_filename);
 		m_next=s_stack;
 		s_stack=this;
+		ret=true;
 	}
+
 	return ret;
 }
 
@@ -193,7 +195,8 @@ int CPFile::close()
 	{
 		s_stack=NULL;
 	}
-	return 1;
+
+	return true;
 }
 
 

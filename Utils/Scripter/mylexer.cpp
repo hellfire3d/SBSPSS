@@ -16,8 +16,17 @@
 	Includes
 	-------- */
 
+#ifndef _LEXER_H
 #include "lexer.h"
+#endif
+
+#ifndef _PARSER_H
 #include "parser.h"
+#endif
+
+#ifndef __PFILE_H__
+#include "pfile.h"
+#endif
 
 
 /*	Std Lib
@@ -75,6 +84,19 @@ int mylexer::closeInputFile()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void mylexer::error()
+{
+	fprintf(yyerr,"ERROR AT LINE %d, COLUMN %d\n",getCurrentLine(),getCurrentCharOnLine());
+	m_errorCount++;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int mylexer::yygetchar()
 {
 	char	c;
@@ -113,7 +135,7 @@ int mylexer::yygetchar()
 		// Force compilation to stop after finding errors ( hmm.. )
 		if(m_errorCount)
 		{
-			printf("Stopping compilation!\n");
+			printf("Stopping compilation due to errors!\n");
 			ret=-1;
 		}
 	}

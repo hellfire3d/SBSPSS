@@ -140,6 +140,14 @@ SOURCE=.\main.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\mylexer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\myparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\pfile.cpp
 # End Source File
 # Begin Source File
