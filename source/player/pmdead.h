@@ -50,8 +50,8 @@ private:
 	};
 	int				m_deadTime;
 
-
-//	void			fall();
+	void			fall();
+	int				m_yVelocity;
 
 };
 

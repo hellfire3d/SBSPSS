@@ -342,9 +342,9 @@ if(newmode!=-1)
 		{
 			m_squeakyBootsTimer--;
 		}
-		if(m_invinvibilityRingTimer)
+		if(m_invincibilityRingTimer)
 		{
-			m_invinvibilityRingTimer--;
+			m_invincibilityRingTimer--;
 		}
 
 		// Flashing..
@@ -543,6 +543,12 @@ int healthg=75;
 int healthb=75;
 
 #ifdef __USER_paul__
+#define NUM_LASTPOS	50
+static DVECTOR	lastpos[NUM_LASTPOS];
+static int		lastposnum=0;
+#endif
+
+#ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
 void	CPlayer::render()
@@ -552,6 +558,23 @@ void	CPlayer::render()
 #ifdef _STATE_DEBUG_
 sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy));
 m_fontBank->print(40,40,posBuf);
+#endif
+
+
+#ifdef __USER_paul__
+if(Pos.vx!=lastpos[lastposnum].vx||Pos.vy!=lastpos[lastposnum].vy)
+{
+	lastposnum=(lastposnum+1)%NUM_LASTPOS;
+	lastpos[lastposnum]=Pos;
+}
+for(int i=0;i<NUM_LASTPOS;i++)
+{
+	int	x,y;
+	x=lastpos[i].vx-m_cameraPos.vx;
+	y=lastpos[i].vy-m_cameraPos.vy;
+	DrawLine(x-4,y-4,x+4,y+4,0,0,255,0);
+	DrawLine(x-4,y+4,x+4,y-4,0,0,255,0);
+}
 #endif
 
 	// Render
@@ -882,7 +905,7 @@ void CPlayer::respawn()
 
 	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;
-	m_invinvibilityRingTimer=0;
+	m_invincibilityRingTimer=0;
 	m_bubbleAmmo=0;
 	m_jellyAmmo=0;
 
@@ -920,13 +943,11 @@ int	CPlayer::canDoLookAround()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __VERSION_DEBUG__
 int invincibleSponge=false;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
-#endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {
 	if(m_invincibleFrameCount==0&&			// Don't take damage if still recovering from the last hit
-	   m_invinvibilityRingTimer==0&&		// Or if we have the invincibility ring on
+	   m_invincibilityRingTimer==0&&		// Or if we have the invincibility ring on
 	   m_currentMode!=PLAYER_MODE_DEAD)		// Or already dead! :)
 	{
 		int	ouchThatHurt=true;
@@ -960,9 +981,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 
 		if(ouchThatHurt)
 		{
-#ifdef __VERSION_DEBUG__
 			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
-#endif
 			if(m_health)
 			{
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
@@ -1167,6 +1186,232 @@ bool	CPlayer::getHasPlatformCollided()
 	return( m_hasPlatformCollided );
 }
 
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayer::moveVertical(int _moveDistance)
+{
+	DVECTOR			pos;
+	int				hitGround;
+//	int				colHeight;
+
+	pos=Pos;
+	hitGround=false;
+
+	// Are we falling?
+	if(_moveDistance>0)
+	{
+		int colHeightBefore,colHeightAfter;
+
+		// Yes.. Check to see if we're about to hit/go through the ground
+		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
+		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		if(colHeightBefore>=0&&colHeightAfter<=0)
+		{
+			// Stick at ground level
+			pos.vy+=colHeightAfter+_moveDistance;
+			_moveDistance=0;
+			hitGround=true;
+		}
+	}
+/*
+	}
+	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
+	{
+		// Must be below ground
+		// Are we jumping into an impassable block?
+		if(_moveDistance>0&&
+		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL)
+		{
+			pos.vy=(pos.vy&0xfff0);
+			_moveDistance=0;
+			hitGround=true;
+		}
+		else if(isOnPlatform()&&_moveDistance>=0)
+		{
+			pos.vy+=colHeight;
+			hitGround=true;
+		}
+	}
+*/
+	pos.vy+=_moveDistance;
+	setPlayerPos(&pos);
+
+	return hitGround;
+
+
+	/*
+	DVECTOR			pos;
+	int				hitGround;
+	int				colHeight;
+
+	pos=Pos;
+	hitGround=false;
+	colHeight=getHeightFromGround(pos.vx,pos.vy,1);
+	if(colHeight>=0)
+	{
+		// Above or on the ground
+		// Are we falling?
+		if(_moveDistance>0)
+		{
+			// Yes.. Check to see if we're about to hit/go through the ground
+			colHeight=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+
+			if(colHeight<=0)
+			{
+				// Stick at ground level
+				pos.vy+=colHeight+_moveDistance;
+				_moveDistance=0;
+				hitGround=true;
+			}
+		}
+	}
+	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
+	{
+		// Must be below ground
+		// Are we jumping into an impassable block?
+		if(_moveDistance>0&&
+		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL)
+		{
+			pos.vy=(pos.vy&0xfff0);
+			_moveDistance=0;
+			hitGround=true;
+		}
+		else if(isOnPlatform()&&_moveDistance>=0)
+		{
+			pos.vy+=colHeight;
+			hitGround=true;
+		}
+	}
+
+	pos.vy+=_moveDistance;
+	setPlayerPos(&pos);
+
+	return hitGround;
+	*/
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayer::moveHorizontal(int _moveDistance)
+{
+	int	hitWall;
+
+	hitWall=false;
+	if(_moveDistance)
+	{
+		CLayerCollision	*collision;
+		DVECTOR			pos;
+		int				colHeight;
+
+		collision=getLayerCollision();
+		pos=getPlayerPos();
+		colHeight=getHeightFromGround(pos.vx,pos.vy,5);
+		if(colHeight==0)
+		{
+			// Ok.. we're on the ground. What happens if we move left/right
+			colHeight=getHeightFromGround(pos.vx+_moveDistance,pos.vy);
+			if(colHeight<-8)
+			{
+				// Big step up. Stop at the edge of the obstruction
+				int	dir,vx,cx,i;
+				if(_moveDistance<0)
+				{
+					dir=-1;
+					vx=-_moveDistance;
+				}
+				else
+				{
+					dir=+1;
+					vx=_moveDistance;
+				}
+				cx=pos.vx;
+				for(i=0;i<vx;i++)
+				{
+					if(getHeightFromGround(cx,pos.vy)<-8)
+					{
+						break;
+					}
+					cx+=dir;
+				}
+				if(i)
+					pos.vx=cx-dir;
+
+				hitWall=true;
+				_moveDistance=0;
+				
+				// Get the height at this new position and then try the step-up code below.
+				// Without this, there are problems when you run up a slope and hit a wall at the same time
+				colHeight=getHeightFromGround(pos.vx,pos.vy);
+			}
+			if(colHeight&&colHeight>=-8&&colHeight<=8)
+			{
+				// Small step up/down. Follow the contour of the level
+				pos.vy+=colHeight;
+			}
+		}
+		else
+		{
+			// In the air
+			/*
+			if((getLayerCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
+			{
+				// Hit an impassable block
+				pos.vx&=0xfff0;
+				if(_moveDistance>0)
+				{
+					pos.vx+=15;
+				}
+				_moveDistance=0;
+			}
+			else */if(colHeight>=0) // Lets you jump through platforms from below
+			{
+				colHeight=getHeightFromGround(pos.vx+_moveDistance,pos.vy,5);
+				if(colHeight<0)
+				{
+					// Stop at the edge of the obstruction
+					int	dir,vx,cx,i;
+					if(_moveDistance<0)
+					{
+						dir=-1;
+						vx=_moveDistance;
+					}
+					else
+					{
+						dir=+1;
+						vx=_moveDistance;
+					}
+					cx=pos.vx;
+					for(i=0;i<vx;i++)
+					{
+						if(getHeightFromGround(cx,pos.vy)<0)
+						{
+							break;
+						}
+						cx+=dir;
+					}
+					if(i)
+						pos.vx=cx-dir;
+					_moveDistance=0;
+				}
+			}
+		}
+		pos.vx+=_moveDistance;
+		setPlayerPos(&pos);
+	}
+	
+	return hitWall;
+}
 
 /*----------------------------------------------------------------------
 	Function:

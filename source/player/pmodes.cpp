@@ -252,58 +252,22 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::thinkVerticalMovement()
 {
-	CLayerCollision	*collision;
-	DVECTOR			pos;
-	int				colHeight;
-
-	collision=m_player->getLayerCollision();
-	pos=m_player->getPlayerPos();
-	colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,1);
-	if(colHeight>=0)
+	if(m_player->moveVertical(m_moveVelocity.vy>>VELOCITY_SHIFT))
 	{
-		// Above or on the ground
-		// Are we falling?
-		if(m_moveVelocity.vy>0)
+		playerHasHitGround();
+	}
+	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
+			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
+			m_currentState!=STATE_JUMP)
+	{
+		DVECTOR	pos;
+		pos=m_player->getPlayerPos();
+		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0)
 		{
-			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=m_player->getHeightFromGround(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT),getPlayerMetrics()->m_metric[PM__TERMINAL_VELOCITY]+1);
-
-			if(colHeight<=0)
-			{
-				// Just hit the ground
-				// Stick at ground level
-				pos.vy+=(m_moveVelocity.vy>>VELOCITY_SHIFT)+colHeight;
-				playerHasHitGround();
-			}
-		}
-		else if(colHeight)
-		{
-			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
-			   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-			   m_currentState!=STATE_JUMP)
-			{
-				// Was floating in the air.. fall!
-				setState(STATE_FALL);
-			}
+			// Was floating in the air.. fall!
+			setState(STATE_FALL);
 		}
 	}
-	else
-	{
-		if((m_player->getLayerCollision()->getCollisionBlock(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
-		{
-			// Hit an impassable block
-			pos.vy=(pos.vy&0xfff0)+16;
-			m_moveVelocity.vy=0;
-		}
-		else if ( m_player->isOnPlatform() && m_moveVelocity.vy >= 0 )
-		{
-			pos.vy += colHeight;
-			playerHasHitGround();
-		}
-	}
-
-	pos.vy+=m_moveVelocity.vy>>VELOCITY_SHIFT;
-	m_player->setPlayerPos(&pos);
 }
 
 /*----------------------------------------------------------------------
@@ -314,109 +278,14 @@ void	CPlayerModeBase::thinkVerticalMovement()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::thinkHorizontalMovement()
 {
-	if(m_moveVelocity.vx)
+	if(m_player->moveHorizontal(m_moveVelocity.vx>>VELOCITY_SHIFT))
 	{
-		CLayerCollision	*collision;
-		DVECTOR			pos;
-		int				colHeight;
-
-		collision=m_player->getLayerCollision();
-		pos=m_player->getPlayerPos();
-		colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,5);
-		if(colHeight==0)
+		// If running then go to idle, otherwise leave in same state
+		if(m_currentState==STATE_RUN)
 		{
-			// Ok.. we're on the ground. What happens if we move left/right
-			colHeight=m_player->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy);
-			if(colHeight<-8)
-			{
-				// Big step up. Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(m_moveVelocity.vx<0)
-				{
-					dir=-1;
-					vx=-m_moveVelocity.vx>>VELOCITY_SHIFT;
-				}
-				else
-				{
-					dir=+1;
-					vx=m_moveVelocity.vx>>VELOCITY_SHIFT;
-				}
-				cx=pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(m_player->getHeightFromGround(cx,pos.vy)<-8)
-					{
-						break;
-					}
-					cx+=dir;
-				}
-				if(i)
-					pos.vx=cx-dir;
-
-				// If running then go to idle, otherwise leave in same state
-				if(m_currentState==STATE_RUN)
-				{
-					setState(STATE_IDLE);
-				}
-				m_moveVelocity.vx=0;
-				
-				// Get the height at this new position and then try the step-up code below.
-				// Without this, there are problems when you run up a slope and hit a wall at the same time
-				colHeight=m_player->getHeightFromGround(pos.vx,pos.vy);
-			}
-			if(colHeight&&colHeight>=-8&&colHeight<=8)
-			{
-				// Small step up/down. Follow the contour of the level
-				pos.vy+=colHeight;
-			}
+			setState(STATE_IDLE);
 		}
-		else
-		{
-			// In the air
-			if((m_player->getLayerCollision()->getCollisionBlock(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy)&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
-			{
-				// Hit an impassable block
-				pos.vx&=0xfff0;
-				if(m_moveVelocity.vx>0)
-				{
-					pos.vx+=15;
-				}
-				m_moveVelocity.vx=0;
-			}
-			else if(colHeight>=0) // Lets you jump through platforms from below
-			{
-				colHeight=m_player->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy,5);
-				if(colHeight<0)
-				{
-					// Stop at the edge of the obstruction
-					int	dir,vx,cx,i;
-					if(m_moveVelocity.vx<0)
-					{
-						dir=-1;
-						vx=m_moveVelocity.vx>>VELOCITY_SHIFT;
-					}
-					else
-					{
-						dir=+1;
-						vx=m_moveVelocity.vx>>VELOCITY_SHIFT;
-					}
-					cx=pos.vx;
-					for(i=0;i<vx;i++)
-					{
-						if(m_player->getHeightFromGround(cx,pos.vy)<0)
-						{
-							break;
-						}
-						cx+=dir;
-					}
-					if(i)
-						pos.vx=cx-dir;
-					m_moveVelocity.vx=0;
-				}
-			}
-		}
-		pos.vx+=m_moveVelocity.vx>>VELOCITY_SHIFT;
-		m_player->setPlayerPos(&pos);
+		m_moveVelocity.vx=0;
 	}
 }
 

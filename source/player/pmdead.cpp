@@ -71,6 +71,8 @@ void	CPlayerModeDead::think()
 		m_player->setAnimFrame(m_deadTime);
 	}
 
+m_player->moveVertical(5);
+
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&PI_ACTION)||
 	   m_deadTime>DEATH_TIMEOUT)
 	{
@@ -104,16 +106,16 @@ void	CPlayerModeDead::render(DVECTOR *_pos)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-/*
 void	CPlayerModeDead::fall()
 {
-	m_moveVelocity.vy+=getPlayerMetrics()->m_metric[DEFAULT_PLAYER_PLAYER_GRAVITY];
-	if(m_moveVelocity.vy>=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+	/*
+	m_yVelocity+=getPlayerMetrics()->m_metric[DEFAULT_PLAYER_PLAYER_GRAVITY];
+	if(m_yVelocity>=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
 	{
-		m_moveVelocity.vy=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
+		m_yVelocity=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
 	}
+	*/
 }
-*/
 
 /*===========================================================================
 end */

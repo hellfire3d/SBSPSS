@@ -149,7 +149,8 @@ public:
 	virtual void	think(int _frames);
 	virtual void	render();
 	virtual void	shove(DVECTOR move);
-//	virtual int		moveVertical(int _moveDistance);
+	virtual int		moveVertical(int _moveDistance);
+	virtual int		moveHorizontal(int _moveDistance);
 	virtual void	setHasPlatformCollided( bool newVal );
 	virtual bool	getHasPlatformCollided();
 
@@ -271,7 +272,7 @@ public:
 	int				isWearingGlasses()			{return m_glassesFlag;}
 	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
 	int				isWearingBoots()			{return m_squeakyBootsTimer;}
-	void			giveInvinvibilityRing()		{m_invinvibilityRingTimer=INVINCIBILITY_RING_TIME;}
+	void			giveInvincibilityRing()		{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
 
 	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;if(m_bubbleAmmo>99)m_bubbleAmmo=99;}
@@ -285,7 +286,7 @@ public:
 private:
 	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
-	int				m_invinvibilityRingTimer;
+	int				m_invincibilityRingTimer;
 	int				m_divingHelmet;
 	int				m_bubbleAmmo;
 	int				m_jellyAmmo;
