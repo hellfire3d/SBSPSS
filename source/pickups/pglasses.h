@@ -47,6 +47,7 @@ protected:
 
 private:
 	int					m_glint;
+	int					m_glintRot;
 
 };
 

@@ -64,6 +64,7 @@ void	CGlassesPickup::init()
 	CBasePickup::init();
 
 	m_glint=0;
+	m_glintRot=0;
 }
 
 /*----------------------------------------------------------------------
@@ -84,15 +85,18 @@ void	CGlassesPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int glasses_glintframes=16;
+int glasses_glintwait=400;
 int glasses_glintspeed=1;
-int glasses_glintframes=20;
-int glasses_glintwait=500;
+int glasses_glintRotSpeed=200;
 DVECTOR glasses_gxy={-3,-4};
-int glasses_glintFrames[]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4};
+static const int glasses_glintFrames[]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4,FRM__GLINT4,FRM__GLINT3,FRM__GLINT2,FRM__GLINT1};
 void	CGlassesPickup::thinkPickup(int _frames)
 {
-	m_glint+=_frames*glasses_glintspeed;
+	m_glint+=_frames;
 	if(m_glint>glasses_glintframes+glasses_glintwait)m_glint=0;
+	m_glintRot+=_frames*glasses_glintRotSpeed;
+	m_glintRot&=4095;
 }
 
 /*----------------------------------------------------------------------
@@ -115,8 +119,8 @@ void	CGlassesPickup::renderPickup(DVECTOR *_pos)
 
 	if(m_glint<=glasses_glintframes)
 	{
-		fh=sprites->getFrameHeader(glasses_glintFrames[m_glint&0x03]);
-		sprites->printFT4(fh,x+glasses_gxy.vx,y+glasses_gxy.vy,0,0,PICKUPS_OT_POS-1);
+		fh=sprites->getFrameHeader(glasses_glintFrames[(m_glint>>glasses_glintspeed)&0x07]);
+		sprites->printRotatedScaledSprite(fh,x+glasses_gxy.vx,y+glasses_gxy.vy,4095,4095,m_glintRot,PICKUPS_OT_POS-1);
 	}
 }
 
