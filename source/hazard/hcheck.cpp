@@ -71,7 +71,7 @@ void CNpcCheckpointHazard::think(int _frames)
 		{
 			int	HF=GameState::getOneSecondInFrames()>>1;
 			if (m_timer<HF) m_flick^=2;
-			if (m_flick & 2)
+			if (m_flick & 2 && !GameScene.getIsPaused() )
 			{
 				m_scalableFont->setJustification(FontBank::JUST_CENTRE);
 				m_scalableFont->print( 256, 50, "Checkpoint!" );

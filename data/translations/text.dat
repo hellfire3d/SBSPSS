@@ -767,7 +767,7 @@ eng=Special thanks to:
 [STR__CREDITS__VOICE_OVER]
 eng=Voice Over
 [STR__CREDITS__V_P__OF_INTERACTIVE_PRODUCT_AND_BOOK_PUBLISHING]
-eng=V.P. of Interactive Product and Book Publishing
+eng=V.P. of Interactive\nProduct and Book Publishing
 [STR__CREDITS__DIRECTOR_OF_MARKETING_AND_NEW_BUSINESS_DEVELOPMENT]
 eng=Director of Marketing and New Business Development
 [STR__CREDITS__DIRECTOR_OF_DEVELOPMENT_AND_PRODUCTION]
@@ -777,7 +777,7 @@ eng=Project Coordinator
 [STR__CREDITS__MARKETING_COORDINATOR]
 eng=Marketing Coordinator
 [STR__CREDITS__NICK_INTERACTIVE_WOULD_LIKE_TO_THANK_]
-eng=Nick Interactive would like to thank:
+eng=Nick Interactive\nwould like to thank:
 
 
 ; Climax
@@ -929,7 +929,7 @@ eng=Steve Hillenburg
 [STR__CREDITS__ERIC_COLEMAN]
 eng=Eric Coleman
 [STR__CREDITS__THQ_AND_THE_THQ_LOGO_ARE_TRADEMARKS_AND_OR_REGISTERED_TRADEMARKS_OF_THQ_INC]
-eng=THQ and the THQ logo are trademarks and/or registered trademarks of THQ Inc.
+eng=THQ and the THQ logo \nare trademarks and/or\nregistered trademarks of\nTHQ Inc.
 [STR__CREDITS__C_2001_THQ_INC]
 eng=(C) 2001 THQ Inc.
 

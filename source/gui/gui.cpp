@@ -147,7 +147,7 @@ void CGUIObject::render()
 
 	if(getFlags(FLAG_DRAWBORDER))
 	{
-		POLY_F4		*f4;
+		TPOLY_F4		*f4;
 		int			x,y,w,h;
 		int			ot;
 
@@ -161,10 +161,10 @@ void CGUIObject::render()
 		drawBambooBorder(x,y,w,h,ot);
 
 		// Background
-		f4=GetPrimF4();
+		f4=GetPrimTF4();
 		setXYWH(f4,x,y,w,h);
 		setRGB0(f4,  0,  0, 90);
-		setSemiTrans(f4,true);
+		setTSemiTrans(f4,true);
 		AddPrimToList(f4,ot);
 	}
 
@@ -491,10 +491,10 @@ void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 	sFrameHdr	*cornerFh;
 	POLY_FT4	*ft4;
 	LINE_F2		*f2;
-	POLY_F4		*f4;
 	int			centreX,centreY;
 	sFrameHdr	*faceFh;
-	POLY_F3		*f3;
+	TPOLY_F4		*f4;
+	TPOLY_F3		*f3;
 
 
 	// Squeeze in the corners a bit..
@@ -516,20 +516,20 @@ void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 	f2=DrawLine(_x+_w,_y+_h+cornerFh->H+1,_x,_y+_h+cornerFh->H+1,0,0,0,_ot);setSemiTrans(f2,true);
 
 	// White middle
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,_x,_y-cornerFh->H,_w+1,cornerFh->H);
 	setRGB0(f4,255,255,255);
-	setSemiTrans(f4,true);
+	setTSemiTrans(f4,true);
 	AddPrimToList(f4,_ot);
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,_x-cornerFh->W,_y,_w+(cornerFh->W*2)+1,_h+1);
 	setRGB0(f4,255,255,255);
-	setSemiTrans(f4,true);
+	setTSemiTrans(f4,true);
 	AddPrimToList(f4,_ot);
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,_x,_y+_h+1,_w+1,cornerFh->H);
 	setRGB0(f4,255,255,255);
-	setSemiTrans(f4,true);
+	setTSemiTrans(f4,true);
 	AddPrimToList(f4,_ot);
 
 	if(_faceFrame!=-1)
@@ -548,12 +548,12 @@ void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 		f2=DrawLine(_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop,speechmarkEndX,speechmarkEndY,0,0,0,_ot);setSemiTrans(f2,true);
 		f2=DrawLine(speechmarkEndX,speechmarkEndY,_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight,0,0,0,_ot);setSemiTrans(f2,true);
 		f2=DrawLine(_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight+1,_x-cornerFh->W-1,_y+_h,0,0,0,_ot);setSemiTrans(f2,true);
-		f3=GetPrimF3();
+		f3=GetPrimTF3();
 		setXY3(f3,_x-cornerFh->W,_y+sbb.speechmarkgapfromtop,
 				  speechmarkEndX,speechmarkEndY,
 				  _x-cornerFh->W,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight);
 		setRGB0(f3,255,255,255);
-		setSemiTrans(f3,true);
+		setTSemiTrans(f3,true);
 		AddPrimToList(f3,_ot);
 	}
 	else
@@ -564,10 +564,10 @@ void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 
 	// Background
 	/*
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,0,0,512,256);
 	setRGB0(f4,  0,  0, 90);
-	setSemiTrans(f4,true);
+	setTSemiTrans(f4,true);
 	AddPrimToList(f4,_ot);
 	*/
 }

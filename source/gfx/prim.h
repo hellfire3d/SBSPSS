@@ -244,6 +244,7 @@ typedef	u32	sOT;
 							setTile(CurrPrim-sizeof(TILE))
 
 // Extra prims :o)
+/* These DONT work :o(
 #define GetPrimTF3() 		GetPrim(TPOLY_F3);\
 				   			setTPolyF3((TPOLY_F3*)CurrPrim-sizeof(TPOLY_F3))
 
@@ -291,8 +292,7 @@ typedef	u32	sOT;
 
 #define GetPrimTTILE() 		GetPrim(TTILE);\
 							setTile((TTILE*)CurrPrim-sizeof(TTILE))
-
-
+*/
 /********************************************************************************************************/
 #define	OtInRange			(MAX_OT-1)
 #define	OtOutRange			(0xffffffff-OtInRange)
@@ -323,6 +323,20 @@ void			FlushPrimPool();
 
 LINE_F2			*DrawLine(int _x0,int _y0,int _x1,int _y1,int _r,int _g,int _b,int _ot);
 LINE_G2			*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int _r2,int _g2,int _b2,int _ot);
+
+/********************************************************************************************************/
+inline	TPOLY_F3	*GetPrimTF3()
+{
+TPOLY_F3	*P=(TPOLY_F3 *)GetPrimPtr(); SetPrimPtr((u8*)(P+1)); setTPolyF3(P);
+		return(P);
+}
+
+/********************************************************************************************************/
+inline	TPOLY_F4	*GetPrimTF4() 		
+{
+TPOLY_F4	*P=(TPOLY_F4 *)GetPrimPtr(); SetPrimPtr((u8*)(P+1)); setTPolyF4(P);
+		return(P);
+}
 
 /********************************************************************************************************/
 /*** Inlines ********************************************************************************************/

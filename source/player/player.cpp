@@ -642,7 +642,6 @@ void	CPlayer::init()
 		s_playerModes[i]->initialise(this);
 	}
 	CurrentPrompt=-1;
-	LastPrompt=-1;
 	PromptRGB=0;
 	PromptFade=0;
 
@@ -1382,7 +1381,7 @@ void	CPlayer::render()
 	CPlayerThing::render();
 
 
-#ifdef _STATE_DEBUG_
+#ifdef _STATE_DEBUG_x
 char buf[100];
 #ifdef __USER_paul__
 sprintf(buf,"%04d (%02d) ,%04d (%02d)\ndfg:%+02d\nMode:%s",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy),s_modeText[m_currentMode]);
@@ -2078,6 +2077,7 @@ void CPlayer::respawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+const int	ExtraListYPos=50-32;
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
 	int			playerMode;
@@ -2192,7 +2192,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	// Pants?
 	if(m_pantFlashTimer>0)
 	{
-		SpriteBank	*sb=CGameScene::getSpriteBank();
+/*		SpriteBank	*sb=CGameScene::getSpriteBank();
 		sFrameHdr	*fh;
 		DVECTOR		drawPos;
 		int			size;
@@ -2202,12 +2202,13 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 		drawPos.vy+=PANT_FLASH_Y_OFFSET;
 		size=m_pantFlashTimer&8?4096:8192;
 		ft4=sb->printRotatedScaledSprite(fh,drawPos.vx,drawPos.vy,size,size,0,0);
-		if (FrameFlipFlag&1)
+*/
+		if (FrameFlipFlag&1 && !GameScene.getIsPaused())
 		{
 			m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
 			m_scalableFontBank->setScale(511);
 			m_scalableFontBank->setColour(255,255,255);
-			m_scalableFontBank->print( 256, 50, "Extra Life!");
+			m_scalableFontBank->print( 256, ExtraListYPos, "Extra Life!");
 		}
 	}
 	
@@ -3337,31 +3338,21 @@ int		NewPrompt=m_currentMode;
 			PromptFade=-PromptFadeSpeed*4;
 		}
 
-		if (!PromptTable[NewPrompt].Data || NewPrompt==LastPrompt)
+		if (!PromptTable[NewPrompt].Data || PromptTable[NewPrompt].Shown)
 		{
 			NewPrompt=-1;
 		}
-/*
-		if (NewPrompt!=-1 && PromptTable[NewPrompt].Shown)
-		{
-			NewPrompt=-1;
-		}
-*/
 	
 // Check for Prompt change
 		if (CurrentPrompt!=NewPrompt && NewPrompt!=-1)
 		{
 			if (CurrentPrompt==-1)
 			{ // no prompt, so just display it
-				if (LastPrompt!=-1)
-				{
-					PromptTable[LastPrompt].Shown=1;
-				}
 				CurrentPrompt=NewPrompt;
-				LastPrompt=NewPrompt;
 				PromptTimer=PromptOnScreenTime;
 				PromptRGB=0;
 				PromptFade=+PromptFadeSpeed;
+				PromptTable[CurrentPrompt].Shown=1;	// Set as shown
 			}
 			else
 			{
@@ -3458,17 +3449,15 @@ int			MaxTLen=0;
 // Background
 			
 int			BackRGB=PromptRGB/2;
-u8			*PrimPtr=GetPrimPtr();
-TPOLY_F4	*F4=(TPOLY_F4 *)PrimPtr;
-			PrimPtr+=sizeof(TPOLY_F4);
-			SetPrimPtr((u8*)PrimPtr);
-			setTPolyF4(F4);
+TPOLY_F4	*F4=GetPrimTF4(); setTSemiTrans(F4,1); setTABRMode(F4,0);
 
 			setXYWH(F4,PromptIconX-2,Y-2,MaxTLen+(X-PromptIconX)+4,(PromptY-Y)+4);
 			setRGB0(F4,BackRGB,BackRGB,BackRGB);
-			setTSemiTrans(F4,1);
-			setTABRMode(F4,2);
 			AddPrimToList(F4,0);
+// revert Fontbank settings - shouldnt have to do this, grrrr
+			m_fontBank->setTrans(0);
+			m_fontBank->setColour(128,128,128);
+			m_fontBank->setSMode(0);
 }
 
 /*===========================================================================

@@ -288,7 +288,7 @@ void CGameScene::render_showing_lives()
 {
 	int			colour;
 	char		buf[20];
-	POLY_F4		*f4;
+	TPOLY_F4		*f4;
 	POLY_FT3	*ft3;
 
 
@@ -320,20 +320,21 @@ void CGameScene::render_showing_lives()
 	s_genericFont->print(256,140,buf);
 
 	// Black background
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,0,0,512,256);
 	setRGB0(f4,colour,colour,colour);
-	setShadeTex(f4,0);
-	setSemiTrans(f4,1);
+	setTShadeTex(f4,0);
+	setTSemiTrans(f4,1);
+	setTABRMode(f4,2);
 	AddPrimToList(f4,0);
-	ft3=GetPrimFT3();
+/*	ft3=GetPrimFT3();
 	setPolyFT3(ft3);
 	setShadeTex(ft3,1);
 	setSemiTrans(ft3,1);
 	ft3->tpage=2<<5;
 	setXY3(ft3,512,512,512,512,512,512);
 	AddPrimToList(ft3,0);
-
+*/
 	if(m_gamestate==GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT)
 	{
 		m_bossText->render();

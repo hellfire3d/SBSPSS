@@ -69,6 +69,11 @@ int					CFader::s_waitFrames=0;
   ---------------------------------------------------------------------- */
 void CFader::render()
 {
+int		TMode;
+TPOLY_F4	*f4;
+	
+	TMode=(s_fadeStyle==BLACK_FADE?2:1);
+
 	switch(s_fadeMode)
 	{
 		case FADED_IN:
@@ -82,21 +87,13 @@ void CFader::render()
 					case BLACK_FADE:
 					case WHITE_FADE:
 					{
-						POLY_F4		*f4;
-						POLY_FT3	*ft3;
-						f4=GetPrimF4();
+						f4=GetPrimTF4();
 						setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH()+1);
 						setRGB0(f4,s_fadeValue,s_fadeValue,s_fadeValue);
-						setShadeTex(f4,0);
-						setSemiTrans(f4,1);
+						setTShadeTex(f4,0);
+						setTSemiTrans(f4,1);
+						setTABRMode(f4,TMode);
 						AddPrimToList(f4,0);
-						ft3=GetPrimFT3();
-						setPolyFT3(ft3);
-						setShadeTex(ft3,1);
-						setSemiTrans(ft3,1);
-						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1)<<5;
-						setXY3(ft3,0,0,0,512,512,0);
-						AddPrimToList(ft3,0);
 						break;
 					}
 				}
@@ -111,23 +108,15 @@ void CFader::render()
 					case BLACK_FADE:
 					case WHITE_FADE:
 					{
-						POLY_F4		*f4;
-						POLY_FT3	*ft3;
 						int			col;
 						col=255-s_fadeValue;
-						f4=GetPrimF4();
+						f4=GetPrimTF4();
 						setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH()+1);
 						setRGB0(f4,col,col,col);
-						setShadeTex(f4,0);
-						setSemiTrans(f4,1);
+						setTShadeTex(f4,0);
+						setTSemiTrans(f4,1);
+						setTABRMode(f4,TMode);
 						AddPrimToList(f4,0);
-						ft3=GetPrimFT3();
-						setPolyFT3(ft3);
-						setShadeTex(ft3,1);
-						setSemiTrans(ft3,1);
-						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1)<<5;
-						setXY3(ft3,512,512,512,512,512,512);
-						AddPrimToList(ft3,0);
 						break;
 					}
 				}
@@ -136,9 +125,7 @@ void CFader::render()
 
 		case FADED_OUT:
 			{
-				POLY_F4		*f4;
-				
-				f4=GetPrimF4();
+				f4=GetPrimTF4();
 				setXYWH(f4,0,0,VidGetScrW()+1,VidGetScrH());
 				switch(s_fadeStyle)
 				{

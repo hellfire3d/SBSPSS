@@ -272,7 +272,7 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 {
 	int							xbase;
 	CGameSlotManager::GameSlot	*gameSlot;
-	POLY_F4						*f4;
+	TPOLY_F4						*f4;
 	int							x,y;
 	sFrameHdr					*fh;
 	int							i;
@@ -283,10 +283,10 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 	gameSlot=CGameSlotManager::getSlotData();
 
 	drawBambooBorder(xbase,SLOT_FRAME_Y,SLOT_FRAME_W,SLOT_FRAME_H,3);
-	f4=GetPrimF4();
+	f4=GetPrimTF4();
 	setXYWH(f4,xbase,SLOT_FRAME_Y,SLOT_FRAME_W,SLOT_FRAME_H);
 	setRGB0(f4,  0,  0, 90);
-	setSemiTrans(f4,true);
+	setTSemiTrans(f4,true);
 	AddPrimToList(f4,3);
 
 	x=xbase+SLOT_SLOTNUMBER_X;

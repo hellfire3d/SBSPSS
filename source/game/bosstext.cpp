@@ -244,10 +244,10 @@ void	CBossText::render()
 		m_scalableFontBank->setScale(400);
 		m_scalableFontBank->setColour(128,128,128);
 		m_scalableFontBank->print(256-20,80+s_bossTextYOffset,bd->m_titleTextId);
-
+/*
 		m_fontBank->setColour(118,118,118);
 		m_fontBank->print(256-20,190+s_bossTextYOffset,bd->m_subTitleTextId);
-
+*/
 		// Boss gfx
 		DVECTOR	bossPoss;
 		bossPoss=pos;

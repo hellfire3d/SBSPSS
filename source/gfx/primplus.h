@@ -127,7 +127,7 @@
 #define	setTTile16(p)			setTDrawTPageSize((p), GPUSIZE_TTILE_16), ((p)->code)=GPUCODE_TILE_16
 
 #define	setTSemiTrans(p, abe)	setSemiTrans(&((p)->t_code), (abe))
-#define	setTSetShadeTex(p, st)	setShadeTex(&((p)->t_code), (st))
+#define	setTShadeTex(p, st)		setShadeTex(&((p)->t_code), (st))
 #define	setTABRMode(p,abr)		((p)->t_code) = _get_mode(0,1,(abr<<5))
 #define	setTSprtTPage(p,tp)		((p)->t_code) = _get_mode(0,1,(tp))
 #define	setTSprtTPageABR(p,t,a)	((p)->t_code) = _get_mode(0,1,(((t)&0x19f)|((a)<<5)))

@@ -49,7 +49,7 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 			for (int i=0; i<PrimCount; i++)
 			{
 				setTSprt(PrimPtr);
-				setTSetShadeTex(PrimPtr,1);
+				setTShadeTex(PrimPtr,1);
 				PrimPtr->w=TILE2D_WIDTH;
 				PrimPtr->h=TILE2D_HEIGHT;
 				PrimPtr++;

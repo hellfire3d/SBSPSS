@@ -282,7 +282,6 @@ private:
 	int				PromptRGB;
 	int				PromptFade;
 	int				CurrentPrompt;
-	int				LastPrompt;
 	int				PromptTimer;
 
 static	sPromptTable	PromptTable[NUM_PLAYERMODES];
