@@ -66,6 +66,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndParamBar.EnableDocking( CBRS_ALIGN_ANY);
 	m_wndParamBar.SetWindowText("Param");
 	DockControlBar(&m_wndParamBar);
+
+//	Test1.Create(IDD_TEST1,NULL);
 	m_wndParamBar.AddDialog(LayerList,IDD_LAYER_LIST_DIALOG,TRUE);
 	m_wndParamBar.AddDialog(Test1,IDD_TEST1,TRUE);
 	m_wndParamBar.AddDialog(Test2,IDD_TEST2,TRUE);

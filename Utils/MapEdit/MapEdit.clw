@@ -18,18 +18,18 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=10
-Resource1=IDR_TOOLBAR (English (U.S.))
+Resource1=IDD_TEST1
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_LAYER_LIST_DIALOG
+Resource3=IDD_ABOUTBOX (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_TEST1
-Class8=CLayerList
-Resource6=IDR_MAINFRAME (English (U.S.))
-Resource7=IDD_TRASHHEAP
-Class9=CMultiBar
-Resource8=IDD_MULTIBAR (English (U.S.))
-Resource9=IDD_ABOUTBOX (English (U.S.))
-Resource10=IDD_TEST2
+Resource5=IDR_MAINFRAME (English (U.S.))
+Class8=CMultiBar
+Resource6=IDD_TRASHHEAP
+Resource7=IDD_TEST2
+Resource8=IDR_TOOLBAR (English (U.S.))
+Resource9=IDD_MULTIBAR (English (U.S.))
+Class9=CLayerList
+Resource10=IDD_LAYER_LIST_DIALOG
 
 [CLS:CChildFrame]
 Type=0
@@ -177,20 +177,6 @@ Control1=IDC_STATIC,static,1342308352
 Control2=IDC_CHECK1,button,1342242819
 Control3=IDC_RADIO1,button,1342177289
 
-[DLG:IDD_LAYER_LIST_DIALOG]
-Type=1
-Class=CLayerList
-ControlCount=1
-Control1=IDC_LAYER_LIST,listbox,1352728835
-
-[CLS:CLayerList]
-Type=0
-HeaderFile=LayerList.h
-ImplementationFile=LayerList.cpp
-BaseClass=CDialog
-Filter=D
-LastObject=CLayerList
-
 [CLS:CMultiBar]
 Type=0
 HeaderFile=multibar.h
@@ -239,4 +225,19 @@ Control13=IDC_CHECK13,button,1342242819
 Control14=IDC_CHECK14,button,1342242819
 Control15=IDC_CHECK15,button,1342242819
 Control16=IDC_CHECK16,button,1342242819
+
+[DLG:IDD_LAYER_LIST_DIALOG]
+Type=1
+Class=CLayerList
+ControlCount=1
+Control1=IDC_LAYER_LIST,listbox,1352728915
+
+[CLS:CLayerList]
+Type=0
+HeaderFile=LayerList.h
+ImplementationFile=LayerList.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=CLayerList
 
