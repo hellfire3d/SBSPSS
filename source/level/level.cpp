@@ -175,14 +175,13 @@ int	PretendToBeAPS2=false;
 };
 const	int		LvlTableSize=sizeof(LvlTable)/sizeof(sLvlTab);
 
-const FileEquate	loadingScreens[7]=
+const FileEquate	loadingScreens[6]=
 {
 	LOADINGSCREENS_PINEAPPLE_GFX,	// Chapter 1
 	LOADINGSCREENS_CULTURE_GFX,		// Chapter 2
 	LOADINGSCREENS_PICKLES_GFX,		// Chapter 3
 	LOADINGSCREENS_MONITOR_GFX,		// Chapter 4
 	LOADINGSCREENS_KARATE_GFX,		// Chapter 5
-	LOADINGSCREENS_PIZZA_GFX,		// Fma
 };
 
 /*****************************************************************************/
@@ -291,8 +290,16 @@ u8					*s_image;
 int					i;
 
 			if (LevelNo==-1)
-			{ // default loading screen
-				s_image=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
+			{
+				// default loading screen
+				s_image=LoadPakScreen(LOADINGSCREENS_TEENAGE_GFX);
+				sprintf(buf,"%s",TranslationDatabase::getString(STR__NOW_LOADING));
+			}
+			else if (LevelNo==-2)
+			{
+				// fma laoding screen..
+				s_image=LoadPakScreen(	LOADINGSCREENS_PIZZA_GFX);
+				sprintf(buf,"%s",TranslationDatabase::getString(STR__NOW_LOADING));
 			}
 			else
 			{
@@ -309,20 +316,18 @@ int					i;
 
 			for(i=0;i<2;i++)
 			{
-				if (LevelNo!=-1)
-				{
-					font.setColour(255,255,255);
-					font.print(256  ,90  ,buf);
-					font.setColour(0,0,0);
-					font.print(256-1,90-1,buf);
-					font.print(256-1,90  ,buf);
-					font.print(256-1,90+1,buf);
-					font.print(256  ,90-1,buf);
-					font.print(256  ,90+1,buf);
-					font.print(256+1,90-1,buf);
-					font.print(256+1,90  ,buf);
-					font.print(256+1,90+1,buf);
-					}
+				font.setColour(255,255,255);
+				font.print(256  ,90  ,buf);
+				font.setColour(0,0,0);
+				font.print(256-1,90-1,buf);
+				font.print(256-1,90  ,buf);
+				font.print(256-1,90+1,buf);
+				font.print(256  ,90-1,buf);
+				font.print(256  ,90+1,buf);
+				font.print(256+1,90-1,buf);
+				font.print(256+1,90  ,buf);
+				font.print(256+1,90+1,buf);
+
 				PrimDisplay();
 				VSync(0);
 				VidSwapDraw();

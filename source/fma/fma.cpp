@@ -1201,12 +1201,11 @@ int	s_chosenScript=CFmaScene::FMA_SCRIPT__PLANKTON;
   ---------------------------------------------------------------------- */
 void	CFmaScene::init()
 {
-//	if (s_chosenScript==FMA_SCRIPT__INTRO)
-	{ // Put up loading screen
-		CLevel::DisplayLoadingScreen();
-	}
 	int			i;
 	ACTOR_DATA	*actor;
+
+
+	CLevel::DisplayLoadingScreen(-2);
 
 	m_level=NULL;
 	m_party=NULL;
