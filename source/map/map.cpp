@@ -521,18 +521,16 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 {
 	u8	*image;
 	u16	*src,*dst;
-	int	x,y;
+	int	x;
 
 	image=CFileIO::loadFile((FileEquate)_file);ASSERT(image);
 	src=(u16*)image;
 	dst=(u16*)m_screenImage+(_x+(_y*512));
 	for(y=0;y<_h;y++)
 	{
-		for(x=0;x<_w;x++)
-		{
-			*dst++=*src++;
-		}
-		dst+=512-_w;
+		memcpy(dst,src,_w*2);
+		dst+=512;
+		src+=_w;
 	}
 	MemFree(image);
 }
