@@ -614,6 +614,7 @@ u16		Tail = LList->Tail;
 u16		Node = LList->Stack[ LList->SP-- ];
 
 		MemNodeCount++;
+		ASSERT(MemNodeCount<LListLen);
 
 		if (Head == 0xffff && Tail == 0xffff)
 			{
