@@ -169,7 +169,7 @@ private:
 	enum
 	{
 		NUM_EMITTERS=10,
-		NUM_BUBICLES=150,
+		NUM_BUBICLES=250,
 	};
 
 							CBubicleFactory()						{;}
