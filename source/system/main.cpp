@@ -207,6 +207,8 @@ int 	main()
 	GameState::setNextScene( &SceneSelector );
 #elif __USER_art__
 	GameState::setNextScene( &FrontEndScene );
+#elif __USER_sbart__
+	GameState::setNextScene( &FrontEndScene );
 #else
 	GameState::setNextScene( &GameScene );
 #endif

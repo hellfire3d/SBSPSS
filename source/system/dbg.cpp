@@ -291,7 +291,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 /*****************************************************************************/
 void	DbgPollHost()
 {
-#if		!defined(__USER_ART__)
+#ifndef __CLIMAX_DEVKIT__
 	#if			__FILE_SYSTEM__==PC
 		pollhost();
 	#endif

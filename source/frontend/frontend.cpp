@@ -135,7 +135,7 @@ void CFrontEndScene::init()
 
 	m_exitToGame=false;
 	m_mode=MODE__NONE;
-#ifdef __USER_art__
+#if defined(__USER_art__) || defined(__USER_sbart__)
 	setMode(MODE__CHOOSE_SLOT);
 #else
 	setMode(MODE__MAIN_TITLES);

@@ -13,7 +13,7 @@
 
 #include "gfx\font.h"	
 
-#if		defined(__USER_art__) || defined(__USER_daveo__)
+#if		defined(__USER_art__) || defined(__USER_sbart__) || defined(__USER_daveo__)
 #define	_SHOW_POLYZ_	1
 #endif
 /*****************************************************************************/

@@ -181,13 +181,13 @@ u8 * CFileIO::loadFile( FileEquate file, char *allocName )
 
 	buffer = (u8 *)MemAlloc( Length ,allocName);
 	ASSERT( buffer );
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	EnterCriticalSection();
 #endif
 	OpenFile( file );
 	ReadFile( buffer, Length );
 	CloseFile();
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	ExitCriticalSection();
 #endif
 
@@ -222,13 +222,13 @@ u8 * CFileIO::loadFileAtAddr( FileEquate file, u8* buffer)
 	Length = getFileSize( file );
 
 	ASSERT( buffer );
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	EnterCriticalSection();
 #endif
 	OpenFile( file );
 	ReadFile( buffer, Length );
 	CloseFile();
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	ExitCriticalSection();
 #endif
 
@@ -248,13 +248,13 @@ void 	CFileIO::CloseFile()
 /*****************************************************************************/
 void 	CFileIO::LoadFileSizeAtAddr(FileEquate Filename,void *Buffer,u32 Length)
 {
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	EnterCriticalSection();
 #endif
 	OpenFile(Filename);
 	ReadFile(Buffer,Length);
 	CloseFile();
-#if defined(__USER_ART__)
+#if defined(__CLIMAX_DEVKIT__)
 	ExitCriticalSection();
 #endif
 

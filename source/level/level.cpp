@@ -392,7 +392,7 @@ void 	CLevel::init()
 		exitTrigger=new ("LevelExitTrigger") CLevelExitTrigger();
 		exitTrigger->init();
 // (pkg)
-#if		defined(__USER_art__) || defined(__USER_paul__)
+#if		defined(__USER_art__) || defined(__USER_sbart__) || defined(__USER_paul__)
 if(lvlTab->exitX==0&&lvlTab->exitY==0)
 {
 	PAUL_DBGMSG("-- NO LEVEL EXIT DEFINED FOR %d",s_globalLevelSelectThing);

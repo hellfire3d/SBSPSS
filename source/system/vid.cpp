@@ -431,11 +431,7 @@ int 	OldX=Scr->Disp.disp.x,OldY=Scr->Disp.disp.y;
             PadUpdate();
             DbgPollHost();
 
-#ifdef __USER_ARTDEV__
-            Pad=PadGetHeld(1);
-#else
-            Pad=PadGetHeld(0);
-#endif
+           Pad=PadGetHeld(0);
 #ifdef __USER_paul__
 			// my finger was hurting..
             if((PadGetDown(0) & PAD_SELECT)) Done=1;

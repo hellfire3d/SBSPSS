@@ -177,7 +177,7 @@ const colrgb s_typeColours[]={
 typedef enum {SHOW_NONE,SHOW_OPAQUE,SHOW_SEMITRANS}ColShowType;
 #if defined (__USER_paul__)
 ColShowType	showCollision=SHOW_OPAQUE;
-#elif defined (__USER_art__)
+#elif defined (__USER_art__) || defined (__USER_sbart__)
 ColShowType	showCollision=SHOW_SEMITRANS;
 #else
 ColShowType showCollision=SHOW_NONE;

@@ -51,7 +51,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __USER_art__
+#if defined (__USER_art__) || defined (__USER_sbart__)
 #include "gfx\prim.h"
 void	CLevelExitTrigger::render()
 {
@@ -111,7 +111,7 @@ void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 {
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
 
-#ifndef __USER_art__
+#if !defined (__USER_art__) && !defined (__USER_sbart__)
 	CGameScene::levelFinished();
 #endif
 }

@@ -37,7 +37,7 @@
 class CLevelExitTrigger : public CTriggerThing
 {
 public:
-#ifdef __USER_art__
+#if defined (__USER_art__) || defined (__USER_sbart__)
 	virtual void		render();
 #endif
 	void				setExitPosition(int _x,int _y,int _w,int _h);
