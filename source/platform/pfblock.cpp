@@ -160,56 +160,6 @@ CRECT const &collisionArea=getCollisionArea();
 
 								m_contact = true;
 							}
-							else
-							{
-								DVECTOR shove;
-								int leftDist = playerCollisionArea.x2 - collisionArea.x1;
-								int rightDist = collisionArea.x2 - playerCollisionArea.x1;
-
-								if ( leftDist < rightDist )
-								{
-									shove.vx = -leftDist;
-								}
-								else
-								{
-									shove.vx = rightDist;
-								}
-								shove.vy = 0;
-
-								player->shove( shove );
-							}
-						}
-						else
-						{
-							int testPosY;
-
-							testPosY = playerPos.vy - CPlayer::HEIGHT_FOR_HEAD_COLLISION;
-
-							if ( testPosY >= collisionArea.y1 && testPosY <= collisionArea.y2 )
-							{
-								// player's head is colliding with platform, but feet aren't
-
-								player->forceFall();
-
-								if ( collisionArea.y2 - testPosY > 8 )
-								{
-									DVECTOR shove;
-									int leftDist = playerCollisionArea.x2 - collisionArea.x1;
-									int rightDist = collisionArea.x2 - playerCollisionArea.x1;
-
-									if ( leftDist < rightDist )
-									{
-										shove.vx = -leftDist;
-									}
-									else
-									{
-										shove.vx = rightDist;
-									}
-									shove.vy = 0;
-
-									player->shove( shove );
-								}
-							}
 						}
 					}
 				}
