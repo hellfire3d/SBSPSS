@@ -18,7 +18,8 @@
 #define	MAX_OT_GUI			(0)
 #define	MAX_OT				(16)
 #define	MAX_OT_ALL			(MAX_OT+MAX_OT_GUI)
-#define	MAX_PRIMS			((1024*2)+1024)	// Put back after overrender bug found (BAD DAVE!) ( put back in by evilpaul ;)
+#define	MAX_PRIMS			((1024*2)+512)	// Put back after overrender bug found (BAD DAVE!) ( put back in by evilpaul ;)
+// bumped down a lil, cos we need memory hope this value works ok. Be ok once quadding is in
 
 //#define	USE_NTAGS			1
 
