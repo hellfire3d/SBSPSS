@@ -615,6 +615,7 @@ void CNpcEnemy::init()
 	m_isDying = false;
 
 	m_health = m_data[this->m_type].initHealth;
+	m_health = 1;
 
 	m_extendDir = EXTEND_RIGHT;
 
