@@ -41,7 +41,7 @@
 
 
 #ifndef	__USER_paul__
-#define	FORCE_FMV	1	
+//#define	FORCE_FMV	1	
 #endif
 
 #if		__FILE_SYSTEM__==CD | FORCE_FMV
