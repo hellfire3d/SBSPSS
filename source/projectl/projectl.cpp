@@ -57,6 +57,7 @@ void CProjectile::init()
 	m_lifetimeType = PROJECTILE_FINITE_LIFE;
 	m_state = PROJECTILE_ATTACK;
 	m_turnSpeed = 256;
+	m_extension = 0;
 }
 
 void CProjectile::init( DVECTOR initPos, s16 initHeading )
@@ -64,7 +65,7 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading )
 	init();
 
 	m_heading = initHeading;
-	Pos = initPos;
+	m_initPos = Pos = initPos;
 }
 
 void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType )
@@ -223,7 +224,20 @@ void CProjectile::think(int _frames)
 
 		case PROJECTILE_GAS_CLOUD:
 		{
-			// expand but don't move
+			u16 targetExtension = 100 << 8;
+
+			if ( m_extension < targetExtension )
+			{
+				m_extension += ( ( targetExtension - m_extension ) * _frames ) >> 8;
+
+				Pos = m_initPos;
+				Pos.vx += ( m_extension * rcos( m_heading ) ) >> 20;
+				Pos.vy += ( m_extension * rsin( m_heading ) ) >> 20;
+			}
+			else
+			{
+				// expand
+			}
 
 			break;
 		}

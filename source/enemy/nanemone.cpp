@@ -147,14 +147,9 @@ void CNpc::processCloseAnemone3Attack( int _frames )
 	CProjectile *projectile;
 	u8 lifetime = 8;
 
-	DVECTOR newPos = Pos;
-
-	newPos.vx += rcos( m_fireHeading ) >> 5;
-	newPos.vy += rsin( m_fireHeading ) >> 5;
-
 	projectile = new( "test projectile" ) CProjectile;
-	projectile->init(	newPos,
-						m_heading,
+	projectile->init(	Pos,
+						m_fireHeading,
 						CProjectile::PROJECTILE_GAS_CLOUD,
 						CProjectile::PROJECTILE_FINITE_LIFE,
 						lifetime * GameState::getOneSecondInFrames() );

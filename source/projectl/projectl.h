@@ -55,8 +55,10 @@ protected:
 	bool				processTargetSeek( int _frames, DVECTOR targetPos );
 
 	class SpriteBank							*m_spriteBank;
+	DVECTOR										m_initPos;
 	s16											m_heading;
 	s32											m_lifetime;
+	s32											m_extension;
 	PROJECTILE_MOVEMENT_TYPE					m_movementType;
 	PROJECTILE_LIFETIME_TYPE					m_lifetimeType;
 	PROJECTILE_STATE							m_state;
