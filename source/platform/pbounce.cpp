@@ -145,15 +145,15 @@ void CNpcBouncePlatform::collidedWith( CThing *_thisThing )
 		case TYPE_PLAYER:
 		{
 			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
-			CRECT	playerCollisionArea;
+//			DVECTOR	playerPos;
+//			CRECT	collisionArea;
+//			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			playerCollisionArea = player->getCollisionArea();
-			collisionArea=getCollisionArea();
+DVECTOR const	&playerPos=player->getPos();
+CRECT	const	&playerCollisionArea = player->getCollisionArea();
+CRECT	const	&collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 

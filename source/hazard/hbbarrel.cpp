@@ -76,7 +76,7 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 		m_rotation += 64 * _frames;
 		m_rotation &= 4095;
 
-		DVECTOR	offset = CLevel::getCameraPos();
+		DVECTOR const &offset = CLevel::getCameraPos();
 
 		s32 yPos = Pos.vy - offset.vy;
 

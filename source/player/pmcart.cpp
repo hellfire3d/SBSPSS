@@ -80,8 +80,9 @@ void	CPlayerModeCart::think()
 
 	if ( platform )
 	{
-		newPos.vx = platform->getPos().vx;
-		newPos.vy = platform->getPos().vy;
+		newPos=platform->getPos();
+//		newPos.vx = platform->getPos().vx;
+//		newPos.vy = platform->getPos().vy;
 
 		int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( newPos.vx, newPos.vy );
 		s16 angle = ( ( CNpcPlatform * ) platform )->getCollisionAngle();

@@ -277,7 +277,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 	for ( segmentCount = 0 ; segmentCount < NPC_PARASITIC_WORM_LENGTH ; segmentCount++ )
 	{
-		DVECTOR currentPos = m_segmentArray[segmentCount].getPos();
+		DVECTOR const &currentPos = m_segmentArray[segmentCount].getPos();
 
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
@@ -290,7 +290,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 		if ( segmentCount < NPC_PARASITIC_WORM_LENGTH - 1 )
 		{
-			DVECTOR nextPos = m_segmentArray[segmentCount + 1].getPos();
+			DVECTOR const &nextPos = m_segmentArray[segmentCount + 1].getPos();
 			xDist = currentPos.vx - nextPos.vx;
 			yDist = currentPos.vy - nextPos.vy;
 			headingFromNext = ratan2( yDist, xDist );
@@ -469,23 +469,22 @@ void CNpcParasiticWormEnemy::render()
 
 int CNpcParasiticWormEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
-	DVECTOR	pos,thisThingPos;
+//	DVECTOR	pos,thisThingPos;
 	int		radius;
 	int		collided;
 
-	pos=getCollisionCentre();
-	thisThingPos=_thisThing->getCollisionCentre();
+DVECTOR const	&pos=getCollisionCentre();
+DVECTOR const	&thisThingPos=_thisThing->getCollisionCentre();
 
 	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
 	collided=false;
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		CRECT	thisRect,thatRect;
+//		CRECT	thisRect,thatRect;
 
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
+CRECT const	&thisRect=getCollisionArea();
+CRECT const	&thatRect=_thisThing->getCollisionArea();
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
@@ -565,23 +564,22 @@ void CNpcParasiticWormSegment::render()
 
 int CNpcParasiticWormSegment::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
-	DVECTOR	pos,thisThingPos;
+//	DVECTOR	pos,thisThingPos;
 	int		radius;
 	int		collided;
 
-	pos = getCollisionCentre();
-	thisThingPos = _thisThing->getCollisionCentre();
+DVECTOR const	&pos = getCollisionCentre();
+DVECTOR const	&thisThingPos = _thisThing->getCollisionCentre();
 
 	radius = getCollisionRadius() + _thisThing->getCollisionRadius();
 	collided = false;
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		CRECT	thisRect,thatRect;
+//		CRECT	thisRect,thatRect;
 
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
+CRECT const	&thisRect=getCollisionArea();
+CRECT const	&thatRect=_thisThing->getCollisionArea();
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))

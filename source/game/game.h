@@ -62,7 +62,7 @@ static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
 static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
 
-static	void			dropHealth(DVECTOR &Pos,int Amount,int Vel);
+static	void			dropHealth(DVECTOR const &Pos,int Amount,int Vel);
 
 
 static	void			setCameraShake(s16 X,s16 Y);

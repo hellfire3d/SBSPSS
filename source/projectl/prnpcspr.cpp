@@ -75,14 +75,13 @@ void CEnemyAsSpriteProjectile::setRGB( int R, int G, int B )
 void CEnemyAsSpriteProjectile::render()
 {
 	sFrameHdr	*frameHdr;
-	DVECTOR	offset;
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
 	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( m_spriteFrame );
 	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( m_spriteFrame );
 
-	offset = getScreenOffset();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	x = Pos.vx - offset.vx;
 	y = Pos.vy - offset.vy;

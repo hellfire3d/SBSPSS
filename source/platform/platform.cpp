@@ -689,8 +689,8 @@ void CNpcPlatform::reinit()
 
 void CNpcPlatform::calculateNonRotatedCollisionData()
 {
-	DVECTOR collisionSize = getCollisionSize();
-	DVECTOR collisionOffset = getCollisionCentreOffset();
+DVECTOR const	&collisionSize = getCollisionSize();
+DVECTOR const	&collisionOffset = getCollisionCentreOffset();
 
 	m_nonRotatedCollisionArea.XMax = ( collisionSize.vx >> 1 ) + collisionOffset.vx;
 	m_nonRotatedCollisionArea.XMin = -( collisionSize.vx >> 1 ) + collisionOffset.vx;
@@ -859,9 +859,7 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 	player=GameScene.getPlayer();
 	if(player->isOnPlatform()==this)
 	{
-		DVECTOR	playerPos;
-
-		playerPos=player->getPos();
+		DVECTOR	const &playerPos=player->getPos();
 
 		DVECTOR shove;
 		shove.vx = 0;
@@ -955,7 +953,7 @@ void CNpcPlatform::processTilt( int _frames )
 		// user is touching platform, tilt accordingly
 
 		CPlayer *player = GameScene.getPlayer();
-		DVECTOR playerPos = player->getPos();
+		DVECTOR const &playerPos = player->getPos();
 
 		if ( playerPos.vx > Pos.vx + 10 )
 		{
@@ -1057,14 +1055,14 @@ u8 CNpcPlatform::checkCollisionDelta( CThing *_thisThing, int threshold, CRECT c
 	// check for case of "was not colliding previously because was above" +
 	// "is not colliding now because is below"
 
-	DVECTOR	otherPos = _thisThing->getPos();
+	DVECTOR	const &otherPos = _thisThing->getPos();
 
 	if ( getHeightFromPlatformAtPosition( otherPos.vx, otherPos.vy ) < 0 )
 	{
 		// is currently below platform landing point
 
-		DVECTOR otherPosDelta = _thisThing->getPosDelta();
-		DVECTOR posDelta = getPosDelta();
+		DVECTOR const &otherPosDelta = _thisThing->getPosDelta();
+		DVECTOR const &posDelta = getPosDelta();
 
 		if ( otherPosDelta.vy > 0 || posDelta.vy < 0 )
 		{
@@ -1115,15 +1113,15 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_PLAYER:
 		{
 			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
-			CRECT	playerCollisionArea;
+//			DVECTOR	playerPos;
+//			CRECT	collisionArea;
+//			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			playerCollisionArea = player->getCollisionArea();
-			collisionArea=getCollisionArea();
+DVECTOR const &playerPos=player->getPos();
+CRECT const &playerCollisionArea = player->getCollisionArea();
+CRECT const &collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 
@@ -1163,12 +1161,12 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_NPC:
 		{
 			CNpcFriend *friendNpc;
-			DVECTOR	friendPos;
-			CRECT	collisionArea;
+//			DVECTOR	friendPos;
+//			CRECT	collisionArea;
 
 			friendNpc = (CNpcFriend*) _thisThing;
-			friendPos = friendNpc->getPos();
-			collisionArea=getCollisionArea();
+DVECTOR const &friendPos = friendNpc->getPos();
+CRECT const &collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 
@@ -1259,15 +1257,15 @@ int CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 				thisRect = getCollisionArea();
 				thatRect = _thisThing->getCollisionArea();
 
-				DVECTOR posDelta = getPosDelta();
+				DVECTOR const &thisPosDelta = getPosDelta();
+				int	ThisAbsY=abs(thisPosDelta.vy)>>1;
+				thisRect.y1 -= ThisAbsY;
+				thisRect.y2 += ThisAbsY;
 
-				thisRect.y1 -= abs( posDelta.vy ) >> 1;
-				thisRect.y2 += abs( posDelta.vy ) >> 1;
-
-				posDelta = _thisThing->getPosDelta();
-
-				thatRect.y1 -= abs( posDelta.vy ) >> 1;
-				thatRect.y2 += abs( posDelta.vy ) >> 1;
+				DVECTOR const &ThatPosDelta = _thisThing->getPosDelta();
+				int	ThatAbsY=abs(ThatPosDelta.vy)>>1;
+				thatRect.y1 -= ThatAbsY;
+				thatRect.y2 += ThatAbsY;
 
 				if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 				   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
@@ -1295,7 +1293,7 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 	DVECTOR top;
 	int		angle;
 
-	CRECT collisionArea = getCollisionArea();
+	CRECT const &collisionArea = getCollisionArea();
 
 	top.vy = offsetY + collisionArea.y1;
 

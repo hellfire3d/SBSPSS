@@ -64,15 +64,15 @@ void CNpcJellyfishPlatform::collidedWith( CThing *_thisThing )
 			if ( m_detectCollision && m_isActive )
 			{
 				CPlayer *player;
-				DVECTOR	playerPos;
-				CRECT	collisionArea;
-				CRECT	playerArea;
+//				DVECTOR	playerPos;
+//				CRECT	collisionArea;
+//				CRECT	playerArea;
 
 				// Only interested in SBs feet colliding with the box (pkg)
 				player=(CPlayer*)_thisThing;
-				playerPos=player->getPos();
-				playerArea=player->getCollisionArea();
-				collisionArea=getCollisionArea();
+DVECTOR const	&playerPos=player->getPos();
+CRECT const		&playerArea=player->getCollisionArea();
+CRECT const		&collisionArea=getCollisionArea();
 
 				s32 height = getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy);
 

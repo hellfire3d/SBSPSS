@@ -63,7 +63,7 @@ void CNpcPlanktonFriend::render()
 	// Render
 	DVECTOR renderPos;
 	DVECTOR origRenderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 	int frame = FRM_PLANKTON_STATIC00;
 	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( frame );
 	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( frame );
@@ -71,7 +71,7 @@ void CNpcPlanktonFriend::render()
 	renderPos.vx = Pos.vx - offset.vx - ( spriteWidth >> 1 );
 	renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 );
 
-	CRECT collisionRect = getCollisionArea();
+CRECT const	&collisionRect = getCollisionArea();
 	collisionRect.x1 -= Pos.vx;
 	collisionRect.x2 -= Pos.vx;
 	collisionRect.y1 -= Pos.vy;

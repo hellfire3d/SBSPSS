@@ -102,7 +102,7 @@ int	CNpcBigWheelPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int off
 {
 	DVECTOR top;
 
-	CRECT collisionArea = getCollisionArea();
+	CRECT const &collisionArea = getCollisionArea();
 
 	top.vy = offsetY + collisionArea.y1;
 

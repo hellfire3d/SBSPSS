@@ -120,7 +120,7 @@ void CNpcConveyorPlatform::processMovement( int _frames )
 		m_rotation += 64 * _frames;
 		m_rotation &= 4095;
 
-		DVECTOR	offset = CLevel::getCameraPos();
+		DVECTOR const &offset = CLevel::getCameraPos();
 
 		Pos.vy += 3 * _frames;
 
@@ -187,13 +187,13 @@ void CNpcConveyorPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_PLAYER:
 		{
 			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
+//			DVECTOR	playerPos;
+//			CRECT	collisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			collisionArea=getCollisionArea();
+DVECTOR const &playerPos=player->getPos();
+CRECT const &collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 
@@ -226,7 +226,7 @@ void CNpcConveyorPlatform::collidedWith( CThing *_thisThing )
 						{
 							int distLeft, distRight;
 
-							DVECTOR playerCollisionSize = player->getCollisionSize();
+							DVECTOR const &playerCollisionSize = player->getCollisionSize();
 
 							distLeft = collisionArea.x1 - playerPos.vx - ( playerCollisionSize.vx >> 1 );
 							distRight = collisionArea.x2 - playerPos.vx + ( playerCollisionSize.vx >> 1 );

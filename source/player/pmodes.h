@@ -109,7 +109,7 @@ public:
 
 
 public:
-	DVECTOR			getPlayerPos();						// Public so that the states can get the position for bubicle spawners
+	DVECTOR	const &getPlayerPos();						// Public so that the states can get the position for bubicle spawners
 protected:
 	void			setPlayerPos(DVECTOR *_pos);		// Private so that they cannot directly alter it
 

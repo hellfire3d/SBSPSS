@@ -1526,7 +1526,7 @@ if(drawlastpos)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayer::setRespawnPosAndRingTelephone(DVECTOR _respawn)
+void	CPlayer::setRespawnPosAndRingTelephone(DVECTOR const &_respawn)
 {
 	if(m_respawnPos.vx!=_respawn.vx||
 	   m_respawnPos.vy!=_respawn.vy)
@@ -2395,7 +2395,7 @@ void CPlayer::justButtBouncedABadGuy()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayer::shove( DVECTOR move )
+void CPlayer::shove( DVECTOR const &move )
 {
 	int		colHeight;
 
@@ -3026,10 +3026,10 @@ void CPlayer::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
 }
 void CPlayer::getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h)
 {
-	DVECTOR	offset,size;
+//	DVECTOR	offset,size;
 
-	offset=getCollisionCentreOffset();
-	size=getCollisionSize();
+DVECTOR const	&offset=getCollisionCentreOffset();
+DVECTOR const	&size=getCollisionSize();
 
 	*_x=offset.vx;
 	*_y=offset.vy;

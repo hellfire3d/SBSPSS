@@ -158,7 +158,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 	newPos.vy -= 50;
 
 	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
+	DVECTOR const &playerPos = player->getPos();
 
 	xDist = playerPos.vx - newPos.vx;
 	yDist = playerPos.vy - newPos.vy;

@@ -849,15 +849,15 @@ void CNpcEnemy::processAttackCollision()
 
 void CNpcEnemy::drawAttackEffect()
 {
-	CRECT rect;
-	rect = getCollisionArea();
+	
+CRECT const	&rect = getCollisionArea();
 
 	DVECTOR thwakPos;
 
 	s32 xDist;
 
 	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
+	DVECTOR const &playerPos = player->getPos();
 
 	xDist = playerPos.vx - this->Pos.vx;
 
@@ -1320,7 +1320,7 @@ void CNpcEnemy::processShotDeathEnd( int _frames )
 		m_speed++;
 	}
 
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	if ( Pos.vy - offset.vy > VidGetScrH() )
 	{
@@ -1507,8 +1507,8 @@ int CNpcEnemy::canCollide()
 
 void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 {
-	DVECTOR otherPos = thisThing->getPos();
-	DVECTOR otherDelta = thisThing->getPosDelta();
+	DVECTOR const &otherPos = thisThing->getPos();
+	DVECTOR			otherDelta = thisThing->getPosDelta();
 
 	s32 xDist = Pos.vx - otherPos.vx;
 	s32 yDist = Pos.vy - otherPos.vy;
@@ -1572,8 +1572,8 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 void CNpcEnemy::processUserCollision( CThing *thisThing )
 {
-	DVECTOR otherPos = thisThing->getPos();
-	DVECTOR otherDelta = thisThing->getPosDelta();
+	DVECTOR const &otherPos = thisThing->getPos();
+	DVECTOR const &otherDelta = thisThing->getPosDelta();
 
 	s32 xDist = Pos.vx - otherPos.vx;
 	s32 yDist = Pos.vy - otherPos.vy;

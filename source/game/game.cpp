@@ -106,16 +106,7 @@
 
 #include "gfx\actor.h"
 
-int			RenderZ=378;//256; Increased to make depth less, and SB more visible
-// Horrible evil bodge 4 Petro, via Gary :o(
-#define	USE_GLOBAL_RGB
-#ifdef	USE_GLOBAL_RGB
-u8		GlobalRGB[4]={127,127,127,127};
-int		GlobalRGBSel=0;
-char	*GlobalRGBName[4]={"Sprites","Action","Mid","Other"};
-int		GlobalRGBX=200;
-int		GlobalRGBY=28;
-#endif
+static const int	RenderZ=378;//256; Increased to make depth less, and SB more visible
 
 /*****************************************************************************/
 
@@ -208,11 +199,6 @@ CGameScene	GameScene;
 /*****************************************************************************/
 void 	CGameScene::init()
 {
-// Setup Constant Camera Matrix
-//		SetIdentTrans(&CamMtx,0,0,RenderZ);
-//		SetGeomScreen(RenderZ);
-//		SetTransMatrix(&CamMtx);		
-
 		setCameraMtx();
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
@@ -348,26 +334,7 @@ void CGameScene::render_showing_lives()
 void CGameScene::render_playing()
 {
 //		CamMtx.t[2]=ZPos;	// Temp
-#ifdef	USE_GLOBAL_RGB
-		if (PadIsConnected(1))
-		{	
-			s_genericFont->setTrans(0);
-			s_genericFont->setSMode(0);
 
-			for (int i=0; i<3; i++)
-			{
-				char	Buf[32];
-				if (i==GlobalRGBSel)
-					s_genericFont->setColour(255,255,255);
-				else
-					s_genericFont->setColour(64,64,64);
-				
-				sprintf(Buf,"%s: %i",GlobalRGBName[i],GlobalRGB[i]);
-				s_genericFont->print(GlobalRGBX,GlobalRGBY+(i*16),Buf);
-			}
-		}
-	
-#endif
 		if(m_levelHasTimer)
 		{
 			int		timerValue;
@@ -384,10 +351,6 @@ void CGameScene::render_playing()
 		CThingManager::renderAllThings();
 
 		setCameraMtx();
-//		SetIdentTrans(&CamMtx,0,0,RenderZ);
-//		SetGeomScreen(RenderZ);
-//		SetRotMatrix(&CamMtx);
-//		SetTransMatrix(&CamMtx);
 
 		Level.render();
 		m_HealthManager->render();
@@ -543,19 +506,6 @@ void CGameScene::think_showing_lives(int _frames)
 /*****************************************************************************/
 void CGameScene::think_playing(int _frames)
 {
-#ifdef	USE_GLOBAL_RGB
-		if (PadIsConnected(1))
-		{	
-			if (PadGetDown(1) & PAD_UP)		GlobalRGBSel--;
-			if (PadGetDown(1) & PAD_DOWN)	GlobalRGBSel++;
-			GlobalRGBSel&=3;
-
-			if(PadGetHeld(1)&PAD_LEFT ) GlobalRGB[GlobalRGBSel]--;
-			if(PadGetHeld(1)&PAD_RIGHT ) GlobalRGB[GlobalRGBSel]++;
-			GlobalRGB[GlobalRGBSel]&=255;
-		}
-#endif
-
 	if(s_readyToExit)
 	{
 		return;
@@ -685,7 +635,7 @@ void CGameScene::think_playing(int _frames)
 
 	if(!CConversation::isActive()&&!m_pauseMenu->isActive())
 	{
-		DVECTOR	camPos;
+		DVECTOR camPos;
 		CJellyfishGenerator::think( _frames, &Level );
 		CThingManager::thinkAllThings(_frames);
 		camPos=m_player->getCameraPos();
@@ -832,7 +782,7 @@ void	CGameScene::initLevel()
 
 
 /*****************************************************************************/
-void	CGameScene::dropHealth(DVECTOR &Pos,int Amount,int Vel)
+void	CGameScene::dropHealth(DVECTOR const &Pos,int Amount,int Vel)
 {
 	m_HealthManager->drop(Pos,Amount,Vel);
 }

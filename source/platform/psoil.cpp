@@ -46,7 +46,7 @@ void CNpcSteerableOildrumPlatform::processMovement( int _frames )
 	{
 		player->setReverseCameraMovement(true);
 
-		DVECTOR playerPos = player->getPos();
+		DVECTOR const &playerPos = player->getPos();
 
 		s32 playerMovement = player->getMovement();
 

@@ -231,15 +231,15 @@ void	CPlayerModeNet::think()
 
 		case NET_STATE__CATCHING:
 			{
-				DVECTOR	catchPos;
-				DVECTOR	playerPos;
+//				DVECTOR	catchPos;
+//				DVECTOR	playerPos;
 				int		playerFacing;
 				CRECT	netRect;
 				CThing	*thing;
 
 				ASSERT(m_netFrame<(int)(sizeof(netCatchPos)/sizeof(DVECTOR)));
-				catchPos=netCatchPos[m_netFrame];
-				playerPos=m_player->getPos();
+				DVECTOR const &catchPos=netCatchPos[m_netFrame];
+				DVECTOR const &playerPos=m_player->getPos();
 				playerFacing=m_player->getFacing();
 
 				netRect.x1=playerPos.vx+(catchPos.vx*playerFacing)-(netCatchSize.vx/2);

@@ -28,8 +28,8 @@ public:
 	void				processEnemyCollision( CThing *thisThing );
 	void				setScale( u16 scale )							{m_scale = scale;}
 	CNpcSeaSnakeSegment	*m_nextSegment;
-	void				setPos( DVECTOR newPos )						{Pos = newPos;}
-	DVECTOR				getPos()										{return( Pos );}
+	void				setPos( DVECTOR const &newPos )					{Pos = newPos;}
+	DVECTOR	const 		&getPos()										{return( Pos );}
 	void				setHeading( s16 newHeading )					{m_heading = newHeading;}
 	void				updateCollisionArea();
 	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
@@ -70,7 +70,7 @@ protected:
 	void				processUserCollision( CThing *thisThing );
 	u8					processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	u8					isSnakeStopped();
-	void				moveEntireSnake( DVECTOR newPos );
+	void				moveEntireSnake( DVECTOR const &newPos );
 	void				addHealthMeter();
 	void				updateTail( DVECTOR &oldPos, int _frames );
 

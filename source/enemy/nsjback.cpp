@@ -55,7 +55,7 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 	// change direction?
 
 	DVECTOR renderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	renderPos.vx = Pos.vx - offset.vx;
 	renderPos.vy = Pos.vy - offset.vy;
@@ -175,7 +175,7 @@ void CNpcSmallJellyfishBackgroundEnemy::shutdown()
 
 void CNpcSmallJellyfishBackgroundEnemy::processUserCollision( CThing *thisThing )
 {
-	DVECTOR otherPos = thisThing->getPos();
+	DVECTOR const &otherPos = thisThing->getPos();
 	DVECTOR otherDelta = thisThing->getPosDelta();
 
 	s32 xDist = Pos.vx - otherPos.vx;

@@ -59,7 +59,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 		CPlayer *player = GameScene.getPlayer();
 
 		DVECTOR newPos = Pos;
-		CRECT collisionArea=getCollisionArea();
+		CRECT const &collisionArea=getCollisionArea();
 		newPos.vy = collisionArea.y1;
 
 		player->setPos( newPos );
@@ -82,7 +82,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 
 			Pos.vy += moveY;
 
-			DVECTOR	offset = CLevel::getCameraPos();
+			DVECTOR const &offset = CLevel::getCameraPos();
 
 			s32 yPos = Pos.vy - offset.vy;
 

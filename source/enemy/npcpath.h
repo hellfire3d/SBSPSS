@@ -33,10 +33,10 @@ public:
 	void			decPath();
 	void			resetPath();
 	void			reversePathDir();
-	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY );
-	bool			thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist = 10 );
-	bool			thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading );
-	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
+	s32				think( DVECTOR const &currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY );
+	bool			thinkFlat( DVECTOR const &currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist = 10 );
+	bool			thinkVertical( DVECTOR const &currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading );
+	bool			getDistToNextWaypoint( DVECTOR const &currentPos, s32 *distX, s32 *distY );
 	void			getPathXExtents( s32 *minExtent, s32 *maxExtent );
 	void			getPathYExtents( s32 *minExtent, s32 *maxExtent );
 	u8				getWaypointCount()						{ return( waypointCount ); }
@@ -44,7 +44,7 @@ public:
 	void			setWaypointPtr( u16 *newPtr );
 	void			setPathExtents();
 	u16				*getWaypointPtr()						{ return( waypointPtr ); }
-	bool			isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
+	bool			isPointNear( DVECTOR const &testPos, s32 *xDist, s32 *yDist );
 	void			getCurrentWaypointPos( DVECTOR *waypointPos );
 
 private:

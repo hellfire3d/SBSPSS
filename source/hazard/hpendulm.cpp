@@ -130,7 +130,7 @@ void CNpcPendulumHazard::render()
 	int		x1,y1,x2,y2;
 	int		minX, maxX, minY, maxY;
 
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	CHazardThing::render();
 

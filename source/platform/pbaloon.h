@@ -21,7 +21,7 @@
 class CBridgeBalloon
 {
 public:
-	void				setPos( DVECTOR newPos )						{Pos = newPos;}
+	void				setPos( DVECTOR const &newPos )			{Pos = newPos;}
 	void				render();
 	void				init();
 	void				shutdown();

@@ -679,7 +679,7 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 
 	for ( segmentCount = 0 ; segmentCount < m_segmentCount ; segmentCount++ )
 	{
-		DVECTOR currentPos = m_segmentArray[segmentCount].getPos();
+		DVECTOR const &currentPos = m_segmentArray[segmentCount].getPos();
 
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
@@ -692,7 +692,7 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 
 		if ( segmentCount < m_segmentCount - 1 )
 		{
-			DVECTOR nextPos = m_segmentArray[segmentCount + 1].getPos();
+			DVECTOR const &nextPos = m_segmentArray[segmentCount + 1].getPos();
 			xDist = currentPos.vx - nextPos.vx;
 			yDist = currentPos.vy - nextPos.vy;
 			headingFromNext = ratan2( yDist, xDist );
@@ -1000,23 +1000,22 @@ void CNpcSeaSnakeEnemy::render()
 
 int CNpcSeaSnakeEnemy::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
-	DVECTOR	pos,thisThingPos;
+//	DVECTOR	pos,thisThingPos;
 	int		radius;
 	int		collided;
 
-	pos=getCollisionCentre();
-	thisThingPos=_thisThing->getCollisionCentre();
+DVECTOR const &pos=getCollisionCentre();
+DVECTOR const &thisThingPos=_thisThing->getCollisionCentre();
 
 	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
 	collided=false;
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		CRECT	thisRect,thatRect;
+//		CRECT	thisRect,thatRect;
 
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
+CRECT const	&thisRect=getCollisionArea();
+CRECT const	&thatRect=_thisThing->getCollisionArea();
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
@@ -1096,23 +1095,22 @@ void CNpcSeaSnakeSegment::render()
 
 int CNpcSeaSnakeSegment::checkCollisionAgainst( CThing *_thisThing, int _frames )
 {
-	DVECTOR	pos,thisThingPos;
+//	DVECTOR	pos,thisThingPos;
 	int		radius;
 	int		collided;
 
-	pos = getCollisionCentre();
-	thisThingPos = _thisThing->getCollisionCentre();
+DVECTOR const	&pos = getCollisionCentre();
+DVECTOR const	&thisThingPos = _thisThing->getCollisionCentre();
 
 	radius = getCollisionRadius() + _thisThing->getCollisionRadius();
 	collided = false;
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		CRECT	thisRect,thatRect;
+//		CRECT	thisRect,thatRect;
 
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
+CRECT const	&thisRect=getCollisionArea();
+CRECT const	&thatRect=_thisThing->getCollisionArea();
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
@@ -1144,7 +1142,7 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 
 			m_state = NPC_GENERIC_HIT_DEATH_END;
 
-			DVECTOR	offset = CLevel::getCameraPos();
+			DVECTOR const &offset = CLevel::getCameraPos();
 
 			if ( Pos.vy - offset.vy > VidGetScrH() )
 			{
@@ -1196,7 +1194,7 @@ u8 CNpcSeaSnakeEnemy::isSnakeStopped()
 		return( true );
 	}
 
-	DVECTOR tailPos = m_segmentArray[m_segmentCount - 1].getPos();
+	DVECTOR const &tailPos = m_segmentArray[m_segmentCount - 1].getPos();
 
 	if ( tailPos.vx == Pos.vx && tailPos.vy == Pos.vy )
 	{
@@ -1210,7 +1208,7 @@ u8 CNpcSeaSnakeEnemy::isSnakeStopped()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcSeaSnakeEnemy::moveEntireSnake( DVECTOR newPos )
+void CNpcSeaSnakeEnemy::moveEntireSnake( DVECTOR const &newPos )
 {
 	Pos.vx = newPos.vx;
 	Pos.vy = newPos.vy;

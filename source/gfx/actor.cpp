@@ -517,9 +517,6 @@ CActorGfx::~CActorGfx()
 void	CActorGfx::setActor(sActorPool *ThisActor)
 {
 		PoolEntry=ThisActor;
-//		ShadowXOfs=DEF_SHADOW_OFS;
-//		ShadowYOfs=DEF_SHADOW_OFS;
-//		ShadowFlag=false;
 		OtPos=OTPOS__ACTOR_POS;
 }
 
@@ -605,27 +602,11 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 
 			Ft4=GetPrimFT4();
 			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
-extern u8	GlobalRGB[];
-			setRGB0(Ft4,GlobalRGB[0],GlobalRGB[0],GlobalRGB[0]);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
+			setShadeTex(Ft4,1);
 			addPrim(OtPtr+OtPos,Ft4);
-/*
-			if (ShadowFlag)
-			{
-				POLY_FT4	*sFt4=GetPrimFT4();
-				*sFt4=*Ft4;
-				sFt4->x0-=ShadowXOfs;
-				sFt4->x1-=ShadowXOfs;
-				sFt4->y0+=ShadowYOfs;
-				sFt4->y1+=ShadowYOfs;
-				setSemiTrans(sFt4,1);
-				setRGB0(sFt4,0,0,0);
-				addPrim(OtPtr+OtPos,sFt4);
-			}
-*/
 // Set BBox
-//int			HalfW=CurrentFrameGfx->W>>1;
 // Sizes now depend on aspect corrected sizes, so get sizes back from poly
 int			BBoxW=Ft4->x1-Ft4->x0;
 int			BBoxH=Ft4->y2-Ft4->y0;
@@ -810,9 +791,7 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-static const int	MXO=0;
-static const int	MYO=-8*0;
-void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
+void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,s32 ClipFlag)
 {
 #define	BLOCK_MULT	16
 sElem3d			*Elem=&ModelElemBank[Model->ElemID];
@@ -848,8 +827,8 @@ sTri			*TList=&ModelTriList[Elem->TriStart];
 				}
 			}
 
-		RenderPos.vx=(INGAME_SCREENOFS_X+MXO)+Pos.vx;
-		RenderPos.vy=(INGAME_SCREENOFS_Y+MYO)+Pos.vy;
+		RenderPos.vx=(INGAME_SCREENOFS_X)+Pos.vx;
+		RenderPos.vy=(INGAME_SCREENOFS_Y)+Pos.vy;
 		
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);
@@ -860,20 +839,20 @@ sTri			*TList=&ModelTriList[Elem->TriStart];
 			gte_ldv3(P0,P1,P2);
 			setlen(TPrimPtr, GPU_PolyFT3Tag);
 			TPrimPtr->code=TList->PolyCode;
-			setRGB0(TPrimPtr,128,128,128);
 			gte_rtpt_b();
-	
+			setShadeTex(TPrimPtr,1);
 			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
 			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-			T2=*(u16*)&TList->uv2;		// Get UV2
+			T2=*(u32*)&TList->uv2;		// Get UV2
 			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
 			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
-			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+			*(u32*)&TPrimPtr->u2=T2;	// Set UV2
 			ThisOT=OtPtr+TList->OTOfs;
 			TList++;
 			gte_nclip_b();
 			gte_stsxy3_ft3(TPrimPtr);
 			gte_stopz(&ClipZ);
+			ClipZ|=ClipFlag;		// <-- Evil!!
 			if (ClipZ<=0)
 			{
 				addPrim(ThisOT,TPrimPtr);
@@ -884,3 +863,4 @@ sTri			*TList=&ModelTriList[Elem->TriStart];
 		SetPrimPtr((u8*)TPrimPtr);
 
 }
+

@@ -56,7 +56,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	{
 		player->setReverseCameraMovement(true);
 
-		DVECTOR playerPos = player->getPos();
+		DVECTOR const &playerPos = player->getPos();
 
 		s32 playerMovement = player->getMovement();
 
@@ -203,7 +203,7 @@ void CNpcSteerableBarrelPlatform::render()
 		if (canRender())
 		{
 			DVECTOR &renderPos=getRenderPos();
-			DVECTOR	offset = CLevel::getCameraPos();
+			DVECTOR const &offset = CLevel::getCameraPos();
 
 			SVECTOR rotation;
 			rotation.vx = 0;
@@ -229,15 +229,15 @@ void CNpcSteerableBarrelPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_PLAYER:
 		{
 			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
-			CRECT	playerCollisionArea;
+//			DVECTOR	playerPos;
+//			CRECT	collisionArea;
+//			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			playerCollisionArea = player->getCollisionArea();
-			collisionArea=getCollisionArea();
+DVECTOR const &playerPos=player->getPos();
+CRECT const &playerCollisionArea = player->getCollisionArea();
+CRECT const &collisionArea=getCollisionArea();
 
 			//if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
 			if( playerCollisionArea.x2 >= collisionArea.x1 && playerCollisionArea.x1 <= collisionArea.x2 )

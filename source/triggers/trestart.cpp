@@ -54,14 +54,14 @@
   ---------------------------------------------------------------------- */
 void	CRestartPointTrigger::collidedWith(CThing *_thisThing)
 {
-	CRECT	collisionArea;
+//	CRECT	collisionArea;
 	DVECTOR	respawnPos;
 
 	switch( _thisThing->getThingType() )
 	{
 		case TYPE_PLAYER:
 		{
-			collisionArea=getCollisionArea();
+CRECT const &collisionArea=getCollisionArea();
 			respawnPos.vx=collisionArea.x1+((collisionArea.x2-collisionArea.x1)/2);
 			respawnPos.vy=collisionArea.y2;
 			((CPlayer*)_thisThing)->setRespawnPos(respawnPos);

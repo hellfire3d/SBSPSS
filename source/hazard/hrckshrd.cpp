@@ -93,7 +93,7 @@ void CNpcRockShardHazard::processMovement( int _frames )
 			Pos.vy += yMovement;
 		}
 
-		DVECTOR	offset = CLevel::getCameraPos();
+		DVECTOR const &offset = CLevel::getCameraPos();
 
 		s32 yPos = Pos.vy - offset.vy;
 

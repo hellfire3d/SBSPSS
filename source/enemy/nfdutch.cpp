@@ -161,7 +161,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 		{
 			CPlayer *player = GameScene.getPlayer();
 
-			DVECTOR playerPos = player->getPos();
+			DVECTOR const &playerPos = player->getPos();
 
 			s32 minX, maxX;
 			m_npcPath.getPathXExtents( &minX, &maxX );

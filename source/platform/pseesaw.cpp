@@ -46,7 +46,7 @@ void CNpcSeesawPlatform::processMovement( int _frames )
 
 		CPlayer *player = GameScene.getPlayer();
 
-		DVECTOR playerPos = player->getPos();
+		DVECTOR const &playerPos = player->getPos();
 
 		s32 distX = playerPos.vx - this->Pos.vx;
 

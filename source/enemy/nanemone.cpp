@@ -468,14 +468,14 @@ void CNpcAnemone2Enemy::render()
 				spikePos.vy += result.vy;
 
 				sFrameHdr	*frameHdr;
-				DVECTOR	offset;
+				
 				int		x,y;
 				int		scrnWidth = VidGetScrW();
 				int		scrnHeight = VidGetScrH();
 				int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(FRM__SPIKE);
 				int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(FRM__SPIKE);
 
-				offset = CLevel::getCameraPos();
+				DVECTOR const &offset = CLevel::getCameraPos();
 
 				x = spikePos.vx - offset.vx;
 				y = spikePos.vy - offset.vy;

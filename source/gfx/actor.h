@@ -130,11 +130,6 @@ static	sActorPool	*ActorList,*LastActor;
 class	CActorGfx
 {
 public:
-		enum
-		{
-			DEF_SHADOW_OFS=32,
-		};
-
 		CActorGfx(sActorPool *ThisActor);
 virtual	~CActorGfx();
 
@@ -149,8 +144,6 @@ virtual	~CActorGfx();
 
 		sBBox			&GetBBox()					{return(BBox);}
 
-//		void			SetShadow(bool f)			{ShadowFlag=f;}
-//		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
 		void			SetOtPos(int Ot)			{OtPos=Ot;}
 
 
@@ -162,8 +155,6 @@ protected:
 		sSpriteFrameGfx	*CurrentFrameGfx;
 
 		sBBox			BBox;
-//		bool			ShadowFlag;
-//		s16				ShadowXOfs,ShadowYOfs;
 		u32				OtPos;
 };
 
@@ -179,7 +170,8 @@ virtual	~CModelGfx(){};
 static	void		SetData(sLevelHdr *LevelHdr);
 		void		SetModel(int Type);
 
-		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0);
+		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff);
+		void		RenderClip(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)	{Render(Pos,Angle,Scale,0);}
 		sBBox		&GetBBox()		{return(Model->BBox);}
 
 protected:

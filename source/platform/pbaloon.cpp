@@ -69,7 +69,7 @@ void CBridgeBalloon::shutdown()
 
 int CBridgeBalloon::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
-	DVECTOR projectilePos = _thisThing->getPos();
+	DVECTOR const &projectilePos = _thisThing->getPos();
 
 	s32 xDist = projectilePos.vx - Pos.vx;
 	s32 yDist = projectilePos.vy - Pos.vy;
@@ -284,15 +284,15 @@ int CNpcBalloonBridgePlatform::checkCollisionAgainst(CThing *_thisThing, int _fr
 				thisRect = getCollisionArea();
 				thatRect = _thisThing->getCollisionArea();
 
-				DVECTOR posDelta = getPosDelta();
+				DVECTOR const &thisPosDelta = getPosDelta();
+				int	ThisAbsY=abs(thisPosDelta.vy)>>1;
+				thisRect.y1 -= ThisAbsY;
+				thisRect.y2 += ThisAbsY;
 
-				thisRect.y1 -= abs( posDelta.vy ) >> 1;
-				thisRect.y2 += abs( posDelta.vy ) >> 1;
-
-				posDelta = _thisThing->getPosDelta();
-
-				thatRect.y1 -= abs( posDelta.vy ) >> 1;
-				thatRect.y2 += abs( posDelta.vy ) >> 1;
+				DVECTOR const &ThatPosDelta = _thisThing->getPosDelta();
+				int	ThatAbsY=abs(ThatPosDelta.vy)>>1;
+				thatRect.y1 -= ThatAbsY;
+				thatRect.y2 += ThatAbsY;
 
 				if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 				   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))

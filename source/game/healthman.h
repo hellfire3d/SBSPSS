@@ -35,14 +35,14 @@ public:
 		void		init();
 		void		shutdown();
 
-		void		drop(DVECTOR &Pos,int Amount,int Vel);
+		void		drop(DVECTOR const &Pos,int Amount,int Vel);
 
 		void		checkPlayerCol(CPlayer *Thing);
 		void		think(int frames);
 		void		render();
 
 protected:
-		void		addItem(DVECTOR &Pos,int TableIdx,int Angle,int Vel);
+		void		addItem(DVECTOR const &Pos,int TableIdx,int Angle,int Vel);
 
 		sItem		ItemList[ITEM_MAX];
 		sFrameHdr	*FrameHdr;

@@ -259,13 +259,6 @@ void CProjectile::setState( PROJECTILE_STATE newState )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CProjectile::setPosition( DVECTOR newPos )
-{
-	Pos = newPos;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CProjectile::setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType )
 {
 	m_lifetimeType = lifeType;
@@ -317,7 +310,7 @@ void CProjectile::think(int _frames)
 					default:
 					{
 						CPlayer *player = GameScene.getPlayer();
-						DVECTOR playerPos = player->getPos();
+						DVECTOR const &playerPos = player->getPos();
 
 						if ( processTargetSeek( _frames, playerPos ) )
 						{
@@ -424,14 +417,14 @@ void CProjectile::render()
 	CEnemyProjectileThing::render();
 
 	sFrameHdr	*frameHdr;
-	DVECTOR	offset;
+
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
 	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( m_spriteFrame );
 	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( m_spriteFrame );
 
-	offset = getScreenOffset();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	x = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 ) - ( spriteWidth >> 1 )*/;
 	y = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 ) - ( spriteHeight >> 1 )*/;
@@ -446,13 +439,6 @@ void CProjectile::render()
 	frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
 
 	CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, m_xScale, m_yScale, m_heading, m_ot );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-DVECTOR CProjectile::getScreenOffset()
-{
-	return CLevel::getCameraPos();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -597,13 +583,6 @@ CPlayerProjectile::PLAYER_PROJECTILE_MOVEMENT_TYPE CPlayerProjectile::getMovemen
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CPlayerProjectile::setPosition( DVECTOR newPos )
-{
-	Pos = newPos;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CPlayerProjectile::setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType )
 {
 	m_lifetimeType = lifeType;
@@ -733,12 +712,11 @@ void CPlayerProjectile::render()
 {
 	CPlayerProjectileThing::render();
 
-	DVECTOR	offset;
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
 
-	offset = getScreenOffset();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	if ( m_hitTarget )
 	{
@@ -772,13 +750,6 @@ void CPlayerProjectile::render()
 		SprFrame = CGameScene::getSpriteBank()->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
 		setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-DVECTOR CPlayerProjectile::getScreenOffset()
-{
-	return CLevel::getCameraPos();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

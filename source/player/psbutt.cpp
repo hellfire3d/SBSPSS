@@ -174,9 +174,8 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 	m_bounceOffFloor=false;
 	if(_playerMode->getIsInWater())
 	{
-		DVECTOR	pos;
+		DVECTOR	const &pos=_playerMode->getPlayerPos();
 
-		pos=_playerMode->getPlayerPos();
 		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
 		{
 			CLevel	&level=GameScene.GetLevel();
@@ -223,8 +222,7 @@ void CPlayerStateButtBounceUp::enter(CPlayerModeBase *_playerMode)
 {
 	if(_playerMode->getIsInWater())
 	{
-		DVECTOR	pos;
-		pos=_playerMode->getPlayerPos();
+		DVECTOR	const &pos=_playerMode->getPlayerPos();
 		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
 		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 		CGameScene::setCameraShake(0,8);

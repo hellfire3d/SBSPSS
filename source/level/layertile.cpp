@@ -41,7 +41,7 @@ TSPRT	*PrimPtr=PrimBank;
 		for (int i=0; i<Count; i++)
 		{
 			setTSprt(PrimPtr);
-			setTSetShadeTex(PrimPtr,0);
+			setTSetShadeTex(PrimPtr,1);
 			PrimPtr->w=TILE2D_WIDTH;
 			PrimPtr->h=TILE2D_HEIGHT;
 			PrimPtr++;
@@ -136,8 +136,6 @@ TSPRT			*PrimPtr=PrimBank;
 					PrimPtr->y0=TileY;
 					setTSprtTPage(PrimPtr,Tile->TPage);
 					*(u32*)&PrimPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-extern u8 GlobalRGB[];
-					setRGB0(PrimPtr,GlobalRGB[2],GlobalRGB[2],GlobalRGB[2]);
 					addPrim(ThisOT,PrimPtr);
 					PrimPtr++;
 				}

@@ -199,7 +199,7 @@ int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
   ---------------------------------------------------------------------- */
 int		CPlayerMode::getHeightFromGound()
 {
-	DVECTOR	pos=getPlayerPos();
+	DVECTOR	const &pos=getPlayerPos();
 	return m_player->getHeightFromGround(pos.vx,pos.vy);
 }
 
@@ -219,7 +219,7 @@ void	CPlayerMode::inSoakUpState()					{m_player->inSoakUpState();}
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CPlayerMode::getPlayerPos()						{return m_player->getPlayerPos();}
+DVECTOR	const &CPlayerMode::getPlayerPos()						{return m_player->getPlayerPos();}
 void	CPlayerMode::setPlayerPos(DVECTOR *_pos)		{m_player->setPlayerPos(_pos);}
 
 /*----------------------------------------------------------------------
@@ -350,11 +350,9 @@ void	CPlayerModeBase::thinkVerticalMovement()
 {
 	if(m_player->moveVertical(m_player->getMoveVelocity()->vy>>VELOCITY_SHIFT))
 	{
-		DVECTOR	pos;
-
 		if(m_currentState!=STATE_CELEBRATE)
 			playerHasHitGround();
-		pos=m_player->getPlayerPos();
+		DVECTOR const &pos=m_player->getPlayerPos();
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
 		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP)
 		{
@@ -378,8 +376,8 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			m_currentState!=STATE_JUMPBACK&&m_currentState!=STATE_BUTTBOUNCEUP&&
 			m_currentState!=STATE_FLOAT&&m_currentState!=STATE_CELEBRATE)
 	{
-		DVECTOR	pos;
-		pos=m_player->getPlayerPos();
+		DVECTOR	const &pos=m_player->getPlayerPos();
+
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,1)!=0
 #ifdef SHITE_COLLISION
 			&&
@@ -565,10 +563,9 @@ int cheight=15;
 int CPlayerModeBase::isOnEdge()
 {
 	CLayerCollision	*collision=CGameScene::getCollision();
-	DVECTOR			pos;
 	int	ret;
 
-	pos=m_player->getPlayerPos();
+	DVECTOR const &pos=m_player->getPlayerPos();
 	ret=0;
 	if(m_player->getHeightFromGround(pos.vx-csize,pos.vy,cheight+1)>cheight)
 	{
@@ -589,8 +586,7 @@ int CPlayerModeBase::isOnEdge()
   ---------------------------------------------------------------------- */
 int CPlayerModeBase::canMoveLeft()
 {
-	DVECTOR			pos;
-	pos=m_player->getPlayerPos();
+	DVECTOR	const &pos=m_player->getPlayerPos();
 #ifdef SHITE_COLLISION
 	return m_player->getHeightFromGround(pos.vx-checkx,pos.vy,checkdist)>-checkycanmove?true:false;
 #else
@@ -601,8 +597,7 @@ int CPlayerModeBase::canMoveLeft()
 
 int CPlayerModeBase::canMoveRight()
 {
-	DVECTOR			pos;
-	pos=m_player->getPlayerPos();
+	DVECTOR	const &pos=m_player->getPlayerPos();
 #ifdef SHITE_COLLISION
 	return m_player->getHeightFromGround(pos.vx+checkx,pos.vy,checkdist)>-checkycanmove?true:false;
 #else

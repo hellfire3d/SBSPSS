@@ -212,12 +212,12 @@ void	CPlayerModeCoralBlower::think()
 			else if(m_enemy==NULL)
 			{
 				// Search for an enemy..
-				DVECTOR	playerPos;
+//				DVECTOR	playerPos;
 				int		playerFacing;
 				CRECT	suckRect;
 				CThing	*thing;
 
-				playerPos=m_player->getPos();
+				DVECTOR const &playerPos=m_player->getPos();
 				playerFacing=m_player->getFacing();
 
 				suckRect.x1=playerPos.vx+(blowerCatchPos.vx*playerFacing)-(blowerCatchSize.vx/2);
@@ -228,7 +228,7 @@ void	CPlayerModeCoralBlower::think()
 				#ifdef __USER_paul__
 				{
 				CRECT	area=suckRect;
-				DVECTOR	ofs=CLevel::getCameraPos();
+				DVECTOR const &ofs=CLevel::getCameraPos();
 				area.x1-=ofs.vx;
 				area.y1-=ofs.vy;
 				area.x2-=ofs.vx;
@@ -352,11 +352,11 @@ void	CPlayerModeCoralBlower::renderModeUi()
 		{
 			// Draw aiming cursor
 			int		facing,heading;
-			DVECTOR	screenOfs,launchPos,targetPos;
+			DVECTOR	launchPos,targetPos;
 
 			facing=m_player->getFacing();
 			heading=((m_launchHeading+1024)*facing)&4095;
-			screenOfs=CLevel::getCameraPos();
+			DVECTOR const &screenOfs=CLevel::getCameraPos();
 			launchPos=m_player->getPlayerPos();
 			launchPos.vx+=(blowerLaunchPoint.vx*facing)-screenOfs.vx;
 			launchPos.vy+=blowerLaunchPoint.vy-screenOfs.vy;

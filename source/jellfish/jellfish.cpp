@@ -122,7 +122,7 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 					}
 				}
 
-				DVECTOR	offset = CLevel::getCameraPos();
+				DVECTOR const &offset = CLevel::getCameraPos();
 
 				DVECTOR startPos;
 

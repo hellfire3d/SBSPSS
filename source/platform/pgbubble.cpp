@@ -80,7 +80,7 @@ void CNpcGeyserBubblePlatform::processMovement( int _frames )
 			}
 		}
 
-		DVECTOR	offset = CLevel::getCameraPos();
+		DVECTOR const &offset = CLevel::getCameraPos();
 
 		s32 yPos = Pos.vy - offset.vy;
 

@@ -226,7 +226,7 @@ public:
 	void			detectHazardousSurface();
 	virtual void	render();
 	virtual int		dontKillDuringLevelRespawn()							{return true;}
-	virtual void	shove(DVECTOR move);
+	virtual void	shove(DVECTOR const &move);
 	void			moveLeft();				// This is only for camera scroll right now
 	void			moveRight();			//	"		"		"		"		"
 	void			fall();					//	"		"		"		"		"
@@ -236,12 +236,12 @@ public:
 
 	int				isTryingToConversateWithFriend()					{return m_allowConversation;}
 
-	DVECTOR			getCameraPos()										{return m_cameraPos;}
+	DVECTOR	const	&getCameraPos()										{return m_cameraPos;}
 	void			setCartCam(int _flag)								{m_cartCamActive=_flag;}
 	void			setReverseCameraMovement(int _flag)					{m_reverseCameraMovement=_flag;}
 	void			setCameraBox(CameraBox _cameraBox);
-	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
-	void			setRespawnPosAndRingTelephone(DVECTOR _respawn);
+	void			setRespawnPos(DVECTOR const &_respawn)				{m_respawnPos=_respawn;}
+	void			setRespawnPosAndRingTelephone(DVECTOR const &_respawn);
 
 	// This isn't funny anymore.. :(
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
@@ -285,7 +285,7 @@ private:
 
 
 public:
-	DVECTOR			getPlayerPos()										{return Pos;}
+	DVECTOR	const &getPlayerPos()										{return Pos;}
 	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
 	void			ignoreNewlyPressedButtonsOnPadThisThink();
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}

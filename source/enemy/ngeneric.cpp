@@ -131,7 +131,7 @@ void CNpcEnemy::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 
 	CPlayer *player = GameScene.getPlayer();
 
-	DVECTOR playerPos = player->getPos();
+	DVECTOR const &playerPos = player->getPos();
 
 	*distX = playerPos.vx - this->Pos.vx;
 	*distY = playerPos.vy - this->Pos.vy;

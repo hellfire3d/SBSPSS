@@ -374,7 +374,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			{
 				CPlayer *player = GameScene.getPlayer();
 
-				DVECTOR playerPos = player->getPos();
+				DVECTOR const &playerPos = player->getPos();
 
 				Pos.vx = playerPos.vx + ( ( 70 * rcos( m_extension ) ) >> 12 );
 				Pos.vy = playerPos.vy + ( ( 70 * rsin( m_extension ) ) >> 12 );
@@ -396,7 +396,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 		{
 			Pos.vx += 8 * _frames;
 
-			DVECTOR	offset = CLevel::getCameraPos();
+			DVECTOR const &offset = CLevel::getCameraPos();
 
 			if ( Pos.vx - offset.vx > VidGetScrW() )
 			{

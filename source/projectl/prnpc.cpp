@@ -43,7 +43,7 @@ void CEnemyAsProjectile::render()
 
 	// Render
 	DVECTOR renderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	renderPos.vx = Pos.vx - offset.vx;
 	renderPos.vy = Pos.vy - offset.vy;

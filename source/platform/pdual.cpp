@@ -238,7 +238,7 @@ void CNpcDualPlatform::render()
 {
 	int		x1,y1,x2,y2;
 
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	if ( m_isActive )
 	{
@@ -343,15 +343,15 @@ void CNpcDualPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_PLAYER:
 		{
 			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
-			CRECT	playerCollisionArea;
+//			DVECTOR	playerPos;
+//			CRECT	collisionArea;
+//			CRECT	playerCollisionArea;
 
 			// Only interested in SBs feet colliding with the box (pkg)
 			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			playerCollisionArea = player->getCollisionArea();
-			collisionArea=getCollisionArea();
+DVECTOR const	&playerPos=player->getPos();
+CRECT const		&playerCollisionArea = player->getCollisionArea();
+CRECT const		&collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 
@@ -391,12 +391,12 @@ void CNpcDualPlatform::collidedWith( CThing *_thisThing )
 		case TYPE_NPC:
 		{
 			CNpcFriend *friendNpc;
-			DVECTOR	friendPos;
-			CRECT	collisionArea;
+//			DVECTOR	friendPos;
+//			CRECT	collisionArea;
 
 			friendNpc = (CNpcFriend*) _thisThing;
-			friendPos = friendNpc->getPos();
-			collisionArea=getCollisionArea();
+DVECTOR	const	&friendPos = friendNpc->getPos();
+CRECT const		&collisionArea=getCollisionArea();
 
 			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
 

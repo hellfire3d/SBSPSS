@@ -18,7 +18,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcPath::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
+bool CNpcPath::isPointNear( DVECTOR const &testPos, s32 *xDist, s32 *yDist )
 {
 	s32 xDistSqr, yDistSqr;
 
@@ -268,14 +268,14 @@ void CNpcPath::reversePathDir()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY )
+bool CNpcPath::getDistToNextWaypoint( DVECTOR const &currentPos, s32 *distX, s32 *distY )
 {
 	return( isPointNear( currentPos, distX, distY ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY )
+s32 CNpcPath::think( DVECTOR const &currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY )
 {
 	if ( !waypointPtr )
 	{
@@ -305,7 +305,7 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist )
+bool CNpcPath::thinkFlat( DVECTOR const &currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist )
 {
 	bool pointChange = false;
 
@@ -350,7 +350,7 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading )
+bool CNpcPath::thinkVertical( DVECTOR const &currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading )
 {
 	bool pointChange = false;
 

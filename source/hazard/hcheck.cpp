@@ -75,7 +75,7 @@ void CNpcCheckpointHazard::render()
 			{
 				int		x,y;
 
-				DVECTOR offset = CLevel::getCameraPos();
+				DVECTOR const &offset = CLevel::getCameraPos();
 
 				int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_spriteFrame);
 				int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_spriteFrame);
@@ -101,7 +101,7 @@ void CNpcCheckpointHazard::collidedWith(CThing *_thisThing)
 		{
 			case TYPE_PLAYER:
 			{
-				CRECT collisionArea=getCollisionArea();
+				CRECT const	&collisionArea=getCollisionArea();
 				DVECTOR respawnPos;
 				respawnPos.vx=collisionArea.x1+((collisionArea.x2-collisionArea.x1)/2);
 				respawnPos.vy=collisionArea.y2;

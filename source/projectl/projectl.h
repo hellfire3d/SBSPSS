@@ -61,7 +61,7 @@ public:
 	PROJECTILE_MOVEMENT_TYPE	getMovementType();
 	void				setState( PROJECTILE_STATE newState );
 	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
-	void				setPosition( DVECTOR newPos );
+	void				setPosition( DVECTOR const &newPos )					{Pos = newPos;}
 	void				setHeading( s16 newHeading )							{m_heading = newHeading;}
 	void				setOt( u8 newOt )										{m_ot=newOt;}
 	void				setGraphic( int frame );
@@ -71,7 +71,6 @@ public:
 	void				setShock()												{m_shock = true;}
 
 protected:
-	DVECTOR				getScreenOffset();
 	bool				processTargetSeek( int _frames, DVECTOR targetPos );
 	void				collidedWith( CThing *_thisThing );
 
@@ -127,12 +126,11 @@ public:
 	void				setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType );
 	PLAYER_PROJECTILE_MOVEMENT_TYPE		getMovementType();
 	void				setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType );
-	void				setPosition( DVECTOR newPos );
+	void				setPosition( DVECTOR const &newPos )	{Pos = newPos;}
 	void				setRGB( u32 new_RGB );
 
 
 protected:
-	DVECTOR				getScreenOffset();
 	void				collidedWith( CThing *_thisThing );
 
 	DVECTOR										m_initPos;

@@ -48,7 +48,7 @@ public:
 		void			render();
 		void			think(int _frames);
 
-		void			setCameraCentre(DVECTOR _pos)			{MapPos=_pos;}
+		void			setCameraCentre(DVECTOR const &_pos)	{MapPos=_pos;}
 static	DVECTOR const	&getCameraPos()							{return MapPos;}
 static	DVECTOR const	&getPlayerSpawnPos()					{return s_playerSpawnPos;}
 

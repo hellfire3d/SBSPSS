@@ -125,7 +125,7 @@ void CNpcGaryFriend::think( int _frames )
 			m_speed++;
 		}
 
-		DVECTOR	offset = CLevel::getCameraPos();
+		DVECTOR const &offset = CLevel::getCameraPos();
 
 		if ( Pos.vy - offset.vy > VidGetScrH() )
 		{

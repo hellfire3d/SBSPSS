@@ -127,7 +127,7 @@ public:
 				}
 virtual			~CThing()	{;}
 
-/*virtual*/	void	initDef()
+		void	initDef()
 				{
 					Pos.vx=0; Pos.vy=0;
 					PosDelta=Pos;
@@ -138,13 +138,12 @@ virtual			~CThing()	{;}
 
 virtual	TYPE			getThingType()=0;
 
-/*virtual	*/void		setThingSubType(int	T)	{m_SubType=T;}
-/*virtual	*/int		getThingSubType()		{return(m_SubType);}
+		void			setThingSubType(int	T)	{m_SubType=T;}
+		int				getThingSubType()		{return(m_SubType);}
 
-//virtual	void			create()	{;}	// Once only init (for mem alloc)
-virtual	void			init();			// re-usable init
-virtual	void			shutdown();		// re-usable shutdown
-//virtual	void			destroy()	{;}	// memory clean up when totally killing the poor things
+virtual	void			init();
+virtual	void			shutdown();
+
 
 virtual	void			think(int _frames);
 virtual	void			render();
@@ -161,8 +160,8 @@ virtual int				dontKillDuringLevelRespawn()							{return false;}
 		int				getNumChildren()				{return( m_numChildren );}
 
 		DVECTOR const	&getPos()						{return Pos;}
-		void			setPos(DVECTOR newPos)			{Pos=newPos;}
-		DVECTOR			getPosDelta()					{return PosDelta;}
+		void			setPos(DVECTOR const &newPos)	{Pos=newPos;}
+		DVECTOR	const	&getPosDelta()					{return PosDelta;}
 		CThing			*getParent()					{return ParentThing;}
 		CThing			*getNext()						{return NextThing;}
 
@@ -190,13 +189,12 @@ virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
 virtual	bool			alwaysThink()								{return(false);}
 virtual	void			leftThinkZone(int _frames)					{}
-//virtual	void			enterThinkZone(int _frames)					{}
 
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 		int				getCollisionRadius()						{return m_collisionRadius;}
-/*virtual	*/CRECT const		&getCollisionArea()							{return m_collisionArea;}
+		CRECT const		&getCollisionArea()							{return m_collisionArea;}
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}
 
 virtual int				canCollide()								{return true;}
@@ -204,7 +202,6 @@ virtual int				checkCollisionAgainst(CThing *_thisThing, int _frames);
 		int				checkCollisionAgainstArea(CRECT *_rect);
 		void			updateCollisionArea();
 virtual void			collidedWith(CThing *_thisThing)			{;}
-//virtual s32				getNewYPos( CThing *_thisThing );
 
 public:
 // Thing states
@@ -222,9 +219,9 @@ protected:
 		u8				m_SubType;
 
 protected:
-/*virtual */void			setCollisionSize(int _w,int _h);
-/*virtual */void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
-/*virtual */void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
+		void			setCollisionSize(int _w,int _h);
+		void			setCollisionCentreOffset(int _x,int _y)			{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
+		void			setCollisionCentreOffset(DVECTOR const &xy)		{m_collisionCentreOffset=xy;}
 
 private:
 		DVECTOR			m_collisionSize;
@@ -307,7 +304,16 @@ public:
 virtual TYPE		getThingType()					{return TYPE_FX;}
 };
 
+inline	bool	CheckRect2Rect(CRECT const &Rect0,CRECT const &Rect1)
+{
+		if (Rect0.x2<Rect1.x1 || Rect0.x1>Rect1.x2) return(false);
+		if (Rect0.y2<Rect1.y1 || Rect0.y1>Rect1.y2) return(false);
+		return(true);
+}
+
 #endif	/* __THING_THING_H__ */
 
+
 /*===========================================================================
+
  end */

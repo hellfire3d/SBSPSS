@@ -52,7 +52,7 @@ void	CHealthManager::shutdown()
 
 /*****************************************************************************/
 const int	AngleS=2048+1024+512;
-void	CHealthManager::drop(DVECTOR &Pos,int Amount,int Vel)
+void	CHealthManager::drop(DVECTOR const &Pos,int Amount,int Vel)
 {
 int		Count=0;
 int		Am=Amount;
@@ -86,7 +86,7 @@ int		AngleInc=1024/Count;
 }
 
 /*****************************************************************************/
-void	CHealthManager::addItem(DVECTOR &Pos,int TableIdx,int Angle,int Vel)
+void	CHealthManager::addItem(DVECTOR const &Pos,int TableIdx,int Angle,int Vel)
 {
 int		Idx=0;
 

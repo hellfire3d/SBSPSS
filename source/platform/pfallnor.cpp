@@ -48,7 +48,7 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 	s32 distX, distY, heading;
 	bool pathComplete;
 
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	if ( m_spinFinish )
 	{

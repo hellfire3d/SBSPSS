@@ -90,8 +90,7 @@ void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
 	{
 		if(m_breatheDelayFrames==0)
 		{
-			DVECTOR	pos;
-			pos=_playerMode->getPlayerPos();
+			DVECTOR	const &	pos=_playerMode->getPlayerPos();
 			CGameBubicleFactory::spawnBubicles(pos.vx+BUBBLE_XOFF,pos.vy+BUBBLE_YOFF,BUBBLE_W,BUBBLE_H,CGameBubicleFactory::TYPE_SPONGEBOBSOAKUP);
 			m_breatheDelayFrames=0;
 		}

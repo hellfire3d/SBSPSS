@@ -136,7 +136,7 @@ void CNpcPendulumPlatform::render()
 	int		x1,y1,x2,y2;
 	int		x1Boundary,y1Boundary,x2Boundary,y2Boundary;
 
-	DVECTOR	offset = CLevel::getCameraPos();
+	DVECTOR const &offset = CLevel::getCameraPos();
 
 	if ( m_isActive )
 	{

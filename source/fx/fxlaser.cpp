@@ -96,23 +96,22 @@ int	H=renderPos1.vy-renderPos0.vy;
 /*****************************************************************************/
 int		CFXLaser::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
-	DVECTOR	pos,thisThingPos;
+//	DVECTOR	pos,thisThingPos;
 	int		radius;
 	int		collided;
 
-	pos=getCollisionCentre();
-	thisThingPos=_thisThing->getCollisionCentre();
+DVECTOR const	&pos=getCollisionCentre();
+DVECTOR const	&thisThingPos=_thisThing->getCollisionCentre();
 
 	radius=getCollisionRadius()+_thisThing->getCollisionRadius();
 	collided=false;
 	if(abs(pos.vx-thisThingPos.vx)<radius&&
 	   abs(pos.vy-thisThingPos.vy)<radius)
 	{
-		CRECT	thisRect,thatRect;
+//		CRECT	thisRect,thatRect;
 
-		thisRect=getCollisionArea();
-
-		thatRect=_thisThing->getCollisionArea();
+CRECT const	&thisRect=getCollisionArea();
+CRECT const	&thatRect=_thisThing->getCollisionArea();
 
 		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
 		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))

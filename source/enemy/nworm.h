@@ -23,8 +23,8 @@ public:
 	void				processEnemyCollision( CThing *thisThing );
 	void				setScale( u16 scale )							{m_scale = scale;}
 	CNpcParasiticWormSegment		*m_nextSegment;
-	void				setPos( DVECTOR newPos )						{Pos = newPos;}
-	DVECTOR				getPos()										{return( Pos );}
+	void				setPos( DVECTOR const &newPos )					{Pos = newPos;}
+	DVECTOR	const		&getPos()										{return( Pos );}
 	void				setHeading( s16 newHeading )					{m_heading = newHeading;}
 	void				updateCollisionArea();
 	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
