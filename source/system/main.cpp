@@ -208,12 +208,8 @@ int 	main()
 	
 #ifdef __USER_paul__
 	GameState::setNextScene( &SceneSelector );
-#elif __USER_art__
-	GameState::setNextScene( &FrontEndScene );
-#elif __USER_sbart__
-	GameState::setNextScene( &FrontEndScene );
 #else
-	GameState::setNextScene( &GameScene );
+	GameState::setNextScene( &FrontEndScene );
 #endif
 
 //	CXAStream::Init();			// PKG - Stuck here so that it doesn't affect any startup stuff (7/8/00)
