@@ -20,8 +20,13 @@
 
 class CNpcBouncePlatform : public CNpcPlatform
 {
-protected:
+public:
+	virtual void		postInit();
 	virtual void		think( int _frames );
+	virtual void		render();
+protected:
+	s32					m_vertScale;
+	s32					m_vertVelocity;
 };
 
 #endif
