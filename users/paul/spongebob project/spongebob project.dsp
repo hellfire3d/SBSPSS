@@ -1057,6 +1057,14 @@ SOURCE=..\..\..\source\platform\pbob.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pbounce.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbounce.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pbranch.cpp
 # End Source File
 # Begin Source File

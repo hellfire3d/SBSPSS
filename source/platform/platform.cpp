@@ -95,6 +95,10 @@
 #include "platform\pseesaw.h"
 #endif
 
+#ifndef __PLATFORM_PBOUNCE_H__
+#include "platform\pbounce.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -202,6 +206,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_SEESAW_PLATFORM:
 		{
 			platform = new ("seesaw platform") CNpcSeesawPlatform;
+			break;
+		}
+
+		case NPC_BOUNCE_PLATFORM:
+		{
+			platform = new ("bounce platform") CNpcBouncePlatform;
 			break;
 		}
 

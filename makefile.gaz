@@ -99,7 +99,8 @@ platform_src :=		platform \
 					pretract \
 					pbranch \
 					ppendulm \
-					pseesaw
+					pseesaw \
+					pbounce
 
 hazard_src :=		hazard \
 					hfalling \
