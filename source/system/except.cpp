@@ -37,6 +37,10 @@
 #include "system\lnkopt.h"
 #endif
 
+#ifndef __SYSTEM_GSTATE_H__
+#include "system\gstate.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -466,6 +470,7 @@ static void displayDump()
 static void displayValues()
 {
 	char		textBuf[256];
+	CScene		*scene;
 
 	excFont->setColour(255,255,255);
 
@@ -473,6 +478,14 @@ static void displayValues()
 	sprintf(textBuf," %ld used in %d nodes (%ld available)\n",MainRam.RamUsed,MemNodeCount,MainRam.TotalRam);
 	print(textBuf);
 	sprintf(textBuf," %dk ram size set in link options\n",(int)(OPT_LinkerOpts.RamSize/1024));
+	print(textBuf);
+
+	print("Scene:\n");
+	scene=GameState::getCurrentScene();
+	sprintf(textBuf," Current scene: %s\n",scene->getSceneName());
+	print(textBuf);
+	scene=GameState::getPendingScene();
+	sprintf(textBuf," Pending scene: %s\n",scene?scene->getSceneName():"None");
 	print(textBuf);
 }
 
