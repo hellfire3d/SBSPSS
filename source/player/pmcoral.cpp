@@ -240,6 +240,7 @@ void	CPlayerModeCoralBlower::think()
 				// Got an enemy.. suck him up
 				if(m_enemy->suckUp(getSuckUpPoint(),1))
 				{
+					m_enemyFrame = m_enemy->getFrame();
 					m_blowerState=BLOWER_STATE__FULL;
 				}
 			}
@@ -276,7 +277,7 @@ void	CPlayerModeCoralBlower::think()
 				//CActorGfx *projectileGfx;
 				//projectileGfx=CActorPool::GetActor((FileEquate)ACTORS_SHELL_SBK);
 				//projectile->setGraphic( projectileGfx );
-				projectile->setGraphic( FRM_SHELL_STATIC0000 );
+				projectile->setGraphic( m_enemyFrame );
 				projectile->setHasRGB( false );
 			}
 			break;

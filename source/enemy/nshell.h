@@ -21,8 +21,13 @@
 class CNpcShellEnemy : public CNpcEnemy
 {
 public:
+	virtual void		postInit();
 	virtual void		render();
 	virtual int			getFrameCount()							{return( 1 );}
+	virtual int			getFrame()								{return( m_shellType );}
+protected:
+
+	u8					m_shellType;
 };
 
 #endif

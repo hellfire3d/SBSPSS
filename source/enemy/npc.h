@@ -108,6 +108,7 @@ public:
 	virtual u8			canBeCaughtByNet();
 	void				caughtWithNet();
 	virtual int			getFrameCount();
+	virtual int			getFrame()												{return( m_frame );}
 	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);

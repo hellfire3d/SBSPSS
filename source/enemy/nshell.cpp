@@ -19,6 +19,19 @@
 #include <sprites.h>
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcShellEnemy::postInit()
+{
+	CNpcEnemy::postInit();
+
+	m_shellType = FRM_SHELL_STATIC0000 + ( getRnd() % ( FRM_SHELL_STATIC0002 - FRM_SHELL_STATIC0000 + 1 ) );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +47,7 @@ void CNpcShellEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_SHELL_STATIC0000,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
+			SprFrame = m_spriteBank->printRotatedScaledSprite( m_shellType,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 
 			// get xmax, xmin, ymax, ymin
 

@@ -58,7 +58,8 @@ private:
 	DVECTOR						*getSuckUpPoint();
 
 	BlowerState					m_blowerState;
-	class CNpcEnemy				*m_enemy;	
+	class CNpcEnemy				*m_enemy;
+	u8							m_enemyFrame;
 
 };
 
