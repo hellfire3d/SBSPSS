@@ -21,13 +21,13 @@ static	void	GetTexData();
 static	void	DumpThisTPage(FileEquate TexName);
 
 private:
-	CAnimTex	*NextTex;
-	RECT		Rect;
-	s16			Speed,Count;
-	s16			PixPerWord;
-	u32			*TexData;
-	FileEquate	TexName;
-	u8			TPage;
+		CAnimTex	*NextTex;
+		RECT		Rect;
+		s16			Speed,Count;
+		s16			PixPerWord;
+		u32			*TexData;
+		FileEquate	TexName;
+		u8			TPage;
 
 };
 
@@ -35,16 +35,23 @@ private:
 class CMoveTex
 {
 public:
-		CMoveTex();
-//		~CMoveTex();
+		enum
+		{
+			MOVETEX_MAX=16,
+		};
+
+		CMoveTex()
+		{
+			Src=0;
+		}
 		
 static	void	Add(sTexInfo &SrcFrame,sTexInfo &DstFrame);
 static	void	MoveTex();
 
 private:
-	CMoveTex	*NextTex;
-	sTexInfo	*Src,*Dst;
-	
+		sTexInfo	*Src,*Dst;
+
+static	CMoveTex	MoveTexList[];
 };
 
 /*****************************************************************************/

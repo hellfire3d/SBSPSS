@@ -15,7 +15,7 @@
 #endif
 
 CAnimTex	*AnimTexList=0;
-CMoveTex	*MoveTexList=0;
+CMoveTex	CMoveTex::MoveTexList[CMoveTex::MOVETEX_MAX];
 
 /*****************************************************************************/
 CAnimTex::CAnimTex()
@@ -110,8 +110,6 @@ CAnimTex	*PrevTex, *ThisTex, *NextTex;
 }
 
 /*****************************************************************************/
-
-
 void	CAnimTex::AnimateTex()
 {
 CAnimTex	*ThisTex=AnimTexList;
@@ -153,25 +151,20 @@ int			Time = GameState::getFramesSinceLast();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CMoveTex::CMoveTex()
-{
-		NextTex=0;
-}
-
-/*****************************************************************************/
 void	CMoveTex::Add(sTexInfo &SrcFrame,sTexInfo &DstFrame)
 {
-CMoveTex	*ThisTex=new ("CMoveTex::AddMoveTex") CMoveTex;
-
+int		Idx;
 //		ASSERT(SrcFrame.w==DstFrame.w);
 //		ASSERT(SrcFrame.h==DstFrame.h);
 
-		ThisTex->NextTex=MoveTexList;
-		MoveTexList=ThisTex;
+		for (Idx=0; Idx<MOVETEX_MAX && MoveTexList[Idx].Src; Idx++);
 
-		ThisTex->Src=&SrcFrame;
-		ThisTex->Dst=&DstFrame;
+		ASSERT(Idx<MOVETEX_MAX);
 
+CMoveTex	&ThisTex=MoveTexList[Idx];
+
+		ThisTex.Src=&SrcFrame;
+		ThisTex.Dst=&DstFrame;
 }
 
 /*****************************************************************************/
@@ -179,15 +172,14 @@ void	CMoveTex::MoveTex()
 {
 CMoveTex	*ThisTex=MoveTexList,*NextTex;
 
-		while (ThisTex)
+		for (int Idx=0; Idx<MOVETEX_MAX; Idx++)
 		{
-			MoveImage((RECT*)ThisTex->Src,ThisTex->Dst->x,ThisTex->Dst->y);
-			NextTex=ThisTex->NextTex;
-			delete ThisTex;
-			ThisTex=NextTex;
-		}
-		MoveTexList=0;
+			CMoveTex	&ThisTex=MoveTexList[Idx];
+			if (!ThisTex.Src) return;
 
+			MoveImage((RECT*)ThisTex.Src,ThisTex.Dst->x,ThisTex.Dst->y);
+			ThisTex.Src=0;
+		}
 }
 
 /*****************************************************************************/
