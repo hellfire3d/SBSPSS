@@ -13,7 +13,7 @@
 struct Vector3
 {
 	Vector3(){};
-	Vector3(real _x,real _y,real _z)
+	Vector3(float _x,float _y,float _z)
 	{
 		x=_x;
 		y=_y;
@@ -21,11 +21,11 @@ struct Vector3
 	}
 	union
 	{
-		real m_Vec[3];
+		float m_Vec[3];
 
 		struct
 		{
-			real x, y, z;
+			float x, y, z;
 		};
 	};
 
@@ -33,27 +33,27 @@ struct Vector3
 	inline Vector3 & operator+=( Vector3 const &other );
 	inline Vector3 & operator-=( Vector3 const &other );
 
-	inline Vector3 & operator/=( real val );
-	inline Vector3 & operator*=( real val );
+	inline Vector3 & operator/=( float val );
+	inline Vector3 & operator*=( float val );
 
-	inline real &operator[](int idx);
-	inline real const &operator[](int idx) const;
+	inline float &operator[](int idx);
+	inline float const &operator[](int idx) const;
 
 
-	inline real GetLength( void ) const;
-	inline real GetLengthSquared( void ) const;
+	inline float GetLength( void ) const;
+	inline float GetLengthSquared( void ) const;
 	inline void Normalise( void );
 	inline void Zero(void); //AF - hope mike don't mind me fiddling with his bits...
 
 	
-	friend inline real     operator*( Vector3 const &a, Vector3 const &b ); // dot product
+	friend inline float     operator*( Vector3 const &a, Vector3 const &b ); // dot product
 	friend inline Vector3 operator^( Vector3 const &a, Vector3 const &b ); // cross product
 	friend inline Vector3 operator+( Vector3 const &a, Vector3 const &b );
 	friend inline Vector3 operator-( Vector3 const &a, Vector3 const &b );
-	friend inline Vector3 operator*( Vector3 const &a, real val );
-	friend inline Vector3 operator/( Vector3 const &a, real val );
-	friend inline Vector3 operator*( real val, Vector3 const &a );
-	friend inline Vector3 operator/( real val, Vector3 const &a );
+	friend inline Vector3 operator*( Vector3 const &a, float val );
+	friend inline Vector3 operator/( Vector3 const &a, float val );
+	friend inline Vector3 operator*( float val, Vector3 const &a );
+	friend inline Vector3 operator/( float val, Vector3 const &a );
 
 };
 
@@ -81,7 +81,7 @@ inline Vector3 & Vector3::operator-=( Vector3 const &other )
 	return *this;
 }
 
-inline Vector3 & Vector3::operator/=( real val )
+inline Vector3 & Vector3::operator/=( float val )
 {
 	float temp = 1.f / val;
 	x *= temp;
@@ -90,7 +90,7 @@ inline Vector3 & Vector3::operator/=( real val )
 	return *this;
 }
 
-inline Vector3 & Vector3::operator*=( real val )
+inline Vector3 & Vector3::operator*=( float val )
 {
 	x *= val;
 	y *= val;
@@ -98,23 +98,23 @@ inline Vector3 & Vector3::operator*=( real val )
 	return *this;
 }
 
-inline real Vector3::GetLength( void ) const
+inline float Vector3::GetLength( void ) const
 {
-	real sqmag = x * x + y * y + z * z;
-	real mag = (real)sqrt( sqmag );
+	float sqmag = x * x + y * y + z * z;
+	float mag = (float)sqrt( sqmag );
 	return mag;
 }
 
-inline real Vector3::GetLengthSquared( void ) const
+inline float Vector3::GetLengthSquared( void ) const
 {
-	real sqmag = x * x + y * y + z * z;
+	float sqmag = x * x + y * y + z * z;
 	return sqmag;
 }
 
 inline void Vector3::Normalise( void )
 {
-	real mag = GetLength();
-	real oneomag = 1.f / mag;
+	float mag = GetLength();
+	float oneomag = 1.f / mag;
 	x *= oneomag;
 	y *= oneomag;
 	z *= oneomag;
@@ -127,21 +127,21 @@ inline void Vector3::Zero(void)
 	z=0;
 }
 
-inline real &Vector3::operator[](int idx)
+inline float &Vector3::operator[](int idx)
 {
 	return m_Vec[idx];
 }
 
-inline real const &Vector3::operator[](int idx) const
+inline float const &Vector3::operator[](int idx) const
 {
 	return m_Vec[idx];
 }
 
 
 
-inline real operator*( Vector3 const &a, Vector3 const &b ) // dot product, assumes 
+inline float operator*( Vector3 const &a, Vector3 const &b ) // dot product, assumes 
 {
-	real tot = a.x * b.x + a.y * b.y + a.z * b.z;
+	float tot = a.x * b.x + a.y * b.y + a.z * b.z;
 	return tot;
 }
 
@@ -173,7 +173,7 @@ inline Vector3 operator-( Vector3 const &a, Vector3 const &b )
 	return temp;
 }
 
-inline Vector3 operator*( Vector3 const &a, real val )
+inline Vector3 operator*( Vector3 const &a, float val )
 {
 	Vector3 temp;
 	temp.x = a.x * val;
@@ -182,7 +182,7 @@ inline Vector3 operator*( Vector3 const &a, real val )
 	return temp;
 }
 
-inline Vector3 operator/( Vector3 const &a, real val )
+inline Vector3 operator/( Vector3 const &a, float val )
 {
 	Vector3 temp;
 	float oneoval = 1.f / val;
@@ -192,7 +192,7 @@ inline Vector3 operator/( Vector3 const &a, real val )
 	return temp;
 }
 
-inline Vector3 operator*( real val, Vector3 const &a )
+inline Vector3 operator*( float val, Vector3 const &a )
 {
 	Vector3 temp;
 	temp.x = a.x * val;
@@ -201,7 +201,7 @@ inline Vector3 operator*( real val, Vector3 const &a )
 	return temp;
 }
 
-inline Vector3 operator/( real val, Vector3 const &a )
+inline Vector3 operator/( float val, Vector3 const &a )
 {
 	Vector3 temp;
 	float oneoval = 1.f / val;
