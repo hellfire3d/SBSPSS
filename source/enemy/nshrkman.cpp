@@ -27,8 +27,16 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 #ifndef	__UTILS_HEADER__
 #include "utils\utils.h"
+#endif
+
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 #ifndef __ANIM_SHARKMAN_HEADER__
@@ -38,6 +46,9 @@
 #define	ANIM_SHARKMAN_IDLE2_	ANIM_SHARKMAN_IDLE1_
 #define	ANIM_SHARKMAN_KICK_SAND	ANIM_SHARKMAN_IDLE1_
 #define	ANIM_SHARKMAN_PUSHUPS	ANIM_SHARKMAN_IDLE1_
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSharkManEnemy::processMovement( int _frames )
 {
@@ -124,7 +135,48 @@ void CNpcSharkManEnemy::processMovement( int _frames )
 	processMovementModifier( _frames, moveX, moveY, 0, 0 );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSharkManEnemy::processClose( int _frames )
+{
+	if ( m_animNo != ANIM_SHARKMAN_RUN )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SHARKMAN_RUN;
+		m_frame = 0;
+	}
+	else if ( !m_animPlaying )
+	{
+		// anim finished, fire
+		DVECTOR newPos = Pos;
+		newPos.vy -= 50;
+
+		s32 xDist, yDist;
+
+		CPlayer *player = GameScene.getPlayer();
+		DVECTOR playerPos = player->getPos();
+
+		xDist = playerPos.vx - newPos.vx;
+		yDist = playerPos.vy - newPos.vy;
+
+		s16 heading = ratan2( yDist, xDist ) & 4095;
+
+		CProjectile *projectile;
+		projectile = new( "shark man projectile" ) CProjectile;
+		projectile->init( newPos, heading );
+		projectile->setGraphic( FRM__LIGHTNING2 );
+
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+		m_animNo = m_data[m_type].moveAnim;
+		m_animPlaying = true;
+		m_frame = 0;
+	}
+}
+
+/*void CNpcSharkManEnemy::processClose( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 	s32 groundHeight;
@@ -222,4 +274,4 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_animNo = m_data[m_type].moveAnim;
 	}
-}
+}*/
