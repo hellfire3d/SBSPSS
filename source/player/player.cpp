@@ -347,14 +347,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_NET_CROUCHDOWN,					// ANIM_SPONGEBOB_CROUCHDOWN
 	ANIM_SPONGEBOB_NET_CROUCHUP,					// ANIM_SPONGEBOB_CROUCHUP
 	ANIM_SPONGEBOB_NET_LOOKUP,						// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	ANIM_SPONGEBOB_NET_IDLENET,						// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	ANIM_SPONGEBOB_NET_CELEBRATE,					// ANIM_SPONGEBOB_CELEBRATE,
 	},
 
@@ -388,14 +388,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_CORALBLOWER_CROUCHDOWN,			// ANIM_SPONGEBOB_CROUCHDOWN
 	ANIM_SPONGEBOB_CORALBLOWER_CROUCHUP,			// ANIM_SPONGEBOB_CROUCHUP
 	ANIM_SPONGEBOB_CORALBLOWER_LOOKUP,				// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	ANIM_SPONGEBOB_CORALBLOWER_CELEBRATE,			// ANIM_SPONGEBOB_CELEBRATE,
 	},
 
@@ -429,14 +429,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_JELLYLAUNCHER_CROUCHDOWN,		// ANIM_SPONGEBOB_CROUCHDOWN
 	ANIM_SPONGEBOB_JELLYLAUNCHER_CROUCHUP,			// ANIM_SPONGEBOB_CROUCHUP
 	ANIM_SPONGEBOB_JELLYLAUNCHER_LOOKUP,			// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	ANIM_SPONGEBOB_JELLYLAUNCHER_CELEBRATE,			// ANIM_SPONGEBOB_CELEBRATE,
 	},
 
@@ -470,14 +470,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_WAND_CROUCHDOWN,					// ANIM_SPONGEBOB_CROUCHDOWN
 	ANIM_SPONGEBOB_WAND_CROUCHUP,					// ANIM_SPONGEBOB_CROUCHUP
 	ANIM_SPONGEBOB_WAND_LOOKUP,						// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	ANIM_SPONGEBOB_WAND_CELEBRATE,					// ANIM_SPONGEBOB_CELEBRATE,
 	},
 
@@ -511,14 +511,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	ANIM_SPONGEBOB_JELLYFISH_CROUCHDOWN,			// ANIM_SPONGEBOB_CROUCHDOWN
 	ANIM_SPONGEBOB_JELLYFISH_CROUCHUP,				// ANIM_SPONGEBOB_CROUCHUP
 	ANIM_SPONGEBOB_JELLYFISH_LOOKUP,				// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	ANIM_SPONGEBOB_JELLYFISH_IDLENET,				// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	ANIM_SPONGEBOB_JELLYFISH_CELEBRATE,				// ANIM_SPONGEBOB_CELEBRATE,
 	},
 
@@ -552,14 +552,14 @@ s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 	-1,												// ANIM_SPONGEBOB_CROUCHDOWN
 	-1,												// ANIM_SPONGEBOB_CROUCHUP
 	-1,												// ANIM_SPONGEBOB_LOOKUP
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
+	-1,												// ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN
+	-1,												// ANIM_SPONGEBOB_IDLEBANDAID,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEINHAT,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
+	-1,												// ANIM_SPONGEBOB_IDLEMATURE,
+	-1,												// ANIM_SPONGEBOB_IDLEMOUSTACHE,
+	-1,												// ANIM_SPONGEBOB_IDLENOFACE,
 //NOIDLE	-1,												// ANIM_SPONGEBOB_IDLENET,
-//NOIDLE	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
+	-1,												// ANIM_SPONGEBOB_IDLEZORRO,
 	-1,												// ANIM_SPONGEBOB_CELEBRATE,
 	},
 };
@@ -2563,9 +2563,19 @@ int		CPlayer::moveVertical(int _moveDistance)
 		}
 		else
 		{
+/*
+			int	colHeightLeft,colHeightRight;
+			int blockLeft,blockRight;
+			colHeightLeft=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
+			blockLeft=CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+colHeightLeft)&COLLISION_TILE_MASK<=1;
+			colHeightRight=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
+			blockRight=CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+colHeightRight)&COLLISION_TILE_MASK<=1;
+PAUL_DBGMSG("%d,%d   %d,%d",colHeightRight,blockRight,colHeightLeft,blockLeft);
+*/
+
 			colHeight=getHeightFromGround(pos.vx-checkx,pos.vy+_moveDistance,16);
 			if(colHeight<=0/*&&
-			   CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
+			   CGameScene::getCollision()->getCollisionBlock(pos.vx-checkx,pos.vy+colHeight)&COLLISION_TILE_MASK<=1*/)
 			{
 				pos.vy+=colHeight+_moveDistance;
 				_moveDistance=0;
@@ -2575,7 +2585,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 			{
 				colHeight=getHeightFromGround(pos.vx+checkx,pos.vy+_moveDistance,16);
 				if(colHeight<=0/*&&
-				   CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+_moveDistance)&COLLISION_TILE_MASK<=1*/)
+				   CGameScene::getCollision()->getCollisionBlock(pos.vx+checkx,pos.vy+colHeight)&COLLISION_TILE_MASK<=1*/)
 				{
 					pos.vy+=colHeight+_moveDistance;
 					_moveDistance=0;
@@ -2853,7 +2863,8 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 			targetX=pos.vx+_moveDistance;
 			checkOfs=vx*checkx;
 			moved=0;
-			for(x=pos.vx;x!=targetX;x+=vx)
+int init=checkx*vx;
+			for(x=pos.vx+init;x!=targetX+init;x+=vx)
 			{
 				// Wall?
 				colHeight=getHeightFromGround(x+checkOfs,pos.vy);

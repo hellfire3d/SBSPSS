@@ -293,16 +293,15 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*6/*0*/	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEBANDAID,			-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEINHAT,			-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEMATURE,			-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEMOUSTACHE,		-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLENOFACE,			-1,								1		},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLEZORRO,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEBANDAID,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEMATURE,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEMOUSTACHE,		-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLENOFACE,			-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEZORRO,			-1,								1		},
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
@@ -325,9 +324,9 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*6/*0*/	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
 };
 static int s_numWeaponIdleAnims=sizeof(s_weaponIdleAnims)/sizeof(IdleAnims);
@@ -351,10 +350,9 @@ int CPlayerStateWeaponIdle::getNumIdleAnims()
 static IdleAnims s_netIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*6/*0*/	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6/*0*/	},
-//NOIDLE	{	-1,								ANIM_SPONGEBOB_IDLENET,				-1,								1		},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
 };
 static int s_numNetIdleAnims=sizeof(s_netIdleAnims)/sizeof(IdleAnims);
