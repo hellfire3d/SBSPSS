@@ -11,6 +11,7 @@
 #include	"LayerTile.h"
 #include	"LayerTile3d.h"
 
+#include "gfx\font.h"	
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -26,11 +27,22 @@ CLayerTile3d::CLayerTile3d(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,Tile
 
 	Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr)+sizeof(sLayer3d));
 
+	Font=0;
+#if		defined(__USER_ART__) || defined(__USER_daveo__)
+	Font=new ("PrimFont") FontBank;
+	Font->initialise( &standardFont );
+	Font->setOt( 0 );
+#endif
 }
 
 /*****************************************************************************/
 CLayerTile3d::~CLayerTile3d()
 {
+	if (Font) 
+	{
+		Font->dump();
+		delete Font;
+	}
 }
 
 
@@ -83,7 +95,6 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 #define	BLOCK_MULT	16
-int	TriMax=0;
 
 void	CLayerTile3d::render()
 {
@@ -99,7 +110,6 @@ sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
 
-		TriMax=0;
 
 // Setup shift bits of pos
 		BlkPos.vx=XOfs-((MapXY.vx*BLOCK_MULT)+ShiftX);
@@ -145,7 +155,14 @@ s32				ClipZ;
 			MapPtr+=MapWidth;
 		}
 
-		TriMax=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
+int		PolyCount=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
 
 		SetPrimPtr((u8*)TPrimPtr);
+
+#if		defined(__USER_ART__) || defined(__USER_daveo__)
+char	Txt[256];
+sprintf(Txt,"Poly Count=%i",PolyCount);
+		Font->print( 32, 32, Txt);
+#endif
+
 }

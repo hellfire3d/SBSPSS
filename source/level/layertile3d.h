@@ -7,6 +7,7 @@
 
 
 /*****************************************************************************/
+class	FontBank;
 class CLayerTile3d : public CLayerTile
 {
 public:
@@ -33,6 +34,9 @@ protected:
 		sTri			*TriList;
 		sQuad			*QuadList;
 		sVtx			*VtxList;
+
+		FontBank		*Font;
+
 };
 
 
