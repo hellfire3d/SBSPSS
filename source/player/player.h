@@ -342,7 +342,7 @@ public:
 	void			setIsInWater(int _in)		{m_isInWater=_in;}
 	int				getIsInWater()				{return m_isInWater;}
 
-	int				isHoldingNet()				{m_currentMode==PLAYER_MODE_NET;}
+	int				isHoldingNet()				{return m_currentMode==PLAYER_MODE_NET;}
 
 private:
 	int				m_glassesFlag;
