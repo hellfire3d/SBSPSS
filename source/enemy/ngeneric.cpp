@@ -102,5 +102,5 @@ void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 bool CNpc::isCollisionWithGround()
 {
 	ASSERT(m_layerCollision);
-	return m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + 1 ) >>4 );
+	return m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + 1 ) >> 4 ) ? 16:0;
 }

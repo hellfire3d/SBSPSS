@@ -25,14 +25,20 @@ void CNpc::processGaryMovement( int _frames )
 	s8 multiplier = -1 + ( 2 * m_extension );
 	s32 maxHeight = 10;
 	s32 fallSpeed = 5;
+	s8 yMovement = fallSpeed * _frames;
+	s8 groundHeight;
 
 	// check vertical collision
 
-	if ( isCollisionWithGround() )
+	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+	if ( groundHeight <= 0 )
 	{
+		// groundHeight <= 0  indicates either on ground or below ground
+
 		// check horizontal collision
 
-		if ( m_layerCollision->Get( ( Pos.vx + ( multiplier * _frames ) ) >> 4, ( Pos.vy - maxHeight ) >> 4 ) )
+		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// reverse direction
 
@@ -40,50 +46,37 @@ void CNpc::processGaryMovement( int _frames )
 		}
 		else
 		{
-			s32 distY;
-			s32 lastPointY = 0;
+			// make sure we are on the ground, not below it
 
-			for ( distY = 0 ; distY <= maxHeight ; distY++ )
-			{
-				if ( !m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy - distY ) >> 4 ) )
-				{
-					break;
-				}
-				else
-				{
-					lastPointY--;
-				}
-			}
-
-			Pos.vy += lastPointY;
+			Pos.vy += groundHeight;
 
 			Pos.vx += multiplier * _frames;
 		}
 	}
 	else
 	{
-		if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + ( fallSpeed * _frames ) ) >> 4 ) )
+		// above ground
+
+		if ( groundHeight < yMovement )
 		{
-			s32 distY;
-			s32 lastPointY = 0;
+			// colliding with ground
 
-			for ( distY = 1 ; distY <= _frames ; distY++ )
+			Pos.vy += groundHeight;
+
+			if ( m_layerCollision->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
 			{
-				if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + distY ) >> 4 ) )
-				{
-					break;
-				}
-				else
-				{
-					lastPointY++;
-				}
-			}
+				// reverse direction
 
-			Pos.vy += lastPointY;
+				m_extension = !m_extension;
+			}
+			else
+			{
+				Pos.vx += multiplier * _frames;
+			}
 		}
 		else
 		{
-			Pos.vy += fallSpeed * _frames;
+			Pos.vy += yMovement;
 		}
 	}
 }

@@ -26,6 +26,9 @@
 
 void CNpc::processCloseSkullStomperAttack( int _frames )
 {
+	s8 groundHeight;
+	s8 yMovement;
+
 	if ( m_timerTimer > 0 )
 	{
 		// wait
@@ -34,26 +37,15 @@ void CNpc::processCloseSkullStomperAttack( int _frames )
 	{
 		if ( m_extendDir == EXTEND_DOWN )
 		{
-			if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + ( m_data[m_type].speed * _frames ) ) >> 4 ) )
+			yMovement = m_data[m_type].speed * _frames;
+
+			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+			if ( groundHeight < yMovement )
 			{
 				// colliding with ground
 
-				s32 distY;
-				s32 lastPointY = 0;
-
-				for ( distY = 1 ; distY <= ( m_data[m_type].speed * _frames ) ; distY++ )
-				{
-					if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + distY ) >> 4 ) )
-					{
-						break;
-					}
-					else
-					{
-						lastPointY++;
-					}
-				}
-
-				Pos.vy += lastPointY;
+				Pos.vy += groundHeight;
 
 				// pause and change direction
 
@@ -64,7 +56,7 @@ void CNpc::processCloseSkullStomperAttack( int _frames )
 			{
 				// drop down
 
-				Pos.vy += m_data[m_type].speed * _frames;
+				Pos.vy += yMovement;
 			}
 		}
 		else
