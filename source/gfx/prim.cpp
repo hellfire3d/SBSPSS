@@ -21,7 +21,7 @@ void	PrimDrawCallBack()
 {
 	if (PrimDrawList)
 	{
-		DrawOTag(PrimDrawList);
+		DrawOTag2(PrimDrawList);
 	}
 
 	PrimDrawList=0;
