@@ -91,6 +91,7 @@ int s_globalLevelSelectThing=120;
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
 
+SpriteBank	*CGameScene::s_BackSprites;
 
 /*****************************************************************************/
 
@@ -117,7 +118,12 @@ void 	CGameScene::init()
 
 		CFader::setFadingIn();
 
+		s_BackSprites=new ("BackGfx Sprites") SpriteBank();
+		s_BackSprites->load(LEVELS_LEVELBACKGFX_SPR);
+
 		initLevel();
+		CFileIO::EnableASync(true);
+
 }
 
 /*****************************************************************************/
@@ -140,11 +146,13 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
+		CFileIO::EnableASync(false);
 		shutdownLevel(true);
 		CSoundMediator::dumpSong();	
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 		s_genericFont->dump();		delete s_genericFont;
+		s_BackSprites->dump();		delete s_BackSprites;
 }
 
 /*****************************************************************************/
@@ -168,6 +176,7 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
+	CFileIO::LoadASyncFiles();
 
 	if(s_readyToExit)
 	{
@@ -274,12 +283,15 @@ void	CGameScene::initLevel()
 
 // Init actors (needs moving and tidying
 	int actorNum;
-	sThingActor **actorList = Level.getActorList();
 
+	sThingActor **actorList = Level.getActorList();
+	if (actorList)
+	{
 	for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
 	{
 		CNpcEnemy *enemy;
 		enemy = new ("npc enemy") CNpcEnemy;
+		ASSERT(enemy);
 		enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
 		enemy->init();
 		enemy->setLayerCollision( Level.getCollisionLayer() );
@@ -312,7 +324,7 @@ void	CGameScene::initLevel()
 
 		enemy->postInit();
 	}
-
+	}
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();

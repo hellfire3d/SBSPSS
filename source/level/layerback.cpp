@@ -13,6 +13,7 @@
 #include	"LayerBack.h"
 
 #include	<levelbackgfx.h>
+#include	"Game\game.h"
 
 sBackRGBTable	CLayerBack::BackRGBTable[]=
 {
@@ -54,14 +55,12 @@ CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,TileBank
 		ASSERT(Data->Count<=LAYER_SHADE_RGB_MAX);
 		BandCount=Data->Count-1;
 
-		Sprites=new ("BackGfx Sprites") SpriteBank();
-		Sprites->load(LEVELS_LEVELBACKGFX_SPR);
+		Sprites=CGameScene::GetBackSprites();
 }
 
 /*****************************************************************************/
 CLayerBack::~CLayerBack()
 {
-		Sprites->dump();	delete Sprites;
 }
 
 /*****************************************************************************/
