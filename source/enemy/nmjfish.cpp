@@ -71,17 +71,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 		legs[i]->Setup( legsPos[i].vx, legsPos[i].vy, i > 1 );
 	}
 
-	/*CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->Setup(80,-5,0);
-
-	T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->Setup(40,0,0);
-
-	T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->Setup(-40,-5,1);
-
-	T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-	T->Setup(-80,0,1);*/
+	m_RGB = 255 + ( 128 << 8 ) + ( 255 << 16 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -427,5 +417,42 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 		legs[i]->setScale( scale >> 1 );
 	}
 
-	CNpcEnemy::processShot( _frames );
+	switch ( m_state )
+	{
+		case NPC_GENERIC_HIT_CHECK_HEALTH:
+		{
+			// do not allow to die, must catch in net
+
+			if ( m_health > 0 )
+			{
+				m_health -= 5;
+			}
+
+			m_state = NPC_GENERIC_HIT_RECOIL;
+
+			m_animPlaying = true;
+			m_animNo = m_data[m_type].recoilAnim;
+			m_frame = 0;
+
+			break;
+		}
+
+		case NPC_GENERIC_HIT_RECOIL:
+		{
+			if ( !m_animPlaying )
+			{
+				m_state = 0;
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+			}
+
+			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+u8 CNpcMotherJellyfishEnemy::canBeCaughtByNet()
+{
+	return( m_isActive && !m_isDying && m_health <= 5 );
 }
