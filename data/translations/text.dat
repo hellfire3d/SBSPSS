@@ -534,9 +534,9 @@ eng=This item costs %d tokens, you currently have %d tokens. You cannot afford t
 [STR__CHAPTER_1]
 eng=Bikini Bottom
 [STR__CHAPTER_2]
-eng=To the Center of the Earth
+eng=To the Center\nof the Earth
 [STR__CHAPTER_3]
-eng=Bikini Bottom Prehistoric Times
+eng=Bikini Bottom\nPrehistoric Times
 [STR__CHAPTER_4]
 eng=Rock Bottom
 [STR__CHAPTER_5]
@@ -572,7 +572,7 @@ eng=Kelpazoic Jungle
 eng=Inside the Whale
 
 [STR__CHAPTER_4_LEVEL_1]
-eng=Road to the bottom of Rock Bottom
+eng=Road to the bottom\nof Rock Bottom
 [STR__CHAPTER_4_LEVEL_2]
 eng=Lonely Souls
 [STR__CHAPTER_4_LEVEL_3]
