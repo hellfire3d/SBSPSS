@@ -688,8 +688,8 @@ void CNpcMotherJellyfishEnemy::render()
 			setRGB0( SprFrame, ( m_RGB & 255 ), ( ( m_RGB >> 8 ) & 255 ), ( ( m_RGB >> 16 ) & 255 ) );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
-			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) << 1 );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) + ( ( boundingBox.YMax - boundingBox.YMin ) >> 1 ) );
 		}
 	}
 }
