@@ -110,7 +110,7 @@ public:
 	virtual int			getFrameCount();
 	virtual int			getFrame()												{return( m_frame );}
 	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}
-	virtual CVECTOR		getRGB();
+	virtual u32			getRGB();
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
 	virtual void		setupWaypoints( sThingActor *ThisActor );

@@ -379,7 +379,7 @@ void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CVECTOR CNpcSmallJellyfishEnemy::getRGB()
+u32 CNpcSmallJellyfishEnemy::getRGB()
 {
 	CVECTOR rgb;
 
@@ -387,5 +387,8 @@ CVECTOR CNpcSmallJellyfishEnemy::getRGB()
 	rgb.g = 128;
 	rgb.b = 255;
 
-	return( rgb );
+	u32 rgbVal;
+
+	rgbVal = rgb.r + ( rgb.g << 8 ) + ( rgb.b << 16 );
+	return( rgbVal );
 }

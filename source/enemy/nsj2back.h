@@ -22,7 +22,7 @@ class CNpcSmallJellyfish2BackgroundEnemy : public CNpcSmallJellyfishBackgroundEn
 {
 public:
 	virtual void		render();
-	virtual CVECTOR		getRGB();
+	virtual u32			getRGB();
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 };

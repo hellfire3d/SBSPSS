@@ -112,7 +112,7 @@ public:
 	void				setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
-	void				setRGB( CVECTOR new_RGB )								{m_RGB = new_RGB;}
+	void				setRGB( u32 new_RGB );
 
 private:
 	class CLayerCollision	*m_layerCollision;

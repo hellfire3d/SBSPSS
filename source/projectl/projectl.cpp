@@ -592,4 +592,11 @@ void CPlayerProjectile::collidedWith(CThing *_thisThing)
 	}
 }
 
+void CPlayerProjectile::setRGB( u32 new_RGB )
+{
+	m_RGB.r = new_RGB & 255;
+	m_RGB.g = ( new_RGB >> 8 ) & 255;
+	m_RGB.b = ( new_RGB >> 16 ) & 255;
+}
+
 /*****************************************************************************/

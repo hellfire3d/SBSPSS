@@ -28,7 +28,7 @@ public:
 	virtual void		render();
 	virtual int			getFrameCount()							{return( FRM_JELLYFISH1_SWIM7 - FRM_JELLYFISH1_SWIM1 + 1 );}
 	virtual u8			canCollideWithEnemy()					{return( false );}
-	virtual CVECTOR		getRGB();
+	virtual u32			getRGB();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
