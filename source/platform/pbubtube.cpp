@@ -114,9 +114,21 @@ void CNpcBubbleTubePlatform::processMovement( int _frames )
 			if ( extension )
 			{
 				m_extension += extension;
+
+				if(m_soundId==NOT_PLAYING)
+				{
+					m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ELEVATOR_LOOP,true,true);
+				}
 			}
 			else
 			{
+				if ( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ELEVATOR_STOP,true,true);
+
 				if ( m_returning )
 				{
 					m_isActivated = false;

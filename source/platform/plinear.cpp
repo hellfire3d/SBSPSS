@@ -22,6 +22,8 @@ void CNpcLinearPlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+	m_silent = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +36,14 @@ void CNpcLinearPlatform::processMovement( int _frames )
 
 	bool pathComplete;
 	bool waypointChange;
+
+	if ( !m_silent )
+	{
+		if(m_soundId==NOT_PLAYING)
+		{
+			m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ELEVATOR_LOOP,true,true);
+		}
+	}
 
 	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 

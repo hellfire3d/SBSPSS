@@ -24,6 +24,8 @@ public:
 	virtual void		postInit();
 protected:
 	void				processMovement( int _frames );
+
+	u8					m_silent;
 };
 
 #endif
