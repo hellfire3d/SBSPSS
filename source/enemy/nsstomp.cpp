@@ -119,7 +119,7 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 
 				// pause and change direction
 
-				m_timerTimer = 3 * GameState::getOneSecondInFrames();
+				m_timerTimer = GameState::getOneSecondInFrames();
 				m_extendDir = EXTEND_UP;
 
 				for ( int i = 0 ; i < 20 ; i++ )
