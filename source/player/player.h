@@ -251,6 +251,7 @@ public:
 
 	void			respawn();
 
+	int				getLivesLeft()										{return m_lives;}
 
 
 public:

@@ -145,10 +145,12 @@ void CFrontEndMainTitles::init()
 										50,20,200,20,
 										STR__FRONTEND__OPTIONS,
 										&m_gotoOptionsFlag,true);
+#ifdef __E3__
 	CGUIFactory::createValueButtonFrame(m_mainMenu,
 										50,40,200,20,
 										STR__FRONTEND__CREDITS,
 										&m_gotoCreditsFlag,true);
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -372,7 +374,7 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 			break;
 
 		case MODE__GOTO_CHOOSE_SLOT:
-			ret=CFrontEndScene::MODE__CHOOSE_SLOT;
+			ret=CFrontEndScene::MODE__EXIT_TO_MAP;
 			break;
 
 		case MODE__GOTO_OPTIONS:

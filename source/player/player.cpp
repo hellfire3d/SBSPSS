@@ -549,7 +549,7 @@ void	CPlayer::init()
 m_animNo=0;
 m_animFrame=0;
 	setFacing(FACING_RIGHT);
-	respawn();
+	m_lives++;respawn();
 
 	m_lives=CGameSlotManager::getSlotData()->m_lives;
 
@@ -910,6 +910,7 @@ void	CPlayer::render()
 	CPlayerThing::render();
 
 
+#ifdef __E3__
 #ifdef _STATE_DEBUG_
 char buf[100];
 #ifdef __USER_paul__
@@ -918,6 +919,7 @@ sprintf(buf,"%04d (%02d) ,%04d (%02d)\ndfg:%+02d\nMode:%s",Pos.vx,Pos.vx&0x0f,Po
 sprintf(buf,"Pos: %04d,%04d",Pos.vx,Pos.vy);
 #endif
 m_fontBank->print(stateDebugX,stateDebugY,buf);
+#endif
 #endif
 
 
@@ -1420,6 +1422,8 @@ void CPlayer::respawn()
 	clearPlatform();
 
 	updateCollisionArea();
+
+	m_lives--;
 }
 
 

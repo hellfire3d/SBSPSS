@@ -89,6 +89,8 @@ void CPauseMenu::init()
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
 	int xpos=TEXT_SPACING/2;
+
+#ifdef __E3__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__CONTINUE,
@@ -121,7 +123,6 @@ void CPauseMenu::init()
 										STR__DEBUG__BALLOON_MODE,
 										&newmode,PLAYER_MODE_BALLOON);
 	xpos+=TEXT_SPACING;
-//#ifndef __USER_paul__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BUBBLEMIXTURE_MODE,
@@ -147,7 +148,26 @@ void CPauseMenu::init()
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;
-//#endif
+#else
+	xpos+=TEXT_SPACING*2;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__PAUSE_MENU__CONTINUE,
+										&m_exitPauseMenuFlag,true);
+	xpos+=TEXT_SPACING*2;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__PAUSE_MENU__QUIT,
+										&m_quitGameFlag,true);
+	xpos+=TEXT_SPACING*2;
+
+	
+	CGUIFactory::createCycleButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__INVINCIBILE_SPONGEBOB,
+										&invincibleSponge,inv_data,inv_readoutdata);
+	xpos+=TEXT_SPACING*2;
+#endif
 
 	m_active=false;
 }

@@ -245,7 +245,15 @@ void	CGameScene::think(int _frames)
 	}
 	else if (s_restartLevel)
 	{
-		respawnLevel();
+		if(m_player->getLivesLeft()!=0)
+		{
+			respawnLevel();
+		}
+		else
+		{
+			s_readyToExit=true;
+			GameState::setNextScene(&FrontEndScene);
+		}
 		s_restartLevel=false;
 	}
 
