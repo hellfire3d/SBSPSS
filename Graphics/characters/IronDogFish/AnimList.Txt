@@ -1,0 +1,6 @@
+die
+gethit
+idle
+punch
+tailsmash
+walk

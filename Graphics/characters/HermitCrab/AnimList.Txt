@@ -1,0 +1,10 @@
+die
+gethit
+idle
+jumpend
+jumpstart
+punch
+rollattack
+rollattackend
+rollattackstart
+scuttle

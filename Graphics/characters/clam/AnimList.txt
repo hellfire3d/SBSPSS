@@ -1,7 +1,5 @@
 # Comment
-clamshut
-clamsidesnap
-clamsnapup
+sidesnap snapup
 
 
 

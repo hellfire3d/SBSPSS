@@ -1,0 +1,5 @@
+fireattack
+fly
+gethit
+idlebreathe
+spellattack

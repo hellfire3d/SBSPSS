@@ -1,0 +1,5 @@
+bite
+die
+gethit
+idle
+swim
