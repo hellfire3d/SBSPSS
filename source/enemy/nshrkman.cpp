@@ -158,7 +158,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		m_animNo = ANIM_MANRAY_ATTACK;
 		m_frame = 0;
 	}
-	else if ( ( ( m_frame >> 8 ) > ( ( 3 * getFrameCount() ) >> 2 ) ) && !m_fired )
+	else if ( ( ( m_frame >> 8 ) > ( ( 2 * getFrameCount() ) >> 2 ) ) && !m_fired )
 	{
 		// fire
 
