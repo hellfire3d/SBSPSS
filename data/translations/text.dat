@@ -115,7 +115,11 @@ eng=SPEECH VOLUME
 ; ---------------------------------------------------------------
 
 [STR__BACKEND__GAME_OVER]
-eng=GAME OVER!
+eng=GAME OVER
+[STR__BACKEND__CONTINUE]
+eng=CONTINUE?
+[STR__BACKEND__PRESS_START]
+eng=PRESS START
 
 
 
