@@ -163,35 +163,83 @@ typedef struct
 	CShopScene::SHOPITEM_ID	m_itemId;
 	int						m_fh;
 	u8						m_xOffsetBroken,m_yOffsetBroken;
+	u8						m_flipX;
 	u8						m_ot;
+	u8						m_elementId;
 }PARTY_IMAGE;
 static PARTY_IMAGE images[]=
 {
-	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOON1,		0,0,	2	},
-	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOON2,		1,0,	2	},
-
-	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER1,		0,0,	1	},
-	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER2,		0,0,	1	},
-	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER3,		1,0,	1	},
-	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER4,		1,0,	1	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS1,			0,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS2,			2,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS3,			0,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS4,			0,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS5,			0,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS6,			1,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS7,			1,0,	false,	2,	0	},
+	{	CShopScene::SHOPITEM_BLOWER,	FRM_BALLOONS8,			2,0,	false,	2,	0	},
+																
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER1,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER2,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER3,			1,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER4,			1,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER5,			1,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER6,			2,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_BANNER7,			2,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS1,			1,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS2,			1,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS3,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS4,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS5,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS6,			0,0,	false,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS1,			1,0,	true,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS2,			1,0,	true,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS3,			2,0,	true,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS4,			2,0,	true,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS5,			2,0,	true,	1,	0	},
+	{	CShopScene::SHOPITEM_PARTYHAT,	FRM_STREAMERS6,			2,0,	true,	1,	0	},
+																
+	{	CShopScene::SHOPITEM_CAKE,		FRM_BIGCAKE,			1,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_SLICEOFCAKE,		1,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT1,		1,1,	false,	5,	1	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT2,		1,1,	false,	5,	2	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT3,		1,1,	false,	5,	3	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT4,		1,1,	false,	5,	4	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT5,		1,1,	false,	5,	5	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT6,		1,1,	false,	5,	6	},
+	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLEFRONT7,		1,1,	false,	5,	7	},
+																
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_JELLY,				1,1,	false,	3,	0	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT1,		1,1,	false,	5,	1	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT2,		1,1,	false,	5,	2	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT3,		1,1,	false,	5,	3	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT4,		1,1,	false,	5,	4	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT5,		1,1,	false,	5,	5	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT6,		1,1,	false,	5,	6	},
+	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLEFRONT7,		1,1,	false,	5,	7	},
+																
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES1,			0,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES2,			0,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES3,			2,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESSIES4,			2,1,	false,	4,	0	},
 	
-	{	CShopScene::SHOPITEM_CAKE,		FRM_BIGCAKE,		1,1,	4	},
-	{	CShopScene::SHOPITEM_CAKE,		FRM_TABLE2,			1,1,	5	},
-	
-	{	CShopScene::SHOPITEM_JELLY2,	FRM_JELLY,			1,1,	3	},
-	{	CShopScene::SHOPITEM_JELLY2,	FRM_TABLE2,			1,1,	5	},
-	
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESENTS1,		0,1,	4	},
-	{	CShopScene::SHOPITEM_PREZZIE,	FRM_PRESENTS2,		2,1,	5	},
-	
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_SANDWICHES,		0,1,	5	},
-	{	CShopScene::SHOPITEM_SARNIE,	FRM_LEFTTABLE,		0,1,	5	},
-	
-	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_SMALLCAKES,		1,1,	4	},
-	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLE2,			1,1,	5	},
-
-	{	CShopScene::SHOPITEM_TEDDY,		FRM_TOYCHEST,		1,0,	6	},
-};
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_CUCUMBERSARNIES,	0,1,	false,	5,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE1,			0,1,	false,	5,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE2,			0,1,	false,	5,	0	},
+	{	CShopScene::SHOPITEM_SARNIE,	FRM_TABLESIDE3,			0,1,	false,	5,	0	},
+																
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_CHERRYCAKES,		1,1,	false,	4,	0	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT1,		1,1,	false,	5,	1	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT2,		1,1,	false,	5,	2	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT3,		1,1,	false,	5,	3	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT4,		1,1,	false,	5,	4	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT5,		1,1,	false,	5,	5	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT6,		1,1,	false,	5,	6	},
+	{	CShopScene::SHOPITEM_CUPCAKE,	FRM_TABLEFRONT7,		1,1,	false,	5,	7	},
+																
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS1,			1,1,	false,	6,	0	},
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS2,			1,0,	false,	6,	0	},
+	{	CShopScene::SHOPITEM_TEDDY,		FRM_SOFTTOYS3,			2,1,	false,	6,	0	},
+};																
 static const int numimages=sizeof(images)/sizeof(PARTY_IMAGE);
 
 DVECTOR	sbpos={220,195};
@@ -201,11 +249,11 @@ int patanim=0,patfrm=0;
 void CPartyScene::render()
 {
 	int							i;
-	int							drawn[FRM_TOYCHEST+1];
+	int							drawn[8];
 	PARTY_IMAGE					*pimage;
 	CGameSlotManager::GameSlot	*gameSlot;
 	
-	for(i=0;i<FRM_TOYCHEST+1;i++)
+	for(i=0;i<8;i++)
 	{
 		drawn[i]=false;
 	}
@@ -214,11 +262,14 @@ void CPartyScene::render()
 	pimage=images;
 	for(i=0;i<numimages;i++)
 	{
-		ASSERT(pimage->m_fh<=FRM_TOYCHEST);
-		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_fh])
+		ASSERT(pimage->m_fh<=FRM_TABLESIDE3);
+		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_elementId])
 		{
-			m_sprites->printFT4(pimage->m_fh,pimage->m_xOffsetBroken*256,pimage->m_yOffsetBroken*256,0,0,pimage->m_ot);
-			drawn[pimage->m_fh]=true;
+			m_sprites->printFT4(pimage->m_fh,pimage->m_xOffsetBroken*256,pimage->m_yOffsetBroken*256,pimage->m_flipX,0,pimage->m_ot);
+			if(pimage->m_elementId)
+			{
+				drawn[pimage->m_elementId]=true;
+			}
 		}
 		pimage++;
 	}
