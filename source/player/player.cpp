@@ -616,6 +616,7 @@ if(eyes!=-1)
 
 
 	// Temporary health/lives thing
+#ifdef __USER_paul__
 	int i,x;
 	x=healthx;
 	for(i=0;i<5;i++)
@@ -645,6 +646,7 @@ if(eyes!=-1)
 	char lifebuf[5];
 	sprintf(lifebuf,"x%d",m_lives);
 	s_debugFont.print(livesx,livesy,lifebuf);
+#endif
 }
 
 
