@@ -41,6 +41,35 @@
 #endif
 
 
+
+/*
+Chapter 1
+	1 jelly
+	2 sea weed
+	3 seanut butter
+	4 slice of bread
+Chapter 2
+	1 false teeth
+	2 kelp kream
+	3 mud pack
+	4 sponge
+Chapter 3
+	1 clam bra
+	2 slippers
+	3 starfish mask
+	4 super pants
+Chapter 4
+	1 coin
+	2 coin
+	3 coin
+	4 kelp bar
+Chapter 5
+	1 ariel
+	2 hammer
+	3 oilcan
+	4 wrench
+*/
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
