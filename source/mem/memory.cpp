@@ -162,13 +162,13 @@ void dumpDebugMem()
 				s_currentMemPart++;
 			}
 
-			if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 1;
+			if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
 			if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
 
 			while( !memDump[s_currentMemPart].addr )
 			{
 				s_currentMemPart += dir;
-				if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 1;
+				if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
 				if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
 			}
 		}
