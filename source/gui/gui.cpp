@@ -167,27 +167,8 @@ void CGUIObject::render()
 		setRGB0(f4,  0,  0, 90);
 		setSemiTrans(f4,true);
 		AddPrimToList(f4,ot);
-
-		/*
-		g4=GetPrimG4();
-		setXYWH(g4,x,y,w,h/2);
-		setRGB0(g4,107,105, 98);
-		setRGB1(g4,107,105, 98);
-		setRGB2(g4,  0,  0, 90);
-		setRGB3(g4,  0,  0, 90);
-		setSemiTrans(g4,true);
-		AddPrimToList(g4,ot);
-
-		g4=GetPrimG4();
-		setXYWH(g4,x,y+h/2,w,h/2);
-		setRGB0(g4,  0,  0, 90);
-		setRGB1(g4,  0,  0, 90);
-		setRGB2(g4,107,105, 98);
-		setRGB3(g4,107,105, 98);
-		setSemiTrans(g4,true);
-		AddPrimToList(g4,ot);
-		*/
 	}
+
 
 #ifdef __USER_paul__
 	if(forceBorderDraw)
@@ -489,6 +470,116 @@ void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 	s_uiSpriteBank->printFT4(corner,_x+_w-(corner->W/2),_y+_h-(corner->H/2),0,0,_ot);
 	corner=s_uiSpriteBank->getFrameHeader(FRM__BAMBOOBOTLEFT);
 	s_uiSpriteBank->printFT4(corner,_x-(corner->W/2),_y+_h-(corner->H/2),0,0,_ot);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+typedef struct
+{
+	int	gapfromheadtobubble;
+	int speechmarkgapfromtop;
+	int	speechmarkheight;
+}_sbb;
+_sbb sbb=
+{
+	32,
+	5,
+	10,
+};
+void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
+{
+/*
+DrawLine(_x   ,_y   ,_x+_w,_y   ,255,0,255,0);
+DrawLine(_x+_w,_y   ,_x+_w,_y+_h,255,0,255,0);
+DrawLine(_x+_w,_y+_h,_x   ,_y+_h,255,0,255,0);
+DrawLine(_x   ,_y+_h,_x   ,_y   ,255,0,255,0);
+*/
+
+	sFrameHdr	*cornerFh;
+	POLY_FT4	*ft4;
+	LINE_F2		*f2;
+	POLY_F4		*f4;
+	int			centreX,centreY;
+	sFrameHdr	*faceFh;
+	POLY_F3		*f3;
+
+
+	// Squeeze in the corners a bit..
+	_x+=4;
+	_y+=5;
+	_w-=8;
+	_h-=10;
+
+	// Sprite corner pieces
+	cornerFh=s_uiSpriteBank->getFrameHeader(FRM__SPEECHBUBBLECORNER);
+	ft4=s_uiSpriteBank->printFT4(cornerFh,_x-cornerFh->W,_y-cornerFh->H,0,0,_ot);setSemiTrans(ft4,true);
+	ft4=s_uiSpriteBank->printFT4(cornerFh,_x+_w+cornerFh->W+1,_y-cornerFh->H,1,0,_ot);setSemiTrans(ft4,true);
+	ft4=s_uiSpriteBank->printFT4(cornerFh,_x-cornerFh->W,_y+_h+cornerFh->H+1,0,1,_ot);setSemiTrans(ft4,true);
+	ft4=s_uiSpriteBank->printFT4(cornerFh,_x+_w+cornerFh->W+1,_y+_h+cornerFh->H+1,1,1,_ot);setSemiTrans(ft4,true);
+
+	// Black edge lines
+	f2=DrawLine(_x,_y-cornerFh->H-1,_x+_w,_y-cornerFh->H-1,0,0,0,_ot);setSemiTrans(f2,true);
+	f2=DrawLine(_x+_w+cornerFh->W+1,_y,_x+_w+cornerFh->W+1,_y+_h,0,0,0,_ot);setSemiTrans(f2,true);
+	f2=DrawLine(_x+_w,_y+_h+cornerFh->H+1,_x,_y+_h+cornerFh->H+1,0,0,0,_ot);setSemiTrans(f2,true);
+
+	// White middle
+	f4=GetPrimF4();
+	setXYWH(f4,_x,_y-cornerFh->H,_w+1,cornerFh->H);
+	setRGB0(f4,255,255,255);
+	setSemiTrans(f4,true);
+	AddPrimToList(f4,_ot);
+	f4=GetPrimF4();
+	setXYWH(f4,_x-cornerFh->W,_y,_w+(cornerFh->W*2)+1,_h+1);
+	setRGB0(f4,255,255,255);
+	setSemiTrans(f4,true);
+	AddPrimToList(f4,_ot);
+	f4=GetPrimF4();
+	setXYWH(f4,_x,_y+_h+1,_w+1,cornerFh->H);
+	setRGB0(f4,255,255,255);
+	setSemiTrans(f4,true);
+	AddPrimToList(f4,_ot);
+
+	if(_faceFrame!=-1)
+	{
+		// Speaking characters head
+		centreX=_x-cornerFh->W-sbb.gapfromheadtobubble-(64/2);
+		centreY=_y+(_h/2);
+		faceFh=s_uiSpriteBank->getFrameHeader(_faceFrame);
+		ft4=s_uiSpriteBank->printFT4(faceFh,centreX-(faceFh->W/2),centreY-(faceFh->H/2),0,0,_ot);//setSemiTrans(ft4,true);
+
+		// White speech bubble triangle shaped piece with black outlines.. (!?)
+		int speechmarkEndX,speechmarkEndY;
+		speechmarkEndX=_x-cornerFh->W-sbb.gapfromheadtobubble;
+		speechmarkEndY=centreY;
+		f2=DrawLine(_x-cornerFh->W-1,_y,_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop-1,0,0,0,_ot);setSemiTrans(f2,true);
+		f2=DrawLine(_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop,speechmarkEndX,speechmarkEndY,0,0,0,_ot);setSemiTrans(f2,true);
+		f2=DrawLine(speechmarkEndX,speechmarkEndY,_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight,0,0,0,_ot);setSemiTrans(f2,true);
+		f2=DrawLine(_x-cornerFh->W-1,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight+1,_x-cornerFh->W-1,_y+_h,0,0,0,_ot);setSemiTrans(f2,true);
+		f3=GetPrimF3();
+		setXY3(f3,_x-cornerFh->W,_y+sbb.speechmarkgapfromtop,
+				  speechmarkEndX,speechmarkEndY,
+				  _x-cornerFh->W,_y+sbb.speechmarkgapfromtop+sbb.speechmarkheight);
+		setRGB0(f3,255,255,255);
+		setSemiTrans(f3,true);
+		AddPrimToList(f3,_ot);
+	}
+	else
+	{
+		// Fill in the left hand black edge line
+		f2=DrawLine(_x-cornerFh->W-1,_y,_x-cornerFh->W-1,_y+_h,0,0,0,_ot);setSemiTrans(f2,true);
+	}
+
+	// Background
+	f4=GetPrimF4();
+	setXYWH(f4,0,0,512,256);
+	setRGB0(f4,  0,  0, 90);
+	setSemiTrans(f4,true);
+	AddPrimToList(f4,_ot);
 }
 
 

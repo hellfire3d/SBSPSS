@@ -22,16 +22,8 @@
 #include "mem\memory.h"
 #endif
 
-#ifndef	__GUI_GFRAME_H__
-#include "gui\gframe.h"
-#endif
-
-#ifndef	__GUI_GSPRITE_H__
-#include "gui\gsprite.h"
-#endif
-
-#ifndef	__GUI_GTEXTBOX_H__
-#include "gui\gtextbox.h"
+#ifndef	__GUI_GUI_H__
+#include "gui\gui.h"
 #endif
 
 #ifndef __GFX_SPRBANK_H__
@@ -92,14 +84,12 @@ CConversation::CHAR_ICON_FRAMES	CConversation::s_characterIconFrames[]=
 	{	FRM_PLANKTON		},			// CHAR_PLANKTON
 	{	FRM_MERMAIDMAN		},			// CHAR_MERMAIDMAN,
 	{	FRM_BARNACLEBOY		},			// CHAR_BARNACLEBOY,
-	{	FRM_JACK_CUSTARD	},			// CHAR_JACKCUSTARD
+	{	-1					},			// CHAR_JACKCUSTARD
 
 };
 
-class CGUIGroupFrame	*CConversation::s_guiFrame=NULL;
-class CGUISprite		*CConversation::s_guiIcon=NULL;
-class CGUITextBox		*CConversation::s_guiText=NULL;
-class FontBank			*CConversation::s_fontBank=NULL;
+class FontBank			*CConversation::s_textFontBank=NULL;
+class FontBank			*CConversation::s_questionFontBank=NULL;
 
 class CScript			*CConversation::s_registeredScripts[MAX_LOADED_SCRIPTS];
 int						CConversation::s_registeredScriptIds[MAX_LOADED_SCRIPTS];
@@ -108,11 +98,13 @@ int						CConversation::s_numRegisteredScripts=0;
 class CScript			*CConversation::s_currentScript=NULL;
 int						CConversation::s_currentState=STATE_INACTIVE;
 
-int CConversation::s_currentCharacterId=-1;
-int	CConversation::s_currentTextId=-1;
 int	CConversation::s_currentQuestion=QUESTION_NONE;
 int CConversation::s_currentAnswer=ANSWER_NONE;
 int CConversation::s_currentSelectedAnswer=0;
+
+static int	s_faceFrame=-1;
+static int	s_speechId=-1;
+static int	s_TextOffset=0;
 
 
 /*----------------------------------------------------------------------
@@ -125,27 +117,14 @@ void CConversation::init()
 {
 	ASSERT(s_numRegisteredScripts==0);
 
-	s_guiFrame=new ("Conversation GUI") CGUIGroupFrame();
-	s_guiFrame->init(0);
-	s_guiFrame->setObjectXYWH((512-FRAME_WIDTH)/2,256-FRAME_BOTTOM_OFFSET-FRAME_HEIGHT,FRAME_WIDTH,FRAME_HEIGHT);
-	s_guiFrame->setOt(OT_POS);
-	s_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
+	s_textFontBank=new ("Conversation Font") FontBank();
+	s_textFontBank->initialise(&standardFont);
+	s_textFontBank->setOt(0);
+	s_textFontBank->setPrintArea(125,140,357,60);
 
-		s_guiIcon=new("Conversation Icon") CGUISprite();
-		s_guiIcon->init(s_guiFrame);
-		s_guiIcon->setObjectXYWH(0,0,FRAME_HEIGHT,FRAME_HEIGHT);
-		s_guiIcon->setOt(OT_POS);
-		s_guiIcon->setSpriteBank(SPRITES_SPRITES_SPR);
-		s_guiIcon->setFrame(0);
-
-		s_guiText=new("Conversation Text") CGUITextBox();
-		s_guiText->init(s_guiFrame);
-		s_guiText->setObjectXYWH(FRAME_HEIGHT,TEXT_BORDER,FRAME_WIDTH-FRAME_HEIGHT-TEXT_BORDER,FRAME_HEIGHT-(TEXT_BORDER*2));
-		s_guiText->setOt(OT_POS);
-
-	s_fontBank=new ("Conversation Font") FontBank();
-	s_fontBank->initialise(&standardFont);
-	s_fontBank->setOt(0);
+	s_questionFontBank=new ("Conversation Font") FontBank();
+	s_questionFontBank->initialise(&standardFont);
+	s_questionFontBank->setOt(0);
 
 	s_currentState=STATE_INACTIVE;
 	s_currentScript=NULL;
@@ -160,9 +139,9 @@ void CConversation::init()
   ---------------------------------------------------------------------- */
 void CConversation::shutdown()
 {
-	s_fontBank->dump();				delete s_fontBank;
+	s_questionFontBank->dump();				delete s_questionFontBank;
+	s_textFontBank->dump();					delete s_textFontBank;
 	dumpConversationScripts();
-	s_guiFrame->shutdown();
 }
 
 
@@ -186,8 +165,7 @@ void CConversation::think(int _frames)
 			s_currentState=STATE_ACTIVE;
 		}
 
-		s_guiFrame->think(_frames);
-
+		thinkText();
 		thinkQuestion();
 
 		s_currentScript->run();
@@ -210,8 +188,9 @@ void CConversation::render()
 {
 	if(s_currentState==STATE_ACTIVE)
 	{
+		renderText();
 		renderQuestion();
-		s_guiFrame->render();
+		drawSpeechBubbleBorder(125,140,357,80,0,s_faceFrame);
 	}
 }
 
@@ -283,8 +262,9 @@ int CConversation::isActive()
   ---------------------------------------------------------------------- */
 void CConversation::setCharacterAndText(int _characterId,int _textId)
 {
-	s_guiIcon->setFrame(s_characterIconFrames[_characterId].m_frame);
-	s_guiText->setText(_textId);
+	s_faceFrame=(s_characterIconFrames[_characterId].m_frame);
+	s_speechId=_textId;
+	s_TextOffset=0;
 }
 
 
@@ -311,6 +291,29 @@ void CConversation::setResponseOptions(int _responseOptions)
 int CConversation::getResponse()
 {
 	return s_currentAnswer;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CConversation::thinkText()
+{
+	if(PadGetRepeat(0)&PAD_DOWN)
+	{
+		s_TextOffset-=s_textFontBank->getCharHeight();
+	}
+	else if(PadGetRepeat(0)&PAD_UP)
+	{
+		s_TextOffset+=s_textFontBank->getCharHeight();
+		if(s_TextOffset>0)
+		{
+			s_TextOffset=0;
+		}
+	}
 }
 
 
@@ -356,20 +359,36 @@ void CConversation::thinkQuestion()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CConversation::renderText()
+{
+	RECT clipTextRegion={125,140,357,60};
+
+	PrimFullScreen(0);
+	s_textFontBank->print(0,s_TextOffset,s_speechId);
+	PrimClip(&clipTextRegion,0);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CConversation::renderQuestion()
 {
 	int	xbase,y;
 
 	xbase=(512-FRAME_WIDTH)/2;
-	y=256-FRAME_BOTTOM_OFFSET-(TEXT_BORDER/2)-(s_fontBank->getCharHeight()/2);
+	y=256-FRAME_BOTTOM_OFFSET-(TEXT_BORDER/2)-(s_questionFontBank->getCharHeight()/2);
 
 	switch(s_currentQuestion)
 	{
 		case QUESTION_OK:
 			{
-				s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
-				s_fontBank->setJustification(FontBank::JUST_RIGHT);
-				s_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__OK);
+				s_questionFontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+				s_questionFontBank->setJustification(FontBank::JUST_RIGHT);
+				s_questionFontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__OK);
 			}
 			break;
 
@@ -377,25 +396,25 @@ void CConversation::renderQuestion()
 			{
 				if(s_currentSelectedAnswer==0)
 				{
-					s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+					s_questionFontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
 				}
 				else
 				{
-					s_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
+					s_questionFontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
-				s_fontBank->setJustification(FontBank::JUST_LEFT);
-				s_fontBank->print(xbase+FRAME_HEIGHT,y,STR__YES);
+				s_questionFontBank->setJustification(FontBank::JUST_LEFT);
+				s_questionFontBank->print(xbase+FRAME_HEIGHT,y,STR__YES);
 
 				if(s_currentSelectedAnswer==1)
 				{
-					s_fontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
+					s_questionFontBank->setColour(SELECT_TEXT_R,SELECT_TEXT_G,SELECT_TEXT_B);
 				}
 				else
 				{
-					s_fontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
+					s_questionFontBank->setColour(UNSELECT_TEXT_R,UNSELECT_TEXT_G,UNSELECT_TEXT_B);
 				}
-				s_fontBank->setJustification(FontBank::JUST_RIGHT);
-				s_fontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__NO);
+				s_questionFontBank->setJustification(FontBank::JUST_RIGHT);
+				s_questionFontBank->print(xbase+FRAME_WIDTH-TEXT_BORDER,y,STR__NO);
 			}
 			break;
 

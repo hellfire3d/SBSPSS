@@ -119,16 +119,16 @@ private:
 		MAX_LOADED_SCRIPTS=10,
 	};
 
+	static void		thinkText();
 	static void		thinkQuestion();
+	static void		renderText();
 	static void		renderQuestion();
 
 	static void		dumpConversationScripts();
 
 
-	static class CGUIGroupFrame	*s_guiFrame;
-	static class CGUISprite		*s_guiIcon;
-	static class CGUITextBox	*s_guiText;
-	static class FontBank		*s_fontBank;
+	static class FontBank		*s_textFontBank;
+	static class FontBank		*s_questionFontBank;
 
 	static CHAR_ICON_FRAMES		s_characterIconFrames[MAX_CHARS];
 
@@ -139,8 +139,6 @@ private:
 	static class CScript		*s_currentScript;
 	static int					s_currentState;
 
-	static int					s_currentCharacterId;
-	static int					s_currentTextId;
 	static int					s_currentQuestion;
 	static int					s_currentAnswer;
 	static int					s_currentSelectedAnswer;

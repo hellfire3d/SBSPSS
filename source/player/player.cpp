@@ -827,11 +827,16 @@ int itembaseX=110;
 int	itembaseY=60;
 int	itemgap=40;
 
-
+#include "gui\gui.h"
 void	CPlayer::render()
 {
-	CPlayerThing::render();
 	
+//drawSpeechBubbleBorder(125,140,357,80,0,FRM_BARNACLEBOY);
+
+
+	CPlayerThing::render();
+
+
 #ifdef _STATE_DEBUG_
 char buf[100];
 #ifdef __USER_paul__

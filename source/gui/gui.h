@@ -48,10 +48,10 @@ public:
 
 	typedef enum
 	{
-		FLAG_NONE=			0,
-		FLAG_SELECTED=		1<<0,
-		FLAG_HIDDEN=		1<<2,
-		FLAG_DRAWBORDER=	1<<3,
+		FLAG_NONE=				0,
+		FLAG_SELECTED=			1<<0,
+		FLAG_HIDDEN=			1<<2,
+		FLAG_DRAWBORDER=		1<<3,
 	} GUI_FLAGS;
 
 	enum
@@ -191,6 +191,7 @@ private:
 
 extern void initGUIStuff();
 extern void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot);
+extern void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame=-1);
 
 
 /*---------------------------------------------------------------------- */
