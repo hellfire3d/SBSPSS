@@ -5,7 +5,7 @@
 #ifndef __LEVEL_LEVEL_H__
 #define __LEVEL_LEVEL_H__
 
-#include	"level/layer.h"
+#include	"level/layertile.h"
 
 /*****************************************************************************/
 class	CLayer;
@@ -27,7 +27,7 @@ private:
 	sLvlHdr		*LevelHdr;
 
 // Tile Layers
-	CLayer		*TileLayers[CLayer::LAYER_TYPE_MAX];
+	CLayerTile	*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];
 };
 
 /*****************************************************************************/

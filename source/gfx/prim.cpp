@@ -60,7 +60,6 @@ void	PrimDisplay()
 
 
 /*** Clipping ****************************************************************/
-extern int FrameFlipFlag;
 void	PrimClip(RECT *R, u32 Depth)
 {
 DR_AREA 	*CPtr=(DR_AREA*)CurrPrim;

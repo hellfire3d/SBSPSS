@@ -5,22 +5,17 @@
 #include 	"system\global.h"
 #include	<DStructs.h>
 #include 	"utils\utils.h"
+#include	"system\vid.h"
 #include 	"gfx\prim.h"
 
-#include	"Layer.h"
 #include	"LayerTile.h"
 
-enum
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList)
 {
-	TILE_WIDTH=16,
-	TILE_HEIGHT=16,
-};
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList) : CLayer(Hdr)
-{
+	LayerHdr=Hdr;
 	TileList=_TileList;
 	TriList=_TriList;
 	QuadList=_QuadList;
@@ -32,91 +27,103 @@ CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_Qu
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-}
-
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-void	CLayerTile::init()
-{
+	if (TileMap2d[0].List) MemFree(TileMap2d[0].List);
+	if (TileMap2d[1].List) MemFree(TileMap2d[1].List);
 }
 
 /*****************************************************************************/
-void	CLayerTile::shutdown()
+// NEED TO UPDATE FOR DIFF MAP POS's
+void	CLayerTile::InitTileMap2d(int InitX,int InitY,int Width,int Height)
 {
-}
+int		Size=Width*Height;
+int		MapWidth=GetWidth();
+int		MapHeight=GetWidth();
 
-/*****************************************************************************/
-int		MapX=0;
-int		MapY=0;
+		ASSERT(Width>=SCREEN_TILE_WIDTH);
+		ASSERT(Height>=SCREEN_TILE_HEIGHT);
 
+		TileMapWidth=Width;
+		TileMapHeight=Height;
 
-void	CLayerTile::render()
-{
-int				Width=32;//GetWidth();
-int				Height=21;//GetHeight();
-POLY_FT4		*ft4;
-sTileMapElem	*ThisElem=Map;
-int				XOfs=MapX;
-int				YOfs=MapY;
-int				XTileOfs,YTileOfs;
-		
-
-		if (LayerHdr->SubType==LAYER_TILE_SUBTYPE_BACK)
+		for (int Buffer=0; Buffer<2; Buffer++)
 		{
-			XOfs/=4;
-			YOfs/=4;
-		}
-		if (LayerHdr->SubType==LAYER_TILE_SUBTYPE_MID)
-		{
-			XOfs/=2;
-			YOfs/=2;
-		}
+			sTileMapElem	*MapPtr=Map;
+			sTileMap2dElem	*List=(sTileMap2dElem*) MemAlloc(Size*sizeof(sTileMap2dElem),"2d TileMap");
+			TileMap2d[Buffer].List=List;
 
-		YTileOfs=YOfs;
-		for (int Y=0; Y<Height; Y++)
-		{
-			XTileOfs=XOfs;
-			for (int X=0; X<Width; X++)
+			for (int Y=0; Y<Height; Y++)
 			{
-				if (ThisElem->Tile)
+				for (int X=0; X<Width; X++)
 				{
-					sTile		*ThisTile=&TileList[ThisElem->Tile];
-					if (ThisTile->TPage)
-					{
-						s16		x0=XTileOfs;
-						s16		x1=XTileOfs+TILE_WIDTH;
-						s16		y0=YTileOfs;
-						s16		y1=YTileOfs+TILE_HEIGHT;
+					sTileMap2dElem	*ThisElem=&List[X+(Y*Width)];
+// Tile prim
+					TSPRT_16	*ThisTile=&ThisElem->Tile;
+					sTile		*SrcTile=&TileList[MapPtr->Tile];
+					setTSprt16(ThisTile);
+					setTSprtTPage(ThisTile,SrcTile->TPage);
+					ThisTile->r0=128;
+					ThisTile->g0=128;
+					ThisTile->b0=128;
+					ThisTile->clut=SrcTile->Clut;
+					ThisTile->u0=SrcTile->uv0[0];
+					ThisTile->v0=SrcTile->uv0[1];
 
-						ft4=GetPrimFT4();
-						setShadeTex(ft4,1);
-						ft4->tpage=ThisTile->TPage;
-						ft4->clut=ThisTile->Clut;
-						ft4->x0=x0	; ft4->y0=y0;
-						ft4->x1=x1	; ft4->y1=y0;
-						ft4->x2=x0	; ft4->y2=y1;
-						ft4->x3=x1	; ft4->y3=y1;
-						*(u16*)&ft4->u0=*(u16*)ThisTile->uv0;
-						*(u16*)&ft4->u1=*(u16*)ThisTile->uv1;
-						*(u16*)&ft4->u2=*(u16*)ThisTile->uv2;
-						*(u16*)&ft4->u3=*(u16*)ThisTile->uv3;
-						AddPrimToList(ft4,0);
-					}
-					else
-					{
-					}
+// Table			
+					int TableR=(X+1) % Width;
+					int TableD=(Y+1) % Height;
+					ThisElem->Right=&List[TableR+(Y*Width)];
+					ThisElem->Down=&List[X+(TableD*Width)];
+
+					MapPtr++;
 				}
-				ThisElem++;
-				XTileOfs+=TILE_WIDTH;
+
 			}
-			YTileOfs+=TILE_HEIGHT;
 		}
+		
 }
 
 /*****************************************************************************/
-void	CLayerTile::think(int _frames)
+
+void	CLayerTile::RenderTileMap2d(int MapX,int MapY)
 {
+sTileMap2dElem	*Table=TileMap2d[FrameFlipFlag].List;
+int				XShift,YShift;
+u32				XYPos;
+const u32		XInc=16<<0;
+const u32		YInc=16<<16;
+
+// Setup shift bits of pos
+		XShift=15-(MapX&15);
+		YShift=15-(MapY&15);
+		XYPos=YShift<<16 | XShift<<0;
+
+		MapX>>=4;
+		MapY>>=4;
+// Calc Start pos (fully wrapping)
+/**/	MapX=MapX % TileMapWidth;
+/**/	MapY=MapY % TileMapHeight;
+
+/**/	Table+=MapX;
+/**/	Table+=MapY*TileMapWidth;
+
+// Render it!!		
+		for (int TileY=0; TileY<SCREEN_TILE_HEIGHT; TileY++)
+		{
+			sTileMap2dElem	*TableDown=Table->Down;
+			u32				XYPosDown=XYPos+YInc;
+			for (int TileX=0; TileX<SCREEN_TILE_WIDTH; TileX++)
+			{
+				TSPRT_16	*TileData=&Table->Tile;
+				*(u32*)&TileData->x0=XYPos;
+/**/			//AddPrimToList(TileData,0);
+/**/			AddPrim(OtPtr,TileData);
+				Table=Table->Right;
+				XYPos+=XInc;
+			}
+			Table=TableDown;
+			XYPos=XYPosDown;
+		}
 }
 
+
+/*****************************************************************************/
