@@ -312,7 +312,7 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 				{
 					if ( !player->isRecoveringFromHit() )
 					{
-						//if ( m_frame >= ( 5 << 8 ) )
+						if ( m_frame >= ( 5 << 8 ) )
 						{
 							m_oldControlFunc = m_controlFunc;
 							m_controlFunc = NPC_CONTROL_COLLISION;
