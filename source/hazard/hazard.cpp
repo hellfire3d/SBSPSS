@@ -140,11 +140,9 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
+CNpcHazard *CNpcHazard::Create(int Type)
 {
-	CNpcHazard *hazard;
-
-	NPC_HAZARD_UNIT_TYPE Type = getTypeFromMapEdit( ThisHazard->Type );
+CNpcHazard *hazard;
 
 	hazard = (CNpcHazard*)CThingManager::GetThing(CThing::TYPE_HAZARD,Type);
 	if (!hazard)
@@ -281,6 +279,17 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 
 	hazard->setThingSubType(Type);
 	hazard->init();
+
+	return( hazard );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
+{
+	NPC_HAZARD_UNIT_TYPE Type = getTypeFromMapEdit( ThisHazard->Type );
+
+	CNpcHazard *hazard=Create(ThisHazard->Type);
+
 	hazard->setWaypoints( ThisHazard );
 	hazard->setGraphic( ThisHazard );
 

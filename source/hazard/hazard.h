@@ -74,6 +74,7 @@ public:
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
+	static CNpcHazard	*Create(int Type);
 	static CNpcHazard	*Create(sThingHazard *ThisHazard);
 
 	void				setPlatform(CThing *_newPlatform)	{m_platform = _newPlatform;}
