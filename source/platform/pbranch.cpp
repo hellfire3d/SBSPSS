@@ -117,6 +117,9 @@ void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
 			break;
 		}
 
+		case TYPE_HAZARD:
+			break;
+
 		default:
 			ASSERT(0);
 			break;
