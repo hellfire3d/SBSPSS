@@ -215,20 +215,24 @@ void	CPlayerModeJellyLauncher::think()
 			}
 			else
 			{
-				m_firingState=FIRING_STATE__FIRING;
-				m_firingFrame=0;
-			}
-			break;
-		case FIRING_STATE__FIRING:
-			m_player->setAnimNo(ANIM_SPONGEBOB_FIRESTART);
-			m_player->setAnimFrame(m_firingFrame++);
-			if(m_firingFrame>=m_player->getAnimFrameCount())
-			{
 				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
 				launchProjectile();
 				m_firingState=FIRING_STATE__RECOILING;
 				m_firingFrame=0;
+//				m_firingState=FIRING_STATE__FIRING;
+//				m_firingFrame=0;
 			}
+			break;
+		case FIRING_STATE__FIRING:
+//			m_player->setAnimNo(ANIM_SPONGEBOB_FIRESTART);
+//			m_player->setAnimFrame(m_firingFrame++);
+//			if(m_firingFrame>=m_player->getAnimFrameCount())
+//			{
+//				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
+//				launchProjectile();
+//				m_firingState=FIRING_STATE__RECOILING;
+//				m_firingFrame=0;
+//			}
 			break;
 		case FIRING_STATE__RECOILING:
 			m_player->setAnimNo(ANIM_SPONGEBOB_FIREEND);
