@@ -626,7 +626,15 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 	CNpcPositionHistory *newPos;
 	newPos = m_positionHistory;
 
-	for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+	//m_speed = m_data[m_type].speed + ( ( 3 * ( NPC_SEA_SNAKE_LENGTH - ( m_health - 1 ) ) ) / NPC_SEA_SNAKE_LENGTH );
+
+	int skipDist;
+
+	skipDist = NPC_SEA_SNAKE_SPACING;
+	skipDist -= m_speed - m_data[m_type].speed;
+
+	//for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+	for ( skipCounter = 1 ; skipCounter < skipDist ; skipCounter++ )
 	{
 		newPos = newPos->next;
 	}
@@ -691,7 +699,8 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 		}
 		oldPos = sinPos;
 
-		for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+		//for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+		for ( skipCounter = 0 ; skipCounter < skipDist ; skipCounter++ )
 		{
 			newPos = newPos->next;
 		}
