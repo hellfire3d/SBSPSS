@@ -229,6 +229,8 @@ void CNpcAnemone2Enemy::postInit()
 	SetIdentNoTrans(&mtx );
 	RotMatrixZ( m_heading, &mtx );
 
+	m_radius = 0;
+
 	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 	{
 		DVECTOR spikePos;
@@ -252,8 +254,8 @@ void CNpcAnemone2Enemy::postInit()
 
 		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-		xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
-		yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
+		xDiff = ( m_scaleY * m_radius ) >> 12;
+		yDiff = ( m_scaleX * m_radius ) >> 12;
 
 		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
@@ -266,6 +268,7 @@ void CNpcAnemone2Enemy::postInit()
 		projectile = new( "anemone lev2 projectile" ) CProjectile;
 		projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
 		projectile->setLayerCollision( m_layerCollision );
+		projectile->setOt( 15 );
 
 		addChild( projectile );
 	}
@@ -429,12 +432,15 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 				projectile->setMovementType( CProjectile::PROJECTILE_DUMBFIRE );
 				projectile->setLifeTime( CProjectile::PROJECTILE_FINITE_LIFE );
 				projectile->setState( CProjectile::PROJECTILE_ATTACK );
+				projectile->setOt( 0 );
 			}
 
 			nextThing = nextThing->getNext();
 		}
 
 		removeAllChild();
+
+		m_radius = 0;
 
 		// attach new spikes
 
@@ -465,8 +471,8 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 			// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-			xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
-			yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
+			xDiff = ( m_scaleY * m_radius ) >> 12;
+			yDiff = ( m_scaleX * m_radius ) >> 12;
 
 			offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 			offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
@@ -479,6 +485,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
 			projectile->setLayerCollision( m_layerCollision );
+			projectile->setOt( 15 );
 
 			addChild( projectile );
 		}
@@ -515,6 +522,11 @@ void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 dis
 	SetIdentNoTrans(&mtx );
 	RotMatrixZ( m_heading, &mtx );
 
+	if ( m_radius < SPIKE_RADIUS )
+	{
+		m_radius++;
+	}
+
 	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 	{
 		DVECTOR spikePos;
@@ -537,8 +549,8 @@ void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 dis
 
 		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-		xDiff = ( m_scaleY * SPIKE_RADIUS ) >> 12;
-		yDiff = ( m_scaleX * SPIKE_RADIUS ) >> 12;
+		xDiff = ( m_scaleY * m_radius ) >> 12;
+		yDiff = ( m_scaleX * m_radius ) >> 12;
 
 		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
 		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;

@@ -65,6 +65,7 @@ void CProjectile::init()
 	m_turnSpeed = 256;
 	m_extension = 0;
 	m_isShuttingDown = false;
+	m_ot = 0;
 	updateCollisionArea();
 }
 
@@ -357,7 +358,7 @@ void CProjectile::render()
 
 	frameHdr = m_spriteBank->getFrameHeader(FRM__SPIKE);
 
-	m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, 0 );
+	m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, m_ot );
 }
 
 DVECTOR CProjectile::getScreenOffset()

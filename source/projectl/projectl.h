@@ -60,6 +60,7 @@ public:
 	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+	void				setOt( u8 newOt )										{m_ot=newOt;}
 
 private:
 	class CLayerCollision	*m_layerCollision;
@@ -79,6 +80,7 @@ protected:
 	PROJECTILE_STATE							m_state;
 	u16											m_turnSpeed;
 	u8											m_isShuttingDown;
+	u8											m_ot;
 };
 
 /*****************************************************************************/

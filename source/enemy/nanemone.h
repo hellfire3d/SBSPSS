@@ -46,6 +46,8 @@ protected:
 
 	u16					m_scaleX, m_scaleY;
 
+	u8					m_radius;
+
 	enum
 	{
 		SPIKE_RADIUS = 20,
