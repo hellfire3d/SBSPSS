@@ -48,7 +48,8 @@ protected:
 		u16				ShiftX,ShiftY;
 		
 		sTileMapElem	*Map;
-		TSPRT			*PrimBank;
+		TSPRT			*PrimBank[2];
+		int				PrimBankID;
 };
 
 

@@ -81,7 +81,8 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	int	maxHeightToCheck;
 
 	mapX=_x>>4;
-	mapY=(_y>>4)*MapWidth;
+//	mapY=(_y>>4)*MapWidth;
+	mapY=GetYPos(_y>>4);
 	xFraction=_x&0x0f;
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
@@ -135,7 +136,8 @@ int			CLayerCollision::getHeightFromGroundExcluding(int _x,int _y,int _exclusion
 	int	maxHeightToCheck;
 
 	mapX=_x>>4;
-	mapY=(_y>>4)*MapWidth;
+//	mapY=(_y>>4)*MapWidth;
+	mapY=GetYPos(_y>>4);
 	xFraction=_x&0x0f;
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
@@ -201,7 +203,8 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 	int	maxHeightToCheck;
 
 	mapX=_x>>4;
-	mapY=(_y>>4)*MapWidth;
+//	mapY=(_y>>4)*MapWidth;
+	mapY=GetYPos(_y>>4);
 	xFraction=_x&0x0f;
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
@@ -315,7 +318,8 @@ void CLayerCollision::render(DVECTOR &MapPos)
 		mapy=MapPos.vy/16;
 		for(y=-yoff;y<(20*16)-yoff;y+=16)
 		{
-			coll=&Map[mapx+(mapy*MapWidth)];
+//			coll=&Map[mapx+(mapy*MapWidth)];
+			coll=&Map[mapx+(GetYPos(mapy))];
 			for(x=-xoff;x<(33*16)-xoff;x+=16)
 			{
 				colour=&s_typeColours[((*coll)&COLLISION_TYPE_MASK)>>COLLISION_TYPE_FLAG_SHIFT];

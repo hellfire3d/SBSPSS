@@ -17,9 +17,10 @@
 
 struct	sFlipTable
 {
-	s16		Mtx[4];
-	DVECTOR	*DeltaTab[8];
-	s32		ClipCode;
+	s16		Mtx[4];				// 8
+	DVECTOR	*DeltaTab[8];		// 32
+	s32		ClipCode;			// 4
+	s8		Pad[20];
 };
 extern	sFlipTable	FlipTable[];
 

@@ -18,6 +18,8 @@ static const int	TILE2D_WIDTH=16;
 static const int	TILE2D_HEIGHT=12;
 static const int	SCREEN_TILE2D_WIDTH=((512/TILE2D_WIDTH)+1);
 static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+1);
+static const int	PrimCount=SCREEN_TILE2D_WIDTH*SCREEN_TILE2D_HEIGHT;
+static const int	PrimMemSize=PrimCount*sizeof(TSPRT);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -25,9 +27,6 @@ static const int	SCREEN_TILE2D_HEIGHT=((256/TILE2D_HEIGHT)+1);
 
 CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 {
-int		Count=SCREEN_TILE2D_WIDTH*SCREEN_TILE2D_HEIGHT;
-int		MemSize=Count*sizeof(TSPRT);
-
 		LayerHdr=Hdr;
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
@@ -35,23 +34,31 @@ int		MemSize=Count*sizeof(TSPRT);
 		ElemBank2d=LevelHdr->ElemBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 		
-		PrimBank=(TSPRT*)MemAlloc(MemSize,"Mid Polyz");
+		PrimBankID=0;
 
-TSPRT	*PrimPtr=PrimBank;
-		for (int i=0; i<Count; i++)
+		for (int b=0; b<2; b++)
 		{
-			setTSprt(PrimPtr);
-			setTSetShadeTex(PrimPtr,1);
-			PrimPtr->w=TILE2D_WIDTH;
-			PrimPtr->h=TILE2D_HEIGHT;
-			PrimPtr++;
+			PrimBank[b]=(TSPRT*)MemAlloc(PrimMemSize,"Mid Polyz");
+			TSPRT *PrimPtr=PrimBank[b];
+			for (int i=0; i<PrimCount; i++)
+			{
+				setTSprt(PrimPtr);
+				setTSetShadeTex(PrimPtr,1);
+				PrimPtr->w=TILE2D_WIDTH;
+				PrimPtr->h=TILE2D_HEIGHT;
+				PrimPtr++;
+			}
 		}
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-		MemFree(PrimBank);
+		for (int b=0; b<2; b++)
+		{
+			MemFree(PrimBank[b]);
+		}
+		
 }
 
 /*****************************************************************************/
@@ -113,7 +120,9 @@ void	CLayerTile::render()
 sTileMapElem	*MapPtr=Map+GetMapOfs();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
-TSPRT			*PrimPtr=PrimBank;
+TSPRT			*PrimPtr=PrimBank[PrimBankID];
+
+			PrimBankID^=1;
 
 // Setup shift bits of pos
 		TileY=-ShiftY;
@@ -128,7 +137,6 @@ TSPRT			*PrimPtr=PrimBank;
 			for (int X=0; X<RenderW; X++)
 			{
 				int	ThisTile=MapRow->Tile;
-				MapRow++;
 				if (ThisTile)
 				{
 					sElem2d		*Tile=&ElemBank2d[ThisTile];
@@ -139,6 +147,7 @@ TSPRT			*PrimPtr=PrimBank;
 					addPrim(ThisOT,PrimPtr);
 					PrimPtr++;
 				}
+				MapRow++;
 				TileX+=TILE2D_WIDTH;
 			}
 			MapPtr+=MapWidth;

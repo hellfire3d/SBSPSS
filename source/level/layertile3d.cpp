@@ -14,7 +14,7 @@
 
 
 #if		1
-#if		defined(__USER_sbart__) || defined(__USER_daveo__)
+#if		defined(__USER_sbart__) // || defined(__USER_daveo__)
 #define	_SHOW_POLYZ_	1
 #include	"gfx\font.h"	
 static		FontBank		*Font;
@@ -405,10 +405,6 @@ s16				TCount=0,QCount=0;
 						setlen(ThisPrim, GPU_PolyGT3Tag);
 						gte_nclip_b();	// 8 cycles
 
-#if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0);}
-#endif
-
 						*(u32*)&ThisPrim->x0=T0;	// Set XY0
 						*(u32*)&ThisPrim->x1=T1;	// Set XY1
 						*(u32*)&ThisPrim->x2=T2;	// Set XY2
@@ -424,25 +420,20 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->u1=T1;	// Set UV1
 							*(u32*)&ThisPrim->u2=T2;	// Set UV2
 							addPrim(ThisOT,ThisPrim);
-							
-#if		defined(_SHOW_POLYZ_)
-						if (!ShowPolyz)
+							{ // lighting
+								T0=*(u32*)&RGB[TList->C0];
+								T1=*(u32*)&RGB[TList->C1];
+								T2=*(u32*)&RGB[TList->C2];
+								*(u32*)&ThisPrim->r0=T0;
+								*(u32*)&ThisPrim->r1=T1;
+								*(u32*)&ThisPrim->r2=T2;
+							}
+#if		defined(_SHOW_POLYZ_)	
+							if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0); TCount++;}	
 #endif
-						{ // lighting
-							T0=*(u32*)&RGB[TList->C0];
-							T1=*(u32*)&RGB[TList->C1];
-							T2=*(u32*)&RGB[TList->C2];
-							*(u32*)&ThisPrim->r0=T0;
-							*(u32*)&ThisPrim->r1=T1;
-							*(u32*)&ThisPrim->r2=T2;
-						}
 							ThisPrim->code=TList->PolyCode;
 
 							PrimPtr+=sizeof(POLY_GT3);
-							#if		defined(_SHOW_POLYZ_)
-							TCount++;
-							#endif
-
 						}
 						TList++;
 					}
@@ -452,20 +443,16 @@ s16				TCount=0,QCount=0;
 					{
 						POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
-						T0=*(u32*)(XYList+(QList->P0/*4*/)); 
-						T1=*(u32*)(XYList+(QList->P1/*4*/)); 
-						T2=*(u32*)(XYList+(QList->P2/*4*/));
-						T3=*(u32*)(XYList+(QList->P3/*4*/));
+						T0=*(u32*)(XYList+QList->P0); 
+						T1=*(u32*)(XYList+QList->P1); 
+						T2=*(u32*)(XYList+QList->P2);
+						T3=*(u32*)(XYList+QList->P3);
 						gte_ldsxy0(T0);
 						gte_ldsxy1(T1);
 						gte_ldsxy2(T2);
 						
 						setlen(ThisPrim, GPU_PolyGT4Tag);
 						gte_nclip_b();	// 8 cycles
-
-#if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0);}
-#endif
 
 						*(u32*)&ThisPrim->x0=T0;	// Set XY0
 						*(u32*)&ThisPrim->x1=T1;	// Set XY1
@@ -484,26 +471,23 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->u1=T1;	// Set UV1
 							*(u32*)&ThisPrim->u2=T2;	// Set UV2
 							*(u32*)&ThisPrim->u3=T3;	// Set UV2
-#if		defined(_SHOW_POLYZ_)
-						if (!ShowPolyz)
+							{ // Lighting
+								T0=*(u32*)&RGB[QList->C0];
+								T1=*(u32*)&RGB[QList->C1];
+								T2=*(u32*)&RGB[QList->C2];
+								T3=*(u32*)&RGB[QList->C3];
+								*(u32*)&ThisPrim->r0=T0;
+								*(u32*)&ThisPrim->r1=T1;
+								*(u32*)&ThisPrim->r2=T2;
+								*(u32*)&ThisPrim->r3=T3;
+							}
+#if		defined(_SHOW_POLYZ_)	
+							if (ShowPolyz)	{setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0); QCount++;}	
 #endif
-						{ // Lighting
-							T0=*(u32*)&RGB[QList->C0];
-							T1=*(u32*)&RGB[QList->C1];
-							T2=*(u32*)&RGB[QList->C2];
-							T3=*(u32*)&RGB[QList->C3];
-							*(u32*)&ThisPrim->r0=T0;
-							*(u32*)&ThisPrim->r1=T1;
-							*(u32*)&ThisPrim->r2=T2;
-							*(u32*)&ThisPrim->r3=T3;
-						}
 							ThisPrim->code=QList->PolyCode;
 
 							addPrim(ThisOT,ThisPrim);
 							PrimPtr+=sizeof(POLY_GT4);
-							#if		defined(_SHOW_POLYZ_)
-							QCount++;
-							#endif
 						}
 						QList++;
 					}
