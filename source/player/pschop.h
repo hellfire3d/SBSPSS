@@ -41,6 +41,14 @@ public:
 };
 
 
+class CPlayerStateRunChop : public CPlayerStateChop
+{
+public:
+	void			think(class CPlayer *_player);
+
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */

@@ -42,13 +42,6 @@
 	Tyepdefs && Defines
 	------------------- */
 
-#define ANIM_IDLE_SHORT		0
-#define ANIM_IDLE_LONG		1
-#define ANIM_JUMP			0
-#define ANIM_RUNSTART		2
-#define ANIM_RUN			3
-#define ANIM_RUNSTOP		4
-
 typedef enum
 {
 	STATE_IDLE,
@@ -56,6 +49,14 @@ typedef enum
 	STATE_RUN,
 	STATE_FALL,
 	STATE_FALLFAR,
+	STATE_BUTTBOUNCE,
+	STATE_BUTTFALL,
+	STATE_BUTTLAND,
+	STATE_CHOP,
+	STATE_RUNCHOP,
+	STATE_DUCK,
+	STATE_SOAKUP,
+	STATE_GETUP,
 		
 	NUM_STATES,
 }PLAYER_STATE;
@@ -66,51 +67,47 @@ enum
 	FACING_RIGHT=-1,
 };
 
-
-extern int JUMP_VELOCITY;
-extern int MAX_JUMP_FRAMES;
-extern int MAX_SAFE_FALL_FRAMES;
-extern int GRAVITY_VALUE;
-extern int TERMINAL_VELOCITY;
-extern int MAX_RUN_VELOCITY;
-extern int RUN_SPEEDUP;
-extern int RUN_REVERSESLOWDOWN;
-extern int RUN_SLOWDOWN;
-extern int PSHIFT;
+typedef enum
+{
+	PM__JUMP_VELOCITY,
+	PM__MAX_JUMP_FRAMES,
+	PM__MAX_SAFE_FALL_FRAMES,
+	PM__GRAVITY_VALUE,
+	PM__TERMINAL_VELOCITY,
+	PM__MAX_RUN_VELOCITY,
+	PM__RUN_SPEEDUP,
+	PM__RUN_REVERSESLOWDOWN,
+	PM__RUN_SLOWDOWN,
+		
+	NUM_PLAYER_METRICS
+}PLAYER_METRIC;
 
 
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
 
+struct PlayerMetrics
+{
+	s16		m_metric[NUM_PLAYER_METRICS];
+};
+
+
 class CPlayer : public CThing
 {
 public:
-	typedef enum
+	enum
 	{
-		PM__JUMP_VELOCITY,
-		PM__MAX_JUMP_FRAMES,
-		PM__MAX_SAFE_FALL_FRAMES,
-		PM__GRAVITY_VALUE,
-		PM__TERMINAL_VELOCITY,
-		PM__MAX_RUN_VELOCITY,
-		PM__RUN_SPEEDUP,
-		PM__RUN_REVERSESLOWDOWN,
-		PM__RUN_SLOWDOWN,
-		PM__PSHIFT,
-		
-		NUM_PLAYER_METRICS
-	}PLAYER_METRIC;
-
+		VELOCITY_SHIFT=2
+	};
 
 	void			init();
 	void			shutdown();
 	void			think(int _frames);
 	void			render();
 
-
 protected:		
-	int				getPlayerMetric(PLAYER_METRIC _metric);
+	PlayerMetrics	*getPlayerMetrics();
 
 	void			setState(PLAYER_STATE _state);
 	int				getFacing();

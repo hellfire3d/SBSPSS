@@ -127,6 +127,9 @@ paul_src :=			paul \
 					scenesel
 
 player_src :=		player \
+					psbutt \
+					pschop \
+					psduck \
 					psfall \
 					psjump \
 					psrun \

@@ -78,29 +78,31 @@ void CPlayerStateFall::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::think(CPlayer *_player)
 {
-	int	control;
-	DVECTOR	move;
+	PlayerMetrics	*metrics;
+	int				control;
+	DVECTOR			move;
 
+	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);
 
 	move=getMoveVelocity(_player);
-	move.vy+=GRAVITY_VALUE;
-	if(move.vy>=TERMINAL_VELOCITY<<PSHIFT)
+	move.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
+	if(move.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<CPlayer::VELOCITY_SHIFT)
 	{
-		move.vy=TERMINAL_VELOCITY<<PSHIFT;
+		move.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
 		m_fallFrames++;
-		if(m_fallFrames>MAX_SAFE_FALL_FRAMES)
+		if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
 		{
 			setState(_player,STATE_FALLFAR);
 		}
 	}
 	setMoveVelocity(_player,&move);
 
-	if(control&PAD_LEFT)
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&PAD_RIGHT)
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}
@@ -109,22 +111,53 @@ void CPlayerStateFall::think(CPlayer *_player)
 		slowdown(_player);
 	}
 
-/*
-	if(isOnSolidGround(_player))
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION)&&control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
-		move=getMoveVelocity(_player);
-//		if(move.vx)
-//		{
-//			setState(_player,STATE_RUN);
-//		}
-//		else
-		{
-			setState(_player,STATE_IDLE);
-		}
+		move.vx=0;
 		move.vy=0;
 		setMoveVelocity(_player,&move);
+		setState(_player,STATE_BUTTBOUNCE);
 	}
-*/
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateFallFar::enter(CPlayer *_player)
+{
+	setAnimNo(_player,ANIM_PLAYER_ANIM_FALL);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateFallFar::think(CPlayer *_player)
+{
+	int				control;
+	DVECTOR			move;
+
+	control=getPadInput(_player);
+
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	{
+		moveLeft(_player);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	{
+		moveRight(_player);
+	}
+	else
+	{
+		slowdown(_player);
+	}
 }
 
 

@@ -46,6 +46,10 @@ private:
 
 class CPlayerStateFallFar : public CPlayerStateFall
 {
+private:
+	void			enter(class CPlayer *_player);
+	void			think(class CPlayer *_player);
+
 };
 
 

@@ -28,8 +28,6 @@
 #endif
 
 
-
-
 /*	Std Lib
 	------- */
 
@@ -80,6 +78,47 @@ void CPlayerStateChop::think(CPlayer *_player)
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
 		setState(_player,STATE_IDLE);
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateRunChop::think(CPlayer *_player)
+{
+	int	control;
+	control=getPadInput(_player);
+
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	{
+		moveLeft(_player);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	{
+		moveRight(_player);
+	}
+	else
+	{
+		DVECTOR	move;
+		move=getMoveVelocity(_player);
+		if(move.vx==0)
+		{
+			setState(_player,STATE_IDLE);
+			setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
+		}
+		else
+		{
+			slowdown(_player);
+		}
+	}
+	
+	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	{
+		setState(_player,STATE_RUN);
 	}
 }
 

@@ -63,10 +63,14 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::enter(CPlayer *_player)
 {
+	PlayerMetrics	*metrics;
+
+	metrics=getPlayerMetrics(_player);
+
 	setAnimNo(_player,ANIM_PLAYER_ANIM_JUMPSTART);
 	m_jumpFrames=0;
 	DVECTOR	move=getMoveVelocity(_player);
-	move.vy=-JUMP_VELOCITY<<PSHIFT;
+	move.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
 	setMoveVelocity(_player,&move);
 }
 
@@ -79,10 +83,13 @@ void CPlayerStateJump::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::think(CPlayer *_player)
 {
-	int	control;
+	PlayerMetrics	*metrics;
+	int				control;
+
+	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);
 
-	if(m_jumpFrames<=MAX_JUMP_FRAMES&&control&PAD_CROSS)
+	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
 	{
 		m_jumpFrames++;
 	}
@@ -96,16 +103,16 @@ void CPlayerStateJump::think(CPlayer *_player)
 		}
 		else
 		{
-			move.vy+=GRAVITY_VALUE;
+			move.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
 		}
 		setMoveVelocity(_player,&move);
 	}
 
-	if(control&PAD_LEFT)
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&PAD_RIGHT)
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}

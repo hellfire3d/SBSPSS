@@ -24,6 +24,10 @@
 
 
 /*----------------------------------------------------------------------*/
+PlayerMetrics *CPlayerState::getPlayerMetrics(CPlayer *_player)
+{
+	return _player->getPlayerMetrics();
+}
 void CPlayerState::setState(CPlayer *_player,int _state)
 {
 	_player->setState((PLAYER_STATE)_state);
@@ -117,13 +121,21 @@ void CPlayerStateIdle::think(CPlayer *_player)
 	int	control;
 	control=getPadInput(_player);
 	
-	if(control&PAD_CROSS)
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
 	{
 		setState(_player,STATE_JUMP);
 	}
-	else if(control&(PAD_LEFT|PAD_RIGHT))
+	else if(control&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
 	{
 		setState(_player,STATE_RUN);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	{
+		setState(_player,STATE_CHOP);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	{
+		setState(_player,STATE_DUCK);
 	}
 	else if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
