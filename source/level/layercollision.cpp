@@ -19,24 +19,37 @@ u8 CLayerCollision::s_collisionTable[]=
 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
-	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
-	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
-	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
 
 	 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
 	 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1,
-	16,16,15,15,14,14,13,13,12,12,11,11,10,10, 9, 9,
-	 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,
 
 	 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,
 	16,16,15,15,14,14,13,13,12,12,11,11,10,10, 9, 9,
-	 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
-	 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1,
 
 	 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,
 	16,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-	16,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-	 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,
+};
+
+
+static const u8		s_collisionTileRemapTable[17]=
+{
+	0,	
+	1,
+	1,
+	1,
+	1,
+	2,
+	3,
+	0,
+	0,
+	4,
+	5,
+	0,
+	0,
+	6,
+	7,
+	0,
+	0,
 };
 
 
@@ -50,6 +63,17 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 //		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
+
+		// Convert the collision data to the new format..
+		u8	*map,originalTile,finalTile;
+		int	i;
+		map=Map;
+		for(i=0;i<MapWidth*MapHeight;i++)
+		{
+			originalTile=*map;
+			finalTile=(originalTile&0xe0)|s_collisionTileRemapTable[originalTile&0x1f];
+			*map++=finalTile;
+		}
 }
 
 /*****************************************************************************/
@@ -275,9 +299,6 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						break;
 
 					case 1:
-					case 2:
-					case 3:
-					case 4:
 						f4=GetPrimF4();
 						setXYWH(f4,x,y,16,16);
 						setRGB0(f4,colour->r,colour->g,colour->b);
@@ -285,7 +306,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f4,0);
 						break;
 
-					case 5:
+					case 2:
 						f3=GetPrimF3();
 						setXY3(f3,x+16,y+16,
 								  x,y+16,
@@ -295,7 +316,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f3,0);
 						break;
 
-					case 6:
+					case 3:
 						f3=GetPrimF3();
 						setXY3(f3,x,y+16,
 								  x+16,y+16,
@@ -305,7 +326,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f3,0);
 						break;
 
-					case 9:
+					case 4:
 						f4=GetPrimF4();
 						setXY4(f4,x+16,y,
 								  x,y+8,
@@ -316,7 +337,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f4,0);
 						break;
 
-					case 10:
+					case 5:
 						f4=GetPrimF4();
 						setXY4(f4,x,y,
 								  x+16,y+8,
@@ -327,7 +348,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f4,0);
 						break;
 
-					case 13:
+					case 6:
 						f3=GetPrimF3();
 						setXY3(f3,x+16,y+16,
 								  x,y+16,
@@ -337,7 +358,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						AddPrimToList(f3,0);
 						break;
 
-					case 14:
+					case 7:
 						f3=GetPrimF3();
 						setXY3(f3,x,y+16,
 								  x+16,y+16,
@@ -346,7 +367,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setSemiTrans(f3,semiTrans);
 						AddPrimToList(f3,0);
 						break;
-
+/*
 					case 15:
 						f3=GetPrimF3();
 						setXY3(f3,x+16,y,
@@ -366,7 +387,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setSemiTrans(f3,semiTrans);
 						AddPrimToList(f3,0);
 						break;
-
+*/
 					default:
 						f4=GetPrimF4();
 						setXYWH(f4,x,y,16,16);
