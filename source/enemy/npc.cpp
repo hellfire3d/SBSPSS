@@ -343,6 +343,7 @@ void CNpc::detectCollisionWithPlayer()
 	{
 		// close enough for collision
 
+		m_oldControlFunc = m_controlFunc;
 		m_controlFunc = NPC_CONTROL_COLLISION;
 	}
 }
@@ -953,6 +954,8 @@ void CNpc::processCollision()
 	CPlayer *player = GameScene.getPlayer();
 
 	//player->takeDamage( m_data[m_type].damageToUserType );
+
+	m_controlFunc = m_oldControlFunc;
 }
 
 void CNpc::processTimer(int _frames)

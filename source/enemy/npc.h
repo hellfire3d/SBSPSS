@@ -357,6 +357,7 @@ protected:
 	
 	NPC_UNIT_TYPE		m_type;
 	NPC_CONTROL_FUNC	m_controlFunc;
+	NPC_CONTROL_FUNC	m_oldControlFunc;
 	NPC_TIMER_FUNC		m_timerFunc;
 	NPC_SENSOR_FUNC		m_sensorFunc;
 	CNpcPath			m_npcPath;
