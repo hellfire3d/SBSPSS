@@ -48,7 +48,7 @@
 
 void CNpc::init()
 {
-	m_type = NPC_FLAMING_SKULL;
+	m_type = NPC_CLAM;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;

@@ -163,6 +163,7 @@ protected:
 		NPC_MOVEMENT_PENDULUM,
 		NPC_MOVEMENT_FIREBALL,
 		NPC_MOVEMENT_RETURNING_HAZARD,
+		NPC_MOVEMENT_CLAM_RETRACT,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -272,6 +273,7 @@ protected:
 	// clam functions
 
 	void				processCloseClamAttack( int _frames );
+	void				processClamRetract( int _frames );
 
 	// spider crab functions
 

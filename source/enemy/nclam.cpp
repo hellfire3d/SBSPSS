@@ -76,3 +76,34 @@ void CNpc::processCloseClamAttack( int _frames )
 		}
 	}
 }
+
+void CNpc::processClamRetract( int _frames )
+{
+	s32 velocity;
+
+	// retract
+
+	if ( m_extension > 0 )
+	{
+		velocity = -_frames;
+
+		if ( m_extension < _frames )
+		{
+			velocity = m_extension - _frames;
+		}
+		
+		m_extension += velocity;
+
+
+		Pos.vx += ( velocity * rcos( m_heading ) ) >> 12;
+		Pos.vy += ( velocity * rsin( m_heading ) ) >> 12;
+	}
+	else
+	{
+		// halt clam
+
+		m_controlFunc = NPC_CONTROL_NONE;
+		m_timerFunc = NPC_TIMER_NONE;
+		m_sensorFunc = NPC_SENSOR_NONE;
+	}
+}
