@@ -384,7 +384,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 							fireHeading,
 							 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 							CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-							5*60);
+							(2*GameState::getOneSecondInFrames()));
 
 			projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
 			fireHeading+=512;
@@ -400,7 +400,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 						 fireHeading,
 						 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 						 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-						 5*60);
+						 (2*GameState::getOneSecondInFrames()));
 
 		projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
 		m_player->useOneJelly();
