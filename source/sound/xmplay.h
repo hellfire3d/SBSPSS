@@ -89,8 +89,8 @@ public:
 private:
 	enum
 	{
-		MAX_XM_SONGS=5,					// How many mods our internal loader copes with
-		MAX_XM_VABS=5,					// How many vabs our internal loader copes with
+		MAX_XM_SONGS=2,					// How many mods our internal loader copes with
+		MAX_XM_VABS=2,					// How many vabs our internal loader copes with
 
 		MAX_SONG_HEADERS=24,			// Number of mods that xmplay can play at once
 		MAX_XM_HEADERS=MAX_XM_SONGS,	// Number of mods that xmplay can load at once

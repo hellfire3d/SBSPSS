@@ -60,8 +60,7 @@ public:
 private:
 	enum
 	{
-		MAX_SOUND_BANKS=4,
-		MAX_SPU_MANAGEMENT=MAX_SOUND_BANKS+110,
+		MAX_SPU_MANAGEMENT=200,			// Number of samples that can be loaded..
 	};
 
 	static char		s_spuManagementTable[];

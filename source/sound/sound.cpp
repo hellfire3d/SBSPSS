@@ -32,6 +32,10 @@ adjust channels ( watery-mario64 style music changes )
 #include "utils\utils.h"
 #endif
 
+#ifndef	__SOUND_SPU_H__
+#include "sound\spu.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -282,7 +286,28 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				121,			0	},										// SFX_CAR_START
 	{	1,				122,			0	},										// CAR_SLOW_DOWN
 	{	1,				123,			0	},										// SFX_SPONGEBOB_OUCH
-
+	{	3,				124,			0	},										// SFX_DOGFISH_LASER*
+	{	1,				125,			0	},										// SFX_DOGFISH_GROWL
+	{	3,				126,			0	},										// SFX_DOGFISH_STOMP*
+	{	1,				127,			0	},										// SFX_DOGFISH_THUMP
+	{	3,				128,			0	},										// SFX_FLAME*
+	{	3,				129,			0	},										// SFX_BOSS_JELLYFISH_MOVE*
+	{	1,				130,			0	},										// SFX_BOSS_JELLYFISH_PULSATE
+	{	3,				131,			0	},										// SFX_BOSS_JELLYFISH_ELECTRIC_SHOCK*
+	{	1,				132,			0	},										// SFX_BOSS_JELLYFISH___SB_GETS_ELECTROCUTED
+	{	1,				133,			0	},										// SFX_NEW_JELLY_LAUNCHER
+	{	1,				134,			0	},										// SFX_NEW_LIFT
+	{	1,				135,			0	},										// SFX_NEW_RUBBER_RING_BOUNCE
+	{	1,				136,			0	},										// SFX_NEW_HIT_SWITCH
+	{	1,				137,			0	},										// SFX_NEW_BOUNCE_TYRES
+	{	1,				138,			0	},										// SFX_SHARK___CHOMP
+	{	1,				139,			0	},										// SFX_SHARK___SWIM
+	{	1,				140,			0	},										// SFX_SHARK___CREAKING_ATTACK_SOUND
+	{	1,				141,			0	},										// SFX_SIREN
+	{	1,				142,			0	},										// SFX_WORM___CHOMP
+	{	1,				143,			0	},										// SFX_WORM___HISS
+	{	1,				144,			0	},										// SFX_WORM___SWIM
+	{	3,				145,			0	},										// SFX_FLYING_DUTCHMAN*
 };
 
 // Reverb details
@@ -430,8 +455,18 @@ if(_frames==0)_frames=1;
   ---------------------------------------------------------------------- */
 void CSoundMediator::setReverbType(REVERBTYPE _type)
 {
-	s_spuSound->setReverbDetails(&s_reverbDetails[_type]);
-	s_spuSound->setReverbActive(true);
+	ReverbDetails	*rev;
+
+	rev=&s_reverbDetails[_type];
+	s_spuSound->setReverbDetails(rev);
+	if(rev->m_type==SPU_REV_MODE_OFF)
+	{
+		s_spuSound->setReverbActive(false);
+	}
+	else
+	{
+		s_spuSound->setReverbActive(true);
+	}
 }
 
 
