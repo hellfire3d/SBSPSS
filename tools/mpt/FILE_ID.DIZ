@@ -1,0 +1,21 @@
+
+MODPLUG TRACKER v1.07
+(Player engine v1.40)
+
+MPTRACK.EXE:  Main EXE file
+MPTRACK.CNT:  ModPlug Tracker Help Index
+MPTRACK.HLP:  ModPlug Tracker Help
+FILE_ID.DIZ:  This file
+
+
+New features:
+- New comments screen (for XM/IT editing)
+- More pre-defined chords (Major, Minor, 7th, and 7th Minor)
+- The tree view is now shared between song, and can be hidden
+- Improved keyboard configuration
+- New improved instrument editor
+- Pattern Undo available for most block editing functions
+- Easy MPEG Layer 3 encoding (if you have a codec)
+- You can now enter chords from an external midi keyboard
+- Drag and Drop editing
+
