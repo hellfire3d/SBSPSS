@@ -1630,7 +1630,7 @@ void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
 			if(m_animFrame==frameSfx->m_frame)
 			{
 				CSoundMediator::SFXID sfxId=frameSfx->m_sfxId;
-				if(m_squeakyBootsTimer)
+				if(isWearingBoots())
 				{
 					// Ugh.. horrible way to change the sfx when wearing squeaky boots (pkg)
 					if(sfxId==CSoundMediator::SFX_SPONGEBOB_WALK_1)sfxId=CSoundMediator::SFX_SPONGEBOB_SQUEAKY_SHOES_1;
@@ -1903,7 +1903,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 
 			case DAMAGE__ELECTROCUTION:
 			case DAMAGE__SHOCK_ENEMY:
-				if(m_squeakyBootsTimer)
+				if(!isWearingBoots())
 				{
 					ouchThatHurt=false;
 				}
@@ -2410,6 +2410,12 @@ int		CPlayer::moveVertical(int _moveDistance)
 				takeDamage(DAMAGE__COLLISION_DAMAGE);
 				break;
 
+			case COLLISION_TYPE_FLAG_ELECTRIC:
+				if(!isWearingBoots())
+				{
+					takeDamage(DAMAGE__COLLISION_DAMAGE);
+				}
+				break;
 			default:
 				break;
 		}
