@@ -441,6 +441,14 @@ SOURCE=..\..\..\source\utils\utils.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\gui\gbutton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gbutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gui\gframe.cpp
 # End Source File
 # Begin Source File
