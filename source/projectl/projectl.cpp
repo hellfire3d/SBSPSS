@@ -344,8 +344,8 @@ void CProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth(FRM__SPIKE);
-	int		spriteHeight = m_spriteBank->getFrameHeight(FRM__SPIKE);
+	int		spriteWidth = m_spriteBank->getFrameWidth( m_spriteFrame );
+	int		spriteHeight = m_spriteBank->getFrameHeight( m_spriteFrame );
 
 	offset = getScreenOffset();
 
