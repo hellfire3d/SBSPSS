@@ -26,6 +26,20 @@ MAX_TPAGES	=		32,
 const	int			TPRawW=64;
 const	int			TPRawH=256;
 
+struct	sTPageInfo
+{
+	s16			RefCount;
+	FileEquate	TPageName;
+	s16			XOfs,YOfs;
+	u16			AnimTexCount;
+	sFrameHdr	AnimTexFrame[TPAGE_MAX_ANIM_TEX];
+};
+
+struct	sTPageCache
+{
+	sTPageInfo	Info[2];
+};
+
 static	sTPageCache	s_TPCache[MAX_TPAGES];
 
 // Theory!!
@@ -233,6 +247,17 @@ int			ReadLeft;
 //		DBG_MSG2("TPLoadTexWithHeaders Cached (%i,%i)",TPage,Half);
 		s_TPCache[TPage].Info[Half].RefCount++;
 		Cache=&s_TPCache[TPage].Info[Half];
+
+		// Reload headers (PKG)
+		CFileIO::OpenFile(Filename);
+		CFileIO::ReadFile((void*)&TPHdr,sizeof(sTPageHdr));
+		*hdrs=(sFrameHdr*)MemAlloc(sizeof(sFrameHdr)*TPHdr.NoOfFrames,"TpFh(from cache)");
+		ReadLeft=CFileIO::GetReadLeft();
+		FramePtr=(sFrameHdr*)MemAlloc(ReadLeft,"TPLoadTemp");
+		CFileIO::ReadFile(FramePtr,ReadLeft);
+		CFileIO::CloseFile();
+		MCmemcpy(*hdrs,FramePtr,TPHdr.NoOfFrames*sizeof(sFrameHdr));	
+		MemFree(FramePtr);
 		}
 	else
 		{

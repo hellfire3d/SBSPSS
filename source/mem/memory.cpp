@@ -65,6 +65,8 @@ enum MEM_ID
 	MEM_GAMEOPTIONS,
 	MEM_SYSTEM,
 
+	MEM_UNKNOWN,
+
 	MEM_ID_MAX
 };
 
@@ -96,7 +98,7 @@ static const int	s_dumpTextY = 120;
 static const int s_dumpShift = 20;
 
 static const int s_shadeX = 16;
-static const int s_shadeY = 110;
+static const int s_shadeY = 115;
 static const int s_shadeW = 400;
 static const int s_shadeH = 80;
 static const CVECTOR	s_shadeCol = { 0, 0, 0 };
@@ -111,6 +113,7 @@ static const CVECTOR	s_colors[ MEM_ID_MAX ] =
 	{ 0, 0, 255 },		// MEM_GAME
 	{ 255, 0, 255 },	// MEM_GAMEOPTIONS
 	{ 255, 255, 255 },	// MEM_SYSTEM
+	{ 0, 0, 0 },		// MEM_UNKNOWN
 };
 
 static const char *	s_sceneNames[] =
@@ -120,6 +123,7 @@ static const char *	s_sceneNames[] =
 	"Game",
 	"GameOptions",
 	"System",
+	"UNKNOWN",
 };
 
 static const int s_nbSceneNames = sizeof(s_sceneNames) / sizeof(char *);
@@ -143,10 +147,10 @@ void dumpDebugMem()
 		MEM_PART *	mem;
 		CVECTOR	black = {0, 0, 0};
 
-		padd = PadGetDown( 1 );
-		padh = PadGetHeld( 1 );
+		padd = PadGetRepeat( 0 );
+		padh = PadGetHeld( 0 );
 
-//		if (padh & PAD_SQUARE)
+		if (padh & PAD_SQUARE)
 		{
 			int		dir;
 
@@ -164,7 +168,6 @@ void dumpDebugMem()
 
 			if (s_currentMemPart < 0)				s_currentMemPart = MAX_MEM_DUMP - 2;
 			if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
-
 			while( !memDump[s_currentMemPart].addr )
 			{
 				s_currentMemPart += dir;
@@ -304,7 +307,7 @@ void addDebugMem( void * addr, const char * name, const char * file, int line )
 	{
 		sname = scene->getSceneName();
 
-		id = -1;
+		id = MEM_UNKNOWN;
 		for (int i=0;i<s_nbSceneNames;i++)
 		{
 			if (!strcmp( sname, s_sceneNames[i] ))
@@ -312,7 +315,6 @@ void addDebugMem( void * addr, const char * name, const char * file, int line )
 				id = i;
 			}
 		}
-		if (id == -1)	id = MEM_SYSTEM;
 	}
 	else
 	{

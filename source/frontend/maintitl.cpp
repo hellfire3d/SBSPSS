@@ -126,7 +126,6 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 	m_smallFont=new ("MainTitle SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
-	m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 
 	m_mode=MODE__PRESS_START;
 
@@ -135,9 +134,7 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 	m_mainMenu->init(NULL);
 	m_mainMenu->setObjectXYWH(106,140,300,40);
 	m_mainMenu->clearFlags(CGUIObject::FLAG_DRAWBORDER);
-PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 
-/*
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(m_mainMenu);
 	fr->setObjectXYWH(50,0,200,20);
@@ -161,7 +158,6 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 		tg->setButtonTarget(&m_gotoOptionsFlag);
 
 	m_mainMenu->select();
-*/
 	
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
@@ -178,7 +174,7 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::shutdown()
 {
-	m_mainMenu->shutdown();		delete m_mainMenu;
+	m_mainMenu->shutdown();		// GUI items delete themselves when shutdown..
 	m_smallFont->dump();		delete m_smallFont;
 	m_sprites->dump();			delete m_sprites;
 PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
@@ -271,7 +267,7 @@ void CFrontEndMainTitles::think(int _frames)
 			m_mainMenu->think(_frames);
 			if(m_startGameFlag)
 			{
-//				CFader::setFadingOut();
+				CFader::setFadingOut();
 				m_mode=MODE__START_GAME;
 			}
 			else if(m_gotoOptionsFlag)
@@ -318,11 +314,11 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 			break;
 
 		case MODE__START_GAME:
-			ret=CFrontEndScene::MODE__CHOOSE_SLOT;
+			ret=CFrontEndScene::MODE__MAIN_TITLES;//MODE__CHOOSE_SLOT;
 			break;
 
 		case MODE__GOTO_OPTIONS:
-			ret=CFrontEndScene::MODE__GAME_OPTIONS;
+			ret=CFrontEndScene::MODE__MAIN_TITLES;//MODE__GAME_OPTIONS;
 			break;
 	}
 
@@ -454,6 +450,7 @@ void CFrontEndMainTitles::renderPressStart()
 {
 	if(!CFader::isFading())
 	{
+		m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
 	}
 }

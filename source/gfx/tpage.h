@@ -41,20 +41,6 @@ struct TPAGE_DESC
 	u8	yoffset;
 };
 
-struct	sTPageInfo
-{
-	s16			RefCount;
-	FileEquate	TPageName;
-	s16			XOfs,YOfs;
-	u16			AnimTexCount;
-	sFrameHdr	AnimTexFrame[TPAGE_MAX_ANIM_TEX];
-};
-
-struct	sTPageCache
-{
-	sTPageInfo	Info[2];
-};
-
 /********************************************************************************************************/
 
 void		TPInit();

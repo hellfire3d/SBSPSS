@@ -5,7 +5,7 @@
 	Author:		PKG
 	Created:
 	Project:	Spongebob
-	Purpose:
+	Purpose:	NB: GUI ITEMS delete() THEMSELVES WHEN THEY ARE SHUTDOWN!
 
 	Copyright (c) 2000 Climax Development Ltd
 

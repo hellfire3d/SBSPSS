@@ -60,7 +60,7 @@ public:
 	void	render();
 	void	think(int _frames);
 	int		readyToShutdown();
-	char	*getSceneName()			{return"FrontEndScene";}
+	char	*getSceneName()			{return"FrontEnd";}
 
 
 private:

@@ -54,8 +54,8 @@ static CFrontEndMainTitles		s_frontEndModeMainTitles;
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
-	&s_frontEndModeMainTitles,//NULL,							// MODE__GAME_OPTIONS
-	&s_frontEndModeMainTitles,//NULL,							// MODE__CHOOSE_SLOT
+	NULL,							// MODE__GAME_OPTIONS
+	NULL,							// MODE__CHOOSE_SLOT
 	NULL,							// MODE__DEMO
 
 	NULL,							// MODE__NONE
@@ -140,19 +140,21 @@ int CFrontEndScene::readyToShutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndScene::setMode(FrontEndMode _newMode)
 {
-	PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
+PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
 
 	// Close old mode
 	if(s_modeCodes[m_mode])
 	{
+PAUL_DBGMSG("CFrontEndScene::shutdown mode %d",m_mode);
 		s_modeCodes[m_mode]->shutdown();
 	}
 	
 	// Open new mode
 	m_mode=_newMode;
+PAUL_DBGMSG("CFrontEndScene::init mode %d",m_mode);
 	s_modeCodes[m_mode]->init();
-//	s_modeCodes[m_mode]->shutdown();
-//	ASSERT(0);
+	s_modeCodes[m_mode]->shutdown();
+	s_modeCodes[m_mode]->init();
 }
 
 
