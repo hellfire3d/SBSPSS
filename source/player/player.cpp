@@ -1,22 +1,55 @@
-/**************/
-/*** Player ***/
-/**************/
+/*=========================================================================
 
-#include "system\global.h"
-#include "Game\Thing.h"
-#include "Gfx\Skel.h"
+	player.cpp
+
+	Author:		PKG
+	Created: 
+	Project:	Spongebob
+	Purpose: 
+
+	Copyright (c) 2001 Climax Development Ltd
+
+===========================================================================*/
+
+
+/*----------------------------------------------------------------------
+	Includes
+	-------- */
+
+#include "player\player.h"
+
+#ifndef __ANIM_HEADER__
 #include "gfx\anim.h"
-#include "Player\Player.h"
+#endif
 
+#ifndef __PAD_PADS_H__
 #include "pad\pads.h"
+#endif
+
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
 
 // to be removed
-#include "fileio\fileio.h"
-#include "utils\utils.h"
+//#include "fileio\fileio.h"
 #include "gfx\tpage.h"
-#include "gfx\prim.h"
+//#include "gfx\prim.h"
 
 
+/*	Std Lib
+	------- */
+
+/*	Data
+	---- */
+
+/*----------------------------------------------------------------------
+	Tyepdefs && Defines
+	------------------- */
+
+/*----------------------------------------------------------------------
+	Structure defintions
+	-------------------- */
 
 #define ANIM_IDLE_SHORT		15
 #define ANIM_IDLE_LONG		16
@@ -25,8 +58,20 @@
 #define ANIM_RUNSTOP		30
 
 
+/*----------------------------------------------------------------------
+	Function Prototypes
+	------------------- */
 
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Vars
+	---- */
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::init()
 {
 	CThing::init();
@@ -38,17 +83,26 @@ void	CPlayer::init()
 
 	setState(STATE_IDLE);
 	m_runVel=0;
-	m_facing=-1;
+	setFacing(FACING_RIGHT);
 }
 
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::shutdown()
 {
 	CThing::shutdown();
 }
 
-
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::think(int _frames)
 {
 	CThing::think(_frames);
@@ -57,8 +111,7 @@ void	CPlayer::think(int _frames)
 
 if(_frames>=3)_frames=2;
 
-	// PKG - Needs to come from somewhere local rather than direct from pad handler..
-	padInput=PadGetHeld(0);
+	padInput=getPadInput();
 
 	switch(m_state)
 	{
@@ -67,13 +120,11 @@ if(_frames>=3)_frames=2;
 			{
 				if(padInput&PAD_LEFT)
 				{
-					m_facing=FACING_LEFT;
-					m_skel.setAng(512);
+					setFacing(FACING_LEFT);
 				}
 				else
 				{
-					m_facing=FACING_RIGHT;
-					m_skel.setAng(3096+512);
+					setFacing(FACING_RIGHT);
 				}
 				setState(STATE_RUNSTART);
 				m_runVel=RUN_SPEEDUP;
@@ -101,8 +152,7 @@ if(_frames>=3)_frames=2;
 						if(m_runVel<1)
 						{
 							m_runVel=0;
-							m_facing=FACING_RIGHT;
-							m_skel.setAng(3096+512);
+							setFacing(FACING_RIGHT);
 						}
 					}
 				}
@@ -123,8 +173,7 @@ if(_frames>=3)_frames=2;
 						if(m_runVel<1)
 						{
 							m_runVel=0;
-							m_facing=FACING_LEFT;
-							m_skel.setAng(512);
+							setFacing(FACING_LEFT);
 						}
 					}
 				}
@@ -181,8 +230,12 @@ if(_frames>=3)_frames=2;
 	if(Pos.vy<0)Pos.vy=0;
 }
 
-
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayer::render()
 {
 	CThing::render();
@@ -194,8 +247,12 @@ void	CPlayer::render()
 	m_skel.Render(this);
 }
 
-
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int	CPlayer::s_stateAnims[NUM_STATES]=
 {
 	ANIM_IDLE_SHORT,			// STATE_IDLE
@@ -213,9 +270,36 @@ if(panim!=-1)m_animNo=panim;
 	m_frame=0;	
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::setFacing(int _facing)
+{
+	switch(_facing)
+	{
+		case FACING_LEFT:
+			m_facing=FACING_LEFT;
+			m_skel.setAng(512);
+			break;
+		case FACING_RIGHT:
+			m_facing=FACING_RIGHT;
+			m_skel.setAng(3096+512);
+			break;
+		default:
+			ASSERT(0);
+			break;
+	}
+}
 
-
-/*****************************************************************************/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayer::finishedAnim()
 {
 	switch(m_state)
@@ -239,6 +323,16 @@ void CPlayer::finishedAnim()
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayer::getPadInput()
+{
+	return PadGetHeld(0);
+}
 
-
-
+/*===========================================================================
+end */
