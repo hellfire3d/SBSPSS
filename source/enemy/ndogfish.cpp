@@ -39,6 +39,9 @@
 #include "system\vid.h"
 #endif
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +52,13 @@ void CNpcIronDogfishEnemy::postInit()
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 	m_steamTimer = 0;
 	m_vulnerableTimer = 0;
+	m_meterOn=false;
+
+	if ( CLevel::getIsBossRespawn() )
+	{
+		m_health = CLevel::getBossHealth();
+		m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -552,6 +562,50 @@ void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
 			default:
 				ASSERT(0);
 				break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::shutdown()
+{
+	if ( m_state != NPC_GENERIC_HIT_DEATH_END )
+	{
+		CLevel::setIsBossRespawn( true );
+		CLevel::setBossHealth( m_health );
+	}
+
+	CNpcEnemy::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::render()
+{
+	SprFrame = NULL;
+
+	if ( m_isActive )
+	{
+		CEnemyThing::render();
+
+		if (canRender())
+		{
+			if (!m_meterOn)
+			{
+				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				T->SetMax(m_health);
+				m_meterOn=true;
+			}
+
+			DVECTOR &renderPos=getRenderPos();
+
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
 }

@@ -18,6 +18,8 @@ class CNpcIronDogfishEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
+	void				render();
+	virtual void		shutdown();
 protected:
 	virtual void		processTimer( int _frames );
 	virtual bool		processSensor();
@@ -41,6 +43,7 @@ protected:
 
 	s32					m_steamTimer;
 	s32					m_vulnerableTimer;
+	bool				m_meterOn;
 };
 
 #endif
