@@ -75,7 +75,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 		legs[i]->Setup( legsPos[i].vx, legsPos[i].vy, i > 1 );
 	}
 
-	m_RGB = 255 + ( 128 << 8 ) + ( 255 << 16 );
+	m_RGB = MJ_PINK;
 
 	targetPos = Pos;
 
@@ -86,6 +86,8 @@ void CNpcMotherJellyfishEnemy::postInit()
 	m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	m_pauseTimer = m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
 	m_invulnerableTimer = 0;
+
+	m_attackCounter = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,9 +184,36 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 						m_movementTimer = GameState::getOneSecondInFrames() * 5;
 						m_pulsateTimer = GameState::getOneSecondInFrames();
 						m_pauseTimer = m_maxPauseTimer;
+
+						m_RGB = MJ_PINK;
+
+						m_attackCounter++;
+
+						if ( m_attackCounter > 2 )
+						{
+							m_attackCounter = 0;
+							m_state = MOTHER_JELLYFISH_STRAFE_START;
+
+							s32 minX, maxX, minY, maxY;
+
+							m_npcPath.getPathXExtents( &minX, &maxX );
+							m_npcPath.getPathYExtents( &minY, &maxY );
+
+							targetPos.vx = minX;
+							targetPos.vy = minY;
+						}
 					}
 					else
 					{
+						if ( m_RGB == MJ_PINK )
+						{
+							m_RGB = MJ_WHITE;
+						}
+						else
+						{
+							m_RGB = MJ_PINK;
+						}
+
 						m_pauseTimer -= _frames;
 					}
 				}
@@ -276,6 +305,70 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				m_isActive = false;
 				setToShutdown();
 				CGameScene::getBossHasBeenKilled();
+			}
+
+			break;
+		}
+
+		case MOTHER_JELLYFISH_STRAFE_START:
+		{
+			s32 distX, distY;
+
+			distX = targetPos.vx - Pos.vx;
+			distY = targetPos.vy - Pos.vy;
+
+			if( abs( distX ) < 10 && abs( distY ) < 10 )
+			{
+				s32 minX, maxX, minY, maxY;
+
+				m_npcPath.getPathXExtents( &minX, &maxX );
+				m_npcPath.getPathYExtents( &minY, &maxY );
+
+				targetPos.vx = maxX;
+				targetPos.vy = minY;
+
+				m_state = MOTHER_JELLYFISH_STRAFE;
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
+			}
+
+			break;
+		}
+
+		case MOTHER_JELLYFISH_STRAFE:
+		{
+			if ( m_RGB == MJ_PINK )
+			{
+				m_RGB = MJ_WHITE;
+			}
+			else
+			{
+				m_RGB = MJ_PINK;
+			}
+
+			s32 distX, distY;
+
+			distX = targetPos.vx - Pos.vx;
+			distY = targetPos.vy - Pos.vy;
+
+			if( abs( distX ) < 10 && abs( distY ) < 10 )
+			{
+				s32 minX, maxX, minY, maxY;
+
+				m_npcPath.getPathXExtents( &minX, &maxX );
+				m_npcPath.getPathYExtents( &minY, &maxY );
+
+				targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
+				targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+
+				m_state = MOTHER_JELLYFISH_CYCLE;
+				m_RGB = MJ_PINK;
+			}
+			else
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
 			}
 
 			break;
@@ -540,6 +633,8 @@ void CNpcMotherJellyfishEnemy::render()
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, m_renderScale, m_renderScale );
+
+			setRGB0( SprFrame, ( m_RGB & 255 ), ( ( m_RGB >> 8 ) & 255 ), ( ( m_RGB >> 16 ) & 255 ) );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );

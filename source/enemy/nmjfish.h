@@ -18,6 +18,9 @@
 #include "fx\fxjfish.h"
 #include "fx\fxnrgbar.h"
 
+#define MJ_PINK ( 255 + ( 128 << 8 ) + ( 255 << 16 ) )
+#define MJ_WHITE ( 255 + ( 255 << 8 ) + ( 255 << 16 ) )
+
 class CNpcMotherJellyfishEnemy : public CNpcEnemy
 {
 public:
@@ -48,6 +51,8 @@ protected:
 		MOTHER_JELLYFISH_BEGIN_CIRCLE = 1,
 		MOTHER_JELLYFISH_CIRCLE,
 		MOTHER_JELLYFISH_EXIT,
+		MOTHER_JELLYFISH_STRAFE_START,
+		MOTHER_JELLYFISH_STRAFE,
 	};
 
 	int					m_jellyfishCount;
@@ -60,6 +65,7 @@ protected:
 	bool				m_meterOn;
 	s16					m_renderScale;
 	s32					m_invulnerableTimer;
+	u8					m_attackCounter;
 
 	CFXJellyFishLegs	*legs[4];
 	DVECTOR				legsPos[4];
