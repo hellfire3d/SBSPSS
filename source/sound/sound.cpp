@@ -1,3 +1,10 @@
+/*
+reverb ( trigger from map? )
+position
+adjust channels ( watery-mario64 style music changes )
+*/
+
+
 /*=========================================================================
 
 	sound.cpp
@@ -22,6 +29,7 @@
 #include "system\dbg.h"
 #endif
 
+
 /*	Std Lib
 	------- */
 
@@ -44,7 +52,7 @@ typedef struct XMFILEDATA
 typedef struct SFXDETAILS
 {
 	int			m_channelMask;
-	int			m_pattern;			// ..or instrument for loopers
+	int			m_pattern;			// ..or instrument number for loopers
 	int			m_looping;
 };
 
@@ -57,39 +65,7 @@ typedef struct SFXDETAILS
 	Vars
 	---- */
 
-static XMFILEDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
-{
-	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// HYPERMMX
-	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// DROPPOP
-	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// MUSIC
-};
-
-static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
-{
-	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// INGAME
-};
-
-static SFXDETAILS	s_sfxDetails[]=
-{
-	{	1,	6,	1	},
-	{	1,	1,	0	},
-	{	1,	2,	0	},
-	{	1,	0,	1	},
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Static stuff for CSoundMediator
 int				CSoundMediator::s_initialised=false;
 
 int				CSoundMediator::s_currentVolume[CSoundMediator::NUM_VOLUMETYPES];
@@ -106,7 +82,34 @@ static CSpuSound		*s_spuSound;
 static CXMPlaySound		*s_xmplaySound;
 
 
+// Songs
+static XMFILEDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
+{
+	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// HYPERMMX
+	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// DROPPOP
+	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// MUSIC
+};
 
+// SFX banks
+static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
+{
+	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// INGAME
+};
+
+// Individual SFX details
+static SFXDETAILS	s_sfxDetails[]=
+{
+	{	1,	6,	1	},
+	{	1,	1,	0	},
+	{	1,	2,	0	},
+	{	1,	0,	1	},
+};
+
+
+
+//
+int s_songChannelCount=10;
+//
 
 
 /*----------------------------------------------------------------------
@@ -261,7 +264,7 @@ void CSoundMediator::playSong()
 	ASSERT(s_songModId!=NO_SONG);
 	ASSERT(s_songPlayingId==NOT_PLAYING);
 
-	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId,10);		// pkg !?
+	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId,s_songChannelCount);
 	s_volumeDirty[SONG]=true;		// Force a volume update
 }
 
@@ -334,7 +337,11 @@ xmPlayingId CSoundMediator::playSfx(int _sfxId)
 	else
 	{
 		playId=s_xmplaySound->playSfx(s_sfxSampleId,s_sfxModId,sfx->m_pattern,sfx->m_channelMask,20);
-		if(playId!=NOT_PLAYING)s_xmplaySound->unlockPlayingId(playId);		// We really don't care about one-shot sfx..
+		if(playId!=NOT_PLAYING)
+		{
+			s_xmplaySound->unlockPlayingId(playId);		// We really don't care about one-shot sfx..
+			playId=NOT_PLAYING;
+		}
 	}
 	s_volumeDirty[SFX]=true;		// Force a volume update
 
@@ -348,10 +355,10 @@ xmPlayingId CSoundMediator::playSfx(int _sfxId)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSoundMediator::stopSfx(xmPlayingId _id)
+void CSoundMediator::stopSfx(xmPlayingId _playingId)
 {
-	s_xmplaySound->stopPlayingId(_id);
-	s_xmplaySound->unlockPlayingId(_id);
+	s_xmplaySound->stopPlayingId(_playingId);
+	s_xmplaySound->unlockPlayingId(_playingId);
 }
 
 

@@ -95,7 +95,7 @@ public:
 	static void			setSfxBank(SFXBANKID _bankId);
 	static xmPlayingId	playSfx(int _sfxId);
 //	static void			setposition(int _playId,vector pos );
-	static void			stopSfx(xmPlayingId _id);
+	static void			stopSfx(xmPlayingId _playingId);
 
 	// Speech interface
 	static void			playSpeech(SpeechEquate _speech);

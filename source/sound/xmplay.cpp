@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	spu.cpp
+	xmplay.cpp
 
 	Author:		PKG
 	Created: 
@@ -42,30 +42,9 @@
 	Tyepdefs && Defines
 	------------------- */
 
-#define MAX_XM_SONGS	5
-#define MAX_XM_VABS		5
-
-
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
-
-typedef struct XMSong
-{
-	unsigned char	*m_xmData;
-	FileEquate		m_file;
-	int				m_refCount;
-	// refcount these!
-};
-static XMSong		s_xmSongs[MAX_XM_SONGS];
-
-typedef struct XMVab
-{
-	int				m_vabId;
-	FileEquate		m_vhFile,m_vbFile;
-	int				m_refCount;
-};
-static XMVab		s_xmVabs[MAX_XM_VABS];
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -110,8 +89,8 @@ void CXMPlaySound::initialise()
 	// Clear internal data
 	for(i=0;i<MAX_XM_SONGS;i++)
 	{
-		XMSong	*song=&s_xmSongs[i];
-		song->m_refCount=0;
+		XMMod	*mod=&s_xmMods[i];
+		mod->m_refCount=0;
 	}
 	for(i=0;i<MAX_XM_VABS;i++)
 	{
@@ -148,7 +127,6 @@ void CXMPlaySound::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int spuflags[24];
 void CXMPlaySound::think()
 {
 	int				i;
@@ -161,9 +139,8 @@ void CXMPlaySound::think()
 	ch=m_spuChannelUse;
 	for(i=0;i<NUM_SPU_CHANNELS;i++)
 	{
-//pkg tidy		
-		// Only unlocked SFX need to be checked
-		if(ch->m_locked==false&&ch->m_useType==SFX)
+		// Only unlocked stuff needs to be checked
+		if(ch->m_locked==false&&ch->m_useType!=SILENT)
 		{
 			id=ch->m_playingId;
 			if(id!=-1)
@@ -183,9 +160,6 @@ PAUL_DBGMSG("%d finished.. ( was on chnl %d )",id,i);
 		}
 		ch++;
 	}
-
-for(i=0;i<24;i++)
-	spuflags[i]=m_spuChannelUse[i].m_useType;
 }
 
 
@@ -214,8 +188,6 @@ xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 		}
 	}
 	
-// PKG - Can be neatened up a bit..
-
 	// Find next free vab slot
 	vabId=0;
 	vab=s_xmVabs;
@@ -227,7 +199,6 @@ xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 			VhPtr=(u8*)CFileIO::loadFile(_vhFe);
 			VbPtr=(u8*)CFileIO::loadFile(_vbFe);
 			vab->m_vabId=XM_VABInit(VhPtr,VbPtr);
-			//defragSpuMemory();		somewhere around here..
 			MemFree(VhPtr);
 			MemFree(VbPtr);
 			vab->m_vhFile=_vhFe;
@@ -248,43 +219,41 @@ xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 	Params:
 	Returns:
 ---------------------------------------------------------------------- */
-xmModId CXMPlaySound::loadModData(FileEquate _songFe)
+xmModId CXMPlaySound::loadModData(FileEquate _modFe)
 {
-	int		songId;	
-	XMSong	*song;
+	int		modId;	
+	XMMod	*mod;
 
-	// Is the song already loaded?
-	song=s_xmSongs;
-	for(songId=0;songId<MAX_XM_SONGS;songId++)
+	// Is the mod already loaded?
+	mod=s_xmMods;
+	for(modId=0;modId<MAX_XM_SONGS;modId++)
 	{
-		if(song->m_refCount&&song->m_file==_songFe)
+		if(mod->m_refCount&&mod->m_file==_modFe)
 		{
 			// Yup..
-			song->m_refCount++;
-			return(xmModId)songId;
+			mod->m_refCount++;
+			return(xmModId)modId;
 		}
 	}
-
-// PKG - Can be neatened up a bit..
 
 	// Find next free song slot
-	song=s_xmSongs;
-	songId=0;
+	mod=s_xmMods;
+	modId=0;
 	while(1)
 	{
-		ASSERT(songId<MAX_XM_SONGS);
-		if(song->m_refCount==0)
+		ASSERT(modId<MAX_XM_SONGS);
+		if(mod->m_refCount==0)
 		{
-			song->m_xmData=(u8*)CFileIO::loadFile(_songFe);
-			InitXMData(song->m_xmData,songId,XM_UseS3MPanning);
-			song->m_file=_songFe;
-			song->m_refCount=1;
+			mod->m_xmData=(u8*)CFileIO::loadFile(_modFe);
+			InitXMData(mod->m_xmData,modId,XM_UseS3MPanning);
+			mod->m_file=_modFe;
+			mod->m_refCount=1;
 			break;
 		}
-		songId++;song++;
+		modId++;mod++;
 	}
 
-	return (xmModId)songId;
+	return (xmModId)modId;
 }
 
 
@@ -313,15 +282,15 @@ void CXMPlaySound::dumpSampleData(xmSampleId _sampleId)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::dumpModData(xmModId _songId)
+void CXMPlaySound::dumpModData(xmModId _modId)
 {
-	XMSong	*song;
+	XMMod	*mod;
 
-	song=&s_xmSongs[_songId];
-	song->m_refCount--;
-	if(song->m_refCount==0)
+	mod=&s_xmMods[_modId];
+	mod->m_refCount--;
+	if(mod->m_refCount==0)
 	{
-		MemFree(song->m_xmData);
+		MemFree(mod->m_xmData);
 	}
 }
 
@@ -347,9 +316,9 @@ void CXMPlaySound::setStereo(int _stereo)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::setVolume(xmPlayingId _songId,unsigned char _volume)
+void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
 {
-	XM_SetMasterVol(_songId,_volume>>1);
+	XM_SetMasterVol(_playingId,_volume>>1);
 }
 
 
@@ -359,9 +328,9 @@ void CXMPlaySound::setVolume(xmPlayingId _songId,unsigned char _volume)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CXMPlaySound::setPanning(xmPlayingId _songId,char _pan)
+void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 {
-	XM_SetMasterPan(_songId,_pan);
+	XM_SetMasterPan(_playingId,_pan);
 }
 
 
@@ -379,7 +348,7 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _songId,int _cha
 	xmPlayingId		retId;
 
 	ASSERT(s_xmVabs[_sampleId].m_refCount!=0);
-	ASSERT(s_xmSongs[_songId].m_refCount!=0);
+	ASSERT(s_xmMods[_songId].m_refCount!=0);
 
 	baseChannel=findSpareChannels(_channelCount,255);
 	if(baseChannel!=-1)
@@ -444,9 +413,6 @@ PAUL_DBGMSG("unlocking %d",_playingId);
   ---------------------------------------------------------------------- */
 void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 {
-//	ASSERT(m_spuChannelUse[_playingId].m_locked!=true);		// Unlock channel first!
-
-
 	int				i;
 	spuChannelUse	*ch;
 	
@@ -507,7 +473,7 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _songId,int _sfxP
 	xmPlayingId		retId;
 
 	ASSERT(s_xmVabs[_sampleId].m_refCount!=0);
-	ASSERT(s_xmSongs[_songId].m_refCount!=0);
+	ASSERT(s_xmMods[_songId].m_refCount!=0);
 
 	// Count channels
 	maskCopy=_playMask;
@@ -634,32 +600,8 @@ int CXMPlaySound::findSpareChannels(int _channelCount,int _priority)
 		i=j;
 	}
 
-/*
-	// Couldn't find one.. can we kill off a lower priority sound?
-	if(valid==false)
-	{
-		int		lowestPrioity=_priority;
-		int		possibleBase=-1;
-		int		id;
-		
-		// Find the lowest priority sound with enuf spare channels
-		i=0;
-		while(i<24)
-		{
-			if(m_spuChannelUse[i].m_priority<=lowestPriority&&m_spuChannelUse[j].m_useType!=SILENT)
-			{
-				valid=true;
-				id=m_spuChannelUse[i].m_id;
-				for(j=i;j<i+_channelCount&&valid;j++)
-				{
-					if(m_spuChannelUse[j].m_id!=id) valid=false;
-				}
+	// PKG - Add priority stuff here!!
 
-			}
-			i++;
-		}
-	}
-*/
 	// Can't play it :(
 	return -1;
 }
