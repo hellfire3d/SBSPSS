@@ -81,9 +81,26 @@ static PlayerMetrics	s_playerMetrics=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::enter()
+{
+	CPlayerModeBase::enter();
+	m_timer=0;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayerModeBalloon::think()
 {
 	CPlayerModeBase::think();
+	if(++m_timer>BALLOON_TIMEOUT)
+	{
+		CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
+		m_player->setMode(PLAYER_MODE_FULLUNARMED);
+	}
 }
 
 /*----------------------------------------------------------------------

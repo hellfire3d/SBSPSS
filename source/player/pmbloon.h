@@ -37,6 +37,7 @@
 class CPlayerModeBalloon : public CPlayerModeBase
 {
 public:
+	virtual void	enter();
 	virtual void	think();
 	virtual void	render(DVECTOR *_pos);
 
@@ -44,6 +45,14 @@ public:
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 
 	virtual void				setAnimNo(int _animNo);
+
+
+private:
+	enum
+	{
+		BALLOON_TIMEOUT=5*60,
+	};
+	int				m_timer;
 
 };
 
