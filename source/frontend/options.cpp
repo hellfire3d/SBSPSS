@@ -146,6 +146,15 @@ CFrontEndOptions::ButtonToIconMap	CFrontEndOptions::s_controlMap[]=
 static const int OPTIONS_FRAME_W=416;
 static const int OPTIONS_FRAME_H=160;
 
+// Backgrounds
+int				CFrontEndOptions::s_modeBackground[MODE__COUNT]=
+{
+	FRM__BG1,
+	FRM__BG2,
+	FRM__BG3,
+	FRM__BG4,
+};
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -454,6 +463,7 @@ void CFrontEndOptions::think(int _frames)
 			m_modeMenus[m_mode]->unselect();
 			m_mode=m_nextMode;
 			m_modeMenus[m_mode]->select();
+			m_background->setFrame(s_modeBackground[m_mode]);
 		}
 		m_modeMenus[m_mode]->think(_frames);
 
