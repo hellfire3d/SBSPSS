@@ -75,6 +75,7 @@ private:
 	int							m_bgmVolume;
 	int							m_sfxVolume;
 	int							m_speechVolume;
+	int							m_controlStyle;
 
 };
 

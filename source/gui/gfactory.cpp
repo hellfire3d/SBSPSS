@@ -72,7 +72,7 @@
 	Returns:
   ---------------------------------------------------------------------- */
 void CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
-										 int _x,int _y,int _w, int _h,
+										 int _x,int _y,int _w,int _h,
 										 int _textId,
 										 int *_target,int _value)
 {
@@ -99,10 +99,44 @@ void CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
+										 int _x,int _y,int _w,int _h,
+										 int _textId,
+										 int *_target,int *_data,CGUITextReadout::TextReadoutData *_readoutData)
+{
+	CGUIGroupFrame		*fr;
+	CGUITextBox			*tb;
+	CGUICycleButton		*cb;
+	CGUITextReadout		*tr;
+
+	fr=new ("frame") CGUIGroupFrame();
+	fr->init(_parent);
+	fr->setObjectXYWH(_x,_y,_w,_h);
+		tb=new ("textbox") CGUITextBox();
+		tb->init(fr);
+		tb->setObjectXYWH(0,0,_w,(_h*2)/3);
+		tb->setText(_textId);
+		cb=new ("cyclebutton") CGUICycleButton();
+		cb->init(fr);
+		cb->setButtonTarget(_target);
+		cb->setButtonData(_data);
+		tr=new ("textreadout") CGUITextReadout();
+		tr->init(fr);
+		tr->setObjectXYWH(0,(_h*2)/3,_w,(_h*1)/3);
+		tr->setReadoutTarget(_target);
+		tr->setReadoutData(_readoutData);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CGUIFactory::createSliderButtonFrame(class CGUIObject *_parent,
-										  int _x,int _y,int _w, int _h,
+										  int _x,int _y,int _w,int _h,
 										  int _textId,
-										  int *_target,int _min, int _max)
+										  int *_target,int _min,int _max)
 {
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;

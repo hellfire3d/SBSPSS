@@ -42,6 +42,10 @@
 #include "gui\gframe.h"
 #endif
 
+#ifndef __GUI_GREADOUT_H__
+#include "gui\greadout.h"
+#endif
+
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
 #endif
@@ -77,6 +81,19 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
+
+int	s_controlButtonData[]=
+{
+	0,1,2,3,
+	-1
+};
+CGUITextReadout::TextReadoutData s_controlReadoutText[]=
+{
+	{	0,STR__FRONTEND__A	},
+	{	1,STR__FRONTEND__B	},
+	{	2,STR__FRONTEND__C	},
+	{	3,STR__FRONTEND__D	},
+};
 
 /*----------------------------------------------------------------------
 	Function:
@@ -121,6 +138,10 @@ void CFrontEndOptions::init()
 
 
 	// Populate CONTROLS menu
+	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
+										X_BORDER,Y_BORDER,412-(X_BORDER*2),40,
+										STR__FRONTEND__CONTROL_STYLE,
+										&m_controlStyle,s_controlButtonData,s_controlReadoutText);
 
 
 	// Populate SCREEN menu
@@ -128,15 +149,15 @@ void CFrontEndOptions::init()
 
 	// Populate SOUND menu
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER,412-(X_BORDER*2),30,
+										 X_BORDER,Y_BORDER,412-(X_BORDER*2),35,
 										 STR__FRONTEND__BGM,
 										 &m_bgmVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),30,
+										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),35,
 										 STR__FRONTEND__SFX,
 										 &m_sfxVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
-										 X_BORDER,Y_BORDER+80,412-(X_BORDER*2),30,
+										 X_BORDER,Y_BORDER+80,412-(X_BORDER*2),35,
 										 STR__FRONTEND__SPEECH,
 										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
 
@@ -152,6 +173,7 @@ void CFrontEndOptions::init()
 	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::SONG);
 	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::SFX);
 	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::SPEECH);
+	m_controlStyle=0;
 }
 
 /*----------------------------------------------------------------------
@@ -166,8 +188,7 @@ void CFrontEndOptions::shutdown()
 
 	for(i=0;i<MODE__COUNT;i++)
 	{
-		CGUIControlFrame	**mm=&m_modeMenus[i];
-		(*mm)->shutdown();
+		m_modeMenus[i]->shutdown();
 	}
 	m_background->shutdown();		delete m_background;
 }

@@ -91,7 +91,9 @@ UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
 UI_GFX_NONTRANS :=			
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TRANS :=				+vbamboo.bmp +cross.bmp +tick.bmp +hbamboo.bmp
+UI_GFX_TRANS :=				+vbamboo.bmp +cross.bmp +tick.bmp +hbamboo.bmp \
+							+butU.bmp +butD.bmp +butL.bmp +butR.bmp \
+							+butC.bmp +butS.bmp +butX.bmp +butT.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TEX_IN :=			$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}

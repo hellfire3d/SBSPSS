@@ -62,6 +62,16 @@ eng=EXIT
 eng=BACK
 
 ; Controls menu
+[STR__FRONTEND__CONTROL_STYLE]
+eng=CONTROL STYLE
+[STR__FRONTEND__A]
+eng=A
+[STR__FRONTEND__B]
+eng=B
+[STR__FRONTEND__C]
+eng=C
+[STR__FRONTEND__D]
+eng=D
 
 ; Screen menu
 
