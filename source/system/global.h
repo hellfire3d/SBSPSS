@@ -67,7 +67,7 @@ enum DRAW_TYPE
 #include	"utils\cmxmacro.h"
 #include 	"utils\fixed.h"
 
-#include 	"system\debug.h"
+#include 	"system\dbg.h"
 #include	"system\info.h"
 #include	"system\lnkopt.h"
 

@@ -68,7 +68,7 @@ struct TransHeader
 #if defined(__VERSION_debug__)
 		if (stringNum > m_numOfStrings)
 		{
-			DBG_MSG2("stringNum %d > m_numOfStrings %d", stringNum, m_numOfStrings);
+			SYSTEM_DBGMSG("stringNum %d > m_numOfStrings %d", stringNum, m_numOfStrings);
 			ASSERT(0);
 		}
 #endif
@@ -126,7 +126,7 @@ void TranslationDatabase::initialise(bool includeIds)
 
 	/* now Allocate some mem for it */
 
-	DBG_MSG1("Translation Database allocating %d bytes string space",largestSize);
+	SYSTEM_DBGMSG("Translation Database allocating %d bytes string space",largestSize);
 
 	s_database=(TransHeader*)MemAlloc(largestSize,"TextDB");
 	s_loaded=false;

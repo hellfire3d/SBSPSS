@@ -1,20 +1,12 @@
-#include <stdio.h>
+//#include <stdio.h>
+
+#include "system\vsprintf.h"
+
 
 // Linux Kernel Source Tour
 // http://www.tamacom.com/tour/linux/index.html
 
 
-
-
-// stdarg defs from MSVC
-
-#define _INTSIZEOF(n)   ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
-
-#define va_start(ap,v)  ( ap = (va_list)&v + _INTSIZEOF(v) )
-#define va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
-#define va_end(ap)      ( ap = (va_list)0 )
-
-typedef char *va_list;
 
 
 
@@ -134,7 +126,7 @@ static char * number(char * str, long num, int base, int size, int precision
 	return str;
 }
 
-extern int vsprintf(char *buf, const char *fmt, va_list args)
+extern int __vsprintf(char *buf, const char *fmt, __va_list args)
 {
 	int len;
 	unsigned long num;
@@ -174,7 +166,7 @@ extern int vsprintf(char *buf, const char *fmt, va_list args)
 		else if (*fmt == '*') {
 			++fmt;
 			/* it's the next argument */
-			field_width = va_arg(args, int);
+			field_width = __va_arg(args, int);
 			if (field_width < 0) {
 				field_width = -field_width;
 				flags |= LEFT;
@@ -190,7 +182,7 @@ extern int vsprintf(char *buf, const char *fmt, va_list args)
 			else if (*fmt == '*') {
 				++fmt;
 				/* it's the next argument */
-				precision = va_arg(args, int);
+				precision = __va_arg(args, int);
 			}
 			if (precision < 0)
 				precision = 0;
@@ -211,13 +203,13 @@ extern int vsprintf(char *buf, const char *fmt, va_list args)
 			if (!(flags & LEFT))
 				while (--field_width > 0)
 					*str++ = ' ';
-			*str++ = (unsigned char) va_arg(args, int);
+			*str++ = (unsigned char) __va_arg(args, int);
 			while (--field_width > 0)
 				*str++ = ' ';
 			continue;
 
 		case 's':
-			s = va_arg(args, char *);
+			s = __va_arg(args, char *);
 			if (!s)
 				s = "<NULL>";
 
@@ -238,17 +230,17 @@ extern int vsprintf(char *buf, const char *fmt, va_list args)
 				flags |= ZEROPAD;
 			}
 			str = number(str,
-				(unsigned long) va_arg(args, void *), 16,
+				(unsigned long) __va_arg(args, void *), 16,
 				field_width, precision, flags);
 			continue;
 
 
 		case 'n':
 			if (qualifier == 'l') {
-				long * ip = va_arg(args, long *);
+				long * ip = __va_arg(args, long *);
 				*ip = (str - buf);
 			} else {
-				int * ip = va_arg(args, int *);
+				int * ip = __va_arg(args, int *);
 				*ip = (str - buf);
 			}
 			continue;
@@ -280,16 +272,16 @@ extern int vsprintf(char *buf, const char *fmt, va_list args)
 			continue;
 		}
 		if (qualifier == 'l')
-			num = va_arg(args, unsigned long);
+			num = __va_arg(args, unsigned long);
 		else if (qualifier == 'h')
 			if (flags & SIGN)
-				num = va_arg(args, short);
+				num = __va_arg(args, short);
 			else
-				num = va_arg(args, unsigned short);
+				num = __va_arg(args, unsigned short);
 		else if (flags & SIGN)
-			num = va_arg(args, int);
+			num = __va_arg(args, int);
 		else
-			num = va_arg(args, unsigned int);
+			num = __va_arg(args, unsigned int);
 		str = number(str, num, base, field_width, precision, flags);
 	}
 	*str = '\0';

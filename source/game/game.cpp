@@ -24,7 +24,7 @@ CGameScene	GameScene;
 
 /*****************************************************************************/
 // Note, do not load any data in this function
-void 	CGameScene::Init()
+void 	CGameScene::init()
 {
 	s_genericFont=new ("CGameScene::Init") FontBank();
 	s_genericFont->initialise( &standardFont );
@@ -34,7 +34,7 @@ void 	CGameScene::Init()
 
 /*****************************************************************************/
 
-void CGameScene::Shutdown()
+void CGameScene::shutdown()
 {
 }
 
@@ -44,7 +44,7 @@ int		Y=256/2;
 int		Dx=+7;
 int		Dy=-3;
 
-void 	CGameScene::Render()
+void 	CGameScene::render()
 {
 char	*Str="Sponge\nBob\nSquare\nPants";
 
@@ -55,13 +55,12 @@ char	*Str="Sponge\nBob\nSquare\nPants";
 	if (Y>256-64)	{Y=256-64;	Dy=-Dy;}
 
 
-	s_genericFont->print(X,Y,(u8*)Str);
+	s_genericFont->print(X,Y,Str);
 }
 
 /*****************************************************************************/
-bool 	CGameScene::Control()
+void	CGameScene::think()
 {
-	return 1;
 }
 
 /*****************************************************************************/

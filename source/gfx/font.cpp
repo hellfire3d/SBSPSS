@@ -112,7 +112,7 @@ void FontBank::dump()
   ---------------------------------------------------------------------- */
 void FontBank::print( int _x, int _y, s32 _textId )
 {
-	print(_x,_y,(u8*)TranslationDatabase::getString(_textId));
+	print(_x,_y,(char*)TranslationDatabase::getString(_textId));
 }
 
 
@@ -122,7 +122,7 @@ void FontBank::print( int _x, int _y, s32 _textId )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void FontBank::print( int _x, int _y, u8 *_text )
+void FontBank::print( int _x, int _y, char *_text )
 {
 	ASSERT( m_initialised );
 
@@ -249,7 +249,7 @@ void FontBank::setSMode( int _sMode )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getCharWidth( u8 _char )
+int FontBank::getCharWidth( char _char )
 {
 	int	size;
 
@@ -283,7 +283,7 @@ int FontBank::getCharHeight()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getStringHeight( u8 *_text )
+int FontBank::getStringHeight( char *_text )
 {
 	int length=0;
 	int	height=0;
@@ -310,7 +310,7 @@ int FontBank::getStringHeight( u8 *_text )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::printChar( u8 _char,int _x,int _y )
+int FontBank::printChar( char _char,int _x,int _y )
 {
 	if (_char!=' ')
 	{
@@ -335,7 +335,7 @@ int FontBank::printChar( u8 _char,int _x,int _y )
   ---------------------------------------------------------------------- */
 int FontBank::getStringWidth( char * text )
 {
-	return getStrWrapLen( (u8 *)text, VidGetScrW() );
+	return getStrWrapLen( text, VidGetScrW() );
 }
 
 /*----------------------------------------------------------------------
@@ -344,10 +344,10 @@ int FontBank::getStringWidth( char * text )
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int FontBank::getStrWrapLen( u8 *_text,int _maxWidth )
+int FontBank::getStrWrapLen( char *_text,int _maxWidth )
 {
-	int length=0,spaceW;
-	u8	C;
+	int		length=0,spaceW;
+	char	C;
 
 	spaceW=length+1;	// +1 to prevent infinite loop
 	while (*_text && length<=_maxWidth) 

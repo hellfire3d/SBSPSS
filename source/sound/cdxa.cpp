@@ -111,13 +111,13 @@ sXAStream	&ThisStream=CXAStream::Stream[CXAStream::CurrentStream];
 void	CXAStream::Init()
 {
 #ifdef	FORCE_XA
-			DbgMsg0("FORCE XA\n");	
+			SYSTEM_DBGMSG("FORCE XA\n");	
 			while (!CdInit());
 			CFileIO::FindAllFilePos();
 			CXAStream::SetSector(CFileIO::GetFilePos(FILEPOS_TRACK1));
 
 #endif
-		DBG_MSG0("XA INITIALISED");
+		SYSTEM_DBGMSG("XA INITIALISED");
 
 // Set defaults
 		CurrentStream=XA_STREAM_MUSIC;

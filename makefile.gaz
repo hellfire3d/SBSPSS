@@ -72,6 +72,8 @@ mem_src :=			memory
 
 pad_src :=			pads
 
+paul_src :=			paul
+
 # sound_src :=		sndbank \
 #					music \
 #					cdxa
@@ -79,7 +81,8 @@ pad_src :=			pads
 system_src :=		main \
 					gstate \
 					vid \
-					debug
+					dbg \
+					vsprintf
 
 utils_src :=		utils \
 					sincos

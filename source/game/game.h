@@ -14,15 +14,15 @@ class FontBank;
 class CGameScene : public CScene
 {
 public:
-	CGameScene() {};
-	virtual ~CGameScene() {};
+			CGameScene()	{;}
+	virtual ~CGameScene()	{;}
 
 
-	void Init();
-	void Shutdown();
-	void Render();
-	bool Control();
-	char *GetSceneName()	{return "Game";}
+	void init();
+	void shutdown();
+	void render();
+	void think();
+	char *getSceneName()	{return "Game";}
 
 	
 private:

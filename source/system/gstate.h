@@ -14,17 +14,24 @@
 #ifndef __SYSTEM_GSTATE_H__
 #define __SYSTEM_GSTATE_H__
 
+
+
+
+
+
+
+/*****************************************************************************/
 class CScene
 {
 public:
-	CScene() {}
-	virtual ~CScene() {}
+			CScene()	{;}
+	virtual ~CScene()	{;}
 
-	virtual void Init()=0;
-	virtual void Shutdown()=0;
-	virtual void Render()=0;
-	virtual bool Control()=0;
-	virtual char *GetSceneName()=0;
+	virtual void	init()=0;
+	virtual void	shutdown()=0;
+	virtual void	render()=0;
+	virtual void	think()=0;
+	virtual char	*getSceneName()=0;
 
 protected:
 };
@@ -40,8 +47,8 @@ public:
 
 	static void		setNextScene( CScene *_nextScene );
 
-	inline static u32		getTimeSinceLast()		{return s_timeSinceLast;}
-	inline static u32		getFramesSinceLast()	{return (s_timeSinceLast>>12)+1;}
+	inline static long int	getTimeSinceLast()		{return s_timeSinceLast;}
+	inline static long int	getFramesSinceLast()	{return (s_timeSinceLast>>12)+1;}
 
 	static void		setTimeSpeed( int speed );
 

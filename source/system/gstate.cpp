@@ -46,17 +46,17 @@ void GameState::think()
 			{
 			if( s_currentScene )
 				{
-				s_currentScene->Shutdown();
+				s_currentScene->shutdown();
 				}
 
 			s_currentScene=s_pendingScene;
 			s_pendingScene=NULL;
 
-			s_currentScene->Init();
+			s_currentScene->init();
 			}
 		}
 	ASSERT(s_currentScene);
-	s_currentScene->Control();
+	s_currentScene->think();
 }
 
 
@@ -66,7 +66,7 @@ void GameState::think()
 void GameState::render()
 {
 	ASSERT(s_currentScene);
-	s_currentScene->Render();
+	s_currentScene->render();
 }
 
 

@@ -51,7 +51,7 @@ public:
 	virtual void	initialise( FontData *_fontData );
 	void	dump();
 	int		isInitialised()				{ return m_initialised; }
-	virtual void	print( int _x, int _y, u8 *_text );
+	virtual void	print( int _x, int _y, char *_text );
 	void			print( int _x, int _y, s32 _textId );
 	void	setColour( u8 _r, u8 _g, u8 _b );
 	void	setJustification( Justification _justification );
@@ -60,15 +60,15 @@ public:
 	void	setTrans( int _trans );
 	void	setSMode( int _sMode );
 
-	int		getCharWidth( u8 _char );
+	int		getCharWidth( char _char );
 	int		getCharHeight();
 	int		getStringWidth( char * text );
-	int		getStringHeight( u8 *_text );
+	int		getStringHeight( char *_text );
 
-	int		getStrWrapLen( u8 *_text,int _maxWidth );
+	int		getStrWrapLen( char *_text,int _maxWidth );
 
 private:
-	virtual int		printChar( u8 _char,int _x,int _y );
+	virtual int		printChar( char _char,int _x,int _y );
 
 
 	enum {
