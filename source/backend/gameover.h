@@ -51,6 +51,7 @@ private:
 		STATE__CONTINUE,
 		STATE__CONTINUE_TIMED_OUT,
 		STATE__GAME_OVER,
+		STATE__SPEECH_BEFORE_EXITING_TO_GAME,
 		STATE__EXITING_TO_GAME,
 		STATE__EXITING_TO_FRONT_END,
 	} GAMEOVER_STATE;
@@ -90,6 +91,12 @@ private:
 	class ScalableFontBank	*m_font;
 	int						m_readyToExit;
 	unsigned char			*m_image;
+
+	int						m_hasPlayedFirstSpeech;
+	int						m_hasPlayedSecondSpeech;
+
+	class CActorGfx			*m_patrickGfx;
+	int						m_animFrame;
 
 };
 

@@ -58,6 +58,14 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef __ACTOR_HEADER__
+#include "gfx\actor.h"
+#endif
+
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -67,6 +75,10 @@
 
 #ifndef __STRING_ENUMS__
 #include <trans.h>
+#endif
+
+#ifndef	__ANIM_PATRICK_HEADER__
+#include <actor_patrick_anim.h>
 #endif
 
 
@@ -106,6 +118,12 @@ void CGameOverScene::init()
 	m_font->setJustification(ScalableFontBank::JUST_CENTRE);
 	m_font->setOt(5);
 
+	CActorPool::Reset();
+	m_patrickGfx=CActorPool::GetActor(ACTORS_PATRICK_SBK);
+	m_animFrame=0;
+	CActorPool::SetUpCache();
+	CActorPool::CleanUpCache();
+
 	m_readyToExit=false;
 	CFader::setFadingIn();
 
@@ -120,6 +138,9 @@ void CGameOverScene::init()
 	{
 		m_state=STATE__GAME_OVER;
 	}
+
+	m_hasPlayedFirstSpeech=false;
+	m_hasPlayedSecondSpeech=false;
 }
 
 
@@ -131,6 +152,9 @@ void CGameOverScene::init()
   ---------------------------------------------------------------------- */
 void CGameOverScene::shutdown()
 {
+	delete m_patrickGfx;
+	CActorPool::Reset();
+
 	m_font->dump();				delete m_font;
 
 	MemFree(m_image);
@@ -154,16 +178,22 @@ void CGameOverScene::render()
 			renderContinue();
 			renderGameOver();
 			break;
+		case STATE__SPEECH_BEFORE_EXITING_TO_GAME:
+			renderContinue();
+			break;
 		case STATE__GAME_OVER:
 			renderGameOver();
 			break;
 		case STATE__EXITING_TO_GAME:
 			renderContinue();
-			break;
 		case STATE__EXITING_TO_FRONT_END:
 			renderGameOver();
 			break;
 	}
+
+	DVECTOR ppos={255,210};
+	m_patrickGfx->Render(ppos,0,m_animFrame);
+	CActorPool::CleanUpCache();
 }
 
 
@@ -175,6 +205,11 @@ void CGameOverScene::render()
   ---------------------------------------------------------------------- */
 void CGameOverScene::think(int _frames)
 {
+	int	animLength;
+	m_animFrame+=_frames;
+	animLength=m_patrickGfx->getFrameCount(0);
+	while(m_animFrame>=animLength)m_animFrame-=animLength;
+
 	switch(m_state)
 	{
 		case STATE__CONTINUE:
@@ -186,6 +221,9 @@ void CGameOverScene::think(int _frames)
 			break;
 		case STATE__GAME_OVER:
 			thinkGameOver(_frames);
+			break;
+		case STATE__SPEECH_BEFORE_EXITING_TO_GAME:
+			thinkContinue(_frames);
 			break;
 		case STATE__EXITING_TO_GAME:
 			thinkContinue(_frames);
@@ -229,6 +267,13 @@ void	CGameOverScene::thinkContinue(int _frames)
 	{
 		if(!CFader::isFading())
 		{
+			if(!m_hasPlayedFirstSpeech)
+			{
+				CSoundMediator::playSpeech(SPEECH_085);
+PAUL_DBGMSG("WHERE IS EVERYBODY?");
+				m_hasPlayedFirstSpeech=true;
+			}
+
 			if(m_continueFontOffset)
 			{
 				move=m_continueFontOffset/10;
@@ -254,12 +299,12 @@ void	CGameOverScene::thinkContinue(int _frames)
 					}
 					else if(pad&PAD_START)
 					{
-						m_readyToExit=true;
-						CFader::setFadingOut();
-						GameState::setNextScene(&MapScene);
-						CGameSlotManager::getSlotData()->m_lives=CGameSlotManager::INITIAL_LIVES;
-						CGameSlotManager::getSlotData()->m_continues--;
-						m_state=STATE__EXITING_TO_GAME;
+//						m_readyToExit=true;
+//						CFader::setFadingOut();
+//						GameState::setNextScene(&MapScene);
+//						CGameSlotManager::getSlotData()->m_lives=CGameSlotManager::INITIAL_LIVES;
+//						CGameSlotManager::getSlotData()->m_continues--;
+						m_state=STATE__SPEECH_BEFORE_EXITING_TO_GAME;
 					}
 					else
 					{
@@ -275,8 +320,15 @@ void	CGameOverScene::thinkContinue(int _frames)
 			}
 		}
 	}
-	else if(m_state==STATE__CONTINUE_TIMED_OUT||STATE__EXITING_TO_GAME)
+	else if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME||m_state==STATE__CONTINUE_TIMED_OUT||STATE__EXITING_TO_GAME)
 	{
+		if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME&&!m_hasPlayedSecondSpeech)
+		{
+			CSoundMediator::playSpeech(SPEECH_086);
+PAUL_DBGMSG("LETS TRY AGAIN!");
+			m_hasPlayedSecondSpeech=true;
+		}
+
 		// Slide text back off the screen
 		m_continueFontOffset=(100<<2)-m_continueFontOffset;
 		move=m_continueFontOffset/10;
@@ -287,6 +339,15 @@ void	CGameOverScene::thinkContinue(int _frames)
 		m_continueFontOffset-=move;
 		if(m_continueFontOffset<0)
 		{
+			if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME)
+			{
+				m_readyToExit=true;
+				CFader::setFadingOut();
+				GameState::setNextScene(&MapScene);
+				CGameSlotManager::getSlotData()->m_lives=CGameSlotManager::INITIAL_LIVES;
+				CGameSlotManager::getSlotData()->m_continues--;
+				m_state=STATE__EXITING_TO_GAME;
+			}
 			if(m_state==STATE__CONTINUE_TIMED_OUT)
 			{
 				m_state=STATE__GAME_OVER;
