@@ -746,16 +746,27 @@ if(newmode!=-1)
 	{
 		// Think
 		updatePadInput();
-		if(getPadInputDown()&PI_WEAPONCHANGE)
+		if(!m_tryingToPickupWeapon)
 		{
-			if(!m_tryingToPickupWeapon&&
-			   m_currentMode!=PLAYER_MODE_BASICUNARMED&&
-			   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
-			   m_currentMode!=PLAYER_MODE_DEAD)
+			if(m_currentMode==PLAYER_MODE_BASICUNARMED||
+			   m_currentMode==PLAYER_MODE_FULLUNARMED)
 			{
-				setMode(PLAYER_MODE_FULLUNARMED);
+				// Always trying to pickup weapon if unarmed... means that when SB walks
+				// over an item whilst unarmed, he automatically picks it up
+				m_tryingToPickupWeapon=true;
 			}
-			m_tryingToPickupWeapon=true;
+			else if(getPadInputDown()&PI_WEAPONCHANGE)
+			{
+				if(!m_tryingToPickupWeapon&&
+				   m_currentMode!=PLAYER_MODE_BASICUNARMED&&
+				   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
+				   m_currentMode!=PLAYER_MODE_DEAD)
+				{
+					// Drop current weapon
+					setMode(PLAYER_MODE_FULLUNARMED);
+				}
+				m_tryingToPickupWeapon=true;
+			}
 		}
 
 		// Trying to converate?

@@ -111,12 +111,10 @@ private:
 };
 
 
-class CBaseWeaponPickup : public CBaseRespawningPickup
+class CBaseWeaponPickup : public CBasePickup
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
-
-	virtual int			getRespawnTime()					{return 5*60;}
 
 };
 
