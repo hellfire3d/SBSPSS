@@ -196,7 +196,12 @@ INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_N
 PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +pants +health100 +health50 +health25 +glint1 +glint2 +glint3 +glint4 \
 							+jellyammo +bubblemixture +bubblewand +glasses +shoe +balloon +helmet \
-							+teeth +blower +net
+							+blower +net \
+							+c1_l1_jelly +c1_l2_seaweed +c1_l3_seanutbutter +c1_l4_breadslice \
+							+c2_l1_falseteeth +c2_l2_kelpkream +c2_l3_mudpack +c2_l4_sponge \
+							+c3_l1_slippers +c3_l2_clambra +c3_l3_starfishmask +c3_l4_superpantz \
+							+c4_coin +c4_kelpbar \
+							+c5_l1_hammer +c5_l2_ariel +c5_l3_oilcan +c5_l4_wrench
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 \
@@ -270,8 +275,8 @@ ingamefx:		$(INGAMEFX_GFX_TEX_IN)
 ####
 
 $(INGAMEFX_GFX_TEX_OUT) :	$(INGAMEFX_GFX_TEX_IN)
-		@parkgrab	-z+ ${INGAMEFX_GFX_TRANS_IN} ${PICKUP_GFX_IN} \
-					-z- ${INGAMEFX_GFX_NONTRANS_IN} -b+ \
+		@parkgrab	-c+ -z+ ${INGAMEFX_GFX_TRANS_IN} ${PICKUP_GFX_IN} \
+					-c- -z- ${INGAMEFX_GFX_NONTRANS_IN} -b+ \
 					-c+ -z+ $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} \
 					-c- -z- ${UI_GFX_NONTRANS_IN} \
 					-t:14,2,1 -l:$(REPORT_DIR)/ingamefx.lbm -o:$(INGAMEFX_GFX_TEX_OUT) -k:$(INGAMEFX_GFX_REP_FILE)

@@ -47,6 +47,7 @@ typedef enum
 	PICKUP__HELMET,
 	PICKUP__CORAL_BLOWER,
 	PICKUP__QUEST_ITEM__TEST,	// Needs to be one of these for each quest item ( I think )
+	PICKUP__BALLOON_AND_SPATULA,
 }
 PICKUP_TYPE;
 

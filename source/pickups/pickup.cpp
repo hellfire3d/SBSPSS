@@ -348,10 +348,13 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			pickup=new ("QuestItemPickup") CTestQuestItemPickup();
 			break;
 
+		case PICKUP__BALLOON_AND_SPATULA:
+			pickup=new ("BalloonAndSpatulaPickup") CBalloonAndSpatulaPickup();
+			break;
+
 		default:
 			ASSERT(!"UNKNOWN PICKUP TYPE");
-			pickup=NULL;
-			break;
+			return NULL;
 	}
 
 	pickup->init();

@@ -235,7 +235,7 @@ void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 int		CTestQuestItemPickup::getFrameNumber()
 {
-	return FRM__TEETH;
+	return FRM__C2_L1_FALSETEETH;
 }
 
 /*===========================================================================

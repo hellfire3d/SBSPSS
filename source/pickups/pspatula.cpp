@@ -138,5 +138,28 @@ void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 	}
 }
 
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBalloonAndSpatulaPickup::thinkPickup(int _frames)
+{
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBalloonAndSpatulaPickup::renderPickup(DVECTOR *_pos)
+{
+}
+
 /*===========================================================================
 end */
