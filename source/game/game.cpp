@@ -64,6 +64,9 @@ CGameScene	GameScene;
 /*****************************************************************************/
 void 	CGameScene::init()
 {
+		SetIdentNoTrans(&CamMtx);
+		CamMtx.t[2]=ZPos;
+
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
@@ -84,9 +87,6 @@ void 	CGameScene::init()
 		m_player->init();
 
 		CAnimDB::LoadAnims();
-
-		SetIdentNoTrans(&CamMtx);
-		CamMtx.t[2]=ZPos;
 
 		CFader::setFadingIn();
 
