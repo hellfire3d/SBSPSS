@@ -15,6 +15,14 @@
 #include "platform\pghost.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,12 +30,286 @@ void CNpcGhostTrainPlatform::postInit()
 {
 	CNpcCartPlatform::postInit();
 
-	m_speedSetting = 0;
+	m_speedSetting = GO_DEFAULT;
+
+	m_carSpeed >>= 8;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcGhostTrainPlatform::processMovement( int _frames )
 {
-	CNpcCartPlatform::processMovement( _frames );
+	s32 fallSpeed = 2;
+	s8 yMovement = fallSpeed * _frames;
+	s32 distX, distY, heading;
+	s32 groundHeight;
+	s32 moveX = 0;
+	s32 moveY = 0;
+
+	bool pathComplete;
+
+	if ( m_reboundTimer > 0 )
+	{
+		m_reboundTimer -= _frames;
+	}
+
+	if ( !m_playerAttached && !m_falling )
+	{
+		m_playerAttached = true;
+		CPlayer *player = GameScene.getPlayer();
+
+		DVECTOR newPos = Pos;
+		CRECT collisionArea=getCollisionArea();
+		newPos.vy = collisionArea.y1;
+
+		player->setPos( newPos );
+		player->setPlatform( this );
+		m_contact = true;
+	}
+
+	if ( m_isActivated )
+	{
+		if ( m_falling )
+		{
+			m_vertSpeed += 192;
+
+			if ( m_vertSpeed > ( 8 << 8 ) )
+			{
+				m_vertSpeed = 8 << 8;
+			}
+
+			moveY = ( m_vertSpeed >> 8 ) * _frames;
+
+			Pos.vy += moveY;
+
+			DVECTOR	offset = CLevel::getCameraPos();
+
+			s32 yPos = Pos.vy - offset.vy;
+
+			if ( yPos < 0 || yPos > VidGetScrH() )
+			{
+				setToShutdown();
+			}
+		}
+		else if ( m_rebound )
+		{
+			moveX = -4 * _frames;
+
+			m_vertSpeed += 192;
+
+			if ( m_vertSpeed > ( 8 << 8 ) )
+			{
+				m_vertSpeed = 8 << 8;
+			}
+			else if ( m_vertSpeed < -( 6 << 8 ) )
+			{
+				m_vertSpeed = -( 6 << 8 );
+			}
+
+			moveY = ( m_vertSpeed >> 8 ) * _frames;
+
+			groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy + moveY, 16 );
+
+			if ( groundHeight < 0 )
+			{
+				// have touched down
+
+				m_rebound = false;
+				moveY += groundHeight;
+			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
+		}
+		else
+		{
+			m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
+
+			switch( m_speedSetting )
+			{
+				case GO_DEFAULT:
+				{
+					m_carSpeed = m_speed;
+
+					break;
+				}
+
+				case GO_SLOW_DOWN:
+				{
+					m_carSpeed = m_speed - 2;
+					m_speedSetting = GO_DEFAULT;
+
+					break;
+				}
+
+				case GO_SPEED_UP:
+				{
+					m_carSpeed = m_speed + 2;
+					m_speedSetting = GO_DEFAULT;
+
+					break;
+				}
+			}
+
+			if ( !pathComplete )
+			{
+				moveX = m_carSpeed * _frames;
+
+				if ( heading == 2048 )
+				{
+					moveX = -moveX;
+				}
+			}
+
+			if ( m_inJump )
+			{
+				m_vertSpeed += 192;
+
+				if ( m_vertSpeed > ( 5 << 8 ) )
+				{
+					m_vertSpeed = 5 << 8;
+				}
+				else if ( m_vertSpeed < -( 6 << 8 ) )
+				{
+					m_vertSpeed = -( 6 << 8 );
+				}
+
+				moveY = ( m_vertSpeed >> 8 ) * _frames;
+
+				groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy, moveY + 16 );
+
+				if ( groundHeight < moveY )
+				{
+					// have touched down
+
+					m_inJump = false;
+					moveY += groundHeight;
+				}
+			}
+			else
+			{
+				// check for vertical movement
+
+				s32 checkDist = yMovement + 50;
+
+				groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx + moveX, Pos.vy, checkDist );
+
+				if ( groundHeight < checkDist )
+				{
+					// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+					moveY = groundHeight;
+				}
+				else
+				{
+					// fall
+
+					moveY = yMovement;
+				}
+			}
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
+		}
+
+		// sort out draw rotation
+
+		DVECTOR testPos1, testPos2;
+
+		testPos1 = testPos2 = Pos;
+		testPos1.vx -= 10;
+		testPos2.vx += 10;
+
+		u8 sensorDist = 16;
+
+		s32 yDiff;
+
+		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos1.vx, testPos1.vy, sensorDist + 1 );
+
+		if ( yDiff <= sensorDist )
+		{
+			// only use if there is ground present
+
+			testPos1.vy += yDiff;
+		}
+
+		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
+
+		if ( yDiff <= sensorDist )
+		{
+			// only use if there is ground present
+
+			testPos2.vy += yDiff;
+		}
+
+		s32 xDist = testPos2.vx - testPos1.vx;
+		s32 yDist = testPos2.vy - testPos1.vy;
+
+		heading = ratan2( yDist, xDist );
+
+		setCollisionAngle( heading );
+
+		switch ( CGameScene::getCollision()->getCollisionBlock( testPos2.vx, testPos2.vy - 8 ) & COLLISION_TYPE_MASK )
+		{
+			case COLLISION_TYPE_FLAG_DAMAGE:
+			{
+				if ( m_reboundTimer <= 0 )
+				{
+					m_vertSpeed = -8 << 8;
+					m_reboundTimer = 2 * GameState::getOneSecondInFrames();
+					m_rebound = true;
+					Pos.vy -= 8;
+				}
+
+				break;
+			}
+
+			case COLLISION_TYPE_FLAG_DEATH_FALL:
+			{
+				m_playerAttached = false;
+				m_falling = true;
+
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
+	else
+	{
+		groundHeight = CGameScene::getCollision()->getHeightFromGroundCart( Pos.vx, Pos.vy, yMovement + 16 );
+
+		if ( groundHeight <= yMovement )
+		{
+			moveY = groundHeight;
+		}
+		else
+		{
+			// fall
+
+			moveY = yMovement;
+		}
+
+		Pos.vy += moveY;
+
+		if ( m_contact )
+		{
+			m_isActivated = true;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGhostTrainPlatform::slowDown()
+{
+	m_speedSetting = GO_SLOW_DOWN;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGhostTrainPlatform::speedUp()
+{
+	m_speedSetting = GO_SPEED_UP;
 }

@@ -22,10 +22,19 @@ class CNpcGhostTrainPlatform : public CNpcCartPlatform
 {
 public:
 	void				postInit();
+	void				slowDown();
+	void				speedUp();
 protected:
 	void				processMovement( int _frames );
 
 	u8					m_speedSetting;
+
+	enum
+	{
+		GO_DEFAULT = 0,
+		GO_SLOW_DOWN = 1,
+		GO_SPEED_UP,
+	};
 };
 
 #endif

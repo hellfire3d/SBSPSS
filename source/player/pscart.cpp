@@ -83,22 +83,33 @@ void CPlayerStateCart::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateCart::think(CPlayerModeBase *_playerMode)
 {
-	int controlDown;
+	int controlDown, controlHeld;
 
 	if ( _playerMode->advanceAnimFrameAndCheckForEndOfAnim() )
 	{
 		_playerMode->setAnimNo( ANIM_SPONGEBOB_IDLEBREATH );
 	}
 	controlDown=_playerMode->getPadInputDown();
+	controlHeld=_playerMode->getPadInputHeld();
 
-	if(controlDown&PI_JUMP)
+	CNpcPlatform *platform;
+	platform = (CNpcPlatform *) _playerMode->getPlayer()->isOnPlatform();
+
+	if ( platform )
 	{
-		CNpcPlatform *platform;
-		platform = (CNpcPlatform *) _playerMode->getPlayer()->isOnPlatform();
+		if(controlDown&PI_JUMP)
+		{
+			platform->jump();
+		}
 
-		ASSERT( platform );
-
-		platform->jump();
+		if ( controlHeld & PI_LEFT )
+		{
+			platform->slowDown();
+		}
+		else if ( controlHeld & PI_RIGHT )
+		{
+			platform->speedUp();
+		}
 	}
 }
 

@@ -211,6 +211,10 @@
 #include "platform\pfblock.h"
 #endif
 
+#ifndef __PLATFORM_PGHOST_H__
+#include "platform\pghost.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -470,6 +474,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_FALLING_BLOCK_PLATFORM:
 		{
 			platform = new ("falling block platform") CNpcFallingBlockPlatform;
+			break;
+		}
+
+		case NPC_GHOST_TRAIN_PLATFORM:
+		{
+			platform = new ("ghost train platform") CNpcGhostTrainPlatform;
 			break;
 		}
 

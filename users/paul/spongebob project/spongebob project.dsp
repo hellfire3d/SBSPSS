@@ -1633,6 +1633,14 @@ SOURCE=..\..\..\source\platform\pgeyser.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pghost.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pghost.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pjellfsh.cpp
 # End Source File
 # Begin Source File
