@@ -22,6 +22,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcDropPlatform::postInit()
+{
+	m_dropHit = false;
+
+	CNpcPlatform::postInit();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcDropPlatform::processMovement( int _frames )
 {
 	s32 moveY = m_speed * _frames;
@@ -30,7 +39,23 @@ void CNpcDropPlatform::processMovement( int _frames )
 
 	if ( groundHeight < moveY )
 	{
+		if ( !m_dropHit )
+		{
+			if( m_soundId != NOT_PLAYING )
+			{
+				CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			}
+
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FALLING_ROCK_LAND, true );
+		}
+
+		m_dropHit = true;
+
 		moveY = groundHeight;
+	}
+	else
+	{
+		m_dropHit = false;
 	}
 
 	Pos.vy += moveY;

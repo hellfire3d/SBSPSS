@@ -20,8 +20,12 @@
 
 class CNpcDropPlatform : public CNpcPlatform
 {
+public:
+	void				postInit();
 protected:
 	void				processMovement( int _frames );
+
+	u8					m_dropHit;
 };
 
 #endif
