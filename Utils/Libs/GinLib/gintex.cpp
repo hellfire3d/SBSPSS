@@ -647,6 +647,7 @@ std::vector<CNode>	const &SkinTree=ST->GetTree();
 
 //-----------------------------------------------------------------------------
 // Load User Props - Loaded as Ini File
+/*
 int		PropCount=UserPropChunk.size();
 		for (int Loop=0;Loop<PropCount;Loop++)
 			{
@@ -667,7 +668,7 @@ int		PropCount=UserPropChunk.size();
 					}
 				}
 			}
-
+*/
 //-----------------------------------------------------------------------------
 // Build Pruned Tree
 		ResetPruneTree();

@@ -14,7 +14,7 @@
 #include "matrix4x4.h"
 #include "quat.h"
 
-#include "IniClass.h"
+//#include "IniClass.h"
 
 
 /*****************************************************************************/
@@ -423,7 +423,7 @@ public:
 	Quaternion				apu;
 	int						Active;
 	Matrix4x4				Mtx,WorldMtx;
-	CIni					UserProp;
+//	CIni					UserProp;
 
 	std::vector<int>		ChildList;
 	std::vector<int>		PruneChildList;
