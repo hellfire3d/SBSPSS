@@ -637,6 +637,10 @@ SOURCE=..\..\..\source\player\player.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmodes.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\psbutt.cpp
 # End Source File
 # Begin Source File
