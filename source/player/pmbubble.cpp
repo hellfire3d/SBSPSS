@@ -283,10 +283,10 @@ int		CPlayerModeBubbleMixture::canBlowBubbleFromThisState()
 		case STATE_JUMP:
 		case STATE_RUN:
 		case STATE_FALL:
+		case STATE_SPRINGUP:
 			ret=true;
 			break;
 
-		case STATE_SPRINGUP:
 		case STATE_FALLFAR:
 		case STATE_BUTTBOUNCE:
 		case STATE_BUTTFALL:
