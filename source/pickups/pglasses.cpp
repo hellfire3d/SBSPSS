@@ -93,6 +93,7 @@ DVECTOR	CGlassesPickup::getSizeForPlacement()
 void	CGlassesPickup::collect(class CPlayer *_player)
 {
 	_player->giveGlasses();
+	CSoundMediator::playSfx(CSoundMediator::SFX_GLASSES_ON);
 	CBasePickup::collect(_player);
 }
 
