@@ -259,6 +259,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			{
 				m_isActive = false;
 				setToShutdown();
+				CGameScene::getBossHasBeenKilled();
 			}
 
 			break;
