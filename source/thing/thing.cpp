@@ -208,6 +208,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if (ThingRect.y2<m_ThinkBBox.YMin || ThingRect.y1>m_ThinkBBox.YMax) Flag=false;
 			thing->setThinkFlag(Flag);
 
+			if (thing->getThingType()==CThing::TYPE_PLAYER)
+				Flag=true;
 			if (Flag)
 			{
 				thing->think(_frames);
