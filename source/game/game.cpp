@@ -85,6 +85,7 @@ void 	CGameScene::init()
 
 		m_player=new ("player") CPlayer();
 		m_player->init();
+		m_player->setLayerCollision(Level.getCollisionLayer());
 
 		CAnimDB::LoadAnims();
 

@@ -58,6 +58,9 @@ protected:
 	int				getPadInputDown(class CPlayer *_player);
 
 	int				isOnSolidGround(class CPlayer *_player);
+	int				isOnEdge(class CPlayer *_player);
+	int				canMoveLeft(class CPlayer *_player);
+	int				canMoveRight(class CPlayer *_player);
 
 	void moveLeft(class CPlayer *_player);
 	void moveRight(class CPlayer *_player);

@@ -33,6 +33,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __LAYER_COLLISION_H__
+#include "level\collision.h"
+#endif
+
 // to be removed
 #include "gfx\tpage.h"
 
@@ -73,6 +77,8 @@
 void	CPlayer::init()
 {
 	CThing::init();
+
+	m_layerCollision=NULL;
 	
 	sActor3dHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
@@ -93,7 +99,7 @@ m_animFrame=0;
 
 #ifdef __USER_paul__
 	Pos.vx=23*16;
-	Pos.vy=23*16;
+	Pos.vy=10*16;
 #else
 	Pos.vx=10;
 	Pos.vy=10;
@@ -127,13 +133,11 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef __USER_paul__
-DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+DVECTOR ofs={-248,-136};		// nearly -256,-128 ;)
+int newmode=-1;
 #else
 DVECTOR ofs={0,0}; //temporary
 #endif
-
-int psize=0;
-int newmode=-1;
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -141,11 +145,18 @@ void	CPlayer::think(int _frames)
 	CThing::think(_frames);
 
 
+#ifdef __USER_paul__
+if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
+{
+	Pos.vx=23*16;
+	Pos.vy=10*16;
+}
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
 	newmode=-1;
 }
+#endif
 
 #ifndef __USER_paul__
 	int	padInput=PadGetHeld(0);
@@ -169,25 +180,59 @@ if(newmode!=-1)
 		updatePadInput();
 		m_currentStateClass->think(this);
 
+
 		// Horizontal movement
-		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
-		if(Pos.vx<350)
+		if(m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-1)>>4))
 		{
+			// Move flush with the edge of the obstruction
+			int	dir,vx,cx,y,i;
+			if(m_moveVel.vx<0)
+			{
+				dir=-1;
+				vx=-m_moveVel.vx;
+			}
+			else
+			{
+				dir=+1;
+				vx=m_moveVel.vx;
+			}
+			cx=Pos.vx;
+			y=(Pos.vy-1)>>4;
+			for(i=0;i<vx;i++)
+			{
+				if(m_layerCollision->Get(cx>>4,y))
+				{
+					break;
+				}
+				cx+=dir;
+			}
+			Pos.vx=cx-dir;
+
+			// If running then idle, otherwise leave in same state
 			if(m_currentState==STATE_RUN)
 			{
 				setState(STATE_IDLE);
-//				setAnimNo(ANIM_PLAYER_ANIM_RUNSTOP);
 			}
-			Pos.vx=350;
 			m_moveVel.vx=0;
 		}
+		else
+		{
+			Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
+		}
+		if(m_currentState==STATE_IDLE&&isOnEdge())
+		{
+			setState(STATE_IDLETEETER);
+		}
+
 
 		// Vertical movement
 		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
 		if(isOnSolidGround())
 		{
 //stick to ground (PKG)
-Pos.vy=23*16+1;//16*15;
+//Pos.vy=23*16+1;//16*15;
+int colHeight=16;
+Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 
 			if(m_moveVel.vy)
 			{
@@ -199,6 +244,7 @@ Pos.vy=23*16+1;//16*15;
 				else if(m_currentState==STATE_FALLFAR)
 				{
 					setState(STATE_IDLE);
+					m_moveVel.vx=0;
 				}
 				else if(m_moveVel.vx)
 				{
@@ -210,15 +256,20 @@ Pos.vy=23*16+1;//16*15;
 					setState(STATE_IDLE);
 					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
 				}
-				m_moveVel.vy=0;
+//				m_moveVel.vy=0;
 				m_fallFrames=0;
 			}
+m_moveVel.vy=0;
 		}
 		else
 		{
 			if(m_currentState!=STATE_JUMP&&m_currentState!=STATE_BUTTBOUNCE)
 			{
 				// Fall
+				if(m_currentState!=STATE_FALL&&m_currentState!=STATE_BUTTFALL)
+				{
+					setState(STATE_FALL);
+				}
 				const PlayerMetrics	*metrics;
 				metrics=getPlayerMetrics();
 				m_moveVel.vy+=PLAYER_GRAVITY;
@@ -335,7 +386,7 @@ m_cameraOffset=ofs;
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
-DVECTOR ppos={0,1024};
+DVECTOR ppos={0,500};
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
@@ -547,6 +598,7 @@ int CPlayer::getPadInputDown()
 	return m_padInputDown;
 }
 
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -555,7 +607,52 @@ int CPlayer::getPadInputDown()
   ---------------------------------------------------------------------- */
 int CPlayer::isOnSolidGround()
 {
-	return Pos.vy>23*16;//16*15;
+	ASSERT(m_layerCollision);
+	return m_layerCollision->Get(Pos.vx>>4,Pos.vy>>4);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:	FACING_LEFT if left half of player is hanging, FACING_RIGHT
+				if right half of player is hanging or 0 if no part of the
+				player is hanging
+  ---------------------------------------------------------------------- */
+int csize=20;
+int CPlayer::isOnEdge()
+{
+	int	ret=0;
+
+	ASSERT(m_layerCollision);
+	if(!m_layerCollision->Get((Pos.vx-csize)>>4,Pos.vy>>4))
+	{
+		ret=FACING_LEFT;
+	}
+	else if(!m_layerCollision->Get((Pos.vx+csize)>>4,Pos.vy>>4))
+	{
+		ret=FACING_RIGHT;
+	}
+	return ret;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayer::canMoveLeft()
+{
+	ASSERT(m_layerCollision);
+	return m_layerCollision->Get((Pos.vx-1)>>4,(Pos.vy-1)>>4)==0;
+}
+int CPlayer::canMoveRight()
+{
+	ASSERT(m_layerCollision);
+	return m_layerCollision->Get((Pos.vx+1)>>4,(Pos.vy-1)>>4)==0;
 }
 
 

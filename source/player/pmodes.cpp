@@ -68,8 +68,9 @@
 	Vars
 	---- */
 
-CPlayerStateUnarmedIdle			stateUnarmedIdle;
-CPlayerStateCoralBlowerIdle		stateCoralBlowerIdle;
+CPlayerStateUnarmedIdle		stateUnarmedIdle;
+CPlayerStateCoralBlowerIdle	stateCoralBlowerIdle;
+CPlayerStateTeeterIdle		stateTeeterIdle;
 CPlayerStateJump			stateJump;
 CPlayerStateRun				stateRun;
 CPlayerStateFall			stateFall;
@@ -109,6 +110,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 		}	},
 		{
 			&stateUnarmedIdle,						// STATE_IDLE
+			&stateTeeterIdle,						// STATE_IDLETEETER
 			&stateJump,								// STATE_JUMP
 			&stateRun,								// STATE_RUN
 			&stateFall,								// STATE_FALL
@@ -140,6 +142,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 		}	},
 		{
 			&stateUnarmedIdle,						// STATE_IDLE
+			&stateTeeterIdle,						// STATE_IDLETEETER
 			&stateJump,								// STATE_JUMP
 			&stateRun,								// STATE_RUN
 			&stateFall,								// STATE_FALL
@@ -171,6 +174,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 		}	},
 		{
 			&stateCoralBlowerIdle,					// STATE_IDLE
+			&stateTeeterIdle,						// STATE_IDLETEETER
 			&stateJump,								// STATE_JUMP
 			&stateRun,								// STATE_RUN
 			&stateFall,								// STATE_FALL

@@ -32,6 +32,24 @@
 	Structure defintions
 	-------------------- */
 
+////
+class CPlayerStateBaseIdle : public CPlayerState
+{
+public:
+	void			thinkControl(class CPlayer *_player);
+};
+
+
+////
+class CPlayerStateTeeterIdle : public CPlayerStateBaseIdle
+{
+public:
+	virtual void	enter(class CPlayer *_player);
+	virtual void	think(class CPlayer *_player);
+};
+
+
+////
 typedef struct
 {
 	int		m_startFrame;					// Or -1 for none
@@ -41,7 +59,7 @@ typedef struct
 } IdleAnims;
 
 
-class CPlayerStateIdle : public CPlayerState
+class CPlayerStateIdle : public CPlayerStateBaseIdle
 {
 public:
 	virtual void	enter(class CPlayer *_player);

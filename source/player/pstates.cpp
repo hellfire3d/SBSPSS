@@ -244,6 +244,26 @@ int CPlayerState::isOnSolidGround(CPlayer *_player)
 {
 	return _player->isOnSolidGround();
 }
+int CPlayerState::isOnEdge(class CPlayer *_player)
+{
+	return _player->isOnEdge();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayerState::canMoveLeft(class CPlayer *_player)
+{
+	return _player->canMoveLeft();
+}
+int CPlayerState::canMoveRight(class CPlayer *_player)
+{
+	return _player->canMoveRight();
+}
 
 
 /*----------------------------------------------------------------------
@@ -256,26 +276,10 @@ void CPlayerState::moveLeft(CPlayer *_player)
 {
 	_player->moveLeft();
 }
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void CPlayerState::moveRight(CPlayer *_player)
 {
 	_player->moveRight();
 }
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void CPlayerState::slowdown(CPlayer *_player)
 {
 	_player->slowdown();

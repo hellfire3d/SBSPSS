@@ -58,6 +58,83 @@
 	Vars
 	---- */
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateBaseIdle::thinkControl(CPlayer *_player)
+{
+	int	controlDown,controlHeld;
+	controlDown=getPadInputDown(_player);
+	controlHeld=getPadInputHeld(_player);
+
+	if(controlDown&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	{
+		setState(_player,STATE_JUMP);
+	}
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	{
+		if(canMoveLeft(_player))
+			setState(_player,STATE_RUN);
+	}
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	{
+		if(canMoveRight(_player))
+			setState(_player,STATE_RUN);
+	}
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	{
+		setState(_player,STATE_ATTACK);
+	}
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	{
+		setState(_player,STATE_DUCK);
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateTeeterIdle::enter(CPlayer *_player)
+{
+	int	edgeType,dir;
+	int	anim;
+	
+	edgeType=isOnEdge(_player);
+	dir=getFacing(_player);
+	if(edgeType==FACING_LEFT)
+	{
+		anim=dir==FACING_LEFT?ANIM_PLAYER_ANIM_TEETERFRONT:ANIM_PLAYER_ANIM_TEETERBACK;
+	}
+	else
+	{
+		anim=dir==FACING_RIGHT?ANIM_PLAYER_ANIM_TEETERFRONT:ANIM_PLAYER_ANIM_TEETERBACK;
+	}
+
+	setAnimNo(_player,anim);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateTeeterIdle::think(CPlayer *_player)
+{
+	advanceAnimFrameAndCheckForEndOfAnim(_player);
+	thinkControl(_player);
+}
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -82,30 +159,11 @@ void CPlayerStateIdle::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateIdle::think(CPlayer *_player)
 {
-	int	controlDown,controlHeld;
-	controlDown=getPadInputDown(_player);
-	controlHeld=getPadInputHeld(_player);
+	thinkControl(_player);
 	
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
 		setNextIdleAnim(_player);
-	}
-
-	if(controlDown&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
-	{
-		setState(_player,STATE_JUMP);
-	}
-	else if(controlHeld&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
-	{
-		setState(_player,STATE_RUN);
-	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
-	{
-		setState(_player,STATE_ATTACK);
-	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
-	{
-		setState(_player,STATE_DUCK);
 	}
 }
 

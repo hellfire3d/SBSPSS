@@ -23,8 +23,9 @@ public:
 	void		render();
 	void		think(int _frames);
 
-	void				setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
-	static DVECTOR		getCameraPos()						{return MapPos;}
+	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
+	static DVECTOR			getCameraPos()						{return MapPos;}
+	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 
 private:
 	void		initLayers();

@@ -49,6 +49,7 @@
 typedef enum
 {
 	STATE_IDLE,
+	STATE_IDLETEETER,
 	STATE_JUMP,
 	STATE_RUN,
 	STATE_FALL,
@@ -120,11 +121,13 @@ public:
 
 	DVECTOR			getCameraPos();
 
+	void			setLayerCollision(class CLayerCollision *_layer)		{m_layerCollision=_layer;}
+
 protected:		
 	enum
 	{
-		DEFAULT_PLAYER_JUMP_VELOCITY=8,
-		DEFAULT_PLAYER_MAX_JUMP_FRAMES=10,
+		DEFAULT_PLAYER_JUMP_VELOCITY=4,
+		DEFAULT_PLAYER_MAX_JUMP_FRAMES=12,
 		DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES=20,
 		DEFAULT_PLAYER_MAX_RUN_VELOCITY=8,
 		DEFAULT_PLAYER_RUN_SPEEDUP=4,
@@ -153,6 +156,9 @@ protected:
 
 	// Collision
 	int				isOnSolidGround();
+	int				isOnEdge();
+	int				canMoveLeft();
+	int				canMoveRight();
 
 	// Movement
 	void moveLeft();
@@ -224,6 +230,8 @@ private:
 	int				m_lastPadInput;		// Last frames controls
 	int				m_padInputDown;		// Controls that were pressed this frame
 
+	// Pointer to the collision layer for the current layer
+	class CLayerCollision	*m_layerCollision;
 };
 
 
