@@ -62,6 +62,10 @@
 	Tyepdefs && Defines
 	------------------- */
 
+// Uncomment this to make the selector automatically choose the default ( first ) scene
+// You can still use L1&L2 to force the selection menu to appear
+//#define	AUTOMATICALLY_CHOOSE_DEFAULT
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -168,6 +172,7 @@ void CSceneSelector::think(int _frames)
 		{
 			if(--m_countdown==0)
 			{
+#ifdef AUTOMATICALLY_CHOOSE_DEFAULT
 				int	pad;
 				pad=PadGetHeld(0);
 				if(pad&(PAD_L1|PAD_L2))
@@ -178,6 +183,9 @@ void CSceneSelector::think(int _frames)
 				{
 					m_state=STATE_SELECTED;
 				}
+#else
+				m_state=STATE_SELECTING;
+#endif
 			}
 			break;
 		}
