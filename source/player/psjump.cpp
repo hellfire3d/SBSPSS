@@ -84,12 +84,12 @@ void CPlayerStateJump::enter(CPlayer *_player)
 void CPlayerStateJump::think(CPlayer *_player)
 {
 	const PlayerMetrics	*metrics;
-	int					control;
+	int					controlHeld;
 
 	metrics=getPlayerMetrics(_player);
-	control=getPadInput(_player);
+	controlHeld=getPadInputHeld(_player);
 
-	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
 	{
 		m_jumpFrames++;
 	}
@@ -98,15 +98,15 @@ void CPlayerStateJump::think(CPlayer *_player)
 		setState(_player,STATE_FALL);
 	}
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
 		setState(_player,STATE_AIRATTACK);
 	}
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}

@@ -66,6 +66,7 @@ typedef enum
 {
 	PLAYER_MODE_BASICUNARMED,
 	PLAYER_MODE_FULLUNARMED,
+	PLAYER_MODE_CORALBLOWER,
 
 	NUM_PLAYERMODES,
 }PLAYER_MODE;
@@ -133,7 +134,8 @@ protected:
 	DVECTOR			getMoveVelocity();
 	void			setMoveVelocity(DVECTOR *_moveVel);
 	DVECTOR			getPlayerPos();
-	virtual int		getPadInput();
+	int				getPadInputHeld();
+	int				getPadInputDown();
 
 	// Collision
 	int				isOnSolidGround();
@@ -182,6 +184,12 @@ private:
 
 	DVECTOR			m_cameraOffsetTarget;
 	DVECTOR			m_cameraOffset;
+
+	void			updatePadInput();
+	virtual int		readPadInput();
+	int				m_padInput;			// Controls that are being held down
+	int				m_lastPadInput;		// Last frames controls
+	int				m_padInputDown;		// Controls that were pressed this frame
 
 };
 

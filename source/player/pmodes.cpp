@@ -72,7 +72,8 @@
 	Vars
 	---- */
 
-CPlayerStateIdle			stateIdle;
+CPlayerStateUnarmedIdle			stateUnarmedIdle;
+CPlayerStateCoralBlowerIdle		stateCoralBlowerIdle;
 CPlayerStateJump			stateJump;
 CPlayerStateRun				stateRun;
 CPlayerStateFall			stateFall;
@@ -113,7 +114,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			1,						// PM__RUN_SLOWDOWN
 		}	},
 		{
-			&stateIdle,				// STATE_IDLE
+			&stateUnarmedIdle,		// STATE_IDLE
 			&stateJump,				// STATE_JUMP
 			&stateRun,				// STATE_RUN
 			&stateFall,				// STATE_FALL
@@ -146,7 +147,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			1,						// PM__RUN_SLOWDOWN
 		}	},
 		{
-			&stateIdle,				// STATE_IDLE
+			&stateUnarmedIdle,		// STATE_IDLE
 			&stateJump,				// STATE_JUMP
 			&stateRun,				// STATE_RUN
 			&stateFall,				// STATE_FALL
@@ -161,7 +162,40 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			&stateSoackUp,			// STATE_SOAKUP
 			&stateGetup,			// STATE_GETUP
 		}
-	}
+	},
+
+	//
+	// Armed with coral blower
+	//
+	{
+		{	{
+			8,						// PM__JUMP_VELOCITY
+			10,						// PM__MAX_JUMP_FRAMES
+			20,						// PM__MAX_SAFE_FALL_FRAMES
+			4,						// PM__GRAVITY_VALUE
+			8,						// PM__TERMINAL_VELOCITY
+			4,//8,						// PM__MAX_RUN_VELOCITY
+			2,//4,						// PM__RUN_SPEEDUP
+			2,						// PM__RUN_REVERSESLOWDOWN
+			2,//1,						// PM__RUN_SLOWDOWN
+		}	},
+		{
+			&stateCoralBlowerIdle,	// STATE_IDLE
+			NULL,					// STATE_JUMP
+			&stateRun,				// STATE_RUN
+			&stateFall,				// STATE_FALL
+			&stateFallFar,			// STATE_FALLFAR
+			NULL,					// STATE_BUTTBOUNCE
+			NULL,					// STATE_BUTTFALL
+			NULL,					// STATE_BUTTLAND
+			NULL,					// STATE_ATTACK
+			NULL,					// STATE_RUNATTACK
+			NULL,					// STATE_AIRATTACK
+			NULL,					// STATE_DUCK
+			NULL,					// STATE_SOAKUP
+			NULL,					// STATE_GETUP
+		}
+	},
 };
 
 

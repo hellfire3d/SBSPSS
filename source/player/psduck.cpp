@@ -111,10 +111,10 @@ void CPlayerStateSoakUp::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateSoakUp::think(CPlayer *_player)
 {
-	int				control;
+	int	controlHeld;
 
-	control=getPadInput(_player);
-	if(!(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN)))
+	controlHeld=getPadInputHeld(_player);
+	if(!(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN)))
 	{
 		setState(_player,STATE_GETUP);
 	}

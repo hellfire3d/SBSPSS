@@ -77,17 +77,17 @@ void CPlayerStateFall::enter(CPlayer *_player)
 void CPlayerStateFall::think(CPlayer *_player)
 {
 	const PlayerMetrics	*metrics;
-	int					control;
+	int					controlHeld;
 	DVECTOR				move;
 
 	metrics=getPlayerMetrics(_player);
-	control=getPadInput(_player);
+	controlHeld=getPadInputHeld(_player);
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}
@@ -96,11 +96,11 @@ void CPlayerStateFall::think(CPlayer *_player)
 		slowdown(_player);
 	}
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
 		setState(_player,STATE_AIRATTACK);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		move.vx=0;
 		move.vy=0;
@@ -131,16 +131,16 @@ void CPlayerStateFallFar::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateFallFar::think(CPlayer *_player)
 {
-	int				control;
-	DVECTOR			move;
+	int		controlHeld;
+	DVECTOR	move;
 
-	control=getPadInput(_player);
+	controlHeld=getPadInputHeld(_player);
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}

@@ -99,6 +99,8 @@ m_animFrame=0;
 	m_cameraOffsetTarget.vy=0;
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
+
+	m_lastPadInput=m_padInput=0;
 }
 
 /*----------------------------------------------------------------------
@@ -120,11 +122,21 @@ void	CPlayer::shutdown()
   ---------------------------------------------------------------------- */
 DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
 int psize=0;
+int newmode=-1;
 void	CPlayer::think(int _frames)
 {
 	int	i;
 	
 	CThing::think(_frames);
+
+
+if(newmode!=-1)
+{
+	setMode((PLAYER_MODE)newmode);
+	newmode=-1;
+}
+
+
 
 #ifndef __USER_paul__
 	int	padInput=PadGetHeld(0);
@@ -140,6 +152,7 @@ void	CPlayer::think(int _frames)
 	for(i=0;i<_frames;i++)
 	{
 		// Think
+		updatePadInput();
 		m_currentStateClass->think(this);
 
 		// Horizontal movement
@@ -397,9 +410,13 @@ DVECTOR CPlayer::getPlayerPos()
 {
 	return Pos;
 }
-int CPlayer::getPadInput()
+int CPlayer::getPadInputHeld()
 {
-	return PadGetHeld(0);
+	return m_padInput;
+}
+int CPlayer::getPadInputDown()
+{
+	return m_padInputDown;
 }
 
 
@@ -429,7 +446,6 @@ int CPlayer::isOnSolidGround()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-
 void CPlayer::moveLeft()
 {
 	const PlayerMetrics	*metrics;
@@ -490,6 +506,32 @@ void CPlayer::jump()
 }
 void CPlayer::fall()
 {
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::updatePadInput()
+{
+	m_lastPadInput=m_padInput;
+	m_padInput=readPadInput();
+	m_padInputDown=m_padInput&(m_lastPadInput^-1);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayer::readPadInput()
+{
+	return PadGetHeld(0);
 }
 
 

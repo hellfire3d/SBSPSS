@@ -216,9 +216,21 @@ DVECTOR CPlayerState::getPlayerPos(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayerState::getPadInput(CPlayer *_player)
+int CPlayerState::getPadInputHeld(CPlayer *_player)
 {
-	return _player->getPadInput();
+	return _player->getPadInputHeld();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayerState::getPadInputDown(CPlayer *_player)
+{
+	return _player->getPadInputDown();
 }
 
 

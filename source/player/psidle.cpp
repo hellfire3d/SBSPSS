@@ -58,19 +58,6 @@
 	Vars
 	---- */
 
-CPlayerStateIdle::IdleAnims	CPlayerStateIdle::s_idleAnims[]=
-{
-	//	start frame						loop frame						end frame						loop count
-//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								4	},
-//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								10	},
-//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC03,	-1,								3	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBOOTS,		-1,								4	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								10	},
-	{	-1,								ANIM_PLAYER_ANIM_WAKEUP,		-1,								1	},
-};
-int CPlayerStateIdle::s_numIdleAnims=sizeof(CPlayerStateIdle::s_idleAnims)/sizeof(CPlayerStateIdle::IdleAnims);
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -95,27 +82,28 @@ void CPlayerStateIdle::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateIdle::think(CPlayer *_player)
 {
-	int	control;
-	control=getPadInput(_player);
+	int	controlDown,controlHeld;
+	controlDown=getPadInputDown(_player);
+	controlHeld=getPadInputHeld(_player);
 	
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
 		setNextIdleAnim(_player);
 	}
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	if(controlDown&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
 	{
 		setState(_player,STATE_JUMP);
 	}
-	else if(control&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
+	else if(controlHeld&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
 	{
 		setState(_player,STATE_RUN);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
 		setState(_player,STATE_ATTACK);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		setState(_player,STATE_DUCK);
 	}
@@ -131,9 +119,9 @@ void CPlayerStateIdle::think(CPlayer *_player)
 void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 {
 	IdleAnims	*anims;
-	int			finished=false;
+	int				finished=false;
 
-	anims=&s_idleAnims[m_currentIdleAnim];
+	anims=getIdleAnimsDb(m_currentIdleAnim);
 	switch(m_animState)
 	{
 		case ANIMSTATE_START:
@@ -172,14 +160,14 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 		}
 		else
 		{
-			if(s_numIdleAnims)
+			if(getNumIdleAnims()>1)
 			{
 				// Randomly choose the next anim to run
 				int lastAnim;
 				lastAnim=m_currentIdleAnim;
 				do
 				{
-					m_currentIdleAnim=getRndRange(s_numIdleAnims);
+					m_currentIdleAnim=getRndRange(getNumIdleAnims());
 				}while(m_currentIdleAnim==lastAnim);
 			}
 			else
@@ -189,7 +177,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 		}
 
 		// Start playing the anim
-		anims=&s_idleAnims[m_currentIdleAnim];
+		anims=getIdleAnimsDb(m_currentIdleAnim);
 		if(anims->m_startFrame==-1)
 		{
 			// No start anim - go straight into loop
@@ -208,6 +196,54 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 		m_idleTime++;
 	}
 
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static IdleAnims s_unarmedIdleAnims[]=
+{
+	//	start frame						loop frame						end frame						loop count
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBOOTS,		-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								10	},
+	{	-1,								ANIM_PLAYER_ANIM_WAKEUP,		-1,								1	},
+};
+static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
+IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
+{
+	ASSERT(_animNo<getNumIdleAnims());
+	return &s_unarmedIdleAnims[_animNo];
+}
+int CPlayerStateUnarmedIdle::getNumIdleAnims()
+{
+	return s_numUnarmedIdleAnims;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static IdleAnims s_coralBlowerIdleAnims[]=
+{
+	//	start frame						loop frame						end frame						loop count
+	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								1	},
+};
+static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
+IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)
+{
+	ASSERT(_animNo<getNumIdleAnims());
+	return &s_coralBlowerIdleAnims[_animNo];
+}
+int CPlayerStateCoralBlowerIdle::getNumIdleAnims()
+{
+	return s_numCoralBlowerIdleAnims;
 }
 
 

@@ -90,14 +90,14 @@ void CPlayerStateChop::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateRunChop::think(CPlayer *_player)
 {
-	int	control;
-	control=getPadInput(_player);
+	int	controlHeld;
+	controlHeld=getPadInputHeld(_player);
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}
@@ -128,14 +128,14 @@ void CPlayerStateRunChop::think(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateAirChop::think(CPlayer *_player)
 {
-	int	control;
-	control=getPadInput(_player);
+	int	controlHeld;
+	controlHeld=getPadInputHeld(_player);
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
 	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
 	{
 		moveRight(_player);
 	}
