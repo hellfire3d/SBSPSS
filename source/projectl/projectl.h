@@ -55,6 +55,7 @@ public:
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
 	void				shutdown();
 	void				think(int _frames);
+	bool				alwaysThink()											{return(true);}
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setMovementType( PROJECTILE_MOVEMENT_TYPE moveType );
