@@ -1703,6 +1703,14 @@ SOURCE=..\..\..\source\player\psbutt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pscart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pscart.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\psduck.cpp
 # End Source File
 # Begin Source File
@@ -1793,6 +1801,14 @@ SOURCE=..\..\..\source\player\pmbubble.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pmbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmcart.h
 # End Source File
 # Begin Source File
 

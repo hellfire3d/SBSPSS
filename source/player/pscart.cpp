@@ -85,6 +85,10 @@ void CPlayerStateCart::think(CPlayerModeBase *_playerMode)
 {
 	int controlDown;
 
+	if ( _playerMode->advanceAnimFrameAndCheckForEndOfAnim() )
+	{
+		_playerMode->setAnimNo( ANIM_SPONGEBOB_IDLEBREATH );
+	}
 	controlDown=_playerMode->getPadInputDown();
 
 	if(controlDown&PI_JUMP)

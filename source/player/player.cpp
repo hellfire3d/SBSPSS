@@ -65,6 +65,10 @@
 #include "player\pmjelly.h"
 #endif
 
+#ifndef __PLAYER_PMCART_H__
+#include "player\pmcart.h"
+#endif
+
 #ifndef __GFX_FONT_H__
 #include "gfx\font.h"
 #endif
@@ -212,6 +216,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"JELLY LAUNCHER",
 	"DEAD",
 	"FLY",
+	"CART",
 };
 #endif
 
@@ -232,6 +237,7 @@ CPlayerModeCoralBlower		PLAYERMODECORALBLOWER;
 CPlayerModeJellyLauncher	PLAYERMODEJELLYLAUNCHER;
 CPlayerModeDead				PLAYERMODEDEAD;
 CPlayerModeFly				PLAYERMODEFLY;
+CPlayerModeCart				PLAYERMODECART;
 
 CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 {
@@ -244,6 +250,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEJELLYLAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
+	&PLAYERMODECART,			// PLAYER_MODE_CART
 };
 
 
@@ -307,6 +314,7 @@ PLAYER_ADDONS	s_addonNumbers[NUM_PLAYERMODES]=
 	PLAYER_ADDON_JELLYLAUNCHER,					//	PLAYER_MODE_JELLY_LAUNCHER
 	NO_ADDON,									//	PLAYER_MODE_DEAD
 	NO_ADDON,									//	PLAYER_MODE_FLY
+	NO_ADDON,									//	PLAYER_MODE_CART
 };
 
 static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
@@ -730,11 +738,10 @@ if(newmode!=-1)
 	{
 		if ( ( (CNpcPlatform *) platform )->isCart() )
 		{
-			Pos.vx = platform->getPos().vx;
-			Pos.vy = platform->getPos().vy;
-
-			int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
-			Pos.vy += platformOffset;
+			if ( m_currentMode != PLAYER_MODE_CART )
+			{
+				setMode( PLAYER_MODE_CART );
+			}
 		}
 		else
 		{
@@ -811,6 +818,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 					PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER,
 					-1,						// PLAYER_MODE_DEAD,
 					-1,						// PLAYER_MODE_FLY,
+					-1,						// PLAYER_MODE_CART,
 				};
 
 				int	pickupToDrop;

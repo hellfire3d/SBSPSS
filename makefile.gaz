@@ -270,6 +270,7 @@ player_src :=		demoplay \
 					pmfly \
 					pmjelly \
 					pmnet \
+					pmcart \
 					psbutt \
 					pslook \
 					psduck \
@@ -279,7 +280,8 @@ player_src :=		demoplay \
 					psjmpbck \
 					psjump \
 					psrun \
-					psspring
+					psspring \
+					pscart
 
 script_src :=		script \
 					function

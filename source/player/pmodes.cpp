@@ -70,6 +70,10 @@
 #include "player\psspring.h"
 #endif
 
+#ifndef __PLAYER_PSCART_H__
+#include "player\pscart.h"
+#endif
+
 #ifndef __PLATFORM_PLATFORM_H__
 #include "platform\platform.h"
 #endif
@@ -122,6 +126,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateLookDown,						// STATE_LOOKDOWN
 	&s_stateLookDownRelax,					// STATE_LOOKDOWNRELAX
 	&s_stateJumpBack,						// STATE_JUMPBACK
+	&s_stateCart,							// STATE_CART
 };
 
 static	PlayerMetrics	s_playerMetrics=
@@ -199,19 +204,7 @@ void	CPlayerModeBase::think()
 {
 	getStateTable()[m_currentState]->think(this);
 	thinkVerticalMovement();
-
-	if ( m_player->isOnPlatform() )
-	{
-		CNpcPlatform *platform = (CNpcPlatform *) m_player->isOnPlatform();
-		if ( !platform->isCart() )
-		{
-			thinkHorizontalMovement();
-		}
-	}
-	else
-	{
-		thinkHorizontalMovement();
-	}
+	thinkHorizontalMovement();
 
 	// Teeter if on an edge
 	if(canTeeter()&&isOnEdge())
@@ -634,18 +627,6 @@ int		CPlayerModeBase::slowdown()
 }
 void	CPlayerModeBase::jump()
 {
-	CNpcPlatform *platform;
-	platform = (CNpcPlatform *) m_player->isOnPlatform();
-	if(platform)
-	{
-		if ( platform->isCart() )
-		{
-			platform->jump();
-
-			return;
-		}
-	}
-
 	DVECTOR				moveVel;
 	moveVel=*m_player->getMoveVelocity();
 	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;

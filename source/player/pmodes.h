@@ -158,6 +158,7 @@ public:
 	int							canMoveRight();
 	virtual void				setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 	virtual void				getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h);
+	CPlayer						*getPlayer()							{ return( m_player ); }
 
 	int							getIsInWater()							{return m_player->getIsInWater();}
 	int							getIsHealthFullSoICanStopSoakingUp()	{return m_player->getIsHealthFullSoICanStopSoakingUp();}
