@@ -499,10 +499,16 @@ void	CThing::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#if defined (__USER_paul__) || defined (__USER_charles__)
-int showthings=true;
+#if		!defined(__USER_CDBUILD__)
 #include "gfx\prim.h"
 #include "level\level.h"
+
+	#if defined (__USER_paul__) || defined (__USER_charles__)
+	int showthings=true;
+	#else
+	int showthings=false;
+	#endif
+
 void	CThing::render()
 {
 	if(showthings)
@@ -517,8 +523,7 @@ void	CThing::render()
 		area.x2-=ofs.vx;
 		area.y2-=ofs.vy;
 
-		if(area.x1<=511&&area.x2>=0&&
-		   area.y1<=255&&area.y2>=0)
+		if(area.x1<=511&&area.x2>=0 && area.y1<=255&&area.y2>=0)
 		{
 			DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
 			DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
