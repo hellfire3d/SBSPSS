@@ -34,6 +34,14 @@
 #include "utils\utils.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -68,13 +76,17 @@ char				*s_mem[3];
   ---------------------------------------------------------------------- */
 void CPaulScene::init()
 {
-	setActiveDbgChannels(DC_PAUL);
-	PAUL_DBGMSG("this is a message..");
-	PAUL_DBGMSG("this is a message.. 2");
-	PAUL_DBGMSG("this is a message.. 3");
-
 	s_fontBank.initialise(&standardFont);
+	CSoundMediator::initialise();
 
+	CSoundMediator::setSong(CSoundMediator::DROPPOP);
+//	CSoundMediator::playSong();
+
+	CSoundMediator::setSfxBank(CSoundMediator::INGAME);
+
+
+//CXAStream::Init();
+	PAUL_DBGMSG("initialised..");
 }
 
 
@@ -116,34 +128,75 @@ void CPaulScene::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int trashoff=-1;
-int trash=false;
+int psfx=3;
+#include "sound\speech.h"
+int mvol=10;
+int svol=255;
+
 void CPaulScene::think()
 {
-//	static int	arse=0;
-//	PAUL_DBGMSG("%d\n",arse++);
-//	ASSERT(arse<100);
+	int				pad;
+	int				sfxId=-1;
+	int				setVolumes=false;
 
-	int	i;
-	int	size[3];
-
-	for(i=0;i<3;i++)
+	pad=PadGetDown(0);
+	if(pad&PAD_CROSS)
 	{
-		size[i]=32763;//getRndRange(32768);
-		s_mem[i]=MemAlloc(size[i],"Test");
+		sfxId=psfx;
 	}
-	PAUL_DBGMSG("%d %d %d",size[0],size[1],size[2]);
-
-	if(trash)
+	else if(pad&PAD_SQUARE)
 	{
-		*(s_mem[0]+trashoff)=123;
-		trash=false;
+		sfxId=0;
+	}
+	else if(pad&PAD_TRIANGLE)
+	{
+		sfxId=1;
+	}
+	else if(pad&PAD_CIRCLE)
+	{
+		sfxId=2;
+	}
+	if(sfxId!=-1)
+	{
+		CSoundMediator::playSfx(sfxId);
+//		PAUL_DBGMSG("---- sfx %d",sfxId);
+		//CSoundMediator::playSpeech(speechId);
+//		CXAStream::Stop();
+//		CXAStream::PlaySpeech(speechId,true);
+//		PAUL_DBGMSG("----- playing speech %d",speechId);
+	}
+//	CXAStream::SetVolume(32700,32700);
+
+
+	pad=PadGetHeld(0);
+	if(pad&PAD_UP)
+	{
+		if(++mvol>CSoundMediator::MAX_VOLUME)mvol=CSoundMediator::MAX_VOLUME;
+		setVolumes=true;
+	}
+	if(pad&PAD_DOWN)
+	{
+		if(--mvol<CSoundMediator::MIN_VOLUME)mvol=CSoundMediator::MIN_VOLUME;
+		setVolumes=true;
+	}
+	if(pad&PAD_RIGHT)
+	{
+		if(++svol>CSoundMediator::MAX_VOLUME)svol=CSoundMediator::MAX_VOLUME;
+		setVolumes=true;
+	}
+	if(pad&PAD_LEFT)
+	{
+		if(--svol<CSoundMediator::MIN_VOLUME)svol=CSoundMediator::MIN_VOLUME;
+		setVolumes=true;
+	}
+	if(setVolumes)
+	{
+		CSoundMediator::setVolume(CSoundMediator::SONG,mvol);
+		CSoundMediator::setVolume(CSoundMediator::SFX,svol);
 	}
 
-	for(i=0;i<3;i++)
-	{
-		MemFree(s_mem[i]);
-	}
+	CSoundMediator::think(GameState::getTimeSinceLast());
+//CXAStream::ControlXA();
 }
 
 

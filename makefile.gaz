@@ -74,15 +74,17 @@ pad_src :=			pads
 
 paul_src :=			paul
 
-# sound_src :=		sndbank \
-#					music \
-#					cdxa
+sound_src :=		sound \
+					spu \
+					xmplay \
+					cdxa
 
 system_src :=		main \
 					gstate \
 					vid \
 					dbg \
-					vsprintf
+					vsprintf \
+					clickcount
 
 utils_src :=		utils \
 					sincos

@@ -15,12 +15,18 @@
 #include "system\global.h"
 #include "system\gstate.h"
 
+#ifndef __SYSTEM_CLICKCOUNT_H__
+#include "system\clickcount.h"
+#endif
+
+
 
 /*****************************************************************************/
 static CScene	*s_currentScene;
 static CScene	*s_pendingScene;
 
 int		GameState::s_timeSinceLast;
+static	CClickCount	s_clickCounter;
 
 
 /*****************************************************************************/
@@ -88,8 +94,15 @@ CScene * GameState::getCurrentScene()
 }
 
 /*****************************************************************************/
+static int s_timeSpeed = ONE;
 void GameState::updateTimer()
 {
+	s_timeSinceLast = (s_clickCounter.timeSinceLast() * s_timeSpeed) >> 12;
+	
+	if (s_timeSinceLast > 4 * 4096)
+	{
+		s_timeSinceLast = 4 * 4096;
+	}
 }
 
 

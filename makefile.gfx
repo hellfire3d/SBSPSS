@@ -120,6 +120,25 @@ GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
 #----------------------------------------------------------------------------
 # SFX
 #----------------------------------------------------------------------------
+SFX_IN_DIR :=		data/SFX
+SFX_OUT_DIR :=		$(DATA_OUT)/SFX
+
+SFX_LIST :=			ingame
+
+SFX_ALL_IN :=		$(foreach SFX,$(SFX_LIST),$(SFX_IN_DIR)/$(SFX)/$(SFX).PXM $(SFX_IN_DIR)/$(SFX)/$(SFX).VH $(SFX_IN_DIR)/$(SFX)/$(SFX).VB)
+SFX_ALL_OUT :=		$(foreach SFX,$(SFX_LIST),$(SFX_OUT_DIR)/$(SFX).PXM $(SFX_OUT_DIR)/$(SFX).VH $(SFX_OUT_DIR)/$(SFX).VB)
+
+sfx: 	$(SFX_ALL_OUT)
+
+cleansfx:
+	@$(RM) -f $(SFX_ALL_OUT)
+
+$(SFX_ALL_OUT) : $(SFX_ALL_IN)
+	$(CP) $(SFX_ALL_IN) $(SFX_OUT_DIR)
+
+GRAF_DIRS_TO_MAKE	+=	$(SFX_OUT_DIR)
+GFX_DATA_OUT		+=	$(SFX_ALL_OUT)
+
 
 #----------------------------------------------------------------------------
 #	Music
@@ -127,7 +146,7 @@ GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
 MUSIC_IN_DIR :=		data/music
 MUSIC_OUT_DIR :=	$(DATA_OUT)/music
 
-MUSIC_LIST :=		hypermmx
+MUSIC_LIST :=		hypermmx droppop
 
 MUSIC_ALL_IN :=		$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).PXM $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VH $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VB)
 MUSIC_ALL_OUT :=	$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_OUT_DIR)/$(MUSIC).PXM $(MUSIC_OUT_DIR)/$(MUSIC).VH $(MUSIC_OUT_DIR)/$(MUSIC).VB)
