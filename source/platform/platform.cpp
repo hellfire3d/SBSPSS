@@ -87,6 +87,10 @@
 #include "platform\pbranch.h"
 #endif
 
+#ifndef __PLATFORM_PCART_H__
+#include "platform\pcart.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -168,6 +172,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_BRANCH_PLATFORM:
 		{
 			platform = new ("branch platform") CNpcBranchPlatform;
+			break;
+		}
+
+		case NPC_CART_PLATFORM:
+		{
+			platform = new ("cart platform") CNpcCartPlatform;
 			break;
 		}
 
@@ -268,6 +278,8 @@ void CNpcPlatform::init()
 
 	m_lifetime = 0;
 	m_lifetimeType = m_data[m_type].lifetimeType;
+
+	m_isShuttingDown = false;
 
 	m_npcPath.initPath();
 }
