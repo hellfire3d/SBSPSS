@@ -7,10 +7,6 @@
 #include "gfx\prim.h"
 #include "fileio\fileio.h"
 
-#ifndef __SPR_UIGFX_H__
-#include <uigfx.h>
-#endif
-
 /*****************************************************************************/
 #define MaxVBFuncs 	4
 

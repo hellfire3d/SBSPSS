@@ -89,8 +89,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_UIGFX_H__
-#include <uigfx.h>
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
 #endif
 
 

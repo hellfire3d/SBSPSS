@@ -1,7 +1,7 @@
 #include	data/scripts/defs/defs.scr
 #include	data/scripts/defs/charanim.scr
 
-#include	out/usa/include/uigfx.h
+#include	out/usa/include/ingamefx.h
 
 
 /*

@@ -468,6 +468,5 @@ actors/STOMPER.SBK
 
 { SYSTEM_CACHE 4
 }
-ui/uigfx.spr
 frontend/frontend.spr
 ingamefx/ingamefx.spr

@@ -57,8 +57,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_UIGFX_H__
-#include <uigfx.h>
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
 #endif
 
 #ifndef __STRING_ENUMS__
@@ -135,7 +135,7 @@ void CConversation::init()
 		s_guiIcon->init(s_guiFrame);
 		s_guiIcon->setObjectXYWH(0,0,FRAME_HEIGHT,FRAME_HEIGHT);
 		s_guiIcon->setOt(OT_POS);
-		s_guiIcon->setSpriteBank(UI_UIGFX_SPR);
+		s_guiIcon->setSpriteBank(INGAMEFX_INGAMEFX_SPR);
 		s_guiIcon->setFrame(0);
 
 		s_guiText=new("Conversation Text") CGUITextBox();

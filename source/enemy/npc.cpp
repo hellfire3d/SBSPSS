@@ -21,10 +21,6 @@
 #include <biglump.h>
 #endif
 
-#ifndef __SPR_UIGFX_H__
-#include <uigfx.h>
-#endif
-
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
