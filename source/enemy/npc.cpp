@@ -261,6 +261,8 @@ void CNpcEnemy::init()
 
 	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 
+	m_positionHistory = NULL;
+
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
@@ -521,7 +523,26 @@ void CNpcEnemy::init()
 
 void CNpcEnemy::shutdown()
 {
+	// remove waypoints
+
 	m_npcPath.removeAllWaypoints();
+
+	// remove position history
+
+	CNpcPositionHistory *currentPosition;
+	CNpcPositionHistory *oldPosition;
+
+	currentPosition = m_positionHistory;
+
+	while( currentPosition )
+	{
+		oldPosition = currentPosition;
+		currentPosition = currentPosition->next;
+
+		delete oldPosition;
+	}
+
+	m_positionHistory = NULL;
 
 	// temporary
 	TPFree( m_actorTPage );
