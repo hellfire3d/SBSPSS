@@ -38,9 +38,6 @@ void CNpcPendulumPlatform::postInit()
 	m_heading = 1024;
 	m_lineBase.vx = Pos.vx;
 	m_lineBase.vy = 0;
-
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, boundingBox.YMin + 15 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
