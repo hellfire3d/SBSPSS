@@ -69,9 +69,13 @@ CPlayerStateSpring			s_stateSpring;
   ---------------------------------------------------------------------- */
 void CPlayerStateSpring::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
-	m_springFrames=0;
-	_playerMode->spring();
+	// If already in this state then don't do the entry code
+	if(_playerMode->getState()!=STATE_SPRINGUP)
+	{
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+		m_springFrames=0;
+		_playerMode->spring();
+	}
 }
 
 
