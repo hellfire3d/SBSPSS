@@ -234,30 +234,37 @@ struct	sLevelHdr
 //***************************************************************************
 //***************************************************************************
 // Actors
+struct	sSpriteFrameGfx
+{
+		u8			*PAKSpr;	// 4	Needs to be u32, so might as well make it a ptr
+		u16			Pad;		// 2 :o(
+		u8			W,H;		// 2
+};
+
 struct	sSpriteFrame
 {
-	u8			*PAKSpr;	// 4
-	s8			XOfs,YOfs;	// 2
-	u8			W,H;		// 2
+		u16		FrameIdx;
+		s8		XOfs,YOfs;
+
 };
 
 struct	sSpriteAnim
 {
-	u16			FrameCount;	// 2
-	u16			Pad;
-	u16			*Anim;		// 4
+	u16				FrameCount;	// 2
+	u16				Pad;
+	sSpriteFrame	*Anim;		// 4
 };
 
 struct	sSpriteAnimBank
 {
-	u16				Clut;			// 2
-	u16				AnimCount;		// 2
-	u16				FrameCount;		// 2
-	u8				MaxW,MaxH;		// 2
+	u16					Clut;			// 2
+	u16					AnimCount;		// 2
+	u16					FrameCount;		// 2
+	u8					MaxW,MaxH;		// 2
 
-	u8				*Palette;		// 4
-	sSpriteAnim		*AnimList;		// 4
-	sSpriteFrame	*FrameList;		// 4
+	u8					*Palette;		// 4
+	sSpriteAnim			*AnimList;		// 4
+	sSpriteFrameGfx		*FrameList;		// 4
 };
 
 
