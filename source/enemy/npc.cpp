@@ -332,7 +332,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_GHOST_PIRATE
-		NPC_INIT_DEFAULT,
+		NPC_INIT_GHOST_PIRATE,
 		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
 		NPC_MOVEMENT_STATIC,
 		NPC_MOVEMENT_MODIFIER_NONE,
@@ -383,7 +383,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_ANEMONE_1;
+	m_type = NPC_GHOST_PIRATE;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -397,11 +397,11 @@ void CNpc::init()
 	m_timerFunc = m_data[this->m_type].timerFunc;
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
 
+	m_controlFunc = NPC_CONTROL_MOVEMENT;
+
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
-			m_controlFunc = NPC_CONTROL_MOVEMENT;
-
 			m_npcPath.initPath();
 
 			DVECTOR newPos;
@@ -430,8 +430,10 @@ void CNpc::init()
 
 			break;
 
+		case NPC_INIT_GHOST_PIRATE:
+			m_heading = m_fireHeading = 3072;
+
 		default:
-			m_controlFunc = NPC_CONTROL_MOVEMENT;
 
 			break;
 	}

@@ -23,6 +23,10 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 
 void CNpc::processCloseGhostPirateAttack( int _frames )
 {
@@ -47,7 +51,26 @@ void CNpc::processCloseGhostPirateAttack( int _frames )
 		{
 			m_extendDir = EXTEND_DOWN;
 
-			// fire too
+			// fire
+
+			s16 heading;
+
+			CPlayer *player = GameScene.getPlayer();
+			DVECTOR playerPos = player->getPos();
+
+			if ( playerPos.vx > Pos.vx )
+			{
+				heading = 0;
+			}
+			else
+			{
+				heading = 2048;
+			}
+
+			CProjectile *projectile;
+
+			projectile = new( "test projectile" ) CProjectile;
+			projectile->init( Pos, heading );
 		}
 	}
 	else if ( m_extendDir == EXTEND_DOWN )
