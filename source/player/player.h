@@ -94,7 +94,6 @@ typedef enum
 	PLAYER_ADDON_NET,
 	PLAYER_ADDON_CORALBLOWER,
 	PLAYER_ADDON_JELLYLAUNCHER,
-	PLAYER_ADDON_GLASSES,
 	PLAYER_ADDON_BUBBLEWAND,
 	PLAYER_ADDON_JELLYFISHINNET,
 	PLAYER_ADDON_GLOVE,
@@ -372,8 +371,6 @@ private:
 		MAX_JELLFISH_IN_NET=5,
 	};
 public:
-	void			giveGlasses()							{m_glassesFlag=true;}
-	int				isWearingGlasses()						{return m_glassesFlag;}
 	void			giveSqueakyBoots()						{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
 	int				isWearingBoots()						{return m_squeakyBootsTimer;}
 	void			giveInvincibilityRing()					{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
@@ -404,7 +401,6 @@ public:
 	void			justButtBouncedABadGuy();	// Also fugly.. :/
 
 private:
-	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
 	int				m_invincibilityRingTimer;
 	int				m_divingHelmet;

@@ -55,10 +55,6 @@
 #include "pickups\pblower.h"
 #endif
 
-#ifndef	__PICKUPS_PGLASSES_H__
-#include "pickups\pglasses.h"
-#endif
-
 #ifndef	__PICKUPS_PSHOES_H__
 #include "pickups\pshoes.h"
 #endif
@@ -468,7 +464,7 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			break;
 
 		case PICKUP__GLASSES:
-			pickup=new ("GlassesPickup") CGlassesPickup();
+			ASSERT(!"GLASSES ARE NO LONGER IN THE GAME");
 			break;
 
 		case PICKUP__SQUEAKY_SHOES:

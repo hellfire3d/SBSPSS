@@ -43,7 +43,7 @@ void CNpcSmallJellyfish2BackgroundEnemy::render()
 {
 	CPlayer *player = GameScene.getPlayer();
 
-	if ( player->isWearingGlasses() )
+//	if ( player->isWearingGlasses() )		(PKG)
 	{
 		SprFrame = NULL;
 
