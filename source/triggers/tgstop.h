@@ -38,6 +38,7 @@ class CGaryStopTrigger : public CTrigger
 {
 public:
 	void				init();
+	bool				alwaysThink()							{return(true);}
 protected:
 	void				collidedWith(CThing *_thisThing);
 

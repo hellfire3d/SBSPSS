@@ -36,6 +36,8 @@
 
 class CGaryGoLeftTrigger : public CTrigger
 {
+public:
+	bool				alwaysThink()							{return(true);}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 };

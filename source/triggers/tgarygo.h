@@ -42,6 +42,7 @@ class CGaryStartTrigger : public CTrigger
 {
 public:
 	virtual void		setGary( CNpcGaryFriend *gary )			{m_gary = gary;}
+	bool				alwaysThink()							{return(true);}
 
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
