@@ -28,7 +28,9 @@ void	CBubbleEmitterTrigger::think(int _frames)
 
 	if ( m_timer <= 0 )
 	{
+#ifndef __USER_paul__
 		CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, Pos );
+#endif
 
 		m_timer = GameState::getOneSecondInFrames() >> 2;
 	}
