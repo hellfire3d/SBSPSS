@@ -86,7 +86,7 @@ typedef enum
 	#define SYSTEM_DBGMSG						__DBGMSG(DC_SYSTEM)
 	#define SOUND_DBGMSG						__DBGMSG(DC_SOUND)
 	#define GUI_DBGMSG							__DBGMSG(DC_GUI)
-	#define MEMCARD_MSG							__DBGMSG(DC_MEMCARD)
+	#define MEMCARD_DBGMSG						__DBGMSG(DC_MEMCARD)
 
 	#define setActiveDbgChannels(_channelFlags)	__setActiveDbgChannels(_channelFlags)
 	#define getActiveDbgChannels()				__getActiveDbgChannels()
