@@ -28,7 +28,7 @@
 #endif
 
 
-void CNpc::processFlyingDutchmanMovement( int _frames )
+void CNpcEnemy::processFlyingDutchmanMovement( int _frames )
 {
 	if ( m_movementTimer > 0 )
 	{
@@ -69,7 +69,7 @@ void CNpc::processFlyingDutchmanMovement( int _frames )
 	}
 }
 
-void CNpc::processCloseFlyingDutchmanAttack( int _frames )
+void CNpcEnemy::processCloseFlyingDutchmanAttack( int _frames )
 {
 	if ( playerYDist > 0 )
 	{

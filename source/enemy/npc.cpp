@@ -45,16 +45,175 @@
 #include "game\convo.h"
 #endif
 
+#include "Gfx\Skel.h"
+#include "gfx\anim.h"
 
-s32 CNpc::playerXDist;
-s32 CNpc::playerYDist;
-s32 CNpc::playerXDistSqr;
-s32 CNpc::playerYDistSqr;
-class CLayerCollision	*CNpc::m_layerCollision;
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
 
-void CNpc::init()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Friend NPCs
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class CLayerCollision	*CNpcFriend::m_layerCollision;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFriend::init()
+{
+	CNpcThing::init();
+
+	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+	m_skel.Init(Hdr);
+	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
+	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
+
+	Pos.vx = 100;
+	Pos.vy = 100;
+
+	m_extension = EXTEND_RIGHT;
+
+	// temporary
+	m_animNo = 0;
+	m_frame = 0;
+
+	m_type = NPC_FRIEND_GARY;
+
+	//m_spriteBank=new ("enemy sprites") SpriteBank();
+	//m_spriteBank->load(UI_UIGFX_SPR);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFriend::shutdown()
+{
+	//m_spriteBank->dump();		delete m_spriteBank;
+
+	CNpcThing::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFriend::think(int _frames)
+{
+	CNpcThing::think(_frames);
+
+	switch( m_data[m_type].movementFunc )
+	{
+		case NPC_FRIEND_MOVEMENT_GARY:
+			processGaryMovement( _frames );
+
+			break;
+
+		case NPC_FRIEND_MOVEMENT_STATIC:
+		default:
+			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFriend::render()
+{
+	CNpcThing::render();
+
+	// Render
+	DVECTOR renderPos;
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	renderPos.vx = ( Pos.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
+	renderPos.vy = ( Pos.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
+
+	m_skel.setPos( renderPos );
+	m_skel.setFrame(m_frame);
+	m_skel.setAnimNo(m_animNo);
+	m_skel.Animate(this);
+	m_skel.Render(this);
+
+	/*s32		x,y;
+	s32		scrnWidth = VidGetScrW();
+	s32		scrnHeight = VidGetScrH();
+	s32		spriteWidth = m_spriteBank->getFrameWidth(FRM_BARNACLEBOY);
+	s32		spriteHeight = m_spriteBank->getFrameHeight(FRM_BARNACLEBOY);
+
+	x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
+	y = Pos.vy - offset.vy - ( spriteHeight >> 1 );
+
+	//if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
+	//{
+		//return;
+	//}
+
+	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);*/
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFriend::processEvent( GAME_EVENT evt, CThing *sourceThing )
+{
+	switch( evt )
+	{
+		case USER_REQUEST_TALK_EVENT:
+		{
+			if ( m_data[this->m_type].canTalk )
+			{
+				DVECTOR sourcePos;
+				s32 xDiffSqr, yDiffSqr;
+
+				// check talk distance
+
+				sourcePos = sourceThing->getPos();
+
+				xDiffSqr = this->Pos.vx - sourcePos.vx;
+				xDiffSqr *= xDiffSqr;
+
+				yDiffSqr = this->Pos.vy - sourcePos.vy;
+				yDiffSqr *= yDiffSqr;
+
+				if ( xDiffSqr + yDiffSqr < 10000 )
+				{
+					if( !CConversation::isActive() )
+					{
+						CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
+					}
+				}
+			}
+
+			break;
+		}
+
+		default:
+			// ignore
+
+			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Enemy NPCs
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+s32 CNpcEnemy::playerXDist;
+s32 CNpcEnemy::playerYDist;
+s32 CNpcEnemy::playerXDistSqr;
+s32 CNpcEnemy::playerYDistSqr;
+class CLayerCollision	*CNpcEnemy::m_layerCollision;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::init()
 {
 	CEnemyThing::init();
+
+	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+	m_skel.Init(Hdr);
+	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
+	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
+
+	// temporary
+	m_animNo = 0;
+	m_frame = 0;
 
 	m_type = NPC_CIRCULAR_PLATFORM;
 
@@ -278,16 +437,18 @@ m_npcPath.initPath();
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpc::shutdown()
+void CNpcEnemy::shutdown()
 {
 	m_npcPath.removeAllWaypoints();
 
 	CEnemyThing::shutdown();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpc::think(int _frames)
+void CNpcEnemy::think(int _frames)
 {
 	CEnemyThing::think(_frames);
 
@@ -333,8 +494,9 @@ void CNpc::think(int _frames)
 	processTimer(_frames);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpc::detectCollisionWithPlayer()
+void CNpcEnemy::detectCollisionWithPlayer()
 {
 	if ( m_data[m_type].detectCollision && playerXDistSqr + playerYDistSqr < 400 )
 	{
@@ -345,8 +507,9 @@ void CNpc::detectCollisionWithPlayer()
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpc::processSensor()
+bool CNpcEnemy::processSensor()
 {
 	switch( m_sensorFunc )
 	{
@@ -650,7 +813,9 @@ bool CNpc::processSensor()
 	}
 }
 
-void CNpc::processMovement(int _frames)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processMovement(int _frames)
 {
 	if ( _frames > 2 )
 	{
@@ -738,13 +903,6 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
-		case NPC_MOVEMENT_GARY:
-		{
-			processGaryMovement( _frames );
-		}
-
-		break;
-
 		default:
 
 			break;
@@ -753,7 +911,9 @@ void CNpc::processMovement(int _frames)
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }
 
-void CNpc::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange)
 {
 	switch( m_data[m_type].movementModifierFunc )
 	{
@@ -793,11 +953,15 @@ void CNpc::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, 
 	}
 }
 
-void CNpc::processShot()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processShot()
 {
 }
 
-void CNpc::processClose(int _frames)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processClose(int _frames)
 {
 	switch( m_data[this->m_type].closeFunc )
 	{
@@ -908,7 +1072,9 @@ void CNpc::processClose(int _frames)
 	}
 }
 
-void CNpc::processCollision()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processCollision()
 {
 	CPlayer *player = GameScene.getPlayer();
 
@@ -917,7 +1083,9 @@ void CNpc::processCollision()
 	m_controlFunc = m_oldControlFunc;
 }
 
-void CNpc::processTimer(int _frames)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processTimer(int _frames)
 {
 	if ( m_timerTimer > 0 )
 	{
@@ -948,12 +1116,29 @@ void CNpc::processTimer(int _frames)
 	}
 }
 
-void CNpc::render()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::render()
 {
 	CEnemyThing::render();
+
+	// Render
+	DVECTOR renderPos;
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	renderPos.vx = ( Pos.vx - offset.vx ) * 20;
+	renderPos.vy = ( Pos.vy - offset.vy ) * 20;
+
+	m_skel.setPos( renderPos );
+	m_skel.setFrame(m_frame);
+	m_skel.setAnimNo(m_animNo);
+	m_skel.Animate(this);
+	m_skel.Render(this);
 }
 
-void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 {
 	switch( evt )
 	{

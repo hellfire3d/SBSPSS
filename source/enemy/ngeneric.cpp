@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed )
+void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed )
 {
 	s16 decDir, incDir, moveDist;
 	s32 moveX, moveY;
@@ -83,7 +83,7 @@ void CNpc::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 spee
 	Pos.vy += moveY;
 }
 
-void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
+void CNpcEnemy::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 {
 	s32 moveX = 0, moveY = 0;
 
@@ -99,7 +99,7 @@ void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 	*distY = playerPos.vy - this->Pos.vy;
 }
 
-bool CNpc::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
+bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 {
 	bool xBlocked = false;
 	bool yBlocked = false;
@@ -153,7 +153,7 @@ bool CNpc::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 	return( xBlocked | yBlocked );
 }
 
-void CNpc::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
+void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
 {
 	bool pathComplete;
 	bool waypointChange;
@@ -226,7 +226,7 @@ void CNpc::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32
 	}
 }
 
-void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
+void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 {
 	s32 maxHeight = 10;
 	s32 distX, distY;
@@ -295,7 +295,7 @@ void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 	}
 }
 
-void CNpc::processGenericCircularPath( int _frames )
+void CNpcEnemy::processGenericCircularPath( int _frames )
 {
 	m_rotation += m_data[m_type].speed;
 	m_rotation %= 4096;
@@ -305,7 +305,7 @@ void CNpc::processGenericCircularPath( int _frames )
 }
 
 
-bool CNpc::isCollisionWithGround()
+bool CNpcEnemy::isCollisionWithGround()
 {
 	ASSERT(m_layerCollision);
 	return m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + 1 ) >> 4 ) ? 16:0;

@@ -30,17 +30,87 @@
 #include "player\player.h"
 #endif
 
+// temporary
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
 /*****************************************************************************/
 
-class	CNpc : public CEnemyThing
+class	CNpcFriend : public CNpcThing
+{
+public:
+	enum NPC_FRIEND_UNIT_TYPE
+	{
+		NPC_FRIEND_SANDY_CHEEKS = 0,
+		NPC_FRIEND_GARY = 1,
+		NPC_FRIEND_UNIT_TYPE_MAX,
+	};
+
+	void				init();
+	void				shutdown();
+	void				think(int _frames);
+	virtual void		render();
+	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+
+protected:
+	enum NPC_FRIEND_MOVEMENT_FUNC
+	{
+		NPC_FRIEND_MOVEMENT_STATIC = 0,
+		NPC_FRIEND_MOVEMENT_GARY = 1,
+	};
+
+	typedef struct NPC_FRIEND_DATA_TYPE
+	{
+		//NPC_FRIEND_INIT_FUNC					initFunc;
+		//NPC_FRIEND_SENSOR_FUNC					sensorFunc;
+		NPC_FRIEND_MOVEMENT_FUNC				movementFunc;
+		//NPC_FRIEND_MOVEMENT_MODIFIER_FUNC		movementModifierFunc;
+		//NPC_FRIEND_CLOSE_FUNC					closeFunc;
+		//NPC_FRIEND_TIMER_FUNC					timerFunc;
+		bool							canTalk;
+		u8								speed;
+		u16								turnSpeed;
+		bool							detectCollision;
+		DAMAGE_TYPE						damageToUserType;
+	}
+	NPC_FRIEND_DATA;
+
+	// gary functions
+
+	void				processGaryMovement( int _frames );
+
+	// data
+
+	static NPC_FRIEND_DATA		m_data[NPC_FRIEND_UNIT_TYPE_MAX];
+
+	static class CLayerCollision	*m_layerCollision;
+	//class SpriteBank	*m_spriteBank;
+
+	enum
+	{
+		EXTEND_RIGHT = true,
+		EXTEND_LEFT = false,
+	};
+
+	// internal variables
+	
+	NPC_FRIEND_UNIT_TYPE		m_type;
+	s32							m_extension;
+
+	int				m_frame;
+	int				m_animNo;
+	CSkel			m_skel;
+};
+
+class	CNpcEnemy : public CEnemyThing
 {
 public:
 	enum NPC_UNIT_TYPE
 	{
-		NPC_SANDY_CHEEKS = 0,
-		NPC_GARY = 1,
-		NPC_FALLING_ITEM,
-		NPC_FISH_HOOK,
+		NPC_FALLING_ITEM = 0,
+		NPC_FISH_HOOK = 1,
 		NPC_DUST_DEVIL,
 		NPC_PENDULUM,
 		NPC_FIREBALL,
@@ -182,7 +252,6 @@ protected:
 		NPC_MOVEMENT_FIREBALL,
 		NPC_MOVEMENT_RETURNING_HAZARD,
 		NPC_MOVEMENT_CLAM_RETRACT,
-		NPC_MOVEMENT_GARY,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -371,10 +440,6 @@ protected:
 	void				processFireballMovement( int _frames );
 	void				processReturningHazardMovement( int _frames );
 
-	// gary functions
-
-	void				processGaryMovement( int _frames );
-
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -407,6 +472,10 @@ protected:
 	DVECTOR				m_base;
 	u8					m_state;
 	u8					m_salvoCount;
+
+	int				m_frame;
+	int				m_animNo;
+	CSkel			m_skel;
 };
 
 

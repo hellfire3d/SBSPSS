@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseSkullStomperAttack( int _frames )
+void CNpcEnemy::processCloseSkullStomperAttack( int _frames )
 {
 	s8 groundHeight;
 	s8 yMovement;

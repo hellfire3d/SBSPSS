@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange )
+void CNpcEnemy::processBabyOctopusMovementModifier( int _frames, s32 dist, s16 headingChange )
 {
 	s32 newX, newY;
 	s32 preShiftX, preShiftY;

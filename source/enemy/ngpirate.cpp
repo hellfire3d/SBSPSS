@@ -28,7 +28,7 @@
 #endif
 
 
-void CNpc::processCloseGhostPirateAttack( int _frames )
+void CNpcEnemy::processCloseGhostPirateAttack( int _frames )
 {
 	s32 velocity;
 

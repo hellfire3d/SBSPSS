@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processMotherJellyfishMovement( int _frames )
+void CNpcEnemy::processMotherJellyfishMovement( int _frames )
 {
 	s32 xDist, yDist;
 	s32 xDistSqr, yDistSqr;
@@ -106,7 +106,7 @@ void CNpc::processMotherJellyfishMovement( int _frames )
 	}
 }
 
-void CNpc::processCloseMotherJellyfishAttack( int _frames )
+void CNpcEnemy::processCloseMotherJellyfishAttack( int _frames )
 {
 	// seek position above user
 

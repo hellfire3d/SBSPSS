@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseBoogerMonsterAttack( int _frames )
+void CNpcEnemy::processCloseBoogerMonsterAttack( int _frames )
 {
 	s32 velocity;
 

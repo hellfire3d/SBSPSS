@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseSkeletalFishAttack( int _frames )
+void CNpcEnemy::processCloseSkeletalFishAttack( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;

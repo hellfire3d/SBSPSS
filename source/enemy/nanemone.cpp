@@ -28,7 +28,7 @@
 #endif
 
 
-void CNpc::processCloseAnemone1Attack( int _frames )
+void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;
@@ -121,7 +121,7 @@ void CNpc::processCloseAnemone1Attack( int _frames )
 	}
 }
 
-void CNpc::processCloseAnemone2Attack( int _frames )
+void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 {
 	int fireLoop;
 	CProjectile *projectile;
@@ -142,7 +142,7 @@ void CNpc::processCloseAnemone2Attack( int _frames )
 	m_sensorFunc = NPC_SENSOR_NONE;
 }
 
-void CNpc::processCloseAnemone3Attack( int _frames )
+void CNpcEnemy::processCloseAnemone3Attack( int _frames )
 {
 	CProjectile *projectile;
 	u8 lifetime = 8;

@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseClamAttack( int _frames )
+void CNpcEnemy::processCloseClamAttack( int _frames )
 {
 	s32 velocity;
 
@@ -77,7 +77,7 @@ void CNpc::processCloseClamAttack( int _frames )
 	}
 }
 
-void CNpc::processClamRetract( int _frames )
+void CNpcEnemy::processClamRetract( int _frames )
 {
 	s32 velocity;
 

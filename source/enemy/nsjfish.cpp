@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
+void CNpcEnemy::processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
 	s32 newX, newY;
 	s32 preShiftX, preShiftY;
@@ -100,7 +100,7 @@ void CNpc::processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 di
 	Pos.vy += newY;
 }
 
-void CNpc::processCloseSmallJellyfishEvade( int _frames )
+void CNpcEnemy::processCloseSmallJellyfishEvade( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 

@@ -27,7 +27,7 @@
 #include "projectl\projectl.h"
 #endif
 
-void CNpc::processIronDogfishMovement( int _frames )
+void CNpcEnemy::processIronDogfishMovement( int _frames )
 {
 	if ( m_movementTimer > 0 )
 	{
@@ -68,7 +68,7 @@ void CNpc::processIronDogfishMovement( int _frames )
 	}
 }
 
-void CNpc::processStandardIronDogfishAttack( int _frames )
+void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
 {
 	if ( playerXDist > 0 )
 	{
@@ -141,7 +141,7 @@ void CNpc::processStandardIronDogfishAttack( int _frames )
 	}
 }
 
-void CNpc::processCloseIronDogfishAttack( int _frames )
+void CNpcEnemy::processCloseIronDogfishAttack( int _frames )
 {
 	// swipe at player
 

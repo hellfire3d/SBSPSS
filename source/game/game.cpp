@@ -100,8 +100,8 @@ void 	CGameScene::init()
 		Level.init();
 
 #ifdef __USER_charles__		
-		C2dEnemy	*enemy;
-		enemy=new ("test enemy") C2dEnemy;
+		CNpcFriend	*enemy;
+		enemy=new ("test enemy") CNpcFriend;
 		enemy->init();
 		enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif

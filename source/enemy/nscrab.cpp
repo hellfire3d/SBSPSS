@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseSpiderCrabAttack( int _frames )
+void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 {
 	s32 velocity;
 	DVECTOR newPos = Pos;

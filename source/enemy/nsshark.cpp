@@ -27,7 +27,7 @@
 #include "projectl\projectl.h"
 #endif
 
-void CNpc::processSubSharkMovement( int _frames )
+void CNpcEnemy::processSubSharkMovement( int _frames )
 {
 	if ( m_timerTimer <= 0 )
 	{
@@ -84,7 +84,7 @@ void CNpc::processSubSharkMovement( int _frames )
 	}
 }
 
-void CNpc::processCloseSubSharkAttack( int _frames )
+void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 {
 	if ( playerXDist > 0 )
 	{

@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processFishFolkMovementModifier( int _frames, s32 distX, s32 distY )
+void CNpcEnemy::processFishFolkMovementModifier( int _frames, s32 distX, s32 distY )
 {
 	Pos.vy += distY;
 

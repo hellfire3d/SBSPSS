@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseFlamingSkullAttack( int _frames )
+void CNpcEnemy::processCloseFlamingSkullAttack( int _frames )
 {
 	s32 distX, distY;
 	s32 distXSqr, distYSqr;

@@ -24,7 +24,7 @@
 #endif
 
 
-void CNpc::processCloseSharkManAttack( int _frames )
+void CNpcEnemy::processCloseSharkManAttack( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 	s32 groundHeight;

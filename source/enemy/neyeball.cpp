@@ -28,7 +28,7 @@
 #endif
 
 
-void CNpc::processCloseEyeballAttack( int _frames )
+void CNpcEnemy::processCloseEyeballAttack( int _frames )
 {
 	if ( Next )
 	{
