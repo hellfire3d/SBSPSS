@@ -98,6 +98,7 @@ void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->zeroMoveVelocity();	
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_GETUP);
+	_playerMode->setPlayerCollisionSize(0,-10,60,20);
 }
 
 

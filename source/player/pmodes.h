@@ -84,6 +84,8 @@ public:
 	virtual void	think()								{;}
 	virtual void	render(DVECTOR *_pos)				{;}
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
+	virtual int		canDoLookAround()					{return false;}
+
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
@@ -112,7 +114,8 @@ public:
 
 	virtual void	enter();
 	virtual void	think();
-	virtual void	render();
+	virtual void	render()							{;}
+	virtual int		canDoLookAround();
 
 	virtual ATTACK_STATE	getAttackState();
 
@@ -127,7 +130,6 @@ public:
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 	virtual int					setState(int _state);
 	int							getState()				{return m_currentState;}
-//	virtual void			setMode(class CPlayer *_player,int _mode);
 	int							getFacing();
 	void						setFacing(int _facing);
 	virtual int					getAnimNo();
@@ -136,13 +138,13 @@ public:
 	virtual int					getAnimFrame();
 	virtual int					getAnimFrameCount();
 	int							advanceAnimFrameAndCheckForEndOfAnim();
-//	virtual int				retreatAnimFrameAndCheckForEndOfAnim(class CPlayer *_player);
 	DVECTOR						getMoveVelocity();
 	void						zeroMoveVelocity();
 	void						setMoveVelocity(DVECTOR *_moveVel);
 	int							isOnEdge();
 	int							canMoveLeft();
 	int							canMoveRight();
+	void						setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 
 	void						moveLeft();
 	void						moveRight();

@@ -209,7 +209,29 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
 
-int	sbanimspeed=0;
+
+// A big bunch of 'temporary' variables for tweaking things
+// This #def makes them static under a release build..
+#ifdef __VERSION_DEBUG__s
+#define		pint		int
+#else
+#define		pint		static const int
+#endif
+
+pint	sbanimspeed=0;
+
+pint	looktimeout=20;
+pint	lookmaxoffsetup=3*MAP2D_BLOCKSTEPSIZE;
+pint	lookmaxoffsetdown=6*MAP2D_BLOCKSTEPSIZE;
+pint	lookspeed=2;
+pint	lookreturnspeed=5;
+
+pint	ledgeTimer=50;
+pint	ledgeSpeedIn=1;
+pint	ledgeSpeedOut=3;
+pint	ledgeShift=1;
+
+pint	cammove=2;
 
 
 /*----------------------------------------------------------------------
@@ -231,9 +253,6 @@ void	CPlayer::init()
 
 	m_layerCollision=NULL;
 
-//	m_onPlatform = false;
-//	m_prevOnPlatform = false;
-	
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
 	for(int i=0;i<NUM_PLAYERMODES;i++)
@@ -254,8 +273,7 @@ m_animFrame=0;
 
 	s_screenPos=128;
 
-	setCollisionSize(30,60);
-	setCollisionCentreOffset(0,-30);
+	resetPlayerCollisionSizeToBase();
 
 	m_divingHelmet=false;
 }
@@ -281,18 +299,6 @@ void	CPlayer::shutdown()
 	CPlayerThing::shutdown();
 }
 
-
-int looktimeout=20;
-int	lookmaxoffsetup=3*MAP2D_BLOCKSTEPSIZE;
-int	lookmaxoffsetdown=6*MAP2D_BLOCKSTEPSIZE;
-int	lookspeed=2;
-int lookreturnspeed=5;
-
-int ledgeTimer=50;
-int	ledgeSpeedIn=1;
-int ledgeSpeedOut=3;
-int	ledgeShift=1;
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -300,7 +306,6 @@ int	ledgeShift=1;
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
-int cammove=2;
 
 #ifdef _STATE_DEBUG_
 char posBuf[100];
@@ -357,7 +362,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
 		// Look around
 		int	pad=getPadInputHeld();
-		if(pad&PI_UP)
+		if(pad&PI_UP&&canDoLookAround())
 		{
 			if(m_padLookAroundTimer>0)
 			{
@@ -376,7 +381,7 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 				}
 			}
 		}
-		else if(pad&PI_DOWN)
+		else if(pad&PI_DOWN&&canDoLookAround())
 		{
 			if(m_padLookAroundTimer<0)
 			{
@@ -726,6 +731,7 @@ ATTACK_STATE	CPlayer::getAttackState()
   ---------------------------------------------------------------------- */
 void CPlayer::setMode(PLAYER_MODE _mode)
 {
+	resetPlayerCollisionSizeToBase();
 	m_currentMode=_mode;
 	m_currentPlayerModeClass=s_playerModes[_mode];
 	m_currentPlayerModeClass->enter();
@@ -861,6 +867,17 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Says whether SB can do the look up/down thing
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int	CPlayer::canDoLookAround()
+{
+	return m_currentPlayerModeClass->canDoLookAround();
+}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1115,6 +1132,29 @@ bool	CPlayer::getHasPlatformCollided()
 	return( m_hasPlatformCollided );
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::resetPlayerCollisionSizeToBase()
+{
+	setPlayerCollisionSize(0,-COLSIZE_BASE_HEIGHT/2,COLSIZE_BASE_WIDTH,COLSIZE_BASE_HEIGHT);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
+{
+	setCollisionSize(_w,_h);
+	setCollisionCentreOffset(_x,_y);
+}
 
 /*===========================================================================
 end */

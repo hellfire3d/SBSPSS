@@ -196,6 +196,9 @@ public:
 		CSoundMediator::SFXID	m_sfxId;
 	} AnimFrameSfx;
 	void			renderSb(DVECTOR *_pos,int _animNo,int _animFrame);
+
+	int				canDoLookAround();
+
 private:
 	typedef struct
 	{
@@ -291,16 +294,22 @@ public:
 
 private:
 	CThing			*m_platform;
-	/*
-private:
-	CThing			*m_platform;
-	bool			m_onPlatform;
-	bool			m_prevOnPlatform;
-	DVECTOR			m_prevPlatformPos;
-	*/
 
 private:
 	bool			m_hasPlatformCollided;
+
+
+	// Player collision size
+public:
+	enum
+	{
+		COLSIZE_BASE_WIDTH=30,
+		COLSIZE_BASE_HEIGHT=60,
+	};
+	void			resetPlayerCollisionSizeToBase();
+	void			setPlayerCollisionSize(int _x,int _y,int _w,int _h);
+
+
 
 
 	// Graphical resources

@@ -183,8 +183,32 @@ void	CPlayerModeBase::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBase::render()
+int		CPlayerModeBase::canDoLookAround()
 {
+	int	ret=false;
+
+	switch(getState())
+	{
+		case STATE_IDLE:
+		case STATE_IDLETEETER:
+		case STATE_SOAKUP:
+			ret=true;
+			break;
+
+		case STATE_JUMP:
+		case STATE_RUN:
+		case STATE_FALL:
+		case STATE_FALLFAR:
+		case STATE_HITGROUND:
+		case STATE_BUTTBOUNCE:
+		case STATE_BUTTFALL:
+		case STATE_BUTTLAND:
+		case STATE_DUCK:
+		case STATE_GETUP:
+			break;
+	}
+
+	return ret;
 }
 
 /*----------------------------------------------------------------------
@@ -458,6 +482,7 @@ int		CPlayerModeBase::setState(int _state)
 	nextState=getStateTable()[_state];
 	if(nextState)
 	{
+		m_player->resetPlayerCollisionSizeToBase();
 		m_currentStateClass=nextState;
 		m_currentStateClass->enter(this);
 		m_currentState=(PLAYER_STATE)_state;
@@ -561,6 +586,17 @@ int CPlayerModeBase::canMoveRight()
 	DVECTOR			pos;
 	pos=m_player->getPlayerPos();
 	return m_player->getHeightFromGround(pos.vx+1,pos.vy,16)>-8?true:false;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBase::setPlayerCollisionSize(int _x,int _y,int _w,int _h)
+{
+	m_player->setPlayerCollisionSize(_x,_y,_w,_h);
 }
 
 /*----------------------------------------------------------------------
