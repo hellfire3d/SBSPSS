@@ -35,11 +35,11 @@ int						CXAStream::Status;
 int						CXAStream::StartSector;
 CXAStream::sXAStream	CXAStream::Stream[XA_STREAM_MAX];
 int						CXAStream::CurrentStream;
-int						CXAStream::PauseFlag;
+int						CXAStream::PauseFlag=0;
 
 // Speech
-SpeechEquate			CXAStream::Queue[XA_QUEUE_MAX];
-u16						CXAStream::QueueCount;
+//SpeechEquate			CXAStream::Queue[XA_QUEUE_MAX];
+//u16						CXAStream::QueueCount;
 
 
 // Volume
@@ -172,7 +172,7 @@ u32		Channel=SpeechNo>>XA_CHANNEL_SHIFT;
 u32		Speech=SpeechNo & XA_SPEECH_MASK;
 u32		Sector=Speech*XA_TRACK_MAX;
 
-		if (CurrentStream==XA_STREAM_SPEECH && Mode==XA_MODE_PLAY && !ForcePlay)
+/*		if (CurrentStream==XA_STREAM_SPEECH && Mode==XA_MODE_PLAY && !ForcePlay)
 		    {
 			// Check Current
 			if (Stream[CurrentStream].Entry.Channel==Channel && Stream[CurrentStream].Entry.StartSector==Sector) return;
@@ -182,6 +182,7 @@ u32		Sector=Speech*XA_TRACK_MAX;
 			Queue[QueueCount++]=SpeechNo;
 			return;
 			}
+*/
 	SetVolumeOff();
 	Start(XA_STREAM_SPEECH,Sector,Channel,XA_DEFAULT_VOL,XA_DEFAULT_VOL);
 }
@@ -233,6 +234,7 @@ sXAStream	&ThisStream=Stream[CurrentStream];
 				SetVolume(s_masterVolumeL,s_masterVolumeL);
 				break;
 			case	XA_MODE_END:
+/*
 				SetVolumeOff();
 				if (CurrentStream==XA_STREAM_SPEECH)
 	                {
@@ -253,6 +255,7 @@ sXAStream	&ThisStream=Stream[CurrentStream];
 					Mode=XA_MODE_START;
 	                }
 				break;
+*/
 			case	XA_MODE_PAUSE:
 				SetVolumeOff();
   				CdControlF(CdlPause,0);
@@ -286,8 +289,9 @@ void	CXAStream::Reset()
 			Mode=XA_MODE_IDLE;
 			}
 // Clear Queue
-		for (int Loop=0;Loop<(int)XA_QUEUE_MAX; Loop++) Queue[Loop]=0;
-		QueueCount=0;
+//		for (int Loop=0;Loop<(int)XA_QUEUE_MAX; Loop++) Queue[Loop]=0;
+//		QueueCount=0;
+		PauseFlag=0;
 #endif		
 }
 
@@ -314,7 +318,7 @@ CdlATV			CDVol;
 SpuCommonAttr	Attr;
 
 	SpuSetCommonCDVolume(0,0);
-	SpuSetCommonCDMix(SPU_ON);
+	SpuSetCommonCDMix(SPU_OFF);
 
 	CDVol.val0 = 0;		// CdL -> SpuL
 	CDVol.val1 = 0;		// CdL -> SpuR

@@ -45,7 +45,7 @@ public:
 	{
 		XA_MUSIC_TRACK		=1,
 		XA_SPEECH_TRACK		=1,
-		XA_QUEUE_MAX		=8,
+//		XA_QUEUE_MAX		=8,
 		XA_TRACK_MAX		=32,
 		XA_DEFAULT_VOL		=32000,
 		XA_CHANNEL_SHIFT	=16,
@@ -108,8 +108,8 @@ public:
 	static	int			CurrentChannel;
 	
 	// Speech
-	static SpeechEquate	Queue[XA_QUEUE_MAX];
-	static	u16			QueueCount;
+//	static SpeechEquate	Queue[XA_QUEUE_MAX];
+//	static	u16			QueueCount;
 	static	int			SpeechChannel;
 	
 	static int			s_masterVolumeL,s_masterVolumeR;

@@ -40,7 +40,7 @@
 #include "..\..\tools\vlc\include\vlc_bit.h"
 
 
-//#define	FORCE_FMV	1	
+// #define	FORCE_FMV	1	
 
 #if		__FILE_SYSTEM__==CD | FORCE_FMV
 #define	ENABLE_FMV	
@@ -487,6 +487,7 @@ static void strKickCD(CdlLOC *loc)
 void SetCDVolumeOff()
 {
 	SetCDVolume(0);
+	SpuSetCommonCDMix(SPU_OFF);
 }
 
 /*----------------------------------------------------------------------
