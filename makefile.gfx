@@ -328,11 +328,18 @@ GFX_DATA_OUT		+=		$(SHOP_GFX_TEX_OUT)
 PARTY_GFX_DIR :=			$(GRAF_DIR)/party
 PARTY_GFX_OUT_DIR :=		$(DATA_OUT)/party
 
-PARTY_GFX_TRANS :=			balloon1 balloon2 banner1 banner2 banner3 banner4 \
-							bigcake jelly lefttable presents1 presents2 \
-							sandwiches smallcakes table2 \
-							toychest
-							# leave this as last item - some of the code needs it :(
+PARTY_GFX_TRANS :=			balloons1 balloons2 balloons3 balloons4 balloons5 balloons6 balloons7 balloons8 \
+							banner1 banner2 banner3 banner4 banner5 banner6 banner7 \
+							bigcake \
+							cherrycakes \
+							cucumbersarnies \
+							jelly \
+							pressies1 pressies2 pressies3 pressies4 \
+							sliceofcake \
+							softtoys1 softtoys2 softtoys3 \
+							streamers1 streamers2 streamers3 streamers4 streamers5 streamers6 \
+							tablefront1 tablefront2 tablefront3 tablefront4 tablefront5 tablefront6 tablefront7 \
+							tableside1 tableside2 tableside3
 PARTY_GFX_TRANS_IN :=		$(foreach FILE,$(PARTY_GFX_TRANS),$(PARTY_GFX_DIR)/$(FILE).bmp)
 
 PARTY_GFX_TEX_OUT :=		$(PARTY_GFX_OUT_DIR)/party.spr
