@@ -421,7 +421,7 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
 	m_heading = initHeading;
 	m_initPos = Pos = initPos;
 
-	if ( m_heading == 2048 )
+	if ( m_heading > 1024 && m_heading < 3072 )
 	{
 		m_reversed = 1;
 	}
@@ -483,12 +483,12 @@ void CPlayerProjectile::think(int _frames)
 
 	CPlayerProjectileThing::think( _frames );
 
-	m_frame += _frames;
+	/*m_frame += _frames;
 
 	if ( m_frame > ( FRM_JELLYFISH1_SWIM6 - FRM_JELLYFISH1_SWIM1 ) )
 	{
 		m_frame = 0;
-	}
+	}*/
 
 	switch( m_movementType )
 	{
