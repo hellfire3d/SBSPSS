@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\GinLib" /I "..\glibdev\glib\include" /I "..\glibdev\glib\include\pc" /I "..\ginlib" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG" /d "_AFXDLL"
@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib glu32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 opengl32.lib glu32.lib win32lib.lib ginlib.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\ginlib\debug\\" /libpath:"..\GlibDev\glib\LIB\win32lib\debug\\"
 
 !ENDIF 
 
@@ -143,6 +143,14 @@ SOURCE=.\Core.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\TileSet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TileSet.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\utils.cpp
 # End Source File
 # Begin Source File
@@ -192,7 +200,7 @@ SOURCE=.\StdAfx.cpp
 # End Group
 # Begin Group "Header Files"
 
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\ChildFrm.h

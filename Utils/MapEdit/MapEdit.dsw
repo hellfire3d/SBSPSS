@@ -3,6 +3,22 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "GinLib"=..\GinLib\ginlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/Utils/GinLib", RICAAAAA
+    ..\ginlib
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "MapEdit"=.\MapEdit.dsp - Package Owner=<4>
 
 Package=<5>
@@ -11,6 +27,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name GinLib
+    End Project Dependency
 }}}
 
 ###############################################################################

@@ -10,6 +10,8 @@
 #include	"Layer.h"
 #include	"LayerBack.h"
 
+#include	"TileSet.h"
+
 
 /*****************************************************************************/
 enum MOUSE_MODE
@@ -49,13 +51,15 @@ public:
 
 
 private:
-		CMapEditView	*ParentWindow;	
-		MOUSE_MODE		MouseMode;
-		CPoint			CurrentMousePos,LastMousePos;
-		Vec				MapPos;
+		CMapEditView			*ParentWindow;	
+		MOUSE_MODE				MouseMode;
+		CPoint					CurrentMousePos,LastMousePos;
+		Vec						MapPos;
 
-		CLayer				*Layers[LAYER_TYPE_MAX];
-		int					ActiveLayer;
+		CLayer					*Layers[LAYER_TYPE_MAX];
+		int						ActiveLayer;
+
+		std::vector<CTileSet>	TileSet;
 
 
 };

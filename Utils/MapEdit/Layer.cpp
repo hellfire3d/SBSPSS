@@ -77,6 +77,8 @@ void	CLayer::Render(Vec &MapPos,BOOL Is3d)
 }
 
 /*****************************************************************************/
+extern GLint TestTile;
+
 void	CLayer::Render2d(Vec &MapPos)
 {
 float	XYDiv=GetLayerZPosDiv();
@@ -84,7 +86,7 @@ float	XYDiv=GetLayerZPosDiv();
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z);
-
+/*
 		glBegin(GL_QUADS);
 		SetTestColor();
 			BuildGLQuad(-1,LayerWidth+1,-1,0,0);						// Bottom
@@ -92,6 +94,8 @@ float	XYDiv=GetLayerZPosDiv();
 			BuildGLQuad(-1,0,LayerHeight,0,0);							// Left
 			BuildGLQuad(LayerWidth,LayerWidth+1,LayerHeight,0,0);		// Right
 		glEnd();
+*/
+		glCallList(TestTile);
 }
 
 /*****************************************************************************/

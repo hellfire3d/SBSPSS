@@ -21,7 +21,9 @@
 #include	"LayerAction.h"
 #include	"LayerFore.h"
 
+
 BOOL	Test3dFlag=TRUE;
+GLint	TestTile;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -45,11 +47,14 @@ CCore::~CCore()
 void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
-//	glDisable(GL_DEPTH_TEST);
 	ActiveLayer=0;
 	MapPos.x=MapPos.y=MapPos.z=0;
 	UpdateView(0,0,0);
+	CTileSet	NewSet("c:/SpongeBob/graphics/test.gin");
+	TileSet.push_back(NewSet);
 }
+
+
 
 /*****************************************************************************/
 /*****************************************************************************/

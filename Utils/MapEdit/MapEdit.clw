@@ -21,8 +21,8 @@ Class8=CMapEditView
 ResourceCount=4
 Resource1=IDR_MAPEDITYPE (English (U.S.))
 Resource2=IDD_ABOUTBOX (English (U.S.))
-Resource3=IDR_MAINFRAME (English (U.S.))
-Resource4=IDD_LAYERBAR (English (U.S.))
+Resource3=IDD_LAYERBAR (English (U.S.))
+Resource4=IDR_MAINFRAME (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
