@@ -22,6 +22,7 @@ class CNpcLinearPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		processMovement( int _frames );
 };

@@ -24,6 +24,7 @@ public:
 	virtual void		render();
 	virtual void		postInit();
 	virtual void		think( int _frames );
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
