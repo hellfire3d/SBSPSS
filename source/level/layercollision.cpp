@@ -31,28 +31,6 @@ u8 CLayerCollision::s_collisionTable[]=
 };
 
 
-static const u8		s_collisionTileRemapTable[17]=
-{
-	0,	
-	1,
-	1,
-	1,
-	1,
-	2,
-	3,
-	0,
-	0,
-	4,
-	5,
-	0,
-	0,
-	6,
-	7,
-	0,
-	0,
-};
-
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -62,18 +40,6 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		Map=(u8*)MakePtr(Hdr,sizeof(sLayerHdr));
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
-//		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
-
-		// Convert the collision data to the new format..
-		u8	*map,originalTile,finalTile;
-		int	i;
-		map=Map;
-		for(i=0;i<MapWidth*MapHeight;i++)
-		{
-//			originalTile=*map;
-//			finalTile=(originalTile&0xe0)|s_collisionTileRemapTable[originalTile&0x1f];
-//			*map++=finalTile;
-		}
 }
 
 /*****************************************************************************/
