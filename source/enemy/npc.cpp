@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_GARY;
+	m_type = NPC_SMALL_JELLYFISH_1;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -85,22 +85,26 @@ void CNpc::init()
 			DVECTOR newPos;
 
 			newPos.vx = 100;
-			newPos.vy = 10;
+			//newPos.vy = 10;
+			newPos.vy = 400;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 500;
-			newPos.vy = 10;
+			//newPos.vy = 10;
+			newPos.vy = 400;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 500;
-			newPos.vy = 100;
+			//newPos.vy = 100;
+			newPos.vy = 350;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 100;
-			newPos.vy = 100;
+			//newPos.vy = 100;
+			newPos.vy = 350;
 
 			m_npcPath.addWaypoint( newPos );
 

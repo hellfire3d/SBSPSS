@@ -214,6 +214,53 @@ void CNpc::processCloseSmallJellyfishEvade( int _frames )
 				moveY = ( _frames * 3 * rsin( m_heading ) ) >> 12;
 				moveVel = ( _frames * 3 ) << 8;
 
+				// check for collision with ground
+
+				if ( m_layerCollision->Get( ( Pos.vx + moveX ) >> 4, ( Pos.vy + moveY ) >> 4 ) )
+				{
+					bool xBlocked = false;
+					bool yBlocked = false;
+
+					// destination point is below ground, check in individual directions
+
+					if ( m_layerCollision->Get( ( Pos.vx + moveX ) >> 4, Pos.vy >> 4 ) )
+					{
+						// X direction is blocked
+
+						xBlocked = true;
+					}
+
+					if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + moveY ) >> 4 ) )
+					{
+						yBlocked = true;
+					}
+
+					if ( xBlocked && !yBlocked )
+					{
+						// invert X
+
+						moveX = -moveX;
+
+						m_heading = ratan2( moveY, moveX );
+					}
+					else if ( !xBlocked && yBlocked )
+					{
+						// invert Y
+
+						moveY = -moveY;
+
+						m_heading = ratan2( moveY, moveX );
+					}
+					else
+					{
+						moveX = -moveX;
+						moveY = -moveY;
+
+						m_heading += 2048;
+						m_heading &= 4096;
+					}
+				}
+
 				processMovementModifier(_frames, moveX, moveY, moveVel, moveDist);
 			}
 		}
