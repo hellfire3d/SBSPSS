@@ -1523,7 +1523,7 @@ void	CFmaScene::think(int _frames)
 					// Being carried by an actor
 					item->m_Pos=actor->m_pos;
 					item->m_facing=actor->m_facing;
-					item->m_Pos.vx=item->m_facing?-actor->m_ItemOfs.vx:actor->m_ItemOfs.vx;
+					item->m_Pos.vx+=item->m_facing?-actor->m_ItemOfs.vx:actor->m_ItemOfs.vx;
 					item->m_Pos.vy+=actor->m_ItemOfs.vy;
 				}
 			}
