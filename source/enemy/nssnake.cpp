@@ -224,6 +224,129 @@ bool CNpcSeaSnakeEnemy::processSensor()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+u8 CNpcSeaSnakeEnemy::processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
+{
+	bool pathComplete;
+	bool waypointChange;
+	s32 xDist, yDist;
+
+	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
+
+	/*if ( waypointChange )
+	{
+		m_movementTimer = 0;
+	}*/
+
+	if ( !pathComplete )
+	{
+		s16 decDir, incDir;
+		s16 maxTurnRate = m_data[m_type].turnSpeed;
+
+		decDir = m_heading - headingToTarget;
+
+		if ( decDir < 0 )
+		{
+			decDir += ONE;
+		}
+
+		incDir = headingToTarget - m_heading;
+
+		if ( incDir < 0 )
+		{
+			incDir += ONE;
+		}
+
+		if ( decDir < incDir )
+		{
+			*moveDist = -decDir;
+		}
+		else
+		{
+			*moveDist = incDir;
+		}
+
+		if ( *moveDist < -maxTurnRate )
+		{
+			*moveDist = -maxTurnRate;
+		}
+		else if ( *moveDist > maxTurnRate )
+		{
+			*moveDist = maxTurnRate;
+		}
+
+		m_heading += *moveDist;
+		m_heading &= 4095;
+
+		s32 speed = m_speed;
+
+		if ( abs( *moveDist ) > 10 )
+		{
+			speed = 3;
+		}
+
+		s32 preShiftX = _frames * speed * rcos( m_heading );
+		s32 preShiftY = _frames * speed * rsin( m_heading );
+
+		*moveX = preShiftX >> 12;
+		if ( !(*moveX) && preShiftX )
+		{
+			*moveX = preShiftX / abs( preShiftX );
+		}
+
+		if ( xDist > 0 )
+		{
+			if ( *moveX > xDist )
+			{
+				*moveX = xDist;
+			}
+		}
+		else if ( xDist < 0 )
+		{
+			if ( *moveX < xDist )
+			{
+				*moveX = xDist;
+			}
+		}
+		else
+		{
+			*moveX = 0;
+		}
+
+		*moveY = preShiftY >> 12;
+		if ( !(*moveY) && preShiftY )
+		{
+			*moveY = preShiftY / abs( preShiftY );
+		}
+
+		if ( yDist > 0 )
+		{
+			if ( *moveY > yDist )
+			{
+				*moveY = yDist;
+			}
+		}
+		else if ( yDist < 0 )
+		{
+			if ( *moveY < yDist )
+			{
+				*moveY = yDist;
+			}
+		}
+		else
+		{
+			*moveY = 0;
+		}
+
+		*moveVel = ( _frames * m_speed ) << 8;
+
+		//processGroundCollisionReverse( moveX, moveY );
+	}
+
+	return( waypointChange );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSeaSnakeEnemy::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
@@ -275,8 +398,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
 
-				s32 preShiftX = _frames * m_speed * rcos( m_heading );
-				s32 preShiftY = _frames * m_speed * rsin( m_heading );
+				s32 preShiftX = _frames * 3 * rcos( m_heading );
+				s32 preShiftY = _frames * 3 * rsin( m_heading );
 
 				s32 moveX = preShiftX >> 12;
 				if ( !moveX && preShiftX )
@@ -308,8 +431,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 				m_heading = ( m_origHeading + m_circleHeading ) & 4095;
 
-				s32 preShiftX = _frames * m_speed * rcos( m_heading );
-				s32 preShiftY = _frames * m_speed * rsin( m_heading );
+				s32 preShiftX = _frames * 3 * rcos( m_heading );
+				s32 preShiftY = _frames * 3 * rsin( m_heading );
 
 				s32 moveX = preShiftX >> 12;
 				if ( !moveX && preShiftX )
@@ -379,7 +502,7 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 				}
 				else
 				{
-					if ( processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist ) )
+					if ( processPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist ) )
 					{
 						// path has changed
 

@@ -68,6 +68,7 @@ protected:
 	virtual void		processShot( int _frames );
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual void		processUserCollision( CThing *thisThing );
+	u8					processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	u8					isSnakeStopped();
 	void				moveEntireSnake( DVECTOR newPos );
 
