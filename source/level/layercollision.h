@@ -22,10 +22,9 @@ virtual	~CLayerCollision();
 
 virtual	void			shutdown();
 
-		u8				Get(int X,int Y)	{return(Map[X+(Y*MapWidth)]&COLLISION_MASK);}
+		u8				Get(int X,int Y)					{return(Map[X+(Y*MapWidth)]&COLLISION_MASK);}
 		int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
-		int				getHeightFromCeiling(int _x,int _y,int _maxHeight=32);
-		int				getCollisionType(int _x,int _y);
+		int				getCollisionBlock(int _x,int _y)	{return Map[(_x>>4)+((_y>>4)*MapWidth)];}
 
 #ifdef __SHOW_COLLISION__
 		void			render(DVECTOR &MapPos);
