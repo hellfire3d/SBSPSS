@@ -219,6 +219,8 @@ void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 {
 	Pos.vx = xPos << 4;
 	Pos.vy = yPos << 4;
+
+	m_base = Pos;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,8 +247,6 @@ void CNpcEnemy::init()
 	m_health = m_data[this->m_type].initHealth;
 
 	m_extendDir = EXTEND_RIGHT;
-
-	m_base = Pos;
 
 	m_timerFunc = m_data[this->m_type].timerFunc;
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
@@ -1335,7 +1335,7 @@ void CNpcEnemy::render()
 	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
 
 	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy - 100;
+	renderPos.vy = Pos.vy - offset.vy;
 
 	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
