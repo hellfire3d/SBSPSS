@@ -15,7 +15,6 @@ TeeterBack
 TeeterFront
 DeathForwards
 DeathSquash
-DeathSpin
 GetHit
 CrouchDown
 CrouchUp

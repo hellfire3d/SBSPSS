@@ -13,7 +13,6 @@ RunStop
 RunStart
 TeeterBack 
 TeeterFront 
-DeathSpin 
 DeathSquash
 DeathForwards
 GetHit
