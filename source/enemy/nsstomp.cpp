@@ -27,6 +27,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 #ifndef __ANIM_STOMPER_HEADER__
 #include <ACTOR_STOMPER_ANIM.h>
 #endif
@@ -135,6 +139,9 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 					bubblePos.vx += 20 - ( getRnd() % 41 );
 					CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
 				}
+
+				CGameScene::setCameraShake(0,8);
+				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
 			}
 			else
 			{
