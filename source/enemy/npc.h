@@ -81,6 +81,7 @@ public:
 	void				think(int _frames);
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 
 
 protected:
@@ -362,6 +363,8 @@ protected:
 
 	static s32			playerXDistSqr;
 	static s32			playerYDistSqr;
+
+	static class CLayerCollision	*m_layerCollision;
 
 	// internal variables
 	

@@ -96,6 +96,7 @@ void 	CGameScene::init()
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
+		enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif
 
 		createPlayer();

@@ -50,7 +50,7 @@ s32 CNpc::playerXDist;
 s32 CNpc::playerYDist;
 s32 CNpc::playerXDistSqr;
 s32 CNpc::playerYDistSqr;
-
+class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
@@ -71,6 +71,8 @@ void CNpc::init()
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
+
+	m_layerCollision = NULL;
 
 	switch ( m_data[this->m_type].initFunc )
 	{
