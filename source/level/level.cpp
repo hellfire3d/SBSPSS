@@ -22,6 +22,10 @@
 #include "triggers\tlevexit.h"
 #endif
 
+#ifndef __PICKUPS_PICKUP_H__
+#include "pickups\pickup.h"
+#endif
+
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
 #endif
@@ -541,8 +545,16 @@ void	CLevel::initLayers()
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
 			ItemCount=Hdr->Count;
 			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
-		}
 
+			DVECTOR	pos;
+			for(int i=0;i<ItemCount;i++)
+			{
+				pos.vx=ItemList->Pos.X<<4;
+				pos.vy=ItemList->Pos.Y<<4;
+				createPickup((PICKUP_TYPE)ItemList->Type,&pos);
+				ItemList++;
+			}
+		}
 }
 
 /*****************************************************************************/
