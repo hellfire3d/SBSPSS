@@ -1,0 +1,17 @@
+#include	data/scripts/defs/defs.scr
+
+#include	data/scripts/defs/charanim.scr
+#include	data/scripts/defs/items.scr
+#include	data/scripts/defs/response.scr
+#include	data/scripts/defs/trans.scr
+
+
+_setText(CHAR_KRABS,STR__INGAME__CH1__L4__KRUSTY2);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+stop;
