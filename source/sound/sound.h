@@ -49,22 +49,26 @@ class CSoundMediator
 public:
 	typedef enum SONGID
 	{
-		HYPERMMX,
-		DROPPOP,
-		MUSIC,
+		SONG_HYPERMMX,
+		SONG_DROPPOP,
+		SONG_MUSIC,
+		SONG_INGAME,
+		SONG_TITLE,
 		NUM_SONGIDS,
 	};
 	typedef enum SFXBANKID
 	{
-		INGAME,
+		SFX_INGAME,
 		NUM_SFXBANKIDS,
 	};
 
 	typedef enum VOLUMETYPE
 	{
-		SONG,
-		SFX,
-		SPEECH,
+		VOL_SONG,
+		VOL_SFX,
+		VOL_SPEECH,
+
+		VOL_FADE,
 
 		NUM_VOLUMETYPES,
 	};
@@ -77,8 +81,8 @@ public:
 
 	typedef enum REVERBTYPE
 	{
-		NONE,
-		ECHO_TEST,
+		REV_NONE,
+		REV_ECHOTEST,
 
 		NUM_REVERBTYPES,
 	};

@@ -88,15 +88,17 @@ static CXMPlaySound		*s_xmplaySound;
 // Songs
 static XMFILEDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
 {
-	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// HYPERMMX
-	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// DROPPOP
-	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// MUSIC
+	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// SONG_HYPERMMX
+	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// SONG_DROPPOP
+	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// SONG_MUSIC
+	{	MUSIC_INGAME_VH,		MUSIC_INGAME_VB,		MUSIC_INGAME_PXM	},		// SONG_INGAME
+	{	MUSIC_TITLE_VH,			MUSIC_TITLE_VB,			MUSIC_TITLE_PXM		},		// SONG_TITLE
 };
 
 // SFX banks
 static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 {
-	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// INGAME
+	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// SFX_INGAME
 };
 
 // Individual SFX details
@@ -112,8 +114,8 @@ static SFXDETAILS	s_sfxDetails[]=
 // Reverb details
 static ReverbDetails	s_reverbDetails[CSoundMediator::NUM_REVERBTYPES]=
 {
-	{	SPU_REV_MODE_OFF,	0,	0,		0	},								// NONE
-	{	SPU_REV_MODE_ECHO,	75,	0x3000,	100	},								// ECHO_TEST
+	{	SPU_REV_MODE_OFF,	0,	0,		0	},								// REV_NONE
+	{	SPU_REV_MODE_ECHO,	75,	0x3000,	100	},								// REV_ECHOTEST
 };
 
 
@@ -145,7 +147,7 @@ void CSoundMediator::initialise()
 	ASSERT(CXAStream::MAX_VOLUME==32767);
 
 	// Initial reverb settings
-	setReverbType(NONE);//ECHO_TEST);
+	setReverbType(REV_NONE);//REV_ECHOTEST);
 
 	SOUND_DBGMSG("Sound mediator initialised");
 	s_initialised=true;
@@ -220,21 +222,27 @@ if(_frames==0)_frames=1;
 	
 
 	// Push through any changes in volume
-	if(s_volumeDirty[SONG])
+	if(s_volumeDirty[VOL_FADE])
 	{
-		s_xmplaySound->setMasterSongVolume(s_currentVolume[SONG]);
-		s_volumeDirty[SONG]=false;
+		s_volumeDirty[VOL_SONG]=true;
+		s_volumeDirty[VOL_SFX]=true;
+		s_volumeDirty[VOL_SPEECH]=true;
 	}
-	if(s_volumeDirty[SFX])
+	if(s_volumeDirty[VOL_SONG])
 	{
-		s_xmplaySound->setMasterSfxVolume(s_currentVolume[SFX]);
-		s_volumeDirty[SFX]=false;
+		s_xmplaySound->setMasterSongVolume((s_currentVolume[VOL_SONG]*s_currentVolume[VOL_FADE])>>8);
+		s_volumeDirty[VOL_SONG]=false;
 	}
-	if(s_volumeDirty[SPEECH])
+	if(s_volumeDirty[VOL_SFX])
 	{
-		int vol=s_currentVolume[SPEECH]<<7;
+		s_xmplaySound->setMasterSfxVolume((s_currentVolume[VOL_SFX]*s_currentVolume[VOL_FADE])>>8);
+		s_volumeDirty[VOL_SFX]=false;
+	}
+	if(s_volumeDirty[VOL_SPEECH])
+	{
+		int vol=((s_currentVolume[VOL_SPEECH]*s_currentVolume[VOL_FADE])>>8)<<7;
 		CXAStream::setMasterVolume(vol,vol);
-		s_volumeDirty[SPEECH]=false;
+		s_volumeDirty[VOL_SPEECH]=false;
 	}
 }
 

@@ -54,6 +54,10 @@
 #include "locale\textdbase.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -135,6 +139,9 @@ void CFrontEndScene::init()
 	m_font=new ("frontendfont") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
+
+	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
+	CSoundMediator::playSong();
 }
 
 
@@ -153,6 +160,8 @@ void CFrontEndScene::shutdown()
 	{
 		s_modeCodes[i]->shutdown();
 	}
+
+	CSoundMediator::dumpSong();
 }
 
 

@@ -26,6 +26,10 @@
 #include "gfx\bubicles.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -193,7 +197,23 @@ void CFader::think(int _frames)
 		s_fadeLine-=_frames*FADE_SPEED;
 		if(s_fadeLine<-FADE_BORDER_SIZE)
 		{
-			s_fadeMode=s_fadeMode==FADING_OUT?FADED_OUT:FADED_IN;
+			if(s_fadeMode==FADING_OUT)
+			{
+				s_fadeMode=FADED_OUT;
+				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+			}
+			else
+			{
+				s_fadeMode=FADED_IN;
+				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
+			}
+		}
+		else
+		{
+			if(s_fadeLine>=0&&s_fadeLine<=255)
+			{
+				CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeLine:255-s_fadeLine);
+			}
 		}
 	}
 }

@@ -286,9 +286,9 @@ void CFrontEndOptions::init()
 											&m_nextMode,MODE__OPTIONS);
 	}
 
-	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::SONG);
-	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::SFX);
-	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::SPEECH);
+	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SONG);
+	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SFX);
+	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH);
 	m_controlStyle=CPadConfig::getConfig();
 	m_screenXOff=VidGetXOfs();
 	m_screenYOff=VidGetYOfs();
@@ -393,19 +393,19 @@ void CFrontEndOptions::think(int _frames)
 
 		if(m_mode==MODE__SOUND)
 		{
-			if(m_bgmVolume!=CSoundMediator::getVolume(CSoundMediator::SONG))
+			if(m_bgmVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SONG))
 			{
-				CSoundMediator::setVolume(CSoundMediator::SONG,m_bgmVolume);
+				CSoundMediator::setVolume(CSoundMediator::VOL_SONG,m_bgmVolume);
 				PAUL_DBGMSG("SONG");
 			}
-			if(m_sfxVolume!=CSoundMediator::getVolume(CSoundMediator::SFX))
+			if(m_sfxVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SFX))
 			{
-				CSoundMediator::setVolume(CSoundMediator::SFX,m_sfxVolume);
+				CSoundMediator::setVolume(CSoundMediator::VOL_SFX,m_sfxVolume);
 				PAUL_DBGMSG("SFX");
 			}
-			if(m_speechVolume!=CSoundMediator::getVolume(CSoundMediator::SPEECH))
+			if(m_speechVolume!=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH))
 			{
-				CSoundMediator::setVolume(CSoundMediator::SPEECH,m_speechVolume);
+				CSoundMediator::setVolume(CSoundMediator::VOL_SPEECH,m_speechVolume);
 				PAUL_DBGMSG("SPEECH");
 			}
 		}
