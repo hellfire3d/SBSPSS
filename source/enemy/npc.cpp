@@ -52,6 +52,8 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_JELLYFISH_EVADE,
 		NPC_TIMER_NONE,
 		false,
+		3,
+		128,
 	},
 
 	{	// NPC_SANDY_CHEEKS
@@ -62,6 +64,8 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
 		true,
+		3,
+		128,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
@@ -72,6 +76,32 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_JELLYFISH_EVADE,
 		NPC_TIMER_NONE,
 		false,
+		3,
+		128,
+	},
+
+	{	// NPC_SMALL_JELLYFISH_2
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_JELLYFISH_USER_CLOSE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_JELLYFISH,
+		NPC_CLOSE_JELLYFISH_EVADE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		128,
+	},
+
+	{	// NPC_LARGE_JELLYFISH
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		128,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -82,6 +112,8 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
 		false,
+		3,
+		128,
 	},
 
 	{	// NPC_CLAM
@@ -91,13 +123,52 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_MOVEMENT_MODIFIER_NONE,
 		NPC_CLOSE_CLAM_ATTACK,
 		NPC_TIMER_NONE,
+		3,
+		128,
 	},
+
+	{	// NPC_SQUID_DART
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		5,
+		256,
+	},
+
+	{	// NPC_FISH_FOLK
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		2,
+		128,
+	},
+
+	{	// NPC_PRICKLY_BUG
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		1,
+		128,
+	},
+
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_CLAM;
+	m_type = NPC_FISH_FOLK;
 
 	m_heading = 3072;
 	m_movementTimer = 0;
@@ -287,6 +358,7 @@ void CNpc::processMovement(int _frames)
 			if ( !pathComplete )
 			{
 				s16 decDir, incDir;
+				s16 maxTurnRate = m_data[m_type].turnSpeed;
 
 				decDir = m_heading - headingToTarget;
 
@@ -311,22 +383,35 @@ void CNpc::processMovement(int _frames)
 					moveDist = incDir;
 				}
 
-				if ( moveDist < -128 )
+				if ( moveDist < -maxTurnRate )
 				{
-					moveDist = -128;
+					moveDist = -maxTurnRate;
 				}
-				else if ( moveDist > 128 )
+				else if ( moveDist > maxTurnRate )
 				{
-					moveDist = 128;
+					moveDist = maxTurnRate;
 				}
 
 				m_heading += moveDist;
 
 				m_heading = m_heading % ONE;
 				
-				moveX = ( _frames * 3 * rcos( m_heading ) ) >> 12;
-				moveY = ( _frames * 3 * rsin( m_heading ) ) >> 12;
-				moveVel = ( _frames * 3 ) << 8;
+				s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
+				s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
+
+				moveX = preShiftX >> 12;
+				if ( !moveX && preShiftX )
+				{
+					moveX = preShiftX / abs( preShiftX );
+				}
+
+				moveY = preShiftY >> 12;
+				if ( !moveY && preShiftY )
+				{
+					moveY = preShiftY / abs( preShiftY );
+				}
+
+				moveVel = ( _frames * m_data[m_type].speed ) << 8;
 			}
 
 			break;

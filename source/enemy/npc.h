@@ -42,8 +42,13 @@ protected:
 		NPC_TEST_TYPE = 0,
 		NPC_SANDY_CHEEKS = 1,
 		NPC_SMALL_JELLYFISH_1,
+		NPC_SMALL_JELLYFISH_2,
+		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
 		NPC_CLAM,
+		NPC_SQUID_DART,
+		NPC_FISH_FOLK,
+		NPC_PRICKLY_BUG,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -113,6 +118,8 @@ protected:
 		NPC_CLOSE_FUNC					closeFunc;
 		NPC_TIMER_FUNC					timerFunc;
 		bool							canTalk;
+		u8								speed;
+		u16								turnSpeed;
 	}
 	NPC_DATA;
 
