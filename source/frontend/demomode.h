@@ -41,7 +41,8 @@
 class CDemoGameScene : public CGameScene
 {
 public:
-	void	createPlayer();
+	virtual void	createPlayer();
+	virtual int		canPause()			{return false;}
 };
 
 

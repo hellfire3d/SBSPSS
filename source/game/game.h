@@ -28,6 +28,7 @@ virtual			~CGameScene()	{;}
 
 		void	init();
 virtual	void	createPlayer();
+virtual	int		canPause();
 		void	shutdown();
 		void	render();
 		void	think(int _frames);

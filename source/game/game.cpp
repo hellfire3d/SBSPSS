@@ -123,6 +123,12 @@ void	CGameScene::createPlayer()
 		m_player=new ("player") CPlayer();
 }
 
+// This is also to be overloaded for demomode.. to stop the pause menu appearing
+int		CGameScene::canPause()
+{
+		return true;
+}
+
 
 /*****************************************************************************/
 
@@ -159,7 +165,8 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
-	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START)
+	
+	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START&&canPause())
 	{
 		m_pauseMenu->select();
 	}
