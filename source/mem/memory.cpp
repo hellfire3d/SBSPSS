@@ -99,7 +99,7 @@ static const int		s_shadeH = 102;
 static const CVECTOR	s_shadeCol = { 0, 0, 0 };
 
 static const int		s_dumpTextX = s_shadeX+12;
-static const int		s_dumpTextY = s_shadeY0;
+static const int		s_dumpTextY = s_shadeY;
 
 static const int		s_dumpX = s_shadeX;
 static const int		s_dumpY = s_shadeY+s_shadeH+5;
