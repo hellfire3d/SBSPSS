@@ -62,6 +62,7 @@
 void	CPlayerModeCart::enter()
 {
 	m_player->setCartCam(true);
+	m_player->setFacing(FACING_RIGHT);
 	setState( STATE_CART );
 }
 
