@@ -39,12 +39,6 @@ typedef enum	{NOT_PLAYING=-1}	xmPlayingId;
 // 8 bits are the base channel of the playing sound.
 
 
-
-// Define this to store the SFX number in the channel details. Useful for finding tracing sounds
-// that are being left locked
-//#define SFX_DEBUG
-
-
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -87,6 +81,7 @@ public:
 	xmPlayingId		playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int _soundId,u8 _priority,int _pitch=0x400);
 
 	int				isStillPlaying(xmPlayingId _playingId);
+	int				isSfxPatternPlaying(int _startPattern);
 
 	void			unlockPlayingId(xmPlayingId _playingId);
 	void			stopPlayingId(xmPlayingId _playingId);
@@ -110,7 +105,8 @@ private:
 		SFX,
 		LOOPINGSFX,
 
-		SILENT,				// Channel is silent
+		SILENTSONG,			// Channel is silent
+		SILENTSFX,			//	"	"	"	"
 		FREE,				// Channel is free for re-allocation
 		CONTINUE,			// Channel is a continuation of the previous channel
 	} CHANNELUSETYPE;
@@ -140,9 +136,7 @@ private:
 		u8					m_priority;
 		u8					m_locked;
 		u8					m_vol,m_pan;
-#ifdef SFX_DEBUG
-		u8					m_sfxId;
-#endif
+		u8					m_startPattern;
 	} spuChannelUse;
 
 	xmPlayingId		getNextSparePlayingId(int _baseChannel);

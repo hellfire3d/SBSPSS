@@ -593,7 +593,7 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 				same time as *lots* of other sfx.
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false)
+xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false,int _dontPlayIfSFXAlreadyAudible=false)
 {
 	if(!s_canPlaySfx)
 	{
@@ -609,6 +609,12 @@ xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false)
 
 	// Play!
 	sfx=&s_sfxDetails[_sfxId];
+	
+	if(_dontPlayIfSFXAlreadyAudible&&s_xmplaySound->isSfxPatternPlaying(sfx->m_pattern))
+	{
+			return NOT_PLAYING;
+	}
+
 	if(sfx->m_looping)
 	{
 		playId=s_xmplaySound->playLoopingSfx(s_sfxSampleId,s_sfxModId,sfx->m_pattern,10);

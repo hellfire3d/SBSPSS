@@ -163,15 +163,12 @@ void CXMPlaySound::think()
 #ifdef __USER_paul__
 	if(dump)
 	{
-		static char		*text[]={"SONG","SFX","LOOPINGSFX","SILENT","FREE","CONTINUE"};
+		static char		*text[]={"SONG","SFX","LOOPINGSFX","SILENTSONG","SILENTSFX","FREE","CONTINUE"};
 		spuChannelUse	*ch=m_spuChannelUse;
 		PAUL_DBGMSG("=======");
 		for(int i=0;i<24;i++,ch++)
 		{
-			PAUL_DBGMSG("%02d] u:%s  l:%d  pid:%04x",i,text[ch->m_useType],ch->m_locked,ch->m_playingId);
-#ifdef SFX_DEBUG
-			PAUL_DBGMSG("    sfxId:%d",ch->m_sfxId);
-#endif
+			PAUL_DBGMSG("%02d] u:%s  l:%d  pid:%04x  sPtn:%03d",i,text[ch->m_useType],ch->m_locked,ch->m_playingId,ch->m_startPattern);
 		}
 		PAUL_DBGMSG("=======");
 		dump=false;
@@ -191,7 +188,8 @@ void CXMPlaySound::think()
 		switch(ch->m_useType)
 		{
 			// Silent and unlocked sounds can be freed
-			case SILENT:
+			case SILENTSONG:
+			case SILENTSFX:
 				if(!ch->m_locked)
 				{
 					do
@@ -208,11 +206,9 @@ void CXMPlaySound::think()
 			case SONG:
 			case SFX:
 				if(XM_GetFeedback(ch->m_internalId,&fb))
-//				XM_GetFeedback(ch->m_internalId,&fb);
-//				if(fb.Status==XM_STOPPED)
 				{
 					// Just mark it as silent, if it's unlocked then it'll die next frame
-					ch->m_useType=SILENT;
+					ch->m_useType=ch->m_useType==SFX?SILENTSFX:SILENTSONG;
 
 					// And kill it in the player
 					XM_Quit(ch->m_internalId);
@@ -235,12 +231,13 @@ if(PadGetDown(1)&PAD_L1&&PadGetHeld(1)&(PAD_L2|PAD_R1|PAD_R2))
 }
 if(sounddebug)
 {
-	static const int	colours[6][3]=
+	static const int	colours[7][3]=
 	{
 		{	255,255,255		},			// SONG
 		{	255,  0,255		},			// SFX
 		{	  0,  0,255		},			// LOOPINGSFX
-		{	255,255,  0		},			// SILENT
+		{	255,255,  0		},			// SILENTSONG
+		{	255,255,  0		},			// SILENTSFX
 		{	  0,255,  0		},			// FREE
 		{	128,128,128		},			// CONTINUE
 	};
@@ -535,7 +532,8 @@ void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
 		ch->m_vol=_volume;						// Update volume
 		switch(ch->m_useType)
 		{
-			case SILENT:
+			case SILENTSONG:
+			case SILENTSFX:
 				break;
 				
 			case SONG:
@@ -581,7 +579,8 @@ void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 		ch->m_pan=_pan;							// Update pan
 		switch(ch->m_useType)
 		{
-			case SILENT:
+			case SILENTSONG:
+			case SILENTSFX:
 				break;
 				
 			case SONG:
@@ -699,9 +698,7 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
 				   XM_Music,			// Music
 				   _startPattern);		// Where to start from
 		markChannelsAsActive(baseChannel,channelCount,SONG,retId,id,255);
-#ifdef SFX_DEBUG
-		m_spuChannelUse[baseChannel].m_sfxId=_startPattern;
-#endif
+		m_spuChannelUse[baseChannel].m_startPattern=_startPattern;
 		setVolume(retId,MAX_VOLUME);
 	}
 	else
@@ -726,10 +723,35 @@ int	CXMPlaySound::isStillPlaying(xmPlayingId _playingId)
 	if(ch->m_playingId==_playingId)
 	{
 		ASSERT(ch->m_locked!=false);	// Can't do this on an unlocked sound!
-		return ch->m_useType!=SILENT;
+		return ch->m_useType!=SILENTSFX&&ch->m_useType!=SILENTSONG;
 	}
 
 	ASSERT(0);			// Couldn't find the sound to check it!
+	return false;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CXMPlaySound::isSfxPatternPlaying(int _startPattern)
+{
+	spuChannelUse	*ch;
+	int				i;
+
+	ch=m_spuChannelUse;
+	for(i=0;i<NUM_SPU_CHANNELS;i++)
+	{
+		if((ch->m_useType==SFX||ch->m_useType==SILENTSFX)&&ch->m_startPattern==_startPattern)
+		{
+			return true;
+		}
+		ch++;
+	}
+
 	return false;
 }
 
@@ -777,16 +799,17 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 				{
 				XM_PlayStop(ch->m_internalId);
 				XM_Quit(ch->m_internalId);
-				ch->m_useType=SILENT;
+				ch->m_useType=ch->m_useType==SFX?SILENTSFX:SILENTSONG;
 				}
 				break;
 
 			case LOOPINGSFX:
 				XM_StopSample(ch->m_internalId);
-				ch->m_useType=SILENT;
+				ch->m_useType=SILENTSFX;
 				break;
 				
-			case SILENT:
+			case SILENTSONG:
+			case SILENTSFX:
 				break;
 
 			case FREE:
@@ -849,9 +872,7 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPa
 				   _sfxPattern);		// SFX pattern to play
 		XM_ClearSFXRange();
 		markChannelsAsActive(baseChannel,channelCount,SFX,retId,id,_priority);
-#ifdef SFX_DEBUG
-		m_spuChannelUse[baseChannel].m_sfxId=_sfxPattern;
-#endif
+		m_spuChannelUse[baseChannel].m_startPattern=_sfxPattern;
 		setVolume(retId,MAX_VOLUME);
 	}
 	else
@@ -915,8 +936,10 @@ xmPlayingId	CXMPlaySound::getNextSparePlayingId(int _baseChannel)
 		ch=m_spuChannelUse;
 		for(i=0;i<NUM_SPU_CHANNELS&&validId!=NOT_PLAYING;i++)
 		{
-			if(ch->m_playingId==validId&&!(ch->m_locked==false&&ch->m_useType==SILENT))
+			if(ch->m_playingId==validId&&!(ch->m_locked==false&&(ch->m_useType==SILENTSONG||ch->m_useType==SILENTSFX)))
+			{
 				validId=NOT_PLAYING;
+			}
 			ch++;
 		}
 	}

@@ -203,7 +203,7 @@ public:
 
 	// SFX interface
 	static void			setSfxBank(SFXBANKID _bankId);
-	static xmPlayingId	playSfx(SFXID _sfxId,int _lock=false);
+	static xmPlayingId	playSfx(SFXID _sfxId,int _lock=false,int _dontPlayIfSFXAlreadyAudible=false);
 	static void			setposition(xmPlayingId _playingId,VECTOR *pos);
 	static void			stopAndUnlockSfx(xmPlayingId _playingId);
 	static void			stopAllSfx();
