@@ -25,7 +25,7 @@ int			ShowPolyz=0;
 static const int	BLOCK_SIZE				=16;
 #if defined(__TERRITORY_EUR__)
 static const int	SCREEN_TILE_ADJ_U		=2;
-static const int	SCREEN_TILE_ADJ_D		=2;	// Extra line needed :o(
+static const int	SCREEN_TILE_ADJ_D		=3;	// Extra 2 lines needed, cos of extra height @ perspective :o(
 static const int	SCREEN_TILE_ADJ_L		=3;
 static const int	SCREEN_TILE_ADJ_R		=3;
 #else
