@@ -172,7 +172,7 @@ void CXMPlaySound::think()
 				{
 					do
 					{
-PAUL_DBGMSG("freed channel %d  ( %d )",i,ch->m_playingId);
+//PAUL_DBGMSG("freed channel %d  ( %d )",i,ch->m_playingId);
 						ch->m_useType=FREE;
 #ifdef __VERSION_DEBUG__
 						ch->m_internalId=0;
