@@ -132,7 +132,7 @@ public:
 	static CNpcPlatform	*Create(int Type);
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
-	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
+	virtual void		setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
 
 protected:
 	// NPC data structure definitions //
@@ -177,7 +177,7 @@ protected:
 
 	// functions
 
-	void				reinit();
+	virtual void		reinit();
 	bool				processSensor();
 	virtual void		processMovement( int _frames );
 	virtual void		processLifetime( int _frames );

@@ -23,8 +23,14 @@ class CNpcRetractingPlatform : public CNpcPlatform
 public:
 	void				postInit();
 	void				render();
+	bool				alwaysThink()									{return(true);}
+
+	void				setSpeed( s16 newSpeed );
 protected:
+	void				reinit();
 	void processTimer( int _frames );
+
+	s32					m_initDelay;
 
 	enum NPC_PLATFORM_TIMER_TYPE
 	{

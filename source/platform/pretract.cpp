@@ -36,12 +36,39 @@ void CNpcRetractingPlatform::postInit()
 	m_timer = NPC_PLATFORM_TIMER_RETRACT;
 
 	m_extension = ONE;
+
+	m_initDelay = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcRetractingPlatform::setSpeed( s16 newSpeed )
+{
+	m_speed = newSpeed;
+
+	m_initDelay = ( m_speed * GameState::getOneSecondInFrames() ) >> 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcRetractingPlatform::reinit()
+{
+	CNpcPlatform::reinit();
+
+	m_initDelay = ( m_speed * GameState::getOneSecondInFrames() ) >> 2;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcRetractingPlatform::processTimer( int _frames )
 {
+	if ( m_initDelay > 0 )
+	{
+		m_initDelay -= _frames;
+
+		return;
+	}
+
 	switch( m_timerType )
 	{
 		case NPC_PLATFORM_TIMER_RETRACT:
