@@ -28,6 +28,12 @@
 
 #define	SCREEN_GRAB
 
+#ifdef __USER_paul__
+#include "paul\paul.h"
+CPaulScene s_paulScene;
+#endif
+
+
 /*****************************************************************************/
 
 void	SaveScreen(RECT R);
@@ -60,6 +66,9 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	GameState::initialise();
 
+#ifdef __USER_paul__
+s_paulScene.init();
+#endif
 }
 
 /*****************************************************************************/
@@ -75,6 +84,11 @@ void	MainLoop()
 	{
 		GameState::think();
 		GameState::render();
+
+#ifdef __USER_paul__
+		s_paulScene.think();
+		s_paulScene.render();
+#endif
 
 		while(DrawSync(1));
 
