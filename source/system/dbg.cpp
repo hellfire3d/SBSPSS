@@ -272,7 +272,9 @@ void DoAssert( const char * Txt, const char * file, const int line )
 
 	VSync(0);
 	VidSwapDraw();
-	PrimDisplay();
+//	PrimDisplay();
+	DrawOTag(OtPtr);
+
 	while(DrawSync(1));
 
 	InitOTag(OtPtr, MAX_OT);
@@ -280,7 +282,9 @@ void DoAssert( const char * Txt, const char * file, const int line )
 
 	VSync(0);
 	VidSwapDraw();
-	PrimDisplay();
+//	PrimDisplay();
+	DrawOTag(OtPtr);
+
 	while(DrawSync(1));
 
 	F.dump();

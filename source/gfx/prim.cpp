@@ -29,7 +29,7 @@ void	PrimInit()
 	GUIOtPtr=BaseOtPtr;
 	OtPtr=GUIOtPtr+MAX_OT_GUI;
 	CurrPrim=(u8*)PrimBuffer[PrimFlipFlag];
-	EndPrim=CurrPrim+(PRIMPOOL_SIZE);
+	EndPrim=CurrPrim+PRIMPOOL_SIZE;
 
 	PrimListStart=PrimBuffer[0];
 	PrimListEnd=PrimListStart+(PRIMPOOL_SIZE*2);
@@ -43,6 +43,11 @@ void	PrimInit()
 /*****************************************************************************/
 void	PrimDisplay()
 {
+	if ((int)CurrPrim>=(int)EndPrim)
+	{
+		ASSERT(!"PRIM OVERFLOW");
+	}
+
 	CAnimTex::AnimateTex();
 	CPakTex::DMAPakTex();
 	UnlinkOTagR(BaseOtPtr, MAX_OT_ALL, &DmaStart[PrimFlipFlag]);
