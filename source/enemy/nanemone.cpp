@@ -44,14 +44,14 @@ void CNpc::processCloseAnemone1Attack( int _frames )
 
 	s16 headingToPlayer = ratan2( yDist, xDist );
 
-	decDir = m_baseHeading - headingToPlayer;
+	decDir = m_fireHeading - headingToPlayer;
 
 	if ( decDir < 0 )
 	{
 		decDir += ONE;
 	}
 
-	incDir = headingToPlayer - m_baseHeading;
+	incDir = headingToPlayer - m_fireHeading;
 
 	if ( incDir < 0 )
 	{
@@ -136,7 +136,7 @@ void CNpc::processCloseAnemone2Attack( int _frames )
 
 	for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 	{
-		heading = m_baseHeading - 1024 + ( fireLoop * 512 );
+		heading = m_heading - 1024 + ( fireLoop * 512 );
 		heading %= 4096;
 
 		projectile = new( "test projectile" ) CProjectile;

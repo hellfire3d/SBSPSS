@@ -385,7 +385,7 @@ void CNpc::init()
 {
 	m_type = NPC_ANEMONE_1;
 
-	m_heading = m_baseHeading = 0;
+	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;

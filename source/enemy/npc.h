@@ -208,7 +208,7 @@ protected:
 	NPC_SENSOR_FUNC		m_sensorFunc;
 	CNpcPath			m_npcPath;
 	s32					m_heading;
-	s32					m_baseHeading;
+	s32					m_fireHeading;
 	s32					m_movementTimer;
 	s32					m_velocity;
 	bool				m_evadeClockwise;
