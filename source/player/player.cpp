@@ -2757,10 +2757,9 @@ int		CPlayer::moveVertical(int _moveDistance)
 					takeDamage(DAMAGE__COLLISION_DAMAGE);
 				}
 				break;
+				/*
 			case COLLISION_TYPE_FLAG_DEATH_LIQUID:
 				dieYouPorousFreak(DEATHTYPE__LIQUID);
-PAUL_DBGMSG("dead");
-PAUL_DBGMSG("onp %d",isOnPlatform()!=NULL);
 				break;
 			case COLLISION_TYPE_FLAG_DEATH_INSTANT:
 				dieYouPorousFreak(DEATHTYPE__NORMAL);
@@ -2768,6 +2767,7 @@ PAUL_DBGMSG("onp %d",isOnPlatform()!=NULL);
 			case COLLISION_TYPE_FLAG_DEATH_FALL:
 				dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
 				break;
+				*/
 			default:
 				break;
 		}
