@@ -158,6 +158,8 @@ s32				ClipZ;
 				*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
 				int	ZP=P0->vz>>5;
+				if (ZP<-4) ZP=-4;
+				if (ZP>8) ZP=8;
 sOT				*ThisOT=OtPtr+(LayerOT+ZP);
 
 				TList++;
