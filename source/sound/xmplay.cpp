@@ -361,7 +361,7 @@ xmModId CXMPlaySound::loadModData(FileEquate _modFe)
 		if(mod->m_refCount==0)
 		{
 			mod->m_xmData=(u8*)CFileIO::loadFile(_modFe);
-			InitXMData(mod->m_xmData,modId,0);//XM_UseS3MPanning);
+			InitXMData(mod->m_xmData,modId,XM_UseXMPanning);
 			mod->m_file=_modFe;
 			mod->m_refCount=1;
 			break;

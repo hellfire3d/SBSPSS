@@ -220,13 +220,13 @@ if(_frames==0)_frames=1;
 	CXAStream::ControlXA();
 	s_xmplaySound->think();
 	
-
 	// Push through any changes in volume
 	if(s_volumeDirty[VOL_FADE])
 	{
 		s_volumeDirty[VOL_SONG]=true;
 		s_volumeDirty[VOL_SFX]=true;
 		s_volumeDirty[VOL_SPEECH]=true;
+		s_volumeDirty[VOL_FADE]=false;
 	}
 	if(s_volumeDirty[VOL_SONG])
 	{
