@@ -121,7 +121,6 @@ const int CFrontEndStart::s_itemFrames[]=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int result;
 void CFrontEndStart::init()
 {
 	CGUITextBox			*tb;
