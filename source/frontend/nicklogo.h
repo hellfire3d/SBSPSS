@@ -47,7 +47,11 @@ public:
 private:
 	enum
 	{
+#ifdef __USER_CDBUILD__
 		DISPLAY_FRAMES=60*6,
+#else
+		DISPLAY_FRAMES=6,
+#endif
 	};
 
 	int										m_readyToExit;
