@@ -169,7 +169,7 @@ void CNpcGaryFriend::think( int _frames )
 
 				if ( m_started )
 				{
-					CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
+					//CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
 
 					Pos.vx += multiplier * 2 * _frames;
 				}
@@ -195,7 +195,7 @@ void CNpcGaryFriend::think( int _frames )
 				{
 					if ( m_started )
 					{
-						CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
+						//CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL );
 
 						Pos.vx += multiplier * 2 * _frames;
 					}

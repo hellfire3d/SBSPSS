@@ -419,6 +419,9 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
 
 	m_heading = initHeading;
 	m_initPos = Pos = initPos;
+	m_vertVelocity = 0;
+	m_bounceCount = 0;
+	m_hitTarget = false;
 
 	if ( m_heading > 1024 && m_heading < 3072 )
 	{
@@ -489,6 +492,68 @@ void CPlayerProjectile::think(int _frames)
 
 	switch( m_movementType )
 	{
+		case PLAYER_PROJECTILE_BOUNCING:
+		{
+			if ( !m_hitTarget )
+			{
+				Pos.vx += ( _frames * 5 * rcos( m_heading ) ) >> 12;
+
+				m_vertVelocity += 128;
+
+				if ( m_vertVelocity > ( 5 << 8 ) )
+				{
+					m_vertVelocity = 5 << 8;
+				}
+				else if ( m_vertVelocity < -( 5 << 8 ) )
+				{
+					m_vertVelocity = -( 5 << 8 );
+				}
+
+				s16 moveY = ( m_vertVelocity >> 8 ) * _frames;
+
+				s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy + moveY, 32 );
+
+				if ( groundHeight < 0 )
+				{
+					// destroy destructable tiles
+
+					CLevel &level = GameScene.GetLevel();
+
+					level.destroyMapArea( Pos );
+
+					if ( groundHeight < -16 )
+					{
+						m_hitTarget = true;
+						m_lifetimeType = PLAYER_PROJECTILE_FINITE_LIFE;
+						m_lifetime = GameState::getOneSecondInFrames() >> 2;
+					}
+					else
+					{
+						// reverse vertical velocity
+
+						m_vertVelocity = -m_vertVelocity;
+
+						if ( m_bounceCount > 2 )
+						{
+							m_hitTarget = true;
+							m_lifetimeType = PLAYER_PROJECTILE_FINITE_LIFE;
+							m_lifetime = GameState::getOneSecondInFrames() >> 2;
+						}
+						else
+						{
+							m_bounceCount++;
+						}
+					}
+				}
+				else
+				{
+					Pos.vy += moveY;
+				}
+			}
+
+			break;
+		}
+
 		case PLAYER_PROJECTILE_DUMBFIRE:
 		default:
 		{
@@ -497,7 +562,7 @@ void CPlayerProjectile::think(int _frames)
 				// destroy destructable tiles
 
 				CLevel &level = GameScene.GetLevel();
-				
+
 				level.destroyMapArea( Pos );
 
 				setToShutdown();
@@ -531,29 +596,41 @@ void CPlayerProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_frame);
-	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_frame);
 
 	offset = getScreenOffset();
 
-	if ( m_reversed )
+	if ( m_hitTarget )
 	{
-		x = Pos.vx - offset.vx + ( spriteWidth >> 1 );
+		x = Pos.vx - offset.vx;
+		y = Pos.vy - offset.vy;
+
+		SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BALLOONBURST, x, y, 4096 << 1, 4096 << 1, 0, 0 );
+		setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 	}
 	else
 	{
-		x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
+		int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_frame);
+		int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_frame);
+
+		if ( m_reversed )
+		{
+			x = Pos.vx - offset.vx + ( spriteWidth >> 1 );
+		}
+		else
+		{
+			x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
+		}
+
+		y = Pos.vy - offset.vy - ( spriteHeight >> 1 );
+
+		if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
+		{
+			return;
+		}
+
+		SprFrame = CGameScene::getSpriteBank()->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
+		setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 	}
-
-	y = Pos.vy - offset.vy - ( spriteHeight >> 1 );
-
-	if ( x < -spriteWidth || y < -spriteHeight || x > scrnWidth || y > scrnHeight )
-	{
-		return;
-	}
-
-	SprFrame = CGameScene::getSpriteBank()->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
-	setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 }
 
 DVECTOR CPlayerProjectile::getScreenOffset()

@@ -233,7 +233,7 @@ void	CPlayerModeNet::think()
 				
 				projectile->init(	launchPos,
 									fireHeading,
-									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+									CPlayerProjectile::PLAYER_PROJECTILE_BOUNCING,
 									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 									5*60);
 

@@ -92,6 +92,7 @@ public:
 	enum PLAYER_PROJECTILE_MOVEMENT_TYPE
 	{
 		PLAYER_PROJECTILE_DUMBFIRE = 0,
+		PLAYER_PROJECTILE_BOUNCING = 1,
 	};
 
 	enum PLAYER_PROJECTILE_LIFETIME_TYPE
@@ -135,6 +136,9 @@ protected:
 	POLY_FT4									*SprFrame;
 	u8											m_reversed;
 	CVECTOR										m_RGB;
+	s16											m_vertVelocity;
+	u8											m_bounceCount;
+	u8											m_hitTarget;
 };
 
 
