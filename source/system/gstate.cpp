@@ -95,7 +95,7 @@ void GameState::think()
 				if(loss)
 				{
 					SYSTEM_DBGMSG("MEMORY HAS CHANGED BY %d BYTES DURING SCENE '%s'!",loss,s_currentScene->getSceneName());
-					ASSERT(0);
+					ASSERTas(!"MEMORY CHANGED!");
 					s_baseMemory=0;
 				}
 #endif
