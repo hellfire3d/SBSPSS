@@ -640,7 +640,7 @@ void CPlayerProjectile::think(int _frames)
 
 				s16 moveY = ( m_vertVelocity >> 8 ) * _frames;
 
-				s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, moveY );
+				s32 groundHeight = CGameScene::getCollision()->getHeightFromGroundAmmo( Pos.vx, Pos.vy, moveY );
 
 				if ( groundHeight < moveY )
 				{

@@ -208,7 +208,7 @@ int			CLayerCollision::getHeightFromCeiling(int _x,int _y,int _maxHeight)
 */
 
 /*****************************************************************************/
-int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
+int			CLayerCollision::getHeightFromGroundExcluding(int _x,int _y,int _exclusion,int _maxHeight=32)
 {
 	int	mapX,mapY,xFraction,yFraction;
 	int	distanceFromGround;
@@ -222,7 +222,7 @@ int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
 	distanceFromGround=0;
 
 	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-	if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_SB_NOMOVE )
+	if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
 	{
 		colHeight = 0;
 	}
@@ -239,7 +239,7 @@ int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
 				return -_maxHeight;
 			}
 			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_SB_NOMOVE )
+			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
 			{
 				colHeight = 0;
 			}
@@ -261,7 +261,7 @@ int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
 				return _maxHeight;
 			}
 			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_SB_NOMOVE )
+			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == _exclusion )
 			{
 				colHeight = 0;
 			}
@@ -271,6 +271,12 @@ int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
 	}
 
 	return distanceFromGround;
+}
+
+/*****************************************************************************/
+int			CLayerCollision::getHeightFromGroundNonSB(int _x,int _y,int _maxHeight)
+{
+	return( CLayerCollision::getHeightFromGroundExcluding( _x, _y, COLLISION_TYPE_FLAG_SB_NOMOVE, _maxHeight ) );
 }
 
 /*****************************************************************************/
@@ -340,6 +346,12 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 	}
 
 	return distanceFromGround;
+}
+
+/*****************************************************************************/
+int			CLayerCollision::getHeightFromGroundAmmo(int _x,int _y,int _maxHeight)
+{
+	return( CLayerCollision::getHeightFromGroundExcluding( _x, _y, COLLISION_TYPE_FLAG_NORMAL, _maxHeight ) );
 }
 
 /*****************************************************************************/
