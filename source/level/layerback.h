@@ -7,6 +7,7 @@
 
 
 /*****************************************************************************/
+/*
 struct	sBackSpriteInfo
 {
 		int			Frame;
@@ -32,7 +33,7 @@ struct sBackRGBTable
 {
 		u8	R,G,B,P;
 };
-
+*/
 /*****************************************************************************/
 class SpriteBank;
 
@@ -42,12 +43,6 @@ public:
 		enum
 		{
 			MOVE_SHIFT=4,
-			SPRITE_MAX=16,
-
-			SPIN=1<<0,
-			SCALE=1<<1,
-			MOVE=1<<2,
-			COLOR=1<<3,
 		};
 
 		CLayerBack(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
@@ -59,19 +54,11 @@ public:
 		void	render();
 
 protected:
-		void	InitSprite(sBackSprite *SpritePtr);
-
 		sLayerShadeHdr	*Data;
 		int				XOfs,YOfs;
 		int				PosDx,PosDy;
 		int				BandCount,BandHeight;
 		POLY_G4			Band[LAYER_SHADE_RGB_MAX-1];
-
-		sBackSprite		SpriteList[SPRITE_MAX];
-
-static	sBackRGBTable	BackRGBTable[];
-static	sBackSpriteInfo	InfoTab[];
-
 };
 
 
