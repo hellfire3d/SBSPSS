@@ -18,6 +18,11 @@
 	Includes
 	-------- */
 
+#ifndef __PRIM_HEADER__
+#include "gfx\prim.h"
+#endif
+
+
 /*	Std Lib
 	------- */
 
@@ -49,7 +54,7 @@ private:
 		DEFAULT_X_SPEED=-2,
 		DEFAULT_Y_SPEED=-3,
 		DEFAULT_SPEED_SCALE=2,
-		DEFAULT_OT=1000,
+		DEFAULT_OT=MAX_OT-1,
 	};
 
 	class SpriteBank	*m_sprites;

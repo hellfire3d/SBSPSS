@@ -156,7 +156,7 @@ void CFrontEndDemoMode::render()
 	setRGB1(g4,50,50,99);
 	setRGB2(g4,50,99,50);
 	setRGB3(g4,99,50,99);
-	AddPrimToList(g4,1001);
+	AddPrimToList(g4,MAX_OT-1);
 }
 
 /*----------------------------------------------------------------------

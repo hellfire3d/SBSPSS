@@ -218,7 +218,7 @@ void CFrontEndMainTitles::render()
 
 	// The island
 	fh=m_sprites->getFrameHeader(FRM__ISLAND);
-	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,221);
+	m_sprites->printFT4(fh,ISLAND_LEFT_X,ISLAND_BOTTOM_Y-(fh->H),0,0,201);
 
 	// Sky
 /*	
@@ -499,7 +499,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
 			ft4->y3=grid[xloop+1][yloop+1].y;
 			ft4->x2=grid[xloop  ][yloop+1].x;
 			ft4->y2=grid[xloop  ][yloop+1].y;
-			AddPrimToList(ft4,1000);
+			AddPrimToList(ft4,202);
 			x+=xstep;
 		}
 		y+=ystep;
@@ -510,7 +510,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
 	f4=GetPrimF4();
 	setXYWH(f4,0,HORIZON_LEVEL,512,256-HORIZON_LEVEL);
 	setRGB0(f4,80,70,60);
-	AddPrimToList(f4,1020);
+	AddPrimToList(f4,203);
 	//////////////////////// bg
 }
 
