@@ -2,8 +2,8 @@
 /*** Pad Stuff ***/
 /*****************/
 
-#ifndef __PADS_H__
-#define __PADS_H__
+#ifndef __PAD_PADS_H__
+#define __PAD_PADS_H__
 
 /*****************************************************************************/
 #define DUALSHOCKMODE ((u_long *)0x80010000)

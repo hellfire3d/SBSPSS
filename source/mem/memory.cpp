@@ -38,7 +38,7 @@ static const unsigned int	MEM_GUARD_SIZE=sizeof(int)*2;
 #include "gfx/prim.h"
 #endif
 
-#ifndef __PADS_H__
+#ifndef __PAD_PADS_H__
 #include "pad/pads.h"
 #endif
 
