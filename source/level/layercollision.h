@@ -38,7 +38,7 @@ protected:
 
 		u8				*Map;
 
-		u8				*m_collisionTable;
+		static u8		s_collisionTable[];
 };
 
 

@@ -13,6 +13,33 @@
 #endif
 
 
+// Manual collision height table (pkg)
+u8 CLayerCollision::s_collisionTable[]=
+{
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+	16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+
+	 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
+	 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+	 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,
+	16,16,15,15,14,14,13,13,12,12,11,11,10,10, 9, 9,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+	 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,
+	16,15,14,13,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -23,8 +50,6 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
-
-		m_collisionTable=CFileIO::loadFile(COLLISION_COLLTAB_DAT);
 }
 
 /*****************************************************************************/
@@ -35,7 +60,6 @@ CLayerCollision::~CLayerCollision()
 /*****************************************************************************/
 void		CLayerCollision::shutdown()
 {
-	MemFree(m_collisionTable);
 }
 
 /*****************************************************************************/
@@ -52,7 +76,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
 
-	colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 	if(colHeight)
 	{
 		// Inside a collision block.. find the nearest ground above this point
@@ -66,7 +90,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return -_maxHeight;
 			}
-			colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround<-_maxHeight)distanceFromGround=-_maxHeight;
@@ -85,7 +109,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return _maxHeight;
 			}
-			colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
+			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround>_maxHeight)distanceFromGround=_maxHeight;
@@ -109,7 +133,7 @@ int			CLayerCollision::getCollisionType(int _x,int _y)
 	yFraction=16-(_y&0x0f);
 
 	block=Map[mapX+mapY];
-	colHeight=m_collisionTable[((block&COLLISION_MASK)*16)+xFraction];
+	colHeight=s_collisionTable[((block&COLLISION_MASK)*16)+xFraction];
 	if(colHeight==yFraction)
 	{
 		ret=block;
