@@ -122,8 +122,10 @@ void	MainLoop()
 
 		DbgPollHost();
 
+#ifdef __USER_paul__
 		bug=100/thing;
 		thing--;
+#endif
 
 #if defined(__VERSION_DEBUG__)
 
