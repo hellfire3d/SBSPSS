@@ -6,6 +6,22 @@
 #define __LAYER_TILE_3D_Hx__
 
 
+#define CMX_SetRotMatrixXY( r0 ) __asm__  (       \
+    "lw $12, 0( %0 );"                  \
+    "lw $13, 4( %0 );"                  \
+    "ctc2   $12, $0;"                   \
+    "ctc2   $13, $2;"                   \
+    :                           \
+    : "r"( r0 )                     \
+    : "$12", "$13")
+
+struct	sFlipTable
+{
+	s16		Mtx[4];
+	s32		ClipCode;
+};
+extern	sFlipTable	FlipTable[];
+
 /*****************************************************************************/
 class	FontBank;
 class CLayerTile3d : public CLayerTile

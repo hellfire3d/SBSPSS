@@ -111,20 +111,6 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-#define CMX_SetRotMatrixXY( r0 ) __asm__  (       \
-    "lw $12, 0( %0 );"                  \
-    "lw $13, 4( %0 );"                  \
-    "ctc2   $12, $0;"                   \
-    "ctc2   $13, $2;"                   \
-    :                           \
-    : "r"( r0 )                     \
-    : "$12", "$13")
-
-struct	sFlipTable
-{
-	s16		Mtx[4];
-	s32		ClipCode;
-};
 
 sFlipTable	FlipTable[4]=
 {
@@ -165,10 +151,10 @@ VECTOR			BlkPos;
 				sTri		*TList=&TriList[Elem->TriStart];
 
 				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+				CMX_SetTransMtxXY(&BlkPos);
+				CMX_SetRotMatrixXY(&FTab->Mtx);
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
 				{
-					CMX_SetTransMtxXY(&BlkPos);
-					CMX_SetRotMatrixXY(&FTab->Mtx);
 					gte_ldv3(P0,P1,P2);
 					setlen(TPrimPtr, GPU_PolyFT3Tag);
 					TPrimPtr->code=TList->PolyCode;
