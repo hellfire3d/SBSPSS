@@ -22,6 +22,7 @@ class CNpcRisingWeightHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual void		render();
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				setTriggered()											{m_triggered = true;}
 protected:

@@ -19,6 +19,14 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,4 +105,50 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 	}
 
 	Pos.vy = m_base.vy - ( m_extension >> 8 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcRisingWeightHazard::render()
+{
+	int		x1,y1,x2,y2;
+
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	if ( m_isActive )
+	{
+		CHazardThing::render();
+
+		if (canRender())
+		{
+			DVECTOR &renderPos=getRenderPos();
+
+			m_modelGfx->Render(renderPos);
+		}
+
+		x1 = x2 = m_base.vx - offset.vx;
+		y1 = m_base.vy - ( m_maxExtension >> 8 ) - offset.vy;
+		y2 = Pos.vy - offset.vy;
+
+		if ( x2 >= 0 && x1 <= VidGetScrW() )
+		{
+			if ( y2 >= 0 && y1 <= VidGetScrH() )
+			{
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+			}
+		}
+
+		x1 = ( m_wheelPos.vx << 4 ) + 8 - offset.vx;
+		x2 = m_base.vx - offset.vx;
+		y1 = ( m_wheelPos.vy << 4 ) + 16 - offset.vy;
+		y2 = m_base.vy - ( m_maxExtension >> 8 ) - offset.vy;
+
+		if ( x2 >= 0 && x1 <= VidGetScrW() )
+		{
+			if ( y1 >= 0 && y2 <= VidGetScrH() )
+			{
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+			}
+		}
+	}
 }
