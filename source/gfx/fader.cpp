@@ -69,6 +69,7 @@ BubicleEmitterData	s_fadeBubicleSpawner=
 	0,0,512,40,					// m_x,m_y,m_w,m_h
 	0,0,						// m_birthRate,m_birthAmount
 	0,							// m_life
+	false,						// m_applyMapOffsets
 
 	// m_bubicleBase
 	{

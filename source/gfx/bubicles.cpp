@@ -82,8 +82,11 @@ const int	CBubicleFactory::s_frameTabSrc[s_frameTabSize]=
 	FRM__BUBBLE_2,FRM__BUBBLE_1,FRM__BUBBLE_2,FRM__BUBBLE_3,
 };
 
+DVECTOR		CBubicleFactory::s_mapPositionOffset={0,0};
+
 int s_numLiveBubicleEmitters=0;
 int s_numLiveBubicles=0;
+
 
 
 
@@ -152,10 +155,15 @@ void CBubicleEmitter::think(int _frames)
 #ifdef SHOW_BUBICLE_EMITTERS
 void CBubicleEmitter::render()
 {
+	DVECTOR		mapPos={0,0}
 	POLY_F4		*f4;
+	if(m_data.m_applyMapOffset)
+	{
+		mapPos=*CBubicleFactory::getMapOffset();
+	}
 	f4=GetPrimF4();
 	setPolyF4(f4);
-	setXYWH(f4,m_data.m_x,m_data.m_y,m_data.m_w,m_data.m_h);
+	setXYWH(f4,m_data.m_x-mapPos->vx,m_data.m_y-mapPos->vy,m_data.m_w,m_data.m_h);
 	setSemiTrans(f4,1);
 	setShadeTex(f4,0);
 	setRGB0(f4,30,40,50);
@@ -227,7 +235,7 @@ void CBubicle::create()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CBubicle::init(BubicleData *_init,int _x,int _y)
+void CBubicle::init(BubicleData *_init,int _x,int _y,int _applyMapOffset)
 {
 	m_data=*_init;
 
@@ -242,6 +250,7 @@ void CBubicle::init(BubicleData *_init,int _x,int _y)
 	m_typeSizeChange=getRnd()&1;
 	m_vSizeChange=0;	
 	m_frameCount=0;
+	m_applyMapOffset=_applyMapOffset;
 
 	m_fhBub=CBubicleFactory::getBubbleFrameHeader();
 
@@ -340,11 +349,17 @@ void CBubicle::render()
 {
 	ASSERT(isActive());
 
+	DVECTOR		mapPos={0,0};
 	POLY_FT4	*ft4;
 	int			x,y,w,h;
 
-	x=m_x>>ACCURACY_SHIFT;
-	y=m_y>>ACCURACY_SHIFT;
+	if(m_applyMapOffset)
+	{
+		mapPos=*CBubicleFactory::getMapOffset();
+	}
+
+	x=(m_x>>ACCURACY_SHIFT)-mapPos.vx;
+	y=(m_y>>ACCURACY_SHIFT)-mapPos.vy;
 	w=m_data.m_w>>ACCURACY_SHIFT;
 	h=m_data.m_h>>ACCURACY_SHIFT;
 
@@ -558,7 +573,7 @@ CBubicle *CBubicleFactory::spawnParticle(BubicleEmitterData *_init)
 			newBubData.m_colour.m_g=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_g);
 			newBubData.m_colour.m_b=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_b);
 
-			bub->init(&newBubData,x,y);
+			bub->init(&newBubData,x,y,_init->m_applyMapOffset);
 			s_numLiveBubicles++;
 			return bub;
 		}
@@ -580,6 +595,30 @@ sFrameHdr *CBubicleFactory::getBubbleFrameHeader()
 	s_frameTypeCounter=(s_frameTypeCounter+1)&s_frameTabSizeMask;
 
 	return s_frameTab[s_frameTypeCounter];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CBubicleFactory::setMapOffset(DVECTOR *_offset)
+{
+	s_mapPositionOffset=*_offset;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+const DVECTOR *CBubicleFactory::getMapOffset()
+{
+	return &s_mapPositionOffset;
 }
 
 

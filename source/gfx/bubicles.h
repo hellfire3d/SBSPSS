@@ -54,7 +54,7 @@ typedef struct
 	s16				m_life;						// Frames to live for
 	s16				m_vx,m_vdx,m_vxmax;			// Velocity, velocitydelta, max velocity
 	s16				m_vy,m_vdy,m_vymax;
-	int				m_w,m_h;					// Size of bubicle
+	s16				m_w,m_h;					// Size of bubicle
 	s16				m_dvSizeChange;				// Speed at which bubbles changes height/width
 	s16				m_theta,m_vtheta;
 	s16				m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth;
@@ -74,7 +74,7 @@ private:
 				CBubicle()											{;}
 
 	void		create();
-	void		init(BubicleData *_init,int _x,int _y);
+	void		init(BubicleData *_init,int _x,int _y,int _applyMapOffset);
 
 	void		think(int _frames);
 	void		render();
@@ -88,6 +88,7 @@ private:
 	s16			m_typeSizeChange;				// 0=Width, 1=Height
 	s16			m_vSizeChange;
 	s16			m_frameCount;
+	s16			m_applyMapOffset;
 	sFrameHdr	*m_fhBub;
 
 	BubicleData	m_data;
@@ -107,6 +108,7 @@ typedef struct
 	int			m_x,m_y,m_w,m_h;				// Size and position of emitter
 	s16			m_birthRate,m_birthAmount;		// birthAmount bubicles born every birthRate frames
 	s16			m_life;							// -1 for infinite life
+	s16			m_applyMapOffset;				// Is bubicle position relative to the map or not?
 
 	BubicleData	m_bubicleBase;
 	BubicleData	m_bubicleRange;
@@ -162,6 +164,9 @@ public:
 	static sFrameHdr		*getBubbleFrameHeader();
 	static SpriteBank		*getSprites()							{return s_sprites;}
 
+	static void				setMapOffset(DVECTOR *_offset);
+	static const DVECTOR	*getMapOffset();
+
 
 private:
 	enum
@@ -182,6 +187,8 @@ private:
 	static const int		s_frameTabSizeMask;
 	static sFrameHdr		*s_frameTab[];
 	static const int		s_frameTabSrc[];
+
+	static DVECTOR			s_mapPositionOffset;
 
 };
 
