@@ -166,7 +166,6 @@ public:
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
-	void				setTypeFromMapEdit( u16 newType );
 	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
 	void				setHeading( s32 xPos, s32 yPos );
@@ -179,6 +178,7 @@ public:
 	virtual int			getFrameCount();
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
+	void				setupWaypoints( sThingActor *ThisActor );
 
 
 protected:

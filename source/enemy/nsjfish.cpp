@@ -31,15 +31,34 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 void CNpcSmallJellyfishEnemy::render()
 {
-	CNpcEnemy::render();
+	SprFrame = NULL;
 
-	if ( SprFrame )
+	if ( m_isActive )
 	{
-		setRGB0( SprFrame, 255, 128, 255 );
-	}
+		CEnemyThing::render();
 
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+		{
+			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			{
+				SprFrame = m_spriteBank->printFT4(m_frame>>8,renderPos.vx,renderPos.vy,m_reversed,0,10);
+				setRGB0( SprFrame, 255, 128, 255 );
+			}
+		}
+	}
 }
 
 void CNpcSmallJellyfishEnemy::processClose( int _frames )

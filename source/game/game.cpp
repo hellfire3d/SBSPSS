@@ -272,40 +272,8 @@ void	CGameScene::initLevel()
 					{
 						CNpcEnemy *enemy;
 						enemy=CNpcEnemy::Create(ThisActor);
-						enemy->setTypeFromMapEdit( ThisActor->Type );
-						enemy->init();
 						enemy->setLayerCollision( Level.getCollisionLayer() );
-
-						u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
-
-						u16 newXPos, newYPos;
-
-						newXPos = (u16) *PntList;
-						PntList++;
-						newYPos = (u16) *PntList;
-						PntList++;
-
-						enemy->setStartPos( newXPos, newYPos );
-						enemy->addWaypoint( newXPos, newYPos );
-
-						if ( ThisActor->PointCount > 1 )
-						{
-							for (pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
-							{
-								newXPos = (u16) *PntList;
-								PntList++;
-								newYPos = (u16) *PntList;
-								PntList++;
-
-								enemy->addWaypoint( newXPos, newYPos );
-
-								if ( pointNum == 1 )
-								{
-									enemy->setHeading( newXPos, newYPos );
-								}
-							}
-						}
-
+						enemy->setupWaypoints( ThisActor );
 						enemy->postInit();
 					}
 					break;
