@@ -776,6 +776,14 @@ SOURCE=..\..\..\source\player\modelist.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmballoon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmballoon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmboots.cpp
 # End Source File
 # Begin Source File
@@ -794,6 +802,14 @@ SOURCE=..\..\..\source\player\pmodes.h
 # Begin Group "states"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psballoon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psballoon.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psbutt.cpp

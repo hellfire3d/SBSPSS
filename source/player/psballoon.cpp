@@ -38,6 +38,9 @@
 	Tyepdefs && Defines
 	------------------- */
 
+#define MAX_BALLOON_VELOCITY	5
+
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -58,28 +61,9 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateBalloon::enter(CPlayer *_player)
 {
-	int	controlHeld;
-	controlHeld=getPadInputHeld(_player);
-
-	if(getMoveVelocity(_player).vx)
-	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
-	}
-	else
-	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUNSTART);
-	}
-
-	if(controlHeld&PI_LEFT)
-	{
-		setFacing(_player,FACING_LEFT);
-	}
-	else if(controlHeld&PI_RIGHT)
-	{
-		setFacing(_player,FACING_RIGHT);
-	}
+	setAnimNo(_player,ANIM_SPONGEBOB_HOVER);
+	m_canDropBalloon=false;
 }
-
 
 /*----------------------------------------------------------------------
   Function:
@@ -93,17 +77,9 @@ void CPlayerStateBalloon::think(CPlayer *_player)
 	controlDown=getPadInputDown(_player);
 	controlHeld=getPadInputHeld(_player);
 
-	if(controlDown&PI_JUMP)
+	if(m_canDropBalloon&&controlDown&PI_ACTION)
 	{
-		setState(_player,STATE_JUMP);
-	}
-	if(controlHeld&PI_DOWN)
-	{
-		setState(_player,STATE_DUCK);
-	}
-	if(controlDown&PI_ACTION)
-	{
-		setState(_player,STATE_RUNATTACK);
+		setMode(_player,PLAYER_MODE_FULLUNARMED);
 	}
 
 	if(controlHeld&PI_LEFT)
@@ -116,22 +92,25 @@ void CPlayerStateBalloon::think(CPlayer *_player)
 	}
 	else
 	{
-		if(getMoveVelocity(_player).vx==0)
-		{
-			setState(_player,STATE_IDLE);
-		}
-		else
-		{
-			slowdown(_player);
-		}
+		slowdown(_player);
 	}
+
+	DVECTOR moveVel=getMoveVelocity(_player);
+	if(moveVel.vy>-MAX_BALLOON_VELOCITY)
+	{
+		moveVel.vy--;
+	}
+	if(moveVel.vy<-MAX_BALLOON_VELOCITY)
+	{
+		moveVel.vy++;
+	}
+	setMoveVelocity(_player,&moveVel);
 
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
-		setAnimNo(_player,ANIM_SPONGEBOB_RUN);
+		m_canDropBalloon=true;
 	}
 }
-
 
 /*===========================================================================
  end */

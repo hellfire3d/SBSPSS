@@ -26,6 +26,10 @@
 #include "player/pmboots.h"
 #endif
 
+#ifndef __PLAYER_PMBALLOON_H__
+#include "player/pmballoon.h"
+#endif
+
 
 #ifndef __PLAYER__PSJUMP_H__
 #include "player\psjump.h"
@@ -63,6 +67,10 @@
 #include "player\psfly.h"
 #endif
 
+#ifndef __PLAYER__PSBALLOON_H__
+#include "player\psballoon.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -88,6 +96,7 @@
 
 CPlayerMode					modeEmpty;
 CPlayerModeBoots			modeBoots;
+CPlayerModeBalloon			modeBalloon;
 
 CPlayerStateUnarmedIdle		stateUnarmedIdle;
 CPlayerStateCoralBlowerIdle	stateCoralBlowerIdle;
@@ -107,6 +116,7 @@ CPlayerStateSoakUp			stateSoackUp;
 CPlayerStateGetUp			stateGetup;
 CPlayerStateDead			stateDead;
 CPlayerStateFly				stateFly;
+CPlayerStateBalloon			stateBalloon;
 
 
 
@@ -119,6 +129,7 @@ CPlayerStateFly				stateFly;
 CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 {
 	//
+	// PLAYER_MODE_BASICUNARMED
 	// Basic player mode. No attack, only butt bounce
 	//
 	{
@@ -153,6 +164,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// PLAYER_MODE_FULLUNARMED
 	// Full unarmed player mode. With butt bounce and karate chop
 	//
 	{
@@ -187,6 +199,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// PLAYER_MODE_SQUEAKYBOOTS
 	// Squeaky boots. Also has butt bounce and karate chop
 	//
 	{
@@ -221,6 +234,42 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// PLAYER_MODE_BALLOON
+	// Holding a balloon
+	//
+	{
+		{	{
+			0,										// PM__JUMP_VELOCITY
+			0,										// PM__MAX_JUMP_FRAMES
+			0,										// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY/2,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP/4,			// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN/4,	// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN/4,			// PM__RUN_SLOWDOWN
+		}	},
+		&modeBalloon,
+		{
+			&stateBalloon,							// STATE_IDLE
+			NULL,									// STATE_IDLETEETER
+			NULL,									// STATE_JUMP
+			NULL,									// STATE_RUN
+			NULL,									// STATE_FALL
+			NULL,									// STATE_FALLFAR
+			NULL,									// STATE_BUTTBOUNCE
+			NULL,									// STATE_BUTTFALL
+			NULL,									// STATE_BUTTLAND
+			NULL,									// STATE_ATTACK
+			NULL,									// STATE_RUNATTACK
+			NULL,									// STATE_AIRATTACK
+			NULL,									// STATE_DUCK
+			NULL,									// STATE_SOAKUP
+			NULL,									// STATE_GETUP
+			&stateDead,								// STATE_DEAD
+		}
+	},
+
+	//
+	// PLAYER_MODE_NET
 	// Armed with net
 	//
 	{
@@ -255,6 +304,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// PLAYER_MODE_CORALBLOWER
 	// Armed with coral blower ( Heavy weapon so slows SB down )
 	//
 	{
@@ -289,6 +339,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// PLAYER_MODE_FLY
 	// Fly mode ( A useful debugging mode.. )
 	//
 	{

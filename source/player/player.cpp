@@ -68,6 +68,9 @@
 	Structure defintions
 	-------------------- */
 
+// Two dice.  One says 'Re' on every face, the other says 'boot',
+// 'install', 'try', 'tire', 'sume' and 'number'
+
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -132,6 +135,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"BASICUNARMED",
 	"FULLUNARMED",
 	"SQUEAKYBOOTS",
+	"BALLOON",
 	"NET",
 	"CORALBLOWER",
 };
@@ -388,29 +392,32 @@ void CPlayer::thinkVerticalMovement()
 				Pos.vy+=(m_moveVel.vy>>VELOCITY_SHIFT)+colHeight;
 				m_moveVel.vy=0;
 				m_fallFrames=0;
-				if(m_currentState==STATE_BUTTFALL)
+				if(m_currentMode!=PLAYER_MODE_BALLOON)
 				{
-					// Landed from a butt bounce
-					setState(STATE_BUTTLAND);
-				}
-				else if(m_currentState==STATE_FALLFAR)
-				{
-					// Landed from a painfully long fall
-					setState(STATE_IDLE);
-					takeDamage(DAMAGE__FALL);
-					m_moveVel.vx=0;
-					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-				}
-				else if(m_moveVel.vx)
-				{
-					// Landed from a jump with x movement
-					setState(STATE_RUN);
-				}
-				else
-				{
-					// Landed from a jump with no x movement
-					setState(STATE_IDLE);
-					setAnimNo(ANIM_SPONGEBOB_JUMPEND);
+					if(m_currentState==STATE_BUTTFALL)
+					{
+						// Landed from a butt bounce
+						setState(STATE_BUTTLAND);
+					}
+					else if(m_currentState==STATE_FALLFAR)
+					{
+						// Landed from a painfully long fall
+						setState(STATE_IDLE);
+						takeDamage(DAMAGE__FALL);
+						m_moveVel.vx=0;
+						CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
+					}
+					else if(m_moveVel.vx)
+					{
+						// Landed from a jump with x movement
+						setState(STATE_RUN);
+					}
+					else
+					{
+						// Landed from a jump with no x movement
+						setState(STATE_IDLE);
+						setAnimNo(ANIM_SPONGEBOB_JUMPEND);
+					}
 				}
 			}
 		}
@@ -680,7 +687,12 @@ void CPlayer::setMode(PLAYER_MODE _mode)
 {
 	m_currentMode=_mode;
 // Need to do something about this setState() for when the new mode doesn't have that state (pkg)
-	setState(m_currentState);
+	if(!setState(m_currentState))
+	{
+		m_moveVel.vx=0;
+		m_moveVel.vy=0;
+		setState(STATE_IDLE);
+	}
 	s_modes[m_currentMode].m_modeControl->enter(this);
 }
 

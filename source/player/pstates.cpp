@@ -75,6 +75,18 @@ int CPlayerState::setState(CPlayer *_player,int _state)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CPlayerState::setMode(class CPlayer *_player,int _mode)
+{
+	_player->setMode((PLAYER_MODE)_mode);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getFacing(CPlayer *_player)
 {
 	return _player->getFacing();

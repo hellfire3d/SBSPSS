@@ -37,6 +37,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -91,6 +95,7 @@ void	CBalloonPickup::init()
 void	CBalloonPickup::collect(class CPlayer *_player)
 {
 	CBaseRespawningPickup::collect(_player);
+	_player->setMode(PLAYER_MODE_BALLOON);
 }
 
 /*----------------------------------------------------------------------
