@@ -282,7 +282,6 @@ mode=mode_none;
 	m_font=new ("Credits font") ScalableFontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(ScalableFontBank::JUST_CENTRE);
-	m_font->setColour(17/2,34/2,255/2);
 
 	m_background1=new ("Options Background") CScrollyBackground();
 	m_background1->init();
@@ -350,6 +349,9 @@ void CFrontEndCredits::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int	creditsfr=40;
+int	creditsfg=80;
+int creditsfb=127;
 void CFrontEndCredits::think(int _frames)
 {
 #ifdef MEM_CARD_TEST
@@ -411,6 +413,9 @@ else if(mode==mode_load)
 
 //if(mode==mode_none)
 #endif
+
+	m_font->setColour(creditsfr,creditsfg,creditsfb);
+
 	if(!CFader::isFading())
 	{
 		m_frame+=_frames;
