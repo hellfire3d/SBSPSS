@@ -1,5 +1,5 @@
 CD-ROM Generator for Windows 1.40
-Tue Apr 17 17:23:11 2001
+Thu May 03 13:24:39 2001
 WE
 Standard
 3
@@ -374,10 +374,48 @@ d:\sbsp\usa\THQ.STR
 0
 0
 \
+TRACK1.IXA;1
+1
+d:\sbsp\usa\TRACK1.IXA
+8683
+0
+0
+50
+50
+14336
+1
+1
+0 0 0 0 0 0 0
+2336
+-1
+0
+-1
+0
+-32403
+1
+0
+0
+-1
+43057152
+988863744
+988863744
+988863744
+1
+0
+-1
+0
+0
+20283488
+0
+0
+0
+0
+0
+\
 ZZZZZZZZ.ZZZ;1
 1
 d:\sbsp\usa\ZZZZZZZZ.ZZZ
-8683
+27115
 0
 0
 50
@@ -405,7 +443,7 @@ d:\sbsp\usa\ZZZZZZZZ.ZZZ
 -1
 0
 0
-20283488
+63340640
 0
 0
 0
