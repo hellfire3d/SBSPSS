@@ -128,18 +128,11 @@ static const char *	s_sceneNames[] =
 	"System",
 	"UNKNOWN",
 };
-#endif	/* __DEBUG_MEM__ */
 
 static const int s_nbSceneNames = sizeof(s_sceneNames) / sizeof(char *);
 
 static FontBank s_debugFont;
 
-
-
-
-
-
-#ifdef __DEBUG_MEM__
 void dumpDebugMem()
 {
 	if (s_dumpMem)
@@ -371,6 +364,13 @@ void freeDebugMem( void * addr )
 	ASSERT( !"Can't find debug mem node ( memory already freed? )" );
 }
 
+// hmm.. have to alloc this memory before the first scene, but have to wait until all the
+// systems are active so can't do it in the standard MemInit() thing
+void DebugMemFontInit()
+{
+	s_debugFont.initialise( &standardFont );
+	s_debugFont.setOt( 0 );
+}
 
 #endif
 
@@ -402,21 +402,10 @@ void MemInit()
 }
 
 
-// hmm.. have to alloc this memory before the first scene, but have to wait until all the
-// systems are active so can't do it in the standard MemInit() thing
-void DebugMemFontInit()
-{
-#ifdef __DEBUG_MEM__
-	s_debugFont.initialise( &standardFont );
-	s_debugFont.setOt( 0 );
-#endif
-}
-
 /*****************************************************************************/
 // 030700	Dave - Implemented smart allocation
 //			It now looks thru the whole node list, and takes from the smallest VALID node
 //			I now understand how this memory stuff works, it aint all bad!
-
 char * MemAllocate( u32 TLen, char const *Name, char const * File, int LineNumber )
 {
 sLList	*mem = &MainRam;
@@ -482,7 +471,7 @@ int		BestNode,FirstNode;
 		}
 
 #ifdef __DEBUG_MEM__
-	addDebugMem( Addr, Name, File, LineNumber );
+		addDebugMem( Addr, Name, File, LineNumber );
 #endif
 
 	ASSERT( (Addr != (char*)-1) );
