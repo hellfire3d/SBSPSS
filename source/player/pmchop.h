@@ -43,7 +43,7 @@ public:
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
 
-	virtual int					isInAttackState();
+	virtual ATTACK_STATE		getAttackState();
 
 private:
 	int							canAttackFromThisState();

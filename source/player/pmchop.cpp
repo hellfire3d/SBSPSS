@@ -120,9 +120,16 @@ void	CPlayerModeChop::setAnimFrame(int _animFrame)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeChop::isInAttackState()
+ATTACK_STATE	CPlayerModeChop::getAttackState()
 {
-	return m_chopping||CPlayerModeBase::isInAttackState();
+	if(m_chopping)
+	{
+		return ATTACK_STATE__KARATE;
+	}
+	else
+	{
+		return CPlayerModeBase::getAttackState();
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -131,7 +138,7 @@ int		CPlayerModeChop::isInAttackState()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeChop::canAttackFromThisState()
+int	CPlayerModeChop::canAttackFromThisState()
 {
 	int	ret=false;
 

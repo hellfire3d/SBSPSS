@@ -633,6 +633,16 @@ void CPlayer::addLife()
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+ATTACK_STATE	CPlayer::getAttackState()
+{
+	return m_currentPlayerModeClass->getAttackState();
+}
 
 /*----------------------------------------------------------------------
 	Function:

@@ -193,15 +193,15 @@ void	CPlayerModeBase::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeBase::isInAttackState()
+ATTACK_STATE	CPlayerModeBase::getAttackState()
 {
-	int	ret=false;
+	ATTACK_STATE	ret=ATTACK_STATE__NONE;
 
 	switch(getState())
 	{
 		case STATE_BUTTFALL:
 		case STATE_BUTTLAND:
-			ret=true;
+			ret=ATTACK_STATE__BUTT_BOUNCE;
 			break;
 
 		case STATE_IDLE:

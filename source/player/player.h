@@ -121,6 +121,16 @@ typedef enum
 }PLAYERINPUT;
 
 
+// For getAttackState()
+typedef enum
+{
+	ATTACK_STATE__NONE,
+	ATTACK_STATE__KARATE,
+	ATTACK_STATE__BUTT_BOUNCE,
+} ATTACK_STATE;
+
+
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -153,6 +163,8 @@ public:
 
 	void			addHealth(int _health);
 	void			addLife();
+	ATTACK_STATE	getAttackState();
+	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0;}
 
 public:
 	void			setMode(PLAYER_MODE _mode);

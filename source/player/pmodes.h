@@ -88,7 +88,8 @@ public:
 	int				getPadInputHeld();
 	int				getPadInputDown();
 
-	virtual int		isInAttackState()					{return false;}
+	virtual ATTACK_STATE	getAttackState()			{return ATTACK_STATE__NONE;}
+
 
 protected:
 	DVECTOR			getPlayerPos();
@@ -113,7 +114,7 @@ public:
 	virtual void	think();
 	virtual void	render();
 
-	virtual int		isInAttackState();
+	virtual ATTACK_STATE	getAttackState();
 
 	virtual int					canTeeter()				{return m_currentState==STATE_IDLE;}
 	virtual int					canFallForever()		{return m_currentState==STATE_BUTTFALL;}
