@@ -50,7 +50,7 @@ protected:
 
 	enum
 	{
-		SPIKE_RADIUS = 20,
+		SPIKE_RADIUS = 15,
 	};
 };
 
