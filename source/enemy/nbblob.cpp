@@ -32,6 +32,9 @@ void CNpcBallBlobEnemy::postInit()
 	m_heading = m_fireHeading = 128;
 
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+	m_velocity.vx = 0;
+	m_velocity.vy = -5;
 }
 
 void CNpcBallBlobEnemy::processMovement( int _frames )
@@ -42,6 +45,7 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 	s32 waypointXDist;
 	s32 waypointYDist;
 	s32 waypointHeading;
+	s32 groundHeight;
 
 	if ( !m_animPlaying && m_frame != 0 )
 	{
@@ -58,101 +62,64 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 		return;
 	}
 
+	// deal with vertical
+
+	m_velocity.vy += 128;
+
+	if ( m_velocity.vy > ( 5 << 8 ) )
+	{
+		m_velocity.vy = 5 << 8;
+	}
+	else if ( m_velocity.vy < -( 5 << 8 ) )
+	{
+		m_velocity.vy = -( 5 << 8 );
+	}
+
+	moveY = ( m_velocity.vy >> 8 ) * _frames;
+
+	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+
+	if ( groundHeight < 0 )
+	{
+		if ( m_velocity.vy > 0 )
+		{
+			m_velocity.vy = -m_velocity.vy;
+			m_animPlaying = true;
+			m_animNo = ANIM_BALLBLOB_BOUNCE;
+			m_frame = 0;
+		}
+		else
+		{
+			m_velocity.vy = -( 5 << 8 );
+			m_animPlaying = true;
+			m_animNo = ANIM_BALLBLOB_BOUNCE;
+			m_frame = 0;
+		}
+
+		moveY = groundHeight;
+	}
+
 	// deal with horizontal
 
 	bool pathComplete;
 	
 	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading ) )
 	{
-		// increment waypoint
-
-		if ( waypointHeading == 0 )
+		if ( m_animNo != ANIM_BALLBLOB_BOUNCE )
 		{
-			// head right
-
-			if ( m_heading >= 1024 && m_heading <= 3072 )
-			{
-				// currently heading in the wrong direction, reverse horizontal
-
-				s32 headingDiff = m_heading - 2048;
-
-				headingDiff = -headingDiff;
-
-				headingDiff += 4096;
-
-				m_heading = headingDiff % 4096;
-
-				m_animPlaying = true;
-				m_animNo = ANIM_BALLBLOB_WOBBLE;
-				m_frame = 0;
-			}
-		}
-		else
-		{
-			// head left
-
-			if ( m_heading < 1024 || m_heading > 3072 )
-			{
-				// currently heading in the wrong direction, reverse horizontal
-
-				s32 headingDiff = m_heading;
-
-				headingDiff = -headingDiff;
-
-				headingDiff += 6144;
-
-				m_heading = headingDiff % 4096;
-
-				m_animPlaying = true;
-				m_animNo = ANIM_BALLBLOB_WOBBLE;
-				m_frame = 0;
-			}
+			m_animPlaying = true;
+			m_animNo = ANIM_BALLBLOB_WOBBLE;
+			m_frame = 0;
 		}
 	}
 
-	s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-	s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
-
-	moveX = preShiftX >> 12;
-	if ( !moveX && preShiftX )
+	if ( waypointHeading == 0 )
 	{
-		moveX = preShiftX / abs( preShiftX );
+		moveX = m_data[m_type].speed * _frames;
 	}
-
-	moveY = preShiftY >> 12;
-	if ( !moveY && preShiftY )
+	else
 	{
-		moveY = preShiftY / abs( preShiftY );
-	}
-
-	// deal with vertical
-
-	if ( Pos.vy < 0 || m_layerCollision->Get( ( Pos.vx + moveX ) >> 4, ( Pos.vy + moveY ) >> 4 ) )
-	{
-		// reflect heading in vertical
-
-		m_heading = 4096 - m_heading;
-
-		m_animPlaying = true;
-		m_animNo = ANIM_BALLBLOB_BOUNCE;
-		m_frame = 0;
-
-		// get new movement values
-
-		preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-		preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
-
-		moveX = preShiftX >> 12;
-		if ( !moveX && preShiftX )
-		{
-			moveX = preShiftX / abs( preShiftX );
-		}
-
-		moveY = preShiftY >> 12;
-		if ( !moveY && preShiftY )
-		{
-			moveY = preShiftY / abs( preShiftY );
-		}
+		moveX = -m_data[m_type].speed * _frames;
 	}
 
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );

@@ -20,6 +20,8 @@ public:
 	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
+
+	DVECTOR				m_velocity;
 };
 
 #endif
