@@ -221,7 +221,7 @@ void	CNpcEnemy::CacheActor(int Type)
 {
 int	m_type = mapEditConvertTable[Type - NPC_ENEMY_MAPEDIT_OFFSET];
 		
-		CActorPool::GetActor(m_data[m_type].skelType);
+		CActorPool::AddActor(m_data[m_type].skelType);
 
 }
 

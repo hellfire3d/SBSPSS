@@ -418,7 +418,9 @@ void 	CLevel::init()
 // Load it
 sLvlTab *lvlTab=&LvlTable[s_globalLevelSelectThing];
 
+		CActorGfx::ResetCache();
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
+
 		if (!LevelBuffer)
 		{
 			initNewLevel(lvlTab);
