@@ -153,6 +153,9 @@ int 	Count;
 #if		!defined(__TERRITORY_USA__)
 		DBuf[0].disp.screen.y=24;
 		DBuf[1].disp.screen.y=24;
+#else
+		DBuf[0].disp.screen.y=16;
+		DBuf[1].disp.screen.y=16;
 #endif
 
 // Stop flicker!!
