@@ -2016,6 +2016,18 @@ SOURCE=..\..\..\source\PsxBoot\psxboot.cpp
 SOURCE=..\..\..\source\PsxBoot\PSXBOOT.H
 # End Source File
 # End Group
+# Begin Group "save"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\save\save.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\save\save.h
+# End Source File
+# End Group
 # Begin Group "script"
 
 # PROP Default_Filter ""
