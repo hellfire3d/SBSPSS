@@ -117,7 +117,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 				remainder = 0;
 			}
 
-			if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + testX, Pos.vy ) < -maxHeight )
+			if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + testX + ( sign * 32 ), Pos.vy ) < -maxHeight )
 			{
 				moveX = 0;
 				m_currentSpeed = 0;
