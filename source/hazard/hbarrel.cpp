@@ -26,6 +26,7 @@ void CNpcBarrelHazard::init()
 	CNpcHazard::init();
 
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
+	m_rotation = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,6 +112,41 @@ void CNpcBarrelHazard::processMovement( int _frames )
 		}
 	}
 
+	if ( moveX < 0 )
+	{
+		m_rotation -= 64 * _frames;
+		m_rotation &= 4095;
+	}
+	else if ( moveX > 0 )
+	{
+		m_rotation += 64 * _frames;
+		m_rotation &= 4095;
+	}
+
 	Pos.vx += moveX;
 	Pos.vy += moveY;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBarrelHazard::render()
+{
+	CHazardThing::render();
+
+	if (canRender())
+	{
+		DVECTOR &renderPos=getRenderPos();
+
+		SVECTOR rotation;
+		rotation.vx = 0;
+		rotation.vy = 0;
+		rotation.vz = m_rotation;
+
+		VECTOR scale;
+		scale.vx = ONE;
+		scale.vy = ONE;
+		scale.vz = ONE;
+
+		m_modelGfx->Render(renderPos,&rotation,&scale);
+	}
 }

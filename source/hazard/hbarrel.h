@@ -22,8 +22,11 @@ class CNpcBarrelHazard : public CNpcHazard
 {
 public:
 	void				init();
+	void				render();
 protected:
 	void				processMovement( int _frames );
+
+	s16					m_rotation;
 };
 
 #endif
