@@ -93,8 +93,7 @@ public:
 	virtual int			isSelectable()								{return false;}
 	virtual int			isUnselectable()							{return true;}
 
-	void				setOt(int _ot)								{m_ot=_ot;}
-	int					getOt()										{return m_ot;}
+	int					getOt()										{return 0;}
 	
 // PKG - Do we really need ids!?	
 int getId() {return m_id;}
@@ -136,8 +135,6 @@ public:
 	virtual void		setFlags(GUI_FLAGS _flags);
 	virtual void		clearFlags(GUI_FLAGS _flags);
 	
-	void				setOt(int _ot);
-
 	
 protected:
 	enum

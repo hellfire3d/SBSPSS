@@ -157,7 +157,6 @@ void CShopScene::init()
 	m_font=new ("shop font") ScalableFontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(ScalableFontBank::JUST_CENTRE);
-	m_font->setOt(5);
 
 	m_spriteBank=new ("shop sprites") SpriteBank();
 	m_spriteBank->load(SHOP_SHOP_SPR);
@@ -166,13 +165,11 @@ void CShopScene::init()
 	// GUI Frame
 	m_guiFrame=new ("Token count frame") CGUIGroupFrame();
 	m_guiFrame->init(0);
-	m_guiFrame->setOt(5);
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 	m_guiFrame->setObjectXYWH(SHOP_MAIN_UI_X,SHOP_MAIN_UI_Y,SHOP_MAIN_UI_W,SHOP_MAIN_UI_H);
 
 	m_guiConfirmPurchaseFrame=new ("Confirm purchase frame") CGUIControlFrame();
 	m_guiConfirmPurchaseFrame->init(0);
-	m_guiConfirmPurchaseFrame->setOt(4);
 	m_guiConfirmPurchaseFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 	m_guiConfirmPurchaseFrame->setObjectXYWH(SHOP_QUERY_UI_X,SHOP_QUERY_UI_Y,SHOP_QUERY_UI_W,SHOP_QUERY_UI_H);
 	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
@@ -188,7 +185,6 @@ void CShopScene::init()
 
 	m_guiCannotAffordFrame=new ("Cannot afford frame") CGUIControlFrame();
 	m_guiCannotAffordFrame->init(0);
-	m_guiCannotAffordFrame->setOt(4);
 	m_guiCannotAffordFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 	m_guiCannotAffordFrame->setObjectXYWH(SHOP_QUERY_UI_X,SHOP_QUERY_UI_Y,SHOP_QUERY_UI_W,SHOP_QUERY_UI_H);
 	CGUIFactory::createValueButtonFrame(m_guiCannotAffordFrame,
@@ -562,9 +558,9 @@ void CShopScene::renderUi()
 	fh2=sb->getFrameHeader(FRM__BUTR);
 	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
 	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
-	sb->printFT4(fh2,x,y,0,0,5);
+	sb->printFT4(fh2,x,y,0,0,0);
 	x-=SHOP_GAP_BETWEEN_INSTRUCTION_BUTTONS+fh1->W;
-	sb->printFT4(fh1,x,y,0,0,5);
+	sb->printFT4(fh1,x,y,0,0,0);
 	maxInstructionsWidth=xbase+SHOP_MAIN_UI_Y-x;
 
 	x=xbase+instructionsXBase;
@@ -573,7 +569,7 @@ void CShopScene::renderUi()
 	fh1=sb->getFrameHeader(FRM__BUTX);
 	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
 	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
-	sb->printFT4(fh1,x-1,y,0,0,5);
+	sb->printFT4(fh1,x-1,y,0,0,0);
 
 	x=xbase+instructionsXBase;
 	y=ybase+SHOP_INSTRUCTIONS_Y_BASE+(SHOP_Y_GAP_BETWEEN_INSTRUCTION_LINES*2);
@@ -581,7 +577,7 @@ void CShopScene::renderUi()
 	fh1=sb->getFrameHeader(FRM__BUTT);
 	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
 	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
-	sb->printFT4(fh1,x-1,y,0,0,5);
+	sb->printFT4(fh1,x-1,y,0,0,0);
 
 	// Item price
 	int		x1,x2;
@@ -595,7 +591,7 @@ void CShopScene::renderUi()
 		fh1=m_spriteBank->getFrameHeader(shopItem->m_frame);
 		x=xbase+SHOP_ITEM_X_POS;
 		y=ybase+SHOP_ITEM_Y_POS;
-		sb->printFT4(fh1,x,y,0,0,5);
+		sb->printFT4(fh1,x,y,0,0,0);
 
 		x1+=32;
 
@@ -616,7 +612,7 @@ void CShopScene::renderUi()
 	x=xbase+SHOP_TOKEN_COUNT_X_POS;
 	y=ybase+SHOP_TOKEN_COUNT_Y_POS;
 	fh1=m_spriteBank->getFrameHeader(FRM_SMALLTOKEN);
-	m_spriteBank->printFT4(fh1,x,y,0,0,5);
+	m_spriteBank->printFT4(fh1,x,y,0,0,0);
 	x+=fh1->W;
 	sprintf(buf,"x%d",CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld());
 	m_font->setJustification(FontBank::JUST_LEFT);

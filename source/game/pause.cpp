@@ -77,7 +77,6 @@ static const int	FRAME_WIDTH		=352;
 static const int	FRAME_HEIGHT	=160;
 static const int	TEXT_BOX_WIDTH	=300;
 static const int	TEXT_BOX_HEIGHT	=20;
-static const int	OT_POS			=5;
 static const int	TEXT_SPACING	=13;
 extern int newmode;
 
@@ -90,7 +89,6 @@ void CPauseMenu::init()
 	m_guiFrame=new ("Conversation GUI") CGUIControlFrame();
 	m_guiFrame->init(0);
 	m_guiFrame->setObjectXYWH((INGAME_SCREENW-FRAME_WIDTH)/2,(INGAME_SCREENH-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
-	m_guiFrame->setOt(OT_POS);
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
 	int xpos=TEXT_SPACING/2;

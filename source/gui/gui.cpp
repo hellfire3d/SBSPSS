@@ -96,12 +96,10 @@ void CGUIObject::init(CGUIObject *_parent,GUIId _id)
 		{
 			m_parent->m_child=this;
 		}
-		setOt(m_parent->getOt()-1);
 	}
 	else
 	{
 		// This object is a bastard :)
-		setOt(INITIAL_OT);
 	}
 }
 
@@ -315,19 +313,6 @@ void CGUIObjectWithFont::clearFlags(GUI_FLAGS _flags)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUIObjectWithFont::setOt(int _ot)
-{
-	CGUIObject::setOt(_ot);
-	getFontBank()->setOt(_ot);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void CGUIObjectWithFont::recalc()
 {
 	int	x,y,w,h;
@@ -418,7 +403,6 @@ void initGUIStuff()
   ---------------------------------------------------------------------- */
 void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 {
-	_ot=0;	// Sorry again
 	sFrameHdr	*vbam,*hbam,*corner;
 	int			totalSize,numSprites,step;
 	int			x1,y1,x2,y2;

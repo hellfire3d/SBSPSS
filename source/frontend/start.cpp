@@ -160,7 +160,7 @@ void CFrontEndStart::init()
 	m_font=new ("ChooseSlotFont") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_LEFT);
-	m_font->setOt(3);
+	m_font->setOt(0);
 	m_font->setPrintArea(0,0,712,256);
 
 	m_spriteBank=new ("PartItemSprites") SpriteBank();
@@ -237,11 +237,11 @@ void CFrontEndStart::render()
 	switch(m_state)
 	{
 		case STATE_SELECT:
-			m_emptyGuiFrame->render();
 			if(!m_slotDrawOffset)
 			{
 				drawInstructions();
 			}
+			m_emptyGuiFrame->render();
 			break;
 
 		case STATE_CONFIRM_ERASE:
