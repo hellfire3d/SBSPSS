@@ -252,13 +252,10 @@ void	CPlayer::think(int _frames)
 
 m_skel.setAng(angg);
 
-#ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 {
-	Pos.vx=23*16;
-	Pos.vy=10*16;
+	respawn();
 }
-#endif
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
