@@ -1,2 +1,4 @@
 bodystatic
 headstatic
+arms
+tail

@@ -134,6 +134,15 @@ void CNpcParasiticWormEnemy::postInit()
 
 		m_segmentArray[segCount].setScale( segScale );
 
+		if ( segCount == NPC_PARASITIC_WORM_LENGTH - 1 )
+		{
+			m_segmentArray[segCount].setAnim( ANIM_GIANTWORM_TAIL );
+		}
+		else
+		{
+			m_segmentArray[segCount].setAnim( ANIM_GIANTWORM_BODYSTATIC );
+		}
+
 		// attach snake segment
 
 		if ( segCount < NPC_PARASITIC_WORM_LENGTH - 1 )
@@ -517,7 +526,7 @@ void CNpcParasiticWormSegment::render()
 
 	if ( renderFlag )
 	{
-		SprFrame = m_actorGfx->Render(renderPos,ANIM_GIANTWORM_BODYSTATIC,0,0);
+		SprFrame = m_actorGfx->Render(renderPos,m_animNo,0,0);
 		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();

@@ -33,6 +33,7 @@ public:
 	virtual	CRECT const	&getCollisionArea()							{return m_collisionArea;}
 	DVECTOR	const		&getCollisionCentre()						{return m_collisionCentre;}
 	int					getCollisionRadius()						{return m_collisionRadius;}
+	void				setAnim( int newAnim )						{m_animNo = newAnim;}
 
 protected:
 	u16								m_scale;
@@ -44,6 +45,7 @@ protected:
 	DVECTOR							m_collisionCentreOffset;
 	DVECTOR							m_collisionSize;
 	int								m_collisionRadius;
+	int								m_animNo;
 };
 
 class CNpcParasiticWormEnemy : public CNpcEnemy

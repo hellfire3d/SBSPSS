@@ -39,14 +39,9 @@
 #include <sprites.h>
 #endif
 
-#ifndef __ANIM_SHARKMAN_HEADER__
-#include <ACTOR_SHARKMAN_ANIM.h>
+#ifndef __ANIM_MANRAY_HEADER__
+#include <ACTOR_MANRAY_ANIM.h>
 #endif
-
-#define	ANIM_SHARKMAN_IDLE2_	ANIM_SHARKMAN_IDLE1_
-#define	ANIM_SHARKMAN_KICK_SAND	ANIM_SHARKMAN_IDLE1_
-#define	ANIM_SHARKMAN_PUSHUPS	ANIM_SHARKMAN_IDLE1_
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +49,16 @@ void CNpcSharkManEnemy::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 
-	if ( m_movementTimer > 0 )
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_frame = 0;
+		m_animNo = m_data[m_type].moveAnim;
+	}
+
+	processGenericFixedPathWalk( _frames, &moveX, &moveY );
+
+	/*if ( m_movementTimer > 0 )
 	{
 		m_movementTimer -= _frames;
 
@@ -130,7 +134,7 @@ void CNpcSharkManEnemy::processMovement( int _frames )
 
 		m_animPlaying = true;
 		m_frame = 0;
-	}
+	}*/
 
 	processMovementModifier( _frames, moveX, moveY, 0, 0 );
 }
@@ -139,10 +143,10 @@ void CNpcSharkManEnemy::processMovement( int _frames )
 
 void CNpcSharkManEnemy::processClose( int _frames )
 {
-	if ( m_animNo != ANIM_SHARKMAN_RUN )
+	if ( m_animNo != ANIM_MANRAY_ATTACK )
 	{
 		m_animPlaying = true;
-		m_animNo = ANIM_SHARKMAN_RUN;
+		m_animNo = ANIM_MANRAY_ATTACK;
 		m_frame = 0;
 	}
 	else if ( !m_animPlaying )
