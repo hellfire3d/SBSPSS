@@ -19,6 +19,15 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcBranchPlatform::postInit()
@@ -77,6 +86,7 @@ void CNpcBranchPlatform::processMovement( int _frames )
 		if ( ( m_reversed && newAngle < -256 ) || newAngle > 256 )
 		{
 			// flick player upwards
+			GameScene.getPlayer()->springPlayerUp();
 		}
 
 		s16 angularForce = 3 * _frames;

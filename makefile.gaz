@@ -204,7 +204,8 @@ player_src :=		demoplay \
 					pshitgnd \
 					psidle \
 					psjump \
-					psrun
+					psrun \
+					psspring
 
 script_src :=		script \
 					function

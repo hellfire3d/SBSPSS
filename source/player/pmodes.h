@@ -85,6 +85,7 @@ public:
 	virtual void	render(DVECTOR *_pos)				{;}
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 	virtual int		canDoLookAround()					{return false;}
+	virtual void	springPlayerUp()					{;}
 
 
 	int				getPadInputHeld();
@@ -116,6 +117,7 @@ public:
 	virtual void	think();
 	virtual void	render()							{;}
 	virtual int		canDoLookAround();
+	virtual void	springPlayerUp()					{setState(STATE_SPRINGUP);}
 
 	virtual ATTACK_STATE	getAttackState();
 

@@ -1090,6 +1090,17 @@ void CPlayer::setAnimNo(int _animNo)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayer::springPlayerUp()
+{
+	m_currentPlayerModeClass->springPlayerUp();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayer::playAnimFrameSfx(int _animNo,int _animFrame)
 {
 	static int				lastAnimNo=-1;

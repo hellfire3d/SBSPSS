@@ -58,6 +58,10 @@
 #include "player\psduck.h"
 #endif
 
+#ifndef __PLAYER__PSSPRING_H__
+#include "player\psspring.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -91,6 +95,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateUnarmedIdle,					// STATE_IDLE
 	&s_stateTeeterIdle,						// STATE_IDLETEETER
 	&s_stateJump,							// STATE_JUMP
+	&s_stateSpring,							// STATE_SPRINGUP
 	&s_stateRun,							// STATE_RUN
 	&s_stateFall,							// STATE_FALL
 	&s_stateFallFar,						// STATE_FALLFAR
@@ -196,6 +201,7 @@ int		CPlayerModeBase::canDoLookAround()
 			break;
 
 		case STATE_JUMP:
+		case STATE_SPRINGUP:
 		case STATE_RUN:
 		case STATE_FALL:
 		case STATE_FALLFAR:
@@ -231,6 +237,7 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 		case STATE_IDLE:
 		case STATE_IDLETEETER:
 		case STATE_JUMP:
+		case STATE_SPRINGUP:
 		case STATE_RUN:
 		case STATE_FALL:
 		case STATE_FALLFAR:
@@ -258,7 +265,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 	}
 	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
-			m_currentState!=STATE_JUMP)
+			m_currentState!=STATE_JUMP&&m_currentState!=STATE_SPRINGUP)
 	{
 		DVECTOR	pos;
 		pos=m_player->getPlayerPos();

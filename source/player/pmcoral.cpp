@@ -46,6 +46,10 @@
 #include "player\psduck.h"
 #endif
 
+#ifndef __PLAYER__PSSPRING_H__
+#include "player\psspring.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -83,6 +87,7 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateWeaponIdle,						// STATE_IDLE
 	&s_stateWeaponIdle,						// STATE_IDLETEETER
 	&s_stateJump,							// STATE_JUMP
+	&s_stateSpring,							// STATE_SPRINGUP
 	&s_stateWalk,							// STATE_RUN
 	&s_stateFall,							// STATE_FALL
 	&s_stateFallFar,						// STATE_FALLFAR

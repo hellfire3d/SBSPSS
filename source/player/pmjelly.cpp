@@ -202,6 +202,7 @@ int		CPlayerModeJellyLauncher::setState(int _state)
 			case STATE_IDLE:
 			case STATE_IDLETEETER:
 			case STATE_JUMP:
+			case STATE_SPRINGUP:
 			case STATE_RUN:
 			case STATE_FALLFAR:
 			case STATE_BUTTBOUNCE:
@@ -243,6 +244,7 @@ int		CPlayerModeJellyLauncher::canFireFromThisState()
 			break;
 
 		case STATE_JUMP:
+		case STATE_SPRINGUP:
 		case STATE_RUN:
 		case STATE_FALL:
 		case STATE_FALLFAR:

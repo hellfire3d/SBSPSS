@@ -1227,6 +1227,14 @@ SOURCE=..\..\..\source\player\psrun.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\psspring.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psspring.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pstates.h
 # End Source File
 # End Group

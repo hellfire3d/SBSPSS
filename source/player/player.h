@@ -67,6 +67,7 @@ typedef enum
 	STATE_IDLE,
 	STATE_IDLETEETER,
 	STATE_JUMP,
+	STATE_SPRINGUP,
 	STATE_RUN,
 	STATE_FALL,
 	STATE_FALLFAR,
@@ -195,6 +196,8 @@ public:
 	int				getAnimFrameCount();
 	int				getAnimNo();
 	void			setAnimNo(int _animNo);
+
+	void			springPlayerUp();
 private:
 	void			playAnimFrameSfx(int _animNo,int _animFrame);
 

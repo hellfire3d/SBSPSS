@@ -70,7 +70,7 @@ CPlayerStateSpring			s_stateSpring;
 void CPlayerStateSpring::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
-	m_jumpFrames=0;
+	m_springFrames=0;
 
 	_playerMode->jump();
 }
@@ -82,7 +82,7 @@ void CPlayerStateSpring::enter(CPlayerModeBase *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int maxspring=20;
+int maxplayerspringframes=25;
 void CPlayerStateSpring::think(CPlayerModeBase *_playerMode)
 {
 	const PlayerMetrics	*metrics;
@@ -94,9 +94,9 @@ void CPlayerStateSpring::think(CPlayerModeBase *_playerMode)
 
 	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 
-	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES])
+	if(m_springFrames<=maxspring)
 	{
-		m_jumpFrames++;
+		m_springFrames++;
 	}
 	else
 	{
