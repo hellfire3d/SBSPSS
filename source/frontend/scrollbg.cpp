@@ -97,17 +97,7 @@ void CScrollyBackground::render()
 	sFrameHdr	*fh;
 	int			x,y,w,h;
 
-	switch(m_drawMode)
-	{
-		default:
-		case DRAWMODE_NORMAL:
-			smode=0;
-			break;
-
-		case DRAWMODE_ADDITIVE:
-			smode=1;
-			break;
-	}
+	smode=m_drawMode;
 
 	fh=m_sprites->getFrameHeader(m_frame);
 	w=(fh->W*m_scale)>>8;
