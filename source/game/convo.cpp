@@ -485,11 +485,11 @@ void CConversation::setCharacterAndText(int _characterId,int _textId)
 	pBuf=buf;
 	clipTextRegion=getTextRegion();
 	s_textFontBank->setPrintArea(clipTextRegion.x,clipTextRegion.y,clipTextRegion.w,clipTextRegion.h);
-	i=0;
+	i=-1;
 	while(*pBuf)
 	{
 		// yes.. i know it's gay but it works..
-		pBuf+=s_textFontBank->printTillEndOfLine(0,-50,pBuf);
+		pBuf+=s_textFontBank->printTillEndOfLine(0,-90,pBuf);
 		i++;
 	}
 
@@ -504,8 +504,6 @@ void CConversation::setCharacterAndText(int _characterId,int _textId)
 			break;
 		}
 	}
-
-	PAUL_DBGMSG("calced height=%d",s_maxTextPageOffset);
 }
 
 
@@ -644,7 +642,7 @@ void CConversation::renderText()
 	for(i=0;i<s_textPageOffset*TEXTBOX_FONT_NUM_LINES_IN_BOX;i++)
 	{
 		// yes.. i know it's gay but it works..
-		pBuf+=s_textFontBank->printTillEndOfLine(0,-50,pBuf);
+		pBuf+=s_textFontBank->printTillEndOfLine(0,-90,pBuf);
 	}
 	for(i=0;i<TEXTBOX_FONT_NUM_LINES_IN_BOX&&pBuf;i++)
 	{
