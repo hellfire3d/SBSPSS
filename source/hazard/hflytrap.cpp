@@ -123,7 +123,7 @@ void CNpcFlyTrapHazard::render()
 		scale.vy = ONE;
 		scale.vz = ONE;
 
-		m_modelGfx->RenderClip(renderPos,&rotation,&scale);
+		m_modelGfx->Render(renderPos,&rotation,&scale);
 
 		sBBox boundingBox = m_modelGfx->GetBBox();
 
