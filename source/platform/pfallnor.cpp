@@ -27,6 +27,8 @@
 
 void CNpcFallingNoRespawnPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 }
 

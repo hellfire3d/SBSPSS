@@ -23,6 +23,8 @@
 
 void CNpcPendulumPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_extendDir = EXTEND_LEFT;
 	m_extension = 0;
 	m_heading = 1024;

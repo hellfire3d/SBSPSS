@@ -30,6 +30,8 @@
 
 void CNpcBouncePlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_vertScale = 0;
 	m_vertVelocity = 0;
 }

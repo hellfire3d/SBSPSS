@@ -127,6 +127,10 @@
 #include "platform\pleaf.h"
 #endif
 
+#ifndef __PLATFORM_PBWHEEL_H__
+#include "platform\pbwheel.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -293,6 +297,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_LEAF_PLATFORM:
 		{
 			platform = new ("leaf platform") CNpcLeafPlatform;
+			break;
+		}
+
+		case NPC_BIG_WHEEL_PLATFORM:
+		{
+			platform = new ("big wheel platform") CNpcBigWheelPlatform;
 			break;
 		}
 

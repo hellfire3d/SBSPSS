@@ -23,6 +23,8 @@
 
 void CNpcLanternPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_extension = 0;
 	m_heading = 1024;
 }

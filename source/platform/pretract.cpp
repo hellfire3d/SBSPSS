@@ -23,6 +23,8 @@
 
 void CNpcRetractingPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_timer = NPC_PLATFORM_TIMER_RETRACT;
 }
 

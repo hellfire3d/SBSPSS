@@ -19,6 +19,8 @@
 
 void CNpcCircularPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_extension = 100;
 }
 

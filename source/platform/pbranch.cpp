@@ -36,6 +36,8 @@
 
 void CNpcBranchPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_angularVelocity = 0;
 	m_platformWidth <<= 1;
 }

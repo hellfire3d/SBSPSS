@@ -19,6 +19,8 @@
 
 void CNpcLinearPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 }
 

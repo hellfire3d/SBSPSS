@@ -793,6 +793,14 @@ SOURCE=..\..\..\source\hazard\hboat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hbwheel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbwheel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hcsaw.cpp
 # End Source File
 # Begin Source File
@@ -1162,6 +1170,14 @@ SOURCE=..\..\..\source\platform\pbubble.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\platform\pbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbwheel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbwheel.h
 # End Source File
 # Begin Source File
 

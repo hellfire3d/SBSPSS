@@ -37,7 +37,7 @@ void CNpcBigWheelHazard::init()
 
 void CNpcBigWheelHazard::processMovement( int _frames )
 {
-	m_rotation += 10 * _frames;
+	m_rotation += 5 * _frames;
 	m_rotation &= 4095;
 }
 

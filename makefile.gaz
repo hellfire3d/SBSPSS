@@ -112,7 +112,8 @@ platform_src :=		platform \
 					praft \
 					plantern \
 					pbgeyser \
-					pleaf
+					pleaf \
+					pbwheel
 
 hazard_src :=		hazard \
 					hfalling \
@@ -125,7 +126,8 @@ hazard_src :=		hazard \
 					hmower \
 					hmasher \
 					hfan \
-					hspikes
+					hspikes \
+					hbwheel
 
 fx_src :=			fx \
 					fxjfish

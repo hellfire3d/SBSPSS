@@ -28,6 +28,8 @@
 
 void CNpcRaftPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 	m_isActivated = false;

@@ -28,6 +28,8 @@
 
 void CNpcFishHookPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_isMoving = false;
 	m_isShuttingDown = false;
 }

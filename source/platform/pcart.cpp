@@ -23,6 +23,8 @@
 
 void CNpcCartPlatform::postInit()
 {
+	CNpcPlatform::postInit();
+
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 	m_carSpeed = m_data[m_type].speed << 8;

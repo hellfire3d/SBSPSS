@@ -71,6 +71,10 @@
 #include "hazard\hspikes.h"
 #endif
 
+#ifndef __HAZARD_HBWHEEL_H__
+#include "hazard\hbwheel.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +90,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_MASHER_HAZARD,
 	NPC_FAN_HAZARD,
 	NPC_SPIKES_HAZARD,
+	NPC_BIG_WHEEL_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +160,12 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_SPIKES_HAZARD:
 		{
 			hazard = new ("spikes hazard") CNpcSpikesHazard;
+			break;
+		}
+
+		case NPC_BIG_WHEEL_HAZARD:
+		{
+			hazard = new ("big wheel") CNpcBigWheelHazard;
 			break;
 		}
 
@@ -257,6 +268,10 @@ void CNpcHazard::setGraphic( sThingHazard *ThisHazard )
 {
 	m_modelGfx = new ("ModelGfx") CModelGfx;
 	m_modelGfx->SetModel( ThisHazard->Gfx );
+
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
