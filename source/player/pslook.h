@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	pscrouch.h
+	pslook.h
 
 	Author:		PKG
 	Created:	
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__PLAYER_PSCROUCH_H__
-#define __PLAYER_PSCROUCH_H__
+#ifndef	__PLAYER_PSLOOK_H__
+#define __PLAYER_PSLOOK_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -32,7 +32,7 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerStateCrouchDown : public CPlayerState
+class CPlayerStateLookDown : public CPlayerState
 {
 public:
 	void			enter(class CPlayerModeBase *_playerMode);
@@ -41,7 +41,7 @@ public:
 };
 
 
-class CPlayerStateCrouchUp : public CPlayerState
+class CPlayerStateLookDownRelax : public CPlayerState
 {
 public:
 	void			enter(class CPlayerModeBase *_playerMode);
@@ -54,8 +54,8 @@ public:
 	Globals
 	------- */
 
-extern	CPlayerStateCrouchDown		s_stateCrouchDown;
-extern	CPlayerStateCrouchUp		s_stateCrouchUp;
+extern	CPlayerStateLookDown		s_stateLookDown;
+extern	CPlayerStateLookDownRelax	s_stateLookDownRelax;
 
 
 /*----------------------------------------------------------------------
@@ -64,7 +64,7 @@ extern	CPlayerStateCrouchUp		s_stateCrouchUp;
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __PLAYER_PSCROUCH_H__ */
+#endif	/* __PLAYER_PSLOOK_H__ */
 
 /*===========================================================================
  end */

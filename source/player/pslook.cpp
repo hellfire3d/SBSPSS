@@ -1,7 +1,7 @@
 
 /*=========================================================================
 
-	pscrouch.cpp
+	pslook.cpp
 
 	Author:		PKG
 	Created: 
@@ -17,7 +17,7 @@
 	Includes
 	-------- */
 
-#include "player\pscrouch.h"
+#include "player\pslook.h"
 
 #ifndef __PLAYER_PLAYER_H__
 #include "player\player.h"
@@ -55,8 +55,8 @@
 	Vars
 	---- */
 
-CPlayerStateCrouchDown		s_stateCrouchDown;
-CPlayerStateCrouchUp		s_stateCrouchUp;
+CPlayerStateLookDown		s_stateLookDown;
+CPlayerStateLookDownRelax	s_stateLookDownRelax;
 
 
 /*----------------------------------------------------------------------
@@ -65,7 +65,7 @@ CPlayerStateCrouchUp		s_stateCrouchUp;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateCrouchDown::enter(CPlayerModeBase *_playerMode)
+void CPlayerStateLookDown::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_CROUCHDOWN);
 }
@@ -77,7 +77,7 @@ void CPlayerStateCrouchDown::enter(CPlayerModeBase *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
+void CPlayerStateLookDown::think(CPlayerModeBase *_playerMode)
 {
 	int	maxFrame;
 	int	controlDown,controlHeld;
@@ -95,7 +95,7 @@ void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
 	{
 		if(!(controlHeld&PI_DOWN))
 		{
-			_playerMode->setState(STATE_CROUCHUP);
+			_playerMode->setState(STATE_LOOKDOWNRELAX);
 		}
 	}
 
@@ -122,7 +122,7 @@ void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateCrouchUp::enter(CPlayerModeBase *_playerMode)
+void CPlayerStateLookDownRelax::enter(CPlayerModeBase *_playerMode)
 {
 	  _playerMode->setAnimNo(ANIM_SPONGEBOB_CROUCHUP);
 }
@@ -134,7 +134,7 @@ void CPlayerStateCrouchUp::enter(CPlayerModeBase *_playerMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateCrouchUp::think(CPlayerModeBase *_playerMode)
+void CPlayerStateLookDownRelax::think(CPlayerModeBase *_playerMode)
 {
 	int	controlDown,controlHeld;
 	controlDown=_playerMode->getPadInputDown();
