@@ -76,6 +76,7 @@ int CFrontEndStart::s_levelValues[]=
 	1,
 	2,
 	3,
+	-1,
 };
 CGUITextReadout::TextReadoutData CFrontEndStart::s_levelReadoutText[]=
 {
