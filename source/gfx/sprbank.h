@@ -101,12 +101,13 @@ inline	POLY_FT4	*printFT4Scaled(sFrameHdr *_fh,int _x,int _y,int _xFlip,int _yFl
 	return(ft4);
 }
 		
-
-private:
+	// Hmm.. why did these used to be private?
 	void		prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip);
 	void		prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xFlip,bool _yFlip,long _z);
 	void 		setUVTp(sFrameHdr *_fh,POLY_FT4 *_ft4,int _xFlip,int _yYFlip);
 
+
+private:
 	class SpriteBankInstance	*m_SpriteBankInstance;
 
 };
