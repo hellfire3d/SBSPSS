@@ -722,9 +722,9 @@ if(newmode!=-1)
 	platform=isOnPlatform();
 	if(platform)
 	{
-		if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
+		if ( ( (CNpcPlatform *) platform )->isCart() )
 		{
-			if ( ( (CNpcPlatform *) platform )->isCart() )
+			if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
 			{
 				setMode( PLAYER_MODE_CART );
 			}

@@ -305,7 +305,8 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 
 		case NPC_CART_PLATFORM:
 		{
-			platform = new ("cart platform") CNpcCartPlatform;
+			//platform = new ("cart platform") CNpcCartPlatform;
+			platform = new ("ghost train platform") CNpcGhostTrainPlatform;
 			break;
 		}
 
