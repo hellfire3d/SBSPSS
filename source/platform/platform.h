@@ -52,6 +52,7 @@ public:
 		NPC_BOBBING_PLATFORM,
 		NPC_FALLING_PLATFORM,
 		NPC_CART_PLATFORM,
+		NPC_FISH_HOOK_2_PLATFORM,
 		NPC_PLAYER_BUBBLE_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
 	};
@@ -70,6 +71,8 @@ public:
 	virtual s32			getNewYPos( CThing *_thisThing );
 	void				setTiltable( bool isTiltable );
 	void				addWaypoint( s32 xPos, s32 yPos );
+	void				setGraphic( sThingPlatform *ThisPlatform );
+	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
@@ -89,6 +92,16 @@ protected:
 	{
 		NPC_PLATFORM_TIMER_NONE = 0,
 		NPC_PLATFORM_TIMER_RESPAWN = 1,
+	};
+
+	enum
+	{
+		EXTEND_UP = true,
+		EXTEND_DOWN = false,
+		EXTEND_RIGHT = true,
+		EXTEND_LEFT = false,
+		EXTEND_CLOCKWISE = true,
+		EXTEND_ANTICLOCKWISE = false,
 	};
 
 	typedef struct NPC_PLATFORM_DATA_TYPE
@@ -157,6 +170,7 @@ protected:
 	bool						m_tiltable;
 	s32							m_tiltAngle;
 	s32							m_tiltVelocity;
+	bool						m_extendDir;
 
 	int							m_frame;
 	int							m_animNo;

@@ -91,7 +91,9 @@ platform_src :=		platform \
 					pbob \
 					pfalling \
 					pcart \
-					pretract
+					pretract \
+					pbranch \
+					ppendulm
 
 hazard_src :=		hazard \
 					hfalling \

@@ -1369,6 +1369,14 @@ SOURCE=..\..\..\source\platform\pbob.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pbranch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbranch.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pbubble.cpp
 # End Source File
 # Begin Source File
@@ -1438,6 +1446,14 @@ SOURCE=..\..\..\source\platform\plinear.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\platform\plinear.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ppendulm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ppendulm.h
 # End Source File
 # Begin Source File
 

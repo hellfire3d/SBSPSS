@@ -79,6 +79,10 @@
 #include "platform\pfalling.h"
 #endif
 
+#ifndef __PLATFORM_PPENDULM_H__
+#include "platform\ppendulm.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -91,7 +95,6 @@ class CLayerCollision	*CNpcPlatform::m_layerCollision;
 
 CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 {
-	int pointNum;
 	CNpcPlatform *platform;
 
 	NPC_PLATFORM_UNIT_TYPE platformType = getTypeFromMapEdit( ThisPlatform->Type );
@@ -152,8 +155,15 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_FISH_HOOK_2_PLATFORM:
+		{
+			platform = new ("fish hook 2 platform") CNpcPendulumPlatform;
+			break;
+		}
+
 		default:
 		{
+			ASSERT( 0 );
 			platform = new ("platform") CNpcPlatform;
 			break;
 		}
@@ -161,6 +171,20 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 
 	ASSERT(platform);
 	platform->setType( platformType );
+	platform->setGraphic( ThisPlatform );
+
+	platform->setWaypoints( ThisPlatform );
+
+	platform->setTiltable( false );
+
+	return( platform );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::setWaypoints( sThingPlatform *ThisPlatform )
+{
+	int pointNum;
 
 	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
 
@@ -175,10 +199,9 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 	startPos.vx = newXPos << 4;
 	startPos.vy = newYPos << 4;
 
-	platform->init( startPos );
-	platform->setTiltable( false );
+	init( startPos );
 
-	platform->addWaypoint( newXPos, newYPos );
+	addWaypoint( newXPos, newYPos );
 
 	if ( ThisPlatform->PointCount > 1 )
 	{
@@ -189,11 +212,17 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			newYPos = (u16) *PntList;
 			PntList++;
 
-			platform->addWaypoint( newXPos, newYPos );
+			addWaypoint( newXPos, newYPos );
 		}
 	}
+}
 
-	return( platform );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::setGraphic( sThingPlatform *ThisPlatform )
+{
+	m_modelGfx = new ("ModelGfx") CModelGfx;
+	m_modelGfx->SetModel( ThisPlatform->Gfx );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,9 +232,6 @@ void CNpcPlatform::init()
 	CPlatformThing::init();
 
 	
-	m_modelGfx=new ("ModelGfx") CModelGfx;
-	m_modelGfx->SetModel(0);
-
 	m_animPlaying = true;
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;

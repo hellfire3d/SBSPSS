@@ -15,13 +15,52 @@
 #include "platform\ppendulm.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPendulumPlatform::postInit()
 {
 	m_extendDir = EXTEND_LEFT;
 	m_extension = 0;
 	m_heading = 1024;
-	m_length = 200;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPendulumPlatform::setWaypoints( sThingPlatform *ThisPlatform )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
+
+	u16 initYPos, newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	initYPos = newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	init( startPos );
+
+	if ( ThisPlatform->PointCount > 1 )
+	{
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		m_length = ( newYPos - initYPos ) << 4;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPendulumPlatform::processMovement( int _frames )
 {
