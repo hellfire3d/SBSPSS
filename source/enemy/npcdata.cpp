@@ -991,6 +991,27 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 	},
+
+	{	// NPC_SHELL
+		ACTORS_SPIDERCRAB_SBK,
+		0,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_STATIC,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		128,
+		DETECT_NO_COLLISION,
+		DAMAGE__BURN_ENEMY,
+		16,
+		0,
+		NPC_SHOT_GENERIC,
+		0,
+		0,
+		false,
+		false,
+	},
 };
 
 CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::mapEditConvertTable[NPC_UNIT_TYPE_MAX] =
@@ -1024,6 +1045,7 @@ CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::mapEditConvertTable[NPC_UNIT_TYPE_MAX] =
 	NPC_SKULL_STOMPER,
 	NPC_DUST_DEVIL,
 	NPC_SPIDER_CRAB_SPAWNER,
+	NPC_SHELL,
 	//NPC_FALLING_ITEM,
 	//NPC_FISH_HOOK,
 	//NPC_PENDULUM,

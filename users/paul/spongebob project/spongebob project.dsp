@@ -301,6 +301,10 @@ SOURCE=..\..\..\source\enemy\nsdart.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nshell.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nshrkman.cpp
 # End Source File
 # Begin Source File

@@ -177,6 +177,10 @@
 #include "enemy\noilblob.h"
 #endif
 
+#ifndef __ENEMY_NSHELL_H__
+#include "enemy\nshell.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
@@ -468,6 +472,12 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 		case CNpcEnemy::NPC_OIL_BLOB:
 		{
 			enemy = new ("oil blob") CNpcOilBlobEnemy;
+			break;
+		}
+
+		case CNpcEnemy::NPC_SHELL:
+		{
+			enemy = new ("shell") CNpcShellEnemy;
 			break;
 		}
 

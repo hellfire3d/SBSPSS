@@ -82,7 +82,7 @@ FontBank	*CGameScene::s_genericFont;
 MATRIX		CGameScene::CamMtx;
 
 /*****************************************************************************/
-CGameScene::ACTOR_TYPE CGameScene::actorType[39] =
+CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
 {
 	ACTOR_PLAYER,				//SpongeBob=0
 	ACTOR_FRIEND_NPC,			//BarnacleBoy=1
@@ -123,6 +123,7 @@ CGameScene::ACTOR_TYPE CGameScene::actorType[39] =
 	ACTOR_ENEMY_NPC,			//Stomper=36
 	ACTOR_ENEMY_NPC,			//DustDevil=37
 	ACTOR_ENEMY_NPC,			//SiderCrabSpawner=38
+	ACTOR_ENEMY_NPC,			//Shell=39
 };
 
 /*****************************************************************************/
