@@ -85,6 +85,7 @@ void CNpcGaryFriend::think( int _frames )
 			case COLLISION_TYPE_FLAG_DEATH_FALL:
 			case COLLISION_TYPE_FLAG_DEATH_INSTANT:
 			case COLLISION_TYPE_FLAG_DEATH_LIQUID:
+			case COLLISION_TYPE_FLAG_DAMAGE:
 			{
 				CPlayer *player = GameScene.getPlayer();
 				player->takeDamage( DAMAGE__KILL_OUTRIGHT );
