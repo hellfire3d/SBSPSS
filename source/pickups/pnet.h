@@ -38,6 +38,7 @@ class CNetPickup : public CBasePickup
 {
 public:
 	virtual void		init();
+	virtual int			dontKillDuringLevelRespawn()							{return true;}
 	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 

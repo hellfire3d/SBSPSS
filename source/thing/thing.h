@@ -115,6 +115,7 @@ virtual	void	shutdown();
 virtual	void	think(int _frames);
 virtual	void	render();
 virtual u8		isSetToShutdown()										{return( false );}
+virtual int		dontKillDuringLevelRespawn()							{return false;}
 
 // Linkage
 		void			addChild(CThing *Child);

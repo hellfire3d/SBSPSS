@@ -191,6 +191,7 @@ public:
 	virtual void	shutdown();
 	virtual void	think(int _frames);
 	virtual void	render();
+	virtual int		dontKillDuringLevelRespawn()							{return true;}
 	virtual void	shove(DVECTOR move);
 	void			moveLeft();				// This is only for camera scroll right now..
 	void			moveRight();			//	"		"		"		"		"
@@ -305,7 +306,8 @@ private:
 
 	static class CPlayerMode	*s_playerModes[NUM_PLAYERMODES];
 	class CPlayerMode			*m_currentPlayerModeClass;
-	int							m_currentMode;
+	PLAYER_MODE					m_currentMode;
+	PLAYER_MODE					m_lastModeBeforeDeath;
 
 
 private:

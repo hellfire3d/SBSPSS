@@ -63,7 +63,7 @@ static const int	s_ThinkBBoxX1=512+526;
 static const int	s_ThinkBBoxY0=0-128;
 static const int	s_ThinkBBoxY1=256+128;
 
-CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];//={NULL,NULL};
+CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
 int				CThingManager::s_initialised=false;
 
@@ -127,25 +127,32 @@ int		i;
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	Kills every CThing except the player
+	Purpose:	
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
 void		CThingManager::killAllThingsForRespawn()
 {
 	int		i;
-	CThing	*thing;
 
 	ASSERT(s_initialised);
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
-		if(i!=CThing::TYPE_PLAYER)
+		// Hey - it's not optimal in speed, but it's vaguely funny :)
+		// ( and anyway.. it probly *is* optimal in size.. )
+		CThing	*thing;
+		thing=s_thingLists[i];
+		while(thing)
 		{
-			while(s_thingLists[i])
+			if(thing->dontKillDuringLevelRespawn())
 			{
-				thing=s_thingLists[i];
+				thing=thing->m_nextListThing;
+			}
+			else
+			{
 				thing->shutdown();
 				delete thing;
+				thing=s_thingLists[i];
 			}
 		}
 	}

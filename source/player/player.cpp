@@ -567,12 +567,12 @@ void	CPlayer::init()
 	{
 		s_playerModes[i]->initialise(this);
 	}
-	m_currentPlayerModeClass=NULL;
-	setMode(PLAYER_MODE_FULLUNARMED);	//PKG
 
 m_animNo=0;
 m_animFrame=0;
 	setFacing(FACING_RIGHT);
+	m_currentPlayerModeClass=NULL;
+	m_lastModeBeforeDeath=PLAYER_MODE_FULLUNARMED;	// Player will then respawn into this mode
 	m_lives++;respawn();
 
 	m_lives=CGameSlotManager::getSlotData()->m_lives;
@@ -1257,6 +1257,12 @@ void CPlayer::registerAddon(PLAYER_ADDONS _addon)
   ---------------------------------------------------------------------- */
 void CPlayer::setMode(PLAYER_MODE _mode)
 {
+	if(_mode==PLAYER_MODE_DEAD)
+	{
+		ASSERT(m_currentMode!=PLAYER_MODE_DEAD);
+		m_lastModeBeforeDeath=m_currentMode;
+	}
+
 	resetPlayerCollisionSizeToBase();
 	m_currentMode=_mode;
 	m_currentPlayerModeClass=s_playerModes[_mode];
@@ -1424,15 +1430,7 @@ void CPlayer::calcCameraFocusPointTarget()
   ---------------------------------------------------------------------- */
 void CPlayer::respawn()
 {
-	// Strip any items that the player might be holding
-//	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
-//	{
-		setMode(PLAYER_MODE_FULLUNARMED);
-//	}
-//	else
-//	{
-//		setMode(PLAYER_MODE_BASICUNARMED);
-//	}
+	setMode(m_lastModeBeforeDeath);
 
 	m_allowConversation=false;
 

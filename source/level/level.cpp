@@ -440,9 +440,24 @@ void	CLevel::initThings(int _respawningLevel)
 			int		spatNumber=0;
 			for(int i=0;i<ItemCount;i++)
 			{
-				int	isSpat=(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA;
+				int			createThisPickup;
+				int			isSpat;
 				CBasePickup	*newPickup;
-				if(!isSpat||CGameSlotManager::getSlotData()->isSpatulaUncollected(GameScene.getChapterNumber(),GameScene.getLevelNumber(),spatNumber))
+				
+				createThisPickup=true;
+
+				isSpat=(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA;
+				if(isSpat&&CGameSlotManager::getSlotData()->isSpatulaUncollected(GameScene.getChapterNumber(),GameScene.getLevelNumber(),spatNumber)==false)
+				{
+					createThisPickup=false;
+				}
+
+				if((PICKUP_TYPE)ItemList->Type==PICKUP__NET&&_respawningLevel)
+				{
+					createThisPickup=false;
+				}
+
+				if(createThisPickup)
 				{
 					pos.vx=ItemList->Pos.X<<4;
 					pos.vy=ItemList->Pos.Y<<4;
@@ -456,6 +471,7 @@ void	CLevel::initThings(int _respawningLevel)
 				{
 					spatNumber++;
 				}
+
 				ItemList++;
 			}
 		}
