@@ -473,7 +473,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if (!thing->allowOffMap() && (ThingPos.vx<0 || ThingPos.vx>=MapWH16.vx || ThingPos.vy<0 || ThingPos.vy>=MapWH16.vy))
 			{
 				thing->setToShutdown();
-				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapWH16.vx,MapWH16.vy);
+//				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapWH16.vx,MapWH16.vy);
 			}
 			else
 			{
