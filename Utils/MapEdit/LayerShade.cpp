@@ -75,6 +75,7 @@ void	CLayerShade::Load(CFile *File,int Version)
 		else
 		{
 			File->Read(&Count,sizeof(int));
+			if (Count<2) Count=2;
 			for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 			{
 				File->Read(&Pos[i],sizeof(int));
@@ -204,7 +205,9 @@ void	CLayerShade::Export(CCore *Core,CExport &Exp)
 		for (int i=0; i<LAYER_SHADE_RGB_MAX; i++)
 		{
 			Exp.Write(&Pos[i],sizeof(int));
-			Exp.Write(&RGB[i],sizeof(RGBQUAD));
+			Exp.Write(&RGB[i].rgbRed,sizeof(u8));
+			Exp.Write(&RGB[i].rgbGreen,sizeof(u8));
+			Exp.Write(&RGB[i].rgbBlue,sizeof(u8));
+			Exp.Write(&RGB[i].rgbRed,sizeof(u8));	// Pad
 		}
 }
-

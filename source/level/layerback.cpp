@@ -15,24 +15,13 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)// : CLayerTile(Hdr)
+CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList) : CLayerTile(Hdr,TileList,TriList,QuadList,VtxList)
 {
-//		RGB[0]=(u8*)MakePtr(Hdr,sizeof(sLayerHdr));
-//		RGB[1]=(u8*)MakePtr(RGB[0],3);
-//		RGB[2]=(u8*)MakePtr(RGB[1],3);
-//		RGB[3]=(u8*)MakePtr(RGB[2],3);
-		Data=(sLayerShadeHdr*)(Hdr,sizeof(sLayerHdr));
+		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 
-		for (int i=0; i<Data->Count; i++)
-		{
-			SetPolyG4(&Poly[i]);
-			setRGB0(&Poly[i],Data->Data[i].RGB[0],Data->Data[i].RGB[1],Data->Data[i].RGB[2]);
-			setRGB1(&Poly[i],Data->Data[i].RGB[0],Data->Data[i].RGB[1],Data->Data[i].RGB[2]);
-//			setRGB2(G4,0,0,128-Col);
-//			setRGB3(G4,0,0,128-Col);
-
-		}
-
+		ASSERT(Data->Count<=LAYER_SHADE_RGB_MAX);
+		printf("%i Back Shades",Data->Count);
+		BandCount=Data->Count-1;
 }
 
 /*****************************************************************************/
@@ -46,6 +35,19 @@ CLayerBack::~CLayerBack()
 /*****************************************************************************/
 void	CLayerBack::init(DVECTOR &MapPos,int Shift,int Width,int Height)
 {
+		MapXYShift=Shift;
+
+		BandHeight=(Height*16)/(BandCount);
+
+		for (int i=0; i<BandCount; i++)
+		{
+			SetPolyG4(&Band[i]);
+			setRGB0(&Band[i],Data->Data[i+0].RGB[0],Data->Data[i+0].RGB[1],Data->Data[i+0].RGB[2]);
+			setRGB1(&Band[i],Data->Data[i+0].RGB[0],Data->Data[i+0].RGB[1],Data->Data[i+0].RGB[2]);
+			setRGB2(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
+			setRGB3(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
+		}
+
 }
 
 /*****************************************************************************/
@@ -56,17 +58,21 @@ void	CLayerBack::shutdown()
 /*****************************************************************************/
 void	CLayerBack::think(DVECTOR &MapPos)
 { 
-		YOfs=MapPos.vy>>2;
+		YOfs=MapPos.vy>>MapXYShift;
 }
 
 /*****************************************************************************/
-int		BH=256;
 void	CLayerBack::render()
 {
-sOT			*ThisOT=OtPtr+(MAX_OT-1);
-//printf("%i %i\n",MapWidth,MapHeight);
-			setXYWH(&Poly[0],0,-YOfs,512,BH);
-//			addPrim(ThisOT,&Poly[0]);
+sOT		*ThisOT=OtPtr+(MAX_OT-1);
+int		ThisY=-YOfs;
+
+		for (int i=0; i<BandCount; i++)
+		{
+			setXYWH(&Band[i],0,ThisY,512,BandHeight);
+			addPrim(ThisOT,&Band[i]);
+			ThisY+=BandHeight;
+		}
 
 }
 
