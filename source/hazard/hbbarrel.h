@@ -26,12 +26,15 @@ public:
 	virtual	CRECT const		*getThinkBBox();
 protected:
 	void				processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	DVECTOR				m_lastWaypoint;
 
 	s16					m_rotation;
 	s16					m_rockRotation;
 	u8					m_rockDir;
+	u8					m_hitPlayer;
+	s32					m_speed;
 };
 
 #endif

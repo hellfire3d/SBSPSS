@@ -15,6 +15,14 @@
 #include "hazard\hbbarrel.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
 #ifndef __LAYER_COLLISION_H__
 #include "level\layercollision.h"
 #endif
@@ -39,6 +47,7 @@ void CNpcBouncingBarrelHazard::init()
 	m_rotation = 0;
 	m_rockRotation = 0;
 	m_rockDir = true;
+	m_hitPlayer = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,84 +64,111 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 
 	// deal with horizontal
 
-	bool pathComplete;
-	
-	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading, 1 ) )
+	if ( m_hitPlayer )
 	{
-		if ( pathComplete )
+		Pos.vy += m_speed * _frames;
+
+		if ( m_speed < 3 )
+		{
+			m_speed++;
+		}
+
+		m_rotation += 64 * _frames;
+		m_rotation &= 4095;
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos > VidGetScrH() )
 		{
 			Pos = m_base;
+			m_hitPlayer = false;
 			m_npcPath.resetPath();
 		}
-
-		m_lastWaypoint = Pos;
-	}
-
-	moveX = 4 * _frames;
-
-	if ( moveX > abs( waypointXDist ) )
-	{
-		moveX = abs( waypointXDist );
-	}
-
-	if ( waypointHeading == 2048 )
-	{
-		moveX = -moveX;
-		m_rotation -= 256 * _frames;
-		m_rotation &= 4095;
 	}
 	else
 	{
-		m_rotation += 256 * _frames;
-		m_rotation &= 4095;
-	}
-
-	if ( m_rockDir )
-	{
-		m_rockRotation += 30 * _frames;
-
-		if ( m_rockRotation > 256 )
+		bool pathComplete;
+		
+		if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading, 1 ) )
 		{
-			m_rockDir = false;
-		}
-	}
-	else
-	{
-		m_rockRotation -= 30 * _frames;
+			if ( pathComplete )
+			{
+				Pos = m_base;
+				m_hitPlayer = false;
+				m_npcPath.resetPath();
+			}
 
-		if ( m_rockRotation < -256 )
+			m_lastWaypoint = Pos;
+		}
+
+		moveX = 3 * _frames;
+
+		if ( moveX > abs( waypointXDist ) )
 		{
-			m_rockDir = true;
+			moveX = abs( waypointXDist );
 		}
-	}
 
-	Pos.vx += moveX;
+		if ( waypointHeading == 2048 )
+		{
+			moveX = -moveX;
+			m_rotation -= 256 * _frames;
+			m_rotation &= 4095;
+		}
+		else
+		{
+			m_rotation += 256 * _frames;
+			m_rotation &= 4095;
+		}
 
-	// deal with vertical
+		if ( m_rockDir )
+		{
+			m_rockRotation += 30 * _frames;
 
-	DVECTOR nextWaypoint;
-	
-	nextWaypoint.vx = waypointXDist + Pos.vx;
-	nextWaypoint.vy = waypointYDist + Pos.vy;
+			if ( m_rockRotation > 256 )
+			{
+				m_rockDir = false;
+			}
+		}
+		else
+		{
+			m_rockRotation -= 30 * _frames;
 
-	s32 waypointDist = abs( nextWaypoint.vx - m_lastWaypoint.vx );
+			if ( m_rockRotation < -256 )
+			{
+				m_rockDir = true;
+			}
+		}
 
-	if ( waypointDist < 1 )
-	{
-		waypointDist = 1;
-	}
+		Pos.vx += moveX;
 
-	if ( waypointYDist > 0 )
-	{
-		s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) * 1024 ) / waypointDist;
+		// deal with vertical
 
-		Pos.vy = nextWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
-	}
-	else if ( waypointYDist < 0 )
-	{
-		s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) * 1024 ) / waypointDist;
+		DVECTOR nextWaypoint;
+		
+		nextWaypoint.vx = waypointXDist + Pos.vx;
+		nextWaypoint.vy = waypointYDist + Pos.vy;
 
-		Pos.vy = m_lastWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
+		s32 waypointDist = abs( nextWaypoint.vx - m_lastWaypoint.vx );
+
+		if ( waypointDist < 1 )
+		{
+			waypointDist = 1;
+		}
+
+		if ( waypointYDist > 0 )
+		{
+			s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) * 1024 ) / waypointDist;
+
+			Pos.vy = nextWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
+		}
+		else if ( waypointYDist < 0 )
+		{
+			s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) * 1024 ) / waypointDist;
+
+			Pos.vy = m_lastWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
+		}
 	}
 }
 
@@ -173,4 +209,37 @@ const CRECT *CNpcBouncingBarrelHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBouncingBarrelHazard::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				if ( !m_hitPlayer )
+				{
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					if ( !player->isRecoveringFromHit() )
+					{
+						player->takeDamage( DAMAGE__HIT_ENEMY );
+					}
+
+					m_hitPlayer = true;
+					m_speed = -5;
+				}
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
+		}
+	}
 }
