@@ -21,9 +21,14 @@
 class CNpcBubblePlatform : public CNpcPlatform
 {
 public:
+	virtual void		render();
+	virtual void		postInit();
 	virtual	CRECT const		*getThinkBBox();
 protected:
+	virtual void		processLifetime( int _frames );
 	virtual void		processMovement( int _frames );
+
+	u8					m_pop;
 };
 
 #endif
