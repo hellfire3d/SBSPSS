@@ -236,6 +236,9 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 	if ( !m_isStunned )
 	{
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = getRnd() % ( 3 * GameState::getOneSecondInFrames() );
+		m_sensorFunc = NPC_SENSOR_NONE;
 	}
 }
 
