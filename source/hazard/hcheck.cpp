@@ -19,6 +19,14 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,13 +35,42 @@ void CNpcCheckpointHazard::init()
 	CNpcHazard::init();
 
 	m_triggered = false;
+	m_spriteFrame = FRM__CHECKPOINT;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcCheckpointHazard::render()
 {
-	CNpcHazard::render();
+	sFrameHdr	*frameHdr;
+
+	if ( m_isActive )
+	{
+		CHazardThing::render();
+
+		if (canRender())
+		{
+			DVECTOR &renderPos=getRenderPos();
+
+			m_modelGfx->Render(renderPos);
+
+			if ( m_triggered )
+			{
+				int		x,y;
+
+				DVECTOR offset = CLevel::getCameraPos();
+
+				int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_spriteFrame);
+				int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_spriteFrame);
+
+				x = Pos.vx - offset.vx - ( spriteWidth >> 1 );
+				y = Pos.vy - 100 - offset.vy - ( spriteHeight >> 1 );
+
+				frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
+				CGameScene::getSpriteBank()->printFT4( frameHdr, x, y, 0, 0, 10 );
+			}
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

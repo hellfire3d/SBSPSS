@@ -131,6 +131,10 @@
 #include "hazard\hlog.h"
 #endif
 
+#ifndef __HAZARD_HCHECK_H__
+#include "hazard\hcheck.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -161,6 +165,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_BOUNCING_ROCK_HAZARD,
 	NPC_SWORDFISH_HAZARD,
 	NPC_LOG_HAZARD,
+	NPC_CHECKPOINT_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +325,12 @@ CNpcHazard *hazard;
 		case NPC_LOG_HAZARD:
 		{
 			hazard = new ("log hazard") CNpcLogHazard;
+			break;
+		}
+
+		case NPC_CHECKPOINT_HAZARD:
+		{
+			hazard = new ("checkpoint hazard") CNpcCheckpointHazard;
 			break;
 		}
 

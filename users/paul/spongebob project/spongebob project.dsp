@@ -985,6 +985,14 @@ SOURCE=..\..\..\source\hazard\hbwheel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hcheck.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hcheck.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hcsaw.cpp
 # End Source File
 # Begin Source File

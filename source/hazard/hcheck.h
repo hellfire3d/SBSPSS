@@ -27,6 +27,7 @@ protected:
 	void				collidedWith(CThing *_thisThing);
 
 	u8					m_triggered;
+	int					m_spriteFrame;
 };
 
 #endif
