@@ -18,10 +18,6 @@
 
 #include "frontend\maintitl.h"
 
-#ifndef	__MEMORY_HEADER__
-#include "mem\memory.h"
-#endif
-
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
@@ -46,20 +42,12 @@
 #include "gfx\fader.h"
 #endif
 
-#ifndef __GUI_GUI_H__
-#include "gui\gui.h"
-#endif
-
-#ifndef __GUI_GTEXTBOX_H__
-#include "gui\gtextbox.h"
+#ifndef __GUI_GFACTORY_H__
+#include "gui\gfactory.h"
 #endif
 
 #ifndef __GUI_GFRAME_H__
 #include "gui\gframe.h"
-#endif
-
-#ifndef __GUI_GBUTTON_H__
-#include "gui\gbutton.h"
 #endif
 
 
@@ -111,15 +99,8 @@ int sval=0;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int mem;
 void CFrontEndMainTitles::init()
 {
-mem=MainRam.TotalRam-MainRam.RamUsed;
-PAUL_DBGMSG("initial mem free=%d",mem);
-	CGUIGroupFrame		*fr;
-	CGUITextBox			*tb;
-	CGUIToggleButton	*tg;
-
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
 	m_sprites->load(FRONTEND_FRONTEND_SPR);
 
@@ -127,35 +108,25 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
 
-	// Create the main menu ( START GAME/OPTIONS )
+	// Create the main menu ( START GAME/OPTIONS/CREDITS )
 	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
 	m_mainMenu->init(NULL);
-	m_mainMenu->setObjectXYWH(106,140,300,40);
+	m_mainMenu->setObjectXYWH(106,140,300,60);
 	m_mainMenu->clearFlags(CGUIObject::FLAG_DRAWBORDER);
 
-	fr=new ("frame") CGUIGroupFrame();
-	fr->init(m_mainMenu);
-	fr->setObjectXYWH(50,0,200,20);
-		tb=new ("textbox") CGUITextBox();
-		tb->init(fr);
-		tb->setObjectXYWH(0,0,200,20);
-		tb->setText(STR__FRONTEND__START_GAME);
-		tg=new ("togglebutton") CGUIToggleButton();
-		tg->init(fr);
-		tg->setButtonTarget(&m_startGameFlag);
-
-	fr=new ("frame") CGUIGroupFrame();
-	fr->init(m_mainMenu);
-	fr->setObjectXYWH(50,20,200,20);
-		tb=new ("textbox") CGUITextBox();
-		tb->init(fr);
-		tb->setObjectXYWH(0,0,200,20);
-		tb->setText(STR__FRONTEND__OPTIONS);
-		tg=new ("togglebutton") CGUIToggleButton();
-		tg->init(fr);
-		tg->setButtonTarget(&m_gotoOptionsFlag);
+	CGUIFactory::createValueButtonFrame(m_mainMenu,
+										50,0,200,20,
+										STR__FRONTEND__START_GAME,
+										&m_startGameFlag,true);
+	CGUIFactory::createValueButtonFrame(m_mainMenu,
+										50,20,200,20,
+										STR__FRONTEND__OPTIONS,
+										&m_gotoOptionsFlag,true);
+	CGUIFactory::createValueButtonFrame(m_mainMenu,
+										50,40,200,20,
+										STR__FRONTEND__CREDITS,
+										&m_gotoOptionsFlag,true);
 }
-
 
 /*----------------------------------------------------------------------
 	Function:
@@ -168,7 +139,6 @@ void CFrontEndMainTitles::shutdown()
 	m_mainMenu->shutdown();		// GUI items delete themselves when shutdown..
 	m_smallFont->dump();		delete m_smallFont;
 	m_sprites->dump();			delete m_sprites;
-PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 }
 
 /*----------------------------------------------------------------------

@@ -75,6 +75,7 @@ gfx_src :=			prim \
 
 gui_src :=			gui \
 					gbutton \
+					gfactory \
 					gframe \
 					greadout \
 					gtextbox

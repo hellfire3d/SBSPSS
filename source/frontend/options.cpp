@@ -34,24 +34,20 @@
 #include "gfx\prim.h"
 #endif
 
-#ifndef __GUI_GUI_H__
-#include "gui\gui.h"
-#endif
-
-#ifndef __GUI_GTEXTBOX_H__
-#include "gui\gtextbox.h"
+#ifndef __GUI_GFACTORY_H__
+#include "gui\gfactory.h"
 #endif
 
 #ifndef __GUI_GFRAME_H__
 #include "gui\gframe.h"
 #endif
 
-#ifndef __GUI_GBUTTON_H__
-#include "gui\gbutton.h"
-#endif
-
 #ifndef __LOCALE_TEXTDBASE_H__
 #include "locale\textdbase.h"
+#endif
+
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
 #endif
 
 
@@ -90,27 +86,72 @@
   ---------------------------------------------------------------------- */
 void CFrontEndOptions::init()
 {
-	CGUIGroupFrame		*fr;
-	CGUITextBox			*tb;
-	CGUIToggleButton	*tg;
+	int					i;
 
 	m_background=new ("Options Background") CScrollyBackground();
 	m_background->init();
 
-	m_optionsMenu=new ("Options GUI") CGUIControlFrame();
-	m_optionsMenu->init(NULL);
-	m_optionsMenu->setObjectXYWH(50,40,412,176);
+	// Create the menu frames
+	for(i=0;i<MODE__COUNT;i++)
+	{
+		CGUIControlFrame	**mm=&m_modeMenus[i];
+		*mm=new ("optionsframe") CGUIControlFrame();
+		(*mm)->init(NULL);
+		(*mm)->setObjectXYWH(50,40,412,176);
+	}
 
-	fr=new ("frame") CGUIGroupFrame();
-	fr->init(m_optionsMenu);
-	fr->setObjectXYWH(50,0,200,20);
-		tb=new ("textbox") CGUITextBox();
-		tb->init(fr);
-		tb->setObjectXYWH(0,0,200,20);
-		tb->setText(STR__FRONTEND__EXIT);
-		tg=new ("togglebutton") CGUIToggleButton();
-		tg->init(fr);
-		tg->setButtonTarget(&m_exitFlag);
+
+	// Populate OPTIONS menu
+	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
+										X_BORDER,Y_BORDER,412-(X_BORDER*2),20,
+										STR__FRONTEND__CONTROLS,
+										&m_nextMode,MODE__CONTROL);
+	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
+										X_BORDER,Y_BORDER+30,412-(X_BORDER*2),20,
+										STR__FRONTEND__SCREEN,
+										&m_nextMode,MODE__SCREEN);
+	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
+										X_BORDER,Y_BORDER+60,412-(X_BORDER*2),20,
+										STR__FRONTEND__SOUND,
+										&m_nextMode,MODE__SOUND);
+	CGUIFactory::createValueButtonFrame(m_modeMenus[MODE__OPTIONS],
+										X_BORDER,176-Y_BORDER-20,412-(X_BORDER*2),20,
+										STR__FRONTEND__EXIT,
+										&m_exitFlag,true);
+
+
+	// Populate CONTROLS menu
+
+
+	// Populate SCREEN menu
+
+
+	// Populate SOUND menu
+	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
+										 X_BORDER,Y_BORDER,412-(X_BORDER*2),30,
+										 STR__FRONTEND__BGM,
+										 &m_bgmVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
+										 X_BORDER,Y_BORDER+40,412-(X_BORDER*2),30,
+										 STR__FRONTEND__SFX,
+										 &m_sfxVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+	CGUIFactory::createSliderButtonFrame(m_modeMenus[MODE__SOUND],
+										 X_BORDER,Y_BORDER+80,412-(X_BORDER*2),30,
+										 STR__FRONTEND__SPEECH,
+										 &m_speechVolume,CSoundMediator::MIN_VOLUME,CSoundMediator::MAX_VOLUME);
+
+	// Add BACK to all of the sub menus
+	for(i=1;i<MODE__COUNT;i++)
+	{
+		CGUIFactory::createValueButtonFrame(m_modeMenus[i],
+											X_BORDER,176-Y_BORDER-20,412-(X_BORDER*2),20,
+											STR__FRONTEND__BACK,
+											&m_nextMode,MODE__OPTIONS);
+	}
+
+	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::SONG);
+	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::SFX);
+	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::SPEECH);
 }
 
 /*----------------------------------------------------------------------
@@ -121,7 +162,13 @@ void CFrontEndOptions::init()
   ---------------------------------------------------------------------- */
 void CFrontEndOptions::shutdown()
 {
-	m_optionsMenu->shutdown();
+	int		i;
+
+	for(i=0;i<MODE__COUNT;i++)
+	{
+		CGUIControlFrame	**mm=&m_modeMenus[i];
+		(*mm)->shutdown();
+	}
 	m_background->shutdown();		delete m_background;
 }
 
@@ -133,7 +180,9 @@ void CFrontEndOptions::shutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndOptions::select()
 {
-	m_optionsMenu->select();
+	m_modeMenus[MODE__OPTIONS]->select();
+
+	m_mode=m_nextMode=MODE__OPTIONS;
 
 	m_exitFlag=false;
 	m_closingDown=false;
@@ -149,7 +198,7 @@ void CFrontEndOptions::select()
   ---------------------------------------------------------------------- */
 void CFrontEndOptions::unselect()
 {
-	m_optionsMenu->unselect();
+	m_modeMenus[m_mode]->unselect();
 }
 
 /*----------------------------------------------------------------------
@@ -172,7 +221,7 @@ void CFrontEndOptions::render()
 
 	m_background->render();
 
-	m_optionsMenu->render();
+	m_modeMenus[m_mode]->render();
 }
 
 /*----------------------------------------------------------------------
@@ -192,7 +241,32 @@ void CFrontEndOptions::think(int _frames)
 
 	if(!CFader::isFading())
 	{
-		m_optionsMenu->think(_frames);
+		if(m_nextMode!=m_mode)
+		{
+			m_modeMenus[m_mode]->unselect();
+			m_mode=m_nextMode;
+			m_modeMenus[m_mode]->select();
+		}
+		m_modeMenus[m_mode]->think(_frames);
+
+		if(m_mode==MODE__SOUND)
+		{
+			if(m_bgmVolume!=CSoundMediator::getVolume(CSoundMediator::SONG))
+			{
+				CSoundMediator::setVolume(CSoundMediator::SONG,m_bgmVolume);
+				PAUL_DBGMSG("SONG");
+			}
+			if(m_sfxVolume!=CSoundMediator::getVolume(CSoundMediator::SFX))
+			{
+				CSoundMediator::setVolume(CSoundMediator::SFX,m_sfxVolume);
+				PAUL_DBGMSG("SFX");
+			}
+			if(m_speechVolume!=CSoundMediator::getVolume(CSoundMediator::SPEECH))
+			{
+				CSoundMediator::setVolume(CSoundMediator::SPEECH,m_speechVolume);
+				PAUL_DBGMSG("SPEECH");
+			}
+		}
 	}
 
 	if(!m_closingDown&&m_exitFlag)
@@ -200,6 +274,7 @@ void CFrontEndOptions::think(int _frames)
 		CFader::setFadingOut();
 		m_closingDown=true;
 	}
+
 }
 
 /*----------------------------------------------------------------------

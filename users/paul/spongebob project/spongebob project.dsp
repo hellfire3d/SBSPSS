@@ -249,6 +249,14 @@ SOURCE=..\..\..\source\gui\gbutton.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gui\gfactory.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gfactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gui\gframe.cpp
 # End Source File
 # Begin Source File

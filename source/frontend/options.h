@@ -49,12 +49,32 @@ public:
 
 
 private:
+	enum
+	{
+		MODE__OPTIONS,
+		MODE__CONTROL,
+		MODE__SCREEN,
+		MODE__SOUND,
+
+		MODE__COUNT,
+	};
+
+	enum
+	{
+		X_BORDER=30,
+		Y_BORDER=20,
+	};
+
 	class CScrollyBackground	*m_background;
-	class CGUIControlFrame		*m_optionsMenu;
-
+	class CGUIControlFrame		*m_modeMenus[MODE__COUNT];
+	int							m_mode,m_nextMode;
+	
 	int							m_exitFlag;
-
 	int							m_closingDown;
+
+	int							m_bgmVolume;
+	int							m_sfxVolume;
+	int							m_speechVolume;
 
 };
 

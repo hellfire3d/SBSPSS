@@ -113,6 +113,56 @@ void CGUIToggleButton::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CGUIValueButton::init(CGUIObject *_parent,GUIId _id)
+{
+	CGUIToggleButton::init(_parent,_id);
+	m_value=-1;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIValueButton::setButtonValue(int _value)
+{
+	m_value=_value;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIValueButton::think(int _frames)
+{
+	ASSERT(getTarget());
+	
+	CGUIObject::think(_frames);
+	if(isSelected())
+	{
+		if(PadGetRepeat(0)&PAD_CROSS)
+		{
+			*getTarget()=m_value;
+		}
+	}
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CGUICycleButton::init(CGUIObject *_parent,GUIId _id)
 {
 	CGUIToggleButton::init(_parent,_id);

@@ -34,6 +34,7 @@
 	Structure defintions
 	-------------------- */
 
+// Toggles a target int between true/false
 class CGUIToggleButton : public CGUIObject
 {
 public:
@@ -54,7 +55,23 @@ private:
 	
 };
 
+// Sets target to a specified value
+class CGUIValueButton : public CGUIToggleButton
+{
+public:
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
+	void				setButtonValue(int _value);
+
+	virtual void		think(int _frames);
+
+
+private:
+	int					m_value;
+
+};
+
+// Cycles target between a specified range of values
 class CGUICycleButton : public CGUIToggleButton
 {
 public:
@@ -74,7 +91,7 @@ private:
 
 };
 
-
+// Scrolls target between set limits
 class CGUISliderButton : public CGUIToggleButton
 {
 public:

@@ -46,10 +46,32 @@ eng=PRESS START
 eng=START GAME
 [STR__FRONTEND__OPTIONS]
 eng=OPTIONS
+[STR__FRONTEND__CREDITS]
+eng=CREDITS
 
+; Options menu
+[STR__FRONTEND__CONTROLS]
+eng=CONTROLS
+[STR__FRONTEND__SCREEN]
+eng=SCREEN
+[STR__FRONTEND__SOUND]
+eng=SOUND
 [STR__FRONTEND__EXIT]
 eng=EXIT
+[STR__FRONTEND__BACK]
+eng=BACK
 
+; Controls menu
+
+; Screen menu
+
+; Sound menu
+[STR__FRONTEND__BGM]
+eng=BGM VOLUME
+[STR__FRONTEND__SFX]
+eng=SFX VOLUME
+[STR__FRONTEND__SPEECH]
+eng=SPEECH VOLUME
 
 
 ; ---------------------------------------------------------------
