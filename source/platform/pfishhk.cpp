@@ -15,6 +15,15 @@
 #include "platform\pfishhk.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcFishHookPlatform::postInit()
@@ -43,7 +52,10 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 
 		if ( Pos.vy < 0 )
 		{
-			setToShutdown();
+			m_isActive = false;
+			m_timer = getRnd() % ( 4 * GameState::getOneSecondInFrames() );
+			m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
+			m_isMoving = false;
 		}
 	}
 }
