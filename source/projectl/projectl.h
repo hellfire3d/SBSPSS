@@ -51,6 +51,7 @@ public:
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 	void				think(int _frames);
+	void				setPos( DVECTOR newPos )								{Pos = newPos;}
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setMovementType( PROJECTILE_MOVEMENT_TYPE moveType );

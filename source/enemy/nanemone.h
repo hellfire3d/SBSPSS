@@ -38,8 +38,12 @@ class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
 public:
 	virtual void		postInit();
 	virtual void		shutdown();
+	virtual void		render();
 protected:
 	virtual void		processClose( int _frames );
+	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+
+	u16					m_scaleX, m_scaleY;
 };
 
 class	CNpcAnemone3Enemy : public CNpcAnemoneEnemy

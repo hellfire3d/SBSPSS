@@ -27,6 +27,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -39,16 +43,22 @@
 #include <ACTOR_SPIKEYANENOME_ANIM.h>
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcAnemoneEnemy::postInit()
 {
 	CNpcEnemy::postInit();
 	m_drawRotation = m_heading + 1024;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcAnemoneEnemy::processEnemyCollision( CThing *thisThing )
 {
 	// do nothing
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool CNpcAnemoneEnemy::processSensor()
 {
@@ -72,6 +82,8 @@ bool CNpcAnemoneEnemy::processSensor()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcAnemone1Enemy::processClose( int _frames )
 {
@@ -200,6 +212,8 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcAnemone2Enemy::postInit()
 {
 	CProjectile *projectile;
@@ -228,13 +242,20 @@ void CNpcAnemone2Enemy::postInit()
 	}
 
 	m_drawRotation = m_heading + 1024;
+
+	m_scaleX = ONE;
+	m_scaleY = ONE;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcAnemone2Enemy::shutdown()
 {
 	deleteAllChild();
 	CNpcEnemy::shutdown();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcAnemone2Enemy::processClose( int _frames )
 {
@@ -305,6 +326,92 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 		m_sensorFunc = NPC_SENSOR_NONE;
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
+{
+	s32 maxTimer = GameState::getOneSecondInFrames() >> 1;
+
+	m_movementTimer += _frames;
+
+	if ( m_movementTimer > maxTimer )
+	{
+		m_movementTimer -= maxTimer;
+	}
+
+	s32 sineVal = ( m_movementTimer * ONE ) / maxTimer;
+
+	m_scaleX = ONE + ( rsin( sineVal ) >> 2 );
+	m_scaleY = ONE + ( rcos( sineVal ) >> 2 );
+
+	CProjectile *projectile;
+	projectile = (CProjectile *) Next;
+
+	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+	{
+		DVECTOR spikePos;
+
+		s16 heading = m_heading - 1024 + ( fireLoop * 512 );
+		heading &= 4095;
+
+		spikePos = Pos;
+
+		s16 multiplier, multiplier2;
+		
+		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
+		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
+
+		multiplier = ( m_scaleX * 40 ) >> 12;
+		multiplier2 = ( m_scaleY * 40 ) >> 12;
+
+		multiplier += multiplier2;
+		multiplier >>= 1;
+
+		spikePos.vx += ( multiplier * rcos( heading ) ) >> 12;
+		spikePos.vy += ( multiplier * rsin( heading ) ) >> 12;
+
+		if ( projectile )
+		{
+			projectile->setPos( spikePos );
+			projectile = (CProjectile *) projectile->getNext();
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcAnemone2Enemy::render()
+{
+	SprFrame = NULL;
+
+	if ( m_isActive )
+	{
+		CEnemyThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx;
+		renderPos.vy = Pos.vy - offset.vy;
+
+		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
+		{
+			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
+			{
+				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, m_scaleX, m_scaleY );
+
+				sBBox boundingBox = m_actorGfx->GetBBox();
+				setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+				setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcAnemone3Enemy::processClose( int _frames )
 {
