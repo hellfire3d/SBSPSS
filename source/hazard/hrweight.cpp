@@ -31,6 +31,9 @@
 #include "friend\friend.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -198,7 +201,7 @@ void CNpcRisingWeightHazard::render()
 		{
 			if ( maxY >= 0 && minY <= VidGetScrH() )
 			{
-				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, OTPOS__ACTOR_POS+1 );
 			}
 		}
 
@@ -229,7 +232,7 @@ void CNpcRisingWeightHazard::render()
 		{
 			if ( maxY >= 0 && minY <= VidGetScrH() )
 			{
-				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, OTPOS__ACTOR_POS+1 );
 			}
 		}
 	}

@@ -27,6 +27,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPendulumPlatform::postInit()
@@ -191,7 +195,7 @@ void CNpcPendulumPlatform::render()
 		{
 			if ( y2Boundary >= 0 && y1Boundary <= VidGetScrH() )
 			{
-				DrawLine( x1, y1, x2, y2, 0, 0, 0, 8 );
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, OTPOS__ACTOR_POS+1 );
 			}
 		}
 	}

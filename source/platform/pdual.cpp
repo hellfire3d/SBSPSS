@@ -35,6 +35,9 @@
 #include "friend\friend.h"
 #endif
 
+#ifndef	__GFX_OTPOS_H__
+#include "gfx\otpos.h"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -290,7 +293,7 @@ void CNpcDualPlatform::render()
 		{
 			if ( y2 >= 0 && y1 <= VidGetScrH() )
 			{
-				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, OTPOS__ACTOR_POS+1 );
 			}
 		}
 
@@ -332,7 +335,7 @@ void CNpcDualPlatform::render()
 			{
 				if ( y2 >= 0 && y1 <= VidGetScrH() )
 				{
-					DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+					DrawLine( x1, y1, x2, y2, 0, 0, 0, OTPOS__ACTOR_POS+1 );
 				}
 			}
 		}
