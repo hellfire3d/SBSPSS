@@ -129,6 +129,7 @@ void CPaulScene::render()
 	Returns:
   ---------------------------------------------------------------------- */
 int psfx=3;
+int	pkill=0;
 #include "sound\speech.h"
 int mvol=10;
 int svol=255;
@@ -163,13 +164,12 @@ void CPaulScene::think()
 	if(sfxId!=-1)
 	{
 		CSoundMediator::playSfx(sfxId);
-//		PAUL_DBGMSG("---- sfx %d",sfxId);
-		//CSoundMediator::playSpeech(speechId);
-//		CXAStream::Stop();
-//		CXAStream::PlaySpeech(speechId,true);
-//		PAUL_DBGMSG("----- playing speech %d",speechId);
+
 	}
-//	CXAStream::SetVolume(32700,32700);
+	if(pad&PAD_START)
+	{
+		CSoundMediator::stopSfx((xmPlayingId)pkill);
+	}
 
 
 	pad=PadGetHeld(0);
