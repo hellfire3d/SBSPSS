@@ -815,6 +815,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 
 		// Trying to converate?
 		if(m_allowConversation==false&&
+		   m_currentPlayerModeClass->canConverse()&&
 		   getPadInputDown()&PI_UP)
 		{
 			m_allowConversation=true;

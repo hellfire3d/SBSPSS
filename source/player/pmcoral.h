@@ -41,6 +41,7 @@ public:
 	virtual void				think();
 	virtual void				renderModeUi();
 	virtual int					canDoLookAround();
+	virtual int					canConverse()						{return m_blowerState==BLOWER_STATE__EMPTY||m_blowerState==BLOWER_STATE__FULL;}
 
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 

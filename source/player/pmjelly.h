@@ -40,6 +40,7 @@ public:
 	virtual void				enter();
 	virtual void				think();
 	virtual void				renderModeUi();
+	virtual int					canConverse()						{return m_firingState==FIRING_STATE__NONE;}
 
 	virtual int					setState(int _state);
 

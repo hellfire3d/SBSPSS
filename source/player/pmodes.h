@@ -94,6 +94,7 @@ public:
 	virtual void	springPlayerUp(int _springHeight)	{;}
 	virtual void	setFloating()						{;}
 	void			inSoakUpState();
+	virtual int		canConverse()						{return true;}
 
 	virtual int		setState(int _state)				{return 0;}
 	virtual int		getState()							{return STATE_IDLE;}			// ARSE.. states need to go back in CPlayer! (pkg)
@@ -101,6 +102,7 @@ public:
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
+
 
 	virtual ATTACK_STATE	getAttackState()			{return ATTACK_STATE__NONE;}
 
