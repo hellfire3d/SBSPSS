@@ -271,8 +271,9 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 		}
 		else
 		{
-			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_BUTTFALL&&
-			   m_currentState!=STATE_JUMP&&m_currentState!=STATE_BUTTBOUNCE)
+			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&
+			   m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
+			   m_currentState!=STATE_JUMP)
 			{
 				setState(STATE_FALL);
 			}
@@ -427,7 +428,7 @@ DVECTOR CPlayer::getCameraPos()
 {
 	DVECTOR	cameraPos;
 	cameraPos.vx=Pos.vx+m_cameraOffset.vx;
-	cameraPos.vy=Pos.vy+m_cameraOffset.vy+m_cameraLookYOffset;
+	cameraPos.vy=Pos.vy+m_cameraOffset.vy;//+m_cameraLookYOffset;
 	return cameraPos;
 }
 
