@@ -1159,7 +1159,7 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 	s_FMAPartyScript,
 };
 
-static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__CH4FINISHED;//FMA_SCRIPT__INTRO;
+static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__PARTY;//FMA_SCRIPT__INTRO;
 
 /*----------------------------------------------------------------------
 	Function:
