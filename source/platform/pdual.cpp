@@ -213,7 +213,7 @@ void CNpcDualPlatform::processMovement( int _frames )
 
 		if ( extensionChange && m_soundId == NOT_PLAYING )
 		{
-			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__ROTATING_PLATFORM, true, true );
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_PULLEY, true, true );
 		}
 
 		Pos.vy = m_base.vy + m_extension;
