@@ -69,37 +69,14 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 
 	if ( waypointYDist > 0 )
 	{
-		s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) << 11 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
+		s32 sineVal = ( abs( Pos.vx - nextWaypoint.vx ) * 1024 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
 
-		Pos.vy = nextWaypoint.vy + ( ( ( m_lastWaypoint.vy - nextWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
+		Pos.vy = nextWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
 	}
 	else if ( waypointYDist < 0 )
 	{
-		s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) << 11 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
+		s32 sineVal = ( abs( Pos.vx - m_lastWaypoint.vx ) * 1024 ) / abs( nextWaypoint.vx - m_lastWaypoint.vx );
 
-		Pos.vy = m_lastWaypoint.vy + ( ( ( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
+		Pos.vy = m_lastWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
 	}
-
-	/*if ( waypointYDist < 0 )
-	{
-		if ( waypointYDist > -16 )
-		{
-			s32 multiplier = -waypointYDist;
-
-			m_velocity.vy = ( multiplier * m_velocity.vy ) / 16;
-
-			if ( m_velocity.vy < 1 )
-			{
-				m_velocity.vy = 1;
-			}
-		}
-		else
-		{
-			m_velocity.vy = -5 << 8;
-		}
-	}
-	else
-	{
-		m_velocity.vy += 128;
-	}*/
 }
