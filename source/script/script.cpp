@@ -67,9 +67,15 @@ signed short	CScript::s_globalVars[NUM_GLOBAL_VARS]=
   ---------------------------------------------------------------------- */
 void CScript::initialise(FileEquate _fe)
 {
+	int	i;
+
 	m_code=(unsigned short*)CFileIO::loadFile(_fe);
 	m_stack=(unsigned short*)MemAlloc(sizeof(unsigned short)*STACK_SIZE,"ScriptStack");
 	reset();
+	for(i=0;i<NUM_LOCAL_VARS;i++)
+	{
+		m_localVars[i]=0;
+	}
 }
 
 
@@ -114,13 +120,8 @@ void CScript::run()
 int testval=2;
 void CScript::reset()
 {
-	int	i;
 	m_pc=0;
 	m_sp=0;
-	for(i=0;i<NUM_LOCAL_VARS;i++)
-	{
-		m_localVars[i]=0;
-	}
 m_localVars[TMP1]=testval;
 	m_state=RESET;
 }
