@@ -97,7 +97,26 @@ void	CPlayerModeNet::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	netCatchPos={-15,-90};
+DVECTOR	netCatchPos[17]=		// Oh.. why not, eh?
+{
+	{	64-42,	-128+102	},
+	{	64-15,	-128+86		},
+	{	64-42,	-128+33		},
+	{	64-42,	-128+33		},
+	{	64-42,	-128+33		},
+	{	64-80,	-128+35		},
+	{	64-80,	-128+35		},
+	{	64-95,	-128+64		},
+	{	64-95,	-128+64		},
+	{	64-114,	-128+110	},
+	{	64-114,	-128+110	},
+	{	64-114,	-128+110	},
+	{	64-95,	-128+64		},
+	{	64-80,	-128+35		},
+	{	64-42,	-128+33		},
+	{	64-15,	-128+86		},
+	{	64-42,	-128+102	},
+};
 DVECTOR netCatchSize={50,30};
 DVECTOR	netLaunchPos={-15,-90};
 void	CPlayerModeNet::think()
@@ -136,19 +155,23 @@ void	CPlayerModeNet::think()
 
 		case NET_STATE__CATCHING:
 			{
+				DVECTOR	catchPos;
 				DVECTOR	playerPos;
 				int		playerFacing;
 				CRECT	netRect;
 				CThing	*thing;
 
+				ASSERT(m_netFrame<(int)(sizeof(netCatchPos)/sizeof(DVECTOR)));
+				catchPos=netCatchPos[m_netFrame];
 				playerPos=m_player->getPos();
 				playerFacing=m_player->getFacing();
 
-				netRect.x1=playerPos.vx+(netCatchPos.vx*playerFacing)-(netCatchSize.vx/2);
-				netRect.y1=playerPos.vy+netCatchPos.vy-(netCatchSize.vy/2);
+				netRect.x1=playerPos.vx+(catchPos.vx*playerFacing)-(netCatchSize.vx/2);
+				netRect.y1=playerPos.vy+catchPos.vy-(netCatchSize.vy/2);
 				netRect.x2=netRect.x1+netCatchSize.vx;
 				netRect.y2=netRect.y1+netCatchSize.vy;
 
+/*
 				#ifdef __USER_paul__
 				{
 				CRECT	area=netRect;
@@ -163,6 +186,7 @@ void	CPlayerModeNet::think()
 				DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
 				}
 				#endif
+*/
 
 				thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
 				while(thing)
