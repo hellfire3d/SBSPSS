@@ -795,6 +795,7 @@ void	CGameScene::initLevel()
 	createPlayer();
 	m_player->setRespawnPos(Level.getPlayerSpawnPos());
 	m_player->init();
+	m_player->setFacing(Level.getPlayerStartFacing());
 	if(getLevelNumber()==5)
 	{
 		m_player->setCanExitLevelNow();

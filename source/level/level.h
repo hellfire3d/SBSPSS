@@ -21,6 +21,7 @@
 struct	sLvlTab
 {
 	u16								Chapter,Level;
+	s8								SBFacing;
 	u8								totalSpatCount;
 	FileEquate						LevelFilename,TexFilename;
 	int								songId;
@@ -55,6 +56,7 @@ public:
 		void			setCameraCentre(DVECTOR const &_pos)	{MapPos=_pos;}
 static	DVECTOR const	&getCameraPos()							{return MapPos;}
 static	DVECTOR const	&getPlayerSpawnPos()					{return s_playerSpawnPos;}
+static	int				getPlayerStartFacing()					{return s_playerFacing;}
 
 static int							getCurrentChapter()						{return LvlTable[s_globalLevelSelectThing].Chapter;}
 static int							getCurrentChapterLevel()				{return LvlTable[s_globalLevelSelectThing].Level;}
@@ -101,6 +103,7 @@ static	sLevelHdr		*LevelHdr;
 
 static	DVECTOR			MapPos;
 static	DVECTOR			s_playerSpawnPos;
+static	int				s_playerFacing;
 		TPAGE_DESC		m_levelTPage;
 
 // Tile Layers
