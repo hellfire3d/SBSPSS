@@ -134,6 +134,14 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 	moveX = m_currentSpeed;
 
+	if ( m_currentSpeed )
+	{
+		if(m_soundId==NOT_PLAYING)
+		{
+			m_soundId=CSoundMediator::playSfx(CSoundMediator::SFX_ROLLING_BARREL,true);
+		}
+	}
+
 	// check for collision
 
 	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
