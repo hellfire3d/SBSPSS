@@ -85,7 +85,7 @@ int		Width,Height;
 //		AddLayer(LAYER_TYPE_SHADE,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE, Width, Height);
-		AddLayer(LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE, Width, Height);
+		AddLayer(LAYER_TYPE_RGB,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_FX,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);

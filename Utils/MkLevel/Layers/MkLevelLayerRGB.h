@@ -1,42 +1,50 @@
-/*******************/
-/*** Layer Shade ***/
-/*******************/
+/*****************/
+/*** Layer RGB ***/
+/*****************/
 
-#ifndef	__MKLEVEL_LAYER_SHADE_HEADER__
-#define	__MKLEVEL_LAYER_SHADE_HEADER__
+#ifndef	__MKLEVEL_LAYER_RGB_HEADER__
+#define	__MKLEVEL_LAYER_RGB_HEADER__
 
 #include	"MkLevelLayer.h"
 #include	<List2d.h>
 
-/*****************************************************************************/
-struct  sBackGfxList
+struct	sRGBElem
 {
-		GString					Name;
-		int						TexID;
-		sLayerShadeBackGfxType	Out;
+	sRGBCol	RGB;
+	int		TableIdx;
+};
 
-bool	operator ==(sBackGfxList const &v1)		{return(Name==v1.Name);}
+struct	sRGBList
+{
+	sRGBCol	RGB;
+	int		Count;
+bool	operator==(sRGBList const &v1)	{return(RGB==v1.RGB);}
+
 };
 
 /*****************************************************************************/
-class	CMkLevelLayerShade : public CMkLevelLayer
+class	CMkLevelLayerRGB : public CMkLevelLayer
 {
 public:
-		CMkLevelLayerShade(sExpLayerHdr *LayerHdr);
+		CMkLevelLayerRGB(sExpLayerHdr *LayerHdr);
 
 		void	PreProcess(CMkLevel *Core);
 		void	Process(CMkLevel *Core);
 		int		Write(CMkLevel *Core,FILE *File,const char *LayerName);
 
 protected:
-		int		WriteTypeList(FILE *File);
-		int		WriteGfxList(FILE *File);
+		int		WriteRGBMap(FILE *File);
+		int		WriteRGBTable(FILE *File);
+		int		FindClosestRGB(sRGBCol const &RGB);
 
-		CList<GString>			TypeNameList;
-		CList<sLayerShadeGfx>	GfxList;
+		CList2d<sRGBElem>		RGBMap;
+		CList<sRGBList>			InRGBList;
+		CList<sRGBList>			SortRGBList;
+		CList<int>				RemapTable;
+		int						ShadeFlag;
 
-		CList<sBackGfxList>		OutTypeList;
-		sLayerShadeHdr			ShadeHdr;
+		CList2d<u8>				OutMap;
+		CList2d<sRGBCol>		OutRGBTable;
 };
 
 /*****************************************************************************/

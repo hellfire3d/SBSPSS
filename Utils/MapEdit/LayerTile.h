@@ -59,6 +59,7 @@ virtual	bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFl
 virtual	bool			MouseMove(CCore *Core,UINT nFlags, CPoint &point);
 virtual	bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
+		sMapElem		GetMapElem(int X,int Y)	{return(Map.Get(X,Y));}
 		bool			MirrorX(CCore *Core);
 		bool			MirrorY(CCore *Core);
 		bool			SetColFlags(CCore *Core,int Flags);

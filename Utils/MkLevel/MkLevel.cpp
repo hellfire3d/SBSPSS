@@ -24,6 +24,7 @@
 #include	"Layers\MkLevelLayerFX.h"
 #include	"Layers\MkLevelLayerTrigger.h"
 #include	"Layers\MkLevelLayerHazard.h"
+#include	"Layers\MkLevelLayerRGB.h"
 
 #define	PSX_TILE2D_HEIGHT	(12)
 #define	PSX_TILE3D_HEIGHT	(16)
@@ -46,6 +47,7 @@ sLayerNameTable	LayerNameTable[]=
 	{LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE,"Trigger List"},
 	{LAYER_TYPE_FX,LAYER_SUBTYPE_NONE,"FX List"},
 	{LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE,"Hazard List"},
+	{LAYER_TYPE_RGB,LAYER_SUBTYPE_NONE,"RGB"},
 
 };
 #define		LayerNameTableSize	sizeof(LayerNameTable)/sizeof(sLayerNameTable)
@@ -401,6 +403,9 @@ u8		*ByteHdr=(u8*)FileHdr;
 			case LAYER_TYPE_HAZARD:
 				LayerList.push_back(new CMkLevelLayerHazard(LayerHdr));
 				break;
+			case LAYER_TYPE_RGB:
+				LayerList.push_back(new CMkLevelLayerRGB(LayerHdr));
+				break;
 			default:
 				GObject::Error(ERR_FATAL,"Unknown Layer Type\n");
 			}
@@ -632,7 +637,7 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 
 //***************************************************************************
 int		OTMin=0;
-int		OTMax=16-1;
+int		OTMax=15-1;
 
 void	CMkLevel::CalcOtOfs(vector<sTri> &PList,vector<sVtx> &VtxList,int Start,int Count)
 {
@@ -1134,7 +1139,8 @@ void	CMkLevel::WriteLayers()
 		LevelHdr.ActionLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 // Collision
 		LevelHdr.CollisionLayer=WriteLayer(LAYER_TYPE_COLLISION,LAYER_SUBTYPE_NONE);
-
+// RGB
+		LevelHdr.RGBLayer=WriteLayer(LAYER_TYPE_RGB,LAYER_SUBTYPE_NONE);
 // Things
 int		ThingStart=ftell(File);
 		LevelHdr.ActorList=WriteThings(LAYER_TYPE_ACTOR);
@@ -1144,6 +1150,7 @@ int		ThingStart=ftell(File);
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX);
 		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD);
 		LevelHdr.ModelList=(sModel*)WriteModelList();
+
 		printf("Things =\t(%i Bytes)\n",ftell(File)-ThingStart);
 
 

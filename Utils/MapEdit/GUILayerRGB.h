@@ -6,6 +6,9 @@
 #endif // _MSC_VER > 1000
 // GUILayerRGB.h : header file
 //
+#ifndef	u8
+typedef	unsigned char	u8;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // CGUILayerRGB dialog
@@ -19,7 +22,16 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerRGB)
 	enum { IDD = IDD_LAYER_RGB };
-		// NOTE: the ClassWizard will add data members here
+	CComboBox	m_ModeList;
+	CButton	m_Shade;
+	CSpinButtonCtrl	m_BSpin;
+	CEdit	m_B;
+	CSpinButtonCtrl	m_GSpin;
+	CEdit	m_G;
+	CSpinButtonCtrl	m_RSpin;
+	CEdit	m_R;
+	CSpinButtonCtrl	m_BrushSpin;
+	CEdit	m_Brush;
 	//}}AFX_DATA
 
 
@@ -31,11 +43,21 @@ public:
 	//}}AFX_VIRTUAL
 
 // Implementation
+public:
+	void	EnableCallback()		{CallbackFlag=true;}
+	void	DisableCallback()		{CallbackFlag=false;}
+
+	void	SetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+	void	GetVal(CEdit &Dlg,int &Val,int Min=-1,int Max=-1);
+	void	SetRGB(u8 &R,u8 &G,u8 &B);
+	void	GetRGB(u8 &R,u8 &G,u8 &B);
+
 protected:
+	bool	CallbackFlag;
 
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerRGB)
-		// NOTE: the ClassWizard will add member functions here
+	afx_msg void OnParamChange();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

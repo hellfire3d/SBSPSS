@@ -25,6 +25,7 @@
 #define IDD_LAYER_TRIGGER               184
 #define IDD_LAYER_FX                    185
 #define IDD_LAYER_HAZARD                186
+#define IDD_LAYER_RGB                   187
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYERLIST_LIST              1019
 #define IDD_TILEBANK_UPDATE             1029
@@ -211,6 +212,20 @@
 #define IDC_LAYERSHADE_GFX_Y            1212
 #define IDC_LAYERSHADE_GFX_YSPIN        1213
 #define IDC_LAYERSHADE_DEF_LIST         1214
+#define IDC_LAYERSHADE_BRUSHTEXT        1215
+#define IDC_LAYERSHADE_BRUSH            1216
+#define IDC_LAYERSHADE_BRUSHSPIN        1217
+#define IDC_LAYERSHADE_MODELIST         1218
+#define IDC_LAYERSHADE_RTEXT            1219
+#define IDC_LAYERSHADE_R                1220
+#define IDC_LAYERSHADE_RSPIN            1221
+#define IDC_LAYERSHADE_GTEXT            1222
+#define IDC_LAYERSHADE_G                1223
+#define IDC_LAYERSHADE_GSPIN            1224
+#define IDC_LAYERSHADE_BTEXT            1225
+#define IDC_LAYERSHADE_B                1226
+#define IDC_LAYERSHADE_BSPIN            1227
+#define IDC_LAYERSHADE_SHADE            1229
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_PARAMBAR             32783
 #define ID_TOGGLE_SUBVIEW               32785
@@ -238,7 +253,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        180
 #define _APS_NEXT_COMMAND_VALUE         32803
-#define _APS_NEXT_CONTROL_VALUE         1215
+#define _APS_NEXT_CONTROL_VALUE         1230
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -13,6 +13,7 @@
 struct	sRGBCol
 {
 		u8	R,G,B,P;
+bool	operator ==(sRGBCol const &v1)	{return(R==v1.R && G==v1.G && B==v1.B);}
 };
 
 struct	sXY

@@ -1,39 +1,52 @@
 /*******************/
-/*** Layer Shade ***/
+/*** Layer RGB ***/
 /*******************/
 
-#ifndef	__LAYER_SHADE_HEADER__
-#define	__LAYER_SHADE_HEADER__
+#ifndef	__LAYER_RGB_HEADER__
+#define	__LAYER_RGB_HEADER__
 
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"GUILayerShade.h"
+#include	"GUILayerRGB.h"
 #include	"Elem.h"
 #include	"ExportHdr.h"
 
-
-/*****************************************************************************/
-struct	sBackList
+struct sRGBElem
 {
-		GString	Name;
-		int		ElemID;
+	u8	R,G,B;
 };
-
 
 /*****************************************************************************/
 class	CCore;
-class	CLayerShade : public CLayer
+class	CLayerRGB : public CLayer
 {
 
 public:
 		enum
 		{
-			LAYER_SHADE_RGB_MAX=4,
+			GUI_MODE_PAINT=0,
+			GUI_MODE_TINT,
+			GUI_MODE_LIGHTEN,
+			GUI_MODE_DARKEN,
+
+			GUI_MODE_MAX
+		};
+		enum
+		{
+			RGB_BRUSH_MAX=8,
 		};
 
-		CLayerShade(sLayerDef &Def);
-		CLayerShade(CFile *File,int Version)	{Load(File,Version);}
-		~CLayerShade();
+		struct	sRGBBrush
+		{
+				int	WH;
+				int	XYOfs;
+				u8	*Gfx;
+		};
+
+
+		CLayerRGB(sLayerDef &Def);
+		CLayerRGB(CFile *File,int Version)	{Load(File,Version);}
+		~CLayerRGB();
 
 		void			InitLayer(sLayerDef &Def);
 
@@ -48,8 +61,6 @@ public:
 		void			GUIUpdate(CCore *Core);
 		void			GUIChanged(CCore *Core);
 
-//		int				GetWidth()						{return(LayerDef.Width);}
-//		int				GetHeight()						{return(LayerDef.Height);}
 		void			CheckLayerSize(int Width,int Height);
 		bool			Resize(int Width,int Height);
 
@@ -57,34 +68,38 @@ public:
 		void			Save(CFile *File);
 
 		void			Export(CCore *Core,CExport &Exp);
-		virtual	void			LoadGfx(CCore *Core)		{if (GfxBank->NeedLoad()) GfxBank->LoadAllSets(Core);}
+virtual	void			LoadGfx(CCore *Core){}
+
+		void			SetSize(int Width,int Height,BOOL ClearFlag);
+		void			Clear();
+
 
 // Functions
 		bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
 		bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);
 		bool			MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
-		bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
 protected:
-		void			LoadGfx();
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
-		void			RenderBackGfx(CCore *Core,Vector3 &ThisCam,sLayerShadeGfx &ThisGfx);
-		void			AddGfx(CCore *Core);
-		void			GotoGfx(CCore *Core);
-		void			DeleteGfx(CCore *Core);
+		void			Paint(CCore *Core,CPoint &CursorPos);
+		void			Grab(CCore *Core,CPoint &CursorPos);
+		sRGBElem const	&GetRGB(int X,int Y)		{return(Map[X][Y]);}
 
-		CGUILayerShade		GUIShade;
-		CIni				Script;
-		CList<sBackList>	BankList;
-		CElemBank			*GfxBank;
-		sLayerShadeGfx			Cursor;
+		CGUILayerRGB		GUIRGB;
+		
+		sRGBElem		CurrentRGB;
+		int				CurrentBrush;
+		int				CurrentMode;
+		bool			ShadeFlag;
 
-		int					ShadeCount;
-		sRGBCol				ShadeRGB[LAYER_SHADE_RGB_MAX];
+		int				MapWidth,MapHeight;
+		std::vector< std::vector<sRGBElem> > Map;
 
-		CList<sLayerShadeGfx>		GfxList;
-		int					CurrentGfx;
+		CPoint			LastCursPos;
+static	char			*RGBModeName[GUI_MODE_MAX];
+static	sRGBBrush		RGBBrushTable[CLayerRGB::RGB_BRUSH_MAX];
 
+		
 };
 
 /*****************************************************************************/

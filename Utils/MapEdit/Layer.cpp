@@ -27,6 +27,7 @@
 #include	"LayerTrigger.h"
 #include	"LayerFX.h"
 #include	"LayerHazard.h"
+#include	"LayerRGB.h"
 
 #include	"LayerDef.h"
 #include	"Utils.h"
@@ -47,6 +48,7 @@ sLayerInfoTable	CLayer::InfoTable[]=
 	{LAYER_TYPE_TRIGGER,	LAYER_SUBTYPE_NONE,		"Trigger",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 	{LAYER_TYPE_FX,			LAYER_SUBTYPE_NONE,		"FX",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 	{LAYER_TYPE_HAZARD,		LAYER_SUBTYPE_NONE,		"Hazard",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
+	{LAYER_TYPE_RGB,		LAYER_SUBTYPE_NONE,		"RGB",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 };
 
 int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);
@@ -105,6 +107,9 @@ CLayer	*New;
 		case LAYER_TYPE_HAZARD:
 			New=new CLayerHazard(Def);
 			break;
+		case LAYER_TYPE_RGB:
+			New=new CLayerRGB(Def);
+			break;
 		default:
 			ASSERT(!"Unknown Layer");
 		}
@@ -147,6 +152,9 @@ CLayer	*New;
 				break;
 			case LAYER_TYPE_HAZARD:
 				New=new CLayerHazard(File,Version);
+				break;
+			case LAYER_TYPE_RGB:
+				New=new CLayerRGB(File,Version);
 				break;
 			default:
 				ASSERT(!"Unknown Layer");

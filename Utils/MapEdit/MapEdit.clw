@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CGUILayerTrigger
+LastClass=CGUILayerRGB
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=26
+ClassCount=27
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CGUIAddLayer
@@ -36,28 +36,30 @@ Class24=CAboutDlg
 Class25=CMapEditDoc
 Class26=CMapEditView
 
-ResourceCount=21
-Resource1=IDD_NEWMAP
-Resource2=IDD_LAYER_SHADE
-Resource3=IDD_LAYER_TRIGGER
-Resource4=IDD_TOOLBAR
-Resource5=IDR_TOOLBAR (English (U.S.))
-Resource6=IDD_ABOUTBOX (English (U.S.))
-Resource7=IDD_RESIZE
-Resource8=IDD_MULTIBAR (English (U.S.))
-Resource9=IDR_MAINFRAME (English (U.S.))
-Resource10=IDD_LAYER_COLLISION
-Resource11=IDD_LAYER_ACTOR
-Resource12=IDD_LAYER_LIST
-Resource13=IDD_LAYER_FX
-Resource14=IDD_TILEBANK
-Resource15=IDD_LAYER_PLATFORM
-Resource16=IDD_ELEMLIST
+ResourceCount=22
+Resource1=IDD_LAYER_PLATFORM
+Resource2=IDR_TOOLBAR (English (U.S.))
+Resource3=IDD_ADDLAYER
+Resource4=IDD_LAYER_HAZARD
+Resource5=IDD_LAYER_SHADE
+Resource6=IDD_ELEMLIST
+Resource7=IDD_LAYER_THING_POS
+Resource8=IDD_LAYER_ACTOR
+Resource9=IDD_LAYER_COLLISION
+Resource10=IDR_MAINFRAME (English (U.S.))
+Resource11=IDD_MULTIBAR (English (U.S.))
+Resource12=IDD_LAYER_THING
+Resource13=IDD_TILEBANK
+Resource14=IDD_LAYER_FX
+Resource15=IDD_NEWMAP
+Resource16=IDD_ABOUTBOX (English (U.S.))
 Resource17=IDR_MAPEDITYPE (English (U.S.))
-Resource18=IDD_ADDLAYER
-Resource19=IDD_LAYER_THING
-Resource20=IDD_LAYER_THING_POS
-Resource21=IDD_LAYER_HAZARD
+Resource18=IDD_LAYER_TRIGGER
+Resource19=IDD_LAYER_LIST
+Resource20=IDD_RESIZE
+Resource21=IDD_TOOLBAR
+Class27=CGUILayerRGB
+Resource22=IDD_LAYER_RGB
 
 [CLS:CChildFrame]
 Type=0
@@ -139,7 +141,7 @@ HeaderFile=GUILayerShade.h
 ImplementationFile=GUILayerShade.cpp
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_LAYERSHADE_GFX_XSPIN
+LastObject=CGUILayerShade
 
 [CLS:CGUILayerThing]
 Type=0
@@ -160,7 +162,7 @@ HeaderFile=GUILayerTrigger.h
 ImplementationFile=GUILayerTrigger.cpp
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_TRIGGER_VAL0_SPIN
+LastObject=CGUILayerTrigger
 
 [CLS:CGUIMultiBar]
 Type=0
@@ -611,4 +613,32 @@ Control3=IDOK,button,1342373889
 Type=1
 Class=?
 ControlCount=0
+
+[DLG:IDD_LAYER_RGB]
+Type=1
+Class=CGUILayerRGB
+ControlCount=14
+Control1=IDC_LAYERSHADE_BRUSHTEXT,static,1342308352
+Control2=IDC_LAYERSHADE_BRUSH,edit,1350641792
+Control3=IDC_LAYERSHADE_BRUSHSPIN,msctls_updown32,1342177334
+Control4=IDC_LAYERSHADE_MODELIST,combobox,1344339971
+Control5=IDC_LAYERSHADE_RTEXT,static,1342308352
+Control6=IDC_LAYERSHADE_R,edit,1350641792
+Control7=IDC_LAYERSHADE_RSPIN,msctls_updown32,1342177334
+Control8=IDC_LAYERSHADE_GTEXT,static,1342308352
+Control9=IDC_LAYERSHADE_G,edit,1350641792
+Control10=IDC_LAYERSHADE_GSPIN,msctls_updown32,1342177334
+Control11=IDC_LAYERSHADE_BTEXT,static,1342308352
+Control12=IDC_LAYERSHADE_B,edit,1350641792
+Control13=IDC_LAYERSHADE_BSPIN,msctls_updown32,1342177334
+Control14=IDC_LAYERSHADE_SHADE,button,1342242851
+
+[CLS:CGUILayerRGB]
+Type=0
+HeaderFile=GUILayerRGB.h
+ImplementationFile=GUILayerRGB.cpp
+BaseClass=CDialog
+Filter=D
+LastObject=IDC_LAYERSHADE_MODELIST
+VirtualFilter=dWC
 

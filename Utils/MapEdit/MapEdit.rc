@@ -884,6 +884,40 @@ BEGIN
                     UDS_ARROWKEYS,75,70,11,10
 END
 
+IDD_LAYER_RGB DIALOG DISCARDABLE  0, 0, 156, 56
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Brush",IDC_LAYERSHADE_BRUSHTEXT,10,5,25,10
+    EDITTEXT        IDC_LAYERSHADE_BRUSH,30,5,25,12,ES_AUTOHSCROLL | 
+                    ES_READONLY | ES_NUMBER
+    CONTROL         "Spin1",IDC_LAYERSHADE_BRUSHSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,45,0,11,15
+    COMBOBOX        IDC_LAYERSHADE_MODELIST,60,5,90,65,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "R",IDC_LAYERSHADE_RTEXT,10,25,15,10
+    EDITTEXT        IDC_LAYERSHADE_R,10,35,30,12,ES_AUTOHSCROLL | 
+                    ES_READONLY | ES_NUMBER
+    CONTROL         "Spin1",IDC_LAYERSHADE_RSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,25,30,11,15
+    LTEXT           "G",IDC_LAYERSHADE_GTEXT,45,25,15,10
+    EDITTEXT        IDC_LAYERSHADE_G,45,35,30,12,ES_AUTOHSCROLL | 
+                    ES_READONLY | ES_NUMBER
+    CONTROL         "Spin1",IDC_LAYERSHADE_GSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,61,30,11,15
+    LTEXT           "B",IDC_LAYERSHADE_BTEXT,75,25,15,10
+    EDITTEXT        IDC_LAYERSHADE_B,75,35,30,12,ES_AUTOHSCROLL | 
+                    ES_READONLY | ES_NUMBER
+    CONTROL         "Spin1",IDC_LAYERSHADE_BSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,91,30,11,15
+    CONTROL         "Shade",IDC_LAYERSHADE_SHADE,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,105,35,35,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1019,6 +1053,14 @@ BEGIN
         RIGHTMARGIN, 149
         TOPMARGIN, 7
         BOTTOMMARGIN, 89
+    END
+
+    IDD_LAYER_RGB, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 149
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 49
     END
 END
 #endif    // APSTUDIO_INVOKED

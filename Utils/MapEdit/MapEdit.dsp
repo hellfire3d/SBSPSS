@@ -155,6 +155,14 @@ SOURCE=.\LayerPlatform.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerRGB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerRGB.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerShade.cpp
 # End Source File
 # Begin Source File
@@ -454,6 +462,14 @@ SOURCE=.\GUILayerPlatform.cpp
 # Begin Source File
 
 SOURCE=.\GUILayerPlatform.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerRGB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerRGB.h
 # End Source File
 # Begin Source File
 

@@ -147,6 +147,14 @@ SOURCE=.\Layers\MkLevelLayerPlatform.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Layers\MkLevelLayerRGB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Layers\MkLevelLayerRGB.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Layers\MkLevelLayerShade.cpp
 # End Source File
 # Begin Source File

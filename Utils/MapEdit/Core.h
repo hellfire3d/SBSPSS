@@ -107,6 +107,7 @@ public:
 		void					Toggle2d3d();
 		int						FindLayer(int Type,int SubType=-1);
 		int						SetActionLayer(CLayerTile *Lyr)		{ActionLayer=Lyr;}
+		CLayer					*GetActionLayer()					{return(ActionLayer);}
 
 		void					SetScale();
 		Vector3					&GetScaleVector()			{return(ScaleVector);}
