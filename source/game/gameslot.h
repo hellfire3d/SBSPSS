@@ -42,6 +42,7 @@ public:
 	
 	typedef struct
 	{
+		int		m_isInUse;
 		int		m_lives;
 		int		m_continues;
 		int		m_maxLevelCompleted;

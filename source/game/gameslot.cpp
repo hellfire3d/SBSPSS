@@ -78,6 +78,7 @@ void CGameSlotManager::setActiveSlot(unsigned int _slot)
 {
 	ASSERT(_slot<=NUM_GAME_SLOTS);
 	s_currentGameSlot=&s_gameSlots[_slot];
+	s_currentGameSlot->m_isInUse=true;
 }
 
 
@@ -121,6 +122,7 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 
 	slot=&s_gameSlots[_slot];
 
+	slot->m_isInUse=false;
 	slot->m_lives=INITIAL_LIVES;
 	slot->m_continues=INITIAL_CONTINUES;
 	slot->m_maxLevelCompleted=0;
