@@ -124,7 +124,7 @@ void	CPlayerModeDead::think()
 		m_player->setAnimFrame(frame);
 	}
 
-	if(m_player->getPos().vy<(GameScene.GetLevel().getMapHeight()+4)*16)
+	if(m_player->getPos().vy<GameScene.GetLevel().getMapHeight16()+(4*16))
 	{
 		if(m_deathMovementType==FALL_TO_DEATH)
 		{

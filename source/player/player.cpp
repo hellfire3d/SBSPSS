@@ -2030,6 +2030,14 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	int			addon;
 	POLY_FT4	*ft4;
 
+
+	// Y clipping ( damn useful when player is dead.. ;)
+	if(_pos->vy<0-256||_pos->vy>256+256)
+	{
+		return;
+	}
+
+
 	if(m_currentMode==PLAYER_MODE_DEAD)
 	{
 		playerMode=m_lastModeBeforeDeath;
