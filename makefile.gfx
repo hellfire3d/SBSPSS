@@ -182,6 +182,7 @@ INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_N
 
 PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +token +pants +glint1 +glint2 +glint3 +glint4 \
+							+questitemstar1 +questitemstar2 +questitemstar3 +questitemstar4 \
 							+jellyammo +bubblemixture +bubblewand +shoe +balloon +balloonburst +helmet \
 							+blower +launcher +net \
 							+c1_l1_quest_item +c1_l2_quest_item +c1_l3_quest_item +c1_l4_quest_item \
