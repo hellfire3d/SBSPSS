@@ -43,6 +43,10 @@ public:
 	virtual void		think(int _frames);
 
 
+protected:
+	virtual int			isSelectable()								{return true;}
+
+
 private:
 	int					*m_target;
 	int					*m_data;

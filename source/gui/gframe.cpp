@@ -85,6 +85,33 @@ void CGUIGroupFrame::clearFlags(GUI_FLAGS _flags)
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CGUIGroupFrame::isSelectable()
+{
+	CGUIObject	*pGUI;
+	int			selectable=false;
+	
+	pGUI=getChild();
+	while(pGUI)
+	{
+		if(pGUI->isSelectable())
+		{
+			selectable=true;
+			break;
+		}
+		pGUI=pGUI->getNext();
+	}
+
+GUI_DBGMSG("frame is %s",selectable?"SELECTABLE":"NOT SELECTABLE");	
+	return selectable;
+}
+
+
 
 
 
@@ -118,9 +145,12 @@ void CGUIControlFrame::think(int _frames)
 			pGUI->unselect();
 GUI_DBGMSG("unselected %d",pGUI->getId());
 
-			// Find next object and select it
-			pGUI=pGUI->getNext();
-			if(!pGUI)pGUI=getChild();
+			// Find next selectbale object and select it
+			while(!pGUI->isSelectable())
+			{
+				pGUI=pGUI->getNext();
+				if(!pGUI)pGUI=getChild();
+			}
 			pGUI->select();
 GUI_DBGMSG("selected %d",pGUI->getId());
 		}
@@ -181,10 +211,12 @@ void CGUIControlFrame::selectFrame()
 	CGUIObject	*pGUI;
 
 	pGUI=getChild();
-	if(pGUI)
+	while(!pGUI->isSelectable())
 	{
-		pGUI->select();
+		ASSERT(pGUI);
+		pGUI=pGUI->getNext();
 	}
+	pGUI->select();
 }
 
 

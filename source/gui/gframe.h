@@ -40,7 +40,9 @@ public:
 	virtual void		setFlags(GUI_FLAGS _flags);
 	virtual void		clearFlags(GUI_FLAGS _flags);
 
+	virtual int			isSelectable();
 
+	
 protected:
 	GUI_FLAGS			getInitialFlags()							{return FLAG_DRAWBORDER;}
 

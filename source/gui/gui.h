@@ -78,6 +78,7 @@ public:
 
 	CGUIObject			*getChild()									{return m_child;}
 	CGUIObject			*getNext()									{return m_next;}
+	virtual int			isSelectable()								{return false;}
 
 int getId() {return m_id;}
 
@@ -85,7 +86,6 @@ protected:
 	virtual void		recalc();
 
 	virtual GUI_FLAGS	getInitialFlags()							{return FLAG_NONE;}
-	virtual int			isSelectable()								{return false;}
 
 	int					getX()										{return m_x;}
 	int					getY()										{return m_y;}
