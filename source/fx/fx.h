@@ -99,24 +99,24 @@ static	CFX			*Create(const FX_TYPE Type);
 static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
 static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
 
-virtual	bool		alwaysThink()								{return(Flags & FX_FLAG_SCREEN_FX);}
-virtual	void		leftThinkZone(int _frames)					{if (Flags & FX_FLAG_NO_THINK_KILL) killFX();}
+		bool		alwaysThink()								{return(Flags & FX_FLAG_SCREEN_FX);}
+		void		leftThinkZone(int _frames)					{if (Flags & FX_FLAG_NO_THINK_KILL) killFX();}
 
-virtual void		init();
+		void		init();
 virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 
-virtual int			canCollide()					{return(Flags & FX_FLAG_INJURE_PLAYER);}
-virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
-virtual	void		setLife(int L)					{Life=L;}
+		int			canCollide()					{return(Flags & FX_FLAG_INJURE_PLAYER);}
+		void		SetOtPos(int Ot)				{OtPos=Ot;}
+		void		setLife(int L)					{Life=L;}
 
-virtual	void		getFXRenderPos(DVECTOR &Pos);
-virtual	bool		getFXParentPos(DVECTOR &Pos);
+		void		getFXRenderPos(DVECTOR &Pos);
+		bool		getFXParentPos(DVECTOR &Pos);
 
 virtual	void		killFX();
-virtual void		toggleVisible()					{Flags ^=FX_FLAG_HIDDEN;}
+		void		toggleVisible()					{Flags ^=FX_FLAG_HIDDEN;}
 
 protected:
 		void		collidedWith(CThing *_thisThing);

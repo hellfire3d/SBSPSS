@@ -12,9 +12,9 @@
 class CFXGeyser : public CFX
 {
 public:
-virtual void		init(DVECTOR const &Pos);
-virtual void		think(int Frames);
-virtual void		render();
+/*virtual */void		init(DVECTOR const &Pos);
+/*virtual */void		think(int Frames);
+/*virtual */void		render();
 
 		void		setHeight(int H)	{TargetHeight=H;}
 

@@ -124,6 +124,7 @@ static	void		EnableASync(bool f)		{ASyncFlag=f;}
 static	void		AddASyncFile(FileEquate file,u8 *Dst);
 static	void		LoadASyncFiles();
 
+static	void		setLogging(bool f)		{LogFlag=f;}
 private:
 static	void   		CheckChunk();
 
@@ -137,6 +138,7 @@ static	DataBankEquate	CurrentDataBank;
 static	sFAT		*MainFAT;
 static	sASyncQueue	ASyncQueue;
 static	bool		ASyncFlag;
+static	bool		LogFlag;
 };
 
 /*****************************************************************************/

@@ -12,9 +12,9 @@ class CFXJellyFishLegs : public CFX
 {
 public:
 
-virtual void		init(DVECTOR const &Pos);
-virtual void		think(int _frames);
-virtual void		render();
+/*virtual */void		init(DVECTOR const &Pos);
+/*virtual */void		think(int _frames);
+/*virtual */void		render();
 
 		void		Setup(int XOfs,int YOfs,bool XFlip);
 		void		setScale( s16 newScale )					{Scale = newScale;}

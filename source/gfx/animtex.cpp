@@ -9,7 +9,8 @@
 #include "gfx\animtex.h"
 #include "gfx\tpage.h"
 #include "utils\utils.h"
-#include "utils\pak.h"
+//#include "utils\pak.h"
+#include "utils\lznp.h"
 
 #ifndef __SYSTEM_GSTATE_H__
 #include 	"system\gstate.h"
@@ -212,7 +213,9 @@ void	CPakTex::DMAPakTex()
 		for (int i=0; i<PakTexCount; i++)
 		{
 			ASSERT(UnpackBuffer);
-			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
+//			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
+//			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
+			LZNP_Decode(PakTexList[i].PakSpr,UnpackBuffer);
 			LoadImage( PakTexList[i].DstRect, (u32*)UnpackBuffer);
 		}
 		PakTexCount=0;

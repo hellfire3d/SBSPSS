@@ -23,10 +23,10 @@ virtual void		render();
 
 		void		setBaseData(void *Data);
 
-virtual	void		SetScale(int S)			{CurrentScaleX=CurrentScaleY=S;}
-virtual void		SetScaleX(int S)		{CurrentScaleX=S;}
-virtual void		SetScaleY(int S)		{CurrentScaleY=S;}
-virtual void		SetHeading(int H)		{CurrentHeading=H;}
+/*virtual */void		SetScale(int S)			{CurrentScaleX=CurrentScaleY=S;}
+/*virtual */void		SetScaleX(int S)		{CurrentScaleX=S;}
+/*virtual */void		SetScaleY(int S)		{CurrentScaleY=S;}
+/*virtual */void		SetHeading(int H)		{CurrentHeading=H;}
 
 protected:
 		bool		HasInit;

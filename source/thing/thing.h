@@ -122,11 +122,11 @@ public:
 				CThing()	
 				{
 					initDef();
-					m_SubType=1234;
+					m_SubType=255;
 				}
 virtual			~CThing()	{;}
 
-virtual	void	initDef()
+/*virtual*/	void	initDef()
 				{
 					Pos.vx=0; Pos.vy=0;
 					PosDelta=Pos;
@@ -135,22 +135,22 @@ virtual	void	initDef()
 					NextFreeThing=0;
 				}
 
-virtual	TYPE	getThingType()=0;
+virtual	TYPE			getThingType()=0;
 
-virtual	void	setThingSubType(int	T)	{m_SubType=T;}
-virtual	int		getThingSubType()		{return(m_SubType);}
+/*virtual	*/void		setThingSubType(int	T)	{m_SubType=T;}
+/*virtual	*/int		getThingSubType()		{return(m_SubType);}
 
-virtual	void	create()	{;}	// Once only init (for mem alloc)
-virtual	void	init();			// re-usable init
-virtual	void	shutdown();		// re-usable shutdown
-virtual	void	destroy()	{;}	// memory clean up when totally killing the poor things
+//virtual	void			create()	{;}	// Once only init (for mem alloc)
+virtual	void			init();			// re-usable init
+virtual	void			shutdown();		// re-usable shutdown
+//virtual	void			destroy()	{;}	// memory clean up when totally killing the poor things
 
-virtual	void	think(int _frames);
-virtual	void	render();
-		void	setToShutdown(bool f=true)								{m_isShuttingDown = f;}
-		u8		isSetToShutdown()										{return( m_isShuttingDown);}
-virtual int		dontKillDuringLevelRespawn()							{return false;}
-		void	calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos);
+virtual	void			think(int _frames);
+virtual	void			render();
+		void			setToShutdown(bool f=true)								{m_isShuttingDown = f;}
+		u8				isSetToShutdown()										{return( m_isShuttingDown);}
+virtual int				dontKillDuringLevelRespawn()							{return false;}
+		void			calcRenderPos(DVECTOR const &Pos,DVECTOR &renderPos);
 
 // Linkage
 		void			addChild(CThing *Child);
@@ -173,7 +173,7 @@ protected:
 
 // Parent Child Linkage
 		CThing			*ParentThing,*NextThing;
-		int				m_numChildren;
+		u8				m_numChildren;
 
 public:
 // Collision/List Link List
@@ -189,13 +189,13 @@ virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
 virtual	bool			alwaysThink()								{return(false);}
 virtual	void			leftThinkZone(int _frames)					{}
-virtual	void			enterThinkZone(int _frames)					{}
+//virtual	void			enterThinkZone(int _frames)					{}
 
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 		int				getCollisionRadius()						{return m_collisionRadius;}
-virtual	CRECT const		&getCollisionArea()							{return m_collisionArea;}
+/*virtual	*/CRECT const		&getCollisionArea()							{return m_collisionArea;}
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}
 
 virtual int				canCollide()								{return true;}
@@ -215,20 +215,20 @@ public:
 		bool			canThink()									{return (m_thinkFlag);}
 
 protected:
-		bool			m_renderFlag,m_thinkFlag;
 		DVECTOR			m_RenderPos;
-		bool			m_isShuttingDown;
-		int				m_SubType;
+		u8				m_renderFlag,m_thinkFlag;
+		u8				m_isShuttingDown;
+		u8				m_SubType;
 
 protected:
-virtual void			setCollisionSize(int _w,int _h);
-virtual void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
-virtual void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
+/*virtual */void			setCollisionSize(int _w,int _h);
+/*virtual */void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
+/*virtual */void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
 
 private:
 		DVECTOR			m_collisionSize;
 		DVECTOR			m_collisionCentreOffset;
-		int				m_collisionRadius;
+		s16				m_collisionRadius;
 		CRECT			m_collisionArea;
 		DVECTOR			m_collisionCentre;
 

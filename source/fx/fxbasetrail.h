@@ -31,11 +31,11 @@ public:
 			LIST_SIZE = 16
 		};
 
-virtual void		init(DVECTOR const &Pos);
-virtual void		think(int _frames);
-virtual void		render();
+/*virtual */void		init(DVECTOR const &Pos);
+/*virtual */void		think(int _frames);
+/*virtual */void		render();
 
-virtual	sList		&moveHead();
+/*virtual	*/sList		&moveHead();
 
 protected:
 		sList		List[LIST_SIZE];

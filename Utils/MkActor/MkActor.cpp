@@ -142,6 +142,53 @@ int		i,ListSize;
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
+#if	1
+void PakImage(sBmp &Image)
+{
+#ifdef _DEBUG
+	const char	*ExeName="tools\\lznp";
+#else
+	const char	*ExeName="lznp.exe";
+#endif
+const char	*TmpName="Actor.Tmp";
+const char	*PakName="Actor.Pak";
+char		CmdStr[256];
+FILE	*File;
+
+// Write normal file to temp
+		File=fopen(TmpName,"wb");
+		if (!File) GObject::Error(ERR_FATAL,"Could not create temp file %s.",TmpName);
+		fwrite(Image.Psx,1,Image.PsxSize,File);
+		fclose(File);
+
+// Pak File by calling LZNP.exe
+		sprintf(CmdStr, "%s  %s %s >nul",ExeName,TmpName, PakName);
+		system(CmdStr);
+
+// Read Pak File Back
+		remove(TmpName);		// Delete Tmp File
+		File=fopen(PakName,"rb");
+		if (!File) GObject::Error(ERR_FATAL,"Could not open temp Pak file %s.",PakName);
+		fseek(File,0,SEEK_END);
+		Image.PakSize=ftell(File);
+		fseek(File,0,SEEK_SET);
+		Image.Pak=(u8*)malloc(Image.PakSize*2);
+		ASSERT(Image.Pak);
+		fread(Image.Pak,1,Image.PakSize,File);
+		fclose(File);
+		remove(PakName);		// Delete Pak File
+
+}
+#else
+void PakImage(sBmp &Image)
+{
+				Image.PakSize=PAK_findPakSize(Image.Psx,Image.PsxSize);
+				Image.Pak=(u8*)malloc(Image.PakSize);
+				ASSERT(Image.Pak);
+				PAK_doPak(Image.Pak,Image.Psx,Image.PsxSize);
+}
+#endif
+//***************************************************************************
 CMkActor::CMkActor(GString &ActorName,GString &ActorPath,GString &SpritePath)
 {
 		Name=ActorName;
@@ -543,13 +590,14 @@ int		i,ListSize=BmpList.size();
 		{
 			sBmp	&ThisBmp=BmpList[i];
 
-			printf("%s - Processing Frame %2d\\%2d\r",Name,i+1,ListSize);
+			printf("%s - Processing Frame %2d\\%2d\t\t\t\r",Name,i+1,ListSize);
 			if (ThisBmp.Psx)
 			{
-				ThisBmp.PakSize=PAK_findPakSize(ThisBmp.Psx,ThisBmp.PsxSize);
-				ThisBmp.Pak=(u8*)malloc(ThisBmp.PakSize);
-				ASSERT(ThisBmp.Pak);
-				PAK_doPak(ThisBmp.Pak,ThisBmp.Psx,ThisBmp.PsxSize);
+				PakImage(ThisBmp);
+//				ThisBmp.PakSize=PAK_findPakSize(ThisBmp.Psx,ThisBmp.PsxSize);
+//				ThisBmp.Pak=(u8*)malloc(ThisBmp.PakSize);
+//				ASSERT(ThisBmp.Pak);
+//				PAK_doPak(ThisBmp.Pak,ThisBmp.Psx,ThisBmp.PsxSize);
 			}
 			else
 			{ // Blank Frame

@@ -358,7 +358,7 @@ triggers_src :=		trigger \
 
 utils_src :=		utils \
 					sincos \
-					pak
+					lznp
 
 utils_src_mip :=	mathmip \
 					replace

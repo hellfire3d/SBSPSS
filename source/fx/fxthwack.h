@@ -11,8 +11,8 @@
 class CFXThwack : public CFX
 {
 public:
-virtual void		init(DVECTOR const &Pos);
-virtual void		render();
+/*virtual*/ void		init(DVECTOR const &Pos);
+/*virtual*/ void		render();
 
 protected:
 		u16			Angle,Scale;

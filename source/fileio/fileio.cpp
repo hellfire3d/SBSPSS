@@ -34,6 +34,7 @@ int			CFileIO::FilePosList[FILEPOS_MAX];
 sFAT		*CFileIO::MainFAT=0;
 sASyncQueue	CFileIO::ASyncQueue;
 bool		CFileIO::ASyncFlag;
+bool		CFileIO::LogFlag;
 
 /*****************************************************************************/
 sDataBank	CFileIO::DataBank[DATABANK_MAX]=
@@ -90,7 +91,12 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 //		CurrentDataBank=DATABANK_MAX;
 		ASyncQueue.Status=BLStatusOffline;
 		ASyncFlag=false;
+		LogFlag=false;
+#if	defined(__USER_daveo__)
+		LogFlag=true;
+#endif
 }
+
 
 /*****************************************************************************/
 /*** Open ********************************************************************/
@@ -191,6 +197,11 @@ u8 * CFileIO::loadFile( FileEquate file, char *allocName )
 	if (buffer) return(buffer);
 
 	Length = getFileSize( file );
+
+	if (LogFlag)
+	{
+		SYSTEM_DBGMSG("File: %i = %i",(int)file,Length);
+	}
 
 	buffer = (u8 *)MemAlloc( Length ,allocName);
 	ASSERT( buffer );

@@ -105,10 +105,7 @@ sBBox			CThingManager::m_ThinkBBox;
 
 #ifdef	USE_FREE_LIST
 CThing			**CThingManager::s_FreeList[CThing::MAX_TYPE];
-CThing			*DuffList;
 int				FreeListCount=0;
-int				DuffListCount=0;
-
 
 struct	sFreeListTable
 {
@@ -436,7 +433,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 				case 0: // 0    0
 					break;
 				case 1: // 0    1
-					thing->enterThinkZone(_frames);
+//					thing->enterThinkZone(_frames);
 					break;
 				case 2: // 1    0
 					thing->leftThinkZone(_frames);
@@ -896,7 +893,6 @@ void		CThingManager::initFreeList()
 			s_FreeList[ThisType.Type]=List;
 
 		}
-		DuffList=0;
 #endif
 }
 
@@ -916,21 +912,13 @@ void	CThingManager::resetFreeList()
 				while (ThisThing)
 				{
 					CThing	*Next=ThisThing->NextFreeThing;
-					ThisThing->destroy();
+//					ThisThing->destroy();
 					delete ThisThing;
 					FreeListCount--;
 					ThisThing=Next;
 				}
 				List[t]=0;
 			}
-		}
-		CThing	*Duff=DuffList;
-		while (Duff)
-		{
-			CThing	*next=Duff->NextFreeThing;
-			delete Duff;
-			DuffListCount--;
-			Duff=next;
 		}
 #endif
 }
@@ -981,7 +969,7 @@ CThing	**List=s_FreeList[Type];
 
 // Check its been aquired/set correctly
 
-		ASSERT(SubType!=1234);
+		ASSERT(SubType!=255);
 
 		Thing->NextFreeThing=List[SubType];
 		List[SubType]=Thing;

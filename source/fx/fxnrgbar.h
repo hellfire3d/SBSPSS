@@ -12,9 +12,9 @@ class CFXNRGBar : public CFX
 {
 public:
 
-virtual void		init(DVECTOR const &Pos);
-virtual void		think(int _frames);
-virtual void		render();
+/*virtual*/ void		init(DVECTOR const &Pos);
+/*virtual*/ void		think(int _frames);
+/*virtual*/ void		render();
 
 		void		SetMax(int Max)	{MaxHealth=Max-1;}
 		bool		alwaysThink()								{return(true);}
