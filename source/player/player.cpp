@@ -2073,6 +2073,19 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 			}
 			else
 			{
+				CThing	*platform;
+				platform=isOnPlatform();
+				if(platform)
+				{
+					if ( ( (CNpcPlatform *) platform )->isCart() )
+					{
+						m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
+						m_healthReactFrames=25;
+
+						return;
+					}
+				}
+
 				if(_reactDirection!=REACT__NO_REACTION)
 				{
 					if(_reactDirection==REACT__GET_DIRECTION_FROM_THING)
