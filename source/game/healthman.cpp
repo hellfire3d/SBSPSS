@@ -11,6 +11,7 @@
 #include "game\game.h"
 #include "player\player.h"
 #include "gfx\otpos.h"
+#include "system\vid.h"
 #include "game\healthman.h"
 
 #ifndef __SAVE_SAVE_H__
@@ -21,15 +22,15 @@
 
 CHealthManager::sItemTable	CHealthManager::ItemTable[]=
 {
-	{5,256,	255,255,0},
-	{1,256,	127,127,127},
+	{CHealthManager::SPAT_CLUMP,	255,255,0},
+	{1,								127,127,127},
 };
 
 const int	CHealthManager::ItemTableSize=sizeof(CHealthManager::ItemTable)/sizeof(CHealthManager::sItemTable);
 
-int	HealthManGrav=128;
-int	HealthManShift=9;
-int	HealthManPickUpDelay=32;
+const int	HealthManGrav=128;
+const int	HealthManShift=9;
+const int	HealthManPickUpDelay=32;
 
 /*****************************************************************************/
 void	CHealthManager::init()
@@ -37,19 +38,23 @@ void	CHealthManager::init()
 sItem	*list=ItemList;
 
 		FrameHdr=CGameScene::getSpriteBank()->getFrameHeader(FRM__SPATULA);
-		for (int i=0; i<ITEM_MAX; i++)
+		for (int i=0; i<SPAT_MAX; i++)
 		{
 			list->Life=0;
-			setTSprt(&list->Sprite);
-			setTSprtTPage(&list->Sprite,FrameHdr->TPage);
-			list->Sprite.clut=FrameHdr->Clut;
-			list->Sprite.u0=FrameHdr->U;
-			list->Sprite.v0=FrameHdr->V;
-			list->Sprite.w=FrameHdr->W;
-			list->Sprite.h=FrameHdr->H;
+			for (int s=0; s<2; s++)
+			{
+				TSPRT	*Spr=&list->Sprite[s];
+				setTSprt(Spr);
+				setTSprtTPage(Spr,FrameHdr->TPage);
+				Spr->clut=FrameHdr->Clut;
+				Spr->u0=FrameHdr->U-1;
+				Spr->v0=FrameHdr->V-1;
+				Spr->w=FrameHdr->W;
+				Spr->h=FrameHdr->H;
+			}
 			list++;
 		}
-
+	Frame=0;
 }
 
 /*****************************************************************************/
@@ -100,11 +105,11 @@ int		Idx=0;
 sItem	*item;
 
 		while (ItemList[Idx].Life) Idx++;
-		ASSERT(Idx<ITEM_MAX);
-
+		ASSERT(Idx<SPAT_MAX);
 		item=&ItemList[Idx];
-		item->Life=ItemTable[TableIdx].Life;
-		setRGB0(&item->Sprite,ItemTable[TableIdx].R,ItemTable[TableIdx].G,ItemTable[TableIdx].B);
+		item->Life=SPAT_LIFE;
+		setRGB0(&item->Sprite[0],ItemTable[TableIdx].R,ItemTable[TableIdx].G,ItemTable[TableIdx].B);
+		setRGB0(&item->Sprite[1],ItemTable[TableIdx].R,ItemTable[TableIdx].G,ItemTable[TableIdx].B);
 		item->Pos.vx=Pos.vx<<HealthManShift;
 		item->Pos.vy=Pos.vy<<HealthManShift;
 
@@ -129,7 +134,7 @@ sItem	*item=ItemList;
 		PRect.y1+=16;
 		PRect.y2+=16;
 
-		for (int i=0; i<ITEM_MAX; i++)
+		for (int i=0; i<SPAT_MAX; i++)
 		{
 			if (item->Life  && item->Life<256-HealthManPickUpDelay)
 			{
@@ -153,21 +158,27 @@ sItem	*item=ItemList;
 /*****************************************************************************/
 /*** think *******************************************************************/
 /*****************************************************************************/
+const int	YO=32;
+const int	CO=1;
 void	CHealthManager::think(int frames)
 {
 sItem	*item=ItemList;
-int		mapHeight;
+int		Dist;
+	
+		CLayerCollision	*ColLayer=CGameScene::getCollision();
 
-	CLayerCollision	*ColLayer=CGameScene::getCollision();
-	mapHeight=GameScene.GetLevel().getMapHeight16();
-
-		for (int i=0; i<ITEM_MAX; i++)
+		for (int i=0; i<SPAT_MAX; i++)
 		{
 			for (int f=0; f<frames; f++)
 			{
 				if (item->Life>1)
 				{
-					int	OldY=ItemList[i].Pos.vy;
+					int		CheckOfs=16;
+					int		YOfs=0;
+					int		ColEx=COLLISION_TYPE_FLAG_DEATH_FALL;
+					int		XS=1;
+					int		XYO=0;
+
 					item->Life--;
 					item->Pos.vx+=item->Vel.vx;
 					item->Pos.vy+=item->Vel.vy;
@@ -175,26 +186,33 @@ int		mapHeight;
 					item->ScrPos.vy=item->Pos.vy>>HealthManShift;
 					item->Vel.vy+=HealthManGrav;
 
-//					if (item->Vel.vy>0)
-					{ 
-						int	DistY = ColLayer->getHeightFromGround( item->ScrPos.vx, item->ScrPos.vy, 16 );
-						int newBlock=ColLayer->getCollisionBlock(item->ScrPos.vx,item->ScrPos.vy)&COLLISION_TYPE_MASK;
-						if (DistY<=0&&newBlock!=COLLISION_TYPE_FLAG_DEATH_FALL )
-						{
-							if (item->Vel.vy<0)
-							{
-								item->Pos.vy=OldY;
-							}
-							item->Vel.vy=-item->Vel.vy>>1;
-							item->Vel.vx>>=1;
-	//						item->Pos.vy-=DistY<<(HealthManShift-1);
+					if (item->Vel.vy)
+					{
+						if (item->Vel.vy<0)
+						{ // Going Up
+							YOfs=-YO;//+(item->Vel.vy>>HealthManShift);
+							CheckOfs=CO;
+							ColEx=0;	// Dont exclude any types when going up
+							XS=0;		// dont reduce x on head col
 						}
-
-						if(item->ScrPos.vy>mapHeight)
+					
+						Dist = ColLayer->getHeightFromGround( item->ScrPos.vx, item->ScrPos.vy+YOfs, CheckOfs );
+						if ((item->Vel.vy>0 && Dist<=0) || (item->Vel.vy<0 && Dist!=CheckOfs))
 						{
-							item->Life=0;
+							int newBlock=ColLayer->getCollisionBlock(item->ScrPos.vx,item->ScrPos.vy) & COLLISION_TYPE_MASK;
+							if (!(ColEx && newBlock==ColEx))
+							{
+								item->Pos.vy+=Dist<<HealthManShift;	// align to ground
+								item->ScrPos.vy=item->Pos.vy>>HealthManShift;
+								item->Vel.vy-=HealthManGrav;
+								item->Vel.vy=-item->Vel.vy>>1;
+								item->Vel.vx>>=XS;
+								XYO=-4;			// to stop spat coming back on hitting ground
+							}
 						}
 					}
+
+					if(item->ScrPos.vy>GameScene.GetLevel().getMapHeight16()) item->Life=0;
 
 					int	XOfs;
 					if (item->Vel.vx>0)
@@ -206,13 +224,13 @@ int		mapHeight;
 						XOfs=-16;
 					}
 					// Check X collision
-					int	DistX = ColLayer->getHeightFromGround( item->ScrPos.vx+XOfs, item->ScrPos.vy, 32 );
-					if (DistX<=0)
+					Dist = ColLayer->getHeightFromGround( item->ScrPos.vx+XOfs, item->ScrPos.vy+XYO, 16);
+					if (Dist<=0)
 					{
 						item->Vel.vx=-item->Vel.vx>>1;
-	//					item->Pos.vy-=DistY<<(HealthManShift-1);
+						item->Vel.vy>>=1;
 					}
-					
+
 				}
 				else
 				{
@@ -231,20 +249,23 @@ int		mapHeight;
 void	CHealthManager::render()
 {
 sItem	*list=ItemList;
-sOT		*ThisOT=OtPtr;//+OTPOS__PICKUP_POS;
+sOT		*ThisOT=OtPtr+OTPOS__PICKUP_POS;
 DVECTOR	const	&CamPos=CLevel::getCameraPos();
-	for (int i=0; i<ITEM_MAX; i++)
-	{
-		int	life=list->Life;
-		if (life&&(life<256-HealthManPickUpDelay||life&3))
-		{
-			// Calc render pos (dont worry about clipping yet)
-			list->Sprite.x0 = list->ScrPos.vx - CamPos.vx;
-			list->Sprite.y0 = (list->ScrPos.vy - CamPos.vy)-32;
 
-			addPrim(ThisOT,&list->Sprite);
+	for (int i=0; i<SPAT_MAX; i++)
+	{
+		int	Life=list->Life;
+		if (Life<64 && Frame) Life=0;
+		if (Life)
+		{
+			TSPRT	*Spr=&list->Sprite[Frame];
+			// Calc render pos (dont worry about clipping yet)
+			Spr->x0 =  list->ScrPos.vx - CamPos.vx;
+			Spr->y0 = (list->ScrPos.vy - CamPos.vy)-32;
+
+			addPrim(ThisOT,Spr);
 		}
 		list++;
 	}
-
+	Frame^=1;
 }

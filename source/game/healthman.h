@@ -12,13 +12,16 @@ class CHealthManager
 public:
 		enum
 		{
-			ITEM_MAX	=	50,
+			
+			SPAT_CLUMP		=   5,
+			SPAT_MAX		=	(100/SPAT_CLUMP)+(SPAT_CLUMP-1),
+			SPAT_LIFE		=	256,
+
 		};
 
 		struct	sItemTable
 		{
-			u16			Count;
-			u16			Life;
+			u8			Count;
 			u8			R,G,B;
 		};
 
@@ -29,7 +32,7 @@ public:
 			DVECTOR	ScrPos;
 			u16		Life;
 			u16		Count;
-			TSPRT	Sprite;
+			TSPRT	Sprite[2];
 		};
 
 		void		init();
@@ -44,8 +47,9 @@ public:
 protected:
 		void		addItem(DVECTOR const &Pos,int TableIdx,int Angle,int Vel);
 
-		sItem		ItemList[ITEM_MAX];
+		sItem		ItemList[SPAT_MAX];
 		sFrameHdr	*FrameHdr;
+		int			Frame;
 
 static	sItemTable	ItemTable[];
 static	const int	ItemTableSize;
