@@ -124,6 +124,7 @@ void CPartyScene::init()
 	m_actorSpongebob->SetOtPos(5);
 	m_actorPatrick=CActorPool::GetActor(ACTORS_PATRICK_SBK);
 	m_actorPatrick->SetOtPos(5);
+	CActorPool::SetUpCache();
 }
 
 
@@ -199,8 +200,10 @@ static int itemsHeld[CShopScene::NUM_SHOP_ITEM_IDS]=
 	true,		// SHOPITEM_SARNIE
 	true,		// SHOPITEM_TEDDY
 };
-DVECTOR	sbpos={100,100};
-DVECTOR	patpos={100,100};
+DVECTOR	sbpos={200,195};
+int sbanim=1,sbfrm=0;
+DVECTOR	patpos={250,195};
+int patanim=0,patfrm=0;
 void CPartyScene::render()
 {
 	int			i;
@@ -225,8 +228,11 @@ void CPartyScene::render()
 	}
 
 	// Actors
-//	m_actorSpongebob->Render(sbpos,0,0,0,0);
-//	m_actorPatrick->Render(patpos,0,0,0,0);
+//	m_actorSpongebob->Render(sbpos,sbanim,sbfrm,0,0);
+//	m_actorPatrick->Render(patpos,patanim,patfrm,0,0);
+
+
+	CActorPool::CleanUpCache();
 }
 
 
