@@ -356,6 +356,8 @@ void CSoundMediator::initialise()
 		s_targetVolume[i]=INITIAL_VOLUME;
 		s_volumeDirty[i]=true;
 	}
+//	s_targetVolume[VOL_SONG]=INITIAL_VOLUME-32;
+	s_targetVolume[VOL_SPEECH]=INITIAL_VOLUME+64;
 
 	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
 	ASSERT(CXAStream::MAX_VOLUME==32767);
@@ -446,7 +448,7 @@ if(_frames==0)_frames=1;
 	if (isSpeechPlaying())
 	{
 		s_volumeDirty[VOL_SONG]=true;
-		s_currentVolume[VOL_FADE]=128;
+		s_currentVolume[VOL_FADE]=64;
 	}
 	if(s_volumeDirty[VOL_SONG])
 	{
@@ -460,7 +462,12 @@ if(_frames==0)_frames=1;
 	}
 	if(s_volumeDirty[VOL_SPEECH])
 	{
-		int vol=((s_currentVolume[VOL_SPEECH]*s_currentVolume[VOL_FADE])>>8)<<7;
+//		int vol=((s_currentVolume[VOL_SPEECH]*s_currentVolume[VOL_FADE])/*>>8*/)/*<<7*/;
+		int vol=s_currentVolume[VOL_SPEECH]<<8;//*s_currentVolume[VOL_FADE])/*>>8*/)/*<<7*/;
+
+		if (vol<=CXAStream::MIN_VOLUME) vol=CXAStream::MIN_VOLUME;
+		if (vol>=CXAStream::MAX_VOLUME) vol=CXAStream::MAX_VOLUME;
+
 		CXAStream::setMasterVolume(vol,vol);
 		s_volumeDirty[VOL_SPEECH]=false;
 	}
