@@ -1371,7 +1371,7 @@ if(drawlastpos)
 
 		sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
 
-		if(m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6))
+		if(m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6)&&m_currentPlayerModeClass->getState()!=STATE_SOAKUP)
 		{
 			int		digit;
 			DVECTOR	src={x+(W/2),y+(H/2)};
