@@ -1,4 +1,3 @@
-//#define SHITE_COLLISION
 /*=========================================================================
 
 	player.cpp
@@ -594,10 +593,8 @@ int	returnsafespace=4*16;
 #endif
 
 
-#ifdef SHITE_COLLISION
 extern int checkx;
 extern int checky;
-#endif
 
 
 
@@ -647,12 +644,14 @@ m_animFrame=0;
 	setIsInWater(true);
 
 #ifdef __USER_paul__
+	/*
 registerAddon(PLAYER_ADDON_GLOVE);
 registerAddon(PLAYER_ADDON_NET);
 registerAddon(PLAYER_ADDON_CORALBLOWER);
 registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
 registerAddon(PLAYER_ADDON_BUBBLEWAND);
 registerAddon(PLAYER_ADDON_JELLYFISHINNET);
+*/
 #endif
 }
 
@@ -2579,256 +2578,181 @@ void	CPlayer::clearPlatform()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef SHITE_COLLISION
 int		CPlayer::moveVertical(int _moveDistance)
 {
 	DVECTOR			pos;
 	int				hitGround;
+	int				hitThisSuspectBlock;
 
 	pos=Pos;
 	hitGround=false;
+	hitThisSuspectBlock=0;
 
 	// Are we falling?
 	if(_moveDistance>0)
 	{
-//////////
-		int colHeightBefore[3],colHeightAfter[3],moveRequired[3];
-		int	i,xoff;
-		int	safe;
+		int colHeightBefore[2],colHeightAfter[2],blockAfter[2],moveRequired[2];
+		int	i;
+		int	move;
 
-		for(i=0;i<3;i++)
+		// Get heights of the two edges
+		for(i=0;i<+2;i++)
 		{
-			int x=pos.vx+((i-1)*checkx);
+			int x=pos.vx+((i==0?-checkx:+checkx));
 			colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
 			colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
-			moveRequired[i]=0;
+			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,pos.vy+_moveDistance);
 		}
 
-		safe=true;
-		for(i=0;i<3;i++)
+		// See if either side is about to go through the ground
+		for(i=0;i<2;i++)
 		{
-			if(colHeightBefore[i]>=0)
+			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0)
 			{
-				if(colHeightAfter[i]<0)
-				{
-					moveRequired[i]=colHeightAfter[i];
-					hitGround=true;
-				}
-				else if(colHeightAfter[i]==0)
-				{
-					hitGround=true;
-				}
+				moveRequired[i]=colHeightAfter[i];
+				hitGround=true;
+				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
+			}
+			else
+			{
+				moveRequired[i]=0;
 			}
 		}
 
-		int	move=0;
-		for(i=0;i<3;i++)
+		// Find the smallest move required to hit ground
+		move=0;
+		for(i=0;i<2;i++)
 		{
 			if(moveRequired[i]<move)
 			{
-				moveRequired[i]=move;
+				move=moveRequired[i];
 			}
 		}
 
 		_moveDistance+=move;
-/*
-		do
-		{
-			for(i=0;i<3;i++)
-			{
-				int x=pos.vx+((i-1)*checkx);
-				colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
-				colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
-			}
-
-			safe=true;
-			for(i=0;i<3;i++)
-			{
-				if(colHeightBefore[i]>=0)
-				{
-					if(colHeightAfter[i]<0)
-					{
-						_moveDistance+=colHeightAfter[i];
-						safe=false;
-						hitGround=true;
-						break;
-					}
-					else if(colHeightAfter[i]==0)
-					{
-						hitGround=true;
-					}
-				}
-			}
-		}
-		while(!safe);
-*/
-//////////
 	}
 	else if(_moveDistance<0)
 	{
-// NEEDS HEAD COLLISION ON THREE POINTS ALSO
+		int colHeightBefore[2],colHeightAfter[2],blockAfter[2],moveRequired[2];
+		int	i;
+		int	move;
 
-		// Are we jumping into an impassable block?
-		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
+		// -------------- Jumping - See if the feet have hit anything --------------
+
+		// Get heights of the two edges
+		for(i=0;i<+2;i++)
 		{
-			pos.vy=(pos.vy&0xfff0);
-			_moveDistance=0;
-			hitGround=true;
+			int x=pos.vx+((i==0?-checkx:+checkx));
+			colHeightBefore[i]=getHeightFromGround(x,pos.vy,16);
+			colHeightAfter[i]=getHeightFromGround(x,pos.vy+_moveDistance,16);
+			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,pos.vy+_moveDistance);
 		}
-		else if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-		   getHeightFromGround(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)<=0)
+
+		// See if either side is about to go through the ground
+		for(i=0;i<2;i++)
 		{
-			switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)
+			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 			{
-				case COLLISION_TYPE_FLAG_DAMAGE:
-					takeDamage(DAMAGE__COLLISION_DAMAGE);
-					break;
-
-				case COLLISION_TYPE_FLAG_ELECTRIC:
-					if(!isWearingBoots())
-					{
-						takeDamage(DAMAGE__COLLISION_DAMAGE);
-					}
-					break;
-				default:
-					break;
-			}
-			pos.vy=((pos.vy+_moveDistance)&0xfff0);
-			_moveDistance=0;
-			hitGround=true;
-		}
-
-	}
-	else
-	{
-		// Stood on any important types of collision?
-		switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
-		{
-			case COLLISION_TYPE_FLAG_DAMAGE:
-				takeDamage(DAMAGE__COLLISION_DAMAGE);
-				break;
-
-			case COLLISION_TYPE_FLAG_ELECTRIC:
-				if(!isWearingBoots())
-				{
-					takeDamage(DAMAGE__COLLISION_DAMAGE);
-				}
-				break;
-			default:
-				break;
-		}
-	}
-	pos.vy+=_moveDistance;
-	setPlayerPos(&pos);
-
-	return hitGround;
-}
-#else
-int		CPlayer::moveVertical(int _moveDistance)
-{
-	DVECTOR			pos;
-	int				hitGround;
-
-	pos=Pos;
-	hitGround=false;
-
-	// Are we falling?
-	if(_moveDistance>0)
-	{
-		int colHeightBefore,colHeightAfter;
-
-		// Yes.. Check to see if we're about to hit/go through the ground/platform
-		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
-		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-		if(isOnPlatform()&&
-		   !(colHeightBefore>=0&&colHeightAfter<=0))
-		{
-			colHeightBefore=getHeightFromPlatformNoGround(pos.vx,pos.vy,16);
-			colHeightAfter=getHeightFromPlatformNoGround(pos.vx,pos.vy+_moveDistance,16);
-		}
-
-		if(colHeightBefore>=0&&colHeightAfter<=0)
-		{
-			// About to hit a 'fall to death' block?
-			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH_FALL)
-			{
-				// No
-				// Stick at ground level
-				pos.vy+=colHeightAfter+_moveDistance;
-				_moveDistance=0;
+				moveRequired[i]=colHeightAfter[i];
 				hitGround=true;
+				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
 			}
 			else
 			{
-				// Yeah!
-				if(m_currentMode!=PLAYER_MODE_DEAD)
-				{
-					// Lock the camera, kill the player and let him fall to his death..
-					dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
-					m_lockCamera=true;
-				}
+				moveRequired[i]=0;
 			}
 		}
-	}
-	else if(_moveDistance<0)
-	{
-		// Are we jumping into an impassable block?
-		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
-		{
-			pos.vy=(pos.vy&0xfff0);
-			_moveDistance=0;
-			hitGround=true;
-		}
-		else if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-		   getHeightFromGround(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)<=0)
-		{
-			switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)
-			{
-				case COLLISION_TYPE_FLAG_DAMAGE:
-					takeDamage(DAMAGE__COLLISION_DAMAGE);
-					break;
 
-				case COLLISION_TYPE_FLAG_ELECTRIC:
-					if(!isWearingBoots())
-					{
-						takeDamage(DAMAGE__COLLISION_DAMAGE);
-					}
-					break;
-				default:
-					break;
+		// Find the smallest move required to hit ground
+		move=0;
+		for(i=0;i<2;i++)
+		{
+			if(moveRequired[i]<move)
+			{
+				move=moveRequired[i];
 			}
-			pos.vy=((pos.vy+_moveDistance)&0xfff0);
-			_moveDistance=0;
-			hitGround=true;
 		}
+
+		_moveDistance-=move;
+
+
+		// -------------- Jumping - See if the head has hit anything --------------
+		
+		// Get heights of the two edges
+		int	y=pos.vy-HEIGHT_FOR_HEAD_COLLISION;
+		for(i=0;i<+2;i++)
+		{
+			int x=pos.vx+((i==0?-checkx:+checkx));
+			colHeightBefore[i]=getHeightFromGround(x,y,16);
+			colHeightAfter[i]=getHeightFromGround(x,y+_moveDistance,16);
+			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,y+_moveDistance);
+		}
+
+		// See if either side is about to go through the ground
+		for(i=0;i<2;i++)
+		{
+			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
+			{
+				moveRequired[i]=16+colHeightAfter[i];
+				hitGround=true;
+				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
+			}
+			else
+			{
+				moveRequired[i]=0;
+			}
+		}
+
+		// Find the smallest move required to hit ground
+		move=0;
+		for(i=0;i<2;i++)
+		{
+			if(moveRequired[i]<move)
+			{
+				move=moveRequired[i];
+			}
+		}
+
+		_moveDistance-=move;
 	}
 	else
 	{
 		// Stood on any important types of collision?
-		switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
+		hitThisSuspectBlock=CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance);
+	}
+	pos.vy+=_moveDistance;
+	setPlayerPos(&pos);
+
+
+	if(m_currentMode!=PLAYER_MODE_DEAD)
+	{
+		switch(hitThisSuspectBlock&COLLISION_TYPE_MASK)
 		{
 			case COLLISION_TYPE_FLAG_DAMAGE:
 				takeDamage(DAMAGE__COLLISION_DAMAGE);
 				break;
-
 			case COLLISION_TYPE_FLAG_ELECTRIC:
 				if(!isWearingBoots())
 				{
 					takeDamage(DAMAGE__COLLISION_DAMAGE);
 				}
 				break;
+			case COLLISION_TYPE_FLAG_DEATH_LIQUID:
+				dieYouPorousFreak(DEATHTYPE__LIQUID);
+				break;
+			case COLLISION_TYPE_FLAG_DEATH_INSTANT:
+				dieYouPorousFreak(DEATHTYPE__NORMAL);
+				break;
+			case COLLISION_TYPE_FLAG_DEATH_FALL:
+				dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
+				break;
 			default:
 				break;
 		}
 	}
-	pos.vy+=_moveDistance;
-	setPlayerPos(&pos);
 
 	return hitGround;
 }
-#endif
 
 /*----------------------------------------------------------------------
 	Function:
@@ -2836,193 +2760,114 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef SHITE_COLLISION
-int blah;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
-blah=999;
 
 	hitWall=false;
 	if(_moveDistance)
 	{
-		CLayerCollision	*collision=CGameScene::getCollision();
 		DVECTOR			pos;
+		int				dirToMove;
+		int				i;
+		int				colHeightEdges[2];
 		int				colHeight;
 
 		pos=getPlayerPos();
-int init=0;
-colHeight=getHeightFromGround(pos.vx-checkx,pos.vy,5);
-if(colHeight==0)init=-checkx;
-colHeight=getHeightFromGround(pos.vx+checkx,pos.vy,5);
-if(colHeight==0)init=+checkx;
-//		if(colHeight==0)
-blah=init;
+		dirToMove=_moveDistance<0?-1:+1;
+		for(i=abs(_moveDistance);i&&!hitWall;i--)
 		{
-			int	vx,targetX,checkOfs,moved,x;
+			int	touchingGround,x;
 
-			vx=_moveDistance<0?-1:+1;
-			targetX=pos.vx+_moveDistance;
-			checkOfs=vx*checkx;
-			moved=0;
-			for(x=pos.vx+checkx;x!=targetX+checkx;x+=vx)
+			colHeightEdges[0]=getHeightFromGround(pos.vx-checkx,pos.vy,16);
+			colHeightEdges[1]=getHeightFromGround(pos.vx+checkx,pos.vy,16);
+
+			touchingGround=false;
+			x=pos.vx+dirToMove;
+
+			if(dirToMove>0)
 			{
-				// Wall?
-				colHeight=getHeightFromGround(x+checkOfs,pos.vy);
-				if(colHeight<-checky)
+				// Moving right
+				if(colHeightEdges[1]==0)
 				{
-					hitWall=true;
-					break;
+					// Right side of SB touching ground
+					x+=checkx;
+					touchingGround=true;
 				}
-
-				// Slope?
-				colHeight=getHeightFromGround(x+vx,pos.vy);
-				if(colHeight>=-1&&colHeight<=1)
+				else if(colHeightEdges[0]==0)
 				{
+					// Left side of SB touching ground
+					x-=checkx;
+					touchingGround=true;
+				}
+			}
+			else
+			{
+				// Moving left
+				if(colHeightEdges[0]==0)
+				{
+					// Left side of SB touching ground
+					x-=checkx;
+					touchingGround=true;
+				}
+				else if(colHeightEdges[1]==0)
+				{
+					// Right side of SB touching ground
+					x+=checkx;
+					touchingGround=true;
+				}
+			}
+
+			if(touchingGround)
+			{
+				// SB touching ground on at least one edge
+				colHeight=getHeightFromGround(x,pos.vy,16);
+				if(colHeight>=-2&&colHeight<=2)
+				{
+					// Move along the ground
+					pos.vx+=dirToMove;
 					pos.vy+=colHeight;
 				}
-
-				moved+=vx;
-			}
-			_moveDistance=moved;
-		}
-/*
-		else if(colHeight>0) // Lets you jump through platforms from below
-		{
-			if((CGameScene::getCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-			   getHeightFromGround(pos.vx+_moveDistance,pos.vy,5)<0)
-			{
-				// Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(_moveDistance<0)
+				else if(colHeight<0)
 				{
-					dir=-1;
-					vx=-_moveDistance;
+					// Hit wall
+					hitWall=true;
 				}
 				else
 				{
-					dir=+1;
-					vx=_moveDistance;
+					// Moved off edge of ledge
+					pos.vx+=dirToMove;
 				}
-				cx=pos.vx;
-				for(i=0;i<vx;i++)
+			}
+			else
+			{
+				// SB not touching ground
+				if(dirToMove<0)
 				{
-					if(getHeightFromGround(cx,pos.vy)<0)
-					{
-						break;
-					}
-					cx+=dir;
+					x-=checkx;
 				}
-				if(i)
-					cx-=dir;
-				pos.vx=cx;
-				_moveDistance=0;
+				else
+				{
+					x+=checkx;
+				}
+				colHeight=getHeightFromGround(x,pos.vy,16);
+				if(colHeight>=0)
+				{
+					// Move in air
+					pos.vx+=dirToMove;
+				}
+				else
+				{
+					// Hit wall
+					hitWall=true;
+				}
 			}
 		}
-*/
-		pos.vx+=_moveDistance;
 		setPlayerPos(&pos);
 	}
 
 	return hitWall;
 }
-#else
-int		CPlayer::moveHorizontal(int _moveDistance)
-{
-	int	hitWall;
-
-	hitWall=false;
-	if(_moveDistance)
-	{
-		CLayerCollision	*collision=CGameScene::getCollision();
-		DVECTOR			pos;
-		int				colHeight;
-
-		pos=getPlayerPos();
-		colHeight=getHeightFromGround(pos.vx,pos.vy,5);
-		if(colHeight==0)
-		{
-			// Ok.. we're on the ground. What happens if we move left/right
-			colHeight=getHeightFromGround(pos.vx+_moveDistance,pos.vy);
-			if(colHeight<-8)
-			{
-				// Big step up. Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(_moveDistance<0)
-				{
-					dir=-1;
-					vx=-_moveDistance;
-				}
-				else
-				{
-					dir=+1;
-					vx=_moveDistance;
-				}
-				cx=pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(getHeightFromGround(cx,pos.vy)<-8)
-					{
-						break;
-					}
-					cx+=dir;
-				}
-				if(i)
-					pos.vx=cx-dir;
-
-				hitWall=true;
-				_moveDistance=0;
-
-				// Get the height at this new position and then try the step-up code below.
-				// Without this, there are problems when you run up a slope and hit a wall at the same time
-				colHeight=getHeightFromGround(pos.vx,pos.vy);
-			}
-			if(colHeight&&colHeight>=-8&&colHeight<=8)
-			{
-				// Small step up/down. Follow the contour of the level
-				pos.vy+=colHeight;
-			}
-		}
-		else if(colHeight>0) // Lets you jump through platforms from below
-		{
-			if((CGameScene::getCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
-			   getHeightFromGround(pos.vx+_moveDistance,pos.vy,5)<0)
-			{
-				// Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(_moveDistance<0)
-				{
-					dir=-1;
-					vx=-_moveDistance;
-				}
-				else
-				{
-					dir=+1;
-					vx=_moveDistance;
-				}
-				cx=pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(getHeightFromGround(cx,pos.vy)<0)
-					{
-						break;
-					}
-					cx+=dir;
-				}
-				if(i)
-					cx-=dir;
-				pos.vx=cx;
-				_moveDistance=0;
-			}
-		}
-
-		pos.vx+=_moveDistance;
-		setPlayerPos(&pos);
-	}
-
-	return hitWall;
-}
-#endif
 
 /*----------------------------------------------------------------------
 	Function:
