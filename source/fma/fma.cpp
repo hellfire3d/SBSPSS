@@ -1436,17 +1436,6 @@ void	CFmaScene::think(int _frames)
 		m_musicPlaying=true;
 	}
 
-	if(PadGetHeld(0) & PAD_START)
-	{ // Give player an exit option!!
-			m_scriptRunning=false;
-			m_doOtherProcessing=true;
-	}
-
-	if(m_scriptRunning==false&&!m_readyToShutdown)
-	{
-		startShutdown();
-	}
-
 	for(int i=0;i<_frames;i++)
 	{
 		if(m_scriptRunning)
@@ -1600,6 +1589,17 @@ void	CFmaScene::think(int _frames)
 		{
 			m_frameCount++;
 		}
+	}
+
+	if(!CFader::isFading()&&PadGetHeld(0) & PAD_START)
+	{ // Give player an exit option!!
+			m_scriptRunning=false;
+			m_doOtherProcessing=true;
+	}
+
+	if(m_scriptRunning==false&&!m_readyToShutdown)
+	{
+		startShutdown();
 	}
 
 	CThingManager::thinkAllThings(_frames);
