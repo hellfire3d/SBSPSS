@@ -86,11 +86,9 @@ UI_GFX_DIR :=				$(GRAF_DIR)/ui
 UI_FONT_DIR :=				$(UI_GFX_DIR)/font
 UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 
-UI_GFX_FONT_IN	:=			$(GRAF_DIR)/ui/font/pr-fontingame.anm
-#							$(GRAF_DIR)/ui/ingame/numbers.anm
+UI_GFX_FONT_IN	:=			$(GRAF_DIR)/ui/font/font.anm
 
 UI_GFX_NONTRANS :=			
-
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_NONTRANS_DIR)/$(FILE))
 
 UI_GFX_TRANS :=				
