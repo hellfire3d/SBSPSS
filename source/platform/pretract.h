@@ -22,6 +22,7 @@ class CNpcRetractingPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
+	virtual void		render();
 protected:
 	void processTimer( int _frames );
 

@@ -19,6 +19,14 @@
 #include	"game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcRetractingPlatform::postInit()
@@ -26,6 +34,8 @@ void CNpcRetractingPlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_timer = NPC_PLATFORM_TIMER_RETRACT;
+
+	m_extension = ONE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +52,19 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			}
 			else
 			{
-				m_timer = 4 * GameState::getOneSecondInFrames();
-				m_timerType = NPC_PLATFORM_TIMER_EXTEND;
-				m_detectCollision = false;
+				if ( m_extension > 1 )
+				{
+					m_extension -= 128 * _frames;
+
+					if ( m_extension <= 1 )
+					{
+						m_extension = 1;
+
+						m_timer = 4 * GameState::getOneSecondInFrames();
+						m_timerType = NPC_PLATFORM_TIMER_EXTEND;
+						m_detectCollision = false;
+					}
+				}
 			}
 
 			break;
@@ -58,12 +78,88 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			}
 			else
 			{
-				m_timer = 4 * GameState::getOneSecondInFrames();
-				m_timerType = NPC_PLATFORM_TIMER_RETRACT;
-				m_detectCollision = true;
+				if ( m_extension < ONE )
+				{
+					m_extension += 128 * _frames;
+
+					if ( m_extension >= ONE )
+					{
+						m_extension = ONE;
+
+						m_timer = 4 * GameState::getOneSecondInFrames();
+						m_timerType = NPC_PLATFORM_TIMER_RETRACT;
+						m_detectCollision = true;
+					}
+				}
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcRetractingPlatform::render()
+{
+	if ( m_isActive )
+	{
+		CPlatformThing::render();
+
+		// Render
+		DVECTOR renderPos;
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		renderPos.vx = Pos.vx - offset.vx ;
+		renderPos.vy = Pos.vy - offset.vy ;
+
+		CRECT collisionRect = getCollisionArea();
+		collisionRect.x1 -= Pos.vx;
+		collisionRect.x2 -= Pos.vx;
+		collisionRect.y1 -= Pos.vy;
+		collisionRect.y2 -= Pos.vy;
+
+		if ( renderPos.vx + collisionRect.x2 >= 0 && renderPos.vx + collisionRect.x1 <= VidGetScrW() )
+		{
+			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
+			{
+				SVECTOR rotation;
+				rotation.vx = 0;
+				rotation.vy = 0;
+				rotation.vz = 0;
+
+				VECTOR scale;
+				scale.vx = ONE;
+				scale.vy = ONE;
+				scale.vz = m_extension;
+
+				m_modelGfx->Render(renderPos,&rotation,&scale);
+
+#if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
+	DVECTOR	centre;
+	int		halfLength;
+	int		x1,y1,x2,y2;
+
+	centre=getCollisionCentre();
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
+
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
+			}
 		}
 	}
 }
