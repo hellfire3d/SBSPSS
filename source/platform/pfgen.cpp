@@ -49,7 +49,15 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 
 	if ( m_timer < 0 )
 	{
-		m_timer = ( 3 * GameState::getOneSecondInFrames() ) + ( getRnd() % ( ( m_data[m_type].initTimer - 1 ) * GameState::getOneSecondInFrames() ) );
+		s32 second = GameState::getOneSecondInFrames();
+
+		m_timer = second;
+
+		m_timer += m_data[m_type].initTimer * second;
+
+		m_timer += second - ( getRnd() % ( 2 * second ) );
+
+		//m_timer = ( 3 * GameState::getOneSecondInFrames() ) + ( getRnd() % ( ( m_data[m_type].initTimer - 1 ) * GameState::getOneSecondInFrames() ) );
 
 		// generate new falling platform
 

@@ -179,7 +179,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_OILDRUM_PLATFORM
-		2,
+		1,
 		128,
 		true,
 		DAMAGE__NONE,
@@ -191,7 +191,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CRATE_PLATFORM
-		3,
+		1,
 		128,
 		true,
 		DAMAGE__NONE,
@@ -239,7 +239,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_CRATE_GENERATOR
-		3,
+		2,
 		128,
 		true,
 		DAMAGE__NONE,
@@ -275,7 +275,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_VERTICAL_OILDRUM_PLATFORM
-		2,
+		1,
 		128,
 		true,
 		DAMAGE__NONE,
