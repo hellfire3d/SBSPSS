@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
 	psbutt.cpp
@@ -81,8 +80,11 @@ CPlayerStateButtBounceUp	s_stateButtBounceUp;
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounce::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->zeroMoveVelocity();	
+	DVECTOR	move;
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCESTART);
+	move=_playerMode->getMoveVelocity();
+	move.vy=0;
+	_playerMode->setMoveVelocity(&move);
 }
 
 
@@ -94,6 +96,22 @@ void CPlayerStateButtBounce::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounce::think(CPlayerModeBase *_playerMode)
 {
+	int	controlHeld;
+	controlHeld=_playerMode->getPadInputHeld();
+
+	if(controlHeld&PI_LEFT)
+	{
+		_playerMode->moveLeft();
+	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		_playerMode->moveRight();
+	}
+	else
+	{
+		_playerMode->slowdown();
+	}
+
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
 		_playerMode->setState(STATE_BUTTFALL);
@@ -121,6 +139,22 @@ void CPlayerStateButtBounceFall::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceFall::think(CPlayerModeBase *_playerMode)
 {
+	int	controlHeld;
+	controlHeld=_playerMode->getPadInputHeld();
+
+	if(controlHeld&PI_LEFT)
+	{
+		_playerMode->moveLeft();
+	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		_playerMode->moveRight();
+	}
+	else
+	{
+		_playerMode->slowdown();
+	}
+
 	_playerMode->buttFall();
 }
 
@@ -142,7 +176,6 @@ void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DESTRUCTABLE_WALL)
 		{
 			CLevel	&level=GameScene.GetLevel();
-			CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
 			level.destroyMapArea(pos);
 			m_bounceOffFloor=true;
 		}
@@ -167,6 +200,7 @@ void CPlayerStateButtBounceLand::think(CPlayerModeBase *_playerMode)
 	{
 		_playerMode->setState(STATE_IDLE);
 	}
+	_playerMode->zeroMoveVelocity();	
 }
 
 
