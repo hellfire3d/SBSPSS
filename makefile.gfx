@@ -117,7 +117,7 @@ ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball
 
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 
 
-ACTOR_SPRITES :=		Jellyfish1 Squiddart
+ACTOR_SPRITES :=		Jellyfish1 Squiddart Plankton
 
 ACTOR_SPR_LIST :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/$(ACTOR)_*.bmp)
 ACTOR_SPR_DEP :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/*)
