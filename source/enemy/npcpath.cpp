@@ -43,7 +43,7 @@ void CNpcPath::initPath()
 	lastWaypoint = NULL;
 	waypointCount = 0;
 	reversePath = false;
-	minX = maxX = 0;
+	minX = maxX = minY = maxY = 0;
 }
 
 void CNpcPath::resetPath()
@@ -84,6 +84,15 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 		{
 			maxX = newPos.vx;
 		}
+
+		if ( newPos.vy < minY )
+		{
+			minY = newPos.vy;
+		}
+		else if ( newPos.vy > maxY )
+		{
+			maxY = newPos.vy;
+		}
 	}
 	else
 	{
@@ -99,7 +108,7 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 
 		currentWaypoint = this->waypoint;
 
-		minX = maxX = newPos.vx;
+		minX = maxX = minY = maxY = newPos.vx;
 	}
 }
 
@@ -107,6 +116,12 @@ void CNpcPath::getPathXExtents( s32 *minExtent, s32 *maxExtent )
 {
 	*minExtent = minX;
 	*maxExtent = maxX;
+}
+
+void CNpcPath::getPathYExtents( s32 *minExtent, s32 *maxExtent )
+{
+	*minExtent = minY;
+	*maxExtent = maxY;
 }
 
 void CNpcPath::removeAllWaypoints()
@@ -287,6 +302,48 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *headi
 	else
 	{
 		*heading = 2048;
+	}
+
+	return( pointChange );
+}
+
+bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading )
+{
+	bool pointChange = false;
+
+	if ( !this->waypoint )
+	{
+		return( true );
+	}
+
+	if ( !currentWaypoint )
+	{
+		// if no currentWaypoint set, start it off
+
+		currentWaypoint = this->waypoint;
+	}
+
+	*distX = currentWaypoint->pos.vx - currentPos.vx;
+	*distY = currentWaypoint->pos.vy - currentPos.vy;
+
+	*pathComplete = false;
+
+	if ( abs( *distY ) < 10 )
+	{
+		pointChange = true;
+		*pathComplete = incPath();
+	}
+
+	*distX = currentWaypoint->pos.vx - currentPos.vx;
+	*distY = currentWaypoint->pos.vy - currentPos.vy;
+
+	if ( *distY > 0 )
+	{
+		*heading = 1024;
+	}
+	else
+	{
+		*heading = 3072;
 	}
 
 	return( pointChange );
