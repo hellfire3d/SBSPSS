@@ -25,7 +25,9 @@ public:
 	virtual void		render();
 	virtual int			getFrameCount()							{return( 1 );}
 	virtual int			getFrame()								{return( m_shellType );}
+	virtual u8			hasBeenAttacked()						{return( false );}
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
 
 	u8					m_shellType;
 };
