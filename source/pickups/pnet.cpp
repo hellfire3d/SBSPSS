@@ -25,6 +25,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -71,6 +75,8 @@ void	CNetPickup::init()
 
 	fh=getSpriteBank()->getFrameHeader(FRM__NET);
 	setCollisionSize(fh->W,fh->H);
+
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_NET);
 }
 
 /*----------------------------------------------------------------------

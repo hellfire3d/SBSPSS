@@ -17,10 +17,6 @@
 
 #include "triggers\trestart.h"
 
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
-#endif
-
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif

@@ -121,6 +121,7 @@ void CPauseMenu::init()
 										STR__DEBUG__BALLOON_MODE,
 										&newmode,PLAYER_MODE_BALLOON);
 	xpos+=TEXT_SPACING;
+//#ifndef __USER_paul__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BUBBLEMIXTURE_MODE,
@@ -131,7 +132,6 @@ void CPauseMenu::init()
 										STR__DEBUG__NET_MODE,
 										&newmode,PLAYER_MODE_NET);
 	xpos+=TEXT_SPACING;
-#ifndef __USER_CDBUILD__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__CORALBLOWER_MODE,
@@ -147,7 +147,7 @@ void CPauseMenu::init()
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;
-#endif
+//#endif
 
 	m_active=false;
 }

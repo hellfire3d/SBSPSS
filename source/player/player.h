@@ -81,6 +81,18 @@ typedef enum
 	NUM_STATES,
 }PLAYER_STATE;
 
+typedef enum
+{
+	PLAYER_ADDON_NET,
+	PLAYER_ADDON_CORALBLOWER,
+	PLAYER_ADDON_JELLYLAUNCHER,
+	PLAYER_ADDON_GLASSES,
+	PLAYER_ADDON_BUBBLEWAND,
+
+	NUM_PLAYER_ADDONS,
+	NO_ADDON,
+}PLAYER_ADDONS;
+
 enum
 {
 	FACING_LEFT=+1,
@@ -169,6 +181,8 @@ public:
 	void			addLife();
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
+
+	void			registerAddon(PLAYER_ADDONS _addon);
 
 public:
 	void			setMode(PLAYER_MODE _mode);

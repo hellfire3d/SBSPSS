@@ -21,6 +21,10 @@
 
 #include "pickups\pglasses.h"
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -74,6 +78,8 @@ void	CGlassesPickup::init()
 
 	fh=getSpriteBank()->getFrameHeader(FRM__GLASSES);
 	setCollisionSize(fh->W,fh->H);
+
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_BUBBLEWAND);
 }
 
 /*----------------------------------------------------------------------

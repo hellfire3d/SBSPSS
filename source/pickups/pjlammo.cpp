@@ -29,6 +29,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 #ifndef	__GFX_OTPOS_H__
 #include "gfx\otpos.h"
 #endif
@@ -165,6 +169,8 @@ void	CJellyLauncherPickup::init()
 
 	fh=getSpriteBank()->getFrameHeader(FRM__LAUNCHER);
 	setCollisionSize(fh->W,fh->H);
+
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
 }
 
 /*----------------------------------------------------------------------

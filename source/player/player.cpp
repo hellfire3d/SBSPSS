@@ -92,6 +92,31 @@
 #include <sprites.h>
 #endif
 
+#ifndef	__ANIM_SPONGEBOB_HEADER__
+#include <ACTOR_SPONGEBOB_Anim.h>
+#endif
+
+#ifndef	__ANIM_SPONGEBOB_NET_HEADER__
+#include <ACTOR_SPONGEBOB_NET_Anim.h>
+#endif
+
+#ifndef	__ANIM_SPONGEBOB_CORALBLOWER_HEADER__
+#include <ACTOR_SPONGEBOB_CORALBLOWER_Anim.h>
+#endif
+
+#ifndef	__ANIM_SPONGEBOB_JELLYLAUNCHER_HEADER__
+#include <ACTOR_SPONGEBOB_JELLYLAUNCHER_Anim.h>
+#endif
+
+//#ifndef	__ANIM_SPONGEBOB_GLASSES_HEADER__
+//#include <ACTOR_SPONGEBOB_GLASSES_Anim.h>
+//#endif
+
+//#ifndef	__ANIM_SPONGEBOB_BUBBLEWAND_HEADER__
+//#include <ACTOR_SPONGEBOB_BUBBLEWAND_Anim.h>
+//#endif
+
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -239,7 +264,183 @@ pint	ledgeShift=1;
 pint	cammove=2;
 
 
-CActorGfx		*m_actorWeaponGfx;
+
+// --------------------------------- Addon stuff ---------------------------------
+CActorGfx		*s_addonActorGfx[NUM_PLAYER_ADDONS]=
+{
+	NULL,										// PLAYER_ADDON_NET
+	NULL,										// PLAYER_ADDON_CORALBLOWER
+	NULL,										// PLAYER_ADDON_JELLYLAUNCHER
+	NULL,										// PLAYER_ADDON_GLASSES
+	NULL,										// PLAYER_ADDON_BUBBLEWAND
+};
+FileEquate		s_addonActorPoolNames[NUM_PLAYER_ADDONS]=
+{
+	ACTORS_SPONGEBOB_NET_SBK,					// PLAYER_ADDON_NET
+	ACTORS_SPONGEBOB_CORALBLOWER_SBK,			// PLAYER_ADDON_CORALBLOWER
+	ACTORS_SPONGEBOB_JELLYLAUNCHER_SBK,			// PLAYER_ADDON_JELLYLAUNCHER
+	(FileEquate)-1,					// PLAYER_ADDON_GLASSES
+	(FileEquate)-1,					// PLAYER_ADDON_BUBBLEWAND
+};
+PLAYER_ADDONS	s_addonNumbers[NUM_PLAYERMODES]=
+{
+	NO_ADDON,									//	PLAYER_MODE_BASICUNARMED
+	NO_ADDON,									//	PLAYER_MODE_FULLUNARMED
+	NO_ADDON,									//	PLAYER_MODE_BALLOON
+	PLAYER_ADDON_BUBBLEWAND,					//	PLAYER_MODE_BUBBLE_MIXTURE
+	PLAYER_ADDON_NET,							//	PLAYER_MODE_NET
+	PLAYER_ADDON_CORALBLOWER,					//	PLAYER_MODE_CORALBLOWER
+	PLAYER_ADDON_JELLYLAUNCHER,					//	PLAYER_MODE_JELLY_LAUNCHER
+	NO_ADDON,									//	PLAYER_MODE_DEAD
+	NO_ADDON,									//	PLAYER_MODE_FLY
+};
+
+static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
+{
+	//	PLAYER_ADDON_NET,
+	{
+	ANIM_SPONGEBOB_NET_BUTTBOUNCEEND,				// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	ANIM_SPONGEBOB_NET_BUTTBOUNCESTART,				// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_NET_FALL,						// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_NET_GETUP,						// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_NET_HITGROUND,					// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_NET_IDLEBREATH,					// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_NET_IDLEWIND,					// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_NET_JUMPEND,						// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_NET_JUMP,						// ANIM_SPONGEBOB_JUMP,
+	ANIM_SPONGEBOB_NET_RUN,							// ANIM_SPONGEBOB_RUN,
+	ANIM_SPONGEBOB_NET_RUNSTOP,						// ANIM_SPONGEBOB_RUNSTOP,
+	ANIM_SPONGEBOB_NET_RUNSTART,					// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_NET_SOAKUP,						// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_NET_TEETERBACK,					// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_NET_TEETERFRONT,					// ANIM_SPONGEBOB_TEETERFRONT,
+	ANIM_SPONGEBOB_NET_SWIPE,						// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_NET_DEATHSPIN,					// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,												// ANIM_SPONGEBOB_FIREEND,
+	-1,												// ANIM_SPONGEBOB_FIRESTART,
+	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,												// ANIM_SPONGEBOB_WALK,
+	-1,												// ANIM_SPONGEBOB_KARATE,
+	},
+
+	//	PLAYER_ADDON_CORALBLOWER,
+	{
+	-1,												// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	-1,												// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_CORALBLOWER_FALL,				// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_CORALBLOWER_GETUP,				// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_CORALBLOWER_HITGROUND,			// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_CORALBLOWER_IDLEBREATH,			// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_CORALBLOWER_IDLEWIND,			// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_CORALBLOWER_JUMPEND,				// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_CORALBLOWER_JUMP,				// ANIM_SPONGEBOB_JUMP,
+	-1,												// ANIM_SPONGEBOB_RUN,
+	-1,												// ANIM_SPONGEBOB_RUNSTOP,
+	-1,												// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_CORALBLOWER_SOAKUP,				// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_CORALBLOWER_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_CORALBLOWER_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
+	-1,												// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_CORALBLOWER_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
+	ANIM_SPONGEBOB_CORALBLOWER_FIREEND,				// ANIM_SPONGEBOB_FIREEND,
+	ANIM_SPONGEBOB_CORALBLOWER_FIRESTART,			// ANIM_SPONGEBOB_FIRESTART,
+	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	ANIM_SPONGEBOB_CORALBLOWER_WALK,				// ANIM_SPONGEBOB_WALK,
+	-1,												// ANIM_SPONGEBOB_KARATE,
+	},
+
+	// PLAYER_ADDON_JELLYLAUNCHER,
+	{
+	ANIM_SPONGEBOB_JELLYLAUNCHER_BUTTBOUNCEEND,		// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_BUTTBOUNCESTART,	// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_FALL,				// ANIM_SPONGEBOB_FALL,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_GETUP,				// ANIM_SPONGEBOB_GETUP,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_HITGROUND,			// ANIM_SPONGEBOB_HITGROUND,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_IDLEBREATH,		// ANIM_SPONGEBOB_IDLEBREATH,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_IDLEWIND,			// ANIM_SPONGEBOB_IDLEWIND,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_JUMPEND,			// ANIM_SPONGEBOB_JUMPEND,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_JUMP,				// ANIM_SPONGEBOB_JUMP,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_RUN,				// ANIM_SPONGEBOB_RUN,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_RUNSTOP,			// ANIM_SPONGEBOB_RUNSTOP,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_RUNSTART,			// ANIM_SPONGEBOB_RUNSTART,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_SOAKUP,			// ANIM_SPONGEBOB_SOAKUP,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_TEETERBACK,		// ANIM_SPONGEBOB_TEETERBACK,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_TEETERFRONT,		// ANIM_SPONGEBOB_TEETERFRONT,
+	-1,												// ANIM_SPONGEBOB_SWIPE,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,												// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,												// ANIM_SPONGEBOB_BLOWBUBBLE,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_FIREEND,			// ANIM_SPONGEBOB_FIREEND,
+	ANIM_SPONGEBOB_JELLYLAUNCHER_FIRESTART,			// ANIM_SPONGEBOB_FIRESTART,
+	-1,												// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,												// ANIM_SPONGEBOB_WALK,
+	-1,												// ANIM_SPONGEBOB_KARATE,
+	},
+
+	// PLAYER_ADDON_GLASSES,
+	{
+	-1,		// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	-1,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	-1,				// ANIM_SPONGEBOB_FALL,
+	-1,				// ANIM_SPONGEBOB_GETUP,
+	-1,			// ANIM_SPONGEBOB_HITGROUND,
+	-1,			// ANIM_SPONGEBOB_IDLEBREATH,
+	-1,			// ANIM_SPONGEBOB_IDLEWIND,
+	-1,				// ANIM_SPONGEBOB_JUMPEND,
+	-1,				// ANIM_SPONGEBOB_JUMP,
+	-1,					// ANIM_SPONGEBOB_RUN,
+	-1,				// ANIM_SPONGEBOB_RUNSTOP,
+	-1,			// ANIM_SPONGEBOB_RUNSTART,
+	-1,				// ANIM_SPONGEBOB_SOAKUP,
+	-1,			// ANIM_SPONGEBOB_TEETERBACK,
+	-1,			// ANIM_SPONGEBOB_TEETERFRONT,
+	-1,				// ANIM_SPONGEBOB_SWIPE,
+	-1,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,										// ANIM_SPONGEBOB_FIREEND,
+	-1,										// ANIM_SPONGEBOB_FIRESTART,
+	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,										// ANIM_SPONGEBOB_WALK,
+	-1,										// ANIM_SPONGEBOB_KARATE,
+	},
+
+	// PLAYER_ADDON_BUBBLEWAND,
+	{
+	-1,		// ANIM_SPONGEBOB_BUTTBOUNCEEND,
+	-1,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
+	-1,				// ANIM_SPONGEBOB_FALL,
+	-1,				// ANIM_SPONGEBOB_GETUP,
+	-1,			// ANIM_SPONGEBOB_HITGROUND,
+	-1,			// ANIM_SPONGEBOB_IDLEBREATH,
+	-1,			// ANIM_SPONGEBOB_IDLEWIND,
+	-1,				// ANIM_SPONGEBOB_JUMPEND,
+	-1,				// ANIM_SPONGEBOB_JUMP,
+	-1,					// ANIM_SPONGEBOB_RUN,
+	-1,				// ANIM_SPONGEBOB_RUNSTOP,
+	-1,			// ANIM_SPONGEBOB_RUNSTART,
+	-1,				// ANIM_SPONGEBOB_SOAKUP,
+	-1,			// ANIM_SPONGEBOB_TEETERBACK,
+	-1,			// ANIM_SPONGEBOB_TEETERFRONT,
+	-1,				// ANIM_SPONGEBOB_SWIPE,
+	-1,			// ANIM_SPONGEBOB_DEATHSPIN,
+	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
+	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
+	-1,										// ANIM_SPONGEBOB_FIREEND,
+	-1,										// ANIM_SPONGEBOB_FIRESTART,
+	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
+	-1,										// ANIM_SPONGEBOB_WALK,
+	-1,										// ANIM_SPONGEBOB_KARATE,
+	},
+};
+
+// -------------------------------------------------------------------------------
+
+
 
 
 /*----------------------------------------------------------------------
@@ -250,6 +451,8 @@ CActorGfx		*m_actorWeaponGfx;
   ---------------------------------------------------------------------- */
 void	CPlayer::init()
 {
+	int	i;
+
 	CPlayerThing::init();
 
 	m_fontBank=new ("PlayerFont") FontBank();
@@ -261,12 +464,9 @@ void	CPlayer::init()
 
 	m_layerCollision=NULL;
 
-	CActorPool::AddActor(ACTORS_SPONGEBOB_NET_SBK);
-	m_actorWeaponGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_NET_SBK);
-
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
-	for(int i=0;i<NUM_PLAYERMODES;i++)
+	for(i=0;i<NUM_PLAYERMODES;i++)
 	{
 		s_playerModes[i]->initialise(this);
 	}
@@ -287,6 +487,14 @@ m_animFrame=0;
 	resetPlayerCollisionSizeToBase();
 
 	m_divingHelmet=false;
+
+//#ifdef __USER_paul__
+registerAddon(PLAYER_ADDON_NET);
+registerAddon(PLAYER_ADDON_CORALBLOWER);
+registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
+registerAddon(PLAYER_ADDON_GLASSES);
+registerAddon(PLAYER_ADDON_BUBBLEWAND);
+//#endif
 }
 
 /*----------------------------------------------------------------------
@@ -297,11 +505,21 @@ m_animFrame=0;
   ---------------------------------------------------------------------- */
 void	CPlayer::shutdown()
 {
-	for(int i=0;i<NUM_PLAYERMODES;i++)
+	int	i;
+
+	for(i=0;i<NUM_PLAYERMODES;i++)
 	{
 		s_playerModes[i]->shutdown();
 	}
 
+	for(i=0;i<NUM_PLAYER_ADDONS;i++)
+	{
+		if(s_addonActorGfx[i])
+		{
+			delete s_addonActorGfx[i];
+			s_addonActorGfx[i]=NULL;
+		}
+	}
 	delete m_actorGfx;
 
 	m_spriteBank->dump();	delete m_spriteBank;
@@ -569,9 +787,9 @@ int panim=-1;
 #include "gfx\prim.h"	// (pkg)
 int healthx=40;
 int healthy=40;
-int healthr=200;
-int healthg=75;
-int healthb=75;
+int healthr=128;
+int healthg=0;
+int healthb=0;
 
 #ifdef __USER_paul__
 #define NUM_LASTPOS	50
@@ -781,6 +999,26 @@ ATTACK_STATE	CPlayer::getAttackState()
 	return m_currentPlayerModeClass->getAttackState();
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::registerAddon(PLAYER_ADDONS _addon)
+{
+	if(!s_addonActorGfx[_addon])
+	{
+		FileEquate	sbk;
+		sbk=s_addonActorPoolNames[_addon];
+		if(sbk!=-1)
+		{
+			s_addonActorGfx[_addon]=CActorPool::GetActor(sbk);
+		}
+	}
+}
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -952,52 +1190,45 @@ void CPlayer::respawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifndef	__ANIM_SPONGEBOB_NET_HEADER__
-#include <ACTOR_SPONGEBOB_NET_Anim.h>
-#endif
-
-static s8 s_animMapNet[]=
-{
-	ANIM_SPONGEBOB_NET_BUTTBOUNCEEND,		// ANIM_SPONGEBOB_BUTTBOUNCEEND=0,
-	ANIM_SPONGEBOB_NET_BUTTBOUNCESTART,		// ANIM_SPONGEBOB_BUTTBOUNCESTART,
-	ANIM_SPONGEBOB_NET_FALL,				// ANIM_SPONGEBOB_FALL,
-	ANIM_SPONGEBOB_NET_GETUP,				// ANIM_SPONGEBOB_GETUP,
-	ANIM_SPONGEBOB_NET_HITGROUND,			// ANIM_SPONGEBOB_HITGROUND,
-	ANIM_SPONGEBOB_NET_IDLEBREATH,			// ANIM_SPONGEBOB_IDLEBREATH,
-	ANIM_SPONGEBOB_NET_IDLEWIND,			// ANIM_SPONGEBOB_IDLEWIND,
-	ANIM_SPONGEBOB_NET_JUMPEND,				// ANIM_SPONGEBOB_JUMPEND,
-	ANIM_SPONGEBOB_NET_JUMP,				// ANIM_SPONGEBOB_JUMP,
-	ANIM_SPONGEBOB_NET_RUN,					// ANIM_SPONGEBOB_RUN,
-	ANIM_SPONGEBOB_NET_RUNSTOP,				// ANIM_SPONGEBOB_RUNSTOP,
-	ANIM_SPONGEBOB_NET_RUNSTART,			// ANIM_SPONGEBOB_RUNSTART,
-	ANIM_SPONGEBOB_NET_SOAKUP,				// ANIM_SPONGEBOB_SOAKUP,
-	ANIM_SPONGEBOB_NET_TEETERBACK,			// ANIM_SPONGEBOB_TEETERBACK,
-	ANIM_SPONGEBOB_NET_TEETERFRONT,			// ANIM_SPONGEBOB_TEETERFRONT,
-	ANIM_SPONGEBOB_NET_SWIPE,				// ANIM_SPONGEBOB_SWIPE,
-	ANIM_SPONGEBOB_NET_DEATHSPIN,			// ANIM_SPONGEBOB_DEATHSPIN,
-	-1,										// ANIM_SPONGEBOB_BALLOONJUMP,
-	-1,										// ANIM_SPONGEBOB_BLOWBUBBLE,
-	-1,										// ANIM_SPONGEBOB_FIREEND,
-	-1,										// ANIM_SPONGEBOB_FIRESTART,
-	-1,										// ANIM_SPONGEBOB_IDLEWEAPON,
-	-1,										// ANIM_SPONGEBOB_WALK,
-	-1,										// ANIM_SPONGEBOB_KARATE,
-};
-
-
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
-	if(m_currentMode==PLAYER_MODE_NET)
+	int addon;
+
+	// Render an addon?
+	addon=s_addonNumbers[m_currentMode];
+	if(addon!=NO_ADDON)
 	{
-		if(s_animMapNet[_animNo]!=-1)
+		s8	addonAnimFrame=s_animMapNet[addon][_animNo];
+		if(addonAnimFrame!=-1)
 		{
-			if(_animFrame<m_actorWeaponGfx->getFrameCount(s_animMapNet[_animNo]))
+			CActorGfx	*addonGfx=s_addonActorGfx[addon];
+			if(addonGfx&&
+			   _animFrame>=addonGfx->getFrameCount(addonAnimFrame))
 			{
-				m_actorWeaponGfx->Render(*_pos,s_animMapNet[_animNo],_animFrame,m_facing==FACING_RIGHT?0:1);
+				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB ADDON!");
+				_animFrame=0;
 			}
+			addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
 		}
 	}
 
+	// Render glasses addon?
+	if(isWearingGlasses())
+	{
+		s8	addonAnimFrame=s_animMapNet[PLAYER_ADDON_GLASSES][_animNo];
+		if(addonAnimFrame!=-1)
+		{
+			CActorGfx	*addonGfx=s_addonActorGfx[PLAYER_ADDON_GLASSES];
+			if(_animFrame>=addonGfx->getFrameCount(addonAnimFrame))
+			{
+				PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!");
+				_animFrame=0;
+			}
+			addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
+		}
+	}
+
+	// Render SB
 	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 }
 
