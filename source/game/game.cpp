@@ -17,11 +17,16 @@
 #include "gfx\bubicles.h"
 #endif
 
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
+#endif
+
 
 
 /*****************************************************************************/
 
 FontBank			*CGameScene::s_genericFont;
+SpriteBank			*CGameScene::s_sprites;
 
 BubicleEmitterData bubData=
 {
@@ -68,12 +73,17 @@ void 	CGameScene::init()
 
 	CBubicleFactory::init();
 	testBub=CBubicleFactory::spawnEmitter(&bubData);
+
+	s_sprites=new ("bg sprite") SpriteBank();
+	s_sprites->load(INGAMEFX_INGAMEFX_SPR);
 }
 
 /*****************************************************************************/
 
 void CGameScene::shutdown()
 {
+	s_genericFont->dump();		delete s_genericFont;
+	s_sprites->dump();			delete s_sprites;
 	CBubicleFactory::shutdown();
 }
 
@@ -90,6 +100,10 @@ char	*Str="Sponge\nBob\nSquare\nPants";
 	s_genericFont->print(X,Y,Str);
 
 	CBubicleFactory::render();
+
+	POLY_FT4	*ft4=s_sprites->printFT4(FRM_BACKGROUND,0,0,0,0,1023);
+	setXYWH(ft4,20,20,512-40,256-40);
+	setRGB0(ft4,64,64,64);
 }
 
 /*****************************************************************************/
@@ -98,10 +112,10 @@ void	CGameScene::think(int _frames)
 	for(int i=0;i<_frames;i++)
 	{
 		X+=Dx; Y+=Dy;
-		if (X<0+64)		{X=0+64;	Dx=-Dx;}
-		if (X>512-64)	{X=512-64;	Dx=-Dx;}
-		if (Y<0+64)		{Y=0+64;	Dy=-Dy;}
-		if (Y>256-64)	{Y=256-64;	Dy=-Dy;}
+		if (X<0+64)		{X=0+64;	Dx=getRndRange(5)+1;}
+		if (X>512-64)	{X=512-64;	Dx=-(getRndRange(5)+1);}
+		if (Y<0+64)		{Y=0+64;	Dy=getRndRange(5)+1;}
+		if (Y>256-64)	{Y=256-64;	Dy=-(getRndRange(5)+1);}
 	}
 
 	testBub->setPos(X,Y);

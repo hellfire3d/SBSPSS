@@ -28,7 +28,9 @@ public:
 	
 private:
 
-	static	FontBank			*s_genericFont;
+	static FontBank			*s_genericFont;
+	static class SpriteBank	*s_sprites;
+
 };
 
 
