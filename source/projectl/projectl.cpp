@@ -153,7 +153,7 @@ bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
 
 		m_heading += moveDist;
 
-		m_heading = m_heading % ONE;
+		m_heading &= 4095;
 		
 		s32 preShiftX = _frames * 3 * rcos( m_heading );
 		s32 preShiftY = _frames * 3 * rsin( m_heading );
