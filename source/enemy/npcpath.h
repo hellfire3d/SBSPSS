@@ -40,16 +40,17 @@ private:
 	NPC_PATH_TYPE	pathType;
 	u8				waypointCount;
 	bool			reversePath;
+	CNpcWaypoint	*currentWaypoint;
+	CNpcWaypoint	*lastWaypoint;
 
 public:
-	CNpcWaypoint	*currentWaypoint;
-
 	void			initPath();
 	void			addWaypoint( DVECTOR newPos );
 	void			removeAllWaypoints();
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
 	void			resetPath();
+	void			reversePathDir();
 	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };

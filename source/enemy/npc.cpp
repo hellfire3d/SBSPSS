@@ -48,7 +48,7 @@
 
 void CNpc::init()
 {
-	m_type = NPC_SAW_BLADE;
+	m_type = NPC_FISH_FOLK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -239,6 +239,29 @@ void CNpc::init()
 			m_npcPath.addWaypoint( newPos );
 
 			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
+
+		case NPC_INIT_FISH_FOLK:
+		{
+			m_heading = m_fireHeading = 0;
+			
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 500;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( PONG_PATH );
 
 			break;
 		}
@@ -777,6 +800,13 @@ void CNpc::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, 
 		case NPC_MOVEMENT_MODIFIER_JELLYFISH:
 		{
 			processSmallJellyfishMovementModifier( _frames, distX, distY, dist, headingChange );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_MODIFIER_FISH_FOLK:
+		{
+			processFishFolkMovementModifier( _frames, distX, distY );
 
 			break;
 		}

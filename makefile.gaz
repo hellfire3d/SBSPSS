@@ -70,6 +70,7 @@ enemy_src :=		2denemy \
 					nsshark \
 					ndogfish \
 					nhazard \
+					nffolk \
 					enemy
 
 projectl_src :=		projectl

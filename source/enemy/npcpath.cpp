@@ -40,6 +40,7 @@ void CNpcPath::initPath()
 	waypoint = NULL;
 	pathType = SINGLE_USE_PATH;
 	currentWaypoint = NULL;
+	lastWaypoint = NULL;
 	waypointCount = 0;
 	reversePath = false;
 }
@@ -47,6 +48,7 @@ void CNpcPath::initPath()
 void CNpcPath::resetPath()
 {
 	currentWaypoint = waypoint;
+	lastWaypoint = NULL;
 }
 
 void CNpcPath::addWaypoint( DVECTOR newPos )
@@ -118,6 +120,7 @@ bool CNpcPath::incPath()
 	{
 		if ( currentWaypoint->nextWaypoint )
 		{
+			lastWaypoint = currentWaypoint;
 			currentWaypoint = currentWaypoint->nextWaypoint;
 		}
 		else
@@ -132,6 +135,7 @@ bool CNpcPath::incPath()
 				case REPEATING_PATH:
 					// go back to start
 
+					lastWaypoint = currentWaypoint;
 					currentWaypoint = this->waypoint;
 
 					break;
@@ -143,6 +147,7 @@ bool CNpcPath::incPath()
 
 					if ( currentWaypoint->prevWaypoint )
 					{
+						lastWaypoint = currentWaypoint;
 						currentWaypoint = currentWaypoint->prevWaypoint;
 					}
 
@@ -156,6 +161,7 @@ bool CNpcPath::incPath()
 
 		if ( currentWaypoint->prevWaypoint )
 		{
+			lastWaypoint = currentWaypoint;
 			currentWaypoint = currentWaypoint->prevWaypoint;
 		}
 		else
@@ -164,12 +170,30 @@ bool CNpcPath::incPath()
 
 			if ( currentWaypoint->nextWaypoint )
 			{
+				lastWaypoint = currentWaypoint;
 				currentWaypoint = currentWaypoint->nextWaypoint;
 			}
 		}
 	}
 
 	return( false );
+}
+
+void CNpcPath::reversePathDir()
+{
+	if ( lastWaypoint )
+	{
+		CNpcWaypoint *tempWaypoint;
+
+		tempWaypoint = currentWaypoint;
+		currentWaypoint = lastWaypoint;
+		lastWaypoint = tempWaypoint;
+
+		if ( pathType == PONG_PATH )
+		{
+			reversePath = !reversePath;
+		}
+	}
 }
 
 bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY )
