@@ -149,7 +149,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 			}
 			else
 			{
-				m_movementTimer = GameState::getOneSecondInFrames() * 3;
+				m_movementTimer = GameState::getOneSecondInFrames() * 2;
 			}
 		}
 	}
@@ -216,7 +216,8 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						m_animPlaying = true;
 						m_frame = 0;
 					}
-					else if ( !m_animPlaying )
+					//else if ( !m_animPlaying )
+					else if ( m_frame > ( getFrameCount() >> 1 ) )
 					{
 						// fire at player
 
@@ -248,7 +249,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						else
 						{
 							m_controlFunc = NPC_CONTROL_MOVEMENT;
-							m_movementTimer = GameState::getOneSecondInFrames() * 3;
+							m_movementTimer = GameState::getOneSecondInFrames() * 2;
 
 							m_state++;
 							m_inRange = false;
@@ -279,7 +280,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 				else
 				{
 					m_controlFunc = NPC_CONTROL_MOVEMENT;
-					m_movementTimer = GameState::getOneSecondInFrames() * 3;
+					m_movementTimer = GameState::getOneSecondInFrames() * 2;
 					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 					m_inRange = false;
 
@@ -308,6 +309,17 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 	else
 	{
 		m_heading = 2048;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFlyingDutchmanEnemy::processShotRecoil( int _frames )
+{
+	if ( !m_animPlaying )
+	{
+		m_state = m_oldState;
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
 	}
 }
 
@@ -422,6 +434,7 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 							player->justButtBouncedABadGuy();
 						}
 						m_controlFunc = NPC_CONTROL_SHOT;
+						m_oldState = m_state;
 						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 
 						drawAttackEffect();
@@ -463,6 +476,7 @@ u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 			m_invulnerableTimer = 4 * GameState::getOneSecondInFrames();
 
 			m_controlFunc = NPC_CONTROL_SHOT;
+			m_oldState = m_state;
 			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 		}
 	}

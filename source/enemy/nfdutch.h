@@ -30,6 +30,7 @@ public:
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
+	virtual void		processShotRecoil( int _frames );
 	virtual void		processShotDeathEnd( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 
@@ -44,6 +45,7 @@ protected:
 	u8					m_inRange;
 	u8					m_fireCount;
 	s32					m_invulnerableTimer;
+	u8					m_oldState;
 };
 
 #endif
