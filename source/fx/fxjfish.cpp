@@ -40,7 +40,7 @@ void	CFXJellyFishLegs::shutdown()
 /*****************************************************************************/
 void	CFXJellyFishLegs::SetUp(int _Width,int _Gap,int _Length,int _Count)
 {
-
+/*
 		XOfs=-(_Width/2);
 		Width=_Width/_Gap;
 		Gap=_Gap;
@@ -74,7 +74,7 @@ int		AInc=1024/Width;
 			HeightTable[H]=(s16)dH;
 //			printf("%i %i =%i\n",H,Ofs,HeightTable[H]);
 		}
-
+*/
 }
 
 /*****************************************************************************/
@@ -84,7 +84,7 @@ int		AInc=1024/Width;
 int	XT[]={-3,-2,-2,-2,-2,-1,-1,-1,	+1,+1,+1,+2,+2,+2,+2,+3};
 void	CFXJellyFishLegs::think(int _frames)
 {
-		ASSERT(FXList);
+/*		ASSERT(FXList);
 		CFX::think(_frames);
 
 		ListIdx--;
@@ -100,6 +100,7 @@ void	CFXJellyFishLegs::think(int _frames)
 
 			ThisList[ListIdx].Ofs.vx+=XT[XO];
 		}
+*/
 }
 
 /*****************************************************************************/
@@ -111,6 +112,7 @@ int	LY=32;
 
 void	CFXJellyFishLegs::render()
 {
+/*
 DVECTOR	_MapOfs=CLevel::getCameraPos();
 DVECTOR	MapOfs;
 int		dRGB=256/Count;
@@ -160,4 +162,5 @@ s16		*dH=HeightTable;
 			}
 			MapOfs.vx+=Gap;
 		}
+*/
 }

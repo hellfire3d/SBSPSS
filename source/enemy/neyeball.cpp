@@ -105,6 +105,8 @@ bool CNpcEyeballEnemy::processSensor()
 
 void CNpcEyeballEnemy::processClose( int _frames )
 {
+CThing	*Next=getNext();
+
 	if ( Next )
 	{
 		CProjectile *projectile;
@@ -265,6 +267,7 @@ void CNpcEyeballEnemy::processShot( int _frames )
 				m_actorGfx->SetOtPos( 0 );
 			}
 
+			CThing	*Next=getNext();
 			if ( Next )
 			{
 				CProjectile *projectile;
@@ -298,6 +301,7 @@ void CNpcEyeballEnemy::processShot( int _frames )
 				m_speed++;
 			}
 
+			CThing	*Next=getNext();
 			if ( Next )
 			{
 				CProjectile *projectile;

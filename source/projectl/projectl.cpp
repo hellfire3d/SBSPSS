@@ -261,6 +261,7 @@ void CProjectile::think(int _frames)
 					{
 						if ( processTargetSeek( _frames, m_initPos ) )
 						{
+							CThing	*Parent=getParent();
 							Parent->processEvent( PROJECTILE_RETURNED_TO_SOURCE_EVENT, this );
 							m_heading = m_initHeading;
 						}
