@@ -163,7 +163,7 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
 
-#if defined(__USER_paul__) || defined(__USER_cdbuild__)
+#if defined(__USER_paul__) || defined(__USER_CDBUILD__)
 	DoAutoLoad();
 #endif
 
