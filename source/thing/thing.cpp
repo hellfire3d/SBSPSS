@@ -121,6 +121,33 @@ void		CThingManager::thinkAllThings(int _frames)
 		}
 		thing1=thing1->m_nextThing;
 	}
+
+	// Player -> Enemy collision
+	thing1=s_thingLists[CThing::TYPE_ENEMY];
+	thing2=s_thingLists[CThing::TYPE_PLAYER];
+	while(thing1&&thing2)
+	{
+		if(thing1->canCollide()&&
+		   thing1->checkCollisionAgainst(thing2))
+		{
+			thing1->collidedWith(thing2);
+		}
+		thing1=thing1->m_nextThing;
+	}
+
+	// Player -> Enemy projectile collision
+	thing1=s_thingLists[CThing::TYPE_ENEMYPROJECTILE];
+	thing2=s_thingLists[CThing::TYPE_PLAYER];
+	while(thing1&&thing2)
+	{
+		if(thing1->canCollide()&&
+		   thing1->checkCollisionAgainst(thing2))
+		{
+			thing1->collidedWith(thing2);
+		}
+		thing1=thing1->m_nextThing;
+	}
+
 }
 
 /*----------------------------------------------------------------------
