@@ -100,7 +100,6 @@ void CGUIObject::init(CGUIObject *_parent,GUIId _id)
 	else
 	{
 		// This object is a bastard :)
-		GUI_DBGMSG("INFO: GUI object without parent created!");
 		setOt(INITIAL_OT);
 	}
 }
