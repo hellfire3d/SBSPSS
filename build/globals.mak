@@ -108,7 +108,7 @@ LS :=					$(CYG_BIN_DIR)/ls
 MV :=					$(CYG_BIN_DIR)/mv
 DATE :=					$(CYG_BIN_DIR)/date
 SED :=					$(CYG_BIN_DIR)/sed
-ATTRIB :=				$(CYG_BIN_DIR)/chmod 
+ATTRIB :=				$(CYG_BIN_DIR)/chmod +w
 
 LOG_NAME :=				uname
 PARKGRAB :=				parkgrab
