@@ -888,7 +888,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_timerFunc = NPC_TIMER_ATTACK_DONE;
-				m_timerTimer = 5 * GameState::getOneSecondInFrames();
+				m_timerTimer = 10 * GameState::getOneSecondInFrames();
 				m_sensorFunc = NPC_SENSOR_NONE;
 
 				Pos = oldPos;
