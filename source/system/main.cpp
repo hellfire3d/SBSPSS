@@ -71,6 +71,7 @@ CPaulScene s_paulScene;
 #include "gfx\bubicles.h"
 #endif
 
+#include	<sprites.h>
 
 #if	__FILE_SYSTEM__==PC
 	#if	!defined(__USER_CDBUILD__)
@@ -120,6 +121,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	GenericSpriteBank.load(SPRITES_SPRITES_SPR);
 	CGameScene::setSpriteBank(&GenericSpriteBank);
+	SetUpLoadIcon(GenericSpriteBank.getFrameHeader(FRM__TOKEN));
+//	StartLoad();
 
 	GameState::initialise();
 	CSoundMediator::initialise();

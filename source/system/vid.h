@@ -32,7 +32,6 @@ struct sVidScreen
 extern int		FrameFlipFlag;
 
 /*****************************************************************************/
-
 void		VidInit();
 
 void		VidScrOn();
@@ -59,6 +58,7 @@ void 		VidRemoveVSyncFunc(VbFuncType v);
 
 void 		VRamViewer();
 
+void		SetUpLoadIcon(void *fh);
 void		StartLoad(int _loadX=430,int _loadY=202);
 void		StopLoad();
 

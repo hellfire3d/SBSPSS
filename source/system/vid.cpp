@@ -7,6 +7,7 @@
 #include "gfx\prim.h"
 #include "fileio\fileio.h"
 
+
 /*****************************************************************************/
 #define MaxVBFuncs 	4
 
@@ -29,7 +30,7 @@ static const CVECTOR s_defClearCol = {0, 0, 0};
 /*****************************************************************************/
 /*** Loading Icon Cack *******************************************************/
 /*****************************************************************************/
-POLY_FT4	LoadPoly[2];
+POLY_FT4	LoadPoly;
 static int	LoadX=430;
 static int	LoadY=161;
 static int	LoadHalfWidth;
@@ -53,7 +54,7 @@ void	LoadingIcon()
 {
 int			Dst;
 int			rgb;
-POLY_FT4	*PolyPtr=&LoadPoly[LoadIconSide];
+POLY_FT4	*PolyPtr=&LoadPoly;
 
 		Dst=LoadTab[LoadTime];
 		
@@ -70,35 +71,28 @@ POLY_FT4	*PolyPtr=&LoadPoly[LoadIconSide];
 
 		LoadTime++;
 		if (LoadTime>=LoadTabSize)	LoadTime=0;
-		if(LoadTime==LoadTabSize/2)	LoadIconSide^=1;
+//		if(LoadTime==LoadTabSize/2)	LoadIconSide^=1;
 }
 
 /*****************************************************************************/
-void	StartLoad(int _loadX,int _loadY)
+void	SetUpLoadIcon(void *_fh)
 {
-/*	
-sFrameHdr	*fh;
-SpriteBank	*spr;
-
-		spr=UIGetSharedSpriteBank();
-		LoadX=_loadX;
-		LoadY=_loadY;
-
-		setPolyFT4(&LoadPoly[0]);
-		fh=spr->getFrameHeader(FRM__CD);
-		setXYWH(&LoadPoly[0],LoadX,LoadY,fh->W,fh->H);
-		setUVWH(&LoadPoly[0],fh->U,fh->V,fh->W,fh->H);
-		LoadPoly[0].tpage=fh->TPage;
-		LoadPoly[0].clut=fh->Clut;
-
-		setPolyFT4(&LoadPoly[1]);
-		fh=spr->getFrameHeader(FRM__CDFRONT);
-		setXYWH(&LoadPoly[1],LoadX,LoadY,fh->W,fh->H);
-		setUVWH(&LoadPoly[1],fh->U,fh->V,fh->W,fh->H);
-		LoadPoly[1].tpage=fh->TPage;
-		LoadPoly[1].clut=fh->Clut;
+sFrameHdr *fh=(sFrameHdr*)_fh;
+		setPolyFT4(&LoadPoly);
+		setXYWH(&LoadPoly,LoadX,LoadY,fh->W,fh->H);
+		setUVWH(&LoadPoly,fh->U,fh->V,fh->W,fh->H);
+		LoadPoly.tpage=fh->TPage;
+		LoadPoly.clut=fh->Clut;
 
 		LoadHalfWidth=fh->W/2;
+		setRECT(&LoadBackRect,LoadX,LoadY+(LoadBackY^256),fh->W+4,fh->H+4);
+
+}
+/*****************************************************************************/
+void	StartLoad(int _loadX,int _loadY)
+{
+		LoadX=_loadX;
+		LoadY=_loadY;
 
 		Screen[0].Draw.isbg=Screen[1].Draw.isbg=0;
 
@@ -106,12 +100,10 @@ SpriteBank	*spr;
 		PutDispEnv(&Screen[FrameFlipFlag].Disp);
 
 		LoadBackY=Screen[FrameFlipFlag^1].Disp.disp.y;
-		setRECT(&LoadBackRect,LoadX,LoadY+(LoadBackY^256),fh->W+4,fh->H+4);
 
 		LoadTime=0;
 		DrawLoadIcon=1;
 		LoadIconSide=0;
-*/		
 }
 
 /*****************************************************************************/
@@ -357,7 +349,11 @@ int		ScrH=VidGetScrH()*FrameFlipFlag;
 		PutDrawEnv(Draw);
 
 // If set, load background screen
-		if (ScreenImage) LoadImage2(&Screen[LastFrame].Disp.disp ,(u_long*)ScreenImage);
+		if (ScreenImage) 
+		{	
+			LoadImage(&Screen[LastFrame].Disp.disp ,(u_long*)ScreenImage);
+			DrawSync(0);
+		}
 
 
 if(ScreenClipBox==1)
