@@ -521,7 +521,7 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 {
 	u8	*image;
 	u16	*src,*dst;
-	int	x;
+	int	y;
 
 	image=CFileIO::loadFile((FileEquate)_file);ASSERT(image);
 	src=(u16*)image;
