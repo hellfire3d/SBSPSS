@@ -44,7 +44,7 @@ class CGameSlotManager
 public:
 	enum
 	{
-		INITIAL_LIVES=4,
+		INITIAL_LIVES=5,
 		INITIAL_CONTINUES=3,
 		
 		NUM_GAME_SLOTS=4,
@@ -68,7 +68,6 @@ public:
 		unsigned char	m_isInUse;
 		unsigned char	m_lives;
 		unsigned char	m_continues;
-		unsigned char	m_maxLevelCompleted;
 		unsigned char	m_spatulaCollectedFlags[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS][16];			// Enuf space for 128 spats per level
 		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Same again..
 		unsigned char	m_kelpTokensHeld;
@@ -188,6 +187,22 @@ public:
 			int	index;
 			index=(_chapter*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER))+_level;
 			m_levelCompletionState[index]=LEVELCOMPETESTATE_COMPLETED;
+		}
+
+		void			getHighestLevelOpen(int *_chapter,int *_level)
+		{
+			int	chapter,level;
+			for(chapter=0;chapter<NUM_CHAPTERS;chapter++)
+			{
+				for(level=0;level<NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS;level++)
+				{
+					if(isLevelOpen(chapter,level))
+					{
+						*_chapter=chapter;
+						*_level=level;
+					}
+				}
+			}
 		}
 
 #ifdef __VERSION_DEBUG__

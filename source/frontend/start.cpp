@@ -66,6 +66,10 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -289,9 +293,11 @@ void CFrontEndStart::drawGameSlot(int _xOff,int _slotNumber)
 
 	if(gameSlot->m_isInUse)
 	{
+		int		chapter,level;
 		char	buf[100];
 
-		sprintf(buf,TranslationDatabase::getString(STR__SLOT_SELECT_SCREEN__LEVEL_REACHED),0,0);
+		gameSlot->getHighestLevelOpen(&chapter,&level);
+		sprintf(buf,TranslationDatabase::getString(STR__SLOT_SELECT_SCREEN__LEVEL_REACHED),chapter+1,level+1);
 		m_font->print(xbase+SLOT_LEVEL_TEXT_X,SLOT_FRAME_Y+SLOT_LEVEL_TEXT_Y,buf);
 
 		x=xbase+SLOT_TOKENCOUNT_X;
@@ -432,6 +438,9 @@ void CFrontEndStart::think(int _frames)
 					gameSlot=CGameSlotManager::getSlotData();
 					if(gameSlot->m_isInUse)
 					{
+						int	chapter,level;
+						gameSlot->getHighestLevelOpen(&chapter,&level);
+						CMapScene::setLevelToStartOn(chapter,level);
 						m_state=STATE_EXITING_TO_GAME;
 						CFader::setFadingOut();
 						CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
