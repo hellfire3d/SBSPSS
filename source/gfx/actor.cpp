@@ -711,6 +711,20 @@ int		YMin,YMax;
 }
 
 /*****************************************************************************/
+void	CActorGfx::getFrameOffsets(int _anim,int _frame,int *_x,int *_y)
+{
+	sSpriteAnimBank	*SpriteBank;
+	sSpriteAnim		*ThisAnim;
+	sSpriteFrame	*pFrame;
+
+	SpriteBank=PoolEntry->ActorGfx;
+	ThisAnim=SpriteBank->AnimList+_anim;
+	pFrame=&ThisAnim->Anim[_frame];
+	*_x=pFrame->XOfs;
+	*_y=pFrame->YOfs;
+}
+
+/*****************************************************************************/
 void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip)
 {
 u8		W=CurrentFrameGfx->W-1;

@@ -142,6 +142,7 @@ virtual	~CActorGfx();
 
 		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false);
 		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale);
+		void			getFrameOffsets(int _anim,int _frame,int *_x,int *_y);
 
 		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
 		int				GetTotalFrameCount()		{return(PoolEntry->ActorGfx->FrameCount);}
@@ -151,6 +152,7 @@ virtual	~CActorGfx();
 //		void			SetShadow(bool f)			{ShadowFlag=f;}
 //		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
 		void			SetOtPos(int Ot)			{OtPos=Ot;}
+
 
 protected:
 		void			SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
