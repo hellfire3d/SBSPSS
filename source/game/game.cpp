@@ -213,6 +213,7 @@ void 	CGameScene::render()
 		SetTransMatrix(&CamMtx);
 
 		Level.render();
+		CActorPool::CleanUpCache();
 }
 
 /*****************************************************************************/

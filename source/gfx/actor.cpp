@@ -39,11 +39,14 @@ CActorCache::~CActorCache()
 /*****************************************************************************/
 int		CActorCache::GetSizeType(int Size)
 {
-		if (Size<= 16) return(16);
-		if (Size<= 32) return(32);
-		if (Size<= 64) return(64);
-		if (Size<=128) return(128);
-		if (Size<=256) return(256);
+//		if (Size<= 16) return(16);
+//		if (Size<= 32) return(32);
+//		if (Size<= 64) return(64);
+//		if (Size<=128) return(128);
+//		if (Size<=256) return(256);
+//	Size>>=4;
+//	Size<<=4;
+		return(Size);
 		ASSERT(!"SPRITE SIZE NOT SUPPORTED");
 
 		return(-1);
@@ -79,10 +82,10 @@ int		Slot=0;
 /*****************************************************************************/
 sPoolNode *CActorCache::RemoveHeadNode(sNodeList *Root)
 {
-sPoolNode *Node=Root->List;
+sPoolNode *Node=Root->Head;
 sPoolNode *Next=Node->Next;
 
-		Root->List=Node->Next;
+		Root->Head=Node->Next;
 		Next->Prev=0;
 		Node->Next=0;
 		return(Node);
@@ -108,7 +111,7 @@ sPoolNode	*Next=Node->Next;
 // Add node to end of list
 void	CActorCache::AddNode(sPoolNode *Node,sNodeList *Root)
 {
-sPoolNode	*Prev=Root->LastNode;
+sPoolNode	*Prev=Root->Tail;
 sPoolNode	*Next=0;
 
 		if (Prev)
@@ -117,12 +120,40 @@ sPoolNode	*Next=0;
 		}
 		else
 		{
-			Root->List=Node;
+			Root->Head=Node;
 		}
 
 		Node->Prev=Prev;
 		Node->Next=0;
-		Root->LastNode=Node;
+		Root->Tail=Node;
+}
+
+/*****************************************************************************/
+// Add node list to end of list
+void	CActorCache::AddNodeList(sNodeList *Src,sNodeList *Dst)
+{
+sPoolNode	*SrcHead=Src->Head;
+sPoolNode	*SrcTail=Src->Tail;
+sPoolNode	*DstHead=Dst->Head;
+sPoolNode	*DstTail=Dst->Tail;
+
+		if (!SrcHead) return;
+
+		if (!DstTail)
+		{
+			Dst->Head=SrcHead;
+			SrcHead->Prev=0;
+		}
+		else
+		{
+			DstTail->Next=SrcHead;
+			SrcHead->Prev=DstTail;
+		}
+
+		SrcTail->Next=0;
+		Dst->Tail=SrcTail;
+		Src->Head=0;
+		Src->Tail=0;
 }
 
 /*****************************************************************************/
@@ -196,8 +227,8 @@ void	CActorCache::Reset()
 		{
 			if (SlotList[i].ListMem) MemFree(SlotList[i].ListMem);
 			SlotList[i].ListMem=0;
-			SlotList[i].NodeList.List=0;
-			SlotList[i].NodeList.LastNode=0;
+			SlotList[i].NodeList.Head=0;
+			SlotList[i].NodeList.Tail=0;
 			SlotList[i].RefCount=0;
 			SlotList[i].FrameCount=0;
 			SlotList[i].Width=0;
@@ -285,9 +316,9 @@ sActorPool	*List=ActorList;
 
 			while (List)
 			{
-				List->CachePool=Cache.GetSlotList(List->CacheSlot);
-				List->ThisCache.List=0;
-				List->ThisCache.LastNode=0;
+				List->PoolCache=Cache.GetSlotList(List->CacheSlot);
+				List->ActorCache.Head=0;
+				List->ActorCache.Tail=0;
 				List=List->Next;
 			}
 }
@@ -339,7 +370,6 @@ int		TotalFrames=0;
 
 sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
 
-//		printf("Add Actor %i\n",(int)Filename);
 		Spr->AnimList=(sSpriteAnim*)	MakePtr(Spr,(int)Spr->AnimList);
 		Spr->FrameList=(sSpriteFrame*)	MakePtr(Spr,(int)Spr->FrameList);
 		Spr->Palette=(u8*)				MakePtr(Spr,(int)Spr->Palette);
@@ -386,6 +416,18 @@ void		CActorPool::AddActor(sActorPool *NewActor)
 			NewActor->Next=0;
 			Cache.LoadPalette(NewActor);
 			LastActor=NewActor;
+}
+/*****************************************************************************/
+void	CActorPool::CleanUpCache()
+{
+sActorPool	*Actor=ActorList;
+			
+			while (Actor) 
+			{
+				CActorCache::AddNodeList(&Actor->ActorCache ,Actor->PoolCache);
+				Actor=Actor->Next;
+			}
+
 }
 
 /*****************************************************************************/
@@ -439,18 +481,40 @@ POLY_FT4		*Ft4;
 
 			CurrentFrame=GetFrame(Anim,Frame);
 // Is cached?
-			ThisNode=PoolEntry->ThisCache.List;
+			ThisNode=PoolEntry->ActorCache.Head;
 			while (ThisNode)
-			{
+			{ // Try local Cache (From Head forward)
 				if (ThisNode->Actor==PoolEntry->Filename && ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
 				ThisNode=ThisNode->Next;
 			}
+/*			
+			if (!ThisNode)
+			{ // Try main cache ( from tail back)
+			
+				ThisNode=PoolEntry->PoolCache->Tail;
+				while (ThisNode)
+				{
+					if (ThisNode->Actor==PoolEntry->Filename && ThisNode->Anim==Anim && ThisNode->Frame==Frame) break;
+					if (ThisNode->Prev==PoolEntry->PoolCache->Tail) ThisNode->Prev=0;
+					ThisNode=ThisNode->Prev;
 
+				}
+				if (ThisNode)
+				{
+					CActorCache::RemoveNode(ThisNode,PoolEntry->PoolCache);
+					CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
+				}
+			}
+			else
+			{
+			}
+*/
 			if (!ThisNode)
 			{ // Not cached frame
-				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->CachePool);
-				CActorCache::AddNode(ThisNode,&PoolEntry->ThisCache);
+				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->PoolCache);
+				CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
 				RECT	R;
+				ASSERT(ThisNode);
 
 				ThisNode->Actor=PoolEntry->Filename;
 				ThisNode->Anim=Anim;
@@ -640,14 +704,13 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-int	DX=1;
-int	DY=1;
-int	PXOfs=-16;
-int	PYOfs=-6;
-int	blah=0;
-void		CModelGfx::Render(DVECTOR &Pos)
+//int	DX=1;
+//int	DY=1;
+const int	PXOfs=-16;
+const int	PYOfs=-6;
+
+void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)
 {
-		Model=&CModelGfx::ModelTable[blah];
 #define	BLOCK_MULT	16
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
@@ -659,6 +722,14 @@ DVECTOR			MapXY;
 VECTOR			RenderPos;
 int				TriCount=Model->TriCount;				
 sTri			*TList=&ModelTriList[Model->TriStart];
+				MATRIX	Mtx;
+
+			SetIdentNoTrans(&Mtx);
+			if (Scale || Angle)
+			{
+				if (Angle) RotMatrix(Angle,&Mtx);
+				if (Scale) ScaleMatrix(&Mtx,Scale);
+			}
 
 			MapXY.vx=Pos.vx>>4;
 			MapXY.vy=Pos.vy>>4;
@@ -669,6 +740,7 @@ int			ShiftY=(Pos.vy & 15);
 			RenderPos.vx=(PXOfs*16)+((MapXY.vx*16)+ShiftX);
 			RenderPos.vy=(PYOfs*16)+((MapXY.vy*16)+ShiftY);
 
+		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);
 
 		while (TriCount--)

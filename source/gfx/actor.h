@@ -27,8 +27,8 @@ struct	sPoolNode
 
 struct	sNodeList
 {
-		sPoolNode	*List;
-		sPoolNode	*LastNode;
+		sPoolNode	*Head;
+		sPoolNode	*Tail;
 };
 
 struct	sPoolSlot
@@ -46,8 +46,8 @@ struct	sActorPool
 		FileEquate		Filename;
 		sSpriteAnimBank	*ActorGfx;
 		int				CacheSlot;
-		sNodeList		*CachePool;
-		sNodeList		ThisCache;
+		sNodeList		*PoolCache;
+		sNodeList		ActorCache;
 		sActorPool		*Next;
 };
 
@@ -85,6 +85,7 @@ public:
 static	sPoolNode	*RemoveHeadNode(sNodeList *Root);
 static	void		RemoveNode(sPoolNode *Node,sNodeList *Root);
 static	void		AddNode(sPoolNode *Node,sNodeList *Root);
+static	void		AddNodeList(sNodeList *Src,sNodeList *Dst);
 static	u8			*UnpackBuffer;
 
 protected:
@@ -112,6 +113,7 @@ static	void		SetUpCache();
 
 static	void		AddActor(FileEquate Filename)		{GetActor(Filename);}
 static	CActorGfx	*GetActor(FileEquate Filename);
+static	void		CleanUpCache();
 
 protected:
 static	sActorPool	*FindActor(FileEquate Filename);
@@ -164,9 +166,10 @@ virtual	~CModelGfx(){};
 static	void		SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList);
 		void		SetModel(int Type);
 
-		void		Render(DVECTOR &Pos);
+		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0);
 
 protected:
+
 static	sModel		*ModelTable;
 static	sTri		*ModelTriList;
 static	sQuad		*ModelQuadList;

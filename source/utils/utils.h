@@ -93,6 +93,15 @@ inline	void	SetIdentScaleNoTrans(MATRIX *Mtx,u32 Scale)
 }
 
 /*****************************************************************************/
+inline	void	SetIdentScaleNoTrans(MATRIX *Mtx,SVECTOR *Scale)
+{
+	Mtx->m[0][0]=Scale->vx;	Mtx->m[0][1]=0;			Mtx->m[0][2]=0;
+	Mtx->m[1][0]=0; 		Mtx->m[1][1]=Scale->vy;	Mtx->m[1][2]=0;
+	Mtx->m[2][0]=0; 		Mtx->m[2][1]=0;			Mtx->m[2][2]=Scale->vz;
+
+}
+
+/*****************************************************************************/
 inline	void InverseMatrix(MATRIX *m, MATRIX &im)	//assumes no scale, just transformation and rotation
 {
 	TransposeMatrix(m, &im);
