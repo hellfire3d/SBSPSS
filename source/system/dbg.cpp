@@ -72,7 +72,7 @@ Available options are:
 #else
 	#define DBG_OUTPUT_TO_DEBUGGER
 	#define	DBG_FILENAME_LENGTH		16
-	#define DBG_DEFAULT_CHANNEL		DC_ALL
+	#define DBG_DEFAULT_CHANNEL		DC_SYSTEM
 #endif
 
 
