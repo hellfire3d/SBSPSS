@@ -149,6 +149,7 @@ public:
 public:
 virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
+virtual	bool			alwaysThink()								{return(false);}
 
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
@@ -205,6 +206,8 @@ class CPlayerThing : public CThing
 {
 public:
 virtual	TYPE		getThingType()					{return TYPE_PLAYER;}
+virtual	bool		alwaysThink()					{return(true);}
+
 };
 
 class CPlayerProjectileThing : public CThing

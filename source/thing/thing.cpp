@@ -54,15 +54,14 @@
 	Vars
 	---- */
 
-static int	s_RenderBBoxX0=0;
-static int	s_RenderBBoxX1=512;
-static int	s_RenderBBoxY0=0;
-static int	s_RenderBBoxY1=256;
-static int	s_ThinkBBoxX0=0-256;
-static int	s_ThinkBBoxX1=512+526;
-static int	s_ThinkBBoxY0=0-128;
-static int	s_ThinkBBoxY1=256+128;
-
+static const int	s_RenderBBoxX0=0;
+static const int	s_RenderBBoxX1=512;
+static const int	s_RenderBBoxY0=0;
+static const int	s_RenderBBoxY1=256;
+static const int	s_ThinkBBoxX0=0-256;
+static const int	s_ThinkBBoxX1=512+526;
+static const int	s_ThinkBBoxY0=0-128;
+static const int	s_ThinkBBoxY1=256+128;
 
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];//={NULL,NULL};
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
@@ -204,12 +203,13 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			bool	Flag=true;
 			// Will speed this up
 			
-			if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=false;
-			if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=false;
+			if (!thing->alwaysThink())
+			{
+				if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=false;
+				if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=false;
+			}
 			thing->setThinkFlag(Flag);
 
-			if (thing->getThingType()==CThing::TYPE_PLAYER)
-				Flag=true;
 			if (Flag)
 			{
 				thing->think(_frames);
