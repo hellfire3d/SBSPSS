@@ -15,6 +15,7 @@
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
+#if defined(__VERSION_DEBUG__)
 
 #include "paul\animtest.h"
 
@@ -316,6 +317,11 @@ void CAnimTestScene::think(int _frames)
 	}
 }
 
+#else
+void	AnimTestDummyStub()
+{
+}
+#endif
 
 /*===========================================================================
  end */

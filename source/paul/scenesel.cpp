@@ -16,6 +16,8 @@
 	Includes
 	-------- */
 
+#if defined(__VERSION_DEBUG__)
+
 #include "paul\scenesel.h"
 
 #ifndef __GFX_FONT_H__
@@ -285,6 +287,11 @@ void CSceneSelector::selectScene(int _scene)
 	GameState::setNextScene(s_sceneList[_scene]);
 }
 
+#else
+void	SceneSelTestDummyStub()
+{
+}
+#endif
 
 /*===========================================================================
  end */

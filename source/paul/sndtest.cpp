@@ -15,6 +15,7 @@
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
+#if defined(__VERSION_DEBUG__)
 
 #include "paul\sndtest.h"
 
@@ -163,6 +164,11 @@ int CSceneSoundTest::readyToShutdown()
 	return false;
 }
 
+#else
+void	SndTestSelTestDummyStub()
+{
+}
+#endif
 
 /*===========================================================================
  end */

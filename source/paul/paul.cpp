@@ -15,6 +15,7 @@
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
+#if defined(__VERSION_DEBUG__)
 
 #include "paul\paul.h"
 
@@ -193,6 +194,11 @@ void CPaulScene::think(int _frames)
 	}
 }
 
+#else
+void	PaulDummyStub()
+{
+}
+#endif
 
 /*===========================================================================
  end */
