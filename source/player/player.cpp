@@ -702,7 +702,7 @@ void	CPlayer::think(int _frames)
 #ifdef	__USER_daveo__
 if(PadGetDown(0)&PAD_R1)
 {
-	TestFX(getPos());
+	TestFX(getPos(),this);
 }
 #endif
 
