@@ -54,20 +54,14 @@ void CNpcEnemyGenerator::think(int _frames)
 			enemy->init();
 			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
 
-			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+			u16 *waypointPtr = m_npcPath.getWaypointPtr();
 
-			if ( sourceWaypoint )
-			{
-				// skip first waypoint
+			// skip first waypoint
+			waypointPtr++;
+			waypointPtr++;
 
-				sourceWaypoint = sourceWaypoint->nextWaypoint;
-
-				while( sourceWaypoint )
-				{
-					enemy->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
-					sourceWaypoint = sourceWaypoint->nextWaypoint;
-				}
-			}
+			enemy->setWaypointCount( m_npcPath.getWaypointCount() - 1 );
+			enemy->setWaypointPtr( waypointPtr );
 
 			enemy->setPathType( m_npcPath.getPathType() );
 

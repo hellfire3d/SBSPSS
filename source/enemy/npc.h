@@ -104,7 +104,10 @@ public:
 	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
 	void				setHeading( s32 xPos, s32 yPos );
-	void				addWaypoint( s32 xPos, s32 yPos );
+	//void				addWaypoint( u16 *ptr );
+	//void				addWaypoint( u16 *ptrX, u16 *ptrY );
+	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
+	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
 	virtual u8			hasBeenAttacked();

@@ -70,7 +70,8 @@ public:
 	void				think(int _frames);
 	virtual void		render();
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
-	void				addWaypoint( s32 xPos, s32 yPos );
+	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
+	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );

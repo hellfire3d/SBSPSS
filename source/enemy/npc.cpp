@@ -468,44 +468,40 @@ void CNpcEnemy::setupWaypoints( sThingActor *ThisActor )
 
 	u16 newXPos, newYPos;
 
+	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
+
 	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
 
 	setStartPos( newXPos, newYPos );
-	addWaypoint( newXPos, newYPos );
 
 	if ( ThisActor->PointCount > 1 )
 	{
-		for (int pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
 
-			addWaypoint( newXPos, newYPos );
-
-			if ( pointNum == 1 )
-			{
-				setHeading( newXPos, newYPos );
-			}
-		}
+		setHeading( newXPos, newYPos );
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcEnemy::addWaypoint( s32 xPos, s32 yPos )
+/*void CNpcEnemy::addWaypoint( u16 *ptr )
 {
-	DVECTOR newPos;
-
-	newPos.vx = xPos << 4;
-	newPos.vy = yPos << 4;
-
-	m_npcPath.addWaypoint( newPos );
+	m_npcPath.addWaypoint( ptr );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::addWaypoint( u16 *ptrX, u16 *ptrY )
+{
+	m_npcPath.addWaypoint( ptrX, ptrY );
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -552,7 +548,6 @@ void CNpcEnemy::init()
 	m_isDying = false;
 
 	m_health = m_data[this->m_type].initHealth;
-	m_health = 1;
 
 	m_extendDir = EXTEND_RIGHT;
 
@@ -615,7 +610,7 @@ void CNpcEnemy::reinit()
 
 void CNpcEnemy::shutdown()
 {
-	m_npcPath.removeAllWaypoints();
+	//m_npcPath.removeAllWaypoints();
 
 	if (m_actorGfx)	delete m_actorGfx;
 
@@ -1088,26 +1083,19 @@ void CNpcEnemy::processShot( int _frames )
 			{
 				case NPC_GENERIC_HIT_CHECK_HEALTH:
 				{
-					if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
+					m_health -= 5;
+
+					if ( m_health < 0 )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 					}
 					else
 					{
-						m_health -= 5;
+						m_state = NPC_GENERIC_HIT_RECOIL;
 
-						if ( m_health < 0 )
-						{
-							m_state = NPC_GENERIC_HIT_DEATH_START;
-						}
-						else
-						{
-							m_state = NPC_GENERIC_HIT_RECOIL;
-
-							m_animPlaying = true;
-							m_animNo = m_data[m_type].recoilAnim;
-							m_frame = 0;
-						}
+						m_animPlaying = true;
+						m_animNo = m_data[m_type].recoilAnim;
+						m_frame = 0;
 					}
 
 					break;

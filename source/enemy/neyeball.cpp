@@ -236,23 +236,16 @@ void CNpcEyeballEnemy::processShot( int _frames )
 	{
 		case NPC_GENERIC_HIT_CHECK_HEALTH:
 		{
-			if ( CLevel::getCurrentChapter() == 1 && CLevel::getCurrentChapterLevel() == 1 )
+			m_health -= 5;
+
+			if ( m_health < 0 )
 			{
 				m_state = NPC_GENERIC_HIT_DEATH_START;
 			}
 			else
 			{
-				m_health -= 5;
-
-				if ( m_health < 0 )
-				{
-					m_state = NPC_GENERIC_HIT_DEATH_START;
-				}
-				else
-				{
-					m_state = 0;
-					m_controlFunc = NPC_CONTROL_MOVEMENT;
-				}
+				m_state = 0;
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
 			}
 
 			break;

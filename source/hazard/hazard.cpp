@@ -306,7 +306,10 @@ void CNpcHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	u16 newXPos, newYPos;
 
+	m_npcPath.setWaypointCount( ThisHazard->PointCount - 1 );
+
 	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
@@ -317,33 +320,6 @@ void CNpcHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	Pos = startPos;
 	m_base = Pos;
-
-	addWaypoint( newXPos, newYPos );
-
-	if ( ThisHazard->PointCount > 1 )
-	{
-		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
-
-			addWaypoint( newXPos, newYPos );
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcHazard::addWaypoint( s32 xPos, s32 yPos )
-{
-	DVECTOR newPos;
-
-	newPos.vx = xPos << 4;
-	newPos.vy = yPos << 4;
-
-	m_npcPath.addWaypoint( newPos );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +367,7 @@ void CNpcHazard::shutdown()
 	delete m_modelGfx;
 	// remove waypoints
 
-	m_npcPath.removeAllWaypoints();
+	//m_npcPath.removeAllWaypoints();
 
 	//if (m_actorGfx)	delete m_actorGfx;
 

@@ -213,7 +213,10 @@ void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	u16 newXPos, newYPos;
 
+	m_npcPath.setWaypointCount( ThisHazard->PointCount - 1 );
+
 	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
@@ -224,21 +227,6 @@ void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	Pos = startPos;
 	m_base = Pos;
-
-	addWaypoint( newXPos, newYPos );
-
-	if ( ThisHazard->PointCount > 1 )
-	{
-		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
-
-			addWaypoint( newXPos, newYPos );
-		}
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

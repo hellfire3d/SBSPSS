@@ -87,24 +87,28 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 		newPlatform->setThingSubType( m_targetType );
 		newPlatform->setGraphic( m_graphicNum );
 
-		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+		DVECTOR startPos = Pos;
+		newPlatform->init( startPos );
+
+		newPlatform->setWaypointCount( m_npcPath.getWaypointCount() );
+		newPlatform->setWaypointPtr( m_npcPath.getWaypointPtr() );
+
+		/*CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
 
 		if ( sourceWaypoint )
 		{
 			DVECTOR startPos;
-			startPos.vx = sourceWaypoint->pos.vx;
-			startPos.vy = sourceWaypoint->pos.vy;
-			//startPos.vx = 100;
-			//startPos.vy = 100;
+			startPos.vx = *sourceWaypoint->posX << 4;
+			startPos.vy = *sourceWaypoint->posY << 4;
 
 			newPlatform->init( startPos );
 
 			while( sourceWaypoint )
 			{
-				newPlatform->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
+				newPlatform->addWaypoint( sourceWaypoint->posX, sourceWaypoint->posY );
 				sourceWaypoint = sourceWaypoint->nextWaypoint;
 			}
-		}
+		}*/
 
 		newPlatform->setTiltable( false );
 		newPlatform->postInit();

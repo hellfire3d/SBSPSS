@@ -59,7 +59,7 @@ void CNpcConveyorPlatformGenerator::think( int _frames )
 
 		//m_timer = ( 3 * GameState::getOneSecondInFrames() ) + ( getRnd() % ( ( m_data[m_type].initTimer - 1 ) * GameState::getOneSecondInFrames() ) );
 
-		// generate new falling platform
+		// generate new conveyor platform
 
 		CNpcPlatform *newPlatform = NULL;
 		newPlatform = CNpcPlatform::Create( NPC_CONVEYOR_PLATFORM );
@@ -69,24 +69,11 @@ void CNpcConveyorPlatformGenerator::think( int _frames )
 		newPlatform->setThingSubType( NPC_CONVEYOR_PLATFORM );
 		newPlatform->setGraphic( m_graphicNum );
 
-		CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+		DVECTOR startPos = Pos;
+		newPlatform->init( startPos );
 
-		if ( sourceWaypoint )
-		{
-			DVECTOR startPos;
-			startPos.vx = sourceWaypoint->pos.vx;
-			startPos.vy = sourceWaypoint->pos.vy;
-			//startPos.vx = 100;
-			//startPos.vy = 100;
-
-			newPlatform->init( startPos );
-
-			while( sourceWaypoint )
-			{
-				newPlatform->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
-				sourceWaypoint = sourceWaypoint->nextWaypoint;
-			}
-		}
+		newPlatform->setWaypointCount( m_npcPath.getWaypointCount() );
+		newPlatform->setWaypointPtr( m_npcPath.getWaypointPtr() );
 
 		newPlatform->setTiltable( false );
 		newPlatform->postInit();

@@ -47,12 +47,13 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	u16 newXPos, newYPos;
 
+	m_npcPath.setWaypointCount( ThisHazard->PointCount - 1 );
+
 	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
-
-	addWaypoint( newXPos, newYPos );
 
 	DVECTOR startPos;
 	startPos.vx = newXPos << 4;
@@ -60,23 +61,6 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 
 	Pos = startPos;
 	m_base = Pos;
-
-	if ( ThisHazard->PointCount > 1 )
-	{
-		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
-
-			addWaypoint( newXPos, newYPos );
-		}
-	}
-	else
-	{
-		addWaypoint( newXPos, newYPos );
-	}
 
 	s32 minX, maxX, minY, maxY;
 

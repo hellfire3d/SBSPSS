@@ -15,14 +15,22 @@
 #include "enemy\npcpath.h"
 #endif
 
-bool CNpcWaypoint::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcPath::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 {
 	s32 xDistSqr, yDistSqr;
 
-	*xDist = this->pos.vx - testPos.vx;
+	u16 *waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
+
+	*xDist = ( *waypoint << 4 ) - testPos.vx;
 	xDistSqr = (*xDist) * (*xDist);
 
-	*yDist = this->pos.vy - testPos.vy;
+	waypoint++;
+
+	*yDist = ( *waypoint << 4 ) - testPos.vy;
 	yDistSqr = (*yDist) * (*yDist);
 
 	if ( xDistSqr + yDistSqr < 100 )
@@ -35,83 +43,29 @@ bool CNpcWaypoint::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPath::initPath()
 {
-	waypoint = NULL;
+	//waypoint = NULL;
 	pathType = SINGLE_USE_PATH;
-	currentWaypoint = NULL;
-	lastWaypoint = NULL;
+	currentWaypoint = 0;
+	lastWaypoint = 0;
 	waypointCount = 0;
 	reversePath = false;
 	minX = maxX = minY = maxY = 0;
+	waypointPtr = NULL;
+
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPath::resetPath()
 {
-	currentWaypoint = waypoint;
-	lastWaypoint = NULL;
+	lastWaypoint = currentWaypoint = 0;
 }
 
-void CNpcPath::addWaypoint( DVECTOR newPos )
-{
-	CNpcWaypoint *testWaypoint;
-	CNpcWaypoint *newWaypoint;
-
-	testWaypoint = this->waypoint;
-
-	if ( testWaypoint )
-	{
-		// find end of path
-
-		while ( testWaypoint->nextWaypoint )
-		{
-			testWaypoint = testWaypoint->nextWaypoint;
-		}
-
-		newWaypoint = new( "waypoint" ) CNpcWaypoint;
-		newWaypoint->pos = newPos;
-		newWaypoint->nextWaypoint = NULL;
-		newWaypoint->prevWaypoint = testWaypoint;
-
-		testWaypoint->nextWaypoint = newWaypoint;
-		waypointCount++;
-
-		if ( newPos.vx < minX )
-		{
-			minX = newPos.vx;
-		}
-		else if ( newPos.vx > maxX )
-		{
-			maxX = newPos.vx;
-		}
-
-		if ( newPos.vy < minY )
-		{
-			minY = newPos.vy;
-		}
-		else if ( newPos.vy > maxY )
-		{
-			maxY = newPos.vy;
-		}
-	}
-	else
-	{
-		// no waypoints exist in this path, create
-
-		newWaypoint = new( "waypoint" ) CNpcWaypoint;
-		newWaypoint->pos = newPos;
-		newWaypoint->nextWaypoint = NULL;
-		newWaypoint->prevWaypoint = NULL;
-
-		this->waypoint = newWaypoint;
-		waypointCount++;
-
-		currentWaypoint = this->waypoint;
-
-		minX = maxX = newPos.vx;
-		minY = maxY = newPos.vy;
-	}
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPath::getPathXExtents( s32 *minExtent, s32 *maxExtent )
 {
@@ -119,48 +73,93 @@ void CNpcPath::getPathXExtents( s32 *minExtent, s32 *maxExtent )
 	*maxExtent = maxX;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPath::getPathYExtents( s32 *minExtent, s32 *maxExtent )
 {
 	*minExtent = minY;
 	*maxExtent = maxY;
 }
 
-void CNpcPath::removeAllWaypoints()
-{
-	CNpcWaypoint *testWaypoint;
-	CNpcWaypoint *lastWaypoint;
-
-	testWaypoint = this->waypoint;
-
-	while ( testWaypoint )
-	{
-		lastWaypoint = testWaypoint;
-		testWaypoint = testWaypoint->nextWaypoint;
-
-		delete lastWaypoint;
-	}
-
-	this->waypoint = NULL;
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPath::setPathType( u8 newPathType )
 {
 	pathType = (NPC_PATH_TYPE) newPathType;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 u8 CNpcPath::getPathType()
 {
 	return( pathType );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPath::setWaypointPtr( u16 *newPtr )
+{
+	waypointPtr = newPtr;
+
+	setPathExtents();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPath::setPathExtents()
+{
+	u8 tempWaypoint;
+	u16 *tempPtr = waypointPtr;
+	DVECTOR mapPos;
+
+	if ( tempPtr )
+	{
+		mapPos.vx = *tempPtr << 4;
+		*tempPtr++;
+		mapPos.vy = *tempPtr << 4;
+		*tempPtr++;
+
+		minX = maxX = mapPos.vx;
+		minY = maxY = mapPos.vy;
+
+		for ( tempWaypoint = 1 ; tempWaypoint <= waypointCount ; tempWaypoint++ )
+		{
+			mapPos.vx = *tempPtr << 4;
+			*tempPtr++;
+			mapPos.vy = *tempPtr << 4;
+			*tempPtr++;
+
+			if ( mapPos.vx < minX )
+			{
+				minX = mapPos.vx;
+			}
+			else if ( mapPos.vx > maxX )
+			{
+				maxX = mapPos.vx;
+			}
+
+			if ( mapPos.vy < minY )
+			{
+				minY = mapPos.vy;
+			}
+			else if ( mapPos.vy > maxY )
+			{
+				maxY = mapPos.vy;
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcPath::incPath()
 {
 	if ( !reversePath )
 	{
-		if ( currentWaypoint->nextWaypoint )
+		if ( currentWaypoint < waypointCount )
 		{
 			lastWaypoint = currentWaypoint;
-			currentWaypoint = currentWaypoint->nextWaypoint;
+			currentWaypoint++;
 		}
 		else
 		{
@@ -175,7 +174,7 @@ bool CNpcPath::incPath()
 					// go back to start
 
 					lastWaypoint = currentWaypoint;
-					currentWaypoint = this->waypoint;
+					currentWaypoint = 0;
 
 					break;
 
@@ -184,10 +183,10 @@ bool CNpcPath::incPath()
 
 					reversePath = !reversePath;
 
-					if ( currentWaypoint->prevWaypoint )
+					if ( currentWaypoint > 0 )
 					{
 						lastWaypoint = currentWaypoint;
-						currentWaypoint = currentWaypoint->prevWaypoint;
+						currentWaypoint--;
 					}
 
 					break;
@@ -198,19 +197,19 @@ bool CNpcPath::incPath()
 	{
 		// must be pong path if reversed
 
-		if ( currentWaypoint->prevWaypoint )
+		if ( currentWaypoint > 0 )
 		{
 			lastWaypoint = currentWaypoint;
-			currentWaypoint = currentWaypoint->prevWaypoint;
+			currentWaypoint--;
 		}
 		else
 		{
 			reversePath = !reversePath;
 
-			if ( currentWaypoint->nextWaypoint )
+			if ( currentWaypoint < waypointCount )
 			{
 				lastWaypoint = currentWaypoint;
-				currentWaypoint = currentWaypoint->nextWaypoint;
+				currentWaypoint++;
 			}
 		}
 	}
@@ -218,11 +217,13 @@ bool CNpcPath::incPath()
 	return( false );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPath::reversePathDir()
 {
 	if ( lastWaypoint )
 	{
-		CNpcWaypoint *tempWaypoint;
+		u8 tempWaypoint;
 
 		tempWaypoint = currentWaypoint;
 		currentWaypoint = lastWaypoint;
@@ -235,35 +236,36 @@ void CNpcPath::reversePathDir()
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY )
 {
-	return( currentWaypoint->isPointNear( currentPos, distX, distY ) );
+	return( isPointNear( currentPos, distX, distY ) );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY )
 {
-	if ( !this->waypoint )
+	if ( !waypointPtr )
 	{
 		return( 0 );
-	}
-
-	if ( !currentWaypoint )
-	{
-		// if no currentWaypoint set, start it off
-
-		currentWaypoint = this->waypoint;
 	}
 
 	*pathComplete = false;
 	*waypointChange = false;
 
-	if ( currentWaypoint->isPointNear( currentPos, distX, distY ) )
+	if ( isPointNear( currentPos, distX, distY ) )
 	{
 		*pathComplete = incPath();
 		*waypointChange = true;
 
-		*distX = currentWaypoint->pos.vx - currentPos.vx;
-		*distY = currentWaypoint->pos.vy - currentPos.vy;
+		u16 *waypoint = waypointPtr;
+		waypoint += 2 * currentWaypoint;
+
+		*distX = ( *waypoint << 4 ) - currentPos.vx;
+		waypoint++;
+		*distY = ( *waypoint << 4 ) - currentPos.vy;
 	}
 
 	s32 headingToTarget = ratan2( *distY, *distX );
@@ -271,26 +273,25 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 	return( headingToTarget );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading, u8 waypointDist )
 {
 	bool pointChange = false;
 
 	*pathComplete = false;
 
-	if ( !this->waypoint )
+	if ( !waypointPtr )
 	{
 		return( true );
 	}
 
-	if ( !currentWaypoint )
-	{
-		// if no currentWaypoint set, start it off
+	u16 *waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
 
-		currentWaypoint = this->waypoint;
-	}
-
-	*distX = currentWaypoint->pos.vx - currentPos.vx;
-	*distY = currentWaypoint->pos.vy - currentPos.vy;
+	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	waypoint++;
+	*distY = ( *waypoint << 4 ) - currentPos.vy;
 
 	if ( abs( *distX ) < waypointDist )
 	{
@@ -298,8 +299,12 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 		*pathComplete = incPath();
 	}
 
-	*distX = currentWaypoint->pos.vx - currentPos.vx;
-	*distY = currentWaypoint->pos.vy - currentPos.vy;
+	waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
+
+	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	waypoint++;
+	*distY = ( *waypoint << 4 ) - currentPos.vy;
 
 	if ( *distX > 0 )
 	{
@@ -313,26 +318,25 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 	return( pointChange );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading )
 {
 	bool pointChange = false;
 
 	*pathComplete = false;
 
-	if ( !this->waypoint )
+	if ( !waypointPtr )
 	{
 		return( true );
 	}
 
-	if ( !currentWaypoint )
-	{
-		// if no currentWaypoint set, start it off
+	u16 *waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
 
-		currentWaypoint = this->waypoint;
-	}
-
-	*distX = currentWaypoint->pos.vx - currentPos.vx;
-	*distY = currentWaypoint->pos.vy - currentPos.vy;
+	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	waypoint++;
+	*distY = ( *waypoint << 4 ) - currentPos.vy;
 
 	if ( abs( *distY ) < 10 )
 	{
@@ -340,8 +344,12 @@ bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX
 		*pathComplete = incPath();
 	}
 
-	*distX = currentWaypoint->pos.vx - currentPos.vx;
-	*distY = currentWaypoint->pos.vy - currentPos.vy;
+	waypoint = waypointPtr;
+	waypoint += 2 * currentWaypoint;
+
+	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	waypoint++;
+	*distY = ( *waypoint << 4 ) - currentPos.vy;
 
 	if ( *distY > 0 )
 	{
@@ -353,9 +361,4 @@ bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX
 	}
 
 	return( pointChange );
-}
-
-CNpcWaypoint *CNpcPath::getWaypointList()
-{
-	return( waypoint );
 }

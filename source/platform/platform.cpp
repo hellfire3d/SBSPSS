@@ -449,10 +449,12 @@ void CNpcPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	int pointNum;
 
 	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
+	u16 *waypoints;
 
 	u16 newXPos, newYPos;
 
 	newXPos = (u16) *PntList;
+	waypoints = PntList;
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
@@ -463,20 +465,9 @@ void CNpcPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 	init( startPos );
 
-	addWaypoint( newXPos, newYPos );
+	setWaypointCount( ThisPlatform->PointCount - 1 );
 
-	if ( ThisPlatform->PointCount > 1 )
-	{
-		for ( pointNum = 1 ; pointNum < ThisPlatform->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
-
-			addWaypoint( newXPos, newYPos );
-		}
-	}
+	setWaypointPtr( waypoints );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -605,7 +596,7 @@ void CNpcPlatform::postInit()
 void CNpcPlatform::shutdown()
 {
 	delete m_modelGfx;
-	m_npcPath.removeAllWaypoints();
+	//m_npcPath.removeAllWaypoints();
 
 	// temporary
 	CPlatformThing::shutdown();
@@ -1191,15 +1182,17 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcPlatform::addWaypoint( s32 xPos, s32 yPos )
+/*void CNpcPlatform::addWaypoint( u16 *ptr )
 {
-	DVECTOR newPos;
-
-	newPos.vx = xPos << 4;
-	newPos.vy = yPos << 4;
-
-	m_npcPath.addWaypoint( newPos );
+	m_npcPath.addWaypoint( ptr );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::addWaypoint( u16 *ptrX, u16 *ptrY )
+{
+	m_npcPath.addWaypoint( ptrX, ptrY );
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

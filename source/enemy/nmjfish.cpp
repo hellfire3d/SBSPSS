@@ -70,13 +70,15 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 	s32 startX = 0;
 
+	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
+
 	newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	newYPos = (u16) *PntList;
 	PntList++;
 
 	setStartPos( newXPos, newYPos );
-	addWaypoint( newXPos, newYPos );
 
 	startX = newXPos << 4;
 
@@ -88,8 +90,6 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 			PntList++;
 			newYPos = (u16) *PntList;
 			PntList++;
-
-			addWaypoint( newXPos, newYPos );
 
 			if ( pointNum == 1 )
 			{
@@ -337,16 +337,8 @@ void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
 			enemy->init();
 			enemy->setStartPos( Pos.vx >> 4, ( Pos.vy + 20 ) >> 4 );
 
-			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
-
-			if ( sourceWaypoint )
-			{
-				while( sourceWaypoint )
-				{
-					enemy->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
-					sourceWaypoint = sourceWaypoint->nextWaypoint;
-				}
-			}
+			enemy->setWaypointCount( m_npcPath.getWaypointCount() );
+			enemy->setWaypointPtr( m_npcPath.getWaypointPtr() );
 
 			enemy->setPathType( CNpcPath::PONG_PATH );
 			enemy->postInit();

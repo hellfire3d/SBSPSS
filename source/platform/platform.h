@@ -108,7 +108,8 @@ public:
 	virtual u8			checkCollisionDelta( CThing *_thisThing, int threshold, CRECT collisionArea );
 	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 	void				setTiltable( bool isTiltable );
-	void				addWaypoint( s32 xPos, s32 yPos );
+	void				setWaypointPtr( u16 *newPtr )							{m_npcPath.setWaypointPtr( newPtr );}
+	void				setWaypointCount( u8 newCount )							{m_npcPath.setWaypointCount( newCount );}
 	void				setGraphic( sThingPlatform *ThisPlatform );
 	void				setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );

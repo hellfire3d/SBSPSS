@@ -37,12 +37,12 @@ void CNpcFishFolk::postInit()
 	newPos.vx = 200;
 	newPos.vy = 400;
 
-	m_npcPath.addWaypoint( newPos );
+	//m_npcPath.addWaypoint( newPos );
 
 	newPos.vx = 500;
 	newPos.vy = 400;
 
-	m_npcPath.addWaypoint( newPos );
+	//m_npcPath.addWaypoint( newPos );
 
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 }

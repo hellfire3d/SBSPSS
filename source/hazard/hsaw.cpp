@@ -30,7 +30,7 @@ void CNpcSawbladeHazard::init()
 	newPos.vx = 300;
 	newPos.vy = 100;
 
-	m_npcPath.addWaypoint( newPos );
+	//m_npcPath.addWaypoint( newPos );
 
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 }

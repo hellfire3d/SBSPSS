@@ -105,40 +105,34 @@ void CNpcJumpingClamEnemy::setupWaypoints( sThingActor *ThisActor )
 	u16 newXPos, newYPos;
 	u16 startXPos, startYPos, endXPos, endYPos;
 
+	m_npcPath.setWaypointCount( ThisActor->PointCount - 1 );
+
 	startXPos = newXPos = (u16) *PntList;
+	setWaypointPtr( PntList );
 	PntList++;
 	startYPos = newYPos = (u16) *PntList;
 	PntList++;
 
 	setStartPos( newXPos, newYPos );
-	addWaypoint( newXPos, newYPos );
 
 	m_maxExtension = 10;
 
 	if ( ThisActor->PointCount > 1 )
 	{
-		for (int pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
-		{
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
 
-			addWaypoint( newXPos, newYPos );
+		endXPos = newXPos;
+		endYPos = newYPos;
 
-			if ( pointNum == 1 )
-			{
-				endXPos = newXPos;
-				endYPos = newYPos;
+		setHeading( newXPos, newYPos );
 
-				setHeading( newXPos, newYPos );
+		s32 xDist = ( endXPos - startXPos ) << 4;
+		s32 yDist = ( endYPos - startYPos ) << 4;
 
-				s32 xDist = ( endXPos - startXPos ) << 4;
-				s32 yDist = ( endYPos - startYPos ) << 4;
-
-				m_maxExtension = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
-			}
-		}
+		m_maxExtension = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
 	}
 }
 

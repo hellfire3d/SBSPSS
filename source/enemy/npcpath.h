@@ -16,16 +16,6 @@
 
 #include "system\global.h"
 
-class CNpcWaypoint
-{
-public:
-	DVECTOR	pos;
-	CNpcWaypoint *nextWaypoint;
-	CNpcWaypoint *prevWaypoint;
-
-	bool	isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
-};
-
 class CNpcPath
 {
 public:
@@ -37,7 +27,6 @@ public:
 	};
 
 	void			initPath();
-	void			addWaypoint( DVECTOR newPos );
 	void			removeAllWaypoints();
 	void			setPathType( u8 newPathType );
 	u8				getPathType();
@@ -51,17 +40,22 @@ public:
 	void			getPathXExtents( s32 *minExtent, s32 *maxExtent );
 	void			getPathYExtents( s32 *minExtent, s32 *maxExtent );
 	u8				getWaypointCount()						{ return( waypointCount ); }
-	CNpcWaypoint	*getWaypointList();
+	void			setWaypointCount( u8 newCount )			{ waypointCount = newCount; }
+	void			setWaypointPtr( u16 *newPtr );
+	void			setPathExtents();
+	u16				*getWaypointPtr()						{ return( waypointPtr ); }
+	bool			isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist );
 
 private:
-	CNpcWaypoint	*waypoint;
 	NPC_PATH_TYPE	pathType;
 	u8				waypointCount;
 	bool			reversePath;
-	CNpcWaypoint	*currentWaypoint;
-	CNpcWaypoint	*lastWaypoint;
+	u8				currentWaypoint;
+	u8				lastWaypoint;
 	s32				minX, maxX;
 	s32				minY, maxY;
+
+	u16				*waypointPtr;
 };
 
 #endif
