@@ -131,6 +131,7 @@ GFX_DATA_OUT		+=	$(COLLISION_OUT)
 # Actors
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
+# Player List
 SPONGEBOB_ANIM_LIST :=	buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
 						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate run \
 						runstart runstop soakup talk01 teeterback teeterfront \
@@ -148,6 +149,10 @@ SPONGEBOB_EXTRA_TEX :=	SBBackNormal \
 						SBTopNormal
 
 #----------------------------------------------------------------------------
+# NPC List
+
+#----------------------------------------------------------------------------
+# Enemy List
 CLAM_ANIM_LIST :=		 clamsidesnap
 
 #----------------------------------------------------------------------------
@@ -156,8 +161,15 @@ ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/Actors
 ACTORS_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
+ACTORS_PLAYER_LIST :=	SPONGEBOB
 
-ACTORS_LIST :=			SPONGEBOB CLAM
+ACTORS_NPC_LIST :=		
+
+ACTORS_ENEMY_LIST :=	CLAM
+
+ACTORS_LIST :=			$(foreach ACTOR,$(ACTORS_PLAYER_LIST),$(ACTOR)) \
+						$(foreach ACTOR,$(ACTORS_NPC_LIST),$(ACTOR)) \
+						$(foreach ACTOR,$(ACTORS_ENEMY_LIST),$(ACTOR))
 
 ACTORS_MAKEFILES :=		$(foreach ACTOR,$(ACTORS_LIST),$(ACTOR_MAKEFILE_DIR)/$(ACTOR).mak)
 
