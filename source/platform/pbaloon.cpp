@@ -260,6 +260,11 @@ int CNpcBalloonBridgePlatform::checkCollisionAgainst(CThing *_thisThing, int _fr
 
 						m_targetHeight = m_base.vy + ( ( ( BRIDGE_NUM_BALLOONS - m_balloonCount ) * m_maxExtension ) / BRIDGE_NUM_BALLOONS );
 
+						if ( m_soundId == NOT_PLAYING )
+						{
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BALLOON_POP, true );
+						}
+
 						break;
 					}
 				}
