@@ -35,6 +35,9 @@
 #include <ACTOR_SHARKMAN_ANIM.h>
 #endif
 
+#define	ANIM_SHARKMAN_IDLE2_	ANIM_SHARKMAN_IDLE1_
+#define	ANIM_SHARKMAN_KICK_SAND	ANIM_SHARKMAN_IDLE1_
+#define	ANIM_SHARKMAN_PUSHUPS	ANIM_SHARKMAN_IDLE1_
 
 void CNpcSharkManEnemy::processMovement( int _frames )
 {
