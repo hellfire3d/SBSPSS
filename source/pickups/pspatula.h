@@ -57,9 +57,15 @@ private:
 
 class CBalloonAndSpatulaPickup : public CSpatulaPickup
 {
+public:
+	virtual void		init();
+
 protected:
 	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
+
+private:
+	int					m_sin;
 };
 
 
