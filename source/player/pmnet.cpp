@@ -193,6 +193,7 @@ void	CPlayerModeNet::think()
 					if(((CNpcEnemy*)thing)->canBeCaughtByNet())
 					{
 						((CNpcEnemy*)thing)->caughtWithNet();
+						m_RGB = ((CNpcEnemy*)thing)->getRGB();
 						m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
 						thing=NULL;
 						if(m_player->getJellyFishAmmo()==0)
@@ -238,6 +239,7 @@ void	CPlayerModeNet::think()
 									5*60);
 				projectile->setLayerCollision( m_player->getLayerCollision() );
 				projectile->updateCollisionArea();
+				projectile->setRGB( m_RGB );
 
 				m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				m_player->useOneJellyFishAmmo();

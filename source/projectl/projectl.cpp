@@ -428,6 +428,10 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
 	{
 		m_reversed = 1;
 	}
+
+	m_RGB.r = 0;
+	m_RGB.g = 0;
+	m_RGB.b = 0;
 }
 
 void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType )
@@ -554,7 +558,7 @@ void CPlayerProjectile::render()
 	}
 
 	SprFrame = m_spriteBank->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,10);
-	setRGB0( SprFrame, 255, 128, 255 );
+	setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 }
 
 DVECTOR CPlayerProjectile::getScreenOffset()

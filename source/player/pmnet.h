@@ -60,6 +60,7 @@ private:
 	int							m_netFrame;
 	NetState					m_netState;
 	int							m_netSin;
+	CVECTOR						m_RGB;
 
 };
 

@@ -1696,3 +1696,15 @@ void CNpcEnemy::processCoralBlower( int _frames )
 
 	m_isBlowerOn = false;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CVECTOR CNpcEnemy::getRGB()
+{
+	CVECTOR rgb;
+	rgb.r = 0;
+	rgb.g = 0;
+	rgb.b = 0;
+
+	return( rgb );
+}

@@ -141,3 +141,16 @@ void CNpcSmallJellyfish2BackgroundEnemy::collidedWith( CThing *_thisThing )
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CVECTOR CNpcSmallJellyfish2BackgroundEnemy::getRGB()
+{
+	CVECTOR rgb;
+
+	rgb.r = 128;
+	rgb.g = 128;
+	rgb.b = 255;
+
+	return( rgb );
+}

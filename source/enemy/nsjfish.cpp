@@ -376,3 +376,16 @@ void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
 	projectile->setHasRGB( true );
 	projectile->setRGB( 255, 128, 255 );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CVECTOR CNpcSmallJellyfishEnemy::getRGB()
+{
+	CVECTOR rgb;
+
+	rgb.r = 255;
+	rgb.g = 128;
+	rgb.b = 255;
+
+	return( rgb );
+}
