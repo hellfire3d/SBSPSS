@@ -22,12 +22,12 @@
 #include "gui\gframe.h"
 #endif
 
-#ifndef	__GUI_GSPRITE_H__
-#include "gui\gsprite.h"
+#ifndef	__GUI_GFACTORY_H__
+#include "gui\gfactory.h"
 #endif
 
-#ifndef	__GUI_GTEXTBOX_H__
-#include "gui\gtextbox.h"
+#ifndef	__MEMORY_HEADER__
+#include "mem\memory.h"
 #endif
 
 
@@ -68,27 +68,45 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CConversation::init()
+#define FRAME_WIDTH		400
+#define FRAME_HEIGHT	180
+#define TEXT_BOX_WIDTH	300
+#define TEXT_BOX_HEIGHT	20
+#define OT_POS			5
+int m_exitFlag;
+extern int newmode;
+void CPauseMenu::init()
 {
-/*
-	s_guiFrame=new ("Conversation GUI") CGUIGroupFrame();
-	s_guiFrame->init(0);
-	s_guiFrame->setObjectXYWH((512-FRAME_WIDTH)/2,256-FRAME_BOTTOM_OFFSET-FRAME_HEIGHT,FRAME_WIDTH,FRAME_HEIGHT);
-	s_guiFrame->setOt(OT_POS);
-	s_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
+	m_guiFrame=new ("Conversation GUI") CGUIControlFrame();
+	m_guiFrame->init(0);
+	m_guiFrame->setObjectXYWH((512-FRAME_WIDTH)/2,(256-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
+	m_guiFrame->setOt(OT_POS);
+	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
-		s_guiIcon=new("Conversation Icon") CGUISprite();
-		s_guiIcon->init(s_guiFrame);
-		s_guiIcon->setObjectXYWH(0,0,FRAME_HEIGHT,FRAME_HEIGHT);
-		s_guiIcon->setOt(OT_POS);
-		s_guiIcon->setSpriteBank(UI_UIGFX_SPR);
-		s_guiIcon->setFrame(0);
-
-		s_guiText=new("Conversation Text") CGUITextBox();
-		s_guiText->init(s_guiFrame);
-		s_guiText->setObjectXYWH(FRAME_HEIGHT,TEXT_BORDER,FRAME_WIDTH-FRAME_HEIGHT-TEXT_BORDER,FRAME_HEIGHT-(TEXT_BORDER*2));
-		s_guiText->setOt(OT_POS);
-*/
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,10,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__PAUSE_MENU__CONTINUE,
+										&m_exitFlag,true);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,40,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__BASICUNARMED_MODE,
+										&newmode,0);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,60,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__FULLUNARMED_MODE,
+										&newmode,1);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,80,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__SQUEAKYBOOTS_MODE,
+										&newmode,2);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,100,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__NET_MODE,
+										&newmode,3);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,120,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__CORALBLOWER_MODE,
+										&newmode,4);
 
 	m_active=false;
 }
@@ -100,9 +118,9 @@ void CConversation::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CConversation::shutdown()
+void CPauseMenu::shutdown()
 {
-//	s_guiFrame->shutdown();
+	m_guiFrame->shutdown();
 }
 
 
@@ -112,9 +130,11 @@ void CConversation::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CConversation::select()
+void CPauseMenu::select()
 {
 	m_active=true;
+	m_exitFlag=false;
+	m_guiFrame->select();
 }
 
 
@@ -124,29 +144,30 @@ void CConversation::select()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CConversation::think(int _frames)
+void CPauseMenu::unselect()
 {
-	ASSERT(m_active);
-//	if(isActive())
-//	{
-//		s_guiFrame->think(_frames);
-//	}
+	m_active=false;
+	m_exitFlag=false;
+	m_guiFrame->unselect();
 }
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CConversation::render()
+#include "game\game.h"
+#include "player\player.h"
+void CPauseMenu::think(int _frames)
 {
-	ASSERT(m_active);
-//	if(s_currentState==STATE_ACTIVE)
-//	{
-//		s_guiFrame->render();
-//	}
+	if(m_active)
+	{
+		m_guiFrame->think(_frames);
+		if(m_exitFlag||newmode!=-1)
+		{
+			unselect();
+		}
+	}
 }
 
 
@@ -156,7 +177,22 @@ void CConversation::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CConversation::isActive()
+void CPauseMenu::render()
+{
+	if(m_active)
+	{
+		m_guiFrame->render();
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPauseMenu::isActive()
 {
 	return m_active;
 }

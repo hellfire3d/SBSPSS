@@ -47,6 +47,10 @@
 #include "gfx\animtex.h"
 #endif
 
+#ifndef	__GAME_PAUSE_H__
+#include "game\pause.h"
+#endif
+
 
 int		GX=248;
 int		GY=129;
@@ -88,6 +92,9 @@ void 	CGameScene::init()
 		m_player->init();
 		m_player->setLayerCollision(Level.getCollisionLayer());
 
+		m_pauseMenu=new ("Pause Menu") CPauseMenu();
+		m_pauseMenu->init();
+
 		CFader::setFadingIn();
 
 		SetGeomOffset( GX, GY );
@@ -108,6 +115,8 @@ void	CGameScene::createPlayer()
 
 void	CGameScene::shutdown()
 {
+		m_pauseMenu->shutdown();
+
 		m_player->shutdown();		delete m_player;
 		CThing::shutdownAndDeleteAllThings();
 
@@ -121,6 +130,7 @@ void 	CGameScene::render()
 {
 		CamMtx.t[2]=ZPos;	// Temp
 
+		m_pauseMenu->render();
 		CConversation::render();
 		CThing::renderAllThings();
 		Level.render();
@@ -136,8 +146,15 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
+	if(PadGetDown(0)&PAD_START)
+	{
+		m_pauseMenu->select();
+	}
+
 	CConversation::think(_frames);
-	if(!CConversation::isActive())
+	m_pauseMenu->think(_frames);
+	if(!CConversation::isActive()&&
+	   !m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
 		CThing::thinkAllThings(_frames);

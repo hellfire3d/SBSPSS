@@ -40,8 +40,9 @@ virtual	void	createPlayer();
 	
 protected:
 
-		CLevel		Level;
-		class CPlayer	*m_player;
+		CLevel				Level;
+		class CPauseMenu	*m_pauseMenu;
+		class CPlayer		*m_player;
 		static	FontBank	*s_genericFont;
 		static	MATRIX		CamMtx;
 //static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry

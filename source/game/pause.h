@@ -36,6 +36,7 @@ public:
 	void			shutdown();
 
 	void			select();
+	void			unselect();
 	void			think(int _frames);
 	void			render();
 
@@ -43,7 +44,9 @@ public:
 
 
 private:
-	int				m_active;
+	int						m_active;
+
+	class CGUIControlFrame	*m_guiFrame;
 
 };
 
@@ -58,7 +61,7 @@ private:
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __GAME_CONVO_H__ */
+#endif	/* __GAME_PAUSE_H__ */
 
 /*===========================================================================
  end */

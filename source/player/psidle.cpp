@@ -85,7 +85,7 @@ void CPlayerStateBaseIdle::thinkControl(CPlayer *_player)
 		if(canMoveRight(_player))
 			setState(_player,STATE_RUN);
 	}
-	else if(controlHeld&PI_ACTION)
+	else if(controlDown&PI_ACTION)
 	{
 		setState(_player,STATE_ATTACK);
 	}

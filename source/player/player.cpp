@@ -57,6 +57,9 @@
 	------------------- */
 
 //#define _RECORD_DEMO_MODE_
+#ifdef __USER_paul__
+#define _STATE_DEBUG_
+#endif 
 
 
 /*----------------------------------------------------------------------
@@ -101,6 +104,38 @@ static void writeDemoControls()
 }
 #endif
 
+
+#ifdef _STATE_DEBUG_
+static const char *s_stateText[NUM_STATES]=
+{
+	"IDLE",
+	"IDLETEETER",
+	"JUMP",
+	"RUN",
+	"FALL",
+	"FALLFAR",
+	"BUTTBOUNCE",
+	"BUTTFALL",
+	"BUTTLAND",
+	"ATTACK",
+	"RUNATTACK",
+	"AIRATTACK",
+	"DUCK",
+	"SOAKUP",
+	"GETUP",
+	"DEAD",
+};
+static const char *s_modeText[NUM_PLAYERMODES]=
+{
+	"BASICUNARMED",
+	"FULLUNARMED",
+	"SQUEAKYBOOTS",
+	"NET",
+	"CORALBLOWER",
+};
+#include "gfx\font.h"	
+FontBank	s_debugFont;
+#endif
 
 
 int s_health;
@@ -179,6 +214,11 @@ m_animFrame=0;
 
 m_skel.setAng(512);
 //m_skel.setAngInc(678);
+
+#ifdef _STATE_DEBUG_
+	s_debugFont.initialise(&standardFont);
+	s_debugFont.setJustification(FontBank::JUST_LEFT);
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -189,6 +229,9 @@ m_skel.setAng(512);
   ---------------------------------------------------------------------- */
 void	CPlayer::shutdown()
 {
+#ifdef _STATE_DEBUG_
+	s_debugFont.dump();
+#endif
 	CThing::shutdown();
 }
 
@@ -198,9 +241,7 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __USER_paul__
 int newmode=-1;
-#endif
 
 void	CPlayer::think(int _frames)
 {
@@ -216,12 +257,12 @@ if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 	Pos.vx=23*16;
 	Pos.vy=10*16;
 }
+#endif
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
 	newmode=-1;
 }
-#endif
 
 #ifndef __USER_paul__
 	int	padInput=PadGetHeld(0);
@@ -351,7 +392,7 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 
 		// Look around
 		int	pad=getPadInputHeld();
-if(getPadInputDown()&PAD_CIRCLE)
+if(PadGetDown(0)&PAD_CIRCLE)
 {
 	m_skel.blink();
 }
@@ -502,6 +543,15 @@ if(eyes!=-1)
 		m_skel.Animate(this);
 		m_skel.Render(this);
 	}
+
+
+#ifdef _STATE_DEBUG_
+	char	buf[128];
+	sprintf(buf,"STATE: %s",s_stateText[m_currentState]);
+	s_debugFont.print(40,200,buf);
+	sprintf(buf,"MODE:  %s",s_modeText[m_currentMode]);
+	s_debugFont.print(40,210,buf);
+#endif
 }
 
 

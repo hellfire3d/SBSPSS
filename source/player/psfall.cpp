@@ -77,11 +77,12 @@ void CPlayerStateFall::enter(CPlayer *_player)
 void CPlayerStateFall::think(CPlayer *_player)
 {
 	const PlayerMetrics	*metrics;
-	int					controlHeld;
+	int					controlHeld,controlDown;
 	DVECTOR				move;
 
 	metrics=getPlayerMetrics(_player);
 	controlHeld=getPadInputHeld(_player);
+	controlDown=getPadInputDown(_player);
 
 	if(controlHeld&PI_LEFT)
 	{
@@ -98,16 +99,20 @@ void CPlayerStateFall::think(CPlayer *_player)
 
 	fall(_player);
 
-	if(controlHeld&PI_ACTION)
+	if(controlDown&PI_ACTION)
 	{
 		setState(_player,STATE_AIRATTACK);
 	}
 	else if(controlHeld&PI_DOWN)
 	{
-		move.vx=0;
-		move.vy=0;
-		setMoveVelocity(_player,&move);
-		setState(_player,STATE_BUTTBOUNCE);
+		if(setState(_player,STATE_BUTTBOUNCE))
+		{
+			// Only do this if this mode allows us to go into butt bounce, otherwise
+			// SB just floats in the air :)
+			move.vx=0;
+			move.vy=0;
+			setMoveVelocity(_player,&move);
+		}
 	}
 	advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }

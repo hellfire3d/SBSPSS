@@ -90,10 +90,11 @@ void CPlayerStateJump::enter(CPlayer *_player)
 void CPlayerStateJump::think(CPlayer *_player)
 {
 	const PlayerMetrics	*metrics;
-	int					controlHeld;
+	int					controlHeld,controlDown;
 
 	metrics=getPlayerMetrics(_player);
 	controlHeld=getPadInputHeld(_player);
+	controlDown=getPadInputDown(_player);
 
 	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&PI_JUMP)
 	{
@@ -104,7 +105,7 @@ void CPlayerStateJump::think(CPlayer *_player)
 		setState(_player,STATE_FALL);
 	}
 
-	if(controlHeld&PI_ACTION)
+	if(controlDown&PI_ACTION)
 	{
 		setState(_player,STATE_AIRATTACK);
 	}

@@ -111,7 +111,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 	{
 		setState(_player,STATE_DUCK);
 	}
-	if(controlHeld&PI_ACTION)
+	if(controlDown&PI_ACTION)
 	{
 		setState(_player,STATE_RUNATTACK);
 	}
