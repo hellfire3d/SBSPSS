@@ -30,6 +30,7 @@ virtual	~CActorGfx();
 		FileEquate	GetFilename()	{return(Filename);}
 private:
 		void		SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip);
+		sSpriteFrame	*GetFrame(int Anim,int Frame);
 
 		FileEquate		Filename;
 		sSpriteAnimBank	*SpriteBank;
@@ -45,6 +46,7 @@ public:
 		enum
 		{
 			MAX_ACTORS=8,
+			MAX_ACTOR_SIZE=128*128,
 		};
 
 static	void		Init();
@@ -53,6 +55,8 @@ static	void			AddActor(FileEquate Filename)		{GetActor(Filename);}
 static	CActorGfx		*GetActor(FileEquate Filename);
 static	void			DumpActor(FileEquate Filename);
 		
+static	u8			UnpackBuffer[MAX_ACTOR_SIZE];
+
 private:
 static	int			FindIdx(FileEquate Filename);
 static	int			FindFreeIdx();

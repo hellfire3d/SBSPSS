@@ -108,18 +108,6 @@ struct	sQuad
 //*** Game Types and Headers ************************************************
 //***************************************************************************
 // Maps
-/*
-enum	TILE3D_FLAGS
-{
-	TILE3D_FLAGS_F=0,
-	TILE3D_FLAGS_U,
-	TILE3D_FLAGS_D,
-	TILE3D_FLAGS_L,
-	TILE3D_FLAGS_R,
-//	TILE3D_FLAGS_B,	// Should never have back facing polys
-	TILE3D_FLAGS_MAX
-};
-*/
 typedef	u16	sTileMapElem;	// Tile or Tri Start
 
 struct	sTile
@@ -203,7 +191,8 @@ struct	sSpriteFrame
 struct	sSpriteAnim
 {
 	u16			FrameCount;	// 2
-	u16			*Anim;		// 2
+	u16			Pad;
+	u16			*Anim;		// 4
 };
 
 struct	sSpriteAnimBank

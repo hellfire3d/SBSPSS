@@ -14,6 +14,7 @@
 
 /*****************************************************************************/
 CActorGfx	*CActorPool::ActorList[CActorPool::MAX_ACTORS];
+u8			CActorPool::UnpackBuffer[CActorPool::MAX_ACTOR_SIZE];
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -78,25 +79,44 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
+sSpriteFrame	*CActorGfx::GetFrame(int Anim,int Frame)
+{
+sSpriteAnim		*ThisAnim=SpriteBank->AnimList+Anim;
+u16				ThisFrame=ThisAnim->Anim[Frame];
+	
+				return(SpriteBank->FrameList+ThisFrame);
+}
+
+/*****************************************************************************/
+int		CActorGfx::getFrameWidth(int Anim,int Frame)
+{
+sSpriteFrame	*ThisFrame=GetFrame(Anim,Frame);
+				return(ThisFrame->W);
+}
+
+/*****************************************************************************/
+int		CActorGfx::getFrameHeight(int Anim,int Frame)
+{
+sSpriteFrame	*ThisFrame=GetFrame(Anim,Frame);
+				return(ThisFrame->H);
+}
+
+/*****************************************************************************/
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
-sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
-u16				FrameNo=ThisAnim.Anim[Frame];
-sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
-u8				Buffer[64*64];
+sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
 
-			PAK_doUnpak(Buffer,ThisFrame.PAKSpr);
-		
+			PAK_doUnpak(CActorPool::UnpackBuffer,FrameGfx->PAKSpr);
 // Gfx
 RECT		Rect;
 			Rect.x=TexX;
 			Rect.y=TexY;
-			Rect.w=ThisFrame.W/4;
-			Rect.h=ThisFrame.H;
-			LoadImage( &Rect, (u32*)Buffer);
+			Rect.w=FrameGfx->W/4;
+			Rect.h=FrameGfx->H;
+			LoadImage( &Rect, (u32*)CActorPool::UnpackBuffer);
 
 POLY_FT4	*Ft4=GetPrimFT4();
-			SetUpFT4(Ft4,&ThisFrame,Pos.vx,Pos.vy,XFlip,YFlip);
+			SetUpFT4(Ft4,FrameGfx,Pos.vx,Pos.vy,XFlip,YFlip);
 			setRGB0(Ft4,128,128,128);
 			setTPage(Ft4,0,0,TexX,TexY);
 			setClut(Ft4, ClutX, ClutY);
@@ -167,24 +187,6 @@ int		H=ThisFrame->H;
 void	CActorGfx::Dump()
 {
 }
-/*****************************************************************************/
-int		CActorGfx::getFrameWidth(int Anim,int Frame)
-{
-sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
-u16				FrameNo=ThisAnim.Anim[Frame];
-sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
-				return(ThisFrame.W);
-}
-
-/*****************************************************************************/
-int		CActorGfx::getFrameHeight(int Anim,int Frame)
-{
-sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
-u16				FrameNo=ThisAnim.Anim[Frame];
-sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
-				return(ThisFrame.H);
-}
-
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -220,11 +222,13 @@ int		CActorPool::FindFreeIdx()
 /*****************************************************************************/
 /*** Load ********************************************************************/
 /*****************************************************************************/
+int	ActorNo=0;
 CActorGfx	*CActorPool::GetActor(FileEquate Filename)
 {
 CActorGfx	*NewActor;
 int			Idx;
 		
+		Filename=(FileEquate)(ACTORS_SPONGEBOB_SBK+ActorNo);
 // Already Loaded?
 		Idx=FindIdx(Filename);
 		if (Idx!=-1) return(ActorList[Idx]);
@@ -254,4 +258,3 @@ int			Idx;
 		ActorList[Idx]=0;
 		delete ThisActor;
 }
-
