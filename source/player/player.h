@@ -157,6 +157,13 @@ public:
 		MAX_LIVES=99,
 	};
 
+	typedef struct
+	{
+		s16			x1,y1;
+		s16			x2,y2;
+	} CameraBox;
+
+	
 	virtual void	init();
 	virtual void	shutdown();
 	virtual void	think(int _frames);
@@ -172,7 +179,7 @@ public:
 	DVECTOR			getCameraPos()										{return m_cameraPos;}
 
 	void			setLayerCollision(class CLayerCollision *_layer)	{m_layerCollision=_layer;}
-	void			setMapSize(DVECTOR _mapSize);
+	void			setCameraBox(CameraBox _cameraBox);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
@@ -284,8 +291,8 @@ private:
 	
 	// Various info about the current map
 	class CLayerCollision	*m_layerCollision;
-	DVECTOR					m_mapCameraEdges;
-	DVECTOR					m_mapEdge;
+	CameraBox				m_cameraPosLimitBox;
+	CameraBox				m_playerPosLimitBox;
 	DVECTOR					m_respawnPos;
 
 

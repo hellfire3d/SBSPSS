@@ -306,7 +306,9 @@ void	CGameScene::initLevel()
 	m_player->setRespawnPos(Level.getPlayerSpawnPos());
 	m_player->init();
 	m_player->setLayerCollision(Level.getCollisionLayer());
-	m_player->setMapSize(Level.getMapSize());
+	DVECTOR				mapSize=Level.getMapSize();
+	CPlayer::CameraBox	camBox={0,0,mapSize.vx,mapSize.vy};
+	m_player->setCameraBox(camBox);
 
 // Init actors (needs moving and tidying
 	int actorNum;

@@ -619,12 +619,11 @@ if(newmode!=-1)
 			m_invincibleFrameCount--;
 		}
 
-
-if(Pos.vx<64)Pos.vx=64;
-else if(Pos.vx>m_mapEdge.vx-64)Pos.vx=m_mapEdge.vx-64;
-if(Pos.vy<64)Pos.vy=64;
-else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
-
+		// Stop the player vanishing off the edge of the telly..
+		if(Pos.vx<m_playerPosLimitBox.x1)		Pos.vx=m_playerPosLimitBox.x1;
+		else if(Pos.vx>m_playerPosLimitBox.x2)	Pos.vx=m_playerPosLimitBox.x2;
+		if(Pos.vy<m_playerPosLimitBox.y1)		Pos.vy=m_playerPosLimitBox.y1;
+		else if(Pos.vy>m_playerPosLimitBox.y2)	Pos.vy=m_playerPosLimitBox.y2;
 
 		// Look around
 		int	pad=getPadInputHeld();
@@ -775,24 +774,11 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
 	m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
 
-
 	// Limit camera scroll to the edges of the map
-	if(m_cameraPos.vx<0)
-	{
-		m_cameraPos.vx=0;
-	}
-	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
-	{
-		m_cameraPos.vx=m_mapCameraEdges.vx;
-	}
-	if(m_cameraPos.vy<0)
-	{
-		m_cameraPos.vy=0;
-	}
-	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
-	{
-		m_cameraPos.vy=m_mapCameraEdges.vy;
-	}
+	if(m_cameraPos.vx<m_cameraPosLimitBox.x1)		m_cameraPos.vx=m_cameraPosLimitBox.x1;
+	else if(m_cameraPos.vx>m_cameraPosLimitBox.x2)	m_cameraPos.vx=m_cameraPosLimitBox.x2;
+	if(m_cameraPos.vy<m_cameraPosLimitBox.y1)		m_cameraPos.vy=m_cameraPosLimitBox.y1;
+	else if(m_cameraPos.vy>m_cameraPosLimitBox.y2)	m_cameraPos.vy=m_cameraPosLimitBox.y2;
 	
 	CPlayerThing::think(_frames);
 }
@@ -945,15 +931,28 @@ for(int i=0;i<NUM_LASTPOS;i++)
 	Function:
 	Purpose:	Pre-calcs the visible edges of the map ( ie: the hard limits
 				for the camera pos )
-	Params:
+	Params:		camera box ( in tiles )
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayer::setMapSize(DVECTOR _mapSize)
+  void CPlayer::setCameraBox(CameraBox _cameraBox)
 {
-	m_mapCameraEdges.vx=(_mapSize.vx-34)*MAP2D_BLOCKSTEPSIZE;		// Made up numbers! :) (pkg)
-	m_mapCameraEdges.vy=(_mapSize.vy-18)*MAP2D_BLOCKSTEPSIZE;
-	m_mapEdge.vx=_mapSize.vx*MAP2D_BLOCKSTEPSIZE;
-	m_mapEdge.vy=_mapSize.vy*MAP2D_BLOCKSTEPSIZE;
+	_cameraBox.x1*=16;
+	_cameraBox.y1*=16;
+	_cameraBox.x2*=16;
+	_cameraBox.y2*=16;
+//PAUL_DBGMSG("setCameraBox  %d,%d  %d,%d",_cameraBox.x1,_cameraBox.y1,_cameraBox.x2,_cameraBox.y2);
+
+	m_cameraPosLimitBox.x1=_cameraBox.x1;
+	m_cameraPosLimitBox.y1=_cameraBox.y1;
+	m_cameraPosLimitBox.x2=_cameraBox.x2-(32*MAP2D_BLOCKSTEPSIZE);		// Made up numbers! :) (pkg);
+	m_cameraPosLimitBox.y2=_cameraBox.y2-(16*MAP2D_BLOCKSTEPSIZE);
+//PAUL_DBGMSG("m_cameraPosLimitBox  %d,%d  %d,%d",m_cameraPosLimitBox.x1,m_cameraPosLimitBox.y1,m_cameraPosLimitBox.x2,m_cameraPosLimitBox.y2);
+
+	m_playerPosLimitBox.x1=_cameraBox.x1+64;
+	m_playerPosLimitBox.y1=_cameraBox.y1+64;
+	m_playerPosLimitBox.x2=_cameraBox.x2-64;
+	m_playerPosLimitBox.y2=_cameraBox.y2-64;
+//PAUL_DBGMSG("m_playerPosLimitBox  %d,%d  %d,%d",m_playerPosLimitBox.x1,m_playerPosLimitBox.y1,m_playerPosLimitBox.x2,m_playerPosLimitBox.y2);
 }
 
 
