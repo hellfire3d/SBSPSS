@@ -24,6 +24,8 @@ public:
 	void				init();
 protected:
 	void				processMovement( int _frames );
+
+	s32					m_length;
 };
 
 #endif

@@ -24,6 +24,7 @@ void CNpcPendulumHazard::init()
 	m_extendDir = EXTEND_LEFT;
 	m_extension = 0;
 	m_heading = 1024;
+	m_length = 200;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,6 @@ void CNpcPendulumHazard::processMovement( int _frames )
 		}
 	}
 
-	Pos.vx = m_base.vx + ( ( 100 * rcos( m_heading + m_extension ) ) >> 12 );
-	Pos.vy = m_base.vy + ( ( 100 * rsin( m_heading + m_extension ) ) >> 12 );
+	Pos.vx = m_base.vx + ( ( m_length * rcos( m_heading + m_extension ) ) >> 12 );
+	Pos.vy = m_base.vy + ( ( m_length * rsin( m_heading + m_extension ) ) >> 12 );
 }
