@@ -31,6 +31,60 @@
 #include "system\vid.h"
 #endif
 
+#ifdef	SHOW_BBOX
+#include "gfx\prim.h"
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcParasiticWormSegment::init()
+{
+	m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_SEASNAKE_SBK );
+
+	m_heading = 0;
+	m_nextSegment = NULL;
+
+	/*DVECTOR ofs = getCollisionSize();
+
+	m_drawOffset.vx = 0;
+	m_drawOffset.vy = -( ofs.vy >> 1 );
+
+	updateCollisionArea();*/
+
+	//sBBox boundingBox = m_actorGfx->GetBBox();
+	setCollisionSize( 20, 20 );
+	setCollisionCentreOffset( 10, 10 );
+	updateCollisionArea();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcParasiticWormSegment::updateCollisionArea()
+{
+	m_collisionCentre.vx=Pos.vx+m_collisionCentreOffset.vx;
+	m_collisionCentre.vy=Pos.vy+m_collisionCentreOffset.vy;
+	m_collisionArea.x1=m_collisionCentre.vx-(m_collisionSize.vx/2);
+	m_collisionArea.x2=m_collisionArea.x1+m_collisionSize.vx;
+	m_collisionArea.y1=m_collisionCentre.vy-(m_collisionSize.vy/2);
+	m_collisionArea.y2=m_collisionArea.y1+m_collisionSize.vy;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcParasiticWormSegment::setCollisionSize(int _w,int _h)
+{
+	m_collisionSize.vx=_w;
+	m_collisionSize.vy=_h;
+	if(m_collisionSize.vx>m_collisionSize.vy)
+	{
+		m_collisionRadius=m_collisionSize.vx;
+	}
+	else
+	{
+		m_collisionRadius=m_collisionSize.vy;
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcParasiticWormEnemy::postInit()
@@ -67,15 +121,16 @@ void CNpcParasiticWormEnemy::postInit()
 	int initLength = NPC_PARASITIC_WORM_LENGTH / 3;
 	int remLength = NPC_PARASITIC_WORM_LENGTH - initLength;
 
+	m_segment = NULL;
+
+	CNpcParasiticWormSegment *currentSegment;
+
 	for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 	{
-		CNpcEnemy *segment;
 		CNpcParasiticWormSegment *wormSegment;
 		wormSegment = new ("segment") CNpcParasiticWormSegment;
-		wormSegment->setType( CNpcEnemy::NPC_PARASITIC_WORM_SEGMENT );
 		wormSegment->init();
-		wormSegment->setLayerCollision( m_layerCollision );
-		wormSegment->postInit();
+		//wormSegment->setLayerCollision( m_layerCollision );
 
 		if ( segCount < initLength )
 		{
@@ -95,9 +150,26 @@ void CNpcParasiticWormEnemy::postInit()
 		}
 
 		wormSegment->setScale( segScale );
-		segment = wormSegment;
 
-		this->addChild( segment );
+		// attach worm segment
+
+		if ( m_segment )
+		{
+			currentSegment = m_segment;
+
+			while( currentSegment->m_nextSegment )
+			{
+				currentSegment = currentSegment->m_nextSegment;
+			}
+
+			currentSegment->m_nextSegment = wormSegment;
+		}
+		else
+		{
+			// no previous segments
+
+			m_segment = wormSegment;
+		}
 	}
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
@@ -107,20 +179,20 @@ void CNpcParasiticWormEnemy::postInit()
 
 void CNpcParasiticWormEnemy::shutdown()
 {
-	deleteAllChild();
+	// delete worm segments
+
+	CNpcParasiticWormSegment *currentSegment = m_segment;
+
+	while( currentSegment )
+	{
+		CNpcParasiticWormSegment *oldSegment;
+
+		oldSegment = currentSegment;
+		currentSegment = currentSegment->m_nextSegment;
+		delete oldSegment;
+	}
+
 	CNpcEnemy::shutdown();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcParasiticWormSegment::think( int _frames )
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcParasiticWormSegment::postInit()
-{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +241,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		newPos = newPos->next;
 	}
 
-	CThing	*List=Next;
+	CNpcParasiticWormSegment *List = m_segment;
 
 	oldPos = Pos;
 
@@ -191,14 +263,10 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 	while( List )
 	{
-		CNpcEnemy *segment = (CNpcEnemy *) List;
-
 		s32 xDist = oldPos.vx - newPos->pos.vx;
 		s32 yDist = oldPos.vy - newPos->pos.vy;
 
 		s16 headingToTarget = ratan2( yDist, xDist );
-
-		//segment->setHeading( headingToTarget );
 
 		DVECTOR sinPos;
 
@@ -210,7 +278,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		List->setPos( sinPos );
 		oldPos = sinPos;
 
-		List = List->getNext();
+		List = List->m_nextSegment;
 
 		if ( List )
 		{
@@ -229,14 +297,13 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		}
 	}
 
-	List=Next;
+	List = m_segment;
 
 	oldPos = Pos;
 
 	while( List )
 	{
-		CNpcEnemy *segment = (CNpcEnemy *) List;
-		DVECTOR currentPos = segment->getPos();
+		DVECTOR currentPos = List->getPos();
 
 		s32 xDist = oldPos.vx - currentPos.vx;
 		s32 yDist = oldPos.vy - currentPos.vy;
@@ -247,7 +314,9 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 		oldPos = currentPos;
 
-		List = List->getNext();
+		CNpcParasiticWormSegment *oldList = List;
+
+		List = List->m_nextSegment;
 
 		if ( List )
 		{
@@ -284,13 +353,14 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 			heading -= moveDist >> 1;
 		}
 
-		segment->setHeading( heading );
+		oldList->setHeading( heading );
+		oldList->updateCollisionArea();
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcParasiticWormEnemy::resetParasiticWormHeadToTail()
+/*void CNpcParasiticWormEnemy::resetParasiticWormHeadToTail()
 {
 	DVECTOR startPos;
 	DVECTOR endPos;
@@ -360,13 +430,13 @@ void CNpcParasiticWormEnemy::resetParasiticWormHeadToTail()
 		extension += 1024;
 		extension &= 4095;
 	}
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcParasiticWormEnemy::processClose( int _frames )
 {
-	resetParasiticWormHeadToTail();
+	//resetParasiticWormHeadToTail();
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 
@@ -412,6 +482,14 @@ void CNpcParasiticWormEnemy::render()
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
+
+		CNpcParasiticWormSegment *segment = m_segment;
+
+		while( segment )
+		{
+			segment->render();
+			segment = segment->m_nextSegment;
+		}
 	}
 }
 
@@ -419,22 +497,52 @@ void CNpcParasiticWormEnemy::render()
 
 void CNpcParasiticWormSegment::render()
 {
-	SprFrame = NULL;
+	POLY_FT4 *SprFrame = NULL;
 
-	if ( m_isActive )
+	sBBox			&ScrBBox=CThingManager::getRenderBBox();
+	DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+	DVECTOR renderPos;
+	renderPos.vx = Pos.vx - CamPos.vx;
+	renderPos.vy = Pos.vy - CamPos.vy;
+
+	u8 renderFlag = true;
+	if ( m_collisionArea.x2 < ScrBBox.XMin || m_collisionArea.x1 > ScrBBox.XMax ) renderFlag=false;
+	if ( m_collisionArea.y2 < ScrBBox.YMin || m_collisionArea.y1 > ScrBBox.YMax ) renderFlag=false;
+
+	if ( renderFlag )
 	{
-		CEnemyThing::render();
+		SprFrame = m_actorGfx->Render(renderPos,0,0,0);
+		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
-		if (canRender())
+		sBBox boundingBox = m_actorGfx->GetBBox();
+		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+
+#if defined (__USER_charles__)
+		DVECTOR	const	&ofs=CLevel::getCameraPos();
+		CRECT	area;
+
+		area=getCollisionArea();
+		area.x1-=ofs.vx;
+		area.y1-=ofs.vy;
+		area.x2-=ofs.vx;
+		area.y2-=ofs.vy;
+
+		if(area.x1<=511&&area.x2>=0 && area.y1<=255&&area.y2>=0)
 		{
-			DVECTOR &renderPos=getRenderPos();
+			DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
+			DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
+			DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
+			DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
 
-			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
-			m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
-
-			sBBox boundingBox = m_actorGfx->GetBBox();
-			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+			area.x1=Pos.vx-10-ofs.vx;
+			area.y1=Pos.vy-10-ofs.vy;
+			area.x2=Pos.vx+10-ofs.vx;
+			area.y2=Pos.vy+10-ofs.vy;
+			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
+			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
 		}
+#endif
 	}
 }
