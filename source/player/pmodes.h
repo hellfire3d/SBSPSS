@@ -91,7 +91,7 @@ public:
 	virtual void	render(DVECTOR *_pos)				{;}
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 	virtual int		canDoLookAround()					{return false;}
-	virtual void	springPlayerUp()					{;}
+	virtual void	springPlayerUp(int _springHeight)	{;}
 	void			inSoakUpState();
 
 	virtual int		setState(int _state)				{return 0;}
@@ -127,7 +127,7 @@ public:
 	virtual void	think();
 	virtual void	render()							{;}
 	virtual int		canDoLookAround();
-	virtual void	springPlayerUp()					{setState(STATE_SPRINGUP);}
+	virtual void	springPlayerUp(int _springHeight)	{m_springHeight=_springHeight;setState(STATE_SPRINGUP);}
 
 	virtual ATTACK_STATE	getAttackState();
 
@@ -173,13 +173,17 @@ public:
 	void						fall();
 	void						buttFall();
 
+	int							getSpringHeight()		{return m_springHeight;}
+
 
 private:
 	int							m_fallFrames;
+	int							m_springHeight;
 
 
 protected:
 	virtual class CPlayerState	**getStateTable();
+
 
 private:
 	class CPlayerState			*m_currentStateClass;

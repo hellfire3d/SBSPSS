@@ -1548,9 +1548,9 @@ void CPlayer::setAnimNo(int _animNo)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayer::springPlayerUp()
+void	CPlayer::springPlayerUp(int _springHeight)
 {
-	m_currentPlayerModeClass->springPlayerUp();
+	m_currentPlayerModeClass->springPlayerUp(_springHeight);
 }
 
 /*----------------------------------------------------------------------

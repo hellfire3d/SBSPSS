@@ -246,8 +246,8 @@ public:
 	int				getAnimNo();
 	void			setAnimNo(int _animNo);
 
-	void			springPlayerUp();		// Springy branches
-	void			floatPlayerUp();		// Geysers
+	void			springPlayerUp(int _springHeight=55);		// Springy branches
+	void			floatPlayerUp();							// Geysers
 	void			teleportTo(int _x,int _y);
 
 private:

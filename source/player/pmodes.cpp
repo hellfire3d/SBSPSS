@@ -632,7 +632,7 @@ void	CPlayerModeBase::jump()
 	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
 	setMoveVelocity(&moveVel);
 }
-int spr=2;
+int spr=5;
 void	CPlayerModeBase::spring()
 {
 	DVECTOR				moveVel;
