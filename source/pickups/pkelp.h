@@ -43,6 +43,7 @@ public:
 	virtual void		collect(class CPlayer *_player);
 
 	void				setTokenNumber(int _number)					{m_tokenNumber=_number;}
+	bool				alwaysThink();
 
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

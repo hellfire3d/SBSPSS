@@ -158,6 +158,27 @@ void	CKelpTokenPickup::collidedWith(CThing *_thisThing)
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+bool	CKelpTokenPickup::alwaysThink()
+{
+	int level=GameScene.getLevelNumber();
+	int chapter=GameScene.getChapterNumber();
+
+	if ( chapter == 5 && level == 5 )			// snail race
+	{
+		return( true );
+	}
+	else
+	{
+		return( false );
+	}
+}
+
 
 /*===========================================================================
 end */
