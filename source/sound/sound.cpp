@@ -308,6 +308,20 @@ static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 	{	1,				143,			0	},										// SFX_WORM___HISS
 	{	1,				144,			0	},										// SFX_WORM___SWIM
 	{	3,				145,			0	},										// SFX_FLYING_DUTCHMAN*
+	{	1,				146,			0	},										// SFX_BOUNCY_PLATFORM
+	{	1,				147,			0	},										// SFX_ELEVATOR_LOOP
+	{	1,				148,			0	},										// SFX_ELEVATOR_STOP
+	{	1,				149,			0	},										// SFX_PULLEY
+	{	1,				150,			0	},										// SFX_ELECTRIC_FAN
+	{	1,				151,			0	},										// SFX_ROLLING_BARREL
+	{	1,				152,			0	},										// SFX_RETRACTING_PLATFORM
+	{	1,				153,			0	},										// SFX_SINKING_CRATE
+	{	3,				154,			0	},										// SFX_FIRE_CRACKLING*
+	{	3,				155,			0	},										// SFX_OIL_GEYSER*
+	{	3,				156,			0	},										// SFX_FLYIN_DUTCHMAN_WOOSH*
+	{	1,				157,			0	},										// SFX_JELLYFISH_BOUNCE
+	{	1,				158,			0	},										// SFX_TORNADO
+
 };
 
 // Reverb details
