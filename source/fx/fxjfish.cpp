@@ -56,6 +56,7 @@ void	CFXJellyFishLegs::think(int _frames)
 /*****************************************************************************/
 const int	LegXInc=4;
 
+
 void	CFXJellyFishLegs::render()
 {
 CThing	*Parent=getParent();
@@ -63,7 +64,7 @@ CThing	*Parent=getParent();
 		CFX::render();
 //		if (!canRender()) return;
 		if (!Parent->canRender()) return;
-
+			
 SpriteBank	*SprBank=CGameScene::getSpriteBank();;
 DVECTOR		RenderPos=getRenderPos();
 int			WOfs=0;	
@@ -77,7 +78,10 @@ int			XInc=LegXInc;
 			RenderPos.vx+=Ofs.vx;
 			RenderPos.vy+=Ofs.vy;
 
-			if (!XFlip) XInc=-XInc;		
+			if (!XFlip) 
+			{
+				XInc=-XInc-1;	
+			}
 			for (int i=0; i<LegCount; i++)
 			{
 				ThisAngle+=AngleInc;
@@ -86,6 +90,7 @@ int			XInc=LegXInc;
 
 
 				POLY_FT4	*Ft4;
+
 
 				Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx+(i*XInc),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
 
