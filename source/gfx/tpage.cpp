@@ -26,13 +26,19 @@ MAX_TPAGES	=		32,
 const	int			TPRawW=64;
 const	int			TPRawH=256;
 
+struct	sAnimTexInfo
+{
+	int			Frame;
+	sFrameHdr	FrameHdr;
+};
+
 struct	sTPageInfo
 {
-	s16			RefCount;
-	FileEquate	TPageName;
-	s16			XOfs,YOfs;
-	u16			AnimTexCount;
-	sFrameHdr	AnimTexFrame[TPAGE_MAX_ANIM_TEX];
+	s16				RefCount;
+	FileEquate		TPageName;
+	s16				XOfs,YOfs;
+	u16				AnimTexCount;
+	sAnimTexInfo	AnimTexFrame[TPAGE_MAX_ANIM_TEX];
 };
 
 struct	sTPageCache
@@ -167,23 +173,23 @@ RECT		Rect;
 }
 
 /*****************************************************************************/
-void	AddAnimTexToList(sTPageInfo	*Cache,sFrameHdr *FramePtr,int TPage,int Half)
+void	AddAnimTexToList(sTPageInfo	*Cache,sFrameHdr *FramePtr,int Frm,int TPage,int Half)
 {
-sFrameHdr	*AT=&Cache->AnimTexFrame[Cache->AnimTexCount];
 	
-		MCmemcpy(AT,FramePtr,sizeof(sFrameHdr));
+		MCmemcpy(&Cache->AnimTexFrame[Cache->AnimTexCount].FrameHdr,FramePtr,sizeof(sFrameHdr));
+		Cache->AnimTexFrame[Cache->AnimTexCount].Frame=Frm;
 		Cache->AnimTexCount++;
 }
 
 /*****************************************************************************/
 TPAGE_DESC	TPLoadTex(FileEquate Filename)
 {
-TPAGE_DESC	Desc;
-sTPageHdr	*TPHdr;
-sFrameHdr	*FramePtr;
-u32			*VRAMData;
-int			TPage,Half;
-sTPageInfo	*Cache;
+TPAGE_DESC		Desc;
+sTPageHdr		*TPHdr;
+sFrameHdr		*FramePtr;
+u32				*VRAMData;
+int				TPage,Half;
+sTPageInfo		*Cache;
 
 // Is it already loaded in TCache?
 		IsTPageInCache(Filename,TPage,Half);
@@ -193,7 +199,6 @@ sTPageInfo	*Cache;
 //			DBG_MSG2("TPLoadTex Cached (%i,%i)",TPage,Half);
 			s_TPCache[TPage].Info[Half].RefCount++;
 			Cache=&s_TPCache[TPage].Info[Half];
-			FramePtr=&Cache->AnimTexFrame[0];
 			}
 		else
 			{		// Better load it then
@@ -205,7 +210,8 @@ sTPageInfo	*Cache;
 			Cache=FindSpareTPage(Filename,TPage,Half,TPHdr);
 			for (int Frm=0;Frm<TPHdr->NoOfFrames; Frm++)	// Add Animated Texture references
 				{
-				if (FramePtr->Cycle) AddAnimTexToList(Cache,FramePtr++,TPage,Half);
+				if (FramePtr->Cycle) AddAnimTexToList(Cache,FramePtr,Frm,TPage,Half);
+				FramePtr++;
 				}
 			TPLoadVRam(TPHdr, TPage,Half,VRAMData);
 			MemFree(TPHdr);
@@ -213,8 +219,8 @@ sTPageInfo	*Cache;
 // If first instance, add animated textures
 		if (Cache->RefCount==1)	
 			{
-			FramePtr=Cache->AnimTexFrame;
-			for (int Frm=0; Frm<Cache->AnimTexCount; Frm++) CAnimTex::AddAnimTex(FramePtr++,Filename);
+			sAnimTexInfo	*ATexPtr=Cache->AnimTexFrame;
+			for (int Frm=0; Frm<Cache->AnimTexCount; Frm++) CAnimTex::AddAnimTex(&ATexPtr[Frm].FrameHdr,ATexPtr[Frm].Frame,Filename);
 			}
 		
 		Desc.Half= Half;
@@ -281,7 +287,7 @@ int			ReadLeft;
 		FramePtr=*hdrs;
 		for (int Frm=0;Frm<TPHdr.NoOfFrames; Frm++)	// Add Animated Texture references
 			{
-			if (FramePtr->Cycle) AddAnimTexToList(Cache,FramePtr++,TPage,Half);
+			if (FramePtr->Cycle) AddAnimTexToList(Cache,FramePtr++,Frm,TPage,Half);
 			}
 
 		Cache->RefCount=1;
@@ -295,8 +301,8 @@ int			ReadLeft;
 // If first instance, add animated textures
 		if (Cache->RefCount==1)	
 			{
-			FramePtr=Cache->AnimTexFrame;
-			for (int Frm=0; Frm<Cache->AnimTexCount; Frm++) CAnimTex::AddAnimTex(FramePtr++,Filename);
+			sAnimTexInfo	*ATexPtr=Cache->AnimTexFrame;
+			for (int Frm=0; Frm<Cache->AnimTexCount; Frm++) CAnimTex::AddAnimTex(&ATexPtr[Frm].FrameHdr,ATexPtr[Frm].Frame,Filename);
 			}
 
 	Desc.Half= Half;

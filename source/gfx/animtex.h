@@ -15,10 +15,11 @@ public:
 		CAnimTex();
 		~CAnimTex();
 		
-static	void	AddAnimTex(sFrameHdr *Frame,FileEquate Filename);
+static	void	AddAnimTex(sFrameHdr *Frame,int Frame,FileEquate Filename);
 static	void	AnimateTex();
 static	void	GetTexData();
 static	void	DumpThisTPage(FileEquate TexName);
+static	void	SetSpeed(FileEquate Filename,int Frm,int Speed);
 
 private:
 		CAnimTex	*NextTex;
@@ -27,6 +28,7 @@ private:
 		s16			PixPerWord;
 		u32			*TexData;
 		FileEquate	TexName;
+		int			FrameNo;
 		u8			TPage;
 
 };
