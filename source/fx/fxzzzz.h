@@ -1,31 +1,37 @@
-/*************/
-/*** Laser ***/
-/*************/
+/**********************/
+/*** ZZZZ (for FMA) ***/
+/**********************/
 
-#ifndef	__FX_FX_LASER_HEADER__
-#define __FX_FX_LASER_HEADER__
+#ifndef	__FX_FX_ZZZZ_HEADER__
+#define __FX_FX_ZZZZ_HEADER__
 
 #include "fx/fx.h"
 
 /*****************************************************************************/
-class CFXLaser : public CFX
+class CFXZZZZ : public CFX
 {
 public:
+		enum
+		{
+			Z_COUNT=8,
+		};
+		struct	sZ
+		{
+			DVECTOR	Ofs;
+			s16		TablePos;
+			s16		Life;
+		};
+
 		void		init(DVECTOR const &Pos);
 		void		think(int _frames);
 		void		render();
-/*virtual */int			canCollide()					{return true;}
-/*virtual */int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 
-		void		setOffset(DVECTOR &Pos);
-		void		setTarget(DVECTOR &Pos);
-
-		void		setRGB(u8 r,u8 g,u8 b)	{R=r; G=g; B=g;}
+		void		killFX()	{DieFlag=1;}
 
 protected:
-/*virtual */void		collidedWith(CThing *_thisThing);
-		DVECTOR		Offset,Target;
-		u8			R,G,B;
+		sZ			Z[Z_COUNT];
+		s16			Count;
+		u8			DieFlag;
 };
 
 #endif
