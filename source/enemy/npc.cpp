@@ -714,6 +714,30 @@ s32 CNpcEnemy::getFrameShift( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::processAnimFrames( int _frames )
+{
+	if ( m_animPlaying && !m_isDying )
+	{
+		s32 frameCount;
+
+		frameCount = getFrameCount();
+
+		s32 frameShift = getFrameShift( _frames );
+
+		if ( ( frameCount << 8 ) - m_frame > frameShift )
+		{
+			m_frame += frameShift;
+		}
+		else
+		{
+			m_frame = ( frameCount - 1 ) << 8;
+			m_animPlaying = false;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::think(int _frames)
 {
 	int moveFrames = _frames;
@@ -739,24 +763,7 @@ void CNpcEnemy::think(int _frames)
 	{
 		if ( m_isActive )
 		{
-			if ( m_animPlaying && !m_isDying )
-			{
-				s32 frameCount;
-
-				frameCount = getFrameCount();
-
-				s32 frameShift = getFrameShift( moveFrames );
-
-				if ( ( frameCount << 8 ) - m_frame > frameShift )
-				{
-					m_frame += frameShift;
-				}
-				else
-				{
-					m_frame = ( frameCount - 1 ) << 8;
-					m_animPlaying = false;
-				}
-			}
+			processAnimFrames( moveFrames );
 
 			switch ( this->m_controlFunc )
 			{
@@ -1046,6 +1053,11 @@ void CNpcEnemy::processMovement(int _frames)
 	s32 moveVel = 0;
 	s32 moveDist = 0;
 
+	if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+	{
+		CSoundMediator::playSfx( m_data[m_type].moveSfx );
+	}
+
 	switch( m_movementFunc )
 	{
 		case NPC_MOVEMENT_STATIC:
@@ -1180,6 +1192,11 @@ void CNpcEnemy::processShot( int _frames )
 					m_animNo = m_data[m_type].dieAnim;
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
+
+					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
+					{
+						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+					}
 
 					m_isDying = true;
 					m_speed = -5;

@@ -77,6 +77,8 @@ bool CNpcClamEnemy::processSensor()
 					m_movementTimer = GameState::getOneSecondInFrames() >> 3;
 					m_velocity = ( getRnd() % 6 ) + 1;
 
+					CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_MOVE );
+
 					return( true );
 				}
 				else
@@ -168,7 +170,6 @@ void CNpcStaticClamEnemy::postInit()
 	CNpcClamEnemy::postInit();
 
 	m_isStunned = false;
-	m_isAnimating = false;
 
 	// create platform in same place
 
@@ -178,8 +179,9 @@ void CNpcStaticClamEnemy::postInit()
 	platform->setGraphic( (u8) 0 );
 	platform->init( Pos );
 	platform->setTiltable( false );
-	//platform->setBBox();
 	platform->postInit();
+
+	m_animPlaying = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,15 +192,9 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 	{
 		m_animPlaying = true;
 		m_animNo = ANIM_CLAM_SIDESNAP;
-		m_frame = 0;
-	}
-	/*else if ( !m_animPlaying )
-	{
+
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
-		m_animNo = m_data[m_type].initAnim;
-		m_frame = 0;
-		m_isAnimating = false;
-	}*/
+	}
 
 	if ( m_isStunned )
 	{
@@ -218,8 +214,12 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 			{
 				if ( m_frame < ( 5 << 8 ) )
 				{
-					m_animNo = ANIM_CLAM_SIDESNAP;
-					m_frame = 0;
+					if ( m_frame != 0 )
+					{
+						m_frame = 0;
+						CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK );
+					}
+
 					m_isStunned = true;
 					m_animPlaying = false;
 				}
@@ -262,4 +262,29 @@ void CNpcStaticClamEnemy::processCollision()
 s32 CNpcStaticClamEnemy::getFrameShift( int _frames )
 {
 	return( ( _frames << 8 ) >> 2 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcStaticClamEnemy::processAnimFrames( int _frames )
+{
+	if ( m_animPlaying && !m_isDying )
+	{
+		s32 frameCount;
+
+		frameCount = getFrameCount();
+
+		s32 frameShift = getFrameShift( _frames );
+
+		if ( ( frameCount << 8 ) - m_frame > frameShift )
+		{
+			m_frame += frameShift;
+		}
+		else
+		{
+			m_frame = 0;
+			m_animPlaying = false;
+			CSoundMediator::playSfx( CSoundMediator::SFX_CLAM_ATTACK );
+		}
+	}
 }

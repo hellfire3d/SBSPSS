@@ -221,6 +221,10 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 
 					Pos.vx = newX;
 					Pos.vy += moveY;
+
+					// sound
+
+					CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_ATTACK );
 				}
 			}
 		}
@@ -252,4 +256,8 @@ void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	s16 heading = ratan2( yDist, xDist );
 
 	m_drawRotation = heading;
+
+	// sound
+
+	CSoundMediator::playSfx( CSoundMediator::SFX_HERMIT_CRAB_MOVE );
 }

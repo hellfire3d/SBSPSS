@@ -166,11 +166,16 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 			withinRange = true;
 		}
 
-		m_heading += moveDist;
+		if ( moveDist )
+		{
+			m_heading += moveDist;
 
-		m_heading &= 4095;
+			m_heading &= 4095;
 
-		m_drawRotation = m_heading + 1024;
+			m_drawRotation = m_heading + 1024;
+
+			CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_MOVE );
+		}
 
 		if ( withinRange )
 		{
@@ -205,6 +210,8 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 			{
 				// if firing anim is complete and user is still in range, fire projectile
 
+				CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL1 );
+
 				CProjectile *projectile;
 				projectile = new( "test projectile" ) CProjectile;
 				projectile->init( Pos, m_heading );
@@ -231,6 +238,8 @@ void CNpcAnemone2Enemy::postInit()
 
 	m_scaleX = ONE;
 	m_scaleY = ONE;
+
+	m_radius = 0;
 
 	m_spriteBank=new ("projectile sprites") SpriteBank();
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
@@ -305,6 +314,11 @@ void CNpcAnemone2Enemy::processShot( int _frames )
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
 
+					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
+					{
+						CSoundMediator::playSfx( m_data[m_type].deathSfx );
+					}
+
 					deleteAllChild();
 					m_isDying = true;
 					m_speed = -5;
@@ -371,6 +385,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 	}
 	else
 	{
+		CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL2 );
 		CProjectile *projectile;
 		s16 heading;
 
@@ -548,6 +563,8 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 	}
 	else if ( !m_animPlaying )
 	{
+		CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_ATTACK_LEVEL3 );
+
 		CProjectile *projectile;
 		u8 lifetime = 8;
 

@@ -130,6 +130,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
@@ -153,6 +155,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_2
@@ -176,6 +180,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -199,6 +205,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::SFX_ANEMONE_DEFEATED_LEVEL1,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_ANEMONE_2
@@ -222,6 +230,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::SFX_ANEMONE_DEFEATED_LEVEL2,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_ANEMONE_3
@@ -245,6 +255,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::SFX_ANEMONE_DEFEATED_LEVEL3,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SKELETAL_FISH
@@ -268,6 +280,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_CLAM_JUMP
@@ -291,6 +305,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::SFX_CLAM_DEFEATED,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_CLAM_STATIC
@@ -314,6 +330,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SQUID_DART
@@ -337,6 +355,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::SFX_SQUIDDART_DEFEATED,
+		CSoundMediator::SFX_SQUIDDART_MOVE,
 	},
 
 	{	// NPC_FISH_FOLK
@@ -360,6 +380,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_PRICKLY_BUG
@@ -383,6 +405,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::SFX_PRICKLY_BUG_DEFEATED,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SEA_SNAKE
@@ -406,6 +430,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_PUFFA_FISH
@@ -429,6 +455,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -452,6 +480,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_HERMIT_CRAB
@@ -475,6 +505,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_MINE
@@ -498,6 +530,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_BOOGER_MONSTER
@@ -521,6 +555,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SPIDER_CRAB
@@ -544,6 +580,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_SPIDERCRAB_MOVE,
 	},
 
 	{	// NPC_SPIDER_CRAB_SPAWNER
@@ -567,6 +605,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_EYEBALL
@@ -590,6 +630,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_BABY_OCTOPUS
@@ -613,6 +655,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -636,6 +680,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_NINJA_STARFISH
@@ -659,6 +705,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_GHOST
@@ -682,6 +730,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_GHOST_PIRATE
@@ -705,6 +755,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_FLAMING_SKULL
@@ -728,6 +780,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SHARK_MAN
@@ -751,6 +805,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_OIL_BLOB
@@ -774,6 +830,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SKULL_STOMPER
@@ -797,6 +855,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_MOTHER_JELLYFISH
@@ -820,6 +880,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SUB_SHARK
@@ -843,6 +905,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_PARASITIC_WORM
@@ -866,6 +930,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_FLYING_DUTCHMAN
@@ -889,6 +955,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_IRON_DOGFISH
@@ -912,6 +980,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_PARASITIC_WORM_SEGMENT
@@ -935,6 +1005,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_BALL_BLOB
@@ -958,6 +1030,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SHELL
@@ -981,6 +1055,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		true,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_PROJECTILE_JELLYFISH
@@ -1004,6 +1080,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_MOTHER_JELLYFISH_BACKGROUND
@@ -1027,6 +1105,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_BACKGROUND
@@ -1050,6 +1130,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_2_BACKGROUND
@@ -1073,6 +1155,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 
 	{	// NPC_BUTTERFLY_BACKGROUND
@@ -1096,6 +1180,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
+		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::NUM_SFXIDS,
 	},
 };
 

@@ -228,6 +228,8 @@ protected:
 		u8								respawning;
 		u8								canBeSuckedUp;
 		u8								canCollideWithEnemy;
+		CSoundMediator::SFXID			deathSfx;
+		CSoundMediator::SFXID			moveSfx;
 	}
 	NPC_DATA;
 
@@ -243,6 +245,7 @@ protected:
 	virtual void		processCollision();
 	virtual void		processAttackCollision();
 	virtual void		processGraphicFlipping();
+	virtual void		processAnimFrames( int _frames );
 	void				processTimer( int _frames );
 	bool				isCollisionWithGround();
 

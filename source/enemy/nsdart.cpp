@@ -147,6 +147,10 @@ bool CNpcSquidDartEnemy::processSensor()
 
 				m_angularDistance = 0;
 
+				// sound
+
+				CSoundMediator::playSfx( CSoundMediator::SFX_SQUIDDART_ATTACK );
+
 				return( true );
 			}
 			else
@@ -186,5 +190,4 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 		m_animNo = m_data[m_type].moveAnim;
 		m_animPlaying = true;
 	}
-
 }

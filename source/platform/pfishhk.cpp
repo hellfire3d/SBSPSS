@@ -57,6 +57,8 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 {
 	if ( m_isMoving )
 	{
+		CSoundMediator::playSfx( CSoundMediator::SFX_FISH_HOOK_MOVE );
+
 		if ( m_isResetting )
 		{
 			Pos.vy += 2 * _frames;

@@ -42,9 +42,9 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
+	virtual void		processAnimFrames( int _frames );
 
 	u8					m_isStunned;
-	u8					m_isAnimating;
 };
 
 #endif

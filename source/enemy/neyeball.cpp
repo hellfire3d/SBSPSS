@@ -117,6 +117,10 @@ CThing	*Next=getNext();
 		{
 			projectile->setMovementType( CProjectile::PROJECTILE_USER_SEEK );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
+
+			// sound
+
+			CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK );
 		}
 	}
 	else
@@ -134,6 +138,10 @@ CThing	*Next=getNext();
 		projectile->setState( CProjectile::PROJECTILE_ATTACK );
 
 		addChild( projectile );
+
+		// sound
+
+		CSoundMediator::playSfx( CSoundMediator::SFX_EYEBALL_SENTRY_ATTACK );
 	}
 }
 

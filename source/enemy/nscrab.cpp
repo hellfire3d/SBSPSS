@@ -97,6 +97,10 @@ bool CNpcSpiderCrabEnemy::processSensor()
 				m_velocity = 5;
 				m_base = Pos;
 
+				// sound
+
+				CSoundMediator::playSfx( CSoundMediator::SFX_SPIDERCRAB_ATTACK );
+
 				return( true );
 			}
 			else

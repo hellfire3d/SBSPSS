@@ -41,4 +41,8 @@ void CNpcPricklyBugEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	s16 heading = ratan2( yDist, xDist );
 
 	m_drawRotation = heading;
+
+	// sound
+
+	CSoundMediator::playSfx( CSoundMediator::SFX_PRICKLY_BUG_MOVE );
 }
