@@ -713,6 +713,7 @@ if(newmode!=-1)
 
 ///
 #ifdef __USER_paul__
+/*
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
 	DVECTOR	spawnBasePos;
@@ -740,6 +741,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		angle+=angleInc;
 	}
 }
+*/
 #endif
 ///
 
@@ -1920,7 +1922,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					if(m_currentMode==PLAYER_MODE_NET)
 					{
 						// Launch net pickup
-						m_currentMode=PLAYER_MODE_FULLUNARMED;
+						setMode(PLAYER_MODE_FULLUNARMED);
 					}
 					else
 					{
