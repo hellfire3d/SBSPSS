@@ -43,6 +43,8 @@ class CFrontEndMainTitles : public CFrontEndMode
 public:
 	void	init();
 	void	shutdown();
+	void	select();
+	void	unselect();
 	void	render();
 	void	think(int _frames);
 

@@ -127,8 +127,6 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
 
-	m_mode=MODE__PRESS_START;
-
 	// Create the main menu ( START GAME/OPTIONS )
 	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
 	m_mainMenu->init(NULL);
@@ -156,13 +154,6 @@ PAUL_DBGMSG("initial mem free=%d",mem);
 		tg=new ("togglebutton") CGUIToggleButton();
 		tg->init(fr);
 		tg->setButtonTarget(&m_gotoOptionsFlag);
-
-	m_mainMenu->select();
-	
-	m_startGameFlag=false;
-	m_gotoOptionsFlag=false;
-
-	CFader::setFadingIn();
 }
 
 
@@ -178,6 +169,35 @@ void CFrontEndMainTitles::shutdown()
 	m_smallFont->dump();		delete m_smallFont;
 	m_sprites->dump();			delete m_sprites;
 PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndMainTitles::select()
+{
+	m_mode=MODE__PRESS_START;
+
+	m_mainMenu->select();
+	
+	m_startGameFlag=false;
+	m_gotoOptionsFlag=false;
+
+	CFader::setFadingIn();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndMainTitles::unselect()
+{
+	m_mainMenu->unselect();
 }
 
 
@@ -327,7 +347,7 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 			break;
 
 		case MODE__GOTO_OPTIONS:
-			ret=CFrontEndScene::MODE__MAIN_TITLES;//MODE__GAME_OPTIONS;
+			ret=CFrontEndScene::MODE__GAME_OPTIONS;
 			break;
 	}
 

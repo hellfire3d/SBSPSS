@@ -53,7 +53,8 @@ fileio_src :=		fileio \
 
 frontend_src :=		frontend \
 					scrollbg \
-					maintitl
+					maintitl \
+					options
 
 game_src :=			game
 

@@ -141,6 +141,14 @@ SOURCE=..\..\..\source\frontend\maintitl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\options.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\options.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\scrollbg.cpp
 # End Source File
 # Begin Source File

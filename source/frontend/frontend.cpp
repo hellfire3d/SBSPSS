@@ -26,6 +26,10 @@
 #include "frontend\maintitl.h"
 #endif
 
+#ifndef	__FRONTEND_OPTIONS_H__
+#include "frontend\options.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -50,11 +54,12 @@
 	---- */
 
 static CFrontEndMainTitles		s_frontEndModeMainTitles;
+static CFrontEndOptions			s_frontEndModeOptions;
 
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
 	&s_frontEndModeMainTitles,		// MODE__MAIN_TITLES
-	NULL,							// MODE__GAME_OPTIONS
+	&s_frontEndModeOptions,			// MODE__GAME_OPTIONS
 	NULL,							// MODE__CHOOSE_SLOT
 	NULL,							// MODE__DEMO
 
@@ -73,6 +78,12 @@ CFrontEndScene	FrontEndScene;
   ---------------------------------------------------------------------- */
 void CFrontEndScene::init()
 {
+	for(int i=0;i<MODE__NONE;i++)
+	{
+		if(s_modeCodes[i])		// temporary (PKG)
+		s_modeCodes[i]->init();
+	}
+
 	m_mode=MODE__NONE;
 	setMode(MODE__MAIN_TITLES);
 }
@@ -86,6 +97,11 @@ void CFrontEndScene::init()
   ---------------------------------------------------------------------- */
 void CFrontEndScene::shutdown()
 {
+	for(int i=0;i<MODE__NONE;i++)
+	{
+		if(s_modeCodes[i])		// temporary (PKG)
+		s_modeCodes[i]->shutdown();
+	}
 }
 
 
@@ -145,16 +161,12 @@ PAUL_DBGMSG("CFrontEndScene::setMode(%d)",_newMode);
 	// Close old mode
 	if(s_modeCodes[m_mode])
 	{
-PAUL_DBGMSG("CFrontEndScene::shutdown mode %d",m_mode);
-		s_modeCodes[m_mode]->shutdown();
+		s_modeCodes[m_mode]->unselect();
 	}
 	
 	// Open new mode
 	m_mode=_newMode;
-PAUL_DBGMSG("CFrontEndScene::init mode %d",m_mode);
-	s_modeCodes[m_mode]->init();
-	s_modeCodes[m_mode]->shutdown();
-	s_modeCodes[m_mode]->init();
+	s_modeCodes[m_mode]->select();
 }
 
 

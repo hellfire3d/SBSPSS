@@ -111,13 +111,6 @@ void CFrontEndOptions::init()
 		tg=new ("togglebutton") CGUIToggleButton();
 		tg->init(fr);
 		tg->setButtonTarget(&m_exitFlag);
-
-	m_optionsMenu->select();
-
-	m_exitFlag=false;
-	m_closingDown=false;
-	
-	CFader::setFadingIn();
 }
 
 /*----------------------------------------------------------------------
@@ -130,6 +123,33 @@ void CFrontEndOptions::shutdown()
 {
 	m_optionsMenu->shutdown();
 	m_background->shutdown();		delete m_background;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndOptions::select()
+{
+	m_optionsMenu->select();
+
+	m_exitFlag=false;
+	m_closingDown=false;
+
+	CFader::setFadingIn();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CFrontEndOptions::unselect()
+{
+	m_optionsMenu->unselect();
 }
 
 /*----------------------------------------------------------------------

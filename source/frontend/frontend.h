@@ -78,6 +78,8 @@ class CFrontEndMode
 public:
 	virtual void	init()=0;
 	virtual void	shutdown()=0;
+	virtual void	select()=0;
+	virtual void	unselect()=0;
 	virtual void	render()=0;
 	virtual void	think(int _frames)=0;
 
