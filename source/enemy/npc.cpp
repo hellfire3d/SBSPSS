@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_SHARK_MAN;
+	m_type = NPC_SMALL_JELLYFISH_1;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -336,7 +336,7 @@ bool CNpc::processSensor()
 				{
 					case NPC_SENSOR_JELLYFISH_USER_CLOSE:
 					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 5625 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_evadeClockwise = getRnd() % 2;
@@ -635,10 +635,8 @@ void CNpc::processMovement(int _frames)
 	}
 
 	s32 moveX = 0, moveY = 0;
-
-	s16 moveDist = 0;
-
 	s32 moveVel = 0;
+	s32 moveDist = 0;
 
 	switch( m_data[this->m_type].movementFunc )
 	{
@@ -649,81 +647,14 @@ void CNpc::processMovement(int _frames)
 
 		case NPC_MOVEMENT_FIXED_PATH:
 		{
-			bool pathComplete;
-			bool waypointChange;
-
-			s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
-
-			if ( waypointChange )
-			{
-				m_movementTimer = 0;
-			}
-
-			if ( !pathComplete )
-			{
-				s16 decDir, incDir;
-				s16 maxTurnRate = m_data[m_type].turnSpeed;
-
-				decDir = m_heading - headingToTarget;
-
-				if ( decDir < 0 )
-				{
-					decDir += ONE;
-				}
-
-				incDir = headingToTarget - m_heading;
-
-				if ( incDir < 0 )
-				{
-					incDir += ONE;
-				}
-
-				if ( decDir < incDir )
-				{
-					moveDist = -decDir;
-				}
-				else
-				{
-					moveDist = incDir;
-				}
-
-				if ( moveDist < -maxTurnRate )
-				{
-					moveDist = -maxTurnRate;
-				}
-				else if ( moveDist > maxTurnRate )
-				{
-					moveDist = maxTurnRate;
-				}
-
-				m_heading += moveDist;
-
-				m_heading = m_heading % ONE;
-
-				s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-				s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
-
-				moveX = preShiftX >> 12;
-				if ( !moveX && preShiftX )
-				{
-					moveX = preShiftX / abs( preShiftX );
-				}
-
-				moveY = preShiftY >> 12;
-				if ( !moveY && preShiftY )
-				{
-					moveY = preShiftY / abs( preShiftY );
-				}
-
-				moveVel = ( _frames * m_data[m_type].speed ) << 8;
-			}
+			processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
 
 			break;
 		}
 
 		case NPC_MOVEMENT_FIXED_PATH_WALK:
 		{
-			processGenericFixedPathWalk( _frames, &moveX, &moveY, &m_heading );
+			processGenericFixedPathWalk( _frames, &moveX, &moveY );
 
 			break;
 		}
@@ -789,7 +720,7 @@ void CNpc::processMovement(int _frames)
 			break;
 	}
 
-	processMovementModifier(_frames, moveX, moveY, moveVel, moveDist);
+	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }
 
 void CNpc::processMovementModifier(int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange)

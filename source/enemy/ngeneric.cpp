@@ -99,7 +99,134 @@ void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 	*distY = playerPos.vy - this->Pos.vy;
 }
 
-void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY, s32 *heading )
+bool CNpc::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
+{
+	bool xBlocked = false;
+	bool yBlocked = false;
+
+	// check for collision with ground
+
+	if ( m_layerCollision->Get( ( Pos.vx + *moveX ) >> 4, ( Pos.vy + *moveY ) >> 4 ) )
+	{
+		// destination point is below ground, check in individual directions
+
+		if ( m_layerCollision->Get( ( Pos.vx + *moveX ) >> 4, Pos.vy >> 4 ) )
+		{
+			// X direction is blocked
+
+			xBlocked = true;
+		}
+
+		if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + *moveY ) >> 4 ) )
+		{
+			yBlocked = true;
+		}
+
+		if ( xBlocked && !yBlocked )
+		{
+			// invert X
+
+			*moveX = -(*moveX);
+
+			m_heading = ratan2( *moveY, *moveX );
+		}
+		else if ( !xBlocked && yBlocked )
+		{
+			// invert Y
+
+			*moveY = -(*moveY);
+
+			m_heading = ratan2( *moveY, *moveX );
+		}
+		else
+		{
+			// invert both
+
+			*moveX = -(*moveX);
+			*moveY = -(*moveY);
+
+			m_heading += 2048;
+			m_heading &= 4096;
+		}
+	}
+
+	return( xBlocked | yBlocked );
+}
+
+void CNpc::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
+{
+	bool pathComplete;
+	bool waypointChange;
+
+	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
+
+	if ( waypointChange )
+	{
+		m_movementTimer = 0;
+	}
+
+	if ( !pathComplete )
+	{
+		s16 decDir, incDir;
+		s16 maxTurnRate = m_data[m_type].turnSpeed;
+
+		decDir = m_heading - headingToTarget;
+
+		if ( decDir < 0 )
+		{
+			decDir += ONE;
+		}
+
+		incDir = headingToTarget - m_heading;
+
+		if ( incDir < 0 )
+		{
+			incDir += ONE;
+		}
+
+		if ( decDir < incDir )
+		{
+			*moveDist = -decDir;
+		}
+		else
+		{
+			*moveDist = incDir;
+		}
+
+		if ( *moveDist < -maxTurnRate )
+		{
+			*moveDist = -maxTurnRate;
+		}
+		else if ( *moveDist > maxTurnRate )
+		{
+			*moveDist = maxTurnRate;
+		}
+
+		m_heading += *moveDist;
+		m_heading = m_heading % ONE;
+
+		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
+		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
+
+		*moveX = preShiftX >> 12;
+		if ( !(*moveX) && preShiftX )
+		{
+			*moveX = preShiftX / abs( preShiftX );
+		}
+
+		*moveY = preShiftY >> 12;
+		if ( !(*moveY) && preShiftY )
+		{
+			*moveY = preShiftY / abs( preShiftY );
+		}
+
+		*moveVel = ( _frames * m_data[m_type].speed ) << 8;
+
+		processGroundCollisionReverse( moveX, moveY );
+	}
+}
+
+void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 {
 	s32 maxHeight = 10;
 	s32 distX, distY;
@@ -112,7 +239,7 @@ void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY, s32
 
 	// ignore y component of waypoint, since we are stuck to the ground
 
-	if ( m_npcPath.thinkFlat( Pos, &distX, &distY, heading ) )
+	if ( m_npcPath.thinkFlat( Pos, &distX, &distY, &m_heading ) )
 	{
 		// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
 
