@@ -27,6 +27,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +42,8 @@ void CNpcFallingHazard::init()
 
 	m_respawnRate = 4;
 	m_bounceFinish = false;
+	m_spinFinish = false;
+	m_rotation = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,16 +66,22 @@ void CNpcFallingHazard::processMovement( int _frames )
 
 		Pos.vy += m_speed * _frames;
 
-		if ( Pos.vy > ( m_bouncePos.vy + 32 ) )
+		/*if ( Pos.vy > ( m_bouncePos.vy + 32 ) )
 		{
 			m_bounceFinish = false;
 		}
-		else
+		else*/
 		{
 			if ( m_speed < 3 )
 			{
 				m_speed++;
 			}
+		}
+
+		if ( m_spinFinish )
+		{
+			m_rotation += 64 * _frames;
+			m_rotation &= 4095;
 		}
 	}
 	else
@@ -140,6 +152,8 @@ void CNpcFallingHazard::processTimer( int _frames )
 		Pos = m_base;
 		m_movementTimer = 2 * GameState::getOneSecondInFrames();
 		m_bounceFinish = false;
+		m_spinFinish = false;
+		m_rotation = 0;
 	}
 }
 
@@ -147,7 +161,34 @@ void CNpcFallingHazard::processTimer( int _frames )
 
 void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 {
-	if (m_movementTimer<=0) CNpcHazard::collidedWith(_thisThing);
+	if ( m_movementTimer <= 0 && m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				if ( !player->isRecoveringFromHit() )
+				{
+					player->takeDamage( DAMAGE__HIT_ENEMY );
+				}
+
+				m_bounceFinish = true;
+				m_spinFinish = true;
+				m_speed = -5;
+				m_bounceDir = getRnd() % 2;
+
+				m_bouncePos = Pos;
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,5 +238,29 @@ void CNpcFallingHazard::setWaypoints( sThingHazard *ThisHazard )
 
 			addWaypoint( newXPos, newYPos );
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFallingHazard::render()
+{
+	CHazardThing::render();
+
+	if (canRender())
+	{
+		DVECTOR &renderPos=getRenderPos();
+
+		SVECTOR rotation;
+		rotation.vx = 0;
+		rotation.vy = 0;
+		rotation.vz = m_rotation;
+
+		VECTOR scale;
+		scale.vx = ONE;
+		scale.vy = ONE;
+		scale.vz = ONE;
+
+		m_modelGfx->Render(renderPos,&rotation,&scale);
 	}
 }

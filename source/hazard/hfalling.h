@@ -24,6 +24,7 @@ public:
 	void				init();
 	//virtual	CRECT const		*getThinkBBox();
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				render();
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
@@ -31,9 +32,11 @@ protected:
 
 	s32					m_movementTimer;
 	u8					m_bounceFinish;
+	u8					m_spinFinish;
 	s32					m_speed;
 	u8					m_bounceDir;
 	DVECTOR				m_bouncePos;
+	s16					m_rotation;
 };
 
 #endif
