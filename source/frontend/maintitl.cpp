@@ -311,7 +311,11 @@ void CFrontEndMainTitles::think(int _frames)
 
 	if(m_mode==MODE__PRESS_START||m_mode==MODE__SELECT_OPTION)
 	{
-		m_demoTimeout+=_frames;
+		if(!CFader::isFading())
+		{
+			m_demoTimeout+=_frames;
+		}
+
 		/*
 		if(!PadGetHeld(0))
 		{
@@ -503,7 +507,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::renderPressStart()
 {
-	if(!CFader::isFading() && m_demoTimeout & 32)
+	if(!CFader::isFading()&&!(m_demoTimeout&32))
 	{
 		m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
