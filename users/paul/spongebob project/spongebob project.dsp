@@ -257,19 +257,31 @@ SOURCE=..\..\..\source\sound\cdxa.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\sound\music.cpp
+SOURCE=..\..\..\source\sound\sound.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\sound\music.h
+SOURCE=..\..\..\source\sound\sound.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\sound\sndbank.cpp
+SOURCE=..\..\..\source\sound\speech.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\sound\sndbank.h
+SOURCE=..\..\..\source\sound\spu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\sound\spu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\sound\xmplay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\sound\xmplay.h
 # End Source File
 # End Group
 # Begin Group "system"
