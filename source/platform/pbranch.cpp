@@ -154,14 +154,14 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 		if ( m_reversed )
 		{
-			if ( m_angularVelocity > 10 && newAngle < -32 )
+			if ( m_angularVelocity > 8 && newAngle < -20 )
 			{
 				player->springPlayerUp();
 			}
 		}
 		else
 		{
-			if ( m_angularVelocity < -10 && newAngle > 32 )
+			if ( m_angularVelocity < -8 && newAngle > 20 )
 			{
 				player->springPlayerUp();
 			}
@@ -188,7 +188,7 @@ void CNpcBranchPlatform::processMovement( int _frames )
 		m_angularVelocity += angularForce;
 	}
 
-	s32 resistance = -( 5 * _frames * newAngle ) >> 8;
+	s32 resistance = -( 10 * _frames * newAngle ) >> 8;
 
 	if ( newAngle > 0 && resistance > -2 )
 	{
