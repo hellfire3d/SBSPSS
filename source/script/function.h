@@ -37,6 +37,9 @@
 	Functions
 	--------- */
 
+signed short callFunction(int _functionNumber,int _argCount,unsigned short *_args);
+
+
 /*---------------------------------------------------------------------- */
 
 #endif	/* __SCRIPT_FUNCTION_H__ */

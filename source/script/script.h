@@ -75,25 +75,28 @@ private:
 
 	enum
 	{
-		STACK_SIZE=20,
+		STACK_SIZE=10,
+		MAX_FUNCTION_ARGS=5,
 	};
 
 	enum
 	{
-								//	args				stack data				result
+								//	args						stack data				result
 		OP_NOP=0x1100,			//
 		OP_STOP,				//
 		OP_PAUSE,
 		OP_PUSHVALUE,			//	value
 		OP_PUSHVARVALUE,		//	varidx
-		OP_JMP,					//						jump
-		OP_JMPF,				//						jump, value
-		OP_JMPT,				//						jump, value
-		OP_IS_EQUAL_VALUE,		//						value, value			pushes result ( 0 or 1 ) to stack
-		OP_IS_NOTEQUAL_VALUE,	//						value, value			pushes result ( 0 or 1 ) to stack
-		OP_ASSIGN,				//						varidx, value
-		OP_ADD,					//						value, value			pushes result to stack
-		OP_PRINT,				//						value
+		OP_POP,					//								value
+		OP_JMP,					//								jump
+		OP_JMPF,				//								jump, value
+		OP_JMPT,				//								jump, value
+		OP_IS_EQUAL_VALUE,		//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_NOTEQUAL_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_ASSIGN,				//								varidx, value
+		OP_ADD,					//								value, value			pushes result to stack
+		OP_PRINT,				//								value
+		OP_CALL_FUNCTION,		//	functionnumber, argcount	args					pushes return value to stack
 	};
 
 
@@ -115,6 +118,8 @@ private:
 	static signed short		s_globalVars[NUM_GLOBAL_VARS];
 	signed short			m_localVars[NUM_LOCAL_VARS];
 
+	static unsigned short	s_argBuffer[MAX_FUNCTION_ARGS];
+		
 	ScriptState		m_state;
 };
 

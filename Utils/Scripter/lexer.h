@@ -15,7 +15,7 @@ protected:
 	virtual int yyaction(int action);
 
 public:
-#line 24 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 25 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 	int	openInputFile(char *_filename);
 	int closeInputFile();

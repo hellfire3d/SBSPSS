@@ -8,6 +8,7 @@ Date: 07 December 2000
 
 #include "parser.h"
 #include "var.h"
+#include "function.h"
 #include "prepro.h"
 #include <stdlib.h>
 
@@ -78,10 +79,14 @@ print						{return PRINT;}
 \)							{return CLOSE_PAR;}
 \{							{return BEGIN_CS;}
 \}							{return END_CS;}
+,							{return COMMA;}
+
 
 \$[a-zA-Z_][a-zA-Z_0-9]*	{yylval.variableIdx=lookupVarName(yytext+1);return VARIABLE;}
 [0-9]+						{yylval.value=atoi(yytext);return VALUE;}
 //	\"[^\"]*\"					{printf("s:%s\n",yytext);return STRING;}
+
+_[a-zA-Z_][a-zA-Z_0-9]*		{yylval.functionNumber=lookupFunctionName(yytext+1);return FUNCTION;}
 
 \/\/.*						{}
 [ \t]+						{}

@@ -26,6 +26,10 @@
 #include "parser.h"
 #endif
 
+#ifndef __FUNCTION_H__
+#include "function.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -76,7 +80,7 @@ extern int parseFile(char *_filename,CTreeNode *_baseNode)
 	{
 		if(s_lexer.yycreate(&s_parser))
 		{
-			if(s_lexer.openInputFile(_filename)==true)
+			if(s_lexer.openInputFile(_filename)==(int)true)
 			{
 				s_parser.setCurrentLexer(&s_lexer);
 				s_parser.setBaseNode(_baseNode);
@@ -180,6 +184,9 @@ CTreeNode::CTreeNode(NodeType _type,int _data)
 		case VALUE_EXPR:
 			m_value=_data;
 			break;
+		case FUNCTION_EXPR:
+			m_functionNumber=_data;
+			break;
 		default:
 			printf("ARSE\n");
 			break;
@@ -240,7 +247,11 @@ int CTreeNode::generateCode(int _write)
 			codeSize+=emit(OP_JMP,_write);
 			codeSize+=m_children[2]->generateCode(_write);
 			break;
-			
+
+		case POP_STMT:			// pop
+			codeSize+=emit(OP_POP,_write);
+			break;
+
 		case ASSIGN_EXPR:		// assign [ variable, number ]
 			codeSize+=m_children[1]->generateCode(_write);
 			codeSize+=emit(OP_PUSHVALUE,_write);
@@ -272,6 +283,12 @@ int CTreeNode::generateCode(int _write)
 			codeSize+=emitValue(m_children[0],_write);
 			codeSize+=emitValue(m_children[1],_write);
 			codeSize+=emit(OP_ADD,_write);
+			break;
+
+		case FUNCTION_EXPR:		// function [functionNumber]
+			codeSize+=emit(OP_CALL_FUNCTION,_write);
+			codeSize+=emit(getFunctionNumber(),_write);
+			codeSize+=emit(getFunctionArgCount(getFunctionNumber()),_write);
 			break;
 
 		default:

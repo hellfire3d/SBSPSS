@@ -385,6 +385,14 @@ SOURCE=..\..\..\source\PsxBoot\PSXBOOT.H
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\script\function.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\script\function.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\script\script.cpp
 # End Source File
 # Begin Source File

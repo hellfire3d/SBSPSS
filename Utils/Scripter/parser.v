@@ -13,22 +13,28 @@
     9            | IF OPEN_PAR expression CLOSE_PAR statement
    10            | IF OPEN_PAR expression CLOSE_PAR statement ELSE statement
    11            | BEGIN_CS statement_list END_CS
+   12            | function END_STMT
 
-   12  assign_expression : variable ASSIGN value
+   13  assign_expression : variable ASSIGN value
 
-   13  expression : OPEN_PAR expression CLOSE_PAR
-   14             | equal_expression
-   15             | notequal_expression
+   14  expression : OPEN_PAR expression CLOSE_PAR
+   15             | equal_expression
+   16             | notequal_expression
 
-   16  equal_expression : value EQUAL value
+   17  equal_expression : value EQUAL value
 
-   17  notequal_expression : value NOTEQUAL value
+   18  notequal_expression : value NOTEQUAL value
 
-   18  variable : VARIABLE
+   19  variable : VARIABLE
 
-   19  value : VALUE
-   20        | VARIABLE
-   21        | value PLUS value
+   20  value : VALUE
+   21        | VARIABLE
+   22        | value PLUS value
+   23        | function
+
+   24  $$1 :
+
+   25  function : FUNCTION OPEN_PAR $$1 CLOSE_PAR
 
 
 state 0
@@ -58,36 +64,38 @@ state 2
 	END_STMT  shift 7
 	BEGIN_CS  shift 8
 	VARIABLE  shift 9
+	FUNCTION  shift 10
 	.  reduce 1
 
-	statement goto 10
-	assign_expression goto 11
-	variable goto 12
+	statement goto 11
+	assign_expression goto 12
+	variable goto 13
+	function goto 14
 
 
 state 3
 	statement : STOP . END_STMT
 
-	END_STMT  shift 13
+	END_STMT  shift 15
 
 
 state 4
 	statement : IF . OPEN_PAR expression CLOSE_PAR statement
 	statement : IF . OPEN_PAR expression CLOSE_PAR statement ELSE statement
 
-	OPEN_PAR  shift 14
+	OPEN_PAR  shift 16
 
 
 state 5
 	statement : PAUSE . END_STMT
 
-	END_STMT  shift 15
+	END_STMT  shift 17
 
 
 state 6
 	statement : PRINT . OPEN_PAR value CLOSE_PAR END_STMT
 
-	OPEN_PAR  shift 16
+	OPEN_PAR  shift 18
 
 
 state 7
@@ -102,69 +110,85 @@ state 8
 
 	.  reduce 3
 
-	statement_list goto 17
+	statement_list goto 19
 
 
 state 9
-	variable : VARIABLE .  (18)
+	variable : VARIABLE .  (19)
 
-	.  reduce 18
+	.  reduce 19
 
 
 state 10
+	function : FUNCTION . OPEN_PAR $$1 CLOSE_PAR
+
+	OPEN_PAR  shift 20
+
+
+state 11
 	statement_list : statement_list statement .  (2)
 
 	.  reduce 2
 
 
-state 11
+state 12
 	statement : assign_expression . END_STMT
 
-	END_STMT  shift 18
-
-
-state 12
-	assign_expression : variable . ASSIGN value
-
-	ASSIGN  shift 19
+	END_STMT  shift 21
 
 
 state 13
+	assign_expression : variable . ASSIGN value
+
+	ASSIGN  shift 22
+
+
+state 14
+	statement : function . END_STMT
+
+	END_STMT  shift 23
+
+
+state 15
 	statement : STOP END_STMT .  (5)
 
 	.  reduce 5
 
 
-state 14
+state 16
 	statement : IF OPEN_PAR . expression CLOSE_PAR statement
 	statement : IF OPEN_PAR . expression CLOSE_PAR statement ELSE statement
 
-	OPEN_PAR  shift 20
-	VARIABLE  shift 21
-	VALUE  shift 22
+	OPEN_PAR  shift 24
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
 
-	expression goto 23
-	equal_expression goto 24
-	notequal_expression goto 25
-	value goto 26
+	expression goto 27
+	equal_expression goto 28
+	notequal_expression goto 29
+	value goto 30
+	function goto 31
 
 
-state 15
+state 17
 	statement : PAUSE END_STMT .  (6)
 
 	.  reduce 6
 
 
-state 16
+state 18
 	statement : PRINT OPEN_PAR . value CLOSE_PAR END_STMT
 
-	VARIABLE  shift 21
-	VALUE  shift 22
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
 
-	value goto 27
+	value goto 32
+	function goto 31
 
 
-state 17
+state 19
 	statement_list : statement_list . statement
 	statement : BEGIN_CS statement_list . END_CS
 
@@ -174,112 +198,145 @@ state 17
 	PRINT  shift 6
 	END_STMT  shift 7
 	BEGIN_CS  shift 8
-	END_CS  shift 28
+	END_CS  shift 33
 	VARIABLE  shift 9
+	FUNCTION  shift 10
 
-	statement goto 10
-	assign_expression goto 11
-	variable goto 12
+	statement goto 11
+	assign_expression goto 12
+	variable goto 13
+	function goto 14
 
 
-state 18
+state 20
+	function : FUNCTION OPEN_PAR . $$1 CLOSE_PAR
+	$$1 : .  (24)
+
+	.  reduce 24
+
+	$$1 goto 34
+
+
+state 21
 	statement : assign_expression END_STMT .  (8)
 
 	.  reduce 8
 
 
-state 19
+state 22
 	assign_expression : variable ASSIGN . value
 
-	VARIABLE  shift 21
-	VALUE  shift 22
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
 
-	value goto 29
+	value goto 35
+	function goto 31
 
 
-state 20
+state 23
+	statement : function END_STMT .  (12)
+
+	.  reduce 12
+
+
+state 24
 	expression : OPEN_PAR . expression CLOSE_PAR
 
-	OPEN_PAR  shift 20
-	VARIABLE  shift 21
-	VALUE  shift 22
+	OPEN_PAR  shift 24
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
 
-	expression goto 30
-	equal_expression goto 24
-	notequal_expression goto 25
-	value goto 26
+	expression goto 36
+	equal_expression goto 28
+	notequal_expression goto 29
+	value goto 30
+	function goto 31
 
 
-state 21
-	value : VARIABLE .  (20)
+state 25
+	value : VARIABLE .  (21)
+
+	.  reduce 21
+
+
+state 26
+	value : VALUE .  (20)
 
 	.  reduce 20
 
 
-state 22
-	value : VALUE .  (19)
-
-	.  reduce 19
-
-
-state 23
+state 27
 	statement : IF OPEN_PAR expression . CLOSE_PAR statement
 	statement : IF OPEN_PAR expression . CLOSE_PAR statement ELSE statement
 
-	CLOSE_PAR  shift 31
+	CLOSE_PAR  shift 37
 
 
-state 24
-	expression : equal_expression .  (14)
-
-	.  reduce 14
-
-
-state 25
-	expression : notequal_expression .  (15)
+state 28
+	expression : equal_expression .  (15)
 
 	.  reduce 15
 
 
-state 26
+state 29
+	expression : notequal_expression .  (16)
+
+	.  reduce 16
+
+
+state 30
 	equal_expression : value . EQUAL value
 	notequal_expression : value . NOTEQUAL value
 	value : value . PLUS value
 
-	EQUAL  shift 32
-	NOTEQUAL  shift 33
-	PLUS  shift 34
+	EQUAL  shift 38
+	NOTEQUAL  shift 39
+	PLUS  shift 40
 
 
-state 27
+state 31
+	value : function .  (23)
+
+	.  reduce 23
+
+
+state 32
 	statement : PRINT OPEN_PAR value . CLOSE_PAR END_STMT
 	value : value . PLUS value
 
-	PLUS  shift 34
-	CLOSE_PAR  shift 35
+	PLUS  shift 40
+	CLOSE_PAR  shift 41
 
 
-state 28
+state 33
 	statement : BEGIN_CS statement_list END_CS .  (11)
 
 	.  reduce 11
 
 
-state 29
-	assign_expression : variable ASSIGN value .  (12)
+state 34
+	function : FUNCTION OPEN_PAR $$1 . CLOSE_PAR
+
+	CLOSE_PAR  shift 42
+
+
+state 35
+	assign_expression : variable ASSIGN value .  (13)
 	value : value . PLUS value
 
-	PLUS  shift 34
-	.  reduce 12
+	PLUS  shift 40
+	.  reduce 13
 
 
-state 30
+state 36
 	expression : OPEN_PAR expression . CLOSE_PAR
 
-	CLOSE_PAR  shift 36
+	CLOSE_PAR  shift 43
 
 
-state 31
+state 37
 	statement : IF OPEN_PAR expression CLOSE_PAR . statement
 	statement : IF OPEN_PAR expression CLOSE_PAR . statement ELSE statement
 
@@ -290,92 +347,106 @@ state 31
 	END_STMT  shift 7
 	BEGIN_CS  shift 8
 	VARIABLE  shift 9
+	FUNCTION  shift 10
 
-	statement goto 37
-	assign_expression goto 11
-	variable goto 12
-
-
-state 32
-	equal_expression : value EQUAL . value
-
-	VARIABLE  shift 21
-	VALUE  shift 22
-
-	value goto 38
-
-
-state 33
-	notequal_expression : value NOTEQUAL . value
-
-	VARIABLE  shift 21
-	VALUE  shift 22
-
-	value goto 39
-
-
-state 34
-	value : value PLUS . value
-
-	VARIABLE  shift 21
-	VALUE  shift 22
-
-	value goto 40
-
-
-state 35
-	statement : PRINT OPEN_PAR value CLOSE_PAR . END_STMT
-
-	END_STMT  shift 41
-
-
-state 36
-	expression : OPEN_PAR expression CLOSE_PAR .  (13)
-
-	.  reduce 13
-
-
-37: shift-reduce conflict (shift 42, reduce 9) on ELSE
-state 37
-	statement : IF OPEN_PAR expression CLOSE_PAR statement .  (9)
-	statement : IF OPEN_PAR expression CLOSE_PAR statement . ELSE statement
-
-	ELSE  shift 42
-	.  reduce 9
+	statement goto 44
+	assign_expression goto 12
+	variable goto 13
+	function goto 14
 
 
 state 38
-	equal_expression : value EQUAL value .  (16)
-	value : value . PLUS value
+	equal_expression : value EQUAL . value
 
-	PLUS  shift 34
-	.  reduce 16
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
+
+	value goto 45
+	function goto 31
 
 
 state 39
-	notequal_expression : value NOTEQUAL value .  (17)
-	value : value . PLUS value
+	notequal_expression : value NOTEQUAL . value
 
-	PLUS  shift 34
-	.  reduce 17
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
+
+	value goto 46
+	function goto 31
 
 
-40: shift-reduce conflict (shift 34, reduce 21) on PLUS
 state 40
-	value : value PLUS value .  (21)
-	value : value . PLUS value
+	value : value PLUS . value
 
-	PLUS  shift 34
-	.  reduce 21
+	VARIABLE  shift 25
+	VALUE  shift 26
+	FUNCTION  shift 10
+
+	value goto 47
+	function goto 31
 
 
 state 41
+	statement : PRINT OPEN_PAR value CLOSE_PAR . END_STMT
+
+	END_STMT  shift 48
+
+
+state 42
+	function : FUNCTION OPEN_PAR $$1 CLOSE_PAR .  (25)
+
+	.  reduce 25
+
+
+state 43
+	expression : OPEN_PAR expression CLOSE_PAR .  (14)
+
+	.  reduce 14
+
+
+44: shift-reduce conflict (shift 49, reduce 9) on ELSE
+state 44
+	statement : IF OPEN_PAR expression CLOSE_PAR statement .  (9)
+	statement : IF OPEN_PAR expression CLOSE_PAR statement . ELSE statement
+
+	ELSE  shift 49
+	.  reduce 9
+
+
+state 45
+	equal_expression : value EQUAL value .  (17)
+	value : value . PLUS value
+
+	PLUS  shift 40
+	.  reduce 17
+
+
+state 46
+	notequal_expression : value NOTEQUAL value .  (18)
+	value : value . PLUS value
+
+	PLUS  shift 40
+	.  reduce 18
+
+
+47: shift-reduce conflict (shift 40, reduce 22) on PLUS
+state 47
+	value : value PLUS value .  (22)
+	value : value . PLUS value
+
+	PLUS  shift 40
+	.  reduce 22
+
+
+state 48
 	statement : PRINT OPEN_PAR value CLOSE_PAR END_STMT .  (7)
 
 	.  reduce 7
 
 
-state 42
+state 49
 	statement : IF OPEN_PAR expression CLOSE_PAR statement ELSE . statement
 
 	STOP  shift 3
@@ -385,21 +456,23 @@ state 42
 	END_STMT  shift 7
 	BEGIN_CS  shift 8
 	VARIABLE  shift 9
+	FUNCTION  shift 10
 
-	statement goto 43
-	assign_expression goto 11
-	variable goto 12
+	statement goto 50
+	assign_expression goto 12
+	variable goto 13
+	function goto 14
 
 
-state 43
+state 50
 	statement : IF OPEN_PAR expression CLOSE_PAR statement ELSE statement .  (10)
 
 	.  reduce 10
 
 
-State 37 contains 1 shift-reduce conflict
-State 40 contains 1 shift-reduce conflict
+State 44 contains 1 shift-reduce conflict
+State 47 contains 1 shift-reduce conflict
 
 
-18 tokens, 10 nonterminals
-22 grammar rules, 44 states
+19 tokens, 12 nonterminals
+26 grammar rules, 51 states

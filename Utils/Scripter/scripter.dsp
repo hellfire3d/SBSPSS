@@ -132,6 +132,14 @@ SOURCE=.\codegen.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\function.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\function.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\main.cpp
 # End Source File
 # Begin Source File

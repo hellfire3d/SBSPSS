@@ -97,7 +97,8 @@ pad_src :=			pads
 
 paul_src :=			paul
 
-script_src :=		script
+script_src :=		script \
+					function
 
 sound_src :=		sound \
 					spu \

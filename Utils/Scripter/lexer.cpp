@@ -11,12 +11,13 @@ Date: 07 December 2000
 
 #include "parser.h"
 #include "var.h"
+#include "function.h"
 #include "prepro.h"
 #include <stdlib.h>
 
 
 
-#line 20 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 21 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 // repeated because of possible precompiled header
 #include <clex.h>
 
@@ -28,11 +29,11 @@ Date: 07 December 2000
 YYLEXNAME::YYLEXNAME()
 {
 	yytables();
-#line 45 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 46 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 	// place any extra initialisation code here
 
-#line 36 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 37 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 }
 
 #ifndef YYTEXT_SIZE
@@ -78,166 +79,180 @@ void YYLEXNAME::yyunput(int ch)
 
 int YYLEXNAME::yyaction(int action)
 {
-#line 57 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 58 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 // extract yylval for use later on in actions
 YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
 
-#line 87 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 88 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 	yyreturnflg = 1;
 	switch (action) {
 	case 1:
 		{
-#line 64 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 65 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 if(preprocessorCmd(yytext+1)!=(int)true)error();
-#line 94 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 95 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 2:
 		{
-#line 65 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 66 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 printf("# commands must be at start of line!\n");error();
-#line 101 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 102 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 3:
 		{
-#line 67 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 68 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return STOP;
-#line 108 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 109 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 4:
 		{
-#line 68 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 69 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return IF;
-#line 115 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 116 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 5:
 		{
-#line 69 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 70 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return ELSE;
-#line 122 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 123 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 6:
 		{
-#line 70 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 71 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PAUSE;
-#line 129 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 130 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 7:
 		{
-#line 71 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 72 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PRINT;
-#line 136 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 137 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 8:
 		{
-#line 72 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 73 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return ASSIGN;
-#line 143 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 144 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 9:
 		{
-#line 73 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 74 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return EQUAL;
-#line 150 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 151 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 10:
 		{
-#line 74 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 75 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return NOTEQUAL;
-#line 157 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 158 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 11:
 		{
-#line 75 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 76 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return PLUS;
-#line 164 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 165 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 12:
 		{
-#line 76 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 77 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return END_STMT;
-#line 171 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 172 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 13:
 		{
-#line 77 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 78 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return OPEN_PAR;
-#line 178 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 179 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 14:
 		{
-#line 78 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 79 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return CLOSE_PAR;
-#line 185 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 186 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 15:
 		{
-#line 79 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 80 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return BEGIN_CS;
-#line 192 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 193 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 16:
 		{
-#line 80 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 81 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 return END_CS;
-#line 199 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 200 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 17:
 		{
 #line 82 "C:\\spongebob\\Utils\\scripter\\lexer.l"
-yylval.variableIdx=lookupVarName(yytext+1);return VARIABLE;
-#line 206 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+return COMMA;
+#line 207 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 18:
 		{
-#line 83 "C:\\spongebob\\Utils\\scripter\\lexer.l"
-yylval.value=atoi(yytext);return VALUE;
-#line 213 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 85 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+yylval.variableIdx=lookupVarName(yytext+1);return VARIABLE;
+#line 214 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 19:
 		{
 #line 86 "C:\\spongebob\\Utils\\scripter\\lexer.l"
-
-#line 220 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+yylval.value=atoi(yytext);return VALUE;
+#line 221 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 20:
 		{
-#line 87 "C:\\spongebob\\Utils\\scripter\\lexer.l"
-
-#line 227 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 89 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+yylval.functionNumber=lookupFunctionName(yytext+1);return FUNCTION;
+#line 228 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 21:
 		{
-#line 88 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 91 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
-#line 234 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 235 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	case 22:
 		{
-#line 90 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 92 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+
+#line 242 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+		}
+		break;
+	case 23:
+		{
+#line 93 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+
+#line 249 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+		}
+		break;
+	case 24:
+		{
+#line 95 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 unexpectedChar();
-#line 241 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 256 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 		}
 		break;
 	default:
@@ -253,7 +268,7 @@ unexpectedChar();
 #pragma warn .rch		// <warning: unreachable code> to the old state
 #endif
 #endif
-#line 92 "C:\\spongebob\\Utils\\scripter\\lexer.l"
+#line 97 "C:\\spongebob\\Utils\\scripter\\lexer.l"
 
 
 
@@ -261,7 +276,7 @@ unexpectedChar();
 // programs section
 
 
-#line 265 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
+#line 280 "C:\\spongebob\\Utils\\scripter\\lexer.cpp"
 
 void YYLEXNAME::yytables()
 {
@@ -273,7 +288,7 @@ void YYLEXNAME::yytables()
 	};
 	yymatch = match;
 
-	yytransitionmax = 251;
+	yytransitionmax = 336;
 	static const yytransition_t YYNEARFAR YYBASED_CODE transition[] = {
 		{ 0, 0 },
 		{ 0, 0 },
@@ -285,9 +300,9 @@ void YYLEXNAME::yytables()
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 19, 19 },
-		{ 0, 30 },
-		{ 0, 41 },
+		{ 21, 21 },
+		{ 0, 33 },
+		{ 0, 44 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
@@ -308,7 +323,7 @@ void YYLEXNAME::yytables()
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 19, 19 },
+		{ 21, 21 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 3, 1 },
@@ -323,141 +338,226 @@ void YYLEXNAME::yytables()
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 30, 18 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
+		{ 33, 20 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 27, 8 },
-		{ 28, 9 },
+		{ 29, 8 },
+		{ 30, 9 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 29, 29 },
+		{ 31, 31 },
 		{ 0, 0 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 29, 29 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 0, 16 },
-		{ 19, 2 },
-		{ 20, 2 },
-		{ 33, 25 },
-		{ 40, 38 },
-		{ 22, 4 },
-		{ 25, 7 },
-		{ 32, 24 },
-		{ 37, 33 },
-		{ 35, 31 },
-		{ 31, 22 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 31, 31 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 36, 27 },
+		{ 43, 41 },
+		{ 24, 4 },
+		{ 35, 26 },
+		{ 40, 36 },
 		{ 38, 34 },
-		{ 24, 6 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 17, 17 },
-		{ 26, 7 },
-		{ 19, 2 },
+		{ 34, 24 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 41, 37 },
+		{ 26, 6 },
+		{ 37, 28 },
+		{ 25, 5 },
+		{ 32, 32 },
+		{ 39, 35 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 32, 32 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 17 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 0, 19 },
+		{ 21, 2 },
+		{ 22, 2 },
+		{ 27, 7 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 18, 18 },
+		{ 42, 40 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 28, 7 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 21, 2 },
 		{ 9, 2 },
-		{ 34, 26 },
-		{ 41, 2 },
-		{ 16, 2 },
-		{ 23, 5 },
-		{ 36, 32 },
-		{ 39, 37 },
+		{ 0, 0 },
+		{ 44, 2 },
+		{ 17, 2 },
+		{ 0, 0 },
+		{ 0, 0 },
+		{ 0, 0 },
 		{ 12, 2 },
 		{ 13, 2 },
 		{ 0, 0 },
 		{ 10, 2 },
+		{ 16, 2 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 0, 0 },
+		{ 20, 2 },
 		{ 18, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
-		{ 17, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
+		{ 18, 2 },
 		{ 0, 0 },
 		{ 11, 2 },
 		{ 0, 0 },
@@ -495,7 +595,7 @@ void YYLEXNAME::yytables()
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
-		{ 0, 0 },
+		{ 19, 2 },
 		{ 0, 0 },
 		{ 0, 0 },
 		{ 0, 0 },
@@ -532,50 +632,55 @@ void YYLEXNAME::yytables()
 	static const yystate_t YYNEARFAR YYBASED_CODE state[] = {
 		{ 0, 0, 0 },
 		{ 2, 1, 0 },
-		{ -21, 125, 0 },
+		{ -23, 210, 0 },
 		{ 0, 0, 2 },
-		{ 38, 22, 22 },
-		{ 0, 60, 22 },
-		{ 0, 37, 22 },
-		{ 0, 42, 22 },
+		{ 41, 20, 24 },
+		{ 0, 68, 24 },
+		{ 0, 60, 24 },
+		{ 0, 124, 24 },
 		{ 9, 1, 8 },
-		{ 0, 2, 22 },
+		{ 0, 2, 24 },
 		{ 0, 0, 11 },
 		{ 0, 0, 12 },
 		{ 0, 0, 13 },
 		{ 0, 0, 14 },
 		{ 0, 0, 15 },
 		{ 0, 0, 16 },
-		{ 29, 76, 22 },
-		{ 0, 98, 18 },
+		{ 0, 0, 17 },
+		{ 31, 151, 24 },
+		{ 0, 174, 19 },
+		{ 32, 161, 24 },
+		{ 0, 1, 24 },
 		{ 0, 1, 22 },
-		{ 0, 1, 20 },
-		{ 0, 0, 21 },
-		{ 0, 0, 22 },
-		{ 0, 32, 0 },
+		{ 0, 0, 23 },
+		{ 0, 0, 24 },
+		{ 0, 29, 0 },
 		{ 0, 0, 4 },
-		{ 33, 25, 0 },
-		{ 0, 19, 0 },
-		{ 0, 54, 0 },
+		{ 36, 22, 0 },
+		{ 0, 17, 0 },
+		{ 0, 64, 0 },
 		{ 0, 0, 9 },
 		{ 0, 0, 10 },
-		{ 38, 1, 17 },
-		{ -30, 1, 19 },
-		{ 0, 30, 0 },
-		{ 37, 62, 0 },
-		{ 0, 26, 0 },
-		{ 0, 34, 0 },
+		{ 41, 1, 18 },
+		{ 41, 76, 20 },
+		{ -33, 1, 21 },
+		{ 0, 27, 0 },
+		{ 40, 71, 0 },
+		{ 0, 23, 0 },
+		{ 0, 57, 0 },
 		{ 0, 0, 3 },
 		{ 0, 0, 5 },
-		{ 0, 63, 0 },
-		{ 0, 21, 0 },
+		{ 0, 131, 0 },
+		{ 0, 19, 0 },
 		{ 0, 0, 6 },
 		{ 0, 0, 7 },
-		{ -41, 2, 1 }
+		{ -44, 2, 1 }
 	};
 	yystate = state;
 
 	static const yybackup_t YYNEARFAR YYBASED_CODE backup[] = {
+		0,
+		0,
 		0,
 		0,
 		0,

@@ -35,6 +35,7 @@ typedef enum
 	PAUSE_STMT,				// pause
 	IF_STMT,				// if [expression, ifcode]
 	IFELSE_STMT,			// if [expression, ifcode, elsecode]
+	POP_STMT,				// pop
 		
 	// Expressions
 	ASSIGN_EXPR,			// assignment [variable, value]
@@ -43,6 +44,7 @@ typedef enum
 	VARIABLE_EXPR,			// variable
 	VALUE_EXPR,				// value
 	PLUS_EXPR,				// + [value, value]
+	FUNCTION_EXPR,			// function [functionNumber]
 }NodeType;
 
 
@@ -64,26 +66,29 @@ public:
 	int			getVariableIdx()				{return m_variableIdx;}
 	int			getValue()						{return m_value;}
 	int			getType()						{return m_type;}
+	int			getFunctionNumber()				{return m_functionNumber;}
 
 private:
 
 	// Nothing else needs to know these so we may as well protect them
 	enum
 	{
-								//	args				stack data				result
+								//	args						stack data				result
 		OP_NOP=0x1100,			//
 		OP_STOP,				//
 		OP_PAUSE,				//
 		OP_PUSHVALUE,			//	value
 		OP_PUSHVARVALUE,		//	varidx
-		OP_JMP,					//						jump
-		OP_JMPF,				//						jump, value
-		OP_JMPT,				//						jump, value
-		OP_IS_EQUAL_VALUE,		//						value, value			pushes result ( 0 or 1 ) to stack
-		OP_IS_NOTEQUAL_VALUE,	//						value, value			pushes result ( 0 or 1 ) to stack
-		OP_ASSIGN,				//						varidx, value
-		OP_ADD,					//						value, value			pushes result to stack
-		OP_PRINT,				//						value
+		OP_POP,					//								value
+		OP_JMP,					//								jump
+		OP_JMPF,				//								jump, value
+		OP_JMPT,				//								jump, value
+		OP_IS_EQUAL_VALUE,		//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_IS_NOTEQUAL_VALUE,	//								value, value			pushes result ( 0 or 1 ) to stack
+		OP_ASSIGN,				//								varidx, value
+		OP_ADD,					//								value, value			pushes result to stack
+		OP_PRINT,				//								value
+		OP_CALL_FUNCTION,		//	functionNumber, argcount	args					pushes return value to stack
 	};
 
 	enum{MAX_CHILD_NODES=3};
@@ -95,6 +100,7 @@ private:
 	NodeType		m_type;
 	CTreeNode		*m_children[MAX_CHILD_NODES];
 	int				m_numChildren;
+	int				m_functionNumber;
 
 	signed short	m_variableIdx;
 	signed short	m_value;

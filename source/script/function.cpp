@@ -39,7 +39,7 @@
 
 typedef struct
 {
-	signed short	(*m_func)(signed short *_args);
+	signed short	(*m_func)(unsigned short *_args);
 	int				m_argCount;
 } FunctionDef;
 
@@ -48,14 +48,20 @@ typedef struct
 	Function Prototypes
 	------------------- */
 
+static signed short func_setCharacterExpression(unsigned short *_args);
+static signed short func_setText(unsigned short *_args);
+
+
 /*----------------------------------------------------------------------
 	Vars
 	---- */
 
 static FunctionDef	s_functionDefs[]=
 {
+	{	func_setCharacterExpression,	2	},		// character, expression
+	{	func_setText,					1	},		// textId
 };
-static int			s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
+static const int	s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
 
 
 /*----------------------------------------------------------------------
@@ -64,6 +70,42 @@ static int			s_numFunctionDefs=sizeof(s_functionDefs)/sizeof(FunctionDef);
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+signed short callFunction(int _functionNumber,int _argCount,unsigned short *_args)
+{
+	FunctionDef	*fd;
+
+	ASSERT(_functionNumber<s_numFunctionDefs);
+	fd=&s_functionDefs[_functionNumber];
+	ASSERT(_argCount==fd->m_argCount);
+	return fd->m_func(_args);
+}
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static signed short func_setCharacterExpression(unsigned short *_args)
+{
+	return _args[0];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+static signed short func_setText(unsigned short *_args)
+{
+	return _args[0];
+}
+
 
 /*===========================================================================
  end */

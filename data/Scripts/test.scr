@@ -1,37 +1,10 @@
-// Crappy test program
-// Prints a number based upon another one ( eh? )
-
-//#print	something..
 #include	data/scripts/defs.scr
 
 
-
-// No switch statements here..
-if($tmp1==ONE)
-{
-	$tmp2=11;
-}
-else if($tmp1==TWO)
-{
-	$tmp2=22;
-}
-else if($tmp1==THREE)
-{
-	$tmp2=30+3;
-}
-else if($tmp1==FOUR)
-{
-	// Stop here!
-	stop;
-}
-
-// Have a rest..
-pause;
-
-// Show result and stop
-if($tmp2!=0)
-	print($tmp2);
-else
-	print(5432);
+//$tmp1=11;
+//$tmp2=22;
+//$tmp3=_setCharacterExpression(1,2);
+//$tmp3=_setCharacterExpression($tmp1,$tmp2);
+print($tmp3);
+$tmp3=_setText(123);
 stop;
-

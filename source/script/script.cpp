@@ -18,6 +18,10 @@
 
 #include "script\script.h"
 
+#ifndef __SCRIPT_FUNCTION_H__
+#include "script\function.h"
+#endif
+
 #ifndef	__SYSTEM_DBG_H__
 #include "system\dbg.h"
 #endif
@@ -57,6 +61,10 @@ signed short	CScript::s_globalVars[NUM_GLOBAL_VARS]=
 {
 	0,			// LIVES
 };
+
+
+// Buffer for passing arguments to functions
+unsigned short	CScript::s_argBuffer[MAX_FUNCTION_ARGS];
 
 
 /*----------------------------------------------------------------------
@@ -149,6 +157,7 @@ void CScript::executeNextInstruction()
 {
 	unsigned short	instruction;
 	signed short	val1,val2,val3;
+	int				i;
 
 #ifdef FULL_CODE_OUTPUT
 PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
@@ -199,7 +208,14 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			push(val2);
 			break;
 
-		case OP_JMP:				//						jump
+		case OP_POP:				//								value
+			val1=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("POP %d",val1);
+#endif
+			break;
+
+		case OP_JMP:				//								jump
 			val1=pop();
 #ifdef FULL_CODE_OUTPUT
 			PAUL_DBGMSG("JMP %d",val1);
@@ -207,7 +223,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			jump(val1);
 			break;
 			
-		case OP_JMPF:				//						jump, value
+		case OP_JMPF:				//								jump, value
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -216,7 +232,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			if(val2==0)jump(val1);
 			break;
 
-		case OP_JMPT:				//						jump, value
+		case OP_JMPT:				//								jump, value
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -225,7 +241,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			if(val2!=0)jump(val1);
 			break;
 
-		case OP_IS_EQUAL_VALUE:		//						value, value			pushes result ( 0 or 1 ) to stack
+		case OP_IS_EQUAL_VALUE:		//								value, value			pushes result ( 0 or 1 ) to stack
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -234,7 +250,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			push(val1==val2);
 			break;
 
-		case OP_IS_NOTEQUAL_VALUE:	//						value, value			pushes result ( 0 or 1 ) to stack
+		case OP_IS_NOTEQUAL_VALUE:	//								value, value			pushes result ( 0 or 1 ) to stack
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -243,7 +259,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			push(val1!=val2);
 			break;
 			
-		case OP_ASSIGN:				//						varidx, value
+		case OP_ASSIGN:				//								varidx, value
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -252,7 +268,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			setVar(val1,val2);
 			break;
 
-		case OP_ADD:				//						value, value			pushes result to stack
+		case OP_ADD:				//								value, value			pushes result to stack
 			val1=pop();
 			val2=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -261,9 +277,27 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			push(val1+val2);
 			break;
 			
-		case OP_PRINT:				//						value
+		case OP_PRINT:				//								value
 			val1=pop();
 			PAUL_DBGMSG("PRINT %d",val1);
+			break;
+
+		case OP_CALL_FUNCTION:		//	functionnumber, argcount	args					pushes return value to stack
+			val1=readNextInstruction();
+			val2=readNextInstruction();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("CALL_FUNCTION %d ( %d args )",val1,val2);
+#endif
+			ASSERT(val2<MAX_FUNCTION_ARGS);		// Too many args.. just increase the #define to fix this
+			for(i=0;i<val2;i++)
+			{
+				s_argBuffer[i]=pop();
+			}
+			val3=callFunction(val1,val2,s_argBuffer);
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("( return value is %d )",val3);
+#endif
+			push(val3);
 			break;
 
 		default:

@@ -45,6 +45,13 @@
 	Structure defintions
 	-------------------- */
 
+struct FunctionDef
+{
+	char	*m_name;
+	int		m_argCount;
+};
+
+
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -54,7 +61,8 @@
 	---- */
 static FunctionDef s_functionNames[]=
 {
-	{ 0,	"print",	1,	},
+	{ "setCharacterExpression",	2,	},		// character, expression
+	{ "setText",				1,	},		// textId
 };
 static int		s_functionCount=sizeof(s_functionNames)/sizeof(FunctionDef);
 
@@ -68,7 +76,7 @@ extern myparser s_parser;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern FunctionDef *lookupFunctionName(char *_name)
+extern int lookupFunctionName(char *_name)
 {
 	int			i;
 	FunctionDef	*fp;
@@ -78,14 +86,14 @@ extern FunctionDef *lookupFunctionName(char *_name)
 	{
 		if(strcmp(fp->m_name,_name)==0)
 		{
-			return fp;
+			return i;
 		}
 		fp++;
 	}
 
 	printf("Unknown function name _%s\n",_name);
 	s_lexer.error();
-	return NULL;
+	return -1;
 }
 
 
@@ -107,38 +115,63 @@ extern int getFunctionArgCount(int _functionNumber)
 	Params:
 	Returns:	A treenode that contains all of the functions arguments
   ---------------------------------------------------------------------- */
-extern CTreeNode *getFunctionArgs(int _argCount)
+extern CTreeNode *getFunctionArgs(int _functionNumber)
 {
-	int	i;
+	int	argCount,i;
 	int	tokenType;
 
-	if(_argCount)
+	argCount=s_functionNames[_functionNumber].m_argCount;
+	if(argCount)
 	{
 		CTreeNode	*base;
 
-//		base=new CTreeNode(STMT_LIST
-		for(i=0;i<_argCount;i++)
+		base=NULL;
+		for(i=0;i<argCount;i++)
 		{
 			tokenType=s_parser.yygettoken();
 			switch(tokenType)
 			{
 				case VARIABLE:
+					{
+					int var;
+					var=*((int*)s_parser.yylvalptr);
+					if(base)
+						base=new CTreeNode(STMT_LIST,base,new CTreeNode(VARIABLE_EXPR,(int)var));
+					else
+						base=new CTreeNode(STMT_LIST,new CTreeNode(VARIABLE_EXPR,(int)var));
 					break;
+					}
 				case VALUE:
+					{
+					signed short value;
+					value=*((signed short*)s_parser.yylvalptr);
+					if(base)
+						base=new CTreeNode(STMT_LIST,base,new CTreeNode(VALUE_EXPR,(int)value));
+					else
+						base=new CTreeNode(STMT_LIST,new CTreeNode(VALUE_EXPR,(int)value));
 					break;
+					}
 				default:
 					printf("UNEXPECTED TOKEN '%s' FOR ARGUMENT %d\n",s_lexer.yytext,i+1);
 					s_lexer.error();
 					break;
 			}
+			if(i<argCount-1)
+			{
+				if(s_parser.yygettoken()!=COMMA)
+				{
+					printf("EXPETCING ',' BUT FOUND '%s'\n",s_lexer.yytext);
+					s_lexer.error();
+					break;
+
+				}
+			}
 		}
 
-		return new CTreeNode(EMPTY_STMT);
+		return base;
 	}
-	else
-	{
-		return new CTreeNode(EMPTY_STMT);
-	}
+
+	return new CTreeNode(EMPTY_STMT);
 }
 
 

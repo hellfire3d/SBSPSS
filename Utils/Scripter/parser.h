@@ -19,7 +19,7 @@ protected:
 #endif
 
 public:
-#line 22 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 23 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
 public:
 	void	setCurrentLexer(class mylexer *_lexer);
@@ -33,8 +33,12 @@ private:
 	class mylexer	*m_currentLexer;
 	class CTreeNode	*m_baseNode;
 
+	// Ugh! (pkg)
+	class CTreeNode	*m_functionArgs;
+	int				m_functionNumber;
 
-#line 38 "C:\\spongebob\\Utils\\scripter\\parser.h"
+
+#line 42 "C:\\spongebob\\Utils\\scripter\\parser.h"
 };
 
 #ifndef YYPARSENAME
@@ -43,13 +47,14 @@ private:
 
 #ifndef YYSTYPE
 union tagYYSTYPE {
-#line 49 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 54 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
-	int				variableIdx;
-	signed short	value;
-	class CTreeNode	*treenode;
+	int					variableIdx;
+	signed short		value;
+	int					functionNumber;
+	class CTreeNode		*treenode;
 
-#line 53 "C:\\spongebob\\Utils\\scripter\\parser.h"
+#line 58 "C:\\spongebob\\Utils\\scripter\\parser.h"
 };
 
 #define YYSTYPE union tagYYSTYPE
@@ -69,6 +74,8 @@ union tagYYSTYPE {
 #define CLOSE_PAR 268
 #define BEGIN_CS 269
 #define END_CS 270
-#define VARIABLE 271
-#define VALUE 272
+#define COMMA 271
+#define VARIABLE 272
+#define VALUE 273
+#define FUNCTION 274
 #endif

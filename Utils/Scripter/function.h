@@ -34,14 +34,6 @@
 	Structure defintions
 	-------------------- */
 
-struct FunctionDef
-{
-	int		m_functionNumber;
-	char	*m_name;
-	int		m_argCount;
-};
-
-
 /*----------------------------------------------------------------------
 	Globals
 	------- */
@@ -50,11 +42,11 @@ struct FunctionDef
 	Functions
 	--------- */
 
-extern FunctionDef *lookupFunctionName(char *_name);
+extern int lookupFunctionName(char *_name);
 
 extern int getFunctionArgCount(int _functionNumber);
 
-extern CTreeNode *getFunctionArgs(int _argCount);
+extern CTreeNode *getFunctionArgs(int _functionNumber);
 
 
 /*---------------------------------------------------------------------- */

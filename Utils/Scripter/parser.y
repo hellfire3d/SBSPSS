@@ -6,6 +6,7 @@ ParserWizard generated YACC file.
 Date: 07 December 2000
 ****************************************************************************/
 
+#include "function.h"
 #include "lexer.h"
 #include "codegen.h"
 
@@ -32,6 +33,10 @@ private:
 	class mylexer	*m_currentLexer;
 	class CTreeNode	*m_baseNode;
 
+	// Ugh! (pkg)
+	class CTreeNode	*m_functionArgs;
+	int				m_functionNumber;
+
 }
 
 // constructor
@@ -47,9 +52,10 @@ private:
 //}
 
 %union {
-	int				variableIdx;
-	signed short	value;
-	class CTreeNode	*treenode;
+	int					variableIdx;
+	signed short		value;
+	int					functionNumber;
+	class CTreeNode		*treenode;
 }
 
 
@@ -71,14 +77,18 @@ private:
 %token	CLOSE_PAR
 %token	BEGIN_CS
 %token	END_CS
-%token	<variableIdx>	VARIABLE
-%token	<value>			VALUE
+%token	COMMA
+%token	<variableIdx>		VARIABLE
+%token	<value>				VALUE
+%token	<functionNumber>	FUNCTION
+
 
 %type	<treenode>		program statement_list statement
 %type	<treenode>		assign_expression
 %type	<treenode>		expression equal_expression notequal_expression
 %type	<treenode>		variable
 %type	<treenode>		value
+%type	<treenode>		function
 
 %%
 
@@ -106,6 +116,7 @@ statement
 	|IF OPEN_PAR expression CLOSE_PAR statement			{$$=new CTreeNode(IF_STMT,$3,$5);}
 	|IF OPEN_PAR expression CLOSE_PAR statement ELSE statement	{$$=new CTreeNode(IFELSE_STMT,$3,$5,$7);}
 	|BEGIN_CS statement_list END_CS						{$$=new CTreeNode(STMT_LIST,$2);}
+	|function END_STMT									{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(POP_STMT));}
 	;
 
 
@@ -137,7 +148,14 @@ value
 	:VALUE												{$$=new CTreeNode(VALUE_EXPR,$1);}
 	|VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable value
 	|value PLUS value									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
+	|function											{$$=$1;}
 	;													
+
+
+function
+	:FUNCTION OPEN_PAR									{if($1!=-1){m_functionNumber=$1;m_functionArgs=getFunctionArgs($1);}}
+	 CLOSE_PAR											{$$=new CTreeNode(STMT_LIST,m_functionArgs,new CTreeNode(FUNCTION_EXPR,m_functionNumber));}
+	;
 
 
 
