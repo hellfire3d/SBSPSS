@@ -22,6 +22,7 @@ public:
 
 	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
 	static DVECTOR			getCameraPos()						{return MapPos;}
+	static DVECTOR			getPlayerSpawnPos()					{return s_playerSpawnPos;}
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 
@@ -31,6 +32,7 @@ private:
 	sLvlHdr			*LevelHdr;
 	sTileBankHdr	*TileBankHdr;
 	static DVECTOR	MapPos;
+	static DVECTOR	s_playerSpawnPos;
 
 	TPAGE_DESC		m_levelTPage;
 
