@@ -631,7 +631,6 @@ m_animFrame=0;
 	m_currentPlayerModeClass=NULL;
 	m_lastModeBeforeDeath=PLAYER_MODE_BASICUNARMED;	// Player will then respawn into this mode
 	respawn();
-	m_canExitLevel=false;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
@@ -1950,6 +1949,8 @@ void CPlayer::respawn()
 	updateCollisionArea();
 
 	m_ignoreNewlyPressedButtonsOnPadThisThink=true;
+
+	m_canExitLevel=false;
 }
 
 /*----------------------------------------------------------------------

@@ -61,7 +61,7 @@ void	CPlayerModeFly::enter()
 	Returns:
   ---------------------------------------------------------------------- */
 #if	defined(__USER_paul__) 
-int playerflyspeed=10;
+int playerflyspeed=30;
 #elif	defined(__USER_daveo__)
 int playerflyspeed=10;
 #else
