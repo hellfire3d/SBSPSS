@@ -159,6 +159,10 @@
 #include "triggers\tboss.h"
 #endif
 
+#ifndef __TRIGGERS_TSPEECH_H__
+#include "triggers\tspeech.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -350,6 +354,79 @@ CTrigger	*trigger;
 		case TRIGGER_SECRET_AREA:
 			trigger = (CSecretAreaTrigger*)new("SecretAreaTrigger") CSecretAreaTrigger();
 			break;
+
+		case TRIGGER_SPEECH_FIRST_NET:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_FIRST_CORAL:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_GARY_CH2L1:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_BREAK_FLOOR:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_BUBBLE_GEYSER:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_RISING_PLATFORM:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_FIRST_BUBBLE:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_USE_BUBBLE:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
+		case TRIGGER_SPEECH_WEIGHT:
+		{
+			trigger = (CSpeechTrigger*)new("SpeechTrigger") CSpeechTrigger();
+			CSpeechTrigger *speechTrigger = (CSpeechTrigger*) trigger;
+			speechTrigger->setData(0);
+			break;
+		}
+
 		default:
 			trigger=NULL;
 	}

@@ -357,7 +357,8 @@ triggers_src :=		trigger \
 					twinddown \
 					twindleft \
 					twindright \
-					toilgeyser
+					toilgeyser \
+					tspeech
 
 
 utils_src :=		utils \

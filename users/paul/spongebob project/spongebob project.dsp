@@ -2481,6 +2481,14 @@ SOURCE=..\..\..\source\triggers\tsleftemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tspeech.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tspeech.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tsrightemit.cpp
 # End Source File
 # Begin Source File
