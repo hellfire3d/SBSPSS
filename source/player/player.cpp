@@ -270,11 +270,11 @@ void	CPlayer::render()
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
 		m_skel.setPos(&ppos);
-		m_skel.setFrame(m_animFrame);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
 		else
 			m_skel.setAnimNo(m_animNo);
+		m_skel.setFrame(m_animFrame);
 		m_skel.Animate(this);
 		m_skel.Render(this);
 	}
