@@ -74,7 +74,6 @@ void CPlayerStateFall::enter(CPlayerModeBase *_playerMode)
 			_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
 		}
 	}
-	m_buttBounceTimer=0;
 }
 
 
@@ -110,21 +109,9 @@ void CPlayerStateFall::think(CPlayerModeBase *_playerMode)
 	}
 	_playerMode->fall();
 
-	// Double-tap for butt bounce
-	if(m_buttBounceTimer)
-	{
-		m_buttBounceTimer--;
-	}
 	if(controlDown&PI_JUMP)
 	{
-		if(m_buttBounceTimer==0)
-		{
-			m_buttBounceTimer=BUTT_BOUNCE_TIMEOUT;
-		}
-		else
-		{
-			_playerMode->setState(STATE_BUTTBOUNCE);
-		}
+		_playerMode->setState(STATE_BUTTBOUNCE);
 	}
 }
 
