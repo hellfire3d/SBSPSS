@@ -196,7 +196,9 @@ struct	sSpriteFrame
 {
 	u8			*PAKSpr;	// 4
 	s8			XOfs,YOfs;	// 2
+	s8			HX,HY;	// 2
 	u8			W,H;		// 2
+	u16			Pad;
 };
 
 struct	sSpriteAnim
