@@ -169,6 +169,7 @@ fx_src :=			fx \
 					fxbaseemitter \
 					fxattachanim \
 					fxbubble \
+					fxthwack \
 					fxnrgbar \
 					fxjfish \
 					fxfallingtile \

@@ -19,6 +19,7 @@
 
 #include	"FX\FXAttachAnim.h"
 
+#include	"FX\FXThwack.h"
 #include	"FX\FXBubble.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
@@ -241,11 +242,11 @@ void	TestFX(DVECTOR Pos)
 }
 */
 /*****************************************************************************/
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_FOUNTAIN_WATER;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_THWACK;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
 CFXAttachAnim	*FX=(CFXAttachAnim*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
-		Parent->addChild(FX);
+//		Parent->addChild(FX);
 //		TestFXPtr->setLife(32);
 }
 
@@ -338,6 +339,10 @@ CFX		*NewFX;
 		case FX_TYPE_FOUNTAIN_OIL:
 			NewFX=new ("FXOilFountain") CFXAttachAnim();
 			NewFX->setData(&FXOilFountainData);
+			break;
+
+		case FX_TYPE_THWACK:
+			NewFX=new ("FXThwack") CFXThwack();
 			break;
 
 		case FX_TYPE_NRG_BAR:

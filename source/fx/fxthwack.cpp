@@ -1,6 +1,6 @@
-/***********************/
-/*** Anim Base Class ***/
-/***********************/
+/*****************/
+/*** Thwack!!! ***/
+/*****************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -10,40 +10,39 @@
 #include	<sprites.h>
 #include	"level\level.h"
 #include	"game\game.h"
+#include	"gfx\otpos.h"
 
-#include	"FX\FXBaseAnim.h"
-#include	"FX\FXAttachAnim.h"
+#include	"FX\FXThwack.h"
 
+const int		ThwackLife=12;
 
 /*****************************************************************************/
-void	CFXAttachAnim::init(DVECTOR const &_Pos)
+void	CFXThwack::init(DVECTOR const &_Pos)
 {
-		CFXBaseAnim::init(_Pos);
+		CFX::init(_Pos);
+		Life=ThwackLife;
+		OtPos=OTPOS__ACTOR_POS-1;
+		Angle=getRnd()&4095;
+		Scale=2048+1024+(getRnd()&2047);
 }
 
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-void	CFXAttachAnim::render()
+
+void	CFXThwack::render()
 {
-		CFXBaseAnim::render();
+DVECTOR	RenderPos;
+
+		getFXRenderPos(RenderPos);
 		if (!canRender() || !IsVisible) return;
 
-CThing	*Parent=getParent();
-		ASSERT(Parent);
-
-DVECTOR	&ParentPos=Parent->getRenderPos();
-int		FrameW=Frame->x1-Frame->x0;
-int		HalfW=FrameW>>1;
-
-		Frame->x0=ParentPos.vx-HalfW;
-		Frame->y0=ParentPos.vy;
-		Frame->x1=ParentPos.vx+HalfW;
-		Frame->y1=ParentPos.vy;
-
-		int	BY=Frame->y2-Frame->y0;
-//		setCollisionCentreOffset(0,BY>>1);
-		setCollisionSize(FrameW,BY*2);
+SpriteBank	*SprBank=CGameScene::getSpriteBank();
+POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(FRM__THWACK,RenderPos.vx,RenderPos.vy,Scale,Scale,Angle,OtPos);
+			setSemiTrans(Ft4,1);
+			Ft4->tpage|=1<<5;
+int			Col=(256/ThwackLife)*Life;
+			setRGB0(Ft4,Col,Col,Col);
 
 }
 
