@@ -33,6 +33,10 @@
 #include "gfx\otpos.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -45,35 +49,6 @@
 #endif
 
 
-
-/*
-Chapter 1
-	1 jelly
-	2 sea weed
-	3 seanut butter
-	4 slice of bread
-Chapter 2
-	1 false teeth
-	2 kelp kream
-	3 mud pack
-	4 sponge
-Chapter 3
-	1 clam bra
-	2 slippers
-	3 starfish mask
-	4 super pants
-Chapter 4
-	1 coin
-	2 coin
-	3 coin
-	4 kelp bar
-Chapter 5
-	1 ariel
-	2 hammer
-	3 oilcan
-	4 wrench
-*/
-
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -81,6 +56,13 @@ Chapter 5
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
+
+typedef struct
+{
+	u8		m_chapter,m_level;
+	u16		m_gfxFrame;
+} sQuestItemMap;
+
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -90,20 +72,65 @@ Chapter 5
 	Vars
 	---- */
 
+static const sQuestItemMap	s_questItemMap[]=
+{
+	{	1,1,	FRM__C1_L1_JELLY		},
+	{	1,2,	FRM__C1_L2_SEAWEED		},
+	{	1,3,	FRM__C1_L3_SEANUTBUTTER	},
+	{	1,4,	FRM__C1_L4_BREADSLICE	},
+	{	2,1,	FRM__C2_L1_FALSETEETH	},
+	{	2,2,	FRM__C2_L2_KELPKREAM	},
+	{	2,3,	FRM__C2_L3_MUDPACK		},
+	{	2,4,	FRM__C2_L4_SPONGE		},
+	{	3,1,	FRM__C3_L1_SLIPPERS		},
+	{	3,2,	FRM__C3_L2_CLAMBRA		},
+	{	3,3,	FRM__C3_L3_STARFISHMASK	},
+	{	3,4,	FRM__C3_L4_SUPERPANTZ	},
+	{	4,1,	FRM__C4_COIN			},
+	{	4,2,	FRM__C4_COIN			},
+	{	4,3,	FRM__C4_COIN			},
+	{	4,4,	FRM__C4_KELPBAR			},
+	{	5,1,	FRM__C5_L1_HAMMER		},
+	{	5,2,	FRM__C5_L2_ARIEL		},
+	{	5,3,	FRM__C5_L3_OILCAN		},
+	{	5,4,	FRM__C5_L4_WRENCH		},
+};
+static const int			s_numQuestItemMap=sizeof(s_questItemMap)/sizeof(sQuestItemMap);
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::init()
+void	CQuestItemPickup::init()
 {
-	sFrameHdr	*fh;
+	int					chapter,level;
+	const sQuestItemMap	*qi;
+	int					i;
+	sFrameHdr			*fh;
+
 
 	CBasePickup::init();
 	m_pingFrame=0;
 
-	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	chapter=GameScene.getChapterNumber();
+	level=GameScene.getLevelNumber();
+	m_gfxFrame=-1;
+	qi=s_questItemMap;
+	for(i=0;i<s_numQuestItemMap;i++)
+	{
+		if(qi->m_chapter==chapter&&qi->m_level==level)
+		{
+			m_gfxFrame=qi->m_gfxFrame;
+			break;
+		}
+		qi++;
+	}
+	ASSERT(m_gfxFrame!=-1);
+
+	fh=getSpriteBank()->getFrameHeader(m_gfxFrame);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -113,12 +140,12 @@ void	CBaseQuestItemPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CBaseQuestItemPickup::getSizeForPlacement()
+DVECTOR	CQuestItemPickup::getSizeForPlacement()
 {
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	fh=getSpriteBank()->getFrameHeader(m_gfxFrame);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -130,7 +157,7 @@ DVECTOR	CBaseQuestItemPickup::getSizeForPlacement()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::collect(class CPlayer *_player)
+void	CQuestItemPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
 }
@@ -149,7 +176,7 @@ int quest_transmode=1;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CBaseQuestItemPickup::getVisibilityRadius()
+int		CQuestItemPickup::getVisibilityRadius()
 {
 	return quest_pingsize;
 }
@@ -160,7 +187,7 @@ int		CBaseQuestItemPickup::getVisibilityRadius()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::thinkPickup(int _frames)
+void	CQuestItemPickup::thinkPickup(int _frames)
 {
 	m_pingFrame+=_frames;
 	if(m_pingFrame>(quest_pingframes+quest_pingwaitframes))
@@ -176,14 +203,14 @@ void	CBaseQuestItemPickup::thinkPickup(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
+void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 {
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
 	int			x,y;
 
 	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(getFrameNumber());
+	fh=sprites->getFrameHeader(m_gfxFrame);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
 	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
@@ -233,19 +260,6 @@ void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
 	}
 }
 
-
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int		CTestQuestItemPickup::getFrameNumber()
-{
-	return FRM__C2_L1_FALSETEETH;
-}
 
 /*===========================================================================
 end */

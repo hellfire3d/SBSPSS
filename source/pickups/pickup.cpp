@@ -430,8 +430,8 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			pickup=new ("CoralBlowerPickup") CCoralBlowerPickup();
 			break;
 
-		case PICKUP__QUEST_ITEM__TEST:
-			pickup=new ("QuestItemPickup") CTestQuestItemPickup();
+		case PICKUP__QUEST_ITEM:
+			pickup=new ("QuestItemPickup") CQuestItemPickup();
 			break;
 
 		case PICKUP__BALLOON_AND_SPATULA:

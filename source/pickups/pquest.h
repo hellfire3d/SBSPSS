@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CBaseQuestItemPickup : public CBasePickup
+class CQuestItemPickup : public CBasePickup
 {
 public:
 	virtual void		init();
@@ -42,23 +42,14 @@ public:
 	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
-protected:
+private:
 	virtual int			getVisibilityRadius();
 
 	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
 
-	virtual int			getFrameNumber()=0;
-
-private:
 	int					m_pingFrame;
-
-};
-
-class CTestQuestItemPickup : public CBaseQuestItemPickup
-{
-protected:
-	virtual int			getFrameNumber();
+	int					m_gfxFrame;
 
 };
 

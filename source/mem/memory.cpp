@@ -23,9 +23,9 @@ int			MemNodeCount=0;
 #endif
 
 #ifdef	USE_MEM_GUARDS
-static const unsigned int	HEAD_GUARD_FILL_PATTERN	=0x3c3c3c3c;
+static const unsigned int	HEAD_GUARD_FILL_PATTERN	=0x3e3e3e3e;
 static const unsigned int	MEM_FILL_PATTERN		=0x3d3d3d3d;
-static const unsigned int	TAIL_GUARD_FILL_PATTERN	=0x3e3e3e3e;
+static const unsigned int	TAIL_GUARD_FILL_PATTERN	=0x3c3c3c3c;
 static const unsigned int	NUM_MEM_GUARDS=2;
 static const unsigned int	MEM_GUARD_SIZE=sizeof(int)*NUM_MEM_GUARDS;
 #endif	/* USE_MEM_GUARDS */
