@@ -1,6 +1,8 @@
 #include	data/scripts/defs/defs.scr
 #include	data/scripts/defs/charanim.scr
 
+#include	out/usa/include/uigfx.h
+
 
 /*
 _setCharacterAnimation(CHAR_SPONGEBOB,ANIM_QUIET);
@@ -21,17 +23,18 @@ vx=velocity;
 vy=velocity;
 while(1==1)
 {
-
-	// readout for fps :)
+	// Readout for fps :)
 	$tmp0=_getFrameTime();
 	$tmp5=50;
 	do{
-		_drawSprite(4,$tmp5,50,10);
+		_drawSprite(FRM__BUTU,$tmp5,50,0);
 		$tmp5=$tmp5+20;
 		$tmp0=$tmp0-1;
 	}while($tmp0>0);
 
-	_drawSprite(0,x,y,100);
+
+	// Bouncy thing
+	_drawSprite(FRM__BUTC,x,y,100);
 	$tmp0=_getFrameTime();
 	do
 	{
@@ -61,6 +64,9 @@ while(1==1)
 		$tmp0=$tmp0-1;
 	}
 	while($tmp0>0);
+
+
+	// End of frame..
 	pause;
 }
 stop;

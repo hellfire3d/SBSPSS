@@ -92,9 +92,9 @@ private:
 
 %type	<treenode>		program statement_list statement
 %type	<treenode>		assign_expression
-%type	<treenode>		expression equal_expression notequal_expression lessthan_expression greaterthan_expression
+%type	<treenode>		conditional
 %type	<treenode>		variable
-%type	<treenode>		value
+%type	<treenode>		expression
 %type	<treenode>		function
 
 %%
@@ -106,79 +106,63 @@ private:
 // place your YACC rules here (there must be at least one)
 
 program
-	:statement_list										{s_baseTreeNode=$1;}
+	:statement_list												{s_baseTreeNode=$1;}
 	;													
 
 statement_list											
-	:statement_list statement							{$$=new CTreeNode(STMT_LIST,$1,$2);}
-	|													{$$=new CTreeNode(EMPTY_STMT);}
+	:statement_list statement									{$$=new CTreeNode(STMT_LIST,$1,$2);}
+	|															{$$=new CTreeNode(EMPTY_STMT);}
 	;
 
 statement
-	:END_STMT											{$$=new CTreeNode(EMPTY_STMT);}
-	|STOP END_STMT										{$$=new CTreeNode(STOP_STMT);}
-	|PAUSE END_STMT										{$$=new CTreeNode(PAUSE_STMT);}
-	|PRINT OPEN_PAR value CLOSE_PAR END_STMT			{$$=new CTreeNode(PRINT_STMT,$3);}
-	|assign_expression END_STMT							{$$=$1;}
-	|IF OPEN_PAR expression CLOSE_PAR statement			{$$=new CTreeNode(IF_STMT,$3,$5);}
-	|IF OPEN_PAR expression CLOSE_PAR statement ELSE statement	{$$=new CTreeNode(IFELSE_STMT,$3,$5,$7);}
-	|WHILE OPEN_PAR expression CLOSE_PAR statement		{$$=new CTreeNode(WHILE_STMT,$3,$5);}
-	|DO statement WHILE OPEN_PAR expression CLOSE_PAR END_STMT	{$$=new CTreeNode(DOWHILE_STMT,$2,$5);}
-	|BEGIN_CS statement_list END_CS						{$$=new CTreeNode(STMT_LIST,$2);}
-	|function END_STMT									{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(POP_STMT));}
+	:END_STMT													{$$=new CTreeNode(EMPTY_STMT);}
+	|STOP END_STMT												{$$=new CTreeNode(STOP_STMT);}
+	|PAUSE END_STMT												{$$=new CTreeNode(PAUSE_STMT);}
+	|PRINT OPEN_PAR expression CLOSE_PAR END_STMT				{$$=new CTreeNode(PRINT_STMT,$3);}
+	|assign_expression END_STMT									{$$=$1;}
+	|IF OPEN_PAR conditional CLOSE_PAR statement				{$$=new CTreeNode(IF_STMT,$3,$5);}
+	|IF OPEN_PAR conditional CLOSE_PAR statement ELSE statement	{$$=new CTreeNode(IFELSE_STMT,$3,$5,$7);}
+	|WHILE OPEN_PAR conditional CLOSE_PAR statement				{$$=new CTreeNode(WHILE_STMT,$3,$5);}
+	|DO statement WHILE OPEN_PAR conditional CLOSE_PAR END_STMT	{$$=new CTreeNode(DOWHILE_STMT,$2,$5);}
+	|BEGIN_CS statement_list END_CS								{$$=new CTreeNode(STMT_LIST,$2);}
+	|function END_STMT											{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(POP_STMT));}
 	;
 
 
 assign_expression
-	:variable ASSIGN value								{$$=new CTreeNode(ASSIGN_EXPR,$1,$3);}
+	:variable ASSIGN expression									{$$=new CTreeNode(ASSIGN_EXPR,$1,$3);}
 	;													
 														
 														
-expression												
-	:equal_expression									{$$=$1;}
-	|notequal_expression								{$$=$1;}
-	|lessthan_expression								{$$=$1;}
-	|greaterthan_expression								{$$=$1;}
-	;													
-														
-equal_expression										
-	:value EQUAL value									{$$=new CTreeNode(EQUAL_EXPR,$1,$3);}
-	;													
-														
-notequal_expression										
-	:value NOTEQUAL value								{$$=new CTreeNode(NOTEQUAL_EXPR,$1,$3);}
-	;													
-														
-lessthan_expression										
-	:value LESSTHAN value								{$$=new CTreeNode(LESSTHAN_EXPR,$1,$3);}
-	;													
-														
-greaterthan_expression										
-	:value GREATERTHAN value							{$$=new CTreeNode(GREATERTHAN_EXPR,$1,$3);}
+conditional												
+	:expression EQUAL expression								{$$=new CTreeNode(EQUAL_EXPR,$1,$3);}
+	|expression NOTEQUAL expression								{$$=new CTreeNode(NOTEQUAL_EXPR,$1,$3);}
+	|expression LESSTHAN expression								{$$=new CTreeNode(LESSTHAN_EXPR,$1,$3);}
+	|expression GREATERTHAN expression							{$$=new CTreeNode(GREATERTHAN_EXPR,$1,$3);}
 	;													
 														
 														
 variable												
-	:VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable id
+	:VARIABLE													{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable id
 	;													
 														
-value													
-	:VALUE												{$$=new CTreeNode(VALUE_EXPR,$1);}
-	|OPEN_PAR value CLOSE_PAR							{$$=$2;}
-	|VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable value
-//	|PLUS value											{$$=$2;}
-//	|SUBTRACT value										{$$=new CTreeNode(STMT_LIST,CTreeNodeCTreeNode(VALUE_EXPR,$2);}
-	|value PLUS value									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
-	|value SUBTRACT value								{$$=new CTreeNode(SUBTRACT_EXPR,$1,$3);}
-	|value MULTIPLY value								{$$=new CTreeNode(MULTIPLY_EXPR,$1,$3);}
-	|value DIVIDE value									{$$=new CTreeNode(DIVIDE_EXPR,$1,$3);}
-	|function											{$$=$1;}
+expression													
+	:VALUE														{$$=new CTreeNode(VALUE_EXPR,$1);}
+	|OPEN_PAR expression CLOSE_PAR								{$$=$2;}
+	|VARIABLE													{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable value
+//	|PLUS expression											{$$=$2;}
+//	|SUBTRACT expression										{$$=new CTreeNode(STMT_LIST,CTreeNodeCTreeNode(VALUE_EXPR,$2);}
+	|expression PLUS expression									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
+	|expression SUBTRACT expression								{$$=new CTreeNode(SUBTRACT_EXPR,$1,$3);}
+	|expression MULTIPLY expression								{$$=new CTreeNode(MULTIPLY_EXPR,$1,$3);}
+	|expression DIVIDE expression								{$$=new CTreeNode(DIVIDE_EXPR,$1,$3);}
+	|function													{$$=$1;}
 	;													
 
 
 function
-	:FUNCTION OPEN_PAR									{if($1!=-1){m_functionNumber=$1;m_functionArgs=getFunctionArgs($1);}}
-	 CLOSE_PAR											{$$=new CTreeNode(STMT_LIST,m_functionArgs,new CTreeNode(FUNCTION_EXPR,m_functionNumber));}
+	:FUNCTION OPEN_PAR											{if($1!=-1){m_functionNumber=$1;m_functionArgs=getFunctionArgs($1);}}
+	 CLOSE_PAR													{$$=new CTreeNode(STMT_LIST,m_functionArgs,new CTreeNode(FUNCTION_EXPR,m_functionNumber));}
 	;
 
 

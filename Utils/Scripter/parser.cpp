@@ -261,12 +261,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 15:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
 #line 138 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(EQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 271 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -274,12 +274,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 16:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
 #line 139 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(NOTEQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 284 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -287,12 +287,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 17:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
 #line 140 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(LESSTHAN_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 297 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -300,12 +300,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 18:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
 #line 141 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(GREATERTHAN_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 310 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -313,12 +313,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 19:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
+			YYSTYPE YYFAR* yya[2];
+			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 145 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(EQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 146 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
 #line 323 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -326,12 +326,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 20:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
+			YYSTYPE YYFAR* yya[2];
+			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 149 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(NOTEQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 150 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VALUE_EXPR,yyattribute(1 - 1).value);
 #line 336 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -343,8 +343,8 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 153 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(LESSTHAN_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 151 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(2 - 3).treenode;
 #line 349 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -352,12 +352,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 22:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
+			YYSTYPE YYFAR* yya[2];
+			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 157 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(GREATERTHAN_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 152 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
 #line 362 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -365,12 +365,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 23:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 162 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
+#line 155 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(PLUS_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 375 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -378,12 +378,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 24:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 166 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VALUE_EXPR,yyattribute(1 - 1).value);
+#line 156 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(SUBTRACT_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 388 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -395,8 +395,8 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 167 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(2 - 3).treenode;
+#line 157 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(MULTIPLY_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 401 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -404,12 +404,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 26:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
+			YYSTYPE YYFAR* yya[4];
+			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 168 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
+#line 158 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(DIVIDE_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 414 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -417,12 +417,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 27:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
+			YYSTYPE YYFAR* yya[2];
+			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 171 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(PLUS_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 159 "C:\\spongebob\\Utils\\scripter\\parser.y"
+(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
 #line 427 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -430,12 +430,12 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 28:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
+			YYSTYPE YYFAR* yya[3];
+			yyinitdebug((void YYFAR**)yya, 3);
 #endif
 			{
-#line 172 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(SUBTRACT_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
+#line 164 "C:\\spongebob\\Utils\\scripter\\parser.y"
+if(yyattribute(1 - 2).functionNumber!=-1){m_functionNumber=yyattribute(1 - 2).functionNumber;m_functionArgs=getFunctionArgs(yyattribute(1 - 2).functionNumber);}
 #line 440 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
@@ -443,65 +443,13 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 	case 29:
 		{
 #ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
-#endif
-			{
-#line 173 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(MULTIPLY_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
-#line 453 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
-			}
-		}
-		break;
-	case 30:
-		{
-#ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[4];
-			yyinitdebug((void YYFAR**)yya, 4);
-#endif
-			{
-#line 174 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(DIVIDE_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
-#line 466 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
-			}
-		}
-		break;
-	case 31:
-		{
-#ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[2];
-			yyinitdebug((void YYFAR**)yya, 2);
-#endif
-			{
-#line 175 "C:\\spongebob\\Utils\\scripter\\parser.y"
-(*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
-#line 479 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
-			}
-		}
-		break;
-	case 32:
-		{
-#ifdef YYDEBUG
-			YYSTYPE YYFAR* yya[3];
-			yyinitdebug((void YYFAR**)yya, 3);
-#endif
-			{
-#line 180 "C:\\spongebob\\Utils\\scripter\\parser.y"
-if(yyattribute(1 - 2).functionNumber!=-1){m_functionNumber=yyattribute(1 - 2).functionNumber;m_functionArgs=getFunctionArgs(yyattribute(1 - 2).functionNumber);}
-#line 492 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
-			}
-		}
-		break;
-	case 33:
-		{
-#ifdef YYDEBUG
 			YYSTYPE YYFAR* yya[5];
 			yyinitdebug((void YYFAR**)yya, 5);
 #endif
 			{
-#line 181 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 165 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(STMT_LIST,m_functionArgs,new CTreeNode(FUNCTION_EXPR,m_functionNumber));
-#line 505 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
+#line 453 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
 		}
 		break;
@@ -510,14 +458,14 @@ if(yyattribute(1 - 2).functionNumber!=-1){m_functionNumber=yyattribute(1 - 2).fu
 		break;
 	}
 }
-#line 186 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 170 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
 
 
 /////////////////////////////////////////////////////////////////////////////
 // programs section
 
-#line 521 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
+#line 469 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 void YYPARSENAME::yytables()
 {
 	yyattribute_size = sizeof(YYSTYPE);
@@ -563,32 +511,28 @@ void YYPARSENAME::yytables()
 		"statement: END_STMT",
 		"statement: STOP END_STMT",
 		"statement: PAUSE END_STMT",
-		"statement: PRINT OPEN_PAR value CLOSE_PAR END_STMT",
+		"statement: PRINT OPEN_PAR expression CLOSE_PAR END_STMT",
 		"statement: assign_expression END_STMT",
-		"statement: IF OPEN_PAR expression CLOSE_PAR statement",
-		"statement: IF OPEN_PAR expression CLOSE_PAR statement ELSE statement",
-		"statement: WHILE OPEN_PAR expression CLOSE_PAR statement",
-		"statement: DO statement WHILE OPEN_PAR expression CLOSE_PAR END_STMT",
+		"statement: IF OPEN_PAR conditional CLOSE_PAR statement",
+		"statement: IF OPEN_PAR conditional CLOSE_PAR statement ELSE statement",
+		"statement: WHILE OPEN_PAR conditional CLOSE_PAR statement",
+		"statement: DO statement WHILE OPEN_PAR conditional CLOSE_PAR END_STMT",
 		"statement: BEGIN_CS statement_list END_CS",
 		"statement: function END_STMT",
-		"assign_expression: variable ASSIGN value",
-		"expression: equal_expression",
-		"expression: notequal_expression",
-		"expression: lessthan_expression",
-		"expression: greaterthan_expression",
-		"equal_expression: value EQUAL value",
-		"notequal_expression: value NOTEQUAL value",
-		"lessthan_expression: value LESSTHAN value",
-		"greaterthan_expression: value GREATERTHAN value",
+		"assign_expression: variable ASSIGN expression",
+		"conditional: expression EQUAL expression",
+		"conditional: expression NOTEQUAL expression",
+		"conditional: expression LESSTHAN expression",
+		"conditional: expression GREATERTHAN expression",
 		"variable: VARIABLE",
-		"value: VALUE",
-		"value: OPEN_PAR value CLOSE_PAR",
-		"value: VARIABLE",
-		"value: value PLUS value",
-		"value: value SUBTRACT value",
-		"value: value MULTIPLY value",
-		"value: value DIVIDE value",
-		"value: function",
+		"expression: VALUE",
+		"expression: OPEN_PAR expression CLOSE_PAR",
+		"expression: VARIABLE",
+		"expression: expression PLUS expression",
+		"expression: expression SUBTRACT expression",
+		"expression: expression MULTIPLY expression",
+		"expression: expression DIVIDE expression",
+		"expression: function",
 		"$$1:",
 		"function: FUNCTION OPEN_PAR $$1 CLOSE_PAR"
 	};
@@ -612,114 +556,110 @@ void YYPARSENAME::yytables()
 		{ 3, 3, 12 },
 		{ 3, 2, 13 },
 		{ 4, 3, 14 },
-		{ 5, 1, 15 },
-		{ 5, 1, 16 },
-		{ 5, 1, 17 },
-		{ 5, 1, 18 },
-		{ 6, 3, 19 },
-		{ 7, 3, 20 },
-		{ 8, 3, 21 },
-		{ 9, 3, 22 },
-		{ 10, 1, 23 },
-		{ 11, 1, 24 },
-		{ 11, 3, 25 },
-		{ 11, 1, 26 },
-		{ 11, 3, 27 },
-		{ 11, 3, 28 },
-		{ 11, 3, 29 },
-		{ 11, 3, 30 },
-		{ 11, 1, 31 },
-		{ 13, 0, 32 },
-		{ 12, 4, 33 }
+		{ 5, 3, 15 },
+		{ 5, 3, 16 },
+		{ 5, 3, 17 },
+		{ 5, 3, 18 },
+		{ 6, 1, 19 },
+		{ 7, 1, 20 },
+		{ 7, 3, 21 },
+		{ 7, 1, 22 },
+		{ 7, 3, 23 },
+		{ 7, 3, 24 },
+		{ 7, 3, 25 },
+		{ 7, 3, 26 },
+		{ 7, 1, 27 },
+		{ 9, 0, 28 },
+		{ 8, 4, 29 }
 	};
 	yyreduction = reduction;
 
 	static const yytokenaction_t YYNEARFAR YYBASED_CODE tokenaction[] = {
-		{ 71, YYAT_SHIFT, 3 },
-		{ 71, YYAT_SHIFT, 4 },
-		{ 72, YYAT_SHIFT, 74 },
-		{ 71, YYAT_SHIFT, 5 },
-		{ 71, YYAT_SHIFT, 6 },
-		{ 71, YYAT_SHIFT, 7 },
-		{ 71, YYAT_SHIFT, 8 },
+		{ 67, YYAT_SHIFT, 3 },
+		{ 67, YYAT_SHIFT, 4 },
+		{ 68, YYAT_SHIFT, 70 },
+		{ 67, YYAT_SHIFT, 5 },
+		{ 67, YYAT_SHIFT, 6 },
+		{ 67, YYAT_SHIFT, 7 },
+		{ 67, YYAT_SHIFT, 8 },
 		{ 2, YYAT_SHIFT, 3 },
 		{ 2, YYAT_SHIFT, 4 },
-		{ 69, YYAT_SHIFT, 72 },
+		{ 65, YYAT_SHIFT, 68 },
 		{ 2, YYAT_SHIFT, 5 },
 		{ 2, YYAT_SHIFT, 6 },
 		{ 2, YYAT_SHIFT, 7 },
 		{ 2, YYAT_SHIFT, 8 },
-		{ 59, YYAT_SHIFT, 71 },
-		{ 56, YYAT_SHIFT, 70 },
-		{ 71, YYAT_SHIFT, 9 },
-		{ 42, YYAT_SHIFT, 57 },
-		{ 40, YYAT_SHIFT, 56 },
-		{ 71, YYAT_SHIFT, 10 },
-		{ 39, YYAT_SHIFT, 55 },
-		{ 38, YYAT_SHIFT, 54 },
-		{ 71, YYAT_SHIFT, 11 },
+		{ 55, YYAT_SHIFT, 67 },
+		{ 52, YYAT_SHIFT, 66 },
+		{ 67, YYAT_SHIFT, 9 },
+		{ 38, YYAT_SHIFT, 53 },
+		{ 36, YYAT_SHIFT, 52 },
+		{ 67, YYAT_SHIFT, 10 },
+		{ 35, YYAT_SHIFT, 51 },
+		{ 34, YYAT_SHIFT, 50 },
+		{ 67, YYAT_SHIFT, 11 },
 		{ 2, YYAT_SHIFT, 9 },
-		{ 71, YYAT_SHIFT, 12 },
-		{ 31, YYAT_SHIFT, 45 },
+		{ 67, YYAT_SHIFT, 12 },
+		{ 31, YYAT_SHIFT, 41 },
 		{ 2, YYAT_SHIFT, 10 },
-		{ 23, YYAT_SHIFT, 41 },
-		{ 20, YYAT_SHIFT, 39 },
+		{ 23, YYAT_SHIFT, 37 },
+		{ 20, YYAT_SHIFT, 35 },
 		{ 2, YYAT_SHIFT, 11 },
 		{ 16, YYAT_SHIFT, 27 },
 		{ 2, YYAT_SHIFT, 12 },
-		{ 36, YYAT_SHIFT, 46 },
-		{ 36, YYAT_SHIFT, 47 },
-		{ 36, YYAT_SHIFT, 48 },
-		{ 36, YYAT_SHIFT, 49 },
+		{ 32, YYAT_SHIFT, 42 },
+		{ 32, YYAT_SHIFT, 43 },
+		{ 32, YYAT_SHIFT, 44 },
+		{ 32, YYAT_SHIFT, 45 },
 		{ 15, YYAT_SHIFT, 26 },
-		{ 44, YYAT_SHIFT, 50 },
-		{ 44, YYAT_SHIFT, 51 },
-		{ 44, YYAT_SHIFT, 52 },
-		{ 44, YYAT_SHIFT, 53 },
-		{ 55, YYAT_SHIFT, 28 },
-		{ 36, YYAT_ERROR, 0 },
-		{ 44, YYAT_SHIFT, 58 },
+		{ 40, YYAT_SHIFT, 46 },
+		{ 40, YYAT_SHIFT, 47 },
+		{ 40, YYAT_SHIFT, 48 },
+		{ 40, YYAT_SHIFT, 49 },
+		{ 51, YYAT_SHIFT, 28 },
+		{ 32, YYAT_ERROR, 0 },
+		{ 40, YYAT_SHIFT, 54 },
 		{ 14, YYAT_SHIFT, 25 },
 		{ 12, YYAT_SHIFT, 24 },
-		{ 55, YYAT_SHIFT, 29 },
-		{ 55, YYAT_SHIFT, 30 },
-		{ 55, YYAT_SHIFT, 12 },
-		{ 67, YYAT_SHIFT, 50 },
-		{ 67, YYAT_SHIFT, 51 },
-		{ 67, YYAT_SHIFT, 52 },
-		{ 67, YYAT_SHIFT, 53 },
-		{ 66, YYAT_SHIFT, 50 },
-		{ 66, YYAT_SHIFT, 51 },
-		{ 66, YYAT_SHIFT, 52 },
-		{ 66, YYAT_SHIFT, 53 },
-		{ 65, YYAT_SHIFT, 50 },
-		{ 65, YYAT_SHIFT, 51 },
-		{ 65, YYAT_SHIFT, 52 },
-		{ 65, YYAT_SHIFT, 53 },
-		{ 64, YYAT_SHIFT, 50 },
-		{ 64, YYAT_SHIFT, 51 },
-		{ 64, YYAT_SHIFT, 52 },
-		{ 64, YYAT_SHIFT, 53 },
-		{ 63, YYAT_SHIFT, 50 },
-		{ 63, YYAT_SHIFT, 51 },
-		{ 63, YYAT_SHIFT, 52 },
-		{ 63, YYAT_SHIFT, 53 },
-		{ 62, YYAT_SHIFT, 50 },
-		{ 62, YYAT_SHIFT, 51 },
-		{ 62, YYAT_SHIFT, 52 },
-		{ 62, YYAT_SHIFT, 53 },
-		{ 61, YYAT_SHIFT, 50 },
-		{ 61, YYAT_SHIFT, 51 },
-		{ 61, YYAT_SHIFT, 52 },
-		{ 61, YYAT_SHIFT, 53 },
-		{ 60, YYAT_SHIFT, 50 },
-		{ 60, YYAT_SHIFT, 51 },
-		{ 60, YYAT_SHIFT, 52 },
-		{ 60, YYAT_SHIFT, 53 },
-		{ 43, YYAT_SHIFT, 50 },
-		{ 43, YYAT_SHIFT, 51 },
-		{ 43, YYAT_SHIFT, 52 },
-		{ 43, YYAT_SHIFT, 53 },
+		{ 51, YYAT_SHIFT, 29 },
+		{ 51, YYAT_SHIFT, 30 },
+		{ 51, YYAT_SHIFT, 12 },
+		{ 63, YYAT_SHIFT, 46 },
+		{ 63, YYAT_SHIFT, 47 },
+		{ 63, YYAT_SHIFT, 48 },
+		{ 63, YYAT_SHIFT, 49 },
+		{ 62, YYAT_SHIFT, 46 },
+		{ 62, YYAT_SHIFT, 47 },
+		{ 62, YYAT_SHIFT, 48 },
+		{ 62, YYAT_SHIFT, 49 },
+		{ 61, YYAT_SHIFT, 46 },
+		{ 61, YYAT_SHIFT, 47 },
+		{ 61, YYAT_SHIFT, 48 },
+		{ 61, YYAT_SHIFT, 49 },
+		{ 60, YYAT_SHIFT, 46 },
+		{ 60, YYAT_SHIFT, 47 },
+		{ 60, YYAT_SHIFT, 48 },
+		{ 60, YYAT_SHIFT, 49 },
+		{ 59, YYAT_SHIFT, 46 },
+		{ 59, YYAT_SHIFT, 47 },
+		{ 59, YYAT_SHIFT, 48 },
+		{ 59, YYAT_SHIFT, 49 },
+		{ 58, YYAT_SHIFT, 46 },
+		{ 58, YYAT_SHIFT, 47 },
+		{ 58, YYAT_SHIFT, 48 },
+		{ 58, YYAT_SHIFT, 49 },
+		{ 57, YYAT_SHIFT, 46 },
+		{ 57, YYAT_SHIFT, 47 },
+		{ 57, YYAT_SHIFT, 48 },
+		{ 57, YYAT_SHIFT, 49 },
+		{ 56, YYAT_SHIFT, 46 },
+		{ 56, YYAT_SHIFT, 47 },
+		{ 56, YYAT_SHIFT, 48 },
+		{ 56, YYAT_SHIFT, 49 },
+		{ 39, YYAT_SHIFT, 46 },
+		{ 39, YYAT_SHIFT, 47 },
+		{ 39, YYAT_SHIFT, 48 },
+		{ 39, YYAT_SHIFT, 49 },
 		{ 8, YYAT_SHIFT, 22 },
 		{ 7, YYAT_SHIFT, 21 },
 		{ 5, YYAT_SHIFT, 19 },
@@ -734,75 +674,71 @@ void YYPARSENAME::yytables()
 		{ 0, 0, YYAT_REDUCE, 3 },
 		{ 90, 1, YYAT_ERROR, 0 },
 		{ -250, 1, YYAT_REDUCE, 1 },
-		{ -184, 1, YYAT_DEFAULT, 72 },
-		{ -186, 1, YYAT_DEFAULT, 39 },
-		{ -187, 1, YYAT_DEFAULT, 39 },
-		{ 0, 0, YYAT_DEFAULT, 71 },
-		{ -187, 1, YYAT_DEFAULT, 72 },
-		{ -189, 1, YYAT_DEFAULT, 39 },
+		{ -184, 1, YYAT_DEFAULT, 68 },
+		{ -186, 1, YYAT_DEFAULT, 35 },
+		{ -187, 1, YYAT_DEFAULT, 35 },
+		{ 0, 0, YYAT_DEFAULT, 67 },
+		{ -187, 1, YYAT_DEFAULT, 68 },
+		{ -189, 1, YYAT_DEFAULT, 35 },
 		{ 0, 0, YYAT_REDUCE, 4 },
 		{ 0, 0, YYAT_REDUCE, 3 },
-		{ 0, 0, YYAT_REDUCE, 24 },
-		{ -229, 1, YYAT_DEFAULT, 39 },
+		{ 0, 0, YYAT_REDUCE, 20 },
+		{ -229, 1, YYAT_DEFAULT, 35 },
 		{ 0, 0, YYAT_REDUCE, 2 },
-		{ -229, 1, YYAT_DEFAULT, 72 },
+		{ -229, 1, YYAT_DEFAULT, 68 },
 		{ -228, 1, YYAT_ERROR, 0 },
-		{ -243, 1, YYAT_DEFAULT, 72 },
+		{ -243, 1, YYAT_DEFAULT, 68 },
 		{ 0, 0, YYAT_REDUCE, 5 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
 		{ -232, 1, YYAT_ERROR, 0 },
 		{ 0, 0, YYAT_REDUCE, 6 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ -250, 1, YYAT_DEFAULT, 71 },
-		{ 0, 0, YYAT_REDUCE, 33 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ -250, 1, YYAT_DEFAULT, 67 },
+		{ 0, 0, YYAT_REDUCE, 29 },
 		{ 0, 0, YYAT_REDUCE, 8 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
 		{ 0, 0, YYAT_REDUCE, 14 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_REDUCE, 27 },
-		{ 0, 0, YYAT_REDUCE, 25 },
-		{ -250, 1, YYAT_DEFAULT, 69 },
-		{ 0, 0, YYAT_REDUCE, 16 },
-		{ 0, 0, YYAT_REDUCE, 17 },
-		{ 0, 0, YYAT_REDUCE, 18 },
-		{ 0, 0, YYAT_REDUCE, 19 },
-		{ -233, 1, YYAT_DEFAULT, 44 },
-		{ 0, 0, YYAT_REDUCE, 32 },
-		{ -254, 1, YYAT_DEFAULT, 69 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_REDUCE, 23 },
+		{ 0, 0, YYAT_REDUCE, 21 },
+		{ -250, 1, YYAT_DEFAULT, 65 },
+		{ -233, 1, YYAT_DEFAULT, 40 },
+		{ 0, 0, YYAT_REDUCE, 28 },
+		{ -254, 1, YYAT_DEFAULT, 65 },
 		{ -254, 1, YYAT_ERROR, 0 },
-		{ -257, 1, YYAT_DEFAULT, 44 },
+		{ -257, 1, YYAT_DEFAULT, 40 },
 		{ 0, 0, YYAT_REDUCE, 13 },
-		{ -258, 1, YYAT_DEFAULT, 69 },
+		{ -258, 1, YYAT_DEFAULT, 65 },
 		{ -188, 1, YYAT_REDUCE, 15 },
-		{ -232, 1, YYAT_DEFAULT, 69 },
-		{ 0, 0, YYAT_DEFAULT, 71 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 55 },
-		{ 0, 0, YYAT_DEFAULT, 71 },
-		{ -233, 1, YYAT_DEFAULT, 39 },
-		{ -258, 1, YYAT_DEFAULT, 72 },
-		{ 0, 0, YYAT_REDUCE, 34 },
-		{ 0, 0, YYAT_REDUCE, 26 },
+		{ -232, 1, YYAT_DEFAULT, 65 },
+		{ 0, 0, YYAT_DEFAULT, 67 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 51 },
+		{ 0, 0, YYAT_DEFAULT, 67 },
+		{ -233, 1, YYAT_DEFAULT, 35 },
+		{ -258, 1, YYAT_DEFAULT, 68 },
+		{ 0, 0, YYAT_REDUCE, 30 },
+		{ 0, 0, YYAT_REDUCE, 22 },
 		{ -245, 1, YYAT_REDUCE, 9 },
-		{ -192, 1, YYAT_REDUCE, 20 },
-		{ -196, 1, YYAT_REDUCE, 21 },
-		{ -200, 1, YYAT_REDUCE, 22 },
-		{ -204, 1, YYAT_REDUCE, 23 },
-		{ -208, 1, YYAT_REDUCE, 28 },
-		{ -212, 1, YYAT_REDUCE, 29 },
-		{ -216, 1, YYAT_REDUCE, 30 },
-		{ -220, 1, YYAT_REDUCE, 31 },
+		{ -192, 1, YYAT_REDUCE, 16 },
+		{ -196, 1, YYAT_REDUCE, 17 },
+		{ -200, 1, YYAT_REDUCE, 18 },
+		{ -204, 1, YYAT_REDUCE, 19 },
+		{ -208, 1, YYAT_REDUCE, 24 },
+		{ -212, 1, YYAT_REDUCE, 25 },
+		{ -216, 1, YYAT_REDUCE, 26 },
+		{ -220, 1, YYAT_REDUCE, 27 },
 		{ 0, 0, YYAT_REDUCE, 11 },
 		{ -266, 1, YYAT_ERROR, 0 },
 		{ 0, 0, YYAT_REDUCE, 7 },
-		{ -257, 1, YYAT_DEFAULT, 72 },
+		{ -257, 1, YYAT_DEFAULT, 68 },
 		{ -271, 1, YYAT_ERROR, 0 },
 		{ 0, 0, YYAT_REDUCE, 10 },
 		{ 0, 0, YYAT_REDUCE, 12 }
@@ -810,54 +746,50 @@ void YYPARSENAME::yytables()
 	yystateaction = stateaction;
 
 	static const yynontermgoto_t YYNEARFAR YYBASED_CODE nontermgoto[] = {
-		{ 55, 69 },
-		{ 55, 32 },
-		{ 55, 33 },
-		{ 55, 34 },
-		{ 55, 35 },
-		{ 54, 68 },
-		{ 55, 36 },
-		{ 71, 73 },
-		{ 71, 14 },
-		{ 53, 67 },
-		{ 53, 37 },
+		{ 67, 69 },
+		{ 67, 14 },
+		{ 51, 65 },
+		{ 67, 15 },
+		{ 51, 32 },
+		{ 67, 16 },
+		{ 49, 63 },
+		{ 49, 33 },
 		{ 0, 1 },
 		{ 0, 2 },
-		{ 52, 66 },
-		{ 71, 15 },
-		{ 51, 65 },
-		{ 71, 16 },
 		{ 50, 64 },
-		{ 49, 63 },
 		{ 48, 62 },
 		{ 47, 61 },
 		{ 46, 60 },
 		{ 45, 59 },
-		{ 28, 44 },
-		{ 26, 43 },
-		{ 24, 42 },
+		{ 44, 58 },
+		{ 43, 57 },
+		{ 42, 56 },
+		{ 41, 55 },
+		{ 28, 40 },
+		{ 26, 39 },
+		{ 24, 38 },
 		{ 23, 13 },
-		{ 22, 40 },
-		{ 19, 38 },
+		{ 22, 36 },
+		{ 19, 34 },
 		{ 18, 31 },
 		{ 10, 23 },
 		{ 6, 20 }
 	};
 	yynontermgoto = nontermgoto;
-	yynontermgoto_size = 32;
+	yynontermgoto_size = 28;
 
 	static const yystategoto_t YYNEARFAR YYBASED_CODE stategoto[] = {
-		{ 10, -1 },
+		{ 7, -1 },
 		{ 0, -1 },
 		{ 0, 23 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 28, 71 },
+		{ 24, 67 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 28, -1 },
+		{ 24, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
@@ -865,19 +797,17 @@ void YYPARSENAME::yytables()
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 24, 55 },
-		{ 23, 55 },
+		{ 20, 51 },
+		{ 19, 51 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 16, 53 },
-		{ 23, 71 },
+		{ 16, 49 },
+		{ 19, 67 },
 		{ 12, -1 },
 		{ 0, -1 },
-		{ 13, 53 },
+		{ 13, 49 },
 		{ 0, -1 },
-		{ 12, 53 },
-		{ 0, -1 },
-		{ 0, -1 },
+		{ 12, 49 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
@@ -890,19 +820,17 @@ void YYPARSENAME::yytables()
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 0, -1 },
-		{ 0, -1 },
-		{ 19, 71 },
-		{ 10, 53 },
-		{ 9, 53 },
-		{ 8, 53 },
-		{ 7, 53 },
-		{ 6, 53 },
-		{ 4, 53 },
-		{ 2, 53 },
-		{ -2, -1 },
-		{ 2, 71 },
-		{ -5, 53 },
+		{ 15, 67 },
+		{ 10, 49 },
+		{ 9, 49 },
+		{ 8, 49 },
+		{ 7, 49 },
+		{ 6, 49 },
+		{ 5, 49 },
+		{ 4, 49 },
+		{ -1, -1 },
+		{ 7, 67 },
+		{ -3, 49 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
@@ -918,7 +846,7 @@ void YYPARSENAME::yytables()
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
-		{ 4, -1 },
+		{ -3, -1 },
 		{ 0, -1 },
 		{ 0, -1 },
 		{ 0, -1 }
