@@ -22,6 +22,8 @@ virtual void		think(int _frames);
 virtual void		render();
 
 		void		SetUp(int _Width,int _Gap,int _Length,int _Count);
+virtual	CRECT const	&getCollisionArea()						{return (Parent->getCollisionArea());}
+
 protected:
 
 		int			XOfs;

@@ -151,7 +151,7 @@ public:
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 		int				getCollisionRadius()						{return m_collisionRadius;}
-		CRECT const		&getCollisionArea()							{return m_collisionArea;}
+virtual	CRECT const		&getCollisionArea()							{return m_collisionArea;}
 		s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
 		DVECTOR const	&getNewCollidedPos()							{return m_newCollidedPos;}		// pkg - to be removed?
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}

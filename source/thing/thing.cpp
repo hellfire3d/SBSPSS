@@ -211,14 +211,14 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if (Flag)
 			{
 				thing->think(_frames);
-				thing->updateCollisionArea();
+//				thing->updateCollisionArea();
 				if (thing->canCollide())
 				{
 					CThingManager::addToCollisionList(thing);
 				}
 			}
 /* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
-//			thing->updateCollisionArea();
+			thing->updateCollisionArea();
 
 			thing=thing->m_nextListThing;
 		}
@@ -379,7 +379,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 // Shut emm down, sh sh shut em down, we shutem down
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
-		thing=s_CollisionLists[i];
+		thing=s_thingLists[i];
 		CThing	*nextThing = thing;
 		while(thing)
 		{
