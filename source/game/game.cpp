@@ -39,7 +39,10 @@
 
 
 
-int		ZPos=6500;
+int		GX=248;
+int		GY=129;
+int		GH=256;
+int		ZPos=5100;
 
 /*****************************************************************************/
 
@@ -73,6 +76,10 @@ void 	CGameScene::init()
 		CamMtx.t[2]=ZPos;
 
 		CFader::setFadingIn();
+
+		SetGeomOffset( GX, GY );
+		SetGeomScreen(GH);
+
 }
 
 /*****************************************************************************/
