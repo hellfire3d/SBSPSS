@@ -348,6 +348,14 @@ void CGameScene::render_playing()
 			timerValue=m_timer/55;
 			if(timerValue<0)timerValue=0;
 			sprintf(buf,"%d",timerValue);
+			if(timerValue<=5)
+			{
+				m_scalableFont->setColour(255,0,0);
+			}
+			else
+			{
+				m_scalableFont->setColour(255,255,255);
+			}
 			m_scalableFont->print(VidGetScrW()/2,30,buf);
 		}
 
@@ -550,7 +558,16 @@ void CGameScene::think_playing(int _frames)
 	if(m_levelHasTimer&&
 	   !CConversation::isActive()&&!m_pauseMenu->isActive())
 	{
+		int	oldTimer;
+		
+		oldTimer=m_timer/55;
 		m_timer-=_frames;
+
+		if(oldTimer>m_timer/55)
+		{
+			CSoundMediator::playSfx(oldTimer>6?CSoundMediator::SFX_BEEP3:CSoundMediator::SFX_BEEP7);
+		}
+
 		if(m_timer<0)
 		{
 			s_levelFinished=true;
