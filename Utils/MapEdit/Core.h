@@ -50,6 +50,9 @@ public:
 		int				LayerGetActive();
 		CLayer			*LayerGet(int i);
 
+// Tex Cache
+		CTexCache		&GetTexCache()	{return(TexCache);}
+
 
 private:
 		CMapEditView			*ParentWindow;	

@@ -19,8 +19,16 @@
 /*****************************************************************************/
 CTileSet::CTileSet(char *_Filename,CCore *Core)
 {
-	strcpy(Filename,_Filename);
-	Load(Core);
+char	Drive[_MAX_DRIVE];
+char	Dir[_MAX_DIR];
+char	Fname[_MAX_FNAME];
+char	Ext[_MAX_EXT];
+
+	_splitpath(_Filename,Drive,Dir,Fname,Ext);
+	sprintf(Path,"%s%s",Drive,Dir);
+	sprintf(Filename,"%s%s",Fname,Ext);
+
+	Load(Core,_Filename);
 }
 
 /*****************************************************************************/
@@ -33,11 +41,11 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CTileSet::Load(CCore *Core)
+int		CTileSet::Load(CCore *Core,char *_Filename)
 {
-CScene	Scene;
+		CScene	Scene;
 
-		Scene.Load(Filename);
+		Scene.Load(_Filename);
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -45,7 +53,7 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
 			CTile	NewTile;
-			NewTile.Load(Core,Scene,ThisNode.PruneChildList[Child]);
+			NewTile.Load(Core,this,Scene,ThisNode.PruneChildList[Child]);
 			Tile.push_back(NewTile);
 //			AddTileToSet(Scene,ThisNode.PruneChildList[Child]);
 		}

@@ -15,25 +15,28 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int			CTexCache::ProcessTexture(char *TexName)
+int			CTexCache::ProcessTexture(char *TexName,char *Path,int Flags)
 {
-//		TRACE3("%i %s\t%i Tris\n",Id,ThisNode.GetName(),TriCount);
 int		ListSize=TexList.size();
 		
 // Check if Tex exists		
 		for (int Count=0;Count<ListSize;Count++)
 		{
-			if (strcmp(TexName,TexList[Count].Name))
+			if (strcmp(TexName,TexList[Count].Name)==0 && TexList[Count].Flags==Flags)
 			{
-				return(TexList[Count].TexID);
+				return(Count);
 			}
 		}
 sTex	NewTex;
+char	Filename[256];
 		strcpy(NewTex.Name,TexName);
-		LoadGLTexture(TexName,NewTex.TexID);
+		strcpy(NewTex.Path,Path);
+		sprintf(Filename,"%s%s",Path,TexName);
+		TRACE1("Loading Texture %s\n",Filename);
+		LoadGLTexture(Filename,NewTex.TexID);
+		NewTex.Flags=Flags;
 		TexList.push_back(NewTex);
 				
-		return(NewTex.TexID);
-//			
+		return(Count);
 }
 

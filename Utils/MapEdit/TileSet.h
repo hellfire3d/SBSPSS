@@ -24,12 +24,15 @@ class	CCore;
 class	CTileSet
 {
 public:
-		CTileSet(char *Filename,CCore *Core);
+		CTileSet(char *_Filename,CCore *Core);
 		~CTileSet();
-
-		int		Load(CCore *Core);
+		
+		int		Load(CCore *Core,char *_Filename);
+		char	*GetPath()			{return(Path);}
+		char	*GetFilename()		{return(Filename);}
 
 private:
+		char	Path[256];
 		char	Filename[256];
 		std::vector<CTile>	Tile;
 
