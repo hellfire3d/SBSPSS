@@ -77,12 +77,12 @@ char				*s_mem[3];
 void CPaulScene::init()
 {
 	s_fontBank.initialise(&standardFont);
-	CSoundMediator::initialise();
 
-	CSoundMediator::setSong(CSoundMediator::DROPPOP);
-//	CSoundMediator::playSong();
-
+	
 	CSoundMediator::setSfxBank(CSoundMediator::INGAME);
+
+	CSoundMediator::setSong(CSoundMediator::MUSIC);
+	CSoundMediator::playSong();
 
 
 //CXAStream::Init();
@@ -140,7 +140,11 @@ void CPaulScene::think()
 	int				setVolumes=false;
 
 	pad=PadGetDown(0);
-	if(pad&PAD_CROSS)
+	if(pad&PAD_R1)
+	{
+		PAUL_DBGMSG("-------------------");
+	}
+	else if(pad&PAD_CROSS)
 	{
 		sfxId=psfx;
 	}
@@ -195,7 +199,6 @@ void CPaulScene::think()
 		CSoundMediator::setVolume(CSoundMediator::SFX,svol);
 	}
 
-	CSoundMediator::think(GameState::getTimeSinceLast());
 //CXAStream::ControlXA();
 }
 

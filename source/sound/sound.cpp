@@ -41,6 +41,13 @@ typedef struct XMFILEDATA
 	FileEquate	m_vh,m_vb,m_pxm;
 };
 
+typedef struct SFXDETAILS
+{
+	int			m_channels;
+	int			m_pattern;
+	int			m_looping;
+};
+
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -54,12 +61,33 @@ static XMFILEDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
 {
 	{	MUSIC_HYPERMMX_VH,		MUSIC_HYPERMMX_VB,		MUSIC_HYPERMMX_PXM	},		// HYPERMMX
 	{	MUSIC_DROPPOP_VH,		MUSIC_DROPPOP_VB,		MUSIC_DROPPOP_PXM	},		// DROPPOP
+	{	MUSIC_MUSIC_VH,			MUSIC_MUSIC_VB,			MUSIC_MUSIC_PXM		},		// MUSIC
 };
 
 static XMFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 {
 	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// INGAME
 };
+
+static SFXDETAILS	s_sfxDetails[]=
+{
+	{	1,	0,	0	},
+	{	1,	1,	0	},
+	{	1,	2,	0	},
+	{	1,	3,	0	},
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 int			CSoundMediator::s_initialised=false;
@@ -110,6 +138,8 @@ void CSoundMediator::initialise()
 //	ASSERT(CXAStream::MAX_VOLUME==32767);
 
 
+PAUL_DBGMSG("song:   %d-%d  (%d)",SONG_BASE_CHANNEL,SONG_MAX_CHANNEL,SONG_CHANNELS);
+PAUL_DBGMSG("sfx:    %d-%d  (%d)",SFX_BASE_CHANNEL,SFX_MAX_CHANNEL,SFX_CHANNELS);
 
 	SOUND_DBGMSG("Sound mediator initialised");
 	s_initialised=true;
@@ -162,13 +192,33 @@ void CSoundMediator::think(int _frames)
 int id;
 
 id=-1;
-for(i=10;i<24;i++)
+for(i=SONG_CHANNELS;i<24;i++)
 {
 	if(id!=s_spuChannelUse[i])
 	{
 		id=s_spuChannelUse[i];
 		if(id!=-1)
 		{
+/*
+			if(id>=5000)
+			{
+PAUL_DBGMSG("%d is now free.. ( was on chnl %d )",id-5000,i);
+				while(s_spuChannelUse[i]==id&&i<24)
+				{
+					s_spuChannelUse[i++]=-1;
+				}
+				i--;
+			}
+			else if(id>=100)
+			{
+				while(s_spuChannelUse[i]==id&&i<24)
+				{
+					s_spuChannelUse[i++]+=100;
+				}
+				i--;
+			}
+			else 
+*/
 			if(!s_xmplaySound->isSfxActive((xmPlayingSongId)id))
 			{
 PAUL_DBGMSG("%d end.. ( was on chnl %d )",id,i);
@@ -176,7 +226,12 @@ PAUL_DBGMSG("%d end.. ( was on chnl %d )",id,i);
 				{
 					s_spuChannelUse[i++]=-1;
 				}
+				i--;
 			}
+//else
+//{
+//	PAUL_DBGMSG("channel %d playing",i);
+//}
 		}
 	}
 
@@ -348,18 +403,17 @@ sfxChannelMask=3;
 	}
 
 	// Find some spare channels to play on
-	valid=true;
-	for(i=SFX_BASE_CHANNEL;i<NUM_SPU_CHANNELS-channelCount+1;i++)
+	valid=false;
+	for(i=SFX_BASE_CHANNEL;i<NUM_SPU_CHANNELS-channelCount+1&&valid==false;i++)
 	{
 		valid=true;
 		for(j=i;j<i+channelCount&&valid;j++)
 		{
-			if(s_spuChannelUse[j]!=-1) valid=false;
+			if(s_spuChannelUse[j]!=-1) valid=false;			// pkg - tidy up
 		}
-		if(valid==true) break;
 	}
 	ASSERT(valid!=false);
-	baseChannel=i;
+	baseChannel=i-1;
 
 	// Play!
 	playId=s_xmplaySound->playSfx(s_sfxSampleId,s_sfxDataId,baseChannel,_sfxId,sfxChannelMask);

@@ -25,6 +25,11 @@
 #include "locale\textdbase.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
+
 
 #define	SCREEN_GRAB
 
@@ -66,6 +71,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	GameState::initialise();
 
+	CSoundMediator::initialise();
+
 #ifdef __USER_paul__
 s_paulScene.init();
 #endif
@@ -85,6 +92,8 @@ void	MainLoop()
 		GameState::think();
 		GameState::render();
 
+		CSoundMediator::think(GameState::getTimeSinceLast());
+		
 #ifdef __USER_paul__
 		s_paulScene.think();
 		s_paulScene.render();

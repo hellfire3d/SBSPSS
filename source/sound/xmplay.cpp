@@ -43,7 +43,6 @@ unsigned char	*xmPtr;
 	Tyepdefs && Defines
 	------------------- */
 
-#define XM_SONGID 0
 #define MAX_XM_SONGS	5
 #define MAX_XM_VABS		5
 
@@ -161,6 +160,8 @@ xmSampleId CXMPlaySound::loadSamples(FileEquate _vhFe,FileEquate _vbFe)
 			return(xmSampleId)vabId;
 		}
 	}
+	
+// PKG - Can be neatened up a bit..
 
 	// Find next free vab slot
 	vabId=0;
@@ -210,7 +211,9 @@ xmSongId CXMPlaySound::loadSongData(FileEquate _songFe)
 			return(xmSongId)songId;
 		}
 	}
-	
+
+// PKG - Can be neatened up a bit..
+
 	// Find next free song slot
 	song=s_xmSongs;
 	songId=0;
@@ -328,7 +331,7 @@ xmPlayingSongId CXMPlaySound::playSong(xmSampleId _sampleId,xmSongId _songId,int
 	vab=&s_xmVabs[_sampleId];
 	id=XM_Init(vab->m_vabId,	// id from XM_VABInit
 			   _songId,			// XM id ( as passed to InitXMData )
-			   -1,				// Song id
+			   0,				// Song id
 			   _baseChannel,	// First channel
 			   XM_Loop,			// Loop 
 			   -1,				// Play mask
@@ -361,6 +364,9 @@ void CXMPlaySound::stopSong(xmPlayingSongId _songId)
 int SONGNUM=1;
 xmPlayingSongId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmSongId _songId,int _baseChannel,int _sfxPattern,int _playMask=-1)
 {
+//	XM_PlaySample(XM_GetSampleAddress(_sampleId,_sfxPattern),23,0x3fff,0x3fff,0x800);
+//	return (xmPlayingSongId)0;
+	
 	int		i, maskCopy,channelCount=0;
 	XMVab	*vab;
 	int		id;
@@ -386,11 +392,11 @@ xmPlayingSongId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmSongId _songId,int 
 				 XM_NoLoop,		// Loop 
 				 _playMask,		// Play mask
 				 XM_SFX,		// Music
-				 _sfxPattern);				// Pattern to start at
+				 _sfxPattern);	// Pattern to start at
 
 SONGNUM++;	
 if(SONGNUM>=24)SONGNUM=1;
-PAUL_DBGMSG("sfx - ret:%d",id);	
+//PAUL_DBGMSG("sfx - ret:%d",id);	
 	return (xmPlayingSongId)id;
 }
 
@@ -404,13 +410,8 @@ PAUL_DBGMSG("sfx - ret:%d",id);
 int CXMPlaySound::isSfxActive(xmPlayingSongId _id)
 {
 	XM_Feedback	fb;
-	int			ret;
 
-	XM_GetFeedback(_id,&fb);
-
-	ret=fb.Status==XM_PLAYING;
-//PAUL_DBGMSG("check %d  ( %d )",_id,fb.Status);
-	return ret;
+	return XM_GetFeedback(_id,&fb)==0;
 }
 
 
