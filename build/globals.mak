@@ -114,9 +114,8 @@ LOG_NAME :=				uname
 PARKGRAB :=				parkgrab
 BANKER :=				banker
 BIGLUMP :=				bl2
+TGA2GFX :=				Tga2Gfx
 
-ALCHEMY :=				alchemy
-CHOPCHOP :=				chopchop
 
 # PSX and misc tools
 # ------------------
