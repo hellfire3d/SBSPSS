@@ -34,6 +34,7 @@ public:
 		NPC_FISH_HOOK,
 		NPC_DUST_DEVIL,
 		NPC_PENDULUM,
+		NPC_FIREBALL,
 		NPC_SMALL_JELLYFISH_1,
 		NPC_SMALL_JELLYFISH_2,
 		NPC_LARGE_JELLYFISH,
@@ -92,6 +93,7 @@ protected:
 		NPC_INIT_FALLING_ITEM,
 		NPC_INIT_FISH_HOOK,
 		NPC_INIT_PENDULUM,
+		NPC_INIT_FIREBALL,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -155,6 +157,7 @@ protected:
 		NPC_MOVEMENT_FLYING_DUTCHMAN,
 		NPC_MOVEMENT_IRON_DOGFISH,
 		NPC_MOVEMENT_PENDULUM,
+		NPC_MOVEMENT_FIREBALL,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -304,6 +307,7 @@ protected:
 	void				processCloseFallingItemFall( int _frames );
 	void				processCloseFishHookRise( int _frames );
 	void				processPendulumMovement( int _frames );
+	void				processFireballMovement( int _frames );
 
 	// data
 

@@ -84,6 +84,8 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 
 		this->waypoint = newWaypoint;
 		waypointCount++;
+
+		currentWaypoint = this->waypoint;
 	}
 }
 

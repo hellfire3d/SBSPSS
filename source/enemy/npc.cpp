@@ -108,6 +108,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		2048,
 	},
 
+	{	// NPC_FIREBALL
+		NPC_INIT_FIREBALL,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIREBALL,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
+
 	{	// NPC_SMALL_JELLYFISH_1
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE,
@@ -483,7 +495,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_FISH_HOOK;
+	m_type = NPC_FIREBALL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -634,6 +646,28 @@ void CNpc::init()
 			m_extendDir = EXTEND_LEFT;
 			m_extension = 0;
 			m_heading = 1024;
+
+			break;
+		}
+
+		case NPC_INIT_FIREBALL:
+		{
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 200;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			m_extension = newPos.vx - Pos.vx;
+
+			m_velocity = m_data[m_type].speed;
+
+			m_timerTimer = GameState::getOneSecondInFrames() * 4;
 
 			break;
 		}
@@ -1142,6 +1176,13 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_PENDULUM:
 		{
 			processPendulumMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_FIREBALL:
+		{
+			processFireballMovement( _frames );
 
 			break;
 		}
