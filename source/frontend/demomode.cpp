@@ -69,6 +69,7 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
+static int count;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -108,6 +109,7 @@ void CFrontEndDemoMode::select()
 {
 	// LOAD UP DEMO AND DEMO LEVEL
 	m_shuttingDown=false;
+count=0;
 	CFader::setFadingIn();
 }
 
@@ -160,10 +162,14 @@ void CFrontEndDemoMode::render()
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::think(int _frames)
 {
-	if(PadGetDown(0)&PAD_START)		// OR DEMO ENDED
+	if(!m_shuttingDown)
 	{
-		m_shuttingDown=true;
-		CFader::setFadingOut();
+	count+=_frames;	
+		if(PadGetDown(0)&PAD_START||count>60*20)		// OR DEMO ENDED
+		{
+			m_shuttingDown=true;
+			CFader::setFadingOut();
+		}
 	}
 }
 

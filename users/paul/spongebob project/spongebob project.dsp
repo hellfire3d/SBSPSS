@@ -125,6 +125,14 @@ SOURCE=..\..\..\source\fileio\pcfile.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\frontend\demomode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\frontend\demomode.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\frontend\frontend.cpp
 # End Source File
 # Begin Source File
