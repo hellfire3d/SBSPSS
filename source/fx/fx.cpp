@@ -18,6 +18,10 @@
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
 #include	"FX\FXSplash.h"
+#include	"FX\FXSplashAcid.h"
+#include	"FX\FXSplashLava.h"
+#include	"FX\FXSplashOil.h"
+#include	"FX\FXExplode.h"
 /* FX
 
 	Jellyfish legs
@@ -108,6 +112,23 @@ CFX		*NewFX;
 		case FX_TYPE_SPLASH:
 			NewFX=new ("FXSplash") CFXSplash();
 			break;
+		case FX_TYPE_SPLASH_WATER:
+			NewFX=new ("FXSplash") CFXSplash();
+			break;
+		case FX_TYPE_SPLASH_ACID:
+			NewFX=new ("FXSplashAcid") CFXSplashAcid();
+			break;
+		case FX_TYPE_SPLASH_LAVA:
+			NewFX=new ("FXSplashLava") CFXSplashLava();
+			break;
+		case FX_TYPE_SPLASH_OIL:
+			NewFX=new ("FXSplashOil") CFXSplashOil();
+			break;
+		case FX_TYPE_EXPLODE:
+			NewFX=new ("FXExplode") CFXExplode();
+			break;
+
+
 		case FX_TYPE_JELLYFISH_LEGS:
 //			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			ASSERT(!"FISH LEGS OUT OF STOCK\n");
@@ -128,17 +149,12 @@ CFX		*NewFX;
 			case FX_TYPE_DROP_ACID:
 			case FX_TYPE_DROP_LAVA:
 			case FX_TYPE_DROP_OIL:
-			case FX_TYPE_SPLASH_WATER:
-			case FX_TYPE_SPLASH_ACID:
-			case FX_TYPE_SPLASH_LAVA:
-			case FX_TYPE_SPLASH_OIL:
 		case FX_TYPE_CASCADE:		
 		case FX_TYPE_CASCADE_SPLASH:	
 		case FX_TYPE_FIREBALL:
 			case FX_TYPE_SMOKE:
 			case FX_TYPE_GAS:
 		case FX_TYPE_FLAMES:
-		case FX_TYPE_EXPLODE:
 		case FX_TYPE_DEBRIS:
 		
 		default:
