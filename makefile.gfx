@@ -102,6 +102,28 @@ cleanlevels : 	$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(C
 
 
 #----------------------------------------------------------------------------
+# Collision data
+#----------------------------------------------------------------------------
+
+COLLISION_IN		:=	$(TOOL_DIR)/mapedit/collision.bmp
+
+COLLISION_OUT_DIR	:=	$(DATA_OUT)/collision
+COLLISION_OUT		:=	$(COLLISION_OUT_DIR)/colltab.dat
+
+collision : $(COLLISION_OUT)
+
+cleancollision:
+	@$(RM) -f $(COLLISION_OUT)
+	@$(ECHO) Collision table cleaned
+
+$(COLLISION_OUT) : $(COLLISION_IN)
+	@$(DATA_BIN_DIR)/mkcoltab $(COLLISION_IN) -o:$(COLLISION_OUT)
+
+GRAF_DIRS_TO_MAKE	+=	$(COLLISION_OUT_DIR)
+GFX_DATA_OUT		+=	$(COLLISION_OUT)
+
+
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 # Actors
 #----------------------------------------------------------------------------

@@ -8,6 +8,10 @@
 
 #include	"LayerCollision.h"
 
+#ifndef _FILEIO_HEADER_
+#include 	"fileio\fileio.h"
+#endif
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -19,6 +23,8 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
+
+		m_collisionTable=CFileIO::loadFile(COLLISION_COLLTAB_DAT);
 }
 
 /*****************************************************************************/
@@ -29,7 +35,59 @@ CLayerCollision::~CLayerCollision()
 /*****************************************************************************/
 void		CLayerCollision::shutdown()
 {
+	MemFree(m_collisionTable);
 }
+
+/*****************************************************************************/
+int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
+{
+	int	mapX,mapY,xFraction,yFraction;
+	int	distanceFromGround;
+	int	colHeight;
+
+	mapX=_x>>4;
+	mapY=(_y>>4)*MapWidth;
+	xFraction=_x&0x0f;
+	yFraction=16-(_y&0x0f);
+	distanceFromGround=0;
+
+	colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+	if(colHeight)
+	{
+		// Inside a collision block.. find the nearest ground above this point
+		while(colHeight==16)
+		{
+			_y-=16;
+			mapY-=MapWidth;
+			distanceFromGround-=16;
+			if(distanceFromGround<=-_maxHeight)
+			{
+				return -_maxHeight;
+			}
+			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+		}
+		distanceFromGround+=yFraction-colHeight;
+	}
+	else
+	{
+		// Not inside a collision block.. find the nearest ground below this point
+		while(colHeight==0)
+		{
+			_y+=16;
+			mapY+=MapWidth;
+			distanceFromGround+=16;
+			if(distanceFromGround>=_maxHeight)
+			{
+				return _maxHeight;
+			}
+			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+		}
+		distanceFromGround+=yFraction-colHeight;
+	}
+
+	return distanceFromGround;
+}
+
 
 /*****************************************************************************/
 #ifdef __SHOW_COLLISION__

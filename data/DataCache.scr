@@ -87,6 +87,8 @@ levels/CHAPTER04_LEVEL0405.Lvl
 levels/CHAPTER04_LEVEL0406.Lvl
 levels/CHAPTER04_LEVEL0407.Lvl
 
+collision/colltab.dat
+
 actors/spongebob.a3d
 actors/spongebob.tex
 

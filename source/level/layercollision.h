@@ -23,6 +23,7 @@ virtual	~CLayerCollision();
 virtual	void			shutdown();
 
 		u8				Get(int X,int Y)	{return(Map[X+(Y*MapWidth)]);}
+		int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
 
 #ifdef __SHOW_COLLISION__
 		void			render(DVECTOR &MapPos);
@@ -35,6 +36,8 @@ protected:
 
 
 		u8				*Map;
+
+		u8				*m_collisionTable;
 };
 
 
