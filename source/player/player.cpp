@@ -557,10 +557,12 @@ void CPlayer::thinkHorizontalMovement()
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
 int healthx=100;
-int healthy=20;
+int healthy=27;
 int healthw=10;
 int healthh=10;
 int healthg=2;
+int livesx=162;
+int livesy=28;
 
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
@@ -613,7 +615,7 @@ if(eyes!=-1)
 #endif
 
 
-	// Temporary health thing
+	// Temporary health/lives thing
 	int i,x;
 	x=healthx;
 	for(i=0;i<5;i++)
@@ -621,7 +623,6 @@ if(eyes!=-1)
 		POLY_F4	*f4;
 		f4=GetPrimF4();
 		setXYWH(f4,x,healthy,healthw,healthh);
-
 		if(i<s_health)
 		{
 			setRGB0(f4,0,255,0);
@@ -630,12 +631,20 @@ if(eyes!=-1)
 		{
 			setRGB0(f4,255,0,0);
 		}
-
 		setSemiTrans(f4,true);
 		AddPrimToList(f4,0);
 
+		f4=GetPrimF4();
+		setXYWH(f4,x+1,healthy+1,healthw,healthh);
+		setRGB0(f4,0,0,0);
+		setSemiTrans(f4,true);
+		AddPrimToList(f4,1);
+
 		x+=healthw+healthg;
 	}
+	char lifebuf[5];
+	sprintf(lifebuf,"x%d",m_lives);
+	s_debugFont.print(livesx,livesy,lifebuf);
 }
 
 
@@ -667,8 +676,35 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 	m_mapEdge.vy=_mapSize.vy*MAP2D_BLOCKSTEPSIZE;
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::addHealth(int _health)
+{
+	s_health+=_health;
+	if(s_health>MAX_HEALTH)
+	{
+		s_health=MAX_HEALTH;
+	}
+}
 
-
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::addLife()
+{
+	m_lives++;
+	if(m_lives>MAX_LIVES)
+	{
+		m_lives=MAX_LIVES;
+	}
+}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -1064,7 +1100,7 @@ void CPlayer::respawn()
 		setMode(PLAYER_MODE_BASICUNARMED);
 	}
 
-	s_health=5;
+	s_health=MAX_HEALTH;
 	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 	m_moveVel.vx=0;

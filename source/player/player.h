@@ -159,6 +159,14 @@ public:
 	void			setMapSize(DVECTOR _mapSize);
 	void			setRespawnPos(DVECTOR _respawn)							{m_respawnPos=_respawn;}
 
+	enum
+	{
+		MAX_HEALTH=5,
+		MAX_LIVES=99,
+	};
+	void			addHealth(int _health);
+	void			addLife();
+
 protected:		
 	enum
 	{
