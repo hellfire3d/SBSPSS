@@ -135,14 +135,14 @@ static int	s_questItems[5][4]=
 	{	FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_KELPBAR			},	
 	{	FRM__C5_L1_HAMMER,			FRM__C5_L2_ARIEL,			FRM__C5_L3_OILCAN,			FRM__C5_L4_WRENCH		},
 };
-static int	s_levelNumbers[5][4]=
+static int	s_levelNumbers[5][6]=
 {
 	{	0,		1,		2,		3,		4,		25	},
 	{	5,		6,		7,		8,		9,		26	},
 	{	10,		11,		12,		13,		14,		27	},
 	{	15,		16,		17,		18,		19,		28	},
 	{	20,		21,		22,		23,		24,		29	},
-}
+};
 
 
 void CMapScene::init()
