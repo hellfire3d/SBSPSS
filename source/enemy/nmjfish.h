@@ -33,7 +33,6 @@ public:
 	void				shutdown();
 	void				setupWaypoints( sThingActor *ThisActor );
 	bool				alwaysThink();
-	bool				allowOffMap()								{return (true);}
 
 protected:
 	void				processClose( int _frames );

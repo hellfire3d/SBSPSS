@@ -28,6 +28,7 @@ public:
 	virtual void		shutdown();
 	void				think( int _frames );
 	virtual void		renderOnMapScreen( DVECTOR drawPos )		{;}
+	bool				allowOffMap()								{return (true);}
 
 protected:
 	void				addHealthMeter();

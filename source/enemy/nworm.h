@@ -55,6 +55,8 @@ public:
 	void				shutdown();
 	void				render();
 	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
+	bool				allowOffMap()								{return (true);}
+
 protected:
 	bool				processSensor();
 	void				processClose( int _frames );
