@@ -214,6 +214,8 @@ private:
 	int							m_currentMode;
 
 	int				m_lives;
+	int				m_health;
+	int				m_healthReactFrames;
 
 	DVECTOR			m_cameraOffset;
 
