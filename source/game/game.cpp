@@ -234,8 +234,8 @@ void	CGameScene::initLevel()
 	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
 
 #ifdef __USER_charles__		
-	CNpcPlatform	*enemy;
-	enemy=new ("test enemy") CNpcPlatform;
+	CNpcEnemy	*enemy;
+	enemy=new ("test enemy") CNpcEnemy;
 	enemy->init();
 	enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif
