@@ -167,7 +167,9 @@ void CFrontEndStart::render()
 	setRGB3(g4,50, 0,50);
 	AddPrimToList(g4,MAX_OT-1);
 
+#if 0
 	m_guiFrame->render();
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -178,6 +180,7 @@ void CFrontEndStart::render()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::think(int _frames)
 {
+#if 0
 	if(!CFader::isFading())
 	{
 		m_guiFrame->think(_frames);
@@ -195,6 +198,7 @@ void CFrontEndStart::think(int _frames)
 			CFader::setFadingOut();
 		}
 	}
+#endif
 }
 
 /*----------------------------------------------------------------------
@@ -205,7 +209,7 @@ void CFrontEndStart::think(int _frames)
   ---------------------------------------------------------------------- */
 int CFrontEndStart::isReadyToExit()
 {
-	return !CFader::isFading()&&m_shuttingDown;
+	return !CFader::isFading();
 }
 
 /*----------------------------------------------------------------------
@@ -216,14 +220,7 @@ int CFrontEndStart::isReadyToExit()
   ---------------------------------------------------------------------- */
 CFrontEndScene::FrontEndMode CFrontEndStart::getNextMode()
 {
-	if(m_selectedSlot==NO_SLOT_SELECTED)
-	{
-		return CFrontEndScene::MODE__MAIN_TITLES;
-	}
-	else
-	{
-		return CFrontEndScene::MODE__EXIT_TO_GAME;
-	}
+	return CFrontEndScene::MODE__EXIT_TO_MAP;
 }
 
 /*===========================================================================

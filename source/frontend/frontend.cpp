@@ -66,8 +66,8 @@
 #include "Dstructs.h"
 #endif
 
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
 #endif
 
 
@@ -284,10 +284,10 @@ void CFrontEndScene::setMode(FrontEndMode _newMode)
 	}
 	
 	// Open new mode
-	if(_newMode==MODE__EXIT_TO_GAME)
+	if(_newMode==MODE__EXIT_TO_MAP)
 	{
 		m_exitToGame=true;
-		GameState::setNextScene(&GameScene);
+		GameState::setNextScene(&MapScene);
 		
 	}
 	else

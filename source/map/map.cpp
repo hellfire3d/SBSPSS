@@ -30,8 +30,8 @@
 #include "gfx\prim.h"
 #endif
 
-#ifndef	__FRONTEND_FRONTEND_H__
-#include "frontend\frontend.h"
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
 #endif
 
 #ifndef	__GFX_FADER_H__
@@ -44,14 +44,6 @@
 
 #ifndef _FILEIO_HEADER_
 #include "fileio\fileio.h"
-#endif
-
-#ifndef	__GUI_GFRAME_H__
-#include "gui\gframe.h"
-#endif
-
-#ifndef	__GUI_GFACTORY_H__
-#include "gui\gfactory.h"
 #endif
 
 #ifndef __MATHTABLE_HEADER__
@@ -93,58 +85,49 @@
 CMapScene	MapScene;
 
 
+CMapScene::sMapLevelData	CMapScene::s_mapLevelData[5]=
+{
+	// Chapter 1
+	{
+		{	MAP_C1_L1_GFX,		MAP_C1_L2_GFX,		MAP_C1_L3_GFX,		MAP_C1_L4_GFX,		MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
+		{	0,					1,					2,					3,					-1,					20				},
+		{	FRM__C1_L1_JELLY,			FRM__C1_L2_SEAWEED,			FRM__C1_L3_SEANUTBUTTER,	FRM__C1_L4_BREADSLICE	},
+	},
+	// Chapter 2
+	{
+		{	MAP_C2_L1_GFX,		MAP_C2_L2_GFX,		MAP_C2_L3_GFX,		MAP_C2_L4_GFX,		MAP_C2_BOSS_GFX,	MAP_C2_FAIR_GFX	},
+		{	4,					5,					6,					7,					-1,					21				},
+		{	FRM__C2_L1_FALSETEETH,		FRM__C2_L2_KELPKREAM,		FRM__C2_L3_MUDPACK,			FRM__C2_L4_SPONGE		},
+	},
+	// Chapter 3
+	{
+		{	MAP_C3_L1_GFX,		MAP_C3_L2_GFX,		MAP_C3_L3_GFX,		MAP_C3_L4_GFX,		MAP_C3_BOSS_GFX,	MAP_C3_FAIR_GFX	},
+		{	8,					9,					10,					11,					-1,					22				},
+		{	FRM__C3_L1_SLIPPERS,		FRM__C3_L2_CLAMBRA,			FRM__C3_L3_STARFISHMASK,	FRM__C3_L4_SUPERPANTZ	},
+	},
+	// Chapter 4
+	{
+		{	MAP_C4_L1_GFX,		MAP_C4_L2_GFX,		MAP_C4_L3_GFX,		MAP_C4_L4_GFX,		MAP_C4_BOSS_GFX,	MAP_C4_FAIR_GFX	},
+		{	12,					13,					14,					15,					-1,					23				},
+		{	FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_KELPBAR			},	
+	},
+	// Chapter 5
+	{
+		{	MAP_C5_L1_GFX,		MAP_C5_L2_GFX,		MAP_C5_L3_GFX,		MAP_C5_L4_GFX,		MAP_C5_BOSS_GFX,	MAP_C5_FAIR_GFX	},
+		{	16,					17,					18,					19,					-1,					24				},
+		{	FRM__C5_L1_HAMMER,			FRM__C5_L2_ARIEL,			FRM__C5_L3_OILCAN,			FRM__C5_L4_WRENCH		},
+	},
+};
+
+extern int s_globalLevelSelectThing;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-enum
-{
-	MAP_PARCHMENT_WIDTH=496,
-	MAP_PARCHMENT_HEIGHT=190,
-	MAP_PARCHMENT_START_X=(512-MAP_PARCHMENT_WIDTH)/2,
-	MAP_PARCHMENT_START_Y=20,
-
-	MAP_LEVEL_WIDTH=140,
-	MAP_LEVEL_HEIGHT=60,
-	MAP_LEVEL_TOP_BORDER=20,
-	MAP_LEVEL_Y_SPACING=8,
-	MAP_LEVEL_X_SPACING=4,
-
-
-	MAP_INSTRUCTIONS_WIDTH=416,
-	MAP_INSTRUCTIONS_HEIGHT=32,
-	MAP_INSTRUCTIONS_BOTTOM_OFFSET=40,
-};
-
-
-static int	s_levelMaps[5][6]=
-{
-	{	MAP_C1_L1_GFX,	MAP_C1_L2_GFX,	MAP_C1_L3_GFX,	MAP_C1_L4_GFX,	MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-	{	MAP_C1_L1_GFX,	MAP_C1_L2_GFX,	MAP_C1_L3_GFX,	MAP_C1_L4_GFX,	MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-	{	MAP_C1_L1_GFX,	MAP_C1_L2_GFX,	MAP_C1_L3_GFX,	MAP_C1_L4_GFX,	MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-	{	MAP_C1_L1_GFX,	MAP_C1_L2_GFX,	MAP_C1_L3_GFX,	MAP_C1_L4_GFX,	MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-	{	MAP_C1_L1_GFX,	MAP_C1_L2_GFX,	MAP_C1_L3_GFX,	MAP_C1_L4_GFX,	MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-};
-static int	s_questItems[5][4]=
-{
-	{	FRM__C1_L1_JELLY,			FRM__C1_L2_SEAWEED,			FRM__C1_L3_SEANUTBUTTER,	FRM__C1_L4_BREADSLICE	},
-	{	FRM__C2_L1_FALSETEETH,		FRM__C2_L2_KELPKREAM,		FRM__C2_L3_MUDPACK,			FRM__C2_L4_SPONGE		},
-	{	FRM__C3_L1_SLIPPERS,		FRM__C3_L2_CLAMBRA,			FRM__C3_L3_STARFISHMASK,	FRM__C3_L4_SUPERPANTZ	},
-	{	FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_KELPBAR			},	
-	{	FRM__C5_L1_HAMMER,			FRM__C5_L2_ARIEL,			FRM__C5_L3_OILCAN,			FRM__C5_L4_WRENCH		},
-};
-static int	s_levelNumbers[5][6]=
-{
-	{	0,		1,		2,		3,		4,		25	},
-	{	5,		6,		7,		8,		9,		26	},
-	{	10,		11,		12,		13,		14,		27	},
-	{	15,		16,		17,		18,		19,		28	},
-	{	20,		21,		22,		23,		24,		29	},
-};
-
-
 void CMapScene::init()
 {
 	m_font=new ("map screen font") FontBank();
@@ -158,46 +141,15 @@ void CMapScene::init()
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 
-	// Generate the map background image
-	int	i,x,y,xpos,ypos;
+	m_currentChapterSelection=0;
+	m_currentLevelSelection=0;
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
-	memset(m_screenImage,0,512*256*2);
-	copyImageToScreen(MAP_MAP_BACKGROUND_GFX,MAP_PARCHMENT_START_X,MAP_PARCHMENT_START_Y,MAP_PARCHMENT_WIDTH,MAP_PARCHMENT_HEIGHT);
-	i=0;
-	ypos=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER;
-	for(y=0;y<2;y++)
-	{
-		xpos=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING;
-		for(x=0;x<3;x++)
-		{
-			if(isLevelOpen(m_currentChapterSelection,i))
-			{
-				copyImageToScreen(s_levelMaps[m_currentChapterSelection][i],xpos,ypos,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
-			}
-			i++;
-			xpos+=MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING;
-		}
-		ypos+=MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING;
-	}
-
+	generateMapScreenImage();
 	SetScreenImage((u8*)m_screenImage);
-
-	// Generate the ui box at the bottom of the screen
-	m_guiFrame=new ("Conversation GUI") CGUIControlFrame();
-	m_guiFrame->init(0);
-	m_guiFrame->setObjectXYWH((512-MAP_INSTRUCTIONS_WIDTH)/2,256-MAP_INSTRUCTIONS_BOTTOM_OFFSET-MAP_INSTRUCTIONS_HEIGHT,MAP_INSTRUCTIONS_WIDTH,MAP_INSTRUCTIONS_HEIGHT);
-//	m_guiFrame->setOt(OT_POS);
-	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
 
 	m_readyToExit=false;
 //	CFader::setFadingIn(CFader::BLACK_FADE);
-
-
-	m_currentChapterSelection=0;
-	m_currentLevelSelection=0;
-	m_pointerPos.vx=256;
-	m_pointerPos.vy=-50;
 }
 
 
@@ -209,7 +161,6 @@ void CMapScene::init()
   ---------------------------------------------------------------------- */
 void CMapScene::shutdown()
 {
-	m_guiFrame->shutdown();
 	ClearScreenImage();
 	MemFree(m_screenImage);
 	m_spriteBank->dump();		delete m_spriteBank;
@@ -242,7 +193,7 @@ void CMapScene::render()
 		{
 			sprintf(spatCount,"%d/%d",getSpatulaCollectedCount(m_currentChapterSelection,i),getSpatulaAvailableCount(m_currentChapterSelection,i));
 			m_font->print(xpos,ypos,spatCount);
-			fh=m_spriteBank->getFrameHeader(s_questItems[m_currentChapterSelection][i]);
+			fh=m_spriteBank->getFrameHeader(s_mapLevelData[m_currentChapterSelection].m_questItemFrames[i]);
 			ft4=m_spriteBank->printFT4Scaled(fh,xpos+MAP_LEVEL_WIDTH-fh->W,ypos+MAP_LEVEL_HEIGHT-fh->H,0,0,10,128);
 			if(!hasQuestItemBeenCollected(m_currentChapterSelection,i))
 			{
@@ -257,8 +208,13 @@ void CMapScene::render()
 	// Selection cursor
 	fh=m_spriteBank->getFrameHeader(FRM__MAPPOINTER);
 	m_spriteBank->printFT4(fh,m_pointerPos.vx-(fh->W/2),m_pointerPos.vy-(fh->H/2),0,0,9);
-	
-	m_guiFrame->render();
+
+char buf[100];
+sprintf(buf,"Chapter %d, Level %d",m_currentChapterSelection+1,m_currentLevelSelection+1);
+m_font->setColour(0,255,0);
+m_font->print(24,24,buf);
+m_font->setColour(0,0,0);
+m_font->print(25,25,buf);
 }
 
 
@@ -272,6 +228,18 @@ void CMapScene::think(int _frames)
 {
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
+		// Change chapter
+		if(PadGetDown(0)&PAD_UP)
+		{
+			if(++m_currentChapterSelection>4)m_currentChapterSelection=0;
+			generateMapScreenImage();
+		}
+		else if(PadGetDown(0)&PAD_DOWN)
+		{
+			if(--m_currentChapterSelection<0)m_currentChapterSelection=4;
+			generateMapScreenImage();
+		}
+
 		// Move cursor
 		if(PadGetDown(0)&PAD_LEFT)
 		{
@@ -292,13 +260,7 @@ void CMapScene::think(int _frames)
 		
 		// Calc where the pointer should be
 		m_pointerSin=(m_pointerSin+(_frames*70))&4095;
-		m_pointerTarget.vx=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING+
-						   ((m_currentLevelSelection%3)*(MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING))+
-						   (MAP_LEVEL_WIDTH/2);
-		m_pointerTarget.vy=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER+
-						   ((m_currentLevelSelection/3)*(MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING))+
-						   (MAP_LEVEL_HEIGHT)+
-						   (msin(m_pointerSin)*4>>12);
+		m_pointerTarget=getPointerTargetPosition();
 
 		// Move the pointer
 		for(int i=0;i<_frames;i++)
@@ -334,11 +296,11 @@ void CMapScene::think(int _frames)
 
 		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
 		{
+			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection].m_globalLevelNumbers[m_currentLevelSelection];
 			m_readyToExit=true;
 //			CFader::setFadingOut(CFader::BLACK_FADE);
-			GameState::setNextScene(&FrontEndScene);
+			GameState::setNextScene(&GameScene);
 		}
-		m_guiFrame->think(_frames);
 	}
 }
 
@@ -353,6 +315,42 @@ int CMapScene::readyToShutdown()
 {
 	return m_readyToExit&&!CFader::isFading();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CMapScene::generateMapScreenImage()
+{
+	int	i,x,y,xpos,ypos;
+
+
+	m_currentLevelSelection=0;
+	memset(m_screenImage,0,512*256*2);
+	copyImageToScreen(MAP_MAP_BACKGROUND_GFX,MAP_PARCHMENT_START_X,MAP_PARCHMENT_START_Y,MAP_PARCHMENT_WIDTH,MAP_PARCHMENT_HEIGHT);
+	i=0;
+	ypos=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER;
+	for(y=0;y<2;y++)
+	{
+		xpos=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING;
+		for(x=0;x<3;x++)
+		{
+			if(isLevelOpen(m_currentChapterSelection,i))
+			{
+				copyImageToScreen(s_mapLevelData[m_currentChapterSelection].m_mapFiles[i],xpos,ypos,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
+			}
+			i++;
+			xpos+=MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING;
+		}
+		ypos+=MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING;
+	}
+
+	m_pointerPos=getPointerTargetPosition();
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -386,14 +384,34 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	CMapScene::getPointerTargetPosition()
+{
+	DVECTOR	pos;
+	pos.vx=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING+
+		   ((m_currentLevelSelection%3)*(MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING))+
+		   (MAP_LEVEL_WIDTH/2);
+	pos.vy=MAP_PARCHMENT_START_Y+MAP_LEVEL_TOP_BORDER+
+		   ((m_currentLevelSelection/3)*(MAP_LEVEL_HEIGHT+MAP_LEVEL_Y_SPACING))+
+		   (MAP_LEVEL_HEIGHT)+
+		   (msin(m_pointerSin)*4>>12);
+	return pos;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int		CMapScene::isLevelOpen(int _chapter,int _level)
 {
-	return true;//_level<4;
+	return _level!=4;		// no boss levels atm..
 }
 
 int		CMapScene::getSpatulaCollectedCount(int _chapter,int _level)
 {
-	return 10+_level;
+	return 0;
 }
 
 int		CMapScene::getSpatulaAvailableCount(int _chapter,int _level)
@@ -403,7 +421,7 @@ int		CMapScene::getSpatulaAvailableCount(int _chapter,int _level)
 
 int		CMapScene::hasQuestItemBeenCollected(int _chapter,int _level)
 {
-	return _level<2;
+	return true;
 }
 
 
