@@ -23,8 +23,14 @@ class CNpcFallingNoRespawnPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual	CRECT const		*getThinkBBox();
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
+	virtual void		render();
 	virtual void		processMovement( int _frames );
+
+	u8					m_spinFinish;
+	s16					m_rotation;
+	u8					m_bounceDir;
 };
 
 #endif

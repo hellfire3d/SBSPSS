@@ -185,7 +185,7 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 	}
 	else
 	{
-		if ( yAim )
+		if ( abs( yAim ) > 20 )
 		{
 			movement = yAim;
 			

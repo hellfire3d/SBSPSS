@@ -27,6 +27,11 @@
 #include "platform\pfallnor.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcConveyorPlatformGenerator::collidedWith(CThing *_thisThing)
@@ -102,6 +107,9 @@ void CNpcConveyorPlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
+
+	m_spinFinish = false;
+	m_rotation = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,40 +120,59 @@ void CNpcConveyorPlatform::processMovement( int _frames )
 	s32 distX, distY;
 	bool pathComplete, waypointChange;
 
-	m_npcPath.think( Pos, &pathComplete, &waypointChange, &distX, &distY );
-
-	if ( pathComplete )
+	if ( m_spinFinish )
 	{
-		setToShutdown();
+		m_rotation += 64 * _frames;
+		m_rotation &= 4095;
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		Pos.vy += 3 * _frames;
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos > VidGetScrH() )
+		{
+			setToShutdown();
+		}
 	}
 	else
 	{
-		if ( distX )
-		{
-			moveX = distX;
+		m_npcPath.think( Pos, &pathComplete, &waypointChange, &distX, &distY );
 
-			if ( moveX > 1 )
-			{
-				moveX = 1;
-			}
-			else if ( moveX < -1 )
-			{
-				moveX = -1;
-			}
+		if ( pathComplete )
+		{
+			m_spinFinish = true;
 		}
 		else
 		{
-			moveY = distY;
-
-			s32 verticalMovement = 3 * _frames;
-
-			if ( moveY > verticalMovement )
+			if ( distX )
 			{
-				moveY = verticalMovement;
+				moveX = distX;
+
+				if ( moveX > 1 )
+				{
+					moveX = 1;
+				}
+				else if ( moveX < -1 )
+				{
+					moveX = -1;
+				}
 			}
-			else if ( moveY < -verticalMovement )
+			else
 			{
-				moveY = -verticalMovement;
+				moveY = distY;
+
+				s32 verticalMovement = 3 * _frames;
+
+				if ( moveY > verticalMovement )
+				{
+					moveY = verticalMovement;
+				}
+				else if ( moveY < -verticalMovement )
+				{
+					moveY = -verticalMovement;
+				}
 			}
 		}
 	}
@@ -225,9 +252,10 @@ void CNpcConveyorPlatform::collidedWith( CThing *_thisThing )
 
 		case TYPE_HAZARD:
 		{
-			// needs to explode or something
-
-			setToShutdown();
+			if ( !m_spinFinish )
+			{
+				m_spinFinish = true;
+			}
 
 			break;
 		}
@@ -235,5 +263,47 @@ void CNpcConveyorPlatform::collidedWith( CThing *_thisThing )
 		default:
 			ASSERT(0);
 			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcConveyorPlatform::render()
+{
+	if ( m_isActive )
+	{
+		CPlatformThing::render();
+
+		// Render
+		if (canRender())
+		{
+			DVECTOR &renderPos=getRenderPos();
+
+			SVECTOR rotation;
+			rotation.vx = 0;
+			rotation.vy = 0;
+			rotation.vz = m_rotation;
+
+			VECTOR scale;
+			scale.vx = ONE;
+			scale.vy = ONE;
+			scale.vz = ONE;
+
+			m_modelGfx->Render(renderPos,&rotation,&scale);
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int CNpcConveyorPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
+{
+	if ( m_spinFinish )
+	{
+		return( false );
+	}
+	else
+	{
+		return( CNpcPlatform::checkCollisionAgainst( _thisThing, _frames ) );
 	}
 }

@@ -23,9 +23,14 @@ class CNpcConveyorPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual	CRECT const		*getThinkBBox();
+	virtual void		render();
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	virtual void		processMovement( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
+
+	u8					m_spinFinish;
+	s16					m_rotation;
 };
 
 class CNpcConveyorPlatformGenerator : public CNpcPlatform
