@@ -796,7 +796,7 @@ void	CModelGfx::SetModel(int Type)
 
 /*****************************************************************************/
 static const int	MXO=0;
-static const int	MYO=-8;
+static const int	MYO=-8*0;
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {
 #define	BLOCK_MULT	16

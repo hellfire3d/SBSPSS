@@ -200,7 +200,7 @@ int			i,ListSize=ModelList.size();
 			for (i=0; i<ListSize; i++)
 			{
 				sMkLevelModel	&ThisModel=ModelList[i];
-				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false);	// always all models as global for the moment
+				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false,false);	// always all models as global for the moment
 			}
 }
 
@@ -586,7 +586,7 @@ sExpTile	&SrcTile=InTileList[Tile];
 int			ElemID;
 			if (SrcTile.TriCount)
 			{
-				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom);
+				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom,true);
 			}
 			else
 			{
@@ -597,7 +597,7 @@ int			ElemID;
 }
 
 //***************************************************************************
-int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local)
+int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile)
 {
 CFace			F;
 int				i,ListSize;
@@ -642,7 +642,14 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 
 				for (int p=0; p<3; p++)
 				{
-					F.vtx[p]=ThisTri.vtx[p];
+//					F.vtx[p]=ThisTri.vtx[p];
+					F.vtx[p].x=+ThisTri.vtx[p].x;
+					F.vtx[p].y=-ThisTri.vtx[p].y;
+					F.vtx[p].z=+ThisTri.vtx[p].z;
+					if (IsTile)
+					{
+						F.vtx[p].y+=0.5f;
+					}
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
@@ -675,7 +682,11 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 
 				for (int p=0; p<3; p++)
 				{
-					F.vtx[p]=ThisTri.vtx[p];
+//					F.vtx[p]=ThisTri.vtx[p];
+					F.vtx[p].x=+ThisTri.vtx[p].x;
+					F.vtx[p].y=-ThisTri.vtx[p].y;
+					F.vtx[p].z=+ThisTri.vtx[p].z;
+					F.vtx[p].y+=0.5f;	// Adjust for tile offset (2dElems Always Tile)
 					F.uvs[p].u=ThisTri.uv[p][0];
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
@@ -1053,7 +1064,8 @@ int		Pos=ftell(File);
 			sVtx		Out;
 
 			Out.vx=+In.vx;
-			Out.vy=-In.vy+(Scale/2);	// Offset it so the origin is centre centre
+//			Out.vy=-In.vy;//+(Scale/2);	// Offset it so the origin is centre centre
+			Out.vy=+In.vy;//+(Scale/2);	// Offset it so the origin is centre centre
 			Out.vz=+In.vz;
 			Min.vx=__min(Min.vx,Out.vx);
 			Min.vy=__min(Min.vy,Out.vy);

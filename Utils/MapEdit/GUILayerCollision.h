@@ -48,6 +48,7 @@ protected:
 	afx_msg void OnLayercollisionSlippery();
 	afx_msg void OnLayercollisionSolid();
 	afx_msg void OnLayercollisionSoakUp();
+	afx_msg void OnLayercollisionSbNomove();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

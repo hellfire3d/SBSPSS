@@ -437,6 +437,8 @@ sColTab	ColTable[]=
 {  0,127,127},		// PC_TILE_COLLISION_MOVE_RIGHT:			
 {  0,  0,255},		// PC_TILE_COLLISION_DEATH_LIQUID:		
 
+{255,127,0},		// PC_TILE_COLLISION_SB_NOMOVE
+
 };
 
 void	CElem::Render(int Flags,bool Render3d)

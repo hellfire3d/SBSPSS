@@ -114,7 +114,7 @@ public:
 protected:	
 		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
 
-		int				Create3dElem(int TriCount,int TriStart,bool Local);
+		int				Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile);
 		int				Create2dElem(int Tile,bool Local);
 
 		CMkLevelLayer	*FindLayer(int Type,int SubType);

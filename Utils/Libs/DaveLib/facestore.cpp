@@ -369,8 +369,8 @@ void	CFaceStore::ParseVtx4BBox(sVtx &ThisVtx)
 {
 		if (BBox.XMin>+ThisVtx.vx) BBox.XMin=+ThisVtx.vx;
 		if (BBox.XMax<+ThisVtx.vx) BBox.XMax=+ThisVtx.vx;
-		if (BBox.YMin>-ThisVtx.vy) BBox.YMin=-ThisVtx.vy;
-		if (BBox.YMax<-ThisVtx.vy) BBox.YMax=-ThisVtx.vy;
+		if (BBox.YMin>+ThisVtx.vy) BBox.YMin=+ThisVtx.vy;
+		if (BBox.YMax<+ThisVtx.vy) BBox.YMax=+ThisVtx.vy;
 }
 //***************************************************************************
 void	CFaceStore::BuildOutTriList(vector<sTri> &OutTriList,vector<sVtx> &OutVtxList)
