@@ -56,6 +56,9 @@ static void				restartlevel()		{s_restartLevel=true;}
 //		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 
+static void				setBossHasBeenKilled()				{s_bossHasBeenKilled=true;}
+static int				getBossHasBeenKilled()				{return s_bossHasBeenKilled;}
+
 protected:
 
 		void			initLevel();
@@ -88,6 +91,7 @@ static	CLayerCollision	*getCollision()						{return(s_GlobalCollision);}
 
 static	SpriteBank		*s_GlobalSpritebank;
 static	CLayerCollision	*s_GlobalCollision;
+static	int				s_bossHasBeenKilled;
 
 };
 

@@ -42,6 +42,11 @@ public:
 	virtual DVECTOR		getSizeForPlacement();
 	virtual void		collect(class CPlayer *_player);
 
+
+protected:
+	virtual void		collidedWith(CThing *_thisThing);
+
+
 private:
 	virtual int			getVisibilityRadius();
 
@@ -50,6 +55,7 @@ private:
 
 	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__LEVEL_ITEM;}
 
+	int					m_hiddenUntilBossDead;
 	int					m_pingFrame;
 	int					m_gfxFrame;
 

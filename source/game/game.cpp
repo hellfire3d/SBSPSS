@@ -153,6 +153,7 @@ int CGameScene::s_levelFinished;
 int CGameScene::s_skipToNextLevel;
 #endif
 int	CGameScene::s_restartLevel;
+int	CGameScene::s_bossHasBeenKilled;
 
 /*****************************************************************************/
 
@@ -393,11 +394,14 @@ void	CGameScene::initLevel()
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);
 
+	s_bossHasBeenKilled=false;
+
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
 	CActorPool::SetUpCache();
 	SYSTEM_DBGMSG("InitLevelDone\n");
+
 }
 
 
