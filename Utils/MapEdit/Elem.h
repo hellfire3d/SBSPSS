@@ -47,6 +47,7 @@ public:
 
 		void	Purge();
 		void	Render(int Flags,bool Render3d);
+		void	RenderInvalid();
 
 		int		GetElemWidth()				{return(ElemWidth);}
 		int		GetElemHeight()				{return(ElemHeight);}
@@ -116,6 +117,7 @@ const	char		*GetName()										{return(Name);}
 		int			GetBrowserWidth()								{return(ElemBrowserWidth);}
 
 		void		RenderElem(int Elem,int Flags,bool Render3d)	{ElemList[Elem].Render(Flags,Render3d);}
+		void		RenderInvalid()									{ElemList[0].RenderInvalid();}
 		CElem		&GetElem(int No)								{return(ElemList[No]);}
 		void		Purge();
 		bool		IsValid(int No);

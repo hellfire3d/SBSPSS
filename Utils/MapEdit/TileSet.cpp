@@ -139,6 +139,19 @@ GString	SavePath;
 }
 
 /*****************************************************************************/
+void	CTileBank::RenderTile(int Set,int Elem,int Flags,bool Is3d)
+{
+		if (IsValid(Set,Elem))
+		{
+			SetList[Set].RenderElem(Elem,Flags,Is3d);
+		}
+		else
+		{
+			SetList[0].RenderInvalid();
+		}
+		
+}
+/*****************************************************************************/
 void	CTileBank::DeleteCurrent()
 {
 int		ListSize=GetSetCount();

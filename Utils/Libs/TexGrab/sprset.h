@@ -52,6 +52,7 @@ struct	sTexOutInfo
 	bool		Rotated;
 	int			u,v,w,h;
 	int			XOfs,YOfs;
+	int			OrigW,OrigH;
 };
 
 /*	Encapsulates a file and all the infomation parkgrab needs to process it
@@ -83,6 +84,8 @@ class FileInfo
 			ForceOffsets=Fi.ForceOffsets;
 			XOff=Fi.XOff;
 			YOff=Fi.YOff;
+			XOff1=Fi.XOff1;
+			YOff1=Fi.YOff1;
 			ShrinkToFit=Fi.ShrinkToFit;
 			m_allocateAs16Bit=Fi.m_allocateAs16Bit;
 			MemFrame=Fi.MemFrame;
@@ -186,6 +189,15 @@ class FileInfo
 			{
 			return(YOff);
 			}
+		int		GetXOff1(void) const
+			{
+			return(XOff1);
+			}
+
+		int		GetYOff1(void) const
+			{
+			return(YOff1);
+			}
 
 		bool getAllocateAs16Bit(void) const
 			{return(m_allocateAs16Bit);}
@@ -217,6 +229,7 @@ class FileInfo
 		bool	m_allocateAs16Bit;
 
 		int		XOff,YOff;
+		int		XOff1,YOff1;
 
 		Frame	*MemFrame;
 	};
@@ -463,6 +476,9 @@ public:
 
 	int		getY(void)	{return(Y);}
 
+	int		GetOrigW()	{return(OrigW);}
+	int		GetOrigH()	{return(OrigH);}
+
 	int		getW(void)
 	{
 		if (MyFileInfo.GetMoveUVs() && Width && !MyFileInfo.getAllocateAs16Bit())
@@ -494,6 +510,8 @@ protected:
 		PalIndex=NewFrame.PalIndex;
 		MyFileInfo=NewFrame.MyFileInfo;
 		MyRect=NewFrame.MyRect;
+		OrigW=NewFrame.OrigW;
+		OrigH=NewFrame.OrigH;
 		}
 
 
@@ -507,6 +525,7 @@ protected:
 	int			PalIndex;
 	FileInfo	MyFileInfo;
 	TPRect		MyRect;
+	int			OrigW,OrigH;
 };
 
 /*	A collection of sprites

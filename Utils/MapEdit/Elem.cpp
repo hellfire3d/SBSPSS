@@ -333,6 +333,26 @@ int		ColFlags=Flags >> PC_TILE_FLAG_COLLISION_SHIFT;
 }
 
 /*****************************************************************************/
+void	CElem::RenderInvalid()
+{
+float	X0=0;
+float	X1=UnitWidth;
+float	Y0=0;
+float	Y1=UnitHeight;
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBegin(GL_LINES); 
+			glColor4f(1,1,1,1);
+			
+			glVertex3f( X0,Y0,0);
+			glVertex3f( X1,Y1,0);
+
+			glVertex3f( X1,Y0,0);
+			glVertex3f( X0,Y1,0);
+		glEnd();
+}
+
+/*****************************************************************************/
 void	CElem::Purge()
 {
 		for (int i=0; i<ElemTypeMax; i++)

@@ -109,7 +109,6 @@ int		i,ListSize;
 		if (OutStr.Empty()) Usage("No Output File Set\n");
 vector<GString> const &Files = MyFiles.GetFileInfoVector();
 
-
 		for (i=0; i<Files.size(); i++)
 		{
 			ActorList.push_back(CMkActor3d(Files[i]));
@@ -124,7 +123,7 @@ vector<GString> const &Files = MyFiles.GetFileInfoVector();
 			ActorList[i].ActorProcess();
 			ActorList[i].AnimLoad();
 		}
-		CMkActor3d::TexProcess();
+		CMkActor3d::TexGrab.Process();
 
 		for (i=0; i<ListSize; i++)
 		{
@@ -146,6 +145,7 @@ GFName	File=UpperName;
 		InFilename=UpperName;
 		InPath=File.Drive();
 		InPath+=File.Dir();
+		InPath.Append('\\');
 		Name=File.File();
 }
 
@@ -167,6 +167,7 @@ GString	IncName;
 		TexGrab.DontOutputBoxes(true);
 		TexGrab.AllowRotate(true);
 		TexGrab.FileRecursion(true);
+		
 }
 
 //***************************************************************************
@@ -291,7 +292,9 @@ Matrix4x4	PMtx=ParentNode.Mtx;
 
 				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
 				GString	TexName=InPath+SceneTexList[Mat];
-				ParentBone.FaceList.AddFace( VtxList, NodeTriList[T], NodeUVList[T], TexName);
+				Scale*=16;;
+				ParentBone.FaceList.AddFace( VtxList, NodeTriList[T], NodeUVList[T], TexName,0,false);
+				Scale/=16;;
 			}
 		}
 
@@ -306,6 +309,7 @@ void	CMkActor3d::BuildSkelOut()
 int		ListSize=Skel.size();
 
 		BoneCount=Skel.size();
+		FaceList.SetTexGrab(TexGrab);
 
 		for (int i=0; i<ListSize; i++)
 		{
@@ -320,7 +324,9 @@ int		ListSize=Skel.size();
 
 				for (int F=0; F<FaceListSize; F++)
 				{
-					FaceList.AddFace(ThisBone.FaceList[F]);
+				Scale*=16;
+					FaceList.AddFace(ThisBone.FaceList[F],true);
+				Scale/=16;
 				}
 			ThisBone.Bone.VtxCount=FaceList.GetVtxCount()-VtxStart;
 			}
@@ -344,8 +350,6 @@ int		ListSize=Skel.size();
 //***************************************************************************
 void	CMkActor3d::ActorProcess()
 {
-		FaceList.SetTexGrab(TexGrab);
-
 		ProcessSkel(1,-1);
 		BuildSkelOut();
 		printf("%s has %i bones\n",Name,BoneCount);
@@ -363,6 +367,29 @@ int		ListSize=InTexList.size();
 
 
 //***************************************************************************
+//***************************************************************************
+void	Rescale(vector<sVtx> const &InList,vector<sVtx> &OutList)
+{
+int		i,ListSize=InList.size();
+int		S=16;
+
+		OutList.resize(ListSize);
+		if (!ListSize) return;
+		printf("Rescale Factor %i\n",S);
+
+		for (i=0; i<ListSize;i++)
+		{
+			sVtx const	&In=InList[i];
+			sVtx		&Out=OutList[i];
+
+			Out.vx=In.vx/S;
+			Out.vy=In.vy/S;
+			Out.vz=In.vz/S;
+		}
+}
+
+//***************************************************************************
+
 void	CMkActor3d::ActorWrite()
 {
 GString	OutName=OutFile+".A3d";
@@ -390,7 +417,11 @@ GString	OutName=OutFile+".A3d";
 		printf("Q:%i\t",FileHdr.QuadCount);
 // Write VtxList
 		FileHdr.VtxCount=FaceList.GetVtxCount();
-		FileHdr.VtxList=(sVtx*)FaceList.WriteVtxList(File);
+//		FileHdr.VtxList=(sVtx*)FaceList.WriteVtxList(File);
+vector<sVtx>	VtxList;
+		Rescale(FaceList.GetVtxList(),VtxList);
+		FileHdr.VtxList=(sVtx*)FaceList.WriteVtxList(File,VtxList);
+
 		printf("V:%i\t",FileHdr.VtxCount);
 
 // Write TexList

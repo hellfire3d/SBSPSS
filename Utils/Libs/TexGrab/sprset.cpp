@@ -399,7 +399,9 @@ GString		CurrDir;
 			ThisInfo.w=Frm.GetWidth();
 			ThisInfo.h=Frm.GetHeight();
 			ThisInfo.XOfs=Frm.GetX();
-			ThisInfo.XOfs=Frm.GetY();
+			ThisInfo.YOfs=Frm.GetY();
+			ThisInfo.OrigW=Frm.GetOrigW();
+			ThisInfo.OrigH=Frm.GetOrigH();
 			}
 }
 
@@ -847,6 +849,8 @@ void SprFrame::SetFrameAndInfo(Frame const & Fr,FileInfo const & NewMyFileInfo,i
 	Frame::CopyFrame(Fr);
 	MyFileInfo=NewMyFileInfo;
 
+	OrigW=Fr.GetWidth();
+	OrigH=Fr.GetHeight();
 
 	GFName	MyName(MyFileInfo.GetFileName());
 	GString	TempName=MyName.File();

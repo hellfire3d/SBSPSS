@@ -86,7 +86,7 @@ public:
 		CFaceStore(int Max)		{MaxStrip=Max;TexGrab=&FaceStoreTexGrab;}
 		~CFaceStore(){};
 
-		CFace					&AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID=0);
+		CFace					&AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID=0,bool ProcessTexFlag=false);
 		CFace					&AddFace(CFace &F,bool TexFlag=true);
 		void					AddFaces(vector<CFace>&Faces,bool TexFlag=true);
 		void					AddFaces(CFaceStore &Faces,bool TexFlag=true);
@@ -111,9 +111,14 @@ public:
 
 		void					ProcessTextures();
 		void					Process();
-		int						WriteTriList(FILE *File);
-		int						WriteQuadList(FILE *File);
-		int						WriteVtxList(FILE *File,sVtx *Mul=0);
+
+		int						WriteTriList(FILE *File)						{return(WriteTriList(File,OutTriList));}
+		int						WriteQuadList(FILE *File)						{return(WriteQuadList(File,OutQuadList));}
+		int						WriteVtxList(FILE *File)						{return(WriteVtxList(File,OutVtxList));}
+
+		int						WriteTriList(FILE *File,vector<sTri> &List);
+		int						WriteQuadList(FILE *File,vector<sQuad> &List);
+		int						WriteVtxList(FILE *File,vector<sVtx> &List);
 		
 			
 		vector<CFace> const		&GetFaceList()					{return(FaceList);}

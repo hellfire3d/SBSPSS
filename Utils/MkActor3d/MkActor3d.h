@@ -39,7 +39,7 @@ public:
 		CMkActor3d(GString const &In);
 
 static	void				SetTPData(const char *Name,int TPBase,int TPW,int TPH);
-static	void				TexProcess()			{TexGrab.Process();}
+//static	void				TexProcess()			{TexGrab.Process();}
 		
 		void				ActorLoad();
 		void				ActorProcess();
@@ -47,6 +47,8 @@ static	void				TexProcess()			{TexGrab.Process();}
 
 		void				AnimLoad();
 		void				AnimWrite();
+
+static	CTexGrab			TexGrab;
 
 private:
 		void				ReadScript(const char *Filename,vector<GString>	&List);
@@ -70,7 +72,6 @@ private:
 
 		std::vector<GString>	InTexList;
 		std::vector<GString>	InAnimList;
-static	CTexGrab				TexGrab;
 
 /*Anim*/
 		void				AnimWriteInclude();

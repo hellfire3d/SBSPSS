@@ -69,7 +69,7 @@ public:
 const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
 const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
 		CElem		&GetTile(int Set,int Tile)								{return(SetList[Set].GetElem(Tile));}
-		void		RenderTile(int Set,int Elem,int Flags,bool Is3d)		{SetList[Set].RenderElem(Elem,Flags,Is3d);}
+		void		RenderTile(int Set,int Elem,int Flags,bool Is3d);
 
 // Local
 		void		DeleteCurrent();

@@ -82,7 +82,7 @@ inline bool uvaprox( sUV &uv0, sUV &uv1 )
 }
 
 //***************************************************************************
-CFace	&CFaceStore::AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID)
+CFace	&CFaceStore::AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID,bool ProcessTexFlag )
 {
 //int		ListSize = FaceList.size();
 //		FaceList.resize(ListSize+1);
@@ -104,7 +104,7 @@ CFace	F;
 
 		F.TexName=Tex;
 		F.Mat = -1;
-		return(AddFace(F));
+		return(AddFace(F,ProcessTexFlag));
 }
 
 //***************************************************************************
@@ -174,7 +174,7 @@ CFace	&F = FaceList[ListSize];
 	F.Mat = Face.Mat;
 	F.Normal = crossProduct( F.vtx[0], F.vtx[1], F.vtx[2] );
 	F.Avail = true;
-	F.ID=ID=0;
+	F.ID=ID;
 	return(F);
 }
 
@@ -243,11 +243,82 @@ int		FaceCount=FaceList.size();
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
+/*
 void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
 {
 vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
 sTexOutInfo			&ThisTex=TexInfo[In.Mat];
 ASSERT(In.Mat<TexInfo.size());
+
+// Uses orig tex size to make sure mapping is corrent on 'shrunk' textures :o)			
+int		W = ThisTex.OrigW - 1;
+int		H = ThisTex.OrigH - 1;
+int		XOfs=0,YOfs=0;
+
+int		uv0[2];
+int		uv1[2];
+int		uv2[2];
+
+		if (ThisTex.Rotated)
+		{
+//			uv0[0] = (ThisTex.u + H) - round(In.uvs[0].v * H);
+//			uv0[1] = (ThisTex.v + W) - round(In.uvs[0].u * W);
+//			uv1[0] = (ThisTex.u + H) - round(In.uvs[1].v * H);
+//			uv1[1] = (ThisTex.v + W) - round(In.uvs[1].u * W);
+//			uv2[0] = (ThisTex.u + H) - round(In.uvs[2].v * H);
+//			uv2[1] = (ThisTex.v + W) - round(In.uvs[2].u * W);
+
+			uv0[0] = (ThisTex.u ) - round(In.uvs[0].v * H);
+			uv0[1] = (ThisTex.v ) - round(In.uvs[0].u * W);
+			uv1[0] = (ThisTex.u ) - round(In.uvs[1].v * H);
+			uv1[1] = (ThisTex.v ) - round(In.uvs[1].u * W);
+			uv2[0] = (ThisTex.u ) - round(In.uvs[2].v * H);
+			uv2[1] = (ThisTex.v ) - round(In.uvs[2].u * W);
+
+			XOfs=H-((ThisTex.OrigW-ThisTex.h));
+			YOfs= +((ThisTex.OrigH-ThisTex.w)-W);
+			ASSERT(!"");
+		} 
+		else
+		{
+			W=ThisTex.w-1;
+			H=ThisTex.h-1;
+//			Out.uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
+//			Out.uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
+//			Out.uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
+//			Out.uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
+//			Out.uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
+//			Out.uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
+
+			uv0[0] = (ThisTex.u) +	round(In.uvs[0].u * W);
+			uv0[1] = (ThisTex.v) -	round(In.uvs[0].v * H);
+			uv1[0] = (ThisTex.u) +	round(In.uvs[1].u * W);
+			uv1[1] = (ThisTex.v) -	round(In.uvs[1].v * H);
+			uv2[0] = (ThisTex.u) +	round(In.uvs[2].u * W);
+			uv2[1] = (ThisTex.v) -	round(In.uvs[2].v * H);
+
+			XOfs=(ThisTex.OrigW-ThisTex.w);
+			YOfs=(ThisTex.OrigH-ThisTex.h)-H;
+			XOfs=0;
+			YOfs=0;
+		}
+
+		Out.uv0[0]=uv0[0]-XOfs; Out.uv0[1]=uv0[1]-YOfs;
+		Out.uv1[0]=uv1[0]-XOfs; Out.uv1[1]=uv1[1]-YOfs;
+		Out.uv2[0]=uv2[0]-XOfs; Out.uv2[1]=uv2[1]-YOfs;
+
+		Out.TPage=ThisTex.Tpage;
+		Out.Clut=ThisTex.Clut;
+}
+*/
+void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
+{
+vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
+sTexOutInfo			&ThisTex=TexInfo[In.Mat];
+ASSERT(In.Mat<TexInfo.size());
+
+int		uv0[2],uv1[2],uv2[2];
+int		XOfs=0,YOfs=0;
 			
 int		W = ThisTex.w - 1;
 int		H = ThisTex.h - 1;
@@ -260,20 +331,47 @@ int		H = ThisTex.h - 1;
 			Out.uv1[1] = (ThisTex.v + W) - round(In.uvs[1].u * W);
 			Out.uv2[0] = (ThisTex.u + H) - round(In.uvs[2].v * H);
 			Out.uv2[1] = (ThisTex.v + W) - round(In.uvs[2].u * W);
+			ASSERT(0==1);
 		} 
 		else
 		{
-			Out.uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
-			Out.uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
-			Out.uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
-			Out.uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
-			Out.uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
-			Out.uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
+//			W=ThisTex.OrigW-1;
+//			H=ThisTex.OrigH-1;
+			if (ThisTex.w!=ThisTex.OrigW) printf("WW");
+			if (ThisTex.h!=ThisTex.OrigH) printf("HH");
+/*
+			uv0[0] = (ThisTex.u)+		round(In.uvs[0].u * W);
+			uv0[1] = (ThisTex.v + H) -	round(In.uvs[0].v * H);
+			uv1[0] = (ThisTex.u)+		round(In.uvs[1].u * W);
+			uv1[1] = (ThisTex.v + H) -	round(In.uvs[1].v * H);
+			uv2[0] = (ThisTex.u)+		round(In.uvs[2].u * W);
+			uv2[1] = (ThisTex.v + H) -	round(In.uvs[2].v * H);
+*/
+int			U=ThisTex.u;
+int			V=ThisTex.v+H;
+
+			uv0[0] = U +	round(In.uvs[0].u * W);
+			uv0[1] = V -	round(In.uvs[0].v * H);
+			uv1[0] = U +	round(In.uvs[1].u * W);
+			uv1[1] = V -	round(In.uvs[1].v * H);
+			uv2[0] = U +	round(In.uvs[2].u * W);
+			uv2[1] = V -	round(In.uvs[2].v * H);
+
+//			XOfs=(ThisTex.OrigW-ThisTex.w);
+//			XOfs=ThisTex.XOfs;
+//			YOfs=H-(ThisTex.OrigH-ThisTex.h);
+//			YOfs=H;
 		}
+		
+		Out.uv0[0]=(uv0[0]-XOfs); Out.uv0[1]=(uv0[1]-YOfs);
+		Out.uv1[0]=(uv1[0]-XOfs); Out.uv1[1]=(uv1[1]-YOfs);
+		Out.uv2[0]=(uv2[0]-XOfs); Out.uv2[1]=(uv2[1]-YOfs);
 
 		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
 }
+
+
 
 //***************************************************************************
 void	CFaceStore::SetupUV(CFace const &In, sQuad &Out)
@@ -347,7 +445,6 @@ int		FaceCount=TriFaceList.size();
 			OutFace.P0=InFace.pts[0];
 			OutFace.P1=InFace.pts[1];
 			OutFace.P2=InFace.pts[2];
-
 // Materials and other shit
 			SetupUV(InFace,OutFace);
 		}
@@ -379,48 +476,42 @@ int		FaceCount=QuadFaceList.size();
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-int		CFaceStore::WriteTriList(FILE *File)
+int		CFaceStore::WriteTriList(FILE *File,vector<sTri> &List)
 {
-int		ListSize=OutTriList.size();
+int		ListSize=List.size();
 int		Pos=ftell(File);
 
 		for (int i=0; i<ListSize; i++)
 		{
-			sTri	ThisTri=OutTriList[i];
+			sTri	ThisTri=List[i];
 			fwrite(&ThisTri,1,sizeof(sTri),File);
 		}
 		return(Pos);
 }
 
 //***************************************************************************
-int		CFaceStore::WriteQuadList(FILE *File)
+int		CFaceStore::WriteQuadList(FILE *File,vector<sQuad> &List)
 {
-int		ListSize=OutQuadList.size();
+int		ListSize=List.size();
 int		Pos=ftell(File);
 
 		for (int i=0; i<ListSize; i++)
 		{
-			sQuad	&ThisQuad=OutQuadList[i];
+			sQuad	&ThisQuad=List[i];
 			fwrite(&ThisQuad,1,sizeof(sQuad),File);
 		}
 		return(Pos);
 }
 
 //***************************************************************************
-int		CFaceStore::WriteVtxList(FILE *File,sVtx *Mul)
+int		CFaceStore::WriteVtxList(FILE *File,vector<sVtx> &List)
 {
-int		ListSize=OutVtxList.size();
+int		ListSize=List.size();
 int		Pos=ftell(File);
 
 		for (int i=0; i<ListSize; i++)
 		{
-			sVtx	ThisVtx=OutVtxList[i];
-			if (Mul)
-			{
-				ThisVtx.vx*=Mul->vx;
-				ThisVtx.vy*=Mul->vy;
-				ThisVtx.vz*=Mul->vz;
-			}
+			sVtx	&ThisVtx=List[i];
 			fwrite(&ThisVtx,1,sizeof(sVtx),File);
 		}
 		return(Pos);
