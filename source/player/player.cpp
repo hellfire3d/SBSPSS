@@ -2376,6 +2376,21 @@ int		CPlayer::moveVertical(int _moveDistance)
 		else if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 		   getHeightFromGround(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)<=0)
 		{
+			switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)
+			{
+				case COLLISION_TYPE_FLAG_DAMAGE:
+					takeDamage(DAMAGE__COLLISION_DAMAGE);
+					break;
+
+				case COLLISION_TYPE_FLAG_ELECTRIC:
+					if(!isWearingBoots())
+					{
+						takeDamage(DAMAGE__COLLISION_DAMAGE);
+					}
+					break;
+				default:
+					break;
+			}
 			pos.vy=((pos.vy+_moveDistance)&0xfff0);
 			_moveDistance=0;
 			hitGround=true;
