@@ -108,7 +108,7 @@ void CPlayerStateFall::think(CPlayer *_player)
 			setMoveVelocity(_player,&move);
 		}
 	}
-	advanceAnimFrameAndCheckForEndOfAnim(_player);	
+//	advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }
 
 
