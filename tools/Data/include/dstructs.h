@@ -218,15 +218,15 @@ struct	sLvlHdr
 
 struct	sActor3dHdr
 {
-	u16		NodeCount;
+	u16		BoneCount;
 	u16		TriCount;
 	u16		QuadCount;
 	u16		WeightCount;
 
-	u32		NodeData;
-	u32		TriData;
-	u32		QuadData;
-	u32		WeightData;
+	sBone	*BoneList;
+	sTri	*TriList;
+	sQuad	*QuadList;
+	sWeight	*WeightList;
 };
 
 
