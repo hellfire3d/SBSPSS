@@ -328,7 +328,7 @@ DVECTOR CShopScene::getPointerTarget()
 		}
 	}
 
-	DVECTOR	ret={x-5,y+30};
+	DVECTOR	ret={x-15,y+35};
 	return ret;
 }
 
