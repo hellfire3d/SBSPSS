@@ -74,6 +74,10 @@
 #include "gfx\font.h"
 #endif
 
+#ifndef __MATHTABLE_HEADER__
+#include "utils\mathtab.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -167,10 +171,10 @@ void	CPlayerModeCoralBlower::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int cbstate=0;
 DVECTOR	blowerCatchPos={-110,-20};
 DVECTOR blowerCatchSize={180,150};
-DVECTOR blowerSuckUpPoint={-40,-20};
+DVECTOR blowerSuckUpPoint={-20,-20};
+DVECTOR blowerLaunchPoint={-20,-20};
 void	CPlayerModeCoralBlower::think()
 {
 	CPlayerModeBase::think();
@@ -249,6 +253,8 @@ void	CPlayerModeCoralBlower::think()
 			if(getPadInputDown()&PI_FIRE&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__AIMING;
+				m_launchHeading=0;
+				m_launchHeadingChangeSpeed=0;
 			}
 			break;
 		case BLOWER_STATE__AIMING:
@@ -261,14 +267,19 @@ void	CPlayerModeCoralBlower::think()
 				// Fire!
 				m_blowerState=BLOWER_STATE__EMPTY;
 
-				DVECTOR newPos = m_player->getPos();
+				DVECTOR launchPos=m_player->getPos();
+				int		facing=m_player->getFacing();
+				int		launchHeading;
 
-				newPos.vy -= 10;
+				launchPos.vx+=blowerLaunchPoint.vx*facing;
+				launchPos.vy+=blowerLaunchPoint.vy;
+
+				launchHeading=(-((m_launchHeading+1024)*facing)-1024)&4095;
 
 				CEnemyAsSpriteProjectile *projectile;
 				projectile = new( "blower projectile" ) CEnemyAsSpriteProjectile;
-				projectile->init(	newPos,
-									1024+(1024*m_player->getFacing()),
+				projectile->init(	launchPos,
+									launchHeading,//1024+(1024*facing),
 									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 									5*60);
@@ -280,9 +291,55 @@ void	CPlayerModeCoralBlower::think()
 				projectile->setGraphic( m_enemyFrame );
 				projectile->setHasRGB( false );
 			}
+			else
+			{
+				int	padHeld;
+				padHeld=getPadInputHeld();
+				if(padHeld&PI_UP)
+				{
+					if(m_launchHeadingChangeSpeed>-BLOWER_AIM_SPEED_INITIAL)
+					{
+						m_launchHeadingChangeSpeed=-BLOWER_AIM_SPEED_INITIAL;
+					}
+					else
+					{
+						if(m_launchHeadingChangeSpeed>-BLOWER_AIM_SPEED_MAXIMUM)
+						{
+							m_launchHeadingChangeSpeed--;
+						}
+					}
+					m_launchHeading+=m_launchHeadingChangeSpeed;
+					if(m_launchHeading<BLOWER_MINIMUM_AIM_ANGLE)
+					{
+						m_launchHeading=BLOWER_MINIMUM_AIM_ANGLE;
+					}
+				}
+				else if(padHeld&PI_DOWN)
+				{
+					if(m_launchHeadingChangeSpeed<BLOWER_AIM_SPEED_INITIAL)
+					{
+						m_launchHeadingChangeSpeed=BLOWER_AIM_SPEED_INITIAL;
+					}
+					else
+					{
+						if(m_launchHeadingChangeSpeed<BLOWER_AIM_SPEED_MAXIMUM)
+						{
+							m_launchHeadingChangeSpeed++;
+						}
+					}
+					m_launchHeading+=m_launchHeadingChangeSpeed;
+					if(m_launchHeading>BLOWER_MAXIMUM_AIM_ANGLE)
+					{
+						m_launchHeading=BLOWER_MAXIMUM_AIM_ANGLE;
+					}
+				}
+				else
+				{
+					m_launchHeadingChangeSpeed=0;
+				}
+			}
 			break;
 	}
-cbstate=m_blowerState;
 }
 
 /*----------------------------------------------------------------------
@@ -303,14 +360,47 @@ void	CPlayerModeCoralBlower::renderModeUi()
 	{
 		// Blower has a creature/object inside
 		sb->printFT4Scaled(FRM__BLOWER,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,256+128);
+
+		if(m_blowerState==BLOWER_STATE__AIMING)
+		{
+			// Draw aiming cursor
+			int		facing,heading;
+			DVECTOR	screenOfs,launchPos,targetPos;
+
+			facing=m_player->getFacing();
+			heading=((m_launchHeading+1024)*facing)&4095;
+			screenOfs=CLevel::getCameraPos();
+			launchPos=m_player->getPlayerPos();
+			launchPos.vx+=(blowerLaunchPoint.vx*facing)-screenOfs.vx;
+			launchPos.vy+=blowerLaunchPoint.vy-screenOfs.vy;
+			targetPos.vx=launchPos.vx-((msin(heading)*BLOWER_TARGET_DISTANCE)>>12);
+			targetPos.vy=launchPos.vy-((mcos(heading)*BLOWER_TARGET_DISTANCE)>>12);
+			heading=((m_launchHeading+1024)*-facing+1024)&4095;
+
+			sb->printRotatedScaledSprite(FRM__AIM_ARROW,targetPos.vx,targetPos.vy,8192,8192,heading,0);
+			PAUL_DBGMSG("%d",heading);
+		}
 	}
 	else
 	{
+		// Blower is empty
 		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 	}
 
 //	sprintf(buf,"x%d",0);
 //	m_player->getFontBank()->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayerModeCoralBlower::canDoLookAround()
+{
+	return m_blowerState!=BLOWER_STATE__AIMING;
 }
 
 /*----------------------------------------------------------------------

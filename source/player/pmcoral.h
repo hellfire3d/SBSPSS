@@ -40,6 +40,7 @@ public:
 	virtual void				enter();
 	virtual void				think();
 	virtual void				renderModeUi();
+	virtual int					canDoLookAround();
 
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 
@@ -55,11 +56,23 @@ private:
 		BLOWER_STATE__AIMING,
 	} BlowerState;
 
+	enum
+	{
+		BLOWER_TARGET_DISTANCE=40,
+		BLOWER_MINIMUM_AIM_ANGLE=-768,
+		BLOWER_MAXIMUM_AIM_ANGLE=768,
+		BLOWER_AIM_SPEED_INITIAL=1,
+		BLOWER_AIM_SPEED_MAXIMUM=50,
+	};
+
 	DVECTOR						*getSuckUpPoint();
 
 	BlowerState					m_blowerState;
 	class CNpcEnemy				*m_enemy;
 	u8							m_enemyFrame;
+
+	int							m_launchHeading;
+	int							m_launchHeadingChangeSpeed;
 
 };
 
