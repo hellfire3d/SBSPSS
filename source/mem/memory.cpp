@@ -368,7 +368,7 @@ void freeDebugMem( void * addr )
 			return;
 		}
 	}
-	ASSERT( !"Can't find debug mem node" );
+	ASSERT( !"Can't find debug mem node ( memory already freed? )" );
 }
 
 
