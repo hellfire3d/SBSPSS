@@ -1,0 +1,25 @@
+#include	data/scripts/defs/defs.scr
+
+#include	data/scripts/defs/charanim.scr
+#include	data/scripts/defs/items.scr
+#include	data/scripts/defs/response.scr
+#include	data/scripts/defs/trans.scr
+
+
+_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_C1_INTRO0);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+_setText(CHAR_JACKCUSTARD,STR__INGAME__FMA_C1_INTRO1);
+_setResponseOptions(QUESTION_OK);
+do
+{
+	pause;
+}
+while(_getResponse()==ANSWER_NONE);
+
+stop;
