@@ -87,7 +87,8 @@ enemy_src :=		npc \
 					nbuttfly \
 					nshell \
 					nssnake \
-					nboss
+					nboss \
+					nghost
 
 friend_src :=		friend \
 					fdata \

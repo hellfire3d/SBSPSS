@@ -16,6 +16,8 @@
 
 class CNpcGhostEnemy : public CNpcEnemy
 {
+public:
+	void				render();
 };
 
 #endif

@@ -237,6 +237,10 @@ SOURCE=..\..\..\source\enemy\ngeneric.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nghost.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nghost.h
 # End Source File
 # Begin Source File
