@@ -146,7 +146,7 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
-	if(PadGetDown(0)&PAD_START)
+	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START)
 	{
 		m_pauseMenu->select();
 	}
