@@ -106,7 +106,7 @@ void CPlayerStateDance::think(CPlayerModeBase *_playerMode)
 	_playerMode->slowdown();
 	if(!m_hitGround)
 	{
-		if(_playerMode->getHeightFromGound()==0)
+		if(_playerMode->getHeightFromGound()<=0)
 		{
 			_playerMode->setAnimNo(ANIM_SPONGEBOB_CELEBRATE);
 			m_hitGround=true;
