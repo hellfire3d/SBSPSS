@@ -1088,7 +1088,7 @@ void CNpcSeaSnakeEnemy::renderOnMapScreen( DVECTOR drawPos )
 		}
 
 		POLY_FT4 *Ft4= m_actorGfx->Render(drawPos,segmentType,0,0);
-		m_actorGfx->RotateScale( Ft4, drawPos, 0, 4096, segScale );
+		m_actorGfx->RotateScale( Ft4, drawPos, 0, 4096, segScale,true );
 	}
 }
 

@@ -27,7 +27,7 @@ virtual	~CLayerCollision();
 
 virtual	void			shutdown();
 
-		u32				GetYPos(int Y)						{return(ColYTable[Y+COL_Y_OFS]);}
+		int				GetYPos(int Y)						{return(ColYTable[Y+COL_Y_OFS]);}
 
 		int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
 		int				getHeightFromGroundExcluding(int _x,int _y,int _exclusion,int _maxHeight=32);
@@ -72,7 +72,7 @@ protected:
 		u8				*Map;
 
 		static u8		s_collisionTable[];
-		u32				*ColYTable;
+		int				*ColYTable;
 };
 
 

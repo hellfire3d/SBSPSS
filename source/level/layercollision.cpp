@@ -43,7 +43,7 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 
 int		TabH=MapHeight+COL_Y_OFS;
 
-		ColYTable=(u32*)MemAlloc(TabH*sizeof(u16),"ColYTable");
+		ColYTable=(int*)MemAlloc(TabH*sizeof(int),"ColYTable");
 		ASSERT(ColYTable);
 
 		for (int i=0; i<TabH; i++)
