@@ -95,6 +95,7 @@ static CXMPlaySound		*s_xmplaySound;
 // Songs
 static XMSONGDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
 {
+	//	m_vh					m_vb					m_pxm					m_startPattern;
 	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x00	},		// SONG_TITLE
 	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x0a	},		// SONG_OPTIONS
 	{	MUSIC_SB_TITLE_VH,		MUSIC_SB_TITLE_VB,		MUSIC_SB_TITLE_PXM,		0x13	},		// SONG_MEMORYCARD
@@ -116,29 +117,46 @@ static XMSONGDATA	s_xmSongData[CSoundMediator::NUM_SONGIDS]=
 	{	MUSIC_CHAPTER3_VH,		MUSIC_CHAPTER3_VB,		MUSIC_CHAPTER3_PXM,		0x0b	},		// SONG_CHAPTER3_LEVEL4,
 	{	MUSIC_CHAPTER3_VH,		MUSIC_CHAPTER3_VB,		MUSIC_CHAPTER3_PXM,		0x21	},		// SONG_CHAPTER3_BOSS_ASLEEP,
 	{	MUSIC_CHAPTER3_VH,		MUSIC_CHAPTER3_VB,		MUSIC_CHAPTER3_PXM,		0x22	},		// SONG_CHAPTER3_BOSS_AWAKE,
+	{	MUSIC_CHAPTER4_VH,		MUSIC_CHAPTER4_VB,		MUSIC_CHAPTER4_PXM,		0x1b	},		// SONG_CHAPTER4_LEVEL1,
+	{	MUSIC_CHAPTER4_VH,		MUSIC_CHAPTER4_VB,		MUSIC_CHAPTER4_PXM,		0x00	},		// SONG_CHAPTER4_LEVEL2,
+	{	MUSIC_CHAPTER4_VH,		MUSIC_CHAPTER4_VB,		MUSIC_CHAPTER4_PXM,		0x2c	},		// SONG_CHAPTER4_LEVEL3,
+	{	MUSIC_CHAPTER4_VH,		MUSIC_CHAPTER4_VB,		MUSIC_CHAPTER4_PXM,		0x00	},		// SONG_CHAPTER4_LEVEL4,
+	{	MUSIC_CHAPTER4_VH,		MUSIC_CHAPTER4_VB,		MUSIC_CHAPTER4_PXM,		0x3c	},		// SONG_CHAPTER4_BOSS,
+	{	MUSIC_CHAPTER5_VH,		MUSIC_CHAPTER5_VB,		MUSIC_CHAPTER5_PXM,		0x00	},		// SONG_CHAPTER5_LEVEL1,
+	{	MUSIC_CHAPTER5_VH,		MUSIC_CHAPTER5_VB,		MUSIC_CHAPTER5_PXM,		0x14	},		// SONG_CHAPTER5_LEVEL2,
+	{	MUSIC_CHAPTER5_VH,		MUSIC_CHAPTER5_VB,		MUSIC_CHAPTER5_PXM,		0x00	},		// SONG_CHAPTER5_LEVEL3,
+	{	MUSIC_CHAPTER5_VH,		MUSIC_CHAPTER5_VB,		MUSIC_CHAPTER5_PXM,		0x2a	},		// SONG_CHAPTER5_LEVEL4,
+	{	MUSIC_CHAPTER5_VH,		MUSIC_CHAPTER5_VB,		MUSIC_CHAPTER5_PXM,		0x3e	},		// SONG_CHAPTER5_BOSS,
 };
 
 // SFX banks
 static XMSFXFILEDATA	s_xmSfxData[CSoundMediator::NUM_SFXBANKIDS]=
 {
+	//	m_vh					m_vb					m_pxm
 	{	SFX_INGAME_VH,			SFX_INGAME_VB,			SFX_INGAME_PXM		},		// SFX_INGAME
 };
 
 // Individual SFX details
-static SFXDETAILS	s_sfxDetails[]=
+static SFXDETAILS	s_sfxDetails[CSoundMediator::NUM_SFXIDS]=
 {
-	{	1,	6,	1	},
-	{	1,	4,	0	},
-	{	1,	5,	0	},
-	{	1,	0,	1	},
+	//	m_channelMask	m_pattern		m_looping
+	{	1,				0,				0	},										// SFX_TEST0
+	{	1,				1,				0	},										// SFX_TEST1
+	{	1,				2,				0	},										// SFX_TEST2
+	{	1,				3,				0	},										// SFX_TEST3
+	{	1,				4,				0	},										// SFX_TEST4
+	{	1,				5,				0	},										// SFX_TEST5
+	{	1,				6,				0	},										// SFX_TEST6
+	{	1,				7,				0	},										// SFX_TEST7
 };
 
 
 // Reverb details
 static ReverbDetails	s_reverbDetails[CSoundMediator::NUM_REVERBTYPES]=
 {
-	{	SPU_REV_MODE_OFF,	0,	0,		0	},								// REV_NONE
-	{	SPU_REV_MODE_ECHO,	75,	0x3000,	100	},								// REV_ECHOTEST
+	//	m_type					m_delay		m_depth		m_feedback
+	{	SPU_REV_MODE_OFF,		0,			0,			0	},						// REV_NONE
+	{	SPU_REV_MODE_ECHO,		75,			0x3000,		100	},						// REV_ECHOTEST
 };
 
 
@@ -372,7 +390,7 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 				same time as *lots* of other sfx.
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId CSoundMediator::playSfx(int _sfxId,int _lock=false)
+xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false)
 {
 	int			sfxChannelMask;
 	xmPlayingId	playId;

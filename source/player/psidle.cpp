@@ -61,9 +61,12 @@
 CPlayerStateIdle::IdleAnims	CPlayerStateIdle::s_idleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								4	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								10	},
-	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC03,	-1,								3	},
+//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								4	},
+//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC04,	-1,								10	},
+//	{	-1,								ANIM_PLAYER_ANIM_IDLEGENERIC03,	-1,								3	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBOOTS,		-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLECORAL,		-1,								10	},
+	{	-1,								ANIM_PLAYER_ANIM_WAKEUP,		-1,								1	},
 };
 int CPlayerStateIdle::s_numIdleAnims=sizeof(CPlayerStateIdle::s_idleAnims)/sizeof(CPlayerStateIdle::IdleAnims);
 

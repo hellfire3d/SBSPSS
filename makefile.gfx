@@ -156,7 +156,7 @@ cleanplayer:
 	@$(ECHO) Player Cleaned
 	
 $(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
-	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256
+	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:128
 
 GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
 
@@ -383,6 +383,7 @@ cleansfx:
 
 $(SFX_ALL_OUT) : $(SFX_ALL_IN)
 	$(CP) $(SFX_ALL_IN) $(SFX_OUT_DIR)
+	attrib -r $(SFX_OUT_DIR)/*
 
 GRAF_DIRS_TO_MAKE	+=	$(SFX_OUT_DIR)
 GFX_DATA_OUT		+=	$(SFX_ALL_OUT)
@@ -417,7 +418,7 @@ MUSIC_IN_DIR :=		data/music
 MUSIC_OUT_DIR :=	$(DATA_OUT)/music
 
 MUSIC_LIST :=		sb-title \
-					chapter1 chapter2 chapter3
+					chapter1 chapter2 chapter3 chapter4 chapter5
 
 MUSIC_ALL_IN :=		$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).PXM $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VH $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VB)
 MUSIC_ALL_OUT :=	$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_OUT_DIR)/$(MUSIC).PXM $(MUSIC_OUT_DIR)/$(MUSIC).VH $(MUSIC_OUT_DIR)/$(MUSIC).VB)
