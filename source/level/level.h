@@ -88,7 +88,7 @@ static CFmaScene::FMA_SCRIPT_NUMBER getFMAToFollow()						{return LvlTable[s_glo
 		int				getMapHeight16()						{return(MapSize16.vy);}
 
 		bool			GetNextLevel(int &Lvl);
-
+		int				isFMA()									{return(m_isFMA);}
 		void			respawnLevel();
 static	sLevelHdr		*getLevelHdr()							{return(LevelHdr);}
 
@@ -135,6 +135,7 @@ static	int				s_playerFacing;
 
 		u8				*m_RGBMap;
 		u8				*m_RGBTable;
+		u8				m_isFMA;
 
 static	u8				m_isBossRespawn;
 static	s32				m_bossHealth;
