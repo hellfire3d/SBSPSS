@@ -98,8 +98,13 @@ int		Idx=0;
 		ItemList[Idx].Pos.vx=Pos.vx<<HealthManShift;
 		ItemList[Idx].Pos.vy=Pos.vy<<HealthManShift;
 
-		ItemList[Idx].Vel.vx=-(msin(Angle)*Vel)>>1;
+		ItemList[Idx].Vel.vx=-(msin(Angle)*Vel);//>>1;
 		ItemList[Idx].Vel.vy=-(mcos(Angle)*Vel);
+
+		ItemList[Idx].Pos.vx+=ItemList[Idx].Vel.vx;
+		ItemList[Idx].Pos.vy+=ItemList[Idx].Vel.vy;
+
+
 		ItemList[Idx].Count=ItemTable[TableIdx].Count;
 }
 
