@@ -326,6 +326,8 @@ int		CPlayerModeNet::canSwingNetFromThisState()
 		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
+		case STATE_CROUCHDOWN:
+		case STATE_CROUCHUP:
 		case STATE_JUMPBACK:
 			break;
 	}

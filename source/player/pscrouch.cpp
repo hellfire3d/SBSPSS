@@ -106,38 +106,6 @@ void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateCrouchUp::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->zeroMoveVelocity();	
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
-	_playerMode->setAnimFrame(_playerMode->getAnimFrameCount()-1);
-	_playerMode->setPlayerCollisionSize(0,-10,60,20);
-}
-
-
-/*
-void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
-{
-	int	controlHeld;
-
-	controlHeld=_playerMode->getPadInputHeld();
-	if(!(controlHeld&PI_DOWN))
-	{
-		_playerMode->setState(STATE_GETUP);
-	}
-	else
-	{
-		_playerMode->inSoakUpState();
-	}
-}
-*/
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayerStateCrouchUp::enter(CPlayerModeBase *_playerMode)
-{
 	  _playerMode->setAnimNo(ANIM_SPONGEBOB_CROUCHUP);
 }
 

@@ -30,6 +30,10 @@
 #endif
 
 // States
+#ifndef __PLAYER__PSCROUCH_H__
+#include "player\pscrouch.h"
+#endif
+
 #ifndef __PLAYER__PSJUMP_H__
 #include "player\psjump.h"
 #endif
@@ -111,6 +115,8 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateDuck,							// STATE_DUCK
 	&s_stateSoakUp,							// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
+	&s_stateCrouchDown,						// STATE_CROUCHDOWN
+	&s_stateCrouchUp,						// STATE_CROUCHUP
 	&s_stateJumpBack,						// STATE_JUMPBACK
 };
 
@@ -216,6 +222,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_IDLE:
 		case STATE_IDLETEETER:
 		case STATE_SOAKUP:
+		case STATE_CROUCHDOWN:
 			ret=true;
 			break;
 
@@ -231,6 +238,7 @@ int		CPlayerModeBase::canDoLookAround()
 		case STATE_BUTTBOUNCEUP:
 		case STATE_DUCK:
 		case STATE_GETUP:
+		case STATE_CROUCHUP:
 		case STATE_JUMPBACK:
 			break;
 	}
@@ -267,6 +275,8 @@ ATTACK_STATE	CPlayerModeBase::getAttackState()
 		case STATE_DUCK:
 		case STATE_SOAKUP:
 		case STATE_GETUP:
+		case STATE_CROUCHDOWN:
+		case STATE_CROUCHUP:
 		case STATE_JUMPBACK:
 			break;
 	}

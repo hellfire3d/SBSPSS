@@ -234,6 +234,7 @@ player_src :=		demoplay \
 					pmjelly \
 					pmnet \
 					psbutt \
+					pscrouch \
 					psduck \
 					psfall \
 					pshitgnd \

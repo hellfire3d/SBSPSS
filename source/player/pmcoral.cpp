@@ -22,6 +22,10 @@
 #endif
 
 // States
+#ifndef __PLAYER__PSCROUCH_H__
+#include "player\pscrouch.h"
+#endif
+
 #ifndef __PLAYER__PSJUMP_H__
 #include "player\psjump.h"
 #endif
@@ -119,6 +123,8 @@ static	CPlayerState	*s_stateTable[]=
 	NULL,									// STATE_DUCK
 	NULL,									// STATE_SOAKUP
 	&s_stateGetUp,							// STATE_GETUP
+	&s_stateCrouchDown,						// STATE_CROUCHDOWN
+	&s_stateCrouchUp,						// STATE_CROUCHUP
 	&s_stateJumpBack,						// STATE_JUMPBACK
 };
 

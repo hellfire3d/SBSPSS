@@ -87,7 +87,7 @@ void CPlayerStateBaseIdle::thinkControl(CPlayerModeBase *_playerMode)
 	}
 	else if(controlDown&PI_DOWN)
 	{
-		_playerMode->setState(STATE_DUCK);
+		_playerMode->setState(STATE_CROUCHDOWN);
 	}
 }
 

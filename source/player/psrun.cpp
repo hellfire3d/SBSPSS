@@ -117,7 +117,7 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 	}
 	if(controlDown&PI_DOWN)
 	{
-		switchedState=_playerMode->setState(STATE_DUCK);
+		switchedState=_playerMode->setState(STATE_CROUCHDOWN);
 	}
 
 	if(controlHeld&PI_LEFT)
