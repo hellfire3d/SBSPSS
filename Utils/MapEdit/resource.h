@@ -162,6 +162,9 @@
 #define IDC_FX_SPEED                    1151
 #define IDC_TRIGGER_TARGETH             1151
 #define IDC_FX_SPEED_SPIN               1152
+#define IDC_TRIGGER_TEXT_VAL0           1152
+#define IDC_TRIGGER_VAL0                1153
+#define IDC_TRIGGER_VAL0_SPIN           1154
 #define IDC_TRIGGER_HEIGHT_SPIN         1163
 #define IDC_TRIGGER_TARGETY_SPIN        1164
 #define IDC_TRIGGER_TARGETH_SPIN        1165

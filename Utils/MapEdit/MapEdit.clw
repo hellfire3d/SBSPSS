@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CGUILayerTrigger
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -37,26 +37,26 @@ Class25=CMapEditDoc
 Class26=CMapEditView
 
 ResourceCount=21
-Resource1=IDD_LAYER_LIST
-Resource2=IDD_TILEBANK
-Resource3=IDD_LAYER_THING_POS
-Resource4=IDD_ADDLAYER
-Resource5=IDD_LAYER_TRIGGER
-Resource6=IDR_TOOLBAR (English (U.S.))
-Resource7=IDD_MULTIBAR (English (U.S.))
-Resource8=IDR_MAINFRAME (English (U.S.))
-Resource9=IDD_LAYER_FX
-Resource10=IDD_TOOLBAR
-Resource11=IDD_LAYER_COLLISION
-Resource12=IDD_ABOUTBOX (English (U.S.))
-Resource13=IDD_LAYER_PLATFORM
-Resource14=IDD_NEWMAP
-Resource15=IDD_LAYER_THING
-Resource16=IDD_LAYER_SHADE
+Resource1=IDD_NEWMAP
+Resource2=IDD_LAYER_SHADE
+Resource3=IDD_LAYER_TRIGGER
+Resource4=IDD_TOOLBAR
+Resource5=IDR_TOOLBAR (English (U.S.))
+Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource7=IDD_RESIZE
+Resource8=IDD_MULTIBAR (English (U.S.))
+Resource9=IDR_MAINFRAME (English (U.S.))
+Resource10=IDD_LAYER_COLLISION
+Resource11=IDD_LAYER_ACTOR
+Resource12=IDD_LAYER_LIST
+Resource13=IDD_LAYER_FX
+Resource14=IDD_TILEBANK
+Resource15=IDD_LAYER_PLATFORM
+Resource16=IDD_ELEMLIST
 Resource17=IDR_MAPEDITYPE (English (U.S.))
-Resource18=IDD_RESIZE
-Resource19=IDD_ELEMLIST
-Resource20=IDD_LAYER_ACTOR
+Resource18=IDD_ADDLAYER
+Resource19=IDD_LAYER_THING
+Resource20=IDD_LAYER_THING_POS
 Resource21=IDD_LAYER_HAZARD
 
 [CLS:CChildFrame]
@@ -160,7 +160,7 @@ HeaderFile=GUILayerTrigger.h
 ImplementationFile=GUILayerTrigger.cpp
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_TRIGGER_TARGETW
+LastObject=IDC_TRIGGER_VAL0_SPIN
 
 [CLS:CGUIMultiBar]
 Type=0
@@ -437,7 +437,7 @@ Control4=IDC_THING_POS_DELETE,button,1342242816
 [DLG:IDD_LAYER_TRIGGER]
 Type=1
 Class=CGUILayerTrigger
-ControlCount=15
+ControlCount=18
 Control1=IDC_TRIGGER_SIZE,static,1342308354
 Control2=IDC_TRIGGER_WIDTH,edit,1350633600
 Control3=IDC_TRIGGER_WIDTH_SPIN,msctls_updown32,1342177334
@@ -453,6 +453,9 @@ Control12=IDC_TRIGGER_TARGETW,edit,1350633600
 Control13=IDC_TRIGGER_TARGETW_SPIN,msctls_updown32,1342177334
 Control14=IDC_TRIGGER_TARGETH,edit,1350633600
 Control15=IDC_TRIGGER_TARGETH_SPIN,msctls_updown32,1342177334
+Control16=IDC_TRIGGER_TEXT_VAL0,static,1342308354
+Control17=IDC_TRIGGER_VAL0,edit,1350633600
+Control18=IDC_TRIGGER_VAL0_SPIN,msctls_updown32,1342177334
 
 [DLG:IDD_MULTIBAR]
 Type=1

@@ -197,6 +197,7 @@ void	CLayerTrigger::GUIInit(CCore *Core)
 		GUITrigger.m_TargetYSpin.SetRange(0,32000);
 		GUITrigger.m_TargetWSpin.SetRange(1,32000);
 		GUITrigger.m_TargetHSpin.SetRange(1,32000);
+		GUITrigger.m_ValSpin.SetRange(1,32000);
 }
 
 /*****************************************************************************/
@@ -237,6 +238,7 @@ void	CLayerTrigger::GUIThingUpdate(bool OnlySel)
 {
 int		TargetXYMode=SW_HIDE;
 int		TargetWHMode=SW_HIDE;
+int		ValMode=SW_HIDE;
 
 		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
@@ -250,6 +252,7 @@ int		TargetWHMode=SW_HIDE;
 			GUITrigger.SetVal(GUITrigger.m_TargetY,ThisThing.Data.Trigger.TriggerTargetY);
 			GUITrigger.SetVal(GUITrigger.m_TargetW,ThisThing.Data.Trigger.TriggerTargetW);
 			GUITrigger.SetVal(GUITrigger.m_TargetH,ThisThing.Data.Trigger.TriggerTargetH);
+			GUITrigger.SetVal(GUITrigger.m_Val0,ThisThing.Data.Trigger.TriggerVal0);
 			if (ThingScript.GetInt(ThisThing.Name,"HasTarget"))
 			{
 				TargetXYMode=SW_SHOW;
@@ -258,6 +261,10 @@ int		TargetWHMode=SW_HIDE;
 			{
 				TargetXYMode=SW_SHOW;
 				TargetWHMode=SW_SHOW;
+			}
+			if (ThingScript.GetInt(ThisThing.Name,"HasVal"))
+			{
+				ValMode=SW_SHOW;
 			}
 		}
 		else
@@ -277,6 +284,10 @@ int		TargetWHMode=SW_HIDE;
 		GUITrigger.m_TargetH.ShowWindow(TargetWHMode);
 		GUITrigger.m_TargetWSpin.ShowWindow(TargetWHMode);
 		GUITrigger.m_TargetHSpin.ShowWindow(TargetWHMode);
+
+		GUITrigger.m_ValText.ShowWindow(ValMode);
+		GUITrigger.m_Val0.ShowWindow(ValMode);
+		GUITrigger.m_ValSpin.ShowWindow(ValMode);
 
 		GUITrigger.DisableCallback(false);
 }
@@ -299,6 +310,7 @@ void	CLayerTrigger::GUIChanged(CCore *Core)
 			ThisThing.Data.Trigger.TriggerTargetY=GUITrigger.GetVal(GUITrigger.m_TargetY);
 			ThisThing.Data.Trigger.TriggerTargetW=GUITrigger.GetVal(GUITrigger.m_TargetW);
 			ThisThing.Data.Trigger.TriggerTargetH=GUITrigger.GetVal(GUITrigger.m_TargetH);
+			ThisThing.Data.Trigger.TriggerVal0=GUITrigger.GetVal(GUITrigger.m_Val0);
 		}
 }
 

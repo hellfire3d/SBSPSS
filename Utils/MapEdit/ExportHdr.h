@@ -152,6 +152,8 @@ struct	sLayerThingTrigger
 	int						TriggerTargetY;
 	int						TriggerTargetW;
 	int						TriggerTargetH;
+	int						TriggerVal0;
+	int						TriggerVal1;
 };
 
 struct	sLayerThingFX
