@@ -64,10 +64,10 @@
 #endif
 
 
-int		GX=248;
-int		GY=129;
+//int		GX=512/2;
+//int		GY=256/;
 int		GH=256;
-int		ZPos=5100;
+int		ZPos=5100/16;
 
 /*****************************************************************************/
 
@@ -99,9 +99,9 @@ void 	CGameScene::init()
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
-		VidSetClearScreen(1);
+		VidSetClearScreen(0);
 
-		SetGeomOffset( GX, GY );
+//		SetGeomOffset( GX, GY );
 		SetGeomScreen(GH);
 
 		m_pauseMenu=new ("Pause Menu") CPauseMenu();
