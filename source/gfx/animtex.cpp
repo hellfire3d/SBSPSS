@@ -76,7 +76,7 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 		ThisTex->Rect.w=W;
 		ThisTex->Rect.h=H;
 		ThisTex->TexData=0;
-		ThisTex->Count=0; ThisTex->Speed=-4;
+		ThisTex->Count=0; ThisTex->Speed=-1;
 		ThisTex->TPage=Frame->TPage;
 		ThisTex->TexName=Filename;
 
