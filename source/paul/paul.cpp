@@ -114,7 +114,7 @@ static CScrollyBackground		*s_bg1;
 static CScrollyBackground		*s_bg2;
 static CScrollyBackground		*s_bg3;
 
-CScript	*testScript;
+//CScript	*testScript;
 
 
 /*----------------------------------------------------------------------
@@ -262,7 +262,7 @@ PAUL_DBGMSG("change=%d",mem-(MainRam.TotalRam-MainRam.RamUsed));
 	s_bg3->setOt(1002);
 */
 
-	testScript->initialise(SCRIPTS_TEST_DAT);
+//	testScript->initialise(SCRIPTS_TEST_DAT);
 }
 
 
@@ -307,17 +307,17 @@ void CPaulScene::render()
 		}
 	}
 
-	if(testScript->isFinished())
-	{
-		if(PadGetDown(0)&PAD_START)
-		{
-			testScript->reset();
-		}
-	}
-	else
-	{
-		testScript->run();
-	}
+//	if(testScript->isFinished())
+//	{
+//		if(PadGetDown(0)&PAD_START)
+//		{
+//			testScript->reset();
+//		}
+//	}
+//	else
+//	{
+//		testScript->run();
+//	}
 	
 	/*
 	if(baseGUIObject)	
