@@ -168,6 +168,7 @@ public:
 	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
+	void				setHeading( s32 xPos, s32 yPos );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );

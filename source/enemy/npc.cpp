@@ -214,13 +214,20 @@ void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 	m_initPos = m_base = Pos;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::setHeading( s32 xPos, s32 yPos )
+{
+	m_heading = ratan2( ( yPos << 4 ) - Pos.vy, ( xPos << 4 ) - Pos.vx );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static function to initialise the actor pool with levels nasty folk
 void	CNpcEnemy::CacheActor(int Type)
 {
 int	m_type = mapEditConvertTable[Type - NPC_ENEMY_MAPEDIT_OFFSET];
-		
+
 		CActorPool::AddActor(m_data[m_type].skelType);
 
 }
@@ -350,7 +357,7 @@ void CNpcEnemy::postInit()
 		case NPC_INIT_FISH_HOOK:
 		{
 			m_heading = m_fireHeading = 3072;
-			
+
 			DVECTOR newPos;
 
 			newPos.vx = 100;
@@ -399,7 +406,7 @@ void CNpcEnemy::postInit()
 		case NPC_INIT_FISH_FOLK:
 		{
 			m_heading = m_fireHeading = 0;
-			
+
 			DVECTOR newPos;
 
 			newPos.vx = 200;
@@ -448,8 +455,8 @@ void CNpcEnemy::postInit()
 				heading &= 4095;
 
 				spikePos = Pos;
-				spikePos.vx += ( 10 * rcos( heading ) ) >> 12;
-				spikePos.vy += ( 10 * rsin( heading ) ) >> 12;
+				spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
+				spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
 
 				projectile = new( "anemone lev2 projectile" ) CProjectile;
 				projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
@@ -985,7 +992,7 @@ bool CNpcEnemy::processSensor()
 
 					case NPC_SENSOR_SKULL_STOMPER_USER_CLOSE:
 					{
-						if ( playerXDistSqr + playerYDistSqr < 40000 )
+						if ( playerXDistSqr < 10000 && playerYDist >= 0 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_DOWN;
