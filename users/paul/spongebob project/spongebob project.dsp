@@ -277,14 +277,6 @@ SOURCE=..\..\..\source\enemy\npcpath.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\enemy\nplatfrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\enemy\nplatfrm.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\enemy\npuffa.cpp
 # End Source File
 # Begin Source File
@@ -1354,6 +1346,102 @@ SOURCE=..\..\..\source\fmv\fmv.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\fmv\fmv.h
+# End Source File
+# End Group
+# Begin Group "platform"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbob.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbob.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcirculr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcirculr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfalling.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfalling.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfishhk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfishhk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pgeyser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pgeyser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platdata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plinear.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plinear.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pplayer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pretract.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pretract.h
 # End Source File
 # End Group
 # End Group

@@ -29,10 +29,13 @@ void CNpcFishHookPlatform::processLifetime( int _frames )
 
 void CNpcFishHookPlatform::processMovement( int _frames )
 {
-	Pos.vy -= m_data[m_type].speed * _frames;
-
-	if ( Pos.vy < 0 )
+	if ( m_isMoving )
 	{
-		shutdown();
+		Pos.vy -= m_data[m_type].speed * _frames;
+
+		if ( Pos.vy < 0 )
+		{
+			shutdown();
+		}
 	}
 }

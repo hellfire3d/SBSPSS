@@ -74,13 +74,24 @@ enemy_src :=		npc \
 					nfskull \
 					nsklfish \
 					ngary \
-					nplatfrm \
 					nworm \
 					nhcrab \
 					nbblob \
 					npuffa \
 					ngen \
 					nsdart
+
+platform_src :=		platform \
+					platdata \
+					plinear \
+					pcirculr \
+					pbubble \
+					pfishhk \
+					pgeyser \
+					pbob \
+					pfalling \
+					pcart \
+					pretract
 
 projectl_src :=		projectl
 

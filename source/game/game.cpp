@@ -27,8 +27,8 @@
 #include "enemy\npc.h"
 #endif
 
-#ifndef __ENEMY_NPLATFRM_H__
-#include "enemy\nplatfrm.h"
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
 #endif
 
 #ifndef __PROJECTL_PROJECTL_H__
@@ -111,7 +111,7 @@ void 	CGameScene::init()
 
 		SetGeomScreen(RenderZ);
 		CamMtx.t[2]=RenderZ;
-		SetTransMatrix(&CamMtx);		
+		SetTransMatrix(&CamMtx);
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
@@ -257,7 +257,6 @@ void	CGameScene::initLevel()
 	m_player->setMapSize(Level.getMapSize());
 
 // Init actors (needs moving and tidying
-	int pointNum;
 	int actorNum;
 	int platformNum;
 
@@ -291,43 +290,11 @@ void	CGameScene::initLevel()
 	{
 		for ( platformNum = 0 ; platformNum < Level.getPlatformCount() ; platformNum++ )
 		{
+			sThingPlatform *ThisPlatform = platformList[platformNum];
 			CNpcPlatform *platform;
-			platform = new ("platform") CNpcPlatform;
-			ASSERT(platform);
-			platform->setTypeFromMapEdit( platformList[platformNum]->Type );
-
-			u16	*PntList=(u16*)MakePtr(platformList[platformNum],sizeof(sThingPlatform));
-
-			u16 newXPos, newYPos;
-
-			newXPos = (u16) *PntList;
-			PntList++;
-			newYPos = (u16) *PntList;
-			PntList++;
-
-			DVECTOR startPos;
-			startPos.vx = newXPos << 4;
-			startPos.vy = newYPos << 4;
-
-			platform->init( startPos );
+			platform = CNpcPlatform::Create( ThisPlatform );
 			platform->setLayerCollision( Level.getCollisionLayer() );
-			platform->setTiltable( false );
-
-			platform->addWaypoint( newXPos, newYPos );
-
-			if ( platformList[platformNum]->PointCount > 1 )
-			{
-				for ( pointNum = 1 ; pointNum < platformList[platformNum]->PointCount ; pointNum++ )
-				{
-					newXPos = (u16) *PntList;
-					PntList++;
-					newYPos = (u16) *PntList;
-					PntList++;
-
-					platform->addWaypoint( newXPos, newYPos );
-				}
-			}
-
+			platform->postInit();
 		}
 	}
 

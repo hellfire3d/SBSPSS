@@ -55,38 +55,38 @@ void CNpcLinearPlatform::processMovement( int _frames )
 
 		if ( decDir < incDir )
 		{
-			*moveDist = -decDir;
+			moveDist = -decDir;
 		}
 		else
 		{
-			*moveDist = incDir;
+			moveDist = incDir;
 		}
 
-		if ( *moveDist < -maxTurnRate )
+		if ( moveDist < -maxTurnRate )
 		{
-			*moveDist = -maxTurnRate;
+			moveDist = -maxTurnRate;
 		}
-		else if ( *moveDist > maxTurnRate )
+		else if ( moveDist > maxTurnRate )
 		{
-			*moveDist = maxTurnRate;
+			moveDist = maxTurnRate;
 		}
 
-		m_heading += *moveDist;
+		m_heading += moveDist;
 		m_heading &= 4095;
 
 		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
 		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
 
-		*moveX = preShiftX >> 12;
-		if ( !(*moveX) && preShiftX )
+		moveX = preShiftX >> 12;
+		if ( !moveX && preShiftX )
 		{
-			*moveX = preShiftX / abs( preShiftX );
+			moveX = preShiftX / abs( preShiftX );
 		}
 
-		*moveY = preShiftY >> 12;
-		if ( !(*moveY) && preShiftY )
+		moveY = preShiftY >> 12;
+		if ( !moveY && preShiftY )
 		{
-			*moveY = preShiftY / abs( preShiftY );
+			moveY = preShiftY / abs( preShiftY );
 		}
 
 		//processGroundCollisionReverse( moveX, moveY );

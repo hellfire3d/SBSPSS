@@ -24,6 +24,9 @@ public:
 	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
+	virtual void		processTimer( int _frames );
+
+	bool				m_isFiring;
 };
 
 #endif

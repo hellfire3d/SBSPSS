@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nplatfrm.cpp
+	platform.cpp
 
 	Author:		CRB
 	Created:
@@ -11,7 +11,7 @@
 
 ===========================================================================*/
 
-#include "enemy\nplatfrm.h"
+#include "platform\platform.h"
 
 #ifndef __LEVEL_LEVEL_H__
 #include "level\level.h"
@@ -43,9 +43,158 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PLATFORM_PLINEAR_H__
+#include "platform\plinear.h"
+#endif
+
+#ifndef __PLATFORM_PCIRCULR_H__
+#include "platform\pcirculr.h"
+#endif
+
+#ifndef __PLATFORM_PBUBBLE_H__
+#include "platform\pbubble.h"
+#endif
+
+#ifndef __PLATFORM_PCBUBBLE_H__
+#include "platform\pcbubble.h"
+#endif
+
+#ifndef __PLATFORM_PFISHHK_H__
+#include "platform\pfishhk.h"
+#endif
+
+#ifndef __PLATFORM_PRETRACT_H__
+#include "platform\pretract.h"
+#endif
+
+#ifndef __PLATFORM_PGEYSER_H__
+#include "platform\pgeyser.h"
+#endif
+
+#ifndef __PLATFORM_PBOB_H__
+#include "platform\pbob.h"
+#endif
+
+#ifndef __PLATFORM_PFALLING_H__
+#include "platform\pfalling.h"
+#endif
+
+#ifndef __PLATFORM_PPLAYER_H__
+#include "platform\pplayer.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class CLayerCollision	*CNpcPlatform::m_layerCollision;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
+{
+	int pointNum;
+	CNpcPlatform *platform;
+
+	NPC_PLATFORM_UNIT_TYPE platformType = getTypeFromMapEdit( ThisPlatform->Type );
+
+	switch( platformType )
+	{
+		case NPC_LINEAR_PLATFORM:
+		{
+			platform = new ("linear platform") CNpcLinearPlatform;
+			break;
+		}
+
+		case NPC_CIRCULAR_PLATFORM:
+		{
+			platform = new ("circular platform") CNpcCircularPlatform;
+			break;
+		}
+
+		case NPC_BUBBLE_PLATFORM:
+		{
+			platform = new ("bubble platform") CNpcBubblePlatform;
+			break;
+		}
+
+		case NPC_COLLAPSING_BUBBLE_PLATFORM:
+		{
+			platform = new ("collapsing bubble platform") CNpcCollapsingBubblePlatform;
+			break;
+		}
+
+		case NPC_FISH_HOOK_PLATFORM:
+		{
+			platform = new ("fish hook platform") CNpcFishHookPlatform;
+			break;
+		}
+
+		case NPC_RETRACTING_PLATFORM:
+		{
+			platform = new ("retracting platform") CNpcRetractingPlatform;
+			break;
+		}
+
+		case NPC_GEYSER_PLATFORM:
+		{
+			platform = new ("geyser platform") CNpcGeyserPlatform;
+			break;
+		}
+
+		case NPC_BOBBING_PLATFORM:
+		{
+			platform = new ("bobbing platform") CNpcBobbingPlatform;
+			break;
+		}
+
+		case NPC_FALLING_PLATFORM:
+		{
+			platform = new ("falling platform") CNpcFallingPlatform;
+			break;
+		}
+
+		default:
+		{
+			platform = new ("platform") CNpcPlatform;
+			break;
+		}
+	}
+
+	ASSERT(platform);
+	platform->setType( platformType );
+
+	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
+
+	u16 newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	platform->init( startPos );
+	platform->setTiltable( false );
+
+	platform->addWaypoint( newXPos, newYPos );
+
+	if ( ThisPlatform->PointCount > 1 )
+	{
+		for ( pointNum = 1 ; pointNum < ThisPlatform->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			platform->addWaypoint( newXPos, newYPos );
+		}
+	}
+
+	return( platform );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +219,6 @@ void CNpcPlatform::init()
 	m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
 	m_timerType = m_data[m_type].initTimerType;
 	m_isActive = true;
-	m_movementFunc = m_data[m_type].movementFunc;
 	m_detectCollision = m_data[m_type].detectCollision;
 	m_state = 0;
 	m_tiltAngle = 0;
@@ -86,23 +234,6 @@ void CNpcPlatform::init()
 	m_lifetimeType = m_data[m_type].lifetimeType;
 
 	m_npcPath.initPath();
-
-	if ( m_type == NPC_LINEAR_PLATFORM || m_type == NPC_CART_PLATFORM )
-	{
-		m_npcPath.setPathType( CNpcPath::PONG_PATH );
-	}
-	else if ( m_type == NPC_GEYSER_PLATFORM )
-	{
-		m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-	}
-	else if ( m_type == NPC_FALLING_PLATFORM )
-	{
-		m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
-	}
-	else
-	{
-		m_extension = 100;
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +272,6 @@ void CNpcPlatform::reinit()
 	m_timer = m_data[m_type].initTimer * GameState::getOneSecondInFrames();
 	m_timerType = m_data[m_type].initTimerType;
 	m_isActive = true;
-	m_movementFunc = m_data[m_type].movementFunc;
 	m_detectCollision = m_data[m_type].detectCollision;
 	m_state = 0;
 	m_tiltAngle = 0;
@@ -149,18 +279,13 @@ void CNpcPlatform::reinit()
 
 	m_lifetime = m_initLifetime;
 
-	if ( m_type == NPC_LINEAR_PLATFORM )
-	{
-		Pos = m_initPos;
+	Pos = m_initPos;
+}
 
-		m_extension = 0;
-	}
-	else
-	{
-		Pos = m_initPos;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		m_extension = 100;
-	}
+void CNpcPlatform::postInit()
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,6 +301,61 @@ void CNpcPlatform::shutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPlatform::processLifetime( int _frames )
+{
+	switch( m_lifetimeType )
+	{
+		case NPC_PLATFORM_FINITE_LIFE:
+		{
+			m_lifetime -= _frames;
+
+			if ( m_lifetime <= 0 )
+			{
+				shutdown();
+				delete this;
+
+				return;
+			}
+
+			break;
+		}
+
+		case NPC_PLATFORM_FINITE_LIFE_RESPAWN:
+		{
+			m_lifetime -= _frames;
+
+			if ( m_lifetime <= 0 )
+			{
+				reinit();
+			}
+
+			break;
+		}
+
+		case NPC_PLATFORM_INFINITE_LIFE_COLLAPSIBLE:
+		{
+			if ( m_contact )
+			{
+				m_lifetime -= _frames;
+
+				if ( m_lifetime <= 0 )
+				{
+					m_isActive = false;
+					m_timer = 3 * GameState::getOneSecondInFrames();
+					m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
+				}
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPlatform::think(int _frames)
 {
 	
@@ -186,65 +366,7 @@ void CNpcPlatform::think(int _frames)
 			processTilt( _frames );
 		}
 
-		switch( m_lifetimeType )
-		{
-			case NPC_PLATFORM_FINITE_LIFE:
-			{
-				m_lifetime -= _frames;
-
-				if ( m_lifetime <= 0 )
-				{
-					shutdown();
-					delete this;
-
-					return;
-				}
-
-				break;
-			}
-
-			case NPC_PLATFORM_FINITE_LIFE_RESPAWN:
-			{
-				m_lifetime -= _frames;
-
-				if ( m_lifetime <= 0 )
-				{
-					reinit();
-				}
-
-				break;
-			}
-
-			case NPC_PLATFORM_INFINITE_LIFE_COLLAPSIBLE:
-			{
-				if ( m_contact )
-				{
-					m_lifetime -= _frames;
-
-					if ( m_lifetime <= 0 )
-					{
-						m_isActive = false;
-						m_timer = 3 * GameState::getOneSecondInFrames();
-						m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
-					}
-				}
-
-				break;
-			}
-
-			case NPC_PLATFORM_INFINITE_LIFE_FISH_HOOK:
-			{
-				if ( m_contact )
-				{
-					m_movementFunc = NPC_PLATFORM_MOVEMENT_FISH_HOOK;
-				}
-
-				break;
-			}
-
-			default:
-				break;
-		}
+		processLifetime( _frames );
 
 		if ( m_animPlaying )
 		{
@@ -383,52 +505,6 @@ void CNpcPlatform::processTimer( int _frames )
 
 			break;
 		}
-
-		case NPC_PLATFORM_TIMER_RETRACT:
-		{
-			if ( m_timer > 0 )
-			{
-				m_timer -= _frames;
-			}
-			else
-			{
-				m_timer = 4 * GameState::getOneSecondInFrames();
-				m_timerType = NPC_PLATFORM_TIMER_EXTEND;
-				m_detectCollision = false;
-			}
-
-			break;
-		}
-
-		case NPC_PLATFORM_TIMER_EXTEND:
-		{
-			if ( m_timer > 0 )
-			{
-				m_timer -= _frames;
-			}
-			else
-			{
-				m_timer = 4 * GameState::getOneSecondInFrames();
-				m_timerType = NPC_PLATFORM_TIMER_RETRACT;
-				m_detectCollision = true;
-			}
-
-			break;
-		}
-
-		case NPC_PLATFORM_TIMER_GEYSER:
-		{
-			if ( m_timer > 0 )
-			{
-				m_timer -= _frames;
-			}
-			else
-			{
-				m_movementFunc = NPC_PLATFORM_MOVEMENT_GEYSER;
-			}
-
-			break;
-		}
 	}
 }
 
@@ -463,367 +539,8 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcPlatform::processGenericCircularPath( int _frames )
+void CNpcPlatform::processMovement( int _frames )
 {
-	m_rotation += m_data[m_type].speed;
-	m_rotation &= 4095;
-
-	Pos.vx = m_base.vx + ( ( m_extension * rcos( m_rotation ) ) >> 12 );
-	Pos.vy = m_base.vy + ( ( m_extension * rsin( m_rotation ) ) >> 12 );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist )
-{
-	bool pathComplete;
-	bool waypointChange;
-
-	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
-
-	if ( !pathComplete )
-	{
-		s16 decDir, incDir;
-		s16 maxTurnRate = m_data[m_type].turnSpeed;
-
-		decDir = m_heading - headingToTarget;
-
-		if ( decDir < 0 )
-		{
-			decDir += ONE;
-		}
-
-		incDir = headingToTarget - m_heading;
-
-		if ( incDir < 0 )
-		{
-			incDir += ONE;
-		}
-
-		if ( decDir < incDir )
-		{
-			*moveDist = -decDir;
-		}
-		else
-		{
-			*moveDist = incDir;
-		}
-
-		if ( *moveDist < -maxTurnRate )
-		{
-			*moveDist = -maxTurnRate;
-		}
-		else if ( *moveDist > maxTurnRate )
-		{
-			*moveDist = maxTurnRate;
-		}
-
-		m_heading += *moveDist;
-		m_heading &= 4095;
-
-		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
-
-		*moveX = preShiftX >> 12;
-		if ( !(*moveX) && preShiftX )
-		{
-			*moveX = preShiftX / abs( preShiftX );
-		}
-
-		*moveY = preShiftY >> 12;
-		if ( !(*moveY) && preShiftY )
-		{
-			*moveY = preShiftY / abs( preShiftY );
-		}
-
-		*moveVel = ( _frames * m_data[m_type].speed ) << 8;
-
-		//processGroundCollisionReverse( moveX, moveY );
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processGeyserMove( int _frames, s32 *moveX, s32 *moveY )
-{
-	s32 distX, distY, heading;
-	bool pathComplete;
-
-	m_npcPath.thinkVertical( Pos, &pathComplete, &distX, &distY, &heading );
-
-	if ( pathComplete )
-	{
-		m_npcPath.resetPath();
-		reinit();
-	}
-	else
-	{
-		s32 minY, maxY;
-
-		m_npcPath.getPathYExtents( &minY, &maxY );
-
-		*moveY = m_data[m_type].speed * _frames;
-
-		if ( Pos.vy < ( minY + 64 ) )
-		{
-			s32 multiplier = Pos.vy - minY;
-
-			*moveY = ( multiplier * (*moveY) ) >> 6;
-
-			if ( *moveY < 1 )
-			{
-				*moveY = 1;
-			}
-		}
-
-		if ( heading == 3072 )
-		{
-			*moveY = -(*moveY);
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processFallingMove( int _frames, s32 *moveX, s32 *moveY )
-{
-	s32 distX, distY, heading;
-	bool pathComplete;
-
-	m_npcPath.thinkVertical( Pos, &pathComplete, &distX, &distY, &heading );
-
-	if ( pathComplete )
-	{
-		m_isActive = false;
-		m_timer = 4 * GameState::getOneSecondInFrames();
-		m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
-	}
-	else
-	{
-		*moveY = m_data[m_type].speed * _frames;
-
-		if ( heading == 3072 )
-		{
-			*moveY = -(*moveY);
-		}
-
-		s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + (*moveX), Pos.vy + (*moveY), 16 );
-
-		if ( groundHeight < *moveY )
-		{
-			*moveY = groundHeight;
-			*moveX = 2 * _frames;
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processCartMove( int _frames, s32 *moveX, s32 *moveY )
-{
-	s32 fallSpeed = 3;
-	s8 yMovement = fallSpeed * _frames;
-	s32 distX, distY, heading;
-	s32 groundHeight;
-
-	bool pathComplete;
-
-	m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &heading );
-
-	*moveX = m_data[m_type].speed * _frames;
-
-	if ( heading == 2048 )
-	{
-		*moveX = -(*moveX);
-	}
-
-	// check for vertical movement
-
-	groundHeight = m_layerCollision->getHeightFromGround( ( Pos.vx + *moveX ), Pos.vy, yMovement + 16 );
-
-	if ( groundHeight <= yMovement )
-	{
-		// groundHeight <= yMovement indicates either just above ground or on or below ground
-
-		*moveY = groundHeight;
-	}
-	else
-	{
-		// fall
-
-		*moveY = yMovement;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processBobMove( int _frames, s32 *moveX, s32 *moveY )
-{
-	if ( m_contact )
-	{
-		CPlayer *player = GameScene.getPlayer();
-		DVECTOR playerPos = player->getPos();
-
-		int height = player->getHeightFromGroundNoPlatform( playerPos.vx, playerPos.vy );
-
-		// if stood on, increase velocity
-
-		if ( m_velocity < 0 )
-		{
-			m_velocity = 0;
-		}
-		else if ( m_velocity < 4 )
-		{
-			if ( height <= 0 )
-			{
-				m_velocity = 0;
-			}
-			else
-			{
-				m_velocity += 1;
-			}
-		}
-
-		m_state = NPC_BOB_MOVE;
-	}
-	else
-	{
-		if ( m_state == NPC_BOB_MOVE )
-		{
-			// otherwise drop velocity and ultimately reverse course
-
-			if ( m_velocity > -2 )
-			{
-				m_velocity--;
-			}
-		}
-	}
-
-	if ( m_velocity )
-	{
-		*moveY = m_velocity * _frames;
-
-		if ( Pos.vy + (*moveY) < m_initPos.vy )
-		{
-			Pos.vy = m_initPos.vy;
-			m_velocity = 0;
-			m_state = NPC_BOB_STOP;
-			*moveY = 0;
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcPlatform::processMovement(int _frames)
-{
-	VECTOR rotPos;
-	DVECTOR newPos;
-	DVECTOR oldPos;
-	SVECTOR relPos;
-
-	if ( _frames > 2 )
-	{
-		_frames = 2;
-	}
-
-	s32 moveX = 0, moveY = 0;
-	s32 moveVel = 0;
-	s32 moveDist = 0;
-
-	switch( m_movementFunc )
-	{
-		case NPC_PLATFORM_MOVEMENT_FIXED_PATH:
-		{
-			processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_FIXED_CIRCULAR:
-		{
-			processGenericCircularPath( _frames );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_FISH_HOOK:
-		{
-			moveY = -m_data[m_type].speed * _frames;
-
-			if ( Pos.vx + moveY < 0 )
-			{
-				shutdown();
-			}
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_BUBBLE:
-		{
-			moveY = -m_data[m_type].speed * _frames;
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_GEYSER:
-		{
-			processGeyserMove( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_FALL:
-		{
-			processFallingMove( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_BOB:
-		{
-			processBobMove( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_CART:
-		{
-			processCartMove( _frames, &moveX, &moveY );
-
-			break;
-		}
-
-		case NPC_PLATFORM_MOVEMENT_PLAYER_BUBBLE:
-		case NPC_PLATFORM_MOVEMENT_STATIC:
-		{
-			break;
-		}
-
-		default:
-
-			break;
-	}
-
-	int angleChange = 3;
-
-	Pos.vx += moveX;
-	Pos.vy += moveY;
-
-	/*CThing *thisThing = Next;
-
-	while ( thisThing )
-	{
-		newPos.vx = moveX;
-		newPos.vy = moveY;
-
-		thisThing->shove( newPos );
-
-		thisThing = thisThing->getNext();
-	}*/
-
-	//setCollisionAngle( ( getCollisionAngle() + angleChange ) % 4096 );
-	//setCollisionAngle( 512 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1146,4 +863,11 @@ void CNpcPlatform::addWaypoint( s32 xPos, s32 yPos )
 void CNpcPlatform::setTypeFromMapEdit( u16 newType )
 {
 	m_type = mapEditConvertTable[newType];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcPlatform::NPC_PLATFORM_UNIT_TYPE CNpcPlatform::getTypeFromMapEdit( u16 newType )
+{
+	return( mapEditConvertTable[newType] );
 }

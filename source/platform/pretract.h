@@ -20,6 +20,16 @@
 
 class CNpcRetractingPlatform : public CNpcPlatform
 {
+public:
+	virtual void		postInit();
+protected:
+	void processTimer( int _frames );
+
+	enum NPC_PLATFORM_TIMER_TYPE
+	{
+		NPC_PLATFORM_TIMER_RETRACT = 0,
+		NPC_PLATFORM_TIMER_EXTEND = 1,
+	};
 };
 
 #endif

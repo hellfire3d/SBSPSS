@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nplatfrm.h
+	platform.h
 
 	Author:		CRB
 	Created: 
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__ENEMY_NPLATFRM_H__
-#define	__ENEMY_NPLATFRM_H__
+#ifndef	__PLATFORM_PLATFORM_H__
+#define	__PLATFORM_PLATFORM_H__
 
 //#include <dstructs.h>
 
@@ -59,6 +59,7 @@ public:
 	void				init();
 	void				init( DVECTOR initPos );
 	void				init( DVECTOR initPos, s32 initLifetime );
+	virtual void		postInit();
 	void				shutdown();
 	void				think(int _frames);
 	void				render();
@@ -69,23 +70,12 @@ public:
 	virtual s32			getNewYPos( CThing *_thisThing );
 	void				setTiltable( bool isTiltable );
 	void				addWaypoint( s32 xPos, s32 yPos );
+	
+	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
+	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
 protected:
 	// NPC data structure definitions //
-
-	enum NPC_PLATFORM_MOVEMENT_FUNC
-	{
-		NPC_PLATFORM_MOVEMENT_STATIC = 0,
-		NPC_PLATFORM_MOVEMENT_FIXED_PATH = 1,
-		NPC_PLATFORM_MOVEMENT_FIXED_CIRCULAR,
-		NPC_PLATFORM_MOVEMENT_BUBBLE,
-		NPC_PLATFORM_MOVEMENT_FISH_HOOK,
-		NPC_PLATFORM_MOVEMENT_GEYSER,
-		NPC_PLATFORM_MOVEMENT_BOB,
-		NPC_PLATFORM_MOVEMENT_FALL,
-		NPC_PLATFORM_MOVEMENT_CART,
-		NPC_PLATFORM_MOVEMENT_PLAYER_BUBBLE,
-	};
 
 	enum NPC_PLATFORM_LIFETIME_TYPE
 	{
@@ -93,22 +83,12 @@ protected:
 		NPC_PLATFORM_INFINITE_LIFE = 1,
 		NPC_PLATFORM_FINITE_LIFE_RESPAWN,
 		NPC_PLATFORM_INFINITE_LIFE_COLLAPSIBLE,
-		NPC_PLATFORM_INFINITE_LIFE_FISH_HOOK,
 	};
 
 	enum NPC_PLATFORM_TIMER_TYPE
 	{
 		NPC_PLATFORM_TIMER_NONE = 0,
 		NPC_PLATFORM_TIMER_RESPAWN = 1,
-		NPC_PLATFORM_TIMER_RETRACT,
-		NPC_PLATFORM_TIMER_EXTEND,
-		NPC_PLATFORM_TIMER_GEYSER,
-	};
-
-	enum NPC_BOB_STATE
-	{
-		NPC_BOB_STOP = 0,
-		NPC_BOB_MOVE = 1,
 	};
 
 	typedef struct NPC_PLATFORM_DATA_TYPE
@@ -116,7 +96,6 @@ protected:
 		FileEquate						ActorType;
 //		FileEquate						animData;
 		u16								initAnim;
-		NPC_PLATFORM_MOVEMENT_FUNC		movementFunc;
 		u8								speed;
 		u16								turnSpeed;
 		bool							detectCollision;
@@ -125,7 +104,7 @@ protected:
 		s32								lifetime;
 		NPC_PLATFORM_LIFETIME_TYPE		lifetimeType;
 		s32								initTimer;
-		NPC_PLATFORM_TIMER_TYPE			initTimerType;
+		u8								initTimerType;
 	}
 	NPC_PLATFORM_DATA;
 
@@ -133,21 +112,14 @@ protected:
 
 	void				reinit();
 	bool				processSensor();
-	void				processMovement( int _frames );
-	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+	virtual void		processMovement( int _frames );
+	virtual void		processLifetime( int _frames );
 	void				processShot();
 	void				processClose( int _frames );
 	void				processCollision();
-	void				processTimer( int _frames );
+	virtual void		processTimer( int _frames );
 	void				processTilt( int _frames );
 	bool				isCollisionWithGround();
-
-	void				processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
-	void				processGenericCircularPath( int _frames );
-	void				processGeyserMove( int _frames, s32 *moveX, s32 *moveY );
-	void				processFallingMove( int _frames, s32 *moveX, s32 *moveY );
-	void				processBobMove( int _frames, s32 *moveX, s32 *moveY );
-	void				processCartMove( int _frames, s32 *moveX, s32 *moveY );
 
 	// data
 
@@ -180,8 +152,7 @@ protected:
 	bool						m_contact;
 	s32							m_timer;
 	bool						m_isActive;
-	NPC_PLATFORM_TIMER_TYPE		m_timerType;
-	NPC_PLATFORM_MOVEMENT_FUNC	m_movementFunc;
+	u8							m_timerType;
 	bool						m_detectCollision;
 	bool						m_tiltable;
 	s32							m_tiltAngle;
