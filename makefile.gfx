@@ -272,8 +272,35 @@ UI_GFX_DIR :=				$(GRAF_DIR)/ui
 UI_FONT_DIR :=				$(GRAF_DIR)/font
 UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 
-UI_GFX_FONT :=				smallfont
-UI_GFX_FONT_IN :=			$(foreach DIR,$(UI_GFX_FONT),$(UI_FONT_DIR)/$(DIR)/*.bmp)
+UI_GFX_FONT :=				smallfont/+33	smallfont/+34	smallfont/+37	smallfont/+39	smallfont/+40	\
+							smallfont/+41	smallfont/+42	smallfont/+43	smallfont/+44	smallfont/+45	\
+							smallfont/+46	smallfont/+47	smallfont/+48	smallfont/+49	smallfont/+50	\
+							smallfont/+51	smallfont/+52	smallfont/+53	smallfont/+54	smallfont/+55	\
+							smallfont/+56	smallfont/+57	smallfont/+58	smallfont/+60	\
+							smallfont/+61	smallfont/+62	smallfont/+63	smallfont/+65	\
+							smallfont/+66	smallfont/+67	smallfont/+68	smallfont/+69	smallfont/+70	\
+							smallfont/+71	smallfont/+72	smallfont/+73	smallfont/+74	smallfont/+75	\
+							smallfont/+76	smallfont/+77	smallfont/+78	smallfont/+79	smallfont/+80	\
+							smallfont/+81	smallfont/+82	smallfont/+83	smallfont/+84	smallfont/+85	\
+							smallfont/+86	smallfont/+87	smallfont/+88	smallfont/+89	smallfont/+90	\
+							smallfont/+95	smallfont/+97	smallfont/+98	smallfont/+99	\
+							smallfont/+100	smallfont/+101	smallfont/+102	smallfont/+103	smallfont/+104	\
+							smallfont/+105	smallfont/+106	smallfont/+107	smallfont/+108	smallfont/+109	\
+							smallfont/+110	smallfont/+111	smallfont/+112	smallfont/+113	smallfont/+114\
+							smallfont/+115	smallfont/+116	smallfont/+117	smallfont/+118	smallfont/+119	\
+							smallfont/+120	smallfont/+121	smallfont/+122	smallfont/+140	smallfont/+192	\
+							smallfont/+193	smallfont/+194	smallfont/+195	smallfont/+196	\
+							smallfont/+197	smallfont/+198	smallfont/+199	smallfont/+200	smallfont/+201	\
+							smallfont/+202	smallfont/+203	smallfont/+204	smallfont/+205	smallfont/+206	\
+							smallfont/+207	smallfont/+208	smallfont/+210	smallfont/+211	smallfont/+212	\
+							smallfont/+213	smallfont/+214	smallfont/+216	smallfont/+217	smallfont/+218	\
+							smallfont/+219	smallfont/+220	smallfont/+221	smallfont/+222	smallfont/+223	\
+							smallfont/+224	smallfont/+225	smallfont/+226	smallfont/+227	smallfont/+228	\
+							smallfont/+230	smallfont/+232	smallfont/+233	smallfont/+234	smallfont/+235	\
+							smallfont/+236	smallfont/+237	smallfont/+238	smallfont/+239	smallfont/+242	\
+							smallfont/+243	smallfont/+244	smallfont/+245	smallfont/+246	smallfont/+249	\
+							smallfont/+250	smallfont/+251	smallfont/+252	smallfont/+253	smallfont/+255
+UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_FONT_DIR)/$(FILE).bmp)
 
 UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
 							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp \
@@ -286,7 +313,7 @@ UI_GFX_TRANS :=				+vbamboo.bmp +vbambootl.bmp +vbambootr.bmp +vbamboobl.bmp +vb
 							+butC.bmp +butS.bmp +butX.bmp +butT.bmp
 UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
-UI_GFX_TEX_IN :=			$(UI_GFX_FONT_IN) ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}
+UI_GFX_TEX_IN :=			${UI_GFX_FONT_IN} ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}
 UI_GFX_TEX_OUT :=			$(UI_GFX_OUT_DIR)/UIGfx.Spr
 UI_GFX_REP_FILE :=			$(REPORT_DIR)/UIGfx.rep
 UI_GFX_HDR_FILE :=			$(INC_DIR)/UIGfx.h
