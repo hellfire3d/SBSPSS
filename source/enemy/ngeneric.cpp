@@ -62,7 +62,7 @@ void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32
 	}
 
 	m_heading += moveDist;
-	m_heading = m_heading % ONE;
+	m_heading &= 4095;
 
 	s32 preShiftX = _frames * speed * rcos( m_heading );
 	s32 preShiftY = _frames * speed * rsin( m_heading );
@@ -146,8 +146,9 @@ bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 			*moveY = -(*moveY);
 
 			m_heading += 2048;
-			m_heading &= 4096;
 		}
+
+		m_heading &= 4095;
 	}
 
 	return( xBlocked | yBlocked );
@@ -203,7 +204,7 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 		}
 
 		m_heading += *moveDist;
-		m_heading = m_heading % ONE;
+		m_heading &= 4095;
 
 		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
 		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );

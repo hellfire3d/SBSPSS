@@ -146,7 +146,7 @@ void CNpcEnemy::processCloseSmallJellyfishEvade( int _frames )
 				headingToPlayer -= 1024;
 			}
 
-			headingToPlayer %= ONE;
+			headingToPlayer &= 4095;
 
 			s16 decDir, incDir;
 

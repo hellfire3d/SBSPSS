@@ -386,18 +386,6 @@ void CNpcEnemy::postInit()
 
 		case NPC_INIT_RETURNING_HAZARD:
 		{
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			newPos.vy = 10;
-
-			m_npcPath.addWaypoint( newPos );
-
-			newPos.vx = 500;
-			newPos.vy = 10;
-
-			m_npcPath.addWaypoint( newPos );
-
 			m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 			break;
@@ -452,7 +440,7 @@ void CNpcEnemy::postInit()
 				DVECTOR spikePos;
 
 				heading = m_heading - 1024 + ( fireLoop * 512 );
-				heading %= 4096;
+				heading &= 4095;
 
 				spikePos = Pos;
 				spikePos.vx += ( 10 * rcos( heading ) ) >> 12;

@@ -190,7 +190,7 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 			DVECTOR spikePos;
 
 			heading = m_heading - 1024 + ( fireLoop * 512 );
-			heading %= 4096;
+			heading &= 4095;
 
 			spikePos = Pos;
 			spikePos.vx += ( 10 * rcos( heading ) ) >> 12;
