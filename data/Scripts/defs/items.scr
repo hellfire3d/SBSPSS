@@ -1,0 +1,22 @@
+// Item numbers
+
+#define	ITEM_BALLOON				0
+#define ITEM_BUBBLE_MIXTURE			1
+#define ITEM_DIVING_HELMET			2
+#define ITEM_CORAL_BLOWER			3
+#define ITEM_NET					4
+#define ITEM_JELLY_LAUNCHER			5
+#define ITEM_GLASSES				6
+#define ITEM_SQUEAKY_BOOTS			7
+#define ITEM_SUPERHERO_RING			8
+#define ITEM_GARY_THE_SNAIL			9
+#define ITEM_DISGUISE				10
+#define ITEM_100_HEALTH				11
+#define ITEM_50_HEALTH				12
+#define ITEM_25_HEALTH				13
+#define ITEM_JELLYFISH_1			14
+#define ITEM_JELLYFISH_2			15
+#define ITEM_JELLYFISH_3			16
+#define ITEM_JAM_JAR				17
+#define ITEM_BUBBLE_MIXTURE			18
+
