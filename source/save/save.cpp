@@ -126,11 +126,11 @@ void CSaveScene::init()
 		tb->setObjectXYWH(0,0,WANT_TO_SAVE__FRAME_W,40);
 		tb->setText(STR__SAVE__DO_YOU_WANT_TO_SAVE);
 		CGUIFactory::createValueButtonFrame(m_wantToSaveFrame,
-											0,70,WANT_TO_SAVE__FRAME_W,20,
+											0,WANT_TO_SAVE__FRAME_H-50,WANT_TO_SAVE__FRAME_W,20,
 											STR__NO,
 											&m_userResponse,USERRESPONSE__NO);
 		CGUIFactory::createValueButtonFrame(m_wantToSaveFrame,
-											0,50,WANT_TO_SAVE__FRAME_W,20,
+											0,WANT_TO_SAVE__FRAME_H-30,WANT_TO_SAVE__FRAME_W,20,
 											STR__YES,
 											&m_userResponse,USERRESPONSE__YES);
 
@@ -177,6 +177,7 @@ void CSaveScene::init()
 
 	m_fontBank=new ("CGameScene::Init") FontBank();
 	m_fontBank->initialise( &standardFont );
+	m_fontBank->setColour(80,80,80);
 
 	m_spriteBank=new ("options sprites") SpriteBank();
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
@@ -224,6 +225,28 @@ void CSaveScene::render()
 
 	switch(m_mode)
 	{
+		case MODE__CHECKING:
+		case MODE__FORMATTING:
+		case MODE__CHECKINGFORMAT:
+		case MODE__SAVING:
+			break;
+
+		case MODE__CONFIRMSAVE:
+		case MODE__UNFORMATTED:
+		case MODE__FORMATOK:
+		case MODE__FORMATERROR:
+		case MODE__NOCARD:
+		case MODE__NOSPACE:
+		case MODE__CONFIRMOVERWRITE:
+		case MODE__SAVEOK:
+		case MODE__SAVEERROR:
+		case MODE__READYTOEXIT:
+			renderButtonPrompts();
+			break;
+	}
+
+	switch(m_mode)
+	{
 		case MODE__CONFIRMSAVE:
 			m_wantToSaveFrame->render();
 			break;
@@ -250,28 +273,6 @@ void CSaveScene::render()
 			break;
 
 		case MODE__READYTOEXIT:
-			break;
-	}
-
-	switch(m_mode)
-	{
-		case MODE__CHECKING:
-		case MODE__FORMATTING:
-		case MODE__CHECKINGFORMAT:
-		case MODE__SAVING:
-			break;
-
-		case MODE__CONFIRMSAVE:
-		case MODE__UNFORMATTED:
-		case MODE__FORMATOK:
-		case MODE__FORMATERROR:
-		case MODE__NOCARD:
-		case MODE__NOSPACE:
-		case MODE__CONFIRMOVERWRITE:
-		case MODE__SAVEOK:
-		case MODE__SAVEERROR:
-		case MODE__READYTOEXIT:
-			renderButtonPrompts();
 			break;
 	}
 }
@@ -679,23 +680,33 @@ void	CSaveScene::renderButtonPrompts()
 	sFrameHdr		*fh1;
 	int				x,y,width;
 
-int	INSTRUCTIONS_Y_POS=213;
-int INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;		// Eh!? (pkg)
+int	INSTRUCTIONS_Y_POS=185;
+int INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;
 int INSTRUCTIONS_BUTTON_Y_OFFSET=4;
+
+	if(m_mode==MODE__CONFIRMSAVE)
+	{
+		y=153;
+	}
+	else
+	{
+		y=INSTRUCTIONS_Y_POS;
+	}
+
 
 	fh1=m_spriteBank->getFrameHeader(FRM__BUTX);
 	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__CROSS_TO_SELECT);
 	x=128-(width/2);
-	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	m_spriteBank->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__CROSS_TO_SELECT);
+	m_fontBank->print(x,y,STR__FRONTEND__CROSS_TO_SELECT);
 
 	fh1=m_spriteBank->getFrameHeader(FRM__BUTT);
 	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__TRIANGLE_TO_GO_BACK);
 	x=256+128-(width/2);
-	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	m_spriteBank->printFT4(fh1,x,y+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+	m_fontBank->print(x,y,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
 }
 
 
