@@ -51,22 +51,13 @@ void CNpcSmallJellyfishEnemy::render()
 
 		renderPos.vx = Pos.vx - offset.vx + m_drawOffset.vx;
 
-		if ( m_reversed )
-		{
-			renderPos.vx += spriteWidth >> 1;
-		}
-		else
-		{
-			renderPos.vx -= spriteWidth >> 1;
-		}
-
 		renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 ) + m_drawOffset.vy;
 
 		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
-				SprFrame = m_spriteBank->printFT4(m_frame>>8,renderPos.vx,renderPos.vy,m_reversed,0,10);
+				SprFrame = m_spriteBank->printRotatedScaledSprite( m_frame>>8,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 				setRGB0( SprFrame, 255, 128, 255 );
 			}
 		}
@@ -313,4 +304,6 @@ void CNpcSmallJellyfishEnemy::processMovementModifier( int _frames, s32 distX, s
 
 	Pos.vx += newX;
 	Pos.vy += newY;
+
+	m_drawRotation = m_heading;
 }
