@@ -80,7 +80,7 @@ void	CFXBaseAnim::killFX()
 {
 	setToShutdown();
 // If has follow on effect, create it now
-	if (DataPtr->EndFX || canThink())
+	if (DataPtr->EndFX!=CFX::FX_TYPE_NONE && canThink())
 	{
 		CFX::Create((CFX::FX_TYPE)DataPtr->EndFX,getPos());
 	}

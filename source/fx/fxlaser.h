@@ -1,21 +1,28 @@
-/*****************/
-/*** Thwack!!! ***/
-/*****************/
+/*************/
+/*** Laser ***/
+/*************/
 
-#ifndef	__FX_FX_THWACK_HEADER__
-#define __FX_FX_THWACK_HEADER__
+#ifndef	__FX_FX_LASER_HEADER__
+#define __FX_FX_LASER_HEADER__
 
 #include "fx/fx.h"
 
 /*****************************************************************************/
-class CFXThwack : public CFX
+class CFXLaser : public CFX
 {
 public:
-virtual void		init(DVECTOR const &Pos);
-virtual void		render();
+		void		init(DVECTOR const &Pos);
+		void		think(int _frames);
+		void		render();
+
+		void		setOffset(DVECTOR &Pos);
+		void		setTarget(DVECTOR &Pos);
+
+		void		setRGB(u8 r,u8 g,u8 b)	{R=r; G=g; B=g;}
 
 protected:
-		u16			Angle,Scale;
+		DVECTOR		Offset,Target;
+		u8			R,G,B;
 };
 
 #endif

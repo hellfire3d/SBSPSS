@@ -19,6 +19,7 @@
 
 #include	"FX\FXAttachAnim.h"
 
+#include	"FX\FXLaser.h"
 #include	"FX\FXThwack.h"
 #include	"FX\FXBubble.h"
 #include	"FX\FXfallingTile.h"
@@ -39,7 +40,7 @@ CFXBaseAnim::sFXAnim	FXWaterSplashData=
 		127,127,255,
 		0,
 		{0,0},
-		0,
+		CFX::FX_TYPE_NONE
 };
 
 CFXBaseAnim::sFXAnim	FXAcidSplashData=
@@ -50,7 +51,7 @@ CFXBaseAnim::sFXAnim	FXAcidSplashData=
 		127,255,127,
 		0,
 		{0,0},
-		0
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXLavaSplashData=
 {
@@ -60,7 +61,7 @@ CFXBaseAnim::sFXAnim	FXLavaSplashData=
 		255,0,0,
 		0,
 		{0,0},
-		0
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXOilSplashData=
 {
@@ -81,7 +82,7 @@ CFXBaseAnim::sFXAnim	FXExplodeData=
 		127,127,127,
 		0,
 		{0,0},
-		0
+		CFX::FX_TYPE_NONE
 };
 
 CFXBaseAnim::sFXAnim	FXFireData=
@@ -92,7 +93,7 @@ CFXBaseAnim::sFXAnim	FXFireData=
 		127,127,127,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_TRANS,
 		{0,0},
-		0
+		CFX::FX_TYPE_NONE
 };
 
 CFXBaseAnim::sFXAnim	FXWaterDripData=
@@ -145,7 +146,7 @@ CFXBaseAnim::sFXAnim	FXBubbleWaterData=
 		127,127,255,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
 		{0,-1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_NONE
 };
 
 CFXBaseAnim::sFXAnim	FXBubbleAcidData=
@@ -156,7 +157,7 @@ CFXBaseAnim::sFXAnim	FXBubbleAcidData=
 		0,255,0,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
 		{0,-1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXBubbleLavaData=
 {
@@ -166,7 +167,7 @@ CFXBaseAnim::sFXAnim	FXBubbleLavaData=
 		255,0,0,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
 		{0,-1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXBubbleOilData=
 {
@@ -176,7 +177,7 @@ CFXBaseAnim::sFXAnim	FXBubbleOilData=
 		32,32,32,
 		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
 		{0,-1},
-		CFX::FX_TYPE_SPLASH_WATER
+		CFX::FX_TYPE_NONE
 };
 
 CFXBaseAnim::sFXAnim	FXWaterFountainData=
@@ -187,7 +188,7 @@ CFXBaseAnim::sFXAnim	FXWaterFountainData=
 		127,127,255,
 		CFXBaseAnim::FXANIM_FLAG_LOOP,
 		{0,0},
-		0,
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXAcidFountainData=
 {
@@ -197,7 +198,7 @@ CFXBaseAnim::sFXAnim	FXAcidFountainData=
 		0,255,0,
 		CFXBaseAnim::FXANIM_FLAG_LOOP,
 		{0,0},
-		0,
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXLavaFountainData=
 {
@@ -207,7 +208,7 @@ CFXBaseAnim::sFXAnim	FXLavaFountainData=
 		255,0,0,
 		CFXBaseAnim::FXANIM_FLAG_LOOP,
 		{0,0},
-		0,
+		CFX::FX_TYPE_NONE
 };
 CFXBaseAnim::sFXAnim	FXOilFountainData=
 {
@@ -217,22 +218,20 @@ CFXBaseAnim::sFXAnim	FXOilFountainData=
 		32,32,32,
 		CFXBaseAnim::FXANIM_FLAG_LOOP,
 		{0,0},
-		0,
+		CFX::FX_TYPE_NONE
 };
 
 /*****************************************************************************/
-/*
-CFXSteam	*TestFXPtr=0;
-void	TestFX(DVECTOR Pos)
+
+CFXLaser	*TestFXPtr=0;
+void	TestFX(DVECTOR Pos,CThing *Parent)
 {
 		if (!TestFXPtr)
 		{
-			Pos.vx=256;
-			Pos.vy=128;
-			TestFXPtr=(CFXSteam*)CFX::Create(CFX::FX_TYPE_STEAM,Pos);
-			TestFXPtr->setLife(32);
-			TestFXPtr->setRelativeToMap(false);
-			TestFXPtr=0;
+			TestFXPtr=(CFXLaser*)CFX::Create(CFX::FX_TYPE_LASER,Parent);
+//			TestFXPtr->setLife(32);
+//			TestFXPtr->setRelativeToMap(false);
+//			TestFXPtr=0;
 		}
 		else
 		{
@@ -240,18 +239,27 @@ void	TestFX(DVECTOR Pos)
 			TestFXPtr=0;
 		}
 }
-*/
+
 /*****************************************************************************/
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_THWACK;
+/*
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_LASER;
 #include	"game\game.h"
+
+int	OX=32;
+int	OY=32;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-//CFXAttachAnim	*FX=(CFXAttachAnim*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+CFXLaser	*FX=(CFXLaser*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+
+//		FX->setOrigin(Pos);
+		Pos.vx+=OX;
+		Pos.vy+=OY;
+		FX->setTarget(Pos);
 //		Parent->addChild(FX);
 //		TestFXPtr->setLife(32);
-	CGameScene::dropHealth(Pos,0,0);
+//	CGameScene::dropHealth(Pos,0,0);
 }
-
+*/
 /*****************************************************************************/
 CFX		*CFX::Create(const FX_TYPE Type)
 {
@@ -261,6 +269,9 @@ CFX		*NewFX;
 		if (!NewFX)
 		switch(Type)
 		{
+		case FX_TYPE_NONE:
+			ASSERT(!"FX NONE CANT BE CREATED!");
+			break;
 		case FX_TYPE_FALLINGTILE:
 			NewFX=new ("FXFalling Tile") CFXFallingTile();
 			break;
@@ -355,18 +366,12 @@ CFX		*NewFX;
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			break;
 
+		case FX_TYPE_LASER:
+			NewFX=new ("FX Laser") CFXLaser();
+			break;
+
 		case FX_TYPE_LIGHTNING_BOLT:
-		case FX_TYPE_LIGHTNING_SHEET:
-		case FX_TYPE_LIGHTNING_BLAST:
-		case FX_TYPE_LIGHTNING_RADIAL:
-		case FX_TYPE_LIGHTNING_PROJECTILE:
-		case FX_TYPE_SHOCKWAVE:
 		case FX_TYPE_DAZE:
-
-		case FX_TYPE_CASCADE:		
-		case FX_TYPE_CASCADE_SPLASH:	
-		case FX_TYPE_FIREBALL:
-
 		case FX_TYPE_SMOKE:
 		case FX_TYPE_GAS:
 
