@@ -103,7 +103,7 @@ void CNpcFlyingDutchmanEnemy::think( int _frames )
 		}
 	}
 
-	CNpcEnemy::think( _frames );
+	CNpcBossEnemy::think( _frames );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -760,7 +760,7 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 							}
 						}
 					}
-					else
+					else if ( m_invulnerableTimer <= 0 )
 					{
 						// player is attacking, respond appropriately
 

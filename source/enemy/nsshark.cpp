@@ -63,26 +63,12 @@ void CNpcSubSharkEnemy::postInit()
 		m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	}
 
-	m_invulnerableTimer = 0;
-
 	m_timerTimer = 0;
 	m_salvoCount = 5;
 	m_carryPlayer = false;
 	m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 
 	CNpcBossEnemy::postInit();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcSubSharkEnemy::think( int _frames )
-{
-	if ( m_invulnerableTimer > 0 )
-	{
-		m_invulnerableTimer -= _frames;
-	}
-
-	CNpcEnemy::think( _frames );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

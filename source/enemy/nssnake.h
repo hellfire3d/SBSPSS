@@ -73,6 +73,7 @@ protected:
 	void				moveEntireSnake( DVECTOR const &newPos );
 	void				addHealthMeter();
 	void				updateTail( DVECTOR &oldPos, int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	enum
 	{

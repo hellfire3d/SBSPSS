@@ -66,7 +66,6 @@ protected:
 	s32					m_cycleWidth;
 	s32					m_halfCycleWidth;
 	s16					m_renderScale;
-	s32					m_invulnerableTimer;
 	u8					m_attackCounter;
 	u8					m_patternNum;
 	u8					m_patternPoint;

@@ -88,7 +88,6 @@ void CNpcMotherJellyfishEnemy::postInit()
 	m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 	m_speed = m_data[m_type].speed + ( ( 2 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	m_pauseTimer = m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
-	m_invulnerableTimer = 0;
 
 	m_attackCounter = 0;
 	m_patternNum = 0;
@@ -193,11 +192,6 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
-	if ( m_invulnerableTimer > 0 )
-	{
-		m_invulnerableTimer -= _frames;
-	}
-
 	switch( m_state )
 	{
 		case MOTHER_JELLYFISH_CYCLE:

@@ -535,7 +535,7 @@ void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
 						}
 					}
 				}
-				else if ( m_vulnerableTimer > 0 )
+				else if ( m_vulnerableTimer > 0 && m_invulnerableTimer <= 0 )
 				{
 					// player is attacking, respond appropriately
 

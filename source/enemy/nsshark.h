@@ -26,7 +26,6 @@
 class CNpcSubSharkEnemy : public CNpcBossEnemy
 {
 public:
-	void				think( int _frames );
 	void				postInit();
 	void				render();
 	void				shutdown();
@@ -54,7 +53,6 @@ protected:
 	};
 
 	u8					m_salvoCount;
-	s32					m_invulnerableTimer;
 	DVECTOR				m_targetPos;
 	u8					m_carryPlayer;
 	PLAYER_MODE			m_oldPlayerMode;

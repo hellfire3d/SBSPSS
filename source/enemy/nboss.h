@@ -26,12 +26,14 @@ class CNpcBossEnemy : public CNpcEnemy
 public:
 	virtual void		postInit();
 	virtual void		shutdown();
+	void				think( int _frames );
 protected:
 	void				addHealthMeter();
 	virtual void		processShot( int _frames );
 
 	bool				m_meterOn;
 	CFXNRGBar			*m_energyBar;
+	s32					m_invulnerableTimer;
 };
 
 #endif

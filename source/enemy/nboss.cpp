@@ -15,6 +15,10 @@
 #include "enemy\nboss.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +26,7 @@ void CNpcBossEnemy::postInit()
 {
 	m_meterOn=false;
 	m_energyBar = NULL;
+	m_invulnerableTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +39,18 @@ void CNpcBossEnemy::shutdown()
 	}
 
 	CNpcEnemy::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBossEnemy::think( int _frames )
+{
+	if ( m_invulnerableTimer > 0 )
+	{
+		m_invulnerableTimer -= _frames;
+	}
+
+	CNpcEnemy::think( _frames );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +100,7 @@ void CNpcBossEnemy::processShot( int _frames )
 						m_animPlaying = true;
 						m_animNo = m_data[m_type].recoilAnim;
 						m_frame = 0;
+						m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
 					}
 
 					break;
