@@ -28,6 +28,7 @@ protected:
 	virtual void		processAttackCollision();
 	virtual void		hasBeenSteamed( DVECTOR &steamPos );
 	virtual void		processShot( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	enum NPC_IRON_DOGFISH_STATE
 	{
@@ -39,6 +40,7 @@ protected:
 	};
 
 	s32					m_steamTimer;
+	s32					m_vulnerableTimer;
 };
 
 #endif

@@ -48,6 +48,7 @@ void CNpcIronDogfishEnemy::postInit()
 	m_extendDir = EXTEND_RIGHT;
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 	m_steamTimer = 0;
+	m_vulnerableTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,29 +82,43 @@ bool CNpcIronDogfishEnemy::processSensor()
 
 void CNpcIronDogfishEnemy::processMovement( int _frames )
 {
-	s32 moveX = 0, moveY = 0;
-	s32 moveVel = 0;
-	s32 moveDist = 0;
-
-	if ( m_movementTimer > 0 )
+	if ( m_vulnerableTimer > 0 )
 	{
-		if ( !m_animPlaying )
+		m_vulnerableTimer -= _frames;
+
+		if ( m_animNo != ANIM_IRONDOGFISH_IDLE )
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_IRONDOGFISH_WALK;
+			m_animNo = ANIM_IRONDOGFISH_IDLE;
 			m_frame = 0;
 		}
-
-		processGenericFixedPathWalk( _frames, &moveX, &moveY );
-
-		Pos.vx += moveX;
-		Pos.vy += moveY;
-
-		m_movementTimer -= _frames;
 	}
 	else
 	{
-		processStandardIronDogfishAttack( _frames );
+		s32 moveX = 0, moveY = 0;
+		s32 moveVel = 0;
+		s32 moveDist = 0;
+
+		if ( m_movementTimer > 0 )
+		{
+			if ( m_animNo != ANIM_IRONDOGFISH_WALK || !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = ANIM_IRONDOGFISH_WALK;
+				m_frame = 0;
+			}
+
+			processGenericFixedPathWalk( _frames, &moveX, &moveY );
+
+			Pos.vx += moveX;
+			Pos.vy += moveY;
+
+			m_movementTimer -= _frames;
+		}
+		else
+		{
+			processStandardIronDogfishAttack( _frames );
+		}
 	}
 }
 
@@ -321,7 +336,10 @@ void CNpcIronDogfishEnemy::hasBeenSteamed( DVECTOR &steamPos )
 {
 	if ( m_steamTimer <= 0 )
 	{
-		hasBeenAttacked();
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_vulnerableTimer = 2 * GameState::getOneSecondInFrames();
+
+		//hasBeenAttacked();
 		m_steamTimer = 4 * GameState::getOneSecondInFrames();
 	}
 }
@@ -448,6 +466,92 @@ void CNpcIronDogfishEnemy::processShot( int _frames )
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive && !m_isCaught && !m_isDying )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				ATTACK_STATE playerState = player->getAttackState();
+
+				if(playerState==ATTACK_STATE__NONE)
+				{
+					if ( !player->isRecoveringFromHit() )
+					{
+						switch( m_data[m_type].detectCollision )
+						{
+							case DETECT_NO_COLLISION:
+							{
+								// ignore
+
+								break;
+							}
+
+							case DETECT_ALL_COLLISION:
+							{
+								m_oldControlFunc = m_controlFunc;
+								m_controlFunc = NPC_CONTROL_COLLISION;
+
+								processUserCollision( _thisThing );
+
+								break;
+							}
+
+							case DETECT_ATTACK_COLLISION_GENERIC:
+							{
+								processAttackCollision();
+								processUserCollision( _thisThing );
+
+								break;
+							}
+						}
+					}
+				}
+				else if ( m_vulnerableTimer > 0 )
+				{
+					// player is attacking, respond appropriately
+
+					if ( m_controlFunc != NPC_CONTROL_SHOT )
+					{
+						if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+						{
+							player->justButtBouncedABadGuy();
+						}
+						m_controlFunc = NPC_CONTROL_SHOT;
+						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+
+						drawAttackEffect();
+					}
+				}
+
+				break;
+			}
+
+			case TYPE_ENEMY:
+			{
+				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+				if ( canCollideWithEnemy() && enemy->canCollideWithEnemy() )
+				{
+					processEnemyCollision( _thisThing );
+				}
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
 		}
 	}
 }
