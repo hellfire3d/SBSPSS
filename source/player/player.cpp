@@ -539,6 +539,17 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
+{
+	return( m_layerCollision->getHeightFromGround(_x,_y,_maxHeight) );
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayer::addHealth(int _health)
 {
 	m_health+=_health;

@@ -149,6 +149,7 @@ public:
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
+	int				getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32);
 
 	void			addHealth(int _health);
 	void			addLife();
