@@ -191,7 +191,7 @@ void CNpcPendulumPlatform::render()
 		{
 			if ( y2Boundary >= 0 && y1Boundary <= VidGetScrH() )
 			{
-				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+				DrawLine( x1, y1, x2, y2, 0, 0, 0, 8 );
 			}
 		}
 	}
