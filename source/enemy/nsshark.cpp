@@ -226,7 +226,8 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 			if( abs( distY ) == 0 )
 			{
 				m_state = SUB_SHARK_START_CHARGE;
-				m_timerTimer = GameState::getOneSecondInFrames();
+				m_timerTimer = GameState::getOneSecondInFrames() >> 8;
+				m_movementTimer = GameState::getOneSecondInFrames();
 			}
 			else
 			{
@@ -245,11 +246,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 				m_frame = 0;
 			}
 
-			if ( m_timerTimer > 0 )
-			{
-				m_timerTimer -= _frames;
-			}
-			else
+			if ( m_movementTimer <= 0 )
 			{
 				s32 minX, maxX, minY, maxY;
 
@@ -260,6 +257,20 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 				m_targetPos.vy = maxY;
 
 				m_state = SUB_SHARK_CHARGE;
+			}
+
+			if ( m_timerTimer > 0 )
+			{
+				m_timerTimer -= _frames;
+			}
+			else
+			{
+				DVECTOR bubblePos = Pos;
+				bubblePos.vx -= 20 + ( getRnd() % 30 );
+				bubblePos.vy -= getRnd() % 50;
+				CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
+
+				m_timerTimer = GameState::getOneSecondInFrames() >> 8;
 			}
 
 			break;
