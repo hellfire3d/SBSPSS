@@ -1217,6 +1217,14 @@ SOURCE=..\..\..\source\platform\pplayer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\praft.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\praft.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pretract.cpp
 # End Source File
 # Begin Source File

@@ -107,7 +107,8 @@ platform_src :=		platform \
 					pbounce \
 					pdual \
 					pfgen \
-					pfallnor
+					pfallnor \
+					praft
 
 hazard_src :=		hazard \
 					hfalling \

@@ -111,6 +111,10 @@
 #include "platform\pfgen.h"
 #endif
 
+#ifndef __PLATFORM_PRAFT_H__
+#include "platform\praft.h"
+#endif
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,6 +249,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_RAFT_PLATFORM:
+		{
+			platform = new ("raft platform") CNpcRaftPlatform;
+			break;
+		}
+
 		default:
 		{
 			ASSERT( 0 );
@@ -351,8 +361,6 @@ void CNpcPlatform::init()
 	m_lifetimeType = m_data[m_type].lifetimeType;
 
 	m_isShuttingDown = false;
-
-	m_platformWidth = PLATFORMWIDTH;
 
 	m_npcPath.initPath();
 }
@@ -604,12 +612,16 @@ void CNpcPlatform::calculateBoundingBoxSize()
 	centre=getCollisionCentre();
 	halfLength=m_platformWidth/2;
 
-	x1=-halfLength*mcos(angle&4095)>>12;
+	/*x1=-halfLength*mcos(angle&4095)>>12;
 	y1=-halfLength*msin(angle&4095)>>12;
 	x2=+halfLength*mcos(angle&4095)>>12;
 	y2=+halfLength*msin(angle&4095)>>12;
 
-	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);*/
+
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 }
 
 
