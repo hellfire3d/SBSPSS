@@ -18,10 +18,6 @@
 
 #include "frontend\scrollbg.h"
 
-//#ifndef	__UTILS_HEADER__
-//#include "utils\utils.h"
-//#endif
-
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
@@ -70,6 +66,8 @@ void CScrollyBackground::init()
 	setSpeedScale(DEFAULT_SPEED_SCALE);
 	setOt(DEFAULT_OT);
 	setFrame(FRM__BG1);
+	setTheDrawMode(DRAWMODE_NORMAL);
+	setColour(128,128,128);
 }
 
 
@@ -93,9 +91,22 @@ void CScrollyBackground::shutdown()
   ---------------------------------------------------------------------- */
 void CScrollyBackground::render()
 {
+	int			smode;
 	POLY_FT4	*ft4;
 	sFrameHdr	*fh;
 	int			x,y,w,h;
+
+	switch(m_drawMode)
+	{
+		default:
+		case DRAWMODE_NORMAL:
+			smode=0;
+			break;
+
+		case DRAWMODE_ADDITIVE:
+			smode=1;
+			break;
+	}
 
 	fh=m_sprites->getFrameHeader(m_frame);
 	w=fh->W;
@@ -107,7 +118,10 @@ void CScrollyBackground::render()
 		do
 		{
 			ft4=m_sprites->printFT4(fh,x,y,0,0,m_ot);
+			setShadeTex(ft4,0);
 			setSemiTrans(ft4,true);
+			ft4->tpage|=(smode<<5);
+			setRGB0(ft4,m_r,m_g,m_b);
 			x+=w;
 		}
 		while(x<512);

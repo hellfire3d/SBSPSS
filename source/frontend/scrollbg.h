@@ -37,6 +37,12 @@
 class CScrollyBackground
 {
 public:
+	typedef enum
+	{
+		DRAWMODE_NORMAL,
+		DRAWMODE_ADDITIVE,
+	}DRAWMODE;
+
 	void				init();
 	void				shutdown();
 	void				render();
@@ -46,7 +52,8 @@ public:
 	void				setSpeedScale(int _speedScale)				{m_speedScale=_speedScale;}
 	void				setOt(int _ot)								{m_ot=_ot;}
 	void				setFrame(int _frame)						{m_frame=_frame;}
-
+	void				setTheDrawMode(DRAWMODE _drawMode)			{m_drawMode=_drawMode;}
+	void				setColour(u8 _r,u8 _g,u8 _b)				{m_r=_r;m_g=_g;m_b=_b;}
 
 private:
 	enum
@@ -63,6 +70,8 @@ private:
 	int					m_speedScale;
 	int					m_ot;
 	int					m_frame;
+	DRAWMODE			m_drawMode;
+	u8					m_r,m_g,m_b;
 
 };
 
