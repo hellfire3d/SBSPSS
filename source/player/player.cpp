@@ -242,7 +242,7 @@ void	CPlayer::init()
 		s_playerModes[i]->initialise(this);
 	}
 	m_currentPlayerModeClass=NULL;
-	setMode(PLAYER_MODE_FULLUNARMED);	//PKG
+	setMode(PLAYER_MODE_BASICUNARMED);	//PKG
 
 m_animNo=0;
 m_animFrame=0;
