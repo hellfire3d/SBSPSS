@@ -656,8 +656,6 @@ void CPlayerProjectile::think(int _frames)
 
 					CLevel &level = GameScene.GetLevel();
 
-					level.destroyMapArea( Pos );
-
 					if ( groundHeight < -16 )
 					{
 						m_hitTarget = true;
