@@ -54,6 +54,10 @@ public:
 	void				render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
+
+private:
+	class CLayerCollision	*m_layerCollision;
 
 protected:
 	enum NPC_FRIEND_MOVEMENT_FUNC
@@ -86,7 +90,6 @@ protected:
 
 	static NPC_FRIEND_DATA		m_data[NPC_FRIEND_UNIT_TYPE_MAX];
 
-	static class CLayerCollision	*m_layerCollision;
 	//class SpriteBank	*m_spriteBank;
 
 	enum
@@ -164,6 +167,9 @@ public:
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
 
 
+private:
+	class CLayerCollision	*m_layerCollision;
+
 protected:
 	// NPC data structure definitions //
 
@@ -188,6 +194,7 @@ protected:
 		NPC_INIT_CIRCULAR_PLATFORM,
 		NPC_INIT_PARASITIC_WORM,
 		NPC_INIT_PARASITIC_WORM_SEGMENT,
+		NPC_INIT_HERMIT_CRAB,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -217,6 +224,7 @@ protected:
 		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
 		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
 		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
+		NPC_SENSOR_HERMIT_CRAB_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -243,6 +251,7 @@ protected:
 		NPC_CLOSE_FISH_HOOK_RISE,
 		NPC_CLOSE_FLAMING_SKULL_ATTACK,
 		NPC_CLOSE_SKELETAL_FISH_ATTACK,
+		NPC_CLOSE_HERMIT_CRAB_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -259,6 +268,7 @@ protected:
 		NPC_MOVEMENT_RETURNING_HAZARD,
 		NPC_MOVEMENT_CLAM_RETRACT,
 		NPC_MOVEMENT_PARASITIC_WORM,
+		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -320,6 +330,13 @@ protected:
 		FLAMING_SKULL_RETURN = 1,
 	};
 
+	enum NPC_HERMIT_CRAB_STATE
+	{
+		HERMIT_CRAB_NO_ATTACK = 0,
+		HERMIT_CRAB_PUNCH_ATTACK = 1,
+		HERMIT_CRAB_ROLL_ATTACK = 2,
+	};
+
 	enum
 	{
 		NPC_JELLYFISH_RESISTANCE = 64,
@@ -352,6 +369,7 @@ protected:
 		bool							detectCollision;
 		DAMAGE_TYPE						damageToUserType;
 		u16								initHealth;
+		u16								moveAnim;
 	}
 	NPC_DATA;
 
@@ -394,6 +412,10 @@ protected:
 	// spider crab functions
 
 	void				processCloseSpiderCrabAttack( int _frames );
+
+	// hermit crab functions
+
+	void				processCloseHermitCrabAttack( int _frames );
 
 	// ghost pirate functions
 
@@ -472,8 +494,6 @@ protected:
 	static s32			playerXDistSqr;
 	static s32			playerYDistSqr;
 
-	static class CLayerCollision	*m_layerCollision;
-
 	// internal variables
 	
 	NPC_UNIT_TYPE		m_type;
@@ -515,6 +535,7 @@ protected:
 	};
 
 	CNpcPositionHistory		*m_positionHistory;
+
 };
 
 

@@ -23,11 +23,22 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __ANIM_SPIDERCRAB_HEADER__
+#include <ACTOR_SPIDERCRAB_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 {
 	s32 velocity;
 	DVECTOR newPos = Pos;
+
+	if ( m_animNo != ANIM_SPIDERCRAB_JUMP )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SPIDERCRAB_JUMP;
+		m_frame = 0;
+	}
 
 	velocity = m_velocity * _frames;
 

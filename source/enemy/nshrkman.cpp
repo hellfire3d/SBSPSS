@@ -23,6 +23,10 @@
 #include	"player\player.h"
 #endif
 
+#ifndef __ANIM_SHARKMAN_HEADER__
+#include <ACTOR_SHARKMAN_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseSharkManAttack( int _frames )
 {
@@ -35,6 +39,13 @@ void CNpcEnemy::processCloseSharkManAttack( int _frames )
 	s8 yMovement = fallSpeed * _frames;
 
 	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SHARKMAN_RUN;
+		m_frame = 0;
+	}
 
 	decDir = m_heading - headingToPlayer;
 

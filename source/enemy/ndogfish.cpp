@@ -27,10 +27,21 @@
 #include "projectl\projectl.h"
 #endif
 
+#ifndef __ANIM_IRONDOGFISH_HEADER__
+#include <ACTOR_IRONDOGFISH_ANIM.h>
+#endif
+
 void CNpcEnemy::processIronDogfishMovement( int _frames )
 {
 	if ( m_movementTimer > 0 )
 	{
+		if ( !m_animPlaying )
+		{
+			m_animPlaying = true;
+			m_animNo = ANIM_IRONDOGFISH_WALK;
+			m_frame = 0;
+		}
+
 		m_movementTimer -= _frames;
 
 		if ( m_extendDir == EXTEND_RIGHT )
@@ -86,14 +97,30 @@ void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
 		{
 			if ( playerXDistSqr > 100 )
 			{
+				if ( !m_animPlaying )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_IRONDOGFISH_WALK;
+					m_frame = 0;
+				}
+
 				processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
 			}
 			else
 			{
 				// thump player
 
-				m_state++;
-				m_movementTimer = GameState::getOneSecondInFrames() * 3;
+				if ( m_animNo != ANIM_IRONDOGFISH_PUNCH )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_IRONDOGFISH_PUNCH;
+					m_frame = 0;
+				}
+				else if ( !m_animPlaying )
+				{
+					m_state++;
+					m_movementTimer = GameState::getOneSecondInFrames() * 3;
+				}
 			}
 
 			break;
@@ -128,6 +155,13 @@ void CNpcEnemy::processStandardIronDogfishAttack( int _frames )
 
 			if ( playerXDistSqr > 100 )
 			{
+				if ( !m_animPlaying )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_IRONDOGFISH_WALK;
+					m_frame = 0;
+				}
+
 				processGenericGotoTarget( _frames, playerXDist, 0, 6 );
 			}
 			else

@@ -157,6 +157,10 @@ SOURCE=..\..\..\source\enemy\nhazard.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nhcrab.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File

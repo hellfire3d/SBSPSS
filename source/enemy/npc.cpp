@@ -56,10 +56,6 @@
 // Friend NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class CLayerCollision	*CNpcFriend::m_layerCollision;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcFriend::init()
 {
 	CNpcThing::init();
@@ -70,10 +66,11 @@ void CNpcFriend::init()
 	m_extension = EXTEND_RIGHT;
 
 	// temporary
+	m_actorGfx=CActorPool::GetActor(ACTORS_CLAM_SBK);
+
+	//m_animPlaying = true;
 	m_animNo = 0;
 	m_frame = 0;
-
-	m_type = NPC_FRIEND_GARY;
 
 	DVECTOR ofs = getCollisionSize();
 
@@ -196,7 +193,6 @@ s32 CNpcEnemy::playerXDist;
 s32 CNpcEnemy::playerYDist;
 s32 CNpcEnemy::playerXDistSqr;
 s32 CNpcEnemy::playerYDistSqr;
-class CLayerCollision	*CNpcEnemy::m_layerCollision;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -223,7 +219,9 @@ void CNpcEnemy::init()
 
 	m_extendDir = EXTEND_RIGHT;
 
-	Pos.vx = 400;
+	//Pos.vx = 400;
+	//Pos.vy = 400;
+	Pos.vx = 100;
 	Pos.vy = 100;
 
 	m_base = Pos;
@@ -232,8 +230,6 @@ void CNpcEnemy::init()
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
-
-	m_layerCollision = NULL;
 
 	m_npcPath.initPath();
 
@@ -277,6 +273,29 @@ void CNpcEnemy::init()
 			m_npcPath.addWaypoint( newPos );
 
 			m_npcPath.setPathType( PONG_PATH );
+
+			break;
+		}
+
+		case NPC_INIT_HERMIT_CRAB:
+		{
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			//newPos.vy = 10;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 500;
+			//newPos.vy = 10;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( PONG_PATH );
+
+			m_state = HERMIT_CRAB_NO_ATTACK;
 
 			break;
 		}
@@ -551,7 +570,7 @@ void CNpcEnemy::think(int _frames)
 		}
 		else
 		{
-			m_frame = frameCount;
+			m_frame = frameCount - 1;
 			m_animPlaying = false;
 		}
 	}
@@ -876,6 +895,20 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_HERMIT_CRAB_USER_CLOSE:
+					{
+						if ( playerXDistSqr + playerYDistSqr < 400 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					case NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 400 )
@@ -963,9 +996,28 @@ void CNpcEnemy::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_STATIC_CYCLE_ANIM:
+		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = m_data[m_type].initAnim;
+				m_frame = 0;
+			}
+
+			break;
+		}
+
 		case NPC_MOVEMENT_FIXED_PATH:
 		{
 			processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
+
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = m_data[m_type].moveAnim;
+				m_frame = 0;
+			}
 
 			break;
 		}
@@ -973,6 +1025,13 @@ void CNpcEnemy::processMovement(int _frames)
 		case NPC_MOVEMENT_FIXED_PATH_WALK:
 		{
 			processGenericFixedPathWalk( _frames, &moveX, &moveY );
+
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = m_data[m_type].moveAnim;
+				m_frame = 0;
+			}
 
 			break;
 		}
@@ -1202,6 +1261,11 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 
+		case NPC_CLOSE_HERMIT_CRAB_ATTACK:
+			processCloseHermitCrabAttack( _frames );
+
+			break;
+
 		default:
 			break;
 	}
@@ -1261,8 +1325,13 @@ void CNpcEnemy::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
-	renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
+	//renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) );// * 20;
+	//renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) );// * 20;
+
+	int	W=m_actorGfx->getFrameWidth(m_animNo,m_frame);
+	int	H=m_actorGfx->getFrameHeight(m_animNo,m_frame);
+	renderPos.vx = Pos.vx - offset.vx /*+ ( scrnWidth >> 1 )*/ - ( W >> 1 );
+	renderPos.vy = Pos.vy - offset.vy /*+ ( scrnHeight >> 1 )*/ - ( H >> 1 );
 
 	if ( m_reversed )
 	{
@@ -1272,8 +1341,9 @@ void CNpcEnemy::render()
 	{
 //!!		m_actorGfx.setZAng( m_heading );
 	}
+	
 
-	m_actorGfx->Render(renderPos,m_frame,m_animNo,m_reversed);
+	m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

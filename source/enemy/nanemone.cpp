@@ -27,6 +27,14 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__ANIM_ANENOMELVL1_HEADER__
+#include <ACTOR_ANENOMELVL1_ANIM.h>
+#endif
+
+#ifndef __ANIM_SPIKEYANENOME_HEADER__
+#include <ACTOR_SPIKEYANENOME_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 {
@@ -108,14 +116,27 @@ void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 		{
 			// can fire
 
-			if ( m_timerTimer <= 0 )
+			if ( m_timerTimer <= 0 && !m_animPlaying )
 			{
-				CProjectile *projectile;
-				projectile = new( "test projectile" ) CProjectile;
-				projectile->init( Pos, m_heading );
+				if ( m_animNo != ANIM_ANENOMELVL1_FIRE )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_ANENOMELVL1_FIRE;
+					m_frame = 0;
+				}
+				else
+				{
+					CProjectile *projectile;
+					projectile = new( "test projectile" ) CProjectile;
+					projectile->init( Pos, m_heading );
 
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
-				m_timerTimer = GameState::getOneSecondInFrames();
+					m_controlFunc = NPC_CONTROL_MOVEMENT;
+					m_timerTimer = GameState::getOneSecondInFrames();
+
+					m_animPlaying = true;
+					m_animNo = ANIM_ANENOMELVL1_BEND;
+					m_frame = 0;
+				}
 			}
 		}
 	}
@@ -127,19 +148,28 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 	CProjectile *projectile;
 	s16 heading;
 
-	for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+	if ( m_animNo != ANIM_SPIKEYANENOME_BODY )
 	{
-		heading = m_heading - 1024 + ( fireLoop * 512 );
-		heading %= 4096;
-
-		projectile = new( "test projectile" ) CProjectile;
-		projectile->init( Pos, heading );
+		m_animPlaying = true;
+		m_animNo = ANIM_SPIKEYANENOME_BODY;
+		m_frame = 0;
 	}
+	else
+	{
+		for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
+		{
+			heading = m_heading - 1024 + ( fireLoop * 512 );
+			heading %= 4096;
 
-	m_controlFunc = NPC_CONTROL_MOVEMENT;
-	m_timerFunc = NPC_TIMER_ATTACK_DONE;
-	m_timerTimer = GameState::getOneSecondInFrames();
-	m_sensorFunc = NPC_SENSOR_NONE;
+			projectile = new( "test projectile" ) CProjectile;
+			projectile->init( Pos, heading );
+		}
+
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+		m_timerFunc = NPC_TIMER_ATTACK_DONE;
+		m_timerTimer = GameState::getOneSecondInFrames();
+		m_sensorFunc = NPC_SENSOR_NONE;
+	}
 }
 
 void CNpcEnemy::processCloseAnemone3Attack( int _frames )

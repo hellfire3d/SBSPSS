@@ -23,6 +23,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __ANIM_SKELETALFISH_HEADER__
+#include <ACTOR_SKELETALFISH_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseSkeletalFishAttack( int _frames )
 {
@@ -30,6 +34,13 @@ void CNpcEnemy::processCloseSkeletalFishAttack( int _frames )
 	s16 decDir, incDir, moveDist;
 
 	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
+
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SKELETALFISH_SWIM;
+		m_frame = 0;
+	}
 
 	decDir = m_heading - headingToPlayer;
 

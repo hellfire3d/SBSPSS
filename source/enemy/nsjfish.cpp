@@ -125,6 +125,13 @@ void CNpcEnemy::processCloseSmallJellyfishEvade( int _frames )
 		}
 		else
 		{
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = m_data[m_type].moveAnim;
+				m_frame = 0;
+			}
+
 			s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
 			if ( m_evadeClockwise )

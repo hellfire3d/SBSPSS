@@ -23,11 +23,22 @@
 #include "player\player.h"
 #endif
 
+#ifndef __ANIM_STOMPER_HEADER__
+#include <ACTOR_STOMPER_ANIM.h>
+#endif
+
 
 void CNpcEnemy::processCloseSkullStomperAttack( int _frames )
 {
 	s8 groundHeight;
 	s8 yMovement;
+
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_STOMPER_CRUSH;
+		m_frame = 0;
+	}
 
 	if ( m_timerTimer > 0 )
 	{
