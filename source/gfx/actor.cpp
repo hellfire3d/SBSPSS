@@ -222,13 +222,11 @@ int		CActorPool::FindFreeIdx()
 /*****************************************************************************/
 /*** Load ********************************************************************/
 /*****************************************************************************/
-int	ActorNo=0;
 CActorGfx	*CActorPool::GetActor(FileEquate Filename)
 {
 CActorGfx	*NewActor;
 int			Idx;
 		
-		Filename=(FileEquate)(ACTORS_SPONGEBOB_SBK+ActorNo);
 // Already Loaded?
 		Idx=FindIdx(Filename);
 		if (Idx!=-1) return(ActorList[Idx]);
