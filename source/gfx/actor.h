@@ -15,7 +15,7 @@
 /*****************************************************************************/
 struct	sPoolNode
 {
-		sSpriteFrame	*Frame;
+		sSpriteFrameGfx	*Frame;
 		RECT			DstRect;
 		u16				TPage;
 		u8				U,V;
@@ -151,11 +151,11 @@ virtual	~CActorGfx();
 		void			SetOtPos(int Ot)			{OtPos=Ot;}
 
 protected:
-		void			SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
-		sSpriteFrame	*GetFrame(int Anim,int Frame);
+		void			SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
 
 		sActorPool		*PoolEntry;
 		sSpriteFrame	*CurrentFrame;
+		sSpriteFrameGfx	*CurrentFrameGfx;
 
 		sBBox			BBox;
 		bool			ShadowFlag;

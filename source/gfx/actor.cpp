@@ -429,22 +429,22 @@ int		TotalFrames=0;
 
 sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
 
-		Spr->AnimList=(sSpriteAnim*)	MakePtr(Spr,(int)Spr->AnimList);
-		Spr->FrameList=(sSpriteFrame*)	MakePtr(Spr,(int)Spr->FrameList);
-		Spr->Palette=(u8*)				MakePtr(Spr,(int)Spr->Palette);
+		Spr->AnimList=(sSpriteAnim*)		MakePtr(Spr,(int)Spr->AnimList);
+		Spr->FrameList=(sSpriteFrameGfx*)	MakePtr(Spr,(int)Spr->FrameList);
+		Spr->Palette=(u8*)					MakePtr(Spr,(int)Spr->Palette);
 
 // FixUp AnimList
 		for (i=0; i<Spr->AnimCount; i++)
 		{
 			sSpriteAnim	*ThisAnim=&Spr->AnimList[i];
-			ThisAnim->Anim=(u16*)	MakePtr(Spr,(int)ThisAnim->Anim);
+			ThisAnim->Anim=(sSpriteFrame*)	MakePtr(Spr,(int)ThisAnim->Anim);
 			TotalFrames+=ThisAnim->FrameCount;
 		}
 
 // FixUp FrameList
 		for (i=0; i<Spr->FrameCount; i++)
 		{
-			sSpriteFrame	*ThisFrame=&Spr->FrameList[i];
+			sSpriteFrameGfx	*ThisFrame=&Spr->FrameList[i];
 			ThisFrame->PAKSpr=(u8*)				MakePtr(Spr,(int)ThisFrame->PAKSpr);
 		}
 
@@ -531,6 +531,7 @@ CActorGfx::CActorGfx(sActorPool *ThisActor)
 		ShadowYOfs=DEF_SHADOW_OFS;
 		ShadowFlag=false;
 		OtPos=OTPOS__ACTOR_POS;
+		
 }
 
 /*****************************************************************************/
@@ -539,29 +540,25 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
-sSpriteFrame	*CActorGfx::GetFrame(int Anim,int Frame)
-{
-
-sSpriteAnim		*ThisAnim=PoolEntry->ActorGfx->AnimList+Anim;
-u16				ThisFrame=ThisAnim->Anim[Frame];
-	
-				return(PoolEntry->ActorGfx->FrameList+ThisFrame);
-}
-
-/*****************************************************************************/
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
 POLY_FT4		*Ft4;
 
-			CurrentFrame=GetFrame(Anim,Frame);
-			ThisNode=0;
+// Calc Frame Ptrs
+sSpriteAnimBank	*SpriteBank=PoolEntry->ActorGfx;
+sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 
+			CurrentFrame=&ThisAnim->Anim[Frame];
+			CurrentFrameGfx=&SpriteBank->FrameList[CurrentFrame->FrameIdx];
+
+// Try to find Pre-cached sprite
+			ThisNode=0;
 // Check Local Cache
 			FindNode=PoolEntry->LocalCache.Head;
 			while (FindNode)
 			{ // Try local Cache (From Head forward)
-				if (FindNode->Frame==CurrentFrame) 
+				if (FindNode->Frame==CurrentFrameGfx) 
 				{
 					ThisNode=FindNode;
 					break;
@@ -575,7 +572,7 @@ POLY_FT4		*Ft4;
 				FindNode=PoolEntry->LastCache.Head;
 				while (FindNode)
 				{
-					if (FindNode->Frame==CurrentFrame) 
+					if (FindNode->Frame==CurrentFrameGfx) 
 					{
 						ThisNode=FindNode;
 						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
@@ -588,13 +585,13 @@ POLY_FT4		*Ft4;
 
 			}
 			
-// Check Global Cache
+// Check Global Cache (From Tail back)
 			if (!ThisNode)
 			{
 				FindNode=PoolEntry->GlobalCache->Tail;
 				while (FindNode)
 				{
-					if (FindNode->Frame==CurrentFrame) 
+					if (FindNode->Frame==CurrentFrameGfx) 
 					{
 						ThisNode=FindNode;
 						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
@@ -612,15 +609,16 @@ POLY_FT4		*Ft4;
 				ASSERT(ThisNode);
 				CActorCache::AddNode(ThisNode,&PoolEntry->LocalCache);
 
-				ThisNode->Frame=CurrentFrame;
+				ThisNode->Frame=CurrentFrameGfx;
 				
-				ThisNode->DstRect.w=CurrentFrame->W>>2;	// div 4 cos 16 color
-				ThisNode->DstRect.h=CurrentFrame->H;
-				CPakTex::Add(CurrentFrame->PAKSpr,&ThisNode->DstRect);
+				ThisNode->DstRect.w=CurrentFrameGfx->W>>2;	// div 4 cos 16 color
+				ThisNode->DstRect.h=CurrentFrameGfx->H;
+
+				CPakTex::Add(CurrentFrameGfx->PAKSpr,&ThisNode->DstRect);
 			}
 
 			Ft4=GetPrimFT4();
-			SetUpFT4(Ft4,CurrentFrame,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
+			SetUpFT4(Ft4,ThisNode,Pos.vx,Pos.vy,XFlip,YFlip);
 			setRGB0(Ft4,128,128,128);
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
@@ -639,11 +637,11 @@ POLY_FT4		*Ft4;
 				addPrim(OtPtr+OtPos,sFt4);
 			}
 // Set BBox
-int			HalfW=CurrentFrame->W>>1;
+int			HalfW=CurrentFrameGfx->W>>1;
 
 			BBox.XMin=-HalfW+BBOX_ADJ;
 			BBox.XMax=+HalfW-BBOX_ADJ;
-			BBox.YMin=-CurrentFrame->H+BBOX_ADJ;
+			BBox.YMin=-CurrentFrameGfx->H+BBOX_ADJ;
 			BBox.YMax=0-BBOX_ADJ;
 
 			return(Ft4);
@@ -660,8 +658,8 @@ sBBox	SBox,CBox;
 
 		Angle&=4095;	
 	
-		dX=(CurrentFrame->W*XScale)>>(12+1);	// +1 for half
-		dY=(CurrentFrame->H*YScale)>>(12);	
+		dX=(CurrentFrameGfx->W*XScale)>>(12+1);	// +1 for half
+		dY=(CurrentFrameGfx->H*YScale)>>(12);	
 
 		CosAngle=mcos(Angle);
 		SinAngle=msin(Angle);
@@ -713,25 +711,20 @@ int		YMin,YMax;
 		Ft4->x2=Pos.vx+x2; Ft4->y2=Pos.vy+y2;
 		Ft4->x3=Pos.vx+x3; Ft4->y3=Pos.vy+y3;
 
-//		Ft4->x0=Pos.vx+CBox.XMin-SBox.YMin; Ft4->y0=Pos.vy+SBox.XMin+CBox.YMin;
-//		Ft4->x1=Pos.vx+CBox.XMax-SBox.YMin; Ft4->y1=Pos.vy+SBox.XMax+CBox.YMin;
-//		Ft4->x2=Pos.vx+CBox.XMin+SBox.YMax; Ft4->y2=Pos.vy+SBox.XMin-CBox.YMax;
-//		Ft4->x3=Pos.vx+CBox.XMax+SBox.YMax; Ft4->y3=Pos.vy+SBox.XMax-CBox.YMax;
-
 		return(Ft4);
 }
 
 /*****************************************************************************/
-void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip)
+void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip)
 {
-u8		W=Frame->W;
-u8		H=Frame->H;
+u8		W=CurrentFrameGfx->W;
+u8		H=CurrentFrameGfx->H;
 u8		U=Node->U;
 u8		V=Node->V;
 
 		if (XFlip)
 			{
-			X-=Frame->XOfs;
+			X-=CurrentFrame->XOfs;
 			X-=W;
 			Ft4->u0=U+W-1;
 			Ft4->u1=U;//-1;
@@ -741,7 +734,7 @@ u8		V=Node->V;
 			}
 		else
 		{
-			X+=Frame->XOfs;
+			X+=CurrentFrame->XOfs;
 			Ft4->u0=U;
 			Ft4->u1=U+W-1;
 			Ft4->u2=U;
@@ -751,7 +744,7 @@ u8		V=Node->V;
 
 		if (YFlip)
 			{
-			Y-=Frame->YOfs;
+			Y-=CurrentFrame->YOfs;
 			Y-=H;
 			Ft4->v0=V+H-1;
 			Ft4->v1=V+H-1;
@@ -760,7 +753,7 @@ u8		V=Node->V;
 			}
 		else
 		{
-			Y+=Frame->YOfs;
+			Y+=CurrentFrame->YOfs;
 			Ft4->v0=V;
 			Ft4->v1=V;
 			Ft4->v2=V+H-1;
@@ -796,8 +789,8 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-int	PXOfs=-16;
-int	PYOfs=-8;
+const int	PXOfs=-16;
+const int	PYOfs=-8;
 
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale)
 {

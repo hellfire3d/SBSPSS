@@ -10,6 +10,7 @@ struct	sFrame
 {
 		GString				Filename;
 		int					FrameIdx;
+		int					XOfs,YOfs;
 };
 
 //***************************************************************************
@@ -17,7 +18,6 @@ struct	sAnim
 {
 		GString				Name;
 		vector<sFrame>		Frames;
-		bool				VRamFlag;
 };
 
 //***************************************************************************
@@ -31,7 +31,6 @@ struct	sBmp
 		u8			*Pak;
 		int			PsxSize;
 		int			PakSize;
-		bool		VRamFlag;
 		int			CrossHairX,CrossHairY;
 };
 
@@ -55,8 +54,7 @@ private:
 		int					FindDup(sBmp &Frm);
 
 		void				LoadFrameList();
-		void				LoadFrame(sFrame &ThisFrame,bool VRamFlag);
-		int					LoadBmp(GString	&Name,bool VRamFlag);
+		void				LoadBmp(sFrame &ThisFrame);
 		void				CheckAndShrinkFrame(sBmp &Bmp);
 		bool				IsImageSame(sBmp &Bmp0,sBmp &Bmp1);
 		void				MakePsxGfx(sBmp &Bmp);

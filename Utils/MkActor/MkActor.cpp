@@ -227,16 +227,9 @@ char	AnimName[256];
 		{
 			sAnim	&ThisAnim=AnimList[i];
 			sprintf(AnimName,"%s",InAnimList[i]);
-			if (AnimName[0]=='~')
-			{ // VRam Sprite
-				ThisAnim.Name=&AnimName[1];
-				ThisAnim.VRamFlag=true;
-			}
-			else
-			{ // PAK Sprite
-				ThisAnim.Name=&AnimName[0];
-				ThisAnim.VRamFlag=false;
-			}
+
+			ThisAnim.Name=&AnimName[0];
+
 			FindFrames(ThisAnim);
 		}
 }
@@ -285,18 +278,13 @@ int		i,ListSize=AnimList.size();
 			int		FrameCount=ThisAnim.Frames.size();
 			for (int f=0; f<FrameCount; f++)
 			{
-				printf("%s - Load Anim %2d/%2d\tFrame %2d/%2d\r",Name,i+1,ListSize,f,FrameCount);
-				LoadFrame(ThisAnim.Frames[f],ThisAnim.VRamFlag);
+				printf("%s - Load Anim %2d/%2d\tFrame %2d/%2d   \r",Name,i+1,ListSize,f,FrameCount);
+				LoadBmp(ThisAnim.Frames[f]);
 			}
 		}
 		printf("\t\t\t\t\t\t\r");
 }
 
-//***************************************************************************
-void	CMkActor::LoadFrame(sFrame &ThisFrame,bool VRamFlag)
-{
-		ThisFrame.FrameIdx=LoadBmp(ThisFrame.Filename,VRamFlag);
-}
 
 //***************************************************************************
 void	CMkActor::MakePsxGfx(sBmp &Bmp)
@@ -427,9 +415,9 @@ Rect	BBox;
 }
 
 //***************************************************************************
-int		CMkActor::LoadBmp(GString &Name,bool VRamFlag)
+void	CMkActor::LoadBmp(sFrame &ThisFrame)
 {
-GString	Filename=SpriteDir+Name;
+GString	Filename=SpriteDir+ThisFrame.Filename;
 int		BmpListSize=BmpList.size();
 sBmp	NewBmp;
 
@@ -438,14 +426,10 @@ sBmp	NewBmp;
 		NewBmp.RGB=0;
 		NewBmp.Pak=0;
 		NewBmp.Psx=0;
-		NewBmp.VRamFlag=VRamFlag;
 
 		CheckAndShrinkFrame(NewBmp);
-		if (BmpListSize==0)
-		{ // Calc HotSpot based on first frame
-			printf("!");
-			 
-		}
+		ThisFrame.XOfs=NewBmp.CrossHairX;
+		ThisFrame.YOfs=NewBmp.CrossHairY;
 
 // Check Dups
 int		Idx=FindDup(NewBmp);
@@ -453,7 +437,8 @@ int		Idx=FindDup(NewBmp);
 		if (Idx!=-1)
 		{
 			DupCount++;
-			return(Idx);
+			ThisFrame.FrameIdx=Idx;
+			return;
 		}
 // Its unique, add to list
 		BmpList.push_back(NewBmp);
@@ -465,7 +450,7 @@ void	WriteTGA(GString Name,Frame Frm);
 		WriteTGA(Name,NewBmp.Frm);
 #endif
 
-		return(BmpListSize);
+		ThisFrame.FrameIdx=BmpListSize;
 }
 
 //***************************************************************************
@@ -535,7 +520,7 @@ GString			OutName=OutFile+".SBK";
 		FileHdr.AnimList=(sSpriteAnim*)WriteAnimList();
 		PadFile(File);
 // Write FrameList
-		FileHdr.FrameList=(sSpriteFrame*)WriteFrameList();
+		FileHdr.FrameList=(sSpriteFrameGfx*)WriteFrameList();
 //		PadFile(File);
 
 // Rewrite Header
@@ -594,13 +579,17 @@ vector<sSpriteAnim>	Hdrs;
 			int		f,FrameCount=ThisAnim.Frames.size();
 
 			Hdrs[i].FrameCount=FrameCount;
-			Hdrs[i].Anim=(u16*)ftell(File);
+			Hdrs[i].Anim=(sSpriteFrame*)ftell(File);
 
 			for (f=0; f<FrameCount; f++)
 			{
-				sFrame	&ThisFrame=ThisAnim.Frames[f];
-				u16	FrameNo=ThisFrame.FrameIdx;
-				fwrite(&FrameNo,1,sizeof(u16),File);
+				sFrame			&ThisFrame=ThisAnim.Frames[f];
+				sSpriteFrame	OutFrame;
+				
+				OutFrame.FrameIdx=ThisFrame.FrameIdx;
+				OutFrame.XOfs=ThisFrame.XOfs;
+				OutFrame.YOfs=ThisFrame.YOfs;
+				fwrite(&OutFrame,1,sizeof(sSpriteFrame),File);
 			}
 			PadFile(File);
 			
@@ -623,7 +612,7 @@ int		CMkActor::WriteFrameList()
 {
 int		Pos=ftell(File);
 int		i,FrameCount=BmpList.size();
-vector<sSpriteFrame>	Hdrs;
+vector<sSpriteFrameGfx>	Hdrs;
 
 		FileHdr.MaxW=MaxW;
 		FileHdr.MaxH=MaxH;
@@ -631,9 +620,10 @@ vector<sSpriteFrame>	Hdrs;
 
 // Write Dummy Hdrs
 		Hdrs.resize(FrameCount);
+
 		for (i=0; i<FrameCount; i++)
 		{
-			fwrite(&Hdrs[i],1,sizeof(sSpriteFrame),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteFrameGfx),File);
 		}
 		PadFile(File);
 		
@@ -641,31 +631,20 @@ vector<sSpriteFrame>	Hdrs;
 		for (i=0; i<FrameCount; i++)
 		{
 			sBmp	&ThisBmp=BmpList[i];
-			if (ThisBmp.VRamFlag)
-			{ // VRam
-				GObject::Error(ERR_FATAL,"VRam sprites not supported yet (%s)\n",ThisBmp.Frm.GetName);
-			}
-			else
-			{ // Pak
-				int	XOfs=ThisBmp.CrossHairX;
-				int	YOfs=ThisBmp.CrossHairY;
 
-				Hdrs[i].PAKSpr=(u8*)ftell(File);
-				Hdrs[i].XOfs=XOfs;
-				Hdrs[i].YOfs=YOfs;
-				Hdrs[i].W=ThisBmp.Frm.GetWidth();
-				Hdrs[i].H=ThisBmp.Frm.GetHeight();
-				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
-			}
-
-
+			Hdrs[i].PAKSpr=(u8*)ftell(File);
+//			Hdrs[i].XOfs=ThisBmp.CrossHairX;
+//			Hdrs[i].YOfs=ThisBmp.CrossHairY;
+			Hdrs[i].W=ThisBmp.Frm.GetWidth();
+			Hdrs[i].H=ThisBmp.Frm.GetHeight();
+			fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
 		}
 // ReWrite Headers
 int		SavePos=ftell(File);
 		fseek(File,Pos,SEEK_SET);
 		for (i=0; i<FrameCount; i++)
 		{
-			fwrite(&Hdrs[i],1,sizeof(sSpriteFrame),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteFrameGfx),File);
 		}
 		fseek(File,SavePos,SEEK_SET);
 
