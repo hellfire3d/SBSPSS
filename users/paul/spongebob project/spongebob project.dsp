@@ -1581,6 +1581,14 @@ SOURCE=..\..\..\source\platform\plinear.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\plurve.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plurve.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\ppendulm.cpp
 # End Source File
 # Begin Source File

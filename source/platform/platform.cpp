@@ -183,6 +183,10 @@
 #include "platform\plift.h"
 #endif
 
+#ifndef __PLATFORM_PLURVE_H__
+#include "platform\plurve.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -418,6 +422,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_LIFT_PLATFORM:
 		{
 			platform = new ("lift platform") CNpcLiftPlatform;
+			break;
+		}
+
+		case NPC_LOVE_BOAT_PLATFORM:
+		{
+			platform = new ("love boat platform") CNpcLoveBoatPlatform;
 			break;
 		}
 

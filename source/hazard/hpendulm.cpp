@@ -19,6 +19,15 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPendulumHazard::init()
@@ -107,4 +116,55 @@ void CNpcPendulumHazard::processMovement( int _frames )
 
 	Pos.vx = m_base.vx + ( ( m_length * rcos( m_heading + m_extension ) ) >> 12 );
 	Pos.vy = m_base.vy + ( ( m_length * rsin( m_heading + m_extension ) ) >> 12 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPendulumHazard::render()
+{
+	int		x1,y1,x2,y2;
+	int		minX, maxX, minY, maxY;
+
+	DVECTOR	offset = CLevel::getCameraPos();
+
+	CHazardThing::render();
+
+	if (canRender())
+	{
+		DVECTOR &renderPos=getRenderPos();
+
+		m_modelGfx->Render(renderPos);
+	}
+
+	x1 = Pos.vx - offset.vx;
+	x2 = m_base.vx - offset.vx;
+
+	y1 = Pos.vy - offset.vy;
+	y2 = m_base.vy - offset.vy;
+
+	minX = x1;
+	maxX = x2;
+
+	if ( minX > maxX )
+	{
+		minX = x2;
+		maxX = x1;
+	}
+
+	minY = y1;
+	maxY = y2;
+
+	if ( minY > maxY )
+	{
+		minY = y2;
+		maxY = y1;
+	}
+
+	if ( maxX >= 0 && minX <= VidGetScrW() )
+	{
+		if ( maxY >= 0 && minY <= VidGetScrH() )
+		{
+			DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
+		}
+	}
 }
