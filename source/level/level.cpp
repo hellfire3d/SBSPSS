@@ -133,7 +133,7 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		LevelHdr->TriList=(sTri*)		MakePtr(LevelHdr,(int)LevelHdr->TriList);
 		LevelHdr->QuadList=(sQuad*)		MakePtr(LevelHdr,(int)LevelHdr->QuadList);
 		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
-		LevelHdr->PlatformGfx=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->PlatformGfx);
+		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
 
 		printf("ActorList %i\n",(int)LevelHdr->ActorList);
 		printf("ItemList %i\n",(int)LevelHdr->ItemList);
@@ -141,7 +141,7 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		printf("TriggerList %i\n",(int)LevelHdr->TriggerList);
 		printf("FXList %i\n",(int)LevelHdr->FXList);
 
-		CModelGfx::SetData(LevelHdr->PlatformGfx,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
+		CModelGfx::SetData(LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
 		s_playerSpawnPos.vx=LevelHdr->PlayerStartX*16;

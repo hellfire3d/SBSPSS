@@ -38,7 +38,8 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #----------------------------------------------------------------------------
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
-LEVELS_OPTS :=				-t:8,4,1 -s:16
+LEVELS_MODEL_TO_ADD :=		-m:$(GRAF_DIR)/Platforms/Bubble/Bubble.gin
+LEVELS_OPTS :=				-t:8,4,1 -s:16 $(LEVELS_MODEL_TO_ADD)
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 LEVELS_MAKEFILE_DIR :=		$(TEMP_BUILD_DIR)/levels
@@ -106,7 +107,7 @@ ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
-ACTOR_SPONGEBOB :=		SPONGEBOB
+ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net
 ACTOR_NPC :=			Squidward
 #						BarnacleBoy Gary Krusty MermaidMan Patrick Plankton Sandy Squidward
 

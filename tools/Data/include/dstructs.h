@@ -209,7 +209,7 @@ struct	sLevelHdr
 	sTri	*TriList;
 	sQuad	*QuadList;
 	sVtx	*VtxList;
-	sModel	*PlatformGfx;
+	sModel	*ModelList;
 };
 
 //***************************************************************************

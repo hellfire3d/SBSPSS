@@ -644,8 +644,10 @@ int	DX=1;
 int	DY=1;
 int	PXOfs=-16;
 int	PYOfs=-6;
+int	blah=0;
 void		CModelGfx::Render(DVECTOR &Pos)
 {
+		Model=&CModelGfx::ModelTable[blah];
 #define	BLOCK_MULT	16
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
