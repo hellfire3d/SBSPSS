@@ -132,8 +132,10 @@ CFX		*NewFX;
 
 
 		case FX_TYPE_JELLYFISH_LEGS:
-//			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
-			ASSERT(!"FISH LEGS OUT OF STOCK\n");
+			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
+			break;
+
+
 		case FX_TYPE_BUBBLE:
 			case FX_TYPE_BUBBLE_WATER:
 			case FX_TYPE_BUBBLE_ACID:
@@ -172,9 +174,8 @@ CFX		*CFX::Create(const FX_TYPE Type,CThing *Parent)
 {
 CFX		*NewFX=CFX::Create(Type);
 
-		ASSERT(Parent);
-
 		NewFX->init(Parent->getPos());
+		ASSERT(Parent);
 		Parent->addChild(NewFX);
 
 		return NewFX;

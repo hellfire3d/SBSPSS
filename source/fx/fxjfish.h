@@ -11,29 +11,20 @@
 class CFXJellyFishLegs : public CFX
 {
 public:
-		struct	sList
-		{
-			DVECTOR	Ofs;
-		};
 
-virtual void		init();
+virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 
-		void		SetUp(int _Width,int _Gap,int _Length,int _Count);
-//virtual	CRECT const	&getCollisionArea()						{return (Parent->getCollisionArea());}
+		void		Setup(int XOfs,int YOfs,bool XFlip);
 
 protected:
+		DVECTOR		Ofs;
 
-		int			XOfs;
-		int			Width,Gap;
-		int			Length,Count;
+		int			Angle,AngleInc;
+		bool		XFlip;
 
-		sList		**FXList;
-		int			ListIdx;
-		s16			*WidthTable;
-		s16			*HeightTable;
 };
 
 #endif
