@@ -2189,7 +2189,16 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 		drawPos.vy+=PANT_FLASH_Y_OFFSET;
 		size=m_pantFlashTimer&8?4096:8192;
 		ft4=sb->printRotatedScaledSprite(fh,drawPos.vx,drawPos.vy,size,size,0,0);
+		if (FrameFlipFlag&1)
+		{
+			m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
+			m_scalableFontBank->setScale(511);
+			m_scalableFontBank->setColour(255,255,255);
+			m_scalableFontBank->print( 256, 50, "Extra Life!");
+		}
 	}
+	
+
 }
 
 
