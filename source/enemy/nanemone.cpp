@@ -141,7 +141,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 		if ( decDir < incDir )
 		{
-			moveDist = decDir;
+			moveDist = -decDir;
 		}
 		else
 		{
@@ -164,6 +164,8 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 		m_heading += moveDist;
 
 		m_heading &= 4095;
+
+		m_drawRotation = m_heading + 1024;
 
 		if ( withinRange )
 		{
@@ -495,6 +497,8 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 	{
 		CProjectile *projectile;
 		u8 lifetime = 8;
+
+		m_fireHeading = m_heading & 4095;
 
 		projectile = new( "test projectile" ) CProjectile;
 		projectile->init(	Pos,
