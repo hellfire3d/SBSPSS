@@ -91,7 +91,7 @@ void CGUISprite::render()
 	{
 		SpriteBank	*sb;
 		sb=getSpriteBank();
-		sb->printFT4(sb->getFrameHeader(m_frame),m_x,m_y,0,0,getOt());
+		sb->printFT4(sb->getFrameHeader(m_frame),getParentX()+m_x,getParentY()+m_y,0,0,getOt());
 	}
 	CGUIObjectWithSpriteBank::render();
 }
