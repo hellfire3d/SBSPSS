@@ -79,6 +79,13 @@ void CNpcFriend::init()
 
 	m_type = NPC_FRIEND_GARY;
 
+	DVECTOR ofs = getCollisionSize();
+
+	m_drawOffset.vx = 0;
+	m_drawOffset.vy = -( ofs.vy >> 1 );
+
+	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
+
 	//m_spriteBank=new ("enemy sprites") SpriteBank();
 	//m_spriteBank->load(UI_UIGFX_SPR);
 }
@@ -125,8 +132,8 @@ void CNpcFriend::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	renderPos.vx = ( Pos.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
-	renderPos.vy = ( Pos.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
+	renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
+	renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
 
 	m_skel.setPos( renderPos );
 	m_skel.setFrame(m_frame);
@@ -248,6 +255,13 @@ void CNpcEnemy::init()
 	m_layerCollision = NULL;
 
 	m_npcPath.initPath();
+
+	DVECTOR ofs = getCollisionSize();
+
+	m_drawOffset.vx = 0;
+	m_drawOffset.vy = -( ofs.vy >> 1 );
+
+	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 
 	switch ( m_data[this->m_type].initFunc )
 	{
@@ -1170,8 +1184,8 @@ void CNpcEnemy::render()
 	DVECTOR renderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 
-	renderPos.vx = ( Pos.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
-	renderPos.vy = ( Pos.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
+	renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
+	renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
 
 	if ( m_reversed )
 	{

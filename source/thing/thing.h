@@ -144,6 +144,7 @@ protected:
 	void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
+	DVECTOR			getCollisionSize()							{return m_collisionSize;}
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
 	s16				getCollisionAngle()							{return m_collisionAngle;}
 	bool			getCentreCollision()						{return m_centreCollision;}

@@ -103,6 +103,7 @@ protected:
 	int				m_animNo;
 	CSkel			m_skel;
 	TPAGE_DESC		m_actorTPage;
+	DVECTOR			m_drawOffset;
 };
 
 class	CNpcEnemy : public CEnemyThing
@@ -490,6 +491,7 @@ protected:
 	int				m_animNo;
 	CSkel			m_skel;
 	TPAGE_DESC		m_actorTPage;
+	DVECTOR			m_drawOffset;
 
 	virtual void		collidedWith(CThing *_thisThing);
 };
