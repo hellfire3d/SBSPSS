@@ -34,22 +34,40 @@
 	Structure defintions
 	-------------------- */
 
-class CGUIButton : public CGUIObject
+class CGUIToggleButton : public CGUIObject
 {
 public:
 	virtual void		setButtonTarget(int *_target);
+	
+	virtual void		think(int _frames);
+	
+	
+protected:
+	int					*getTarget()								{return m_target;}
+	virtual int			isSelectable()								{return true;}
+	
+	
+private:
+	int					*m_target;
+	
+};
+
+
+class CGUICycleButton : public CGUIToggleButton
+{
+public:
 	virtual void		setButtonData(int *_data);
 
 	virtual void		think(int _frames);
 
 
 protected:
-	virtual int			isSelectable()								{return true;}
+	int					*getData()									{return m_data;}
 
 
 private:
-	int					*m_target;
 	int					*m_data;
+
 };
 
 

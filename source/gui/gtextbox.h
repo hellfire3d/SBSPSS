@@ -37,7 +37,7 @@
 class CGUITextBox : public CGUIObjectWithFont
 {
 public:
-	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
 	virtual void		setText(unsigned int _textId);
 

@@ -52,6 +52,8 @@ eng=CONTROL TYPE
 eng=MUSIC
 [STR__PAULS_TEST__SFX]
 eng=SFX
+[STR__PAULS_TEST__EXIT]
+eng=EXIT
 
 
 

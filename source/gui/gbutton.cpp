@@ -45,13 +45,14 @@
 	Vars
 	---- */
 
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUIButton::setButtonTarget(int *_target)
+void CGUIToggleButton::setButtonTarget(int *_target)
 {
 	m_target=_target;
 }
@@ -63,7 +64,44 @@ void CGUIButton::setButtonTarget(int *_target)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUIButton::setButtonData(int *_data)
+void CGUIToggleButton::think(int _frames)
+{
+	ASSERT(getTarget());
+	
+	CGUIObject::think(_frames);
+	if(isSelected())
+	{
+		int pad;
+
+		pad=PadGetRepeat(0);
+		if(pad&PAD_CROSS)
+		{
+			int *target;
+			target=getTarget();
+			if(*target==true)
+			{
+				*target=false;
+			}
+			else
+			{
+				*target=true;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUICycleButton::setButtonData(int *_data)
 {
 	  m_data=_data;
 }
@@ -75,12 +113,12 @@ void CGUIButton::setButtonData(int *_data)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CGUIButton::think(int _frames)
+void CGUICycleButton::think(int _frames)
 {
-	ASSERT(m_target);
-	ASSERT(m_data);
+	ASSERT(getTarget());
+	ASSERT(getData());
 	
-	CGUIObject::think(_frames);
+	CGUIToggleButton::think(_frames);
 	if(isSelected())
 	{
 		int pad;
@@ -88,29 +126,31 @@ void CGUIButton::think(int _frames)
 		pad=PadGetRepeat(0);
 		if(pad&PAD_CROSS)
 		{
+			int	*target;
 			int	*data;
 			int	tmp;
 
-			data=m_data;
-			tmp=*data;
+			target=getTarget();
+			data=getData();
 			do
 			{
 				tmp=*data;
-				data++;
-				if(*m_target==tmp)
+				if(*target==*data)
 				{
 					break;
 				}
+				data++;
 			}
 			while(tmp<*data);
 			if(tmp>*data)
 			{
-				data=m_data;
+				data=getData();
 			}
-			*m_target=*data;
+			*target=*data;
 		}
 	}
 }
+
 
 /*===========================================================================
  end */

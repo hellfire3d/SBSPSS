@@ -33,6 +33,7 @@ class CGUIObject
 {
 public:
 	typedef int			GUIId;
+	static const GUIId	noId=-1;	
 
 	typedef enum
 	{
@@ -50,7 +51,7 @@ public:
 	};
 
 
-	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 	virtual void		shutdown();
 
 	void				setObjectX(int _x)							{m_x=_x;recalc();}
@@ -115,7 +116,7 @@ private:
 class CGUIObjectWithFont : public CGUIObject
 {
 public:
-	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 	virtual void		shutdown();
 
 	virtual void		setFlags(GUI_FLAGS _flags);

@@ -44,7 +44,7 @@ public:
 	} TextReadoutData;
 
 	
-	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 
 	virtual void		setReadoutTarget(int *_target);
 	virtual void		setReadoutData(TextReadoutData *_data);
@@ -77,7 +77,7 @@ public:
 	} SpriteReadoutData;
 
 	
-	virtual void		init(CGUIObject *_parent,GUIId _id);
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
 	virtual void		shutdown();
 
 	virtual void		setReadoutTarget(int *_target);
