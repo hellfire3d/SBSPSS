@@ -28,6 +28,9 @@ CPaulScene s_paulScene;
 #include "paul\scenesel.h"
 #endif
 
+#ifdef __USER_charles__
+#include "map\map.h"
+#endif
 
 
 #ifndef __SYSTEM_GSTATE_H__
@@ -210,6 +213,8 @@ int 	main()
 	GameState::setNextScene( &SceneSelector );
 #elif	defined(__USER_daveo__)
 	GameState::setNextScene( &GameScene );
+#elif	defined(__USER_charles__)
+	GameState::setNextScene( &MapScene );
 #else
 	GameState::setNextScene( &FrontEndScene );
 #endif

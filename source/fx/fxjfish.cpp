@@ -83,7 +83,9 @@ int			ScaleHInc=(Scale*LegHInc)>>12;
 
 				POLY_FT4	*Ft4;
 
-				if ( XFlip )
+				//Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos,Scale>>4);
+
+				if ( !XFlip )
 				{
 					Ft4=SprBank->printFT4Scaled(FRM__LEG,RenderPos.vx + 6 + ( spriteWidth >> 1 ),RenderPos.vy,XFlip,0,OtPos,Scale>>4);
 				}
@@ -94,13 +96,21 @@ int			ScaleHInc=(Scale*LegHInc)>>12;
 
 				if (!XFlip)
 				{
-					Ft4->x1-=WOfs;
-					Ft4->x3-=WOfs;
+//					Ft4->x1-=WOfs;
+//					Ft4->x3-=WOfs;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 				else
 				{
-					Ft4->x0+=WOfs;
-					Ft4->x2+=WOfs;
+//					Ft4->x0+=WOfs;
+//					Ft4->x2+=WOfs;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 
 		
