@@ -830,6 +830,11 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 				m_snapTimer = m_movementTimer;
 			}
 
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SEASNAKE_ATTACK, true );
+			}
+
 			break;
 		}
 	}
