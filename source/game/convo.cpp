@@ -799,11 +799,12 @@ void CConversation::registerConversationLevelScripts(int level)
 		{
 			switch ( CLevel::getCurrentChapterLevel() )
 			{
-				case 1:
-				{
-					CConversation::registerConversationScript(SCRIPTS_CH3L1_01_DAT);
-					break;
-				}
+// removed as this is an FMA script
+//				case 1:
+//				{
+//					CConversation::registerConversationScript(SCRIPTS_CH3L1_01_DAT);
+//					break;
+//				}
 
 				case 2:
 				{
