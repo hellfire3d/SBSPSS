@@ -16,12 +16,13 @@ public:
 
 		enum
 		{
-			SCREEN_TILE_ADJ_UP=2,
-			SCREEN_TILE_ADJ_DOWN=2,
-			SCREEN_TILE_ADJ_LEFT=2,
-			SCREEN_TILE_ADJ_RIGHT=5,
+			SCREEN_TILE_ADJ_UP		=2,
+			SCREEN_TILE_ADJ_DOWN	=2,
+			SCREEN_TILE_ADJ_LEFT	=2,
+			SCREEN_TILE_ADJ_RIGHT	=5,
 			SCREEN_TILE_WIDTH3D=	SCREEN_TILE_WIDTH+SCREEN_TILE_ADJ_RIGHT,
 			SCREEN_TILE_HEIGHT3D=	SCREEN_TILE_HEIGHT+SCREEN_TILE_ADJ_DOWN,
+			BLOCK_MULT			=	16
 		};
 
 		void			init(DVECTOR &MapPos,int Shift);
@@ -34,6 +35,7 @@ protected:
 		sTri			*TriList;
 		sQuad			*QuadList;
 		sVtx			*VtxList;
+		DVECTOR			RenderOfs;
 
 		FontBank		*Font;
 

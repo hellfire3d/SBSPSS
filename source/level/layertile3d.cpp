@@ -35,6 +35,7 @@ CLayerTile3d::CLayerTile3d(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,Tile
 	Font=new ("PrimFont") FontBank;
 	Font->initialise( &standardFont );
 	Font->setOt( 0 );
+	Font->setTrans(1);
 #endif
 }
 
@@ -64,6 +65,7 @@ void	CLayerTile3d::shutdown()
 }
 
 int	GHV=256;
+
 /*****************************************************************************/
 
 void	CLayerTile3d::think(DVECTOR &MapPos)
@@ -80,8 +82,17 @@ int			YPos=MapPos.vy>>MapXYShift;
 			ShiftX=XPos & 15;
 			ShiftY=YPos & 15;
 
-			if (MapXY.vx<0) MapXY.vx=0;
-			if (MapXY.vy<0) MapXY.vy=0;
+			RenderOfs.vx=RenderOfs.vy=0;
+			if (MapXY.vx<0) 
+			{
+				RenderOfs.vx=-MapXY.vx*BLOCK_MULT;
+				MapXY.vx=0;
+			}
+			if (MapXY.vy<0) 
+			{
+				RenderOfs.vy=-MapXY.vy*BLOCK_MULT;
+				MapXY.vy=0;
+			}
 
 			if (MapXY.vx+SCREEN_TILE_WIDTH3D<=MapWidth)
 				RenderW=SCREEN_TILE_WIDTH3D;
@@ -100,8 +111,6 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-#define	BLOCK_MULT	16
-
 void	CLayerTile3d::render()
 {
 const int	XOfs=-(BLOCK_MULT*15)-(SCREEN_TILE_ADJ_LEFT*BLOCK_MULT);
@@ -117,9 +126,11 @@ u32				T0,T1,T2;
 s32				ClipZ;
 
 
-// Setup shift bits of pos
+// Setup Trans Matrix
 		BlkPos.vx=XOfs-((MapXY.vx*BLOCK_MULT)+ShiftX);
 		BlkPos.vy=YOfs-((MapXY.vy*BLOCK_MULT)+ShiftY);
+		BlkPos.vx+=RenderOfs.vx;
+		BlkPos.vy+=RenderOfs.vy;
 		CMX_SetTransMtxXY(&BlkPos);
 
 		for (int Y=0; Y<RenderH; Y++)
@@ -146,13 +157,18 @@ s32				ClipZ;
 				*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 				*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
+//				printf("%i\n",P0->vz>>4);
+//				int	ZP=P0->vz>>5*;
+//sOT				*ThisOT=OtPtr+(LayerOT+ZP);
+
 				TList++;
 				gte_nclip_b();
 				gte_stsxy3_ft3(TPrimPtr);
 				gte_stopz(&ClipZ);
 				if (ClipZ<=0)
 				{
-					addPrimNoCheck(ThisOT,TPrimPtr);
+//					addPrimNoCheck(ThisOT,TPrimPtr);
+					addPrim(ThisOT,TPrimPtr);
 					TPrimPtr++;
 				}
 
