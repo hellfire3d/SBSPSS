@@ -603,6 +603,62 @@ SOURCE=..\..\..\source\player\player.cpp
 
 SOURCE=..\..\..\source\player\player.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psbutt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pschop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pschop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psduck.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psduck.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psfall.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psfall.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psjump.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psjump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psrun.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psrun.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pstates.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pstates.h
+# End Source File
 # End Group
 # Begin Group "psxboot"
 
