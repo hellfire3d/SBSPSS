@@ -229,10 +229,15 @@ void	CLevel::initLayers()
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
 		}
 // Collision
+
 		if (LevelHdr->CollisionLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
+		}
+		else
+		{
+			ASSERT(!"Where is the collision, moron!");
 		}
 
 // Actors
@@ -354,22 +359,11 @@ void	CLevel::shutdown()
 /*****************************************************************************/
 void 	CLevel::render()
 {
-// Setup dummy prim to ensure OtPos 0 is initialised (for fast add)
-/*
-		for (int i=0;i<8; i++)
-		{
-		TILE_16	*Prim=GetPrimTILE16();
-		sOT		*ThisOT=OtPtr+LayerOT+i-4;
-				Prim->x0=1024;
-				Prim->y0=1024;
-				AddPrim(ThisOT,Prim);
-				ASSERT(ThisOT->FirstPrim);
-		}
-*/
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			if (TileLayers[i]) TileLayers[i]->render();
 		}
+
 #ifdef __SHOW_COLLISION__
 		if(CollisionLayer)
 		{
@@ -383,6 +377,7 @@ void 	CLevel::render()
 /*****************************************************************************/
 void	CLevel::think(int _frames)
 {
+
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			if (TileLayers[i]) TileLayers[i]->think(MapPos);

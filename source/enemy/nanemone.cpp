@@ -31,18 +31,13 @@
 #include "player\player.h"
 #endif
 
-#ifndef	__ANIM_ANENOMELVL1_HEADER__
-#include <ACTOR_ANENOMELVL1_ANIM.h>
+#ifndef	__ANIM_ANENOME_HEADER__
+#include <ACTOR_ANENOME_ANIM.h>
 #endif
 
 #ifndef __ANIM_SPIKEYANENOME_HEADER__
 #include <ACTOR_SPIKEYANENOME_ANIM.h>
 #endif
-
-#ifndef	__ANIM_ANENOMELVL3_HEADER__
-#include <ACTOR_ANENOMELVL3_ANIM.h>
-#endif
-
 
 void CNpcAnemoneEnemy::processEnemyCollision( CThing *thisThing )
 {
@@ -154,10 +149,10 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 			if ( m_timerTimer <= 0 && !m_animPlaying )
 			{
-				if ( m_animNo != ANIM_ANENOMELVL1_FIRE )
+				if ( m_animNo != ANIM_ANENOME_FIRE )
 				{
 					m_animPlaying = true;
-					m_animNo = ANIM_ANENOMELVL1_FIRE;
+					m_animNo = ANIM_ANENOME_FIRE;
 					m_frame = 0;
 				}
 			}
@@ -165,10 +160,10 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 	}
 	else
 	{
-		if ( !m_animPlaying || m_animNo != ANIM_ANENOMELVL1_BEND )
+		if ( !m_animPlaying || m_animNo != ANIM_ANENOME_FIRE )
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_ANENOMELVL1_BEND;
+			m_animNo = ANIM_ANENOME_FIRE;
 			m_frame = 0;
 		}
 	}
@@ -177,7 +172,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 	{
 		if ( m_timerTimer <= 0 && !m_animPlaying )
 		{
-			if ( m_animNo == ANIM_ANENOMELVL1_FIRE )
+			if ( m_animNo == ANIM_ANENOME_FIRE )
 			{
 				// if firing anim is complete and user is still in range, fire projectile
 
@@ -192,7 +187,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 				m_sensorFunc = NPC_SENSOR_NONE;
 
 				m_animPlaying = true;
-				m_animNo = ANIM_ANENOMELVL1_BEND;
+				m_animNo = ANIM_ANENOME_FIRE;
 				m_frame = 0;
 			}
 		}
@@ -291,10 +286,10 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 void CNpcAnemone3Enemy::processClose( int _frames )
 {
-	if ( m_animNo != ANIM_ANENOMELVL3_FIRE )
+	if ( m_animNo != ANIM_ANENOME_FIRE )
 	{
 		m_animPlaying = true;
-		m_animNo = ANIM_ANENOMELVL3_FIRE;
+		m_animNo = ANIM_ANENOME_FIRE;
 		m_frame = 0;
 	}
 	else if ( !m_animPlaying )
@@ -316,7 +311,7 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 		m_sensorFunc = NPC_SENSOR_NONE;
 
 		m_animPlaying = true;
-		m_animNo = ANIM_ANENOMELVL3_BEND;
+		m_animNo = ANIM_ANENOME_FIRE;
 		m_frame = 0;
 	}
 }

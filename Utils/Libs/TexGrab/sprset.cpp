@@ -965,9 +965,9 @@ void SprFrame::SetFrameAndInfo(Frame const & Fr,FileInfo const & NewMyFileInfo,i
 	X=XOff;
 	Y=YOff;
 
-	if (Width > 254 || Height > 254)
+	if (Width > 256 || Height > 256)
 		{
-		Error(ERR_FATAL,"Images only allowed to 254x254, this is %dx%d : %s",Width,Height,MyFileInfo.GetActualFileName());
+		Error(ERR_FATAL,"Images only allowed to 256x256, this is %dx%d : %s",Width,Height,MyFileInfo.GetActualFileName());
 		}
 
 

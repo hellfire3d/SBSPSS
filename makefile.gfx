@@ -110,7 +110,7 @@ ACTOR_SPONGEBOB :=		SPONGEBOB
 ACTOR_NPC :=			
 #						BarnacleBoy Gary Krusty MermaidMan Patrick Plankton Sandy Squidward
 
-ACTOR_ENEMY :=			AnenomeLvl1 AnenomeLvl3 BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
+ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
 						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Stomper
 

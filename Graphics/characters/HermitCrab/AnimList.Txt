@@ -1,5 +1,4 @@
 die
-gethit
 idle
 jumpend
 jumpstart

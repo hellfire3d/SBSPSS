@@ -218,29 +218,30 @@ RECT	R={512,256,512,250};
 /*****************************************************************************/
 void	CActorCache::LoadPalette(sActorPool *Actor)
 {
-RECT	R;
-int		X=CurrentPalette%(((CACHE_W*TPAGE_W)/CACHE_PALW));
-int		Y=CurrentPalette/(((CACHE_W*TPAGE_W)/CACHE_PALW)-1);
+		if (!Actor->ActorGfx->Clut)
+		{ // Cheap bodge at mo
+			RECT	R;
+			int		X=CurrentPalette%(((CACHE_W*TPAGE_W)/CACHE_PALW));
+			int		Y=CurrentPalette/(((CACHE_W*TPAGE_W)/CACHE_PALW)-1);
 
-// Cheap bodge at mo
-		if (Actor->Filename==ACTORS_SPONGEBOB_SBK)
-		{
-			R.x=512;
-			R.y=511;
+			if (Actor->Filename==ACTORS_SPONGEBOB_SBK)
+			{
+				R.x=512;
+				R.y=511;
+			}
+			else
+			{
+				R.x=CACHE_PALX+(CurrentPalette*CACHE_PALW);
+				R.y=CACHE_PALY-Y;
+			}
+
+			R.w=CACHE_PALW;
+			R.h=CACHE_PALH;
+			DrawSync(0);
+			LoadImage( &R, (u32*)Actor->ActorGfx->Palette);
+			Actor->ActorGfx->Clut=getClut(R.x,R.y);
+			CurrentPalette++;
 		}
-		else
-		{
-			R.x=CACHE_PALX+(CurrentPalette*CACHE_PALW);
-			R.y=CACHE_PALY-Y;
-		}
-
-		R.w=CACHE_PALW;
-		R.h=CACHE_PALH;
-		DrawSync(0);
-		LoadImage( &R, (u32*)Actor->ActorGfx->Palette);
-
-		Actor->ActorGfx->Clut=getClut(R.x,R.y);
-		CurrentPalette++;
 }
 
 /*****************************************************************************/
@@ -429,10 +430,7 @@ int		Total=0;
 
 /*****************************************************************************/
 int	ActorOT=10;
-int	Angle=0;
-int	AngleInc=16;
-int	ScaleX=4095;
-int	ScaleY=4095;
+
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 
@@ -492,10 +490,6 @@ int			HalfW=CurrentFrame->W>>1;
 			BBox.XMax=+HalfW;
 			BBox.YMin=-CurrentFrame->H;
 			BBox.YMax=0;
-
-//
-//			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
-//	Angle+=AngleInc;
 
 			return(Ft4);
 }

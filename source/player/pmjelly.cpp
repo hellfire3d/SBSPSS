@@ -122,7 +122,7 @@ void	CPlayerModeJellyLauncher::think()
 			else
 			{
 				m_firingState=FIRING_STATE__FIRING;
-				m_player->setAnimNo(ANIM_SPONGEBOB_FIREND);
+				m_player->setAnimNo(ANIM_SPONGEBOB_FIREEND);
 				launchProjectile();
 			}
 			break;

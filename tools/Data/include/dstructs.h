@@ -232,11 +232,10 @@ struct	sSpriteAnim
 
 struct	sSpriteAnimBank
 {
-	u16				ColorCount;		// 2
+	u16				Clut;			// 2
 	u16				AnimCount;		// 2
 	u16				FrameCount;		// 2
-	u16				MaxW,MaxH;		// 4
-	u16				Clut;
+	u8				MaxW,MaxH;		// 2
 
 	u8				*Palette;		// 4
 	sSpriteAnim		*AnimList;		// 4
