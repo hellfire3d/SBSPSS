@@ -128,15 +128,91 @@ eng=PRESS START
 ; it won't get passed to the script compiler!
 ; ---------------------------------------------------------------
 
-; Chapter 1 - Level 1 - Test
-;[STR__INGAME__SANDY__TEST1]
-;eng=Ahhh, ere we are at Bikini Bottom.. and today we will be following my favourite creature Spongebob SquarePants on his adventures around Bikini Bottom in his search for the Best Birthday Present ever, for his best friend in the whole of Bikini Bottom, Patrick.
-;[STR__INGAME__SANDY__TEST2]
-;eng=Hold on there little square dude if you want to defend yourself you need to do this!!!!
-;[STR__INGAME__SPONGEBOB__TEST3]
-;eng=Did that make sense..?
+; ---------------------------------------------------------------
+; Generic Text
+; ---------------------------------------------------------------
+[STR__INGAME__GARY_MEOW]
+eng=Meow!!
+
+; ---------------------------------------------------------------
+; FMA Text
+; ---------------------------------------------------------------
+
+; C1 FMA
+[STR__INGAME__FMA_C1_INTRO0]
+eng=Ahhh, ‘ere we are at Bikini Bottom..and today we will be following my favourite creature Spongebob SquarePants on his adventures around Bikini Bottom.
+[STR__INGAME__FMA_C1_INTRO1]
+eng=Today he is in search of the Best Birthday Present ever, for his best friend Patrick. The question is how far will he go for his best friend?
+[STR__INGAME__FMA_C1_SB0]
+eng=Gary, I just had a great idea about what to get Patrick for his birthday!!
+[STR__INGAME__FMA_C1_BB0]
+eng=Ohhh no, not you again. Just keep the noise down. What do you want?
+[STR__INGAME__FMA_C1_SB1]
+eng=It’s my best friend Patrick’s birthday and a signed photo of his favorite superheroes would be the best thing ever!
+[STR__INGAME__FMA_C1_BB1]
+eng=Well we are a bit busy right now. no rest for super heroes!!!!! Well I know that Mermaid Man might consider signing one for a superhero snack.
+[STR__INGAME__FMA_C1_MM0]
+eng= ....sea-nut butter.... ....tomatoes.... ....jelly.....
+[STR__INGAME__FMA_C1_SB2]
+eng=Like a calculator, you can count on it!
+
+; C2 FMA
+[STR__INGAME__FMA_C2_MM_BB0]
+eng=zzzzzzzzzz
+[STR__INGAME__FMA_C2_SB0]
+eng=I’m ready. I’m ready. I’m ready. Oops!
+[STR__INGAME__FMA_C2_BB0]
+eng=Back already?.. That is definitely a sandwich fit for a super hero!! Gonna need to think of something to test your super hero potential, (under breath) and keep busy! . Look MM is not in great super hero condition at the moment and he could really do with some pampering!! Some Kelp cream and a facial! Not for me you understand!
+[STR__INGAME__FMA_C2_SB1]
+eng=I’m on my way!!
+
+; C3 FMA
+[STR__INGAME__FMA_C3_SB0]
+eng=aaah
+[STR__INGAME__FMA_C3_BB0]
+eng=That is amazing, how did you manage that!! Reflecto has got nothing on you kid, you must really love your mate Trevor!
+[STR__INGAME__FMA_C3_SB1]
+eng=Patrick!
+[STR__INGAME__FMA_C3_BB1]
+eng=Whatever! Look we could do with some new uniforms? So how about you pop back to pre-historic Bikini Bottom to see what you can find!!!!
+[STR__INGAME__FMA_C3_SB2]
+eng=By the power of Neptune, and the use of Planktons Time Machine I shall go through time!
+
+; C4 FMA
+[STR__INGAME__FMA_C4_SB0]
+eng=Surprise! I’m back!
+[STR__INGAME__FMA_C4_MM_BB0]
+eng=Gasp!
+[STR__INGAME__FMA_C4_SB1]
+eng=Look what I have got for you!
+[STR__INGAME__FMA_C4_BB0]
+eng=Look kid you are beginning to bug me now! One of my favorite kelp bars would be great. Hey kid, you can only get them in Bikini Bottom!
+
+; C5 FMA
+[STR__INGAME__FMA_C5_SB0]
+eng=Mmhh that’s funny? Oh I know!
+[STR__INGAME__FMA_C5_BB0]
+eng=Mmhh! Thanks kid. Look Kid MM has had a turn, the TV has broken and unless you get the right tools he is gonna miss his favorite cartoon. Can you help?
+[STR__INGAME__FMA_C5_SB1]
+eng=Does a snail meow? You bet!
+
+; C6 FMA
+[STR__INGAME__FMA_C6_SB0]
+eng=Anybody around here need a TV fixed??!!
+[STR__INGAME__FMA_C6_SB1]
+eng=Nope, just force that there, hit that, twist that, erm put that there!!
+[STR__INGAME__FMA_C6_BB0]
+eng=Congratulations SpongeyBlob you earned this. Patrick is lucky to have a friend like you!. 
+[STR__INGAME__FMA_C6_SB2]
+eng=Gee thanks!!!
+[STR__INGAME__FMA_C6_BB1]
+eng=Well, I have learnt today that friendship is something that is priceless! SB is not such a bad sponge afterall!
+[STR__INGAME__FMA_C6_BB_MM0]
+eng=SpongeBob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
 
 
+
+; ---------------------------------------------------------------
 [STR__INGAME__GENERIC__CHECK1]
 eng=Did that make sense..?
 
