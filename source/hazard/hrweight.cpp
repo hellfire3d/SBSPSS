@@ -47,8 +47,8 @@ void CNpcRisingWeightHazard::setWaypoints( sThingHazard *ThisHazard )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	Pos = startPos;
 	m_base = Pos;
@@ -60,7 +60,7 @@ void CNpcRisingWeightHazard::setWaypoints( sThingHazard *ThisHazard )
 	newYPos = (u16) *PntList;
 	PntList++;
 
-	m_maxExtension = abs( ( newYPos << 4 ) - startPos.vy ) << 8;
+	m_maxExtension = abs( ( ( newYPos << 4 ) + 16 ) - startPos.vy ) << 8;
 
 	// get slave trigger position
 

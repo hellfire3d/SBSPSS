@@ -73,8 +73,8 @@ void CNpcBranchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	init( startPos );
 

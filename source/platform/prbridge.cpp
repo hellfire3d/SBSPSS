@@ -60,8 +60,8 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	init( startPos );
 
@@ -74,7 +74,7 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	newYPos = (u16) *PntList;
 	PntList++;
 
-	m_maxExtension = abs( ( newYPos << 4 ) - startPos.vy ) << 8;
+	m_maxExtension = abs( ( ( newYPos << 4 ) + 16 ) - startPos.vy ) << 8;
 
 	// get slave trigger position
 
@@ -87,7 +87,7 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 //	trigger = new ("PlatformTrigger") CPlatformTrigger();
 	trigger=(CPlatformTrigger*)CTrigger::Create(CTrigger::TRIGGER_PLATFORM);
-	trigger->setPositionAndSize( newXPos << 4, newYPos << 4, 100, 0 );
+	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16, 100, 0 );
 	//trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
 	trigger->setPlatform( this );
 }

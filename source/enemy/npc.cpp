@@ -507,8 +507,8 @@ void CNpcEnemy::addWaypoint( u16 *ptrX, u16 *ptrY )
 
 void CNpcEnemy::setStartPos( s32 xPos, s32 yPos )
 {
-	Pos.vx = xPos << 4;
-	Pos.vy = yPos << 4;
+	Pos.vx = ( xPos << 4 ) + 8;
+	Pos.vy = ( yPos << 4 ) + 16;
 
 	m_initPos = m_base = Pos;
 }

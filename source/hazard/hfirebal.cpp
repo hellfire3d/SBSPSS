@@ -56,8 +56,8 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	Pos = startPos;
 	m_base = Pos;

@@ -138,8 +138,8 @@ void CNpcBalloonBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	init( startPos );
 
@@ -152,7 +152,7 @@ void CNpcBalloonBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	newYPos = (u16) *PntList;
 	PntList++;
 
-	m_maxExtension = abs( ( newYPos << 4 ) - startPos.vy );
+	m_maxExtension = abs( ( ( newYPos << 4 ) + 16 ) - startPos.vy );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

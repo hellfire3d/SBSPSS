@@ -91,7 +91,7 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 	setStartPos( newXPos, newYPos );
 
-	startX = newXPos << 4;
+	startX = ( newXPos << 4 ) + 8;
 
 	if ( ThisActor->PointCount > 1 )
 	{
@@ -109,13 +109,13 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 			if ( pointNum == ThisActor->PointCount - 2 )
 			{
-				startX = newXPos << 4;
+				startX = ( newXPos << 4 ) + 8;
 				m_base.vx = startX;
-				m_base.vy = newYPos << 4;
+				m_base.vy = ( newYPos << 4 ) + 16;
 			}
 			else if ( pointNum == ThisActor->PointCount - 1 )
 			{
-				m_cycleWidth = abs( startX - ( newXPos << 4 ) );
+				m_cycleWidth = abs( startX - ( ( newXPos << 4 ) + 8 ) );
 				m_halfCycleWidth = m_cycleWidth >> 1;
 				m_base.vx += m_halfCycleWidth;
 			}

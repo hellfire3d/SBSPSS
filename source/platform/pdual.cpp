@@ -64,8 +64,8 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	init( startPos );
 
@@ -78,7 +78,7 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	newYPos = (u16) *PntList;
 	PntList++;
 
-	m_maxExtension = ( newYPos << 4 ) - startPos.vy;
+	m_maxExtension = ( ( newYPos << 4 ) + 16 ) - startPos.vy;
 
 	ASSERT( m_maxExtension >= 0 );
 
@@ -90,7 +90,7 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	PntList++;
 
 	DVECTOR slavePos;
-	slavePos.vx = newXPos << 4;
+	slavePos.vx = ( newXPos << 4 ) + 8;
 	slavePos.vy = startPos.vy + m_maxExtension;
 
 	m_otherPlatform->init( slavePos );

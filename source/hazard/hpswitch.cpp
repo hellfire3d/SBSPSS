@@ -52,8 +52,8 @@ void CNpcPressureSwitchHazard::setWaypoints( sThingHazard *ThisHazard )
 	m_triggerPos.vy = newYPos;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	Pos = startPos;
 	m_base = Pos;

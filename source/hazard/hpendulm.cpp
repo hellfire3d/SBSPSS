@@ -47,8 +47,8 @@ void CNpcPendulumHazard::setWaypoints( sThingHazard *ThisHazard )
 	PntList++;
 
 	DVECTOR startPos;
-	startPos.vx = newXPos << 4;
-	startPos.vy = newYPos << 4;
+	startPos.vx = ( newXPos << 4 ) + 8;
+	startPos.vy = ( newYPos << 4 ) + 16;
 
 	if ( ThisHazard->PointCount > 1 )
 	{
@@ -58,8 +58,8 @@ void CNpcPendulumHazard::setWaypoints( sThingHazard *ThisHazard )
 		PntList++;
 
 		DVECTOR pivotPos;
-		pivotPos.vx = newXPos << 4;
-		pivotPos.vy = newYPos << 4;
+		pivotPos.vx = ( newXPos << 4 ) + 8;
+		pivotPos.vy = ( newYPos << 4 ) + 16;
 
 		s32 xDist = startPos.vx - pivotPos.vx;
 		s32 yDist = startPos.vy - pivotPos.vy;

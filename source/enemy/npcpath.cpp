@@ -25,12 +25,12 @@ bool CNpcPath::isPointNear( DVECTOR testPos, s32 *xDist, s32 *yDist )
 	u16 *waypoint = waypointPtr;
 	waypoint += 2 * currentWaypoint;
 
-	*xDist = ( *waypoint << 4 ) - testPos.vx;
+	*xDist = ( ( *waypoint << 4 ) + 8 ) - testPos.vx;
 	xDistSqr = (*xDist) * (*xDist);
 
 	waypoint++;
 
-	*yDist = ( *waypoint << 4 ) - testPos.vy;
+	*yDist = ( ( *waypoint << 4 ) + 16 ) - testPos.vy;
 	yDistSqr = (*yDist) * (*yDist);
 
 	if ( xDistSqr + yDistSqr < 100 )
@@ -114,9 +114,9 @@ void CNpcPath::setPathExtents()
 
 	if ( tempPtr )
 	{
-		mapPos.vx = *tempPtr << 4;
+		mapPos.vx = ( *tempPtr << 4 ) + 8;
 		*tempPtr++;
-		mapPos.vy = *tempPtr << 4;
+		mapPos.vy = ( *tempPtr << 4 ) + 16;
 		*tempPtr++;
 
 		minX = maxX = mapPos.vx;
@@ -124,9 +124,9 @@ void CNpcPath::setPathExtents()
 
 		for ( tempWaypoint = 1 ; tempWaypoint <= waypointCount ; tempWaypoint++ )
 		{
-			mapPos.vx = *tempPtr << 4;
+			mapPos.vx = ( *tempPtr << 4 ) + 8;
 			*tempPtr++;
-			mapPos.vy = *tempPtr << 4;
+			mapPos.vy = ( *tempPtr << 4 ) + 16;
 			*tempPtr++;
 
 			if ( mapPos.vx < minX )
@@ -263,9 +263,9 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 		u16 *waypoint = waypointPtr;
 		waypoint += 2 * currentWaypoint;
 
-		*distX = ( *waypoint << 4 ) - currentPos.vx;
+		*distX = ( ( *waypoint << 4 ) + 8 ) - currentPos.vx;
 		waypoint++;
-		*distY = ( *waypoint << 4 ) - currentPos.vy;
+		*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 	}
 
 	s32 headingToTarget = ratan2( *distY, *distX );
@@ -289,9 +289,9 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 	u16 *waypoint = waypointPtr;
 	waypoint += 2 * currentWaypoint;
 
-	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	*distX = ( ( *waypoint << 4 ) + 8 ) - currentPos.vx;
 	waypoint++;
-	*distY = ( *waypoint << 4 ) - currentPos.vy;
+	*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 
 	if ( abs( *distX ) < waypointDist )
 	{
@@ -302,9 +302,9 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s3
 	waypoint = waypointPtr;
 	waypoint += 2 * currentWaypoint;
 
-	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	*distX = ( ( *waypoint << 4 ) + 8 ) - currentPos.vx;
 	waypoint++;
-	*distY = ( *waypoint << 4 ) - currentPos.vy;
+	*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 
 	if ( *distX > 0 )
 	{
@@ -334,9 +334,9 @@ bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX
 	u16 *waypoint = waypointPtr;
 	waypoint += 2 * currentWaypoint;
 
-	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	*distX = ( ( *waypoint << 4 ) + 8 ) - currentPos.vx;
 	waypoint++;
-	*distY = ( *waypoint << 4 ) - currentPos.vy;
+	*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 
 	if ( abs( *distY ) < 10 )
 	{
@@ -347,9 +347,9 @@ bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX
 	waypoint = waypointPtr;
 	waypoint += 2 * currentWaypoint;
 
-	*distX = ( *waypoint << 4 ) - currentPos.vx;
+	*distX = ( ( *waypoint << 4 ) + 8 ) - currentPos.vx;
 	waypoint++;
-	*distY = ( *waypoint << 4 ) - currentPos.vy;
+	*distY = ( ( *waypoint << 4 ) + 16 ) - currentPos.vy;
 
 	if ( *distY > 0 )
 	{
