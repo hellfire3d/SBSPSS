@@ -342,7 +342,9 @@ triggers_src :=		trigger \
 					twindup \
 					twinddown \
 					twindleft \
-					twindright
+					twindright \
+					toilgeyser
+
 
 utils_src :=		utils \
 					sincos \
