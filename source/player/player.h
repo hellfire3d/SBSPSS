@@ -360,6 +360,7 @@ private:
 
 public:
 	DEATH_TYPE		getDeathType()				{return m_deathType;}
+	void			dieYouPorousFreak(DEATH_TYPE _deathType=DEATHTYPE__NORMAL);
 
 private:
 	int				m_numSpatulasHeld;
@@ -368,7 +369,6 @@ private:
 	int				m_helmetSoundTimer;			// Timer for breathing sound when using the helmet
 
 
-	void			dieYouPorousFreak(DEATH_TYPE _deathType=DEATHTYPE__NORMAL);
 	DEATH_TYPE		m_deathType;
 
 

@@ -279,6 +279,11 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 			{
 				m_playerAttached = false;
 				m_falling = true;
+				CPlayer *player = GameScene.getPlayer();
+				if ( player->getMode() != PLAYER_MODE_DEAD )
+				{
+					player->dieYouPorousFreak();
+				}
 
 				break;
 			}
