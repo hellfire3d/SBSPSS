@@ -69,6 +69,8 @@ public:
 
 // Layers
 		void					SetLayer(int Layer);
+		void					AddLayer(int Layer);
+		void					DeleteLayer(int Layer);
 		void					UpdateLayerGUI(CMapEditView *View);
 
 // Grid

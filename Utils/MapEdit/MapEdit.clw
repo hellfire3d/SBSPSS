@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditView
+LastClass=CLayerList
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,24 +18,24 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_LAYER_LIST_DIALOG
+Resource1=IDD_NEW_LAYER
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_NEW_LAYER
+Resource3=IDD_ABOUTBOX (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_MAINFRAME (English (U.S.))
+Resource5=IDD_LAYER_LIST_DIALOG
 Class8=CMultiBar
-Resource6=IDD_MAPSIZE
-Resource7=IDD_NEWMAP
+Resource6=IDD_LAYERTILE_GUI
+Resource7=IDD_MULTIBAR (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_ABOUTBOX (English (U.S.))
+Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_LAYERTILE_GUI
-Resource10=IDD_MULTIBAR (English (U.S.))
+Resource9=IDR_TOOLBAR (English (U.S.))
+Resource10=IDD_MAPSIZE
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDR_TOOLBAR (English (U.S.))
+Resource11=IDD_NEWMAP
 
 [CLS:CChildFrame]
 Type=0
@@ -216,8 +216,10 @@ ControlCount=0
 [DLG:IDD_LAYER_LIST_DIALOG]
 Type=1
 Class=CLayerList
-ControlCount=1
+ControlCount=3
 Control1=IDC_LAYER_LIST,listbox,1352728913
+Control2=IDC_LAYERLIST_ADD,button,1342242816
+Control3=IDC_LAYERLIST_DELETE,button,1342242816
 
 [CLS:CLayerList]
 Type=0
@@ -226,7 +228,7 @@ ImplementationFile=LayerList.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=CLayerList
+LastObject=IDC_LAYERLIST_ADD
 
 [CLS:CGfxToolBar]
 Type=0

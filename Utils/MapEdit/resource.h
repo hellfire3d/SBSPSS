@@ -41,6 +41,8 @@
 #define IDC_NEWMAP_FORE_CHECK           1051
 #define IDC_NEW_LAYER_WIDTH_NAME2       1052
 #define IDC_NEW_LAYER_WIDTH_EDIT2       1053
+#define IDC_LAYERLIST_ADD               1056
+#define IDC_LAYERLIST_DELETE            1057
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -68,7 +70,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        172
 #define _APS_NEXT_COMMAND_VALUE         32799
-#define _APS_NEXT_CONTROL_VALUE         1056
+#define _APS_NEXT_CONTROL_VALUE         1057
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

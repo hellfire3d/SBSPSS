@@ -62,6 +62,8 @@ virtual	void			Save(CFile *File)=0;
 
 virtual	void			Export(CCore *Core,CExport &Exp)=0;
 
+virtual bool			CanDelete()=0;
+
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;
 virtual	BOOL			InitMode()=0;

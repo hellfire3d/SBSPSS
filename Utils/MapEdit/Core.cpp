@@ -65,7 +65,9 @@ int		Width,Height;
 		Dlg.m_Mid=TRUE;
 		Dlg.m_Fore=FALSE;
 		
+#ifndef _DEBUG
 		if (Dlg.DoModal()!=IDOK) return FALSE;
+#endif
 		Width=Dlg.m_Width;
 		Height=Dlg.m_Height;
 
@@ -418,6 +420,7 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 
+		if (NewLayer<0) NewLayer=0;
 // If toggling layer, dont change the layer
 		if ((int)List->ListBox.GetCheck(NewLayer)!=(int)Layer[NewLayer]->IsVisible())
 		{
@@ -429,6 +432,34 @@ CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
 			ActiveLayer=NewLayer;
 		}
 
+}
+
+/*****************************************************************************/
+void		CCore::AddLayer(int CurrentLayer)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
+
+		TRACE1("Add Layer %i\n",CurrentLayer);
+
+}
+
+/*****************************************************************************/
+void		CCore::DeleteLayer(int CurrentLayer)
+{
+		if (Layer[CurrentLayer]->CanDelete())
+		{
+			delete Layer[CurrentLayer];
+			Layer.erase(Layer.begin() + CurrentLayer);
+			SetLayer(CurrentLayer-1);
+			UpdateAll(NULL);
+			TRACE1("Deleted Layer %i\n",CurrentLayer);
+		}
+		else
+		{
+			TRACE1("Cant Delete Layer %i\n",CurrentLayer);
+		}
 }
 
 /*****************************************************************************/

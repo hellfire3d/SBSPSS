@@ -54,6 +54,7 @@ public:
 		void			CheckLayerSize(int Width,int Height);
 
 		void			Export(CCore *Core,CExport &Exp);
+		bool			CanDelete()			{if (SubType==LAYERTILE_FORE) return(true); else return(false);}
 
 // Functions
 		BOOL			SetMode(int NewMode);

@@ -49,6 +49,8 @@ public:
 
 	void			SetMode(int NewMode);
 	void			SetLayer(int Layer);
+	void			AddLayer(int Layer);
+	void			DeleteLayer(int Layer);
 
 // Operations
 public:
