@@ -63,7 +63,7 @@ struct sOutElem3d
 		sElem3d			Elem3d;
 		CFaceStore		FaceStore;
 //		CList<u16>		LocalVtxIdxList;
-		int				LocalVtxIdxStart;
+//		int				LocalVtxIdxStart;
 		int				LocalVtxIdxCount;
 		int				OTOfs;
 };
@@ -162,6 +162,9 @@ protected:
 		char			*GetLayerName(int Type,int SubType);
 
 		void			ExpTri2Face(sExpTri &In,CFace &Out,bool ImportTex=true);
+
+		void			CalcOtOfs(vector<sTri> &TList,vector<sVtx> &VtxList,int Start,int Count);
+		void			CalcOtOfs(vector<sQuad> &TList,vector<sVtx> &VtxList,int Start,int Count);
 
 		FILE					*File;
 		GString					InFilename,InPath,LevelName,LevelFullName;

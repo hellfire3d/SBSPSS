@@ -32,6 +32,15 @@ static const int	RENDER_X_OFS			=INGAME_SCREENOFS_X-(SCREEN_TILE_ADJ_L*BLOCK_SIZ
 static const int	RENDER_Y_OFS			=INGAME_SCREENOFS_Y-(SCREEN_TILE_ADJ_U*BLOCK_SIZE)+INGAME_RENDER_OFS_Y;
 
 /*****************************************************************************/
+sFlipTable	FlipTable[4]=
+{
+	{{+4096,0,+4096,0},0<<31},	//00 <0
+	{{-4096,0,+4096,0},1<<31},	//01 >0
+	{{+4096,0,-4096,0},1<<31},	//10 >0
+	{{-4096,0,-4096,0},0<<31}	//11 <0
+};
+
+/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr,Hdr)
@@ -40,6 +49,7 @@ CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(Leve
 		TriList=LevelHdr->TriList;
 		QuadList=LevelHdr->QuadList;
 		VtxList=LevelHdr->VtxList;
+		VtxIdxList=LevelHdr->VtxIdxList;
 
 #if		defined(_SHOW_POLYZ_)
 		Font=new ("PrimFont") FontBank;
@@ -111,15 +121,124 @@ void	CLayerTile3d::think(DVECTOR &MapPos)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-
-sFlipTable	FlipTable[4]=
+void	CLayerTile3d::CacheElemVtx(sElem3d *Elem)
 {
-	{{+4096,0,+4096,0},0<<31},	//00 <0
-	{{-4096,0,+4096,0},1<<31},	//01 >0
-	{{+4096,0,-4096,0},1<<31},	//10 >0
-	{{-4096,0,-4096,0},0<<31}	//11 <0
-};
+int		Count=Elem->VtxTriCount;
+sVtx	*V0,*V1,*V2;
+u16		*IdxTable=&VtxIdxList[Elem->VtxIdxStart];
+u32		*OutVtx=(u32*)SCRATCH_RAM;
+u32		*OutPtr;
 
+		V0=&VtxList[*IdxTable++];
+		V1=&VtxList[*IdxTable++];
+		V2=&VtxList[*IdxTable++];
+		gte_ldv3(V0,V1,V2);
+
+		while (Count--)
+		{
+			gte_rtpt_b(); // 22 cycles
+// Preload next (when able) - Must check this
+			V0=&VtxList[*IdxTable++];
+			V1=&VtxList[*IdxTable++];
+			V2=&VtxList[*IdxTable++];
+			OutPtr=OutVtx;
+			OutVtx+=3;
+			gte_ldv3(V0,V1,V2);
+			gte_stsxy3c(OutPtr);	// read XY back
+		}
+
+}
+/*****************************************************************************/
+void	CLayerTile3d::render()
+{
+sTileMapElem	*MapPtr=GetMapPos();
+u8				*PrimPtr=GetPrimPtr();
+POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
+u32				*XYList=(u32*)SCRATCH_RAM;
+u32				T0,T1,T2;
+u32				P0,P1,P2;
+s32				ClipZ;
+sOT				*ThisOT;
+VECTOR			BlkPos;
+
+// Setup Trans Matrix
+		BlkPos.vx=RENDER_X_OFS-(ShiftX)+RenderOfs.vx;
+		BlkPos.vy=RENDER_Y_OFS-(ShiftY)+RenderOfs.vy;
+
+		for (int Y=0; Y<RenderH; Y++)
+		{
+			sTileMapElem	*MapRow=MapPtr;
+			s32				BlkXOld=BlkPos.vx;
+
+			for (int X=0; X<RenderW; X++)
+			{
+				u16			Tile=MapRow->Tile;
+				u16			TileIdx=Tile>>2;
+				u16			Flip=Tile&3;
+				sFlipTable	*FTab=&FlipTable[Flip];
+				sElem3d		*Elem=&ElemBank3d[TileIdx];
+
+				int			TriCount=Elem->TriCount;				
+				sTri		*TList=&TriList[Elem->TriStart];
+
+				CMX_SetTransMtxXY(&BlkPos);
+				CMX_SetRotMatrixXY(&FTab->Mtx);
+				CacheElemVtx(Elem);
+				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
+				{
+
+					P0=XYList[TList->P0]; 
+					P1=XYList[TList->P1]; 
+					P2=XYList[TList->P2];
+					gte_ldsxy0(P0);
+					gte_ldsxy1(P1);
+					gte_ldsxy2(P2);
+					
+					setlen(TPrimPtr, GPU_PolyFT3Tag);
+					TPrimPtr->code=TList->PolyCode;
+					gte_nclip_b();	// 8 cycles
+
+					setShadeTex(TPrimPtr,1);
+
+					T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
+					T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
+					T2=*(u16*)&TList->uv2;		// Get UV2
+					*(u32*)&TPrimPtr->u0=T0;	// Set UV0
+					*(u32*)&TPrimPtr->u1=T1;	// Set UV1
+					*(u16*)&TPrimPtr->u2=T2;	// Set UV2
+					gte_stopz(&ClipZ);
+					ThisOT=OtPtr+TList->OTOfs;
+					ClipZ^=FTab->ClipCode;
+					TList++;
+					if (ClipZ<0)
+					{
+						*(u32*)&TPrimPtr->x0=P0;	// Set XY0
+						*(u32*)&TPrimPtr->x1=P1;	// Set XY1
+						*(u32*)&TPrimPtr->x2=P2;	// Set XY2
+						addPrim(ThisOT,TPrimPtr);
+						TPrimPtr++;
+					}
+				}
+				MapRow++;
+				BlkPos.vx+=BLOCK_SIZE;
+			}
+			MapPtr+=MapWidth;
+			BlkPos.vx=BlkXOld;
+			BlkPos.vy+=BLOCK_SIZE;
+		}
+
+		SetPrimPtr((u8*)TPrimPtr);
+
+#if		defined(_SHOW_POLYZ_)
+char	Txt[256];
+int		TCount=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
+int		QCount=0;
+		sprintf(Txt,"TC %i\nQC %i",TCount,QCount);
+		Font->print( 128, 32, Txt);
+#endif
+
+}
+/*
 void	CLayerTile3d::render()
 {
 sTileMapElem	*MapPtr=GetMapPos();
@@ -149,8 +268,12 @@ VECTOR			BlkPos;
 				sElem3d		*Elem=&ElemBank3d[TileIdx];
 				int			TriCount=Elem->TriCount;				
 				sTri		*TList=&TriList[Elem->TriStart];
+				u16			*IdxTable=&VtxIdxList[Elem->VtxIdxStart];
 
-				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+//				P0=&VtxList[TList->P0]; P1=&VtxList[TList->P1]; P2=&VtxList[TList->P2];
+				P0=&VtxList[IdxTable[TList->P0]]; 
+				P1=&VtxList[IdxTable[TList->P1]]; 
+				P2=&VtxList[IdxTable[TList->P2]];
 				CMX_SetTransMtxXY(&BlkPos);
 				CMX_SetRotMatrixXY(&FTab->Mtx);
 				while (TriCount--)	// Blank tiles rejected here (as no tri-count)
@@ -202,3 +325,5 @@ int		QCount=0;
 #endif
 
 }
+
+*/

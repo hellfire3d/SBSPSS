@@ -155,9 +155,8 @@ struct	sElem3d
 		u16		TriCount;
 		u16		QuadStart;
 		u16		QuadCount;
-		u16		VtxStart;
-		u8		TVtxCount;
-		u8		SVtxCount;
+		u16		VtxIdxStart;
+		u16		VtxTriCount;
 };											// 12
 
 //***************************************************************************
@@ -231,7 +230,7 @@ struct	sLevelHdr
 	sTri		*TriList;
 	sQuad		*QuadList;
 	sVtx		*VtxList;
-	u16			*LocalVtxList;
+	u16			*VtxIdxList;
 	sModel		*ModelList;
 };
 

@@ -36,10 +36,13 @@ public:
 		void			render();
 
 protected:
+		void			CacheElemVtx(sElem3d *Elem);
+
 		sElem3d			*ElemBank3d;
 		sTri			*TriList;
 		sQuad			*QuadList;
 		sVtx			*VtxList;
+		u16				*VtxIdxList;
 		DVECTOR			RenderOfs;
 };
 

@@ -207,6 +207,7 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		LevelHdr->TriList=(sTri*)		MakePtr(LevelHdr,(int)LevelHdr->TriList);
 		LevelHdr->QuadList=(sQuad*)		MakePtr(LevelHdr,(int)LevelHdr->QuadList);
 		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
+		LevelHdr->VtxIdxList=(u16*)		MakePtr(LevelHdr,(int)LevelHdr->VtxIdxList);
 		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
 
 		CModelGfx::SetData(LevelHdr);//LevelHdr->ModelList,LevelHdr->TriList,LevelHdr->QuadList,LevelHdr->VtxList);

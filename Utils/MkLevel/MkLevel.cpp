@@ -74,6 +74,13 @@ Vector3	DefVtxTable[8]=
 };
 #define	DefVtxTableSize	sizeof(DefVtxTable)/sizeof(Vector3)
 
+float	SnapThresh=0.05f;
+float	SnapXMin=-0.5f;
+float	SnapXMax=+0.5f;
+float	SnapYMin=-0.0f;
+float	SnapYMax=+1.0f;
+float	SnapZMin=-4.0f;
+float	SnapZMax=+4.0f;
 
 //***************************************************************************
 CMkLevel::CMkLevel()
@@ -393,14 +400,6 @@ u8		*ByteHdr=(u8*)FileHdr;
 
 
 //***************************************************************************
-float	SnapThresh=0.05f;
-float	SnapXMin=-0.5f;
-float	SnapXMax=+0.5f;
-float	SnapYMin=-0.0f;
-float	SnapYMax=+1.0f;
-float	SnapZMin=-4.0f;
-float	SnapZMax=+4.0f;
-
 void	CMkLevel::SnapTiles()
 {
 int		i,ListSize=InTileList.size();
@@ -557,7 +556,7 @@ int		i,ListSize=OutElem3d.size();
 //***************************************************************************
 void	CMkLevel::ProcessElem3d(sOutElem3d &ThisElem)
 {
-CFaceStore	&ThisList=ThisElem.FaceStore;
+CFaceStore		&ThisList=ThisElem.FaceStore;
 
 			ThisList.setMaxStripLength(StripLength);
 			ThisElem.Elem3d.TriStart=OutTriList.size();
@@ -565,31 +564,102 @@ CFaceStore	&ThisList=ThisElem.FaceStore;
 			if (!ThisElem.LocalGeom)
 			{ // Global Geom
 				ThisList.Process(OutTriList,OutQuadList,OutVtxList);
+				CalcOtOfs(OutTriList,OutVtxList,ThisElem.Elem3d.TriStart,ThisList.GetTriFaceCount());
+				CalcOtOfs(OutQuadList,OutVtxList,ThisElem.Elem3d.QuadStart,ThisList.GetQuadFaceCount());
 			}
 			else
 			{ // Local Geom
 				vector<sVtx>	LocalVtxList;
-				AddDefVtx(LocalVtxList);
+//				AddDefVtx(LocalVtxList);
 				ThisList.Process(OutTriList,OutQuadList,LocalVtxList);
-				ThisElem.LocalVtxIdxStart=OutLocalVtxIdxList.size();
-				printf("%i\n",LocalVtxList.size());
+				ThisElem.Elem3d.VtxIdxStart=OutLocalVtxIdxList.size();
+//				printf("%i\n",LocalVtxList.size());
 
-				int v,VtxListSize=LocalVtxList.size();
-				for (v=0; v<VtxListSize; v++)
+				int VtxListSize=LocalVtxList.size();
+				for (int v=0; v<VtxListSize; v++)
 				{
 					u16	Idx=CFaceStore::AddVtx(OutVtxList,LocalVtxList[v]);
 					OutLocalVtxIdxList.push_back(Idx);
 				}
+				ThisElem.Elem3d.VtxTriCount=VtxListSize/3;
+				if (VtxListSize%3) ThisElem.Elem3d.VtxTriCount++;
+
+				CalcOtOfs(OutTriList,LocalVtxList,ThisElem.Elem3d.TriStart,ThisList.GetTriFaceCount());
+				CalcOtOfs(OutQuadList,LocalVtxList,ThisElem.Elem3d.QuadStart,ThisList.GetQuadFaceCount());
 			}
 
 			ThisElem.Elem3d.TriCount=ThisList.GetTriFaceCount();
 			ThisElem.Elem3d.QuadCount=ThisList.GetQuadFaceCount();
 
-			if (!ThisElem.Model)
-			{ // Gen max polys per tile (NOT MODEL)
-				if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
-				if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+		if (!ThisElem.Model)
+		{ // Gen max polys per tile (NOT MODEL)
+			if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
+			if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+		}
+}
+
+//***************************************************************************
+void	CMkLevel::CalcOtOfs(vector<sTri> &PList,vector<sVtx> &VtxList,int Start,int Count)
+{
+int		ZOfs=+4*Scale;
+
+		for (int i=0;i<Count;i++)
+		{
+			sTri	&P=PList[Start+i];
+			int		OtOfs=0;
+			int		Z[3];
+// Get VtxZ
+			
+			Z[0]=VtxList[P.P0].vz+ZOfs;
+			Z[1]=VtxList[P.P1].vz+ZOfs;
+			Z[2]=VtxList[P.P2].vz+ZOfs;
+
+			for (int p=0; p<3; p++)	
+			{
+				OtOfs+=Z[p]*Z[p];
 			}
+
+			OtOfs=((int)sqrt(OtOfs/3))/8;
+
+			OtOfs+=P.OTOfs;
+
+			if (OtOfs>15) OtOfs=15;
+			if (OtOfs<0) OtOfs=0;
+
+			P.OTOfs=OtOfs;
+		}
+
+}
+
+//***************************************************************************
+void	CMkLevel::CalcOtOfs(vector<sQuad> &PList,vector<sVtx> &VtxList,int Start,int Count)
+{
+int		ZOfs=+4*Scale;
+
+		for (int i=0;i<Count;i++)
+		{
+			sQuad	&P=PList[Start+i];
+			int		OtOfs=0;
+			int		Z[4];
+// Get VtxZ
+			
+			Z[0]=VtxList[P.P0].vz+ZOfs;
+			Z[1]=VtxList[P.P1].vz+ZOfs;
+			Z[2]=VtxList[P.P2].vz+ZOfs;
+			Z[3]=VtxList[P.P3].vz+ZOfs;
+
+			for (int p=0; p<4; p++)	OtOfs+=Z[p]*Z[p];
+
+			OtOfs=((int)sqrt(OtOfs/4))/8;
+
+			OtOfs+=P.OTOfs;
+
+			if (OtOfs>15) OtOfs=15;
+			if (OtOfs<0) OtOfs=0;
+
+			P.OTOfs=OtOfs;
+		}
+
 }
 
 //***************************************************************************
@@ -895,8 +965,6 @@ GString	OutFilename=OutName+".Lvl";
 }
 
 //***************************************************************************
-int		MinOT=123456,MaxOT=0;		
-
 void	CMkLevel::WriteElemBanks()
 {
 int		i,ListSize;
@@ -928,54 +996,30 @@ int		i,ListSize;
 
 // VtxList
 		LevelHdr.VtxList=(sVtx*)WriteVtxList();
+// VtxIdxList
+		LevelHdr.VtxIdxList=(u16*)ftell(File);
+		ListSize=OutLocalVtxIdxList.size();
+		for (i=0; i<ListSize; i++)
+		{
+			u16	&ThisIdx=OutLocalVtxIdxList[i];
+			fwrite(&ThisIdx,1,sizeof(u16),File);
+		}
+
 }
 
 
 //***************************************************************************
-int		ZMin=9999,ZMax=0;
-int		SnapCount[8]={0,0,0,0,0,0,0,0};
 int		CMkLevel::WriteTriList()
 {
 int				ThisPos=ftell(File);
 int				i,ListSize=OutTriList.size();
-int				ZOfs=+4*Scale;
 
 		for (i=0;i<ListSize;i++)
 		{
 			sTri	&T=OutTriList[i];
-			int		OtOfs=0;
-			int		Z[3];
-
-// Calc OtOfs
-			Z[0]=OutVtxList[T.P0].vz+ZOfs;
-			Z[1]=OutVtxList[T.P1].vz+ZOfs;
-			Z[2]=OutVtxList[T.P2].vz+ZOfs;
-
-			if (T.P0<8) SnapCount[T.P0]++;
-			if (T.P1<8) SnapCount[T.P1]++;
-			if (T.P2<8) SnapCount[T.P2]++;
-			for (int p=0; p<3; p++)
-			{
-				if (ZMin>Z[p]) ZMin=Z[p];
-				if (ZMax<Z[p]) ZMax=Z[p];
-				OtOfs+=Z[p]*Z[p];
-			}
-			OtOfs=(int)sqrt(OtOfs/3);
-			
-			OtOfs/=8;
-			if (MinOT>OtOfs) MinOT=OtOfs;
-			if (MaxOT<OtOfs) MaxOT=OtOfs;
-
-			OtOfs+=T.OTOfs;
-			if (OtOfs>15) OtOfs=15;
-			if (OtOfs<0) OtOfs=0;
-
-			T.OTOfs=OtOfs;
-// Write It			
 			fwrite(&T,1,sizeof(sTri),File);
 		}
 		printf("%i Tris\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTri));
-//		printf("\n"); for (i=0; i<8;i++) printf("Snapped Vtx %i=%i \n",i,SnapCount[i]); printf("\n");
 		return(ThisPos);
 }
 
@@ -984,54 +1028,23 @@ int		CMkLevel::WriteQuadList()
 {
 int				ThisPos=ftell(File);
 int				i,ListSize=OutQuadList.size();
-int				ZOfs=+4*Scale;
 
 		for (i=0;i<ListSize;i++)
 		{
 			sQuad	&Q=OutQuadList[i];
-			int		OtOfs=0;
-			int		Z[4];
-
-// Calc OtOfs
-			Z[0]=OutVtxList[Q.P0].vz+ZOfs;
-			Z[1]=OutVtxList[Q.P1].vz+ZOfs;
-			Z[2]=OutVtxList[Q.P2].vz+ZOfs;
-			Z[3]=OutVtxList[Q.P3].vz+ZOfs;
-			
-			if (Q.P0<8) SnapCount[Q.P0]++;
-			if (Q.P1<8) SnapCount[Q.P1]++;
-			if (Q.P2<8) SnapCount[Q.P2]++;
-			if (Q.P3<8) SnapCount[Q.P3]++;
-			for (int p=0; p<4; p++)
-			{
-				if (ZMin>Z[p]) ZMin=Z[p];
-				if (ZMax<Z[p]) ZMax=Z[p];
-				OtOfs+=Z[p]*Z[p];
-			}
-			OtOfs=(int)sqrt(OtOfs/4);
-			
-			OtOfs/=8;
-			if (MinOT>OtOfs) MinOT=OtOfs;
-			if (MaxOT<OtOfs) MaxOT=OtOfs;
-			if (OtOfs>15) OtOfs=15;
-			if (OtOfs<0) OtOfs=0;
-
-			Q.OTOfs=OtOfs;
-// Write It			
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
 		printf("%i Quads\t(%i Bytes)\n",ListSize,ListSize*sizeof(sQuad));
-//		printf("\n"); for (i=0; i<8;i++) printf("Snapped Vtx %i=%i \n",i,SnapCount[i]); printf("\n");
 		return(ThisPos);
 }
 
 //***************************************************************************
-sVtx	Min={+100,+100,+100};
-sVtx	Max={-100,-100,-100};
 int		CMkLevel::WriteVtxList()
 {
 int		i,ListSize=OutVtxList.size();
 int		Pos=ftell(File);
+sVtx	Min={+100,+100,+100};
+sVtx	Max={-100,-100,-100};
 
 		for (i=0; i<ListSize; i++)
 		{
@@ -1048,7 +1061,6 @@ int		Pos=ftell(File);
 			Max.vy=__max(Max.vy,Out.vy);
 			Max.vz=__max(Max.vz,Out.vz);
 			fwrite(&Out,1,sizeof(sVtx),File);
-//			if (abs(Out.vz)==400) printf("%i %i %i\n",Out.vx,Out.vy,Out.vz);
 		}
 		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));
 
