@@ -1,0 +1,44 @@
+OVERVIEW
+The SBSP memcard system will allow the player to save their progress through the game onto memcard. 
+The game internally allows up to four players to save their progress in four "game slots". 
+These will then be saved onto a memcard as one "memcard slot". 
+To reduce the work required for memcards ( and also to reduce the chance of TRC related failures! ) we will only allow one game save per card. 
+This means that we do not have to ask the user for a save filename, do not have to display filenames from other products, etc., etc.. 
+We will also only ever use memory card slot 1 - Again, this saves us from a lot of potential problems.
+The load/save will be split into the three areas described below: autoload, load and save.
+
+AUTOLOAD
+Occurs while the game is booting, most probably while the legal screen is being displayed. 
+If the operation succeeds then the options and saved game slots will be restored. 
+There will be no feedback given to and no interaction with the user about this process at all as it is not required.
+
+LOAD
+Selected from the front end OPTIONS menu, this will allow the user to load in a previously saved game. 
+All options and game slots will be restored, as per the autoload. 
+This screen will be extremely simple and will basically be a single menu with "DO YOU WANT TO LOAD? YES/NO" 
+surrounded by all of the TRC required messages ( "CHECKING MEMORY CARD..", "CARD NOT FORMATTED..", "SAVING - DO NOT REMOVE THE MEMORY CARD..", etc.. )
+
+SAVE
+Selectable from the map screen and also appears automatically after the party screen ( ie: after the game has been completed. ) 
+This will again be a very simple screen, this time with a "DO YOU WANT TO SAVE? YES/NO" menu. 
+The screen will be more complex than the LOAD one as there are more potential errors that could occur here ( eg: card not formatted, not enough space on card, etc.. )
+
+It is worth noting that we have a full selection of memory card texts that have been passed by Sony.
+
+WHAT WILL BE SAVED
+Per game slot:
+	Party items bought
+	Number of spatulas collected per level
+	Kelp tokens collected per bonus level ( and exactly which ones )
+	Total number of kelp tokens held
+	State of all levels ( not open/open/complete )
+Options:
+	Control style
+	Screen position
+	Sound volumes ( BGM, SFX and speech )
+	Language ( only on PAL build )
+
+WHAT WILL NOT BE SAVED
+Per game slot:
+	Lives ( will always reset to 5 when you start )
+	Continues ( will always reset to 3 when you start )
