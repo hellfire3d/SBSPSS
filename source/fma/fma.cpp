@@ -1520,7 +1520,10 @@ void	CFmaScene::think(int _frames)
 			while(!m_doOtherProcessing);
 		}
 
-		m_frameCount++;
+		if(*m_pc!=SC_WAIT_ON_CONVERSATION)
+		{
+			m_frameCount++;
+		}
 	}
 
 	CThingManager::thinkAllThings(_frames);
