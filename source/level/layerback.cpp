@@ -128,6 +128,7 @@ int		XInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 
 		if (Data->BackGfx[SpritePtr->Type].Flags & MOVE)
+		if (0)
 		{
 			switch(StartPos&3)
 			{
@@ -174,6 +175,7 @@ int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 		}
 		
 		if (Data->BackGfx[SpritePtr->Type].Flags & SCALE)
+		if (0)
 		{
 			SpritePtr->Scale.vx=getRndRange(4095);
 			SpritePtr->Scale.vy=getRndRange(4095);
@@ -183,6 +185,7 @@ int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 			if (SpritePtr->ScaleInc.vy&1) SpritePtr->ScaleInc.vy=-SpritePtr->ScaleInc.vy;
 		}
 		if (Data->BackGfx[SpritePtr->Type].Flags & SPIN)
+		if (0)
 		{
 			SpritePtr->AngleInc=getRndRange(31)+31;
 			if (SpritePtr->AngleInc&1) SpritePtr->AngleInc=-SpritePtr->AngleInc;
