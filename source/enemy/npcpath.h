@@ -30,6 +30,7 @@ public:
 	void			setPathType( u8 newPathType );
 	u8				getPathType();
 	bool			incPath();
+	void			decPath();
 	void			resetPath();
 	void			reversePathDir();
 	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY );

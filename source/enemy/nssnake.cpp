@@ -555,8 +555,21 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 			case COLLISION_TYPE_FLAG_SOLID:
 			{
 				Pos = oldPos;
-				m_heading += 1024;
+				m_heading += 2048;
 				m_heading &= 4095;
+
+				m_npcPath.decPath();
+
+				DVECTOR waypointPos;
+				m_npcPath.getCurrentWaypointPos( &waypointPos );
+				waypointPos.vy -= 8;
+
+				if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+				{
+					// one of the special 'teleport' waypoints
+
+					m_npcPath.incPath();
+				}
 
 				break;
 			}
@@ -879,8 +892,21 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 				m_sensorFunc = NPC_SENSOR_NONE;
 
 				Pos = oldPos;
-				m_heading += 1024;
+				m_heading += 2048;
 				m_heading &= 4095;
+
+				m_npcPath.decPath();
+
+				DVECTOR waypointPos;
+				m_npcPath.getCurrentWaypointPos( &waypointPos );
+				waypointPos.vy -= 8;
+
+				if ( CGameScene::getCollision()->getHeightFromGround( waypointPos.vx, waypointPos.vy ) < 0 )
+				{
+					// one of the special 'teleport' waypoints
+
+					m_npcPath.incPath();
+				}
 
 				break;
 			}
