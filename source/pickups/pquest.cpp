@@ -160,6 +160,7 @@ DVECTOR	CQuestItemPickup::getSizeForPlacement()
   ---------------------------------------------------------------------- */
 void	CQuestItemPickup::collect(class CPlayer *_player)
 {
+	CGameScene::levelFinished();
 	CBasePickup::collect(_player);
 }
 

@@ -301,7 +301,6 @@ thing_src :=		thing
 
 triggers_src :=		trigger \
 					tcamlock \
-					tlevexit \
 					tlook \
 					trestart \
 					tteleprt \

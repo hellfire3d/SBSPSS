@@ -34,6 +34,10 @@
 #include "map\map.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -65,9 +69,7 @@ CFmaScene	FmaScene;
 
 
 
-// tmp
 #include 	"pad\pads.h"
-// tmp
 
 
 /*----------------------------------------------------------------------
@@ -86,7 +88,8 @@ void	CFmaScene::init()
 	m_level=new ("FMALevel") CLevel();
 	m_level->init(25);
 
-	m_cameraPos.vx=m_cameraPos.vy=0;
+	m_cameraPos.vx=-30;
+	m_cameraPos.vy=280;
 	m_readyToShutdown=false;
 }
 
@@ -100,6 +103,7 @@ void	CFmaScene::init()
 void	CFmaScene::shutdown()
 {
 	m_level->shutdown();	delete m_level;
+	CSoundMediator::dumpSong();
 
 	CConversation::shutdown();
 	CThingManager::shutdown();
@@ -128,7 +132,7 @@ void	CFmaScene::render()
   ---------------------------------------------------------------------- */
 void	CFmaScene::think(int _frames)
 {
-// tmp
+#ifdef __USER_paul__
 	if(PadGetHeld(0)&PAD_UP)
 	{
 		m_cameraPos.vy-=10*_frames;
@@ -145,11 +149,11 @@ void	CFmaScene::think(int _frames)
 	{
 		m_cameraPos.vx+=10*_frames;
 	}
-	else if(PadGetDown(0)&PAD_START)
+#endif
+	if(PadGetDown(0)&(PAD_CROSS|PAD_START))
 	{
 		startShutdown();
 	}
-// tmp
 
 	CThingManager::thinkAllThings(_frames);
 	CConversation::think(_frames);

@@ -79,6 +79,11 @@
 #include "map\map.h"
 #endif
 
+#ifndef __FMA_FMA_H__
+#include "fma\fma.h"
+#endif
+
+
 #include "gfx\actor.h"
 
 int			RenderZ=256;
@@ -248,8 +253,15 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
-		// Level finished - go to map
-		GameState::setNextScene(&MapScene);
+		// Level finished - go to map or fma
+		if(getLevelNumber()==4)
+		{
+			GameState::setNextScene(&FmaScene);
+		}
+		else
+		{
+			GameState::setNextScene(&MapScene);
+		}
 		s_readyToExit=true;
 	}
 #ifdef __VERSION_DEBUG__
