@@ -97,7 +97,7 @@ private:
 
 
 	void	createData();
-	void	restoreData();
+	void	restoreData(int _loadSettingsOnly);
 
 	void	allocateBuffer();
 	void	freeBuffer();

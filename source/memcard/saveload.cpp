@@ -296,7 +296,7 @@ int CSaveLoadDatabase::getLoadStatus()
 				}
 
 				// Loaded ok - Copy the data in
-				restoreData();
+				restoreData(m_autoloading==true);
 				ret=FINISHED_OK;
 				MEMCARD_DBGMSG("load ok :)");
 			}
@@ -477,7 +477,7 @@ void CSaveLoadDatabase::createData()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSaveLoadDatabase::restoreData()
+void CSaveLoadDatabase::restoreData(int _loadSettingsOnly)
 {
 	int i;
 
@@ -494,10 +494,13 @@ void CSaveLoadDatabase::restoreData()
 		TranslationDatabase::loadLanguage(m_dataBuffer.m_systemDetails.m_language);
 	}
 	
-	// Game slots
-	for(i=0;i<CGameSlotManager::NUM_GAME_SLOTS;i++)
+	if(!_loadSettingsOnly)
 	{
-		CGameSlotManager::setSlotData(i,&m_dataBuffer.m_gameSlots[i]);
+		// Game slots
+		for(i=0;i<CGameSlotManager::NUM_GAME_SLOTS;i++)
+		{
+			CGameSlotManager::setSlotData(i,&m_dataBuffer.m_gameSlots[i]);
+		}
 	}
 }
 
