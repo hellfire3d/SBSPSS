@@ -1000,7 +1000,7 @@ void CNpcSeaSnakeEnemy::render()
 
 void CNpcSeaSnakeEnemy::renderOnMapScreen( DVECTOR drawPos )
 {
-	drawPos.vx += 300;
+	drawPos.vx += 120;
 
 	POLY_FT4 *headSprFrame;
 
