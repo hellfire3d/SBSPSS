@@ -100,6 +100,7 @@ gfx_src :=			prim \
 					font \
 					bubicles \
 					skel \
+					skelspng \
 					anim
 
 #					camera \

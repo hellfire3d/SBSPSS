@@ -421,6 +421,14 @@ SOURCE=..\..\..\source\gfx\skel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gfx\skelspng.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\skelspng.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gfx\sprbank.cpp
 # End Source File
 # Begin Source File

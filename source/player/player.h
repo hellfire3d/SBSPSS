@@ -19,11 +19,11 @@
 	-------- */
 
 #ifndef __GAME_THING_H__
-#include "Game/Thing.h"
+#include "game/thing.h"
 #endif
 
-#ifndef __SKEL_HEADER__
-#include "Gfx/Skel.h"
+#ifndef __GFX_SKELSPNG_H__
+#include "gfx/skelspng.h"
 #endif
 
 #ifndef __DATA_STRUCTS_HEADER__
@@ -188,7 +188,7 @@ private:
 	static const AnimSfx	s_animSfx[];
 	int				m_animFrame;
 	int				m_animNo;
-	CSkel			m_skel;
+	CSkelSpongeBob	m_skel;
 
 	DVECTOR			m_moveVel;
 	int				m_facing;
