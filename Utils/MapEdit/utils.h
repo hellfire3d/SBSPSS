@@ -53,6 +53,7 @@ void	MakeFullFilename(const char *RelName,GString &Out);
 void	MakePathRel2App(const char* In,char *Out);
 GString	GetWorkingPath();
 void	CheckFilename(GString &Filename);
+int		round(float f) ;
 
 	
 #endif

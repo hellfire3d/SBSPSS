@@ -13,7 +13,7 @@
 #include	"Core.h"
 #include	"TexCache.h"
 #include	"TileSet.h"
-#include	"Tile.h"
+#include	"Elem.h"
 
 #include	"Layer.h"
 #include	"LayerTile.h"
@@ -30,6 +30,11 @@ CExport::CExport(char *Filename)
 // Write Dummy File Header
 
 		fwrite(&FileHdr,sizeof(sExpFileHdr),1,File);
+
+// Add blank tile
+
+sExpTile	BlankElem={0,0,0,0,0,0,0};
+		AddTile(BlankElem);
 }
 
 /*****************************************************************************/
@@ -81,8 +86,10 @@ void	CExport::ExportTiles(CCore *Core)
 int		ListSize,i;
 CTileBank	*TileBank=Core->GetTileBank();
 
-		FileHdr.TileW=TileBank->GetTile(1,0).GetPCTexW();
-		FileHdr.TileH=TileBank->GetTile(1,0).GetPCTexH();
+//!!		FileHdr.TileW=TileBank->GetTile(0,0).GetElemWidth();
+//!!		FileHdr.TileH=TileBank->GetTile(0,0).GetElemHeight();
+		FileHdr.TileW=16;
+		FileHdr.TileH=16;
 
 // Write Tiles
 		ListSize=UsedTileList.size();
@@ -108,37 +115,32 @@ CTileBank	*TileBank=Core->GetTileBank();
 void	CExport::ExportTile(CCore *Core,sExpTile &OutTile)
 {
 CTileBank	*TileBank=Core->GetTileBank();
-CTile		&ThisTile=TileBank->GetTile(OutTile.Set,OutTile.Tile);
-int			RGBW=ThisTile.GetPCTexW();
-int			RGBH=ThisTile.GetPCTexH();
-u8			*RGB=ThisTile.GetPCTexRGB();
-GString		SetName=TileBank->GetSet(OutTile.Set).GetFilename();
 
-		if (ThisTile.IsTile3d())
+		if (OutTile.Set==0 && OutTile.Tile==0)
 		{
-			ExportTile3d(Core,ThisTile,OutTile);
+			char	c=0;
+
+			fwrite(&OutTile,sizeof(sExpTile),1,File);
+			fwrite(&c,1,16*16*3,File);	// Write RGB
 		}
 		else
 		{
+			CElem		&ThisTile=TileBank->GetTile(OutTile.Set,OutTile.Tile);
+			GString		SetName=TileBank->GetSetFilename(OutTile.Set);
+
+			ASSERT(ThisTile.GetElemWidth()==FileHdr.TileW);
+			ASSERT(ThisTile.GetElemHeight()==FileHdr.TileH);
+			if (ThisTile.IsElem3d()) ExportTile3d(Core,ThisTile,OutTile);
+			OutTile.Set=SetNames.Add(SetName);
+			fwrite(&OutTile,sizeof(sExpTile),1,File);
+			fwrite(ThisTile.GetElemRGB(),FileHdr.TileW*FileHdr.TileH*3,1,File);	// Write RGB
 		}
 
-// change set name to set mappping
-		if (OutTile.Set==0) 
-		{
-			SetName="BLANK";
-		}
-
-		OutTile.Set=SetNames.Add(SetName);
-		fwrite(&OutTile,sizeof(sExpTile),1,File);
-// Write RGB
-		ASSERT(RGBW==FileHdr.TileW);
-		ASSERT(RGBH==FileHdr.TileH);
-		fwrite(RGB,RGBW*RGBH*3,1,File);
 
 }
 
 /*****************************************************************************/
-void	CExport::ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile)
+void	CExport::ExportTile3d(CCore *Core,CElem &ThisTile,sExpTile &OutTile)
 {
 CTexCache				&TexCache=Core->GetTexCache();
 std::vector<sTriFace>	&TileTriList=ThisTile.GetTriList();
@@ -185,6 +187,7 @@ char		RelStr[256];
 			ThisFile.Upper();
 			GFName::makerelative(SavePath,ThisFile,RelStr);
 			fwrite(RelStr,strlen(RelStr)+1,1,File);
+			TRACE2("Set %i:%s\n",i,RelStr);
 		}
 // Tex List
 		ListSize=TexNames.size();
@@ -197,6 +200,7 @@ char		RelStr[256];
 			ThisFile.Upper();
 			GFName::makerelative(SavePath,ThisFile,RelStr);
 			fwrite(RelStr,strlen(RelStr)+1,1,File);
+			TRACE2("Tex %i:%s\n",i,RelStr);
 		}
 
 }

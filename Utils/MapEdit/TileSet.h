@@ -14,7 +14,7 @@
 
 #include	"Layer.h"
 #include	"TexCache.h"
-#include	"Tile.h"
+#include	"Elem.h"
 
 #include	"MapEdit.h"
 #include	"LayerTileGui.h"
@@ -27,11 +27,9 @@ DefTileBrowserWidth=8,
 
 /*****************************************************************************/
 class	CCore;
-class	CTile;
 
 /*****************************************************************************/
-class	CTileSet;
-class	CTileBank : public CLayer
+class	CTileBank : public CLayer, public CElemBank
 {
 public:
 		CTileBank();
@@ -57,11 +55,6 @@ public:
 		void		GUIUpdate(CCore *Core);
 		void		GUIChanged(CCore *Core);
 
-		int			GetWidth(){return(0);}
-		int			GetHeight(){return(0);}
-		void		CheckLayerSize(int Width,int Height){};
-		bool		Resize(int Width,int Height){return(false);}
-
 		void		Load(CFile *File,int Version);
 		void		Save(CFile *File);
 
@@ -72,30 +65,25 @@ public:
 		bool		MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos);
 		bool		Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
+// ElemSet Thruput
+const	char		*GetSetName(int Set)									{return(SetList[Set].GetName());}
+const	char		*GetSetFilename(int Set)								{return(SetList[Set].GetFilename());}
+		CElem		&GetTile(int Set,int Tile)								{return(SetList[Set].GetElem(Tile));}
+		void		RenderTile(int Set,int Elem,int Flags,bool Is3d)		{SetList[Set].RenderElem(Elem,Flags,Is3d);}
+
 // Local
-		void		AddTileSet(const char *Filename);
-		int			NeedLoad()							{return(LoadFlag);}
 		void		DeleteCurrent();
-		void		ReloadAll();
-		void		LoadTileSets(CCore *Core);
-		CTile		&GetTile(int Bank,int Tile);
 		
-		int			GetSetCount()						{return(TileSet.size());}
-		
-		CMap		&GetLBrush()						{return(Brush[LBrush]);}
-		CMap		&GetRBrush()						{return(Brush[RBrush]);}
-		CMap		&GetBrush(int i)					{return(Brush[i]);}
-		CMap		&GetActiveBrush()					{return(GetBrush(ActiveBrush));}
+		CMap		&GetLBrush()											{return(Brush[LBrush]);}
+		CMap		&GetRBrush()											{return(Brush[RBrush]);}
+		CMap		&GetBrush(int i)										{return(Brush[i]);}
+		CMap		&GetActiveBrush()										{return(GetBrush(ActiveBrush));}
 
-		bool		IsTileValid(int Set,int Tile);
-		bool		CanClose()							{return(SelStart==-1);}
-
-		void		SetCollision(bool f);
-		CTileSet	&GetSet(int Set)					{return(TileSet[Set]);}
+		bool		CanClose()												{return(SelStart==-1);}
+		CPoint		GetTilePos(int ID,int Width);
 
 // Functions
 		bool		SelectCancel();
-		void		LoadSet(CCore *Core);
 		void		DeleteSet(CCore *Core);
 
 
@@ -104,7 +92,7 @@ protected:
 		bool		Select(int BrushID,bool DownFlag);
 		void		SetBrush(CMap &ThisBrush);
 
-		CList<CTileSet>			TileSet;
+//!!		CList<CTileSet>			TileSet;
 		int						CurrentSet,LastSet;
 		CMap					Brush[2];
 		int						ActiveBrush;
@@ -115,49 +103,6 @@ protected:
 
 		CLayerTileGUI			TileBankGUI;
 
-};
-
-/*****************************************************************************/
-class	CTileSet
-{
-public:
-		CTileSet(const char *_Filename,int Idx);
-		~CTileSet();
-		
-		int			IsLoaded()			{return(Loaded);}
-		int			GetTileCount()		{return(Tile.size());}
-
-		void		Load(CCore *Core);
-		void		Load2d(CCore *Core);
-		void		Load3d(CCore *Core);
-
-const	char		*GetFilename()		{return(Filename);}
-const	char		*GetName()			{return(Name);}
-
-		CTile		&GetTile(int No)	{return(Tile[No]);}
-		void		Purge();
-		int			FindCursorPos(CCore *Core,Vector3 &CamPos,CPoint &MousePos);
-		void		Render(CCore *Core,Vector3 &CamPos,CMap &LBrush,CMap &RBrush,bool Render3d);
-		void		RenderCursor(Vector3 &CamPos,int Pos,int Width, int Height);
-		void		RenderBrush(Vector3 &CamPos,CMap &LBrush,CMap &RBrush);
-		void		RenderGrid(CCore *Core,Vector3 &CamPos,bool Active);
-		int			GetTileBrowserWidth()		{return(TileBrowserWidth);}
-		bool		IsTileValid(int No);
-
-bool			operator==(CTileSet const &v1)		{return (Name==v1.Name);}
-
-//			if (IsStrSame((char*)Name,(char*)v1.Name) return(i);
-
-private:
-		bool		Create16x16Tile(sRGBData &Src,u8 *Dst,int XOfs,int YOfs);
-		CPoint		GetTilePos(int ID);
-
-		GString			Filename,Name;
-		
-		int				SetNumber;
-		CList<CTile>	Tile;
-		bool			Loaded;
-		int				TileBrowserWidth;
 };
 
 /*****************************************************************************/

@@ -19,10 +19,12 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-const	s32		FileVersion=3;
+const	s32		FileVersion=4;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
+
+const Vector3	DefaultCamPos(0.0f,0.0f,0.9f);
 
 /*****************************************************************************/
 class	CMapEditView;
@@ -58,8 +60,8 @@ public:
 // Subview & TileBank
 		CTileBank				*GetTileBank()					{return(ActionLayer->GetTileBank());}
 		void					ToggleSubView();
-		CLayer					*FindSubView(int Type);
-
+//		CLayer					*FindSubView(int Type);
+		bool					IsSubView()						{return(CurrentLayer!=Layer[ActiveLayer]);}
 // GUI 
 		void					UpdateParamBar();
 		void					GUIAdd(CDialog &Dlg,int ID,bool Visible=true,bool Lock=false);
@@ -117,7 +119,7 @@ private:
 		CMapEditView			*CurrentView;
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
-		Vector3					MapCam,TileCam;
+		Vector3					MapCam;
 		Vector3					MapCamOfs,TileCamOfs;
 		Vector3					ScaleVector;
 

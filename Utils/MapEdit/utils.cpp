@@ -324,3 +324,15 @@ CFileDialog	Dlg(true,NULL,Name,OFN_HIDEREADONLY | OFN_PATHMUSTEXIST,Filter);
 }
 
 /*****************************************************************************/
+int		round(float f) 
+{
+		if (f<0) 
+		{
+			return (int)(f-0.5f);
+		} 
+		else 
+		{
+			return (int)(f+0.5f);
+		}
+}
+/*****************************************************************************/

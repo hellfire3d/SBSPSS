@@ -27,7 +27,6 @@
 #include	"Export.h"
 #include	"LayerList.h"
 
-const Vector3	DefaultCamPos(0.0f,0.0f,0.9f);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -36,12 +35,12 @@ CCore::CCore()
 {
 		CurrentMousePos=CPoint(0,0);
 		MapCam=DefaultCamPos;
-		TileCam=DefaultCamPos;
 		SpareFlag=false;
 		GridFlag=true;
 		Is3dFlag=true;
 		CurrentView=NULL;
 		CursorPos.x=CursorPos.y=0;
+		CurrentLayer=0;
 		
 }
 
@@ -86,10 +85,10 @@ void	CCore::Load(CFile *File)
 {
 int		Version,i;
 BOOL	F;
-
+Vector3	DuffVector;
 		File->Read(&Version,sizeof(int));
 		if (Version>100000) Version=1;	// Check fix for changing version to int from float
-
+#ifndef _DEBUG
 		if (Version<FileVersion)
 		{
 			CString mexstr;
@@ -97,13 +96,17 @@ BOOL	F;
 			AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
 
 		}
+#endif
 
 		TRACE1("Load Version %i\n",Version);
 
 		File->Read(&MapCam,sizeof(Vector3));
-		File->Read(&MapCamOfs,sizeof(Vector3));
-		File->Read(&TileCam,sizeof(Vector3));
-		File->Read(&TileCamOfs,sizeof(Vector3));
+		if (Version<FileVersion)
+		{
+			File->Read(&MapCamOfs,sizeof(Vector3));
+			File->Read(&DuffVector,sizeof(Vector3));
+			File->Read(&DuffVector,sizeof(Vector3));
+		}
 	
 		File->Read(&F,sizeof(BOOL));  SpareFlag=F!=0;
 		File->Read(&F,sizeof(BOOL));  GridFlag=F!=0;
@@ -161,9 +164,6 @@ BOOL	F;
 		File->Write(&FileVersion,sizeof(int));
 
 		File->Write(&MapCam,sizeof(Vector3));
-		File->Write(&MapCamOfs,sizeof(Vector3));
-		File->Write(&TileCam,sizeof(Vector3));
-		File->Write(&TileCamOfs,sizeof(Vector3));
 
 		F=SpareFlag;	File->Write(&F,sizeof(BOOL));
 		F=GridFlag;		File->Write(&F,sizeof(BOOL));
@@ -182,7 +182,12 @@ int		LayerCount=Layer.size();
 			Layer[i]->Save(File);
 		}
 	GetTileBank()->Save(File);
-
+/*
+CString	a=File->GetFilePath();
+char	Txt[256];
+		sprintf(Txt,"%s",a);
+	Export(Txt);
+*/
 }
 
 /*****************************************************************************/
@@ -209,14 +214,14 @@ Vector3	&ThisCam=GetCam();
 			UpdateAll();
 			return;
 		}
-		if (GetTileBank()->NeedLoad()) GetTileBank()->LoadTileSets(this);
+//		if (GetTileBank()->NeedLoad()) GetTileBank()->LoadAllSets(this);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 
-		if (CurrentLayer!=Layer[ActiveLayer] || CurrentLayer->IsUnique())
+		if (IsSubView() || CurrentLayer->IsUnique())
 		{
 			CurrentLayer->Render(this,ThisCam,Is3dFlag);
-			CurrentLayer->RenderGrid(this,ThisCam,true);
+			if (GridFlag) CurrentLayer->RenderGrid(this,ThisCam,true);
 			CurrentLayer->FindCursorPos(this,GetCam(),CurrentMousePos);
 		}
 		else
@@ -398,7 +403,7 @@ bool	RedrawFlag=false;
 			break;
 
 		}
-/*		if (RedrawFlag) */RedrawView();
+		RedrawView();
 
 }
 
@@ -454,14 +459,12 @@ int		LastLayer=ActiveLayer;
 		}
 		else
 		{
-			bool	IsCol=Layer[NewLayer]->GetType()==LAYER_TYPE_COLLISION;
-			GetTileBank()->SetCollision(IsCol);
 			ActiveLayer=NewLayer;
 		}
 
 		if (LastLayer!=ActiveLayer || Force)
 		{
-			if (LastLayer<=LayerCount) CurrentLayer->GUIKill(this);
+			if (LastLayer<=LayerCount) Layer[LastLayer]->GUIKill(this);
 			CurrentLayer=Layer[ActiveLayer];
 			CurrentLayer->GUIInit(this);
 			GUIUpdate();
@@ -487,7 +490,6 @@ int			Idx=ListSize;
 		Layer.insert(Layer.begin() + Idx,NewLayer);
 		
 		if (NewLayer->GetType()==LAYER_TYPE_TILE && NewLayer->GetSubType()==LAYER_SUBTYPE_ACTION) ActionLayer=(CLayerTile*)NewLayer;
-		NewLayer->InitSubView(this);
 		return(Idx);
 }
 
@@ -511,6 +513,7 @@ int		Idx;
 				ASSERT(!"AddLayer - Invalid Layer Type");
 				break;
 		}
+		if (ActionLayer) Layer[Idx]->InitSubView(this);
 		return(Idx);
 }
 
@@ -549,23 +552,25 @@ int		Idx=AddLayer(CLayer::InfoTable[NewLayerId].Type,CLayer::InfoTable[NewLayerI
 }
 
 /*****************************************************************************/
-void		CCore::DeleteLayer(int CurrentLayer)
+void		CCore::DeleteLayer(int ThisLayer)
 {
-		if (Layer[CurrentLayer]->CanDelete())
+
+		if (Layer[ThisLayer]->CanDelete())
 		{
-			Layer[CurrentLayer]->GUIKill(this);
-			delete Layer[CurrentLayer];
-			Layer.erase(Layer.begin() + CurrentLayer);
-			SetLayer(CurrentLayer-1,true);
-			TRACE1("Deleted Layer %i\n",CurrentLayer);
+//			Layer[CurrentLayer]->GUIKill(this);
+			SetLayer(ThisLayer-1,true);
+			delete Layer[ThisLayer];
+			Layer.erase(Layer.begin() + ThisLayer);
+			TRACE1("Deleted Layer %i\n",ThisLayer);
 		}
 		else
 		{
-			TRACE1("Cant Delete Layer %i\n",CurrentLayer);
+			TRACE1("Cant Delete Layer %i\n",ThisLayer);
 		}
 }
 
 /*****************************************************************************/
+/*
 CLayer		*CCore::FindSubView(int Type)
 {
 int			i,ListSize=Layer.size();
@@ -580,7 +585,7 @@ int			i,ListSize=Layer.size();
 			}
 		return(0);
 }
-
+*/
 /*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/
@@ -604,7 +609,7 @@ CLayer	*LastLayer=CurrentLayer;
 			LastLayer->GUIKill(this);
 			CurrentLayer->GUIInit(this);
 			GUIUpdate();
-			RedrawView();
+			UpdateView();
 		}
 }
 
@@ -613,10 +618,12 @@ CLayer	*LastLayer=CurrentLayer;
 /*****************************************************************************/
 Vector3	&CCore::GetCam()
 {
-//		if (SubViewFlag)
-//			return(TileCam);
-//		else
-			return(MapCam);
+		if (IsSubView() || CurrentLayer->IsUnique())
+		{
+			return(CurrentLayer->GetCam());
+		}
+
+		return(MapCam);
 
 }
 
@@ -719,6 +726,7 @@ void	CCore::RedrawView()
 /*****************************************************************************/
 void	CCore::UpdateView(Vector3 *Ofs)
 {
+		if (!CurrentLayer) return;
 		if (Ofs)
 		{
 			Vector3	&ThisCam=GetCam();
@@ -726,8 +734,11 @@ void	CCore::UpdateView(Vector3 *Ofs)
 			ThisCam.x+=Ofs->x;
 			ThisCam.y+=Ofs->y;
 			ThisCam.z-=Ofs->z;
-			if (ThisCam.x<0) ThisCam.x=0;
-			if (ThisCam.y<0) ThisCam.y=0;
+			if (!IsSubView())
+			{
+				if (ThisCam.x<0) ThisCam.x=0;
+				if (ThisCam.y<0) ThisCam.y=0;
+			}
 			if (ThisCam.z<0.1) ThisCam.z=0.1f;
 		}
 
@@ -779,7 +790,6 @@ Vector3	ThisCam=Cam;
 
 	ThisCam=Cam/DivVal;
 	ThisCam.z=Cam.z;
-
 	return(ThisCam);
 }
 

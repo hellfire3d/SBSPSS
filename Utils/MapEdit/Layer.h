@@ -78,16 +78,17 @@ virtual	void			GUIKill(CCore *Core)=0;
 virtual	void			GUIUpdate(CCore *Core)=0;
 virtual	void			GUIChanged(CCore *Core)=0;
 
-virtual	int				GetWidth()=0;
-virtual	int				GetHeight()=0;
+virtual	int				GetWidth()						{return(-1);}
+virtual	int				GetHeight()						{return(-1);}
 virtual	void			CheckLayerSize(int Width,int Height){};
-virtual	bool			Resize(int Width,int Height)=0;
+virtual	bool			Resize(int Width,int Height)	{return(false);}
 
 virtual	void			Load(CFile *File,int Version)=0;
 virtual	void			Save(CFile *File)=0;
 
 virtual	void			Export(CCore *Core,CExport &Exp)=0;
 
+virtual	Vector3			&GetCam()						{return(LayerCam);}
 
 // Functions
 virtual	bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag){return(false);}
@@ -103,6 +104,8 @@ protected:
 		bool			VisibleFlag;
 		CSelect			Selection;
 		CLayer			*SubView;
+		Vector3			LayerCam;
+
 };
 
 

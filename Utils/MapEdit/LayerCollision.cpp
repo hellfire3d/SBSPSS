@@ -21,6 +21,9 @@
 #include	"Select.h"
 #include	"Export.h"
 
+// Reserve slot 0 for collision :o)
+GString		ColFName="Collision.bmp";
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -31,6 +34,7 @@ CLayerCollision::CLayerCollision(int _SubType,int Width,int Height)
 		SetDefaultParams();
 		Mode=MouseModePaint;
 		Map.SetSize(Width,Height,TRUE);
+		VisibleFlag=true;
 }
 
 /*****************************************************************************/
@@ -43,6 +47,32 @@ CLayerCollision::CLayerCollision(CFile *File,int Version)
 /*****************************************************************************/
 CLayerCollision::~CLayerCollision()
 {
+		delete TileBank;
+}
+
+/*****************************************************************************/
+void	CLayerCollision::InitSubView(CCore *Core)
+{
+		TileBank=new CTileBank;
+		SubView=TileBank;
+
+GFName	ExePath;
+GString	Filename;
+
+// Get application path
+#ifdef _DEBUG
+		ExePath="C:\\Spongebob\\tools\\mapedit\\";
+#else
+char	ExeFilename[2048];
+		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
+		ExePath=ExeFilename;
+		ExePath.File(0);
+ 		ExePath.Ext(0);
+#endif
+		Filename=ExePath.FullName();
+		Filename+=ColFName;
+		TileBank->AddSet(Filename);
+
 }
 
 /*****************************************************************************/
@@ -81,7 +111,7 @@ void	CLayerCollision::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
-			CLayerTile::Render(Core,ThisCam,Map,FALSE,0.5f);
+			CLayerTile::Render(Core,ThisCam,Map,false,0.5f);
 }
 
 /*****************************************************************************/
@@ -162,19 +192,3 @@ int		Height=Map.GetHeight();
 		}
 
 }
-
-/*****************************************************************************/
-/*
-void	CLayerCollision::DeleteSet(int Set)
-{
-		Map.DeleteSet(Set);
-}
-*/
-/*****************************************************************************/
-/*
-void	CLayerCollision::RemapSet(int OrigSet,int NewSet)
-{
-		Map.RemapSet(OrigSet,NewSet);
-
-}
-*/

@@ -68,7 +68,7 @@ virtual	bool			Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0);
 
 // Local
 		CTileBank		*GetTileBank()		{return(TileBank);}
-		void			DeleteSet(int Set);
+		void			RemoveSet(int Set);
 		void			RemapSet(int OrigSet,int NewSet);
 
 protected:

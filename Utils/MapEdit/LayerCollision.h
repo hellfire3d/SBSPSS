@@ -20,6 +20,7 @@ public:
 		~CLayerCollision();
 
 		int				GetType()			{return(LAYER_TYPE_COLLISION);}
+		void			InitSubView(CCore *Core);
 
 		void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 
@@ -38,7 +39,7 @@ public:
 		void			DeleteSet(int Set);
 		void			RemapSet(int OrigSet,int NewSet);
 protected:
-
+		void			InitTileBank();
 
 		CLayerCollisionGUI	CollisionGUI;
 

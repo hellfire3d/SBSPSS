@@ -55,7 +55,7 @@ public:
 		void		Load(CFile *File,int Version);
 		void		Save(CFile *File);
 
-		void		DeleteSet(int Set);
+		void		RemoveSet(int Set);
 		void		RemapSet(int Old,int New);
 
 

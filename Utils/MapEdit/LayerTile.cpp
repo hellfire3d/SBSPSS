@@ -110,11 +110,11 @@ void	CLayerTile::Save(CFile *File)
 void	CLayerTile::InitSubView(CCore *Core)
 {
 // Fix up shared layers
-		if (!SubView)
+		if (SubType!=LAYER_SUBTYPE_ACTION)
 		{
-			SubView=Core->FindSubView(LAYER_SUBVIEW_TILEBANK);
+			TileBank=Core->GetTileBank();
+			SubView=(CLayer*)TileBank;
 		}
-		TileBank=(CTileBank*)SubView;
 }
 
 /*****************************************************************************/
@@ -154,16 +154,8 @@ void	CLayerTile::Render(CCore *Core,Vector3 &CamPos,bool Is3d)
 {
 Vector3		ThisCam=Core->OffsetCam(CamPos,GetScaleFactor());
 
-		if (Is3d && Render3dFlag)
-		{
-			glEnable(GL_DEPTH_TEST);
-			Render(Core,ThisCam,Map,TRUE);
-			glDisable(GL_DEPTH_TEST);
-		}
-			else
-		{
-			Render(Core,ThisCam,Map,FALSE);
-		}
+		Is3d&=Render3dFlag;
+		Render(Core,ThisCam,Map,Is3d);
 }
 
 /*****************************************************************************/
@@ -206,10 +198,12 @@ float		ScrOfsX=(ZoomW/2);
 float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
 bool		WrapMap=SubType==LAYER_SUBTYPE_BACK;
-int		StartX=(int)ThisCam.x;
-int		StartY=(int)ThisCam.y;
-float	ShiftX=ThisCam.x - (int)ThisCam.x;
-float	ShiftY=ThisCam.y - (int)ThisCam.y;
+int			StartX=(int)ThisCam.x;
+int			StartY=(int)ThisCam.y;
+float		ShiftX=ThisCam.x - (int)ThisCam.x;
+float		ShiftY=ThisCam.y - (int)ThisCam.y;
+
+		if (TileBank->NeedLoad()) TileBank->LoadAllSets(Core);
 
 		if (StartX<0) StartX=0;
 		if (StartY<0) StartY=0;
@@ -251,12 +245,10 @@ int		DrawH=ZoomH+8;
 				}
 				
 				sMapElem	&ThisElem=ThisMap.Get(XPos,YPos);
-				if (ThisElem.Tile && TileBank->IsTileValid(ThisElem.Set,ThisElem.Tile))
-				{ // Render Non Zero Tiles
-					CTile		&ThisTile=TileBank->GetTile(ThisElem.Set,ThisElem.Tile);
-
+				if (ThisElem.Tile>0)
+				{ // Render Non Zero and Valid Tiles
 					glColor4f(1,1,1,Alpha);	// Set default Color
-					ThisTile.Render(ThisElem.Flags,Render3d);
+					TileBank->RenderTile(ThisElem.Set,ThisElem.Tile,ThisElem.Flags,Render3d);
 				}
 				glTranslatef(1.0f,0,0);	// Next X
 			}
@@ -584,6 +576,7 @@ bool	Ret=false;
 		case CmdMsg_ActiveBrushLeft:
 		case CmdMsg_ActiveBrushRight:
 			Ret=TileBank->Command(CmdMsg,Core,Param0,Param1);
+			break;
 		default:
 			TRACE3("LayerTile-Unhandled Command %i (%i,%i)\n",CmdMsg,Param0,Param1);
 		}
@@ -634,7 +627,6 @@ bool	CLayerTile::MirrorX(CCore *Core)
 /*****************************************************************************/
 bool	CLayerTile::MirrorY(CCore *Core)
 {
-//		if (GetType()==LAYER_TYPE_COLLISION) return(false);
 		switch(Mode)
 		{
 		case MouseModePaint:
@@ -714,7 +706,7 @@ CRect		Rect=Selection.GetRect();
 
 bool	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 {
-		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
+		if (CursorPos.x==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
 		if (!Blk.IsValid()) return(FALSE);	// Invalid tile?
 
 		Map.Set(CursorPos.x,CursorPos.y,Blk);
@@ -727,38 +719,45 @@ void	CLayerTile::Export(CCore *Core,CExport &Exp)
 {
 int				Width=Map.GetWidth();
 int				Height=Map.GetHeight();
-sExpTile		BlankElem={0,0,0,0};
 
 		Exp.ExportLayerHeader(LAYER_TYPE_TILE,SubType,Width,Height);
 
-		Exp.AddTile(BlankElem);	// Ensure blank tile is present
-		
 		for (int Y=0; Y<Height; Y++)
 		{
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
-				CTile			&ThisTile=TileBank->GetTile(MapElem.Set,MapElem.Tile);
 				sExpLayerTile	OutElem;
-				sExpTile		OutTile;
 
-				OutTile.Set=MapElem.Set;
-				OutTile.Tile=MapElem.Tile;
-				OutTile.TriCount=0;
-				OutTile.XOfs=ThisTile.GetTexXOfs();
-				OutTile.YOfs=ThisTile.GetTexYOfs();
-				
-				OutElem.Tile=Exp.AddTile(OutTile);
-				OutElem.Flags=MapElem.Flags;
+				if (MapElem.Set==0 && MapElem.Tile==0)
+				{ // Blank
+					OutElem.Tile=0;
+					OutElem.Flags=0;
+				}
+				else
+				{
+					sExpTile		OutTile;
+					CElem			&ThisTile=TileBank->GetTile(MapElem.Set,MapElem.Tile);
+
+					OutTile.Set=MapElem.Set;
+					OutTile.Tile=MapElem.Tile;
+					OutTile.TriStart=0;
+					OutTile.TriCount=0;
+					OutTile.XOfs=ThisTile.GetTexXOfs();
+					OutTile.YOfs=ThisTile.GetTexYOfs();
+					OutElem.Tile=Exp.AddTile(OutTile);
+					OutElem.Flags=MapElem.Flags;
+				}
+
 				Exp.Write(&OutElem,sizeof(sExpLayerTile));
 			}
 		}
 }
 
 /*****************************************************************************/
-void	CLayerTile::DeleteSet(int Set)
+void	CLayerTile::RemoveSet(int Set)
 {
-		Map.DeleteSet(Set);
+		Map.RemoveSet(Set);
 }
 
 /*****************************************************************************/

@@ -129,7 +129,6 @@ vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		for (i=0; i<ListSize; i++)
 		{
 			ActorList[i].ActorWrite();
-			ActorList[i].AnimWrite();
 		}
 
 		return 0;
@@ -397,11 +396,15 @@ GString	OutName=OutFile+".A3d";
 // Write TexList
 		FileHdr.TexInfo=(sTexInfo*)WriteTexInfoList();
 
-		printf("S:%i\n",ftell(File));
+// Write anims
+		AnimWrite();
 
 // Rewrite Header
 		fseek(File, 0, SEEK_SET);
 		fwrite(&FileHdr,1,sizeof(sActorHdr),File);
+		fclose(File);
+
+		AnimWriteInclude();
 }
 
 //***************************************************************************
@@ -492,7 +495,7 @@ int		ListSize=InAnimList.size();
 			AnimList.push_back(ThisAnim);
 
 			ThisBoneCount=ThisAnim.BoneAnim.size();
-			printf("\t(%i Bones, %i Frames)\n",ThisBoneCount,ThisAnim.FrameCount);
+			printf("\t(%i Frames)\n",ThisAnim.FrameCount);
 
 // Check Skeleton
 			if (BoneCount!=ThisBoneCount)
@@ -557,21 +560,17 @@ int			ChildCount=ThisNode.GetPruneChildCount();
 //***************************************************************************
 void	CMkActor3d::AnimWrite()
 {
-GString			OutName=OutFile+".Abk";
 int				Anim,AnimCount=AnimList.size();
-sAnimFileHdr	FileHdr;
 sAnimHdr		Hdr;
+int				HdrPos;
 
-		if (!AnimCount) return;	// No anims, dont bother
-		File=fopen(OutName,"wb");
-
-// Write Dummy FileHdr		
+// FileHdr		
 		FileHdr.AnimCount=AnimCount;
-		FileHdr.BoneCount=BoneCount;
-		fwrite(&FileHdr,1,sizeof(sAnimFileHdr),File);
+		if (!AnimCount) return;	// No anims, dont bother
 
 // Write Dummy AnimHdrs
-
+		HdrPos=ftell(File);
+		FileHdr.AnimList=(sAnimHdr*)HdrPos;
 		for (Anim=0; Anim<AnimCount; Anim++)
 		{
 			fwrite(&Hdr,1,sizeof(sAnimHdr),File);
@@ -592,12 +591,8 @@ sAnimHdr		Hdr;
 			AnimList[Anim].AnimOfs=AnimWriteAnim(AnimList[Anim]);
 		}
 
-// ReWrite FileHdr
-		fseek(File, 0, SEEK_SET);
-		fwrite(&FileHdr,1,sizeof(sAnimFileHdr),File);
-
 // Rewrite Dummy AnimHdrs
-
+		fseek(File,HdrPos,SEEK_SET);
 		for (Anim=0; Anim<AnimCount; Anim++)
 		{
 			Hdr.FrameCount=AnimList[Anim].FrameCount;
@@ -605,9 +600,7 @@ sAnimHdr		Hdr;
 			Hdr.Anim=(u16*)AnimList[Anim].AnimOfs;
 			fwrite(&Hdr,1,sizeof(sAnimHdr),File);
 		}
-	
-		fclose(File);
-		if (!IncludeFile.Empty()) AnimWriteInclude();
+
 }
 
 //***************************************************************************
@@ -663,6 +656,7 @@ int		ListSize=QuatList.size();
 void	CMkActor3d::AnimWriteInclude()
 {
 GString	Filename=IncFile+"_Anim.h";
+FILE	*File;
 
 		File=fopen(Filename,"wt");
 

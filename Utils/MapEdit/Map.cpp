@@ -17,7 +17,7 @@ void	CMap::Load(CFile *File,int Version)
 // Version 1
 int	Width;
 int	Height;
-int	VFix=0;	// Fix for colliison tileset
+int	VFix=0;	// Fix for New tileset shash
 
 		if (Version<2) VFix=1;
 
@@ -33,6 +33,15 @@ int	VFix=0;	// Fix for colliison tileset
 				sMapElem	ThisElem;
 				File->Read(&ThisElem,sizeof(sMapElem));
 				ThisElem.Set+=VFix;
+				if (Version==3) 
+				{
+					ThisElem.Set--;
+					if (ThisElem.Set<0)
+					{
+						ThisElem.Set=0;
+					}
+				}
+
 				Set(X,Y,ThisElem,TRUE);
 			}
 		}
@@ -312,7 +321,7 @@ int		MinH=min(Height,OldHeight);
 }
 
 /*****************************************************************************/
-void	CMap::DeleteSet(int Set)
+void	CMap::RemoveSet(int Set)
 {
 int		Width=GetWidth();
 int		Height=GetHeight();

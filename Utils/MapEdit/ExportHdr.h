@@ -6,8 +6,6 @@
 #define	__EXPORT_STRUCTS_HEADER__
 
 #include	<Vector>
-//#include	"GinTex.h"
-//#include	"Tile.h"
 
 #include	<List.h>
 

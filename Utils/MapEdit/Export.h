@@ -34,8 +34,8 @@ public:
 
 protected:
 		void	ExportTile(CCore *Core,sExpTile	&ThisElem);
-		void	ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
-		void	ExportTile2d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
+		void	ExportTile3d(CCore *Core,CElem &ThisTile,sExpTile &OutTile);
+		void	ExportTile2d(CCore *Core,CElem &ThisTile,sExpTile &OutTile);
 
 		sExpFileHdr			FileHdr;
 		

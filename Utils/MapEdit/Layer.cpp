@@ -31,6 +31,7 @@ int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);
 CLayer::CLayer()
 {
 	SubView=0;
+	LayerCam=DefaultCamPos;
 }
 
 /*****************************************************************************/
