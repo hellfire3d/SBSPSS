@@ -35,6 +35,7 @@ void CNpcFishHookPlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_isMoving = false;
+	m_isResetting = false;
 	m_isShuttingDown = false;
 	m_lineBase.vx = Pos.vx;
 	m_lineBase.vy = 0;
@@ -59,14 +60,26 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 {
 	if ( m_isMoving )
 	{
-		Pos.vy -= m_speed * _frames;
-
-		if ( Pos.vy < 0 )
+		if ( m_isResetting )
 		{
-			m_isActive = false;
-			m_timer = getRnd() % ( 4 * GameState::getOneSecondInFrames() );
-			m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
-			m_isMoving = false;
+			Pos.vy += 2 * _frames;
+
+			if ( Pos.vy > m_base.vy )
+			{
+				Pos.vy = m_base.vy;
+
+				m_isResetting = false;
+				m_isMoving = false;
+			}
+		}
+		else
+		{
+			Pos.vy -= m_speed * _frames;
+
+			if ( Pos.vy < 0 )
+			{
+				m_isResetting = true;
+			}
 		}
 	}
 }
