@@ -143,7 +143,6 @@ public:
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
 	s16				getCollisionAngle()							{return m_collisionAngle;}
-	bool			getCentreCollision()						{return m_centreCollision;}
 	DVECTOR			getNewCollidedPos()							{return m_newCollidedPos;}
 	DVECTOR			getCollisionSize()							{return m_collisionSize;}
 
@@ -156,7 +155,6 @@ public:
 	virtual bool	getHasPlatformCollided()					{return false;}
 	virtual s32		getNewYPos( CThing *_thisThing );
 	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
-	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
 
 
 protected:

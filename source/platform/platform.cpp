@@ -854,19 +854,9 @@ int	CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 					{
 						_thisThing->setHasPlatformCollided( true );
 
-						_thisThing->setCentreCollision( true );
-
 						_thisThing->setNewCollidedPos( thatPos );
 					}
 				}
-				else
-				{
-					_thisThing->setCentreCollision( false );
-				}
-			}
-			else
-			{
-				_thisThing->setCentreCollision( false );
 			}
 		}
 	}
