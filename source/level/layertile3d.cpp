@@ -64,8 +64,6 @@ void	CLayerTile3d::shutdown()
 {
 }
 
-int	GHV=256;
-
 /*****************************************************************************/
 
 void	CLayerTile3d::think(DVECTOR &MapPos)
@@ -103,9 +101,6 @@ int			YPos=MapPos.vy>>MapXYShift;
 				RenderH=SCREEN_TILE_HEIGHT3D;
 			else
 				RenderH=MapHeight-MapXY.vy;
-
-		SetGeomScreen(GHV);
-
 }
 
 /*****************************************************************************/

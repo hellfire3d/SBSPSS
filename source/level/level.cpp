@@ -686,12 +686,6 @@ void	CLevel::shutdown(bool CleanUp)
 /*****************************************************************************/
 void 	CLevel::render()
 {
-// Setup Constant Rot Matrix
-MATRIX	*Mtx=CGameScene::GetCamMtx();
-
-		SetRotMatrix(Mtx);
-		SetTransMatrix(Mtx);
-
 // Setup dummy prim to ensure OtPos 0 is initialised (for fast add)
 		for (int i=0;i<8; i++)
 		{

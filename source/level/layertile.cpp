@@ -61,16 +61,17 @@ int			XPos=MapPos.vx>>MapXYShift;
 int			YPos=MapPos.vy>>MapXYShift;
 
 			MapXY.vx=XPos>>4;
-			MapXY.vy=YPos>>4;
-			
+			MapXY.vy=YPos/12;
+#if	0			
 			if (LayerHdr->SubType==1)	// BODGE AND A HALF
 			{
 /**/			MapXY.vx+=TileMapOfs.vx;
 /**/			MapXY.vy+=TileMapOfs.vy;
 			}
-
+#endif
 			ShiftX=XPos & 15;
-			ShiftY=YPos & 15;
+//			ShiftY=YPos & 15;
+			ShiftY=YPos%12;
 
 			if (MapXY.vx+SCREEN_TILE_WIDTH<=MapWidth)
 				RenderW=SCREEN_TILE_WIDTH;
@@ -87,6 +88,49 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+#if	1
+void	CLayerTile::render()
+{
+sTileMapElem	*MapPtr=GetMapPos();
+u8				*PrimPtr=GetPrimPtr();
+s16				TileX,TileY;
+sOT				*ThisOT=OtPtr+LayerOT;
+
+// Setup shift bits of pos
+		TileY=-ShiftY;
+
+// Render it!!
+		for (int Y=0; Y<RenderH; Y++)
+		{
+			sTileMapElem	*MapRow=MapPtr;
+			TileX=-ShiftX;
+
+			for (int X=0; X<RenderW; X++)
+			{
+				int	ThisTile=*MapRow++;
+				if (ThisTile)
+				{
+					sTile		*Tile=&TileBank[ThisTile];
+					POLY_FT4	*Ft4=(POLY_FT4*)PrimPtr;
+					setPolyFT4(Ft4);
+					setShadeTex(Ft4,1);
+					setXYWH(Ft4,TileX,TileY,16,12);
+					setUVWH(Ft4,Tile->u0,Tile->v0,15,15);
+					Ft4->tpage=Tile->TPage;
+					Ft4->clut=Tile->Clut;
+					addPrimNoCheck(ThisOT,Ft4);
+					PrimPtr+=sizeof(POLY_FT4);
+				}
+				TileX+=TILE_WIDTH;
+			}
+			MapPtr+=MapWidth;
+			TileY+=TILE_HEIGHT;
+		}
+		SetPrimPtr(PrimPtr);
+
+}
+
+#else
 void	CLayerTile::render()
 {
 sTileMapElem	*MapPtr=GetMapPos();
@@ -129,3 +173,5 @@ sOT				*ThisOT=OtPtr+LayerOT;
 
 }
 
+
+#endif
