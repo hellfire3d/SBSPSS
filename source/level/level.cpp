@@ -421,7 +421,6 @@ void	CLevel::initThings(int _respawningLevel)
 				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
 											TriggerList->Width<<4,TriggerList->Height<<4);
 				trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
-				trigger->updateCollisionArea();
 			}
 			TriggerList++;
 		}
@@ -444,7 +443,6 @@ void	CLevel::initThings(int _respawningLevel)
 					pos.vx=ItemList->Pos.X<<4;
 					pos.vy=ItemList->Pos.Y<<4;
 					newPickup=createPickup((PICKUP_TYPE)ItemList->Type,&pos);
-					newPickup->updateCollisionArea();
 					if(isSpat)
 					{
 						((CSpatulaPickup*)newPickup)->setSpatulaNumber(spatNumber);
@@ -479,7 +477,6 @@ void	CLevel::initThings(int _respawningLevel)
 						enemy->setLayerCollision( getCollisionLayer() );
 						enemy->setupWaypoints( ThisActor );
 						enemy->postInit();
-						enemy->updateCollisionArea();
 
 						if ( ThisActor->Speed )
 						{
@@ -494,7 +491,6 @@ void	CLevel::initThings(int _respawningLevel)
 						friendNpc=CNpcFriend::Create(ThisActor);
 						friendNpc->setLayerCollision( getCollisionLayer() );
 						friendNpc->postInit();
-						friendNpc->updateCollisionArea();
 					}
 					break;
 
@@ -514,7 +510,6 @@ void	CLevel::initThings(int _respawningLevel)
 			platform = CNpcPlatform::Create( ThisPlatform );
 			platform->setLayerCollision( getCollisionLayer() );
 			platform->postInit();
-			platform->updateCollisionArea();
 
 			if ( ThisPlatform->Speed )
 			{
@@ -532,7 +527,6 @@ void	CLevel::initThings(int _respawningLevel)
 			CNpcHazard *hazard;
 			hazard = CNpcHazard::Create( ThisHazard );
 			hazard->setLayerCollision( getCollisionLayer() );
-			hazard->updateCollisionArea();
 			if ( ThisHazard->Respawn )
 			{
 				hazard->setRespawnRate( ThisHazard->Respawn );
@@ -543,6 +537,7 @@ void	CLevel::initThings(int _respawningLevel)
 	// initialise jellyfish generator
 
 	CJellyfishGenerator::init();
+	CThingManager::initAllThings();
 }
 
 

@@ -158,6 +158,25 @@ void		CThingManager::killAllThingsForRespawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void		CThingManager::initAllThings()
+{
+	for(int	i=0; i<CThing::MAX_TYPE; i++)
+	{
+		CThing	*thing=s_thingLists[i];
+		while(thing)
+		{
+			thing->updateCollisionArea();
+			thing=thing->m_nextListThing;
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 
 void		CThingManager::thinkAllThings(int _frames)
 {
@@ -172,9 +191,10 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	int		i;
 	CThing	*thing;
 	CThing	*thing1,*thing2,*playerThing;
+
 	initList(s_CollisionLists);
 
-	for(i=0;i<CThing::MAX_TYPE;i++)
+	for(i=0; i<CThing::MAX_TYPE; i++)
 	{
 		thing=s_thingLists[i];
 		while(thing)
@@ -191,14 +211,14 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if (Flag)
 			{
 				thing->think(_frames);
-//				thing->updateCollisionArea();
+				thing->updateCollisionArea();
 				if (thing->canCollide())
 				{
-				CThingManager::addToCollisionList(thing);
+					CThingManager::addToCollisionList(thing);
 				}
 			}
 /* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
-			thing->updateCollisionArea();
+//			thing->updateCollisionArea();
 
 			thing=thing->m_nextListThing;
 		}
@@ -213,7 +233,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 	playerThing=s_CollisionLists[CThing::TYPE_PLAYER];
 
-	if (playerThing)
+	if (player && playerThing)
 	{
 		playerThing->setHasPlatformCollided( false );
 		playerThing->setNewCollidedPos( playerThing->getPos() );
@@ -514,13 +534,12 @@ void	CThingManager::removeFromThingList(CThing *_this)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CThingManager::addToCollisionList(CThing *_this)
+void	CThingManager::addToCollisionList(CThing *thing)
 {
-int	Type=_this->getThingType();
+int	Type=thing->getThingType();
 
-		_this->m_nextCollisionThing=s_CollisionLists[Type];
-		s_CollisionLists[Type]=_this;
-
+		thing->m_nextCollisionThing=s_CollisionLists[Type];
+		s_CollisionLists[Type]=thing;
 }
 
 /*----------------------------------------------------------------------
@@ -536,13 +555,14 @@ void	CThing::init()
 	m_numChildren = 0;
 
 	Pos.vx=Pos.vy=10;
-
-	// Add to thing list
-	CThingManager::addToThingList(this);
-
+// These need to stay for init
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
 	setCollisionAngle(0);
+
+// Add to thing list
+	CThingManager::addToThingList(this);
+
 }
 
 /*----------------------------------------------------------------------

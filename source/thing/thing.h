@@ -55,6 +55,7 @@ public:
 	static void		shutdown();
 	static void		killAllThingsForRespawn();
 
+	static void		initAllThings();
 	static void		thinkAllThings(int _frames);
 	static void		renderAllThings();
 	static void		processEventAllThings(GAME_EVENT _event,CThing *_sourceThing);
