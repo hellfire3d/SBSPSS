@@ -61,6 +61,7 @@ protected:
 	afx_msg void OnMirrory();
 	afx_msg void OnActivebrushLeft();
 	afx_msg void OnActivebrushRight();
+	afx_msg void OnMapSetSize();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

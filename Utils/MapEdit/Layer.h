@@ -50,6 +50,9 @@ virtual	void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
 virtual	void			InitGUI(CCore *Core)=0;
 virtual	void			UpdateGUI(CCore *Core)=0;
 
+virtual	int				GetWidth()=0;
+virtual	int				GetHeight()=0;
+virtual	void			Resize(int Width,int Height)=0;
 
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;
@@ -66,7 +69,9 @@ protected:
 
 		char			Name[256];
 		BOOL			Render3dFlag;
-		float			ZPosDiv;
+		float			ZPosDiv,MapSizeDiv;
+		BOOL			ResizeFlag;
+
 };
 
 

@@ -60,11 +60,12 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 /*****************************************************************************/
 void	CCore::NewMap()
 {
-// To be loaded/created
-	Layers[LAYER_TYPE_BACK]=	new CLayerTile("Back",	32,							32,								4.0f,	FALSE);
-	Layers[LAYER_TYPE_MID]=		new CLayerTile("Mid",	TileLayerDefaultWidth/2.0f,	TileLayerDefaultHeight/2.0f,	2.0f,	FALSE);
-	Layers[LAYER_TYPE_ACTION]=	new CLayerTile("Action",TileLayerDefaultWidth/1.0f,	TileLayerDefaultHeight/1.0f,	1.0f,	TRUE);
-	Layers[LAYER_TYPE_FORE]=	new CLayerTile("Fore",	TileLayerDefaultWidth/0.5f,	TileLayerDefaultHeight/0.5f,	0.5f,	FALSE);
+// Create Gfx Layers
+//												Name	Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
+	Layers[LAYER_TYPE_BACK]=	new CLayerTile(	"Back",	32,						32,						1.0f,	4.0f,	FALSE,	FALSE);
+	Layers[LAYER_TYPE_MID]=		new CLayerTile(	"Mid",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE);
+	Layers[LAYER_TYPE_ACTION]=	new CLayerTile(	"Action",TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE);
+	Layers[LAYER_TYPE_FORE]=	new CLayerTile(	"Fore",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE);
 
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
@@ -327,15 +328,37 @@ CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 }
 
 /*****************************************************************************/
-void	CCore::MirrorX()
+void	CCore::MirrorX(CMapEditView *View)
 {
-	if (!TileViewFlag) Layers[ActiveLayer]->MirrorX(this);
+		if (!TileViewFlag) 
+		{
+			Layers[ActiveLayer]->MirrorX(this);
+			UpdateView(View);
+		}
 }
 
 /*****************************************************************************/
-void	CCore::MirrorY()
+void	CCore::MirrorY(CMapEditView *View)
 {
-	if (!TileViewFlag) Layers[ActiveLayer]->MirrorY(this);
+		if (!TileViewFlag) 
+		{
+			Layers[ActiveLayer]->MirrorY(this);
+			UpdateView(View);
+		}
+}
+
+/*****************************************************************************/
+void	CCore::ActiveBrushLeft(CMapEditView *View)
+{
+		TileBank.SetActiveBrushL();
+		UpdateView(View);
+}
+
+/*****************************************************************************/
+void	CCore::ActiveBrushRight(CMapEditView *View)
+{
+		TileBank.SetActiveBrushR();
+		UpdateView(View);
 }
 
 /*****************************************************************************/
@@ -371,3 +394,17 @@ Vec		&ThisCam=GetCam();
 		if (ThisCam.z>-1) ThisCam.z=-1;
 		if (View) View->Invalidate();
 }		
+
+/*****************************************************************************/
+void	CCore::SetMapSize(CMapEditView *View,int Width,int Height)
+{
+	if (Width==GetMapWidth() && Height==GetMapHeight()) return;
+
+	for (int i=0; i<LAYER_TYPE_MAX; i++) 
+	{
+//		Layers[i]->Resize(Width,Height);
+	}
+		Layers[LAYER_TYPE_ACTION]->Resize(Width,Height);
+
+	UpdateView(View);
+}

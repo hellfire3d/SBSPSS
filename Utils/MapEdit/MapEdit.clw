@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CMapSizeDlg
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=11
+ClassCount=12
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CMainFrame
@@ -17,20 +17,22 @@ Class5=CAboutDlg
 Class6=CMapEditDoc
 Class7=CMapEditView
 
-ResourceCount=9
-Resource1=IDD_ABOUTBOX (English (U.S.))
-Resource2=IDR_TOOLBAR (English (U.S.))
-Resource3=IDD_TILESET_DIALOG
+ResourceCount=10
+Resource1=IDR_MAINFRAME (English (U.S.))
+Resource2=IDD_TILESET_DIALOG
+Resource3=IDD_LAYER_LIST_DIALOG
 Resource4=IDD_DIALOGBAR (English (U.S.))
 Resource5=IDR_MAPEDITYPE (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_LAYER_LIST_DIALOG
-Resource7=IDR_MAINFRAME (English (U.S.))
+Resource6=IDD_ABOUTBOX (English (U.S.))
+Resource7=IDR_TOOLBAR (English (U.S.))
 Class9=CLayerList
 Class10=CTileSetDlg
 Resource8=IDD_MULTIBAR (English (U.S.))
 Class11=CGfxToolBar
 Resource9=IDD_GFXTOOLBAR
+Class12=CMapSizeDlg
+Resource10=IDD_MAPSIZE
 
 [CLS:CChildFrame]
 Type=0
@@ -70,14 +72,14 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=CMapEditDoc
+LastObject=ID_MIRRORX
 
 [CLS:CMapEditView]
 Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_ACTIVEBRUSH_RIGHT
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 
@@ -126,18 +128,19 @@ Command10=ID_EDIT_COPY
 Command11=ID_EDIT_PASTE
 Command12=ID_VIEW_TOOLBAR
 Command13=ID_VIEW_STATUS_BAR
-Command14=ID_TOGGLE_GRID
-Command15=ID_TOGGLE_TILEVIEW
+Command14=ID_MAP_SETSIZE
+Command15=ID_TOGGLE_GRID
 Command16=ID_MIRRORX
 Command17=ID_MIRRORY
 Command18=ID_ACTIVEBRUSH_LEFT
 Command19=ID_ACTIVEBRUSH_RIGHT
-Command20=ID_WINDOW_NEW
-Command21=ID_WINDOW_CASCADE
-Command22=ID_WINDOW_TILE_HORZ
-Command23=ID_WINDOW_ARRANGE
-Command24=ID_APP_ABOUT
-CommandCount=24
+Command20=ID_TOGGLE_TILEVIEW
+Command21=ID_WINDOW_NEW
+Command22=ID_WINDOW_CASCADE
+Command23=ID_WINDOW_TILE_HORZ
+Command24=ID_WINDOW_ARRANGE
+Command25=ID_APP_ABOUT
+CommandCount=25
 
 [ACL:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -241,4 +244,24 @@ ControlCount=3
 Control1=IDD_GFXTOOLBAR_PAINT,button,1342177344
 Control2=IDD_GFXTOOLBAR_SELECT,button,1476395072
 Control3=IDD_GFXTOOLBAR_PICKER,button,1476395072
+
+[DLG:IDD_MAPSIZE]
+Type=1
+Class=CMapSizeDlg
+ControlCount=7
+Control1=IDOK,button,1342177281
+Control2=IDCANCEL,button,1342177280
+Control3=IDC_MAPSIZE_WIDTH_TEXT,static,1342308866
+Control4=IDC_MAPSIZE_WIDTH,edit,1350639744
+Control5=IDC_MAPSIZE_HEIGHT_TEXT,static,1342308866
+Control6=IDC_MAPSIZE_HEIGHT,edit,1350639744
+Control7=IDC_MAPSIZE_WARNING,static,1342308352
+
+[CLS:CMapSizeDlg]
+Type=0
+HeaderFile=MapSizeDlg.h
+ImplementationFile=MapSizeDlg.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
 

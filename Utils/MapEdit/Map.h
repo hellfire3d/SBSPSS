@@ -44,6 +44,8 @@ public:
 		void		Set(int X,int Y,CMap &Blk);
 		void		Set(CMap &Src,int StartX,int StartY,int Width,int Height);
 
+		void		Resize(int Width,int Height);
+
 		BOOL		DoesContainTile(sMapElem &Tile);
 
 inline	void	operator=(CMap &Src)	

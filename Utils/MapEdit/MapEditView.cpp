@@ -39,10 +39,11 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_COMMAND(ID_TOOLBAR_GRID, OnToggleGrid)
 	ON_COMMAND(ID_MIRRORX, OnMirrorx)
 	ON_COMMAND(ID_MIRRORY, OnMirrory)
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
-	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
 	ON_COMMAND(ID_ACTIVEBRUSH_LEFT, OnActivebrushLeft)
 	ON_COMMAND(ID_ACTIVEBRUSH_RIGHT, OnActivebrushRight)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
+	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_COMMAND(ID_MAP_SETSIZE, OnMapSetSize)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -142,7 +143,8 @@ void CMapEditView::OnSetFocus(CWnd* pOldWnd)
 CMapEditDoc	*CurDoc=GetDocument();
 	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
-	CurDoc->UpdateAll(this);
+//	CurDoc->UpdateAll(this);
+	CurDoc->UpdateAllViews(this);
 }
 
 /*********************************************************************************/
@@ -158,8 +160,10 @@ void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{GetDocument()->RBu
 void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{GetDocument()->MouseMove(this,nFlags, point);}
 void CMapEditView::OnToggleTileview()									{GetDocument()->ToggleTileView(this);}
 void CMapEditView::OnToggleGrid()										{GetDocument()->ToggleGrid(this);}
-void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX();}
-void CMapEditView::OnMirrory()											{GetDocument()->MirrorY();}
+void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX(this);}
+void CMapEditView::OnMirrory()											{GetDocument()->MirrorY(this);}
 
-void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft();}
-void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight();}
+void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft(this);}
+void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight(this);}
+
+void CMapEditView::OnMapSetSize()			 							{GetDocument()->MapSetSize(this);}

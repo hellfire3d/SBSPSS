@@ -114,17 +114,20 @@ BEGIN
     END
     POPUP "&Map"
     BEGIN
+        MENUITEM "Set Size",                    ID_MAP_SETSIZE
+        MENUITEM SEPARATOR
         MENUITEM "&Toggle Grid",                ID_TOGGLE_GRID
     END
     POPUP "&TileBank"
     BEGIN
-        MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
         MENUITEM SEPARATOR
         MENUITEM "Mirror &X",                   ID_MIRRORX
         MENUITEM "Mirror &Y",                   ID_MIRRORY
         MENUITEM SEPARATOR
         MENUITEM "View Left Brush",             ID_ACTIVEBRUSH_LEFT
         MENUITEM "View Right Brush",            ID_ACTIVEBRUSH_RIGHT
+        MENUITEM SEPARATOR
+        MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
     END
     POPUP "&Window"
     BEGIN
@@ -473,6 +476,23 @@ BEGIN
                     WS_DISABLED | NOT WS_TABSTOP
 END
 
+IDD_MAPSIZE DIALOG DISCARDABLE  0, 0, 127, 61
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Enter New Size"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,75,5,50,14,NOT WS_TABSTOP
+    PUSHBUTTON      "Cancel",IDCANCEL,75,20,50,14,NOT WS_TABSTOP
+    RTEXT           "Width",IDC_MAPSIZE_WIDTH_TEXT,5,5,20,10,SS_CENTERIMAGE
+    EDITTEXT        IDC_MAPSIZE_WIDTH,30,5,35,12,ES_AUTOHSCROLL | ES_NUMBER
+    RTEXT           "Height",IDC_MAPSIZE_HEIGHT_TEXT,5,20,20,10,
+                    SS_CENTERIMAGE
+    EDITTEXT        IDC_MAPSIZE_HEIGHT,30,20,35,12,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    LTEXT           "Resize can destroy data.\nYou have been warned",
+                    IDC_MAPSIZE_WARNING,5,40,110,20
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -504,6 +524,14 @@ BEGIN
         RIGHTMARGIN, 149
         TOPMARGIN, 7
         BOTTOMMARGIN, 19
+    END
+
+    IDD_MAPSIZE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 120
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 54
     END
 END
 #endif    // APSTUDIO_INVOKED

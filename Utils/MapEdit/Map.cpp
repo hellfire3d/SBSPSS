@@ -186,4 +186,22 @@ int		Height=GetHeight();
 }
 
 /*****************************************************************************/
+void	CMap::Resize(int Width,int Height)
+{
+CMap	Old=*this;
 
+int		OldWidth=Old.GetWidth();
+int		OldHeight=Old.GetHeight();
+int		MinW=min(Width,OldWidth);
+int		MinH=min(Height,OldHeight);
+
+		Delete();
+		SetSize(Width,Height,TRUE);
+		for (int Y=0; Y<MinH; Y++)
+		{
+			for (int X=0; X<MinW; X++)
+			{
+				Set(X,Y,Old.Get(X,Y));
+			}
+		}
+}

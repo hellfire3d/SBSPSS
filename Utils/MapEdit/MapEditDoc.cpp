@@ -5,6 +5,7 @@
 #include "MapEdit.h"
 
 #include "MapEditDoc.h"
+#include "MapSizeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -100,15 +101,8 @@ void	CMapEditDoc::Render(CMapEditView *View)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::UpdateAll(CMapEditView *View)
-{
-		Core.UpdateAll(View);
-}
-
-/*********************************************************************************/
 void	CMapEditDoc::OnStatusCursorXY(CCmdUI *pCmdUI)
 {
-
 CPoint	&XY=Core.GetCursorPos();
 CString XYStr;
 		pCmdUI->Enable();
@@ -167,16 +161,16 @@ void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::MirrorX()
+void	CMapEditDoc::MirrorX(CMapEditView *View)
 {
-		Core.MirrorX();
+		Core.MirrorX(View);
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::MirrorY()
+void	CMapEditDoc::MirrorY(CMapEditView *View)
 {
-		Core.MirrorY();
+		Core.MirrorY(View);
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
@@ -221,16 +215,26 @@ void	CMapEditDoc::TileBankSet()
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ActiveBrushLeft()
+void	CMapEditDoc::ActiveBrushLeft(CMapEditView *View)
 {
-		Core.ActiveBrushLeft();
-		UpdateAllViews(NULL);
+		Core.ActiveBrushLeft(View);
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ActiveBrushRight()
+void	CMapEditDoc::ActiveBrushRight(CMapEditView *View)
 {
-		Core.ActiveBrushRight();
-		UpdateAllViews(NULL);
+		Core.ActiveBrushRight(View);
+}
 
+/*********************************************************************************/
+void	CMapEditDoc::MapSetSize(CMapEditView *View)
+{
+CMapSizeDlg	Dlg;
+
+		Dlg.m_Width=Core.GetMapWidth();
+		Dlg.m_Height=Core.GetMapHeight();
+		
+		if (Dlg.DoModal()!=IDOK) return;
+
+		Core.SetMapSize(View,Dlg.m_Width,Dlg.m_Height);
 }

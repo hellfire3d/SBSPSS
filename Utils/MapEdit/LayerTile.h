@@ -12,8 +12,8 @@
 /*****************************************************************************/
 enum	TileLayerEnum
 {
-	TileLayerDefaultWidth=30,
-	TileLayerDefaultHeight=20,
+	TileLayerDefaultWidth=3,
+	TileLayerDefaultHeight=2,
 };
 
 /*****************************************************************************/
@@ -35,8 +35,8 @@ public:
 			MouseFlagMirrorY=1<<1,
 		};
 
-		CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d);	// New Layer
-		CLayerTile(char *_Name);											// Load Layer
+		CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable);		// New Layer
+		CLayerTile(char *_Name);																			// Load Layer
 		~CLayerTile();
 
 		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
@@ -47,6 +47,10 @@ public:
 
 		void			InitGUI(CCore *Core);
 		void			UpdateGUI(CCore *Core);
+
+		int				GetWidth()			{return(Map.GetWidth());}
+		int				GetHeight()			{return(Map.GetHeight());}
+		void			Resize(int Width,int Height);
 
 
 // Functions

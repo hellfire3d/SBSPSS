@@ -16,6 +16,7 @@
 #define IDI_PICKER                      154
 #define IDI_MIRRORY                     165
 #define IDI_MIRRORX                     166
+#define IDD_MAPSIZE                     167
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYER_LIST                  1019
 #define IDC_TILESETDLG_BTN_UPDATE       1029
@@ -24,6 +25,11 @@
 #define IDC_TILESETDLG_BTN_LOAD         1031
 #define IDD_GFXTOOLBAR_SELECT           1032
 #define IDD_GFXTOOLBAR_PICKER           1033
+#define IDC_MAPSIZE_WIDTH               1037
+#define IDC_MAPSIZE_WIDTH_TEXT          1038
+#define IDC_MAPSIZE_HEIGHT_TEXT         1039
+#define IDC_MAPSIZE_HEIGHT              1040
+#define IDC_MAPSIZE_WARNING             1041
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -36,6 +42,7 @@
 #define ID_MIRRORY                      32789
 #define ID_ACTIVEBRUSH_LEFT             32790
 #define ID_ACTIVEBRUSH_RIGHT            32791
+#define ID_MAP_SETSIZE                  32792
 #define ID_INDICATOR_CURSORXY           59142
 
 // Next default values for new objects
@@ -43,9 +50,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        167
-#define _APS_NEXT_COMMAND_VALUE         32792
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_RESOURCE_VALUE        168
+#define _APS_NEXT_COMMAND_VALUE         32794
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

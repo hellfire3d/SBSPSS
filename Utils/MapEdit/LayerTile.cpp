@@ -25,13 +25,16 @@
 /*****************************************************************************/
 /*****************************************************************************/
 // New Layer
-CLayerTile::CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d)
+CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable)
 {
 		SetName(_Name);
-		Map.SetSize(Width,Height,TRUE);
 		ZPosDiv=ZDiv;
+		MapSizeDiv=MapDiv;
+		ResizeFlag=Resizable;
 		Render3dFlag=Is3d;
 		Mode=MouseModePaint;
+
+		Map.SetSize(Width/MapDiv,Height/MapDiv,TRUE);
 }
 
 /*****************************************************************************/
@@ -44,6 +47,14 @@ CLayerTile::CLayerTile(char *_Name)
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
+}
+
+/*****************************************************************************/
+void	CLayerTile::Resize(int Width,int Height)
+{
+		if (!ResizeFlag) return;	// Its a fixed size, so DONT DO IT!
+
+		Map.Resize(Width/MapSizeDiv,Height/MapSizeDiv);
 }
 
 /*****************************************************************************/
@@ -475,8 +486,6 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 {
 		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
 		if (!Blk.IsValid()) return(FALSE);	// Invalid tile?
-
-//		Tile.Flags=Flag;
 
 		Map.Set(CursorPos.x,CursorPos.y,Blk);
 

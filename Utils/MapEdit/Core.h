@@ -45,10 +45,10 @@ public:
 		void					TileBankLoad(char *Filename);
 		void					TileBankReload();
 		void					TileBankSet();
-		void					MirrorX();
-		void					MirrorY();
-		void					ActiveBrushLeft()				{TileBank.SetActiveBrushL();}
-		void					ActiveBrushRight()				{TileBank.SetActiveBrushR();}
+		void					MirrorX(CMapEditView *View);
+		void					MirrorY(CMapEditView *View);
+		void					ActiveBrushLeft(CMapEditView *View);
+		void					ActiveBrushRight(CMapEditView *View);
 // Param Bar
 		void					UpdateParamBar();
 
@@ -71,6 +71,10 @@ public:
 		Vec						&GetCam();
 		void					SetCursorPos(CPoint &Pos)		{CursorPos=Pos;}
 		CPoint					&GetCursorPos()					{return(CursorPos);}
+
+		void					SetMapSize(CMapEditView *View,int Width,int Height);
+		int						GetMapWidth()					{return(Layers[LAYER_TYPE_ACTION]->GetWidth());}
+		int						GetMapHeight()					{return(Layers[LAYER_TYPE_ACTION]->GetHeight());}
 
 private:
 		CPoint					CurrentMousePos,LastMousePos;

@@ -31,10 +31,11 @@ public:
 	void			MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
 	void			ToggleTileView(CMapEditView *View);
 	void			ToggleGrid(CMapEditView *View);
-	void			MirrorX();
-	void			MirrorY();
-	void			ActiveBrushLeft();
-	void			ActiveBrushRight();
+	void			MirrorX(CMapEditView *View);
+	void			MirrorY(CMapEditView *View);
+	void			ActiveBrushLeft(CMapEditView *View);
+	void			ActiveBrushRight(CMapEditView *View);
+	void			MapSetSize(CMapEditView *View);
 
 	void			TileBankLoad();
 	void			TileBankReload();
