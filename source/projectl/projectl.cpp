@@ -692,6 +692,7 @@ void CPlayerProjectile::think(int _frames)
 		}
 
 		case PLAYER_PROJECTILE_DUMBFIRE:
+		case PLAYER_PROJECTILE_DUMBFIRE_CORAL:
 		default:
 		{
 			if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
@@ -700,7 +701,10 @@ void CPlayerProjectile::think(int _frames)
 
 				CLevel &level = GameScene.GetLevel();
 
-				level.destroyMapArea( Pos );
+				if ( m_movementType == PLAYER_PROJECTILE_DUMBFIRE_CORAL )
+				{
+					level.destroyMapArea( Pos );
+				}
 
 				setToShutdown();
 			}
