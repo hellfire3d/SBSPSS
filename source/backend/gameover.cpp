@@ -182,7 +182,6 @@ void CGameOverScene::think(int _frames)
 		case STATE__EXITING_TO_FRONT_END:
 			break;
 	}
-PAUL_DBGMSG("%d",m_state);
 }
 
 

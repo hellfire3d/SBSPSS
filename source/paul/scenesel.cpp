@@ -67,6 +67,11 @@
 #include "backend\party.h"
 #endif
 
+#ifndef __BACKEND_CREDITS_H__
+#include "backend\credits.h"
+#endif
+
+
 
 /*	Std Lib
 	------- */
@@ -104,6 +109,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&MapScene,
 	&ShopScene,
 	&PartyScene,
+	&CreditsScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 
@@ -161,7 +167,7 @@ void CSceneSelector::render()
 		AddPrimToList(f4,15);
 
 		m_font->setColour(255,255,255);
-		m_font->print(256,80,"Select scene:");
+		m_font->print(256,50,"Select scene:");
 		for(i=0;i<s_sceneCount;i++)
 		{
 			if(i==m_currentSelection)
@@ -172,7 +178,7 @@ void CSceneSelector::render()
 			{
 				m_font->setColour(255,100,100);
 			}
-			m_font->print(256,110+(i*m_font->getCharHeight()),s_sceneList[i]->getSceneName());
+			m_font->print(256,80+(i*m_font->getCharHeight()),s_sceneList[i]->getSceneName());
 		}
 	}
 }

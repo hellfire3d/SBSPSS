@@ -22,7 +22,7 @@
 	Includes
 	-------- */
 
-#include "frontend\credits.h"
+#include "backend\credits.h"
 
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
@@ -60,6 +60,9 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef	__FRONTEND_FRONTEND_H__
+#include "frontend\frontend.h"
+#endif
 
 /*	Std Lib
 	------- */
@@ -236,6 +239,8 @@ int TITLE_FONT_SIZE=384;
 int NAME_FONT_SIZE=256;
 int	DELAY_TIME=4*60;
 
+CCreditsScene	CreditsScene;
+
 
 
 /*----------------------------------------------------------------------
@@ -251,7 +256,7 @@ CSaveLoadDatabase	*sl;
 enum{mode_none,mode_save,mode_load};
 int mode=mode_none;
 #endif
-void CFrontEndCredits::init()
+void CCreditsScene::init()
 {
 #ifdef MEM_CARD_TEST
 MemCard::Start();
@@ -302,7 +307,7 @@ mode=mode_none;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndCredits::shutdown()
+void CCreditsScene::shutdown()
 {
 #ifdef MEM_CARD_TEST
 MemCard::Stop();
@@ -325,7 +330,7 @@ delete sl;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CFrontEndCredits::render()
+void CCreditsScene::render()
 {
 	renderCreditsListTillEndOfPage(m_currentPage);
 	m_background1->render();
@@ -341,7 +346,7 @@ void CFrontEndCredits::render()
 int	creditsfr=40;
 int	creditsfg=80;
 int creditsfb=127;
-void CFrontEndCredits::think(int _frames)
+void CCreditsScene::think(int _frames)
 {
 #ifdef MEM_CARD_TEST
 sl->think();
@@ -434,6 +439,7 @@ else if(mode==mode_load)
 		{
 			m_shuttingDown=true;
 			CFader::setFadingOut();
+			GameState::setNextScene(&FrontEndScene);
 		}
 	}
 
@@ -447,7 +453,7 @@ else if(mode==mode_load)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CFrontEndCredits::isReadyToExit()
+int CCreditsScene::readyToShutdown()
 {
 	return !CFader::isFading()&&m_shuttingDown;
 }
@@ -458,18 +464,7 @@ int CFrontEndCredits::isReadyToExit()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-CFrontEndScene::FrontEndMode CFrontEndCredits::getNextMode()
-{
-	return	CFrontEndScene::MODE__MAIN_TITLES;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CFrontEndCredits::renderCreditsListTillEndOfPage(u16 *_list)
+void CCreditsScene::renderCreditsListTillEndOfPage(u16 *_list)
 {
 	int	y;
 	int	mode;

@@ -46,10 +46,6 @@
 #include "frontend\demomode.h"
 #endif
 
-#ifndef	__FRONTEND_CREDITS_H__
-#include "frontend\credits.h"
-#endif
-
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
@@ -108,7 +104,6 @@ static CFrontEndMainTitles		s_frontEndModeMainTitles;
 static CFrontEndOptions			s_frontEndModeOptions;
 static CFrontEndStart			s_frontEndStart;
 static CFrontEndDemoMode		s_frontEndDemoMode;
-static CFrontEndCredits			s_frontEndCredits;
 
 CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 {
@@ -118,7 +113,6 @@ CFrontEndMode	*CFrontEndScene::s_modeCodes[]=
 	&s_frontEndModeOptions,			// MODE__GAME_OPTIONS
 	&s_frontEndStart,				// MODE__CHOOSE_SLOT
 	&s_frontEndDemoMode,			// MODE__DEMO
-	&s_frontEndCredits,				// MODE__CREDITS
 
 	// NULL,							// MODE__NONE
 	// NULL,							// MODE__EXIT_TO_GAME

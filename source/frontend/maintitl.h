@@ -77,7 +77,6 @@ private:
 		MODE__GOTO_CHOOSE_SLOT,
 		MODE__GOTO_OPTIONS,
 		MODE__GOTO_DEMO,
-		MODE__GOTO_CREDITS,
 	};
 
 	enum
@@ -101,7 +100,6 @@ private:
 
 	int						m_startGameFlag;
 	int						m_gotoOptionsFlag;
-	int						m_gotoCreditsFlag;
 
 	int						m_demoTimeout;
 	int						m_musicStarted;

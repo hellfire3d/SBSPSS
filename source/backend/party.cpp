@@ -58,8 +58,8 @@
 #include "gfx\actor.h"
 #endif
 
-#ifndef	__FRONTEND_FRONTEND_H__
-#include "frontend\frontend.h"
+#ifndef	__BACKEND_CREDITS_H__
+#include "backend\credits.h"
 #endif
 
 #ifndef __MATHTABLE_HEADER__
@@ -314,7 +314,7 @@ void CPartyScene::think(int _frames)
 		{
 			m_readyToExit=true;
 			CFader::setFadingOut();
-			GameState::setNextScene(&FrontEndScene);
+			GameState::setNextScene(&CreditsScene);
 		}
 	}
 

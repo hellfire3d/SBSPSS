@@ -97,6 +97,14 @@ SOURCE=..\..\..\source\backend\complete.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\backend\credits.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\credits.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\backend\gameover.cpp
 # End Source File
 # Begin Source File
@@ -551,14 +559,6 @@ SOURCE=..\..\..\source\fmv\fmv.h
 # Begin Group "frontend"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\credits.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\frontend\credits.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\frontend\demomode.cpp

@@ -18,8 +18,8 @@
 	Includes
 	-------- */
 
-#ifndef	__FRONTEND_FRONTEND_H__
-#include "frontend\frontend.h"
+#ifndef __SYSTEM_GSTATE_H__
+#include "system\gstate.h"
 #endif
 
 #ifndef _GLOBAL_HEADER_
@@ -38,19 +38,15 @@
 	Structure defintions
 	-------------------- */
 
-class CFrontEndCredits : public CFrontEndMode
+class CCreditsScene : public CScene
 {
 public:
 	void	init();
 	void	shutdown();
-	void	select();
-	void	unselect();
 	void	render();
 	void	think(int _frames);
-
-	int		isReadyToExit();
-	CFrontEndScene::FrontEndMode	getNextMode();
-
+	int		readyToShutdown();
+	char	*getSceneName()			{return"Credits";}
 
 private:
 	void	renderCreditsListTillEndOfPage(u16 *_list);
@@ -73,6 +69,9 @@ private:
 /*----------------------------------------------------------------------
 	Globals
 	------- */
+
+extern CCreditsScene	CreditsScene;
+
 
 /*----------------------------------------------------------------------
 	Functions

@@ -131,7 +131,7 @@ void CFrontEndMainTitles::init()
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
 	m_smallFont->setOt(5);
 
-	// Create the main menu ( START GAME/OPTIONS/CREDITS )
+	// Create the main menu ( START GAME/OPTIONS )
 	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
 	m_mainMenu->init(NULL);
 	m_mainMenu->setObjectXYWH(106,145,300,60);
@@ -145,10 +145,6 @@ void CFrontEndMainTitles::init()
 										50,20,200,20,
 										STR__FRONTEND__OPTIONS,
 										&m_gotoOptionsFlag,true);
-	CGUIFactory::createValueButtonFrame(m_mainMenu,
-										50,40,200,20,
-										STR__FRONTEND__CREDITS,
-										&m_gotoCreditsFlag,true);
 }
 
 /*----------------------------------------------------------------------
@@ -184,7 +180,6 @@ void CFrontEndMainTitles::select()
 
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
-	m_gotoCreditsFlag=false;
 
 	m_demoTimeout=0;
 
@@ -306,12 +301,6 @@ void CFrontEndMainTitles::think(int _frames)
 				m_mode=MODE__GOTO_OPTIONS;
 				m_mainMenu->unselect();
 			}
-			else if(m_gotoCreditsFlag)
-			{
-				CFader::setFadingOut();
-				m_mode=MODE__GOTO_CREDITS;
-				m_mainMenu->unselect();
-			}
 			break;
 
 		default:
@@ -349,7 +338,7 @@ void CFrontEndMainTitles::think(int _frames)
   ---------------------------------------------------------------------- */
 int CFrontEndMainTitles::isReadyToExit()
 {
-	return !CFader::isFading()&&(m_mode==MODE__GOTO_CHOOSE_SLOT||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO||m_mode==MODE__GOTO_CREDITS);
+	return !CFader::isFading()&&(m_mode==MODE__GOTO_CHOOSE_SLOT||m_mode==MODE__GOTO_OPTIONS||m_mode==MODE__GOTO_DEMO);
 }
 
 
@@ -381,10 +370,6 @@ CFrontEndScene::FrontEndMode CFrontEndMainTitles::getNextMode()
 
 		case MODE__GOTO_DEMO:
 			ret=CFrontEndScene::MODE__DEMO;
-			break;
-
-		case MODE__GOTO_CREDITS:
-			ret=CFrontEndScene::MODE__CREDITS;
 			break;
 	}
 
