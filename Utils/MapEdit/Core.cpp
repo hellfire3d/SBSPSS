@@ -50,7 +50,7 @@ void	CCore::Init(CMapEditView *Wnd)
 	ActiveLayer=0;
 	MapPos.x=MapPos.y=MapPos.z=0;
 	UpdateView(0,0,0);
-	CTileSet	NewSet("c:/temp/test.gin",this);
+	CTileSet	NewSet("c:/temp/1/test.gin",this);
 	TileSet.push_back(NewSet);
 }
 
