@@ -51,6 +51,8 @@ void CNpcSpiderCrabEnemy::postInit()
 	else
 	{
 		m_velocity = m_data[m_type].speed;
+
+		m_initDelay = 0;
 	}
 }
 
