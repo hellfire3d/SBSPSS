@@ -642,8 +642,6 @@ eng=Take one dog\n\nAnd a fish\n\nAnd also some metal\n\nMix them up into an  Me
 
 [STR__CREDITS__PRODUCER]
 eng=Producer
-[STR__CREDITS__ASSOCIATE_PRODUCER]
-eng=Associate Producer
 [STR__CREDITS__ASSISTANT_PRODUCER]
 eng=Assistant Producer
 [STR__CREDITS__SENIOR_PRODUCER]
@@ -772,10 +770,16 @@ eng=Carolina Beroza
 eng=Michael Rubinelli
 [STR__CREDITS__JEREMY_BARNES]
 eng=Jeremy Barnes
+[STR__CREDITS__SLAVEMONKEY_TRAVISTY_THOLEN]
+eng="Slavemonkey Travisty" Tholen
 [STR__CREDITS__IAN_SEDENSKY]
 eng=Ian Sedensky
 [STR__CREDITS__CHUCK_SHEFFIELD]
 eng=Chuck Sheffield
+[STR__CREDITS__JASON_DE_HERAS]
+eng=Jason De Heras
+[STR__CREDITS__BUSTER_DEGEORGE]
+eng=Buster DeGeorge
 [STR__CREDITS__TBD]
 eng=TBD
 [STR__CREDITS__THQ_AND_THE_THQ_LOGO_ARE_TRADEMARKS_AND_OR_REGISTERED_TRADEMARKS_OF_THQ_INC]
