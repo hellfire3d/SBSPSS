@@ -30,6 +30,7 @@ virtual			~CGameScene()	{;}
 		char	*getSceneName()	{return "Game";}
 
 		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
+		class CPlayer	*getPlayer();
 	
 private:
 
