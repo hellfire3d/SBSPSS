@@ -346,6 +346,7 @@ BOOL	CTileBank::SelectCancel()
 BOOL	CTileBank::IsTileValid(int Set,int Tile)
 {
  		if (Set<0 || Tile<0) return(FALSE);
+		if (Tile==0) return(TRUE);
 		ASSERT(Set<TileSet.size());
 		
 		return(TileSet[Set].IsTileValid(Tile));

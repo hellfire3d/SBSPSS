@@ -10,22 +10,10 @@
 
 /*****************************************************************************/
 sOT 		*OtList[2],*OtPtr;
-u32			*PrimDrawList;
 u32			DmaStart[2];
 u8			*PrimBuffer[2],*PrimListStart,*PrimListEnd;
 u8			*CurrPrim,*EndPrim;
 int			PrimFlipFlag;
-
-/*****************************************************************************/
-void	PrimDrawCallBack()
-{
-	if (PrimDrawList)
-	{
-		DrawOTag2(PrimDrawList);
-	}
-
-	PrimDrawList=0;
-}
 
 /*****************************************************************************/
 void	PrimInit()
@@ -47,7 +35,6 @@ void	PrimInit()
 	InitOTagR(OtList[0],MAX_OT);
 	InitOTagR(OtList[1],MAX_OT);
 
-	PrimDrawList=0;
 }
 
 
@@ -58,10 +45,9 @@ void	PrimDisplay()
 	UnlinkOTagR(OtPtr, MAX_OT, &DmaStart[PrimFlipFlag]);
 
 #ifdef	USE_NTAGS
-//	DrawOTag((u32*)&DmaStart[PrimFlipFlag]);
-	PrimDrawList=&DmaStart[PrimFlipFlag];
+	DrawOTag((u32*)&DmaStart[PrimFlipFlag]);
 #else
-//	DrawOTag(OtPtr+(MAX_OT-1));
+	DrawOTag(OtPtr+(MAX_OT-1));
 #endif
 
 	PrimFlipFlag^=1;

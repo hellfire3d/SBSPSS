@@ -93,28 +93,20 @@ struct	sTri
 		u16			P2;						//  2
 };											// 16
 
-//		u8			r0, g0, b0, code;		//  4
-//		u8			r1, g1, b1, Mat;		//  4
-//		u8			r2, g2, b2;				//	3
-//		s8			OtOfs;					//  1
-
 //---------------------------------------------------------------------------
 struct	sQuad
 {
-		u16			P0,P1,P2,P3;			//  8
+		u16			P0;						//  2
+		u16			P1;						//  2
+		u16			P2;						//  2
+		u16			P3;						//  2
 		u8			uv0[2];					//  2
+		u16			Clut;					//  2
 		u8			uv1[2];					//  2
+		u16			TPage;					//  2
 		u8			uv2[2];					//  2
 		u8			uv3[2];					//  2
-		u16			TPage;					//  2
-		u16			Clut;					//  2
 };											// 20
-
-//		u8			r0, g0, b0, code;		//  4
-//		u8			r1, g1, b1, Mat;		//  4
-//		u8			r2, g2, b2;				//	3
-//		s8			OtOfs;					//  1
-//		u8			r3, g3, b3, Pad3;		//  4
 
 //***************************************************************************
 /*
@@ -152,29 +144,36 @@ enum	TILE3D_FLAGS
 struct	sTileMapElem
 {
 		u16		Tile;
+};
+
+struct	sTileMapElem3d : public sTileMapElem
+{
 		u16		Flags;
 };
 
+/*
 struct	sTileTable
 {
 		u16		TriList;
 		u16		TriCount;
 };
-
+*/
 struct	sTile
 {
 // 3d Tile
-		sTileTable	TileTable[TILE3D_FLAGS_MAX];
+//		sTileTable	TileTable[TILE3D_FLAGS_MAX];	// 20 (4*5)
+		u16		TriStart;							// 2
+		u16		TileTable[TILE3D_FLAGS_MAX];		// 10
 // 2d Tile
-		u8		u0,v0;
-		u16		Clut;
-		u16		TPage;
-		u16		Pad;	// :o( need this?
+		u8		u0,v0;								// 2
+		u16		Clut;								// 2
+		u16		TPage;								// 2
+		u16		Pad;	// :o( need this?			// 2
 
 #ifdef	WIN32
 bool	operator==(sTile const &v1)	{return(false);}
 #endif
-};
+};													// 20
 
 //---------------------------------------------------------------------------
 // Layers

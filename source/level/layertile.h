@@ -7,13 +7,29 @@
 
 
 /*****************************************************************************/
+/*
 struct	sPrimGridElem
 {
 	TSPRT_16		Prim;
-	u16				Tile;
-	u16				Flags;
+//	u16				Tile;
+//	u16				Flags;
 	sPrimGridElem	*Right;
 	sPrimGridElem	*Down;
+};
+*/
+
+/*****************************************************************************/
+struct	sPrimGridElem
+{
+	TSPRT_16		Prim;
+	sPrimGridElem	*Right;
+	sPrimGridElem	*Down;
+};
+
+struct	sPrimGridElem3d : public sPrimGridElem
+{
+	u16				Tile;
+	u16				Flags;
 };
 
 /*****************************************************************************/
@@ -47,30 +63,27 @@ virtual	void			shutdown();
 virtual	void			think(VECTOR &MapPos);
 virtual	void			render();
 
-
 protected:
-		void			UpdateWholeMap();
+virtual	void			UpdateWholeMap();
+virtual	void			UpdateRow(int MapX,int MapY);
+virtual	void			UpdateColumn(int MapX,int MapY);
+
 		sPrimGridElem	*GetGridPos(int X,int Y);
 		sTileMapElem	*GetMapPos(int X,int Y);
-		void			UpdateRow(int MapX,int MapY);
-		void			UpdateColumn(int MapX,int MapY);
-		
-		void			renderSolid();
-		void			render3d();
-		void			RenderBlock(sPrimGridElem *Elem);
 
 		sLayerHdr		*LayerHdr;
 		sTile			*TileList;
 		sTri			*TriList;
 		sQuad			*QuadList;
 		sVtx			*VtxList;
-		sTileMapElem	*Map;
 
 		int				MapWidth,MapHeight,MapXYShift;
 		int				PrimGridWidth,PrimGridHeight;
 
 		int				MapX,MapY;
 		u16				ShiftX,ShiftY;
+		
+		sTileMapElem	*Map;
 		sPrimGridElem	*PrimGrid;
 
 };

@@ -37,7 +37,7 @@ CChildFrame::~CChildFrame()
 {
 }
 
-BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
+BOOL	CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: Modify the Window class or styles here by modifying
 	//  the CREATESTRUCT cs

@@ -146,7 +146,6 @@ void	MainLoop()
 #ifdef __USER_paul__
 		s_paulScene.think(frames);
 #endif
-
 		while(DrawSync(1));
 
 // Render States		
@@ -159,8 +158,8 @@ void	MainLoop()
 #endif
 
 		PrimDisplay();
-		VidSwapDraw();
 		VSync(0);
+		VidSwapDraw();
 
 		PadUpdate();
 
