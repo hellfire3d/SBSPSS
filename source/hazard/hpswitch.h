@@ -28,6 +28,7 @@ public:
 	void				init();
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				linkToPlatform( CNpcTrapdoorPlatform *platform )		{m_platform = platform;}
+	bool				alwaysThink()											{return(true);}
 	//virtual void		render();
 protected:
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
