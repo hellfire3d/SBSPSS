@@ -31,7 +31,6 @@
 #include "player\player.h"
 #endif
 
-// temporary
 #ifndef __GFX_SPRBANK_H__
 #include "gfx\sprbank.h"
 #endif
