@@ -77,6 +77,7 @@ void	CNetPickup::init()
 	setCollisionSize(fh->W,fh->H);
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_NET);
+	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_JELLYFISHINNET);
 }
 
 /*----------------------------------------------------------------------

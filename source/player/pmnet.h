@@ -40,6 +40,7 @@ public:
 	virtual void				enter();
 	virtual void				think();
 	virtual void				renderModeUi();
+	virtual int					isJellyfishNetFull()				{return m_jellyfishHeld!=0;}
 
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
@@ -47,9 +48,10 @@ public:
 private:
 	typedef enum
 	{
-		NET_STATE__EMPTY,
+		NET_STATE__INERT,
+		NET_STATE__CATCHING,
 		NET_STATE__JUST_CAUGHT_SOMETHING,
-		NET_STATE__FULL,
+		NET_STATE__LAUNCHING,
 		NET_STATE__JUST_LAUNCHED_SOMETHING,
 	} NetState;
 
@@ -57,9 +59,9 @@ private:
 
 	int							m_savedAnimNo,m_savedAnimFrame;
 	int							m_netFrame;
-	int							m_netting;
 	NetState					m_netState;
 	int							m_netSin;
+	int							m_jellyfishHeld;
 
 };
 

@@ -87,6 +87,7 @@ public:
 	virtual int		canDoLookAround()					{return false;}
 	virtual void	springPlayerUp()					{;}
 	void			inSoakUpState();
+	virtual int		isJellyfishNetFull()				{ASSERT(0);return false;}		// Fugly..
 
 
 	int				getPadInputHeld();

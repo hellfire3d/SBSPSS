@@ -562,6 +562,7 @@ m_animFrame=0;
 //	registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
 //	registerAddon(PLAYER_ADDON_GLASSES);
 //	registerAddon(PLAYER_ADDON_BUBBLEWAND);
+//	registerAddon(PLAYER_ADDON_JELLYFISHINNET);
 }
 
 /*----------------------------------------------------------------------
@@ -637,7 +638,7 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 {
-	respawn();
+	CGameScene::restartlevel();
 }
 if(newmode!=-1)
 {
@@ -894,10 +895,6 @@ int mouth=-1,eyes=-1;
 #include "gui\gui.h"
 void	CPlayer::render()
 {
-	
-//drawSpeechBubbleBorder(125,140,357,80,0,FRM_BARNACLEBOY);
-
-
 	CPlayerThing::render();
 
 
@@ -1410,14 +1407,15 @@ void CPlayer::respawn()
 	
 	clearPlatform();
 
-	GameScene.respawnLevel();
 	updateCollisionArea();
 }
 
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
+	Purpose:	Yes - This function is fat! It can be tidied up when all of the anims
+				are finalised. Etracting the repeated code to a function will probly not
+				improve things cos of the amount of data that would need to be passed about.
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
@@ -1452,6 +1450,28 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 		}
 	}
 
+	// Render JFish in a net?
+	if(m_currentMode==PLAYER_MODE_NET&&m_currentPlayerModeClass->isJellyfishNetFull())
+	{
+		s8	addonAnimNo=s_animMapNet[PLAYER_ADDON_JELLYFISHINNET][_animNo];
+		if(addonAnimNo!=-1)
+		{
+			CActorGfx	*addonGfx=s_addonActorGfx[PLAYER_ADDON_JELLYFISHINNET];
+			if(addonGfx)
+			{
+				if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
+				{
+					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB JELLYFISH ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+				}
+				else
+				{
+					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+					setRGB0(ft4,255,128,255);
+					setSemiTrans(ft4,trans);
+				}
+			}
+		}
+	}
 	// Render glasses addon?
 	if(isWearingGlasses())
 	{
@@ -1485,7 +1505,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 			{
 				if(_animFrame>=addonGfx->getFrameCount(addonAnimNo))
 				{
-					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLASSES ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
+					PAUL_DBGMSG("FRAME OVERRUN ON SPONGEBOB GLOVE ADDON!  ( %d vs %d )",m_actorGfx->getFrameCount(_animNo),addonGfx->getFrameCount(addonAnimNo));
 				}
 				else
 				{

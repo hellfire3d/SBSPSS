@@ -34,7 +34,11 @@
 #endif
 
 #ifndef	__UTILS_HEADER__
-#include	"utils\utils.h"
+#include "utils\utils.h"
+#endif
+
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
 #endif
 
 
@@ -82,8 +86,8 @@ int npsize=40;
   ---------------------------------------------------------------------- */
 void	CPlayerModeNet::enter()
 {
-	m_netting=false;
-	m_netState=NET_STATE__EMPTY;
+	m_netState=NET_STATE__INERT;
+	m_jellyfishHeld=0;
 }
 
 /*----------------------------------------------------------------------
@@ -92,121 +96,136 @@ void	CPlayerModeNet::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	netCatchPos={0,-80};
-DVECTOR netCatchSize={30,30};
-DVECTOR	netLaunchPos={-10,-70};
+DVECTOR	netCatchPos={-15,-90};
+DVECTOR netCatchSize={50,30};
+DVECTOR	netLaunchPos={-15,-90};
 void	CPlayerModeNet::think()
 {
 	// If we're netting then restore the 'real' anim number/frame before
 	// doing the think so that the rest of the code doesn't know what
 	// is going on ;)
-	if(m_netting)
+	if(m_netState!=NET_STATE__INERT)
 	{
 		setAnimNo(m_savedAnimNo);
 		setAnimFrame(m_savedAnimFrame);
 	}
 	CPlayerModeBase::think();
 
-	// Start to net?
-	if(!m_netting&&getPadInputDown()&PI_FIRE&&canSwingNetFromThisState())
-	{
-		m_netFrame=0;
-		m_netting=true;
-	}
-
 	// Netting?
-	if(m_netting)
+	switch(m_netState)
 	{
-		switch(m_netState)
-		{
-			case NET_STATE__EMPTY:
+		case NET_STATE__INERT:
+			{
+				int	padDown;
+				padDown=getPadInputDown();
+				if(padDown&(PI_CATCH|PI_FIRE)&&canSwingNetFromThisState())
 				{
-					DVECTOR	playerPos;
-					int		playerFacing;
-					CRECT	netRect;
-					CThing	*thing;
-
-					playerPos=m_player->getPos();
-					playerFacing=m_player->getFacing();
-
-					netRect.x1=playerPos.vx+(netCatchPos.vx*playerFacing)-(netCatchSize.vx/2);
-					netRect.y1=playerPos.vy+netCatchPos.vy-(netCatchSize.vy/2);
-					netRect.x2=netRect.x1+netCatchSize.vx;
-					netRect.y2=netRect.y1+netCatchSize.vy;
-
-					#ifdef __USER_paul__
+					if(padDown&PI_CATCH&&m_jellyfishHeld<5)
 					{
-					CRECT	area=netRect;
-					DVECTOR	ofs=CLevel::getCameraPos();
-					area.x1-=ofs.vx;
-					area.y1-=ofs.vy;
-					area.x2-=ofs.vx;
-					area.y2-=ofs.vy;
-					DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
-					DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
-					DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
-					DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
+						m_netState=NET_STATE__CATCHING;
 					}
-					#endif
-
-					thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
-					while(thing)
+					else if(padDown&PI_FIRE&&m_jellyfishHeld)
 					{
-						if(((CNpcEnemy*)thing)->canBeCaughtByNet())
+						m_netState=NET_STATE__LAUNCHING;
+					}
+					m_netFrame=0;
+				}
+			}
+			break;
+
+		case NET_STATE__CATCHING:
+			{
+				DVECTOR	playerPos;
+				int		playerFacing;
+				CRECT	netRect;
+				CThing	*thing;
+
+				playerPos=m_player->getPos();
+				playerFacing=m_player->getFacing();
+
+				netRect.x1=playerPos.vx+(netCatchPos.vx*playerFacing)-(netCatchSize.vx/2);
+				netRect.y1=playerPos.vy+netCatchPos.vy-(netCatchSize.vy/2);
+				netRect.x2=netRect.x1+netCatchSize.vx;
+				netRect.y2=netRect.y1+netCatchSize.vy;
+
+				#ifdef __USER_paul__
+				{
+				CRECT	area=netRect;
+				DVECTOR	ofs=CLevel::getCameraPos();
+				area.x1-=ofs.vx;
+				area.y1-=ofs.vy;
+				area.x2-=ofs.vx;
+				area.y2-=ofs.vy;
+				DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
+				DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);
+				DrawLine(area.x2,area.y2,area.x1,area.y2,255,255,255,0);
+				DrawLine(area.x1,area.y2,area.x1,area.y1,255,255,255,0);
+				}
+				#endif
+
+				thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
+				while(thing)
+				{
+					if(((CNpcEnemy*)thing)->canBeCaughtByNet())
+					{
+						((CNpcEnemy*)thing)->caughtWithNet();
+						m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
+						thing=NULL;
+						if(m_jellyfishHeld==0)
 						{
-							((CNpcEnemy*)thing)->caughtWithNet();
-							m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
-							thing=NULL;
 							m_netSin=0;
 						}
-						else
-						{
-							thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,true);
-						}
+						m_jellyfishHeld++;
+					}
+					else
+					{
+						thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,true);
 					}
 				}
-				break;
+			}
+			break;
 
-			case NET_STATE__JUST_CAUGHT_SOMETHING:
-				break;
+		case NET_STATE__JUST_CAUGHT_SOMETHING:
+			break;
 
-			case NET_STATE__FULL:
-				if(m_netFrame==0)
-				{
-					// Launch projectile at halfway through the swing..
-					CPlayerProjectile *projectile;
+		case NET_STATE__LAUNCHING:
+			// Launch projectile at halfway through the swing..
+			if(m_netFrame==4)
+			{
+				CPlayerProjectile *projectile;
 
-					int		playerFacing;
-					int		fireHeading;
-					DVECTOR	launchPos;
+				int		playerFacing;
+				int		fireHeading;
+				DVECTOR	launchPos;
 
-					playerFacing=m_player->getFacing();
-					fireHeading=1024+(512*playerFacing);
-					launchPos=m_player->getPos();
-					launchPos.vx+=netLaunchPos.vx*playerFacing;
-					launchPos.vy+=netLaunchPos.vy;
-
-
-					projectile = new( "user projectile" ) CPlayerProjectile;
-					
-					projectile->init(	launchPos,
-										fireHeading,
-										CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
-										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-										5*60);
-					projectile->setLayerCollision( m_player->getLayerCollision() );
-					projectile->updateCollisionArea();
-					
+				playerFacing=m_player->getFacing();
+				fireHeading=1024+(512*playerFacing);
+				launchPos=m_player->getPos();
+				launchPos.vx+=netLaunchPos.vx*playerFacing;
+				launchPos.vy+=netLaunchPos.vy;
 
 
-					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
-				}
-				break;
+				projectile = new( "user projectile" ) CPlayerProjectile;
+				
+				projectile->init(	launchPos,
+									fireHeading,
+									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+									5*60);
+				projectile->setLayerCollision( m_player->getLayerCollision() );
+				projectile->updateCollisionArea();
 
-			case NET_STATE__JUST_LAUNCHED_SOMETHING:
-				break;
-		}
+				m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
+				m_jellyfishHeld--;
+			}
+			break;
 
+		case NET_STATE__JUST_LAUNCHED_SOMETHING:
+			break;
+	}
+
+	if(m_netState!=NET_STATE__INERT)
+	{
 		m_player->setAnimNo(ANIM_SPONGEBOB_SWIPE);
 		m_player->setAnimFrame(m_netFrame);
 		m_netFrame++;
@@ -214,20 +233,12 @@ void	CPlayerModeNet::think()
 		{
 			m_player->setAnimNo(m_savedAnimNo);
 			m_player->setAnimFrame(m_savedAnimFrame);
-			m_netting=false;
 
-			if(m_netState==NET_STATE__JUST_CAUGHT_SOMETHING)
-			{
-				m_netState=NET_STATE__FULL;
-			}
-			else if(m_netState==NET_STATE__JUST_LAUNCHED_SOMETHING)
-			{
-				m_netState=NET_STATE__EMPTY;
-			}
+			m_netState=NET_STATE__INERT;
 		}
 	}
 
-	if(m_netState==NET_STATE__FULL)
+	if(m_jellyfishHeld)
 	{
 		m_netSin=(m_netSin+npspeed)&4095;
 	}
@@ -243,10 +254,11 @@ void	CPlayerModeNet::think()
 {
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
+	char		buf[4];
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__NET);
-	if(m_netState==NET_STATE__FULL)
+	if(m_jellyfishHeld)
 	{
 		POLY_FT4	*ft4;
 
@@ -261,6 +273,9 @@ void	CPlayerModeNet::think()
 	{
 		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 	}
+
+	sprintf(buf,"x%d",m_jellyfishHeld);
+	m_player->getFontBank()->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
 }
 
 /*----------------------------------------------------------------------
