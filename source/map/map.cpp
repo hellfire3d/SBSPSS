@@ -170,8 +170,8 @@ DVECTOR						CMapScene::s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER]=
 	{	330,113	},
 };
 
-int							CMapScene::s_chapterToStartOn=1;
-int							CMapScene::s_levelToStartOn=1;
+int							CMapScene::s_chapterToStartOn=0;
+int							CMapScene::s_levelToStartOn=0;
 
 
 extern int s_globalLevelSelectThing;
