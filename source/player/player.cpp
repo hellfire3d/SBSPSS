@@ -183,7 +183,7 @@ int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-136;
 int MAP2D_BLOCKSTEPSIZE=16;
 
-int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most
+int CAMERA_SCROLLLIMIT=3;//8;				// SB is this many tiles off centre at most
 int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
 int CAMERA_STARTMOVETHRESHOLD=20;		// If SB moves faster than this then the camera starts scrolling
 int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camera stops scrolling
