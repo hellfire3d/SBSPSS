@@ -1413,8 +1413,11 @@ if(drawlastpos)
 		// Boots
 		int			pickupX,pickupY;
 		sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
-		sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
-		sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
+		if(m_squeakyBootsTimer>SQUEAKY_BOOTS_FLASH_TIME||m_squeakyBootsTimer&2)
+		{
+			sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
+			sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
+		}
 		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
 	}
 
