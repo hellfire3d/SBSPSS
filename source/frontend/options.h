@@ -52,6 +52,7 @@ public:
 
 
 private:
+	void	getValues();
 	void	setLoadMode(int _newMode);
 
 

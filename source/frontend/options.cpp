@@ -446,13 +446,7 @@ void CFrontEndOptions::init()
 		}
 	}
 
-	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SONG);
-	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SFX);
-	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH);
-	m_controlStyle=CPadConfig::getConfig();
-	m_vibrationStatus=m_lastVibrationStatus=PadGetVibrationIsTurnedOn(0);
-	m_screenXOff=VidGetXOfs();
-	m_screenYOff=VidGetYOfs();
+	getValues();
 
 	m_saveLoadDatabase=NULL;
 }
@@ -740,6 +734,7 @@ void CFrontEndOptions::think(int _frames)
 					int stat=m_saveLoadDatabase->getLoadStatus();
 					if(stat==CSaveLoadDatabase::FINISHED_OK)
 					{
+						getValues();
 						setLoadMode(LOADMODE__LOADOK);
 					}
 					else if(stat==CSaveLoadDatabase::FAILED)
@@ -815,6 +810,22 @@ CFrontEndScene::FrontEndMode CFrontEndOptions::getNextMode()
 	return CFrontEndScene::MODE__MAIN_TITLES;
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CFrontEndOptions::getValues()
+{
+	m_bgmVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SONG);
+	m_sfxVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SFX);
+	m_speechVolume=CSoundMediator::getVolume(CSoundMediator::VOL_SPEECH);
+	m_controlStyle=CPadConfig::getConfig();
+	m_vibrationStatus=m_lastVibrationStatus=PadGetVibrationIsTurnedOn(0);
+	m_screenXOff=VidGetXOfs();
+	m_screenYOff=VidGetYOfs();
+}
 
 /*----------------------------------------------------------------------
 	Function:
