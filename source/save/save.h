@@ -81,6 +81,7 @@ private:
 	};
 
 	void	setMode(MODE _newMode);
+	void	renderButtonPrompts();
 
 	class CSaveLoadDatabase	*m_saveLoadDatabase;
 
@@ -97,6 +98,9 @@ private:
 	int						m_userResponse;
 
 	static NEXTSCENE		s_nextScene;
+
+	class FontBank			*m_fontBank;
+	class SpriteBank		*m_spriteBank;
 
 };
 

@@ -34,6 +34,10 @@
 #include "gui\gtextbox.h"
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -67,6 +71,10 @@
 
 #ifndef __STRING_ENUMS__
 #include <trans.h>
+#endif
+
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -167,6 +175,12 @@ void CSaveScene::init()
 
 	setMode(MODE__CONFIRMSAVE);
 
+	m_fontBank=new ("CGameScene::Init") FontBank();
+	m_fontBank->initialise( &standardFont );
+
+	m_spriteBank=new ("options sprites") SpriteBank();
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
+
 	MemCard::Start();
 	m_saveLoadDatabase=new ("saveloaddb") CSaveLoadDatabase();
 }
@@ -180,6 +194,9 @@ void CSaveScene::init()
   ---------------------------------------------------------------------- */
 void CSaveScene::shutdown()
 {
+	m_spriteBank->dump();			delete m_spriteBank;
+	m_fontBank->dump();				delete m_fontBank;
+
 	m_yesNoResponseFrame->shutdown();
 	m_okResponseFrame->shutdown();
 	m_blankFrame->shutdown();
@@ -233,6 +250,28 @@ void CSaveScene::render()
 			break;
 
 		case MODE__READYTOEXIT:
+			break;
+	}
+
+	switch(m_mode)
+	{
+		case MODE__CHECKING:
+		case MODE__FORMATTING:
+		case MODE__CHECKINGFORMAT:
+		case MODE__SAVING:
+			break;
+
+		case MODE__CONFIRMSAVE:
+		case MODE__UNFORMATTED:
+		case MODE__FORMATOK:
+		case MODE__FORMATERROR:
+		case MODE__NOCARD:
+		case MODE__NOSPACE:
+		case MODE__CONFIRMOVERWRITE:
+		case MODE__SAVEOK:
+		case MODE__SAVEERROR:
+		case MODE__READYTOEXIT:
+			renderButtonPrompts();
 			break;
 	}
 }
@@ -465,6 +504,36 @@ void CSaveScene::think(int _frames)
 		}
 	}
 
+
+	if(PadGetDown(0)&PAD_TRIANGLE)
+	{
+		switch(m_mode)
+		{
+			case MODE__CHECKING:
+			case MODE__FORMATTING:
+			case MODE__CHECKINGFORMAT:
+			case MODE__SAVING:
+				break;
+
+			case MODE__CONFIRMSAVE:
+				setMode(MODE__READYTOEXIT);
+				CFader::setFadingOut();
+				break;
+
+			case MODE__UNFORMATTED:
+			case MODE__FORMATOK:
+			case MODE__FORMATERROR:
+			case MODE__NOCARD:
+			case MODE__NOSPACE:
+			case MODE__CONFIRMOVERWRITE:
+			case MODE__SAVEOK:
+			case MODE__SAVEERROR:
+			case MODE__READYTOEXIT:
+				setMode(MODE__CONFIRMSAVE);
+				break;
+		}
+	}
+	
 	m_timeInMode+=_frames;
 }
 
@@ -597,6 +666,36 @@ static const char *text[]=
 PAUL_DBGMSG("newmode: %s",text[m_mode]);
 #endif
 //////////
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CSaveScene::renderButtonPrompts()
+{
+	sFrameHdr		*fh1;
+	int				x,y,width;
+
+int	INSTRUCTIONS_Y_POS=213;
+int INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;		// Eh!? (pkg)
+int INSTRUCTIONS_BUTTON_Y_OFFSET=4;
+
+	fh1=m_spriteBank->getFrameHeader(FRM__BUTX);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__CROSS_TO_SELECT);
+	x=128-(width/2);
+	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__CROSS_TO_SELECT);
+
+	fh1=m_spriteBank->getFrameHeader(FRM__BUTT);
+	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__FRONTEND__TRIANGLE_TO_GO_BACK);
+	x=256+128-(width/2);
+	m_spriteBank->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__FRONTEND__TRIANGLE_TO_GO_BACK);
 }
 
 
