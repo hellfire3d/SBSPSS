@@ -117,7 +117,7 @@ void CNpcRisingBridgePlatform::processMovement( int _frames )
 	}
 	else
 	{
-		m_extension -= 64 * _frames;
+		m_extension -= 16 * _frames;
 
 		if ( m_extension < 0 )
 		{
