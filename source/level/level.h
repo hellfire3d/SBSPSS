@@ -15,6 +15,7 @@
 struct	sLvlTab
 {
 	u16						Chapter,Level;
+	u8						totalSpatCount;
 	FileEquate				LevelFilename,TexFilename;
 	int						songId;
 };
@@ -37,6 +38,7 @@ static	DVECTOR const		&getPlayerSpawnPos()				{return s_playerSpawnPos;}
 
 static int					getCurrentChapter();
 static int					getCurrentChapterLevel();
+static int					getTotalSpatCount();
 
 		int					getActorCount()						{return ActorCount;}
 		sThingActor			**getActorList()					{return ActorList;}

@@ -39,6 +39,10 @@ virtual	int				canPause();
 		int				readyToShutdown();
 		char			*getSceneName()	{return "Game";}
 
+		int				getChapterNumber();
+		int				getLevelNumber();
+		int				getTotalSpatCountForThisLevel();
+
 		CPlayer			*getPlayer();
 		void			respawnLevel();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
@@ -46,7 +50,8 @@ virtual	int				canPause();
 static void				setReadyToExit()	{s_readyToExit=true;}
 static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}
-	
+
+
 //		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 

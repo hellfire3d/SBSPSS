@@ -297,6 +297,21 @@ CPlayer	* CGameScene::getPlayer()
 }
 
 /*****************************************************************************/
+int		CGameScene::getChapterNumber()
+{
+	return Level.getCurrentChapter();
+}
+int		CGameScene::getLevelNumber()
+{
+	return Level.getCurrentChapterLevel();
+}
+
+int		CGameScene::getTotalSpatCountForThisLevel()
+{
+	return Level.getTotalSpatCount();
+}
+
+/*****************************************************************************/
 void	CGameScene::respawnLevel()
 {
 	m_player->respawn();

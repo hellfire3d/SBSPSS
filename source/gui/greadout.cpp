@@ -45,6 +45,10 @@
 #include <biglump.h>
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -113,8 +117,6 @@ void CGUITextReadout::setReadoutData(TextReadoutData *_data)
   ---------------------------------------------------------------------- */
 void CGUITextReadout::render()
 {
-	FontBank	*fb;
-	
 	if(!isHidden())
 	{
 		getFontBank()->print((getW()-(BORDERWIDTH*2))/2,m_textY,m_textId);
@@ -184,6 +186,84 @@ void CGUITextReadout::recalc()
 		m_textY=(getH()-(BORDERHEIGHT*2)-fb->getStringHeight(string))/2;
 	}
 }
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUISpatCountReadout::init(CGUIObject *_parent,GUIId _id)
+{
+	CGUIObjectWithFont::init(_parent,_id);
+	m_spatsCollected=m_spatsTotal=0;
+	m_spriteBank=new ("SpatCountReadoutSprites") SpriteBank();
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUISpatCountReadout::shutdown()
+{
+	m_spriteBank->dump();	delete m_spriteBank;
+	CGUIObjectWithFont::shutdown();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUISpatCountReadout::setSpatCounts(int _collected,int _total)
+{
+	m_spatsCollected=_collected;
+	m_spatsTotal=_total;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUISpatCountReadout::render()
+{
+	if(!isHidden())
+	{
+		FontBank	*fb;
+		sFrameHdr	*fh;
+		char		buf[100];
+		int			x,y;
+
+		fb=getFontBank();
+		fh=m_spriteBank->getFrameHeader(FRM__SPATULA);
+
+		sprintf(buf,"%d/%d",m_spatsCollected,m_spatsTotal);
+		x=getW()-fb->getStringWidth(buf);
+		y=(getH()/2)-fb->getCharHeight();
+		fb->print(x,y,buf);
+
+		x=getX()+getParentX();
+		y=getY()+getParentY()+((getH()-fh->H)/2);
+		m_spriteBank->printFT4(fh,x,y,0,0,0);
+	}
+	CGUIObjectWithFont::render();
+}
+
+
+
 
 
 

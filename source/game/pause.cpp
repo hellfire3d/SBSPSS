@@ -34,6 +34,14 @@
 #include "player\player.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -149,7 +157,7 @@ void CPauseMenu::init()
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;
 #else
-	xpos+=TEXT_SPACING*2;
+	xpos+=TEXT_SPACING*4;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__CONTINUE,
@@ -168,6 +176,10 @@ void CPauseMenu::init()
 										&invincibleSponge,inv_data,inv_readoutdata);
 	xpos+=TEXT_SPACING*2;
 #endif
+
+	m_guiSpatReadout=new ("SpatReadout") CGUISpatCountReadout();
+	m_guiSpatReadout->init(m_guiFrame);
+	m_guiSpatReadout->setObjectXYWH(10,10,120,40);
 
 	m_active=false;
 }
@@ -193,10 +205,16 @@ void CPauseMenu::shutdown()
   ---------------------------------------------------------------------- */
 void CPauseMenu::select()
 {
+	int		chapter,level;
 	m_active=true;
 	m_exitPauseMenuFlag=false;
 	m_quitGameFlag=false;
 	m_guiFrame->select();
+
+	chapter=GameScene.getChapterNumber();
+	level=GameScene.getLevelNumber();
+	m_guiSpatReadout->setSpatCounts(CGameSlotManager::getSlotData()->getSpatulaCollectedCount(chapter,level),
+									GameScene.getTotalSpatCountForThisLevel());
 }
 
 

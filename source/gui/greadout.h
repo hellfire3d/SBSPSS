@@ -67,6 +67,24 @@ private:
 };
 
 
+class CGUISpatCountReadout : public CGUIObjectWithFont
+{
+public:
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
+	virtual void		shutdown();
+
+	virtual void		setSpatCounts(int _collected,int _total);
+
+	virtual void		render();
+
+
+private:
+	int					m_spatsCollected,m_spatsTotal;
+	class SpriteBank	*m_spriteBank;
+
+};
+
+
 class CGUISpriteReadout : public CGUIObjectWithSpriteBank
 {
 public:

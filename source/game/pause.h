@@ -48,7 +48,8 @@ private:
 	int						m_exitPauseMenuFlag;
 	int						m_quitGameFlag;
 
-	class CGUIControlFrame	*m_guiFrame;
+	class CGUIControlFrame		*m_guiFrame;
+	class CGUISpatCountReadout	*m_guiSpatReadout;
 
 };
 

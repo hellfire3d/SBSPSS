@@ -33,6 +33,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -105,7 +109,7 @@ DVECTOR	CSpatulaPickup::getSizeForPlacement()
 void	CSpatulaPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
-	CGameSlotManager::getSlotData()->collectSpatula(0,0,m_spatulaNumber);
+	CGameSlotManager::getSlotData()->collectSpatula(GameScene.getChapterNumber(),GameScene.getLevelNumber(),m_spatulaNumber);
 }
 
 /*----------------------------------------------------------------------
