@@ -36,10 +36,6 @@
 
 class CGaryStopTrigger : public CTrigger
 {
-public:
-#if defined (__USER_art__) || defined (__USER_sbart__)
-	virtual void		render();
-#endif
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 };
