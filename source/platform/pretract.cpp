@@ -78,16 +78,6 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			if ( m_timer > 0 )
 			{
 				m_timer -= _frames;
-
-				if ( m_timer <= 0 )
-				{
-					for ( int i = 0 ; i < 4 ; i++ )
-					{
-						DVECTOR bubblePos = Pos;
-						bubblePos.vx += 20 - ( getRnd() % 41 );
-						CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
-					}
-				}
 			}
 			else
 			{
@@ -114,16 +104,6 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			if ( m_timer > 0 )
 			{
 				m_timer -= _frames;
-
-				if ( m_timer <= 0 )
-				{
-					for ( int i = 0 ; i < 4 ; i++ )
-					{
-						DVECTOR bubblePos = Pos;
-						bubblePos.vx += 20 - ( getRnd() % 41 );
-						CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
-					}
-				}
 			}
 			else
 			{
