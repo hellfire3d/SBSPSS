@@ -164,7 +164,7 @@ static	PlayerMetrics	s_playerMetrics=
 void	CPlayerModeCoralBlower::enter()
 {
 	CPlayerModeBase::enter();
-	m_blowerState=BLOWER_STATE__FULL;
+	m_blowerState=BLOWER_STATE__EMPTY;
 }
 
 /*----------------------------------------------------------------------
