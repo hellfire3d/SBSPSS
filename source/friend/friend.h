@@ -106,6 +106,9 @@ protected:
 	u8				m_animPlaying;
 	CActorGfx		*m_actorGfx;
 	bool			m_reversed;
+
+	int				m_hasSpokenToSbYet;
+	int				m_iconStrobe;
 };
 
 #endif

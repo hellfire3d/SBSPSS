@@ -59,6 +59,27 @@
 #include "friend\fplnkton.h"
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
+
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
+
+// These are temporary.. I'll clean them up when I can test them (pkg)
+int	strobespeed=20;
+int strobebase=300;
+int strobescale=100;
+// These are temporary.. I'll clean them up when I can test them (pkg)
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +196,8 @@ void CNpcFriend::init()
 	m_frame = 0;
 	m_reversed = false;
 	m_platform = NULL;
+	m_hasSpokenToSbYet=false;
+	m_iconStrobe=0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,9 +252,27 @@ void CNpcFriend::think(int _frames)
 		m_animPlaying = true;
 		m_frame = 0;
 	}
+
+	m_iconStrobe=(m_iconStrobe+(strobespeed))&4095;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef struct
+{
+	int		m_control,m_iconFrame;
+} ICON_MAP;
+static const ICON_MAP	s_iconMap[]=
+{
+	{	PAD_UP,			FRM__BUTU	},
+	{	PAD_DOWN,		FRM__BUTD	},
+	{	PAD_LEFT,		FRM__BUTL	},
+	{	PAD_RIGHT,		FRM__BUTR	},
+	{	PAD_CROSS,		FRM__BUTX	},
+	{	PAD_SQUARE,		FRM__BUTS	},
+	{	PAD_CIRCLE,		FRM__BUTC	},
+	{	PAD_TRIANGLE,	FRM__BUTT	},
+};
 
 void CNpcFriend::render()
 {
@@ -249,6 +290,28 @@ void CNpcFriend::render()
 		boundingBox.YMax = 0;
 		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+
+		if(m_hasSpokenToSbYet&&!CConversation::isActive())
+		{
+			const ICON_MAP	*map;
+			int				control;
+			sFrameHdr		*fh;
+			int				size;
+			DVECTOR			iconPos;
+
+			map=s_iconMap;
+			control=CPadConfig::getButton(CPadConfig::PAD_CFG_UP);
+			while(map->m_control!=control)
+			{
+				map++;
+			}
+			fh=CGameScene::getSpriteBank()->getFrameHeader(map->m_iconFrame);
+			size=strobebase+((msin(m_iconStrobe)*strobescale)>>12);
+			iconPos=getRenderPos();
+			iconPos.vx-=(fh->W*size)>>(8+1);
+			iconPos.vy-=120;
+			CGameScene::getSpriteBank()->printFT4Scaled(fh,iconPos.vx,iconPos.vy,0,0,0,size);
+		}
 	}
 
 }
@@ -263,8 +326,9 @@ void CNpcFriend::collidedWith( CThing *_thisThing )
 		{
 			CPlayer *player = (CPlayer *) _thisThing;
 
-			if ( player->isTryingToConversateWithFriend() )
+			if ( !m_hasSpokenToSbYet||player->isTryingToConversateWithFriend() )
 			{
+				m_hasSpokenToSbYet=true;
 				startConderversation();
 			}
 
