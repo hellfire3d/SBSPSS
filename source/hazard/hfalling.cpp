@@ -44,98 +44,125 @@ void CNpcFallingHazard::init()
 	m_bounceFinish = false;
 	m_spinFinish = false;
 	m_rotation = 0;
+	m_growing = true;
+	m_scale = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcFallingHazard::processMovement( int _frames )
 {
-	s8 groundHeight;
-	s8 yMovement;
-
-	if ( m_bounceFinish )
+	if ( m_growing )
 	{
-		if ( m_bounceDir )
-		{
-			Pos.vx += 2 * _frames;
-		}
-		else
-		{
-			Pos.vx -= 2 * _frames;
-		}
+		m_scale = ( ( ( 2 * GameState::getOneSecondInFrames() ) - m_movementTimer ) << 12 ) / ( 2 * GameState::getOneSecondInFrames() );
 
-		Pos.vy += m_speed * _frames;
-
-		/*if ( Pos.vy > ( m_bouncePos.vy + 32 ) )
-		{
-			m_bounceFinish = false;
-		}
-		else*/
-		{
-			if ( m_speed < 3 )
-			{
-				m_speed++;
-			}
-		}
-
-		if ( m_spinFinish )
-		{
-			m_rotation += 64 * _frames;
-			m_rotation &= 4095;
-		}
-	}
-	else
-	{
 		if ( m_movementTimer > 0 )
 		{
 			m_movementTimer -= _frames;
 
-			if ( m_movementTimer <= 0 )
+			if ( m_movementTimer < 0 )
 			{
-				Pos = m_base;
-			}
-			else
-			{
-				Pos.vx = m_base.vx + ( -3 + ( getRnd() % 7 ) );
-				Pos.vy = m_base.vy + ( -3 + ( getRnd() % 7 ) );
+				m_movementTimer = 0;
 			}
 		}
 		else
 		{
-			yMovement = 3 * _frames;
+			m_growing = false;
 
-			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			m_movementTimer = 2 * GameState::getOneSecondInFrames();
+		}
+	}
+	else
+	{
+		s8 groundHeight;
+		s8 yMovement;
 
-			if ( groundHeight < yMovement )
+		if ( m_bounceFinish )
+		{
+			if ( m_bounceDir )
 			{
-				// colliding with ground
-
-				Pos.vy += groundHeight;
-
-				m_bounceFinish = true;
-				m_speed = -5;
-				m_bounceDir = getRnd() % 2;
-
-				m_bouncePos = Pos;
+				Pos.vx += 2 * _frames;
 			}
 			else
 			{
-				// drop down
+				Pos.vx -= 2 * _frames;
+			}
 
-				Pos.vy += yMovement;
+			Pos.vy += m_speed * _frames;
+
+			/*if ( Pos.vy > ( m_bouncePos.vy + 32 ) )
+			{
+				m_bounceFinish = false;
+			}
+			else*/
+			{
+				if ( m_speed < 3 )
+				{
+					m_speed++;
+				}
+			}
+
+			if ( m_spinFinish )
+			{
+				m_rotation += 64 * _frames;
+				m_rotation &= 4095;
 			}
 		}
-	}
+		else
+		{
+			if ( m_movementTimer > 0 )
+			{
+				m_movementTimer -= _frames;
 
-	DVECTOR	offset = CLevel::getCameraPos();
+				if ( m_movementTimer <= 0 )
+				{
+					Pos = m_base;
+				}
+				else
+				{
+					Pos.vx = m_base.vx + ( -3 + ( getRnd() % 7 ) );
+					Pos.vy = m_base.vy + ( -3 + ( getRnd() % 7 ) );
+				}
+			}
+			else
+			{
+				yMovement = 3 * _frames;
 
-	s32 yPos = Pos.vy - offset.vy;
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
-	if ( yPos > VidGetScrH() )
-	{
-		m_isActive = false;
-		m_timerActive = true;
-		m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
+				if ( groundHeight < yMovement )
+				{
+					// colliding with ground
+
+					Pos.vy += groundHeight;
+
+					m_bounceFinish = true;
+					m_speed = -5;
+					m_bounceDir = getRnd() % 2;
+
+					m_bouncePos = Pos;
+				}
+				else
+				{
+					// drop down
+
+					Pos.vy += yMovement;
+				}
+			}
+		}
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos > VidGetScrH() )
+		{
+			m_isActive = false;
+			m_timerActive = true;
+			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
+			m_growing = true;
+			m_scale = 0;
+		}
 	}
 }
 
@@ -245,9 +272,9 @@ void CNpcFallingHazard::render()
 		rotation.vz = m_rotation;
 
 		VECTOR scale;
-		scale.vx = ONE;
-		scale.vy = ONE;
-		scale.vz = ONE;
+		scale.vx = m_scale;
+		scale.vy = m_scale;
+		scale.vz = m_scale;
 
 		m_modelGfx->Render(renderPos,&rotation,&scale);
 	}

@@ -37,6 +37,8 @@ protected:
 	u8					m_bounceDir;
 	DVECTOR				m_bouncePos;
 	s16					m_rotation;
+	s16					m_scale;
+	u8					m_growing;
 };
 
 #endif
