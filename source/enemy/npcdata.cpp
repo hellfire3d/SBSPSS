@@ -946,7 +946,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		0,
 		0,
 		false,
-		false,
+		true,
 		true,
 	},
 

@@ -58,6 +58,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PROJECTL_PRNPC_H__
+#include "projectl\prnpc.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -221,14 +225,12 @@ void	CPlayerModeCoralBlower::think()
 			}
 			break;
 		case BLOWER_STATE__FULL:
-			m_enemy->suckUp(getSuckUpPoint(),1);
 			if(getPadInputDown()&PI_ACTION&&getState()==STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__AIMING;
 			}
 			break;
 		case BLOWER_STATE__AIMING:
-			m_enemy->suckUp(getSuckUpPoint(),1);
 			if(getState()!=STATE_IDLE)
 			{
 				m_blowerState=BLOWER_STATE__FULL;
@@ -237,7 +239,23 @@ void	CPlayerModeCoralBlower::think()
 			{
 				// Fire!
 				m_blowerState=BLOWER_STATE__EMPTY;
-				m_enemy->fireAsProjectile(1024+(1024*m_player->getFacing()));
+
+				DVECTOR newPos = m_player->getPos();
+
+				newPos.vy -= 10;
+
+				CEnemyAsProjectile *projectile;
+				projectile = new( "blower projectile" ) CEnemyAsProjectile;
+				projectile->init(	newPos,
+									1024+(1024*m_player->getFacing()),
+									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
+									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
+									5*60);
+				projectile->setLayerCollision( m_player->getLayerCollision() );
+
+				CActorGfx *projectileGfx;
+				projectileGfx=CActorPool::GetActor((FileEquate)ACTORS_SHELL_SBK);
+				projectile->setGraphic( projectileGfx );
 			}
 			break;
 	}

@@ -116,7 +116,6 @@ public:
 
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
-	virtual void		fireAsProjectile( s16 heading );
 
 protected:
 	class CLayerCollision	*m_layerCollision;
@@ -253,7 +252,7 @@ protected:
 	void				reinit();
 
 	void				processCoralBlower( int _frames );
-	bool				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist );
+	bool				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u8 destroyAtTarget );
 
 	// data
 

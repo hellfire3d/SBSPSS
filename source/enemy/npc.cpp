@@ -717,8 +717,6 @@ void CNpcEnemy::setToShutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool gitTrigger = false;
-
 int CNpcEnemy::getFrameCount()
 {
 	return( m_actorGfx->getFrameCount( m_animNo ) );
@@ -824,11 +822,6 @@ void CNpcEnemy::think(int _frames)
 	if ( !m_isCaught )
 	{
 		processTimer( moveFrames );
-	}
-
-	if ( gitTrigger )
-	{
-		fireAsProjectile( 0 );
 	}
 }
 
@@ -1453,7 +1446,7 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
+bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u8 destroyAtTarget )
 {
 	s32 moveX, moveY;
 	s16 headingToTarget;
@@ -1522,6 +1515,27 @@ bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
 	}
 	else
 	{
+		// has reached target point
+
+		if ( destroyAtTarget )
+		{
+			if ( m_data[m_type].respawning )
+			{
+				if ( m_isActive )
+				{
+					m_isCaught = false;
+					m_isActive = false;
+
+					m_timerFunc = NPC_TIMER_RESPAWN;
+					m_timerTimer = 1 * GameState::getOneSecondInFrames();
+				}
+			}
+			else
+			{
+				setToShutdown();
+			}
+		}
+
 		return( true );
 	}
 }
@@ -1551,7 +1565,7 @@ bool CNpcEnemy::suckUp( DVECTOR *suckPos, int _frames )
 			s32 targetXDist = suckPos->vx - Pos.vx;
 			s32 targetYDist = suckPos->vy - Pos.vy;
 
-			returnVal = processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+			returnVal = processCoralBlowerMovement( _frames, targetXDist, targetYDist, true );
 
 			break;
 		}
@@ -1601,7 +1615,7 @@ void CNpcEnemy::processCoralBlower( int _frames )
 			targetXDist = m_caughtPos.vx - Pos.vx;
 			targetYDist = m_caughtPos.vy - Pos.vy;
 
-			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+			processCoralBlowerMovement( _frames, targetXDist, targetYDist, false );
 
 			if ( !targetXDist && !targetYDist )
 			{
@@ -1623,26 +1637,4 @@ void CNpcEnemy::processCoralBlower( int _frames )
 	}
 
 	m_isBlowerOn = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcEnemy::fireAsProjectile( s16 heading )
-{
-	m_isActive = false;
-	setToShutdown();
-
-	DVECTOR newPos = Pos;
-
-	newPos.vy -= 10;
-
-	CEnemyAsProjectile *projectile;
-	projectile = new( "blower projectile" ) CEnemyAsProjectile;
-	projectile->init(	newPos,
-						heading,
-						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
-						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
-						5*60);
-	projectile->setLayerCollision( m_layerCollision );
-	projectile->setGraphic( m_actorGfx );
 }
