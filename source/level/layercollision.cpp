@@ -41,7 +41,7 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
-int		TabH=MapHeight+COL_Y_OFS;
+int		TabH=MapHeight+(COL_Y_OFS*2);
 
 		ColYTable=(int*)MemAlloc(TabH*sizeof(int),"ColYTable");
 		ASSERT(ColYTable);
@@ -49,12 +49,13 @@ int		TabH=MapHeight+COL_Y_OFS;
 		for (int i=0; i<TabH; i++)
 		{
 			int	Y=i-COL_Y_OFS;
-			if (Y<0)
+			if (Y<0)								// extend off top
 			{
 				ColYTable[i]=0;
 			}
 			else
 			{
+				if (Y>=MapHeight) Y=MapHeight-1;	// extend off bottom
 				ColYTable[i]=Y*MapWidth;
 			}
 			
