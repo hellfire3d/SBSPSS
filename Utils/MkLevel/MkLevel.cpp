@@ -730,7 +730,7 @@ u8		Outx0, Outy0;
 		Outy0 = (Info.v + H) -  round(Iny0 * H);
 
 		Out.u0=Outx0; Out.v0=Outy0;
-		Out.TPage=Info.Tpage;
+		Out.TPage=0xe1000000 | (Info.Tpage & 0x9ff);		// fixup TPage for TSPRT
 		Out.Clut=Info.Clut;
 }
 
