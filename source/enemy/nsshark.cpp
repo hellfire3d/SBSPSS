@@ -622,6 +622,22 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 
 		case NPC_SHOT_GENERIC:
 		{
+			if ( m_carryPlayer )
+			{
+				// spit out player
+
+				CPlayer *player = GameScene.getPlayer();
+				player->setMode( m_oldPlayerMode );
+				m_carryPlayer = false;
+
+				DVECTOR move;
+				move.vx = 16 * _frames;
+				move.vy = -16 * _frames;
+
+				player->shove( move );
+				player->setMoveVelocity( &move );
+			}
+
 			switch ( m_state )
 			{
 				case NPC_GENERIC_HIT_CHECK_HEALTH:
