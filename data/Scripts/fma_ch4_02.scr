@@ -22,7 +22,7 @@ do
 }
 while(_getResponse()==ANSWER_NONE);
 
-_setText(CHAR_SPONGEBOB,STR__INGAME__FMA_C4_SB2);
+_setText(CHAR_SPONGEBOB,STR__INGAME__FMA_C2_SB1);
 _setResponseOptions(QUESTION_OK);
 do
 {

@@ -228,6 +228,7 @@ eng=zzzzzzzzzz
 eng=I知 ready. I知 ready. I知 ready. Oops!
 [STR__INGAME__FMA_C2_BB0]
 eng=Back already?.. That is definitely a sandwich fit for a super hero!! Gonna need to think of something to test your super hero potential, and keep busy! . Look MM is not in great super hero condition at the moment and he could really do with some pampering!! Some Kelp cream and a facial! Not for me you understand!
+;PKG 17/7/01 - This is duped by STR__INGAME__FMA_C4_SB2
 [STR__INGAME__FMA_C2_SB1]
 eng=I知 on my way!!
 
@@ -254,8 +255,9 @@ eng=Gasp!
 eng=Look what I have got for you!
 [STR__INGAME__FMA_C4_BB0]
 eng=Look kid you are beginning to bug me now! One of my favorite kelp bars would be great. Hey kid, you can only get them in Bikini Bottom!
-[STR__INGAME__FMA_C4_SB2]
-eng=I知 on my way!!
+;PKG 17/7/01 - Using a dupe of STR__INGAME__FMA_C2_SB1 for this
+;[STR__INGAME__FMA_C4_SB2]
+;eng=I知 on my way!!
 
 ; C5 FMA
 [STR__INGAME__FMA_C5_SB0]
