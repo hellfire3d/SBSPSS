@@ -737,6 +737,7 @@ void	CGameScene::respawnLevel()
 	CSoundMediator::setCanPlaySfx(false);
 	m_player->respawn();
 	Level.respawnLevel();
+	m_HealthManager->init();
 	if(!s_showBossTextOnRespawn)
 	{
 		m_gamestate=GAMESTATE_SHOWING_LIVES;
@@ -838,12 +839,6 @@ void	CGameScene::initLevel()
 	SYSTEM_DBGMSG("InitLevelDone\n");
 }
 
-
-/*****************************************************************************/
-void	CGameScene::initHealth()
-{
-	m_HealthManager->init();
-}
 
 /*****************************************************************************/
 void	CGameScene::dropHealth(DVECTOR const &Pos,int Amount,int Vel)

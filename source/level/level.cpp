@@ -205,11 +205,6 @@ void 	CLevel::init(int LevelNo)
 // Load it
 sLvlTab *lvlTab=&LvlTable[LevelNo];
 
-		m_isFMA=0;
-		if (lvlTab->Chapter==6)
-		{
-			m_isFMA=1;
-		}
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
 		LevelHdr=(sLevelHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
@@ -637,10 +632,7 @@ void	CLevel::initThings(int _respawningLevel)
 	CThingManager::matchWheelsAndWeights();
 	CThingManager::matchPressureSwitches();
 	CThingManager::matchGaryTriggers();
-	if (!m_isFMA) GameScene.initHealth();
 }
-
-
 
 /*****************************************************************************/
 void	CLevel::respawnLevel()
