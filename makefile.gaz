@@ -19,7 +19,7 @@ default : all
 #----------------------------------------------------------------------------
 #	Name of the project
 #	--------------------
-PROJ :=			prlsr
+PROJ :=			Spongey
 
 #----------------------------------------------------------------------------
 
@@ -48,201 +48,41 @@ CD_FILESYS_LIB :=		CMXBoot
 #	Source Code to Compile
 #----------------------------------------------------------------------------
 
-actor_src :=		actor \
-					actpool \
-					actions
-
-backend_src :=		backend
-
-civilian_src :=		civilian \
-					stop \
-					teleport \
-					actions
-
-credits_src :=		credits
-
-collide_src :=		attack \
-					base \
-					collide \
-					surface \
-					surfdesc \
-					trigger
-
-enemy_src :=		enemy \
-					e_stop \
-					e_gototarget \
-					e_attacktarget \
-					e_retreat \
-					e_gotowaypoint \
-					e_block \
-					e_taunt \
-					e_jumpback \
-					e_teleport \
-					e_props \
-					e_blback \
-					e_coll \
-					e_sstep \
-					e_telein \
-					e_jumpin \
-					e_rushtarget \
-					e_discombo \
-					e_goforward \
-					e_boss \
-					actions \
-					nrgbar
-
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)
 
-fmv_src :=			newfmv
-
-frontend_src :=		frontend
-
-fx_src :=			fx \
-					fx_hit \
-					fx_beam \
-					fx_trail \
-					fx_breth \
-					fx_tele \
-					fx_exp \
-					fx_splash \
-					fx_bgrow \
-					fx_rock \
-					fx_sproing \
-					fx_unsproing \
-					fx_shock \
-					fx_sword \
-					fx_punch \
-					fx_card \
-					fx_blast \
-					fx_eyes \
-					fx_light \
-					fx_sonic \
-					fx_feyes \
-					fx_iceb \
-					fx_icea \
-					fx_death \
-					fx_pink \
-					fx_yello \
-					fx_green \
-					fx_blue \
-					fx_titan \
-					fx_inv \
-					fx_zord \
-					fx_miss \
-					fx_bmiss \
-					envelope
-
-gallery_src :=		gallery
-
-game_src :=			game \
-					levintro \
-					mailicon \
-					object \
-					mapobj \
-					pickup \
-					triggers \
-					level1 \
-					level2 \
-					level3 \
-					level4 \
-					level5 \
-					level6 \
-					level7 \
-					level8 \
-					compass \
-					camera
-
-
-gameopts_src :=		gameopts \
-					menubase \
-					mainmenu \
-					options \
-					gallery \
-					pdiff \
-					psound \
-					pcontrol \
-					pscreen \
-					pcstyle \
-					oneplyr \
-					codemenu \
-					ppasswrd \
-					pcodes \
-					mload
+game_src :=			game
 
 gfx_src :=			prim \
 					tpage \
-					sprbank \
 					animtex \
-					camera \
-					basemod \
-					skel \
-					anim \
-					lvlmesh \
-					kdnode \
+					sprbank \
 					font \
-					fdata \
-					fader \
-					bilboard
+					fdata
 
-gfx_src_mip :=		render
-
-gui_src :=          gui gtext goptlist nrgbar gsprite gcontrls \
-					gframe gcodlist gtextent gtoggle \
-					guisfx
+#					camera \
+#					basemod \
+#					skel \
+#					anim \
+#					bilboard
 
 locale_src :=		textdbase
 
 mem_src :=			memory
 
-memcard_src :=		memcard \
-					saveload
+pad_src :=			pads
 
-pad_src :=			pads combo usrcombodata
-
-paul_src :=			paul
-
-particle_src :=		particle \
-					effects
-
-pause_src :=		menu \
-					story \
-					debug \
-					controls \
-					objectiv \
-					quit \
-					save \
-					bonuses \
-					options outmenu \
-					pmodels
-
-ranger_src :=		ranger \
-					rangerui \
-					actions \
-					r_props \
-					pickup
-
-sound_src :=		sndbank \
-					music \
-					cdxa
+# sound_src :=		sndbank \
+#					music \
+#					cdxa
 
 system_src :=		main \
 					gstate \
-					clickcount \
 					vid \
-					debug \
-					cpuprof \
-					sysobj \
-					prof \
-					scene \
-					password \
-					hiscores \
-					pak
-
+					debug
 
 utils_src :=		utils \
-					sincos \
-					list
+					sincos
 
 utils_src_mip :=	quatmip \
 					mathmip \
@@ -416,7 +256,7 @@ cleandeps :
 
 CD_DIR :=			CdBuild/$(TERRITORY)
 BIGLUMP_FILE :=		$(VERSION_DIR)/BIGLUMP.BIN
-BIN_OUTFILE :=		PRLSR.BIN
+BIN_OUTFILE :=		SPONGEY.BIN
 BOOTSTRAP_DIR :=	source/psxboot/
 BOOTSTRAP_IN :=		$(BOOTSTRAP_DIR)/PsxBoot.cpp
 BOOTSTRAP_CPE :=	$(TEMP_DIR)/PsxBoot.cpe
