@@ -29,7 +29,7 @@ public:
 	virtual void		render();
 	virtual int			getFrameCount()							{return( FRM_JELLYFISH1_SWIM7 - FRM_JELLYFISH1_SWIM1 + 1 );}
 	virtual u8			canCollideWithEnemy()					{return( false );}
-	virtual	CRECT const	*getThinkBBox()							{return( &getCollisionArea() );}
+	virtual	CRECT const	*getThinkBBox()							{return( CThing::getThinkBBox() );}
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );

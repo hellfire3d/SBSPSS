@@ -40,7 +40,7 @@ class CNpcStaticClamEnemy : public CNpcClamEnemy
 public:
 	virtual void		postInit();
 	virtual u8			hasBeenAttacked()						{return( false );}
-	virtual	CRECT const	*getThinkBBox()							{return( &getCollisionArea() );}
+	virtual	CRECT const	*getThinkBBox()							{return( CThing::getThinkBBox() );}
 protected:
 	virtual s32			getFrameShift( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
