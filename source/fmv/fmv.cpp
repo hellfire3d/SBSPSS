@@ -147,7 +147,7 @@ static u_long		*SectorBuffer;
 static const FmvData s_fmvData[MAX_FMVS]=
 {
 	{FILEPOS_THQ_STR,		240-15	},
-	{FILEPOS_INTRO_STR,		371-15	},
+	{FILEPOS_INTRO_STR,		602-15	},
 };
 
 
