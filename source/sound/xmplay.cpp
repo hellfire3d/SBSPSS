@@ -169,6 +169,9 @@ void CXMPlaySound::think()
 		for(int i=0;i<24;i++,ch++)
 		{
 			PAUL_DBGMSG("%02d] u:%s  l:%d  pid:%04x",i,text[ch->m_useType],ch->m_locked,ch->m_playingId);
+#ifdef SFX_DEBUG
+			PAUL_DBGMSG("    sfxId:%d",ch->m_sfxId);
+#endif
 		}
 		PAUL_DBGMSG("=======");
 		dump=false;
@@ -696,6 +699,9 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
 				   XM_Music,			// Music
 				   _startPattern);		// Where to start from
 		markChannelsAsActive(baseChannel,channelCount,SONG,retId,id,255);
+#ifdef SFX_DEBUG
+		m_spuChannelUse[baseChannel].m_sfxId=_startPattern;
+#endif
 		setVolume(retId,MAX_VOLUME);
 	}
 	else
@@ -843,6 +849,9 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPa
 				   _sfxPattern);		// SFX pattern to play
 		XM_ClearSFXRange();
 		markChannelsAsActive(baseChannel,channelCount,SFX,retId,id,_priority);
+#ifdef SFX_DEBUG
+		m_spuChannelUse[baseChannel].m_sfxId=_sfxPattern;
+#endif
 		setVolume(retId,MAX_VOLUME);
 	}
 	else
