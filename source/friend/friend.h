@@ -76,6 +76,8 @@ protected:
 
 	void						startConderversation();
 
+	virtual void		collidedWith(CThing *_thisThing);
+
 	enum
 	{
 		EXTEND_RIGHT = true,

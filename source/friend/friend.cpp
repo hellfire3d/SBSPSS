@@ -250,6 +250,30 @@ void CNpcFriend::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcFriend::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player = (CPlayer *) _thisThing;
+
+			if ( player->isTryingToConversateWithFriend() )
+			{
+				startConderversation();
+			}
+
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFriend::startConderversation()
 {
 	// I am 'avin a fayg
