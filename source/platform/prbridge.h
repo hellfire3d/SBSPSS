@@ -21,7 +21,7 @@
 class CNpcRisingBridgePlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		trigger();
 	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:

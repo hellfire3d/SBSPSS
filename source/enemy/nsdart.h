@@ -22,13 +22,13 @@ class CNpcSquidDartEnemy : public CNpcEnemy
 {
 public:
 	void				render();
-	virtual int			getFrameCount()							{return( FRM_SQUIDDART_SWIM0004 - FRM_SQUIDDART_SWIM0001 + 1 );}
-	virtual u8			canCollideWithEnemy()					{return( false );}
-	virtual void		fireAsProjectile( s16 heading );
+	int					getFrameCount()							{return( FRM_SQUIDDART_SWIM0004 - FRM_SQUIDDART_SWIM0001 + 1 );}
+	u8					canCollideWithEnemy()					{return( false );}
+	void				fireAsProjectile( s16 heading );
 protected:
-	virtual s32			getFrameShift( int _frames );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
+	s32					getFrameShift( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
 
 	s32					m_xPos;
 	u8					m_attack;

@@ -21,7 +21,7 @@
 class CNpcLanternPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	bool				alwaysThink()									{return(true);}
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );

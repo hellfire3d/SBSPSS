@@ -23,9 +23,9 @@ class CNpcFlyingDutchmanEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		think( int _frames );
-	virtual void		postInit();
+	void				postInit();
 	void				render();
-	virtual void		shutdown();
+	void				shutdown();
 	virtual u8			hasBeenAttacked();
 protected:
 	virtual void		processClose( int _frames );

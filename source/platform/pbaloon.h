@@ -21,7 +21,7 @@
 class CBridgeBalloon
 {
 public:
-	virtual void		setPos( DVECTOR newPos )						{Pos = newPos;}
+	void				setPos( DVECTOR newPos )						{Pos = newPos;}
 	void				render();
 	void				init();
 	void				shutdown();
@@ -33,14 +33,14 @@ protected:
 class CNpcBalloonBridgePlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
-	virtual void		render();
-	virtual void		shutdown();
+	void				postInit();
+	void				render();
+	void				shutdown();
 	virtual	CRECT const	*getThinkBBox()									{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 
 	s32					m_maxExtension;
 	s8					m_balloonCount;

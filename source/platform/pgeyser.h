@@ -21,7 +21,7 @@
 class CNpcGeyserPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 protected:
 	virtual void		processMovement( int _frames );
 	virtual void		processTimer( int _frames );

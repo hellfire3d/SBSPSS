@@ -21,7 +21,7 @@
 class CNpcSandyFriend : public CNpcFriend
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 protected:
 	virtual void		startConderversation();
 

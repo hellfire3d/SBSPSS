@@ -27,9 +27,9 @@
 class CNpcMotherJellyfishEnemy : public CNpcBossEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	void				render();
-	virtual void		shutdown();
+	void				shutdown();
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 protected:
 	virtual void		processClose( int _frames );

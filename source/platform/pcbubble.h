@@ -21,7 +21,7 @@
 class CNpcCollapsingBubblePlatform : public CNpcBubblePlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual	CRECT const	*getThinkBBox()												{return( CThing::getThinkBBox() );}
 protected:
 	virtual void		processLifetime( int _frames );

@@ -21,12 +21,12 @@
 class CNpcPlanktonFriend : public CNpcFriend
 {
 public:
-	virtual void		init();
-	virtual void		render();
-	virtual void		think(int _frames);
-	virtual void		shutdown();
+	void				init();
+	void				render();
+	void				think(int _frames);
+	void				shutdown();
 protected:
-	virtual void		startConderversation();
+	void				startConderversation();
 };
 
 #endif

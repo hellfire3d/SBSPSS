@@ -17,7 +17,7 @@
 class CNpcClamEnemy : public CNpcEnemy
 {
 public:
-	virtual u8			canCollideWithEnemy()					{return( false );}
+	u8					canCollideWithEnemy()					{return( false );}
 protected:
 	virtual void		processUserCollision( CThing *thisThing );
 	virtual void		processEnemyCollision( CThing *thisThing );
@@ -27,7 +27,7 @@ protected:
 class CNpcJumpingClamEnemy : public CNpcClamEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		setupWaypoints( sThingActor *ThisActor );
@@ -38,7 +38,7 @@ protected:
 class CNpcStaticClamEnemy : public CNpcClamEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual u8			hasBeenAttacked()						{return( false );}
 	virtual	CRECT const	*getThinkBBox()							{return( CThing::getThinkBBox() );}
 protected:

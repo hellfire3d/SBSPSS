@@ -17,7 +17,7 @@
 class CNpcDustDevilEnemy : public CNpcEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 protected:
 	virtual s32			getFrameShift( int _frames );
 	virtual void		processMovement( int _frames );

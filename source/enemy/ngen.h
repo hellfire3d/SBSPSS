@@ -21,12 +21,12 @@
 class	CNpcEnemyGenerator : public CNpcEnemy
 {
 public:
-	virtual void		shutdown();
-	virtual void		processEnemyCollision( CThing *thisThing );
+	void				shutdown();
+	void				processEnemyCollision( CThing *thisThing );
 	void				render();
 	void				think(int _frames);
-	virtual u8			canCollideWithEnemy()									{return( false );}
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	u8					canCollideWithEnemy()									{return( false );}
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 };
 
 #endif

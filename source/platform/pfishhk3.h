@@ -21,7 +21,7 @@
 class CNpcFishHook3Platform : public CNpcFishHookPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 };
 
 #endif

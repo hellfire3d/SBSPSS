@@ -25,7 +25,7 @@
 class CNpcSteamSwitchPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 protected:
 	virtual void		processMovement( int _frames );

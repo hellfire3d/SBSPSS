@@ -22,20 +22,20 @@
 class CNpcSeaSnakeSegment
 {
 public:
-	virtual void		init();
-	virtual void		shutdown();
-	virtual void		render();
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual void		setScale( u16 scale )							{m_scale = scale;}
+	void				init();
+	void				shutdown();
+	void				render();
+	void				processEnemyCollision( CThing *thisThing );
+	void				setScale( u16 scale )							{m_scale = scale;}
 	CNpcSeaSnakeSegment	*m_nextSegment;
-	virtual void		setPos( DVECTOR newPos )						{Pos = newPos;}
-	virtual DVECTOR		getPos()										{return( Pos );}
-	virtual void		setHeading( s16 newHeading )					{m_heading = newHeading;}
+	void				setPos( DVECTOR newPos )						{Pos = newPos;}
+	DVECTOR				getPos()										{return( Pos );}
+	void				setHeading( s16 newHeading )					{m_heading = newHeading;}
 	void				updateCollisionArea();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
-	virtual void		setCollisionSize(int _w,int _h);
-	virtual void		setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
-	virtual	CRECT const	&getCollisionArea()							{return m_collisionArea;}
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				setCollisionSize(int _w,int _h);
+	void				setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
+	CRECT const			&getCollisionArea()							{return m_collisionArea;}
 	DVECTOR	const		&getCollisionCentre()						{return m_collisionCentre;}
 	int					getCollisionRadius()						{return m_collisionRadius;}
 	void				setAnim( int newAnim )						{m_anim = newAnim;}
@@ -56,8 +56,8 @@ protected:
 class CNpcSeaSnakeEnemy : public CNpcBossEnemy
 {
 public:
-	virtual void		postInit();
-	virtual void		shutdown();
+	void				postInit();
+	void				shutdown();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:

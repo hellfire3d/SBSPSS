@@ -25,9 +25,9 @@
 class CNpcIronDogfishEnemy : public CNpcBossEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	void				render();
-	virtual void		shutdown();
+	void				shutdown();
 protected:
 	virtual void		processTimer( int _frames );
 	virtual bool		processSensor();

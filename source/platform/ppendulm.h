@@ -21,7 +21,7 @@
 class CNpcPendulumPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		render();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );

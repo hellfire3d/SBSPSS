@@ -21,17 +21,17 @@
 class CNpcGaryFriend : public CNpcFriend
 {
 public:
-	virtual void		postInit();
-	virtual void		shutdown();
-	virtual void		think( int _frames );
-	virtual void		setupWaypoints( sThingActor *ThisActor );
+	void				postInit();
+	void				shutdown();
+	void				think( int _frames );
+	void				setupWaypoints( sThingActor *ThisActor );
 	bool				alwaysThink()											{return(true);}
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				start();
 	void				stop();
 	void				startLeft();
 	void				startRight();
-	virtual void		render();
+	void				render();
 
 protected:
 	DVECTOR				m_triggerPos;

@@ -21,7 +21,7 @@
 class CNpcTrapdoorPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				setTriggered()											{m_triggered = true;}
 	virtual void		render();

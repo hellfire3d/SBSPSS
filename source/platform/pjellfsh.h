@@ -21,7 +21,7 @@
 class CNpcJellyfishPlatform : public CNpcLinearPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		think( int _frames );
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

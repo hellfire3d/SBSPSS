@@ -22,7 +22,7 @@ class CNpcSteerableBarrelPlatform : public CNpcPlatform
 {
 public:
 	virtual void		render();
-	virtual void		postInit();
+	void				postInit();
 	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
 	virtual void		processMovement( int _frames );

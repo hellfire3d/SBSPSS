@@ -21,7 +21,7 @@
 class CNpcBubbleTubePlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

@@ -21,7 +21,7 @@
 class CNpcMotherJellyfishBackground : public CNpcEnemy
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	void				render();
 };
 

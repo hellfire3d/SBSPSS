@@ -22,7 +22,7 @@ class CNpcBigWheelPlatform : public CNpcPlatform
 {
 public:
 	bool				alwaysThink()								{return(true);}
-	virtual void		postInit();
+	void				postInit();
 	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );

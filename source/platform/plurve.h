@@ -21,7 +21,7 @@
 class CNpcLoveBoatPlatform : public CNpcCartPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 };
 
 #endif

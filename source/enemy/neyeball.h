@@ -18,8 +18,8 @@ class CNpcEyeballEnemy : public CNpcEnemy
 {
 public:
 	virtual void		render();
-	virtual void		postInit();
-	virtual void		shutdown();
+	void				postInit();
+	void				shutdown();
 	virtual int			getFrameCount()									{return( 1 );}
 	virtual void		processEvent( GAME_EVENT evt, CThing *sourceThing );
 protected:

@@ -21,7 +21,7 @@
 class CNpcSeesawPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		render();
 	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:

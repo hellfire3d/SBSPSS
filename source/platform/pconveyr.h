@@ -21,7 +21,7 @@
 class CNpcConveyorPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
+	void				postInit();
 	virtual void		render();
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:

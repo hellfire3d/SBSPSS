@@ -27,9 +27,9 @@ class CNpcSubSharkEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		think( int _frames );
-	virtual void		postInit();
+	void				postInit();
 	void				render();
-	virtual void		shutdown();
+	void				shutdown();
 protected:
 	//virtual void		processClose( int _frames );
 	virtual s32			getFrameShift( int _frames );
