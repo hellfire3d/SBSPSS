@@ -64,7 +64,9 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 	respawnPos.vy=collisionArea.y2;
 	((CPlayer*)_thisThing)->setRespawnPos(respawnPos);
 	*/
+#ifdef __USER_paul__
 	ASSERT(0);
+#endif
 }
 
 /*===========================================================================
