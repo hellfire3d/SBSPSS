@@ -53,7 +53,10 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeBubbleMixture::enter()
 {
-	m_chopping=false;
+	CSoundMediator::playSfx(CSoundMediator::SFX_BUBBLE_WAND);
+	m_blowing=false;
+	m_bubbleDelay=0;
+	m_bubbleCount=BUBBLE_AMMO;
 }
 
 /*----------------------------------------------------------------------
@@ -64,34 +67,52 @@ void	CPlayerModeBubbleMixture::enter()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBubbleMixture::think()
 {
-	// If we're chopping then restore the 'real' anim number/frame before
+	// If we're blowing then restore the 'real' anim number/frame before
 	// doing the think so that the rest of the code doesn't know what
 	// is going on ;)
-	if(m_chopping)
+	if(m_blowing)
 	{
 		setAnimNo(m_savedAnimNo);
 		setAnimFrame(m_savedAnimFrame);
 	}
 	CPlayerModeBase::think();
 
-	// Start to chop?
-	if(!m_chopping&&getPadInputDown()&PI_ACTION&&canAttackFromThisState())
+	if(m_bubbleDelay)
 	{
-		m_chopFrame=0;
-		m_chopping=true;
+		// Delay so that you can't blow all of your bubbles really quickly
+		m_bubbleDelay--;
+	}
+	else
+	{
+		// Start to blow?
+		if(!m_blowing&&getPadInputDown()&PI_ACTION&&canBlowBubbleFromThisState())
+		{
+			// Spawn the bubbly platform thingy..!
+			//	pos is m_player->getPos();
+			//	dir is m_player->getFacing();
+
+			// Start the anim off
+			m_blowFrame=0;
+			m_blowing=true;
+		}
 	}
 
-	// Chopping?
-	if(m_chopping)
+	// Blowing?
+	if(m_blowing)
 	{
 		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
-		m_player->setAnimFrame(m_chopFrame);
-		m_chopFrame++;
-		if(m_chopFrame>=m_player->getAnimFrameCount())
+		m_player->setAnimFrame(m_blowFrame);
+		m_blowFrame++;
+		if(m_blowFrame>=m_player->getAnimFrameCount())
 		{
 			m_player->setAnimNo(m_savedAnimNo);
 			m_player->setAnimFrame(m_savedAnimFrame);
-			m_chopping=false;
+			m_blowing=false;
+			m_bubbleDelay=BUBBLE_DELAY;
+			if(--m_bubbleCount==0)
+			{
+				m_player->setMode(PLAYER_MODE_FULLUNARMED);
+			}
 		}
 	}
 }
@@ -120,18 +141,7 @@ void	CPlayerModeBubbleMixture::setAnimFrame(int _animFrame)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeBubbleMixture::isInAttackState()
-{
-	return m_chopping||CPlayerModeBase::isInAttackState();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int		CPlayerModeBubbleMixture::canAttackFromThisState()
+int		CPlayerModeBubbleMixture::canBlowBubbleFromThisState()
 {
 	int	ret=false;
 

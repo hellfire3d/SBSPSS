@@ -43,14 +43,21 @@ public:
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
 
-	virtual int					isInAttackState();
-
 private:
-	int							canAttackFromThisState();
+	enum
+	{
+		BUBBLE_AMMO=10,
+		BUBBLE_DELAY=60*1,
+	};
+
+	int							canBlowBubbleFromThisState();
 
 	int							m_savedAnimNo,m_savedAnimFrame;
-	int							m_chopFrame;
-	int							m_chopping;
+	int							m_blowFrame;
+	int							m_blowing;
+	int							m_bubbleDelay;
+
+	int							m_bubbleCount;
 
 };
 
