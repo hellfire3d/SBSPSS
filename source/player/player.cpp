@@ -212,7 +212,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 
 // A big bunch of 'temporary' variables for tweaking things
 // This #def makes them static under a release build..
-#ifdef __VERSION_DEBUG__s
+#ifdef __VERSION_DEBUG__
 #define		pint		int
 #else
 #define		pint		static const int
