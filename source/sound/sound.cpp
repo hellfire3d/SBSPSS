@@ -293,7 +293,6 @@ void CSoundMediator::initialise()
 		s_targetVolume[i]=INITIAL_VOLUME;
 		s_volumeDirty[i]=true;
 	}
-s_targetVolume[VOL_SONG]=32;
 
 	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
 	ASSERT(CXAStream::MAX_VOLUME==32767);
