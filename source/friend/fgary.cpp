@@ -87,7 +87,7 @@ void CNpcGaryFriend::think( int _frames )
 		{
 			if ( !CSoundMediator::isSpeechPlaying() )
 			{
-				m_garyMeow = false;
+				m_garyMeow = true;
 				CSoundMediator::playSpeech( SPEECH_029 );
 			}
 		}
