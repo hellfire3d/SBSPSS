@@ -23,6 +23,14 @@
 #include "level\level.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include	"game\game.h"
+#endif
+
+#ifndef	__PLAYER_PLAYER_H__
+#include	"player\player.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,6 +40,7 @@ void CNpcFlyTrapHazard::init()
 
 	m_rotation = 0;
 	m_shut = true;
+	m_contact = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,25 +49,53 @@ void CNpcFlyTrapHazard::processMovement( int _frames )
 {
 	if ( m_shut )
 	{
-		m_rotation += 64 * _frames;
-
-		if ( m_rotation > 1024 )
+		if ( m_contact )
 		{
-			m_rotation = 1024;
-			m_shut = false;
+			if ( m_timer <= 0 )
+			{
+				m_rotation += 64 * _frames;
+
+				if ( m_rotation > 1024 )
+				{
+					m_rotation = 1024;
+					m_shut = false;
+					m_contact = false;
+					m_timer = GameState::getOneSecondInFrames();
+				}
+			}
+			else
+			{
+				m_timer -= _frames;
+			}
 		}
 	}
-	else
+	else if ( !m_shut )
 	{
-		m_rotation -= 64 * _frames;
-
-		if ( m_rotation < 0 )
+		if ( m_timer <= 0 )
 		{
-			m_rotation = 0;
-			m_shut = true;
+			m_rotation -= 64 * _frames;
+
+			if ( m_rotation < 0 )
+			{
+				m_rotation = 0;
+				m_shut = true;
+			}
+		}
+		else
+		{
+			if ( m_contact )
+			{
+				m_contact = false;
+			}
+			else
+			{
+				if ( m_timer > 0 )
+				{
+					m_timer -= _frames;
+				}
+			}
 		}
 	}
-	//m_rotation &= 4095;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,5 +119,66 @@ void CNpcFlyTrapHazard::render()
 		scale.vz = ONE;
 
 		m_modelGfx->Render(renderPos,&rotation,&scale);
+
+		sBBox boundingBox = m_modelGfx->GetBBox();
+
+		s32 vertSize = ( ( boundingBox.YMax - boundingBox.YMin ) * rsin( 1024 - m_rotation ) ) >> 12;
+		if ( vertSize < 20 )
+		{
+			vertSize = 20;
+		}
+
+		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), vertSize );
+		//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+		setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, -vertSize >> 1 );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcFlyTrapHazard::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				if ( !m_contact )
+				{
+					if ( m_shut )
+					{
+						m_contact = true;
+
+						m_timer = GameState::getOneSecondInFrames() >> 1;
+					}
+					else
+					{
+						if ( m_timer > 0 )
+						{
+							m_contact = true;
+
+							m_timer = GameState::getOneSecondInFrames();
+						}
+					}
+				}
+
+				if ( m_rotation > 512 )
+				{
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					if ( !player->isRecoveringFromHit() )
+					{
+						player->takeDamage( DAMAGE__HIT_ENEMY );
+					}
+				}
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
+		}
 	}
 }

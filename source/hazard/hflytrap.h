@@ -25,9 +25,11 @@ public:
 	virtual void		render();
 protected:
 	void				processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	s16					m_rotation;
 	u8					m_shut;
+	u8					m_contact;
 };
 
 #endif
