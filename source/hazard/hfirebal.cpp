@@ -19,24 +19,16 @@
 #include	"game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcFireballHazard::init()
 {
 	CNpcHazard::init();
-
-	DVECTOR newPos;
-
-	Pos.vx = 100;
-	Pos.vy = 100;
-	m_base = Pos;
-
-	newPos.vx = 300;
-	newPos.vy = 100;
-
-	m_npcPath.addWaypoint( newPos );
-	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
 
 	m_extension = 0;
 	m_velocity = 40;
@@ -46,15 +38,52 @@ void CNpcFireballHazard::init()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisHazard,sizeof(sThingHazard));
+
+	u16 newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	Pos = startPos;
+	m_base = Pos;
+
+	if ( ThisHazard->PointCount > 1 )
+	{
+		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			addWaypoint( newXPos, newYPos );
+		}
+	}
+	else
+	{
+		addWaypoint( newXPos, newYPos );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFireballHazard::processMovement( int _frames )
 {
-	s32 distX;
-	s32 distY;
 	s32 velocity;
 	s32 distSourceX;
 	s32 distSourceY;
 
-	m_npcPath.getDistToNextWaypoint( Pos, &distX, &distY );
 	m_npcPath.getDistToNextWaypoint( m_base, &distSourceX, &distSourceY );
 
 	if ( m_extension < 4096 )

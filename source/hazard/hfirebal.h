@@ -22,6 +22,7 @@ class CNpcFireballHazard : public CNpcHazard
 {
 public:
 	void				init();
+	virtual void		setWaypoints( sThingHazard *ThisHazard );
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
