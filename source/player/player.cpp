@@ -2012,6 +2012,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				else
 				{
 					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+					setShadeTex(ft4,0);
 					setRGB0(ft4,255,128,255);
 					setSemiTrans(ft4,trans);
 				}
@@ -2578,6 +2579,8 @@ void	CPlayer::clearPlatform()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#define CRAP_COLLISION
+#ifdef CRAP_COLLISION
 int		CPlayer::moveVertical(int _moveDistance)
 {
 	DVECTOR			pos;
@@ -2772,6 +2775,113 @@ PAUL_DBGMSG("onp %d",isOnPlatform()!=NULL);
 
 	return hitGround;
 }
+#else
+int		CPlayer::moveVertical(int _moveDistance)
+{
+	DVECTOR			pos;
+	int				hitGround;
+
+	pos=Pos;
+	hitGround=false;
+
+	// Are we falling?
+	if(_moveDistance>0)
+	{
+		int colHeightBefore,colHeightAfter;
+
+		// Yes.. Check to see if we're about to hit/go through the ground/platform
+		colHeightBefore=getHeightFromGround(pos.vx,pos.vy,16);
+		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
+		if(isOnPlatform()&&
+		   !(colHeightBefore>=0&&colHeightAfter<=0))
+		{
+			colHeightBefore=getHeightFromPlatformNoGround(pos.vx,pos.vy,16);
+			colHeightAfter=getHeightFromPlatformNoGround(pos.vx,pos.vy+_moveDistance,16);
+		}
+
+		if(colHeightBefore>=0&&colHeightAfter<=0)
+		{
+			// About to hit a 'fall to death' block?
+			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH_FALL)
+			{
+				// No
+				// Stick at ground level
+				pos.vy+=colHeightAfter+_moveDistance;
+				_moveDistance=0;
+				hitGround=true;
+			}
+			else
+			{
+				// Yeah!
+				if(m_currentMode!=PLAYER_MODE_DEAD)
+				{
+					// Lock the camera, kill the player and let him fall to his death..
+					dieYouPorousFreak(DEATHTYPE__FALL_TO_DEATH);
+					m_lockCamera=true;
+				}
+			}
+		}
+	}
+	else if(_moveDistance<0)
+	{
+		// Are we jumping into an impassable block?
+		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
+		{
+			pos.vy=(pos.vy&0xfff0);
+			_moveDistance=0;
+			hitGround=true;
+		}
+		else if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		   getHeightFromGround(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)<=0)
+		{
+			switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance-HEIGHT_FOR_HEAD_COLLISION)&COLLISION_TYPE_MASK)
+			{
+				case COLLISION_TYPE_FLAG_DAMAGE:
+					takeDamage(DAMAGE__COLLISION_DAMAGE);
+					break;
+
+				case COLLISION_TYPE_FLAG_ELECTRIC:
+					if(!isWearingBoots())
+					{
+						takeDamage(DAMAGE__COLLISION_DAMAGE);
+					}
+					break;
+				default:
+					break;
+			}
+			pos.vy=((pos.vy+_moveDistance)&0xfff0);
+			_moveDistance=0;
+			hitGround=true;
+		}
+	}
+	else
+	{
+		// Stood on any important types of collision?
+		switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
+		{
+			case COLLISION_TYPE_FLAG_DAMAGE:
+				takeDamage(DAMAGE__COLLISION_DAMAGE);
+				break;
+
+			case COLLISION_TYPE_FLAG_ELECTRIC:
+				if(!isWearingBoots())
+				{
+					takeDamage(DAMAGE__COLLISION_DAMAGE);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	pos.vy+=_moveDistance;
+	setPlayerPos(&pos);
+
+	return hitGround;
+}
+#endif
+
+
 
 /*----------------------------------------------------------------------
 	Function:
