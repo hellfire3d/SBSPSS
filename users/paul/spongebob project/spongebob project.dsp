@@ -396,6 +396,66 @@ SOURCE=..\..\..\source\fileio\pcfile.cpp
 SOURCE=..\..\..\source\fileio\pcfile.h
 # End Source File
 # End Group
+# Begin Group "friend"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fbboy.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fdata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fgary.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fgary.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fkrusty.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fmman.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fpatrick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\friend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\friend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fsandy.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fsquid.h
+# End Source File
+# End Group
+# Begin Group "fmv"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\fmv\fmv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\fmv\fmv.h
+# End Source File
+# End Group
 # Begin Group "frontend"
 
 # PROP Default_Filter ""
@@ -668,6 +728,66 @@ SOURCE=..\..\..\source\gui\gui.cpp
 SOURCE=..\..\..\source\gui\gui.h
 # End Source File
 # End Group
+# Begin Group "hazard"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hazard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbarrel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbarrel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hboat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hboat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfalling.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfalling.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfirebal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hfirebal.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hpendulm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hpendulm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsaw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hsaw.h
+# End Source File
+# End Group
 # Begin Group "level"
 
 # PROP Default_Filter ""
@@ -722,6 +842,18 @@ SOURCE=..\..\..\source\locale\textdbase.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\locale\textdbase.h
+# End Source File
+# End Group
+# Begin Group "map"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\map\map.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\map\map.h
 # End Source File
 # End Group
 # Begin Group "mem"
@@ -906,6 +1038,126 @@ SOURCE=..\..\..\source\pickups\pspatula.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\pickups\pspatula.h
+# End Source File
+# End Group
+# Begin Group "platform"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbob.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbob.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbranch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbranch.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbubble.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcbubble.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcirculr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pcirculr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfalling.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfalling.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfishhk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfishhk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pgeyser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pgeyser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platdata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plinear.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plinear.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ppendulm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\ppendulm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pplayer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pretract.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pretract.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pseesaw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pseesaw.h
 # End Source File
 # End Group
 # Begin Group "player"
@@ -1354,258 +1606,6 @@ SOURCE=..\..\..\source\utils\utils.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\utils\utils.h
-# End Source File
-# End Group
-# Begin Group "fmv"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\fmv\fmv.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\fmv\fmv.h
-# End Source File
-# End Group
-# Begin Group "platform"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbob.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbob.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbranch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbranch.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbubble.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pbubble.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pcart.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pcart.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pcbubble.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pcirculr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pcirculr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pfalling.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pfalling.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pfishhk.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pfishhk.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pgeyser.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pgeyser.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\platdata.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\platform.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\platform.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\plinear.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\plinear.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\ppendulm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\ppendulm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pplayer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pretract.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pretract.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pseesaw.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\platform\pseesaw.h
-# End Source File
-# End Group
-# Begin Group "hazard"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hazard.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hazard.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hbarrel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hbarrel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hboat.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hboat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hfalling.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hfalling.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hfirebal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hfirebal.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hpendulm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hpendulm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hsaw.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\hazard\hsaw.h
-# End Source File
-# End Group
-# Begin Group "map"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\map\map.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\map\map.h
-# End Source File
-# End Group
-# Begin Group "friend"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fbboy.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fdata.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fgary.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fgary.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fkrusty.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fmman.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fpatrick.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\friend.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\friend.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fsandy.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\friend\fsquid.h
 # End Source File
 # End Group
 # End Group
