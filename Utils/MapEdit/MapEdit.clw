@@ -29,7 +29,7 @@ Type=0
 BaseClass=CMDIChildWnd
 HeaderFile=ChildFrm.h
 ImplementationFile=ChildFrm.cpp
-LastObject=CChildFrame
+LastObject=IDC_LAYERBAR_LIST
 
 [CLS:CGLEnabledView]
 Type=0
@@ -171,10 +171,6 @@ Control4=IDOK,button,1342373889
 [DLG:IDD_LAYERBAR (English (U.S.))]
 Type=1
 Class=?
-ControlCount=5
-Control1=IDC_LAYERBAR_NEW,button,1342242816
-Control2=IDC_LAYERBAR_DELETE,button,1342242816
-Control3=IDC_LAYERBAR_UP,button,1342242816
-Control4=IDC_LAYERBAR_DOWN,button,1342242816
-Control5=IDC_LAYERBAR_LIST,listbox,1352728833
+ControlCount=1
+Control1=IDC_LAYERBAR_LIST,listbox,1352728833
 

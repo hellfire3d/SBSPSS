@@ -57,12 +57,7 @@ protected:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnLayerbarNew();
-	afx_msg void OnLayerbarDelete();
-	afx_msg void OnLayerbarUp();
-	afx_msg void OnLayerbarDown();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnCaptureChanged(CWnd *pWnd);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

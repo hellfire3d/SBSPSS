@@ -34,12 +34,7 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
-	ON_BN_CLICKED(IDC_LAYERBAR_NEW, OnLayerbarNew)
-	ON_BN_CLICKED(IDC_LAYERBAR_DELETE, OnLayerbarDelete)
-	ON_BN_CLICKED(IDC_LAYERBAR_UP, OnLayerbarUp)
-	ON_BN_CLICKED(IDC_LAYERBAR_DOWN, OnLayerbarDown)
 	ON_WM_MOUSEMOVE()
-	ON_WM_CAPTURECHANGED()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -129,64 +124,19 @@ void CMapEditView::UpdateAll()
 	UpdateLayerBar();
 
 }
-/*********************************************************************************/
-/*** Layer Commands **************************************************************/
-/*********************************************************************************/
-void CMapEditView::OnLayerbarNew() 
-{
-	Core.LayerAdd();
-	UpdateLayerBar();
-}
-
-/*********************************************************************************/
-void CMapEditView::OnLayerbarDelete() 
-{
-int	Sel=GetLayerCurSel();
-
-		if (Sel==-1) return;
-		Core.LayerDelete(Sel);
-		UpdateLayerBar();
-}
-
-/*********************************************************************************/
-void CMapEditView::OnLayerbarUp() 
-{
-int	Sel=GetLayerCurSel();
-
-	if (Sel==-1) return;
-	if (Sel>0)
-	{
-		Core.LayerMoveUp(Sel);
-		UpdateLayerBar();
-	}
-
-}
-
-/*********************************************************************************/
-void CMapEditView::OnLayerbarDown() 
-{
-int	Sel=GetLayerCurSel();
-	if (Sel==-1) return;
-	if (Sel<GetLayerCount()-1)
-	{
-		Core.LayerMoveDown(GetLayerCurSel());
-		UpdateLayerBar();
-	}
-}
 
 /*********************************************************************************/
 void CMapEditView::UpdateLayerBar()
 {
-int			LayerCount=Core.LayerGetCount();
 CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 int			CurSel=Dlg->GetCurSel();
 
 		Dlg->ResetContent();
 
-		for (int i=0;i<LayerCount;i++)
+		for (int i=0;i<LAYER_TYPE_MAX;i++)
 		{
-			CLayer	&ThisLayer=Core.LayerGet(i);
-			Dlg->AddString(ThisLayer.GetName());
+			CLayer	*ThisLayer=Core.LayerGet(i);
+			Dlg->AddString(ThisLayer->GetName());
 		}
 		Dlg->SetCurSel(CurSel);
 
@@ -218,12 +168,6 @@ void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{Core.MButtonContro
 BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{Core.MouseWheel(nFlags,zDelta,pt) ;return(0);}
 void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,TRUE);}
 void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,FALSE);}
-void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point,GetCapture()==this);}
+void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point);}
 
 
-void CMapEditView::OnCaptureChanged(CWnd *pWnd) 
-{
-	// TODO: Add your message handler code here
-TRACE0("!!!!");	
-	CGLEnabledView::OnCaptureChanged(pWnd);
-}

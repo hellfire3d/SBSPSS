@@ -22,46 +22,33 @@
 /*****************************************************************************/
 CLayer::CLayer()
 {
-
 }
+
 /*****************************************************************************/
 CLayer::~CLayer()
 {
 }
 
 /*****************************************************************************/
-void	CLayer::Init()
+void	CLayer::Render(Vec &MapPos)
 {
+		TRACE1("%s\n",GetName());
 
-}
+float	ZOfs=GetLayerZPos();
+float	XYDiv=GetLayerZPosDiv();
 
-/*****************************************************************************/
-void	CLayer::SetName(char *Str)
-{
-	strcpy(Name,Str);
-}
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-void	CLayer::Render()
-{
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z-ZOfs);
 
 		glBegin(GL_QUADS);
-		glColor3f(1,0,1);
-			BuildGLBox(-1,LayerWidth+1,-1,0,LayerZ,LayerZ+1);						// Bottom
-			BuildGLBox(-1,LayerWidth+1,LayerHeight+1,LayerHeight,LayerZ,LayerZ+1);	// Top
-			BuildGLBox(-1,0,LayerHeight,0,LayerZ,LayerZ+1);							// Left
-			BuildGLBox(LayerWidth,LayerWidth+1,LayerHeight,0,LayerZ,LayerZ+1);		// Right
+		SetTestColor();
+			BuildGLBox(-1,LayerWidth+1,-1,0,0,0+1);						// Bottom
+			BuildGLBox(-1,LayerWidth+1,LayerHeight+1,LayerHeight,0,0+1);	// Top
+			BuildGLBox(-1,0,LayerHeight,0,0,0+1);							// Left
+			BuildGLBox(LayerWidth,LayerWidth+1,LayerHeight,0,0,0+1);		// Right
 		glEnd();
 }
 
-
-
 /*****************************************************************************/
 /*****************************************************************************/
-/*****************************************************************************/
-
-

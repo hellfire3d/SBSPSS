@@ -8,6 +8,17 @@
 #include	<Vector>
 #include	"gl3d.h"
 
+enum LAYER_TYPE
+{
+	LAYER_TYPE_BACK=0,
+	LAYER_TYPE_MID,
+	LAYER_TYPE_ACTION,
+	LAYER_TYPE_FORE,
+
+	LAYER_TYPE_MAX
+};
+
+
 
 /*****************************************************************************/
 class	CLayer
@@ -15,28 +26,22 @@ class	CLayer
 public:
 		CLayer();
 		~CLayer();
-// Blah
-		void			Init();
-		void			Render();
 
-		void			SetName(char *Str);
-		char			*GetName()			{return(Name);}
-		
+
+// Virtual
+virtual	void			Init()=0;
+virtual	char			*GetName()=0;
+virtual	void			Render(Vec &MapPos);
+
+virtual	float			GetLayerZPosDiv()=0;
+virtual	float			GetLayerZPos()=0;
+virtual	void			SetTestColor()=0;
+
 // Control
-//		void			LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-//		void			MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-//		void			RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-//		void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
-//		void			MouseMove(UINT nFlags, CPoint &point, BOOL CaptureFlag);
 
 
-private:
-		char			Name[32];
-
-		float			LayerWidth,LayerHeight,LayerDepth;
-		float			LayerX,LayerY,LayerZ;
-
-
+protected:
+		float			LayerWidth,LayerHeight;
 };
 
 /*****************************************************************************/

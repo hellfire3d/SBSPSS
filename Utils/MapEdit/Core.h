@@ -8,16 +8,19 @@
 #include	<Vector>
 #include	"gl3d.h"
 #include	"Layer.h"
+#include	"LayerBack.h"
 
 
 /*****************************************************************************/
 enum MOUSE_MODE
 {
 	MOUSE_MODE_NONE=0,
-	MOUSE_MODE_LMB,
-	MOUSE_MODE_MMB,
-	MOUSE_MODE_RMB,
+	MOUSE_MODE_LMB_EDIT,
+	MOUSE_MODE_MMB_EDIT,
+	MOUSE_MODE_RMB_EDIT,
+	
 };
+
 
 /*****************************************************************************/
 class	CMapEditView;
@@ -31,7 +34,7 @@ public:
 		void			MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
 		void			RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
 		void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
-		void			MouseMove(UINT nFlags, CPoint &point, BOOL CaptureFlag);
+		void			MouseMove(UINT nFlags, CPoint &point);
 
 // Blah
 		void			Init(CMapEditView *Wnd);
@@ -40,25 +43,18 @@ public:
 		void			SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
 
 // Layers
-		void			LayerAdd(char *Name=0);
 		void			LayerSetActive(int Layer);
 		int				LayerGetActive();
-		int				LayerGetCount();
-		CLayer			&LayerGet(int i);
-		void			LayerDelete(int Layer);
-		void			LayerMoveUp(int Layer);
-		void			LayerMoveDown(int Layer);
-
+		CLayer			*LayerGet(int i);
 
 
 private:
 		CMapEditView	*ParentWindow;	
 		MOUSE_MODE		MouseMode;
 		CPoint			CurrentMousePos,LastMousePos;
-		Vec				ViewPos;
+		Vec				MapPos;
 
-		
-		std::vector<CLayer>	Layers;
+		CLayer				*Layers[LAYER_TYPE_MAX];
 		int					ActiveLayer;
 
 

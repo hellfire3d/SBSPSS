@@ -89,14 +89,9 @@ LINK32=link.exe
 # Begin Group "MapEditor"
 
 # PROP Default_Filter ""
-# Begin Source File
+# Begin Group "Layers"
 
-SOURCE=.\Core.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Core.h
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\Layer.cpp
@@ -104,6 +99,47 @@ SOURCE=.\Layer.cpp
 # Begin Source File
 
 SOURCE=.\Layer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerAction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerAction.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerBack.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerBack.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerFore.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerFore.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerMid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerMid.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\Core.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Core.h
 # End Source File
 # Begin Source File
 
