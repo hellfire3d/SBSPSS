@@ -276,7 +276,9 @@ void	CGameScene::initLevel()
 	m_player->setMapSize(Level.getMapSize());
 
 // Init actors (needs moving and tidying
+	int pointNum;
 	int actorNum;
+	int platformNum;
 
 	sThingActor **actorList = Level.getActorList();
 	if (actorList)
@@ -296,7 +298,6 @@ void	CGameScene::initLevel()
 					enemy->init();
 					enemy->setLayerCollision( Level.getCollisionLayer() );
 
-					int pointNum;
 					u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
 
 					u16 newXPos, newYPos;
@@ -332,6 +333,50 @@ void	CGameScene::initLevel()
 			}
 		}
 	}
+
+	sThingPlatform **platformList = Level.getPlatformList();
+	if (platformList)
+	{
+		for ( platformNum = 0 ; platformNum < Level.getPlatformCount() ; platformNum++ )
+		{
+			CNpcPlatform *platform;
+			platform = new ("platform") CNpcPlatform;
+			ASSERT(platform);
+			platform->setTypeFromMapEdit( platformList[platformNum]->Type );
+
+			u16	*PntList=(u16*)MakePtr(platformList[platformNum],sizeof(sThingPlatform));
+
+			u16 newXPos, newYPos;
+
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			DVECTOR startPos;
+			startPos.vx = newXPos;
+			startPos.vy = newYPos;
+
+			platform->init( startPos );
+			platform->setLayerCollision( Level.getCollisionLayer() );
+
+			platform->addWaypoint( newXPos, newYPos );
+
+			if ( platformList[platformNum]->PointCount > 1 )
+			{
+				for ( pointNum = 1 ; pointNum < platformList[platformNum]->PointCount ; pointNum++ )
+				{
+					newXPos = (u16) *PntList;
+					PntList++;
+					newYPos = (u16) *PntList;
+					PntList++;
+
+					platform->addWaypoint( newXPos, newYPos );
+				}
+			}
+		}
+	}
+
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();

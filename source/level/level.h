@@ -36,6 +36,8 @@ public:
 	static DVECTOR			getPlayerSpawnPos()					{return s_playerSpawnPos;}
 	int						getActorCount()						{return ActorCount;}
 	sThingActor				**getActorList()					{return ActorList;}
+	int						getPlatformCount()					{return PlatformCount;}
+	sThingPlatform			**getPlatformList()					{return PlatformList;}
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 
