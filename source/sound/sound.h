@@ -210,6 +210,7 @@ public:
 	static void			setVolume(VOLUMETYPE _type,int _val);
 	static int			getVolume(VOLUMETYPE _type);
 	static void			stopAllSound();
+	static void			setCanPlaySfx(int _flag)				{s_canPlaySfx=_flag;}
 
 
 private:
@@ -236,6 +237,8 @@ private:
 
 	static xmSampleId		s_sfxSampleId;
 	static xmModId			s_sfxModId;
+
+	static int				s_canPlaySfx;
 
 };
 

@@ -90,6 +90,9 @@ int				CSoundMediator::s_songStartPattern=0;
 xmSampleId		CSoundMediator::s_sfxSampleId=NO_SAMPLE;
 xmModId			CSoundMediator::s_sfxModId=NO_SONG;
 
+int				CSoundMediator::s_canPlaySfx=true;
+
+
 static CSpuSound		*s_spuSound;
 static CXMPlaySound		*s_xmplaySound;
 
@@ -557,6 +560,11 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
   ---------------------------------------------------------------------- */
 xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false)
 {
+	if(!s_canPlaySfx)
+	{
+		return NOT_PLAYING;
+	}
+
 	int			sfxChannelMask;
 	xmPlayingId	playId;
 	SFXDETAILS	*sfx;
