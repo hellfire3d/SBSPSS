@@ -97,7 +97,6 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 	switch( m_state )
 	{
 		case SUB_SHARK_MINE_1:
-		case SUB_SHARK_MINE_2:
 		{
 			if ( !m_animPlaying )
 			{
@@ -315,7 +314,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 			}
 			else
 			{
-				processGenericGotoTarget( _frames, distX, distY, m_speed << 1 );
+				processGenericGotoTarget( _frames, distX, distY, m_speed << 2 );
 			}
 
 			break;
