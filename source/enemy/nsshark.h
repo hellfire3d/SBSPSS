@@ -18,6 +18,8 @@ class CNpcSubSharkEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
+	void				render();
+	virtual void		shutdown();
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
@@ -37,6 +39,7 @@ protected:
 	};
 
 	u8					m_salvoCount;
+	bool				m_meterOn;
 };
 
 #endif

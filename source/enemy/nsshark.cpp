@@ -39,6 +39,9 @@
 #include "system\vid.h"
 #endif
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,6 +51,13 @@ void CNpcSubSharkEnemy::postInit()
 	m_extendDir = EXTEND_RIGHT;
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 	m_salvoCount = 0;
+	m_meterOn=false;
+
+	if ( CLevel::getIsBossRespawn() )
+	{
+		m_health = CLevel::getBossHealth();
+		m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +92,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 			m_salvoCount--;
 
-			m_timerTimer = GameState::getOneSecondInFrames() * 1;
+			m_timerTimer = ( GameState::getOneSecondInFrames() >> 2 ) * ( 1 + ( ( 3 * m_health ) / m_data[m_type].initHealth ) );
 		}
 	}
 
@@ -109,7 +119,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 	Pos.vx += moveX;
 	Pos.vy += moveY;
 
-	if ( m_movementTimer <= 0 )
+	if ( m_movementTimer <= 0 && m_salvoCount < 1 )
 	{
 		m_controlFunc = NPC_CONTROL_CLOSE;
 	}
@@ -199,7 +209,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 
 				m_salvoCount = 5;
 				m_state++;
-				m_movementTimer = GameState::getOneSecondInFrames() * 8;
+				m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 			}
 
@@ -279,7 +289,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 				m_animNo = ANIM_SHARKSUB_SWIM;
 				m_frame = 0;
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
-				m_movementTimer = GameState::getOneSecondInFrames() * 8;
+				m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 				m_state = SUB_SHARK_MINE_1;
 			}
 
@@ -321,6 +331,7 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 						m_animPlaying = true;
 						m_animNo = m_data[m_type].recoilAnim;
 						m_frame = 0;
+						m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 					}
 
 					break;
@@ -398,6 +409,50 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 			}
 
 			break;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSubSharkEnemy::shutdown()
+{
+	if ( m_state != NPC_GENERIC_HIT_DEATH_END )
+	{
+		CLevel::setIsBossRespawn( true );
+		CLevel::setBossHealth( m_health );
+	}
+
+	CNpcEnemy::shutdown();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSubSharkEnemy::render()
+{
+	SprFrame = NULL;
+
+	if ( m_isActive )
+	{
+		CEnemyThing::render();
+
+		if (canRender())
+		{
+			if (!m_meterOn)
+			{
+				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				T->SetMax(m_health);
+				m_meterOn=true;
+			}
+
+			DVECTOR &renderPos=getRenderPos();
+
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
+
+			sBBox boundingBox = m_actorGfx->GetBBox();
+			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+			setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 		}
 	}
 }
