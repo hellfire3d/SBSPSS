@@ -113,12 +113,12 @@ void CBubicleEmitter::think(int _frames)
 
 	if(m_spawnFrameCount>=m_data.m_birthRate)
 	{
+		m_spawnFrameCount=0;
 		for(int i=0;i<m_data.m_birthAmount;i++)
 		{
 			if(CBubicleFactory::spawnParticle(&m_data)==NULL)
-				break;
+				break;	// Ran out of bubicles :(
 		}
-		m_spawnFrameCount=0;
 	}
 
 	if(m_data.m_life!=-1&&m_frameCount>m_data.m_life)

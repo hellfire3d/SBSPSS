@@ -48,20 +48,20 @@
 
 typedef struct RGBPack
 {
-	unsigned char	m_r,m_g,m_b;
+	u8				m_r,m_g,m_b;
 };
 
 typedef struct
 {
-	int				m_life;
-	int				m_vx,m_vdx,m_vxmax;
-	int				m_vy,m_vdy,m_vymax;
-	int				m_w,m_h;
-	int				m_dvSizeChange;
-	int				m_theta,m_vtheta;
-	int				m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth;
-	int				m_ot;
-	RGBPack			m_colour;
+	s16				m_life;						// Frames to live for
+	s16				m_vx,m_vdx,m_vxmax;			// Velocity, velocitydelta, max velocity
+	s16				m_vy,m_vdy,m_vymax;
+	int				m_w,m_h;					// Size of bubicle
+	s16				m_dvSizeChange;				// Speed at which bubbles changes height/width
+	s16				m_theta,m_vtheta;
+	s16				m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth;
+	s16				m_ot;						// ot
+	RGBPack			m_colour;					// Colour
 } BubicleData;
 
 class CBubicle
@@ -84,13 +84,12 @@ private:
 	int			isActive()											{return m_active;}
 
 
-	int			m_active;
-
+	u8			m_active;
 	int			m_x;
 	int			m_y;
-	int			m_typeSizeChange;		// 0=Width, 1=Height
-	int			m_vSizeChange;
-	int			m_frameCount;
+	s16			m_typeSizeChange;				// 0=Width, 1=Height
+	s16			m_vSizeChange;
+	s16			m_frameCount;
 	sFrameHdr	*m_fhBub;
 
 	BubicleData	m_data;
@@ -107,9 +106,9 @@ friend class CBubicleEmitter;
 
 typedef struct
 {
-	int			m_x,m_y,m_w,m_h;
-	int			m_birthRate,m_birthAmount;
-	int			m_life;							// -1 for infinite life
+	int			m_x,m_y,m_w,m_h;				// Size and position of emitter
+	s16			m_birthRate,m_birthAmount;		// birthAmount bubicles born every birthRate frames
+	s16			m_life;							// -1 for infinite life
 
 	BubicleData	m_bubicleBase;
 	BubicleData	m_bubicleRange;
@@ -138,10 +137,10 @@ private:
 #endif
 	
 
-	int					m_active;
+	u8					m_active;
 	BubicleEmitterData	m_data;
 	int					m_frameCount;
-	int					m_spawnFrameCount;
+	s16					m_spawnFrameCount;
 
 friend class CBubicleFactory;
 };
@@ -170,7 +169,7 @@ private:
 	enum
 	{
 		NUM_EMITTERS=10,
-		NUM_BUBICLES=200,
+		NUM_BUBICLES=100,
 	};
 
 							CBubicleFactory()						{;}
