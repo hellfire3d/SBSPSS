@@ -1,7 +1,7 @@
 chomp
-death
-gethit
-sprintclosed
+# death
+# gethit
+# sprintclosed
 sprintopen
 swim
 swipe

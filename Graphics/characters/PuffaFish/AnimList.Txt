@@ -1,4 +1,4 @@
-PuffUP
+# PuffUP
 PuffUpIdle
 Swim
 Turn
