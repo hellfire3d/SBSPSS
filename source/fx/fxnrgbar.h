@@ -20,12 +20,8 @@ public:
 		bool		alwaysThink()								{return(true);}
 
 protected:
-		int			GfxW,GfxHalfW;
-
 		int			MaxHealth;
 		int			CurrentHealth;
-		int			Scale;
-		int			XInc;
 };
 
 #endif

@@ -103,27 +103,30 @@ int		ColorCount=0;
 		printf("RGB remapped to %i colors\n",ColorCount);
 // Build Out RGB Table
 		OutRGBTable.SetSize(ColorCount,16);
-int		RInc=(ShadeRGB.R-128)/16;
-int		GInc=(ShadeRGB.G-128)/16;
-int		BInc=(ShadeRGB.B-128)/16;
+float	RInc=(ShadeRGB.R-128)/16.0f;
+float	GInc=(ShadeRGB.G-128)/16.0f;
+float	BInc=(ShadeRGB.B-128)/16.0f;
 
 		for (int c=0;c<ColorCount;c++)
 		{
-			int		R=DestPal[(c*3)+0];
-			int		G=DestPal[(c*3)+1];
-			int		B=DestPal[(c*3)+2];
+			int		BaseR=DestPal[(c*3)+0];
+			int		BaseG=DestPal[(c*3)+1];
+			int		BaseB=DestPal[(c*3)+2];
 			for (int s=0; s<16; s++)
 			{
 				sRGBCol	RGB;
-				RGB.R=R; RGB.G=G; RGB.B=B;
-				OutRGBTable.Set(c,s,RGB);
+				int	R,G,B;
 
-				R+=RInc;
-				G+=GInc;
-				B+=BInc;
+				R=BaseR+(RInc*s);
+				G=BaseG+(RInc*s);
+				B=BaseB+(RInc*s);
 				if (R<0) R=0; else if (R>255) R=255;
 				if (G<0) G=0; else if (G>255) G=255;
 				if (B<0) B=0; else if (B>255) B=255;
+
+				RGB.R=R; RGB.G=G; RGB.B=B;
+				OutRGBTable.Set(c,s,RGB);
+
 			}
 		}
 }

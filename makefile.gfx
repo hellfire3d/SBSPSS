@@ -173,7 +173,7 @@ SFX_GFX :=				+smoke.bmp \
 						+drip.bmp +bubblepop.bmp \
 						+Gush000.bmp +Gush001.bmp +Gush002.bmp +Gush003.bmp +GushBase.bmp \
 						+cog01.bmp +elecvalve.bmp\
-						+leg.bmp +thwack.bmp +lightning1.bmp +lightning2.bmp
+						+leg.bmp +thwack.bmp +lightning1.bmp +lightning2.bmp +Healthbubble.bmp
 
 SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))
 
@@ -206,7 +206,7 @@ PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+watermeter +waterhilight +netblob \
-							+spike +sharkmine +snakebile +checkpoint
+							+spike +sharkmine +snakebile
 INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+bubble_1 +bubble_2 +bubble_3 \
 										+water  +aim_arrow
 

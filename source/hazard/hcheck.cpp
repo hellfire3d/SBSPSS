@@ -35,7 +35,8 @@ void CNpcCheckpointHazard::init()
 	CNpcHazard::init();
 
 	m_triggered = false;
-	m_spriteFrame = FRM__CHECKPOINT;
+//	m_spriteFrame = FRM__CHECKPOINT;
+	m_spriteFrame = 0; // Change by dave cos the checkpoint gfx aint there no more
 	m_timer = 0;
 	m_flick = false;
 }

@@ -17,9 +17,13 @@
 
 #include	"FX\FXBubble.h"
 
-const int		NRGX=32;
+const int		NRGX=96;
 const int		NRGY=188;
-const int		NRGW=INGAME_SCREENW-64;
+const int		NRGXInc=32;
+const int		NRGMaxHealth=10;
+const int		NRGW=INGAME_SCREENW-(NRGMaxHealth*NRGXInc);
+const int		NRGBaseRGB=240;
+const int		NRGRGBInc=NRGBaseRGB/NRGMaxHealth;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -29,8 +33,6 @@ void	CFXNRGBar::init(DVECTOR const &_Pos)
 		CFX::init();
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 
-		GfxW=SprBank->getFrameWidth(FRM__BUBBLE_1);
-		GfxHalfW=GfxW/2;
 		CurrentHealth=0;
 }
 
@@ -38,23 +40,16 @@ SpriteBank	*SprBank=CGameScene::getSpriteBank();
 void	CFXNRGBar::SetMax(int Max)
 {
 		MaxHealth=Max;
-		Scale=((NRGW*4096)/32)/MaxHealth;
-		XInc=NRGW/MaxHealth;
 		CurrentHealth=Max;
 }
 
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-//int		NRGMax=16;
-//int		NRGH=NRGMax;
 void	CFXNRGBar::think(int _frames)
 {
 CNpcEnemy	*P=(CNpcEnemy*)ParentThing;
 int			Health=P->getHealth();
-
-//		SetMax(NRGMax);
-//		Health=NRGH;
 
 		if (CurrentHealth<Health) CurrentHealth=Health;
 		if (CurrentHealth>Health)
@@ -63,7 +58,7 @@ int			Health=P->getHealth();
 			for (int b=0; b<4; b++)
 			{
 				DVECTOR	Pos;
-				Pos.vx=NRGX+(CurrentHealth*XInc);
+				Pos.vx=NRGX+(CurrentHealth*NRGXInc);
 				Pos.vy=NRGY;
 
 				CFXBubble	*FX=(CFXBubble*)CFX::Create(CFX::FX_TYPE_BUBBLE_WATER,Pos);
@@ -77,18 +72,25 @@ int			Health=P->getHealth();
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
+int	asd=0;
 void	CFXNRGBar::render()
 {
 //		CFX::render();
 
-int			x=NRGX;
-
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 POLY_FT4	*Ft4;
+int			RGB=NRGBaseRGB;
+int			x=NRGX;
+
 			for (int i=0; i<CurrentHealth; i++)
 			{
-				Ft4=SprBank->printRotatedScaledSprite(FRM__BUBBLE_1,x,NRGY,Scale,Scale,0,0);
-				x+=XInc;
+				Ft4=SprBank->printFT4(FRM__HEALTHBUBBLE,x,NRGY,0,0,0);
+				setRGB0(Ft4,RGB,NRGBaseRGB-RGB,0);
+				setSemiTrans(Ft4,1);
+				Ft4->tpage|=asd<<5;
+
+				RGB-=NRGRGBInc;
+				x+=NRGXInc;
 			}
 
 }
