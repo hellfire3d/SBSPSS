@@ -42,7 +42,7 @@ eng=
 ; ---------------------------------------------------------------
 
 [STR__FRONTEND__GAME_TITLE]
-eng=SpongeBob SquarePants:\nSuperSponge
+eng=Spongebob SquarePants:\nSuperSponge
 [STR__FRONTEND__PRESS_START]
 eng=PRESS START
 
@@ -55,7 +55,7 @@ eng=OPTIONS
 [STR__FRONTEND__CONTROLS]
 eng=CONTROLS
 [STR__FRONTEND__SCREEN]
-eng=SCREEN
+eng=SCREEN ADJUST
 [STR__FRONTEND__SOUND]
 eng=SOUND
 [STR__FRONTEND__LOAD]
@@ -111,7 +111,7 @@ eng=SPEECH VOLUME
 
 ; Load menu ( also some strings in the memcard section )
 [STR__FRONTEND__CONFIRM_LOAD]
-eng=SpongeBob game data found.\nAre you sure you want to load?
+eng=Spongebob game data found.\nAre you sure you want to load?
 
 
 
@@ -137,7 +137,7 @@ eng=Checking...\nPlease do not remove the MEMORY CARD
 [STR__MEMCARD__UNFORMATTEDCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted
 [STR__MEMCARD__NOFILESONCARD]
-eng=No SpongeBob game data present
+eng=No Spongebob game data present
 [STR__MEMCARD__NOCARDINSLOT]
 eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
@@ -203,7 +203,7 @@ eng=Meow!!
 
 ; C1 FMA
 [STR__INGAME__FMA_C1_INTRO0]
-eng=Ahhh, ‘ere we are at Bikini Bottom..and today we will be following my favourite creature Spongebob SquarePants on his adventures around Bikini Bottom.
+eng=Ahhh, ‘ere we are at Bikini Bottom..and today we will be following my favorite creature Spongebob SquarePants on his adventures around Bikini Bottom.
 [STR__INGAME__FMA_C1_INTRO1]
 eng=Today he is in search of the Best Birthday Present ever, for his best friend Patrick. The question is how far will he go for his best friend?
 [STR__INGAME__FMA_C1_SB0]
@@ -277,7 +277,7 @@ eng=Gee thanks!!!
 [STR__INGAME__FMA_C6_BB1]
 eng=Well, I have learnt today that friendship is something that is priceless! SB is not such a bad sponge afterall!
 [STR__INGAME__FMA_C6_BB_MM0]
-eng=SpongeBob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
+eng=Spongebob SqaurePants!!! Wait until I get my hands on that porous Freak!!!!
 
 
 ; ---------------------------------------------------------------
@@ -323,11 +323,11 @@ Chapter 1 - Level 1 - 01
 [STR__INGAME__CH1__L1__SPONGEY1]
 eng=Hi Squidward !!! Ready for another great day together, friend?
 [STR__INGAME__CH1__L1__SQUIDWARD1]
-eng=Today's Sunday, SpongeBob.  Forget the Krusty Krab. Hey moron, why don't you take your net and go waste somebody else's time!
+eng=Today's Sunday, Spongebob.  Forget the Krusty Krab. Hey moron, why don't you take your net and go waste somebody else's time!
 
 Chapter 1 - Level 1 - 02
 [STR__INGAME__CH1__L1__SQUIDWARD2]
-eng=Look SpongeBob, I told you, use your net and GO FISH!
+eng=Look Spongebob, I told you, use your net and GO FISH!
 
 
 Chapter 1 - Level 2 - 01
@@ -340,7 +340,7 @@ eng=I like you Spongebob. We're tighter than bark on a tree.  Why don't y'all bo
 
 Chapter 1 - Level 2 - 03
 [STR__INGAME__CH1__L2__SANDY3]
-eng=SpongeBob you silly 'ol sponge, try using your helmet!!!
+eng=Spongebob you silly 'ol sponge, try using your helmet!!!
 
 
 Chapter 1 - Level 4 - 01
@@ -363,7 +363,7 @@ eng=Use the Coral Blower me boy! Blast away!
 
 Chapter 2 - Level 2 - 01
 [STR__INGAME__CH2__L2__PATRICK1]
-eng=Hey SpongeBob. I got an extra balloon for my birthday. Want it? Ooooo, you're floating away! Hey, where'd my balloon go? SpongeBob!
+eng=Hey Spongebob. I got an extra balloon for my birthday. Want it? Ooooo, you're floating away! Hey, where'd my balloon go? Spongebob!
 
 Chapter 2 - Level 2 - 02
 [STR__INGAME__CH2__L2__PATRICK2]
@@ -410,7 +410,7 @@ eng=Now to find the Bread. But where? I know! Bikini Bottom has loads of bread!
 eng= 
 
 [STR__INGAME__CH2__L1__SBCELEBRATE]
-eng=Yippee... Now to find the Loofah...... That has to be in Thermal Tunnels
+eng=Yippee... Now to find the Loofah...... That has to be in Thermal Tunnels!
 [STR__INGAME__CH2__L2__SBCELEBRATE]
 eng=Now to find the Mud Pack.... off to those nasty Acrid Air Pockets, better make sure I'm nice and moist!
 [STR__INGAME__CH2__L3__SBCELEBRATE]
@@ -421,7 +421,7 @@ eng=Right! Now back to Mermaid Man to receive my new orders!!!
 [STR__INGAME__CH3__L1__SBCELEBRATE]
 eng=Now to find the Scallop Bra, the only place is Desert Wasteland. But what if I get stuck in quicksand? Like that's gonna happen.
 [STR__INGAME__CH3__L2__SBCELEBRATE]
-eng=Now to find the a pair of Shell slippers..... and in to Kelp Jungle!
+eng=Now to find a pair of Shell slippers..... and in to Kelp Jungle!
 [STR__INGAME__CH3__L3__SBCELEBRATE]
 eng=Uh Oh, those plants are moving! They're not trees....... Hellllllllppppppp!
 [STR__INGAME__CH3__L4__SBCELEBRATE]
@@ -534,7 +534,7 @@ eng=This item costs %d tokens, you currently have %d tokens. You cannot afford t
 [STR__CHAPTER_1]
 eng=Bikini Bottom
 [STR__CHAPTER_2]
-eng=To the Centre of the Earth
+eng=To the Center of the Earth
 [STR__CHAPTER_3]
 eng=Bikini Bottom Prehistoric Times
 [STR__CHAPTER_4]

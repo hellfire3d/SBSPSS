@@ -548,7 +548,7 @@ void CGameScene::think_playing(int _frames)
 		{	
 			if (PadGetDown(1) & PAD_UP)		GlobalRGBSel--;
 			if (PadGetDown(1) & PAD_DOWN)	GlobalRGBSel++;
-			GlobalRGBSel%=3;
+			GlobalRGBSel&=3;
 
 			if(PadGetHeld(1)&PAD_LEFT ) GlobalRGB[GlobalRGBSel]--;
 			if(PadGetHeld(1)&PAD_RIGHT ) GlobalRGB[GlobalRGBSel]++;

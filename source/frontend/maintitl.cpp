@@ -503,7 +503,7 @@ void CFrontEndMainTitles::renderSeaSection(sFrameHdr *_fh,int _x,int _y,int _w,i
   ---------------------------------------------------------------------- */
 void CFrontEndMainTitles::renderPressStart()
 {
-	if(!CFader::isFading())
+	if(!CFader::isFading() && m_demoTimeout & 32)
 	{
 		m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
