@@ -119,6 +119,10 @@
 #include "platform\plantern.h"
 #endif
 
+#ifndef __PLATFORM_PBGEYSER_H__
+#include "platform\pbgeyser.h"
+#endif
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,6 +268,15 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			CNpcFallingPlatformGenerator *generator;
 			generator = new ("vertical oildrum generator") CNpcFallingPlatformGenerator;
 			generator->setTargetType( NPC_VERTICAL_OILDRUM_PLATFORM );
+			platform = generator;
+			break;
+		}
+
+		case NPC_BUBBLE_GEYSER_GENERATOR:
+		{
+			CNpcGeyserPlatformGenerator *generator;
+			generator = new ("bubble geyser generator") CNpcGeyserPlatformGenerator;
+			generator->setTargetType( NPC_BUBBLE_PLATFORM );
 			platform = generator;
 			break;
 		}

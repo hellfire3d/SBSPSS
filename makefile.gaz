@@ -110,7 +110,8 @@ platform_src :=		platform \
 					pfgen \
 					pfallnor \
 					praft \
-					plantern
+					plantern \
+					pbgeyser
 
 hazard_src :=		hazard \
 					hfalling \
