@@ -78,7 +78,7 @@ int s_globalLevelSelectThing=0;
 int s_globalLevelSelectThing=1;
 #endif
 int CGameScene::s_readyToExit;
-int exitToNextLevel;
+int CGameScene::s_levelFinished;
 
 
 /*****************************************************************************/
@@ -140,7 +140,8 @@ void 	CGameScene::init()
 		SetGeomScreen(GH);
 
 		s_readyToExit=false;
-		exitToNextLevel=false;
+		s_levelFinished=false;
+
 }
 
 /*****************************************************************************/
@@ -217,7 +218,7 @@ void	CGameScene::think(int _frames)
 
 		if(PadGetDown(0)&PAD_R2)
 		{
-			exitToNextLevel=true;
+			levelFinished();
 		}
 	}
 
@@ -227,7 +228,7 @@ void	CGameScene::think(int _frames)
 		// Temporarily.. exiting game scene always goes back to the front end (pkg)
 		GameState::setNextScene(&FrontEndScene);
 	}
-	else if(exitToNextLevel)
+	else if(s_levelFinished)
 	{
 		s_globalLevelSelectThing++;
 		GameState::setNextScene(&GameScene);

@@ -36,6 +36,7 @@ virtual	int		canPause();
 		void	sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 		static void		setReadyToExit()	{s_readyToExit=true;}
+		static void		levelFinished()		{s_levelFinished=true;}
 	
 protected:
 
@@ -46,6 +47,7 @@ protected:
 		static	MATRIX		CamMtx;
 
 		static int			s_readyToExit;
+		static int			s_levelFinished;
 
 };
 
