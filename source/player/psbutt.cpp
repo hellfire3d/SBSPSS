@@ -104,6 +104,18 @@ void CPlayerStateButtBounceFall::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CPlayerStateButtBounceFall::think(CPlayer *_player)
+{
+	fall(_player);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::enter(CPlayer *_player)
 {
 	DVECTOR	pos;

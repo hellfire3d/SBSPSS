@@ -63,7 +63,9 @@ typedef enum
 	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
-		
+
+	STATE_DEAD,
+
 	NUM_STATES,
 }PLAYER_STATE;
 
@@ -94,6 +96,13 @@ typedef enum
 		
 	NUM_PLAYER_METRICS
 }PLAYER_METRIC;
+
+typedef enum
+{
+	DAMAGE__FALL,
+	DAMAGE__ELECTROCUTION,
+	DAMAGE__LAVA,
+}DAMAGE_TYPE;
 
 
 /*----------------------------------------------------------------------
@@ -167,6 +176,8 @@ protected:
 	void jump();
 	void fall();
 
+	void			takeDamage(DAMAGE_TYPE _damage);
+
 friend class CPlayerState;
 
 
@@ -203,7 +214,7 @@ private:
 	enum
 	{
 		INVIBCIBLE_FRAMES__START=120,	// Invincible for this many frames at start of life
-		INVINCIBLE_FRAMES__HIT=25,		// Invincible for this many frames after taking damage
+		INVINCIBLE_FRAMES__HIT=50,		// Invincible for this many frames after taking damage
 
 		LOOKAROUND_DELAY=90,			// Frames before look around starts
 		LOOKAROUND_SCROLLSPEED=2,		// Speed to scroll at
@@ -230,7 +241,7 @@ private:
 	int				m_lastPadInput;		// Last frames controls
 	int				m_padInputDown;		// Controls that were pressed this frame
 
-	// Pointer to the collision layer for the current layer
+	// Pointer to the collision layer for the current map
 	class CLayerCollision	*m_layerCollision;
 };
 

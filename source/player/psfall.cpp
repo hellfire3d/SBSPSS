@@ -96,6 +96,8 @@ void CPlayerStateFall::think(CPlayer *_player)
 		slowdown(_player);
 	}
 
+	fall(_player);
+
 	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
 		setState(_player,STATE_AIRATTACK);
@@ -148,6 +150,8 @@ void CPlayerStateFallFar::think(CPlayer *_player)
 	{
 		slowdown(_player);
 	}
+
+	fall(_player);
 }
 
 

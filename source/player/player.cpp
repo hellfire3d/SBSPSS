@@ -68,6 +68,8 @@
 	Vars
 	---- */
 
+int s_health;
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -113,6 +115,8 @@ m_animFrame=0;
 	m_cameraLookTimer=0;
 
 	m_lastPadInput=m_padInput=0;
+
+	s_health=5;
 }
 
 /*----------------------------------------------------------------------
@@ -239,49 +243,38 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 				// Was falling.. so we've just hit the ground
 				if(m_currentState==STATE_BUTTFALL)
 				{
+					// landed from a btt bounce
 					setState(STATE_BUTTLAND);
 				}
 				else if(m_currentState==STATE_FALLFAR)
 				{
+					// Landed from a painful long fall
 					setState(STATE_IDLE);
+					takeDamage(DAMAGE__FALL);
 					m_moveVel.vx=0;
+					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
 				}
 				else if(m_moveVel.vx)
 				{
+					// Landed from a jump with x movement
 					setState(STATE_RUN);
-//					setAnimNo(ANIM_PLAYER_ANIM_RUNJUMPEND);
 				}
 				else
 				{
+					// Landed from a standing jump
 					setState(STATE_IDLE);
 					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
 				}
-//				m_moveVel.vy=0;
+				m_moveVel.vy=0;
 				m_fallFrames=0;
 			}
-m_moveVel.vy=0;
 		}
 		else
 		{
-			if(m_currentState!=STATE_JUMP&&m_currentState!=STATE_BUTTBOUNCE)
+			if(m_currentState!=STATE_FALL&&m_currentState!=STATE_BUTTFALL&&
+			   m_currentState!=STATE_JUMP&&m_currentState!=STATE_BUTTBOUNCE)
 			{
-				// Fall
-				if(m_currentState!=STATE_FALL&&m_currentState!=STATE_BUTTFALL)
-				{
-					setState(STATE_FALL);
-				}
-				const PlayerMetrics	*metrics;
-				metrics=getPlayerMetrics();
-				m_moveVel.vy+=PLAYER_GRAVITY;
-				if(m_moveVel.vy>=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT)
-				{
-					m_moveVel.vy=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT;
-					m_fallFrames++;
-					if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
-					{
-						setState(STATE_FALLFAR);
-					}
-				}
+				setState(STATE_FALL);
 			}
 		}
 
@@ -297,6 +290,7 @@ if(getPadInputDown()&PAD_CIRCLE)
 {
 	m_skel.blink();
 }
+/*
 		if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
 		{
 			if(m_cameraLookTimer<=-LOOKAROUND_DELAY)
@@ -347,6 +341,7 @@ if(getPadInputDown()&PAD_CIRCLE)
 				}
 			}
 		}
+*/
 	}
 
 
@@ -722,6 +717,69 @@ void CPlayer::jump()
 }
 void CPlayer::fall()
 {
+	const PlayerMetrics	*metrics;
+	metrics=getPlayerMetrics();
+	m_moveVel.vy+=PLAYER_GRAVITY;
+	if(m_moveVel.vy>=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT)
+	{
+		m_moveVel.vy=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT;
+		m_fallFrames++;
+		if(m_currentState!=STATE_BUTTFALL)
+		{
+			if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
+			{
+				setState(STATE_FALLFAR);
+			}
+		}
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+#ifdef __VERSION_DEBUG__
+int invincibleSponge=false;		// NB: This is for debugging purposes only
+#endif
+void CPlayer::takeDamage(DAMAGE_TYPE _damage)
+{
+	// Don't take damage if still recovering from the last hit
+	if(!m_invincibleFrameCount)
+	{
+		int	ouchThatHurt=true;
+
+		// Check if we are currently immune to this damage type
+		switch(_damage)
+		{
+			case DAMAGE__FALL:
+			case DAMAGE__LAVA:
+				break;
+
+			case DAMAGE__ELECTROCUTION:
+				// if squeaky boots then ouchThatHurt=false;
+				break;
+		}
+
+		if(ouchThatHurt)
+		{
+#ifdef __VERSION_DEBUG__
+			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
+#endif
+			if(s_health)
+			{
+				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
+				s_health--;
+			}
+			else
+			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
+				setState(STATE_DEAD);
+			}
+		}
+	}
 }
 
 

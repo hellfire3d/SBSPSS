@@ -45,6 +45,10 @@
 #include "player\psduck.h"
 #endif
 
+#ifndef __PLAYER__PSDEAD_H__
+#include "player\psdead.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -84,6 +88,7 @@ CPlayerStateAirChop			stateAirChop;
 CPlayerStateDuck			stateDuck;
 CPlayerStateSoakUp			stateSoackUp;
 CPlayerStateGetUp			stateGetup;
+CPlayerStateDead			stateDead;
 
 
 
@@ -124,6 +129,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			&stateDuck,								// STATE_DUCK
 			&stateSoackUp,							// STATE_SOAKUP
 			&stateGetup,							// STATE_GETUP
+			&stateDead,								// STATE_DEAD
 		}
 	},
 
@@ -156,6 +162,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			&stateDuck,								// STATE_DUCK
 			&stateSoackUp,							// STATE_SOAKUP
 			&stateGetup,							// STATE_GETUP
+			&stateDead,								// STATE_DEAD
 		}
 	},
 
@@ -188,6 +195,7 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			NULL,									// STATE_DUCK
 			NULL,									// STATE_SOAKUP
 			NULL,									// STATE_GETUP
+			&stateDead,								// STATE_DEAD
 		}
 	},
 };

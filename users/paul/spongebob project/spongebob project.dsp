@@ -701,6 +701,14 @@ SOURCE=..\..\..\source\player\pschop.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\psdead.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psdead.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\psduck.cpp
 # End Source File
 # Begin Source File

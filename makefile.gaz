@@ -146,6 +146,7 @@ player_src :=		panimsfx \
 					pmodes \
 					psbutt \
 					pschop \
+					psdead \
 					psduck \
 					psfall \
 					psidle \
