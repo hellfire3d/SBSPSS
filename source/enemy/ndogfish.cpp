@@ -110,6 +110,14 @@ void CNpc::processStandardIronDogfishAttack( int _frames )
 		{
 			// fire at user
 
+			s32 yDist = playerPos.vy - Pos.vy;
+
+			s16 headingToPlayer = ratan2( yDist, xDist );
+
+			CProjectile *projectile;
+			projectile = new( "test projectile" ) CProjectile;
+			projectile->init( Pos, headingToPlayer );
+
 			m_state++;
 
 			if ( m_state > IRON_DOGFISH_LASER_EYE_2 )
