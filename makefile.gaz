@@ -400,8 +400,9 @@ ifeq ($(USER_NAME),CDBUILD)
 	Cpe2Exe $($(TERRITORY)_CPE2X_PARAM) $(BOOTSTRAP_CPE)
 	$(CP) -u $(BOOTSTRAP_EXE) $($(TERRITORY)_BOOTSTRAP_OUT) -f
 	$(ECHO) $(TERRITORY) Psx CD Built
+endif
 
-# build iso
+buildiso:
 	$(BUILDCD) -i$(CD_BUILD_DIR)/psx.img -l data/cddata/$(TERRITORY).cti
 	$(STRIPISO)s 2352 $(CD_BUILD_DIR)/psx.img $(CD_BUILD_DIR)/$(TERRITORY).iso
 	$(RM) $(CD_BUILD_DIR)/psx.img
@@ -409,7 +410,6 @@ ifeq ($(USER_NAME),CDBUILD)
 	$(RM) QSheet.toc
 	@$(ECHO) $(TERRITORY) Iso Built
 
-endif
 
 #	tools\STRIPISO.EXE s 2336 $(CD_BUILD_DIR)/psx.img $(CD_BUILD_DIR)/$(TERRITORY).iso
 
