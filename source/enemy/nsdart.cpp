@@ -49,7 +49,7 @@ void CNpcSquidDartEnemy::render()
 			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
 			SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
-			setRGB0( SprFrame, 255, 128, 255 );
+			//setRGB0( SprFrame, 255, 128, 255 );
 
 			/*s32 XMax = SprFrame->x1 - origRenderPos.vx;
 			s32 XMin = SprFrame->x0 - origRenderPos.vx;
