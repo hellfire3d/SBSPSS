@@ -307,7 +307,7 @@ eng=Rock Bottom
 [STR__CHAPTER_5]
 eng=Industrial
 [STR__KELP_WORLD]
-eng=Kelp World
+eng=Six Clams Adventure Land
 
 [STR__CHAPTER_1_LEVEL_1]
 eng=Jelly Fields
@@ -316,7 +316,7 @@ eng=Sandy's Bio-Dome
 [STR__CHAPTER_1_LEVEL_3]
 eng=Fish Hooks Park
 [STR__CHAPTER_1_LEVEL_4]
-eng=Bikini Bottom Town
+eng=Downtown Bikini Bottom
 
 [STR__CHAPTER_2_LEVEL_1]
 eng=Cavernous Canyons
@@ -332,7 +332,7 @@ eng=Precipice Canyon
 [STR__CHAPTER_3_LEVEL_2]
 eng=Desert Wasteland
 [STR__CHAPTER_3_LEVEL_3]
-eng=Kelp Jungle
+eng=Kelpazoic Jungle
 [STR__CHAPTER_3_LEVEL_4]
 eng=Inside the Whale
 
@@ -348,11 +348,11 @@ eng=Last Stop
 [STR__CHAPTER_5_LEVEL_1]
 eng=Jelly Fields
 [STR__CHAPTER_5_LEVEL_2]
-eng=Polluted Seabed
+eng=Man Ray's Lair
 [STR__CHAPTER_5_LEVEL_3]
 eng=Oil Rig
 [STR__CHAPTER_5_LEVEL_4]
-eng=Tuna Canning Ship
+eng=Canning Factory
 
 [STR__CHAPTER_6_LEVEL_1]
 eng=Snail Race
