@@ -40,12 +40,6 @@ void	CFXBaseAnim::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXBaseAnim::shutdown()
-{
-		CFX::shutdown();
-}
-
-/*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
 void	CFXBaseAnim::think(int _frames)
@@ -86,7 +80,7 @@ void	CFXBaseAnim::killFX()
 {
 	setToShutdown();
 // If has follow on effect, create it now
-	if (DataPtr->EndFX)
+	if (DataPtr->EndFX || canThink())
 	{
 		CFX::Create((CFX::FX_TYPE)DataPtr->EndFX,getPos());
 	}

@@ -33,12 +33,6 @@ void	CFXJellyFishLegs::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXJellyFishLegs::shutdown()
-{
-		CFX::shutdown();
-}
-
-/*****************************************************************************/
 void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool XFlip)
 {
 	Ofs.vx=XOfs; 

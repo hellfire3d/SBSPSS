@@ -31,19 +31,19 @@ struct	sNodeList
 struct	sPoolSlot
 {
 		u16			Width,Height;
-		u16			RefCount;
-		u16			FrameCount;
+//		u16			RefCount;
+//		u16			FrameCount;
 		sNodeList	NodeList;
 		u8			*ListMem;
-		int			SlotCount;
+		u16			SlotCount;
 };
 
 /*****************************************************************************/
 struct	sActorPool
 {
 		FileEquate		Filename;
+		s16				CacheSlot;
 		sSpriteAnimBank	*ActorGfx;
-		int				CacheSlot;
 		sNodeList		*GlobalCache;
 		sNodeList		LocalCache;
 		sNodeList		LastCache;
@@ -138,6 +138,8 @@ public:
 		CActorGfx(sActorPool *ThisActor);
 virtual	~CActorGfx();
 
+		void			setActor(sActorPool *ThisActor);
+
 		POLY_FT4		*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false);
 		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale);
 
@@ -146,8 +148,8 @@ virtual	~CActorGfx();
 
 		sBBox			&GetBBox()					{return(BBox);}
 
-		void			SetShadow(bool f)			{ShadowFlag=f;}
-		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
+//		void			SetShadow(bool f)			{ShadowFlag=f;}
+//		void			SetShadowOfs(int X,int Y)	{ShadowXOfs=X; ShadowYOfs=Y;}
 		void			SetOtPos(int Ot)			{OtPos=Ot;}
 
 protected:
@@ -158,8 +160,8 @@ protected:
 		sSpriteFrameGfx	*CurrentFrameGfx;
 
 		sBBox			BBox;
-		bool			ShadowFlag;
-		s16				ShadowXOfs,ShadowYOfs;
+//		bool			ShadowFlag;
+//		s16				ShadowXOfs,ShadowYOfs;
 		u32				OtPos;
 };
 

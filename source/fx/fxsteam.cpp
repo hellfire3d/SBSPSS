@@ -34,12 +34,6 @@ void	CFXSteam::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXSteam::shutdown()
-{
-		CFX::shutdown();
-}
-
-/*****************************************************************************/
 void	CFXSteam::SetSize(int Size)
 {
 		Size>>=12;

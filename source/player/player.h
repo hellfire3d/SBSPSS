@@ -227,7 +227,7 @@ public:
 	void			setLedgeLookAhead(int _lookAhead)					{m_ledgeLookAhead=_lookAhead;}
 
 	void			addLife();
-	void			addSpatula()										{m_numSpatulasHeld++;}
+	void			addSpatula(int Count=1)								{m_numSpatulasHeld+=Count;}
 	int				getSpatulasHeld()									{return m_numSpatulasHeld;}
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}

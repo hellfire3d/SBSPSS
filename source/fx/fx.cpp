@@ -243,11 +243,13 @@ void	TestFX(DVECTOR Pos)
 */
 /*****************************************************************************/
 int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_THWACK;
+#include	"game\game.h"
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-CFXAttachAnim	*FX=(CFXAttachAnim*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+//CFXAttachAnim	*FX=(CFXAttachAnim*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
 //		Parent->addChild(FX);
 //		TestFXPtr->setLife(32);
+	CGameScene::dropHealth(Pos,0,0);
 }
 
 /*****************************************************************************/

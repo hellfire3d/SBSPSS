@@ -13,7 +13,6 @@ class CFXJellyFishLegs : public CFX
 public:
 
 virtual void		init(DVECTOR const &Pos);
-virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 

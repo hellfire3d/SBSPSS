@@ -13,7 +13,6 @@ class CFXFallingTile : public CFX
 public:
 
 virtual void		init(DVECTOR const &Pos);
-virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 		void		SetTile(int T)		{Tile=T;}

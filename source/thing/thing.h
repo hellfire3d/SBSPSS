@@ -140,8 +140,11 @@ virtual	TYPE	getThingType()=0;
 virtual	void	setThingSubType(int	T)	{m_SubType=T;}
 virtual	int		getThingSubType()		{return(m_SubType);}
 
-virtual	void	init();
-virtual	void	shutdown();
+virtual	void	create()	{;}	// Once only init (for mem alloc)
+virtual	void	init();			// re-usable init
+virtual	void	shutdown();		// re-usable shutdown
+virtual	void	destroy()	{;}	// memory clean up when totally killing the poor things
+
 virtual	void	think(int _frames);
 virtual	void	render();
 		void	setToShutdown(bool f=true)								{m_isShuttingDown = f;}
@@ -153,9 +156,7 @@ virtual int		dontKillDuringLevelRespawn()							{return false;}
 		void			removeChild(CThing *Child);
 		void			removeAllChild();
 		void			deleteAllChild();
-//		bool			hasChild(CThing *Child);
 		int				getNumChildren()				{return( m_numChildren );}
-
 
 		DVECTOR const	&getPos()						{return Pos;}
 		void			setPos(DVECTOR newPos)			{Pos=newPos;}
@@ -186,8 +187,8 @@ public:
 virtual	CRECT const		*getRenderBBox()							{return &m_collisionArea;}
 virtual	CRECT const		*getThinkBBox()								{return &m_collisionArea;}
 virtual	bool			alwaysThink()								{return(false);}
-virtual	void			leftThingZone(int _frames)					{}
-virtual	void			enterThingZone(int _frames)					{}
+virtual	void			leftThinkZone(int _frames)					{}
+virtual	void			enterThinkZone(int _frames)					{}
 
 		void			ShowBBox();
 		DVECTOR	const	&getCollisionCentre()						{return m_collisionCentre;}
@@ -203,7 +204,7 @@ virtual int				checkCollisionAgainst(CThing *_thisThing, int _frames);
 virtual void			collidedWith(CThing *_thisThing)			{;}
 virtual void			setHasPlatformCollided( bool newVal )		{;}
 virtual bool			getHasPlatformCollided()					{return false;}
-virtual s32				getNewYPos( CThing *_thisThing );
+//virtual s32				getNewYPos( CThing *_thisThing );
 
 public:
 // Thing states
@@ -213,6 +214,7 @@ public:
 		bool			canRender()									{return (m_renderFlag);}
 		DVECTOR			&getRenderPos()								{return(m_RenderPos);}
 		bool			canThink()									{return (m_thinkFlag);}
+
 protected:
 		bool			m_renderFlag,m_thinkFlag;
 		DVECTOR			m_RenderPos;

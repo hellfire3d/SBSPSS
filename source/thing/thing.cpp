@@ -418,6 +418,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 				if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=0;
 			}
 			thing->setThinkFlag(Flag);
+// Is in think zone
 			if (Flag)
 			{
 				thing->think(_frames);
@@ -428,15 +429,16 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 				}
 			}
 			Flag|=lastFlag;
+// Handle enter/leave states (not sure of viabilty now)
 			switch (Flag)
 			{			// Last This
 				case 0: // 0    0
 					break;
 				case 1: // 0    1
-					thing->enterThingZone(_frames);
+					thing->enterThinkZone(_frames);
 					break;
 				case 2: // 1    0
-					thing->leftThingZone(_frames);
+					thing->leftThinkZone(_frames);
 					break;
 				case 3: // 1    1
 					break;
@@ -444,11 +446,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 					ASSERT("Invalid Think State");
 			}
 
-
-
 /* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
 			thing->updateCollisionArea();
-
 			thing=thing->m_nextListThing;
 		}
 	}
@@ -916,6 +915,7 @@ void	CThingManager::resetFreeList()
 				while (ThisThing)
 				{
 					CThing	*Next=ThisThing->NextFreeThing;
+					ThisThing->destroy();
 					delete ThisThing;
 					FreeListCount--;
 					ThisThing=Next;
@@ -979,21 +979,12 @@ int		SubType=Thing->getThingSubType();
 CThing	**List=s_FreeList[Type];
 
 // Check its been aquired/set correctly
-//		ASSERT(SubType!=1234);
-		if (SubType!=1234)
-		{
-			Thing->NextFreeThing=List[SubType];
-			List[SubType]=Thing;
-			FreeListCount++;
-		}
-		else
-		{
-			printf("%i %i\n",Type,SubType);
-			ASSERT(!"Thing not Setup Correctly");
-			Thing->NextFreeThing=DuffList;
-			DuffList=Thing;
-			DuffListCount++;
-		}
+
+		ASSERT(SubType!=1234);
+
+		Thing->NextFreeThing=List[SubType];
+		List[SubType]=Thing;
+		FreeListCount++;
 
 #else
 		delete Thing;
@@ -1255,30 +1246,6 @@ CThing	*List=NextThing;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-/*
-bool	CThing::hasChild(CThing *Child)
-{
-CThing *nextChild = NextThing;
-
-	while( nextChild )
-	{
-		if ( nextChild == Child )
-		{
-			return( true );
-		}
-
-		nextChild = nextChild->NextThing;
-	}
-
-	return( false );
-}
-*/
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CThing::setCollisionSize(int _w,int _h)
 {
 	m_collisionSize.vx=_w;
@@ -1315,7 +1282,7 @@ void	CThing::updateCollisionArea()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-
+/*
 s32		CThing::getNewYPos(CThing *_thisThing)
 {
 	CRECT	thisRect;
@@ -1330,7 +1297,7 @@ s32		CThing::getNewYPos(CThing *_thisThing)
 		return( thisRect.y2 );
 	}
 }
-
+*/
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

@@ -69,6 +69,7 @@ static	CFX			*Create(const FX_TYPE Type);
 static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
 static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
 virtual	bool		alwaysThink()								{return(!RelativeToMap);}
+virtual	void		leftThinkZone(int _frames)					{killFX();}
 
 virtual void		init();
 virtual void		init(DVECTOR const &Pos);

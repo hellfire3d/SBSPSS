@@ -6,7 +6,6 @@
 #include "mem\memory.h"
 #include "fileio\fileio.h"
 #include "utils\utils.h"
-//#include "utils\pak.h"
 #include "gfx\prim.h"
 #include "gfx\actor.h"
 #include "gfx\otpos.h"
@@ -99,7 +98,7 @@ int		Slot=0;
 			SlotCount++;
 			}
 		}
-		SlotList[Slot].RefCount++;
+//		SlotList[Slot].RefCount++;
 
 		return(Slot);
 }
@@ -208,7 +207,7 @@ sPoolNode	*DstTail=Dst->Tail;
 int		CActorCache::ReserveSlot(int W,int H,int FrameCount)
 {
 int		Slot=GetSlot(W,H);
-		SlotList[Slot].FrameCount+=FrameCount;
+//		SlotList[Slot].FrameCount+=FrameCount;
 		return(Slot);
 }
 
@@ -282,8 +281,8 @@ void	CActorCache::Reset()
 			SlotList[i].ListMem=0;
 			SlotList[i].NodeList.Head=0;
 			SlotList[i].NodeList.Tail=0;
-			SlotList[i].RefCount=0;
-			SlotList[i].FrameCount=0;
+//			SlotList[i].RefCount=0;
+//			SlotList[i].FrameCount=0;
 			SlotList[i].Width=0;
 			SlotList[i].Height=0;
 		}
@@ -524,17 +523,23 @@ sActorPool	*Actor=ActorList;
 /*****************************************************************************/
 CActorGfx::CActorGfx(sActorPool *ThisActor)
 {
-		PoolEntry=ThisActor;
-		ShadowXOfs=DEF_SHADOW_OFS;
-		ShadowYOfs=DEF_SHADOW_OFS;
-		ShadowFlag=false;
-		OtPos=OTPOS__ACTOR_POS;
-		
+		setActor(ThisActor);	
 }
 
 /*****************************************************************************/
 CActorGfx::~CActorGfx()
 {
+}
+
+/*****************************************************************************/
+void	CActorGfx::setActor(sActorPool *ThisActor)
+{
+		PoolEntry=ThisActor;
+//		ShadowXOfs=DEF_SHADOW_OFS;
+//		ShadowYOfs=DEF_SHADOW_OFS;
+//		ShadowFlag=false;
+		OtPos=OTPOS__ACTOR_POS;
+
 }
 
 /*****************************************************************************/
@@ -622,7 +627,7 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 			Ft4->tpage=ThisNode->TPage;
 			Ft4->clut=PoolEntry->ActorGfx->Clut;
 			addPrim(OtPtr+OtPos,Ft4);
-
+/*
 			if (ShadowFlag)
 			{
 				POLY_FT4	*sFt4=GetPrimFT4();
@@ -635,6 +640,7 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 				setRGB0(sFt4,0,0,0);
 				addPrim(OtPtr+OtPos,sFt4);
 			}
+*/
 // Set BBox
 //int			HalfW=CurrentFrameGfx->W>>1;
 // Sizes now depend on aspect corrected sizes, so get sizes back from poly
