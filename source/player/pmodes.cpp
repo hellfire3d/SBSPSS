@@ -435,7 +435,10 @@ int		CPlayerModeBase::setState(int _state)
   ---------------------------------------------------------------------- */
 int		CPlayerModeBase::getFacing()								{return m_player->getFacing();}
 void	CPlayerModeBase::setFacing(int _facing)						{m_player->setFacing(_facing);}
-void	CPlayerModeBase::setAnimNo(int _animNo)						{m_player->setAnimNo(_animNo);}
+int		CPlayerModeBase::getAnimNo()								{return m_player->getAnimNo();}
+void	CPlayerModeBase::setAnimNo(int _animNo)						{m_player->setAnimNo(_animNo);setAnimFrame(0);}
+int		CPlayerModeBase::getAnimFrame()								{return m_player->getAnimFrame();}
+int		CPlayerModeBase::getAnimFrameCount()						{return m_player->getAnimFrameCount();}
 void	CPlayerModeBase::setAnimFrame(int _animFrame)				{m_player->setAnimFrame(_animFrame);}
 
 /*----------------------------------------------------------------------
@@ -448,15 +451,15 @@ int		CPlayerModeBase::advanceAnimFrameAndCheckForEndOfAnim()
 {
 	int	animFrame,frameCount;
 	int	looped;
-	animFrame=m_player->getAnimFrame()+1;
-	frameCount=m_player->getAnimFrameCount();
+	animFrame=getAnimFrame()+1;
+	frameCount=getAnimFrameCount();
 	looped=false;
 	if(animFrame>=frameCount)
 	{
 		looped=true;
 		animFrame=0;
 	}
-	m_player->setAnimFrame(animFrame);
+	setAnimFrame(animFrame);
 	return looped;
 
 }

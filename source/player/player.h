@@ -196,7 +196,7 @@ private:
 
 	enum
 	{
-		INVIBCIBLE_FRAMES__START=120,	// Invincible for this many frames at start of life
+		INVINCIBLE_FRAMES__START=120,	// Invincible for this many frames at start of life
 		INVINCIBLE_FRAMES__HIT=50,		// Invincible for this many frames after taking damage
 
 		LOOKAROUND_DELAY=90,			// Frames before look around starts
