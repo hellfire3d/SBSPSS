@@ -296,64 +296,80 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 
 	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
 
+//!!!!!! Sort you life out charles - Unhappy Dave
+	if (enemyType==14)
+	{
+		enemyType=CNpcEnemy::NPC_SMALL_JELLYFISH_1;
+	}
+
 	switch( enemyType )
 	{
 		case CNpcEnemy::NPC_SMALL_JELLYFISH_1:
 		{
+			printf("JFish\n");
 			enemy = new ("small jellyfish") CNpcSmallJellyfishEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_HERMIT_CRAB:
 		{
+			printf("NPC_HERMIT_CRAB\n");
 			enemy = new ("hermit crab") CNpcHermitCrabEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SPIDER_CRAB:
 		{
+			printf("NPC_SPIDER_CRAB\n");
 			enemy = new ("spider crab") CNpcSpiderCrabEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SPIDER_CRAB_SPAWNER:
 		{
+			printf("NPC_SPIDER_CRAB_SPAWNER\n");
 			enemy = new ("spider crab spawner") CNpcEnemyGenerator;
 			break;
 		}
 
 		case CNpcEnemy::NPC_ANEMONE_1:
 		{
+			printf("NPC_ANEMONE_1\n");
 			enemy = new ("anemone 1") CNpcAnemone1Enemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_ANEMONE_2:
 		{
+			printf("NPC_ANEMONE_2\n");
 			enemy = new ("anemone 2") CNpcAnemone2Enemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_ANEMONE_3:
 		{
+			printf("NPC_ANEMONE_3\n");
 			enemy = new ("anemone 3") CNpcAnemone3Enemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_CLAM_JUMP:
 		{
+			printf("NPC_CLAM_JUMP\n");
 			enemy = new ("jumping clam") CNpcJumpingClamEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_CLAM_STATIC:
 		{
+			printf("NPC_CLAM_STATIC\n");
 			enemy = new ("static clam") CNpcStaticClamEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_BABY_OCTOPUS:
 		{
+			printf("NPC_BABY_OCTOPUS\n");
 			enemy = new ("baby octopus") CNpcBabyOctopusEnemy;
 			break;
 		}
@@ -361,132 +377,154 @@ CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 		case CNpcEnemy::NPC_FISH_FOLK:
 		case CNpcEnemy::NPC_ZOMBIE_FISH_FOLK:
 		{
+			printf("NPC_FISH_FOLK\n");
 			enemy = new ("fish folk") CNpcFishFolk;
 			break;
 		}
 
 		case CNpcEnemy::NPC_BALL_BLOB:
 		{
+			printf("NPC_BALL_BLOB\n");
 			enemy = new ("ball blob") CNpcBallBlobEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_GHOST_PIRATE:
 		{
+			printf("NPC_GHOST_PIRATE\n");
 			enemy = new ("ghost pirate") CNpcGhostPirateEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_PUFFA_FISH:
 		{
+			printf("NPC_PUFFA_FISH\n");
 			enemy = new ("puffa fish") CNpcPuffaFishEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SHARK_MAN:
 		{
+			printf("NPC_SHARK_MAN\n");
 			enemy = new ("shark man") CNpcSharkManEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SKELETAL_FISH:
 		{
+			printf("NPC_SKELETAL_FISH\n");
 			enemy = new ("skeletal fish") CNpcSkeletalFishEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_EYEBALL:
 		{
+			printf("NPC_EYEBALL\n");
 			enemy = new ("eyeball") CNpcEyeballEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_FLAMING_SKULL:
 		{
+			printf("NPC_FLAMING_SKULL\n");
 			enemy = new ("flaming skull") CNpcFlamingSkullEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SKULL_STOMPER:
 		{
+			printf("NPC_SKULL_STOMPER\n");
 			enemy = new ("skull stomper") CNpcSkullStomperEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_BOOGER_MONSTER:
 		{
+			printf("NPC_BOOGER_MONSTER\n");
 			enemy = new ("booger monster") CNpcBoogerMonsterEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
 		{
+			printf("NPC_MOTHER_JELLYFISH\n");
 			enemy = new ("mother jellyfish") CNpcMotherJellyfishEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SUB_SHARK:
 		{
+			printf("NPC_SUB_SHARK\n");
 			enemy = new ("sub shark") CNpcSubSharkEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_PARASITIC_WORM:
 		{
+			printf("NPC_PARASITIC_WORM\n");
 			enemy = new ("parasitic worm") CNpcParasiticWormEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
 		{
+			printf("NPC_FLYING_DUTCHMAN\n");
 			enemy = new ("flying dutchman") CNpcFlyingDutchmanEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_IRON_DOGFISH:
 		{
+			printf("NPC_IRON_DOGFISH\n");
 			enemy = new ("iron dogfish") CNpcIronDogfishEnemy;
 			break;
 		}
 
 		case CNpcEnemy::NPC_FALLING_ITEM:
 		{
+			printf("NPC_FALLING_ITEM\n");
 			enemy = new ("falling item") CNpcFallingItemHazard;
 			break;
 		}
 
 		case CNpcEnemy::NPC_FISH_HOOK:
 		{
+			printf("NPC_FISH_HOOK\n");
 			enemy = new ("fish hook") CNpcFishHookHazard;
 			break;
 		}
 
 		case CNpcEnemy::NPC_PENDULUM:
 		{
+			printf("NPC_PENDULUM\n");
 			enemy = new ("pendulum") CNpcPendulumHazard;
 			break;
 		}
 
 		case CNpcEnemy::NPC_FIREBALL:
 		{
+			printf("NPC_FIREBALL\n");
 			enemy = new ("fireball") CNpcFireballHazard;
 			break;
 		}
 
 		case CNpcEnemy::NPC_SAW_BLADE:
 		{
+			printf("NPC_SAW_BLADE\n");
 			enemy = new ("saw blade") CNpcReturningHazard;
 			break;
 		}
 
 		case CNpcEnemy::NPC_DUST_DEVIL:
 		{
+			printf("NPC_DUST_DEVIL\n");
 			enemy = new ("dust devil") CNpcReturningGroundHazard;
 			break;
 		}
 
 		default:
 		{
+			printf("UNKNOWN %i\n",enemyType);
 			enemy = new ("npc enemy") CNpcEnemy;
 			break;
 		}
