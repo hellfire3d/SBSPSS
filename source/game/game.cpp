@@ -68,7 +68,10 @@ void 	CGameScene::init()
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
 		VidSetClearScreen(1);
+
 		CConversation::init();
+		CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
+
 		Level.init();
 
 		C2dEnemy	*enemy;

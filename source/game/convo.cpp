@@ -101,6 +101,10 @@ class CGUISprite		*CConversation::s_guiIcon=NULL;
 class CGUITextBox		*CConversation::s_guiText=NULL;
 class FontBank			*CConversation::s_fontBank=NULL;
 
+class CScript			*CConversation::s_registeredScripts[MAX_LOADED_SCRIPTS];
+int						CConversation::s_registeredScriptIds[MAX_LOADED_SCRIPTS];
+int						CConversation::s_numRegisteredScripts=0;
+
 class CScript			*CConversation::s_currentScript=NULL;
 int						CConversation::s_currentState=STATE_INACTIVE;
 
@@ -119,6 +123,8 @@ int CConversation::s_currentSelectedAnswer=0;
   ---------------------------------------------------------------------- */
 void CConversation::init()
 {
+	ASSERT(s_numRegisteredScripts==0);
+
 	s_guiFrame=new ("Conversation GUI") CGUIGroupFrame();
 	s_guiFrame->init(0);
 	s_guiFrame->setObjectXYWH((512-FRAME_WIDTH)/2,256-FRAME_BOTTOM_OFFSET-FRAME_HEIGHT,FRAME_WIDTH,FRAME_HEIGHT);
@@ -142,6 +148,7 @@ void CConversation::init()
 	s_fontBank->setOt(0);
 
 	s_currentState=STATE_INACTIVE;
+	s_currentScript=NULL;
 }
 
 
@@ -153,6 +160,7 @@ void CConversation::init()
   ---------------------------------------------------------------------- */
 void CConversation::shutdown()
 {
+	dumpConversationScripts();
 	s_guiFrame->shutdown();			delete s_guiFrame;
 }
 
@@ -167,6 +175,8 @@ void CConversation::think(int _frames)
 {
 	if(isActive())
 	{
+		ASSERT(s_currentScript);
+
 		if(s_currentState==STATE_JUST_ACTIVATED)
 		{
 			s_currentState=STATE_ACTIVE;
@@ -179,6 +189,7 @@ void CConversation::think(int _frames)
 		s_currentScript->run();
 		if(s_currentScript->isFinished())
 		{
+			s_currentScript=NULL;
 			s_currentState=STATE_INACTIVE;
 		}
 	}
@@ -209,7 +220,13 @@ void CConversation::render()
   ---------------------------------------------------------------------- */
 void CConversation::registerConversationScript(FileEquate _feScript)
 {
-	// Blah blah..
+	ASSERT(s_numRegisteredScripts<MAX_LOADED_SCRIPTS);
+
+	// Load in the script and register its id
+	s_registeredScripts[s_numRegisteredScripts]=new ("conversation script") CScript();
+	s_registeredScripts[s_numRegisteredScripts]->initialise(_feScript);
+	s_registeredScriptIds[s_numRegisteredScripts]=_feScript;
+	s_numRegisteredScripts++;
 }
 
 
@@ -221,12 +238,23 @@ void CConversation::registerConversationScript(FileEquate _feScript)
   ---------------------------------------------------------------------- */
 void CConversation::trigger(FileEquate _feScript)
 {
+	int	i;
+
 	ASSERT(!isActive());
 
-	s_currentScript=new ("script") CScript();
-	s_currentScript->initialise(_feScript);
+	// Is this script already registered?
+	for(i=0;i<s_numRegisteredScripts;i++)
+	{
+		if(s_registeredScriptIds[i]==_feScript)
+		{
+			// Found it..
+			s_currentScript=s_registeredScripts[i];
+			s_currentState=STATE_JUST_ACTIVATED;
+			return;
+		}
+	}
 
-	s_currentState=STATE_JUST_ACTIVATED;
+	ASSERT(!"Script was not registered");
 }
 
 
@@ -370,6 +398,25 @@ void CConversation::renderQuestion()
 		default:
 			break;
 	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CConversation::dumpConversationScripts()
+{
+	int	i;
+
+	for(i=0;i<s_numRegisteredScripts;i++)
+	{
+		s_registeredScripts[i]->dump();
+	}
+	s_currentScript=NULL;
+	s_numRegisteredScripts=0;
 }
 
 

@@ -93,6 +93,19 @@ void CScript::initialise(FileEquate _fe)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CScript::dump()
+{
+	MemFree(m_stack);
+	MemFree(m_code);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CScript::run()
 {
 #ifdef SHOW_RUN_COUNT
@@ -125,12 +138,10 @@ void CScript::run()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int testval=2;
 void CScript::reset()
 {
 	m_pc=0;
 	m_sp=0;
-m_localVars[TMP1]=testval;
 	m_state=RESET;
 }
 

@@ -44,7 +44,6 @@ public:
 	static void	render();
 
 	static void	registerConversationScript(FileEquate _feScript);
-
 	static void	trigger(FileEquate _feScript);
 	static int	isActive();
 
@@ -113,9 +112,16 @@ private:
 		STATE_ACTIVE,
 	};
 
+	// Maximum number of scripts per level
+	enum
+	{
+		MAX_LOADED_SCRIPTS=10,
+	};
 
 	static void		thinkQuestion();
 	static void		renderQuestion();
+
+	static void		dumpConversationScripts();
 
 
 	static class CGUIGroupFrame	*s_guiFrame;
@@ -124,6 +130,10 @@ private:
 	static class FontBank		*s_fontBank;
 
 	static CHAR_ICON_FRAMES		s_characterIconFrames[MAX_CHARS];
+
+	static class CScript		*s_registeredScripts[MAX_LOADED_SCRIPTS];
+	static int					s_registeredScriptIds[MAX_LOADED_SCRIPTS];
+	static int					s_numRegisteredScripts;
 
 	static class CScript		*s_currentScript;
 	static int					s_currentState;

@@ -38,6 +38,7 @@ class CScript
 {
 public:
 	void	initialise(FileEquate _fe);
+	void	dump();
 
 	void	reset();
 	void	run();
