@@ -197,6 +197,7 @@ void CMapScene::init()
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
 
 	m_currentChapterSelection=s_chapterToStartOn;
+	m_mapBackgroundImage=(char*)CFileIO::loadFile(MAP_MAP_BACKGROUND_GFX);ASSERT(m_mapBackgroundImage);
 	generateMapScreenImage();
 	m_currentLevelSelection=s_levelToStartOn;
 
@@ -220,6 +221,7 @@ void CMapScene::shutdown()
 {
 	ClearScreenImage();
 	delete m_pointerIcon;
+	MemFree(m_mapBackgroundImage);
 	MemFree(m_screenImage);
 	m_font->dump();				delete m_font;
 }
@@ -427,56 +429,7 @@ void CMapScene::think(int _frames)
 		if(lastLevel!=m_currentLevelSelection)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
-//			m_pointerArrivedAtTarget=false;
-//			m_pointerSin=0;
 		}
-		
-		// Calc where the pointer should be
-//		if(m_pointerArrivedAtTarget)
-//		{
-//			m_pointerSin=(m_pointerSin+(_frames*70))&4095;
-//		}
-//		m_pointerIcon->setTarget(getPointerTargetPosition());
-
-		// Move the pointer
-		/*
-		for(int i=0;i<_frames;i++)
-		{
-			int delta;
-
-			delta=m_pointerTarget.vx-m_pointerPos.vx;
-			if(delta<0)
-			{
-				delta/=3;
-				if(!delta)delta=-1;
-			}
-			else if(delta>0)
-			{
-				delta/=3;
-				if(!delta)delta=+1;
-			}
-			m_pointerPos.vx+=delta;
-
-			delta=(m_pointerTarget.vy+(msin(m_pointerSin)*4>>12))-m_pointerPos.vy;
-			if(delta<0)
-			{
-				delta/=3;
-				if(!delta)delta=-1;
-			}
-			else if(delta>0)
-			{
-				delta/=3;
-				if(!delta)delta=+1;
-			}
-			m_pointerPos.vy+=delta;
-
-			if(!m_pointerArrivedAtTarget&&
-			   m_pointerTarget.vx==m_pointerPos.vx&&m_pointerTarget.vy==m_pointerPos.vy)
-			{
-				m_pointerArrivedAtTarget=true;
-			}
-		}
-		*/
 		m_pointerIcon->think(_frames);
 
 		if(m_pointerIcon->canPointerSelect()&&
@@ -515,8 +468,7 @@ void	CMapScene::generateMapScreenImage()
 	int	i;
 
 	m_currentLevelSelection=0;
-	memset(m_screenImage,0,512*256*2);
-	copyImageToScreen(MAP_MAP_BACKGROUND_GFX,MAP_PARCHMENT_START_X,MAP_PARCHMENT_START_Y,MAP_PARCHMENT_WIDTH,MAP_PARCHMENT_HEIGHT);
+	memcpy(m_screenImage,m_mapBackgroundImage,512*256*2);
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
 		if(isLevelOpen(m_currentChapterSelection,i))
@@ -526,8 +478,6 @@ void	CMapScene::generateMapScreenImage()
 	}
 
 	m_pointerIcon->snapToTarget(getPointerTargetPosition());
-//	m_pointerPos=getPointerTargetPosition();
-//	m_pointerArrivedAtTarget=true;
 }
 
 

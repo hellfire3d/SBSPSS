@@ -101,6 +101,7 @@ private:
 	int					m_readyToExit;
 
 	char				*m_screenImage;
+	char				*m_mapBackgroundImage;
 
 	int					m_currentChapterSelection;
 	int					m_currentLevelSelection;
