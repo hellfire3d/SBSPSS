@@ -236,6 +236,7 @@ void	CGameScene::initLevel()
 #ifdef __USER_charles__		
 	CNpcEnemy	*enemy;
 	enemy=new ("test enemy") CNpcEnemy;
+	enemy->setType( CNpcEnemy::NPC_PARASITIC_WORM );
 	enemy->init();
 	enemy->setLayerCollision( Level.getCollisionLayer() );
 #endif

@@ -216,8 +216,6 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_FLYING_DUTCHMAN;
-
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
 	m_skel.Init(m_data[m_type].skelType);
@@ -441,6 +439,75 @@ void CNpcEnemy::init()
 			m_extendDir = EXTEND_CLOCKWISE;
 			m_extension = 100;
 
+			break;
+		}
+
+		case NPC_INIT_PARASITIC_WORM:
+		{
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			//newPos.vy = 10;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 500;
+			//newPos.vy = 10;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 500;
+			//newPos.vy = 100;
+			newPos.vy = 300;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 100;
+			//newPos.vy = 100;
+			newPos.vy = 300;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( PONG_PATH );
+
+			// create head of list
+			CNpcPositionHistory *newPosition;
+			newPosition = new ("position history") CNpcPositionHistory;
+			newPosition->pos = Pos;
+			m_positionHistory = newPosition;
+
+			CNpcPositionHistory *currentPosition = m_positionHistory;
+
+			// create rest of list
+
+			for ( int histLength = 1 ; histLength < ( 10 * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
+			{
+				newPosition = new ("position history") CNpcPositionHistory;
+				newPosition->pos = Pos;
+				newPosition->next = NULL;
+
+				currentPosition->next = newPosition;
+				currentPosition = newPosition;
+			}
+
+			for ( int segCount = 0 ; segCount < 10 ; segCount++ )
+			{
+				CNpcEnemy *segment;
+				segment = new ("segment") CNpcEnemy;
+				segment->setType( CNpcEnemy::NPC_PARASITIC_WORM_SEGMENT );
+				segment->init();
+				segment->setLayerCollision( m_layerCollision );
+
+				this->addChild( segment );
+			}
+
+			break;
+		}
+
+		case NPC_INIT_PARASITIC_WORM_SEGMENT:
+		{
 			break;
 		}
 
@@ -917,6 +984,13 @@ void CNpcEnemy::processMovement(int _frames)
 		case NPC_MOVEMENT_FLYING_DUTCHMAN:
 		{
 			processFlyingDutchmanMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_PARASITIC_WORM:
+		{
+			processParasiticWormMovement( _frames );
 
 			break;
 		}

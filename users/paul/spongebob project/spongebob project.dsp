@@ -215,6 +215,10 @@ SOURCE=..\..\..\source\enemy\nsshark.cpp
 
 SOURCE=..\..\..\source\enemy\nsstomp.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nworm.cpp
+# End Source File
 # End Group
 # Begin Group "fileio"
 

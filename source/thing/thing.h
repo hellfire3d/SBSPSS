@@ -99,6 +99,7 @@ public:
 
 
 	DVECTOR			getPos()						{return Pos;}
+	void			setPos(DVECTOR newPos)			{Pos=newPos;}
 	virtual void	shove(DVECTOR move);
 	CThing			*getNext()						{return Next;}
 

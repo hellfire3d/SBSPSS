@@ -128,8 +128,7 @@ public:
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
 		NPC_PRICKLY_BUG,
-		NPC_SEA_SNAKE_1,
-		NPC_SEA_SNAKE_2,
+		NPC_SEA_SNAKE,
 		NPC_PUFFA_FISH,
 		NPC_ANGLER_FISH,
 		NPC_HERMIT_CRAB,
@@ -148,8 +147,10 @@ public:
 		NPC_SKULL_STOMPER,
 		NPC_MOTHER_JELLYFISH,
 		NPC_SUB_SHARK,
+		NPC_PARASITIC_WORM,
 		NPC_FLYING_DUTCHMAN,
 		NPC_IRON_DOGFISH,
+		NPC_PARASITIC_WORM_SEGMENT,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -159,6 +160,8 @@ public:
 	void				render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
+	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
 
 
 protected:
@@ -183,6 +186,8 @@ protected:
 		NPC_INIT_FISH_FOLK,
 		NPC_INIT_FLAMING_SKULL,
 		NPC_INIT_CIRCULAR_PLATFORM,
+		NPC_INIT_PARASITIC_WORM,
+		NPC_INIT_PARASITIC_WORM_SEGMENT,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -253,6 +258,7 @@ protected:
 		NPC_MOVEMENT_FIREBALL,
 		NPC_MOVEMENT_RETURNING_HAZARD,
 		NPC_MOVEMENT_CLAM_RETRACT,
+		NPC_MOVEMENT_PARASITIC_WORM,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -319,6 +325,7 @@ protected:
 		NPC_JELLYFISH_RESISTANCE = 64,
 		NPC_BOOGER_MONSTER_MAX_EXTENSION = 20,
 		NPC_SUB_SHARK_HIGH_SPEED = 6,
+		NPC_PARASITIC_WORM_SPACING = 6,
 		EXTEND_UP = true,
 		EXTEND_DOWN = false,
 		EXTEND_RIGHT = true,
@@ -432,6 +439,10 @@ protected:
 	void				processSubSharkMovement( int _frames );
 	void				processCloseSubSharkAttack( int _frames );
 
+	// parasitic worm functions
+
+	void				processParasiticWormMovement( int _frames );
+
 	// flying dutchman functions
 
 	void				processFlyingDutchmanMovement( int _frames );
@@ -494,6 +505,17 @@ protected:
 	DVECTOR			m_drawOffset;
 
 	virtual void		collidedWith(CThing *_thisThing);
+
+	// position history stuff
+
+	class CNpcPositionHistory
+	{
+	public:
+		DVECTOR						pos;
+		CNpcPositionHistory			*next;
+	};
+
+	CNpcPositionHistory		*m_positionHistory;
 };
 
 
