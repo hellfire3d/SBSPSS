@@ -96,10 +96,27 @@ int CGameScene::s_levelFinished;
 CGameScene	GameScene;
 
 /*****************************************************************************/
+void	CGameScene::AspectCorrectCamera()
+{
+const s32 Scale = (512<<12)/(256);
+
+		CamMtx.m[0][0] = ((s32)CamMtx.m[0][0] * Scale)>>12;
+		CamMtx.m[0][1] = ((s32)CamMtx.m[0][1] * Scale)>>12;
+		CamMtx.m[0][2] = ((s32)CamMtx.m[0][2] * Scale)>>12;
+
+		CamMtx.t[0]  = (CamMtx.t[0] * Scale)>>12;
+}
+
+/*****************************************************************************/
 void 	CGameScene::init()
 {		
+// Setup Constant Camera Matrix
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
+//		AspectCorrectCamera();
+		SetRotMatrix(&CamMtx);
+		SetTransMatrix(&CamMtx);
+
 
 		s_genericFont=new ("CGameScene::Init") FontBank();
 		s_genericFont->initialise( &standardFont );
@@ -151,7 +168,7 @@ void	CGameScene::shutdown()
 /*****************************************************************************/
 void 	CGameScene::render()
 {
-		CamMtx.t[2]=ZPos;	// Temp
+//		CamMtx.t[2]=ZPos;	// Temp
 
 		m_pauseMenu->render();
 		CConversation::render();

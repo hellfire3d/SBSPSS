@@ -7,9 +7,9 @@ char	*FilenameList[FILEPOS_MAX]=
 {
 "BIGLUMP.BIN",
 "BIGLUMP.BIN",
-//"TRACK1.IXA",
+"THQ.STR",
+"INTRO.STR",
 //"CLIMAX.STR",
-//"INTRO.STR",
 //"LEVEL1.STR",
 //"LEVEL2.STR",
 //"LEVEL3.STR",

@@ -31,7 +31,7 @@ virtual	int		canPause();
 		int		readyToShutdown();
 		char	*getSceneName()	{return "Game";}
 
-		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
+//		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
 		class CPlayer	*getPlayer();
 		void	sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
@@ -42,6 +42,8 @@ protected:
 
 		void			initLevel();
 		void			shutdownLevel(bool CleanUp);
+
+		void			AspectCorrectCamera();
 
 		CLevel				Level;
 		class CPauseMenu	*m_pauseMenu;

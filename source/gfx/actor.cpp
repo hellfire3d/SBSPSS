@@ -335,6 +335,7 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 
 /*****************************************************************************/
 
+int	ActorOT=10;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
@@ -355,7 +356,7 @@ POLY_FT4	*Ft4=GetPrimFT4();
 			setRGB0(Ft4,128,128,128);
 			Ft4->tpage=TPage;
 			Ft4->clut=Clut;
-			AddPrimToList(Ft4,10);
+			AddPrimToList(Ft4,ActorOT);
 
 			if (Shadow)
 			{
@@ -367,7 +368,7 @@ POLY_FT4	*Ft4=GetPrimFT4();
 				sFt4->y1+=ShadowYOfs;
 				setSemiTrans(sFt4,1);
 				setRGB0(sFt4,0,0,0);
-				AddPrimToList(sFt4,10);
+				AddPrimToList(sFt4,ActorOT);
 			}
 
 			return(Ft4);
