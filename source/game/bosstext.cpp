@@ -95,6 +95,9 @@ const CBossText::BOSS_DATA	CBossText::s_bossData[]=
 // Evil global pointer to the boss character
 extern CThing	*g_bossThing;
 
+static const int s_bossTextYOffset=-8;
+
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -233,27 +236,28 @@ void	CBossText::render()
 	// Text
 	bd=&s_bossData[GameScene.GetLevel().getCurrentChapter()-1];
 	m_fontBank->setColour(118,118,118);
-	m_fontBank->print(256-20,30,STR__BOSS_TEXT_TITLE);
+	m_fontBank->print(256-20,30+s_bossTextYOffset,STR__BOSS_TEXT_TITLE);
 	if(m_currentPage==0)
 	{
 		// Intro
 		m_scalableFontBank->setScale(400);
 		m_scalableFontBank->setColour(128,128,128);
-		m_scalableFontBank->print(256-20,80,bd->m_titleTextId);
+		m_scalableFontBank->print(256-20,80+s_bossTextYOffset,bd->m_titleTextId);
 
 		m_fontBank->setColour(118,118,118);
-		m_fontBank->print(256-20,190,bd->m_subTitleTextId);
+		m_fontBank->print(256-20,190+s_bossTextYOffset,bd->m_subTitleTextId);
 
 		// Boss gfx
 		DVECTOR	bossPoss;
 		bossPoss=pos;
+		bossPoss.vy+=s_bossTextYOffset;
 		((CNpcBossEnemy*)g_bossThing)->renderOnMapScreen(bossPoss);
 	}
 	else
 	{
 		// Instructions
 		m_fontBank->setColour(118,118,118);
-		m_fontBank->print(256-20,80,bd->m_instructionsTextId);
+		m_fontBank->print(256-20,80+s_bossTextYOffset,bd->m_instructionsTextId);
 	}
 
 
@@ -276,16 +280,16 @@ void	CBossText::render()
 	}
 	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(text);
 	x=128-(width/2);
-	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET+s_bossTextYOffset,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,text);
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS+s_bossTextYOffset,text);
 
 	fh1=sb->getFrameHeader(FRM__BUTX);
 	width=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_fontBank->getStringWidth(STR__BOSS__CONTINUE);
 	x=256+128-(width/2);
-	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+	sb->printFT4(fh1,x,INSTRUCTIONS_Y_POS+INSTRUCTIONS_BUTTON_Y_OFFSET+s_bossTextYOffset,0,0,0);
 	x+=fh1->W+INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_fontBank->print(x,INSTRUCTIONS_Y_POS,STR__BOSS__CONTINUE);
+	m_fontBank->print(x,INSTRUCTIONS_Y_POS+s_bossTextYOffset,STR__BOSS__CONTINUE);
 
 	m_fontBank->setJustification(FontBank::JUST_CENTRE);
 }
