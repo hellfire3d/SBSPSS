@@ -69,8 +69,8 @@ void	CMap::SetSize(int Width,int Height,BOOL ClearFlag)
 /*****************************************************************************/
 void	CMap::Clear()
 {
-int	Width=GetWidth();
-int	Height=GetHeight();
+int		Width=GetWidth();
+int		Height=GetHeight();
 
 		for (int Y=0;Y<Height;Y++)
 		{
@@ -225,6 +225,28 @@ int		Ofs=(R->bottom+R->top)-1;
 				Set(X,Ofs-Y,ThisElem,true);
 			}
 		}
+}
+
+/*****************************************************************************/
+void	CMap::Paste(CMap &Src,CRect *R)
+{
+		if (!R)
+		{ // No rect, use full
+			R=new CRect(0,0,GetWidth(),GetHeight());
+		}
+
+		for (int Y=0; Y<R->Height(); Y++)
+		{
+			for (int X=0; X<R->Width(); X++)
+			{
+				int	SrcX=X % Src.GetWidth();
+				int	SrcY=Y % Src.GetHeight();
+				sMapElem	&ThisElem=Src.Get(SrcX,SrcY);
+				
+				Set(X+R->left,Y+R->top,ThisElem,true);
+			}
+		}
+
 }
 
 /*****************************************************************************/

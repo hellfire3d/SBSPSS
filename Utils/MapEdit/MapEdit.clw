@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -18,21 +18,21 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_MULTIBAR (English (U.S.))
+Resource1=IDR_TOOLBAR (English (U.S.))
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_LAYERTILE_GUI
+Resource3=IDD_ABOUTBOX (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_LAYERTILE_GUI
 Class8=CMultiBar
-Resource6=IDD_MAPSIZE
-Resource7=IDD_NEW_LAYER
+Resource6=IDD_MULTIBAR (English (U.S.))
+Resource7=IDD_LAYER_LIST_DIALOG
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDR_MAINFRAME (English (U.S.))
+Resource8=IDD_MAPSIZE
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_LAYER_LIST_DIALOG
-Resource10=IDD_ABOUTBOX (English (U.S.))
+Resource9=IDR_MAINFRAME (English (U.S.))
+Resource10=IDD_NEW_LAYER
 Class13=CNewMapGUI
 Class14=CProgressDlg
 Resource11=IDD_NEWMAP
@@ -77,7 +77,7 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=ID_EDIT_COPY
+LastObject=ID_EXPORT_AGB
 Filter=N
 VirtualFilter=DC
 
@@ -86,7 +86,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_ZOOM_IN
+LastObject=ID_EDIT_PASTE
 Filter=C
 VirtualFilter=VWC
 

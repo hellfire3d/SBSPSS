@@ -102,8 +102,8 @@ public:
 		float					GetZoomW();
 		float					GetZoomH();
 		
-		void					CopySelection();
-		void					PasteSelection();
+		void					CopySelection(CMapEditView *View);
+		void					PasteSelection(CMapEditView *View);
 
 		GString					GetCurrentPath();
 private:

@@ -25,8 +25,6 @@ BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	ON_COMMAND(ID_EXPORT_PSX, OnExportPsx)
 	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
 	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
-	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
-	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -195,6 +193,20 @@ void	CMapEditDoc::MirrorY(CMapEditView *View)
 }
 
 /*********************************************************************************/
+void	CMapEditDoc::CopySelection(CMapEditView *View) 
+{
+		Core.CopySelection(View);
+		FocusView();
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::PasteSelection(CMapEditView *View) 
+{
+		Core.PasteSelection(View);
+		FocusView();
+}
+
+/*********************************************************************************/
 void	CMapEditDoc::SetMode(int NewMode)
 {
 		Core.SetMode(NewMode);
@@ -331,14 +343,3 @@ void	CMapEditDoc::FocusView()
 }
 
 
-/*********************************************************************************/
-void CMapEditDoc::OnEditCopy() 
-{
-		Core.CopySelection();
-}
-
-/*********************************************************************************/
-void CMapEditDoc::OnEditPaste() 
-{
-		Core.PasteSelection();
-}

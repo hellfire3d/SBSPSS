@@ -51,6 +51,7 @@ public:
 		void		Set(int X,int Y,CMap &Blk,BOOL Force=FALSE);
 		void		Set(CMap &Src,int StartX,int StartY,int Width,int Height,BOOL Force=FALSE);
 		void		Set(CMap &Src,CRect &Rect,BOOL Force=FALSE);
+		void		Paste(CMap &Src,CRect *R);
 
 		void		Resize(int Width,int Height);
 

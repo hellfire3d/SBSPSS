@@ -549,6 +549,20 @@ BOOL	CCore::IsTileValid(int Set,int Tile)
 }
 
 /*****************************************************************************/
+void	CCore::CopySelection(CMapEditView *View)
+{
+		Layer[ActiveLayer]->CopySelection(this);
+		UpdateView(View);
+}
+
+/*****************************************************************************/
+void	CCore::PasteSelection(CMapEditView *View)
+{
+		Layer[ActiveLayer]->PasteSelection(this);
+		UpdateView(View);
+}
+
+/*****************************************************************************/
 /*** Misc ********************************************************************/
 /*****************************************************************************/
 Vector3	&CCore::GetCam()
@@ -734,14 +748,3 @@ GString	Path=FullPath.Dir();
 }
 
 
-/*****************************************************************************/
-void	CCore::CopySelection()
-{
-		Layer[ActiveLayer]->CopySelection(this);
-}
-
-/*****************************************************************************/
-void	CCore::PasteSelection()
-{
-		Layer[ActiveLayer]->PasteSelection(this);
-}

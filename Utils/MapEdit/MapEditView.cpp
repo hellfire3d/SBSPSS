@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_COMMAND(ID_2D_3D_TOGGLE, On2d3dToggle)
 	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
 	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
+	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -158,6 +160,8 @@ void CMapEditView::OnToggleTileview()									{GetDocument()->ToggleTileView(thi
 void CMapEditView::OnToggleGrid()										{GetDocument()->ToggleGrid(this);}
 void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX(this);}
 void CMapEditView::OnMirrory()											{GetDocument()->MirrorY(this);}
+void CMapEditView::OnEditCopy()											{GetDocument()->CopySelection(this);}
+void CMapEditView::OnEditPaste()										{GetDocument()->PasteSelection(this);}
 
 void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft(this);}
 void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight(this);}

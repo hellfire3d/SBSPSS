@@ -35,6 +35,8 @@ public:
 	void			ToggleGrid(CMapEditView *View);
 	void			MirrorX(CMapEditView *View);
 	void			MirrorY(CMapEditView *View);
+	void			CopySelection(CMapEditView *View);
+	void			PasteSelection(CMapEditView *View);
 	void			ActiveBrushLeft(CMapEditView *View);
 	void			ActiveBrushRight(CMapEditView *View);
 	void			MapSetSize(CMapEditView *View);
@@ -79,8 +81,6 @@ protected:
 	afx_msg void OnExportPsx();
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
-	afx_msg void OnEditCopy();
-	afx_msg void OnEditPaste();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

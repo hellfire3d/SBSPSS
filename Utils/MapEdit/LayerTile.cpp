@@ -590,7 +590,7 @@ BOOL	CLayerTile::CopySelection(CCore *Core)
 CTileBank	&TileBank=Core->GetTileBank();
 CRect		Rect=Selection.GetRect();
 
-		TileBank.GetLBrush().Set(Map,Rect.left,Rect.top,Rect.Width(),Rect.Height());
+		TileBank.GetActiveBrush().Set(Map,Rect.left,Rect.top,Rect.Width(),Rect.Height());
 
 		return(true);
 
@@ -602,7 +602,10 @@ BOOL	CLayerTile::PasteSelection(CCore *Core)
 		if (Mode!=MouseModeSelect) return(false);	// Not in select mode
 		if (!Selection.IsValid()) return(false);	// No Selection
 
-		TRACE0("Paste\n");
+CTileBank	&TileBank=Core->GetTileBank();
+CRect		Rect=Selection.GetRect();
+
+		Map.Paste(TileBank.GetActiveBrush(),&Rect);
 		return(true);
 }
 

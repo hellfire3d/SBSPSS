@@ -63,6 +63,8 @@ protected:
 	afx_msg void OnActivebrushRight();
 	afx_msg void OnMapSetSize();
 	afx_msg void On2d3dToggle();
+	afx_msg void OnEditCopy();
+	afx_msg void OnEditPaste();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
