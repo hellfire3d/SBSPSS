@@ -484,22 +484,6 @@ void	CLevel::initThings(int _respawningLevel)
 			}
 		}
 
-
-///////
-{
-	int		i;
-	DVECTOR	pos={100,100};
-	for(i=PICKUP__BIG_HEALTH;i<PICKUP__MAX;i++)
-	{
-		if(i!=PICKUP__SPATULA&&i!=PICKUP__KELP_TOKEN&&i!=PICKUP__BALLOON_AND_SPATULA)
-		{
-			createPickup((PICKUP_TYPE)i,&pos);
-			pos.vx+=60;
-		}
-	}
-}
-///////		
-
 // Init actors (needs moving and tidying
 	int actorNum;
 	int platformNum;
