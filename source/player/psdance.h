@@ -40,6 +40,7 @@ public:
 
 private:
 	int				m_hitGround;
+	int				m_startedConversation;
 };
 
 

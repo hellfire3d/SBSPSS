@@ -91,6 +91,7 @@ void CPlayerStateDance::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
 	m_hitGround=false;
+	m_startedConversation=false;
 }
 
 
@@ -117,11 +118,22 @@ void CPlayerStateDance::think(CPlayerModeBase *_playerMode)
 	}
 	else
 	{
-		if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+		if(!m_startedConversation)
 		{
-			CConversation::trigger(s_celebrationScripts[GameScene.getChapterNumber()-1][GameScene.getLevelNumber()-1]);
-//			GameScene.getPlayer()->setCanExitLevelNow();
-			_playerMode->setState(STATE_IDLE);
+			if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+			{
+				_playerMode->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+				CConversation::trigger(s_celebrationScripts[GameScene.getChapterNumber()-1][GameScene.getLevelNumber()-1]);
+				m_startedConversation=true;
+			}
+		}
+		else
+		{
+			if(!CConversation::isActive())
+			{
+				GameScene.getPlayer()->setCanExitLevelNow();
+				_playerMode->setState(STATE_IDLE);
+			}
 		}
 	}
 }
