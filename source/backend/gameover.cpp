@@ -81,7 +81,7 @@ void CGameOverScene::init()
 	m_font=new ("game over font") FontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
-	m_font->setOt(10);
+	m_font->setOt(5);
 
 	m_readyToExit=false;
 	CFader::setFadingIn(CFader::BLACK_FADE);
@@ -113,7 +113,7 @@ void CGameOverScene::render()
 	f4=GetPrimF4();
 	setXYWH(f4,0,0,512,256);
 	setRGB0(f4,0,0,0);
-	AddPrimToList(f4,20);
+	AddPrimToList(f4,10);
 
 	m_font->setColour(255,255,255);
 	m_font->print(256,100,STR__BACKEND__GAME_OVER);
