@@ -72,7 +72,7 @@ int			Health=P->getHealth();
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-int	asd=0;
+
 void	CFXNRGBar::render()
 {
 //		CFX::render();
@@ -87,8 +87,6 @@ int			x=NRGX;
 				Ft4=SprBank->printFT4(FRM__HEALTHBUBBLE,x,NRGY,0,0,0);
 				setRGB0(Ft4,RGB,NRGBaseRGB-RGB,0);
 				setSemiTrans(Ft4,1);
-				Ft4->tpage|=asd<<5;
-
 				RGB-=NRGRGBInc;
 				x+=NRGXInc;
 			}
