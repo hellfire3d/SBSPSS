@@ -238,6 +238,7 @@ pickups_src :=		pickup \
 					phealth \
 					phelmet \
 					pjlammo \
+					pkelp \
 					plife \
 					pnet \
 					pquest \

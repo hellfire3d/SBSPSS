@@ -1193,6 +1193,14 @@ SOURCE=..\..\..\source\pickups\pjlammo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\pickups\pkelp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pkelp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\pickups\plife.cpp
 # End Source File
 # Begin Source File

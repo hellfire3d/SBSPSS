@@ -72,13 +72,11 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CKelpPickup::init()
+void	CKelpTokenPickup::init()
 {
 	sFrameHdr	*fh;
 
 	CBasePickup::init();
-	m_glint=0;
-	m_glintRot=0;
 
 	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__TOKEN);
 	setCollisionSize(fh->W,fh->H);
@@ -90,7 +88,7 @@ void	CKelpPickup::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CKelpPickup::getSizeForPlacement()
+DVECTOR	CKelpTokenPickup::getSizeForPlacement()
 {
 	DVECTOR		size;
 	sFrameHdr	*fh;
@@ -107,7 +105,7 @@ DVECTOR	CKelpPickup::getSizeForPlacement()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CKelpPickup::collect(class CPlayer *_player)
+void	CKelpTokenPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
 //	CGameSlotManager::getSlotData()->collectSpatula(GameScene.getChapterNumber(),GameScene.getLevelNumber(),m_spatulaNumber);
@@ -119,7 +117,7 @@ void	CKelpPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CKelpPickup::renderPickup(DVECTOR *_pos)
+void	CKelpTokenPickup::renderPickup(DVECTOR *_pos)
 {
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;

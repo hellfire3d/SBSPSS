@@ -79,6 +79,10 @@
 #include "pickups\pquest.h"
 #endif
 
+#ifndef	__PICKUPS_PKELP_H__
+#include "pickups\pkelp.h"
+#endif
+
 #include	"game/game.h"
 
 /*	Std Lib
@@ -486,6 +490,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 		case PICKUP__JELLY_LAUNCHER:
 			pickup=new ("JellylauncherPickup") CJellyLauncherPickup();
+			break;
+
+		case PICKUP__KELP_TOKEN:
+			pickup=new ("KelpTokenPickup") CKelpTokenPickup();
 			break;
 
 		default:

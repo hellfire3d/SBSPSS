@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CKelpPickup : public CBasePickup
+class CKelpTokenPickup : public CBasePickup
 {
 public:
 	virtual void		init();
