@@ -182,11 +182,11 @@ PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +token +pants +health100 +health50 +health25 +glint1 +glint2 +glint3 +glint4 \
 							+jellyammo +bubblemixture +bubblewand +glasses +shoe +balloon +balloonburst +helmet \
 							+blower +launcher +net \
-							+c1_l1_jelly +c1_l2_seaweed +c1_l3_seanutbutter +c1_l4_breadslice \
-							+c2_l1_falseteeth +c2_l2_kelpkream +c2_l3_mudpack +c2_l4_sponge \
-							+c3_l1_slippers +c3_l2_clambra +c3_l3_starfishmask +c3_l4_superpantz \
-							+c4_coin +c4_kelpbar \
-							+c5_l1_hammer +c5_l2_ariel +c5_l3_oilcan +c5_l4_wrench
+							+c1_l1_quest_item +c1_l2_quest_item +c1_l3_quest_item +c1_l4_quest_item \
+							+c2_l1_quest_item +c2_l2_quest_item +c2_l3_quest_item +c2_l4_quest_item \
+							+c3_l1_quest_item +c3_l2_quest_item +c3_l3_quest_item +c3_l4_quest_item \
+							+c4_quest_item_1 +c4_quest_item_2 \
+							+c5_l1_quest_item +c5_l2_quest_item +c5_l3_quest_item +c5_l4_quest_item 
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx

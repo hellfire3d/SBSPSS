@@ -93,33 +93,33 @@ CMapScene::sMapLevelData	CMapScene::s_mapLevelData[5]=
 {
 	// Chapter 1
 	{
-		{	MAP_C1_L1_GFX,		MAP_C1_L2_GFX,		MAP_C1_L3_GFX,		MAP_C1_L4_GFX,		MAP_C1_BOSS_GFX,	MAP_C1_FAIR_GFX	},
-		{	0,					1,					2,					3,					-1,					20				},
-		{	FRM__C1_L1_JELLY,			FRM__C1_L2_SEAWEED,			FRM__C1_L3_SEANUTBUTTER,	FRM__C1_L4_BREADSLICE	},
+		{	MAP_C1_L1_GFX,			MAP_C1_L2_GFX,			MAP_C1_L3_GFX,			MAP_C1_L4_GFX,			MAP_C1_BOSS_GFX,		MAP_C1_FAIR_GFX	},
+		{	0,						1,						2,						3,						-1,						20				},
+		{	FRM__C1_L1_QUEST_ITEM,	FRM__C1_L2_QUEST_ITEM,	FRM__C1_L3_QUEST_ITEM,	FRM__C1_L4_QUEST_ITEM},
 	},
 	// Chapter 2
 	{
-		{	MAP_C2_L1_GFX,		MAP_C2_L2_GFX,		MAP_C2_L3_GFX,		MAP_C2_L4_GFX,		MAP_C2_BOSS_GFX,	MAP_C2_FAIR_GFX	},
-		{	4,					5,					6,					7,					-1,					21				},
-		{	FRM__C2_L1_FALSETEETH,		FRM__C2_L2_KELPKREAM,		FRM__C2_L3_MUDPACK,			FRM__C2_L4_SPONGE		},
+		{	MAP_C2_L1_GFX,			MAP_C2_L2_GFX,			MAP_C2_L3_GFX,			MAP_C2_L4_GFX,			MAP_C2_BOSS_GFX,		MAP_C2_FAIR_GFX	},
+		{	4,						5,						6,						7,						-1,						21				},
+		{	FRM__C2_L1_QUEST_ITEM,	FRM__C2_L2_QUEST_ITEM,	FRM__C2_L3_QUEST_ITEM,	FRM__C2_L4_QUEST_ITEM},
 	},
 	// Chapter 3
 	{
-		{	MAP_C3_L1_GFX,		MAP_C3_L2_GFX,		MAP_C3_L3_GFX,		MAP_C3_L4_GFX,		MAP_C3_BOSS_GFX,	MAP_C3_FAIR_GFX	},
-		{	8,					9,					10,					11,					-1,					22				},
-		{	FRM__C3_L1_SLIPPERS,		FRM__C3_L2_CLAMBRA,			FRM__C3_L3_STARFISHMASK,	FRM__C3_L4_SUPERPANTZ	},
+		{	MAP_C3_L1_GFX,			MAP_C3_L2_GFX,			MAP_C3_L3_GFX,			MAP_C3_L4_GFX,			MAP_C3_BOSS_GFX,		MAP_C3_FAIR_GFX	},
+		{	8,						9,						10,						11,						-1,						22				},
+		{	FRM__C3_L1_QUEST_ITEM,	FRM__C3_L2_QUEST_ITEM,	FRM__C3_L3_QUEST_ITEM,	FRM__C3_L4_QUEST_ITEM},
 	},
 	// Chapter 4
 	{
-		{	MAP_C4_L1_GFX,		MAP_C4_L2_GFX,		MAP_C4_L3_GFX,		MAP_C4_L4_GFX,		MAP_C4_BOSS_GFX,	MAP_C4_FAIR_GFX	},
-		{	12,					13,					14,					15,					-1,					23				},
-		{	FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_COIN,				FRM__C4_KELPBAR			},	
+		{	MAP_C4_L1_GFX,			MAP_C4_L2_GFX,			MAP_C4_L3_GFX,			MAP_C4_L4_GFX,			MAP_C4_BOSS_GFX,		MAP_C4_FAIR_GFX	},
+		{	12,						13,						14,						15,						-1,						23				},
+		{	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_1,	FRM__C4_QUEST_ITEM_2		},	
 	},
 	// Chapter 5
 	{
-		{	MAP_C5_L1_GFX,		MAP_C5_L2_GFX,		MAP_C5_L3_GFX,		MAP_C5_L4_GFX,		MAP_C5_BOSS_GFX,	MAP_C5_FAIR_GFX	},
-		{	16,					17,					18,					19,					-1,					24				},
-		{	FRM__C5_L1_HAMMER,			FRM__C5_L2_ARIEL,			FRM__C5_L3_OILCAN,			FRM__C5_L4_WRENCH		},
+		{	MAP_C5_L1_GFX,			MAP_C5_L2_GFX,			MAP_C5_L3_GFX,			MAP_C5_L4_GFX,			MAP_C5_BOSS_GFX,		MAP_C5_FAIR_GFX	},
+		{	16,						17,						18,						19,						-1,						24				},
+		{	FRM__C5_L1_QUEST_ITEM,	FRM__C5_L2_QUEST_ITEM,	FRM__C5_L3_QUEST_ITEM,	FRM__C5_L4_QUEST_ITEM},
 	},
 };
 
