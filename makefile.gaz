@@ -167,6 +167,7 @@ fx_src :=			fx \
 					fxbaseanim \
 					fxbasetrail \
 					fxbaseemitter \
+					fxattachanim \
 					fxbubble \
 					fxnrgbar \
 					fxjfish \
