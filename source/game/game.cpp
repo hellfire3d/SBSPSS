@@ -15,6 +15,8 @@
 #include	"gfx\fdata.h"
 
 #include	"level\level.h"
+#include	"player\player.h"
+#include	"gfx\anim.h"
 
 #ifndef __GFX_BUBICLES__
 #include "gfx\bubicles.h"
@@ -43,6 +45,9 @@ void 	CGameScene::init()
 		VidSetClearScreen(1);
 		m_conversation.init();
 		Level.init();
+		Player.init();
+		CAnimDB::LoadAnims();
+
 }
 
 /*****************************************************************************/
@@ -58,7 +63,8 @@ void	CGameScene::shutdown()
 void 	CGameScene::render()
 {
 		m_conversation.render();
-		Level.render();
+		Player.render();
+//		Level.render();
 }
 
 /*****************************************************************************/
@@ -66,9 +72,13 @@ void	CGameScene::think(int _frames)
 {
 		m_conversation.think(_frames);
 		Level.think(_frames);
+		Player.think();
+		Player.Animate();
 
 		if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
+		{
 			m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
+		}
 
 }
 

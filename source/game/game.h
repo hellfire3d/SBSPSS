@@ -7,6 +7,7 @@
 
 #include	"system\gstate.h"
 #include	"level\level.h"
+#include	"player\player.h"
 
 #ifndef	__GAME_CONVO_H__
 #include "game\convo.h"
@@ -33,6 +34,7 @@ public:
 private:
 
 		CLevel		Level;
+		CPlayer		Player;
 		CConversation	m_conversation;
 static	FontBank	*s_genericFont;
 //static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry
