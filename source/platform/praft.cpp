@@ -145,16 +145,42 @@ void CNpcRaftPlatform::processMovement( int _frames )
 	DVECTOR testPos1, testPos2;
 
 	testPos1 = testPos2 = Pos;
-	testPos1.vx -= 10;
-	testPos2.vx += 10;
+	testPos1.vx -= 20;
+	testPos2.vx += 20;
 
-	testPos1.vy += CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	s16 heightDiff;
+
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+
+	if ( heightDiff == 16 )
+	{
+		return;
+	}
+
+	testPos1.vy += heightDiff;
+
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+
+	if ( heightDiff == 16 )
+	{
+		return;
+	}
+
+	testPos2.vy += heightDiff;
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;
 
 	s16 heading = ratan2( yDist, xDist );
+
+	/*if ( heading > 512 )
+	{
+		heading = 512;
+	}
+	else if ( heading < -512 )
+	{
+		heading = -512;
+	}*/
 
 	setCollisionAngle( heading );
 }
@@ -184,4 +210,19 @@ void CNpcRaftPlatform::render()
 			m_modelGfx->Render(renderPos,&rotation,&scale);
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcRaftPlatform::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.x1 = thinkBBox.XMin;
+	objThinkBox.x2 = thinkBBox.XMax;
+	objThinkBox.y1 = thinkBBox.YMin;
+	objThinkBox.y2 = thinkBBox.YMax;
+
+	return &objThinkBox;
 }
