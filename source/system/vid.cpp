@@ -33,7 +33,7 @@ static const CVECTOR s_defClearCol = {0, 0, 0};
 /*****************************************************************************/
 POLY_FT4	LoadPoly;
 static int	LoadX=430;
-static int	LoadY=192;
+static int	LoadY=192-8;
 static int	LoadBackY;
 static int	LoadHalfWidth;
 static int	LoadIconSide;
