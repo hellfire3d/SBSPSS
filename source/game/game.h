@@ -38,6 +38,7 @@ virtual	int				canPause();
 		static void		setReadyToExit()	{s_readyToExit=true;}
 		static void		levelFinished()		{s_levelFinished=true;}
 	
+		static	MATRIX	&GetCamMtx()		{return(CamMtx);}
 protected:
 
 		void			initLevel();
