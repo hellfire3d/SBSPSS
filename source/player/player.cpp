@@ -579,6 +579,16 @@ if(newmode!=-1)
 
 
 	m_allowConversation=false;
+	
+	if(m_healthReactFrames)
+	{
+		m_healthReactFrames-=_frames;
+		if(m_healthReactFrames<0)
+		{
+			m_healthReactFrames=0;
+		}
+	}
+
 	for(i=0;i<_frames;i++)
 	{
 		// Think
@@ -796,11 +806,6 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
   ---------------------------------------------------------------------- */
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
-int healthx=40;
-int healthy=40;
-int healthr=128;
-int healthg=0;
-int healthb=0;
 
 #ifdef _STATE_DEBUG_
 int stateDebugX=280;
@@ -816,6 +821,12 @@ static int		lastposnum=0;
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
+
+
+int itembaseX=110;
+int	itembaseY=60;
+int	itemgap=40;
+
 
 void	CPlayer::render()
 {
@@ -880,14 +891,10 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		POLY_FT4	*ft4;
 		int			*frames;
 
-		x=healthx;
-		y=healthy;
+		x=HEALTH_ICONX;
+		y=HEALTH_ICONY;
 		if(m_health==0||m_healthReactFrames)
 		{
-			if(m_healthReactFrames)
-			{
-				m_healthReactFrames--;
-			}
 			frames=s_emptyHealthFrames;
 		}
 		else
@@ -900,16 +907,32 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		for(i=5;i>0;i--)
 		{
 			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,0);
-			if(i>m_health)
-			{
-				setRGB0(ft4,healthr,healthg,healthb);
-			}
+			setSemiTrans(ft4,i>m_health);
 			y+=ygap;
 		}
 	}
 
 	// Mode specific ui
+	int	itemX=itembaseX;
+
+	// Pickups
 	m_currentPlayerModeClass->renderModeUi();
+	if(isWearingBoots())
+	{
+		int			x,y;
+		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__SHOE);
+		x=itemX-(fh->W/2);
+		y=itembaseY-(fh->H/2);
+		m_spriteBank->printFT4(fh,x+2,y+2,0,0,0);
+		m_spriteBank->printFT4(fh,x-2,y-2,0,0,0);
+		itemX+=itemgap;
+	}
+	if(isWearingHelmet())
+	{
+		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__HELMET);
+		m_spriteBank->printFT4(fh,itemX-(fh->W/2),itembaseY-(fh->H/2),0,0,0);
+		itemX+=itemgap;
+	}
 }
 
 
@@ -1354,7 +1377,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			if(m_health)
 			{
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
-				m_healthReactFrames=10;
+				m_healthReactFrames=25;
 				m_health--;
 			}
 			else

@@ -172,11 +172,11 @@ void	CPlayerModeBubbleMixture::renderModeUi()
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__BUBBLEWAND);
-	sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+	sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 
 	fb=m_player->getFontBank();
 	sprintf(buf,"x%d",m_player->getBubbleAmmo());
-	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY-(fb->getCharHeight()/2),buf);
+	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
 }
 
 /*----------------------------------------------------------------------

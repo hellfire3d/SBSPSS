@@ -157,26 +157,26 @@ void	CPlayerModeJellyLauncher::renderModeUi()
 	{
 		case FIRING_STATE__NONE:
 		case FIRING_STATE__FIRING:
-			sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+			sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 			break;
 		case FIRING_STATE__POWERINGUP:
 			{
 				int	rotRange,scaleBase,scaleRange;
 				int	xs,ys,rot;
 				rotRange=m_firingTime;
-				scaleBase=4096+(m_firingTime*10);
+				scaleBase=4500+(m_firingTime*10);
 				scaleRange=m_firingTime*2;
 				rot=(getRndRange(rotRange*2)-rotRange)&4095;
 				xs=scaleBase+getRndRange(scaleRange);
 				ys=scaleBase+getRndRange(scaleRange);
-				sb->printRotatedScaledSprite(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,xs,ys,rot,CPlayer::POWERUPUI_OT);
+				sb->printRotatedScaledSprite(fh,CPlayer::POWERUPUI_ICONX+(fh->W/2),CPlayer::POWERUPUI_ICONY+(fh->H/2),xs,ys,rot,CPlayer::POWERUPUI_OT);
 			}
 			break;
 	}
 
 	fb=m_player->getFontBank();
 	sprintf(buf,"x%d",m_player->getJellyAmmo());
-	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY-(fb->getCharHeight()/2),buf);
+	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY,buf);
 }
 
 /*----------------------------------------------------------------------

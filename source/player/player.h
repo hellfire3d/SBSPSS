@@ -302,6 +302,7 @@ public:
 	int				isWearingGlasses()			{return m_glassesFlag;}
 	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
 	int				isWearingBoots()			{return m_squeakyBootsTimer;}
+	int				isWearingHelmet()			{return false;}
 	void			giveInvincibilityRing()		{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
 
@@ -355,10 +356,12 @@ public:
 
 	enum
 	{
-		POWERUPUI_ICONX=40,
-		POWERUPUI_ICONY=200,
-		POWERUPUI_TEXTX=60,
-		POWERUPUI_TEXTY=200,
+		HEALTH_ICONX=40,
+		HEALTH_ICONY=40,
+		POWERUPUI_ICONX=400,
+		POWERUPUI_ICONY=40,
+		POWERUPUI_TEXTX=440,
+		POWERUPUI_TEXTY=37,
 		POWERUPUI_OT=0,
 	};
 
