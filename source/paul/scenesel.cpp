@@ -67,6 +67,10 @@
 #include "paul\animtest.h"
 #endif
 
+#ifndef __PAUL_SNDTEST_H__
+#include "paul\sndtest.h"
+#endif
+
 #ifndef __SAVE_SAVE_H__
 #include "save\save.h"
 #endif
@@ -115,6 +119,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&CreditsScene,
 	&AnimTestScene,
 	&SaveScene,
+	&SoundTestScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 

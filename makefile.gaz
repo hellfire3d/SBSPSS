@@ -253,6 +253,7 @@ pad_src :=			pads \
 					vibe
 
 paul_src :=			paul \
+					sndtest \
 					scenesel \
 					animtest
 

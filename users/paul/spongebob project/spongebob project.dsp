@@ -1327,6 +1327,14 @@ SOURCE=..\..\..\source\paul\scenesel.cpp
 
 SOURCE=..\..\..\source\paul\scenesel.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\paul\sndtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\paul\sndtest.h
+# End Source File
 # End Group
 # Begin Group "pickups"
 

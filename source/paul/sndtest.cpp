@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	scenesel.cpp
+	sndtest.cpp
 
 	Author:		PKG
 	Created: 
@@ -16,7 +16,7 @@
 	Includes
 	-------- */
 
-#include "paul\scenesel.h"
+#include "paul\sndtest.h"
 
 #ifndef __GFX_FONT_H__
 #include "gfx\font.h"
@@ -26,53 +26,12 @@
 #include "pad\pads.h"
 #endif
 
-#ifndef __DATA_STRUCTS_HEADER__
-#include "Dstructs.h"
-#endif
-
 #ifndef __PRIM_HEADER__
 #include "gfx\prim.h"
 #endif
 
-// Scenes
-#ifndef	__FRONTEND_FRONTEND_H__
-#include "frontend\frontend.h"
-#endif
-
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
-#endif
-
-#ifndef __FMA_FMA_H__
-#include "fma\fma.h"
-#endif
-
-#ifndef __SHOP_SHOP_H__
-#include "shop\shop.h"
-#endif
-
-#ifndef __BACKEND_GAMEOVER_H__
-#include "backend\gameover.h"
-#endif
-
-#ifndef __MAP_MAP_H__
-#include "map\map.h"
-#endif
-
-#ifndef __BACKEND_CREDITS_H__
-#include "backend\credits.h"
-#endif
-
-#ifndef __PAUL_ANIMTEST_H__
-#include "paul\animtest.h"
-#endif
-
-#ifndef __SAVE_SAVE_H__
-#include "save\save.h"
-#endif
-
-#ifndef __GFX_FADER_H__
-#include "gfx\fader.h"
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
 #endif
 
 
@@ -86,12 +45,6 @@
 	Tyepdefs && Defines
 	------------------- */
 
-// Uncomment this to make the selector automatically choose the default ( first ) scene
-// You can still use L1&L2 to force the selection menu to appear
-#if defined (__USER_art__)||defined (__USER_sbart__)
-#define	AUTOMATICALLY_CHOOSE_DEFAULT
-#endif
-
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -104,22 +57,9 @@
 	Vars
 	---- */
 
-CScene	*CSceneSelector::s_sceneList[]=
-{
-	&FrontEndScene,				// First scene in the list is the default scene
-	&GameScene,
-	&GameOverScene,
-	&FmaScene,
-	&MapScene,
-	&ShopScene,
-	&CreditsScene,
-	&AnimTestScene,
-	&SaveScene,
-};
-int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
+CSceneSoundTest	SoundTestScene;
 
-
-CSceneSelector	SceneSelector;
+static int			s_soundId;
 
 
 /*----------------------------------------------------------------------
@@ -128,18 +68,15 @@ CSceneSelector	SceneSelector;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSceneSelector::init()
+void CSceneSoundTest::init()
 {
-	m_font=new ("scene select font") FontBank();
+	m_font=new ("scene select font") ScalableFontBank();
 	m_font->initialise(&standardFont);
 	m_font->setJustification(FontBank::JUST_CENTRE);
 	m_font->setOt(10);
+	m_font->setScale(400);
 
-	m_currentSelection=0;
-	m_state=STATE_INIT;
-	m_countdown=2;				// Need a couple of frames for the pad handler to wake up..
-
-	CFader::setFadingIn();
+	s_soundId=0;
 }
 
 
@@ -149,7 +86,7 @@ void CSceneSelector::init()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSceneSelector::shutdown()
+void CSceneSoundTest::shutdown()
 {
 	m_font->dump();				delete m_font;
 }
@@ -161,32 +98,56 @@ void CSceneSelector::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CSceneSelector::render()
+void CSceneSoundTest::render()
 {
-	if(m_state==STATE_SELECTING)
+	POLY_F4	*f4;
+	char	buf[20];
+
+	f4=GetPrimF4();
+	setXYWH(f4,0,0,512,256);
+	setRGB0(f4,10,20,30);
+	AddPrimToList(f4,15);
+
+	sprintf(buf,"%d",s_soundId);
+	m_font->print(256,80,buf);
+	m_font->print(256,140,"UP/DOWN - Select");
+	m_font->print(256,160,"X - Play");
+
+
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSceneSoundTest::think(int _frames)
+{
+	int	padDown,padRepeat;
+
+	padDown=PadGetDown(0);
+	padRepeat=PadGetRepeat(0);
+
+	if(padRepeat&PAD_DOWN)
 	{
-		POLY_F4	*f4;
-		int		i;
-
-		f4=GetPrimF4();
-		setXYWH(f4,0,0,512,256);
-		setRGB0(f4,10,20,30);
-		AddPrimToList(f4,15);
-
-		m_font->setColour(255,255,255);
-		m_font->print(256,50,"Select scene:");
-		for(i=0;i<s_sceneCount;i++)
+		if(--s_soundId<0)
 		{
-			if(i==m_currentSelection)
-			{
-				m_font->setColour(100,255,100);
-			}
-			else
-			{
-				m_font->setColour(255,100,100);
-			}
-			m_font->print(256,80+(i*m_font->getCharHeight()),s_sceneList[i]->getSceneName());
+			s_soundId=CSoundMediator::NUM_SFXIDS-1;
 		}
+	}
+	else if(padRepeat&PAD_UP)
+	{
+		if(++s_soundId==CSoundMediator::NUM_SFXIDS)
+		{
+			s_soundId=0;
+		}
+	}
+
+	if(padDown&PAD_CROSS)
+	{
+		CSoundMediator::playSfx((CSoundMediator::SFXID)s_soundId);
 	}
 }
 
@@ -197,87 +158,9 @@ void CSceneSelector::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#include "pad\vibe.h"
-
-void CSceneSelector::think(int _frames)
+int CSceneSoundTest::readyToShutdown()
 {
-if(PadGetDown(0)&PAD_L1)	CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_LONG_STROBEY);
-if(PadGetDown(0)&PAD_L2)	CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_LONG_STROBEY,127);
-
-	switch(m_state)
-	{
-		case STATE_INIT:
-		{
-			if(--m_countdown==0)
-			{
-#ifdef AUTOMATICALLY_CHOOSE_DEFAULT
-				int	pad;
-				pad=PadGetHeld(0);
-				if(pad&(PAD_L1|PAD_L2))
-				{
-					m_state=STATE_SELECTING;
-				}
-				else
-				{
-					m_state=STATE_SELECTED;
-				}
-#else
-				m_state=STATE_SELECTING;
-#endif
-			}
-			break;
-		}
-
-		case STATE_SELECTING:
-		{
-			int	pad;
-			pad=PadGetDown(0);
-			if(pad&PAD_UP)
-			{
-				if(--m_currentSelection==-1)m_currentSelection=s_sceneCount-1;
-			}
-			else if(pad&PAD_DOWN)
-			{
-				if(++m_currentSelection==s_sceneCount)m_currentSelection=0;
-			}
-			else if(pad&(PAD_CROSS|PAD_START))
-			{
-				m_state=STATE_SELECTED;
-			}
-			break;
-		}
-		
-		case STATE_SELECTED:
-		{
-			selectScene(m_currentSelection);
-			m_state=STATE_READY_TO_EXIT;
-			break;
-		}
-	}
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-int CSceneSelector::readyToShutdown()
-{
-	return m_state==STATE_READY_TO_EXIT;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CSceneSelector::selectScene(int _scene)
-{
-	GameState::setNextScene(s_sceneList[_scene]);
+	return false;
 }
 
 

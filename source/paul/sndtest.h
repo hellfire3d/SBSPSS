@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	scenesel.h
+	sndtest.h
 
 	Author:		PKG
 	Created:
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__PAUL_SCENESEL_H__
-#define __PAUL_SCENESEL_H__
+#ifndef	__PAUL_SNDTEST_H__
+#define __PAUL_SNDTEST_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CSceneSelector : public CScene
+class CSceneSoundTest : public CScene
 {
 public:
 	void	init();
@@ -42,28 +42,12 @@ public:
 	void	render();
 	void	think(int _frames);
 	int		readyToShutdown();
-	char	*getSceneName()			{return"SceneSelector";}
+	char	*getSceneName()			{return"SoundTest";}
 
 
 private:
-	enum
-	{
-		STATE_INIT,
-		STATE_SELECTING,
-		STATE_SELECTED,
-		STATE_READY_TO_EXIT,
-	};
 
-	static class CScene	*s_sceneList[];
-	static int			s_sceneCount;
-	int					m_currentSelection;
-	int					m_state;
-	int					m_countdown;
-	
-	class FontBank		*m_font;
-
-
-	void				selectScene(int _scene);
+	class ScalableFontBank		*m_font;
 
 };
 
@@ -72,7 +56,7 @@ private:
 	Globals
 	------- */
 
-extern CSceneSelector	SceneSelector;
+extern CSceneSoundTest	SoundTestScene;
 
 
 /*----------------------------------------------------------------------
@@ -81,7 +65,7 @@ extern CSceneSelector	SceneSelector;
 
 /*---------------------------------------------------------------------- */
 
-#endif	/* __PAUL_SCENESEL_H__ */
+#endif	/* __PAUL_SNDTEST_H__ */
 
 /*===========================================================================
  end */
