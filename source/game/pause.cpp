@@ -55,6 +55,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad/pads.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -237,6 +241,7 @@ void CPauseMenu::select()
 {
 	int		chapter,level;
 	m_active=true;
+	m_padDebounce=true;
 	m_currentState=STATE__MAIN_MENU;
 	m_responseFlag=RESPONSE__WAITING;
 	m_pauseGuiFrame->select();
@@ -266,62 +271,79 @@ void CPauseMenu::think(int _frames)
 {
 	if(m_active)
 	{
-		switch(m_currentState)
+		if(PadGetDown(0)&PAD_START)
 		{
-			// Main menu
-			case STATE__MAIN_MENU:
-				m_pauseGuiFrame->think(_frames);
-				switch(m_responseFlag)
-				{
-					case RESPONSE__WAITING:
-						break;
+			if(!m_padDebounce)
+			{
+				if(m_pauseGuiFrame->isSelected())m_pauseGuiFrame->unselect();
+				if(m_confirmQuitGuiFrame->isSelected())m_confirmQuitGuiFrame->unselect();
+				unselect();
+			}
+		}
+		else
+		{
+			switch(m_currentState)
+			{
+				// Main menu
+				case STATE__MAIN_MENU:
+					m_pauseGuiFrame->think(_frames);
+					switch(m_responseFlag)
+					{
+						case RESPONSE__WAITING:
+							break;
 
-					case RESPONSE__CONTINUE:
-						m_pauseGuiFrame->unselect();
-						unselect();
-						break;
+						case RESPONSE__CONTINUE:
+							m_pauseGuiFrame->unselect();
+							unselect();
+							break;
 
-					case RESPONSE__QUIT:
-						m_pauseGuiFrame->unselect();
-						m_confirmQuitGuiFrame->select();
-						m_currentState=STATE__CONFIRM_QUIT;
-						m_responseFlag=RESPONSE__WAITING;
-						break;
+						case RESPONSE__QUIT:
+							m_pauseGuiFrame->unselect();
+							m_confirmQuitGuiFrame->select();
+							m_currentState=STATE__CONFIRM_QUIT;
+							m_responseFlag=RESPONSE__WAITING;
+							break;
 
-					case RESPONSE__CONFIRM_QUIT_YES:
-					case RESPONSE__CONFIRM_QUIT_NO:
-						ASSERT(0);
-						break;
-				}
-				break;
+						case RESPONSE__CONFIRM_QUIT_YES:
+						case RESPONSE__CONFIRM_QUIT_NO:
+							ASSERT(0);
+							break;
+					}
+					break;
 
-			// Confirm quit menu
-			case STATE__CONFIRM_QUIT:
-				m_confirmQuitGuiFrame->think(_frames);
-				switch(m_responseFlag)
-				{
-					case RESPONSE__WAITING:
-						break;
+				// Confirm quit menu
+				case STATE__CONFIRM_QUIT:
+					m_confirmQuitGuiFrame->think(_frames);
+					switch(m_responseFlag)
+					{
+						case RESPONSE__WAITING:
+							break;
 
-					case RESPONSE__CONTINUE:
-					case RESPONSE__QUIT:
-						ASSERT(0);
-						break;
+						case RESPONSE__CONTINUE:
+						case RESPONSE__QUIT:
+							ASSERT(0);
+							break;
 
-					case RESPONSE__CONFIRM_QUIT_YES:
-						m_confirmQuitGuiFrame->unselect();
-						CGameScene::setReadyToExit();
-						unselect();
-						break;
+						case RESPONSE__CONFIRM_QUIT_YES:
+							m_confirmQuitGuiFrame->unselect();
+							CGameScene::setReadyToExit();
+							unselect();
+							break;
 
-					case RESPONSE__CONFIRM_QUIT_NO:
-						m_pauseGuiFrame->select();
-						m_confirmQuitGuiFrame->unselect();
-						m_currentState=STATE__MAIN_MENU;
-						m_responseFlag=RESPONSE__WAITING;
-						break;
-				}
-				break;
+						case RESPONSE__CONFIRM_QUIT_NO:
+							m_pauseGuiFrame->select();
+							m_confirmQuitGuiFrame->unselect();
+							m_currentState=STATE__MAIN_MENU;
+							m_responseFlag=RESPONSE__WAITING;
+							break;
+					}
+					break;
+			}
+		}
+
+		if(m_padDebounce)
+		{
+			m_padDebounce=false;
 		}
 	}
 }
