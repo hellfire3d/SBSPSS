@@ -22,6 +22,10 @@
 #include "system\gstate.h"
 #endif
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"		// Doh.. just for DVECTOR :/
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -62,6 +66,7 @@ public:
 
 private:
 	void	renderUi();
+	DVECTOR	getPointerTarget();
 
 	int		isItemAvailableToBuy(int _itemNumber);
 	void	playSound(int _sfxId);
@@ -157,6 +162,9 @@ private:
 		MAIN_UI_MAX_Y_OFFSET=120,
 	};
 	int						m_mainUiYOffset;
+
+
+	class CPointerIcon		*m_pointerIcon;
 
 };
 

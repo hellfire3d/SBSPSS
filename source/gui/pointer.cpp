@@ -136,7 +136,7 @@ void	CPointerIcon::render()
 	fh=sb->getFrameHeader(FRM__MAPPOINTER);
 	x=m_pointerPos.vx-(fh->W/2);
 	y=m_pointerPos.vy-(fh->H/2);
-	ft4=sb->printFT4(fh,x,y,0,0,9);
+	ft4=sb->printFT4(fh,x,y,0,0,0);
 	if(!m_pointerArrivedAtTarget)
 	{
 		setSemiTrans(ft4,true);

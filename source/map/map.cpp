@@ -58,7 +58,11 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef	__GUI_POINTER_H__
+#include "gui\pointer.h"
+#endif
 
+	
 /*	Std Lib
 	------- */
 
@@ -195,8 +199,9 @@ void CMapScene::init()
 	m_currentChapterSelection=s_chapterToStartOn;
 	generateMapScreenImage();
 	m_currentLevelSelection=s_levelToStartOn;
-	m_pointerPos=getPointerTargetPosition();
-	m_pointerArrivedAtTarget=true;
+
+	m_pointerIcon=new ("MapPointer") CPointerIcon();
+	m_pointerIcon->snapToTarget(getPointerTargetPosition());
 	
 	SetScreenImage((u8*)m_screenImage);
 
@@ -214,6 +219,7 @@ void CMapScene::init()
 void CMapScene::shutdown()
 {
 	ClearScreenImage();
+	delete m_pointerIcon;
 	MemFree(m_screenImage);
 	m_font->dump();				delete m_font;
 }
@@ -232,6 +238,8 @@ void CMapScene::render()
 	int				i;
 	char			buf[100];
 	
+	m_pointerIcon->render();
+
 	sb=CGameScene::getSpriteBank();
 	level=&s_mapLevelData[m_currentChapterSelection][0];
 
@@ -271,7 +279,6 @@ void CMapScene::render()
 		level++;
 	}
 
-	renderPointer();
 	renderInstructions();
 
 
@@ -280,28 +287,6 @@ m_font->setColour(0,255,0);
 m_font->print(24,24,buf);
 m_font->setColour(0,0,0);
 m_font->print(25,25,buf);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CMapScene::renderPointer()
-{
-	SpriteBank		*sb;
-	sFrameHdr		*fh;
-	POLY_FT4		*ft4;
-
-	sb=CGameScene::getSpriteBank();
-	fh=sb->getFrameHeader(FRM__MAPPOINTER);
-	ft4=sb->printFT4(fh,m_pointerPos.vx-(fh->W/2),m_pointerPos.vy-(fh->H/2),0,0,9);
-	if(!m_pointerArrivedAtTarget)
-	{
-		setSemiTrans(ft4,true);
-	}
 }
 
 
@@ -428,6 +413,7 @@ void CMapScene::think(int _frames)
 				if(--m_currentLevelSelection<0)m_currentLevelSelection=MAP_NUM_LEVELS_PER_CHAPTER-1;
 			}
 			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
+			m_pointerIcon->setTarget(getPointerTargetPosition());
 		}
 		else if(pad&PAD_RIGHT)
 		{
@@ -436,22 +422,24 @@ void CMapScene::think(int _frames)
 				if(++m_currentLevelSelection>=MAP_NUM_LEVELS_PER_CHAPTER)m_currentLevelSelection=0;
 			}
 			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
+			m_pointerIcon->setTarget(getPointerTargetPosition());
 		}
 		if(lastLevel!=m_currentLevelSelection)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
-			m_pointerArrivedAtTarget=false;
-			m_pointerSin=0;
+//			m_pointerArrivedAtTarget=false;
+//			m_pointerSin=0;
 		}
 		
 		// Calc where the pointer should be
-		if(m_pointerArrivedAtTarget)
-		{
-			m_pointerSin=(m_pointerSin+(_frames*70))&4095;
-		}
-		m_pointerTarget=getPointerTargetPosition();
+//		if(m_pointerArrivedAtTarget)
+//		{
+//			m_pointerSin=(m_pointerSin+(_frames*70))&4095;
+//		}
+//		m_pointerIcon->setTarget(getPointerTargetPosition());
 
 		// Move the pointer
+		/*
 		for(int i=0;i<_frames;i++)
 		{
 			int delta;
@@ -488,8 +476,10 @@ void CMapScene::think(int _frames)
 				m_pointerArrivedAtTarget=true;
 			}
 		}
+		*/
+		m_pointerIcon->think(_frames);
 
-		if(m_pointerArrivedAtTarget&&
+		if(m_pointerIcon->canPointerSelect()&&
 		   pad&PAD_CROSS)
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
@@ -535,8 +525,9 @@ void	CMapScene::generateMapScreenImage()
 		}
 	}
 
-	m_pointerPos=getPointerTargetPosition();
-	m_pointerArrivedAtTarget=true;
+	m_pointerIcon->snapToTarget(getPointerTargetPosition());
+//	m_pointerPos=getPointerTargetPosition();
+//	m_pointerArrivedAtTarget=true;
 }
 
 
@@ -578,7 +569,7 @@ DVECTOR	CMapScene::getPointerTargetPosition()
 	
 	pos=s_mapLevelPositions[m_currentLevelSelection];
 	pos.vx+=(MAP_LEVEL_WIDTH/2);
-	pos.vy+=MAP_LEVEL_HEIGHT;//+(msin(m_pointerSin)*4>>12);
+	pos.vy+=MAP_LEVEL_HEIGHT;
 
 	return pos;
 }

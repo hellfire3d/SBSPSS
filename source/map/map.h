@@ -104,10 +104,7 @@ private:
 
 	int					m_currentChapterSelection;
 	int					m_currentLevelSelection;
-	DVECTOR				m_pointerPos;
-	DVECTOR				m_pointerTarget;
-	int					m_pointerSin;
-	int					m_pointerArrivedAtTarget;
+	class CPointerIcon	*m_pointerIcon;
 
 	static sMapLevelData	s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
 	static DVECTOR			s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];

@@ -78,6 +78,10 @@
 #include "backend\party.h"
 #endif
 
+#ifndef	__GUI_POINTER_H__
+#include "gui\pointer.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -205,6 +209,9 @@ void CShopScene::init()
 	m_state=SHOP_STATE__FADING_IN;
 
 	m_mainUiYOffset=SHOP_STATE__SELECT_ITEM;
+
+	m_pointerIcon=new ("MapPointer") CPointerIcon();
+	m_pointerIcon->snapToTarget(getPointerTarget());
 }
 
 
@@ -216,6 +223,8 @@ void CShopScene::init()
   ---------------------------------------------------------------------- */
 void CShopScene::shutdown()
 {
+	delete m_pointerIcon;
+
 	m_guiCannotAffordFrame->shutdown();
 	m_guiConfirmPurchaseFrame->shutdown();
 	m_guiFrame->shutdown();
@@ -259,9 +268,7 @@ void CShopScene::render()
 			{
 				if(m_state==SHOP_STATE__SELECT_ITEM)
 				{
-					SpriteBank	*sb=CGameScene::getSpriteBank();
-					sFrameHdr	*fh=sb->getFrameHeader(FRM__MAPPOINTER);
-					sb->printFT4(fh,x-fh->W,y+30,0,0,5);
+					m_pointerIcon->render();
 				}
 
 				// Flash selected item
@@ -289,6 +296,41 @@ void CShopScene::render()
 	}
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR CShopScene::getPointerTarget()
+{
+	int			i,x,y,gap;
+
+	x=SHOP_ICON_XBASE;
+	y=SHOP_ICON_YBASE;
+	gap=SHOP_ICON_WIDTH/(SHOP_ICON_ITEMS_PER_ROW-1);
+
+	for(i=0;i<NUM_SHOP_ITEM_IDS;i++)
+	{
+		if(i==m_currentlySelectedItem)
+		{
+			break;
+		}
+
+		if(i%SHOP_ICON_ITEMS_PER_ROW==SHOP_ICON_ITEMS_PER_ROW-1)
+		{
+			x=SHOP_ICON_XBASE;
+			y+=SHOP_ICON_Y_GAP;
+		}
+		else
+		{
+			x+=gap;
+		}
+	}
+
+	DVECTOR	ret={x-5,y+30};
+	return ret;
+}
 
 /*----------------------------------------------------------------------
 	Function:
@@ -309,6 +351,8 @@ void CShopScene::think(int _frames)
 	{
 		int	pad;
 
+		m_pointerIcon->think(_frames);
+
 		pad=PadGetDown(0);
 		if(pad&PAD_LEFT)
 		{
@@ -319,6 +363,7 @@ void CShopScene::think(int _frames)
 			}
 			m_flashSin=0;
 			playSound(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+			m_pointerIcon->setTarget(getPointerTarget());
 		}
 		else if(pad&PAD_RIGHT)
 		{
@@ -329,8 +374,9 @@ void CShopScene::think(int _frames)
 			}
 			m_flashSin=0;
 			playSound(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+			m_pointerIcon->setTarget(getPointerTarget());
 		}
-		else if(pad&PAD_CROSS)
+		else if(m_pointerIcon->canPointerSelect()&&pad&PAD_CROSS)
 		{
 			if(isItemAvailableToBuy(m_currentlySelectedItem))
 			{

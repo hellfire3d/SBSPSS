@@ -923,6 +923,14 @@ SOURCE=..\..\..\source\gui\gui.cpp
 
 SOURCE=..\..\..\source\gui\gui.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\pointer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\pointer.h
+# End Source File
 # End Group
 # Begin Group "hazard"
 

@@ -223,7 +223,8 @@ gui_src :=			gbubbles \
 					greadout \
 					gsprite \
 					gtextbox \
-					gui
+					gui \
+					pointer
 
 jellfish_src :=		jellfish
 
