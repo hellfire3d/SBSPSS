@@ -10,7 +10,7 @@
 #include	<List.h>
 
 /*****************************************************************************/
-#define	EXPORT_LAYER_COUNT	8
+#define	EXPORT_LAYER_COUNT	16
 struct	sExpFileHdr
 {
 		int		TileCount;
