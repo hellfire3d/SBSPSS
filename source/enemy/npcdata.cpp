@@ -852,7 +852,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		DAMAGE__SQUASH_ENEMY,
 		1,
 		ANIM_STOMPER_CRUSH,
-		NPC_SHOT_GENERIC,
+		NPC_SHOT_NONE,
 		0,
 		0,
 		false,
