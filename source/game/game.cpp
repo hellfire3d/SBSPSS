@@ -35,6 +35,10 @@
 #include "platform\platform.h"
 #endif
 
+#ifndef __HAZARD_HAZARD_H__
+#include "hazard\hazard.h"
+#endif
+
 #ifndef __PROJECTL_PROJECTL_H__
 #include "projectl\projectl.h"
 #endif
@@ -309,6 +313,7 @@ void	CGameScene::initLevel()
 // Init actors (needs moving and tidying
 	int actorNum;
 	int platformNum;
+	int hazardNum;
 
 	sThingActor **actorList = Level.getActorList();
 	if (actorList)
@@ -353,6 +358,18 @@ void	CGameScene::initLevel()
 			platform = CNpcPlatform::Create( ThisPlatform );
 			platform->setLayerCollision( Level.getCollisionLayer() );
 			platform->postInit();
+		}
+	}
+
+	sThingHazard **hazardList = Level.getHazardList();
+	if (hazardList)
+	{
+		for ( hazardNum = 0 ; hazardNum < Level.getHazardCount() ; hazardNum++ )
+		{
+			sThingHazard *ThisHazard = hazardList[hazardNum];
+			CNpcHazard *hazard;
+			hazard = CNpcHazard::Create( ThisHazard );
+			hazard->setLayerCollision( Level.getCollisionLayer() );
 		}
 	}
 

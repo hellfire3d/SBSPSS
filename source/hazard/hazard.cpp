@@ -23,21 +23,142 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+#ifndef __HAZARD_HFALLING_H__
+#include "hazard\hfalling.h"
+#endif
+
+#ifndef __HAZARD_HPENDULM_H__
+#include "hazard\hpendulm.h"
+#endif
+
+#ifndef __HAZARD_HBOAT_H__
+#include "hazard\hboat.h"
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE_MAX] =
+{
+	NPC_FALLING_HAZARD,
+	NPC_PENDULUM_HAZARD,
+	NPC_BOAT_HAZARD,
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
+{
+	CNpcHazard *hazard;
+
+	NPC_HAZARD_UNIT_TYPE hazardType = getTypeFromMapEdit( ThisHazard->Type );
+
+	switch( hazardType )
+	{
+		case NPC_FALLING_HAZARD:
+		{
+			hazard = new ("falling hazard") CNpcFallingHazard;
+			break;
+		}
+
+		case NPC_PENDULUM_HAZARD:
+		{
+			hazard = new ("pendulum hazard") CNpcPendulumHazard;
+			break;
+		}
+
+		case NPC_BOAT_HAZARD:
+		{
+			hazard = new ("boat hazard") CNpcBoatHazard;
+			break;
+		}
+
+		default:
+		{
+			hazard = NULL;
+			break;
+		}
+	}
+
+	ASSERT( hazard );
+
+	hazard->init();
+	hazard->setWaypoints( ThisHazard );
+	hazard->setGraphic( ThisHazard );
+
+	return( hazard );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHazard::setWaypoints( sThingHazard *ThisHazard )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisHazard,sizeof(sThingHazard));
+
+	u16 newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	Pos = startPos;
+	m_base = Pos;
+
+	addWaypoint( newXPos, newYPos );
+
+	if ( ThisHazard->PointCount > 1 )
+	{
+		for ( pointNum = 1 ; pointNum < ThisHazard->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			addWaypoint( newXPos, newYPos );
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcHazard::addWaypoint( s32 xPos, s32 yPos )
+{
+	DVECTOR newPos;
+
+	newPos.vx = xPos << 4;
+	newPos.vy = yPos << 4;
+
+	m_npcPath.addWaypoint( newPos );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::getTypeFromMapEdit( u16 newType )
+{
+	return( mapEditConvertTable[newType] );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcHazard::init()
 {
 	CHazardThing::init();
 
-	m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_CLAM_SBK );
-	m_spriteBank=0;
+	//m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_CLAM_SBK );
+	//m_spriteBank=0;
 
 	m_npcPath.initPath();
-
-	Pos.vx = 300;
-	Pos.vy = 300;
-
-	m_base = Pos;
 
 	m_timer = 0;
 	m_timerActive = false;
@@ -50,14 +171,23 @@ void CNpcHazard::init()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcHazard::setGraphic( sThingHazard *ThisHazard )
+{
+	m_modelGfx = new ("ModelGfx") CModelGfx;
+	m_modelGfx->SetModel( ThisHazard->Gfx );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcHazard::shutdown()
 {
-	if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
+	delete m_modelGfx;
+	//if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
 	// remove waypoints
 
 	m_npcPath.removeAllWaypoints();
 
-	if (m_actorGfx)	delete m_actorGfx;
+	//if (m_actorGfx)	delete m_actorGfx;
 
 	CHazardThing::shutdown();
 }
@@ -119,7 +249,8 @@ void CNpcHazard::render()
 		{
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
-				m_actorGfx->Render(renderPos,0,0,0);
+				m_modelGfx->Render(renderPos);
+				//m_actorGfx->Render(renderPos,0,0,0);
 			}
 		}
 	}

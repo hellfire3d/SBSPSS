@@ -23,9 +23,11 @@ class CNpcPendulumHazard : public CNpcHazard
 public:
 	void				init();
 protected:
+	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				processMovement( int _frames );
 
 	s32					m_length;
+	s32					m_maxExtension;
 };
 
 #endif

@@ -15,6 +15,10 @@
 #include "hazard\hpendulm.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPendulumHazard::init()
@@ -29,11 +33,58 @@ void CNpcPendulumHazard::init()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPendulumHazard::setWaypoints( sThingHazard *ThisHazard )
+{
+	int pointNum;
+
+	u16	*PntList=(u16*)MakePtr(ThisHazard,sizeof(sThingHazard));
+
+	u16 newXPos, newYPos;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	DVECTOR startPos;
+	startPos.vx = newXPos << 4;
+	startPos.vy = newYPos << 4;
+
+	if ( ThisHazard->PointCount > 1 )
+	{
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		DVECTOR pivotPos;
+		pivotPos.vx = newXPos << 4;
+		pivotPos.vy = newYPos << 4;
+
+		s32 xDist = startPos.vx - pivotPos.vx;
+		s32 yDist = startPos.vy - pivotPos.vy;
+
+		m_maxExtension = 1024 - ratan2( abs( yDist ), abs( xDist ) );
+
+		m_length = isqrt2( ( xDist * xDist ) + ( yDist * yDist ) );
+
+		Pos = pivotPos;
+	}
+	else
+	{
+		Pos = startPos;
+	}
+
+	m_base = Pos;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPendulumHazard::processMovement( int _frames )
 {
 	if ( m_extendDir == EXTEND_LEFT )
 	{
-		if ( m_extension > 512 )
+		if ( m_extension > m_maxExtension )
 		{
 			m_extendDir = EXTEND_RIGHT;
 		}
@@ -44,7 +95,7 @@ void CNpcPendulumHazard::processMovement( int _frames )
 	}
 	else
 	{
-		if ( m_extension < -512 )
+		if ( m_extension < -m_maxExtension )
 		{
 			m_extendDir = EXTEND_LEFT;
 		}

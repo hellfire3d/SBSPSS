@@ -34,11 +34,26 @@
 class CNpcHazard : public CHazardThing
 {
 public:
+	enum NPC_HAZARD_UNIT_TYPE
+	{
+		NPC_FALLING_HAZARD = 0,
+		NPC_PENDULUM_HAZARD = 1,
+		NPC_BOAT_HAZARD,
+
+		NPC_HAZARD_TYPE_MAX,
+	};
+
 	virtual void		init();
+	void				setGraphic( sThingHazard *ThisHazard );
 	void				shutdown();
 	void				think(int _frames);
 	void				render();
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				addWaypoint( s32 xPos, s32 yPos );
+
+	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
+	static CNpcHazard	*Create(sThingHazard *ThisHazard);
 
 protected:
 	enum
@@ -54,8 +69,8 @@ protected:
 	virtual void		processMovement( int _frames );
 	virtual void		processTimer( int _frames );
 	CNpcPath			m_npcPath;
-	CActorGfx			*m_actorGfx;
-	SpriteBank			*m_spriteBank;
+	//CActorGfx			*m_actorGfx;
+	//SpriteBank			*m_spriteBank;
 	DVECTOR				m_base;
 	s32					m_timer;
 	bool				m_timerActive;
@@ -64,6 +79,9 @@ protected:
 	s32					m_extension;
 	bool				m_extendDir;
 	s32					m_heading;
+	CModelGfx			*m_modelGfx;
+
+	static NPC_HAZARD_UNIT_TYPE mapEditConvertTable[NPC_HAZARD_TYPE_MAX];
 };
 
 #endif
