@@ -123,7 +123,8 @@ public:
 		NPC_ANEMONE_2,
 		NPC_ANEMONE_3,
 		NPC_SKELETAL_FISH,
-		NPC_CLAM,
+		NPC_CLAM_JUMP,
+		NPC_CLAM_STATIC,
 		NPC_SQUID_DART,
 		NPC_FISH_FOLK,
 		NPC_PRICKLY_BUG,
@@ -217,7 +218,8 @@ protected:
 	{
 		NPC_CLOSE_NONE = 0,
 		NPC_CLOSE_JELLYFISH_EVADE = 1,
-		NPC_CLOSE_CLAM_ATTACK,
+		NPC_CLOSE_CLAM_JUMP_ATTACK,
+		NPC_CLOSE_CLAM_SNAP_ATTACK,
 		NPC_CLOSE_SPIDER_CRAB_ATTACK,
 		NPC_CLOSE_GHOST_PIRATE_ATTACK,
 		NPC_CLOSE_SHARK_MAN_ATTACK,
@@ -373,7 +375,8 @@ protected:
 
 	// clam functions
 
-	void				processCloseClamAttack( int _frames );
+	void				processCloseClamJumpAttack( int _frames );
+	void				processCloseClamSnapAttack( int _frames );
 
 	// spider crab functions
 

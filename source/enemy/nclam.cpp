@@ -28,7 +28,7 @@
 #endif
 
 
-void CNpcEnemy::processCloseClamAttack( int _frames )
+void CNpcEnemy::processCloseClamJumpAttack( int _frames )
 {
 	s32 velocity;
 
@@ -50,7 +50,7 @@ void CNpcEnemy::processCloseClamAttack( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_CLAMSIDESNAP;
+				m_animNo = ANIM_CLAM_CLAMSNAPUP;
 				m_frame = 0;
 			}
 		}
@@ -82,10 +82,6 @@ void CNpcEnemy::processCloseClamAttack( int _frames )
 		{
 			if ( !m_animPlaying )
 			{
-				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_CLAMSHUT;
-				m_frame = 0;
-
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_timerFunc = NPC_TIMER_ATTACK_DONE;
 				m_timerTimer = GameState::getOneSecondInFrames();
@@ -93,4 +89,16 @@ void CNpcEnemy::processCloseClamAttack( int _frames )
 			}
 		}
 	}
+}
+
+void CNpcEnemy::processCloseClamSnapAttack( int _frames )
+{
+	if ( !m_animPlaying )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_CLAM_CLAMSIDESNAP;
+		m_frame = 0;
+	}
+
+	m_controlFunc = NPC_CONTROL_MOVEMENT;
 }

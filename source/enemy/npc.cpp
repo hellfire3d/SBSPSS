@@ -206,7 +206,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_SUB_SHARK;
+	m_type = NPC_CLAM_STATIC;
 
 	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 	m_skel.Init( Hdr );
@@ -998,8 +998,13 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 
-		case NPC_CLOSE_CLAM_ATTACK:
-			processCloseClamAttack( _frames );
+		case NPC_CLOSE_CLAM_JUMP_ATTACK:
+			processCloseClamJumpAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_CLAM_SNAP_ATTACK:
+			processCloseClamSnapAttack( _frames );
 
 			break;
 
