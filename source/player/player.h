@@ -320,6 +320,16 @@ private:
 	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
 	int				m_invinvibilityRingTimer;
+
+	// Platforms
+public:
+	void			setPlatform( CThing *newPlatform );
+	void			clearPlatform();
+private:
+	CThing			*m_platform;
+	bool			m_onPlatform;
+	bool			m_prevOnPlatform;
+	DVECTOR			m_prevPlatformPos;
 };
 
 

@@ -222,7 +222,7 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 
 		*moveVel = ( _frames * m_data[m_type].speed ) << 8;
 
-		processGroundCollisionReverse( moveX, moveY );
+		//processGroundCollisionReverse( moveX, moveY );
 	}
 }
 

@@ -17,6 +17,13 @@
 
 #include "thing\thing.h"
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
 
 /*	Std Lib
 	------- */
@@ -107,6 +114,13 @@ void		CThingManager::thinkAllThings(int _frames)
 			thing->updateCollisionArea();
 			thing=thing->m_nextThing;
 		}
+	}
+
+	CPlayer *player = GameScene.getPlayer();
+
+	if ( player )
+	{
+		player->clearPlatform();
 	}
 
 	// Player -> Pickup collision
@@ -307,7 +321,7 @@ void	CThing::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#ifdef __USER_paul__
+#if defined (__USER_paul__) || defined (__USER_charles__)
 int showthings=true;
 #include "gfx\prim.h"
 #include "level\level.h"

@@ -204,6 +204,9 @@ void	CPlayer::init()
 	CPlayerThing::init();
 
 	m_layerCollision=NULL;
+
+	m_onPlatform = false;
+	m_prevOnPlatform = false;
 	
 	m_skel.Init(ACTORS_SPONGEBOB_A3D);
 	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
@@ -416,7 +419,9 @@ if(PadGetDown(0)&PAD_CIRCLE)
 void CPlayer::thinkVerticalMovement()
 {
 	int	colHeight;
+
 	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,1);
+
 	if(colHeight>=0)
 	{
 		// Above or on the ground
@@ -425,6 +430,7 @@ void CPlayer::thinkVerticalMovement()
 		{
 			// Yes.. Check to see if we're about to hit/go through the ground
 			colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT),PLAYER_TERMINAL_VELOCITY+1);
+
 			if(colHeight<=0)
 			{
 				// Just hit the ground
@@ -468,7 +474,11 @@ void CPlayer::thinkVerticalMovement()
 			   m_currentState!=STATE_JUMP)
 			{
 				// Was floating in the air.. fall!
-				setState(STATE_FALL);
+
+				if ( !m_onPlatform )
+				{
+					setState(STATE_FALL);
+				}
 			}
 		}
 	}
@@ -1305,6 +1315,135 @@ PLAYERINPUT CPlayer::readPadInput()
 #endif
 
 	return input;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::clearPlatform()
+{
+	m_prevOnPlatform = m_onPlatform;
+	m_onPlatform = false;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::setPlatform( CThing *newPlatform )
+{
+	int colHeight;
+	int platformHeight;
+
+	m_platform = newPlatform;
+	m_onPlatform = true;
+
+	if ( m_onPlatform )
+	{
+		colHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
+
+		platformHeight = m_platform->getPos().vy - Pos.vy;
+
+		if ( platformHeight > colHeight )
+		{
+			m_onPlatform = false;
+		}
+		else
+		{
+			colHeight = platformHeight;
+		}
+	}
+
+	if ( m_onPlatform )
+	{
+		// have collided with a platform
+
+		m_moveVel.vy=0;
+		Pos.vy += colHeight;
+
+		if ( !m_prevOnPlatform )
+		{
+			if( m_currentMode != PLAYER_MODE_BALLOON )
+			{
+				m_fallFrames=0;
+
+				if(m_currentState==STATE_BUTTFALL)
+				{
+					// Landed from a butt bounce
+					setState(STATE_BUTTLAND);
+				}
+				else if(m_currentState==STATE_FALLFAR)
+				{
+					// Landed from a painfully long fall
+					setState(STATE_IDLE);
+					takeDamage(DAMAGE__FALL);
+					m_moveVel.vx=0;
+					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
+				}
+				else if(m_moveVel.vx)
+				{
+					// Landed from a jump with x movement
+					setState(STATE_RUN);
+				}
+				else
+				{
+					// Landed from a jump with no x movement
+					setState(STATE_IDLE);
+					setAnimNo(ANIM_SPONGEBOB_JUMPEND);
+				}
+			}
+		}
+		else
+		{
+			Pos.vx += m_platform->getPos().vx - m_prevPlatformPos.vx;
+		}
+
+		// Move the camera offset
+		m_playerScreenGeomPos.vx=SCREEN_GEOM_PLAYER_OFS_X+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
+		m_playerScreenGeomPos.vy=SCREEN_GEOM_PLAYER_OFS_Y+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
+		m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
+		m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
+
+
+		m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
+		m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
+
+
+		// Limit camera scroll to the edges of the map
+		if(m_cameraPos.vx<0)
+		{
+			m_playerScreenGeomPos.vx+=m_cameraPos.vx;
+			m_cameraPos.vx=0;
+			m_cameraScrollDir=0;
+		}
+		else if(m_cameraPos.vx>m_mapCameraEdges.vx)
+		{
+			m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
+			m_cameraPos.vx=m_mapCameraEdges.vx;
+			m_cameraScrollDir=0;
+		}
+		if(m_cameraPos.vy<0)
+		{
+			m_playerScreenGeomPos.vy+=m_cameraPos.vy;
+			m_cameraPos.vy=0;
+			m_cameraScrollDir=0;
+		}
+		else if(m_cameraPos.vy>m_mapCameraEdges.vy)
+		{
+			m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
+			m_cameraPos.vy=m_mapCameraEdges.vy;
+			m_cameraScrollDir=0;
+		}
+
+		this->updateCollisionArea();
+
+		m_prevPlatformPos = m_platform->getPos();
+	}
 }
 
 /*===========================================================================

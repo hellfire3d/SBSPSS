@@ -209,7 +209,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_CLAM_STATIC;
+	m_type = NPC_LINEAR_PLATFORM;
 
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
@@ -256,25 +256,25 @@ void CNpcEnemy::init()
 
 			newPos.vx = 100;
 			//newPos.vy = 10;
-			newPos.vy = 400;
+			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 500;
 			//newPos.vy = 10;
-			newPos.vy = 400;
+			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 500;
 			//newPos.vy = 100;
-			newPos.vy = 350;
+			newPos.vy = 300;
 
 			m_npcPath.addWaypoint( newPos );
 
 			newPos.vx = 100;
 			//newPos.vy = 100;
-			newPos.vy = 350;
+			newPos.vy = 300;
 
 			m_npcPath.addWaypoint( newPos );
 
@@ -527,8 +527,19 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 		{
 			if ( m_data[m_type].detectCollision )
 			{
-				m_oldControlFunc = m_controlFunc;
-				m_controlFunc = NPC_CONTROL_COLLISION;
+				if ( m_data[m_type].damageToUserType == DAMAGE__NONE )
+				{
+					// if we can detect a collision, but the collision does no damage, this must be a platform
+
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					player->setPlatform( this );
+				}
+				else
+				{
+					m_oldControlFunc = m_controlFunc;
+					m_controlFunc = NPC_CONTROL_COLLISION;
+				}
 			}
 
 			break;
