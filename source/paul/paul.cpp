@@ -42,12 +42,25 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __GFX_BUBICLES__
+#include "gfx\bubicles.h"
+#endif
+
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
 
 /*	Std Lib
 	------- */
 
 /*	Data
 	---- */
+
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -76,6 +89,39 @@ char				*s_mem[3];
   ---------------------------------------------------------------------- */
 int ploopid1=0;
 int ploopid2=0;
+BubicleEmitterData data=
+{
+	206,200,40,40,		// m_x,m_y,m_w,m_h
+	3,1,				// m_birthRate,m_birthAmount
+	{					// m_bubicleBase
+		100,				// m_life
+		0,0,0,				// m_vx,m_vdx,m_vxmax
+		-40,-15,-200,		// m_vy,m_vdy,m_vymax
+		13,10,				// m_w,m_h
+		10,					// m_dvSizeChange
+		0,100,				// m_theta,m_vtheta
+		100,2,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
+		40,					// m_ot
+		{ 128,128,128,	}	// m_colour
+	},
+	{					// m_bubicleRange
+		100,				// m_life
+		0,0,0,				// m_vx,m_vdx,m_vxmax
+		20,10,0,			// m_vy,m_vdy,m_vymax
+		5,5,				// m_w,m_h
+		10,					// m_dvSizeChange
+		4095,50,			// m_theta,m_vtheta
+		100,5,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
+		0,					// m_ot
+		{   0, 64,127,	}	// m_colour
+	}
+};
+CBubicleEmitter tb;
+int tbx=64,tby=230;
+int	tbw=512-128,tbh=20;
+
+static SpriteBank	*sprites=NULL;
+
 void CPaulScene::init()
 {
 	s_fontBank.initialise(&standardFont);
@@ -92,6 +138,11 @@ void CPaulScene::init()
 
 	ploopid1=CSoundMediator::playSfx(0);
 	ploopid2=CSoundMediator::playSfx(0);
+
+	tb.init(&data);
+
+	sprites=new ("bg sprite") SpriteBank();
+	sprites->load(INGAMEFX_INGAMEFX_SPR);
 }
 
 
@@ -125,6 +176,12 @@ void CPaulScene::render()
 		s_fontBank.print(20,y,getDbgLineFromLog(i));
 		y+=charHeight;
 	}
+
+	tb.render();
+
+	POLY_FT4	*ft4=sprites->printFT4(FRM_BACKGROUND,0,0,0,0,1023);
+	setXYWH(ft4,20,20,512-40,256-40);
+	setRGB0(ft4,64,64,64);
 }
 
 /*----------------------------------------------------------------------
@@ -151,6 +208,7 @@ void CPaulScene::think()
 	pad=PadGetDown(0);
 	if(pad&PAD_R1)
 	{
+		tb.init(&data);
 		PAUL_DBGMSG("-------------------");
 	}
 	else if(pad&PAD_CROSS)
@@ -229,7 +287,38 @@ void CPaulScene::think()
 		PAUL_DBGMSG("speech:%d   sfx:%d",mvol,svol);
 	}
 
+
+
+
+
 //CXAStream::ControlXA();
+
+	pad=PadGetHeld(1);
+	if(pad&PAD_L1)
+	{
+		if(pad&PAD_UP)
+			tbh--;
+		if(pad&PAD_DOWN)
+			tbh++;
+		if(pad&PAD_LEFT)
+			tbw--;
+		if(pad&PAD_RIGHT)
+			tbw++;
+	}
+	else
+	{
+		if(pad&PAD_UP)
+			tby-=5;
+		if(pad&PAD_DOWN)
+			tby+=5;
+		if(pad&PAD_LEFT)
+			tbx-=5;
+		if(pad&PAD_RIGHT)
+			tbx+=5;
+	}
+	tb.setPosAndSize(tbx,tby,tbw,tbh);
+
+	tb.think();
 }
 
 

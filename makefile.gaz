@@ -58,7 +58,8 @@ gfx_src :=			prim \
 					animtex \
 					sprbank \
 					font \
-					fdata
+					fdata \
+					bubicles
 
 #					camera \
 #					basemod \

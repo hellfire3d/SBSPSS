@@ -19,4 +19,4 @@ sfx/ingame.vh
 { SYSTEM_CACHE 4
 }
 ui/uigfx.spr
-
+ingamefx/ingamefx.spr
