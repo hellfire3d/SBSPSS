@@ -401,8 +401,11 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 		_ft4->u2=U+H;
 		_ft4->u3=U+H;
 	}
-	_ft4->u1--; _ft4->u3--;
-	_ft4->v2--; _ft4->v3--;
+	if (_rot>1024 && _rot<3078)
+	{
+		_ft4->u1--; _ft4->u3--;
+		_ft4->v2--; _ft4->v3--;
+	}
 	_ft4->tpage=_fh->TPage;
 	_ft4->clut=_fh->Clut;
 ////////////////////////////////	
