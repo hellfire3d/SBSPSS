@@ -31,6 +31,12 @@
 #include <ACTOR_STOMPER_ANIM.h>
 #endif
 
+#include "fx\fx.h"
+
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,6 +115,13 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 
 				m_timerTimer = 3 * GameState::getOneSecondInFrames();
 				m_extendDir = EXTEND_UP;
+
+				for ( int i = 0 ; i < 20 ; i++ )
+				{
+					DVECTOR bubblePos = Pos;
+					bubblePos.vx += 20 - ( getRnd() % 41 );
+					CFX::Create( CFX::FX_TYPE_BUBBLE_WATER, bubblePos );
+				}
 			}
 			else
 			{
