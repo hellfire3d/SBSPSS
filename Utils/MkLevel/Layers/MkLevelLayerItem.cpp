@@ -33,7 +33,7 @@ void	CMkLevelLayerItem::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerItem::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerItem::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 int			ThisPos=ftell(File);
 sThingHdr	Hdr;
@@ -53,6 +53,7 @@ int			i,ListSize=ThingList.size();
 			fwrite(&OutThing,sizeof(sThingItem),1,File);
 		}
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 

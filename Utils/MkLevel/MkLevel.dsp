@@ -194,5 +194,13 @@ SOURCE=.\MkLevel.h
 
 SOURCE=..\..\tools\Data\bin\MkLevel.ini
 # End Source File
+# Begin Source File
+
+SOURCE=.\pak.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\pak.h
+# End Source File
 # End Target
 # End Project

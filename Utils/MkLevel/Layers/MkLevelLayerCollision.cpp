@@ -87,7 +87,7 @@ static const u8		s_collisionTileRemapTable[17]=
 	0,
 };
 
-int		CMkLevelLayerCollision::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerCollision::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 sLayerHdr	Hdr;
 int			ThisPos=ftell(File);
@@ -109,29 +109,12 @@ int			Height=Map.GetHeight();
 
 				OutElem=s_collisionTileRemapTable[ThisElem.Tile];
 				OutElem|=ThisElem.Flags<<COLLISION_TYPE_FLAG_SHIFT;
-/*
-				OutElem=0;
-				if (ThisElem.Tile || ThisElem.Flags)
-				{
-					int	FF=ThisElem.Tile & 1;
-					int	T=(ThisElem.Tile>>1)+1;
-					OutElem=((T-1)*4)+1;
-					OutElem+=FF;
-					OutElem|=ThisElem.Flags<<COLLISION_TYPE_FLAG_SHIFT;
-
-				}
-
-*/
-/*				if (ThisElem.Tile>(u16)COLLISION_MASK)
-				{
-					printf("COLLISION OVERFLOW %s: %i,%i=(%i,%i)!!\n",MapName,X,Y,ThisElem.Tile,ThisElem.Flags);
-				}
-*/
 				fwrite(&OutElem,sizeof(u8),1,File);
 			}
 		}
 		PadFile(File);
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 

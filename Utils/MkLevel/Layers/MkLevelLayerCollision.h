@@ -16,7 +16,7 @@ public:
 
 virtual	void	PreProcess(CMkLevel *Core);
 virtual	void	Process(CMkLevel *Core);
-virtual	int		Write(FILE *File,const char *LayerName,const char *MapName);
+virtual	int		Write(CMkLevel *Core,FILE *File,const char *LayerName);
 
 protected:
 

@@ -25,6 +25,33 @@
 #include	"Layers\MkLevelLayerTrigger.h"
 #include	"Layers\MkLevelLayerHazard.h"
 
+
+//***************************************************************************
+struct	sLayerNameTable
+{
+	int		Type,SubType;
+	char	*Name;
+};
+sLayerNameTable	LayerNameTable[]=
+{
+	{LAYER_TYPE_SHADE,LAYER_SUBTYPE_BACK,"Shade"},
+	{LAYER_TYPE_TILE,LAYER_SUBTYPE_MID,"Mid"},
+	{LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION,"Action"},
+	{LAYER_TYPE_COLLISION,LAYER_SUBTYPE_NONE,"Collision"},
+	{LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE,"Actor List"},
+	{LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE,"Item List"},
+	{LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE,"Platform List"},
+	{LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE,"Trigger List"},
+	{LAYER_TYPE_FX,LAYER_SUBTYPE_NONE,"FX List"},
+	{LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE,"Hazard List"},
+
+};
+#define		LayerNameTableSize	sizeof(LayerNameTable)/sizeof(sLayerNameTable)
+
+//***************************************************************************
+int		TSize,QSize,VSize;
+int		Tile2dSize,Tile3dSize;
+
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
 sExpLayerTile	BlankTile2d={-1,-1};
@@ -61,7 +88,7 @@ GFName	Path=AppPath;
 }
 
 //***************************************************************************
-void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH)
+void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int _PakW,int _PakH)
 {
 // Setup filenames and paths
 GFName		Path;
@@ -119,6 +146,9 @@ GFName		Path;
 		FlatFace[1].uv[1][0]=1;		FlatFace[1].uv[1][1]=1;
 		FlatFace[1].uv[2][0]=0;		FlatFace[1].uv[2][1]=1;
 		FlatFace[1].Flags=0;
+// Setup Pak Info
+		PakW=_PakW;
+		PakH=_PakH;
 }
 
 
@@ -876,6 +906,9 @@ GString	OutFilename=OutName+".Lvl";
 		fclose(File);
 // Write Info header File
 		WriteIncFile();
+
+// Write Sizes
+		ReportLayers();
 }
 
 //***************************************************************************
@@ -888,7 +921,7 @@ int		i,ListSize;
 // 2d Tilebank
 		LevelHdr.TileBank2d=(sTile2d*)ftell(File);
 		ListSize=OutTile2dList.size();
-		printf("%i 2d tiles\n",ListSize);
+		printf("%i 2d tiles\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTile2d));
 		for (i=0; i<ListSize; i++)
 		{
 			sTile2d	&OutTile=OutTile2dList[i];
@@ -897,7 +930,7 @@ int		i,ListSize;
 // 3d Tilebank
 		LevelHdr.TileBank3d=(sTile3d*)ftell(File);
 		ListSize=OutTile3dList.size();
-		printf("%i 3d tiles\n",ListSize);
+		printf("%i 3d tiles\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTile3d));
 		for (i=0; i<ListSize; i++)
 		{
 			sTile3d	&OutTile=OutTile3dList[i];
@@ -908,7 +941,7 @@ int		i,ListSize;
 		
 // QuadList
 		LevelHdr.QuadList=(sQuad*)WriteQuadList();
-		printf("OT %i -> %i\n",MinOT,MaxOT);
+//		printf("OT %i -> %i\n",MinOT,MaxOT);
 
 // VtxList
 		LevelHdr.VtxList=(sVtx*)WriteVtxList();
@@ -958,8 +991,8 @@ int				ZOfs=+4*Scale;
 // Write It			
 			fwrite(&T,1,sizeof(sTri),File);
 		}
-		printf("Tri %i\n",ListSize);
-		printf("ZMin %i ZMax %i\n",ZMin,ZMax);
+		printf("%i Tris\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTri));
+//		printf("ZMin %i ZMax %i\n",ZMin,ZMax);
 
 		return(ThisPos);
 
@@ -994,7 +1027,7 @@ int				i,ListSize=QuadList.size();
 // Write It			
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
-		printf("Quad %i\n",ListSize);
+		printf("%i Quads\t(%i Bytes)\n",ListSize,ListSize*sizeof(sQuad));
 		return(ThisPos);
 
 }
@@ -1022,6 +1055,8 @@ int		Pos=ftell(File);
 //			printf("%i\n",Out.vz);
 			fwrite(&Out,1,sizeof(sVtx),File);
 		}
+		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));
+
 		return(Pos);
 }
 
@@ -1038,54 +1073,60 @@ void	CMkLevel::WriteLevel()
 void	CMkLevel::WriteLayers()
 {
 // Back (Shade)
-		LevelHdr.BackLayer=WriteLayer(LAYER_TYPE_SHADE,LAYER_SUBTYPE_BACK,0);//"Shade");
+		LevelHdr.BackLayer=WriteLayer(LAYER_TYPE_SHADE,LAYER_SUBTYPE_BACK);
 // Mid
-		LevelHdr.MidLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_MID,"Mid");
+		LevelHdr.MidLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_MID);
 // Action
-		LevelHdr.ActionLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION,"Action");
+		LevelHdr.ActionLayer=WriteLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 // Collision
-		LevelHdr.CollisionLayer=WriteLayer(LAYER_TYPE_COLLISION,LAYER_SUBTYPE_NONE,"Collision");
+		LevelHdr.CollisionLayer=WriteLayer(LAYER_TYPE_COLLISION,LAYER_SUBTYPE_NONE);
 
 // Things
-		LevelHdr.ActorList=WriteThings(LAYER_TYPE_ACTOR,"Actor List");
-		LevelHdr.ItemList=WriteThings(LAYER_TYPE_ITEM,"Item List");
-		LevelHdr.PlatformList=WriteThings(LAYER_TYPE_PLATFORM,"Platform List");
-		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER,"Trigger List");
-		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX,"FX List");
-		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD,"Hazard List");
+int		ThingStart=ftell(File);
+		LevelHdr.ActorList=WriteThings(LAYER_TYPE_ACTOR);
+		LevelHdr.ItemList=WriteThings(LAYER_TYPE_ITEM);
+		LevelHdr.PlatformList=WriteThings(LAYER_TYPE_PLATFORM);
+		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER);
+		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX);
+		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD);
 		LevelHdr.ModelList=(sModel*)WriteModelList();
+		printf("Things =\t(%i Bytes)\n",ftell(File)-ThingStart);
+
+
 }
 
 //***************************************************************************
-int		CMkLevel::WriteLayer(int Type,int SubType,const char *LayerName)
+int		CMkLevel::WriteLayer(int Type,int SubType,bool Warn)
 {
 CMkLevelLayer	*ThisLayer=FindLayer(Type,SubType);
 int		Ofs;
+char	*LayerName=GetLayerName(Type,SubType);
 
 		if (!ThisLayer)
 		{
-			if (LayerName) GObject::Error(ERR_WARNING,"No %s Layer Found in %s!!\n",LayerName,LevelName);
+			if (Warn) GObject::Error(ERR_WARNING,"No %s Layer Found in %s!!\n",LayerName,LevelName);
 			return(0);
 		}
-		Ofs=ThisLayer->Write(File,LayerName,LevelName);
+		Ofs=ThisLayer->Write(this,File,LayerName);
 
 		PadFile(File);
 		return(Ofs);
 }
 
 //***************************************************************************
-int		CMkLevel::WriteThings(int Type,const char *LayerName)
+int		CMkLevel::WriteThings(int Type,bool Warn)
 {
 CMkLevelLayer	*ThisLayer=FindLayer(Type,LAYER_SUBTYPE_NONE);
 int		Ofs;
+char	*LayerName=GetLayerName(Type,LAYER_SUBTYPE_NONE);
 
 		if (!ThisLayer)
 		{
 			GFName		Name=InFilename;
-			if (LayerName) GObject::Error(ERR_WARNING,"No %s Layer Found in %s!!\n",LayerName,Name.File());
+			if (Warn) GObject::Error(ERR_WARNING,"No %s Layer Found in %s!!\n",LayerName,Name.File());
 			return(0);
 		}
-		Ofs=ThisLayer->Write(File,LayerName,LevelName);
+		Ofs=ThisLayer->Write(this,File,LayerName);
 //		printf("%s %i\n",LayerName,Ofs);
 		PadFile(File);
 		return(Ofs);
@@ -1186,4 +1227,31 @@ int		ListSize=InfList.size();
 		fprintf(File,"#endif\n");
 
 		fclose(File);
+}
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+void	CMkLevel::ReportLayers()
+{
+int		i,ListSize=LayerList.size();
+
+		for (i=0; i<ListSize; i++)
+		{
+			CMkLevelLayer	*ThisLayer=LayerList[i];
+			char	*LayerName=GetLayerName(ThisLayer->GetType(),ThisLayer->GetSubType());
+
+			printf("Layer %s= %i bytes\n",LayerName,ThisLayer->GetSize());
+
+		}
+}
+
+//***************************************************************************
+char	*CMkLevel::GetLayerName(int Type,int SubType)
+{
+		for (int i=0; i<LayerNameTableSize; i++)
+		{
+			if (LayerNameTable[i].Type==Type && LayerNameTable[i].SubType==SubType) return(LayerNameTable[i].Name);
+		}
+		return(0);
 }

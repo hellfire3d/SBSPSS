@@ -19,15 +19,20 @@ public:
 
 virtual		void	PreProcess(CMkLevel *Core)=0;
 virtual		void	Process(CMkLevel *Core)=0;
-virtual		int		Write(FILE *File,const char *LayerName,const char *MapName)=0;
+virtual		int		Write(CMkLevel *Core,FILE *File,const char *LayerName)=0;
 
 			bool	IsType(int _Type,int _SubType)			{return(Type==_Type && SubType==_SubType);}
 
+			void	SetSize(int S)	{Size=S;}
+			int		GetSize()		{return(Size);}
+			int		GetType()		{return(Type);}
+			int		GetSubType()	{return(SubType);}
 protected:
 			int		Type;
 			int		SubType;
 			int		Width;
 			int		Height;
+			int		Size;
 };
 
 

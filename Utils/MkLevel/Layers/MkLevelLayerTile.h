@@ -22,11 +22,26 @@ public:
 
 virtual	void	PreProcess(CMkLevel *Core);
 virtual	void	Process(CMkLevel *Core);
-virtual	int		Write(FILE *File,const char *LayerName,const char *MapName);
+virtual	int		Write(CMkLevel *Core,FILE *File,const char *LayerName);
 
 protected:
+		int		WriteNormal(CMkLevel *Core,FILE *File);
+		int		WritePak(CMkLevel *Core,FILE *File);
+
+		void	BuildOutElem(int X,int Y,sTileMapElem *Out);
+
 		CList2d<sExpLayerTile>		InMap;
 		CList2d<sMkLevelElem>		OutMap;
+		sLayerHdr					Hdr;
+
+// Pak Stuff
+		int				BuildPakChunk(int X,int Y,int &PakW,int &PakH);
+		int				PakChunk(int ChunkSize);
+
+		int				PakW,PakH;
+		sTileMapElem	*ChunkBuffer;
+		u8				*PakBuffer;
+
 
 };
 

@@ -26,7 +26,7 @@ public:
 
 		void	PreProcess(CMkLevel *Core);
 		void	Process(CMkLevel *Core);
-		int		Write(FILE *File,const char *LayerName,const char *MapName);
+		int		Write(CMkLevel *Core,FILE *File,const char *LayerName);
 
 protected:
 		int		WriteTypeList(FILE *File);

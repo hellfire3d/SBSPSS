@@ -35,7 +35,7 @@ void	CMkLevelLayerFX::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerFX::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerFX::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 int			ThisPos=ftell(File);
 sThingHdr	Hdr;
@@ -59,6 +59,7 @@ int			i,ListSize=ThingList.size();
 
 		}
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 

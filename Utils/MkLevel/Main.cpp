@@ -14,6 +14,7 @@
 CMkLevel	Level;
 int			TPBase=-1,TPW=-1,TPH=-1;
 GString		IncDir;
+int			PakW=0,PakH=0;
 
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
@@ -63,6 +64,17 @@ int		Count;
 				case 'q':
 					StripLength=4;
 					break;
+				case 'p':
+					TpStr= CheckFileString(String);
+					TextPtr=Text;
+					strcpy(TextPtr,TpStr);
+					Count=ZeroAndCountCommas(TextPtr);
+					if (Count!=1)
+							GObject::Error(ERR_FATAL,"Problem with option %s\n",String);
+					PakW=atol(TextPtr);
+					TextPtr+=strlen(TextPtr)+1;
+					PakH=atol(TextPtr);
+					break;
 				default:
 					GObject::Error(ERR_FATAL,"Unknown switch %s",String);
 					break;
@@ -106,7 +118,7 @@ std::vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		if (Files.size()>1)		Usage("Too many Levels specified\n");
 
 		Level.SetAppDir(argv[0]);
-		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH);
+		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH,PakW,PakH);
 		Level.Load();
 		Level.Process();
 		Level.Write();

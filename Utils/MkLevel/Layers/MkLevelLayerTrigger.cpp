@@ -35,7 +35,7 @@ void	CMkLevelLayerTrigger::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerTrigger::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerTrigger::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 int			ThisPos=ftell(File);
 sThingHdr	Hdr;
@@ -61,6 +61,7 @@ int			i,ListSize=ThingList.size();
 			fwrite(&OutThing,sizeof(sThingTrigger),1,File);
 		}
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 

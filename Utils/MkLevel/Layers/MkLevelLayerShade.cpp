@@ -121,7 +121,7 @@ CTexGrab	&TexGrab=Core->GetTexGrab();
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerShade::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerShade::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 sLayerHdr		Hdr;
 int				ThisPos=ftell(File);
@@ -147,6 +147,7 @@ int		RetPos=ftell(File);
 		fseek(File,RetPos,SEEK_SET);
 
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 

@@ -86,7 +86,7 @@ public:
 		~CMkLevel();
 
 		void			SetAppDir(const char *Path);
-		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH);
+		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH,int PakW,int PakH);
 
 		void			LoadModels();
 		int				AddModel(GString &Filename);
@@ -114,6 +114,8 @@ public:
 		CTexGrab		&GetTexGrab()									{return(TexGrab);}
 
 		void			SetStart(int X,int Y)				{LevelHdr.PlayerStartX=X; LevelHdr.PlayerStartY=Y;}
+
+		void			GetPakWH(int &W,int &H)				{W=PakW; H=PakH;}
 protected:	
 		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
@@ -136,8 +138,8 @@ protected:
 
 		void			WriteLevel();
 		void			WriteLayers();
-		int				WriteLayer(int Type,int SubType,const char *LayerName);
-		int				WriteThings(int Type,const char *LayerName);
+		int				WriteLayer(int Type,int SubType,bool Warn=false);
+		int				WriteThings(int Type,bool Warn=false);
 		int				WriteModelList();
 		int				WriteTriList();
 		int				WriteQuadList();
@@ -147,6 +149,9 @@ protected:
 		void            BuildTiles();
 
 		void			WriteIncFile();
+
+		void			ReportLayers();
+		char			*GetLayerName(int Type,int SubType);
 
 		void			ExpTri2Face(sExpTri &In,CFace &Out,bool ImportTex=true);
 
@@ -184,6 +189,8 @@ protected:
 		sExpTri					FlatFace[2];
 
 		CList<sInfItem>			InfList;
+
+		int						PakW,PakH;
 
 };
 

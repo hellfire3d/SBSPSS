@@ -45,7 +45,7 @@ void	CMkLevelLayerHazard::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CMkLevelLayerHazard::Write(FILE *File,const char *LayerName,const char *MapName)
+int		CMkLevelLayerHazard::Write(CMkLevel *Core,FILE *File,const char *LayerName)
 {
 int			ThisPos=ftell(File);
 sThingHdr	Hdr;
@@ -82,6 +82,7 @@ int			i,ListSize=ThingList.size();
 			}
 		}
 
+		Size=ftell(File)-ThisPos;
 		return(ThisPos);
 }
 
