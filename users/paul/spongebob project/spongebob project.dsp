@@ -1904,6 +1904,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_LRGJELLYFISH_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_MOTHERJELLYFISH_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\ACTOR_PATRICK_Anim.h
 # End Source File
 # Begin Source File
