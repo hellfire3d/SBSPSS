@@ -996,25 +996,6 @@ void CPlayer::setPlatform( CThing *newPlatform )
   ---------------------------------------------------------------------- */
 void CPlayer::shove( DVECTOR move )
 {
-	DVECTOR newPos;
-
-	newPos.vx = Pos.vx + move.vx;
-	newPos.vy = Pos.vy + move.vy;
-
-	int colHeight = m_layerCollision->getHeightFromGround( newPos.vx, newPos.vy, 1 );
-
-	if( colHeight < 0 )
-	{
-		// target position in within wall, abort
-
-		return;
-	}
-	else
-	{
-		Pos.vx = newPos.vx;
-		Pos.vy = newPos.vy;
-	}
-/*
 	int		colHeight;
 
 	// X movement
@@ -1082,7 +1063,6 @@ void CPlayer::shove( DVECTOR move )
 		// No obstruction
 		Pos.vy+=move.vy;
 	}
-*/
 }
 
 void	CPlayer::setPlatform(CThing *_newPlatform)
