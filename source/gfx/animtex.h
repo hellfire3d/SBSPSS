@@ -6,6 +6,7 @@
 #define _ANIMTEX_HEADER_
 
 #include "gfx\tpage.h"
+#include <DStructs.h>
 
 /*****************************************************************************/
 class CAnimTex
@@ -28,6 +29,22 @@ private:
 	FileEquate	TexName;
 	u8			TPage;
 
+};
+
+/*****************************************************************************/
+class CMoveTex
+{
+public:
+		CMoveTex();
+//		~CMoveTex();
+		
+static	void	Add(sTexInfo &SrcFrame,sTexInfo &DstFrame);
+static	void	MoveTex();
+
+private:
+	CMoveTex	*NextTex;
+	sTexInfo	*Src,*Dst;
+	
 };
 
 /*****************************************************************************/

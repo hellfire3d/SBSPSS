@@ -15,6 +15,7 @@
 #endif
 
 CAnimTex	*AnimTexList=0;
+CMoveTex	*MoveTexList=0;
 
 /*****************************************************************************/
 CAnimTex::CAnimTex()
@@ -145,8 +146,50 @@ int			Time = GameState::getFramesSinceLast();
 			ThisTex->Count%=(ThisTex->Rect.h<<2);
 			ThisTex=ThisTex->NextTex;
 			}
+		CMoveTex::MoveTex();
 
 }
 
 /*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+CMoveTex::CMoveTex()
+{
+		NextTex=0;
+}
+
+/*****************************************************************************/
+void	CMoveTex::Add(sTexInfo &SrcFrame,sTexInfo &DstFrame)
+{
+CMoveTex	*ThisTex=new ("CMoveTex::AddMoveTex") CMoveTex;
+
+//		ASSERT(SrcFrame.w==DstFrame.w);
+//		ASSERT(SrcFrame.h==DstFrame.h);
+
+		ThisTex->NextTex=MoveTexList;
+		MoveTexList=ThisTex;
+
+		ThisTex->Src=&SrcFrame;
+		ThisTex->Dst=&DstFrame;
+
+}
+
+/*****************************************************************************/
+void	CMoveTex::MoveTex()
+{
+CMoveTex	*ThisTex=MoveTexList,*NextTex;
+
+		while (ThisTex)
+		{
+			MoveImage((RECT*)ThisTex->Src,ThisTex->Dst->x,ThisTex->Dst->y);
+			NextTex=ThisTex->NextTex;
+			delete ThisTex;
+			ThisTex=NextTex;
+		}
+		MoveTexList=0;
+
+}
+
+/*****************************************************************************/
+
 
