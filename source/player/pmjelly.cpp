@@ -84,7 +84,7 @@ void	CPlayerModeJellyLauncher::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	jellyLaunchPos={-20,-40};
+DVECTOR	jellyLaunchPos={-20,-25};
 void	CPlayerModeJellyLauncher::think()
 {
 	CPlayerModeBase::think();
