@@ -125,6 +125,8 @@ public:
 	bool				suckUp( DVECTOR *suckPos, int _frames );
 
 	int					getHealth()												{return(m_health);}
+
+	bool				alwaysThink()											{return(m_isDying);}	// makes sure enemy drops off screen and is killed normally
 protected:
 	// NPC data structure definitions //
 

@@ -1320,9 +1320,7 @@ void CNpcEnemy::processShotDeathEnd( int _frames )
 		m_speed++;
 	}
 
-	DVECTOR const &offset = CLevel::getCameraPos();
-
-	if ( Pos.vy - offset.vy > VidGetScrH() )
+	if ( !canRender() )
 	{
 		if ( m_data[m_type].respawning )
 		{
