@@ -220,6 +220,11 @@ void CFrontEndOptions::init()
 	m_background=new ("Options Background") CScrollyBackground();
 	m_background->init();
 	m_background->setOt(MAX_OT-2);
+	m_background->setTheDrawMode(CScrollyBackground::DRAWMODE_ADDITIVE);
+	m_background->setColour(80,80,80);
+	m_background->setSpeed(1,-1);
+	m_background->setSpeedScale(0);
+
 
 	// Create the menu frames
 	for(i=0;i<MODE__COUNT;i++)
@@ -464,16 +469,11 @@ paulColourSpaceToRGB(rh,rb,rgb);
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int ox=-1;
-int oy=-1;
-int os=0;
 void CFrontEndOptions::think(int _frames)
 {
 	int		i,j,button;
 
 
-	m_background->setSpeed(ox,oy);
-	m_background->setSpeedScale(os);
 	m_background->think(_frames);
 
 	if(!CFader::isFading())

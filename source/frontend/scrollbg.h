@@ -39,7 +39,7 @@ class CScrollyBackground
 public:
 	typedef enum
 	{
-		DRAWMODE_NORMAL=1,
+		DRAWMODE_NORMAL=0,
 		DRAWMODE_ADDITIVE=1,
 		DRAWMODE_SUBTRACTIVE=2,
 	}DRAWMODE;
