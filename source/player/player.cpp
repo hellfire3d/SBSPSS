@@ -1055,8 +1055,6 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		ft4=m_spriteBank->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
 		setSemiTrans(ft4,true);
 
-		m_spriteBank->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
-
 		fh=m_spriteBank->getFrameHeader(FRM__WATER);
 		ft4=m_spriteBank->printFT4(fh,0,0,0,0,0);
 		setSemiTrans(ft4,true);
@@ -1068,6 +1066,8 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		setXYWH(ft4,HEALTH_ICONX,HEALTH_ICONY+(partH),W,H-partH);
 		ft4->v0=V+(partH);
 		ft4->v1=V+(partH);
+
+		m_spriteBank->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
 	}
 
 
