@@ -110,6 +110,9 @@
 #include "game\convo.h"
 #endif
 
+#ifndef __STRING_ENUMS__
+#include <trans.h>
+#endif
 
 /*	Std Lib
 	------- */
@@ -638,6 +641,10 @@ void	CPlayer::init()
 	{
 		s_playerModes[i]->initialise(this);
 	}
+	CurrentPrompt=-1;
+	LastPrompt=-1;
+	PromptRGB=0;
+	PromptFade=0;
 
 m_animNo=0;
 m_animFrame=0;
@@ -1292,6 +1299,7 @@ if(newmode!=-1)
 	}
 
 	CPlayerThing::think(_frames);
+	promptThink(_frames);
 }
 
 
@@ -1381,6 +1389,9 @@ sprintf(buf,"%04d (%02d) ,%04d (%02d)\ndfg:%+02d\nMode:%s",Pos.vx,Pos.vx&0x0f,Po
 #else
 sprintf(buf,"Pos: %04d,%04d",Pos.vx,Pos.vy);
 #endif
+m_fontBank->setTrans(0);
+m_fontBank->setColour(255,255,255);
+
 m_fontBank->print(stateDebugX,stateDebugY,buf);
 #endif
 
@@ -1570,6 +1581,8 @@ if(drawlastpos)
 		}
 	
 	}
+	promptRender();
+
 }
 
 
@@ -3246,6 +3259,216 @@ void CPlayer::getPlayerNormalCollisionSize(int *_x,int *_y,int *_w,int *_h)
 	*_y=-COLSIZE_BASE_HEIGHT/2;
 	*_w=COLSIZE_BASE_WIDTH;
 	*_h=COLSIZE_BASE_HEIGHT;
+}
+/*****************************************************************************/
+/*****************************************************************************/
+/*** On Screen Prompts *******************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+// Prompt Data is stored reverse order
+
+const int	PromptIconX=32;
+const int	PromptTextXOfs=20;
+const int	PromptTextYOfs=-4;
+const int	PromptY=(INGAME_SCREENH-32);
+const int	PromptXGap=20;
+const int	PromptYGap=12;
+const int	PromptTMode=1;
+const int	PromptOnScreenTime=50*5;
+const int	PromptFadeSpeed=8;
+
+static const CPlayer::sPromptData	KaratePromptData[]=
+{
+	{CPadConfig::PAD_CFG_WEAPONCHANGE,	STR_PROMPT_KARATE_UNEQUIP},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_KARATE_CHOP},
+	{CPadConfig::PAD_CFG_NONE,			STR_PROMPT_KARATE_TITLE}
+};
+static const CPlayer::sPromptData	BubblePromptData[]=
+{
+	{CPadConfig::PAD_CFG_WEAPONCHANGE,	STR_PROMPT_BUBBLEWAND_UNEQUIP},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_BUBBLEWAND_BLOW},
+	{CPadConfig::PAD_CFG_NONE,			STR_PROMPT_BUBBLEWAND_TITLE}
+};
+static const CPlayer::sPromptData	NetPromptData[]=
+{
+	{CPadConfig::PAD_CFG_WEAPONCHANGE,	STR_PROMPT_NET_UNEQUIP},
+	{CPadConfig::PAD_CFG_CATCH,			STR_PROMPT_NET_CATCH},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_NET_THROW},
+	{CPadConfig::PAD_CFG_NONE,			STR_PROMPT_NET_TITLE}
+};
+static const CPlayer::sPromptData	CoralBlowerPromptData[]=
+{
+	{CPadConfig::PAD_CFG_WEAPONCHANGE,	STR_PROMPT_CORALBLOWER_UNEQUIP},
+	{CPadConfig::PAD_CFG_UP,			STR_PROMPT_CORALBLOWER_AIM},
+	{CPadConfig::PAD_CFG_CATCH,			STR_PROMPT_CORALBLOWER_SUCK},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_CORALBLOWER_FIRE},
+	{CPadConfig::PAD_CFG_NONE,			STR_PROMPT_CORALBLOWER_TITLE}
+};
+static const CPlayer::sPromptData	JellyLauncherPromptData[]=
+{
+	{CPadConfig::PAD_CFG_WEAPONCHANGE,	STR_PROMPT_JELLYLAUNCHER_UNEQUIP},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_JELLYLAUNCHER_FIRE2},
+	{CPadConfig::PAD_CFG_FIRE,			STR_PROMPT_JELLYLAUNCHER_FIRE},
+	{CPadConfig::PAD_CFG_NONE,			STR_PROMPT_JELLYLAUNCHER_TITLE}
+};
+
+CPlayer::sPromptTable	CPlayer::PromptTable[NUM_PLAYERMODES]=
+{
+	{0,0},							// PLAYER_MODE_BASICUNARMED
+	{KaratePromptData,0},			// PLAYER_MODE_FULLUNARMED
+	{0,0},							// PLAYER_MODE_BALLOON
+	{BubblePromptData,0},			// PLAYER_MODE_BUBBLE_MIXTURE
+	{NetPromptData,0},				// PLAYER_MODE_NET
+	{CoralBlowerPromptData,0},		// PLAYER_MODE_CORALBLOWER
+	{JellyLauncherPromptData,0},	// PLAYER_MODE_JELLY_LAUNCHER
+	{0,0},							// PLAYER_MODE_DEAD
+	{0,0},							// PLAYER_MODE_FLY
+	{0,0},							// PLAYER_MODE_CART
+	{0,0},							// PLAYER_MODE_SWALLOW
+};
+
+/*****************************************************************************/
+void	CPlayer::promptThink(int _frames)
+{
+int		NewPrompt=m_currentMode;
+	
+		if (NewPrompt==0)
+		{ // No pickup- so kill all prompts
+			PromptFade=-PromptFadeSpeed*4;
+		}
+
+		if (!PromptTable[NewPrompt].Data || NewPrompt==LastPrompt)
+		{
+			NewPrompt=-1;
+		}
+/*
+		if (NewPrompt!=-1 && PromptTable[NewPrompt].Shown)
+		{
+			NewPrompt=-1;
+		}
+*/
+	
+// Check for Prompt change
+		if (CurrentPrompt!=NewPrompt && NewPrompt!=-1)
+		{
+			if (CurrentPrompt==-1)
+			{ // no prompt, so just display it
+				if (LastPrompt!=-1)
+				{
+					PromptTable[LastPrompt].Shown=1;
+				}
+				CurrentPrompt=NewPrompt;
+				LastPrompt=NewPrompt;
+				PromptTimer=PromptOnScreenTime;
+				PromptRGB=0;
+				PromptFade=+PromptFadeSpeed;
+			}
+			else
+			{
+				PromptFade=-PromptFadeSpeed;
+				if (NewPrompt!=-1)
+				{
+					PromptFade*=4;	// Fast fade, cos new prompt waiting
+				}
+			}
+		}
+
+// Control Current Prompt
+	if (CurrentPrompt!=-1)
+	{
+		PromptRGB+=PromptFade;
+		if (PromptRGB>127)
+		{ // Fade in/on screen
+			PromptRGB=127;
+			PromptTimer-=_frames;
+			if (PromptTimer<0)
+			{
+				PromptFade=-PromptFadeSpeed;
+			}
+		}
+		else
+		if (PromptRGB<0) 
+		{
+			PromptRGB=0;
+			CurrentPrompt=-1;
+		}
+	
+	}
+	
+}
+
+/*****************************************************************************/
+
+void	CPlayer::promptRender()
+{
+	if (CurrentPrompt==-1) return;
+
+sPromptTable	&ThisTable=PromptTable[CurrentPrompt];
+sPromptData	*Ptr=(sPromptData*)ThisTable.Data;
+int			X=0;
+int			Y=PromptY-PromptYGap;
+SpriteBank	*sb=CGameScene::getSpriteBank();
+POLY_FT4	*Ft4;
+int			MaxTLen=0;
+
+		if (!Ptr) return;	// no prompt, so go away
+
+		m_fontBank->setOt(0);
+		m_fontBank->setTrans(1);
+		m_fontBank->setColour(PromptRGB,PromptRGB,PromptRGB);
+		m_fontBank->setSMode(PromptTMode);
+
+		while ((CPadConfig::PAD_CFG)Ptr->m_input!=CPadConfig::PAD_CFG_NONE)
+		{
+			X=PromptIconX;
+			int	Icon[2]={0,0};
+			switch(CPadConfig::getButton((CPadConfig::PAD_CFG)Ptr->m_input))
+			{
+				case PAD_CROSS:		Icon[0]=FRM__BUTX;	break;
+				case PAD_TRIANGLE:	Icon[0]=FRM__BUTT;	break;
+				case PAD_CIRCLE:	Icon[0]=FRM__BUTC;	break;
+				case PAD_SQUARE:	Icon[0]=FRM__BUTS;	break;
+				case PAD_UP:		Icon[0]=FRM__BUTU;	Icon[1]=FRM__BUTD; break;
+				default:			ASSERT(!"Unknown Pad Button");	break;
+
+			}
+			for (int i=0; i<2; i++)
+			{
+				if (Icon[i])
+				{
+					//Icon
+					Ft4=sb->printFT4(Icon[i],X,Y,0,0,0); setSemiTrans(Ft4,1); Ft4->tpage|=PromptTMode<<5; setRGB0(Ft4,PromptRGB,PromptRGB,PromptRGB);
+					//Icon Mask	- to aid alpha fade
+					int	Col=(PromptRGB*3)/2;
+					Ft4=sb->printFT4(Icon[i],X,Y,0,0,0); setSemiTrans(Ft4,1); Ft4->tpage|=2<<5;			setRGB0(Ft4,Col,Col,Col);
+					X+=PromptXGap;
+				}
+			}
+// text
+			
+			int	TLen=m_fontBank->getStringWidth(Ptr->Text);
+			if (MaxTLen<TLen) MaxTLen=TLen;
+			m_fontBank->print(X,Y+PromptTextYOfs,Ptr->Text);
+
+			Y-=PromptYGap;
+			Ptr++;
+		}
+// Title
+		m_fontBank->print(PromptIconX,Y+PromptTextYOfs,Ptr->Text);
+// Background
+			
+int			BackRGB=PromptRGB/2;
+u8			*PrimPtr=GetPrimPtr();
+TPOLY_F4	*F4=(TPOLY_F4 *)PrimPtr;
+			PrimPtr+=sizeof(TPOLY_F4);
+			SetPrimPtr((u8*)PrimPtr);
+			setTPolyF4(F4);
+
+			setXYWH(F4,PromptIconX-2,Y-2,MaxTLen+(X-PromptIconX)+4,(PromptY-Y)+4);
+			setRGB0(F4,BackRGB,BackRGB,BackRGB);
+			setTSemiTrans(F4,1);
+			setTABRMode(F4,2);
+			AddPrimToList(F4,0);
 }
 
 /*===========================================================================

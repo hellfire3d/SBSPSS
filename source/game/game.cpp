@@ -458,7 +458,7 @@ void	CGameScene::think(int _frames)
 	m_scalableFont->setSMode(0);
 	m_scalableFont->setColour(128,128,128);
 	m_scalableFont->setScale(300);
-	m_scalableFont->print(40,200,buf);
+	m_scalableFont->print(280,160,buf);
 #endif
 #endif
 

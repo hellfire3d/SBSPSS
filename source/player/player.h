@@ -262,7 +262,32 @@ public:
 	void			registerAddon(PLAYER_ADDONS _addon);
 	DVECTOR			*getMoveVelocity()									{return &m_moveVelocity;}
 	void			setMoveVelocity(const DVECTOR *_moveVelocity)		{m_moveVelocity=*_moveVelocity;}
+//--- Prompt Stuff
+private:
+	struct	sPromptData
+	{
+		u16					m_input;
+		int					Text;
+	};
+	struct	sPromptTable
+	{
+		const sPromptData	*Data;
+		int					Shown;
+	};
 
+	void			promptThink(int _frames);
+	void			promptRender();
+
+	int				PromptCount;
+	int				PromptRGB;
+	int				PromptFade;
+	int				CurrentPrompt;
+	int				LastPrompt;
+	int				PromptTimer;
+
+static	sPromptTable	PromptTable[NUM_PLAYERMODES];
+
+// Prompt End
 public:
 	void			setMode(PLAYER_MODE _mode);
 	PLAYER_MODE		getMode()											{return m_currentMode;}
