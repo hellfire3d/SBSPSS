@@ -182,13 +182,16 @@ void CNpcEnemy::processCloseFlyingDutchmanAttack( int _frames )
 					m_movementTimer = GameState::getOneSecondInFrames() * 3;
 					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 
-					if ( m_extension == 100 )
+					s32 minX, maxX;
+					m_npcPath.getPathXExtents( &minX, &maxX );
+
+					if ( m_extension == minX )
 					{
-						m_extension = 400;
+						m_extension = maxX;
 					}
 					else
 					{
-						m_extension = 100;
+						m_extension = minX;
 					}
 				}
 

@@ -321,7 +321,11 @@ void CNpcEnemy::postInit()
 		{
 			m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 			m_extendDir = EXTEND_UP;
-			m_extension = 100;
+
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			m_extension = minX;
 
 			break;
 		}
