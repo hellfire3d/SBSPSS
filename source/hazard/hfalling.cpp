@@ -305,6 +305,6 @@ void CNpcFallingHazard::render()
 		scale.vy = -m_scale;
 		scale.vz = m_scale;
 
-		m_modelGfx->Render(renderPos,&rotation,&scale);
+		m_modelGfx->RenderNoClip(renderPos,&rotation,&scale);
 	}
 }
