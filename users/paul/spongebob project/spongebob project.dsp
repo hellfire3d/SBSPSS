@@ -1465,6 +1465,14 @@ SOURCE=..\..\..\source\platform\pconveyr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pdrop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pdrop.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pdual.cpp
 # End Source File
 # Begin Source File

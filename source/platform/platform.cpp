@@ -171,6 +171,10 @@
 #include "platform\pfallnor.h"
 #endif
 
+#ifndef __PLATFORM_PDROP_H__
+#include "platform\pdrop.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -388,6 +392,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_CONVEYOR_PLATFORM:
 		{
 			platform = new ("conveyor platform") CNpcConveyorPlatform;
+			break;
+		}
+
+		case NPC_DROP_PLATFORM:
+		{
+			platform = new ("drop platform") CNpcDropPlatform;
 			break;
 		}
 
