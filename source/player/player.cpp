@@ -377,6 +377,11 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 			}
 		}
 
+if(Pos.vx<16)Pos.vx=16;
+else if(Pos.vx>m_mapEdge.vx)Pos.vx=m_mapEdge.vx;
+if(Pos.vy<16)Pos.vy=16;
+else if(Pos.vy>m_mapEdge.vy-16)Pos.vy=m_mapEdge.vy-16;
+
 		// Flashing..
 		if(m_invincibleFrameCount)
 		{
@@ -600,6 +605,8 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 {
 	m_mapCameraEdges.vx=(_mapSize.vx-34)*MAP2D_BLOCKSTEPSIZE;		// Made up numbers! :) (pkg)
 	m_mapCameraEdges.vy=(_mapSize.vy-18)*MAP2D_BLOCKSTEPSIZE;
+	m_mapEdge.vx=_mapSize.vx*MAP2D_BLOCKSTEPSIZE;
+	m_mapEdge.vy=_mapSize.vy*MAP2D_BLOCKSTEPSIZE;
 }
 
 

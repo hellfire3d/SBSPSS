@@ -265,6 +265,7 @@ private:
 	// Various info about the current map
 	class CLayerCollision	*m_layerCollision;
 	DVECTOR					m_mapCameraEdges;
+	DVECTOR					m_mapEdge;
 	DVECTOR					m_respawnPos;
 };
 
