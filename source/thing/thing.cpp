@@ -204,7 +204,6 @@ void			CThingManager::addToThingList(CThing *_this)
 {
 	_this->m_nextThing=s_thingLists[_this->getThingType()];
 	s_thingLists[_this->getThingType()]=_this;
-PAUL_DBGMSG("Added thing type %d",_this->getThingType());
 }
 
 /*----------------------------------------------------------------------
