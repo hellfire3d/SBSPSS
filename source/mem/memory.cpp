@@ -116,7 +116,7 @@ static const CVECTOR	s_colors[ MEM_ID_MAX ] =
 	{ 0, 0, 255 },		// MEM_GAME
 	{ 255, 0, 255 },	// MEM_GAMEOPTIONS
 	{ 255, 255, 255 },	// MEM_SYSTEM
-	{ 0, 0, 0 },		// MEM_UNKNOWN
+	{ 128, 128, 128 },	// MEM_UNKNOWN
 };
 
 static const char *	s_sceneNames[] =
@@ -144,7 +144,7 @@ void dumpDebugMem()
 {
 	if (s_dumpMem)
 	{
-		int		x, y;
+		s32		x, y;
 		u16		padh, padd;
 		u32		freeMem;
 		u32		memBase;
@@ -155,7 +155,7 @@ void dumpDebugMem()
 		padd = PadGetRepeat( 0 );
 		padh = PadGetHeld( 0 );
 
-		if (padh & PAD_SQUARE)
+		if (padh & PAD_CIRCLE)
 		{
 			int		dir;
 
@@ -180,7 +180,8 @@ void dumpDebugMem()
 				if (s_currentMemPart >= MAX_MEM_DUMP-1)	s_currentMemPart = 0;
 			}
 		}
-/*		else
+		/*
+		else if(padh&PAD_TRIANGLE)
 		{
 			if (padh & PAD_UP)		s_dumpScale += 64;
 			if (padh & PAD_DOWN)	s_dumpScale -= 64;
@@ -188,7 +189,8 @@ void dumpDebugMem()
 			if (padh & PAD_LEFT)	s_dumpX -= (2 * s_dumpScale) >> 12;
 			if (padh & PAD_RIGHT)	s_dumpX += (2 * s_dumpScale) >> 12;
 		}
-*/
+		*/
+
 		memBase = (u32)OPT_LinkerOpts.FreeMemAddress;
 		freeMem = OPT_LinkerOpts.FreeMemSize - 4;
 		if (freeMem > 6*1024*1024)	freeMem -= 6*1024*1024;
@@ -222,10 +224,13 @@ void dumpDebugMem()
 #else
 				len = *(addr - 1);
 #endif
+				len = (((u32)addr) - ((u32)memBase))+len;
 				len *= s_dumpScale;
 				len >>= 12;
 				len *= byteWidth;
 				len >>= s_dumpShift;
+				len += s_dumpX;
+				len=len-x;
 				if(len==0)len=1;
 
 				col = &s_colors[ mem->id ];
