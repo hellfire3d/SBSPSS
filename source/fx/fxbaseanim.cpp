@@ -51,16 +51,22 @@ void	CFXBaseAnim::think(int _frames)
 					m_soundId=CSoundMediator::playSfx((CSoundMediator::SFXID)BaseData->StartSnd,true,true);
 				}
 			}
-			else
-			{
-				if(!CSoundMediator::isSfxStillPlaying(m_soundId))
-				{
-					CSoundMediator::stopAndUnlockSfx(m_soundId);
-					m_soundId=NOT_PLAYING;
-				}
-			}
+
 			EndSnd=BaseData->EndSnd;
 			HasInit=true;
+		}
+		else
+		{
+			if ( !( Flags & FX_FLAG_HIDDEN ) )
+			{
+				if(m_soundId==NOT_PLAYING)
+				{
+					if (BaseData->MainSnd)
+					{
+						m_soundId=CSoundMediator::playSfx((CSoundMediator::SFXID)BaseData->MainSnd,true,true);
+					}
+				}
+			}
 		}
 
 		CFX::think(_frames);
@@ -85,6 +91,14 @@ int		ThisFrame=CurrentFrame>>BaseData->FrameShift;
 		renderFrame=BaseData->StartFrame+ThisFrame;
 		}
 
+		if ( m_soundId != NOT_PLAYING )
+		{
+			if(!CSoundMediator::isSfxStillPlaying(m_soundId))
+			{
+				CSoundMediator::stopAndUnlockSfx(m_soundId);
+				m_soundId=NOT_PLAYING;
+			}
+		}
 }
 
 /*****************************************************************************/

@@ -15,7 +15,7 @@ public:
 	{
 		s16				StartFrame,EndFrame,FrameShift;
 		u16				Flags;
-		u16				StartSnd,EndSnd;
+		u16				StartSnd,MainSnd,EndSnd;
 	};
 
 virtual void		init(DVECTOR const &Pos);

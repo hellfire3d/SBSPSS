@@ -53,35 +53,35 @@ CFXBaseAnim::sFXBaseData	FXDropBaseData=
 {
 		FRM__DRIP,FRM__DRIP,1,
 		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_HAS_GRAVITY | FX_FLAG_NO_THINK_KILL, 
-		0,CSoundMediator::SFX_HAZARD__ACID_DROP,
+		0,0,CSoundMediator::SFX_HAZARD__ACID_DROP,
 };
 
 CFXBaseAnim::sFXBaseData	FXSplashBaseData=
 {
 		FRM__SPLASH001,FRM__SPLASH006,1,
 		FX_FLAG_NO_THINK_KILL,
-		0,0,
+		0,0,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXExplodeBaseData=
 {
 		FRM__EXPLOSION0001,FRM__EXPLOSION0008,1,
 		FX_FLAG_NO_THINK_KILL,
-		CSoundMediator::SFX_HAZARD__FIREBALL_LAND,0,
+		CSoundMediator::SFX_HAZARD__FIREBALL_LAND,0,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXFireBaseData=
 {
 		FRM__FIRE01,FRM__FIRE08,1,
 		FX_FLAG_LOOP | FX_FLAG_TRANS,
-		0,0,
+		0,CSoundMediator::SFX_FIRE_CRACKLING,0,
 };
 
 CFXBaseAnim::sFXBaseData	FXBubbleBaseData=
 {
 		FRM__BUBBLE_2,FRM__BUBBLE_2,1,
 		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_NO_THINK_KILL,
-		0,0,
+		0,0,0,
 };
 
 /*****************************************************************************/
