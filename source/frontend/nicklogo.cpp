@@ -30,6 +30,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef __PAD_PADS_H__
+#include "pad\pads.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -94,7 +98,8 @@ void CFrontEndNickLogo::think(int _frames)
 	{
 		m_frameCount+=_frames;
 
-		if(m_frameCount>DISPLAY_FRAMES&!m_readyToExit)
+		if(!m_readyToExit&&
+		   (PadGetDown(0)&(PAD_CROSS|PAD_START)||m_frameCount>DISPLAY_FRAMES))
 		{
 			CFader::setFadingOut();
 			m_readyToExit=true;
