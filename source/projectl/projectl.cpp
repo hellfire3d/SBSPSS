@@ -390,6 +390,7 @@ void CProjectile::think(int _frames)
 			if ( m_movementType == PROJECTILE_MINE )
 			{
 				CFX::Create( CFX::FX_TYPE_EXPLODE, Pos );
+				CGameScene::setCameraShake(0,8);
 			}
 		}
 	}
