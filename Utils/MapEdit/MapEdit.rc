@@ -392,6 +392,14 @@ BEGIN
     ID_TOOLBAR_TILEPALETTE  "Hides/Shows Tile Palette"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDC_LAYERBAR_NEW        "Create New Layer"
+    IDC_LAYERBAR_DELETE     "Delete Current Layer"
+    IDC_LAYERBAR_UP         "Move Layer Up List"
+    IDC_LAYERBAR_DOWN       "Move Layer Down List"
+END
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

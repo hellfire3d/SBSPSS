@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "MapEdit.h"
@@ -49,7 +49,7 @@ VirtualFilter=DC
 Type=0
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-Filter=C
+Filter=W
 LastObject=CMapEditView
 BaseClass=CView
 VirtualFilter=VWC

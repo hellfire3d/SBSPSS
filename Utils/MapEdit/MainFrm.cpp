@@ -80,6 +80,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndLayerBar.SetWindowText("Layer");
 	DockControlBar(&m_wndLayerBar);
 
+	
 //	FloatControlBar(&m_wndLayerBar,CPoint(256,256));
 
 	return 0;
