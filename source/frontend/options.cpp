@@ -362,10 +362,10 @@ void CFrontEndOptions::render()
 
 	g4=GetPrimG4();
 	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,50, 0, 0);
-	setRGB1(g4, 0, 0,50);
-	setRGB2(g4, 0,50, 0);
-	setRGB3(g4,50, 0,50);
+	setRGB0(g4,90, 0, 0);
+	setRGB1(g4, 0, 0,90);
+	setRGB2(g4, 0,90, 0);
+	setRGB3(g4,90, 0,90);
 	AddPrimToList(g4,MAX_OT-1);
 
 	m_background->render();
