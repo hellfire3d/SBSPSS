@@ -180,11 +180,10 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 
 
 int s_screenPos;
-DVECTOR	m_cameraScrollPos={0,600};
 int		m_cameraLookOffset=0;
 
 int MAP2D_CENTRE_X=-256;
-int MAP2D_CENTRE_Y=-136;
+int MAP2D_CENTRE_Y=-170;
 int MAP2D_BLOCKSTEPSIZE=16;
 
 CPlayerModeBase				PLAYERMODE;
@@ -283,11 +282,14 @@ void	CPlayer::shutdown()
 }
 
 
-int looktimeout=50;
+int looktimeout=20;
 int	lookmaxoffsetup=3*16;
 int	lookmaxoffsetdown=6*16;
-int	lookspeed=20;
+int	lookspeed=2;
 int lookreturnspeed=80;
+
+int ledgexsearch=4;
+int	ledgemaxylook=4;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -415,14 +417,48 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		}
 	}
 
-	// New cam stuff
-	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8)+m_cameraLookOffset;
+	// Camera focus point stuff
+// are we on a ledge and need to automatically look down?
+int lookDownAmount=0;
+/*
+if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,10)==0)
+{
+	// Near the edge of a ledge?
+	int	dir,x;
+	int	i;
+	dir=getFacing()*16;
+	x=Pos.vx;
+	for(i=0;i<ledgexsearch;i++)
+	{
+		if(m_layerCollision->getCollisionBlock(x,Pos.vy)==0)
+		{
+			int	y,gap;
+			y=Pos.vy;
+			gap=0;
+			for(i=0;i<ledgemaxylook;i++)
+			{
+				if(m_layerCollision->getCollisionBlock(x,y))
+				{
+					lookDownAmount=gap;
+					break;
+				}
+				y+=16;
+				gap+=16;
+			}
+			break;
+		}
+		x-=dir;
+	}
+}
+*/
+	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X;
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y+(lookDownAmount);
+
 	m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
 	m_currentCamFocusPoint.vy+=(m_currentCamFocusPointTarget.vy-m_currentCamFocusPoint.vy)>>cammove;
 
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
-	m_cameraPos.vy=m_currentCamFocusPoint.vy;
+	m_cameraPos.vy=m_currentCamFocusPoint.vy+m_cameraLookOffset;
 
 	// Limit camera scroll to the edges of the map
 	if(m_cameraPos.vx<0)
@@ -758,8 +794,8 @@ void CPlayer::respawn()
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
-	m_currentCamFocusPoint.vx=Pos.vx+MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-	m_currentCamFocusPoint.vy=Pos.vy+MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8)+m_cameraLookOffset;
+	m_currentCamFocusPoint.vx=0;//Pos.vx+MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
+	m_currentCamFocusPoint.vy=0;//Pos.vy+MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8)+m_cameraLookOffset;
 	m_padLookAroundTimer=0;
 
 	m_glassesFlag=0;
@@ -796,8 +832,9 @@ int invincibleSponge=false;		// NB: This is for debugging purposes only so don't
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {
-	if(m_invincibleFrameCount==0&&	// Don't take damage if still recovering from the last hit
-	   m_invinvibilityRingTimer==0)	// Or if we have the invincibility ring on
+	if(m_invincibleFrameCount==0&&			// Don't take damage if still recovering from the last hit
+	   m_invinvibilityRingTimer==0&&		// Or if we have the invincibility ring on
+	   m_currentMode!=PLAYER_MODE_DEAD)		// Or already dead! :)
 	{
 		int	ouchThatHurt=true;
 
