@@ -34,13 +34,22 @@
 	Structure defintions
 	-------------------- */
 
-class CBalloonPickup : public CBasePickup
+class CBalloonPickup : public CBaseRespawningPickup
 {
 public:
+	virtual void		init();
+
 	virtual void		collect(class CPlayer *_player);
 
 protected:
+	virtual int			getVisibilityRadius();
+	virtual int			getRespawnTime();
+
+	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
+
+private:
+	int					m_sin;
 
 };
 

@@ -78,14 +78,24 @@ void	CSpatulaPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CSpatulaPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int spat_glintspeed=3;
 int spat_maxglint=600;
 DVECTOR	spat_gxy1={-5,30};
 DVECTOR spat_gxy2={10,-5};
 int spat_glintFrames[]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4};
-void	CSpatulaPickup::think(int _frames)
+void	CSpatulaPickup::thinkPickup(int _frames)
 {
-	CBasePickup::think(_frames);
 	m_glint+=_frames*spat_glintspeed;
 	if(m_glint>spat_maxglint)m_glint-=spat_maxglint;
 }
@@ -96,18 +106,16 @@ void	CSpatulaPickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CSpatulaPickup::render()
+void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
 	int			x,y;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__SPATULA);
-	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
 	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 
 	if(m_glint<=255)
@@ -117,19 +125,6 @@ void	CSpatulaPickup::render()
 		y=y+(((spat_gxy2.vy-spat_gxy1.vy)*m_glint)>>8)+spat_gxy1.vy;
 		sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS-1);
 	}
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CSpatulaPickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
 }
 
 /*===========================================================================

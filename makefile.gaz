@@ -145,9 +145,11 @@ paul_src :=			paul \
 					scenesel
 
 pickups_src :=		pickup \
+					pballoon \
 					pbubmix \
 					pglasses \
 					phealth \
+					phelmet \
 					pjlammo \
 					plife \
 					pquest \

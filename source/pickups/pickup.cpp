@@ -55,6 +55,14 @@
 #include "pickups\pshoes.h"
 #endif
 
+#ifndef	__PICKUPS_PBALLOON_H__
+#include "pickups\pballoon.h"
+#endif
+
+#ifndef	__PICKUPS_PHELMET_H__
+#include "pickups\phelmet.h"
+#endif
+
 #ifndef	__PICKUPS_PQUEST_H__
 #include "pickups\pquest.h"
 #endif
@@ -119,9 +127,16 @@ void	CBasePickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#include "pad\pads.h"
 void	CBasePickup::think(int _frames)
 {
 	CThing::think(_frames);
+	thinkPickup(_frames);
+
+if(PadGetDown(0)&PAD_L2)
+{
+	collect(NULL);
+}
 }
 
 /*----------------------------------------------------------------------
@@ -132,6 +147,20 @@ void	CBasePickup::think(int _frames)
   ---------------------------------------------------------------------- */
 void	CBasePickup::render()
 {
+	DVECTOR	ofs,pos;
+	int		visibilityRadius;
+	
+	CThing::render();
+	
+	ofs=CLevel::getCameraPos();
+	pos.vx=Pos.vx-ofs.vx;
+	pos.vy=Pos.vy-ofs.vy;
+	visibilityRadius=getVisibilityRadius();
+	if(pos.vx>0-visibilityRadius&&pos.vx<512+visibilityRadius&&
+	   pos.vy>0-visibilityRadius&&pos.vy<256+visibilityRadius)
+	{
+		renderPickup(&pos);
+	}
 	/*
 	DVECTOR	ofs;
 	int		x,y;
@@ -167,15 +196,67 @@ void	CBasePickup::collect(class CPlayer *_player)
 	delete this;
 }
 
+
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-DVECTOR	CBasePickup::getRenderOffset()
+void	CBaseRespawningPickup::init()
 {
-	return CLevel::getCameraPos();
+	CBasePickup::init();
+	m_respawnTime=0;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseRespawningPickup::think(int _frames)
+{
+	if(m_respawnTime==0)
+	{
+		CBasePickup::think(_frames);
+	}
+	else
+	{
+		m_respawnTime-=_frames;
+		if(m_respawnTime<0)
+		{
+			m_respawnTime=0;
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseRespawningPickup::render()
+{
+	if(m_respawnTime==0||
+	   m_respawnTime<50&&!(m_respawnTime&3))
+	{
+		CBasePickup::render();
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseRespawningPickup::collect(class CPlayer *_player)
+{
+	m_respawnTime=getRespawnTime();
 }
 
 
@@ -227,13 +308,21 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			pickup=new ("ShoesPickup") CShoesPickup();
 			break;
 
+		case PICKUP__BALLOON:
+			pickup=new ("BalloonPickup") CBalloonPickup();
+			break;
+
+		case PICKUP__HELMET:
+			pickup=new ("HelmetPickup") CHelmetPickup();
+			break;
+
 		case PICKUP__QUEST_ITEM__TEST:
 			pickup=new ("QuestItemPickup") CTestQuestItemPickup();
 			break;
 
 		default:
 			ASSERT(!"UNKNOWN PICKUP TYPE");
-			pickup=new ("Pickup") CBasePickup();
+			pickup=NULL;
 			break;
 	}
 

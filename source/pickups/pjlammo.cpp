@@ -82,13 +82,23 @@ void	CJellyLauncherAmmoPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CJellyLauncherAmmoPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int jlammo_rattlespeed=500;
 int jlammo_rattlescale=90;
 int jlammo_rattlecount=5;
 int jlammo_waitcount=10;
-void	CJellyLauncherAmmoPickup::think(int _frames)
+void	CJellyLauncherAmmoPickup::thinkPickup(int _frames)
 {
-	CBasePickup::think(_frames);
 	m_rattle+=jlammo_rattlespeed*_frames;
 	if(m_rattle>(jlammo_rattlecount+jlammo_waitcount)*4095)m_rattle=0;
 }
@@ -99,19 +109,14 @@ void	CJellyLauncherAmmoPickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CJellyLauncherAmmoPickup::render()
+void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
-	int			x,y;
 	int			angle;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__JELLYAMMO);
-	x=Pos.vx-ofs.vx;
-	y=Pos.vy-ofs.vy;
 	if(m_rattle<=jlammo_rattlecount*4095)
 	{
 		angle=((msin(m_rattle&4095)*jlammo_rattlescale)>>12)&4095;
@@ -120,20 +125,7 @@ void	CJellyLauncherAmmoPickup::render()
 	{
 		angle=0;
 	}
-	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,PICKUPS_OT_POS);
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CJellyLauncherAmmoPickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
+	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,PICKUPS_OT_POS);
 }
 
 /*===========================================================================

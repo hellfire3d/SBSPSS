@@ -82,12 +82,22 @@ void	CShoesPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CShoesPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int shoes_bobspeed=100;
 int shoes_bobscale=2;
 int shoes_seperation=4;
-void	CShoesPickup::think(int _frames)
+void	CShoesPickup::thinkPickup(int _frames)
 {
-	CBasePickup::think(_frames);
 	m_sin=(m_sin+(_frames*shoes_bobspeed))&4095;
 }
 
@@ -97,34 +107,19 @@ void	CShoesPickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CShoesPickup::render()
+void	CShoesPickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
 	int			x,y,yoff;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__SHOE);
-	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
 	yoff=((msin(m_sin)*shoes_bobscale)>>12);
 	sprites->printFT4(fh,x+shoes_seperation,y+yoff,0,0,PICKUPS_OT_POS);
 	sprites->printFT4(fh,x-shoes_seperation,y-yoff,0,0,PICKUPS_OT_POS);
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CShoesPickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
 }
 
 /*===========================================================================

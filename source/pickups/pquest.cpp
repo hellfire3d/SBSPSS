@@ -86,6 +86,11 @@ void	CBaseQuestItemPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CBaseQuestItemPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
 int quest_pingframes=50;
 int quest_pingwaitframes=100;
 int quest_pingsize=100;
@@ -94,9 +99,25 @@ int quest_pingg=255;
 int quest_pingb=0;
 int	quest_pingsegments=16;
 int quest_transmode=1;
-void	CBaseQuestItemPickup::think(int _frames)
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CBaseQuestItemPickup::getVisibilityRadius()
 {
-	CBasePickup::think(_frames);
+	return quest_pingsize;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseQuestItemPickup::thinkPickup(int _frames)
+{
 	m_pingFrame+=_frames;
 	if(m_pingFrame>(quest_pingframes+quest_pingwaitframes))
 	{
@@ -111,18 +132,16 @@ void	CBaseQuestItemPickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::render()
+void	CBaseQuestItemPickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
 	int			x,y;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(getFrameNumber());
-	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
 	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 
 	if(m_pingFrame<quest_pingframes)
@@ -135,8 +154,8 @@ void	CBaseQuestItemPickup::render()
 		POLY_G3		*g3;
 		POLY_FT3	*ft3;
 
-		x=Pos.vx-ofs.vx;
-		y=Pos.vy-ofs.vy;
+		x=_pos->vx;
+		y=_pos->vy;
 		radius=(quest_pingsize*m_pingFrame)/quest_pingframes;
 		endr=(quest_pingr*(quest_pingframes-m_pingFrame))/quest_pingframes;
 		endg=(quest_pingg*(quest_pingframes-m_pingFrame))/quest_pingframes;
@@ -167,21 +186,7 @@ void	CBaseQuestItemPickup::render()
 		ft3->tpage=(quest_transmode<<5);
 		setXY3(ft3,512,512,512,512,512,512);
 		AddPrimToList(ft3,PICKUPS_OT_POS+1);
-
 	}
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBaseQuestItemPickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
 }
 
 

@@ -82,11 +82,21 @@ void	CBaseHealthPickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CBaseHealthPickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int health_rotatespeed=200;
 int health_rotatescale=200;
-void	CBaseHealthPickup::think(int _frames)
+void	CBaseHealthPickup::thinkPickup(int _frames)
 {
-	CBasePickup::think(_frames);
 	m_sin=(m_sin+(_frames*health_rotatespeed))&4095;
 }
 
@@ -96,34 +106,16 @@ void	CBaseHealthPickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CBaseHealthPickup::render()
+void	CBaseHealthPickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
-	int			x,y;
 	int			angle;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(getFrameNumber());
-	x=Pos.vx-ofs.vx;
-	y=Pos.vy-ofs.vy;
 	angle=((msin(m_sin)*health_rotatescale)>>12)&4095;
-	sprites->printRotatedScaledSprite(fh,x,y,4096,4096,angle,PICKUPS_OT_POS);
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBaseHealthPickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
+	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,PICKUPS_OT_POS);
 }
 
 

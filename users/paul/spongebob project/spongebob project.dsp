@@ -685,6 +685,14 @@ SOURCE=..\..\..\source\paul\scenesel.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\pickups\pballoon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pballoon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\pickups\pbubmix.cpp
 # End Source File
 # Begin Source File
@@ -706,6 +714,14 @@ SOURCE=..\..\..\source\pickups\phealth.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\pickups\phealth.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\phelmet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\phelmet.h
 # End Source File
 # Begin Source File
 

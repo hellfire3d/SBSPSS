@@ -115,6 +115,8 @@ void 	CGameScene::init()
 		pos.vx+=32;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
 		pos.vx+=32;	createPickup(PICKUP__GLASSES,&pos);		
 		pos.vx+=32;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
+		pos.vx+=32;	createPickup(PICKUP__BALLOON,&pos);		
+		pos.vx+=32;	createPickup(PICKUP__HELMET,&pos);		
 		pos.vx+=32;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
 #endif
 

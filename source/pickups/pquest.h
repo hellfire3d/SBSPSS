@@ -39,12 +39,15 @@ class CBaseQuestItemPickup : public CBasePickup
 public:
 	virtual void		init();
 	virtual void		shutdown();
-	virtual void		think(int _frames);
-	virtual void		render();
 
 	virtual void		collect(class CPlayer *_player);
 
 protected:
+	virtual int			getVisibilityRadius();
+
+	virtual void		thinkPickup(int _frames);
+	virtual void		renderPickup(DVECTOR *_pos);
+
 	virtual int			getFrameNumber()=0;
 
 private:

@@ -82,11 +82,21 @@ void	CLifePickup::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CLifePickup::collect(class CPlayer *_player)
+{
+	CBasePickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int life_pulsespeed=205;
 int life_pulsescale=75;
-void	CLifePickup::think(int _frames)
+void	CLifePickup::thinkPickup(int _frames)
 {
-	CBasePickup::think(_frames);
 	m_sin=(m_sin+(_frames*life_pulsespeed))&4095;
 }
 
@@ -96,34 +106,19 @@ void	CLifePickup::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CLifePickup::render()
+void	CLifePickup::renderPickup(DVECTOR *_pos)
 {
-	DVECTOR		ofs;
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;
 	int			x,y;
 	int			size;
 
-	ofs=getRenderOffset();
 	sprites=getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__PANTS);
-	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
 	size=256+((msin(m_sin)*life_pulsescale)>>12);
 	sprites->printFT4Scaled(fh,x,y,0,0,PICKUPS_OT_POS,size);
-
-	CBasePickup::render();
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CLifePickup::collect(class CPlayer *_player)
-{
-	CBasePickup::collect(_player);
 }
 
 /*===========================================================================

@@ -55,21 +55,9 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CGlassesPickup::render()
+void	CGlassesPickup::collect(class CPlayer *_player)
 {
-	DVECTOR		ofs;
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	ofs=getRenderOffset();
-	sprites=getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__GLASSES);
-	x=Pos.vx-ofs.vx-(fh->W/2);
-	y=Pos.vy-ofs.vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
-
-	CBasePickup::render();
+	CBasePickup::collect(_player);
 }
 
 /*----------------------------------------------------------------------
@@ -78,9 +66,17 @@ void	CGlassesPickup::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CGlassesPickup::collect(class CPlayer *_player)
+void	CGlassesPickup::renderPickup(DVECTOR *_pos)
 {
-	CBasePickup::collect(_player);
+	SpriteBank	*sprites;
+	sFrameHdr	*fh;
+	int			x,y;
+
+	sprites=getSpriteBank();
+	fh=sprites->getFrameHeader(FRM__GLASSES);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
+	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 }
 
 /*===========================================================================

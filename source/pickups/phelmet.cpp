@@ -55,7 +55,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CGlassesPickup::collect(class CPlayer *_player)
+void	CHelmetPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
 }
@@ -66,7 +66,7 @@ void	CGlassesPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CGlassesPickup::renderPickup(DVECTOR *_pos)
+void	CHelmetPickup::renderPickup(DVECTOR *_pos)
 {
 	SpriteBank	*sprites;
 	sFrameHdr	*fh;

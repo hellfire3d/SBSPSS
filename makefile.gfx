@@ -313,7 +313,8 @@ INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_N
 
 PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +pants +health100 +health50 +health25 +glint1 +glint2 +glint3 +glint4 \
-							+jellyammo +bubblemixture +glasses +shoe +teeth
+							+jellyammo +bubblemixture +glasses +shoe +balloon +helmet \
+							+teeth 
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3
