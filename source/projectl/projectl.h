@@ -64,6 +64,7 @@ private:
 protected:
 	DVECTOR				getScreenOffset();
 	bool				processTargetSeek( int _frames, DVECTOR targetPos );
+	void				collidedWith( CThing *_thisThing );
 
 	class SpriteBank							*m_spriteBank;
 	DVECTOR										m_initPos;
@@ -111,6 +112,7 @@ private:
 
 protected:
 	DVECTOR				getScreenOffset();
+	void				collidedWith( CThing *_thisThing );
 
 	class SpriteBank							*m_spriteBank;
 	DVECTOR										m_initPos;

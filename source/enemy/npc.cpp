@@ -248,6 +248,7 @@ void CNpcEnemy::init()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
+	m_attackTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -577,6 +578,7 @@ void CNpcEnemy::reinit()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
+	m_attackTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -622,6 +624,19 @@ void CNpcEnemy::shutdown()
 	m_positionHistory = NULL;
 
 	delete m_actorGfx;
+
+	// remove child elements
+
+	CThing	*List = this->getNext();
+
+	while ( List )
+	{
+		CThing *Next = List->getNext();
+		List->shutdown();
+
+		List = Next;
+	}
+
 	CEnemyThing::shutdown();
 
 }
@@ -709,7 +724,7 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 	{
 		case TYPE_PLAYER:
 		{
-			if ( m_controlFunc != NPC_CONTROL_COLLISION )
+			if ( m_controlFunc != NPC_CONTROL_COLLISION && m_attackTimer == 0 )
 			{
 				// only detect collision if one isn't already happening
 
@@ -1288,6 +1303,7 @@ void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 d
 void CNpcEnemy::hasBeenAttacked()
 {
 	m_controlFunc = NPC_CONTROL_SHOT;
+	m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1352,7 +1368,17 @@ void CNpcEnemy::processShot()
 				{
 					if ( !m_animPlaying )
 					{
-						this->shutdown();
+						if ( m_data[m_type].respawning )
+						{
+							m_isActive = false;
+
+							m_timerFunc = NPC_TIMER_RESPAWN;
+							m_timerTimer = 4 * GameState::getOneSecondInFrames();
+						}
+						else
+						{
+							shutdown();
+						}
 					}
 
 					break;
@@ -1512,9 +1538,11 @@ void CNpcEnemy::processCollision()
 		{
 			CPlayer *player = GameScene.getPlayer();
 
-			//player->takeDamage( m_data[m_type].damageToUserType );
+			player->takeDamage( m_data[m_type].damageToUserType );
 
 			m_controlFunc = m_oldControlFunc;
+
+			m_attackTimer = GameState::getOneSecondInFrames();
 
 			break;
 		}
@@ -1532,6 +1560,16 @@ void CNpcEnemy::processCollision()
 
 void CNpcEnemy::processTimer(int _frames)
 {
+	if ( m_attackTimer > 0 )
+	{
+		m_attackTimer -= _frames;
+
+		if ( m_attackTimer < 0 )
+		{
+			m_attackTimer = 0;
+		}
+	}
+
 	if ( m_timerTimer > 0 )
 	{
 		m_timerTimer -= _frames;
@@ -1663,11 +1701,18 @@ bool CNpcEnemy::canBeCaughtByNet()
 
 void CNpcEnemy::caughtWithNet()
 {
-	if ( m_isActive )
+	if ( m_data[m_type].respawning )
 	{
-		m_isActive = false;
+		if ( m_isActive )
+		{
+			m_isActive = false;
 
-		m_timerFunc = NPC_TIMER_RESPAWN;
-		m_timerTimer = 4 * GameState::getOneSecondInFrames();
+			m_timerFunc = NPC_TIMER_RESPAWN;
+			m_timerTimer = 4 * GameState::getOneSecondInFrames();
+		}
+	}
+	else
+	{
+		shutdown();
 	}
 }

@@ -290,6 +290,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 							 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 							CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 							5*60);
+			projectile->setLayerCollision( m_player->getLayerCollision() );
 			fireHeading+=512;
 			m_player->useOneJelly();
 		}
@@ -304,6 +305,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 						 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 						 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 						 5*60);
+		projectile->setLayerCollision( m_player->getLayerCollision() );
 		m_player->useOneJelly();
 	}
 }

@@ -168,6 +168,7 @@ void	CPlayerModeNet::think()
 										CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 										CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 										5*60);
+					projectile->setLayerCollision( m_player->getLayerCollision() );
 
 					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				}

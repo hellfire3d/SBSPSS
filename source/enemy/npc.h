@@ -435,6 +435,7 @@ protected:
 		u16								recoilAnim;
 		NPC_COLLISION_FUNC				collisionFunc;
 		bool							canBeNetted;
+		bool							respawning;
 	}
 	NPC_DATA;
 
@@ -601,6 +602,7 @@ protected:
 	bool				m_reversed;
 	s32					m_health;
 	bool				m_isActive;
+	s32					m_attackTimer;
 
 	s32				m_frame;
 	int				m_animNo;

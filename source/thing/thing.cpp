@@ -198,6 +198,24 @@ void		CThingManager::thinkAllThings(int _frames)
 		thing1=thing1->m_nextThing;
 	}
 
+	// Enemy -> Player projectile collision
+	thing1=s_thingLists[CThing::TYPE_PLAYERPROJECTILE];
+	thing2=s_thingLists[CThing::TYPE_ENEMY];
+	while(thing1)
+	{
+		while(thing2)
+		{
+			if(thing1->canCollide()&&
+			   thing2->canCollide()&&
+			   thing1->checkCollisionAgainst(thing2, _frames))
+			{
+				thing1->collidedWith(thing2);
+			}
+			thing2=thing2->m_nextThing;
+		}
+		thing1=thing1->m_nextThing;
+	}
+
 }
 
 /*----------------------------------------------------------------------

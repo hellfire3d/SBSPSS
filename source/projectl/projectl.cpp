@@ -43,6 +43,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
 
 /*****************************************************************************/
 
@@ -356,6 +360,28 @@ void CProjectile::processEvent( GAME_EVENT evt, CThing *sourceThing )
 {
 }
 
+void CProjectile::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player = (CPlayer *) _thisThing;
+
+			player->takeDamage( DAMAGE__HIT_ENEMY );
+
+			shutdown();
+			delete this;
+
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
+	}
+}
+
 /*****************************************************************************/
 
 void CPlayerProjectile::init()
@@ -490,6 +516,25 @@ DVECTOR CPlayerProjectile::getScreenOffset()
 
 void CPlayerProjectile::processEvent( GAME_EVENT evt, CThing *sourceThing )
 {
+}
+
+void CPlayerProjectile::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_ENEMY:
+		{
+			CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+			enemy->hasBeenAttacked();
+
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
+	}
 }
 
 /*****************************************************************************/

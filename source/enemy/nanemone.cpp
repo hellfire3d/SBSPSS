@@ -186,6 +186,8 @@ void CNpcEnemy::processCloseAnemone2Attack( int _frames )
 			nextThing = nextThing->getNext();
 		}
 
+		removeAllChild();
+
 		// attach new spikes
 
 		for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
