@@ -187,10 +187,11 @@ void	CBasePickup::collidedWith(CThing *_thisThing)
 			CSoundMediator::playSfx(sfxToPlayWhenCollected());
 			break;
 
-		default:
-			ASSERT(0);
 		case TYPE_NPC:
 			break;
+
+		default:
+			ASSERT(0);
 	}
 }
 
@@ -348,6 +349,9 @@ void	CBaseWeaponPickup::collidedWith(CThing *_thisThing)
 					m_collidedWithPlayer=true;
 				}
 			}
+			break;
+
+		case TYPE_NPC:
 			break;
 
 		default:
