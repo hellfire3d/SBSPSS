@@ -145,6 +145,14 @@ SOURCE=..\..\..\source\gfx\animtex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gfx\bubicles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gfx\bubicles.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gfx\fdata.cpp
 # End Source File
 # Begin Source File
