@@ -15,6 +15,7 @@
 	Includes
 	-------- */
 
+#include "triggers\trigger.h"
 #include "triggers\tlook.h"
 
 #ifndef	__PLAYER_PLAYER_H__

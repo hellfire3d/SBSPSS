@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CCameraLockTrigger : public CTriggerThing
+class CCameraLockTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CLevelExitTrigger : public CTriggerThing
+class CLevelExitTrigger : public CTrigger
 {
 public:
 #if defined (__USER_art__) || defined (__USER_sbart__)

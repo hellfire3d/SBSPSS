@@ -15,6 +15,8 @@
 	Includes
 	-------- */
 
+#include "triggers\trigger.h"
+
 #include "triggers\tcamlock.h"
 
 #ifndef	__PLAYER_PLAYER_H__

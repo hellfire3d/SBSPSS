@@ -19,6 +19,8 @@
 
 #include "gfx\font.h"
 
+#include	"triggers\trigger.h"
+/*
 #ifndef	__TRIGGERS_TLEVEXIT_H__
 #include "triggers\tlevexit.h"
 #endif
@@ -38,6 +40,7 @@
 #ifndef	__TRIGGERS_TWATER_H__
 #include "triggers\twater.h"
 #endif
+*/
 
 #ifndef __PICKUPS_PICKUP_H__
 #include "pickups\pickup.h"
@@ -352,79 +355,28 @@ void	CLevel::initLayers()
 /*****************************************************************************/
 void	CLevel::initThings(int _respawningLevel)
 {
-	// Triggers
-	// Yeah yeah - I'll put this crap into a seperate file when the numbers of trigger types get a bit bigger! (pkg)
 	if (LevelHdr->TriggerList)
 	{
 		sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
 		TriggerCount=Hdr->Count;
 		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
 
+// Cam Locks first
 		for(int i=0;i<TriggerCount;i++)
 		{
-			CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
-			if(TriggerList->Type==3)
+			if (TriggerList[i].Type==CTrigger::TRIGGER_CAMLOCK)
 			{
-				// Camera lock trigger
-				trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
-				trigger->setThingSubType(0);
-				trigger->init();
-				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-											TriggerList->Width<<4,TriggerList->Height<<4);
-				trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
+				CTrigger::Create(&TriggerList[i]);
 			}
-			TriggerList++;
 		}
-	}
-
-	if (LevelHdr->TriggerList)
-	{
-		sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
-		TriggerCount=Hdr->Count;
+// the rest
 		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
-
 		for(int i=0;i<TriggerCount;i++)
 		{
-			CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
-			switch(TriggerList->Type)
+			if (TriggerList[i].Type!=CTrigger::TRIGGER_CAMLOCK)
 			{
-				// Exit trigger
-				case 0:
-					trigger=(CTriggerThing*)new ("LevelExitTrigger") CLevelExitTrigger();
-					break;
-
-				// Level respawn trigger
-				case 1:
-					trigger=(CRestartPointTrigger*)new ("RestartTrigger") CRestartPointTrigger();
-					break;
-
-				// Teleport trigger
-				case 2:
-					trigger=(CTeleportTrigger*)new ("TeleportTrigger") CTeleportTrigger();
-					break;
-
-				// Camera lock trigger
-				case 3:
-					trigger=NULL;
-					break;
-
-				// In/Out of water triggers
-				case 4:
-					trigger=(CInWaterTrigger*)new ("InWaterTrigger") CInWaterTrigger();
-					break;
-				case 5:
-					trigger=(COutOfWaterTrigger*)new ("OutOfWaterTrigger") COutOfWaterTrigger();
-					break;
+				CTrigger::Create(&TriggerList[i]);
 			}
-			if(trigger)
-			{
-				trigger->setThingSubType(0);
-				trigger->init();
-				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-											TriggerList->Width<<4,TriggerList->Height<<4);
-				trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
-			}
-			TriggerList++;
 		}
 	}
 

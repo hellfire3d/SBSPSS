@@ -15,6 +15,7 @@
 	Includes
 	-------- */
 
+#include "triggers\trigger.h"
 #include "triggers\trestart.h"
 
 #ifndef	__PLAYER_PLAYER_H__

@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CTeleportTrigger : public CTriggerThing
+class CTeleportTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

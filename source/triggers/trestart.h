@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CRestartPointTrigger : public CTriggerThing
+class CRestartPointTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

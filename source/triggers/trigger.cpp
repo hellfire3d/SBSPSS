@@ -44,7 +44,7 @@
 CTrigger	*CTrigger::Create(int Type)
 {
 CTrigger	*trigger;
-printf("Trig Type %i\n",Type);
+
 	trigger = (CTrigger*)CThingManager::GetThing(CThing::TYPE_TRIGGER,Type);
 	if (!trigger)
 	switch( Type )
@@ -66,20 +66,19 @@ printf("Trig Type %i\n",Type);
 
 		// Camera lock trigger
 		case TRIGGER_CAMLOCK:
-			trigger=NULL;
+			trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
 			break;
 
 		// In/Out of water triggers
-		case TRIGGER_WATER:
+		case TRIGGER_INWATER:
 			trigger=(CInWaterTrigger*)new ("InWaterTrigger") CInWaterTrigger();
 			break;
-		case 5:
+		case TRIGGER_OUTWATER:
 			trigger=(COutOfWaterTrigger*)new ("OutOfWaterTrigger") COutOfWaterTrigger();
 			break;
 		default:
 			trigger=NULL;
 	}
-printf("TriggerDone\n");
 	ASSERT( trigger);
 
 	trigger->setThingSubType(Type);
@@ -92,7 +91,6 @@ printf("TriggerDone\n");
 CTrigger	*CTrigger::Create(sThingTrigger *ThisTrigger)
 {
 CTrigger	*trigger=Create(ThisTrigger->Type);
-
 			trigger->setPositionAndSize(ThisTrigger->Pos.X<<4,ThisTrigger->Pos.Y<<4,ThisTrigger->Width<<4,ThisTrigger->Height<<4);
 			trigger->setTargetBox(ThisTrigger->TargetPos.X<<4,ThisTrigger->TargetPos.Y<<4,ThisTrigger->TargetSize.X<<4,ThisTrigger->TargetSize.Y<<4);
 
@@ -102,9 +100,47 @@ CTrigger	*trigger=Create(ThisTrigger->Type);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void	CTrigger::init()
 {
+	CTriggerThing::init();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void	CTrigger::shutdown()
 {
+	CTriggerThing::shutdown();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void	CTrigger::think(int _frames)
+{
+		CTriggerThing::think(_frames);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void	CTrigger::render()
+{
+		CTriggerThing::render();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void	CTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
+{
+	Pos.vx=_x+(_w/2);
+	Pos.vy=_y+(_h/2);
+	setCollisionSize(_w,_h);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CTrigger::setTargetBox(int _x,int _y,int _w,int _h)
+{
+	m_boxX1=_x;
+	m_boxY1=_y;
+	m_boxX2=_x+_w;
+	m_boxY2=_y+_h;
+}
+
+

@@ -15,6 +15,8 @@
 #include "platform\prbridge.h"
 #endif
 
+#include "triggers\trigger.h"
+
 #ifndef	__TRIGGERS_TPLATFRM_H__
 #include "triggers\tplatfrm.h"
 #endif

@@ -38,6 +38,7 @@
 #include	"projectl\projectl.h"
 #include	"enemy\npc.h"
 #include	"friend\friend.h"
+#include	"triggers\trigger.h"
 #include	"fx\fx.h"
 
 #ifndef __FRIEND_FRIEND_H__
@@ -115,7 +116,7 @@ static const sFreeListTable	FreeListTable[]=
 /* 4*/	{CThing::TYPE_NPC				,CNpcFriend::MAX_SUBTYPE},
 /* 5*/	{CThing::TYPE_ENEMY				,CNpcEnemy::MAX_SUBTYPE},
 /* 6*/	{CThing::TYPE_ENEMYPROJECTILE	,CProjectile::MAX_SUBTYPE},
-/* 7*/	{CThing::TYPE_TRIGGER			,CTriggerThing::MAX_SUBTYPE},
+/* 7*/	{CThing::TYPE_TRIGGER			,CTrigger::MAX_SUBTYPE},
 /* 8*/	{CThing::TYPE_HAZARD			,CNpcHazard::MAX_SUBTYPE},
 /* 9*/	{CThing::TYPE_FX				,CFX::MAX_SUBTYPE},
 };
@@ -837,6 +838,8 @@ CThing	*CThingManager::GetThing(int Type,int SubType)
 CThing	**List=s_FreeList[Type];
 CThing	*Thing=List[SubType];
 
+		ASSERT(Type<CThing::MAX_TYPE);
+		ASSERT(SubType<FreeListTable[Type].Count);
 		if (Thing)
 		{
 			List[SubType]=Thing->NextFreeThing;
@@ -898,6 +901,7 @@ void	CThing::init()
 {
 	ParentThing=NULL;
 	NextThing=NULL;
+	NextFreeThing=0;
 	m_numChildren = 0;
 
 	Pos.vx=Pos.vy=10;
@@ -1012,78 +1016,6 @@ void	CThing::ShowBBox()
 			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
 			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
 		}
-/*
-		DVECTOR	ofs;
-		CRECT	area;
-
-		ofs=CLevel::getCameraPos();
-
-		area=getCollisionArea();
-		area.x1-=ofs.vx;
-		area.y1-=ofs.vy;
-		area.x2-=ofs.vx;
-		area.y2-=ofs.vy;
-
-		if(area.x1<=511&&area.x2>=0&&
-		   area.y1<=255&&area.y2>=0)
-		{
-			area=getCollisionArea();
-
-			SVECTOR points[4];
-			VECTOR vecPoints[4];
-
-			points[0].vx = area.x1 - Pos.vx;
-			points[0].vy = area.y1 - Pos.vy;
-
-			points[1].vx = area.x1 - Pos.vx;
-			points[1].vy = area.y2 - Pos.vy;
-
-			points[2].vx = area.x2 - Pos.vx;
-			points[2].vy = area.y2 - Pos.vy;
-
-			points[3].vx = area.x2 - Pos.vx;
-			points[3].vy = area.y1 - Pos.vy;
-
-			MATRIX mtx;
-
-			SetIdentNoTrans(&mtx );
-			RotMatrixZ( m_collisionAngle, &mtx );
-
-			ApplyMatrix( &mtx, &points[0], &vecPoints[0] );
-			ApplyMatrix( &mtx, &points[1], &vecPoints[1] );
-			ApplyMatrix( &mtx, &points[2], &vecPoints[2] );
-			ApplyMatrix( &mtx, &points[3], &vecPoints[3] );
-
-			vecPoints[0].vx += Pos.vx - ofs.vx;
-			vecPoints[0].vy += Pos.vy - ofs.vy;
-
-			vecPoints[1].vx += Pos.vx - ofs.vx;
-			vecPoints[1].vy += Pos.vy - ofs.vy;
-
-			vecPoints[2].vx += Pos.vx - ofs.vx;
-			vecPoints[2].vy += Pos.vy - ofs.vy;
-
-			vecPoints[3].vx += Pos.vx - ofs.vx;
-			vecPoints[3].vy += Pos.vy - ofs.vy;
-
-			//DrawLine(area.x1,area.y1,area.x1,area.y2,255,255,255,0);
-			//DrawLine(area.x1,area.y2,area.x2,area.y2,255,255,255,0);
-			//DrawLine(area.x2,area.y2,area.x2,area.y1,255,255,255,0);
-			//DrawLine(area.x2,area.y1,area.x1,area.y1,255,255,255,0);
-
-			DrawLine( vecPoints[0].vx, vecPoints[0].vy, vecPoints[1].vx, vecPoints[1].vy,255,255,255,0);
-			DrawLine( vecPoints[1].vx, vecPoints[1].vy, vecPoints[2].vx, vecPoints[2].vy,255,255,255,0);
-			DrawLine( vecPoints[2].vx, vecPoints[2].vy, vecPoints[3].vx, vecPoints[3].vy,255,255,255,0);
-			DrawLine( vecPoints[3].vx, vecPoints[3].vy, vecPoints[0].vx, vecPoints[0].vy,255,255,255,0);
-
-			area.x1=Pos.vx-10-ofs.vx;
-			area.y1=Pos.vy-10-ofs.vy;
-			area.x2=Pos.vx+10-ofs.vx;
-			area.y2=Pos.vy+10-ofs.vy;
-			DrawLine(area.x1,area.y1,area.x2,area.y2,255,0,0,0);
-			DrawLine(area.x2,area.y1,area.x1,area.y2,255,0,0,0);
-		}
-*/
 	}
 }
 #endif
@@ -1207,17 +1139,7 @@ CThing	*List=NextThing;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CThing::getNumChildren()
-{
-	return( m_numChildren );
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
+/*
 bool	CThing::hasChild(CThing *Child)
 {
 CThing *nextChild = NextThing;
@@ -1234,7 +1156,7 @@ CThing *nextChild = NextThing;
 
 	return( false );
 }
-
+*/
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -1370,25 +1292,3 @@ void	CThing::processEvent(GAME_EVENT _event,CThing *_sourceThing)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CTriggerThing::setPositionAndSize(int _x,int _y,int _w,int _h)
-{
-	Pos.vx=_x+(_w/2);
-	Pos.vy=_y+(_h/2);
-	setCollisionSize(_w,_h);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CTriggerThing::setTargetBox(int _x,int _y,int _w,int _h)
-{
-	m_boxX1=_x;
-	m_boxY1=_y;
-	m_boxX2=_x+_w;
-	m_boxY2=_y+_h;
-}
-
-

@@ -15,6 +15,7 @@
 	Includes
 	-------- */
 
+#include "triggers\trigger.h"
 #include "triggers\tplatfrm.h"
 
 #ifndef __GAME_GAME_H__

@@ -34,14 +34,14 @@
 	Structure defintions
 	-------------------- */
 
-class CInWaterTrigger : public CTriggerThing
+class CInWaterTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
 };
 
-class COutOfWaterTrigger : public CTriggerThing
+class COutOfWaterTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

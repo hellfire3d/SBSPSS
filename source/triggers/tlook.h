@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CLookTrigger : public CTriggerThing
+class CLookTrigger : public CTrigger
 {
 protected:
 	virtual void		collidedWith(CThing *_thisThing);

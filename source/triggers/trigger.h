@@ -3,9 +3,9 @@
 	trigger.h
 
 	Author:		dave 
-	Created: 
+	Created:	cos paul was too lazy
 	Project:	Spongebob
-	Purpose: 
+	Purpose:	Oh, cos I like the sound of my own typing
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -27,7 +27,8 @@ enum TRIGGER_TYPE
 	TRIGGER_RESPAWN,
 	TRIGGER_TELEPORT,
 	TRIGGER_CAMLOCK,
-	TRIGGER_WATER,
+	TRIGGER_INWATER,
+	TRIGGER_OUTWATER,
 	TRIGGER_MAX,
 	};
 
@@ -38,12 +39,18 @@ enum TRIGGER_TYPE
 
 virtual void		init();
 virtual void		shutdown();
+virtual void		think(int _frames);
+virtual void		render();
 
 static CTrigger		*Create(int Type);
 static CTrigger		*Create(sThingTrigger *ThisTrigger);
+virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
+virtual void		setTargetBox(int _x,int _y,int _w,int _h);
 
 protected:
 virtual void		collidedWith(CThing *_thisThing){};
+
+		int			m_boxX1,m_boxY1,m_boxX2,m_boxY2;
 
 };
 

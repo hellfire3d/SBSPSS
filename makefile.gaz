@@ -285,7 +285,8 @@ system_src :=		main \
 
 thing_src :=		thing
 
-triggers_src :=		tcamlock \
+triggers_src :=		trigger \
+					tcamlock \
 					tlevexit \
 					tlook \
 					trestart \

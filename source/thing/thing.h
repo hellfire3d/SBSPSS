@@ -149,8 +149,8 @@ virtual int		dontKillDuringLevelRespawn()							{return false;}
 		void			removeChild(CThing *Child);
 		void			removeAllChild();
 		void			deleteAllChild();
-		bool			hasChild(CThing *Child);
-		int				getNumChildren();
+//		bool			hasChild(CThing *Child);
+		int				getNumChildren()				{return( m_numChildren );}
 
 
 		DVECTOR const	&getPos()						{return Pos;}
@@ -286,17 +286,7 @@ virtual TYPE		getThingType()					{return TYPE_PLATFORM;}
 class CTriggerThing : public CThing
 {
 public:
-	enum
-	{ // For Dynamic ThingCache
-		MAX_SUBTYPE	=1,
-	};
-
 virtual TYPE		getThingType()					{return TYPE_TRIGGER;}
-virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);	// Wonder if this might be better in CThing? (pkg)
-virtual void		setTargetBox(int _x,int _y,int _w,int _h);			// Wonder if this might be better in CThing? (pkg)
-
-protected:
-		int			m_boxX1,m_boxY1,m_boxX2,m_boxY2;
 };
 
 class CHazardThing : public CThing
