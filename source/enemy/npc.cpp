@@ -1017,6 +1017,7 @@ void CNpc::processEvent( GAME_EVENT evt, CThing *sourceThing )
 			m_sensorFunc = NPC_SENSOR_NONE;
 
 			removeChild( sourceThing );
+			sourceThing->shutdown();
 			delete sourceThing;
 
 			break;
