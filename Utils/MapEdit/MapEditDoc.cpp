@@ -84,6 +84,9 @@ void CMapEditDoc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		Core.Save(ar.GetFile());
+//#if	_DEBUG && 1
+//		Core.Export(ar.GetFile()->GetFilePath());
+//#endif
 	}
 	else
 	{

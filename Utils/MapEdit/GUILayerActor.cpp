@@ -38,23 +38,13 @@ void CGUILayerActor::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ACTOR_SPEED, m_Speed);
 	DDX_Control(pDX, IDC_ACTOR_ATTACK, m_Attack);
 	DDX_Control(pDX, IDC_ACTOR_HEALTH, m_Health);
-	DDX_Control(pDX, IDC_LEVEL_ACTOR_LIST, m_LevelList);
-	DDX_Control(pDX, IDC_ACTOR_POS_LIST, m_PosList);
-	DDX_Control(pDX, IDC_ACTOR_LIST, m_List);
 	//}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CGUILayerActor, CDialog)
 	//{{AFX_MSG_MAP(CGUILayerActor)
-	ON_BN_CLICKED(IDC_ACTOR_DELETE, OnActorDelete)
-	ON_BN_CLICKED(IDC_ACTOR_POS_UP, OnActorPosUp)
-	ON_BN_CLICKED(IDC_ACTOR_POS_DOWN, OnActorPosDown)
-	ON_BN_CLICKED(IDC_ACTOR_POS_DELETE, OnActorPosDelete)
 	ON_EN_CHANGE(IDC_ACTOR_HEALTH, OnChangeParam)
-	ON_CBN_SELCHANGE(IDC_ACTOR_LIST, OnSelchangeActorList)
-	ON_CBN_SELCHANGE(IDC_LEVEL_ACTOR_LIST, OnSelchangeLevelActorList)
-	ON_LBN_SELCHANGE(IDC_ACTOR_POS_LIST, OnSelchangeActorPosList)
 	ON_EN_CHANGE(IDC_ACTOR_ATTACK, OnChangeParam)
 	ON_BN_CLICKED(IDC_ACTOR_COLLISION, OnChangeParam)
 	ON_EN_CHANGE(IDC_ACTOR_SPEED, OnChangeParam)
@@ -87,15 +77,5 @@ int		Val=0;
 
 /////////////////////////////////////////////////////////////////////////////
 // CGUILayerActor message handlers
-
-void CGUILayerActor::OnSelchangeActorList()				{theApp.GetCurrent()->Command(CmdMsg_ThingListSelect,m_List.GetCurSel());}
-void CGUILayerActor::OnActorDelete()					{theApp.GetCurrent()->Command(CmdMsg_ThingListDelete,m_List.GetCurSel());}
-
-void CGUILayerActor::OnSelchangeLevelActorList()		{theApp.GetCurrent()->Command(CmdMsg_ThingLevelSelect,m_LevelList.GetCurSel());}
-
-void CGUILayerActor::OnSelchangeActorPosList()			{theApp.GetCurrent()->Command(CmdMsg_ThingPosSelect,m_PosList.GetCurSel());}
-void CGUILayerActor::OnActorPosUp()						{theApp.GetCurrent()->Command(CmdMsg_ThingPosUp,m_PosList.GetCurSel());}
-void CGUILayerActor::OnActorPosDown()					{theApp.GetCurrent()->Command(CmdMsg_ThingPosDown,m_PosList.GetCurSel());}
-void CGUILayerActor::OnActorPosDelete()					{theApp.GetCurrent()->Command(CmdMsg_ThingPosDelete,m_PosList.GetCurSel());}
 
 void CGUILayerActor::OnChangeParam()					{if (!CallbackFlag) theApp.GetCurrent()->GUIChanged();}

@@ -8,7 +8,6 @@
 #include	"LayerThing.h"
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"GUILayerItem.h"
 #include	"Elem.h"
 
 /*****************************************************************************/
@@ -31,7 +30,6 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 
 protected:
-		CGUILayerItem		GUI;
 
 };
 

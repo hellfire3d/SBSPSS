@@ -19,7 +19,9 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerFX)
 	enum { IDD = IDD_LAYER_FX };
-		// NOTE: the ClassWizard will add data members here
+	CEdit	m_Width;
+	CEdit	m_Height;
+	CEdit	m_Speed;
 	//}}AFX_DATA
 
 
@@ -31,11 +33,17 @@ public:
 	//}}AFX_VIRTUAL
 
 // Implementation
+
+public:
+	void	DisableCallback(bool f)	{CallbackFlag=f;}
+	void	SetVal(CEdit &Dlg,int Number);
+	int		GetVal(CEdit &Dlg);
 protected:
+	bool	CallbackFlag;
 
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerFX)
-		// NOTE: the ClassWizard will add member functions here
+	afx_msg void OnParamChange();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

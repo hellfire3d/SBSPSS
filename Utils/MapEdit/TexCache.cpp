@@ -191,23 +191,15 @@ u8		*Src,*Dst;
 		ThisTex.TexH=RGBData->TexH;
 		ThisTex.ScaleU=RGBData->ScaleU;
 		ThisTex.ScaleV=RGBData->ScaleV;
-int	Err;
+
 		glGenTextures(1, &ThisTex.TexID);
-		Err=glGetError();ASSERT(Err==0);
 		glBindTexture(GL_TEXTURE_2D, ThisTex.TexID);
-		Err=glGetError();ASSERT(Err==0);
 		glTexImage2D(GL_TEXTURE_2D, 0, 4, RGBData->TexW, RGBData->TexH, 0, GL_RGBA, GL_UNSIGNED_BYTE, Buffer);
-		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		Err=glGetError();ASSERT(Err==0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		Err=glGetError();ASSERT(Err==0);
 		MemFree(Buffer);
 }
 

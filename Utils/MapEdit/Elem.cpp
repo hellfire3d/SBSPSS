@@ -66,12 +66,13 @@ CElem::CElem(int Width,int Height)
 		ElemID=-1;
 int		AW=AlignSize(ElemWidth);
 int		AH=AlignSize(ElemHeight);
+		ElemRGB=0;
 		ElemRGB=(u8*)MemAlloc(AW*AH*3);
 		memset(ElemRGB,0,AW*AH*3);
 		Type=ElemType2d;
 		TexXOfs=0;
 		TexYOfs=0;
-		for (int i=0; i<ElemTypeMax; i++) DrawList[i]=BlankID;
+		BlankFlag=true;
 }
 
 /*****************************************************************************/
@@ -89,6 +90,7 @@ GFName		Path=Filename;
 			Type=ElemType3d;
 			TexXOfs=-1;
 			TexYOfs=-1;
+			ElemRGB=0;
 			Ofs.Zero();
 			Build3dElem(TexCache,ThisScene,Node);
 			Calc3dSize();
@@ -96,11 +98,8 @@ GFName		Path=Filename;
 			Ofs.Zero();
 			Create2dTexture(TexCache,Path.File(),Node);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
-			if (!ValidFlag)	
-			{
-				Purge();	// Clear whatever is already there
-				for (int i=0; i<ElemTypeMax; i++) DrawList[i]=InvalidID;
-			}
+			BlankFlag=false;
+			if (!ValidFlag)	SetInvalid();
 }
 
 /*****************************************************************************/
@@ -115,6 +114,7 @@ GFName		Path=Filename;
 			ElemHeight=Height;
 			UnitWidth=ElemWidth/UnitSize;
 			UnitHeight=ElemHeight/UnitSize;
+			ElemRGB=0;
 
 			Type=ElemType2d;
 			TexXOfs=XOfs;
@@ -152,17 +152,28 @@ GFName		Path=Filename;
 			Build3dDrawList(TexCache,DrawList[ElemType3d]);
 			Create2dTexture(TexCache,Path.File(),TexID);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
-			if (!ValidFlag)	
-			{
-				Purge();	// Clear whatever is already there
-				for (int i=0; i<ElemTypeMax; i++) DrawList[i]=InvalidID;
-			}
+			BlankFlag=false;
+			if (!ValidFlag)	SetInvalid();
 }
 
 /*****************************************************************************/
 void	CElem::CleanUp()
 {
-		MemFree(ElemRGB);
+		if (ElemRGB) MemFree(ElemRGB);
+		ElemRGB=0;
+}
+
+/*****************************************************************************/
+void	CElem::SetBlank()
+{
+		for (int i=0; i<ElemTypeMax; i++) DrawList[i]=BlankID;
+}
+
+/*****************************************************************************/
+void	CElem::SetInvalid()
+{
+		Purge();	// Clear whatever is already there
+		for (int i=0; i<ElemTypeMax; i++) DrawList[i]=InvalidID;
 }
 
 /*****************************************************************************/
@@ -402,6 +413,11 @@ float		ScaleU,ScaleV;
 /*****************************************************************************/
 void	CElem::Render(int Flags,bool Render3d)
 {
+		if (BlankFlag)
+		{
+			glCallList(BlankID);
+			return;
+		}
 		glPushMatrix();
 
 		if (Flags & PC_TILE_FLAG_MIRROR_X)
@@ -452,6 +468,7 @@ void	CElem::Purge()
 {
 		for (int i=0; i<ElemTypeMax; i++)
 			glDeleteLists(DrawList[i],1);
+		CleanUp();
 		TriList.clear();
 }
 
@@ -646,6 +663,12 @@ GFName	FName=Filename;
 GString	Ext=FName.Ext();
 		Ext.Upper();
 		if (!CElem::DefTexFlag) CElem::CreateDefaultTileGfx();
+
+		if (!ElemList.size())
+		{
+//			ElemList[0].SetBlank();
+		}
+
 		if (Ext=="GIN")
 			Load3d(Core);
 		else
@@ -686,7 +709,7 @@ CScene	Scene;
 
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
-		
+
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
 			ElemList.push_back(CElem(Core,Filename,Scene,ThisNode.PruneChildList[Child]));
@@ -697,13 +720,24 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 /*****************************************************************************/
 void	CElemSet::Purge()
 {
-int	ListSize=ElemList.size();
+int		i,ListSize=ElemList.size();
 	
-		for (int i=0; i<ListSize; i++)
+		for (i=0; i<ListSize; i++)
 		{
-			ElemList[i].Purge();
+			if (!ElemList[i].IsBlank())
+			{
+				ElemList[i].Purge();
+			}
 		}
-		ElemList.clear();
+
+		if (ElemList[0].IsBlank())
+		{
+			ElemList.erase(1,ListSize);
+		}
+		else
+		{
+			ElemList.clear();
+		}
 		Loaded=FALSE;
 }
 

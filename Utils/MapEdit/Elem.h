@@ -67,6 +67,7 @@ public:
 
 		bool	IsValid()					{return(ValidFlag);}
 
+		bool	IsBlank()					{return(BlankFlag);}
 		bool	IsElem3d()					{return(Type==ElemType3d);}
 		int		GetTexXOfs()				{return(TexXOfs);}
 		int		GetTexYOfs()				{return(TexYOfs);}
@@ -78,6 +79,8 @@ static	bool	DefTexFlag;
 		
 		std::vector<sTriFace> 	&GetTriList() {return(TriList);}
 
+		void	SetBlank();
+		void	SetInvalid();
 protected:
 		void	Build3dElem(CTexCache &TexCache,CScene &ThisScene,int Node);
 		void	Build2dElem(CCore *Core,const char *Filename,int TexId);
@@ -96,7 +99,7 @@ protected:
 
 		GLint					DrawList[ElemTypeMax];
 		ElemType				Type;
-		bool					ValidFlag;
+		bool					ValidFlag,BlankFlag;
 		int						TexXOfs,TexYOfs;
 		
 		int						ElemWidth,ElemHeight;

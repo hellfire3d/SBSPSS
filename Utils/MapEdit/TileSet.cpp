@@ -417,6 +417,8 @@ bool	CTileBank::SelectCancel()
 /*****************************************************************************/
 void	CTileBank::DeleteSet(CCore *Core)
 {
+		if (GUIElemList.m_List.GetCurSel()==-1) return;
+
 		if (Core->Question("Delete Current Tile Bank\n\nAll used tiles in current set will be set to blank\nAre you sure?"))
 			{
 			int		SetCount=GetSetCount();
@@ -446,6 +448,7 @@ void	CTileBank::DeleteSet(CCore *Core)
 				}
 			}
 		CurrentSet--;
+
 		GUIUpdate(Core);
 }
 

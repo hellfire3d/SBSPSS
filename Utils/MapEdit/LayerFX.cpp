@@ -1,6 +1,6 @@
-/**********************/
-/*** Layer Platform ***/
-/**********************/
+/****************/
+/*** Layer FX ***/
+/****************/
 
 #include	"stdafx.h"
 #include	<Vector3.h>
@@ -15,74 +15,120 @@
 
 #include	"Core.h"
 #include	"LayerThing.h"
-#include	"LayerPlatform.h"
+#include	"LayerFX.h"
 #include	"Utils.h"
 #include	"Export.h"
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerPlatform::CLayerPlatform(sLayerDef &Def)
+CLayerFX::CLayerFX(sLayerDef &Def)
 {
 		InitLayer(Def);
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::InitLayer(sLayerDef &Def)
+void	CLayerFX::InitLayer(sLayerDef &Def)
 {
 		ThingBank=new CElemBank(-1,-1,false,CElem::CentreModeLR | CElem::CentreModeB);
 		CLayerThing::InitLayer(Def);
-		LoadThingScript(theApp.GetConfigStr("LayerScript","PlatformScript"));
+		LoadThingScript(theApp.GetConfigStr("LayerScript","FXScript"));
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::InitSubView(CCore *Core)
+void	CLayerFX::InitSubView(CCore *Core)
 {
+}
+
+/*****************************************************************************/
+void	CLayerFX::RenderThing(CCore *Core,Vector3 &ThisCam,sLayerThing &ThisThing,bool Render3d,bool Selected)
+{
+float		ZoomW=Core->GetZoomW();
+float		ZoomH=Core->GetZoomH();
+Vector3		&Scale=Core->GetScaleVector();
+Vector3		ScrOfs(ZoomW/2,ZoomH/2,0);
+float		Col=0.8f,A=0.8f;
+
+			glColor4f(1,1,1,0.8f);
+			if (Selected) 
+			{
+				Col=1.0f;
+				A=0.8f;
+				glColor4f(1,1,1,1.0f); // For number
+			}
+			
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+
+			glLoadIdentity();
+
+			glScalef(Scale.x,Scale.y,Scale.z);
+			glTranslatef(-ThisCam.x,ThisCam.y,0);					// Set scroll offset
+			glTranslatef(-ScrOfs.x,ScrOfs.y,0);						// Bring to top left corner
+
+			glTranslatef(ThisThing.XY[0].x,-ThisThing.XY[0].y,0);	// Set Pos
+
+			Core->RenderNumber(0);
+			glEnable(GL_DEPTH_TEST);
+
+float	W=(ThisThing.Data.Width);
+float	H=-(ThisThing.Data.Height);
+// Draw Box
+			glBegin (GL_QUADS);
+				glColor4f(0,0,Col-0.25f,A);
+				glVertex3f(0,0+1,0);
+				glVertex3f(W,0+1,0);
+				glVertex3f(W,H+1,0);
+				glVertex3f(0,H+1,0);
+			glEnd();
+// Draw OutLine
+			glBegin(GL_LINES); 
+				glColor4f(Col,Col,Col,A);
+			
+				glVertex3f( 0,0+1,0);
+				glVertex3f( W,0+1,0);
+
+				glVertex3f( W,0+1,0);
+				glVertex3f( W,H+1,0);
+
+				glVertex3f( W,H+1,0);
+				glVertex3f( 0,H+1,0);
+
+				glVertex3f( 0,H+1,0);
+				glVertex3f( 0,0+1,0);
+
+			glEnd();
+
+			glDisable(GL_DEPTH_TEST);
+
+			glPopMatrix();
 }
 
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CLayerPlatform::GUIInit(CCore *Core)
+void	CLayerFX::GUIInit(CCore *Core)
 {
-		GUIPlatform.DisableCallback(true);
+		GUIFX.DisableCallback(true);
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
-		Core->GUIAdd(GUIThingPos,IDD_LAYER_THING_POS);
-		Core->GUIAdd(GUIPlatform,IDD_LAYER_PLATFORM);
-		GUIPlatform.DisableCallback(false);
-
-// Init type lists
-		{
-CComboBox	&List=GUIPlatform.m_MoveList;
-			List.AddString("Linear");
-			List.AddString("Circular");
-		}
-
-		{
-CComboBox	&List=GUIPlatform.m_Type;
-			List.AddString("Normal");
-			List.AddString("Weighted");
-			List.AddString("Rotating");
-		}
-
-
+		Core->GUIAdd(GUIFX,IDD_LAYER_FX);
+		GUIFX.DisableCallback(false);
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIKill(CCore *Core)
+void	CLayerFX::GUIKill(CCore *Core)
 {
 		Core->GUIRemove(GUIThing,IDD_LAYER_THING);
-		Core->GUIRemove(GUIThingPos,IDD_LAYER_THING_POS);
-		Core->GUIRemove(GUIPlatform,IDD_LAYER_PLATFORM);
+		Core->GUIRemove(GUIFX,IDD_LAYER_FX);
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIUpdate(CCore *Core)
+void	CLayerFX::GUIUpdate(CCore *Core)
 {
 int			i,ListSize;
 CComboBox	&List=GUIThing.m_DefList;
 
-// Setup Def Platform List
+// Setup Def FX List
 		ListSize=DefList.size();
 		List.ResetContent();
 		for (i=0; i<ListSize; i++)
@@ -95,7 +141,7 @@ CComboBox	&List=GUIThing.m_DefList;
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIThingDefClear()
+void	CLayerFX::GUIThingDefClear()
 {
 CComboBox	&List=GUIThing.m_DefList;
 		CurrentDefThing=-1;
@@ -103,63 +149,48 @@ CComboBox	&List=GUIThing.m_DefList;
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIThingUpdate(bool OnlySel)
+void	CLayerFX::GUIThingUpdate(bool OnlySel)
 {
 		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
-		GUIPlatform.DisableCallback(true);
+		GUIFX.DisableCallback(true);
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUIPlatform.SetVal(GUIPlatform.m_Speed,ThisThing.Data.Speed);
-			GUIPlatform.SetVal(GUIPlatform.m_TurnRate,ThisThing.Data.TurnRate);
-			GUIPlatform.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUIPlatform.m_MoveList.SetCurSel(ThisThing.Data.MoveType);
-			GUIPlatform.m_Type.SetCurSel(ThisThing.Data.PlatformType);
+			GUIFX.SetVal(GUIFX.m_Speed,ThisThing.Data.Speed);
+			GUIFX.SetVal(GUIFX.m_Width,ThisThing.Data.Width);
+			GUIFX.SetVal(GUIFX.m_Height,ThisThing.Data.Height);
 		}
 		else
 		{
-			GUIPlatform.m_Speed.SetWindowText("");
-			GUIPlatform.m_TurnRate.SetWindowText("");
-			GUIPlatform.m_Collision.SetCheck(false);
-			GUIPlatform.m_MoveList.SetCurSel(-1);
-			GUIPlatform.m_Type.SetCurSel(-1);
+			GUIFX.m_Speed.SetWindowText("");
+			GUIFX.m_Width.SetWindowText("");
+			GUIFX.m_Height.SetWindowText("");
 		}
-		GUIPlatform.DisableCallback(false);
+		GUIFX.DisableCallback(false);
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIThingPointUpdate(bool OnlySel)
+void	CLayerFX::GUIThingPointUpdate(bool OnlySel)
 {
-		GUIThingPointUpdateList(GUIThingPos.m_List,OnlySel);
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::GUIChanged(CCore *Core)
+void	CLayerFX::GUIChanged(CCore *Core)
 {
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUIPlatform.GetVal(GUIPlatform.m_Speed);
-			ThisThing.Data.TurnRate=GUIPlatform.GetVal(GUIPlatform.m_TurnRate);
-			ThisThing.Data.CollisionFlag=GUIPlatform.m_Collision.GetCheck()!=0;
-			ThisThing.Data.MoveType=GUIPlatform.m_MoveList.GetCurSel();
-			ThisThing.Data.PlatformType=GUIPlatform.m_Type.GetCurSel();
-			SetThingParams(ThisThing);
+			ThisThing.Data.Speed=GUIFX.GetVal(GUIFX.m_Speed);
+			ThisThing.Data.Width=GUIFX.GetVal(GUIFX.m_Width);
+			ThisThing.Data.Height=GUIFX.GetVal(GUIFX.m_Height);
 		}
 }
 
 /*****************************************************************************/
-void	CLayerPlatform::SetThingParams(sLayerThing &Thing)
+void	CLayerFX::SetThingParams(sLayerThing &Thing)
 {
-		switch(Thing.Data.MoveType)
-		{
-			case MoveTypeLinear:
-				Thing.Data.WaypointCount=16;
-				break;
-			case MoveTypeCirular:
-				Thing.Data.WaypointCount=1;
-				Thing.XY.resize(1);
-				break;
-		}
+		Thing.Data.WaypointCount=1;
+		if (Thing.Data.Width<1) Thing.Data.Width=1;
+		if (Thing.Data.Height<1) Thing.Data.Height=1;
 }

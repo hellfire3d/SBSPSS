@@ -30,6 +30,25 @@
 CLayerShade::CLayerShade(sLayerDef &Def)
 {
 		InitLayer(Def);
+// Load script (messy)
+GString	ExecPath;
+GString	ScriptName;
+
+		GetExecPath(ExecPath);
+		ScriptName=ExecPath+theApp.GetConfigStr("LayerScript","BackGfxScript");
+		Script.LoadAndImport(ScriptName);
+
+int		i,ListSize=Script.GetGroupCount();
+		BackGfx.resize(ListSize);
+
+		for (i=0; i<ListSize; i++)
+		{
+			BackGfx[i]=Script.GetGroupName(i);
+			TRACE1("%s\n",BackGfx[i]);
+		}
+		Back0=Back1=-1;
+		TransMode0=TransMode1=0;
+		Flags0=Flags1=-1;
 }
 
 
@@ -75,6 +94,18 @@ void	CLayerShade::Load(CFile *File,int Version)
 			File->Read(&Pos[i],sizeof(int));
 			File->Read(&RGB[i],sizeof(RGBQUAD));
 		}
+		if (Version>=7)
+		{
+			File->Read(&Back0,sizeof(int));
+			File->Read(&Back1,sizeof(int));
+		}
+		if (Version>=8)
+		{
+			File->Read(&TransMode0,sizeof(int));
+			File->Read(&Flags0,sizeof(int));
+			File->Read(&TransMode1,sizeof(int));
+			File->Read(&Flags1,sizeof(int));
+		}
 
 }
 
@@ -88,7 +119,12 @@ void	CLayerShade::Save(CFile *File)
 			File->Write(&Pos[i],sizeof(int));
 			File->Write(&RGB[i],sizeof(RGBQUAD));
 		}
-
+		File->Write(&Back0,sizeof(int));
+		File->Write(&Back1,sizeof(int));
+		File->Write(&TransMode0,sizeof(int));
+		File->Write(&Flags0,sizeof(int));
+		File->Write(&TransMode1,sizeof(int));
+		File->Write(&Flags1,sizeof(int));
 }
 
 /*****************************************************************************/
@@ -152,6 +188,50 @@ void	CLayerShade::GUIInit(CCore *Core)
 			GUI.SetRGB(RGB[i],i);
 		}
 		GUI.SetCount(Count);
+		InitGfxList();
+
+		if (Flags0 & SpinFlag)	GUI.m_Spin0.SetCheck(true);
+		if (Flags0 & ScaleFlag)	GUI.m_Scale0.SetCheck(true);
+		if (Flags0 & MoveFlag)	GUI.m_Move0.SetCheck(true);
+		if (Flags0 & ColorFlag)	GUI.m_Color0.SetCheck(true);
+
+		if (Flags1 & SpinFlag)	GUI.m_Spin1.SetCheck(true);
+		if (Flags1 & ScaleFlag)	GUI.m_Scale1.SetCheck(true);
+		if (Flags1 & MoveFlag)	GUI.m_Move1.SetCheck(true);
+		if (Flags1 & ColorFlag)	GUI.m_Color1.SetCheck(true);
+
+		GUI.m_Trans0.ResetContent();
+		GUI.m_Trans0.AddString("Normal");
+		GUI.m_Trans0.AddString("50%");
+		GUI.m_Trans0.AddString("Subtractive");
+		GUI.m_Trans0.AddString("Another one");
+		GUI.m_Trans0.SetCurSel(TransMode0);
+
+		GUI.m_Trans1.ResetContent();
+		GUI.m_Trans1.AddString("Normal");
+		GUI.m_Trans1.AddString("50%");
+		GUI.m_Trans1.AddString("Subtractive");
+		GUI.m_Trans1.AddString("Another one");
+		GUI.m_Trans1.SetCurSel(TransMode1);
+
+}
+
+/*****************************************************************************/
+void	CLayerShade::InitGfxList()
+{
+int		i,ListSize=BackGfx.size();
+CComboBox	&List0=GUI.m_Gfx0;
+CComboBox	&List1=GUI.m_Gfx1;
+
+		List0.ResetContent();
+		List1.ResetContent();
+		for (i=0; i<ListSize; i++)
+		{
+			List0.AddString(BackGfx[i]);
+			List1.AddString(BackGfx[i]);
+		}
+		List0.SetCurSel(Back0);
+		List1.SetCurSel(Back1);
 }
 
 /*****************************************************************************/
@@ -174,6 +254,23 @@ void	CLayerShade::GUIChanged(CCore *Core)
 			GUI.GetRGB(RGB[i],i);
 		}
 		GUI.GetCount(Count);
+		Back0=GUI.m_Gfx0.GetCurSel();
+		Back1=GUI.m_Gfx1.GetCurSel();
+
+		Flags0=0;
+		if (GUI.m_Spin0.GetCheck())		Flags0|=SpinFlag;
+		if (GUI.m_Scale0.GetCheck())	Flags0|=ScaleFlag;
+		if (GUI.m_Move0.GetCheck())		Flags0|=MoveFlag;
+		if (GUI.m_Color0.GetCheck())	Flags0|=ColorFlag;
+		TransMode0=GUI.m_Trans0.GetCurSel();
+
+		Flags1=0;
+		if (GUI.m_Spin1.GetCheck())		Flags1|=SpinFlag;
+		if (GUI.m_Scale1.GetCheck())	Flags1|=ScaleFlag;
+		if (GUI.m_Move1.GetCheck())		Flags1|=MoveFlag;
+		if (GUI.m_Color1.GetCheck())	Flags1|=ColorFlag;
+		TransMode1=GUI.m_Trans1.GetCurSel();
+
 }
 
 /*****************************************************************************/
@@ -191,4 +288,21 @@ void	CLayerShade::Export(CCore *Core,CExport &Exp)
 			Exp.Write(&RGB[i].rgbBlue,sizeof(u8));
 			Exp.Write(&RGB[i].rgbRed,sizeof(u8));	// Pad
 		}
+
+		Exp.Write(&TransMode0,sizeof(int));
+		Exp.Write(&Flags0,sizeof(int));
+		Exp.Write(&TransMode1,sizeof(int));
+		Exp.Write(&Flags1,sizeof(int));
+
+// Back Gfx
+char	Txt[256];
+
+		Txt[0]=0; 
+		if (Back0!=-1) sprintf(Txt,BackGfx[Back0]);
+		Exp.Write(Txt,strlen(Txt)+1);		
+		
+		Txt[0]=0; 
+		if (Back1!=-1) sprintf(Txt,BackGfx[Back1]);
+		Exp.Write(Txt,strlen(Txt)+1);		
+
 }

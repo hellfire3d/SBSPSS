@@ -51,7 +51,7 @@ void	SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image);
 
 void	BGR2RGB(int W,int H,u8 *Data);
 
-void	SetFileExt(char *InName,char *OutName,char *Ext);
+void	SetFileExt(const char *InName,char *OutName,char *Ext);
 
 void	MakeFullFilename(const char *RelName,GString &Out);
 void	MakePathRel2App(const char* In,char *Out);
@@ -63,13 +63,13 @@ void	*_MemAlloc(size_t Size);
 void	_MemFree(void *Ptr);
 void	CheckMem();
 
-#ifdef _DEBUG
-#define	MemAlloc(v)	_MemAlloc(v)
-#define	MemFree(v)	_MemFree(v)
-#else
+//#ifdef _DEBUG
+//#define	MemAlloc(v)	_MemAlloc(v)
+//#define	MemFree(v)	_MemFree(v)
+//#else
 #define	MemAlloc(v)	malloc(v)
 #define	MemFree(v)	free(v)
-#endif
+//#endif
 
 void	GetExecPath(GString &Path);
 

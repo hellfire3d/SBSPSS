@@ -19,7 +19,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGuiLayerThingPos)
 	enum { IDD = IDD_LAYER_THING_POS };
-		// NOTE: the ClassWizard will add data members here
+	CListBox	m_List;
 	//}}AFX_DATA
 
 
@@ -35,7 +35,10 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CGuiLayerThingPos)
-		// NOTE: the ClassWizard will add member functions here
+	afx_msg void OnSelchangeThingPosList();
+	afx_msg void OnThingPosUp();
+	afx_msg void OnThingPosDown();
+	afx_msg void OnThingPosDelete();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -104,10 +104,66 @@ struct	sQuad
 		u8			uv3[2];					//  2
 };											// 20
 
+
 //***************************************************************************
 //*** Game Types and Headers ************************************************
 //***************************************************************************
+// Tiles 
+typedef	u16	sTileMapElem;	// Tile or Tri Start
+
+struct	sTile
+{
+// 2d Tile
+		u8		u0,v0;						// 2
+		u16		Clut;						// 2
+		u16		TPage;						// 2
+		u16		Pad;	// :o( need this?	// 2
+
+};											// 8
+
+//---------------------------------------------------------------------------
+struct	sTileTri
+{
+		u16			P0;						//  2
+		u16			P1;						//  2
+		u16			P2;						//  2
+		u16			Mat;					//  2
+};											//  8
+
+//---------------------------------------------------------------------------
+struct	sTileTriMat
+{
+		u8			uv0[2];					//  2
+		u16			Clut;					//  2
+		u8			uv1[2];					//  2
+		u16			TPage;					//  2
+		u8			uv2[2];					//  2
+};											//  10
+
+//---------------------------------------------------------------------------
+struct	sTileQuad
+{
+		u16			P0;						//  2
+		u16			P1;						//  2
+		u16			P2;						//  2
+		u16			P3;						//  2
+		u16			Mat;					//  2
+};											//  10
+
+//---------------------------------------------------------------------------
+struct	sTileQuadMat
+{
+		u8			uv0[2];					//  2
+		u16			Clut;					//  2
+		u8			uv1[2];					//  2
+		u16			TPage;					//  2
+		u8			uv2[2];					//  2
+		u8			uv3[2];					//  2
+};											// 12
+
+//***************************************************************************
 // Level Info
+
 struct	sLevelInfo
 {
 		u32		MaxPakSize;
@@ -116,20 +172,6 @@ struct	sLevelInfo
 		u16		Pad;
 //		u16		ActorTypeList.....
 };
-
-//---------------------------------------------------------------------------
-// Maps
-typedef	u16	sTileMapElem;	// Tile or Tri Start
-
-struct	sTile
-{
-// 2d Tile
-		u8		u0,v0;								// 2
-		u16		Clut;								// 2
-		u16		TPage;								// 2
-		u16		Pad;	// :o( need this?			// 2
-
-};													// 8
 
 //---------------------------------------------------------------------------
 // Layers
@@ -163,10 +205,21 @@ struct	sLayerShade
 	u32		Ofs;
 	u8		RGB[4];
 };
+
+struct	sLayerShadeGfx
+{
+		u16			TPage;
+		u16			Clut;
+		u8			U,V;
+		u8			W,H;
+		u16			Flags;
+};
+
 struct	sLayerShadeHdr
 {
 	u16				Count;
-	sLayerShade		Data[4];
+	sLayerShade		Data[LAYER_SHADE_RGB_MAX];
+	sLayerShadeGfx	BackGfx[2];
 };
 
 //---------------------------------------------------------------------------
@@ -181,11 +234,11 @@ struct	sLvlHdr
 	u32		ActorList;
 	u32		ItemList;
 	u32		PlatformList;
-	u32		Pad4;
-	u32		Pad5;
+	u32		TriggerList;
+	u32		FXList;
 	u32		Pad6;
 	u32		Pad7;
-
+	u16		PlayerStartX,PlayerStartY;
 };
 
 //***************************************************************************
@@ -262,6 +315,20 @@ struct	sThingPlatform
 	u8		PointCount;
 	// Point List...
 }; // 10
+
+struct	sThingFX
+{
+	u16			Type;
+	u16			Speed;
+	sThingPoint	Pos,Size;
+}; // 8
+
+struct	sThingTrigger
+{
+	u16		Type;
+	sThingPoint	Pos;
+	u8		Width,Height;
+}; // 8
 
 //***************************************************************************
 #endif

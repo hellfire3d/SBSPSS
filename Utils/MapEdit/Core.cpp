@@ -82,18 +82,21 @@ int		Width,Height;
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
 #ifdef _DEBUG
+		AddLayer(LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE, Width, Height);
+		AddLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE, Width, Height);
+		AddLayer(LAYER_TYPE_FX,LAYER_SUBTYPE_NONE, Width, Height);
 		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
-		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
+//		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
 #endif
 		for (int i=0; i<Layer.size(); i++)
 		{
 			Layer[i]->InitSubView(this);
 		}
 
-
 		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 #ifdef _DEBUG
-		ActiveLayer=FindLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE);
+		ActiveLayer=FindLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE);
+		if (ActiveLayer<0) ActiveLayer=0;
 #endif
 		CurrentLayer=Layer[ActiveLayer];
 		return(TRUE);
@@ -157,6 +160,7 @@ int		MapHeight=ActionLayer->GetHeight();
 		{
 			Layer[i]->CheckLayerSize(MapWidth,MapHeight);
 		}
+
 }
 
 /*****************************************************************************/
@@ -401,7 +405,7 @@ bool	RedrawFlag=false;
 			Zoom(+0.1f);
 			break;
 		case CmdMsg_ResetView:
-			ResetView();
+			SetCamPos(DefaultCamPos);
 			break;
 		case CmdMsg_SetLayer:
 			SetLayer(Param0);
@@ -524,31 +528,6 @@ sLayerDef	ThisDef;
 
 		Lyr=CLayer::NewLayer(ThisDef);
 		Idx=AddLayer(Lyr);
-/*		switch (Type)
-		{
-			case LAYER_TYPE_TILE:
-				Idx=AddLayer(new CLayerTile(SubType, Width,Height));
-				break;
-			case LAYER_TYPE_COLLISION:
-				Idx=AddLayer(new CLayerCollision(SubType, Width,Height));
-				break;
-			case LAYER_TYPE_SHADE:
-				Idx=AddLayer(new CLayerShade(SubType, Width,Height));
-				break;
-			case LAYER_TYPE_ACTOR:
-				Idx=AddLayer(new CLayerActor(SubType, Width,Height));
-				break;
-			case LAYER_TYPE_ITEM:
-				Idx=AddLayer(new CLayerItem(SubType, Width,Height));
-				break;
-			case LAYER_TYPE_PLATFORM:
-				Idx=AddLayer(new CLayerPlatform(SubType, Width,Height));
-				break;
-			default:
-				ASSERT(!"AddLayer - Invalid Layer Type");
-				break;
-		}
-*/
 		if (ActionLayer) Layer[Idx]->InitSubView(this);
 		return(Idx);
 }
@@ -593,10 +572,20 @@ void		CCore::DeleteLayer(int ThisLayer)
 
 		if (Layer[ThisLayer]->CanDelete())
 		{
-//			Layer[CurrentLayer]->GUIKill(this);
-			SetLayer(ThisLayer-1,true);
+			Layer[ThisLayer]->GUIKill(this);
 			delete Layer[ThisLayer];
 			Layer.erase(Layer.begin() + ThisLayer);
+			UpdateLayerGUI();
+
+			if (ActiveLayer==ThisLayer)
+			{
+				ActiveLayer--;
+				if (ActiveLayer<0) ActiveLayer=0;
+				CurrentLayer=Layer[ActiveLayer];
+				CurrentLayer->GUIInit(this);
+				GUIUpdate();
+			}
+
 			TRACE1("Deleted Layer %i\n",ThisLayer);
 		}
 		else
@@ -675,11 +664,21 @@ Vector3	&ThisCam=GetCam();
 }
 
 /*****************************************************************************/
-void	CCore::ResetView()
+void	CCore::SetCamPos(Vector3 Pos)
 {
 Vector3	&ThisCam=GetCam();
 
-		ThisCam=DefaultCamPos;
+		ThisCam=Pos;
+		UpdateView();
+}
+
+/*****************************************************************************/
+void	CCore::SetCamPos(CPoint &Pos)
+{
+Vector3	&ThisCam=GetCam();
+
+		ThisCam.x=Pos.x;
+		ThisCam.y=Pos.y;
 		UpdateView();
 }
 
@@ -813,9 +812,8 @@ Vector3	ThisCam=Cam;
 }
 
 /*****************************************************************************/
-void	CCore::Export(char *Filename)
+void	CCore::Export(const char *Filename)
 {
-
 int		LayerCount=Layer.size();
 char	ExportName[256];
 		

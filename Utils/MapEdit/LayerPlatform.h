@@ -8,13 +8,20 @@
 #include	"LayerThing.h"
 #include	"Layer.h"
 #include	"MapEdit.h"
-//#include	"GUILayerPlatform.h"
+#include	"GUILayerPlatform.h"
 #include	"Elem.h"
 
 /*****************************************************************************/
 class	CLayerPlatform : public CLayerThing
 {
 public:
+		enum
+		{
+				MoveTypeLinear=0,
+				MoveTypeCirular
+
+		};
+
 		CLayerPlatform(sLayerDef &Def);
 		CLayerPlatform(CFile *File,int Version)	{Load(File,Version);}
 
@@ -31,8 +38,11 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
+
 protected:
-//		CGUILayerPlatform		GUI;
+		void			SetThingParams(sLayerThing &Thing);
+
+		CGUILayerPlatform		GUIPlatform;
 
 };
 

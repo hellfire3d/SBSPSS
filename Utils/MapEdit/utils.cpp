@@ -269,7 +269,7 @@ int					PaletteSize,ImageSize;
 }
 
 /**************************************************************************************/
-void	SetFileExt(char *InName,char *OutName,char *Ext)
+void	SetFileExt(const char *InName,char *OutName,char *Ext)
 {
 char	Drive[_MAX_DRIVE];
 char	Path[_MAX_DIR];
@@ -414,3 +414,4 @@ GFName	Exe;
 		Path="\\SpongeBob\\tools\\MapEdit\\";
 #endif
 }
+

@@ -32,7 +32,7 @@ public:
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
 protected:
-		CGUILayerActor		GUI;
+		CGUILayerActor		GUIActor;
 
 };
 

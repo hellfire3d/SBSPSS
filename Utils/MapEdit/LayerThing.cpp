@@ -70,10 +70,6 @@ int		i,ListSize;
 		}
 		LoadThingNames(File,Version);
 
-//		CurrentDefThing=-1;
-//		CurrentThing=-1;
-//		CurrentThingPoint=-1;
-
 }
 
 /*****************************************************************************/
@@ -180,8 +176,9 @@ int		i,ListSize=ThingScript.GetGroupCount();
 			char	*Name=ThingScript.GetGroupName(i);
 			char	*Gfx=ThingScript.GetStr(Name,"gfx");
 
+			memset(&ThisDef.Data,0,sizeof(sLayerThingData));
 			ThisDef.Name=Name;
-			ThisDef.Data.WaypointFlag=ThingScript.GetInt(Name,"WayPoints")==1;
+			ThisDef.Data.WaypointCount=ThingScript.GetInt(Name,"WayPoints");
 			ThisDef.Data.Speed=ThingScript.GetInt(Name,"Speed");
 			ThisDef.Data.TurnRate=ThingScript.GetInt(Name,"TurnRate");
 			ThisDef.Data.Health=ThingScript.GetInt(Name,"Health");
@@ -196,10 +193,6 @@ int		i,ListSize=ThingScript.GetGroupCount();
 				char	Filename[512];
 				GFName::makeabsolute(ExecPath,Gfx,Filename);
 				ThisDef.ElemID=ThingBank->AddSet(Filename);
-			}
-			else
-			{
-				TRACE1("BAD %s\n",Name);
 			}
 
 		}
@@ -429,6 +422,9 @@ bool	Ret=false;
 		case CmdMsg_ThingListDelete:
 			DeleteThing();
 			break;
+		case CmdMsg_ThingListGoto:
+			GotoThing(Core);
+			break;
 		case CmdMsg_ThingListSelect:
 			CurrentDefThing=Param0;
 			SetCursor(DefList[CurrentDefThing].Name);
@@ -535,6 +531,7 @@ void	CLayerThing::AddThing(CPoint &Pos)
 
 sLayerThing	&ThisThing=ThingList[CurrentThing];
 		ThisThing=Cursor;
+		SetThingParams(ThisThing);
 		SelectThing(CurrentThing);
 		GUIThingDefClear();
 }
@@ -554,17 +551,9 @@ int		CLayerThing::SelectThing(int Idx)
 		CurrentThingPoint=0;
 		if (CurrentThing!=-1)
 		{
-			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			if (ThisThing.Data.WaypointFlag)
-			{
-				Mode=MouseModePoints;
-			}
-			else
-			{
-				Mode=MouseModeNormal;
-			}
-		GUIThingUpdate();
-		GUIThingPointUpdate();
+			Mode=MouseModePoints;
+			GUIThingUpdate();
+			GUIThingPointUpdate();
 		}
 		return(CurrentThing);
 }
@@ -579,6 +568,14 @@ void	CLayerThing::DeleteThing()
 		GUIThingUpdate();
 }
 
+/*****************************************************************************/
+void	CLayerThing::GotoThing(CCore *Core)
+{
+		if (CurrentThing==-1) return;
+sLayerThing	&ThisThing=ThingList[CurrentThing];
+
+		Core->SetCamPos(ThisThing.XY[0]);
+}
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -612,8 +609,9 @@ int			StartIdx=0;
 /*****************************************************************************/
 void	CLayerThing::AddThingPoint(CPoint &Pos)
 {
-	TRACE1("ADDTHINGPOINT %i\n",CurrentThingPoint);
+		TRACE1("ADDTHINGPOINT %i\n",CurrentThingPoint);
 		if (Pos.x==-1 || Pos.y==-1) return;	// Off Map?
+
 		CurrentThingPoint=SelectThingPoint(Pos);
 		
 		if (CurrentThingPoint!=-1) 
@@ -623,11 +621,16 @@ void	CLayerThing::AddThingPoint(CPoint &Pos)
 		}
 sLayerThing	&ThisThing=ThingList[CurrentThing];
 
-		CurrentThingPoint=ThisThing.XY.size();
-		ThisThing.XY.resize(CurrentThingPoint+1);
-		ThisThing.XY[CurrentThingPoint]=Pos;
-		TRACE0("Add Point\n");
-		GUIThingPointUpdate();
+		int	PntCount=ThisThing.XY.size();
+		if (PntCount<ThisThing.Data.WaypointCount+1)
+		{
+			CurrentThingPoint=ThisThing.XY.size();
+			ThisThing.XY.resize(CurrentThingPoint+1);
+			ThisThing.XY[CurrentThingPoint]=Pos;
+			TRACE0("Add Point\n");
+			GUIThingPointUpdate();
+		}
+
 }
 
 /*****************************************************************************/
@@ -714,21 +717,16 @@ int		i,ListSize=ThingList.size();
 void	CLayerThing::ExportThing(CExport &Exp,sLayerThing &ThisThing)
 {
 int				i,ListSize=ThisThing.XY.size();
-sExpLayerThing	OutThing;
+sLayerThingData	OutThing=ThisThing.Data;
+
+		OutThing.WaypointCount=ListSize;
+		Exp.Write(&OutThing,sizeof(sLayerThingData));
+
 // Point List
-		Exp.Write(&ListSize,sizeof(int));
 		for (i=0 ;i<ListSize; i++)
 		{
 			Exp.Write(&ThisThing.XY[i],sizeof(CPoint));
 		}
-// Thing
-		OutThing.Health=ThisThing.Data.Health;
-		OutThing.AttackStrength=ThisThing.Data.AttackStrength;
-		OutThing.Speed=ThisThing.Data.Speed;
-		OutThing.TurnRate=ThisThing.Data.TurnRate;
-		OutThing.CollisionFlag=ThisThing.Data.CollisionFlag;
-		OutThing.PlayerFlag=ThisThing.Data.PlayerFlag;
-		Exp.Write(&OutThing,sizeof(sExpLayerThing));
 }
 
 /*****************************************************************************/

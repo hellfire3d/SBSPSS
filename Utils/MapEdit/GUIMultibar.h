@@ -62,6 +62,7 @@ virtual	CSize CalcDynamicLayout( int nLength, DWORD dwMode );
 
 
 
+
 // Dialog Data
 	//{{AFX_DATA(CGUIMultiBar)
 	enum { IDD = IDD_MULTIBAR };

@@ -24,6 +24,8 @@
 #include	"LayerActor.h"
 #include	"LayerItem.h"
 #include	"LayerPlatform.h"
+#include	"LayerTrigger.h"
+#include	"LayerFX.h"
 
 #include	"LayerDef.h"
 #include	"Utils.h"
@@ -41,6 +43,8 @@ sLayerInfoTable	CLayer::InfoTable[]=
 	{LAYER_TYPE_ACTOR,		LAYER_SUBTYPE_NONE,		"Actor",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 	{LAYER_TYPE_ITEM,		LAYER_SUBTYPE_NONE,		"Item",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 	{LAYER_TYPE_PLATFORM,	LAYER_SUBTYPE_NONE,		"Platform",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
+	{LAYER_TYPE_TRIGGER,	LAYER_SUBTYPE_NONE,		"Trigger",		true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
+	{LAYER_TYPE_FX,			LAYER_SUBTYPE_NONE,		"FX",			true,	1.0f,	false,	true,		true,	LAYER_SUBVIEW_NONE,},
 };
 
 int		CLayer::InfoTableSize=sizeof(InfoTable)/sizeof(sLayerInfoTable);
@@ -90,6 +94,12 @@ CLayer	*New;
 		case LAYER_TYPE_PLATFORM:
 			New=new CLayerPlatform(Def);
 			break;
+		case LAYER_TYPE_TRIGGER:
+			New=new CLayerTrigger(Def);
+			break;
+		case LAYER_TYPE_FX:
+			New=new CLayerFX(Def);
+			break;
 		default:
 			ASSERT(!"Unknown Layer");
 		}
@@ -123,6 +133,12 @@ CLayer	*New;
 				break;
 			case LAYER_TYPE_PLATFORM:
 				New=new CLayerPlatform(File,Version);
+				break;
+			case LAYER_TYPE_TRIGGER:
+				New=new CLayerTrigger(File,Version);
+				break;
+			case LAYER_TYPE_FX:
+				New=new CLayerFX(File,Version);
 				break;
 			default:
 				ASSERT(!"Unknown Layer");
@@ -232,7 +248,7 @@ float	ShiftY=ThisCam.y - (int)ThisCam.y;
 
 		if (StartX<0) StartX=0;
 		if (StartY<0) StartY=0;
-
+		
 int		DrawW=ZoomW+8;
 int		DrawH=ZoomH+8;
 

@@ -123,6 +123,14 @@ SOURCE=.\LayerDef.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayerFX.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerFX.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayerItem.cpp
 # End Source File
 # Begin Source File
@@ -160,6 +168,14 @@ SOURCE=.\LayerTile.cpp
 # Begin Source File
 
 SOURCE=.\LayerTile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTrigger.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerTrigger.h
 # End Source File
 # End Group
 # Begin Group "Export"
@@ -401,11 +417,11 @@ SOURCE=.\GUILayerCollision.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GUILayerItem.cpp
+SOURCE=.\GUILayerFX.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GUILayerItem.h
+SOURCE=.\GUILayerFX.h
 # End Source File
 # Begin Source File
 
@@ -417,11 +433,43 @@ SOURCE=.\GUILayerList.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GUILayerPlatform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerPlatform.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GUILayerShade.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GUILayerShade.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerThing.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerThing.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GuiLayerThingPos.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GuiLayerThingPos.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerTrigger.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerTrigger.h
 # End Source File
 # Begin Source File
 
@@ -464,5 +512,29 @@ SOURCE=.\GUIToolBar.cpp
 SOURCE=.\GUIToolBar.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\actor.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\fx.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\Item.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\MapEdit.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\platform.ini
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\tools\MapEdit\trigger.ini
+# End Source File
 # End Target
 # End Project

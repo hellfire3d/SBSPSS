@@ -19,7 +19,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-const	s32		FileVersion=6;
+const	s32		FileVersion=8;
 
 #define	SCREEN_MAP_WIDTH	30
 #define	SCREEN_MAP_HEIGHT	20
@@ -44,7 +44,7 @@ public:
 		void					Render(bool ForceRender=FALSE);
 		void					RenderLayers(bool OneShot=false);
 		void					RenderNumber(int No);
-		void					Export(char *Filename);
+		void					Export(const char *Filename);
 		void					RenderToTga(char *Filename);
 		void					RenderToTga();
 
@@ -116,7 +116,9 @@ public:
 		void					CopySelection();
 		void					PasteSelection();
 
-		void					ResetView();
+		void					SetCamPos(Vector3 Pos);
+		void					SetCamPos(CPoint &Pos);
+
 		CElemBank				*GetIconBank()					{return(IconBank);}
 
 private:

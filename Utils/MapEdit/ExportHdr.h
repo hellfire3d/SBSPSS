@@ -110,15 +110,26 @@ BOOL	operator==(sExpMapElem const &v1)
 /*****************************************************************************/
 /*** Things ******************************************************************/
 /*****************************************************************************/
-struct	sExpLayerThing
+struct	sLayerThingData
 {
-	int						Health;
-	int						AttackStrength;
+	int						WaypointCount;
+
 	int						Speed;
 	int						TurnRate;
+	int						Health;
+	int						AttackStrength;
 	bool					CollisionFlag;
 	bool					PlayerFlag;
-	int						Spare[8];
+
+// Platform
+	int						MoveType;
+	int						PlatformType;
+// Boxes
+	int						Width,Height;
+// Spare
+	int						Spare[4];
+
 };
+
 #endif
 

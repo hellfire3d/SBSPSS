@@ -1,29 +1,23 @@
-/*******************/
-/*** Layer Platform ***/
-/*******************/
+/*********************/
+/*** Layer Trigger ***/
+/*********************/
 
-#ifndef	__LAYER_PLATFORM_HEADER__
-#define	__LAYER_PLATFORM_HEADER__
+#ifndef	__LAYER_TRIGGER_HEADER__
+#define	__LAYER_TRIGGER_HEADER__
 
 #include	"LayerThing.h"
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"GUILayerPlatform.h"
+#include	"GUILayerTrigger.h"
 #include	"Elem.h"
 
 /*****************************************************************************/
-class	CLayerPlatform : public CLayerThing
+class	CLayerTrigger : public CLayerThing
 {
 public:
-		enum
-		{
-				MoveTypeLinear=0,
-				MoveTypeCirular
 
-		};
-
-		CLayerPlatform(sLayerDef &Def);
-		CLayerPlatform(CFile *File,int Version)	{Load(File,Version);}
+		CLayerTrigger(sLayerDef &Def);
+		CLayerTrigger(CFile *File,int Version)	{Load(File,Version);}
 
 		void			InitLayer(sLayerDef &Def);
 		void			InitSubView(CCore *Core);
@@ -40,9 +34,10 @@ public:
 
 
 protected:
+		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
 		void			SetThingParams(sLayerThing &Thing);
 
-		CGUILayerPlatform		GUIPlatform;
+		CGUILayerTrigger		GUITrigger;
 
 };
 

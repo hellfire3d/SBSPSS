@@ -1,29 +1,23 @@
-/*******************/
-/*** Layer Platform ***/
-/*******************/
+/****************/
+/*** Layer FX ***/
+/****************/
 
-#ifndef	__LAYER_PLATFORM_HEADER__
-#define	__LAYER_PLATFORM_HEADER__
+#ifndef	__LAYER_FX_HEADER__
+#define	__LAYER_FX_HEADER__
 
 #include	"LayerThing.h"
 #include	"Layer.h"
 #include	"MapEdit.h"
-#include	"GUILayerPlatform.h"
+#include	"GUILayerFX.h"
 #include	"Elem.h"
 
 /*****************************************************************************/
-class	CLayerPlatform : public CLayerThing
+class	CLayerFX : public CLayerThing
 {
 public:
-		enum
-		{
-				MoveTypeLinear=0,
-				MoveTypeCirular
 
-		};
-
-		CLayerPlatform(sLayerDef &Def);
-		CLayerPlatform(CFile *File,int Version)	{Load(File,Version);}
+		CLayerFX(sLayerDef &Def);
+		CLayerFX(CFile *File,int Version)	{Load(File,Version);}
 
 		void			InitLayer(sLayerDef &Def);
 		void			InitSubView(CCore *Core);
@@ -40,9 +34,10 @@ public:
 
 
 protected:
+		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
 		void			SetThingParams(sLayerThing &Thing);
 
-		CGUILayerPlatform		GUIPlatform;
+		CGUILayerFX		GUIFX;
 
 };
 

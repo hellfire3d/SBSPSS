@@ -34,6 +34,18 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerShade)
 	enum { IDD = IDD_LAYER_SHADE };
+	CButton	m_Spin1;
+	CButton	m_Spin0;
+	CButton	m_Scale1;
+	CButton	m_Scale0;
+	CButton	m_Move1;
+	CButton	m_Move0;
+	CButton	m_Color1;
+	CButton	m_Color0;
+	CComboBox	m_Trans1;
+	CComboBox	m_Trans0;
+	CComboBox	m_Gfx1;
+	CComboBox	m_Gfx0;
 	CEdit	m_R0;
 	CEdit	m_G0;
 	CEdit	m_B0;
@@ -64,6 +76,7 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerShade)
 	afx_msg void OnChangeLayershadeEdit();
+	afx_msg void OnChangeParam();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 	bool	SetFlag;

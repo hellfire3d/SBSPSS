@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CGUILayerActor dialog
 
-class CGUILayerActor : public CDialog
+class CGUILayerActor : public CDialog 
 {
 // Construction
 public:
@@ -25,9 +25,6 @@ public:
 	CEdit	m_Speed;
 	CEdit	m_Attack;
 	CEdit	m_Health;
-	CComboBox	m_LevelList;
-	CListBox	m_PosList;
-	CComboBox	m_List;
 	//}}AFX_DATA
 
 
@@ -49,14 +46,7 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerActor)
-	afx_msg void OnActorDelete();
-	afx_msg void OnActorPosUp();
-	afx_msg void OnActorPosDown();
-	afx_msg void OnActorPosDelete();
 	afx_msg void OnChangeParam();
-	afx_msg void OnSelchangeActorList();
-	afx_msg void OnSelchangeLevelActorList();
-	afx_msg void OnSelchangeActorPosList();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

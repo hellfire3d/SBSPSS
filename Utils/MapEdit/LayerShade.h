@@ -18,16 +18,18 @@ public:
 		enum
 		{
 			LAYER_SHADE_RGB_MAX=4,
+
+			SpinFlag=1<<0,
+			ScaleFlag=1<<1,
+			MoveFlag=1<<2,
+			ColorFlag=1<<3,
 		};
-//		CLayerShade(){};
+
 		CLayerShade(sLayerDef &Def);
 		CLayerShade(CFile *File,int Version)	{Load(File,Version);}
 		~CLayerShade();
 
 		void			InitLayer(sLayerDef &Def);
-
-//		int				GetType()			{return(LAYER_TYPE_SHADE);}
-//		int				GetSubType()		{return(SubType);}
 
 		void			Render(CCore *Core,Vector3 &CamPos,bool Is3d);
 		void			RenderGrid(CCore *Core,Vector3 &CamPos,bool Active){};
@@ -51,12 +53,19 @@ public:
 
 protected:
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
+		void			InitGfxList();
 
 		CGUILayerShade	GUI;
+		CIni			Script;
+		CList<GString>	BackGfx;
+		int				Back0,Back1;
+		int				TransMode0,TransMode1;
+		int				Flags0,Flags1;
 
 		int				Count;
 		int				Pos[LAYER_SHADE_RGB_MAX];
 		RGBQUAD			RGB[LAYER_SHADE_RGB_MAX];
+
 };
 
 /*****************************************************************************/

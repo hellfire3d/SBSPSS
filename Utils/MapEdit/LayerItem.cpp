@@ -47,22 +47,20 @@ void	CLayerItem::InitSubView(CCore *Core)
 /*****************************************************************************/
 void	CLayerItem::GUIInit(CCore *Core)
 {
-//		GUI.DisableCallback(true);
-		Core->GUIAdd(GUI,IDD_LAYER_ITEM);
-//		GUI.DisableCallback(false);
+		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 }
 
 /*****************************************************************************/
 void	CLayerItem::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(GUI,IDD_LAYER_ITEM);
+		Core->GUIRemove(GUIThing,IDD_LAYER_THING);
 }
 
 /*****************************************************************************/
 void	CLayerItem::GUIUpdate(CCore *Core)
 {
 int			i,ListSize;
-CComboBox	&List=GUI.m_List;
+CComboBox	&List=GUIThing.m_DefList;
 
 // Setup Def Item List
 		ListSize=DefList.size();
@@ -74,21 +72,24 @@ CComboBox	&List=GUI.m_List;
 		List.SetCurSel(CurrentDefThing);
 
 //		GUIThingUpdate();
+
 }
 
 /*****************************************************************************/
 void	CLayerItem::GUIThingDefClear()
 {
-CComboBox	&List=GUI.m_List;
+
+CComboBox	&List=GUIThing.m_DefList;
 		CurrentDefThing=-1;
 		List.SetCurSel(CurrentDefThing);
+
 }
 
 /*****************************************************************************/
 void	CLayerItem::GUIThingUpdate(bool OnlySel)
 {
 int			i,ListSize;
-CComboBox	&List=GUI.m_LevelList;
+CComboBox	&List=GUIThing.m_List;
 
 		if (OnlySel)
 		{

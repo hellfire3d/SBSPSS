@@ -45,22 +45,26 @@ void	CLayerActor::InitSubView(CCore *Core)
 /*****************************************************************************/
 void	CLayerActor::GUIInit(CCore *Core)
 {
-		GUI.DisableCallback(true);
-		Core->GUIAdd(GUI,IDD_LAYER_ACTOR);
-		GUI.DisableCallback(false);
+		GUIActor.DisableCallback(true);
+		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
+		Core->GUIAdd(GUIThingPos,IDD_LAYER_THING_POS);
+		Core->GUIAdd(GUIActor,IDD_LAYER_ACTOR);
+		GUIActor.DisableCallback(false);
 }
 
 /*****************************************************************************/
 void	CLayerActor::GUIKill(CCore *Core)
 {
-		Core->GUIRemove(GUI,IDD_LAYER_ACTOR);
+		Core->GUIRemove(GUIThing,IDD_LAYER_THING);
+		Core->GUIRemove(GUIThingPos,IDD_LAYER_THING_POS);
+		Core->GUIRemove(GUIActor,IDD_LAYER_ACTOR);
 }
 
 /*****************************************************************************/
 void	CLayerActor::GUIUpdate(CCore *Core)
 {
 int			i,ListSize;
-CComboBox	&List=GUI.m_List;
+CComboBox	&List=GUIThing.m_DefList;
 
 // Setup Def Actor List
 		ListSize=DefList.size();
@@ -77,7 +81,7 @@ CComboBox	&List=GUI.m_List;
 /*****************************************************************************/
 void	CLayerActor::GUIThingDefClear()
 {
-CComboBox	&List=GUI.m_List;
+CComboBox	&List=GUIThing.m_DefList;
 		CurrentDefThing=-1;
 		List.SetCurSel(CurrentDefThing);
 }
@@ -85,35 +89,35 @@ CComboBox	&List=GUI.m_List;
 /*****************************************************************************/
 void	CLayerActor::GUIThingUpdate(bool OnlySel)
 {
-		GUIThingUpdateList(GUI.m_LevelList,false);
+		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
-		GUI.DisableCallback(true);
+		GUIActor.DisableCallback(true);
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			GUI.SetVal(GUI.m_Speed,ThisThing.Data.Speed);
-			GUI.SetVal(GUI.m_TurnRate,ThisThing.Data.TurnRate);
-			GUI.SetVal(GUI.m_Health,ThisThing.Data.Health);
-			GUI.SetVal(GUI.m_Attack,ThisThing.Data.AttackStrength);
-			GUI.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
-			GUI.m_Player.SetCheck(ThisThing.Data.PlayerFlag);
+			GUIActor.SetVal(GUIActor.m_Speed,ThisThing.Data.Speed);
+			GUIActor.SetVal(GUIActor.m_TurnRate,ThisThing.Data.TurnRate);
+			GUIActor.SetVal(GUIActor.m_Health,ThisThing.Data.Health);
+			GUIActor.SetVal(GUIActor.m_Attack,ThisThing.Data.AttackStrength);
+			GUIActor.m_Collision.SetCheck(ThisThing.Data.CollisionFlag);
+			GUIActor.m_Player.SetCheck(ThisThing.Data.PlayerFlag);
 		}
 		else
 		{
-			GUI.m_Speed.SetWindowText("");
-			GUI.m_TurnRate.SetWindowText("");
-			GUI.m_Health.SetWindowText("");
-			GUI.m_Attack.SetWindowText("");
-			GUI.m_Collision.SetCheck(false);
-			GUI.m_Player.SetCheck(false);
+			GUIActor.m_Speed.SetWindowText("");
+			GUIActor.m_TurnRate.SetWindowText("");
+			GUIActor.m_Health.SetWindowText("");
+			GUIActor.m_Attack.SetWindowText("");
+			GUIActor.m_Collision.SetCheck(false);
+			GUIActor.m_Player.SetCheck(false);
 		}
-		GUI.DisableCallback(false);
+		GUIActor.DisableCallback(false);
 }
 
 /*****************************************************************************/
 void	CLayerActor::GUIThingPointUpdate(bool OnlySel)
 {
-		GUIThingPointUpdateList(GUI.m_PosList,OnlySel);
+		GUIThingPointUpdateList(GUIThingPos.m_List,OnlySel);
 }
 
 /*****************************************************************************/
@@ -122,12 +126,12 @@ void	CLayerActor::GUIChanged(CCore *Core)
 		if (CurrentThing!=-1)
 		{
 			sLayerThing	&ThisThing=ThingList[CurrentThing];
-			ThisThing.Data.Speed=GUI.GetVal(GUI.m_Speed);
-			ThisThing.Data.TurnRate=GUI.GetVal(GUI.m_TurnRate);
-			ThisThing.Data.Health=GUI.GetVal(GUI.m_Health);
-			ThisThing.Data.AttackStrength=GUI.GetVal(GUI.m_Attack);
-			ThisThing.Data.CollisionFlag=GUI.m_Collision.GetCheck()!=0;
-			ThisThing.Data.PlayerFlag=GUI.m_Player.GetCheck()!=0;
+			ThisThing.Data.Speed=GUIActor.GetVal(GUIActor.m_Speed);
+			ThisThing.Data.TurnRate=GUIActor.GetVal(GUIActor.m_TurnRate);
+			ThisThing.Data.Health=GUIActor.GetVal(GUIActor.m_Health);
+			ThisThing.Data.AttackStrength=GUIActor.GetVal(GUIActor.m_Attack);
+			ThisThing.Data.CollisionFlag=GUIActor.m_Collision.GetCheck()!=0;
+			ThisThing.Data.PlayerFlag=GUIActor.m_Player.GetCheck()!=0;
 		}
 
 }

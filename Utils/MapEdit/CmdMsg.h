@@ -37,12 +37,13 @@ enum	CmdMsg
 
 // Thing
 		CmdMsg_ThingListDelete,		// 23
-		CmdMsg_ThingListSelect,		// 24
-		CmdMsg_ThingLevelSelect,	// 25
-		CmdMsg_ThingPosSelect,		// 26
-		CmdMsg_ThingPosUp,			// 27
-		CmdMsg_ThingPosDown,		// 28
-		CmdMsg_ThingPosDelete,		// 29
+		CmdMsg_ThingListGoto,		// 24
+		CmdMsg_ThingListSelect,		// 25
+		CmdMsg_ThingLevelSelect,	// 26
+		CmdMsg_ThingPosSelect,		// 27
+		CmdMsg_ThingPosUp,			// 28
+		CmdMsg_ThingPosDown,		// 29
+		CmdMsg_ThingPosDelete,		// 30
 };
 #endif
 /*****************************************************************************/

@@ -8,22 +8,12 @@
 #include	"Layer.h"
 #include	"MapEdit.h"
 #include	"GUIToolbar.h"
+#include	"GUILayerThing.h"
+#include	"GUILayerThingPos.h"
 #include	"Elem.h"
+#include	"ExportHdr.h"	// For thing data struct
 
 /*****************************************************************************/
-struct	sLayerThingData
-{
-	bool					WaypointFlag;
-
-	int						Speed;
-	int						TurnRate;
-	int						Health;
-	int						AttackStrength;
-	bool					CollisionFlag;
-	bool					PlayerFlag;
-	int						Spare[8];
-
-};
 struct	sLayerThing
 {
 	GString					Name;
@@ -91,12 +81,13 @@ protected:
 virtual	int				FindDefThing(const char *Name);
 virtual	void			SetCursor(const char *Name);
 
-		void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
+virtual	void			RenderThing(CCore *Core,Vector3 &CamPos,sLayerThing	&ThisThing,bool Render3d,bool Selected);
 		int				CheckThing(CPoint &Pos);
 		void			AddThing(CPoint &Pos);
 		int				SelectThing(CPoint &Pos);
 		int				SelectThing(int Idx);
 		void			DeleteThing();
+		void			GotoThing(CCore *Core);
 		int				CheckThingPoint(CPoint &Pos);
 		void			AddThingPoint(CPoint &Pos);
 		int				SelectThingPoint(CPoint &Pos);
@@ -105,6 +96,7 @@ virtual	void			SetCursor(const char *Name);
 		void			MovePoint(int Dir);
 		void			DeletePoint();
 		void			Cancel();
+virtual	void			SetThingParams(sLayerThing &Thing){}
 
 		CIni				ThingScript;
 		CElemBank			*ThingBank;
@@ -115,6 +107,10 @@ virtual	void			SetCursor(const char *Name);
 		MouseMode			Mode;
 		sLayerThing			Cursor;
 		bool				DrawPoints;
+
+		CGUILayerThing		GUIThing;
+		CGuiLayerThingPos	GUIThingPos;
+
 };
 
 /*****************************************************************************/
