@@ -84,7 +84,7 @@ s16	standardFontTab[]=
 	/* ð ñ ò ó ô õ ö ÷ */	      -1,      -1,FRM__242,FRM__243,FRM__244,FRM__245,FRM__246,      -1,
 	/* ø ù ú û ü ý þ ÿ */	      -1,FRM__249,FRM__250,FRM__251,FRM__252,FRM__253,      -1,FRM__255,
 };
-FontData	standardFont( UI_UIGFX_SPR,	standardFontTab,	9,	1,1, 4 );
+FontData	standardFont( UI_UIGFX_SPR,	standardFontTab,	13,	1,1, 4 );
 
 /*----------------------------------------------------------------------
 	Function:
