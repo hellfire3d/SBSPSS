@@ -31,6 +31,11 @@ void CNpcPlayerBubblePlatform::postInit()
 	CNpcPlatform::postInit();
 
 	m_pop = false;
+
+	setCollisionSize( 30, 30 );
+	setCollisionCentreOffset( 0, -15 );
+
+	calculateNonRotatedCollisionData();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
