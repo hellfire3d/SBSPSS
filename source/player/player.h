@@ -228,13 +228,8 @@ private:
 
 	enum
 	{
-		INVINCIBLE_FRAMES__START=120,	// Invincible for this many frames at start of life
-		INVINCIBLE_FRAMES__HIT=50,		// Invincible for this many frames after taking damage
-
-		LOOKAROUND_DELAY=90,			// Frames before look around starts
-		LOOKAROUND_SCROLLSPEED=2,		// Speed to scroll at
-		LOOKAROUND_MAXSCROLL=60,		// Maximum distance to scroll
-		LOOKAROUND_RESETSPEED=6,		// Speed of scroll back when look around ended
+		INVINCIBLE_FRAMES__START=200,	// Invincible for this many frames at start of life
+		INVINCIBLE_FRAMES__HIT=100,		// Invincible for this many frames after taking damage
 	};
 	int				m_invincibleFrameCount;		// Initial invincibility and also invincibility after taking damage
 
