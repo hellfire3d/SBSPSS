@@ -430,8 +430,11 @@ void CNpcIronDogfishEnemy::processAttackCollision()
 		{
 			// only detect collision if in attack mode
 
-			m_oldControlFunc = m_controlFunc;
-			m_controlFunc = NPC_CONTROL_COLLISION;
+			if ( m_controlFunc != NPC_CONTROL_COLLISION )
+			{
+				m_oldControlFunc = m_controlFunc;
+				m_controlFunc = NPC_CONTROL_COLLISION;
+			}
 
 			break;
 		}
@@ -514,8 +517,11 @@ void CNpcIronDogfishEnemy::collidedWith( CThing *_thisThing )
 
 							case DETECT_ALL_COLLISION:
 							{
-								m_oldControlFunc = m_controlFunc;
-								m_controlFunc = NPC_CONTROL_COLLISION;
+								if ( m_controlFunc != NPC_CONTROL_COLLISION )
+								{
+									m_oldControlFunc = m_controlFunc;
+									m_controlFunc = NPC_CONTROL_COLLISION;
+								}
 
 								break;
 							}

@@ -841,8 +841,11 @@ void CNpcMotherJellyfishEnemy::collidedWith(CThing *_thisThing)
 
 									case DETECT_ALL_COLLISION:
 									{
-										m_oldControlFunc = m_controlFunc;
-										m_controlFunc = NPC_CONTROL_COLLISION;
+										if ( m_controlFunc != NPC_CONTROL_COLLISION )
+										{
+											m_oldControlFunc = m_controlFunc;
+											m_controlFunc = NPC_CONTROL_COLLISION;
+										}
 
 										processUserCollision( _thisThing );
 

@@ -314,8 +314,11 @@ void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 					{
 						if ( m_frame >= ( 5 << 8 ) )
 						{
-							m_oldControlFunc = m_controlFunc;
-							m_controlFunc = NPC_CONTROL_COLLISION;
+							if ( m_controlFunc != NPC_CONTROL_COLLISION )
+							{
+								m_oldControlFunc = m_controlFunc;
+								m_controlFunc = NPC_CONTROL_COLLISION;
+							}
 						}
 					}
 				}
