@@ -165,6 +165,8 @@ virtual bool			getHasPlatformCollided()					{return false;}
 virtual s32				getNewYPos( CThing *_thisThing );
 		void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
+		void			setRenderFlag(bool f)						{m_renderFlag=f;}
+		void			setThinkFlag(bool f)						{m_thinkFlag=f;}
 		bool			canRender()									{return (m_renderFlag);}
 		DVECTOR			&getRenderPos()								{return(m_RenderPos);}
 		bool			canThink()									{return (m_thinkFlag);}

@@ -54,12 +54,23 @@
 	Vars
 	---- */
 
+static int	s_RenderBBoxX0=0;
+static int	s_RenderBBoxX1=512;
+static int	s_RenderBBoxY0=0;
+static int	s_RenderBBoxY1=256;
+static int	s_ThinkBBoxX0=0-256;
+static int	s_ThinkBBoxX1=512+526;
+static int	s_ThinkBBoxY0=0-128;
+static int	s_ThinkBBoxY1=256+128;
+
+
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];//={NULL,NULL};
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
 int				CThingManager::s_initialised=false;
 
 sBBox			CThingManager::m_RenderBBox;
 sBBox			CThingManager::m_ThinkBBox;
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -147,8 +158,17 @@ void		CThingManager::killAllThingsForRespawn()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+bool	FO=false;
 void		CThingManager::thinkAllThings(int _frames)
 {
+// Setup Screen BBox's
+DVECTOR	const	&CamPos=CLevel::getCameraPos();
+
+	m_ThinkBBox.XMin=s_ThinkBBoxX0+CamPos.vx;
+	m_ThinkBBox.XMax=s_ThinkBBoxX1+CamPos.vx;
+	m_ThinkBBox.YMin=s_ThinkBBoxY0+CamPos.vy;
+	m_ThinkBBox.YMax=s_ThinkBBoxY1+CamPos.vy;
+
 	int		i;
 	CThing	*thing;
 	CThing	*thing1,*thing2;
@@ -158,8 +178,20 @@ void		CThingManager::thinkAllThings(int _frames)
 		thing=s_thingLists[i];
 		while(thing)
 		{
-			thing->think(_frames);
-			thing->updateCollisionArea();
+			// Check If in Thinkable range
+			CRECT	const	&ThingRect= thing->getCollisionArea();
+			bool	Flag=true;
+			// Will speed this up
+			
+			if (ThingRect.x2<m_ThinkBBox.XMin || ThingRect.x1>m_ThinkBBox.XMax) Flag=false;
+			if (ThingRect.y2<m_ThinkBBox.YMin || ThingRect.y1>m_ThinkBBox.YMax) Flag=false;
+			thing->setThinkFlag(Flag);
+
+			if (Flag)
+			{
+				thing->think(_frames);
+				thing->updateCollisionArea();
+			}
 			thing=thing->m_nextListThing;
 		}
 	}
@@ -180,10 +212,8 @@ void		CThingManager::thinkAllThings(int _frames)
 
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() &&  thing1->checkCollisionAgainst(thing2, _frames))
 		{
-
 			thing1->collidedWith(thing2);
 		}
 		thing1=thing1->m_nextListThing;
@@ -194,8 +224,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -207,8 +236,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -220,8 +248,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -233,8 +260,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -246,8 +272,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -259,8 +284,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	thing2=s_thingLists[CThing::TYPE_PLAYER];
 	while(thing1&&thing2)
 	{
-		if(thing1->canCollide()&&
-		   thing1->checkCollisionAgainst(thing2, _frames))
+		if(thing1->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 		{
 			thing1->collidedWith(thing2);
 		}
@@ -274,9 +298,7 @@ void		CThingManager::thinkAllThings(int _frames)
 	{
 		while(thing2)
 		{
-			if(thing1->canCollide()&&
-			   thing2->canCollide()&&
-			   thing1->checkCollisionAgainst(thing2, _frames))
+			if(thing1->canCollide()&& thing2->canCollide() && thing1->checkCollisionAgainst(thing2, _frames))
 			{
 				thing1->collidedWith(thing2);
 			}
@@ -295,9 +317,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			if ( thing1 != thing2 )
 			{
-				if ( thing1->canCollide() &&
-						thing2->canCollide() &&
-						thing1->checkCollisionAgainst( thing2, _frames ) )
+				if ( thing1->canCollide() && thing2->canCollide() && thing1->checkCollisionAgainst( thing2, _frames ) )
 				{
 					thing1->collidedWith( thing2 );
 					//thing2->collidedWith( thing1 );
@@ -320,9 +340,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		{
 			if ( thing1 != thing2 )
 			{
-				if ( thing1->canCollide() &&
-						thing2->canCollide() &&
-						thing1->checkCollisionAgainst( thing2, _frames ) )
+				if ( thing1->canCollide() && thing2->canCollide() && thing1->checkCollisionAgainst( thing2, _frames ) )
 				{
 					thing1->collidedWith( thing2 );
 					//thing2->collidedWith( thing1 );
@@ -335,6 +353,7 @@ void		CThingManager::thinkAllThings(int _frames)
 		thing1 = thing1->m_nextListThing;
 	}
 
+// Shut emm down, sh sh shut em down, we shutem down
 	for(i=0;i<CThing::MAX_TYPE;i++)
 	{
 		thing=s_thingLists[i];
@@ -360,15 +379,6 @@ void		CThingManager::thinkAllThings(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static int	s_RenderBBoxX0=0;
-static int	s_RenderBBoxX1=512;
-static int	s_RenderBBoxY0=0;
-static int	s_RenderBBoxY1=256;
-static int	s_ThinkBBoxX0=0-256;
-static int	s_ThinkBBoxX1=512+526;
-static int	s_ThinkBBoxY0=0+128;
-static int	s_ThinkBBoxY1=256+128;
-
 void		CThingManager::renderAllThings()
 {
 // Setup Screen BBox's
@@ -379,17 +389,10 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	m_RenderBBox.YMin=s_RenderBBoxY0+CamPos.vy;
 	m_RenderBBox.YMax=s_RenderBBoxY1+CamPos.vy;
 
-	m_ThinkBBox.XMin=s_ThinkBBoxX0+CamPos.vx;
-	m_ThinkBBox.XMax=s_ThinkBBoxX1+CamPos.vx;
-	m_ThinkBBox.YMin=s_ThinkBBoxY0+CamPos.vy;
-	m_ThinkBBox.YMax=s_ThinkBBoxY1+CamPos.vy;
 
-int		i;
-CThing	*thing;
-
-	for(i=0;i<CThing::MAX_TYPE;i++)
+	for(int i=0;i<CThing::MAX_TYPE;i++)
 	{
-		thing=s_thingLists[i];
+		CThing	*thing=s_thingLists[i];
 		while(thing)
 		{
 			thing->render();
@@ -556,6 +559,8 @@ void	CThing::think(int _frames)
 	PosDelta.vx=Pos.vx-PosLast.vx; 
 	PosDelta.vy=Pos.vy-PosLast.vy;
 	PosLast=Pos;
+
+
 }
 
 /*----------------------------------------------------------------------
@@ -577,7 +582,7 @@ int showthings=false;
 void	CThing::render()
 {
 // Check Is Onscreen
-CRECT	const	&collisionRect = getCollisionArea();
+CRECT	const	&ThingRect= getCollisionArea();
 sBBox			&ScrBBox=CThingManager::getRenderBBox();
 DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
@@ -586,8 +591,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 // Will speed this up
 		m_renderFlag=true;
-		if (collisionRect.x2<ScrBBox.XMin || collisionRect.x1>ScrBBox.XMax) m_renderFlag=false;
-		if (collisionRect.y2<ScrBBox.YMin || collisionRect.y1>ScrBBox.YMax) m_renderFlag=false;
+		if (ThingRect.x2<ScrBBox.XMin || ThingRect.x1>ScrBBox.XMax) m_renderFlag=false;
+		if (ThingRect.y2<ScrBBox.YMin || ThingRect.y1>ScrBBox.YMax) m_renderFlag=false;
 
 /***/
 #ifdef	SHOW_BBOX
@@ -1007,3 +1012,4 @@ void	CTriggerThing::setTargetBox(int _x,int _y,int _w,int _h)
 
 /*===========================================================================
 end */
+
