@@ -18,46 +18,47 @@ int		ShadowYOfs=32;
 
 /*****************************************************************************/
 
-CActorPool::ACTOR_TYPE CActorPool::actorType[38] =
+CActorPool::ACTOR_TYPE CActorPool::actorType[39] =
 {
-	ACTOR_PLAYER,		//SpongeBob=0
-	ACTOR_FRIEND_NPC,	//BarnacleBoy=1
-	ACTOR_FRIEND_NPC,	//Gary=2
-	ACTOR_FRIEND_NPC,	//Krusty=3
-	ACTOR_FRIEND_NPC,	//MermaidMan=4
-	ACTOR_FRIEND_NPC,	//Patrick=5
-	ACTOR_FRIEND_NPC,	//Sandy=6
-	ACTOR_FRIEND_NPC,	//Squidward=7
-	ACTOR_FRIEND_NPC,	//Plankton=8
+	ACTOR_PLAYER,				//SpongeBob=0
+	ACTOR_FRIEND_NPC,			//BarnacleBoy=1
+	ACTOR_FRIEND_NPC,			//Gary=2
+	ACTOR_FRIEND_NPC,			//Krusty=3
+	ACTOR_FRIEND_NPC,			//MermaidMan=4
+	ACTOR_FRIEND_NPC,			//Patrick=5
+	ACTOR_FRIEND_NPC,			//Sandy=6
+	ACTOR_FRIEND_NPC,			//Squidward=7
+	ACTOR_FRIEND_NPC,			//Plankton=8
 	ACTOR_UNKNOWN,
-	ACTOR_ENEMY_NPC,	//SmallJellyfish-Level1=10
-	ACTOR_ENEMY_NPC,	//SmallJellyfish-Level2=11
-	ACTOR_ENEMY_NPC,	//Motherjellyfish=12
-	ACTOR_ENEMY_NPC,	//Anenome-Level1=13
-	ACTOR_ENEMY_NPC,	//SpikeyAnenome=14
-	ACTOR_ENEMY_NPC,	//Anenome-Level3=15
-	ACTOR_ENEMY_NPC,	//BabyOctopus=16
-	ACTOR_ENEMY_NPC,	//Ballblob=17
-	ACTOR_ENEMY_NPC,	//Boogermonster=18
-	ACTOR_ENEMY_NPC,	//Caterpillar=19
-	ACTOR_ENEMY_NPC,	//Clam-Level1=20
-	ACTOR_ENEMY_NPC,	//Clam-Level2=21
-	ACTOR_ENEMY_NPC,	//Eyeball=22
-	ACTOR_ENEMY_NPC,	//Flamingskull=23
-	ACTOR_ENEMY_NPC,	//FlyingDutchman=24
-	ACTOR_ENEMY_NPC,	//Ghost=25
-	ACTOR_ENEMY_NPC,	//GiantWorm=26
-	ACTOR_ENEMY_NPC,	//HermitCrab=27
-	ACTOR_ENEMY_NPC,	//IronDogFish=28
-	ACTOR_ENEMY_NPC,	//PuffaFish=29
-	ACTOR_ENEMY_NPC,	//SeaSnake=30
-	ACTOR_ENEMY_NPC,	//Sharkman=31
-	ACTOR_ENEMY_NPC,	//SharkSub=32
-	ACTOR_ENEMY_NPC,	//Skeletalfish=33
-	ACTOR_ENEMY_NPC,	//SpiderCrab=34
-	ACTOR_ENEMY_NPC,	//Squiddart=35
-	ACTOR_ENEMY_NPC,	//Stomper=36
-	ACTOR_ENEMY_NPC,	//DustDevil=37
+	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level1=10
+	ACTOR_ENEMY_NPC,			//SmallJellyfish-Level2=11
+	ACTOR_ENEMY_NPC,			//Motherjellyfish=12
+	ACTOR_ENEMY_NPC,			//Anenome-Level1=13
+	ACTOR_ENEMY_NPC,			//SpikeyAnenome=14
+	ACTOR_ENEMY_NPC,			//Anenome-Level3=15
+	ACTOR_ENEMY_NPC,			//BabyOctopus=16
+	ACTOR_ENEMY_NPC,			//Ballblob=17
+	ACTOR_ENEMY_NPC,			//Boogermonster=18
+	ACTOR_ENEMY_NPC,			//Caterpillar=19
+	ACTOR_ENEMY_NPC,			//Clam-Level1=20
+	ACTOR_ENEMY_NPC,			//Clam-Level2=21
+	ACTOR_ENEMY_NPC,			//Eyeball=22
+	ACTOR_ENEMY_NPC,			//Flamingskull=23
+	ACTOR_ENEMY_NPC,			//FlyingDutchman=24
+	ACTOR_ENEMY_NPC,			//Ghost=25
+	ACTOR_ENEMY_NPC,			//GiantWorm=26
+	ACTOR_ENEMY_NPC,			//HermitCrab=27
+	ACTOR_ENEMY_NPC,			//IronDogFish=28
+	ACTOR_ENEMY_NPC,			//PuffaFish=29
+	ACTOR_ENEMY_NPC,			//SeaSnake=30
+	ACTOR_ENEMY_NPC,			//Sharkman=31
+	ACTOR_ENEMY_NPC,			//SharkSub=32
+	ACTOR_ENEMY_NPC,			//Skeletalfish=33
+	ACTOR_ENEMY_NPC,			//SpiderCrab=34
+	ACTOR_ENEMY_NPC,			//Squiddart=35
+	ACTOR_ENEMY_NPC,			//Stomper=36
+	ACTOR_ENEMY_NPC,			//DustDevil=37
+	ACTOR_ENEMY_GENERATOR_NPC,	//SiderCrabSpawner=38
 };
 
 /*****************************************************************************/

@@ -27,6 +27,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NGEN_H__
+#include "enemy\ngen.h"
+#endif
+
 #ifndef __ENEMY_NPLATFRM_H__
 #include "enemy\nplatfrm.h"
 #endif
@@ -109,7 +113,7 @@ const s32 Scale = (512<<12)/(256);
 
 /*****************************************************************************/
 void 	CGameScene::init()
-{		
+{
 // Setup Constant Camera Matrix
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
@@ -159,7 +163,7 @@ void	CGameScene::shutdown()
 {
 //		CFileIO::EnableASync(false);
 		shutdownLevel();
-		CSoundMediator::dumpSong();	
+		CSoundMediator::dumpSong();
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 		s_genericFont->dump();		delete s_genericFont;
@@ -179,7 +183,7 @@ void 	CGameScene::render()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
-//#ifdef __USER_paul__		
+//#ifdef __USER_paul__
 //	if(!CConversation::isActive()&&PadGetDown(0)&PAD_START)
 //	{
 //		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
@@ -201,7 +205,7 @@ void	CGameScene::think(int _frames)
 	s_levelFinished=false;
 	}
 
-	
+
 	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START&&canPause())
 	{
 		m_pauseMenu->select();
@@ -217,7 +221,7 @@ void	CGameScene::think(int _frames)
 //PKG
 //		if(camPos.vx<0){camPos.vx=0;PAUL_DBGMSG("cx<0");}
 //		if(camPos.vy<0){camPos.vy=0;PAUL_DBGMSG("cy<0");}
-//PKG		
+//PKG
 /*		if (!s_levelFinished) */CBubicleFactory::setMapOffset(&camPos);
 /*		if (!s_levelFinished) */Level.setCameraCentre(camPos);
 /*		if (!s_levelFinished) */Level.think(_frames);
@@ -268,15 +272,15 @@ void	CGameScene::initLevel()
 	pos.vx+=64;	createPickup(PICKUP__LIFE,&pos);
 	pos.vx+=64;	createPickup(PICKUP__SPATULA,&pos);
 	pos.vx+=64;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
-	pos.vx+=64;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__BUBBLE_WAND,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__NET,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__GLASSES,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__BALLOON,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__HELMET,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__CORAL_BLOWER,&pos);		
-	pos.vx+=64;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);
+	pos.vx+=64;	createPickup(PICKUP__BUBBLE_WAND,&pos);
+	pos.vx+=64;	createPickup(PICKUP__NET,&pos);
+	pos.vx+=64;	createPickup(PICKUP__GLASSES,&pos);
+	pos.vx+=64;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);
+	pos.vx+=64;	createPickup(PICKUP__BALLOON,&pos);
+	pos.vx+=64;	createPickup(PICKUP__HELMET,&pos);
+	pos.vx+=64;	createPickup(PICKUP__CORAL_BLOWER,&pos);
+	pos.vx+=64;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);
 
 //	CNpcPlatform	*platform;
 //	platform=new ("test platform") CNpcPlatform;
@@ -311,6 +315,50 @@ void	CGameScene::initLevel()
 				{
 					CNpcEnemy *enemy;
 					enemy = new ("npc enemy") CNpcEnemy;
+					ASSERT(enemy);
+					enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
+					enemy->init();
+					enemy->setLayerCollision( Level.getCollisionLayer() );
+
+					u16	*PntList=(u16*)MakePtr(actorList[actorNum],sizeof(sThingActor));
+
+					u16 newXPos, newYPos;
+
+					newXPos = (u16) *PntList;
+					PntList++;
+					newYPos = (u16) *PntList;
+					PntList++;
+
+					enemy->setStartPos( newXPos, newYPos );
+					enemy->addWaypoint( newXPos, newYPos );
+
+					if ( actorList[actorNum]->PointCount > 1 )
+					{
+						for ( pointNum = 1 ; pointNum < actorList[actorNum]->PointCount ; pointNum++ )
+						{
+							newXPos = (u16) *PntList;
+							PntList++;
+							newYPos = (u16) *PntList;
+							PntList++;
+
+							enemy->addWaypoint( newXPos, newYPos );
+
+							if ( pointNum == 1 )
+							{
+								enemy->setHeading( newXPos, newYPos );
+							}
+						}
+					}
+
+					enemy->postInit();
+
+					break;
+				}
+
+				case CActorPool::ACTOR_ENEMY_GENERATOR_NPC:
+				{
+					CNpcEnemyGenerator *enemy;
+					enemy = new ("npc enemy generator") CNpcEnemyGenerator;
 					ASSERT(enemy);
 					enemy->setTypeFromMapEdit( actorList[actorNum]->Type );
 					enemy->init();

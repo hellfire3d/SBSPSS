@@ -147,3 +147,86 @@ void CNpcEnemy::processSpiderCrabCollision()
 		m_controlFunc = m_oldControlFunc;
 	}
 }
+
+void CNpcEnemy::processSpiderCrabInitJumpMovement( int _frames )
+{
+	s32 velocity;
+	bool completed = false;
+	bool collision = false;
+
+	if ( m_animNo != ANIM_SPIDERCRAB_JUMP )
+	{
+		m_animPlaying = true;
+		m_animNo = ANIM_SPIDERCRAB_JUMP;
+		m_frame = 0;
+	}
+
+	velocity = m_velocity * _frames;
+
+	m_extension += velocity;
+
+	if ( m_extension > 128 )
+	{
+		m_extension = 128;
+		completed = true;
+	}
+
+	Pos.vy = m_base.vy - ( ( 50 * rsin( abs( m_extension ) << 4 ) ) >> 12 );
+
+	if ( m_extension > 64 )
+	{
+		// check for collision on the way back down
+
+		if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy ) < 0 )
+		{
+			collision = true;
+		}
+	}
+
+	if ( completed || collision )
+	{
+		m_movementFunc = m_data[m_type].movementFunc;
+	}
+}
+
+void CNpcEnemy::processSpiderCrabSpawnerMovement( int _frames )
+{
+	if ( getNumChildren() < 3 )
+	{
+		m_movementTimer -= _frames;
+
+		if ( m_movementTimer < 0 )
+		{
+			m_movementTimer = 3 * GameState::getOneSecondInFrames();
+
+			CNpcEnemy *enemy;
+			enemy = new( "spider crab" ) CNpcEnemy;
+			ASSERT(enemy);
+			enemy->setType( CNpcEnemy::NPC_SPIDER_CRAB );
+			enemy->init();
+			enemy->setLayerCollision( m_layerCollision );
+			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
+
+			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
+
+			if ( sourceWaypoint )
+			{
+				// skip first waypoint
+
+				sourceWaypoint = sourceWaypoint->nextWaypoint;
+
+				while( sourceWaypoint )
+				{
+					enemy->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
+					sourceWaypoint = sourceWaypoint->nextWaypoint;
+				}
+			}
+
+			enemy->setPathType( m_npcPath.getPathType() );
+
+			enemy->postInit();
+
+			addChild( enemy );
+		}
+	}
+}

@@ -40,6 +40,7 @@ public:
 	void			addWaypoint( DVECTOR newPos );
 	void			removeAllWaypoints();
 	void			setPathType( u8 newPathType );
+	u8				getPathType();
 	bool			incPath();
 	void			resetPath();
 	void			reversePathDir();
@@ -49,6 +50,7 @@ public:
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 	void			getPathXExtents( s32 *minExtent, s32 *maxExtent );
 	void			getPathYExtents( s32 *minExtent, s32 *maxExtent );
+	CNpcWaypoint	*getWaypointList();
 
 private:
 	CNpcWaypoint	*waypoint;

@@ -261,6 +261,7 @@ void CNpcEnemy::init()
 
 	m_timerFunc = m_data[this->m_type].timerFunc;
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
+	m_movementFunc = m_data[this->m_type].movementFunc;
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 
@@ -560,6 +561,23 @@ void CNpcEnemy::postInit()
 			break;
 		}
 
+		case NPC_INIT_SPIDER_CRAB:
+		{
+			m_npcPath.setPathType( CNpcPath::PONG_PATH );
+
+			if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 ) < 0 )
+			//if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			{
+				// starting off below ground, jump initially
+
+				m_velocity = 5;
+
+				m_movementFunc = NPC_MOVEMENT_SPIDER_CRAB_INITJUMP;
+			}
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -590,6 +608,7 @@ void CNpcEnemy::reinit()
 
 	m_timerFunc = m_data[this->m_type].timerFunc;
 	m_sensorFunc = m_data[this->m_type].sensorFunc;
+	m_movementFunc = m_data[this->m_type].movementFunc;
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 
@@ -622,18 +641,6 @@ void CNpcEnemy::shutdown()
 	m_positionHistory = NULL;
 
 	delete m_actorGfx;
-
-	// remove child elements
-
-	CThing	*List = this->getNext();
-
-	while ( List )
-	{
-		CThing *Next = List->getNext();
-		List->shutdown();
-
-		List = Next;
-	}
 
 	CEnemyThing::shutdown();
 
@@ -1156,7 +1163,7 @@ void CNpcEnemy::processMovement(int _frames)
 	s32 moveVel = 0;
 	s32 moveDist = 0;
 
-	switch( m_data[this->m_type].movementFunc )
+	switch( m_movementFunc )
 	{
 		case NPC_MOVEMENT_STATIC:
 		{
@@ -1276,6 +1283,20 @@ void CNpcEnemy::processMovement(int _frames)
 		case NPC_MOVEMENT_BALL_BLOB:
 		{
 			processBallBlobMovement( _frames, &moveX, &moveY );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_SPIDER_CRAB_SPAWNER:
+		{
+			processSpiderCrabSpawnerMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_SPIDER_CRAB_INITJUMP:
+		{
+			processSpiderCrabInitJumpMovement( _frames );
 
 			break;
 		}

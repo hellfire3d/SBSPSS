@@ -106,6 +106,7 @@ public:
 	void			removeChild(CThing *Child);
 	void			removeAllChild();
 	bool			hasChild(CThing *Child);
+	int				getNumChildren();
 
 
 	DVECTOR			getPos()						{return Pos;}
@@ -122,7 +123,8 @@ protected:
 	
 // Linkage
 		CThing		*Parent,*Next;
-
+// Count
+		int			m_numChildren;
 // Pos
 		DVECTOR		Pos, PosLast, PosDelta;
 

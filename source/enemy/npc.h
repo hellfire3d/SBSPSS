@@ -138,6 +138,7 @@ public:
 		NPC_MINE,
 		NPC_BOOGER_MONSTER,
 		NPC_SPIDER_CRAB,
+		NPC_SPIDER_CRAB_SPAWNER,
 		NPC_EYEBALL,
 		NPC_BABY_OCTOPUS,
 		NPC_ZOMBIE_FISH_FOLK,
@@ -209,6 +210,7 @@ protected:
 		NPC_INIT_EYEBALL,
 		NPC_INIT_BALL_BLOB,
 		NPC_INIT_ANEMONE_2,
+		NPC_INIT_SPIDER_CRAB,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -292,6 +294,8 @@ protected:
 		NPC_MOVEMENT_SHARK_MAN,
 		NPC_MOVEMENT_BALL_BLOB,
 		NPC_MOVEMENT_RETURNING_HAZARD_GROUND,
+		NPC_MOVEMENT_SPIDER_CRAB_SPAWNER,
+		NPC_MOVEMENT_SPIDER_CRAB_INITJUMP,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -489,6 +493,8 @@ protected:
 
 	void				processCloseSpiderCrabAttack( int _frames );
 	void				processSpiderCrabCollision();
+	void				processSpiderCrabSpawnerMovement( int _frames );
+	void				processSpiderCrabInitJumpMovement( int _frames );
 
 	// hermit crab functions
 
@@ -586,6 +592,7 @@ protected:
 	NPC_CONTROL_FUNC	m_oldControlFunc;
 	NPC_TIMER_FUNC		m_timerFunc;
 	NPC_SENSOR_FUNC		m_sensorFunc;
+	NPC_MOVEMENT_FUNC	m_movementFunc;
 	CNpcPath			m_npcPath;
 	s32					m_heading;
 	s32					m_fireHeading;
@@ -624,7 +631,6 @@ protected:
 
 	CNpcPositionHistory		*m_positionHistory;
 };
-
 
 /*****************************************************************************/
 #endif

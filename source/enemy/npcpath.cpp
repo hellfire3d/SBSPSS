@@ -147,6 +147,11 @@ void CNpcPath::setPathType( u8 newPathType )
 	pathType = (NPC_PATH_TYPE) newPathType;
 }
 
+u8 CNpcPath::getPathType()
+{
+	return( pathType );
+}
+
 bool CNpcPath::incPath()
 {
 	if ( !reversePath )
@@ -349,4 +354,9 @@ bool CNpcPath::thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX
 	}
 
 	return( pointChange );
+}
+
+CNpcWaypoint *CNpcPath::getWaypointList()
+{
+	return( waypoint );
 }

@@ -354,6 +354,7 @@ void	CThing::init()
 {
 	Parent=NULL;
 	Next=NULL;
+	m_numChildren = 0;
 
 	Pos.vx=Pos.vy=10;
 
@@ -511,12 +512,14 @@ CThing	*List=Next;
 		}
 		List->Next=Child;
 		Child->Parent=this;
+		m_numChildren++;
 	}
 	else
 	{
 // List does not exist, create
 		Next = Child;
 		Child->Parent=this;
+		m_numChildren++;
 	}
 }
 
@@ -552,6 +555,8 @@ CThing	*Last=NULL;
 			this->Next = List->Next;
 		}
 
+		m_numChildren--;
+
 		Child->Parent=NULL;
 }
 
@@ -573,6 +578,19 @@ CThing	*List=Next;
 			List=Next;
 		}
 		Next=NULL;
+
+		m_numChildren = 0;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CThing::getNumChildren()
+{
+	return( m_numChildren );
 }
 
 /*----------------------------------------------------------------------
