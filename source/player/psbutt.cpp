@@ -101,6 +101,7 @@ void CPlayerStateButtBounce::think(CPlayerModeBase *_playerMode)
 void CPlayerStateButtBounceFall::enter(CPlayerModeBase *_playerMode)
 {
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);
+PAUL_DBGMSG("[PM__BUTTFALL_VELOCITY]");
 }
 
 
@@ -112,6 +113,7 @@ void CPlayerStateButtBounceFall::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceFall::think(CPlayerModeBase *_playerMode)
 {
+//	_playerMode->buttFall();
 	_playerMode->fall();
 }
 

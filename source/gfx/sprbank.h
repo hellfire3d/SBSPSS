@@ -99,6 +99,7 @@ inline	POLY_FT4	*printFT4Scaled(sFrameHdr *_fh,int _x,int _y,int _xFlip,int _yFl
 	return(ft4);
 }
 
+inline	POLY_FT4	*printRotatedScaledSprite(int _frame,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot,int _ot)	{return printRotatedScaledSprite(&m_SpriteBankInstance->getFrameHeaders()[ _frame ],_xCentre,_yCentre,_xScale,_yScale,_rot,_ot);}
 inline	POLY_FT4	*printRotatedScaledSprite(sFrameHdr *_fh,int _xCentre,int _yCentre,int _xScale,int _yScale,int _rot,int _ot)
 {
 	ASSERT(_rot>=0);
