@@ -517,8 +517,8 @@ static s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
 int			m_cameraXScrollDir;
 int			m_cameraXScrollPos;
 int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most
-//int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
-int CAMERA_STARTMOVETHRESHOLD=20;		// If SB moves faster than this then the camera starts scrolling
+int CAMERA_SCROLLTHRESHOLD=6;			// If SB moves when more than this many tiles off-centre, the camera will *always* scroll
+int CAMERA_STARTMOVETHRESHOLD=90;		// If SB moves faster than this then the camera starts scrolling
 int CAMERA_STOPMOVETHRESHOLD=10;		// If SB moves slower than this then the camera stops scrolling
 int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
@@ -1457,7 +1457,6 @@ void CPlayer::respawn()
 	m_lives--;
 }
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:	Yes - This function is fat! It can be tidied up when all of the anims
@@ -1948,7 +1947,7 @@ void CPlayer::shove( DVECTOR move )
   ---------------------------------------------------------------------- */
 void	CPlayer::moveLeft()
 {
-	if(m_moveVelocity.vx<-CAMERA_STARTMOVETHRESHOLD)//||m_cameraXScrollPos<-(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+	if(m_moveVelocity.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraXScrollPos<-(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
 	{
 		m_cameraXScrollDir=+1;
 	}
@@ -1959,7 +1958,7 @@ void	CPlayer::moveLeft()
 }
 void	CPlayer::moveRight()
 {
-	if(m_moveVelocity.vx>CAMERA_STARTMOVETHRESHOLD)//||m_cameraXScrollPos>(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
+	if(m_moveVelocity.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraXScrollPos>(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
 	{
 		m_cameraXScrollDir=-1;
 	}
