@@ -34,15 +34,16 @@ public:
 		NPC_FRIEND_PATRICK,
 		NPC_FRIEND_SANDY_CHEEKS,
 		NPC_FRIEND_SQUIDWARD,
+		NPC_FRIEND_PLANKTON,
 		NPC_FRIEND_UNIT_TYPE_MAX,
 	};
 
-	void				init();
+	virtual void		init();
 	void				init( DVECTOR initPos );
 	virtual void		postInit();
-	void				shutdown();
+	virtual void		shutdown();
 	virtual void		think(int _frames);
-	void				render();
+	virtual void		render();
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
 
@@ -56,7 +57,6 @@ protected:
 	typedef struct NPC_FRIEND_DATA_TYPE
 	{
 		int								skelType;
-		bool							canTalk;
 		u8								speed;
 		u16								turnSpeed;
 		bool							detectCollision;

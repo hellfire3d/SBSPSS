@@ -26,6 +26,7 @@ public:
 	virtual void		think(int _frames);
 	virtual void		shutdown();
 protected:
+	virtual void		startConderversation();
 	SpriteBank		*m_spriteBank;
 };
 

@@ -42,6 +42,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __LEVEL_LEVEL_H__
+#include "level\level.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -56,6 +60,7 @@
 #ifndef __STRING_ENUMS__
 #include <trans.h>
 #endif
+
 
 
 /*----------------------------------------------------------------------
@@ -453,27 +458,105 @@ void CConversation::dumpConversationScripts()
   ---------------------------------------------------------------------- */
 void CConversation::registerConversationLevelScripts(int level)
 {
-	switch( level )
+	switch( CLevel::getCurrentChapter() )
 	{
-		case 0:
+		case 1:
 		{
-			CConversation::registerConversationScript(SCRIPTS_CH1L1_01_DAT);
-			CConversation::registerConversationScript(SCRIPTS_CH1L1_02_DAT);
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH1L1_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH1L1_02_DAT);
+					break;
+				}
 
-			// temporary
-			//CConversation::registerConversationScript(SCRIPTS_CH1L2_01_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH1L2_02_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH1L2_03_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH1L4_01_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH1L4_02_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH2L1_01_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH2L1_02_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH2L2_01_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH2L2_02_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);
-			//CConversation::registerConversationScript(SCRIPTS_CH3L3_02_DAT);
-			CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
-			CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
+				case 2:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH1L2_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH1L2_02_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH1L2_03_DAT);
+					break;
+				}
+
+				case 4:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH1L4_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH1L4_02_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			break;
+		}
+
+		case 2:
+		{
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH2L1_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH2L1_02_DAT);
+					break;
+				}
+
+				case 2:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH2L2_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH2L2_02_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			break;
+		}
+
+		case 3:
+		{
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 1:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH3L1_01_DAT);
+					break;
+				}
+
+				case 3:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH3L3_02_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			break;
+		}
+
+		case 4:
+		{
+			switch ( CLevel::getCurrentChapterLevel() )
+			{
+				case 3:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
+					CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
+					break;
+				}
+
+				default:
+					break;
+			}
+
 			break;
 		}
 

@@ -79,16 +79,13 @@ void CNpcSquidwardFriend::think( int _frames )
 
 void CNpcSquidwardFriend::startConderversation()
 {
-	if ( m_data[this->m_type].canTalk )
+	if( !CConversation::isActive() )
 	{
-		if( !CConversation::isActive() )
-		{
-			CConversation::trigger( m_conversation );
+		CConversation::trigger( m_conversation );
 
-			if ( m_conversation == SCRIPTS_CH1L1_01_DAT )
-			{
-				m_conversation = SCRIPTS_CH1L1_02_DAT;
-			}
+		if ( m_conversation == SCRIPTS_CH1L1_01_DAT )
+		{
+			m_conversation = SCRIPTS_CH1L1_02_DAT;
 		}
 	}
 }

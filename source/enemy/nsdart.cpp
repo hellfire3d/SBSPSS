@@ -40,7 +40,7 @@ void CNpcSquidDartEnemy::render()
 		DVECTOR origRenderPos;
 		DVECTOR	offset = CLevel::getCameraPos();
 
-		int frame = 6 + ( m_frame >> 8 );
+		int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
 		int		spriteWidth = m_spriteBank->getFrameWidth( frame );
 		int		spriteHeight = m_spriteBank->getFrameHeight( frame );

@@ -62,43 +62,40 @@ void CNpcKrustyFriend::postInit()
 
 void CNpcKrustyFriend::startConderversation()
 {
-	if ( m_data[this->m_type].canTalk )
+	if( !CConversation::isActive() )
 	{
-		if( !CConversation::isActive() )
+		CConversation::trigger( m_conversation );
+
+		switch( CLevel::getCurrentChapter() )
 		{
-			CConversation::trigger( m_conversation );
-
-			switch( CLevel::getCurrentChapter() )
+			case 4:
 			{
-				case 4:
+				if ( m_conversation == SCRIPTS_CH4L3_01_DAT )
 				{
-					if ( m_conversation == SCRIPTS_CH4L3_01_DAT )
-					{
-						m_conversation = SCRIPTS_CH4L3_02_DAT;
-					}
-
-					break;
+					m_conversation = SCRIPTS_CH4L3_02_DAT;
 				}
 
-				case 2:
-				{
-					if ( m_conversation == SCRIPTS_CH2L1_01_DAT )
-					{
-						m_conversation = SCRIPTS_CH2L1_02_DAT;
-					}
+				break;
+			}
 
-					break;
+			case 2:
+			{
+				if ( m_conversation == SCRIPTS_CH2L1_01_DAT )
+				{
+					m_conversation = SCRIPTS_CH2L1_02_DAT;
 				}
 
-				default:
-				{
-					if ( m_conversation == SCRIPTS_CH1L4_01_DAT )
-					{
-						m_conversation = SCRIPTS_CH1L4_02_DAT;
-					}
+				break;
+			}
 
-					break;
+			default:
+			{
+				if ( m_conversation == SCRIPTS_CH1L4_01_DAT )
+				{
+					m_conversation = SCRIPTS_CH1L4_02_DAT;
 				}
+
+				break;
 			}
 		}
 	}

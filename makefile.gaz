@@ -87,7 +87,8 @@ friend_src :=		friend \
 					fsquid \
 					fsandy \
 					fkrusty \
-					fpatrick
+					fpatrick \
+					fplnkton
 
 platform_src :=		platform \
 					platdata \

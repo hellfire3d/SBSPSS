@@ -62,7 +62,7 @@ void CNpcSmallJellyfishEnemy::render()
 		{
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
-				SprFrame = m_spriteBank->printRotatedScaledSprite( m_frame>>8,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
+				SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 				setRGB0( SprFrame, 255, 128, 255 );
 
 				// get xmax, xmin, ymax, ymin

@@ -40,7 +40,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 {
 	{	// NPC_FRIEND_BARNACLE_BOY
 		ACTORS_CLAM_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -50,7 +49,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_GARY
 		ACTORS_CLAM_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -60,7 +58,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_KRUSTY
 		ACTORS_KRUSTY_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -70,7 +67,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_MERMAID_MAN
 		ACTORS_CLAM_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -80,7 +76,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_PATRICK
 		ACTORS_PATRICK_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -90,7 +85,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_SANDY_CHEEKS
 		ACTORS_SANDY_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -100,7 +94,6 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 
 	{	// NPC_FRIEND_SQUIDWARD
 		ACTORS_SQUIDWARD_SBK,
-		true,
 		3,
 		128,
 		false,
@@ -118,5 +111,6 @@ CNpcFriend::NPC_FRIEND_UNIT_TYPE CNpcFriend::mapEditConvertTable[NPC_FRIEND_UNIT
 	NPC_FRIEND_PATRICK,
 	NPC_FRIEND_SANDY_CHEEKS,
 	NPC_FRIEND_SQUIDWARD,
+	NPC_FRIEND_PLANKTON,
 };
 

@@ -55,6 +55,10 @@
 #include "friend\fsquid.h"
 #endif
 
+#ifndef __FRIEND_FPLNKTON_H__
+#include "friend\fplnkton.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +110,12 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 		case CNpcFriend::NPC_FRIEND_SQUIDWARD:
 		{
 			friendNpc = new ("squidward") CNpcSquidwardFriend;
+			break;
+		}
+
+		case CNpcFriend::NPC_FRIEND_PLANKTON:
+		{
+			friendNpc = new ("plankton") CNpcPlanktonFriend;
 			break;
 		}
 

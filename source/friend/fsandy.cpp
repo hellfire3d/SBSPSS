@@ -32,11 +32,8 @@
 
 void CNpcSandyFriend::startConderversation()
 {
-	if ( m_data[this->m_type].canTalk )
+	if( !CConversation::isActive() )
 	{
-		if( !CConversation::isActive() )
-		{
-			CConversation::trigger( SCRIPTS_CH1L2_03_DAT );
-		}
+		CConversation::trigger( SCRIPTS_CH1L2_03_DAT );
 	}
 }

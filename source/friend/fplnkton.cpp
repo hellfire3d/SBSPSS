@@ -31,6 +31,10 @@
 #include <sprites.h>
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -83,4 +87,14 @@ void CNpcPlanktonFriend::render()
 
 void CNpcPlanktonFriend::think( int _frames )
 {
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlanktonFriend::startConderversation()
+{
+	if( !CConversation::isActive() )
+	{
+		CConversation::trigger( SCRIPTS_CH3L1_01_DAT );
+	}
 }

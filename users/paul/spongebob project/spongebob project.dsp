@@ -437,6 +437,14 @@ SOURCE=..\..\..\source\friend\fpatrick.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\friend\fplnkton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fplnkton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\friend\friend.cpp
 # End Source File
 # Begin Source File
@@ -1754,6 +1762,10 @@ SOURCE=..\..\..\data\Scripts\ch2l2_01.scr
 # Begin Source File
 
 SOURCE=..\..\..\data\Scripts\ch2l2_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch3l1_01.scr
 # End Source File
 # Begin Source File
 

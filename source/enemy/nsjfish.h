@@ -18,11 +18,15 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 class CNpcSmallJellyfishEnemy : public CNpcEnemy
 {
 public:
 	void				render();
-	virtual int			getFrameCount()							{return( 6 );}
+	virtual int			getFrameCount()							{return( FRM_JELLYFISH1_SWIM6 - FRM_JELLYFISH1_SWIM1 + 1 );}
 	virtual u8			canCollideWithEnemy()					{return( false );}
 protected:
 	virtual bool		processSensor();
