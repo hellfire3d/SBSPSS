@@ -285,42 +285,54 @@ bool	Finished=false;
 /*****************************************************************************/
 void	CLevel::DisplayLoadingScreen(int LevelNo)
 {
-sLvlTab				*lvlTab=&LvlTable[LevelNo];
 ScalableFontBank	font;
 char				buf[256];
 u8					*s_image;
 int					i;
+
+			if (LevelNo==-1)
+			{ // default loading screen
+				s_image=LoadPakScreen(LOADINGSCREENS_BOOTSCREEN_GFX);
+			}
+			else
+			{
+				s_image=LoadPakScreen(loadingScreens[LvlTable[LevelNo].Chapter-1]);
+				sprintf(buf,"%s\n\n%s",TranslationDatabase::getString(LvlTable[LevelNo].ChapterLoadingText),TranslationDatabase::getString(LvlTable[LevelNo].LevelLoadingText));
+			}
 			
+			ASSERT(s_image);
+			SetScreenImage(s_image);
+
 			font.initialise(&standardFont);
 			font.setJustification(FontBank::JUST_CENTRE);
 			font.setScale(370);
 
-			sprintf(buf,"%s\n\n%s",TranslationDatabase::getString(lvlTab->ChapterLoadingText),TranslationDatabase::getString(lvlTab->LevelLoadingText));
-			s_image=LoadPakScreen(loadingScreens[lvlTab->Chapter-1]);
-			ASSERT(s_image);
-			SetScreenImage(s_image);
 			for(i=0;i<2;i++)
 			{
-				font.setColour(255,255,255);
-				font.print(256  ,90  ,buf);
-				font.setColour(0,0,0);
-				font.print(256-1,90-1,buf);
-				font.print(256-1,90  ,buf);
-				font.print(256-1,90+1,buf);
-				font.print(256  ,90-1,buf);
-				font.print(256  ,90+1,buf);
-				font.print(256+1,90-1,buf);
-				font.print(256+1,90  ,buf);
-				font.print(256+1,90+1,buf);
+				if (LevelNo!=-1)
+				{
+					font.setColour(255,255,255);
+					font.print(256  ,90  ,buf);
+					font.setColour(0,0,0);
+					font.print(256-1,90-1,buf);
+					font.print(256-1,90  ,buf);
+					font.print(256-1,90+1,buf);
+					font.print(256  ,90-1,buf);
+					font.print(256  ,90+1,buf);
+					font.print(256+1,90-1,buf);
+					font.print(256+1,90  ,buf);
+					font.print(256+1,90+1,buf);
+					}
 				PrimDisplay();
 				VSync(0);
 				VidSwapDraw();
 			}
+			font.dump();
+
 			ClearScreenImage();
 			MemFree(s_image);
-			VSync(20);
-			font.dump();
 			StartLoad();
+			VSync(0);
 }
 
 /*****************************************************************************/

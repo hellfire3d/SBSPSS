@@ -91,7 +91,7 @@ static void				setBossHealth( s32 newBossHealth )		{m_bossHealth=newBossHealth;}
 static CNpcCheckpointHazard		*getCurrentCheckpoint()											{return( m_checkpoint );}
 static void						setCurrentCheckpoint( CNpcCheckpointHazard *newCheckpoint )		{m_checkpoint = newCheckpoint;}
 
-static	void			DisplayLoadingScreen(int LevelNo=25);
+static	void			DisplayLoadingScreen(int LevelNo=-1);
 
 private:
 		void			initLayers();
