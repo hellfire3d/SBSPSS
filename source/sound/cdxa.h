@@ -40,7 +40,7 @@ public:
 	static void			setMasterVolume(int _volumeL,int _volumeR);
 
 	
-private:
+//private: Paul, can you sort out the access functions
 	enum	XA_ENUM
 	{
 		XA_MUSIC_TRACK		=1,
