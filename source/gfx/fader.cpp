@@ -80,7 +80,7 @@ BubicleEmitterData	s_fadeBubicleSpawner=
 		0,0,						// m_theta,m_vtheta
 		0,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
 		0,							// m_ot
-		{20,20,20}					// m_colour
+		{0,0,0}						// m_colour
 	},
 	// m_bubicleRange;
 	{
