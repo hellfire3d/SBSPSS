@@ -45,10 +45,6 @@
 #include "player\psduck.h"
 #endif
 
-#ifndef	__GAME_GAMESLOT_H__
-#include "game\gameslot.h"
-#endif
-
 
 /*	Std Lib
 	------- */
