@@ -1,0 +1,2 @@
+attack
+walk
