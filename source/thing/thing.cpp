@@ -783,7 +783,10 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing, int _frames)
 			{
 				thatPos.vy = getNewYPos( _thisThing );
 
-				s32 verticalDelta = abs( _thisThing->getPosDelta().vy );
+				// vertical height change is the sum of the maximums of BOTH objects
+				// potentially, one object could be falling down through another object that is moving up
+
+				s32 verticalDelta = abs( _thisThing->getPosDelta().vy ) + abs( this->getPosDelta().vy );
 
 				if ( thatPos.vy - _thisThing->getPos().vy >= -verticalDelta )
 				{

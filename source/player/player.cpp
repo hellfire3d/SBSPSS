@@ -511,10 +511,12 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 	if(isOnPlatform())
 	{
 		DVECTOR	platformPos;
-		platformPos=m_platform->getPos();
+		platformPos=m_platform->getPosDelta();
 		DVECTOR newPos = getNewCollidedPos();
 
-		height = newPos.vy - Pos.vy;
+		// since collision was detected in the LAST frame, we must check to see where the platform has moved to in THIS frame
+
+		height = newPos.vy + platformPos.vy - Pos.vy;
 
 //		if(height<-_maxHeight)
 //		{
