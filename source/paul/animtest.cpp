@@ -187,6 +187,10 @@ void CAnimTestScene::render()
 	if(m_addonNumber!=-1)
 	{
 		addonAnimNumber=s_animMapNet[m_addonNumber][m_animNumber];
+		if(m_animFrame>=s_addonActorGfx[m_addonNumber]->getFrameCount(addonAnimNumber))
+		{
+			addonAnimNumber=-2;
+		}
 	}
 
 	// Actor alone
@@ -194,19 +198,24 @@ void CAnimTestScene::render()
 	sbpos.vx+=150;
 
 	// Addon alone
-	if(addonAnimNumber!=-1)
+	if(addonAnimNumber>=0)
 	{
 		s_addonActorGfx[m_addonNumber]->Render(sbpos,addonAnimNumber,m_animFrame,0,0);
 	}
 	else
 	{
+		if(addonAnimNumber==-2)
+		{
+			m_font->setColour(255,0,0);
+		}
 		m_font->print(sbpos.vx,sbpos.vy-50,"x");
+		m_font->setColour(255,255,255);
 	}
 	sbpos.vx+=150;
 
 	// Actor+Addon
 	m_actorSpongebob->Render(sbpos,m_animNumber,m_animFrame,0,0);
-	if(addonAnimNumber!=-1)
+	if(addonAnimNumber>=0)
 	{
 		s_addonActorGfx[m_addonNumber]->Render(sbpos,addonAnimNumber,m_animFrame,0,0);
 	}
