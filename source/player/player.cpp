@@ -124,8 +124,11 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-//DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+#ifdef __USER_paul__
+DVECTOR ofs={-240,-134};		// nearly -256,-128 ;)
+#else
 DVECTOR ofs={0,0}; //temporary
+#endif
 
 int psize=0;
 int newmode=-1;
