@@ -339,7 +339,7 @@ bool CNpc::processSensor()
 						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_evadeClockwise = ( getRnd() % 2 ) - 1;
+							m_evadeClockwise = getRnd() % 2;
 
 							return( true );
 						}
