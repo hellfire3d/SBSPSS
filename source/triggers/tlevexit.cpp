@@ -44,6 +44,45 @@
 	Vars
 	---- */
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+#ifdef __USER_art__
+#include "gfx\prim.h"
+void	CLevelExitTrigger::render()
+{
+	DVECTOR	ofs;
+	CRECT	area;
+
+	CTriggerThing::render();
+
+	ofs=CLevel::getCameraPos();
+	area=getCollisionArea();
+	area.x1-=ofs.vx;
+	area.y1-=ofs.vy;
+	area.x2-=ofs.vx;
+	area.y2-=ofs.vy;
+
+	POLY_F4	*f4;
+	f4=GetPrimF4();
+	setXY4(f4,area.x1,area.y1,
+			  area.x2,area.y1,
+			  area.x1,area.y2,
+			  area.x2,area.y2);
+	setRGB0(f4,0,255,0);
+	setSemiTrans(f4,true);
+	AddPrimToList(f4,0);
+	DrawLine(area.x1,area.y1,area.x2,area.y1,0,255,0,0);
+	DrawLine(area.x2,area.y1,area.x2,area.y2,0,255,0,0);
+	DrawLine(area.x2,area.y2,area.x1,area.y2,0,255,0,0);
+	DrawLine(area.x1,area.y2,area.x1,area.y1,0,255,0,0);
+}
+#endif
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -68,7 +107,9 @@ void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 {
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
 
+#ifndef __USER_art__
 	CGameScene::levelFinished();
+#endif
 }
 
 
