@@ -67,6 +67,7 @@ sPadData	PadData[2];
 u8 			PadBuffer[2][34];
 u8 			PadAlign[6]={0,1,0xFF,0xFF,0xFF,0xFF};
 u8			PadMotor[2][2];
+int			PadRepeatTimers[2][16];
 
 /*****************************************************************************/
 // 701
@@ -157,6 +158,9 @@ void	PadsInit()
 	PadInitShock(0);
 	PadInitShock(1);
 
+	for(int i=0;i<2;i++)
+		for(int j=0;j<16;j++)
+			PadRepeatTimers[i][j]=0;
 }
 
 /*****************************************************************************/
@@ -336,6 +340,12 @@ u16 	PadGetHeld(int Port)
 }
 
 /*****************************************************************************/
+u16 	PadGetRepeat(int Port)
+{
+	return(PadData[Port].Repeat);
+}
+
+/*****************************************************************************/
 void 	PadClear(int Port)
 {
 	PadData[Port].Up=PadData[Port].Down=PadData[Port].Held=PadData[Port].Old=0;
@@ -344,6 +354,47 @@ void 	PadClear(int Port)
 
 
 /*****************************************************************************/
+
+void UpdateRepeats(int _port)
+{
+	int	frames,pad,i,mask,*repeatTimers;
+	u16 *repeatFlags;
+
+
+	frames=GameState::getFramesSinceLast();
+	pad=PadGetHeld(_port);
+	mask=1;
+	repeatTimers=PadRepeatTimers[_port];
+	repeatFlags=&PadData[_port].Repeat;
+	*repeatFlags=0;
+	for(i=0;i<16;i++)
+	{
+		if(pad&mask)
+		{
+			if(*repeatTimers)
+			{
+				*repeatTimers-=frames;
+				if(*repeatTimers<=0)
+				{
+					*repeatFlags|=mask;
+					*repeatTimers=TYPOMATIC_RATE;
+				}
+			}				
+			else
+			{
+				*repeatFlags|=mask;
+				*repeatTimers=TYPOMATIC_DELAY;
+			}
+		}
+		else
+		{
+			*repeatTimers=0;
+		}
+		mask<<=1;
+		repeatTimers++;
+	}
+}
+
 
 void 	PadUpdate()
 {
@@ -355,6 +406,8 @@ void 	PadUpdate()
 		ReadController(0);
 		ReadController(1);
 
+		UpdateRepeats(0);
+		UpdateRepeats(1);
 }
 
 

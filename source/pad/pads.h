@@ -40,11 +40,14 @@
 #define	BUTTON_SELECT	PAD_CROSS
 #define	BUTTON_BACK		PAD_TRIANGLE
 
+#define TYPOMATIC_DELAY	75
+#define TYPOMATIC_RATE	50
+
 
 /*****************************************************************************/
 typedef struct
 	{
-	u16		Up,Held,Down,Old;
+	u16		Up,Held,Down,Old,Repeat;
 	int		XPos, YPos,	XPos1, YPos1;	// For analog
 	int		Dx,Dy, Dx1,Dy1;
 	u8		Status;			// These 8 values are obtained
@@ -79,7 +82,8 @@ sPadData 	*PadGet(int Port);
 u16 		PadGetUp(int Port);
 u16 		PadGetDown(int Port);
 u16 		PadGetHeld(int Port);
-u16 		PadGetTick(int Port);
+u16			PadGetRepeat(int Port);
+
 
 int 		PadIsDualShock(int Port);
 

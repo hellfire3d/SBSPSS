@@ -161,6 +161,7 @@ int psp=0;
 
 void CPaulScene::think(int _frames)
 {
+/*	
 	int				pad;
 	int				sfxId=-1;
 	int				setSfxVolume=false;
@@ -246,21 +247,18 @@ void CPaulScene::think(int _frames)
 	{
 		PAUL_DBGMSG("speech:%d   sfx:%d",mvol,svol);
 	}
+*/
 
 
-
-
-
-//CXAStream::ControlXA();
-
-	pad=PadGetHeld(1);
-	if(pad&PAD_L1)
 	{
-	}
-	else
+	int		pad=PadGetRepeat(0);
+	int		i;
+	for(i=0;i<16;i++)
 	{
+		if(pad&(1<<i))
+			s_fontBank.print(40+(i*10),120,"+");
 	}
-
+	}
 }
 
 
