@@ -217,7 +217,15 @@
 #define IDC_LAYERSHADE_MODELIST         1218
 #define IDC_LAYERSHADE_BRUSHLIST        1219
 #define IDC_LAYERSHADE_RATELIST         1220
-#define IDC_LAYERSHADE_SHADE            1229
+#define IDC_LAYERSHADE_BIFILTER         1230
+#define IDC_LAYERSHADE_TRIFILTER        1231
+#define IDC_LAYERSHADE_SHADER           1232
+#define IDC_LAYERSHADE_SHADERSPIN       1233
+#define IDC_LAYERSHADE_SHADEG           1234
+#define IDC_LAYERSHADE_SHADEGSPIN       1235
+#define IDC_LAYERSHADE_SHADEB           1236
+#define IDC_LAYERSHADE_SHADEBSPIN       1237
+#define IDC_LAYERSHADE_SHADETEXT        1238
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_PARAMBAR             32783
 #define ID_TOGGLE_SUBVIEW               32785
@@ -245,7 +253,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        180
 #define _APS_NEXT_COMMAND_VALUE         32803
-#define _APS_NEXT_CONTROL_VALUE         1230
+#define _APS_NEXT_CONTROL_VALUE         1239
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

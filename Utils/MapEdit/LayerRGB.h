@@ -87,6 +87,11 @@ protected:
 		void			LoadBrush(const char *Name);
 		void			CreateUndo();
 		void			Undo();
+		void			BiFilter(CCore *Core);
+		void			TriFilter(CCore *Core);
+		void			STriFilter(CCore *Core);
+		void			GetFilterCol(CCore *Core,int X,int Y,int &Col,int &Count);
+		void			SetFilterCol(CCore *Core,int X,int Y,int Col,int Div);
 
 		void			Render(CCore *Core,Vector3 &CamPos,CMap &ThisMap,bool Render3d,float Alpha=1.0f,Vector3 *Ofs=0);
 		void			Paint(CCore *Core,CPoint &CursorPos);
@@ -95,11 +100,11 @@ protected:
 
 		CGUILayerRGB		GUIRGB;
 		
-		sRGBElem		CurrentRGB;
+		sRGBElem		ShadeRGB;
 		int				CurrentBrush;
 		int				CurrentMode;
 		int				CurrentRate;
-		bool			ShadeFlag;
+		bool			SpareFlag;
 		int				CurrentUndo;
 
 		int				MapWidth,MapHeight;

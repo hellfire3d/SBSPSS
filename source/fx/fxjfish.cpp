@@ -58,8 +58,11 @@ const int	LegXInc=4;
 
 void	CFXJellyFishLegs::render()
 {
+CThing	*Parent=getParent();
+
 		CFX::render();
-		if (!canRender()) return;
+//		if (!canRender()) return;
+		if (!Parent->canRender()) return;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();;
 DVECTOR		RenderPos=getRenderPos();
