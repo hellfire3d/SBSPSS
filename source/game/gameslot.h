@@ -121,6 +121,7 @@ public:
 			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
 			m_kelpTokenCollectedFlags[_chapter][_token>>3]|=1<<(_token&7);
+			m_kelpTokensHeld++;
 		}
 		int				isKelpTokenUncollected(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
