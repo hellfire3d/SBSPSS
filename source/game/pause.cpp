@@ -75,6 +75,11 @@ static const int	TEXT_BOX_HEIGHT	=20;
 static const int	OT_POS			=5;
 static const int	TEXT_SPACING	=13;
 extern int newmode;
+
+extern int invincibleSponge;
+int	inv_data[]={0,1,-1};
+static CGUITextReadout::TextReadoutData inv_readoutdata[2]={{0,STR__OFF},{1,STR__ON}};
+
 void CPauseMenu::init()
 {
 	m_guiFrame=new ("Conversation GUI") CGUIControlFrame();
@@ -93,8 +98,13 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__QUIT,
 										&m_quitGameFlag,true);
+	xpos+=TEXT_SPACING+(TEXT_SPACING/2);
 
 	
+	CGUIFactory::createCycleButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__INVINCIBILE_SPONGEBOB,
+										&invincibleSponge,inv_data,inv_readoutdata);
 	xpos+=TEXT_SPACING+(TEXT_SPACING/2);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
@@ -136,12 +146,6 @@ void CPauseMenu::init()
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;
-#if	!defined(__USER_CDBUILD__)
-	CGUIFactory::createValueButtonFrame(m_guiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-										STR__DEBUG__FLY_MODE,
-										&newmode,PLAYER_MODE_FLY);
-#endif
 
 	m_active=false;
 }
