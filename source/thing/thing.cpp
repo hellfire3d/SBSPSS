@@ -875,5 +875,17 @@ void	CTriggerThing::setPositionAndSize(int _x,int _y,int _w,int _h)
 	setCollisionSize(_w,_h);
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CTriggerThing::setTargetPos(int _x,int _y)
+{
+	TargetPos.vx=_x;
+	TargetPos.vy=_y;
+}
+
 /*===========================================================================
 end */

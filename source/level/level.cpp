@@ -315,6 +315,7 @@ void	CLevel::initLayers()
 				trigger->init();
 				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
 											TriggerList->Width<<4,TriggerList->Height<<4);
+				trigger->setTargetPos(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4);
 				TriggerList++;
 			}
 		}

@@ -53,6 +53,16 @@
   ---------------------------------------------------------------------- */
 void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 {
+	CRECT	collisionArea;
+	DVECTOR	respawnPos;
+
+	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
+
+	collisionArea=getCollisionArea();
+	respawnPos.vx=collisionArea.x1+((collisionArea.x2-collisionArea.x1)/2);
+	respawnPos.vy=collisionArea.y2;
+	((CPlayer*)_thisThing)->setPos(TargetPos);
+
 	/*
 	CRECT	collisionArea;
 	DVECTOR	respawnPos;

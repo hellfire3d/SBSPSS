@@ -165,6 +165,8 @@ void CNpcBranchPlatform::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int	BX=-20;
+int	BY=-30;
 void CNpcBranchPlatform::render()
 {
 	if ( m_isActive )
@@ -175,8 +177,8 @@ void CNpcBranchPlatform::render()
 		DVECTOR renderPos;
 		DVECTOR	offset = CLevel::getCameraPos();
 
-		renderPos.vx = Pos.vx - offset.vx;
-		renderPos.vy = Pos.vy - offset.vy;
+		renderPos.vx = Pos.vx - offset.vx ;
+		renderPos.vy = Pos.vy - offset.vy ;
 
 		if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
 		{
@@ -188,11 +190,15 @@ void CNpcBranchPlatform::render()
 				{
 					rotation.vy = 0;
 					rotation.vz = getCollisionAngle();
+					renderPos.vx-= BX;
+					renderPos.vy+= BY;
 				}
 				else
 				{
 					rotation.vy = 2048;
 					rotation.vz = -getCollisionAngle();
+					renderPos.vx+= BX;
+					renderPos.vy+= BY;
 				}
 
 				VECTOR scale;

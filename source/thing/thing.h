@@ -216,6 +216,8 @@ class CTriggerThing : public CThing
 public:
 	virtual TYPE	getThingType()					{return TYPE_TRIGGER;}
 	virtual void	setPositionAndSize(int _x,int _y,int _w,int _h);	// Wonder if this might be better in CThing? (pkg)
+	virtual void	setTargetPos(int _x,int _y);	// Wonder if this might be better in CThing? (pkg)
+	DVECTOR	TargetPos;
 };
 class CHazardThing : public CThing
 {
