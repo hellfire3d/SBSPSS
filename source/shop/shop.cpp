@@ -208,6 +208,9 @@ void CShopScene::init()
 
 	m_pointerIcon=new ("MapPointer") CPointerIcon();
 	m_pointerIcon->snapToTarget(getPointerTarget());
+
+	CSoundMediator::setSong(CSoundMediator::SONG_SHOPSCREEN);
+	CSoundMediator::playSong();
 }
 
 
@@ -219,6 +222,8 @@ void CShopScene::init()
   ---------------------------------------------------------------------- */
 void CShopScene::shutdown()
 {
+	CSoundMediator::dumpSong();
+
 	delete m_pointerIcon;
 
 	m_guiCannotAffordFrame->shutdown();

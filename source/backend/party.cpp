@@ -66,6 +66,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -138,6 +142,9 @@ void CPartyScene::init()
 	CActorPool::CleanUpCache();
 
 	s_leftBobSin=s_leftBob=s_rightBobSin=s_rightBob=0;
+
+	CSoundMediator::setSong(CSoundMediator::SONG_PARTY);
+	CSoundMediator::playSong();
 }
 
 
@@ -149,6 +156,8 @@ void CPartyScene::init()
   ---------------------------------------------------------------------- */
 void CPartyScene::shutdown()
 {
+	CSoundMediator::dumpSong();
+
 	delete m_actorPatrick;
 	delete m_actorSpongebob;
 	CActorPool::Reset();
