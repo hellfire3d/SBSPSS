@@ -48,9 +48,9 @@ void	CFXSteam::SetSize(int Size)
 }
 
 /*****************************************************************************/
-void	CFXSteam::setDie()
+void	CFXSteam::killFX()
 {
-		CFXBaseTrail::setDie();
+		DieOut=true;
 		for (int i=0; i<LIST_SIZE; i++)
 		{ // Set drift off
 			sList	&ThisElem=List[i];

@@ -156,15 +156,11 @@ hazard_src :=		hazard \
 fx_src :=			fx \
 					fxbaseanim \
 					fxbasetrail \
+					fxbaseemitter \
 					fxnrgbar \
 					fxjfish \
 					fxfallingtile \
-					fxsteam \
-					fxsplash \
-					fxsplashacid \
-					fxsplashlava \
-					fxsplashoil \
-					fxexplode
+					fxsteam
 
 projectl_src :=		projectl \
 					prnpc \

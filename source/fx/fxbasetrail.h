@@ -11,6 +11,14 @@
 class CFXBaseTrail : public CFX
 {
 public:
+		struct sFXData
+		{
+			s16		Scale;
+			s16		StartFrame,EndFrame;
+			s16		FrameShift;
+			u8		R,G,B;
+		};
+
 		struct	sList
 		{
 			u16		Frame;

@@ -14,7 +14,7 @@ public:
 virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
-virtual	void		setDie();
+virtual	void		killFX();
 
 		void		SetSize(int Size);
 
@@ -22,6 +22,7 @@ protected:
 		DVECTOR		BaseVel;
 		s16			ScaleInc;
 		s16			ShadeDec;
+		bool		DieOut;
 
 };
 

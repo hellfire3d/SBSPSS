@@ -20,7 +20,6 @@ virtual void		render();
 protected:
 
 		u16			Tile;
-		u16			Life;
 		DVECTOR		Velocity;
 
 		sTile3d		*TileBank3d;

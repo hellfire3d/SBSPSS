@@ -10,64 +10,54 @@
 #include	<sprites.h>
 #include	"level\level.h"
 #include	"game\game.h"
-#include	"FX\FXEmitter.h"
+#include	"FX\FXBaseEmitter.h"
 
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFXEmitter::init(DVECTOR const &_Pos)
+void	CFXBaseEmitter::init(DVECTOR const &_Pos)
 {
-		CFX::init();
-		Pos=_Pos;
-		SetFrame(0,0);
-		Scale=ONE;
-		BirthCount=0;
+		CFX::init(_Pos);
+		Width=Height=16;
+		CurrentCount=DataPtr->Rate;
+		Life=DataPtr->Life;
 }
 
 /*****************************************************************************/
-void	CFXEmitter::shutdown()
+void	CFXBaseEmitter::shutdown()
 {
 		CFX::shutdown();
 }
 
 /*****************************************************************************/
-void	CFXEmitter::setUp(int W,int H,int Rate,int Amount,int Life)
-{
-		SetSize(W,H);
-		SetRate(Rate,Amount);
-		SetLife(L);
-}
-
-/*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-void	CFXEmitter::think(int _frames)
+void	CFXBaseEmitter::think(int _frames)
 {
 		CFX::think(_frames);
 
-		BirthCount-=_frames;
-		if (BirthCount<=0)
+		CurrentCount-=_frames;
+		if (CurrentCount<=0)
 		{
-			BirthCount=BirthRate;
-			Create(_frames);
+			CurrentCount=DataPtr->Rate;
+			createParticle(_frames);
 		}
-		Life--;
-		if (Life
-
+			
 }
 
 /*****************************************************************************/
-void	CFXEmitter::Create(int _frames)
+void	CFXBaseEmitter::createParticle(int _frames)
 {
-
+		CFX::Create(DataPtr->ParticleType,getPos());
 }
 
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-void	CFXEmitter::render()
+void	CFXBaseEmitter::render()
 {
+/*
 DVECTOR	renderPos;
 		if (MapEmitter)
 		{
@@ -77,15 +67,16 @@ DVECTOR	renderPos;
 		}
 		else
 		{
-			renderPos=getPos()
+			renderPos=getPos();
 		}
 
 POLY_F4		*f4;
 		f4=GetPrimF4();
 		setPolyF4(f4);
-		setXYWH(f4,renderPos.vx,renderPos.vy,Width.Height);
+		setXYWH(f4,renderPos.vx,renderPos.vy,Width,Height);
 		setSemiTrans(f4,1);
 		setShadeTex(f4,0);
 		setRGB0(f4,30,40,50);
 		AddPrimToList(f4,0);
+*/
 }

@@ -12,16 +12,13 @@
 #include	"game\game.h"
 #include	"FX\FXBaseAnim.h"
 
-
-/*****************************************************************************/
-/*****************************************************************************/
 /*****************************************************************************/
 void	CFXBaseAnim::init(DVECTOR const &_Pos)
 {
-		CFX::init();
-		Pos=_Pos;
-		SetFrame(0,0);
-		Scale=ONE;
+		CFX::init(_Pos);
+		CurrentFrame=0;
+		CurrentScale=DataPtr->Scale;
+		Life=((DataPtr->EndFrame-DataPtr->StartFrame)<<DataPtr->FrameShift)-1;
 }
 
 /*****************************************************************************/
@@ -31,23 +28,13 @@ void	CFXBaseAnim::shutdown()
 }
 
 /*****************************************************************************/
-void	CFXBaseAnim::SetFrame(int Base,int Count,int Shift=0)
-{
-		Frame=0;
-		BaseFrame=Base;
-		FrameShift=Shift;
-		MaxFrame=(Count<<FrameShift)-1;
-}
-
-/*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
 void	CFXBaseAnim::think(int _frames)
 {
 		CFX::think(_frames);
-
-		Frame+=_frames;
-		if (Frame>=MaxFrame) setToShutdown();
+		CurrentFrame+=_frames;
+		Pos.vy-=4;
 }
 
 /*****************************************************************************/
@@ -55,16 +42,18 @@ void	CFXBaseAnim::think(int _frames)
 /*****************************************************************************/
 void	CFXBaseAnim::render()
 {
-		CFX::render();
+DVECTOR	RenderPos;
 
-		if (!canRender() || isSetToShutdown()) return;
+		getFXRenderPos(RenderPos);
+		if (!canRender()) return;
+
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
-DVECTOR		&RenderPos=getRenderPos();
-int			ThisFrame=Frame>>FrameShift;
 
-POLY_FT4	*Ft4=SprBank->printFT4Scaled(BaseFrame+ThisFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,Scale>>4);
+int			ThisFrame=CurrentFrame>>DataPtr->FrameShift;
+
+POLY_FT4	*Ft4=SprBank->printFT4Scaled(DataPtr->StartFrame+ThisFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos,CurrentScale>>4);
 			Ft4->u1--; Ft4->u3--;
 			Ft4->v2--; Ft4->v3--;
-			setRGB0(Ft4,R,G,B);
-
+			setShadeTex(Ft4,0);
+			setRGB0(Ft4,DataPtr->R,DataPtr->G,DataPtr->B);
 }

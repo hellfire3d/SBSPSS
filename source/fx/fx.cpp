@@ -15,62 +15,54 @@
 #include	"FX\FXjfish.h"
 #include	"FX\FXBaseTrail.h"
 #include	"FX\FXBaseAnim.h"
+#include	"FX\FXBaseEmitter.h"
+
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
-#include	"FX\FXSplash.h"
-#include	"FX\FXSplashAcid.h"
-#include	"FX\FXSplashLava.h"
-#include	"FX\FXSplashOil.h"
-#include	"FX\FXExplode.h"
+
 #include	"FX\FXNrgBar.h"
-/* FX
 
-	Jellyfish legs
-	Bubbles (inc acid)
-	Electricity lightning bolt
-	Electricity sheet lightning
-	Electricity Blast
-	Electricity Radial?
-	Electricity projectile
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+// Anim Data 
+CFXBaseAnim::sFXData	FXWaterSplashData=
+{
+		ONE,
+		FRM__SPLASH001,FRM__SPLASH006,
+		1,
+		127,127,255
+};
 
-	Shockwave - From falling items
-	Daze stars
+CFXBaseAnim::sFXData	FXAcidSplashData=
+{
+		ONE,
+		FRM__SPLASH001,FRM__SPLASH006,
+		1,
+		0,255,0
+};
+CFXBaseAnim::sFXData	FXLavaSplashData=
+{
+		ONE,
+		FRM__SPLASH001,FRM__SPLASH006,
+		1,
+		255,0,0
+};
+CFXBaseAnim::sFXData	FXOilSplashData=
+{
+		ONE,
+		FRM__SPLASH001,FRM__SPLASH006,
+		1,
+		0,0,0
+};
 
-	water/acid/lava/oil
-		drip
-		splashes
-
-
-	water/acid/lava.oil
-		drops
-		waterfall 
-		waterfall end (splash)
-
-	fireballs
-
-	steam
-	smoke
-	flames
-	marsh gas
-
-	explosions (implode!!)
-
-	Coral debris
-
-***************************
-Level Effect Emitters
-
-	Bubble 
-	Acid drip 
-	Acid Flow
-	steam
-	smoke
-	fireballs
-	flames
-	gas
-
-*/
-
+CFXBaseAnim::sFXData	FXExplodeData=
+{
+		ONE,
+		FRM__EXPLOSION0001,FRM__EXPLOSION0006,
+		1,
+		127,127,127
+};
 
 /*****************************************************************************/
 /*
@@ -79,21 +71,25 @@ void	TestFX(DVECTOR Pos)
 {
 		if (!TestFXPtr)
 		{
+			Pos.vx=256;
+			Pos.vy=128;
 			TestFXPtr=(CFXSteam*)CFX::Create(CFX::FX_TYPE_STEAM,Pos);
 			TestFXPtr->setLife(32);
+			TestFXPtr->setRelativeToMap(false);
 			TestFXPtr=0;
 		}
 		else
 		{
-			TestFXPtr->setDie();
+			TestFXPtr->killFX();
 			TestFXPtr=0;
 		}
 }
 */
 /*****************************************************************************/
+int	FXType=(CFX::FX_TYPE)0;
 void	TestFX(DVECTOR Pos)
 {
-		CFX::Create(CFX::FX_TYPE_SPLASH,Pos);
+		CFX::Create((CFX::FX_TYPE)FXType,Pos);
 //		TestFXPtr->setLife(32);
 }
 
@@ -112,25 +108,26 @@ CFX		*NewFX;
 		case FX_TYPE_STEAM:
 			NewFX=new ("FXSteam") CFXSteam();
 			break;
-		case FX_TYPE_SPLASH:
-			NewFX=new ("FXSplash") CFXSplash();
-			break;
 		case FX_TYPE_SPLASH_WATER:
-			NewFX=new ("FXSplash") CFXSplash();
+			NewFX=new ("FXWaterSplash") CFXBaseAnim();
+			NewFX->setData(&FXWaterSplashData);
 			break;
 		case FX_TYPE_SPLASH_ACID:
-			NewFX=new ("FXSplashAcid") CFXSplashAcid();
+			NewFX=new ("FXAcidSplash") CFXBaseAnim();
+			NewFX->setData(&FXAcidSplashData);
 			break;
 		case FX_TYPE_SPLASH_LAVA:
-			NewFX=new ("FXSplashLava") CFXSplashLava();
+			NewFX=new ("FXLavaSplash") CFXBaseAnim();
+			NewFX->setData(&FXLavaSplashData);
 			break;
 		case FX_TYPE_SPLASH_OIL:
-			NewFX=new ("FXSplashOil") CFXSplashOil();
+			NewFX=new ("FXOilSplash") CFXBaseAnim();
+			NewFX->setData(&FXOilSplashData);
 			break;
 		case FX_TYPE_EXPLODE:
-			NewFX=new ("FXExplode") CFXExplode();
+			NewFX=new ("FXExplode") CFXBaseAnim();
+			NewFX->setData(&FXExplodeData);
 			break;
-
 
 		case FX_TYPE_NRG_BAR:
 			NewFX=new ("NRG Bar") CFXNRGBar();
@@ -140,12 +137,10 @@ CFX		*NewFX;
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			break;
 
-
-		case FX_TYPE_BUBBLE:
-			case FX_TYPE_BUBBLE_WATER:
-			case FX_TYPE_BUBBLE_ACID:
-			case FX_TYPE_BUBBLE_LAVA:
-			case FX_TYPE_BUBBLE_OIL:
+		case FX_TYPE_BUBBLE_WATER:
+		case FX_TYPE_BUBBLE_ACID:
+		case FX_TYPE_BUBBLE_LAVA:
+		case FX_TYPE_BUBBLE_OIL:
 		case FX_TYPE_LIGHTNING_BOLT:
 		case FX_TYPE_LIGHTNING_SHEET:
 		case FX_TYPE_LIGHTNING_BLAST:
@@ -153,18 +148,19 @@ CFX		*NewFX;
 		case FX_TYPE_LIGHTNING_PROJECTILE:
 		case FX_TYPE_SHOCKWAVE:
 		case FX_TYPE_DAZE:
-		case FX_TYPE_DROP:			
-			case FX_TYPE_DROP_WATER:
-			case FX_TYPE_DROP_ACID:
-			case FX_TYPE_DROP_LAVA:
-			case FX_TYPE_DROP_OIL:
+
+		case FX_TYPE_DROP_WATER:
+		case FX_TYPE_DROP_ACID:
+		case FX_TYPE_DROP_LAVA:
+		case FX_TYPE_DROP_OIL:
 		case FX_TYPE_CASCADE:		
 		case FX_TYPE_CASCADE_SPLASH:	
 		case FX_TYPE_FIREBALL:
-			case FX_TYPE_SMOKE:
-			case FX_TYPE_GAS:
+
+		case FX_TYPE_SMOKE:
+		case FX_TYPE_GAS:
+
 		case FX_TYPE_FLAMES:
-		case FX_TYPE_DEBRIS:
 		
 		default:
 			ASSERT(!"UNKNOWN FX TYPE");
@@ -203,8 +199,15 @@ void	CFX::init()
 {
 		CFXThing::init();
 		OtPos=OTPOS__ACTOR_POS;
+		RelativeToMap=true;
+		Life=-1;	// Set to immortal
+}
 
-		Life=-1;
+/*****************************************************************************/
+void	CFX::init(DVECTOR const &_Pos)
+{
+		init();
+		Pos=_Pos;
 }
 
 /*****************************************************************************/
@@ -217,12 +220,13 @@ void	CFX::shutdown()
 void	CFX::think(int _frames)
 {
 		CFXThing::think(_frames);
+
 		if (Life>0)
 		{
-			Life--;
-			if (Life==0 && !DieOut)
+			Life-=_frames;
+			if (Life<=0)
 			{
-				setDie();
+				killFX();
 			}
 		}
 
@@ -234,3 +238,33 @@ void	CFX::render()
 		CFXThing::render();
 }
 
+/*****************************************************************************/
+bool	CFX::getFXParentPos(DVECTOR &Pos)
+{
+CThing	*Parent=getParent();
+		if (!Parent) return(false);
+
+		if (RelativeToMap)
+		{
+			Pos=Parent->getPos();
+		}
+		else
+		{
+			Pos=getPos();
+		}
+		return(true);
+}
+
+/*****************************************************************************/
+void	CFX::getFXRenderPos(DVECTOR &Pos)
+{
+		if (RelativeToMap)
+		{
+			CFX::render();
+			Pos=getRenderPos();
+		}
+		else
+		{
+			Pos=getPos();
+		}
+}

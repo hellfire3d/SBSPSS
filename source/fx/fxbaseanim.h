@@ -11,21 +11,27 @@
 class CFXBaseAnim : public CFX
 {
 public:
+	struct sFXData
+	{
+		s16		Scale;
+		s16		StartFrame,EndFrame;
+		s16		FrameShift;
+		u8		R,G,B;
+	};
 
 virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
-virtual	void		SetScale(int S)		{Scale=S;}
-virtual	void		SetFrame(int Base,int Count,int Shift=0);
+		void		setData(void *Data)		{DataPtr=(sFXData*)Data;}
+
+virtual	void		SetScale(int S)			{CurrentScale=S;}
 
 protected:
-		s16			BaseFrame,Frame;
-		s16			MaxFrame;
-		s16			FrameShift;
+		sFXData		*DataPtr;
 
-		s16			Scale;
-		u8			R,G,B;
+		s16			CurrentFrame;
+		s16			CurrentScale;
 };
 
 #endif

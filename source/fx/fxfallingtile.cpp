@@ -14,7 +14,6 @@
 
 
 /*****************************************************************************/
-int		TT=1;
 const int		FallingTile_DefVY=-2;
 const int		FallingTile_DefLife=32;
 
@@ -35,8 +34,6 @@ sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 		Velocity.vx=getRndRange(7)-4;
 		Velocity.vy=FallingTile_DefVY;
 		Life=FallingTile_DefLife;
-		Tile=TT++;
-
 }
 
 /*****************************************************************************/
@@ -54,8 +51,6 @@ void	CFXFallingTile::think(int _frames)
 		Pos.vx+=Velocity.vx;
 		Pos.vy+=Velocity.vy;
 		Velocity.vy++;
-		Life--;
-		if (!Life) setToShutdown();
 }
 
 /*****************************************************************************/
@@ -68,7 +63,7 @@ void	CFXFallingTile::render()
 {
 		CFX::render();
 
-		if (!canRender() && Life) return;
+		if (!canRender()) return;
 
 u8			*PrimPtr=GetPrimPtr();
 POLY_FT3	*TPrimPtr=(POLY_FT3*)PrimPtr;

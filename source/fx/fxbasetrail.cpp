@@ -23,7 +23,6 @@ void	CFXBaseTrail::init(DVECTOR const &_Pos)
 		Pos=_Pos;
 		HeadIdx=0;
 		ListCount=0;
-		DieOut=0;
 }
 
 /*****************************************************************************/
@@ -37,11 +36,12 @@ void	CFXBaseTrail::shutdown()
 /*****************************************************************************/
 void	CFXBaseTrail::think(int _frames)
 {
-CThing	*Parent=getParent();
+DVECTOR	Pos;
+bool	hasParent=getFXParentPos(Pos);
 
-		if (Parent)
+		if (hasParent)
 		{
-			this->setPos(Parent->getPos());
+			setPos(Pos);
 		}
 }
 
@@ -61,11 +61,12 @@ CFXBaseTrail::sList	&CFXBaseTrail::moveHead()
 
 void	CFXBaseTrail::render()
 {
-		CFX::render();
+DVECTOR	RenderPos;
+
+		getFXRenderPos(RenderPos);
 
 		if (canRender())
 		{
-			DVECTOR	RenderPos=getRenderPos();
 			SpriteBank	*SprBank=CGameScene::getSpriteBank();
 			int		ThisIdx=HeadIdx;
 			int		StartY=RenderPos.vy;
