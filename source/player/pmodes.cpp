@@ -29,6 +29,10 @@
 #include "level\layercollision.h"
 #endif
 
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
+#endif
+
 // States
 #ifndef __PLAYER__PSLOOK_H__
 #include "player\pslook.h"
@@ -441,7 +445,10 @@ void	CPlayerModeBase::playerHasHitGround()
 		setState(STATE_HITGROUND);
 #ifdef __USER_paul__
 		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
+#else
+		CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_SHORT);
 #endif
+
 		moveVel.vx=0;
 		CGameScene::setCameraShake(0,8);
 	}
