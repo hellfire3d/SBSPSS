@@ -52,6 +52,11 @@ public:
 
 	void					respawnLevel();
 
+	static u8				getIsBossRespawn()					{return m_isBossRespawn;}
+	static s32				getBossHealth()						{return m_bossHealth;}
+	static void				setIsBossRespawn( u8 newIsBossRespawn )		{m_isBossRespawn=newIsBossRespawn;}
+	static void				setBossHealth( s32 newBossHealth )			{m_bossHealth=newBossHealth;}
+
 	
 private:
 	void					initLayers();
@@ -85,6 +90,9 @@ private:
 	sThingFX		*FXList;
 	int				HazardCount;
 	sThingHazard	**HazardList;
+
+	static u8		m_isBossRespawn;
+	static s32		m_bossHealth;
 
 };
 

@@ -128,6 +128,8 @@ const FileEquate	loadingScreens[6]=
 DVECTOR CLevel::MapPos;
 DVECTOR	CLevel::s_playerSpawnPos;
 
+u8 CLevel::m_isBossRespawn;
+s32 CLevel::m_bossHealth;
 /*****************************************************************************/
 CLevel::CLevel()
 {
@@ -178,6 +180,9 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 
 		MapPos.vx=MapPos.vy=0;
 		initLayers();
+
+		m_isBossRespawn = false;
+		m_bossHealth = 0;
 }
 
 /*****************************************************************************/
@@ -486,6 +491,9 @@ void	CLevel::initThings(int _respawningLevel)
 /*****************************************************************************/
 void	CLevel::respawnLevel()
 {
+	m_isBossRespawn = false;
+	m_bossHealth = 0;
+
 	CThingManager::killAllThingsForRespawn();
 	initThings(true);
 }
