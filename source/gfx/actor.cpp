@@ -139,7 +139,7 @@ int		H=ThisFrame->H;
 			Ft4->u2=U+W-1;
 	 		Ft4->u3=U;
 			X-=ThisFrame->XOfs;
-			X-=ThisFrame->W/2;
+			X-=ThisFrame->W;
 		}
 		else
 		{
