@@ -228,10 +228,8 @@ UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) \
 							$(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN)
 
-INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) \
-							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) -b+ \
-							-c+ -z+ $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
-							-c- -z- $(UI_GFX_NONTRANS_IN)
+INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
+							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) $(UI_GFX_NONTRANS_IN)
 
 #----------------------------------------------------------------------------
 # Front end graphics
@@ -558,12 +556,9 @@ $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 #	Where it all happens
 #----------------------------------------------------------------------------
 
-# WARNING !!!! BigLump must be the last item that all is dependant on. GRL !!!!
-
 all : 	dirs gdirs \
 		actors \
 		levels \
-		sprites \
 		biglump
 		@$(ECHO) Graphics made
 
