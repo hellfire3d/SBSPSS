@@ -84,6 +84,26 @@ CFG=spongebob project - Win32 Debug
 # Begin Group "source"
 
 # PROP Default_Filter ""
+# Begin Group "backend"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\complete.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\complete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\gameover.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\gameover.h
+# End Source File
+# End Group
 # Begin Group "enemy"
 
 # PROP Default_Filter ""

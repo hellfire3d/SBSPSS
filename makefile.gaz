@@ -48,6 +48,9 @@ CD_FILESYS_LIB :=		CMXBoot
 #	Source Code to Compile
 #----------------------------------------------------------------------------
 
+backend_src :=		gameover \
+					complete
+
 enemy_src :=		
 
 fileio_src :=		fileio \

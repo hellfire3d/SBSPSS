@@ -43,6 +43,14 @@
 #include "game\game.h"
 #endif
 
+#ifndef __BACKEND_GAMEOVER_H__
+#include "backend\gameover.h"
+#endif
+
+#ifndef __BACKEND_COMPLETE_H__
+#include "backend\complete.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -68,8 +76,10 @@
 
 CScene	*CSceneSelector::s_sceneList[]=
 {
-	&GameScene,			// First scene in the list is the default scene
+	&GameScene,				// First scene in the list is the default scene
 	&FrontEndScene,
+	&GameOverScene,
+	&GameCompletedScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 
@@ -119,6 +129,7 @@ void CSceneSelector::render()
 	if(m_state==STATE_SELECTING)
 	{
 		POLY_F4	*f4;
+		int		i;
 
 		f4=GetPrimF4();
 		setXYWH(f4,0,0,512,256);
@@ -126,9 +137,19 @@ void CSceneSelector::render()
 		AddPrimToList(f4,20);
 
 		m_font->setColour(255,255,255);
-		m_font->print(256,100,"Select scene:");
-		m_font->setColour(100,255,100);
-		m_font->print(256,120,s_sceneList[m_currentSelection]->getSceneName());
+		m_font->print(256,80,"Select scene:");
+		for(i=0;i<s_sceneCount;i++)
+		{
+			if(i==m_currentSelection)
+			{
+				m_font->setColour(100,255,100);
+			}
+			else
+			{
+				m_font->setColour(255,100,100);
+			}
+			m_font->print(256,110+(i*m_font->getCharHeight()),s_sceneList[i]->getSceneName());
+		}
 	}
 }
 

@@ -5,7 +5,8 @@
 	Author:		PKG
 	Created: 
 	Project:	Spongebob
-	Purpose: 
+	Purpose:	Game Over scene. Shown when out of contiunes or player chooses
+				not to continue any longer
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -83,6 +84,7 @@ void CGameOverScene::init()
 	m_font->setOt(10);
 
 	m_readyToExit=false;
+	CFader::setFadingIn(CFader::BLACK_FADE);
 }
 
 
@@ -126,12 +128,12 @@ void CGameOverScene::render()
   ---------------------------------------------------------------------- */
 void CGameOverScene::think(int _frames)
 {
-	if(!m_readyToExit)
+	if(!CFader::isFading()&&!m_readyToExit)
 	{
 		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
 		{
 			m_readyToExit=true;
-			CFader::setFadingOut();
+			CFader::setFadingOut(CFader::BLACK_FADE);
 			GameState::setNextScene(&FrontEndScene);
 		}
 	}
