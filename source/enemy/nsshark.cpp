@@ -771,6 +771,8 @@ void CNpcSubSharkEnemy::render()
 
 void CNpcSubSharkEnemy::renderOnMapScreen( DVECTOR drawPos )
 {
+	drawPos.vy += 50;
+
 	SprFrame = NULL;
 
 	SprFrame = m_actorGfx->Render(drawPos,3,0,false);
