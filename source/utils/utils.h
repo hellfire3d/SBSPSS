@@ -45,6 +45,25 @@ inline	void	SetIdent(MATRIX *Mtx)
 	Mtx->t[0]=0;		Mtx->t[1]=0;		Mtx->t[2]=0;
 }
 
+
+/*****************************************************************************/
+inline	void	SetIdentTrans(MATRIX *Mtx,VECTOR *T)
+{
+	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
+	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
+	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
+	Mtx->t[0]=T->vx;	Mtx->t[1]=T->vy;	Mtx->t[2]=T->vz;
+}
+
+/*****************************************************************************/
+inline	void	SetIdentTrans(MATRIX *Mtx,s32 X,s32 Y,s32 Z)
+{
+	Mtx->m[0][0]=ONE; 	Mtx->m[0][1]=0;		Mtx->m[0][2]=0;
+	Mtx->m[1][0]=0; 	Mtx->m[1][1]=ONE;	Mtx->m[1][2]=0;
+	Mtx->m[2][0]=0; 	Mtx->m[2][1]=0;		Mtx->m[2][2]=ONE;
+	Mtx->t[0]=X;		Mtx->t[1]=Y;		Mtx->t[2]=Z;
+}
+
 /*****************************************************************************/
 inline	void	SetIdentNoTrans(MATRIX *Mtx)
 {

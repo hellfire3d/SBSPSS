@@ -113,16 +113,15 @@ sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
 sOT				*ThisOT;
-MATRIX			&CamMtx=CGameScene::GetCamMtx();
+//MATRIX			&CamMtx=CGameScene::GetCamMtx();
 VECTOR			BlkPos;
 
-extern int RenderZ;
-		SetGeomScreen(RenderZ);
-		CamMtx.t[2]=RenderZ;
-		SetTransMatrix(&CamMtx);		
+//extern int RenderZ;
+//		CamMtx.t[2]=RenderZ;
+//		SetTransMatrix(&CamMtx);		
 
-		SetIdentNoTrans(&CamMtx);
-		SetRotMatrix(&CamMtx);
+//		SetIdentNoTrans(&CamMtx);
+//		SetRotMatrix(&CamMtx);
 
 // Setup Trans Matrix
 		BlkPos.vx=XOfs-(ShiftX);
