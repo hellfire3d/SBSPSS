@@ -24,7 +24,7 @@ int		i,ListSize;
 		for (i=0; i<ListSize; i++)
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
-			RemapTable[i]=Core->AddPlatform(ThisThing);
+			RemapTable[i]=Core->AddModel(ThisThing);
 		}
 
 		printf("%i Platforms\n",ThingList.size());

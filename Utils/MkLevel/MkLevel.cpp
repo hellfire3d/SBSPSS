@@ -113,6 +113,118 @@ GFName		Path;
 		FlatFace[1].uv[2][0]=0;		FlatFace[1].uv[2][1]=1;
 }
 
+
+//***************************************************************************
+int		CMkLevel::AddModel(GString &Filename)
+{
+GFName			Path=Filename;
+sMkLevelModel	ThisModel;
+int				Idx;
+CScene			Scene;
+
+		ThisModel.Name=GFName(Filename).File();
+		Idx=ModelList.Find(ThisModel);
+
+		if (Idx!=-1)
+		{
+			return(Idx);
+		}
+		Idx=ModelList.size();
+
+		Path.File("");
+		Path.Ext("");
+GString	RootPath=Path.FullName();
+// Load Model and add
+int		TriStart=ModelFaceList.GetFaceCount();;
+		Scene.Load(Filename);
+		BuildModel(Scene,RootPath,0);
+		ThisModel.TriStart=TriStart;
+		ThisModel.TriCount=ModelFaceList.GetFaceCount()-TriStart;
+
+		ModelList.Add(ThisModel);
+		return(Idx);
+}
+
+//***************************************************************************
+void	CMkLevel::BuildModel(CScene &Scene,GString &RootPath,int Node)
+{
+CNode					&ThisNode=Scene.GetNode(Node);
+vector<sGinTri> const	&NodeTriList =	ThisNode.GetTris();
+vector<Vector3> const	&NodeVtxList =	ThisNode.GetPts();
+vector<int>	const		&NodeMatList =	ThisNode.GetTriMaterial();
+vector<sUVTri> const	&NodeUVList =	ThisNode.GetUVTris();
+vector<GString> const	&SceneTexList=	Scene.GetTexList();
+vector<int> const		&SceneUsedMatList=Scene.GetUsedMaterialIdx();
+
+int						TriCount=NodeTriList.size();
+
+			for (int T=0; T<TriCount; T++)
+			{
+				int		Mat=SceneUsedMatList[NodeMatList[T]];
+				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
+				GString	TexName=RootPath+SceneTexList[Mat];
+				
+				ModelFaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], TexName,0,false);
+			}
+
+int		ChildCount=ThisNode.GetPruneChildCount();
+		for (int Loop=0;Loop<ChildCount ; Loop++) BuildModel(Scene,RootPath,ThisNode.PruneChildList[Loop]);
+}
+
+//***************************************************************************
+int		CMkLevel::AddModel(sMkLevelLayerThing &ThisThing)
+{
+sMkLevelModel	ThisModel;
+int				Idx;
+
+		ThisModel.Name=ThisThing.Name;
+		Idx=ModelList.Find(ThisModel);
+
+		if (Idx!=-1)
+		{
+			return(Idx);
+		}
+		Idx=ModelList.size();
+		ThisModel.TriStart=ModelFaceList.GetFaceCount();
+		ThisModel.TriCount=ThisThing.Data.TriCount;
+
+
+// Add tri data
+		for (int i=0;i<ThisModel.TriCount; i++)
+		{
+			sExpTri	&ThisTri=InTriList[ThisThing.Data.TriStart+i];
+			CFace	F;
+
+			ExpTri2Face(ThisTri,F);
+			ModelFaceList.AddFace(F,false);
+		}
+
+		ModelList.Add(ThisModel);
+		return(Idx);
+}
+
+//***************************************************************************
+void	CMkLevel::ProcessModels()
+{
+int		i,ListSize;
+int		TriStart=OutFaceList.GetFaceCount();
+
+// Add faces
+		ListSize=ModelFaceList.GetFaceCount();
+		for (i=0; i<ListSize; i++)
+		{
+			OutFaceList.AddFace(ModelFaceList[i],true);
+		}
+
+// Update models
+		ListSize=ModelList.size();
+		for (i=0; i<ListSize; i++)
+		{
+			printf("%s = %i %i\n",ModelList[i].Name,ModelList[i].TriStart,ModelList[i].TriCount);
+			ModelList[i].TriStart+=TriStart;
+		}
+}
+
 //***************************************************************************
 //*** Load ******************************************************************
 //***************************************************************************
@@ -273,6 +385,8 @@ void	CMkLevel::Process()
 {
 		printf("PreProcess Layers\n");
 		PreProcessLayers();
+		printf("Process Models\n");
+		ProcessModels();
 		printf("Process Tilebank\n");
 		ProcessTileBanks();
 		printf("Process Layers\n");
@@ -390,38 +504,6 @@ u8		Outx0, Outy0;
 		Out.u0=Outx0; Out.v0=Outy0;
 		Out.TPage=Info.Tpage;
 		Out.Clut=Info.Clut;
-}
-
-//***************************************************************************
-int		CMkLevel::AddPlatform(sMkLevelLayerThing &ThisThing)
-{
-sMkLevelPlatform	ThisPlatform;
-int				Idx;
-
-		ThisPlatform.Name=ThisThing.Name;
-		Idx=PlatformList.Find(ThisPlatform);
-
-		if (Idx!=-1)
-		{
-			return(Idx);
-		}
-		Idx=PlatformList.size();
-		ThisPlatform.TriStart=OutFaceList.GetFaceCount();
-		ThisPlatform.TriCount=ThisThing.Data.TriCount;
-
-		PlatformList.Add(ThisPlatform);
-
-// Add tri data
-		for (int i=0;i<ThisPlatform.TriCount; i++)
-		{
-//			sExpTri	&ThisTri=InTriList[ThisPlatform.TriStart+i];
-			sExpTri	&ThisTri=InTriList[i];
-			CFace	F;
-
-			ExpTri2Face(ThisTri,F);
-			OutFaceList.AddFace(F);
-		}
-		return(Idx);
 }
 
 //***************************************************************************
@@ -915,7 +997,7 @@ void	CMkLevel::WriteLayers()
 		LevelHdr.PlatformList=WriteThings(LAYER_TYPE_PLATFORM,"Platform List");
 		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER,"Trigger List");
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX,"FX List");
-		LevelHdr.PlatformGfx=(sModel*)WritePlatformGfx();
+		LevelHdr.ModelList=(sModel*)WriteModelList();
 }
 
 //***************************************************************************
@@ -954,19 +1036,19 @@ int		Ofs;
 }
 
 //***************************************************************************
-int		CMkLevel::WritePlatformGfx()
+int		CMkLevel::WriteModelList()
 {
-int		i,ListSize=PlatformList.size();
+int		i,ListSize=ModelList.size();
 int		Ofs=ftell(File);
 
 		for (i=0; i<ListSize; i++)
 		{
 			sModel				Out;
-			sMkLevelPlatform	&ThisPlatform=PlatformList[i];
+			sMkLevelModel		&ThisModel=ModelList[i];
 
-			Out.TriCount=ThisPlatform.TriCount;
-			Out.TriStart=ThisPlatform.TriStart;
-			printf("Writing Platform %s (%i/%i)- %i Tris\n",ThisPlatform.Name,i+1,ListSize,Out.TriCount);
+			Out.TriCount=ThisModel.TriCount;
+			Out.TriStart=ThisModel.TriStart;
+			printf("Writing Model %s (%i/%i)- %i Tris\n",ThisModel.Name,i+1,ListSize,Out.TriCount);
 			fwrite(&Out,1,sizeof(sModel),File);
 		}
 

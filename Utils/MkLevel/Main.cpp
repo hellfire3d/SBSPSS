@@ -50,6 +50,10 @@ int		Count;
 					TextPtr+=strlen(TextPtr)+1;
 					TPH=atol(TextPtr);
 					break;
+				case 'm':
+					TpStr= CheckFileString(String);
+					Level.AddModel(TpStr);
+					break;
 				case 'q':
 					StripLength=4;
 					break;
@@ -78,10 +82,9 @@ void Usage(char *ErrStr)
 	printf("   -o:[FILE]       Set output File (AND Dir)\n");
 	printf("   -s:nn           Set Scaling value\n");
 	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
-//	printf("   -c:             Set Chapter Name\n");
-//	printf("   -l:             Set Level Name\n");
+	printf("   -m:             Add Model\n");
 	printf("   -d:             Enable Debug output\n");
-//	printf("   -q:             Enable Quadding\n");
+	printf("   -q:             Enable Quadding\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 

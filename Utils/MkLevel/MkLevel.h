@@ -37,13 +37,13 @@ bool	operator ==(sMkLevelTex const &v1)
 };
 
 //***************************************************************************
-struct	sMkLevelPlatform
+struct	sMkLevelModel
 {
 		GString	Name;
 		int		TriStart;
 		int		TriCount;
 
-bool	operator ==(sMkLevelPlatform const &v1)		{return(Name==v1.Name);}
+bool	operator ==(sMkLevelModel const &v1)		{return(Name==v1.Name);}
 };
 
 //***************************************************************************
@@ -58,12 +58,14 @@ public:
 		void			SetAppDir(const char *Path);
 		void			Init(const char *InFilename,const char *OutFilename,int TPBase,int TPW,int TPH);
 
+		void			LoadModels();
+		int				AddModel(GString &Filename);
+		int				AddModel(sMkLevelLayerThing &ThisThing);
 		void			Load();
 
 		void			Process();
 		int				AddTile3d(sExpLayerTile &Tile)			{return(Tile3dList.Add(Tile));}
 		int				AddTile2d(sExpLayerTile &Tile)			{return(Tile2dList.Add(Tile));}
-		int				AddPlatform(sMkLevelLayerThing &ThisThing);
 
 		void			Write();
 
@@ -80,6 +82,7 @@ public:
 
 		void			SetStart(int X,int Y)				{LevelHdr.PlayerStartX=X; LevelHdr.PlayerStartY=Y;}
 protected:	
+		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
 		void			LoadStrList(CList<GString> &List,char *TexPtr,int Count);
 
@@ -96,11 +99,13 @@ protected:
 		void			ProcessLayers();
 		void            SetUpTileUV(sTile2d &Out, sTexOutInfo &Info);
 
+		void			ProcessModels();
+
 		void			WriteLevel();
 		void			WriteLayers();
 		int				WriteLayer(int Type,int SubType,const char *LayerName);
 		int				WriteThings(int Type,const char *LayerName);
-		int				WritePlatformGfx();
+		int				WriteModelList();
 		int				WriteTriList();
 		int				WriteQuadList();
 		int				WriteVtxList();
@@ -117,7 +122,7 @@ protected:
 
 		int						TileW,TileH;
 		CIni					Config;
-
+		
 		CList<sExpTri>			InTriList;
 		CList<sExpTile>			InTileList;
 		CList<GString>			InSetNameList;
@@ -135,8 +140,10 @@ protected:
 		CTexGrab				TexGrab;
 		CList<Frame>			BmpList;
 
-		CList<sMkLevelPlatform>	PlatformList;
 		vector<CMkLevelLayer*>	LayerList;
+
+		CList<sMkLevelModel>	ModelList;
+		CFaceStore				ModelFaceList;
 
 		sLevelHdr				LevelHdr;
 		sExpTri					FlatFace[2];
