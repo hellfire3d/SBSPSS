@@ -193,7 +193,7 @@ void CGUICycleButton::think(int _frames)
 	ASSERT(getTarget());
 	ASSERT(getData());
 	
-	CGUIToggleButton::think(_frames);
+	CGUIObject::think(_frames);
 	if(isSelected())
 	{
 		int pad;
@@ -210,11 +210,11 @@ void CGUICycleButton::think(int _frames)
 			do
 			{
 				tmp=*data;
-				if(*target==*data)
+				data++;
+				if(*target==tmp)
 				{
 					break;
 				}
-				data++;
 			}
 			while(tmp<*data);
 			if(tmp>*data)
