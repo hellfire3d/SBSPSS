@@ -362,6 +362,7 @@ void CGameScene::render_playing()
 			{
 				m_scalableFont->setColour(255,255,255);
 			}
+			m_scalableFont->setScale(511);
 			m_scalableFont->print(VidGetScrW()/2,30,buf);
 		}
 
