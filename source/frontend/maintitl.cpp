@@ -70,6 +70,10 @@
 #include "utils\utils.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -183,9 +187,7 @@ void CFrontEndMainTitles::select()
 
 	m_demoTimeout=0;
 
-	// Currently the selection of title screens is random.. eventually it will be tied
-	// into how much of the game has been completed (pkg)
-	s_image=CFileIO::loadFile(s_imageFiles[getRndRange(4)]);
+	s_image=CFileIO::loadFile(s_imageFiles[CGameSlotManager::getNumberOfFrontendScreenToUse()]);
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 

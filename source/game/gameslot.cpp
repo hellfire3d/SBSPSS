@@ -29,6 +29,34 @@
 /*	Data
 	---- */
 
+// Level data include files:
+#include <CHAPTER01_LEVEL01_INF.h>
+#include <CHAPTER01_LEVEL02_INF.h>
+#include <CHAPTER01_LEVEL03_INF.h>
+#include <CHAPTER01_LEVEL04_INF.h>
+#include <CHAPTER02_LEVEL01_INF.h>
+#include <CHAPTER02_LEVEL02_INF.h>
+#include <CHAPTER02_LEVEL03_INF.h>
+#include <CHAPTER02_LEVEL04_INF.h>
+#include <CHAPTER03_LEVEL01_INF.h>
+#include <CHAPTER03_LEVEL02_INF.h>
+#include <CHAPTER03_LEVEL03_INF.h>
+#include <CHAPTER03_LEVEL04_INF.h>
+#include <CHAPTER04_LEVEL01_INF.h>
+#include <CHAPTER04_LEVEL02_INF.h>
+#include <CHAPTER04_LEVEL03_INF.h>
+#include <CHAPTER04_LEVEL04_INF.h>
+#include <CHAPTER05_LEVEL01_INF.h>
+#include <CHAPTER05_LEVEL02_INF.h>
+#include <CHAPTER05_LEVEL03_INF.h>
+#include <CHAPTER05_LEVEL04_INF.h>
+#include <CHAPTER06_LEVEL01_INF.h>
+#include <CHAPTER06_LEVEL02_INF.h>
+#include <CHAPTER06_LEVEL03_INF.h>
+#include <CHAPTER06_LEVEL04_INF.h>
+#include <CHAPTER06_LEVEL05_INF.h>
+
+
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
@@ -202,6 +230,88 @@ CGameSlotManager::GameSlot CGameSlotManager::getSlotData(int _slot)
 {
 	ASSERT(_slot<=NUM_GAME_SLOTS);
 	return s_gameSlots[_slot];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:	0..3
+  ---------------------------------------------------------------------- */
+int CGameSlotManager::getNumberOfFrontendScreenToUse()
+{
+	int			bestSoFar;
+	GameSlot	*slot;
+	int			i;
+
+	bestSoFar=0;
+	slot=s_gameSlots;
+	for(i=0;i<NUM_GAME_SLOTS&&bestSoFar<3;i++)
+	{
+		int bestForThisSlot=0;
+
+		if(slot->m_isInUse)
+		{
+			// All normal levels completed? ( screen 1 )
+			if(slot->hasQustItemBeenCollected(5-1,4-1))
+			{
+				bestForThisSlot=1;
+
+				// ..and bought all party items? ( screen 2 )
+				int j;
+				for(j=CShopScene::NUM_SHOP_ITEM_IDS;j>0&&slot->isPartyItemHeld(j);j--);
+				if(j==0)
+				{
+					bestForThisSlot=2;
+
+					// ..and collected all spats? ( screen 3 )
+					int	count,c,l;
+					count=0;
+					for(c=0;c<5;c++)
+					{
+						for(l=0;l<4;l++)
+						{
+							count+=slot->getSpatulaCollectedCount(c,l);
+						}
+					}
+					if(count==CHAPTER01_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER01_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER01_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER01_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER02_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER02_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER02_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER02_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER03_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER03_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER03_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER03_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER04_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER04_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER04_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER04_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER05_LEVEL01_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER05_LEVEL02_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER05_LEVEL03_INF_TOTAL_ITEM_GOLDEN_SPATULA+
+							  CHAPTER05_LEVEL04_INF_TOTAL_ITEM_GOLDEN_SPATULA)
+					{
+						bestForThisSlot=3;
+					}
+				}
+			}
+
+			// Is this slot better than the others?
+			if(bestForThisSlot>bestSoFar)
+			{
+				bestSoFar=bestForThisSlot;
+			}
+		}
+
+		slot++;
+	}
+
+	return bestSoFar;
 }
 
 

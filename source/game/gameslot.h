@@ -216,6 +216,8 @@ public:
 	static void			eraseGameSlot(unsigned int _slot);
 	static void			copyGameSlot(unsigned int _src,unsigned int _dest);
 
+	static int			getNumberOfFrontendScreenToUse();
+
 
 private:
 	static GameSlot		s_gameSlots[NUM_GAME_SLOTS];
