@@ -77,6 +77,15 @@ struct	sDataBank
 };
 
 /*****************************************************************************/
+struct	sASyncQueue
+{
+		int			Sector;
+		int			Length;
+		u8			*Dst;
+		int			Status;
+};
+
+/*****************************************************************************/
 class CLOFileIO;
 class CFileIO
 {
@@ -110,6 +119,11 @@ static	void		FindAllFilePos();
 static	void		GetAllFilePos();
 static	int			GetReadLeft();
 
+// Fake ASync Que Stuff
+static	void		EnableASync(bool f)		{ASyncFlag=f;}
+static	void		AddASyncFile(FileEquate file,u8 *Dst);
+static	void		LoadASyncFiles();
+
 private:
 static	void   		CheckChunk();
 
@@ -121,6 +135,8 @@ static	sDataBank		DataBank[DATABANK_MAX];
 static	DataBankEquate	CurrentDataBank;
 
 static	sFAT		*MainFAT;
+static	sASyncQueue	ASyncQueue;
+static	bool		ASyncFlag;
 };
 
 /*****************************************************************************/
@@ -129,6 +145,7 @@ class CLOFileIO
 public:
 	virtual void 	Open()=0;
 	virtual void	Read(u32 Length,void *Buffer)=0;
+	virtual	void	ReadAsync(sASyncQueue &File){};
 	virtual void 	Close()=0;
 };
 

@@ -16,6 +16,7 @@ public:
 
 	void 		Open();
 	void 		Read(u32 Length,void *Buffer);
+	void		ReadAsync(sASyncQueue &File);
 	void 		Close();
 
 private:

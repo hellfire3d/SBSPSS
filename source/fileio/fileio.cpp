@@ -23,6 +23,8 @@ CLOFileIO	*CFileIO::FileIO;
 int			CFileIO::FilePosList[FILEPOS_MAX];
 
 sFAT		*CFileIO::MainFAT=0;
+sASyncQueue	CFileIO::ASyncQueue;
+bool		CFileIO::ASyncFlag;
 
 /*****************************************************************************/
 sDataBank	CFileIO::DataBank[DATABANK_MAX]=
@@ -77,6 +79,8 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 		for (int Bank=0;Bank<DATABANK_MAX; Bank++) DataBank[Bank].Data=0;
 //		loadDataBank(DATABANK_SYSTEM);
 //		CurrentDataBank=DATABANK_MAX;
+		ASyncQueue.Status=BLStatusOffline;
+		ASyncFlag=false;
 }
 
 /*****************************************************************************/
@@ -335,6 +339,25 @@ int	CFileIO::GetReadLeft()
 {
 	return(BigLump.LengthLeft);
 }
+
+/*****************************************************************************/
+void	CFileIO::AddASyncFile(FileEquate file,u8 *Dst)
+{
+		ASyncQueue.Sector = getFileSector(file);
+		ASyncQueue.Length = getFileSize(file )/2048;
+		ASyncQueue.Dst=Dst;
+		ASyncQueue.Status=BLStatusReady;
+}
+
+/*****************************************************************************/
+void	CFileIO::LoadASyncFiles()
+{
+		if (ASyncQueue.Status!=BLStatusOffline && ASyncFlag)
+		{
+			FileIO->ReadAsync(ASyncQueue);
+		}
+}
+
 /*****************************************************************************/
 /*** Data Banks **************************************************************/
 /*****************************************************************************/
