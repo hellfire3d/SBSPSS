@@ -337,6 +337,13 @@ void CNpcPlatform::shutdown()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPlatform::setToShutdown()
+{
+	m_isShuttingDown = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPlatform::processLifetime( int _frames )
 {
 	switch( m_lifetimeType )
@@ -347,8 +354,7 @@ void CNpcPlatform::processLifetime( int _frames )
 
 			if ( m_lifetime <= 0 )
 			{
-				shutdown();
-				delete this;
+				setToShutdown();
 
 				return;
 			}

@@ -35,13 +35,6 @@ void CNpcFishHookPlatform::processLifetime( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcFishHookPlatform::setToShutdown()
-{
-	m_isShuttingDown = true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcFishHookPlatform::processMovement( int _frames )
 {
 	if ( m_isMoving )
@@ -50,7 +43,7 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 
 		if ( Pos.vy < 0 )
 		{
-			shutdown();
+			setToShutdown();
 		}
 	}
 }

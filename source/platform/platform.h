@@ -78,6 +78,9 @@ public:
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
+	void				setToShutdown();
+	u8					isSetToShutdown()										{return( m_isShuttingDown );}
+
 protected:
 	// NPC data structure definitions //
 
@@ -176,6 +179,7 @@ protected:
 	int							m_frame;
 	int							m_animNo;
 	CModelGfx					*m_modelGfx;
+	u8							m_isShuttingDown;
 
 	virtual void		collidedWith(CThing *_thisThing);
 
