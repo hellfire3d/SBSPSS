@@ -2,8 +2,8 @@
 
 [General Info]
 Version=1
-LastClass=CMainFrame
-LastTemplate=CListBox
+LastClass=CMultiBar
+LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
@@ -11,37 +11,37 @@ LastPage=0
 ClassCount=9
 Class1=CChildFrame
 Class2=CGLEnabledView
-Class3=CParamBar
-Class4=CMainFrame
-Class5=CMapEditApp
-Class6=CAboutDlg
-Class7=CMapEditDoc
-Class8=CMapEditView
+Class3=CMainFrame
+Class4=CMapEditApp
+Class5=CAboutDlg
+Class6=CMapEditDoc
+Class7=CMapEditView
 
-ResourceCount=8
-Resource1=IDR_MAPEDITYPE (English (U.S.))
-Resource2=IDD_TILEBAR (English (U.S.))
-Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDR_MAINFRAME (English (U.S.))
-Resource5=IDD_TRASHHEAP
-Resource6=IDD_ABOUTBOX (English (U.S.))
-Resource7=IDR_TOOLBAR (English (U.S.))
-Class9=CCheckList
-Resource8=IDD_PARAMBAR (English (U.S.))
+ResourceCount=10
+Resource1=IDR_TOOLBAR (English (U.S.))
+Resource2=IDR_MAPEDITYPE (English (U.S.))
+Resource3=IDD_LAYER_LIST_DIALOG
+Resource4=IDD_DIALOGBAR (English (U.S.))
+Resource5=IDD_TEST1
+Class8=CLayerList
+Resource6=IDR_MAINFRAME (English (U.S.))
+Resource7=IDD_TRASHHEAP
+Class9=CMultiBar
+Resource8=IDD_MULTIBAR (English (U.S.))
+Resource9=IDD_ABOUTBOX (English (U.S.))
+Resource10=IDD_TEST2
 
 [CLS:CChildFrame]
 Type=0
 BaseClass=CMDIChildWnd
 HeaderFile=ChildFrm.h
 ImplementationFile=ChildFrm.cpp
-LastObject=CChildFrame
 
 [CLS:CGLEnabledView]
 Type=0
 BaseClass=CView
 HeaderFile=GLEnabledView.h
 ImplementationFile=GLEnabledView.cpp
-LastObject=CGLEnabledView
 
 [CLS:CMainFrame]
 Type=0
@@ -49,8 +49,6 @@ BaseClass=CMDIFrameWnd
 HeaderFile=MainFrm.h
 ImplementationFile=MainFrm.cpp
 LastObject=CMainFrame
-Filter=M
-VirtualFilter=fWC
 
 [CLS:CMapEditApp]
 Type=0
@@ -71,22 +69,32 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=CMapEditDoc
-Filter=N
-VirtualFilter=DC
 
 [CLS:CMapEditView]
 Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_NEWMAP_OK
-Filter=C
-VirtualFilter=VWC
 
 [DLG:IDD_ABOUTBOX]
 Type=1
 Class=CAboutDlg
+
+[TB:IDR_TOOLBAR (English (U.S.))]
+Type=1
+Class=?
+Command1=ID_FILE_NEW
+Command2=ID_FILE_OPEN
+Command3=ID_FILE_SAVE
+Command4=ID_EDIT_CUT
+Command5=ID_EDIT_COPY
+Command6=ID_EDIT_PASTE
+Command7=ID_FILE_PRINT
+Command8=ID_APP_ABOUT
+Command9=ID_TOOLBAR_PARAMBAR
+Command10=ID_TOOLBAR_TILEPALETTE
+Command11=ID_TOOLBAR_COMBO
+CommandCount=11
 
 [MNU:IDR_MAINFRAME (English (U.S.))]
 Type=1
@@ -155,60 +163,80 @@ Control2=IDC_STATIC,static,1342308480
 Control3=IDC_STATIC,static,1342308352
 Control4=IDOK,button,1342373889
 
-[DLG:IDD_TILEBAR (English (U.S.))]
-Type=1
-Class=?
-ControlCount=1
-Control1=IDC_TILETOOLBAR_COMBO,combobox,1344340227
-
-[DLG:IDD_LAYERBAR1 (English (U.S.))]
-Type=1
-Class=?
-ControlCount=1
-Control1=IDC_LAYERBAR_LIST,listbox,1352728833
-
-[TB:IDR_TOOLBAR (English (U.S.))]
-Type=1
-Class=?
-Command1=ID_FILE_NEW
-Command2=ID_FILE_OPEN
-Command3=ID_FILE_SAVE
-Command4=ID_EDIT_CUT
-Command5=ID_EDIT_COPY
-Command6=ID_EDIT_PASTE
-Command7=ID_FILE_PRINT
-Command8=ID_APP_ABOUT
-Command9=ID_TOOLBAR_PARAMBAR
-Command10=ID_TOOLBAR_TILEPALETTE
-Command11=ID_TOOLBAR_COMBO
-CommandCount=11
-
 [DLG:IDD_TRASHHEAP]
 Type=1
 Class=?
 ControlCount=1
 Control1=IDC_TOOLBAR_COMBO,combobox,1344340226
 
-[DLG:IDD_PARAMBAR (English (U.S.))]
+[DLG:IDD_DIALOGBAR (English (U.S.))]
 Type=1
 Class=?
-ControlCount=1
-Control1=IDC_PARAMBAR_LAYER_LIST,listbox,1352728833
+ControlCount=3
+Control1=IDC_STATIC,static,1342308352
+Control2=IDC_CHECK1,button,1342242819
+Control3=IDC_RADIO1,button,1342177289
 
-[CLS:CParamBar]
+[DLG:IDD_LAYER_LIST_DIALOG]
+Type=1
+Class=CLayerList
+ControlCount=1
+Control1=IDC_LAYER_LIST,listbox,1352728835
+
+[CLS:CLayerList]
 Type=0
-HeaderFile=ParamBar.h
-ImplementationFile=ParamBar.cpp
-BaseClass=CDialogBar
+HeaderFile=LayerList.h
+ImplementationFile=LayerList.cpp
+BaseClass=CDialog
 Filter=D
-LastObject=IDC_PARAMBAR_LAYER_LIST
+LastObject=CLayerList
+
+[CLS:CMultiBar]
+Type=0
+HeaderFile=multibar.h
+ImplementationFile=multibar.cpp
+BaseClass=CDialogBar
+LastObject=CMultiBar
+Filter=D
 VirtualFilter=dWC
 
-[CLS:CCheckList]
-Type=0
-HeaderFile=CheckList.h
-ImplementationFile=CheckList.cpp
-BaseClass=CListBox
-Filter=W
-LastObject=CCheckList
+[DLG:IDD_MULTIBAR (English (U.S.))]
+Type=1
+Class=CMultiBar
+ControlCount=0
+
+[DLG:IDD_TEST1]
+Type=1
+Class=?
+ControlCount=9
+Control1=IDC_STATIC,button,1342177287
+Control2=IDC_EDIT1,edit,1350631552
+Control3=IDC_EDIT2,edit,1350631552
+Control4=IDC_EDIT3,edit,1350631552
+Control5=IDC_EDIT4,edit,1350631552
+Control6=IDC_COMBO1,combobox,1344340226
+Control7=IDC_COMBO2,combobox,1344340226
+Control8=IDC_COMBO3,combobox,1344340226
+Control9=IDC_COMBO4,combobox,1344340226
+
+[DLG:IDD_TEST2]
+Type=1
+Class=?
+ControlCount=16
+Control1=IDC_CHECK1,button,1342242819
+Control2=IDC_CHECK2,button,1342242819
+Control3=IDC_CHECK3,button,1342242819
+Control4=IDC_CHECK4,button,1342242819
+Control5=IDC_CHECK5,button,1342242819
+Control6=IDC_CHECK6,button,1342242819
+Control7=IDC_CHECK7,button,1342242819
+Control8=IDC_CHECK8,button,1342242819
+Control9=IDC_CHECK9,button,1342242819
+Control10=IDC_CHECK10,button,1342242819
+Control11=IDC_CHECK11,button,1342242819
+Control12=IDC_CHECK12,button,1342242819
+Control13=IDC_CHECK13,button,1342242819
+Control14=IDC_CHECK14,button,1342242819
+Control15=IDC_CHECK15,button,1342242819
+Control16=IDC_CHECK16,button,1342242819
 

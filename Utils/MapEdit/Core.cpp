@@ -74,6 +74,7 @@ Vec		&ThisCam=GetCam();
 
 		if (TileBank.NeedLoad()) TileBank.LoadTileSets(this);
 
+
 		if (RenderFlag)
 		{
 			RenderFlag=FALSE;
@@ -167,29 +168,35 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 void	CCore::UpdateParamBar(CMapEditView *View,BOOL ViewFlag)
 {
-/*
+
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
-CDialogBar	*ParamBar=Frm->GetParamBar();
-CListBox	*Dlg=(CListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
-		
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
+//		ParamBar->ReCalc();
+//CCheckListBox	*Dlg=(CCheckListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
+/*		
 		ParamViewFlag=ViewFlag;
 		if (ParamViewFlag)
 		{
-			Dlg->ResetContent();
+			ParamBar->m_ListBox.ResetContent();
+//			Dlg->ResetContent();
 
 			for (int i=0;i<LAYER_TYPE_MAX;i++)
 			{
 				CLayer	*ThisLayer=GetLayer(i);
-				Dlg->AddString(ThisLayer->GetName());
+				ParamBar->m_ListBox.AddString(ThisLayer->GetName());
+//				Dlg->AddString(ThisLayer->GetName());
 			}
-			Dlg->SetCurSel(ActiveLayer);
+			ParamBar->m_ListBox.SetCurSel(ActiveLayer);
+//			Dlg->SetCurSel(ActiveLayer);
 		}
-
+*/
 		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
 		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
+		ParamBar->ShowWindow(SW_SHOW);
 		if (View) UpdateView(View);
-*/
+
 }
 
 /*****************************************************************************/

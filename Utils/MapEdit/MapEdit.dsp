@@ -166,15 +166,15 @@ SOURCE=.\utils.h
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\CheckList.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GLEnabledView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerList.cpp
 # End Source File
 # Begin Source File
 
@@ -198,7 +198,7 @@ SOURCE=.\MapEditView.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamBar.cpp
+SOURCE=.\MultiBar.cpp
 # End Source File
 # Begin Source File
 
@@ -208,11 +208,7 @@ SOURCE=.\StdAfx.cpp
 # End Group
 # Begin Group "Header Files"
 
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\CheckList.h
-# End Source File
+# PROP Default_Filter "*.h"
 # Begin Source File
 
 SOURCE=.\ChildFrm.h
@@ -224,6 +220,10 @@ SOURCE=.\gl3d.h
 # Begin Source File
 
 SOURCE=.\GLEnabledView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LayerList.h
 # End Source File
 # Begin Source File
 
@@ -243,7 +243,7 @@ SOURCE=.\MapEditView.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamBar.h
+SOURCE=.\MultiBar.h
 # End Source File
 # Begin Source File
 

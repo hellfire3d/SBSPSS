@@ -5,6 +5,8 @@
 #if !defined(AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_)
 #define AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_
 
+#include	"MultiBar.h"
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -27,9 +29,9 @@ public:
 
 // Attributes
 public:
-	CMainToolBar	*GetToolBar()	{return(&m_wndToolBar);}
-	CDialogBar		*GetParamBar()	{return(&m_wndParamBar);}
 	CStatusBar		*GetStatusBar()	{return(&m_wndStatusBar);}
+	CMainToolBar	*GetToolBar()	{return(&m_wndToolBar);}
+	CMultiBar		*GetParamBar()	{return(&m_wndParamBar);}
 // Operations
 public:
 
@@ -50,8 +52,12 @@ public:
 protected:  // control bar embedded members
 	CStatusBar		m_wndStatusBar;
 	CMainToolBar	m_wndToolBar;
-	CDialogBar		m_wndParamBar;
 
+	CMultiBar		m_wndParamBar;
+// Sub Dialogs
+	CDialog			LayerList;
+	CDialog			Test1;
+	CDialog			Test2;
 
 // Generated message map functions
 protected:

@@ -66,7 +66,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndParamBar.EnableDocking( CBRS_ALIGN_ANY);
 	m_wndParamBar.SetWindowText("Param");
 	DockControlBar(&m_wndParamBar);
-	
+	m_wndParamBar.AddDialog(LayerList,IDD_LAYER_LIST_DIALOG,TRUE);
+	m_wndParamBar.AddDialog(Test1,IDD_TEST1,TRUE);
+	m_wndParamBar.AddDialog(Test2,IDD_TEST2,TRUE);
+
 
 // ToolBar (plus extra code for extra controls!!)
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
