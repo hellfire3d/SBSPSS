@@ -37,10 +37,6 @@
 #include "player\pmodes.h"
 #endif
 
-#ifndef	__UTILS_HEADER__
-#include	"utils\utils.h"
-#endif
-
 // to be removed
 #include "gfx\tpage.h"
 
@@ -420,6 +416,12 @@ void CPlayer::thinkVerticalMovement()
 
 	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,1);
 
+//New collision stuff (pkg)
+//if(m_layerCollision->getCollisionType(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)
+//{
+//	m_moveVel.vy=0;
+//	return;
+//}
 	if(colHeight>=0)
 	{
 		// Above or on the ground
@@ -508,6 +510,12 @@ void CPlayer::thinkHorizontalMovement()
 {
 	if(m_moveVel.vx)
 	{
+//New collision stuff (pkg)
+//if(m_layerCollision->getCollisionType(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy)&COLLISION_TYPE_MASK)
+//{
+//	m_moveVel.vx=0;
+//	return;
+//}
 		int colHeight;
 		colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5);
 		if(colHeight==0)
