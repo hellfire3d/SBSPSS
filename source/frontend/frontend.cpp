@@ -58,6 +58,14 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef __DATA_STRUCTS_HEADER__
+#include "Dstructs.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -259,7 +267,8 @@ void CFrontEndScene::setMode(FrontEndMode _newMode)
 	if(_newMode==MODE__EXIT_TO_GAME)
 	{
 		m_exitToGame=true;
-		GameState::setNextScene(&FrontEndScene);
+		GameState::setNextScene(&GameScene);
+		
 	}
 	else
 	{

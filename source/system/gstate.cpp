@@ -78,44 +78,44 @@ void GameState::think()
 		{
 			if(s_currentScene->readyToShutdown())
 			{
-				SYSTEM_DBGMSG("GameState: Closing down scene..");
+				SYSTEM_DBGMSG("GameState: Closing down scene '%s'..",s_currentScene->getSceneName());
 #ifdef __VERSION_DEBUG__
 				int gain;
 				gain=MainRam.RamUsed-s_baseSceneMemory;
 				if(gain)
 				{
-					SYSTEM_DBGMSG("Scene allocated an extra %d bytes after init()",gain);
+					SYSTEM_DBGMSG("Scene '%s' allocated an extra %d bytes after init()",s_currentScene->getSceneName(),gain);
 				}
 #endif
 				ASSERT(s_pendingScene);		// There really should be a scene pending before you shutdown..!
 				s_currentScene->shutdown();
-				s_currentScene=NULL;
 #ifdef __VERSION_DEBUG__
 				int loss;
 				loss=MainRam.RamUsed-s_baseMemory;
 				if(loss)
 				{
-					SYSTEM_DBGMSG("MEMORY HAS CHANGED BY %d BYTES DURING SCENE!",loss);
+					SYSTEM_DBGMSG("MEMORY HAS CHANGED BY %d BYTES DURING SCENE '%s'!",loss,s_currentScene->getSceneName());
 					ASSERT(0);
 					s_baseMemory=0;
 				}
 #endif
+				s_currentScene=NULL;
 			}
 		}
 		if(!s_currentScene)
 		{
+			s_currentScene=s_pendingScene;
 #ifdef __VERSION_DEBUG__
 			if(s_baseMemory==0)
 			{
 				s_baseMemory=MainRam.RamUsed;
 			}
-			SYSTEM_DBGMSG("GameState: Opening new scene ( with %d bytes used )",s_baseMemory);
+			SYSTEM_DBGMSG("GameState: Opening new scene '%s' ( with %d bytes used )",s_currentScene->getSceneName(),s_baseMemory);
 #endif
-			s_currentScene=s_pendingScene;
 			s_currentScene->init();
 #ifdef __VERSION_DEBUG__
 			s_baseSceneMemory=MainRam.RamUsed;
-			SYSTEM_DBGMSG("GameState: Scene has used %d bytes during init()",s_baseSceneMemory-s_baseMemory);
+			SYSTEM_DBGMSG("GameState: Scene '%s' has used %d bytes during init()",s_currentScene->getSceneName(),s_baseSceneMemory-s_baseMemory);
 #endif
 			s_pendingScene=NULL;
 		}
