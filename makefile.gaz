@@ -281,6 +281,7 @@ player_src :=		demoplay \
 					pmfly \
 					pmjelly \
 					pmnet \
+					pmswal \
 					psbutt \
 					pscart \
 					psdance \
@@ -293,7 +294,8 @@ player_src :=		demoplay \
 					psjump \
 					pslook \
 					psrun \
-					psspring
+					psspring \
+					psswal
 
 save_src :=			save
 

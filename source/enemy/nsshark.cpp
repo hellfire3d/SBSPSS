@@ -67,6 +67,7 @@ void CNpcSubSharkEnemy::postInit()
 
 	m_timerTimer = 0;
 	m_salvoCount = 5;
+	m_carryPlayer = false;
 	m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 
 	CNpcBossEnemy::postInit();
@@ -240,7 +241,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_SHARKSUB_SWIM;
+				m_animNo = ANIM_SHARKSUB_SPRINTOPEN;
 				m_frame = 0;
 			}
 
@@ -276,11 +277,23 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_CHARGE:
 		{
-			if ( !m_animPlaying )
+			if ( !m_carryPlayer && abs( playerXDist ) < 200 )
 			{
-				m_animPlaying = true;
-				m_animNo = ANIM_SHARKSUB_SWIM;
-				m_frame = 0;
+				if ( m_animNo != ANIM_SHARKSUB_CHOMP || !m_animPlaying )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_SHARKSUB_CHOMP;
+					m_frame = 0;
+				}
+			}
+			else
+			{
+				if ( !m_animPlaying )
+				{
+					m_animPlaying = true;
+					m_animNo = ANIM_SHARKSUB_SPRINTOPEN;
+					m_frame = 0;
+				}
 			}
 
 			s32 distX, distY;
@@ -332,8 +345,31 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 				processGenericGotoTarget( _frames, distX, distY, m_speed );
 			}
 
+			if ( m_carryPlayer )
+			{
+				// spit out player
+
+				CPlayer *player = GameScene.getPlayer();
+				player->setMode( m_oldPlayerMode );
+				m_carryPlayer = false;
+
+				DVECTOR move;
+				move.vx = 16 * _frames;
+				move.vy = -16 * _frames;
+
+				player->shove( move );
+				player->setMoveVelocity( &move );
+			}
+
 			break;
 		}
+	}
+
+	if ( m_carryPlayer )
+	{
+		CPlayer *player = GameScene.getPlayer();
+
+		player->setPos( Pos );
 	}
 
 
@@ -705,10 +741,18 @@ void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 
 				if(playerState==ATTACK_STATE__NONE)
 				{
-					if ( !player->isRecoveringFromHit() )
+					CPlayer *player = GameScene.getPlayer();
+
+					if ( !player->isRecoveringFromHit() && !m_carryPlayer )
 					{
-						CPlayer *player = GameScene.getPlayer();
 						player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
+					}
+
+					if ( m_state == SUB_SHARK_CHARGE && player->getMode() != PLAYER_MODE_SWALLOW )
+					{
+						m_carryPlayer = true;
+						m_oldPlayerMode = player->getMode();
+						player->setMode( PLAYER_MODE_SWALLOW );
 					}
 				}
 				else if ( m_invulnerableTimer <= 0 )

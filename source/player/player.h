@@ -60,6 +60,7 @@ typedef enum
 	PLAYER_MODE_FLY,
 
 	PLAYER_MODE_CART,
+	PLAYER_MODE_SWALLOW,
 
 	NUM_PLAYERMODES,
 }PLAYER_MODE;
@@ -88,6 +89,7 @@ typedef enum
 	STATE_CART,
 	STATE_FLOAT,
 	STATE_CELEBRATE,
+	STATE_SWALLOW,
 
 	NUM_STATES,
 }PLAYER_STATE;
@@ -258,6 +260,7 @@ public:
 
 public:
 	void			setMode(PLAYER_MODE _mode);
+	PLAYER_MODE		getMode()											{return m_currentMode;}
 	int				getFacing();
 	void			setFacing(int _facing);
 	int				getAnimFrame();

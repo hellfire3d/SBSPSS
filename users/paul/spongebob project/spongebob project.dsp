@@ -1858,6 +1858,14 @@ SOURCE=..\..\..\source\player\pmodes.cpp
 
 SOURCE=..\..\..\source\player\pmodes.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmswal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmswal.h
+# End Source File
 # End Group
 # Begin Group "states"
 
@@ -1965,6 +1973,14 @@ SOURCE=..\..\..\source\player\psspring.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psspring.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psswal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psswal.h
 # End Source File
 # Begin Source File
 

@@ -18,6 +18,10 @@
 #include "enemy\nboss.h"
 #endif
 
+#ifndef __PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 class CNpcSubSharkEnemy : public CNpcBossEnemy
 {
@@ -53,6 +57,8 @@ protected:
 	u8					m_salvoCount;
 	s32					m_invulnerableTimer;
 	DVECTOR				m_targetPos;
+	u8					m_carryPlayer;
+	PLAYER_MODE			m_oldPlayerMode;
 };
 
 #endif

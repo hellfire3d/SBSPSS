@@ -74,6 +74,10 @@
 #include "player\pmcart.h"
 #endif
 
+#ifndef __PLAYER_PMSWAL_H__
+#include "player\pmswal.h"
+#endif
+
 #ifndef __GFX_FONT_H__
 #include "gfx\font.h"
 #endif
@@ -205,6 +209,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"DEAD",
 	"FLY",
 	"CART",
+	"SWALLOW",
 };
 #endif
 
@@ -226,6 +231,7 @@ CPlayerModeJellyLauncher	PLAYERMODEJELLYLAUNCHER;
 CPlayerModeDead				PLAYERMODEDEAD;
 CPlayerModeFly				PLAYERMODEFLY;
 CPlayerModeCart				PLAYERMODECART;
+CPlayerModeSwallow			PLAYERMODESWALLOW;
 
 CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 {
@@ -239,6 +245,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 	&PLAYERMODECART,			// PLAYER_MODE_CART
+	&PLAYERMODESWALLOW,			// PLAYER_MODE_SWALLOW
 };
 
 
@@ -301,6 +308,7 @@ PLAYER_ADDONS	s_addonNumbers[NUM_PLAYERMODES]=
 	NO_ADDON,									//	PLAYER_MODE_DEAD
 	NO_ADDON,									//	PLAYER_MODE_FLY
 	NO_ADDON,									//	PLAYER_MODE_CART
+	NO_ADDON,									//	PLAYER_MODE_SWALLOW
 };
 
 s8 s_animMapNet[NUM_PLAYER_ADDONS][NUM_ANIM_SPONGEBOB]=
@@ -2008,7 +2016,8 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 	if(m_invincibleFrameCount==0&&								// Don't take damage if still recovering from the last hit
 	   m_invincibilityRingTimer==0&&							// Or if we have the invincibility ring on
 	   m_currentPlayerModeClass->getState()!=STATE_SOAKUP&&		// Or soaking up
-	   m_currentMode!=PLAYER_MODE_DEAD)							// Or already dead! :)
+	   m_currentMode!=PLAYER_MODE_DEAD &&
+	   m_currentMode!=PLAYER_MODE_SWALLOW)							// Or already dead! :)
 	{
 		int	ouchThatHurt=true;
 		int	ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
