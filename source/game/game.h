@@ -72,6 +72,9 @@ static	MATRIX			CamMtx;
 static int				s_restartLevel;
 static int				s_readyToExit;
 static int				s_levelFinished;
+#ifdef __VERSION_DEBUG__
+static int				s_skipToNextLevel;
+#endif
 
 static	ACTOR_TYPE		actorType[];
 

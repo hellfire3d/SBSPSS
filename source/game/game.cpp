@@ -75,6 +75,10 @@
 #include "sound\sound.h"
 #endif
 
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
+#endif
+
 #include "gfx\actor.h"
 
 int			RenderZ=256;
@@ -136,6 +140,9 @@ CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
 int s_globalLevelSelectThing=0;
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
+#ifdef __VERSION_DEBUG__
+int CGameScene::s_skipToNextLevel;
+#endif
 int	CGameScene::s_restartLevel;
 
 /*****************************************************************************/
@@ -241,11 +248,20 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
+		// Level finished - go to map
+		GameState::setNextScene(&MapScene);
+		s_readyToExit=true;
+	}
+#ifdef __VERSION_DEBUG__
+	else if(s_skipToNextLevel)
+	{
+		// Skip to next level
 		bool	Finished=Level.GetNextLevel(s_globalLevelSelectThing);
 		shutdownLevel();
 		initLevel();
-		s_levelFinished=false;
+		s_skipToNextLevel=false;
 	}
+#endif
 	else if (s_restartLevel)
 	{
 		if(m_player->getLivesLeft()!=0)
@@ -266,24 +282,25 @@ void	CGameScene::think(int _frames)
 		m_pauseMenu->select();
 	}
 
-/*	if (!s_levelFinished) */CConversation::think(_frames);
-/*	if (!s_levelFinished) */m_pauseMenu->think(_frames);
+	CConversation::think(_frames);
+	m_pauseMenu->think(_frames);
 	if(!CConversation::isActive()&& !m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
 		CJellyfishGenerator::think( _frames, &Level );
-/*		if (!s_levelFinished) */CThingManager::thinkAllThings(_frames);
-/*		if (!s_levelFinished) */camPos=m_player->getCameraPos();
-/*		if (!s_levelFinished) */CBubicleFactory::setMapOffset(&camPos);
-/*		if (!s_levelFinished) */Level.setCameraCentre(camPos);
-/*		if (!s_levelFinished) */Level.think(_frames);
+		CThingManager::thinkAllThings(_frames);
+		camPos=m_player->getCameraPos();
+		CBubicleFactory::setMapOffset(&camPos);
+		Level.setCameraCentre(camPos);
+		Level.think(_frames);
 
+#ifdef __VERSION_DEBUG__
 		if(PadGetDown(0)&PAD_R2)
 		{
-			levelFinished();
+			s_skipToNextLevel=true;
 		}
+#endif
 	}
-//	s_levelFinished=false;
 }
 
 
@@ -340,6 +357,9 @@ void	CGameScene::initLevel()
 	CConversation::registerConversationLevelScripts( s_globalLevelSelectThing );
 
 	s_levelFinished=false;
+#ifdef __VERSION_DEBUG__
+	s_skipToNextLevel=false;
+#endif
 	Level.init(s_globalLevelSelectThing);
 
 	createPlayer();
