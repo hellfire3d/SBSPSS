@@ -871,9 +871,14 @@ sTri			*TList=&ModelTriList[Elem->TriStart];
 			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 			ThisOT=OtPtr+TList->OTOfs;
 			TList++;
-			addPrim(ThisOT,TPrimPtr);
+			gte_nclip_b();
 			gte_stsxy3_ft3(TPrimPtr);
-			TPrimPtr++;
+			gte_stopz(&ClipZ);
+			if (ClipZ<=0)
+			{
+				addPrim(ThisOT,TPrimPtr);
+				TPrimPtr++;
+			}
 		}
 
 		SetPrimPtr((u8*)TPrimPtr);
