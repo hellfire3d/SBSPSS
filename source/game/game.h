@@ -18,11 +18,12 @@ public:
 	virtual ~CGameScene()	{;}
 
 
-	void init();
-	void shutdown();
-	void render();
-	void think(int _frames);
-	char *getSceneName()	{return "Game";}
+	void	init();
+	void	shutdown();
+	void	render();
+	void	think(int _frames);
+	int		readyToShutdown();
+	char	*getSceneName()	{return "Game";}
 
 	
 private:

@@ -46,21 +46,26 @@ void GameState::think()
 {
 	updateTimer();
 
-	if( s_pendingScene )
+
+	if(s_pendingScene)
+	{
+		if(s_currentScene)
 		{
-		if( !s_currentScene)
+			if(s_currentScene->readyToShutdown())
 			{
-			if( s_currentScene )
-				{
+				ASSERT(s_pendingScene);		// There really should be a scene pending before you shutdown..!
 				s_currentScene->shutdown();
-				}
-
-			s_currentScene=s_pendingScene;
-			s_pendingScene=NULL;
-
-			s_currentScene->init();
+				s_currentScene=NULL;
 			}
 		}
+		if(!s_currentScene)
+		{
+			s_currentScene=s_pendingScene;
+			s_currentScene->init();
+			s_pendingScene=NULL;
+		}
+	}
+
 	ASSERT(s_currentScene);
 	s_currentScene->think(getFramesSinceLast());
 }

@@ -36,11 +36,12 @@
 class CPaulScene : public CScene
 {
 public:
-	void init();
-	void shutdown();
-	void render();
-	void think(int _frames);
-	char *getSceneName()			{return"PaulsScene";}
+	void	init();
+	void	shutdown();
+	void	render();
+	void	think(int _frames);
+	int		readyToShutdown()		{return false;}
+	char	*getSceneName()			{return"PaulsScene";}
 };
 
 

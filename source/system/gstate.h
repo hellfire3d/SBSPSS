@@ -31,6 +31,7 @@ public:
 	virtual void	shutdown()=0;
 	virtual void	render()=0;
 	virtual void	think(int _frames)=0;
+	virtual int		readyToShutdown()=0;
 	virtual char	*getSceneName()=0;
 
 protected:
