@@ -1398,11 +1398,33 @@ if(drawlastpos)
 		m_fontBank->setColour(128,128,128);
 		x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
 
+		if(isWearingBoots())
+		{
+			// Boots
+			int			pickupX,pickupY;
+			sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
+			if(m_squeakyBootsTimer>SQUEAKY_BOOTS_FLASH_TIME||m_squeakyBootsTimer&2)
+			{
+				sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
+				sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
+			}
+			x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
+		}
+
+		// Mode specific ui
+		m_currentPlayerModeClass->renderModeUi();
+
+
+		// Fiving helmet.. now appears in same place as mode specific ui..
 		if(isWearingDivingHelmet())
 		{
 			// Helmet
 			POLY_FT4	*ft4;
+			int			x,y;
 			int			V,W,H,partH;
+
+			x=POWERUPUI_ICONX;
+			y=POWERUPUI_ICONY;
 
 			ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,POWERUPUI_OT);
 			setSemiTrans(ft4,true);
@@ -1452,21 +1474,7 @@ if(drawlastpos)
 
 			x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
 		}
-		if(isWearingBoots())
-		{
-			// Boots
-			int			pickupX,pickupY;
-			sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
-			if(m_squeakyBootsTimer>SQUEAKY_BOOTS_FLASH_TIME||m_squeakyBootsTimer&2)
-			{
-				sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
-				sb->printFT4(fh,x+4,y+4,0,0,POWERUPUI_OT);
-			}
-			x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
-		}
-
-		// Mode specific ui
-		m_currentPlayerModeClass->renderModeUi();
+	
 	}
 }
 
