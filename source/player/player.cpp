@@ -1962,6 +1962,7 @@ void CPlayer::calcCameraFocusPointTarget()
   ---------------------------------------------------------------------- */
 void CPlayer::respawn()
 {
+	// Set previous mode
 	setMode(m_lastModeBeforeDeath);
 
 	m_allowConversation=false;
@@ -2002,6 +2003,16 @@ void CPlayer::respawn()
 	m_jellyfishAmmoCount=0;
 	m_pantFlashTimer=0;
 	m_hasReceivedExtraLifeFor100Spats=false;
+
+	// Re-stock ammo if need be
+	if(m_currentMode==PLAYER_MODE_BUBBLE_MIXTURE)
+	{
+		giveBubbleAmmoFromWeapon();
+	}
+	else if(m_currentMode==PLAYER_MODE_JELLY_LAUNCHER)
+	{
+		giveJellyAmmoFromWeapon();
+	}
 
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
 
