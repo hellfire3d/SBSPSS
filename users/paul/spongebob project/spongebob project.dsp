@@ -909,6 +909,14 @@ SOURCE=..\..\..\source\hazard\hpendulm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hrrock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hrrock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hsaw.cpp
 # End Source File
 # Begin Source File
