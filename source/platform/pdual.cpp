@@ -140,6 +140,18 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 	m_thinkArea.y1 = startPos.vy;
 	m_thinkArea.y2 = startPos.vy + m_maxExtension;
+
+	m_otherPlatform->setThinkArea( m_thinkArea );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcDualPlatform::setThinkArea( CRECT &newArea )
+{
+	m_thinkArea.x1 = newArea.x1;
+	m_thinkArea.y1 = newArea.y1;
+	m_thinkArea.x2 = newArea.x2;
+	m_thinkArea.y2 = newArea.y2;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
