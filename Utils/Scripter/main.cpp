@@ -77,6 +77,7 @@ extern int main(int argc, char *argv[])
 		infile=argv[1];
 		outfile=argv[2];
 
+		printf("Scripter attempting to compile %s..\n",infile);
 		if(parseFile(infile,s_baseTreeNode)==YYEXIT_SUCCESS&&s_baseTreeNode)
 		{
 			if(openOutputFile(outfile))
@@ -84,7 +85,7 @@ extern int main(int argc, char *argv[])
 				int byteCount;
 				byteCount=s_baseTreeNode->generateCode(true);
 				closeOutputFile();
-				printf("Generated %d bytes of code\n",byteCount*2);
+				printf("Generated %d bytes of code in %s\n",byteCount*2,outfile);
 				ret=0;
 			}
 			else

@@ -61,7 +61,7 @@ struct FunctionDef
 	---- */
 static FunctionDef s_functionNames[]=
 {
-	{ "setCharacterExpression",	2,	},		// character, expression
+	{ "setCharacterAnimation",	2,	},		// character, animation
 	{ "setText",				1,	},		// textId
 };
 static int		s_functionCount=sizeof(s_functionNames)/sizeof(FunctionDef);

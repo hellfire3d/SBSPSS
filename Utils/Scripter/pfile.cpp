@@ -134,10 +134,10 @@ int CPFile::open(char *_filename)
   ---------------------------------------------------------------------- */
 int CPFile::close()
 {
-	printf("Processed %d char(s) on %d line(s) in file %s\n",m_charCount,m_lineCount,m_filename);
+	printf(" Processed %d char(s) on %d line(s) in file %s\n",m_charCount,m_lineCount,m_filename);
 	if(m_errorCount)
 	{
-		printf("Found %d error(s) :(\n",m_errorCount);
+		printf(" Found %d error(s) :(\n",m_errorCount);
 	}
 	fclose(m_fh);
 	if(m_next)
