@@ -111,11 +111,6 @@
 #include <ACTOR_SEASNAKE_ANIM.h>
 #endif
 
-#ifndef	__ANIM_BUTTERFLY_HEADER__
-#include <ACTOR_BUTTERFLY_ANIM.h>
-#endif
-
-
 CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 {
 	{	// NPC_DUST_DEVIL
