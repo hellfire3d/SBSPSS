@@ -23,6 +23,8 @@
 #include "level\level.h"
 #endif
 
+#include	"game/game.h"
+
 void CEnemyAsSpriteProjectile::think( int _frames )
 {
 	CPlayerProjectile::think( _frames );
@@ -51,8 +53,8 @@ void CEnemyAsSpriteProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth( m_spriteFrame );
-	int		spriteHeight = m_spriteBank->getFrameHeight( m_spriteFrame );
+	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( m_spriteFrame );
+	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( m_spriteFrame );
 
 	offset = getScreenOffset();
 
@@ -64,8 +66,8 @@ void CEnemyAsSpriteProjectile::render()
 		return;
 	}
 
-	frameHdr = m_spriteBank->getFrameHeader( m_spriteFrame );
-	POLY_FT4 *SprFrame = m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_rotation, 0 );
+	frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
+	POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_rotation, 0 );
 
 	if ( m_hasRGB )
 	{

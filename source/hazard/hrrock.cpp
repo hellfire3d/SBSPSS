@@ -19,6 +19,8 @@
 #include "level\layercollision.h"
 #endif
 
+#include	"game\game.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcRollingRockHazard::init()
@@ -90,7 +92,7 @@ void CNpcRollingRockHazard::processMovement( int _frames )
 
 				moveY += m_jumpVel >> 8;
 
-				groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
 
 				if ( groundHeight < 16 )
 				{
@@ -104,7 +106,7 @@ void CNpcRollingRockHazard::processMovement( int _frames )
 			{
 				// check for vertical movement
 
-				groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy, 64 );
+				groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, 64 );
 
 				if ( groundHeight < 64 )
 				{
@@ -129,7 +131,7 @@ void CNpcRollingRockHazard::processMovement( int _frames )
 
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{

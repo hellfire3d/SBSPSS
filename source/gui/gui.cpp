@@ -30,6 +30,7 @@
 #include "gfx\prim.h"
 #endif
 
+#include	"game\game.h"
 
 /*	Std Lib
 	------- */
@@ -369,7 +370,7 @@ void CGUIObjectWithSpriteBank::shutdown()
 
 	CGUIObject::shutdown();
 	m_spriteBank->dump();
-	delete m_spriteBank;
+//	delete m_spriteBank;
 	m_spriteBank=0;
 }
 
@@ -382,8 +383,9 @@ void CGUIObjectWithSpriteBank::shutdown()
   ---------------------------------------------------------------------- */
 void CGUIObjectWithSpriteBank::setSpriteBank(FileEquate _fe)
 {
-	m_spriteBank=new ("spritebank") SpriteBank();
-	m_spriteBank->load(_fe);
+//	m_spriteBank=new ("spritebank") SpriteBank();
+//	m_spriteBank->load(_fe);
+	m_spriteBank=CGameScene::getSpriteBank();
 }
 
 
@@ -402,8 +404,10 @@ void initGUIStuff()
 {
 	ASSERT(!s_uiSpriteBank);
 
-	s_uiSpriteBank=new ("UI Sprites") SpriteBank();
-	s_uiSpriteBank->load(SPRITES_SPRITES_SPR);
+//	s_uiSpriteBank=new ("UI Sprites") SpriteBank();
+//	s_uiSpriteBank->load(SPRITES_SPRITES_SPR);
+	s_uiSpriteBank=CGameScene::getSpriteBank();
+
 }
 
 

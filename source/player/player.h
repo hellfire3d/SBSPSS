@@ -214,7 +214,6 @@ public:
 
 	DVECTOR			getCameraPos()										{return m_cameraPos;}
 
-	void			setLayerCollision(class CLayerCollision *_layer)	{m_layerCollision=_layer;}
 	void			setCameraBox(CameraBox _cameraBox);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 
@@ -262,7 +261,6 @@ public:
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
 	int				tryingToPickupWeapon()								{return m_tryingToPickupWeapon;}
-	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
 							
 	void			inSoakUpState();
 	void			takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection=REACT__UP,CThing *_thing=NULL);
@@ -344,7 +342,6 @@ private:
 
 	
 	// Various info about the current map
-	class CLayerCollision	*m_layerCollision;
 	CameraBox				m_cameraPosLimitBox;
 	CameraBox				m_playerPosLimitBox;
 	DVECTOR					m_respawnPos;
@@ -429,7 +426,6 @@ public:
 	// Graphical resources
 public:
 	class FontBank		*getFontBank()					{return m_fontBank;}
-	class SpriteBank	*getSpriteBank()				{return m_spriteBank;}
 
 	enum
 	{
@@ -447,8 +443,6 @@ public:
 
 private:
 	class FontBank		*m_fontBank;
-	class SpriteBank	*m_spriteBank;
-
 };
 
 

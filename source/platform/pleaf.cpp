@@ -66,7 +66,7 @@ void CNpcLeafPlatform::processMovement( int _frames )
 				moveY = -moveY;
 			}
 
-			s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+			s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
 
 			if ( groundHeight < moveY )
 			{

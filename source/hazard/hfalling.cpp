@@ -92,7 +92,7 @@ void CNpcFallingHazard::processMovement( int _frames )
 		{
 			yMovement = 3 * _frames;
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight < yMovement )
 			{

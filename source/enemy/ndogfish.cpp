@@ -133,7 +133,7 @@ void CNpcIronDogfishEnemy::processWalkToUser( int _frames, int speed )
 
 	s32 fallSpeed = 3;
 	s8 yMovement = fallSpeed * _frames;
-	s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+	s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 	if ( groundHeight <= yMovement )
 	{
@@ -208,7 +208,6 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			DVECTOR startPos = Pos;
 			startPos.vy -= 20;
 			projectile->init( startPos, headingToPlayer );
-			projectile->setLayerCollision( m_layerCollision );
 
 			m_state++;
 

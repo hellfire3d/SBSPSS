@@ -49,6 +49,7 @@ typedef enum
 	PICKUP__QUEST_ITEM,
 	PICKUP__BALLOON_AND_SPATULA,
 	PICKUP__JELLY_LAUNCHER,
+	PICKUP__MAX
 }
 PICKUP_TYPE;
 
@@ -60,6 +61,10 @@ PICKUP_TYPE;
 class CBasePickup : public CPickupThing
 {
 public:
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=PICKUP__MAX,
+	};
 	virtual void		init();
 	virtual void		shutdown();
 	virtual void		think(int _frames);
@@ -75,7 +80,6 @@ protected:
 		DEFAULT_VISIBILITY_RADIUS=32,
 	};
 
-	class SpriteBank	*getSpriteBank()					{return m_spriteBank;}
 	virtual int			getVisibilityRadius()				{return DEFAULT_VISIBILITY_RADIUS;}
 
 	virtual void		thinkPickup(int _Frames)			{;}
@@ -84,7 +88,6 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
 private:
-	class SpriteBank	*m_spriteBank;
 
 };
 

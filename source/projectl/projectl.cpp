@@ -55,8 +55,6 @@ void CProjectile::init()
 {
 	CEnemyProjectileThing::init();
 
-	m_spriteBank=new ("projectile sprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 	m_spriteFrame = FRM__SPIKE;
 
 	m_initHeading = m_heading = 0;
@@ -97,8 +95,6 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TY
 
 void CProjectile::shutdown()
 {
-	m_spriteBank->dump();		delete m_spriteBank;
-
 	CEnemyProjectileThing::shutdown();
 }
 
@@ -250,7 +246,7 @@ void CProjectile::think(int _frames)
 
 		case PROJECTILE_USER_SEEK:
 		{
-			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				setToShutdown();
 			}
@@ -312,7 +308,7 @@ void CProjectile::think(int _frames)
 		case PROJECTILE_DUMBFIRE:
 		default:
 		{
-			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				setToShutdown();
 			}
@@ -346,8 +342,8 @@ void CProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth( m_spriteFrame );
-	int		spriteHeight = m_spriteBank->getFrameHeight( m_spriteFrame );
+	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( m_spriteFrame );
+	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( m_spriteFrame );
 
 	offset = getScreenOffset();
 
@@ -359,11 +355,11 @@ void CProjectile::render()
 		return;
 	}
 
-	//m_spriteBank->printFT4(FRM__SPIKE,x,y,0,0,0);
+	//CGameScene::getSpriteBank()->printFT4(FRM__SPIKE,x,y,0,0,0);
 
-	frameHdr = m_spriteBank->getFrameHeader( m_spriteFrame );
+	frameHdr = CGameScene::getSpriteBank()->getFrameHeader( m_spriteFrame );
 
-	m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, m_ot );
+	CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, m_heading, m_ot );
 }
 
 DVECTOR CProjectile::getScreenOffset()
@@ -404,9 +400,6 @@ void CProjectile::collidedWith(CThing *_thisThing)
 void CPlayerProjectile::init()
 {
 	CPlayerProjectileThing::init();
-
-	m_spriteBank=new ("projectile sprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 	m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;
@@ -453,7 +446,6 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTIL
 
 void CPlayerProjectile::shutdown()
 {
-	m_spriteBank->dump();		delete m_spriteBank;
 
 	CPlayerProjectileThing::shutdown();
 }
@@ -499,7 +491,7 @@ void CPlayerProjectile::think(int _frames)
 		case PLAYER_PROJECTILE_DUMBFIRE:
 		default:
 		{
-			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
+			if ( CGameScene::getCollision()->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				// destroy destructable tiles
 
@@ -538,8 +530,8 @@ void CPlayerProjectile::render()
 	int		x,y;
 	int		scrnWidth = VidGetScrW();
 	int		scrnHeight = VidGetScrH();
-	int		spriteWidth = m_spriteBank->getFrameWidth(m_frame);
-	int		spriteHeight = m_spriteBank->getFrameHeight(m_frame);
+	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(m_frame);
+	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(m_frame);
 
 	offset = getScreenOffset();
 
@@ -559,7 +551,7 @@ void CPlayerProjectile::render()
 		return;
 	}
 
-	SprFrame = m_spriteBank->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
+	SprFrame = CGameScene::getSpriteBank()->printFT4(FRM_JELLYFISH1_SWIM1 + m_frame,x,y,m_reversed,0,0);
 	setRGB0( SprFrame, m_RGB.r, m_RGB.g, m_RGB.b );
 }
 

@@ -65,7 +65,7 @@ void CNpcSquidDartEnemy::render()
 
 			int frame = FRM_SQUIDDART_SWIM0001 + ( m_frame >> 8 );
 
-			SprFrame = m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
+			SprFrame = CGameScene::getSpriteBank()->printFT4(frame,renderPos.vx,renderPos.vy,m_reversed,0,10);
 
 			//setRGB0( SprFrame, 255, 128, 255 );
 
@@ -106,7 +106,7 @@ void CNpcSquidDartEnemy::fireAsProjectile( s16 heading )
 						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 						5*60);
-	projectile->setLayerCollision( m_layerCollision );
+
 	projectile->setGraphic( FRM_SQUIDDART_SWIM0001 );
 	projectile->setHasRGB( true );
 	projectile->setRGB( 255, 128, 255 );

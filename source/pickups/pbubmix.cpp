@@ -37,6 +37,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -78,7 +79,7 @@ void	CBubbleMixturePickup::init()
 	CBaseRespawningPickup::init();
 	m_sin=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -93,7 +94,7 @@ DVECTOR	CBubbleMixturePickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__BUBBLEMIXTURE);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -147,7 +148,7 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__BUBBLEMIXTURE);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2)+((msin(m_sin)*bubmix_bobscale)>>12);

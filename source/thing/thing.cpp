@@ -11,6 +11,7 @@
 
 ===========================================================================*/
 
+//#define	USE_FREE_LIST
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
@@ -31,9 +32,13 @@
 
 #include "level\level.h"
 
-#ifndef __HAZARD_HAZARD_H__
-#include "hazard\hazard.h"
-#endif
+// Needed for freelist table :o(
+#include	"pickups\pickup.h"
+#include	"platform\platform.h"
+#include	"projectl\projectl.h"
+#include	"enemy\npc.h"
+#include	"friend\friend.h"
+#include	"fx\fx.h"
 
 #ifndef __HAZARD_HRWEIGHT_H__
 #include "hazard\hrweight.h"
@@ -46,7 +51,6 @@
 #ifndef __HAZARD_HPSWITCH_H__
 #include "hazard\hpswitch.h"
 #endif
-
 
 /*	Std Lib
 	------- */
@@ -82,11 +86,34 @@ static const int	s_ThinkBBoxY1=256+128;
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
 int				CThingManager::s_initialised=false;
-
 sBBox			CThingManager::m_RenderBBox;
 sBBox			CThingManager::m_ThinkBBox;
 
+#ifdef	USE_FREE_LIST
+CThing			**CThingManager::s_FreeList[CThing::MAX_TYPE];
 
+
+struct	sFreeListTable
+{
+	u16	Type;
+	u16	Count;
+};
+
+static const sFreeListTable	FreeListTable[]=
+{
+/* 0*/	{CThing::TYPE_PICKUP			,CBasePickup::MAX_SUBTYPE},
+/* 1*/	{CThing::TYPE_PLATFORM			,CNpcPlatform::MAX_SUBTYPE},
+/* 2*/	{CThing::TYPE_PLAYER			,CPlayerThing::MAX_SUBTYPE},
+/* 3*/	{CThing::TYPE_PLAYERPROJECTILE	,CPlayerProjectile::MAX_SUBTYPE},
+/* 4*/	{CThing::TYPE_NPC				,CNpcFriend::MAX_SUBTYPE},
+/* 5*/	{CThing::TYPE_ENEMY				,CNpcEnemy::MAX_SUBTYPE},
+/* 6*/	{CThing::TYPE_ENEMYPROJECTILE	,CProjectile::MAX_SUBTYPE},
+/* 7*/	{CThing::TYPE_TRIGGER			,CTriggerThing::MAX_SUBTYPE},
+/* 8*/	{CThing::TYPE_HAZARD			,CNpcHazard::MAX_SUBTYPE},
+/* 9*/	{CThing::TYPE_FX				,CFX::MAX_SUBTYPE},
+};
+static const	int	FreeListTableSize=sizeof(FreeListTable)/sizeof(sFreeListTable);
+#endif
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -98,6 +125,7 @@ void		CThingManager::init()
 	ASSERT(!s_initialised);
 	initList(s_thingLists);
 	initList(s_CollisionLists);
+	initFreeList();
 	s_initialised=true;
 }
 
@@ -119,10 +147,11 @@ void		CThingManager::shutdown()
 		{
 			thing=s_thingLists[i];
 			thing->shutdown();
-			delete thing;
+			DeleteThing(thing);
 		}
 	}
 	s_initialised=false;
+	shutdownFreeList();
 }
 
 /*----------------------------------------------------------------------
@@ -167,7 +196,7 @@ void		CThingManager::killAllThingsForRespawn()
 			else
 			{
 				thing->shutdown();
-				delete thing;
+				DeleteThing(thing);
 				thing=s_thingLists[i];
 			}
 		}
@@ -353,7 +382,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	if (player && playerThing)
 	{
 		playerThing->setHasPlatformCollided( false );
-		playerThing->setNewCollidedPos( playerThing->getPos() );
+//!Dave!		playerThing->setNewCollidedPos( playerThing->getPos() );
 
 		// Player -> Platform collision
 		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
@@ -521,7 +550,7 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			if ( thing->isSetToShutdown() )
 			{
 				thing->shutdown();
-				delete thing;
+				DeleteThing(thing);
 			}
 
 			thing = nextThing;
@@ -629,6 +658,7 @@ CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,i
 void	CThingManager::addToThingList(CThing *_this)
 {
 int	Type=_this->getThingType();
+
 	_this->m_nextListThing=s_thingLists[Type];
 	s_thingLists[Type]=_this;
 }
@@ -675,14 +705,130 @@ int	Type=thing->getThingType();
 		s_CollisionLists[Type]=thing;
 }
 
+/********************************************************************/
+/********************************************************************/
+/*** Free List Stuff ************************************************/
+/********************************************************************/
+/********************************************************************/
+void		CThingManager::initFreeList()
+{
+#ifdef	USE_FREE_LIST
+// Make sure no-one is being naughty
+		ASSERT(FreeListTableSize==CThing::MAX_TYPE)
+
+		for (int i=0; i<FreeListTableSize; i++)
+		{
+			sFreeListTable	const &ThisType=FreeListTable[i];
+			int	Count=ThisType.Count;
+			CThing	**List=(CThing**)MemAlloc(Count*sizeof(CThing**),"ThingCache");
+			for (int t=0; t<Count; t++)
+			{
+				List[t]=0;
+
+			}
+			s_FreeList[ThisType.Type]=List;
+
+		}
+#endif
+}
+
+/********************************************************************/
+void	CThingManager::resetFreeList()
+{
+#ifdef	USE_FREE_LIST
+		for (int i=0; i<FreeListTableSize; i++)
+		{
+			sFreeListTable	const &ThisType=FreeListTable[i];
+			int	Count=ThisType.Count;
+
+			CThing	**List=s_FreeList[i];
+			for (int t=0; t<Count; t++)
+			{
+				CThing	*ThisThing=List[t];
+				while (ThisThing)
+				{
+					CThing	*Next=ThisThing->NextFreeThing;
+					delete ThisThing;
+					ThisThing=Next;
+				}
+				List[t]=0;
+			}
+			
+		}
+#endif
+}
+
+/********************************************************************/
+void	CThingManager::shutdownFreeList()
+{
+#ifdef	USE_FREE_LIST
+		resetFreeList();
+		for (int i=0; i<FreeListTableSize; i++)
+		{
+			sFreeListTable	const &ThisType=FreeListTable[i];
+			MemFree(s_FreeList[ThisType.Type]);
+		}
+#endif
+}
+
+/********************************************************************/
+CThing	*CThingManager::GetThing(int Type,int SubType)
+{
+#ifdef	USE_FREE_LIST
+CThing	**List=s_FreeList[Type];
+CThing	*Thing=List[SubType];
+
+
+		if (Thing)
+		{
+			List[SubType]=Thing->NextFreeThing;
+			Thing->initDef();
+			Thing->NextFreeThing=0;
+		}
+
+		return(Thing);
+#else
+		return(0);
+#endif
+}
+
+/********************************************************************/
+void	CThingManager::DeleteThing(CThing *Thing)
+{
+#ifdef	USE_FREE_LIST
+int		Type=Thing->getThingType();
+int		SubType=Thing->getThingSubType();
+CThing	**List=s_FreeList[Type];
+	
+// Check its been aquired/set correctly
+
+		ASSERT(SubType!=1234);
+
+		Thing->NextFreeThing=List[SubType];
+		List[SubType]=Thing;
+
+#else
+		delete Thing;
+#endif
+}
+
+/********************************************************************/
+/********************************************************************/
+/********************************************************************/
+/********************************************************************/
+/********************************************************************/
+/********************************************************************/
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int	DaveDbg=1;
 void	CThing::init()
 {
+	ASSERT(DaveDbg);
 	ParentThing=NULL;
 	NextThing=NULL;
 	m_numChildren = 0;
@@ -691,11 +837,10 @@ void	CThing::init()
 // These need to stay for init
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
-	setCollisionAngle(0);
+//!Dave!	setCollisionAngle(0);
 
 // Add to thing list
 	CThingManager::addToThingList(this);
-
 }
 
 /*----------------------------------------------------------------------
@@ -983,7 +1128,7 @@ CThing	*List=NextThing;
 			List->ParentThing=NULL;
 			List->NextThing=NULL;
 			List->shutdown();
-			delete List;
+			CThingManager::DeleteThing(List);
 			List=NextThing;
 		}
 		NextThing=NULL;
@@ -1181,6 +1326,5 @@ void	CTriggerThing::setTargetBox(int _x,int _y,int _w,int _h)
 	m_boxY2=_y+_h;
 }
 
-/*===========================================================================
-end */
+
 

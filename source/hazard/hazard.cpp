@@ -144,9 +144,11 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 {
 	CNpcHazard *hazard;
 
-	NPC_HAZARD_UNIT_TYPE hazardType = getTypeFromMapEdit( ThisHazard->Type );
+	NPC_HAZARD_UNIT_TYPE Type = getTypeFromMapEdit( ThisHazard->Type );
 
-	switch( hazardType )
+	hazard = (CNpcHazard*)CThingManager::GetThing(CThing::TYPE_HAZARD,Type);
+	if (!hazard)
+	switch( Type )
 	{
 		case NPC_FALLING_HAZARD:
 		{
@@ -277,7 +279,8 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 
 	ASSERT( hazard );
 
-	hazard->setType( hazardType );
+	hazard->setType( Type );
+	hazard->setThingSubType(Type);
 	hazard->init();
 	hazard->setWaypoints( ThisHazard );
 	hazard->setGraphic( ThisHazard );
@@ -348,9 +351,6 @@ void CNpcHazard::init()
 {
 	CHazardThing::init();
 
-	//m_actorGfx=CActorPool::GetActor( (FileEquate) ACTORS_CLAM_SBK );
-	//m_spriteBank=0;
-
 	m_npcPath.initPath();
 
 	m_timer = 0;
@@ -381,7 +381,6 @@ void CNpcHazard::setGraphic( sThingHazard *ThisHazard )
 void CNpcHazard::shutdown()
 {
 	delete m_modelGfx;
-	//if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
 	// remove waypoints
 
 	m_npcPath.removeAllWaypoints();

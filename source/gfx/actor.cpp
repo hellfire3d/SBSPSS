@@ -61,12 +61,12 @@ int		SlotW=+32000,SlotH=+32000;
 
 		if (SlotList[Slot].Width<W) 
 		{
-//			printf("Adjusted Slot Width from %i to %i\n",SlotList[Slot].Width,W);
+//			DAVE_DBGMSG("Adjusted Slot Width from %i to %i\n",SlotList[Slot].Width,W);
 			SlotList[Slot].Width=W; 
 		}
 		if (SlotList[Slot].Height<H) 
 		{
-//			printf("Adjusted Slot Height from %i to %i\n",SlotList[Slot].Height,H);
+//			DAVE_DBGMSG("Adjusted Slot Height from %i to %i\n",SlotList[Slot].Height,H);
 			SlotList[Slot].Height=H;
 		}
 
@@ -511,7 +511,7 @@ sActorPool	*Actor=ActorList;
 			sPoolSlot	&Slot=CActorPool::Cache.GetSlot(i);
 			int			Count=CountSlots(Slot.NodeList.Head);
 
-			printf("SC %i: %i %i\n",i,Slot.SlotCount,Count);
+			DAVE_DBGMSG("SC %i: %i %i\n",i,Slot.SlotCount,Count);
 			ASSERT(Slot.SlotCount==Count);
 		}
 */

@@ -101,6 +101,8 @@ CFX		*CFX::Create(const FX_TYPE Type)
 {
 CFX		*NewFX;
 
+		NewFX = (CFX*)CThingManager::GetThing(CThing::TYPE_FX,Type);
+		if (!NewFX)
 		switch(Type)
 		{
 		case FX_TYPE_FALLINGTILE:
@@ -161,7 +163,7 @@ CFX		*NewFX;
 			ASSERT(!"UNKNOWN FX TYPE");
 			return NULL;
 	}
-
+	NewFX->setThingSubType(Type);
 	return NewFX;
 }
 
@@ -194,9 +196,6 @@ CFX		*NewFX=CFX::Create(Type);
 void	CFX::init()
 {
 		CFXThing::init();
-
-		m_spriteBank=new ("FX Sprite") SpriteBank();
-		m_spriteBank->load(SPRITES_SPRITES_SPR);
 		OtPos=OTPOS__ACTOR_POS;
 
 		Life=-1;
@@ -205,7 +204,6 @@ void	CFX::init()
 /*****************************************************************************/
 void	CFX::shutdown()
 {
-		m_spriteBank->dump();	delete m_spriteBank;
 		CFXThing::shutdown();
 }
 

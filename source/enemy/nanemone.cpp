@@ -215,7 +215,6 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 				CProjectile *projectile;
 				projectile = new( "test projectile" ) CProjectile;
 				projectile->init( Pos, m_heading );
-				projectile->setLayerCollision( m_layerCollision );
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_timerTimer = GameState::getOneSecondInFrames();
@@ -240,9 +239,6 @@ void CNpcAnemone2Enemy::postInit()
 	m_scaleY = ONE;
 
 	m_radius = 0;
-
-	m_spriteBank=new ("projectile sprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -435,7 +431,6 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_DUMBFIRE, CProjectile::PROJECTILE_FINITE_LIFE );
-			projectile->setLayerCollision( m_layerCollision );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
 			projectile->setSpeed( 5 );
 		}
@@ -527,16 +522,16 @@ void CNpcAnemone2Enemy::render()
 				int		x,y;
 				int		scrnWidth = VidGetScrW();
 				int		scrnHeight = VidGetScrH();
-				int		spriteWidth = m_spriteBank->getFrameWidth(FRM__SPIKE);
-				int		spriteHeight = m_spriteBank->getFrameHeight(FRM__SPIKE);
+				int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth(FRM__SPIKE);
+				int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight(FRM__SPIKE);
 
 				offset = CLevel::getCameraPos();
 
 				x = spikePos.vx - offset.vx;
 				y = spikePos.vy - offset.vy;
 
-				frameHdr = m_spriteBank->getFrameHeader( FRM__SPIKE );
-				m_spriteBank->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, heading, 10 );
+				frameHdr = CGameScene::getSpriteBank()->getFrameHeader( FRM__SPIKE );
+				CGameScene::getSpriteBank()->printRotatedScaledSprite( frameHdr, x, y, 4096, 4096, heading, 10 );
 			}
 
 			DVECTOR &renderPos=getRenderPos();
@@ -576,7 +571,6 @@ void CNpcAnemone3Enemy::processClose( int _frames )
 							CProjectile::PROJECTILE_GAS_CLOUD,
 							CProjectile::PROJECTILE_FINITE_LIFE,
 							lifetime * GameState::getOneSecondInFrames() );
-		projectile->setLayerCollision( m_layerCollision );
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;

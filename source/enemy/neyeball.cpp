@@ -62,7 +62,6 @@ void CNpcEyeballEnemy::postInit()
 	CProjectile *projectile;
 	projectile = new ( "eyeball projectile" ) CProjectile;
 	projectile->init( eyeballPos, m_fireHeading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
-	projectile->setLayerCollision( m_layerCollision );
 	projectile->setGraphic( FRM_EYEBALL_STATIC );
 
 	addChild( projectile );
@@ -133,7 +132,6 @@ CThing	*Next=getNext();
 		CProjectile *projectile;
 		projectile = new ( "eyeball projectile" ) CProjectile;
 		projectile->init( eyeballPos, m_fireHeading, CProjectile::PROJECTILE_USER_SEEK, CProjectile::PROJECTILE_INFINITE_LIFE );
-		projectile->setLayerCollision( m_layerCollision );
 		projectile->setGraphic( FRM_EYEBALL_STATIC );
 		projectile->setState( CProjectile::PROJECTILE_ATTACK );
 
@@ -159,7 +157,7 @@ void CNpcEyeballEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_EYEBALL_STALK, renderPos.vx, renderPos.vy, 4096, 4096, m_drawRotation, 10);
+			SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM_EYEBALL_STALK, renderPos.vx, renderPos.vy, 4096, 4096, m_drawRotation, 10);
 
 			// get xmax, xmin, ymax, ymin
 

@@ -43,6 +43,7 @@
 #include "system\vid.h"
 #endif
 
+#include	"game\game.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,10 +110,14 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 				{
 					case 1:
 					{
-						enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
-						ASSERT(enemy);
+						enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
+						if (!enemy)
+						{
+							enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
+							ASSERT(enemy);
+						}
 						enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
-
+						enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
 						break;
 					}
 
@@ -120,15 +125,25 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 					{
 						if ( getRnd() % 4 == 0 )
 						{
-							enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
-							ASSERT(enemy);
+							enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND);
+							if (!enemy)
+							{
+								enemy = new( "jellyfish" ) CNpcSmallJellyfish2BackgroundEnemy;
+								ASSERT(enemy);
+							}
 							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND );
+							enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_2_BACKGROUND);
 						}
 						else
 						{
-							enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
-							ASSERT(enemy);
+							enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
+							if (!enemy)
+							{
+								enemy = new( "jellyfish" ) CNpcSmallJellyfishBackgroundEnemy;
+								ASSERT(enemy);
+							}
 							enemy->setType( CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND );
+							enemy->setThingSubType(CNpcEnemy::NPC_SMALL_JELLYFISH_BACKGROUND);
 						}
 
 						break;
@@ -136,16 +151,19 @@ void CJellyfishGenerator::think( int _frames, CLevel *level )
 
 					case 3:
 					{
-						enemy = new( "butterfly" ) CNpcButterflyBackgroundEnemy;
-						ASSERT(enemy);
+						enemy = (CNpcEnemy*)CThingManager::GetThing(CThing::TYPE_ENEMY,CNpcEnemy::NPC_BUTTERFLY_BACKGROUND);
+						if (!enemy)
+						{
+							enemy = new( "butterfly" ) CNpcButterflyBackgroundEnemy;
+							ASSERT(enemy);
+						}
 						enemy->setType( CNpcEnemy::NPC_BUTTERFLY_BACKGROUND );
-
+						enemy->setThingSubType(CNpcEnemy::NPC_BUTTERFLY_BACKGROUND);
 						break;
 					}
 				}
 
 				enemy->init();
-				enemy->setLayerCollision( level->getCollisionLayer() );
 
 				DVECTOR	offset = CLevel::getCameraPos();
 

@@ -126,7 +126,6 @@ void CNpcParasiticWormEnemy::postInit()
 		CNpcParasiticWormSegment *wormSegment;
 		wormSegment = new ("segment") CNpcParasiticWormSegment;
 		wormSegment->init();
-		//wormSegment->setLayerCollision( m_layerCollision );
 
 		if ( segCount < initLength )
 		{

@@ -61,7 +61,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 		// check for collision
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
 		{
 			moveX = 0;
 		}
@@ -80,7 +80,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 	// check for vertical movement
 
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy, yMovement + 16 );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, yMovement + 16 );
 
 	if ( groundHeight <= yMovement )
 	{

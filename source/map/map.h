@@ -91,8 +91,6 @@ private:
 
 	char				*m_screenImage;
 
-	class SpriteBank	*m_spriteBank;
-
 	int					m_currentChapterSelection;
 	int					m_currentLevelSelection;
 	DVECTOR				m_pointerPos;

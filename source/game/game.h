@@ -16,6 +16,7 @@
 class	FontBank;
 class	SpriteBank;
 class	CPlayer;
+class	CLayerCollision;
 class CGameScene : public CScene
 {
 public:
@@ -73,6 +74,17 @@ static int				s_readyToExit;
 static int				s_levelFinished;
 
 static	ACTOR_TYPE		actorType[];
+
+// global vars
+public:
+static	void			setSpriteBank(SpriteBank *SprBank)	{s_GlobalSpritebank=SprBank;}
+static	SpriteBank		*getSpriteBank()					{return(s_GlobalSpritebank);}
+
+static	void			setCollision(CLayerCollision *Col)	{s_GlobalCollision=Col;}
+static	CLayerCollision	*getCollision()						{return(s_GlobalCollision);}
+
+static	SpriteBank		*s_GlobalSpritebank;
+static	CLayerCollision	*s_GlobalCollision;
 
 };
 

@@ -9,7 +9,7 @@
 #include	"gfx\sprbank.h"
 #include	<sprites.h>
 #include	"level\level.h"
-
+#include	"game\game.h"
 #include	"FX\FXBaseAnim.h"
 
 
@@ -58,11 +58,11 @@ void	CFXBaseAnim::render()
 		CFX::render();
 
 		if (!canRender() || isSetToShutdown()) return;
-
+SpriteBank	*SprBank=CGameScene::getSpriteBank();
 DVECTOR		&RenderPos=getRenderPos();
 int			ThisFrame=Frame>>FrameShift;
 
-POLY_FT4	*Ft4=m_spriteBank->printFT4Scaled(BaseFrame+ThisFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,Scale>>4);
+POLY_FT4	*Ft4=SprBank->printFT4Scaled(BaseFrame+ThisFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,Scale>>4);
 			Ft4->u1--; Ft4->u3--;
 			Ft4->v2--; Ft4->v3--;
 			setRGB0(Ft4,R,G,B);

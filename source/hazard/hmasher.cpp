@@ -19,6 +19,8 @@
 #include "level\layercollision.h"
 #endif
 
+#include	"game\game.h"
+
 void CNpcMasherHazard::init()
 {
 	CNpcHazard::init();
@@ -36,7 +38,7 @@ void CNpcMasherHazard::processMovement( int _frames )
 
 			s8 groundHeight;
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight < yMovement )
 			{

@@ -25,7 +25,7 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
-		printf("%i %i\n",MapWidth,MapHeight);
+//		printf("%i %i\n",MapWidth,MapHeight);
 		TileBank2d=LevelHdr->TileBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 }

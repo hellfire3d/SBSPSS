@@ -72,7 +72,6 @@ int		AInc=1024/Width;
 			if (dH>8) dH=8;
 			if (dH<2) dH=2;
 			HeightTable[H]=(s16)dH;
-//			printf("%i %i =%i\n",H,Ofs,HeightTable[H]);
 		}
 */
 }
@@ -144,7 +143,7 @@ s16		*dH=HeightTable;
 			for (int i=0; i<Count-1; i++)
 			{
 				if (Idx>=Count) Idx=0;
-				POLY_FT4	*Ft4=m_spriteBank->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,OtPos);
+				POLY_FT4	*Ft4=CGameScene::getSpriteBank()->printFT4(FRM__TENTACLE,LastPos.vx,LastPos.vy,0,0,OtPos);
 
 				Ft4->x0=LastPos.vx+0+LastdW; Ft4->y0=LastPos.vy;
 				Ft4->x1=LastPos.vx+8-LastdW; Ft4->y1=LastPos.vy;

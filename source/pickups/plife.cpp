@@ -33,6 +33,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -74,7 +75,7 @@ void	CLifePickup::init()
 	CBasePickup::init();
 	m_sin=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__PANTS);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__PANTS);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -89,7 +90,7 @@ DVECTOR	CLifePickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__PANTS);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__PANTS);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -133,7 +134,7 @@ void	CLifePickup::renderPickup(DVECTOR *_pos)
 	int			x,y;
 	int			size;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__PANTS);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);

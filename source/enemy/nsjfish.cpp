@@ -63,7 +63,7 @@ void CNpcSmallJellyfishEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
+			SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 			setRGB0( SprFrame, 255, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)
 
 			// get xmax, xmin, ymax, ymin
@@ -380,7 +380,6 @@ void CNpcSmallJellyfishEnemy::fireAsProjectile( s16 heading )
 						CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 						CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 						5*60);
-	projectile->setLayerCollision( m_layerCollision );
 	projectile->setGraphic( FRM_JELLYFISH1_SWIM1 );
 	projectile->setHasRGB( true );
 	projectile->setRGB( 255, 128, 255 );

@@ -69,7 +69,7 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 
 	moveY = ( m_velocity.vy >> 8 ) * _frames;
 
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
 
 	if ( groundHeight < 0 )
 	{

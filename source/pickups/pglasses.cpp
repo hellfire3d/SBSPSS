@@ -33,6 +33,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -76,7 +77,7 @@ void	CGlassesPickup::init()
 	m_glint=0;
 	m_glintRot=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__GLASSES);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__GLASSES);
 	setCollisionSize(fh->W,fh->H);
 
 	GameScene.getPlayer()->registerAddon(PLAYER_ADDON_GLASSES);
@@ -93,7 +94,7 @@ DVECTOR	CGlassesPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__GLASSES);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__GLASSES);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -144,7 +145,7 @@ void	CGlassesPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__GLASSES);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);

@@ -37,6 +37,10 @@ public:
 		NPC_FRIEND_PLANKTON,
 		NPC_FRIEND_UNIT_TYPE_MAX,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=NPC_FRIEND_UNIT_TYPE_MAX,
+	};
 
 	virtual void		init();
 	void				init( DVECTOR initPos );
@@ -44,14 +48,12 @@ public:
 	virtual void		shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+
+
 	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
 
 	static CNpcFriend	*Create(sThingActor *ThisActor);
 	static NPC_FRIEND_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
-
-protected:
-	class CLayerCollision	*m_layerCollision;
 
 protected:
 	typedef struct NPC_FRIEND_DATA_TYPE

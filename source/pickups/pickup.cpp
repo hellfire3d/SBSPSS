@@ -79,6 +79,7 @@
 #include "pickups\pquest.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -117,8 +118,6 @@ void	CBasePickup::init()
 {
 	CPickupThing::init();
 
-	m_spriteBank=new ("pickup sprite") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 /*----------------------------------------------------------------------
@@ -129,7 +128,6 @@ void	CBasePickup::init()
   ---------------------------------------------------------------------- */
 void	CBasePickup::shutdown()
 {
-	m_spriteBank->dump();	delete m_spriteBank;
 	CPickupThing::shutdown();
 }
 
@@ -320,7 +318,7 @@ void	CBaseWeaponSimplePickup::init()
 
 	CBaseWeaponPickup::init();
 
-	fh=getSpriteBank()->getFrameHeader(FRM__NET);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__NET);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -335,7 +333,7 @@ DVECTOR	CBaseWeaponSimplePickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(getWeaponSpriteFrame());
+	fh=CGameScene::getSpriteBank()->getFrameHeader(getWeaponSpriteFrame());
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -353,7 +351,7 @@ void	CBaseWeaponSimplePickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(getWeaponSpriteFrame());
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
@@ -374,6 +372,8 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 	CBasePickup	*pickup;
 	DVECTOR		pickupPos;
 
+	pickup = (CBasePickup*)CThingManager::GetThing(CThing::TYPE_PICKUP,_type);
+	if (!pickup)
 	switch(_type)
 	{
 		case PICKUP__BIG_HEALTH:
@@ -447,6 +447,7 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			return NULL;
 	}
 
+	pickup->setThingSubType(_type);
 	pickup->init();
 	pickupPos=pickup->getSizeForPlacement();
 	pickupPos.vx=_pos->vx+(pickupPos.vx/2);

@@ -9,6 +9,7 @@
 #include	"gfx\sprbank.h"
 #include	<sprites.h>
 #include	"level\level.h"
+#include	"game\game.h"
 
 #include	"FX\FXBaseTrail.h"
 
@@ -65,7 +66,7 @@ void	CFXBaseTrail::render()
 		if (canRender())
 		{
 			DVECTOR	RenderPos=getRenderPos();
-
+			SpriteBank	*SprBank=CGameScene::getSpriteBank();
 			int		ThisIdx=HeadIdx;
 			int		StartY=RenderPos.vy;
 			
@@ -78,7 +79,7 @@ void	CFXBaseTrail::render()
 				RenderPos.vy+=ThisElem.Ofs.vy>>2;
 				if (ThisElem.Shade)
 				{
-					Ft4=m_spriteBank->printRotatedScaledSprite(ThisElem.Frame,RenderPos.vx,RenderPos.vy,ThisElem.Scale,ThisElem.Scale,ThisElem.Angle,OtPos*0);
+					Ft4=SprBank->printRotatedScaledSprite(ThisElem.Frame,RenderPos.vx,RenderPos.vy,ThisElem.Scale,ThisElem.Scale,ThisElem.Angle,OtPos*0);
 					setShadeTex(Ft4,0);
 					setRGB0(Ft4,ThisElem.Shade,ThisElem.Shade,ThisElem.Shade);
 					setSemiTrans(Ft4,1);

@@ -140,10 +140,6 @@ void CMapScene::init()
 	m_font->setOt(10);
 	m_font->setJustification(FontBank::JUST_LEFT);
 
-	m_spriteBank=new ("map screen sprite") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
-
-
 	m_currentChapterSelection=0;
 	m_currentLevelSelection=0;
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
@@ -165,7 +161,6 @@ void CMapScene::shutdown()
 {
 	ClearScreenImage();
 	MemFree(m_screenImage);
-	m_spriteBank->dump();		delete m_spriteBank;
 	m_font->dump();				delete m_font;
 }
 
@@ -196,8 +191,8 @@ void CMapScene::render()
 		{
 			sprintf(spatCount,"%d/%d",getSpatulaCollectedCount(m_currentChapterSelection,i),getSpatulaAvailableCount(m_currentChapterSelection,i));
 			m_font->print(xpos,ypos,spatCount);
-			fh=m_spriteBank->getFrameHeader(s_mapLevelData[m_currentChapterSelection].m_questItemFrames[i]);
-			ft4=m_spriteBank->printFT4Scaled(fh,xpos+MAP_LEVEL_WIDTH-fh->W,ypos+MAP_LEVEL_HEIGHT-fh->H,0,0,10,128);
+			fh=CGameScene::getSpriteBank()->getFrameHeader(s_mapLevelData[m_currentChapterSelection].m_questItemFrames[i]);
+			ft4=CGameScene::getSpriteBank()->printFT4Scaled(fh,xpos+MAP_LEVEL_WIDTH-fh->W,ypos+MAP_LEVEL_HEIGHT-fh->H,0,0,10,128);
 			if(!hasQuestItemBeenCollected(m_currentChapterSelection,i))
 			{
 				setRGB0(ft4,10,10,10);
@@ -209,8 +204,8 @@ void CMapScene::render()
 	}
 
 	// Selection cursor
-	fh=m_spriteBank->getFrameHeader(FRM__MAPPOINTER);
-	m_spriteBank->printFT4(fh,m_pointerPos.vx-(fh->W/2),m_pointerPos.vy-(fh->H/2),0,0,9);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__MAPPOINTER);
+	CGameScene::getSpriteBank()->printFT4(fh,m_pointerPos.vx-(fh->W/2),m_pointerPos.vy-(fh->H/2),0,0,9);
 
 char buf[100];
 sprintf(buf,"Chapter %d, Level %d",m_currentChapterSelection+1,m_currentLevelSelection+1);

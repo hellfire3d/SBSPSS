@@ -64,7 +64,7 @@ void CNpcRockShardHazard::processMovement( int _frames )
 	{
 		yMovement = 6 * _frames;
 
-		groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 		if ( groundHeight < yMovement )
 		{

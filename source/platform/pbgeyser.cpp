@@ -92,7 +92,6 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 			}
 		}
 
-		newPlatform->setLayerCollision( m_layerCollision );
 		newPlatform->setTiltable( false );
 		newPlatform->postInit();
 	}

@@ -28,7 +28,6 @@ public:
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	DVECTOR							Pos;
-	SpriteBank						*m_spriteBank;
 };
 
 class CNpcBalloonBridgePlatform : public CNpcPlatform

@@ -37,6 +37,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -78,7 +79,7 @@ void	CJellyLauncherAmmoPickup::init()
 	CBasePickup::init();
 	m_rattle=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -93,7 +94,7 @@ DVECTOR	CJellyLauncherAmmoPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__JELLYAMMO);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -139,7 +140,7 @@ void	CJellyLauncherAmmoPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			angle;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__JELLYAMMO);
 	if(m_rattle<=jlammo_rattlecount*4095)
 	{

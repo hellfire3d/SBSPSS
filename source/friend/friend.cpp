@@ -67,9 +67,11 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 {
 	CNpcFriend *friendNpc;
 
-	NPC_FRIEND_UNIT_TYPE friendType = CNpcFriend::getTypeFromMapEdit( ThisActor->Type );
+	NPC_FRIEND_UNIT_TYPE Type = CNpcFriend::getTypeFromMapEdit( ThisActor->Type );
 
-	switch( friendType )
+	friendNpc = (CNpcFriend*)CThingManager::GetThing(CThing::TYPE_NPC,Type);
+	if (!friendNpc)
+	switch( Type )
 	{
 		case CNpcFriend::NPC_FRIEND_BARNACLE_BOY:
 		{
@@ -121,7 +123,7 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 		default:
 		{
-			printf("UNKNOWN %i\n",friendType);
+			SYSTEM_DBGMSG("UNKNOWN %i\n",Type);
 			friendNpc = NULL;
 			ASSERT(0);
 			break;
@@ -130,7 +132,8 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 
 	ASSERT( friendNpc );
 
-	friendNpc->setType( friendType );
+	friendNpc->setType( Type );
+	friendNpc->setThingSubType(Type);
 
 	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
 
@@ -191,8 +194,6 @@ void CNpcFriend::postInit()
 
 void CNpcFriend::shutdown()
 {
-	//m_spriteBank->dump();		delete m_spriteBank;
-
 	delete m_actorGfx;
 	CNpcThing::shutdown();
 }

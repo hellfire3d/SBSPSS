@@ -23,6 +23,7 @@
 #include	"utils\utils.h"
 #endif
 
+#include	"game/game.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +48,7 @@ void CNpcShellEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_spriteBank->printRotatedScaledSprite( m_shellType,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
+			SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( m_shellType,renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
 
 			// get xmax, xmin, ymax, ymin
 

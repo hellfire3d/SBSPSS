@@ -56,11 +56,11 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 			moveY = -moveY;
 		}
 
-		s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+		s32 groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
 
 		if ( groundHeight < moveY )
 		{
-			if ( ( m_layerCollision->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK ) != (7<<COLLISION_TYPE_FLAG_SHIFT) )
+			if ( ( CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy + groundHeight + 8 ) & COLLISION_TYPE_MASK ) != (7<<COLLISION_TYPE_FLAG_SHIFT) )
 			{
 				moveY = groundHeight;
 				moveX = 2 * _frames;

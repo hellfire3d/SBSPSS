@@ -97,7 +97,6 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 			//startPos.vy = 100;
 
 			newPlatform->init( startPos );
-			ASSERT(m_layerCollision);
 
 			while( sourceWaypoint )
 			{
@@ -106,7 +105,6 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 			}
 		}
 
-		newPlatform->setLayerCollision( m_layerCollision );
 		newPlatform->setTiltable( false );
 		newPlatform->postInit();
 	}

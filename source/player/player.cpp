@@ -596,10 +596,6 @@ void	CPlayer::init()
 	m_fontBank->initialise(&standardFont);
 	m_fontBank->setOt(5);
 
-	m_spriteBank=new ("PlayerSprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
-
-	m_layerCollision=NULL;
 
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
@@ -665,7 +661,6 @@ void	CPlayer::shutdown()
 	}
 	delete m_actorGfx;
 
-	m_spriteBank->dump();	delete m_spriteBank;
 	m_fontBank->dump();		delete m_fontBank;
 
 	CPlayerThing::shutdown();
@@ -1200,10 +1195,10 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		}
 
 		int	ygap;
-		ygap=m_spriteBank->getFrameHeader(*frames)->H;
+		ygap=CGameScene::getSpriteBank()->getFrameHeader(*frames)->H;
 		for(i=5;i>0;i--)
 		{
-			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,0);
+			ft4=CGameScene::getSpriteBank()->printFT4(*frames++,x,y,0,0,0);
 			setSemiTrans(ft4,i>m_health);
 			y+=ygap;
 		}
@@ -1215,11 +1210,11 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		sFrameHdr	*fh;
 		int			V,W,H,partH;
 
-		ft4=m_spriteBank->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+		ft4=CGameScene::getSpriteBank()->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
 		setSemiTrans(ft4,true);
 
-		fh=m_spriteBank->getFrameHeader(FRM__WATER);
-		ft4=m_spriteBank->printFT4(fh,0,0,0,0,0);
+		fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__WATER);
+		ft4=CGameScene::getSpriteBank()->printFT4(fh,0,0,0,0,0);
 		setSemiTrans(ft4,true);
 		V=fh->V;
 		W=fh->W;
@@ -1230,7 +1225,7 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		ft4->v0=V+(partH);
 		ft4->v1=V+(partH);
 
-		m_spriteBank->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+		CGameScene::getSpriteBank()->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
 	}
 
 
@@ -1242,18 +1237,18 @@ for(int i=0;i<NUM_LASTPOS;i++)
 	if(isWearingBoots())
 	{
 		int			x,y;
-		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__SHOE);
+		sFrameHdr	*fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SHOE);
 		x=itemX-(fh->W/2);
 		y=COLLECTEDITEM_BASEY-(fh->H/2);
-		m_spriteBank->printFT4(fh,x+2,y+2,0,0,0);
-		m_spriteBank->printFT4(fh,x-2,y-2,0,0,0);
+		CGameScene::getSpriteBank()->printFT4(fh,x+2,y+2,0,0,0);
+		CGameScene::getSpriteBank()->printFT4(fh,x-2,y-2,0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
 /*
 	if(isWearingDivingHelmet())
 	{
-		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__HELMET);
-		m_spriteBank->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
+		sFrameHdr	*fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__HELMET);
+		CGameScene::getSpriteBank()->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
 		itemX+=COLLECTEDITEM_GAP;
 	}
 */
@@ -1291,7 +1286,7 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 {
 	int	height;
 
-	height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
+	height=CGameScene::getCollision()->getHeightFromGround(_x,_y,_maxHeight);
 	if(height>=_maxHeight)
 	{
 		CThing *platform;
@@ -1337,7 +1332,7 @@ int CPlayer::getHeightFromPlatformNoGround(int _x,int _y,int _maxHeight)
   ---------------------------------------------------------------------- */
 int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
 {
-	return( m_layerCollision->getHeightFromGround(_x,_y,_maxHeight) );
+	return( CGameScene::getCollision()->getHeightFromGround(_x,_y,_maxHeight) );
 }
 
 /*----------------------------------------------------------------------
@@ -1796,7 +1791,7 @@ int	CPlayer::canDoLookAround()
 void	CPlayer::inSoakUpState()
 {
 	if(isWearingDivingHelmet()&&
-	   (m_layerCollision->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER)
+	   (CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER)
 	{
 		m_healthWaterLevel+=waterSoakUpSpeed;
 		if(m_healthWaterLevel>WATERMAXHEALTH)
@@ -2096,7 +2091,7 @@ void CPlayer::shove( DVECTOR move )
 	int		colHeight;
 
 	// X movement
-	colHeight=m_layerCollision->getHeightFromGround(Pos.vx+move.vx,Pos.vy,5);
+	colHeight=CGameScene::getCollision()->getHeightFromGround(Pos.vx+move.vx,Pos.vy,5);
 	if(colHeight<0)
 	{
 		// Stop at the edge of the obstruction
@@ -2114,7 +2109,7 @@ void CPlayer::shove( DVECTOR move )
 		cx=Pos.vx;
 		for(i=0;i<vx;i++)
 		{
-			if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
+			if(CGameScene::getCollision()->getHeightFromGround(cx,Pos.vy)<0)
 			{
 				break;
 			}
@@ -2130,7 +2125,7 @@ void CPlayer::shove( DVECTOR move )
 	}
 
 	// Y movement
-	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+move.vy,5);
+	colHeight=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy+move.vy,5);
 	if(colHeight<0)
 	{
 		// Stop at the edge of the obstruction
@@ -2148,7 +2143,7 @@ void CPlayer::shove( DVECTOR move )
 		cy=Pos.vy;
 		for(i=0;i<vy;i++)
 		{
-			if(m_layerCollision->getHeightFromGround(Pos.vx,cy)<0)
+			if(CGameScene::getCollision()->getHeightFromGround(Pos.vx,cy)<0)
 			{
 				break;
 			}
@@ -2263,7 +2258,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 		if(colHeightBefore>=0&&colHeightAfter<=0)
 		{
 			// About to hit a 'fall to death' block?
-			if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH)
+			if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_DEATH)
 			{
 				// No
 				// Stick at ground level
@@ -2287,7 +2282,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 	{
 		// Must be below ground
 		// Are we jumping into an impassable block?
-		if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		if((CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
 		{
 			pos.vy=(pos.vy&0xfff0);
@@ -2298,7 +2293,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 	else
 	{
 		// Stood on any important types of collision?
-		switch(m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
+		switch(CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
 		{
 			case COLLISION_TYPE_FLAG_DAMAGE:
 				takeDamage(DAMAGE__COLLISION_DAMAGE);
@@ -2327,11 +2322,10 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 	hitWall=false;
 	if(_moveDistance)
 	{
-		CLayerCollision	*collision;
+		CLayerCollision	*collision=CGameScene::getCollision();
 		DVECTOR			pos;
 		int				colHeight;
 
-		collision=getLayerCollision();
 		pos=getPlayerPos();
 		colHeight=getHeightFromGround(pos.vx,pos.vy,5);
 		if(colHeight==0)
@@ -2379,7 +2373,7 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 		}
 		else if(colHeight>0) // Lets you jump through platforms from below
 		{
-			if((m_layerCollision->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+			if((CGameScene::getCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
 			   getHeightFromGround(pos.vx+_moveDistance,pos.vy,5)<0)
 			{
 				// Stop at the edge of the obstruction

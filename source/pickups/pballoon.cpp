@@ -45,6 +45,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game\game.h"
 
 /*	Std Lib
 	------- */
@@ -86,7 +87,7 @@ void	CBalloonPickup::init()
 	CBaseWeaponPickup::init();
 	m_sin=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__BALLOON);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__BALLOON);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -101,7 +102,7 @@ DVECTOR	CBalloonPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__BALLOON);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__BALLOON);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -179,7 +180,7 @@ void	CBalloonPickup::renderPickup(DVECTOR *_pos)
 	int			xo1,xo2;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__BALLOON);
 
 	xo1=((msin((m_sin+balloon_phase)&4095)*balloon_scale1)>>12);

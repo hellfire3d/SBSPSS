@@ -49,7 +49,7 @@ void CBridgeBalloon::render()
 		renderPos.vx = Pos.vx - CamPos.vx;
 		renderPos.vy = Pos.vy - CamPos.vy;
 
-		m_spriteBank->printFT4(FRM__BALLOON,renderPos.vx,renderPos.vy,0,0,10);
+		CGameScene::getSpriteBank()->printFT4(FRM__BALLOON,renderPos.vx,renderPos.vy,0,0,10);
 	}
 }
 
@@ -57,15 +57,12 @@ void CBridgeBalloon::render()
 
 void CBridgeBalloon::init()
 {
-	m_spriteBank=new ("enemy sprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CBridgeBalloon::shutdown()
 {
-	if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

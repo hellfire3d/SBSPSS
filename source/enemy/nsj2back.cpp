@@ -55,7 +55,7 @@ void CNpcSmallJellyfish2BackgroundEnemy::render()
 			{
 				DVECTOR &renderPos=getRenderPos();
 
-				SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,15);
+				SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,15);
 				setRGB0( SprFrame, 128, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)
 
 				// get xmax, xmin, ymax, ymin

@@ -36,6 +36,8 @@
 #endif
 
 
+#include	"game/game.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPlanktonFriend::init()
@@ -43,17 +45,12 @@ void CNpcPlanktonFriend::init()
 	CNpcThing::init();
 
 	m_extension = EXTEND_RIGHT;
-
-	m_spriteBank=new ("enemy sprites") SpriteBank();
-	m_spriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPlanktonFriend::shutdown()
 {
-	m_spriteBank->dump();		delete m_spriteBank;
-
 	CNpcThing::shutdown();
 }
 
@@ -68,8 +65,8 @@ void CNpcPlanktonFriend::render()
 	DVECTOR origRenderPos;
 	DVECTOR	offset = CLevel::getCameraPos();
 	int frame = FRM_PLANKTON_STATIC00;
-	int		spriteWidth = m_spriteBank->getFrameWidth( frame );
-	int		spriteHeight = m_spriteBank->getFrameHeight( frame );
+	int		spriteWidth = CGameScene::getSpriteBank()->getFrameWidth( frame );
+	int		spriteHeight = CGameScene::getSpriteBank()->getFrameHeight( frame );
 
 	renderPos.vx = Pos.vx - offset.vx - ( spriteWidth >> 1 );
 	renderPos.vy = Pos.vy - offset.vy - ( spriteHeight >> 1 );
@@ -84,7 +81,7 @@ void CNpcPlanktonFriend::render()
 	{
 		if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 		{
-			m_spriteBank->printFT4(frame,renderPos.vx,renderPos.vy,0,0,10);
+			CGameScene::getSpriteBank()->printFT4(frame,renderPos.vx,renderPos.vy,0,0,10);
 		}
 	}
 }

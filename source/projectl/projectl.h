@@ -42,6 +42,10 @@ public:
 		PROJECTILE_ATTACK = 0,
 		PROJECTILE_RETURN = 1,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=1,
+	};
 
 	void				init();
 	void				init( DVECTOR initPos, s16 initHeading );
@@ -57,20 +61,15 @@ public:
 	void				setLifeTime( PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
 	void				setHeading( s16 newHeading )							{m_heading = newHeading;}
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setOt( u8 newOt )										{m_ot=newOt;}
 	void				setGraphic( int frame );
 	void				setSpeed( u16 newSpeed )								{m_speed = newSpeed;}
-
-private:
-	class CLayerCollision	*m_layerCollision;
 
 protected:
 	DVECTOR				getScreenOffset();
 	bool				processTargetSeek( int _frames, DVECTOR targetPos );
 	void				collidedWith( CThing *_thisThing );
 
-	class SpriteBank							*m_spriteBank;
 	DVECTOR										m_initPos;
 	s16											m_heading;
 	s16											m_initHeading;
@@ -100,6 +99,10 @@ public:
 		PLAYER_PROJECTILE_FINITE_LIFE = 0,
 		PLAYER_PROJECTILE_INFINITE_LIFE = 1,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=1,
+	};
 
 	void				init();
 	void				init( DVECTOR initPos, s16 initHeading );
@@ -109,21 +112,18 @@ public:
 	virtual void		think(int _frames);
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
+
 	void				setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType );
 	PLAYER_PROJECTILE_MOVEMENT_TYPE		getMovementType();
 	void				setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType );
 	void				setPosition( DVECTOR newPos );
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setRGB( u32 new_RGB );
 
-private:
-	class CLayerCollision	*m_layerCollision;
 
 protected:
 	DVECTOR				getScreenOffset();
 	void				collidedWith( CThing *_thisThing );
 
-	class SpriteBank							*m_spriteBank;
 	DVECTOR										m_initPos;
 	s16											m_heading;
 	s32											m_lifetime;

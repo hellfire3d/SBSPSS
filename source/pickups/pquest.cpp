@@ -37,6 +37,7 @@
 #include "game\game.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -130,7 +131,7 @@ void	CQuestItemPickup::init()
 	}
 	ASSERT(m_gfxFrame!=-1);
 
-	fh=getSpriteBank()->getFrameHeader(m_gfxFrame);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(m_gfxFrame);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -145,7 +146,7 @@ DVECTOR	CQuestItemPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(m_gfxFrame);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(m_gfxFrame);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -209,7 +210,7 @@ void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(m_gfxFrame);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);

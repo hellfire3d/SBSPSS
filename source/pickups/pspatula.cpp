@@ -37,6 +37,7 @@
 #include "game\game.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -79,7 +80,7 @@ void	CSpatulaPickup::init()
 	m_glint=0;
 	m_glintRot=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__SPATULA);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SPATULA);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -94,7 +95,7 @@ DVECTOR	CSpatulaPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__SPATULA);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SPATULA);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -143,7 +144,7 @@ void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__SPATULA);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);
@@ -213,7 +214,7 @@ void	CBalloonAndSpatulaPickup::renderPickup(DVECTOR *_pos)
 	int			xo1,xo2;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__BALLOON);
 	fhspat=sprites->getFrameHeader(FRM__SPATULA);
 

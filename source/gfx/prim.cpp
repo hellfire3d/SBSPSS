@@ -70,7 +70,6 @@ void	PrimDisplay()
 /*****************************************************************************/
 void	FlushPrimPool()
 {
-	printf("%x %x\n",(int)CurrPrim,(int)PrimBuffer[PrimFlipFlag]);
 	BaseOtPtr=(sOT*)OtList[PrimFlipFlag];
 	GUIOtPtr=BaseOtPtr;
 	OtPtr=GUIOtPtr+MAX_OT_GUI;

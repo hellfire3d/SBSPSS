@@ -8,7 +8,6 @@
 #include "thing/thing.h"
 
 /*****************************************************************************/
-class SpriteBank;
 class CFX : public CFXThing
 {
 public:
@@ -47,6 +46,11 @@ public:
 			FX_TYPE_FLAMES,
 			FX_TYPE_EXPLODE,
 			FX_TYPE_DEBRIS,
+			FX_TYPE_MAX
+		};
+		enum
+		{ // For Dynamic ThingCache
+			MAX_SUBTYPE	=FX_TYPE_MAX,
 		};
 
 static	CFX			*Create(const FX_TYPE Type);
@@ -65,7 +69,6 @@ virtual	void		setDie()						{DieOut=true;}
 virtual	void		setLife(int L)					{Life=L;}
 
 protected:
-		SpriteBank	*m_spriteBank;
 		s32			OtPos;
 
 		u8			DieOut;

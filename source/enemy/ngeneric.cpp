@@ -144,18 +144,18 @@ bool CNpcEnemy::processGroundCollisionReverse( s32 *moveX, s32 *moveY )
 
 	// check for collision with ground
 
-	if ( m_layerCollision->Get( ( Pos.vx + *moveX ) >> 4, ( Pos.vy + *moveY ) >> 4 ) )
+	if ( CGameScene::getCollision()->Get( ( Pos.vx + *moveX ) >> 4, ( Pos.vy + *moveY ) >> 4 ) )
 	{
 		// destination point is below ground, check in individual directions
 
-		if ( m_layerCollision->Get( ( Pos.vx + *moveX ) >> 4, Pos.vy >> 4 ) )
+		if ( CGameScene::getCollision()->Get( ( Pos.vx + *moveX ) >> 4, Pos.vy >> 4 ) )
 		{
 			// X direction is blocked
 
 			xBlocked = true;
 		}
 
-		if ( m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + *moveY ) >> 4 ) )
+		if ( CGameScene::getCollision()->Get( Pos.vx >> 4, ( Pos.vy + *moveY ) >> 4 ) )
 		{
 			yBlocked = true;
 		}
@@ -325,7 +325,7 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 
 		// check for vertical movement
 
-		groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 		if ( groundHeight <= yMovement )
 		{
@@ -346,7 +346,7 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 
 		distX = distX / abs( distX );
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -356,7 +356,7 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 		{
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{
@@ -377,6 +377,5 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 
 bool CNpcEnemy::isCollisionWithGround()
 {
-	ASSERT(m_layerCollision);
-	return m_layerCollision->Get( Pos.vx >> 4, ( Pos.vy + 1 ) >> 4 ) ? 16:0;
+	return CGameScene::getCollision()->Get( Pos.vx >> 4, ( Pos.vy + 1 ) >> 4 ) ? 16:0;
 }

@@ -49,7 +49,7 @@ CLayerCollision::CLayerCollision(sLayerHdr *Hdr)
 		Map=(u8*)MakePtr(Hdr,sizeof(sLayerHdr));
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
-		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
+//		printf("COLLISION LAYER = %i %i\n",MapWidth,MapHeight);
 }
 
 /*****************************************************************************/

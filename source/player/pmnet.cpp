@@ -237,7 +237,7 @@ void	CPlayerModeNet::think()
 									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 									5*60);
-				projectile->setLayerCollision( m_player->getLayerCollision() );
+
 				projectile->updateCollisionArea();
 				projectile->setRGB( m_RGB );
 
@@ -282,7 +282,7 @@ void	CPlayerModeNet::think()
 	sFrameHdr	*fh;
 	char		buf[4];
 
-	sb=m_player->getSpriteBank();
+	sb=CGameScene::getSpriteBank();
 	fh=sb->getFrameHeader(FRM__NET);
 	if(m_player->getJellyFishAmmo())
 	{

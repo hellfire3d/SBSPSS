@@ -33,6 +33,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -74,7 +75,7 @@ void	CBaseHealthPickup::init()
 	CBasePickup::init();
 	m_sin=0;
 
-	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	fh=CGameScene::getSpriteBank()->getFrameHeader(getFrameNumber());
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -89,7 +90,7 @@ DVECTOR	CBaseHealthPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(getFrameNumber());
+	fh=CGameScene::getSpriteBank()->getFrameHeader(getFrameNumber());
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -132,7 +133,7 @@ void	CBaseHealthPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			angle;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(getFrameNumber());
 	angle=((msin(m_sin)*health_rotatescale)>>12)&4095;
 	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,OTPOS__PICKUP_POS);

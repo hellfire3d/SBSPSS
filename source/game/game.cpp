@@ -81,8 +81,10 @@ int			RenderZ=256;
 
 /*****************************************************************************/
 
-FontBank	*CGameScene::s_genericFont;
-MATRIX		CGameScene::CamMtx;
+FontBank		*CGameScene::s_genericFont;
+SpriteBank		*CGameScene::s_GlobalSpritebank;
+CLayerCollision	*CGameScene::s_GlobalCollision;
+MATRIX			CGameScene::CamMtx;
 
 /*****************************************************************************/
 CGameScene::ACTOR_TYPE CGameScene::actorType[40] =
@@ -330,7 +332,7 @@ void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 /*****************************************************************************/
 void	CGameScene::initLevel()
 {
-	printf("InitLevel\n");
+	SYSTEM_DBGMSG("InitLevel\n");
 	CThingManager::init();
 
 	CConversation::init();
@@ -342,7 +344,6 @@ void	CGameScene::initLevel()
 	createPlayer();
 	m_player->setRespawnPos(Level.getPlayerSpawnPos());
 	m_player->init();
-	m_player->setLayerCollision(Level.getCollisionLayer());
 	DVECTOR				mapSize=Level.getMapSize();
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);
@@ -351,7 +352,7 @@ void	CGameScene::initLevel()
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
 	CActorPool::SetUpCache();
-	printf("InitLevelDone\n");
+	SYSTEM_DBGMSG("InitLevelDone\n");
 }
 
 

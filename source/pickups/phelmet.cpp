@@ -29,6 +29,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -69,7 +70,7 @@ void	CHelmetPickup::init()
 
 	CBasePickup::init();
 
-	fh=getSpriteBank()->getFrameHeader(FRM__HELMET);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__HELMET);
 	setCollisionSize(fh->W,fh->H);
 }
 	
@@ -84,7 +85,7 @@ DVECTOR	CHelmetPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__HELMET);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__HELMET);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -115,7 +116,7 @@ void	CHelmetPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__HELMET);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);

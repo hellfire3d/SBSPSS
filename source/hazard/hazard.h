@@ -59,13 +59,16 @@ public:
 
 		NPC_HAZARD_TYPE_MAX,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=NPC_HAZARD_TYPE_MAX,
+	};
 
 	virtual void		init();
 	void				setGraphic( sThingHazard *ThisHazard );
 	void				shutdown();
 	void				think(int _frames);
 	virtual void		render();
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
@@ -97,12 +100,10 @@ protected:
 	NPC_HAZARD_UNIT_TYPE	m_type;
 	CNpcPath			m_npcPath;
 	//CActorGfx			*m_actorGfx;
-	//SpriteBank			*m_spriteBank;
 	DVECTOR				m_base;
 	s32					m_timer;
 	bool				m_timerActive;
 	bool				m_isActive;
-	class CLayerCollision	*m_layerCollision;
 	s32					m_extension;
 	bool				m_extendDir;
 	s32					m_heading;

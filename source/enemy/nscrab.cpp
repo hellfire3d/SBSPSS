@@ -38,7 +38,7 @@ void CNpcSpiderCrabEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
-	if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy - 8, 16 ) <= 0 )
+	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy - 8, 16 ) <= 0 )
 	{
 		// starting off below ground, jump initially
 
@@ -169,7 +169,7 @@ void CNpcSpiderCrabEnemy::processClose( int _frames )
 
 	// check for collision with ground
 
-	if ( m_layerCollision->getHeightFromGround( newPos.vx, newPos.vy ) < 0 )
+	if ( CGameScene::getCollision()->getHeightFromGround( newPos.vx, newPos.vy ) < 0 )
 	{
 		// abort jump
 
@@ -266,7 +266,7 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 	{
 		// check for collision on the way back down
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy ) < 0 )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy ) < 0 )
 		{
 			collision = true;
 		}
@@ -325,8 +325,8 @@ void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	testPos1.vy += m_layerCollision->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += m_layerCollision->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	testPos1.vy += CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+	testPos2.vy += CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;

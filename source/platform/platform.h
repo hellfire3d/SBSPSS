@@ -88,6 +88,10 @@ public:
 		NPC_CLAM_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=NPC_PLATFORM_TYPE_MAX,
+	};
 
 	void				init();
 	void				init( DVECTOR initPos );
@@ -99,7 +103,6 @@ public:
 	virtual u8			canDrop()												{return true;}
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	virtual u8			checkCollisionDelta( CThing *_thisThing, int threshold, CRECT collisionArea );
 	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
@@ -179,8 +182,6 @@ protected:
 	static s32			playerXDistSqr;
 	static s32			playerYDistSqr;
 
-	class CLayerCollision	*m_layerCollision;
-
 	// internal variables
 
 	NPC_PLATFORM_UNIT_TYPE		m_type;
@@ -223,9 +224,12 @@ protected:
 
 
 protected:
-	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
 	virtual void	calculateNonRotatedCollisionData();
 	virtual void	calculateBoundingBoxSize();
+
+	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
+	s16				getCollisionAngle()							{return m_collisionAngle;}
+	s16				m_collisionAngle;
 
 
 };

@@ -27,7 +27,6 @@ public:
 	virtual void		shutdown();
 protected:
 	virtual void		startConderversation();
-	SpriteBank		*m_spriteBank;
 };
 
 #endif

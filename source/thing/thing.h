@@ -84,10 +84,18 @@ private:
 	static CThing			*s_CollisionLists[];
 	static sBBox			m_RenderBBox;
 	static sBBox			m_ThinkBBox;
+public:
+// FreeList Stuff
+	static void		initFreeList();
+	static void		resetFreeList();
+	static void		shutdownFreeList();
+	static	CThing	*GetThing(int Type,int SubType);
+	static	void	DeleteThing(CThing *Thing);
 
-//	static CThing			*s_FreeList[];
-
+private:
+	static CThing			**s_FreeList[];
 };
+
 
 /*----------------------------------------------------------------------*/
 // Base thing class
@@ -110,16 +118,29 @@ public:
 		MAX_TYPE,
 	};
 //	TYPE;
-				CThing()	{m_isShuttingDown=false;}
+				CThing()	
+				{
+					initDef();
+					m_SubType=1234;
+				}
 virtual			~CThing()	{;}
 
+virtual	void	initDef()
+				{
+					m_isShuttingDown=false;
+					NextFreeThing=0;
+				}
+
 virtual	TYPE	getThingType()=0;
+
+virtual	void	setThingSubType(int	T)	{m_SubType=T;}
+virtual	int		getThingSubType()		{return(m_SubType);}
 
 virtual	void	init();
 virtual	void	shutdown();
 virtual	void	think(int _frames);
 virtual	void	render();
-		void	setToShutdown()											{m_isShuttingDown = true;}
+		void	setToShutdown(bool f=true)								{m_isShuttingDown = f;}
 		u8		isSetToShutdown()										{return( m_isShuttingDown);}
 virtual int		dontKillDuringLevelRespawn()							{return false;}
 
@@ -167,8 +188,8 @@ virtual	bool			alwaysThink()								{return(false);}
 		DVECTOR const	&getCollisionCentreOffset()					{return m_collisionCentreOffset;}
 		int				getCollisionRadius()						{return m_collisionRadius;}
 virtual	CRECT const		&getCollisionArea()							{return m_collisionArea;}
-		s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
-		DVECTOR const	&getNewCollidedPos()							{return m_newCollidedPos;}		// pkg - to be removed?
+//!Dave!		s16				getCollisionAngle()							{return m_collisionAngle;}		// pkg - move to CNpcPlatform?
+//!Dave!		DVECTOR const	&getNewCollidedPos()							{return m_newCollidedPos;}		// pkg - to be removed?
 		DVECTOR const	&getCollisionSize()							{return m_collisionSize;}
 
 virtual int				canCollide()								{return true;}
@@ -179,8 +200,7 @@ virtual void			collidedWith(CThing *_thisThing)			{;}
 virtual void			setHasPlatformCollided( bool newVal )		{;}
 virtual bool			getHasPlatformCollided()					{return false;}
 virtual s32				getNewYPos( CThing *_thisThing );
-		void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
-
+//!Dave!		void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}	// pkg - to be removed?
 
 public:
 // Thing states
@@ -193,24 +213,26 @@ protected:
 		bool			m_renderFlag,m_thinkFlag;
 		DVECTOR			m_RenderPos;
 		bool			m_isShuttingDown;
+		int				m_SubType;
 
 protected:
 virtual void			setCollisionSize(int _w,int _h);
 virtual void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}
 virtual void			setCollisionCentreOffset(DVECTOR xy)		{m_collisionCentreOffset=xy;}
-virtual void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}	// pkg - move to CNpcPlatform?
+//!Dave!virtual void			setCollisionAngle(int newAngle)				{m_collisionAngle = newAngle;}	// pkg - move to CNpcPlatform?
 private:
 		DVECTOR			m_collisionSize;
 		DVECTOR			m_collisionCentreOffset;
 		int				m_collisionRadius;
 		CRECT			m_collisionArea;
 		DVECTOR			m_collisionCentre;
-		s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
-		DVECTOR			m_newCollidedPos;															// pkg - to be removed?
+//!Dave!		s16				m_collisionAngle;															// pkg - move to CNpcPlatform?
+//!Dave!		DVECTOR			m_newCollidedPos;															// pkg - to be removed?
 
 // Free List Stuff
-public:	
-//virtual	int				getMaxType()=0;
+public:
+		CThing			*NextFreeThing;
+
 };
 
 /*---------------------------------------------------------------------- */
@@ -224,6 +246,10 @@ virtual TYPE		getThingType()					{return TYPE_PICKUP;}
 class CPlayerThing : public CThing
 {
 public:
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=1,
+	};
 virtual	TYPE		getThingType()					{return TYPE_PLAYER;}
 virtual	bool		alwaysThink()					{return(true);}
 
@@ -262,9 +288,15 @@ virtual TYPE		getThingType()					{return TYPE_PLATFORM;}
 class CTriggerThing : public CThing
 {
 public:
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=1,
+	};
+
 virtual TYPE		getThingType()					{return TYPE_TRIGGER;}
 virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);	// Wonder if this might be better in CThing? (pkg)
 virtual void		setTargetBox(int _x,int _y,int _w,int _h);			// Wonder if this might be better in CThing? (pkg)
+
 protected:
 		int			m_boxX1,m_boxY1,m_boxX2,m_boxY2;
 };

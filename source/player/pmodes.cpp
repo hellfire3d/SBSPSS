@@ -70,7 +70,7 @@
 #include "player\psspring.h"
 #endif
 
-
+#include	"game/game.h"
 /*	Std Lib
 	------- */
 
@@ -297,7 +297,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 		playerHasHitGround();
 		pos=m_player->getPlayerPos();
 		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
-		   (m_player->getLayerCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER&&
+		   (CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER&&
 		   !m_player->getIsHealthSoFullThatIDontNeedToSoakUp())
 		{
 			// Hit water - Go into soakup mode
@@ -474,11 +474,10 @@ int csize=5;
 int cheight=15;
 int CPlayerModeBase::isOnEdge()
 {
-	CLayerCollision	*collision;
+	CLayerCollision	*collision=CGameScene::getCollision();
 	DVECTOR			pos;
 	int	ret;
 
-	collision=m_player->getLayerCollision();
 	pos=m_player->getPlayerPos();
 	ret=0;
 	if(m_player->getHeightFromGround(pos.vx-csize,pos.vy,cheight+1)>cheight)

@@ -32,7 +32,7 @@ void CNpcGaryFriend::think( int _frames )
 
 	// check vertical collision
 
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 	if ( groundHeight <= 0 )
 	{
@@ -40,7 +40,7 @@ void CNpcGaryFriend::think( int _frames )
 
 		// check horizontal collision
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// reverse direction
 
@@ -65,7 +65,7 @@ void CNpcGaryFriend::think( int _frames )
 
 			Pos.vy += groundHeight;
 
-			if ( m_layerCollision->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
+			if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( multiplier * _frames ), Pos.vy ) < -maxHeight )
 			{
 				// reverse direction
 

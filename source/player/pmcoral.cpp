@@ -283,7 +283,7 @@ void	CPlayerModeCoralBlower::think()
 									CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 									CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 									5*60);
-				projectile->setLayerCollision( m_player->getLayerCollision() );
+
 
 				//CActorGfx *projectileGfx;
 				//projectileGfx=CActorPool::GetActor((FileEquate)ACTORS_SHELL_SBK);
@@ -354,7 +354,7 @@ void	CPlayerModeCoralBlower::renderModeUi()
 	sFrameHdr	*fh;
 //	char		buf[4];
 
-	sb=m_player->getSpriteBank();
+	sb=CGameScene::getSpriteBank();
 	fh=sb->getFrameHeader(FRM__BLOWER);
 	if(m_blowerState==BLOWER_STATE__FULL||m_blowerState==BLOWER_STATE__AIMING)
 	{

@@ -181,6 +181,7 @@ void SpriteBank::load( FileEquate _file )
 	}
 	else
 	{
+//		ASSERT(!"Sprite Bank Already Loaded");
 		SpriteBankInstance *sbiPtr=s_bankList;
 		do
 		{

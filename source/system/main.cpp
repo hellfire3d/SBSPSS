@@ -113,6 +113,9 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	SetDispMask(1);
 
+	GenericSpriteBank.load(SPRITES_SPRITES_SPR);
+	CGameScene::setSpriteBank(&GenericSpriteBank);
+
 	GameState::initialise();
 	CSoundMediator::initialise();
 	CSoundMediator::setSfxBank(CSoundMediator::SFX_INGAME);
@@ -122,8 +125,6 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	CBubicleFactory::init();
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
-	GenericSpriteBank.load(SPRITES_SPRITES_SPR);
-
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();

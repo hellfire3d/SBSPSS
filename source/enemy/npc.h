@@ -87,6 +87,10 @@ public:
 		NPC_BUTTERFLY_BACKGROUND,
 		NPC_UNIT_TYPE_MAX,
 	};
+	enum
+	{ // For Dynamic ThingCache
+		MAX_SUBTYPE	=NPC_UNIT_TYPE_MAX,
+	};
 
 	void				init();
 	virtual void		postInit();
@@ -95,8 +99,7 @@ public:
 	virtual void		think(int _frames);
 	virtual void		render();
 	virtual void		processEvent( GAME_EVENT evt, CThing *sourceThing );
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
-	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
+	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType; setThingSubType(newType);}
 	NPC_UNIT_TYPE		getType()												{return( m_type );}
 	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
@@ -119,9 +122,6 @@ public:
 
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
-
-protected:
-	class CLayerCollision	*m_layerCollision;
 
 protected:
 	// NPC data structure definitions //
@@ -306,7 +306,7 @@ protected:
 	s32				m_frame;
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
-	SpriteBank		*m_spriteBank;
+
 	POLY_FT4		*SprFrame;
 
 	virtual void		collidedWith(CThing *_thisThing);

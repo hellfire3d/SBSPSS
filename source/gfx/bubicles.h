@@ -162,7 +162,6 @@ public:
 	static CBubicleEmitter	*spawnEmitter(BubicleEmitterData *_init);
 	static CBubicle			*spawnParticle(BubicleEmitterData *_init);
 	static sFrameHdr		*getBubbleFrameHeader();
-	static SpriteBank		*getSprites()							{return s_sprites;}
 
 	static void				setMapOffset(DVECTOR *_offset);
 	static const DVECTOR	*getMapOffset();
@@ -180,7 +179,6 @@ private:
 	static int				s_initialised;
 	static CBubicleEmitter	*s_emitters;
 	static CBubicle			*s_bubicles;
-	static SpriteBank		*s_sprites;
 
 	static int				s_frameTypeCounter;
 	static const int		s_frameTabSize;

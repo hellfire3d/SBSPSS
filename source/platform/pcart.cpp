@@ -67,7 +67,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	s32 checkDist = yMovement + 50;
 
-	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
 
 	if ( groundHeight < checkDist )
 	{
@@ -116,7 +116,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 	s32 yDiff;
 
-	yDiff = m_layerCollision->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
+	yDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, sensorDist + 1 );
 
 	if ( yDiff <= sensorDist )
 	{
@@ -125,7 +125,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 		testPos1.vy += yDiff;
 	}
 
-	yDiff = m_layerCollision->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
+	yDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, sensorDist + 1 );
 
 	if ( yDiff <= sensorDist )
 	{

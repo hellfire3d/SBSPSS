@@ -335,7 +335,6 @@ void CNpcMotherJellyfishEnemy::spawnJellyfish( int _frames )
 			ASSERT(enemy);
 			enemy->setType( CNpcEnemy::NPC_PROJECTILE_JELLYFISH );
 			enemy->init();
-			enemy->setLayerCollision( m_layerCollision );
 			enemy->setStartPos( Pos.vx >> 4, ( Pos.vy + 20 ) >> 4 );
 
 			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();

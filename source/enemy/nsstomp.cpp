@@ -88,7 +88,7 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 		{
 			yMovement = m_data[m_type].speed * _frames;
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight < yMovement )
 			{

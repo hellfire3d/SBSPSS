@@ -52,7 +52,6 @@ void CNpcEnemyGenerator::think(int _frames)
 			ASSERT(enemy);
 			enemy->setType( CNpcEnemy::NPC_SPIDER_CRAB );
 			enemy->init();
-			enemy->setLayerCollision( m_layerCollision );
 			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
 
 			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();

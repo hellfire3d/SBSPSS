@@ -33,6 +33,7 @@
 #include "gfx\font.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -152,7 +153,7 @@ void	CPlayerModeJellyLauncher::renderModeUi()
 	FontBank	*fb;
 	char		buf[4];
 
-	sb=m_player->getSpriteBank();
+	sb=CGameScene::getSpriteBank();
 	fh=sb->getFrameHeader(FRM__LAUNCHER);
 	switch(m_firingState)
 	{
@@ -301,7 +302,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 							 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 							CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 							5*60);
-			projectile->setLayerCollision( m_player->getLayerCollision() );
+
 			projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
 			fireHeading+=512;
 			m_player->useOneJelly();
@@ -317,7 +318,7 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 						 CPlayerProjectile::PLAYER_PROJECTILE_DUMBFIRE,
 						 CPlayerProjectile::PLAYER_PROJECTILE_FINITE_LIFE,
 						 5*60);
-		projectile->setLayerCollision( m_player->getLayerCollision() );
+
 		projectile->setRGB( 255 + ( 128 << 8 ) + ( 255 << 16 ) );
 		m_player->useOneJelly();
 	}

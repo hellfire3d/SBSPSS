@@ -204,7 +204,7 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 				}
 				else
 				{
-					groundHeight = m_layerCollision->getHeightFromGround( newX, Pos.vy, yMovement + 16 );
+					groundHeight = CGameScene::getCollision()->getHeightFromGround( newX, Pos.vy, yMovement + 16 );
 
 					if ( groundHeight <= yMovement )
 					{
@@ -247,8 +247,8 @@ void CNpcHermitCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	testPos1.vy += m_layerCollision->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += m_layerCollision->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	testPos1.vy += CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+	testPos2.vy += CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;

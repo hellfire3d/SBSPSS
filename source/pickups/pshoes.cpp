@@ -33,6 +33,7 @@
 #include "gfx\otpos.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -74,7 +75,7 @@ void	CShoesPickup::init()
 	CBaseRespawningPickup::init();
 	m_sin=0;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__SHOE);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SHOE);
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -89,7 +90,7 @@ DVECTOR	CShoesPickup::getSizeForPlacement()
 	DVECTOR		size;
 	sFrameHdr	*fh;
 
-	fh=getSpriteBank()->getFrameHeader(FRM__SHOE);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SHOE);
 	size.vx=fh->W;
 	size.vy=fh->H;
 	return size;
@@ -144,7 +145,7 @@ void	CShoesPickup::renderPickup(DVECTOR *_pos)
 	sFrameHdr	*fh;
 	int			x,y,yoff;
 
-	sprites=getSpriteBank();
+	sprites=CGameScene::getSpriteBank();
 	fh=sprites->getFrameHeader(FRM__SHOE);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2);

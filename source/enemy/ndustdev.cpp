@@ -69,7 +69,7 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 		{
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{
@@ -91,7 +91,7 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 
 		distX = distX / abs( distX );
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -101,7 +101,7 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 		{
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{
@@ -135,8 +135,8 @@ void CNpcDustDevilEnemy::processMovementModifier( int _frames, s32 distX, s32 di
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	testPos1.vy += m_layerCollision->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += m_layerCollision->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	testPos1.vy += CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+	testPos2.vy += CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;

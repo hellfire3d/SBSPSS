@@ -25,6 +25,7 @@
 #include "gfx\font.h"
 #endif
 
+#include	"game/game.h"
 
 /*	Std Lib
 	------- */
@@ -172,7 +173,7 @@ void	CPlayerModeBubbleMixture::renderModeUi()
 	char		buf[4];
 	FontBank	*fb;
 
-	sb=m_player->getSpriteBank();
+	sb=CGameScene::getSpriteBank();
 	fh=sb->getFrameHeader(FRM__BUBBLEWAND);
 	sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 

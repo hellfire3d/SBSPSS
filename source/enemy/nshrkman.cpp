@@ -183,7 +183,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 			direction = 1;
 		}
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( _frames * m_velocity * direction ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( _frames * m_velocity * direction ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, abort
 
@@ -197,7 +197,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		{
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{

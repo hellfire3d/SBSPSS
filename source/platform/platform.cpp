@@ -169,9 +169,11 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 {
 	CNpcPlatform *platform;
 
-	NPC_PLATFORM_UNIT_TYPE platformType = getTypeFromMapEdit( ThisPlatform->Type );
+	NPC_PLATFORM_UNIT_TYPE Type = getTypeFromMapEdit( ThisPlatform->Type );
 
-	switch( platformType )
+	platform = (CNpcPlatform*)CThingManager::GetThing(CThing::TYPE_PLATFORM,Type);
+	if (!platform)
+	switch( Type )
 	{
 		case NPC_LINEAR_PLATFORM:
 		{
@@ -271,7 +273,7 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			dualPlatformMaster->setOtherPlatform( dualPlatformSlave );
 			dualPlatformSlave->setOtherPlatform( dualPlatformMaster );
 
-			dualPlatformSlave->setType( platformType );
+			dualPlatformSlave->setType( Type );
 			dualPlatformSlave->setGraphic( ThisPlatform );
 			dualPlatformSlave->setTiltable( false );
 
@@ -383,7 +385,8 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 	}
 
 	ASSERT(platform);
-	platform->setType( platformType );
+	platform->setType( Type );
+	platform->setThingSubType( Type );
 	platform->setGraphic( ThisPlatform );
 
 	platform->setWaypoints( ThisPlatform );
@@ -470,8 +473,6 @@ void CNpcPlatform::init()
 	m_tiltVelocity = 0;
 	m_tiltable = false;
 	m_initRotation = 0;
-
-	m_layerCollision = NULL;
 
 	m_lifetime = 0;
 	m_lifetimeType = m_data[m_type].lifetimeType;
@@ -664,7 +665,8 @@ void CNpcPlatform::think(int _frames)
 
 void CNpcPlatform::setCollisionAngle(int newAngle)
 {
-	CPlatformThing::setCollisionAngle(newAngle);
+	m_collisionAngle=newAngle;
+//	CPlatformThing::setCollisionAngle(newAngle);
 	calculateBoundingBoxSize();
 	
 	CPlayer	*player;

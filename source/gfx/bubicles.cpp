@@ -38,7 +38,7 @@
 #include "system\gstate.h"
 #endif
 
-
+#include	"game\game.h"
 /*	Std Lib
 	------- */
 
@@ -69,8 +69,6 @@
 int				CBubicleFactory::s_initialised=false;
 CBubicleEmitter	*CBubicleFactory::s_emitters;
 CBubicle		*CBubicleFactory::s_bubicles;
-
-SpriteBank		*CBubicleFactory::s_sprites;
 
 int			CBubicleFactory::s_frameTypeCounter=0;
 const int	CBubicleFactory::s_frameTabSize=8;
@@ -365,7 +363,7 @@ void CBubicle::render()
 
 	x+=(msin(m_data.m_theta)*(m_data.m_wobbleWidth>>ACCURACY_SHIFT))>>12;
 
-	ft4=CBubicleFactory::getSprites()->printFT4(m_fhBub,0,0,0,0,m_data.m_ot);
+	ft4=CGameScene::getSpriteBank()->printFT4(m_fhBub,0,0,0,0,m_data.m_ot);
 	setXYWH(ft4,x,y,w,h);
 	setSemiTrans(ft4,1);
 	setRGB0(ft4,m_data.m_colour.m_r,m_data.m_colour.m_g,m_data.m_colour.m_b);
@@ -386,13 +384,10 @@ void CBubicleFactory::init()
 	int				i;
 	CBubicleEmitter	*emt;
 	CBubicle		*bub;
-
-	s_sprites=new ("Bubble Sprites") SpriteBank();
-	s_sprites->load(SPRITES_SPRITES_SPR);
-
+	SpriteBank		*SprBank=CGameScene::getSpriteBank();
 	for(i=0;i<s_frameTabSize;i++)
 	{
-		s_frameTab[i]=s_sprites->getFrameHeader(s_frameTabSrc[i]);
+		s_frameTab[i]=SprBank->getFrameHeader(s_frameTabSrc[i]);
 	}
 
 	emt=s_emitters=(CBubicleEmitter*)MemAlloc(sizeof(CBubicleEmitter)*NUM_EMITTERS,"BubicleEmitters");
@@ -421,7 +416,6 @@ void CBubicleFactory::shutdown()
 	
 	MemFree(s_emitters);
 	MemFree(s_bubicles);
-	s_sprites->dump();			delete 	s_sprites;
 
 	s_initialised=false;
 }

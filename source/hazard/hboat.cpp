@@ -64,7 +64,7 @@ void CNpcBoatHazard::processMovement( int _frames )
 
 		// check for vertical movement
 
-		groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 		if ( groundHeight <= yMovement )
 		{
@@ -94,7 +94,7 @@ void CNpcBoatHazard::processMovement( int _frames )
 			m_reversed = true;
 		}
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy ) < -maxHeight )
+		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + ( distX * 3 * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -104,7 +104,7 @@ void CNpcBoatHazard::processMovement( int _frames )
 		{
 			// check for vertical movement
 
-			groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
 
 			if ( groundHeight <= yMovement )
 			{
