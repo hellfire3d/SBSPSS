@@ -902,10 +902,17 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			case DAMAGE__NONE:
 				break;
 
+			case DAMAGE__ELECTROCUTION:
+			case DAMAGE__SHOCK_ENEMY:
+				if(m_squeakyBootsTimer)
+				{
+					ouchThatHurt=false;
+				}
+				break;
+
 			case DAMAGE__FALL:
 			case DAMAGE__LAVA:
 			case DAMAGE__HIT_ENEMY:
-			case DAMAGE__SHOCK_ENEMY:
 			case DAMAGE__GAS_ENEMY:
 			case DAMAGE__POISON_ENEMY:
 			case DAMAGE__SWALLOW_ENEMY:
@@ -913,13 +920,6 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 			case DAMAGE__SQUASH_ENEMY:
 			case DAMAGE__BURN_ENEMY:
 			case DAMAGE__BITE_ENEMY:
-				break;
-
-			case DAMAGE__ELECTROCUTION:
-				if(m_squeakyBootsTimer)
-				{
-					ouchThatHurt=false;
-				}
 				break;
 		}
 

@@ -268,6 +268,7 @@ public:
 	void			giveGlasses()				{m_glassesFlag=true;}
 	int				isWearingGlasses()			{return m_glassesFlag;}
 	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
+	int				isWearingBoots()			{return m_squeakyBootsTimer;}
 	void			giveInvinvibilityRing()		{m_invinvibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
 
