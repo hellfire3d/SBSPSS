@@ -52,7 +52,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
 
-	colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
+	colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 	if(colHeight)
 	{
 		// Inside a collision block.. find the nearest ground above this point
@@ -66,7 +66,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return -_maxHeight;
 			}
-			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
+			colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround<-_maxHeight)distanceFromGround=-_maxHeight;
@@ -85,7 +85,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 			{
 				return _maxHeight;
 			}
-			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
+			colHeight=m_collisionTable[((Map[mapX+mapY]&COLLISION_MASK)*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
 		if(distanceFromGround>_maxHeight)distanceFromGround=_maxHeight;
@@ -128,7 +128,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 			coll=&Map[mapx+(mapy*MapWidth)];
 			for(x=-xoff;x<(33*16)-xoff;x+=16)
 			{
-				switch(*coll)
+				switch((*coll)&COLLISION_MASK)
 				{
 					case 0:
 						break;

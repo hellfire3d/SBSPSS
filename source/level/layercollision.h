@@ -22,7 +22,7 @@ virtual	~CLayerCollision();
 
 virtual	void			shutdown();
 
-		u8				Get(int X,int Y)	{return(Map[X+(Y*MapWidth)]);}
+		u8				Get(int X,int Y)	{return(Map[X+(Y*MapWidth)]&COLLISION_MASK);}
 		int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
 
 #ifdef __SHOW_COLLISION__
