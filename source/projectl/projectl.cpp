@@ -400,6 +400,8 @@ void CPlayerProjectile::init()
 	m_lifetimeType = PLAYER_PROJECTILE_FINITE_LIFE;
 	m_turnSpeed = 256;
 	m_extension = 0;
+	m_frame = 0;
+	m_reversed = 0;
 }
 
 void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
@@ -408,6 +410,11 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
 
 	m_heading = initHeading;
 	m_initPos = Pos = initPos;
+
+	if ( m_heading == 2048 )
+	{
+		m_reversed = 1;
+	}
 }
 
 void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType )
@@ -455,6 +462,13 @@ void CPlayerProjectile::setLifeTime( PLAYER_PROJECTILE_LIFETIME_TYPE lifeType )
 void CPlayerProjectile::think(int _frames)
 {
 	CPlayerProjectileThing::think( _frames );
+
+	m_frame += _frames;
+
+	if ( m_frame > 5 )
+	{
+		m_frame -= 5;
+	}
 
 	switch( m_movementType )
 	{
@@ -509,7 +523,9 @@ void CPlayerProjectile::render()
 		return;
 	}
 
-	m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
+	//m_spriteBank->printFT4(FRM_BARNACLEBOY,x,y,0,0,0);
+	SprFrame = m_spriteBank->printFT4(m_frame,x,y,m_reversed,0,10);
+	setRGB0( SprFrame, 255, 128, 255 );
 }
 
 DVECTOR CPlayerProjectile::getScreenOffset()

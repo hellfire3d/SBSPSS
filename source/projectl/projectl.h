@@ -122,6 +122,9 @@ protected:
 	PLAYER_PROJECTILE_MOVEMENT_TYPE				m_movementType;
 	PLAYER_PROJECTILE_LIFETIME_TYPE				m_lifetimeType;
 	u16											m_turnSpeed;
+	int											m_frame;
+	POLY_FT4									*SprFrame;
+	u8											m_reversed;
 };
 
 
