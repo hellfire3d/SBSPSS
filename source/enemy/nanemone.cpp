@@ -249,6 +249,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 				CProjectile *projectile;
 				projectile = CProjectile::Create();
 				projectile->init( projPos, m_heading );
+				projectile->setSpeed( 4 );
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_timerTimer = GameState::getOneSecondInFrames();
@@ -470,7 +471,7 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			projectile = CProjectile::Create();
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_DUMBFIRE, CProjectile::PROJECTILE_FINITE_LIFE );
 			projectile->setState( CProjectile::PROJECTILE_ATTACK );
-			projectile->setSpeed( 5 );
+			projectile->setSpeed( 4 );
 		}
 
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
