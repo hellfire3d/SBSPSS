@@ -1220,10 +1220,10 @@ void CPlayer::respawn()
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
 	POLY_FT4	*ft4;
-	int			flash;
+	int			trans;
 	int			addon;
 
-	flash=m_invincibleFrameCount&2==2;
+	trans=m_invincibleFrameCount||m_invincibilityRingTimer;
 
 	// Render an addon?
 	addon=s_addonNumbers[m_currentMode];
@@ -1240,7 +1240,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				_animFrame=0;
 			}
 			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
-			setSemiTrans(ft4,flash);
+			setSemiTrans(ft4,trans);
 		}
 	}
 
@@ -1257,13 +1257,13 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				_animFrame=0;
 			}
 			ft4=addonGfx->Render(*_pos,addonAnimFrame,_animFrame,m_facing==FACING_RIGHT?0:1);
-			setSemiTrans(ft4,flash);
+			setSemiTrans(ft4,trans);
 		}
 	}
 
 	// Render SB
 	ft4=m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
-	setSemiTrans(ft4,flash);
+	setSemiTrans(ft4,trans);
 }
 
 
