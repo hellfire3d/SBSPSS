@@ -6,7 +6,7 @@
 #include	data/scripts/defs/trans.scr
 
 
-_setText(CHAR_MERMAIDMAN,STR__INGAME__FMA_C4_MM_BB0);
+_setText(CHAR_MERMAIDMAN,STR__INGAME__FMA_C4_MM_GASP);
 _setResponseOptions(QUESTION_OK);
 do
 {
@@ -14,7 +14,7 @@ do
 }
 while(_getResponse()==ANSWER_NONE);
 
-_setText(CHAR_BARNACLEBOY,STR__INGAME__FMA_C4_MM_BB0);
+_setText(CHAR_BARNACLEBOY,STR__INGAME__FMA_C4_BB_GASP);
 _setResponseOptions(QUESTION_OK);
 do
 {

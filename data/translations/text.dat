@@ -157,7 +157,9 @@ eng= ....sea-nut butter.... ....tomatoes.... ....jelly.....
 eng=Like a calculator, you can count on it!
 
 ; C2 FMA
-[STR__INGAME__FMA_C2_MM_BB0]
+[STR__INGAME__FMA_C2_MM_ZZZ]
+eng=zzzzzzzzzz
+[STR__INGAME__FMA_C2_BB_ZZZ]
 eng=zzzzzzzzzz
 [STR__INGAME__FMA_C2_SB0]
 eng=I知 ready. I知 ready. I知 ready. Oops!
@@ -181,7 +183,9 @@ eng=By the power of Neptune, and the use of Planktons Time Machine I shall go th
 ; C4 FMA
 [STR__INGAME__FMA_C4_SB0]
 eng=Surprise! I知 back!
-[STR__INGAME__FMA_C4_MM_BB0]
+[STR__INGAME__FMA_C4_MM_GASP]
+eng=Gasp!
+[STR__INGAME__FMA_C4_BB_GASP]
 eng=Gasp!
 [STR__INGAME__FMA_C4_SB1]
 eng=Look what I have got for you!
