@@ -45,6 +45,8 @@ public:
 		void			UpdateView(float XOfs,float YOfs,float ZOfs);
 		void			SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
 
+		Vec				&GetMapPos()	{return(MapPos);}
+
 // Layers
 		void			LayerSetActive(int Layer);
 		int				LayerGetActive();

@@ -70,10 +70,19 @@ CLayer::~CLayer()
 /*****************************************************************************/
 void	CLayer::Render(Vec &MapPos,BOOL Is3d)
 {
+
+/*
 	if (Is3d && CanRender3d())
 		Render3d(MapPos);
 		else
 		Render2d(MapPos);
+*/
+Vec		ZeroPos(0,0,0);
+	if (Is3d && CanRender3d())
+		Render3d(ZeroPos);
+		else
+		Render2d(ZeroPos);
+
 }
 
 /*****************************************************************************/
@@ -102,24 +111,16 @@ return;
 float	asd=0;
 void	CLayer::Render3d(Vec &MapPos)
 {
-float	ZOfs=GetLayerZPos();
 float	XYDiv=GetLayerZPosDiv();
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z-ZOfs);
+		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z);
 		glRotatef(asd,0,1,0);
 		asd+=0.5;
-/*
-		glBegin(GL_QUADS);
-		SetTestColor();
-			BuildGLBox(-1,LayerWidth+1,-1,0,0,0+1);						// Bottom
-			BuildGLBox(-1,LayerWidth+1,LayerHeight+1,LayerHeight,0,0+1);	// Top
-			BuildGLBox(-1,0,LayerHeight,0,0,0+1);							// Left
-			BuildGLBox(LayerWidth,LayerWidth+1,LayerHeight,0,0,0+1);		// Right
-		glEnd();
-*/
+
 		glCallList(TestTile);
+
 }
 
 

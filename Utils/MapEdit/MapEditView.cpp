@@ -69,6 +69,7 @@ void CMapEditView::OnCreateGL()
 		glClearDepth(1.0f);         // Depth Buffer Setup
 		glEnable(GL_DEPTH_TEST);       // Enables Depth Testing
 		glDepthFunc(GL_LEQUAL);        // The Type Of Depth Testing To Do
+//		glDepthRange(-100000,+100000);
 		glEnable(GL_LIGHT0);        // Quick And Dirty Lighting (Assumes Light0 Is SetUp)
 		glEnable(GL_LIGHTING);        // Enable Lighting
 		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
@@ -78,6 +79,27 @@ void CMapEditView::OnCreateGL()
 
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void CMapEditView::OnSizeGL(int cx, int cy)
+{
+// set correspondence between window and OGL viewport
+		glViewport(0,0,cx,cy);
+
+}
+
+void	CMapEditView::UpdateCamera()
+{
+//Vec	&CamPos=Core
+// update the camera
+ 		glPushMatrix();
+			glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				gluPerspective(40.0,m_dAspectRatio,0.1f, 10.0f);
+				glTranslatef(0.0f,0.0f,-4.f);
+			glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+
+}
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnDrawGL()
 {

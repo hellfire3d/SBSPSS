@@ -21,6 +21,9 @@ public:
 	CMapEditDoc* GetDocument();
 	void		OnCreateGL();
 	void		OnDrawGL();
+	void		OnSizeGL(int cx, int cy);
+	void		UpdateCamera();
+
 // Operations
 public:
 

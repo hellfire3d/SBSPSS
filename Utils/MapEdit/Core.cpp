@@ -130,8 +130,8 @@ float	YOfs=0;
 			RECT	ThisRect;
 
 			ParentWindow->GetWindowRect(&ThisRect);
-			XS=MapPos.z*Layers[ActiveLayer]->GetLayerZPos();
-			YS=MapPos.z*Layers[ActiveLayer]->GetLayerZPos();
+			XS=MapPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			YS=MapPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	

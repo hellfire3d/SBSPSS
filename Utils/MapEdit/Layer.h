@@ -36,7 +36,6 @@ virtual	void			Render2d(Vec &MapPos);
 virtual	void			Render3d(Vec &MapPos);
 
 virtual	float			GetLayerZPosDiv()=0;
-virtual	float			GetLayerZPos()=0;
 virtual	BOOL			CanRender3d()=0;
 virtual	void			SetTestColor()=0;
 
