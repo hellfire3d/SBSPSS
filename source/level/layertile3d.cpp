@@ -57,6 +57,7 @@ int		Size=Width*Height;
 			}
 		}
 		UpdateWholeMap();		
+		CreateRenderFlagTable();
 
 }
 
@@ -66,8 +67,44 @@ void	CLayerTile3d::shutdown()
 }
 
 /*****************************************************************************/
+void	CLayerTile3d::CreateRenderFlagTable()
+{
+s16		*Ptr;
+
+		RenderFlagTable=(s16*) MemAlloc(SCREEN_TILE_WIDTH*SCREEN_TILE_HEIGHT*sizeof(s32),"RenderFlagTable");
+		Ptr=RenderFlagTable;
+
+		for (int Y=0; Y<SCREEN_TILE_HEIGHT; Y++)
+		{
+			for (int X=0; X<SCREEN_TILE_WIDTH; X++)
+			{
+				s16	Flag=1<<TILE3D_FLAGS_F;
+				if (X<(SCREEN_TILE_WIDTH/2)+1) 
+				{
+					Flag|=1<<TILE3D_FLAGS_R;
+				}
+				if (X>(SCREEN_TILE_WIDTH/2)-1) 
+				{
+					Flag|=1<<TILE3D_FLAGS_L;
+				}
+				if (Y<(SCREEN_TILE_HEIGHT/2)+1) 
+				{
+					Flag|=1<<TILE3D_FLAGS_D;
+				}
+				if (Y>(SCREEN_TILE_HEIGHT/2)-1) 
+				{
+					Flag|=1<<TILE3D_FLAGS_U;
+				}
+				*Ptr++=Flag;
+			}
+
+		}
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
+/*****************************************************************************/
+
 // Get (wrapped) PrimGrid pos
 sPrimGridElem3d	*CLayerTile3d::GetGridPos3d(int X,int Y)
 {
@@ -145,6 +182,7 @@ sTileMapElem3d	*MapPtr=GetMapPos3d(X,Y);
 /*****************************************************************************/
 /*****************************************************************************/
 #define	BLOCK_MULT	16
+
 void	CLayerTile3d::render()
 {
 sPrimGridElem3d	*Grid=GetGridPos3d(MapX,MapY);
@@ -152,11 +190,14 @@ s16				TileX,TileY;
 VECTOR			BlkPos;
 s32				BlkXStore;
 sOT				*ThisOT=OtPtr+LayerOT;
+s16				*RenderFlags=RenderFlagTable;
+
 
 // Setup shift bits of pos
 		TileY=-ShiftY;
 		BlkPos.vx=((-15*TILE_WIDTH)-ShiftX)*BLOCK_MULT;
-		BlkPos.vy=((-8*TILE_HEIGHT)-ShiftY)*BLOCK_MULT;
+//		BlkPos.vy=((-8*TILE_HEIGHT)-ShiftY)*BLOCK_MULT;
+		BlkPos.vy=((-7*TILE_HEIGHT)-ShiftY)*BLOCK_MULT;
 		BlkXStore=BlkPos.vx;
 
 // Render it!!
@@ -177,11 +218,12 @@ sOT				*ThisOT=OtPtr+LayerOT;
 				if (Grid->Flags)
 				{ // Has 3d Data
 /**/				CMX_SetTransMtxXY(&BlkPos);
-/**/				RenderBlock(Grid);
+/**/				RenderBlock(Grid,*RenderFlags);
 				}
 				Grid=(sPrimGridElem3d *)Grid->Right;
 				TileX+=TILE_WIDTH;
 				BlkPos.vx+=TILE_WIDTH*BLOCK_MULT;
+				RenderFlags++;
 			}
 			Grid=(sPrimGridElem3d *)GridDown;
 			TileY+=TILE_HEIGHT;
@@ -196,10 +238,10 @@ sOT				*ThisOT=OtPtr+LayerOT;
 // NOTE: Tiles are split into facing strips, to reduce overdraw :o)
 // NOTE: Matrix already setup for block
 
-void	CLayerTile3d::RenderBlock(sPrimGridElem3d *Elem)
+void	CLayerTile3d::RenderBlock(sPrimGridElem3d *Elem,s16 RenderFlags)
 {
 sTile		*Tile=&TileList[Elem->Tile];
-u32			Flags=Elem->Flags;
+u32			Flags=Elem->Flags & RenderFlags;
 sVtx		*P0,*P1,*P2;
 POLY_FT3	*TPrimPtr=(POLY_FT3*)GetPrimPtr();
 u16			*TileTable=Tile->TileTable;
@@ -207,8 +249,11 @@ u32			T0,T1,T2;
 sTri		*TList=TriList+Tile->TriStart;
 sOT			*ThisOT=OtPtr+LayerOT;
 
-//--- Tris ---------------------------------------------------------------------------
+			Flags=0xff & RenderFlags;
+//			Flags=0xff;// & RenderFlags;
 
+//--- Tris ---------------------------------------------------------------------------
+			
 			for (int i=0; i<TILE3D_FLAGS_MAX; i++)
 			{
 				int		TriCount=*TileTable++;		// Get Tri Count

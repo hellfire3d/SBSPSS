@@ -18,13 +18,16 @@ public:
 		void			render();
 
 protected:
+		void			CreateRenderFlagTable();
 		void			UpdateRow(int MapX,int MapY);
 		void			UpdateColumn(int MapX,int MapY);
 
 		sPrimGridElem3d	*GetGridPos3d(int X,int Y);
 		sTileMapElem3d	*GetMapPos3d(int X,int Y);
 
-		void	RenderBlock(sPrimGridElem3d *Elem);
+		void			RenderBlock(sPrimGridElem3d *Elem,s16 RenderFlags);
+
+		s16				*RenderFlagTable;
 
 };
 

@@ -29,7 +29,6 @@ CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_Qu
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
-
 }
 
 /*****************************************************************************/

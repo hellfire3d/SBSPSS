@@ -44,15 +44,26 @@ LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 
 LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05
 LEVELS_CHAPTER01 :=			
-LEVELS_CHAPTER02 :=			 
-LEVELS_CHAPTER03 :=			LEVEL02
+LEVELS_CHAPTER01_LEVEL01 :=
+
+LEVELS_CHAPTER02 :=			LEVEL04
+LEVELS_CHAPTER02_LEVEL04 :=	01
+
+LEVELS_CHAPTER03 :=			
+
 LEVELS_CHAPTER04 :=			
+
 LEVELS_CHAPTER05 :=			
 
-LEVELS_OUT_DIRS :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(LEVELS_OUT_DIR)/$(CHAPTER)/$(LEVEL) ))
-LEVELS_IN :=				$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(CHAPTER)/$(LEVEL)/$(LEVEL) ))
 
-LEVELS_OUT :=				$(foreach LEVEL,$(LEVELS_IN),$(LEVELS_OUT_DIR)/$(LEVEL).lvl)
+LEVELS_OUT_DIRS :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(LEVELS_OUT_DIR)/$(CHAPTER)/$(LEVEL) ))
+ALL_LEVELS :=				$(foreach CHAPTER, $(LEVELS_CHAPTERS), \
+								$(foreach LEVEL, $(LEVELS_$(CHAPTER)), \
+									$(foreach SUBLEVEL, $(LEVELS_$(CHAPTER)_$(LEVEL)), \
+										$(CHAPTER)/$(LEVEL)/$(LEVEL)$(SUBLEVEL) )))
+
+ALL_LEVELS_IN :=				$(foreach LEVEL,$(ALL_LEVELS),$(LEVELS_IN_DIR)/$(LEVEL).pme)
+ALL_LEVELS_OUT :=				$(foreach LEVEL,$(ALL_LEVELS),$(LEVELS_OUT_DIR)/$(LEVEL).lvl)
 
 levels : $(LEVELS_OUT)
 
@@ -60,11 +71,16 @@ cleanlevels :
 	@$(RM) -f $(LEVELS_OUT)
 	@$(ECHO) Cleaned levels
 
+# $(ALL_LEVELS_OUT) : $(ALL_LEVELS__IN)
+#	$(MKLEVEL) $(ALL_LEVELS__IN) -o:$(LEVELS_OUT_DIR)/LEVEL04 -t:24,1,1
+
 $(LEVELS_OUT_DIR)/%.lvl : $(LEVELS_IN_DIR)/%.pme
 	@$(ECHO) Building $< $@
-	@$(MKLEVEL) $< -o:$(dir $(basename $@)) $(LEVELS_OPTS)
+	$(MKLEVEL) $< -o:$@ $(LEVELS_OPTS)
+#	$(MKLEVEL) $< -o:$(dir $(basename $@))/level04.tex $(LEVELS_OPTS)
 
-GFX_DATA_OUT +=	$(LEVELS_OUT)
+GFX_DATA_OUT +=	$(ALL_LEVELS_OUT)
+
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
