@@ -623,7 +623,15 @@ void CGameScene::think_playing(int _frames)
 #endif
 	else if (s_restartLevel)
 	{
-		if(m_player->getLivesLeft()>=0)
+		if(getLevelNumber()==5)
+		{
+			// Bonus level.. go back to map after death
+			GameState::setNextScene(&MapScene);
+			s_readyToExit=true;
+			s_levelFinished=false;
+			CFader::setFadingOut();
+		}
+		else if(m_player->getLivesLeft()>=0)
 		{
 			respawnLevel();
 		}

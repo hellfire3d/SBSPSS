@@ -131,8 +131,11 @@ void	CPlayerModeDead::think()
 		if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&(PI_JUMP|PI_FIRE))||
 		   m_deadTime>DEATH_TIMEOUT)
 		{
-			// Take a life off..
-			CGameSlotManager::getSlotData()->m_lives--;
+			if(GameScene.getLevelNumber()!=5)
+			{
+				// Take a life off..
+				CGameSlotManager::getSlotData()->m_lives--;
+			}
 
 			CGameScene::restartlevel();
 			m_killed=true;
