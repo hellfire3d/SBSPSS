@@ -72,7 +72,11 @@ MATRIX		CGameScene::CamMtx;
 
 /*****************************************************************************/
 
+#ifndef __USER_paul__
 int s_globalLevelSelectThing=0;
+#else
+int s_globalLevelSelectThing=1;
+#endif
 int CGameScene::s_readyToExit;
 int exitToNextLevel;
 
