@@ -1358,6 +1358,8 @@ void CPlayer::respawn()
 	m_leftRightScrollPosition=0;
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
+	m_cameraPos.vx=m_currentCamFocusPoint.vx;
+	m_cameraPos.vy=m_currentCamFocusPoint.vy;
 
 	m_padLookAroundTimer=0;
 	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
