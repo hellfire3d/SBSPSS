@@ -207,14 +207,26 @@ CMapScene::sMapLevelData	CMapScene::s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEV
 };
 
 
-DVECTOR						CMapScene::s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER]=
+// Positions of map gfx on the screen
+DVECTOR						CMapScene::s_mapLevelPositions[CMapScene::MAP_NUM_LEVELS_PER_CHAPTER]=
 {
-	{	42,49	},
-	{	186,49	},
-	{	330,49	},
-	{	42,113	},
-	{	330,113	},
+	{	42,49						},		// MAP_ICON_LEVEL_1
+	{	186,49						},		// MAP_ICON_LEVEL_2
+	{	330,49						},		// MAP_ICON_LEVEL_3
+	{	42,113						},		// MAP_ICON_LEVEL_4
+	{	330,113						},		// MAP_ICON_LEVEL_BONUS
 };
+
+// Cursor positions for all icons
+DVECTOR						CMapScene::s_mapPointerPositions[CMapScene::MAP_NUM_LEVELS_PER_CHAPTER]=
+{
+	{	42+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_1
+	{	186+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_2
+	{	330+(MAP_LEVEL_WIDTH/2),49+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_3
+	{	42+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT		},		// MAP_ICON_LEVEL_4
+	{	330+(MAP_LEVEL_WIDTH/2),113+MAP_LEVEL_HEIGHT	},		// MAP_ICON_LEVEL_BONUS
+};
+
 
 int							CMapScene::s_chapterToStartOn=0;
 int							CMapScene::s_levelToStartOn=0;
@@ -251,7 +263,7 @@ void CMapScene::init()
 	}
 
 	generateMapScreenImage();
-	m_currentLevelSelection=s_levelToStartOn;
+	m_currentIconSelection=s_levelToStartOn+1;
 
 	m_pointerIcon=new ("MapPointer") CPointerIcon();
 	m_pointerIcon->snapToTarget(getPointerTargetPosition());
@@ -303,7 +315,10 @@ void CMapScene::render()
 	int				i;
 	char			buf[100];
 	
-	m_pointerIcon->render();
+	if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
+	{
+		m_pointerIcon->render();
+	}
 
 	sb=CGameScene::getSpriteBank();
 	level=&s_mapLevelData[m_currentChapterSelection][0];
@@ -345,9 +360,10 @@ void CMapScene::render()
 	}
 
 	renderInstructions();
+	renderChapterArrows();
 
 
-sprintf(buf,"Chapter %d, Level %d",m_currentChapterSelection+1,m_currentLevelSelection+1);
+sprintf(buf,"Chapter %d",m_currentChapterSelection+1);
 m_font->setColour(0,255,0);
 m_font->print(24,24,buf);
 m_font->setColour(0,0,0);
@@ -364,57 +380,42 @@ m_font->print(25,25,buf);
 void CMapScene::renderInstructions()
 {
 	// Instructions
-	int				renderChapterControls;
 	SpriteBank		*sb;
 	sFrameHdr		*fh1,*fh2;
 	int				width;
 	int				x,y;
+	int				xText=0;
 
-
-	// If only the first chapter is open then you can't select other ones...
-	renderChapterControls=isChapterOpen(1)?true:false;
 
 	sb=CGameScene::getSpriteBank();
 	m_font->setColour(MAP_INSTRUCTIONS_TEXT_R,MAP_INSTRUCTIONS_TEXT_G,MAP_INSTRUCTIONS_TEXT_B);
 
 	y=MAP_INSTRUCTIONS_YSTART;
-	fh1=sb->getFrameHeader(FRM__BUTL);
-	fh2=sb->getFrameHeader(FRM__BUTR);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__MAP_SCREEN__LEFT_RIGHT_TO_SELECT_LEVEL);
-	x=256-(width/2);
-	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
-	sb->printFT4(fh2,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	x+=fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_font->print(x,y,STR__MAP_SCREEN__LEFT_RIGHT_TO_SELECT_LEVEL);
 
-	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
-	fh1=sb->getFrameHeader(FRM__BUTU);
-	fh2=sb->getFrameHeader(FRM__BUTD);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS+fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER);
-	x=256-(width/2);
-	if(renderChapterControls)
+	switch(m_currentIconSelection)
 	{
-		sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
+		case MAP_ICON_PREVIOUS_CHAPTER:
+			xText=STR__MAP_SCREEN__X_FOR_PREVIOUS_CHAPTER;
+			break;
+		case MAP_ICON_LEVEL_1:
+		case MAP_ICON_LEVEL_2:
+		case MAP_ICON_LEVEL_3:
+		case MAP_ICON_LEVEL_4:
+		case MAP_ICON_LEVEL_BONUS:
+			xText=STR__MAP_SCREEN__X_TO_START;
+			break;
+		case MAP_ICON_NEXT_CHAPTER:
+			xText=STR__MAP_SCREEN__X_FOR_NEXT_CHAPTER;
+			break;
 	}
-	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS;
-	if(renderChapterControls)
-	{
-		sb->printFT4(fh2,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
-	}
-	x+=fh2->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	if(renderChapterControls)
-	{
-		m_font->print(x,y,STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER);
-	}
-
+	
 	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTX);
-	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(STR__MAP_SCREEN__X_TO_START);
+	width=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT+m_font->getStringWidth(xText);
 	x=256-(width/2);
 	sb->printFT4(fh1,x,y+MAP_INSTRUCTIONS_BUTTON_Y_OFFSET,0,0,0);
 	x+=fh1->W+MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT;
-	m_font->print(x,y,STR__MAP_SCREEN__X_TO_START);
+	m_font->print(x,y,xText);
 
 	y+=MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES;
 	fh1=sb->getFrameHeader(FRM__BUTT);
@@ -432,10 +433,52 @@ void CMapScene::renderInstructions()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CMapScene::renderChapterArrows()
+{
+	SpriteBank	*sb;
+	sFrameHdr	*fh;
+	int			x,y;
+	POLY_FT4	*ft4;
+
+	sb=CGameScene::getSpriteBank();
+	fh=sb->getFrameHeader(FRM__MAP_ARROW);
+
+	x=256;
+	if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))
+	{
+		int	selected=false;
+		y=MAP_ARROW_PREVIOUS_Y-fh->H;
+		if(m_currentIconSelection==MAP_ICON_PREVIOUS_CHAPTER)
+		{
+			selected=true;
+		}
+		ft4=sb->printFT4Scaled(fh,x,y,0,0,0,selected?512:256);
+	}
+	if(m_currentChapterSelection<5&&isChapterOpen(m_currentChapterSelection+1))
+	{
+		int	selected=false;
+		y=MAP_ARROW_NEXT_Y-fh->H;
+		if(m_currentIconSelection==MAP_ICON_NEXT_CHAPTER)
+		{
+			selected=true;
+		}
+		ft4=sb->printFT4Scaled(fh,x,y,0,1,0,selected?512:256);
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CMapScene::think(int _frames)
 {
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
+		CURSOR_MOVE_STATE	cursor=CURSOR_DIDNT_MOVE;
+
 		if(m_musicStarted==false)
 		{
 			m_musicStarted=true;
@@ -443,88 +486,195 @@ void CMapScene::think(int _frames)
 		}
 		
 		int	pad=PadGetDown(0);
-
-		// Change chapter
-		if(pad&PAD_UP)
-		{
-			int nextChapter=m_currentChapterSelection;
-			do
-			{
-				nextChapter++;
-				if(nextChapter==MAP_NUM_CHAPTERS)nextChapter=0;
-			}
-			while(!isChapterOpen(nextChapter));
-			if(nextChapter!=m_currentChapterSelection)
-			{
-				m_currentChapterSelection=nextChapter;
-				generateMapScreenImage();
-			}
-		}
-		else if(pad&PAD_DOWN)
-		{
-			int nextChapter=m_currentChapterSelection;
-			do
-			{
-				nextChapter--;
-				if(nextChapter<0)nextChapter=MAP_NUM_CHAPTERS-1;
-			}
-			while(!isChapterOpen(nextChapter));
-			if(nextChapter!=m_currentChapterSelection)
-			{
-				m_currentChapterSelection=nextChapter;
-				generateMapScreenImage();
-			}
-		}
 #ifdef __VERSION_DEBUG__
-		else if(pad&PAD_L1)
+		if(pad&PAD_L1)
 		{
 			CGameSlotManager::getSlotData()->debugCheatOpenAllLevels();
 			generateMapScreenImage();
 		}
 #endif
 
-		// Move cursor
-		int	lastLevel=m_currentLevelSelection;
-		if(pad&PAD_LEFT)
+		// Move cursor in the gayest way possible..
+		// Hahahaha! It's like a spiders nest! (pkg and proud of it)
+		if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
 		{
-			do
+			m_previousIconSelection=m_currentIconSelection;
+		}
+		if(pad&PAD_UP)
+		{
+			cursor=CURSOR_MOVED;
+			switch(m_currentIconSelection)
 			{
-				if(--m_currentLevelSelection<0)m_currentLevelSelection=MAP_NUM_LEVELS_PER_CHAPTER-1;
+				case MAP_ICON_PREVIOUS_CHAPTER:
+					break;
+				case MAP_ICON_LEVEL_1:
+				case MAP_ICON_LEVEL_2:
+				case MAP_ICON_LEVEL_3:
+					if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))m_currentIconSelection=MAP_ICON_PREVIOUS_CHAPTER;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_4:
+					m_currentIconSelection=MAP_ICON_LEVEL_1;
+					break;
+				case MAP_ICON_LEVEL_BONUS:
+					if(isLevelOpen(m_currentChapterSelection,3-1))m_currentIconSelection=MAP_ICON_LEVEL_3;
+					else if(isLevelOpen(m_currentChapterSelection,2-1))m_currentIconSelection=MAP_ICON_LEVEL_2;
+					else m_currentIconSelection=MAP_ICON_LEVEL_1;
+					break;
+				case MAP_ICON_NEXT_CHAPTER:
+					m_currentIconSelection=m_previousIconSelection;
+					break;
 			}
-			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
-			m_pointerIcon->setTarget(getPointerTargetPosition());
+		}
+		else if(pad&PAD_DOWN)
+		{
+			int nextChapterAvailable=false;
+			if(m_currentChapterSelection<5&&isChapterOpen(m_currentChapterSelection+1))nextChapterAvailable=true;
+
+			cursor=CURSOR_MOVED;
+			switch(m_currentIconSelection)
+			{
+				case MAP_ICON_PREVIOUS_CHAPTER:
+					m_currentIconSelection=m_previousIconSelection;
+					break;
+				case MAP_ICON_LEVEL_1:
+				case MAP_ICON_LEVEL_2:
+					if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
+					else if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
+					else if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_3:
+					if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
+					else if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
+					else if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_4:
+				case MAP_ICON_LEVEL_BONUS:
+					if(nextChapterAvailable)m_currentIconSelection=MAP_ICON_NEXT_CHAPTER;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_NEXT_CHAPTER:
+					break;
+			}
+		}
+		else if(pad&PAD_LEFT)
+		{
+			cursor=CURSOR_MOVED;
+			switch(m_currentIconSelection)
+			{
+				case MAP_ICON_PREVIOUS_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_1:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_2:
+					m_currentIconSelection=MAP_ICON_LEVEL_1;
+					break;
+				case MAP_ICON_LEVEL_3:
+					m_currentIconSelection=MAP_ICON_LEVEL_2;
+					break;
+				case MAP_ICON_LEVEL_4:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_BONUS:
+					if(isLevelOpen(m_currentChapterSelection,4-1))m_currentIconSelection=MAP_ICON_LEVEL_4;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_NEXT_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+			}
 		}
 		else if(pad&PAD_RIGHT)
 		{
-			do
+			cursor=CURSOR_MOVED;
+			switch(m_currentIconSelection)
 			{
-				if(++m_currentLevelSelection>=MAP_NUM_LEVELS_PER_CHAPTER)m_currentLevelSelection=0;
+				case MAP_ICON_PREVIOUS_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_1:
+					if(isLevelOpen(m_currentChapterSelection,2-1))m_currentIconSelection=MAP_ICON_LEVEL_2;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_2:
+					if(isLevelOpen(m_currentChapterSelection,3-1))m_currentIconSelection=MAP_ICON_LEVEL_3;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_3:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_4:
+					if(isLevelOpen(m_currentChapterSelection,5-1))m_currentIconSelection=MAP_ICON_LEVEL_BONUS;
+					else cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_LEVEL_BONUS:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
+				case MAP_ICON_NEXT_CHAPTER:
+					cursor=CURSOR_COULDNT_MOVE;
+					break;
 			}
-			while(!isLevelOpen(m_currentChapterSelection,m_currentLevelSelection));
-			m_pointerIcon->setTarget(getPointerTargetPosition());
 		}
-		if(lastLevel!=m_currentLevelSelection)
+
+		// What did the cursor do?
+		switch(cursor)
 		{
-			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+			case CURSOR_DIDNT_MOVE:
+				break;
+			case CURSOR_MOVED:
+				if(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER)
+				{
+					m_pointerIcon->setTarget(getPointerTargetPosition());
+				}
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+				break;
+			case CURSOR_COULDNT_MOVE:
+				CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__ERROR,false,true);
+				break;
 		}
 		m_pointerIcon->think(_frames);
 
+
+		// SELECT or SAVE pressed?		
 		if(m_pointerIcon->canPointerSelect()&&
 		   pad&PAD_CROSS)
 		{
-			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
-			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
-			m_readyToExit=true;
-			CFader::setFadingOut();
-			if(m_currentChapterSelection==3-1&&m_currentLevelSelection==1-1)
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
+			switch(m_currentIconSelection)
 			{
-				// Plankton FMA..
-				CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__PLANKTON);
-				GameState::setNextScene(&FmaScene);
-			}
-			else
-			{
-				GameState::setNextScene(&GameScene);
+				case MAP_ICON_PREVIOUS_CHAPTER:
+					m_currentChapterSelection--;
+					generateMapScreenImage();
+					break;
+
+				case MAP_ICON_LEVEL_1:
+				case MAP_ICON_LEVEL_2:
+				case MAP_ICON_LEVEL_3:
+				case MAP_ICON_LEVEL_4:
+				case MAP_ICON_LEVEL_BONUS:
+					s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentIconSelection-1].m_globalLevelNumber;
+					m_readyToExit=true;
+					CFader::setFadingOut();
+					if(m_currentChapterSelection==3-1&&m_currentIconSelection-1==1-1)
+					{
+						// Plankton FMA..
+						CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__PLANKTON);
+						GameState::setNextScene(&FmaScene);
+					}
+					else
+					{
+						GameState::setNextScene(&GameScene);
+					}
+					break;
+
+				case MAP_ICON_NEXT_CHAPTER:
+					m_currentChapterSelection++;
+					generateMapScreenImage();
+					break;
 			}
 		}
 		else if(pad&PAD_TRIANGLE)
@@ -563,7 +713,7 @@ void	CMapScene::generateMapScreenImage()
 
 	LZNP_Decode((u8*)m_packedBackgroundImage,(u8*)m_screenImage);
 
-	m_currentLevelSelection=0;
+	m_currentIconSelection=MAP_ICON_LEVEL_1;
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
 		if(isLevelOpen(m_currentChapterSelection,i))
@@ -616,9 +766,9 @@ DVECTOR	CMapScene::getPointerTargetPosition()
 {
 	DVECTOR	pos;
 	
-	pos=s_mapLevelPositions[m_currentLevelSelection];
-	pos.vx+=(MAP_LEVEL_WIDTH/2);
-	pos.vy+=MAP_LEVEL_HEIGHT;
+	ASSERT(m_currentIconSelection!=MAP_ICON_PREVIOUS_CHAPTER&&m_currentIconSelection!=MAP_ICON_NEXT_CHAPTER);
+
+	pos=s_mapPointerPositions[m_currentIconSelection-1];
 
 	return pos;
 }

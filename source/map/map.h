@@ -53,15 +53,10 @@ public:
 private:
 	enum
 	{
-		MAP_PARCHMENT_WIDTH=512,
-		MAP_PARCHMENT_HEIGHT=256,
-		MAP_PARCHMENT_START_X=0,
-		MAP_PARCHMENT_START_Y=0,
-
 		MAP_LEVEL_WIDTH=140,
 		MAP_LEVEL_HEIGHT=60,
 
-		MAP_INSTRUCTIONS_YSTART=170,
+		MAP_INSTRUCTIONS_YSTART=180,
 		MAP_INSTRUCTIONS_BUTTON_Y_OFFSET=3,
 		MAP_INSTRUCTIONS_TEXT_R=128,
 		MAP_INSTRUCTIONS_TEXT_G=64,
@@ -69,6 +64,9 @@ private:
 		MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS=5,
 		MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10,
 		MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES=13,
+
+		MAP_ARROW_PREVIOUS_Y=50,
+		MAP_ARROW_NEXT_Y=190,
 
 		MAP_NUM_CHAPTERS=5,
 		MAP_NUM_LEVELS_PER_CHAPTER=5,
@@ -123,9 +121,35 @@ private:
 		u8	*Gfx;
 	};
 
+	enum
+	{
+		MAP_ICON_PREVIOUS_CHAPTER,
+		MAP_ICON_LEVEL_1,
+		MAP_ICON_LEVEL_2,
+		MAP_ICON_LEVEL_3,
+		MAP_ICON_LEVEL_4,
+		MAP_ICON_LEVEL_BONUS,
+		MAP_ICON_NEXT_CHAPTER,
+
+		NUM_MAP_ICONS,
+	};
+	typedef struct
+	{
+		u8		m_left,m_right,m_up,m_down;
+	} sMapIconMoves;
+
+	typedef enum
+	{
+		CURSOR_DIDNT_MOVE,
+		CURSOR_MOVED,
+		CURSOR_COULDNT_MOVE,
+	} CURSOR_MOVE_STATE;
+
+
 
 	void	renderPointer();
 	void	renderInstructions();
+	void	renderChapterArrows();
 
 	
 	void	generateMapScreenImage();
@@ -145,12 +169,13 @@ private:
 	char				*m_packedBackgroundImage;
 
 	int					m_currentChapterSelection;
-	int					m_currentLevelSelection;
+	int					m_currentIconSelection,m_previousIconSelection;
 	class CPointerIcon	*m_pointerIcon;
 
 	static sMapLevelGfxTable	s_GfxTable[MAP_GFX_MAX];
 	static sMapLevelData		s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
 	static DVECTOR				s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];
+	static DVECTOR				s_mapPointerPositions[MAP_NUM_LEVELS_PER_CHAPTER];
 
 	static int				s_chapterToStartOn;
 	static int				s_levelToStartOn;

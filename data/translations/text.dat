@@ -498,12 +498,12 @@ eng=Are you sure that you want to erase this game?
 ; Map screen
 ; ---------------------------------------------------------------
 
-[STR__MAP_SCREEN__LEFT_RIGHT_TO_SELECT_LEVEL]
-eng=Select level
-[STR__MAP_SCREEN__UP_DOWN_TO_SELECT_CHAPTER]
-eng=Select chapter
 [STR__MAP_SCREEN__X_TO_START]
 eng=Start
+[STR__MAP_SCREEN__X_FOR_NEXT_CHAPTER]
+eng=Next chapter
+[STR__MAP_SCREEN__X_FOR_PREVIOUS_CHAPTER]
+eng=Previous chapter
 [STR__MAP_SCREEN__TRIANGLE_TO_SAVE]
 eng=Save
 
