@@ -6,7 +6,7 @@
 #include <List.h>
 #include <FaceStore.h>
 
-#include "..\mapedit\ExportPSXHdr.h"
+#include "..\mapedit\ExportHdr.h"
 
 struct	sGinSkel
 {

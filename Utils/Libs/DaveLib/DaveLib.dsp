@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\glib" /I "..\ginlib" /I "..\maths" /I "..\texgrab" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\glib" /I "..\ginlib" /I "..\maths" /I "..\texgrab" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -84,11 +84,35 @@ LIB32=link.exe -lib
 # Name "DaveLib - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\DaveLib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DaveLib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\facestore.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\facestore.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\List.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\list2d.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\list2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PsxTypes.h
 # End Source File
 # End Target
 # End Project

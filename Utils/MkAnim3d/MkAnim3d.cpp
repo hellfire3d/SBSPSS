@@ -8,7 +8,7 @@
 #include <conio.h>
 #include <iostream.h>
 #include <vector>
-#include <PsxLib.h>
+#include <DaveLib.h>
 #include <FaceStore.h>
 
 #include "MkAnim3d.h"
