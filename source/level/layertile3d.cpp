@@ -450,13 +450,10 @@ s16				TCount=0,QCount=0;
 						gte_ldsxy2(P2);
 						
 						setlen(ThisPrim, GPU_PolyGT3Tag);
-						ThisPrim->code=TList->PolyCode;
 						gte_nclip_b();	// 8 cycles
 
-						setShadeTex(ThisPrim,1);
-
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0);}
+						if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0);}
 #endif
 
 						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
@@ -475,7 +472,6 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							addPrim(ThisOT,ThisPrim);
 							// lighting
-							setShadeTex(ThisPrim,0);
 							T0=*(u32*)&RGBTable[TList->C0];
 							T1=*(u32*)&RGBTable[TList->C1];
 							T2=*(u32*)&RGBTable[TList->C2];
@@ -507,12 +503,10 @@ s16				TCount=0,QCount=0;
 						gte_ldsxy2(P2);
 						
 						setlen(ThisPrim, GPU_PolyGT4Tag);
-						ThisPrim->code=QList->PolyCode;
 						gte_nclip_b();	// 8 cycles
 
-						setShadeTex(ThisPrim,1);
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0);}
+						if (ShowPolyz)	{setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0);}
 #endif
 
 						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
@@ -533,7 +527,6 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->x2=P2;	// Set XY2
 							*(u32*)&ThisPrim->x3=P3;	// Set XY3
 							// Lighting
-							setShadeTex(ThisPrim,0);
 							T0=*(u32*)&RGBTable[QList->C0];
 							T1=*(u32*)&RGBTable[QList->C1];
 							T2=*(u32*)&RGBTable[QList->C2];
