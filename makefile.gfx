@@ -522,7 +522,7 @@ $(GRAF_DIRS_TO_MAKE) :
 
 BIGLUMP_IN :=		$(GFX_DATA_OUT)
 BIGLUMP_OUT :=		$(VERSION_DIR)/BigLump.Bin
-BIGLUMP_INC :=		$(INC_DIR)/BigLump.hx
+BIGLUMP_INC :=		$(INC_DIR)/BigLump.h
 
 biglump : $(BIGLUMP_OUT)
 
