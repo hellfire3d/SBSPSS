@@ -69,6 +69,7 @@ void CScrollyBackground::init()
 	setSpeed(DEFAULT_X_SPEED,DEFAULT_Y_SPEED);
 	setSpeedScale(DEFAULT_SPEED_SCALE);
 	setOt(DEFAULT_OT);
+	setFrame(FRM__BG1);
 }
 
 
@@ -96,7 +97,7 @@ void CScrollyBackground::render()
 	sFrameHdr	*fh;
 	int			x,y,w,h;
 
-	fh=m_sprites->getFrameHeader(FRM__BG1);
+	fh=m_sprites->getFrameHeader(m_frame);
 	w=fh->W;
 	h=fh->H;
 	y=(m_yOff>>m_speedScale)-h;
@@ -126,7 +127,7 @@ void CScrollyBackground::think(int _frames)
 {
 	sFrameHdr	*fh;
 
-	fh=m_sprites->getFrameHeader(FRM__BG1);
+	fh=m_sprites->getFrameHeader(m_frame);
 
 	m_xOff=(m_xOff+(_frames*m_xSpeed))%(fh->W<<m_speedScale);
 	m_yOff=(m_yOff+(_frames*m_ySpeed))%(fh->H<<m_speedScale);

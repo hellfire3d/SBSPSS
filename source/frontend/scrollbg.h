@@ -40,6 +40,7 @@ public:
 	void				setSpeed(int _xSpeed,int _ySpeed)			{m_xSpeed=_xSpeed;m_ySpeed=_ySpeed;}
 	void				setSpeedScale(int _speedScale)				{m_speedScale=_speedScale;}
 	void				setOt(int _ot)								{m_ot=_ot;}
+	void				setFrame(int _frame)						{m_frame=_frame;}
 
 
 private:
@@ -56,6 +57,7 @@ private:
 	int					m_xSpeed,m_ySpeed;
 	int					m_speedScale;
 	int					m_ot;
+	int					m_frame;
 
 };
 
