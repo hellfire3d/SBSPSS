@@ -181,11 +181,31 @@ void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 
 			if ( m_extendDir == EXTEND_RIGHT )
 			{
-				Pos.vx += NPC_SUB_SHARK_HIGH_SPEED;
+				s32 xDist = 600 - Pos.vx;
+				s32 xDistSqr = xDist * xDist;
+
+				if ( xDistSqr > 100 )
+				{
+					processGenericGotoTarget( _frames, xDist, 0, NPC_SUB_SHARK_HIGH_SPEED );
+				}
+				else
+				{
+					m_extendDir = EXTEND_LEFT;
+				}
 			}
 			else
 			{
-				Pos.vx -= NPC_SUB_SHARK_HIGH_SPEED;
+				s32 xDist = 100 - Pos.vx;
+				s32 xDistSqr = xDist * xDist;
+
+				if ( xDistSqr > 100 )
+				{
+					processGenericGotoTarget( _frames, xDist, 0, NPC_SUB_SHARK_HIGH_SPEED );
+				}
+				else
+				{
+					m_extendDir = EXTEND_RIGHT;
+				}
 			}
 
 			if ( !m_animPlaying )
