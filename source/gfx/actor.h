@@ -141,6 +141,7 @@ virtual	~CActorGfx();
 		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
 		int				GetTotalFrameCount();
 
+		sBBox			&GetBBox()					{return(BBox);}
 protected:
 		void			SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,sPoolNode *Node,int X,int Y,bool XFlip,bool YFlip);
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
