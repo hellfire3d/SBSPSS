@@ -460,7 +460,7 @@ GFX_DATA_OUT +=			$(MAPSCREENS_OUT)
 # Loading screens
 #----------------------------------------------------------------------------
 LOADINGSCREENS_IN_DIR :=	$(GRAF_DIR)/loadingscreens
-LOADINGSCREENS_IN :=		culture karate monitor pickles pineapple pizza teenage
+LOADINGSCREENS_IN :=		culture karate monitor pickles pineapple pizza
 
 LOADINGSCREENS_OUT_DIR :=	$(DATA_OUT)/loadingscreens
 LOADINGSCREENS_OUT :=		$(foreach SCREEN,$(LOADINGSCREENS_IN),$(LOADINGSCREENS_OUT_DIR)/$(SCREEN).gfx)
