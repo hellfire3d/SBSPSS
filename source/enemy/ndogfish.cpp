@@ -39,8 +39,6 @@
 #include "system\vid.h"
 #endif
 
-#include "fx\fxnrgbar.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,6 +56,8 @@ void CNpcIronDogfishEnemy::postInit()
 		m_health = CLevel::getBossHealth();
 		m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 	}
+
+	m_energyBar = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -655,6 +655,11 @@ void CNpcIronDogfishEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
+	if ( m_energyBar )
+	{
+		m_energyBar->setToShutdown();
+	}
+
 	CNpcEnemy::shutdown();
 }
 
@@ -672,8 +677,8 @@ void CNpcIronDogfishEnemy::render()
 		{
 			if (!m_meterOn)
 			{
-				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				T->SetMax(m_health);
+				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				m_energyBar->SetMax(m_data[m_type].initHealth);
 				m_meterOn=true;
 			}
 

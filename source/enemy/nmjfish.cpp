@@ -88,6 +88,8 @@ void CNpcMotherJellyfishEnemy::postInit()
 	m_invulnerableTimer = 0;
 
 	m_attackCounter = 0;
+
+	m_energyBar = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -578,6 +580,11 @@ void CNpcMotherJellyfishEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
+	if ( m_energyBar )
+	{
+		m_energyBar->setToShutdown();
+	}
+
 	CNpcEnemy::shutdown();
 }
 
@@ -624,8 +631,8 @@ void CNpcMotherJellyfishEnemy::render()
 		{
 			if (!m_meterOn)
 			{
-				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				T->SetMax(m_health);
+				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				m_energyBar->SetMax(m_data[m_type].initHealth);
 				m_meterOn=true;
 			}
 

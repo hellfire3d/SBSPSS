@@ -42,6 +42,11 @@ void	CFXNRGBar::think(int _frames)
 
 CNpcEnemy	*P=(CNpcEnemy*)ParentThing;
 int		Health=P->getHealth();
+		if ( Health < 0 )
+		{
+			Health = 0;
+		}
+
 		CurrentW=((NRGW/MaxHealth)*Health);
 
 int		Diff=DrawW-CurrentW;
@@ -49,7 +54,8 @@ int		Diff=DrawW-CurrentW;
 		DrawW-=(Diff+1)>>1;
 		if (DrawW<=0 && Health==0)
 		{
-			setToShutdown();
+			//setToShutdown();
+			DrawW = 0;
 		}
 
 }

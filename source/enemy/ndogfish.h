@@ -16,6 +16,8 @@
 
 #include "fx\fx.h"
 #include "fx\fxlaser.h"
+#include "fx\fxnrgbar.h"
+
 
 class CNpcIronDogfishEnemy : public CNpcEnemy
 {
@@ -53,6 +55,7 @@ protected:
 	bool				m_meterOn;
 
 	CFXLaser			*m_effect;
+	CFXNRGBar			*m_energyBar;
 };
 
 #endif

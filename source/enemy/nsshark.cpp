@@ -47,9 +47,6 @@
 #include <sprites.h>
 #endif
 
-#include "fx\fx.h"
-#include "fx\fxnrgbar.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,6 +69,8 @@ void CNpcSubSharkEnemy::postInit()
 	m_timerTimer = 0;
 	m_salvoCount = 5;
 	m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
+
+	m_energyBar = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -706,6 +705,11 @@ void CNpcSubSharkEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
+	if ( m_energyBar )
+	{
+		m_energyBar->setToShutdown();
+	}
+
 	CNpcEnemy::shutdown();
 }
 
@@ -723,8 +727,8 @@ void CNpcSubSharkEnemy::render()
 		{
 			if (!m_meterOn)
 			{
-				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				T->SetMax(m_health);
+				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				m_energyBar->SetMax(m_data[m_type].initHealth);
 				m_meterOn=true;
 			}
 

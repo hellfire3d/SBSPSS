@@ -47,9 +47,6 @@
 #include <sprites.h>
 #endif
 
-#include "fx\fx.h"
-#include "fx\fxnrgbar.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -168,6 +165,8 @@ void CNpcSeaSnakeEnemy::postInit()
 	m_meterOn=false;
 	m_turnDir = 0;
 	m_waitTimer = 0;
+
+	m_energyBar = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,6 +191,11 @@ void CNpcSeaSnakeEnemy::shutdown()
 	for ( int segCount = 0 ; segCount < NPC_SEA_SNAKE_LENGTH ; segCount++ )
 	{
 		m_segmentArray[segCount].shutdown();
+	}
+
+	if ( m_energyBar )
+	{
+		m_energyBar->setToShutdown();
 	}
 
 	CNpcEnemy::shutdown();
@@ -696,8 +700,8 @@ void CNpcSeaSnakeEnemy::render()
 		{
 			if (!m_meterOn)
 			{
-				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				T->SetMax( NPC_SEA_SNAKE_LENGTH );
+				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				m_energyBar->SetMax( NPC_SEA_SNAKE_LENGTH + 1 );
 				m_meterOn=true;
 			}
 

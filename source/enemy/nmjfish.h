@@ -71,6 +71,7 @@ protected:
 	DVECTOR				legsPos[4];
 
 	DVECTOR				targetPos;
+	CFXNRGBar			*m_energyBar;
 };
 
 #endif

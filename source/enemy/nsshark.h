@@ -14,6 +14,10 @@
 #ifndef	__ENEMY_NSSHARK_H__
 #define	__ENEMY_NSSHARK_H__
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
+
 class CNpcSubSharkEnemy : public CNpcEnemy
 {
 public:
@@ -49,6 +53,7 @@ protected:
 	bool				m_meterOn;
 	s32					m_invulnerableTimer;
 	DVECTOR				m_targetPos;
+	CFXNRGBar			*m_energyBar;
 };
 
 #endif

@@ -43,9 +43,6 @@
 #include <sprites.h>
 #endif
 
-#include "fx\fx.h"
-#include "fx\fxnrgbar.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -70,6 +67,8 @@ void CNpcFlyingDutchmanEnemy::postInit()
 	m_fireCount = 0;
 
 	m_invulnerableTimer = 0;
+
+	m_energyBar = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -443,6 +442,11 @@ void CNpcFlyingDutchmanEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
+	if ( m_energyBar )
+	{
+		m_energyBar->setToShutdown();
+	}
+
 	CNpcEnemy::shutdown();
 }
 
@@ -460,8 +464,8 @@ void CNpcFlyingDutchmanEnemy::render()
 		{
 			if (!m_meterOn)
 			{
-				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				T->SetMax(m_health);
+				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				m_energyBar->SetMax(m_data[m_type].initHealth);
 				m_meterOn=true;
 			}
 

@@ -14,6 +14,10 @@
 #ifndef	__ENEMY_NFDUTCH_H__
 #define	__ENEMY_NFDUTCH_H__
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
+
 class CNpcFlyingDutchmanEnemy : public CNpcEnemy
 {
 public:
@@ -39,6 +43,7 @@ protected:
 	u8					m_inRange;
 	u8					m_fireCount;
 	s32					m_invulnerableTimer;
+	CFXNRGBar			*m_energyBar;
 };
 
 #endif

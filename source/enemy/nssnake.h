@@ -14,6 +14,10 @@
 #ifndef	__ENEMY_NSSNAKE_H__
 #define	__ENEMY_NSSNAKE_H__
 
+#include "fx\fx.h"
+#include "fx\fxnrgbar.h"
+
+
 class CNpcSeaSnakeSegment
 {
 public:
@@ -98,6 +102,7 @@ protected:
 	s16								m_circleHeading;
 	s16								m_origHeading;
 	s32								m_waitTimer;
+	CFXNRGBar						*m_energyBar;
 };
 
 #endif
