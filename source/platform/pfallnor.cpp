@@ -87,6 +87,13 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 			m_spinFinish = true;
 			m_speed = -5;
 			m_bounceDir = getRnd() % 2;
+
+			if( m_soundId != NOT_PLAYING )
+			{
+				CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+			}
+
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
 		}
 		else
 		{
