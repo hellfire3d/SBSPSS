@@ -46,8 +46,13 @@ public:
 
 
 private:
+	void	copyImageToScreen(int _file,int _x,int _y,int _w,int _h);
+
+
 	class FontBank		*m_font;
 	int					m_readyToExit;
+
+	char				*m_screenImage;
 
 };
 

@@ -151,6 +151,8 @@ level_src :=		level \
 
 locale_src :=		textdbase
 
+map_src :=			map
+
 mem_src :=			memory
 
 memcard_src :=		md5 \

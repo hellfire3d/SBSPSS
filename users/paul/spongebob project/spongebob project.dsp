@@ -1512,6 +1512,18 @@ SOURCE=..\..\..\source\hazard\hsaw.cpp
 SOURCE=..\..\..\source\hazard\hsaw.h
 # End Source File
 # End Group
+# Begin Group "map"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\map\map.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\map\map.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "makefiles"
 

@@ -51,6 +51,10 @@
 #include "backend\complete.h"
 #endif
 
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -84,6 +88,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&FrontEndScene,
 	&GameOverScene,
 	&GameCompletedScene,
+	&MapScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 
