@@ -86,6 +86,7 @@ public:
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 	virtual int		canDoLookAround()					{return false;}
 	virtual void	springPlayerUp()					{;}
+	void			inSoakUpState();
 
 
 	int				getPadInputHeld();

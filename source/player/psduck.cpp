@@ -118,6 +118,10 @@ void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
 	{
 		_playerMode->setState(STATE_GETUP);
 	}
+	else
+	{
+		_playerMode->inSoakUpState();
+	}
 }
 
 

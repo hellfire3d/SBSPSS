@@ -132,6 +132,16 @@ static	PlayerMetrics	s_playerMetrics=
 int		CPlayerMode::getPadInputHeld()					{return m_player->getPadInputHeld();}
 int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerMode::inSoakUpState()					{m_player->inSoakUpState();}
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:

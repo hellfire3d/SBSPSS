@@ -126,8 +126,6 @@
 #define _STATE_DEBUG_
 
 
-#define SLIPSPEED		10					// Speed that player slips on icy surfaces
-
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -260,6 +258,9 @@ pint	ledgeSpeedOut=3;
 pint	ledgeShift=1;
 
 pint	cammove=2;
+
+pint	waterDrainSpeed=4;
+pint	waterSoakUpSpeed=20;
 
 
 
@@ -493,6 +494,9 @@ registerAddon(PLAYER_ADDON_JELLYLAUNCHER);
 registerAddon(PLAYER_ADDON_GLASSES);
 registerAddon(PLAYER_ADDON_BUBBLEWAND);
 //#endif
+
+
+	setHealthType(HEALTH_TYPE__NORMAL);
 }
 
 /*----------------------------------------------------------------------
@@ -542,6 +546,14 @@ void	CPlayer::think(int _frames)
 {
 	int	i;
 
+	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&m_currentMode!=PLAYER_MODE_DEAD)
+	{
+		m_healthWaterLevel-=waterDrainSpeed*_frames;
+		if(m_healthWaterLevel<=0)
+		{
+			dieYouPorousFreak();
+		}
+	}
 
 if(PadGetDown(0)&PAD_L1)
 {
@@ -808,11 +820,6 @@ static int		lastposnum=0;
 int mouth=-1,eyes=-1;
 #endif
 
-
-int itembaseX=110;
-int	itembaseY=60;
-int	itemgap=40;
-
 #include "gui\gui.h"
 void	CPlayer::render()
 {
@@ -861,7 +868,9 @@ for(int i=0;i<NUM_LASTPOS;i++)
 
 
 	// Health
+	if(m_healthType==HEALTH_TYPE__NORMAL)
 	{
+		// In water - Use normal SB face for health
 		static int	s_fullHealthFrames[]=
 		{
 			FRM__HEALTH_FULL_1,
@@ -902,9 +911,34 @@ for(int i=0;i<NUM_LASTPOS;i++)
 			y+=ygap;
 		}
 	}
+	else
+	{
+		// Out of water - Use bowl of water
+		POLY_FT4	*ft4;
+		sFrameHdr	*fh;
+		int			V,W,H,partH;
+		
+		ft4=m_spriteBank->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+		setSemiTrans(ft4,true);
+
+		m_spriteBank->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+
+		fh=m_spriteBank->getFrameHeader(FRM__WATER);
+		ft4=m_spriteBank->printFT4(fh,0,0,0,0,0);
+		setSemiTrans(ft4,true);
+		V=fh->V;
+		W=fh->W;
+		H=fh->H;
+		partH=(H*(255-(m_healthWaterLevel>>WATERLEVELSHIFT)))>>8;
+		if(partH>H)partH=H;
+		setXYWH(ft4,HEALTH_ICONX,HEALTH_ICONY+(partH),W,H-partH);
+		ft4->v0=V+(partH);
+		ft4->v1=V+(partH);
+	}
+
 
 	// Mode specific ui
-	int	itemX=itembaseX;
+	int	itemX=COLLECTEDITEM_BASEX;
 
 	// Pickups
 	m_currentPlayerModeClass->renderModeUi();
@@ -913,16 +947,16 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		int			x,y;
 		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__SHOE);
 		x=itemX-(fh->W/2);
-		y=itembaseY-(fh->H/2);
+		y=COLLECTEDITEM_BASEY-(fh->H/2);
 		m_spriteBank->printFT4(fh,x+2,y+2,0,0,0);
 		m_spriteBank->printFT4(fh,x-2,y-2,0,0,0);
-		itemX+=itemgap;
+		itemX+=COLLECTEDITEM_GAP;
 	}
 	if(isWearingHelmet())
 	{
 		sFrameHdr	*fh=m_spriteBank->getFrameHeader(FRM__HELMET);
-		m_spriteBank->printFT4(fh,itemX-(fh->W/2),itembaseY-(fh->H/2),0,0,0);
-		itemX+=itemgap;
+		m_spriteBank->printFT4(fh,itemX-(fh->W/2),COLLECTEDITEM_BASEY-(fh->H/2),0,0,0);
+		itemX+=COLLECTEDITEM_GAP;
 	}
 }
 
@@ -1001,10 +1035,21 @@ int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
   ---------------------------------------------------------------------- */
 void CPlayer::addHealth(int _health)
 {
-	m_health+=_health;
-	if(m_health>MAX_HEALTH)
+	if(m_healthType==HEALTH_TYPE__NORMAL)
 	{
-		m_health=MAX_HEALTH;
+		m_health+=_health;
+		if(m_health>MAX_HEALTH)
+		{
+			m_health=MAX_HEALTH;
+		}
+	}
+	else
+	{
+		m_healthWaterLevel+=WATERHEALTHPART*_health;
+		if(m_healthWaterLevel>WATERMAXHEALTH)
+		{
+			m_healthWaterLevel=WATERMAXHEALTH;
+		}
 	}
 }
 
@@ -1240,6 +1285,7 @@ void CPlayer::respawn()
 	m_allowConversation=false;
 
 	m_health=MAX_HEALTH;
+	m_healthWaterLevel=WATERMAXHEALTH;
 	m_healthReactFrames=0;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
@@ -1333,6 +1379,26 @@ int	CPlayer::canDoLookAround()
 	return m_currentPlayerModeClass->canDoLookAround();
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::inSoakUpState()
+{
+	if(m_healthType==HEALTH_TYPE__OUT_OF_WATER&&
+	   (m_layerCollision->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER)
+	{
+		m_healthWaterLevel+=waterSoakUpSpeed;
+		if(m_healthWaterLevel>WATERMAXHEALTH)
+		{
+			m_healthWaterLevel=WATERMAXHEALTH;
+		}
+	}
+}
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -1377,20 +1443,50 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 
 		if(ouchThatHurt)
 		{
+			int	died=false;
 			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
-			if(m_health)
+			if(m_healthType==HEALTH_TYPE__NORMAL)
 			{
-				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
-				m_healthReactFrames=25;
 				m_health--;
+				if(m_health<0)
+				{
+					died=true;
+				}
 			}
 			else
 			{
-				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
-				setMode(PLAYER_MODE_DEAD);
+				m_healthWaterLevel-=WATERHEALTHPART;
+				if(m_healthWaterLevel<0)
+				{
+					died=true;
+				}
+			}
+
+			if(died)
+			{
+				dieYouPorousFreak();
+			}
+			else
+			{
+				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
+				m_healthReactFrames=25;
 			}
 		}
 	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::dieYouPorousFreak()
+{
+	ASSERT(m_currentMode!=PLAYER_MODE_DEAD);
+
+	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DEFEATED_JINGLE);
+	setMode(PLAYER_MODE_DEAD);
 }
 
 

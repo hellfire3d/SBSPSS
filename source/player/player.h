@@ -155,6 +155,10 @@ public:
 	{
 		MAX_HEALTH=5,
 		MAX_LIVES=99,
+		
+		WATERLEVELSHIFT=4,
+		WATERMAXHEALTH=(255<<WATERLEVELSHIFT),
+		WATERHEALTHPART=WATERMAXHEALTH/(MAX_HEALTH+1),
 	};
 
 	typedef struct
@@ -224,7 +228,8 @@ public:
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
 	class CLayerCollision	*getLayerCollision()						{return m_layerCollision;}
-																		
+								
+	void			inSoakUpState();
 	void			takeDamage(DAMAGE_TYPE _damage);
 
 	void			respawn();
@@ -240,6 +245,8 @@ public:
 	void			renderSb(DVECTOR *_pos,int _animNo,int _animFrame);
 
 	int				canDoLookAround();
+
+	
 
 private:
 	typedef struct
@@ -276,9 +283,25 @@ private:
 	class CPlayerMode			*m_currentPlayerModeClass;
 	int							m_currentMode;
 
+
+public:
+	typedef enum
+	{
+		HEALTH_TYPE__NORMAL,
+		HEALTH_TYPE__OUT_OF_WATER,
+	} HEALTH_TYPE;
+
+	void			setHealthType(HEALTH_TYPE _healthType)			{m_healthType=_healthType;}
+
+private:
 	int				m_lives;
+	HEALTH_TYPE		m_healthType;
 	int				m_health;
+	int				m_healthWaterLevel;
 	int				m_healthReactFrames;
+
+	void			dieYouPorousFreak();
+
 
 	void			updatePadInput();
 protected:
@@ -370,6 +393,9 @@ public:
 		POWERUPUI_TEXTX=440,
 		POWERUPUI_TEXTY=37,
 		POWERUPUI_OT=0,
+		COLLECTEDITEM_BASEX=110,
+		COLLECTEDITEM_BASEY=60,
+		COLLECTEDITEM_GAP=40,
 	};
 
 private:

@@ -174,10 +174,12 @@ INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 \
 							+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
 							+health_empty_1 +health_empty_2 +health_empty_3 +health_empty_4 +health_empty_5 \
-							+watermeter +netblob \
+							+watermeter +waterhilight +netblob \
 							+spike
+INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+water 
 
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)
+INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS_NONROT_NONCLIP),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)
 
 ####
 
@@ -229,11 +231,12 @@ UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 ####
 
-INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) \
-							$(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN)
+INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN) \
+							$(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN)
 
 INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
-							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) $(UI_GFX_NONTRANS_IN)
+							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) $(UI_GFX_NONTRANS_IN) \
+							-c- -q- -z+ -r- $(INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN)
 
 #----------------------------------------------------------------------------
 # Front end graphics

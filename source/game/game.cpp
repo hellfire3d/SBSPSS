@@ -309,6 +309,10 @@ void	CGameScene::initLevel()
 	DVECTOR				mapSize=Level.getMapSize();
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx,mapSize.vy};
 	m_player->setCameraBox(camBox);
+	if(s_globalLevelSelectThing==1)
+	{
+		m_player->setHealthType(CPlayer::HEALTH_TYPE__OUT_OF_WATER);
+	}
 
 // Init actors (needs moving and tidying
 	int actorNum;
