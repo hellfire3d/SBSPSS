@@ -645,7 +645,8 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 {
 	// fire at player
 
-	s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+	//s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+	s16 heading = m_heading;
 
 	CProjectile *projectile;
 	projectile = CProjectile::Create();
