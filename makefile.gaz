@@ -123,7 +123,8 @@ platform_src :=		platform \
 					pjellfsh \
 					pclam \
 					pfishhk3 \
-					prbridge
+                                        prbridge \
+                                        pbaloon
 
 hazard_src :=		hazard \
 					hfalling \
@@ -483,7 +484,7 @@ ifeq ($(USER_NAME),CDBUILD)
 	@$(CP) -u Data/CdData/$(TERRITORY).ccs $(CD_BUILD_DIR)/$(TERRITORY).ccs
 	@$(CP) -u Data/CdData/thq.str $(CD_DIR)/thq.str
 	@$(CP) -u Data/CdData/intro.str $(CD_DIR)/intro.str
-	@$(CP) -u Data/CdData/track1.ixa $(CD_DIR)/track1.ixa 
+	@$(CP) -u Data/CdData/track1.ixa $(CD_DIR)/track1.ixa
 	@$(RAR) x data/CDData/ZZZZZZZ.RAR $(CD_DIR)/ -y >nul
 	@$(ECHO) HERE
 

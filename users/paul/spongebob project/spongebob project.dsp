@@ -1217,6 +1217,14 @@ SOURCE=..\..\..\source\pickups\pspatula.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pbaloon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pbaloon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pbgeyser.cpp
 # End Source File
 # Begin Source File

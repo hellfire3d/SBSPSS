@@ -82,6 +82,7 @@ public:
 		NPC_JELLYFISH_PLATFORM,
 		NPC_FISH_HOOK_3_PLATFORM,
 		NPC_RISING_BRIDGE_PLATFORM,
+		NPC_BALLOON_BRIDGE_PLATFORM,
 		NPC_PLAYER_BUBBLE_PLATFORM,
 		NPC_CLAM_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
@@ -91,7 +92,7 @@ public:
 	void				init( DVECTOR initPos );
 	void				init( DVECTOR initPos, s32 initLifetime );
 	virtual void		postInit();
-	void				shutdown();
+	virtual void		shutdown();
 	virtual void		think(int _frames);
 	virtual void		render();
 	virtual u8			canDrop()												{return true;}

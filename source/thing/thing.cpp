@@ -441,6 +441,22 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
 			thing1 = thing1->m_nextCollisionThing;
 		}
+
+		// Platform -> Player projectile collision
+		thing1=s_CollisionLists[CThing::TYPE_PLATFORM];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing1->collidedWith(thing2);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
 	}
 // Shut emm down, sh sh shut em down, we shutem down
 	for(i=0;i<CThing::MAX_TYPE;i++)

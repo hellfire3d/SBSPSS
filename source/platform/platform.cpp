@@ -151,6 +151,10 @@
 #include "platform\prbridge.h"
 #endif
 
+#ifndef __PLATFORM_PBALOON_H__
+#include "platform\pbaloon.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -351,6 +355,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_RISING_BRIDGE_PLATFORM:
 		{
 			platform = new ("rising bridge platform") CNpcRisingBridgePlatform;
+			break;
+		}
+
+		case NPC_BALLOON_BRIDGE_PLATFORM:
+		{
+			platform = new ("balloon bridge platform") CNpcBalloonBridgePlatform;
 			break;
 		}
 
@@ -991,33 +1001,42 @@ void CNpcPlatform::render()
 
 int CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
-	int collided = false;
-
-	if ( m_detectCollision && m_isActive && !isSetToShutdown() )
+	switch(_thisThing->getThingType())
 	{
-		CRECT thisRect, thatRect;
+		case TYPE_PLAYERPROJECTILE:
+			return( false );
 
-		thisRect = getCollisionArea();
-		thatRect = _thisThing->getCollisionArea();
-
-		DVECTOR posDelta = getPosDelta();
-
-		thisRect.y1 -= abs( posDelta.vy ) >> 1;
-		thisRect.y2 += abs( posDelta.vy ) >> 1;
-
-		posDelta = _thisThing->getPosDelta();
-
-		thatRect.y1 -= abs( posDelta.vy ) >> 1;
-		thatRect.y2 += abs( posDelta.vy ) >> 1;
-
-		if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
-		   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+		default:
 		{
-			collided = true;
+			int collided = false;
+
+			if ( m_detectCollision && m_isActive && !isSetToShutdown() )
+			{
+				CRECT thisRect, thatRect;
+
+				thisRect = getCollisionArea();
+				thatRect = _thisThing->getCollisionArea();
+
+				DVECTOR posDelta = getPosDelta();
+
+				thisRect.y1 -= abs( posDelta.vy ) >> 1;
+				thisRect.y2 += abs( posDelta.vy ) >> 1;
+
+				posDelta = _thisThing->getPosDelta();
+
+				thatRect.y1 -= abs( posDelta.vy ) >> 1;
+				thatRect.y2 += abs( posDelta.vy ) >> 1;
+
+				if(((thisRect.x1>=thatRect.x1&&thisRect.x1<=thatRect.x2)||(thisRect.x2>=thatRect.x1&&thisRect.x2<=thatRect.x2)||(thisRect.x1<=thatRect.x1&&thisRect.x2>=thatRect.x2))&&
+				   ((thisRect.y1>=thatRect.y1&&thisRect.y1<=thatRect.y2)||(thisRect.y2>=thatRect.y1&&thisRect.y2<=thatRect.y2)||(thisRect.y1<=thatRect.y1&&thisRect.y2>=thatRect.y2)))
+				{
+					collided = true;
+				}
+			}
+
+			return( collided );
 		}
 	}
-
-	return( collided );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
