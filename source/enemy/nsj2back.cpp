@@ -85,3 +85,59 @@ void CNpcSmallJellyfish2BackgroundEnemy::render()
 		}
 	}
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSmallJellyfish2BackgroundEnemy::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive && !m_isCaught && !m_isDying )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				ATTACK_STATE playerState = player->getAttackState();
+
+				if(playerState==ATTACK_STATE__NONE)
+				{
+					if ( !player->isRecoveringFromHit() )
+					{
+						switch( m_data[m_type].detectCollision )
+						{
+							case DETECT_NO_COLLISION:
+							{
+								// ignore
+
+								break;
+							}
+
+							case DETECT_ALL_COLLISION:
+							{
+								m_oldControlFunc = m_controlFunc;
+								m_controlFunc = NPC_CONTROL_COLLISION;
+
+								processUserCollision( _thisThing );
+
+								break;
+							}
+
+							case DETECT_ATTACK_COLLISION_GENERIC:
+							{
+								processAttackCollision();
+								processUserCollision( _thisThing );
+
+								break;
+							}
+						}
+					}
+				}
+
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
+}
