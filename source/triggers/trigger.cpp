@@ -39,6 +39,10 @@
 #include "triggers\tplatfrm.h"
 #endif
 
+#ifndef __TRIGGERS_TGARYGO_H__
+#include "triggers\tgarygo.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -79,6 +83,11 @@ CTrigger	*trigger;
 			break;
 		case TRIGGER_OUTWATER:
 			trigger=(COutOfWaterTrigger*)new ("OutOfWaterTrigger") COutOfWaterTrigger();
+			break;
+
+		// Gary start trigger
+		case TRIGGER_GARYSTART:
+			trigger=(CGaryStartTrigger*)new( "GaryStartTrigger") CGaryStartTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:

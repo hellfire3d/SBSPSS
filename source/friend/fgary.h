@@ -21,7 +21,15 @@
 class CNpcGaryFriend : public CNpcFriend
 {
 public:
-	virtual void			think( int _frames );
+	virtual void		postInit();
+	virtual void		think( int _frames );
+	virtual void		setupWaypoints( sThingActor *ThisActor );
+	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
+	void				start()													{m_started = true;}
+
+protected:
+	DVECTOR				m_triggerPos;
+	u8					m_started;
 };
 
 #endif

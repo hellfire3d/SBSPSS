@@ -23,7 +23,7 @@ void CNpcBubblePlatform::processMovement( int _frames )
 	{
 		Pos.vy -= m_speed * _frames;
 
-		if ( m_npcPath.getWaypointCount() > 1 )
+		if ( m_npcPath.getWaypointCount() )
 		{
 			s32 minY, maxY;
 

@@ -45,6 +45,10 @@
 #include "friend\friend.h"
 #endif
 
+#ifndef __FRIEND_FGARY_H__
+#include "friend\fgary.h"
+#endif
+
 #ifndef __HAZARD_HRWEIGHT_H__
 #include "hazard\hrweight.h"
 #endif
@@ -55,6 +59,10 @@
 
 #ifndef __HAZARD_HPSWITCH_H__
 #include "hazard\hpswitch.h"
+#endif
+
+#ifndef __TRIGGERS_TGARYGO_H__
+#include "triggers\tgarygo.h"
 #endif
 
 /*	Std Lib
@@ -319,6 +327,55 @@ void		CThingManager::matchWheelsAndWeights()
 		}
 
 		hazard1 = (CNpcHazard *) hazard1->m_nextListThing;
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+
+void		CThingManager::matchGaryTriggers()
+{
+	CNpcFriend *friendNpc;
+
+	friendNpc = (CNpcFriend *) s_thingLists[CThing::TYPE_NPC];
+
+	while( friendNpc )
+	{
+		if ( friendNpc->getThingSubType() == CNpcFriend::NPC_FRIEND_GARY )
+		{
+			CNpcGaryFriend *gary = (CNpcGaryFriend *) friendNpc;
+
+			DVECTOR triggerPos = gary->getTriggerPos();
+
+			CTrigger *trigger;
+
+			trigger = (CTrigger *) s_thingLists[CThing::TYPE_TRIGGER];
+
+			while( trigger )
+			{
+				if ( trigger->getThingSubType() == CTrigger::TRIGGER_GARYSTART )
+				{
+					CGaryStartTrigger *garyTrigger = (CGaryStartTrigger *) trigger;
+
+					DVECTOR testPos = garyTrigger->getPos();
+					testPos.vx >>= 4;
+					testPos.vy >>= 4;
+
+					if ( testPos.vx == triggerPos.vx && testPos.vy == triggerPos.vy )
+					{
+						garyTrigger->setGary( gary );
+					}
+				}
+
+				trigger = (CTrigger *) trigger->m_nextListThing;
+			}
+		}
+
+		friendNpc = (CNpcFriend *) friendNpc->m_nextListThing;
 	}
 }
 

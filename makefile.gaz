@@ -294,7 +294,8 @@ triggers_src :=		trigger \
 					trestart \
 					tteleprt \
 					twater \
-					tplatfrm
+					tplatfrm \
+					tgarygo
 
 utils_src :=		utils \
 					sincos \

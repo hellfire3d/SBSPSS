@@ -486,6 +486,7 @@ void	CLevel::initThings(int _respawningLevel)
 					{
 						CNpcFriend *friendNpc;
 						friendNpc=CNpcFriend::Create(ThisActor);
+						friendNpc->setupWaypoints( ThisActor );
 						friendNpc->postInit();
 					}
 					break;
@@ -534,6 +535,7 @@ void	CLevel::initThings(int _respawningLevel)
 	CThingManager::initAllThings();
 	CThingManager::matchWheelsAndWeights();
 	CThingManager::matchPressureSwitches();
+	CThingManager::matchGaryTriggers();
 }
 
 

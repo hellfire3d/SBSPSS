@@ -1905,6 +1905,14 @@ SOURCE=..\..\..\source\triggers\tcamlock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tgarygo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tgarygo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tlevexit.cpp
 # End Source File
 # Begin Source File
@@ -1934,6 +1942,14 @@ SOURCE=..\..\..\source\triggers\trestart.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\trestart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\trigger.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\trigger.h
 # End Source File
 # Begin Source File
 

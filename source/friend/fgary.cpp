@@ -19,6 +19,21 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::postInit()
+{
+	CNpcFriend::postInit();
+
+	m_started = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcGaryFriend::think( int _frames )
 {
@@ -65,7 +80,10 @@ void CNpcGaryFriend::think( int _frames )
 
 			Pos.vy += groundHeight;
 
-			Pos.vx += multiplier * _frames;
+			if ( m_started )
+			{
+				Pos.vx += multiplier * _frames;
+			}
 		}
 	}
 	else
@@ -86,12 +104,42 @@ void CNpcGaryFriend::think( int _frames )
 			}
 			else
 			{
-				Pos.vx += multiplier * _frames;
+				if ( m_started )
+				{
+					Pos.vx += multiplier * _frames;
+				}
 			}
 		}
 		else
 		{
 			Pos.vy += yMovement;
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::setupWaypoints( sThingActor *ThisActor )
+{
+	if ( ThisActor->PointCount > 1 )
+	{
+		u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
+
+		u16 newXPos, newYPos;
+
+		// skip first waypoint
+		
+		PntList++;
+		PntList++;
+
+		// get trigger position
+
+		newXPos = (u16) *PntList;
+		PntList++;
+		newYPos = (u16) *PntList;
+		PntList++;
+
+		m_triggerPos.vx = newXPos;
+		m_triggerPos.vy = newYPos;
 	}
 }

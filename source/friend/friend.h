@@ -57,6 +57,7 @@ public:
 	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
 	void				setPlatform( CNpcPlatform *platform )					{m_platform = platform;}
 	void				clearPlatform()											{m_platform = NULL;}
+	virtual void		setupWaypoints( sThingActor *ThisActor );
 
 	static CNpcFriend	*Create(sThingActor *ThisActor);
 	static NPC_FRIEND_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
