@@ -6,6 +6,7 @@ Fall
 GetUp
 HitGround
 IdleBreath
+IdleWeapon
 JumpEnd
 Jump
 Run
