@@ -3,9 +3,9 @@
 	nanemone.cpp
 
 	Author:		CRB
-	Created: 
+	Created:
 	Project:	Spongebob
-	Purpose: 
+	Purpose:
 
 	Copyright (c) 2000 Climax Development Ltd
 
@@ -38,6 +38,12 @@
 #ifndef __ANIM_SPIKEYANENOME_HEADER__
 #include <ACTOR_SPIKEYANENOME_ANIM.h>
 #endif
+
+void CNpcAnemoneEnemy::postInit()
+{
+	CNpcEnemy::postInit();
+	m_drawRotation = m_heading + 1024;
+}
 
 void CNpcAnemoneEnemy::processEnemyCollision( CThing *thisThing )
 {
@@ -207,6 +213,10 @@ void CNpcAnemone2Enemy::postInit()
 		heading &= 4095;
 
 		spikePos = Pos;
+
+		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
+		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
+
 		spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
 		spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
 
@@ -216,6 +226,14 @@ void CNpcAnemone2Enemy::postInit()
 
 		addChild( projectile );
 	}
+
+	m_drawRotation = m_heading + 1024;
+}
+
+void CNpcAnemone2Enemy::shutdown()
+{
+	deleteAllChild();
+	CNpcEnemy::shutdown();
 }
 
 void CNpcAnemone2Enemy::processClose( int _frames )
@@ -267,6 +285,10 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 			heading &= 4095;
 
 			spikePos = Pos;
+
+			spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
+			spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
+
 			spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
 			spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
 

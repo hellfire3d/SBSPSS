@@ -98,6 +98,12 @@ void CNpcParasiticWormEnemy::postInit()
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 }
 
+void CNpcParasiticWormEnemy::shutdown()
+{
+	deleteAllChild();
+	CNpcEnemy::shutdown();
+}
+
 void CNpcParasiticWormSegment::postInit()
 {
 }

@@ -38,7 +38,7 @@ void CNpcSpiderCrabEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
-	if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 ) < 0 )
+	if ( m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy - 8, 16 ) <= 0 )
 	{
 		// starting off below ground, jump initially
 
@@ -251,7 +251,7 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 
 	Pos.vy = m_base.vy - ( ( 50 * rsin( abs( m_extension ) << 4 ) ) >> 12 );
 
-	if ( m_extension > 64 )
+	/*if ( m_extension > 64 )
 	{
 		// check for collision on the way back down
 
@@ -262,6 +262,11 @@ void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 	}
 
 	if ( completed || collision )
+	{
+		m_state = SPIDER_CRAB_DEFAULT;
+	}*/
+
+	if ( m_extension > 64 )
 	{
 		m_state = SPIDER_CRAB_DEFAULT;
 	}
@@ -318,4 +323,21 @@ void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	s16 heading = ratan2( yDist, xDist );
 
 	m_drawRotation = heading;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpiderCrabEnemy::processEnemyCollision( CThing *thisThing )
+{
+	if ( m_state != SPIDER_CRAB_INIT_JUMP )
+	{
+		CNpcEnemy::processEnemyCollision( thisThing );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+u8 CNpcSpiderCrabEnemy::canCollideWithEnemy()
+{
+	return( m_state != SPIDER_CRAB_INIT_JUMP );
 }

@@ -804,8 +804,6 @@ void CNpcEnemy::shutdown()
 
 	if (m_actorGfx)	delete m_actorGfx;
 
-	deleteAllChild();
-
 	CEnemyThing::shutdown();
 }
 
@@ -985,7 +983,12 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 			case TYPE_ENEMY:
 			{
-				processEnemyCollision( _thisThing );
+				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+				if ( enemy->canCollideWithEnemy() )
+				{
+					processEnemyCollision( _thisThing );
+				}
 
 				break;
 			}
@@ -1517,11 +1520,11 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 	if ( yDist > 0 )
 	{
-		Pos.vy += 6;
+		Pos.vy += 3;
 	}
 	else
 	{
-		Pos.vy -= 6;
+		Pos.vy -= 3;
 	}
 
 	Pos.vx += otherDelta.vx;

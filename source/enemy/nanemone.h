@@ -20,6 +20,8 @@
 
 class	CNpcAnemoneEnemy : public CNpcEnemy
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual bool		processSensor();
@@ -35,6 +37,7 @@ class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
 {
 public:
 	virtual void		postInit();
+	virtual void		shutdown();
 protected:
 	virtual void		processClose( int _frames );
 };

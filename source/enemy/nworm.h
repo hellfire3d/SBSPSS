@@ -18,6 +18,7 @@ class CNpcParasiticWormEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
+	virtual void		shutdown();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );

@@ -22,6 +22,8 @@ class CNpcSpiderCrabEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
+	virtual u8			canCollideWithEnemy();
+	virtual void		processEnemyCollision( CThing *thisThing );
 protected:
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	virtual bool		processSensor();
