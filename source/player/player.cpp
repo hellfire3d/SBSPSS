@@ -645,6 +645,7 @@ m_animFrame=0;
 	m_lastPadInput=m_padInput=PI_NONE;
 
 	setCartCam(false);
+	setReverseCameraMovement(false);
 
 	resetPlayerCollisionSizeToBase();
 
@@ -772,6 +773,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 }
 #endif
 ///
+
 
 	for(i=0;i<_frames;i++)
 	{
@@ -1208,6 +1210,9 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	else if(m_cameraPos.vy>m_cameraPosLimitBox.y2)	m_cameraPos.vy=m_cameraPosLimitBox.y2;
 
 	m_ignoreNewlyPressedButtonsOnPadThisThink=false;
+
+	// Restore flipped camera
+	setReverseCameraMovement(false);
 
 	CPlayerThing::think(_frames);
 }
@@ -2473,7 +2478,7 @@ void	CPlayer::moveLeft()
 {
 	if(m_moveVelocity.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraXScrollPos<-(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
 	{
-		m_cameraXScrollDir=+1;
+		m_cameraXScrollDir=m_reverseCameraMovement==false?+1:-1;
 	}
 	else if(m_moveVelocity.vx>-CAMERA_STOPMOVETHRESHOLD)
 	{
@@ -2484,7 +2489,7 @@ void	CPlayer::moveRight()
 {
 	if(m_moveVelocity.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraXScrollPos>(CAMERA_SCROLLTHRESHOLD*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
 	{
-		m_cameraXScrollDir=-1;
+		m_cameraXScrollDir=m_reverseCameraMovement==false?-1:+1;
 	}
 	else if(m_moveVelocity.vx<CAMERA_STOPMOVETHRESHOLD)
 	{

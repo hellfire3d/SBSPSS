@@ -238,6 +238,7 @@ public:
 
 	DVECTOR			getCameraPos()										{return m_cameraPos;}
 	void			setCartCam(int _flag)								{m_cartCamActive=_flag;}
+	void			setReverseCameraMovement(int _flag)					{m_reverseCameraMovement=_flag;}
 	void			setCameraBox(CameraBox _cameraBox);
 	void			setRespawnPos(DVECTOR _respawn)						{m_respawnPos=_respawn;}
 	void			setRespawnPosAndRingTelephone(DVECTOR _respawn);
@@ -329,6 +330,7 @@ private:
 	CActorGfx		*m_actorGfx;
 
 	int				m_cartCamActive;
+	int				m_reverseCameraMovement;
 	int				m_lockCamera;
 	DVECTOR			m_cameraPos;
 	DVECTOR			m_currentCamFocusPointTarget;
