@@ -22,10 +22,14 @@ class CNpcSteerableBarrelPlatform : public CNpcPlatform
 {
 public:
 	virtual void		render();
+	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	s16					m_rotation;
+	s32					m_currentSpeed;
+	s16					m_moveXHighRes;
 };
 
 #endif

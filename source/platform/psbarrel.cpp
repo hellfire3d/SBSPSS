@@ -30,6 +30,16 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcSteerableBarrelPlatform::postInit()
+{
+	CNpcPlatform::postInit();
+
+	m_currentSpeed = 0;
+	m_moveXHighRes = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 {
 	s32 maxHeight = 20;
@@ -40,42 +50,83 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	s32 moveX = 0;
 	s32 moveY = 0;
 
+	CPlayer *player = GameScene.getPlayer();
+
 	if ( m_contact )
 	{
-		CPlayer *player = GameScene.getPlayer();
-
 		DVECTOR playerPos = player->getPos();
 
 		s32 playerX = playerPos.vx - this->Pos.vx;
 
 		if ( playerX > 5 )
 		{
-			// roll barrel right
+			// increase barrel speed to right
 
-			moveX = m_speed * _frames;
+			m_currentSpeed += _frames;
+
+			if ( m_currentSpeed > ( m_speed << 8 ) )
+			{
+				m_currentSpeed = ( m_speed << 8 );
+			}
 		}
 		else if ( playerX < -5 )
 		{
-			moveX = -m_speed * _frames;
+			m_currentSpeed -= _frames;
+
+			if ( m_currentSpeed < -( m_speed << 8 ) )
+			{
+				m_currentSpeed = -( m_speed << 8 );
+			}
+		}
+	}
+	else
+	{
+		// reduce speed
+
+		s32 speedReduce = -m_currentSpeed;
+
+		if ( speedReduce > _frames )
+		{
+			speedReduce = _frames;
+		}
+		else if ( speedReduce < -_frames )
+		{
+			speedReduce = -_frames;
 		}
 
-		// check for collision
+		m_currentSpeed += speedReduce;
+	}
 
-		if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
-		{
-			moveX = 0;
-		}
+	m_moveXHighRes += m_currentSpeed * _frames;
 
-		if ( moveX > 0 )
-		{
-			m_rotation += 30 * _frames;
-			m_rotation &= 4095;
-		}
-		else if ( moveX < 0 )
-		{
-			m_rotation -= 30 * _frames;
-			m_rotation &= 4095;
-		}
+	moveX = m_moveXHighRes >> 8;
+	m_moveXHighRes -= moveX << 8;
+
+	// check for collision
+
+	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
+	{
+		moveX = 0;
+		m_currentSpeed = 0;
+	}
+
+	if ( moveX > 0 )
+	{
+		m_rotation += 30 * _frames;
+		m_rotation &= 4095;
+	}
+	else if ( moveX < 0 )
+	{
+		m_rotation -= 30 * _frames;
+		m_rotation &= 4095;
+	}
+
+	if ( m_contact )
+	{
+		DVECTOR shove;
+		shove.vx = moveX * _frames;
+		shove.vy = 0;
+		player->shove(shove);
 	}
 
 	// check for vertical movement
@@ -107,10 +158,12 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		if ( Pos.vx < minX )
 		{
 			Pos.vx = minX;
+			m_currentSpeed = 0;
 		}
 		else if ( Pos.vx > maxX )
 		{
 			Pos.vx = maxX;
+			m_currentSpeed = 0;
 		}
 	}
 }
@@ -142,3 +195,58 @@ void CNpcSteerableBarrelPlatform::render()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSteerableBarrelPlatform::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, 0, collisionArea ) )
+				{
+					player->setPlatform( this );
+
+					m_contact = true;
+				}
+				else
+				{
+					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+					{
+						int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+						if ( height >= 0 && height < 1 )
+						{
+							player->setPlatform( this );
+
+							m_contact = true;
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		case TYPE_NPC:
+		case TYPE_HAZARD:
+			break;
+
+		default:
+			ASSERT(0);
+			break;
+	}
+}
+
