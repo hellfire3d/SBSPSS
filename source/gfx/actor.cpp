@@ -74,11 +74,11 @@ int		Slot=0;
 			Slot=SlotCount;
 			SlotList[Slot].Width=W;
 			SlotList[Slot].Height=H;
-/*bodge*/			
-			if (SlotCount<CACHE_W-1)
-			{
-				SlotCount++;
-			}
+
+			printf("Get Slot %i Slots\n",SlotCount);
+
+/*bodge*/	//if (SlotCount<CACHE_W-1)
+			SlotCount++;
 		}
 		SlotList[Slot].RefCount++;
 
@@ -178,6 +178,7 @@ int		MaxW=0;
 int		MaxH=0;
 
 /*		if (TPW<1) */TPW=1;
+
 		ASSERT(SlotCount<CACHE_W);
 
 		for (int i=0; i<SlotCount; i++)
@@ -512,9 +513,17 @@ POLY_FT4		*Ft4;
 			if (!ThisNode)
 			{ // Not cached frame
 				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->PoolCache);
-				CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
-				RECT	R;
+				if (ThisNode)
+				{
+					CActorCache::AddNode(ThisNode,&PoolEntry->ActorCache);
+				}
+				else
+				{
+					printf("NO FREE NODES\n");
+					ThisNode=PoolEntry->ActorCache.Head;
+				}
 				ASSERT(ThisNode);
+				RECT	R;
 
 				ThisNode->Actor=PoolEntry->Filename;
 				ThisNode->Anim=Anim;
@@ -705,8 +714,8 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-const int	PXOfs=-16;
-const int	PYOfs=-6;
+int	PXOfs=-16;
+int	PYOfs=-8;
 
 void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)
 {
