@@ -25,9 +25,6 @@
 #include <gfname.hpp>
 #include <pcre.h>
 
-//#include <ginio.h>
-//#include <repread.h>
-
 #include "sprset.h"
 #include "allfiles.h"
 
@@ -70,8 +67,6 @@ public:
 		void	FileRecursion(bool f)					{MyFiles.SetFileRecursion(f);}
 		void	NoSort()								{MyFiles.setNoSort();}
 		void	SetDebug(bool f)						{DebugFlag=f;}
-
-		void	ReadRepFile(GString String)				{MyFiles.ReadRepFile(String);}
 
 		void	CrossHair(bool f)						{MyFiles.SetCrossHair(f);}
 		void	ZeroColZero(bool f)						{MyFiles.SetZeroColZero(f);}

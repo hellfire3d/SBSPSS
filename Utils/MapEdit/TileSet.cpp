@@ -428,8 +428,8 @@ void	CTileSet::Load2d(CCore *Core)
 {
 CTexCache	&TexCache=Core->GetTexCache();
 GString		ColTest;
-int		TexID=TexCache.ProcessTexture(Filename,0);
-sTex	&ThisTex=TexCache.GetTex(TexID);
+int			TexID=TexCache.ProcessTexture(Filename,0);
+sTex		&ThisTex=TexCache.GetTex(TexID);
 
 int		Width=ThisTex.TexWidth/16;
 int		Height=ThisTex.TexHeight/16;

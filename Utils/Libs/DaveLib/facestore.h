@@ -73,18 +73,18 @@ public:
 
 		CFace					&AddFace(sTriFace &Face,int ID=0);
 
-		void					SetTexGrab(CTexGrab &NewGrab)		{TexGrab=&NewGrab;}
+		void					SetTexGrab(CTexGrab &NewGrab)						{TexGrab=&NewGrab;}
 		int						AddTex(GString const &TexName);
-		void					SetTexBasePath(GString &Path);
-		void					SetTexOut(GString &Name,int TPBase,int TPW,int TPH);
-		void					SetTexInclude(GString &Name)		{TexGrab->SetIncFile(Name);}
-		void					SetTexDebug(bool f)					{TexGrab->SetDebug(f);}
-		void					SetTexDebugOut(GString &Name);
-		void					SetTexShrinkToFit(bool f)			{TexGrab->ShrinkToFit(f);}
-		void					SetTexNoSort()						{TexGrab->NoSort();}
-		void					SetTexAnimatedHeadersOnly(bool f)	{TexGrab->AnimatedHeadersOnly(f);}
-		void					SetTexDontOutputBoxes(bool f)		{TexGrab->DontOutputBoxes(f);}
-		void					SetTexAllowRotate(bool f)			{TexGrab->AllowRotate(f);}
+		void					SetTexBasePath(GString &Path)						{TexBasePath=Path;}
+		void					SetTexOut(GString &Name,int TPBase,int TPW,int TPH)	{TexGrab->SetOutFile(Name); TexGrab->SetTPage(TPBase,TPW,TPH);}
+		void					SetTexInclude(GString &Name)						{TexGrab->SetIncFile(Name);}
+		void					SetTexDebug(bool f)									{TexGrab->SetDebug(f);}
+		void					SetTexDebugOut(GString &Name)						{TexGrab->SetDebugOut(Name);}
+		void					SetTexShrinkToFit(bool f)							{TexGrab->ShrinkToFit(f);}
+		void					SetTexNoSort()										{TexGrab->NoSort();}
+		void					SetTexAnimatedHeadersOnly(bool f)					{TexGrab->AnimatedHeadersOnly(f);}
+		void					SetTexDontOutputBoxes(bool f)						{TexGrab->DontOutputBoxes(f);}
+		void					SetTexAllowRotate(bool f)							{TexGrab->AllowRotate(f);}
 
 		CTexGrab				&GetTexGrab()						{return(FaceStoreTexGrab);}
 		vector<sTexOutInfo>		&GetTexInfo()						{return(TexGrab->GetTexInfo());}

@@ -298,6 +298,7 @@ int		ListSize=AnimList.size();
 		fprintf(File,",\n");
 		}
 
+		fprintf(File,"\tNUM_ANIM_%s",Name.File());
 		fprintf(File,"};\n");
 		fprintf(File,"\n");
 		fprintf(File,"#endif\n");

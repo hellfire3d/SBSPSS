@@ -40,7 +40,6 @@ private:
 
 		CFaceStore			FaceList;
 
-		CTexGrab			TexGrab;
 		sActor3dHdr			FileHdr;
 		FILE				*File;
 

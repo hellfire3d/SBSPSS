@@ -18,18 +18,6 @@
 	Includes
 	-------- */
 
-//#include <vector>
-//#include <gtypes.h>
-//#include <gstring.hpp>
-//#include <misc.hpp>
-//#include <gfname.hpp>
-//#include <pcre.h>
-
-//#include <ginio.h>
-//#include <repread.h>
-
-//#include "sprset.h"
-
 using namespace std;
 
 /*----------------------------------------------------------------------
@@ -78,8 +66,6 @@ public:
 	void	SortOrder();
 	int		AddFile(const char * Name);
 	int		AddMemFrame(char const * FName,Frame &Frame);
-	void	ReadRepFile(char const * Name);
-
 
 protected:
 	vector<GString>		UniqueTexturesSoFar;

@@ -203,6 +203,7 @@ int		ListSize=Skel.size();
 			sGinSkel	&ThisBone=Skel[i];
 			int			VtxStart=FaceList.GetVtxCount();
 			int			FaceListSize=ThisBone.FaceList.GetFaceCount();
+
 			if (FaceListSize)
 			{
 				ThisBone.Bone.TriStart=FaceList.GetFaceCount();
@@ -234,14 +235,14 @@ int		ListSize=Skel.size();
 //***************************************************************************
 void	CMkActor3d::Process()
 {
-		ProcessSkel(1,-1);
-		BuildSkelOut();
-		printf("Skel has %i bones\n",Skel.size());
-
 		FaceList.SetTexBasePath(InPath);
 		FaceList.SetTexOut(OutFile+".Tex",TPageBase,TPageWidth,TPageHeight);
 		FaceList.SetTexDebugOut(OutFile+".Lbm");
 		if (!IncludeFile.Empty()) FaceList.SetTexInclude(IncludeFile);
+
+		ProcessSkel(1,-1);
+		BuildSkelOut();
+		printf("Skel has %i bones\n",Skel.size());
 
 int		ListSize=ExtraTex.size();
 		for (int i=0; i<ListSize; i++)

@@ -190,7 +190,7 @@ CFace	&F = FaceList[ListSize];
 int		CFaceStore::AddTex(GString const &TexName)
 {
 int		ListSize=TexList.size();
-GString	UpperName=TexName;
+GString	UpperName=TexBasePath+TexName;
 		UpperName.Upper();
 
 		for (int i=0; i<ListSize; i++)
@@ -207,29 +207,6 @@ sFaceTexList	&New=TexList[ListSize];
 		New.TexGrabId=TexGrab->AddFile(UpperName);
 
 		return(New.TexGrabId);
-}
-
-//***************************************************************************
-void	CFaceStore::SetTexBasePath(GString &Path)
-{
-		TexBasePath=Path;
-}
-
-//***************************************************************************
-void	CFaceStore::SetTexOut(GString &Name,int TPBase,int TPW,int TPH)
-{
-char	File[256];
-		sprintf(File,"%s",Name);
-		TexGrab->SetOutFile(File);
-		TexGrab->SetTPage(TPBase,TPW,TPH);
-}
-
-//***************************************************************************
-void	CFaceStore::SetTexDebugOut(GString &Name)
-{
-char	File[256];
-		sprintf(File,"%s",Name);
-		TexGrab->SetDebugOut(File);
 }
 
 //***************************************************************************
@@ -272,7 +249,6 @@ void	CFaceStore::SetupUV(CFace const &In, sTri &Out)
 {
 vector<sTexOutInfo>	&TexInfo=TexGrab->GetTexInfo();
 sTexOutInfo			&ThisTex=TexInfo[In.Mat];
-//			printf("Setup UV %s\n",ThisTex.Name);
 			
 int		W = ThisTex.w - 1;
 int		H = ThisTex.h - 1;

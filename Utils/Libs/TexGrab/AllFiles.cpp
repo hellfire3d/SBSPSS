@@ -21,9 +21,6 @@
 #include <gfname.hpp>
 #include <pcre.h>
 
-//#include <ginio.h>
-//#include <repread.h>
-
 #include "sprset.h"
 
 #include	"AllFiles.h"
@@ -58,66 +55,36 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 	GString		Ext(FileName.Ext());
 	
 	Ext.Lower();
-/*
-	if (Ext=="gin")
-		{
-		vector<GString> NonSharedTextures;
+	GFName	Name(FName);
 
-		CScene		MyFile;
-		MyFile.Load(FName);
-
-		MyFile.GetNonSharedTextures(AllExternalSharedTextures,NonSharedTextures);
-
-
-		vector<GString> NewEntrys;
-
-		for (int f=0;f<NonSharedTextures.size();f++)
-			{
-			if (find(UniqueTexturesSoFar.begin(),UniqueTexturesSoFar.end(),NonSharedTextures[f]) == UniqueTexturesSoFar.end())
-				{
-				NewEntrys.push_back(NonSharedTextures[f]);
-				UniqueTexturesSoFar.push_back(NonSharedTextures[f]);
-				}
-			}
-
-
-		for (f=0;f<NewEntrys.size();f++)
-			FileCallback(NewEntrys[f],0);
-
-		if (DebugFlag) cout<<"Read gin file *"<<FName<<"*"<<endl;
-		}
+	if (Name.File()[0]=='+')
+		ThisZeroColZero=true;
 	else
-*/		{
-		GFName	Name(FName);
+		ThisZeroColZero=ZeroColZero;
 
-		if (Name.File()[0]=='+')
-			ThisZeroColZero=true;
-		else
-			ThisZeroColZero=ZeroColZero;
+	if (Name.File()[0]=='!')
+		m_allocateAs16bit=true;
+	else
+		m_allocateAs16bit=false;
 
-		if (Name.File()[0]=='!')
-			m_allocateAs16bit=true;
-		else
-			m_allocateAs16bit=false;
+	if (Name.File()[0] == '@')
+	{
+		ThisZeroColZero = true;
+		m_allocateAs16bit = true;
+	}
 
-		if (Name.File()[0] == '@')
-		{
-			ThisZeroColZero = true;
-			m_allocateAs16bit = true;
-		}
-
-		GString TheFile(FName);
-		TheFile.Lower();
-			
-		MyInfo.SetInfo(TheFile,CrossHair,ThisZeroColZero,MoveUVs,AllowRotate,ShrinkToFit,m_allocateAs16bit);
-		if (DebugFlag) cout<<"Add image file "<<TheFile<<endl;
-
-		if (ForceOffsets)
-			MyInfo.SetForceOffsets(XOff,YOff);
+	GString TheFile(FName);
+	TheFile.Lower();
 		
-		AllFileInfos.resize(AllFileInfos.size()+1);
-		AllFileInfos[AllFileInfos.size()-1]=MyInfo;
-		}
+	MyInfo.SetInfo(TheFile,CrossHair,ThisZeroColZero,MoveUVs,AllowRotate,ShrinkToFit,m_allocateAs16bit);
+	if (DebugFlag) cout<<"Add image file "<<TheFile<<endl;
+
+	if (ForceOffsets)
+		MyInfo.SetForceOffsets(XOff,YOff);
+	
+	AllFileInfos.resize(AllFileInfos.size()+1);
+	AllFileInfos[AllFileInfos.size()-1]=MyInfo;
+
 }
 
 int	AllFiles::AddMemFrame(char const * FName,Frame &Frame)
@@ -180,25 +147,6 @@ void AllFiles::SortOrder()
 				}
 			}
 		}
-}
-
-/*----------------------------------------------------------------------
-	Function:	void AllFiles::ReadRepFile(char const * Name)
-	Purpose:	Read in rep file for shared textures
-	Params:		Name of rep file
-  ---------------------------------------------------------------------- */
-void AllFiles::ReadRepFile(char const * Name)
-{
-/*
-	vector<RepItem>		MyItems;
-
-	::readRepFile(Name,MyItems);
-
-	for (int f=0;f<MyItems.size();f++)
-		AllExternalSharedTextures.push_back(MyItems[f].m_texName);
-
-	if (DebugFlag) cout<<"Read report file "<<Name<<endl;
-*/
 }
 
 /*===========================================================================
