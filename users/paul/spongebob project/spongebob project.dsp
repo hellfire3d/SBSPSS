@@ -767,30 +767,29 @@ SOURCE=..\..\..\source\pickups\pspatula.h
 # Begin Group "player"
 
 # PROP Default_Filter ""
+# Begin Group "modes"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\source\player\demoplay.cpp
+SOURCE=..\..\..\source\player\modelist.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\player\demoplay.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\panimsfx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\player.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\player\player.h
+SOURCE=..\..\..\source\player\pmboots.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pmodes.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmodes.h
+# End Source File
+# End Group
+# Begin Group "states"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\..\source\player\psbutt.cpp
@@ -870,6 +869,27 @@ SOURCE=..\..\..\source\player\pstates.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\player\pstates.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\..\source\player\demoplay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\demoplay.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\panimsfx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\player.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\player.h
 # End Source File
 # End Group
 # Begin Group "projectl"

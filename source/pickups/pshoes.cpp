@@ -25,6 +25,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -61,7 +65,7 @@
   ---------------------------------------------------------------------- */
 void	CShoesPickup::init()
 {
-	CBasePickup::init();
+	CBaseRespawningPickup::init();
 	m_sin=0;
 }
 
@@ -73,7 +77,19 @@ void	CShoesPickup::init()
   ---------------------------------------------------------------------- */
 void	CShoesPickup::collect(class CPlayer *_player)
 {
-	CBasePickup::collect(_player);
+	CBaseRespawningPickup::collect(_player);
+	_player->setMode(PLAYER_MODE_SQUEAKYBOOTS);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CShoesPickup::getRespawnTime()
+{
+	return 60*30;
 }
 
 /*----------------------------------------------------------------------

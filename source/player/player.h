@@ -30,6 +30,10 @@
 #include <dstructs.h>
 #endif
 
+#ifndef	__PLAYER_PMODES_H__
+#include "player\pmodes.h"
+#endif
+
 #ifndef	__PLAYER_PSTATES_H__
 #include "player\pstates.h"
 #endif
@@ -45,6 +49,18 @@
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
 	------------------- */
+
+typedef enum
+{
+	PLAYER_MODE_BASICUNARMED,
+	PLAYER_MODE_FULLUNARMED,
+	PLAYER_MODE_SQUEAKYBOOTS,
+	PLAYER_MODE_NET,
+	PLAYER_MODE_CORALBLOWER,
+	PLAYER_MODE_FLY,
+
+	NUM_PLAYERMODES,
+}PLAYER_MODE;
 
 typedef enum
 {
@@ -68,18 +84,6 @@ typedef enum
 
 	NUM_STATES,
 }PLAYER_STATE;
-
-typedef enum
-{
-	PLAYER_MODE_BASICUNARMED,
-	PLAYER_MODE_FULLUNARMED,
-	PLAYER_MODE_SQUEAKYBOOTS,
-	PLAYER_MODE_NET,
-	PLAYER_MODE_CORALBLOWER,
-	PLAYER_MODE_FLY,
-
-	NUM_PLAYERMODES,
-}PLAYER_MODE;
 
 enum
 {
@@ -171,7 +175,9 @@ protected:
 
 	// State
 	int				setState(PLAYER_STATE _state);
+public:
 	void			setMode(PLAYER_MODE _mode);
+private:
 	int				getFacing();
 	void			setFacing(int _facing);
 	int				getAnimFrame();
@@ -211,6 +217,7 @@ private:
 	typedef struct
 	{
 		PlayerMetrics		m_metrics;
+		class CPlayerMode	*m_modeControl;
 		class CPlayerState	*m_states[NUM_STATES];
 	}PlayerMode;
 

@@ -319,6 +319,8 @@ if(PadGetDown(0)&PAD_CIRCLE)
 				}
 			}
 		}
+
+		s_modes[m_currentMode].m_modeControl->think(this);
 	}
 
 
@@ -679,6 +681,7 @@ void CPlayer::setMode(PLAYER_MODE _mode)
 	m_currentMode=_mode;
 // Need to do something about this setState() for when the new mode doesn't have that state (pkg)
 	setState(m_currentState);
+	s_modes[m_currentMode].m_modeControl->enter(this);
 }
 
 
@@ -1052,7 +1055,10 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 				break;
 
 			case DAMAGE__ELECTROCUTION:
-				// if squeaky boots then ouchThatHurt=false;
+				if(m_currentMode==PLAYER_MODE_SQUEAKYBOOTS)
+				{
+					ouchThatHurt=false;
+				}
 				break;
 		}
 

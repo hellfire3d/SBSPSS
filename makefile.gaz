@@ -157,7 +157,6 @@ pickups_src :=		pickup \
 player_src :=		demoplay \
 					panimsfx \
 					player \
-					pmodes \
 					psbutt \
 					pschop \
 					psdead \
@@ -167,7 +166,10 @@ player_src :=		demoplay \
 					psidle \
 					psjump \
 					psrun \
-					pstates
+					pstates \
+					modelist \
+					pmodes \
+					pmboots
 
 script_src :=		script \
 					function
