@@ -176,6 +176,12 @@ protected:
 		NPC_GENERIC_HIT_DEATH_END,
 	};
 
+	enum NPC_CORAL_BLOWER_STATE
+	{
+		NPC_CORAL_BLOWER_SUCK = 200,
+		NPC_CORAL_BLOWER_RETURN = 201,
+	};
+
 	enum
 	{
 		EXTEND_UP = true,
@@ -242,6 +248,9 @@ protected:
 
 	void				reinit();
 
+	void				processCoralBlower( int _frames );
+	void				processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -274,11 +283,14 @@ protected:
 	DVECTOR				m_base;
 	DVECTOR				m_initPos;
 	u8					m_state;
+	u8					m_oldState;
 	u8					m_salvoCount;
 	bool				m_animPlaying;
 	bool				m_reversed;
 	s32					m_health;
 	bool				m_isActive;
+	u8					m_isCaught;
+	DVECTOR				m_caughtPos;
 
 	s32				m_frame;
 	int				m_animNo;

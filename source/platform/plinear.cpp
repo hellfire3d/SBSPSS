@@ -28,11 +28,12 @@ void CNpcLinearPlatform::processMovement( int _frames )
 {
 	s32 moveX = 0, moveY = 0;
 	s32 moveDist = 0;
+	s32 xDist, yDist;
 
 	bool pathComplete;
 	bool waypointChange;
 
-	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
+	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 
 	if ( !pathComplete )
 	{
@@ -83,10 +84,48 @@ void CNpcLinearPlatform::processMovement( int _frames )
 			moveX = preShiftX / abs( preShiftX );
 		}
 
+		if ( xDist > 0 )
+		{
+			if ( moveX > xDist )
+			{
+				moveX = xDist;
+			}
+		}
+		else if ( xDist < 0 )
+		{
+			if ( moveX < xDist )
+			{
+				moveX = xDist;
+			}
+		}
+		else
+		{
+			moveX = 0;
+		}
+
 		moveY = preShiftY >> 12;
 		if ( !moveY && preShiftY )
 		{
 			moveY = preShiftY / abs( preShiftY );
+		}
+
+		if ( yDist > 0 )
+		{
+			if ( moveY > yDist )
+			{
+				moveY = yDist;
+			}
+		}
+		else if ( yDist < 0 )
+		{
+			if ( moveY < yDist )
+			{
+				moveY = yDist;
+			}
+		}
+		else
+		{
+			moveY = 0;
 		}
 
 		//processGroundCollisionReverse( moveX, moveY );

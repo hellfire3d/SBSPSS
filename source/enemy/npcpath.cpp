@@ -239,7 +239,7 @@ bool CNpcPath::getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY
 	return( currentWaypoint->isPointNear( currentPos, distX, distY ) );
 }
 
-s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange )
+s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY )
 {
 	if ( !this->waypoint )
 	{
@@ -253,21 +253,19 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 		currentWaypoint = this->waypoint;
 	}
 
-	s32 xDist, yDist;
-
 	*pathComplete = false;
 	*waypointChange = false;
 
-	if ( currentWaypoint->isPointNear( currentPos, &xDist, &yDist ) )
+	if ( currentWaypoint->isPointNear( currentPos, distX, distY ) )
 	{
 		*pathComplete = incPath();
 		*waypointChange = true;
 
-		xDist = currentWaypoint->pos.vx - currentPos.vx;
-		yDist = currentWaypoint->pos.vy - currentPos.vy;
+		*distX = currentWaypoint->pos.vx - currentPos.vx;
+		*distY = currentWaypoint->pos.vy - currentPos.vy;
 	}
 
-	s32 headingToTarget = ratan2( yDist, xDist );
+	s32 headingToTarget = ratan2( *distY, *distX );
 
 	return( headingToTarget );
 }

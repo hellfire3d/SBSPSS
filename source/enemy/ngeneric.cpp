@@ -80,12 +80,16 @@ void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32
 			moveX = xDist;
 		}
 	}
-	else
+	else if ( xDist < 0 )
 	{
 		if ( moveX < xDist )
 		{
 			moveX = xDist;
 		}
+	}
+	else
+	{
+		moveX = 0;
 	}
 
 	moveY = preShiftY >> 12;
@@ -101,12 +105,16 @@ void CNpcEnemy::processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32
 			moveY = yDist;
 		}
 	}
-	else
+	else if ( yDist < 0 )
 	{
 		if ( moveY < yDist )
 		{
 			moveY = yDist;
 		}
+	}
+	else
+	{
+		moveY = 0;
 	}
 
 	Pos.vx += moveX;
@@ -188,8 +196,9 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 {
 	bool pathComplete;
 	bool waypointChange;
+	s32 xDist, yDist;
 
-	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
+	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 
 	/*if ( waypointChange )
 	{
@@ -245,10 +254,48 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 			*moveX = preShiftX / abs( preShiftX );
 		}
 
+		if ( xDist > 0 )
+		{
+			if ( *moveX > xDist )
+			{
+				*moveX = xDist;
+			}
+		}
+		else if ( xDist < 0 )
+		{
+			if ( *moveX < xDist )
+			{
+				*moveX = xDist;
+			}
+		}
+		else
+		{
+			*moveX = 0;
+		}
+
 		*moveY = preShiftY >> 12;
 		if ( !(*moveY) && preShiftY )
 		{
 			*moveY = preShiftY / abs( preShiftY );
+		}
+
+		if ( yDist > 0 )
+		{
+			if ( *moveY > yDist )
+			{
+				*moveY = yDist;
+			}
+		}
+		else if ( yDist < 0 )
+		{
+			if ( *moveY < yDist )
+			{
+				*moveY = yDist;
+			}
+		}
+		else
+		{
+			*moveY = 0;
 		}
 
 		*moveVel = ( _frames * m_data[m_type].speed ) << 8;

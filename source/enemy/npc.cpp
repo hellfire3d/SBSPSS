@@ -617,6 +617,7 @@ void CNpcEnemy::init()
 
 	m_isShuttingDown = false;
 	m_drawRotation = 0;
+	m_isCaught = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -707,94 +708,103 @@ int CNpcEnemy::getFrameCount()
 
 void CNpcEnemy::think(int _frames)
 {
+	int moveFrames = _frames;
+
+	if ( moveFrames > 2 )
+	{
+		// make sure enemies don't go berserk if too many frames are dropped
+
+		moveFrames = 2;
+	}
+
 	CEnemyThing::think(_frames);
 
-	if ( m_isActive )
+	processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
+	playerXDistSqr = playerXDist * playerXDist;
+	playerYDistSqr = playerYDist * playerYDist;
+
+	if ( m_isCaught )
 	{
-		processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
-		playerXDistSqr = playerXDist * playerXDist;
-		playerYDistSqr = playerYDist * playerYDist;
-
-		if ( m_animPlaying )
+		processCoralBlower( moveFrames );
+	}
+	else
+	{
+		if ( m_isActive )
 		{
-			s32 frameCount;
-
-			frameCount = getFrameCount();
-
-			s32 frameShift = ( _frames << 8 ) >> 1;
-
-			if ( ( frameCount << 8 ) - m_frame > frameShift )
+			if ( m_animPlaying )
 			{
-				m_frame += frameShift;
-			}
-			else
-			{
-				m_frame = ( frameCount - 1 ) << 8;
-				m_animPlaying = false;
-			}
-		}
+				s32 frameCount;
 
-		switch ( this->m_controlFunc )
-		{
-			case NPC_CONTROL_NONE:
-				return;
+				frameCount = getFrameCount();
 
-			case NPC_CONTROL_MOVEMENT:
-				if ( !processSensor() )
+				s32 frameShift = ( _frames << 8 ) >> 1;
+
+				if ( ( frameCount << 8 ) - m_frame > frameShift )
 				{
-					int moveFrames = _frames;
-
-					if ( moveFrames > 2 )
-					{
-						// make sure enemies don't go berserk if too many frames are dropped
-
-						moveFrames = 2;
-					}
-
-					processMovement( moveFrames );
+					m_frame += frameShift;
 				}
 				else
 				{
-					processClose(_frames);
+					m_frame = ( frameCount - 1 ) << 8;
+					m_animPlaying = false;
 				}
+			}
 
-				break;
+			switch ( this->m_controlFunc )
+			{
+				case NPC_CONTROL_NONE:
+					return;
 
-			case NPC_CONTROL_SHOT:
-				processShot();
+				case NPC_CONTROL_MOVEMENT:
+					if ( !processSensor() )
+					{
+						processMovement( moveFrames );
+					}
+					else
+					{
+						processClose(_frames);
+					}
 
-				break;
+					break;
 
-			case NPC_CONTROL_CLOSE:
-				processClose(_frames);
+				case NPC_CONTROL_SHOT:
+					processShot();
 
-				break;
+					break;
 
-			case NPC_CONTROL_COLLISION:
-				processCollision();
+				case NPC_CONTROL_CLOSE:
+					processClose(_frames);
 
-				break;
-		}
+					break;
 
-		if ( m_heading > 1024 && m_heading < 3072 )
-		{
-			m_reversed = true;
-		}
-		else
-		{
-			m_reversed = false;
+				case NPC_CONTROL_COLLISION:
+					processCollision();
+
+					break;
+			}
+
+			if ( m_heading > 1024 && m_heading < 3072 )
+			{
+				m_reversed = true;
+			}
+			else
+			{
+				m_reversed = false;
+			}
 		}
 	}
 
-	processTimer(_frames);
-
+	if ( !m_isCaught )
+	{
+		processTimer(_frames);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
-	if ( m_isActive )
+	if ( m_isActive && !m_isCaught )
 	{
 		switch(_thisThing->getThingType())
 		{
@@ -1425,5 +1435,120 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 		// try next waypoint to get around other enemy
 
 		m_npcPath.incPath();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist )
+{
+	s32 moveX, moveY;
+	s16 headingToTarget;
+	
+	headingToTarget = ratan2( yDist, xDist );
+
+	s32 preShiftX = _frames * 3 * rcos( headingToTarget );
+	s32 preShiftY = _frames * 3 * rsin( headingToTarget );
+
+	moveX = preShiftX >> 12;
+	if ( !moveX && preShiftX )
+	{
+		moveX = preShiftX / abs( preShiftX );
+	}
+
+	if ( xDist > 0 )
+	{
+		if ( moveX > xDist )
+		{
+			moveX = xDist;
+		}
+	}
+	else if ( xDist < 0 )
+	{
+		if ( moveX < xDist )
+		{
+			moveX = xDist;
+		}
+	}
+	else
+	{
+		moveX = 0;
+	}
+
+	moveY = preShiftY >> 12;
+	if ( !moveY && preShiftY )
+	{
+		moveY = preShiftY / abs( preShiftY );
+	}
+
+	if ( yDist > 0 )
+	{
+		if ( moveY > yDist )
+		{
+			moveY = yDist;
+		}
+	}
+	else if ( yDist < 0 )
+	{
+		if ( moveY < yDist )
+		{
+			moveY = yDist;
+		}
+	}
+	else
+	{
+		moveY = 0;
+	}
+
+	Pos.vx += moveX;
+	Pos.vy += moveY;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcEnemy::processCoralBlower( int _frames )
+{
+	s32 targetXDist, targetYDist;
+
+	switch( m_state )
+	{
+		case NPC_CORAL_BLOWER_SUCK:
+		{
+			// go to user
+
+			targetXDist = playerXDist;
+			targetYDist = playerYDist;
+
+			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+
+			break;
+		}
+
+		case NPC_CORAL_BLOWER_RETURN:
+		{
+			// go to original position
+
+			targetXDist = m_caughtPos.vx - Pos.vx;
+			targetYDist = m_caughtPos.vy - Pos.vy;
+
+			processCoralBlowerMovement( _frames, targetXDist, targetYDist );
+
+			if ( !targetXDist && !targetYDist )
+			{
+				m_state = m_oldState;
+				m_isCaught = false;
+			}
+
+			break;
+		}
+
+		default:
+		{
+			m_oldState = m_state;
+			m_state = NPC_CORAL_BLOWER_SUCK;
+			m_caughtPos = Pos;
+
+			break;
+		}
 	}
 }

@@ -44,7 +44,7 @@ public:
 	bool			incPath();
 	void			resetPath();
 	void			reversePathDir();
-	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
+	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange, s32 *distX, s32 *distY );
 	bool			thinkFlat( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading );
 	bool			thinkVertical( DVECTOR currentPos, bool *pathComplete, s32 *distX, s32 *distY, s32 *heading );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );

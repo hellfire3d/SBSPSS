@@ -41,8 +41,9 @@ void CNpcSawbladeHazard::processMovement( int _frames )
 {
 	bool pathComplete;
 	bool waypointChange;
+	s32 xDist, yDist;
 
-	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
+	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 
 	if ( !pathComplete )
 	{
