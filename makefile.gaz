@@ -139,6 +139,7 @@ hazard_src :=		hazard \
 					hbbarrel
 
 fx_src :=			fx \
+					fxfallingtile \
 					fxjfish
 
 projectl_src :=		projectl \

@@ -85,12 +85,12 @@
 #include "game\gameslot.h"
 #endif
 
+#include	"fx\fx.h"
+#include	"fx\fxfallingtile.h"
+
 
 /*****************************************************************************/
-extern int s_globalLevelSelectThing;
-
-/*****************************************************************************/
-sLvlTab	LvlTable[]=
+ sLvlTab	LvlTable[]=
 {
 // C1
 	{1,1,	21,	LEVELS_CHAPTER01_LEVEL01_LVL,LEVELS_CHAPTER01_LEVEL01_TEX,	CSoundMediator::SONG_CHAPTER1_LEVEL1},
@@ -128,7 +128,7 @@ sLvlTab	LvlTable[]=
 	{6,99,	0,	LEVELS_FMA_SHADYSHOALS_LVL,LEVELS_FMA_SHADYSHOALS_TEX,		CSoundMediator::SONG_TITLE},
 
 };
-const	static int	LvlTableSize=sizeof(LvlTable)/sizeof(sLvlTab);
+const	int		LvlTableSize=sizeof(LvlTable)/sizeof(sLvlTab);
 
 const FileEquate	loadingScreens[6]=
 {
@@ -141,36 +141,16 @@ const FileEquate	loadingScreens[6]=
 };
 
 /*****************************************************************************/
-DVECTOR CLevel::MapPos;
-DVECTOR	CLevel::s_playerSpawnPos;
+DVECTOR		CLevel::MapPos;
+DVECTOR		CLevel::s_playerSpawnPos;
+sLevelHdr	*CLevel::LevelHdr;
 
 u8 CLevel::m_isBossRespawn;
 s32 CLevel::m_bossHealth;
+
 /*****************************************************************************/
 CLevel::CLevel()
 {
-}
-
-/*****************************************************************************/
-bool	CLevel::GetNextLevel(int &Lvl)
-{
-bool	Finished=false;
-		Lvl++;
-// TMP
-		if (Lvl>=LvlTableSize) Lvl=0;
-// Skip Blanks
-		while (CFileIO::getFileSize(LvlTable[Lvl ].LevelFilename)<=10000)	// Dodgy blank level skip
-		{
-			Lvl++;
-			if (Lvl>=LvlTableSize) Lvl=0;
-		}
-// End TMP
-/*** E3 Bodge ***/
-#if !defined(__USER_sbart__)
-		if (Lvl>2) Lvl=0;
-#endif
-/****************/
-		return(Finished);
 }
 
 /*****************************************************************************/
@@ -203,6 +183,26 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 
 		m_isBossRespawn = false;
 		m_bossHealth = 0;
+}
+
+/*****************************************************************************/
+bool	CLevel::GetNextLevel(int &Lvl)
+{
+bool	Finished=false;
+		Lvl++;
+
+		if (Lvl>=LvlTableSize) 
+		{
+			Lvl=0;
+			Finished=true;
+		}
+// End TMP
+/*** E3 Bodge ***/
+#if !defined(__USER_sbart__)
+		if (Lvl>2) Lvl=0;
+#endif
+/****************/
+		return(Finished);
 }
 
 /*****************************************************************************/
@@ -654,26 +654,64 @@ sLayerHdr	*layer;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int CLevel::getCurrentChapter()
+void	CLevel::destroyMapArea(DVECTOR const &Pos)
 {
-	return( LvlTable[s_globalLevelSelectThing].Chapter );
+DVECTOR		TL,BR;
+const int			ColT=COLLISION_TYPE_STICKY;
+
+
+			TL.vx=Pos.vx&-16;;
+			TL.vy=Pos.vy&-16;;
+			BR=TL;
+
+			if (CollisionLayer->getCollisionBlock(TL.vx,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT)printf ("!!");
+
+// Left
+			while (CollisionLayer->getCollisionBlock(TL.vx-16,TL.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vx-=16;
+// Top
+			while (CollisionLayer->getCollisionBlock(TL.vx,TL.vy-16)>>COLLISION_TYPE_FLAG_SHIFT==ColT) TL.vy-=16;
+// Right
+			while (CollisionLayer->getCollisionBlock(BR.vx+16,BR.vy)>>COLLISION_TYPE_FLAG_SHIFT==ColT) BR.vx+=16;
+// Bottom
+			while (CollisionLayer->getCollisionBlock(BR.vx,BR.vy+16)>>COLLISION_TYPE_FLAG_SHIFT==ColT) BR.vy+=16;
+
+DVECTOR		DP;
+			
+			for (DP.vy=TL.vy; DP.vy<=BR.vy; DP.vy+=16)
+			{
+				for (DP.vx=TL.vx; DP.vx<=BR.vx; DP.vx+=16)
+				{
+					u8	*ColElem=CollisionLayer->getMapPtr(DP.vx,DP.vy);
+
+					if (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==COLLISION_TYPE_STICKY)
+					{
+						sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(DP.vx,DP.vy);
+						CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,DP);
+						FX->SetTile(MapElem->Tile);
+						MapElem->Tile=0;
+						*ColElem=0;
+
+					}
+
+				}
+			}
 }
 
 /*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-int CLevel::getCurrentChapterLevel()
+void	CLevel::destroyMapTile(DVECTOR const &Pos)
 {
-	return( LvlTable[s_globalLevelSelectThing].Level );
+u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
+sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Pos.vx,Pos.vy);
+
+//			*ColElem=0;
+
+			if (MapElem->Tile)
+			{
+				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,Pos);
+				FX->SetTile(MapElem->Tile);
+				MapElem->Tile=0;
+
+			}
+
 }
 
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-int CLevel::getTotalSpatCount()
-{
-	return( LvlTable[s_globalLevelSelectThing].totalSpatCount);
-}
-
-
-/*****************************************************************************/
