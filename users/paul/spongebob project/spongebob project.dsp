@@ -317,6 +317,14 @@ SOURCE=..\..\..\source\game\game.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\game\gamebubs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\gamebubs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\gameslot.cpp
 # End Source File
 # Begin Source File
