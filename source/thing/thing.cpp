@@ -1191,8 +1191,8 @@ bool	CThing::isOnScreen(DVECTOR Pos)
 sBBox			&ScrBBox=CThingManager::getRenderBBox();
 DVECTOR	const	&CamPos=CLevel::getCameraPos();
 
-		Pos.vx-=CamPos.vx;
-		Pos.vy-=CamPos.vy;
+//		Pos.vx-=CamPos.vx;
+//		Pos.vy-=CamPos.vy;
 
 		if (Pos.vx<ScrBBox.XMin) return(false);
 		if (Pos.vx>ScrBBox.XMax) return(false);
