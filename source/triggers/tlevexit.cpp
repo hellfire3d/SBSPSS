@@ -67,19 +67,23 @@ void	CLevelExitTrigger::render()
 	area.x2-=ofs.vx;
 	area.y2-=ofs.vy;
 
-	POLY_F4	*f4;
-	f4=GetPrimF4();
-	setXY4(f4,area.x1,area.y1,
-			  area.x2,area.y1,
-			  area.x1,area.y2,
-			  area.x2,area.y2);
-	setRGB0(f4,0,255,0);
-	setSemiTrans(f4,true);
-	AddPrimToList(f4,0);
-	DrawLine(area.x1,area.y1,area.x2,area.y1,0,255,0,0);
-	DrawLine(area.x2,area.y1,area.x2,area.y2,0,255,0,0);
-	DrawLine(area.x2,area.y2,area.x1,area.y2,0,255,0,0);
-	DrawLine(area.x1,area.y2,area.x1,area.y1,0,255,0,0);
+	if(area.x1<=511&&area.x2>=0&&
+	   area.y1<=255&&area.y2>=0)
+	{
+		POLY_F4	*f4;
+		f4=GetPrimF4();
+		setXY4(f4,area.x1,area.y1,
+				  area.x2,area.y1,
+				  area.x1,area.y2,
+				  area.x2,area.y2);
+		setRGB0(f4,0,255,0);
+		setSemiTrans(f4,true);
+		AddPrimToList(f4,0);
+		DrawLine(area.x1,area.y1,area.x2,area.y1,0,255,0,0);
+		DrawLine(area.x2,area.y1,area.x2,area.y2,0,255,0,0);
+		DrawLine(area.x2,area.y2,area.x1,area.y2,0,255,0,0);
+		DrawLine(area.x1,area.y2,area.x1,area.y1,0,255,0,0);
+	}
 }
 #endif
 
