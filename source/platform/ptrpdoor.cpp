@@ -89,6 +89,16 @@ void CNpcTrapdoorPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 	m_triggerPos.vx = newXPos;
 	m_triggerPos.vy = newYPos;
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

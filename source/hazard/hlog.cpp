@@ -63,6 +63,15 @@ void CNpcLogHazard::setWaypoints( sThingHazard *ThisHazard )
 	Pos = startPos;
 	Pos.vy = minY;
 	m_base = Pos;
+
+	s32 minX, maxX;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

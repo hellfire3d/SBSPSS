@@ -150,7 +150,7 @@ void CNpcJellyfishPlatform::think( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcJellyfishPlatform::getThinkBBox()
+/*const CRECT *CNpcJellyfishPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -161,4 +161,4 @@ const CRECT *CNpcJellyfishPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/

@@ -214,7 +214,7 @@ void CNpcRaftPlatform::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcRaftPlatform::getThinkBBox()
+/*const CRECT *CNpcRaftPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -225,4 +225,4 @@ const CRECT *CNpcRaftPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/

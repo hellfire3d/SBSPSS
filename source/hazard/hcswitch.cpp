@@ -105,6 +105,16 @@ void CNpcConveyorSwitchHazard::setWaypoints( sThingHazard *ThisHazard )
 	PntList++;
 	m_conveyorPos.vx = ( newXPos << 4 ) + 8;
 	m_conveyorPos.vy = ( newYPos << 4 ) + 8;
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

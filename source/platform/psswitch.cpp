@@ -168,6 +168,16 @@ void CNpcSteamSwitchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	trigger=(CSteamSwitchEmitterTrigger*)CTrigger::Create(CTrigger::TRIGGER_STEAM_SWITCH_EMITTER);
 	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16 - 50, 100, 100 );
 	trigger->toggleVisible();
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

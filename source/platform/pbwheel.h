@@ -21,7 +21,7 @@
 class CNpcBigWheelPlatform : public CNpcPlatform
 {
 public:
-	virtual	CRECT const		*getThinkBBox();
+	//virtual	CRECT const		*getThinkBBox();
 	virtual void		postInit();
 	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 protected:

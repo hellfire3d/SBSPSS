@@ -158,7 +158,7 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcSkullStomperEnemy::getThinkBBox()
+/*const CRECT *CNpcSkullStomperEnemy::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -169,7 +169,7 @@ const CRECT *CNpcSkullStomperEnemy::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

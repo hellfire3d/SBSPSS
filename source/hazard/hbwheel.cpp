@@ -79,7 +79,7 @@ void CNpcBigWheelHazard::collidedWith( CThing *_thisThing )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcBigWheelHazard::getThinkBBox()
+/*const CRECT *CNpcBigWheelHazard::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -90,4 +90,4 @@ const CRECT *CNpcBigWheelHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/

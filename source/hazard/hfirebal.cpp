@@ -78,6 +78,11 @@ void CNpcFireballHazard::setWaypoints( sThingHazard *ThisHazard )
 			m_width = -m_width;
 		}
 	}
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

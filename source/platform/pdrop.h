@@ -20,8 +20,8 @@
 
 class CNpcDropPlatform : public CNpcPlatform
 {
-public:
-	virtual	CRECT const		*getThinkBBox();
+//public:
+	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		processMovement( int _frames );
 };

@@ -92,7 +92,7 @@ void CNpcGeyserPlatformGenerator::think( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcGeyserPlatformGenerator::getThinkBBox()
+/*const CRECT *CNpcGeyserPlatformGenerator::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -103,4 +103,4 @@ const CRECT *CNpcGeyserPlatformGenerator::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/

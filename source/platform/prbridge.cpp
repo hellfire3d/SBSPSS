@@ -90,6 +90,16 @@ void CNpcRisingBridgePlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16, 100, 0 );
 	//trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
 	trigger->setPlatform( this );
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -125,6 +125,7 @@ public:
 	virtual void		setupWaypoints( sThingActor *ThisActor );
 
 	virtual int			canCollide();
+	virtual	CRECT const	*getThinkBBox()											{return &m_thinkArea;}
 
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
@@ -313,6 +314,7 @@ protected:
 	u8					m_isDying;
 	u32					m_RGB;
 	int					m_soundId;
+	CRECT				m_thinkArea;
 
 	s32				m_frame;
 	int				m_animNo;

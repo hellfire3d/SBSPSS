@@ -202,7 +202,7 @@ void CNpcRollingRockHazard::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcRollingRockHazard::getThinkBBox()
+/*const CRECT *CNpcRollingRockHazard::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -213,4 +213,4 @@ const CRECT *CNpcRollingRockHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/

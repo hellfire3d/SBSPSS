@@ -198,7 +198,7 @@ void CNpcBouncingBarrelHazard::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcBouncingBarrelHazard::getThinkBBox()
+/*const CRECT *CNpcBouncingBarrelHazard::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -209,7 +209,7 @@ const CRECT *CNpcBouncingBarrelHazard::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -125,6 +125,7 @@ public:
 	virtual void		jump()													{;}
 	virtual	void		leftThinkZone(int _frames);
 	s16					getCollisionAngle()										{return m_collisionAngle;}
+	virtual	CRECT const	*getThinkBBox()											{return &m_thinkArea;}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(int Type);
@@ -246,6 +247,7 @@ protected:
 	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
 	s16				m_collisionAngle;
 
+	CRECT				m_thinkArea;
 
 };
 

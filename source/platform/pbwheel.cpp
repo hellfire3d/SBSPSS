@@ -89,11 +89,16 @@ void CNpcBigWheelPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	{
 		init( startPos );
 	}
+
+	m_thinkArea.x1 = Pos.vx - m_extension;
+	m_thinkArea.x2 = Pos.vx + m_extension;
+	m_thinkArea.y1 = Pos.vy - m_extension;
+	m_thinkArea.y2 = Pos.vy + m_extension;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcBigWheelPlatform::getThinkBBox()
+/*const CRECT *CNpcBigWheelPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -104,7 +109,7 @@ const CRECT *CNpcBigWheelPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -83,6 +83,7 @@ public:
 	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
 	virtual void		trigger()												{}
 	virtual	void		leftThinkZone(int _frames);
+	virtual	CRECT const	*getThinkBBox()											{return &m_thinkArea;}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(int Type);
@@ -118,6 +119,7 @@ protected:
 	CModelGfx			*m_modelGfx;
 	s16					m_respawnRate;
 	int					m_soundId;
+	CRECT				m_thinkArea;
 
 	CThing				*m_platform;
 

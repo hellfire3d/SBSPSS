@@ -18,7 +18,7 @@ class CNpcSkullStomperEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
-	virtual	CRECT const		*getThinkBBox();
+	//virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual bool		processSensor();

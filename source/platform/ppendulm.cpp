@@ -88,7 +88,14 @@ void CNpcPendulumPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	else
 	{
 		init( startPos );
+
+		m_length = 200;
 	}
+
+	m_thinkArea.x1 = Pos.vx - m_length;
+	m_thinkArea.x2 = Pos.vx + m_length;
+	m_thinkArea.y1 = Pos.vy - m_length;
+	m_thinkArea.y2 = Pos.vy + m_length;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +199,7 @@ void CNpcPendulumPlatform::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcPendulumPlatform::getThinkBBox()
+/*const CRECT *CNpcPendulumPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -200,4 +207,4 @@ const CRECT *CNpcPendulumPlatform::getThinkBBox()
 	objThinkBox.y1 = thinkBBox.YMax - 1;
 
 	return &objThinkBox;
-}
+}*/

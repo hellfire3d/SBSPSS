@@ -127,6 +127,16 @@ void CNpcDualPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 		setLineBase( Pos );
 		m_otherPlatform->setLineBase( slavePos );
 	}
+
+	s32 minX, maxX, minY, maxY;
+
+	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &minY, &maxY );
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +321,7 @@ void CNpcDualPlatform::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const CRECT *CNpcDualPlatform::getThinkBBox()
+/*const CRECT *CNpcDualPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -322,7 +332,7 @@ const CRECT *CNpcDualPlatform::getThinkBBox()
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

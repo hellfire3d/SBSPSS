@@ -93,4 +93,9 @@ void CNpcSwordfishHazard::setWaypoints( sThingHazard *ThisHazard )
 			m_heading = 2048;
 		}
 	}
+
+	m_thinkArea.x1 = minX;
+	m_thinkArea.x2 = maxX;
+	m_thinkArea.y1 = minY;
+	m_thinkArea.y2 = maxY;
 }
