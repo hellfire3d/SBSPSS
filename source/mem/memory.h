@@ -11,7 +11,9 @@
 #endif
 
 
+#ifdef __VERSION_DEBUG__
 #define	__DEBUG_MEM__		// Define if you want to debug memory - TS
+#endif
 
 
 /*****************************************************************************/

@@ -234,18 +234,17 @@ void dumpDebugMem()
 				setPolyF4( F4 );
 				setXYWH(F4,x,y,len,s_dumpHeight);
 				setRGB0( F4, col->r, col->g, col->b );
-				AddPrimToList( F4, 0 );
-
-				if (i == s_currentMemPart)
+				if(i!=s_currentMemPart)
 				{
-					F4 = GetPrimF4();
-					setPolyF4( F4 );
-					setXYWH(F4,x,y+s_dumpHeight,len,2);
-					setRGB0( F4, 255,0,0 );
+					AddPrimToList( F4, 1 );
+				}
+				else
+				{
 					AddPrimToList( F4, 0 );
+
 					F4 = GetPrimF4();
 					setPolyF4( F4 );
-					setXYWH(F4,x-1,y+s_dumpHeight,len+2,2+1);
+					setXYWH(F4,x-1,y-1,len+2,s_dumpHeight+2);
 					setRGB0( F4, 0,0,0 );
 					AddPrimToList( F4, 0 );
 				}
@@ -335,18 +334,20 @@ void addDebugMem( void * addr, const char * name, const char * file, int line )
 		id = MEM_SYSTEM;
 	}
 
+	MEM_PART	*md=memDump;
 	for (int i=0;i<MAX_MEM_DUMP;i++)
 	{
-		if (!memDump[i].addr)
+		if (!md->addr)
 		{
-			memDump[i].addr = addr;
-			memDump[i].id = MEM_ID( id );
-			memDump[i].name = name;
-			memDump[i].file = file;
-			memDump[i].line = line;
-			memDump[i].frameTime = VidGetTickCount();
+			md->addr = addr;
+			md->id = MEM_ID( id );
+			md->name = name;
+			md->file = file;
+			md->line = line;
+			md->frameTime = VidGetTickCount();
 			return;
 		}
+		md++;
 	}
 	ASSERT( !"Out of debug mem slots" );
 }
