@@ -133,7 +133,8 @@ platform_src :=		platform \
 					pdrop \
 					psswitch \
 					plift \
-					plurve
+					plurve \
+					psoil
 
 hazard_src :=		hazard \
 					hfalling \

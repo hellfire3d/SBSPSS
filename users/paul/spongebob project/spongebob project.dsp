@@ -1645,6 +1645,14 @@ SOURCE=..\..\..\source\platform\pseesaw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\psoil.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\psoil.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\psswitch.cpp
 # End Source File
 # Begin Source File

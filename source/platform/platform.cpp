@@ -187,6 +187,10 @@
 #include "platform\plurve.h"
 #endif
 
+#ifndef __PLATFORM_PSOIL_H__
+#include "platform\psoil.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -428,6 +432,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 		case NPC_LOVE_BOAT_PLATFORM:
 		{
 			platform = new ("love boat platform") CNpcLoveBoatPlatform;
+			break;
+		}
+
+		case NPC_STEERABLE_OILDRUM_PLATFORM:
+		{
+			platform = new ("steerable oildrum platform") CNpcSteerableOildrumPlatform;
 			break;
 		}
 

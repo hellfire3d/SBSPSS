@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	psbarrel.h
+	psoil.h
 
 	Author:		CRB
 	Created: 
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef __PLATFORM_PSBARREL_H__
-#include "platform\psbarrel.h"
+#ifndef __PLATFORM_PSOIL_H__
+#include "platform\psoil.h"
 #endif
 
 #ifndef __GAME_GAME_H__
@@ -30,17 +30,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcSteerableBarrelPlatform::postInit()
-{
-	CNpcPlatform::postInit();
-
-	m_currentSpeed = 0;
-	m_moveXHighRes = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcSteerableBarrelPlatform::processMovement( int _frames )
+void CNpcSteerableOildrumPlatform::processMovement( int _frames )
 {
 	s32 maxHeight = 20;
 	s32 fallSpeed = 3;
@@ -134,7 +124,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 	// check for collision
 
-	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 14 ) < -maxHeight )
+	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 20 ) < -maxHeight )
 	{
 		moveX = 0;
 		m_currentSpeed = 0;
@@ -153,7 +143,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 	// check for vertical movement
 
-	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 14, yMovement + 16 );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 20, yMovement + 16 );
 
 	if ( groundHeight <= yMovement )
 	{
@@ -189,86 +179,3 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		}
 	}
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcSteerableBarrelPlatform::render()
-{
-	if ( m_isActive )
-	{
-		CPlatformThing::render();
-
-		if (canRender())
-		{
-			DVECTOR &renderPos=getRenderPos();
-			DVECTOR	offset = CLevel::getCameraPos();
-
-			SVECTOR rotation;
-			rotation.vx = 0;
-			rotation.vy = 0;
-			rotation.vz = m_rotation;
-
-			VECTOR scale;
-			scale.vx = ONE;
-			scale.vy = ONE;
-			scale.vz = ONE;
-
-			m_modelGfx->Render(renderPos,&rotation,&scale);
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcSteerableBarrelPlatform::collidedWith( CThing *_thisThing )
-{
-	switch(_thisThing->getThingType())
-	{
-		case TYPE_PLAYER:
-		{
-			CPlayer *player;
-			DVECTOR	playerPos;
-			CRECT	collisionArea;
-
-			// Only interested in SBs feet colliding with the box (pkg)
-			player=(CPlayer*)_thisThing;
-			playerPos=player->getPos();
-			collisionArea=getCollisionArea();
-
-			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
-			{
-				if ( checkCollisionDelta( _thisThing, 0, collisionArea ) )
-				{
-					player->setPlatform( this );
-
-					m_contact = true;
-				}
-				else
-				{
-					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
-					{
-						int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
-
-						if ( height >= 0 && height < 1 )
-						{
-							player->setPlatform( this );
-
-							m_contact = true;
-						}
-					}
-				}
-			}
-
-			break;
-		}
-
-		case TYPE_NPC:
-		case TYPE_HAZARD:
-			break;
-
-		default:
-			ASSERT(0);
-			break;
-	}
-}
-
