@@ -1229,6 +1229,9 @@ void	CFmaScene::init()
 	m_tuneLoaded=false;
 
 	m_globalAnimationFlag=true;
+
+	m_stillProcessingCommand=false;
+	m_doOtherProcessing=false;
 }
 
 
@@ -1819,20 +1822,6 @@ void	CFmaScene::startNextScriptCommand()
   ---------------------------------------------------------------------- */
 void	CFmaScene::processCurrentScriptCommand()
 {
-{
-char		buf[100];
-FontBank	f;
-sprintf(buf,"pc:%d\ncmd:%d",
-		m_pc-s_fmaScripts[s_chosenScript],
-		*m_pc);
-f.initialise(&standardFont);
-f.print(20,20,buf);
-f.dump();
-printf("f:%d pc:%d cmd:%d\n",
-	   m_frameCount,
-	   m_pc-s_fmaScripts[s_chosenScript],
-	   *m_pc);
-}
 	switch(*m_pc)
 	{
 		case SC_USE_LEVEL:				// levelNumber
@@ -1849,8 +1838,7 @@ printf("f:%d pc:%d cmd:%d\n",
 		case SC_SET_GLOBAL_ANIMATION:	// on/off
 		case SC_START:					// 
 		case SC_STOP:					// 
-//			ASSERT(!"Shouldn't be here..");
-			m_doOtherProcessing=true;
+			ASSERT(!"Shouldn't be here..");
 			break;
 
 		case SC_WAIT_ON_TIMER:			// frames
