@@ -152,7 +152,8 @@ PLAYER_INC_FILE :=	$(INC_DIR)/Actor_$(PLAYER_FILE).h
 
 PLAYER_MOD_IN :=	$(PLAYER_IN_DIR)/$(PLAYER_FILE).Gin
 PLAYER_MOD_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).a3d
-PLAYER_TEX_IN :=	$(PLAYER_IN_DIR)/*.bmp
+PLAYER_TEX_DIR :=	$(PLAYER_IN_DIR)/textures
+PLAYER_TEX_IN :=	$(PLAYER_TEX_DIR)/*.bmp
 PLAYER_TEX_OUT :=	$(PLAYER_OUT_DIR)/$(PLAYER_FILE).Tex
 
 
@@ -167,7 +168,7 @@ PLAYER_EXTRA_TEX :=	SBBackNormal \
 					SBSoleNormal \
 					SBTopNormal
 
-PLAYER_EXTRA_TEX_LIST :=	$(foreach FILE,	$(PLAYER_EXTRA_TEX),-a:$(FILE).bmp)
+PLAYER_EXTRA_TEX_LIST :=	$(foreach FILE,	$(PLAYER_EXTRA_TEX),-a:textures/$(FILE).bmp)
 
 PLAYER_DEP_IN :=	$(PLAYER_MOD_IN) $(PLAYER_TEX_IN)
 PLAYER_DEP_OUT :=	$(PLAYER_MOD_OUT) $(PLAYER_TEX_OUT)
@@ -179,7 +180,7 @@ cleanplayer:
 	@$(ECHO) Player Cleaned
 	
 $(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
-	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256 -i:$(PLAYER_INC_FILE) $(PLAYER_EXTRA_TEX_LIST)
+	@$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256 -i:$(PLAYER_INC_FILE) $(PLAYER_EXTRA_TEX_LIST)
 
 GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
 
@@ -192,12 +193,12 @@ anims:					playeranims
 cleananims:				cleanplayeranims
 
 ANIM_OUT_DIR :=			$(DATA_OUT)/anims
-PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim/GinFiles
+PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob
 
 # DUFF_ANIMS			deathfall runjumpend runjumpstart
 PLAYER_ANIM_LIST :=		buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
-						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate knockback knockforward run \
-						runstart runstop soakup talk01 talk02 talk03 talk04 teeterback teeterfront \
+						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate run \
+						runstart runstop soakup talk01 teeterback teeterfront \
 						idlewind
 
 PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
@@ -251,9 +252,9 @@ SCRIPT_TRANS_HDR :=	$(GAME_DATA_DIR)/scripts/defs/trans.scr
 TRANS_OUT_FILES :=	$(TRANS_OUT_HDR) $(TRANS_OUT_DAT) $(TRANS_OUT_LBM_LIST) $(TRANS_FINAL_DAT_FILE)
 
 $(TRANS_OUT_FILES) : $(TRANS_IN_FILES)
-	perl tools/perl/pl/lang.pl $(TRANS_IN_ENG)  $(TRANS_FINAL_DAT_FILE) $(ALL_TRANS_IN_FILES)
-	transtext $(LANG_OP) -h:$(TRANS_OUT_HDR) -o:$(TRANS_OUT_DIR) $(TRANS_FINAL_DAT_FILE)
-	perl tools/perl/pl/text_extract.pl $(TRANS_OUT_HDR) $(SCRIPT_TRANS_HDR) STR__INGAME__
+	@perl tools/perl/pl/lang.pl $(TRANS_IN_ENG)  $(TRANS_FINAL_DAT_FILE) $(ALL_TRANS_IN_FILES)
+	@transtext $(LANG_OP) -h:$(TRANS_OUT_HDR) -o:$(TRANS_OUT_DIR) $(TRANS_FINAL_DAT_FILE)
+	@perl tools/perl/pl/text_extract.pl $(TRANS_OUT_HDR) $(SCRIPT_TRANS_HDR) STR__INGAME__
 
 translate : $(TRANS_OUT_FILES)
 	@$(ECHO) made translations
@@ -290,7 +291,7 @@ UI_GFX_REP_FILE :=			$(REPORT_DIR)/UIGfx.rep
 UI_GFX_HDR_FILE :=			$(INC_DIR)/UIGfx.h
 
 cleanui :
-		$(RM) -f $(UI_GFX_TEX_OUT)
+		@$(RM) -f $(UI_GFX_TEX_OUT)
 		@$(ECHO) UI Gfx Cleaned
 
 ui: 		$(UI_GFX_TEX_IN)
@@ -326,7 +327,7 @@ INGAMEFX_GFX_REP_FILE :=	$(REPORT_DIR)/ingamefx.rep
 INGAMEFX_GFX_HDR_FILE :=	$(INC_DIR)/ingamefx.h
 
 cleaningamefx :
-		$(RM) -f $(INGAMEFX_GFX_TEX_OUT)
+		@$(RM) -f $(INGAMEFX_GFX_TEX_OUT)
 		@$(ECHO) InGame GFx Cleaned
 
 ingamefx:		$(INGAMEFX_GFX_TEX_IN)
@@ -360,7 +361,7 @@ FRONTEND_GFX_REP_FILE :=	$(REPORT_DIR)/frontend.rep
 FRONTEND_GFX_HDR_FILE :=	$(INC_DIR)/frontend.h
 
 cleanfrontend :
-		$(RM) -f $(FRONTEND_GFX_TEX_OUT)
+		@$(RM) -f $(FRONTEND_GFX_TEX_OUT)
 		@$(ECHO) Frontend Cleaned
 
 frontend:	$(FRONTEND_GFX_TEX_IN)
@@ -385,7 +386,7 @@ BACKDROPS_OUT :=		$(foreach SCREEN,$(BACKDROPS_IN),$(BACKDROPS_OUT_DIR)/$(SCREEN
 backdrops : $(BACKDROPS_OUT)
 
 cleanbackdrops :
-	@$(RM) -f $(BACKDROPS_OUT)
+		@$(RM) -f $(BACKDROPS_OUT)
 		@$(ECHO) Backdrops Cleaned
 
 $(BACKDROPS_OUT_DIR)/%.gfx : $(BACKDROPS_IN_DIR)/%.tga
@@ -409,12 +410,12 @@ SFX_ALL_OUT :=		$(foreach SFX,$(SFX_LIST),$(SFX_OUT_DIR)/$(SFX).PXM $(SFX_OUT_DI
 sfx: 	$(SFX_ALL_OUT)
 
 cleansfx:
-	@$(RM) -f $(SFX_ALL_OUT)
+		@$(RM) -f $(SFX_ALL_OUT)
 		@$(ECHO) SFX Cleaned
 
 $(SFX_ALL_OUT) : $(SFX_ALL_IN)
-	$(CP) $(SFX_ALL_IN) $(SFX_OUT_DIR)
-	$(ATTRIB) -r $(SFX_ALL_OUT)
+	@$(CP) $(SFX_ALL_IN) $(SFX_OUT_DIR)
+	@$(ATTRIB) -r $(SFX_ALL_OUT)
 
 GRAF_DIRS_TO_MAKE	+=	$(SFX_OUT_DIR)
 GFX_DATA_OUT		+=	$(SFX_ALL_OUT)
@@ -436,7 +437,7 @@ cleanmcheader:
 	@$(ECHO) MemCard Header Cleaned
 
 $(MC_HEADER_OUT) : $(MC_HEADER_IN)
-	$(CP) $(MC_HEADER_IN) $(MC_HEADER_OUT)
+	@$(CP) $(MC_HEADER_IN) $(MC_HEADER_OUT)
 
 GRAF_DIRS_TO_MAKE	+= $(MC_HEADER_OUT_DIR)
 GFX_DATA_OUT		+= $(MC_HEADER_OUT)	
@@ -461,8 +462,8 @@ cleanmusic:
 	@$(ECHO) Music Cleaned
 
 $(MUSIC_ALL_OUT) : $(MUSIC_ALL_IN)
-	$(CP) $(MUSIC_ALL_IN) $(MUSIC_OUT_DIR)
-	$(ATTRIB) -r $(MUSIC_ALL_OUT)
+	@$(CP) $(MUSIC_ALL_IN) $(MUSIC_OUT_DIR)
+	@$(ATTRIB) -r $(MUSIC_ALL_OUT)
 
 GRAF_DIRS_TO_MAKE	+=	$(MUSIC_OUT_DIR)
 GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
@@ -511,8 +512,8 @@ cleandemo:
 	@$(ECHO) Demo Cleaned
 
 $(DEMO_ALL_OUT) : $(DEMO_ALL_IN)
-	$(CP) $(DEMO_ALL_IN) $(DEMO_OUT_DIR)
-	$(ATTRIB) -r $(DEMO_ALL_OUT)
+	@$(CP) $(DEMO_ALL_IN) $(DEMO_OUT_DIR)
+	@$(ATTRIB) -r $(DEMO_ALL_OUT)
 
 GRAF_DIRS_TO_MAKE	+=	$(DEMO_OUT_DIR)
 GFX_DATA_OUT		+=	$(DEMO_ALL_OUT)
