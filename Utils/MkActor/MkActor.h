@@ -23,7 +23,8 @@ struct	sAnim
 //***************************************************************************
 struct	sBmp
 {
-		SprFrame	Bmp;
+		Frame		Frm;
+		int			OrigW,OrigH;
 		int			ChkR,ChkG,ChkB;
 		u8			*RGB;
 		u8			*Psx;
@@ -31,6 +32,7 @@ struct	sBmp
 		int			PsxSize;
 		int			PakSize;
 		bool		VRamFlag;
+		int			CrossHairX,CrossHairY;
 };
 
 //***************************************************************************
@@ -55,7 +57,7 @@ private:
 		void				LoadFrameList();
 		void				LoadFrame(sFrame &ThisFrame,bool VRamFlag);
 		int					LoadBmp(GString	&Name,bool VRamFlag);
-		void				SetAndShrinkFrame(GString &Filename,Frame &Src,SprFrame &Dst);
+		void				CheckAndShrinkFrame(sBmp &Bmp);
 		bool				IsImageSame(sBmp &Bmp0,sBmp &Bmp1);
 		void				MakePsxGfx(sBmp &Bmp);
 		void				ProcessFrames();
@@ -77,6 +79,7 @@ private:
 		CTexGrab			TexGrab;
 		int					DupCount;
 		int					MaxW,MaxH;
+		int					TotalIn,TotalOut;
 };
 
 //***************************************************************************

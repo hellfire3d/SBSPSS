@@ -303,7 +303,7 @@ void	CMkActor::MakePsxGfx(sBmp &Bmp)
 {
 // Copied from SprSet 
 int		nfW,nfH,nfLineWidthBytes,nfAreaBytes;
-Frame	Frm=Bmp.Bmp;
+Frame	Frm=Bmp.Frm;
 
 		nfW=Frm.GetWidth();
 		nfH=Frm.GetHeight();
@@ -313,6 +313,7 @@ Frame	Frm=Bmp.Bmp;
 
 		if (nfW>MaxW) MaxW=nfW;
 		if (nfH>MaxH) MaxH=nfH;
+
 		Bmp.Psx=(u8*)malloc(nfAreaBytes+16);
 		ASSERT(Bmp.Psx);
 
@@ -346,11 +347,11 @@ Frame	Frm=Bmp.Bmp;
 int		CMkActor::FindDup(sBmp &Bmp)
 {
 int			i,BmpListSize=BmpList.size();
-int			Size=Bmp.Bmp.GetWidth()*Bmp.Bmp.GetHeight();
+int			Size=Bmp.Frm.GetWidth()*Bmp.Frm.GetHeight();
 
 			Bmp.RGB=(u8*)malloc(Size*3);
 			ASSERT(Bmp.RGB);
-			Bmp.Bmp.MakeRGB(Bmp.RGB);
+			Bmp.Frm.MakeRGB(Bmp.RGB);
 // Check for dups (Broken at the mo, ah well)
 // Gen Chksum
 
@@ -386,10 +387,10 @@ int		W0,H0,W1,H1,Size;
 u8		*RGB0,*RGB1;
 
 		if (Bmp0.ChkR!=Bmp1.ChkR || Bmp0.ChkG!=Bmp1.ChkG || Bmp0.ChkB!=Bmp1.ChkB) return(false);
-		W0=Bmp0.Bmp.GetWidth();
-		H0=Bmp0.Bmp.GetHeight();
-		W1=Bmp1.Bmp.GetWidth();
-		H1=Bmp1.Bmp.GetHeight();
+		W0=Bmp0.Frm.GetWidth();
+		H0=Bmp0.Frm.GetHeight();
+		W1=Bmp1.Frm.GetWidth();
+		H1=Bmp1.Frm.GetHeight();
 
 		if (W0!=W1 || H0!=H1) return(false);
 		Size=W0*H0*3;
@@ -404,33 +405,25 @@ u8		*RGB0,*RGB1;
 }
 
 //***************************************************************************
-// Shrink frame to extents, aligned for 4 pixels (needed?)
-void	CMkActor::SetAndShrinkFrame(GString &Filename,Frame &Src, SprFrame &Dst)
+void	CMkActor::CheckAndShrinkFrame(sBmp &Bmp)
 {
-FileInfo	ThisInfo;
-Rect		OriginalRect;
-
 // Check Colors
-int		ColorCount=Src.GetNumOfCols();
+int		ColorCount=Bmp.Frm.GetNumOfCols();
 		if (ColorCount>16)
 		{
 				GObject::Error(ERR_FATAL,"%s has %i colors.\n",Name,ColorCount);
 		}
 
-//		ThisInfo.SetInfo(name,		CrossHair,	ThisZeroColZero,	MoveUVs,	AllowRotate,	ShrinkToFit,	m_allocateAs16bit);
-		ThisInfo.SetInfo(Filename,	false,		true,				false,		false,			true,			false);
+		Bmp.OrigW=Bmp.Frm.GetWidth();
+		Bmp.OrigH=Bmp.Frm.GetHeight();
 
-// Copy Frame
-		Dst.SetFrameAndInfo(Src,ThisInfo,0);
-// Align Frame
-
-		OriginalRect=Src;
-		OriginalRect.X=0;
-		OriginalRect.Y=0;
-		OriginalRect.W=GU_AlignVal(OriginalRect.W,4);
-
-		Dst.Crop(OriginalRect);
-
+Rect	BBox;
+		BBox=Bmp.Frm.FindBoundingRect();
+		BBox.W=GU_AlignVal(BBox.W,4);
+		Bmp.Frm.Crop(BBox);
+		Bmp.CrossHairX=BBox.X-(Bmp.OrigW/2);//+)/2;
+		Bmp.CrossHairY=-(Bmp.OrigH-BBox.Y);
+//		printf("%i %i       \n",Bmp.CrossHairX,Bmp.CrossHairY);
 }
 
 //***************************************************************************
@@ -439,17 +432,20 @@ int		CMkActor::LoadBmp(GString &Name,bool VRamFlag)
 GString	Filename=SpriteDir+Name;
 int		BmpListSize=BmpList.size();
 sBmp	NewBmp;
-Frame	NewFrame;
 
-// Init Frame
+// Init & Load Frame
+		NewBmp.Frm.LoadBMP(Filename);
 		NewBmp.RGB=0;
 		NewBmp.Pak=0;
 		NewBmp.Psx=0;
 		NewBmp.VRamFlag=VRamFlag;
 
-// Load frame
-		NewFrame.LoadBMP(Filename);
-		SetAndShrinkFrame(Filename,NewFrame,NewBmp.Bmp);
+		CheckAndShrinkFrame(NewBmp);
+		if (BmpListSize==0)
+		{ // Calc HotSpot based on first frame
+			printf("!");
+			 
+		}
 
 // Check Dups
 int		Idx=FindDup(NewBmp);
@@ -466,7 +462,7 @@ int		Idx=FindDup(NewBmp);
 
 #if	_DEBUG && defined(OutputTGA)
 void	WriteTGA(GString Name,Frame Frm);
-		WriteTGA(Name,NewBmp.Bmp);
+		WriteTGA(Name,NewBmp.Frm);
 #endif
 
 		return(BmpListSize);
@@ -494,18 +490,15 @@ void	CMkActor::Process()
 		BuildFrameList();
 		LoadFrameList();
 		ProcessFrames();
-
-//		TexGrab.Process();
 }
-
 
 //***************************************************************************
 void	CMkActor::ProcessFrames()
 {
 int		i,ListSize=BmpList.size();
-int		TotalIn=0;		
-int		TotalOut=0;		
 
+		TotalIn=0;		
+		TotalOut=0;		
 		for (i=0; i<ListSize; i++)
 		{
 			sBmp	&ThisBmp=BmpList[i];
@@ -520,7 +513,6 @@ int		TotalOut=0;
 			TotalOut+=ThisBmp.PakSize;
 		}
 		printf("\t\t\t\t\t\r");
-		printf("%s - Done. %i Dups  (In %i) (Out %i) (Saved %i)\n",Name,DupCount,TotalIn,TotalOut,TotalIn-TotalOut);
 }
 
 //***************************************************************************
@@ -537,6 +529,7 @@ GString			OutName=OutFile+".SBK";
 		PadFile(File);
 // Write Palette
 		FileHdr.Palette=(u8*)WritePalette();
+		FileHdr.Clut=0;
 		PadFile(File);
 // Write AnimList
 		FileHdr.AnimList=(sSpriteAnim*)WriteAnimList();
@@ -551,6 +544,7 @@ GString			OutName=OutFile+".SBK";
 		fclose(File);
 
 		WriteInclude();
+		printf("%s. %i Dups, (In %i Out %i = Saved %i) (MaxWH %i %i)\n",Name,DupCount,TotalIn,TotalOut,TotalIn-TotalOut,FileHdr.MaxW,FileHdr.MaxH);
 
 }
 
@@ -558,7 +552,7 @@ GString			OutName=OutFile+".SBK";
 int		CMkActor::WritePalette()
 {
 int			Pos=ftell(File);
-Palette		&PCPalette=BmpList[0].Bmp.GetPal();
+Palette		&PCPalette=BmpList[0].Frm.GetPal();
 SprPal		PsxPalette;
 int			i,Count;
 vector<u16>	OutPal;
@@ -568,11 +562,6 @@ vector<u16>	OutPal;
 
 		Count=PsxPalette.GetNumOfCols();
 		if (Count<16) Count=16;
-//		if (Count>16)
-//		{
-//			GObject::Error(ERR_WARNING,"Too Many Colors.\n");
-//		}
-		FileHdr.ColorCount=Count;
 		PsxPalette.MakePSXPal(OutPal);
 		for (i=0; i<Count; i++)
 		{
@@ -636,10 +625,11 @@ int		Pos=ftell(File);
 int		i,FrameCount=BmpList.size();
 vector<sSpriteFrame>	Hdrs;
 
-// Write Dummy Hdrs
 		FileHdr.MaxW=MaxW;
 		FileHdr.MaxH=MaxH;
 		FileHdr.FrameCount=FrameCount;
+
+// Write Dummy Hdrs
 		Hdrs.resize(FrameCount);
 		for (i=0; i<FrameCount; i++)
 		{
@@ -653,17 +643,24 @@ vector<sSpriteFrame>	Hdrs;
 			sBmp	&ThisBmp=BmpList[i];
 			if (ThisBmp.VRamFlag)
 			{ // VRam
-				GObject::Error(ERR_FATAL,"VRam sprites not supported yet (%s)\n",ThisBmp.Bmp.GetName);
+				GObject::Error(ERR_FATAL,"VRam sprites not supported yet (%s)\n",ThisBmp.Frm.GetName);
 			}
 			else
 			{ // Pak
-				int	XOfs=ThisBmp.Bmp.GetX()-(ThisBmp.Bmp.GetOrigW()/2);
-				int	YOfs=ThisBmp.Bmp.GetY()-(ThisBmp.Bmp.GetOrigH());
+//				int	XOfs=ThisBmp.Frm.GetX()-(ThisBmp.OrigW/2);
+//				int	YOfs=ThisBmp.Frm.GetY()-(ThisBmp.OrigH);
+				int	OH=ThisBmp.OrigH;
+				int	NH=ThisBmp.Frm.GetHeight();
+//				int	XOfs=ThisBmp.Frm.GetX()-(MaxW/2);
+//				int	YOfs=ThisBmp.Frm.GetY()-(OH-NH);
+				int	XOfs=ThisBmp.CrossHairX;
+				int	YOfs=ThisBmp.CrossHairY;
+
 				Hdrs[i].PAKSpr=(u8*)ftell(File);
 				Hdrs[i].XOfs=XOfs;
 				Hdrs[i].YOfs=YOfs;
-				Hdrs[i].W=ThisBmp.Bmp.GetWidth();
-				Hdrs[i].H=ThisBmp.Bmp.GetHeight();
+				Hdrs[i].W=ThisBmp.Frm.GetWidth();
+				Hdrs[i].H=ThisBmp.Frm.GetHeight();
 				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
 			}
 
@@ -719,9 +716,4 @@ int		ListSize=AnimList.size();
 		fclose(File);
 }
  
-
-//platform length on bio dome - collision fix
-//flying things
-//platform gfx
-//look up & down
 
