@@ -444,26 +444,21 @@ void CMapScene::renderChapterArrows()
 	sb=CGameScene::getSpriteBank();
 	fh=sb->getFrameHeader(FRM__MAP_ARROW);
 
-	x=256;
 	if(m_currentChapterSelection>0&&isChapterOpen(m_currentChapterSelection-1))
 	{
-		int	selected=false;
-		y=MAP_ARROW_PREVIOUS_Y-fh->H;
-		if(m_currentIconSelection==MAP_ICON_PREVIOUS_CHAPTER)
-		{
-			selected=true;
-		}
-		ft4=sb->printFT4Scaled(fh,x,y,0,0,0,selected?512:256);
+		int	scale;
+		scale=m_currentIconSelection==MAP_ICON_PREVIOUS_CHAPTER?383:256;
+		y=MAP_ARROW_PREVIOUS_Y-(fh->H/2);
+		x=256-(fh->W/2);
+		ft4=sb->printFT4Scaled(fh,x,y,0,0,0,scale);
 	}
 	if(m_currentChapterSelection<5&&isChapterOpen(m_currentChapterSelection+1))
 	{
-		int	selected=false;
-		y=MAP_ARROW_NEXT_Y-fh->H;
-		if(m_currentIconSelection==MAP_ICON_NEXT_CHAPTER)
-		{
-			selected=true;
-		}
-		ft4=sb->printFT4Scaled(fh,x,y,0,1,0,selected?512:256);
+		int	scale;
+		scale=m_currentIconSelection==MAP_ICON_NEXT_CHAPTER?383:256;
+		y=MAP_ARROW_NEXT_Y-(fh->H/2);
+		x=256-(fh->W/2);
+		ft4=sb->printFT4Scaled(fh,x,y,0,1,0,scale);
 	}
 }
 
@@ -650,6 +645,11 @@ void CMapScene::think(int _frames)
 				case MAP_ICON_PREVIOUS_CHAPTER:
 					m_currentChapterSelection--;
 					generateMapScreenImage();
+					if(m_currentChapterSelection==0)
+					{
+						m_currentIconSelection=MAP_ICON_LEVEL_1;
+						m_pointerIcon->setTarget(getPointerTargetPosition());
+					}
 					break;
 
 				case MAP_ICON_LEVEL_1:
@@ -675,6 +675,18 @@ void CMapScene::think(int _frames)
 				case MAP_ICON_NEXT_CHAPTER:
 					m_currentChapterSelection++;
 					generateMapScreenImage();
+					if(m_currentChapterSelection==5||!isChapterOpen(m_currentChapterSelection+1))
+					{
+						for(int i=MAP_ICON_LEVEL_BONUS;i>MAP_ICON_LEVEL_1;i--)
+						{
+							if(isLevelOpen(m_currentChapterSelection,i-1))
+							{
+								m_currentIconSelection=i;
+								m_pointerIcon->setTarget(getPointerTargetPosition());
+								break;
+							}
+						}
+					}
 					break;
 			}
 		}
@@ -714,7 +726,6 @@ void	CMapScene::generateMapScreenImage()
 
 	LZNP_Decode((u8*)m_packedBackgroundImage,(u8*)m_screenImage);
 
-	m_currentIconSelection=MAP_ICON_LEVEL_1;
 	for(i=0;i<MAP_NUM_LEVELS_PER_CHAPTER;i++)
 	{
 		if(isLevelOpen(m_currentChapterSelection,i))
@@ -722,8 +733,6 @@ void	CMapScene::generateMapScreenImage()
 			copyImageToScreen(s_mapLevelData[m_currentChapterSelection][i].m_Gfx,s_mapLevelPositions[i].vx,s_mapLevelPositions[i].vy,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
 		}
 	}
-
-	m_pointerIcon->snapToTarget(getPointerTargetPosition());
 }
 
 
