@@ -125,25 +125,7 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 			{
 				switch( m_animNo )
 				{
-					case ANIM_HERMITCRAB_ROLLATTACKSTART:
-					{
-						m_animPlaying = true;
-						m_animNo = ANIM_HERMITCRAB_ROLLATTACK;
-						m_frame = 0;
-
-						break;
-					}
-
 					case ANIM_HERMITCRAB_ROLLATTACK:
-					{
-						m_animPlaying = true;
-						m_animNo = ANIM_HERMITCRAB_ROLLATTACKEND;
-						m_frame = 0;
-
-						break;
-					}
-
-					case ANIM_HERMITCRAB_ROLLATTACKEND:
 					{
 						m_state = HERMIT_CRAB_NO_ATTACK;
 						m_controlFunc = NPC_CONTROL_MOVEMENT;
@@ -157,7 +139,7 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 					default:
 					{
 						m_animPlaying = true;
-						m_animNo = ANIM_HERMITCRAB_ROLLATTACKSTART;
+						m_animNo = ANIM_HERMITCRAB_ROLLATTACK;
 						m_frame = 0;
 
 						break;
@@ -194,9 +176,7 @@ void CNpcHermitCrabEnemy::processClose( int _frames )
 				{
 					// moving outside path constraints, abort
 
-					m_animPlaying = true;
-					m_animNo = ANIM_HERMITCRAB_ROLLATTACKEND;
-					m_frame = 0;
+					m_animPlaying = false;
 				}
 				else
 				{

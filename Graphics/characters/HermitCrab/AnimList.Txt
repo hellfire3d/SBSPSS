@@ -4,6 +4,6 @@ idle
 # jumpstart
 # punch
 rollattack
-rollattackend
-rollattackstart
+#rollattackend
+#rollattackstart
 scuttle
