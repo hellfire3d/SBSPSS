@@ -256,6 +256,7 @@ void	CGameScene::initLevel()
 	Level.init();
 
 	createPlayer();
+	m_player->setRespawnPos(Level.getPlayerSpawnPos());
 	m_player->init();
 	m_player->setLayerCollision(Level.getCollisionLayer());
 	m_player->setMapSize(Level.getMapSize());

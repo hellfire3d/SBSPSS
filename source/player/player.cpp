@@ -211,12 +211,6 @@ void	CPlayer::init()
 	m_skel.Init(ACTORS_SPONGEBOB_A3D);
 	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
 
-
-// Temporary default respawn pos... should realy be set with setRespawnPos() from the level (pkg)
-m_respawnPos.vx=23*16;
-m_respawnPos.vy=10*16;
-
-
 m_animNo=0;
 m_animFrame=0;
 	m_currentMode=PLAYER_MODE_BASICUNARMED;
