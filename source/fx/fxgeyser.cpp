@@ -21,7 +21,18 @@ void	CFXGeyser::init(DVECTOR const &_Pos)
 		CFX::init(_Pos);
 		Height=TargetHeight=8;
 		currentFrame=FRM__GUSH000;
-/*		m_soundId=*/CSoundMediator::playSfx(CSoundMediator::SFX_WORLD_OBJECT__GEYSER,false);
+		SoundId = NOT_PLAYING;
+}
+
+/*****************************************************************************/
+void	CFXGeyser::shutdown()
+{
+	if ( SoundId != NOT_PLAYING )
+	{
+		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) SoundId );
+	}
+
+	CFX::shutdown();
 }
 
 /*****************************************************************************/
@@ -50,6 +61,14 @@ CThing		*Parent=getParent();
 		getFXRenderPos(RenderPos);
 		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 
+		if( SoundId != NOT_PLAYING && !CSoundMediator::isSfxStillPlaying( (xmPlayingId) SoundId ) )
+		{
+			// unlock sound if it has finished
+
+			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) SoundId );
+			SoundId = NOT_PLAYING;
+		}
+
 // is it attached to a platform?
 		if (Parent) 
 		{ // yes, so get pos, and return
@@ -63,6 +82,11 @@ CThing		*Parent=getParent();
 			if ( Height > 10 )
 			{
 				Flags |= FX_FLAG_INJURE_PLAYER;
+
+				if ( SoundId == NOT_PLAYING )
+				{
+					SoundId = (int) CSoundMediator::playSfx(CSoundMediator::SFX_WORLD_OBJECT__GEYSER,true);
+				}
 			}
 			else
 			{

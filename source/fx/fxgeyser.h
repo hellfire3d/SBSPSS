@@ -15,12 +15,14 @@ public:
 /*virtual */void		init(DVECTOR const &Pos);
 /*virtual */void		think(int Frames);
 /*virtual */void		render();
+		void		shutdown();
 
 		void		setHeight(int H)	{TargetHeight=H;}
 
 protected:
 		s16			TargetHeight,Height;
 		u16			currentFrame;
+		int			SoundId;
 };
 
 #endif
