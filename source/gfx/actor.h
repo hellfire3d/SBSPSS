@@ -16,18 +16,19 @@
 class	CActorGfx
 {
 public:
-//		CActorGfx(){};
 		CActorGfx(FileEquate Filename);
 virtual	~CActorGfx();
 
 		void		Init(FileEquate _Filename);
-		void		Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX);
+		POLY_FT4	*Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX=false,bool FlipY=false,bool Shadow=false);
 		void		Dump();
 
 		int			getFrameCount(int Anim)		{return(SpriteBank->AnimList[Anim].FrameCount);}
 
-		FileEquate		GetFilename()	{return(Filename);}
+		FileEquate	GetFilename()	{return(Filename);}
 private:
+		void		SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip);
+
 		FileEquate		Filename;
 		sSpriteAnimBank	*SpriteBank;
 };

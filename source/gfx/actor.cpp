@@ -5,10 +5,10 @@
 #include "system\global.h"
 #include "mem\memory.h"
 #include "fileio\fileio.h"
-#include "gfx\actor.h"
 #include "utils\utils.h"
 #include "utils\pak.h"
 #include "gfx\prim.h"
+#include "gfx\actor.h"
 
 #include <dstructs.h>
 
@@ -57,63 +57,103 @@ CActorGfx::~CActorGfx()
 }
 
 /*****************************************************************************/
-int	TPP=0;
-int	TPA=0;
-int	TPX=512;
-int	TPY=256;
-int	RR=128;
-int	GG=128;
-int	BB=128;
-int	XX=32;
-int	YY=32;
-//int	PW=16;
-void	CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX)
+int		TPP=0;
+int		TPA=0;
+int		TPX=512;
+int		TPY=256;
+int		ShadowXOfs=32;
+int		ShadowYOfs=32;
+
+POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteAnim		&ThisAnim=SpriteBank->AnimList[Anim];
 u16				FrameNo=ThisAnim.Anim[Frame];
 sSpriteFrame	&ThisFrame=SpriteBank->FrameList[FrameNo];
-POLY_FT4		*Ft4;
-u8	Buffer[256*256];
+u8				Buffer[64*64];
 
 			PAK_doUnpak(Buffer,ThisFrame.PAKSpr);
 // clut
 RECT		Rect;
 			Rect.x=512;
-			Rect.y=511;
+			Rect.y=TPY;
 			Rect.w=SpriteBank->ColorCount;
 			Rect.h=1;
 			LoadImage( &Rect, (u32*)SpriteBank->Palette);
 		
 // Gfx
 			Rect.x=512;
-			Rect.y=256;
+			Rect.y=TPY+4;
 			Rect.w=ThisFrame.W/4;
 			Rect.h=ThisFrame.H;
 			LoadImage( &Rect, (u32*)Buffer);
 
-			Ft4=GetPrimFT4();
-			setXYWH(Ft4,Pos.vx-ThisFrame.XOfs,Pos.vy-ThisFrame.YOfs,ThisFrame.W,ThisFrame.H);
-			setUVWH(Ft4,0,0,ThisFrame.W,ThisFrame.H);
-			setRGB0(Ft4,RR,GG,BB);
-			setTPage(Ft4,0,0,TPX,TPY);
-			setClut(Ft4, TPX, 511);
+POLY_FT4	*Ft4=GetPrimFT4();
+			SetUpFT4(Ft4,&ThisFrame,Pos.vx,Pos.vy,XFlip,YFlip);
+			setRGB0(Ft4,128,128,128);
+			setTPage(Ft4,0,0,TPX,TPY+4);
+			setClut(Ft4, TPX, TPY);
 			AddPrimToList(Ft4,0);
 
-			Ft4=GetPrimFT4();
-			setXYWH(Ft4,Pos.vx-ThisFrame.XOfs,Pos.vy-ThisFrame.YOfs,ThisFrame.W,ThisFrame.H);
-			Ft4->x0-=XX;
-			Ft4->x1-=XX;
-			Ft4->y0+=YY;
-			Ft4->y1+=YY;
+			if (Shadow)
+			{
+				POLY_FT4	*sFt4=GetPrimFT4();
+				*sFt4=*Ft4;
+				sFt4->x0-=ShadowXOfs;
+				sFt4->x1-=ShadowXOfs;
+				sFt4->y0+=ShadowYOfs;
+				sFt4->y1+=ShadowYOfs;
+				setSemiTrans(sFt4,1);
+				setRGB0(sFt4,0,0,0);
+				AddPrimToList(sFt4,0);
+			}
 
-			setUVWH(Ft4,0,0,ThisFrame.W,ThisFrame.H);
-			setRGB0(Ft4,0,0,0);
-			setSemiTrans(Ft4,1);
-			setTPage(Ft4,0,0,TPX,TPY);
-			setClut(Ft4, TPX, 511);
-			AddPrimToList(Ft4,0);
-
+			return(Ft4);
 }
+
+/*****************************************************************************/
+void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip)
+{
+int		U=0;
+int		V=4;
+int		W=ThisFrame->W;
+int		H=ThisFrame->H;
+
+		if (XFlip)
+		{
+			Ft4->u0=U+W-1;
+			Ft4->u1=U;
+			Ft4->u2=U+W-1;
+	 		Ft4->u3=U;
+		}
+		else
+		{
+			Ft4->u0=U;
+			Ft4->u1=U+W;
+			Ft4->u2=U;
+ 			Ft4->u3=U+W;
+		}
+
+		if (YFlip)
+		{
+			Ft4->v0=V+H-1;
+			Ft4->v1=V+H-1;
+			Ft4->v2=V;
+			Ft4->v3=V;
+		}
+		else
+		{
+			Ft4->v0=V;
+			Ft4->v1=V;
+			Ft4->v2=V+H;
+			Ft4->v3=V+H;
+		}
+
+		X+=ThisFrame->XOfs;
+		Y+=ThisFrame->YOfs;
+
+		setXYWH(Ft4,X,Y,W,H);
+}
+
 
 /*****************************************************************************/
 void	CActorGfx::Dump()
