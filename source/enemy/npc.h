@@ -58,6 +58,7 @@ public:
 		NPC_OIL_BLOB,
 		NPC_SKULL_STOMPER,
 		NPC_MOTHER_JELLYFISH,
+		NPC_SUB_SHARK,
 		NPC_FLYING_DUTCHMAN,
 		NPC_UNIT_TYPE_MAX,
 	};
@@ -80,6 +81,7 @@ protected:
 		NPC_INIT_GHOST_PIRATE,
 		NPC_INIT_SKULL_STOMPER,
 		NPC_INIT_MOTHER_JELLYFISH,
+		NPC_INIT_SUB_SHARK,
 		NPC_INIT_FLYING_DUTCHMAN,
 	};
 
@@ -122,6 +124,7 @@ protected:
 		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 		NPC_CLOSE_BOOGER_MONSTER_ATTACK,
 		NPC_CLOSE_MOTHER_JELLYFISH_ATTACK,
+		NPC_CLOSE_SUB_SHARK_ATTACK,
 		NPC_CLOSE_FLYING_DUTCHMAN_ATTACK,
 	};
 
@@ -132,6 +135,7 @@ protected:
 		NPC_MOVEMENT_USER_SEEK,
 		NPC_MOVEMENT_VERTICAL,
 		NPC_MOVEMENT_MOTHER_JELLYFISH,
+		NPC_MOVEMENT_SUB_SHARK,
 		NPC_MOVEMENT_FLYING_DUTCHMAN,
 	};
 
@@ -161,6 +165,13 @@ protected:
 		FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
 		FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
 		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
+	};
+
+	enum NPC_SUB_SHARK_STATE
+	{
+		SUB_SHARK_CYCLE = 0,
+		SUB_SHARK_MINE_1 = 1,
+		SUB_SHARK_MINE_2,
 	};
 
 	enum
@@ -250,6 +261,11 @@ protected:
 	void				processFlyingDutchmanMovement( int _frames );
 	void				processCloseFlyingDutchmanAttack( int _frames );
 
+	// sub shark functions
+
+	void				processSubSharkMovement( int _frames );
+	void				processCloseSubSharkAttack( int _frames );
+
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
@@ -271,6 +287,7 @@ protected:
 	bool				m_extendDir;
 	DVECTOR				m_base;
 	u8					m_state;
+	u8					m_salvoCount;
 };
 
 

@@ -185,6 +185,10 @@ SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nsshark.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nsstomp.cpp
 # End Source File
 # End Group

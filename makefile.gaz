@@ -66,6 +66,7 @@ enemy_src :=		2denemy \
 					nbooger \
 					nmjfish \
 					nfdutch \
+					nsshark \
 					enemy
 
 projectl_src :=		projectl

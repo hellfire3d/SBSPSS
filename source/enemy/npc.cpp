@@ -395,6 +395,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		256,
 	},
 
+	{	// NPC_SUB_SHARK
+		NPC_INIT_SUB_SHARK,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_SUB_SHARK,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_SUB_SHARK_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		256,
+	},
+
 	{	// NPC_FLYING_DUTCHMAN
 		NPC_INIT_FLYING_DUTCHMAN,
 		NPC_SENSOR_NONE,
@@ -411,7 +423,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_FLYING_DUTCHMAN;
+	m_type = NPC_SUB_SHARK;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -497,10 +509,18 @@ void CNpc::init()
 			break;
 		}
 
-		case NPC_FLYING_DUTCHMAN:
+		case NPC_INIT_FLYING_DUTCHMAN:
 		{
 			m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 			m_extendDir = EXTEND_UP;
+
+			break;
+		}
+
+		case NPC_INIT_SUB_SHARK:
+		{
+			m_state = SUB_SHARK_CYCLE;
+			m_extendDir = EXTEND_RIGHT;
 
 			break;
 		}
@@ -958,6 +978,13 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_SUB_SHARK:
+		{
+			processSubSharkMovement( _frames );
+
+			break;
+		}
+
 		default:
 
 			break;
@@ -1062,6 +1089,11 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_FLYING_DUTCHMAN_ATTACK:
 			processCloseFlyingDutchmanAttack( _frames );
+
+			break;
+
+		case NPC_CLOSE_SUB_SHARK_ATTACK:
+			processCloseSubSharkAttack( _frames );
 
 			break;
 
