@@ -447,7 +447,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::SFX_SEASNAKE_MOVE,
+		CSoundMediator::SFX_WORM___SWIM,
 		false,
 	},
 
@@ -811,7 +811,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		CSoundMediator::SFX_JELLYFISH_DEFEATED,
-		CSoundMediator::SFX_JELLYFISH_MOVE,
+		CSoundMediator::SFX_BOSS_JELLYFISH_MOVE,
 		false,
 	},
 
@@ -837,7 +837,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_SHARK___SWIM,
 		true,
 	},
 
@@ -916,7 +916,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_DOGFISH_STOMP,
 		true,
 	},
 

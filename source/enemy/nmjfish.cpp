@@ -218,6 +218,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 						projectile->setGraphic( FRM__LIGHTNING1 );
 						projectile->setSpeed( 6 );
 						projectile->setXScale( 8192 );
+						projectile->setShock();
 
 						m_movementTimer = GameState::getOneSecondInFrames() * 2;
 						m_pulsateTimer = GameState::getOneSecondInFrames();
@@ -256,7 +257,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 						if ( m_soundId == NOT_PLAYING )
 						{
-							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_ATTACK, true );
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BOSS_JELLYFISH_ELECTRIC_SHOCK, true );
 						}
 					}
 				}
@@ -267,9 +268,20 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 					m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 					m_renderScale += ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
 
-					if ( m_soundId == NOT_PLAYING )
+					if ( m_pulsateTimer > 0 )
 					{
-						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_NAUTILUS_ATTACK, true );
+						if ( m_soundId == NOT_PLAYING )
+						{
+							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BOSS_JELLYFISH_PULSATE, true );
+						}
+					}
+					else
+					{
+						if ( m_soundId != NOT_PLAYING )
+						{
+							CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+							m_soundId = NOT_PLAYING;
+						}
 					}
 				}
 			}
@@ -313,7 +325,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 				{
 					if ( m_soundId == NOT_PLAYING )
 					{
-						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+						m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 					}
 				}
 				else
@@ -348,7 +360,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_soundId == NOT_PLAYING )
 			{
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 			}
 
 			break;
@@ -374,7 +386,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_soundId == NOT_PLAYING )
 			{
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 			}
 
 			break;
@@ -395,7 +407,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_soundId == NOT_PLAYING )
 			{
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 			}
 
 			break;
@@ -427,7 +439,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_soundId == NOT_PLAYING )
 			{
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_MOVE, true );
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
 			}
 
 			break;
@@ -446,7 +458,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_soundId == NOT_PLAYING )
 			{
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_ATTACK, true );
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BOSS_JELLYFISH_ELECTRIC_SHOCK, true );
 			}
 
 			s32 distX, distY;

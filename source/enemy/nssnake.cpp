@@ -365,6 +365,8 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 				m_animNo = ANIM_SEASNAKE_HEADSNAP;
 				m_animPlaying = true;
 				m_frame = 0;
+
+				CSoundMediator::playSfx( CSoundMediator::SFX_WORM___CHOMP );
 			}
 		}
 	}
@@ -828,6 +830,8 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 				m_sensorFunc = NPC_SENSOR_NONE;
 
 				m_snapTimer = m_movementTimer;
+
+				CSoundMediator::playSfx( CSoundMediator::SFX_WORM___HISS );
 			}
 
 			if ( m_soundId == NOT_PLAYING )

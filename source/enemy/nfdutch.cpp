@@ -331,6 +331,8 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 								m_state = FLYING_DUTCHMAN_RETURN;
 								m_timerTimer = 2 * GameState::getOneSecondInFrames();
 							}
+
+							CSoundMediator::playSfx( CSoundMediator::SFX_FLYING_DUTCHMAN );
 						}
 					}
 				}

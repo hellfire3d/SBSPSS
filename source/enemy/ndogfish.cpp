@@ -107,6 +107,11 @@ void CNpcIronDogfishEnemy::processMovement( int _frames )
 
 		if ( m_movementTimer > 0 )
 		{
+			if ( m_soundId == NOT_PLAYING && m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( m_animNo != ANIM_IRONDOGFISH_WALK || !m_animPlaying )
 			{
 				m_animPlaying = true;
@@ -227,6 +232,8 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 					m_animPlaying = true;
 					m_animNo = ANIM_IRONDOGFISH_PUNCH;
 					m_frame = 0;
+
+					CSoundMediator::playSfx( CSoundMediator::SFX_DOGFISH_THUMP );
 				}
 				else if ( !m_animPlaying )
 				{
@@ -270,6 +277,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 
 			m_laserTimer = GameState::getOneSecondInFrames() >> 1;
 
+			CSoundMediator::playSfx( CSoundMediator::SFX_DOGFISH_LASER );
 			/*m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
 
 			DVECTOR offsetPos;
@@ -364,6 +372,8 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 					m_animPlaying = true;
 					m_animNo = ANIM_IRONDOGFISH_TAILSMASH;
 					m_frame = 0;
+
+					CSoundMediator::playSfx( CSoundMediator::SFX_DOGFISH_GROWL );
 				}
 				else if ( !m_animPlaying )
 				{

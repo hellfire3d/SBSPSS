@@ -89,6 +89,7 @@ void CProjectile::init()
 	m_speed = 3;
 	m_xScale = ONE;
 	m_yScale = ONE;
+	m_shock = false;
 	updateCollisionArea();
 }
 
@@ -470,7 +471,14 @@ void CProjectile::collidedWith(CThing *_thisThing)
 		{
 			CPlayer *player = (CPlayer *) _thisThing;
 
-			player->takeDamage( DAMAGE__HIT_ENEMY );
+			if ( m_shock )
+			{
+				player->takeDamage( DAMAGE__SHOCK_ENEMY );
+			}
+			else
+			{
+				player->takeDamage( DAMAGE__HIT_ENEMY );
+			}
 
 			if ( m_lifetimeType != PROJECTILE_INFINITE_LIFE )
 			{

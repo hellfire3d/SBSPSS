@@ -68,6 +68,7 @@ public:
 	void				setSpeed( u16 newSpeed )								{m_speed = newSpeed;}
 	void				setXScale( s16 newScale )								{m_xScale = newScale;}
 	void				setYScale( s16 newScale )								{m_yScale = newScale;}
+	void				setShock()												{m_shock = true;}
 
 protected:
 	DVECTOR				getScreenOffset();
@@ -88,6 +89,7 @@ protected:
 	u16											m_speed;
 	s16											m_xScale;
 	s16											m_yScale;
+	u8											m_shock;
 };
 
 /*****************************************************************************/

@@ -98,6 +98,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 	{
 		case SUB_SHARK_MINE_1:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
@@ -164,6 +169,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_GOTO_CHARGE:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
@@ -207,6 +217,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_DROP:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
@@ -237,6 +252,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_START_CHARGE:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SHARK___CREAKING_ATTACK_SOUND, true );
+			}
+
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
@@ -281,6 +301,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_CHARGE:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( !m_carryPlayer && abs( playerXDist ) < 200 )
 			{
 				if ( m_animNo != ANIM_SHARKSUB_CHOMP || !m_animPlaying )
@@ -288,6 +313,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 					m_animPlaying = true;
 					m_animNo = ANIM_SHARKSUB_CHOMP;
 					m_frame = 0;
+					CSoundMediator::playSfx( CSoundMediator::SFX_SHARK___CHOMP );
 				}
 			}
 			else
@@ -327,6 +353,11 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		case SUB_SHARK_END_CHARGE:
 		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( m_data[m_type].moveSfx, true );
+			}
+
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
