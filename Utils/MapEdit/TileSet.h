@@ -32,6 +32,13 @@ public:
 		CTileBank();
 		~CTileBank();
 
+		enum	BrushEnum
+		{
+			LBrush=0,
+			RBrush,
+			MaxBrush
+		};
+
 		void		AddTileSet(char *Filename);
 		int			NeedLoad()							{return(LoadFlag);}
 		void		Reload();
@@ -40,53 +47,66 @@ public:
 		
 		void		SetCurrent(int Set)					{CurrentSet=Set;}
 
-		sMapElem	&GetLTile()							{return(LTile);}
-		sMapElem	&GetRTile()							{return(RTile);}
+		CMap		&GetLBrush()						{return(Brush[LBrush]);}
+		CMap		&GetRBrush()						{return(Brush[RBrush]);}
+		CMap		&GetBrush(int i)					{return(Brush[i]);}
+		CMap		&GetActiveBrush()					{return(GetBrush(ActiveBrush));}
 
 		void		RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d);
 		void		FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
+		void		RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d);
 
 		void		UpdateGUI(CCore *Core,BOOL IsTileView);
 
 // Functions
-		BOOL		TileSelectL()						{return(TileSelect(LTile,RTile));}
-		BOOL		TileSelectR()						{return(TileSelect(RTile,LTile));}
+		BOOL		SelectL(BOOL DownFlag)				{return(Select(LBrush,DownFlag));}
+		BOOL		SelectR(BOOL DownFlag)				{return(Select(RBrush,DownFlag));}
+		BOOL		SelectCancel();
+
+		void		SetActiveBrushL()					{ActiveBrush=LBrush;}
+		void		SetActiveBrushR()					{ActiveBrush=RBrush;}
 
 private:
-		BOOL	TileSelect(sMapElem &ThisTile,sMapElem &OtherTile);
+		BOOL		Select(int BrushID,BOOL DownFlag);
+		void		SetBrush(CMap &ThisBrush);
 
 		std::vector<CTileSet>	TileSet;
 		int						CurrentSet;
-		sMapElem				LTile,RTile;
+		CMap					Brush[2];
+		int						ActiveBrush;
+		int						SelStart,SelEnd;
 
 		BOOL					LoadFlag;
-		int						CursorPos;
+		int						LastCursorPos,CursorPos;
 };
 
 /*****************************************************************************/
 class	CTileSet
 {
 public:
-		CTileSet(char *_Filename);
+		CTileSet(char *_Filename,int Idx);
 		~CTileSet();
 		
 		int		IsLoaded()			{return(Loaded);}
+		int		GetTileCount()		{return(Tile.size());}
 		void	Load(CCore *Core);
 		char	*GetPath()			{return(Path);}
 		char	*GetName()			{return(Name);}
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
 		int		FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
-		void	Render2d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag);
-		void	Render3d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag);
+		void	Render2d(Vec &CamPos,CMap &LBrush,CMap &RBrush);
+		void	Render3d(Vec &CamPos,CMap &LBrush,CMap &RBrush);
+		void	RenderCursor(Vec &CamPos,int Pos,int Width, int Height);
+		void	RenderBrush(Vec &CamPos,CMap &LBrush,CMap &RBrush);
+		void	RenderGrid(Vec &CamPos);
 
 private:
-		void	RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL GridFlag);
 
 		char				Path[256],Name[256];
+		int					SetNumber;
 		std::vector<CTile>	Tile;
 		BOOL				Loaded;
-
 };
 
 /*****************************************************************************/

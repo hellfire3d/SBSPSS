@@ -220,3 +220,17 @@ void	CMapEditDoc::TileBankSet()
 		theApp.GetMainWnd()->SetFocus();		// Put control back to Window :o)
 }
 
+/*********************************************************************************/
+void	CMapEditDoc::ActiveBrushLeft()
+{
+		Core.ActiveBrushLeft();
+		UpdateAllViews(NULL);
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::ActiveBrushRight()
+{
+		Core.ActiveBrushRight();
+		UpdateAllViews(NULL);
+
+}

@@ -32,7 +32,6 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d)
 		ZPosDiv=ZDiv;
 		Render3dFlag=Is3d;
 		Mode=MouseModePaint;
-		Flag=0;
 }
 
 /*****************************************************************************/
@@ -52,41 +51,75 @@ CLayerTile::~CLayerTile()
 /*****************************************************************************/
 void	CLayerTile::Render(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-	if (Is3d && Render3dFlag)
-	{
-		glEnable(GL_DEPTH_TEST);
-		Render3d(Core,CamPos);
-		glDisable(GL_DEPTH_TEST);
-	}
-		else
-	{
-		Render2d(Core,CamPos);
-	}
+float	XYDiv=GetLayerZPosDiv();
+Vec		ThisCam=CamPos/XYDiv;
+
+		if (Is3d && Render3dFlag)
+		{
+			glEnable(GL_DEPTH_TEST);
+			Render3d(Core,ThisCam,Map);
+			glDisable(GL_DEPTH_TEST);
+		}
+			else
+		{
+			Render2d(Core,ThisCam,Map);
+		}
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render2d(CCore *Core,Vec &CamPos)
+void	CLayerTile::RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d)
+{
+CTileBank	&TileBank=Core->GetTileBank();
+Vec			ThisCam=CamPos;
+CPoint		&CursPos=Core->GetCursorPos();
+CMap		&Brush=TileBank.GetActiveBrush();
+
+		if (!Brush.IsValid()) return;
+
+		if (CursPos.x==-1 || CursPos.y==-1) return;
+		ThisCam.x+=CursPos.x;
+		ThisCam.y-=CursPos.y;
+
+		if (Is3d && Render3dFlag)
+		{
+			glEnable(GL_DEPTH_TEST);
+			Render3d(Core,ThisCam,Brush,0.5);
+			glDisable(GL_DEPTH_TEST);
+		}
+			else
+		{
+			Render2d(Core,ThisCam,Brush,0.5);
+		}
+}
+
+/*****************************************************************************/
+void	CLayerTile::Render2d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha)
 {
 	return;
-float		XYDiv=GetLayerZPosDiv();
-int			MapW=Map.GetWidth();
-int			MapH=Map.GetHeight();
-float		StartX=CamPos.x/XYDiv;
-float		StartY=CamPos.y/XYDiv;
-CTexCache	&TexCache=Core->GetTexCache();
+int			Width=ThisMap.GetWidth();
+int			Height=ThisMap.GetHeight();
 		
-		glColor3f(0.5,0.5,0.5);
+		if (Alpha<1)
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
+			glColor4f(0.5,0.5,0.5,Alpha);
+		}
+		else
+		{
+			glColor3f(0.5,0.5,0.5);
+		}
 		glMatrixMode(GL_MODELVIEW);
 
-		for (int YLoop=0; YLoop<MapH; YLoop++)
+		for (int YLoop=0; YLoop<Height; YLoop++)
 		{
-			for (int XLoop=0; XLoop<MapW; XLoop++)
+			for (int XLoop=0; XLoop<Width; XLoop++)
 			{
-				sMapElem	&ThisElem=Map.GetTile(XLoop,YLoop);
+				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
 				CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
 				glLoadIdentity();	// Slow way, but good to go for the mo
-				glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
+				glTranslatef(CamPos.x+XLoop,CamPos.y-YLoop,CamPos.z);
 //				ThisTile.Render();
 int	c=(XLoop+YLoop)&1;
 				glColor3f(c,1,1);
@@ -96,36 +129,44 @@ int	c=(XLoop+YLoop)&1;
 
 			}
 		}
+		glDisable(GL_BLEND);
 }
 
 /*****************************************************************************/
-void	CLayerTile::Render3d(CCore *Core,Vec &CamPos)
+void	CLayerTile::Render3d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha)
 {
-float		XYDiv=GetLayerZPosDiv();
-int			MapW=Map.GetWidth();
-int			MapH=Map.GetHeight();
-float		StartX=CamPos.x/XYDiv;
-float		StartY=CamPos.y/XYDiv;
-CTexCache	&TexCache=Core->GetTexCache();
+int			Width=ThisMap.GetWidth();
+int			Height=ThisMap.GetHeight();
+		
+		if (Alpha<1)
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
+			glColor4f(0.5,0.5,0.5,Alpha);
+		}
+		else
+		{
+			glColor3f(0.5,0.5,0.5);
+		}
 
-		glColor3f(0.5,0.5,0.5);
 		glMatrixMode(GL_MODELVIEW);
 
-		for (int YLoop=0; YLoop<MapH; YLoop++)
+		for (int YLoop=0; YLoop<Height; YLoop++)
 		{
-			for (int XLoop=0; XLoop<MapW; XLoop++)
+			for (int XLoop=0; XLoop<Width; XLoop++)
 			{
-				sMapElem	&ThisElem=Map.GetTile(XLoop,YLoop);
+				sMapElem	&ThisElem=ThisMap.Get(XLoop,YLoop);
 				if (ThisElem.Tile)
 				{ // Render Non Zero Tiles
 					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
 					glLoadIdentity();	// Slow way, but good to go for the mo
-					glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
+					glTranslatef(CamPos.x+XLoop,CamPos.y-YLoop,CamPos.z);
 					ThisTile.Render(ThisElem.Flags);
 				}
 			}
 		}
+		glDisable(GL_BLEND);
 	
 }
 
@@ -133,8 +174,8 @@ CTexCache	&TexCache=Core->GetTexCache();
 void	CLayerTile::RenderGrid(CCore *Core,Vec &CamPos)
 {
 float	XYDiv=GetLayerZPosDiv();
-int		MapW=Map.GetWidth();
-int		MapH=Map.GetHeight();
+int		Width=Map.GetWidth();
+int		Height=Map.GetHeight();
 float	StartX=CamPos.x/XYDiv;
 float	StartY=CamPos.y/XYDiv;
 float	OverVal=0.5;
@@ -148,16 +189,16 @@ float	OverVal=0.5;
 			glNormal3f( 1,1,1);
 			glColor3ub(255,255,255);
 			
-			for (int YLoop=0; YLoop<MapH+1; YLoop++)
+			for (int YLoop=0; YLoop<Height+1; YLoop++)
 			{
 			glVertex3f( 0-OverVal,    -YLoop+1, 0);
-			glVertex3f( MapW+OverVal, -YLoop+1, 0);
+			glVertex3f( Width+OverVal, -YLoop+1, 0);
 			}
 
-			for (int XLoop=0; XLoop<MapW+1; XLoop++)
+			for (int XLoop=0; XLoop<Width+1; XLoop++)
 			{
 			glVertex3f( XLoop, 0+1+OverVal,		0);
-			glVertex3f( XLoop, -MapH+1-OverVal, 0);
+			glVertex3f( XLoop, -Height+1-OverVal, 0);
 			}
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
@@ -174,8 +215,8 @@ int		TileID=0;
 CPoint	&CursorPos=Core->GetCursorPos();
 
 float	XYDiv=GetLayerZPosDiv();
-int		MapW=Map.GetWidth();
-int		MapH=Map.GetHeight();
+int		Width=Map.GetWidth();
+int		Height=Map.GetHeight();
 float	StartX=CamPos.x/XYDiv;
 float	StartY=CamPos.y/XYDiv;
 
@@ -197,9 +238,9 @@ float	StartY=CamPos.y/XYDiv;
 		glLoadIdentity();
 		glTranslatef(StartX,StartY,CamPos.z);
 
-		for (int YLoop=0; YLoop<MapH; YLoop++)
+		for (int YLoop=0; YLoop<Height; YLoop++)
 		{
-			for (int XLoop=0; XLoop<MapW; XLoop++)
+			for (int XLoop=0; XLoop<Width; XLoop++)
 			{
 				glLoadName (TileID);
 				glBegin (GL_QUADS); 
@@ -222,8 +263,7 @@ GLuint	*HitPtr=SelectBuffer;
 
 		{
 			int	HitID=HitPtr[3];
-			CursorPos.x=HitID%MapW;
-			CursorPos.y=HitID/MapW;
+			CursorPos=IDToPoint(HitID,Width);
 		}
 		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
 
@@ -251,8 +291,6 @@ CGfxToolBar	*GfxDlg=(CGfxToolBar *)Frm->GetDialog(IDD_GFXTOOLBAR);
 			GfxDlg->ResetButtons();
 			switch(Mode)
 			{
-			case MouseModeNone:
-				break;
 			case MouseModePaint:
 				GfxDlg->SetButtonState(CGfxToolBar::PAINT,TRUE);
 				break;
@@ -265,8 +303,6 @@ CGfxToolBar	*GfxDlg=(CGfxToolBar *)Frm->GetDialog(IDD_GFXTOOLBAR);
 			default:
 				break;
 			}
-			GfxDlg->SetButtonState(CGfxToolBar::MIRRORX,Flag & MouseFlagMirrorX);
-			GfxDlg->SetButtonState(CGfxToolBar::MIRRORY,Flag & MouseFlagMirrorY);
 		}
 
 }
@@ -290,8 +326,6 @@ BOOL	CLayerTile::InitMode()
 {
 		switch(Mode)
 		{
-		case MouseModeNone:
-			break;
 		case MouseModePaint:
 			break;
 		case MouseModeSelect:
@@ -309,8 +343,6 @@ BOOL	CLayerTile::ExitMode()
 {
 		switch(Mode)
 		{
-		case MouseModeNone:
-			break;
 		case MouseModePaint:
 			break;
 		case MouseModeSelect:
@@ -324,13 +356,6 @@ BOOL	CLayerTile::ExitMode()
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::SetFlag(int NewFlag)
-{
-		Flag^=NewFlag;
-		return(TRUE);
-}
-
-/*****************************************************************************/
 BOOL	CLayerTile::LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
 {
 BOOL		Ret=FALSE;
@@ -338,11 +363,9 @@ CTileBank	&TileBank=Core->GetTileBank();
 
 		switch(Mode)
 		{
-		case MouseModeNone:
-			break;
 		case MouseModePaint:
 			if (DownFlag)
-				Ret=Paint(TileBank.GetLTile(),CursorPos);
+				Ret=Paint(TileBank.GetLBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 			break;
@@ -362,11 +385,9 @@ CTileBank	&TileBank=Core->GetTileBank();
 
 		switch(Mode)
 		{
-		case MouseModeNone:
-			break;
 		case MouseModePaint:
 			if (DownFlag)
-				Ret=Paint(TileBank.GetRTile(),CursorPos);
+				Ret=Paint(TileBank.GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 			break;
@@ -386,14 +407,12 @@ CTileBank	&TileBank=Core->GetTileBank();
 
 		switch(Mode)
 		{
-		case MouseModeNone:
-			break;
 		case MouseModePaint:
 			if (nFlags & MK_LBUTTON)
-				Ret=Paint(TileBank.GetLTile(),CursorPos);
+				Ret=Paint(TileBank.GetLBrush(),CursorPos);
 			else
 			if (nFlags & MK_RBUTTON)
-				Ret=Paint(TileBank.GetRTile(),CursorPos);
+				Ret=Paint(TileBank.GetRBrush(),CursorPos);
 			break;
 		case MouseModeSelect:
 			break;
@@ -406,16 +425,45 @@ CTileBank	&TileBank=Core->GetTileBank();
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MirrorX()
+void	CLayerTile::RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-		SetFlag(MouseFlagMirrorX);
+		switch(Mode)
+		{
+		case MouseModePaint:
+			RenderCursorPaint(Core,CamPos,Is3d);
+			break;
+		case MouseModeSelect:
+			break;
+		case MouseModePicker:
+			break;
+		default:
+			break;
+		}
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::MirrorX(CCore *Core)
+{
+CTileBank	&TileBank=Core->GetTileBank();
+CMap		&LBrush=TileBank.GetLBrush();
+CMap		&RBrush=TileBank.GetRBrush();
+
+			LBrush.MirrorX(MouseFlagMirrorX);
+			RBrush.MirrorX(MouseFlagMirrorX);
+
 		return(TRUE);
 }
 
 /*****************************************************************************/
-BOOL	CLayerTile::MirrorY()
+BOOL	CLayerTile::MirrorY(CCore *Core)
 {
-		SetFlag(MouseFlagMirrorY);
+CTileBank	&TileBank=Core->GetTileBank();
+CMap		&LBrush=TileBank.GetLBrush();
+CMap		&RBrush=TileBank.GetRBrush();
+
+			LBrush.MirrorY(MouseFlagMirrorY);
+			RBrush.MirrorY(MouseFlagMirrorY);
+
 		return(TRUE);
 }
 
@@ -423,13 +471,14 @@ BOOL	CLayerTile::MirrorY()
 /*****************************************************************************/
 /*****************************************************************************/
 
-BOOL	CLayerTile::Paint(sMapElem &Tile,CPoint &CursorPos)
+BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 {
 		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
-		if (Tile.Set==-1 || Tile.Tile==-1) return(FALSE);	// Invalid tile?
+		if (!Blk.IsValid()) return(FALSE);	// Invalid tile?
 
-		Tile.Flags=Flag;
-		Map.SetTile(CursorPos.x,CursorPos.y,Tile);
+//		Tile.Flags=Flag;
+
+		Map.Set(CursorPos.x,CursorPos.y,Blk);
 
 		return(TRUE);
 

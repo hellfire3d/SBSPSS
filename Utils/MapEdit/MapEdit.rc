@@ -119,8 +119,12 @@ BEGIN
     POPUP "&TileBank"
     BEGIN
         MENUITEM "&Toggle TileView",            ID_TOGGLE_TILEVIEW
+        MENUITEM SEPARATOR
         MENUITEM "Mirror &X",                   ID_MIRRORX
         MENUITEM "Mirror &Y",                   ID_MIRRORY
+        MENUITEM SEPARATOR
+        MENUITEM "View Left Brush",             ID_ACTIVEBRUSH_LEFT
+        MENUITEM "View Right Brush",            ID_ACTIVEBRUSH_RIGHT
     END
     POPUP "&Window"
     BEGIN
@@ -143,6 +147,8 @@ END
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
+    219,            ID_ACTIVEBRUSH_LEFT,    VIRTKEY, NOINVERT
+    221,            ID_ACTIVEBRUSH_RIGHT,   VIRTKEY, NOINVERT
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     "G",            ID_TOGGLE_GRID,         VIRTKEY, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
@@ -461,14 +467,10 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "P",IDD_GFXTOOLBAR_PAINT,5,5,15,15,BS_ICON | NOT 
                     WS_TABSTOP
-    PUSHBUTTON      "S",IDD_GFXTOOLBAR_SELECT,20,5,15,15,BS_ICON | NOT 
-                    WS_TABSTOP
-    PUSHBUTTON      "Pk",IDD_GFXTOOLBAR_PICKER,35,5,15,15,BS_ICON | NOT 
-                    WS_TABSTOP
-    PUSHBUTTON      "X",IDD_GFXTOOLBAR_MIRRORX,50,5,15,15,BS_ICON | NOT 
-                    WS_TABSTOP
-    PUSHBUTTON      "Y",IDD_GFXTOOLBAR_MIRRORY,65,5,15,15,BS_ICON | NOT 
-                    WS_TABSTOP
+    PUSHBUTTON      "S",IDD_GFXTOOLBAR_SELECT,20,5,15,15,BS_ICON | 
+                    WS_DISABLED | NOT WS_TABSTOP
+    PUSHBUTTON      "Pk",IDD_GFXTOOLBAR_PICKER,35,5,15,15,BS_ICON | 
+                    WS_DISABLED | NOT WS_TABSTOP
 END
 
 

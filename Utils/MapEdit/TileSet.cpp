@@ -36,17 +36,35 @@ const float	TileBrowserY1=1+TileBrowserGap/2;
 /*****************************************************************************/
 CTileBank::CTileBank()
 {
-	LoadFlag=FALSE;
-	CurrentSet=0;
-	LTile.Set=-1;
-	RTile.Set=-1;
+		LoadFlag=FALSE;
+		CurrentSet=0;
+		for (int i=0; i<MaxBrush; i++) Brush[i].Delete();
+		LastCursorPos=CursorPos=-1;
+		ActiveBrush=0;
+		SelStart=-1;
+		SelEnd=1;
+
 #ifdef _DEBUG
 	AddTileSet("c:/temp/rockp/rockp.gin");
-	LTile.Set=0;
-	LTile.Tile=1;
-	RTile.Set=0;
-	RTile.Tile=2;
-#endif
+
+int	W=3;
+int	H=3;
+CMap	&Brush=GetLBrush();
+
+	Brush.SetSize(W,H);
+sMapElem	Blk;
+	Blk.Set=0;
+	Blk.Tile=1;
+	Blk.Flags=0;
+	for (int Y=0; Y<H; Y++)
+	{
+		for (int X=0; X<W; X++)
+		{
+		Brush.Set(X,Y,Blk);
+		Blk.Tile++;
+		}
+	}
+#endif	
 }
 
 /*****************************************************************************/
@@ -57,7 +75,8 @@ CTileBank::~CTileBank()
 /*****************************************************************************/
 void	CTileBank::AddTileSet(char *Filename)
 {
-	TileSet.push_back(CTileSet(Filename));
+int	ListSize=TileSet.size();
+	TileSet.push_back(CTileSet(Filename,ListSize));
 	LoadFlag=TRUE;
 }
 
@@ -97,24 +116,21 @@ CTile	&CTileBank::GetTile(int Bank,int Tile)
 /*****************************************************************************/
 void	CTileBank::RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-int		LT=LTile.Tile;
-int		RT=RTile.Tile;
-
-		if (LTile.Set!=CurrentSet) LT=-1;
-		if (RTile.Set!=CurrentSet) RT=-1;
-
 		if (!TileSet.size()) return;	// No tiles, return
 
 		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
-			TileSet[CurrentSet].Render3d(CamPos,LT,RT,CursorPos,Core->IsGridOn());
+			TileSet[CurrentSet].Render3d(CamPos,GetLBrush(),GetRBrush());
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			TileSet[CurrentSet].Render2d(CamPos,LT,RT,CursorPos,Core->IsGridOn());
+			TileSet[CurrentSet].Render2d(CamPos,GetLBrush(),GetRBrush());
 		}
+
+		TileSet[CurrentSet].RenderCursor(CamPos,CursorPos,SelStart,SelEnd);
+		if (Core->IsGridOn()) TileSet[CurrentSet].RenderGrid(CamPos);
 }
 
 /*****************************************************************************/
@@ -123,6 +139,7 @@ void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint 
 		if (!TileSet.size()) return;	// No tiles, return
 		
 		CursorPos=TileSet[CurrentSet].FindCursorPos(Core,View,CamPos,MousePos);
+		SelEnd=CursorPos;
 }
 
 /*****************************************************************************/
@@ -155,17 +172,66 @@ int			ListSize=TileSet.size();
 /*****************************************************************************/
 /*** Functions ***************************************************************/
 /*****************************************************************************/
-BOOL	CTileBank::TileSelect(sMapElem &ThisTile,sMapElem &OtherTile)
+BOOL	CTileBank::Select(int BrushID,BOOL DownFlag)
 {
-		if (CursorPos==-1) return(FALSE);
-		if (CurrentSet==OtherTile.Set && OtherTile.Tile==CursorPos)
-		{ // Dont assign if same as other Tile
-			return(FALSE);
+		if (DownFlag && SelStart==-1)
+		{
+			if (CursorPos==-1) return(FALSE);
+			SelStart=CursorPos;
+			TRACE3("Start %i=%i,%i\n",SelStart,SelStart%TileBrowserWidth,SelStart/TileBrowserWidth);
+		}
+		else
+		if (!DownFlag && SelStart!=-1)
+		{
+			if (CursorPos==-1) return(SelectCancel());
+	
+			SetBrush(GetBrush(BrushID));
+
+			SelStart=-1;
+			TRACE0("END SEL\n");
 		}
 
-		ThisTile.Set=CurrentSet;
-		ThisTile.Tile=CursorPos;
-		if (ThisTile.Tile==0) ThisTile.Set=0;	// Always make zero tile, bank 0 (dunno why, just seems handy)
+		return(TRUE);
+}
+
+/*****************************************************************************/
+void	CTileBank::SetBrush(CMap &ThisBrush)
+{
+
+CPoint		S=IDToPoint(SelStart,TileBrowserWidth);
+CPoint		E=IDToPoint(SelEnd,TileBrowserWidth);
+
+CPoint		Start=CPoint(min(S.x,E.x), min(S.y,E.y));
+CPoint		End=CPoint(	 max(S.x,E.x), max(S.y,E.y));
+int			Width=(End.x-Start.x)+1;
+int			Height=(End.y-Start.y)+1;
+sMapElem	ThisElem;
+int			MaxTile=TileSet[CurrentSet].GetTileCount();
+
+		if (PointToID(End,TileBrowserWidth)>=MaxTile) SelectCancel();	// Invalid selection
+
+		ThisElem.Set=CurrentSet;
+		ThisElem.Flags=0;
+			
+		ThisBrush.Delete();
+		ThisBrush.SetSize(Width,Height);
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				ThisElem.Tile=PointToID(CPoint(Start.x+X,Start.y+Y),TileBrowserWidth);
+				ThisBrush.Set(X,Y,ThisElem);
+			}
+		}
+			
+}
+
+/*****************************************************************************/
+BOOL	CTileBank::SelectCancel()
+{
+		SelStart=-1;
+		TRACE0("Select Cancelled\n");
 		return(TRUE);
 }
 
@@ -174,7 +240,7 @@ BOOL	CTileBank::TileSelect(sMapElem &ThisTile,sMapElem &OtherTile)
 /*** TileSet *****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CTileSet::CTileSet(char *_Filename)
+CTileSet::CTileSet(char *_Filename,int Idx)
 {
 char	Drive[_MAX_DRIVE];
 char	Dir[_MAX_DIR];
@@ -185,6 +251,7 @@ char	Ext[_MAX_EXT];
 		sprintf(Path,"%s%s",Drive,Dir);
 		sprintf(Name,"%s",Fname);
 		Loaded=FALSE;
+		SetNumber=Idx;
 }
 
 /*****************************************************************************/
@@ -232,30 +299,66 @@ int	ListSize=Tile.size();
 }
 
 /*****************************************************************************/
-void	CTileSet::Render2d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag)
+void	CTileSet::Render2d(Vec &CamPos,CMap &LBrush,CMap &RBrush)
 {
 }
 
 /*****************************************************************************/
-void	CTileSet::Render3d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag)
+void	CTileSet::Render3d(Vec &CamPos,CMap &LBrush,CMap &RBrush)
 {
 int			ListSize=Tile.size();
 int			TileID=0;
+sMapElem	ThisElem;
+int			SelFlag;
+
+		ThisElem.Flags=0;
+		ThisElem.Set=SetNumber;
 		
 		glMatrixMode(GL_MODELVIEW);
 
 		while(TileID!=ListSize)
 		{
-			int		XPos=TileID%TileBrowserWidth;
-			int		YPos=TileID/TileBrowserWidth;
+			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
 
 			glLoadIdentity();
-			glTranslatef(CamPos.x+XPos*(1+TileBrowserGap),CamPos.y-YPos*(1+TileBrowserGap),CamPos.z);
-
-			RenderMisc(TileID==LTile,TileID==RTile,TileID==CursorPos,GridFlag);
+			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glColor3f(0.5,0.5,0.5);
 			if (TileID) Tile[TileID].Render(0);
+			ThisElem.Tile=TileID;
+			SelFlag=0;
+
+			if (LBrush.DoesContainTile(ThisElem)) SelFlag|=1;
+			if (RBrush.DoesContainTile(ThisElem)) SelFlag|=2;
+
+			if (SelFlag)
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glBegin(GL_QUADS); 
+				glNormal3f( 1,1,1);
+				switch(SelFlag)
+				{
+					case 1: // L
+						glColor4f(1,0,0,0.5);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						break;
+					case 2: // R
+						glColor4f(0,0,1,0.5);
+						BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						break;
+					case 3: // LR
+						glColor4f(1,0,0,0.5);
+						BuildGLQuad(TileBrowserX0,0.5,TileBrowserY0,TileBrowserY1,0);
+						glColor4f(0,0,1,0.5);
+						BuildGLQuad(0.5,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+						break;
+				}
+	
+				glEnd();
+				glDisable(GL_BLEND);
+
+			}
 
 			TileID++;
 		}
@@ -263,6 +366,97 @@ int			TileID=0;
 }
 
 /*****************************************************************************/
+void	CTileSet::RenderCursor(Vec &CamPos,int CursorPos,int SelStart,int SelEnd)
+{
+int		ListSize=Tile.size();
+CPoint	Start,End;
+int		MaxTile=Tile.size();
+		if (CursorPos<0 || CursorPos>ListSize) return;		
+
+		if (SelStart==-1)
+		{
+			Start=IDToPoint(CursorPos,TileBrowserWidth);
+			End=Start;
+		}
+		else
+		{
+			CPoint	S=IDToPoint(SelStart,TileBrowserWidth);
+			CPoint	E=IDToPoint(SelEnd,TileBrowserWidth);
+
+			Start=CPoint(	min(S.x,E.x), min(S.y,E.y));
+			End=CPoint(		max(S.x,E.x), max(S.y,E.y));
+			if (PointToID(End,TileBrowserWidth)>=MaxTile) return;		// Invalid selection
+		}
+
+		glMatrixMode(GL_MODELVIEW);
+		glDisable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+		for (int Y=Start.y; Y<=End.y; Y++)
+		{
+			for (int X=Start.x; X<=End.x; X++)
+			{
+//				RenderCursorBlock(CamPos,X,Y);
+				glLoadIdentity();
+				glTranslatef(CamPos.x+X*(1+TileBrowserGap),CamPos.y-Y*(1+TileBrowserGap),CamPos.z);
+	
+				glBegin(GL_QUADS); 
+				glNormal3f( 1,1,1);
+	
+				glColor4f(1,1,0,0.5);
+				BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+				glEnd();
+
+			}
+		}
+
+		glEnable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+
+}
+
+/*****************************************************************************/
+void	CTileSet::RenderGrid(Vec &CamPos)
+{
+int			ListSize=Tile.size();
+int			TileID=0;
+		
+		glMatrixMode(GL_MODELVIEW);
+		glDisable(GL_TEXTURE_2D);
+
+		while(TileID!=ListSize)
+		{
+			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
+
+			glLoadIdentity();
+			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
+
+			glBegin(GL_LINES); 
+				glNormal3f( 1,1,1);
+				glColor3ub(255,255,255);
+			
+				glVertex3f( TileBrowserX0,TileBrowserY0,0);
+				glVertex3f( TileBrowserX1,TileBrowserY0,0);
+
+				glVertex3f( TileBrowserX0,TileBrowserY1,0);
+				glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+				glVertex3f( TileBrowserX0,TileBrowserY0,0);
+				glVertex3f( TileBrowserX0,TileBrowserY1,0);
+
+				glVertex3f( TileBrowserX1,TileBrowserY0,0);
+				glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+			glEnd();
+
+			TileID++;
+		}
+		glEnable(GL_TEXTURE_2D);
+}
+
+/*
 void	CTileSet::RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL GridFlag)
 {
 		glDisable(GL_TEXTURE_2D);
@@ -309,7 +503,7 @@ void	CTileSet::RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL Gri
 
 		glEnable(GL_TEXTURE_2D);
 }
-
+*/
 /*****************************************************************************/
 int		CTileSet::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
 {
@@ -336,11 +530,10 @@ int		TileID=0;
 
 		while(TileID!=ListSize)
 		{
-			int		XPos=TileID%TileBrowserWidth;
-			int		YPos=TileID/TileBrowserWidth;
+			CPoint	Pos=IDToPoint(TileID,TileBrowserWidth);
 
 			glLoadIdentity();
-			glTranslatef(CamPos.x+XPos*(1+TileBrowserGap),CamPos.y-YPos*(1+TileBrowserGap),CamPos.z);
+			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glLoadName (TileID);
 			glBegin (GL_QUADS); 
@@ -363,6 +556,7 @@ GLuint	*HitPtr=SelectBuffer;
 			TileID=HitPtr[3];
 		}
 		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
+
 		return(TileID);
 
 }

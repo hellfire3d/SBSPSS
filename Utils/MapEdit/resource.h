@@ -24,8 +24,6 @@
 #define IDC_TILESETDLG_BTN_LOAD         1031
 #define IDD_GFXTOOLBAR_SELECT           1032
 #define IDD_GFXTOOLBAR_PICKER           1033
-#define IDD_GFXTOOLBAR_MIRRORX          1034
-#define IDD_GFXTOOLBAR_MIRRORY          1035
 #define ID_TOOLBAR_LAYERBAR             32773
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_COMBO                32777
@@ -36,6 +34,8 @@
 #define ID_TOGGLE_GRID                  32787
 #define ID_MIRRORX                      32788
 #define ID_MIRRORY                      32789
+#define ID_ACTIVEBRUSH_LEFT             32790
+#define ID_ACTIVEBRUSH_RIGHT            32791
 #define ID_INDICATOR_CURSORXY           59142
 
 // Next default values for new objects
@@ -44,7 +44,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        167
-#define _APS_NEXT_COMMAND_VALUE         32790
+#define _APS_NEXT_COMMAND_VALUE         32792
 #define _APS_NEXT_CONTROL_VALUE         1037
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

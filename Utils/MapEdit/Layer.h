@@ -45,9 +45,11 @@ virtual	void			Render(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
 virtual	void			RenderGrid(CCore *Core,Vec &CamPos)=0;
 
 virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)=0;
+virtual	void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d)=0;
 
 virtual	void			InitGUI(CCore *Core)=0;
 virtual	void			UpdateGUI(CCore *Core)=0;
+
 
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;
@@ -57,8 +59,8 @@ virtual	BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint
 virtual	BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
 virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)=0;
 
-virtual	BOOL			MirrorX(){return(FALSE);};
-virtual	BOOL			MirrorY(){return(FALSE);};
+virtual	BOOL			MirrorX(CCore *Core){return(FALSE);};
+virtual	BOOL			MirrorY(CCore *Core){return(FALSE);};
 
 protected:
 

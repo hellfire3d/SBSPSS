@@ -37,10 +37,12 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TOGGLE_TILEVIEW, OnToggleTileview)
 	ON_COMMAND(ID_TOOLBAR_GRID, OnToggleGrid)
-	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
-	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
 	ON_COMMAND(ID_MIRRORX, OnMirrorx)
 	ON_COMMAND(ID_MIRRORY, OnMirrory)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToggleTileview)
+	ON_COMMAND(ID_TOGGLE_GRID, OnToggleGrid)
+	ON_COMMAND(ID_ACTIVEBRUSH_LEFT, OnActivebrushLeft)
+	ON_COMMAND(ID_ACTIVEBRUSH_RIGHT, OnActivebrushRight)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -66,16 +68,19 @@ void CMapEditView::VideoMode(ColorsNumber & c, ZAccuracy & z, BOOL & dbuf)
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnCreateGL()
 {
-		glEnable(GL_TEXTURE_2D);       // Enable Texture Mapping
-		glShadeModel(GL_SMOOTH);       // Enable Smooth Shading
-		glClearColor(0.0f, 0.0f, 0.0f, 0.5f);    // Black Background
-		glClearDepth(1.0f);         // Depth Buffer Setup
-		glEnable(GL_DEPTH_TEST);       // Enables Depth Testing
-		glDepthFunc(GL_LEQUAL);        // The Type Of Depth Testing To Do
-		glEnable(GL_LIGHT0);        // Quick And Dirty Lighting (Assumes Light0 Is SetUp)
-		glEnable(GL_LIGHTING);        // Enable Lighting
-		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
+		glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
+		glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
+		glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Background Color
+		glClearDepth(1.0f);									// Depth Buffer Setup
+		glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+		glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+		glEnable(GL_LIGHT0);								// Quick And Dirty Lighting (Assumes Light0 Is SetUp)
+		glEnable(GL_LIGHTING);								// Enable Lighting
+		glEnable(GL_COLOR_MATERIAL);						// Enable Material Coloring
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+//		glDisable(GL_BLEND);									// Enable Alpha Channel
+//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Alpha Blend Style
+
 }
 
 
@@ -155,3 +160,6 @@ void CMapEditView::OnToggleTileview()									{GetDocument()->ToggleTileView(thi
 void CMapEditView::OnToggleGrid()										{GetDocument()->ToggleGrid(this);}
 void CMapEditView::OnMirrorx()											{GetDocument()->MirrorX();}
 void CMapEditView::OnMirrory()											{GetDocument()->MirrorY();}
+
+void CMapEditView::OnActivebrushLeft()									{GetDocument()->ActiveBrushLeft();}
+void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight();}

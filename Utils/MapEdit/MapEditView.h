@@ -59,6 +59,8 @@ protected:
 	afx_msg void OnToggleGrid();
 	afx_msg void OnMirrorx();
 	afx_msg void OnMirrory();
+	afx_msg void OnActivebrushLeft();
+	afx_msg void OnActivebrushRight();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

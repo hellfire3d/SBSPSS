@@ -69,9 +69,6 @@ void	CCore::NewMap()
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
-//	TileBank.AddTileSet("c:/temp/3/test.gin");
-//	TileBank.AddTileSet("c:/temp/4/4.gin");
-//	TileBank.AddTileSet("c:/temp/slope/slope.gin");
 	Init();
 }
 
@@ -109,8 +106,9 @@ Vec		&ThisCam=GetCam();
 			Layers[i]->Render(this,ThisCam,Is3dFlag);
 		}
 		
+		Layers[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
 		if (GridFlag) Layers[ActiveLayer]->RenderGrid(this,ThisCam);
-
+		
 // Get Cursor Pos
 		LastCursorPos=CursorPos;
 		Layers[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
@@ -122,6 +120,7 @@ void	CCore::RenderTileView(CMapEditView *View)
 Vec		&ThisCam=GetCam();
 
 		TileBank.RenderSet(this,ThisCam,Is3dFlag);
+//		TileBank.RenderCursor(this,ThisCam,Is3dFlag);
 
 // Get Cursor Pos
 		TileBank.FindCursorPos(this,View,GetCam(),CurrentMousePos);
@@ -145,12 +144,16 @@ BOOL	RedrawFlag=FALSE;
 
 		if (TileViewFlag)
 		{
-			RedrawFlag=TileBank.TileSelectL();
+			if (nFlags & MK_RBUTTON)
+				RedrawFlag=TileBank.SelectCancel();
+			else
+				RedrawFlag=TileBank.SelectL(DownFlag);
 		}
 		else
 		{
 			RedrawFlag=Layers[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
 		}
+		TileBank.SetActiveBrushL();
 
 		if (RedrawFlag) View->Invalidate();
 }
@@ -168,12 +171,16 @@ BOOL	RedrawFlag=FALSE;
 
 		if (TileViewFlag)
 		{
-			RedrawFlag=TileBank.TileSelectR();
+			if (nFlags & MK_LBUTTON)
+				RedrawFlag=TileBank.SelectCancel();
+			else
+				RedrawFlag=TileBank.SelectR(DownFlag);
 		}
 		else
 		{
 			RedrawFlag=Layers[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
 		}
+		TileBank.SetActiveBrushR();
 
 		if (RedrawFlag) View->Invalidate();
 }
@@ -222,7 +229,13 @@ Vec		&ThisCam=GetCam();
 		else
 		{	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
 			View->Invalidate();
+			if (TileViewFlag)
+			{
+			}
+			else
+			{
 			Layers[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
+			}
 		}
 
 }
@@ -316,13 +329,13 @@ CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 /*****************************************************************************/
 void	CCore::MirrorX()
 {
-	if (!TileViewFlag) Layers[ActiveLayer]->MirrorX();
+	if (!TileViewFlag) Layers[ActiveLayer]->MirrorX(this);
 }
 
 /*****************************************************************************/
 void	CCore::MirrorY()
 {
-	if (!TileViewFlag) Layers[ActiveLayer]->MirrorY();
+	if (!TileViewFlag) Layers[ActiveLayer]->MirrorY(this);
 }
 
 /*****************************************************************************/

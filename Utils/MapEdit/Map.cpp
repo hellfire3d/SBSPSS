@@ -1,4 +1,4 @@
-/******************/
+/*****************/
 /*** Map Stuph ***/
 /*****************/
 
@@ -13,7 +13,7 @@
 
 
 /*****************************************************************************/
-void	CMap::SetSize(int Width,int Height,BOOL Clear)
+void	CMap::SetSize(int Width,int Height,BOOL ClearFlag)
 {
 	Map.resize(Width);
 	for (int i=0;i<Width;i++)
@@ -21,8 +21,15 @@ void	CMap::SetSize(int Width,int Height,BOOL Clear)
 		Map[i].resize(Height);
 	}
 
-	if (Clear)
-	{
+	if (ClearFlag)	Clear();
+}
+
+/*****************************************************************************/
+void	CMap::Clear()
+{
+int	Width=GetWidth();
+int	Height=GetHeight();
+
 		for (int Y=0;Y<Height;Y++)
 		{
 			for (int X=0;X<Width;X++)
@@ -32,8 +39,6 @@ void	CMap::SetSize(int Width,int Height,BOOL Clear)
 				Map[X][Y].Tile=0;
 			}
 		}
-	}
-
 }
 
 /*****************************************************************************/
@@ -45,29 +50,140 @@ void	CMap::SetWidth(int Width)
 void	CMap::SetHeight(int Height)
 {
 }
+/*****************************************************************************/
+int		CMap::GetWidth()			
+{
+	return(Map.size());
+}
 
 /*****************************************************************************/
-void	CMap::Clear()
+int		CMap::GetHeight()
 {
-int	Width=GetWidth();
+		if (GetWidth())
+		{
+			return(Map[0].size());
+		}
+		return(0);
+}
 
-	for (int i=0;i<Width;i++)
-	{
-		Map[i].clear();
-	}
-	Map.clear();
+/*****************************************************************************/
+void	CMap::Delete()
+{
+int		Width=GetWidth();
+
+		for (int i=0;i<Width;i++)
+		{
+			Map[i].clear();
+		}
+		Map.clear();
+}
+
+/*****************************************************************************/
+sMapElem	&CMap::Get(int X,int Y)	
+{
+		return(Map[X][Y]);
+}
+
+/*****************************************************************************/
+void	CMap::Set(int X,int Y,sMapElem &Blk)
+{
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+// Make sure within map
+		if ((X>=0 && X<Width) && (Y>=0 && Y<Height))
+		{
+			Map[X][Y]=Blk;
+		}
+}
+
+/*****************************************************************************/
+void	CMap::Set(int StartX,int StartY,CMap &Blk)
+{
+int		Width=Blk.GetWidth();
+int		Height=Blk.GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				Set(StartX+X,StartY+Y,Blk.Get(X,Y));
+			}
+		}
+}
+
+/*****************************************************************************/
+void	CMap::Set(CMap &Src,int StartX,int StartY,int Width,int Height)
+{
+		Delete();
+		SetSize(Width,Height);
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				Set(X,Y,Src.Get(StartX+X,StartY+Y));
+			}
+		}
 
 }
 
 /*****************************************************************************/
-sMapElem	&CMap::GetTile(int X,int Y)	
+void	CMap::MirrorX(int Flag)
 {
-	return(Map[X][Y]);
+CMap	Old=*this;
+
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem	&ThisElem=Old.Get(X,Y);
+				ThisElem.Flags^=Flag;
+				Set((Width-1)-X,Y,ThisElem);
+			}
+		}
+
 }
 
 /*****************************************************************************/
-void	CMap::SetTile(int X,int Y,sMapElem &New)
+void	CMap::MirrorY(int Flag)
 {
-		Map[X][Y]=New;
+CMap	Old=*this;
+
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem	&ThisElem=Old.Get(X,Y);
+				ThisElem.Flags^=Flag;
+				Set(X,(Height-1)-Y,ThisElem);
+			}
+		}
+
 }
+
+/*****************************************************************************/
+BOOL	CMap::DoesContainTile(sMapElem &Tile)
+{
+int		Width=GetWidth();
+int		Height=GetHeight();
+
+		for (int Y=0; Y<Height; Y++)
+		{
+			for (int X=0; X<Width; X++)
+			{
+				sMapElem	&ThisElem=Get(X,Y);
+				if (ThisElem.Set==Tile.Set && ThisElem.Tile==Tile.Tile) return(TRUE);
+			}
+		}
+		return(FALSE);
+}
+
+/*****************************************************************************/
 

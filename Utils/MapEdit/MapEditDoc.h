@@ -33,6 +33,8 @@ public:
 	void			ToggleGrid(CMapEditView *View);
 	void			MirrorX();
 	void			MirrorY();
+	void			ActiveBrushLeft();
+	void			ActiveBrushRight();
 
 	void			TileBankLoad();
 	void			TileBankReload();

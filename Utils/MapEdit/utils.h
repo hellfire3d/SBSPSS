@@ -19,6 +19,9 @@ int		LoadGLTexture(char *FileName, GLuint &Text);
 void	TNormalise(TVECTOR &V);
 TVECTOR	TCrossProduct(TVECTOR const &V0,TVECTOR const &V1,const TVECTOR &V2 );
 
+CPoint	IDToPoint(int ID,int Width);
+int		PointToID(CPoint &Pnt,int Width);
+
 /**************************************************************************************/
 
 #endif

@@ -25,12 +25,9 @@ class	CLayerTile : public CLayer
 public:
 		enum	MouseMode
 		{
-			MouseModeNone=0,
-			MouseModePaint,
+			MouseModePaint=0,
 			MouseModeSelect,
 			MouseModePicker,
-//			MouseModeMirrorX,
-//			MouseModeMirrorY,
 		};
 		enum	MouseFlag
 		{
@@ -44,35 +41,36 @@ public:
 
 		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
 		void			RenderGrid(CCore *Core,Vec &CamPos);
+
 		void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
+		void			RenderCursor(CCore *Core,Vec &CamPos,BOOL Is3d);
 
 		void			InitGUI(CCore *Core);
 		void			UpdateGUI(CCore *Core);
+
 
 // Functions
 		BOOL			SetMode(int NewMode);
 		BOOL			InitMode();
 		BOOL			ExitMode();
 
-		BOOL			SetFlag(int Flag);
-
 		BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point);
 
-		BOOL			MirrorX();
-		BOOL			MirrorY();
+		BOOL			MirrorX(CCore *Core);
+		BOOL			MirrorY(CCore *Core);
 
 protected:
-		void			Render2d(CCore *Core,Vec &CamPos);
-		void			Render3d(CCore *Core,Vec &CamPos);
-		BOOL			Paint(sMapElem &Blk,CPoint &CursorPos);
+		void			Render2d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha=1.0f);
+		void			Render3d(CCore *Core,Vec &CamPos,CMap &ThisMap,float Alpha=1.0f);
+		void			RenderCursorPaint(CCore *Core,Vec &CamPos,BOOL Is3d);
+
+		BOOL			Paint(CMap &Blk,CPoint &CursorPos);
 
 		CMap			Map;
 
 		MouseMode		Mode;
-		BOOL			Flag;
-
 };
 
 /*****************************************************************************/

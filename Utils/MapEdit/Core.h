@@ -47,7 +47,8 @@ public:
 		void					TileBankSet();
 		void					MirrorX();
 		void					MirrorY();
-
+		void					ActiveBrushLeft()				{TileBank.SetActiveBrushL();}
+		void					ActiveBrushRight()				{TileBank.SetActiveBrushR();}
 // Param Bar
 		void					UpdateParamBar();
 
