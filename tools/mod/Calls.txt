@@ -1,0 +1,712 @@
+07-12-98/JAP
+XMPlayer (Extended MOD) for PlayStation. (c)1998 SCEE
+Written by Jason Page
+
+Calls:
+
+----------------------------------------------------------------------------
+void XM_OnceOffInit(machine type);
+
+	Description:
+				Init player to NTSC/PAL
+	Requires:
+		XM_NTSC		To play at 60fps
+		XM_PAL		To play at 50fsp
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+int XM_VABInit(VHData,VBData);
+
+	Description:
+				Initialise the VAB data files
+	Requires:
+		VHData		Address of VAB Header
+		VBData		Address of VAB Body
+				(Hopefully BOTH VB and VH files can be
+				deleted from main memory after this call)
+	Returns:
+		VAB_ID.		0-7
+				-1 if transfer not complete
+				(no free ID's or out of SPU RAM)
+----------------------------------------------------------------------------
+void InitXMData(XMData,XM_ID,PanType);
+
+	Description:
+		    		Initialise the XM data
+	Requires:
+		XMData		Address of .XM Data file
+		XM_ID		ID(0-7) so any song/SFX know what XM file to
+				use.
+		PanType		XM_UseXMPanning
+				XM_UseS3MPanning
+				(Allows S3M files (converted to .XM) to play
+				correctly)
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+int XM_Init (VabID,XM_ID,FirstChannel,Loop,PlayMask,SongType,SFXPatternNum);
+
+	Description:
+				Play a Song or SFX
+				Init's user channel volumes to 0
+	Requres:
+		VabID		ID returned from XM_VABInit
+		XM_ID		So we know what XM file to use.(0-7)
+		FirstChannel	1) First channel to playback on (setting
+				   this to 5, with a 4 channel song, would
+				   use SPU channels 5,6,7,8)
+				2) -1 will force SFX to use the predefined
+				   channels from the XM_SetSFXRange call.
+		Loop		XM_Loop or XM_NoLoop(for once off music)
+		PlayMask	Set each bit to all data to be played.
+				-1 will play everything.
+				 3 will play the first 2 channels
+				 5 will play channels 0 and 3 only
+				This allows for multi or single channel SFX
+				0 = PAUSE TUNE (So it wont start straight away)
+				    Use XM_PlayStart to start tune.
+		SongType	XM_Music or XM_SFX
+		SFXPatternNum	1) Pattern to use as a SFX.
+				   SFX will play the single pattern and then
+				   stop. Using this, with the PlayMask and
+				   FirstChannel	allows multi or single channel
+				   SFX to play on any channel- quite powerful.
+				2) Offset in Songs pattern play list.
+				   Set this to play from any point through
+				   the song.
+	Returns:
+		Song_ID		0-23. Used later for panning/volume/pausing...
+
+----------------------------------------------------------------------------
+void XM_PlayStart(Song_ID,int Playmask);
+
+	Description:
+				Set flag to allow processing of tune.
+	Requires:
+		Song_ID		Value passed on XM_Init
+		PlayMask	BitMask for channels on or off.
+				-1 Play all channels of tune.
+				3 Play channels 0 and 1 etc..etc...
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_PlayStop(Song_ID);
+
+	Description:
+				Set flag to stop processing of tune.
+				Silence any playing channels for tune.
+	Requires:
+		Song_ID		Value passed on XM_Init
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_SetSongPos(Song_ID,SongPos);
+
+	Description:
+				Jumps directley to SongPos in the XM file's
+				playlist.
+	Requires:
+		Song_ID		Value passed on XM_Init
+		SongPos		Positiong through song to jump to
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_Update();
+
+	Description:
+				Updates XM Player (up to 24 songs/SFX)
+				Must be called at 50 or 60fps
+				(Depending on XM_OnceOffInit)
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+
+void XM_Update2(Speed);
+
+	Description:
+				Updates XM Player (up to 24 songs/SFX)
+				Must be called n times per frame
+				Keeps better time than XM_Update()
+				(Depending on XM_OnceOffInit)
+	Requires:
+		Speed (amount of times routine is called per frame..)
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+
+void XM_Pause(Song_ID);
+
+	Description:
+				Pause song/SFX
+				Silence any playing channels
+	Requires:
+		Song_ID		Value passed on XM_Init
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_Restart(Song_ID);
+
+	Description:
+				Restart (UnPause) song/SFX
+				Continue any playing channels
+				(Continues any previously keyed on notes)
+	Requires:
+		Song_ID		Value passed on XM_Init
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_PauseAll(void);
+
+	Description:
+				Pause all playing songs/SFX
+				Silence any playing channels
+	Requires:
+		Nothing
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_RestartAll(void);
+
+	Description:
+				Restart (UnPause) all paused songs/SFX
+				Continue any playing channels
+				(Continues any previously keyed on notes)
+	Requires:
+		Nothing
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_Exit();
+
+	Description:
+				Stops all tunes.
+				Free SPU RAM
+
+	Requires:
+		Nothing
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_SetChVolume(Song_ID,Channel,Volume);
+
+	Description:
+				Allow user input to modify individual channel
+				volumes.
+	Requires:
+		Song_ID		Value passed on XM_Init
+		Channel		(0-24) Channel to modify/set.
+		Volume		(0-64) This value is subtracted from the
+				channels current volume.
+				 0 Normal Channel volume.
+				32 Current channel volume - 32
+				64 Current channel volume - 64 (silent)
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+int XM_GetChVolume(Song_ID,Channel);
+
+	Description:
+				Get user volume setting for current channel.
+	Requires:
+		Song_ID		Value passed on XM_Init
+		Channel		(0-24) Channel to get info from.
+	Returns:
+		ChannelVolume	(0-64) Current user volume for channel.
+
+----------------------------------------------------------------------------
+XM_Feedback Fdbk;
+XM_Feedback *FB;
+FB=&Fdbk;
+XM_GetFeedback(Song_ID,FB);
+
+	Description:
+				  Get song info.
+	Requires:
+		Song_ID		  Value passed on XM_Init
+		FB		  Pointer to the XM_Feedback structure.
+	Returns:
+		Fdbk.Status	  Current Playing status (stopped,playing,paused..)
+		Fdbk.SongPos	  Current Song position through playlist.
+		Fdbk.PatternPos	  Current postion through current pattern
+		Fdbk.SongBPM	  Current BPM for song
+		Fdbk.SongSpeed	  Current Speed for song
+		Fdbk.SongLength   Number of patterns in song
+		Fdbk.SongLoop	  Flag if song is to loop at end or finish.
+		Fdbk.Volume	  Master volume (0-128)
+		Fdbk.Panning	  Master panning (-127 > +127)
+		Fdbk.ActiveVoices Amount of keyed on voices
+		Fdbk.PlayNext	  Current User requested song jump (-1 if none)
+		Fdbk.CurrentStart Position tune last jumped to if user jumps
+
+----------------------------------------------------------------------------
+void XM_PlayNext(Song_ID,SongPosition);
+
+	Description:
+				Sets position in songs pattern list to
+				jump to, when playing reaches the end
+				of a pattern.
+	Reqires:
+		Song_ID		Value passed on XM_Init
+		SongPosition	Position through song list to jump to
+				or -1 to cancel request
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_CPlayNext(Song_ID,SongPosition);
+
+	Description:
+				Sets position in songs pattern list to
+				jump to, when playing reaches the end
+				of a pattern. ONLY does this if a 0xcff
+				has been put in the pattern data.
+				(set 0xcfe to cancel command)
+	Reqires:
+		Song_ID		Value passed on XM_Init
+		SongPosition	Position through song list to jump to
+				or -1 to cancel request
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+
+void XM_CloseVAB(VabID);
+
+	Description:
+				Clears SPU RAM of all samples used in VAB.
+	Requires:
+				VAB ID
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_SetMasterVol(int Song_ID,u_char Vol);
+
+	Description:
+				Set Song/SFX master volume.
+	Requires:
+		SongID		Value passed on XM_Init
+		Volume		0-128
+				
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_SetMasterPan(int Song_ID,u_char Pan);
+
+	Description:
+				Set Song/SFX master volume.
+	Requires:
+		SongID		Value passed on XM_Init
+		Pan		-127 > + 127 (0 = middle, -ve left +ve right)
+				
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+int XM_SendVAGToSRAM(u_char *addr,int size);
+
+	Description:
+				Sends a single VAG to SPU RAM.
+				Uses the same malloc table, and so on.
+				Allows the user to play single VAG samples
+				without having to use the XM Player.
+
+	Requires:
+		addr		Address of VAG
+		size		Size of VAG
+
+	Returns:
+		SPU Address	Address of sample in SPU RAM.
+				-1 if Transfer failed.
+----------------------------------------------------------------------------
+void XM_FreeVAG(int addr);
+
+	Description:
+				Free's sample from SPU RAM
+				Used for clearing samples if user has called
+				XM_SendVAGToSRAM.
+
+	Requires:
+		addr		Address of VAG (returned from XM_SendVAGToSRAM)
+
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_DoFullUpdate(int Song);
+
+	Description:
+				Forces update of Song data.
+				Does not use any BPM or Speed rescrictions.
+				Use this call if you are setting up your
+				own interrupt or timer.
+				Your interrupt will have to calculate the
+				BPM/Speed and then call this function when
+				necessary.
+				You will need to get the BPM and Speed values
+				from the Feedback structure after each call
+				to this, and use them for your calculations.
+
+	Requires:
+		Song		Song number 0-23 to update.
+
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+XM_HeaderInfo Info;
+XM_HeaderInfo *Inf;
+Inf=&Info;
+
+XM_GetHeaderInfo(XM_ID,Inf);
+
+	Description:
+				Get XM file info.
+				Use if setting up your own interrupt to call
+				XM_DoFullUpdate.
+
+	Requires:
+		XM_ID		Value returned from InitXMData
+		Inf		Pointer to XM_HeaderInfo structure
+
+	Returns:
+		Inf.BPM		XM File Initial BPM setting
+		Inf.Speed	XM File Initial Speed setting
+
+----------------------------------------------------------------------------
+int XM_SetSFXRange(start,length);
+
+	Description:
+				Sets table for using SFX.
+				This table (along with setting -1 in the first
+				channel of the XM_Init call) will force SFX
+				to use specified channels.
+				This means that the user doesn't have to
+				specify what channel a SFX will be played on,
+				so makes it easier to setup and call SFX.
+				1) XM_SetSFXRange(0,10)
+				2) XM_Init(with -1 in FirstChannel)
+				SFX will then be played on channels 0-0xf.
+				Any finished patterns will free up channels.
+
+	Requires:
+		start		First channel to use as SFX
+		length		Amount of channels to use as SFX
+
+	Returns:
+		0		All OK
+		-1		Error (too many channels?)
+
+----------------------------------------------------------------------------
+void XM_ClearSFXRange(void);
+
+	Description:
+				Clears any values set up by XM_SetSFXRange
+
+	Requires:
+		Nothing
+
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_Quit(SongID);
+
+	Description:
+				Stops song/SFX. Free ID
+	Requires:
+		Song_ID		ID of song/SFX you want to quit.
+
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+int XM_GetSampleAddress(VabID,Sample);
+
+	Description:
+				Returns the SPU address of sample n in a VAB
+
+	Requires:
+		VabID		ID of VAB file you want to use
+		Sample		Sample number in VAB ID (as in XM file)
+	Returns:
+		SPU Address
+
+----------------------------------------------------------------------------
+void XM_PlaySample(Address,Channel,VolL,VolR,Pitch);
+
+	Description:
+				Basic routine to play a sample in SPU RAM
+	Requires:
+		Address		SPU Address of sample (see XM_GetSampleAddress)
+		Channel		0-23
+		VolL		Left volume (-0x3fff > + 0x3fff)
+		VolR		Right volume (-0x3fff > + 0x3fff)
+		Pitch		0x1000 = 44khz sample, 0x800 = 22khz...
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+void XM_StopSample(Channel);
+
+	Description:
+				Key off a sample on a channel
+	Requires:
+		Channel		Channel to key off (0-23)
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+int XM_GetFreeVAB(void);
+
+	Description:
+				Returns a free VAB slot.
+				Use this if using your own SPU allocation.
+	Requires:
+				Nothing
+	Returns:
+				VAB slot 0-7
+				-1 no free slots
+
+----------------------------------------------------------------------------
+void XM_SetVAGAddress(VabID,slot,addr);
+
+	Description:
+				Store SPU address of sample in XMPlayer data
+				Use this if using your own SPU allocation.
+	Requires:
+		VabID		Returned from XM_GetFreeVAB
+  		slot		0-127. Position in XMPlayer data to store addr
+				(normally the same value as the position of
+				the sample in the original XM file)
+		addr		Address of VAG in SPU RAM
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+XM_VABInfo VInfo;
+XM_VABInfo *VInf;
+VInf=&VInfo;
+
+int XM_GetVABSampleInfo(VInfo,Header,Body,slot);
+
+	Description:
+				Gets a VAG start address and size from a VAB
+				file.
+				Use this, XM_SetVAGAddress and XM_GetFreeVAB
+				to use your own SPU memory management code.
+	Requires:
+		VInfo		Pointer to XM_VABInfo structure.
+		Header		Address of VH
+		Body		Address of VB
+		slot		Sample within VAB to retrieve data from
+				(0 = first, 1=second.....)
+
+	Returns:
+		0		Data Stored OK.
+		VInfo.Address	Address of VAG
+		VInfo.Size	Size of VAG
+
+		-1		No VAG data (slot is greater than number of
+				VAG's)
+
+----------------------------------------------------------------------------
+void XM_CloseVAB2(VabID);
+
+	Description:
+				Shuts down VAB
+				Same as XM_CloseVAB, but only use if you are
+				using your own SPU memory management code.
+				(See XM_GetVABSampleInfo,XM_SetVAGAddress and
+				XM_GetFreeVAB)
+	Requires:
+				VAB ID
+	Returns:
+		Nothing
+
+----------------------------------------------------------------------------
+int XM_GetSongSize(void)
+
+	Description:
+				Returns the size of the "Song" structure.
+				This is needed for the user to do memory
+				allocation.
+
+	Requires:
+		Nothing.
+	Returns:
+		Song structure size
+
+----------------------------------------------------------------------------
+void XM_SetSongAddress(u_char *Address)
+
+	Description:
+				Sets the address of the song structure that
+				the user has allocated, using the size from
+				XM_GetSongSize(). The more times the user
+				allocates song structures, and calls this
+				function, the more Song ID's will become
+				available (max 24)
+
+	Requires:
+		Address of allocated song structure.
+
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_FreeSongID(void)
+
+	Description:
+				Free's the last song ID. Call this after
+				freeing the song structure memory. This
+				call also means that the user has one less
+				song ID available.
+
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_FreeAllSongIDs(void)
+
+	Description:
+				Free's ALL song ID's. Call this after freeing
+				memory used by all song structure mallocs.
+				This is the same as XM_FreeSongID, but
+				clears ALL song ID's.
+
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+int XM_GetFileHeaderSize(void)
+
+	Description:
+				Returns the size of the "Header" structure.
+				This is needed for the user to do memory
+				allocation.
+
+	Requires:
+		Nothing.
+	Returns:
+		Header structure size
+
+----------------------------------------------------------------------------
+void XM_SetFileHeaderAddress(u_char *Address)
+
+	Description:
+				Sets the address of the header structure that
+				the user has allocated, using the size from
+				XM_GetFileHeaderSize(). The more times the user
+				allocates header structures, and calls this
+				function, the more Header ID's will become
+				available (max 8).
+				This is known as XM_ID in the above calls.
+
+	Requires:
+		Address of allocated header structure.
+
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_FreeFileHeaderID(void)
+
+	Description:
+				Free's the last header ID. Call this after
+				freeing the header structure memory. This
+				call also means that the user has one less
+				header ID available.
+
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_FreeAllHeaderIDs(void)
+
+	Description:
+				Free's ALL header ID's. Call this after freeing
+				memory used by all header structure mallocs.
+				This is the same as XM_FreeHeaderID, but
+				clears ALL header ID's.
+
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_SetSpeed(int Song_ID,u_short Speed);
+
+	Description:
+				Sets the song speed.
+				Note - this can get overridden by xm data
+
+	Requires:
+		Song_ID		ID of song to modify speed
+		Speed		New speed
+
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_SetBPM(int Song_ID,u_short BPM);
+
+	Description:
+				Sets the song BPM.
+				Note - this can get overridden by xm data
+
+	Requires:
+		Song_ID		ID of song to modify BPM
+		BPM		New BPM
+
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_SetMono(void);
+
+	Description:
+				Sets mono output (Left and Right volumes are
+				averaged, and the result sent to both
+				left and right outputs)
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+void XM_SetStereo(void);
+
+	Description:
+				Sets stereo output
+	Requires:
+		Nothing.
+	Returns:
+		Nothing.
+
+----------------------------------------------------------------------------
+
+End-Of-File
