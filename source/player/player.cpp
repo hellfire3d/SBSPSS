@@ -737,7 +737,7 @@ if(newmode!=-1)
 	{
 		if ( ( (CNpcPlatform *) platform )->isCart() )
 		{
-			if ( m_currentMode != PLAYER_MODE_CART )
+			if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
 			{
 				setMode( PLAYER_MODE_CART );
 			}
