@@ -80,6 +80,9 @@ void CPlayerStateCrouchDown::enter(CPlayerModeBase *_playerMode)
 void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
 {
 	int	maxFrame;
+	int	controlDown,controlHeld;
+	controlDown=_playerMode->getPadInputDown();
+	controlHeld=_playerMode->getPadInputHeld();
 
 	_playerMode->slowdown();
 
@@ -90,10 +93,25 @@ void CPlayerStateCrouchDown::think(CPlayerModeBase *_playerMode)
 	}
 	else
 	{
-		if(!(_playerMode->getPadInputHeld()&PI_DOWN))
+		if(!(controlHeld&PI_DOWN))
 		{
 			_playerMode->setState(STATE_CROUCHUP);
 		}
+	}
+
+	if(controlDown&PI_JUMP)
+	{
+		_playerMode->setState(STATE_JUMP);
+	}
+	else if(controlHeld&PI_LEFT)
+	{
+		if(_playerMode->canMoveLeft())
+			_playerMode->setState(STATE_RUN);
+	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		if(_playerMode->canMoveRight())
+			_playerMode->setState(STATE_RUN);
 	}
 }
 
@@ -118,9 +136,28 @@ void CPlayerStateCrouchUp::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateCrouchUp::think(CPlayerModeBase *_playerMode)
 {
+	int	controlDown,controlHeld;
+	controlDown=_playerMode->getPadInputDown();
+	controlHeld=_playerMode->getPadInputHeld();
+
 	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
 	{
 		_playerMode->setState(STATE_IDLE);
+	}
+
+	if(controlDown&PI_JUMP)
+	{
+		_playerMode->setState(STATE_JUMP);
+	}
+	else if(controlHeld&PI_LEFT)
+	{
+		if(_playerMode->canMoveLeft())
+			_playerMode->setState(STATE_RUN);
+	}
+	else if(controlHeld&PI_RIGHT)
+	{
+		if(_playerMode->canMoveRight())
+			_playerMode->setState(STATE_RUN);
 	}
 }
 
