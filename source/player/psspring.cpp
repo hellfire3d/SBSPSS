@@ -102,6 +102,11 @@ void CPlayerStateSpring::think(CPlayerModeBase *_playerMode)
 		_playerMode->setState(STATE_FALL);
 	}
 
+	if(controlDown&PI_JUMP)
+	{
+		_playerMode->setState(STATE_BUTTBOUNCE);
+	}
+
 	if(controlHeld&PI_LEFT)
 	{
 		_playerMode->moveLeft();
