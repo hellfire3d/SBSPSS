@@ -91,6 +91,10 @@
 #include "platform\pcart.h"
 #endif
 
+#ifndef __PLATFORM_PSEESAW_H__
+#include "platform\pseesaw.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -190,6 +194,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_CART_PLATFORM:
 		{
 			platform = new ("cart platform") CNpcCartPlatform;
+			break;
+		}
+		
+		case NPC_SEESAW_PLATFORM:
+		{
+			platform = new ("seesaw platform") CNpcSeesawPlatform;
 			break;
 		}
 

@@ -97,7 +97,8 @@ platform_src :=		platform \
 					pcart \
 					pretract \
 					pbranch \
-					ppendulm
+					ppendulm \
+					pseesaw
 
 hazard_src :=		hazard \
 					hfalling \

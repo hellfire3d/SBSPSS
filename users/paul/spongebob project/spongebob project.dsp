@@ -1471,6 +1471,14 @@ SOURCE=..\..\..\source\platform\pretract.cpp
 
 SOURCE=..\..\..\source\platform\pretract.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pseesaw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pseesaw.h
+# End Source File
 # End Group
 # Begin Group "hazard"
 
