@@ -187,6 +187,7 @@ void CNpcSharkManEnemy::processClose( int _frames )
 		CProjectile *projectile;
 		projectile = CProjectile::Create();
 		projectile->init( newPos, heading );
+		projectile->setShock();
 		projectile->setGraphic( FRM__LIGHTNING2 );
 
 		m_fired = true;
