@@ -184,32 +184,33 @@ void	CPlayer::init()
 	TPLoadTex(ACTORS_SPONGEBOB_TEX);
 	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
 
+
+#ifdef __USER_paul__
+	m_respawnPos.vx=23*16;
+	m_respawnPos.vy=10*16;
+#else
+	m_respawnPos.vx=10;
+	m_respawnPos.vy=10;
+#endif
+
+
 m_animNo=0;
 m_animFrame=0;
 	m_currentMode=PLAYER_MODE_BASICUNARMED;
-	setState(STATE_IDLE);
 	m_moveVel.vx=0;
 	m_moveVel.vy=0;
 	setFacing(FACING_RIGHT);
+	respawn();
 
 	m_lives=CGameSlotManager::getSlotData().m_lives;
 
-	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
 
-#ifdef __USER_paul__
-	Pos.vx=23*16;
-	Pos.vy=10*16;
-#else
-	Pos.vx=10;
-	Pos.vy=10;
-#endif
 
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
-	s_health=5;
 	s_screenPos=128;
 
 m_skel.setAng(512);
@@ -932,6 +933,29 @@ void CPlayer::fall()
 }
 
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::respawn()
+{
+	setState(STATE_IDLE);
+
+	// Strip any items that the player might be holding
+	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
+	{
+		setMode(PLAYER_MODE_FULLUNARMED);
+	}
+
+	s_health=5;
+	m_invincibleFrameCount=INVIBCIBLE_FRAMES__START;
+	Pos=m_respawnPos;
+}
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -939,7 +963,7 @@ void CPlayer::fall()
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef __VERSION_DEBUG__
-int invincibleSponge=false;		// NB: This is for debugging purposes only
+int invincibleSponge=false;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {

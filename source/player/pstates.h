@@ -68,6 +68,8 @@ protected:
 	void jump(class CPlayer *_player);
 	void fall(class CPlayer *_player);
 
+	void			respawn(class CPlayer *_player);
+
 
 };
 

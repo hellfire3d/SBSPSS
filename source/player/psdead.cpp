@@ -22,6 +22,10 @@
 #include "player\player.h"
 #endif
 
+#ifndef __SYSTEM_GSTATE_H__
+#include "system\gstate.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -59,6 +63,8 @@
 void CPlayerStateDead::enter(CPlayer *_player)
 {
 	setAnimNo(_player,ANIM_PLAYER_ANIM_DEATHSPIN);
+
+	m_deadCounter=0;
 }
 
 
@@ -70,11 +76,22 @@ void CPlayerStateDead::enter(CPlayer *_player)
   ---------------------------------------------------------------------- */
 void CPlayerStateDead::think(CPlayer *_player)
 {
-	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	if(!m_deadCounter)
 	{
-		setState(_player,STATE_IDLE);
+		if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+		{
+			retreatAnimFrameAndCheckForEndOfAnim(_player);
+			m_deadCounter=1;
+		}
 	}
-
+	else
+	{
+		if(++m_deadCounter>10*GameState::getOneSecondInFrames()||
+		   getPadInputDown(_player)&PI_ACTION)
+		{
+			respawn(_player);
+		}
+	}
 }
 
 

@@ -38,6 +38,9 @@ public:
 	virtual void	enter(class CPlayer *_player);
 	virtual void	think(class CPlayer *_player);
 
+
+private:
+	int				m_deadCounter;
 };
 
 

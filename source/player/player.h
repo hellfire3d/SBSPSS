@@ -195,6 +195,8 @@ protected:
 	void jump();
 	void fall();
 
+	void			respawn();
+
 	void			takeDamage(DAMAGE_TYPE _damage);
 
 friend class CPlayerState;
@@ -263,6 +265,7 @@ private:
 	// Various info about the current map
 	class CLayerCollision	*m_layerCollision;
 	DVECTOR					m_mapCameraEdges;
+	DVECTOR					m_respawnPos;
 };
 
 
