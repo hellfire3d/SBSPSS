@@ -127,6 +127,9 @@ virtual			~CThing()	{;}
 
 virtual	void	initDef()
 				{
+					Pos.vx=0; Pos.vy=0;
+					PosDelta=Pos;
+					PosLast=Pos;
 					m_isShuttingDown=false;
 					NextFreeThing=0;
 				}
