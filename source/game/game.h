@@ -53,7 +53,7 @@ virtual	int				canPause();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 static void				setReadyToExit();
-static void				hitBossArenaTrigger();
+		void			hitBossArenaTrigger();
 
 static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}

@@ -721,7 +721,7 @@ int		CGameScene::getTotalSpatCountForThisLevel()
 /*****************************************************************************/
 int		CGameScene::triggerTeleportEffect()
 {
-	if(m_gamestate==GAMESTATE_PLAYING)
+	if(m_gamestate==GAMESTATE_PLAYING&&!m_player->isDead())
 	{
 		m_gamestate=GAMESTATE_TELEPORT_START;
 		CFader::setFadingOut();
@@ -776,7 +776,7 @@ void CGameScene::setBossHasBeenKilled()
 /*****************************************************************************/
 void CGameScene::hitBossArenaTrigger()
 {
-	if(!s_showBossTextOnRespawn)
+	if(!s_showBossTextOnRespawn&&!m_player->isDead())
 	{
 		s_justHitBossArenaTrigger=true;
 		s_showBossTextOnRespawn=true;
