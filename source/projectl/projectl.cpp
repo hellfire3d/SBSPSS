@@ -496,9 +496,9 @@ void CPlayerProjectile::think(int _frames)
 		{
 			if ( !m_hitTarget )
 			{
-				Pos.vx += ( _frames * 5 * rcos( m_heading ) ) >> 12;
+				Pos.vx += ( _frames * 4 * rcos( m_heading ) ) >> 12;
 
-				m_vertVelocity += 128;
+				m_vertVelocity += 192;
 
 				if ( m_vertVelocity > ( 5 << 8 ) )
 				{
