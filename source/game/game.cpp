@@ -617,9 +617,12 @@ void CGameScene::think_playing(int _frames)
 	}
 
 
-	if(!m_pauseMenu->isActive()&&PadGetDown(0)&PAD_START&&canPause())
+	if(canPause()&&!m_pauseMenu->isActive())
 	{
-		m_pauseMenu->select();
+		if(PadGetDown(0)&PAD_START||!PadIsConnected(0))
+		{
+			m_pauseMenu->select();
+		}
 	}
 
 	// Conversation think ( with pad debounce stuff.. )
