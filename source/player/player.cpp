@@ -1057,24 +1057,36 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 
 	m_xMove = Pos.vx - m_xMove;
 
-	// Out of water and wearing helmet..?
 	ASSERT(!(getIsInWater()==false&&isWearingDivingHelmet()==false));
-	if(isWearingDivingHelmet()&&getIsInWater()==false&&
-	   m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
+	if(isWearingDivingHelmet())
 	{
-		// Drain water/health
-		m_healthWaterLevel-=waterDrainSpeed*_frames;
-		if(m_healthWaterLevel<=0)
+		if(getIsInWater()==false&&m_currentMode!=PLAYER_MODE_DEAD&&m_currentMode!=PLAYER_MODE_FLY)
 		{
-			dieYouPorousFreak(DEATHTYPE__DRYUP);
-		}
+			// Out of water and wearing helmet!
+	
+			// Drain water/health
+			m_healthWaterLevel-=waterDrainSpeed*_frames;
+			if(m_healthWaterLevel<=0)
+			{
+				dieYouPorousFreak(DEATHTYPE__DRYUP);
+			}
 
-		// Breath sound
-		m_helmetSoundTimer+=_frames;
-		if(m_helmetSoundTimer>150+(m_healthWaterLevel>>WATERLEVELSHIFT))
+			// Breath sound
+			m_helmetSoundTimer+=_frames;
+			if(m_helmetSoundTimer>150+(m_healthWaterLevel>>WATERLEVELSHIFT))
+			{
+				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DIVING_HELMET);
+				m_helmetSoundTimer=0;
+			}
+		}
+		else if(getIsInWater())
 		{
-			CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_DIVING_HELMET);
-			m_helmetSoundTimer=0;
+			// Back in water - fill up helmet! :)
+			m_healthWaterLevel+=waterSoakUpSpeed;
+			if(m_healthWaterLevel>WATERMAXHEALTH)
+			{
+				m_healthWaterLevel=WATERMAXHEALTH;
+			}
 		}
 	}
 
@@ -1377,7 +1389,7 @@ if(drawlastpos)
 
 		sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
 
-		if(m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6)&&m_currentPlayerModeClass->getState()!=STATE_SOAKUP)
+		if(!getIsInWater()&&m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6)&&m_currentPlayerModeClass->getState()!=STATE_SOAKUP)
 		{
 			int		digit;
 			DVECTOR	src={x+(W/2),y+(H/2)};
