@@ -401,7 +401,8 @@ GFX_DATA_OUT		+= $(MC_HEADER_OUT)
 MUSIC_IN_DIR :=		data/music
 MUSIC_OUT_DIR :=	$(DATA_OUT)/music
 
-MUSIC_LIST :=		ingame sb-title
+MUSIC_LIST :=		sb-title \
+					chapter1 chapter3
 
 MUSIC_ALL_IN :=		$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).PXM $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VH $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VB)
 MUSIC_ALL_OUT :=	$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_OUT_DIR)/$(MUSIC).PXM $(MUSIC_OUT_DIR)/$(MUSIC).VH $(MUSIC_OUT_DIR)/$(MUSIC).VB)

@@ -6,9 +6,12 @@ translations/ita.dat
 translations/ger.dat
 translations/id.dat
 translations/eng.dat
-music/ingame.pxm
-music/ingame.vb
-music/ingame.vh
+music/chapter1.pxm
+music/chapter1.vb
+music/chapter1.vh
+music/chapter3.pxm
+music/chapter3.vb
+music/chapter3.vh
 music/sb-title.pxm
 music/sb-title.vb
 music/sb-title.vh
