@@ -191,7 +191,7 @@ bool	CLevel::GetNextLevel(int &Lvl)
 bool	Finished=false;
 		Lvl++;
 
-		if (Lvl>=LvlTableSize) 
+		if (Lvl>=LvlTableSize)
 		{
 			Lvl=0;
 			Finished=true;
@@ -253,7 +253,7 @@ void	CLevel::initLayers()
 		HazardList=0;
 
 // Back
-		if (LevelHdr->BackLayer) 
+		if (LevelHdr->BackLayer)
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
 			CLayerTile	*NewLayer=new ("Back Layer") CLayerBack(LevelHdr,Layer);
@@ -262,7 +262,7 @@ void	CLevel::initLayers()
 		}
 
 // Mid
-		if (LevelHdr->MidLayer) 
+		if (LevelHdr->MidLayer)
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->MidLayer);
 			CLayerTile *NewLayer=new ("Mid Layer") CLayerTile(LevelHdr,Layer);
@@ -271,7 +271,7 @@ void	CLevel::initLayers()
 		}
 
 // Action
-		if (LevelHdr->ActionLayer) 
+		if (LevelHdr->ActionLayer)
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
 			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(LevelHdr,Layer);
@@ -280,7 +280,7 @@ void	CLevel::initLayers()
 		}
 // Collision
 
-		if (LevelHdr->CollisionLayer) 
+		if (LevelHdr->CollisionLayer)
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
@@ -307,7 +307,7 @@ void	CLevel::initLayers()
 // Platforms
 		if (LevelHdr->PlatformList)
 		{
-			
+
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->PlatformList);
 			PlatformCount=Hdr->Count;
 			PlatformList=(sThingPlatform**)MemAlloc(PlatformCount*sizeof(sThingPlatform**),"Platform List");
@@ -438,7 +438,7 @@ void	CLevel::initThings(int _respawningLevel)
 				int			createThisPickup;
 				int			isSpat;
 				CBasePickup	*newPickup;
-				
+
 				createThisPickup=true;
 
 				isSpat=(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA;
@@ -554,6 +554,7 @@ void	CLevel::initThings(int _respawningLevel)
 
 	CJellyfishGenerator::init();
 	CThingManager::initAllThings();
+	CThingManager::matchWheelsAndWeights();
 }
 
 
@@ -583,7 +584,7 @@ void	CLevel::shutdown()
 
 		if (CollisionLayer)
 		{
-			CollisionLayer->shutdown();	
+			CollisionLayer->shutdown();
 			delete CollisionLayer;
 		}
 
@@ -675,7 +676,7 @@ const int			ColT=COLLISION_TYPE_DESTRUCTABLE;
 			while (CollisionLayer->getCollisionBlock(BR.vx,BR.vy+16)>>COLLISION_TYPE_FLAG_SHIFT==ColT) BR.vy+=16;
 
 DVECTOR		DP;
-			
+
 			for (DP.vy=TL.vy; DP.vy<=BR.vy; DP.vy+=16)
 			{
 				for (DP.vx=TL.vx; DP.vx<=BR.vx; DP.vx+=16)
@@ -712,4 +713,3 @@ sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(
 			}
 
 }
-
