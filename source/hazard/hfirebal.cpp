@@ -96,6 +96,7 @@ void CNpcFireballHazard::processMovement( int _frames )
 		m_isActive = false;
 		m_timerActive = true;
 		m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
+		CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAND );
 
 		return;
 	}
@@ -114,5 +115,7 @@ void CNpcFireballHazard::processTimer( int _frames )
 	{
 		m_timerActive = false;
 		m_isActive = true;
+
+		CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FIREBALL_LAUNCH );
 	}
 }

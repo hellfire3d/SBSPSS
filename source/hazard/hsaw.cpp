@@ -45,6 +45,8 @@ void CNpcSawbladeHazard::processMovement( int _frames )
 
 	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange, &xDist, &yDist );
 
+	CSoundMediator::playSfx( CSoundMediator::SFX_SAW );
+
 	if ( !pathComplete )
 	{
 		s16 decDir, incDir, moveDist;

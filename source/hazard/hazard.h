@@ -30,6 +30,9 @@
 #include "gfx\actor.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
 
 class CNpcHazard : public CHazardThing
 {

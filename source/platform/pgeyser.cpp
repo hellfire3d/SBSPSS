@@ -134,6 +134,7 @@ void CNpcGeyserPlatform::processTimer( int _frames )
 			m_isFiring = true;
 			Pos = m_base;
 			m_state = GEYSER_RISING;
+			CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__GEYSER );
 		}
 	}
 }

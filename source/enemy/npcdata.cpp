@@ -410,7 +410,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::SFX_PRICKLY_BUG_DEFEATED,
-		CSoundMediator::NUM_SFXIDS,
+		//CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_PRICKLY_BUG_MOVE,
 	},
 
 	{	// NPC_SEA_SNAKE
@@ -435,7 +436,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_SEASNAKE_MOVE,
 	},
 
 	{	// NPC_PUFFA_FISH
@@ -460,7 +461,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_PUFFAFISH_MOVE,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -485,7 +486,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_ANGLER_FISH_MOVE,
 	},
 
 	{	// NPC_HERMIT_CRAB
@@ -535,7 +536,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_HAZARD__MINE,
 	},
 
 	{	// NPC_BOOGER_MONSTER
@@ -735,7 +736,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_GHOST,
 	},
 
 	{	// NPC_GHOST_PIRATE
@@ -784,8 +785,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		true,
-		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_FLAMING_SKULL_DEFEATED,
+		CSoundMediator::SFX_FLAMING_SKULL_MOVE,
 	},
 
 	{	// NPC_SHARK_MAN
@@ -884,8 +885,8 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		false,
 		false,
-		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_JELLYFISH_DEFEATED,
+		CSoundMediator::SFX_JELLYFISH_MOVE,
 	},
 
 	{	// NPC_SUB_SHARK
@@ -1035,7 +1036,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		true,
 		CSoundMediator::NUM_SFXIDS,
-		CSoundMediator::NUM_SFXIDS,
+		CSoundMediator::SFX_BALL_BLOB_MOVE,
 	},
 
 	{	// NPC_SHELL

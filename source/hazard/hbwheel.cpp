@@ -39,6 +39,7 @@ void CNpcBigWheelHazard::processMovement( int _frames )
 {
 	m_rotation += 5 * _frames;
 	m_rotation &= 4095;
+	CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__BIG_WHEEL );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -53,7 +53,7 @@ void CNpcPricklyBugEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 
 	// sound
 
-	CSoundMediator::playSfx( CSoundMediator::SFX_PRICKLY_BUG_MOVE );
+	//CSoundMediator::playSfx( CSoundMediator::SFX_PRICKLY_BUG_MOVE );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -246,6 +246,11 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 	DVECTOR oldPos = Pos;
 	u8 skipCounter;
 
+	if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+	{
+		CSoundMediator::playSfx( m_data[m_type].moveSfx );
+	}
+
 	processGenericFixedPathMove( _frames, &moveX, &moveY, &moveVel, &moveDist );
 
 	Pos.vx += moveX;

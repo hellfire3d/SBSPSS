@@ -132,6 +132,8 @@ void CNpcFallingHazard::processMovement( int _frames )
 
 				if ( groundHeight < yMovement )
 				{
+					CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND );
+
 					// colliding with ground
 
 					Pos.vy += groundHeight;

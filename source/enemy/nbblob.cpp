@@ -83,6 +83,11 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 		}
 
 		moveY = groundHeight;
+
+		if ( m_data[m_type].moveSfx < CSoundMediator::NUM_SFXIDS )
+		{
+			CSoundMediator::playSfx( m_data[m_type].moveSfx );
+		}
 	}
 
 	// deal with horizontal

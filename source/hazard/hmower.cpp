@@ -39,6 +39,8 @@ void CNpcMowerHazard::processMovement( int _frames )
 {
 	m_rotation += 256 * _frames;
 	m_rotation &= 4095;
+
+	CSoundMediator::playSfx( CSoundMediator::SFX_SAW );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

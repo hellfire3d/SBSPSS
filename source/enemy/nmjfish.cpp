@@ -259,6 +259,8 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
+
+				CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_ATTACK );
 			}
 
 			break;

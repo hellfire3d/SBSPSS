@@ -64,6 +64,11 @@ void CNpcRollingRockHazard::processMovement( int _frames )
 	}
 	else
 	{
+		if ( !m_jump )
+		{
+			CSoundMediator::playSfx( CSoundMediator::SFX_ROLLING_ROCK );
+		}
+
 		if ( distX )
 		{
 			// move along ground
