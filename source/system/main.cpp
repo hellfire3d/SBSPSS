@@ -203,6 +203,8 @@ int 	main()
 	
 #ifdef __USER_paul__
 	GameState::setNextScene( &SceneSelector );
+#elif __USER_art__
+	GameState::setNextScene( &FrontEndSelector );
 #else
 	GameState::setNextScene( &GameScene );
 #endif
