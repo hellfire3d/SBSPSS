@@ -175,7 +175,8 @@ PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim/GinFiles
 # DUFF_ANIMS			deathfall runjumpend runjumpstart
 PLAYER_ANIM_LIST :=		buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
 						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate knockback knockforward run \
-						runstart runstop soakup talk01 talk02 talk03 talk04 teeterback teeterfront
+						runstart runstop soakup talk01 talk02 talk03 talk04 teeterback teeterfront \
+						idlewind
 
 PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
 PLAYER_ANIM_OUT :=		$(ANIM_OUT_DIR)/Player.Abk

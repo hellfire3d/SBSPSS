@@ -129,7 +129,13 @@ static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSf
 // ANIM_PLAYER_ANIM_TEETERBACK
 // ANIM_PLAYER_ANIM_TEETERFRONT
 
-
+// ANIM_PLAYER_ANIM_IDLEWIND
+static const CPlayer::AnimFrameSfx s_idleWindSfx[]=
+{
+	{	7,	CSoundMediator::SFX_HAZARD__SWAMP_GAS,		},
+	{	24,	CSoundMediator::SFX_SPONGEBOB_WALK_2,		},
+};
+static const int	s_idleWindCount=sizeof(s_idleWindSfx)/sizeof(CPlayer::AnimFrameSfx);
 
 
 
@@ -175,6 +181,7 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TALK04
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERBACK
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_TEETERFRONT
+	{	s_idleWindCount,		s_idleWindSfx			},		// ANIM_PLAYER_ANIM_IDLEWIND
 };
 
  

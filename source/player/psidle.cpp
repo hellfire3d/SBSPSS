@@ -156,19 +156,16 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 		int	animNo;
 		if(m_idleTime<5)
 		{
-			m_currentIdleAnim=0;		// First anim in list is the default idle
+			// Run the default idle anim a number of times before
+			// starting to do weird things..
+			m_currentIdleAnim=0;
 		}
 		else
 		{
-			if(getNumIdleAnims()>1)
+			// Alternate random idle anims with the default one
+			if(m_currentIdleAnim==0&&getNumIdleAnims()>1)
 			{
-				// Randomly choose the next anim to run
-				int lastAnim;
-				lastAnim=m_currentIdleAnim;
-				do
-				{
-					m_currentIdleAnim=getRndRange(getNumIdleAnims());
-				}while(m_currentIdleAnim==lastAnim);
+				m_currentIdleAnim=getRndRange(getNumIdleAnims());
 			}
 			else
 			{
@@ -195,7 +192,6 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 
 		m_idleTime++;
 	}
-
 }
 
 
@@ -208,12 +204,18 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayer *_player)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},	// default
 	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
-	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEHOOLA,		ANIM_PLAYER_ANIM_FACEBACK,		3	},
-	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEWIGGLEARM,	ANIM_PLAYER_ANIM_FACEBACK,		3	},
+	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEHOOLA,		ANIM_PLAYER_ANIM_FACEBACK,		5	},
+	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEWIGGLEARM,	ANIM_PLAYER_ANIM_FACEBACK,		5	},
 	{	-1,								ANIM_PLAYER_ANIM_IDLELOOK,		-1,								1	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEWIND,		-1,								1	},
 };
+//idlekick
+//idlescratch
+//? - idlesleep* - wakeup
+//idlestretch
+//idlewind
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
 {
@@ -235,7 +237,7 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_coralBlowerIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},
+	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	}, // default
 	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
 	{	-1,								ANIM_PLAYER_ANIM_IDLELOOK,		-1,								1	},
 };
