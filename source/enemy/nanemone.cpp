@@ -56,7 +56,7 @@
 void CNpcAnemoneEnemy::postInit()
 {
 	CNpcEnemy::postInit();
-	m_drawRotation = m_heading + 1024;
+	m_drawRotation = ( m_heading + 1024 ) & 4095;
 	m_fireHeading = m_heading;
 }
 
@@ -172,7 +172,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 			m_heading &= 4095;
 
-			m_drawRotation = m_heading + 1024;
+			m_drawRotation = ( m_heading + 1024 ) & 4095;
 
 			CSoundMediator::playSfx( CSoundMediator::SFX_ANEMONE_MOVE );
 		}
@@ -233,7 +233,7 @@ void CNpcAnemone1Enemy::processClose( int _frames )
 
 void CNpcAnemone2Enemy::postInit()
 {
-	m_drawRotation = m_heading + 1024;
+	m_drawRotation = ( m_heading + 1024 ) & 4095;
 
 	m_scaleX = ONE;
 	m_scaleY = ONE;
@@ -322,8 +322,10 @@ void CNpcAnemone2Enemy::processShot( int _frames )
 
 				case NPC_GENERIC_HIT_DEATH_END:
 				{
-					m_drawRotation += 64 * _frames;
-					m_drawRotation &= 4095;
+					m_heading += 64 * _frames;
+					m_heading &= 4095;
+
+					m_drawRotation = ( m_heading + 1024 ) & 4095;
 
 					Pos.vy += m_speed * _frames;
 
