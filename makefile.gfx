@@ -573,7 +573,7 @@ GFX_DATA_OUT		+= $(MC_HEADER_OUT)
 MUSIC_IN_DIR :=		data/music
 MUSIC_OUT_DIR :=	$(DATA_OUT)/music
 
-MUSIC_LIST :=		sb-title \
+MUSIC_LIST :=		sb-title fma \
 					chapter1 chapter2 chapter3 chapter4 chapter5 chapter6
 
 MUSIC_ALL_IN :=		$(foreach MUSIC,$(MUSIC_LIST),$(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).PXM $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VH $(MUSIC_IN_DIR)/$(MUSIC)/$(MUSIC).VB)
