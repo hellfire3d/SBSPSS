@@ -288,7 +288,8 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 	distanceFromGround=0;
 
 	colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-	if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE )
+	if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE ||
+			(Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DEATH_FALL )
 	{
 		colHeight = 0;
 	}
@@ -305,7 +306,8 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 				return -_maxHeight;
 			}
 			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE )
+			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE ||
+					(Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DEATH_FALL )
 			{
 				colHeight = 0;
 			}
@@ -327,7 +329,8 @@ int			CLayerCollision::getHeightFromGroundCart(int _x,int _y,int _maxHeight)
 				return _maxHeight;
 			}
 			colHeight=s_collisionTable[((Map[mapX+mapY]&COLLISION_TILE_MASK)*16)+xFraction];
-			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE )
+			if ( (Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DAMAGE ||
+					(Map[mapX+mapY] & COLLISION_TYPE_MASK) == COLLISION_TYPE_FLAG_DEATH_FALL )
 			{
 				colHeight = 0;
 			}

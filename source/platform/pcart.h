@@ -25,6 +25,7 @@ public:
 	void				render();
 	u8					isCart()												{return( true );}
 	void				jump();
+	bool				alwaysThink()											{return(true);}
 protected:
 	void				processMovement( int _frames );
 	void				collidedWith(CThing *_thisThing);
@@ -35,6 +36,7 @@ protected:
 	s32					m_vertSpeed;
 	u8					m_playerAttached;
 	u8					m_rebound;
+	u8					m_falling;
 
 	s32					m_reboundTimer;
 };
