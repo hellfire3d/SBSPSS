@@ -82,11 +82,11 @@ extern GLint TestTile;
 void	CLayer::Render2d(Vec &MapPos)
 {
 float	XYDiv=GetLayerZPosDiv();
-
+return;
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z);
-/*
+
 		glBegin(GL_QUADS);
 		SetTestColor();
 			BuildGLQuad(-1,LayerWidth+1,-1,0,0);						// Bottom
@@ -94,11 +94,12 @@ float	XYDiv=GetLayerZPosDiv();
 			BuildGLQuad(-1,0,LayerHeight,0,0);							// Left
 			BuildGLQuad(LayerWidth,LayerWidth+1,LayerHeight,0,0);		// Right
 		glEnd();
-*/
-		glCallList(TestTile);
+
+
 }
 
 /*****************************************************************************/
+float	asd=0;
 void	CLayer::Render3d(Vec &MapPos)
 {
 float	ZOfs=GetLayerZPos();
@@ -107,7 +108,9 @@ float	XYDiv=GetLayerZPosDiv();
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(MapPos.x/XYDiv,MapPos.y/XYDiv,MapPos.z-ZOfs);
-
+		glRotatef(asd,0,1,0);
+		asd+=0.5;
+/*
 		glBegin(GL_QUADS);
 		SetTestColor();
 			BuildGLBox(-1,LayerWidth+1,-1,0,0,0+1);						// Bottom
@@ -115,6 +118,8 @@ float	XYDiv=GetLayerZPosDiv();
 			BuildGLBox(-1,0,LayerHeight,0,0,0+1);							// Left
 			BuildGLBox(LayerWidth,LayerWidth+1,LayerHeight,0,0,0+1);		// Right
 		glEnd();
+*/
+		glCallList(TestTile);
 }
 
 

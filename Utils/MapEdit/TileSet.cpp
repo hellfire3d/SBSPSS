@@ -17,10 +17,10 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CTileSet::CTileSet(char *_Filename)
+CTileSet::CTileSet(char *_Filename,CCore *Core)
 {
 	strcpy(Filename,_Filename);
-	Load();
+	Load(Core);
 }
 
 /*****************************************************************************/
@@ -33,18 +33,23 @@ CTileSet::~CTileSet()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CTileSet::Load()
+int		CTileSet::Load(CCore *Core)
 {
 CScene	Scene;
 
 		Scene.Load(Filename);
 
-int		NodeCount=Scene.GetSceneNodeCount();
-
-		for (int i=1;i<NodeCount;i++)
+CNode	&ThisNode=Scene.GetSceneNode(0);
+int		ChildCount=ThisNode.GetPruneChildCount();
+		
+		for (int Child=0; Child<ChildCount; Child++) 
 		{
-			AddTileToSet(Scene,i);
+			CTile	NewTile;
+			NewTile.Load(Core,Scene,ThisNode.PruneChildList[Child]);
+			Tile.push_back(NewTile);
+//			AddTileToSet(Scene,ThisNode.PruneChildList[Child]);
 		}
+
 /*
 std::vector<GString> const &Tex=Scene.GetTexNames();
 	
@@ -57,42 +62,3 @@ std::vector<GString> const &Tex=Scene.GetTexNames();
 	return(1);
 }
 
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-extern GLint TestTile;
-void	CTileSet::AddTileToSet(CScene &ThisScene,int Id)
-{
-CNode				&ThisNode=ThisScene.GetNode(Id);
-std::vector<sTri>	const &TriList=ThisNode.GetTris();
-std::vector<TVECTOR>const &VtxList=ThisNode.GetRelPts();
-int					TriCount=TriList.size();
-GLint				ThisTile;
-				
-			ThisTile=glGenLists(1);
-			glNewList(ThisTile,GL_COMPILE);
-			glColor3f(0.5,0.5,0);
-			glBegin (GL_TRIANGLES);
-
-			TRACE3("%i %s\t%i Tris\n",Id,ThisNode.GetName(),TriCount);
-
-			for (int T=0; T<TriCount; T++)
-			{
-				sTri	const &ThisTri=TriList[T];
-				TVECTOR Normal=TCrossProduct(VtxList[ThisTri.p[0]],VtxList[ThisTri.p[1]],VtxList[ThisTri.p[2]]);
-				glNormal3f( Normal.GetX(), Normal.GetZ(),Normal.GetY());
-
-				for (int P=0; P<3; P++)
-				{
-					TVECTOR	const &ThisVtx=VtxList[ThisTri.p[P]];
-					
-					glVertex3f( ThisVtx.GetX(), ThisVtx.GetZ(), ThisVtx.GetY());
-				}
-
-			}
-	
-			glEnd();
-			glEndList();
-			Tile.push_back(ThisTile);
-			TestTile=ThisTile;
-}

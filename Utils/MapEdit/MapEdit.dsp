@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib glu32.lib win32lib.lib ginlib.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\ginlib\debug\\" /libpath:"..\GlibDev\glib\LIB\win32lib\debug\\"
+# ADD LINK32 opengl32.lib glu32.lib win32lib.lib ginlib.lib glaux.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\ginlib\debug\\" /libpath:"..\GlibDev\glib\LIB\win32lib\debug\\"
 
 !ENDIF 
 
@@ -140,6 +140,22 @@ SOURCE=.\Core.cpp
 # Begin Source File
 
 SOURCE=.\Core.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TexCache.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TexCache.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tile.h
 # End Source File
 # Begin Source File
 

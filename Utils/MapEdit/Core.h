@@ -10,6 +10,7 @@
 #include	"Layer.h"
 #include	"LayerBack.h"
 
+#include	"TexCache.h"
 #include	"TileSet.h"
 
 
@@ -60,6 +61,7 @@ private:
 		int						ActiveLayer;
 
 		std::vector<CTileSet>	TileSet;
+		CTexCache				TexCache;
 
 
 };

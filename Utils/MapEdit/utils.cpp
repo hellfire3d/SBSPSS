@@ -3,10 +3,13 @@
 /*************/
 
 #include	"stdafx.h"
+//#include	<windows.h>		// Header File For Windows
+//#include	<stdio.h>			// Header File For Standard Input/Output
 #include	"gl3d.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
+#include	<gl\glaux.h>		// Header File For The Glaux Library
 #include	"GLEnabledView.h"
 #include	"maths.h"
 
@@ -155,3 +158,52 @@ TVECTOR	Out;
 /**************************************************************************************/
 /**************************************************************************************/
 /**************************************************************************************/
+AUX_RGBImageRec *LoadBMP(char *Filename)
+{
+FILE	*File=NULL;
+
+	File=fopen(Filename,"r");
+
+	if (File)
+	{
+		fclose(File);
+		return auxDIBImageLoad(Filename);
+	}
+
+	return NULL;
+}
+
+/**************************************************************************************/
+int		LoadGLTexture(char *FileName, GLuint &Text)
+{
+AUX_RGBImageRec	*TextureImage[1];
+int				Status=FALSE;
+
+	memset(TextureImage,0,sizeof(void *)*1);           	// Init Buffer
+
+	// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
+	if (TextureImage[0]=LoadBMP(FileName))
+	{
+		Status=TRUE;									// Set The Status To TRUE
+
+		glGenTextures(1, &Text);						// Create The Texture
+
+		// Typical Texture Generation Using Data From The Bitmap
+		glBindTexture(GL_TEXTURE_2D, Text);
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	}
+
+	if (TextureImage[0])									// If Texture Exists
+	{
+		if (TextureImage[0]->data)							// If Texture Image Exists
+		{
+			free(TextureImage[0]->data);					// Free The Texture Image Memory
+		}
+
+		free(TextureImage[0]);								// Free The Image Structure
+	}
+
+	return Status;										// Return The Status
+}

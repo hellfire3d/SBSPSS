@@ -1,9 +1,9 @@
 /*********************/
-/*** TileSet Stuph ***/
+/*** Texture Cache ***/
 /*********************/
 
-#ifndef	__TILESET_HEADER__
-#define	__TILESET_HEADER__
+#ifndef	__TEXCACHE_HEADER__
+#define	__TEXCACHE_HEADER__
 
 #include	"stdafx.h"
 #include	"gl3d.h"
@@ -12,26 +12,24 @@
 #include	<gl\glut.h>
 #include	<Vector>
 
-#include	"TexCache.h"
-#include	"Tile.h"
-//#include	"GinTex.h"
+struct	sTex
+{
+	char			Name[256];
+	GLuint			TexID;
+};
 
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-class	CCore;
-class	CTileSet
+class	CTexCache
 {
 public:
-		CTileSet(char *Filename,CCore *Core);
-		~CTileSet();
+	
+		int		ProcessTexture(char *TexName);
+		int		AddTexture(char *TexName);
 
-		int		Load(CCore *Core);
 
-private:
-		char	Filename[256];
-		std::vector<CTile>	Tile;
+		std::vector<sTex>		TexList;
 
 };
 
