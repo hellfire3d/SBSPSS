@@ -443,16 +443,20 @@ bool	CTileBank::Command(int CmdMsg,CCore *Core,int Param0,int Param1)
 		{
 		case CmdMsg_SubViewLoad:
 			LoadNewSet(Core);
+			GUIUpdate(Core);
 			break;
 		case CmdMsg_SubViewDelete:
 			DeleteSet(Core);
+			GUIUpdate(Core);
 			break;
 		case CmdMsg_SubViewUpdate:
 			ReloadAllSets();
 			Core->GetTexCache().Purge();
+			GUIUpdate(Core);
 			break;
 		case CmdMsg_SubViewSet:
 			CurrentSet=TileBankGUI.m_List.GetCurSel();
+			GUIUpdate(Core);
 			break;
 		case CmdMsg_ActiveBrushLeft:
 			ActiveBrush=LBrush;
@@ -483,7 +487,7 @@ void	CTileBank::GUIKill(CCore *Core)
 void	CTileBank::GUIUpdate(CCore *Core)
 {
 int			ListSize=GetSetCount();
-bool		IsSubView=true;
+bool		IsSubView=Core->IsSubView();
 
 			if (TileBankGUI.m_List)
 			{

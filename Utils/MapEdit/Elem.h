@@ -43,8 +43,8 @@ public:
 		CElem(int Width,int Height);																	// Blank (2d)
 		CElem(CCore *Core,const char *Filename,int TexId,int XOfs,int YOfs,int Width,int Height);		// 2d elem
 		CElem(CCore *Core,const char *Filename,CScene &ThisScene,int Node);								// 3d elem
-
 		void	CleanUp();
+
 		void	Purge();
 		void	Render(int Flags,bool Render3d);
 
@@ -105,6 +105,7 @@ public:
 		CElemSet(const char *_Filename,int Idx,int Width=DEF_ELEMWIDTH,int Height=DEF_ELEMHEIGHT);
 		~CElemSet();
 	
+		void		CleanUp();
 		int			IsLoaded()										{return(Loaded);}
 		int			GetCount()										{return(ElemList.size());}
 
@@ -142,6 +143,7 @@ class	CElemBank
 public:
 		CElemBank();
 		~CElemBank();
+		void	CleanUp();
 
 		void		Load(CFile *File,int Version);
 		void		Save(CFile *File);

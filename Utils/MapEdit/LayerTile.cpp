@@ -69,7 +69,11 @@ CLayerTile::CLayerTile(CFile *File,int Version)
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
-		if (SubType==LAYER_SUBTYPE_ACTION) delete TileBank;
+		if (SubType==LAYER_SUBTYPE_ACTION) 
+		{
+			TileBank->CleanUp();
+			delete TileBank;
+		}
 }
 
 /*****************************************************************************/
