@@ -54,6 +54,10 @@
 #include "map\map.h"
 #endif
 
+#ifndef __BACKEND_PARTY_H__
+#include "backend\party.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -84,6 +88,7 @@
 
 CSaveScene	SaveScene;
 
+CSaveScene::NEXTSCENE		CSaveScene::s_nextScene=CSaveScene::NEXTSCENE_MAP;
 
 static const int	NORMAL__FRAME_W=416;
 static const int	NORMAL__FRAME_H=160;
@@ -547,7 +552,16 @@ void CSaveScene::setMode(MODE _newMode)
 			break;
 
 		case MODE__READYTOEXIT:
-			GameState::setNextScene(&MapScene);
+			switch(s_nextScene)
+			{
+				case NEXTSCENE_MAP:
+					GameState::setNextScene(&MapScene);
+					break;
+				case NEXTSCENE_PARTY:
+					GameState::setNextScene(&FmaScene);
+					CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__PARTY);
+					break;
+			}
 			break;
 	}
 
@@ -558,6 +572,7 @@ void CSaveScene::setMode(MODE _newMode)
 
 
 //////////
+#ifdef __USER_paul__
 static const char *text[]=
 {
 		"MODE__CONFIRMSAVE",
@@ -576,6 +591,7 @@ static const char *text[]=
 		"MODE__READYTOEXIT",
 };
 PAUL_DBGMSG("newmode: %s",text[m_mode]);
+#endif
 //////////
 }
 

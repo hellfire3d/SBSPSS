@@ -469,6 +469,7 @@ void CMapScene::think(int _frames)
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 			m_readyToExit=true;
 			CFader::setFadingOut();
+			CSaveScene::setNextScene(CSaveScene::NEXTSCENE_MAP);
 			GameState::setNextScene(&SaveScene);
 		}
 	}

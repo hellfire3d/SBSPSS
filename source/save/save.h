@@ -37,12 +37,21 @@
 class CSaveScene: public CScene
 {
 public:
-	void	init();
-	void	shutdown();
-	void	render();
-	void	think(int _frames);
-	int		readyToShutdown();
-	char	*getSceneName()			{return"Save";}
+	typedef enum
+	{
+		NEXTSCENE_MAP,
+		NEXTSCENE_PARTY,
+	}NEXTSCENE;
+
+
+	void			init();
+	void			shutdown();
+	void			render();
+	void			think(int _frames);
+	int				readyToShutdown();
+	char			*getSceneName()					{return"Save";}
+
+	static void		setNextScene(NEXTSCENE _next)	{s_nextScene=_next;}
 
 
 private:
@@ -86,6 +95,8 @@ private:
 	MODE					m_mode;
 	int						m_timeInMode;
 	int						m_userResponse;
+
+	static NEXTSCENE		s_nextScene;
 
 };
 
