@@ -87,7 +87,7 @@ void CPlayerStateRun::enter(CPlayer *_player)
 		setFacing(_player,FACING_RIGHT);
 	}
 
-//	m_numberOfTimeAnimHasLooped=0;
+	m_numberOfTimeAnimHasLooped=0;
 }
 
 
@@ -129,10 +129,10 @@ void CPlayerStateRun::think(CPlayer *_player)
 		if(getMoveVelocity(_player).vx==0)
 		{
 			setState(_player,STATE_IDLE);
-//			if(m_numberOfTimeAnimHasLooped>=2)
-//			{
-//				setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
-//			}
+			if(m_numberOfTimeAnimHasLooped>=4)
+			{
+				setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
+			}
 		}
 		else
 		{
@@ -143,7 +143,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
 		setAnimNo(_player,ANIM_PLAYER_ANIM_RUN);
-//		m_numberOfTimeAnimHasLooped++;
+		m_numberOfTimeAnimHasLooped++;
 	}
 }
 
