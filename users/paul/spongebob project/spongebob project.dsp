@@ -749,6 +749,14 @@ SOURCE=..\..\..\source\player\psfall.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\psfly.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\psfly.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\psidle.cpp
 # End Source File
 # Begin Source File

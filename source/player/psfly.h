@@ -32,7 +32,7 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerStateFall : public CPlayerState
+class CPlayerStateFly : public CPlayerState
 {
 public:
 	virtual void	enter(class CPlayer *_player);

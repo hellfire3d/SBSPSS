@@ -378,7 +378,7 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 		}
 
 if(Pos.vx<16)Pos.vx=16;
-else if(Pos.vx>m_mapEdge.vx)Pos.vx=m_mapEdge.vx;
+else if(Pos.vx>m_mapEdge.vx-16)Pos.vx=m_mapEdge.vx-16;
 if(Pos.vy<16)Pos.vy=16;
 else if(Pos.vy>m_mapEdge.vy-16)Pos.vy=m_mapEdge.vy-16;
 
@@ -762,6 +762,10 @@ DVECTOR CPlayer::getPlayerPos()
 {
 	return Pos;
 }
+void CPlayer::setPlayerPos(DVECTOR *_pos)
+{
+	Pos=*_pos;
+}
 
 
 /*----------------------------------------------------------------------
@@ -801,7 +805,7 @@ int CPlayer::isOnSolidGround()
 				if right half of player is hanging or 0 if no part of the
 				player is hanging
   ---------------------------------------------------------------------- */
-int csize=20;
+int csize=15;
 int CPlayer::isOnEdge()
 {
 	int	ret=0;

@@ -54,6 +54,7 @@ protected:
 	DVECTOR			getMoveVelocity(class CPlayer *_player);
 	void			setMoveVelocity(class CPlayer *_player,DVECTOR *_moveVel);
 	DVECTOR			getPlayerPos(class CPlayer *_player);
+	void			setPlayerPos(class CPlayer *_player,DVECTOR *_pos);
 	int				getPadInputHeld(class CPlayer *_player);
 	int				getPadInputDown(class CPlayer *_player);
 

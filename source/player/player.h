@@ -76,6 +76,7 @@ typedef enum
 	PLAYER_MODE_SQUEAKYBOOTS,
 	PLAYER_MODE_NET,
 	PLAYER_MODE_CORALBLOWER,
+	PLAYER_MODE_FLY,
 
 	NUM_PLAYERMODES,
 }PLAYER_MODE;
@@ -179,6 +180,7 @@ protected:
 	DVECTOR			getMoveVelocity();
 	void			setMoveVelocity(DVECTOR *_moveVel);
 	DVECTOR			getPlayerPos();
+	void			setPlayerPos(DVECTOR *_pos);
 	PLAYERINPUT		getPadInputHeld();
 	PLAYERINPUT		getPadInputDown();
 

@@ -153,6 +153,7 @@ player_src :=		demoplay \
 					psdead \
 					psduck \
 					psfall \
+					psfly \
 					psidle \
 					psjump \
 					psrun \

@@ -62,7 +62,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::enter(CPlayer *_player)
+void CPlayerStateFly::enter(CPlayer *_player)
 {
 	setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEHOOLA);
 }
@@ -74,30 +74,30 @@ void CPlayerStateFall::enter(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayerStateFall::think(CPlayer *_player)
+void CPlayerStateFly::think(CPlayer *_player)
 {
 	int		controlHeld;
 	DVECTOR	pos;
 
 	controlHeld=getPadInputHeld(_player);
 	pos=getPlayerPos(_player);
-	if(controlHeld&PI_UP)
-	{
-		pos.vx-=5;
-	}
-	else if(controlHeld&PI_DOWN)
-	{
-		pos.vx+=5;
-	}
 	if(controlHeld&PI_LEFT)
 	{
-		pos.vy-=5;
+		pos.vx-=8;
 	}
 	else if(controlHeld&PI_RIGHT)
 	{
-		pos.vy+=5;
+		pos.vx+=8;
 	}
-	this->setPlayerPos(_player,pos);
+	if(controlHeld&PI_UP)
+	{
+		pos.vy-=8;
+	}
+	else if(controlHeld&PI_DOWN)
+	{
+		pos.vy+=8;
+	}
+	this->setPlayerPos(_player,&pos);
 
 	advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }

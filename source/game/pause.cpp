@@ -30,16 +30,16 @@
 #include "mem\memory.h"
 #endif
 
+#ifndef __PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
 
 /*	Data
 	---- */
-
-#ifndef __SPR_UIGFX_H__
-#include <uigfx.h>
-#endif
 
 #ifndef __STRING_ENUMS__
 #include <trans.h>
@@ -90,27 +90,32 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,30,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__QUIT,
 										&m_quitGameFlag,true);
-#ifdef __USER_paul__
+
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,60,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-										STR__DEBUG__BASICUNARMED_MODE,
-										&newmode,0);
+										STR__DEBUG__FLY_MODE,
+										&newmode,PLAYER_MODE_FLY);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,80,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-										STR__DEBUG__FULLUNARMED_MODE,
-										&newmode,1);
+										STR__DEBUG__BASICUNARMED_MODE,
+										&newmode,PLAYER_MODE_BASICUNARMED);
+#ifdef __USER_paul__
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,100,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-										STR__DEBUG__SQUEAKYBOOTS_MODE,
-										&newmode,2);
+										STR__DEBUG__FULLUNARMED_MODE,
+										&newmode,PLAYER_MODE_FULLUNARMED);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,120,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-										STR__DEBUG__NET_MODE,
-										&newmode,3);
+										STR__DEBUG__SQUEAKYBOOTS_MODE,
+										&newmode,PLAYER_MODE_SQUEAKYBOOTS);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,140,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__NET_MODE,
+										&newmode,PLAYER_MODE_NET);
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,160,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__CORALBLOWER_MODE,
-										&newmode,4);
+										&newmode,PLAYER_MODE_CORALBLOWER);
 #endif
 
 	m_active=false;

@@ -49,6 +49,10 @@
 #include "player\psdead.h"
 #endif
 
+#ifndef __PLAYER__PSFLY_H__
+#include "player\psfly.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -89,6 +93,7 @@ CPlayerStateDuck			stateDuck;
 CPlayerStateSoakUp			stateSoackUp;
 CPlayerStateGetUp			stateGetup;
 CPlayerStateDead			stateDead;
+CPlayerStateFly				stateFly;
 
 
 
@@ -262,6 +267,39 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 			NULL,									// STATE_SOAKUP
 			NULL,									// STATE_GETUP
 			&stateDead,								// STATE_DEAD
+		}
+	},
+
+	//
+	// Fly mode ( A useful debugging mode.. )
+	//
+	{
+		{	{
+			DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
+			DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
+			DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP,				// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
+		}	},
+		{
+			&stateFly,								// STATE_IDLE
+			&stateFly,								// STATE_IDLETEETER
+			&stateFly,								// STATE_JUMP
+			&stateFly,								// STATE_RUN
+			&stateFly,								// STATE_FALL
+			&stateFly,								// STATE_FALLFAR
+			&stateFly,								// STATE_BUTTBOUNCE
+			&stateFly,								// STATE_BUTTFALL
+			&stateFly,								// STATE_BUTTLAND
+			&stateFly,								// STATE_ATTACK
+			&stateFly,								// STATE_RUNATTACK
+			&stateFly,								// STATE_AIRATTACK
+			&stateFly,								// STATE_DUCK
+			&stateFly,								// STATE_SOAKUP
+			&stateFly,								// STATE_GETUP
+			&stateFly,								// STATE_DEAD
 		}
 	},
 };

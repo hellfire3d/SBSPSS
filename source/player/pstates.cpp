@@ -216,6 +216,18 @@ DVECTOR CPlayerState::getPlayerPos(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void CPlayerState::setPlayerPos(class CPlayer *_player,DVECTOR *_pos)
+{
+	return _player->setPlayerPos(_pos);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getPadInputHeld(CPlayer *_player)
 {
 	return _player->getPadInputHeld();
