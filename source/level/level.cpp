@@ -331,7 +331,6 @@ int					i;
 				font.print(256+1,90+1,buf);
 
 				PrimDisplay();
-				VSync(0);
 				VidSwapDraw();
 			}
 			font.dump();

@@ -241,7 +241,6 @@ void exc_c(void)
 
 		// Swap
 		while(DrawSync(1));
-		VSync(0);
 		VidSwapDraw();
 		PrimDisplay();
 	}
