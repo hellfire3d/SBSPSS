@@ -70,6 +70,10 @@
 #include "player\psspring.h"
 #endif
 
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
+#endif
+
 #include	"game/game.h"
 /*	Std Lib
 	------- */
@@ -195,7 +199,19 @@ void	CPlayerModeBase::think()
 {
 	getStateTable()[m_currentState]->think(this);
 	thinkVerticalMovement();
-	thinkHorizontalMovement();
+
+	if ( m_player->isOnPlatform() )
+	{
+		CNpcPlatform *platform = (CNpcPlatform *) m_player->isOnPlatform();
+		if ( !platform->isCart() )
+		{
+			thinkHorizontalMovement();
+		}
+	}
+	else
+	{
+		thinkHorizontalMovement();
+	}
 
 	// Teeter if on an edge
 	if(canTeeter()&&isOnEdge())
@@ -618,6 +634,24 @@ int		CPlayerModeBase::slowdown()
 }
 void	CPlayerModeBase::jump()
 {
+	CNpcPlatform *platform;
+	platform = (CNpcPlatform *) m_player->isOnPlatform();
+	if(platform)
+	{
+		if ( platform->isCart() )
+		{
+			/*Pos.vx = platform->getPos().vx;
+			Pos.vy = platform->getPos().vy;
+
+			int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
+			Pos.vy += platformOffset;*/
+
+			platform->jump();
+
+			return;
+		}
+	}
+
 	DVECTOR				moveVel;
 	moveVel=*m_player->getMoveVelocity();
 	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;

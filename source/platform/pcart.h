@@ -23,11 +23,15 @@ class CNpcCartPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
+	virtual u8			isCart()												{return( true );}
+	virtual void		jump();
 protected:
 	virtual void		processMovement( int _frames );
 
 	s32					m_carSpeed;
 	u8					m_isActivated;
+	u8					m_inJump;
+	s32					m_vertSpeed;
 };
 
 #endif

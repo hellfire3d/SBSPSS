@@ -121,6 +121,8 @@ public:
 	void				setGraphic( u8 graphicNum );
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		trigger()												{;}
+	virtual u8			isCart()												{return( false );}
+	virtual void		jump()													{;}
 
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(int Type);

@@ -72,41 +72,68 @@ void CNpcCartPlatform::processMovement( int _frames )
 			}
 		}
 
-		// check for vertical movement
-
-		s32 checkDist = yMovement + 50;
-
-		groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
-
-		if ( groundHeight < checkDist )
+		if ( m_inJump )
 		{
-			// groundHeight <= yMovement indicates either just above ground or on or below ground
+			m_vertSpeed += 64;
 
-			moveY = groundHeight;
+			if ( m_vertSpeed > ( 5 << 8 ) )
+			{
+				m_vertSpeed = 5 << 8;
+			}
+			else if ( m_vertSpeed < -( 6 << 8 ) )
+			{
+				m_vertSpeed = -( 6 << 8 );
+			}
+
+			moveY = ( m_vertSpeed >> 8 ) * _frames;
+
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + moveY, 16 );
+
+			if ( groundHeight < 0 )
+			{
+				// have touched down
+
+				m_inJump = false;
+			}
 		}
 		else
 		{
-			// fall
+			// check for vertical movement
 
-			moveY = yMovement;
-		}
+			s32 checkDist = yMovement + 50;
 
-		if ( moveY < 0 )
-		{
-			m_carSpeed -= 20;
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, checkDist );
 
-			if ( m_carSpeed < ( 2 << 8 ) )
+			if ( groundHeight < checkDist )
 			{
-				m_carSpeed = ( 2 << 8 );
+				// groundHeight <= yMovement indicates either just above ground or on or below ground
+
+				moveY = groundHeight;
 			}
-		}
-		else if ( moveY > 0 )
-		{
-			m_carSpeed += 20;
-
-			if ( m_carSpeed > ( 6 << 8 ) )
+			else
 			{
-				m_carSpeed = ( 6 << 8 );
+				// fall
+
+				moveY = yMovement;
+			}
+
+			if ( moveY < 0 )
+			{
+				m_carSpeed -= 1;
+
+				if ( m_carSpeed < ( 2 << 8 ) )
+				{
+					m_carSpeed = ( 2 << 8 );
+				}
+			}
+			else if ( moveY > 0 )
+			{
+				m_carSpeed += 20;
+
+				if ( m_carSpeed > ( 6 << 8 ) )
+				{
+					m_carSpeed = ( 6 << 8 );
+				}
 			}
 		}
 
@@ -198,5 +225,16 @@ void CNpcCartPlatform::render()
 
 			m_modelGfx->Render(renderPos,&rotation,&scale);
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcCartPlatform::jump()
+{
+	if ( !m_inJump )
+	{
+		m_inJump = true;
+		m_vertSpeed = -6 << 8;
 	}
 }
