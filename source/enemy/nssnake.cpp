@@ -204,9 +204,10 @@ bool CNpcSeaSnakeEnemy::processSensor()
 		return( false );
 	}
 
-	if ( playerXDistSqr + playerYDistSqr < 40000 )
+	if ( playerXDistSqr + playerYDistSqr < 50000 )
 	{
 		m_controlFunc = NPC_CONTROL_CLOSE;
+		m_state = SEA_SNAKE_VERTICAL_LINEUP;
 
 		return( true );
 	}
@@ -347,7 +348,6 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 	s32 moveVel = 0;
 	s32 moveDist = 0;
 	DVECTOR oldPos = Pos;
-	u8 skipCounter;
 
 	if ( m_snapTimer > 0 )
 	{
@@ -538,6 +538,15 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 	Pos.vx += moveX;
 	Pos.vy += moveY;
+
+	updateTail( oldPos, _frames );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
+{
+	u8 skipCounter;
 
 	m_extension += 256;
 	m_extension &= 4095;
@@ -764,6 +773,65 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 
 void CNpcSeaSnakeEnemy::processClose( int _frames )
 {
+	DVECTOR oldPos = Pos;
+
+	switch( m_state )
+	{
+		case SEA_SNAKE_VERTICAL_LINEUP:
+		{
+			if ( playerYDistSqr > 100 )
+			{
+				processGenericGotoTarget( _frames, 0, playerYDist, m_speed );
+			}
+			else
+			{
+				m_state = SEA_SNAKE_CHARGE;
+			}
+
+			break;
+		}
+
+		case SEA_SNAKE_CHARGE:
+		{
+			if ( playerXDistSqr > 4000 )
+			{
+				processGenericGotoTarget( _frames, playerXDist, 0, m_speed );
+			}
+			else
+			{
+				s16 heading = m_heading;
+
+				CProjectile *projectile;
+				projectile = CProjectile::Create();
+				DVECTOR newPos = Pos;
+				newPos.vx += 50 * ( rcos( m_heading ) >> 12 );
+				newPos.vy += 50 * ( rsin( m_heading ) >> 12 );
+
+				int perpHeading = ( heading - 1024 ) & 4095;
+
+				newPos.vx += 20 * ( rcos( perpHeading ) >> 12 );
+				newPos.vy += 20 * ( rsin( perpHeading ) >> 12 );
+
+				projectile->init( newPos, heading );
+				projectile->setGraphic( FRM__SNAKEBILE );
+
+				m_movementTimer = GameState::getOneSecondInFrames();
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_timerTimer = 5 * GameState::getOneSecondInFrames();
+				m_sensorFunc = NPC_SENSOR_NONE;
+
+				m_snapTimer = m_movementTimer;
+			}
+
+			break;
+		}
+	}
+
+	updateTail( oldPos, _frames );
+
+	/*
 	// fire at player
 
 	//s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
@@ -794,6 +862,7 @@ void CNpcSeaSnakeEnemy::processClose( int _frames )
 
 	m_snapTimer = m_movementTimer;
 	//m_openTimer = GameState::getOneSecondInFrames() >> 2;
+	*/
 }
 
 

@@ -72,6 +72,7 @@ protected:
 	u8					isSnakeStopped();
 	void				moveEntireSnake( DVECTOR newPos );
 	void				addHealthMeter();
+	void				updateTail( DVECTOR &oldPos, int _frames );
 
 	enum
 	{
@@ -79,6 +80,12 @@ protected:
 		NPC_SEA_SNAKE_LENGTH = 10,
 		NPC_SEA_SNAKE_CIRCLE_CLOCKWISE = 1,
 		NPC_SEA_SNAKE_CIRCLE_ANTICLOCKWISE = 2,
+	};
+
+	enum SEA_SNAKE_STATES
+	{
+		SEA_SNAKE_VERTICAL_LINEUP = 0,
+		SEA_SNAKE_CHARGE = 1,
 	};
 
 	// position history stuff
