@@ -56,7 +56,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	{
 		DVECTOR playerPos = player->getPos();
 
-		DVECTOR *playerVel = player->getMoveVelocity();
+		s32 playerMovement = player->getMovement();
 
 		/*s32 speedChange = -playerVel->vx << 8;
 
@@ -80,7 +80,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 			m_currentSpeed = -( m_speed << 8 );
 		}*/
 
-		m_currentSpeed = -playerVel->vx << 4;
+		m_currentSpeed = -playerMovement;
 
 		/*s32 playerX = playerPos.vx - this->Pos.vx;
 
@@ -130,17 +130,17 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	moveX = m_moveXHighRes >> 8;
 	m_moveXHighRes -= moveX << 8;*/
 
-	moveX = ( m_currentSpeed * _frames ) >> 8;
+	moveX = m_currentSpeed;
 
 	// check for collision
 
-	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 14 ) < -maxHeight )
+	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy ) < -maxHeight )
 	{
 		moveX = 0;
 		m_currentSpeed = 0;
 	}
 
-	m_rotation += ( m_currentSpeed * 30 * _frames ) >> 10;
+	m_rotation += ( m_currentSpeed * 30 * _frames ) >> 2;
 	m_rotation &= 4095;
 
 	if ( m_contact )
@@ -153,7 +153,7 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 
 	// check for vertical movement
 
-	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy + 14, yMovement + 16 );
+	groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx + moveX, Pos.vy, yMovement + 16 );
 
 	if ( groundHeight <= yMovement )
 	{

@@ -455,6 +455,15 @@ public:
 
 private:
 	class FontBank		*m_fontBank;
+
+public:
+
+	// Movement tracking for barrels
+
+	s32				getMovement()						{return( m_xMove );}
+
+private:
+	s32				m_xMove;
 };
 
 

@@ -741,6 +741,9 @@ if(newmode!=-1)
 
 	m_tryingToManuallyPickupWeapon=false;
 	m_tryingToAutomaticallyPickupWeapon=false;
+
+	m_xMove = Pos.vx;
+
 	for(i=0;i<_frames;i++)
 	{
 		updatePadInput();
@@ -1021,6 +1024,8 @@ if(newmode!=-1)
 		// Automatic anim sfx
 		playAnimFrameSfx(m_animNo,m_animFrame);
 	}
+
+	m_xMove = Pos.vx - m_xMove;
 
 	// Out of water and wearing helmet..?
 	ASSERT(!(getIsInWater()==false&&isWearingDivingHelmet()==false));
