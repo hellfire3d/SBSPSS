@@ -30,10 +30,9 @@ void CNpcButterflyBackgroundEnemy::processMovementModifier(int _frames, s32 dist
 	Pos.vx += distX;
 	Pos.vy += distY;
 
-	m_frame++;
-
-	if ( m_frame > ( FRM_BUTTERFLY_FLAP04 - FRM_BUTTERFLY_FLAP01 ) )
+	if ( !m_animPlaying )
 	{
+		m_animPlaying = true;
 		m_frame = 0;
 	}
 }
@@ -73,7 +72,7 @@ void CNpcButterflyBackgroundEnemy::render()
 		{
 			if ( renderPos.vy + collisionRect.y2 >= 0 && renderPos.vy + collisionRect.y1 <= VidGetScrH() )
 			{
-				SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_BUTTERFLY_FLAP01 + m_frame,renderPos.vx,renderPos.vy,4096,4096,0,10);
+				SprFrame = m_spriteBank->printFT4(FRM_BUTTERFLY_FLAP01 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,!m_reversed,0,10);
 				setRGB0( SprFrame, 255, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)
 
 				// get xmax, xmin, ymax, ymin

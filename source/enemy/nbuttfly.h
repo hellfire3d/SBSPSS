@@ -18,10 +18,15 @@
 #include "enemy\nsjback.h"
 #endif
 
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
+#endif
+
 class CNpcButterflyBackgroundEnemy : public CNpcSmallJellyfishBackgroundEnemy
 {
 public:
 	virtual void		render();
+	virtual int			getFrameCount()							{return( FRM_BUTTERFLY_FLAP04 - FRM_BUTTERFLY_FLAP01 + 1 );}
 protected:
 	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 };
