@@ -15,9 +15,9 @@
 #include "enemy\npc.h"
 #endif
 
-//#ifndef __GAME_GAME_H__
-//#include "game\game.h"
-//#endif
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
 
 #ifndef	__PLAYER_PLAYER_H__
 #include	"player\player.h"
@@ -55,6 +55,19 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 
 	s32 extension = m_extension;
 	u8 downShift = 2;
+	u8 timeShift;
+
+	if ( m_movementTimer > 0 )
+	{
+		m_movementTimer -= _frames;
+
+		if ( m_movementTimer < 0 )
+		{
+			m_movementTimer = 0;
+		}
+	}
+
+	timeShift = m_movementTimer / GameState::getOneSecondInFrames();
 
 	while( List )
 	{
@@ -70,7 +83,7 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 		DVECTOR sinPos;
 
 		sinPos = newPos->pos;
-		s32 diff = ( ( 10 >> downShift ) * rsin( extension ) ) >> 12;
+		s32 diff = ( ( ( 10 >> downShift ) * rsin( extension ) ) >> 12 ) >> timeShift;
 		sinPos.vx += ( diff * rcos( headingToTarget + 1024 ) ) >> 12;
 		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
 
@@ -95,29 +108,40 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 			downShift--;
 		}
 	}
+}
 
-	/*// add new (old) position onto list head
-	CNpcPositionHistory *newPos;
-	newPos = new ("position history") CNpcPositionHistory;
-	newPos->pos = oldPos;
-	newPos->next = m_positionHistory;
-	m_positionHistory = newPos;
+void CNpcEnemy::resetParasiticWormHeadToTail()
+{
+	DVECTOR startPos;
+	DVECTOR endPos;
+	int posCounter;
+	CNpcPositionHistory *currentPos;
 
-	// remove list end
-	CNpcPositionHistory *last;
-	last = newPos;
+	startPos = Pos;
 
-	while( newPos->next )
+	currentPos = m_positionHistory;
+
+	for ( posCounter = 0 ; posCounter < ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) - 1 ; posCounter++ )
 	{
-		last = newPos;
-		newPos = newPos->next;
+		currentPos = currentPos->next;
 	}
 
-	delete newPos;
-	last->next = NULL;
+	endPos = currentPos->pos;
 
-	// assign positions
+	currentPos = m_positionHistory;
+
+	for ( posCounter = 0 ; posCounter < NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ; posCounter++ )
+	{
+		currentPos->pos.vx = startPos.vx + ( posCounter * ( endPos.vx - startPos.vx ) ) / ( ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) - 1 );
+		currentPos->pos.vy = startPos.vy + ( posCounter * ( endPos.vy - startPos.vy ) ) / ( ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) - 1 );
+
+		currentPos = currentPos->next;
+	}
+
+	CNpcPositionHistory *newPos;
 	newPos = m_positionHistory;
+
+	u8 skipCounter;
 	for ( skipCounter = 1 ; skipCounter < NPC_PARASITIC_WORM_SPACING ; skipCounter++ )
 	{
 		newPos = newPos->next;
@@ -125,10 +149,9 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 
 	CThing	*List=Next;
 
-	oldPos = Pos;
+	DVECTOR oldPos = Pos;
 
 	s32 extension = m_extension;
-	u8 downShift = 2;
 
 	while( List )
 	{
@@ -141,14 +164,7 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 
 		segment->setHeading( headingToTarget );
 
-		DVECTOR sinPos;
-
-		sinPos = newPos->pos;
-		s32 diff = ( ( 10 >> downShift ) * rsin( extension ) ) >> 12;
-		sinPos.vx += ( diff * rcos( headingToTarget + 1024 ) ) >> 12;
-		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
-
-		List->setPos( sinPos );
+		List->setPos( newPos->pos );
 		oldPos = newPos->pos;
 
 		List = List->getNext();
@@ -163,10 +179,18 @@ void CNpcEnemy::processParasiticWormMovement( int _frames )
 
 		extension += 1024;
 		extension &= 4095;
-
-		if ( downShift > 0 )
-		{
-			downShift--;
-		}
-	}*/
+	}
 }
+
+void CNpcEnemy::processCloseParasiticWormAttack( int _frames )
+{
+	resetParasiticWormHeadToTail();
+
+	m_movementTimer = 2 * GameState::getOneSecondInFrames();
+
+	m_controlFunc = NPC_CONTROL_MOVEMENT;
+	m_timerFunc = NPC_TIMER_ATTACK_DONE;
+	m_timerTimer = GameState::getOneSecondInFrames();
+	m_sensorFunc = NPC_SENSOR_NONE;
+}
+

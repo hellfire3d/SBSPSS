@@ -161,10 +161,10 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 
 	s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
 
-	if ( waypointChange )
+	/*if ( waypointChange )
 	{
 		m_movementTimer = 0;
-	}
+	}*/
 
 	if ( !pathComplete )
 	{

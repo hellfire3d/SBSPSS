@@ -548,6 +548,8 @@ void CNpcEnemy::postInit()
 				this->addChild( segment );
 			}
 
+			m_movementTimer = 2 * GameState::getOneSecondInFrames();
+
 			break;
 		}
 
@@ -986,6 +988,7 @@ bool CNpcEnemy::processSensor()
 					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
 					case NPC_SENSOR_FLAMING_SKULL_USER_CLOSE:
+					case NPC_SENSOR_PARASITIC_WORM_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 40000 )
 						{
@@ -1484,6 +1487,11 @@ void CNpcEnemy::processClose(int _frames)
 
 		case NPC_CLOSE_PUFFA_FISH_INFLATE:
 			processClosePuffaFishInflate( _frames );
+
+			break;
+
+		case NPC_CLOSE_PARASITIC_WORM_ATTACK:
+			processCloseParasiticWormAttack( _frames );
 
 			break;
 

@@ -241,6 +241,7 @@ protected:
 		NPC_SENSOR_HERMIT_CRAB_USER_CLOSE,
 		NPC_SENSOR_OCTOPUS_USER_CLOSE,
 		NPC_SENSOR_PUFFA_FISH_USER_CLOSE,
+		NPC_SENSOR_PARASITIC_WORM_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -270,6 +271,7 @@ protected:
 		NPC_CLOSE_HERMIT_CRAB_ATTACK,
 		NPC_CLOSE_OCTOPUS_ATTACK,
 		NPC_CLOSE_PUFFA_FISH_INFLATE,
+		NPC_CLOSE_PARASITIC_WORM_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -542,6 +544,8 @@ protected:
 	// parasitic worm functions
 
 	void				processParasiticWormMovement( int _frames );
+	void				resetParasiticWormHeadToTail();
+	void				processCloseParasiticWormAttack( int _frames );
 
 	// flying dutchman functions
 
