@@ -26,7 +26,7 @@ void	CMkLevelLayerFX::PreProcess(CMkLevel *Core)
 /*****************************************************************************/
 void	CMkLevelLayerFX::Process(CMkLevel *Core)
 {
-		ProcessList();
+		ProcessList(Core);
 		printf("%i FX\n",ThingList.size());
 }
 

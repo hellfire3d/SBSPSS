@@ -23,12 +23,12 @@ static		FontBank		*Font;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTile3d::CLayerTile3d(sLvlHdr *LvlHdr,sLayerHdr *Hdr) : CLayerTile(LvlHdr,Hdr)
+CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr,Hdr)
 {
-		TileBank3d=LvlHdr->TileBank3d;
-		TriList=LvlHdr->TriList;
-		QuadList=LvlHdr->QuadList;
-		VtxList=LvlHdr->VtxList;
+		TileBank3d=LevelHdr->TileBank3d;
+		TriList=LevelHdr->TriList;
+		QuadList=LevelHdr->QuadList;
+		VtxList=LevelHdr->VtxList;
 
 #if		defined(_SHOW_POLYZ_)
 		Font=new ("PrimFont") FontBank;

@@ -96,6 +96,7 @@ std::vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		if (Files.size()==0)	Usage("No Levels specified\n");
 		if (Files.size()>1)		Usage("Too many Levels specified\n");
 
+		Level.SetAppDir(argv[0]);
 		Level.Init(Files[0],OutStr,TPBase,TPW,TPH);
 		Level.Load();
 		Level.Process();

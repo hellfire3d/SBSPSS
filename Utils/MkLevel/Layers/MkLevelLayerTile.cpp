@@ -93,15 +93,18 @@ int			Height=OutMap.GetHeight();
 		Hdr.Height=Height;
 		fwrite(&Hdr,sizeof(sLayerHdr),1,File);
 
+		printf("%s (%i,%i)= %i\n",LayerName,Width,Height,Width*Height*sizeof(sTileMapElem));
+
 		for (int Y=0; Y<Height; Y++)
 		{
 			for (int X=0; X<Width; X++)
 			{
 				sMkLevelElem	&ThisElem=OutMap.Get(X,Y);	
-				
-				ASSERT(Hdr.SubType!=LAYER_SUBTYPE_ACTION);
-				fwrite(&ThisElem.Elem,sizeof(u16),1,File);
-
+				sTileMapElem	OutElem;
+				OutElem.Tile=ThisElem.Elem;
+//				OutElem.LightIdx=0;
+			
+				fwrite(&OutElem,sizeof(sTileMapElem),1,File);
 			}
 		}
 		PadFile(File);

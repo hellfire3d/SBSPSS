@@ -138,6 +138,9 @@ public:
 
 		CFace& operator []( int nIndex )	{return(FaceList[nIndex]);}
 
+		vector<sTri>			GetOutTriList()					{return(OutTriList);}
+		vector<sQuad>			GetOutQuadList()				{return(OutQuadList);}
+
 private:
 		void					Quad();
 		void					SetupUV(CFace const &In, sTri &Out);

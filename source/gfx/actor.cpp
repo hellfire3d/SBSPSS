@@ -231,14 +231,15 @@ int		Clut=getClut(R.x,R.y);
 }
 
 /*****************************************************************************/
-void	CActorPool::AddActor(FileEquate Filename)
+int		CActorPool::AddActor(FileEquate Filename)
 {
 sActorPool	*Actor;
 int			Idx=FindActorInPool(Filename);
 
-		if (Idx!=-1) return;
-// Load it
-		LoadActor(Filename);
+			if (Idx!=-1) return(Idx);
+// Doesnt Exist, soooooo, Load it
+			Idx=LoadActor(Filename);
+			return(Idx);
 }
 
 /*****************************************************************************/
@@ -249,7 +250,10 @@ int			Idx;
 		
 // Find Actor in Pool
 		Idx=FindActorInPool(Filename);
-		if (Idx==-1) ASSERT(!"Actor Not Loaded");
+		if (Idx==-1) 
+		{
+			AddActor(Filename);
+		}
 
 sActorPool	&ThisActor=ActorPool[Idx];
 		Actor=new ("CActorGfx") CActorGfx;

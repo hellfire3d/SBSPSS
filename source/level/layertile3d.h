@@ -11,7 +11,7 @@ class	FontBank;
 class CLayerTile3d : public CLayerTile
 {
 public:
-		CLayerTile3d(sLvlHdr *LvlHdr,sLayerHdr *Hdr);
+		CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
 		~CLayerTile3d();
 
 		enum

@@ -183,7 +183,7 @@ struct	sLayerShadeHdr
 
 //---------------------------------------------------------------------------
 // Header
-struct	sLvlHdr
+struct	sLevelHdr
 {
 	u32		BackLayer;
 	u32		MidLayer;

@@ -46,7 +46,7 @@ private:
 	void					initLayers();
 	void					DisplayLoadingScreen(sLvlTab *lvlTab);
 
-	sLvlHdr			*LevelHdr;
+	sLevelHdr				*LevelHdr;
 
 	static DVECTOR	MapPos;
 	static DVECTOR	s_playerSpawnPos;

@@ -25,7 +25,7 @@ void	CMkLevelLayerTrigger::PreProcess(CMkLevel *Core)
 /*****************************************************************************/
 void	CMkLevelLayerTrigger::Process(CMkLevel *Core)
 {
-		ProcessList();
+		ProcessList(Core);
 		printf("%i Trigger\n",ThingList.size());
 
 }

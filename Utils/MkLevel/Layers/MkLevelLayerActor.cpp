@@ -44,10 +44,10 @@ GString	Player=Core->GetConfigStr("MISC","PlayerActor");
 		}
 		if (NotFound)
 		{
-			GObject::Error(ERR_FATAL,"No Start Point defined");
+			GObject::Error(ERR_WARNING,"No Start Point defined\n");
 		}
 
-		ProcessList();
+		ProcessList(Core);
 		printf("%i actors\n",ThingList.size());
 }
 

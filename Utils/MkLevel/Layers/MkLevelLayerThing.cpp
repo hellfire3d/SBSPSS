@@ -71,17 +71,17 @@ int		i,ListSize=ThingList.size();
 }
 
 /*****************************************************************************/
-void	CMkLevelLayerThing::ProcessList()
+void	CMkLevelLayerThing::ProcessList(CMkLevel *Core)
 {
-/*
 int		i,ListSize=ThingList.size();
+CIni	&Config=Core->GetConfig();
 
 		for (i=0; i<ListSize; i++)
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
-			bool	Found=CMkLevel::Config.GetInt(GetTypeName(),ThisThing.Name,ThisThing.Type);
+			bool	Found=Config.GetInt(GetTypeName(),ThisThing.Name,ThisThing.Type);
 			if (!Found)
 				GObject::Error(ERR_FATAL,"%s not found in list\n",ThisThing.Name);
 		}
-*/
+
 }

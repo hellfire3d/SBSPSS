@@ -135,18 +135,18 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 
 		DisplayLoadingScreen(lvlTab);
 
-		LevelHdr=(sLvlHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
+		LevelHdr=(sLevelHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
 		LevelHdr->TileBank2d=(sTile2d*)	MakePtr(LevelHdr,(int)LevelHdr->TileBank2d);
 		LevelHdr->TileBank3d=(sTile3d*)	MakePtr(LevelHdr,(int)LevelHdr->TileBank3d);
 		LevelHdr->TriList=(sTri*)		MakePtr(LevelHdr,(int)LevelHdr->TriList);
 		LevelHdr->QuadList=(sQuad*)		MakePtr(LevelHdr,(int)LevelHdr->QuadList);
 		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
 
-		LevelHdr->ActorList=0;
-		LevelHdr->FXList=0;
-		LevelHdr->ItemList=0;
-		LevelHdr->PlatformList=0;
-		LevelHdr->TriggerList=0;
+		printf("ActorList %i\n",(int)LevelHdr->ActorList);
+		printf("ItemList %i\n",(int)LevelHdr->ItemList);
+		printf("Platfrom List %i\n",(int)LevelHdr->PlatformList);
+		printf("TriggerList %i\n",(int)LevelHdr->TriggerList);
+		printf("FXList %i\n",(int)LevelHdr->FXList);
 
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
@@ -244,7 +244,6 @@ void	CLevel::initLayers()
 // Actors
 		if (LevelHdr->ActorList)
 		{
-			
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ActorList);
 			ActorCount=Hdr->Count;
 			ActorList=(sThingActor**)MemAlloc(ActorCount*sizeof(sThingActor**),"Actor List");
@@ -255,7 +254,6 @@ void	CLevel::initLayers()
 				ThingPtr+=sizeof(sThingActor);
 				ThingPtr+=ActorList[i]->PointCount*sizeof(u16)*2;
 			}
-			if (Hdr->Count>8) Hdr->Count=0;
 		}
 // Items
 		if (LevelHdr->ItemList)
@@ -263,7 +261,6 @@ void	CLevel::initLayers()
 			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
 			ItemCount=Hdr->Count;
 			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
-
 			DVECTOR	pos;
 			for(int i=0;i<ItemCount;i++)
 			{
@@ -287,7 +284,6 @@ void	CLevel::initLayers()
 				ThingPtr+=sizeof(sThingPlatform);
 				ThingPtr+=PlatformList[i]->PointCount*sizeof(u16)*2;
 			}
-			if (Hdr->Count>8) Hdr->Count=0;
 		}
 
 // Triggers

@@ -44,7 +44,8 @@ public:
 		CMkLevel();
 		~CMkLevel();
 
-		void			Init(const char *InFilename,const char *OutPath,int TPBase,int TPW,int TPH);
+		void			SetAppDir(const char *Path);
+		void			Init(const char *InFilename,const char *OutFilename,int TPBase,int TPW,int TPH);
 
 		void			Load();
 
@@ -62,9 +63,10 @@ public:
 		int				BuildTileTex(sMkLevelTex &InTex);
 
 		char			*GetConfigStr(const char *Grp,const char *Key)	{return(Config.GetStr(Grp,Key));}
+		CIni			&GetConfig()									{return(Config);}
 		CTexGrab		&GetTexGrab()									{return(TexGrab);}
 
-		void			SetStart(int X,int Y)				{LvlHdr.PlayerStartX=X; LvlHdr.PlayerStartY=Y;}
+		void			SetStart(int X,int Y)				{LevelHdr.PlayerStartX=X; LevelHdr.PlayerStartY=Y;}
 protected:	
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
 		void			LoadStrList(CList<GString> &List,char *TexPtr,int Count);
@@ -88,13 +90,15 @@ protected:
 		int				WriteThings(int Type,const char *LayerName);
 		int				WriteTriList();
 		int				WriteQuadList();
+		int				WriteVtxList();
 		void			WriteTileBank();
 
 		void            BuildTiles();
 
 		FILE					*File;
 		GString					InFilename,InPath,LevelName;
-		GString					OutPath,OutName;
+		GString					OutName;
+		GString					AppDir;
 
 		int						TileW,TileH;
 		CIni					Config;
@@ -106,7 +110,7 @@ protected:
 		CList<GString>			UsedSetNameList;
 		CList<GString>			UsedTexNameList;
 
-		CFaceStore				OutTriList;
+		CFaceStore				OutFaceList;
 		CList<sTile2d>			OutTile2dList;
 		CList<sTile3d>			OutTile3dList;
 
@@ -118,9 +122,9 @@ protected:
 
 		vector<CMkLevelLayer*>	LayerList;
 
-		sLvlHdr					LvlHdr;
-		sTileBankHdr			TileBankHdr;
-		CFace					FlatFace[2];
+		sLevelHdr				LevelHdr;
+//		sTileBankHdr			TileBankHdr;
+		sExpTri					FlatFace[2];
 
 };
 

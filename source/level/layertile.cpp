@@ -19,14 +19,14 @@ const u32	YInc=16<<16;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTile::CLayerTile(sLvlHdr *LvlHdr,sLayerHdr *Hdr)
+CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 {
 		LayerHdr=Hdr;
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
 		printf("%i %i\n",MapWidth,MapHeight);
-		TileBank2d=LvlHdr->TileBank2d;
+		TileBank2d=LevelHdr->TileBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 }
 

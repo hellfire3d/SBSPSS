@@ -215,3 +215,25 @@ sTgaHdr			FileHdr;
 }
 
 //***************************************************
+Vector3 CalcNormal(Vector3 const &v0, Vector3 const &v1, Vector3 const &v2 )
+{
+		Vector3 dv1, dv2;
+		Vector3 out;
+
+		dv1.x = v1.x - v0.x;
+		dv1.y = v1.y - v0.y;
+		dv1.z = v1.z - v0.z;
+
+		dv2.x = v2.x - v0.x;
+		dv2.y = v2.y - v0.y;
+		dv2.z = v2.z - v0.z;
+
+		out.x = (dv1.z * dv2.y) - (dv1.y * dv2.z);
+		out.y = (dv1.x * dv2.z) - (dv1.z * dv2.x);
+		out.z = (dv1.y * dv2.x) - (dv1.x * dv2.y);
+
+		out.Normalise();
+
+		return out;
+}
+

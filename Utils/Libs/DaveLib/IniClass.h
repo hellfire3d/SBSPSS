@@ -65,7 +65,7 @@ FILE	*File;
 int		Size;
 char	*Script;
 		File=fopen(Filename,"rt");
-		if (!File) return;
+		if (!File) {printf("%s Not Found\n",Filename); return;}
 		fseek(File,0,SEEK_END);
 		Size=ftell(File);
 		fseek(File,0,SEEK_SET);

@@ -25,7 +25,7 @@ void	CMkLevelLayerPlatform::PreProcess(CMkLevel *Core)
 /*****************************************************************************/
 void	CMkLevelLayerPlatform::Process(CMkLevel *Core)
 {
-		ProcessList();
+		ProcessList(Core);
 		printf("%i Platforms\n",ThingList.size());
 }
 

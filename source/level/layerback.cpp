@@ -37,7 +37,7 @@ sBackRGBTable	CLayerBack::BackRGBTable[]=
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerBack::CLayerBack(sLvlHdr *LvlHdr,sLayerHdr *Hdr) : CLayerTile(LvlHdr,Hdr)
+CLayerBack::CLayerBack(sLevelHdr *LevelHdr,sLayerHdr *Hdr) : CLayerTile(LevelHdr,Hdr)
 {
 		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 

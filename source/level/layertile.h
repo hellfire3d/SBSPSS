@@ -34,7 +34,7 @@ public:
 			SCREEN_TILE_SIZE=SCREEN_TILE_WIDTH*SCREEN_TILE_HEIGHT
 		};
 
-		CLayerTile(sLvlHdr *LvlHdr,sLayerHdr *Hdr);
+		CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr);
 virtual	~CLayerTile();
 
 virtual	void			init(DVECTOR &MapPos,int Shift);

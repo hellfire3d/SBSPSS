@@ -41,9 +41,9 @@ int			Height=InMap.GetHeight();
 /*** Process *****************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/*
 void	CMkLevelLayer3d::Process(CMkLevel *Core)
 {
-/*
 int				Width=InMap.GetWidth();
 int				Height=InMap.GetHeight();
 int				i,ListSize;
@@ -149,18 +149,19 @@ int				i,ListSize;
 				}
 			}
 		}
-*/
 }
-
+*/
 /*****************************************************************************/
 /*****************************************************************************/
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/*
 int		CMkLevelLayer3d::Write(FILE *File,const char *LayerName,const char *MapName)
 {
 int				ThisPos=ftell(File);
-/*
+		CMkLevelLayerTile::Write(File,LayerName,MapName);
+
 int				Width=OutMap.GetWidth();
 int				Height=OutMap.GetHeight();
 sLayerHdr		LayerHdr;
@@ -203,11 +204,12 @@ int	RetPos=ftell(File);
 		fseek(File,Pos3d,SEEK_SET);
 		fwrite(&Hdr3d,sizeof(sLayer3d),1,File);
 		fseek(File,RetPos,SEEK_SET);
-*/
+
 		return(ThisPos);
 }
-
+*/
 /*****************************************************************************/
+#if	0
 void	CMkLevelLayer3d::ProcessVtxList(vector<sVtx> const &InList,vector<sVtx> &OutList)
 {
 int		i,ListSize=InList.size();
@@ -263,5 +265,5 @@ sVtx	Ofs;
 		printf("MinXY %i,%i  %i,%i\n",XMin,YMin,XMax,YMax);
 */
 }
-
+#endif
 /*****************************************************************************/

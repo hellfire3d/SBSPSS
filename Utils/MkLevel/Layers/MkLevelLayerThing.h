@@ -36,7 +36,7 @@ virtual	int		Write(FILE *File,const char *LayerName,const char *MapName)=0;
 protected:
 		u8		*LoadThing(sMkLevelLayerThing &ThisThing,u8 *Ptr);
 		void	LoadThingNames(char *Ptr);
-		void	ProcessList();
+		void	ProcessList(CMkLevel *Core);
 
 		CList<sMkLevelLayerThing>	ThingList;
 		

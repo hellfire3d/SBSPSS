@@ -25,7 +25,7 @@ void	CMkLevelLayerItem::PreProcess(CMkLevel *Core)
 /*****************************************************************************/
 void	CMkLevelLayerItem::Process(CMkLevel *Core)
 {
-		ProcessList();
+		ProcessList(Core);
 }
 
 /*****************************************************************************/
