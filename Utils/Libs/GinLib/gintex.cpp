@@ -109,17 +109,17 @@ void CMesh::Load(Gifstream & In)
 void CMod4::Load(Gifstream & In)
 {
 Mod4Chunk	ThisChunk;	
-	In.read((char*)&ThisChunk.nCurObj	, sizeof(long));
-	In.read(ThisChunk.Name, 32);
-	In.read((char*)&ThisChunk.Radius, sizeof(float));
-	In.read((char*)&ThisChunk.Centre.x, sizeof(float));
-	In.read((char*)&ThisChunk.Centre.y, sizeof(float));
-	In.read((char*)&ThisChunk.Centre.z, sizeof(float));
-	In.read((char*)&ThisChunk.Ap.x, sizeof(float));
-	In.read((char*)&ThisChunk.Ap.y, sizeof(float));
-	In.read((char*)&ThisChunk.Ap.z, sizeof(float));
-	Chunk.push_back(ThisChunk);
 
+		In.read((char*)&ThisChunk.nCurObj	, sizeof(long));
+		In.read(ThisChunk.Name, 32);
+		In.read((char*)&ThisChunk.Radius, sizeof(float));
+		In.read((char*)&ThisChunk.Centre.x, sizeof(float));
+		In.read((char*)&ThisChunk.Centre.y, sizeof(float));
+		In.read((char*)&ThisChunk.Centre.z, sizeof(float));
+		In.read((char*)&ThisChunk.Ap.x, sizeof(float));
+		In.read((char*)&ThisChunk.Ap.y, sizeof(float));
+		In.read((char*)&ThisChunk.Ap.z, sizeof(float));
+		Chunk.push_back(ThisChunk);
 }
 
 /*****************************************************************************/
@@ -170,24 +170,6 @@ CNode	ThisNode;
 		In.Align(4);
 		
 		In.read(ThisNode.Name, 32);
-/*		In.read((char*)&ThisNode.XPos, 4);
-		In.read((char*)&ThisNode.YPos, 4);
-		In.read((char*)&ThisNode.ZPos, 4);
-
-		In.read((char*)&ThisNode.XAng, 4);
-		In.read((char*)&ThisNode.YAng, 4);
-		In.read((char*)&ThisNode.ZAng, 4);
-		In.read((char*)&ThisNode.WAng, 4);
-
-		In.read((char*)&ThisNode.Xapk, 4);
-		In.read((char*)&ThisNode.Yapk, 4);
-		In.read((char*)&ThisNode.Zapk, 4);
-
-		In.read((char*)&ThisNode.Xapu, 4);
-		In.read((char*)&ThisNode.Yapu, 4);
-		In.read((char*)&ThisNode.Zapu, 4);
-		In.read((char*)&ThisNode.Wapu, 4);
-*/	
 		In.read((char*)&ThisNode.Pos.x, 4);
 		In.read((char*)&ThisNode.Pos.y, 4);
 		In.read((char*)&ThisNode.Pos.z, 4);
@@ -277,24 +259,6 @@ CNode	ThisNode;
 		ThisNode.Anim.resize(FrameCount);
 		for (int Frame=0;Frame<FrameCount;Frame++)
 			{
-/*			In.read((char*)&ThisNode.Anim[Frame].XPos, 4);
-			In.read((char*)&ThisNode.Anim[Frame].YPos, 4);
-			In.read((char*)&ThisNode.Anim[Frame].ZPos, 4);
-
-			In.read((char*)&ThisNode.Anim[Frame].XAng, 4);
-			In.read((char*)&ThisNode.Anim[Frame].YAng, 4);
-			In.read((char*)&ThisNode.Anim[Frame].ZAng, 4);
-			In.read((char*)&ThisNode.Anim[Frame].WAng, 4);
-
-			In.read((char*)&ThisNode.Anim[Frame].kX, 4);
-			In.read((char*)&ThisNode.Anim[Frame].kY, 4);
-			In.read((char*)&ThisNode.Anim[Frame].kZ, 4);
-
-			In.read((char*)&ThisNode.Anim[Frame].uX, 4);
-			In.read((char*)&ThisNode.Anim[Frame].uY, 4);
-			In.read((char*)&ThisNode.Anim[Frame].uZ, 4); 
-			In.read((char*)&ThisNode.Anim[Frame].uW, 4);
-*/			
 			In.read((char*)&ThisNode.Anim[Frame].Pos.x, 4);
 			In.read((char*)&ThisNode.Anim[Frame].Pos.y, 4);
 			In.read((char*)&ThisNode.Anim[Frame].Pos.z, 4);
@@ -312,7 +276,6 @@ CNode	ThisNode;
 			In.read((char*)&ThisNode.Anim[Frame].apu.y, 4);
 			In.read((char*)&ThisNode.Anim[Frame].apu.z, 4); 
 			In.read((char*)&ThisNode.Anim[Frame].apu.w, 4);
-
 			}
 
 int		ChildCount= In.Get32();
@@ -347,24 +310,6 @@ int		KeyCount;
 		for (int Frame=0;Frame<KeyCount;Frame++)
 			{
 			ThisNode.KeyAnim[Frame].Frame=In.Get32();
-/*			In.read((char*)&ThisNode.KeyAnim[Frame].XPos, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].YPos, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].ZPos, 4);
-
-			In.read((char*)&ThisNode.KeyAnim[Frame].XAng, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].YAng, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].ZAng, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].WAng, 4);
-
-			In.read((char*)&ThisNode.KeyAnim[Frame].kX, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].kY, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].kZ, 4);
-
-			In.read((char*)&ThisNode.KeyAnim[Frame].uX, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].uY, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].uZ, 4);
-			In.read((char*)&ThisNode.KeyAnim[Frame].uW, 4);
-*/
 			In.read((char*)&ThisNode.KeyAnim[Frame].Pos.x, 4);
 			In.read((char*)&ThisNode.KeyAnim[Frame].Pos.y, 4);
 			In.read((char*)&ThisNode.KeyAnim[Frame].Pos.z, 4);
@@ -652,29 +597,34 @@ CNode		*ParentNode=&SceneTree[ParentIdx];
 //-----------------------------------------------------------------------------
 // Load Anims
 // Sort KeyFrame Anims
+int	AnimCount=AnimTreeChunk.size();
+		if (AnimCount)
+		{
 CKeyAnimTree			*KATC= (CKeyAnimTree*)KeyAnimTreeChunk[0];
 CAnimTree				*NATC = (CAnimTree*)AnimTreeChunk[0];
 std::vector<CNode>const &KeyAnimTree=KATC->GetTree();
 std::vector<CNode>const &AnimTree=NATC->GetTree();
 
-	NodeCount=KeyAnimTree.size();
-	for (Node=0;Node<NodeCount;Node++)
+		NodeCount=KeyAnimTree.size();
+		for (Node=0;Node<NodeCount;Node++)
 		{
-		LoadAndShrinkAnim(KeyAnimTree[Node],AnimTree[Node],SceneTree[Node]);
+			LoadAndShrinkAnim(KeyAnimTree[Node],AnimTree[Node],SceneTree[Node]);
+		}
 		}
 
 
 //-----------------------------------------------------------------------------
 // Load Camera(s)
 int	CamCount=CameraChunk.size();
-	if (CamCount)
-	{
-	for (int Cam=0;Cam<CamCount;Cam++)
+
+		if (CamCount)
 		{
-		CCamera		*CamC= (CCamera	*)CameraChunk[Cam];
-		Camera.push_back(CamC->GetCam());
+		for (int Cam=0;Cam<CamCount;Cam++)
+			{
+			CCamera		*CamC= (CCamera	*)CameraChunk[Cam];
+			Camera.push_back(CamC->GetCam());
+			}
 		}
-	}
 	
 
 //-----------------------------------------------------------------------------
@@ -936,14 +886,6 @@ Matrix4x4	ParentMtx, ThisMtx, PosMtx, RotMtx, StrMtx, SclMtx, IStrMtx;
 
 		if (ParentIdx!=-1) ParentMtx=GetWorldMatrix(Tree,ParentIdx);
 
-
-//		ThisMtx.Identity();
-//		PosMtx.Identity(); 
-//		RotMtx.Identity(); 
-//		StrMtx.Identity(); 
-//		SclMtx.Identity(); 
-//		IStrMtx.Identity(); 
-
 // Pos
 		PosMtx.Identity(); 
 		PosMtx.SetTranslation(ThisNode.Pos);
@@ -968,10 +910,8 @@ Matrix4x4	ParentMtx, ThisMtx, PosMtx, RotMtx, StrMtx, SclMtx, IStrMtx;
 Vector3	GetWorldPos(std::vector<CNode> const &Tree,int Idx)
 {
 CNode	ThisNode=Tree[Idx];
-//Vector3	ThisPos(ThisNode.XPos,ThisNode.YPos,ThisNode.ZPos);
 Matrix4x4	WorldMtx=GetWorldMatrix(Tree,ThisNode.ParentIdx);
 
-//		if (WorldMtx!=ThisNode.WorldMtx) printf("!!!");
 		return(WorldMtx*ThisNode.Pos);
 }
 
