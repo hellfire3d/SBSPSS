@@ -66,6 +66,10 @@
 #include "gui\pointer.h"
 #endif
 
+#ifndef	__FMA_FMA_H__
+#include "fma\fma.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -462,7 +466,15 @@ void CMapScene::think(int _frames)
 			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
 			m_readyToExit=true;
 			CFader::setFadingOut();
-			GameState::setNextScene(&GameScene);
+			if(m_currentChapterSelection==3-1&&m_currentLevelSelection==1-1)
+			{
+				// Plankton FMA..
+				GameState::setNextScene(&FmaScene);
+			}
+			else
+			{
+				GameState::setNextScene(&GameScene);
+			}
 		}
 		else if(pad&PAD_TRIANGLE)
 		{
