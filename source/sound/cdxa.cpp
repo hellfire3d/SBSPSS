@@ -47,7 +47,6 @@ int CXAStream::s_masterVolumeL=XA_DEFAULT_VOL;
 int CXAStream::s_masterVolumeR=XA_DEFAULT_VOL;
 
 
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -60,6 +59,7 @@ sXAStream	&ThisStream=CXAStream::Stream[CXAStream::CurrentStream];
 
 	CXAStream::Status=Intr;
 	if (CXAStream::Mode==XA_MODE_IDLE)	return;
+//	if (CXAStream::Mode!=XA_MODE_PLAY)	return;
 
 	switch (Intr)
     	{
@@ -192,6 +192,8 @@ void	CXAStream::Pause()
 {
 		Mode=XA_MODE_PAUSE;
 		PauseFlag=1;
+		SetVolumeOff();
+		CdControlF(CdlPause,0);
 }
 
 /*****************************************************************************/
