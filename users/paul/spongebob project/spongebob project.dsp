@@ -113,6 +113,10 @@ SOURCE=..\..\..\source\enemy\nanemone.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nbblob.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nbooger.cpp
 # End Source File
 # Begin Source File

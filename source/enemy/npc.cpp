@@ -235,7 +235,7 @@ void CNpcEnemy::init()
 	m_animNo = m_data[m_type].initAnim;
 	m_frame = 0;
 
-	m_heading = m_fireHeading = 0;
+	m_heading = m_fireHeading = 128;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
 	m_velocity = 0;
@@ -1089,6 +1089,13 @@ void CNpcEnemy::processMovement(int _frames)
 		case NPC_MOVEMENT_SHARK_MAN:
 		{
 			processSharkManMovement( _frames, &moveX, &moveY );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_BALL_BLOB:
+		{
+			processBallBlobMovement( _frames, &moveX, &moveY );
 
 			break;
 		}

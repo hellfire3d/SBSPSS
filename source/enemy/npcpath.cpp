@@ -224,6 +224,9 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 	{
 		*pathComplete = incPath();
 		*waypointChange = true;
+
+		xDist = currentWaypoint->pos.vx - currentPos.vx;
+		yDist = currentWaypoint->pos.vy - currentPos.vy;
 	}
 
 	s32 headingToTarget = ratan2( yDist, xDist );
@@ -255,6 +258,9 @@ bool CNpcPath::thinkFlat( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *headi
 		pointChange = true;
 		incPath();
 	}
+
+	*distX = currentWaypoint->pos.vx - currentPos.vx;
+	*distY = currentWaypoint->pos.vy - currentPos.vy;
 
 	if ( *distX > 0 )
 	{

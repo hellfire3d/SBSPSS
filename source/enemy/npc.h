@@ -277,6 +277,7 @@ protected:
 		NPC_MOVEMENT_PARASITIC_WORM,
 		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
 		NPC_MOVEMENT_SHARK_MAN,
+		NPC_MOVEMENT_BALL_BLOB,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -416,6 +417,10 @@ protected:
 	// fish folk functions
 
 	void				processFishFolkMovementModifier( int _frames, s32 distX, s32 distY );
+
+	// ball blob functions
+
+	void				processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY );
 
 	// clam functions
 
