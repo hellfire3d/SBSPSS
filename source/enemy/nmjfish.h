@@ -50,6 +50,8 @@ protected:
 	int					m_jellyfishCount;
 	s32					m_spawnTimer;
 	s32					m_pulsateTimer;
+	s32					m_pauseTimer;
+	s32					m_maxPauseTimer;
 	s32					m_cycleWidth;
 	s32					m_halfCycleWidth;
 	bool				m_meterOn;

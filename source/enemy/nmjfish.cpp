@@ -81,6 +81,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 
 	m_movementTimer = GameState::getOneSecondInFrames() * 5;
 	m_pulsateTimer = GameState::getOneSecondInFrames();
+	m_pauseTimer = m_maxPauseTimer = GameState::getOneSecondInFrames();
 
 	m_renderScale = 4096;
 }
@@ -145,24 +146,33 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 	{
 		if ( m_pulsateTimer <= 0 )
 		{
-			// fire at player
+			if ( m_pauseTimer <= 0 )
+			{
+				// fire at player
 
-			s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+				s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
 
-			CProjectile *projectile;
-			projectile = CProjectile::Create();
-			DVECTOR newPos = Pos;
-			projectile->init( newPos, heading );
-			projectile->setGraphic( FRM__LIGHTNING2 );
+				CProjectile *projectile;
+				projectile = CProjectile::Create();
+				DVECTOR newPos = Pos;
+				projectile->init( newPos, heading );
+				projectile->setGraphic( FRM__LIGHTNING2 );
 
-			m_movementTimer = GameState::getOneSecondInFrames() * 5;
-			m_pulsateTimer = GameState::getOneSecondInFrames();
+				m_movementTimer = GameState::getOneSecondInFrames() * 5;
+				m_pulsateTimer = GameState::getOneSecondInFrames();
+				m_pauseTimer = m_maxPauseTimer;
+			}
+			else
+			{
+				m_pauseTimer -= _frames;
+			}
 		}
 		else
 		{
 			m_pulsateTimer -= _frames;
 
-			m_renderScale = 4096 + ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
+			m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+			m_renderScale += ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
 		}
 	}
 	else
@@ -579,6 +589,8 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 				m_health -= 5;
 
 				m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+				m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+				m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
 			}
 
 			m_state = NPC_GENERIC_HIT_RECOIL;
