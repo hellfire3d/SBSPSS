@@ -455,7 +455,7 @@ void CSaveLoadDatabase::createData()
 	// System details
 	m_dataBuffer.m_systemDetails.m_screenOffX=VidGetXOfs();
 	m_dataBuffer.m_systemDetails.m_screenOffY=VidGetYOfs();
-	for(i=0;i<CSoundMediator::NUM_VOLUMETYPES;i++)
+	for(i=0;i<CSoundMediator::NUM_VOLUMETYPESTOSAVE;i++)
 	{
 		m_dataBuffer.m_systemDetails.m_volumes[i]=CSoundMediator::getVolume((CSoundMediator::VOLUMETYPE)i);
 	}
@@ -483,7 +483,7 @@ void CSaveLoadDatabase::restoreData()
 
 	// System details
 	VidSetXYOfs(m_dataBuffer.m_systemDetails.m_screenOffX,m_dataBuffer.m_systemDetails.m_screenOffY);
-	for(i=0;i<CSoundMediator::NUM_VOLUMETYPES;i++)
+	for(i=0;i<CSoundMediator::NUM_VOLUMETYPESTOSAVE;i++)
 	{
 		CSoundMediator::setVolume((CSoundMediator::VOLUMETYPE)i,m_dataBuffer.m_systemDetails.m_volumes[i]);
 	}

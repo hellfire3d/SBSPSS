@@ -169,6 +169,7 @@ public:
 		VOL_FADE,
 
 		NUM_VOLUMETYPES,
+		NUM_VOLUMETYPESTOSAVE=VOL_SPEECH,
 	};
 
 	typedef enum
