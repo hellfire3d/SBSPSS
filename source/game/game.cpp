@@ -41,29 +41,35 @@ void 	CGameScene::init()
 		s_genericFont->initialise( &standardFont );
 		s_genericFont->setColour( 255, 255 , 0 );
 		VidSetClearScreen(1);
+		m_conversation.init();
 		Level.init();
-
 }
 
 /*****************************************************************************/
 
 void	CGameScene::shutdown()
 {
-		s_genericFont->dump();		delete s_genericFont;
 		Level.shutdown();
-
+		m_conversation.shutdown();
+		s_genericFont->dump();		delete s_genericFont;
 }
 
 /*****************************************************************************/
 void 	CGameScene::render()
 {
+		m_conversation.render();
 		Level.render();
 }
 
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
+		m_conversation.think(_frames);
 		Level.think(_frames);
+
+		if(!m_conversation.isActive()&&PadGetDown(0)&PAD_START)
+			m_conversation.trigger(SCRIPTS_SPEECHTEST_DAT);
+
 }
 
 /*****************************************************************************/

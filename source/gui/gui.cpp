@@ -432,30 +432,49 @@ void initGUIStuff()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int abcd=3;
 void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 {
-	sFrameHdr	*vbam,*hbam;
+	sFrameHdr	*vbam,*hbam,*spr1,*spr2;
 	int			totalSize,numSprites,step;
 	int			x1,y1,x2,y2;
-	int			i;
+	int			i,x,y;
 
 
 	vbam=s_uiSpriteBank->getFrameHeader(FRM__VBAMBOO);
 	hbam=s_uiSpriteBank->getFrameHeader(FRM__HBAMBOO);
+	spr1=spr2=0;	// Just to keep the compiler quiet.. :/
 
 	// Top & bottom
-	totalSize=_w-vbam->W-hbam->W;
+	totalSize=_w+vbam->W-hbam->W;
 	numSprites=(totalSize/hbam->W)+1;
+if(abcd&1)
 	if(numSprites>1)
 	{
 		step=(totalSize<<4)/(numSprites-1);
-		x1=(_x+(vbam->W/2)+(hbam->W/2))<<4;
+		x1=(_x-(vbam->W/2)+(hbam->W/2))<<4;
 		y1=_y-(hbam->H/2);
 		y2=y1+_h;
 		for(i=0;i<numSprites;i++)
 		{
-			s_uiSpriteBank->printFT4(hbam,(x1>>4)-(hbam->W/2),y1,0,0,_ot);
-			s_uiSpriteBank->printFT4(hbam,(x1>>4)-(hbam->W/2),y2,0,0,_ot);
+			x=(x1>>4)-(hbam->W/2);
+			if(i==0)
+			{
+				spr1=s_uiSpriteBank->getFrameHeader(FRM__HBAMBOOTL);
+				spr2=s_uiSpriteBank->getFrameHeader(FRM__HBAMBOOBL);
+				s_uiSpriteBank->printFT4(spr1,x+hbam->W-spr1->W-1,y1,0,0,_ot);
+				s_uiSpriteBank->printFT4(spr2,x+hbam->W-spr2->W-1,y2,0,0,_ot);
+			}
+			else if(i<numSprites-1)
+			{
+				s_uiSpriteBank->printFT4(hbam,x,y1,0,0,_ot);
+				s_uiSpriteBank->printFT4(hbam,x,y2,0,0,_ot);
+			}
+			else
+			{
+				s_uiSpriteBank->printFT4(FRM__HBAMBOOTR,x,y1,0,0,_ot);
+				s_uiSpriteBank->printFT4(FRM__HBAMBOOBR,x,y2,0,0,_ot);
+			}
 			x1+=step;
 		}
 	}
@@ -464,23 +483,40 @@ void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 		x1=_x-(_w-hbam->W)/2;
 		y1=_y-(hbam->H/2);
 		y2=y1+_h;
-		s_uiSpriteBank->printFT4(vbam,x1,y1,0,0,_ot);
-		s_uiSpriteBank->printFT4(vbam,x1,y2,0,0,_ot);
+		s_uiSpriteBank->printFT4(hbam,x1,y1,0,0,_ot);
+		s_uiSpriteBank->printFT4(hbam,x1,y2,0,0,_ot);
 	}
 
 	// Left & right
-	totalSize=_h-hbam->H-vbam->H;
+	totalSize=_h+hbam->H-vbam->H;
 	numSprites=(totalSize/vbam->H)+1;
+if(abcd&2)
 	if(numSprites>1)
 	{
 		step=(totalSize<<4)/(numSprites-1);
-		y1=(_y+(hbam->H/2)+(vbam->H/2))<<4;
+		y1=(_y-(hbam->H/2)+(vbam->H/2))<<4;
 		x1=_x-(vbam->W/2);
 		x2=x1+_w;
 		for(i=0;i<numSprites;i++)
 		{
-			s_uiSpriteBank->printFT4(vbam,x1,(y1>>4)-(vbam->H/2),0,0,_ot);
-			s_uiSpriteBank->printFT4(vbam,x2,(y1>>4)-(vbam->H/2),0,0,_ot);
+			y=(y1>>4)-(vbam->H/2);
+			if(i==0)
+			{
+				spr1=s_uiSpriteBank->getFrameHeader(FRM__VBAMBOOTL);
+				spr2=s_uiSpriteBank->getFrameHeader(FRM__VBAMBOOTR);
+				s_uiSpriteBank->printFT4(spr1,x1,y+vbam->H-spr1->H-1,0,0,_ot);
+				s_uiSpriteBank->printFT4(spr2,x2,y+vbam->H-spr2->H-1,0,0,_ot);
+			}
+			else if(i<numSprites-1)
+			{
+				s_uiSpriteBank->printFT4(vbam,x1,y,0,0,_ot);
+				s_uiSpriteBank->printFT4(vbam,x2,y,0,0,_ot);
+			}
+			else
+			{
+				s_uiSpriteBank->printFT4(FRM__VBAMBOOBL,x1,y,0,0,_ot);
+				s_uiSpriteBank->printFT4(FRM__VBAMBOOBR,x2,y,0,0,_ot);
+			}
 			y1+=step;
 		}
 	}

@@ -716,7 +716,7 @@ SOURCE=..\..\..\data\scripts\defs\response.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\defs\text.scr
+SOURCE=..\..\..\data\scripts\defs\trans.scr
 # End Source File
 # End Group
 # Begin Source File

@@ -25,6 +25,7 @@ while(1==1)
 {
 	// Readout for fps :)
 	$tmp0=_getFrameTime();
+	if($tmp0>10)$tmp0=10;
 	$tmp5=50;
 	do{
 		_drawSprite(FRM__BUTU,$tmp5,50,0);

@@ -15,6 +15,8 @@
 ; Some generic strings..
 ; ---------------------------------------------------------------
 
+[STR__OK]
+eng=OK
 [STR__YES]
 eng=Yes
 [STR__NO]
@@ -31,6 +33,8 @@ eng=NOW LOADING..
 ; NOTE: This string just contains a single space
 [STR__BLANK]
 eng= 
+
+
 
 
 ; ---------------------------------------------------------------
@@ -98,6 +102,25 @@ eng=BGM VOLUME
 eng=SFX VOLUME
 [STR__FRONTEND__SPEECH]
 eng=SPEECH VOLUME
+
+
+
+
+; ---------------------------------------------------------------
+; Ingame text
+; All ingame text *must* be prefixed with STR__INGAME__ otherwise
+; it won't get passed to the script compiler!
+; ---------------------------------------------------------------
+
+; Chapter 1 - Level 1 - Test
+[STR__INGAME__SANDY__TEST1]
+eng=Take that 'ya sorry ol' clam. Y'all need to learn some manners!
+[STR__INGAME__SANDY__TEST2]
+eng=Hold on there little square dude if you want to defend yourself you need to do this!!!!
+[STR__INGAME__SPONGEBOB__TEST3]
+eng=Did that make sense..?
+
+
 
 
 ; ---------------------------------------------------------------

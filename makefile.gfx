@@ -142,11 +142,14 @@ TRANS_OUT_DAT :=	$(foreach FILE,	$(LANGUAGES),$(TRANS_OUT_DIR)/$(FILE).dat) $(TR
 #$(TRANS_OUT_KANJI_TAB)
 TRANS_OUT_HDR :=	$(INC_DIR)/trans.h
 
+SCRIPT_TRANS_HDR :=	$(GAME_DATA_DIR)/scripts/defs/trans.scr
+
 TRANS_OUT_FILES :=	$(TRANS_OUT_HDR) $(TRANS_OUT_DAT) $(TRANS_OUT_LBM_LIST) $(TRANS_FINAL_DAT_FILE)
 
 $(TRANS_OUT_FILES) : $(TRANS_IN_FILES)
 	perl tools/perl/pl/lang.pl $(TRANS_IN_ENG)  $(TRANS_FINAL_DAT_FILE) $(ALL_TRANS_IN_FILES)
 	transtext $(LANG_OP) -h:$(TRANS_OUT_HDR) -o:$(TRANS_OUT_DIR) $(TRANS_FINAL_DAT_FILE)
+	perl tools/perl/pl/text_extract.pl $(TRANS_OUT_HDR) $(SCRIPT_TRANS_HDR) STR__INGAME__
 
 translate : $(TRANS_OUT_FILES)
 	@$(ECHO) made translations
@@ -165,7 +168,8 @@ UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 UI_GFX_FONT :=				font
 UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
 
-UI_GFX_NONTRANS :=			
+UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
+							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TRANS :=				+vbamboo.bmp +vbambootl.bmp +vbambootr.bmp +vbamboobl.bmp +vbamboobr.bmp \
@@ -358,7 +362,8 @@ scripts : $(SCRIPTS_OUT)
 cleanscripts:
 	@$(RM) -f $(SCRIPTS_OUT)
 
-$(SCRIPTS_OUT_DIR)/%.dat : $(SCRIPTS_IN_DIR)/%.scr
+# Saves a lot of hassle to make the scripts dependant upon the text database too..
+$(SCRIPTS_OUT_DIR)/%.dat : $(SCRIPTS_IN_DIR)/%.scr $(SCRIPT_TRANS_HDR)
 	@scripter $< $@
 
 GRAF_DIRS_TO_MAKE	+=	$(SCRIPTS_OUT_DIR)

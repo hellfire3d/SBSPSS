@@ -31,6 +31,10 @@ question/response
 #include "system\gstate.h"
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -126,6 +130,7 @@ static signed short func_setCharacterAnimation(unsigned short *_args)
   ---------------------------------------------------------------------- */
 static signed short func_setText(unsigned short *_args)
 {
+	CConversation::setCharacterAndText(_args[0],_args[1]);
 	return 0;
 }
 
@@ -163,6 +168,7 @@ static signed short func_gotItem(unsigned short *_args)
   ---------------------------------------------------------------------- */
 static signed short func_setResponseOptions(unsigned short *_args)
 {
+	CConversation::setResponseOptions(_args[0]);
 	return 0;
 }
 
@@ -175,7 +181,7 @@ static signed short func_setResponseOptions(unsigned short *_args)
   ---------------------------------------------------------------------- */
 static signed short func_getResponse(unsigned short *_args)
 {
-	return 0;
+	return CConversation::getResponse();
 }
 
 
