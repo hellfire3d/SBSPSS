@@ -79,12 +79,12 @@ void	CSpatulaPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int spat_glintspeed=3;
+int spat_glintspeed=1;
 int spat_maxglint=100;
 int spat_glintrotspeed=50;
 int spat_glintgrowspeed=5;
 DVECTOR	spat_gxy1={0,28};
-DVECTOR spat_gxy2={20,0};
+DVECTOR spat_gxy2={50,-35};
 static const int spat_glintFrames[]={FRM__GLINT1,FRM__GLINT2,FRM__GLINT3,FRM__GLINT4,FRM__GLINT4,FRM__GLINT3,FRM__GLINT2,FRM__GLINT1};
 void	CSpatulaPickup::thinkPickup(int _frames)
 {

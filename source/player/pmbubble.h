@@ -43,11 +43,12 @@ public:
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
 
+	void						giveBubbleAmmo(int _amount)			{m_bubbleCount+=_amount;}
+
 private:
 	enum
 	{
-		BUBBLE_AMMO=10,
-		BUBBLE_DELAY=60*1,
+		BUBBLE_DELAY=30*1,
 	};
 
 	int							canBlowBubbleFromThisState();

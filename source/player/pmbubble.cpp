@@ -57,7 +57,7 @@ void	CPlayerModeBubbleMixture::enter()
 	CSoundMediator::playSfx(CSoundMediator::SFX_BUBBLE_WAND);
 	m_blowing=false;
 	m_bubbleDelay=0;
-	m_bubbleCount=BUBBLE_AMMO;
+	m_player->giveBubbleAmmo();
 }
 
 /*----------------------------------------------------------------------
@@ -66,6 +66,8 @@ void	CPlayerModeBubbleMixture::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR buboff={-40,-40};
+int bubam;
 void	CPlayerModeBubbleMixture::think()
 {
 	// If we're blowing then restore the 'real' anim number/frame before
@@ -86,19 +88,24 @@ void	CPlayerModeBubbleMixture::think()
 	else
 	{
 		// Start to blow?
-		if(!m_blowing&&getPadInputDown()&PI_ACTION&&canBlowBubbleFromThisState())
+		if(!m_blowing&&getPadInputDown()&PI_ACTION&&canBlowBubbleFromThisState()&&m_player->getBubbleAmmo())
 		{
 			// Spawn the bubbly platform thingy..!
-			//	pos is m_player->getPos();
-			//	dir is m_player->getFacing();
+			CNpcPlatform	*bubble;
+			DVECTOR			pos;
+			bubble=new ("bubble platform") CNpcPlatform;
+			bubble->setType( CNpcPlatform::NPC_BUBBLE_PLATFORM );
+			pos=m_player->getPos();
+			pos.vx+=buboff.vx*m_player->getFacing();
+			pos.vy+=buboff.vy;
+			bubble->init(pos,4);
 
-			// Start the anim off
+			// Start the blowing anim off
 			m_blowFrame=0;
 			m_blowing=true;
 
-			CNpcPlatform *bubble = new ("bubble platform") CNpcPlatform;
-			bubble->setType( CNpcPlatform::NPC_BUBBLE_PLATFORM );
-			bubble->init( m_player->getPos(), 4 );
+			// One less bubble..
+			m_player->useOneBubble();
 		}
 	}
 
@@ -114,12 +121,9 @@ void	CPlayerModeBubbleMixture::think()
 			m_player->setAnimFrame(m_savedAnimFrame);
 			m_blowing=false;
 			m_bubbleDelay=BUBBLE_DELAY;
-			if(--m_bubbleCount==0)
-			{
-				m_player->setMode(PLAYER_MODE_FULLUNARMED);
-			}
 		}
 	}
+	bubam=m_player->getBubbleAmmo();
 }
 
 /*----------------------------------------------------------------------

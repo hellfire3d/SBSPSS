@@ -258,6 +258,8 @@ void	CGameScene::initLevel()
 	pos.vx+=64;	createPickup(PICKUP__SPATULA,&pos);
 	pos.vx+=64;	createPickup(PICKUP__JELLY_LAUNCHER_AMMO,&pos);
 	pos.vx+=64;	createPickup(PICKUP__BUBBLE_MIXTURE,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__BUBBLE_WAND,&pos);		
+	pos.vx+=64;	createPickup(PICKUP__NET,&pos);		
 	pos.vx+=64;	createPickup(PICKUP__GLASSES,&pos);		
 	pos.vx+=64;	createPickup(PICKUP__SQUEAKY_SHOES,&pos);		
 	pos.vx+=64;	createPickup(PICKUP__BALLOON,&pos);		
@@ -265,10 +267,10 @@ void	CGameScene::initLevel()
 	pos.vx+=64;	createPickup(PICKUP__CORAL_BLOWER,&pos);		
 	pos.vx+=64;	createPickup(PICKUP__QUEST_ITEM__TEST,&pos);		
 
-	CNpcPlatform	*platform;
-	platform=new ("test platform") CNpcPlatform;
-	platform->init();
-	platform->setLayerCollision( Level.getCollisionLayer() );
+//	CNpcPlatform	*platform;
+//	platform=new ("test platform") CNpcPlatform;
+//	platform->init();
+//	platform->setLayerCollision( Level.getCollisionLayer() );
 #endif
 
 	s_levelFinished=false;

@@ -246,11 +246,16 @@ public:
 	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
 	void			giveInvinvibilityRing()		{m_invinvibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
+
+	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;}
+	void			useOneBubble()				{m_bubbleAmmo--;}
+	int				getBubbleAmmo()				{return m_bubbleAmmo;}
 private:
 	int				m_glassesFlag;
 	int				m_squeakyBootsTimer;
 	int				m_invinvibilityRingTimer;
 	int				m_divingHelmet;
+	int				m_bubbleAmmo;
 
 	// Platforms
 public:

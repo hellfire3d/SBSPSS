@@ -67,6 +67,10 @@
 #include "pickups\phelmet.h"
 #endif
 
+#ifndef	__PICKUPS_PNET_H__
+#include "pickups\pnet.h"
+#endif
+
 #ifndef	__PICKUPS_PQUEST_H__
 #include "pickups\pquest.h"
 #endif
@@ -309,6 +313,14 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 		case PICKUP__BUBBLE_MIXTURE:
 			pickup=new ("BubbleAmmoPickup") CBubbleMixturePickup();
+			break;
+
+		case PICKUP__BUBBLE_WAND:
+			pickup=new ("BubbleWandPickup") CBubbleWandPickup();
+			break;
+
+		case PICKUP__NET:
+			pickup=new ("NetPickup") CNetPickup();
 			break;
 
 		case PICKUP__GLASSES:

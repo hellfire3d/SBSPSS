@@ -745,6 +745,14 @@ SOURCE=..\..\..\source\pickups\plife.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\pickups\pnet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pnet.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\pickups\pquest.cpp
 # End Source File
 # Begin Source File

@@ -77,7 +77,7 @@ void	CBubbleMixturePickup::init()
   ---------------------------------------------------------------------- */
 void	CBubbleMixturePickup::collect(class CPlayer *_player)
 {
-	_player->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
+	_player->giveBubbleAmmo();
 	CBaseRespawningPickup::collect(_player);
 }
 
@@ -121,6 +121,62 @@ void	CBubbleMixturePickup::renderPickup(DVECTOR *_pos)
 	fh=sprites->getFrameHeader(FRM__BUBBLEMIXTURE);
 	x=_pos->vx-(fh->W/2);
 	y=_pos->vy-(fh->H/2)+((msin(m_sin)*bubmix_bobscale)>>12);
+	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
+}
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBubbleWandPickup::init()
+{
+	CBaseRespawningPickup::init();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBubbleWandPickup::collect(class CPlayer *_player)
+{
+	_player->setMode(PLAYER_MODE_BUBBLE_MIXTURE);
+	CBaseRespawningPickup::collect(_player);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CBubbleWandPickup::getRespawnTime()
+{
+	return 60*10;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBubbleWandPickup::renderPickup(DVECTOR *_pos)
+{
+	SpriteBank	*sprites;
+	sFrameHdr	*fh;
+	int			x,y;
+
+	sprites=getSpriteBank();
+	fh=sprites->getFrameHeader(FRM__BUBBLEWAND);
+	x=_pos->vx-(fh->W/2);
+	y=_pos->vy-(fh->H/2);
 	sprites->printFT4(fh,x,y,0,0,PICKUPS_OT_POS);
 }
 

@@ -250,9 +250,6 @@ m_animFrame=0;
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
 
-	m_glassesFlag=0;
-	m_squeakyBootsTimer=0;
-	m_invinvibilityRingTimer=0;
 	m_divingHelmet=false;
 }
 
@@ -707,6 +704,11 @@ void CPlayer::respawn()
 	s_health=MAX_HEALTH;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
+
+	m_glassesFlag=0;
+	m_squeakyBootsTimer=0;
+	m_invinvibilityRingTimer=0;
+	m_bubbleAmmo=0;
 
 	clearPlatform();
 }

@@ -53,6 +53,21 @@ private:
 };
 
 
+class CBubbleWandPickup : public CBaseRespawningPickup
+{
+public:
+	virtual void		init();
+
+	virtual void		collect(class CPlayer *_player);
+
+protected:
+	virtual int			getRespawnTime();
+
+	virtual void		renderPickup(DVECTOR *_pos);
+
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */
