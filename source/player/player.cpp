@@ -2823,7 +2823,6 @@ int		CPlayer::moveVertical(int _moveDistance)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int checkside=+1;
 int		CPlayer::moveHorizontal(int _moveDistance)
 {
 	int	hitWall;
@@ -2890,29 +2889,43 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 			{
 				// SB touching ground on at least one edge
 				colHeight=getHeightFromGround(x,pos.vy,16);
-				if(colHeight>=-2&&colHeight<=2)
-				{
-					// Move along the ground
-					pos.vx+=dirToMove;
-					pos.vy+=colHeight;
 
-					// Heh - these 4 lines stop SB going down a slope on the 'wrong edge' :)
-					colHeight=getHeightFromGround(x2,pos.vy,16);
-					if(colHeight<0)
+				// Head collision ( a bit of a hack )
+				int oktomove=false;
+				switch ( CGameScene::getCollision()->getCollisionBlock( x, pos.vy-HEIGHT_FOR_HEAD_COLLISION ) & COLLISION_TYPE_MASK )
+				{
+					case COLLISION_TYPE_NORMAL:
+						oktomove=true;
+						break;
+
+					default:
+						break;
+				}
+				if(oktomove)
+				{
+					if(colHeight>=-2&&colHeight<=2)
 					{
+						// Move along the ground
+						pos.vx+=dirToMove;
 						pos.vy+=colHeight;
-					}
-				}
-				else if(colHeight<0)
-				{
-					// Hit wall
-					hitWall=true;
-				}
-				else
-				{
-					// Moved off edge of ledge
-					pos.vx+=dirToMove;
 
+						// Heh - these 4 lines stop SB going down a slope on the 'wrong edge' :)
+						colHeight=getHeightFromGround(x2,pos.vy,16);
+						if(colHeight<0)
+						{
+							pos.vy+=colHeight;
+						}
+					}
+					else if(colHeight<0)
+					{
+						// Hit wall
+						hitWall=true;
+					}
+					else
+					{
+						// Moved off edge of ledge
+						pos.vx+=dirToMove;
+					}
 				}
 			}
 			else
