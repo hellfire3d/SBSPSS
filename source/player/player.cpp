@@ -759,7 +759,18 @@ if(newmode!=-1)
 				shove(posDelta);
 
 				int platformOffset = ( ( CNpcPlatform* ) platform )->getHeightFromPlatformAtPosition( Pos.vx, Pos.vy );
-				int height=CGameScene::getCollision()->getHeightFromGround(Pos.vx,Pos.vy,16);
+
+				int height = 16;
+				
+				for ( int testX = -1 ; testX < 2 ; testX++ )
+				{
+					int testHeight = CGameScene::getCollision()->getHeightFromGround(Pos.vx + (checkx * testX),Pos.vy,16);
+
+					if ( testHeight < height )
+					{
+						height = testHeight;
+					}
+				}
 
 				// Hmm.. this *almost* stops him elevating through walls :/
 				if ( platformOffset < height )
