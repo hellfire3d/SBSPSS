@@ -281,6 +281,8 @@ void	CPlayer::shutdown()
 		s_playerModes[i]->shutdown();
 	}
 
+	delete m_actorGfx;
+
 	m_spriteBank->dump();	delete m_spriteBank;
 	m_fontBank->dump();		delete m_fontBank;
 
