@@ -271,7 +271,7 @@ protected:
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
-	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
+	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY, s32 *heading );
 
 	// small jellyfish functions
 

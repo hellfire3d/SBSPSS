@@ -54,7 +54,7 @@ class CLayerCollision	*CNpc::m_layerCollision;
 
 void CNpc::init()
 {
-	m_type = NPC_FISH_FOLK;
+	m_type = NPC_SHARK_MAN;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -723,7 +723,7 @@ void CNpc::processMovement(int _frames)
 
 		case NPC_MOVEMENT_FIXED_PATH_WALK:
 		{
-			processGenericFixedPathWalk( _frames, &moveX, &moveY );
+			processGenericFixedPathWalk( _frames, &moveX, &moveY, &m_heading );
 
 			break;
 		}

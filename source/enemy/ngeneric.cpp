@@ -99,11 +99,11 @@ void CNpc::processGenericGetUserDist( int _frames, s32 *distX, s32 *distY )
 	*distY = playerPos.vy - this->Pos.vy;
 }
 
-void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
+void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY, s32 *heading )
 {
 	s32 maxHeight = 10;
 	s32 distX, distY;
-	s32 fallSpeed = 5;
+	s32 fallSpeed = 2;
 	s8 yMovement = fallSpeed * _frames;
 	s32 groundHeight;
 
@@ -112,7 +112,7 @@ void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY )
 
 	// ignore y component of waypoint, since we are stuck to the ground
 
-	if ( m_npcPath.think2D( Pos, &distX, &distY ) )
+	if ( m_npcPath.think2D( Pos, &distX, &distY, heading ) )
 	{
 		// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
 

@@ -231,7 +231,7 @@ s32 CNpcPath::think( DVECTOR currentPos, bool *pathComplete, bool *waypointChang
 	return( headingToTarget );
 }
 
-bool CNpcPath::think2D( DVECTOR currentPos, s32 *distX, s32 *distY )
+bool CNpcPath::think2D( DVECTOR currentPos, s32 *distX, s32 *distY, s32 *heading )
 {
 	bool pointChange = false;
 
@@ -254,6 +254,15 @@ bool CNpcPath::think2D( DVECTOR currentPos, s32 *distX, s32 *distY )
 	{
 		pointChange = true;
 		incPath();
+	}
+
+	if ( *distX > 0 )
+	{
+		*heading = 0;
+	}
+	else
+	{
+		*heading = 2048;
 	}
 
 	return( pointChange );
