@@ -51,7 +51,7 @@ CD_FILESYS_LIB :=		CMXBoot
 backend_src :=		gameover \
 					complete
 
-enemy_src :=		
+enemy_src :=		enemy
 
 fileio_src :=		fileio \
 					$($(FILE_SYSTEM)_FILESYS_SRC)

@@ -107,6 +107,14 @@ SOURCE=..\..\..\source\backend\gameover.h
 # Begin Group "enemy"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\enemy.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\enemy.h
+# End Source File
 # End Group
 # Begin Group "fileio"
 
