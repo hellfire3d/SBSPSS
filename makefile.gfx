@@ -631,7 +631,7 @@ SCRIPTS_LIST		:=	ch1l1_01 ch1l1_02 ch1l2_01 ch1l2_02 ch1l2_03 ch1l4_01 ch1l4_02 
 						c5l1_celebrate c5l2_celebrate c5l3_celebrate c5l4_celebrate \
 						triggerspeech_151 triggerspeech_152 triggerspeech_153 triggerspeech_154 \
 						triggerspeech_155 triggerspeech_156 triggerspeech_157 triggerspeech_158 \
-						triggerspeech_159
+						triggerspeech_159 triggerspeech_028
  
 SCRIPTS_IN_DIR		:=	$(GAME_DATA_DIR)/scripts
  

@@ -2956,6 +2956,10 @@ SOURCE=..\..\..\data\scripts\fma_plankton.scr
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\data\scripts\triggerspeech_028.scr
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\data\scripts\triggerspeech_151.scr
 # End Source File
 # Begin Source File

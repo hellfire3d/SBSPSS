@@ -125,7 +125,7 @@ const sSpeechTable	SpeechTable[]=
 {SPEECH_025,STR__INGAME__FMA_C2_SB1},
 {SPEECH_026,STR__INGAME__CH2__L1__KRUSTY1},
 {SPEECH_027,STR__INGAME__CH2__L1__KRUSTY2},
-{SPEECH_028,-1},
+{SPEECH_028,STR__INGAME__TRIGGERSPEECH_028},
 {SPEECH_029,-1},	// Another Meow
 {SPEECH_030,STR__INGAME__CH2__L1__SBCELEBRATE},
 {SPEECH_031,STR__INGAME__CH2__L2__PATRICK1},
@@ -821,6 +821,7 @@ void CConversation::registerConversationLevelScripts(int level)
 					registerConversationScript(SCRIPTS_CH2L1_01_DAT);
 					registerConversationScript(SCRIPTS_CH2L1_02_DAT);
 					registerConversationScript(SCRIPTS_C2L1_CELEBRATE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_028_DAT);	// gary
 					break;
 				}
 
@@ -961,6 +962,7 @@ void CConversation::registerConversationLevelScripts(int level)
 				case 5:
 				{
 					registerConversationScript(SCRIPTS_TRIGGERSPEECH_159_DAT);	// weight
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_028_DAT);	// gary
 					break;
 				}
 

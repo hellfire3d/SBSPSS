@@ -463,6 +463,8 @@ eng=I got it! Well, celebration time is over! Now back to Bikini Bottom to add t
 ; Speech trigger texts
 ; ---------------------------------------------------------------
 
+[STR__INGAME__TRIGGERSPEECH_028]
+eng=Now Gary, follow me. I’ll protect you!! Just head for your food Gary!!
 [STR__INGAME__TRIGGERSPEECH_151]
 eng=Hey, I can use this net to catch jellyfish and throw them at those annoying critters!
 [STR__INGAME__TRIGGERSPEECH_152]
@@ -480,7 +482,7 @@ eng=I can make bubbles! And what do you know, I can jump on them!
 [STR__INGAME__TRIGGERSPEECH_158]
 eng=A few bubbles should get me up there...
 [STR__INGAME__TRIGGERSPEECH_159]
-eng=I cant't lift that.. hmmmm. Those pulleys should do the trick.
+eng=I can't lift that.. hmmmm. Those pulleys should do the trick.
 
 
 

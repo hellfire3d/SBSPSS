@@ -31,6 +31,11 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
+
 #ifndef __ANIM_GARY_HEADER__
 #include <ACTOR_GARY_Anim.h>
 #endif
@@ -457,7 +462,7 @@ void CNpcGaryFriend::start()
 			m_garySpeech = true;
 			m_garyMeow = false;
 			m_garySB = true;
-			CSoundMediator::playSpeech( SPEECH_028 );
+			CConversation::trigger(SCRIPTS_TRIGGERSPEECH_028_DAT);
 		}
 		else
 		{
