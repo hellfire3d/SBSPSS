@@ -980,7 +980,7 @@ eng=Stavit Young
 ; Prompt Text
 ; ---------------------------------------------------------------
 [STR_PROMPT_NET_TITLE]
-eng=Jellyfishing Net
+eng=JELLYFISHING NET
 [STR_PROMPT_NET_UNEQUIP]
 eng=Unequip Net
 [STR_PROMPT_NET_CATCH]
@@ -989,32 +989,32 @@ eng=Catch JellyFish
 eng=Throw JellyFish
 
 [STR_PROMPT_KARATE_TITLE]
-eng=Karate Glove
+eng=KARATE GLOVE
 [STR_PROMPT_KARATE_UNEQUIP]
 eng=Unequip Glove
 [STR_PROMPT_KARATE_CHOP]
 eng=Chop
 
 [STR_PROMPT_CORALBLOWER_TITLE]
-eng=Coral Blower
+eng=CORAL BLOWER
 [STR_PROMPT_CORALBLOWER_UNEQUIP]
 eng=Unequip Coral Blower
 [STR_PROMPT_CORALBLOWER_SUCK]
-eng=Suck Up Coral
+eng=Collect Coral
 [STR_PROMPT_CORALBLOWER_FIRE]
 eng=Fire Coral
 [STR_PROMPT_CORALBLOWER_AIM]
 eng=Aim Coral
 
 [STR_PROMPT_BUBBLEWAND_TITLE]
-eng=Bubble Wand
+eng=BUBBLE WAND
 [STR_PROMPT_BUBBLEWAND_UNEQUIP]
 eng=Unequip Bubble Wand
 [STR_PROMPT_BUBBLEWAND_BLOW]
 eng=Blow Bubble
 
 [STR_PROMPT_JELLYLAUNCHER_TITLE]
-eng=Jelly Launcher
+eng=JELLY LAUNCHER
 [STR_PROMPT_JELLYLAUNCHER_UNEQUIP]
 eng=Unequip Jelly Launcher
 [STR_PROMPT_JELLYLAUNCHER_FIRE]
