@@ -806,7 +806,9 @@ void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 							player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
 						}
 
-						if ( m_state == SUB_SHARK_CHARGE && player->getMode() != PLAYER_MODE_SWALLOW )
+						if ( m_state == SUB_SHARK_CHARGE &&
+								player->getMode() != PLAYER_MODE_SWALLOW &&
+								player->getMode() != PLAYER_MODE_DEAD )
 						{
 							m_carryPlayer = true;
 							m_oldPlayerMode = player->getMode();
