@@ -61,8 +61,6 @@ public:
 protected:
 	virtual int			getWeaponSpriteFrame();
 
-private:
-	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_JELLY_LAUNCHER;}
 };
 
 
