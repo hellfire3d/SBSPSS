@@ -118,6 +118,11 @@ POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderP
 			setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
 			setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
 			Frame=Ft4;
+			if (renderFrame==FRM__BUBBLE_2)
+			{
+				Ft4->u1++; Ft4->u3++;
+				Ft4->v2++; Ft4->v3++;
+			}
 }
 
 

@@ -74,6 +74,9 @@ void CNpcBubblePlatform::render()
 				// Evil hard coded Offsets
 				POLY_FT4 *SprFrame = CGameScene::getSpriteBank()->printRotatedScaledSprite( FRM__BUBBLE_1, renderPos.vx, renderPos.vy - 16, m_scale, ONE, 0, 10 );
 				setRGB0( SprFrame, 128, 128, 255 );
+				SprFrame->u1++; SprFrame->u3++;
+				SprFrame->v2++; SprFrame->v3++;
+
 			}
 		}
 	}
