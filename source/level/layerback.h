@@ -44,27 +44,16 @@ public:
 			MOVE_SHIFT=4,
 			SPRITE_MAX=16,
 
-			NO_SPIN=1<<0,
-			NO_SCALE=1<<1,
-			NO_MOVE=1<<2,
-			NO_COLOR=1<<3,
-		};
-
-		enum	BackSpriteType
-		{
-			FLOWER=0,
-			GHOST,
-			PUMPKIN,
-			BUBBLE,
-			BUBBLESMALL,
-			FISHBONE,
+			SPIN=1<<0,
+			SCALE=1<<1,
+			MOVE=1<<2,
+			COLOR=1<<3,
 		};
 
 		CLayerBack(sLayerHdr *Hdr,sTile *TileBank);
 		~CLayerBack();
 
 		void	init(DVECTOR &MapPos,int Shift);
-		void	SetFrames(int Spr0,int Spr1);
 		void	shutdown();
 		void	think(DVECTOR &MapPos);
 		void	render();
@@ -78,7 +67,6 @@ protected:
 		int				BandCount,BandHeight;
 		POLY_G4			Band[LAYER_SHADE_RGB_MAX-1];
 
-		SpriteBank		*Sprites;
 		sBackSprite		SpriteList[SPRITE_MAX];
 
 static	sBackRGBTable	BackRGBTable[];

@@ -410,33 +410,6 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 ////////////////////////////////	
 }
 
-void SpriteBank::RotateBox(sBox *B,int W,int H,int _xScale,int _yScale,int _rot)
-{
-int		halfW,halfH;
-int		ca,sa;
-int		cw,ch,sw,sh;
-int		width,height;
-int		aspect;
-
-	halfW=(W*_xScale)>>(12+1);
-	halfH=(H*_yScale)>>(12+1);
-	ca=mcos(_rot);
-	sa=msin(_rot);
-	cw=(ca*halfW)>>12;
-	ch=(ca*halfH)>>12;
-	sw=(sa*halfW)>>12;
-	sh=(sa*halfH)>>12;
-
-//	aspect=(512<<12)/384;//((_fh->H<<12)/_fh->W)/2;
-//	ch=(ch*aspect)>>12;
-//	sh=(sh*aspect)>>12;
-
-	B->x0=-cw+sh;	B->y0=-sw-ch;
-	B->x1=+cw+sh;	B->y1=+sw-ch;
-	B->x2=-cw-sh;	B->y2=-sw+ch;
-	B->x3=+cw-sh;	B->y3=+sw+ch;
-
-}
 
 /*----------------------------------------------------------------------
 	Function:

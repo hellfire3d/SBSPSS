@@ -38,8 +38,6 @@ virtual	int		canPause();
 		static void		setReadyToExit()	{s_readyToExit=true;}
 		static void		levelFinished()		{s_levelFinished=true;}
 	
-static	SpriteBank	*GetBackSprites()	{return(s_BackSprites);}
-
 protected:
 
 		void			initLevel();
@@ -53,8 +51,6 @@ protected:
 
 		static int			s_readyToExit;
 		static int			s_levelFinished;
-
-		static	SpriteBank	*s_BackSprites;
 
 };
 

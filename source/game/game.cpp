@@ -91,8 +91,6 @@ int s_globalLevelSelectThing=120;
 int CGameScene::s_readyToExit;
 int CGameScene::s_levelFinished;
 
-SpriteBank	*CGameScene::s_BackSprites;
-
 /*****************************************************************************/
 
 CGameScene	GameScene;
@@ -117,9 +115,6 @@ void 	CGameScene::init()
 		s_readyToExit=false;
 
 		CFader::setFadingIn();
-
-		s_BackSprites=new ("BackGfx Sprites") SpriteBank();
-		s_BackSprites->load(LEVELS_LEVELBACKGFX_SPR);
 
 		initLevel();
 		CFileIO::EnableASync(true);
@@ -152,7 +147,6 @@ void	CGameScene::shutdown()
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
 		s_genericFont->dump();		delete s_genericFont;
-		s_BackSprites->dump();		delete s_BackSprites;
 }
 
 /*****************************************************************************/

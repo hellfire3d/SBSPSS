@@ -35,16 +35,6 @@ sBackRGBTable	CLayerBack::BackRGBTable[]=
 
 #define	BackRGBTableSize	sizeof(BackRGBTable)/sizeof(sBackRGBTable)
 
-sBackSpriteInfo	CLayerBack::InfoTab[]=
-{
-{FRM_FLOWER,0,0},
-{FRM_GHOST,0,3},
-{FRM_PUMPKIN,0,3},
-{FRM_BUBBLE,NO_SPIN | NO_SCALE | NO_COLOR,3 },
-{FRM_BUBBLESMALL,NO_SPIN | NO_SCALE | NO_COLOR,3},
-{FRM_FISHBONE,NO_COLOR,0},
-};
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -54,8 +44,44 @@ CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,TileBank
 
 		ASSERT(Data->Count<=LAYER_SHADE_RGB_MAX);
 		BandCount=Data->Count-1;
+// Setup back gfx
+		
+		for (int i=0; i<SPRITE_MAX; i++)
+		{
+			int	Type=i&1;
+			POLY_GT4	*Gt4=&SpriteList[i].Poly;
+			
+			SpriteList[i].Type=Type;
+			setPolyGT4(Gt4);
+			Gt4->tpage=Data->BackGfx[Type].TPage;
+			Gt4->clut=Data->BackGfx[Type].Clut;
+			setUVWH(Gt4,Data->BackGfx[Type].U,Data->BackGfx[Type].V,Data->BackGfx[Type].W,Data->BackGfx[Type].H);
+			SpriteList[i].W=Data->BackGfx[Type].W;
+			SpriteList[i].H=Data->BackGfx[Type].H;
+			setSemiTrans(Gt4,1);
+			Gt4->u1--; 	Gt4->u3--;
+			Gt4->v2--; 	Gt4->v3--;
 
-		Sprites=CGameScene::GetBackSprites();
+// Init all
+			setRGB0(Gt4,255,255,255);
+			setRGB1(Gt4,255,255,255);
+			setRGB2(Gt4,255,255,255);
+			setRGB3(Gt4,255,255,255);
+			SpriteList[i].Angle=0;
+			SpriteList[i].AngleInc=0;
+			SpriteList[i].PosInc.vx=0;
+			SpriteList[i].PosInc.vy=0;
+			SpriteList[i].Scale.vx=1024;
+			SpriteList[i].Scale.vy=1024;
+			SpriteList[i].ScaleInc.vx=0;
+			SpriteList[i].ScaleInc.vy=0;
+			
+			InitSprite(&SpriteList[i]);
+			SpriteList[i].Pos.vx=getRndRange(512<<MOVE_SHIFT);
+			SpriteList[i].Pos.vy=getRndRange(256<<MOVE_SHIFT);
+		}
+
+
 }
 
 /*****************************************************************************/
@@ -89,56 +115,6 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 }
 
 /*****************************************************************************/
-void	CLayerBack::SetFrames(int Spr0,int Spr1)
-{
-int		Spr[2];
-		Spr[0]=Spr0;
-		Spr[1]=Spr1;
-
-
-		for (int i=0; i<SPRITE_MAX; i++)
-		{
-			int	Type=Spr[i&1];
-			POLY_GT4	*Gt4=&SpriteList[i].Poly;
-			sFrameHdr	*Frm=Sprites->getFrameHeader(InfoTab[Type].Frame);
-
-			SpriteList[i].Type=Type;
-			Sprites->prepareGT4(Gt4,Frm,0,0,0,0);
-			SpriteList[i].W=Frm->W;
-			SpriteList[i].H=Frm->W;
-			setSemiTrans(Gt4,1);
-			Gt4->tpage|=InfoTab[Type].Trans<<5;
-			if (Frm->Rotated)
-			{
-				Gt4->u2++; 	Gt4->u3++;
-				Gt4->v2++; 	Gt4->v3++;
-			}
-			else
-			{
-				Gt4->u1--; 	Gt4->u3--;
-				Gt4->v2--; 	Gt4->v3--;
-			}
-// Init all
-			setRGB0(Gt4,255,255,255);
-			setRGB1(Gt4,255,255,255);
-			setRGB2(Gt4,255,255,255);
-			setRGB3(Gt4,255,255,255);
-			SpriteList[i].Angle=0;
-			SpriteList[i].AngleInc=0;
-			SpriteList[i].PosInc.vx=0;
-			SpriteList[i].PosInc.vy=0;
-			SpriteList[i].Scale.vx=1024;
-			SpriteList[i].Scale.vy=1024;
-			SpriteList[i].ScaleInc.vx=0;
-			SpriteList[i].ScaleInc.vy=0;
-			
-			InitSprite(&SpriteList[i]);
-			SpriteList[i].Pos.vx=getRndRange(512<<MOVE_SHIFT);
-			SpriteList[i].Pos.vy=getRndRange(256<<MOVE_SHIFT);
-		}
-}
-
-/*****************************************************************************/
 void	CLayerBack::shutdown()
 {
 }
@@ -152,7 +128,7 @@ int		Pos=getRnd();
 int		XInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 
-		if (!(InfoTab[SpritePtr->Type].Flags & NO_MOVE))
+		if (Data->BackGfx[SpritePtr->Type].Flags & MOVE)
 		{
 			switch(StartPos&3)
 			{
@@ -198,7 +174,7 @@ int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 			SpritePtr->Pos.vy<<=MOVE_SHIFT;
 		}
 		
-		if (!(InfoTab[SpritePtr->Type].Flags & NO_SCALE))
+		if (Data->BackGfx[SpritePtr->Type].Flags & SCALE)
 		{
 			SpritePtr->Scale.vx=getRndRange(4095);
 			SpritePtr->Scale.vy=getRndRange(4095);
@@ -207,13 +183,13 @@ int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 			SpritePtr->ScaleInc.vy=getRndRange(31)+31;
 			if (SpritePtr->ScaleInc.vy&1) SpritePtr->ScaleInc.vy=-SpritePtr->ScaleInc.vy;
 		}
-		if (!(InfoTab[SpritePtr->Type].Flags & NO_SPIN))
+		if (Data->BackGfx[SpritePtr->Type].Flags & SPIN)
 		{
 			SpritePtr->AngleInc=getRndRange(31)+31;
 			if (SpritePtr->AngleInc&1) SpritePtr->AngleInc=-SpritePtr->AngleInc;
 		}
 
-		if (!(InfoTab[SpritePtr->Type].Flags & NO_COLOR))
+		if (Data->BackGfx[SpritePtr->Type].Flags & COLOR)
 		{
 int	i;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r0=BackRGBTable[i].R; SpritePtr->Poly.g0=BackRGBTable[i].G; SpritePtr->Poly.b0=BackRGBTable[i].B;
@@ -281,8 +257,7 @@ int			ScaleY=msin(SpritePtr->Scale.vy);
 			Gt4->tpage|=Tran<<5;
 
 sBox		Box;
-			Sprites->RotateBox(&Box,SpritePtr->W,SpritePtr->W,ScaleX,ScaleY,SpritePtr->Angle);
-
+			RotateBox(&Box,SpritePtr->W,SpritePtr->W,ScaleX,ScaleY,SpritePtr->Angle);
 			Gt4->x0=X+Box.x0; Gt4->y0=Y+Box.y0;
 			Gt4->x1=X+Box.x1; Gt4->y1=Y+Box.y1;
 			Gt4->x2=X+Box.x2; Gt4->y2=Y+Box.y2;

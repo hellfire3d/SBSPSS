@@ -16,8 +16,8 @@ struct	sLvlTab
 	FileEquate				LevelInfo;
 	FileEquate				TileBank,Level,Tex;
 	int						exitX,exitY,exitW,exitH;
-	int						spawnX,spawnY;
-	int						Spr0,Spr1;
+//	int						spawnX,spawnY;
+//	int						Spr0,Spr1;
 	int						songId;
 };
 
@@ -71,6 +71,10 @@ private:
 	sThingItem		*ItemList;
 	int				PlatformCount;
 	sThingPlatform	**PlatformList;
+	int				TriggerCount;
+	sThingTrigger	*TriggerList;
+	int				FXCount;
+	sThingFX		*FXList;
 
 };
 

@@ -22,7 +22,17 @@ extern const s16 c_circle[ NO_SIN ];
 extern const MATRIX IdentityMtx;
 
 /*****************************************************************************/
+struct	sBox
+{
+		s16	x0,y0;
+		s16	x1,y1;
+		s16	x2,y2;
+		s16	x3,y3;
+};
+
+/*****************************************************************************/
 u8		*MakePtr(void *BasePtr,int Offset);
+void	RotateBox(sBox *B,int W,int H,int _xScale,int _yScale,int _rot);
 
 /*****************************************************************************/
 /*** Loads of inlines ********************************************************/
