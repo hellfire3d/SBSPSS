@@ -472,6 +472,29 @@ void	CLevel::initLayers()
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
 		}
+// Actors
+		if (LevelHdr->ActorList)
+		{
+			
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ActorList);
+			ActorCount=Hdr->Count;
+			ActorList=(sThingActor**)MemAlloc(ActorCount*sizeof(sThingActor**),"Actor List");
+			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
+			for (int i=0; i<ActorCount; i++)
+			{
+				ActorList[i]=(sThingActor*)ThingPtr;
+				ThingPtr+=sizeof(sThingActor);
+				ThingPtr+=ActorList[i]->PointCount*sizeof(u16)*2;
+			}
+		}
+// Items
+		if (LevelHdr->ItemList)
+		{
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
+			ItemCount=Hdr->Count;
+			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
+		}
+
 }
 
 /*****************************************************************************/

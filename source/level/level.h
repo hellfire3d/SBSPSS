@@ -36,11 +36,18 @@ private:
 
 	TPAGE_DESC		m_levelTPage;
 
-
 // Tile Layers
 	CLayerTile		*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];
 // Collision
 	CLayerCollision	*CollisionLayer;
+// Things
+	int				ActorCount;
+	sThingActor		**ActorList;
+	int				ItemCount;
+	sThingItem		*ItemList;
+	int				PlatformCount;
+	sThingPlatform	**PlatformList;
+
 };
 
 /*****************************************************************************/
