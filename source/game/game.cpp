@@ -570,7 +570,8 @@ void CGameScene::think_playing(int _frames)
 
 
 	// Auto-timer stuff
-	if(m_levelHasTimer)
+	if(m_levelHasTimer&&
+	   !CConversation::isActive()&&!m_pauseMenu->isActive())
 	{
 		m_timer-=_frames;
 		if(m_timer<0)
