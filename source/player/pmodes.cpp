@@ -167,6 +167,38 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	},
 
 	//
+	// Squeaky boots. Also has butt bounce and karate chop
+	//
+	{
+		{	{
+			DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
+			DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
+			DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP,				// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
+		}	},
+		{
+			&stateUnarmedIdle,						// STATE_IDLE
+			&stateTeeterIdle,						// STATE_IDLETEETER
+			&stateJump,								// STATE_JUMP
+			&stateRun,								// STATE_RUN
+			&stateFall,								// STATE_FALL
+			&stateFallFar,							// STATE_FALLFAR
+			&stateButtBounce,						// STATE_BUTTBOUNCE
+			&stateButtBounceFall,					// STATE_BUTTFALL
+			&stateButtBounceLand,					// STATE_BUTTLAND
+			&stateChop,								// STATE_ATTACK
+			&stateRunChop,							// STATE_RUNATTACK
+			&stateAirChop,							// STATE_AIRATTACK
+			&stateDuck,								// STATE_DUCK
+			&stateSoackUp,							// STATE_SOAKUP
+			&stateGetup,							// STATE_GETUP
+			&stateDead,								// STATE_DEAD
+		}
+	},
+	//
 	// Armed with coral blower
 	//
 	{

@@ -69,6 +69,30 @@
 	---- */
 
 int s_health;
+int s_screenPos;
+
+
+int MAP3D_CENTRE_X=170;
+int MAP3D_CENTRE_Y=500;
+int MAP3D_BLOCKSTEPSIZE=315;
+
+int MAP2D_CENTRE_X=-256;
+int MAP2D_CENTRE_Y=-136;
+int MAP2D_BLOCKSTEPSIZE=16;
+
+
+int m_cameraScrollPos=0;
+int m_cameraScrollDir=0;
+
+int CAMERA_SCROLLLIMIT=8;
+int CAMERA_SCROLLTHRESHOLD=6;
+int CAMERA_SCROLLSPEED=60;
+int CAMERA_STARTMOVETHRESHOLD=20;
+int CAMERA_STOPMOVETHRESHOLD=10;
+
+
+int angg=900;
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -117,6 +141,10 @@ m_animFrame=0;
 	m_lastPadInput=m_padInput=0;
 
 	s_health=5;
+	s_screenPos=128;
+
+m_skel.setAng(512);
+//m_skel.setAngInc(678);
 }
 
 /*----------------------------------------------------------------------
@@ -137,17 +165,22 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef __USER_paul__
-DVECTOR ofs={-248,-136};		// nearly -256,-128 ;)
+// -90,-136
+// -256,-136
+// -432,-136
+DVECTOR ofs={-256,-136};		// nearly -256,-128 ;)
 int newmode=-1;
 #else
 DVECTOR ofs={0,0}; //temporary
 #endif
+
 void	CPlayer::think(int _frames)
 {
 	int	i;
 	
 	CThing::think(_frames);
 
+m_skel.setAng(angg);
 
 #ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
@@ -291,6 +324,42 @@ if(getPadInputDown()&PAD_CIRCLE)
 {
 	m_skel.blink();
 }
+
+
+
+	// Map scroll..
+	if(m_cameraScrollDir==-1)
+	{
+		//right
+		if(m_cameraScrollPos>-CAMERA_SCROLLLIMIT<<8)
+		{
+			m_cameraScrollPos-=CAMERA_SCROLLSPEED;
+			if(m_cameraScrollPos<-CAMERA_SCROLLLIMIT<<8)
+			{
+				m_cameraScrollPos=-CAMERA_SCROLLLIMIT<<8;
+				m_cameraScrollDir=0;
+			}
+		}
+	}
+	else if(m_cameraScrollDir==+1)
+	{
+		//left
+		if(m_cameraScrollPos<(CAMERA_SCROLLLIMIT<<8))
+		{
+			m_cameraScrollPos+=CAMERA_SCROLLSPEED;
+			if(m_cameraScrollPos>CAMERA_SCROLLLIMIT<<8)
+			{
+				m_cameraScrollPos=CAMERA_SCROLLLIMIT<<8;
+				m_cameraScrollDir=0;
+			}
+		}
+	}
+
+
+
+
+
+
 /*
 		if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
 		{
@@ -382,7 +451,12 @@ m_cameraOffset=ofs;
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
-DVECTOR ppos={0,500};
+// -3912,500
+// 130,500
+// 4172,500
+DVECTOR ppos={130,500};
+//int moff=0;
+
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
@@ -405,6 +479,17 @@ if(eyes!=-1)
 	eyes=-1;
 }
 #endif
+
+ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos)>>8);
+ppos.vy=MAP3D_CENTRE_Y;
+ofs.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos))>>8);
+ofs.vy=MAP2D_CENTRE_Y;
+
+
+//int xval=255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos>>8));
+//DrawLine(xval-7,0,xval-7,255,0,128,255,0);
+//DrawLine(xval+7,0,xval+7,255,0,128,255,0);
+
 		m_skel.setPos(ppos);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
@@ -482,6 +567,7 @@ int CPlayer::setState(PLAYER_STATE _state)
 void CPlayer::setMode(PLAYER_MODE _mode)
 {
 	m_currentMode=_mode;
+// Need to do something about this setState() for when the new mode doesn't have that state (pkg)
 	setState(m_currentState);
 }
 
@@ -534,7 +620,14 @@ void CPlayer::setAnimFrame(int _animFrame)
 		{
 			if(m_animFrame==frameSfx->m_frame)
 			{
-				CSoundMediator::playSfx(frameSfx->m_sfxId);
+				CSoundMediator::SFXID sfxId=frameSfx->m_sfxId;
+				if(m_currentMode==PLAYER_MODE_SQUEAKYBOOTS)
+				{
+					// Ugh.. horrible way to change the sfx when wearing squeaky boots (pkg)
+					if(sfxId==CSoundMediator::SFX_SPONGEBOB_WALK_1)sfxId=CSoundMediator::SFX_SPONGEBOB_SQUEAKY_SHOES_1;
+					else if(sfxId==CSoundMediator::SFX_SPONGEBOB_WALK_2)sfxId=CSoundMediator::SFX_SPONGEBOB_SQUEAKY_SHOES_2;
+				}
+				CSoundMediator::playSfx(sfxId);
 			}
 			if(m_animFrame<frameSfx->m_frame)
 			{
@@ -676,6 +769,15 @@ void CPlayer::moveLeft()
 	{
 		m_moveVel.vx-=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
 	}
+
+	if(m_moveVel.vx<-CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos<-CAMERA_SCROLLTHRESHOLD<<8)
+	{
+		m_cameraScrollDir=+1;
+	}
+	else if(m_moveVel.vx>-CAMERA_STOPMOVETHRESHOLD)
+	{
+		m_cameraScrollDir=0;
+	}
 }
 void CPlayer::moveRight()
 {
@@ -694,6 +796,15 @@ void CPlayer::moveRight()
 	else
 	{
 		m_moveVel.vx+=metrics->m_metric[PM__RUN_REVERSESLOWDOWN];
+	}
+
+	if(m_moveVel.vx>CAMERA_STARTMOVETHRESHOLD||m_cameraScrollPos>CAMERA_SCROLLTHRESHOLD<<8)
+	{
+		m_cameraScrollDir=-1;
+	}
+	else if(m_moveVel.vx<CAMERA_STOPMOVETHRESHOLD)
+	{
+		m_cameraScrollDir=0;
 	}
 }
 void CPlayer::slowdown()
