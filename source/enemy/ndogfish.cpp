@@ -436,7 +436,7 @@ void CNpcIronDogfishEnemy::hasBeenSteamed( DVECTOR &steamPos )
 
 		//hasBeenAttacked();
 		m_steamTimer = 4 * GameState::getOneSecondInFrames();
-		m_effect->killFX();
+		//m_effect->killFX();
 	}
 }
 

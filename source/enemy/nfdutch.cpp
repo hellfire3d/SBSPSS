@@ -753,6 +753,18 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 							m_controlFunc = NPC_CONTROL_SHOT;
 							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 
+							s32 minX, maxX;
+							m_npcPath.getPathXExtents( &minX, &maxX );
+
+							if ( m_extension == minX )
+							{
+								m_extension = maxX;
+							}
+							else
+							{
+								m_extension = minX;
+							}
+
 							drawAttackEffect();
 						}
 					}
@@ -797,14 +809,20 @@ u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 			m_fadeDown = true;
 			m_timerTimer = 0;
 			m_fireCount = 0;*/
+
+			s32 minX, maxX;
+			m_npcPath.getPathXExtents( &minX, &maxX );
+
+			if ( m_extension == minX )
+			{
+				m_extension = maxX;
+			}
+			else
+			{
+				m_extension = minX;
+			}
 		}
 	}
 
 	return( true );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFlyingDutchmanEnemy::shakePlatformLoose()
-{
 }
