@@ -243,7 +243,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 	if(finished)
 	{
 		int	animNo;
-		if(m_idleTime<5)
+		if(m_idleTime<2)
 		{
 			// Run the default idle anim a number of times before
 			// starting to do weird things..
@@ -254,7 +254,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 			// Alternate random idle anims with the default one
 			if(m_currentIdleAnim==0&&getNumIdleAnims()>1)
 			{
-				m_currentIdleAnim=getRndRange(getNumIdleAnims());
+				m_currentIdleAnim=getRndRange(getNumIdleAnims()-1)+1;
 			}
 			else
 			{
@@ -293,7 +293,7 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},	// default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
@@ -324,7 +324,7 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	}, // default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
@@ -350,7 +350,7 @@ int CPlayerStateWeaponIdle::getNumIdleAnims()
 static IdleAnims s_netIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	}, // default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},

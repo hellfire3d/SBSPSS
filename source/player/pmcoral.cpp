@@ -266,6 +266,7 @@ void	CPlayerModeCoralBlower::think()
 				}
 				CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_CORAL_BLOWER_SUCK);
 			}
+			setState(STATE_IDLE);		// Re-enter idle state - stops idle anims happening :/
 			break;
 		case BLOWER_STATE__FULL:
 			if(getPadInputDown()&PI_FIRE&&getState()==STATE_IDLE)
@@ -325,6 +326,7 @@ void	CPlayerModeCoralBlower::think()
 					if(m_launchHeading>BLOWER_MAXIMUM_AIM_ANGLE)m_launchHeading=BLOWER_MAXIMUM_AIM_ANGLE;
 				}
 			}
+			setState(STATE_IDLE);		// Re-enter idle state - stops idle anims happening :/
 			break;
 	}
 }
