@@ -1928,6 +1928,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_SANDY_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_SEASNAKE_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\ACTOR_SHARKMAN_Anim.h
 # End Source File
 # Begin Source File

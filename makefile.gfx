@@ -113,7 +113,7 @@ ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
 						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Stomper \
-						SharkSub Motherjellyfish
+						SharkSub Motherjellyfish SeaSnake
 
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 
 

@@ -1,0 +1,2 @@
+bodystatic
+headstatic
