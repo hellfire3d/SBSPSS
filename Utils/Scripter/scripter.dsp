@@ -23,8 +23,8 @@ CFG=scripter - Win32 Debug
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName ""$/Utils/scripter", YFEAAAAA"
+# PROP Scc_LocalPath "."
 CPP=cl.exe
 RSC=rc.exe
 
@@ -129,6 +129,22 @@ SOURCE=.\codegen.cpp
 # Begin Source File
 
 SOURCE=.\codegen.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\main.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\main.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\prepro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\prepro.h
 # End Source File
 # Begin Source File
 

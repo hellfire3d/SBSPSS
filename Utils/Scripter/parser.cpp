@@ -26,7 +26,7 @@ Date: 07 December 2000
 YYPARSENAME::YYPARSENAME()
 {
 	yytables();
-#line 27 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 38 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
 	// place any extra initialisation code here
 
@@ -75,7 +75,7 @@ void YYPARSENAME::yyaction(int action)
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 80 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 92 "C:\\spongebob\\Utils\\scripter\\parser.y"
 s_baseTreeNode=yyattribute(1 - 1).treenode;
 #line 81 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -88,7 +88,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 3);
 #endif
 			{
-#line 84 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 96 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(STMT_LIST,yyattribute(1 - 2).treenode,yyattribute(2 - 2).treenode);
 #line 94 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -96,7 +96,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 		break;
 	case 2:
 		{
-#line 85 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 97 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(EMPTY_STMT);
 #line 102 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 		}
@@ -108,7 +108,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 89 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 101 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(EMPTY_STMT);
 #line 114 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -121,7 +121,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 3);
 #endif
 			{
-#line 90 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 102 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(STOP_STMT);
 #line 127 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -134,7 +134,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 3);
 #endif
 			{
-#line 91 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 103 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(PAUSE_STMT);
 #line 140 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -147,7 +147,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 6);
 #endif
 			{
-#line 92 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 104 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(PRINT_STMT,yyattribute(3 - 5).treenode);
 #line 153 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -160,7 +160,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 3);
 #endif
 			{
-#line 93 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 105 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 2).treenode;
 #line 166 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -173,7 +173,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 6);
 #endif
 			{
-#line 94 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 106 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(IF_STMT,yyattribute(3 - 5).treenode,yyattribute(5 - 5).treenode);
 #line 179 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -186,7 +186,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 8);
 #endif
 			{
-#line 95 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 107 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(IFELSE_STMT,yyattribute(3 - 7).treenode,yyattribute(5 - 7).treenode,yyattribute(7 - 7).treenode);
 #line 192 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -199,7 +199,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 96 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 108 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(STMT_LIST,yyattribute(2 - 3).treenode);
 #line 205 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -212,7 +212,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 101 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 113 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(ASSIGN_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 218 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -225,7 +225,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 106 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 118 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(2 - 3).treenode;
 #line 231 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -238,7 +238,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 107 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 119 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
 #line 244 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -251,7 +251,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 108 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 120 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=yyattribute(1 - 1).treenode;
 #line 257 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -264,7 +264,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 112 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 124 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(EQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 270 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -277,7 +277,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 116 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 128 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(NOTEQUAL_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 283 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -290,7 +290,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 121 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 133 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
 #line 296 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -303,7 +303,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 125 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 137 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VALUE_EXPR,yyattribute(1 - 1).value);
 #line 309 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -316,7 +316,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 2);
 #endif
 			{
-#line 126 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 138 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(VARIABLE_EXPR,yyattribute(1 - 1).variableIdx);
 #line 322 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -329,7 +329,7 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 			yyinitdebug((void YYFAR**)yya, 4);
 #endif
 			{
-#line 127 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 139 "C:\\spongebob\\Utils\\scripter\\parser.y"
 (*(YYSTYPE YYFAR*)yyvalptr).treenode=new CTreeNode(PLUS_EXPR,yyattribute(1 - 3).treenode,yyattribute(3 - 3).treenode);
 #line 335 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 			}
@@ -340,39 +340,14 @@ s_baseTreeNode=yyattribute(1 - 1).treenode;
 		break;
 	}
 }
-#line 130 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 144 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
 
 
 /////////////////////////////////////////////////////////////////////////////
 // programs section
 
-int main(void)
-{
-	int n=1;
-
-openOutputFile("test.dat");
-	mylexer lexer;
-	myparser parser;
-	if(parser.yycreate(&lexer))
-	{
-		if(lexer.yycreate(&parser))
-		{
-			n=parser.yyparse();
-		}
-	}
-
-if(s_baseTreeNode)
-{
-	s_baseTreeNode->generateCode(true);
-}
-closeOutputFile();
-
-	return n;
-}
-
-
-#line 376 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
+#line 351 "C:\\spongebob\\Utils\\scripter\\parser.cpp"
 void YYPARSENAME::yytables()
 {
 	yyattribute_size = sizeof(YYSTYPE);

@@ -21,9 +21,20 @@ protected:
 public:
 #line 22 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
-	// place any extra class members here
+public:
+	void	setCurrentLexer(class mylexer *_lexer);
+	void	setBaseNode(class CTreeNode *_baseNode);
 
-#line 27 "C:\\spongebob\\Utils\\scripter\\parser.h"
+	// Overridden parser functions
+	void	yyerror(const char *_text);
+	int		yyparse();
+
+private:
+	class mylexer	*m_currentLexer;
+	class CTreeNode	*m_baseNode;
+
+
+#line 38 "C:\\spongebob\\Utils\\scripter\\parser.h"
 };
 
 #ifndef YYPARSENAME
@@ -32,13 +43,13 @@ public:
 
 #ifndef YYSTYPE
 union tagYYSTYPE {
-#line 38 "C:\\spongebob\\Utils\\scripter\\parser.y"
+#line 49 "C:\\spongebob\\Utils\\scripter\\parser.y"
 
 	int				variableIdx;
 	signed short	value;
 	class CTreeNode	*treenode;
 
-#line 42 "C:\\spongebob\\Utils\\scripter\\parser.h"
+#line 53 "C:\\spongebob\\Utils\\scripter\\parser.h"
 };
 
 #define YYSTYPE union tagYYSTYPE

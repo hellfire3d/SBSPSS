@@ -39,6 +39,8 @@
 
 extern int preprocessorCmd(char *_cmd);
 
+extern char *lookupMacro(char *_name);
+
 
 /*---------------------------------------------------------------------- */
 

@@ -112,6 +112,8 @@ extern CTreeNode	*s_baseTreeNode;
 	Functions
 	--------- */
 
+extern int parseFile(char *_filename,class CTreeNode *_baseNode);
+
 extern int openOutputFile(char *_filename);
 extern int closeOutputFile();
 

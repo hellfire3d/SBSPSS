@@ -20,7 +20,18 @@ Date: 07 December 2000
 
 // class definition
 {
-	// place any extra class members here
+public:
+	void	setCurrentLexer(class mylexer *_lexer);
+	void	setBaseNode(class CTreeNode *_baseNode);
+
+	// Overridden parser functions
+	void	yyerror(const char *_text);
+	int		yyparse();
+
+private:
+	class mylexer	*m_currentLexer;
+	class CTreeNode	*m_baseNode;
+
 }
 
 // constructor
@@ -44,6 +55,7 @@ Date: 07 December 2000
 
 
 // place any declarations here
+
 
 %token	STOP
 %token	IF
@@ -79,7 +91,7 @@ Date: 07 December 2000
 program
 	:statement_list										{s_baseTreeNode=$1;}
 	;													
-														
+
 statement_list											
 	:statement_list statement							{$$=new CTreeNode(STMT_LIST,$1,$2);}
 	|													{$$=new CTreeNode(EMPTY_STMT);}
@@ -127,33 +139,10 @@ value
 	|value PLUS value									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
 	;													
 
+
+
 %%
 
 
 /////////////////////////////////////////////////////////////////////////////
 // programs section
-
-int main(void)
-{
-	int n=1;
-
-openOutputFile("test.dat");
-	mylexer lexer;
-	myparser parser;
-	if(parser.yycreate(&lexer))
-	{
-		if(lexer.yycreate(&parser))
-		{
-			n=parser.yyparse();
-		}
-	}
-
-if(s_baseTreeNode)
-{
-	s_baseTreeNode->generateCode(true);
-}
-closeOutputFile();
-
-	return n;
-}
-

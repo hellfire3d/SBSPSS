@@ -17,6 +17,8 @@
 	-------- */
 
 #include "codegen.h"
+#include "lexer.h"
+#include "parser.h"
 
 
 /*	Std Lib
@@ -47,6 +49,38 @@
 static FILE	*s_fhOutput=NULL;
 
 CTreeNode	*s_baseTreeNode=NULL;
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+extern int parseFile(char *_filename,CTreeNode *_baseNode)
+{
+	int		ret;
+	mylexer lexer;
+	myparser parser;
+
+	ret=YYEXIT_FAILURE;
+	if(parser.yycreate(&lexer))
+	{
+		if(lexer.yycreate(&parser))
+		{
+			if(lexer.openInputFile(_filename))
+			{
+				parser.setCurrentLexer(&lexer);
+				parser.setBaseNode(_baseNode);
+				ret=parser.yyparse();
+				lexer.closeInputFile();
+			}
+		}
+	}
+
+	return ret;
+}
 
 
 /*----------------------------------------------------------------------
@@ -159,83 +193,83 @@ int CTreeNode::generateCode(int _write)
 	
 	switch(m_type)
 	{
-	case STMT_LIST:			// list of statements [left-part, right-part] (left-part may be another list)
-		if(m_children[0])codeSize=m_children[0]->generateCode(_write);
-		if(m_children[1])codeSize=m_children[1]->generateCode(_write);
-		break;
-		
-	case EMPTY_STMT:		// empty statement
-		break;
-		
-	case PRINT_STMT:		// print [variable]
-		codeSize+=m_children[0]->generateCode(_write);
-		codeSize+=emit(OP_PRINT,_write);
-		break;
-		
-	case STOP_STMT:			// stop
-		codeSize+=emit(OP_STOP,_write);
-		break;
-		
-	case PAUSE_STMT:		// pause
-		codeSize+=emit(OP_PAUSE,_write);
-		break;
-		
-	case IF_STMT:			// if [expression, ifcode]
-		codeSize+=m_children[0]->generateCode(_write);
-		codeSize+=emit(OP_PUSHVALUE,_write);
-		codeSize+=emit((signed short)m_children[1]->generateCode(false),_write);
-		codeSize+=emit(OP_JMPF,_write);
-		codeSize+=m_children[1]->generateCode(_write);
-		break;
-		
-	case IFELSE_STMT:		// if [expression, ifcode, elsecode]
-		codeSize+=m_children[0]->generateCode(_write);
-		codeSize+=emit(OP_PUSHVALUE,_write);
-		codeSize+=emit((signed short)(m_children[1]->generateCode(false)+emit(OP_PUSHVALUE,false)+emit(0,false)+emit(OP_JMP,false)),_write);
-		codeSize+=emit(OP_JMPF,_write);
-		codeSize+=m_children[1]->generateCode(_write);
-		codeSize+=emit(OP_PUSHVALUE,_write);
-		codeSize+=emit((signed short)m_children[2]->generateCode(false),_write);
-		codeSize+=emit(OP_JMP,_write);
-		codeSize+=m_children[2]->generateCode(_write);
-		break;
-		
-	case ASSIGN_EXPR:		// assign [ variable, number ]
-		codeSize+=m_children[1]->generateCode(_write);
-		codeSize+=emit(OP_PUSHVALUE,_write);
-		codeSize+=emit(m_children[0]->getVariableIdx(),_write);
-		codeSize+=emit(OP_ASSIGN,_write);
-		break;
-		
-	case EQUAL_EXPR:		// == [variable, value]
-		codeSize+=m_children[0]->generateCode(_write);
-		codeSize+=m_children[1]->generateCode(_write);
-		codeSize+=emit(OP_IS_EQUAL_VALUE,_write);
-		break;
-		
-	case NOTEQUAL_EXPR:		// != [variable, value]
-		codeSize+=m_children[0]->generateCode(_write);
-		codeSize+=m_children[1]->generateCode(_write);
-		codeSize+=emit(OP_IS_NOTEQUAL_VALUE,_write);
-		break;
+		case STMT_LIST:			// list of statements [left-part, right-part] (left-part may be another list)
+			if(m_children[0])codeSize+=m_children[0]->generateCode(_write);
+			if(m_children[1])codeSize+=m_children[1]->generateCode(_write);
+			break;
+			
+		case EMPTY_STMT:		// empty statement
+			break;
+			
+		case PRINT_STMT:		// print [variable]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_PRINT,_write);
+			break;
+			
+		case STOP_STMT:			// stop
+			codeSize+=emit(OP_STOP,_write);
+			break;
+			
+		case PAUSE_STMT:		// pause
+			codeSize+=emit(OP_PAUSE,_write);
+			break;
+			
+		case IF_STMT:			// if [expression, ifcode]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)m_children[1]->generateCode(false),_write);
+			codeSize+=emit(OP_JMPF,_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			break;
+			
+		case IFELSE_STMT:		// if [expression, ifcode, elsecode]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)(m_children[1]->generateCode(false)+emit(OP_PUSHVALUE,false)+emit(0,false)+emit(OP_JMP,false)),_write);
+			codeSize+=emit(OP_JMPF,_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit((signed short)m_children[2]->generateCode(false),_write);
+			codeSize+=emit(OP_JMP,_write);
+			codeSize+=m_children[2]->generateCode(_write);
+			break;
+			
+		case ASSIGN_EXPR:		// assign [ variable, number ]
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_PUSHVALUE,_write);
+			codeSize+=emit(m_children[0]->getVariableIdx(),_write);
+			codeSize+=emit(OP_ASSIGN,_write);
+			break;
+			
+		case EQUAL_EXPR:		// == [variable, value]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_IS_EQUAL_VALUE,_write);
+			break;
+			
+		case NOTEQUAL_EXPR:		// != [variable, value]
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=emit(OP_IS_NOTEQUAL_VALUE,_write);
+			break;
 
-	case VARIABLE_EXPR:		// variable
-	case VALUE_EXPR:		// value
-		if(m_numChildren)
+		case VARIABLE_EXPR:		// variable
+		case VALUE_EXPR:		// value
+			if(m_numChildren)
+				codeSize+=emitValue(m_children[0],_write);
+			else
+				codeSize+=emitValue(this,_write);
+			break;
+
+		case PLUS_EXPR:			// + [value, value]
 			codeSize+=emitValue(m_children[0],_write);
-		else
-			codeSize+=emitValue(this,_write);
-		break;
+			codeSize+=emitValue(m_children[1],_write);
+			codeSize+=emit(OP_ADD,_write);
+			break;
 
-	case PLUS_EXPR:			// + [value, value]
-		codeSize+=emitValue(m_children[0],_write);
-		codeSize+=emitValue(m_children[1],_write);
-		codeSize+=emit(OP_ADD,_write);
-		break;
-
-	default:
-		printf("UNHANDLED CASE %d\n",m_type);
-		break;
+		default:
+			printf("UNHANDLED CASE %d\n",m_type);
+			break;
 	}
 	
 	return codeSize;
