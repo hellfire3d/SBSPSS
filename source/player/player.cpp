@@ -805,11 +805,13 @@ if(newmode!=-1)
 		// Think for the current player mode
 		m_currentPlayerModeClass->think();
 
-		// Conveyor belt movement
+		// Is player stood on any special collision?
 		if(getHeightFromGroundNoPlatform(Pos.vx,Pos.vy,5)==0)
 		{
 			int block;
 			block=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
+
+			// Conveyor belt movement
 			if(block==COLLISION_TYPE_FLAG_MOVE_LEFT)
 			{
 				moveHorizontal(-1);
@@ -818,6 +820,18 @@ if(newmode!=-1)
 			{
 				moveHorizontal(+1);
 			}
+
+			// Death?
+			else if(m_currentMode!=PLAYER_MODE_DEAD&&
+					block==COLLISION_TYPE_FLAG_DEATH_LIQUID)
+			{
+				dieYouPorousFreak(DEATHTYPE__LIQUID);
+			}		
+			else if(m_currentMode!=PLAYER_MODE_DEAD&&
+					block==COLLISION_TYPE_FLAG_DEATH_INSTANT)
+			{
+				dieYouPorousFreak(DEATHTYPE__NORMAL);
+			}		
 		}
 
 		// Powerups
@@ -1861,8 +1875,7 @@ int	CPlayer::canDoLookAround()
 void	CPlayer::inSoakUpState()
 {
 	if(isWearingDivingHelmet()&&
-//		(CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_DEATH_LIQUID)
-		(CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP)
+	   (CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_SOAKUP)
 	{
 		m_healthWaterLevel+=waterSoakUpSpeed;
 		if(m_healthWaterLevel>WATERMAXHEALTH)

@@ -73,6 +73,9 @@ void	CPlayerModeDead::enter()
 		case DEATHTYPE__SQUASH:
 			deathAnim=ANIM_SPONGEBOB_DEATHSQUASH;
 			break;
+		case DEATHTYPE__LIQUID:
+			deathAnim=ANIM_SPONGEBOB_DEATHSPIN;
+			break;
 	}
 	m_player->setAnimNo(deathAnim);
 }
