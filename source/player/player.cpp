@@ -262,8 +262,8 @@ m_animFrame=0;
 
 	s_screenPos=128;
 
-	setCollisionSize(25,50);
-	setCollisionCentreOffset(0,-25);
+	setCollisionSize(30,60);
+	setCollisionCentreOffset(0,-30);
 
 	m_divingHelmet=false;
 }
@@ -395,8 +395,8 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
   ---------------------------------------------------------------------- */
 int panim=-1;
 #include "gfx\prim.h"	// (pkg)
-int healthx=400;
-int healthy=30;
+int healthx=435;
+int healthy=40;
 int healthr=200;
 int healthg=75;
 int healthb=75;
