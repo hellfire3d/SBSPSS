@@ -1,0 +1,53 @@
+text				group 
+;extractors			group 
+;extradtors			group 
+data				group 
+sdata				group 
+sbss				group 	bss
+bss					group	bss 
+;cached				group	cache(0x20000000) 
+
+;overgroup	group 
+
+memend		group	bss
+
+	section .text,text
+;	section .cached,cached
+	section .sdata,sdata
+;	section .ctors,text
+;	section .dtors,text 
+	section .data,data
+	section .rdata,text
+	section .sbss,sbss
+	section .bss,bss
+	section .memend,memend
+	section .last,memend
+
+;LNK_RamSize		equ	2
+;LNK_StackSize		equ 3000
+;LNK_OrgAddress		equ 0x80010000
+;LNK_FileSys		equ 0
+;LNK_DevKit			equ 1
+;LNK_FinalOverlays equ 1 
+
+	regs	pc=__SN_ENTRY_POINT
+	include PsxBoot.o
+
+; Libs
+	inclib /prlsr/tools/psyq/lib/libc.lib
+	inclib /prlsr/tools/psyq/lib/libapi.lib
+	inclib /prlsr/tools/psyq/lib/libetc.lib
+	inclib /prlsr/tools/psyq/lib/libspu.lib
+	inclib /prlsr/tools/psyq/lib/libsnd.lib
+	inclib /prlsr/tools/psyq/lib/libgpu.lib
+	inclib /prlsr/tools/psyq/lib/libcard.lib
+	inclib /prlsr/tools/psyq/lib/libpress.lib
+	inclib /prlsr/tools/psyq/lib/libcd.lib
+	inclib /prlsr/tools/psyq/lib/libtap.lib
+	inclib /prlsr/tools/psyq/lib/libcomb.lib
+	inclib /prlsr/tools/psyq/lib/libmcrd.lib
+	inclib /prlsr/tools/psyq/lib/libgte.lib
+	inclib /prlsr/tools/psyq/lib/libpad.lib
+	inclib /prlsr/tools/psyq/lib/libsn.lib
+
+

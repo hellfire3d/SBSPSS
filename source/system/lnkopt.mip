@@ -1,0 +1,36 @@
+	global		LNK_RamSize
+	global		LNK_StackSize
+	global		LNK_OrgAddress
+	global		LNK_FileSys
+	global		LNK_DevKit
+
+	global		OPT_LinkerOpts
+
+	global		OPT_RamSize
+	global		OPT_StackSize
+	global		OPT_OrgAddress
+	global		OPT_FreeMemStart
+	global		OPT_FreeMemSize
+	global		OPT_FileSystem
+	global		OPT_DevKit
+	global		hahha
+
+	xref		_extractors_size
+extractors	group
+
+
+	section		.rdata
+OPT_LinkerOpts
+OPT_RamSize			dw	LNK_RamSize*1024*1024
+OPT_StackSize		dw	LNK_StackSize
+OPT_OrgAddress		dw	LNK_OrgAddress
+OPT_FreeMemStart	dw	hahha
+OPT_FreeMemSize		dw	((LNK_OrgAddress+(LNK_RamSize*1024*1024)-(64*1024))-hahha)-LNK_StackSize
+OPT_FileSystem		dw	LNK_FileSys
+OPT_DevKit			dw	LNK_DevKit
+OPT_extraCtorsSize	dw	_extractors_size
+OPT_extraCtorsAddress	dw	group(extractors)
+
+	section	.last
+
+hahha	dw	0
