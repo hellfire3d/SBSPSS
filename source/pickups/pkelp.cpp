@@ -130,6 +130,28 @@ void	CKelpTokenPickup::renderPickup(DVECTOR *_pos)
 	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CKelpTokenPickup::collidedWith(CThing *_thisThing)
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		case TYPE_NPC:
+			collect((CPlayer*)_thisThing);
+			CSoundMediator::playSfx(sfxToPlayWhenCollected());
+			break;
+
+		default:
+			ASSERT(0);
+			break;
+	}
+}
+
 
 /*===========================================================================
 end */

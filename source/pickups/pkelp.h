@@ -45,6 +45,7 @@ public:
 	void				setTokenNumber(int _number)					{m_tokenNumber=_number;}
 
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
 	virtual void		renderPickup(DVECTOR *_pos);
 
 private:
