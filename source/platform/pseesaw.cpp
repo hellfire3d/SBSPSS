@@ -93,14 +93,14 @@ void CNpcSeesawPlatform::processMovement( int _frames )
 
 	s32 newAngle = m_currentAngle + m_angularVelocity;
 
-	if ( newAngle > ( 512 << 8 ) )
+	if ( newAngle > ( 340 << 8 ) )
 	{
-		newAngle = 512 << 8;
+		newAngle = 340 << 8;
 		m_angularVelocity = 0;
 	}
-	else if ( newAngle < -( 512 << 8 ) )
+	else if ( newAngle < -( 340 << 8 ) )
 	{
-		newAngle = -( 512 << 8 );
+		newAngle = -( 340 << 8 );
 		m_angularVelocity = 0;
 	}
 
