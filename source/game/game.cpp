@@ -457,7 +457,7 @@ void CGameScene::think_playing(int _frames)
 		return;
 	}
 
-	if(s_justHitBossArenaTrigger)
+	if(s_justHitBossArenaTrigger&&m_gamestate==GAMESTATE_PLAYING)
 	{
 		m_gamestate=GAMESTATE_FADING_INTO_BOSS_INTRO;
 		CFader::setFadingOut();

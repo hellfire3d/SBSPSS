@@ -1770,7 +1770,7 @@ void CPlayer::setAnimNo(int _animNo)
 void	CPlayer::springPlayerUp(int _springHeight)
 {
 	m_currentPlayerModeClass->springPlayerUp(_springHeight);
-	CSoundMediator::playSfx( CSoundMediator::SFX_BOUNCY_PLATFORM );
+	CSoundMediator::playSfx(CSoundMediator::SFX_BOUNCY_PLATFORM,false,true);
 }
 
 /*----------------------------------------------------------------------
