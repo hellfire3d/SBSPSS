@@ -66,6 +66,9 @@ private:
 	FIRING_STATE				m_firingState;
 	int							m_firingTime;
 
+protected:
+	virtual class CPlayerState	**getStateTable();
+
 };
 
 

@@ -71,6 +71,10 @@
 #include "backend\credits.h"
 #endif
 
+#ifndef __PAUL_ANIMTEST_H__
+#include "paul\animtest.h"
+#endif
+
 
 
 /*	Std Lib
@@ -110,6 +114,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&ShopScene,
 	&PartyScene,
 	&CreditsScene,
+	&AnimTestScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 

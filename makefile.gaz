@@ -247,7 +247,8 @@ memcard_src :=		md5 \
 pad_src :=			pads
 
 paul_src :=			paul \
-					scenesel
+					scenesel \
+					animtest
 
 pickups_src :=		pickup \
 					pballoon \

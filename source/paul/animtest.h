@@ -38,7 +38,7 @@ class CAnimTestScene : public CScene
 {
 public:
 	void	init();
-	void	shutdown()				{}
+	void	shutdown()				{;}
 	void	render();
 	void	think(int _frames);
 	int		readyToShutdown()		{return false;}
@@ -46,7 +46,11 @@ public:
 
 
 private:
-	class FontBank	*m_fontBank;
+	class FontBank	*m_font;
+
+	int				m_animNumber;
+	int				m_animFrame;
+	int				m_addonNumber;
 
 };
 
@@ -55,7 +59,7 @@ private:
 	Globals
 	------- */
 
-extern CPartyScene	PartyScene;
+extern CAnimTestScene	AnimTestScene;
 
 
 /*----------------------------------------------------------------------

@@ -1289,6 +1289,14 @@ SOURCE=..\..\..\source\pad\pads.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\paul\animtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\paul\animtest.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\paul\paul.cpp
 # End Source File
 # Begin Source File

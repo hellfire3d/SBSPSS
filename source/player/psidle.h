@@ -49,6 +49,14 @@ public:
 };
 
 
+class CPlayerStateNoAnimIdle : public CPlayerStateBaseIdle
+{
+public:
+	virtual void	enter(class CPlayerModeBase *_playerMode);
+	virtual void	think(class CPlayerModeBase *_playerMode);
+};
+
+
 ////
 typedef struct
 {
@@ -118,6 +126,7 @@ private:
 
 extern	CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 extern	CPlayerStateTeeterIdle		s_stateTeeterIdle;
+extern	CPlayerStateNoAnimIdle		s_stateNoAnimIdle;
 extern	CPlayerStateWeaponIdle		s_stateWeaponIdle;
 extern	CPlayerStateNetIdle			s_stateNetIdle;
 

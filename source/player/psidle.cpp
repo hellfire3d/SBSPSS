@@ -56,6 +56,7 @@
 
 CPlayerStateUnarmedIdle		s_stateUnarmedIdle;
 CPlayerStateTeeterIdle		s_stateTeeterIdle;
+CPlayerStateNoAnimIdle		s_stateNoAnimIdle;
 CPlayerStateWeaponIdle		s_stateWeaponIdle;
 CPlayerStateNetIdle			s_stateNetIdle;
 
@@ -130,6 +131,31 @@ void CPlayerStateTeeterIdle::enter(CPlayerModeBase *_playerMode)
 	Returns:
   ---------------------------------------------------------------------- */
 void CPlayerStateTeeterIdle::think(CPlayerModeBase *_playerMode)
+{
+	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
+	thinkControl(_playerMode);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateNoAnimIdle::enter(CPlayerModeBase *_playerMode)
+{
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_IDLEBREATH);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateNoAnimIdle::think(CPlayerModeBase *_playerMode)
 {
 	_playerMode->advanceAnimFrameAndCheckForEndOfAnim();
 	thinkControl(_playerMode);
@@ -296,9 +322,9 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*60	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								10*6	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*6	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
 };
 static int s_numWeaponIdleAnims=sizeof(s_weaponIdleAnims)/sizeof(IdleAnims);

@@ -57,6 +57,9 @@ private:
 	int							m_blowing;
 	int							m_bubbleDelay;
 
+protected:
+	virtual class CPlayerState	**getStateTable();
+
 };
 
 

@@ -25,7 +25,59 @@
 #include "gfx\font.h"
 #endif
 
-#include	"game/game.h"
+#ifndef __GAME_GAME_H__
+#include "game/game.h"
+#endif
+
+// States
+#ifndef __PLAYER__PSLOOK_H__
+#include "player\pslook.h"
+#endif
+
+#ifndef __PLAYER__PSJUMP_H__
+#include "player\psjump.h"
+#endif
+
+#ifndef __PLAYER__PSJMPBCK_H__
+#include "player\psjmpbck.h"
+#endif
+
+#ifndef __PLAYER__PSRUN_H__
+#include "player\psrun.h"
+#endif
+
+#ifndef __PLAYER__PSFALL_H__
+#include "player\psfall.h"
+#endif
+
+#ifndef __PLAYER__PSHITGND_H__
+#include "player\pshitgnd.h"
+#endif
+
+#ifndef __PLAYER__PSIDLE_H__
+#include "player\psidle.h"
+#endif
+
+#ifndef __PLAYER__PSBUTT_H__
+#include "player\psbutt.h"
+#endif
+
+#ifndef __PLAYER__PSDUCK_H__
+#include "player\psduck.h"
+#endif
+
+#ifndef __PLAYER__PSSPRING_H__
+#include "player\psspring.h"
+#endif
+
+#ifndef __PLAYER_PSCART_H__
+#include "player\pscart.h"
+#endif
+
+#ifndef __PLAYER_PSFLOAT_H__
+#include "player\psfloat.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -57,6 +109,32 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
+
+static	CPlayerState	*s_stateTable[]=
+{
+	&s_stateNoAnimIdle,						// STATE_IDLE
+	&s_stateTeeterIdle,						// STATE_IDLETEETER
+	&s_stateJump,							// STATE_JUMP
+	&s_stateSpring,							// STATE_SPRINGUP
+	&s_stateRun,							// STATE_RUN
+	&s_stateFall,							// STATE_FALL
+	&s_stateFallFar,						// STATE_FALLFAR
+	&s_stateHitGround,						// STATE_HITGROUND
+	&s_stateButtBounce,						// STATE_BUTTBOUNCE
+	&s_stateButtBounceFall,					// STATE_BUTTFALL
+	&s_stateButtBounceLand,					// STATE_BUTTLAND
+	&s_stateButtBounceUp,					// STATE_BUTTBOUNCEUP
+	&s_stateSoakUp,							// STATE_SOAKUP
+	&s_stateGetUp,							// STATE_GETUP
+	&s_stateLookDown,						// STATE_LOOKDOWN
+	&s_stateLookDownRelax,					// STATE_LOOKDOWNRELAX
+	&s_stateLookUp,							// STATE_LOOKUP
+	&s_stateLookUpRelax,					// STATE_LOOKUPRELAX
+	&s_stateJumpBack,						// STATE_JUMPBACK
+	&s_stateCart,							// STATE_CART
+	&s_stateFloat,							// STATE_FLOAT
+};
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -215,6 +293,17 @@ int		CPlayerModeBubbleMixture::canBlowBubbleFromThisState()
 	}
 
 	return ret;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CPlayerState	**CPlayerModeBubbleMixture::getStateTable()
+{
+	return s_stateTable;
 }
 
 /*===========================================================================
