@@ -20,8 +20,12 @@
 
 class CNpcSandyFriend : public CNpcFriend
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		startConderversation();
+
+	FileEquate			m_conversation;
 };
 
 #endif

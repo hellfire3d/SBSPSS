@@ -765,6 +765,12 @@ void CConversation::registerConversationLevelScripts(int level)
 					break;
 				}
 
+				case 2:
+				{
+					CConversation::registerConversationScript(SCRIPTS_CH3L2_01_DAT);
+					break;
+				}
+
 				case 3:
 				{
 					CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);

@@ -2637,6 +2637,10 @@ SOURCE=..\..\..\data\Scripts\ch3l1_01.scr
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\data\Scripts\ch3l2_01.scr
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\data\Scripts\ch3l3_01.scr
 # End Source File
 # Begin Source File
