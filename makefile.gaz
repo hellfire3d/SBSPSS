@@ -159,6 +159,7 @@ player_src :=		demoplay \
 					player \
 					pmodes \
 					pmbloon \
+					pmchop \
 					pmdead \
 					pmfly \
 					psbutt \

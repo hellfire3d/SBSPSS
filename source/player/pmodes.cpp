@@ -133,6 +133,13 @@ static PlayerMetrics	s_playerMetrics=
   ---------------------------------------------------------------------- */
 int		CPlayerMode::getPadInputHeld()					{return m_player->getPadInputHeld();}
 int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR	CPlayerMode::getPlayerPos()						{return m_player->getPlayerPos();}
 void	CPlayerMode::setPlayerPos(DVECTOR *_pos)		{m_player->setPlayerPos(_pos);}
 
@@ -185,6 +192,39 @@ void	CPlayerModeBase::think()
   ---------------------------------------------------------------------- */
 void	CPlayerModeBase::render()
 {
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CPlayerModeBase::isInAttackState()
+{
+	int	ret=false;
+
+	switch(getState())
+	{
+		case STATE_BUTTFALL:
+		case STATE_BUTTLAND:
+			ret=true;
+			break;
+
+		case STATE_IDLE:
+		case STATE_IDLETEETER:
+		case STATE_JUMP:
+		case STATE_RUN:
+		case STATE_FALL:
+		case STATE_FALLFAR:
+		case STATE_BUTTBOUNCE:
+		case STATE_DUCK:
+		case STATE_SOAKUP:
+		case STATE_GETUP:
+			break;
+	}
+
+	return ret;
 }
 
 /*----------------------------------------------------------------------

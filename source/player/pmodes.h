@@ -77,12 +77,15 @@ class CPlayerMode
 {
 public:
 	virtual void	initialise(class CPlayer *_player)	{m_player=_player;}
+	virtual void	shutdown()							{;}
 	virtual void	enter()								{;}
 	virtual void	think()								{;}
 	virtual void	render()							{;}
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
+
+	virtual int		isInAttackState()					{return false;}
 
 protected:
 	DVECTOR			getPlayerPos();
@@ -107,6 +110,8 @@ public:
 	virtual void	think();
 	virtual void	render();
 
+	virtual int		isInAttackState();
+
 	virtual int					canTeeter()				{return m_currentState==STATE_IDLE;}
 	virtual int					canFallForever()		{return m_currentState==STATE_BUTTFALL;}
 
@@ -116,12 +121,15 @@ public:
 	
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 	int							setState(int _state);
+	int							getState()				{return m_currentState;}
 //	virtual void			setMode(class CPlayer *_player,int _mode);
 	int							getFacing();
 	void						setFacing(int _facing);
-//	virtual int				getAnimNo(class CPlayer *_player);
-	void						setAnimNo(int _animNo);
-	void						setAnimFrame(int _animFrame);
+	virtual int					getAnimNo();
+	virtual void				setAnimNo(int _animNo);
+	virtual void				setAnimFrame(int _animFrame);
+	virtual int					getAnimFrame();
+	virtual int					getAnimFrameCount();
 	int							advanceAnimFrameAndCheckForEndOfAnim();
 //	virtual int				retreatAnimFrameAndCheckForEndOfAnim(class CPlayer *_player);
 	DVECTOR						getMoveVelocity();

@@ -36,6 +36,22 @@
 
 class CPlayerModeChop : public CPlayerModeBase
 {
+public:
+	virtual void				enter();
+	virtual void				think();
+
+	virtual void				setAnimNo(int _animNo);
+	virtual void				setAnimFrame(int _animFrame);
+
+	virtual int					isInAttackState();
+
+private:
+	int							canAttackFromThisState();
+
+	int							m_savedAnimNo,m_savedAnimFrame;
+	int							m_chopFrame;
+	int							m_chopping;
+
 };
 
 

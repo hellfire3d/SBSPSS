@@ -17,12 +17,25 @@
 
 #include "player\pmbloon.h"
 
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
+#ifndef __LEVEL_LEVEL_H__
+#include "level\level.h"
+#endif
+
 
 /*	Std Lib
 	------- */
 
 /*	Data
 	---- */
+
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -60,10 +73,35 @@ static PlayerMetrics	s_playerMetrics=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::initialise(class CPlayer *_player)
+{
+	CPlayerModeBase::initialise(_player);
+	m_sprites=new ("BalloonSprite") SpriteBank();
+	m_sprites->load(INGAMEFX_INGAMEFX_SPR);
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBalloon::shutdown()
+{
+	m_sprites->dump();		delete m_sprites;
+	CPlayerModeBase::shutdown();
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CPlayerModeBalloon::enter()
 {
 	CPlayerModeBase::enter();
-	m_ballonTimer=BALLOON_TIME;
+	m_balloonTimer=BALLOON_TIME;
 }
 
 /*----------------------------------------------------------------------
@@ -75,10 +113,34 @@ void	CPlayerModeBalloon::enter()
 void	CPlayerModeBalloon::think()
 {
 	CPlayerModeBase::think();
-	if(--m_ballonTimer==0)
+	if(--m_balloonTimer==0||getPadInputDown()&PI_ACTION)
 	{
 		PAUL_DBGMSG("*pop*");
 		m_player->setMode(PLAYER_MODE_FULLUNARMED);
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int balloonx=-14;
+int balloony=-90;
+void	CPlayerModeBalloon::render()
+{
+	DVECTOR	ofs,pos;
+	CPlayerModeBase::render();
+
+	if(m_balloonTimer>BALLOON_FLASH_TIME||
+	   m_balloonTimer&2)
+	{
+		ofs=CLevel::getCameraPos();
+		pos=m_player->getPlayerPos();
+		pos.vx+=balloonx-ofs.vx;
+		pos.vy+=balloony-ofs.vy;
+		m_sprites->printFT4(FRM__BALLOON,pos.vx,pos.vy,0,0,0);
 	}
 }
 
