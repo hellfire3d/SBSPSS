@@ -452,7 +452,7 @@ void CMapScene::renderChapterArrows()
 		x=256-(fh->W/2);
 		ft4=sb->printFT4Scaled(fh,x,y,0,0,0,scale);
 	}
-	if(m_currentChapterSelection<5&&isChapterOpen(m_currentChapterSelection+1))
+	if(m_currentChapterSelection<5-1&&isChapterOpen(m_currentChapterSelection+1))
 	{
 		int	scale;
 		scale=m_currentIconSelection==MAP_ICON_NEXT_CHAPTER?383:256;
@@ -520,19 +520,35 @@ void CMapScene::think(int _frames)
 					break;
 				case MAP_ICON_NEXT_CHAPTER:
 					m_currentIconSelection=m_previousIconSelection;
+					if(!isLevelOpen(m_currentChapterSelection,m_currentIconSelection-1))
+					{
+						for(int i=MAP_ICON_LEVEL_BONUS;i>=MAP_ICON_LEVEL_1;i--)
+						{
+							if(isLevelOpen(m_currentChapterSelection,i-1))
+							{
+								m_currentIconSelection=i;
+								m_pointerIcon->setTarget(getPointerTargetPosition());
+								break;
+							}
+						}
+					}
 					break;
 			}
 		}
 		else if(pad&PAD_DOWN)
 		{
 			int nextChapterAvailable=false;
-			if(m_currentChapterSelection<5&&isChapterOpen(m_currentChapterSelection+1))nextChapterAvailable=true;
+			if(m_currentChapterSelection<5-1&&isChapterOpen(m_currentChapterSelection+1))nextChapterAvailable=true;
 
 			cursor=CURSOR_MOVED;
 			switch(m_currentIconSelection)
 			{
 				case MAP_ICON_PREVIOUS_CHAPTER:
 					m_currentIconSelection=m_previousIconSelection;
+					if(!isLevelOpen(m_currentChapterSelection,m_currentIconSelection-1))
+					{
+						m_currentIconSelection=MAP_ICON_LEVEL_1;
+					}
 					break;
 				case MAP_ICON_LEVEL_1:
 				case MAP_ICON_LEVEL_2:
@@ -677,9 +693,9 @@ void CMapScene::think(int _frames)
 				case MAP_ICON_NEXT_CHAPTER:
 					m_currentChapterSelection++;
 					generateMapScreenImage();
-					if(m_currentChapterSelection==5||!isChapterOpen(m_currentChapterSelection+1))
+					if(m_currentChapterSelection==5-1||!isChapterOpen(m_currentChapterSelection+1))
 					{
-						for(int i=MAP_ICON_LEVEL_BONUS;i>MAP_ICON_LEVEL_1;i--)
+						for(int i=MAP_ICON_LEVEL_BONUS;i>=MAP_ICON_LEVEL_1;i--)
 						{
 							if(isLevelOpen(m_currentChapterSelection,i-1))
 							{
