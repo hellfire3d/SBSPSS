@@ -240,7 +240,9 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 
 	// ignore y component of waypoint, since we are stuck to the ground
 
-	if ( m_npcPath.thinkFlat( Pos, &distX, &distY, &m_heading ) )
+	bool pathComplete;
+
+	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &distX, &distY, &m_heading ) )
 	{
 		// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
 

@@ -60,7 +60,7 @@ void CNpcEnemy::processCloseSkullStomperAttack( int _frames )
 
 				// pause and change direction
 
-				m_timerTimer = GameState::getOneSecondInFrames();
+				m_timerTimer = 3 * GameState::getOneSecondInFrames();
 				m_extendDir = EXTEND_UP;
 			}
 			else

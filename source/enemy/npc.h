@@ -291,6 +291,7 @@ protected:
 		NPC_MOVEMENT_STATIC_CYCLE_ANIM,
 		NPC_MOVEMENT_SHARK_MAN,
 		NPC_MOVEMENT_BALL_BLOB,
+		NPC_MOVEMENT_RETURNING_HAZARD_GROUND,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -566,6 +567,7 @@ protected:
 	void				processPendulumMovement( int _frames );
 	void				processFireballMovement( int _frames );
 	void				processReturningHazardMovement( int _frames );
+	void				processReturningHazardMovementGround( int _frames );
 
 	// data
 

@@ -225,7 +225,7 @@ void CNpcEnemy::processCloseSmallJellyfishEvade( int _frames )
 
 				m_heading += moveDist;
 
-				m_heading = m_heading % ONE;
+				m_heading &= 4095;
 				
 				moveX = ( _frames * 3 * rcos( m_heading ) ) >> 12;
 				moveY = ( _frames * 3 * rsin( m_heading ) ) >> 12;

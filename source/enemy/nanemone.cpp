@@ -114,11 +114,11 @@ void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 
 		m_heading += moveDist;
 
-		m_heading = m_heading % ONE;
+		m_heading &= 4095;
 
 		if ( withinRange )
 		{
-			// can fire
+			// can fire, start firing anim
 
 			if ( m_timerTimer <= 0 && !m_animPlaying )
 			{
@@ -128,22 +128,40 @@ void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 					m_animNo = ANIM_ANENOMELVL1_FIRE;
 					m_frame = 0;
 				}
-				else
-				{
-					CProjectile *projectile;
-					projectile = new( "test projectile" ) CProjectile;
-					projectile->init( Pos, m_heading );
-					projectile->setLayerCollision( m_layerCollision );
+			}
+		}
+	}
+	else
+	{
+		if ( !m_animPlaying || m_animNo != ANIM_ANENOMELVL1_BEND )
+		{
+			m_animPlaying = true;
+			m_animNo = ANIM_ANENOMELVL1_BEND;
+			m_frame = 0;
+		}
+	}
 
-					m_controlFunc = NPC_CONTROL_MOVEMENT;
-					m_timerTimer = GameState::getOneSecondInFrames();
-					m_timerFunc = NPC_TIMER_ATTACK_DONE;
-					m_sensorFunc = NPC_SENSOR_NONE;
+	if ( withinRange )
+	{
+		if ( m_timerTimer <= 0 && !m_animPlaying )
+		{
+			if ( m_animNo == ANIM_ANENOMELVL1_FIRE )
+			{
+				// if firing anim is complete and user is still in range, fire projectile
 
-					m_animPlaying = true;
-					m_animNo = ANIM_ANENOMELVL1_BEND;
-					m_frame = 0;
-				}
+				CProjectile *projectile;
+				projectile = new( "test projectile" ) CProjectile;
+				projectile->init( Pos, m_heading );
+				projectile->setLayerCollision( m_layerCollision );
+
+				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_timerTimer = GameState::getOneSecondInFrames();
+				m_timerFunc = NPC_TIMER_ATTACK_DONE;
+				m_sensorFunc = NPC_SENSOR_NONE;
+
+				m_animPlaying = true;
+				m_animNo = ANIM_ANENOMELVL1_BEND;
+				m_frame = 0;
 			}
 		}
 	}

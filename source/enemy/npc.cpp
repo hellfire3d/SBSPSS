@@ -1259,6 +1259,13 @@ void CNpcEnemy::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_RETURNING_HAZARD_GROUND:
+		{
+			processReturningHazardMovementGround( _frames );
+
+			break;
+		}
+
 		case NPC_MOVEMENT_SHARK_MAN:
 		{
 			processSharkManMovement( _frames, &moveX, &moveY );

@@ -43,8 +43,10 @@ void CNpcEnemy::processBallBlobMovement( int _frames, s32 *moveX, s32 *moveY )
 	}
 
 	// deal with horizontal
+
+	bool pathComplete;
 	
-	if ( m_npcPath.thinkFlat( Pos, &waypointXDist, &waypointYDist, &waypointHeading ) )
+	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading ) )
 	{
 		// increment waypoint
 

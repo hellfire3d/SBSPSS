@@ -122,7 +122,7 @@ void CNpcEnemy::processSpiderCrabCollision()
 		{
 			CPlayer *player = GameScene.getPlayer();
 
-			//player->takeDamage( m_data[m_type].damageToUserType );
+			player->takeDamage( m_data[m_type].damageToUserType );
 
 			m_animNo = ANIM_SPIDERCRAB_BITE;
 			m_animPlaying = true;
@@ -142,7 +142,7 @@ void CNpcEnemy::processSpiderCrabCollision()
 	{
 		CPlayer *player = GameScene.getPlayer();
 
-		//player->takeDamage( m_data[m_type].damageToUserType );
+		player->takeDamage( m_data[m_type].damageToUserType );
 
 		m_controlFunc = m_oldControlFunc;
 	}
