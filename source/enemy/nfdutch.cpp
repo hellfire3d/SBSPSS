@@ -455,6 +455,7 @@ void CNpcFlyingDutchmanEnemy::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			setSemiTrans( SprFrame, true );
 			m_actorGfx->RotateScale( SprFrame, renderPos, 0, 4096, 4096 );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
