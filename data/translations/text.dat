@@ -39,7 +39,3 @@ eng=
 ; Debugging text
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------
-
-[STR__ART_REMOVE_THIS_TRIGGER]
-eng=THIS TRIGGER SHOULD NOT BE HERE\nTO BE REMOVED BY ART..
-
