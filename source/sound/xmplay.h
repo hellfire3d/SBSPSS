@@ -44,9 +44,22 @@ typedef enum	{NOT_PLAYING=-1}	xmPlayingId;
 class CXMPlaySound
 {
 public:
+	enum
+	{
+		MIN_VOLUME=0,
+		MAX_VOLUME=255,
+		PAN_LEFT=0,
+		PAN_CENTRE=127,
+		PAN_RIGHT=255,
+	};
+
+	
 	void			initialise();
 	void			shutdown();
 	void			think();
+
+	void			setMasterSongVolume(unsigned char _vol);
+	void			setMasterSfxVolume(unsigned char _vol);
 
 	xmSampleId		loadSampleData(FileEquate _vhFe,FileEquate _vbFe);
 	xmModId			loadModData(FileEquate _modFe);
@@ -58,9 +71,11 @@ public:
 	void			setVolume(xmPlayingId _playingId,unsigned char _volume);
 	void			setPanning(xmPlayingId _playingId,char _pan);
 
-	xmPlayingId		playSong(xmSampleId _sampleId,xmModId _songId,int _channelCount);
-	xmPlayingId		playSfx(xmSampleId _sampleId,xmModId _songId,int _sfxPattern,int _playMask,u8 _priority);
-	xmPlayingId		playLoopingSfx(xmSampleId _sampleId,xmModId _songId,int _soundId,u8 _priority,int _pitch=0x400);
+	void			stopAndUnlockAllSound();
+
+	xmPlayingId		playSong(xmSampleId _sampleId,xmModId _modId);
+	xmPlayingId		playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPattern,int _playMask,u8 _priority);
+	xmPlayingId		playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int _soundId,u8 _priority,int _pitch=0x400);
 
 	void			unlockPlayingId(xmPlayingId _playingId);
 	void			stopPlayingId(xmPlayingId _playingId);
@@ -86,7 +101,7 @@ private:
 		LOOPINGSFX,
 	} CHANNELUSETYPE;
 
-	// Internal representation of loaded songs
+	// Internal representation of loaded mods
 	typedef struct XMMod
 	{
 		unsigned char	*m_xmData;
@@ -111,6 +126,7 @@ private:
 		u8					m_internalId;
 		u8					m_priority;
 		u8					m_locked;
+		u8					m_vol,m_pan;
 	} spuChannelUse;
 
 	xmPlayingId		getNextSparePlayingId();
@@ -119,11 +135,17 @@ private:
 
 	void			defragSpuMemory();
 
+	void			updateLoopingSfx(spuChannelUse *ch);
+
+	
 	unsigned char	*m_fhPtr[MAX_XM_HEADERS];
 	unsigned char	*m_songPtr[MAX_SONG_HEADERS];
-	XMMod			s_xmMods[MAX_XM_SONGS];
-	XMVab			s_xmVabs[MAX_XM_VABS];
+	XMMod			m_xmMods[MAX_XM_SONGS];
+	XMVab			m_xmVabs[MAX_XM_VABS];
 	spuChannelUse	m_spuChannelUse[NUM_SPU_CHANNELS];
+
+	unsigned char	m_masterSongVolume;
+	unsigned char	m_masterSfxVolume;
 	
 };
 

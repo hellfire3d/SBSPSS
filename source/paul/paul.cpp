@@ -74,6 +74,7 @@ char				*s_mem[3];
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int ploopid=0;
 void CPaulScene::init()
 {
 	s_fontBank.initialise(&standardFont);
@@ -87,6 +88,8 @@ void CPaulScene::init()
 
 //CXAStream::Init();
 	PAUL_DBGMSG("initialised..");
+
+	ploopid=CSoundMediator::playSfx(0);
 }
 
 
@@ -133,12 +136,14 @@ int	pkill=0;
 #include "sound\speech.h"
 int mvol=10;
 int svol=255;
+VECTOR ppos;
 
 void CPaulScene::think()
 {
 	int				pad;
 	int				sfxId=-1;
-	int				setVolumes=false;
+	int				setSfxVolume=false;
+	int				setSongVolume=false;
 
 	pad=PadGetDown(0);
 	if(pad&PAD_R1)
@@ -164,39 +169,51 @@ void CPaulScene::think()
 	if(sfxId!=-1)
 	{
 		CSoundMediator::playSfx(sfxId);
-
 	}
 	if(pad&PAD_START)
 	{
+		PAUL_DBGMSG("stop %d",pkill);
 		CSoundMediator::stopSfx((xmPlayingId)pkill);
 	}
+	if(pad&PAD_R2)
+	{
+		PAUL_DBGMSG("stop all");
+		CSoundMediator::stopAllSound();
+	}
 
+//CSoundMediator::setposition((xmPlayingId)ploopid,&ppos);
 
 	pad=PadGetHeld(0);
 	if(pad&PAD_UP)
 	{
-		if(++mvol>CSoundMediator::MAX_VOLUME)mvol=CSoundMediator::MAX_VOLUME;
-		setVolumes=true;
+		mvol+=16;
+		if(mvol>CSoundMediator::MAX_VOLUME)mvol=CSoundMediator::MAX_VOLUME;
+		setSongVolume=true;
 	}
 	if(pad&PAD_DOWN)
 	{
-		if(--mvol<CSoundMediator::MIN_VOLUME)mvol=CSoundMediator::MIN_VOLUME;
-		setVolumes=true;
+		mvol-=16;
+		if(mvol<CSoundMediator::MIN_VOLUME)mvol=CSoundMediator::MIN_VOLUME;
+		setSongVolume=true;
 	}
 	if(pad&PAD_RIGHT)
 	{
-		if(++svol>CSoundMediator::MAX_VOLUME)svol=CSoundMediator::MAX_VOLUME;
-		setVolumes=true;
+		svol+=16;
+		if(svol>CSoundMediator::MAX_VOLUME)svol=CSoundMediator::MAX_VOLUME;
+		setSfxVolume=true;
 	}
 	if(pad&PAD_LEFT)
 	{
-		if(--svol<CSoundMediator::MIN_VOLUME)svol=CSoundMediator::MIN_VOLUME;
-		setVolumes=true;
+		svol-=16;
+		if(svol<CSoundMediator::MIN_VOLUME)svol=CSoundMediator::MIN_VOLUME;
+		setSfxVolume=true;
 	}
-	if(setVolumes)
+	if(setSongVolume)		CSoundMediator::setVolume(CSoundMediator::SONG,mvol);
+	if(setSfxVolume)		CSoundMediator::setVolume(CSoundMediator::SFX,svol);
+
+	if(setSongVolume||setSfxVolume)
 	{
-		CSoundMediator::setVolume(CSoundMediator::SONG,mvol);
-		CSoundMediator::setVolume(CSoundMediator::SFX,svol);
+		PAUL_DBGMSG("song:%d   sfx:%d",mvol,svol);
 	}
 
 //CXAStream::ControlXA();

@@ -28,6 +28,10 @@ adjust channels ( watery-mario64 style music changes )
 #include "system\dbg.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include "utils\utils.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -112,9 +116,6 @@ static ReverbDetails	s_reverbDetails[CSoundMediator::NUM_REVERBTYPES]=
 	{	SPU_REV_MODE_ECHO,	75,	0x3000,	100	},								// ECHO_TEST
 };
 
-//
-int s_songChannelCount=10;
-//
 
 
 /*----------------------------------------------------------------------
@@ -139,12 +140,11 @@ void CSoundMediator::initialise()
 		s_targetVolume[i]=INITIAL_VOLUME;
 		s_volumeDirty[i]=true;
 	}
-	setSongToFadedIn();
 //	ASSERT(CXAStream::MIN_VOLUME==0);			// Just incase someone decides to change any of these.. things in here will break ( PKG )
 //	ASSERT(CXAStream::MAX_VOLUME==32767);
 
 	// Initial reverb settings
-	setReverbType(ECHO_TEST);
+	setReverbType(NONE);//ECHO_TEST);
 
 	SOUND_DBGMSG("Sound mediator initialised");
 	s_initialised=true;
@@ -211,23 +211,20 @@ void CSoundMediator::think(int _frames)
 		dirty++;
 	}
 
-	// Manual update of anything that needs it
+	// Update of anything that needs it
 //	CXAStream::ControlXA();
 	s_xmplaySound->think();
 	
 
 	// Push through any changes in volume
-	if(s_volumeDirty[SONG]||s_volumeDirty[SONGFADE])
+	if(s_volumeDirty[SONG])
 	{
-		if(s_songPlayingId!=NOT_PLAYING)
-		{
-			int vol=(s_currentVolume[SONG]*((s_currentVolume[SONGFADE]>>1)+128))>>8;
-			s_xmplaySound->setVolume(s_songPlayingId,(char)vol);
-		}
-		s_volumeDirty[SONG]=s_volumeDirty[SONGFADE]=false;
+		s_xmplaySound->setMasterSongVolume(s_currentVolume[SONG]);
+		s_volumeDirty[SONG]=false;
 	}
 	if(s_volumeDirty[SFX])
 	{
+		s_xmplaySound->setMasterSfxVolume(s_currentVolume[SFX]);
 		s_volumeDirty[SFX]=false;
 	}
 //	if(s_volumeDirty[SPEECH])
@@ -283,8 +280,8 @@ void CSoundMediator::playSong()
 	ASSERT(s_songModId!=NO_SONG);
 	ASSERT(s_songPlayingId==NOT_PLAYING);
 
-	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId,s_songChannelCount);
-	s_volumeDirty[SONG]=true;		// Force a volume update
+	s_songPlayingId=s_xmplaySound->playSong(s_songSampleId,s_songModId);
+//	s_volumeDirty[SONG]=true;		// Force a volume update
 }
 
 
@@ -335,10 +332,12 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
-	Params:
+	Params:		Pass _lock as true if you wanna keep hold of one-shot sfx.
+				This'll be necessary if you have a *long* one-shot at the
+				same time as *lots* of other sfx.
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId CSoundMediator::playSfx(int _sfxId)
+xmPlayingId CSoundMediator::playSfx(int _sfxId,int _lock=false)
 {
 	int			sfxChannelMask;
 	xmPlayingId	playId;
@@ -356,15 +355,41 @@ xmPlayingId CSoundMediator::playSfx(int _sfxId)
 	else
 	{
 		playId=s_xmplaySound->playSfx(s_sfxSampleId,s_sfxModId,sfx->m_pattern,sfx->m_channelMask,20);
-		if(playId!=NOT_PLAYING)
+		if(!_lock&&playId!=NOT_PLAYING)
 		{
 			s_xmplaySound->unlockPlayingId(playId);		// We really don't care about one-shot sfx..
 			playId=NOT_PLAYING;
 		}
 	}
-	s_volumeDirty[SFX]=true;		// Force a volume update
+//	s_volumeDirty[SFX]=true;		// Force a volume update
 
 	return playId;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Calculate volume and panning for a sound base upon its
+				position in space. Takes a position in space which describes
+				the sound position relative to the camera/microphone.
+				Volume comes from distance from origin and panning comes from
+				the position along the x axis.
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::setposition(xmPlayingId _playingId,VECTOR *pos)
+{
+	int		volume,pan;
+
+	volume=CXMPlaySound::MAX_VOLUME-(CalcLengthV(pos));
+	if(volume<CXMPlaySound::MIN_VOLUME)volume=CXMPlaySound::MIN_VOLUME;
+
+	pan=(pos->vx/2)+CXMPlaySound::PAN_CENTRE;
+	if(pan<CXMPlaySound::PAN_LEFT)pan=CXMPlaySound::PAN_LEFT;
+	else if(pan>CXMPlaySound::PAN_RIGHT)pan=CXMPlaySound::PAN_RIGHT;
+
+	s_xmplaySound->setVolume(_playingId,volume);
+	s_xmplaySound->setPanning(_playingId,pan);
 }
 
 
@@ -420,6 +445,18 @@ void CSoundMediator::setVolume(VOLUMETYPE _type,int _val)
 int CSoundMediator::getVolume(VOLUMETYPE _type)
 {
 	return s_targetVolume[_type];
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CSoundMediator::stopAllSound()
+{
+	s_xmplaySound->stopAndUnlockAllSound();
 }
 
 

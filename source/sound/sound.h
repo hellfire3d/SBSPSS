@@ -66,8 +66,6 @@ public:
 		SFX,
 		SPEECH,
 
-		SONGFADE,
-
 		NUM_VOLUMETYPES,
 	};
 
@@ -98,13 +96,11 @@ public:
 	static void			setSong(SONGID _songId);
 	static void			playSong();
 	static void			dumpSong();
-	static void			setSongToFadedOut()				{setVolume(SONGFADE,0);}
-	static void			setSongToFadedIn()				{setVolume(SONGFADE,255);}
 
 	// SFX interface
 	static void			setSfxBank(SFXBANKID _bankId);
-	static xmPlayingId	playSfx(int _sfxId);
-//	static void			setposition(int _playId,vector pos );
+	static xmPlayingId	playSfx(int _sfxId,int _lock=false);
+	static void			setposition(xmPlayingId _playingId,VECTOR *pos);
 	static void			stopSfx(xmPlayingId _playingId);
 
 	// Speech interface
@@ -113,7 +109,7 @@ public:
 	// Control
 	static void			setVolume(VOLUMETYPE _type,int _val);
 	static int			getVolume(VOLUMETYPE _type);
-//	static void			stopAllSound();
+	static void			stopAllSound();
 
 
 private:
