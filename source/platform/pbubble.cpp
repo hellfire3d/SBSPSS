@@ -19,10 +19,5 @@
 
 void CNpcBubblePlatform::processMovement( int _frames )
 {
-	if ( _frames > 2 )
-	{
-		_frames = 2;
-	}
-
 	Pos.vy -= m_data[m_type].speed * _frames;
 }

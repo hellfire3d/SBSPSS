@@ -418,7 +418,16 @@ void CNpcPlatform::think(int _frames)
 			m_reversed = false;
 		}
 
-		processMovement(_frames);
+		int moveFrames = _frames;
+
+		if ( moveFrames > 2 )
+		{
+			// make sure platforms don't go berserk if too many frames are dropped
+
+			moveFrames = 2;
+		}
+
+		processMovement( moveFrames );
 
 		m_contact = false;
 	}

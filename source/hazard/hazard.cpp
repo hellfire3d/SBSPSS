@@ -70,7 +70,16 @@ void CNpcHazard::think(int _frames)
 
 	if ( m_isActive )
 	{
-		processMovement( _frames );
+		int moveFrames = _frames;
+
+		if ( moveFrames > 2 )
+		{
+			// make sure hazards don't go berserk if too many frames are dropped
+
+			moveFrames = 2;
+		}
+
+		processMovement( moveFrames );
 	}
 
 	if ( m_timerActive )
