@@ -54,6 +54,11 @@ XAFileAttributes
 XaSource cdbuild\usa\thq.str
 EndFile
 
+File	TRACK1.IXA
+XAFileAttributes
+XaSource cdbuild\usa\track1.ixa
+EndFile
+
 File	INTRO.STR
 XAFileAttributes
 XaSource cdbuild\usa\intro.str
