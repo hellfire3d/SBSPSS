@@ -233,15 +233,7 @@ void	CPlayerModeBase::thinkVerticalMovement()
 
 	collision=m_player->getLayerCollision();
 	pos=m_player->getPlayerPos();
-
 	colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,1);
-
-//New collision stuff (pkg)
-//if(m_layerCollision->getCollisionType(Pos.vx,Pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)
-//{
-//	m_moveVelocity.vy=0;
-//	return;
-//}
 	if(colHeight>=0)
 	{
 		// Above or on the ground
@@ -266,14 +258,19 @@ void	CPlayerModeBase::thinkVerticalMovement()
 			   m_currentState!=STATE_JUMP)
 			{
 				// Was floating in the air.. fall!
-
 				setState(STATE_FALL);
 			}
 		}
 	}
 	else
 	{
-		if ( m_player->isOnPlatform() && m_moveVelocity.vy >= 0 )
+		if((m_player->getLayerCollision()->getCollisionBlock(pos.vx,pos.vy+(m_moveVelocity.vy>>VELOCITY_SHIFT))&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
+		{
+			// Hit an impassable block
+			pos.vy=(pos.vy&0xfff0)+16;
+			m_moveVelocity.vy=0;
+		}
+		else if ( m_player->isOnPlatform() && m_moveVelocity.vy >= 0 )
 		{
 			pos.vy += colHeight;
 			playerHasHitGround();
@@ -296,16 +293,10 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 	{
 		CLayerCollision	*collision;
 		DVECTOR			pos;
+		int				colHeight;
 
 		collision=m_player->getLayerCollision();
 		pos=m_player->getPlayerPos();
-//New collision stuff (pkg)
-//if(m_layerCollision->getCollisionType(Pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),Pos.vy)&COLLISION_TYPE_MASK)
-//{
-//	m_moveVelocity.vx=0;
-//	return;
-//}
-		int colHeight;
 		colHeight=m_player->getHeightFromGround(pos.vx,pos.vy,5);
 		if(colHeight==0)
 		{
@@ -357,8 +348,17 @@ void	CPlayerModeBase::thinkHorizontalMovement()
 		else
 		{
 			// In the air
-//			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
-			if(colHeight>=0) // Lets you jump through platforms from below
+			if((m_player->getLayerCollision()->getCollisionBlock(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy)&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
+			{
+				// Hit an impassable block
+				pos.vx&=0xfff0;
+				if(m_moveVelocity.vx>0)
+				{
+					pos.vx+=15;
+				}
+				m_moveVelocity.vx=0;
+			}
+			else if(colHeight>=0) // Lets you jump through platforms from below
 			{
 				colHeight=m_player->getHeightFromGround(pos.vx+(m_moveVelocity.vx>>VELOCITY_SHIFT),pos.vy,5);
 				if(colHeight<0)
