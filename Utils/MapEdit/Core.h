@@ -14,7 +14,6 @@
 #include	"TileSet.h"
 
 
-
 /*****************************************************************************/
 class	CMapEditView;
 class	CCore
@@ -31,6 +30,7 @@ public:
 		void					RenderTileView(CMapEditView *View);
 
 // Control
+		void					SetMode(int NewMode);
 		void					LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		void					MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 		void					RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
@@ -40,14 +40,11 @@ public:
 // TileBank
 		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
 
+		CTileBank				&GetTileBank()					{return(TileBank);}
 		CTile					GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
-		void					ReloadTileBank();
-		void					ChangeTileBank();
-
-		int						GetCurrentTileBank()			{return(CurrentTileBank);}
-		void					SetCurrentTileBank(int Bnk)		{CurrentTileBank=Bnk;}
-		sMapElem				&GetMouseTileL()				{return(MouseTileL);}
-		sMapElem				&GetMouseTileR()				{return(MouseTileR);}
+		void					TileBankLoad(char *Filename);
+		void					TileBankReload();
+		void					TileBankSet();
 
 // Param Bar
 		void					UpdateParamBar(CMapEditView *View,BOOL ViewFlag);
@@ -81,13 +78,13 @@ private:
 		int						ActiveLayer;
 
 		CTileBank				TileBank;
+
 		CTexCache				TexCache;
-		int						CurrentTileBank;
-		sMapElem				MouseTileL,MouseTileR;
 
 		BOOL					TileViewFlag;
 		BOOL					GridFlag;
 		BOOL					Is3dFlag;
+		
 
 };
 

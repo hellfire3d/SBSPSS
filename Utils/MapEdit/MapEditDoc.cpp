@@ -148,7 +148,7 @@ void	CMapEditDoc::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoin
 /*********************************************************************************/
 void	CMapEditDoc::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point)
 {
-	Core.MouseMove(View,nFlags,point);
+		Core.MouseMove(View,nFlags,point);
 }
 
 /*********************************************************************************/
@@ -165,16 +165,39 @@ void	CMapEditDoc::ToggleGrid(CMapEditView *View)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ReloadTileBank()
+void	CMapEditDoc::SetMode(int NewMode)
 {
-		Core.ReloadTileBank();
+		Core.SetMode(NewMode);
+}
+
+/*********************************************************************************/
+/*** Tilebank Functions **********************************************************/
+/*********************************************************************************/
+void	CMapEditDoc::TileBankLoad()
+{
+char		BASED_CODE GinFilter[]= "Gin Files (*.Gin)|*.gin|All Files (*.*)|*.*||";
+CFileDialog	Dlg(TRUE,"Gin",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,GinFilter);
+
+		if (Dlg.DoModal()!=IDOK) return;
+
+char	Filename[256];
+		sprintf(Filename,"%s",Dlg.GetPathName());
+		Core.TileBankLoad(Filename);
+		UpdateAllViews(NULL);
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::TileBankReload()
+{
+		Core.TileBankReload();
 		UpdateAllViews(NULL);
 
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::TileBankChange()
+void	CMapEditDoc::TileBankSet()
 {
-		Core.ChangeTileBank();
+		Core.TileBankSet();
 		UpdateAllViews(NULL);
 }
+

@@ -243,6 +243,14 @@ SOURCE=.\StdAfx.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\res\ico00001.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\icon1.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\MapEdit.ico
 # End Source File
 # Begin Source File
@@ -255,12 +263,44 @@ SOURCE=.\res\MapEditDoc.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\mirrorx.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\mirrory.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\paint.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\paint1.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\paint2.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\picker.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # End Group
 # Begin Group "Dlg"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\GfxToolBar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GfxToolBar.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\LayerList.cpp

@@ -32,27 +32,35 @@ public:
 		CTileBank();
 		~CTileBank();
 
-		void	AddTileSet(char *Filename);
-		int		NeedLoad()					{return(LoadFlag);}
-		void	Reload();
-		void	LoadTileSets(CCore *Core);
-		CTile	&GetTile(int Bank,int Tile);
+		void		AddTileSet(char *Filename);
+		int			NeedLoad()							{return(LoadFlag);}
+		void		Reload();
+		void		LoadTileSets(CCore *Core);
+		CTile		&GetTile(int Bank,int Tile);
+		
+		void		SetCurrent(int Set)					{CurrentSet=Set;}
 
-		void	RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d);
-		void	FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
+		sMapElem	&GetLTile()							{return(LTile);}
+		sMapElem	&GetRTile()							{return(RTile);}
 
-		void	LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
-		void	RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
+		void		RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d);
+		void		FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
 
-		void	InitGUI(CCore *Core);
-		void	UpdateGUI(CCore *Core);
+		void		UpdateGUI(CCore *Core,BOOL IsTileView);
+
+// Functions
+		BOOL		TileSelectL()						{return(TileSelect(LTile,RTile));}
+		BOOL		TileSelectR()						{return(TileSelect(RTile,LTile));}
 
 private:
+		BOOL	TileSelect(sMapElem &ThisTile,sMapElem &OtherTile);
 
 		std::vector<CTileSet>	TileSet;
-		BOOL					LoadFlag;
-		int						CursPos;
+		int						CurrentSet;
+		sMapElem				LTile,RTile;
 
+		BOOL					LoadFlag;
+		int						CursorPos;
 };
 
 /*****************************************************************************/
@@ -68,12 +76,13 @@ public:
 		char	*GetName()			{return(Name);}
 		CTile	&GetTile(int No)	{return(Tile[No]);}
 		void	Purge();
-		void	Render2d(CCore *Core,Vec &CamPos,int CursorPos,int LTile,int RTile);
-		void	Render3d(CCore *Core,Vec &CamPos,int CursorPos,int LTile,int RTile);
-		void	RenderMisc(BOOL LSelFlag,BOOL RSelFlag, BOOL GridFlag,BOOL CursorFlag);
 		int		FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos);
+		void	Render2d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag);
+		void	Render3d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag);
 
 private:
+		void	RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL GridFlag);
+
 		char				Path[256],Name[256];
 		std::vector<CTile>	Tile;
 		BOOL				Loaded;

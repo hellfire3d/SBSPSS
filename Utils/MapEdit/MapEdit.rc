@@ -410,6 +410,19 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_PAINT               ICON    DISCARDABLE     "res\\paint.ico"
+IDI_SELECT              ICON    DISCARDABLE     "res\\paint1.ico"
+IDI_PICKER              ICON    DISCARDABLE     "res\\picker.ico"
+IDI_MIRRORX             ICON    DISCARDABLE     "res\\mirrorx.ico"
+IDI_MIRRORY             ICON    DISCARDABLE     "res\\mirrory.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Dialog
 //
 
@@ -428,7 +441,19 @@ FONT 8, "MS Sans Serif"
 BEGIN
     COMBOBOX        IDC_TILESETDLG_COMBO,7,7,138,322,CBS_DROPDOWNLIST | 
                     WS_TABSTOP
-    PUSHBUTTON      "Update",IDC_TILESETDLG_BTN_UPDATE,5,25,140,15
+    PUSHBUTTON      "Update",IDC_TILESETDLG_BTN_UPDATE,80,25,65,15
+    PUSHBUTTON      "Load",IDC_TILESETDLG_BTN_LOAD,5,25,70,15
+END
+
+IDD_GFXTOOLBAR DIALOG DISCARDABLE  0, 0, 156, 26
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "P",IDD_GFXTOOLBAR_PAINT,5,5,15,15
+    PUSHBUTTON      "S",IDD_GFXTOOLBAR_SELECT,20,5,15,15
+    PUSHBUTTON      "Pk",IDD_GFXTOOLBAR_PICKER,35,5,15,15
+    PUSHBUTTON      "X",IDD_GFXTOOLBAR_MIRRORX,50,5,15,15
+    PUSHBUTTON      "Y",IDD_GFXTOOLBAR_MIRRORY,65,5,15,15
 END
 
 
@@ -454,6 +479,14 @@ BEGIN
         RIGHTMARGIN, 144
         TOPMARGIN, 7
         BOTTOMMARGIN, 39
+    END
+
+    IDD_GFXTOOLBAR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 149
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 19
     END
 END
 #endif    // APSTUDIO_INVOKED

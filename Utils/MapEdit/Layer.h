@@ -49,7 +49,16 @@ virtual	void			FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &
 virtual	void			InitGUI(CCore *Core)=0;
 virtual	void			UpdateGUI(CCore *Core)=0;
 
+// Functions
+virtual	BOOL			SetMode(int NewMode)=0;
+virtual	BOOL			InitMode()=0;
+virtual	BOOL			ExitMode()=0;
+virtual	BOOL			LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
+virtual	BOOL			RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)=0;
+virtual	BOOL			MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)=0;
+
 protected:
+
 		char			Name[256];
 		BOOL			Render3dFlag;
 		float			ZPosDiv;

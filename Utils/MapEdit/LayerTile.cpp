@@ -28,9 +28,11 @@
 CLayerTile::CLayerTile(char *_Name,int Width,int Height,float ZDiv,BOOL Is3d)
 {
 		SetName(_Name);
-		Map.SetSize(Width,Height);
+		Map.SetSize(Width,Height,TRUE);
 		ZPosDiv=ZDiv;
 		Render3dFlag=Is3d;
+		Mode=MouseModePaint;
+		Flag=MouseFlagNone;
 }
 
 /*****************************************************************************/
@@ -81,7 +83,7 @@ CTexCache	&TexCache=Core->GetTexCache();
 			for (int XLoop=0; XLoop<MapW; XLoop++)
 			{
 				sMapElem	&ThisElem=Map.GetTile(XLoop,YLoop);
-				CTile		&ThisTile=Core->GetTile(ThisElem.Bank,ThisElem.Tile);
+				CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
 				glLoadIdentity();	// Slow way, but good to go for the mo
 				glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
@@ -114,11 +116,14 @@ CTexCache	&TexCache=Core->GetTexCache();
 			for (int XLoop=0; XLoop<MapW; XLoop++)
 			{
 				sMapElem	&ThisElem=Map.GetTile(XLoop,YLoop);
-				CTile		&ThisTile=Core->GetTile(ThisElem.Bank,ThisElem.Tile);
+				if (ThisElem.Tile)
+				{ // Render Non Zero Tiles
+					CTile		&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
 
-				glLoadIdentity();	// Slow way, but good to go for the mo
-				glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
-				ThisTile.Render();
+					glLoadIdentity();	// Slow way, but good to go for the mo
+					glTranslatef(StartX+XLoop,StartY-YLoop,CamPos.z);
+					ThisTile.Render();
+				}
 			}
 		}
 	
@@ -232,11 +237,160 @@ void	CLayerTile::InitGUI(CCore *Core)
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
-		ParamBar->RemoveAll();
-		ParamBar->Update();
+			ParamBar->Add(Frm->GetGfxToolBar(),IDD_GFXTOOLBAR,TRUE);
 }
 
 /*****************************************************************************/
 void	CLayerTile::UpdateGUI(CCore *Core)
 {
 }
+
+/*****************************************************************************/
+/*** Functions ***************************************************************/
+/*****************************************************************************/
+BOOL	CLayerTile::SetMode(int NewMode)
+{
+BOOL	Ret=FALSE;
+// Clean up last mode
+	Ret|=ExitMode();
+	Mode=(MouseMode)NewMode;
+	Ret|=InitMode();
+	return(Ret);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::InitMode()
+{
+	switch(Mode)
+	{
+	case MouseModeNone:
+		break;
+	case MouseModePaint:
+		break;
+	case MouseModeSelect:
+		break;
+	case MouseModeBlockSelect:
+		break;
+	case MouseModePicker:
+		break;
+	default:
+		break;
+	}
+	return(FALSE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::ExitMode()
+{
+	switch(Mode)
+	{
+	case MouseModeNone:
+		break;
+	case MouseModePaint:
+		break;
+	case MouseModeSelect:
+		break;
+	case MouseModeBlockSelect:
+		break;
+	case MouseModePicker:
+		break;
+	default:
+		break;
+	}
+	return(FALSE);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
+{
+BOOL		Ret=FALSE;
+CTileBank	&TileBank=Core->GetTileBank();
+
+	switch(Mode)
+	{
+	case MouseModeNone:
+		break;
+	case MouseModePaint:
+		if (DownFlag)
+			Ret=Paint(TileBank.GetLTile(),CursorPos);
+		break;
+	case MouseModeSelect:
+		break;
+	case MouseModeBlockSelect:
+		break;
+	case MouseModePicker:
+		break;
+	default:
+		break;
+	}
+	return(Ret);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos,BOOL DownFlag)
+{
+BOOL		Ret=FALSE;
+CTileBank	&TileBank=Core->GetTileBank();
+
+	switch(Mode)
+	{
+	case MouseModeNone:
+		break;
+	case MouseModePaint:
+		if (DownFlag)
+			Ret=Paint(TileBank.GetRTile(),CursorPos);
+		break;
+	case MouseModeSelect:
+		break;
+	case MouseModeBlockSelect:
+		break;
+	case MouseModePicker:
+		break;
+	default:
+		break;
+	}
+	return(Ret);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::MouseMove(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &CursorPos)
+{
+BOOL		Ret=FALSE;
+CTileBank	&TileBank=Core->GetTileBank();
+
+	switch(Mode)
+	{
+	case MouseModeNone:
+		break;
+	case MouseModePaint:
+		if (nFlags & MK_LBUTTON)
+			Ret=Paint(TileBank.GetLTile(),CursorPos);
+		else
+		if (nFlags & MK_RBUTTON)
+			Ret=Paint(TileBank.GetRTile(),CursorPos);
+		break;
+	case MouseModeSelect:
+		break;
+	case MouseModeBlockSelect:
+		break;
+	case MouseModePicker:
+		break;
+	default:
+		break;
+	}
+	return(Ret);
+}
+
+/*****************************************************************************/
+BOOL	CLayerTile::Paint(sMapElem &Tile,CPoint &CursorPos)
+{
+		if (CursorPos.y==-1 || CursorPos.y==-1) return(FALSE);	// Off Map?
+		if (Tile.Set==-1 || Tile.Tile==-1) return(FALSE);	// Invalid tile?
+
+		Map.SetTile(CursorPos.x,CursorPos.y,Tile);
+
+		return(TRUE);
+
+
+}
+

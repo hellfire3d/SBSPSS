@@ -8,6 +8,7 @@
 #include	"MultiBar.h"
 #include	"LayerList.h"
 #include	"TileSetDlg.h"
+#include	"GfxToolBar.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -39,7 +40,7 @@ public:
 	CMultiBar		*GetParamBar()			{return(&ParamBar);}
 	CDialog			&GetLayerList()			{return(LayerList);}
 	CDialog			&GetTileSetDlg()		{return(TileSetDlg);}
-		
+	CDialog			&GetGfxToolBar()		{return(GfxToolBar);}		
 // Operations
 public:
 
@@ -65,7 +66,7 @@ protected:  // control bar embedded members
 // Sub Dialogs
 	CLayerList		LayerList;
 	CTileSetDlg		TileSetDlg;
-
+	CGfxToolBar		GfxToolBar;
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)

@@ -32,8 +32,11 @@ public:
 	void			ToggleTileView(CMapEditView *View);
 	void			ToggleGrid(CMapEditView *View);
 
-	void			ReloadTileBank();
-	void			TileBankChange();
+	void			TileBankLoad();
+	void			TileBankReload();
+	void			TileBankSet();
+
+	void			SetMode(int NewMode);
 
 // Operations
 public:

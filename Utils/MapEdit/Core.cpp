@@ -19,7 +19,6 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -35,17 +34,26 @@ CCore::CCore()
 	TileCam=Vec(0,0,0);
 	Is3dFlag=TRUE;
 
-	CurrentTileBank=0;
-	MouseTileL.Bank=0; MouseTileL.Tile=1;
-	MouseTileR.Bank=0; MouseTileR.Tile=1;
-
-
 }
 
 /*****************************************************************************/
 CCore::~CCore()
 {
 	for (int i=0; i<LAYER_TYPE_MAX; i++) if (Layers[i]) delete Layers[i];
+}
+
+/*****************************************************************************/
+void	CCore::Init()
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+
+			ParamBar->RemoveAll();
+// Add default parram bar items			
+			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
+			ParamBar->Add(Frm->GetTileSetDlg(),IDD_TILESET_DIALOG,TRUE,TRUE);
+			Layers[ActiveLayer]->InitGUI(this);
+			ParamBar->Update();
 }
 
 /*****************************************************************************/
@@ -60,12 +68,10 @@ void	CCore::NewMap()
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
-	TileBank.AddTileSet("c:/temp/3/test.gin");
+//	TileBank.AddTileSet("c:/temp/3/test.gin");
+//	TileBank.AddTileSet("c:/temp/4/4.gin");
 //	TileBank.AddTileSet("c:/temp/slope/slope.gin");
-//	TileBank.AddTileSet("c:/temp/2/2.gin");
-//	TileBank.AddTileSet("c:/temp/1/1.gin");
-	TileBank.AddTileSet("c:/temp/4/4.gin");
-	TileBank.AddTileSet("c:/temp/5/5.gin");
+	Init();
 }
 
 /*****************************************************************************/
@@ -105,6 +111,7 @@ Vec		&ThisCam=GetCam();
 		if (GridFlag) Layers[ActiveLayer]->RenderGrid(this,ThisCam);
 
 // Get Cursor Pos
+		LastCursorPos=CursorPos;
 		Layers[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
 }
 
@@ -122,12 +129,30 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 /*** Control *****************************************************************/
 /*****************************************************************************/
+void	CCore::SetMode(int NewMode)
+{
+BOOL	RedrawFlag=FALSE;
+
+		RedrawFlag=Layers[ActiveLayer]->SetMode(NewMode);
+		
+		//if (RedrawFlag) View->Invalidate();
+}
+
+/*****************************************************************************/
 void	CCore::LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
+BOOL	RedrawFlag=FALSE;
+
 		if (TileViewFlag)
-			TileBank.LButtonControl(this,View,nFlags,point,DownFlag);
+		{
+			RedrawFlag=TileBank.TileSelectL();
+		}
 		else
-			;
+		{
+			RedrawFlag=Layers[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
+		}
+
+		if (RedrawFlag) View->Invalidate();
 }
 
 /*****************************************************************************/
@@ -139,11 +164,18 @@ void	CCore::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL Do
 /*****************************************************************************/
 void	CCore::RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-		if (TileViewFlag)
-			TileBank.RButtonControl(this,View,nFlags,point,DownFlag);
-		else
-			;
+BOOL	RedrawFlag=FALSE;
 
+		if (TileViewFlag)
+		{
+			RedrawFlag=TileBank.TileSelectR();
+		}
+		else
+		{
+			RedrawFlag=Layers[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
+		}
+
+		if (RedrawFlag) View->Invalidate();
 }
 
 /*****************************************************************************/
@@ -190,9 +222,11 @@ Vec		&ThisCam=GetCam();
 		else
 		{	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
 			View->Invalidate();
+			Layers[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
 		}
 
 }
+
 
 /*****************************************************************************/
 /*** Layers ******************************************************************/
@@ -203,29 +237,6 @@ CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
 CMultiBar	*ParamBar=Frm->GetParamBar();
 
-//		ParamBar->ReCalc();
-//CCheckListBox	*Dlg=(CCheckListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
-/*		
-		ParamViewFlag=ViewFlag;
-		if (ParamViewFlag)
-		{
-			ParamBar->m_ListBox.ResetContent();
-//			Dlg->ResetContent();
-
-			for (int i=0;i<LAYER_TYPE_MAX;i++)
-			{
-				CLayer	*ThisLayer=GetLayer(i);
-				ParamBar->m_ListBox.AddString(ThisLayer->GetName());
-//				Dlg->AddString(ThisLayer->GetName());
-			}
-			ParamBar->m_ListBox.SetCurSel(ActiveLayer);
-//			Dlg->SetCurSel(ActiveLayer);
-		}
-*/
-//		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
-//		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
-//		ParamBar->ShowWindow(SW_SHOW);
-//		if (View) UpdateView(View);
 }
 
 /*****************************************************************************/
@@ -255,36 +266,36 @@ void	CCore::UpdateTileView(CMapEditView *View,BOOL Toggle)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
+CMultiBar	*ParamBar=Frm->GetParamBar();
 
-			if (Toggle) 
-			{
-				TileViewFlag=!TileViewFlag;
-				if (TileViewFlag)
-					TileBank.InitGUI(this);
-				else
-					Layers[ActiveLayer]->InitGUI(this);
-
-			}
-
+			if (Toggle) TileViewFlag=!TileViewFlag;
+			ParamBar->RemoveAll();
 			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
 			UpdateView(View);
 }
 
 /*****************************************************************************/
-void	CCore::ReloadTileBank()
+void	CCore::TileBankLoad(char *Filename)
+{
+		TileBank.AddTileSet(Filename);
+		TileBank.UpdateGUI(this,TileViewFlag);
+		UpdateView(NULL);
+}
+
+/*****************************************************************************/
+void	CCore::TileBankReload()
 {
 		TileBank.Reload();
 		TexCache.Purge();
 		UpdateView(NULL);
 }
-
 /*****************************************************************************/
-void	CCore::ChangeTileBank()
+void	CCore::TileBankSet()
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 
-		CurrentTileBank=TileSetDlg->TileSetList.GetCurSel();			
+		TileBank.SetCurrent(TileSetDlg->TileSetList.GetCurSel());
 }
 
 /*****************************************************************************/
@@ -305,10 +316,8 @@ void	CCore::UpdateAll(CMapEditView *View)
 		UpdateView(View);
 		UpdateGrid(View);
 
-		if (TileViewFlag)
-			TileBank.UpdateGUI(this);
-		else
-			Layers[ActiveLayer]->UpdateGUI(this);
+		TileBank.UpdateGUI(this,TileViewFlag);
+		Layers[ActiveLayer]->UpdateGUI(this);
 
 }
 

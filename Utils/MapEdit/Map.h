@@ -9,7 +9,7 @@
 
 struct	sMapElem
 {
-	int		Bank;
+	int		Set;
 	int		Tile;
 	int		Flags;
 };
@@ -21,14 +21,16 @@ public:
 		CMap(){};
 		~CMap(){};
 
-		int			GetWidth();
-		int			GetHeight();
+		int			GetWidth()			{return(Map.size());}
+		int			GetHeight()			{return(Map[0].size());}
 
-		void		SetSize(int Width,int Height);
+		void		SetSize(int Width,int Height,BOOL Clear=FALSE);
 		void		SetWidth(int Width);
 		void		SetHeight(int Height);
+		void		Clear();
 
-		sMapElem	&GetTile(int X,int Y)	{return(Map[X][Y]);}
+		sMapElem	&GetTile(int X,int Y);
+		void		SetTile(int X,int Y,sMapElem &New);
 
 protected:
 		std::vector< std::vector<sMapElem> > Map;

@@ -37,6 +37,15 @@ const float	TileBrowserY1=1+TileBrowserGap/2;
 CTileBank::CTileBank()
 {
 	LoadFlag=FALSE;
+	CurrentSet=0;
+	LTile.Set=-1;
+	RTile.Set=-1;
+
+	AddTileSet("c:/temp/rockp/rockp.gin");
+	LTile.Set=0;
+	LTile.Tile=1;
+	RTile.Set=0;
+	RTile.Tile=2;
 }
 
 /*****************************************************************************/
@@ -87,107 +96,75 @@ CTile	&CTileBank::GetTile(int Bank,int Tile)
 /*****************************************************************************/
 void	CTileBank::RenderSet(CCore *Core,Vec &CamPos,BOOL Is3d)
 {
-int		CurrentBank=Core->GetCurrentTileBank();
-sMapElem	&LSelTile=Core->GetMouseTileL();
-sMapElem	&RSelTile=Core->GetMouseTileR();
-int			LTile=-1,RTile=-1;
+int		LT=LTile.Tile;
+int		RT=RTile.Tile;
 
-		if (LSelTile.Bank==CurrentBank || LSelTile.Tile==0) LTile=LSelTile.Tile;
-		if (RSelTile.Bank==CurrentBank || RSelTile.Tile==0) RTile=RSelTile.Tile;
+		if (LTile.Set!=CurrentSet) LT=-1;
+		if (RTile.Set!=CurrentSet) RT=-1;
+
+		if (!TileSet.size()) return;	// No tiles, return
 
 		if (Is3d)
 		{
 			glEnable(GL_DEPTH_TEST);
-			TileSet[CurrentBank].Render3d(Core,CamPos,CursPos,LTile,RTile);
+			TileSet[CurrentSet].Render3d(CamPos,LT,RT,CursorPos,Core->IsGridOn());
 			glDisable(GL_DEPTH_TEST);
 		}
 			else
 		{
-			TileSet[CurrentBank].Render2d(Core,CamPos,CursPos,LTile,RTile);
+			TileSet[CurrentSet].Render2d(CamPos,LT,RT,CursorPos,Core->IsGridOn());
 		}
 }
 
 /*****************************************************************************/
 void	CTileBank::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
 {
-int		CurrentBank=Core->GetCurrentTileBank();
+		if (!TileSet.size()) return;	// No tiles, return
 		
-		CursPos=TileSet[CurrentBank].FindCursorPos(Core,View,CamPos,MousePos);
-}
-
-/*****************************************************************************/
-void	CTileBank::LButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
-{
-		if (!DownFlag) return;
-
-sMapElem	&SelTile=		Core->GetMouseTileL();
-sMapElem	&OtherSelTile=	Core->GetMouseTileR();
-int			CurrentBank=	Core->GetCurrentTileBank();
-
-		if (CursPos==-1) return;
-		if (CurrentBank==OtherSelTile.Bank && OtherSelTile.Tile==CursPos)
-		{ // Dont assign if same as other mouse
-		}
-		else
-		{
-			SelTile.Bank=CurrentBank;
-			SelTile.Tile=CursPos;
-			if (SelTile.Tile==0) SelTile.Bank=0;	// Always make zero tile, bank 0 (dunno why, just seems handy)
-			View->Invalidate();
-		}
-
-}
-
-/*****************************************************************************/
-void	CTileBank::RButtonControl(CCore *Core,CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
-{
-		if (!DownFlag) return;
-
-sMapElem	&SelTile=		Core->GetMouseTileR();
-sMapElem	&OtherSelTile=	Core->GetMouseTileL();
-int			CurrentBank=	Core->GetCurrentTileBank();
-
-		if (CursPos==-1) return;
-		if (CurrentBank==OtherSelTile.Bank && OtherSelTile.Tile==CursPos)
-		{ // Dont assign if same as other mouse
-		}
-		else
-		{
-			SelTile.Bank=CurrentBank;
-			SelTile.Tile=CursPos;
-			View->Invalidate();
-		}
+		CursorPos=TileSet[CurrentSet].FindCursorPos(Core,View,CamPos,MousePos);
 }
 
 /*****************************************************************************/
 /*** Gui *********************************************************************/
 /*****************************************************************************/
-void	CTileBank::InitGUI(CCore *Core)
-{
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CMultiBar	*ParamBar=Frm->GetParamBar();
-
-		ParamBar->RemoveAll();
-		ParamBar->Add(Frm->GetTileSetDlg(),IDD_TILESET_DIALOG,TRUE);
-		ParamBar->Update();
-		UpdateGUI(Core);
-}
-
-/*****************************************************************************/
-void	CTileBank::UpdateGUI(CCore *Core)
+void	CTileBank::UpdateGUI(CCore *Core,BOOL IsTileView)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CTileSetDlg	*TileSetDlg=(CTileSetDlg*)Frm->GetDialog(IDD_TILESET_DIALOG);
 int			ListSize=TileSet.size();
 
-	TRACE1("%i\n",TileSetDlg->TileSetList.GetCurSel());
 	TileSetDlg->TileSetList.ResetContent();
-
-	for (int i=0; i<ListSize; i++)
+	if (ListSize)
 	{
-		TileSetDlg->TileSetList.AddString(TileSet[i].GetName());
+		for (int i=0; i<ListSize; i++)
+		{
+			TileSetDlg->TileSetList.AddString(TileSet[i].GetName());
+		}
+		TileSetDlg->TileSetList.SetCurSel(CurrentSet);
+//		IsTileView=TRUE;
 	}
-	TileSetDlg->TileSetList.SetCurSel(Core->GetCurrentTileBank());
+	else
+	{
+		IsTileView=FALSE;
+	}
+	TileSetDlg->TileSetList.EnableWindow(IsTileView);
+}
+
+/*****************************************************************************/
+/*** Functions ***************************************************************/
+/*****************************************************************************/
+BOOL	CTileBank::TileSelect(sMapElem &ThisTile,sMapElem &OtherTile)
+{
+		if (CursorPos==-1) return(FALSE);
+		if (CurrentSet==OtherTile.Set && OtherTile.Tile==CursorPos)
+		{ // Dont assign if same as other Tile
+			return(FALSE);
+		}
+
+		ThisTile.Set=CurrentSet;
+		ThisTile.Tile=CursorPos;
+		if (ThisTile.Tile==0) ThisTile.Set=0;	// Always make zero tile, bank 0 (dunno why, just seems handy)
+		return(TRUE);
 }
 
 /*****************************************************************************/
@@ -202,10 +179,10 @@ char	Dir[_MAX_DIR];
 char	Fname[_MAX_FNAME];
 char	Ext[_MAX_EXT];
 
-	_splitpath(_Filename,Drive,Dir,Fname,Ext);
-	sprintf(Path,"%s%s",Drive,Dir);
-	sprintf(Name,"%s",Fname);
-	Loaded=FALSE;
+		_splitpath(_Filename,Drive,Dir,Fname,Ext);
+		sprintf(Path,"%s%s",Drive,Dir);
+		sprintf(Name,"%s",Fname);
+		Loaded=FALSE;
 }
 
 /*****************************************************************************/
@@ -222,7 +199,6 @@ void	CTileSet::Load(CCore *Core)
 {
 CScene	Scene;
 char	Filename[256+64];
-CTile	NewTile;
 
 		sprintf(Filename,"%s%s.%s",Path,Name,"Gin");
 		Scene.Load(Filename);
@@ -230,13 +206,10 @@ CTile	NewTile;
 CNode	&ThisNode=Scene.GetSceneNode(0);
 int		ChildCount=ThisNode.GetPruneChildCount();
 		
-		NewTile.CreateBlank(Core,this);		
-		Tile.push_back(NewTile);
-
+		Tile.push_back(CTile());	// Insert Blank		
 		for (int Child=0; Child<ChildCount; Child++) 
 		{
-			NewTile.Load(Core,this,Scene,ThisNode.PruneChildList[Child]);
-			Tile.push_back(NewTile);
+			Tile.push_back(CTile(Core,this,Scene,ThisNode.PruneChildList[Child]));
 		}
 
 	Loaded=TRUE;
@@ -257,17 +230,15 @@ int	ListSize=Tile.size();
 }
 
 /*****************************************************************************/
-void	CTileSet::Render2d(CCore *Core,Vec &CamPos,int CursorPos,int LTile,int RTile)
+void	CTileSet::Render2d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag)
 {
 }
 
 /*****************************************************************************/
-void	CTileSet::Render3d(CCore *Core,Vec &CamPos,int CursorPos,int LTile,int RTile)
+void	CTileSet::Render3d(Vec &CamPos,int LTile,int RTile,int CursorPos,BOOL GridFlag)
 {
 int			ListSize=Tile.size();
-CTexCache	&TexCache=Core->GetTexCache();
 int			TileID=0;
-BOOL		GridFlag=Core->IsGridOn();
 		
 		glMatrixMode(GL_MODELVIEW);
 
@@ -280,10 +251,11 @@ BOOL		GridFlag=Core->IsGridOn();
 			glLoadIdentity();
 			glTranslatef(CamPos.x+XPos*(1+TileBrowserGap),CamPos.y-YPos*(1+TileBrowserGap),CamPos.z);
 
-			RenderMisc(TileID==LTile,TileID==RTile,GridFlag,TileID==CursorPos);
+			RenderMisc(TileID==LTile,TileID==RTile,TileID==CursorPos,GridFlag);
 
 			glColor3f(0.5,0.5,0.5);
 			ThisTile.Render();
+
 
 			TileID++;
 		}
@@ -291,50 +263,51 @@ BOOL		GridFlag=Core->IsGridOn();
 }
 
 /*****************************************************************************/
-void	CTileSet::RenderMisc(BOOL LSelFlag,BOOL RSelFlag, BOOL GridFlag,BOOL CursorFlag)
+void	CTileSet::RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL GridFlag)
 {
-		
-			glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_2D);
 
-			if (LSelFlag || RSelFlag || CursorFlag)
-			{ // Show selected tile
-				glBegin(GL_QUADS); 
-					glNormal3f( 1,1,1);
-					if (LSelFlag) 
-						glColor3ub(255,0,0);
-					else
-					if (RSelFlag) 
-						glColor3ub(0,0,255);
-					else
-						glColor3ub(255,255,0);
+		if (LTileFlag || RTileFlag || CursorFlag)
+		{
+			glBegin(GL_QUADS); 
+			glNormal3f( 1,1,1);
 
-					BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
-				glEnd();
-			}
-			else
-			if (GridFlag)
+			glColor3ub(255,255,0);
+
+			if (LTileFlag)
 			{
-				glBegin(GL_LINES); 
-					glNormal3f( 1,1,1);
-					glColor3ub(255,255,255);
-				
-					glVertex3f( TileBrowserX0,TileBrowserY0,0);
-					glVertex3f( TileBrowserX1,TileBrowserY0,0);
-	
-					glVertex3f( TileBrowserX0,TileBrowserY1,0);
-					glVertex3f( TileBrowserX1,TileBrowserY1,0);
-	
-					glVertex3f( TileBrowserX0,TileBrowserY0,0);
-					glVertex3f( TileBrowserX0,TileBrowserY1,0);
-	
-					glVertex3f( TileBrowserX1,TileBrowserY0,0);
-					glVertex3f( TileBrowserX1,TileBrowserY1,0);
-	
-				glEnd();
+				glColor3ub(255,0,0);
 			}
+			if (RTileFlag)
+			{
+				glColor3ub(0,0,255);
+			}
+			BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
+			glEnd();
+		}
 
-			glEnable(GL_TEXTURE_2D);
-	
+		if (GridFlag)
+		{
+			glBegin(GL_LINES); 
+				glNormal3f( 1,1,1);
+				glColor3ub(255,255,255);
+			
+				glVertex3f( TileBrowserX0,TileBrowserY0,0);
+				glVertex3f( TileBrowserX1,TileBrowserY0,0);
+
+				glVertex3f( TileBrowserX0,TileBrowserY1,0);
+				glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+				glVertex3f( TileBrowserX0,TileBrowserY0,0);
+				glVertex3f( TileBrowserX0,TileBrowserY1,0);
+
+				glVertex3f( TileBrowserX1,TileBrowserY0,0);
+				glVertex3f( TileBrowserX1,TileBrowserY1,0);
+
+			glEnd();
+		}
+
+		glEnable(GL_TEXTURE_2D);
 }
 
 /*****************************************************************************/

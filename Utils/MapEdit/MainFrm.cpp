@@ -67,9 +67,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ParamBar.SetWindowText("Param");
 	DockControlBar(&ParamBar);
 
-	ParamBar.Add(LayerList,IDD_LAYER_LIST_DIALOG,TRUE,TRUE);	// Add default parram bar item
-
-
 // ToolBar (plus extra code for extra controls!!)
 	if (!ToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !ToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
