@@ -14,8 +14,9 @@
 #ifndef	__ENEMY_NSSNAKE_H__
 #define	__ENEMY_NSSNAKE_H__
 
-#include "fx\fx.h"
-#include "fx\fxnrgbar.h"
+#ifndef __ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
 
 
 class CNpcSeaSnakeSegment
@@ -52,7 +53,7 @@ protected:
 	int								m_collisionRadius;
 };
 
-class CNpcSeaSnakeEnemy : public CNpcEnemy
+class CNpcSeaSnakeEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		postInit();
@@ -70,6 +71,7 @@ protected:
 	u8					processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	u8					isSnakeStopped();
 	void				moveEntireSnake( DVECTOR newPos );
+	virtual void		addHealthMeter();
 
 	enum
 	{
@@ -97,12 +99,10 @@ protected:
 	s32								m_collTimer;
 	s32								m_snapTimer;
 	//s32								m_openTimer;
-	bool							m_meterOn;
 	u8								m_turnDir;
 	s16								m_circleHeading;
 	s16								m_origHeading;
 	s32								m_waitTimer;
-	CFXNRGBar						*m_energyBar;
 };
 
 #endif

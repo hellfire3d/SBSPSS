@@ -50,7 +50,6 @@ void CNpcMotherJellyfishEnemy::postInit()
 {
 	m_state = MOTHER_JELLYFISH_CYCLE;
 	m_spawnTimer = 0;
-	m_meterOn=false;
 
 	if ( CLevel::getIsBossRespawn() )
 	{
@@ -93,7 +92,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 
 	m_attackCounter = 0;
 
-	m_energyBar = NULL;
+	CNpcBossEnemy::postInit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -584,12 +583,7 @@ void CNpcMotherJellyfishEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
-	if ( m_energyBar )
-	{
-		m_energyBar->setToShutdown();
-	}
-
-	CNpcEnemy::shutdown();
+	CNpcBossEnemy::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -633,13 +627,6 @@ void CNpcMotherJellyfishEnemy::render()
 
 		if (canRender())
 		{
-			if (!m_meterOn)
-			{
-				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				m_energyBar->SetMax(m_data[m_type].initHealth);
-				m_meterOn=true;
-			}
-
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);

@@ -56,7 +56,6 @@ void CNpcSubSharkEnemy::postInit()
 	m_extendDir = EXTEND_RIGHT;
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 	m_salvoCount = 0;
-	m_meterOn=false;
 
 	if ( CLevel::getIsBossRespawn() )
 	{
@@ -70,7 +69,7 @@ void CNpcSubSharkEnemy::postInit()
 	m_salvoCount = 5;
 	m_movementTimer = GameState::getOneSecondInFrames() * ( 1 + ( ( 7 * m_health ) / m_data[m_type].initHealth ) );
 
-	m_energyBar = NULL;
+	CNpcBossEnemy::postInit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -663,12 +662,7 @@ void CNpcSubSharkEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
-	if ( m_energyBar )
-	{
-		m_energyBar->setToShutdown();
-	}
-
-	CNpcEnemy::shutdown();
+	CNpcBossEnemy::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -683,13 +677,6 @@ void CNpcSubSharkEnemy::render()
 
 		if (canRender())
 		{
-			if (!m_meterOn)
-			{
-				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				m_energyBar->SetMax(m_data[m_type].initHealth);
-				m_meterOn=true;
-			}
-
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);

@@ -16,10 +16,13 @@
 
 #include "fx\fx.h"
 #include "fx\fxlaser.h"
-#include "fx\fxnrgbar.h"
+
+#ifndef __ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
 
 
-class CNpcIronDogfishEnemy : public CNpcEnemy
+class CNpcIronDogfishEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		postInit();
@@ -52,10 +55,8 @@ protected:
 	s32					m_steamTimer;
 	s32					m_vulnerableTimer;
 	s32					m_laserTimer;
-	bool				m_meterOn;
 
 	CFXLaser			*m_effect;
-	CFXNRGBar			*m_energyBar;
 };
 
 #endif

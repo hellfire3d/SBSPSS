@@ -14,11 +14,12 @@
 #ifndef	__ENEMY_NFDUTCH_H__
 #define	__ENEMY_NFDUTCH_H__
 
-#include "fx\fx.h"
-#include "fx\fxnrgbar.h"
+#ifndef __ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
 
 
-class CNpcFlyingDutchmanEnemy : public CNpcEnemy
+class CNpcFlyingDutchmanEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		think( int _frames );
@@ -40,11 +41,9 @@ protected:
 	};
 
 	s32					m_minY, m_maxY;
-	bool				m_meterOn;
 	u8					m_inRange;
 	u8					m_fireCount;
 	s32					m_invulnerableTimer;
-	CFXNRGBar			*m_energyBar;
 };
 
 #endif

@@ -56,7 +56,6 @@ void CNpcFlyingDutchmanEnemy::postInit()
 	m_npcPath.getPathYExtents( &m_minY, &m_maxY );
 
 	m_extension = minX;
-	m_meterOn=false;
 	m_inRange = false;
 
 	if ( CLevel::getIsBossRespawn() )
@@ -68,7 +67,7 @@ void CNpcFlyingDutchmanEnemy::postInit()
 
 	m_invulnerableTimer = 0;
 
-	m_energyBar = NULL;
+	CNpcBossEnemy::postInit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,12 +341,7 @@ void CNpcFlyingDutchmanEnemy::shutdown()
 		CLevel::setBossHealth( m_health );
 	}
 
-	if ( m_energyBar )
-	{
-		m_energyBar->setToShutdown();
-	}
-
-	CNpcEnemy::shutdown();
+	CNpcBossEnemy::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -362,13 +356,6 @@ void CNpcFlyingDutchmanEnemy::render()
 
 		if (canRender())
 		{
-			if (!m_meterOn)
-			{
-				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				m_energyBar->SetMax(m_data[m_type].initHealth);
-				m_meterOn=true;
-			}
-
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);

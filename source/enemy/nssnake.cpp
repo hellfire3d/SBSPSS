@@ -162,11 +162,10 @@ void CNpcSeaSnakeEnemy::postInit()
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
 	m_collTimer = 0;
-	m_meterOn=false;
 	m_turnDir = 0;
 	m_waitTimer = 0;
 
-	m_energyBar = NULL;
+	CNpcBossEnemy::postInit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,12 +192,7 @@ void CNpcSeaSnakeEnemy::shutdown()
 		m_segmentArray[segCount].shutdown();
 	}
 
-	if ( m_energyBar )
-	{
-		m_energyBar->setToShutdown();
-	}
-
-	CNpcEnemy::shutdown();
+	CNpcBossEnemy::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -821,13 +815,6 @@ void CNpcSeaSnakeEnemy::render()
 
 		if (canRender())
 		{
-			if (!m_meterOn)
-			{
-				m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
-				m_energyBar->SetMax( NPC_SEA_SNAKE_LENGTH + 1 );
-				m_meterOn=true;
-			}
-
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),0);
@@ -1069,5 +1056,17 @@ void CNpcSeaSnakeEnemy::moveEntireSnake( DVECTOR newPos )
 	for ( int histLength = 0 ; histLength < maxArraySize ; histLength++ )
 	{
 		m_positionHistoryArray[histLength].pos = Pos;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSeaSnakeEnemy::addHealthMeter()
+{
+	if (!m_meterOn)
+	{
+		m_energyBar=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+		m_energyBar->SetMax( NPC_SEA_SNAKE_LENGTH + 1 );
+		m_meterOn=true;
 	}
 }

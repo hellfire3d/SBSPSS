@@ -598,6 +598,7 @@ void	CGameScene::think_boss_intro(int _frames)
 		{
 			m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
 			CFader::setFadingOut();
+			sendEvent( BOSS_FOUND_EVENT, NULL );
 		}
 	}
 }

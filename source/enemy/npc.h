@@ -262,6 +262,7 @@ protected:
 	virtual void		processAnimFrames( int _frames );
 	virtual void		processTimer( int _frames );
 	bool				isCollisionWithGround();
+	virtual void		addHealthMeter()					{}
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );

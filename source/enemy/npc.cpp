@@ -207,6 +207,10 @@
 #include "enemy\nprojjf.h"
 #endif
 
+#ifndef __ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
@@ -1440,6 +1444,13 @@ void CNpcEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 			projectile = (CProjectile *) sourceThing;
 			projectile->setMovementType( CProjectile::PROJECTILE_FIXED );
 			projectile->setPosition( Pos );
+
+			break;
+		}
+
+		case BOSS_FOUND_EVENT:
+		{
+			addHealthMeter();
 
 			break;
 		}

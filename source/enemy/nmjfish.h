@@ -14,14 +14,17 @@
 #ifndef	__ENEMY_NMJFISH_H__
 #define	__ENEMY_NMJFISH_H__
 
+#ifndef __ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
-#include "fx\fxnrgbar.h"
 
 #define MJ_PINK ( 255 + ( 128 << 8 ) + ( 255 << 16 ) )
 #define MJ_WHITE ( 255 + ( 255 << 8 ) + ( 255 << 16 ) )
 
-class CNpcMotherJellyfishEnemy : public CNpcEnemy
+class CNpcMotherJellyfishEnemy : public CNpcBossEnemy
 {
 public:
 	virtual void		postInit();
@@ -62,7 +65,6 @@ protected:
 	s32					m_maxPauseTimer;
 	s32					m_cycleWidth;
 	s32					m_halfCycleWidth;
-	bool				m_meterOn;
 	s16					m_renderScale;
 	s32					m_invulnerableTimer;
 	u8					m_attackCounter;
@@ -71,7 +73,6 @@ protected:
 	DVECTOR				legsPos[4];
 
 	DVECTOR				targetPos;
-	CFXNRGBar			*m_energyBar;
 };
 
 #endif

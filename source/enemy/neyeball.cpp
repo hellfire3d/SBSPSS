@@ -231,6 +231,9 @@ void CNpcEyeballEnemy::processEvent( GAME_EVENT evt, CThing *sourceThing )
 
 			break;
 		}
+
+		default:
+			break;
 	}
 }
 
