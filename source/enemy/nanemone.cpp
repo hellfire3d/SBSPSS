@@ -31,6 +31,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 #ifndef	__PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
@@ -219,20 +223,43 @@ void CNpcAnemone2Enemy::postInit()
 	CProjectile *projectile;
 	s16 heading;
 
+	MATRIX mtx;
+	SetIdentNoTrans(&mtx );
+	RotMatrixZ( m_heading, &mtx );
+
 	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 	{
 		DVECTOR spikePos;
 
-		heading = m_heading - 1024 + ( fireLoop * 512 );
+		s16 relativeHeading = -1024 + ( fireLoop * 512 );
+
+		heading = m_heading + relativeHeading;
 		heading &= 4095;
 
 		spikePos = Pos;
 
+		//s16 multiplier, multiplier2;
+		s16 xDiff, yDiff;
+		SVECTOR offset;
+		VECTOR result;
+
+		// move base position
+		
 		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
 		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
 
-		spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
-		spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
+		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
+
+		xDiff = ( m_scaleY * 40 ) >> 12;
+		yDiff = ( m_scaleX * 40 ) >> 12;
+
+		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
+		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
+
+		ApplyMatrix( &mtx, &offset, &result );
+
+		spikePos.vx += result.vx;
+		spikePos.vy += result.vy;
 
 		projectile = new( "anemone lev2 projectile" ) CProjectile;
 		projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
@@ -298,20 +325,43 @@ void CNpcAnemone2Enemy::processClose( int _frames )
 
 		// attach new spikes
 
+		MATRIX mtx;
+		SetIdentNoTrans(&mtx );
+		RotMatrixZ( m_heading, &mtx );
+
 		for ( fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 		{
 			DVECTOR spikePos;
 
-			heading = m_heading - 1024 + ( fireLoop * 512 );
+			s16 relativeHeading = -1024 + ( fireLoop * 512 );
+
+			heading = m_heading + relativeHeading;
 			heading &= 4095;
 
 			spikePos = Pos;
 
+			//s16 multiplier, multiplier2;
+			s16 xDiff, yDiff;
+			SVECTOR offset;
+			VECTOR result;
+
+			// move base position
+			
 			spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
 			spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
 
-			spikePos.vx += ( 40 * rcos( heading ) ) >> 12;
-			spikePos.vy += ( 40 * rsin( heading ) ) >> 12;
+			// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
+
+			xDiff = ( m_scaleY * 40 ) >> 12;
+			yDiff = ( m_scaleX * 40 ) >> 12;
+
+			offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
+			offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
+
+			ApplyMatrix( &mtx, &offset, &result );
+
+			spikePos.vx += result.vx;
+			spikePos.vy += result.vy;
 
 			projectile = new( "anemone lev2 projectile" ) CProjectile;
 			projectile->init( spikePos, heading, CProjectile::PROJECTILE_FIXED, CProjectile::PROJECTILE_INFINITE_LIFE );
@@ -348,28 +398,42 @@ void CNpcAnemone2Enemy::processMovementModifier( int _frames, s32 distX, s32 dis
 	CProjectile *projectile;
 	projectile = (CProjectile *) Next;
 
+	MATRIX mtx;
+	SetIdentNoTrans(&mtx );
+	RotMatrixZ( m_heading, &mtx );
+
 	for ( int fireLoop = 0 ; fireLoop < 5 ; fireLoop++ )
 	{
 		DVECTOR spikePos;
 
-		s16 heading = m_heading - 1024 + ( fireLoop * 512 );
+		s16 relativeHeading = -1024 + ( fireLoop * 512 );
+		s16 heading = m_heading + relativeHeading;
 		heading &= 4095;
 
 		spikePos = Pos;
 
-		s16 multiplier, multiplier2;
+		//s16 multiplier, multiplier2;
+		s16 xDiff, yDiff;
+		SVECTOR offset;
+		VECTOR result;
+
+		// move base position
 		
 		spikePos.vx += ( 10 * rcos( m_heading ) ) >> 12;
 		spikePos.vy += ( 10 * rsin( m_heading ) ) >> 12;
 
-		multiplier = ( m_scaleX * 40 ) >> 12;
-		multiplier2 = ( m_scaleY * 40 ) >> 12;
+		// move appropriate to scaling (anemone origin is 90 degrees off, hence:)
 
-		multiplier += multiplier2;
-		multiplier >>= 1;
+		xDiff = ( m_scaleY * 40 ) >> 12;
+		yDiff = ( m_scaleX * 40 ) >> 12;
 
-		spikePos.vx += ( multiplier * rcos( heading ) ) >> 12;
-		spikePos.vy += ( multiplier * rsin( heading ) ) >> 12;
+		offset.vx = ( xDiff * rcos( relativeHeading ) ) >> 12;
+		offset.vy = ( yDiff * rsin( relativeHeading ) ) >> 12;
+
+		ApplyMatrix( &mtx, &offset, &result );
+
+		spikePos.vx += result.vx;
+		spikePos.vy += result.vy;
 
 		if ( projectile )
 		{
