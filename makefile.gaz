@@ -134,6 +134,7 @@ player_src :=		player \
 					pschop \
 					psduck \
 					psfall \
+					psidle \
 					psjump \
 					psrun \
 					pstates

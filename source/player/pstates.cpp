@@ -1,57 +1,140 @@
+/*=========================================================================
+
+	pstates.cpp
+
+	Author:		PKG
+	Created: 
+	Project:	Spongebob
+	Purpose: 
+
+	Copyright (c) 2001 Climax Development Ltd
+
+===========================================================================*/
+
+
+/*----------------------------------------------------------------------
+	Includes
+	-------- */
+
 #include "player\pstates.h"
 
 #ifndef __PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
 
-#ifndef	__UTILS_HEADER__
-#include "utils\utils.h"
-#endif
 
-#ifndef __PAD_PADS_H__
-#include "pad\pads.h"
-#endif
+/*	Std Lib
+	------- */
 
+/*	Data
+	---- */
 
+/*----------------------------------------------------------------------
+	Tyepdefs && Defines
+	------------------- */
 
+/*----------------------------------------------------------------------
+	Structure defintions
+	-------------------- */
 
-#ifndef	__ANIM_PLAYER_ANIM_HEADER__
-#include <player_anim.h>
-#endif
+/*----------------------------------------------------------------------
+	Function Prototypes
+	------------------- */
 
+/*----------------------------------------------------------------------
+	Vars
+	---- */
 
-
-
-
-/*----------------------------------------------------------------------*/
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 const PlayerMetrics *CPlayerState::getPlayerMetrics(CPlayer *_player)
 {
 	return _player->getPlayerMetrics();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::setState(CPlayer *_player,int _state)
 {
 	_player->setState((PLAYER_STATE)_state);
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getFacing(CPlayer *_player)
 {
 	return _player->getFacing();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::setFacing(CPlayer *_player,int _facing)
 {
 	_player->setFacing(_facing);
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getAnimNo(CPlayer *_player)
 {
 	return _player->getAnimNo();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::setAnimNo(CPlayer *_player,int _animNo)
 {
 	_player->setAnimNo(_animNo);
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::setAnimFrame(CPlayer *_player,int _animFrame)
 {
 	_player->setAnimFrame(_animFrame);
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::advanceAnimFrameAndCheckForEndOfAnim(class CPlayer *_player)
 {
 	int	animFrame,frameCount;
@@ -67,81 +150,137 @@ int CPlayerState::advanceAnimFrameAndCheckForEndOfAnim(class CPlayer *_player)
 	_player->setAnimFrame(animFrame);
 	return looped;
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPlayerState::retreatAnimFrameAndCheckForEndOfAnim(class CPlayer *_player)
+{
+	int	animFrame;
+	int	looped;
+	animFrame=_player->getAnimFrame()-1;
+	looped=false;
+	if(animFrame<0)
+	{
+		looped=true;
+		animFrame=_player->getAnimFrameCount()-1;
+	}
+	_player->setAnimFrame(animFrame);
+	return looped;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR CPlayerState::getMoveVelocity(CPlayer *_player)
 {
 	return _player->getMoveVelocity();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::setMoveVelocity(CPlayer *_player,DVECTOR *_moveVel)
 {
 	_player->setMoveVelocity(_moveVel);
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::getPadInput(CPlayer *_player)
 {
 	return _player->getPadInput();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayerState::isOnSolidGround(CPlayer *_player)
 {
 	return _player->isOnSolidGround();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::moveLeft(CPlayer *_player)
 {
 	_player->moveLeft();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::moveRight(CPlayer *_player)
 {
 	_player->moveRight();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::slowdown(CPlayer *_player)
 {
 	_player->slowdown();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::jump(CPlayer *_player)
 {
 	_player->jump();
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CPlayerState::fall(CPlayer *_player)
 {
 	_player->fall();
 }
 
 
-
-
-
-
-
-
-/*----------------------------------------------------------------------*/
-void CPlayerStateIdle::enter(CPlayer *_player)
-{
-	setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC04);
-}
-void CPlayerStateIdle::think(CPlayer *_player)
-{
-	int	control;
-	control=getPadInput(_player);
-	
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
-	{
-		setState(_player,STATE_JUMP);
-	}
-	else if(control&(CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT)|CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT)))
-	{
-		setState(_player,STATE_RUN);
-	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
-	{
-		setState(_player,STATE_CHOP);
-	}
-	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
-	{
-		setState(_player,STATE_DUCK);
-	}
-	else if(advanceAnimFrameAndCheckForEndOfAnim(_player))
-	{
-		if(getRndRange(100)<95)
-			setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC04);
-		else
-			setAnimNo(_player,ANIM_PLAYER_ANIM_IDLEGENERIC03);
-	}
-}
+/*===========================================================================
+ end */

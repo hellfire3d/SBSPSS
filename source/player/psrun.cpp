@@ -86,6 +86,8 @@ void CPlayerStateRun::enter(CPlayer *_player)
 	{
 		setFacing(_player,FACING_RIGHT);
 	}
+
+	m_numberOfTimeAnimHasLooped=0;
 }
 
 
@@ -110,7 +112,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 	}
 	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
 	{
-		setState(_player,STATE_RUNCHOP);
+		setState(_player,STATE_RUNATTACK);
 	}
 	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
@@ -125,7 +127,10 @@ void CPlayerStateRun::think(CPlayer *_player)
 		if(getMoveVelocity(_player).vx==0)
 		{
 			setState(_player,STATE_IDLE);
-			setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
+			if(m_numberOfTimeAnimHasLooped>=2)
+			{
+				setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTOP);
+			}
 		}
 		else
 		{
@@ -136,6 +141,7 @@ void CPlayerStateRun::think(CPlayer *_player)
 	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
 	{
 		setAnimNo(_player,ANIM_PLAYER_ANIM_RUN);
+		m_numberOfTimeAnimHasLooped++;
 	}
 }
 

@@ -67,7 +67,7 @@ void CPlayerStateJump::enter(CPlayer *_player)
 
 	metrics=getPlayerMetrics(_player);
 
-	setAnimNo(_player,ANIM_PLAYER_ANIM_JUMPSTART);
+	setAnimNo(_player,ANIM_PLAYER_ANIM_HOVER);
 	m_jumpFrames=0;
 	DVECTOR	move=getMoveVelocity(_player);
 	move.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
@@ -95,19 +95,13 @@ void CPlayerStateJump::think(CPlayer *_player)
 	}
 	else
 	{
-		DVECTOR	move;
-		move=getMoveVelocity(_player);
-		if(move.vy>=0)
-		{
-			setState(_player,STATE_FALL);
-		}
-		else
-		{
-			move.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
-		}
-		setMoveVelocity(_player,&move);
+		setState(_player,STATE_FALL);
 	}
 
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	{
+		setState(_player,STATE_AIRATTACK);
+	}
 	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
@@ -120,6 +114,7 @@ void CPlayerStateJump::think(CPlayer *_player)
 	{
 		slowdown(_player);
 	}
+advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }
 
 

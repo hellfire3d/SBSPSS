@@ -128,11 +128,15 @@ void	CGameScene::think(int _frames)
 	CConversation::think(_frames);
 	if(!CConversation::isActive())
 	{
-		DVECTOR	mapPos;
+		DVECTOR	camPos;
 		CThing::thinkAllThings(_frames);
-		mapPos=m_player->getPos();
-		CBubicleFactory::setMapOffset(&mapPos);
-		Level.setCameraCentre(mapPos);
+		camPos=m_player->getCameraPos();
+//PKG
+if(camPos.vx<0)camPos.vx=0;
+if(camPos.vy<0)camPos.vy=0;
+//PKG		
+		CBubicleFactory::setMapOffset(&camPos);
+		Level.setCameraCentre(camPos);
 		Level.think(_frames);
 	}
 }

@@ -52,8 +52,9 @@ typedef enum
 	STATE_BUTTBOUNCE,
 	STATE_BUTTFALL,
 	STATE_BUTTLAND,
-	STATE_CHOP,
-	STATE_RUNCHOP,
+	STATE_ATTACK,
+	STATE_RUNATTACK,
+	STATE_AIRATTACK,
 	STATE_DUCK,
 	STATE_SOAKUP,
 	STATE_GETUP,
@@ -106,6 +107,8 @@ public:
 	void			think(int _frames);
 	void			render();
 
+	DVECTOR			getCameraPos();
+
 protected:		
 	const PlayerMetrics	*getPlayerMetrics();
 
@@ -135,6 +138,14 @@ friend class CPlayerState;
 
 private:
 
+	typedef struct
+	{
+		PlayerMetrics		m_metrics;
+		class CPlayerState	*m_states[NUM_STATES];
+	}PlayerMode;
+
+	static PlayerMode		s_modes;
+	
 	int				m_animFrame;
 	int				m_animNo;
 	PLAYER_STATE	m_state;
@@ -142,6 +153,7 @@ private:
 
 	DVECTOR			m_moveVel;
 	int				m_facing;
+	int				m_fallFrames;
 
 	enum
 	{
@@ -150,13 +162,12 @@ private:
 	};
 	int				m_invincibleFrameCount;
 
-	static class CPlayerState	*s_states[NUM_STATES];
-
-	class CPlayerState	*m_currentState;
-
-
+	class CPlayerState			*m_currentState;
 
 	int				m_lives;
+
+	DVECTOR			m_cameraOffsetTarget;
+	DVECTOR			m_cameraOffset;
 
 };
 

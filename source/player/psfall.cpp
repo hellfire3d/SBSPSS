@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
 	psfall.cpp
@@ -65,8 +64,7 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateFall::enter(CPlayer *_player)
 {
-	setAnimNo(_player,ANIM_PLAYER_ANIM_JUMPSTART);
-	m_fallFrames=0;
+	setAnimNo(_player,ANIM_PLAYER_ANIM_HOVER);
 }
 
 
@@ -85,19 +83,6 @@ void CPlayerStateFall::think(CPlayer *_player)
 	metrics=getPlayerMetrics(_player);
 	control=getPadInput(_player);
 
-	move=getMoveVelocity(_player);
-	move.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
-	if(move.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<CPlayer::VELOCITY_SHIFT)
-	{
-		move.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
-		m_fallFrames++;
-		if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
-		{
-			setState(_player,STATE_FALLFAR);
-		}
-	}
-	setMoveVelocity(_player,&move);
-
 	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
 	{
 		moveLeft(_player);
@@ -111,13 +96,18 @@ void CPlayerStateFall::think(CPlayer *_player)
 		slowdown(_player);
 	}
 
-	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	{
+		setState(_player,STATE_AIRATTACK);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
 	{
 		move.vx=0;
 		move.vy=0;
 		setMoveVelocity(_player,&move);
 		setState(_player,STATE_BUTTBOUNCE);
 	}
+	advanceAnimFrameAndCheckForEndOfAnim(_player);	
 }
 
 

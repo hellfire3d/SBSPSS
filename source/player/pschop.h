@@ -49,6 +49,14 @@ public:
 };
 
 
+class CPlayerStateAirChop : public CPlayerStateChop
+{
+public:
+	void			think(class CPlayer *_player);
+
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */

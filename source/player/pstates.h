@@ -37,8 +37,8 @@
 class CPlayerState
 {
 public:
-	virtual void	enter(class CPlayer *_player)=0;
-	virtual void	think(class CPlayer *_player)=0;
+	virtual void	enter(class CPlayer *_player)		{;}
+	virtual void	think(class CPlayer *_player)		{;}
 
 
 protected:
@@ -50,6 +50,7 @@ protected:
 	void			setAnimNo(class CPlayer *_player,int _animNo);
 	void			setAnimFrame(class CPlayer *_player,int _animFrame);
 	int				advanceAnimFrameAndCheckForEndOfAnim(class CPlayer *_player);
+	int				retreatAnimFrameAndCheckForEndOfAnim(class CPlayer *_player);
 	DVECTOR			getMoveVelocity(class CPlayer *_player);
 	void			setMoveVelocity(class CPlayer *_player,DVECTOR *_moveVel);
 	int				getPadInput(class CPlayer *_player);
@@ -63,15 +64,6 @@ protected:
 	void fall(class CPlayer *_player);
 
 
-};
-
-
-
-class CPlayerStateIdle : public CPlayerState
-{
-public:
-	void			enter(class CPlayer *_player);
-	void			think(class CPlayer *_player);
 };
 
 

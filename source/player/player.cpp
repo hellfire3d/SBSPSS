@@ -41,6 +41,10 @@
 #include "player\psfall.h"
 #endif
 
+#ifndef __PLAYER__PSIDLE_H__
+#include "player\psidle.h"
+#endif
+
 #ifndef __PLAYER__PSBUTT_H__
 #include "player\psbutt.h"
 #endif
@@ -66,6 +70,11 @@
 
 /*	Data
 	---- */
+
+#ifndef	__ANIM_PLAYER_ANIM_HEADER__
+#include <player_anim.h>
+#endif
+
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -93,25 +102,41 @@ CPlayerStateButtBounceFall	stateButtBounceFall;
 CPlayerStateButtBounceLand	stateButtBounceLand;
 CPlayerStateChop			stateChop;
 CPlayerStateRunChop			stateRunChop;
+CPlayerStateAirChop			stateAirChop;
 CPlayerStateDuck			stateDuck;
 CPlayerStateSoakUp			stateSoackUp;
 CPlayerStateGetUp			stateGetup;
 
-CPlayerState *CPlayer::s_states[NUM_STATES]=
+// Player with karate chop installed
+CPlayer::PlayerMode CPlayer::s_modes=
 {
-	&stateIdle,				// STATE_IDLE
-	&stateJump,				// STATE_JUMP
-	&stateRun,				// STATE_RUN
-	&stateFall,				// STATE_FALL
-	&stateFallFar,			// STATE_FALLFAR
-	&stateButtBounce,		// STATE_BUTTBOUNCE
-	&stateButtBounceFall,	// STATE_BUTTFALL
-	&stateButtBounceLand,	// STATE_BUTTLAND
-	&stateChop,				// STATE_CHOP
-	&stateRunChop,			// STATE_RUNCHOP
-	&stateDuck,				// STATE_DUCK
-	&stateSoackUp,			// STATE_SOAKUP
-	&stateGetup,			// STATE_GETUP
+	{	{
+		8,						// PM__JUMP_VELOCITY
+		10,						// PM__MAX_JUMP_FRAMES
+		20,						// PM__MAX_SAFE_FALL_FRAMES
+		4,						// PM__GRAVITY_VALUE
+		8,						// PM__TERMINAL_VELOCITY
+		8,						// PM__MAX_RUN_VELOCITY
+		4,						// PM__RUN_SPEEDUP
+		2,						// PM__RUN_REVERSESLOWDOWN
+		1,						// PM__RUN_SLOWDOWN
+	}	},
+	{
+		&stateIdle,				// STATE_IDLE
+		&stateJump,				// STATE_JUMP
+		&stateRun,				// STATE_RUN
+		&stateFall,				// STATE_FALL
+		&stateFallFar,			// STATE_FALLFAR
+		&stateButtBounce,		// STATE_BUTTBOUNCE
+		&stateButtBounceFall,	// STATE_BUTTFALL
+		&stateButtBounceLand,	// STATE_BUTTLAND
+		&stateChop,				// STATE_ATTACK
+		&stateRunChop,			// STATE_RUNATTACK
+		&stateAirChop,			// STATE_AIRATTACK
+		&stateDuck,				// STATE_DUCK
+		&stateSoackUp,			// STATE_SOAKUP
+		&stateGetup,			// STATE_GETUP
+	}
 };
 
 
@@ -148,6 +173,11 @@ m_animFrame=0;
 	Pos.vx=10;
 	Pos.vy=10;
 #endif
+
+	m_cameraOffsetTarget.vx=0;
+	m_cameraOffsetTarget.vy=0;
+	m_cameraOffset.vx=0;
+	m_cameraOffset.vy=0;
 }
 
 /*----------------------------------------------------------------------
@@ -167,8 +197,11 @@ void	CPlayer::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR ofs={0,0};
 void	CPlayer::think(int _frames)
 {
+	int	i;
+	
 	CThing::think(_frames);
 
 #ifndef __USER_paul__
@@ -178,11 +211,10 @@ void	CPlayer::think(int _frames)
 	if(padInput&PAD_DOWN)	Pos.vy+=move;
 	if(padInput&PAD_LEFT)	Pos.vx-=move;
 	if(padInput&PAD_RIGHT)	Pos.vx+=move;
-	m_invincibleFrameCount=0;
 #else
 	if(_frames>=3)_frames=2;
 
-	for(int i=0;i<_frames;i++)
+	for(i=0;i<_frames;i++)
 	{
 		// Think
 		m_currentState->think(this);
@@ -190,33 +222,87 @@ void	CPlayer::think(int _frames)
 		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
 
 		// Ground collision
-		if(m_moveVel.vy&&isOnSolidGround())
+		if(isOnSolidGround())
 		{
-			if(m_state==STATE_BUTTFALL)
+			if(m_moveVel.vy)
 			{
-				setState(STATE_BUTTLAND);
+				// Was falling.. so we've just hit the ground
+				if(m_state==STATE_BUTTFALL)
+				{
+					setState(STATE_BUTTLAND);
+				}
+				else if(m_state==STATE_FALLFAR)
+				{
+					setState(STATE_IDLE);
+				}
+				else if(m_moveVel.vx)
+				{
+					setState(STATE_RUN);
+					setAnimNo(ANIM_PLAYER_ANIM_RUNJUMPEND);
+				}
+				else
+				{
+					setState(STATE_IDLE);
+					setAnimNo(ANIM_PLAYER_ANIM_JUMPEND);
+				}
+				m_moveVel.vy=0;
+				m_fallFrames=0;
 			}
-			else if(m_state==STATE_FALLFAR)
+		}
+		else
+		{
+			if(m_state!=STATE_JUMP&&m_state!=STATE_BUTTBOUNCE)
 			{
-				setState(STATE_IDLE);
+				// Fall
+				const PlayerMetrics	*metrics;
+				metrics=getPlayerMetrics();
+				m_moveVel.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
+				if(m_moveVel.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+				{
+					m_moveVel.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
+					m_fallFrames++;
+					if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
+					{
+						setState(STATE_FALLFAR);
+					}
+				}
 			}
-			else if(m_moveVel.vx)
-			{
-				setState(STATE_RUN);
-			}
-			else
-			{
-				setState(STATE_IDLE);
-			}
-			m_moveVel.vy=0;
 		}
 
+		// Flashing..
 		if(m_invincibleFrameCount)
 		{
 			m_invincibleFrameCount--;
 		}
 	}
+
+
 #endif
+m_invincibleFrameCount=0;
+	// Move the camera offset
+	for(i=0;i<_frames;i++)
+	{
+		m_cameraOffsetTarget=ofs;		
+		m_cameraOffset=ofs;
+		/*
+		int moveDelta;
+		moveDelta=(m_cameraOffset.vx-m_cameraOffsetTarget.vx);
+		if(moveDelta)
+		{
+		if(moveDelta<0)
+		{
+					moveDelta>>=2;
+					if(moveDelta==0)moveDelta=1;
+					}
+					else if(moveDelta>0)
+					{
+					moveDelta>>=2;
+					if(moveDelta==0)moveDelta=-1;
+					}
+					m_cameraOffset.vx+=moveDelta;
+					}
+		*/
+	}
 	if(Pos.vx<0)Pos.vx=0;
 	if(Pos.vy<0)Pos.vy=0;
 }
@@ -228,15 +314,15 @@ void	CPlayer::think(int _frames)
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
-int MASK=2;
+SVECTOR ppos={0,1024,5000};
 void	CPlayer::render()
 {
 	CThing::render();
 	
 	// Render
-	if(m_invincibleFrameCount==0||
-	   m_invincibleFrameCount&MASK)
+	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
+		m_skel.setPos(&ppos);
 		m_skel.setFrame(m_animFrame);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
@@ -249,6 +335,20 @@ void	CPlayer::render()
 
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+DVECTOR CPlayer::getCameraPos()
+{
+	DVECTOR	cameraPos;
+	cameraPos.vx=Pos.vx;//+m_cameraOffset.vx;
+	cameraPos.vy=Pos.vy;//+m_cameraOffset.vy;
+	return cameraPos;
+}
+
 
 
 
@@ -258,23 +358,9 @@ void	CPlayer::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-PlayerMetrics s_normalPlayerMetrics=
-{
-	{
-		8,		// PM__JUMP_VELOCITY
-		10,		// PM__MAX_JUMP_FRAMES
-		20,		// PM__MAX_SAFE_FALL_FRAMES
-		4,		// PM__GRAVITY_VALUE
-		8,		// PM__TERMINAL_VELOCITY
-		8,		// PM__MAX_RUN_VELOCITY
-		4,		// PM__RUN_SPEEDUP
-		2,		// PM__RUN_REVERSESLOWDOWN
-		1,		// PM__RUN_SLOWDOWN
-	}
-};
 const PlayerMetrics *CPlayer::getPlayerMetrics()
 {
-	return &s_normalPlayerMetrics;
+	return &s_modes.m_metrics;
 }
 
 
@@ -289,7 +375,7 @@ const PlayerMetrics *CPlayer::getPlayerMetrics()
   ---------------------------------------------------------------------- */
 void	CPlayer::setState(PLAYER_STATE _state)
 {
-	m_currentState=s_states[_state];
+	m_currentState=s_modes.m_states[_state];
 	m_currentState->enter(this);
 	m_state=_state;
 }
@@ -313,11 +399,11 @@ void CPlayer::setFacing(int _facing)
 		{
 			case FACING_LEFT:
 				m_facing=FACING_LEFT;
-				m_skel.setAng(512);
+				m_skel.setAng(1024);
 				break;
 			case FACING_RIGHT:
 				m_facing=FACING_RIGHT;
-				m_skel.setAng(3096+512);
+				m_skel.setAng(-1024);
 				break;
 			default:
 				ASSERT(0);
@@ -376,7 +462,7 @@ int CPlayer::getPadInput()
 
 int CPlayer::isOnSolidGround()
 {
-	return Pos.vy>400;
+	return Pos.vy>16*15;
 }
 
 

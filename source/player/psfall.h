@@ -38,9 +38,6 @@ public:
 	void			enter(class CPlayer *_player);
 	void			think(class CPlayer *_player);
 
-private:
-	int				m_fallFrames;
-
 };
 
 

@@ -120,5 +120,36 @@ void CPlayerStateRunChop::think(CPlayer *_player)
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayerStateAirChop::think(CPlayer *_player)
+{
+	int	control;
+	control=getPadInput(_player);
+
+	if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	{
+		moveLeft(_player);
+	}
+	else if(control&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	{
+		moveRight(_player);
+	}
+	else
+	{
+		slowdown(_player);
+	}
+	
+	if(advanceAnimFrameAndCheckForEndOfAnim(_player))
+	{
+		setState(_player,STATE_FALL);
+	}
+}
+
+
 /*===========================================================================
  end */
