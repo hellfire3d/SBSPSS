@@ -620,6 +620,27 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
 	return retId;
 }
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int	CXMPlaySound::isStillPlaying(xmPlayingId _playingId)
+{
+	spuChannelUse	*ch;
+
+	ch=&m_spuChannelUse[_playingId&0xff];
+	if(ch->m_playingId==_playingId)
+	{
+		ASSERT(ch->m_locked!=false);	// Can't do this on an unlocked sound!
+		return ch->m_useType!=SILENT;
+	}
+
+	ASSERT(0);			// Couldn't find the sound to check it!
+	return false;
+}
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -635,7 +656,7 @@ void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
 	if(ch->m_playingId==_playingId)
 	{
 		//PAUL_DBGMSG("unlocking %d",_playingId);
-		ASSERT(ch->m_locked!=false);
+		ASSERT(ch->m_locked!=false);	// Can't do this on an unlocked sound!
 		do
 		{
 			ch->m_locked=false;

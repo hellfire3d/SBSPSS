@@ -80,6 +80,8 @@ public:
 	xmPlayingId		playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPattern,int _playMask,u8 _priority);
 	xmPlayingId		playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int _soundId,u8 _priority,int _pitch=0x400);
 
+	int				isStillPlaying(xmPlayingId _playingId);
+
 	void			unlockPlayingId(xmPlayingId _playingId);
 	void			stopPlayingId(xmPlayingId _playingId);
 

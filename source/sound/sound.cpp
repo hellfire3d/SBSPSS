@@ -636,6 +636,18 @@ void CSoundMediator::stopAllSfx()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int	CSoundMediator::isSfxStillPlaying(xmPlayingId _playingId)
+{
+	return s_xmplaySound->isStillPlaying(_playingId);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CSoundMediator::playSpeech(SpeechEquate _speech)
 {
 	stopSpeech();

@@ -198,6 +198,7 @@ public:
 	static void			setposition(xmPlayingId _playingId,VECTOR *pos);
 	static void			stopAndUnlockSfx(xmPlayingId _playingId);
 	static void			stopAllSfx();
+	static int			isSfxStillPlaying(xmPlayingId _playingId);
 
 	// Speech interface
 	static void			playSpeech(SpeechEquate _speech);
