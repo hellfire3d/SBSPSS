@@ -92,14 +92,14 @@
 	Vars
 	---- */
 
-static const int	s_RenderBBoxX0=0;
-static const int	s_RenderBBoxX1=INGAME_SCREENW;
-static const int	s_RenderBBoxY0=0;
-static const int	s_RenderBBoxY1=INGAME_SCREENH;
+static const int	s_RenderBBoxX0=-32;
+static const int	s_RenderBBoxX1=INGAME_SCREENW+32;
+static const int	s_RenderBBoxY0=-16;
+static const int	s_RenderBBoxY1=INGAME_SCREENH+16;
 static const int	s_ThinkBBoxX0=0-(INGAME_SCREENW/2);
 static const int	s_ThinkBBoxX1=INGAME_SCREENW+(INGAME_SCREENW/2);
-static const int	s_ThinkBBoxY0=0-(INGAME_SCREENW/2);
-static const int	s_ThinkBBoxY1=INGAME_SCREENW+(INGAME_SCREENW/2);
+static const int	s_ThinkBBoxY0=0-(INGAME_SCREENH/2);
+static const int	s_ThinkBBoxY1=INGAME_SCREENW+(INGAME_SCREENH/2);
 
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE];
 CThing			*CThingManager::s_CollisionLists[CThing::MAX_TYPE];
