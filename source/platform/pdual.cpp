@@ -211,7 +211,7 @@ void CNpcDualPlatform::processMovement( int _frames )
 
 		m_extension += extensionChange;
 
-		if ( extensionChange )
+		if ( extensionChange && m_soundId == NOT_PLAYING )
 		{
 			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_WORLD_OBJECT__ROTATING_PLATFORM, true, true );
 		}
