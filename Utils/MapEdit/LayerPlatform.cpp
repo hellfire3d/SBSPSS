@@ -58,7 +58,6 @@ sLayerThingDataOLD	OldThing;
 		ThisThing.Data.Platform.PlatformCollisionFlag=OldThing.CollisionFlag;
 		ThisThing.Data.Platform.PlatformTriCount=OldThing.TriCount;	// Not needed but what the hell!!
 		ThisThing.Data.Platform.PlatformTriStart=OldThing.TriStart;	// Not needed but what the hell!!
-
 }
 
 
@@ -75,6 +74,7 @@ void	CLayerPlatform::GUIInit(CCore *Core)
 
 		GUIPlatform.m_SpeedSpin.SetRange(0,255);
 		GUIPlatform.m_TurnRateSpin.SetRange(0,255);
+		GUIPlatform.m_Param0Spin.SetRange(0,255);
 
 // Init type lists
 		{
@@ -89,6 +89,10 @@ CComboBox	&List=GUIPlatform.m_Type;
 			List.AddString("Weighted");
 			List.AddString("Rotating");
 		}
+		GUIPlatform.m_Param0Txt.ShowWindow(SW_HIDE);
+		GUIPlatform.m_Param0.ShowWindow(SW_HIDE);
+		GUIPlatform.m_Param0Spin.ShowWindow(SW_HIDE);
+
 }
 
 /*****************************************************************************/
@@ -139,6 +143,22 @@ void	CLayerPlatform::GUIThingUpdate(bool OnlySel)
 			GUIPlatform.m_Collision.SetCheck(ThisThing.Data.Platform.PlatformCollisionFlag);
 			GUIPlatform.m_MoveList.SetCurSel(ThisThing.Data.Platform.PlatformMoveType);
 			GUIPlatform.m_Type.SetCurSel(ThisThing.Data.Platform.PlatformType);
+// Additional Params
+			char	*Param0Txt=ThingScript.GetStr(ThisThing.Name,"Param0");
+			if (Param0Txt)
+			{
+				GUIPlatform.m_Param0Txt.SetWindowText(Param0Txt);
+				GUIPlatform.SetVal(GUIPlatform.m_Param0,ThisThing.Data.Platform.PlatformParam0);
+				GUIPlatform.m_Param0Txt.ShowWindow(SW_SHOW);
+				GUIPlatform.m_Param0.ShowWindow(SW_SHOW);
+				GUIPlatform.m_Param0Spin.ShowWindow(SW_SHOW);
+			}
+			else
+			{
+				GUIPlatform.m_Param0Txt.ShowWindow(SW_HIDE);
+				GUIPlatform.m_Param0.ShowWindow(SW_HIDE);
+				GUIPlatform.m_Param0Spin.ShowWindow(SW_HIDE);
+			}
 		}
 		else
 		{
@@ -147,6 +167,7 @@ void	CLayerPlatform::GUIThingUpdate(bool OnlySel)
 			GUIPlatform.m_Collision.SetCheck(false);
 			GUIPlatform.m_MoveList.SetCurSel(-1);
 			GUIPlatform.m_Type.SetCurSel(-1);
+
 		}
 		GUIPlatform.DisableCallback(false);
 }
@@ -168,6 +189,7 @@ void	CLayerPlatform::GUIChanged(CCore *Core)
 			ThisThing.Data.Platform.PlatformCollisionFlag=GUIPlatform.m_Collision.GetCheck()!=0;
 			ThisThing.Data.Platform.PlatformMoveType=GUIPlatform.m_MoveList.GetCurSel();
 			ThisThing.Data.Platform.PlatformType=GUIPlatform.m_Type.GetCurSel();
+			ThisThing.Data.Platform.PlatformParam0=GUIPlatform.GetVal(GUIPlatform.m_Param0);
 			SetThingParams(ThisThing);
 		}
 }

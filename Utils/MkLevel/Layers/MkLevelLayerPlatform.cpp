@@ -65,6 +65,7 @@ int			i,ListSize=ThingList.size();
 			OutThing.Flags=ThisThing.Data.Platform.PlatformCollisionFlag;
 			OutThing.PointCount=PointCount;
 			OutThing.Gfx=RemapTable[i];
+			OutThing.Param0=ThisThing.Data.Platform.PlatformParam0;
 			fwrite(&OutThing,sizeof(sThingPlatform),1,File);
 
 			for (p=0;p<PointCount;p++)

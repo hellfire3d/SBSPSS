@@ -228,7 +228,6 @@ Vector3		ScrOfs(ZoomW/2,ZoomH/2,0);
 				ScrOfs.z=-4.0f;
 			}
 
-			if (ThingBank->NeedLoad()) ThingBank->LoadAllSets(Core);
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
@@ -353,6 +352,7 @@ bool	Ret=false;
 			SelectThing(CursorPos);
 			break;
 		case MouseModeNew:
+			GUIChanged(Core);
 			AddThing(CursorPos);
 			break;
 		case MouseModePoints:

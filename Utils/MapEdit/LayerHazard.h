@@ -34,6 +34,9 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
+		void			Export(CCore *Core,CExport &Exp);
+		void			ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisThing,sLayerThingData &OutThing);
+
 protected:
 		CGUILayerHazard		GUIHazard;
 

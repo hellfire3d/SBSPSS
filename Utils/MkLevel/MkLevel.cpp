@@ -105,6 +105,7 @@ GFName		Path;
 		FlatFace[0].uv[0][0]=1;		FlatFace[0].uv[0][1]=1;
 		FlatFace[0].uv[1][0]=0;		FlatFace[0].uv[1][1]=0;
 		FlatFace[0].uv[2][0]=1;		FlatFace[0].uv[2][1]=0;
+		FlatFace[0].Flags=0;
 
 		FlatFace[1].vtx[0].x=-0.5f; FlatFace[1].vtx[0].y= 0.0f;	FlatFace[1].vtx[0].z=-4.0f;
 		FlatFace[1].vtx[1].x=+0.5f; FlatFace[1].vtx[1].y=+1.0f;	FlatFace[1].vtx[1].z=-4.0f;
@@ -112,6 +113,7 @@ GFName		Path;
 		FlatFace[1].uv[0][0]=0;		FlatFace[1].uv[0][1]=0;
 		FlatFace[1].uv[1][0]=1;		FlatFace[1].uv[1][1]=1;
 		FlatFace[1].uv[2][0]=0;		FlatFace[1].uv[2][1]=1;
+		FlatFace[1].Flags=0;
 }
 
 
@@ -166,9 +168,7 @@ int						TriCount=NodeTriList.size();
 				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
 				GString	TexName=RootPath+SceneTexList[Mat];
 				
-
 				CFace &F=ModelFaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], TexName,SceneMaterials[Mat].Flags,false);
-//				ModelFaceList.SetTPageFlag(F,SceneMaterials[Mat].Flags);
 			}
 
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -200,7 +200,7 @@ int				Idx;
 			CFace	F;
 
 			ExpTri2Face(ThisTri,F);
-			ModelFaceList.SetTPageFlag(F,ThisTri.Flags);
+			ModelFaceList.SetTPageFlag(F,ThisTri.Flags*0);
 			ModelFaceList.AddFace(F,false);
 		}
 
@@ -225,7 +225,7 @@ int		TriStart=OutFaceList.GetFaceCount();
 		ListSize=ModelList.size();
 		for (i=0; i<ListSize; i++)
 		{
-			printf("%s = %i %i\n",ModelList[i].Name,ModelList[i].TriStart,ModelList[i].TriCount);
+//			printf("%s = %i %i\n",ModelList[i].Name,ModelList[i].TriStart,ModelList[i].TriCount);
 			ModelList[i].TriStart+=TriStart;
 		}
 }
@@ -303,6 +303,7 @@ u8		*TilePtr=(u8*) &ByteHdr[FileHdr->TileOfs];
 			sExpTile	&InTile=InTileList[i];
 			
 			InTile=*ThisTilePtr;
+// Skip RGB Image, not needed (and too buggy)
 //			InTile.RGB=(u8*)malloc(RGBSize);
 //			memcpy(InTile.RGB,TilePtr+sizeof(sExpTile),RGBSize);
 			InTile.RGB=0;
@@ -573,7 +574,7 @@ int				TileID=OutTile3dList.size();
 				for (i=0; i<SrcTile.TriCount; i++)
 				{
 					int		ListPos;
-					sExpTri	ThisTri=InTriList[SrcTile.TriStart+i];
+					sExpTri	&ThisTri=InTriList[SrcTile.TriStart+i];
 					float	ThisZPos;
 
 					ThisZPos=ThisTri.vtx[0].z;
@@ -592,15 +593,19 @@ int				TileID=OutTile3dList.size();
 			}
 			else
 			{ // create flat tile (This is WRONG, flip tex are gen, need to flip goem)
-				int		TexID=Create2dTex(InTile.Tile,InTile.Flags);
+//				int		TexID=Create2dTex(InTile.Tile,InTile.Flags);
+				int		TexID=Create2dTex(InTile.Tile,0);
 
 				ThisTile.TriCount=2;
+				
 				for (int i=0; i<2; i++)
 					{
+						FlatFace[i].Flags=0;
 						FlatFace[i].TexID=TexID;
 						SortList.push_back(FlatFace[i]);
 					}
-				InTile.Flags=0;
+
+//				InTile.Flags=0;
 			}
 
 // Add sorted list to main list
@@ -668,24 +673,25 @@ int				TileID=OutTile3dList.size();
 int		CMkLevel::Create2dTex(int Tile,int Flags)
 {
 sExpTile	&SrcTile=InTileList[Tile];
-//sMkLevelTex	InTex;
-
-//		InTex.RGB=SrcTile.RGB;
-
-// Try and find RGB data match
-// not working
-//		Idx=FindRGBMatch(InTex);
-//		if (Idx!=-1) return(Idx);
-
+sMkLevelTex	InTex;
+int			Idx;
 // Must be new, add it
 //		InTex.Set=SrcTile.Set;
-//		InTex.Flags=Flags;
 //		InTex.XOfs=SrcTile.XOfs;
 //		InTex.YOfs=SrcTile.YOfs;
+		InTex.Tile=Tile;
+		InTex.Flags=Flags;
+		
+		Idx=Tex2dList.Find(InTex);
 
-int		TexID=BuildTileTex(SrcTile,Flags);
-//		Tex2dList.push_back(InTex);
-		return(TexID);
+		if (Idx!=-1)
+		{
+			return(Tex2dList[Idx].TexID);
+		}
+
+		InTex.TexID=BuildTileTex(SrcTile,Flags);
+		Tex2dList.push_back(InTex);
+		return(InTex.TexID);
 }
 
 //***************************************************************************
@@ -980,7 +986,7 @@ int				i,ListSize=QuadList.size();
 // Write It			
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
-		printf("Quad %i\n",ListSize,MaxOT);
+		printf("Quad %i\n",ListSize);
 		return(ThisPos);
 
 }
@@ -1090,9 +1096,40 @@ int		Ofs=ftell(File);
 
 			Out.TriCount=ThisModel.TriCount;
 			Out.TriStart=ThisModel.TriStart;
-			printf("Writing Model %s (%i/%i)- %i Tris\n",ThisModel.Name,i+1,ListSize,Out.TriCount);
+			CalcModelBBox(ThisModel,Out.BBox);
+			printf("Writing Model %s (%i/%i) (%i Tris) (BBox %i,%i->%i,%i)\n",ThisModel.Name,i+1,ListSize,Out.TriCount,Out.BBox.XMin,Out.BBox.YMin,Out.BBox.XMax,Out.BBox.YMax);
 			fwrite(&Out,1,sizeof(sModel),File);
 		}
 
 		return(Ofs);
+}
+
+//***************************************************************************
+void	CMkLevel::CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox)
+{
+vector<sTri>		&TriList=OutFaceList.GetOutTriList();
+vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
+int					Vtx[3];
+
+		BBox.XMin=+32000;
+		BBox.XMax=-32000;
+		BBox.YMin=+32000;
+		BBox.YMax=-32000;
+
+		for (int T=0; T<ThisModel.TriCount; T++)
+		{
+			sTri	&ThisTri=TriList[T+ThisModel.TriStart];
+			Vtx[0]=ThisTri.P0;
+			Vtx[1]=ThisTri.P1;
+			Vtx[2]=ThisTri.P2;
+
+			for (int V=0; V<3; V++)
+			{
+				sVtx	const &ThisVtx=VtxList[Vtx[V]];
+				if (BBox.XMin>+ThisVtx.vx) BBox.XMin=+ThisVtx.vx;
+				if (BBox.XMax<+ThisVtx.vx) BBox.XMax=+ThisVtx.vx;
+				if (BBox.YMin>-ThisVtx.vy) BBox.YMin=-ThisVtx.vy;
+				if (BBox.YMax<-ThisVtx.vy) BBox.YMax=-ThisVtx.vy;
+			}
+		}
 }

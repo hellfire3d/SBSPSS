@@ -57,6 +57,7 @@ public:
 		void			Save(CFile *File);
 
 		void			Export(CCore *Core,CExport &Exp);
+		virtual	void			LoadGfx(CCore *Core)		{if (GfxBank->NeedLoad()) GfxBank->LoadAllSets(Core);}
 
 // Functions
 		bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &CursorPos,bool DownFlag);

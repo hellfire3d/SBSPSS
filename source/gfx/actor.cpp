@@ -558,7 +558,7 @@ POLY_FT4		*Ft4;
 				}
 				else
 				{
-					printf("NO FREE NODES\n");
+//					printf("NO FREE NODES\n");
 					ThisNode=PoolEntry->ActorCache.Head;
 				}
 				ASSERT(ThisNode);

@@ -22,6 +22,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerShade)
 	enum { IDD = IDD_LAYER_SHADE };
+	CSpinButtonCtrl	m_GfxPosYSpin;
+	CSpinButtonCtrl	m_GfxPosXSpin;
 	CComboBox	m_DefList;
 	CSpinButtonCtrl	m_ShadeCountSpin;
 	CEdit			m_ShadeCount;
@@ -40,9 +42,7 @@ public:
 	CSpinButtonCtrl	m_GfxCurrentSpin;
 	CEdit			m_GfxCurrent;
 	CComboBox		m_GfxBankList;
-	CEdit			m_GfxPosXSpin;
 	CEdit			m_GfxPosX;
-	CEdit			m_GfxPosYSpin;
 	CEdit			m_GfxPosY;
 	CSpinButtonCtrl	m_GfxSpinx0;
 	CSpinButtonCtrl	m_GfxSpiny0;

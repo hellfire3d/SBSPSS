@@ -70,6 +70,7 @@ virtual	bool			IsVisible()						{return(LayerDef.VisibleFlag);}
 virtual	int				GetType()						{return(LayerDef.Type);}
 virtual	int				GetSubType()					{return(LayerDef.SubType);}
 
+virtual	void			LoadGfx(CCore *Core)=0;
 
 virtual	void			Render(CCore *Core,Vector3 &CamPos,bool Is3d){};
 virtual	void			Render4TGA(const char *Filename){}

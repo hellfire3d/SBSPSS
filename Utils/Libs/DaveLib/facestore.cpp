@@ -84,23 +84,18 @@ inline bool uvaprox( sUV &uv0, sUV &uv1 )
 //***************************************************************************
 void	CFaceStore::SetTPageFlag(CFace &F,int MatFlag)
 {
-int		Trans=0;
-
+		
 		switch (MatFlag>>3)
 		{
-//			case 0: Trans=2; break;	/* Subtractive */
-			case 1: Trans=1; break;	/* Additive */
+//			case 0:		F.TPageFlag=2; break;	/* Subtractive */
+			case 1:		F.TPageFlag=1; break;	/* Additive */
+			default:	F.TPageFlag=0; break;
 		}
-//	Trans=1;
-		F.TPageFlag=Trans<<5;
 }
 
 //***************************************************************************
 CFace	&CFaceStore::AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int MatFlag,bool ProcessTexFlag )
 {
-//int		ListSize = FaceList.size();
-//		FaceList.resize(ListSize+1);
-//CFace	&F = FaceList[ListSize];
 CFace	F;
 
 		for (int i=0; i<3; i++)
@@ -119,7 +114,8 @@ CFace	F;
 		F.TexName=Tex;
 		F.Mat = -1;
 		SetTPageFlag(F,MatFlag);
-		return(AddFace(F,ProcessTexFlag));
+CFace	&NF=AddFace(F,ProcessTexFlag);
+		return(NF);
 }
 
 //***************************************************************************
@@ -383,13 +379,17 @@ int			V=ThisTex.v+H;
 		Out.uv1[0]=(uv1[0]-XOfs); Out.uv1[1]=(uv1[1]-YOfs);
 		Out.uv2[0]=(uv2[0]-XOfs); Out.uv2[1]=(uv2[1]-YOfs);
 
-		Out.TPage=ThisTex.Tpage | In.TPageFlag;
+		Out.TPage=ThisTex.Tpage;
 		Out.Clut=ThisTex.Clut;
 		Out.PolyCode=GPU_PolyFT3Code;
 
 		if (In.TPageFlag)
 		{
 			Out.PolyCode|=GPUCode_SemiTrans;
+			if (In.TPageFlag!=1)
+			{
+				Out.TPage|=In.TPageFlag<<5;
+			}
 		}
 
 }

@@ -84,8 +84,8 @@ int		Width,Height;
 #ifdef _DEBUG
 //		AddLayer(LAYER_TYPE_SHADE,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_TRIGGER,LAYER_SUBTYPE_NONE, Width, Height);
-		AddLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE, Width, Height);
-//		AddLayer(LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE, Width, Height);
+//		AddLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE, Width, Height);
+		AddLayer(LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_FX,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
 //		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
@@ -98,7 +98,7 @@ int		Width,Height;
 
 		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
 #ifdef _DEBUG
-		ActiveLayer=FindLayer(LAYER_TYPE_PLATFORM,LAYER_SUBTYPE_NONE);
+		ActiveLayer=FindLayer(LAYER_TYPE_HAZARD,LAYER_SUBTYPE_NONE);
 		if (ActiveLayer<0) ActiveLayer=0;
 #endif
 		CurrentLayer=Layer[ActiveLayer];
@@ -258,6 +258,7 @@ CLayer	*ThisLayer;
 
 		for (int i=StartLayer; i<EndLayer; i++)
 		{
+			ThisLayer->LoadGfx(this);
 			if (ThisLayer->IsVisible())
 			{
 				ThisLayer->Render(this,ThisCam,Is3dFlag);

@@ -37,6 +37,26 @@ bool	operator ==(sMkLevelTex const &v1)
 		}
 };
 */
+
+struct	sMkLevelTex
+{
+//		int		Set;
+//		int		XOfs,YOfs;
+		int		Tile;
+		int		Flags;
+		int		TexID;
+
+bool	operator ==(sMkLevelTex const &v1)
+		{
+//		if (Set!=v1.Set) return(false);
+//		if (XOfs!=v1.XOfs) return(false);
+//		if (YOfs!=v1.YOfs) return(false);
+		if (Tile!=v1.Tile) return(false);
+		if (Flags!=v1.Flags) return(false);
+		return(true);
+		}
+};
+
 //***************************************************************************
 struct	sMkLevelModel
 {
@@ -112,7 +132,7 @@ protected:
 		int				WriteQuadList();
 		int				WriteVtxList();
 		void			WriteTileBank();
-
+		void			CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox);
 		void            BuildTiles();
 
 		void			ExpTri2Face(sExpTri &In,CFace &Out,bool ImportTex=true);
@@ -138,7 +158,7 @@ protected:
 
 		CList<sExpLayerTile>	Tile2dList;
 		CList<sExpLayerTile>	Tile3dList;
-//		CList<sMkLevelTex>		Tex2dList;
+		CList<sMkLevelTex>		Tex2dList;
 		CTexGrab				TexGrab;
 		CList<Frame>			BmpList;
 

@@ -32,6 +32,9 @@ void CGUILayerPlatform::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerPlatform)
+	DDX_Control(pDX, IDC_PLATFORM_PARAM_SPIN, m_Param0Spin);
+	DDX_Control(pDX, IDC_PLATFORM_PARAM0_TEXT, m_Param0Txt);
+	DDX_Control(pDX, IDC_PLATFORM_PARAM0, m_Param0);
 	DDX_Control(pDX, IDC_PLATFORM_TURNRATE_SPIN, m_TurnRateSpin);
 	DDX_Control(pDX, IDC_PLATFORM_SPEED_SPIN, m_SpeedSpin);
 	DDX_Control(pDX, IDC_PLATFORM_TYPE, m_Type);

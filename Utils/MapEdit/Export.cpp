@@ -183,6 +183,7 @@ std::vector<sTriFace>	&ElemTriList=ThisElem.GetTriList();
 				OutTri.uv[p][0]=InTri.uvs[p].u;
 				OutTri.uv[p][1]=InTri.uvs[p].v;
 			}
+			OutTri.Flags=InTri.Flags;
 			TriList.push_back(OutTri);
 		}
 }

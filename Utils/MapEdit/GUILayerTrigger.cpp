@@ -32,6 +32,11 @@ void CGUILayerTrigger::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerTrigger)
+	DDX_Control(pDX, IDC_TRIGGER_TARGETW_SPIN, m_TargetWSpin);
+	DDX_Control(pDX, IDC_TRIGGER_TARGETH_SPIN, m_TargetHSpin);
+	DDX_Control(pDX, IDC_TRIGGER_TEXT_TARGET_WH, m_TargetWHTxt);
+	DDX_Control(pDX, IDC_TRIGGER_TARGETW, m_TargetW);
+	DDX_Control(pDX, IDC_TRIGGER_TARGETH, m_TargetH);
 	DDX_Control(pDX, IDC_TRIGGER_TARGET, m_TargetTxt);
 	DDX_Control(pDX, IDC_TRIGGER_TARGETY_SPIN, m_TargetYSpin);
 	DDX_Control(pDX, IDC_TRIGGER_TARGETX_SPIN, m_TargetXSpin);
@@ -51,6 +56,8 @@ BEGIN_MESSAGE_MAP(CGUILayerTrigger, CDialog)
 	ON_EN_CHANGE(IDC_TRIGGER_WIDTH, OnParamChange)
 	ON_EN_CHANGE(IDC_TRIGGER_TARGETX, OnParamChange)
 	ON_EN_CHANGE(IDC_TRIGGER_TARGETY, OnParamChange)
+	ON_EN_CHANGE(IDC_TRIGGER_TARGETH, OnParamChange)
+	ON_EN_CHANGE(IDC_TRIGGER_TARGETW, OnParamChange)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

@@ -84,6 +84,7 @@ float		Col=0.8f,A=0.8f;
 			glTranslatef(-ThisCam.x,ThisCam.y,0);					// Set scroll offset
 			glTranslatef(-ScrOfs.x,ScrOfs.y,0);						// Bring to top left corner
 
+			glPushMatrix();
 			glTranslatef(ThisThing.XY[0].x,-ThisThing.XY[0].y,0);	// Set Pos
 
 			Core->RenderNumber(0);
@@ -140,6 +141,39 @@ float	H=-(ThisThing.Data.Trigger.TriggerHeight);
 
 				
 			}
+			glPopMatrix();
+
+			if (Selected && ThingScript.GetInt(ThisThing.Name,"HasBox"))
+			{ // Draw Box
+				glTranslatef(ThisThing.Data.Trigger.TriggerTargetX,-ThisThing.Data.Trigger.TriggerTargetY,0);	// Set Pos
+				W=ThisThing.Data.Trigger.TriggerTargetW;
+				H=-ThisThing.Data.Trigger.TriggerTargetH;
+
+
+				glBegin (GL_QUADS);	// Draw Box
+					glColor4f(Col-0.25f,0,0,A/2.0f);
+					glVertex3f(0,0+1,0);
+					glVertex3f(W,0+1,0);
+					glVertex3f(W,H+1,0);
+					glVertex3f(0,H+1,0);
+				glEnd();
+// Draw OutLine
+				glBegin(GL_LINES); 
+					glColor4f(Col,Col,Col,A);
+					glVertex3f( 0,0+1,0);
+					glVertex3f( W,0+1,0);
+
+					glVertex3f( W,0+1,0);
+					glVertex3f( W,H+1,0);
+
+					glVertex3f( W,H+1,0);
+					glVertex3f( 0,H+1,0);
+
+					glVertex3f( 0,H+1,0);
+					glVertex3f( 0,0+1,0);
+				glEnd();
+				
+			}
 
 
 			glDisable(GL_DEPTH_TEST);
@@ -157,10 +191,12 @@ void	CLayerTrigger::GUIInit(CCore *Core)
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 		Core->GUIAdd(GUITrigger,IDD_LAYER_TRIGGER);
 		GUITrigger.DisableCallback(false);
-		GUITrigger.m_WidthSpin.SetRange(1,255);
-		GUITrigger.m_HeightSpin.SetRange(1,255);
+		GUITrigger.m_WidthSpin.SetRange(1,32000);
+		GUITrigger.m_HeightSpin.SetRange(1,32000);
 		GUITrigger.m_TargetXSpin.SetRange(0,32000);
 		GUITrigger.m_TargetYSpin.SetRange(0,32000);
+		GUITrigger.m_TargetWSpin.SetRange(1,32000);
+		GUITrigger.m_TargetHSpin.SetRange(1,32000);
 }
 
 /*****************************************************************************/
@@ -199,7 +235,8 @@ CComboBox	&List=GUIThing.m_DefList;
 /*****************************************************************************/
 void	CLayerTrigger::GUIThingUpdate(bool OnlySel)
 {
-int		TargetMode=SW_SHOW;
+int		TargetXYMode=SW_HIDE;
+int		TargetWHMode=SW_HIDE;
 
 		GUIThingUpdateList(GUIThing.m_List,false);
 // Params
@@ -211,23 +248,35 @@ int		TargetMode=SW_SHOW;
 			GUITrigger.SetVal(GUITrigger.m_Height,ThisThing.Data.Trigger.TriggerHeight);
 			GUITrigger.SetVal(GUITrigger.m_TargetX,ThisThing.Data.Trigger.TriggerTargetX);
 			GUITrigger.SetVal(GUITrigger.m_TargetY,ThisThing.Data.Trigger.TriggerTargetY);
-			if (ThingScript.GetInt(ThisThing.Name,"HasTarget")==0)
+			GUITrigger.SetVal(GUITrigger.m_TargetW,ThisThing.Data.Trigger.TriggerTargetW);
+			GUITrigger.SetVal(GUITrigger.m_TargetH,ThisThing.Data.Trigger.TriggerTargetH);
+			if (ThingScript.GetInt(ThisThing.Name,"HasTarget"))
 			{
-				TargetMode=SW_HIDE;
+				TargetXYMode=SW_SHOW;
+			}
+			if (ThingScript.GetInt(ThisThing.Name,"HasBox"))
+			{
+				TargetXYMode=SW_SHOW;
+				TargetWHMode=SW_SHOW;
 			}
 		}
 		else
 		{
 			GUITrigger.m_Width.SetWindowText("");
 			GUITrigger.m_Height.SetWindowText("");
-			TargetMode=SW_HIDE;
 		}
 
-		GUITrigger.m_TargetTxt.ShowWindow(TargetMode);
-		GUITrigger.m_TargetX.ShowWindow(TargetMode);
-		GUITrigger.m_TargetY.ShowWindow(TargetMode);
-		GUITrigger.m_TargetXSpin.ShowWindow(TargetMode);
-		GUITrigger.m_TargetYSpin.ShowWindow(TargetMode);
+		GUITrigger.m_TargetTxt.ShowWindow(TargetXYMode);
+		GUITrigger.m_TargetX.ShowWindow(TargetXYMode);
+		GUITrigger.m_TargetY.ShowWindow(TargetXYMode);
+		GUITrigger.m_TargetXSpin.ShowWindow(TargetXYMode);
+		GUITrigger.m_TargetYSpin.ShowWindow(TargetXYMode);
+
+		GUITrigger.m_TargetWHTxt.ShowWindow(TargetWHMode);
+		GUITrigger.m_TargetW.ShowWindow(TargetWHMode);
+		GUITrigger.m_TargetH.ShowWindow(TargetWHMode);
+		GUITrigger.m_TargetWSpin.ShowWindow(TargetWHMode);
+		GUITrigger.m_TargetHSpin.ShowWindow(TargetWHMode);
 
 		GUITrigger.DisableCallback(false);
 }
@@ -248,6 +297,8 @@ void	CLayerTrigger::GUIChanged(CCore *Core)
 			ThisThing.Data.Trigger.TriggerHeight=GUITrigger.GetVal(GUITrigger.m_Height);
 			ThisThing.Data.Trigger.TriggerTargetX=GUITrigger.GetVal(GUITrigger.m_TargetX);
 			ThisThing.Data.Trigger.TriggerTargetY=GUITrigger.GetVal(GUITrigger.m_TargetY);
+			ThisThing.Data.Trigger.TriggerTargetW=GUITrigger.GetVal(GUITrigger.m_TargetW);
+			ThisThing.Data.Trigger.TriggerTargetH=GUITrigger.GetVal(GUITrigger.m_TargetH);
 		}
 }
 
@@ -257,4 +308,8 @@ void	CLayerTrigger::SetThingParams(sLayerThing &Thing)
 		Thing.Data.WaypointCount=1;
 		if (Thing.Data.Trigger.TriggerWidth<1) Thing.Data.Trigger.TriggerWidth=1;
 		if (Thing.Data.Trigger.TriggerHeight<1) Thing.Data.Trigger.TriggerHeight=1;
+		Thing.Data.Trigger.TriggerTargetX=Thing.XY[0].x;	// Default target Pos
+		Thing.Data.Trigger.TriggerTargetY=Thing.XY[0].y;
+		Thing.Data.Trigger.TriggerTargetW=1;
+		Thing.Data.Trigger.TriggerTargetH=1;
 }

@@ -143,12 +143,12 @@ int		i;
 // Load GfxList
 			File->Read(&GfxCount,sizeof(int));
 			GfxList.resize(GfxCount);
-
 			for (i=0; i<GfxCount; i++)
 			{
 				sLayerShadeGfx	&ThisGfx=GfxList[i];
 				File->Read(&ThisGfx,sizeof(sLayerShadeGfx));
 			}
+			if (GfxCount) CurrentGfx=0;
 
 		}
 }
@@ -243,7 +243,6 @@ float		ZoomH=Core->GetZoomH();
 Vector3		&Scale=Core->GetScaleVector();
 Vector3		ScrOfs(ZoomW/2,ZoomH/2,0);
 int			i;
-			if (GfxBank->NeedLoad()) GfxBank->LoadAllSets(Core);
 
 CElem		Elem=GfxBank->GetElem(ThisGfx.Gfx,0);
 
@@ -323,6 +322,7 @@ int		i,ListSize;
 		GUIShade.m_GfxTransList.AddString("Subtractive");
 		GUIShade.m_GfxTransList.AddString("Another one");
 
+		GUIShade.m_GfxPosXSpin.SetRange(0,32000); GUIShade.m_GfxPosYSpin.SetRange(0,32000);
 		GUIShade.m_GfxSpinx0.SetRange(-32,+32);	GUIShade.m_GfxSpiny0.SetRange(-32,+32);
 		GUIShade.m_GfxSpinx1.SetRange(-32,+32);	GUIShade.m_GfxSpiny1.SetRange(-32,+32);
 		GUIShade.m_GfxSpinx2.SetRange(-32,+32);	GUIShade.m_GfxSpiny2.SetRange(-32,+32);
@@ -388,7 +388,7 @@ sLayerShadeGfx	&ThisGfx=GfxList[CurrentGfx];
 void	CLayerShade::GUIChanged(CCore *Core)
 {
 int		i,ListSize;
-
+int		LastGfx=CurrentGfx;
 // Shade
 		for (i=0; i<LAYER_SHADE_MAX; i++) 
 		{
@@ -396,13 +396,12 @@ int		i,ListSize;
 		}
 		GUIShade.GetVal(GUIShade.m_ShadeCount,ShadeCount,2,4);
 // Gfx
-		GUIShade.GetVal(GUIShade.m_GfxCurrent,CurrentGfx); 
 		ListSize=GfxList.size();
+		GUIShade.GetVal(GUIShade.m_GfxCurrent,ListSize,0,ListSize);
 		if (!ListSize || CurrentGfx==-1) return;
 
 sLayerShadeGfx	&ThisGfx=GfxList[CurrentGfx];
 		
-		GUIShade.GetVal(GUIShade.m_GfxCurrent,ListSize,0,ListSize);
 		GUIShade.GetVal(GUIShade.m_GfxPosX,ThisGfx.Pos.x);
 		GUIShade.GetVal(GUIShade.m_GfxPosY,ThisGfx.Pos.y);
 		ThisGfx.Gfx=GUIShade.m_GfxBankList.GetCurSel();
@@ -417,7 +416,10 @@ sLayerShadeGfx	&ThisGfx=GfxList[CurrentGfx];
 		GUIShade.GetVal(GUIShade.m_Gfxx3,ThisGfx.Ofs[3].x); GUIShade.GetVal(GUIShade.m_Gfxy3,ThisGfx.Ofs[3].y);
 		ThisGfx.TransMode=GUIShade.m_GfxTransList.GetCurSel();
 
-		GUIUpdate(Core);
+		if (CurrentGfx!=LastGfx)
+		{
+			GUIUpdate(Core);
+		}
 }
 
 /*****************************************************************************/

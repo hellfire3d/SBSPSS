@@ -32,7 +32,7 @@ char szBuf[256];
 }
 
 /**************************************************************************************/
-const int	TexAlignTable[]={1,2,4,8,16,32,64,128,256};
+const int	TexAlignTable[]={1,2,4,8,16,32,64,128,256,512,1024};
 const int	TexAlignTableSize=sizeof(TexAlignTable)/sizeof(int);
 int		AlignSize(int Size)
 {

@@ -277,7 +277,7 @@ int			ListSize=TriList.size();
 				GString	TexName=SceneTexList[TexID];
 				
 				ThisName=SetPath+TexName;
-				TRACE2("%i !%s!\n",TexID,ThisName);
+//				TRACE2("%i !%s!\n",TexID,ThisName);
 				TexID=TexCache.ProcessTexture(ThisName);
 				}
 // Sort Rest of Tri info

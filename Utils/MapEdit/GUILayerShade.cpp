@@ -30,6 +30,8 @@ void CGUILayerShade::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerShade)
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_YSPIN, m_GfxPosYSpin);
+	DDX_Control(pDX, IDC_LAYERSHADE_GFX_XSPIN, m_GfxPosXSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_DEF_LIST, m_DefList);
 	DDX_Control(pDX, IDC_LAYERSHADE_SHADECOUNT_SPIN, m_ShadeCountSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_SHADECOUNT, m_ShadeCount);
@@ -48,9 +50,7 @@ void CGUILayerShade::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_CURRENT_SPIN, m_GfxCurrentSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_CURRENT, m_GfxCurrent);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_LIST, m_GfxBankList);
-	DDX_Control(pDX, IDC_LAYERSHADE_GFX_XSPIN, m_GfxPosXSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_X, m_GfxPosX);
-	DDX_Control(pDX, IDC_LAYERSHADE_GFX_YSPIN, m_GfxPosYSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_Y, m_GfxPosY);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_X0, m_GfxSpinx0);
 	DDX_Control(pDX, IDC_LAYERSHADE_GFX_SPIN_Y0, m_GfxSpiny0);

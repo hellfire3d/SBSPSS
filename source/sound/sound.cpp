@@ -624,7 +624,7 @@ void CSoundMediator::stopAllSfx()
 void CSoundMediator::playSpeech(SpeechEquate _speech)
 {
 	stopSpeech();
-	CXAStream::PlaySpeech(_speech);
+	CXAStream::PlaySpeech(_speech,1);
 //	s_volumeDirty[SPEECH]=true;		// Force a volume update
 }
 

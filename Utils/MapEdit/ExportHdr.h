@@ -141,6 +141,7 @@ struct	sLayerThingPlatform
 	int						PlatformMoveType;
 	int						PlatformTriStart;
 	int						PlatformTriCount;
+	int						PlatformParam0;
 };
 
 struct	sLayerThingTrigger
@@ -149,6 +150,8 @@ struct	sLayerThingTrigger
 	int						TriggerHeight;
 	int						TriggerTargetX;
 	int						TriggerTargetY;
+	int						TriggerTargetW;
+	int						TriggerTargetH;
 };
 
 struct	sLayerThingFX

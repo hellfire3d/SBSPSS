@@ -210,6 +210,8 @@ virtual	bool		MouseMove(CCore *Core,UINT nFlags, CPoint &CursorPos)						{return
 virtual	bool		Command(int CmdMsg,CCore *Core,int Param0=0,int Param1=0)					{return(false);}
 		CPoint		GetElemPos(int ID,int Width);
 
+virtual	void			LoadGfx(CCore *Core){}
+
 // Local
 virtual	bool		CanClose()												{return(true);}
 

@@ -19,6 +19,9 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerPlatform)
 	enum { IDD = IDD_LAYER_PLATFORM };
+	CSpinButtonCtrl	m_Param0Spin;
+	CStatic	m_Param0Txt;
+	CEdit	m_Param0;
 	CSpinButtonCtrl	m_TurnRateSpin;
 	CSpinButtonCtrl	m_SpeedSpin;
 	CComboBox	m_Type;

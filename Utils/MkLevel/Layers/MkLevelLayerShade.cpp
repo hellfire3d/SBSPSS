@@ -33,7 +33,6 @@ sRGBCol	*RGB=(sRGBCol*)iPtr;
 			ShadeHdr.RGB[i][2]=RGB->B;
 			RGB++;
 		}
-
 		iPtr=(int*)RGB;
 
 		ListSize=*iPtr++;
@@ -41,10 +40,11 @@ sRGBCol	*RGB=(sRGBCol*)iPtr;
 sLayerShadeGfx	*GfxPtr=(sLayerShadeGfx*)iPtr;
 		for (i=0; i<ListSize; i++)
 		{
+			sLayerShadeGfx	&ThisGfx=GfxList[i];
 			GfxList[i]=*GfxPtr++;
 		}
-		iPtr=(int*)GfxPtr;
 
+		iPtr=(int*)GfxPtr;
 		ListSize=*iPtr++;
 		TypeNameList.resize(ListSize);
 char	*TypePtr=(char*)iPtr;
@@ -132,13 +132,20 @@ int				ThisPos=ftell(File);
 		Hdr.Height=Height;
 		fwrite(&Hdr,sizeof(sLayerHdr),1,File);
 
-// Write Gfx Stuff
-		ShadeHdr.TypeList=(sLayerShadeBackGfxType*)WriteTypeList(File);
-		ShadeHdr.GfxList=(sLayerShadeBackGfx*)WriteGfxList(File);
-
-
+int		HdrPos=ftell(File);
 		fwrite(&ShadeHdr,sizeof(sLayerShadeHdr),1,File);
-		PadFile(File);
+
+
+// Write Gfx Stuff
+		ShadeHdr.GfxList=(sLayerShadeBackGfx*)(WriteGfxList(File)-ThisPos);
+		ShadeHdr.TypeList=(sLayerShadeBackGfxType*)(WriteTypeList(File)-ThisPos);
+
+// rewrite header
+int		RetPos=ftell(File);
+		fseek(File,HdrPos,SEEK_SET);
+		fwrite(&ShadeHdr,sizeof(sLayerShadeHdr),1,File);
+		fseek(File,RetPos,SEEK_SET);
+
 
 		return(ThisPos);
 }
@@ -164,11 +171,11 @@ int		CMkLevelLayerShade::WriteGfxList(FILE *File)
 int		Pos=ftell(File);
 int		i,ListSize=GfxList.size();
 
-		ShadeHdr.GfxCount=GfxList.size();
+		ShadeHdr.GfxCount=ListSize;
 
 		for (i=0; i<ListSize; i++)
 		{
-			sLayerShadeGfx	&ThisGfx=GfxList[i];
+			sLayerShadeGfx		&ThisGfx=GfxList[i];
 			sLayerShadeBackGfx	Out;
 			
 			Out.Type=ThisGfx.Gfx;
@@ -177,12 +184,13 @@ int		i,ListSize=GfxList.size();
 			Out.Trans=ThisGfx.TransMode;
 			for (int p=0; p<4; p++)
 			{
-				Out.Ofs[i][0]=ThisGfx.Ofs[i].x;
-				Out.Ofs[i][1]=ThisGfx.Ofs[i].y;
-				Out.RGB[i][0]=ThisGfx.RGB[i].R;
-				Out.RGB[i][1]=ThisGfx.RGB[i].G;
-				Out.RGB[i][2]=ThisGfx.RGB[i].B;
+				Out.Ofs[p][0]=ThisGfx.Ofs[p].x;
+				Out.Ofs[p][1]=ThisGfx.Ofs[p].y;
+				Out.RGB[p][0]=ThisGfx.RGB[p].R;
+				Out.RGB[p][1]=ThisGfx.RGB[p].G;
+				Out.RGB[p][2]=ThisGfx.RGB[p].B;
 			}
+			fwrite(&Out,sizeof(sLayerShadeBackGfx),1,File);
 		}
 		return(Pos);
 }

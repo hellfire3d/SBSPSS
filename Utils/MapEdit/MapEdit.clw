@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CGUINewMap
+LastClass=CGUILayerShade
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -37,27 +37,27 @@ Class25=CMapEditDoc
 Class26=CMapEditView
 
 ResourceCount=21
-Resource1=IDD_LAYER_COLLISION
+Resource1=IDD_LAYER_HAZARD
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_ELEMLIST
+Resource3=IDD_LAYER_COLLISION
 Resource4=IDD_MULTIBAR (English (U.S.))
-Resource5=IDD_LAYER_THING
-Resource6=IDR_TOOLBAR (English (U.S.))
-Resource7=IDD_LAYER_PLATFORM
-Resource8=IDD_LAYER_TRIGGER
-Resource9=IDD_TILEBANK
-Resource10=IDD_NEWMAP
-Resource11=IDR_MAINFRAME (English (U.S.))
-Resource12=IDD_ABOUTBOX (English (U.S.))
-Resource13=IDD_LAYER_ACTOR
-Resource14=IDD_LAYER_LIST
-Resource15=IDD_RESIZE
-Resource16=IDD_LAYER_THING_POS
-Resource17=IDD_ADDLAYER
-Resource18=IDD_LAYER_FX
-Resource19=IDD_TOOLBAR
-Resource20=IDD_LAYER_SHADE
-Resource21=IDD_LAYER_HAZARD
+Resource5=IDD_LAYER_ACTOR
+Resource6=IDD_LAYER_THING_POS
+Resource7=IDD_LAYER_FX
+Resource8=IDD_LAYER_PLATFORM
+Resource9=IDD_ADDLAYER
+Resource10=IDD_RESIZE
+Resource11=IDD_LAYER_LIST
+Resource12=IDD_LAYER_TRIGGER
+Resource13=IDD_ELEMLIST
+Resource14=IDR_TOOLBAR (English (U.S.))
+Resource15=IDD_ABOUTBOX (English (U.S.))
+Resource16=IDD_LAYER_THING
+Resource17=IDD_NEWMAP
+Resource18=IDR_MAINFRAME (English (U.S.))
+Resource19=IDD_TILEBANK
+Resource20=IDD_TOOLBAR
+Resource21=IDD_LAYER_SHADE
 
 [CLS:CChildFrame]
 Type=0
@@ -125,6 +125,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerPlatform.h
 ImplementationFile=GUILayerPlatform.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_PLATFORM_PARAM_SPIN
 
 [CLS:CGUILayerShade]
 Type=0
@@ -133,7 +136,7 @@ HeaderFile=GUILayerShade.h
 ImplementationFile=GUILayerShade.cpp
 Filter=D
 VirtualFilter=dWC
-LastObject=CGUILayerShade
+LastObject=IDC_LAYERSHADE_GFX_XSPIN
 
 [CLS:CGUILayerThing]
 Type=0
@@ -152,6 +155,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerTrigger.h
 ImplementationFile=GUILayerTrigger.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_TRIGGER_TARGETW
 
 [CLS:CGUIMultiBar]
 Type=0
@@ -317,7 +323,7 @@ Control3=IDC_LAYERLIST_DELETE,button,1342242816
 [DLG:IDD_LAYER_PLATFORM]
 Type=1
 Class=CGUILayerPlatform
-ControlCount=9
+ControlCount=12
 Control1=IDC_PLATFORM_SPEED_TEXT,static,1342308354
 Control2=IDC_PLATFORM_SPEED,edit,1350633600
 Control3=IDC_PLATFORM_SPEED_SPIN,msctls_updown32,1342177334
@@ -327,6 +333,9 @@ Control6=IDC_PLATFORM_TURNRATE_SPIN,msctls_updown32,1342177334
 Control7=IDC_PLATFORM_COLLISION,button,1342243363
 Control8=IDC_PLATFORM_MOVE_TYPE,combobox,1344339971
 Control9=IDC_PLATFORM_TYPE,combobox,1344339971
+Control10=IDC_PLATFORM_PARAM0_TEXT,static,1342308354
+Control11=IDC_PLATFORM_PARAM0,edit,1350633600
+Control12=IDC_PLATFORM_PARAM_SPIN,msctls_updown32,1342177334
 
 [DLG:IDD_LAYER_SHADE]
 Type=1
@@ -416,7 +425,7 @@ Control4=IDC_THING_POS_DELETE,button,1342242816
 [DLG:IDD_LAYER_TRIGGER]
 Type=1
 Class=CGUILayerTrigger
-ControlCount=10
+ControlCount=15
 Control1=IDC_TRIGGER_SIZE,static,1342308354
 Control2=IDC_TRIGGER_WIDTH,edit,1350633600
 Control3=IDC_TRIGGER_WIDTH_SPIN,msctls_updown32,1342177334
@@ -427,6 +436,11 @@ Control7=IDC_TRIGGER_TARGETX,edit,1350633600
 Control8=IDC_TRIGGER_TARGETX_SPIN,msctls_updown32,1342177334
 Control9=IDC_TRIGGER_TARGETY,edit,1350633600
 Control10=IDC_TRIGGER_TARGETY_SPIN,msctls_updown32,1342177334
+Control11=IDC_TRIGGER_TEXT_TARGET_WH,static,1342308354
+Control12=IDC_TRIGGER_TARGETW,edit,1350633600
+Control13=IDC_TRIGGER_TARGETW_SPIN,msctls_updown32,1342177334
+Control14=IDC_TRIGGER_TARGETH,edit,1350633600
+Control15=IDC_TRIGGER_TARGETH_SPIN,msctls_updown32,1342177334
 
 [DLG:IDD_MULTIBAR]
 Type=1

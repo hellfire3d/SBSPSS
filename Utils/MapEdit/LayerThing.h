@@ -56,6 +56,8 @@ virtual	void			GUIChanged(CCore *Core);
 		int				GetWidth();
 		int				GetHeight();
 
+virtual	void			LoadGfx(CCore *Core)			{if (ThingBank->NeedLoad()) ThingBank->LoadAllSets(Core);}
+
 virtual	void			GUIThingDefClear(){};
 virtual	void			GUIThingUpdate(bool OnlySel=false){};
 virtual	void			GUIThingUpdateList(CComboBox &List,bool OnlySel=false);

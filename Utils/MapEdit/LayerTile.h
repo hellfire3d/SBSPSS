@@ -52,7 +52,7 @@ virtual	void			GUIChanged(CCore *Core);
 		void			Validate(CCore *Core);
 
 		void			Export(CCore *Core,CExport &Exp);
-
+		void			LoadGfx(CCore *Core);
 // Functions
 virtual	bool			LButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFlag);
 virtual	bool			RButtonControl(CCore *Core,UINT nFlags, CPoint &point,bool DownFlag);

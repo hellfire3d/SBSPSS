@@ -166,3 +166,18 @@ void	CLayerHazard::GUIChanged(CCore *Core)
 		}
 
 }
+
+/*****************************************************************************/
+void	CLayerHazard::Export(CCore *Core,CExport &Exp)
+{
+		CLayerThing::Export(Core,Exp);
+}
+
+/*****************************************************************************/
+void	CLayerHazard::ExportThingData(CCore *Core,CExport &Exp,sLayerThing &ThisThing,sLayerThingData &OutThing)
+{
+CElem	&ThisElem=ThingBank->GetElem(ThisThing.ElemID,0);
+
+		Exp.ExportElem3d(Core,ThisElem,OutThing.Hazard.HazardTriStart,OutThing.Hazard.HazardTriCount);
+		
+}

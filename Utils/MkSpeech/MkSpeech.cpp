@@ -37,7 +37,7 @@ struct	sLang
 
 struct	sInFile
 {
-		char	Name[32];
+		char	Name[256];
 		int		Chunks;
 		int		Offset;
 };
@@ -211,6 +211,7 @@ sInFile	InFile;
 			InFile.Chunks=0;
 			while (!IsWhiteSpace(*Ptr) && Ptr<EndPtr) InFile.Name[i++]=*Ptr++;
 			InFile.Name[i]=0;
+			strupr(InFile.Name);
 			FileList.push_back(InFile);
 //			printf("%s\n",InFile.Name);
 			}
@@ -308,7 +309,7 @@ int		FileCount=FileList.size();
 int		Offset=0;
 
 		sprintf(HdrStr,"__%s_SPEECH_DEFINES_H__",strupr(fname));
-		sprintf(EqStr,"%s_STR_",strupr(fname));
+		sprintf(EqStr,"%s_SPEECH_",strupr(fname));
 
 		OutFile= fopen( IncludeFilename,"wt" );
 		if(!OutFile)
@@ -326,7 +327,7 @@ int		Offset=0;
 			sInFile	&ThisFile=FileList[File];
 			
 			ConvertString(ThisFile.Name);
-			fprintf( OutFile, "%s%s = 0x%x,\n", EqStr,ThisFile.Name, Offset+(BankNo<<BANK_SHIFT));
+			fprintf( OutFile, "%s%s = 0x%x,\n", "SPEECH_",ThisFile.Name, Offset+(BankNo<<BANK_SHIFT));
 			Offset+=ThisFile.Chunks+1; // +1 for pad
 			}
 		fprintf( OutFile, "};\n" );

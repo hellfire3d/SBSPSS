@@ -233,6 +233,16 @@ Vector3		Ofs;
 }
 
 /*****************************************************************************/
+void	CLayerTile::LoadGfx(CCore *Core)
+{
+		if (TileBank->NeedLoad()) 
+		{
+			TileBank->LoadAllSets(Core);
+			Core->Validate(GetType());
+		}
+}
+
+/*****************************************************************************/
 void	CLayerTile::Render(CCore *Core,Vector3 &ThisCam,CMap &ThisMap,bool Render3d,float Alpha,Vector3 *Ofs)
 {
 int			MapWidth=ThisMap.GetWidth();
@@ -247,12 +257,6 @@ int			StartX=(int)ThisCam.x;
 int			StartY=(int)ThisCam.y;
 float		ShiftX=ThisCam.x - (int)ThisCam.x;
 float		ShiftY=ThisCam.y - (int)ThisCam.y;
-
-		if (TileBank->NeedLoad()) 
-		{
-			TileBank->LoadAllSets(Core);
-			Core->Validate(GetType());
-		}
 
 		if (StartX<0) StartX=0;
 		if (StartY<0) StartY=0;
