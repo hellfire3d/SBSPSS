@@ -620,10 +620,15 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 void CNpcMotherJellyfishEnemy::shutdown()
 {
+	CLevel::setIsBossRespawn( true );
+
 	if ( m_isActive )
 	{
-		CLevel::setIsBossRespawn( true );
 		CLevel::setBossHealth( m_health );
+	}
+	else
+	{
+		CLevel::setBossHealth( 0 );
 	}
 
 	for ( int i = 0 ; i < 4 ; i++ )

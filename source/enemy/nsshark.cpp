@@ -712,10 +712,15 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 
 void CNpcSubSharkEnemy::shutdown()
 {
+	CLevel::setIsBossRespawn( true );
+
 	if ( m_state != NPC_GENERIC_HIT_DEATH_END )
 	{
-		CLevel::setIsBossRespawn( true );
 		CLevel::setBossHealth( m_health );
+	}
+	else
+	{
+		CLevel::setBossHealth( 0 );
 	}
 
 	CNpcBossEnemy::shutdown();

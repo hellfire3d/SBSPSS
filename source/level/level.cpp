@@ -492,12 +492,18 @@ void	CLevel::initThings(int _respawningLevel)
 					{
 						CNpcEnemy *enemy;
 						enemy=CNpcEnemy::Create(ThisActor);
-						enemy->setupWaypoints( ThisActor );
-						enemy->postInit();
 
-						if ( ThisActor->Speed )
+						if ( enemy )
 						{
-							enemy->setSpeed( ThisActor->Speed );
+							// if boss is killed and user dies, boss will not initialise and will return NULL
+
+							enemy->setupWaypoints( ThisActor );
+							enemy->postInit();
+
+							if ( ThisActor->Speed )
+							{
+								enemy->setSpeed( ThisActor->Speed );
+							}
 						}
 					}
 					break;
@@ -563,8 +569,8 @@ void	CLevel::initThings(int _respawningLevel)
 /*****************************************************************************/
 void	CLevel::respawnLevel()
 {
-	m_isBossRespawn = false;
-	m_bossHealth = 0;
+	//m_isBossRespawn = false;
+	//m_bossHealth = 0;
 
 	CThingManager::killAllThingsForRespawn();
 	initThings(true);

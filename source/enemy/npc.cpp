@@ -216,6 +216,27 @@ CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
 
 CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 {
+	switch( enemyType )
+	{
+		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
+		case CNpcEnemy::NPC_SUB_SHARK:
+		case CNpcEnemy::NPC_SEA_SNAKE:
+		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
+		case CNpcEnemy::NPC_IRON_DOGFISH:
+		{
+			if ( CLevel::getIsBossRespawn() )
+			{
+				if ( !CLevel::getBossHealth() )
+				{
+					return( NULL );
+				}
+			}
+		}
+
+		default:
+			break;
+	}
+
 	CNpcEnemy *enemy;
 
 	enemy = (CNpcEnemy*)CThingManager::GetThing(TYPE_ENEMY,enemyType);
@@ -455,7 +476,6 @@ CNpcEnemy *enemy;
 	NPC_UNIT_TYPE enemyType = CNpcEnemy::getTypeFromMapEdit( ThisActor->Type );
 
 	enemy = (CNpcEnemy*)Create(enemyType);
-	ASSERT(enemy);
 
 	return(enemy);
 }
