@@ -367,6 +367,7 @@ void CPauseMenu::renderLives()
 
 	gameSlot=CGameSlotManager::getSlotData();
 
+/*
 	// Spat count
 	x=100;
 	y=137;
@@ -378,6 +379,7 @@ void CPauseMenu::renderLives()
 	textYOff=fh->H-m_fontBank->getStringHeight(buf);
 	y+=textYOff;
 	m_fontBank->print(x,y,buf);
+*/
 
 	// Lives
 	x=350;
@@ -387,6 +389,7 @@ void CPauseMenu::renderLives()
 	sb->printFT4(fh,x,y,0,0,0);
 	x+=fh->W;
 	sprintf(buf,"x%d",gameSlot->m_lives);
+	textYOff=fh->H-m_fontBank->getStringHeight(buf);
 	y+=textYOff;
 	m_fontBank->print(x,y,buf);
 }

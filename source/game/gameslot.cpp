@@ -173,7 +173,7 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	}
 
 #ifdef __USER_paul__
-	slot->m_kelpTokensHeld=82;
+	slot->m_kelpTokensHeld=125;
 #else
 	slot->m_kelpTokensHeld=0;
 #endif

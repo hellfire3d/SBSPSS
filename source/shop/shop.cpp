@@ -118,17 +118,17 @@
 	Vars
 	---- */
 
-// 82 tokens in total
+// 125 tokens in total
 CShopScene::SHOPITEM	CShopScene::s_shopItems[NUM_SHOP_ITEM_IDS]=
 {
-	{	1,	FRM_BLOWER		},
-	{	2,	FRM_CAKE		},
-	{	3,	FRM_CUPCAKE		},
-	{	4,	FRM_JELLY2		},
-	{	5,	FRM_PARTYHAT	},
-	{	6,	FRM_PREZZIE		},
-	{	7,	FRM_SARNIE		},
-	{	8,	FRM_TEDDY		},
+	{	 5,	FRM_TEDDY		},
+	{	 8,	FRM_SARNIE		},
+	{	10,	FRM_CUPCAKE		},
+	{	12,	FRM_PREZZIE		},
+	{	16,	FRM_JELLY2		},
+	{	20,	FRM_CAKE		},
+	{	24,	FRM_BLOWER		},
+	{	30,	FRM_PARTYHAT	},
 };
 
 xmPlayingId	s_playId;

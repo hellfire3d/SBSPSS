@@ -26,6 +26,10 @@
 #include "pad\vibe.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 #ifndef	__GAME_GAMESLOT_H__
 #include "game\gameslot.h"
 #endif
@@ -88,10 +92,6 @@
 
 #ifndef	__PLATFORM_PLATFORM_H__
 #include "platform\platform.h"
-#endif
-
-#ifndef __GAME_GAME_H__
-#include "game\game.h"
 #endif
 
 #ifndef __PICKUPS_PICKUP_H__
@@ -1341,18 +1341,30 @@ if(drawlastpos)
 
 
 	// UI
-	char		spatCount[20];
-	int			x,y;
+	int			count;
 	sFrameHdr	*fh;
+	char		countBuf[5];
+	int			x,y;
 
-	// Spat count
-	sprintf(spatCount,"x%d",m_numSpatulasHeld);
+	// Spat/token count
+	if(GameScene.getLevelNumber()!=5)
+	{
+		// Spat count
+		count=m_numSpatulasHeld;
+		fh=sb->getFrameHeader(FRM__SPATULA);
+	}
+	else
+	{
+		// Token count
+		count=CGameSlotManager::getSlotData()->getKelpTokenCollectedCount(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1);
+		fh=sb->getFrameHeader(FRM__TOKEN);
+	}
+	sprintf(countBuf,"x%d",count);
 	x=SB_UI_XBASE;
 	y=SB_UI_YBASE;
-	fh=sb->getFrameHeader(FRM__SPATULA);
 	sb->printFT4(fh,x,y,0,0,POWERUPUI_OT);
 	x+=fh->W;
-	m_fontBank->print(x,y,spatCount);
+	m_fontBank->print(x,y,countBuf);
 	x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
 
 	if(isWearingDivingHelmet())
