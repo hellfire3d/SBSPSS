@@ -459,6 +459,14 @@ void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 			x1+=step;
 		}
 	}
+	else
+	{
+		x1=_x-(_w-hbam->W)/2;
+		y1=_y-(hbam->H/2);
+		y2=y1+_h;
+		s_uiSpriteBank->printFT4(vbam,x1,y1,0,0,_ot);
+		s_uiSpriteBank->printFT4(vbam,x1,y2,0,0,_ot);
+	}
 
 	// Left & right
 	totalSize=_h-hbam->H-vbam->H;
@@ -475,6 +483,14 @@ void drawBambooBorder(int _x,int _y,int _w,int _h,int _ot)
 			s_uiSpriteBank->printFT4(vbam,x2,(y1>>4)-(vbam->H/2),0,0,_ot);
 			y1+=step;
 		}
+	}
+	else
+	{
+		x1=_x-(vbam->W/2);
+		x2=x1+_w;
+		y1=_y+(_h-vbam->H)/2;
+		s_uiSpriteBank->printFT4(vbam,x1,y1,0,0,_ot);
+		s_uiSpriteBank->printFT4(vbam,x2,y1,0,0,_ot);
 	}
 }
 
