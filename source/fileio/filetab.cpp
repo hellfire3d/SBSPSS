@@ -10,6 +10,9 @@ char	*FilenameList[FILEPOS_MAX]=
 "THQ.STR",
 "CLIMAX.STR",
 "INTRO.STR",
+#if defined(__TERRITORY_EUR__)
+"DEMO.STR",
+#endif
 //"CLIMAX.STR",
 //"LEVEL1.STR",
 //"LEVEL2.STR",

@@ -149,6 +149,9 @@ static const FmvData s_fmvData[MAX_FMVS]=
 	{FILEPOS_THQ_STR,		270-15	},
 	{FILEPOS_CLIMAX_STR,	243-15 	},
 	{FILEPOS_INTRO_STR,		607-15	},
+#if defined(__TERRITORY_EUR__)
+	{FILEPOS_DEMO_STR,		582-15	},
+#endif
 };
 
 

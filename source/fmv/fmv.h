@@ -41,6 +41,9 @@ enum
 	FMV_THQ,
 	FMV_CLIMAX,
 	FMV_INTRO,
+#if defined(__TERRITORY_EUR__)
+	FMV_DEMO,
+#endif
 	MAX_FMVS,
 };
 
