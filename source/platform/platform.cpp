@@ -95,6 +95,18 @@
 #include "platform\pplayer.h"
 #endif
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// All platforms are fied to this width at the minute..
+#define PLATFORMWIDTH				80
+
+// The collision box is this high.. if SB keeps falling through platforms then it *should* be sufficient
+// just to up this a bit
+#define PLATFORMCOLLISIONHEIGHT		50
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class CLayerCollision	*CNpcPlatform::m_layerCollision;
@@ -278,9 +290,6 @@ void CNpcPlatform::init()
 	m_tiltAngle = 0;
 	m_tiltVelocity = 0;
 	m_tiltable = false;
-
-	setCollisionSize(80,50);
-	//setCollisionSize( 200, 20 );
 
 	m_layerCollision = NULL;
 
@@ -470,11 +479,83 @@ void CNpcPlatform::think(int _frames)
 
 	processTimer( _frames );
 
-//pkg
-//
-
 	CPlatformThing::think(_frames);
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::setCollisionAngle(int newAngle)
+{
+	CPlayer	*player;
+
+	// Is the player stood on this platform as it rotates?
+	player=GameScene.getPlayer();
+	if(player->isOnPlatform()==this)
+	{
+		DVECTOR	playerPos;
+
+		playerPos=player->getPos();
+		if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
+		{
+			// Ok.. currently stood on the platform - awkward bastard
+			DVECTOR	centre;
+			int		x,y;
+			DVECTOR	shove;
+
+			// Rotate backwards to find x position on platform
+			centre=getCollisionCentre();
+			x=-((centre.vx-playerPos.vx)*mcos(-getCollisionAngle()&4095)>>(12));
+
+			// Rotate forwards to find new position *after* the platform has been rotated
+			y=x*msin(newAngle&4095)>>(12);
+			x=x*mcos(newAngle&4095)>>(12);
+
+			// Shove the player to the new position
+			shove.vx=0;//(x+centre.vx)-playerPos.vx;		pkg - can't get this to work :(
+			shove.vy=(y+centre.vy)-playerPos.vy;
+
+			// Finally, to cope with any innacuracies that have been introduced, we run this
+			// new position through the getHeightFromPlatformAtPosition() code and use this to
+			// make sure that the player is still on the platform
+			playerPos.vx+=shove.vx;
+			playerPos.vy+=shove.vy;
+			y=(centre.vy-playerPos.vy)+((centre.vx-playerPos.vx)*msin(-newAngle&4095)>>12);
+			if(y)
+			{
+				shove.vy+=y;
+			}
+
+			player->shove(shove);
+		}
+	}
+
+	CPlatformThing::setCollisionAngle(newAngle);
+	calculateBoundingBoxSize();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::calculateBoundingBoxSize()
+{
+	int		angle;
+	DVECTOR	centre;
+	int		halfLength;
+	int		x1,y1,x2,y2;
+
+	angle=getCollisionAngle();
+	centre=getCollisionCentre();
+	halfLength=PLATFORMWIDTH/2;
+
+	x1=-halfLength*mcos(angle&4095)>>12;
+	y1=-halfLength*msin(angle&4095)>>12;
+	x2=+halfLength*mcos(angle&4095)>>12;
+	y2=+halfLength*msin(angle&4095)>>12;
+
+	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -649,15 +730,13 @@ void CNpcPlatform::render()
 //				setRGB0(F4,127,127,64);
 //				AddPrimToList(F4,2);
 
-#ifdef __USER_paul__
+#if defined (__USER_paul__) || defined (__USER_charles__)
 	DVECTOR	centre;
-	CRECT	area;
 	int		halfLength;
 	int		x1,y1,x2,y2;
 
 	centre=getCollisionCentre();
-	area=getCollisionArea();
-	halfLength=(area.x2-area.x1)/2;
+	halfLength=PLATFORMWIDTH/2;
 
 	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
 	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
@@ -953,7 +1032,7 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y)
 	DVECTOR	centre;
 	int		y;
 
-	// Rotate backwards to find height
+	// Rotate backwards to find height at current position
 	centre=getCollisionCentre();
 	y=(centre.vx-_x)*msin(-getCollisionAngle()&4095)>>12;
 

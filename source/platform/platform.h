@@ -188,6 +188,14 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
 	static NPC_PLATFORM_UNIT_TYPE mapEditConvertTable[NPC_PLATFORM_TYPE_MAX];
+
+
+
+protected:
+	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
+	void			calculateBoundingBoxSize();
+
+
 };
 
 
