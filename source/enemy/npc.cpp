@@ -116,7 +116,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
 		false,
-		3,
+		40,
 		2048,
 	},
 
@@ -656,17 +656,14 @@ void CNpc::init()
 
 			DVECTOR newPos;
 
-			newPos.vx = 200;
+			newPos.vx = 300;
 			newPos.vy = 100;
 
 			m_npcPath.addWaypoint( newPos );
-
 			m_npcPath.setPathType( SINGLE_USE_PATH );
 
-			m_extension = newPos.vx - Pos.vx;
-
+			m_extension = 0;
 			m_velocity = m_data[m_type].speed;
-
 			m_timerTimer = GameState::getOneSecondInFrames() * 4;
 
 			break;
