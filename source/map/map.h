@@ -99,6 +99,7 @@ private:
 
 	class FontBank		*m_font;
 	int					m_readyToExit;
+	int					m_musicStarted;
 
 	char				*m_screenImage;
 	char				*m_mapBackgroundImage;

@@ -214,7 +214,7 @@ void CMapScene::init()
 	CFader::setFadingIn();
 
 	CSoundMediator::setSong(CSoundMediator::SONG_MAPSCREEN);
-	CSoundMediator::playSong();
+	m_musicStarted=false;
 }
 
 
@@ -382,6 +382,12 @@ void CMapScene::think(int _frames)
 {
 	if(!CFader::isFading()&&!m_readyToExit)
 	{
+		if(m_musicStarted==false)
+		{
+			m_musicStarted=true;
+			CSoundMediator::playSong();
+		}
+		
 		int	pad=PadGetDown(0);
 
 		// Change chapter
