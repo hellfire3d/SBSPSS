@@ -266,6 +266,7 @@ int			V=ThisTex.v+H;
 				Out.TPage|=In.TPageFlag<<5;
 			}
 		}
+
 }
 
 
@@ -677,6 +678,7 @@ int		c = FaceList.size();
 	FaceList[minF].Avail = false;
 	F.Normal= FaceList[minF].Normal;
 	F.OtOfs=FaceList[minF].OtOfs;
+	F.TPageFlag=FaceList[minF].TPageFlag;
 
 	if (minC && MaxStrip>F.pts.size()) FollowFace( minF, F );
 

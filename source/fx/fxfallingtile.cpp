@@ -11,6 +11,7 @@
 #include	"level\level.h"
 #include	"level\layertile3d.h"
 #include	"system\vid.h"
+#include	"gfx\actor.h"
 
 #include	"FX\FXfallingTile.h"
 
@@ -60,23 +61,11 @@ void	CFXFallingTile::render()
 
 		if (!canRender()) return;
 
-u8			*PrimPtr=GetPrimPtr();
-POLY_FT3	*TPrimPtr=(POLY_FT3*)PrimPtr;
-sVtx		*P0,*P1,*P2;
-u32			T0,T1,T2;
-s32			ClipZ;
-sOT			*ThisOT;
-MATRIX		Mtx;
 DVECTOR		&RenderPos=getRenderPos();
-VECTOR		ThisRenderPos;
-
-			SetIdentNoTrans(&Mtx);
-
-			ThisRenderPos.vx=(INGAME_SCREENOFS_X)+RenderPos.vx;
-			ThisRenderPos.vy=(INGAME_SCREENOFS_Y)+RenderPos.vy;
 
 			u16			TileIdx=Tile>>2;
-			u16			Flip=Tile&3;
+			CModelGfx::RenderTile(RenderPos,TileIdx);
+/*			u16			Flip=Tile&3;
 			sFlipTable	*FTab=&FlipTable[Flip];
 			sElem3d		*Elem=&ElemBank3d[TileIdx];
 			int			TriCount=Elem->TriCount;				
@@ -114,5 +103,5 @@ VECTOR		ThisRenderPos;
 			}
 
 		SetPrimPtr((u8*)TPrimPtr);
-
+*/
 }

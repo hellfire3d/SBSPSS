@@ -317,7 +317,37 @@ s16				TCount=0,QCount=0;
 					CMX_SetTransMtxXY(&BlkPos);
 					CMX_SetRotMatrixXY(&FTab->Mtx);
 
-					CacheElemVtx(Elem);
+// --- Cache Vtx ----------
+//					CacheElemVtx(Elem);
+					{
+					int		Count=Elem->VtxTriCount;
+					sVtx	*V0,*V1,*V2;
+					u16		*IdxTable=&VtxIdxList[Elem->VtxIdxStart];
+					s32		*OutVtx=(s32*)SCRATCH_RAM;
+					s32		*OutPtr;
+
+							OutVtx+=8;
+
+							V0=&VtxList[*IdxTable++];
+							V1=&VtxList[*IdxTable++];
+							V2=&VtxList[*IdxTable++];
+							gte_ldv3(V0,V1,V2);
+
+							while (Count--)
+							{
+								gte_rtpt_b(); // 22 cycles
+					// Preload next (when able) - Must check this
+								V0=&VtxList[*IdxTable++];
+								V1=&VtxList[*IdxTable++];
+								V2=&VtxList[*IdxTable++];
+								OutPtr=OutVtx;
+								OutVtx+=3;
+								gte_ldv3(V0,V1,V2);
+								gte_stsxy3c(OutPtr);	// read XY back
+							}
+
+					}
+
 
 					s16	FL=DeltaFX[0]+DeltaFOfs.vx;
 					s16	FR=DeltaFX[1]+DeltaFOfs.vx;
@@ -353,6 +383,7 @@ s16				TCount=0,QCount=0;
 					DP3->vx=BR;
 					DP3->vy=BD;
 
+// --- Render Tri's -------------
 					while (TriCount--)
 					{
 						POLY_FT3	*ThisPrim=(POLY_FT3*)PrimPtr;
@@ -396,6 +427,8 @@ s16				TCount=0,QCount=0;
 
 						}
 					}
+
+// --- Render Quads -----------
 					while (QuadCount--)
 					{
 						POLY_FT4	*ThisPrim=(POLY_FT4*)PrimPtr;

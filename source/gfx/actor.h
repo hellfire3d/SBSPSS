@@ -170,19 +170,28 @@ virtual	~CModelGfx(){};
 static	void		SetData(sLevelHdr *LevelHdr);
 		void		SetModel(int Type);
 
-		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff);
+static	void		RenderTile(DVECTOR &Pos,int TileID);
+static	void		RenderElem(sElem3d *Elem,DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff,u32 *TransBuffer=(u32*)SCRATCH_RAM);
+
+		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff) {RenderElem(Elem,Pos,Angle,Scale,ClipFlag);}
 		void		RenderClip(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)	{Render(Pos,Angle,Scale,0);}
+
 		sBBox		&GetBBox()		{return(Model->BBox);}
 
 protected:
+		void		CacheModelVtx();
 
 static	sModel		*ModelTable;
-static	sElem3d		*ModelElemBank;
-static	sTri		*ModelTriList;
-static	sQuad		*ModelQuadList;
-static	sVtx		*ModelVtxList;
+static	sElem3d		*ElemBank;
+static	sTri		*TriList;
+static	sQuad		*QuadList;
+static	sVtx		*VtxList;
+static	u16			*VtxIdxList;
+
 
 		sModel		*Model;
+		sElem3d		*Elem;
+
 };
 
 /*****************************************************************************/

@@ -244,7 +244,7 @@ int			i,ListSize=ModelList.size();
 				if (OtOfs)
 					printf("ModelOTOfs %s %i\n",ThisModel.Name,OtOfs);
 			
-				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false,false,OtOfs);	// always all models as global for the moment
+				ThisModel.ElemID=Create3dElem(ThisModel.TriCount,ThisModel.TriStart,false,OtOfs);	// always all models as global for the moment
 			}
 }
 
@@ -278,7 +278,7 @@ int			Size;
 
 			LoadTiles(FileHdr);
 			LoadLayers(FileHdr);
-			SnapTiles();
+			if (SnapThresh!=0.0f) SnapTiles();
 
 			free(FileHdr);
 }
@@ -577,7 +577,7 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 			ThisList.setMaxStripLength(StripLength);
 			ThisElem.Elem3d.TriStart=OutTriList.size();
 			ThisElem.Elem3d.QuadStart=OutQuadList.size();
-			if (!ThisElem.LocalGeom)
+			if (!LocalGeom)
 			{ // Global Geom
 				ThisList.Process(OutTriList,OutQuadList,OutVtxList);
 				CalcOtOfs(OutTriList,OutVtxList,ThisElem.Elem3d.TriStart,ThisList.GetTriFaceCount());
@@ -586,30 +586,35 @@ CFaceStore		&ThisList=ThisElem.FaceStore;
 			else
 			{ // Local Geom
 				vector<sVtx>	LocalVtxList;
-				AddDefVtx(LocalVtxList);
+				int		VtxStart=0;
+
+				if (!ThisElem.Model)
+				{
+					AddDefVtx(LocalVtxList);
+					VtxStart=8;
+				}
+
 				ThisList.Process(OutTriList,OutQuadList,LocalVtxList);
 				ThisElem.Elem3d.VtxIdxStart=OutLocalVtxIdxList.size();
 				
 				int		ListSize=LocalVtxList.size();
 				int		LocalVtxCount=0;
 
-				for (int v=8; v<ListSize; v++)
+				for (int v=VtxStart; v<ListSize; v++)
 				{
 					u16	Idx=CFaceStore::AddVtx(OutVtxList,LocalVtxList[v]);
 
 					OutLocalVtxIdxList.push_back(Idx);
 					LocalVtxCount++;
 				}
-				if (LocalVtxCount<=0) 
+				if (LocalVtxCount==0) 
 				{
 					LocalOptCount++;
 					LocalVtxCount=0;
 				}
 				ThisElem.Elem3d.VtxTriCount=LocalVtxCount/3;
 				if (LocalVtxCount%3) ThisElem.Elem3d.VtxTriCount++;
-//				printf("%i=%i\n",LocalVtxCount,ThisElem.Elem3d.VtxTriCount);
 				
-
 				CalcOtOfs(OutTriList,LocalVtxList,ThisElem.Elem3d.TriStart,ThisList.GetTriFaceCount());
 				CalcOtOfs(OutQuadList,LocalVtxList,ThisElem.Elem3d.QuadStart,ThisList.GetQuadFaceCount());
 			}
@@ -767,18 +772,18 @@ sExpTile	&SrcTile=InTileList[Tile];
 int			ElemID;
 			if (SrcTile.TriCount)
 			{
-				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,LocalGeom,true,0);
+				ElemID=Create3dElem(SrcTile.TriCount,SrcTile.TriStart,true,0);
 			}
 			else
 			{
-				ElemID=Create2dElem(Tile,LocalGeom);
+				ElemID=Create2dElem(Tile);
 			}
 
 			return(ElemID);
 }
 
 //***************************************************************************
-int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile,int OtOfs)
+int		CMkLevel::Create3dElem(int TriCount,int TriStart,bool IsTile,int OtOfs)
 {
 CFace			F;
 int				i,ListSize;
@@ -790,7 +795,6 @@ int				ElemID=OutElem3d.size();
 sOutElem3d		&ThisElem=OutElem3d[ElemID];
 CFaceStore		&FaceList=ThisElem.FaceStore;
 				FaceList.SetTexGrab(TexGrab);
-				ThisElem.LocalGeom=Local;
 
 			for (i=0; i<TriCount; i++)
 			{
@@ -839,15 +843,14 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 				FaceList.AddFace(F,true);
 				
 			}
-		if (IsTile)
-			ThisElem.Model=false;
-		else
-			ThisElem.Model=true;
-		return(ElemID);			
+
+			ThisElem.Model=!IsTile;
+
+			return(ElemID);			
 }
 
 //***************************************************************************
-int			CMkLevel::Create2dElem(int Tile,bool Local)
+int			CMkLevel::Create2dElem(int Tile)
 {
 CFace			F;
 int				i;
@@ -858,7 +861,6 @@ int				ElemID=OutElem3d.size();
 sOutElem3d		&ThisElem=OutElem3d[ElemID];
 CFaceStore		&FaceList=ThisElem.FaceStore;
 				FaceList.SetTexGrab(TexGrab);
-				ThisElem.LocalGeom=Local;
 
 			for (i=0; i<2; i++)
 			{
@@ -869,7 +871,6 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 
 				for (int p=0; p<3; p++)
 				{
-//					F.vtx[p]=ThisTri.vtx[p];
 					F.vtx[p].x=+ThisTri.vtx[p].x;
 					F.vtx[p].y=-ThisTri.vtx[p].y;
 					F.vtx[p].z=+ThisTri.vtx[p].z;
@@ -881,6 +882,8 @@ CFaceStore		&FaceList=ThisElem.FaceStore;
 				FaceList.SetTPageFlag(F,0);
 				FaceList.AddFace(F,true);
 			}
+			ThisElem.Model=false;
+			ThisElem.OTOfs=0;
 			return(ElemID);
 }
 

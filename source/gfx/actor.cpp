@@ -769,42 +769,98 @@ u8		V=Node->V;
 /*****************************************************************************/
 /*****************************************************************************/
 sModel	*CModelGfx::ModelTable;
-sElem3d	*CModelGfx::ModelElemBank;
-sTri	*CModelGfx::ModelTriList;
-sQuad	*CModelGfx::ModelQuadList;
-sVtx	*CModelGfx::ModelVtxList;
+sElem3d	*CModelGfx::ElemBank;
+sTri	*CModelGfx::TriList;
+sQuad	*CModelGfx::QuadList;
+sVtx	*CModelGfx::VtxList;
+u16		*CModelGfx::VtxIdxList;
 
 /*****************************************************************************/
 void	CModelGfx::SetData(sLevelHdr *LevelHdr)
 {
 		ModelTable=LevelHdr->ModelList;
-		ModelElemBank=LevelHdr->ElemBank3d;
-		ModelTriList=LevelHdr->TriList;
-		ModelQuadList=LevelHdr->QuadList;
-		ModelVtxList=LevelHdr->VtxList;
+		ElemBank=LevelHdr->ElemBank3d;
+		TriList=LevelHdr->TriList;
+		QuadList=LevelHdr->QuadList;
+		VtxList=LevelHdr->VtxList;
+		VtxIdxList=LevelHdr->VtxIdxList;
 }
 
 /*****************************************************************************/
 void	CModelGfx::SetModel(int Type)
 {
 		Model=&CModelGfx::ModelTable[Type];
+		Elem=&ElemBank[Model->ElemID];
 }
 
 /*****************************************************************************/
-void		CModelGfx::Render(DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,s32 ClipFlag)
+static const int	ElemXMin=-(16/2);
+static const int	ElemXMax=+(16/2);
+static const int	ElemYMin=-(16/2);
+static const int	ElemYMax=+(16/2);
+static const int	ElemZMin=-(16*4);
+static const int	ElemZMax=+(16*4);
+
+static VECTOR	VtxTable[8]=
 {
-#define	BLOCK_MULT	16
-sElem3d			*Elem=&ModelElemBank[Model->ElemID];
+	{ElemXMin,ElemYMin,ElemZMin},	// FLU
+	{ElemXMax,ElemYMin,ElemZMin},	// FRU
+	{ElemXMin,ElemYMax,ElemZMin},	// FLD
+	{ElemXMax,ElemYMax,ElemZMin},	// FRD
+
+	{ElemXMin,ElemYMin,ElemZMax},	// BLU
+	{ElemXMax,ElemYMin,ElemZMax},	// BRU
+	{ElemXMin,ElemYMax,ElemZMax},	// BLD
+	{ElemXMax,ElemYMax,ElemZMax},	// BRD
+};
+
+/*****************************************************************************/
+void	CModelGfx::RenderTile(DVECTOR &Pos,int TileID)
+{
+sElem3d	*ThisElem=&ElemBank[TileID];
+u32		*XYList=(u32*)SCRATCH_RAM;
+u32		*OutVtx=XYList;
+VECTOR	*V0,*V1,*V2,*InVtx=VtxTable;
+VECTOR	RenderPos;
+MATRIX	Mtx;
+
+		SetIdentNoTrans(&Mtx);
+		RenderPos.vx=(INGAME_SCREENOFS_X)+Pos.vx;
+		RenderPos.vy=(INGAME_SCREENOFS_Y)+Pos.vy;
+		gte_SetRotMatrix(&Mtx);
+		CMX_SetTransMtxXY(&RenderPos);
+
+		V0=InVtx++; 
+		V1=InVtx++; 
+		V2=InVtx++;
+		gte_ldv3(V0,V1,V2);
+		for (int i=0; i<(int)((sizeof(VtxTable)/sizeof(VECTOR))+1); i++)
+		{
+			u32	*OutPtr;
+			gte_rtpt(); // 22 cycles
+			V0=InVtx++;
+			V1=InVtx++;
+			V2=InVtx++;
+			gte_ldv3(V0,V1,V2);
+			OutPtr=OutVtx;
+			OutVtx+=3;
+			gte_stsxy3c(OutPtr);	// read XY back
+		}
+		XYList+=8;
+		RenderElem(ThisElem,Pos,0,0,0,XYList);
+}
+
+/*****************************************************************************/
+void		CModelGfx::RenderElem(sElem3d *ThisElem,DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,s32 ClipFlag,u32 *TransBuffer)
+{
 u8				*PrimPtr=GetPrimPtr();
-POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
-sVtx			*P0,*P1,*P2;
-u32				T0,T1,T2;
+u32				T0,T1,T2,T3;
+u32				P0,P1,P2,P3;
 s32				ClipZ;
 sOT				*ThisOT;
 VECTOR			RenderPos;
-int				TriCount=Elem->TriCount;				
-sTri			*TList=&ModelTriList[Elem->TriStart];
-				MATRIX	Mtx;
+MATRIX			Mtx;
+u32	const		*XYList=(u32*)SCRATCH_RAM;
 
 // If has scale && angle then need to use PSX scale matrix, otherwise, force values
 			if (Angle)
@@ -833,34 +889,119 @@ sTri			*TList=&ModelTriList[Elem->TriStart];
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);
 
-		while (TriCount--)
+// --- Cache Vtx ----------
 		{
-			P0=&ModelVtxList[TList->P0]; P1=&ModelVtxList[TList->P1]; P2=&ModelVtxList[TList->P2];
-			gte_ldv3(P0,P1,P2);
-			setlen(TPrimPtr, GPU_PolyFT3Tag);
-			TPrimPtr->code=TList->PolyCode;
-			gte_rtpt_b();
-			setShadeTex(TPrimPtr,1);
-			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
-			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-			T2=*(u32*)&TList->uv2;		// Get UV2
-			*(u32*)&TPrimPtr->u0=T0;	// Set UV0
-			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
-			*(u32*)&TPrimPtr->u2=T2;	// Set UV2
-			ThisOT=OtPtr+TList->OTOfs;
-			TList++;
-			gte_nclip_b();
-			gte_stsxy3_ft3(TPrimPtr);
-			gte_stopz(&ClipZ);
-			ClipZ|=ClipFlag;		// <-- Evil!!
-			if (ClipZ<=0)
+			int		Count=ThisElem->VtxTriCount;
+			sVtx	*V0,*V1,*V2;
+			u16		*IdxTable=&VtxIdxList[ThisElem->VtxIdxStart];
+
+			V0=&VtxList[*IdxTable++];
+			V1=&VtxList[*IdxTable++];
+			V2=&VtxList[*IdxTable++];
+			gte_ldv3(V0,V1,V2);
+
+			while (Count--)
 			{
-				addPrim(ThisOT,TPrimPtr);
-				TPrimPtr++;
+				u32	*OutPtr;
+				gte_rtpt_b(); // 22 cycles
+		// Preload next (when able) - Must check this
+				V0=&VtxList[*IdxTable++];
+				V1=&VtxList[*IdxTable++];
+				V2=&VtxList[*IdxTable++];
+				OutPtr=TransBuffer;
+				TransBuffer+=3;
+				gte_ldv3(V0,V1,V2);
+				gte_stsxy3c(OutPtr);	// read XY back
 			}
 		}
 
-		SetPrimPtr((u8*)TPrimPtr);
+// --- Render Tri's -------------
+
+		int		TriCount=ThisElem->TriCount;
+		sTri	*TList=&TriList[ThisElem->TriStart];
+		while (TriCount--)
+		{
+			POLY_FT3	*ThisPrim=(POLY_FT3*)PrimPtr;
+
+			P0=XYList[TList->P0]; 
+			P1=XYList[TList->P1]; 
+			P2=XYList[TList->P2];
+			gte_ldsxy0(P0);
+			gte_ldsxy1(P1);
+			gte_ldsxy2(P2);
+
+			setlen(ThisPrim, GPU_PolyFT3Tag);
+			ThisPrim->code=TList->PolyCode;
+			gte_nclip_b();	// 8 cycles
+
+			setShadeTex(ThisPrim,1);
+
+			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
+			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
+			T2=*(u32*)&TList->uv2;		// Get UV2
+			*(u32*)&ThisPrim->u0=T0;	// Set UV0
+			*(u32*)&ThisPrim->u1=T1;	// Set UV1
+			*(u32*)&ThisPrim->u2=T2;	// Set UV2
+
+			gte_stopz(&ClipZ);
+			ThisOT=OtPtr+TList->OTOfs;
+			ClipZ|=ClipFlag;			// <-- Evil!!
+			TList++;
+			if (ClipZ<0)
+			{
+				*(u32*)&ThisPrim->x0=P0;	// Set XY0
+				*(u32*)&ThisPrim->x1=P1;	// Set XY1
+				*(u32*)&ThisPrim->x2=P2;	// Set XY2
+				addPrim(ThisOT,ThisPrim);
+				PrimPtr+=sizeof(POLY_FT3);
+			}
+		}
+
+// --- Render Quads -----------
+		int		QuadCount=ThisElem->QuadCount;
+		sQuad	*QList=&QuadList[ThisElem->QuadStart];
+		while (QuadCount--)
+		{
+			POLY_FT4	*ThisPrim=(POLY_FT4*)PrimPtr;
+
+			P0=XYList[QList->P0]; 
+			P1=XYList[QList->P1]; 
+			P2=XYList[QList->P2];
+			P3=XYList[QList->P3];
+			gte_ldsxy0(P0);
+			gte_ldsxy1(P1);
+			gte_ldsxy2(P2);
+			
+			setlen(ThisPrim, GPU_PolyFT4Tag);
+			ThisPrim->code=QList->PolyCode;
+			gte_nclip_b();	// 8 cycles
+
+			setShadeTex(ThisPrim,1);
+
+			T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
+			T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
+			T2=*(u32*)&QList->uv2;		// Get UV2
+			T3=*(u32*)&QList->uv3;		// Get UV2
+			*(u32*)&ThisPrim->u0=T0;	// Set UV0
+			*(u32*)&ThisPrim->u1=T1;	// Set UV1
+			*(u32*)&ThisPrim->u2=T2;	// Set UV2
+			*(u32*)&ThisPrim->u3=T3;	// Set UV2
+			gte_stopz(&ClipZ);
+			ThisOT=OtPtr+QList->OTOfs;
+			ClipZ|=ClipFlag;			// <-- Evil!!
+			QList++;
+			if (ClipZ<0)
+			{
+				*(u32*)&ThisPrim->x0=P0;	// Set XY0
+				*(u32*)&ThisPrim->x1=P1;	// Set XY1
+				*(u32*)&ThisPrim->x2=P2;	// Set XY2
+				*(u32*)&ThisPrim->x3=P3;	// Set XY3
+				addPrim(ThisOT,ThisPrim);
+				PrimPtr+=sizeof(POLY_FT4);
+			}
+		}
+
+		SetPrimPtr(PrimPtr);
 
 }
 

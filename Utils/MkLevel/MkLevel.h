@@ -58,7 +58,7 @@ bool	operator ==(sUsedTile3d const &v1)	{return(Tile==v1.Tile);}
 
 struct sOutElem3d
 {
-		bool			LocalGeom;
+//		bool			LocalGeom;
 		bool			Model;
 		sElem3d			Elem3d;
 		CFaceStore		FaceStore;
@@ -118,8 +118,8 @@ public:
 protected:	
 		void			BuildModel(CScene &ThisScene,GString &RootPath,int Node);
 
-		int				Create3dElem(int TriCount,int TriStart,bool Local,bool IsTile,int OtOfs);
-		int				Create2dElem(int Tile,bool Local);
+		int				Create3dElem(int TriCount,int TriStart,bool IsTile,int OtOfs);
+		int				Create2dElem(int Tile);
 
 		CMkLevelLayer	*FindLayer(int Type,int SubType);
 		void			LoadStrList(CList<GString> &List,char *TexPtr,int Count);
