@@ -55,6 +55,7 @@ void CNpcLeafPlatform::processMovement( int _frames )
 			m_isActive = false;
 			m_timer = getRnd() % ( 4 * GameState::getOneSecondInFrames() );
 			m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
+			m_isActivated = false;
 		}
 		else
 		{
