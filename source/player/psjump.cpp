@@ -114,7 +114,7 @@ void CPlayerStateJump::think(CPlayer *_player)
 	{
 		slowdown(_player);
 	}
-advanceAnimFrameAndCheckForEndOfAnim(_player);	
+	advanceAnimFrameAndCheckForEndOfAnim(_player);
 }
 
 
