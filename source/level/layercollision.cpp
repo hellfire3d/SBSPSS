@@ -44,6 +44,7 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	int	mapX,mapY,xFraction,yFraction;
 	int	distanceFromGround;
 	int	colHeight;
+	int	maxHeightToCheck;
 
 	mapX=_x>>4;
 	mapY=(_y>>4)*MapWidth;
@@ -51,38 +52,43 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 	yFraction=16-(_y&0x0f);
 	distanceFromGround=0;
 
-	colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+	colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
 	if(colHeight)
 	{
 		// Inside a collision block.. find the nearest ground above this point
+		maxHeightToCheck=-_maxHeight-16;	// Need to check one block more incase we cross onto a new block
 		while(colHeight==16)
 		{
 			_y-=16;
 			mapY-=MapWidth;
 			distanceFromGround-=16;
-			if(distanceFromGround<=-_maxHeight)
+			if(distanceFromGround<=maxHeightToCheck)
 			{
 				return -_maxHeight;
 			}
-			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
+		if(distanceFromGround<-_maxHeight)distanceFromGround=-_maxHeight;
+
 	}
 	else
 	{
 		// Not inside a collision block.. find the nearest ground below this point
+		maxHeightToCheck=_maxHeight+16;		// Need to check one block more incase we cross onto a new block
 		while(colHeight==0)
 		{
 			_y+=16;
 			mapY+=MapWidth;
 			distanceFromGround+=16;
-			if(distanceFromGround>=_maxHeight)
+			if(distanceFromGround>=maxHeightToCheck)
 			{
 				return _maxHeight;
 			}
-			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];if(Map[mapX+mapY])colHeight++;
+			colHeight=m_collisionTable[(Map[mapX+mapY]*16)+xFraction];
 		}
 		distanceFromGround+=yFraction-colHeight;
+		if(distanceFromGround>_maxHeight)distanceFromGround=_maxHeight;
 	}
 
 	return distanceFromGround;

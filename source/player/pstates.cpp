@@ -252,10 +252,6 @@ int CPlayerState::getPadInputDown(CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayerState::isOnSolidGround(CPlayer *_player)
-{
-	return _player->isOnSolidGround();
-}
 int CPlayerState::isOnEdge(class CPlayer *_player)
 {
 	return _player->isOnEdge();

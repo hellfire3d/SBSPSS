@@ -116,6 +116,7 @@ u8		c;
 				if (c) ThisTile.Ofs[X]++;
 				if (DebugOn) printf("%i",c);
 			}
+			if(ThisTile.Ofs[X])ThisTile.Ofs[X]++;		// (pkg)
 			if (DebugOn) printf("\t%i \n",ThisTile.Ofs[X]);
 		}
 		if (DebugOn) printf("\n");

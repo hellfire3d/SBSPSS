@@ -186,7 +186,6 @@ protected:
 	PLAYERINPUT		getPadInputDown();
 
 	// Collision
-	int				isOnSolidGround();
 	int				isOnSlippySurface();
 	int				isOnEdge();
 	int				canMoveLeft();

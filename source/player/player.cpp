@@ -1,4 +1,3 @@
-char buf[100];
 /*=========================================================================
 
 	player.cpp
@@ -233,7 +232,6 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
-//DVECTOR pos;
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -252,7 +250,6 @@ if(newmode!=-1)
 	newmode=-1;
 }
 
-if(_frames>3)_frames=3;
 	for(i=0;i<_frames;i++)
 	{
 		// Think
@@ -262,15 +259,16 @@ if(_frames>3)_frames=3;
 		thinkHorizontalMovement();
 
 #ifdef __USER_paul__
+char buf[100];
 sprintf(buf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy));
 s_debugFont.print(40,40,buf);
 #endif
 
 
-if(Pos.vx<16)Pos.vx=16;
-else if(Pos.vx>m_mapEdge.vx-16)Pos.vx=m_mapEdge.vx-16;
-if(Pos.vy<16)Pos.vy=16;
-else if(Pos.vy>m_mapEdge.vy-16)Pos.vy=m_mapEdge.vy-16;
+if(Pos.vx<64)Pos.vx=64;
+else if(Pos.vx>m_mapEdge.vx-64)Pos.vx=m_mapEdge.vx-64;
+if(Pos.vy<64)Pos.vy=64;
+else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
 		// Flashing..
 		if(m_invincibleFrameCount)
@@ -368,7 +366,7 @@ m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>
 void CPlayer::thinkVerticalMovement()
 {
 	int	colHeight;
-	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy);
+	colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,1);
 	if(colHeight>=0)
 	{
 		// Above or on the ground
@@ -376,7 +374,7 @@ void CPlayer::thinkVerticalMovement()
 		if(m_moveVel.vy>0)
 		{
 			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT));
+			colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy+(m_moveVel.vy>>VELOCITY_SHIFT),PLAYER_TERMINAL_VELOCITY+1);
 			if(colHeight<=0)
 			{
 				// Just hit the ground
@@ -449,10 +447,11 @@ void CPlayer::thinkHorizontalMovement()
 {
 	if(m_moveVel.vx)
 	{
-		if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy)==0)
+		int colHeight;
+		colHeight=m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5);
+		if(colHeight==0)
 		{
 			// Ok.. we're on the ground. What happens if we move left/right
-			int colHeight;
 			colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy);
 			if(colHeight<-8)
 			{
@@ -499,33 +498,35 @@ void CPlayer::thinkHorizontalMovement()
 		else
 		{
 			// In the air
-			int colHeight;
-			colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy);
-			if(colHeight<0)
+			if(!(colHeight<0&&m_currentState==STATE_JUMP)) // Lets you jump through platforms from below
 			{
-				// Stop at the edge of the obstruction
-				int	dir,vx,cx,i;
-				if(m_moveVel.vx<0)
+				colHeight=m_layerCollision->getHeightFromGround(Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT),Pos.vy,5);
+				if(colHeight<0)
 				{
-					dir=-1;
-					vx=-m_moveVel.vx>>VELOCITY_SHIFT;
-				}
-				else
-				{
-					dir=+1;
-					vx=m_moveVel.vx>>VELOCITY_SHIFT;
-				}
-				cx=Pos.vx;
-				for(i=0;i<vx;i++)
-				{
-					if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
+					// Stop at the edge of the obstruction
+					int	dir,vx,cx,i;
+					if(m_moveVel.vx<0)
 					{
-						break;
+						dir=-1;
+						vx=-m_moveVel.vx>>VELOCITY_SHIFT;
 					}
-					cx+=dir;
+					else
+					{
+						dir=+1;
+						vx=m_moveVel.vx>>VELOCITY_SHIFT;
+					}
+					cx=Pos.vx;
+					for(i=0;i<vx;i++)
+					{
+						if(m_layerCollision->getHeightFromGround(cx,Pos.vy)<0)
+						{
+							break;
+						}
+						cx+=dir;
+					}
+					Pos.vx=cx-dir;
+					m_moveVel.vx=0;
 				}
-				Pos.vx=cx-dir;
-				m_moveVel.vx=0;
 			}
 		}
 		Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
@@ -798,32 +799,11 @@ PLAYERINPUT CPlayer::getPadInputDown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayer::isOnSolidGround()
-{
-return false;
-/*
-	ASSERT(m_layerCollision);
-	int	collHeight;
-
-	collHeight=m_layerCollision->Get(Pos.vx,Pos.vy);
-
-//	PAUL_DBGMSG("%04d,%04d=%02d",Pos.vx,Pos.vy,collHeight);
-	return collHeight;
-*/
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 int slip=false;
 int CPlayer::isOnSlippySurface()
 {
 return false;
-	return slip&&isOnSolidGround();
+//	return slip&&isOnSolidGround();
 }
 
 
@@ -836,23 +816,20 @@ return false;
 				player is hanging
   ---------------------------------------------------------------------- */
 int csize=15;
+int cheight=15;
 int CPlayer::isOnEdge()
 {
-return false;
-/*
 	int	ret=0;
 
-	ASSERT(m_layerCollision);
-	if(!m_layerCollision->Get(Pos.vx-csize,Pos.vy))
+	if(m_layerCollision->getHeightFromGround(Pos.vx-csize,Pos.vy,cheight+1)>cheight)
 	{
 		ret=FACING_LEFT;
 	}
-	else if(!m_layerCollision->Get(Pos.vx+csize,Pos.vy))
+	else if(m_layerCollision->getHeightFromGround(Pos.vx+csize,Pos.vy,cheight+1)>cheight)
 	{
 		ret=FACING_RIGHT;
 	}
 	return ret;
-*/
 }
 
 
@@ -864,11 +841,11 @@ return false;
   ---------------------------------------------------------------------- */
 int CPlayer::canMoveLeft()
 {
-	return m_layerCollision->getHeightFromGround(Pos.vx-1,Pos.vy)>-8?true:false;
+	return m_layerCollision->getHeightFromGround(Pos.vx-1,Pos.vy,16)>-8?true:false;
 }
 int CPlayer::canMoveRight()
 {
-	return m_layerCollision->getHeightFromGround(Pos.vx+1,Pos.vy)>-8?true:false;
+	return m_layerCollision->getHeightFromGround(Pos.vx+1,Pos.vy,16)>-8?true:false;
 }
 
 
