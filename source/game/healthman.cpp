@@ -13,6 +13,10 @@
 #include "gfx\otpos.h"
 #include "game\healthman.h"
 
+#ifndef __SAVE_SAVE_H__
+#include "save\save.h"
+#endif
+
 #include <sprites.h>
 
 CHealthManager::sItemTable	CHealthManager::ItemTable[]=
@@ -137,6 +141,7 @@ sItem	*item=ItemList;
 				{
 					item->Life=0;
 					Player->addSpatula(item->Count);
+					CSoundMediator::playSfx(CSoundMediator::SFX_ITEM__ANY_OTHER_ITEM);
 				}
 
 			}
