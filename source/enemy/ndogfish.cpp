@@ -259,7 +259,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 			startPos.vy -= 20;
 			projectile->init( startPos, headingToPlayer );*/
 
-			m_laserTimer = 60 * GameState::getOneSecondInFrames();
+			m_laserTimer = GameState::getOneSecondInFrames();
 
 			m_effect = (CFXLaser*) CFX::Create( CFX::FX_TYPE_LASER, this );
 
