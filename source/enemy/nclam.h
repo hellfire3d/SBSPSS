@@ -16,6 +16,8 @@
 
 class CNpcClamEnemy : public CNpcEnemy
 {
+public:
+	virtual u8			canCollideWithEnemy()					{return( false );}
 protected:
 	virtual void		processUserCollision( CThing *thisThing );
 	virtual void		processEnemyCollision( CThing *thisThing );
@@ -35,6 +37,7 @@ class CNpcStaticClamEnemy : public CNpcClamEnemy
 public:
 	virtual void		postInit();
 	//virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	virtual u8			hasBeenAttacked()						{return( false );}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 	//virtual void		processShot( int _frames );
