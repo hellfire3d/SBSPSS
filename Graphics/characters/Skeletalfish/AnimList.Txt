@@ -1,4 +1,4 @@
-bite
+#bite
 # die
 # gethit
 idle
