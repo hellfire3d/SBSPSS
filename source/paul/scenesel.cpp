@@ -88,7 +88,9 @@
 
 // Uncomment this to make the selector automatically choose the default ( first ) scene
 // You can still use L1&L2 to force the selection menu to appear
-//#define	AUTOMATICALLY_CHOOSE_DEFAULT
+#if defined (__USER_art__)||defined (__USER_sbart__)
+#define	AUTOMATICALLY_CHOOSE_DEFAULT
+#endif
 
 /*----------------------------------------------------------------------
 	Structure defintions
@@ -104,8 +106,8 @@
 
 CScene	*CSceneSelector::s_sceneList[]=
 {
-	&GameScene,				// First scene in the list is the default scene
-	&FrontEndScene,
+	&FrontEndScene,				// First scene in the list is the default scene
+	&GameScene,
 	&GameOverScene,
 	&FmaScene,
 	&MapScene,
