@@ -370,8 +370,11 @@ void CProjectile::collidedWith(CThing *_thisThing)
 
 			player->takeDamage( DAMAGE__HIT_ENEMY );
 
-			shutdown();
-			delete this;
+			if ( m_lifetimeType != PROJECTILE_INFINITE_LIFE )
+			{
+				shutdown();
+				delete this;
+			}
 
 			break;
 		}
