@@ -681,7 +681,7 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 bool CNpcEnemy::processSensor()
 {
-	// temporary
+	/*// temporary
 	if ( playerXDistSqr + playerYDistSqr < 10000 )
 	{
 		m_controlFunc = NPC_CONTROL_SHOT;
@@ -689,7 +689,7 @@ bool CNpcEnemy::processSensor()
 
 		return( true );
 	}
-	// temporary
+	// temporary*/
 
 	switch( m_sensorFunc )
 	{
