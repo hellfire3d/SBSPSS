@@ -38,6 +38,14 @@
 	Structure defintions
 	-------------------- */
 
+// Collision rectangle definition
+typedef struct
+{
+	int	x1,y1,x2,y2;
+}
+CRECT;
+
+
 // Thing manager class
 class CThingManager
 {
@@ -48,6 +56,8 @@ public:
 	static void		thinkAllThings(int _frames);
 	static void		renderAllThings();
 	static void		processEventAllThings(GAME_EVENT _event,class CThing *_sourceThing);
+
+	static CThing*	checkCollisionAreaAgainstThings(CRECT *_area,int _type,int _continue);
 
 protected:
 	static void					addToThingList(class CThing *_this);
@@ -126,13 +136,6 @@ public:
 
 	// -- Collision --
 public:
-	typedef struct
-	{
-		int	x1,y1,x2,y2;
-	}
-	CRECT;
-
-
 	DVECTOR			getCollisionCentre()						{return m_collisionCentre;}
 	int				getCollisionRadius()						{return m_collisionRadius;}
 	CRECT			getCollisionArea()							{return m_collisionArea;}
@@ -143,6 +146,7 @@ public:
 
 	virtual int		canCollide()								{return true;}
 	virtual int		checkCollisionAgainst(CThing *_thisThing, int _frames);
+	int				checkCollisionAgainstArea(CRECT *_rect);
 	void			updateCollisionArea();
 	virtual void	collidedWith(CThing *_thisThing)			{;}
 	virtual void	setHasPlatformCollided( bool newVal )		{;}
@@ -150,6 +154,8 @@ public:
 	virtual s32		getNewYPos( CThing *_thisThing );
 	void			setNewCollidedPos(DVECTOR newPos)			{m_newCollidedPos = newPos;}
 	void			setCentreCollision(bool newCentreCollision)	{m_centreCollision = newCentreCollision;}
+
+
 protected:
 	void			setCollisionSize(int _w,int _h);
 	void			setCollisionCentreOffset(int _x,int _y)		{m_collisionCentreOffset.vx=_x;m_collisionCentreOffset.vy=_y;}

@@ -89,21 +89,65 @@ void	CPlayerModeNet::think()
 	{
 		m_netFrame=0;
 		m_netting=true;
-		switch(m_netState)
-		{
-			case NET_STATE__EMPTY:
-				m_netState=NET_STATE__FULL;
-				break;
-			case NET_STATE__FULL:
-				m_netState=NET_STATE__EMPTY;
-				break;
-		}
 	}
 
 	// Netting?
 	if(m_netting)
 	{
-//!!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
+		switch(m_netState)
+		{
+			case NET_STATE__EMPTY:
+				{
+					DVECTOR	playerPos;
+					int		playerFacing;
+					CRECT	netRect;
+					CThing	*thing;
+
+					playerPos=m_player->getPos();
+					playerFacing=m_player->getFacing();
+
+					netRect.x1=playerPos.vx-20;
+					netRect.y1=playerPos.vy-20-40;
+					netRect.x2=playerPos.vx+20;
+					netRect.y2=playerPos.vy+20-40;
+
+					thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,false);
+					while(thing)
+					{
+//						if((CEnemy*)thing)->canBeCaughtByNet())					( or whatever.. )
+						if(1)		// just to stop the complier complaining until the above line can be put it..
+						{
+PAUL_DBGMSG("Caught!");
+							//((CEnemy*)thing)->caughtWithNet();				( or whatever.. )
+							m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
+							thing=NULL;
+						}
+						else
+						{
+							thing=CThingManager::checkCollisionAreaAgainstThings(&netRect,CThing::TYPE_ENEMY,true);
+						}
+					}
+				}
+				break;
+
+			case NET_STATE__JUST_CAUGHT_SOMETHING:
+				break;
+
+			case NET_STATE__FULL:
+				if(m_netFrame==0)
+				{
+					// Launch projectile at halfway through the swing..
+PAUL_DBGMSG("Released!");
+					// new cprojectile											( or whatever.. )
+					m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
+				}
+				break;
+
+			case NET_STATE__JUST_LAUNCHED_SOMETHING:
+				break;
+		}
+
+		//!!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
 		m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
 		m_player->setAnimFrame(m_netFrame);
 		m_netFrame++;
@@ -112,6 +156,15 @@ void	CPlayerModeNet::think()
 			m_player->setAnimNo(m_savedAnimNo);
 			m_player->setAnimFrame(m_savedAnimFrame);
 			m_netting=false;
+
+			if(m_netState==NET_STATE__JUST_CAUGHT_SOMETHING)
+			{
+				m_netState=NET_STATE__FULL;
+			}
+			else if(m_netState==NET_STATE__JUST_LAUNCHED_SOMETHING)
+			{
+				m_netState=NET_STATE__EMPTY;
+			}
 		}
 	}
 	netstate=m_netState;

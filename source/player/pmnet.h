@@ -48,7 +48,9 @@ private:
 	typedef enum
 	{
 		NET_STATE__EMPTY,
+		NET_STATE__JUST_CAUGHT_SOMETHING,
 		NET_STATE__FULL,
+		NET_STATE__JUST_LAUNCHED_SOMETHING,
 	} NetState;
 
 	int							canSwingNetFromThisState();

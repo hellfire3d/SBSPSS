@@ -179,7 +179,6 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 #endif
 
 
-int s_health;
 int s_screenPos;
 DVECTOR	m_cameraScrollPos={0,600};
 
@@ -458,19 +457,23 @@ m_fontBank->print(40,40,posBuf);
 
 		x=healthx;
 		y=healthy;
-		if(s_health)
+		if(m_health==0||m_healthReactFrames)
 		{
-			frames=s_fullHealthFrames;
+			if(m_healthReactFrames)
+			{
+				m_healthReactFrames--;
+			}
+			frames=s_emptyHealthFrames;
 		}
 		else
 		{
-			frames=s_emptyHealthFrames;
+			frames=s_fullHealthFrames;
 		}
 
 		for(i=5;i>0;i--)
 		{
 			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,5);
-			if(i>s_health)
+			if(i>m_health)
 			{
 				setRGB0(ft4,healthr,healthg,healthb);
 			}
@@ -538,10 +541,10 @@ int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
   ---------------------------------------------------------------------- */
 void CPlayer::addHealth(int _health)
 {
-	s_health+=_health;
-	if(s_health>MAX_HEALTH)
+	m_health+=_health;
+	if(m_health>MAX_HEALTH)
 	{
-		s_health=MAX_HEALTH;
+		m_health=MAX_HEALTH;
 	}
 }
 
@@ -670,7 +673,8 @@ void CPlayer::respawn()
 		setMode(PLAYER_MODE_BASICUNARMED);
 	}
 
-	s_health=MAX_HEALTH;
+	m_health=MAX_HEALTH;
+	m_healthReactFrames=0;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	Pos=m_respawnPos;
 
@@ -743,10 +747,11 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 #ifdef __VERSION_DEBUG__
 			if(invincibleSponge){m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;return;}
 #endif
-			if(s_health)
+			if(m_health)
 			{
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
-				s_health--;
+				m_healthReactFrames=10;
+				m_health--;
 			}
 			else
 			{

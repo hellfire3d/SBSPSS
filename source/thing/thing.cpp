@@ -258,6 +258,48 @@ void		CThingManager::processEventAllThings(GAME_EVENT _event,CThing *_sourceThin
 
 /*----------------------------------------------------------------------
 	Function:
+	Purpose:	Searches through a list of things to check for collision against an area.
+				The first time this is called, _continue should be false. If no colliding things are found then
+				NULL will be returned. If a colliding thing is found then it's address gets returned. To continue
+				searching through the list for the next colliding thing, call the function again with _continue set
+				to true.
+				NB: This function could probly cause weird bugs if not used properly! BE AWARE!
+	Params:		*_area		Area to check against
+				_type		Type of thing to search for
+				_continue	If false then the list is searched from the start, if true then the search continues
+							from the last thing that was found ( um.. see above )
+	Returns:
+  ---------------------------------------------------------------------- */
+CThing		*CThingManager::checkCollisionAreaAgainstThings(CRECT *_area,int _type,int _continue)
+{
+	static CThing	*thing=NULL;
+
+	ASSERT(_type<CThing::MAX_TYPE);
+
+	if(_continue)
+	{
+		ASSERT(thing);
+		thing=thing->m_nextThing;
+	}
+	else
+	{
+		thing=s_thingLists[_type];
+	}
+	while(thing)
+	{
+		if(thing->canCollide()&&
+		   thing->checkCollisionAgainstArea(_area))
+		{
+			return thing;
+		}
+		thing=thing->m_nextThing;
+	}
+
+	return NULL;
+}
+
+/*----------------------------------------------------------------------
+	Function:
 	Purpose:
 	Params:
 	Returns:
@@ -645,6 +687,29 @@ int		CThing::checkCollisionAgainst(CThing *_thisThing, int _frames)
 	}
 
 	return collided;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int		CThing::checkCollisionAgainstArea(CRECT *_rect)
+{
+	CRECT	thisRect;
+	int		ret;
+
+	thisRect=getCollisionArea();
+	ret=false;
+
+	if(((thisRect.x1>=_rect->x1&&thisRect.x1<=_rect->x2)||(thisRect.x2>=_rect->x1&&thisRect.x2<=_rect->x2)||(thisRect.x1<=_rect->x1&&thisRect.x2>=_rect->x2))&&
+	   ((thisRect.y1>=_rect->y1&&thisRect.y1<=_rect->y2)||(thisRect.y2>=_rect->y1&&thisRect.y2<=_rect->y2)||(thisRect.y1<=_rect->y1&&thisRect.y2>=_rect->y2)))
+	{
+		ret=true;
+	}
+
+	return ret;
 }
 
 /*----------------------------------------------------------------------
