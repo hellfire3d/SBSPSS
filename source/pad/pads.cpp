@@ -13,8 +13,8 @@
 
 /*****************************************************************************/
 // Yay! Automatic key-repeat stuff!
-#define TYPOMATIC_DELAY	60
-#define TYPOMATIC_RATE	30
+#define TYPOMATIC_DELAY	30
+#define TYPOMATIC_RATE	15
 
 
 /*****************************************************************************/
