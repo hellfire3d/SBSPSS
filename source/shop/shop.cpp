@@ -62,6 +62,18 @@
 #include "gui\gtextbox.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
+#ifndef __MAP_MAP_H__
+#include "map\map.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -98,6 +110,7 @@
 	Vars
 	---- */
 
+// 82 tokens in total
 CShopScene::SHOPITEM	CShopScene::s_shopItems[NUM_SHOP_ITEM_IDS]=
 {
 	{	1,	FRM_BLOWER		},
@@ -110,9 +123,7 @@ CShopScene::SHOPITEM	CShopScene::s_shopItems[NUM_SHOP_ITEM_IDS]=
 	{	8,	FRM_TEDDY		},
 };
 
-
-
-
+xmPlayingId	s_playId;
 
 CShopScene	ShopScene;
 
@@ -123,10 +134,10 @@ CShopScene	ShopScene;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int fx=48;
-int fy=155;
-int fw=416;
-int fh=64;
+int fx=76;
+int fy=80;
+int fw=200;
+int fh=20;
 void CShopScene::init()
 {
 	m_image=CFileIO::loadFile(BACKDROP_SHOP_GFX);
@@ -141,19 +152,53 @@ void CShopScene::init()
 	m_spriteBank=new ("shop sprites") SpriteBank();
 	m_spriteBank->load(SHOP_SHOP_SPR);
 
+
 	// GUI Frame
-	CGUITextBox			*tb;
-	m_guiFrame=new ("Token Count Frame") CGUIGroupFrame();
+	m_guiFrame=new ("Token count frame") CGUIGroupFrame();
 	m_guiFrame->init(0);
-	m_guiFrame->setOt(0);
+	m_guiFrame->setOt(5);
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
-	m_guiFrame->setObjectXYWH(fx,fy,fw,fh);
+	m_guiFrame->setObjectXYWH(SHOP_MAIN_UI_X,SHOP_MAIN_UI_Y,SHOP_MAIN_UI_W,SHOP_MAIN_UI_H);
+
+	m_guiConfirmPurchaseFrame=new ("Confirm purchase frame") CGUIControlFrame();
+	m_guiConfirmPurchaseFrame->init(0);
+	m_guiConfirmPurchaseFrame->setOt(4);
+	m_guiConfirmPurchaseFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
+	m_guiConfirmPurchaseFrame->setObjectXYWH(SHOP_QUERY_UI_X,SHOP_QUERY_UI_Y,SHOP_QUERY_UI_W,SHOP_QUERY_UI_H);
+	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
+										fx,fy,fw,fh,
+										STR__YES,
+										&m_queryAnswer,
+										ANSWER_YES);
+	CGUIFactory::createValueButtonFrame(m_guiConfirmPurchaseFrame,
+										fx,fy+fh,fw,fh,
+										STR__NO,
+										&m_queryAnswer,
+										ANSWER_NO);
+
+	m_guiCannotAffordFrame=new ("Cannot afford frame") CGUIControlFrame();
+	m_guiCannotAffordFrame->init(0);
+	m_guiCannotAffordFrame->setOt(4);
+	m_guiCannotAffordFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
+	m_guiCannotAffordFrame->setObjectXYWH(SHOP_QUERY_UI_X,SHOP_QUERY_UI_Y,SHOP_QUERY_UI_W,SHOP_QUERY_UI_H);
+	CGUIFactory::createValueButtonFrame(m_guiCannotAffordFrame,
+										fx,fy,fw,fh,
+										STR__OK,
+										&m_queryAnswer,
+										ANSWER_OK);
+
 
 	m_readyToExit=false;
 	CFader::setFadingIn(CFader::BLACK_FADE);
 
 	m_currentlySelectedItem=0;
 	m_flashSin=0;
+
+	s_playId=NOT_PLAYING;
+
+	m_state=SHOP_STATE__FADING_IN;
+
+	m_mainUiYOffset=SHOP_STATE__SELECT_ITEM;
 }
 
 
@@ -165,6 +210,8 @@ void CShopScene::init()
   ---------------------------------------------------------------------- */
 void CShopScene::shutdown()
 {
+	m_guiCannotAffordFrame->shutdown();
+	m_guiConfirmPurchaseFrame->shutdown();
 	m_guiFrame->shutdown();
 
 	m_spriteBank->dump();		delete m_spriteBank;
@@ -180,62 +227,60 @@ void CShopScene::shutdown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int shopx=180;
-int shopy=38;
-int shopw=512-(180*2);
-int shopygap=51;
-int shopitemsperrow=4;
-int shopflashspeed=200;
-int shopflashbase=128;
-int shopflashrange=50;
-int shopboughtrgb=45;
 void CShopScene::render()
 {
 	SHOPITEM	*shopItem;
 	int			i,x,y,gap;
 	POLY_FT4	*ft4;
 
+
+	renderUi();
+
 	shopItem=s_shopItems;
-	x=shopx;
-	y=shopy;
-	gap=shopw/(shopitemsperrow-1);
+	x=SHOP_ICON_XBASE;
+	y=SHOP_ICON_YBASE;
+	gap=SHOP_ICON_WIDTH/(SHOP_ICON_ITEMS_PER_ROW-1);
 	for(i=0;i<NUM_SHOP_ITEM_IDS;i++)
 	{
 		// Icon
 		sFrameHdr	*fh=m_spriteBank->getFrameHeader(shopItem->m_frame);
-		ft4=m_spriteBank->printFT4(fh,x-fh->W/2,y,0,0,0);
+		ft4=m_spriteBank->printFT4(fh,x-fh->W/2,y,0,0,5);
 
 		// Cursor?
 		if(i==m_currentlySelectedItem)
 		{
-			SpriteBank	*sb=CGameScene::getSpriteBank();
-			sFrameHdr	*fh=sb->getFrameHeader(FRM__MAPPOINTER);
-			sb->printFT4(fh,x-fh->W,y+30,0,0,0);
+			if(!CFader::isFading())
+			{
+				if(m_state==SHOP_STATE__SELECT_ITEM)
+				{
+					SpriteBank	*sb=CGameScene::getSpriteBank();
+					sFrameHdr	*fh=sb->getFrameHeader(FRM__MAPPOINTER);
+					sb->printFT4(fh,x-fh->W,y+30,0,0,5);
+				}
 
-			// Flash selected item
-			int	rgb=((msin(m_flashSin)*shopflashrange)>>12)+shopflashbase;
-			setRGB0(ft4,rgb,rgb,rgb);
+				// Flash selected item
+				int	rgb=((msin(m_flashSin)*SHOP_ICON_FLASH_COLOUR_RANGE)>>12)+SHOP_ICON_FLASH_COLOUR_BASE;
+				setRGB0(ft4,rgb,rgb,rgb);
+			}
 		}
 
 		// Darken item if already bought
 		if(!isItemAvailableToBuy(i))
 		{
-			setRGB0(ft4,shopboughtrgb,shopboughtrgb,shopboughtrgb);
+			setRGB0(ft4,SHOP_ICON_PURCHASED_RGB,SHOP_ICON_PURCHASED_RGB,SHOP_ICON_PURCHASED_RGB);
 		}
 
 		shopItem++;
-		if(i%shopitemsperrow==shopitemsperrow-1)
+		if(i%SHOP_ICON_ITEMS_PER_ROW==SHOP_ICON_ITEMS_PER_ROW-1)
 		{
-			x=shopx;
-			y+=shopygap;
+			x=SHOP_ICON_XBASE;
+			y+=SHOP_ICON_Y_GAP;
 		}
 		else
 		{
 			x+=gap;
 		}
 	}
-
-	renderUi();
 }
 
 
@@ -247,31 +292,122 @@ void CShopScene::render()
   ---------------------------------------------------------------------- */
 void CShopScene::think(int _frames)
 {
-	int	pad;
-
-	pad=PadGetDown(0);
-	if(pad&PAD_LEFT)
+	if(m_state==SHOP_STATE__FADING_IN)
 	{
-		m_currentlySelectedItem--;
-		if(m_currentlySelectedItem<0)
+		if(!CFader::isFading())
 		{
-			m_currentlySelectedItem=NUM_SHOP_ITEM_IDS-1;
+			m_state=SHOP_STATE__SELECT_ITEM;
 		}
-		m_flashSin=0;
 	}
-	else if(pad&PAD_RIGHT)
+	else if(m_state==SHOP_STATE__SELECT_ITEM&&!CFader::isFading())
 	{
-		m_currentlySelectedItem++;
-		if(m_currentlySelectedItem>=NUM_SHOP_ITEM_IDS)
+		int	pad;
+
+		pad=PadGetDown(0);
+		if(pad&PAD_LEFT)
 		{
-			m_currentlySelectedItem=0;
+			m_currentlySelectedItem--;
+			if(m_currentlySelectedItem<0)
+			{
+				m_currentlySelectedItem=NUM_SHOP_ITEM_IDS-1;
+			}
+			m_flashSin=0;
+			playSound(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
 		}
-		m_flashSin=0;
+		else if(pad&PAD_RIGHT)
+		{
+			m_currentlySelectedItem++;
+			if(m_currentlySelectedItem>=NUM_SHOP_ITEM_IDS)
+			{
+				m_currentlySelectedItem=0;
+			}
+			m_flashSin=0;
+			playSound(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
+		}
+		else if(pad&PAD_CROSS)
+		{
+			if(isItemAvailableToBuy(m_currentlySelectedItem))
+			{
+				int	cost,available;
+				cost=s_shopItems[m_currentlySelectedItem].m_cost;
+				available=CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld();
+				if(available>=cost)
+				{
+					playSound(CSoundMediator::SFX_FRONT_END__SELECT);
+					m_state=SHOP_STATE__CONFIRM_PURCHASE;
+					m_queryAnswer=ANSWER_NONE;
+					m_guiConfirmPurchaseFrame->select();
+				}
+				else
+				{
+					playSound(CSoundMediator::SFX_FRONT_END__ERROR);
+					m_state=SHOP_STATE__CANNOT_AFFORD_ITEM;
+					m_queryAnswer=ANSWER_NONE;
+					m_guiCannotAffordFrame->select();
+				}
+			}
+			else
+			{
+				playSound(CSoundMediator::SFX_FRONT_END__ERROR);
+			}
+		}
+		else if(pad&PAD_TRIANGLE)
+		{
+			m_readyToExit=true;
+			CFader::setFadingOut();
+			GameState::setNextScene(&MapScene);
+		}
+	
+		m_guiFrame->think(_frames);
+	}
+	else if(m_state==SHOP_STATE__CONFIRM_PURCHASE)
+	{
+		m_guiConfirmPurchaseFrame->think(_frames);
+		if(m_queryAnswer==ANSWER_YES)
+		{
+			CGameSlotManager::getSlotData()->buyPartyItem(m_currentlySelectedItem);
+			CGameSlotManager::getSlotData()->useKelpTokens(s_shopItems[m_currentlySelectedItem].m_cost);
+			m_state=SHOP_STATE__SELECT_ITEM;
+			m_guiConfirmPurchaseFrame->unselect();
+		}
+		else if(m_queryAnswer==ANSWER_NO)
+		{
+			m_state=SHOP_STATE__SELECT_ITEM;
+			m_guiConfirmPurchaseFrame->unselect();
+		}
+	}
+	else if(m_state==SHOP_STATE__CANNOT_AFFORD_ITEM)
+	{
+		m_guiCannotAffordFrame->think(_frames);
+	
+		if(m_queryAnswer==ANSWER_OK)
+		{
+			m_state=SHOP_STATE__SELECT_ITEM;
+			m_guiCannotAffordFrame->unselect();
+		}
 	}
 
-	m_flashSin=(m_flashSin+(_frames*shopflashspeed))&4095;
 
-	m_guiFrame->think(_frames);
+	m_flashSin=(m_flashSin+(_frames*SHOP_ICON_FLASH_SPEED))&4095;
+
+
+	// Slide the main UI menu about..
+	if(m_state!=SHOP_STATE__SELECT_ITEM||m_readyToExit)
+	{
+		m_mainUiYOffset+=30*_frames;
+		if(m_mainUiYOffset>MAIN_UI_MAX_Y_OFFSET)
+		{
+			m_mainUiYOffset=MAIN_UI_MAX_Y_OFFSET;
+		}
+	}
+	else
+	{
+		m_mainUiYOffset-=30*_frames;
+		if(m_mainUiYOffset<0)
+		{
+			m_mainUiYOffset=0;
+		}
+	}
 }
 
 
@@ -289,56 +425,50 @@ int CShopScene::readyToShutdown()
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	Ugh...
+	Purpose:	Ugh... I *really* hope this works ok with all languages, otherwise
+				it might just be easier to start again :/
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-typedef struct
-{
-	int
-	tokenx,tokeny,
-	itemx,itemy,
-	pricex,pricey,
-	boxx,boxy,boxw,boxh,
-	gaptoreadout,
-	instructionsy,
-	instructionsygap,
-	instructionsbuttonyoffset,
-	instructionsbuttonspace,
-	instructionsbuttongap,
-	xborder,
-
-	
-	end;
-} shopdata;
-
-shopdata shop=
-{
-	10,42,			//	tokenx,tokeny,
-	10,6,			//	itemx,itemy,
-	110,17,			//	pricex,pricey,
-	10,5,180,500,	//	boxx,boxy,boxw,boxh,
-	5,				//	gaptoreadout
-	7,				//	instructionsy,
-	16,				//	instructionsygap,
-	3,				//	instructionsbuttonyoffset,
-	10,				//	instructionsbuttonspace,
-	5,				//	instructionsbuttongap,
-	10,				//	xborder,
-};
-
 void CShopScene::renderUi()
 {
 	int			xbase,ybase;
 	SpriteBank	*sb;
 	int			w1,w2,w3,instructionsWidth,instructionsXBase;
+	int			maxInstructionsWidth;
 	sFrameHdr	*fh1,*fh2;
 	int			x,y;
 	char		buf[100];
 
 
-	xbase=fx;
-	ybase=fy;
+	m_font->setPrintArea(SHOP_QUERY_UI_X+10,SHOP_QUERY_UI_Y+5,SHOP_QUERY_UI_W-20,SHOP_QUERY_UI_H-10);
+	m_font->setJustification(FontBank::JUST_CENTRE);
+	if(m_state==SHOP_STATE__CONFIRM_PURCHASE)
+	{
+		int		cost,available;
+		char	buf[100];
+		cost=s_shopItems[m_currentlySelectedItem].m_cost;
+		available=CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld();
+		sprintf(buf,TranslationDatabase::getString(STR__SHOP_SCREEN__CONFIRM_PURCHASE),cost,available);
+		m_font->print((SHOP_QUERY_UI_W-20)/2,0,buf);
+		m_guiConfirmPurchaseFrame->render();
+	}
+	else if(m_state==SHOP_STATE__CANNOT_AFFORD_ITEM)
+	{
+		int		cost,available;
+		char	buf[100];
+		cost=s_shopItems[m_currentlySelectedItem].m_cost;
+		available=CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld();
+		sprintf(buf,TranslationDatabase::getString(STR__SHOP_SCREEN__CANNOT_AFFORD_PURCHASE),cost,available);
+		m_font->print((SHOP_QUERY_UI_W-20)/2,0,buf);
+		m_guiCannotAffordFrame->render();
+	}
+	m_font->setPrintArea(0,0,512,256);
+
+
+	m_guiFrame->setObjectXYWH(SHOP_MAIN_UI_X,SHOP_MAIN_UI_Y+m_mainUiYOffset,SHOP_MAIN_UI_W,SHOP_MAIN_UI_H);
+	xbase=SHOP_MAIN_UI_X;
+	ybase=SHOP_MAIN_UI_Y+m_mainUiYOffset;
 	sb=CGameScene::getSpriteBank();
 
 	// Instructions
@@ -350,73 +480,72 @@ void CShopScene::renderUi()
 	instructionsWidth=w1;
 	if(w2>instructionsWidth)instructionsWidth=w2;
 	if(w3>instructionsWidth)instructionsWidth=w3;
-	instructionsXBase=fw-instructionsWidth-shop.xborder;
+	instructionsXBase=SHOP_MAIN_UI_W-instructionsWidth-SHOP_XBORDER;
 
 	x=xbase+instructionsXBase;
-	y=ybase+shop.instructionsy;
+	y=ybase+SHOP_INSTRUCTIONS_Y_BASE;
 	m_font->print(x,y,STR__SHOP_SCREEN__LEFT_RIGHT_TO_SELECT_ITEM);
 	fh1=sb->getFrameHeader(FRM__BUTL);
 	fh2=sb->getFrameHeader(FRM__BUTR);
-	x-=shop.instructionsbuttonspace+fh2->W;
-	y+=shop.instructionsbuttonyoffset;
-	sb->printFT4(fh2,x,y,0,0,0);
-	x-=shop.instructionsbuttongap+fh1->W;
-	sb->printFT4(fh1,x,y,0,0,0);
-int maxInstructionsWidth=xbase+fy-x;
+	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
+	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
+	sb->printFT4(fh2,x,y,0,0,5);
+	x-=SHOP_GAP_BETWEEN_INSTRUCTION_BUTTONS+fh1->W;
+	sb->printFT4(fh1,x,y,0,0,5);
+	maxInstructionsWidth=xbase+SHOP_MAIN_UI_Y-x;
 
 	x=xbase+instructionsXBase;
-	y=ybase+shop.instructionsy+shop.instructionsygap;
+	y=ybase+SHOP_INSTRUCTIONS_Y_BASE+SHOP_Y_GAP_BETWEEN_INSTRUCTION_LINES;
 	m_font->print(x,y,STR__SHOP_SCREEN__CROSS_TO_PURCHASE);
 	fh1=sb->getFrameHeader(FRM__BUTX);
-	x-=shop.instructionsbuttonspace+fh2->W;
-	y+=shop.instructionsbuttonyoffset;
-	sb->printFT4(fh1,x-1,y,0,0,0);
+	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
+	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
+	sb->printFT4(fh1,x-1,y,0,0,5);
 
 	x=xbase+instructionsXBase;
-	y=ybase+shop.instructionsy+(shop.instructionsygap*2);
+	y=ybase+SHOP_INSTRUCTIONS_Y_BASE+(SHOP_Y_GAP_BETWEEN_INSTRUCTION_LINES*2);
 	m_font->print(x,y,STR__SHOP_SCREEN__TRIANGLE_TO_EXIT);
 	fh1=sb->getFrameHeader(FRM__BUTT);
-	x-=shop.instructionsbuttonspace+fh2->W;
-	y+=shop.instructionsbuttonyoffset;
-	sb->printFT4(fh1,x-1,y,0,0,0);
-
+	x-=SHOP_SPACE_BETWEEN_INSTRUCTIONS_AND_BUTTONS+fh2->W;
+	y+=SHOP_Y_BUTTON_OFFSET_FORM_TOP_OF_TEXT;
+	sb->printFT4(fh1,x-1,y,0,0,5);
 
 	// Item price
 	int		x1,x2;
-	x1=shop.xborder;
-	x2=fy-maxInstructionsWidth-(shop.xborder*1);
+	x1=SHOP_XBORDER;
+	x2=SHOP_MAIN_UI_Y-maxInstructionsWidth-(SHOP_XBORDER*1);
 	m_font->setJustification(FontBank::JUST_CENTRE);
 	if(isItemAvailableToBuy(m_currentlySelectedItem))
 	{
 		SHOPITEM	*shopItem;
 		shopItem=&s_shopItems[m_currentlySelectedItem];
 		fh1=m_spriteBank->getFrameHeader(shopItem->m_frame);
-		x=xbase+shop.itemx;
-		y=ybase+shop.itemy;
-		sb->printFT4(fh1,x,y,0,0,0);
+		x=xbase+SHOP_ITEM_X_POS;
+		y=ybase+SHOP_ITEM_Y_POS;
+		sb->printFT4(fh1,x,y,0,0,5);
 
 		x1+=32;
 
 		m_font->setPrintArea(xbase+x1,ybase,x2-x1,100);
-		m_font->print((x2-x1)/2,3,STR__SHOP_SCREEN__PRICE);
+		m_font->print((x2-x1)/2,SHOP_PRICE_Y_GAP_FROM_TOP,STR__SHOP_SCREEN__PRICE);
 
 		sprintf(buf,"%d",shopItem->m_cost);
-		m_font->print((x2-x1)/2,5+m_font->getStringHeight(STR__SHOP_SCREEN__PRICE),buf);
+		m_font->print((x2-x1)/2,SHOP_PRICE_Y_GAP_FROM_TOP+m_font->getStringHeight(STR__SHOP_SCREEN__PRICE),buf);
 	}
 	else
 	{
 		m_font->setPrintArea(xbase+x1,ybase,x2-x1,100);
-		m_font->print((x2-x1)/2,3,STR__SHOP_SCREEN__ITEM_ALREADY_PURCHASED);
+		m_font->print((x2-x1)/2,SHOP_PRICE_Y_GAP_FROM_TOP,STR__SHOP_SCREEN__ITEM_ALREADY_PURCHASED);
 	}
 	m_font->setPrintArea(0,0,512,256);
 
 	// Available token count
-	x=xbase+shop.tokenx;
-	y=ybase+shop.tokeny;
+	x=xbase+SHOP_TOKEN_COUNT_X_POS;
+	y=ybase+SHOP_TOKEN_COUNT_Y_POS;
 	fh1=m_spriteBank->getFrameHeader(FRM_SMALLTOKEN);
-	m_spriteBank->printFT4(fh1,x,y,0,0,0);
+	m_spriteBank->printFT4(fh1,x,y,0,0,5);
 	x+=fh1->W;
-	sprintf(buf,"x%d",99);
+	sprintf(buf,"x%d",CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld());
 	m_font->setJustification(FontBank::JUST_LEFT);
 	m_font->print(x,y,buf);
 
@@ -432,7 +561,29 @@ int maxInstructionsWidth=xbase+fy-x;
   ---------------------------------------------------------------------- */
 int CShopScene::isItemAvailableToBuy(int _itemNumber)
 {
-	return _itemNumber!=3;
+	return !CGameSlotManager::getSlotData()->isPartyItemHeld(_itemNumber);
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CShopScene::playSound(int _sfxId)
+{
+	if(s_playId!=NOT_PLAYING)
+	{
+		CSoundMediator::stopAndUnlockSfx(s_playId);
+	}
+	s_playId=CSoundMediator::playSfx((CSoundMediator::SFXID)_sfxId,true);
+/*
+	if(s_playId)
+	{
+		PAUL_DBGMSG("Didn't play..!?");
+	}
+*/
 }
 
 

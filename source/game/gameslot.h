@@ -18,6 +18,10 @@
 	Includes
 	-------- */
 
+#ifndef __SHOP_SHOP_H__
+#include "shop\shop.h"
+#endif
+
 // Just for ASSERT()..
 #ifndef	__SYSTEM_DBG_H__
 #include "system\dbg.h"
@@ -58,6 +62,8 @@ public:
 		unsigned char	m_maxLevelCompleted;
 		unsigned char	m_spatulaCollectedFlags[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS][16];			// Enuf space for 128 spats per level
 		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Same again..
+		unsigned char	m_kelpTokensHeld;
+		unsigned char	m_partyItemsHeld[CShopScene::NUM_SHOP_ITEM_IDS];
 
 		// Spat functions..
 		int				getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level)
@@ -123,6 +129,26 @@ public:
 			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_token<=128);
 			return (m_kelpTokenCollectedFlags[_chapter][_token>>3]>>(_token&7))&1?false:true;
+		}
+
+		// Shop
+		int				getNumberOfKelpTokensHeld()
+		{
+			return m_kelpTokensHeld;
+		}
+		void			useKelpTokens(int _count)
+		{
+			ASSERT(((int)m_kelpTokensHeld-_count)>=0);
+			m_kelpTokensHeld-=_count;
+		}
+		int				isPartyItemHeld(int _itemNumber)
+		{
+			return m_partyItemsHeld[_itemNumber];
+		}
+		void			buyPartyItem(int _itemNumber)
+		{
+			ASSERT(!m_partyItemsHeld[_itemNumber]);
+			m_partyItemsHeld[_itemNumber]=true;
 		}
 	} GameSlot;
 

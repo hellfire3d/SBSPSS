@@ -143,6 +143,17 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 			slot->m_kelpTokenCollectedFlags[i][j]=0;
 		}
 	}
+
+#ifdef __USER_paul__
+	slot->m_kelpTokensHeld=82;
+#else
+	slot->m_kelpTokensHeld=0;
+#endif
+	for(i=0;i<CShopScene::NUM_SHOP_ITEM_IDS;i++)
+	{
+		slot->m_partyItemsHeld[i]=false;
+	}
+
 }
 
 

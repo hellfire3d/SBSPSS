@@ -54,6 +54,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -383,6 +387,7 @@ void CMapScene::think(int _frames)
 		}
 		if(lastLevel!=m_currentLevelSelection)
 		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
 			m_pointerArrivedAtTarget=false;
 			m_pointerSin=0;
 		}
@@ -435,6 +440,7 @@ void CMapScene::think(int _frames)
 		if(m_pointerArrivedAtTarget&&
 		   PadGetDown(0)&PAD_CROSS)
 		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
 			m_readyToExit=true;
 //			CFader::setFadingOut(CFader::BLACK_FADE);
