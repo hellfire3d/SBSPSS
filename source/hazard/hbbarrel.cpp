@@ -169,6 +169,16 @@ void CNpcBouncingBarrelHazard::processMovement( int _frames )
 
 			Pos.vy = m_lastWaypoint.vy - ( ( abs( nextWaypoint.vy - m_lastWaypoint.vy ) * rsin( sineVal ) ) >> 12 );
 		}
+
+		int groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, 16 );
+
+		if ( groundHeight < 8 )
+		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
+			}
+		}
 	}
 }
 
@@ -214,6 +224,13 @@ void CNpcBouncingBarrelHazard::collidedWith( CThing *_thisThing )
 					{
 						player->takeDamage( DAMAGE__HIT_ENEMY );
 					}
+
+					if( m_soundId != NOT_PLAYING )
+					{
+						CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+					}
+
+					m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
 
 					m_hitPlayer = true;
 					m_speed = -5;

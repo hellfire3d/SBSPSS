@@ -141,9 +141,8 @@ bool CNpcSquidDartEnemy::processSensor()
 				if( m_soundId != NOT_PLAYING )
 				{
 					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+					m_soundId = NOT_PLAYING;
 				}
-
-				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SQUIDDART_ATTACK, true );
 
 				return( true );
 			}
@@ -179,6 +178,11 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 			}
 
 			Pos.vx += movement;
+
+			if( m_soundId != NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SQUIDDART_ATTACK, true );
+			}
 		}
 		else
 		{

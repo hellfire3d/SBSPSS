@@ -122,6 +122,7 @@ void CNpcBranchPlatform::processMovement( int _frames )
 			if ( m_angularVelocity > 6 && newAngle < -20 )
 			{
 				player->springPlayerUp();
+				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE);
 			}
 		}
 		else
@@ -129,6 +130,7 @@ void CNpcBranchPlatform::processMovement( int _frames )
 			if ( m_angularVelocity < -6 && newAngle > 20 )
 			{
 				player->springPlayerUp();
+				CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_BUTTBOUNCE);
 			}
 		}
 

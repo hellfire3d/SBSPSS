@@ -50,6 +50,7 @@ void CNpcJellyfishPlatform::postInit()
 	m_vertScale = 0;
 	m_dipCount = 0;
 	m_dipOffset = 0;
+	m_contactTimeout = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,16 @@ void CNpcJellyfishPlatform::collidedWith( CThing *_thisThing )
 					if( height == 0 )
 					{
 						m_contact = true;
+
+						if ( m_contactTimeout <= 0 )
+						{
+							if ( m_soundId == NOT_PLAYING )
+							{
+								m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_LAND_ON_JELLYFISH, true );
+							}
+						}
+
+						m_contactTimeout = 2;
 					}
 				}
 			}
@@ -114,6 +125,11 @@ void CNpcJellyfishPlatform::think( int _frames )
 	{
 		m_vertScale += 10;
 	}*/
+
+	if ( m_contactTimeout > 0 )
+	{
+		m_contactTimeout--;
+	}
 
 	if ( m_contact )
 	{

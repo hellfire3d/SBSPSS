@@ -74,6 +74,8 @@ void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
 	_playerMode->zeroMoveVelocity();	
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_DONOTDRAW);
 	m_breatheDelayFrames=0;
+
+	CSoundMediator::playSfx(CSoundMediator::SFX_SPLASH);
 }
 
 

@@ -211,6 +211,13 @@ void CNpcFallingHazard::collidedWith( CThing *_thisThing )
 				m_speed = -5;
 				m_bounceDir = getRnd() % 2;
 
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__ACORN_LAND, true );
+
 				m_bouncePos = Pos;
 
 				break;
