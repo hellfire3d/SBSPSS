@@ -153,6 +153,6 @@ void CNpc::processCloseIronDogfishAttack( int _frames )
 {
 	// swipe at player
 
-	m_movementTimer = GameState::getOneSecondInFrames() * 8;
+	m_movementTimer = GameState::getOneSecondInFrames() * 3;
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 }
