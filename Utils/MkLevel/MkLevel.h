@@ -68,6 +68,15 @@ bool	operator ==(sMkLevelModel const &v1)		{return(Name==v1.Name);}
 };
 
 //***************************************************************************
+struct	sInfItem
+{
+	GString	Name;
+	int		Val;
+bool	operator ==(sInfItem const &v1)		{return(Name==v1.Name);}
+
+};
+
+//***************************************************************************
 struct	sMkLevelLayerThing;
 class	CMkLevelLayer;
 class	CMkLevel
@@ -77,7 +86,7 @@ public:
 		~CMkLevel();
 
 		void			SetAppDir(const char *Path);
-		void			Init(const char *InFilename,const char *OutFilename,int TPBase,int TPW,int TPH);
+		void			Init(const char *InFilename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH);
 
 		void			LoadModels();
 		int				AddModel(GString &Filename);
@@ -89,6 +98,7 @@ public:
 		int				AddTile3d(sExpLayerTile &Tile)			{return(Tile3dList.Add(Tile));}
 		int				AddTile2d(sExpLayerTile &Tile)			{return(Tile2dList.Add(Tile));}
 
+		void			AddInfItem(const char *Name,int Val);
 		void			Write();
 
 		int				Create2dTex(int Tile,int Flags);
@@ -99,6 +109,7 @@ public:
 		int				BuildTileTex(sExpTile &SrcTile,int Flags);
 
 		char			*GetConfigStr(const char *Grp,const char *Key)	{return(Config.GetStr(Grp,Key));}
+		int				GetConfigInt(const char *Grp,const char *Key)	{return(Config.GetInt(Grp,Key));}
 		CIni			&GetConfig()									{return(Config);}
 		CTexGrab		&GetTexGrab()									{return(TexGrab);}
 
@@ -135,11 +146,13 @@ protected:
 		void			CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox);
 		void            BuildTiles();
 
+		void			WriteIncFile();
+
 		void			ExpTri2Face(sExpTri &In,CFace &Out,bool ImportTex=true);
 
 		FILE					*File;
-		GString					InFilename,InPath,LevelName;
-		GString					OutName;
+		GString					InFilename,InPath,LevelName,LevelFullName;
+		GString					OutName,OutIncName;
 		GString					AppDir;
 
 		int						TileW,TileH;
@@ -169,6 +182,8 @@ protected:
 
 		sLevelHdr				LevelHdr;
 		sExpTri					FlatFace[2];
+
+		CList<sInfItem>			InfList;
 
 };
 

@@ -75,13 +75,55 @@ void	CMkLevelLayerThing::ProcessList(CMkLevel *Core)
 {
 int		i,ListSize=ThingList.size();
 CIni	&Config=Core->GetConfig();
+int		KeyCount=Config.GetKeyCount(GetTypeName());
+vector<int>	Counts;
+
+		Counts.resize(KeyCount);
+		for (i=0;i<KeyCount;i++)
+		{
+			Counts[i]=0;
+		}
 
 		for (i=0; i<ListSize; i++)
 		{
 			sMkLevelLayerThing	&ThisThing=ThingList[i];
 			bool	Found=Config.GetInt(GetTypeName(),ThisThing.Name,ThisThing.Type);
+			Counts[ThisThing.Type]++;
 			if (!Found)
 				GObject::Error(ERR_FATAL,"%s not found in list\n",ThisThing.Name);
 		}
+// Create Inf Data
 
+
+		for (i=0; i<KeyCount; i++)
+		{
+			GString	OutName="TOTAL_";
+			char	*Name=Config.GetKeyName(GetTypeName(),i);
+
+			OutName+=GetTypeName();
+			OutName+="_";
+			OutName+=Name;
+			
+			Core->AddInfItem(OutName,Counts[i]);
+		}
+
+
+}
+
+/*****************************************************************************/
+int		CMkLevelLayerThing::CountThing(CMkLevel *Core,const char *Name)
+{
+int		i,ListSize=ThingList.size();
+int		Count=0;
+
+		for (i=0; i<ListSize; i++)
+		{
+			sMkLevelLayerThing	&ThisThing=ThingList[i];
+			if (ThisThing.Name=Name)
+			{
+				Count++;
+			}
+		}
+
+		return(Count);
 }

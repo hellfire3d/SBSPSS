@@ -32,6 +32,7 @@ virtual	const char	*GetTypeName()=0;
 virtual	void	PreProcess(CMkLevel *Core)=0;
 virtual	void	Process(CMkLevel *Core)=0;
 virtual	int		Write(FILE *File,const char *LayerName,const char *MapName)=0;
+		int		CountThing(CMkLevel *Core,const char *Name);
 
 protected:
 		u8		*LoadThing(sMkLevelLayerThing &ThisThing,u8 *Ptr);

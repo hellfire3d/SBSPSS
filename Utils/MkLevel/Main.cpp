@@ -13,6 +13,7 @@
 //***************************************************************************
 CMkLevel	Level;
 int			TPBase=-1,TPW=-1,TPH=-1;
+GString		IncDir;
 
 //***************************************************************************
 char * CycleCommands(char *String,int Num)
@@ -53,6 +54,11 @@ int		Count;
 				case 'm':
 					TpStr= CheckFileString(String);
 					Level.AddModel(TpStr);
+					break;
+				case 'i':
+					IncDir= CheckFileString(String);
+					IncDir.Upper();
+					IncDir.Append('\\');
 					break;
 				case 'q':
 					StripLength=4;
@@ -100,7 +106,7 @@ std::vector<GString> const &Files = MyFiles.GetFileInfoVector();
 		if (Files.size()>1)		Usage("Too many Levels specified\n");
 
 		Level.SetAppDir(argv[0]);
-		Level.Init(Files[0],OutStr,TPBase,TPW,TPH);
+		Level.Init(Files[0],OutStr,IncDir,TPBase,TPW,TPH);
 		Level.Load();
 		Level.Process();
 		Level.Write();

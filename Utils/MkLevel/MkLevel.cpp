@@ -61,7 +61,7 @@ GFName	Path=AppPath;
 }
 
 //***************************************************************************
-void	CMkLevel::Init(const char *Filename,const char *OutFilename,int TPBase,int TPW,int TPH)
+void	CMkLevel::Init(const char *Filename,const char *OutFilename,const char *IncDir,int TPBase,int TPW,int TPH)
 {
 // Setup filenames and paths
 GFName		Path;
@@ -74,7 +74,12 @@ GFName		Path;
 			InPath=Path.FullName();
 			Path=OutFilename;
 			Path.Ext("");
+			LevelFullName=Path.File();
+			LevelFullName.Upper();
 			OutName=Path.FullName();
+			OutIncName=IncDir;
+			OutIncName+=Path.File();
+			OutIncName+="_INF.h";
 
 // Load ini file
 			Config.LoadAndImport(GString(AppDir+ConfigFilename));
@@ -869,7 +874,8 @@ GString	OutFilename=OutName+".Lvl";
 		fwrite(&LevelHdr,1,sizeof(sLevelHdr),File);
 
 		fclose(File);
-
+// Write Info header File
+		WriteIncFile();
 }
 
 //***************************************************************************
@@ -1134,4 +1140,50 @@ int					Vtx[3];
 				if (BBox.YMax<-ThisVtx.vy) BBox.YMax=-ThisVtx.vy;
 			}
 		}
+}
+
+//***************************************************************************
+//*** Inf File **************************************************************
+//***************************************************************************
+void	CMkLevel::AddInfItem(const char *Name,int Val)
+{
+sInfItem	Item;
+
+			Item.Name=Name;
+			Item.Name.Upper();
+			Item.Val=Val;
+
+			InfList.Add(Item);
+}
+
+//***************************************************************************
+void	CMkLevel::WriteIncFile()
+{
+GString	DefStr;
+
+		DefStr=LevelFullName+"_INF";
+		File=fopen(OutIncName,"wt");
+
+		fprintf(File,"// %s Info Header\n",LevelFullName);
+		fprintf(File,"\n");
+		fprintf(File,"#ifndef\t__%s_INF_HEADER__\n",LevelFullName);
+		fprintf(File,"#define\t__%s_INF_HEADER__\n",LevelFullName);
+		fprintf(File,"\n");
+		fprintf(File,"\n");
+		fprintf(File,"enum\t%s\n",DefStr);
+		fprintf(File,"{\n");
+
+int		ListSize=InfList.size();
+		for (int i=0; i<ListSize; i++)
+		{
+			sInfItem	&ThisItem=InfList[i];
+			
+			fprintf(File,"\t%s_%s\t\t=%i,\n",DefStr,ThisItem.Name,ThisItem.Val);
+		}
+
+		fprintf(File,"};\n");
+		fprintf(File,"\n");
+		fprintf(File,"#endif\n");
+
+		fclose(File);
 }
