@@ -20,6 +20,7 @@ public:
 	virtual void		postInit();
 protected:
 	virtual void		processMovement( int _frames );
+	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 };
 
 #endif
