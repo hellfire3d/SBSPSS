@@ -37,10 +37,16 @@
 class CGlassesPickup : public CBasePickup
 {
 public:
+	virtual void		init();
+
 	virtual void		collect(class CPlayer *_player);
 
 protected:
+	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
+
+private:
+	int					m_glint;
 
 };
 
