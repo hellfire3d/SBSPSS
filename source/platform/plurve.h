@@ -14,11 +14,11 @@
 #ifndef __PLATFORM_PLURVE_H__
 #define __PLATFORM_PLURVE_H__
 
-#ifndef __PLATFORM_PRAFT_H__
-#include "platform\praft.h"
+#ifndef __PLATFORM_PCART_H__
+#include "platform\pcart.h"
 #endif
 
-class CNpcLoveBoatPlatform : public CNpcRaftPlatform
+class CNpcLoveBoatPlatform : public CNpcCartPlatform
 {
 public:
 	virtual void		postInit();

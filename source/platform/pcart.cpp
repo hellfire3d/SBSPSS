@@ -94,6 +94,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 				// have touched down
 
 				m_inJump = false;
+				moveY += groundHeight;
 			}
 		}
 		else
@@ -236,5 +237,69 @@ void CNpcCartPlatform::jump()
 	{
 		m_inJump = true;
 		m_vertSpeed = -6 << 8;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcCartPlatform::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player;
+			DVECTOR	playerPos;
+			CRECT	collisionArea;
+
+			// Only interested in SBs feet colliding with the box (pkg)
+			player=(CPlayer*)_thisThing;
+			playerPos=player->getPos();
+			collisionArea=getCollisionArea();
+
+			s32 threshold = abs( collisionArea.y2 - collisionArea.y1 );
+
+			if ( threshold > 16 )
+			{
+				threshold = 16;
+			}
+
+			if( playerPos.vx >= collisionArea.x1 && playerPos.vx <= collisionArea.x2 )
+			{
+				if ( checkCollisionDelta( _thisThing, threshold, collisionArea ) )
+				{
+					player->setPlatform( this );
+
+					m_contact = true;
+				}
+				else
+				{
+					if( playerPos.vy >= collisionArea.y1 && playerPos.vy <= collisionArea.y2 )
+					{
+						if ( m_isActivated || player->getPosDelta().vy >= 0 )
+						{
+							int height = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
+
+							if ( height >= -threshold && height < 1 )
+							{
+								player->setPlatform( this );
+
+								m_contact = true;
+							}
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		case TYPE_NPC:
+		case TYPE_HAZARD:
+			break;
+
+		default:
+			ASSERT(0);
+			break;
 	}
 }

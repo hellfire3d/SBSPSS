@@ -27,6 +27,7 @@ public:
 	virtual void		jump();
 protected:
 	virtual void		processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	s32					m_carSpeed;
 	u8					m_isActivated;
