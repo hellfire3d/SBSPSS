@@ -79,7 +79,8 @@ enemy_src :=		npc \
 					npuffa \
 					ngen \
 					nsdart \
-					ndustdev
+					ndustdev \
+					npbug
 
 platform_src :=		platform \
 					platdata \

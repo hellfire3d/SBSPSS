@@ -253,6 +253,10 @@ SOURCE=..\..\..\source\enemy\noilblob.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\npbug.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\npbug.h
 # End Source File
 # Begin Source File

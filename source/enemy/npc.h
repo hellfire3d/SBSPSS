@@ -358,6 +358,7 @@ protected:
 	virtual void		collidedWith(CThing *_thisThing);
 
 	u8					m_isShuttingDown;
+	s16					m_drawRotation;
 
 	// position history stuff
 

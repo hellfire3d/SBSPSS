@@ -14,8 +14,14 @@
 #ifndef __ENEMY_NPBUG_H__
 #define __ENEMY_NPBUG_H__
 
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
 class CNpcPricklyBugEnemy : public CNpcEnemy
 {
+protected:
+	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 };
 
 #endif

@@ -68,6 +68,13 @@ bool CNpcClamEnemy::processSensor()
 	}
 }
 
+void CNpcJumpingClamEnemy::postInit()
+{
+	CNpcClamEnemy::postInit();
+
+	m_drawRotation = m_heading + 1024;
+}
+
 void CNpcJumpingClamEnemy::processClose( int _frames )
 {
 	s32 velocity;
@@ -90,7 +97,7 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_SIDESNAP;
+				m_animNo = ANIM_CLAM_SNAPUP;
 				m_frame = 0;
 			}
 		}

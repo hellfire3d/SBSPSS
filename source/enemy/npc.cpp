@@ -734,6 +734,7 @@ void CNpcEnemy::init()
 	m_positionHistory = NULL;
 
 	m_isShuttingDown = false;
+	m_drawRotation = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1397,6 +1398,7 @@ void CNpcEnemy::render()
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
 				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+				m_actorGfx->RotateScale( SprFrame, renderPos, m_drawRotation, 4096, 4096 );
 			}
 		}
 	}

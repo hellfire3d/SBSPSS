@@ -23,6 +23,8 @@ protected:
 
 class CNpcJumpingClamEnemy : public CNpcClamEnemy
 {
+public:
+	virtual void		postInit();
 protected:
 	virtual void		processClose( int _frames );
 };
