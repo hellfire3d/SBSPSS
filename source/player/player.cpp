@@ -184,6 +184,9 @@ if(newmode!=-1)
 		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
 		if(isOnSolidGround())
 		{
+//stick to ground (PKG)
+Pos.vy=23*16+1;//16*15;
+
 			if(m_moveVel.vy)
 			{
 				// Was falling.. so we've just hit the ground
@@ -216,10 +219,10 @@ if(newmode!=-1)
 				// Fall
 				const PlayerMetrics	*metrics;
 				metrics=getPlayerMetrics();
-				m_moveVel.vy+=metrics->m_metric[PM__GRAVITY_VALUE];
-				if(m_moveVel.vy>=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+				m_moveVel.vy+=PLAYER_GRAVITY;
+				if(m_moveVel.vy>=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT)
 				{
-					m_moveVel.vy=metrics->m_metric[PM__TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
+					m_moveVel.vy=PLAYER_TERMINAL_VELOCITY<<VELOCITY_SHIFT;
 					m_fallFrames++;
 					if(m_fallFrames>metrics->m_metric[PM__MAX_SAFE_FALL_FRAMES])
 					{

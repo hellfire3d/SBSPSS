@@ -103,31 +103,29 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	//
 	{
 		{	{
-			8,						// PM__JUMP_VELOCITY
-			10,						// PM__MAX_JUMP_FRAMES
-			20,						// PM__MAX_SAFE_FALL_FRAMES
-			4,						// PM__GRAVITY_VALUE
-			8,						// PM__TERMINAL_VELOCITY
-			8,						// PM__MAX_RUN_VELOCITY
-			4,						// PM__RUN_SPEEDUP
-			2,						// PM__RUN_REVERSESLOWDOWN
-			1,						// PM__RUN_SLOWDOWN
+			DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
+			DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
+			DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP,				// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
 		}	},
 		{
-			&stateUnarmedIdle,		// STATE_IDLE
-			&stateJump,				// STATE_JUMP
-			&stateRun,				// STATE_RUN
-			&stateFall,				// STATE_FALL
-			&stateFallFar,			// STATE_FALLFAR
-			&stateButtBounce,		// STATE_BUTTBOUNCE
-			&stateButtBounceFall,	// STATE_BUTTFALL
-			&stateButtBounceLand,	// STATE_BUTTLAND
-			NULL,					// STATE_ATTACK
-			NULL,					// STATE_RUNATTACK
-			NULL,					// STATE_AIRATTACK
-			&stateDuck,				// STATE_DUCK
-			&stateSoackUp,			// STATE_SOAKUP
-			&stateGetup,			// STATE_GETUP
+			&stateUnarmedIdle,						// STATE_IDLE
+			&stateJump,								// STATE_JUMP
+			&stateRun,								// STATE_RUN
+			&stateFall,								// STATE_FALL
+			&stateFallFar,							// STATE_FALLFAR
+			&stateButtBounce,						// STATE_BUTTBOUNCE
+			&stateButtBounceFall,					// STATE_BUTTFALL
+			&stateButtBounceLand,					// STATE_BUTTLAND
+			NULL,									// STATE_ATTACK
+			NULL,									// STATE_RUNATTACK
+			NULL,									// STATE_AIRATTACK
+			&stateDuck,								// STATE_DUCK
+			&stateSoackUp,							// STATE_SOAKUP
+			&stateGetup,							// STATE_GETUP
 		}
 	},
 
@@ -136,31 +134,29 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	//
 	{
 		{	{
-			8,						// PM__JUMP_VELOCITY
-			10,						// PM__MAX_JUMP_FRAMES
-			20,						// PM__MAX_SAFE_FALL_FRAMES
-			4,						// PM__GRAVITY_VALUE
-			8,						// PM__TERMINAL_VELOCITY
-			8,						// PM__MAX_RUN_VELOCITY
-			4,						// PM__RUN_SPEEDUP
-			2,						// PM__RUN_REVERSESLOWDOWN
-			1,						// PM__RUN_SLOWDOWN
+			DEFAULT_PLAYER_JUMP_VELOCITY,			// PM__JUMP_VELOCITY
+			DEFAULT_PLAYER_MAX_JUMP_FRAMES,			// PM__MAX_JUMP_FRAMES
+			DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP,				// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
 		}	},
 		{
-			&stateUnarmedIdle,		// STATE_IDLE
-			&stateJump,				// STATE_JUMP
-			&stateRun,				// STATE_RUN
-			&stateFall,				// STATE_FALL
-			&stateFallFar,			// STATE_FALLFAR
-			&stateButtBounce,		// STATE_BUTTBOUNCE
-			&stateButtBounceFall,	// STATE_BUTTFALL
-			&stateButtBounceLand,	// STATE_BUTTLAND
-			&stateChop,				// STATE_ATTACK
-			&stateRunChop,			// STATE_RUNATTACK
-			&stateAirChop,			// STATE_AIRATTACK
-			&stateDuck,				// STATE_DUCK
-			&stateSoackUp,			// STATE_SOAKUP
-			&stateGetup,			// STATE_GETUP
+			&stateUnarmedIdle,						// STATE_IDLE
+			&stateJump,								// STATE_JUMP
+			&stateRun,								// STATE_RUN
+			&stateFall,								// STATE_FALL
+			&stateFallFar,							// STATE_FALLFAR
+			&stateButtBounce,						// STATE_BUTTBOUNCE
+			&stateButtBounceFall,					// STATE_BUTTFALL
+			&stateButtBounceLand,					// STATE_BUTTLAND
+			&stateChop,								// STATE_ATTACK
+			&stateRunChop,							// STATE_RUNATTACK
+			&stateAirChop,							// STATE_AIRATTACK
+			&stateDuck,								// STATE_DUCK
+			&stateSoackUp,							// STATE_SOAKUP
+			&stateGetup,							// STATE_GETUP
 		}
 	},
 
@@ -169,31 +165,29 @@ CPlayer::PlayerMode CPlayer::s_modes[NUM_PLAYERMODES]=
 	//
 	{
 		{	{
-			8,						// PM__JUMP_VELOCITY
-			10,						// PM__MAX_JUMP_FRAMES
-			20,						// PM__MAX_SAFE_FALL_FRAMES
-			4,						// PM__GRAVITY_VALUE
-			8,						// PM__TERMINAL_VELOCITY
-			4,//8,						// PM__MAX_RUN_VELOCITY
-			2,//4,						// PM__RUN_SPEEDUP
-			2,						// PM__RUN_REVERSESLOWDOWN
-			2,//1,						// PM__RUN_SLOWDOWN
+			DEFAULT_PLAYER_JUMP_VELOCITY/3,			// PM__JUMP_VELOCITY
+			DEFAULT_PLAYER_MAX_JUMP_FRAMES/2,		// PM__MAX_JUMP_FRAMES
+			DEFAULT_PLAYER_MAX_SAFE_FALL_FRAMES,	// PM__MAX_SAFE_FALL_FRAMES
+			DEFAULT_PLAYER_MAX_RUN_VELOCITY/2,		// PM__MAX_RUN_VELOCITY
+			DEFAULT_PLAYER_RUN_SPEEDUP/2,			// PM__RUN_SPEEDUP
+			DEFAULT_PLAYER_RUN_REVERSESLOWDOWN,		// PM__RUN_REVERSESLOWDOWN
+			DEFAULT_PLAYER_RUN_SLOWDOWN,			// PM__RUN_SLOWDOWN
 		}	},
 		{
-			&stateCoralBlowerIdle,	// STATE_IDLE
-			NULL,					// STATE_JUMP
-			&stateRun,				// STATE_RUN
-			&stateFall,				// STATE_FALL
-			&stateFallFar,			// STATE_FALLFAR
-			NULL,					// STATE_BUTTBOUNCE
-			NULL,					// STATE_BUTTFALL
-			NULL,					// STATE_BUTTLAND
-			NULL,					// STATE_ATTACK
-			NULL,					// STATE_RUNATTACK
-			NULL,					// STATE_AIRATTACK
-			NULL,					// STATE_DUCK
-			NULL,					// STATE_SOAKUP
-			NULL,					// STATE_GETUP
+			&stateCoralBlowerIdle,					// STATE_IDLE
+			&stateJump,								// STATE_JUMP
+			&stateRun,								// STATE_RUN
+			&stateFall,								// STATE_FALL
+			&stateFallFar,							// STATE_FALLFAR
+			NULL,									// STATE_BUTTBOUNCE
+			NULL,									// STATE_BUTTFALL
+			NULL,									// STATE_BUTTLAND
+			NULL,									// STATE_ATTACK
+			NULL,									// STATE_RUNATTACK
+			NULL,									// STATE_AIRATTACK
+			NULL,									// STATE_DUCK
+			NULL,									// STATE_SOAKUP
+			NULL,									// STATE_GETUP
 		}
 	},
 };
