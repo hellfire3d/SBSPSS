@@ -21,7 +21,7 @@
 class CNpcBubblePlatform : public CNpcPlatform
 {
 public:
-	void				render();
+	virtual void		render();
 	virtual void		postInit();
 	void				shutdown();
 	void				setGraphic( sThingPlatform *ThisPlatform )			{}
