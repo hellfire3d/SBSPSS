@@ -80,12 +80,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 opengl32.lib glu32.lib glib.lib ginlib.lib maths.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"..\libs\ginlib\debug\\" /libpath:"..\libs\glib\debug\\" /libpath:"..\libs\maths\debug\\"
-# Begin Special Build Tool
-ProjDir=.
-TargetDir=.\Debug
-SOURCE="$(InputPath)"
-PostBuild_Cmds=if not exist $(TargetDir)\collision.bmp copy $(ProjDir)\res\collision.bmp $(TargetDir)\collision.bmp	if not exist $(TargetDir)\iconz.bmp copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp	copy $(ProjDir)\res\iconz.bmp $(TargetDir)\iconz.bmp
-# End Special Build Tool
 
 !ENDIF 
 
@@ -404,6 +398,14 @@ SOURCE=.\GUILayerCollision.cpp
 # Begin Source File
 
 SOURCE=.\GUILayerCollision.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerItem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GUILayerItem.h
 # End Source File
 # Begin Source File
 

@@ -13,6 +13,7 @@
 
 #include	<Misc.hpp>
 #include	<GFName.hpp>
+#include	<malloc.h>
 
 #include	"Utils.H"
 
@@ -30,6 +31,18 @@ char szBuf[256];
 		}
 }
 
+/**************************************************************************************/
+const int	TexAlignTable[]={1,2,4,8,16,32,64,128,256};
+const int	TexAlignTableSize=sizeof(TexAlignTable)/sizeof(int);
+int		AlignSize(int Size)
+{
+		for (int i=0;i<TexAlignTableSize-1; i++)
+		{
+			if (Size>TexAlignTable[i] && Size<TexAlignTable[i+1]) return(TexAlignTable[i+1]);
+		}
+
+		return(Size);
+}
 /**************************************************************************************/
 /**************************************************************************************/
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax)
@@ -336,3 +349,56 @@ int		round(float f)
 		}
 }
 /*****************************************************************************/
+void	*_MemAlloc(size_t Size)
+{
+		CheckMem();
+void	*Ptr=malloc(Size);
+		CheckMem();
+		return(Ptr);
+}
+
+/*****************************************************************************/
+void	_MemFree(void *Ptr)
+{
+		CheckMem();
+		free(Ptr);
+		CheckMem();
+
+}
+/*****************************************************************************/
+void	CheckMem()
+{
+int	Status = _heapchk();
+
+	switch( Status)
+	{
+	case _HEAPOK:
+//		TRACE0(" OK - heap is fine\n" );
+		break;
+	case _HEAPEMPTY:
+//		TRACE0(" OK - heap is empty\n" );
+		break;
+	case _HEAPBADBEGIN:
+		TRACE0( "ERROR - bad start of heap\n" );
+		break;
+	case _HEAPBADNODE:
+		TRACE0( "ERROR - bad node in heap\n" );
+		break;
+	}
+}
+/*****************************************************************************/
+void	GetExecPath(GString &Path)
+{
+#ifndef _DEBUG
+// Get application path
+char	ExeFilename[2048];
+GFName	Exe;
+		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
+		Exe=ExeFilename;
+		Exe.File(0);
+ 		Exe.Ext(0);
+		Path=Exe.FullName();
+#else
+		Path="\\SpongeBob\\tools\\MapEdit\\";
+#endif
+}

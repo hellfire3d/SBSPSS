@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CGUINewMap
+LastClass=CGUILayerItem
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=19
+ClassCount=20
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CGUIAddLayer
@@ -28,25 +28,27 @@ Class16=CAboutDlg
 Class17=CMapEditDoc
 Class18=CMapEditView
 
-ResourceCount=17
-Resource1=IDR_TOOLBAR (English (U.S.))
+ResourceCount=18
+Resource1=IDD_ABOUTBOX (English (U.S.))
 Resource2=IDR_MAPEDITYPE (English (U.S.))
-Resource3=IDD_NEWMAP
-Resource4=IDD_TOOLBAR
-Resource5=IDD_LAYER_COLLISION
-Resource6=IDD_RESIZE
-Resource7=IDD_ABOUTBOX (English (U.S.))
+Resource3=IDD_LAYER_COLLISION
+Resource4=IDD_MULTIBAR (English (U.S.))
+Resource5=IDD_LAYER_LIST
+Resource6=IDD_ADDLAYER
+Resource7=IDR_TOOLBAR (English (U.S.))
 Resource8=xxxx
-Resource9=IDD_TILEBANK
-Resource10=IDD_LAYER_SHADE
-Resource11=IDD_ADDLAYER
-Resource12=IDD_MULTIBAR (English (U.S.))
-Resource13=IDD_ELEMLIST
-Resource14=IDD_LAYER_LIST
+Resource9=IDD_LAYER_SHADE
+Resource10=IDD_LAYER_ACTOR
+Resource11=IDD_TOOLBAR
+Resource12=IDD_RESIZE
+Resource13=IDR_MAINFRAME (English (U.S.))
+Resource14=IDD_NEWMAP
 Resource15=IDD_LAYER_ACTOR2
-Resource16=IDR_MAINFRAME (English (U.S.))
 Class19=CGUILayerActor
-Resource17=IDD_LAYER_ACTOR
+Resource16=IDD_TILEBANK
+Resource17=IDD_ELEMLIST
+Class20=CGUILayerItem
+Resource18=IDD_LAYER_ITEM
 
 [CLS:CChildFrame]
 Type=0
@@ -98,7 +100,7 @@ HeaderFile=GUINewMap.h
 ImplementationFile=GUINewMap.cpp
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_MAPSIZE_HEIGHT
+LastObject=CGUINewMap
 
 [CLS:CGUIResize]
 Type=0
@@ -213,7 +215,7 @@ Control7=IDC_MAPSIZE_WARNING,static,1342308352
 Type=1
 Class=CGUITileBank
 ControlCount=3
-Control1=IDD_TILEBANK_UPDATE,button,1342242816
+Control1=IDD_TILEBANK_UPDATE,button,1476460544
 Control2=IDD_TILEBANK_LOAD,button,1342242816
 Control3=IDD_TILEBANK_DELETE,button,1342242816
 
@@ -390,9 +392,18 @@ Control6=IDC_LAYERCOLLISION_WATER,button,1342242816
 Control7=IDC_LAYERCOLLISION_SOLID,button,1342242816
 Control8=IDC_LAYERCOLLISION_DEATH,button,1342242816
 
+[CLS:CGUILayerActor]
+Type=0
+HeaderFile=GUILayerActor.h
+ImplementationFile=GUILayerActor.cpp
+BaseClass=CDialog
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_ACTOR_POS_LIST
+
 [DLG:IDD_LAYER_ACTOR]
 Type=1
-Class=CGUILayerActor
+Class=?
 ControlCount=22
 Control1=IDC_LEVEL_ACTOR_LIST,combobox,1344339971
 Control2=IDC_ACTOR_POS_LIST,listbox,1352728833
@@ -417,12 +428,21 @@ Control20=IDC_LAYER_ACTOR_GROUP,button,1342177287
 Control21=IDC_ACTOR_LIST,combobox,1344339971
 Control22=IDC_ACTOR_DELETE,button,1342242816
 
-[CLS:CGUILayerActor]
+[DLG:IDD_LAYER_ITEM]
+Type=1
+Class=CGUILayerItem
+ControlCount=4
+Control1=IDC_LEVEL_ITEM_LIST,combobox,1344339971
+Control2=IDC_LAYER_ACTOR_GROUP,button,1342177287
+Control3=IDC_ITEM_LIST,combobox,1344339971
+Control4=IDC_ITEM_DELETE,button,1342242816
+
+[CLS:CGUILayerItem]
 Type=0
-HeaderFile=GUILayerActor.h
-ImplementationFile=GUILayerActor.cpp
+HeaderFile=GUILayerItem.h
+ImplementationFile=GUILayerItem.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=CGUILayerActor
+LastObject=IDC_ITEM_LIST
 

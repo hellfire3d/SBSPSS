@@ -116,7 +116,6 @@ public:
 
 		void					ResetView();
 		CElemBank				*GetIconBank()					{return(IconBank);}
-		void					GetExecPath(GString &Path);
 
 private:
 		CMapEditView			*CurrentView;

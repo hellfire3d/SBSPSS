@@ -158,7 +158,11 @@ void	CLayerThing::InitSubView(CCore *Core)
 /*****************************************************************************/
 void	CLayerThing::LoadThingScript(const char *Filename)
 {
-		ThingScript.LoadAndImport(Filename);
+GString	ExecPath;
+GString	ScriptName;
+		GetExecPath(ExecPath);
+		ScriptName=ExecPath+Filename;
+		ThingScript.LoadAndImport(ScriptName);
 
 int		i,ListSize=ThingScript.GetGroupCount();
 		DefList.resize(ListSize);
@@ -181,10 +185,11 @@ int		i,ListSize=ThingScript.GetGroupCount();
 
 			ThisDef.XY.resize(1);
 			TRACE2("%s\t\t%s\n",Name,Gfx);
-			ThisDef.ElemID=ThingBank->GetSetCount();
 			if (Gfx) 
 			{
-				ThingBank->AddSet(Gfx);
+				char	Filename[512];
+				GFName::makeabsolute(ExecPath,Gfx,Filename);
+				ThisDef.ElemID=ThingBank->AddSet(Filename);
 			}
 			else
 			{
@@ -214,9 +219,13 @@ void	CLayerThing::RenderThing(CCore *Core,Vector3 &ThisCam,sLayerThing &ThisThin
 {
 float		ZoomW=Core->GetZoomW();
 float		ZoomH=Core->GetZoomH();
-float		ScrOfsX=(ZoomW/2);
-float		ScrOfsY=(ZoomH/2);
 Vector3		&Scale=Core->GetScaleVector();
+Vector3		ScrOfs(ZoomW/2,ZoomH/2,0);
+
+			if (Render3d)
+			{
+				ScrOfs.z=-4.0f;
+			}
 
 			if (ThingBank->NeedLoad()) ThingBank->LoadAllSets(Core);
 
@@ -227,7 +236,7 @@ Vector3		&Scale=Core->GetScaleVector();
 
 			glScalef(Scale.x,Scale.y,Scale.z);
 			glTranslatef(-ThisCam.x,ThisCam.y,0);					// Set scroll offset
-			glTranslatef(-ScrOfsX,ScrOfsY,0);						// Bring to top left corner
+			glTranslatef(-ScrOfs.x,ScrOfs.y,0);						// Bring to top left corner
 
 int			ListSize=ThisThing.XY.size();
 			for (int i=0;i<ListSize; i++)
@@ -244,7 +253,11 @@ int			ListSize=ThisThing.XY.size();
 				if (i==0)
 				{
 					glColor4f(1,1,1,1);									// Set default Color
+					glEnable(GL_DEPTH_TEST);
+					glTranslatef(0,0,ScrOfs.z);
 					ThingBank->RenderElem(ThisThing.ElemID,0,0,Render3d);
+					glTranslatef(0,0,-ScrOfs.z);
+					glDisable(GL_DEPTH_TEST);
 				}
 				glPopMatrix();
 			}
@@ -257,14 +270,11 @@ int			ListSize=ThisThing.XY.size();
 /*****************************************************************************/
 void	CLayerThing::GUIInit(CCore *Core)
 {
-//		Core->GUIAdd(GUIToolBar,IDD_TOOLBAR);
-
 }
 
 /*****************************************************************************/
 void	CLayerThing::GUIKill(CCore *Core)
 {
-//		Core->GUIRemove(GUIToolBar,IDD_TOOLBAR);
 }
 
 /*****************************************************************************/

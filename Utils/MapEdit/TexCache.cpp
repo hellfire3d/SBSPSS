@@ -41,7 +41,7 @@ GFName		FName=Filename;
 			RGBData=&ThisRGB;
 			LoadTex(NewTex,RGBData);
 			FreeBMP(ThisRGB);
-			NewTex.Loaded=TRUE;
+			NewTex.Loaded=true;
 		}
 		else
 		{
@@ -57,18 +57,65 @@ GFName		FName=Filename;
 /**************************************************************************************/
 /**************************************************************************************/
 /**************************************************************************************/
-const int	TexAlignTable[]={1,2,4,8,16,32,64,128,256};
-const int	TexAlignTableSize=sizeof(TexAlignTable)/sizeof(int);
-int		CTexCache::AlignSize(int Size)
+void	CTexCache::CreateAlignTex(Frame &ThisFrame,sRGBData &RGBData)
 {
-		for (int i=0;i<TexAlignTableSize-1; i++)
+int		FrameW=ThisFrame.GetWidth();
+int		FrameH=ThisFrame.GetHeight();
+int		AlignW=AlignSize(FrameW);
+int		AlignH=AlignSize(FrameH);
+
+		RGBData.RGB=(u8*)MemAlloc(AlignW*AlignH*3);
+		ThisFrame.FlipY();
+		RGBData.OldW=FrameW;
+		RGBData.OldH=FrameH;
+		RGBData.TexW=AlignW;
+		RGBData.TexH=AlignH;
+		RGBData.ScaleU=(float)FrameW/(float)AlignW;
+		RGBData.ScaleV=(float)FrameH/(float)AlignH;
+
+		if (FrameW==AlignW && FrameH==AlignH)
 		{
-			if (Size>TexAlignTable[i] && Size<TexAlignTable[i+1]) return(TexAlignTable[i+1]);
+			ThisFrame.MakeRGB(RGBData.RGB);
+			return;
+		}
+// Tex is mis aligned, so align and fill borders with pure pink
+
+u8		*Buffer=(u8*)MemAlloc(FrameW*FrameH*3);
+u8		*Src,*Dst;
+int		X,Y;
+		ThisFrame.MakeRGB(Buffer);
+
+		Dst=RGBData.RGB;
+	
+		Src=Buffer;
+		Dst=RGBData.RGB;
+		for (Y=0; Y<FrameH; Y++)
+		{
+			for (X=0; X<FrameW; X++)
+			{
+				*Dst++=*Src++; 
+				*Dst++=*Src++; 
+				*Dst++=*Src++;
+			}
+			for (X; X<AlignW; X++)
+			{
+				*Dst++=BlankRGB.rgbRed;
+				*Dst++=BlankRGB.rgbGreen;
+				*Dst++=BlankRGB.rgbBlue;
+			}
+		}
+		for (Y; Y<AlignH; Y++)
+		{
+			for (X=0; X<AlignW; X++)
+			{
+				*Dst++=BlankRGB.rgbRed;
+				*Dst++=BlankRGB.rgbGreen;
+				*Dst++=BlankRGB.rgbBlue;
+			}
 		}
 
-		return(Size);
+		MemFree(Buffer);
 }
-
 
 /**************************************************************************************/
 bool	CTexCache::LoadBMP(const char *Filename,sRGBData &RGBData)
@@ -89,12 +136,8 @@ FILE	*File;
 
 		fclose(File);		
 		ThisFrame.LoadBMP(Filename);
-				
-		RGBData.Width=ThisFrame.GetWidth();
-		RGBData.Height=ThisFrame.GetHeight();
-		RGBData.RGB=(u8*)malloc(RGBData.Width*RGBData.Height*3);
-		ThisFrame.FlipY();
-		ThisFrame.MakeRGB(RGBData.RGB);
+
+		CreateAlignTex(ThisFrame,RGBData);	
 		return(true);
 }
 
@@ -103,29 +146,27 @@ void	CTexCache::FreeBMP(sRGBData &RGBData)
 {
 		if (RGBData.RGB)
 		{
-			free(RGBData.RGB);
+			MemFree(RGBData.RGB);
+			RGBData.RGB=0;
 		}
 }
 
 /**************************************************************************************/
-void	CTexCache::LoadTex(sTex &ThisTex,sRGBData *TexData)
+void	CTexCache::LoadTex(sTex &ThisTex,sRGBData *RGBData)
 {
 u8		*Buffer;
-int		TexWidth=TexData->Width;
-int		TexHeight=TexData->Height;
-int		AlignWidth=AlignSize(TexWidth);
-int		AlignHeight=AlignSize(TexHeight);
 u8		*Src,*Dst;
 
 // create RGB & alpha texture & ensuse texture is correct size for GL
+		Buffer=(u8*)MemAlloc(RGBData->TexW*RGBData->TexH*4);
+		ASSERT(Buffer);
 
-		Buffer=(u8*)malloc(AlignWidth*AlignHeight*4);
-		Src=TexData->RGB;
-		Dst=&Buffer[0];
+		Src=RGBData->RGB;
+		Dst=Buffer;
 
-		for (int Y=0; Y<TexHeight; Y++)
+		for (int Y=0; Y<RGBData->TexH; Y++)
 		{
-			for (int X=0; X<TexWidth; X++)
+			for (int X=0; X<RGBData->TexW; X++)
 			{
 				u8	R,G,B,A;
 
@@ -142,24 +183,32 @@ u8		*Src,*Dst;
 				*Dst++=B;
 				*Dst++=A;
 			}
-			Dst+=(AlignWidth-TexWidth)*4;
 		}
 
-		ThisTex.TexWidth=TexWidth;
-		ThisTex.TexHeight=TexHeight;
-
-		ThisTex.ScaleU=(float)TexWidth/(float)AlignWidth;
-		ThisTex.ScaleV=(float)TexHeight/(float)AlignHeight;
-
+		ThisTex.OldW=RGBData->OldW;
+		ThisTex.OldH=RGBData->OldH;
+		ThisTex.TexW=RGBData->TexW;
+		ThisTex.TexH=RGBData->TexH;
+		ThisTex.ScaleU=RGBData->ScaleU;
+		ThisTex.ScaleV=RGBData->ScaleV;
+int	Err;
 		glGenTextures(1, &ThisTex.TexID);
+		Err=glGetError();ASSERT(Err==0);
 		glBindTexture(GL_TEXTURE_2D, ThisTex.TexID);
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, AlignWidth, AlignHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &Buffer[0]);
+		Err=glGetError();ASSERT(Err==0);
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, RGBData->TexW, RGBData->TexH, 0, GL_RGBA, GL_UNSIGNED_BYTE, Buffer);
+		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		Err=glGetError();ASSERT(Err==0);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		Err=glGetError();ASSERT(Err==0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		free(Buffer);
+		Err=glGetError();ASSERT(Err==0);
+		MemFree(Buffer);
 }
 
 /**************************************************************************************/

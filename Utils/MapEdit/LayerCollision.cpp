@@ -45,7 +45,7 @@ GString	Filename;
 		TileBank=new CTileBank;
 		SubView=TileBank;
 
-		Core->GetExecPath(Filename);
+		GetExecPath(Filename);
 		Filename+=theApp.GetConfigStr("FileLocation","Collision");
 		TileBank->AddSet(Filename);
 }

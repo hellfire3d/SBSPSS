@@ -19,6 +19,7 @@
 #define IDD_LAYER_COLLISION             177
 #define IDD_ELEMLIST                    178
 #define IDD_LAYER_ACTOR                 179
+#define IDD_LAYER_ITEM                  180
 #define IDC_TOOLBAR_COMBO               1018
 #define IDC_LAYERLIST_LIST              1019
 #define IDD_TILEBANK_UPDATE             1029
@@ -67,7 +68,6 @@
 #define IDC_LAYERCOLLISION_DEATH        1088
 #define IDC_LAYERSHADE_EDITB3           1089
 #define IDC_ACTOR_LIST                  1089
-#define IDC_ACTOR_NEW                   1090
 #define IDC_ACTOR_DELETE                1091
 #define IDC_ACTOR_SPEED_SPIN            1092
 #define IDC_ACTOR_PLAYER                1094
@@ -75,6 +75,9 @@
 #define IDC_ACTOR_TURNRATE_TEXT         1097
 #define IDC_ACTOR_TURNRATE              1098
 #define IDC_ACTOR_TURNRATE_SPIN         1099
+#define IDC_ITEM_DELETE                 1100
+#define IDC_ITEM_LIST                   1101
+#define IDC_LEVEL_ITEM_LIST             1102
 #define IDC_ACTOR_HEALTH_TEXT           1112
 #define IDC_ACTOR_HEALTH                1113
 #define IDC_ACTOR_HEALTH_SPIN           1114
@@ -106,7 +109,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        180
 #define _APS_NEXT_COMMAND_VALUE         32800
-#define _APS_NEXT_CONTROL_VALUE         1097
+#define _APS_NEXT_CONTROL_VALUE         1103
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

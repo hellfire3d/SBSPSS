@@ -8,7 +8,7 @@
 #include	"LayerThing.h"
 #include	"Layer.h"
 #include	"MapEdit.h"
-//#include	"GUILayerItem.h"
+#include	"GUILayerItem.h"
 #include	"Elem.h"
 
 /*****************************************************************************/
@@ -29,13 +29,12 @@ public:
 
 		void			GUIThingDefClear();
 		void			GUIThingUpdate();
-		void			GUIThingPointUpdate();
 
 		void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
 
 
 protected:
-//		CGUILayerItem		GUI;
+		CGUILayerItem		GUI;
 
 };
 

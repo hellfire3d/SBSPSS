@@ -64,9 +64,10 @@ CElem::CElem(int Width,int Height)
 		UnitWidth=ElemWidth/UnitSize;
 		UnitHeight=ElemHeight/UnitSize;
 		ElemID=-1;
-		ElemRGB=(u8*)malloc(ElemWidth*ElemHeight*3);
-		memset(ElemRGB,0,ElemWidth*ElemHeight*3);
-
+int		AW=AlignSize(ElemWidth);
+int		AH=AlignSize(ElemHeight);
+		ElemRGB=(u8*)MemAlloc(AW*AH*3);
+		memset(ElemRGB,0,AW*AH*3);
 		Type=ElemType2d;
 		TexXOfs=0;
 		TexYOfs=0;
@@ -138,7 +139,7 @@ GFName		Path=Filename;
 /*****************************************************************************/
 void	CElem::CleanUp()
 {
-		free(ElemRGB);
+		MemFree(ElemRGB);
 }
 
 /*****************************************************************************/
@@ -162,8 +163,16 @@ sTriFace	&Tri1=TriList[ListSize+1];
 CTexCache	&TexCache=Core->GetTexCache();
 sTex		&ThisTex=TexCache.GetTex(TexID);
 
-float		dU=1.0/((float)ThisTex.TexWidth/(float)ElemWidth);
-float		dV=1.0/((float)ThisTex.TexHeight/(float)ElemHeight);
+int			CountW=ThisTex.OldW/ElemWidth;
+int			CountH=ThisTex.OldH/ElemHeight;
+float		dU=ThisTex.ScaleU/(float)CountW;
+float		dV=ThisTex.ScaleV/(float)CountH;
+
+			dU=(1.0f/CountW);
+			dV=(1.0f/CountH);
+
+//			dU=ThisTex.ScaleU;
+//			dV=ThisTex.ScaleV;
 
 float		u0=(TexXOfs*dU);
 float		u1=u0+dU;
@@ -222,7 +231,7 @@ int			ListSize=TriList.size();
 				if (TexID<0 || TexID>=TexCount)
 				{
 					CString mexstr;
-					mexstr.Format("Invalid TexId\n Wanted %i/%i for %s\nThis is gonna hurt!",TexID,TexCount-1,ThisNode.Name);
+					mexstr.Format("Invalid TexId\n Wanted %i only have %i Id's for %s\nThis is gonna hurt!\n Dont ask me about this error, ask Kev.\n This MUST be fixed.",TexID,TexCount-1,ThisNode.Name);
 					AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
 					TexID=0;
 				}
@@ -298,22 +307,27 @@ float	X1=Ofs.x+UnitWidth;
 float	Y0=Ofs.y;
 float	Y1=Ofs.y+UnitHeight;
 float	Z=Ofs.z;
+sTex	&Tex=TexCache.GetTex(ElemID);
+float	u0=0;
+float	u1=1.0f;//Tex.ScaleU;
+float	v0=0;
+float	v1=1.0f;//Tex.ScaleU;
 
 			List=glGenLists(1);
 			glNewList(List,GL_COMPILE);
 
-			glBindTexture(GL_TEXTURE_2D, TexCache.GetTexGLId(ElemID));
+			glBindTexture(GL_TEXTURE_2D, Tex.TexID);
 			glBegin (GL_QUADS);
-				glTexCoord2f(0.0f,0.0f);
+				glTexCoord2f(u0,v0);
 				glVertex3f(X0,Y0,Z);
 
-				glTexCoord2f(1.0f,0.0f);
+				glTexCoord2f(u1,v0);
 				glVertex3f(X1,Y0,Z);
 
-				glTexCoord2f(1.0f,1.0f);
+				glTexCoord2f(u1,v1);
 				glVertex3f(X1,Y1,Z);
 
-				glTexCoord2f(0.0f,1.0f);
+				glTexCoord2f(u0,v1);
 				glVertex3f(X0,Y1,Z);
 			glEnd();
 			glEndList();
@@ -343,17 +357,8 @@ float		ScaleU,ScaleV;
 					glBegin (GL_TRIANGLES);
 					LastMat=ThisMat;
 					sTex &Tex=TexCache.GetTex(ThisMat);
-					int	AW=TexCache.AlignSize(Tex.TexWidth);
-					int	AH=TexCache.AlignSize(Tex.TexHeight);
-					if (AW!=Tex.TexWidth || AH!=Tex.TexHeight)
-					{
-						ScaleU=(float)Tex.TexWidth/(float)AW;
-						ScaleV=(float)Tex.TexHeight/(float)AH;
-					}
-					else
-					{
-						ScaleU=ScaleV=1;
-					}
+					ScaleU=Tex.ScaleU;
+					ScaleV=Tex.ScaleV;
 				}
 		
 				for (int p=0; p<3; p++)
@@ -488,7 +493,7 @@ float	H=UnitHeight;
 		glClearColor(1,0,1,1 );
 //		glClearColor(1,1,1,1 );
 		glPushAttrib(GL_VIEWPORT_BIT);
-		glViewport(0,0,RGBData.Width,RGBData.Height);
+		glViewport(0,0,RGBData.TexW,RGBData.TexH);
 
 		glMatrixMode(GL_PROJECTION);
  		glPushMatrix();
@@ -515,7 +520,7 @@ float	H=UnitHeight;
  		glPopMatrix();
 		glPopAttrib();
 
-		glReadPixels(0,0,RGBData.Width,RGBData.Height,GL_RGB, GL_UNSIGNED_BYTE,RGBData.RGB);
+		glReadPixels(0,0,RGBData.TexW,RGBData.TexH,GL_RGB, GL_UNSIGNED_BYTE,RGBData.RGB);
 		glClearColor(0,0,0,1 );
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen
 }
@@ -528,10 +533,14 @@ sRGBData	RGBData;
 char		TexName[256];
 
 		sprintf(TexName,"_2dPc_%s_%03d",Filename,ID);
-		ElemRGB=(u8*)malloc(ElemWidth*ElemHeight*3);
+int		AW=AlignSize(ElemWidth);
+int		AH=AlignSize(ElemHeight);
+		ElemRGB=(u8*)MemAlloc(AW*AH*3);
 
-		RGBData.Width=ElemWidth;
-		RGBData.Height=ElemHeight;
+		RGBData.TexW=AlignSize(ElemWidth);
+		RGBData.TexH=AlignSize(ElemHeight);
+		RGBData.ScaleU=1.0f;
+		RGBData.ScaleV=1.0f;
 		RGBData.RGB=ElemRGB;
 		RenderElem4Texture(RGBData);
 		ElemID=TexCache.ProcessTexture(TexName,&RGBData);
@@ -553,16 +562,16 @@ char	Filename[256];
 bool	CElem::CheckHasData(sRGBData &RGBData)
 {
 u8		*Src=RGBData.RGB;
-int		Size=RGBData.Width*RGBData.Height;
+int		Size=RGBData.TexW*RGBData.TexH;
 
-		for (int i=0; i<Size; i++)
+		while (Size--)
 		{
 			u8	R=*Src++;
 			u8	G=*Src++;
 			u8	B=*Src++;
-			if (R!=255 || G!=0 || B!=255) return(TRUE);
-
+			if (R!=255 || G!=0 || B!=255) return(true);
 		}
+
 	return(false);
 }
 
@@ -629,12 +638,11 @@ int			TexID=TexCache.ProcessTexture(Filename);
 sTex		&ThisTex=TexCache.GetTex(TexID);
 int			Width,Height;
 
-		if (MaxWidth==-1) MaxWidth=ThisTex.TexWidth;
-		if (MaxHeight==-1) MaxHeight=ThisTex.TexHeight;
+		if (MaxWidth==-1) MaxWidth=ThisTex.OldW;
+		if (MaxHeight==-1) MaxHeight=ThisTex.OldH;
 
-		Width=ThisTex.TexWidth/MaxWidth;
-		Height=ThisTex.TexHeight/MaxHeight;
-
+		Width=ThisTex.OldW/MaxWidth;
+		Height=ThisTex.OldH/MaxHeight;
 
 		for (int Y=0; Y<Height; Y++)
 		{
@@ -799,13 +807,14 @@ GString	SavePath;
 }
 
 /*****************************************************************************/
-void	CElemBank::AddSet(const char *Filename)
+int			CElemBank::AddSet(const char *Filename)
 {
 int			ListSize=SetList.size();
 CElemSet	NewSet(Filename,ListSize,MaxWidth,MaxHeight,BlankFlag,CentreFlag);
 
-			SetList.Add(NewSet);
+int			Idx=SetList.Add(NewSet);
 			if (SetList.size()!=ListSize) LoadFlag=TRUE;
+			return(Idx);
 }
 
 /*****************************************************************************/

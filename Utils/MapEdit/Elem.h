@@ -135,6 +135,7 @@ private:
 		
 		int				SetNumber;
 		int				MaxWidth,MaxHeight;
+		int				BmpW,BmpH;
 		bool			CentreFlag;
 		CList<CElem>	ElemList;
 		bool			Loaded;
@@ -153,7 +154,7 @@ virtual	~CElemBank();
 virtual	void		Load(CFile *File,int Version);
 virtual	void		Save(CFile *File);
 
-		void		AddSet(const char *Filename);
+		int			AddSet(const char *Filename);
 		void		LoadAllSets(CCore *Core);
 		void		LoadNewSet(CCore *Core);
 		void		ReloadAllSets();

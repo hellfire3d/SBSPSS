@@ -35,6 +35,8 @@ class	GString;
 class	CMapEditDoc;
 void	DbgMsg(const char * pszFmt,...);
 
+int		AlignSize(int Size);
+
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
 void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax);
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z);
@@ -55,5 +57,19 @@ GString	GetWorkingPath();
 void	CheckFilename(GString &Filename);
 int		round(float f) ;
 
-	
+void	*_MemAlloc(size_t Size);
+void	_MemFree(void *Ptr);
+void	CheckMem();
+
+#ifdef _DEBUG
+#define	MemAlloc(v)	_MemAlloc(v)
+#define	MemFree(v)	_MemFree(v)
+#else
+#define	MemAlloc(v)	malloc(v)
+#define	MemFree(v)	free(v)
+#endif
+
+void	GetExecPath(GString &Path);
+
+
 #endif

@@ -19,7 +19,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerItem)
 	enum { IDD = IDD_LAYER_ITEM };
-		// NOTE: the ClassWizard will add data members here
+	CComboBox	m_LevelList;
+	CComboBox	m_List;
 	//}}AFX_DATA
 
 
@@ -35,7 +36,9 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CGUILayerItem)
-		// NOTE: the ClassWizard will add member functions here
+	afx_msg void OnItemDelete();
+	afx_msg void OnSelchangeLevelItemList();
+	afx_msg void OnSelchangeItemList();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -33,8 +33,6 @@
 
 #include	<IniClass.h>
 
-//GString		IconzFileName="Iconz.bmp";
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -82,8 +80,10 @@ int		Width,Height;
 
 // Create Tile Layers
 		AddLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION, Width, Height);
+#ifdef _DEBUG
 		AddLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE, Width, Height);
-
+		AddLayer(LAYER_TYPE_ITEM,LAYER_SUBTYPE_NONE, Width, Height);
+#endif
 		for (int i=0; i<Layer.size(); i++)
 		{
 			Layer[i]->InitSubView(this);
@@ -91,6 +91,9 @@ int		Width,Height;
 
 
 		ActiveLayer=FindLayer(LAYER_TYPE_TILE,LAYER_SUBTYPE_ACTION);
+#ifdef _DEBUG
+		ActiveLayer=FindLayer(LAYER_TYPE_ACTOR,LAYER_SUBTYPE_NONE);
+#endif
 		CurrentLayer=Layer[ActiveLayer];
 		return(TRUE);
 }
@@ -252,7 +255,7 @@ CLayer	*ThisLayer;
 				ThisLayer->Render(this,ThisCam,Is3dFlag);
 				if (GridFlag) ThisLayer->RenderGrid(this,ThisCam,i==ActiveLayer);
 			}
-			if (i!=EndLayer) ThisLayer=Layer[i+1];
+			if (i<EndLayer-1) ThisLayer=Layer[i+1];
 			
 		}
 		CurrentLayer->RenderCursor(this,ThisCam,Is3dFlag);
@@ -678,21 +681,6 @@ Vector3	&ThisCam=GetCam();
 		ThisCam=DefaultCamPos;
 		UpdateView();
 }
-/*****************************************************************************/
-void	CCore::GetExecPath(GString &Path)
-{
-#ifndef _DEBUG
-// Get application path
-char	ExeFilename[2048];
-GFName	Exe;
-		GetModuleFileName(GetModuleHandle(NULL),ExeFilename,2048);
-		Exe=ExeFilename;
-		Exe.File(0);
- 		Exe.Ext(0);
-		Path=Exe.FullName();
-#endif
-}
-
 
 /*****************************************************************************/
 /*** GUI *********************************************************************/
