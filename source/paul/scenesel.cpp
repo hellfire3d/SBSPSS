@@ -43,6 +43,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __FMA_FMA_H__
+#include "fma\fma.h"
+#endif
+
 #ifndef __BACKEND_GAMEOVER_H__
 #include "backend\gameover.h"
 #endif
@@ -88,6 +92,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&FrontEndScene,
 	&GameOverScene,
 	&GameCompletedScene,
+	&FmaScene,
 	&MapScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);

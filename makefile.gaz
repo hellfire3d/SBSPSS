@@ -181,6 +181,8 @@ frontend_src :=		credits \
 					scrollbg \
 					start
 
+fma_src :=			fma
+
 fmv_src :=			fmv
 
 game_src :=			convo \

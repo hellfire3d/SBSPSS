@@ -22,6 +22,10 @@
 #include "system\gstate.h"
 #endif
 
+#ifndef _GLOBAL_HEADER_
+#include "system\global.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -43,6 +47,17 @@ public:
 	void	think(int _frames);
 	int		readyToShutdown();
 	char	*getSceneName()			{return"FMA";}
+
+private:
+	void	startShutdown();
+
+
+
+	class CLevel	*m_level;
+
+	DVECTOR			m_cameraPos;
+
+	int				m_readyToShutdown;
 
 };
 
