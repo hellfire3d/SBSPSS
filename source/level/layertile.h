@@ -7,18 +7,6 @@
 
 
 /*****************************************************************************/
-/*
-struct	sPrimGridElem
-{
-	TSPRT_16		Prim;
-//	u16				Tile;
-//	u16				Flags;
-	sPrimGridElem	*Right;
-	sPrimGridElem	*Down;
-};
-*/
-
-/*****************************************************************************/
 struct	sPrimGridElem
 {
 	TSPRT_16		Prim;
@@ -49,8 +37,8 @@ public:
 		{
 			TILE_WIDTH=16,
 			TILE_HEIGHT=16,
-			SCREEN_TILE_WIDTH=32,		// fast bits ops :o)
-			SCREEN_TILE_HEIGHT=16,		// fast bits ops :o)
+			SCREEN_TILE_WIDTH=32,
+			SCREEN_TILE_HEIGHT=16,
 			SCREEN_TILE_SIZE=SCREEN_TILE_WIDTH*SCREEN_TILE_HEIGHT
 		};
 
@@ -58,9 +46,9 @@ public:
 		CLayerTile(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 virtual	~CLayerTile();
 
-virtual	void			init(VECTOR &MapPos,int Shift,int Width=SCREEN_TILE_WIDTH,int Height=SCREEN_TILE_HEIGHT);
+virtual	void			init(DVECTOR &MapPos,int Shift,int Width=SCREEN_TILE_WIDTH,int Height=SCREEN_TILE_HEIGHT);
 virtual	void			shutdown();
-virtual	void			think(VECTOR &MapPos);
+virtual	void			think(DVECTOR &MapPos);
 virtual	void			render();
 
 protected:

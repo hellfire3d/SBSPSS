@@ -41,7 +41,7 @@ CLayerTile::~CLayerTile()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::init(VECTOR &MapPos,int Shift,int Width,int Height)
+void	CLayerTile::init(DVECTOR &MapPos,int Shift,int Width,int Height)
 {
 int			Size=Width*Height;
 
@@ -120,7 +120,7 @@ int		Pos;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::think(VECTOR &MapPos)
+void	CLayerTile::think(DVECTOR &MapPos)
 {
 // Update rows and Columns :o)
 // As these are on the borders, they 'shouldnt' alter any being rendered

@@ -25,7 +25,7 @@ private:
 	void		initLayers();
 
 	sLvlHdr		*LevelHdr;
-	VECTOR		MapPos;
+	DVECTOR		MapPos;
 
 
 // Tile Layers

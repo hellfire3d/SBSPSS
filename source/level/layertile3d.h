@@ -13,7 +13,7 @@ public:
 		CLayerTile3d(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 		~CLayerTile3d();
 
-		void			init(VECTOR &MapPos,int Shift,int Width,int Height);
+		void			init(DVECTOR &MapPos,int Shift,int Width,int Height);
 		void			shutdown();
 		void			render();
 

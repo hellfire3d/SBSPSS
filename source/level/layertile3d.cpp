@@ -28,7 +28,7 @@ CLayerTile3d::~CLayerTile3d()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile3d::init(VECTOR &MapPos,int Shift,int Width,int Height)
+void	CLayerTile3d::init(DVECTOR &MapPos,int Shift,int Width,int Height)
 {
 int		Size=Width*Height;
 
