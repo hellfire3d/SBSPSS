@@ -555,7 +555,7 @@ int CFrontEndStart::isReadyToExit()
   ---------------------------------------------------------------------- */
 CFrontEndScene::FrontEndMode CFrontEndStart::getNextMode()
 {
-	return m_state==STATE_EXITING_TO_GAME?CFrontEndScene::MODE__EXIT_TO_MAP:CFrontEndScene::MODE__MAIN_TITLES;
+	return m_state==STATE_EXITING_TO_GAME?CFrontEndScene::MODE__EXIT_TO_GAME:CFrontEndScene::MODE__MAIN_TITLES;
 }
 
 /*===========================================================================

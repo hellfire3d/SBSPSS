@@ -70,6 +70,10 @@
 #include "game\gameslot.h"
 #endif
 
+#ifndef __FMA_FMA_H__
+#include "fma\fma.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -278,10 +282,23 @@ void CFrontEndScene::setMode(FrontEndMode _newMode)
 	}
 	
 	// Open new mode
-	if(_newMode==MODE__EXIT_TO_MAP)
+	if(_newMode==MODE__EXIT_TO_GAME)
 	{
+		CGameSlotManager::GameSlot	*gameSlot;
+		gameSlot=CGameSlotManager::getSlotData();
+
+		if(gameSlot->m_hasSeenOpeningFMA)
+		{
+			GameState::setNextScene(&MapScene);
+		}
+		else
+		{
+			CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__INTRO);
+			GameState::setNextScene(&FmaScene);
+			gameSlot->m_hasSeenOpeningFMA=true;
+		}
+
 		m_exitToGame=true;
-		GameState::setNextScene(&MapScene);
 		
 	}
 	else

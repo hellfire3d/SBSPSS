@@ -38,15 +38,30 @@
 	Structure defintions
 	-------------------- */
 
-class CFmaScene: public CScene
+class CFmaScene : public CScene
 {
 public:
+	typedef enum
+	{
+		FMA_SCRIPT__INTRO,
+		FMA_SCRIPT__CH1FINISHED,
+		FMA_SCRIPT__CH2FINISHED,
+		FMA_SCRIPT__CH3FINISHED,
+		FMA_SCRIPT__CH4FINISHED,
+		FMA_SCRIPT__CH5FINISHED,
+		NUM_FMA_SCRIPTS,
+		FMA_SCRIPT__NONE,
+	}FMA_SCRIPT_NUMBER;
+
+
 	void	init();
 	void	shutdown();
 	void	render();
 	void	think(int _frames);
 	int		readyToShutdown();
 	char	*getSceneName()			{return"FMA";}
+
+	static void	selectFma(FMA_SCRIPT_NUMBER _fma);
 
 private:
 	void	startShutdown();
@@ -66,7 +81,7 @@ private:
 	int				m_endCameraFrame;
 	DVECTOR			m_endCameraPos;
 
-	int				*m_pc;
+	int const		*m_pc;
 	int				m_scriptRunning;
 	int				m_stillProcessingCommand;
 	int				m_doOtherProcessing;

@@ -5,6 +5,10 @@
 #ifndef __LEVEL_LEVEL_H__
 #define __LEVEL_LEVEL_H__
 
+#ifndef __FMA_FMA_H__
+#include "fma\fma.h"
+#endif
+
 #include "system\global.h"
 #include "level/layertile.h"
 #include "level/layercollision.h"
@@ -12,11 +16,12 @@
 /*****************************************************************************/
 struct	sLvlTab
 {
-	u16						Chapter,Level;
-	u8						totalSpatCount;
-	FileEquate				LevelFilename,TexFilename;
-	int						songId;
-	u16						ChapterLoadingText,LevelLoadingText;
+	u16								Chapter,Level;
+	u8								totalSpatCount;
+	FileEquate						LevelFilename,TexFilename;
+	int								songId;
+	u16								ChapterLoadingText,LevelLoadingText;
+	CFmaScene::FMA_SCRIPT_NUMBER	FMAToFollow;
 };
 
 /*****************************************************************************/
@@ -39,11 +44,12 @@ public:
 static	DVECTOR const	&getCameraPos()							{return MapPos;}
 static	DVECTOR const	&getPlayerSpawnPos()					{return s_playerSpawnPos;}
 
-static int				getCurrentChapter()						{return LvlTable[s_globalLevelSelectThing].Chapter;}
-static int				getCurrentChapterLevel()				{return LvlTable[s_globalLevelSelectThing].Level;}
-static int				getTotalSpatCount()						{return LvlTable[s_globalLevelSelectThing].totalSpatCount;}
-static int				getChapterLoadingText()					{return LvlTable[s_globalLevelSelectThing].ChapterLoadingText;}
-static int				getLevelLoadingText()					{return LvlTable[s_globalLevelSelectThing].LevelLoadingText;}
+static int							getCurrentChapter()						{return LvlTable[s_globalLevelSelectThing].Chapter;}
+static int							getCurrentChapterLevel()				{return LvlTable[s_globalLevelSelectThing].Level;}
+static int							getTotalSpatCount()						{return LvlTable[s_globalLevelSelectThing].totalSpatCount;}
+static int							getChapterLoadingText()					{return LvlTable[s_globalLevelSelectThing].ChapterLoadingText;}
+static int							getLevelLoadingText()					{return LvlTable[s_globalLevelSelectThing].LevelLoadingText;}
+static CFmaScene::FMA_SCRIPT_NUMBER getFMAToFollow()						{return LvlTable[s_globalLevelSelectThing].FMAToFollow;}
 
 		void			destroyMapArea(DVECTOR const &Pos);
 		void			destroyMapTile(DVECTOR const &Pos);

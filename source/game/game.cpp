@@ -429,8 +429,11 @@ void CGameScene::think_playing(int _frames)
 		}
 
 		// Level finished - go to map or fma
-		if(level==4)
+		CFmaScene::FMA_SCRIPT_NUMBER	fma;
+		fma=Level.getFMAToFollow();
+		if(fma!=CFmaScene::FMA_SCRIPT__NONE)
 		{
+			FmaScene.selectFma(fma);
 			GameState::setNextScene(&FmaScene);
 		}
 		else if(level==5)

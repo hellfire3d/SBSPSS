@@ -46,6 +46,10 @@ FX
 #include "gfx\actor.h"
 #endif
 
+#ifndef __GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -160,112 +164,11 @@ typedef struct
 CFmaScene	FmaScene;
 
 
-/*****************************************************************************/
-// Ch1 FMA
-int s_testScript[]=
-{
-	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_00_DAT,
-	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_01_DAT,
-	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
-	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_03_DAT,
-
-// Scene 1 - Shade Shoals
-	SC_SNAP_CAMERA_TO,			4*16,16*16,
-	SC_WAIT_ON_TIMER,			30,
-
-// Scene 2 - SB arrives outside Shady Shoals
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,40*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
-	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
-
-	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,16*16,30*16,96,
-	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH6_00_DAT,
-
-// Scene 3 - SB Fixing TV
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_MM,FMA_ANIM_IDLE,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,224*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_MM,1,
-	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_MM,true,
-
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_IDLE,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,220*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,1,
-	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_BB,true,
-
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,208*16,30*16,
-
-	SC_SNAP_CAMERA_TO,			197*16,16*16,
-
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH6_01_DAT,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_TIMER,			10,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-
-
-// Scene 4 - Goes to BB, and collects his prize
-	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,216*16,30*16,16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,
-	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
-	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,240*16,30*16,154,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
-
-// Scene 5 - SB leaves Shady Shoals
-	SC_SNAP_CAMERA_TO,			4*16,16*16,
-	SC_WAIT_ON_TIMER,			30,
-
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_WALK,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,4*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
-
-	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,40*16,30*16,144,
-	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
-
-// Scene 6 - Back in shady
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_MM,FMA_ANIM_IDLE,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,207*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_MM,0,
-	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_IDLE,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,212*16,30*16,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,1,
-	SC_SNAP_CAMERA_TO,			197*16,16*16,
-	SC_WAIT_ON_TIMER,			60,
-
-// Scene 7 - TV goes pop
-
-// Scene 8 - Outside, MM & BB SCREEEEEEEEEEEEEEEAM
-	SC_SNAP_CAMERA_TO,			4*16,16*16,
-	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_CH6_03_DAT,
-
-	SC_STOP
-};
-
 
 /*****************************************************************************/
 /*** Intro FMA ***************************************************************/
 /*****************************************************************************/
-int s_FMAIntroScript[]=
+static const int s_FMAIntroScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH1_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH1_01_DAT,
@@ -350,7 +253,7 @@ int s_FMAIntroScript[]=
 /*****************************************************************************/
 /*** C1 End FMA **************************************************************/
 /*****************************************************************************/
-int s_FMAC1EndScript[]=
+static const int s_FMAC1EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH2_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH2_01_DAT,
@@ -423,7 +326,7 @@ int s_FMAC1EndScript[]=
 /*****************************************************************************/
 /*** C2 End FMA **************************************************************/
 /*****************************************************************************/
-int s_FMAC2EndScript[]=
+static const int s_FMAC2EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH3_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH3_01_DAT,
@@ -484,7 +387,7 @@ int s_FMAC2EndScript[]=
 /*****************************************************************************/
 /*** C3 End FMA **************************************************************/
 /*****************************************************************************/
-int s_FMAC3EndScript[]=
+static const int s_FMAC3EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH4_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH4_01_DAT,
@@ -556,7 +459,7 @@ int s_FMAC3EndScript[]=
 /*****************************************************************************/
 /*** C4 End FMA **************************************************************/
 /*****************************************************************************/
-int s_FMAC4EndScript[]=
+static const int s_FMAC4EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH5_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH5_01_DAT,
@@ -632,7 +535,7 @@ int s_FMAC4EndScript[]=
 /*** C5 End FMA **************************************************************/
 /*****************************************************************************/
 
-int s_FMAC5EndScript[]=
+static const int s_FMAC5EndScript[]=
 {
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_00_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_01_DAT,
@@ -731,37 +634,9 @@ int s_FMAC5EndScript[]=
 	SC_STOP
 };
 
-/*****************************************************************************/
-// A test script..
-/*
-int s_testScriptold[]=
-{
-	SC_REGISTER_CONVERSATION,	SCRIPTS_CH1L1_01_DAT,
-	SC_SNAP_CAMERA_TO,			0,0,
-	SC_SET_ACTOR_VISIBILITY,	ACTOR_SPONGEBOB,true,
-	SC_SET_ACTOR_POSITION,		ACTOR_SPONGEBOB,100,100,
-
-	SC_MOVE_CAMERA_TO,			100,100,150+(60*2),
-	SC_WALK_ACTOR_TO_POSITION,	ACTOR_SPONGEBOB,200,100,10,
-	SC_WAIT_ON_CAMERA_STOP,
-
-	SC_WAIT_ON_CONVERSATION,	SCRIPTS_CH1L1_01_DAT,
-
-	SC_WAIT_ON_TIMER,			60,
-
-	SC_SET_ACTOR_ANIM_STATE,	ACTOR_SPONGEBOB,ANIM_WALK,
-	SC_SET_ACTOR_FACING,		ACTOR_SPONGEBOB,1,
-	SC_WALK_ACTOR_TO_POSITION,	ACTOR_SPONGEBOB,250,200,5,
-	SC_WAIT_ON_ACTOR_STOP,		ACTOR_SPONGEBOB,
-
-	SC_WAIT_ON_TIMER,			60*5,
-
-	SC_STOP
-};
-*/
 
 // Actor graphics data
-const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
+static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 {
 	{	ACTORS_SPONGEBOB_SBK,			{	ANIM_SPONGEBOB_IDLEBREATH,		ANIM_SPONGEBOB_RUN				}	},	// ACTOR_SPONGEBOB
 	{	ACTORS_MERMAIDMAN_SBK,			{	ANIM_MERMAIDMAN_IDLEBREATHE,	ANIM_MERMAIDMAN_IDLEBREATHE		}	},	// ACTOR_MM
@@ -771,6 +646,20 @@ const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 
 
 ACTOR_DATA		m_actorData[FMA_NUM_ACTORS];
+
+
+static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
+{
+	s_FMAIntroScript,
+	s_FMAC1EndScript,
+	s_FMAC2EndScript,
+	s_FMAC3EndScript,
+	s_FMAC4EndScript,
+	s_FMAC5EndScript,
+};
+
+static CFmaScene::FMA_SCRIPT_NUMBER	s_chosenScript=CFmaScene::FMA_SCRIPT__INTRO;
+
 
 
 #include "pad\pads.h"
@@ -820,7 +709,9 @@ void	CFmaScene::init()
 	m_frameCount=0;
 
 	m_scriptRunning=true;
-	m_pc=s_testScript;
+	m_pc=s_fmaScripts[s_chosenScript];
+
+	CFader::setFadingIn();
 }
 
 
@@ -916,7 +807,7 @@ void	CFmaScene::think(int _frames)
 		m_cameraPos.vx+=16;
 	}
 #endif
-	if(m_scriptRunning==false&&PadGetDown(0)&(PAD_CROSS|PAD_START))
+	if(m_scriptRunning==false&&!m_readyToShutdown)
 	{
 		startShutdown();
 	}
@@ -1021,7 +912,19 @@ void	CFmaScene::think(int _frames)
   ---------------------------------------------------------------------- */
 int		CFmaScene::readyToShutdown()
 {
-	return m_readyToShutdown;
+	return m_readyToShutdown&&!CFader::isFading();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CFmaScene::selectFma(FMA_SCRIPT_NUMBER _fma)
+{
+	s_chosenScript=_fma;
 }
 
 
@@ -1033,6 +936,7 @@ int		CFmaScene::readyToShutdown()
   ---------------------------------------------------------------------- */
 void	CFmaScene::startShutdown()
 {
+	CFader::setFadingOut();
 	GameState::setNextScene(&MapScene);
 	m_readyToShutdown=true;
 }

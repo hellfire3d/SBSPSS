@@ -156,6 +156,8 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	slot->m_isInUse=false;
 	slot->m_lives=INITIAL_LIVES;
 	slot->m_continues=INITIAL_CONTINUES;
+	slot->m_hasSeenOpeningFMA=false;
+
 
 	// Clear spatula and kelp token flags
 	for(i=0;i<NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS;i++)

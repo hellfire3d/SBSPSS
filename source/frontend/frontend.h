@@ -55,7 +55,7 @@ public:
 
 		MODE__NONE,
 
-		MODE__EXIT_TO_MAP,
+		MODE__EXIT_TO_GAME,
 	} FrontEndMode;
 
 	enum
