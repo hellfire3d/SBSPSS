@@ -17,6 +17,10 @@
 
 #include "player\pmdead.h"
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -76,7 +80,7 @@ m_player->moveVertical(5);
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&PI_FIRE)||
 	   m_deadTime>DEATH_TIMEOUT)
 	{
-		respawn();
+		CGameScene::restartlevel();
 	}
 }
 

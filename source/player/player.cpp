@@ -638,7 +638,10 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 {
-	CGameScene::restartlevel();
+	if(m_currentMode!=PLAYER_MODE_DEAD)
+	{
+		dieYouPorousFreak();
+	}
 }
 if(newmode!=-1)
 {
@@ -1367,14 +1370,14 @@ void CPlayer::calcCameraFocusPointTarget()
 void CPlayer::respawn()
 {
 	// Strip any items that the player might be holding
-	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
-	{
+//	if(m_currentMode!=PLAYER_MODE_BASICUNARMED)
+//	{
 		setMode(PLAYER_MODE_FULLUNARMED);
-	}
-	else
-	{
-		setMode(PLAYER_MODE_BASICUNARMED);
-	}
+//	}
+//	else
+//	{
+//		setMode(PLAYER_MODE_BASICUNARMED);
+//	}
 
 	m_allowConversation=false;
 
