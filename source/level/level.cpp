@@ -91,6 +91,7 @@ void 	CLevel::init()
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
 		m_levelTPage=TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
 */
+		if (s_globalLevelSelectThing>33) s_globalLevelSelectThing=0;
 		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(LvlTable[s_globalLevelSelectThing].TileBank,"Tile Bank Data");
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LvlTable[s_globalLevelSelectThing ].Level,"Level Data");
 		m_levelTPage=TPLoadTex(LvlTable[s_globalLevelSelectThing ].Tex);
