@@ -97,6 +97,8 @@ private:
 	int				m_globalAnimationFlag;
 
 	int				m_readyToShutdown;
+
+	int				m_drawScreenAsWhite;
 };
 
 

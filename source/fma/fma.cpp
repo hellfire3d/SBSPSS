@@ -207,6 +207,9 @@ typedef enum
 	SC_SET_NEXT_SCENE,			// nextScene
 	SC_SET_NEXT_FMA_NUMBER,		// fmaNumber
 
+	SC_SET_FADE_TO_BLACK,		//
+	SC_SET_FADE_TO_WHITE,		//
+
 	SC_SNAP_CAMERA_TO,			// x,y
 	SC_MOVE_CAMERA_TO,			// x,y,frames
 
@@ -218,6 +221,7 @@ typedef enum
 	SC_WAIT_ON_CAMERA_STOP,		//								(nonblocking)
 	SC_WAIT_ON_CONVERSATION,	// scriptId						(nonblocking)
 	SC_WAIT_ON_THROWN_ITEM,		// item
+	SC_WAIT_ON_FADE,			//
 	
 	SC_SET_ACTOR_VISIBILITY,	// actor,on/off
 	SC_SET_ACTOR_POSITION,		// actor,x,y
@@ -1090,13 +1094,16 @@ static const int s_FMAPlanktonScript[]=
 	SC_WAIT_ON_CAMERA_STOP,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 
-	SC_SNAP_CAMERA_TO,			94*16,5*16,
+	SC_SNAP_CAMERA_TO,			91*16,5*16,
 	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,114*16,18*16,
 	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
 	SC_WALK_ACTOR_TO_POSITION,	FMA_ACTOR_SPONGEBOB,108*16,18*16,24,
 	SC_WAIT_ON_ACTOR_STOP,		FMA_ACTOR_SPONGEBOB,
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
 
+	SC_WAIT_ON_TIMER,			60,
+	SC_SET_FADE_TO_WHITE,
+	SC_WAIT_ON_FADE,
 	SC_WAIT_ON_TIMER,			60,
 
 	SC_STOP
@@ -1183,7 +1190,7 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 
 
 
-int	s_chosenScript=CFmaScene::FMA_SCRIPT__CH1FINISHED;
+int	s_chosenScript=CFmaScene::FMA_SCRIPT__PLANKTON;
 
 
 /*----------------------------------------------------------------------
@@ -1265,6 +1272,8 @@ void	CFmaScene::init()
 	m_stillProcessingCommand=false;
 	m_doOtherProcessing=false;
 	StopLoad();
+
+	m_drawScreenAsWhite=false;
 }
 
 
@@ -1311,6 +1320,16 @@ void	CFmaScene::shutdown()
   ---------------------------------------------------------------------- */
 void	CFmaScene::render()
 {
+	if(m_drawScreenAsWhite)
+	{
+		POLY_F4	*f4;
+		f4=GetPrimF4();
+		setXYWH(f4,0,0,512,256);
+		setRGB0(f4,255,255,255);
+		AddPrimToList(f4,0);
+		return;
+	}
+
 	int			i;
 	ACTOR_DATA	*actor;
 	sItemData	*item;
@@ -1666,6 +1685,16 @@ void	CFmaScene::startNextScriptCommand()
 			selectFma((FMA_SCRIPT_NUMBER)*(m_pc++));
 			break;
 
+		case SC_SET_FADE_TO_BLACK:		//
+			m_pc++;
+			CFader::setFadingOut(CFader::BLACK_FADE);
+			break;
+
+		case SC_SET_FADE_TO_WHITE:		//
+			m_pc++;
+			CFader::setFadingOut(CFader::WHITE_FADE);
+			break;
+
 		case SC_SNAP_CAMERA_TO:			// x,y
 			m_pc++;
 			m_cameraPos.vx=*m_pc++;
@@ -1710,6 +1739,10 @@ void	CFmaScene::startNextScriptCommand()
 			break;
 
 		case SC_WAIT_ON_THROWN_ITEM:	// item
+			m_stillProcessingCommand=true;
+			break;
+
+		case SC_WAIT_ON_FADE:			//
 			m_stillProcessingCommand=true;
 			break;
 
@@ -1887,6 +1920,8 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_USE_PARTY:				// 
 		case SC_SET_NEXT_SCENE:			// nextScene
 		case SC_SET_NEXT_FMA_NUMBER:	// fmaNumber
+		case SC_SET_FADE_TO_BLACK:		//
+		case SC_SET_FADE_TO_WHITE:		//
 		case SC_SNAP_CAMERA_TO:			// x,y
 		case SC_MOVE_CAMERA_TO:			// x,y,frames
 		case SC_REGISTER_CONVERSATION:	// scriptId
@@ -1975,6 +2010,19 @@ void	CFmaScene::processCurrentScriptCommand()
 			{
 				m_pc+=2;
 				m_stillProcessingCommand=false;
+			}
+			else
+			{
+				m_doOtherProcessing=true;
+			}
+			break;
+
+		case SC_WAIT_ON_FADE:			//
+			if(!CFader::isFading())
+			{
+				m_pc++;
+				m_stillProcessingCommand=false;
+				m_drawScreenAsWhite=true;
 			}
 			else
 			{
