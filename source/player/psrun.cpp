@@ -71,7 +71,8 @@ void CPlayerStateRun::enter(CPlayerModeBase *_playerMode)
 	}
 	else
 	{
-		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTART);
+//!!		_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTART);
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_FIRE);
 	}
 
 	if(controlHeld&PI_LEFT)
@@ -126,7 +127,8 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 				_playerMode->setState(STATE_IDLE);
 				if(m_numberOfTimeAnimHasLooped>=4)
 				{
-					_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTOP);
+//!!					_playerMode->setAnimNo(ANIM_SPONGEBOB_RUNSTOP);
+					_playerMode->setAnimNo(ANIM_SPONGEBOB_FIRE);
 				}
 				return;
 			}

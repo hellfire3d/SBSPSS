@@ -31,9 +31,6 @@ public:
 		void			GUIThingUpdate(bool OnlySel=false);
 		void			GUIThingPointUpdate(bool OnlySel=false);
 
-		void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
-
-
 protected:
 //		CGUILayerPlatform		GUI;
 

@@ -9,12 +9,14 @@
 #include <vector>
 #include <DaveLib.h>
 #include <io.h>
-
+#include <SprSet.h>
 #include "MkActor.h"
 
 #include	<pak.h>
 
 using namespace std;
+//#define	CheckDups	1
+//#define	OutputTGA
 
 //***************************************************************************
 vector<CMkActor>	ActorList;
@@ -257,6 +259,7 @@ int			Error=0;
 				sFrame	NewFrame;
 				NewFrame.Filename=Find.name;
 				ThisAnim.Frames.push_back(NewFrame);
+
 				Error=_findnext( FileHandle, &Find);
 			}
 			_findclose( FileHandle);
@@ -283,7 +286,7 @@ int		i,ListSize=AnimList.size();
 //***************************************************************************
 void	CMkActor::LoadFrame(sFrame &ThisFrame,bool VRamFlag)
 {
-		ThisFrame.FrameIdx=LoadBmp(ThisFrame.Filename,VRamFlag);
+			ThisFrame.FrameIdx=LoadBmp(ThisFrame.Filename,VRamFlag);
 }
 
 //***************************************************************************
@@ -310,7 +313,7 @@ Rect	OriginalRect;
 		nfAreaBytes=nfLineWidthBytes*nfH;
 		Bmp.PsxSize=nfAreaBytes;
 
-		Bmp.Psx=(u8*)malloc(nfAreaBytes);
+		Bmp.Psx=(u8*)malloc(nfAreaBytes+16);
 		ASSERT(Bmp.Psx);
 
 		for (int y=0;y<nfH;y++)
@@ -324,7 +327,7 @@ Rect	OriginalRect;
 
 				PixAddr=&Bmp.Psx[(x/2)+(nfLineWidthBytes*y)];
 
-				if (PixAddr>&Bmp.Psx[nfAreaBytes]) printf("!");
+				if (PixAddr>=&Bmp.Psx[nfAreaBytes]) ASSERT(!"");
 				if ((x&1))
 				{
 					*PixAddr&=0x0f;
@@ -344,39 +347,28 @@ int		CMkActor::LoadBmp(GString &Name,bool VRamFlag)
 {
 GString	Filename=SpriteDir+Name;
 
-int		Idx,i,ListSize;
-int		W,H,Size;
-sBmp	NewBmp;
-Frame	&Bmp=NewBmp.Bmp;
+int			BmpListSize=BmpList.size();
+sBmp		NewBmp;
+SprFrame	&NewFrame=NewBmp.Bmp;
+FileInfo	ThisInfo;
 
-		NewBmp.Filename=Filename;
-		NewBmp.RGB=0;
-		NewBmp.Pak=0;
-		NewBmp.Psx=0;
-		NewBmp.VRamFlag=VRamFlag;
-		Bmp.LoadBMP(Filename);
-		W=Bmp.GetWidth();
-		H=Bmp.GetHeight();
-		Size=W*H;
-		NewBmp.RGB=(u8*)malloc(Size*3);
-		ASSERT(NewBmp.RGB);
-		Bmp.MakeRGB(NewBmp.RGB);
+//			ThisInfo.SetInfo(name,		CrossHair,	ThisZeroColZero,	MoveUVs,	AllowRotate,	ShrinkToFit,	m_allocateAs16bit);
+			ThisInfo.SetInfo(Filename,	false,		true,				false,		false,			true,			false);
 
-#if	_DEBUG && 0
-		{
-u8		*TGA=(u8*)malloc(Size*3);
-		ASSERT(TGA);
-		Bmp.FlipY();
-		Bmp.MakeRGB(TGA);
-		Bmp.FlipY();
+			NewBmp.RGB=0;
+			NewBmp.Pak=0;
+			NewBmp.Psx=0;
+			NewBmp.VRamFlag=VRamFlag;
 
-		char	OutName[256];
-		sprintf(OutName,"\\x\\%s.tga",Name);
-		SaveTGA(OutName,W,H,TGA,true);
-		free(TGA);
-		}
-#endif
+			NewFrame.LoadBMP(Filename);
 
+#ifdef	CheckDups
+int			Size=NewFrame.GetWidth()*NewFrame.GetHeight();
+			NewBmp.RGB=(u8*)malloc(Size*3);
+			ASSERT(NewBmp.RGB);
+			NewFrame.MakeRGB(NewBmp.RGB);
+
+// Check for dups (Broken at the mo, ah well)
 // Gen Chksum
 u8		*RGB=NewBmp.RGB;
 		NewBmp.ChkR=NewBmp.ChkG=NewBmp.ChkB=0;
@@ -386,15 +378,13 @@ u8		*RGB=NewBmp.RGB;
 			NewBmp.ChkG+=*RGB++;
 			NewBmp.ChkB+=*RGB++;
 		}
-		
-		ListSize=BmpList.size();
-		Idx=-1;
+
+int		Idx=-1;
 // Find existing
-		for (i=0; i<ListSize && Idx==-1; i++)
+		for (int i=0; i<BmpListSize && Idx==-1; i++)
 		{
 			sBmp	&ThisBmp=BmpList[i];
-			if (ThisBmp.Filename==Filename) Idx=i;
-			if (ThisBmp.ChkR==NewBmp.ChkR && ThisBmp.ChkG==NewBmp.ChkG && ThisBmp.ChkB==NewBmp.ChkB)
+//			if (ThisBmp.ChkR==NewBmp.ChkR && ThisBmp.ChkG==NewBmp.ChkG && ThisBmp.ChkB==NewBmp.ChkB)
 			{
 				if (IsImageSame(ThisBmp,NewBmp)) Idx=i;
 			}
@@ -406,23 +396,38 @@ u8		*RGB=NewBmp.RGB;
 			free(NewBmp.RGB);
 			return(Idx);
 		}
-
-		MakePsxGfx(NewBmp);
+#endif
 		BmpList.push_back(NewBmp);
-		if (VRamFlag)
+		BmpList[BmpListSize].Bmp.SetFrameAndInfo(BmpList[BmpListSize].Bmp,ThisInfo,0);
+		MakePsxGfx(BmpList[BmpListSize]);
+
+
+#if	_DEBUG && defined(OutputTGA)
 		{
-			TexGrab.AddMemFrame(NewBmp.Filename,NewBmp.Bmp);
+		Frame	&OutF=BmpList[BmpListSize].Bmp;
+u8		*TGA=(u8*)malloc(OutF.GetWidth()*OutF.GetHeight()*3);
+		ASSERT(TGA);
+		OutF.FlipY();
+		OutF.MakeRGB(TGA);
+		OutF.FlipY();
+
+		char	OutName[256];
+		sprintf(OutName,"\\x\\%s.tga",Name);
+		SaveTGA(OutName,OutF.GetWidth(),OutF.GetHeight(),TGA,true);
+		free(TGA);
 		}
-		return(ListSize);
+#endif
+
+		return(BmpListSize);
 }
 
 //***************************************************************************
 bool	CMkActor::IsImageSame(sBmp &Bmp0,sBmp &Bmp1)
 {
-int		W0=Bmp0.Bmp.GetWidth();
-int		H0=Bmp0.Bmp.GetHeight();
-int		W1=Bmp1.Bmp.GetWidth();
-int		H1=Bmp1.Bmp.GetHeight();
+int		W0=Bmp0.Bmp.GetOrigW();
+int		H0=Bmp0.Bmp.GetOrigH();
+int		W1=Bmp1.Bmp.GetOrigW();
+int		H1=Bmp1.Bmp.GetOrigH();
 int		Size=W0*H0*3;
 u8		*RGB0=Bmp0.RGB;
 u8		*RGB1=Bmp1.RGB;
@@ -436,6 +441,7 @@ u8		*RGB1=Bmp1.RGB;
 		}
 		return(true);
 }
+
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
@@ -592,6 +598,11 @@ vector<sSpriteFrame>	Out;
 			else
 			{ // Pak
 				Out[i].PAKSpr=(u8*)ftell(File);
+				Out[i].XOfs=-ThisBmp.Bmp.GetX();
+				Out[i].YOfs=-ThisBmp.Bmp.GetY();
+				Out[i].W=ThisBmp.Bmp.GetWidth();
+				Out[i].H=ThisBmp.Bmp.GetHeight();
+					
 				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
 				PadFile(File);
 			}

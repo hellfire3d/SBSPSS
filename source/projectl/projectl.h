@@ -18,8 +18,6 @@
 #include "thing/thing.h"
 #endif
 
-#include "Gfx/Skel.h"
-
 /*****************************************************************************/
 
 class	CProjectile : public CEnemyProjectileThing

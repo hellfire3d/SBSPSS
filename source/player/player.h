@@ -22,9 +22,8 @@
 #include "thing/thing.h"
 #endif
 
-#ifndef __GFX_SKELSPNG_H__
-#include "gfx/skelspng.h"
-#endif
+#include "gfx/actor.h"
+
 
 #ifndef __DATA_STRUCTS_HEADER__
 #include <dstructs.h>
@@ -189,7 +188,7 @@ private:
 	static const AnimSfx	s_animSfx[];
 	int				m_animFrame;
 	int				m_animNo;
-	CSkelSpongeBob	m_skel;
+	CActorGfx		*m_actorGfx;
 
 	DVECTOR			m_playerScreenGeomPos;
 	DVECTOR			m_cameraPos;

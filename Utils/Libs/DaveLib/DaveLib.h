@@ -66,9 +66,12 @@ void	DebugStr();
 
 int		round(float f);
 
-void	alignFile( FILE *f, int align );
+//void	alignFile( FILE *f, int align );
+void    PadFile(FILE *File);
+
 
 char	*FindFile(const char *Name);
+void	SaveTGA(char *Filename,int W,int H,u8 *Data,bool IsBGR=false);
 
 //***************************************************************************
 #endif

@@ -84,7 +84,8 @@ void	CPlayerModeChop::think()
 	// Chopping?
 	if(m_chopping)
 	{
-		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
+//!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
+		m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
 		m_player->setAnimFrame(m_chopFrame);
 		m_chopFrame++;
 		if(m_chopFrame>=m_player->getAnimFrameCount())

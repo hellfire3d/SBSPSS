@@ -257,12 +257,14 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
-	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEHOOLA,		ANIM_SPONGEBOB_FACEBACK,		5	},
-	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEWIGGLEARM,	ANIM_SPONGEBOB_FACEBACK,		5	},
-	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
-	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
+//!!	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	},	// default
+//!!	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
+//!!	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEHOOLA,		ANIM_SPONGEBOB_FACEBACK,		5	},
+//!!	{	ANIM_SPONGEBOB_FACEFRONT,		ANIM_SPONGEBOB_IDLEWIGGLEARM,	ANIM_SPONGEBOB_FACEBACK,		5	},
+//!!	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
+//!!	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEHOOLA,		-1,								4	},	// default
+
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateUnarmedIdle::getIdleAnimsDb(int _animNo)
@@ -285,9 +287,10 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_coralBlowerIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
-	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
+//!!	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								4	}, // default
+//!!	{	-1,								ANIM_SPONGEBOB_IDLEBREATHE,		-1,								10	},
+//!!	{	-1,								ANIM_SPONGEBOB_IDLELOOK,		-1,								1	},
+	{	-1,								ANIM_SPONGEBOB_IDLEHOOLA,		-1,								1	},
 };
 static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)

@@ -67,7 +67,8 @@
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
+//!!	_playerMode->setAnimNo(ANIM_SPONGEBOB_HOVER);
+	_playerMode->setAnimNo(ANIM_SPONGEBOB_FIRE);
 	m_jumpFrames=0;
 
 	_playerMode->jump();

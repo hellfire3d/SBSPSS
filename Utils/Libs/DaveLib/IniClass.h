@@ -127,7 +127,7 @@ void	Export(char *OutFile)
 }
 
 /*----------------------------------------------------------------------------*/
-char	*GetData(char *GroupEntry,char *KeyEntry)
+char	*GetData(const char *GroupEntry,const char *KeyEntry)
 {
 int	Group=FindGroup(GroupEntry);
 		if (Group==-1) return(0);
@@ -138,19 +138,28 @@ int	Entry=FindKey(GroupEntry,KeyEntry);
 }
 
 /*----------------------------------------------------------------------------*/
-char	*GetStr(char *GroupEntry,char *KeyEntry)
+char	*GetStr(const char *GroupEntry,const char *KeyEntry)
 {
 char	*Str=GetData(GroupEntry,KeyEntry);
 		return(Str);
 }
 
 /*----------------------------------------------------------------------------*/
-int		GetInt(char *GroupEntry,char *KeyEntry)
+int		GetInt(const char *GroupEntry,const char *KeyEntry)
 {
 char	*Str=GetData(GroupEntry,KeyEntry);
 int		Var=0;
 		if (Str) Var=atol(Str);
 		return(Var);
+}
+
+/*----------------------------------------------------------------------------*/
+bool	GetInt(const char *GroupEntry,const char *KeyEntry,int &Var)
+{
+char	*Str=GetData(GroupEntry,KeyEntry);
+		if (!Str) return(false);
+		Var=atol(Str);
+		return(true);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -241,7 +250,7 @@ void	StripGroupName(char *Name)
 }
 
 /*----------------------------------------------------------------------------*/
-int		FindGroup(char *GroupEntry)
+int		FindGroup(const char *GroupEntry)
 {
 		for (int Loop=0;Loop<IniGroup.size();Loop++)
 			{
@@ -251,7 +260,7 @@ int		FindGroup(char *GroupEntry)
 }
 
 /*----------------------------------------------------------------------------*/
-int		FindKey(char *GroupEntry,char *KeyEntry)
+int		FindKey(const char *GroupEntry,const char *KeyEntry)
 {
 int		Group=FindGroup(GroupEntry);;
 		if (Group==-1) return(-1);

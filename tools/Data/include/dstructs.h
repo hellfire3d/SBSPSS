@@ -33,50 +33,10 @@ enum	PSX_DATA_ENUM
 	LAYER_SHADE_RGB_MAX=4,
 };
 
-//***************************************************************************
-// biped bone IDs
-/*
-enum BONE_NAME
-{
-	BIP0,
-	BIP01_PELVI,
-	BIP01_SPIN,
-	BIP01_SPINE,
-	BIP01_NEC,
-	BIP01_HEA,
-	BIP01_L_CLAVICL,
-	BIP01_L_UPPERAR,
-	BIP01_L_FOREAR,
-	BIP01_L_HAN,
-	BIP01_R_CLAVICL,
-	BIP01_R_UPPERAR,
-	BIP01_R_FOREAR,
-	BIP01_R_HAN,
-	BIP01_L_THIG,
-	BIP01_L_CAL,
-	BIP01_L_FOO,
-	BIP01_L_TOE,
-	BIP01_R_THIG,
-	BIP01_R_CAL,
-	BIP01_R_FOO,
-	BIP01_R_TOE0,
-	MAX_BONE
-};
-*/
 
 //***************************************************************************
 //*** Base Types ************************************************************
 //***************************************************************************
-#ifndef	sQuat
-struct 	sQuat
-{
-	s16		vx,vy,vz,vw;
-#ifdef	WIN32
-bool	operator==(sQuat const &v1)	{return((vx==v1.vx) && (vy==v1.vy) && (vz==v1.vz) && (vw==v1.vw));}
-#endif
-};
-#endif
-
 struct sShortXYZ
 {
 		s16		vx,vy,vz;
@@ -113,37 +73,6 @@ struct	sMat
 		u16			Clut;
 //		s32			DblFlag;
 };
-
-//***************************************************************************
-struct	sTexInfo	// Basically same as PSX RECT
-{
-		s16		x, y, w, h;
-};
-
-//***************************************************************************
-struct sWeight
-{
-		s16		vx,vy,vz,VtxNo;				//  8
-};
-
-//***************************************************************************
-struct sBone
-{
-		sVtx		BoneSize;				//  8
-		s16			Parent;					//  2
-		s16			TriStart;				//  2
-		s16			TriCount;				//  2
-		s16			VtxCount;				//  2
-};											// 16
-/*
-struct sBone
-{
-		sVtx		BoneSize;				//  8
-		s16			Parent,Idx;				//  4
-		s32			WeightCount;			//  4
-		sWeight		*WeightList;			//  4
-};											// 20
-*/
 
 //***************************************************************************
 //*** Poly Types ************************************************************
@@ -192,40 +121,16 @@ enum	TILE3D_FLAGS
 };
 */
 typedef	u16	sTileMapElem;	// Tile or Tri Start
-/*
-struct	sTileMapElem
-{
-		u16		Elem;	// Tile or Tri Start
-};
-*/
-/*
-struct	sTileMapElem3d : public sTileMapElem
-{
-		u16		Flags;
-};
-*/
-/*
-struct	sTileTable
-{
-		u16		TriList;
-		u16		TriCount;
-};
-*/
+
 struct	sTile
 {
-// 3d Tile
-//		u16		TriStart;							// 2
-//		u16		TileTable[TILE3D_FLAGS_MAX];		// 10
 // 2d Tile
 		u8		u0,v0;								// 2
 		u16		Clut;								// 2
 		u16		TPage;								// 2
 		u16		Pad;	// :o( need this?			// 2
 
-#ifdef	WIN32
-//bool	operator==(sTile const &v1)	{return(false);}
-#endif
-};													// 20
+};													// 8
 
 //---------------------------------------------------------------------------
 // Layers
@@ -274,9 +179,9 @@ struct	sLvlHdr
 	u32		ActionLayer;
 	u32		ForeLayer;
 	u32		CollisionLayer;
-	u32		Pad1;
-	u32		Pad2;
-	u32		Pad3;
+	u32		ActorList;
+	u32		ItemList;
+	u32		PlatformList;
 	u32		Pad4;
 	u32		Pad5;
 	u32		Pad6;
@@ -284,63 +189,79 @@ struct	sLvlHdr
 
 };
 
-//---------------------------------------------------------------------------
-// TileBank
-/*
-struct	sTileBankHdr
-{
-	u32		TriList;
-	u32		QuadList;
-	u32		VtxList;
-	u32		TileList;
-};
-*/
-
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
 // Actors
-
-typedef	u16	AnimIdx;
-
-struct	sAnimHdr
+struct	sSpriteFrame
 {
-	u16		FrameCount;
-	u16		Pad;
-	AnimIdx	*Anim;
-	s32		*Move;
+	u8			*PAKSpr;	// 4
+	s8			XOfs,YOfs;	// 2
+	u8			W,H;		// 2
 };
 
-struct	sActorHdr
+struct	sSpriteAnim
 {
-	u16			BoneCount;
-	u16			TriCount;
-	u16			QuadCount;
-				u16			WeightCount;
-	u16			VtxCount;
-	u16			AnimCount;
-
-	sBone		*BoneList;
-	sTri		*TriList;
-	sQuad		*QuadList;
-				sWeight		*WeightList;
-	sVtx		*VtxList;
-	sTexInfo	*TexInfo;
-	sAnimHdr	*AnimList;
-	sQuat		*QuatTable;
+	u16			FrameCount;	// 2
+	u16			*Anim;		// 2
 };
+
+struct	sSpriteAnimBank
+{
+	u16				ColorCount;		// 2
+	u16				AnimCount;		// 2
+	u16				FrameCount;		// 2
+	u16				Pad;			// 2
+
+	u8				*Palette;		// 4
+	sSpriteAnim		*AnimList;		// 4
+	sSpriteFrame	*FrameList;		// 4
+};
+
 
 //***************************************************************************
-// Anim
-/*
-struct	sAnimFileHdr
+//***************************************************************************
+//***************************************************************************
+// Things - Must be 4 byte aligned for pos data
+struct	sThingHdr
 {
-	u16		BoneCount;
-	u16		AnimCount;
-	sQuat	*QuatTable;
-//	Anim Hdrs....
+	u16		Count;
+	u16		Pad;
 };
-*/
 
+struct	sThingPoint
+{
+	u16		X,Y;
+};
 
+struct	sThingActor
+{
+	u16		Type;
+	u16		Health;
+	u16		AttackStrength;
+	u16		Speed;
+	u16		TurnRate;
+	u8		Flags;
+	u8		PointCount;
+	// Point List...
+}; // 12
+
+struct	sThingItem
+{
+	u16			Type;
+	u16			Pad; // Poo!
+	sThingPoint	Pos;
+};
+
+struct	sThingPlatform
+{
+	u16		Type;
+	u16		Speed;
+	u16		TurnRate;
+	u8		Flags;
+	u8		PointCount;
+	// Point List...
+}; // 10
+
+//***************************************************************************
 #endif

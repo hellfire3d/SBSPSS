@@ -846,7 +846,11 @@ void SprSet::WriteSprFile(char const * Name)
   ---------------------------------------------------------------------- */
 void SprFrame::SetFrameAndInfo(Frame const & Fr,FileInfo const & NewMyFileInfo,int MaxSize)
 {
-	Frame::CopyFrame(Fr);
+	if (this!=&Fr)
+	{
+		Frame::CopyFrame(Fr);
+	}
+
 	MyFileInfo=NewMyFileInfo;
 
 	OrigW=Fr.GetWidth();

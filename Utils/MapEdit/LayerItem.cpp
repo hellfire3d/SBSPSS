@@ -114,27 +114,3 @@ void	CLayerItem::GUIChanged(CCore *Core)
 {
 }
 
-/*****************************************************************************/
-/*** Functions ***************************************************************/
-/*****************************************************************************/
-void	CLayerItem::ExportThing(CExport &Exp,sLayerThing &ThisThing)
-{
-/*
-int				i,ListSize=ThisThing.XY.size();
-sExpLayerItem	OutThing;
-// Point List
-		Exp.Write(&ListSize,sizeof(int));
-		for (i=0 ;i<ListSize; i++)
-		{
-			Exp.Write(&ThisThing.XY[i],sizeof(CPoint));
-		}
-// Thing
-		OutThing.Health=ThisThing.Data.Health;
-		OutThing.AttackStrength=ThisThing.Data.AttackStrength;
-		OutThing.Speed=ThisThing.Data.Speed;
-		OutThing.TurnRate=ThisThing.Data.TurnRate;
-		OutThing.CollisionFlag=ThisThing.Data.CollisionFlag;
-		OutThing.PlayerFlag=ThisThing.Data.PlayerFlag;
-		Exp.Write(&OutThing,sizeof(sExpLayerItem));
-*/
-}

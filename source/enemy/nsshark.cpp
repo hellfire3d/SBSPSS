@@ -28,7 +28,7 @@
 #endif
 
 #ifndef	__ANIM_SHARKSUB_HEADER__
-#include <ACTOR_SHARKSUB_ANIM.h>
+#include <ACTOR_CLAM_ANIM.h>
 #endif
 
 
@@ -39,13 +39,13 @@ void CNpcEnemy::processSubSharkMovement( int _frames )
 		if ( playerXDistSqr + playerYDistSqr < 100 && !m_salvoCount )
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_SHARKSUB_SHARKSUBSWIPE;
+			m_animNo = ANIM_CLAM_SIDESNAP;
 			m_frame = 0;
 		}
 		else
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_SHARKSUB_SHARKSUBSWIM;
+			m_animNo = ANIM_CLAM_SIDESNAP;
 			m_frame = 0;
 		}
 	}
@@ -156,7 +156,7 @@ void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_SHARKSUB_SHARKSUBSPRINTOPEN;
+				m_animNo = ANIM_CLAM_SIDESNAP;
 				m_frame = 0;
 			}
 
@@ -165,7 +165,7 @@ void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 			if ( playerXDistSqr < 10000 )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_SHARKSUB_SHARKSUBCHOMP;
+				m_animNo = ANIM_CLAM_SIDESNAP;
 				m_frame = 0;
 
 				m_state = SUB_SHARK_SWALLOW;
@@ -211,7 +211,7 @@ void CNpcEnemy::processCloseSubSharkAttack( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_SHARKSUB_SHARKSUBSWIM;
+				m_animNo = ANIM_CLAM_SIDESNAP;
 				m_frame = 0;
 				m_controlFunc = NPC_CONTROL_MOVEMENT;
 				m_movementTimer = GameState::getOneSecondInFrames() * 8;

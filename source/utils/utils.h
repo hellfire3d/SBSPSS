@@ -580,6 +580,7 @@ s32		Dpx, Dpy, Dpz;
 		return (Dpx + Dpy + Dpz);
 }
 /*****************************************************************************/
+/*
 inline void	QuatSlerp(sQuat *s, sQuat *d, int t, sQuat *o)
 {
 s32		xx, yy, zz, ww;
@@ -627,8 +628,9 @@ sQuat	to;
 		gte_LoadAverageShort12(s, &to, c0, c1, o);
 		o->vw = ((c0 * s->vw) + (c1 * to.vw)) >> 12;
 }
-
+*/
 /*****************************************************************************/
+/*
 static const s32 DeltaErr = 1000;
 inline void NormalizeQuaternion(sQuat *o)
 {
@@ -646,5 +648,5 @@ s32 t = (u32)((s32)o->vx*o->vx+(s32)o->vy*o->vy+(s32)o->vz*o->vz+(s32)o->vw*o->v
 			}
 		}
 }
-
+*/
 #endif

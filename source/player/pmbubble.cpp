@@ -123,7 +123,8 @@ void	CPlayerModeBubbleMixture::think()
 	// Blowing?
 	if(m_blowing)
 	{
-		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
+//!!		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
+		m_player->setAnimNo(ANIM_SPONGEBOB_FIRE);
 		m_player->setAnimFrame(m_blowFrame);
 		m_blowFrame++;
 		if(m_blowFrame>=m_player->getAnimFrameCount())

@@ -100,6 +100,10 @@ SOURCE=.\facestore.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\IniClass.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\List.h
 # End Source File
 # Begin Source File

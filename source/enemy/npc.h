@@ -20,7 +20,8 @@
 #include "thing/thing.h"
 #endif
 
-#include "Gfx/Skel.h"
+
+//#include "Gfx/Skel.h"
 
 #ifndef __ENEMY_NPCPATH_H__
 #include "enemy\npcpath.h"
@@ -101,8 +102,7 @@ protected:
 
 	int				m_frame;
 	int				m_animNo;
-	CSkel			m_skel;
-	TPAGE_DESC		m_actorTPage;
+	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;
 };
 
@@ -500,8 +500,7 @@ protected:
 
 	int				m_frame;
 	int				m_animNo;
-	CSkel			m_skel;
-	TPAGE_DESC		m_actorTPage;
+	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;
 
 	virtual void		collidedWith(CThing *_thisThing);

@@ -68,6 +68,7 @@
 #include "sound\sound.h"
 #endif
 
+#include "gfx\actor.h"
 
 
 //int		GX=512/2;
@@ -95,7 +96,6 @@ int CGameScene::s_levelFinished;
 
 CGameScene	GameScene;
 
-#include "gfx\actorpool.h"
 /*****************************************************************************/
 void 	CGameScene::init()
 {

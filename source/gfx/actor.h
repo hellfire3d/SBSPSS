@@ -1,6 +1,6 @@
-/******************/
-/*** Actor Bank ***/
-/******************/
+/*******************/
+/*** Actor Stuff ***/
+/*******************/
 
 #ifndef __ACTOR_HEADER__
 #define __ACTOR_HEADER__
@@ -16,30 +16,30 @@
 class	CActorGfx
 {
 public:
-	CActorGfx(){};
-	CActorGfx(FileEquate Filename);
-	~CActorGfx();
+//		CActorGfx(){};
+		CActorGfx(FileEquate Filename);
+virtual	~CActorGfx();
 
-	void		Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX);
-	void		Dump();
+		void		Init(FileEquate _Filename);
+		void		Render(DVECTOR &Pos,int Anim,int Frame,bool FlipX);
+		void		Dump();
 
-	int			getFrameCount()		{return(0);}
+		int			getFrameCount(int Anim)		{return(SpriteBank->AnimList[Anim].FrameCount);}
 
-	FileEquate		GetFilename()	{return(Filename);}
+		FileEquate		GetFilename()	{return(Filename);}
 private:
 		FileEquate		Filename;
-		sSpriteAnimBank	*ActorData;
+		sSpriteAnimBank	*SpriteBank;
 };
 
 /*****************************************************************************/
-class CActorBank
+class CActorPool
 {
 public:
 		enum
 		{
 			MAX_ACTORS=8,
 		};
-//		virtual ~ActorBank(){};
 
 static	void		Init();
 

@@ -42,14 +42,14 @@ public:
 
 		CMoveTex()
 		{
-			Src=0;
+//			Src=0;
 		}
 		
-static	void	Add(sTexInfo &SrcFrame,sTexInfo &DstFrame);
+//static	void	Add(sTexInfo &SrcFrame,sTexInfo &DstFrame);
 static	void	MoveTex();
 
 private:
-		sTexInfo	*Src,*Dst;
+//		sTexInfo	*Src,*Dst;
 
 static	CMoveTex	MoveTexList[];
 };

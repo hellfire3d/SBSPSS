@@ -1,33 +1,7 @@
-/*=========================================================================
-
-	PAK.CPP	
-
-	Author:  Gary Liddon @ Climax (from work by Nick Pelling && Carl Muller)
-	Created:
-	Project: Diablo PSX
-	Purpose: PAK decompress \ compress code
-
-	Copyright (c) 1997 Climax Development Ltd
-
-===========================================================================*/
-
-/*----------------------------------------------------------------------
-	Includes
-	-------- */
-
-/*	Std Lib
-	------- */
-
-/*	Glib
-	---- */
-
-/*	Local
-	----- */
+#include "system\global.h"
 #include <string.h>
-#include "pak.h"
+#include "utils\pak.h"
 
-/*	Graphics
-	-------- */
 
 /*----------------------------------------------------------------------
 	Tyepdefs && Defines
@@ -44,7 +18,7 @@
 struct Block
 {
 	int		data[128];
-	BOOL	blockrep;
+	bool	blockrep;
 	int		blocksize;
 	int		blockoffset;
 
@@ -115,7 +89,7 @@ void Block::writeBlock(void)
 		}
 
 	// Get ready for next block
-	blockrep = FALSE;
+	blockrep = false;
 	blockoffset = 0;
 	blocksize = -1;
 }
@@ -158,7 +132,7 @@ int lowLevelPak(u8 * Dest,u8 const * buffer,int insize,Block & theblock)
 
 	theblock.Dest=Dest;
 	theblock.outsize=0;
-	theblock.blockrep=FALSE;
+	theblock.blockrep=false;
 
 	BACKDIST = -128;
 	FORWARDDIST = 255;
@@ -244,7 +218,7 @@ int lowLevelPak(u8 * Dest,u8 const * buffer,int insize,Block & theblock)
 			{
 			/* We have found a match */
 			theblock.writeBlock();
-			theblock.blockrep = TRUE;
+			theblock.blockrep = true;
 			theblock.blocksize = bestlength;
 			theblock.blockoffset = bestoffset;
 			inpos += bestlength;
@@ -257,7 +231,7 @@ int lowLevelPak(u8 * Dest,u8 const * buffer,int insize,Block & theblock)
 
 	/* Terminate file */
 
-	theblock.blockrep = TRUE;
+	theblock.blockrep = true;
 	theblock.blocksize = 0;
 	theblock.blockoffset = 0;
 	theblock.writeBlock();

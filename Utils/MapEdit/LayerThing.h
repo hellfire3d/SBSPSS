@@ -78,7 +78,7 @@ virtual	void			SaveThingNames(CFile *File);
 virtual	void			LoadThingScript(const char *Filename);
 
 virtual	void			Export(CCore *Core,CExport &Exp);
-virtual	void			ExportThing(CExport &Exp,sLayerThing &ThisThing)=0;
+virtual	void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
 virtual	void			ExportThingNames(CExport &Exp);
 
 // Functions

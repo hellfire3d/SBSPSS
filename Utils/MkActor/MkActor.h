@@ -23,15 +23,14 @@ struct	sAnim
 //***************************************************************************
 struct	sBmp
 {
-		GString	Filename;
-		Frame	Bmp;
-		int		ChkR,ChkG,ChkB;
-		u8		*RGB;
-		u8		*Psx;
-		u8		*Pak;
-		int		PsxSize;
-		int		PakSize;
-		bool	VRamFlag;
+		SprFrame	Bmp;
+		int			ChkR,ChkG,ChkB;
+		u8			*RGB;
+		u8			*Psx;
+		u8			*Pak;
+		int			PsxSize;
+		int			PakSize;
+		bool		VRamFlag;
 };
 
 //***************************************************************************
@@ -39,7 +38,6 @@ class	CMkActor
 {
 public:
 		CMkActor(GString &ActorName,GString &ActorPath,GString &SpritePath);
-//		~CMkActor();
 
 static	void				SetTPData(const char *Name,int TPBase,int TPW,int TPH);
 		

@@ -151,11 +151,10 @@ int			Time = GameState::getFramesSinceLast();
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/*
 void	CMoveTex::Add(sTexInfo &SrcFrame,sTexInfo &DstFrame)
 {
 int		Idx;
-//		ASSERT(SrcFrame.w==DstFrame.w);
-//		ASSERT(SrcFrame.h==DstFrame.h);
 
 		for (Idx=0; Idx<MOVETEX_MAX && MoveTexList[Idx].Src; Idx++);
 
@@ -166,10 +165,11 @@ CMoveTex	&ThisTex=MoveTexList[Idx];
 		ThisTex.Src=&SrcFrame;
 		ThisTex.Dst=&DstFrame;
 }
-
+*/
 /*****************************************************************************/
 void	CMoveTex::MoveTex()
 {
+/*
 CMoveTex	*ThisTex=MoveTexList,*NextTex;
 
 		for (int Idx=0; Idx<MOVETEX_MAX; Idx++)
@@ -180,6 +180,7 @@ CMoveTex	*ThisTex=MoveTexList,*NextTex;
 			MoveImage((RECT*)ThisTex.Src,ThisTex.Dst->x,ThisTex.Dst->y);
 			ThisTex.Src=0;
 		}
+*/
 }
 
 /*****************************************************************************/

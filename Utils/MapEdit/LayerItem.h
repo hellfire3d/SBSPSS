@@ -30,9 +30,6 @@ public:
 		void			GUIThingDefClear();
 		void			GUIThingUpdate(bool OnlySel=false);
 
-		void			ExportThing(CExport &Exp,sLayerThing &ThisThing);
-
-
 protected:
 		CGUILayerItem		GUI;
 

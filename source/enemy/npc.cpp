@@ -45,7 +45,8 @@
 #include "game\convo.h"
 #endif
 
-#include "Gfx\Skel.h"
+
+#include "Gfx\actor.h"
 
 #ifndef __VID_HEADER_
 #include "system\vid.h"
@@ -62,11 +63,6 @@ class CLayerCollision	*CNpcFriend::m_layerCollision;
 void CNpcFriend::init()
 {
 	CNpcThing::init();
-
-//	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
-//	m_skel.Init(Hdr);
-	m_skel.Init(ACTORS_SPONGEBOB_A3D);
-	m_actorTPage = TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
 
 	Pos.vx = 100;
 	Pos.vy = 100;
@@ -95,10 +91,6 @@ void CNpcFriend::init()
 void CNpcFriend::shutdown()
 {
 	//m_spriteBank->dump();		delete m_spriteBank;
-
-	// temporary
-	//TPFree( m_actorTPage );
-	//CAnimDB::Dump( m_data[m_type].animData );
 
 	CNpcThing::shutdown();
 }
@@ -135,11 +127,7 @@ void CNpcFriend::render()
 	renderPos.vx = ( Pos.vx + m_drawOffset.vx - offset.vx - ( VidGetScrW() >> 1 ) ) * 20;
 	renderPos.vy = ( Pos.vy + m_drawOffset.vy - offset.vy - ( VidGetScrH() >> 1 ) ) * 20;
 
-	m_skel.setPos( renderPos );
-	m_skel.setFrame(m_frame);
-	m_skel.setAnimNo(m_animNo);
-	m_skel.Animate(this);
-	m_skel.Render(this);
+	m_actorGfx->Render(renderPos,m_frame,m_animNo,false);
 
 	/*s32		x,y;
 	s32		scrnWidth = VidGetScrW();
@@ -216,12 +204,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-//	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
-//	m_skel.Init( Hdr );
-	m_skel.Init(m_data[m_type].skelType);
-	m_actorTPage = TPLoadTex( ACTORS_ACTOR_ENEMY_TEX );
-
-	m_skel.setAng(1024);
+	m_actorGfx=CActorPool::GetActor(m_data[m_type].skelType);
 
 	m_animPlaying = true;
 	m_animNo = m_data[m_type].initAnim;
@@ -545,7 +528,6 @@ void CNpcEnemy::shutdown()
 	m_positionHistory = NULL;
 
 	// temporary
-	TPFree( m_actorTPage );
 	CEnemyThing::shutdown();
 }
 
@@ -561,7 +543,7 @@ void CNpcEnemy::think(int _frames)
 
 	if ( m_animPlaying )
 	{
-		int frameCount = m_skel.getFrameCount();
+		int frameCount = m_actorGfx->getFrameCount(m_animNo);
 
 		if ( frameCount - m_frame > _frames )
 		{
@@ -576,12 +558,12 @@ void CNpcEnemy::think(int _frames)
 
 	if ( m_heading > 1024 && m_heading < 3072 )
 	{
-		m_skel.setAng( 3072 );
+//!!		m_actorGfx.setAng( 3072 );
 		m_reversed = true;
 	}
 	else
 	{
-		m_skel.setAng( 1024 );
+//!!		m_actorGfx.setAng( 1024 );
 		m_reversed = false;
 	}
 
@@ -1284,18 +1266,14 @@ void CNpcEnemy::render()
 
 	if ( m_reversed )
 	{
-		m_skel.setZAng( ( m_heading + 2048 ) & 4095 );
+//!!		m_actorGfx.setZAng( ( m_heading + 2048 ) & 4095 );
 	}
 	else
 	{
-		m_skel.setZAng( m_heading );
+//!!		m_actorGfx.setZAng( m_heading );
 	}
 
-	m_skel.setPos( renderPos );
-	m_skel.setFrame(m_frame);
-	m_skel.setAnimNo(m_animNo);
-	m_skel.Animate(this);
-	m_skel.Render(this);
+	m_actorGfx->Render(renderPos,m_frame,m_animNo,m_reversed);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

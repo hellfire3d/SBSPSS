@@ -110,12 +110,12 @@ BOOL	operator==(sExpMapElem const &v1)
 /*****************************************************************************/
 /*** Things ******************************************************************/
 /*****************************************************************************/
-struct	sExpLayerActor
+struct	sExpLayerThing
 {
-	int						Speed;
-	int						TurnRate;
 	int						Health;
 	int						AttackStrength;
+	int						Speed;
+	int						TurnRate;
 	bool					CollisionFlag;
 	bool					PlayerFlag;
 	int						Spare[8];

@@ -50,7 +50,7 @@ void CNpcEnemy::processCloseClamJumpAttack( int _frames )
 			if ( !m_animPlaying )
 			{
 				m_animPlaying = true;
-				m_animNo = ANIM_CLAM_CLAMSNAPUP;
+				m_animNo = ANIM_CLAM_SIDESNAP;
 				m_frame = 0;
 			}
 		}
@@ -96,7 +96,7 @@ void CNpcEnemy::processCloseClamSnapAttack( int _frames )
 	if ( !m_animPlaying )
 	{
 		m_animPlaying = true;
-		m_animNo = ANIM_CLAM_CLAMSIDESNAP;
+		m_animNo = ANIM_CLAM_SIDESNAP;
 		m_frame = 0;
 	}
 

@@ -234,8 +234,7 @@ void	CPlayer::init()
 //	m_onPlatform = false;
 //	m_prevOnPlatform = false;
 	
-	m_skel.Init(ACTORS_SPONGEBOB_A3D);
-	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
+	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
 	for(int i=0;i<NUM_PLAYERMODES;i++)
 	{
@@ -259,8 +258,8 @@ m_animFrame=0;
 
 	s_screenPos=128;
 
-	m_skel.setAng(512);
-//m_skel.setAngInc(678);
+//!!	m_actorGfx.setAng(512);
+//m_actorGfx.setAngInc(678);
 
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
@@ -348,11 +347,6 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 
 		// Look around
 		int	pad=getPadInputHeld();
-if(PadGetDown(0)&PAD_CIRCLE)
-{
-	m_skel.blink();
-}
-
 
 		// Camera scroll..
 		if(m_cameraScrollDir==-1)
@@ -454,33 +448,24 @@ m_fontBank->print(40,40,posBuf);
 	// Render
 	if(m_invincibleFrameCount==0||m_invincibleFrameCount&2)
 	{
-#ifdef __USER_paul__
-if(mouth!=-1)
-{
-	m_skel.setMouthTex(mouth);
-	mouth=-1;
-}
-if(eyes!=-1)
-{
-	m_skel.setEyeTex(eyes);
-	eyes=-1;
-}
-#endif
 
 //int xval=(255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx>>8)));
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
 //DrawLine(xval+7,0,xval+7,255,0,128,255,0);
 
-		SetGeomOffset(SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy);
-		if(panim!=-1)
-			m_skel.setAnimNo(panim);
-		else
-			m_skel.setAnimNo(m_animNo);
-		m_skel.setFrame(m_animFrame);
-		m_skel.Animate(this);
-		m_skel.Render(this);
+//!!		SetGeomOffset(SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx,SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy);
+//		if(panim!=-1)
+//			m_actorGfx.setAnimNo(panim);
+//		else
+//			m_actorGfx.setAnimNo(m_animNo);
+//!!		m_actorGfx.setFrame(m_animFrame);
+//!!		m_actorGfx.Animate(this);
+//!!		m_actorGfx.Render(this);
+//!!		m_currentPlayerModeClass->render();
+//!!		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
+		DVECTOR	Pos={256,128};
+		m_actorGfx->Render(Pos,m_animNo,m_animFrame,0);
 		m_currentPlayerModeClass->render();
-		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
 	}
 
 
@@ -634,7 +619,7 @@ void CPlayer::setFacing(int _facing)
 	if(m_facing!=_facing)
 	{
 		m_facing=_facing;
-		m_skel.setDir(_facing);
+//!!		m_actorGfx.setDir(_facing);
 	}
 }
 
@@ -687,7 +672,7 @@ void CPlayer::setAnimFrame(int _animFrame)
 }
 int CPlayer::getAnimFrameCount()
 {
-	return m_skel.getFrameCount(m_animNo);
+	return m_actorGfx->getFrameCount(m_animNo);
 }
 int CPlayer::getAnimNo()
 {
