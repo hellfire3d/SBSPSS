@@ -103,7 +103,8 @@ cleanlevels :
 ACTOR_IN_DIR :=			$(GRAF_DIR)/Characters
 ACTOR_SPRITE_DIR :=		Render/Psx
 ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
-ACTORS_DIRS_TO_MAKE :=	$(ACTOR_OUT_DIR)
+ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
+ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
 ACTOR_SPONGEBOB :=		SPONGEBOB
 ACTOR_NPC :=			
@@ -113,23 +114,26 @@ ACTOR_ENEMY :=			AnenomeLvl1 AnenomeLvl3 BabyOctopus Ballblob Caterpillar clam D
 						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Squiddart Stomper
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 
 #--- AnenomeLvl3 
-ACTORS_LIST :=			ACTOR_SPONGEBOB ACTOR_NPC ACTOR_ENEMY
 
 ACTOR_LIST :=			$(ACTOR_SPONGEBOB) $(ACTOR_NPC) $(ACTOR_ENEMY)
-ACTOR_IN :=				*
-# $(foreach ACTOR,$(ACTOR_LIST),$(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/bmp)
-ACTOR_OUT :=			$(foreach ACTOR,$(ACTOR_LIST),$(ACTOR_OUT_DIR)/$(ACTOR).Sbk)
 
-cleanactors :
-		@$(RM) -f $(ACTOR_OUT)
-		@$(ECHO) Actors Cleaned
+ACTOR_MAKEFILES :=		$(foreach ACTOR,$(ACTOR_LIST),$(ACTOR_MAKEFILE_DIR)/$(ACTOR).mak)
 
-actors: 		$(ACTOR_IN)
+$(ACTOR_MAKEFILES):	$(ACTOR_DIRS_TO_MAKE) makefile.gfx $(BUILD_DIR)/mkactor.pl
+	@$(PL) $(BUILD_DIR)/mkactor.pl $@ $(notdir $(basename $@))
 
-$(ACTOR_OUT) :	$(ACTOR_IN)
-		$(MKACTOR) -r:$(ACTOR_IN_DIR) -s:$(ACTOR_SPRITE_DIR) -o:$(ACTOR_OUT_DIR) -i:$(INC_DIR) $(ACTOR_LIST)
+include $(ACTOR_MAKEFILES)
 
-GFX_DATA_OUT +=	$(ACTOR_OUT)
+ACTOR_ALL_OUT :=		$(foreach ACTOR,$(ACTOR_LIST),$($(ACTOR)_OUT))
+
+GFX_DATA_OUT +=    		$(ACTOR_ALL_OUT)
+
+actors : $(ACTOR_ALL_OUT)
+	@$(ECHO) Actors made
+
+cleanactors : 	
+	@$(RM) -f $(ACTOR_ALL_OUT)
+	@$(ECHO) Actors cleaned
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
@@ -495,7 +499,7 @@ GFX_DATA_OUT		+=	$(DEMO_ALL_OUT)
 #----------------------------------------------------------------------------
 
 GRAF_DIRS_TO_MAKE +=	$(TRANS_OUT_DIR) \
-						$(ACTORS_DIRS_TO_MAKE) \
+						$(ACTOR_DIRS_TO_MAKE) \
 						$(LEVELS_DIRS_TO_MAKE)
 
 gdirs : $(GRAF_DIRS_TO_MAKE)
