@@ -335,7 +335,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_STEERABLE_BARREL_PLATFORM
-		2,
+		3,
 		128,
 		true,
 		DAMAGE__NONE,

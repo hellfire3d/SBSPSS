@@ -56,13 +56,37 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 	{
 		DVECTOR playerPos = player->getPos();
 
-		s32 playerX = playerPos.vx - this->Pos.vx;
+		DVECTOR *playerVel = player->getMoveVelocity();
+
+		s32 speedChange = -playerVel->vx << 8;
+
+		if ( speedChange > ( _frames << 5 ) )
+		{
+			speedChange = _frames << 5;
+		}
+		else if ( speedChange < -( _frames << 5 ) )
+		{
+			speedChange = -_frames << 5;
+		}
+
+		m_currentSpeed += speedChange;
+
+		if ( m_currentSpeed > ( m_speed << 8 ) )
+		{
+			m_currentSpeed = ( m_speed << 8 );
+		}
+		else if ( m_currentSpeed < -( m_speed << 8 ) )
+		{
+			m_currentSpeed = -( m_speed << 8 );
+		}
+
+		/*s32 playerX = playerPos.vx - this->Pos.vx;
 
 		if ( playerX > 5 )
 		{
 			// increase barrel speed to right
 
-			m_currentSpeed += _frames;
+			m_currentSpeed += _frames << 2;
 
 			if ( m_currentSpeed > ( m_speed << 8 ) )
 			{
@@ -71,13 +95,13 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		}
 		else if ( playerX < -5 )
 		{
-			m_currentSpeed -= _frames;
+			m_currentSpeed -= _frames << 2;
 
 			if ( m_currentSpeed < -( m_speed << 8 ) )
 			{
 				m_currentSpeed = -( m_speed << 8 );
 			}
-		}
+		}*/
 	}
 	else
 	{
