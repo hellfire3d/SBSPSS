@@ -37,7 +37,7 @@ public:
 	//virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
-	virtual void		processShot( int _frames );
+	//virtual void		processShot( int _frames );
 	virtual void		processClose( int _frames );
 
 	u8					m_isStunned;

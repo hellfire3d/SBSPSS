@@ -157,6 +157,16 @@ void CNpcStaticClamEnemy::postInit()
 
 	m_isStunned = false;
 	m_isAnimating = false;
+
+	// create platform in same place
+
+	CNpcClamPlatform *platform = new ("clam platform") CNpcClamPlatform;
+
+	platform->setType( CNpcClamPlatform::NPC_CLAM_PLATFORM );
+	platform->setGraphic( (u8) 0 );
+	platform->init( Pos );
+	platform->setTiltable( false );
+	platform->setBBox();
 }
 
 void CNpcStaticClamEnemy::processClose( int _frames )
@@ -175,9 +185,11 @@ void CNpcStaticClamEnemy::processClose( int _frames )
 		m_frame = 0;
 		m_isAnimating = false;
 	}
+
+	m_isStunned = false;
 }
 
-void CNpcStaticClamEnemy::processShot( int _frames )
+/*void CNpcStaticClamEnemy::processShot( int _frames )
 {
 	if ( !m_isStunned )
 	{
@@ -194,29 +206,30 @@ void CNpcStaticClamEnemy::processShot( int _frames )
 			{
 				m_isStunned = true;
 
-				// create platform in same place
-
-				CNpcClamPlatform *platform = new ("clam platform") CNpcClamPlatform;
-
-				platform->setType( CNpcClamPlatform::NPC_CLAM_PLATFORM );
-				platform->setGraphic( (u8) 0 );
-				platform->init( Pos );
-				platform->setTiltable( false );
-				platform->setBBox();
-
 				break;
 			}
 		}
 	}
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
-}
+}*/
 
 void CNpcStaticClamEnemy::collidedWith( CThing *_thisThing )
 {
-	if ( !m_isStunned )
+	if ( m_isActive && !m_isCaught && !m_isDying )
 	{
-		CNpcClamEnemy::collidedWith( _thisThing );
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				m_isStunned = true;
+
+				break;
+			}
+
+			default:
+				break;
+		}
 	}
 }
 
