@@ -130,7 +130,7 @@ void CMapScene::init()
 		xpos=256-((MAP_LEVEL_WIDTH*3)/2)-MAP_LEVEL_X_SPACING;
 		for(x=0;x<3;x++)
 		{
-			if(isLevelOpen
+//			if(isLevelOpen
 			copyImageToScreen(s_levelMaps[i],xpos,ypos,MAP_LEVEL_WIDTH,MAP_LEVEL_HEIGHT);
 			i++;
 			xpos+=MAP_LEVEL_WIDTH+MAP_LEVEL_X_SPACING;
