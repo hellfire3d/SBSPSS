@@ -251,7 +251,7 @@ public:
 	void			setLedgeLookAhead(int _lookAhead);
 
 	void			addLife();
-	void			addSpatula(int Count=1)								{m_numSpatulasHeld+=Count;}
+	void			addSpatula(int Count=1);
 	int				getSpatulasHeld()									{return m_numSpatulasHeld;}
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
@@ -404,6 +404,9 @@ private:
 		JELLY_LAUNCHER_AMMO_IN_PICKUP=6,
 		MAX_JELLY_LAUNCHER_AMMO=99,
 
+		PANT_FLASH_TIME=128,
+		PANT_FLASH_Y_OFFSET=-90,
+
 		MAX_JELLFISH_IN_NET=5,
 	};
 public:
@@ -448,6 +451,8 @@ private:
 	int				m_jellyAmmo;
 	int				m_jellyfishAmmoCount;
 	int				m_isInWater;
+	int				m_pantFlashTimer;
+	int				m_hasReceivedExtraLifeFor100Spats;
 
 	// Platforms
 public:

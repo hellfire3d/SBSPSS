@@ -765,11 +765,10 @@ if(newmode!=-1)
 
 ///
 #ifdef __USER_paul__
-if(PadGetDown(0)&PAD_TRIANGLE)
-{
-//	CSoundMediator::setVolume(CSoundMediator::VOL_SONG,0);
-//	m_currentPlayerModeClass->setState(STATE_CELEBRATE);
-}
+//if(PadGetDown(0)&PAD_TRIANGLE)
+//{
+//	addLife();
+//}
 #endif
 ///
 
@@ -1208,6 +1207,12 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 	// Restore flipped camera
 	setReverseCameraMovement(false);
 
+	// flashing pants..
+	if(m_pantFlashTimer)
+	{
+		m_pantFlashTimer-=_frames;
+	}
+
 	CPlayerThing::think(_frames);
 }
 
@@ -1625,6 +1630,25 @@ void CPlayer::addLife()
 	{
 		gameSlot->m_lives++;
 	}
+
+	m_pantFlashTimer=PANT_FLASH_TIME;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPlayer::addSpatula(int Count=1)
+{
+	m_numSpatulasHeld+=Count;
+
+	if(!m_hasReceivedExtraLifeFor100Spats&&m_numSpatulasHeld==100)
+	{
+		addLife();
+		m_hasReceivedExtraLifeFor100Spats=true;
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -1918,6 +1942,8 @@ void CPlayer::respawn()
 	m_bubbleAmmo=INITIAL_BUBBLE_BLOWER_AMMO;
 	m_jellyAmmo=INITIAL_JELLY_LAUNCHER_AMMO;
 	m_jellyfishAmmoCount=0;
+	m_pantFlashTimer=0;
+	m_hasReceivedExtraLifeFor100Spats=false;
 
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
 
@@ -2034,6 +2060,22 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	}
 
 	setSemiTrans(ft4,trans);
+
+
+	// Pants?
+	if(m_pantFlashTimer>0)
+	{
+		SpriteBank	*sb=CGameScene::getSpriteBank();
+		sFrameHdr	*fh;
+		DVECTOR		drawPos;
+		int			size;
+
+		fh=sb->getFrameHeader(FRM__PANTS);
+		drawPos=*_pos;
+		drawPos.vy+=PANT_FLASH_Y_OFFSET;
+		size=m_pantFlashTimer&8?4096:8192;
+		ft4=sb->printRotatedScaledSprite(fh,drawPos.vx,drawPos.vy,size,size,0,0);
+	}
 }
 
 
