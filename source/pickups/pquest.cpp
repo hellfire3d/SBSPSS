@@ -269,62 +269,6 @@ void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 			angle=(angle+300)&4095;
 			colourOfs+=200;
 		}
-
-/*
-		SpriteBank	*sprites;
-		sFrameHdr	*fh;
-		int			x,y;
-
-		sprites=CGameScene::getSpriteBank();
-		fh=sprites->getFrameHeader(m_gfxFrame);
-		x=_pos->vx-(fh->W/2);
-		y=_pos->vy-(fh->H/2);
-		sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
-
-		if(m_pingFrame<quest_pingframes)
-		{
-			int			radius;
-			int			endr,endg,endb;
-			int			angle;
-			DVECTOR		p1,p2;
-			int			i;
-			POLY_G3		*g3;
-			POLY_FT3	*ft3;
-
-			x=_pos->vx;
-			y=_pos->vy;
-			radius=(quest_pingsize*m_pingFrame)/quest_pingframes;
-			endr=(quest_pingr*(quest_pingframes-m_pingFrame))/quest_pingframes;
-			endg=(quest_pingg*(quest_pingframes-m_pingFrame))/quest_pingframes;
-			endb=(quest_pingb*(quest_pingframes-m_pingFrame))/quest_pingframes;
-
-			p1.vx=x;
-			p1.vy=y+radius;
-			for(i=0;i<quest_pingsegments;i++)
-			{
-				angle=(4095*(i+1))/quest_pingsegments;
-				p2.vx=x+((msin(angle)*radius)>>12);
-				p2.vy=y+((mcos(angle)*radius)>>12);
-				g3=GetPrimG3();
-				setXY3(g3,x,y,p1.vx,p1.vy,p2.vx,p2.vy);
-				setRGB0(g3,0,0,0);
-				setRGB1(g3,endr,endg,endb);
-				setRGB2(g3,endr,endg,endb);
-				setShadeTex(g3,0);
-				setSemiTrans(g3,1);
-				AddPrimToList(g3,OTPOS__PICKUP_POS+1);
-				p1=p2;
-			}
-
-			// Trans
-			ft3=GetPrimFT3();
-			setShadeTex(ft3,1);
-			setSemiTrans(ft3,1);
-			ft3->tpage=(quest_transmode<<5);
-			setXY3(ft3,512,512,512,512,512,512);
-			AddPrimToList(ft3,OTPOS__PICKUP_POS+1);
-		}
-*/
 	}
 }
 

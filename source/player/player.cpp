@@ -1923,6 +1923,12 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					{
 						// Launch net pickup
 						setMode(PLAYER_MODE_FULLUNARMED);
+						DVECTOR	pickupPos;
+						CBasePickup	*pickup;
+						pickupPos.vx=Pos.vx;
+						pickupPos.vy=Pos.vy-30;
+						pickup=createPickup(PICKUP__NET,&pickupPos);
+						pickup->setPos(&pickupPos);
 					}
 					else
 					{
