@@ -41,7 +41,7 @@ virtual	int		canPause();
 protected:
 
 		void			initLevel();
-		void			shutdownLevel();
+		void			shutdownLevel(bool CleanUp);
 
 		CLevel				Level;
 		class CPauseMenu	*m_pauseMenu;

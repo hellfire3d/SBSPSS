@@ -10,13 +10,26 @@
 #include "level/layercollision.h"
 
 /*****************************************************************************/
+// Woo.. this is getting big now isn't it?
+struct	sLvlTab
+{
+	FileEquate				LevelInfo;
+	FileEquate				TileBank,Level,Tex;
+	int						exitX,exitY,exitW,exitH;
+	int						spawnX,spawnY;
+	int						Spr0,Spr1;
+	int						songId;
+};
+
+/*****************************************************************************/
 class CLayer;
 class CLevel
 {
 public:
+	CLevel();
 // Scene Handlers
 	void		init();
-	void		shutdown();
+	void		shutdown(bool CleanUp);
 	void		render();
 	void		think(int _frames);
 
@@ -28,10 +41,17 @@ public:
 	CLayerCollision			*getCollisionLayer()				{return CollisionLayer;}
 	DVECTOR					getMapSize();
 
+	int						GetNextLevel(int Lvl);
 private:
 	void		initLayers();
+	void		initNewLevel(sLvlTab *LevelDat);
+	void		DisplayLoadingScreen();
 
-	sLvlHdr			*LevelHdr;
+	void		DoPaulsTempCrap(sLvlTab *LevelDat);
+
+	sLevelInfo		*LevelInfo;
+	u8				*PakBuffer,*LevelBuffer;
+
 	sTile			*TileBank;
 	static DVECTOR	MapPos;
 	static DVECTOR	s_playerSpawnPos;
@@ -40,8 +60,10 @@ private:
 
 // Tile Layers
 	CLayerTile		*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];
+
 // Collision
 	CLayerCollision	*CollisionLayer;
+
 // Things
 	int				ActorCount;
 	sThingActor		**ActorList;

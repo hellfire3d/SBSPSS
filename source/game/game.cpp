@@ -140,13 +140,11 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
-	shutdownLevel();
-	CSoundMediator::dumpSong();	
+		shutdownLevel(true);
+		CSoundMediator::dumpSong();	
 
-
-	m_pauseMenu->shutdown();	delete m_pauseMenu;
-
-	s_genericFont->dump();		delete s_genericFont;
+		m_pauseMenu->shutdown();	delete m_pauseMenu;
+		s_genericFont->dump();		delete s_genericFont;
 }
 
 /*****************************************************************************/
@@ -178,8 +176,8 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
-		shutdownLevel();
-		s_globalLevelSelectThing++;
+		s_globalLevelSelectThing=Level.GetNextLevel(s_globalLevelSelectThing);
+		shutdownLevel(s_globalLevelSelectThing%12==0);
 		initLevel();
 		s_levelFinished=false;
 	}
@@ -274,13 +272,7 @@ void	CGameScene::initLevel()
 	m_player->setLayerCollision(Level.getCollisionLayer());
 	m_player->setMapSize(Level.getMapSize());
 
-#ifdef __USER_charles__		
-	/*CNpcEnemy	*enemy;
-	enemy=new ("test enemy") CNpcEnemy;
-	enemy->setType( CNpcEnemy::NPC_PARASITIC_WORM );
-	enemy->init();
-	enemy->setLayerCollision( Level.getCollisionLayer() );*/
-
+// Init actors (needs moving and tidying
 	int actorNum;
 	sThingActor **actorList = Level.getActorList();
 
@@ -319,9 +311,6 @@ void	CGameScene::initLevel()
 		}
 	}
 
-	//u16	*PntList=(u16*)MakePtr(ThisThing,sizeof(sActorThing);
-#endif
-
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
@@ -329,11 +318,11 @@ void	CGameScene::initLevel()
 
 
 /*****************************************************************************/
-void	CGameScene::shutdownLevel()
+void	CGameScene::shutdownLevel(bool CleanUp)
 {
 	CConversation::shutdown();
 	CThingManager::shutdown();
-	Level.shutdown();
+	Level.shutdown(CleanUp);
 }
 
 /*****************************************************************************/

@@ -75,7 +75,7 @@ RECT		Rect;
 /*****************************************************************************/
 CActorGfx::~CActorGfx()
 {
-		MemFree(SpriteBank);
+		Dump();
 }
 
 /*****************************************************************************/
@@ -175,6 +175,7 @@ int		H=ThisFrame->H;
 /*****************************************************************************/
 void	CActorGfx::Dump()
 {
+		MemFree(SpriteBank);
 }
 
 /*****************************************************************************/
@@ -233,15 +234,16 @@ int			Idx;
 /*****************************************************************************/
 /*** Dump ********************************************************************/
 /*****************************************************************************/
-void	CActorPool::DumpActor(FileEquate Filename)
+// Dumps all apart from spongeybob
+void	CActorPool::DumpActors()
 {
-CActorGfx	*ThisActor;
-int			Idx;
-
-// Is Loaded?
-		Idx=FindIdx(Filename);
-		ASSERT(Idx!=-1); 
-		ThisActor=ActorList[Idx];
-		ActorList[Idx]=0;
-		delete ThisActor;
+		for (int i=0; i<MAX_ACTORS; i++)
+		{
+			if (ActorList[i] && ActorList[i]->GetFilename()!=ACTORS_SPONGEBOB_SBK)
+			{
+				CActorGfx	*ThisActor=ActorList[i];
+				delete ThisActor;
+				ActorList[i]=0;
+			}
+		}
 }

@@ -51,7 +51,7 @@ static	void		Init();
 
 static	void			AddActor(FileEquate Filename)		{GetActor(Filename);}
 static	CActorGfx		*GetActor(FileEquate Filename);
-static	void			DumpActor(FileEquate Filename);
+static	void			DumpActors();
 		
 static	u8			UnpackBuffer[MAX_ACTOR_SIZE];
 
