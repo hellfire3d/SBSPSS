@@ -1,14 +1,14 @@
-/**********************/
-/*** JellyFish Legs ***/
-/**********************/
+/******************/
+/*** Energy Bar ***/
+/******************/
 
-#ifndef	__FX_FX_JELLYFISH_LEGS_HEADER__
-#define __FX_FX_JELLYFISH_LEGS_HEADER__
+#ifndef	__FX_FX_NRG_BAR_HEADER__
+#define __FX_FX_NRG_BAR_HEADER__
 
 #include "fx/fx.h"
 
 /*****************************************************************************/
-class CFXJellyFishLegs : public CFX
+class CFXNRGBar : public CFX
 {
 public:
 
@@ -17,14 +17,14 @@ virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
 
-		void		Setup(int XOfs,int YOfs,bool XFlip);
+		void		SetMax(int Max)	{MaxHealth=Max-1;}
+		bool		alwaysThink()								{return(true);}
 
 protected:
-		DVECTOR		Ofs;
+		int			GfxW,GfxHalfW;
 
-		int			Angle,AngleInc;
-		bool		XFlip;
-
+		int			MaxHealth;
+		int			CurrentW,DrawW;
 };
 
 #endif

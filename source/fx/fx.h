@@ -46,6 +46,8 @@ public:
 			FX_TYPE_FLAMES,
 			FX_TYPE_EXPLODE,
 			FX_TYPE_DEBRIS,
+
+			FX_TYPE_NRG_BAR,
 			FX_TYPE_MAX
 		};
 		enum

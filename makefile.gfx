@@ -191,12 +191,12 @@ PICKUP_GFX :=				+spatula +token +pants +health100 +health50 +health25 +glint1 +
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
 INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
-INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 +tentacle\
-							+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
+INGAMEFX_GFX_TRANS :=		+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
 							+health_empty_1 +health_empty_2 +health_empty_3 +health_empty_4 +health_empty_5 \
 							+watermeter +waterhilight +netblob \
 							+spike
-INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+water  +aim_arrow
+INGAMEFX_GFX_TRANS_NONROT_NONCLIP :=	+bubble_1 +bubble_2 +bubble_3 \
+										+water  +aim_arrow
 
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)
 INGAMEFX_GFX_TRANS_NONROT_NONCLIP_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS_NONROT_NONCLIP),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)

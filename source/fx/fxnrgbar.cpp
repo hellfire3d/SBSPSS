@@ -1,6 +1,6 @@
-/**********************/
-/*** JellyFish Legs ***/
-/**********************/
+/******************/
+/*** Energy Bar ***/
+/******************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -11,94 +11,84 @@
 #include	"level\level.h"
 #include	"game\game.h"
 
-#include	"FX\FXjfish.h"
+#include	"FX\FXNRGBar.h"
+#include	"enemy\npc.h"
 
-int		LegCount=3;
-int		LegWInc=32/LegCount;
-int		LegHInc=-4;
-int		LegAngleInc=7;
+int		NRGX=32;
+int		NRGY=188;
+int		NRGW=512-64;
+
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFXJellyFishLegs::init(DVECTOR const &_Pos)
+void	CFXNRGBar::init(DVECTOR const &_Pos)
 {
 		CFX::init();
-		Pos=_Pos;
-	
-		Ofs.vx=0; Ofs.vy=0;
-		Angle=getRnd();
-		AngleInc=LegAngleInc+getRndRange(3);
+SpriteBank	*SprBank=CGameScene::getSpriteBank();
+
+		GfxW=SprBank->getFrameWidth(FRM__BUBBLE_1);
+		GfxHalfW=GfxW/2;
+		DrawW=NRGW;
 }
 
 /*****************************************************************************/
-void	CFXJellyFishLegs::shutdown()
+void	CFXNRGBar::shutdown()
 {
 		CFX::shutdown();
-}
-
-/*****************************************************************************/
-void	CFXJellyFishLegs::Setup(int XOfs,int YOfs,bool XFlip)
-{
-	Ofs.vx=XOfs; 
-	Ofs.vy=YOfs;
-	this->XFlip=XFlip;
 }
 
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
 
-void	CFXJellyFishLegs::think(int _frames)
+void	CFXNRGBar::think(int _frames)
 {
-		Pos=getParent()->getPos();
 
-		CFX::think(_frames);
-		Angle++; Angle&=CIRCLE_TAB_MASK;
-		AngleInc=LegAngleInc;
+CNpcEnemy	*P=(CNpcEnemy*)ParentThing;
+int		Health=P->getHealth();
+		CurrentW=((NRGW/MaxHealth)*Health);
+
+int		Diff=DrawW-CurrentW;
+
+		DrawW-=(Diff+1)>>1;
+		if (DrawW<=0 && Health==0)
+		{
+			setToShutdown();
+		}
+
 }
 
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-void	CFXJellyFishLegs::render()
+void	CFXNRGBar::render()
 {
-		CFX::render();
-		if (!canRender()) return;
+//		CFX::render();
 
-SpriteBank	*SprBank=CGameScene::getSpriteBank();;
-DVECTOR		RenderPos=getRenderPos();
-int			WOfs=0;	
-int			H;
-int			ThisAngle=Angle;
-int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
-		
-			RenderPos.vx+=Ofs.vx;
-			RenderPos.vy+=Ofs.vy;
+SpriteBank	*SprBank=CGameScene::getSpriteBank();
+POLY_FT4	*Ft4;
+// Draw Start
+			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX,NRGY,0,0,0);
+			Ft4->x1-=GfxHalfW;
+			Ft4->x3-=GfxHalfW;
+			Ft4->u1-=GfxHalfW;
+			Ft4->u3-=GfxHalfW;
 
-			for (int i=0; i<LegCount; i++)
-			{
-				ThisAngle+=AngleInc;
-				ThisAngle&=CIRCLE_TAB_MASK;
-				H=LegHeight+(CircleTable[ThisAngle]>>5);
+// Draw Start
+			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX+GfxHalfW,NRGY,0,0,0);
+			Ft4->x1+=DrawW-GfxW;
+			Ft4->x3+=DrawW-GfxW;
+			Ft4->u0+=GfxHalfW-1;
+			Ft4->u1-=GfxHalfW-1;
+			Ft4->u2+=GfxHalfW-1;
+			Ft4->u3-=GfxHalfW-1;
 
-				POLY_FT4	*Ft4=SprBank->printFT4(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos*0);
+// Draw End
+			Ft4=SprBank->printFT4(FRM__BUBBLE_1,NRGX+DrawW+GfxHalfW,NRGY,0,0,0);
+			Ft4->x1-=GfxHalfW;
+			Ft4->x3-=GfxHalfW;
+			Ft4->u0+=GfxHalfW;
+			Ft4->u2+=GfxHalfW;
 
-				if (!XFlip)
-				{
-					Ft4->x1-=WOfs;
-					Ft4->x3-=WOfs;
-				}
-				else
-				{
-					Ft4->x0+=WOfs;
-					Ft4->x2+=WOfs;
-				}
-
-		
-				Ft4->y2=Ft4->y0+H;
-				Ft4->y3=Ft4->y1+H;
-				RenderPos.vy+=H+LegHInc;
-				WOfs+=LegWInc;
-			}
 }

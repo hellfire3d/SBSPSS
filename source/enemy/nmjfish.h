@@ -44,6 +44,7 @@ protected:
 	s32					m_spawnTimer;
 	s32					m_cycleWidth;
 	s32					m_halfCycleWidth;
+	bool				m_meterOn;
 };
 
 #endif

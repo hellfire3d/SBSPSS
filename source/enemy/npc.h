@@ -127,6 +127,7 @@ public:
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
 
+	int					getHealth()												{return(m_health);}
 protected:
 	// NPC data structure definitions //
 

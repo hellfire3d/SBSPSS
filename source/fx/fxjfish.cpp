@@ -13,10 +13,10 @@
 
 #include	"FX\FXjfish.h"
 
-int		LegCount=3;
-int		LegWInc=32/LegCount;
-int		LegHInc=-4;
-int		LegAngleInc=7;
+static const int		LegCount=3;
+static const int		LegWInc=32/LegCount;
+static const int		LegHInc=-4;
+static const int		LegAngleInc=7;
 
 /*****************************************************************************/
 /*****************************************************************************/

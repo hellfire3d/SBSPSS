@@ -41,6 +41,7 @@
 
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
+#include "fx\fxnrgbar.h"
 
 
 
@@ -50,6 +51,7 @@ void CNpcMotherJellyfishEnemy::postInit()
 {
 	m_state = MOTHER_JELLYFISH_RETURN_TO_START_1;
 	m_spawnTimer = 0;
+	m_meterOn=false;
 
 	if ( CLevel::getIsBossRespawn() )
 	{
@@ -371,6 +373,13 @@ void CNpcMotherJellyfishEnemy::render()
 
 		if (canRender())
 		{
+			if (!m_meterOn)
+			{
+				CFXNRGBar	*T=(CFXNRGBar*)CFX::Create(CFX::FX_TYPE_NRG_BAR,this);
+				T->SetMax(m_health);
+				m_meterOn=true;
+			}
+
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),false);

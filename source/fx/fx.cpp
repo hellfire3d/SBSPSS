@@ -22,6 +22,7 @@
 #include	"FX\FXSplashLava.h"
 #include	"FX\FXSplashOil.h"
 #include	"FX\FXExplode.h"
+#include	"FX\FXNrgBar.h"
 /* FX
 
 	Jellyfish legs
@@ -130,6 +131,10 @@ CFX		*NewFX;
 			NewFX=new ("FXExplode") CFXExplode();
 			break;
 
+
+		case FX_TYPE_NRG_BAR:
+			NewFX=new ("NRG Bar") CFXNRGBar();
+			break;
 
 		case FX_TYPE_JELLYFISH_LEGS:
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
