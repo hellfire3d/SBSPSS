@@ -112,7 +112,6 @@ private:
 		unsigned char	*m_xmData;
 		FileEquate		m_file;
 		int				m_refCount;
-		// refcount these!
 	};
 
 	// Internal representation of loaded vabs
