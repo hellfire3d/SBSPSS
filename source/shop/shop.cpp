@@ -506,7 +506,7 @@ void CShopScene::renderUi()
 		char	buf[100];
 		cost=s_shopItems[m_currentlySelectedItem].m_cost;
 		available=CGameSlotManager::getSlotData()->getNumberOfKelpTokensHeld();
-		sprintf(buf,TranslationDatabase::getString(STR__SHOP_SCREEN__CANNOT_AFFORD_PURCHASE),cost,available);
+		sprintf(buf,TranslationDatabase::getString(available!=1?STR__SHOP_SCREEN__CANNOT_AFFORD_PURCHASE:STR__SHOP_SCREEN__CANNOT_AFFORD_PURCHASE_SINGULAR),cost,available);
 		m_font->print((SHOP_QUERY_UI_W-20)/2,0,buf);
 		m_guiCannotAffordFrame->render();
 	}
