@@ -10,13 +10,13 @@
 #include	<sprites.h>
 #include	"level\level.h"
 
-#include	"FX\FXAnim.h"
+#include	"FX\FXBaseAnim.h"
 
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFXAnim::init(DVECTOR const &_Pos)
+void	CFXBaseAnim::init(DVECTOR const &_Pos)
 {
 		CFX::init();
 		Pos=_Pos;
@@ -25,13 +25,13 @@ void	CFXAnim::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXAnim::shutdown()
+void	CFXBaseAnim::shutdown()
 {
 		CFX::shutdown();
 }
 
 /*****************************************************************************/
-void	CFXAnim::SetFrame(int Base,int Count,int Shift=0)
+void	CFXBaseAnim::SetFrame(int Base,int Count,int Shift=0)
 {
 		Frame=0;
 		BaseFrame=Base;
@@ -42,7 +42,7 @@ void	CFXAnim::SetFrame(int Base,int Count,int Shift=0)
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-void	CFXAnim::think(int _frames)
+void	CFXBaseAnim::think(int _frames)
 {
 		CFX::think(_frames);
 
@@ -53,7 +53,7 @@ void	CFXAnim::think(int _frames)
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-void	CFXAnim::render()
+void	CFXBaseAnim::render()
 {
 		CFX::render();
 

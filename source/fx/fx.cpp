@@ -13,6 +13,8 @@
 
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
+#include	"FX\FXBaseTrail.h"
+#include	"FX\FXBaseAnim.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
 #include	"FX\FXSplash.h"

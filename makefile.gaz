@@ -146,9 +146,11 @@ hazard_src :=		hazard \
 					hrwheel
 
 fx_src :=			fx \
-					fxtrail \
+					fxbaseanim \
+					fxbasetrail \
 					fxfallingtile \
-					fxsteam
+					fxsteam \
+					fxsplash
 
 
 projectl_src :=		projectl \

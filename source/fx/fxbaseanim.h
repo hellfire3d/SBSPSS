@@ -2,13 +2,13 @@
 /*** Anim Base Class ***/
 /***********************/
 
-#ifndef	__FX_FX_ANIM_HEADER__
-#define __FX_FX_ANIM_HEADER__
+#ifndef	__FX_FX_BASE_ANIM_HEADER__
+#define __FX_FX_BASE_ANIM_HEADER__
 
 #include "fx/fx.h"
 
 /*****************************************************************************/
-class CFXAnim : public CFX
+class CFXBaseAnim : public CFX
 {
 public:
 

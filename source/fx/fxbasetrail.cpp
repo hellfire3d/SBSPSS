@@ -10,13 +10,13 @@
 #include	<sprites.h>
 #include	"level\level.h"
 
-#include	"FX\FXTrail.h"
+#include	"FX\FXBaseTrail.h"
 
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CFXTrail::init(DVECTOR const &_Pos)
+void	CFXBaseTrail::init(DVECTOR const &_Pos)
 {
 		CFX::init();
 		Pos=_Pos;
@@ -26,7 +26,7 @@ void	CFXTrail::init(DVECTOR const &_Pos)
 }
 
 /*****************************************************************************/
-void	CFXTrail::shutdown()
+void	CFXBaseTrail::shutdown()
 {
 		CFX::shutdown();
 }
@@ -34,7 +34,7 @@ void	CFXTrail::shutdown()
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-void	CFXTrail::think(int _frames)
+void	CFXBaseTrail::think(int _frames)
 {
 CThing	*Parent=getParent();
 
@@ -45,7 +45,7 @@ CThing	*Parent=getParent();
 }
 
 /*****************************************************************************/
-CFXTrail::sList	&CFXTrail::moveHead()
+CFXBaseTrail::sList	&CFXBaseTrail::moveHead()
 {
 		HeadIdx--;
 		if (HeadIdx<0) HeadIdx+=LIST_SIZE;
@@ -58,7 +58,7 @@ CFXTrail::sList	&CFXTrail::moveHead()
 /*** Render ******************************************************************/
 /*****************************************************************************/
 
-void	CFXTrail::render()
+void	CFXBaseTrail::render()
 {
 		CFX::render();
 

@@ -2,13 +2,13 @@
 /*** Trail Base Class ***/
 /***********************/
 
-#ifndef	__FX_FX_TRAIL_HEADER__
-#define __FX_FX_TRAIL_HEADER__
+#ifndef	__FX_FX_BASE_TRAIL_HEADER__
+#define __FX_FX_BASE_TRAIL_HEADER__
 
 #include "fx/fx.h"
 
 /*****************************************************************************/
-class CFXTrail : public CFX
+class CFXBaseTrail : public CFX
 {
 public:
 		struct	sList

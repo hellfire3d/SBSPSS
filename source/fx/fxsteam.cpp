@@ -10,6 +10,7 @@
 #include	<sprites.h>
 #include	"level\level.h"
 
+#include	"FX\FXBaseTrail.h"
 #include	"FX\FXSteam.h"
 
 static const	int		DefSize=4*ONE;
@@ -23,7 +24,7 @@ static const	int		DefShadeDieDec=24;
 /*****************************************************************************/
 void	CFXSteam::init(DVECTOR const &_Pos)
 {
-		CFXTrail::init(_Pos);
+		CFXBaseTrail::init(_Pos);
 
 		Trans=3;
 		ShadeDec=DefShadeDec;
@@ -49,7 +50,7 @@ void	CFXSteam::SetSize(int Size)
 /*****************************************************************************/
 void	CFXSteam::setDie()
 {
-		CFXTrail::setDie();
+		CFXBaseTrail::setDie();
 		for (int i=0; i<LIST_SIZE; i++)
 		{ // Set drift off
 			sList	&ThisElem=List[i];

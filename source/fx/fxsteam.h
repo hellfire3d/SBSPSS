@@ -6,10 +6,9 @@
 #define __FX_FX_STEAM_HEADER__
 
 #include "fx/fx.h"
-#include "fx/fxtrail.h"
 
 /*****************************************************************************/
-class CFXSteam : public CFXTrail
+class CFXSteam : public CFXBaseTrail
 {
 public:
 virtual void		init(DVECTOR const &Pos);
