@@ -26,9 +26,9 @@
 	------------------- */
 
 // Allow debug messaging
-#if defined(__VERSION_DEBUG__)
+//#if defined(__VERSION_DEBUG__)
 #define DBG_ACTIVE
-#endif
+//#endif
 
 
 // Available channels
@@ -90,10 +90,6 @@ typedef enum
 
 	#define getNumberOfDbgLinesInLog()			__getNumberOfDbgLinesInLog()
 	#define getDbgLineFromLog(_line)			__getDbgLineFromLog(_line)
-
-	void	DbgPollHost();
-	void	DoAssert(const char * Txt, const char * file, const int line);
-	#define	ASSERT(x)							if (!(x)) DoAssert(#x,__FILE__,__LINE__);
 #else
 	#define CHARLES_DBGMSG						;
 	#define DAVE_DBGMSG							;
@@ -106,7 +102,14 @@ typedef enum
 
 	#define getNumberOfDbgLinesInLog()			0
 	#define getDbgLineFromLog(_line)			NULL
+#endif
 
+
+#if defined(__VERSION_DEBUG__)
+	void	DbgPollHost();
+	void	DoAssert(const char * Txt, const char * file, const int line);
+	#define	ASSERT(x)							if (!(x)) DoAssert(#x,__FILE__,__LINE__);
+#else
 	#define	ASSERT(x)							;
 #endif
 

@@ -231,11 +231,13 @@ char *__getDbgLineFromLog(int _line)
 #endif
 }
 
+#endif	/* DBG_ACTIVE */
 
 
 
 
 
+#ifdef __VERSION_DEBUG__
 #define OnScreenDebug
 #include "gfx\font.h"
 #include 	"system\vid.h"
@@ -290,10 +292,11 @@ void	DbgPollHost()
 #endif
 }
 
+#endif	/* __VERSION_DEBUG__ */
 
 
 
-#endif	/* DBG_ACTIVE */
+
 
 /*===========================================================================
  end */
