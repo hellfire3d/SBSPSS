@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CGUILayerShade
+LastClass=CGUILayerTrigger
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -33,26 +33,26 @@ Class21=CMapEditDoc
 Class22=CMapEditView
 
 ResourceCount=20
-Resource1=IDD_RESIZE
-Resource2=IDD_NEWMAP
-Resource3=IDD_TOOLBAR
+Resource1=IDD_ADDLAYER
+Resource2=IDD_LAYER_PLATFORM
+Resource3=IDR_TOOLBAR (English (U.S.))
 Resource4=IDR_MAPEDITYPE (English (U.S.))
-Resource5=IDD_LAYER_THING_POS
-Resource6=IDD_LAYER_SHADE
-Resource7=IDD_LAYER_ACTOR
-Resource8=IDD_LAYER_LIST
-Resource9=IDD_MULTIBAR (English (U.S.))
-Resource10=IDD_LAYER_THING
-Resource11=IDD_LAYER_TRIGGER
-Resource12=IDD_ADDLAYER
-Resource13=IDD_TILEBANK
-Resource14=IDR_MAINFRAME (English (U.S.))
-Resource15=IDD_ABOUTBOX (English (U.S.))
-Resource16=IDD_LAYER_COLLISION
-Resource17=IDD_ELEMLIST
-Resource18=IDR_TOOLBAR (English (U.S.))
+Resource5=IDD_NEWMAP
+Resource6=IDD_TOOLBAR
+Resource7=IDD_LAYER_LIST
+Resource8=IDD_LAYER_ACTOR
+Resource9=IDD_ELEMLIST
+Resource10=IDD_RESIZE
+Resource11=IDD_TILEBANK
+Resource12=IDD_LAYER_THING_POS
+Resource13=IDD_LAYER_TRIGGER
+Resource14=IDD_LAYER_SHADE
+Resource15=IDD_LAYER_COLLISION
+Resource16=IDD_ABOUTBOX (English (U.S.))
+Resource17=IDD_MULTIBAR (English (U.S.))
+Resource18=IDR_MAINFRAME (English (U.S.))
 Class23=CGUILayerTrigger
-Resource19=IDD_LAYER_PLATFORM
+Resource19=IDD_LAYER_THING
 Class24=CGUILayerFX
 Resource20=IDD_LAYER_FX
 
@@ -85,6 +85,9 @@ Type=0
 BaseClass=CDialog
 HeaderFile=GUILayerActor.h
 ImplementationFile=GUILayerActor.cpp
+Filter=D
+VirtualFilter=dWC
+LastObject=IDC_ACTOR_SPEED_SPIN
 
 [CLS:GUILayerCollision]
 Type=0
@@ -472,7 +475,7 @@ Control1=IDC_TRIGGER_SIZE,static,1342308354
 Control2=IDC_TRIGGER_WIDTH,edit,1350633600
 Control3=IDC_TRIGGER_WIDTH_SPIN,msctls_updown32,1342177334
 Control4=IDC_TRIGGER_HEIGHT,edit,1350633600
-Control5=IDC_PLATFORM_TURNRATE_SPIN,msctls_updown32,1342177334
+Control5=IDC_TRIGGER_HEIGHT_SPIN,msctls_updown32,1342177334
 
 [CLS:CGUILayerTrigger]
 Type=0
@@ -492,7 +495,7 @@ Control2=IDC_FX_SIZE_TEXT,static,1342308354
 Control3=IDC_FX_WIDTH,edit,1350633600
 Control4=IDC_FX_WIDTH_SPIN,msctls_updown32,1342177334
 Control5=IDC_FX_HEIGHT,edit,1350633600
-Control6=IDC_FX_TURNRATE_SPIN,msctls_updown32,1342177334
+Control6=IDC_FX_HEIGHT_SPIN,msctls_updown32,1342177334
 Control7=IDC_FX_SPEED,edit,1350633600
 Control8=IDC_FX_SPEED_SPIN,msctls_updown32,1342177462
 

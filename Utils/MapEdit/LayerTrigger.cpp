@@ -113,6 +113,9 @@ void	CLayerTrigger::GUIInit(CCore *Core)
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 		Core->GUIAdd(GUITrigger,IDD_LAYER_TRIGGER);
 		GUITrigger.DisableCallback(false);
+		GUITrigger.m_WidthSpin.SetRange(1,255);
+		GUITrigger.m_HeightSpin.SetRange(1,255);
+
 }
 
 /*****************************************************************************/

@@ -32,6 +32,8 @@ void CGUILayerTrigger::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerTrigger)
+	DDX_Control(pDX, IDC_TRIGGER_WIDTH_SPIN, m_WidthSpin);
+	DDX_Control(pDX, IDC_TRIGGER_HEIGHT_SPIN, m_HeightSpin);
 	DDX_Control(pDX, IDC_TRIGGER_WIDTH, m_Width);
 	DDX_Control(pDX, IDC_TRIGGER_HEIGHT, m_Height);
 	//}}AFX_DATA_MAP

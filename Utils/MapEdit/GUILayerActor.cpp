@@ -32,6 +32,10 @@ void CGUILayerActor::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerActor)
+	DDX_Control(pDX, IDC_ACTOR_TURNRATE_SPIN, m_TurnRateSpin);
+	DDX_Control(pDX, IDC_ACTOR_SPEED_SPIN, m_SpeedSpin);
+	DDX_Control(pDX, IDC_ACTOR_HEALTH_SPIN, m_HealthSpin);
+	DDX_Control(pDX, IDC_ACTOR_ATTACK_SPIN, m_AttackSpin);
 	DDX_Control(pDX, IDC_ACTOR_COLLISION, m_Collision);
 	DDX_Control(pDX, IDC_ACTOR_PLAYER, m_Player);
 	DDX_Control(pDX, IDC_ACTOR_TURNRATE, m_TurnRate);

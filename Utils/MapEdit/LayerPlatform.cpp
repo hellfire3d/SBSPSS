@@ -51,6 +51,9 @@ void	CLayerPlatform::GUIInit(CCore *Core)
 		Core->GUIAdd(GUIPlatform,IDD_LAYER_PLATFORM);
 		GUIPlatform.DisableCallback(false);
 
+		GUIPlatform.m_SpeedSpin.SetRange(0,255);
+		GUIPlatform.m_TurnRateSpin.SetRange(0,255);
+
 // Init type lists
 		{
 CComboBox	&List=GUIPlatform.m_MoveList;

@@ -113,6 +113,11 @@ void	CLayerFX::GUIInit(CCore *Core)
 		Core->GUIAdd(GUIThing,IDD_LAYER_THING);
 		Core->GUIAdd(GUIFX,IDD_LAYER_FX);
 		GUIFX.DisableCallback(false);
+
+		GUIFX.m_WidthSpin.SetRange(1,255);
+		GUIFX.m_HeightSpin.SetRange(1,255);
+		GUIFX.m_SpeedSpin.SetRange(0,255);
+
 }
 
 /*****************************************************************************/

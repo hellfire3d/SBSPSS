@@ -50,6 +50,12 @@ void	CLayerActor::GUIInit(CCore *Core)
 		Core->GUIAdd(GUIThingPos,IDD_LAYER_THING_POS);
 		Core->GUIAdd(GUIActor,IDD_LAYER_ACTOR);
 		GUIActor.DisableCallback(false);
+
+		GUIActor.m_HealthSpin.SetRange(0,255);
+		GUIActor.m_AttackSpin.SetRange(0,255);
+		GUIActor.m_SpeedSpin.SetRange(0,255);
+		GUIActor.m_TurnRateSpin.SetRange(0,255);
+
 }
 
 /*****************************************************************************/

@@ -214,6 +214,9 @@ void	CLayerShade::GUIInit(CCore *Core)
 		GUI.m_Trans1.AddString("Another one");
 		GUI.m_Trans1.SetCurSel(TransMode1);
 
+		GUI.m_CountSpin.SetRange(1,4);
+
+
 }
 
 /*****************************************************************************/

@@ -32,6 +32,9 @@ void CGUILayerFX::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerFX)
+	DDX_Control(pDX, IDC_FX_HEIGHT_SPIN, m_HeightSpin);
+	DDX_Control(pDX, IDC_FX_SPEED_SPIN, m_SpeedSpin);
+	DDX_Control(pDX, IDC_FX_WIDTH_SPIN, m_WidthSpin);
 	DDX_Control(pDX, IDC_FX_WIDTH, m_Width);
 	DDX_Control(pDX, IDC_FX_HEIGHT, m_Height);
 	DDX_Control(pDX, IDC_FX_SPEED, m_Speed);

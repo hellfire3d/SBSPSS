@@ -36,6 +36,7 @@ void CGUILayerShade::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CGUILayerShade)
+	DDX_Control(pDX, IDC_SPIN2, m_CountSpin);
 	DDX_Control(pDX, IDC_LAYERSHADE_SPIN1, m_Spin1);
 	DDX_Control(pDX, IDC_LAYERSHADE_SPIN0, m_Spin0);
 	DDX_Control(pDX, IDC_LAYERSHADE_SCALE1, m_Scale1);

@@ -19,6 +19,10 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerActor)
 	enum { IDD = IDD_LAYER_ACTOR };
+	CSpinButtonCtrl	m_TurnRateSpin;
+	CSpinButtonCtrl	m_SpeedSpin;
+	CSpinButtonCtrl	m_HealthSpin;
+	CSpinButtonCtrl	m_AttackSpin;
 	CButton	m_Collision;
 	CButton	m_Player;
 	CEdit	m_TurnRate;

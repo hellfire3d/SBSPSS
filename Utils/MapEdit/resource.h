@@ -104,7 +104,7 @@
 #define IDC_FX_WIDTH                    1147
 #define IDC_FX_HEIGHT                   1148
 #define IDC_FX_WIDTH_SPIN               1149
-#define IDC_FX_TURNRATE_SPIN            1150
+#define IDC_FX_HEIGHT_SPIN              1150
 #define IDC_FX_SPEED                    1151
 #define IDC_FX_SPEED_SPIN               1152
 #define IDC_LAYERSHADE_BACKGFX0         1153
@@ -118,6 +118,7 @@
 #define IDC_LAYERSHADE_SCALE1           1161
 #define IDC_LAYERSHADE_TRANS0           1162
 #define IDC_LAYERSHADE_COLOR1           1163
+#define IDC_TRIGGER_HEIGHT_SPIN         1163
 #define IDC_LAYERSHADE_TRANS1           1164
 #define ID_TOOLBAR_TILEPALETTE          32774
 #define ID_TOOLBAR_PARAMBAR             32783
@@ -144,7 +145,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        180
 #define _APS_NEXT_COMMAND_VALUE         32801
-#define _APS_NEXT_CONTROL_VALUE         1163
+#define _APS_NEXT_CONTROL_VALUE         1164
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

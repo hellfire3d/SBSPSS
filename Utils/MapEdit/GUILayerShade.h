@@ -34,6 +34,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerShade)
 	enum { IDD = IDD_LAYER_SHADE };
+	CSpinButtonCtrl	m_CountSpin;
 	CButton	m_Spin1;
 	CButton	m_Spin0;
 	CButton	m_Scale1;

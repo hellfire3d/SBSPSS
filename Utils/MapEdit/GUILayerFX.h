@@ -19,6 +19,9 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CGUILayerFX)
 	enum { IDD = IDD_LAYER_FX };
+	CSpinButtonCtrl	m_HeightSpin;
+	CSpinButtonCtrl	m_SpeedSpin;
+	CSpinButtonCtrl	m_WidthSpin;
 	CEdit	m_Width;
 	CEdit	m_Height;
 	CEdit	m_Speed;
