@@ -511,7 +511,7 @@ void CNpcEnemy::postInit()
 
 			m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
-			// create head of list
+			// create start of list
 			CNpcPositionHistory *newPosition;
 			newPosition = new ("position history") CNpcPositionHistory;
 			newPosition->pos = Pos;
@@ -521,17 +521,23 @@ void CNpcEnemy::postInit()
 
 			// create rest of list
 
-			for ( int histLength = 1 ; histLength < ( 10 * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
+			for ( int histLength = 1 ; histLength < ( NPC_PARASITIC_WORM_LENGTH * NPC_PARASITIC_WORM_SPACING ) ; histLength++ )
 			{
 				newPosition = new ("position history") CNpcPositionHistory;
 				newPosition->pos = Pos;
 				newPosition->next = NULL;
+				newPosition->prev = currentPosition;
 
 				currentPosition->next = newPosition;
 				currentPosition = newPosition;
 			}
 
-			for ( int segCount = 0 ; segCount < 10 ; segCount++ )
+			// link ends together for circular list
+
+			currentPosition->next = m_positionHistory;
+			m_positionHistory->prev = currentPosition;
+
+			for ( int segCount = 0 ; segCount < NPC_PARASITIC_WORM_LENGTH ; segCount++ )
 			{
 				CNpcEnemy *segment;
 				segment = new ("segment") CNpcEnemy;

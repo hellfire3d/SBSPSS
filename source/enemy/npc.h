@@ -391,6 +391,7 @@ protected:
 		NPC_BOOGER_MONSTER_MAX_EXTENSION = 20,
 		NPC_SUB_SHARK_HIGH_SPEED = 6,
 		NPC_PARASITIC_WORM_SPACING = 6,
+		NPC_PARASITIC_WORM_LENGTH = 10,
 		EXTEND_UP = true,
 		EXTEND_DOWN = false,
 		EXTEND_RIGHT = true,
@@ -611,6 +612,7 @@ protected:
 	public:
 		DVECTOR						pos;
 		CNpcPositionHistory			*next;
+		CNpcPositionHistory			*prev;
 	};
 
 	CNpcPositionHistory		*m_positionHistory;
