@@ -611,7 +611,10 @@ void	CPlayer::init()
 	m_fontBank->initialise(&standardFont);
 	m_fontBank->setOt(POWERUPUI_OT);
 
-
+	m_scalableFontBank=new ("PlayerFont") ScalableFontBank();
+	m_scalableFontBank->initialise(&standardFont);
+	m_scalableFontBank->setOt(POWERUPUI_OT);
+	
 	m_actorGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 
 	for(i=0;i<NUM_PLAYERMODES;i++)
@@ -674,7 +677,8 @@ void	CPlayer::shutdown()
 	}
 	delete m_actorGfx;
 
-	m_fontBank->dump();		delete m_fontBank;
+	m_scalableFontBank->dump();	delete m_scalableFontBank;
+	m_fontBank->dump();			delete m_fontBank;
 
 	CPlayerThing::shutdown();
 }
@@ -1320,6 +1324,35 @@ if(drawlastpos)
 		ft4->v1=V+(partH);
 
 		sb->printFT4(FRM__WATERMETER,x,y,0,0,POWERUPUI_OT);
+
+		if(m_healthWaterLevel<(WATER_COUNTER_SECONDTIME*6))
+		{
+			int		digit;
+			DVECTOR	src={x+(W/2),y+(H/2)};
+			DVECTOR	dst={INGAME_SCREENW/2,(INGAME_SCREENH/3)*1};
+			int		frame;
+			int		digitX,digitY,scale;
+			char	buf[4];
+			int		r,g,b;
+
+			digit=m_healthWaterLevel/WATER_COUNTER_SECONDTIME;
+			if(digit<0)digit=0;
+
+			frame=WATER_COUNTER_SECONDTIME-(m_healthWaterLevel%WATER_COUNTER_SECONDTIME);
+			if(frame>WATER_COUNTER_MOVINGTIME)frame=WATER_COUNTER_MOVINGTIME;
+			digitX=src.vx+(((dst.vx-src.vx)*frame)/WATER_COUNTER_MOVINGTIME);
+			digitY=src.vy+(((dst.vy-src.vy)*frame)/WATER_COUNTER_MOVINGTIME);
+			scale=WATER_COUNTER_STARTSCALE+(((WATER_COUNTER_ENDSCALE-WATER_COUNTER_STARTSCALE)*frame)/WATER_COUNTER_MOVINGTIME);
+
+			sprintf(buf,"%d",digit);
+			m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
+			m_scalableFontBank->setScale(scale);
+			r=WATER_COUNTER_R2-(((WATER_COUNTER_R2-WATER_COUNTER_R1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+			g=WATER_COUNTER_G2-(((WATER_COUNTER_G2-WATER_COUNTER_G1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+			b=WATER_COUNTER_B2-(((WATER_COUNTER_B2-WATER_COUNTER_B1)*(m_healthWaterLevel))/(WATER_COUNTER_SECONDTIME*6));
+			m_scalableFontBank->setColour(r,g,b);
+			m_scalableFontBank->print(digitX,digitY,buf);
+		}
 
 		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
 	}

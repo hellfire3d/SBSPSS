@@ -196,6 +196,17 @@ public:
 		WATERLEVELSHIFT=5,
 		WATERMAXHEALTH=(255<<WATERLEVELSHIFT),
 		WATERMINSOAKUPLEVEL=(245<<WATERLEVELSHIFT),					// SB won't auto soak unless water is lower than this
+
+		WATER_COUNTER_STARTSCALE=50,								// Scale of text
+		WATER_COUNTER_ENDSCALE=511,
+		WATER_COUNTER_R1=59,										// Colour of text
+		WATER_COUNTER_G1=118,
+		WATER_COUNTER_B1=253,
+		WATER_COUNTER_R2=255,
+		WATER_COUNTER_G2=28,
+		WATER_COUNTER_B2=17,
+		WATER_COUNTER_SECONDTIME=15<<CPlayer::WATERLEVELSHIFT,		// Each digit lasts this many frames..
+		WATER_COUNTER_MOVINGTIME=5<<CPlayer::WATERLEVELSHIFT,		// ..and spends this longing moving into position
 	};
 
 	typedef struct
@@ -451,7 +462,8 @@ public:
 
 	// Graphical resources
 public:
-	class FontBank		*getFontBank()					{return m_fontBank;}
+	class FontBank			*getFontBank()					{return m_fontBank;}
+	class ScalableFontBank	*getScalableFontBank()			{return m_scalableFontBank;}
 
 	enum
 	{
@@ -468,7 +480,8 @@ public:
 	};
 
 private:
-	class FontBank		*m_fontBank;
+	class FontBank			*m_fontBank;
+	class ScalableFontBank	*m_scalableFontBank;
 
 public:
 
