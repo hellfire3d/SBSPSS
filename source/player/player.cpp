@@ -103,6 +103,8 @@ m_animFrame=0;
 	m_cameraOffsetTarget.vy=0;
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
+	m_cameraLookYOffset=0;
+	m_cameraLookTimer=0;
 
 	m_lastPadInput=m_padInput=0;
 }
@@ -237,6 +239,59 @@ Pos.vy=23*16+1;//16*15;
 		{
 			m_invincibleFrameCount--;
 		}
+
+		// Look around
+		int	pad=getPadInputHeld();
+		if(pad&PAD_UP)
+		{
+			if(m_cameraLookTimer<=-LOOKAROUND_DELAY)
+			{
+				m_cameraLookYOffset-=LOOKAROUND_SCROLLSPEED;
+				if(m_cameraLookYOffset<-LOOKAROUND_MAXSCROLL)
+				{
+					m_cameraLookYOffset=-LOOKAROUND_MAXSCROLL;
+				}
+			}
+			else
+			{
+				m_cameraLookTimer--;
+			}
+		}
+		else if(pad&PAD_DOWN)
+		{
+			if(m_cameraLookTimer>=LOOKAROUND_DELAY)
+			{
+				m_cameraLookYOffset+=LOOKAROUND_SCROLLSPEED;
+				if(m_cameraLookYOffset>LOOKAROUND_MAXSCROLL)
+				{
+					m_cameraLookYOffset=LOOKAROUND_MAXSCROLL;
+				}
+			}
+			else
+			{
+				m_cameraLookTimer++;
+			}
+		}
+		else
+		{
+			m_cameraLookTimer=0;
+			if(m_cameraLookYOffset<0)
+			{
+				m_cameraLookYOffset+=LOOKAROUND_RESETSPEED;
+				if(m_cameraLookYOffset>0)
+				{
+					m_cameraLookYOffset=0;
+				}
+			}
+			else if(m_cameraLookYOffset>0)
+			{
+				m_cameraLookYOffset-=LOOKAROUND_RESETSPEED;
+				if(m_cameraLookYOffset<0)
+				{
+					m_cameraLookYOffset=0;
+				}
+			}
+		}
 	}
 
 
@@ -307,7 +362,7 @@ DVECTOR CPlayer::getCameraPos()
 {
 	DVECTOR	cameraPos;
 	cameraPos.vx=Pos.vx+m_cameraOffset.vx;
-	cameraPos.vy=Pos.vy+m_cameraOffset.vy;
+	cameraPos.vy=Pos.vy+m_cameraOffset.vy+m_cameraLookYOffset;
 	return cameraPos;
 }
 
