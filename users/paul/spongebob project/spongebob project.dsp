@@ -157,6 +157,10 @@ SOURCE=..\..\..\source\enemy\nfskull.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\ngary.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\ngeneric.cpp
 # End Source File
 # Begin Source File

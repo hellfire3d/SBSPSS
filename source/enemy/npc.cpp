@@ -798,6 +798,13 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
+		case NPC_MOVEMENT_GARY:
+		{
+			processGaryMovement( _frames );
+		}
+
+		break;
+
 		default:
 
 			break;

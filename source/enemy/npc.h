@@ -34,7 +34,8 @@ public:
 	enum NPC_UNIT_TYPE
 	{
 		NPC_SANDY_CHEEKS = 0,
-		NPC_FALLING_ITEM = 1,
+		NPC_GARY = 1,
+		NPC_FALLING_ITEM,
 		NPC_FISH_HOOK,
 		NPC_DUST_DEVIL,
 		NPC_PENDULUM,
@@ -173,6 +174,7 @@ protected:
 		NPC_MOVEMENT_FIREBALL,
 		NPC_MOVEMENT_RETURNING_HAZARD,
 		NPC_MOVEMENT_CLAM_RETRACT,
+		NPC_MOVEMENT_GARY,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -353,6 +355,10 @@ protected:
 	void				processPendulumMovement( int _frames );
 	void				processFireballMovement( int _frames );
 	void				processReturningHazardMovement( int _frames );
+
+	// gary functions
+
+	void				processGaryMovement( int _frames );
 
 	// data
 
