@@ -1,6 +1,4 @@
 fireattack
 fly
 gethit
-idlebreathe
-spellattack
 death
