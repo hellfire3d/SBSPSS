@@ -269,10 +269,11 @@ GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 #--- UI ---------------------------------------------------------------------
 #----------------------------------------------------------------------------
 UI_GFX_DIR :=				$(GRAF_DIR)/ui
+UI_FONT_DIR :=				$(GRAF_DIR)/font
 UI_GFX_OUT_DIR :=			$(DATA_OUT)/ui
 
-UI_GFX_FONT :=				font
-UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
+UI_GFX_FONT :=				smallfont
+UI_GFX_FONT_IN :=			$(foreach DIR,$(UI_GFX_FONT),$(UI_FONT_DIR)/$(DIR)/*.bmp)
 
 UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
 							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp \
