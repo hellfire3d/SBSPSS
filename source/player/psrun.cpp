@@ -105,6 +105,12 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 	controlDown=_playerMode->getPadInputDown();
 	controlHeld=_playerMode->getPadInputHeld();
 
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+	{
+		_playerMode->setAnimNo(getLoopFrame());
+		m_numberOfTimesAnimHasLooped++;
+	}
+
 	if(controlDown&PI_JUMP)
 	{
 		switchedState=_playerMode->setState(STATE_JUMP);
@@ -141,12 +147,6 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 				return;
 			}
 		}
-	}
-
-	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
-	{
-		_playerMode->setAnimNo(getLoopFrame());
-		m_numberOfTimesAnimHasLooped++;
 	}
 }
 
