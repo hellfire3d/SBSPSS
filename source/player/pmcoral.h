@@ -61,8 +61,7 @@ private:
 		BLOWER_TARGET_DISTANCE=40,
 		BLOWER_MINIMUM_AIM_ANGLE=-768,
 		BLOWER_MAXIMUM_AIM_ANGLE=768,
-		BLOWER_AIM_SPEED_INITIAL=1,
-		BLOWER_AIM_SPEED_MAXIMUM=50,
+		BLOWER_AIM_MOVE_AMOUNT=256,
 	};
 
 	DVECTOR						*getSuckUpPoint();
@@ -72,7 +71,6 @@ private:
 	u8							m_enemyFrame;
 
 	int							m_launchHeading;
-	int							m_launchHeadingChangeSpeed;
 
 };
 

@@ -163,7 +163,7 @@ static	PlayerMetrics	s_playerMetrics=
 void	CPlayerModeCoralBlower::enter()
 {
 	CPlayerModeBase::enter();
-	m_blowerState=BLOWER_STATE__EMPTY;
+	m_blowerState=BLOWER_STATE__FULL;
 }
 
 /*----------------------------------------------------------------------
@@ -255,7 +255,6 @@ void	CPlayerModeCoralBlower::think()
 			{
 				m_blowerState=BLOWER_STATE__AIMING;
 				m_launchHeading=0;
-				m_launchHeadingChangeSpeed=0;
 			}
 			break;
 		case BLOWER_STATE__AIMING:
@@ -294,49 +293,17 @@ void	CPlayerModeCoralBlower::think()
 			}
 			else
 			{
-				int	padHeld;
-				padHeld=getPadInputHeld();
-				if(padHeld&PI_UP)
+				int	padDown;
+				padDown=getPadInputDown();
+				if(padDown&PI_UP)
 				{
-					if(m_launchHeadingChangeSpeed>-BLOWER_AIM_SPEED_INITIAL)
-					{
-						m_launchHeadingChangeSpeed=-BLOWER_AIM_SPEED_INITIAL;
-					}
-					else
-					{
-						if(m_launchHeadingChangeSpeed>-BLOWER_AIM_SPEED_MAXIMUM)
-						{
-							m_launchHeadingChangeSpeed--;
-						}
-					}
-					m_launchHeading+=m_launchHeadingChangeSpeed;
-					if(m_launchHeading<BLOWER_MINIMUM_AIM_ANGLE)
-					{
-						m_launchHeading=BLOWER_MINIMUM_AIM_ANGLE;
-					}
+					m_launchHeading-=BLOWER_AIM_MOVE_AMOUNT;
+					if(m_launchHeading<BLOWER_MINIMUM_AIM_ANGLE)m_launchHeading=BLOWER_MINIMUM_AIM_ANGLE;
 				}
-				else if(padHeld&PI_DOWN)
+				else if(padDown&PI_DOWN)
 				{
-					if(m_launchHeadingChangeSpeed<BLOWER_AIM_SPEED_INITIAL)
-					{
-						m_launchHeadingChangeSpeed=BLOWER_AIM_SPEED_INITIAL;
-					}
-					else
-					{
-						if(m_launchHeadingChangeSpeed<BLOWER_AIM_SPEED_MAXIMUM)
-						{
-							m_launchHeadingChangeSpeed++;
-						}
-					}
-					m_launchHeading+=m_launchHeadingChangeSpeed;
-					if(m_launchHeading>BLOWER_MAXIMUM_AIM_ANGLE)
-					{
-						m_launchHeading=BLOWER_MAXIMUM_AIM_ANGLE;
-					}
-				}
-				else
-				{
-					m_launchHeadingChangeSpeed=0;
+					m_launchHeading+=BLOWER_AIM_MOVE_AMOUNT;
+					if(m_launchHeading>BLOWER_MAXIMUM_AIM_ANGLE)m_launchHeading=BLOWER_MAXIMUM_AIM_ANGLE;
 				}
 			}
 			break;
