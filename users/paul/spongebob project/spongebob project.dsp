@@ -483,6 +483,14 @@ SOURCE=..\..\..\source\paul\paul.cpp
 
 SOURCE=..\..\..\source\paul\paul.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\paul\scenesel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\paul\scenesel.h
+# End Source File
 # End Group
 # Begin Group "player"
 

@@ -106,7 +106,8 @@ memcard_src :=		md5 \
 
 pad_src :=			pads
 
-paul_src :=			paul
+paul_src :=			paul \
+					scenesel
 
 player_src :=		player
 

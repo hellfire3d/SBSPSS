@@ -24,6 +24,7 @@
 #ifdef __USER_paul__
 #include "paul\paul.h"
 CPaulScene s_paulScene;
+#include "paul\scenesel.h"
 #endif
 
 
@@ -192,8 +193,8 @@ int 	main()
 	CFileIO::GetAllFilePos();
 	InitSystem();
 	
-#ifdef __USER_paul__NOT
-	GameState::setNextScene( &FrontEndScene );
+#ifdef __USER_paul__
+	GameState::setNextScene( &SceneSelector );
 #else
 	GameState::setNextScene( &GameScene );
 #endif
