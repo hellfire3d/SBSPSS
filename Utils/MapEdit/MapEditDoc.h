@@ -30,7 +30,7 @@ public:
 	void			RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag);
 	void			MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt);
 	void			MouseMove(CMapEditView *View,UINT nFlags, CPoint &point);
-	void			ToggleLayerView(CMapEditView *View);
+	void			ToggleParamView(CMapEditView *View);
 	void			ToggleTileView(CMapEditView *View);
 
 // Operations

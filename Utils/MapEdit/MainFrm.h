@@ -9,8 +9,16 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include	"ExToolbar.h"
+#include	"ParamBar.h"
 
+/////////////////////////////////////////////////////////////////////////////
+class CMainToolBar : public CToolBar
+{
+public:
+	CComboBox m_Combo;
+};
+
+/////////////////////////////////////////////////////////////////////////////
 class CMainFrame : public CMDIFrameWnd
 {
 	DECLARE_DYNAMIC(CMainFrame)
@@ -20,7 +28,7 @@ public:
 // Attributes
 public:
 	CToolBar	*GetToolBar()	{return(&m_wndToolBar);}
-	CDialogBar	*GetLayerBar()	{return(&m_wndLayerBar);}
+	CParamBar	*GetParamBar()	{return(&m_wndParamBar);}
 //	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
 	CStatusBar	*GetStatusBar()	{return(&m_wndStatusBar);}
 // Operations
@@ -41,10 +49,10 @@ public:
 #endif
 
 protected:  // control bar embedded members
-	CStatusBar	m_wndStatusBar;
-	CExToolBar	m_wndToolBar;
-	CDialogBar	m_wndLayerBar;
-//	CDialogBar	m_wndTileBar;
+	CStatusBar		m_wndStatusBar;
+	CMainToolBar	m_wndToolBar;
+	CParamBar		m_wndParamBar;
+
 
 // Generated message map functions
 protected:
@@ -60,6 +68,9 @@ STATUS_BAR_SEP=0,
 STATUS_BAR_XPOS,
 STATUS_BAR_YPOS,
 };
+
+
+/////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////
 

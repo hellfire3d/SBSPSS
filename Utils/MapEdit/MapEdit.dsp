@@ -198,6 +198,10 @@ SOURCE=.\MapEditView.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ParamBar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -236,6 +240,10 @@ SOURCE=.\MapEditDoc.h
 # Begin Source File
 
 SOURCE=.\MapEditView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ParamBar.h
 # End Source File
 # Begin Source File
 

@@ -48,7 +48,7 @@ void	CCore::NewMap()
 	Layers[LAYER_TYPE_FORE]=	new CLayerTile("Fore",	TileLayerDefaultWidth/0.5f,	TileLayerDefaultHeight/0.5f,	0.5f,	FALSE);
 
 	TileViewFlag=0;
-	LayerViewFlag=1;
+	ParamViewFlag=1;
 
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
@@ -162,15 +162,16 @@ Vec		&ThisCam=GetCam();
 /*****************************************************************************/
 /*** Layers ******************************************************************/
 /*****************************************************************************/
-void	CCore::UpdateLayerBar(CMapEditView *View,BOOL ViewFlag)
+void	CCore::UpdateParamBar(CMapEditView *View,BOOL ViewFlag)
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
 CToolBar	*ToolBar=Frm->GetToolBar();
-CDialogBar	*LayerBar=Frm->GetLayerBar();
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-
-		LayerViewFlag=ViewFlag;
-		if (LayerViewFlag)
+CParamBar	*ParamBar=Frm->GetParamBar();
+CCheckListBox	*Dlg=(CCheckListBox *)ParamBar->GetDlgItem(IDC_PARAMBAR_LAYER_LIST);
+		
+		Dlg->SetCheck(1,1);
+		ParamViewFlag=ViewFlag;
+		if (ParamViewFlag)
 		{
 			Dlg->ResetContent();
 
@@ -182,22 +183,22 @@ CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 			Dlg->SetCurSel(ActiveLayer);
 		}
 
-		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerViewFlag);
-		Frm->ShowControlBar(LayerBar, LayerViewFlag, FALSE);	
+		ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_PARAMBAR,ParamViewFlag);
+		Frm->ShowControlBar(ParamBar, ParamViewFlag, FALSE);	
 		if (View) UpdateView(View);
 
 }
 
 /*****************************************************************************/
-void	CCore::ToggleLayerView(CMapEditView *View)
+void	CCore::ToggleParamView(CMapEditView *View)
 {
-	UpdateLayerBar(View,!LayerViewFlag);
+	UpdateParamBar(View,!ParamViewFlag);
 }
 
 /*****************************************************************************/
 void	CCore::SetActiveLayer(int i)
 {
-	UpdateLayerBar(NULL,LayerViewFlag);
+	UpdateParamBar(NULL,ParamViewFlag);
 }
 
 
@@ -237,7 +238,7 @@ Vec		&CCore::GetCam()
 void	CCore::UpdateAll(CMapEditView *View)
 {
 	UpdateView(View);
-	UpdateLayerBar(View,LayerViewFlag);
+	UpdateParamBar(View,ParamViewFlag);
 	UpdateTileView(View,TileViewFlag);
 }
 

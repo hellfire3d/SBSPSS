@@ -152,9 +152,9 @@ void	CMapEditDoc::MouseMove(CMapEditView *View,UINT nFlags, CPoint &point)
 }
 
 /*********************************************************************************/
-void	CMapEditDoc::ToggleLayerView(CMapEditView *View)
+void	CMapEditDoc::ToggleParamView(CMapEditView *View)
 {
-	Core.ToggleLayerView(View);
+	Core.ToggleParamView(View);
 }
 
 /*********************************************************************************/

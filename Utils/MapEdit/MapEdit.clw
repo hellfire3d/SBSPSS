@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CExToolBar
+LastClass=CAboutDlg
 LastTemplate=CToolBarCtrl
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -11,7 +11,7 @@ LastPage=0
 ClassCount=9
 Class1=CChildFrame
 Class2=CGLEnabledView
-Class3=CListBoxEx
+Class3=CParamBar
 Class4=CMainFrame
 Class5=CMapEditApp
 Class6=CAboutDlg
@@ -22,10 +22,10 @@ ResourceCount=8
 Resource1=IDR_MAPEDITYPE (English (U.S.))
 Resource2=IDD_TILEBAR (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDR_TOOLBAR (English (U.S.))
-Resource5=IDD_ABOUTBOX (English (U.S.))
+Resource4=IDD_ABOUTBOX (English (U.S.))
+Resource5=IDD_PARAMBAR (English (U.S.))
 Class9=CExToolBar
-Resource6=IDD_LAYERBAR (English (U.S.))
+Resource6=IDR_TOOLBAR (English (U.S.))
 Resource7=IDR_MAINFRAME (English (U.S.))
 Resource8=IDD_TRASHHEAP
 
@@ -42,13 +42,6 @@ BaseClass=CView
 HeaderFile=GLEnabledView.h
 ImplementationFile=GLEnabledView.cpp
 LastObject=CGLEnabledView
-
-[CLS:CListBoxEx]
-Type=0
-BaseClass=CListBox
-HeaderFile=ListBoxEx.h
-ImplementationFile=ListBoxEx.cpp
-LastObject=CListBoxEx
 
 [CLS:CMainFrame]
 Type=0
@@ -162,12 +155,6 @@ Control2=IDC_STATIC,static,1342308480
 Control3=IDC_STATIC,static,1342308352
 Control4=IDOK,button,1342373889
 
-[DLG:IDD_LAYERBAR (English (U.S.))]
-Type=1
-Class=?
-ControlCount=1
-Control1=IDC_LAYERBAR_LIST,listbox,1352728833
-
 [DLG:IDD_TILEBAR (English (U.S.))]
 Type=1
 Class=?
@@ -191,7 +178,7 @@ Command5=ID_EDIT_COPY
 Command6=ID_EDIT_PASTE
 Command7=ID_FILE_PRINT
 Command8=ID_APP_ABOUT
-Command9=ID_TOOLBAR_LAYERBAR
+Command9=ID_TOOLBAR_PARAMBAR
 Command10=ID_TOOLBAR_TILEPALETTE
 Command11=ID_TOOLBAR_COMBO
 CommandCount=11
@@ -207,5 +194,20 @@ Type=0
 HeaderFile=extoolbar.h
 ImplementationFile=extoolbar.cpp
 BaseClass=CToolBar
-LastObject=CExToolBar
+LastObject=IDC_LAYERBAR_LIST
+
+[DLG:IDD_PARAMBAR (English (U.S.))]
+Type=1
+Class=CParamBar
+ControlCount=1
+Control1=IDC_PARAMBAR_LAYER_LIST,listbox,1352728833
+
+[CLS:CParamBar]
+Type=0
+HeaderFile=ParamBar.h
+ImplementationFile=ParamBar.cpp
+BaseClass=CDialogBar
+Filter=D
+LastObject=CParamBar
+VirtualFilter=dWC
 

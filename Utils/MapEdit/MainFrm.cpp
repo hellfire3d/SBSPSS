@@ -5,7 +5,6 @@
 #include "MapEdit.h"
 
 #include	"MainFrm.h"
-#include	"ExToolBar.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -50,19 +49,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1) return -1;
 	EnableDocking(CBRS_ALIGN_ANY);
 
-/*
-// TileBar
-	if (!m_wndTileBar.Create(this,IDD_TILEBAR,(CBRS_TOP | CBRS_SIZE_DYNAMIC | CBRS_FLOAT_MULTI ),IDD_TILEBAR))
-	{
-		TRACE0("Failed to create ToolBar\n");
-		return -1;
-	}
-	
-	m_wndTileBar.EnableDocking( CBRS_ALIGN_TOP);
-	m_wndTileBar.SetWindowText("TileBar");
-	DockControlBar(&m_wndTileBar);
-*/
-
 // Status Bar
 	if (!m_wndStatusBar.Create(this) || !m_wndStatusBar.SetIndicators(indicators,sizeof(indicators)/sizeof(UINT)))
 	{
@@ -70,16 +56,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 
-// LayerBar
-	if (!m_wndLayerBar.Create(this,IDD_LAYERBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_LAYERBAR))
+// ParamBar
+	if (!m_wndParamBar.Create(this,IDD_PARAMBAR,(CBRS_LEFT | CBRS_SIZE_DYNAMIC),IDD_PARAMBAR))
 	{
-		TRACE0("Failed to create LayerBar\n");
+		TRACE0("Failed to create ParamBar\n");
 		return -1;
 	}
 	
-	m_wndLayerBar.EnableDocking( CBRS_ALIGN_ANY);
-	m_wndLayerBar.SetWindowText("Layer");
-	DockControlBar(&m_wndLayerBar);
+	m_wndParamBar.EnableDocking( CBRS_ALIGN_ANY);
+	m_wndParamBar.SetWindowText("Param");
+	DockControlBar(&m_wndParamBar);
 
 // ToolBar (plus extra code for extra controls!!)
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))

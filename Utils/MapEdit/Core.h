@@ -42,11 +42,11 @@ public:
 
 		CTile					GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 
+// Param Bar
+		void					UpdateParamBar(CMapEditView *View,BOOL ViewFlag);
+		void					ToggleParamView(CMapEditView *View);
+		BOOL					GetParamViewFlag()				{return(ParamViewFlag);}
 // Layers
-		void					UpdateLayerBar(CMapEditView *View,BOOL ViewFlag);
-		void					ToggleLayerView(CMapEditView *View);
-		BOOL					GetLayerViewFlag()				{return(LayerViewFlag);}
-
 		void					SetActiveLayer(int Layer);
 		int						GetActiveLayer()				{return(ActiveLayer);}
 		CLayer					*GetLayer(int i)				{return(Layers[i]);}
@@ -74,7 +74,7 @@ private:
 
 		BOOL					RenderFlag;
 		BOOL					TileViewFlag;
-		BOOL					LayerViewFlag;
+		BOOL					ParamViewFlag;
 
 };
 
