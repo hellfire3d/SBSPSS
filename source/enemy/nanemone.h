@@ -21,6 +21,7 @@
 class	CNpcAnemoneEnemy : public CNpcEnemy
 {
 protected:
+	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual bool		processSensor();
 };
 

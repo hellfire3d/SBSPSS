@@ -180,6 +180,8 @@ public:
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
 	void				setupWaypoints( sThingActor *ThisActor );
 
+	virtual int			canCollide();
+
 
 protected:
 	class CLayerCollision	*m_layerCollision;
@@ -302,6 +304,7 @@ protected:
 	void				processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	void				processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY );
 	bool				processGroundCollisionReverse( s32 *moveX, s32 *moveY );
+	virtual void		processEnemyCollision( CThing *thisThing );
 
 	void				reinit();
 
@@ -329,6 +332,7 @@ protected:
 	s32					m_velocity;
 	bool				m_evadeClockwise;
 	s32					m_movementTimer;
+	s32					m_collisionTimer;
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;

@@ -28,6 +28,11 @@
 #endif
 
 
+void CNpcFlamingSkullEnemy::processEnemyCollision( CThing *thisThing )
+{
+	// do nothing
+}
+
 void CNpcFlamingSkullEnemy::postInit()
 {
 	m_state = FLAMING_SKULL_ATTACK;

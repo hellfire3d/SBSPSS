@@ -32,6 +32,11 @@
 #endif
 
 
+void CNpcEyeballEnemy::processEnemyCollision( CThing *thisThing )
+{
+	// do nothing
+}
+
 void CNpcEyeballEnemy::postInit()
 {
 	CProjectile *projectile;

@@ -21,6 +21,7 @@
 class	CNpcEnemyGenerator : public CNpcEnemy
 {
 public:
+	virtual void		processEnemyCollision( CThing *thisThing );
 	void				render();
 	void				think(int _frames);
 };

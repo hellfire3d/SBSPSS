@@ -32,6 +32,11 @@
 #endif
 
 
+void CNpcSkullStomperEnemy::processEnemyCollision( CThing *thisThing )
+{
+	// do nothing
+}
+
 void CNpcSkullStomperEnemy::postInit()
 {
 	m_extendDir = EXTEND_DOWN;

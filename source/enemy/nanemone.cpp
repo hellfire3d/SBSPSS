@@ -44,6 +44,11 @@
 #endif
 
 
+void CNpcAnemoneEnemy::processEnemyCollision( CThing *thisThing )
+{
+	// do nothing
+}
+
 bool CNpcAnemoneEnemy::processSensor()
 {
 	switch( m_sensorFunc )
