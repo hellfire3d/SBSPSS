@@ -94,6 +94,8 @@ void CNpcBouncePlatform::think( int _frames )
 	}
 
 	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.XMin -= 8;
+	boundingBox.XMax += 8;
 
 	if ( ( boundingBox.YMax - boundingBox.YMin ) < 24 )
 	{
