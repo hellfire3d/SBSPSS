@@ -41,6 +41,7 @@ typedef enum
 	DC_SYSTEM		=1<<3,
 	DC_SOUND		=1<<4,
 	DC_GUI			=1<<5,
+	DC_MEMCARD		=1<<6,
 
 
 	DC_NONE			=0,
@@ -85,6 +86,7 @@ typedef enum
 	#define SYSTEM_DBGMSG						__DBGMSG(DC_SYSTEM)
 	#define SOUND_DBGMSG						__DBGMSG(DC_SOUND)
 	#define GUI_DBGMSG							__DBGMSG(DC_GUI)
+	#define MEMCARD_MSG							__DBGMSG(DC_MEMCARD)
 
 	#define setActiveDbgChannels(_channelFlags)	__setActiveDbgChannels(_channelFlags)
 	#define getActiveDbgChannels()				__getActiveDbgChannels()
@@ -97,7 +99,8 @@ typedef enum
 	#define PAUL_DBGMSG							;
 	#define SYSTEM_DBGMSG						;
 	#define SOUND_DBGMSG						;
-	#define SOUND_GUI							;
+	#define GUI_DBGMSG							;
+	#define MEMCARD_DBGMSG						;
 
 	#define setActiveDbgChannels(_channelFlags)	;
 	#define getActiveDbgChannels()				;
