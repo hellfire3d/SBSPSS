@@ -285,7 +285,7 @@ static IdleAnims s_coralBlowerIdleAnims[]=
 	//	start frame						loop frame						end frame						loop count
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								4	}, // default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								10	},
-	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,		-1,								1	},
+//	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,		-1,								1	},
 };
 static int s_numCoralBlowerIdleAnims=sizeof(s_coralBlowerIdleAnims)/sizeof(IdleAnims);
 IdleAnims *CPlayerStateCoralBlowerIdle::getIdleAnimsDb(int _animNo)
