@@ -2,28 +2,12 @@
 #include	data/scripts/defs/charanim.scr
 
 
-//do
-//{
-//	print($tmp1);
-//	$tmp1=$tmp1+1;
-//	pause;
-//}
-//while($tmp1<1);
-//print(112-_setText(1));
-//do
-//{
-//	print($tmp1);
-//	$tmp1=$tmp1+1;
-//	pause;
-//}
-//while($tmp1<2);
-//print(222);
-//stop;
+/*
+_setCharacterAnimation(CHAR_SPONGEBOB,ANIM_QUIET);
+_setText(123);
+pause;
+*/
 
-
-//_setCharacterAnimation(CHAR_SPONGEBOB,ANIM_QUIET);
-//_setText(123);
-//pause;
 
 #define		x			$tmp1
 #define		y			$tmp2
@@ -38,16 +22,14 @@ vy=velocity;
 while(1==1)
 {
 
-// readout for fps :)
-$tmp0=_getFrameTime();
-//print($tmp0);
-$tmp5=50;
-do{
-	_drawSprite(4,$tmp5,50,10);
-	$tmp5=$tmp5+15;
-	$tmp0=$tmp0-1;
-}while($tmp0>0);
-
+	// readout for fps :)
+	$tmp0=_getFrameTime();
+	$tmp5=50;
+	do{
+		_drawSprite(4,$tmp5,50,10);
+		$tmp5=$tmp5+20;
+		$tmp0=$tmp0-1;
+	}while($tmp0>0);
 
 	_drawSprite(0,x,y,100);
 	$tmp0=_getFrameTime();

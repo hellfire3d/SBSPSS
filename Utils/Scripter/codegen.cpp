@@ -328,6 +328,18 @@ int CTreeNode::generateCode(int _write)
 			codeSize+=emit(OP_ADD,_write);
 			break;
 			
+		case MULTIPLY_EXPR:		// * [value, value]
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_MULTIPLY,_write);
+			break;
+			
+		case DIVIDE_EXPR:		// / [value, value]
+			codeSize+=m_children[1]->generateCode(_write);
+			codeSize+=m_children[0]->generateCode(_write);
+			codeSize+=emit(OP_DIVIDE,_write);
+			break;
+			
 		case FUNCTION_EXPR:		// function [functionNumber]
 			codeSize+=emit(OP_CALL_FUNCTION,_write);
 			codeSize+=emit(getFunctionNumber(),_write);

@@ -78,6 +78,7 @@ private:
 
 		STOPPED_STACK_NOT_EMPTY,
 		CRASHED_ILLEGAL_OPCODE,
+		CRASHED_DIVIDE_BY_ZERO,
 	}ScriptState;
 
 	enum
@@ -104,6 +105,8 @@ private:
 		OP_IS_GREATERTHAN_VALUE,//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_ASSIGN,				//								varidx, value
 		OP_ADD,					//								value, value			pushes result to stack
+		OP_MULTIPLY,			//								value, value			pushes result to stack
+		OP_DIVIDE,				//								value, value			pushes result to stack
 		OP_NEG,					//								value					pushes result to stack
 		OP_PRINT,				//								value
 		OP_CALL_FUNCTION,		//	functionnumber, argcount	args					pushes return value to stack

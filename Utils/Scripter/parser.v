@@ -19,31 +19,33 @@
 
    15  assign_expression : variable ASSIGN value
 
-   16  expression : OPEN_PAR expression CLOSE_PAR
-   17             | equal_expression
-   18             | notequal_expression
-   19             | lessthan_expression
-   20             | greaterthan_expression
+   16  expression : equal_expression
+   17             | notequal_expression
+   18             | lessthan_expression
+   19             | greaterthan_expression
 
-   21  equal_expression : value EQUAL value
+   20  equal_expression : value EQUAL value
 
-   22  notequal_expression : value NOTEQUAL value
+   21  notequal_expression : value NOTEQUAL value
 
-   23  lessthan_expression : value LESSTHAN value
+   22  lessthan_expression : value LESSTHAN value
 
-   24  greaterthan_expression : value GREATERTHAN value
+   23  greaterthan_expression : value GREATERTHAN value
 
-   25  variable : VARIABLE
+   24  variable : VARIABLE
 
-   26  value : VALUE
+   25  value : VALUE
+   26        | OPEN_PAR value CLOSE_PAR
    27        | VARIABLE
    28        | value PLUS value
    29        | value SUBTRACT value
-   30        | function
+   30        | value MULTIPLY value
+   31        | value DIVIDE value
+   32        | function
 
-   31  $$1 :
+   33  $$1 :
 
-   32  function : FUNCTION OPEN_PAR $$1 CLOSE_PAR
+   34  function : FUNCTION OPEN_PAR $$1 CLOSE_PAR
 
 
 state 0
@@ -151,9 +153,9 @@ state 10
 
 
 state 11
-	variable : VARIABLE .  (25)
+	variable : VARIABLE .  (24)
 
-	.  reduce 25
+	.  reduce 24
 
 
 state 12
@@ -242,6 +244,7 @@ state 21
 state 22
 	statement : PRINT OPEN_PAR . value CLOSE_PAR END_STMT
 
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -274,9 +277,9 @@ state 23
 
 state 24
 	function : FUNCTION OPEN_PAR . $$1 CLOSE_PAR
-	$$1 : .  (31)
+	$$1 : .  (33)
 
-	.  reduce 31
+	.  reduce 33
 
 	$$1 goto 42
 
@@ -290,6 +293,7 @@ state 25
 state 26
 	assign_expression : variable ASSIGN . value
 
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -305,19 +309,14 @@ state 27
 
 
 state 28
-	expression : OPEN_PAR . expression CLOSE_PAR
+	value : OPEN_PAR . value CLOSE_PAR
 
 	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
 
-	expression goto 44
-	equal_expression goto 32
-	notequal_expression goto 33
-	lessthan_expression goto 34
-	greaterthan_expression goto 35
-	value goto 36
+	value goto 44
 	function goto 37
 
 
@@ -328,9 +327,9 @@ state 29
 
 
 state 30
-	value : VALUE .  (26)
+	value : VALUE .  (25)
 
-	.  reduce 26
+	.  reduce 25
 
 
 state 31
@@ -341,27 +340,27 @@ state 31
 
 
 state 32
-	expression : equal_expression .  (17)
+	expression : equal_expression .  (16)
+
+	.  reduce 16
+
+
+state 33
+	expression : notequal_expression .  (17)
 
 	.  reduce 17
 
 
-state 33
-	expression : notequal_expression .  (18)
+state 34
+	expression : lessthan_expression .  (18)
 
 	.  reduce 18
 
 
-state 34
-	expression : lessthan_expression .  (19)
+state 35
+	expression : greaterthan_expression .  (19)
 
 	.  reduce 19
-
-
-state 35
-	expression : greaterthan_expression .  (20)
-
-	.  reduce 20
 
 
 state 36
@@ -371,6 +370,8 @@ state 36
 	greaterthan_expression : value . GREATERTHAN value
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	EQUAL  shift 46
 	NOTEQUAL  shift 47
@@ -378,34 +379,40 @@ state 36
 	GREATERTHAN  shift 49
 	PLUS  shift 50
 	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
 
 
 state 37
-	value : function .  (30)
+	value : function .  (32)
 
-	.  reduce 30
+	.  reduce 32
 
 
 state 38
 	statement : WHILE OPEN_PAR expression . CLOSE_PAR statement
 
-	CLOSE_PAR  shift 52
+	CLOSE_PAR  shift 54
 
 
 state 39
 	statement : DO statement WHILE . OPEN_PAR expression CLOSE_PAR END_STMT
 
-	OPEN_PAR  shift 53
+	OPEN_PAR  shift 55
 
 
 state 40
 	statement : PRINT OPEN_PAR value . CLOSE_PAR END_STMT
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
-	CLOSE_PAR  shift 54
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	CLOSE_PAR  shift 56
 
 
 state 41
@@ -417,23 +424,35 @@ state 41
 state 42
 	function : FUNCTION OPEN_PAR $$1 . CLOSE_PAR
 
-	CLOSE_PAR  shift 55
+	CLOSE_PAR  shift 57
 
 
 state 43
 	assign_expression : variable ASSIGN value .  (15)
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
 	.  reduce 15
 
 
 state 44
-	expression : OPEN_PAR expression . CLOSE_PAR
+	value : OPEN_PAR value . CLOSE_PAR
+	value : value . PLUS value
+	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
-	CLOSE_PAR  shift 56
+	PLUS  shift 50
+	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	CLOSE_PAR  shift 58
 
 
 state 45
@@ -451,7 +470,7 @@ state 45
 	VARIABLE  shift 11
 	FUNCTION  shift 12
 
-	statement goto 57
+	statement goto 59
 	assign_expression goto 14
 	variable goto 15
 	function goto 16
@@ -460,28 +479,7 @@ state 45
 state 46
 	equal_expression : value EQUAL . value
 
-	VARIABLE  shift 29
-	VALUE  shift 30
-	FUNCTION  shift 12
-
-	value goto 58
-	function goto 37
-
-
-state 47
-	notequal_expression : value NOTEQUAL . value
-
-	VARIABLE  shift 29
-	VALUE  shift 30
-	FUNCTION  shift 12
-
-	value goto 59
-	function goto 37
-
-
-state 48
-	lessthan_expression : value LESSTHAN . value
-
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -490,9 +488,10 @@ state 48
 	function goto 37
 
 
-state 49
-	greaterthan_expression : value GREATERTHAN . value
+state 47
+	notequal_expression : value NOTEQUAL . value
 
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -501,9 +500,10 @@ state 49
 	function goto 37
 
 
-state 50
-	value : value PLUS . value
+state 48
+	lessthan_expression : value LESSTHAN . value
 
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -512,9 +512,10 @@ state 50
 	function goto 37
 
 
-state 51
-	value : value SUBTRACT . value
+state 49
+	greaterthan_expression : value GREATERTHAN . value
 
+	OPEN_PAR  shift 28
 	VARIABLE  shift 29
 	VALUE  shift 30
 	FUNCTION  shift 12
@@ -523,7 +524,55 @@ state 51
 	function goto 37
 
 
+state 50
+	value : value PLUS . value
+
+	OPEN_PAR  shift 28
+	VARIABLE  shift 29
+	VALUE  shift 30
+	FUNCTION  shift 12
+
+	value goto 64
+	function goto 37
+
+
+state 51
+	value : value SUBTRACT . value
+
+	OPEN_PAR  shift 28
+	VARIABLE  shift 29
+	VALUE  shift 30
+	FUNCTION  shift 12
+
+	value goto 65
+	function goto 37
+
+
 state 52
+	value : value MULTIPLY . value
+
+	OPEN_PAR  shift 28
+	VARIABLE  shift 29
+	VALUE  shift 30
+	FUNCTION  shift 12
+
+	value goto 66
+	function goto 37
+
+
+state 53
+	value : value DIVIDE . value
+
+	OPEN_PAR  shift 28
+	VARIABLE  shift 29
+	VALUE  shift 30
+	FUNCTION  shift 12
+
+	value goto 67
+	function goto 37
+
+
+state 54
 	statement : WHILE OPEN_PAR expression CLOSE_PAR . statement
 
 	STOP  shift 3
@@ -537,13 +586,13 @@ state 52
 	VARIABLE  shift 11
 	FUNCTION  shift 12
 
-	statement goto 64
+	statement goto 68
 	assign_expression goto 14
 	variable goto 15
 	function goto 16
 
 
-state 53
+state 55
 	statement : DO statement WHILE OPEN_PAR . expression CLOSE_PAR END_STMT
 
 	OPEN_PAR  shift 28
@@ -551,7 +600,7 @@ state 53
 	VALUE  shift 30
 	FUNCTION  shift 12
 
-	expression goto 65
+	expression goto 69
 	equal_expression goto 32
 	notequal_expression goto 33
 	lessthan_expression goto 34
@@ -560,116 +609,180 @@ state 53
 	function goto 37
 
 
-state 54
+state 56
 	statement : PRINT OPEN_PAR value CLOSE_PAR . END_STMT
 
-	END_STMT  shift 66
+	END_STMT  shift 70
 
 
-state 55
-	function : FUNCTION OPEN_PAR $$1 CLOSE_PAR .  (32)
-
-	.  reduce 32
-
-
-state 56
-	expression : OPEN_PAR expression CLOSE_PAR .  (16)
-
-	.  reduce 16
-
-
-57: shift-reduce conflict (shift 67, reduce 9) on ELSE
 state 57
-	statement : IF OPEN_PAR expression CLOSE_PAR statement .  (9)
-	statement : IF OPEN_PAR expression CLOSE_PAR statement . ELSE statement
+	function : FUNCTION OPEN_PAR $$1 CLOSE_PAR .  (34)
 
-	ELSE  shift 67
-	.  reduce 9
+	.  reduce 34
 
 
 state 58
-	equal_expression : value EQUAL value .  (21)
-	value : value . PLUS value
-	value : value . SUBTRACT value
+	value : OPEN_PAR value CLOSE_PAR .  (26)
 
-	PLUS  shift 50
-	SUBTRACT  shift 51
-	.  reduce 21
+	.  reduce 26
 
 
+59: shift-reduce conflict (shift 71, reduce 9) on ELSE
 state 59
-	notequal_expression : value NOTEQUAL value .  (22)
-	value : value . PLUS value
-	value : value . SUBTRACT value
+	statement : IF OPEN_PAR expression CLOSE_PAR statement .  (9)
+	statement : IF OPEN_PAR expression CLOSE_PAR statement . ELSE statement
 
-	PLUS  shift 50
-	SUBTRACT  shift 51
-	.  reduce 22
+	ELSE  shift 71
+	.  reduce 9
 
 
 state 60
-	lessthan_expression : value LESSTHAN value .  (23)
+	equal_expression : value EQUAL value .  (20)
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
-	.  reduce 23
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 20
 
 
 state 61
-	greaterthan_expression : value GREATERTHAN value .  (24)
+	notequal_expression : value NOTEQUAL value .  (21)
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
-	.  reduce 24
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 21
 
 
-62: shift-reduce conflict (shift 50, reduce 28) on PLUS
-62: shift-reduce conflict (shift 51, reduce 28) on SUBTRACT
 state 62
+	lessthan_expression : value LESSTHAN value .  (22)
+	value : value . PLUS value
+	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
+
+	PLUS  shift 50
+	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 22
+
+
+state 63
+	greaterthan_expression : value GREATERTHAN value .  (23)
+	value : value . PLUS value
+	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
+
+	PLUS  shift 50
+	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 23
+
+
+64: shift-reduce conflict (shift 50, reduce 28) on PLUS
+64: shift-reduce conflict (shift 51, reduce 28) on SUBTRACT
+64: shift-reduce conflict (shift 52, reduce 28) on MULTIPLY
+64: shift-reduce conflict (shift 53, reduce 28) on DIVIDE
+state 64
 	value : value PLUS value .  (28)
 	value : value . PLUS value
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
 	.  reduce 28
 
 
-63: shift-reduce conflict (shift 50, reduce 29) on PLUS
-63: shift-reduce conflict (shift 51, reduce 29) on SUBTRACT
-state 63
+65: shift-reduce conflict (shift 50, reduce 29) on PLUS
+65: shift-reduce conflict (shift 51, reduce 29) on SUBTRACT
+65: shift-reduce conflict (shift 52, reduce 29) on MULTIPLY
+65: shift-reduce conflict (shift 53, reduce 29) on DIVIDE
+state 65
 	value : value . PLUS value
 	value : value SUBTRACT value .  (29)
 	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
 
 	PLUS  shift 50
 	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
 	.  reduce 29
 
 
-state 64
+66: shift-reduce conflict (shift 50, reduce 30) on PLUS
+66: shift-reduce conflict (shift 51, reduce 30) on SUBTRACT
+66: shift-reduce conflict (shift 52, reduce 30) on MULTIPLY
+66: shift-reduce conflict (shift 53, reduce 30) on DIVIDE
+state 66
+	value : value . PLUS value
+	value : value . SUBTRACT value
+	value : value MULTIPLY value .  (30)
+	value : value . MULTIPLY value
+	value : value . DIVIDE value
+
+	PLUS  shift 50
+	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 30
+
+
+67: shift-reduce conflict (shift 50, reduce 31) on PLUS
+67: shift-reduce conflict (shift 51, reduce 31) on SUBTRACT
+67: shift-reduce conflict (shift 52, reduce 31) on MULTIPLY
+67: shift-reduce conflict (shift 53, reduce 31) on DIVIDE
+state 67
+	value : value . PLUS value
+	value : value . SUBTRACT value
+	value : value . MULTIPLY value
+	value : value DIVIDE value .  (31)
+	value : value . DIVIDE value
+
+	PLUS  shift 50
+	SUBTRACT  shift 51
+	MULTIPLY  shift 52
+	DIVIDE  shift 53
+	.  reduce 31
+
+
+state 68
 	statement : WHILE OPEN_PAR expression CLOSE_PAR statement .  (11)
 
 	.  reduce 11
 
 
-state 65
+state 69
 	statement : DO statement WHILE OPEN_PAR expression . CLOSE_PAR END_STMT
 
-	CLOSE_PAR  shift 68
+	CLOSE_PAR  shift 72
 
 
-state 66
+state 70
 	statement : PRINT OPEN_PAR value CLOSE_PAR END_STMT .  (7)
 
 	.  reduce 7
 
 
-state 67
+state 71
 	statement : IF OPEN_PAR expression CLOSE_PAR statement ELSE . statement
 
 	STOP  shift 3
@@ -683,34 +796,36 @@ state 67
 	VARIABLE  shift 11
 	FUNCTION  shift 12
 
-	statement goto 69
+	statement goto 73
 	assign_expression goto 14
 	variable goto 15
 	function goto 16
 
 
-state 68
+state 72
 	statement : DO statement WHILE OPEN_PAR expression CLOSE_PAR . END_STMT
 
-	END_STMT  shift 70
+	END_STMT  shift 74
 
 
-state 69
+state 73
 	statement : IF OPEN_PAR expression CLOSE_PAR statement ELSE statement .  (10)
 
 	.  reduce 10
 
 
-state 70
+state 74
 	statement : DO statement WHILE OPEN_PAR expression CLOSE_PAR END_STMT .  (12)
 
 	.  reduce 12
 
 
-State 57 contains 1 shift-reduce conflict
-State 62 contains 2 shift-reduce conflicts
-State 63 contains 2 shift-reduce conflicts
+State 59 contains 1 shift-reduce conflict
+State 64 contains 4 shift-reduce conflicts
+State 65 contains 4 shift-reduce conflicts
+State 66 contains 4 shift-reduce conflicts
+State 67 contains 4 shift-reduce conflicts
 
 
-24 tokens, 14 nonterminals
-33 grammar rules, 71 states
+26 tokens, 14 nonterminals
+35 grammar rules, 75 states

@@ -77,6 +77,8 @@ private:
 %token	GREATERTHAN
 %token	PLUS
 %token	SUBTRACT
+%token	MULTIPLY
+%token	DIVIDE
 %token	END_STMT
 %token	OPEN_PAR
 %token	CLOSE_PAR
@@ -133,8 +135,7 @@ assign_expression
 														
 														
 expression												
-	:OPEN_PAR expression CLOSE_PAR						{$$=$2;}
-	|equal_expression									{$$=$1;}
+	:equal_expression									{$$=$1;}
 	|notequal_expression								{$$=$1;}
 	|lessthan_expression								{$$=$1;}
 	|greaterthan_expression								{$$=$1;}
@@ -163,11 +164,14 @@ variable
 														
 value													
 	:VALUE												{$$=new CTreeNode(VALUE_EXPR,$1);}
+	|OPEN_PAR value CLOSE_PAR							{$$=$2;}
 	|VARIABLE											{$$=new CTreeNode(VARIABLE_EXPR,$1);}		// variable value
 //	|PLUS value											{$$=$2;}
-//	|SUBTRACT value										{$$=new CTreeNode(STMT_LIST,$1,new CTreeNode(
+//	|SUBTRACT value										{$$=new CTreeNode(STMT_LIST,CTreeNodeCTreeNode(VALUE_EXPR,$2);}
 	|value PLUS value									{$$=new CTreeNode(PLUS_EXPR,$1,$3);}
 	|value SUBTRACT value								{$$=new CTreeNode(SUBTRACT_EXPR,$1,$3);}
+	|value MULTIPLY value								{$$=new CTreeNode(MULTIPLY_EXPR,$1,$3);}
+	|value DIVIDE value									{$$=new CTreeNode(DIVIDE_EXPR,$1,$3);}
 	|function											{$$=$1;}
 	;													
 

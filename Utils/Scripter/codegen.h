@@ -49,6 +49,8 @@ typedef enum
 	VALUE_EXPR,				// value
 	PLUS_EXPR,				// + [value, value]
 	SUBTRACT_EXPR,			// - [value, value]
+	MULTIPLY_EXPR,			// * [value, value]
+	DIVIDE_EXPR,			// / [value, value]
 	FUNCTION_EXPR,			// function [functionNumber]
 }NodeType;
 
@@ -94,6 +96,8 @@ private:
 		OP_IS_GREATERTHAN_VALUE,//								value, value			pushes result ( 0 or 1 ) to stack
 		OP_ASSIGN,				//								varidx, value
 		OP_ADD,					//								value, value			pushes result to stack
+		OP_MULTIPLY,			//								value, value			pushes result to stack
+		OP_DIVIDE,				//								value, value			pushes result to stack
 		OP_NEG,					//								value					pushes result to stack
 		OP_PRINT,				//								value
 		OP_CALL_FUNCTION,		//	functionNumber, argcount	args					pushes return value to stack

@@ -91,7 +91,16 @@ int mylexer::closeInputFile()
   ---------------------------------------------------------------------- */
 void mylexer::error()
 {
-	CPFile::getCurrentFile()->error(yyerr);
+	CPFile	*cp;
+	cp=CPFile::getCurrentFile();
+	if(cp)
+	{
+		cp->error(yyerr);
+	}
+	else
+	{
+		// Hmm.. this happens when you forget '*/' on the end of a comment
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -212,6 +221,54 @@ void mylexer::unexpectedChar()
 		error();
 	}
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void mylexer::comment()
+{
+	typedef enum CommentState	{	INCOMMENT,FOUNDASTERISK,OUTOFCOMMENT	};
+	int				nextChar;
+	CommentState	commentState=INCOMMENT;
+
+	do
+	{
+		nextChar=yygetchar();
+		if(nextChar==-1)
+		{
+			printf("END OF FILE FOUND INSIDE COMMENT\n");
+			error();
+			return;
+		}
+		switch(commentState)
+		{
+			case INCOMMENT:
+				if(nextChar=='*')
+				{
+					commentState=FOUNDASTERISK;
+				}
+				break;
+			case FOUNDASTERISK:
+				if(nextChar=='/')
+				{
+					commentState=OUTOFCOMMENT;
+				}
+				else
+				{
+					commentState=INCOMMENT;
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	while(commentState!=OUTOFCOMMENT);
+}
+
 
 /*===========================================================================
  end */

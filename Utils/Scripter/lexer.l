@@ -37,6 +37,7 @@ Date: 07 December 2000
 
 private:
 	void			unexpectedChar();
+	void			comment();
 
 
 	class myparser	*m_currentParser;
@@ -79,6 +80,8 @@ print						{return PRINT;}
 \>							{return GREATERTHAN;}
 \+							{return PLUS;}
 \-							{return SUBTRACT;}
+\*							{return MULTIPLY;}
+\/							{return DIVIDE;}
 ;							{return END_STMT;}
 \(							{return OPEN_PAR;}
 \)							{return CLOSE_PAR;}
@@ -94,6 +97,7 @@ print						{return PRINT;}
 _[a-zA-Z_][a-zA-Z_0-9]*		{yylval.functionNumber=lookupFunctionName(yytext+1);return FUNCTION;}
 
 \/\/.*						{}
+\/\*						{comment();}
 [ \t]+						{}
 \n							{}
 

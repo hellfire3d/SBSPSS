@@ -31,11 +31,12 @@ public:
 
 private:
 	void			unexpectedChar();
+	void			comment();
 
 
 	class myparser	*m_currentParser;
 
-#line 39 "C:\\spongebob\\Utils\\scripter\\lexer.h"
+#line 40 "C:\\spongebob\\Utils\\scripter\\lexer.h"
 };
 
 #ifndef YYLEXNAME

@@ -295,6 +295,32 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			push(val1+val2);
 			break;
 
+		case OP_MULTIPLY:			//								value, value			pushes result to stack
+			val1=pop();
+			val2=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("MULTIPLY %d,%d",val1,val2);
+#endif
+			push(val1*val2);
+			break;
+
+		case OP_DIVIDE:				//								value, value			pushes result to stack
+			val1=pop();
+			val2=pop();
+#ifdef FULL_CODE_OUTPUT
+			PAUL_DBGMSG("DIVIDE %d,%d",val1,val2);
+#endif
+			if(val2==0)
+			{
+				SYSTEM_DBGMSG("[SCRIPT] DIVIDE BY ZERO @%d",m_pc);
+				m_state=CRASHED_DIVIDE_BY_ZERO;
+			}
+			else
+			{
+				push(val1/val2);
+			}
+			break;
+
 		case OP_NEG:				//								value					pushes result to stack
 			val1=pop();
 #ifdef FULL_CODE_OUTPUT
@@ -327,7 +353,7 @@ PAUL_DBGMSG("pc:0x%04d  sp:%03d",m_pc*2,m_sp);
 			break;
 
 		default:
-			PAUL_DBGMSG("ILLEGAL OPCODE@%d ( %d )",m_pc,instruction);
+			SYSTEM_DBGMSG("[SCRIPT] ILLEGAL OPCODE@%d ( %d )",m_pc,instruction);
 			m_state=CRASHED_ILLEGAL_OPCODE;
 			break;
 	}

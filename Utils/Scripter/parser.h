@@ -74,13 +74,15 @@ union tagYYSTYPE {
 #define GREATERTHAN 268
 #define PLUS 269
 #define SUBTRACT 270
-#define END_STMT 271
-#define OPEN_PAR 272
-#define CLOSE_PAR 273
-#define BEGIN_CS 274
-#define END_CS 275
-#define COMMA 276
-#define VARIABLE 277
-#define VALUE 278
-#define FUNCTION 279
+#define MULTIPLY 271
+#define DIVIDE 272
+#define END_STMT 273
+#define OPEN_PAR 274
+#define CLOSE_PAR 275
+#define BEGIN_CS 276
+#define END_CS 277
+#define COMMA 278
+#define VARIABLE 279
+#define VALUE 280
+#define FUNCTION 281
 #endif
