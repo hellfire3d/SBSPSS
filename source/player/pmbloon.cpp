@@ -77,8 +77,8 @@ void	CPlayerModeBalloon::think()
 	CPlayerModeBase::think();
 	if(--m_ballonTimer==0)
 	{
-		m_player->setMode(PLAYER_MODE_FULLUNARMED);
 		PAUL_DBGMSG("*pop*");
+		m_player->setMode(PLAYER_MODE_FULLUNARMED);
 	}
 }
 
