@@ -43,7 +43,7 @@ LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
 
 LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05
-LEVELS_CHAPTER01 :=			LEVEL01 LEVEL04
+LEVELS_CHAPTER01 :=			LEVEL04
 LEVELS_CHAPTER02 :=			
 LEVELS_CHAPTER03 :=			
 LEVELS_CHAPTER04 :=			
@@ -104,11 +104,41 @@ player: $(PLAYER_DEP_OUT)
 	
 cleanplayer:
 	@$(RM) -f $(PLAYER_DEP_OUT)
+	@$(ECHO) Player Cleaned
 	
 $(PLAYER_DEP_OUT) : $(PLAYER_DEP_IN)
-	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:23,1,1
+	$(MKACTOR3D) $(PLAYER_MOD_IN) -o:$(PLAYER_OUT_DIR) -t:24,1,1 -s:256
 
 GFX_DATA_OUT +=	$(PLAYER_DEP_OUT)
+
+#----------------------------------------------------------------------------
+# Animations
+#----------------------------------------------------------------------------
+anims:					playeranims
+cleananims:				cleanplayeranims
+
+ANIM_OUT_DIR :=			$(DATA_OUT)/anims
+PLAYER_ANIM_IN_DIR :=	$(ACTOR_IN_DIR)/SpongeBob/SbAnim
+
+# duff
+# idlegeneric02 idlegeneric05 
+PLAYER_ANIM_LIST :=		buttbounce deathelectric deathfall electricshock fall fireaim firerecoill float getup hitground01 hover idleboots idlecoral \
+						idlecoral01 idlegeneric01 idlegeneric03 idlegeneric04 idlelauncher idlenet jumpend jumpstart karate \
+						knockback knockforward netfirelob netswipe netswipejump run runjumpend runjumpstart runstart runstop soakup teeterback teeterfront wakeup 
+
+PLAYER_ANIM_IN :=		$(foreach FILE,	$(PLAYER_ANIM_LIST),$(PLAYER_ANIM_IN_DIR)/$(FILE).gin)
+PLAYER_ANIM_OUT :=		$(ANIM_OUT_DIR)/Player.Abk
+
+playeranims:			$(PLAYER_ANIM_IN)
+
+cleanplayeranims:		
+	@$(RM) -f $(PLAYER_ANIM_OUT)
+	@$(ECHO) Player Anims Cleaned
+
+$(PLAYER_ANIM_OUT) : $(PLAYER_ANIM_IN)
+	@$(MKANIM3D) $(PLAYER_ANIM_IN) -o:$(PLAYER_ANIM_OUT) -s:256
+GFX_DATA_OUT +=	$(PLAYER_ANIM_OUT)
+
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
@@ -156,6 +186,7 @@ translate : $(TRANS_OUT_FILES)
 
 cleantranslate:
 	@$(RM) -f $(TRANS_OUT_FILES)
+	@$(ECHO) Translations Cleaned
 
 GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 
@@ -186,6 +217,7 @@ UI_GFX_HDR_FILE :=			$(INC_DIR)/UIGfx.h
 
 cleanui :
 		$(RM) -f $(UI_GFX_TEX_OUT)
+		@$(ECHO) UI Gfx Cleaned
 
 ui: 		$(UI_GFX_TEX_IN)
 
@@ -214,6 +246,7 @@ INGAMEFX_GFX_HDR_FILE :=	$(INC_DIR)/ingamefx.h
 
 cleaningamefx :
 		$(RM) -f $(INGAMEFX_GFX_TEX_OUT)
+		@$(ECHO) InGame GFx Cleaned
 
 ingamefx:		$(INGAMEFX_GFX_TEX_IN)
 
@@ -247,6 +280,7 @@ FRONTEND_GFX_HDR_FILE :=	$(INC_DIR)/frontend.h
 
 cleanfrontend :
 		$(RM) -f $(FRONTEND_GFX_TEX_OUT)
+		@$(ECHO) Frontend Cleaned
 
 frontend:	$(FRONTEND_GFX_TEX_IN)
 
@@ -271,6 +305,7 @@ backdrops : $(BACKDROPS_OUT)
 
 cleanbackdrops :
 	@$(RM) -f $(BACKDROPS_OUT)
+		@$(ECHO) Backdrops Cleaned
 
 $(BACKDROPS_OUT_DIR)/%.gfx : $(BACKDROPS_IN_DIR)/%.tga
 	alchemy --n -a -15 -^ -o $< $(TEMP_FILE)
@@ -295,6 +330,7 @@ sfx: 	$(SFX_ALL_OUT)
 
 cleansfx:
 	@$(RM) -f $(SFX_ALL_OUT)
+		@$(ECHO) SFX Cleaned
 
 $(SFX_ALL_OUT) : $(SFX_ALL_IN)
 	$(CP) $(SFX_ALL_IN) $(SFX_OUT_DIR)
@@ -316,6 +352,7 @@ mcheader:	$(MC_HEADER_OUT)
 
 cleanmcheader:
 	@$(RM) -f $(MC_HEADER_OUT)
+	@$(ECHO) MemCard Header Cleaned
 
 $(MC_HEADER_OUT) : $(MC_HEADER_IN)
 	$(CP) $(MC_HEADER_IN) $(MC_HEADER_OUT)
@@ -339,6 +376,7 @@ music: 	$(MUSIC_ALL_OUT)
 
 cleanmusic:
 	@$(RM) -f $(MUSIC_ALL_OUT)
+	@$(ECHO) Music Cleaned
 
 $(MUSIC_ALL_OUT) : $(MUSIC_ALL_IN)
 	$(CP) $(MUSIC_ALL_IN) $(MUSIC_OUT_DIR)
@@ -362,6 +400,7 @@ scripts : $(SCRIPTS_OUT)
 
 cleanscripts:
 	@$(RM) -f $(SCRIPTS_OUT)
+	@$(ECHO) Scripts Cleaned
 
 # Saves a lot of hassle to make the scripts dependant upon the text database too..
 $(SCRIPTS_OUT_DIR)/%.dat : $(SCRIPTS_IN_DIR)/%.scr $(SCRIPT_TRANS_HDR)
@@ -378,6 +417,7 @@ GFX_DATA_OUT		+=	$(SCRIPTS_OUT)
 GRAF_DIRS_TO_MAKE +=	$(TRANS_OUT_DIR) \
 						$(UI_GFX_OUT_DIR) \
 						$(ACTORS_DIRS_TO_MAKE) \
+						$(ANIM_OUT_DIR) \
 						$(LEVELS_OUT_DIRS)
 
 gdirs : $(GRAF_DIRS_TO_MAKE)
@@ -400,7 +440,7 @@ biglump : $(BIGLUMP_OUT)
 
 cleanbiglump :
 	@$(RM) -f $(BIGLUMP_OUT)
-	@$(GLECHO) Cleaned BigLump
+	@$(GLECHO) BigLump Cleaned
 
 $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 	@$(MAKEDATA) -b:$(OUT_DIR)/Data/ -s:$(GAME_DATA_DIR)/DataCache.Scr -o:$(BIGLUMP_OUT) -i:$(BIGLUMP_INC)
@@ -418,6 +458,7 @@ $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 
 all : 	dirs gdirs \
 		actors \
+		anims \
 		levels \
 		biglump
 		@$(ECHO) Graphics made

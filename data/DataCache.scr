@@ -28,11 +28,13 @@ backdrop/credits.gfx
 backdrop/sky.gfx
 memcard/memhead.bin
 
-levels/chapter01/level01/level01.lvl
-levels/chapter01/level01/level01.tex
-
 levels/chapter01/level04/level04.lvl
 levels/chapter01/level04/level04.tex
+
+actors/spongebob.a3d
+actors/spongebob.tex
+
+anims/player.abk
 
 { SYSTEM_CACHE 4
 }
