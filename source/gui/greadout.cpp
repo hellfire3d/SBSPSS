@@ -30,6 +30,10 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef __PRIM_HEADER__
+#include "gfx\prim.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -194,27 +198,13 @@ void CGUITextReadout::recalc()
   ---------------------------------------------------------------------- */
 void CGUISpriteReadout::init(CGUIObject *_parent,GUIId _id)
 {
-	CGUIObject::init(_parent,_id);
+	CGUIObjectWithSpriteBank::init(_parent,_id);
 	m_target=0;
 	m_data=0;
-	m_sprites=new ("SpriteReadout:sprites") SpriteBank();
-	m_sprites->load(UI_UIGFX_SPR);
 	m_lastValue=-1;
 	m_frame=0;
 	m_x=m_y=0;
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CGUISpriteReadout::shutdown()
-{
-	CGUIObject::shutdown();
-	m_sprites->dump();	delete m_sprites;	m_sprites=0;
+	setSpriteBank(UI_UIGFX_SPR);
 }
 
 
@@ -256,9 +246,9 @@ void CGUISpriteReadout::render()
 	
 	if(!isHidden())
 	{
-		m_sprites->printFT4(m_frame,getParentX()+m_x,getParentY()+m_y,0,0,getOt());
+		getSpriteBank()->printFT4(m_frame,getParentX()+m_x,getParentY()+m_y,0,0,getOt());
 	}
-	CGUIObject::render();
+	CGUIObjectWithSpriteBank::render();
 }
 
 
@@ -310,7 +300,7 @@ void CGUISpriteReadout::recalc()
 			data++;
 		}
 		while(tmp<data->m_value);
-		fh=m_sprites->getFrameHeader(m_frame);
+		fh=getSpriteBank()->getFrameHeader(m_frame);
 
 #ifdef __VERSION_DEBUG__
 		if(fh->W>getW()-(BORDERWIDTH*2)||
@@ -322,6 +312,118 @@ void CGUISpriteReadout::recalc()
 
 		m_x=getX()+(getW()-fh->W)/2;
 		m_y=getY()+(getH()-fh->H)/2;
+	}
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::init(CGUIObject *_parent,GUIId _id)
+{
+	CGUIObject::init(_parent,_id);
+	setReadoutTarget(0);
+	setReadoutRange(0,255);
+	m_markerOffset=0;
+	m_lastValue=-1;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::setReadoutTarget(int *_target)
+{
+	m_target=_target;
+	recalc();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::setReadoutRange(int _min,int _max)
+{
+	m_min=_min;
+	m_max=_max;
+	recalc();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::render()
+{
+	POLY_G4	*g4;
+	int		x,y,w,h;
+	int		r,g,b;
+	int		ot;
+
+	x=getX()+getParentX();
+	y=getY()+getParentY();
+	w=getW();
+	h=getH();
+	r=g=b=isSelected()?245:110;
+	ot=getOt();
+
+	DrawLine(x,y+(h/2),x+w,y+(h/2),r,g,b,ot);
+	DrawLine(x+m_markerOffset,y,x+m_markerOffset,y+h,r,g,b,ot);
+
+	CGUIObject::render();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::think(int _frames)
+{
+	if(m_lastValue!=*m_target)
+	{
+		recalc();
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIBarReadout::recalc()
+{
+	if(m_target)
+	{
+		int		w,offset;
+		int		scaler;
+		
+		scaler=(getW()<<8)/(m_max-m_min);
+		offset=(scaler*(*m_target-m_min))>>8;
+
+		m_markerOffset=offset;
+
+		m_lastValue=*m_target;
 	}
 }
 

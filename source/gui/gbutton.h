@@ -37,6 +37,8 @@
 class CGUIToggleButton : public CGUIObject
 {
 public:
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
+
 	virtual void		setButtonTarget(int *_target);
 	
 	virtual void		think(int _frames);
@@ -56,6 +58,8 @@ private:
 class CGUICycleButton : public CGUIToggleButton
 {
 public:
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
+
 	virtual void		setButtonData(int *_data);
 
 	virtual void		think(int _frames);
@@ -67,6 +71,29 @@ protected:
 
 private:
 	int					*m_data;
+
+};
+
+
+class CGUISliderButton : public CGUIToggleButton
+{
+public:
+	enum
+	{
+		DEFAULT_SCROLL_SPEED=10,
+	};
+
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
+
+	virtual void		setButtonRange(int _min,int _max);
+	virtual void		setScrollSpeed(int _scrollSpeed);
+
+	virtual void		think(int _frames);
+
+
+private:
+	int					m_min,m_max;
+	int					m_scrollSpeed;
 
 };
 

@@ -18,6 +18,11 @@
 	Includes
 	-------- */
 
+#ifndef __FILE_EQUATES_H__
+#include <biglump.h>			// just to get the bloody def for FileEquate(!)
+#endif
+
+
 /*	Std Lib
 	------- */
 
@@ -28,6 +33,12 @@
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
+
+// PKG
+// None of these clasess should ever really be instantiated, but they are the basis of all other GUI objects.
+// Need a nice way to force this to be the case..
+
+
 
 class CGUIObject
 {
@@ -126,12 +137,12 @@ public:
 protected:
 	enum
 	{
-		DEFAULT_FONT_R=150,
-		DEFAULT_FONT_G=100,
-		DEFAULT_FONT_B=100,
-		SELECTED_FONT_R=175,
-		SELECTED_FONT_G=225,
-		SELECTED_FONT_B=175,
+		DEFAULT_FONT_R=110,
+		DEFAULT_FONT_G=110,
+		DEFAULT_FONT_B=110,
+		SELECTED_FONT_R=245,
+		SELECTED_FONT_G=245,
+		SELECTED_FONT_B=245,
 	};
 
 	virtual void		recalc();
@@ -142,6 +153,25 @@ protected:
 private:
 	class FontBank		*m_fontBank;
 
+
+};
+
+
+class CGUIObjectWithSpriteBank : public CGUIObject
+{
+public:
+	virtual void		init(CGUIObject *_parent,GUIId _id=noId);
+	virtual void		shutdown();
+
+	virtual void		setSpriteBank(FileEquate _fe);
+
+
+protected:
+	class SpriteBank	*getSpriteBank()						{return m_spriteBank;}
+
+
+private:
+	class SpriteBank	*m_spriteBank;
 
 };
 

@@ -156,11 +156,11 @@ void CGUIObject::render()
 		h=getH();
 		if(isSelected())
 		{
-			r=g=b=225;
+			r=g=b=245;
 		}
 		else
 		{
-			r=g=b=150;
+			r=g=b=110;
 		}
 		ot=getOt();
 
@@ -169,22 +169,26 @@ void CGUIObject::render()
 		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
 		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
 		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
-
-		x+=3;y+=2;w-=6;h-=4;
+		x+=1;y+=1;w-=2;h-=2;
 		DrawLine(x  ,y  ,x+w,y  ,r,g,b,ot);
 		DrawLine(x  ,y  ,x  ,y+h,r,g,b,ot);
 		DrawLine(x+w,y  ,x+w,y+h,r,g,b,ot);
 		DrawLine(x  ,y+h,x+w,y+h,r,g,b,ot);
-		x-=3;y-=2;w+=6;h+=4;
+		x+=1;y+=1;w+=1;h+=1;
+		DrawLine(x  ,y  ,x+w,y  ,0,0,0,ot);
+		DrawLine(x  ,y  ,x  ,y+h,0,0,0,ot);
+		DrawLine(x+w,y  ,x+w,y+h,0,0,0,ot);
+		DrawLine(x  ,y+h,x+w,y+h,0,0,0,ot);
+		x-=2;y-=2;w+=1;h+=1;
 
 		// Background
 		g4=GetPrimG4();
 		setXYWH(g4,x,y,w,h);
-		setSemiTrans(g4,true);
-		setRGB0(g4,250, 15,125);
-		setRGB1(g4,250,125, 15);
-		setRGB2(g4, 15,250,125);
-		setRGB3(g4, 15,125,250);
+//		setSemiTrans(g4,true);
+		setRGB0(g4,107,105, 98);
+		setRGB1(g4,107,105, 98);
+		setRGB2(g4,  0,  0, 90);
+		setRGB3(g4,  0,  0, 90);
 		AddPrimToList(g4,ot);
 	}
 }
@@ -317,6 +321,53 @@ void CGUIObjectWithFont::recalc()
 	h=getH()-(BORDERHEIGHT*2);
 	getFontBank()->setPrintArea(x,y,w,h);
 
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObjectWithSpriteBank::init(CGUIObject *_parent,GUIId _id)
+{
+	CGUIObject::init(_parent,_id);
+	m_spriteBank=0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObjectWithSpriteBank::shutdown()
+{
+	ASSERT(m_spriteBank);
+
+	CGUIObject::shutdown();
+	m_spriteBank->dump();
+	delete m_spriteBank;
+	m_spriteBank=0;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CGUIObjectWithSpriteBank::setSpriteBank(FileEquate _fe)
+{
+	m_spriteBank=new ("spritebank") SpriteBank();
+	m_spriteBank->load(_fe);
 }
 
 

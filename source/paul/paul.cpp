@@ -125,6 +125,7 @@ CGUISpriteReadout::SpriteReadoutData onOffSpriteReadouts[]=
 int musicStatus=false;
 int sfxStatus=false;
 int readyToExit=false;
+int	musicVol=0;
 
 
 
@@ -138,6 +139,8 @@ void CPaulScene::init()
 	CGUIToggleButton	*tg;
 	CGUITextReadout		*tr;
 	CGUISpriteReadout	*sr;
+	CGUIBarReadout		*br;
+	CGUISliderButton	*sl;
 
 	s_fontBank.initialise(&standardFont);
 
@@ -176,6 +179,19 @@ void CPaulScene::init()
 		sr->setObjectXYWH(300,0,128,30);
 		sr->setReadoutTarget(&sfxStatus);
 		sr->setReadoutData(onOffSpriteReadouts);
+
+		fr=new ("frame") CGUIGroupFrame();
+		fr->init(baseGUIObject);
+		fr->setObjectXYWH(10,90,448-20,30);
+			sl=new("sliderbutton") CGUISliderButton();
+			sl->init(fr);
+			sl->setButtonTarget(&musicVol);
+			sl->setButtonRange(0,255);
+			br=new ("spritereadout") CGUIBarReadout();
+			br->init(fr);
+			br->setObjectXYWH(0,0,448-20,30);
+			br->setReadoutTarget(&musicVol);
+			br->setReadoutRange(0,255);
 
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(baseGUIObject);
