@@ -673,7 +673,7 @@ void	CPlayer::think(int _frames)
 	int	i;
 
 
-if(PadGetDown(0)&PAD_L1)
+if(PadGetDown(0)&PAD_L1&&m_currentMode!=PLAYER_MODE_DEAD)
 {
 	oldmode=m_currentMode;
 	newmode=PLAYER_MODE_FLY;
