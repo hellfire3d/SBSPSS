@@ -127,7 +127,7 @@ eng=SpongeBob game data found.\nAre you sure you want to load?
 ; ---------------------------------------------------------------
 
 [STR__SAVE__DO_YOU_WANT_TO_SAVE]
-eng=Do you want to save?
+eng=Do you want to save?\nOne block required.
 [STR__SAVE__UNFORMATTEDCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted.\nDo you want to format it now?
 
@@ -139,11 +139,11 @@ eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted.\nDo you want to format i
 ; ---------------------------------------------------------------
 
 [STR__MEMCARD__CHECKING_MEM_CARD]
-eng=Checking...\nPlease do not remove the MEMORY CARD
+eng=Checking...\nPlease do not remove the MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__UNFORMATTEDCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted
 [STR__MEMCARD__NOFILESONCARD]
-eng=No SpongeBob game data present
+eng=No SpongeBob game data present on MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__NOCARDINSLOT]
 eng=There is no MEMORY CARD in MEMORY CARD slot 1
 [STR__MEMCARD__LOADINGPLEASEWIAT]
@@ -153,9 +153,9 @@ eng=Load complete!\nPress the X button to continue
 [STR__MEMCARD__LOADERROR]
 eng=Load Error!\nPress the X button to continue
 [STR__MEMCARD__NOSPACEONCARD]
-eng=Insufficient free blocks available in MEMORY CARD of MEMORY CARD SLOT 1
+eng=Insufficient free blocks available on MEMORY CARD in MEMORY CARD SLOT 1. One free block required
 [STR__MEMCARD__DUPLICATESAVENAME]
-eng=Are you sure you want to overwrite this file?
+eng=Are you sure you want to overwrite the existing file on the MEMORY CARD in MEMORY CARD slot 1?
 [STR__MEMCARD__DOYOUWANTTOFORMATCARD]
 eng=MEMORY CARD in MEMORY CARD slot 1 is not formatted. Do you wish to format?
 [STR__MEMCARD__FORMATTINGPLEASEWIAT]
