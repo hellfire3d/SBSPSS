@@ -98,6 +98,7 @@ void CPlayerStateRun::enter(CPlayerModeBase *_playerMode)
   Params:
   Returns:
 ---------------------------------------------------------------------- */
+int fix=32;
 void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 {
 	int	controlDown,controlHeld;
@@ -143,7 +144,8 @@ void CPlayerStateRun::think(CPlayerModeBase *_playerMode)
 		}
 	}
 
-	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim())
+	if(_playerMode->advanceAnimFrameAndCheckForEndOfAnim()||
+		(_playerMode->getAnimNo()==ANIM_SPONGEBOB_RUN&&_playerMode->getAnimFrame()>=fix))
 	{
 		_playerMode->setAnimNo(getLoopFrame());
 		m_numberOfTimesAnimHasLooped++;
