@@ -35,6 +35,10 @@
 #include	"player\player.h"
 #endif
 
+#include "fx\fx.h"
+#include "fx\fxjfish.h"
+
+
 #define MJ_CYCLE_WIDTH			400
 #define MJ_HALF_CYCLE_WIDTH		( MJ_CYCLE_WIDTH >> 1 )
 
@@ -50,6 +54,9 @@ void CNpcMotherJellyfishEnemy::postInit()
 	{
 		m_health = CLevel::getBossHealth();
 	}
+
+	CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
+	T->SetUp(128,4,8,16);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
