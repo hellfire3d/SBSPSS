@@ -636,6 +636,7 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 }
 
 
+#ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 {
 	if(m_currentMode!=PLAYER_MODE_DEAD)
@@ -643,6 +644,7 @@ if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
 		dieYouPorousFreak();
 	}
 }
+#endif
 if(newmode!=-1)
 {
 	setMode((PLAYER_MODE)newmode);
