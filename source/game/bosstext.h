@@ -47,6 +47,8 @@ public:
 
 
 private:
+	void			exit();
+
 	typedef struct
 	{
 		u16							m_titleTextId;
@@ -57,9 +59,11 @@ private:
 	static const BOSS_DATA	s_bossData[];
 
 
-
 	class FontBank			*m_fontBank;
 	class ScalableFontBank	*m_scalableFontBank;
+
+	int						m_readyToExit;
+	int						m_currentPage;
 
 };
 

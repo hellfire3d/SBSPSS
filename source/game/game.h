@@ -77,7 +77,6 @@ private:
 		GAMESTATE_PLAYING,
 		GAMESTATE_FADING_INTO_BOSS_INTRO,
 		GAMESTATE_BOSS_INTRO,
-		GAMESTATE_FADING_OUT_OF_BOSS_INTRO,
 	}GAMESTATE;
 
 	enum
@@ -92,10 +91,10 @@ private:
 
 	void				think_showing_lives(int _frames);
 	void				think_playing(int _frames);
-	void				think_boss_intro(int _frames);
 	void				render_showing_lives();
 	void				render_playing();
-	void				render_boss_intro();
+
+	class CBossText		*m_bossText;
 
 
 protected:

@@ -107,6 +107,10 @@
 #include "save\save.h"
 #endif
 
+#ifndef __GAME_BOSSTEXT_H__
+#include "game\bosstext.h"
+#endif
+
 #include "gfx\actor.h"
 
 static const int	RenderZ=378;//256; Increased to make depth less, and SB more visible
@@ -176,23 +180,9 @@ int		CGameScene::s_bossHasBeenKilled;
 int		CGameScene::s_justHitBossArenaTrigger;
 DVECTOR	CGameScene::s_CamShake={0,0};
 
-/*****************************************************************************/
-typedef struct
-{
-	u16							m_titleTextId;
-	u16							m_subTitleTextId;
-	u16							m_instructionsTextId;
-	CSoundMediator::SONGID		m_songId;
-} BOSS_DATA;
 
-static const BOSS_DATA	s_bossData[]=
-{
-	{	STR__CHAPTER_1__BOSS_TITLE,	STR__CHAPTER_1__BOSS_SUB_TITLE,	STR__CHAPTER_1__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER1_BOSS			},
-	{	STR__CHAPTER_2__BOSS_TITLE,	STR__CHAPTER_2__BOSS_SUB_TITLE,	STR__CHAPTER_2__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER2_BOSS			},
-	{	STR__CHAPTER_3__BOSS_TITLE,	STR__CHAPTER_3__BOSS_SUB_TITLE,	STR__CHAPTER_3__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER3_BOSS_AWAKE	},
-	{	STR__CHAPTER_4__BOSS_TITLE,	STR__CHAPTER_4__BOSS_SUB_TITLE,	STR__CHAPTER_4__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER4_BOSS			},
-	{	STR__CHAPTER_5__BOSS_TITLE,	STR__CHAPTER_5__BOSS_SUB_TITLE,	STR__CHAPTER_5__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER5_BOSS			},
-};
+// Evil global pointer to the boss character
+CThing			*g_bossThing;
 
 
 /*****************************************************************************/
@@ -222,8 +212,12 @@ void 	CGameScene::init()
 		m_HealthManager= new ("Health Manager") CHealthManager();
 		m_HealthManager->init();
 
+		m_bossText->init();
+
 		s_readyToExit=false;
 		s_restartLevel=false;
+
+		m_bossText=new ("BossText") CBossText();
 
 		CFader::setFadingIn();
 		CLevel::setIsBossRespawn(false);
@@ -231,6 +225,7 @@ void 	CGameScene::init()
 
 		m_gamestate=GAMESTATE_SHOWING_LIVES;
 		m_showingLivesTimer=0;
+
 }
 /*****************************************************************************/
 // This is a seperate funtion ( and virtual ) so that we can overload it for
@@ -253,6 +248,8 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
+		m_bossText->shutdown();		delete m_bossText;
+
 		shutdownLevel();
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
@@ -275,8 +272,7 @@ void 	CGameScene::render()
 			render_playing();
 			break;
 		case GAMESTATE_BOSS_INTRO:
-		case GAMESTATE_FADING_OUT_OF_BOSS_INTRO:
-			render_boss_intro();
+			m_bossText->render();
 			break;
 	}
 }
@@ -372,85 +368,6 @@ void CGameScene::render_playing()
 }
 
 /*****************************************************************************/
-void CGameScene::render_boss_intro()
-{
-	SpriteBank		*sb;
-	sFrameHdr		*fhCorner,*fhSideBorder,*fhTopBorder;
-	int				x,y;
-	POLY_F4			*f4;
-	POLY_G4			*g4;
-	const BOSS_DATA	*bd;
-
-	// Scroll effect type thingy stuff
-	sb=getSpriteBank();
-	fhCorner=sb->getFrameHeader(FRM__HELPBOX1);
-	fhSideBorder=sb->getFrameHeader(FRM__HELPBOX2);
-	fhTopBorder=sb->getFrameHeader(FRM__HELPBOX3);
-
-	// Corners
-	sb->printFT4(fhCorner,  0,  0,false,false,4);
-	sb->printFT4(fhCorner,512,  0,true ,false,4);
-	sb->printFT4(fhCorner,  0,256,false,true ,4);
-	sb->printFT4(fhCorner,512,256,true ,true ,4);
-
-	// Top/bottom
-	for(x=fhCorner->W;x<512-fhCorner->W;x+=fhTopBorder->W)
-	{
-		sb->printFT4(fhTopBorder,x,  0,false,false,4);
-		sb->printFT4(fhTopBorder,x,256,false,true ,4);
-	}
-
-	// Left/right
-	for(y=fhCorner->H;y<256-fhCorner->H;y+=fhSideBorder->H)
-	{
-		sb->printFT4(fhSideBorder,  0,y,false,false,4);
-		sb->printFT4(fhSideBorder,512,y,true ,false,4);
-	}
-
-	// Middle
-	f4=GetPrimF4();
-	setXYWH(f4,fhCorner->W,fhCorner->H,512-(fhCorner->W*2),256-(fhCorner->H*2));
-	setRGB0(f4,224,184,107);
-	AddPrimToList(f4,5);
-
-	// Background
-	g4=GetPrimG4();
-	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,70,50,60);
-	setRGB1(g4,70,50,60);
-	setRGB2(g4,50,60,70);
-	setRGB3(g4,50,60,70);
-	AddPrimToList(g4,5);
-
-	// Instructions..
-	bd=&s_bossData[Level.getCurrentChapter()-1];
-
-	m_scalableFont->setTrans(0);
-	m_scalableFont->setSMode(0);
-	m_scalableFont->setPrintArea(20,0,512-40,256);
-	m_scalableFont->setJustification(FontBank::JUST_CENTRE);
-	m_scalableFont->setColour(128,128,128);
-	s_genericFont->setTrans(0);
-	s_genericFont->setSMode(0);
-	s_genericFont->setPrintArea(20,0,512-40,256);
-	s_genericFont->setJustification(FontBank::JUST_CENTRE);
-
-
-	s_genericFont->setColour(118,118,118);
-	s_genericFont->print(256-20,25,STR__BOSS_TEXT_TITLE);
-	m_scalableFont->setScale(300);
-	s_genericFont->setColour(128,128,128);
-	m_scalableFont->print(256-20,60,bd->m_titleTextId);
-	s_genericFont->setColour(118,118,118);
-	s_genericFont->print(256-20,80,bd->m_subTitleTextId);
-	s_genericFont->setColour(118,118,118);
-	s_genericFont->print(256-20,105,bd->m_instructionsTextId);
-
-
-	s_genericFont->setPrintArea(0,0,256,512);
-}
-
-/*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
 	if(!m_musicStarted&&!CFader::isFading())
@@ -473,25 +390,31 @@ void	CGameScene::think(int _frames)
 		case GAMESTATE_FADING_INTO_BOSS_INTRO:
 			if(!CFader::isFading())
 			{
-				// Swap to the boss tune whilst it's all quiet! :)
-				CSoundMediator::stopSong();
-				CSoundMediator::setSong(s_bossData[Level.getCurrentChapter()-1].m_songId);
+				m_bossText->select();
 				m_gamestate=GAMESTATE_BOSS_INTRO;
 				CFader::setFadingIn();
 			}
 			break;
 		case GAMESTATE_BOSS_INTRO:
-			think_boss_intro(_frames);
-			break;
-		case GAMESTATE_FADING_OUT_OF_BOSS_INTRO:
-			if(!CFader::isFading())
+			m_bossText->think(_frames);
+			if(m_bossText->isReadyToExit())
 			{
 				m_gamestate=GAMESTATE_PLAYING;
 				CSoundMediator::playSong();
+				sendEvent( BOSS_FOUND_EVENT, NULL );
 				CFader::setFadingIn();
 			}
 			break;
 	}
+
+//
+#if defined (__USER_paul__) || defined (__USER_charles__)
+if(PadGetDown(0)&PAD_UP)
+{
+	s_justHitBossArenaTrigger=true;
+}
+#endif
+//
 
 
 #ifdef __VERSION_DEBUG__
@@ -716,21 +639,6 @@ void CGameScene::think_playing(int _frames)
 
 
 /*****************************************************************************/
-void	CGameScene::think_boss_intro(int _frames)
-{
-	if(!CFader::isFading())
-	{
-		if(PadGetDown(0)&PAD_CROSS)
-		{
-			m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
-			CFader::setFadingOut();
-			sendEvent( BOSS_FOUND_EVENT, NULL );
-		}
-	}
-}
-
-
-/*****************************************************************************/
 int		CGameScene::readyToShutdown()
 {
 	return s_readyToExit&&!CFader::isFading();
@@ -794,6 +702,8 @@ void CGameScene::hitBossArenaTrigger()
 /*****************************************************************************/
 void	CGameScene::initLevel()
 {
+	g_bossThing=NULL;
+
 	CSoundMediator::setCanPlaySfx(false);
 	Level.DisplayLoadingScreen(s_globalLevelSelectThing);
 	

@@ -38,6 +38,14 @@
 #include "level\level.h"
 #endif
 
+#ifndef __GFX_FADER_H__
+#include "gfx\fader.h"
+#endif
+
+#ifndef __GFX_ACTOR__H__
+#include "gfx/actor.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -80,14 +88,29 @@ const CBossText::BOSS_DATA	CBossText::s_bossData[]=
 };
 
 
+// Evil global pointer to the boss character
+extern CThing	*g_bossThing;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int forcelevel=0;
 void	CBossText::init()
 {
+//	if(GameScene.GetLevel().getLevelNumer()
+		m_scalableFontBank=new ("font") ScalableFontBank();
+		m_scalableFontBank->initialise(&standardFont);
+		m_scalableFontBank->setPrintArea(20,0,512-40,256);
+		m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
+
+		m_fontBank=new ("CGameScene::Init") FontBank();
+		m_fontBank->initialise( &standardFont );
+		m_fontBank->setPrintArea(20,0,512-40,256);
+		m_fontBank->setJustification(FontBank::JUST_CENTRE);
 }
 
 /*----------------------------------------------------------------------
@@ -98,6 +121,8 @@ void	CBossText::init()
   ---------------------------------------------------------------------- */
 void	CBossText::shutdown()
 {
+	m_fontBank->dump();				delete m_fontBank;
+	m_scalableFontBank->dump();		delete m_scalableFontBank;
 }
 
 /*----------------------------------------------------------------------
@@ -108,8 +133,14 @@ void	CBossText::shutdown()
   ---------------------------------------------------------------------- */
 void	CBossText::select()
 {
-//	CSoundMediator::stopSong();
-//	CSoundMediator::setSong(s_bossData[Level.getCurrentChapter()-1].m_songId);
+//	ASSERT if(GameScene.GetLevel().getLevelNumer()
+
+	m_readyToExit=false;
+	m_currentPage=0;
+
+	CSoundMediator::stopSong();
+	CSoundMediator::setSong(s_bossData[forcelevel/*GameScene.GetLevel().getCurrentChapter()-1*/].m_songId);
+	CFader::setFadingIn();
 }
 
 /*----------------------------------------------------------------------
@@ -120,6 +151,21 @@ void	CBossText::select()
   ---------------------------------------------------------------------- */
 void	CBossText::think(int _frames)
 {
+	if(!CFader::isFading())
+	{
+		int	pad;
+		pad=PadGetDown(0);
+
+		if(pad&PAD_TRIANGLE)
+		{
+			exit();
+		}
+
+		if(pad&PAD_CROSS)
+		{
+			m_currentPage^=1;
+		}
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -128,13 +174,14 @@ void	CBossText::think(int _frames)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+DVECTOR	pos={256,170};
 void	CBossText::render()
 {
 	SpriteBank		*sb;
 	sFrameHdr		*fhCorner,*fhSideBorder,*fhTopBorder;
 	int				x,y;
 	POLY_F4			*f4;
-	POLY_G4			*g4;
+	POLY_FT4		*ft4;
 	const BOSS_DATA	*bd;
 
 	// Scroll effect type thingy stuff
@@ -144,66 +191,87 @@ void	CBossText::render()
 	fhTopBorder=sb->getFrameHeader(FRM__HELPBOX3);
 
 	// Corners
-	sb->printFT4(fhCorner,  0,  0,false,false,4);
-	sb->printFT4(fhCorner,512,  0,true ,false,4);
-	sb->printFT4(fhCorner,  0,256,false,true ,4);
-	sb->printFT4(fhCorner,512,256,true ,true ,4);
+	sb->printFT4(fhCorner,  0,  0,false,false,MAX_OT-2);
+	sb->printFT4(fhCorner,512,  0,true ,false,MAX_OT-2);
+	sb->printFT4(fhCorner,  0,256,false,true ,MAX_OT-2);
+	sb->printFT4(fhCorner,512,256,true ,true ,MAX_OT-2);
 
 	// Top/bottom
 	for(x=fhCorner->W;x<512-fhCorner->W;x+=fhTopBorder->W)
 	{
-		sb->printFT4(fhTopBorder,x,  0,false,false,4);
-		sb->printFT4(fhTopBorder,x,256,false,true ,4);
+		sb->printFT4(fhTopBorder,x,  0,false,false,MAX_OT-2);
+		sb->printFT4(fhTopBorder,x,256,false,true ,MAX_OT-2);
 	}
 
 	// Left/right
 	for(y=fhCorner->H;y<256-fhCorner->H;y+=fhSideBorder->H)
 	{
-		sb->printFT4(fhSideBorder,  0,y,false,false,4);
-		sb->printFT4(fhSideBorder,512,y,true ,false,4);
+		sb->printFT4(fhSideBorder,  0,y,false,false,MAX_OT-2);
+		sb->printFT4(fhSideBorder,512,y,true ,false,MAX_OT-2);
 	}
 
 	// Middle
 	f4=GetPrimF4();
 	setXYWH(f4,fhCorner->W,fhCorner->H,512-(fhCorner->W*2),256-(fhCorner->H*2));
 	setRGB0(f4,224,184,107);
-	AddPrimToList(f4,5);
+	AddPrimToList(f4,MAX_OT-1);
 
 	// Background
-	g4=GetPrimG4();
-	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,70,50,60);
-	setRGB1(g4,70,50,60);
-	setRGB2(g4,50,60,70);
-	setRGB3(g4,50,60,70);
-	AddPrimToList(g4,5);
+	f4=GetPrimF4();
+	setXYWH(f4,0,0,512,256);
+	setRGB0(f4,0,0,0);
+	AddPrimToList(f4,MAX_OT-1);
 
-	// Instructions..
-	bd=&s_bossData[GameScene.GetLevel().getCurrentChapter()-1];
-
-	m_scalableFontBank->setTrans(0);
-	m_scalableFontBank->setSMode(0);
-	m_scalableFontBank->setPrintArea(20,0,512-40,256);
-	m_scalableFontBank->setJustification(FontBank::JUST_CENTRE);
-	m_scalableFontBank->setColour(128,128,128);
-	m_fontBank->setTrans(0);
-	m_fontBank->setSMode(0);
-	m_fontBank->setPrintArea(20,0,512-40,256);
-	m_fontBank->setJustification(FontBank::JUST_CENTRE);
-
-
+	// Text
+	bd=&s_bossData[forcelevel/*GameScene.GetLevel().getCurrentChapter()-1*/];
 	m_fontBank->setColour(118,118,118);
-	m_fontBank->print(256-20,25,STR__BOSS_TEXT_TITLE);
-	m_scalableFontBank->setScale(300);
-	m_fontBank->setColour(128,128,128);
-	m_scalableFontBank->print(256-20,60,bd->m_titleTextId);
-	m_fontBank->setColour(118,118,118);
-	m_fontBank->print(256-20,80,bd->m_subTitleTextId);
-	m_fontBank->setColour(118,118,118);
-	m_fontBank->print(256-20,105,bd->m_instructionsTextId);
+	m_fontBank->print(256-20,30,STR__BOSS_TEXT_TITLE);
+	if(m_currentPage==0)
+	{
+		// Intro
+		m_scalableFontBank->setScale(400);
+		m_scalableFontBank->setColour(128,128,128);
+		m_scalableFontBank->print(256-20,80,bd->m_titleTextId);
+
+		m_fontBank->setColour(118,118,118);
+		m_fontBank->print(256-20,190,bd->m_subTitleTextId);
+
+		// Boss gfx
+		DVECTOR	bossPoss;
+		bossPoss=pos;
+//		g_bossThing;
+
+	}
+	else
+	{
+		// Instructions
+		m_fontBank->setColour(118,118,118);
+		m_fontBank->print(256-20,80,bd->m_instructionsTextId);
+	}
 
 
-	m_fontBank->setPrintArea(0,0,256,512);
+	// Button texts..
+	sFrameHdr		*fh1,*fh2;
+	int				width;
+
+	y=210;
+
+	y+=13;
+	fh1=sb->getFrameHeader(FRM__BUTX);
+	width=fh1->W+10+m_fontBank->getStringWidth(STR__BOSS__CROSS_BUTTON);
+	x=256-(width/2);
+	sb->printFT4(fh1,x,y+3,0,0,0);
+	x+=fh1->W+10;
+	m_fontBank->print(x,y,STR__BOSS__CROSS_BUTTON);
+
+	y+=13;
+	fh1=sb->getFrameHeader(FRM__BUTT);
+	width=fh1->W+10+m_fontBank->getStringWidth(STR__BOSS__TRIANGLE_BUTTON);
+	x=256-(width/2);
+	sb->printFT4(fh1,x,y+3,0,0,0);
+	x+=fh1->W+10;
+	m_fontBank->print(x,y,STR__BOSS__TRIANGLE_BUTTON);
+
 }
 
 /*----------------------------------------------------------------------
@@ -214,13 +282,21 @@ void	CBossText::render()
   ---------------------------------------------------------------------- */
 int		CBossText::isReadyToExit()
 {
-	return false;
+	return m_readyToExit&&!CFader::isFading();
 }
 
 
-
-			m_gamestate=GAMESTATE_FADING_OUT_OF_BOSS_INTRO;
-			CFader::setFadingOut();
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBossText::exit()
+{
+	CFader::setFadingOut();
+	m_readyToExit=true;
+}
 
 /*===========================================================================
  end */

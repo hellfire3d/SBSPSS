@@ -205,7 +205,8 @@ fma_src :=			fma
 
 fmv_src :=			fmv
 
-game_src :=			convo \
+game_src :=			bosstext \
+					convo \
 					game \
 					gamebubs \
 					gameslot \
