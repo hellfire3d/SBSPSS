@@ -40,6 +40,7 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /O2 /I "..\glib\include" /I "..\glib\include\pc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
@@ -63,8 +64,9 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\glib\include" /I "..\glib\include\pc" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fr /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\glib" /I "..\maths" /I "..\davelib" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fr /YX /FD /GZ /c
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -101,10 +103,6 @@ SOURCE=.\mapread.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Maths.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\repread.cpp
 # End Source File
 # Begin Source File
@@ -134,10 +132,6 @@ SOURCE=.\IniClass.h
 # Begin Source File
 
 SOURCE=.\mapread.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Maths.h
 # End Source File
 # Begin Source File
 

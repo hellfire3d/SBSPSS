@@ -10,7 +10,10 @@
 #include <vector>
 
 #include "ginio.h"
-#include "maths.h"
+#include "vector3.h"
+#include "matrix4x4.h"
+#include "quat.h"
+
 #include "IniClass.h"
 
 
@@ -94,8 +97,8 @@ struct Mod4Chunk
 	long	nCurObj;			
 	char	Name[32];
 	float	Radius;
-	float	CentreX,CentreY,CentreZ;
-	float	ApX,ApY,ApZ;
+	Vector3	Centre;
+	Vector3	Ap;
 };
 
 class CMod4: public GinChunk
@@ -130,13 +133,6 @@ protected:
 /*****************************************************************************/
 /*** Vtx Chunk ***************************************************************/
 /*****************************************************************************/
-/*struct vec
-{
-	float x,y,z;
-	vec()								{x = y = z = 0.f;}
-	vec(float _x, float _y, float _z)	{x = _x; y = _y;z = _z;}
-};
-*/
 class CPts4: public GinChunk
 {
 	virtual char const * GetName(void) const				{return("PTS4");}
@@ -148,23 +144,21 @@ class CPts4: public GinChunk
 		Pnts.resize(nv);
 		for (int i = 0; i< nv ;i++) 
 			{
-			float x,y,z;
-			In.read((char*)&x, 4);
-			In.read((char*)&y, 4);
-			In.read((char*)&z, 4);
-			Pnts[i] = TVECTOR(x,y,z);
+			In.read((char*)&Pnts[i].x, 4);
+			In.read((char*)&Pnts[i].y, 4);
+			In.read((char*)&Pnts[i].z, 4);
 			}
 		}
 
 public:
 
-	std::vector<TVECTOR> const & GetPts(void) const	{return(Pnts);}
+	std::vector<Vector3> const & GetPts(void) const	{return(Pnts);}
 	int GetModNum(void) const					{return ModNum;}
 
 protected:
 
 	int  ModNum;
-	std::vector<TVECTOR> Pnts;
+	std::vector<Vector3> Pnts;
 };
 
 /*****************************************************************************/
@@ -248,13 +242,9 @@ class CVcol: public GinChunk
 			{
 			for (int j=0; j<3; j++) 
 				{
-				float r,g,b;
-				In.read((char*)&r, 4);
-				In.read((char*)&g, 4);
-				In.read((char*)&b, 4);
-				Tris[i].p[j].r = r;
-				Tris[i].p[j].g = g;
-				Tris[i].p[j].b = b;
+				In.read((char*)&Tris[i].p[j].r, 4);
+				In.read((char*)&Tris[i].p[j].g, 4);
+				In.read((char*)&Tris[i].p[j].b, 4);
 				}
 			}
 		}
@@ -311,11 +301,8 @@ class CUVtri: public GinChunk
 			{
 			for (int j=0; j<3; j++) 
 				{
-				float u,v;
-				In.read((char*)&u, 4);
-				In.read((char*)&v, 4);
-				Tris[i].p[j].u = u;
-				Tris[i].p[j].v = v;
+				In.read((char*)&Tris[i].p[j].u, 4);
+				In.read((char*)&Tris[i].p[j].v, 4);
 				}
 			}
 		}
@@ -339,15 +326,16 @@ struct sGinWeight
 {
 	long	VertNo;
 	float	Weight;
-	float	X,Y,Z;
+//	float	X,Y,Z;
+	Vector3	Pos;
 };
 struct sGinAnim
 {
-	int		Frame;
-	float	XPos,YPos,ZPos;
-	float	XAng,YAng,ZAng,WAng;
-	float	kX,kY,kZ;
-	float	uX,uY,uZ,uW;
+	int			Frame;
+	Vector3		Pos;
+	Quaternion	Ang;
+	Vector3		apk;
+	Quaternion	apu;
 };
 
 class CNode
@@ -389,18 +377,13 @@ public:
 			}
 		}
 
-	TVECTOR	GetWorldPos(TVECTOR	&Pos);//						{return(WorldMtx*Pos);}
-	TVECTOR	GetWorldPos(float X,float Y,float Z)			{return(GetWorldPos(TVECTOR (X,Y,Z)));}
-	TVECTOR	GetWorldPos()									{return(GetWorldPos(TVECTOR (XPos,YPos,ZPos)));}
-
-	TQUAT	GetWorldAng(TQUAT &Q);//							{return(WorldMtx*Pos);}
-	TQUAT	GetWorldAng(float X,float Y,float Z,float W)	{return(GetWorldAng(TQUAT (X,Y,Z,W)));}
-	TQUAT	GetWorldAng()									{return(GetWorldAng(TQUAT (XAng,YAng,ZAng,WAng)));}
+	Vector3	GetWorldPos(Vector3	&Pos);
+	Quaternion	GetWorldAng(Quaternion &Q);
 
 	int							  GetChildCount()			  {return(ChildList.size());}
 	int							  GetPruneChildCount()		  {return(PruneChildList.size());}
-	std::vector<TVECTOR>	const &GetPts()				const {return(Pts);}
-	std::vector<TVECTOR>	const &GetRelPts()			const {return(RelPts);}
+	std::vector<Vector3>	const &GetPts()				const {return(Pts);}
+	std::vector<Vector3>	const &GetRelPts()			const {return(RelPts);}
 	std::vector<sGinTri>	const &GetTris()			const {return(Tris);}
 	std::vector<sVColTri>	const &GetVColTris()		const {return(VColTris);}
 	std::vector<sUVTri>		const &GetUVTris()			const {return(UVTris);}
@@ -416,19 +399,19 @@ public:
 	int						PruneIdx,PruneParentIdx;
 	char					Name[32];
 
-	float					XPos,YPos,ZPos;
-	float					XAng,YAng,ZAng,WAng;
-	float					Xapk,Yapk,Zapk;
-	float					Xapu,Yapu,Zapu,Wapu;
+	Vector3					Pos;
+	Quaternion				Ang;
+	Vector3					apk;
+	Quaternion				apu;
 	int						Active;
-	TMATRIX					Mtx,WorldMtx;
+	Matrix4x4				Mtx,WorldMtx;
 	CIni					UserProp;
 
 	std::vector<int>		ChildList;
 	std::vector<int>		PruneChildList;
 	std::vector<sGinWeight>	Weights;
-	std::vector<TVECTOR>	Pts;
-	std::vector<TVECTOR>	RelPts;
+	std::vector<Vector3>	Pts;
+	std::vector<Vector3>	RelPts;
 	std::vector<sGinTri>	Tris;
 	std::vector<sVColTri>	VColTris;
 	std::vector<sUVTri>		UVTris;
@@ -492,10 +475,9 @@ class CAnimTree: public GinChunk
 
 public:
 	std::vector<CNode> const & GetTree(void) const{return(AnimTree);}
-//	int		GetFrameCount()						{return(FrameCount);}
 
 protected:
-//	int		FrameCount;
+
 	std::vector<CNode> AnimTree;
 
 };
@@ -555,8 +537,8 @@ protected:
 /*****************************************************************************/
 struct sCam
 {
-	std::vector<TVECTOR>	CamPos;
-	std::vector<TVECTOR>	Target;
+	std::vector<Vector3>	CamPos;
+	std::vector<Vector3>	Target;
 } ;
 
 class CCamera: public GinChunk
@@ -570,19 +552,15 @@ class CCamera: public GinChunk
 		ThisCam.Target.resize(FrameCount);
 		for (Frame = 0; Frame< FrameCount;Frame++) 
 			{
-			float x,y,z;
-			In.read((char*)&x, 4); 
-			In.read((char*)&y, 4); 
-			In.read((char*)&z, 4);
-			ThisCam.CamPos[Frame] = TVECTOR(x,y,z);
+			In.read((char*)&ThisCam.CamPos[Frame].x, 4); 
+			In.read((char*)&ThisCam.CamPos[Frame].y, 4); 
+			In.read((char*)&ThisCam.CamPos[Frame].z, 4);
 			}
 		for (Frame = 0; Frame< FrameCount;Frame++) 
 			{
-			float x,y,z;
-			In.read((char*)&x, 4); 
-			In.read((char*)&y, 4); 
-			In.read((char*)&z, 4);
-			ThisCam.Target[Frame]= TVECTOR(x,y,z);
+			In.read((char*)&ThisCam.Target[Frame].x, 4); 
+			In.read((char*)&ThisCam.Target[Frame].y, 4); 
+			In.read((char*)&ThisCam.Target[Frame].z, 4);
 			}
 		}
 
@@ -772,9 +750,9 @@ protected:
 };
 
 /*****************************************************************************/
-TMATRIX	GetWorldMatrix(std::vector<CNode> const &Tree,int Idx);
-TVECTOR	GetWorldPos(std::vector<CNode> const &Tree,int Idx);
-TVECTOR	GetWorldPos(TMATRIX &WorldMtx,TVECTOR &ThisPos);
+Matrix4x4	GetWorldMatrix(std::vector<CNode> const &Tree,int Idx);
+Vector3		GetWorldPos(std::vector<CNode> const &Tree,int Idx);
+Vector3		GetWorldPos(Matrix4x4 &WorldMtx,Vector3 &ThisPos);
 
 #endif
 

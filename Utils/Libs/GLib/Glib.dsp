@@ -40,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "lib\Release"
 # PROP Intermediate_Dir "lib\Release"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /Gi- /GX /O2 /I "include" /I "include\pc" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "include" /I "include\pc" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR"Release/" /Fp"Release/Glib.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"Release\Glib.lib"
 
 !ELSEIF  "$(CFG)" == "GLib - Win32 Debug"
 
@@ -63,8 +64,9 @@ LIB32=link.exe -lib
 # PROP Output_Dir "lib\debug"
 # PROP Intermediate_Dir "lib\debug"
 # PROP Target_Dir ""
+MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "include" /I "include\pc" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "__GL_DEBUG__" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "__GL_DEBUG__" /FR"debug/" /Fp"debug/Glib.pch" /YX /Fo"debug/" /Fd"debug/" /FD /GZ /c
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -72,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"debug\Glib.lib"
 
 !ENDIF 
 
