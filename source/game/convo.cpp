@@ -179,6 +179,9 @@ void CConversation::think(int _frames)
 
 		if(s_currentState==STATE_JUST_ACTIVATED)
 		{
+			// Need to make sure that the conversation box isn't rendered on the first frame
+			// ( ie: before it's had time to think ) or it will still be displaying old info
+			// from the last time it was up
 			s_currentState=STATE_ACTIVE;
 		}
 
@@ -250,6 +253,7 @@ void CConversation::trigger(FileEquate _feScript)
 			// Found it..
 			s_currentScript=s_registeredScripts[i];
 			s_currentState=STATE_JUST_ACTIVATED;
+			s_currentScript->reset();
 			return;
 		}
 	}
