@@ -280,6 +280,7 @@ protected:
 	s32					m_velocity;
 	bool				m_evadeClockwise;
 	s32					m_movementTimer;
+	s32					m_collisionTimer;
 	s32					m_timerTimer;
 	s32					m_extension;
 	bool				m_extendDir;

@@ -592,6 +592,7 @@ void CNpcEnemy::init()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
+	m_collisionTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -642,6 +643,7 @@ void CNpcEnemy::reinit()
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
 	m_timerTimer = 0;
+	m_collisionTimer = 0;
 	m_velocity = 0;
 	m_extension = 0;
 	m_rotation = 0;
@@ -1237,6 +1239,11 @@ void CNpcEnemy::processCollision()
 
 void CNpcEnemy::processTimer(int _frames)
 {
+	if ( m_collisionTimer > 0 )
+	{
+		m_collisionTimer -= _frames;
+	}
+
 	if ( m_timerTimer > 0 )
 	{
 		m_timerTimer -= _frames;
@@ -1410,14 +1417,29 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 
 	s16 headingFromTarget = ratan2( yDist, xDist );
 
+	if ( ( xDist > 0 && otherDelta.vx < 0 ) || ( xDist < 0 && otherDelta.vx > 0 ) )
+	{
+		otherDelta.vx = -otherDelta.vx;
+	}
+
+	if ( ( yDist > 0 && otherDelta.vy < 0 ) || ( yDist < 0 && otherDelta.vy > 0 ) )
+	{
+		otherDelta.vy = -otherDelta.vy;
+	}
+
 	Pos.vx += otherDelta.vx;
 	Pos.vy += otherDelta.vy;
 
 	m_heading = headingFromTarget;
 
-	// try next waypoint to get around other enemy
+	if ( m_collisionTimer <= 0 )
+	{
+		m_collisionTimer = GameState::getOneSecondInFrames();
 
-	m_npcPath.incPath();
+		// try next waypoint to get around other enemy
+
+		m_npcPath.incPath();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
