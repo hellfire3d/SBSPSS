@@ -17,44 +17,13 @@
 using namespace std;
 
 //***************************************************************************
-/*
 struct	sMkLevelTex
 {
-		int		Set;
-		int		XOfs,YOfs;
-//		u8		*RGB;
-		int		Flags;
-//		int		RChk,GChk,BChk;
-		int		TexID;
-
-bool	operator ==(sMkLevelTex const &v1)
-		{
-		if (Set!=v1.Set) return(false);
-		if (XOfs!=v1.XOfs) return(false);
-		if (YOfs!=v1.YOfs) return(false);
-		if (Flags!=v1.Flags) return(false);
-		return(true);
-		}
-};
-*/
-
-struct	sMkLevelTex
-{
-//		int		Set;
-//		int		XOfs,YOfs;
 		int		Tile;
 		int		Flags;
 		int		TexID;
 
-bool	operator ==(sMkLevelTex const &v1)
-		{
-//		if (Set!=v1.Set) return(false);
-//		if (XOfs!=v1.XOfs) return(false);
-//		if (YOfs!=v1.YOfs) return(false);
-		if (Tile!=v1.Tile) return(false);
-		if (Flags!=v1.Flags) return(false);
-		return(true);
-		}
+bool	operator ==(sMkLevelTex const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags);}
 };
 
 //***************************************************************************
@@ -77,6 +46,32 @@ bool	operator ==(sInfItem const &v1)		{return(Name==v1.Name);}
 };
 
 //***************************************************************************
+struct	sUsedTile2d
+{
+		int	Tile;
+		int	Flags;
+		int	TexID;
+
+bool	operator ==(sUsedTile2d const &v1)	{return(Tile==v1.Tile && Flags==v1.Flags);}
+};
+
+//***************************************************************************
+struct	sUsedTile3d
+{
+		int	Tile;
+		int	Flags;
+
+bool	operator ==(sUsedTile3d const &v1)	{return(Tile==v1.Tile);}
+
+};
+
+struct sOutElem3d
+{
+		sElem3d		Elem3d;
+		CFaceStore	FaceStore;
+};
+
+//***************************************************************************
 struct	sMkLevelLayerThing;
 class	CMkLevelLayer;
 class	CMkLevel
@@ -95,16 +90,14 @@ public:
 		void			Load();
 
 		void			Process();
-		int				AddTile3d(sExpLayerTile &Tile)			{return(Tile3dList.Add(Tile));}
-		int				AddTile2d(sExpLayerTile &Tile)			{return(Tile2dList.Add(Tile));}
+		int				AddTile2d(sExpLayerTile &Tile);
+		int				AddTile3d(sExpLayerTile &Tile);
 
 		void			AddInfItem(const char *Name,int Val);
 		void			Write();
 
-		int				Create2dTex(int Tile,int Flags);
-		int				Create3dTile(sExpLayerTile &ThisTile);
-//		int				FindRGBMatch(sMkLevelTex &ThisTex);
-//		bool			IsRGBSame(const sMkLevelTex &Tile0,const sMkLevelTex &Tile1);
+		int				Create2dTile(int Tile,int Flags);
+		int				Create3dTile(int Tile,int Flags);
 		void			MakeTexName(sExpTile &SrcTile,int Flags,GString &OutStr);
 		int				BuildTileTex(sExpTile &SrcTile,int Flags);
 
@@ -126,16 +119,16 @@ protected:
 		void			LoadLayer(sExpLayerHdr *LayerHdr);
 
 		void			PreProcessLayers();
-		void			ProcessTileBanks();
-		void			PreProcessTileBank2d();
-		void			ProcessTileBank2d();
-		void			PreProcessTileBank3d();
-		void			ProcessTileBank3d();
+		void			ProcessElemBanks();
+		void			PreProcessElemBank2d();
+		void			ProcessElemBank2d();
+		void			PreProcessElemBank3d();
+		void			ProcessElemBank3d();
 		void			ProcessLayers();
-		void            SetUpTileUV(sTile2d &Out, sTexOutInfo &Info);
+		void            SetUpTileUV(sElem2d &Out, sTexOutInfo &Info);
 
 		void			ProcessModels();
-
+		
 		void			WriteLevel();
 		void			WriteLayers();
 		int				WriteLayer(int Type,int SubType,bool Warn=false);
@@ -144,7 +137,7 @@ protected:
 		int				WriteTriList();
 		int				WriteQuadList();
 		int				WriteVtxList();
-		void			WriteTileBank();
+		void			WriteElemBanks();
 		void			CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox);
 		void            BuildTiles();
 
@@ -167,15 +160,15 @@ protected:
 		CList<sExpTile>			InTileList;
 		CList<GString>			InSetNameList;
 		CList<GString>			InTexNameList;
-		CList<GString>			UsedSetNameList;
-		CList<GString>			UsedTexNameList;
 
-		CFaceStore				OutFaceList;
-		CList<sTile2d>			OutTile2dList;
-		CList<sTile3d>			OutTile3dList;
 
-		CList<sExpLayerTile>	Tile2dList;
-		CList<sExpLayerTile>	Tile3dList;
+//		CFaceStore				OutFaceList;
+		CList<sElem2d>			OutElem2d;
+		CList<sOutElem3d>		OutElem3d;
+
+		CList<sUsedTile2d>		UsedTile2dList;
+		CList<sUsedTile3d>		UsedTile3dList;
+
 		CList<sMkLevelTex>		Tex2dList;
 		CTexGrab				TexGrab;
 		CList<Frame>			BmpList;
@@ -191,6 +184,10 @@ protected:
 		CList<sInfItem>			InfList;
 
 		int						PakW,PakH;
+
+		vector<sTri>			OutTriList;
+		vector<sQuad>			OutQuadList;
+		vector<sVtx>			OutVtxList;
 
 };
 

@@ -54,18 +54,18 @@ int		Tile2dSize,Tile3dSize;
 
 //***************************************************************************
 const GString	ConfigFilename="MkLevel.ini";
-sExpLayerTile	BlankTile2d={-1,-1};
-sExpLayerTile	BlankTile3d={0,0};
+sExpLayerTile	BlankTile={0,0};
+//sExpLayerTile	BlankTile2d={-1,-1};
+//sExpLayerTile	BlankTile3d={0,0};
 
 //***************************************************************************
 CMkLevel::CMkLevel()
 {
 		memset(&LevelHdr,0,sizeof(sLevelHdr));
-		Tile2dList.Add(BlankTile2d);
-		Tile3dList.Add(BlankTile3d);
-		OutTile3dList.resize(1);
-		OutTile3dList[0].TriCount=0;
-		OutTile3dList[0].QuadCount=0;
+// Add Blanks
+		AddTile2d(BlankTile);
+		AddTile3d(BlankTile);
+		OutElem3d.resize(1);
 }
 
 //***************************************************************************
@@ -122,13 +122,9 @@ GFName		Path;
 		TexGrab.NoSort();
 		TexGrab.AnimatedHeadersOnly(true);
 		TexGrab.DontOutputBoxes(true);
-	//!!!	TexGrab.AllowRotate(true);
 		TexGrab.AllowRotate(false);
-	//!!!	TexGrab.ShrinkToFit(true);
 		TexGrab.ShrinkToFit(false);
 
-// Setup TriList
-		OutFaceList.SetTexGrab(TexGrab);
 // Set up other stuph
 
 		FlatFace[0].vtx[0].x=+0.5f; FlatFace[0].vtx[0].y=+1.0f;	FlatFace[0].vtx[0].z=-4.0f;
@@ -155,6 +151,7 @@ GFName		Path;
 //***************************************************************************
 int		CMkLevel::AddModel(GString &Filename)
 {
+/*
 GFName			Path=Filename;
 sMkLevelModel	ThisModel;
 int				Idx;
@@ -181,6 +178,8 @@ int		TriStart=ModelFaceList.GetFaceCount();;
 
 		ModelList.Add(ThisModel);
 		return(Idx);
+*/
+		return(0);
 }
 
 //***************************************************************************
@@ -195,7 +194,7 @@ vector<GString> const	&SceneTexList=	Scene.GetTexList();
 vector<int> const		&SceneUsedMatList=Scene.GetUsedMaterialIdx();
 vector<Material> const	&SceneMaterials=Scene.GetMaterials();
 
-int						TriCount=NodeTriList.size();
+int			TriCount=NodeTriList.size();
 
 			for (int T=0; T<TriCount; T++)
 			{
@@ -213,12 +212,12 @@ int		ChildCount=ThisNode.GetPruneChildCount();
 //***************************************************************************
 int		CMkLevel::AddModel(const char *Name,int TriStart,int TriCount)
 {
+/*
 sMkLevelModel	ThisModel;
 int				Idx;
 
 		ThisModel.Name=Name;
 		Idx=ModelList.Find(ThisModel);
-
 		if (Idx!=-1)
 		{
 			return(Idx);
@@ -241,11 +240,14 @@ int				Idx;
 
 		ModelList.Add(ThisModel);
 		return(Idx);
+*/
+		return(0);
 }
 
 //***************************************************************************
 void	CMkLevel::ProcessModels()
 {
+/*
 int		i,ListSize;
 int		TriStart=OutFaceList.GetFaceCount();
 
@@ -263,6 +265,7 @@ int		TriStart=OutFaceList.GetFaceCount();
 //			printf("%s = %i %i\n",ModelList[i].Name,ModelList[i].TriStart,ModelList[i].TriCount);
 			ModelList[i].TriStart+=TriStart;
 		}
+*/
 }
 
 //***************************************************************************
@@ -330,9 +333,16 @@ int		RGBSize;
 // Load TexNames
 		LoadStrList(InTexNameList,(char*) &ByteHdr[FileHdr->TexNameOfs],FileHdr->TexNameCount);
 
+// Load Tris
+sExpTri	*TriPtr=(sExpTri*) &ByteHdr[FileHdr->TriOfs];
+		InTriList.resize(FileHdr->TriCount);
+		for (i=0; i<FileHdr->TriCount; i++)
+		{
+			InTriList[i]=TriPtr[i];
+		}
+
 // Load Tiles
 u8		*TilePtr=(u8*) &ByteHdr[FileHdr->TileOfs];
-
 		InTileList.resize(FileHdr->TileCount);
 		for (i=0; i<FileHdr->TileCount; i++)
 		{
@@ -347,14 +357,6 @@ u8		*TilePtr=(u8*) &ByteHdr[FileHdr->TileOfs];
 			TilePtr+=RGBSize+sizeof(sExpTile);
 		}
 
-// Load Tris
-sExpTri	*TriPtr=(sExpTri*) &ByteHdr[FileHdr->TriOfs];
-		InTriList.resize(FileHdr->TriCount);
-		for (i=0; i<FileHdr->TriCount; i++)
-		{
-			InTriList[i]=TriPtr[i];
-		}
-
 // Load 2d bitmaps
 		ListSize=InSetNameList.size();
 		BmpList.resize(ListSize);
@@ -366,7 +368,6 @@ sExpTri	*TriPtr=(sExpTri*) &ByteHdr[FileHdr->TriOfs];
 				BmpList[i].LoadBMP(InSetNameList[i]);
 			}
 		}
-
 }
 
 //***************************************************************************
@@ -434,11 +435,10 @@ void	CMkLevel::Process()
 		PreProcessLayers();
 		printf("Process Models\n");
 		ProcessModels();
-		printf("Process Tilebank\n");
-		ProcessTileBanks();
+		printf("Process ElemBanks\n");
+		ProcessElemBanks();
 		printf("Process Layers\n");
 		ProcessLayers();
-		OutFaceList.Process();
 }
 
 //***************************************************************************
@@ -464,72 +464,115 @@ int		LayerCount=LayerList.size();
 }
 
 //***************************************************************************
-void	CMkLevel::ProcessTileBanks()
+int		CMkLevel::AddTile2d(sExpLayerTile &InTile)
 {
-		PreProcessTileBank2d();
-		PreProcessTileBank3d();
-		TexGrab.Process();
-		ProcessTileBank2d();
-		ProcessTileBank3d();
+sUsedTile2d	ThisTile;
+
+			ThisTile.Tile=InTile.Tile;
+			ThisTile.Flags=InTile.Flags;
+
+			return(UsedTile2dList.Add(ThisTile));
 }
 
 //***************************************************************************
-void	CMkLevel::PreProcessTileBank2d()
+int		CMkLevel::AddTile3d(sExpLayerTile &InTile)
 {
-int		i,ListSize=Tile2dList.size();
+sUsedTile3d	ThisTile;
 
-		Tile2dList[0].Tile=-1;
+			ThisTile.Tile=InTile.Tile;
+			ThisTile.Flags=InTile.Flags;
+int			TileID=UsedTile3dList.Add(ThisTile);
+int			TileIdx=(TileID<<2) | (InTile.Flags & PC_TILE_FLAG_MIRROR_XY);
+			return(TileIdx);
+}
+
+//***************************************************************************
+void	CMkLevel::ProcessElemBanks()
+{
+		PreProcessElemBank2d();
+		PreProcessElemBank3d();
+		TexGrab.Process();
+		ProcessElemBank2d();
+		ProcessElemBank3d();
+}
+
+//***************************************************************************
+void	CMkLevel::PreProcessElemBank2d()
+{
+int		i,ListSize=UsedTile2dList.size();
+
+//		UsedTile2dList[0].Tile=-1;
 // Extract Tex data from list
 		for (i=1; i<ListSize; i++)
 		{ // Skip blank
-			sExpLayerTile &ThisTile=Tile2dList[i];
-			ThisTile.Tile=Create2dTex(ThisTile.Tile,ThisTile.Flags);
+			sUsedTile2d &ThisTile=UsedTile2dList[i];
+			ThisTile.TexID=Create2dTile(ThisTile.Tile,ThisTile.Flags);
 		}
 }
 
 //***************************************************************************
-void	CMkLevel::ProcessTileBank2d()
+void	CMkLevel::ProcessElemBank2d()
 {
-int		i,ListSize=Tile2dList.size();
+int		i,ListSize=UsedTile2dList.size();
 vector<sTexOutInfo>	&TexInfo=TexGrab.GetTexInfo();
 
-		OutTile2dList.resize(ListSize);
+		OutElem2d.resize(ListSize);
 		for (i=1; i<ListSize; i++)
 		{ // Skip blank
-			sExpLayerTile	&InTile=Tile2dList[i];
-			sTile2d			&OutTile=OutTile2dList[i];
+			sUsedTile2d	&InTile=UsedTile2dList[i];
+			sElem2d		&OutElem=OutElem2d[i];
 
-			SetUpTileUV(OutTile,TexInfo[InTile.Tile]);
+			SetUpTileUV(OutElem,TexInfo[InTile.TexID]);
 		}
-
 }
 
 
 //***************************************************************************
-void	CMkLevel::PreProcessTileBank3d()
+void	CMkLevel::PreProcessElemBank3d()
 {
-int		i,ListSize=Tile3dList.size();
+int		i,ListSize=UsedTile3dList.size();
 		
 		for (i=1; i<ListSize; i++)
 		{ // Skip Blank
-			sExpLayerTile &ThisTile=Tile3dList[i];
-			ThisTile.Tile=Create3dTile(ThisTile);
+			sUsedTile3d &ThisTile=UsedTile3dList[i];
+			ThisTile.Tile=Create3dTile(ThisTile.Tile,ThisTile.Flags);
 		}
 }
 
 //***************************************************************************
-void	CMkLevel::ProcessTileBank3d()
+void	CMkLevel::ProcessElemBank3d()
 {
-int		i,ListSize=Tile3dList.size();
-
+int		i,ListSize=UsedTile3dList.size();
+int		MaxElemTri=0,MaxElemQuad=0;
 		for (i=0; i<ListSize; i++)
 		{
+			sOutElem3d	&ThisElem=OutElem3d[i];
+			CFaceStore	&ThisList=ThisElem.FaceStore;
 
+			ThisList.setMaxStripLength(StripLength);
+			ThisElem.Elem3d.TriStart=OutTriList.size();
+			ThisElem.Elem3d.QuadStart=OutQuadList.size();
+			ThisList.Process(OutTriList,OutQuadList,OutVtxList);
+			ThisElem.Elem3d.TriCount=ThisList.GetTriFaceCount();
+			ThisElem.Elem3d.QuadCount=ThisList.GetQuadFaceCount();
+			if (MaxElemTri<ThisElem.Elem3d.TriCount) MaxElemTri=ThisElem.Elem3d.TriCount;
+			if (MaxElemQuad<ThisElem.Elem3d.QuadCount) MaxElemQuad=ThisElem.Elem3d.QuadCount;
+		}
+		printf("Max Tile Tri =%i\tMax Tile Quad =%i\n",MaxElemTri,MaxElemQuad);
+		for (i=0; i<ListSize; i++)
+		{
+			sOutElem3d	&ThisElem=OutElem3d[i];
+			CFaceStore	&ThisList=ThisElem.FaceStore;
+			for (int c=i; c<ListSize; c++)
+			{
+				sOutElem3d	&CheckElem=OutElem3d[c];
+				CFaceStore	&CheckList=CheckElem.FaceStore;
+			}
 		}
 }
 
 //***************************************************************************
-void	CMkLevel::SetUpTileUV(sTile2d &Out, sTexOutInfo &Info)
+void	CMkLevel::SetUpTileUV(sElem2d &Out, sTexOutInfo &Info)
 {
 int		W = Info.w-1;
 int		H = Info.h-1;
@@ -591,15 +634,96 @@ int		ListSize=LayerList.size();
 }
 
 //***************************************************************************
-int		CMkLevel::Create3dTile(sExpLayerTile &InTile)
+int		CMkLevel::Create3dTile(int Tile,int Flags)
 {
-sExpTile		&SrcTile=InTileList[InTile.Tile];
+sExpTile		&SrcTile=InTileList[Tile];
 CFace			F;
 int				i,ListSize,p;
 CList<sExpTri>	SortList;
 CList<float>	ZPosList;
-sTile3d			ThisTile;
-int				TileID=OutTile3dList.size();
+int				TileID=OutElem3d.size();
+
+			if (SrcTile.TriCount)
+			{
+				for (i=0; i<SrcTile.TriCount; i++)
+				{
+					int		ListPos;
+					sExpTri	&ThisTri=InTriList[SrcTile.TriStart+i];
+					float	ThisZPos;
+
+					ThisZPos=ThisTri.vtx[0].z;
+					if (ThisZPos<ThisTri.vtx[1].z) ThisZPos=ThisTri.vtx[1].z;
+					if (ThisZPos<ThisTri.vtx[2].z) ThisZPos=ThisTri.vtx[2].z;
+					
+					ListSize=SortList.size();
+					for (ListPos=0; ListPos<ListSize; ListPos++)
+					{
+						if (ZPosList[ListPos]>ThisZPos) break;
+					}
+					SortList.insert(ListPos,ThisTri);
+					ZPosList.insert(ListPos,ThisZPos);
+				}
+			}
+			else
+			{
+				int		TexID=Create2dTile(Tile,0);
+
+				for (i=0; i<2; i++)
+					{
+						FlatFace[i].Flags=0;
+						FlatFace[i].TexID=TexID;
+						SortList.push_back(FlatFace[i]);
+					}
+			}
+
+// Add sorted list to main list
+			OutElem3d.resize(TileID+1);
+CFaceStore	&FaceList=OutElem3d[TileID].FaceStore;
+			FaceList.SetTexGrab(TexGrab);
+
+			ListSize=SortList.size();
+			for (i=0; i<ListSize; i++)
+			{
+				sExpTri &ThisTri=SortList[i];
+				CFace	F;
+				bool	SwapPnt=false;
+
+				if (SrcTile.TriCount)
+				{
+					F.TexName=InTexNameList[ThisTri.TexID];
+					F.Mat=-1;
+				}
+				else
+				{
+					F.Mat=ThisTri.TexID;
+				}
+
+				for (p=0; p<3; p++)
+				{
+					F.vtx[p]=ThisTri.vtx[p];
+					F.vtx[p].y=F.vtx[p].y;
+					F.uvs[p].u=ThisTri.uv[p][0];
+					F.uvs[p].v=ThisTri.uv[p][1];
+				}
+				FaceList.SetTPageFlag(F,ThisTri.Flags);
+				FaceList.AddFace(F,true);
+			}
+			
+			return(TileID);
+}
+
+/*
+int		CMkLevel::Create3dTile(int Tile,int Flags)
+{
+sExpTile		&SrcTile=InTileList[Tile];
+CFace			F;
+int				i,ListSize,p;
+CList<sExpTri>	SortList;
+CList<float>	ZPosList;
+sTileBank3d		ThisTile;
+int				TileID=OutTileBank3d.size();
+CFaceStore		FaceStore;
+
 
 			ThisTile.TriStart=OutFaceList.GetFaceCount();
 			ThisTile.QuadCount=0;
@@ -629,9 +753,8 @@ int				TileID=OutTile3dList.size();
 
 			}
 			else
-			{ // create flat tile (This is WRONG, flip tex are gen, need to flip goem)
-//				int		TexID=Create2dTex(InTile.Tile,InTile.Flags);
-				int		TexID=Create2dTex(InTile.Tile,0);
+			{
+				int		TexID=Create2dTile(Tile,0);
 
 				ThisTile.TriCount=2;
 				
@@ -641,8 +764,6 @@ int				TileID=OutTile3dList.size();
 						FlatFace[i].TexID=TexID;
 						SortList.push_back(FlatFace[i]);
 					}
-
-//				InTile.Flags=0;
 			}
 
 // Add sorted list to main list
@@ -671,7 +792,7 @@ int				TileID=OutTile3dList.size();
 					F.uvs[p].v=ThisTri.uv[p][1];
 				}
 
-				if (InTile.Flags & PC_TILE_FLAG_MIRROR_X)
+				if (Flags & PC_TILE_FLAG_MIRROR_X)
 				{
 					F.vtx[0].x=-F.vtx[0].x;
 					F.vtx[1].x=-F.vtx[1].x;
@@ -679,7 +800,7 @@ int				TileID=OutTile3dList.size();
 					SwapPnt^=1;
 				}
 
-				if (InTile.Flags & PC_TILE_FLAG_MIRROR_Y)
+				if (Flags & PC_TILE_FLAG_MIRROR_Y)
 				{
 					F.vtx[0].y	=1.0-F.vtx[0].y;
 					F.vtx[1].y	=1.0-F.vtx[1].y;
@@ -696,26 +817,23 @@ int				TileID=OutTile3dList.size();
 					F.uvs[0]=F.uvs[1];
 					F.uvs[1]=TmpUV;
 				}
+
 				OutFaceList.SetTPageFlag(F,ThisTri.Flags);
 				OutFaceList.AddFace(F,true);
 			}
 
-			OutTile3dList.push_back(ThisTile);
-
+			OutTileBank3d.push_back(ThisTile);
 			return(TileID);
 }
 
-
+  */
 //***************************************************************************
-int		CMkLevel::Create2dTex(int Tile,int Flags)
+int		CMkLevel::Create2dTile(int Tile,int Flags)
 {
 sExpTile	&SrcTile=InTileList[Tile];
 sMkLevelTex	InTex;
 int			Idx;
-// Must be new, add it
-//		InTex.Set=SrcTile.Set;
-//		InTex.XOfs=SrcTile.XOfs;
-//		InTex.YOfs=SrcTile.YOfs;
+
 		InTex.Tile=Tile;
 		InTex.Flags=Flags;
 		
@@ -726,6 +844,7 @@ int			Idx;
 			return(Tex2dList[Idx].TexID);
 		}
 
+// Must be new, add it
 		InTex.TexID=BuildTileTex(SrcTile,Flags);
 		Tex2dList.push_back(InTex);
 		return(InTex.TexID);
@@ -742,8 +861,6 @@ GString			TexName;
 int				BmpW=InFrame.GetWidth();
 int				BmpH=InFrame.GetHeight();
 int				TexID;
-				TexGrab.ShrinkToFit(false);
-				TexGrab.AllowRotate(false);
 
 				if (SrcTile.XOfs*16>BmpW) 
 				{
@@ -795,97 +912,6 @@ GString			Name=GFName(InSetNameList[SrcTile.Set]).File();
 }
 
 //***************************************************************************
-/*
-int		CMkLevel::FindRGBMatch(sMkLevelTex &ThisTex)
-{
-int		i,ListSize=Tex2dList.size();
-int		Size=TileW*TileH;
-u8		*RGBPtr=ThisTex.RGB;
-
-		if (!RGBPtr) printf("HA HA\n");
-// Create Checksum for this tile
-		ThisTex.RChk=0;
-		ThisTex.GChk=0;
-		ThisTex.BChk=0;
-		for (i=0; i<Size; i++)
-		{
-			ThisTex.RChk+=*RGBPtr++;
-			ThisTex.GChk+=*RGBPtr++;
-			ThisTex.BChk+=*RGBPtr++;
-		}
-
-// Check all others for match
-		for (i=0; i<ListSize; i++)
-		{
-			sMkLevelTex &ChkTex=Tex2dList[i];
-			if (ChkTex.RGB)
-			{
-// Checksum first
-				if (ThisTex.RChk==ChkTex.RChk && ThisTex.GChk==ChkTex.GChk && ThisTex.BChk==ChkTex.BChk) 
-				{
-					if (ThisTex.Flags==ChkTex.Flags)
-					{
-						if (IsRGBSame(ThisTex,ChkTex)) return(i);
-					}
-				}
-			}
-		}
-		return(-1);
-}
-*/
-//***************************************************************************
-/*
-bool	CMkLevel::IsRGBSame(const sMkLevelTex &Tex0,const sMkLevelTex &Tex1)
-{
-int		Size=TileW*TileH*3;
-int		H=TileH;
-u8		*RGB0=Tex0.RGB;
-u8		*RGB1=Tex1.RGB;
-
-int	Res=memcmp(RGB0,RGB1,Size);
-
-	return(Res==0);
-}
-*/
-/*
-bool	CMkLevel::IsRGBSame(const sMkLevelTex &Tex0,const sMkLevelTex &Tex1)
-{
-int		W=TileW;
-int		H=TileH;
-int		XOfs0,YOfs0;
-int		XOfs1,YOfs1;
-u8		*RGB0=Tex0.RGB;
-u8		*RGB1=Tex1.RGB;
-
-		XOfs0=YOfs0=0;
-		XOfs1=YOfs1=0;
-
-		if (Tex0.Flags & PC_TILE_FLAG_MIRROR_X) XOfs0=W-1;
-		if (Tex0.Flags & PC_TILE_FLAG_MIRROR_Y) YOfs0=H-1;
-		if (Tex1.Flags & PC_TILE_FLAG_MIRROR_X) XOfs1=W-1;
-		if (Tex1.Flags & PC_TILE_FLAG_MIRROR_Y) YOfs1=H-1;
-
-		for (int Y=0; Y<H; Y++)
-		{
-			for (int X=0; X<W; X++)
-			{
-				int	X0=abs(XOfs0-X);
-				int	Y0=abs(YOfs0-Y);
-				int	X1=abs(XOfs1-X);
-				int	Y1=abs(YOfs1-Y);
-				int	Idx0=X0+(Y0*W);
-				int	Idx1=X1+(Y1*W);
-
-				if (RGB0[Idx0+0]!=RGB1[Idx1+0]) return(false);
-				if (RGB0[Idx0+1]!=RGB1[Idx1+1]) return(false);
-				if (RGB0[Idx0+2]!=RGB1[Idx1+2]) return(false);
-			}
-		}
-		return(true);
-}
-
-*/
-//***************************************************************************
 //*** Write *****************************************************************
 //***************************************************************************
 void	CMkLevel::Write()
@@ -897,7 +923,7 @@ GString	OutFilename=OutName+".Lvl";
 		fwrite(&LevelHdr,1,sizeof(sLevelHdr),File);
 
 		WriteLevel();
-		WriteTileBank();
+		WriteElemBanks();
 
 // rewrite header
 		fseek(File,0,SEEK_SET);
@@ -914,61 +940,58 @@ GString	OutFilename=OutName+".Lvl";
 //***************************************************************************
 int		MinOT=123456,MaxOT=0;		
 
-void	CMkLevel::WriteTileBank()
+void	CMkLevel::WriteElemBanks()
 {
 int		i,ListSize;
 
-// 2d Tilebank
-		LevelHdr.TileBank2d=(sTile2d*)ftell(File);
-		ListSize=OutTile2dList.size();
-		printf("%i 2d tiles\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTile2d));
+// 2d Elem
+		LevelHdr.ElemBank2d=(sElem2d*)ftell(File);
+		ListSize=OutElem2d.size();
+		printf("%i 2d Elems\t(%i Bytes)\n",ListSize,ListSize*sizeof(sElem2d));
 		for (i=0; i<ListSize; i++)
 		{
-			sTile2d	&OutTile=OutTile2dList[i];
-			fwrite(&OutTile,1,sizeof(sTile2d),File);
+			sElem2d	&OutElem=OutElem2d[i];
+			fwrite(&OutElem,1,sizeof(sElem2d),File);
 		}
-// 3d Tilebank
-		LevelHdr.TileBank3d=(sTile3d*)ftell(File);
-		ListSize=OutTile3dList.size();
-		printf("%i 3d tiles\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTile3d));
+// 3d Elem
+
+		LevelHdr.ElemBank3d=(sElem3d*)ftell(File);
+		ListSize=OutElem3d.size();
+		printf("%i 3d Elems\t(%i Bytes)\n",ListSize,ListSize*sizeof(sElem3d));
 		for (i=0; i<ListSize; i++)
 		{
-			sTile3d	&OutTile=OutTile3dList[i];
-			fwrite(&OutTile,1,sizeof(sTile3d),File);
+			sElem3d		&OutElem=OutElem3d[i].Elem3d;
+			fwrite(&OutElem,1,sizeof(sElem3d),File);
 		}
 // TriList
 		LevelHdr.TriList=(sTri*)WriteTriList();
 		
 // QuadList
 		LevelHdr.QuadList=(sQuad*)WriteQuadList();
-//		printf("OT %i -> %i\n",MinOT,MaxOT);
 
 // VtxList
 		LevelHdr.VtxList=(sVtx*)WriteVtxList();
-//		LevelHdr.VtxList=(sVtx*)OutFaceList.WriteVtxList(File);
 }
 
 
 //***************************************************************************
-int	ZMin=9999,ZMax=0;
+int		ZMin=9999,ZMax=0;
 int		CMkLevel::WriteTriList()
 {
-vector<sTri>	&TriList=OutFaceList.GetOutTriList();
-vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
 int				ThisPos=ftell(File);
-int				i,ListSize=TriList.size();
+int				i,ListSize=OutTriList.size();
 int				ZOfs=+4*Scale;
 
 		for (i=0;i<ListSize;i++)
 		{
-			sTri	&T=TriList[i];
+			sTri	&T=OutTriList[i];
 			int		OtOfs=0;
 			int		Z[3];
 
 // Calc OtOfs
-			Z[0]=VtxList[T.P0].vz+ZOfs;
-			Z[1]=VtxList[T.P1].vz+ZOfs;
-			Z[2]=VtxList[T.P2].vz+ZOfs;
+			Z[0]=OutVtxList[T.P0].vz+ZOfs;
+			Z[1]=OutVtxList[T.P1].vz+ZOfs;
+			Z[2]=OutVtxList[T.P2].vz+ZOfs;
 			
 			for (int p=0; p<3; p++)
 			{
@@ -979,80 +1002,74 @@ int				ZOfs=+4*Scale;
 			OtOfs=(int)sqrt(OtOfs/3);
 			
 			OtOfs/=8;
-//			printf("%i\n",OtOfs);
 			if (MinOT>OtOfs) MinOT=OtOfs;
 			if (MaxOT<OtOfs) MaxOT=OtOfs;
 			if (OtOfs>15) OtOfs=15;
 			if (OtOfs<0) OtOfs=0;
 
-//			if (OtOfs>15) OtOfs=15;
 			T.OTOfs=OtOfs;
-
 // Write It			
 			fwrite(&T,1,sizeof(sTri),File);
 		}
 		printf("%i Tris\t(%i Bytes)\n",ListSize,ListSize*sizeof(sTri));
-//		printf("ZMin %i ZMax %i\n",ZMin,ZMax);
-
 		return(ThisPos);
-
 }
 
 //***************************************************************************
 int		CMkLevel::WriteQuadList()
 {
-vector<sQuad>	&QuadList=OutFaceList.GetOutQuadList();
-vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
 int				ThisPos=ftell(File);
-int				i,ListSize=QuadList.size();
+int				i,ListSize=OutQuadList.size();
+int				ZOfs=+4*Scale;
 
 		for (i=0;i<ListSize;i++)
 		{
-			sQuad	&Q=QuadList[i];
-			int		Z[4];
+			sQuad	&Q=OutQuadList[i];
 			int		OtOfs=0;
+			int		Z[4];
+
 // Calc OtOfs
-			Z[0]=abs(VtxList[Q.P0].vz);
-			Z[1]=abs(VtxList[Q.P1].vz);
-			Z[2]=abs(VtxList[Q.P2].vz);
-			Z[3]=abs(VtxList[Q.P3].vz);
+			Z[0]=OutVtxList[Q.P0].vz+ZOfs;
+			Z[1]=OutVtxList[Q.P1].vz+ZOfs;
+			Z[2]=OutVtxList[Q.P2].vz+ZOfs;
+			Z[3]=OutVtxList[Q.P3].vz+ZOfs;
 			
 			for (int p=0; p<4; p++)
 			{
-				if (OtOfs<Z[p]) OtOfs=Z[p];
+				if (ZMin>Z[p]) ZMin=Z[p];
+				if (ZMax<Z[p]) ZMax=Z[p];
+				OtOfs+=Z[p]*Z[p];
 			}
+			OtOfs=(int)sqrt(OtOfs/4);
+			
+			OtOfs/=8;
 			if (MinOT>OtOfs) MinOT=OtOfs;
 			if (MaxOT<OtOfs) MaxOT=OtOfs;
-			if (OtOfs>63) OtOfs=63;
+			if (OtOfs>15) OtOfs=15;
+			if (OtOfs<0) OtOfs=0;
+
+			Q.OTOfs=OtOfs;
 // Write It			
 			fwrite(&Q,1,sizeof(sQuad),File);
 		}
 		printf("%i Quads\t(%i Bytes)\n",ListSize,ListSize*sizeof(sQuad));
 		return(ThisPos);
-
 }
 
 //***************************************************************************
 int		CMkLevel::WriteVtxList()
 {
-vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
-int		i,ListSize=VtxList.size();
+int		i,ListSize=OutVtxList.size();
 int		Pos=ftell(File);
-//sVtx	Ofs;
-
-//		Ofs.vx=-0;
-//		Ofs.vy=-0;
-//		Ofs.vz=-4*Scale;
 
 		for (i=0; i<ListSize; i++)
 		{
-			sVtx const	&In=VtxList[i];
+			sVtx const	&In=OutVtxList[i];
 			sVtx		Out;
 
 			Out.vx=+In.vx;
-			Out.vy=-In.vy;
+			Out.vy=-In.vy+(Scale/2);	// Offset it so the origin is centre centre
 			Out.vz=+In.vz;
-//			printf("%i\n",Out.vz);
 			fwrite(&Out,1,sizeof(sVtx),File);
 		}
 		printf("%i Vtx\t(%i Bytes)\n",ListSize,ListSize*sizeof(sVtx));
@@ -1089,7 +1106,7 @@ int		ThingStart=ftell(File);
 		LevelHdr.TriggerList=WriteThings(LAYER_TYPE_TRIGGER);
 		LevelHdr.FXList=WriteThings(LAYER_TYPE_FX);
 		LevelHdr.HazardList=WriteThings(LAYER_TYPE_HAZARD);
-		LevelHdr.ModelList=(sModel*)WriteModelList();
+//		LevelHdr.ModelList=(sModel*)WriteModelList();
 		printf("Things =\t(%i Bytes)\n",ftell(File)-ThingStart);
 
 
@@ -1135,6 +1152,7 @@ char	*LayerName=GetLayerName(Type,LAYER_SUBTYPE_NONE);
 //***************************************************************************
 int		CMkLevel::WriteModelList()
 {
+/*
 int		i,ListSize=ModelList.size();
 int		Ofs=ftell(File);
 
@@ -1151,9 +1169,12 @@ int		Ofs=ftell(File);
 		}
 
 		return(Ofs);
+*/
+		return(0);
 }
 
 //***************************************************************************
+/*
 void	CMkLevel::CalcModelBBox(sMkLevelModel &ThisModel,sBBox &BBox)
 {
 vector<sTri>		&TriList=OutFaceList.GetOutTriList();
@@ -1182,7 +1203,7 @@ int					Vtx[3];
 			}
 		}
 }
-
+*/
 //***************************************************************************
 //*** Inf File **************************************************************
 //***************************************************************************

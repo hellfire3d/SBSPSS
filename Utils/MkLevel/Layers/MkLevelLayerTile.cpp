@@ -105,9 +105,9 @@ int			Height=OutMap.GetHeight();
 		}
 		else
 		{
-			printf("- Writing Layer %s (%i,%i).. ",LayerName,Width,Height);
+//			printf("- Writing Layer %s (%i,%i).. ",LayerName,Width,Height);
 			int	LvlSize=WriteNormal(Core,File);
-			printf("%i bytes\n",LvlSize);
+//			printf("%i bytes\n",LvlSize);
 		}
 		PadFile(File);
 
