@@ -38,6 +38,7 @@ TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 #----------------------------------------------------------------------------
 #--- Levels -----------------------------------------------------------------
 #----------------------------------------------------------------------------
+# TEMP!!
 LEVELS_OPTS :=				-t:8,4,1 -s:256
 LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
 LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
@@ -131,45 +132,19 @@ GFX_DATA_OUT		+=	$(COLLISION_OUT)
 # Actors
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
-# Player List
-SPONGEBOB_ANIM_LIST :=	buttbounceend buttbouncestart deathbackwards deathdry  deathforwards deathspin deathtar electricshock electricshockend electricshockstart faceback facefront \
-						fall getup getuprun hitground hover hoverend hoverstart idlebreathe idlehoola idlelook idlewigglearm jumpend karate run \
-						runstart runstop soakup talk01 teeterback teeterfront \
-						idlewind
-
-SPONGEBOB_EXTRA_TEX :=	SBBackNormal \
-						SBEyesAngry SBEyesBlink SBEyesDown SBEyesfiece SBEyesLeft SBEyesNormal SBEyesRight SBEyesSheepish SBEyesUp SBEyesWorried \
-						SBHandNormal \
-						SBMouthGasp SBMouthNormal SBMouthSheepish SBMouthSmile SBMouthTerror SBMouthWhistle \
-						SBPantsideNormal \
-						SBPantsNormal \
-						SBSideNormal \
-						SBSocksNormal \
-						SBSoleNormal \
-						SBTopNormal
-
-#----------------------------------------------------------------------------
-# NPC List
-
-#----------------------------------------------------------------------------
-# Enemy List
-CLAM_ANIM_LIST :=		 clamsidesnap
-
-#----------------------------------------------------------------------------
+# Anims and extra textures are held within script files in the character dirs
 ACTOR_IN_DIR :=			$(GRAF_DIR)/Characters
 ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/Actors
 ACTORS_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
-ACTORS_PLAYER_LIST :=	SPONGEBOB
+ACTOR_SPONGEBOB :=		SPONGEBOB
 
-ACTORS_NPC_LIST :=		
+ACTOR_NPC :=		
 
-ACTORS_ENEMY_LIST :=	CLAM
+ACTOR_ENEMY :=			CLAM
 
-ACTORS_LIST :=			$(foreach ACTOR,$(ACTORS_PLAYER_LIST),$(ACTOR)) \
-						$(foreach ACTOR,$(ACTORS_NPC_LIST),$(ACTOR)) \
-						$(foreach ACTOR,$(ACTORS_ENEMY_LIST),$(ACTOR))
+ACTORS_LIST :=			ACTOR_SPONGEBOB ACTOR_NPC ACTOR_ENEMY
 
 ACTORS_MAKEFILES :=		$(foreach ACTOR,$(ACTORS_LIST),$(ACTOR_MAKEFILE_DIR)/$(ACTOR).mak)
 
@@ -178,7 +153,7 @@ $(ACTORS_MAKEFILES):	$(ACTORS_DIRS_TO_MAKE) makefile.gfx $(BUILD_DIR)/mkactor.pl
 
 include $(ACTORS_MAKEFILES)
 
-ACTORS_ALL_OUT :=		$(foreach ACTOR,$(ACTORS_LIST),$(ACTOR_$(ACTOR)_OUT))
+ACTORS_ALL_OUT :=		$(foreach ACTOR,$(ACTORS_LIST),$($(ACTOR)_OUT))
 
 GFX_DATA_OUT +=    		$(ACTORS_ALL_OUT)
 
