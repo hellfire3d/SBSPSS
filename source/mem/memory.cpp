@@ -347,7 +347,7 @@ void addDebugMem( void * addr, const char * name, const char * file, int line )
 			md->name = name;
 			md->file = file;
 			md->line = line;
-			md->frameTime = VidGetTickCount();
+			md->frameTime = VidGetFrameCount();
 			return;
 		}
 		md++;
