@@ -26,9 +26,9 @@
 	------------------- */
 
 // Allow debug messaging
-//#if defined(__VERSION_DEBUG__)
+#if defined(__VERSION_DEBUG__)
 #define DBG_ACTIVE
-//#endif
+#endif
 
 
 // Available channels
@@ -40,11 +40,11 @@ typedef enum
 
 	DC_SYSTEM		=1<<3,
 	DC_SOUND		=1<<4,
+	DC_GUI			=1<<5,
 
 
 	DC_NONE			=0,
 	DC_ALL			=-1,
-	DC_ALL_SYSTEM	=DC_SYSTEM|DC_SOUND,
 
 } DEBUG_CHANNEL_FLAG;
 
@@ -84,6 +84,7 @@ typedef enum
 	#define PAUL_DBGMSG							__DBGMSG(DC_PAUL)
 	#define SYSTEM_DBGMSG						__DBGMSG(DC_SYSTEM)
 	#define SOUND_DBGMSG						__DBGMSG(DC_SOUND)
+	#define GUI_DBGMSG							__DBGMSG(DC_GUI)
 
 	#define setActiveDbgChannels(_channelFlags)	__setActiveDbgChannels(_channelFlags)
 	#define getActiveDbgChannels()				__getActiveDbgChannels()
@@ -96,6 +97,7 @@ typedef enum
 	#define PAUL_DBGMSG							;
 	#define SYSTEM_DBGMSG						;
 	#define SOUND_DBGMSG						;
+	#define SOUND_GUI							;
 
 	#define setActiveDbgChannels(_channelFlags)	;
 	#define getActiveDbgChannels()				;
