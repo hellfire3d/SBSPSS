@@ -100,7 +100,8 @@ platform_src :=		platform \
 					pbranch \
 					ppendulm \
 					pseesaw \
-					pbounce
+					pbounce \
+					pdual
 
 hazard_src :=		hazard \
 					hfalling \

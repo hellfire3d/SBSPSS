@@ -1105,6 +1105,14 @@ SOURCE=..\..\..\source\platform\pcirculr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pdual.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pdual.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pfalling.cpp
 # End Source File
 # Begin Source File

@@ -99,6 +99,10 @@
 #include "platform\pbounce.h"
 #endif
 
+#ifndef __PLATFORM_PDUAL_H__
+#include "platform\pdual.h"
+#endif
+
 #ifndef __PLATFORM_PPLAYER_H__
 #include "platform\pplayer.h"
 #endif
@@ -202,6 +206,24 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 		case NPC_BOUNCE_PLATFORM:
 		{
 			platform = new ("bounce platform") CNpcBouncePlatform;
+			break;
+		}
+
+		case NPC_DUAL_PLATFORM:
+		{
+			CNpcDualPlatform *dualPlatformMaster;
+			platform = dualPlatformMaster = new ("dual platform master") CNpcDualPlatform;
+			dualPlatformMaster->setMaster( true );
+			CNpcDualPlatform *dualPlatformSlave;
+			dualPlatformSlave = new ("dual platform slave") CNpcDualPlatform;
+			dualPlatformSlave->setMaster( false );
+			dualPlatformMaster->setOtherPlatform( dualPlatformSlave );
+			dualPlatformSlave->setOtherPlatform( dualPlatformMaster );
+
+			dualPlatformSlave->setType( platformType );
+			dualPlatformSlave->setGraphic( ThisPlatform );
+			dualPlatformSlave->setTiltable( false );
+
 			break;
 		}
 
