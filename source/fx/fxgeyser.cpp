@@ -11,56 +11,75 @@
 #include	"level\level.h"
 #include	"game\game.h"
 
-#include	"FX\FXBaseAnim.h"
-#include	"FX\FXAttachAnim.h"
+#include	"FX\FXGeyser.h"
 
 int		MaxHeight=128;
+int		GeyserSpeed=4;
 
 /*****************************************************************************/
-void	CFXAttachAnim::init(DVECTOR const &_Pos)
+void	CFXGeyser::init(DVECTOR const &_Pos)
 {
-		CFXBaseAnim::init(_Pos);
+		CFX::init(_Pos);
 		Height=TargetHeight=8;
+		currentFrame=FRM__GUSH000;
 }
 
 /*****************************************************************************/
-void	CFXAttachAnim::thing(int Frames)
+void	CFXGeyser::think(int Frames)
 {
-		CFXBaseAnim::think(Frames);
-CThing	*Parent=getParent();
+		CFX::think(Frames);
 
-int		HDiff=TargetHeight-Height;
-		Height+=(HDiff+1)/2;
-				
-		if (Parent) 
+		currentFrame++;
+		if (currentFrame>FRM__GUSH003)
 		{
-			Pos2=Parent->getRenderPos();
+			currentFrame=FRM__GUSH000;
 		}
-		else
-		{
-
-		}
-
+		TargetHeight=MaxHeight;
 }
+
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-void	CFXAttachAnim::render()
+void	CFXGeyser::render()
 {
-		CFXBaseAnim::render();
+DVECTOR		RenderPos;
+POLY_FT4	*Ft4;
+SpriteBank	*SprBank=CGameScene::getSpriteBank();
+CThing		*Parent=getParent();
+
+		getFXRenderPos(RenderPos);
 		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 
-int		FrameW=Frame->x1-Frame->x0;
-int		HalfW=FrameW>>1;
+// is it attached to a platform?
+		if (Parent) 
+		{ // yes, so get pos, and return
+			Height=RenderPos.vy-Parent->getRenderPos().vy;
+		}
+		else
+		{
+			int		HDiff=TargetHeight-Height;
+			Height+=(HDiff+(GeyserSpeed-1))/GeyserSpeed;
+		}
 
-		Frame->x0=Pos2.vx-HalfW;
-		Frame->y0=Pos2.vy;
-		Frame->x1=Pos2.vx+HalfW;
-		Frame->y1=Pos2.vy;
+// top
+		Ft4=SprBank->printFT4(currentFrame,RenderPos.vx,RenderPos.vy-Height,0,0,OtPos);
+		setShadeTex(Ft4,0);
+		setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
+		setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
 
-		int	BY=Frame->y2-Frame->y0;
-//		setCollisionCentreOffset(0,BY>>1);
-		setCollisionSize(FrameW,BY*2);
+int		FrameW=Ft4->x1-Ft4->x0;
+		setCollisionCentreOffset(FrameW>>1,-Height/2);
+		setCollisionCentreOffset(0,-Height/2);
+		setCollisionSize(FrameW,Height);
+
+// Base
+		Ft4=SprBank->printFT4(FRM__GUSHBASE,RenderPos.vx,RenderPos.vy,0,0,OtPos);
+		setShadeTex(Ft4,0);
+		setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
+		setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
+		Ft4->y0=Ft4->y2-Height;
+		Ft4->y1=Ft4->y3-Height;
+		Ft4->v2--; Ft4->v3--;
 
 }
 

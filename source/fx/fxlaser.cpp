@@ -61,7 +61,7 @@ DVECTOR		renderPos0,renderPos1;
 sOT			*ThisOT=OtPtr+OtPos;
 
 		getFXRenderPos(renderPos0);
-		if (!canRender() || !IsVisible) return;
+		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 
 		calcRenderPos(Target,renderPos1);
 		renderPos0.vx+=Offset.vx;

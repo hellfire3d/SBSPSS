@@ -10,6 +10,8 @@
 #include	<sprites.h>
 #include	"level\level.h"
 #include	"gfx\otpos.h"
+#include	"player\player.h"
+
 
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
@@ -17,13 +19,13 @@
 #include	"FX\FXBaseAnim.h"
 #include	"FX\FXBaseEmitter.h"
 
-#include	"FX\FXAttachAnim.h"
 
 #include	"FX\FXLaser.h"
 #include	"FX\FXThwack.h"
 #include	"FX\FXBubble.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
+#include	"FX\FXGeyser.h"
 
 #include	"FX\FXNrgBar.h"
 
@@ -32,197 +34,49 @@
 /*****************************************************************************/
 // Anim Data 
 
-CFXBaseAnim::sFXAnim	FXWaterSplashData=
+CFX::sFXRGB	CFX::FXRGBTable[CFX::FX_RGB_MAX]=
 {
-		ONE,
-		FRM__SPLASH001,FRM__SPLASH006,
-		1,
-		127,127,255,
-		0,
-		{0,0},
-		CFX::FX_TYPE_NONE
+	{127,127,255},		// Water
+	{127,255,127},		// Acid
+	{255,  0,  0},		// Lava
+	{ 64, 64, 64},		// Oil
 };
 
-CFXBaseAnim::sFXAnim	FXAcidSplashData=
+CFX::sFXRGB	FXRgbWater={127,127,255};
+
+/*****************************************************************************/
+CFXBaseAnim::sFXBaseData	FXDropBaseData=
 {
-		ONE,
-		FRM__SPLASH001,FRM__SPLASH006,
-		1,
-		127,255,127,
-		0,
-		{0,0},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXLavaSplashData=
-{
-		ONE,
-		FRM__SPLASH001,FRM__SPLASH006,
-		1,
-		255,0,0,
-		0,
-		{0,0},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXOilSplashData=
-{
-		ONE,
-		FRM__SPLASH001,FRM__SPLASH006,
-		1,
-		64,64,64,
-		0,
-		{0,0},
-		CFX::FX_TYPE_EXPLODE,
+		FRM__DRIP,FRM__DRIP,1,
+		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_HAS_GRAVITY | FX_FLAG_NO_THINK_KILL, 
 };
 
-CFXBaseAnim::sFXAnim	FXExplodeData=
+CFXBaseAnim::sFXBaseData	FXSplashBaseData=
 {
-		ONE,
-		FRM__EXPLOSION0001,FRM__EXPLOSION0006,
-		1,
-		127,127,127,
-		0,
-		{0,0},
-		CFX::FX_TYPE_NONE
+		FRM__SPLASH001,FRM__SPLASH006,1,
+		FX_FLAG_NO_THINK_KILL,
 };
 
-CFXBaseAnim::sFXAnim	FXFireData=
+CFXBaseAnim::sFXBaseData	FXExplodeBaseData=
 {
-		ONE,
-		FRM__FIRE01,FRM__FIRE08,
-		1,
-		127,127,127,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_TRANS,
-		{0,0},
-		CFX::FX_TYPE_NONE
+		FRM__EXPLOSION0001,FRM__EXPLOSION0006,1,
+		FX_FLAG_NO_THINK_KILL,
 };
 
-CFXBaseAnim::sFXAnim	FXWaterDripData=
+CFXBaseAnim::sFXBaseData	FXFireBaseData=
 {
-		ONE,
-		FRM__DRIP,FRM__DRIP,
-		1,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
-		{0,1},
-		CFX::FX_TYPE_SPLASH_WATER
+		FRM__FIRE01,FRM__FIRE08,1,
+		FX_FLAG_LOOP | FX_FLAG_TRANS,
 };
 
-CFXBaseAnim::sFXAnim	FXAcidDripData=
+CFXBaseAnim::sFXBaseData	FXBubbleBaseData=
 {
-		ONE,
-		FRM__DRIP,FRM__DRIP,
-		1,
-		127,255,127,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
-		{0,1},
-		CFX::FX_TYPE_SPLASH_ACID
-};
-CFXBaseAnim::sFXAnim	FXLavaDripData=
-{
-		ONE,
-		FRM__DRIP,FRM__DRIP,
-		1,
-		255,127,127,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
-		{0,1},
-		CFX::FX_TYPE_SPLASH_LAVA
-};
-CFXBaseAnim::sFXAnim	FXOilDripData=
-{
-		ONE,
-		FRM__DRIP,FRM__DRIP,
-		1,
-		64,64,64,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY | CFXBaseAnim::FXANIM_FLAG_INJURE_PLAYER,
-		{0,1},
-		CFX::FX_TYPE_SPLASH_OIL
-};
-// Bubble
-CFXBaseAnim::sFXAnim	FXBubbleWaterData=
-{
-		ONE,
-		FRM__BUBBLE_2,FRM__BUBBLE_2,
-		1,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
-		{0,-1},
-		CFX::FX_TYPE_NONE
-};
-
-CFXBaseAnim::sFXAnim	FXBubbleAcidData=
-{
-		ONE,
-		FRM__BUBBLE_2,FRM__BUBBLE_2,
-		1,
-		0,255,0,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
-		{0,-1},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXBubbleLavaData=
-{
-		ONE,
-		FRM__BUBBLE_2,FRM__BUBBLE_2,
-		1,
-		255,0,0,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
-		{0,-1},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXBubbleOilData=
-{
-		ONE,
-		FRM__BUBBLE_2,FRM__BUBBLE_2,
-		1,
-		32,32,32,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
-		{0,-1},
-		CFX::FX_TYPE_NONE
-};
-
-CFXBaseAnim::sFXAnim	FXWaterFountainData=
-{
-		ONE,
-		FRM__GUSH000,FRM__GUSH003,
-		3,
-		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP,
-		{0,0},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXAcidFountainData=
-{
-		ONE,
-		FRM__GUSH000,FRM__GUSH002,
-		3,
-		0,255,0,
-		CFXBaseAnim::FXANIM_FLAG_LOOP,
-		{0,0},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXLavaFountainData=
-{
-		ONE,
-		FRM__GUSH000,FRM__GUSH002,
-		3,
-		255,0,0,
-		CFXBaseAnim::FXANIM_FLAG_LOOP,
-		{0,0},
-		CFX::FX_TYPE_NONE
-};
-CFXBaseAnim::sFXAnim	FXOilFountainData=
-{
-		ONE,
-		FRM__GUSH000,FRM__GUSH002,
-		3,
-		32,32,32,
-		CFXBaseAnim::FXANIM_FLAG_LOOP,
-		{0,0},
-		CFX::FX_TYPE_NONE
+		FRM__BUBBLE_2,FRM__BUBBLE_2,1,
+		FX_FLAG_LOOP | FX_FLAG_COLLIDE_KILL | FX_FLAG_NO_THINK_KILL,
 };
 
 /*****************************************************************************/
-
+/*
 CFXLaser	*TestFXPtr=0;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
@@ -230,7 +84,6 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 		{
 			TestFXPtr=(CFXLaser*)CFX::Create(CFX::FX_TYPE_LASER,Parent);
 //			TestFXPtr->setLife(32);
-//			TestFXPtr->setRelativeToMap(false);
 //			TestFXPtr=0;
 		}
 		else
@@ -239,27 +92,18 @@ void	TestFX(DVECTOR Pos,CThing *Parent)
 			TestFXPtr=0;
 		}
 }
-
+*/
 /*****************************************************************************/
-/*
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_LASER;
+
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_GEYSER_WATER;
 #include	"game\game.h"
 
-int	OX=32;
-int	OY=32;
 void	TestFX(DVECTOR Pos,CThing *Parent)
 {
-CFXLaser	*FX=(CFXLaser*)CFX::Create((CFX::FX_TYPE)FXType,Pos);
+		CFX::Create((CFX::FX_TYPE)FXType,Pos);
 
-//		FX->setOrigin(Pos);
-		Pos.vx+=OX;
-		Pos.vy+=OY;
-		FX->setTarget(Pos);
-//		Parent->addChild(FX);
-//		TestFXPtr->setLife(32);
-//	CGameScene::dropHealth(Pos,0,0);
 }
-*/
+
 /*****************************************************************************/
 CFX		*CFX::Create(const FX_TYPE Type)
 {
@@ -272,115 +116,137 @@ CFX		*NewFX;
 		case FX_TYPE_NONE:
 			ASSERT(!"FX NONE CANT BE CREATED!");
 			break;
-		case FX_TYPE_FALLINGTILE:
-			NewFX=new ("FXFalling Tile") CFXFallingTile();
-			break;
-		case FX_TYPE_STEAM:
-			NewFX=new ("FXSteam") CFXSteam();
-			break;
-		case FX_TYPE_SPLASH_WATER:
-			NewFX=new ("FXWaterSplash") CFXBaseAnim();
-			NewFX->setData(&FXWaterSplashData);
-			break;
-		case FX_TYPE_SPLASH_ACID:
-			NewFX=new ("FXAcidSplash") CFXBaseAnim();
-			NewFX->setData(&FXAcidSplashData);
-			break;
-		case FX_TYPE_SPLASH_LAVA:
-			NewFX=new ("FXLavaSplash") CFXBaseAnim();
-			NewFX->setData(&FXLavaSplashData);
-			break;
-		case FX_TYPE_SPLASH_OIL:
-			NewFX=new ("FXOilSplash") CFXBaseAnim();
-			NewFX->setData(&FXOilSplashData);
-			break;
-		case FX_TYPE_EXPLODE:
-			NewFX=new ("FXExplode") CFXBaseAnim();
-			NewFX->setData(&FXExplodeData);
-			break;
-		case FX_TYPE_FLAMES:
-			NewFX=new ("FXFlames") CFXBaseAnim();
-			NewFX->setData(&FXFireData);
-			break;
 
 		case FX_TYPE_DROP_WATER:
 			NewFX=new ("FXWaterDrip") CFXBaseAnim();
-			NewFX->setData(&FXWaterDripData);
+			NewFX->setBaseData(&FXDropBaseData);
+			NewFX->setRGB(FX_RGB_WATER);
+			NewFX->setAfterEffect(CFX::FX_TYPE_SPLASH_WATER);
 			break;
 		case FX_TYPE_DROP_ACID:
 			NewFX=new ("FXAcidDrip") CFXBaseAnim();
-			NewFX->setData(&FXAcidDripData);
+			NewFX->setBaseData(&FXDropBaseData);
+			NewFX->setRGB(FX_RGB_ACID);
+			NewFX->setAfterEffect(CFX::FX_TYPE_SPLASH_ACID);
 			break;
 		case FX_TYPE_DROP_LAVA:
 			NewFX=new ("FXLavaDrip") CFXBaseAnim();
-			NewFX->setData(&FXLavaDripData);
+			NewFX->setBaseData(&FXDropBaseData);
+			NewFX->setRGB(FX_RGB_LAVA);
+			NewFX->setAfterEffect(CFX::FX_TYPE_SPLASH_LAVA);
 			break;
 		case FX_TYPE_DROP_OIL:
 			NewFX=new ("FXOilDrip") CFXBaseAnim();
-			NewFX->setData(&FXOilDripData);
+			NewFX->setBaseData(&FXDropBaseData);
+			NewFX->setRGB(FX_RGB_OIL);
+			NewFX->setAfterEffect(CFX::FX_TYPE_SPLASH_OIL);
+			break;
+		
+		case FX_TYPE_SPLASH_WATER:
+			NewFX=new ("FXWaterSplash") CFXBaseAnim();
+			NewFX->setBaseData(&FXSplashBaseData);
+			NewFX->setRGB(FX_RGB_WATER);
+			break;
+		case FX_TYPE_SPLASH_ACID:
+			NewFX=new ("FXAcidSplash") CFXBaseAnim();
+			NewFX->setBaseData(&FXSplashBaseData);
+			NewFX->setRGB(FX_RGB_ACID);
+			break;
+		case FX_TYPE_SPLASH_LAVA:
+			NewFX=new ("FXLavaSplash") CFXBaseAnim();
+			NewFX->setBaseData(&FXSplashBaseData);
+			NewFX->setRGB(FX_RGB_LAVA);
+			break;
+		case FX_TYPE_SPLASH_OIL:
+			NewFX=new ("FXOilSplash") CFXBaseAnim();
+			NewFX->setBaseData(&FXSplashBaseData);
+			NewFX->setRGB(FX_RGB_OIL);
+			NewFX->setAfterEffect(CFX::FX_TYPE_EXPLODE);
 			break;
 
 		case FX_TYPE_BUBBLE_WATER:
 			NewFX=new ("FXBubbleWater") CFXBubble();
-			NewFX->setData(&FXBubbleWaterData);
+			NewFX->setBaseData(&FXBubbleBaseData);
+			NewFX->setRGB(FX_RGB_WATER);
 			break;
 		case FX_TYPE_BUBBLE_ACID:
 			NewFX=new ("FXBubbleAcid") CFXBubble();
-			NewFX->setData(&FXBubbleAcidData);
+			NewFX->setBaseData(&FXBubbleBaseData);
+			NewFX->setRGB(FX_RGB_ACID);
 			break;
 		case FX_TYPE_BUBBLE_LAVA:
 			NewFX=new ("FXBubbleLava") CFXBubble();
-			NewFX->setData(&FXBubbleLavaData);
+			NewFX->setBaseData(&FXBubbleBaseData);
+			NewFX->setRGB(FX_RGB_LAVA);
 			break;
 		case FX_TYPE_BUBBLE_OIL:
 			NewFX=new ("FXBubbleOil") CFXBubble();
-			NewFX->setData(&FXBubbleOilData);
+			NewFX->setBaseData(&FXBubbleBaseData);
+			NewFX->setRGB(FX_RGB_OIL);
 			break;
 
-		case FX_TYPE_FOUNTAIN_WATER:
-			NewFX=new ("FXWaterFountain") CFXAttachAnim();
-			NewFX->setData(&FXWaterFountainData);
+		case FX_TYPE_GEYSER_WATER:
+			NewFX=new ("FXWaterGEYSER") CFXGeyser();
+			NewFX->setRGB(FX_RGB_WATER);
 			break;
-		case FX_TYPE_FOUNTAIN_ACID:
-			NewFX=new ("FXAcidFountain") CFXAttachAnim();
-			NewFX->setData(&FXAcidFountainData);
+		case FX_TYPE_GEYSER_ACID:
+			NewFX=new ("FXAcidGEYSER") CFXGeyser();
+			NewFX->setRGB(FX_RGB_ACID);
 			break;
-		case FX_TYPE_FOUNTAIN_LAVA:
-			NewFX=new ("FXLavaFountain") CFXAttachAnim();
-			NewFX->setData(&FXLavaFountainData);
+		case FX_TYPE_GEYSER_LAVA:
+			NewFX=new ("FXLavaGEYSER") CFXGeyser();
+			NewFX->setRGB(FX_RGB_LAVA);
 			break;
-		case FX_TYPE_FOUNTAIN_OIL:
-			NewFX=new ("FXOilFountain") CFXAttachAnim();
-			NewFX->setData(&FXOilFountainData);
+		case FX_TYPE_GEYSER_OIL:
+			NewFX=new ("FXOilGEYSER") CFXGeyser();
+			NewFX->setRGB(FX_RGB_OIL);
 			break;
 
 		case FX_TYPE_THWACK:
 			NewFX=new ("FXThwack") CFXThwack();
 			break;
 
-		case FX_TYPE_NRG_BAR:
-			NewFX=new ("NRG Bar") CFXNRGBar();
+		case FX_TYPE_LIGHTNING_BOLT:
+			ASSERT(!"FX_TYPE_LIGHTNING_BOLT");
+			break;
+
+		case FX_TYPE_STEAM:
+			NewFX=new ("FXSteam") CFXSteam();
+			break;
+		case FX_TYPE_SMOKE:
+			ASSERT(!"FX_TYPE_SMOKE");
+			break;
+		case FX_TYPE_GAS:
+			ASSERT(!"FX_TYPE_GAS");
+			break;
+		case FX_TYPE_FLAMES:
+			NewFX=new ("FXFlames") CFXBaseAnim();
+			NewFX->setBaseData(&FXFireBaseData);
 			break;
 
 		case FX_TYPE_JELLYFISH_LEGS:
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			break;
-
+		case FX_TYPE_FALLINGTILE:
+			NewFX=new ("FXFalling Tile") CFXFallingTile();
+			break;
+		case FX_TYPE_EXPLODE:
+			NewFX=new ("FXExplode") CFXBaseAnim();
+			NewFX->setBaseData(&FXExplodeBaseData);
+			break;
+		case FX_TYPE_NRG_BAR:
+			NewFX=new ("NRG Bar") CFXNRGBar();
+			break;
 		case FX_TYPE_LASER:
 			NewFX=new ("FX Laser") CFXLaser();
 			break;
 
-		case FX_TYPE_LIGHTNING_BOLT:
-		case FX_TYPE_DAZE:
-		case FX_TYPE_SMOKE:
-		case FX_TYPE_GAS:
-
 		default:
 			ASSERT(!"UNKNOWN FX TYPE");
 			return NULL;
-	}
-	NewFX->setThingSubType(Type);
-	return NewFX;
+		}
+		NewFX->setThingSubType(Type);
+		return NewFX;
 }
 
 /*****************************************************************************/
@@ -412,9 +278,8 @@ void	CFX::init()
 {
 		CFXThing::init();
 		OtPos=OTPOS__ACTOR_POS;
-		RelativeToMap=true;
-		Life=-1;	// Set to immortal
-		IsVisible=true;
+		Flags=0;
+		Velocity.vx=Velocity.vy=0;
 }
 
 /*****************************************************************************/
@@ -422,6 +287,13 @@ void	CFX::init(DVECTOR const &_Pos)
 {
 		init();
 		Pos=_Pos;
+}
+
+/*****************************************************************************/
+void	CFX::setBaseData(void *Data)
+{
+		setRGB(127,127,127);
+		AfterEffect=FX_TYPE_NONE;
 }
 
 /*****************************************************************************/
@@ -444,7 +316,39 @@ void	CFX::think(int _frames)
 			}
 		}
 
+		if (Flags & FX_FLAG_HAS_GRAVITY)
+		{ 
+			Velocity.vy++;
+		}
+
+		Pos.vx+=Velocity.vx;
+		Pos.vy+=Velocity.vy;
+		if (Flags & FX_FLAG_COLLIDE_KILL)
+		{
+			CLayerCollision	*ColLayer=CGameScene::getCollision();
+			int	DistY = ColLayer->getHeightFromGround( Pos.vx, Pos.vy, 16 );
+			
+			if (DistY<=0) 
+			{
+				Pos.vy-=DistY;
+				killFX();
+			}
+		}
+
+
 }
+
+/*****************************************************************************/
+void	CFX::killFX()
+{
+	setToShutdown();
+// If has follow on effect, create it now
+	if (AfterEffect!=CFX::FX_TYPE_NONE && canThink())
+	{
+		CFX::Create((CFX::FX_TYPE)AfterEffect,getPos());
+	}
+}
+
 
 /*****************************************************************************/
 void	CFX::render()
@@ -458,13 +362,13 @@ bool	CFX::getFXParentPos(DVECTOR &Pos)
 CThing	*Parent=getParent();
 		if (!Parent) return(false);
 
-		if (RelativeToMap)
+		if (Flags & FX_FLAG_SCREEN_FX)
 		{
-			Pos=Parent->getPos();
+			Pos=getPos();
 		}
 		else
 		{
-			Pos=getPos();
+			Pos=Parent->getPos();
 		}
 		return(true);
 }
@@ -472,18 +376,36 @@ CThing	*Parent=getParent();
 /*****************************************************************************/
 void	CFX::getFXRenderPos(DVECTOR &Pos)
 {
-		if (RelativeToMap)
+		if (Flags & FX_FLAG_SCREEN_FX)
 		{
-			CFX::render();
-			Pos=getRenderPos();
+			Pos=getPos();
 		}
 		else
 		{
-			Pos=getPos();
+			CFX::render();
+			Pos=getRenderPos();
 		}
 }
 
 /*****************************************************************************/
 void	CFX::collidedWith(CThing *_thisThing)
 {
+	ASSERT(canCollide());
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			CPlayer *player = (CPlayer *) _thisThing;
+
+			if ( !player->isRecoveringFromHit() )
+			{
+				player->takeDamage( DAMAGE__HIT_ENEMY );
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
 }

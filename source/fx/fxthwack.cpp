@@ -35,7 +35,7 @@ void	CFXThwack::render()
 DVECTOR	RenderPos;
 
 		getFXRenderPos(RenderPos);
-		if (!canRender() || !IsVisible) return;
+		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(FRM__THWACK,RenderPos.vx,RenderPos.vy,Scale,Scale,Angle,OtPos);

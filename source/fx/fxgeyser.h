@@ -2,22 +2,23 @@
 /*** Anim Base Class ***/
 /***********************/
 
-#ifndef	__FX_FX_ATTACH_ANIM_HEADER__
-#define __FX_FX_ATTACH_ANIM_HEADER__
+#ifndef	__FX_FX_GEYSER_HEADER__
+#define __FX_FX_GEYSER_HEADER__
 
 #include "fx/fx.h"
 #include "fx/fxbaseAnim.h"
 
 /*****************************************************************************/
-class CFXAttachAnim : public CFXBaseAnim
+class CFXGeyser : public CFX
 {
 public:
 virtual void		init(DVECTOR const &Pos);
-virtual void		thing(int Frames);
+virtual void		think(int Frames);
 virtual void		render();
 
 protected:
-		DVECTOR		Pos2;
+		s16			TargetHeight,Height;
+		u16			currentFrame;
 };
 
 #endif

@@ -20,11 +20,10 @@ void	CFXBubble::init(DVECTOR const &_Pos)
 {
 		CFXBaseAnim::init(_Pos);
 		Life=32+getRndRange(63);
-		VelY=-getRndRange(4)-1;
-		CurrentScaleX=CurrentScaleY=getRndRange(DataPtr->Scale/2)+(DataPtr->Scale/2);
+		Velocity.vy=-(getRndRange(4)+1);
+		CurrentScaleX=CurrentScaleY=getRndRange(ONE/2)+(ONE/2);
 		Die=0;
 		XIdx=getRnd()&15;
-
 }
 
 /*****************************************************************************/
@@ -55,7 +54,6 @@ void	CFXBubble::think(int _frames)
 /*****************************************************************************/
 void	CFXBubble::killFX()
 {
-
 	Die=1;
 }
 

@@ -13,30 +13,34 @@
 #include	"level\layercollision.h"
 #include	"FX\FXBaseAnim.h"
 
-#ifndef	__PLAYER_PLAYER_H__
-#include	"player\player.h"
-#endif
-
 
 /*****************************************************************************/
 void	CFXBaseAnim::init(DVECTOR const &_Pos)
 {
 		CFX::init(_Pos);
 		CurrentFrame=0;
-		CurrentScaleX=CurrentScaleY=DataPtr->Scale;
+		CurrentScaleX=CurrentScaleY=ONE;
 		CurrentHeading = 0;
-		MaxFrame=((DataPtr->EndFrame-DataPtr->StartFrame)<<DataPtr->FrameShift)-1;
-		if (DataPtr->Flags & FXANIM_FLAG_LOOP)
-		{ // Looping Anim, so let it live forever!
+
+		MaxFrame=((BaseData->EndFrame-BaseData->StartFrame)<<BaseData->FrameShift)-1;
+		Flags|=BaseData->Flags;
+		renderFrame=BaseData->StartFrame;
+
+		if (Flags & FX_FLAG_LOOP)
+		{
 			Life=-1;
 		}
 		else
 		{
 			Life=MaxFrame;
 		}
+}
 
-		VelY=0;
-		renderFrame=DataPtr->StartFrame;
+/*****************************************************************************/
+void	CFXBaseAnim::setBaseData(void *Data)
+{
+		CFX::setBaseData(Data);
+		BaseData=(sFXBaseData*)Data;
 }
 
 /*****************************************************************************/
@@ -45,45 +49,20 @@ void	CFXBaseAnim::init(DVECTOR const &_Pos)
 void	CFXBaseAnim::think(int _frames)
 {
 		CFX::think(_frames);
-		CurrentFrame+=_frames;
 
-		if (CurrentFrame>=MaxFrame)
+		if (BaseData->StartFrame!=BaseData->EndFrame)
 		{
-			CurrentFrame=0;
-		}
-		Pos.vx+=DataPtr->Velocity.vx;
-		Pos.vy+=DataPtr->Velocity.vy+VelY;
+//			CurrentFrame+=_frames;
+			CurrentFrame+=1;
 
-int		ThisFrame=CurrentFrame>>DataPtr->FrameShift;
-		renderFrame=DataPtr->StartFrame+ThisFrame;
-
-		if (DataPtr->Flags & FXANIM_FLAG_HAS_GRAVITY)
-		{ 
-			VelY++;
-		}
-
-		if (DataPtr->Flags & FXANIM_FLAG_COLLIDE_KILL)
-		{
-			CLayerCollision	*ColLayer=CGameScene::getCollision();
-			int	DistY = ColLayer->getHeightFromGround( Pos.vx, Pos.vy, 16 );
-			
-			if (DistY<=0) 
+			if (CurrentFrame>=MaxFrame)
 			{
-				Pos.vy-=DistY;
-				killFX();
+				CurrentFrame=0;
 			}
+int		ThisFrame=CurrentFrame>>BaseData->FrameShift;
+		renderFrame=BaseData->StartFrame+ThisFrame;
 		}
-}
 
-/*****************************************************************************/
-void	CFXBaseAnim::killFX()
-{
-	setToShutdown();
-// If has follow on effect, create it now
-	if (DataPtr->EndFX!=CFX::FX_TYPE_NONE && canThink())
-	{
-		CFX::Create((CFX::FX_TYPE)DataPtr->EndFX,getPos());
-	}
 }
 
 /*****************************************************************************/
@@ -95,41 +74,14 @@ void	CFXBaseAnim::render()
 DVECTOR	RenderPos;
 
 		getFXRenderPos(RenderPos);
-		if (!canRender() || !IsVisible) return;
+		if (!canRender() || Flags & FX_FLAG_HIDDEN) return;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderPos.vy,CurrentScaleX,CurrentScaleY,CurrentHeading,OtPos);
 			setShadeTex(Ft4,0);
-			setRGB0(Ft4,DataPtr->R,DataPtr->G,DataPtr->B);
-			setSemiTrans(Ft4,DataPtr->Flags & FXANIM_FLAG_TRANS);
+			setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
+			setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
 			Frame=Ft4;
 }
 
-/*****************************************************************************/
-void	CFXBaseAnim::collidedWith(CThing *_thisThing)
-{
-	switch(_thisThing->getThingType())
-	{
-		case TYPE_PLAYER:
-		{
-			CPlayer *player = (CPlayer *) _thisThing;
 
-			if ( !player->isRecoveringFromHit() )
-			{
-				if ( DataPtr->Flags & FXANIM_FLAG_KILL_PLAYER )
-				{
-					player->takeDamage( DAMAGE__KILL_OUTRIGHT );
-				}
-				else if ( DataPtr->Flags & FXANIM_FLAG_INJURE_PLAYER )
-				{
-					player->takeDamage( DAMAGE__HIT_ENEMY );
-				}
-			}
-
-			break;
-		}
-
-		default:
-			break;
-	}
-}

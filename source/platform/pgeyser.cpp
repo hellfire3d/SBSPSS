@@ -19,7 +19,7 @@
 #include	"utils\utils.h"
 #endif
 
-#include	"fx\fxattachAnim.h"
+#include	"fx\fxgeyser.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int	DodgyFXOffset=16;
@@ -30,11 +30,12 @@ void CNpcGeyserPlatform::postInit()
 	m_isFiring = false;
 
 	m_state = GEYSER_READY;
-// Add fountain stuff
+// Add GEYSER stuff
+
 DVECTOR	Pos=getPos();
 		Pos.vy+=DodgyFXOffset;
-CThing	*FX=CFX::Create(CFX::FX_TYPE_FOUNTAIN_OIL,Pos);
-			addChild(FX);
+CThing	*FX=CFX::Create(CFX::FX_TYPE_GEYSER_OIL,Pos);
+		addChild(FX);
 
 }
 

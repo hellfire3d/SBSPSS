@@ -169,14 +169,14 @@ fx_src :=			fx \
 					fxbaseanim \
 					fxbasetrail \
 					fxbaseemitter \
-					fxattachanim \
 					fxbubble \
 					fxthwack \
 					fxnrgbar \
 					fxjfish \
 					fxfallingtile \
 					fxsteam \
-					fxlaser
+					fxlaser \
+					fxgeyser
 
 projectl_src :=		projectl \
 					prnpc \

@@ -8,12 +8,30 @@
 #include "thing/thing.h"
 
 /*****************************************************************************/
+enum FX_FLAG
+{
+	FX_FLAG_LOOP			=1<<0,
+	FX_FLAG_COLLIDE_KILL	=1<<1,
+	FX_FLAG_HAS_GRAVITY		=1<<2,
+	FX_FLAG_INJURE_PLAYER	=1<<3,
+	FX_FLAG_TRANS			=1<<4,
+
+	FX_FLAG_NO_THINK_KILL	=1<<13,
+	FX_FLAG_HIDDEN			=1<<14,
+	FX_FLAG_SCREEN_FX		=1<<15,
+};
+
 class CFX : public CFXThing
 {
 public:
 		enum	FX_TYPE
 		{
 			FX_TYPE_NONE=0,
+
+			FX_TYPE_DROP_WATER,
+			FX_TYPE_DROP_ACID,
+			FX_TYPE_DROP_LAVA,
+			FX_TYPE_DROP_OIL,
 
 			FX_TYPE_SPLASH_WATER,
 			FX_TYPE_SPLASH_ACID,
@@ -25,22 +43,14 @@ public:
 			FX_TYPE_BUBBLE_LAVA,
 			FX_TYPE_BUBBLE_OIL,
 
-			FX_TYPE_DROP_WATER,
-			FX_TYPE_DROP_ACID,
-			FX_TYPE_DROP_LAVA,
-			FX_TYPE_DROP_OIL,
-
-			FX_TYPE_FOUNTAIN_WATER,
-			FX_TYPE_FOUNTAIN_ACID,
-			FX_TYPE_FOUNTAIN_LAVA,
-			FX_TYPE_FOUNTAIN_OIL,
+			FX_TYPE_GEYSER_WATER,
+			FX_TYPE_GEYSER_ACID,
+			FX_TYPE_GEYSER_LAVA,
+			FX_TYPE_GEYSER_OIL,
 
 			FX_TYPE_THWACK,
-
 			FX_TYPE_LIGHTNING_BOLT,
-		
-			FX_TYPE_SHOCKWAVE,
-			FX_TYPE_DAZE,
+
 			FX_TYPE_STEAM,
 			FX_TYPE_SMOKE,
 			FX_TYPE_GAS,
@@ -58,36 +68,65 @@ public:
 			MAX_SUBTYPE	=FX_TYPE_MAX,
 		};
 
+		struct	sFXRGB
+		{
+			u8	R,G,B;
+		};
+		enum	FX_RGB
+		{
+			FX_RGB_WATER,
+			FX_RGB_ACID,
+			FX_RGB_LAVA,
+			FX_RGB_OIL,
+			FX_RGB_MAX
+		};
+
 static	CFX			*Create(const FX_TYPE Type);
 static	CFX			*Create(const FX_TYPE Type,CThing *Parent);
 static	CFX			*Create(const FX_TYPE Type,DVECTOR const &Pos);
-virtual	bool		alwaysThink()								{return(!RelativeToMap);}
-virtual	void		leftThinkZone(int _frames)					{killFX();}
+
+virtual	bool		alwaysThink()								{return(Flags & FX_FLAG_SCREEN_FX);}
+virtual	void		leftThinkZone(int _frames)					{if (Flags & FX_FLAG_NO_THINK_KILL) killFX();}
 
 virtual void		init();
 virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
-virtual void		setData(void *Data){};
-virtual int			canCollide()					{return false;}
+
+virtual int			canCollide()					{return(Flags & FX_FLAG_INJURE_PLAYER);}
 virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
 virtual	void		setLife(int L)					{Life=L;}
-virtual	void		setRelativeToMap(bool f)		{RelativeToMap=f;}
 
 virtual	void		getFXRenderPos(DVECTOR &Pos);
 virtual	bool		getFXParentPos(DVECTOR &Pos);
 
-virtual	void		killFX()						{setToShutdown();}
-virtual void		toggleVisible()					{IsVisible = !IsVisible;}
+virtual	void		killFX();
+virtual void		toggleVisible()					{Flags ^=FX_FLAG_HIDDEN;}
 
 protected:
-virtual void		collidedWith(CThing *_thisThing);
-		s32			OtPos;
-		s16			Life;
+		void		collidedWith(CThing *_thisThing);
 
-		bool		RelativeToMap;
-		bool		IsVisible;
+// Def Data
+public:
+		virtual void		setData(void *Data){}
+		virtual	void		setBaseData(void *Data);
+
+		void		setRGB(u8 R,u8 G,u8 B)			{RGB.R=R; RGB.G=G; RGB.B=B;}
+		void		setRGB(sFXRGB &rgb)				{setRGB(rgb.R,rgb.G,rgb.B);}
+		void		setRGB(FX_RGB T)				{setRGB(FXRGBTable[T]);}
+
+		void		setAfterEffect(FX_TYPE Type)	{AfterEffect=Type;}
+//protected:
+		s16			Life;
+		u16			Flags;
+		sFXRGB		RGB;
+		FX_TYPE		AfterEffect;
+		DVECTOR		Velocity;
+
+		s32			OtPos;
+static	sFXRGB		FXRGBTable[FX_RGB_MAX];
+
 };
 
 /*****************************************************************************/
