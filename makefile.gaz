@@ -74,12 +74,13 @@ gfx_src :=			prim \
 #					anim \
 #					bilboard
 
-gui_src :=			gui \
-					gbutton \
+gui_src :=			gbutton \
 					gfactory \
 					gframe \
 					greadout \
-					gtextbox
+					gsprite \
+					gtextbox \
+					gui
 
 locale_src :=		textdbase
 

@@ -229,18 +229,9 @@ void CGUIObject::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-#include "utils\utils.h"
-int wob=0;
 void CGUIObject::think(int _frames)
 {
 	ASSERT(this==m_this);
-
-
-if(m_id==0&&++wob==20)
-{
-	setObjectXYWH(16+getRndRange(10),100+getRndRange(5),512-64,120);
-	wob=0;
-}
 
 	if(m_child)m_child->think(_frames);
 	if(m_next)m_next->think(_frames);

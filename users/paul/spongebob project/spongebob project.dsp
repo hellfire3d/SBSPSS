@@ -281,6 +281,14 @@ SOURCE=..\..\..\source\gui\greadout.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\gui\gsprite.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gsprite.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gui\gtextbox.cpp
 # End Source File
 # Begin Source File
