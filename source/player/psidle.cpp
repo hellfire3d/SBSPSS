@@ -260,7 +260,6 @@ static IdleAnims s_unarmedIdleAnims[]=
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								160	},	// default
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								160	},
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								80	},
-	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
 
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);

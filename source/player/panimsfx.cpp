@@ -77,14 +77,6 @@ static const CPlayer::AnimFrameSfx s_hitGroundSfx[]=
 };
 static const int	s_hitGroundCount=sizeof(s_hitGroundSfx)/sizeof(CPlayer::AnimFrameSfx);
 
-// ANIM_PLAYER_ANIM_IDLEWIND
-static const CPlayer::AnimFrameSfx s_idleWindSfx[]=
-{
-	{	17,		CSoundMediator::SFX_HAZARD__SWAMP_GAS,			},
-	{	24,		CSoundMediator::SFX_SPONGEBOB_WALK_2,			},
-};
-static const int	s_idleWindCount=sizeof(s_idleWindSfx)/sizeof(CPlayer::AnimFrameSfx);
-
 // ANIM_PLAYER_ANIM_JUMPEND
 static const CPlayer::AnimFrameSfx s_jumpEndSfx[]=
 {
@@ -163,7 +155,6 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	ANIM_SPONGEBOB_BLOWBUBBLE,		s_blowBubbleCount,		s_blowBubbleSfx			},
 	{	ANIM_SPONGEBOB_BUTTBOUNCEEND,	s_buttBounceEndCount,	s_buttBounceEndSfx		},
 	{	ANIM_SPONGEBOB_HITGROUND,		s_hitGroundCount,		s_hitGroundSfx			},
-	{	ANIM_SPONGEBOB_IDLEWIND,		s_idleWindCount,		s_idleWindSfx			},
 	{	ANIM_SPONGEBOB_JUMPEND,			s_jumpEndCount,			s_jumpEndSfx			},
 	{	ANIM_SPONGEBOB_KARATE,			s_karateCount,			s_karateSfx				},
 	{	ANIM_SPONGEBOB_RUN,				s_runCount,				s_runSfx				},
