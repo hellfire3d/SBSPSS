@@ -23,15 +23,9 @@ class CNpcBranchPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
-	//virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
-	virtual sBBox		&getBBox();
-
-	//virtual void		collidedWith(CThing *_thisThing);
-	//virtual void		calculateBoundingBoxSize();
-	//virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 
 	s32					m_angularVelocity;
 	u8					m_reversed;

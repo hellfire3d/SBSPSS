@@ -658,7 +658,6 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 
 void CNpcPlatform::calculateBoundingBoxSize()
 {
-	//sBBox boundingBox = getBBox();
 	sBBox boundingBox = m_nonRotatedCollisionArea;
 
 	// 'render' collision box at correct angle

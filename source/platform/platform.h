@@ -163,7 +163,6 @@ protected:
 	virtual void		processTimer( int _frames );
 	void				processTilt( int _frames );
 	bool				isCollisionWithGround();
-	virtual sBBox		&getBBox()						{return( m_modelGfx->GetBBox() );}
 
 	// data
 

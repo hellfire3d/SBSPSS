@@ -22,6 +22,7 @@ class CNpcBigWheelPlatform : public CNpcPlatform
 {
 public:
 	virtual	CRECT const		*getThinkBBox();
+	virtual void		postInit();
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );

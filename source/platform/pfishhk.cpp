@@ -37,6 +37,9 @@ void CNpcFishHookPlatform::postInit()
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
+	calculateNonRotatedCollisionData();
+	setCollisionAngle( m_tiltAngle >> 8 );
+
 	m_isMoving = false;
 	m_isResetting = false;
 	m_isShuttingDown = false;

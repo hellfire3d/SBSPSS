@@ -22,6 +22,19 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcBigWheelPlatform::postInit()
+{
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.YMin = boundingBox.YMax - 32;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) - 8, ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+
+	calculateNonRotatedCollisionData();
+	setCollisionAngle( m_tiltAngle >> 8 );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcBigWheelPlatform::processMovement( int _frames )
 {
 	m_rotation += m_speed * _frames;

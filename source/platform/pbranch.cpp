@@ -43,6 +43,7 @@ void CNpcBranchPlatform::postInit()
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
 	calculateNonRotatedCollisionData();
+	setCollisionAngle( m_tiltAngle >> 8 );
 
 	m_angularVelocity = 0;
 
@@ -224,48 +225,3 @@ void CNpcBranchPlatform::render()
 		}
 	}
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sBBox & CNpcBranchPlatform::getBBox()
-{
-	return( m_boundingBox );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
-{
-	DVECTOR top;
-	int		angle;
-
-	CRECT collisionArea = getCollisionArea();
-
-	if ( m_reversed )
-	{
-		top.vx = offsetX + collisionArea.x2;
-	}
-	else
-	{
-		top.vx = offsetX + collisionArea.x1;
-	}
-
-	top.vy = offsetY + collisionArea.y1;
-
-	angle=getCollisionAngle();
-	if(angle==0)
-	{
-		// Non-rotated platform
-		return( top.vy - _y );
-	}
-	else
-	{
-		// Rotate backwards to find height at current position
-
-		int hypotenuse = ( ( top.vx - _x ) << 12 ) / rcos( angle );
-
-		int angleHeight = -( hypotenuse * rsin( angle ) ) >> 12;
-
-		return( ( top.vy - _y ) + angleHeight );
-	}
-}*/
