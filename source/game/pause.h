@@ -67,6 +67,8 @@ private:
 	int						m_SpeechPlaying;
 	int						m_padDebounce;
 	int						m_responseFlag;
+	int						m_vibrationChangeFlag;
+	int						m_vibrationState;
 	STATE					m_currentState;
 
 	class CGUIControlFrame	*m_pauseGuiFrame;

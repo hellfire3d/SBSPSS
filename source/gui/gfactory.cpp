@@ -79,7 +79,6 @@ void CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
 	CGUIGroupFrame		*fr;
 	CGUITextBox			*tb;
 	CGUIValueButton		*vb;
-	int					x,y,w,h;
 
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(_parent);
@@ -92,11 +91,6 @@ void CGUIFactory::createValueButtonFrame(class CGUIObject *_parent,
 		vb->init(fr);
 		vb->setButtonTarget(_target);
 		vb->setButtonValue(_value);
-
-	w=tb->getTextWidth();
-	h=tb->getTextHeight();
-	x=(_w-w)/2;
-	y=(_h-h)/2;
 }
 
 /*----------------------------------------------------------------------
@@ -114,7 +108,6 @@ void CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
 	CGUITextBox			*tb;
 	CGUICycleButton		*cb;
 	CGUITextReadout		*tr;
-	int					x,y,w,h;
 
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(_parent);
@@ -132,11 +125,6 @@ void CGUIFactory::createCycleButtonFrame(class CGUIObject *_parent,
 		tr->setObjectXYWH(0,(_h*2)/3,_w,(_h*1)/3);
 		tr->setReadoutTarget(_target);
 		tr->setReadoutData(_readoutData);
-		
-	w=tb->getTextWidth();
-	h=tb->getTextHeight();
-	x=(_w-w)/2;
-	y=(_h-h)/2;
 }
 
 /*----------------------------------------------------------------------
@@ -154,7 +142,6 @@ void CGUIFactory::createSliderButtonFrame(class CGUIObject *_parent,
 	CGUITextBox			*tb;
 	CGUISliderButton	*sb;
 	CGUIBarReadout		*br;
-	int					x,y,w,h;
 
 	fr=new ("frame") CGUIGroupFrame();
 	fr->init(_parent);
@@ -172,11 +159,6 @@ void CGUIFactory::createSliderButtonFrame(class CGUIObject *_parent,
 		br->setObjectXYWH(0,(_h*2)/3,_w,(_h*1)/3);
 		br->setReadoutTarget(_target);
 		br->setReadoutRange(_min,_max);
-		
-	w=tb->getTextWidth();
-	h=tb->getTextHeight();
-	x=(_w-w)/2;
-	y=(_h-h)/2;
 }
 
 

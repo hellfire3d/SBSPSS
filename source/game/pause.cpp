@@ -39,6 +39,10 @@
 #include "gui\gtextbox.h"
 #endif
 
+#ifndef __GUI_GBUTTON_H__
+#include "gui\gbutton.h"
+#endif
+
 #ifndef	__MEMORY_HEADER__
 #include "mem\memory.h"
 #endif
@@ -57,6 +61,10 @@
 
 #ifndef __PAD_PADS_H__
 #include "pad/pads.h"
+#endif
+
+#ifndef __PAD_VIBE_H__
+#include "pad\vibe.h"
 #endif
 
 
@@ -99,18 +107,20 @@
   ---------------------------------------------------------------------- */
 static const int	FRAME_WIDTH		=352;
 static const int	FRAME_HEIGHT	=160-64;
-static const int	TEXT_BOX_WIDTH	=300;
+static const int	TEXT_BOX_WIDTH	=200;
 static const int	TEXT_BOX_HEIGHT	=20;
-static const int	TEXT_SPACING	=13;
+static const int	TEXT_SPACING	=16;
 extern int newmode;
 
 extern int invincibleSponge;
 int	inv_data[]={0,1,-1};
-static CGUITextReadout::TextReadoutData inv_readoutdata[2]={{0,STR__OFF},{1,STR__ON}};
+static CGUITextReadout::TextReadoutData s_yesNoReadoutData[2]={{0,STR__OFF},{1,STR__ON}};
+static CGUIGroupFrame	*s_vibFrame;
+
 
 void CPauseMenu::init()
 {
-	int			xpos;
+	int			ypos;
 	CGUITextBox	*tb;
 
 
@@ -120,67 +130,93 @@ void CPauseMenu::init()
 	m_pauseGuiFrame->setObjectXYWH((INGAME_SCREENW-FRAME_WIDTH)/2,(INGAME_SCREENH-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
 	m_pauseGuiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
-	xpos=TEXT_SPACING/2;
+	ypos=TEXT_SPACING/3;
 	tb=new ("textbox") CGUITextBox();
 	tb->init(m_pauseGuiFrame);
-	tb->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
+	tb->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
 	tb->setText(STR__PAUSE_MENU__GAME_PAUSED);
-	xpos+=TEXT_SPACING*2;
+	ypos+=TEXT_SPACING*2;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__CONTINUE,
 										&m_responseFlag,RESPONSE__CONTINUE);
-	xpos+=TEXT_SPACING*2;
+	ypos+=TEXT_SPACING;
+	{
+		// Vibration toggle
+		CGUIGroupFrame		*fr;
+		CGUITextBox			*tb;
+		CGUIValueButton		*vb;
+		CGUITextReadout		*tr;
+
+		fr=new ("frame") CGUIGroupFrame();
+		fr->init(m_pauseGuiFrame);
+		fr->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
+			tb=new ("textbox") CGUITextBox();
+			tb->init(fr);
+			tb->setObjectXYWH(0,0,(TEXT_BOX_WIDTH/3)*2,TEXT_BOX_HEIGHT);
+			tb->setText(STR__PAUSE_MENU__VIBRATION);
+			vb=new ("valuebutton") CGUIValueButton();
+			vb->init(fr);
+			vb->setButtonTarget(&m_vibrationChangeFlag);
+			vb->setButtonValue(true);
+			tr=new ("textreadout") CGUITextReadout();
+			tr->init(fr);
+			tr->setObjectXYWH((TEXT_BOX_WIDTH/3)*2,0,(TEXT_BOX_WIDTH/3)*1,TEXT_BOX_HEIGHT);
+			tr->setReadoutTarget(&m_vibrationState);
+			tr->setReadoutData(s_yesNoReadoutData);
+		s_vibFrame=fr;
+	}
+	ypos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__QUIT,
 										&m_responseFlag,RESPONSE__QUIT);
 
-#ifdef __VERSION_DEBUG__
-	xpos+=8;
+#ifdef __VERSION_DEBUG__o
+	ypos+=8;
 	CGUIFactory::createCycleButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__INVINCIBILE_SPONGEBOB,
-										&invincibleSponge,inv_data,inv_readoutdata);
-	xpos+=TEXT_SPACING;
+										&invincibleSponge,inv_data,s_yesNoReadoutData);
+	ypos+=TEXT_SPACING;
 #if defined (__USER_paul__) || defined (__USER_charles__)
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BASICUNARMED_MODE,
 										&newmode,PLAYER_MODE_BASICUNARMED);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FULLUNARMED_MODE,
 										&newmode,PLAYER_MODE_FULLUNARMED);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BALLOON_MODE,
 										&newmode,PLAYER_MODE_BALLOON);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BUBBLEMIXTURE_MODE,
 										&newmode,PLAYER_MODE_BUBBLE_MIXTURE);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__NET_MODE,
 										&newmode,PLAYER_MODE_NET);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__CORALBLOWER_MODE,
 										&newmode,PLAYER_MODE_CORALBLOWER);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__JELLYLAUNCHER_MODE,
 										&newmode,PLAYER_MODE_JELLY_LAUNCHER);
-	xpos+=8;
+	ypos+=8;
 	CGUIFactory::createValueButtonFrame(m_pauseGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 #endif
@@ -193,19 +229,19 @@ void CPauseMenu::init()
 	m_confirmQuitGuiFrame->setObjectXYWH((INGAME_SCREENW-FRAME_WIDTH)/2,(INGAME_SCREENH-FRAME_HEIGHT)/2,FRAME_WIDTH,FRAME_HEIGHT);
 	m_confirmQuitGuiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
-	xpos=TEXT_SPACING/2;
+	ypos=TEXT_SPACING/3;
 	tb=new ("textbox") CGUITextBox();
 	tb->init(m_confirmQuitGuiFrame);
-	tb->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
+	tb->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
 	tb->setText(STR__PAUSE_MENU__CONFIRM_QUIT);
-	xpos+=TEXT_SPACING*2;
+	ypos+=TEXT_SPACING*2;
 	CGUIFactory::createValueButtonFrame(m_confirmQuitGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__NO,
 										&m_responseFlag,RESPONSE__CONFIRM_QUIT_NO);
-	xpos+=TEXT_SPACING*2;
+	ypos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_confirmQuitGuiFrame,
-										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__YES,
 										&m_responseFlag,RESPONSE__CONFIRM_QUIT_YES);
 
@@ -244,7 +280,11 @@ void CPauseMenu::select()
 	m_padDebounce=true;
 	m_currentState=STATE__MAIN_MENU;
 	m_responseFlag=RESPONSE__WAITING;
+	m_vibrationChangeFlag=false;
+	m_vibrationState=PadGetVibrationIsTurnedOn(0);
 	m_pauseGuiFrame->select();
+	s_vibFrame->think(1);	// This just makes sure that the readout reads correctly on the first frame
+
 
 	chapter=GameScene.getChapterNumber()-1;
 	level=GameScene.getLevelNumber()-1;
@@ -303,6 +343,20 @@ void CPauseMenu::think(int _frames)
 					switch(m_responseFlag)
 					{
 						case RESPONSE__WAITING:
+							if(m_vibrationChangeFlag)
+							{
+								m_vibrationState=PadGetVibrationIsTurnedOn(0)==true?false:true;
+								PadSetVibrationIsTurnedOn(0,m_vibrationState);
+								if(m_vibrationState)
+								{
+									CPadVibrationManager::setVibration(0,CPadVibrationManager::VIBE_MEDIUM);
+								}
+								else
+								{
+									CPadVibrationManager::stopAllVibration();
+								}
+								m_vibrationChangeFlag=false;
+							}
 							break;
 
 						case RESPONSE__CONTINUE:
