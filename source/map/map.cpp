@@ -207,7 +207,7 @@ void CMapScene::init()
 	SetScreenImage((u8*)m_screenImage);
 
 	m_readyToExit=false;
-	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn();
 }
 
 
@@ -438,7 +438,7 @@ void CMapScene::think(int _frames)
 			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__OK);
 			s_globalLevelSelectThing=s_mapLevelData[m_currentChapterSelection][m_currentLevelSelection].m_globalLevelNumber;
 			m_readyToExit=true;
-//			CFader::setFadingOut(CFader::BLACK_FADE);
+			CFader::setFadingOut();
 			GameState::setNextScene(&GameScene);
 		}
 	}

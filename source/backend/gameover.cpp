@@ -103,7 +103,7 @@ void CGameOverScene::init()
 	m_font->setOt(5);
 
 	m_readyToExit=false;
-	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn();
 
 	initContinue();
 	initGameOver();
@@ -244,7 +244,7 @@ void	CGameOverScene::thinkContinue(int _frames)
 					else if(pad&PAD_START)
 					{
 						m_readyToExit=true;
-						CFader::setFadingOut(CFader::BLACK_FADE);
+						CFader::setFadingOut();
 						GameState::setNextScene(&GameScene);
 						m_state=STATE__EXITING_TO_GAME;
 					}
@@ -336,7 +336,7 @@ void	CGameOverScene::thinkGameOver(int _frames)
 		   PadGetDown(0)&(PAD_START|PAD_CROSS))
 		{
 			m_readyToExit=true;
-			CFader::setFadingOut(CFader::BLACK_FADE);
+			CFader::setFadingOut();
 			GameState::setNextScene(&FrontEndScene);
 			m_state=STATE__EXITING_TO_FRONT_END;
 		}

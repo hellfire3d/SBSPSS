@@ -199,7 +199,7 @@ void CShopScene::init()
 
 
 	m_readyToExit=false;
-	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn();
 
 	m_currentlySelectedItem=0;
 	m_flashSin=0;

@@ -127,7 +127,7 @@ void CPartyScene::init()
 	m_sprites->load(PARTY_PARTY_SPR);
 
 	m_readyToExit=false;
-	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn();
 
 	CActorPool::Reset();
 	m_actorSpongebob=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);

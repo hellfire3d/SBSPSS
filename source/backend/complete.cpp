@@ -78,7 +78,7 @@ void CGameCompletedScene::init()
 	m_font->setOt(5);
 
 	m_readyToExit=false;
-	CFader::setFadingIn(CFader::BLACK_FADE);
+	CFader::setFadingIn();
 }
 
 
@@ -127,7 +127,7 @@ void CGameCompletedScene::think(int _frames)
 		if(PadGetDown(0)&(PAD_CROSS|PAD_START))
 		{
 			m_readyToExit=true;
-			CFader::setFadingOut(CFader::BLACK_FADE);
+			CFader::setFadingOut();
 			GameState::setNextScene(&FrontEndScene);
 		}
 	}

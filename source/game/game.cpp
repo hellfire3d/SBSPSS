@@ -277,12 +277,10 @@ void 	CGameScene::render()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
-//#ifdef __USER_paul__
-//	if(!CConversation::isActive()&&PadGetDown(0)&PAD_START)
-//	{
-//		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
-//	}
-//#endif
+	if(s_readyToExit)
+	{
+		return;
+	}
 
 	// Auto-timer stuff
 	if(m_levelHasTimer)
@@ -294,12 +292,7 @@ void	CGameScene::think(int _frames)
 		}
 	}
 
-	if(s_readyToExit)
-	{
-		// Temporarily.. exiting game scene always goes back to the front end (pkg)
-		GameState::setNextScene(&FrontEndScene);
-	}
-	else if(s_levelFinished)
+	if(s_levelFinished)
 	{
 		// Do the gameslot stuff..
 		CGameSlotManager::GameSlot	*gameSlot;
@@ -354,6 +347,8 @@ void	CGameScene::think(int _frames)
 			GameState::setNextScene(&MapScene);
 		}
 		s_readyToExit=true;
+		s_levelFinished=false;
+		CFader::setFadingOut();
 	}
 #ifdef __VERSION_DEBUG__
 	else if(s_skipToNextLevel)
@@ -375,6 +370,7 @@ void	CGameScene::think(int _frames)
 		{
 			s_readyToExit=true;
 			GameState::setNextScene(&FrontEndScene);
+			CFader::setFadingOut();
 		}
 		s_restartLevel=false;
 	}
@@ -418,7 +414,7 @@ void	CGameScene::think(int _frames)
 /*****************************************************************************/
 int		CGameScene::readyToShutdown()
 {
-	return s_readyToExit;
+	return s_readyToExit&&!CFader::isFading();
 }
 
 /*****************************************************************************/
@@ -456,6 +452,14 @@ void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 	CThingManager::processEventAllThings(evt, sourceThing);
 }
 
+
+/*****************************************************************************/
+void CGameScene::setReadyToExit()
+{
+	s_readyToExit=true;
+	GameState::setNextScene(&FrontEndScene);
+	CFader::setFadingOut();
+}
 
 
 /*****************************************************************************/

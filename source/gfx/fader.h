@@ -34,7 +34,6 @@ class CFader
 public:
 	typedef enum
 	{
-		BUBBLE_FADE,
 		BLACK_FADE,
 		WHITE_FADE,
 	} FADE_STYLE;
@@ -42,8 +41,8 @@ public:
 	static void			render();
 	static void			think(int _frames);
 
-	static void			setFadingOut(FADE_STYLE _style=BUBBLE_FADE);
-	static void			setFadingIn(FADE_STYLE _style=BUBBLE_FADE);
+	static void			setFadingOut(FADE_STYLE _style=BLACK_FADE);
+	static void			setFadingIn(FADE_STYLE _style=BLACK_FADE);
 
 	static int			isFading();
 
@@ -51,26 +50,25 @@ public:
 private:
 	enum
 	{
-		// Bubble style
-		FADE_BORDER_SIZE=80,
-		FADE_SMOOTH_BORDER_SIZE=60,
-		BUBBLES_PER_FRAME=15,
-
-		// Both styles
-		FADE_SPEED=3,
+		FRAMES_TO_WAIT=5,		// Waits before fading in/out and after fading out
+		FADE_SPEED=10,
 	};
 
 	typedef enum
 	{
 		FADED_IN,
+		PAUSE_BEFORE_FADING_IN,
 		FADING_IN,
+		PAUSE_BEFORE_FADING_OUT,
 		FADING_OUT,
+		PAUSE_AFTER_FADING_OUT,
 		FADED_OUT,
 	} FADE_MODE;
 	
 	static FADE_MODE	s_fadeMode;
 	static FADE_STYLE	s_fadeStyle;
 	static int			s_fadeValue;
+	static int			s_waitFrames;
 
 };
 

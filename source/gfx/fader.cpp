@@ -53,9 +53,11 @@
 	Vars
 	---- */
 
-int					CFader::s_fadeValue=0;	
 CFader::FADE_MODE	CFader::s_fadeMode=FADED_IN;
 CFader::FADE_STYLE	CFader::s_fadeStyle;
+int					CFader::s_fadeValue=0;	
+int					CFader::s_waitFrames=0;
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -63,84 +65,19 @@ CFader::FADE_STYLE	CFader::s_fadeStyle;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-
-BubicleEmitterData	s_fadeBubicleSpawner=
-{
-	0,0,512,40,					// m_x,m_y,m_w,m_h
-	0,0,						// m_birthRate,m_birthAmount
-	0,							// m_life
-	false,						// m_applyMapOffsets
-
-	// m_bubicleBase
-	{
-		10,							// m_life
-		0,0,0,						// m_vx,m_vdx,m_vxmax
-		-200,0,0,					// m_vy,m_vdy,m_vymax
-		27,18,						// m_w,m_h
-		0,							// m_dvSizeChange
-		0,0,						// m_theta,m_vtheta
-		0,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
-		0,							// m_ot
-		{0,0,0}						// m_colour
-	},
-	// m_bubicleRange;
-	{
-		10,							// m_life
-		0,0,0,						// m_vx,m_vdx,m_vxmax
-		50,0,0,						// m_vy,m_vdy,m_vymax
-		4,4,						// m_w,m_h
-		0,							// m_dvSizeChange
-		0,100,						// m_theta,m_vtheta
-		10,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
-		0,							// m_ot
-		{30,30,30}					// m_colour
-	}
-};
-
 void CFader::render()
 {
 	switch(s_fadeMode)
 	{
 		case FADED_IN:
+		case PAUSE_BEFORE_FADING_IN:
+		case PAUSE_BEFORE_FADING_OUT:
 			return;
 
 		case FADING_IN:
 			{
 				switch(s_fadeStyle)
 				{
-					case BUBBLE_FADE:
-					{				
-						if(s_fadeValue>0)
-						{
-							POLY_F4		*f4;
-							POLY_G4		*g4;
-							POLY_FT3	*ft3;
-
-							f4=GetPrimF4();
-							setXYWH(f4,0,-FADE_BORDER_SIZE,512,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2)+FADE_BORDER_SIZE);
-							setRGB0(f4,255,255,255);
-							AddPrimToList(f4,0);
-
-							g4=GetPrimG4();
-							setXYWH(g4,0,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
-							setRGB0(g4,255,255,255);
-							setRGB1(g4,255,255,255);
-							setRGB2(g4,0,0,0);
-							setRGB3(g4,0,0,0);
-							setShadeTex(g4,0);
-							setSemiTrans(g4,1);
-							AddPrimToList(g4,0);
-
-							ft3=GetPrimFT3();
-							setShadeTex(ft3,1);
-							setSemiTrans(ft3,1);
-							ft3->tpage=(1<<5);
-							setXY3(ft3,512,512,512,512,512,512);
-							AddPrimToList(ft3,0);
-						}
-						break;
-					}
-
 					case BLACK_FADE:
 					case WHITE_FADE:
 					{
@@ -156,8 +93,8 @@ void CFader::render()
 						setPolyFT3(ft3);
 						setShadeTex(ft3,1);
 						setSemiTrans(ft3,1);
-						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1<<5);
-						setXY3(ft3,512,512,512,512,512,512);
+						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1)<<5;
+						setXY3(ft3,0,0,0,512,512,0);
 						AddPrimToList(ft3,0);
 						break;
 					}
@@ -166,39 +103,10 @@ void CFader::render()
 			break;
 
 		case FADING_OUT:
+		case PAUSE_AFTER_FADING_OUT:
 			{
 				switch(s_fadeStyle)
 				{
-					case BUBBLE_FADE:
-					{				
-						POLY_F4		*f4;
-						POLY_G4		*g4;
-						POLY_FT3	*ft3;
-						
-						f4=GetPrimF4();
-						setXYWH(f4,0,s_fadeValue+(FADE_SMOOTH_BORDER_SIZE/2),512,256-s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2));
-						setRGB0(f4,255,255,255);
-						AddPrimToList(f4,0);
-						
-						g4=GetPrimG4();
-						setXYWH(g4,0,s_fadeValue-(FADE_SMOOTH_BORDER_SIZE/2),512,FADE_SMOOTH_BORDER_SIZE);
-						setRGB0(g4,0,0,0);
-						setRGB1(g4,0,0,0);
-						setRGB2(g4,255,255,255);
-						setRGB3(g4,255,255,255);
-						setShadeTex(g4,0);
-						setSemiTrans(g4,1);
-						AddPrimToList(g4,0);
-						
-						ft3=GetPrimFT3();
-						setShadeTex(ft3,1);
-						setSemiTrans(ft3,1);
-						ft3->tpage=(1<<5);
-						setXY3(ft3,512,512,512,512,512,512);
-						AddPrimToList(ft3,0);
-						break;
-					}
-
 					case BLACK_FADE:
 					case WHITE_FADE:
 					{
@@ -216,7 +124,7 @@ void CFader::render()
 						setPolyFT3(ft3);
 						setShadeTex(ft3,1);
 						setSemiTrans(ft3,1);
-						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1<<5);
+						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1)<<5;
 						setXY3(ft3,512,512,512,512,512,512);
 						AddPrimToList(ft3,0);
 						break;
@@ -233,9 +141,6 @@ void CFader::render()
 				setXYWH(f4,0,0,512,256);
 				switch(s_fadeStyle)
 				{
-					case BUBBLE_FADE:
-						setRGB0(f4,255,255,255);
-						break;
 					case BLACK_FADE:
 						setRGB0(f4,0,0,0);
 						break;
@@ -246,13 +151,6 @@ void CFader::render()
 				AddPrimToList(f4,0);
 				return;
 			}
-	}
-
-	if(s_fadeStyle==BUBBLE_FADE)
-	{
-		s_fadeBubicleSpawner.m_y=s_fadeValue-20;
-		for(int i=0;i<BUBBLES_PER_FRAME;i++)
-			CBubicleFactory::spawnParticle(&s_fadeBubicleSpawner);
 	}
 }
 
@@ -265,60 +163,69 @@ void CFader::render()
   ---------------------------------------------------------------------- */
 void CFader::think(int _frames)
 {
-	if(s_fadeMode!=FADED_IN&&s_fadeMode!=FADED_OUT)
+	if(s_waitFrames)
 	{
-		s_fadeValue-=_frames*FADE_SPEED;
-		switch(s_fadeStyle)
-		{
-			case BUBBLE_FADE:
+		s_waitFrames--;
+		return;
+	}
+
+	switch(s_fadeMode)
+	{
+		case FADING_IN:
+		case FADING_OUT:
+			s_fadeValue-=_frames*FADE_SPEED;
+			switch(s_fadeStyle)
 			{
-				if(s_fadeValue<-FADE_BORDER_SIZE)
+				case BLACK_FADE:
+				case WHITE_FADE:
 				{
-					if(s_fadeMode==FADING_OUT)
+					if(s_fadeValue<0)
 					{
-						s_fadeMode=FADED_OUT;
-						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+						s_fadeValue=0;
+						if(s_fadeMode==FADING_OUT)
+						{
+							s_fadeMode=FADED_OUT;
+							CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
+							s_waitFrames=FRAMES_TO_WAIT;
+						}
+						else
+						{
+							s_fadeMode=FADED_IN;
+							CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
+						}
 					}
 					else
-					{
-						s_fadeMode=FADED_IN;
-						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
-					}
-				}
-				else
-				{
-					if(s_fadeValue>=0&&s_fadeValue<=255)
 					{
 						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeValue:255-s_fadeValue);
 					}
+					break;
 				}
-				break;
 			}
+			break;
 
-			case BLACK_FADE:
-			case WHITE_FADE:
+		case PAUSE_BEFORE_FADING_IN:
+			if(--s_waitFrames==0)
 			{
-				if(s_fadeValue<0)
-				{
-					s_fadeValue=0;
-					if(s_fadeMode==FADING_OUT)
-					{
-						s_fadeMode=FADED_OUT;
-						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,0);
-					}
-					else
-					{
-						s_fadeMode=FADED_IN;
-						CSoundMediator::setVolume(CSoundMediator::VOL_FADE,255);
-					}
-				}
-				else
-				{
-					CSoundMediator::setVolume(CSoundMediator::VOL_FADE,s_fadeMode==FADING_OUT?s_fadeValue:255-s_fadeValue);
-				}
-				break;
+				s_fadeMode==FADING_IN;
 			}
-		}
+			break;
+
+		case PAUSE_BEFORE_FADING_OUT:
+			if(--s_waitFrames==0)
+			{
+				s_fadeMode==FADING_OUT;
+			}
+			break;
+
+		case PAUSE_AFTER_FADING_OUT:
+			if(--s_waitFrames==0)
+			{
+				s_fadeMode==FADED_OUT;
+			}
+			break;
+
+		default:
+			break;
 	}
 }
 
@@ -333,9 +240,6 @@ void CFader::setFadingOut(FADE_STYLE _style)
 {
 	switch(_style)
 	{
-		case BUBBLE_FADE:
-			s_fadeValue=256+FADE_BORDER_SIZE;
-			break;
 		case BLACK_FADE:
 		case WHITE_FADE:
 			s_fadeValue=255;
@@ -344,6 +248,7 @@ void CFader::setFadingOut(FADE_STYLE _style)
 
 	s_fadeMode=FADING_OUT;
 	s_fadeStyle=_style;
+	s_waitFrames=FRAMES_TO_WAIT;
 }
 
 
@@ -357,9 +262,6 @@ void CFader::setFadingIn(FADE_STYLE _style)
 {
 	switch(_style)
 	{
-		case BUBBLE_FADE:
-			s_fadeValue=256+FADE_BORDER_SIZE;
-			break;
 		case BLACK_FADE:
 		case WHITE_FADE:
 			s_fadeValue=255;
@@ -367,6 +269,7 @@ void CFader::setFadingIn(FADE_STYLE _style)
 	}
 	s_fadeMode=FADING_IN;
 	s_fadeStyle=_style;
+	s_waitFrames=FRAMES_TO_WAIT;
 }
 
 

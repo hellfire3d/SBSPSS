@@ -49,7 +49,7 @@ virtual	int				canPause();
 		void			respawnLevel();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
-static void				setReadyToExit()	{s_readyToExit=true;}
+static void				setReadyToExit();
 static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}
 		CLevel			&GetLevel()			{return(Level);}
