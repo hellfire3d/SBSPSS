@@ -56,6 +56,17 @@ int		LayerCount=LayerOfs.size();
 }
 
 /*****************************************************************************/
+void    PadFile(FILE *File)
+{
+int		Pad=ftell(File) & 3;
+
+		if (Pad)
+		{
+			fwrite(&Pad,Pad,1,File);
+		}
+}
+
+/*****************************************************************************/
 void	CExport::Write(void *Addr,int Len)
 {
 		fwrite(Addr,Len,1,File);
@@ -64,10 +75,12 @@ void	CExport::Write(void *Addr,int Len)
 /*****************************************************************************/
 int		CExport::ExportLayerHeader(sLayerDef &LayerDef)//(int Type,int SubType,int Width,int Height)
 {
+		PadFile(File);
 sExpLayerHdr	LayerHdr;
 int				ThisFilePos=ftell(File);
 
 		LayerOfs.push_back(ThisFilePos);
+		
 
 		LayerHdr.Type=LayerDef.Type;
 		LayerHdr.SubType=LayerDef.SubType;
