@@ -29,7 +29,7 @@
 
 
 // Use click counter or vbl counter
-#define USE_CLICK_COUNTER
+//#define USE_CLICK_COUNTER
 
 #ifdef USE_CLICK_COUNTER
 #ifndef __SYSTEM_CLICKCOUNT_H__
