@@ -608,30 +608,44 @@ eng=Tunnel of Love
 ; ---------------------------------------------------------------
 ; Boss texts
 ; ---------------------------------------------------------------
+[STR__BOSS_TEXT_TITLE]
+eng=Boss Hints From Mermaid Man and Barnacle Boy's Superhero Handbook
+
+
 [STR__CHAPTER_1__BOSS_TITLE]
-eng=JellyFish Revenge
+eng=Mother Jellyfish...
+[STR__CHAPTER_1__BOSS_SUB_TITLE]
+eng=(Pg. 14, The Things That Sting Section)
 [STR__CHAPTER_1__BOSS_INSTRUCTIONS]
-eng=Take one Mother Jellyfish\n\nTake one net and add some small jellyfish\n\nApply the small jelly fish to the Mother\n\nMix altogether\n\nTurn up heat with a few butt bounces until Mother reduced by half
+eng=If you encounter one of these rare jellyfish, be very, very careful. They have stings ten times stronger than your average jellyfish, so keep your distance. You'll also want to watch out for those nasty electric bolts, those things will fry you in a second. Try to scare it away by throwing whatever you can at it. That's what worked for us at least...
 
 [STR__CHAPTER_2__BOSS_TITLE]
-eng=Shark Sub
+eng=Sub-shark...
+[STR__CHAPTER_2__BOSS_SUB_TITLE]
+eng=(Pg. 23, The Evil Machines Section)
 [STR__CHAPTER_2__BOSS_INSTRUCTIONS]
-eng=Take one Plankton Free Range Shark Sub\n\nServe with Jellyfish launcher\n\nEnsure distance is maintained and launch jelly fish\n\nRapid launch until well done. Season and serve
+eng=It is rumored that this mechanical creature is one of Plankton's creations gone haywire. Now it lives in the fiery depths and unstable grounds of the lava fields. This thing will swallow you whole, so keep your distance. We saw this thing during one of our nightly patrols... let me just say that I've never run so fast in my life. If only we had a jelly launcher...
 
 [STR__CHAPTER_3__BOSS_TITLE]
-eng=Parasitic Feast
+eng=Parasitic Worm...
+[STR__CHAPTER_3__BOSS_SUB_TITLE]
+eng=(Pg. 78, The Gross Creature Section)
 [STR__CHAPTER_3__BOSS_INSTRUCTIONS]
-eng=Take One Parasitic Worm with indigestion\n\nSimmer with a few Butt Bounces until reduced\n\nToss everything together and garnish with the off Karate move
+eng=Now there are worms, and then again, there are WORMS! These guys are big! Mermaid Man insists that he chased one away once by jumping on it. I don't believe him... I mean these guys are big! You shouldn't have to worry about seeing one of these, unless you just happen to be inside the belly of a whale...
 
 [STR__CHAPTER_4__BOSS_TITLE]
-eng=Ghoulish Goulash
+eng=Flying Dutchman...
+[STR__CHAPTER_4__BOSS_SUB_TITLE]
+eng=(Pg. 52, The Ghost Section)
 [STR__CHAPTER_4__BOSS_INSTRUCTIONS]
-eng=Take one ex-Pirate and a crumbling cavern\n\nstir in on jelly launcher and a lot of bubbles\n\nBeat the ghoul until weak Fold in a few butt bounces for a final touch
+eng=Now here's a guy that doesn't let up. He's been terrorizing the residents of Bikini Bottom ever since we can remember. He has a nasty knack of disappearing and reappearing as he pleases, so keep a lookout. A jelly launcher could prove handy; but then again, he is a ghost...
 
 [STR__CHAPTER_5__BOSS_TITLE]
-eng=Steamed Metal Dog Fish
+eng=Iron Dogfish...
+[STR__CHAPTER_5__BOSS_SUB_TITLE]
+eng=(Pg. 92, The Obscure Stuff Section)
 [STR__CHAPTER_5__BOSS_INSTRUCTIONS]
-eng=Take one dog\n\nAnd a fish\n\nAnd also some metal\n\nMix them up into an  Metal Dog Fish\n\nCarefully apply steam until rustily cooked
+eng=Umm, we've heard about this thing but never really seen one ourselves. Whoever heard of a dog underwater anyway, that's almost like saying a squirrel lived in Bikini Bottom.
 
 
 

@@ -177,17 +177,18 @@ DVECTOR	CGameScene::s_CamShake={0,0};
 typedef struct
 {
 	u16							m_titleTextId;
+	u16							m_subTitleTextId;
 	u16							m_instructionsTextId;
 	CSoundMediator::SONGID		m_songId;
 } BOSS_DATA;
 
 static const BOSS_DATA	s_bossData[]=
 {
-	{	STR__CHAPTER_1__BOSS_TITLE,	STR__CHAPTER_1__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER1_BOSS			},
-	{	STR__CHAPTER_2__BOSS_TITLE,	STR__CHAPTER_2__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER2_BOSS			},
-	{	STR__CHAPTER_3__BOSS_TITLE,	STR__CHAPTER_3__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER3_BOSS_ALSEEP	},
-	{	STR__CHAPTER_4__BOSS_TITLE,	STR__CHAPTER_4__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER4_BOSS			},
-	{	STR__CHAPTER_5__BOSS_TITLE,	STR__CHAPTER_5__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER5_BOSS			},
+	{	STR__CHAPTER_1__BOSS_TITLE,	STR__CHAPTER_1__BOSS_SUB_TITLE,	STR__CHAPTER_1__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER1_BOSS			},
+	{	STR__CHAPTER_2__BOSS_TITLE,	STR__CHAPTER_2__BOSS_SUB_TITLE,	STR__CHAPTER_2__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER2_BOSS			},
+	{	STR__CHAPTER_3__BOSS_TITLE,	STR__CHAPTER_3__BOSS_SUB_TITLE,	STR__CHAPTER_3__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER3_BOSS_ALSEEP	},
+	{	STR__CHAPTER_4__BOSS_TITLE,	STR__CHAPTER_4__BOSS_SUB_TITLE,	STR__CHAPTER_4__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER4_BOSS			},
+	{	STR__CHAPTER_5__BOSS_TITLE,	STR__CHAPTER_5__BOSS_SUB_TITLE,	STR__CHAPTER_5__BOSS_INSTRUCTIONS,	CSoundMediator::SONG_CHAPTER5_BOSS			},
 };
 
 
@@ -411,21 +412,29 @@ void CGameScene::render_boss_intro()
 
 	// Instructions..
 	bd=&s_bossData[Level.getCurrentChapter()-1];
-	m_scalableFont->setColour(255,255,255);
+
 	m_scalableFont->setTrans(0);
 	m_scalableFont->setSMode(0);
-	m_scalableFont->setScale(300);
+	m_scalableFont->setPrintArea(20,0,512-40,256);
 	m_scalableFont->setJustification(FontBank::JUST_CENTRE);
-	m_scalableFont->setPrintArea(30,0,512-60,256);
-	m_scalableFont->print(256-30,25,bd->m_titleTextId);
-	m_scalableFont->setPrintArea(0,0,256,512);
-
-	s_genericFont->setColour(255,255,255);
+	m_scalableFont->setColour(128,128,128);
 	s_genericFont->setTrans(0);
 	s_genericFont->setSMode(0);
+	s_genericFont->setPrintArea(20,0,512-40,256);
 	s_genericFont->setJustification(FontBank::JUST_CENTRE);
-	s_genericFont->setPrintArea(30,0,512-60,256);
-	s_genericFont->print(256-30,60,bd->m_instructionsTextId);
+
+
+	s_genericFont->setColour(118,118,118);
+	s_genericFont->print(256-20,25,STR__BOSS_TEXT_TITLE);
+	m_scalableFont->setScale(300);
+	s_genericFont->setColour(128,128,128);
+	m_scalableFont->print(256-20,60,bd->m_titleTextId);
+	s_genericFont->setColour(118,118,118);
+	s_genericFont->print(256-20,80,bd->m_subTitleTextId);
+	s_genericFont->setColour(118,118,118);
+	s_genericFont->print(256-20,105,bd->m_instructionsTextId);
+
+
 	s_genericFont->setPrintArea(0,0,256,512);
 }
 
