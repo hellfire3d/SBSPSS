@@ -167,6 +167,17 @@ int	CGameScene::s_bossHasBeenKilled;
 int	CGameScene::s_justHitBossArenaTrigger;
 
 /*****************************************************************************/
+static const CSoundMediator::SONGID	s_bossMusicIds[]=
+{
+	CSoundMediator::SONG_CHAPTER1_BOSS,
+	CSoundMediator::SONG_CHAPTER2_BOSS,
+	CSoundMediator::SONG_CHAPTER3_BOSS_ALSEEP,
+	CSoundMediator::SONG_CHAPTER4_BOSS,
+	CSoundMediator::SONG_CHAPTER5_BOSS,
+};
+
+/*****************************************************************************/
+
 
 CGameScene	GameScene;
 
@@ -379,7 +390,7 @@ void	CGameScene::think(int _frames)
 			{
 				// Swap to the boss tune whilst it's all quiet! :)
 				CSoundMediator::stopSong();
-				CSoundMediator::setSong(CSoundMediator::SONG_CHAPTER1_BOSS);
+				CSoundMediator::setSong(s_bossMusicIds[Level.getCurrentChapter()-1]);
 				m_gamestate=GAMESTATE_BOSS_INTRO;
 				CFader::setFadingIn();
 			}
