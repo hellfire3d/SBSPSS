@@ -22,6 +22,7 @@ using namespace std;
 //***************************************************************************
 vector<CMkActor>	ActorList;
 int			TPBase=-1,TPWidth=-1,TPHeight=-1;
+int			DupThresh;
 GString		TPOutStr;
 
 GString		RootPath;
@@ -70,6 +71,10 @@ int		Count;
 			case 'a':
 				TpStr= CheckFileString(String);
 				Aspect=(float)atof(TpStr);
+				break;
+			case 'c':
+				TpStr= CheckFileString(String);
+				DupThresh=(int)atol(TpStr);
 				break;
 			case 't':
 				TpStr= CheckFileString(String);
@@ -361,7 +366,7 @@ int			Size=Bmp.Frm.GetWidth()*Bmp.Frm.GetHeight();
 			Bmp.Frm.MakeRGB(Bmp.RGB);
 // Check for dups (Broken at the mo, ah well)
 // Gen Chksum
-
+/*
 u8		*RGB=Bmp.RGB;
 		Bmp.ChkR=Bmp.ChkG=Bmp.ChkB=0;
 		for (i=0; i<Size; i++)
@@ -370,7 +375,7 @@ u8		*RGB=Bmp.RGB;
 			Bmp.ChkG+=*RGB++;
 			Bmp.ChkB+=*RGB++;
 		}
-
+*/
 // Find existing
 		for (i=0; i<BmpListSize; i++)
 		{
@@ -392,23 +397,32 @@ bool	CMkActor::IsImageSame(sBmp &Bmp0,sBmp &Bmp1)
 {
 int		W0,H0,W1,H1,Size;
 u8		*RGB0,*RGB1;
-
-		if (Bmp0.ChkR!=Bmp1.ChkR || Bmp0.ChkG!=Bmp1.ChkG || Bmp0.ChkB!=Bmp1.ChkB) return(false);
+int		DiffCount=0;
+//		if (Bmp0.ChkR!=Bmp1.ChkR || Bmp0.ChkG!=Bmp1.ChkG || Bmp0.ChkB!=Bmp1.ChkB) return(false);
 		W0=Bmp0.Frm.GetWidth();
 		H0=Bmp0.Frm.GetHeight();
 		W1=Bmp1.Frm.GetWidth();
 		H1=Bmp1.Frm.GetHeight();
 
 		if (W0!=W1 || H0!=H1) return(false);
-		Size=W0*H0*3;
+		Size=W0*H0;
 		RGB0=Bmp0.RGB;
 		RGB1=Bmp1.RGB;
 		for (int i=0; i<Size; i++)
 		{
-			if (*RGB0++!=*RGB1++) return(false);
+//			if (*RGB0++!=*RGB1++) return(false);
+			if (*RGB0++!=*RGB1++ ||	// R
+				*RGB0++!=*RGB1++ ||	// G
+				*RGB0++!=*RGB1++)	// B
+			{
+				DiffCount++;
+			}
 
 		}
-		return(true);
+		if (DiffCount<=DupThresh)
+			return(true);
+		else
+			return(false);
 }
 
 //***************************************************************************

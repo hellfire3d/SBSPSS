@@ -40,9 +40,7 @@
 #include "..\..\tools\vlc\include\vlc_bit.h"
 
 
-#ifndef	__USER_paul__
 //#define	FORCE_FMV	1	
-#endif
 
 #if		__FILE_SYSTEM__==CD | FORCE_FMV
 #define	ENABLE_FMV	
@@ -149,7 +147,7 @@ static u_long		*SectorBuffer;
 static const FmvData s_fmvData[MAX_FMVS]=
 {
 	{FILEPOS_THQ_STR,		240-15	},
-	{FILEPOS_INTRO_STR,		0	},
+	{FILEPOS_INTRO_STR,		371-15	},
 };
 
 
