@@ -66,7 +66,7 @@ void	CLayerBack::render()
 sOT			*ThisOT=OtPtr+(MAX_OT-1);
 //printf("%i %i\n",MapWidth,MapHeight);
 			setXYWH(&Poly[0],0,-YOfs,512,BH);
-			addPrim(ThisOT,&Poly[0]);
+//			addPrim(ThisOT,&Poly[0]);
 
 }
 
