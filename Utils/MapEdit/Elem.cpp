@@ -416,6 +416,29 @@ float		ScaleU,ScaleV;
 }
 
 /*****************************************************************************/
+struct	sColTab
+{
+	u8	R,G,B;
+};
+sColTab	ColTable[]=
+{
+{255,255,255},		// PC_TILE_COLLISION_NORMAL:				
+{255,  0,  0},		// PC_TILE_COLLISION_DAMAGE:				
+{  0,255,  0},		// PC_TILE_COLLISION_SLIPPERY:			
+{255,  0,255},		// PC_TILE_COLLISION_ELECTRIC:			
+{200,127,180},		// PC_TILE_COLLISION_DESTRUCTABLE_WALL:	
+{  0,  0,255},		// PC_TILE_COLLISION_DEATH_LIQUID:		
+{  0,255,255},		// PC_TILE_COLLISION_SOLID:
+{200,  0,  0},		// PC_TILE_COLLISION_DEATH_FALL:			
+{127,200,180},		// PC_TILE_COLLISION_DESTRUCTABLE_FLOOR:	
+{255,127,127},		// PC_TILE_COLLISION_DEATH_INSTANT:		
+
+{  0,127,  0},		// PC_TILE_COLLISION_MOVE_LEFT:			
+{  0,127,127},		// PC_TILE_COLLISION_MOVE_RIGHT:			
+
+
+};
+
 void	CElem::Render(int Flags,bool Render3d)
 {
 		if (BlankFlag)
@@ -440,18 +463,27 @@ int		ColFlags=Flags >> PC_TILE_FLAG_COLLISION_SHIFT;
 
 		if (ColFlags)
 		{
+/*
 			switch (ColFlags)
 			{
-			case PC_TILE_COLLISION_NORMAL:		glColor4f(1.0f,1.0f,1.0f,0.5); break;
-			case PC_TILE_COLLISION_DAMAGE:		glColor4f(1.0f,0.0f,0.0f,0.5); break;
-			case PC_TILE_COLLISION_SLIPPERY:	glColor4f(0.0f,1.0f,0.0f,0.5); break;
-			case PC_TILE_COLLISION_ELECTRIC:	glColor4f(1.0f,0.0f,1.0f,0.5); break;
-			case PC_TILE_COLLISION_STICKY:		glColor4f(1.0f,1.0f,0.0f,0.5); break;
-			case PC_TILE_COLLISION_WATER:		glColor4f(0.0f,0.0f,1.0f,0.5); break;
-			case PC_TILE_COLLISION_SOLID:		glColor4f(0.0f,1.0f,1.0f,0.5); break;
-			case PC_TILE_COLLISION_DEATH:		glColor4f(0.0f,0.5f,0.5f,0.5); break;
-			case PC_TILE_COLLISION_DESTRUCTABLE:glColor4f(0.5f,0.7f,0.6f,0.5); break;
+			case PC_TILE_COLLISION_NORMAL:				glColor4f(1.0f,1.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_SOLID:				glColor4f(0.0f,1.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_SLIPPERY:			glColor4f(0.0f,1.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_MOVE_LEFT:			glColor4f(0.5f,1.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_MOVE_RIGHT:			glColor4f(0.0f,1.0f,0.5f,0.5); break;
+
+			case PC_TILE_COLLISION_DAMAGE:				glColor4f(1.0f,0.0f,0.0f,0.5); break;
+			case PC_TILE_COLLISION_ELECTRIC:			glColor4f(1.0f,0.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_DEATH_LIQUID:		glColor4f(0.0f,0.0f,1.0f,0.5); break;
+			case PC_TILE_COLLISION_DEATH_FALL:			glColor4f(0.0f,0.5f,0.5f,0.5); break;
+			case PC_TILE_COLLISION_DEATH_INSTANT:		glColor4f(0.1f,0.5f,0.5f,0.5); break;
+
+			case PC_TILE_COLLISION_DESTRUCTABLE_WALL:	glColor4f(0.7f,0.5f,0.6f,0.5); break;
+			case PC_TILE_COLLISION_DESTRUCTABLE_FLOOR:	glColor4f(0.5f,0.7f,0.6f,0.5); break;
 			}
+*/
+			sColTab	&ThisCol=ColTable[ColFlags];
+			glColor4ub(ThisCol.R,ThisCol.G,ThisCol.B,127);
 		}
 		glEnable(GL_TEXTURE_2D);
 		if (Render3d) 

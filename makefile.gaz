@@ -155,6 +155,7 @@ hazard_src :=		hazard \
 fx_src :=			fx \
 					fxbaseanim \
 					fxbasetrail \
+					fxjfish \
 					fxfallingtile \
 					fxsteam \
 					fxsplash \

@@ -66,6 +66,27 @@ void	CMkLevelLayerCollision::Process(CMkLevel *Core)
 /** Write ********************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+static const u8		s_collisionTileRemapTable[17]=
+{
+	0,	
+	1,
+	1,
+	1,
+	1,
+	2,
+	3,
+	0,
+	0,
+	4,
+	5,
+	0,
+	0,
+	6,
+	7,
+	0,
+	0,
+};
+
 int		CMkLevelLayerCollision::Write(FILE *File,const char *LayerName,const char *MapName)
 {
 sLayerHdr	Hdr;
@@ -86,7 +107,7 @@ int			Height=Map.GetHeight();
 				sExpColTile	&ThisElem=Map.Get(X,Y);	
 				u8		OutElem;
 
-				OutElem=ThisElem.Tile;
+				OutElem=s_collisionTileRemapTable[ThisElem.Tile];
 				OutElem|=ThisElem.Flags<<COLLISION_TYPE_FLAG_SHIFT;
 /*
 				OutElem=0;

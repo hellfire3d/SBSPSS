@@ -107,7 +107,10 @@ vector<int>	Counts;
 			OutName+="_";
 			OutName+=Name;
 			
-			Core->AddInfItem(OutName,Counts[i]);
+//			if (Counts[i])
+			{
+				Core->AddInfItem(OutName,Counts[i]);
+			}
 		}
 
 

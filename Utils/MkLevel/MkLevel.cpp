@@ -1148,8 +1148,8 @@ int					Vtx[3];
 void	CMkLevel::AddInfItem(const char *Name,int Val)
 {
 sInfItem	Item;
-
-			Item.Name=Name;
+GString  ReplaceBadFileChars(GString s);	// Dodgy extern from TexGrab Lib!
+			Item.Name=ReplaceBadFileChars(Name);
 			Item.Name.Upper();
 			Item.Val=Val;
 

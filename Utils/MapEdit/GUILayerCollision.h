@@ -35,15 +35,18 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(GUILayerCollision)
-	afx_msg void OnLayercollisionNormal();
 	afx_msg void OnLayercollisionDamage();
-	afx_msg void OnLayercollisionSlippery();
+	afx_msg void OnLayercollisionDeathFall();
+	afx_msg void OnLayercollisionDeathInstant();
+	afx_msg void OnLayercollisionDeathLiquid();
+	afx_msg void OnLayercollisionDestructFloor();
+	afx_msg void OnLayercollisionDestructWall();
 	afx_msg void OnLayercollisionElectric();
-	afx_msg void OnLayercollisionSticky();
-	afx_msg void OnLayercollisionWater();
+	afx_msg void OnLayercollisionMoveLeft();
+	afx_msg void OnLayercollisionMoveRight();
+	afx_msg void OnLayercollisionNormal();
+	afx_msg void OnLayercollisionSlippery();
 	afx_msg void OnLayercollisionSolid();
-	afx_msg void OnLayercollisionDeath();
-	afx_msg void OnLayercollisionDestructable();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

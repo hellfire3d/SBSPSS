@@ -38,15 +38,18 @@ void GUILayerCollision::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(GUILayerCollision, CDialog)
 	//{{AFX_MSG_MAP(GUILayerCollision)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_NORMAL, OnLayercollisionNormal)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_DAMAGE, OnLayercollisionDamage)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_SLIPPERY, OnLayercollisionSlippery)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DEATH_FALL, OnLayercollisionDeathFall)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DEATH_INSTANT, OnLayercollisionDeathInstant)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DEATH_LIQUID, OnLayercollisionDeathLiquid)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DESTRUCT_FLOOR, OnLayercollisionDestructFloor)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_DESTRUCT_WALL, OnLayercollisionDestructWall)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_ELECTRIC, OnLayercollisionElectric)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_STICKY, OnLayercollisionSticky)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_WATER, OnLayercollisionWater)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_MOVE_LEFT, OnLayercollisionMoveLeft)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_MOVE_RIGHT, OnLayercollisionMoveRight)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_NORMAL, OnLayercollisionNormal)
+	ON_BN_CLICKED(IDC_LAYERCOLLISION_SLIPPERY, OnLayercollisionSlippery)
 	ON_BN_CLICKED(IDC_LAYERCOLLISION_SOLID, OnLayercollisionSolid)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_DEATH, OnLayercollisionDeath)
-	ON_BN_CLICKED(IDC_LAYERCOLLISION_DESTRUCTABLE, OnLayercollisionDestructable)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -54,12 +57,28 @@ END_MESSAGE_MAP()
 // GUILayerCollision message handlers
 
 void GUILayerCollision::OnLayercollisionNormal()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_NORMAL);}
-void GUILayerCollision::OnLayercollisionDamage()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DAMAGE);}
-void GUILayerCollision::OnLayercollisionSlippery()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_SLIPPERY);}
-void GUILayerCollision::OnLayercollisionElectric()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_ELECTRIC);}
-void GUILayerCollision::OnLayercollisionSticky()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_STICKY);}
-void GUILayerCollision::OnLayercollisionWater()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_WATER);}
 void GUILayerCollision::OnLayercollisionSolid()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_SOLID);}
-void GUILayerCollision::OnLayercollisionDeath()			{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DEATH);}
-void GUILayerCollision::OnLayercollisionDestructable()	{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DESTRUCTABLE);}
+void GUILayerCollision::OnLayercollisionSlippery()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_SLIPPERY);}
+void GUILayerCollision::OnLayercollisionMoveLeft()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_MOVE_LEFT);}
+void GUILayerCollision::OnLayercollisionMoveRight()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_MOVE_RIGHT);}
 
+void GUILayerCollision::OnLayercollisionDamage()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DAMAGE);}
+void GUILayerCollision::OnLayercollisionElectric()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_ELECTRIC);}
+void GUILayerCollision::OnLayercollisionDeathLiquid()	{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DEATH_LIQUID);}
+void GUILayerCollision::OnLayercollisionDeathFall()		{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DEATH_FALL);}
+void GUILayerCollision::OnLayercollisionDeathInstant()	{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DEATH_INSTANT);}
+
+void GUILayerCollision::OnLayercollisionDestructWall()	{theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DESTRUCTABLE_WALL);}
+void GUILayerCollision::OnLayercollisionDestructFloor() {theApp.GetCurrent()->Command(CmdMsg_SetColFlag,PC_TILE_COLLISION_DESTRUCTABLE_FLOOR);}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
