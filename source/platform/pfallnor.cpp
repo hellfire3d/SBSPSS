@@ -73,7 +73,7 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 
 		s32 yPos = Pos.vy - offset.vy;
 
-		if ( yPos > VidGetScrH() )
+		if ( yPos < 0 || yPos > VidGetScrH() )
 		{
 			setToShutdown();
 		}
