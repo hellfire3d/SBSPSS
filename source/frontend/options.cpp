@@ -455,6 +455,7 @@ void CFrontEndOptions::init()
 
 	m_fontBank=new ("CGameScene::Init") FontBank();
 	m_fontBank->initialise( &standardFont );
+	m_fontBank->setColour(80,80,80);
 
 	m_spriteBank=new ("options sprites") SpriteBank();
 	m_spriteBank->load(SPRITES_SPRITES_SPR);
@@ -531,6 +532,7 @@ void CFrontEndOptions::render()
 {
 	POLY_G4	*g4;
 	int		rgb[3];
+	int		renderButtons=true;
 
 rh+=rspeed;
 rh&=4095;
@@ -550,33 +552,7 @@ rh&=4095;
 
 	m_background->render();
 
-	if(m_mode==MODE__LOAD)
-	{
-		switch(m_loadMode)
-		{
-			case LOADMODE__INIT:
-			case LOADMODE__CHECKING:
-			case LOADMODE__LOADING:
-				break;
-
-			case LOADMODE__UNFORMATTED:
-			case LOADMODE__NODATA:
-			case LOADMODE__NOCARD:
-			case LOADMODE__LOADOK:
-			case LOADMODE__LOADERROR:
-				m_loadModeOKFrame->render();
-				break;
-
-			case LOADMODE__CONFIRMLOAD:
-				m_loadModeConfirmFrame->render();
-				break;
-		}
-	}
-	m_modeMenus[m_mode]->render();
-
-
 	// Button prompts
-	int	renderButtons=true;
 	switch(m_mode)
 	{
 		case MODE__OPTIONS:
@@ -606,6 +582,31 @@ rh&=4095;
 	{
 		renderButtonPrompts();
 	}
+
+	// UI
+	if(m_mode==MODE__LOAD)
+	{
+		switch(m_loadMode)
+		{
+			case LOADMODE__INIT:
+			case LOADMODE__CHECKING:
+			case LOADMODE__LOADING:
+				break;
+
+			case LOADMODE__UNFORMATTED:
+			case LOADMODE__NODATA:
+			case LOADMODE__NOCARD:
+			case LOADMODE__LOADOK:
+			case LOADMODE__LOADERROR:
+				m_loadModeOKFrame->render();
+				break;
+
+			case LOADMODE__CONFIRMLOAD:
+				m_loadModeConfirmFrame->render();
+				break;
+		}
+	}
+	m_modeMenus[m_mode]->render();
 }
 
 /*----------------------------------------------------------------------
@@ -617,7 +618,6 @@ rh&=4095;
 void CFrontEndOptions::think(int _frames)
 {
 	int		i,j,button;
-
 
 
 	// Hide the VIBRATION option if vibration not available
@@ -972,12 +972,13 @@ void	CFrontEndOptions::setLoadMode(int _newMode)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int	INSTRUCTIONS_Y_POS=185;
 void	CFrontEndOptions::renderButtonPrompts()
 {
 	sFrameHdr		*fh1,*fh2;
 	int				x,y,width;
 
-int	INSTRUCTIONS_Y_POS=213;
+//int	INSTRUCTIONS_Y_POS=213;
 int INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10;		// Eh!? (pkg)
 int INSTRUCTIONS_BUTTON_Y_OFFSET=4;
 
