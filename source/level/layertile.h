@@ -1,0 +1,37 @@
+/************************/
+/*** Tile Layer Class ***/
+/************************/
+
+#ifndef __LAYER_TILE_H__
+#define __LAYER_TILE_H__
+
+
+/*****************************************************************************/
+class CLayerTile : public CLayer
+{
+public:
+		enum LAYER_TILE_SUBTYPE
+		{
+			LAYER_TILE_SUBTYPE_BACK=0,
+			LAYER_TILE_SUBTYPE_MID,
+			LAYER_TILE_SUBTYPE_ACTION,
+			LAYER_TILE_SUBTYPE_FORE,
+			LAYER_TILE_SUBTYPE_MAX
+		};
+
+static	int		GetLayerType(int SubType);
+
+		void	init();
+		void	shutdown();
+		void	render();
+		void	think(int _frames);
+
+private:
+
+};
+
+
+
+/*****************************************************************************/
+
+#endif
