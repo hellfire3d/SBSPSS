@@ -782,6 +782,17 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 	}
 	
+	// Trying to converate?
+	if(getPadInputDown()&PI_DOWN)
+	{
+		m_allowConversation=true;
+	}
+	else
+	{
+		m_allowConversation=false;
+	}
+
+	
 	CPlayerThing::think(_frames);
 }
 
@@ -1177,6 +1188,8 @@ void CPlayer::respawn()
 	{
 		setMode(PLAYER_MODE_BASICUNARMED);
 	}
+
+	m_allowConversation=false;
 
 	m_health=MAX_HEALTH;
 	m_healthReactFrames=0;

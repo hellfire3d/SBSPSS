@@ -167,6 +167,8 @@ public:
 	virtual void	setHasPlatformCollided( bool newVal );
 	virtual bool	getHasPlatformCollided();
 
+	int				isTryingToConversateWithFriend()					{return m_allowConversation;}
+
 	DVECTOR			getCameraPos()										{return m_cameraPos;}
 
 	void			setLayerCollision(class CLayerCollision *_layer)	{m_layerCollision=_layer;}
@@ -202,6 +204,7 @@ private:
 	void			playAnimFrameSfx(int _animNo,int _animFrame);
 
 	DVECTOR			m_moveVelocity;
+	int				m_allowConversation;
 
 
 
