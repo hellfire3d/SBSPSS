@@ -23,6 +23,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __VID_HEADER_
+#include "system\vid.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +81,17 @@ void CNpcRockShardHazard::processMovement( int _frames )
 			// drop down
 
 			Pos.vy += yMovement;
+		}
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		s32 yPos = Pos.vy - offset.vy;
+
+		if ( yPos > VidGetScrH() )
+		{
+			m_isActive = false;
+			m_timerActive = true;
+			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
 		}
 	}
 }
