@@ -10,6 +10,8 @@
 
 #include	"MapEditDoc.h"
 #include	"MapEditView.h"
+#include	"MainFrm.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,6 +34,12 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
+	ON_BN_CLICKED(IDC_LAYERBAR_NEW, OnLayerbarNew)
+	ON_BN_CLICKED(IDC_LAYERBAR_DELETE, OnLayerbarDelete)
+	ON_BN_CLICKED(IDC_LAYERBAR_UP, OnLayerbarUp)
+	ON_BN_CLICKED(IDC_LAYERBAR_DOWN, OnLayerbarDown)
+	ON_WM_MOUSEMOVE()
+	ON_WM_CAPTURECHANGED()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -40,6 +48,9 @@ END_MESSAGE_MAP()
 
 CMapEditView::CMapEditView()
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+			LayerBar=Frm->GetLayerBar();
+	
 }
 
 CMapEditView::~CMapEditView()
@@ -68,14 +79,14 @@ void CMapEditView::OnCreateGL()
 		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Really Nice Perspective Calculations
 
-//Core.Init(this);
+		Core.Init(this);
 
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnDrawGL()
 {
-//		Core.Render();
+		Core.Render();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -104,24 +115,115 @@ CMapEditDoc* CMapEditView::GetDocument() // non-debug version is inline
 
 void CMapEditView::OnSetFocus(CWnd* pOldWnd) 
 {
-	
 CMapEditDoc	*CurDoc=GetDocument();
 	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
-
-	CurDoc->UpdateAll();	// woohoo, that was easy
+	UpdateAll();
 }
 
 /*********************************************************************************/
 /*********************************************************************************/
 /*********************************************************************************/
-void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{}
-void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{}
-void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{}
-void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{}
-BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{return(0);}
-void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{}
-void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{}
+void CMapEditView::UpdateAll() 
+{
+	UpdateLayerBar();
 
+}
+/*********************************************************************************/
+/*** Layer Commands **************************************************************/
+/*********************************************************************************/
+void CMapEditView::OnLayerbarNew() 
+{
+	Core.LayerAdd();
+	UpdateLayerBar();
+}
 
 /*********************************************************************************/
+void CMapEditView::OnLayerbarDelete() 
+{
+int	Sel=GetLayerCurSel();
+
+		if (Sel==-1) return;
+		Core.LayerDelete(Sel);
+		UpdateLayerBar();
+}
+
+/*********************************************************************************/
+void CMapEditView::OnLayerbarUp() 
+{
+int	Sel=GetLayerCurSel();
+
+	if (Sel==-1) return;
+	if (Sel>0)
+	{
+		Core.LayerMoveUp(Sel);
+		UpdateLayerBar();
+	}
+
+}
+
+/*********************************************************************************/
+void CMapEditView::OnLayerbarDown() 
+{
+int	Sel=GetLayerCurSel();
+	if (Sel==-1) return;
+	if (Sel<GetLayerCount()-1)
+	{
+		Core.LayerMoveDown(GetLayerCurSel());
+		UpdateLayerBar();
+	}
+}
+
+/*********************************************************************************/
+void CMapEditView::UpdateLayerBar()
+{
+int			LayerCount=Core.LayerGetCount();
+CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
+int			CurSel=Dlg->GetCurSel();
+
+		Dlg->ResetContent();
+
+		for (int i=0;i<LayerCount;i++)
+		{
+			CLayer	&ThisLayer=Core.LayerGet(i);
+			Dlg->AddString(ThisLayer.GetName());
+		}
+		Dlg->SetCurSel(CurSel);
+
+}
+
+/*********************************************************************************/
+int	CMapEditView::GetLayerCurSel()
+{
+CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
+		return(Dlg->GetCurSel());
+
+}
+
+/*********************************************************************************/
+int	CMapEditView::GetLayerCount()
+{
+CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
+	return(Dlg->GetCount());
+
+}
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+void CMapEditView::OnLButtonDown(UINT nFlags, CPoint point)				{Core.LButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnLButtonUp(UINT nFlags, CPoint point)				{Core.LButtonControl(nFlags,point,FALSE);}
+void CMapEditView::OnMButtonDown(UINT nFlags, CPoint point)				{Core.MButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnMButtonUp(UINT nFlags, CPoint point)				{Core.MButtonControl(nFlags,point,FALSE);}
+BOOL CMapEditView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)	{Core.MouseWheel(nFlags,zDelta,pt) ;return(0);}
+void CMapEditView::OnRButtonDown(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,TRUE);}
+void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{Core.RButtonControl(nFlags,point,FALSE);}
+void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point,GetCapture()==this);}
+
+
+void CMapEditView::OnCaptureChanged(CWnd *pWnd) 
+{
+	// TODO: Add your message handler code here
+TRACE0("!!!!");	
+	CGLEnabledView::OnCaptureChanged(pWnd);
+}

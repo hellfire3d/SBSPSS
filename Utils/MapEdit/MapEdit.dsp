@@ -99,7 +99,19 @@ SOURCE=.\Core.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gl3d.h
+SOURCE=.\Layer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Layer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\utils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\utils.h
 # End Source File
 # End Group
 # Begin Group "Shell"
@@ -115,10 +127,6 @@ SOURCE=.\ChildFrm.cpp
 # Begin Source File
 
 SOURCE=.\GLEnabledView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LayerBar.cpp
 # End Source File
 # Begin Source File
 
@@ -155,11 +163,11 @@ SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GLEnabledView.h
+SOURCE=.\gl3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LayerBar.h
+SOURCE=.\GLEnabledView.h
 # End Source File
 # Begin Source File
 

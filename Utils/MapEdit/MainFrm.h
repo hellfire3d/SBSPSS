@@ -5,7 +5,6 @@
 #if !defined(AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_)
 #define AFX_MAINFRM_H__CEC14D79_A1F2_4281_AA53_544F0924E7D8__INCLUDED_
 
-#include	"LayerBar.h"
 
 #if _MSC_VER > 1000
 #pragma once
@@ -21,7 +20,7 @@ public:
 
 // Attributes
 public:
-	CLayerBar	*GetLayerBar()	{return(&m_wndLayerBar);}
+	CDialogBar	*GetLayerBar()	{return(&m_wndLayerBar);}
 // Operations
 public:
 
@@ -42,7 +41,7 @@ public:
 protected:  // control bar embedded members
 	CStatusBar	m_wndStatusBar;
 	CToolBar	m_wndToolBar;
-	CLayerBar	m_wndLayerBar;
+	CDialogBar	m_wndLayerBar;
 
 
 // Generated message map functions

@@ -11,7 +11,6 @@
 
 #include	"Core.h"
 
-class	CLayerBar;
 class	CMapEditDoc : public CDocument
 {
 protected: // create from serialization only
@@ -39,23 +38,13 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	void		UpdateAll();
 
 protected:
-	void		UpdateLayerBar();
-	int			GetLayerCurSel();
-	int			GetLayerCount();
 
-	CCore		Core;
-	CLayerBar	*LayerBar;
 	
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditDoc)
-	afx_msg void	OnLayerbarNew();
-	afx_msg void	OnLayerbarDelete();
-	afx_msg void	OnLayerbarUp();
-	afx_msg void	OnLayerbarDown();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

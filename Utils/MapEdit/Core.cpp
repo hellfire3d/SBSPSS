@@ -14,6 +14,7 @@
 #include	"MapEditView.h"
 
 #include	"Core.h"
+#include	"Layer.h"
 
 
 /*****************************************************************************/
@@ -21,8 +22,10 @@
 /*****************************************************************************/
 CCore::CCore()
 {
+	MouseMode=MOUSE_MODE_NONE;
 
 }
+
 /*****************************************************************************/
 CCore::~CCore()
 {
@@ -32,6 +35,9 @@ CCore::~CCore()
 void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
+//	ParentWindow->SetCapture();
+//	ParentWindow->SetCapture();
+	
 //	TestLayer.Init();
 //	UpdateView();
 
@@ -42,6 +48,9 @@ void	CCore::Init(CMapEditView *Wnd)
 /*****************************************************************************/
 void	CCore::Render()
 {
+	TRACE0("HERE");
+	Layers[ActiveLayer].Render();
+
 //	if (RenderMode & RENDER_MODE_GFX) TestLayer.Render();
 //	if (RenderMode & RENDER_MODE_POS) TestLayer.UpdateCursor(this);
 //	RenderMode=0;
@@ -62,14 +71,33 @@ void	CCore::UpdateView(float XOfs,float YOfs,float ZOfs)
 /*****************************************************************************/
 /*** Control *****************************************************************/
 /*****************************************************************************/
+void	CCore::SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode)
+{
+	if (MouseMode==CurrentMode) 
+		{
+//		ReleaseCapture();
+		MouseMode=NewMode;
+//		if (MouseMode!=MOUSE_MODE_NONE) ParentWindow->SetCapture();	// Set new capture
+		}
+}
+
+/*****************************************************************************/
 void	CCore::LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 //	TestLayer.LButtonControl(nFlags,point,DownFlag);
+	SetMouseMode(MOUSE_MODE_NONE,MOUSE_MODE_LMB);
+	TRACE0("LMB\n");
 }
 
 /*****************************************************************************/
 void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
+	if (DownFlag) 
+		SetMouseMode(MOUSE_MODE_NONE,MOUSE_MODE_MMB);
+	else
+		SetMouseMode(MOUSE_MODE_MMB,MOUSE_MODE_NONE);
+	TRACE0("MMB\n");
+/*
 	if (DownFlag) 
 	{
 		LastMousePos=point;
@@ -79,13 +107,15 @@ void	CCore::MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 	{
 		ReleaseCapture();
 	}
-
+*/
 }
 
 /*****************************************************************************/
 void	CCore::RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag)
 {
 //	TestLayer.RButtonControl(nFlags,point,DownFlag);
+	SetMouseMode(MOUSE_MODE_NONE,MOUSE_MODE_RMB);
+	TRACE0("RMB\n");
 }
 
 /*****************************************************************************/
@@ -102,12 +132,12 @@ void	CCore::MouseWheel(UINT nFlags, short zDelta, CPoint &pt)
 }
 
 /*****************************************************************************/
-void	CCore::MouseMove(UINT nFlags, CPoint &Point,BOOL CaptureFlag) 
+void	CCore::MouseMove(UINT nFlags, CPoint &point,BOOL CaptureFlag) 
 {
 float	XOfs=0;
 float	YOfs=0;
 
-		CurrentMousePos=Point;
+		CurrentMousePos=point;
 
 		if (CaptureFlag)
 			{
@@ -121,15 +151,16 @@ float	YOfs=0;
 	
 			XOfs=LastMousePos.x-CurrentMousePos.x;
 			YOfs=LastMousePos.y-CurrentMousePos.y;
-			LastMousePos=Point;
+			LastMousePos=CurrentMousePos;
 	
 			XOfs*=XS;
 			YOfs*=YS;
 			}
 		UpdateView(-XOfs,-YOfs,0);
-		if (nFlags & MK_LBUTTON) LButtonControl(nFlags,Point,TRUE);
-		if (nFlags & MK_RBUTTON) RButtonControl(nFlags,Point,TRUE);
+//		if (nFlags & MK_LBUTTON) LButtonControl(nFlags,point,TRUE);
+//		if (nFlags & MK_RBUTTON) RButtonControl(nFlags,point,TRUE);
 
+		TRACE3("Move %i %i %i \n",point.x,point.y,CaptureFlag);
 }
 
 /*****************************************************************************/
@@ -137,7 +168,7 @@ float	YOfs=0;
 /*****************************************************************************/
 void	CCore::LayerAdd(char *Name)
 {
-sLayer	NewLayer;
+CLayer	NewLayer;
 
 	if (!Name)
 	{
@@ -146,7 +177,8 @@ sLayer	NewLayer;
 		Name=DynName;
 	}
 
-	strcpy(NewLayer.Name,Name);
+	NewLayer.SetName(Name);
+//	strcpy(NewLayer.Name,Name);
 	TRACE1("New Layer [%s]\n",Name);
 	Layers.push_back(NewLayer);
 
@@ -170,7 +202,7 @@ int		CCore::LayerGetCount()
 }
 
 /*****************************************************************************/
-sLayer	const	&CCore::LayerGet(int i)
+CLayer	&CCore::LayerGet(int i)
 {
 	return(Layers[i]);
 }
@@ -186,7 +218,7 @@ void	CCore::LayerDelete(int Layer)
 /*****************************************************************************/
 void	CCore::LayerMoveUp(int Layer)
 {
-sLayer	Tmp;
+CLayer	Tmp;
 
 	Tmp=Layers[Layer];
 	Layers[Layer]=Layers[Layer-1];
@@ -198,7 +230,7 @@ sLayer	Tmp;
 /*****************************************************************************/
 void	CCore::LayerMoveDown(int Layer)
 {
-sLayer	Tmp;
+CLayer	Tmp;
 
 	Tmp=Layers[Layer];
 	Layers[Layer]=Layers[Layer+1];

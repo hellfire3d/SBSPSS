@@ -7,14 +7,16 @@
 
 #include	<Vector>
 #include	"gl3d.h"
+#include	"Layer.h"
 
 
 /*****************************************************************************/
-//struct	sLayer;
-struct	sLayer
+enum MOUSE_MODE
 {
-	char	Name[32];
-//	sLayer	*Next,*Prev;
+	MOUSE_MODE_NONE=0,
+	MOUSE_MODE_LMB,
+	MOUSE_MODE_MMB,
+	MOUSE_MODE_RMB,
 };
 
 /*****************************************************************************/
@@ -35,14 +37,14 @@ public:
 		void			Init(CMapEditView *Wnd);
 		void			Render();
 		void			UpdateView(float XOfs,float YOfs,float ZOfs);
-		
+		void			SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
 
 // Layers
 		void			LayerAdd(char *Name=0);
 		void			LayerSetActive(int Layer);
 		int				LayerGetActive();
 		int				LayerGetCount();
-		sLayer	const	&LayerGet(int i);
+		CLayer			&LayerGet(int i);
 		void			LayerDelete(int Layer);
 		void			LayerMoveUp(int Layer);
 		void			LayerMoveDown(int Layer);
@@ -51,10 +53,12 @@ public:
 
 private:
 		CMapEditView	*ParentWindow;	
+		MOUSE_MODE		MouseMode;
 		CPoint			CurrentMousePos,LastMousePos;
 		Vec				ViewPos;
 
-		std::vector<sLayer>	Layers;
+		
+		std::vector<CLayer>	Layers;
 		int					ActiveLayer;
 
 

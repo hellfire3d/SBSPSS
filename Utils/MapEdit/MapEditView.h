@@ -36,9 +36,16 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
+	void		UpdateAll();
+	void		UpdateLayerBar();
+	int			GetLayerCurSel();
+	int			GetLayerCount();
 
 protected:
 	void	VideoMode(ColorsNumber &c,ZAccuracy &z,BOOL &dbuf);
+	CCore		Core;
+	CDialogBar	*LayerBar;
+
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMapEditView)
@@ -50,6 +57,12 @@ protected:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLayerbarNew();
+	afx_msg void OnLayerbarDelete();
+	afx_msg void OnLayerbarUp();
+	afx_msg void OnLayerbarDown();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnCaptureChanged(CWnd *pWnd);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "MapEdit.h"
-#include "Mainfrm.h"
 
 #include "MapEditDoc.h"
 
@@ -20,10 +19,6 @@ IMPLEMENT_DYNCREATE(CMapEditDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CMapEditDoc, CDocument)
 	//{{AFX_MSG_MAP(CMapEditDoc)
-	ON_BN_CLICKED(IDC_LAYERBAR_NEW, OnLayerbarNew)
-	ON_BN_CLICKED(IDC_LAYERBAR_DELETE, OnLayerbarDelete)
-	ON_BN_CLICKED(IDC_LAYERBAR_UP, OnLayerbarUp)
-	ON_BN_CLICKED(IDC_LAYERBAR_DOWN, OnLayerbarDown)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -32,10 +27,6 @@ END_MESSAGE_MAP()
 
 CMapEditDoc::CMapEditDoc() 
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-			LayerBar=Frm->GetLayerBar();
-
-
 }
 
 CMapEditDoc::~CMapEditDoc()
@@ -86,91 +77,3 @@ void CMapEditDoc::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
-/***************************************************************************/
-void CMapEditDoc::UpdateAll() 
-{
-	UpdateLayerBar();
-
-}
-/***************************************************************************/
-/*** Layer Commands ********************************************************/
-/***************************************************************************/
-void CMapEditDoc::OnLayerbarNew() 
-{
-	Core.LayerAdd();
-	UpdateLayerBar();
-}
-
-/***************************************************************************/
-void CMapEditDoc::OnLayerbarDelete() 
-{
-int	Sel=GetLayerCurSel();
-
-		if (Sel==-1) return;
-		Core.LayerDelete(Sel);
-		UpdateLayerBar();
-}
-
-/***************************************************************************/
-void CMapEditDoc::OnLayerbarUp() 
-{
-int	Sel=GetLayerCurSel();
-
-	if (Sel==-1) return;
-	if (Sel>0)
-	{
-		Core.LayerMoveUp(Sel);
-		UpdateLayerBar();
-	}
-
-}
-
-/***************************************************************************/
-void CMapEditDoc::OnLayerbarDown() 
-{
-int	Sel=GetLayerCurSel();
-	if (Sel==-1) return;
-	if (Sel<GetLayerCount()-1)
-	{
-		Core.LayerMoveDown(GetLayerCurSel());
-		UpdateLayerBar();
-	}
-}
-
-/***************************************************************************/
-void CMapEditDoc::UpdateLayerBar()
-{
-int			LayerCount=Core.LayerGetCount();
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-int			CurSel=Dlg->GetCurSel();
-
-		Dlg->ResetContent();
-
-		for (int i=0;i<LayerCount;i++)
-		{
-			sLayer	const &ThisLayer=Core.LayerGet(i);
-			Dlg->AddString(ThisLayer.Name);
-		}
-		Dlg->SetCurSel(CurSel);
-
-}
-
-/***************************************************************************/
-int	CMapEditDoc::GetLayerCurSel()
-{
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-		return(Dlg->GetCurSel());
-
-}
-
-/***************************************************************************/
-int	CMapEditDoc::GetLayerCount()
-{
-CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
-	return(Dlg->GetCount());
-
-}
-
-/***************************************************************************/
-/***************************************************************************/
-/***************************************************************************/
