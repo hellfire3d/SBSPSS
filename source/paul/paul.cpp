@@ -108,9 +108,9 @@ void CPaulScene::render()
   ---------------------------------------------------------------------- */
 void CPaulScene::think()
 {
-	static int	arse=0;
-	PAUL_DBGMSG("%d\n",arse++);
-	ASSERT(arse<100);
+//	static int	arse=0;
+//	PAUL_DBGMSG("%d\n",arse++);
+//	ASSERT(arse<100);
 }
 
 
