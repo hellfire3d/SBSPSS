@@ -123,9 +123,7 @@
 	------------------- */
 
 //#define _RECORD_DEMO_MODE_
-#ifdef __USER_paul__
 #define _STATE_DEBUG_
-#endif 
 
 
 #define SLIPSPEED		10					// Speed that player slips on icy surfaces
@@ -537,10 +535,6 @@ void	CPlayer::shutdown()
 static int oldmode=-1;
 int newmode=-1;
 
-#ifdef _STATE_DEBUG_
-char posBuf[100];
-#endif
-
 int	scmax=160;
 int scspeed=5;
 
@@ -809,6 +803,11 @@ int healthr=128;
 int healthg=0;
 int healthb=0;
 
+#ifdef _STATE_DEBUG_
+int stateDebugX=280;
+int stateDebugY=60;
+#endif
+
 #ifdef __USER_paul__
 #define NUM_LASTPOS	50
 static DVECTOR	lastpos[NUM_LASTPOS];
@@ -824,8 +823,13 @@ void	CPlayer::render()
 	CPlayerThing::render();
 	
 #ifdef _STATE_DEBUG_
-sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy));
-m_fontBank->print(40,40,posBuf);
+char buf[100];
+#ifdef __USER_paul__
+sprintf(buf,"%04d (%02d) ,%04d (%02d)\ndfg:%+02d\nMode:%s",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy),s_modeText[m_currentMode]);
+#else
+sprintf(buf,"Pos: %04d,%04d",Pos.vx,Pos.vy);
+#endif
+m_fontBank->print(stateDebugX,stateDebugY,buf);
 #endif
 
 
@@ -853,13 +857,6 @@ for(int i=0;i<NUM_LASTPOS;i++)
 	};
 	renderSb(&sbPos,m_animNo,m_animFrame>>sbanimspeed);
 	m_currentPlayerModeClass->render(&sbPos);
-
-
-#ifdef _STATE_DEBUG_
-	char	buf[128];
-	sprintf(buf,"MODE:  %s",s_modeText[m_currentMode]);
-	m_fontBank->print(40,210,buf);
-#endif
 
 
 	// Health
