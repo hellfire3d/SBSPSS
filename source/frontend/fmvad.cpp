@@ -84,7 +84,7 @@ void CFrontEndFMVAdvert::select()
 {
 	StopLoad();
 #if defined(__TERRITORY_EUR__)
-	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
+	FMV_play(FMV_DEMO,&fmvPerFrameFunc);
 #else
 	ASSERT(0);
 #endif
