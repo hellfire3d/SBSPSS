@@ -87,10 +87,17 @@ void GameState::setNextScene( CScene *_nextScene )
 }
 
 
+
 /*****************************************************************************/
 CScene * GameState::getCurrentScene()
 {
 	return s_currentScene;
+}
+
+/*****************************************************************************/
+CScene * GameState::getPendingScene()
+{
+	return s_pendingScene;
 }
 
 /*****************************************************************************/

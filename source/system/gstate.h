@@ -53,6 +53,7 @@ public:
 	static void		setTimeSpeed( int speed );
 
 	static CScene *	getCurrentScene();
+	static CScene *	getPendingScene();
 
 #if defined(__TERRITORY_USA__) || defined(__TERRITORY_JAP__)
 	static int		getOneSecondInFrames()			{return 60;}
