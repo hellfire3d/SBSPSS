@@ -1,4 +1,3 @@
-rem ..\..\tools\mkspeech -dEIxa -dGIxa -dFIxa -slist\Chapter01.Lst -b0
 ..\..\tools\mkspeech -dEIxa -slist\Bank0.Lst -b0
 ..\..\tools\mkspeech -dEIxa -slist\Bank1.Lst -b1
 ..\..\tools\mkspeech -dEIxa -slist\Bank2.Lst -b2
