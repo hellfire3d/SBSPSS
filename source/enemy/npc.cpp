@@ -46,9 +46,15 @@
 #endif
 
 
+s32 CNpc::playerXDist;
+s32 CNpc::playerYDist;
+s32 CNpc::playerXDistSqr;
+s32 CNpc::playerYDistSqr;
+
+
 void CNpc::init()
 {
-	m_type = NPC_CLAM;
+	m_type = NPC_ANEMONE_1;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -288,6 +294,12 @@ void CNpc::shutdown()
 
 void CNpc::think(int _frames)
 {
+	processGenericGetUserDist( _frames, &playerXDist, &playerYDist );
+	playerXDistSqr = playerXDist * playerXDist;
+	playerYDistSqr = playerYDist * playerYDist;
+
+	detectCollisionWithPlayer();
+
 	switch ( this->m_controlFunc )
 	{
 		case NPC_CONTROL_NONE:
@@ -325,6 +337,17 @@ void CNpc::think(int _frames)
 }
 
 
+void CNpc::detectCollisionWithPlayer()
+{
+	if ( playerXDistSqr + playerYDistSqr < 400 )
+	{
+		// close enough for collision
+
+		m_controlFunc = NPC_CONTROL_COLLISION;
+	}
+}
+
+
 bool CNpc::processSensor()
 {
 	switch( m_sensorFunc )
@@ -334,24 +357,11 @@ bool CNpc::processSensor()
 
 		default:
 			{
-				CPlayer *player = GameScene.getPlayer();
-
-				DVECTOR playerPos = player->getPos();
-
-				s32 xDist, yDist;
-				s32 xDistSqr, yDistSqr;
-
-				xDist = playerPos.vx - this->Pos.vx;
-				xDistSqr = xDist * xDist;
-
-				yDist = playerPos.vy - this->Pos.vy;
-				yDistSqr = yDist * yDist;
-
 				switch( m_sensorFunc )
 				{
 					case NPC_SENSOR_JELLYFISH_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_evadeClockwise = ( getRnd() % 2 ) - 1;
@@ -366,7 +376,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_CLAM_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_UP;
@@ -384,14 +394,14 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_SPIDER_CRAB_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extension = 0;
 							m_velocity = 5;
 							m_base = Pos;
 
-							if ( playerPos.vx < Pos.vx )
+							if ( playerXDist < 0 )
 							{
 								m_extendDir = EXTEND_LEFT;
 							}
@@ -411,7 +421,7 @@ bool CNpc::processSensor()
 					case NPC_SENSOR_OIL_BLOB_USER_CLOSE:
 					case NPC_SENSOR_NINJA_STARFISH_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_velocity = m_data[m_type].speed;
@@ -426,7 +436,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_GHOST_PIRATE_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_UP;
@@ -446,7 +456,7 @@ bool CNpc::processSensor()
 					{
 						s32 xDistWaypoint, yDistWaypoint;
 
-						if ( abs( xDist ) < 500 )
+						if ( abs( playerXDist ) < 500 )
 						{
 							// within range
 
@@ -456,9 +466,9 @@ bool CNpc::processSensor()
 
 							m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
 
-							if ( abs( xDist ) < abs( xDistWaypoint ) )
+							if ( abs( playerXDist ) < abs( xDistWaypoint ) )
 							{
-								s16 headingToPlayer = ratan2( yDist, xDist );
+								s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
 								s16 decDir, incDir, moveDist;
 
@@ -548,7 +558,7 @@ bool CNpc::processSensor()
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
 					case NPC_SENSOR_FLAMING_SKULL_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 40000 )
+						if ( playerXDistSqr + playerYDistSqr < 40000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -562,7 +572,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_SKULL_STOMPER_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 40000 )
+						if ( playerXDistSqr + playerYDistSqr < 40000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_DOWN;
@@ -577,7 +587,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 400 )
+						if ( playerXDistSqr + playerYDistSqr < 400 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_extendDir = EXTEND_UP;
@@ -592,7 +602,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_IRON_DOGFISH_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 10000 )
+						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -606,7 +616,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 400 )
+						if ( playerXDistSqr + playerYDistSqr < 400 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 
@@ -620,7 +630,7 @@ bool CNpc::processSensor()
 
 					case NPC_SENSOR_FALLING_ITEM_USER_CLOSE:
 					{
-						if ( xDistSqr + yDistSqr < 40000 )
+						if ( playerXDistSqr + playerYDistSqr < 40000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
 							m_movementTimer = GameState::getOneSecondInFrames() * 3;
@@ -858,10 +868,7 @@ void CNpc::processClose(int _frames)
 
 		case NPC_CLOSE_GENERIC_USER_SEEK:
 		{
-			s32 distX, distY;
-
-			processGenericGetUserDist( _frames, &distX, &distY );
-			processGenericGotoTarget( _frames, distX, distY, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, playerXDist, playerYDist, m_data[m_type].speed );
 
 			break;
 		}
@@ -943,6 +950,9 @@ void CNpc::processClose(int _frames)
 
 void CNpc::processCollision()
 {
+	CPlayer *player = GameScene.getPlayer();
+
+	//player->takeDamage( m_data[m_type].damageToUserType );
 }
 
 void CNpc::processTimer(int _frames)

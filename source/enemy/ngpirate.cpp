@@ -55,10 +55,7 @@ void CNpc::processCloseGhostPirateAttack( int _frames )
 
 			s16 heading;
 
-			CPlayer *player = GameScene.getPlayer();
-			DVECTOR playerPos = player->getPos();
-
-			if ( playerPos.vx > Pos.vx )
+			if ( playerXDist > 0 )
 			{
 				heading = 0;
 			}

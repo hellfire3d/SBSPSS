@@ -71,13 +71,7 @@ void CNpc::processFlyingDutchmanMovement( int _frames )
 
 void CNpc::processCloseFlyingDutchmanAttack( int _frames )
 {
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-
-	s32 yDist = playerPos.vy - Pos.vy;
-	s32 yDistSqr = yDist * yDist;
-
-	if ( yDist > 0 )
+	if ( playerYDist > 0 )
 	{
 		m_extendDir = EXTEND_DOWN;
 	}
@@ -86,9 +80,9 @@ void CNpc::processCloseFlyingDutchmanAttack( int _frames )
 		m_extendDir = EXTEND_UP;
 	}
 
-	if ( yDistSqr > 100 )
+	if ( playerYDistSqr > 100 )
 	{
-		processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+		processGenericGotoTarget( _frames, 0, playerYDist, m_data[m_type].speed );
 	}
 	else
 	{
@@ -101,7 +95,7 @@ void CNpc::processCloseFlyingDutchmanAttack( int _frames )
 
 				s16 heading;
 
-				if ( playerPos.vx - Pos.vx > 0 )
+				if ( playerXDist > 0 )
 				{
 					heading = 0;
 				}
@@ -126,12 +120,9 @@ void CNpc::processCloseFlyingDutchmanAttack( int _frames )
 			{
 				// charge player
 
-				s32 xDist = playerPos.vx - Pos.vx;
-				s32 xDistSqr = xDist * xDist;
-
-				if ( xDistSqr + yDistSqr > 100 )
+				if ( playerXDistSqr + playerYDistSqr > 100 )
 				{
-					processGenericGotoTarget( _frames, xDist, yDist, 6 );
+					processGenericGotoTarget( _frames, playerXDist, playerYDist, 6 );
 				}
 				else
 				{

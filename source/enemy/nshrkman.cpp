@@ -28,15 +28,8 @@ void CNpc::processCloseSharkManAttack( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-	s32 xDist, yDist;
 
-	xDist = playerPos.vx - this->Pos.vx;
-
-	yDist = playerPos.vy - this->Pos.vy;
-
-	s16 headingToPlayer = ratan2( yDist, xDist );
+	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
 	decDir = m_heading - headingToPlayer;
 
@@ -65,11 +58,11 @@ void CNpc::processCloseSharkManAttack( int _frames )
 
 	m_npcPath.getDistToNextWaypoint( Pos, &xDistWaypoint, &yDistWaypoint );
 
-	if ( abs( moveDist ) < 1024 && abs( xDistWaypoint ) >= abs( xDist ) )
+	if ( abs( moveDist ) < 1024 && abs( xDistWaypoint ) >= abs( playerXDist ) )
 	{
 		// continue charge
 
-		if ( playerPos.vx < Pos.vx )
+		if ( playerXDist < 0 )
 		{
 			m_heading = 2048;
 		}

@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 {
@@ -28,6 +32,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FALLING_ITEM
@@ -40,6 +45,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FISH_HOOK
@@ -52,6 +58,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_DUST_DEVIL
@@ -64,6 +71,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_PENDULUM
@@ -76,6 +84,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FIREBALL
@@ -88,6 +97,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		40,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SAW_BLADE
@@ -100,6 +110,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_1
@@ -112,6 +123,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SMALL_JELLYFISH_2
@@ -124,6 +136,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_LARGE_JELLYFISH
@@ -136,6 +149,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_ANEMONE_1
@@ -148,6 +162,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_ANEMONE_2
@@ -160,6 +175,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_CLAM
@@ -171,6 +187,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_TIMER_NONE,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SQUID_DART
@@ -183,6 +200,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		5,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FISH_FOLK
@@ -195,6 +213,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_PRICKLY_BUG
@@ -207,6 +226,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		1,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SEA_SNAKE_1
@@ -219,6 +239,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SEA_SNAKE_2
@@ -231,6 +252,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_PUFFA_FISH
@@ -243,6 +265,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_ANGLER_FISH
@@ -255,6 +278,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		1,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_HERMIT_CRAB
@@ -267,6 +291,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_MINE
@@ -279,6 +304,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_BOOGER_MONSTER
@@ -291,6 +317,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SPIDER_CRAB
@@ -303,6 +330,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_EYEBALL
@@ -315,6 +343,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_BABY_OCTOPUS
@@ -327,6 +356,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		512,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_ZOMBIE_FISH_FOLK
@@ -339,6 +369,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_NINJA_STARFISH
@@ -351,6 +382,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		64,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_GHOST
@@ -363,6 +395,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_GHOST_PIRATE
@@ -375,6 +408,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FLAMING_SKULL
@@ -387,6 +421,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SHARK_MAN
@@ -399,6 +434,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_OIL_BLOB
@@ -411,6 +447,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		64,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SKULL_STOMPER
@@ -423,6 +460,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_MOTHER_JELLYFISH
@@ -435,6 +473,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_SUB_SHARK
@@ -447,6 +486,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_FLYING_DUTCHMAN
@@ -459,6 +499,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		DAMAGE__LAVA,
 	},
 
 	{	// NPC_IRON_DOGFISH
@@ -471,5 +512,6 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		DAMAGE__LAVA,
 	},
 };

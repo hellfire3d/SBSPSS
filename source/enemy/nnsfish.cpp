@@ -32,20 +32,7 @@ void CNpc::processCloseNinjaStarfishAttack( int _frames )
 
 	s32 moveVel = 0;
 
-	CPlayer *player = GameScene.getPlayer();
-
-	DVECTOR playerPos = player->getPos();
-
-	s32 xDist, yDist;
-	s32 xDistSqr, yDistSqr;
-
-	xDist = playerPos.vx - this->Pos.vx;
-	xDistSqr = xDist * xDist;
-
-	yDist = playerPos.vy - this->Pos.vy;
-	yDistSqr = yDist * yDist;
-
-	//if ( xDistSqr + yDistSqr > 22500 )
+	//if ( playerXDistSqr + playerYDistSqr > 22500 )
 	//{
 		//this->m_controlFunc = NPC_CONTROL_MOVEMENT;
 	//}
@@ -53,7 +40,7 @@ void CNpc::processCloseNinjaStarfishAttack( int _frames )
 	{
 		bool pathComplete;
 
-		s16 headingToPlayer = ratan2( yDist, xDist );
+		s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 		s16 maxTurnRate = m_data[m_type].turnSpeed;
 		s16 decDir, incDir;
 

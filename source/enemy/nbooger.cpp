@@ -26,18 +26,9 @@
 
 void CNpc::processCloseBoogerMonsterAttack( int _frames )
 {
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-	s32 xDist, yDist;
-	s32 xDistSqr, yDistSqr;
 	s32 velocity;
 
-	xDist = playerPos.vx - this->Pos.vx;
-	xDistSqr = xDist * xDist;
-	yDist = playerPos.vy - this->Pos.vy;
-	yDistSqr = yDist * yDist;
-
-	if ( xDistSqr + yDistSqr > 10000 )
+	if ( playerXDistSqr + playerYDistSqr > 10000 )
 	{
 		// user out of range, retract
 

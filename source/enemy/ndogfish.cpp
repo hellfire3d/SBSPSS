@@ -70,13 +70,7 @@ void CNpc::processIronDogfishMovement( int _frames )
 
 void CNpc::processStandardIronDogfishAttack( int _frames )
 {
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-
-	s32 xDist = playerPos.vx - Pos.vx;
-	s32 xDistSqr = xDist * xDist;
-
-	if ( xDist > 0 )
+	if ( playerXDist > 0 )
 	{
 		m_extendDir = EXTEND_RIGHT;
 	}
@@ -90,9 +84,9 @@ void CNpc::processStandardIronDogfishAttack( int _frames )
 		case IRON_DOGFISH_THUMP_1:
 		case IRON_DOGFISH_THUMP_2:
 		{
-			if ( xDistSqr > 100 )
+			if ( playerXDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
+				processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
 			}
 			else
 			{
@@ -110,9 +104,7 @@ void CNpc::processStandardIronDogfishAttack( int _frames )
 		{
 			// fire at user
 
-			s32 yDist = playerPos.vy - Pos.vy;
-
-			s16 headingToPlayer = ratan2( yDist, xDist );
+			s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
 			CProjectile *projectile;
 			projectile = new( "test projectile" ) CProjectile;
@@ -134,9 +126,9 @@ void CNpc::processStandardIronDogfishAttack( int _frames )
 		{
 			// charge user
 
-			if ( xDistSqr > 100 )
+			if ( playerXDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, 0, 6 );
+				processGenericGotoTarget( _frames, playerXDist, 0, 6 );
 			}
 			else
 			{

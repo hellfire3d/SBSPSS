@@ -22,6 +22,10 @@
 #include "enemy\npcpath.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 /*****************************************************************************/
 
 class	CNpc : public CThing
@@ -240,6 +244,7 @@ protected:
 		bool							canTalk;
 		u8								speed;
 		u16								turnSpeed;
+		DAMAGE_TYPE						damageToUserType;
 	}
 	NPC_DATA;
 
@@ -252,6 +257,7 @@ protected:
 	void				processClose( int _frames );
 	void				processCollision();
 	void				processTimer( int _frames );
+	void				detectCollisionWithPlayer();
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );
 	void				processGenericGetUserDist( int _frames, s32 *distX, s32 *distY );
@@ -340,6 +346,12 @@ protected:
 	// data
 
 	static NPC_DATA		m_data[NPC_UNIT_TYPE_MAX];
+
+	static s32			playerXDist;
+	static s32			playerYDist;
+
+	static s32			playerXDistSqr;
+	static s32			playerYDistSqr;
 
 	// internal variables
 	

@@ -32,17 +32,10 @@ void CNpc::processCloseAnemone1Attack( int _frames )
 {
 	s32 moveX, moveY;
 	s16 decDir, incDir, moveDist;
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-	s32 xDist, yDist;
 	s16 maxTurnRate = m_data[m_type].turnSpeed;
 	bool withinRange = false;
 
-	xDist = playerPos.vx - this->Pos.vx;
-
-	yDist = playerPos.vy - this->Pos.vy;
-
-	s16 headingToPlayer = ratan2( yDist, xDist );
+	s16 headingToPlayer = ratan2( playerYDist, playerXDist );
 
 	decDir = m_fireHeading - headingToPlayer;
 

@@ -86,13 +86,7 @@ void CNpc::processSubSharkMovement( int _frames )
 
 void CNpc::processCloseSubSharkAttack( int _frames )
 {
-	CPlayer *player = GameScene.getPlayer();
-	DVECTOR playerPos = player->getPos();
-
-	s32 xDist = playerPos.vx - Pos.vx;
-	s32 xDistSqr = xDist * xDist;
-
-	if ( xDist > 0 )
+	if ( playerXDist > 0 )
 	{
 		m_extendDir = EXTEND_RIGHT;
 	}
@@ -105,9 +99,9 @@ void CNpc::processCloseSubSharkAttack( int _frames )
 	{
 		case SUB_SHARK_MINE_1:
 		{
-			if ( xDistSqr > 100 )
+			if ( playerXDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
+				processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
 			}
 			else
 			{
@@ -124,9 +118,9 @@ void CNpc::processCloseSubSharkAttack( int _frames )
 
 		case SUB_SHARK_MINE_2:
 		{
-			if ( xDistSqr > 100 )
+			if ( playerXDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
+				processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
 			}
 			else
 			{
@@ -145,13 +139,9 @@ void CNpc::processCloseSubSharkAttack( int _frames )
 		{
 			// charge player
 
-			//s32 yDist = playerPos.vy - Pos.vy;
-			//s32 yDistSqr = yDist * yDist;
-
-			//if ( xDistSqr + yDistSqr > 100 )
-			if ( xDistSqr > 100 )
+			if ( playerXDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, 0, 6 );
+				processGenericGotoTarget( _frames, playerXDist, 0, 6 );
 			}
 			else
 			{
