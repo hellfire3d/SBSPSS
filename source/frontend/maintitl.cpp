@@ -194,7 +194,7 @@ void CFrontEndMainTitles::select()
 	ASSERT(s_image);
 	SetScreenImage(s_image);
 
-	CSoundMediator::setSong(CSoundMediator::SONG_OPTIONS);
+	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
 	m_musicStarted=false;
 
 	CFader::setFadingIn();

@@ -56,6 +56,10 @@
 #include "frontend\scrollbg.h"
 #endif
 
+#ifndef	__SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -307,6 +311,9 @@ mode=mode_none;
 	m_frame=DELAY_TIME;
 
 	m_shuttingDown=false;
+
+	CSoundMediator::setSong(CSoundMediator::SONG_GAMECOMPLETE);
+	CSoundMediator::playSong();
 }
 
 /*----------------------------------------------------------------------
@@ -321,6 +328,8 @@ void CFrontEndCredits::unselect()
 MemCard::Stop();
 delete sl;	
 #endif
+	CSoundMediator::dumpSong();
+
 	m_background2->shutdown();		delete m_background2;
 	m_background1->shutdown();		delete m_background1;
 
