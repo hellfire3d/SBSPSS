@@ -103,6 +103,9 @@
 #include "locale\textdbase.h"
 #endif
 
+#ifndef	__SAVE_SAVE_H__
+#include "save\save.h"
+#endif
 
 #include "gfx\actor.h"
 
@@ -597,13 +600,12 @@ void CGameScene::think_playing(int _frames)
 		{
 			FmaScene.selectFma(fma);
 			GameState::setNextScene(&FmaScene);
+
+			// After the last FMA it goes to save. We then need to make it go to PARTY
+			SaveScene.setNextScene(CSaveScene::NEXTSCENE_PARTY);
 		}
 		else if(level==5)
 		{
-			if(chapter==5)
-			{
-				ShopScene.setGotoPartyScreen();
-			}
 			GameState::setNextScene(&ShopScene);
 		}
 		else

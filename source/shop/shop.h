@@ -48,8 +48,6 @@ public:
 	int		readyToShutdown();
 	char	*getSceneName()			{return"Shop";}
 
-	static void		setGotoPartyScreen();
-
 	typedef enum
 	{
 		SHOPITEM_TEDDY,

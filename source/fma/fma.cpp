@@ -82,6 +82,10 @@ FX
 #include "game\game.h"
 #endif
 
+#ifndef __SAVE_SAVE_H__
+#include "save\save.h"
+#endif
+
 
 
 /*	Std Lib
@@ -185,6 +189,7 @@ enum
 	FMA_NEXT_SCENE_GAME,
 	FMA_NEXT_SCENE_CREDITS,
 	FMA_NEXT_SCENE_FMA,
+	FMA_NEXT_SCENE_SAVE,
 
 	FMA_NUM_NEXT_SCENES
 };
@@ -332,6 +337,7 @@ static CScene	*s_nextGameSceneTable[FMA_NUM_NEXT_SCENES]=
 	&GameScene,					// FMA_NEXT_SCENE_GAME
 	&CreditsScene,				// FMA_NEXT_SCENE_CREDITS
 	&FmaScene,					// FMA_NEXT_SCENE_FMA
+	&SaveScene,					// FMA_NEXT_SCENE_SAVE
 };
 
 
@@ -946,8 +952,7 @@ static const int s_FMAC5EndScript[]=
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_02_DAT,
 	SC_REGISTER_CONVERSATION,	SCRIPTS_FMA_CH6_03_DAT,
 	SC_USE_LEVEL,				25,
-	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_FMA,
-	SC_SET_NEXT_FMA_NUMBER,		CFmaScene::FMA_SCRIPT__PARTY,
+	SC_SET_NEXT_SCENE,			FMA_NEXT_SCENE_SAVE,
 	SC_START,
 
 // Scene 1 - Shade Shoals
