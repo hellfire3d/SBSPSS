@@ -177,6 +177,7 @@ void CNpcParasiticWormEnemy::postInit()
 	}
 
 	m_movementTimer = 2 * GameState::getOneSecondInFrames();
+	m_collTimer = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -359,6 +360,11 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 
 		oldList->setHeading( heading );
 		oldList->updateCollisionArea();
+	}
+
+	if ( m_collTimer > 0 )
+	{
+		m_collTimer -= _frames;
 	}
 }
 
@@ -627,4 +633,61 @@ int CNpcParasiticWormSegment::checkCollisionAgainst( CThing *_thisThing, int _fr
 	}
 
 	return collided;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcParasiticWormEnemy::processShot( int _frames )
+{
+	if ( !m_segment )
+	{
+		m_drawRotation += 64 * _frames;
+		m_drawRotation &= 4095;
+
+		Pos.vy += m_speed * _frames;
+
+		if ( m_speed < 5 )
+		{
+			m_speed++;
+		}
+
+		DVECTOR	offset = CLevel::getCameraPos();
+
+		if ( Pos.vy - offset.vy > VidGetScrH() )
+		{
+			setToShutdown();
+		}
+	}
+	else
+	{
+		if ( m_collTimer <= 0 )
+		{
+			// knock segment off end of list
+
+			CNpcParasiticWormSegment *segment = m_segment;
+			CNpcParasiticWormSegment *oldSegment = segment;
+
+			while( segment->m_nextSegment )
+			{
+				oldSegment = segment;
+
+				segment = segment->m_nextSegment;
+			}
+
+			delete segment;
+
+			if ( segment == m_segment )
+			{
+				m_segment = NULL;
+			}
+			else
+			{
+				oldSegment->m_nextSegment = NULL;
+			}
+
+			m_collTimer = GameState::getOneSecondInFrames();
+		}
+
+		m_controlFunc = NPC_CONTROL_MOVEMENT;
+	}
 }
