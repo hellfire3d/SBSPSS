@@ -722,9 +722,9 @@ if(newmode!=-1)
 	platform=isOnPlatform();
 	if(platform)
 	{
-		if ( ( (CNpcPlatform *) platform )->isCart() )
+		if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
 		{
-			if ( m_currentMode != PLAYER_MODE_CART && m_currentMode != PLAYER_MODE_DEAD )
+			if ( ( (CNpcPlatform *) platform )->isCart() )
 			{
 				setMode( PLAYER_MODE_CART );
 			}
@@ -1616,6 +1616,7 @@ void CPlayer::setMode(PLAYER_MODE _mode)
 	}
 	m_currentMode=_mode;
 	m_currentPlayerModeClass=s_playerModes[_mode];
+	m_currentPlayerModeClass->setInitialState(state);
 	if(!m_currentPlayerModeClass->setState(state))
 	{
 		m_currentPlayerModeClass->setState(STATE_IDLE);

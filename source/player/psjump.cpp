@@ -69,12 +69,16 @@ CPlayerStateJump			s_stateJump;
   ---------------------------------------------------------------------- */
 void CPlayerStateJump::enter(CPlayerModeBase *_playerMode)
 {
-	_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
-	m_jumpFrames=0;
+	// If already in this state then don't do the entry code
+	if(_playerMode->getState()!=STATE_JUMP)
+	{
+		_playerMode->setAnimNo(ANIM_SPONGEBOB_JUMP);
+		m_jumpFrames=0;
 
-	_playerMode->jump();
+		_playerMode->jump();
 
-	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
+		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
+	}
 }
 
 

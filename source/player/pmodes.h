@@ -87,6 +87,7 @@ public:
 	virtual void	initialise(class CPlayer *_player)	{m_player=_player;}
 	virtual void	shutdown()							{;}
 	virtual void	enter()								{;}
+	virtual void	setInitialState(int _state)			{;}
 	virtual void	think()								{;}
 	virtual void	render(DVECTOR *_pos)				{;}
 	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
@@ -128,6 +129,7 @@ public:
 	};
 
 	virtual void	enter();
+	virtual void	setInitialState(int _state)			{m_currentState=(PLAYER_STATE)_state;}
 	virtual void	think();
 	virtual void	render()							{;}
 	virtual int		canDoLookAround();
