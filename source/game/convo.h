@@ -64,6 +64,11 @@ private:
 		TEXTBOX_QUESTIONHEIGHT=16,
 		TEXT_STEP_SIZE=5,
 		OT_POS=0,
+		// Main text
+		TEXT_R=120,
+		TEXT_G=115,
+		TEXT_B=90,
+		// Question text
 		SELECT_TEXT_R=250,
 		SELECT_TEXT_G=250,
 		SELECT_TEXT_B=250,

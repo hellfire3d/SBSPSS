@@ -269,6 +269,7 @@ void CConversation::init()
 	s_textFontBank->initialise(&standardFont);
 	s_textFontBank->setOt(0);
 	s_textFontBank->setPrintArea(TEXTBOX_X,TEXTBOX_Y,TEXTBOX_WIDTH,TEXTBOX_HEIGHT);
+	s_textFontBank->setColour(TEXT_R,TEXT_G,TEXT_B);
 
 	s_questionFontBank=new ("Conversation Font") FontBank();
 	s_questionFontBank->initialise(&standardFont);
