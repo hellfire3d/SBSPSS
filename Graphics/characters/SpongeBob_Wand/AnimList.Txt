@@ -20,3 +20,4 @@ GetHit
 CrouchDown
 CrouchUp
 Celebrate
+IdleBlink

@@ -300,8 +300,8 @@ static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEFACEUPSIDEDOWN,	-1,								1		},
 	{	-1,								ANIM_SPONGEBOB_IDLEBANDAID,			-1,								1		},
 	{	-1,								ANIM_SPONGEBOB_IDLEMATURE,			-1,								1		},
@@ -331,8 +331,8 @@ static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
 };
 static int s_numWeaponIdleAnims=sizeof(s_weaponIdleAnims)/sizeof(IdleAnims);
@@ -357,8 +357,8 @@ static IdleAnims s_netIdleAnims[]=
 {
 	//	start frame						loop frame							end frame						loop count
 	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								5*60	},
+	{	ANIM_SPONGEBOB_IDLEBLINK,		ANIM_SPONGEBOB_IDLEBREATH,			-1,								2*60	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,			-1,								1		},
 };
 static int s_numNetIdleAnims=sizeof(s_netIdleAnims)/sizeof(IdleAnims);

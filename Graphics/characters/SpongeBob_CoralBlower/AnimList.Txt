@@ -17,3 +17,4 @@ CrouchDown
 CrouchUp
 LookUp
 Celebrate
+IdleBlink

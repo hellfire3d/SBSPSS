@@ -35,3 +35,4 @@ IdleNoFace
 # IdleNet
 IdleZorro
 Celebrate
+IdleBlink

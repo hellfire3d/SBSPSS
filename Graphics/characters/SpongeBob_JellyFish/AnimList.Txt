@@ -21,3 +21,4 @@ LookUp
 IdleWeapon
 IdleNet
 Celebrate
+IdleBlink

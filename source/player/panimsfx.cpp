@@ -238,6 +238,13 @@ static const CPlayer::AnimFrameSfx s_idleZorroSfx[]=
 };
 static const int	s_idleZorroCount=sizeof(s_idleZorroSfx)/sizeof(CPlayer::AnimFrameSfx);
 
+// ANIM_SPONGEBOB_IDLEBLINK,
+static const CPlayer::AnimFrameSfx s_idleBlinkSfx[]=
+{
+	{	5,		CSoundMediator::SFX_SPONGEBOB_BLINK,			},
+};
+static const int	s_idleBlinkCount=sizeof(s_idleBlinkSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 
 
 // This is the table that ties up anims to sfx
@@ -259,8 +266,9 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	ANIM_SPONGEBOB_IDLEMOUSTACHE,		s_idleMoustacheCount,		s_idleMoustacheSfx		},
 	{	ANIM_SPONGEBOB_IDLENOFACE,			s_idleNoFaceCount,			s_idleNoFaceSfx			},
 	{	ANIM_SPONGEBOB_IDLEZORRO,			s_idleZorroCount,			s_idleZorroSfx			},
+	{	ANIM_SPONGEBOB_IDLEBLINK,			s_idleBlinkCount,			s_idleBlinkSfx			},
 };
-const int				CPlayer::s_numAnimSfx=16;		// Grrrrrrrr! (pkg)
+const int				CPlayer::s_numAnimSfx=17;		// Grrrrrrrr! (pkg)
 
  
 /*===========================================================================
