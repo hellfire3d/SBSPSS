@@ -73,6 +73,7 @@ void CNpcGaryFriend::think( int _frames )
 			// reverse direction
 
 			m_extension = !m_extension;
+			m_reversed = !m_reversed;
 		}
 		else
 		{
