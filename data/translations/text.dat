@@ -131,6 +131,15 @@ eng=Hold on there little square dude if you want to defend yourself you need to 
 eng=Did that make sense..?
 
 
+; ---------------------------------------------------------------
+; Pause menu
+; ---------------------------------------------------------------
+
+[STR__PAUSE_MENU__CONTINUE]
+eng=CONTINUE
+
+
+
 
 
 ; ---------------------------------------------------------------
@@ -138,5 +147,13 @@ eng=Did that make sense..?
 ; The following texts DO NOT require translation
 ; ---------------------------------------------------------------
 
-
-
+[STR__DEBUG__BASICUNARMED_MODE]
+eng=Set BASICUNARMED mode
+[STR__DEBUG__FULLUNARMED_MODE]
+eng=Set FULLUNARMED mode
+[STR__DEBUG__SQUEAKYBOOTS_MODE]
+eng=Set SQUEAKYBOOTS mode
+[STR__DEBUG__NET_MODE]
+eng=Set NET mode
+[STR__DEBUG__CORALBLOWER_MODE]
+eng=Set CORALBLOWER mode
