@@ -91,6 +91,10 @@
 #include "hazard\hrrock.h"
 #endif
 
+#ifndef __HAZARD_HFLYTRAP_H__
+#include "hazard\hflytrap.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,6 +115,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_BOUNCING_BARREL_HAZARD,
 	NPC_FIREBALL_HAZARD,
 	NPC_ROLLING_ROCK_HAZARD,
+	NPC_FLY_TRAP_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,6 +215,12 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_ROLLING_ROCK_HAZARD:
 		{
 			hazard = new ("rolling rock hazard") CNpcRollingRockHazard;
+			break;
+		}
+
+		case NPC_FLY_TRAP_HAZARD:
+		{
+			hazard = new ("fly trap hazard") CNpcFlyTrapHazard;
 			break;
 		}
 

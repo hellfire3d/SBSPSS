@@ -885,6 +885,14 @@ SOURCE=..\..\..\source\hazard\hfirebal.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hflytrap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hflytrap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hmasher.cpp
 # End Source File
 # Begin Source File
