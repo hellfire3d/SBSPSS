@@ -85,9 +85,9 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_DUST_DEVIL
-		NPC_INIT_DUST_DEVIL,
+		NPC_INIT_RETURNING_HAZARD,
 		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_DUST_DEVIL,
+		NPC_MOVEMENT_RETURNING_HAZARD,
 		NPC_MOVEMENT_MODIFIER_NONE,
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
@@ -669,7 +669,7 @@ void CNpc::init()
 			break;
 		}
 
-		case NPC_INIT_DUST_DEVIL:
+		case NPC_INIT_RETURNING_HAZARD:
 		{
 			m_npcPath.initPath();
 
@@ -1205,9 +1205,9 @@ void CNpc::processMovement(int _frames)
 			break;
 		}
 
-		case NPC_MOVEMENT_DUST_DEVIL:
+		case NPC_MOVEMENT_RETURNING_HAZARD:
 		{
-			processDustDevilMovement( _frames );
+			processReturningHazardMovement( _frames );
 
 			break;
 		}
