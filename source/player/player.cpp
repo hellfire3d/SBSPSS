@@ -768,10 +768,10 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 
 		// Only do the weapon change stuff on the first frame. As the buttons pressed do not
 		// change over these frames there is no point in doing it every frame
-		if(i==0)
+		if(i==0&&m_currentPlayerModeClass->getState()!=STATE_CELEBRATE)
 		{
-m_tryingToManuallyPickupWeapon=false;
-m_tryingToAutomaticallyPickupWeapon=false;
+			m_tryingToManuallyPickupWeapon=false;
+			m_tryingToAutomaticallyPickupWeapon=false;
 
 			// Weapon collect/drop/swap stuff..
 			if(m_currentMode==PLAYER_MODE_BASICUNARMED)

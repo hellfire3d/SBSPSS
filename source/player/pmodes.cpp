@@ -462,18 +462,27 @@ const struct PlayerMetrics	*CPlayerModeBase::getPlayerMetrics()
   ---------------------------------------------------------------------- */
 int		CPlayerModeBase::setState(int _state)
 {
-	CPlayerState	*nextState;
 	int				ret=false;
 
-	nextState=getStateTable()[_state];
-	if(nextState)
+	if(m_currentState==STATE_CELEBRATE&&_state!=STATE_IDLE)
 	{
-		m_player->resetPlayerCollisionSizeToBase();
-		m_currentStateClass=nextState;
-		m_currentStateClass->enter(this);
-		m_currentState=(PLAYER_STATE)_state;
 		ret=true;
 	}
+	else
+	{
+		CPlayerState	*nextState;
+
+		nextState=getStateTable()[_state];
+		if(nextState)
+		{
+			m_player->resetPlayerCollisionSizeToBase();
+			m_currentStateClass=nextState;
+			m_currentStateClass->enter(this);
+			m_currentState=(PLAYER_STATE)_state;
+			ret=true;
+		}
+	}
+
 	return ret;
 }
 
