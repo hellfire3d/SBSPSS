@@ -63,8 +63,8 @@ protected:
 
 	enum
 	{
-		NPC_PARASITIC_WORM_SPACING = 4,
-		NPC_PARASITIC_WORM_LENGTH = 10,
+		NPC_PARASITIC_WORM_SPACING = 1,
+		NPC_PARASITIC_WORM_LENGTH = 30,
 	};
 
 	// position history stuff

@@ -130,11 +130,12 @@ void CNpcParasiticWormEnemy::postInit()
 
 		if ( segCount < initLength )
 		{
-			u16 sum = ONE;
+			/*u16 sum = ONE;
 			u16 start = ONE >> 1;
 			u16 end = sum - start;
 
-			segScale = start + ( ( end * segCount ) / initLength );
+			segScale = start + ( ( end * segCount ) / initLength );*/
+			segScale = ONE;
 		}
 		else
 		{
@@ -295,7 +296,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 		DVECTOR sinPos;
 
 		sinPos = newPos->pos;
-		s32 diff = ( ( ( 5 >> downShift ) * rsin( extension ) ) >> 12 ) >> timeShift;
+		s32 diff = ( ( ( 2 >> downShift ) * rsin( extension ) ) >> 12 ) >> timeShift;
 		sinPos.vx += ( diff * rcos( headingToTarget + 1024 ) ) >> 12;
 		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
 
@@ -312,7 +313,7 @@ void CNpcParasiticWormEnemy::processMovement( int _frames )
 			}
 		}
 
-		extension += 1024;
+		extension += 256;
 		extension &= 4095;
 
 		if ( downShift > 0 )
@@ -504,7 +505,7 @@ void CNpcParasiticWormEnemy::render()
 		{
 			DVECTOR &renderPos=getRenderPos();
 
-			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),0);
 			m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, 4096 );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
