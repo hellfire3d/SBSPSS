@@ -257,9 +257,9 @@ void CPlayerStateIdle::setNextIdleAnim(CPlayerModeBase *_playerMode)
 static IdleAnims s_unarmedIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								100	},	// default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								75	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								50	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								10	},	// default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								7	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								5	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWIND,		-1,								1	},
 
 };
@@ -284,9 +284,9 @@ int CPlayerStateUnarmedIdle::getNumIdleAnims()
 static IdleAnims s_weaponIdleAnims[]=
 {
 	//	start frame						loop frame						end frame						loop count
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								100	}, // default
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								75	},
-	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								50	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								10	}, // default
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								7	},
+	{	-1,								ANIM_SPONGEBOB_IDLEBREATH,		-1,								5	},
 	{	-1,								ANIM_SPONGEBOB_IDLEWEAPON,		-1,								1	},
 };
 static int s_numWeaponIdleAnims=sizeof(s_weaponIdleAnims)/sizeof(IdleAnims);
