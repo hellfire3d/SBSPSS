@@ -121,6 +121,7 @@ void CNpcBouncePlatform::render()
 			m_modelGfx->Render(renderPos,&rotation,&scale);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR	offset = CLevel::getCameraPos();
 	DVECTOR	centre;
 	DVECTOR size;
 	int		halfLength;
