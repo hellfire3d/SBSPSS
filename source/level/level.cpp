@@ -141,7 +141,7 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		m_levelTPage=TPLoadTex(lvlTab->TexFilename);
 
 		s_playerSpawnPos.vx=LevelHdr->PlayerStartX*16;
-		s_playerSpawnPos.vy=LevelHdr->PlayerStartY*16;
+		s_playerSpawnPos.vy=LevelHdr->PlayerStartY*16+16;
 
 		MapPos.vx=MapPos.vy=0;
 		initLayers();
