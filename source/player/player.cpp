@@ -88,6 +88,14 @@ POWER-UPS
 	mm & bb ring		timed
 */
 
+
+// mode:
+//	enter
+//	think
+//	render
+//	states	setState()
+//	metrics getMetrics()
+
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -1278,7 +1286,7 @@ PLAYERINPUT CPlayer::readPadInput()
 		crnt->m_length=1;
 	}
 	s_demoFrameCount++;
-	if(s_demoFrameCount==30*60)
+	if(s_demoFrameCount==MAX_DEMO_TIME_IN_FRAMES)
 	{
 		writeDemoControls();
 		ASSERT(!"DEMO ENDED");
