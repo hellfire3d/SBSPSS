@@ -421,8 +421,9 @@ void	CPlayerModeBase::playerHasHitGround()
 	else if(m_currentState==STATE_FALLFAR)
 	{
 		// Landed from a painfully long fall
+		// This no longer hurts as per THQs request..
 		setState(STATE_HITGROUND);
-		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
+//		m_player->takeDamage(DAMAGE__FALL,REACT__NO_REACTION);
 		moveVel.vx=0;
 		CGameScene::setCameraShake(0,8);
 	}
@@ -453,7 +454,9 @@ const struct PlayerMetrics	*CPlayerModeBase::getPlayerMetrics()
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:
+	Purpose:	Sets player state.
+				NB: When you re-enter a state due to changing modes ( ie: when picking up
+				a weapon ) then strange things can happen :/
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
