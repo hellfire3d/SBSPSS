@@ -140,7 +140,6 @@ void	CBossText::select()
 
 	CSoundMediator::stopSong();
 	CSoundMediator::setSong(s_bossData[GameScene.GetLevel().getCurrentChapter()-1].m_songId);
-	CFader::setFadingIn();
 }
 
 /*----------------------------------------------------------------------

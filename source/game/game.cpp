@@ -262,6 +262,7 @@ void 	CGameScene::render()
 	switch(m_gamestate)
 	{
 		case GAMESTATE_SHOWING_LIVES:
+		case GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT:
 			render_showing_lives();
 			break;
 		case GAMESTATE_PLAYING:
@@ -327,7 +328,14 @@ void CGameScene::render_showing_lives()
 	setXY3(ft3,512,512,512,512,512,512);
 	AddPrimToList(ft3,0);
 
-	render_playing();
+	if(m_gamestate==GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT)
+	{
+		m_bossText->render();
+	}
+	else
+	{
+		render_playing();
+	}
 }
 
 /*****************************************************************************/
@@ -388,6 +396,9 @@ void	CGameScene::think(int _frames)
 		case GAMESTATE_SHOWING_LIVES:
 			think_showing_lives(_frames);
 			break;
+		case GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT:
+			think_showing_lives(_frames);
+			break;
 		case GAMESTATE_PLAYING:
 			think_playing(_frames);
 			break;
@@ -445,13 +456,16 @@ void	CGameScene::think(int _frames)
 /*****************************************************************************/
 void CGameScene::think_showing_lives(int _frames)
 {
-	if(m_showingLivesTimer==0)
+	if(m_gamestate!=GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT)
 	{
-		think_playing(0);
-	}
-	else if((m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT)*SPEED_OF_FADE>128)
-	{
-		think_playing(_frames);
+		if(m_showingLivesTimer==0)
+		{
+			think_playing(0);
+		}
+		else if((m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT)*SPEED_OF_FADE>128)
+		{
+			think_playing(_frames);
+		}
 	}
 
 	if(PadGetDown(0)&PAD_CROSS&&m_showingLivesTimer<TIME_TO_DISPLAY_LIVES_COUNT)
@@ -468,7 +482,14 @@ void CGameScene::think_showing_lives(int _frames)
 	
 	if((m_showingLivesTimer-TIME_TO_DISPLAY_LIVES_COUNT)*SPEED_OF_FADE>255)
 	{
-		m_gamestate=GAMESTATE_PLAYING;
+		if(m_gamestate!=GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT)
+		{
+			m_gamestate=GAMESTATE_PLAYING;
+		}
+		else
+		{
+			m_gamestate=GAMESTATE_BOSS_INTRO;
+		}
 	}
 }
 
@@ -480,11 +501,20 @@ void CGameScene::think_playing(int _frames)
 		return;
 	}
 
-	if(s_justHitBossArenaTrigger&&m_gamestate==GAMESTATE_PLAYING)
+	if(s_justHitBossArenaTrigger)
 	{
-		m_gamestate=GAMESTATE_FADING_INTO_BOSS_INTRO;
-		CFader::setFadingOut();
-		s_justHitBossArenaTrigger=false;
+		if(m_gamestate==GAMESTATE_SHOWING_LIVES)
+		{
+			m_bossText->select();
+			m_gamestate=GAMESTATE_SHOWING_LIVES_BUT_GOING_TO_BOSS_TEXT;
+			s_justHitBossArenaTrigger=false;
+		}
+		else if(m_gamestate==GAMESTATE_PLAYING)
+		{
+			m_gamestate=GAMESTATE_FADING_INTO_BOSS_INTRO;
+			CFader::setFadingOut();
+			s_justHitBossArenaTrigger=false;
+		}
 	}
 
 
