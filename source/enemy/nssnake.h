@@ -22,7 +22,7 @@ public:
 	virtual void		render();
 	virtual void		processEnemyCollision( CThing *thisThing );
 	virtual void		setScale( u16 scale )							{m_scale = scale;}
-	CNpcSeaSnakeSegment		*m_nextSegment;
+	CNpcSeaSnakeSegment	*m_nextSegment;
 	virtual void		setPos( DVECTOR newPos )						{Pos = newPos;}
 	virtual DVECTOR		getPos()										{return( Pos );}
 	virtual void		setHeading( s16 newHeading )					{m_heading = newHeading;}
@@ -33,10 +33,12 @@ public:
 	virtual	CRECT const	&getCollisionArea()							{return m_collisionArea;}
 	DVECTOR	const		&getCollisionCentre()						{return m_collisionCentre;}
 	int					getCollisionRadius()						{return m_collisionRadius;}
+	void				setAnim( int newAnim )						{m_anim = newAnim;}
 
 protected:
 	u16								m_scale;
 	CActorGfx						*m_actorGfx;
+	int								m_anim;
 	DVECTOR							Pos;
 	s16								m_heading;
 	CRECT							m_collisionArea;
@@ -65,7 +67,7 @@ protected:
 
 	enum
 	{
-		NPC_SEA_SNAKE_SPACING = 4,
+		NPC_SEA_SNAKE_SPACING = 6,
 		NPC_SEA_SNAKE_LENGTH = 10,
 	};
 

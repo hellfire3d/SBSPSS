@@ -302,6 +302,29 @@ void CNpcSeaSnakeEnemy::processMovement( int _frames )
 		sinPos.vy += ( diff * rsin( headingToTarget + 1024 ) ) >> 12;
 
 		m_segmentArray[segmentCount].setPos( sinPos );
+
+		if ( segmentCount > 3 )
+		{
+			if ( segmentCount == m_segmentCount - 1 )
+			{
+				m_segmentArray[segmentCount].setAnim( ANIM_SEASNAKE_TAILSTATIC );
+			}
+			else
+			{
+				if ( segmentCount % 2 )
+				{
+					m_segmentArray[segmentCount].setAnim( ANIM_SEASNAKE_BODY2STATIC );
+				}
+				else
+				{
+					m_segmentArray[segmentCount].setAnim( ANIM_SEASNAKE_BODY3STATIC );
+				}
+			}
+		}
+		else
+		{
+			m_segmentArray[segmentCount].setAnim( ANIM_SEASNAKE_BODY1STATIC );
+		}
 		oldPos = sinPos;
 
 		for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
@@ -591,7 +614,7 @@ void CNpcSeaSnakeSegment::render()
 
 	if ( renderFlag )
 	{
-		SprFrame = m_actorGfx->Render(renderPos,ANIM_SEASNAKE_BODY1STATIC,0,0);
+		SprFrame = m_actorGfx->Render(renderPos,m_anim,0,0);
 		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
