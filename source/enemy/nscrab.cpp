@@ -38,7 +38,7 @@ void CNpcSpiderCrabEnemy::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
 
-	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy - 8, 16 ) <= 0 )
+	if ( CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy - 24, 16 ) <= 0 )
 	{
 		// starting off below ground, jump initially
 
