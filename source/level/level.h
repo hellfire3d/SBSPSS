@@ -39,9 +39,11 @@ public:
 static	DVECTOR const	&getCameraPos()							{return MapPos;}
 static	DVECTOR const	&getPlayerSpawnPos()					{return s_playerSpawnPos;}
 
-static int				getCurrentChapter()						{return( LvlTable[s_globalLevelSelectThing].Chapter );}
-static int				getCurrentChapterLevel()				{return( LvlTable[s_globalLevelSelectThing].Level);}
-static int				getTotalSpatCount()						{return( LvlTable[s_globalLevelSelectThing].totalSpatCount);}
+static int				getCurrentChapter()						{return LvlTable[s_globalLevelSelectThing].Chapter;}
+static int				getCurrentChapterLevel()				{return LvlTable[s_globalLevelSelectThing].Level;}
+static int				getTotalSpatCount()						{return LvlTable[s_globalLevelSelectThing].totalSpatCount;}
+static int				getChapterLoadingText()					{return LvlTable[s_globalLevelSelectThing].ChapterLoadingText;}
+static int				getLevelLoadingText()					{return LvlTable[s_globalLevelSelectThing].LevelLoadingText;}
 
 		void			destroyMapArea(DVECTOR const &Pos);
 		void			destroyMapTile(DVECTOR const &Pos);
