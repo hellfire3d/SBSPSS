@@ -313,7 +313,7 @@ void	CGameScene::think(int _frames)
 				chapterToOpen=chapter+1;
 			}
 			gameSlot->levelIsNowOpen(chapterToOpen-1,levelToOpen-1);
-//			CMapScene::setLevelToStartOn(chapterToOpen-1,levelToOpen-1);
+			CMapScene::setLevelToStartOn(chapterToOpen-1,levelToOpen-1);
 		}
 
 		// Level finished - go to map or fma

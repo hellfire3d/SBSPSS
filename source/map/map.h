@@ -48,6 +48,7 @@ public:
 	int		readyToShutdown();
 	char	*getSceneName()			{return"Map";}
 
+	static void	setLevelToStartOn(int _chapter,int _level)	{s_chapterToStartOn=_chapter;s_levelToStartOn=_level;}
 
 private:
 	enum
@@ -110,6 +111,9 @@ private:
 
 	static sMapLevelData	s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
 	static DVECTOR			s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];
+
+	static int				s_chapterToStartOn;
+	static int				s_levelToStartOn;
 
 };
 

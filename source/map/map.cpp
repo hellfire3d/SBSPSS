@@ -170,6 +170,9 @@ DVECTOR						CMapScene::s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER]=
 	{	330,113	},
 };
 
+int							CMapScene::s_chapterToStartOn=1;
+int							CMapScene::s_levelToStartOn=1;
+
 
 extern int s_globalLevelSelectThing;
 
@@ -187,10 +190,14 @@ void CMapScene::init()
 	m_font->setOt(10);
 	m_font->setJustification(FontBank::JUST_LEFT);
 
-	m_currentChapterSelection=0;
-	m_currentLevelSelection=0;
 	m_screenImage=MemAlloc(512*256*2,"MapScreen");
+
+	m_currentChapterSelection=s_chapterToStartOn;
 	generateMapScreenImage();
+	m_currentLevelSelection=s_levelToStartOn;
+	m_pointerPos=getPointerTargetPosition();
+	m_pointerArrivedAtTarget=true;
+	
 	SetScreenImage((u8*)m_screenImage);
 
 	m_readyToExit=false;
