@@ -34,6 +34,17 @@ public:
 			int		GetGroupCount()				{return(IniGroup.size());}
 			char	*GetGroupName(int i)		{return(IniGroup[i].Name);}
 
+			int		GetKeyCount(const char *Grp)
+			{
+				int	Group=FindGroup(Grp);
+				return(IniGroup[Group].Entry.size());
+			}
+			char	*GetKeyName(const char *Grp,int Idx)
+			{
+				int	Group=FindGroup(Grp);
+				return(IniGroup[Group].Entry[Idx].Key);
+			}
+
 /*----------------------------------------------------------------------------*/
 // returns 1 of fail, 0 on success!! (Who thought that up!)
 int	MyStrCmp(const char *Str0,const char *Str1)
