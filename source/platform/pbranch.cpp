@@ -37,6 +37,7 @@
 void CNpcBranchPlatform::postInit()
 {
 	m_angularVelocity = 0;
+	m_platformWidth <<= 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +77,48 @@ void CNpcBranchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 	else
 	{
 		m_reversed = false;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
+{
+	switch(_thisThing->getThingType())
+	{
+		case TYPE_PLAYER:
+		{
+			if ( m_detectCollision && m_isActive )
+			{
+				CPlayer *player;
+				DVECTOR	playerPos;
+				CRECT	collisionArea;
+
+				// Only interested in SBs feet colliding with the box (pkg)
+				player=(CPlayer*)_thisThing;
+				playerPos=player->getPos();
+				collisionArea=getCollisionArea();
+				if(playerPos.vx>=collisionArea.x1&&playerPos.vx<=collisionArea.x2&&
+				   playerPos.vy>=collisionArea.y1&&playerPos.vy<=collisionArea.y2)
+				{
+					if ( ( m_reversed && playerPos.vx <= Pos.vx ) || ( !m_reversed && playerPos.vx >= Pos.vx ) )
+					{
+						player->setPlatform( this );
+
+						if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
+						{
+							m_contact = true;
+						}
+					}
+				}
+			}
+
+			break;
+		}
+
+		default:
+			ASSERT(0);
+			break;
 	}
 }
 
@@ -209,17 +252,30 @@ void CNpcBranchPlatform::render()
 				m_modelGfx->Render(renderPos,&rotation,&scale);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
 	DVECTOR	centre;
 	int		halfLength;
 	int		x1,y1,x2,y2;
 
 	centre=getCollisionCentre();
-	halfLength=PLATFORMWIDTH/2;
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
 
-	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
-	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
-	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
-	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+	x1=0;
+	x2=0;
+	y1=0;
+	y2=0;
+
+	if ( m_reversed )
+	{
+		x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+		y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	}
+	else
+	{
+		x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+		y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+	}
 
 	centre.vx-=offset.vx;
 	centre.vy-=offset.vy;

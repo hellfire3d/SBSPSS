@@ -128,11 +128,13 @@ void CNpcBouncePlatform::render()
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
 	DVECTOR	centre;
+	DVECTOR size;
 	int		halfLength;
 	int		x1,y1,x2,y2;
 
 	centre=getCollisionCentre();
-	halfLength=PLATFORMWIDTH/2;
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
 
 	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
 	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;

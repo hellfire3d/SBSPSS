@@ -310,6 +310,8 @@ void CNpcPlatform::init()
 
 	m_isShuttingDown = false;
 
+	m_platformWidth = PLATFORMWIDTH;
+
 	m_npcPath.initPath();
 }
 
@@ -558,7 +560,7 @@ void CNpcPlatform::calculateBoundingBoxSize()
 
 	angle=getCollisionAngle();
 	centre=getCollisionCentre();
-	halfLength=PLATFORMWIDTH/2;
+	halfLength=m_platformWidth/2;
 
 	x1=-halfLength*mcos(angle&4095)>>12;
 	y1=-halfLength*msin(angle&4095)>>12;
@@ -746,12 +748,14 @@ void CNpcPlatform::render()
 //				AddPrimToList(F4,2);
 
 #if defined (__USER_paul__) || defined (__USER_charles__)
+	DVECTOR size;
 	DVECTOR	centre;
 	int		halfLength;
 	int		x1,y1,x2,y2;
 
 	centre=getCollisionCentre();
-	halfLength=PLATFORMWIDTH/2;
+	size=getCollisionSize();
+	halfLength=size.vx>>1;
 
 	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
 	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;

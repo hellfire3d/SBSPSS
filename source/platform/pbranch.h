@@ -27,6 +27,8 @@ protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
 
+	virtual void		collidedWith(CThing *_thisThing);
+
 	s32					m_angularVelocity;
 	u8					m_reversed;
 };

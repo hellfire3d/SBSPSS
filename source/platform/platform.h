@@ -199,6 +199,8 @@ protected:
 	CModelGfx					*m_modelGfx;
 	u8							m_isShuttingDown;
 
+	u8							m_platformWidth;
+
 	virtual void		collidedWith(CThing *_thisThing);
 
 	static NPC_PLATFORM_UNIT_TYPE mapEditConvertTable[NPC_PLATFORM_TYPE_MAX];
