@@ -24,7 +24,7 @@ protected:
 	virtual void		processMovement( int _frames );
 	void				processStandardIronDogfishAttack( int _frames );
 	void				processWalkToUser( int _frames, int speed );
-	virtual void		collidedWith(CThing *_thisThing);
+	virtual void		processAttackCollision();
 
 	enum NPC_IRON_DOGFISH_STATE
 	{

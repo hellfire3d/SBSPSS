@@ -276,98 +276,22 @@ void CNpcIronDogfishEnemy::processClose( int _frames )
 	}
 }
 
-void CNpcIronDogfishEnemy::collidedWith(CThing *_thisThing)
+void CNpcIronDogfishEnemy::processAttackCollision()
 {
-	if ( m_isActive && !m_isCaught )
+	switch( m_animNo )
 	{
-		switch(_thisThing->getThingType())
+		case ANIM_IRONDOGFISH_PUNCH:
+		case ANIM_IRONDOGFISH_TAILSMASH:
 		{
-			case TYPE_PLAYER:
-			{
-				CPlayer *player = (CPlayer *) _thisThing;
+			// only detect collision if in attack mode
 
-				ATTACK_STATE playerState = player->getAttackState();
+			m_oldControlFunc = m_controlFunc;
+			m_controlFunc = NPC_CONTROL_COLLISION;
 
-				switch( playerState )
-				{
-					case ATTACK_STATE__NONE:
-					{
-						if ( !player->isRecoveringFromHit() )
-						{
-							switch( m_data[m_type].detectCollision )
-							{
-								case DETECT_NO_COLLISION:
-								{
-									// ignore
-
-									break;
-								}
-
-								case DETECT_ALL_COLLISION:
-								{
-									m_oldControlFunc = m_controlFunc;
-									m_controlFunc = NPC_CONTROL_COLLISION;
-
-									break;
-								}
-
-								case DETECT_ATTACK_COLLISION_GENERIC:
-								{
-									switch( m_animNo )
-									{
-										case ANIM_IRONDOGFISH_PUNCH:
-										case ANIM_IRONDOGFISH_TAILSMASH:
-										{
-											// only detect collision if in attack mode
-
-											m_oldControlFunc = m_controlFunc;
-											m_controlFunc = NPC_CONTROL_COLLISION;
-
-											break;
-										}
-
-										default:
-											break;
-									}
-								}
-							}
-						}
-
-						break;
-					}
-
-					default:
-					{
-						// player is attacking, respond appropriately
-
-						if ( m_controlFunc != NPC_CONTROL_SHOT )
-						{
-							m_controlFunc = NPC_CONTROL_SHOT;
-							m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
-						}
-
-						break;
-					}
-				}
-
-				break;
-			}
-
-			case TYPE_ENEMY:
-			{
-				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
-
-				if ( enemy->canCollideWithEnemy() )
-				{
-					processEnemyCollision( _thisThing );
-				}
-
-				break;
-			}
-
-			default:
-				ASSERT(0);
-				break;
+			break;
 		}
+
+		default:
+			break;
 	}
 }

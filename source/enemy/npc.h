@@ -236,6 +236,7 @@ protected:
 	virtual void		processShot();
 	virtual void		processClose( int _frames );
 	virtual void		processCollision();
+	virtual void		processAttackCollision();
 	void				processTimer( int _frames );
 	bool				isCollisionWithGround();
 

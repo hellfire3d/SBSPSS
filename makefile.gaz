@@ -108,7 +108,8 @@ platform_src :=		platform \
 					pdual \
 					pfgen \
 					pfallnor \
-					praft
+					praft \
+					plantern
 
 hazard_src :=		hazard \
 					hfalling \

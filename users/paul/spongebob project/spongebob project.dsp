@@ -1185,6 +1185,14 @@ SOURCE=..\..\..\source\platform\pgeyser.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\plantern.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\plantern.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\platdata.cpp
 # End Source File
 # Begin Source File

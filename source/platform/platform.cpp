@@ -115,6 +115,10 @@
 #include "platform\praft.h"
 #endif
 
+#ifndef __PLATFORM_PLANTERN_H__
+#include "platform\plantern.h"
+#endif
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,6 +265,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			generator = new ("vertical oildrum generator") CNpcFallingPlatformGenerator;
 			generator->setTargetType( NPC_VERTICAL_OILDRUM_PLATFORM );
 			platform = generator;
+			break;
+		}
+
+		case NPC_LANTERN_PLATFORM:
+		{
+			platform = new ("lantern platform") CNpcLanternPlatform;
 			break;
 		}
 

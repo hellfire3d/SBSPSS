@@ -813,6 +813,20 @@ void CNpcEnemy::think(int _frames)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcEnemy::processAttackCollision()
+{
+	//if ( m_controlFunc == NPC_CONTROL_CLOSE && m_data[m_type].closeFunc != NPC_CLOSE_NONE )
+	if ( m_controlFunc == NPC_CONTROL_CLOSE )
+	{
+		// only detect collision if in attack mode
+
+		m_oldControlFunc = m_controlFunc;
+		m_controlFunc = NPC_CONTROL_COLLISION;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::collidedWith( CThing *_thisThing )
 {
 	if ( m_isActive && !m_isCaught )
@@ -850,14 +864,7 @@ void CNpcEnemy::collidedWith( CThing *_thisThing )
 
 								case DETECT_ATTACK_COLLISION_GENERIC:
 								{
-									//if ( m_controlFunc == NPC_CONTROL_CLOSE && m_data[m_type].closeFunc != NPC_CLOSE_NONE )
-									if ( m_controlFunc == NPC_CONTROL_CLOSE )
-									{
-										// only detect collision if in attack mode
-
-										m_oldControlFunc = m_controlFunc;
-										m_controlFunc = NPC_CONTROL_COLLISION;
-									}
+									processAttackCollision();
 
 									break;
 								}
