@@ -6,7 +6,7 @@
 char	*FilenameList[FILEPOS_MAX]=
 {
 "BIGLUMP.BIN",
-"BIGLUMP.BIN",
+"TRACK1.IXA",
 "THQ.STR",
 "INTRO.STR",
 //"CLIMAX.STR",
@@ -37,6 +37,7 @@ void	CalcFilePos(int *Dst)
 			int		Pos;
 			char	Name[32];
 			sprintf(Name,"\\%s;1",FilenameList[Loop]);
+			printf("%s\n",Name);
 			while ( !CdSearchFile(&RetFile,Name) );
 			Dst[Loop]=CdPosToInt(&RetFile.pos);
 			}

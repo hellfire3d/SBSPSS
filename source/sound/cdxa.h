@@ -44,7 +44,7 @@ public:
 	enum	XA_ENUM
 	{
 		XA_MUSIC_TRACK		=1,
-		XA_SPEECH_TRACK		=2,
+		XA_SPEECH_TRACK		=1,
 		XA_QUEUE_MAX		=8,
 		XA_TRACK_MAX		=32,
 		XA_DEFAULT_VOL		=32000,

@@ -19,7 +19,7 @@
 
 // Add this to have CDXA on PC build!!
 // You will need a CD with Track1 synced to something, oh, and a CD drive
-#if	defined(__USER_paul__)//|| defined(__USER_daveo__)
+#if	0//|| defined(__USER_daveo__)
 #define	FORCE_XA	1	
 #endif
 
