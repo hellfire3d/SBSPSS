@@ -1828,6 +1828,10 @@ sprintf(buf,"pc:%d\ncmd:%d",
 f.initialise(&standardFont);
 f.print(20,20,buf);
 f.dump();
+printf("f:%d pc:%d cmd:%d\n",
+	   m_frameCount,
+	   m_pc-s_fmaScripts[s_chosenScript],
+	   *m_pc);
 }
 	switch(*m_pc)
 	{
