@@ -169,7 +169,8 @@ UI_GFX_FONT :=				font
 UI_GFX_FONT_IN :=			$(foreach FILE,$(UI_GFX_FONT),$(UI_GFX_DIR)/$(FILE).anm)
 
 UI_GFX_NONTRANS :=			faces\mr_krabs.bmp faces\patrick.bmp faces\plankton.bmp \
-							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp
+							faces\sandy.bmp faces\spongebob.bmp faces\squidward.bmp \
+							faces\mermaidman.bmp faces\barnacleboy.bmp faces\jack_custard.bmp
 UI_GFX_NONTRANS_IN :=		$(foreach FILE,$(UI_GFX_NONTRANS),$(UI_GFX_DIR)/$(FILE))
 
 UI_GFX_TRANS :=				+vbamboo.bmp +vbambootl.bmp +vbambootr.bmp +vbamboobl.bmp +vbamboobr.bmp \
