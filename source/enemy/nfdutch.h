@@ -25,7 +25,7 @@ public:
 	void				think( int _frames );
 	void				postInit();
 	void				render();
-	void				renderOnMapScreen( DVECTOR drawPos );
+	virtual void		renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 	u8					hasBeenAttacked();
 protected:

@@ -59,7 +59,7 @@ public:
 	void				postInit();
 	void				shutdown();
 	void				render();
-	void				renderOnMapScreen( DVECTOR drawPos );
+	virtual void		renderOnMapScreen( DVECTOR drawPos );
 	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	s32					getFrameShift( int _frames );

@@ -29,7 +29,7 @@ class CNpcMotherJellyfishEnemy : public CNpcBossEnemy
 public:
 	void				postInit();
 	void				render();
-	void				renderOnMapScreen( DVECTOR drawPos );
+	virtual void		renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 	void				setupWaypoints( sThingActor *ThisActor );
 protected:

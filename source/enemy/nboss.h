@@ -27,6 +27,8 @@ public:
 	virtual void		postInit();
 	virtual void		shutdown();
 	void				think( int _frames );
+	virtual void		renderOnMapScreen( DVECTOR drawPos )		{;}
+
 protected:
 	void				addHealthMeter();
 	virtual void		processShot( int _frames );

@@ -737,6 +737,14 @@ SOURCE=..\..\..\source\fx\fxzzzz.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\game\bosstext.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\bosstext.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\convo.cpp
 # End Source File
 # Begin Source File

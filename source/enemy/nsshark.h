@@ -28,7 +28,7 @@ class CNpcSubSharkEnemy : public CNpcBossEnemy
 public:
 	void				postInit();
 	void				render();
-	void				renderOnMapScreen( DVECTOR drawPos );
+	virtual void		renderOnMapScreen( DVECTOR drawPos );
 	void				shutdown();
 protected:
 	//virtual void		processClose( int _frames );

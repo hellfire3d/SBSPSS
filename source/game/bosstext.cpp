@@ -46,6 +46,10 @@
 #include "gfx/actor.h"
 #endif
 
+#ifndef	__ENEMY_NBOSS_H__
+#include "enemy\nboss.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -98,7 +102,6 @@ extern CThing	*g_bossThing;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int forcelevel=0;
 void	CBossText::init()
 {
 	m_scalableFontBank=new ("font") ScalableFontBank();
@@ -239,8 +242,7 @@ void	CBossText::render()
 		// Boss gfx
 		DVECTOR	bossPoss;
 		bossPoss=pos;
-//		g_bossThing;
-
+		((CNpcBossEnemy*)g_bossThing)->renderOnMapScreen(bossPoss);
 	}
 	else
 	{
