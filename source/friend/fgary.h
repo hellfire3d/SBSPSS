@@ -33,6 +33,8 @@ public:
 	void				startRight();
 	void				render();
 	void				setObstructed()											{m_obstructed = true;}
+	static void			setReachedDoor()										{m_hasReachedDoor = true;}
+	static bool			hasReachedDoor()										{return( m_hasReachedDoor );}
 
 protected:
 	DVECTOR				m_triggerPos;
@@ -46,6 +48,7 @@ protected:
 	u8					m_garySB;
 	u8					m_garyMeow;
 	static u8			m_garySpeech;
+	static u8			m_hasReachedDoor;
 };
 
 #endif
