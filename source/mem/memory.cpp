@@ -18,7 +18,9 @@ void	MemRemoveNode(sLList *LList,u_short Node);
 sLList		MainRam;
 int			MemNodeCount=0;
 
+#ifdef __VERSION_DEBUG__
 #define	USE_MEM_GUARDS
+#endif
 
 #ifdef	USE_MEM_GUARDS
 static const unsigned int	HEAD_GUARD_FILL_PATTERN	=0x3c3c3c3c;
