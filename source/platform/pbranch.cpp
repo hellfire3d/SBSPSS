@@ -37,25 +37,23 @@
 void CNpcBranchPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
-	boundingBox.YMin = ( ( boundingBox.YMin - boundingBox.YMax ) >> 1 ) + boundingBox.YMax;
+	boundingBox.YMin = ( ( boundingBox.YMin - boundingBox.YMax ) >> 1 ) + boundingBox.YMax + 16;
 	m_boundingBox = boundingBox;
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) - 8, ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
-	//CNpcPlatform::postInit();
 
-	/*sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ) << 1, ( boundingBox.YMax - boundingBox.YMin ) );
+	calculateNonRotatedCollisionData();
+
+	m_angularVelocity = 0;
 
 	if ( m_reversed )
 	{
-		setCollisionCentreOffset( boundingBox.XMax, 18 + ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) );
+		m_initRotation = 64;
 	}
 	else
 	{
-		setCollisionCentreOffset( boundingBox.XMin, 18 + ( ( boundingBox.YMax + boundingBox.YMin ) >> 1 ) );
-	}*/
-
-	m_angularVelocity = 0;
+		m_initRotation = -64;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,63 +98,12 @@ void CNpcBranchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*void CNpcBranchPlatform::collidedWith( CThing *_thisThing )
-{
-	switch(_thisThing->getThingType())
-	{
-		case TYPE_PLAYER:
-		{
-			if ( m_detectCollision && m_isActive )
-			{
-				CPlayer *player;
-				DVECTOR	playerPos;
-				CRECT	collisionArea;
-
-				// Only interested in SBs feet colliding with the box (pkg)
-				player=(CPlayer*)_thisThing;
-				playerPos=player->getPos();
-				collisionArea=getCollisionArea();
-				if(playerPos.vx>=collisionArea.x1&&playerPos.vx<=collisionArea.x2&&
-				   playerPos.vy>=collisionArea.y1&&playerPos.vy<=collisionArea.y2)
-				{
-					if ( ( m_reversed && playerPos.vx <= Pos.vx ) || ( !m_reversed && playerPos.vx >= Pos.vx ) )
-					{
-						player->setPlatform( this );
-
-						if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
-						{
-							m_contact = true;
-						}
-					}
-				}
-			}
-
-			break;
-		}
-
-		case TYPE_HAZARD:
-			break;
-
-		default:
-			ASSERT(0);
-			break;
-	}
-}*/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void CNpcBranchPlatform::processMovement( int _frames )
 {
 	s16 newAngle = getCollisionAngle();
 
 	if ( m_contact )
 	{
-		//if ( ( m_reversed && newAngle < -256 ) || newAngle > 256 )
-		//{
-			// flick player upwards
-			//GameScene.getPlayer()->springPlayerUp();
-		//}
-
 		CPlayer *player = GameScene.getPlayer();
 
 		if ( m_reversed )
@@ -287,7 +234,7 @@ sBBox & CNpcBranchPlatform::getBBox()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
+/*int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, int offsetY)
 {
 	DVECTOR top;
 	int		angle;
@@ -321,4 +268,4 @@ int	CNpcBranchPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offse
 
 		return( ( top.vy - _y ) + angleHeight );
 	}
-}
+}*/

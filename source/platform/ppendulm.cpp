@@ -31,7 +31,10 @@
 
 void CNpcPendulumPlatform::postInit()
 {
-	CNpcPlatform::postInit();
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	boundingBox.YMin += 18;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
 	m_extendDir = EXTEND_LEFT;
 	m_extension = 0;

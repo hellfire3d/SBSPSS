@@ -80,6 +80,7 @@ public:
 		NPC_BIG_WHEEL_PLATFORM,
 		NPC_STEERABLE_BARREL_PLATFORM,
 		NPC_JELLYFISH_PLATFORM,
+		NPC_FISH_HOOK_3_PLATFORM,
 		NPC_PLAYER_BUBBLE_PLATFORM,
 		NPC_CLAM_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
@@ -201,11 +202,15 @@ protected:
 	s32							m_tiltVelocity;
 	bool						m_extendDir;
 	s16							m_speed;
+	s16							m_initRotation;
 
 	CModelGfx					*m_modelGfx;
 	u8							m_isShuttingDown;
 
 	int							m_graphicNum;
+
+	sBBox						m_nonRotatedCollisionArea;
+	DVECTOR						m_nonRotatedCollisionOffset;
 
 	virtual void		collidedWith(CThing *_thisThing);
 
@@ -215,6 +220,7 @@ protected:
 
 protected:
 	virtual void	setCollisionAngle(int newAngle);	// Actually.. this probly doesn't need to be in the base calss anymore.. :/
+	virtual void	calculateNonRotatedCollisionData();
 	virtual void	calculateBoundingBoxSize();
 
 

@@ -143,6 +143,10 @@
 #include "platform\pjellfsh.h"
 #endif
 
+#ifndef __PLATFORM_PFISHHK3_H__
+#include "platform\pfishhk3.h"
+#endif
+
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
@@ -334,6 +338,12 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_FISH_HOOK_3_PLATFORM:
+		{
+			platform = new ("fish hook 3 platform") CNpcFishHook3Platform;
+			break;
+		}
+
 		default:
 		{
 			ASSERT( 0 );
@@ -429,6 +439,7 @@ void CNpcPlatform::init()
 	m_tiltAngle = 0;
 	m_tiltVelocity = 0;
 	m_tiltable = false;
+	m_initRotation = 0;
 
 	m_layerCollision = NULL;
 
@@ -486,40 +497,29 @@ void CNpcPlatform::reinit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcPlatform::calculateNonRotatedCollisionData()
+{
+	DVECTOR collisionSize = getCollisionSize();
+	DVECTOR collisionOffset = getCollisionCentreOffset();
+
+	m_nonRotatedCollisionArea.XMax = ( collisionSize.vx >> 1 ) + collisionOffset.vx;
+	m_nonRotatedCollisionArea.XMin = -( collisionSize.vx >> 1 ) + collisionOffset.vx;
+	m_nonRotatedCollisionArea.YMax = ( collisionSize.vy >> 1 ) + collisionOffset.vy;
+	m_nonRotatedCollisionArea.YMin = -( collisionSize.vy >> 1 ) + collisionOffset.vy;
+
+	m_nonRotatedCollisionOffset = collisionOffset;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcPlatform::postInit()
 {
 	sBBox boundingBox = m_modelGfx->GetBBox();
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 
-	/*if ( m_type == NPC_LINEAR_PLATFORM )
-	{
-		switch( CLevel::getCurrentChapter() )
-		{
-			case 5:
-			{
-				if ( CLevel::getCurrentChapterLevel() == 4 )
-				{
-					return;
-				}
-
-				break;
-			}
-
-			case 6:
-			{
-				if ( CLevel::getCurrentChapterLevel() == 1 )
-				{
-					return;
-				}
-
-				break;
-			}
-		}
-
-//		CFXJellyFishLegs	*T=(CFXJellyFishLegs*)CFX::Create(CFX::FX_TYPE_JELLYFISH_LEGS,this);
-//		T->SetUp(64,4,8,8);
-	}*/
+	calculateNonRotatedCollisionData();
+	setCollisionAngle( m_tiltAngle >> 8 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -651,74 +651,15 @@ void CNpcPlatform::setCollisionAngle(int newAngle)
 		shove.vx = 0;
 		shove.vy = getHeightFromPlatformAtPosition( playerPos.vx, playerPos.vy );
 		player->shove(shove);
-		/*if(getHeightFromPlatformAtPosition(playerPos.vx,playerPos.vy)==0)
-		{
-			// Ok.. currently stood on the platform - awkward bastard
-			DVECTOR	centre;
-			int		x,y;
-			DVECTOR	shove;
-
-			// Rotate backwards to find x position on platform
-			centre=getCollisionCentre();
-			x=-((centre.vx-playerPos.vx)*mcos(-getCollisionAngle()&4095)>>(12));
-
-			// Rotate forwards to find new position *after* the platform has been rotated
-			y=x*msin(newAngle&4095)>>(12);
-			x=x*mcos(newAngle&4095)>>(12);
-
-			// Shove the player to the new position
-			shove.vx=0;//(x+centre.vx)-playerPos.vx;		pkg - can't get this to work :(
-			shove.vy=(y+centre.vy)-playerPos.vy;
-
-			// Finally, to cope with any innacuracies that have been introduced, we run this
-			// new position through the getHeightFromPlatformAtPosition() code and use this to
-			// make sure that the player is still on the platform
-			playerPos.vx+=shove.vx;
-			playerPos.vy+=shove.vy;
-			y=(centre.vy-playerPos.vy)+((centre.vx-playerPos.vx)*msin(-newAngle&4095)>>12);
-			if(y)
-			{
-				shove.vy+=y;
-			}
-
-			player->shove(shove);
-		}*/
 	}
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPlatform::calculateBoundingBoxSize()
 {
-	/*int		angle;
-	DVECTOR	centre;
-	int		halfLength;
-	int		x1,y1,x2,y2;
-
-	angle=getCollisionAngle();
-	centre=getCollisionCentre();
-
-	//halfLength=m_platformWidth/2;
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	halfLength = ( boundingBox.XMax - boundingBox.XMin ) >> 1;
-
-	x1=-halfLength*mcos(angle&4095)>>12;
-	y1=-halfLength*msin(angle&4095)>>12;
-	x2=+halfLength*mcos(angle&4095)>>12;
-	y2=+halfLength*msin(angle&4095)>>12;
-
-	setCollisionSize( abs(x2-x1), abs(y2-y1) );
-
-	//sBBox boundingBox = m_modelGfx->GetBBox();
-	//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-	//setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );*/
-
-
-
-
-	//sBBox boundingBox = m_modelGfx->GetBBox();
-	sBBox boundingBox = getBBox();
+	//sBBox boundingBox = getBBox();
+	sBBox boundingBox = m_nonRotatedCollisionArea;
 
 	// 'render' collision box at correct angle
 
@@ -739,7 +680,7 @@ void CNpcPlatform::calculateBoundingBoxSize()
 
 	MATRIX mtx;
 	SetIdentNoTrans(&mtx );
-	RotMatrixZ( getCollisionAngle(), &mtx );
+	RotMatrixZ( getCollisionAngle() + m_initRotation, &mtx );
 
 	int i;
 
@@ -747,6 +688,14 @@ void CNpcPlatform::calculateBoundingBoxSize()
 	{
 		ApplyMatrix( &mtx, &testPointsNonRel[i], &testPoints[i] );
 	}
+
+	SVECTOR offsetSource;
+	VECTOR offsetTarget;
+
+	offsetSource.vx = m_nonRotatedCollisionOffset.vx;
+	offsetSource.vy = m_nonRotatedCollisionOffset.vy;
+
+	ApplyMatrix( &mtx, &offsetSource, &offsetTarget );
 
 	int x1, x2, y1, y2;
 
@@ -775,6 +724,8 @@ void CNpcPlatform::calculateBoundingBoxSize()
 	}
 
 	setCollisionSize( x2 - x1 + 1, y2 - y1 + 1 );
+
+	setCollisionCentreOffset( offsetTarget.vx, offsetTarget.vy );
 }
 
 
@@ -1076,10 +1027,9 @@ int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y, int offsetX, in
 
 	CRECT collisionArea = getCollisionArea();
 
-	sBBox boundingBox = getBBox();
 	top.vy = offsetY + collisionArea.y1;
 
-	angle=getCollisionAngle();
+	angle=getCollisionAngle() + m_initRotation;
 	if(angle==0)
 	{
 		// Non-rotated platform

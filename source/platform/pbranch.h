@@ -23,7 +23,7 @@ class CNpcBranchPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
-	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
+	//virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 protected:
 	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
 	virtual void		processMovement( int _frames );
