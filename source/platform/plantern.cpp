@@ -121,7 +121,7 @@ void CNpcLanternPlatform::processMovement( int _frames )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*const CRECT *CNpcLanternPlatform::getThinkBBox()
+const CRECT *CNpcLanternPlatform::getThinkBBox()
 {
 	CRECT objThinkBox = getCollisionArea();
 
@@ -132,4 +132,4 @@ void CNpcLanternPlatform::processMovement( int _frames )
 	objThinkBox.y2 = thinkBBox.YMax;
 
 	return &objThinkBox;
-}*/
+}

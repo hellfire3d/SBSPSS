@@ -108,6 +108,7 @@ void CNpcRaftPlatform::processMovement( int _frames )
 					{
 						// fall
 
+						moveX = distX * m_speed * _frames;
 						moveY = yMovement;
 					}
 				}
@@ -150,18 +151,18 @@ void CNpcRaftPlatform::processMovement( int _frames )
 
 	s16 heightDiff;
 
-	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 32 );
 
-	if ( heightDiff == 16 )
+	if ( heightDiff == 32 )
 	{
 		return;
 	}
 
 	testPos1.vy += heightDiff;
 
-	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 32 );
 
-	if ( heightDiff == 16 )
+	if ( heightDiff == 32 )
 	{
 		return;
 	}
