@@ -58,7 +58,7 @@ CActorPool::ACTOR_TYPE CActorPool::actorType[39] =
 	ACTOR_ENEMY_NPC,			//Squiddart=35
 	ACTOR_ENEMY_NPC,			//Stomper=36
 	ACTOR_ENEMY_NPC,			//DustDevil=37
-	ACTOR_ENEMY_GENERATOR_NPC,	//SiderCrabSpawner=38
+	ACTOR_ENEMY_NPC,			//SiderCrabSpawner=38
 };
 
 /*****************************************************************************/

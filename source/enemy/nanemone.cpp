@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef	__ENEMY_NANEMONE_H__
+#include "enemy\nanemone.h"
+#endif
+
 #ifndef __PROJECTL_PROJECTL_H__
 #include "projectl\projectl.h"
 #endif
@@ -39,6 +43,29 @@
 #include <ACTOR_ANENOMELVL3_ANIM.h>
 #endif
 
+
+bool CNpcAnemoneEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr + playerYDistSqr < 40000 )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
 
 void CNpcEnemy::processCloseAnemone1Attack( int _frames )
 {

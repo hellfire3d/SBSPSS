@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nhcrab.cpp
+	nhcrab.h
 
 	Author:		CRB
 	Created: 
@@ -12,6 +12,7 @@
 ===========================================================================*/
 
 #ifndef __ENEMY_NHCRAB_H__
+#define __ENEMY_NHCRAB_H__
 
 #ifndef __ENEMY_NPC_H__
 #include "enemy\npc.h"

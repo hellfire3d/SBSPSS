@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NSCRAB_H__
+#include "enemy\nscrab.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -28,7 +32,61 @@
 #endif
 
 
-void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CNpcSpiderCrabEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr + playerYDistSqr < 10000 )
+			{
+				// only attack if within path extents
+
+				s32 minX, maxX;
+				m_npcPath.getPathXExtents( &minX, &maxX );
+
+				if ( playerXDist < 0 )
+				{
+					m_extendDir = EXTEND_LEFT;
+
+					if ( ( Pos.vx + playerXDist - 128 ) < minX )
+					{
+						return( false );
+					}
+				}
+				else
+				{
+					m_extendDir = EXTEND_RIGHT;
+
+					if ( ( Pos.vx + playerXDist + 128 ) > maxX )
+					{
+						return( false );
+					}
+				}
+
+				m_controlFunc = NPC_CONTROL_CLOSE;
+				m_extension = 0;
+				m_velocity = 5;
+				m_base = Pos;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpiderCrabEnemy::processClose( int _frames )
 {
 	s32 velocity;
 	DVECTOR newPos = Pos;
@@ -112,7 +170,9 @@ void CNpcEnemy::processCloseSpiderCrabAttack( int _frames )
 	}
 }
 
-void CNpcEnemy::processSpiderCrabCollision()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpiderCrabEnemy::processCollision()
 {
 	if ( m_oldControlFunc == NPC_CONTROL_CLOSE )
 	{
@@ -148,7 +208,9 @@ void CNpcEnemy::processSpiderCrabCollision()
 	}
 }
 
-void CNpcEnemy::processSpiderCrabInitJumpMovement( int _frames )
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpiderCrabEnemy::processSpiderCrabInitJumpMovement( int _frames )
 {
 	s32 velocity;
 	bool completed = false;
@@ -189,44 +251,34 @@ void CNpcEnemy::processSpiderCrabInitJumpMovement( int _frames )
 	}
 }
 
-void CNpcEnemy::processSpiderCrabSpawnerMovement( int _frames )
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSpiderCrabEnemy::processMovement(int _frames)
 {
-	if ( getNumChildren() < 3 )
+	if ( _frames > 2 )
 	{
-		m_movementTimer -= _frames;
+		_frames = 2;
+	}
 
-		if ( m_movementTimer < 0 )
+	s32 moveX = 0, moveY = 0;
+	s32 moveVel = 0;
+	s32 moveDist = 0;
+
+	if ( m_movementFunc == NPC_MOVEMENT_SPIDER_CRAB_INITJUMP )
+	{
+		processSpiderCrabInitJumpMovement( _frames );
+	}
+	else
+	{
+		processGenericFixedPathWalk( _frames, &moveX, &moveY );
+
+		if ( !m_animPlaying )
 		{
-			m_movementTimer = 3 * GameState::getOneSecondInFrames();
-
-			CNpcEnemy *enemy;
-			enemy = new( "spider crab" ) CNpcEnemy;
-			ASSERT(enemy);
-			enemy->setType( CNpcEnemy::NPC_SPIDER_CRAB );
-			enemy->init();
-			enemy->setLayerCollision( m_layerCollision );
-			enemy->setStartPos( Pos.vx >> 4, Pos.vy >> 4 );
-
-			CNpcWaypoint *sourceWaypoint = m_npcPath.getWaypointList();
-
-			if ( sourceWaypoint )
-			{
-				// skip first waypoint
-
-				sourceWaypoint = sourceWaypoint->nextWaypoint;
-
-				while( sourceWaypoint )
-				{
-					enemy->addWaypoint( sourceWaypoint->pos.vx >> 4, sourceWaypoint->pos.vy >> 4 );
-					sourceWaypoint = sourceWaypoint->nextWaypoint;
-				}
-			}
-
-			enemy->setPathType( m_npcPath.getPathType() );
-
-			enemy->postInit();
-
-			addChild( enemy );
+			m_animPlaying = true;
+			m_animNo = m_data[m_type].moveAnim;
+			m_frame = 0;
 		}
 	}
+
+	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
 }

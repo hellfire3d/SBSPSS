@@ -14,8 +14,7 @@
 #ifndef	__ENEMY_NGEN_H__
 #define	__ENEMY_NGEN_H__
 
-
-#ifndef	__ENEMY_NPC_H__
+#ifndef __ENEMY_NPC_H__
 #include "enemy\npc.h"
 #endif
 
@@ -23,6 +22,7 @@ class	CNpcEnemyGenerator : public CNpcEnemy
 {
 public:
 	void				render();
+	void				think(int _frames);
 };
 
 #endif

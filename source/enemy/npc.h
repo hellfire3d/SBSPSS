@@ -162,12 +162,13 @@ public:
 	void				init();
 	void				postInit();
 	void				shutdown();
-	void				think(int _frames);
-	void				render();
+	virtual void		think(int _frames);
+	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_UNIT_TYPE newType )						{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
+	static NPC_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 	void				setHeading( s32 newHeading )							{m_heading = newHeading;}
 	void				setHeading( s32 xPos, s32 yPos );
 	void				addWaypoint( s32 xPos, s32 yPos );
@@ -177,7 +178,7 @@ public:
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
 
-private:
+protected:
 	class CLayerCollision	*m_layerCollision;
 
 protected:
@@ -223,14 +224,12 @@ protected:
 	enum NPC_SENSOR_FUNC
 	{
 		NPC_SENSOR_NONE = 0,
-		NPC_SENSOR_JELLYFISH_USER_CLOSE = 1,
+		NPC_SENSOR_USER_CLOSE = 1,
 		NPC_SENSOR_CLAM_USER_CLOSE,
-		NPC_SENSOR_SPIDER_CRAB_USER_CLOSE,
 		NPC_SENSOR_NINJA_STARFISH_USER_CLOSE,
 		NPC_SENSOR_GHOST_PIRATE_USER_CLOSE,
 		NPC_SENSOR_GENERIC_USER_VISIBLE,
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
-		NPC_SENSOR_ANEMONE_USER_CLOSE,
 		NPC_SENSOR_EYEBALL_USER_CLOSE,
 		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
 		NPC_SENSOR_BOOGER_MONSTER_USER_CLOSE,
@@ -238,7 +237,6 @@ protected:
 		NPC_SENSOR_FALLING_ITEM_USER_CLOSE,
 		NPC_SENSOR_FISH_HOOK_USER_CLOSE,
 		NPC_SENSOR_FLAMING_SKULL_USER_CLOSE,
-		NPC_SENSOR_HERMIT_CRAB_USER_CLOSE,
 		NPC_SENSOR_OCTOPUS_USER_CLOSE,
 		NPC_SENSOR_PUFFA_FISH_USER_CLOSE,
 		NPC_SENSOR_PARASITIC_WORM_USER_CLOSE,
@@ -247,10 +245,8 @@ protected:
 	enum NPC_CLOSE_FUNC
 	{
 		NPC_CLOSE_NONE = 0,
-		NPC_CLOSE_JELLYFISH_EVADE = 1,
-		NPC_CLOSE_CLAM_JUMP_ATTACK,
+		NPC_CLOSE_CLAM_JUMP_ATTACK = 1,
 		NPC_CLOSE_CLAM_SNAP_ATTACK,
-		NPC_CLOSE_SPIDER_CRAB_ATTACK,
 		NPC_CLOSE_GHOST_PIRATE_ATTACK,
 		NPC_CLOSE_SHARK_MAN_ATTACK,
 		NPC_CLOSE_GENERIC_USER_SEEK,
@@ -292,7 +288,6 @@ protected:
 		NPC_MOVEMENT_SHARK_MAN,
 		NPC_MOVEMENT_BALL_BLOB,
 		NPC_MOVEMENT_RETURNING_HAZARD_GROUND,
-		NPC_MOVEMENT_SPIDER_CRAB_SPAWNER,
 		NPC_MOVEMENT_SPIDER_CRAB_INITJUMP,
 	};
 
@@ -300,7 +295,6 @@ protected:
 	{
 		NPC_MOVEMENT_MODIFIER_NONE = 0,
 		NPC_MOVEMENT_MODIFIER_BOB = 1,
-		NPC_MOVEMENT_MODIFIER_JELLYFISH,
 		NPC_MOVEMENT_MODIFIER_FISH_FOLK,
 		NPC_MOVEMENT_MODIFIER_OCTOPUS,
 	};
@@ -317,12 +311,6 @@ protected:
 	{
 		NPC_SHOT_NONE = 0,
 		NPC_SHOT_GENERIC = 1,
-	};
-
-	enum NPC_COLLISION_FUNC
-	{
-		NPC_COLLISION_GENERIC = 0,
-		NPC_COLLISION_SPIDER_CRAB_BITE = 1,
 	};
 
 	enum NPC_MOTHER_JELLYFISH_STATE
@@ -436,7 +424,6 @@ protected:
 		NPC_SHOT_FUNC					shotFunc;
 		u16								dieAnim;
 		u16								recoilAnim;
-		NPC_COLLISION_FUNC				collisionFunc;
 		bool							canBeNetted;
 		bool							respawning;
 	}
@@ -446,12 +433,12 @@ protected:
 
 	// functions
 
-	bool				processSensor();
-	void				processMovement( int _frames );
-	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+	virtual bool		processSensor();
+	virtual void		processMovement( int _frames );
+	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	void				processShot();
-	void				processClose( int _frames );
-	void				processCollision();
+	virtual void		processClose( int _frames );
+	virtual void		processCollision();
 	void				processTimer( int _frames );
 	bool				isCollisionWithGround();
 
@@ -466,7 +453,6 @@ protected:
 	// small jellyfish functions
 
 	void				processSmallJellyfishSensor();
-	void				processSmallJellyfishMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	void				processCloseSmallJellyfishEvade( int _frames );
 
 	// baby octopus functions
@@ -486,17 +472,6 @@ protected:
 
 	void				processCloseClamJumpAttack( int _frames );
 	void				processCloseClamSnapAttack( int _frames );
-
-	// spider crab functions
-
-	void				processCloseSpiderCrabAttack( int _frames );
-	void				processSpiderCrabCollision();
-	void				processSpiderCrabSpawnerMovement( int _frames );
-	void				processSpiderCrabInitJumpMovement( int _frames );
-
-	// hermit crab functions
-
-	void				processCloseHermitCrabAttack( int _frames );
 
 	// ghost pirate functions
 
@@ -614,6 +589,7 @@ protected:
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;
+	POLY_FT4		*SprFrame;
 
 	virtual void		collidedWith(CThing *_thisThing);
 

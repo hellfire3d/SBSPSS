@@ -15,6 +15,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __ENEMY_NHCRAB_H__
+#include "enemy\nhcrab.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -27,7 +31,30 @@
 #include <ACTOR_HERMITCRAB_ANIM.h>
 #endif
 
-void CNpcEnemy::processCloseHermitCrabAttack( int _frames )
+bool CNpcHermitCrabEnemy::processSensor()
+{
+	switch( m_sensorFunc )
+	{
+		case NPC_SENSOR_NONE:
+			return( false );
+
+		default:
+		{
+			if ( playerXDistSqr + playerYDistSqr < 400 )
+			{
+				m_controlFunc = NPC_CONTROL_CLOSE;
+
+				return( true );
+			}
+			else
+			{
+				return( false );
+			}
+		}
+	}
+}
+
+void CNpcHermitCrabEnemy::processClose( int _frames )
 {
 	if ( m_state == HERMIT_CRAB_NO_ATTACK )
 	{

@@ -113,6 +113,10 @@ SOURCE=..\..\..\source\enemy\nanemone.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nanemone.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nbblob.cpp
 # End Source File
 # Begin Source File
@@ -173,6 +177,10 @@ SOURCE=..\..\..\source\enemy\nhcrab.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nhcrab.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nmjfish.cpp
 # End Source File
 # Begin Source File
@@ -217,11 +225,19 @@ SOURCE=..\..\..\source\enemy\nscrab.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\enemy\nscrab.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\enemy\nshrkman.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\enemy\nsjfish.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsjfish.h
 # End Source File
 # Begin Source File
 

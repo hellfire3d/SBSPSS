@@ -1,6 +1,6 @@
 /*=========================================================================
 
-	nsjfish.cpp
+	nsjfish.h
 
 	Author:		CRB
 	Created: 
@@ -12,6 +12,7 @@
 ===========================================================================*/
 
 #ifndef __ENEMY_NSJFISH_H__
+#define __ENEMY_NSJFISH_H__
 
 #ifndef __ENEMY_NPC_H__
 #include "enemy\npc.h"
@@ -20,6 +21,7 @@
 class CNpcSmallJellyfishEnemy : public CNpcEnemy
 {
 public:
+	void				render();
 protected:
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );

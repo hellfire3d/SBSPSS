@@ -188,6 +188,13 @@ s32 CNpcEnemy::playerYDistSqr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
+{
+	return( mapEditConvertTable[newType - NPC_ENEMY_MAPEDIT_OFFSET] );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcEnemy::setTypeFromMapEdit( u16 newType )
 {
 	m_type = mapEditConvertTable[newType - NPC_ENEMY_MAPEDIT_OFFSET];
@@ -814,21 +821,6 @@ bool CNpcEnemy::processSensor()
 			{
 				switch( m_sensorFunc )
 				{
-					case NPC_SENSOR_JELLYFISH_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 5625 )
-						{
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_evadeClockwise = getRnd() % 2;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
 					case NPC_SENSOR_CLAM_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 10000 )
@@ -838,47 +830,6 @@ bool CNpcEnemy::processSensor()
 							m_extension = 0;
 							m_movementTimer = GameState::getOneSecondInFrames() >> 3;
 							m_velocity = ( getRnd() % 6 ) + 1;
-
-							return( true );
-						}
-						else
-						{
-							return( false );
-						}
-					}
-
-					case NPC_SENSOR_SPIDER_CRAB_USER_CLOSE:
-					{
-						if ( playerXDistSqr + playerYDistSqr < 10000 )
-						{
-							// only attack if within path extents
-
-							s32 minX, maxX;
-							m_npcPath.getPathXExtents( &minX, &maxX );
-
-							if ( playerXDist < 0 )
-							{
-								m_extendDir = EXTEND_LEFT;
-
-								if ( ( Pos.vx + playerXDist - 128 ) < minX )
-								{
-									return( false );
-								}
-							}
-							else
-							{
-								m_extendDir = EXTEND_RIGHT;
-
-								if ( ( Pos.vx + playerXDist + 128 ) > maxX )
-								{
-									return( false );
-								}
-							}
-
-							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_extension = 0;
-							m_velocity = 5;
-							m_base = Pos;
 
 							return( true );
 						}
@@ -1024,7 +975,6 @@ bool CNpcEnemy::processSensor()
 						}
 					}
 
-					case NPC_SENSOR_ANEMONE_USER_CLOSE:
 					case NPC_SENSOR_EYEBALL_USER_CLOSE:
 					case NPC_SENSOR_FLAMING_SKULL_USER_CLOSE:
 					case NPC_SENSOR_PARASITIC_WORM_USER_CLOSE:
@@ -1102,7 +1052,6 @@ bool CNpcEnemy::processSensor()
 
 					case NPC_SENSOR_FISH_HOOK_USER_CLOSE:
 					case NPC_SENSOR_OCTOPUS_USER_CLOSE:
-					case NPC_SENSOR_HERMIT_CRAB_USER_CLOSE:
 					{
 						if ( playerXDistSqr + playerYDistSqr < 400 )
 						{
@@ -1277,20 +1226,6 @@ void CNpcEnemy::processMovement(int _frames)
 			break;
 		}
 
-		case NPC_MOVEMENT_SPIDER_CRAB_SPAWNER:
-		{
-			processSpiderCrabSpawnerMovement( _frames );
-
-			break;
-		}
-
-		case NPC_MOVEMENT_SPIDER_CRAB_INITJUMP:
-		{
-			processSpiderCrabInitJumpMovement( _frames );
-
-			break;
-		}
-
 		default:
 
 			break;
@@ -1315,13 +1250,6 @@ void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 d
 
 		case NPC_MOVEMENT_MODIFIER_BOB:
 		{
-			break;
-		}
-
-		case NPC_MOVEMENT_MODIFIER_JELLYFISH:
-		{
-			processSmallJellyfishMovementModifier( _frames, distX, distY, dist, headingChange );
-
 			break;
 		}
 
@@ -1439,11 +1367,6 @@ void CNpcEnemy::processClose(int _frames)
 {
 	switch( m_data[this->m_type].closeFunc )
 	{
-		case NPC_CLOSE_JELLYFISH_EVADE:
-			processCloseSmallJellyfishEvade( _frames );
-
-			break;
-
 		case NPC_CLOSE_CLAM_JUMP_ATTACK:
 			processCloseClamJumpAttack( _frames );
 
@@ -1451,11 +1374,6 @@ void CNpcEnemy::processClose(int _frames)
 
 		case NPC_CLOSE_CLAM_SNAP_ATTACK:
 			processCloseClamSnapAttack( _frames );
-
-			break;
-
-		case NPC_CLOSE_SPIDER_CRAB_ATTACK:
-			processCloseSpiderCrabAttack( _frames );
 
 			break;
 
@@ -1546,11 +1464,6 @@ void CNpcEnemy::processClose(int _frames)
 
 			break;
 
-		case NPC_CLOSE_HERMIT_CRAB_ATTACK:
-			processCloseHermitCrabAttack( _frames );
-
-			break;
-
 		case NPC_CLOSE_OCTOPUS_ATTACK:
 			processCloseOctopusAttack( _frames );
 
@@ -1575,26 +1488,11 @@ void CNpcEnemy::processClose(int _frames)
 
 void CNpcEnemy::processCollision()
 {
-	switch( m_data[m_type].collisionFunc )
-	{
-		case NPC_COLLISION_GENERIC:
-		{
-			CPlayer *player = GameScene.getPlayer();
+	CPlayer *player = GameScene.getPlayer();
 
-			player->takeDamage( m_data[m_type].damageToUserType );
+	player->takeDamage( m_data[m_type].damageToUserType );
 
-			m_controlFunc = m_oldControlFunc;
-
-			break;
-		}
-
-		case NPC_COLLISION_SPIDER_CRAB_BITE:
-		{
-			processSpiderCrabCollision();
-
-			break;
-		}
-	}
+	m_controlFunc = m_oldControlFunc;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1644,6 +1542,8 @@ void CNpcEnemy::processTimer(int _frames)
 
 void CNpcEnemy::render()
 {
+	SprFrame = NULL;
+
 	if ( m_isActive )
 	{
 		CEnemyThing::render();
@@ -1659,7 +1559,7 @@ void CNpcEnemy::render()
 		{
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
-				m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
+				SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),m_reversed);
 			}
 		}
 	}
