@@ -49,9 +49,14 @@ public:
 	DVECTOR					getMapSize();
 
 	bool					GetNextLevel(int &Lvl);
+
+	void					respawnLevel();
+
 	
 private:
 	void					initLayers();
+	void					initThings(int _respawningLevel);
+
 	void					DisplayLoadingScreen(sLvlTab *lvlTab);
 
 	sLevelHdr				*LevelHdr;

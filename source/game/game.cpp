@@ -282,6 +282,13 @@ CPlayer	* CGameScene::getPlayer()
 }
 
 /*****************************************************************************/
+void	CGameScene::respawnLevel()
+{
+	Level.respawnLevel();
+}
+
+
+/*****************************************************************************/
 void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 {
 	CThingManager::processEventAllThings(evt, sourceThing);
@@ -311,70 +318,6 @@ void	CGameScene::initLevel()
 	if(s_globalLevelSelectThing==1)
 	{
 		m_player->setHealthType(CPlayer::HEALTH_TYPE__OUT_OF_WATER);
-	}
-
-// Init actors (needs moving and tidying
-	int actorNum;
-	int platformNum;
-	int hazardNum;
-
-	sThingActor **actorList = Level.getActorList();
-	if (actorList)
-	{
-		for ( actorNum = 0 ; actorNum < Level.getActorCount() ; actorNum++ )
-		{
-			sThingActor	*ThisActor=actorList[actorNum];
-			CGameScene::ACTOR_TYPE actorType = CGameScene::getActorType( actorList[actorNum]->Type );
-			switch ( actorType )
-			{
-				case CGameScene::ACTOR_ENEMY_NPC:
-					{
-						CNpcEnemy *enemy;
-						enemy=CNpcEnemy::Create(ThisActor);
-						enemy->setLayerCollision( Level.getCollisionLayer() );
-						enemy->setupWaypoints( ThisActor );
-						enemy->postInit();
-					}
-					break;
-
-				case CGameScene::ACTOR_FRIEND_NPC:
-					{
-						CNpcFriend *friendNpc;
-						friendNpc=CNpcFriend::Create(ThisActor);
-						friendNpc->setLayerCollision( Level.getCollisionLayer() );
-						friendNpc->postInit();
-					}
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-
-	sThingPlatform **platformList = Level.getPlatformList();
-	if (platformList)
-	{
-		for ( platformNum = 0 ; platformNum < Level.getPlatformCount() ; platformNum++ )
-		{
-			sThingPlatform *ThisPlatform = platformList[platformNum];
-			CNpcPlatform *platform;
-			platform = CNpcPlatform::Create( ThisPlatform );
-			platform->setLayerCollision( Level.getCollisionLayer() );
-			platform->postInit();
-		}
-	}
-
-	sThingHazard **hazardList = Level.getHazardList();
-	if (hazardList)
-	{
-		for ( hazardNum = 0 ; hazardNum < Level.getHazardCount() ; hazardNum++ )
-		{
-			sThingHazard *ThisHazard = hazardList[hazardNum];
-			CNpcHazard *hazard;
-			hazard = CNpcHazard::Create( ThisHazard );
-			hazard->setLayerCollision( Level.getCollisionLayer() );
-		}
 	}
 
 	// Song is loaded/dumped by the level, and played from here. This just gives some

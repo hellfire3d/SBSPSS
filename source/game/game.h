@@ -40,6 +40,7 @@ virtual	int				canPause();
 		char			*getSceneName()	{return "Game";}
 
 		CPlayer			*getPlayer();
+		void			respawnLevel();
 		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 static void				setReadyToExit()	{s_readyToExit=true;}

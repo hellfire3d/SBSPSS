@@ -52,6 +52,7 @@ class CThingManager
 public:
 	static void		init();
 	static void		shutdown();
+	static void		killAllThingsForRespawn();
 
 	static void		thinkAllThings(int _frames);
 	static void		renderAllThings();

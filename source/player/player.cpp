@@ -77,9 +77,9 @@
 #include "platform\platform.h"
 #endif
 
-
-// to be removed
-//#include "gfx\tpage.h"
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
 
 
 /*	Std Lib
@@ -1304,6 +1304,8 @@ void CPlayer::respawn()
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
 	
 	clearPlatform();
+
+	GameScene.respawnLevel();
 }
 
 

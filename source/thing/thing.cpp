@@ -99,6 +99,32 @@ void		CThingManager::shutdown()
 
 /*----------------------------------------------------------------------
 	Function:
+	Purpose:	Kills every CThing except the player
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void		CThingManager::killAllThingsForRespawn()
+{
+	int		i;
+	CThing	*thing;
+
+	ASSERT(s_initialised);
+	for(i=0;i<CThing::MAX_TYPE;i++)
+	{
+		if(i!=CThing::TYPE_PLAYER)
+		{
+			while(s_thingLists[i])
+			{
+				thing=s_thingLists[i];
+				thing->shutdown();
+				delete thing;
+			}
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
 	Purpose:
 	Params:
 	Returns:

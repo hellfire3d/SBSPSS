@@ -47,8 +47,28 @@
 #include "system\vid.h"
 #endif
 
-#include	"enemy\npc.h"
 #include	"gfx\actor.h"
+
+#ifndef	__ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
+#ifndef __PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
+#endif
+
+#ifndef __HAZARD_HAZARD_H__
+#include "hazard\hazard.h"
+#endif
+
+#ifndef __PROJECTL_PROJECTL_H__
+#include "projectl\projectl.h"
+#endif
+
 
 /*****************************************************************************/
 extern int s_globalLevelSelectThing;
@@ -264,21 +284,6 @@ void	CLevel::initLayers()
 				ThingPtr+=ActorList[i]->PointCount*sizeof(u16)*2;
 			}
 		}
-// Items
-		if (LevelHdr->ItemList)
-		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
-			ItemCount=Hdr->Count;
-			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
-			DVECTOR	pos;
-			for(int i=0;i<ItemCount;i++)
-			{
-				pos.vx=ItemList->Pos.X<<4;
-				pos.vy=ItemList->Pos.Y<<4;
-				createPickup((PICKUP_TYPE)ItemList->Type,&pos);
-				ItemList++;
-			}
-		}
 // Platforms
 		if (LevelHdr->PlatformList)
 		{
@@ -295,71 +300,6 @@ void	CLevel::initLayers()
 			}
 		}
 
-// Triggers
-// Yeah yeah - I'll put this crap into a seperate file when the numbers of trigger types get a bit bigger! (pkg)
-		if (LevelHdr->TriggerList)
-		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
-			TriggerCount=Hdr->Count;
-			TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
-
-			for(int i=0;i<TriggerCount;i++)
-			{
-				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
-				if(TriggerList->Type==3)
-				{
-					// Camera lock trigger
-					trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
-					trigger->init();
-					trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-												TriggerList->Width<<4,TriggerList->Height<<4);
-					trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
-				}
-				TriggerList++;
-			}
-		}
-
-		if (LevelHdr->TriggerList)
-		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
-			TriggerCount=Hdr->Count;
-			TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
-
-			for(int i=0;i<TriggerCount;i++)
-			{
-				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
-				switch(TriggerList->Type)
-				{
-					// Exit trigger
-					case 0:
-						trigger=(CTriggerThing*)new ("LevelExitTrigger") CLevelExitTrigger();
-						break;
-
-					// Level respawn trigger
-					case 1:
-						trigger=(CRestartPointTrigger*)new ("RestartTrigger") CRestartPointTrigger();
-						break;
-
-					// Teleport trigger
-					case 2:
-						trigger=(CTeleportTrigger*)new ("TeleportTrigger") CTeleportTrigger();
-						break;
-
-					// Camera lock trigger
-					case 3:
-						trigger=NULL;
-						break;
-				}
-				if(trigger)
-				{
-					trigger->init();
-					trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-												TriggerList->Width<<4,TriggerList->Height<<4);
-					trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
-				}
-				TriggerList++;
-			}
-		}
 // FX
 		if (LevelHdr->FXList)
 		{
@@ -367,6 +307,7 @@ void	CLevel::initLayers()
 			FXCount=Hdr->Count;
 			FXList=(sThingFX*)MakePtr(Hdr,sizeof(sThingHdr));
 		}
+
 // Hazards
 		if (LevelHdr->HazardList)
 		{
@@ -382,7 +323,173 @@ void	CLevel::initLayers()
 			}
 		}
 
+		initThings(false);
 }
+
+
+
+/*****************************************************************************/
+void	CLevel::initThings(int _respawningLevel)
+{
+	// Triggers
+	// Yeah yeah - I'll put this crap into a seperate file when the numbers of trigger types get a bit bigger! (pkg)
+	if (LevelHdr->TriggerList)
+	{
+		sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
+		TriggerCount=Hdr->Count;
+		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
+
+		for(int i=0;i<TriggerCount;i++)
+		{
+			CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
+			if(TriggerList->Type==3)
+			{
+				// Camera lock trigger
+				trigger=(CCameraLockTrigger*)new ("CameraLockTrigger") CCameraLockTrigger();
+				trigger->init();
+				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
+											TriggerList->Width<<4,TriggerList->Height<<4);
+				trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
+			}
+			TriggerList++;
+		}
+	}
+
+	if (LevelHdr->TriggerList)
+	{
+		sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
+		TriggerCount=Hdr->Count;
+		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
+
+		for(int i=0;i<TriggerCount;i++)
+		{
+			CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
+			switch(TriggerList->Type)
+			{
+				// Exit trigger
+				case 0:
+					trigger=(CTriggerThing*)new ("LevelExitTrigger") CLevelExitTrigger();
+					break;
+
+				// Level respawn trigger
+				case 1:
+					trigger=(CRestartPointTrigger*)new ("RestartTrigger") CRestartPointTrigger();
+					break;
+
+				// Teleport trigger
+				case 2:
+					trigger=(CTeleportTrigger*)new ("TeleportTrigger") CTeleportTrigger();
+					break;
+
+				// Camera lock trigger
+				case 3:
+					trigger=NULL;
+					break;
+			}
+			if(trigger)
+			{
+				trigger->init();
+				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
+											TriggerList->Width<<4,TriggerList->Height<<4);
+				trigger->setTargetBox(TriggerList->TargetPos.X<<4,TriggerList->TargetPos.Y<<4,TriggerList->TargetSize.X<<4,TriggerList->TargetSize.Y<<4);
+			}
+			TriggerList++;
+		}
+	}
+
+// Items
+		if (LevelHdr->ItemList)
+		{
+			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
+			ItemCount=Hdr->Count;
+			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
+			DVECTOR	pos;
+			for(int i=0;i<ItemCount;i++)
+			{
+				if(!(_respawningLevel&&(PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA))
+				{
+					pos.vx=ItemList->Pos.X<<4;
+					pos.vy=ItemList->Pos.Y<<4;
+					createPickup((PICKUP_TYPE)ItemList->Type,&pos);
+				}
+				ItemList++;
+			}
+		}
+
+// Init actors (needs moving and tidying
+	int actorNum;
+	int platformNum;
+	int hazardNum;
+
+	sThingActor **actorList = getActorList();
+	if (actorList)
+	{
+		for ( actorNum = 0 ; actorNum < getActorCount() ; actorNum++ )
+		{
+			sThingActor	*ThisActor=actorList[actorNum];
+			CGameScene::ACTOR_TYPE actorType = CGameScene::getActorType( actorList[actorNum]->Type );
+			switch ( actorType )
+			{
+				case CGameScene::ACTOR_ENEMY_NPC:
+					{
+						CNpcEnemy *enemy;
+						enemy=CNpcEnemy::Create(ThisActor);
+						enemy->setLayerCollision( getCollisionLayer() );
+						enemy->setupWaypoints( ThisActor );
+						enemy->postInit();
+					}
+					break;
+
+				case CGameScene::ACTOR_FRIEND_NPC:
+					{
+						CNpcFriend *friendNpc;
+						friendNpc=CNpcFriend::Create(ThisActor);
+						friendNpc->setLayerCollision( getCollisionLayer() );
+						friendNpc->postInit();
+					}
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+	sThingPlatform **platformList = getPlatformList();
+	if (platformList)
+	{
+		for ( platformNum = 0 ; platformNum < getPlatformCount() ; platformNum++ )
+		{
+			sThingPlatform *ThisPlatform = platformList[platformNum];
+			CNpcPlatform *platform;
+			platform = CNpcPlatform::Create( ThisPlatform );
+			platform->setLayerCollision( getCollisionLayer() );
+			platform->postInit();
+		}
+	}
+
+	sThingHazard **hazardList = getHazardList();
+	if (hazardList)
+	{
+		for ( hazardNum = 0 ; hazardNum < getHazardCount() ; hazardNum++ )
+		{
+			sThingHazard *ThisHazard = hazardList[hazardNum];
+			CNpcHazard *hazard;
+			hazard = CNpcHazard::Create( ThisHazard );
+			hazard->setLayerCollision( getCollisionLayer() );
+		}
+	}
+}
+
+
+
+/*****************************************************************************/
+void	CLevel::respawnLevel()
+{
+	CThingManager::killAllThingsForRespawn();
+	initThings(true);
+}
+
 
 /*****************************************************************************/
 void	CLevel::shutdown()
