@@ -48,7 +48,6 @@
 
 void CNpcFlyingDutchmanEnemy::postInit()
 {
-	m_state = FLYING_DUTCHMAN_ATTACK_PLAYER_1;
 	m_extendDir = EXTEND_UP;
 
 	s32 minX, maxX;
@@ -65,10 +64,8 @@ void CNpcFlyingDutchmanEnemy::postInit()
 
 	m_fireCount = 0;
 
-	m_invulnerableTimer = 0;
-
 	m_fadeVal = 128;
-	m_fadeDown = false;
+	m_fadeDown = true;
 
 	CNpcBossEnemy::postInit();
 }
@@ -77,32 +74,23 @@ void CNpcFlyingDutchmanEnemy::postInit()
 
 void CNpcFlyingDutchmanEnemy::think( int _frames )
 {
-	if ( m_invulnerableTimer > 0 )
-	{
-		m_invulnerableTimer -= _frames;
-	}
-
 	if ( m_fadeDown )
 	{
 		if ( m_fadeVal > 0 )
 		{
-			m_fadeVal -= _frames;
+			m_fadeVal -= 4 * _frames;
 
 			if ( m_fadeVal < 0 )
 			{
 				m_fadeVal = 0;
 			}
 		}
-		else
-		{
-			m_fadeDown = false;
-		}
 	}
 	else
 	{
 		if ( m_fadeVal < 128 )
 		{
-			m_fadeVal += _frames;
+			m_fadeVal += 4 * _frames;
 
 			if ( m_fadeVal > 128 )
 			{
@@ -178,6 +166,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 					playerPos.vy >= m_minY && playerPos.vy <= m_maxY )
 			{
 				m_controlFunc = NPC_CONTROL_CLOSE;
+				m_state = FLYING_DUTCHMAN_GOTO_PLAYER;
 			}
 			else
 			{
@@ -209,22 +198,166 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 		m_extendDir = EXTEND_UP;
 	}
 
-	if ( !m_inRange && playerYDistSqr > 100 )
+	if ( !m_inRange )
 	{
-		if ( !m_animPlaying )
+		if ( playerYDistSqr > 100 )
 		{
-			m_animPlaying = true;
-			m_animNo = m_data[m_type].moveAnim;
-			m_frame = 0;
-		}
+			if ( !m_animPlaying )
+			{
+				m_animPlaying = true;
+				m_animNo = m_data[m_type].moveAnim;
+				m_frame = 0;
+			}
 
-		processGenericGotoTarget( _frames, 0, playerYDist, m_speed );
+			processGenericGotoTarget( _frames, 0, playerYDist, m_speed );
+		}
+		else
+		{
+			m_inRange = true;
+		}
 	}
 	else
 	{
-		m_inRange = true;
-
 		switch( m_state )
+		{
+			case FLYING_DUTCHMAN_GOTO_PLAYER:
+			{
+				if ( !m_animPlaying )
+				{
+					m_animPlaying = true;
+					m_animNo = m_data[m_type].moveAnim;
+					m_frame = 0;
+				}
+
+				// charge player
+
+				if ( ( playerXDistSqr + playerYDistSqr ) > 20000 )
+				{
+					processGenericGotoTarget( _frames, playerXDist, playerYDist, 8 );
+				}
+				else
+				{
+					m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
+					m_fadeDown = false;
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_ATTACK_PLAYER:
+			{
+				if ( m_fadeVal == 128 )
+				{
+					if ( m_timerTimer > 0 )
+					{
+						if ( !m_animPlaying )
+						{
+							m_animNo = m_data[m_type].moveAnim;
+							m_animPlaying = true;
+							m_frame = 0;
+						}
+
+						m_timerTimer -= _frames;
+					}
+					else
+					{
+						if ( m_animNo != ANIM_FLYINGDUTCHMAN_FIREATTACK )
+						{
+							m_animNo = ANIM_FLYINGDUTCHMAN_FIREATTACK;
+							m_animPlaying = true;
+							m_frame = 0;
+						}
+						//else if ( !m_animPlaying )
+						else if ( m_frame > ( getFrameCount() >> 1 ) )
+						{
+							// fire at player
+
+							s16 heading;
+
+							if ( playerXDist > 0 )
+							{
+								heading = 0;
+							}
+							else
+							{
+								heading = 2048;
+							}
+
+							CProjectile *projectile;
+							projectile = CProjectile::Create();
+							DVECTOR newPos = Pos;
+							newPos.vy -= 50;
+							projectile->init( newPos, heading );
+							projectile->setGraphic( FRM__SNAKEBILE );
+							projectile->setSpeed( 6 );
+
+							m_fireCount++;
+
+							if ( m_health < ( m_data[m_type].initHealth >> 2 ) && m_fireCount < 2 )
+							{
+								m_timerTimer = GameState::getOneSecondInFrames() >> 2;
+							}
+							else
+							{
+								m_state = FLYING_DUTCHMAN_RETURN;
+								m_timerTimer = GameState::getOneSecondInFrames();
+							}
+						}
+					}
+				}
+				else
+				{
+					if ( !m_animPlaying )
+					{
+						m_animPlaying = true;
+						m_animNo = m_data[m_type].moveAnim;
+						m_frame = 0;
+					}
+				}
+
+				break;
+			}
+
+			case FLYING_DUTCHMAN_RETURN:
+			{
+				if ( m_timerTimer > 0 )
+				{
+					if ( !m_animPlaying )
+					{
+						m_animNo = m_data[m_type].moveAnim;
+						m_animPlaying = true;
+						m_frame = 0;
+					}
+
+					m_timerTimer -= _frames;
+				}
+				else
+				{
+					m_controlFunc = NPC_CONTROL_MOVEMENT;
+					m_movementTimer = GameState::getOneSecondInFrames() * 2;
+					m_inRange = false;
+					m_fadeDown = true;
+					m_timerTimer = 0;
+					m_fireCount = 0;
+
+					s32 minX, maxX;
+					m_npcPath.getPathXExtents( &minX, &maxX );
+
+					if ( m_extension == minX )
+					{
+						m_extension = maxX;
+					}
+					else
+					{
+						m_extension = minX;
+					}
+				}
+
+				break;
+			}
+		}
+
+		/*switch( m_state )
 		{
 			case FLYING_DUTCHMAN_ATTACK_PLAYER_1:
 			case FLYING_DUTCHMAN_ATTACK_PLAYER_2:
@@ -331,7 +464,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 
 				break;
 			}
-		}
+		}*/
 	}
 
 	if ( playerXDist > 0 )
@@ -350,9 +483,9 @@ void CNpcFlyingDutchmanEnemy::processShotRecoil( int _frames )
 {
 	if ( !m_animPlaying )
 	{
-		m_state = m_oldState;
 		m_controlFunc = NPC_CONTROL_MOVEMENT;
 		m_fadeDown = true;
+		m_movementTimer = GameState::getOneSecondInFrames() * 2;
 	}
 }
 
@@ -420,60 +553,64 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 		{
 			case TYPE_PLAYER:
 			{
-				CPlayer *player = (CPlayer *) _thisThing;
-
-				ATTACK_STATE playerState = player->getAttackState();
-
-				if(playerState==ATTACK_STATE__NONE)
+				if ( m_fadeVal == 128 )
 				{
-					if ( !player->isRecoveringFromHit() )
+					CPlayer *player = (CPlayer *) _thisThing;
+
+					ATTACK_STATE playerState = player->getAttackState();
+
+					if(playerState==ATTACK_STATE__NONE)
 					{
-						switch( m_data[m_type].detectCollision )
+						if ( !player->isRecoveringFromHit() )
 						{
-							case DETECT_NO_COLLISION:
+							switch( m_data[m_type].detectCollision )
 							{
-								// ignore
+								case DETECT_NO_COLLISION:
+								{
+									// ignore
 
-								break;
-							}
+									break;
+								}
 
-							case DETECT_ALL_COLLISION:
-							{
-								m_oldControlFunc = m_controlFunc;
-								m_controlFunc = NPC_CONTROL_COLLISION;
+								case DETECT_ALL_COLLISION:
+								{
+									m_oldControlFunc = m_controlFunc;
+									m_controlFunc = NPC_CONTROL_COLLISION;
 
-								processUserCollision( _thisThing );
+									processUserCollision( _thisThing );
 
-								break;
-							}
+									break;
+								}
 
-							case DETECT_ATTACK_COLLISION_GENERIC:
-							{
-								processAttackCollision();
-								processUserCollision( _thisThing );
+								case DETECT_ATTACK_COLLISION_GENERIC:
+								{
+									processAttackCollision();
+									processUserCollision( _thisThing );
 
-								break;
+									break;
+								}
 							}
 						}
 					}
-				}
-				else if ( m_invulnerableTimer <= 0 )
-				{
-					// player is attacking, respond appropriately
-
-					if ( m_controlFunc != NPC_CONTROL_SHOT )
+					else
 					{
-						if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+						// player is attacking, respond appropriately
+
+						if ( m_controlFunc != NPC_CONTROL_SHOT )
 						{
-							player->justButtBouncedABadGuy();
+							if(playerState==ATTACK_STATE__BUTT_BOUNCE)
+							{
+								player->justButtBouncedABadGuy();
+							}
+							m_controlFunc = NPC_CONTROL_MOVEMENT;
+							m_movementTimer = GameState::getOneSecondInFrames() * 2;
+							m_inRange = false;
+							m_fadeDown = true;
+							m_timerTimer = 0;
+							m_fireCount = 0;
+
+							drawAttackEffect();
 						}
-						m_controlFunc = NPC_CONTROL_SHOT;
-						m_oldState = m_state;
-						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
-
-						drawAttackEffect();
-
-						m_invulnerableTimer = 4 * GameState::getOneSecondInFrames();
 					}
 				}
 
@@ -503,15 +640,16 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 
 u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
 {
-	if ( m_invulnerableTimer <= 0 )
+	if ( m_fadeVal == 128 )
 	{
 		if ( m_controlFunc != NPC_CONTROL_SHOT )
 		{
-			m_invulnerableTimer = 4 * GameState::getOneSecondInFrames();
-
-			m_controlFunc = NPC_CONTROL_SHOT;
-			m_oldState = m_state;
-			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
+			m_movementTimer = GameState::getOneSecondInFrames() * 2;
+			m_inRange = false;
+			m_fadeDown = true;
+			m_timerTimer = 0;
+			m_fireCount = 0;
 		}
 	}
 

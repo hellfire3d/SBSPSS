@@ -36,15 +36,17 @@ protected:
 
 	enum NPC_FLYING_DUTCHMAN_STATE
 	{
-		FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
-		FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
-		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
+		//FLYING_DUTCHMAN_ATTACK_PLAYER_1 = 0,
+		//FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
+		//FLYING_DUTCHMAN_ATTACK_PLAYER_3,
+		FLYING_DUTCHMAN_GOTO_PLAYER = 0,
+		FLYING_DUTCHMAN_ATTACK_PLAYER = 1,
+		FLYING_DUTCHMAN_RETURN,
 	};
 
 	s32					m_minY, m_maxY;
 	u8					m_inRange;
 	u8					m_fireCount;
-	s32					m_invulnerableTimer;
 	u8					m_oldState;
 	s16					m_fadeVal;
 	u8					m_fadeDown;
