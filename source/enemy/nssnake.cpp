@@ -133,16 +133,16 @@ void CNpcSeaSnakeEnemy::postInit()
 
 		if ( segCount < initLength )
 		{
-			u16 sum = ONE;
-			u16 start = ONE >> 1;
+			u16 sum = ONE << 1;
+			u16 start = ONE;
 			u16 end = sum - start;
 
 			segScale = start + ( ( end * segCount ) / initLength );
 		}
 		else
 		{
-			u16 sum = ONE;
-			u16 start = ONE >> 3;
+			u16 sum = ONE << 1;
+			u16 start = ONE >> 1;
 			u16 end = sum - start;
 
 			segScale = start + ( ( end * ( NPC_SEA_SNAKE_LENGTH - segCount ) ) / remLength );
