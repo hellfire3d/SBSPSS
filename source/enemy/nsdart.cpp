@@ -160,7 +160,7 @@ bool CNpcSquidDartEnemy::processSensor()
 void CNpcSquidDartEnemy::processClose( int _frames )
 {
 	s32 movement;
-	s32 yAim = playerYDist - 40;
+	s32 yAim = playerYDist - 20;
 	//s32 maxSpeed = m_data[m_type].speed * _frames;
 	s32 maxSpeed = m_speed * _frames;
 
@@ -196,7 +196,7 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 	}
 	else
 	{
-		if ( abs( yAim ) > 20 )
+		if ( abs( yAim ) > 5 )
 		{
 			movement = yAim;
 			
