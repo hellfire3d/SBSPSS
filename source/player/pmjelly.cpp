@@ -168,7 +168,6 @@ void	CPlayerModeJellyLauncher::enter()
 {
 	CPlayerModeBase::enter();
 	m_firingState=FIRING_STATE__NONE;
-	m_player->giveJellyAmmo();
 }
 
 /*----------------------------------------------------------------------

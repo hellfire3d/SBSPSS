@@ -390,8 +390,15 @@ private:
 		SQUEAKY_BOOTS_TIME=60*10,
 		SQUEAKY_BOOTS_FLASH_TIME=60*2,
 		INVINCIBILITY_RING_TIME=60*10,
+		
+		INITIAL_BUBBLE_BLOWER_AMMO=10,
+		BUBBLE_BLOWER_AMMO_IN_PICKUP=10,
 		MAX_BUBBLE_BLOWER_AMMO=99,
+		
+		INITIAL_JELLY_LAUNCHER_AMMO=6,
+		JELLY_LAUNCHER_AMMO_IN_PICKUP=6,
 		MAX_JELLY_LAUNCHER_AMMO=99,
+
 		MAX_JELLFISH_IN_NET=5,
 	};
 public:
@@ -401,19 +408,18 @@ public:
 	void			giveDivingHelmet()						{m_divingHelmet=true;}
 	int				isWearingDivingHelmet()					{return m_divingHelmet;}
 															
-	void			giveBubbleAmmo()						{m_bubbleAmmo+=10;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
+	void			giveBubbleAmmo()						{m_bubbleAmmo+=INITIAL_BUBBLE_BLOWER_AMMO;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
 	void			useOneBubble()							{m_bubbleAmmo--;}
 	int				getBubbleAmmo()							{return m_bubbleAmmo;}
 															
-	void			giveJellyAmmo()							{m_jellyAmmo+=6;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
+	void			giveJellyAmmo()							{m_jellyAmmo+=JELLY_LAUNCHER_AMMO_IN_PICKUP;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
 	void			useOneJelly()							{m_jellyAmmo--;}
 	int				getJellyAmmo()							{return m_jellyAmmo;}
 															
-	void			giveJellyFishAmmo(u32 _colour);
-	void			useOneJellyFishAmmo();
-	int				isJellyFishAmmoFull();
-	int				getJellyFishAmmo();
-	u32				getColourOfNextJellyfishAmmo();
+	void			giveJellyFishAmmo()						{m_jellyfishAmmoCount++;if(m_jellyfishAmmoCount>MAX_JELLFISH_IN_NET)m_jellyfishAmmoCount=MAX_JELLFISH_IN_NET;}
+	void			useOneJellyFishAmmo()					{m_jellyfishAmmoCount--;}
+	int				isJellyFishAmmoFull()					{return m_jellyfishAmmoCount==MAX_JELLFISH_IN_NET;}
+	int				getJellyFishAmmo()						{return m_jellyfishAmmoCount;}
 
 	void			setIsInWater(int _in)					{m_isInWater=_in;m_helmetSoundTimer=0;}
 	int				getIsInWater()							{return m_isInWater;}
@@ -433,7 +439,6 @@ private:
 	int				m_bubbleAmmo;
 	int				m_jellyAmmo;
 	int				m_jellyfishAmmoCount;
-	u32				m_jellyfishAmmoColours[MAX_JELLFISH_IN_NET];
 	int				m_isInWater;
 
 	// Platforms

@@ -157,7 +157,6 @@ void	CPlayerModeBubbleMixture::enter()
 	CPlayerModeBase::enter();
 	m_blowing=false;
 	m_bubbleDelay=0;
-	m_player->giveBubbleAmmo();
 }
 
 /*----------------------------------------------------------------------
