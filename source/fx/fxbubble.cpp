@@ -24,6 +24,7 @@ void	CFXBubble::init(DVECTOR const &_Pos)
 		CurrentScaleX=CurrentScaleY=getRndRange(ONE/2)+(ONE/2);
 		Die=0;
 		XIdx=getRnd()&15;
+		Lifetime = 2 * GameState::getOneSecondInFrames();
 }
 
 /*****************************************************************************/
@@ -32,6 +33,15 @@ void	CFXBubble::init(DVECTOR const &_Pos)
 int	XT[16]={ 0,+1,+0,+1,+0, 0,-1,+0,-1,+0,0,+1,+0,+1,+0,};
 void	CFXBubble::think(int _frames)
 {
+		if (Lifetime > 0)
+		{
+			Lifetime -= _frames;
+		}
+		else
+		{
+			Die = true;
+		}
+
 		if (Die)
 		{
 			if (renderFrame!=FRM__BUBBLEPOP)

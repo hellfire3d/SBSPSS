@@ -18,6 +18,7 @@ virtual	void		killFX();
 protected:
 		s8			Die;
 		u16			XIdx;
+		s32			Lifetime;
 };
 
 #endif
