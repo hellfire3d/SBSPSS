@@ -84,8 +84,11 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 				}
 			}
 
-			((CPlayer*)_thisThing)->clearPlatform();
-			((CPlayer*)_thisThing)->teleportTo(m_boxX1+8,m_boxY1+16);
+			if(GameScene.triggerTeleportEffect())
+			{
+				((CPlayer*)_thisThing)->clearPlatform();
+				((CPlayer*)_thisThing)->teleportTo(m_boxX1+8,m_boxY1+16);
+			}
 			break;
 		}
 

@@ -266,6 +266,8 @@ void 	CGameScene::render()
 			break;
 		case GAMESTATE_PLAYING:
 		case GAMESTATE_FADING_INTO_BOSS_INTRO:
+		case GAMESTATE_TELEPORT_START:
+		case GAMESTATE_TELEPORT_END:
 			render_playing();
 			break;
 		case GAMESTATE_BOSS_INTRO:
@@ -367,6 +369,11 @@ void CGameScene::render_playing()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
+//#if defined (__USER_paul__)
+//if(PadGetDown(0)&PAD_UP)
+//{
+//}
+//#endif
 	if(!m_musicStarted&&!CFader::isFading())
 	{
 		// Song is loaded/dumped by the level, and played from here. This just gives some
@@ -400,6 +407,22 @@ void	CGameScene::think(int _frames)
 				CSoundMediator::playSong();
 				sendEvent( BOSS_FOUND_EVENT, NULL );
 				CFader::setFadingIn();
+			}
+			break;
+		case GAMESTATE_TELEPORT_START:
+			if(!CFader::isFading())
+			{
+				think_playing(1);	// Let the teleport happen..
+				think_playing(1);
+				think_playing(1);
+				m_gamestate=GAMESTATE_TELEPORT_END;
+				CFader::setFadingIn(CFader::WHITE_FADE);
+			}
+			break;
+		case GAMESTATE_TELEPORT_END:
+			if(!CFader::isFading())
+			{
+				m_gamestate=GAMESTATE_PLAYING;
 			}
 			break;
 	}
@@ -652,6 +675,20 @@ int		CGameScene::getTotalSpatCountForThisLevel()
 {
 	return Level.getTotalSpatCount();
 }
+
+
+/*****************************************************************************/
+int		CGameScene::triggerTeleportEffect()
+{
+	if(m_gamestate==GAMESTATE_PLAYING)
+	{
+		m_gamestate=GAMESTATE_TELEPORT_START;
+		CFader::setFadingOut(CFader::WHITE_FADE);
+		return true;
+	}
+	return false;
+}
+
 
 /*****************************************************************************/
 void	CGameScene::respawnLevel()

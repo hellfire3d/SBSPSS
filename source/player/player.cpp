@@ -150,8 +150,10 @@
 	Tyepdefs && Defines
 	------------------- */
 
+#ifdef __VERSION_DEBUG__
 //#define _RECORD_DEMO_MODE_
 #define _STATE_DEBUG_
+#endif
 
 
 /*----------------------------------------------------------------------

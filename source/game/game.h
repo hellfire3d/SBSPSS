@@ -59,6 +59,8 @@ static void				levelFinished()		{s_levelFinished=true;}
 static void				restartlevel()		{s_restartLevel=true;}
 		CLevel			&GetLevel()			{return(Level);}
 
+		int				triggerTeleportEffect();
+
 
 static	ACTOR_TYPE	getActorType( int actorNum )			{return actorType[actorNum];}
 
@@ -80,6 +82,8 @@ private:
 		GAMESTATE_PLAYING,
 		GAMESTATE_FADING_INTO_BOSS_INTRO,
 		GAMESTATE_BOSS_INTRO,
+		GAMESTATE_TELEPORT_START,
+		GAMESTATE_TELEPORT_END,
 	}GAMESTATE;
 
 	enum
