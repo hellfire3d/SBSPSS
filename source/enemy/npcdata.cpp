@@ -714,7 +714,7 @@ CNpcEnemy::NPC_DATA CNpcEnemy::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_TIMER_NONE,
 		false,
 		3,
-		64,
+		2048,
 		false,
 		DAMAGE__HIT_ENEMY,
 		256,

@@ -209,7 +209,7 @@ void CNpcEnemy::init()
 {
 	CEnemyThing::init();
 
-	m_type = NPC_MOTHER_JELLYFISH;
+	m_type = NPC_SUB_SHARK;
 
 //	sActorHdr *Hdr = m_skel.Load( m_data[m_type].skelType );
 //	m_skel.Init( Hdr );
@@ -229,6 +229,7 @@ void CNpcEnemy::init()
 	m_extension = 0;
 	m_rotation = 0;
 	m_reversed = false;
+	m_salvoCount = 0;
 
 	m_health = m_data[this->m_type].initHealth;
 
@@ -312,7 +313,7 @@ void CNpcEnemy::init()
 
 		case NPC_INIT_SUB_SHARK:
 		{
-			m_state = SUB_SHARK_CYCLE;
+			m_state = SUB_SHARK_MINE_1;
 			m_extendDir = EXTEND_RIGHT;
 
 			break;
