@@ -391,6 +391,13 @@ void CProjectile::think(int _frames)
 		}
 	}
 
+	CLevel &level = GameScene.GetLevel();
+	if ( Pos.vx < 0 || Pos.vx > ( level.getCollisionLayer()->getMapWidth() << 4 ) ||
+			Pos.vy < 0 || Pos.vy > ( level.getCollisionLayer()->getMapHeight() << 4 ) )
+	{
+		setToShutdown();
+	}
+
 	if ( m_lifetimeType == PROJECTILE_FINITE_LIFE )
 	{
 		m_lifetime -= _frames;
@@ -709,6 +716,13 @@ void CPlayerProjectile::think(int _frames)
 
 			break;
 		}
+	}
+
+	CLevel &level = GameScene.GetLevel();
+	if ( Pos.vx < 0 || Pos.vx > ( level.getCollisionLayer()->getMapWidth() << 4 ) ||
+			Pos.vy < 0 || Pos.vy > ( level.getCollisionLayer()->getMapHeight() << 4 ) )
+	{
+		setToShutdown();
 	}
 
 	if ( m_lifetimeType == PLAYER_PROJECTILE_FINITE_LIFE )
