@@ -285,33 +285,7 @@ struct	sTileBankHdr
 //***************************************************************************
 // Actors
 
-struct	sActorHdr
-{
-	u16		BoneCount;
-	u16		TriCount;
-	u16		QuadCount;
-//	u16		WeightCount;
-	u16		VtxCount;
-
-	sBone		*BoneList;
-	sTri		*TriList;
-	sQuad		*QuadList;
-//	sWeight		*WeightList;
-	sVtx		*VtxList;
-	sTexInfo	*TexInfo;
-};
-
-//***************************************************************************
-// Anim
 typedef	u16	AnimIdx;
-
-struct	sAnimFileHdr
-{
-	u16		BoneCount;
-	u16		AnimCount;
-	sQuat	*QuatTable;
-//	Anim Hdrs....
-};
 
 struct	sAnimHdr
 {
@@ -320,6 +294,37 @@ struct	sAnimHdr
 	AnimIdx	*Anim;
 	s32		*Move;
 };
+
+struct	sActorHdr
+{
+	u16			BoneCount;
+	u16			TriCount;
+	u16			QuadCount;
+				u16			WeightCount;
+	u16			VtxCount;
+	u16			AnimCount;
+
+	sBone		*BoneList;
+	sTri		*TriList;
+	sQuad		*QuadList;
+				sWeight		*WeightList;
+	sVtx		*VtxList;
+	sTexInfo	*TexInfo;
+	sAnimHdr	*AnimList;
+	sQuat		*QuatTable;
+};
+
+//***************************************************************************
+// Anim
+/*
+struct	sAnimFileHdr
+{
+	u16		BoneCount;
+	u16		AnimCount;
+	sQuat	*QuatTable;
+//	Anim Hdrs....
+};
+*/
 
 
 #endif
