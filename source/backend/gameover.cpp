@@ -119,6 +119,7 @@ void CGameOverScene::init()
 	m_font->setOt(5);
 
 	CActorPool::Reset();
+	m_anotherGfx=CActorPool::GetActor(ACTORS_SPONGEBOB_SBK);
 	m_patrickGfx=CActorPool::GetActor(ACTORS_PATRICK_SBK);
 	m_animFrame=0;
 	CActorPool::SetUpCache();
@@ -152,6 +153,7 @@ void CGameOverScene::init()
   ---------------------------------------------------------------------- */
 void CGameOverScene::shutdown()
 {
+	delete m_anotherGfx;
 	delete m_patrickGfx;
 	CActorPool::Reset();
 

@@ -95,7 +95,7 @@ private:
 	int						m_hasPlayedFirstSpeech;
 	int						m_hasPlayedSecondSpeech;
 
-	class CActorGfx			*m_patrickGfx;
+	class CActorGfx			*m_anotherGfx,*m_patrickGfx;
 	int						m_animFrame;
 
 };
