@@ -108,7 +108,8 @@ ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
 ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net
-ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
+ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick
+#						MermaidMan
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
@@ -173,6 +174,7 @@ INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 \
 							+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
 							+health_empty_1 +health_empty_2 +health_empty_3 +health_empty_4 +health_empty_5 \
+							+watermeter +netblob \
 							+spike
 
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)
