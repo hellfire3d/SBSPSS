@@ -236,7 +236,8 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						DVECTOR newPos = Pos;
 						newPos.vy -= 50;
 						projectile->init( newPos, heading );
-						projectile->setGraphic( FRM__LIGHTNING2 );
+						projectile->setGraphic( FRM__SNAKEBILE );
+						projectile->setSpeed( 5 );
 
 						m_fireCount++;
 
@@ -308,15 +309,6 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 	{
 		m_heading = 2048;
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFlyingDutchmanEnemy::processShotRecoil( int _frames )
-{
-	m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
-
-	CNpcEnemy::processShotRecoil( _frames );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -430,6 +422,8 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 						m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
 
 						drawAttackEffect();
+
+						m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
 					}
 				}
 
@@ -453,4 +447,22 @@ void CNpcFlyingDutchmanEnemy::collidedWith(CThing *_thisThing)
 				break;
 		}
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+u8 CNpcFlyingDutchmanEnemy::hasBeenAttacked()
+{
+	if ( m_invulnerableTimer <= 0 )
+	{
+		if ( m_controlFunc != NPC_CONTROL_SHOT )
+		{
+			m_invulnerableTimer = 2 * GameState::getOneSecondInFrames();
+
+			m_controlFunc = NPC_CONTROL_SHOT;
+			m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+		}
+	}
+
+	return( true );
 }

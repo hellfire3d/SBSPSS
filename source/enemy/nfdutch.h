@@ -26,10 +26,10 @@ public:
 	virtual void		postInit();
 	void				render();
 	virtual void		shutdown();
+	virtual u8			hasBeenAttacked();
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
-	virtual void		processShotRecoil( int _frames );
 	virtual void		processShotDeathEnd( int _frames );
 	virtual void		collidedWith(CThing *_thisThing);
 
