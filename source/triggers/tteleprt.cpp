@@ -58,6 +58,7 @@ void	CTeleportTrigger::collidedWith(CThing *_thisThing)
 	{
 		case TYPE_PLAYER:
 		{
+			((CPlayer*)_thisThing)->clearPlatform();
 			((CPlayer*)_thisThing)->teleportTo(m_boxX1+8,m_boxY1+16);
 			break;
 		}
