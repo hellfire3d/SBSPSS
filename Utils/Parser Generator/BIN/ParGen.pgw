@@ -1,0 +1,18 @@
+[Application]
+WindowPlacement=0 1 -1 -1 -1 -1 367 176 1437 1061
+[Editor1]
+FileName=C:\spongebob\Utils\scripter\parser.y
+ReadOnly=0
+WindowPlacement1=0 1 -1 -1 -1 -1 81 81 896 612
+WindowOrder1=2
+Position001=0 1
+Cursor001=0 1 0 1
+SyntaxColouring=2
+[Editor2]
+FileName=C:\spongebob\Utils\scripter\lexer.l
+ReadOnly=0
+WindowPlacement1=0 1 -1 -1 -1 -1 108 108 923 639
+WindowOrder1=1
+Position001=0 1
+Cursor001=0 1 0 1
+SyntaxColouring=1

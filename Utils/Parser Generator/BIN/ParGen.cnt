@@ -1,0 +1,562 @@
+:Base ParGen.hlp
+1 Parser Generator
+2 How to...
+3 Setup Visual C++ Version 4.00=setup_visual_cpp_version_400
+3 Setup Visual C++ Version 1.52=setup_visual_cpp_version_152
+3 Setup Borland C++ Builder Version 3.0=setup_borland_cpp_builder_version_30
+3 Setup Borland C++ Version 4.52=setup_borland_cpp_version_452
+3 Setup Other C/C++ Compilers=setup_other_c_cpp_compilers
+3 Solve Common Linker Problems=solve_common_linker_problems
+2 Menus
+3 File Menu=menu_file
+3 Edit Menu=menu_edit
+3 View Menu=menu_view
+3 Project Menu=menu_project
+3 Options Menu=menu_options
+3 Window Menu=menu_window
+3 Help Menu=menu_help
+2 Control Bars
+3 Toolbar=AFX_HIDW_TOOLBAR
+3 Status Bar=AFX_HIDW_STATUS_BAR
+2 Windows
+3 Editor Window=HIDR_EDITORTYPE
+3 Output Window=HIDR_OUTPUTTYPE
+1 Options
+2 AYACC Options
+3 Operation=ayacc_operation
+3 -? Option=ayacc_option_question
+3 -$ Option=ayacc_option_dollar
+3 -E Option=ayacc_option_capital_e
+3 -G Option=ayacc_option_capital_g
+3 -I Option=ayacc_option_capital_i
+3 -N Option=ayacc_option_capital_n
+3 -R Option=ayacc_option_capital_r
+3 -S Option=ayacc_option_capital_s
+3 -T Option=ayacc_option_capital_t
+3 -c Option=ayacc_option_c
+3 -d Option=ayacc_option_d
+3 -e Option=ayacc_option_e
+3 -f Option=ayacc_option_f
+3 -l Option=ayacc_option_l
+3 -m Option=ayacc_option_m
+3 -o Option=ayacc_option_o
+3 -p Option=ayacc_option_p
+3 -s Option=ayacc_option_s
+3 -v Option=ayacc_option_v
+3 -x Option=ayacc_option_x
+3 -z Option=ayacc_option_z
+2 ALex Options
+3 Operation=alex_operation
+3 -? Option=alex_option_question
+3 -$ Option=alex_option_dollar
+3 -E Option=alex_option_capital_e
+3 -R Option=alex_option_capital_r
+3 -S Option=alex_option_capital_s
+3 -T Option=alex_option_capital_t
+3 -c Option=alex_option_c
+3 -d Option=alex_option_d
+3 -e Option=alex_option_e
+3 -f Option=alex_option_f
+3 -i Option=alex_option_i
+3 -l Option=alex_option_l
+3 -m Option=alex_option_m
+3 -o Option=alex_option_o
+3 -r Option=alex_option_r
+3 -s Option=alex_option_s
+3 -t Option=alex_option_t
+3 -u Option=alex_option_u
+3 -x Option=alex_option_x
+3 -z Option=alex_option_z
+1 Errors
+2 AYACC Errors
+2 AYACC Errors=ayacc_errors
+3 Fatal Errors
+4 Fatal Error Y1001=Y1001
+4 Fatal Error Y1002=Y1002
+4 Fatal Error Y1003=Y1003
+4 Fatal Error Y1004=Y1004
+4 Fatal Error Y1005=Y1005
+4 Fatal Error Y1006=Y1006
+4 Fatal Error Y1007=Y1007
+4 Fatal Error Y1008=Y1008
+4 Fatal Error Y1009=Y1009
+4 Fatal Error Y1010=Y1010
+4 Fatal Error Y1011=Y1011
+4 Fatal Error Y1012=Y1012
+4 Fatal Error Y1013=Y1013
+4 Fatal Error Y1014=Y1014
+4 Fatal Error Y1015=Y1015
+4 Fatal Error Y1016=Y1016
+4 Fatal Error Y1017=Y1017
+4 Fatal Error Y1018=Y1018
+3 Errors
+4 Error Y2001=Y2001
+4 Error Y2002=Y2002
+4 Error Y2003=Y2003
+4 Error Y2004=Y2004
+4 Error Y2005=Y2005
+4 Error Y2006=Y2006
+4 Error Y2007=Y2007
+4 Error Y2008=Y2008
+4 Error Y2009=Y2009
+4 Error Y2010=Y2010
+4 Error Y2011=Y2011
+4 Error Y2012=Y2012
+4 Error Y2013=Y2013
+4 Error Y2014=Y2014
+4 Error Y2015=Y2015
+4 Error Y2016=Y2016
+4 Error Y2017=Y2017
+4 Error Y2018=Y2018
+4 Error Y2019=Y2019
+4 Error Y2020=Y2020
+4 Error Y2021=Y2021
+4 Error Y2022=Y2022
+4 Error Y2023=Y2023
+4 Error Y2024=Y2024
+4 Error Y2025=Y2025
+4 Error Y2026=Y2026
+4 Error Y2027=Y2027
+4 Error Y2028=Y2028
+4 Error Y2029=Y2029
+4 Error Y2030=Y2030
+4 Error Y2031=Y2031
+3 Warnings
+4 Warning Y4001=Y4001
+4 Warning Y4002=Y4002
+4 Warning Y4003=Y4003
+4 Warning Y4004=Y4004
+4 Warning Y4005=Y4005
+4 Warning Y4006=Y4006
+4 Warning Y4007=Y4007
+4 Warning Y4008=Y4008
+4 Warning Y4009=Y4009
+4 Warning Y4010=Y4010
+4 Warning Y4011=Y4011
+2 ALex Errors
+3 ALex Errors=alex_errors
+3 Fatal Errors
+4 Fatal Error L1001=L1001
+4 Fatal Error L1002=L1002
+4 Fatal Error L1003=L1003
+4 Fatal Error L1004=L1004
+4 Fatal Error L1005=L1005
+4 Fatal Error L1006=L1006
+4 Fatal Error L1007=L1007
+4 Fatal Error L1008=L1008
+4 Fatal Error L1009=L1009
+4 Fatal Error L1010=L1010
+4 Fatal Error L1011=L1011
+4 Fatal Error L1012=L1012
+4 Fatal Error L1013=L1013
+4 Fatal Error L1014=L1014
+4 Fatal Error L1015=L1015
+4 Fatal Error L1016=L1016
+4 Fatal Error L1017=L1017
+4 Fatal Error L1018=L1018
+3 Errors
+4 Error L2001=L2001
+4 Error L2002=L2002
+4 Error L2003=L2003
+4 Error L2004=L2004
+4 Error L2005=L2005
+4 Error L2006=L2006
+4 Error L2007=L2007
+4 Error L2008=L2008
+4 Error L2009=L2009
+4 Error L2010=L2010
+4 Error L2011=L2011
+4 Error L2012=L2012
+4 Error L2013=L2013
+4 Error L2014=L2014
+4 Error L2015=L2015
+4 Error L2016=L2016
+4 Error L2017=L2017
+4 Error L2018=L2018
+4 Error L2019=L2019
+4 Error L2020=L2020
+4 Error L2021=L2021
+3 Warnings
+4 Warning L4001=L4001
+4 Warning L4002=L4002
+4 Warning L4003=L4003
+4 Warning L4004=L4004
+4 Warning L4005=L4005
+4 Warning L4006=L4006
+4 Warning L4007=L4007
+4 Warning L4008=L4008
+4 Warning L4009=L4009
+4 Warning L4010=L4010
+4 Warning L4011=L4011
+4 Warning L4012=L4012
+4 Warning L4013=L4013
+1 YACC Language
+2 YACC Language=yacc_language
+2 Introduction=yacc_introduction
+3 Grammar Summary=yacc_grammar_summary
+2 Tokens
+3 Tokens=yacc_tokens
+3 Keywords=yacc_keywords
+3 Identifiers=yacc_identifiers
+3 Character Tokens=yacc_character_tokens
+3 Integers=yacc_integers
+3 Tags=yacc_tags
+3 Actions=yacc_actions
+3 Attributes=yacc_attributes
+3 Comments=yacc_comments
+3 Program Code=yacc_program_code
+3 Declaration Code Block=yacc_declaration_code_block
+3 Code Block=yacc_code_block
+3 Other Tokens=yacc_other_tokens
+2 Grammar
+3 Grammar=yacc_grammar
+2 Declarations Section
+3 Declarations Section=yacc_declarations_section
+3 Token Declaration=yacc_token_declaration
+3 Start Declaration=yacc_start_declaration
+3 Type Declaration=yacc_type_declaration
+3 Union Declaration=yacc_union_declaration
+3 Name Declaration=yacc_name_declaration
+3 Include Declaration=yacc_include_declaration
+3 Defines=yacc_defines
+2 Rules Section
+3 Rules Section=yacc_rules_section
+3 Grammar Rule=yacc_grammar_rule
+3 Production=yacc_production
+3 Grammar Symbol=yacc_grammar_symbol
+3 Action Symbol=yacc_action_symbol
+3 Precedence Symbol=yacc_precedence_symbol
+3 Symbol Destructor Rule=yacc_symbol_destructor_rule
+3 Ambiguity Resolution=yacc_ambiguity_resolution
+3 Error Recovery=yacc_error_recovery
+3 Operator Precedence Grammars=yacc_operator_precedence_grammars
+2 Programs Section
+3 Programs Section=yacc_programs_section
+2 Quick Reference Topics
+3 Multiple C Parsers=yacc_multiple_parsers
+1 Lex Language
+2 Lex Language=lex_language
+2 Introduction=lex_introduction
+2 Grammar Summary=lex_grammar_summary
+2 Tokens
+3 Keywords=lex_keywords
+3 Identifiers=lex_identifiers
+3 Integers=lex_integers
+3 Characters=lex_characters
+3 Character Strings=lex_character_strings
+3 Character Classes=lex_character_classes
+3 Action=lex_action
+3 Separator=lex_separator
+3 Comments=lex_comments
+3 Program Code=lex_program_code
+3 Code Block=lex_code_block
+3 Code Line=lex_code_line
+3 Macro Name=lex_macro_name
+3 Translation String=lex_translation_string
+3 Macro Reference=lex_macro_reference
+3 Declaration Code Block=lex_declaration_code_block
+3 Other Tokens=lex_other_tokens
+2 Grammar
+3 Grammar=lex_grammar
+2 Declarations Section
+3 Declarations Section=lex_declarations_section
+3 Start Declaration=lex_start_declaration
+3 Table Declaration=lex_table_declaration
+3 Macro Declaration=lex_macro_declaration
+3 Array Declaration=lex_array_declaration
+3 Option Declaration=lex_option_declaration
+3 Name Declaration=lex_name_declaration
+3 Include Declaration=lex_include_declaration
+3 Defines=lex_defines
+2 Rules Section
+3 Rules Section=lex_rules_section
+3 Group Rule=lex_group_rule
+3 Expression Rule=lex_expression_rule
+3 Left Context=lex_left_context
+3 Right Context Expression=lex_right_context_expression
+3 Union Expression=lex_union_expression
+3 Concatenation Expression=lex_concatenation_expression
+3 Repetition Expression=lex_repetition_expression
+3 Primary Expression=lex_primary_expression
+3 Ambiguity Resolution=lex_ambiguity_resolution
+2 Programs Section
+3 Programs Section=lex_programs_section
+2 Quick Reference Topics
+3 Multiple C Lexical Analysers=lex_multiple_lexical_analysers
+3 Operator Summary=lex_operator_summary
+3 ASCII Character Set=ascii_character_set
+1 YACC And Lex Library
+2 YACC And Lex Library=library
+2 Classes
+3 Classes=classes
+3 yyparser
+4 yyparser=yyparser
+4 yyparser Members=yyparser_members
+4 yyparser Member Variables
+5 yychar=yyparser_yychar
+5 yydebug=yyparser_yydebug
+5 yydebugflush=yyparser_yydebugflush
+5 yydebugout=yyparser_yydebugout
+5 yydebugstack=yyparser_yydebugstack
+5 yyerr=yyparser_yyerr
+5 yyerrorcount=yyparser_yyerrorcount
+5 yylookahead=yyparser_yylookahead
+5 yystackgrow=yyparser_yystackgrow
+5 yywipeflg=yyparser_yywipeflg
+4 yyparser Construction Member Functions
+5 yyparser=yyparser_yyparser
+5 yycreate=yyparser_yycreate
+5 yydestroy=yyparser_yydestroy
+4 yyparser General Member Functions
+5 yycleanup=yyparser_yycleanup
+5 yydestructpop=yyparser_yydestructpop
+5 yyparse=yyparser_yyparse
+5 yysetstacksize=yyparser_yysetstacksize
+5 yysetup=yyparser_yysetup
+5 yywipe=yyparser_yywipe
+5 yywork=yyparser_yywork
+4 yyparser Service Member Functions
+5 yydiscard=yyparser_yydiscard
+5 yyerror=yyparser_yyerror
+5 yygettoken=yyparser_yygettoken
+5 yystackoverflow=yyparser_yystackoverflow
+5 yysyntaxerror=yyparser_yysyntaxerror
+4 yyparser Action Member Functions
+5 yyabort=yyparser_yyabort
+5 yyaccept=yyparser_yyaccept
+5 yyclearin=yyparser_yyclearin
+5 yydestructclearin=yyparser_yydestructclearin
+5 yyerrok=yyparser_yyerrok
+5 yyexit=yyparser_yyexit
+5 yyforceerror=yyparser_yyforceerror
+5 yypopping=yyparser_yypopping
+5 yyrecovering=yyparser_yyrecovering
+5 yyretire=yyparser_yyretire
+5 yysetin=yyparser_yysetin
+5 yythrowerror=yyparser_yythrowerror
+5 yyunclearin=yyparser_yyunclearin
+3 yyfparser
+4 yyfparser=yyfparser
+3 yycparser
+4 yycparser=yycparser
+3 yylexer
+4 yylexer=yylexer
+4 yylexer Members=yylexer_members
+4 yylexer Member Variables
+5 yyin=yylexer_yyin
+5 yyeol=yylexer_yyeol
+5 yydebug=yylexer_yydebug
+5 yydebugout=yylexer_yydebugout
+5 yyerr=yylexer_yyerr
+5 yyleng=yylexer_yyleng
+5 yylineno=yylexer_yylineno
+5 yyout=yylexer_yyout
+5 yystart=yylexer_yystart
+5 yytext=yylexer_yytext
+5 yytextgrow=yylexer_yytextgrow
+5 yyunputgrow=yylexer_yyunputgrow
+4 yylexer Construction Member Functions
+5 yylexer=yylexer_yylexer
+5 yycreate=yylexer_yycreate
+5 yydestroy=yylexer_yydestroy
+4 yylexer General Member Functions
+5 yycleanup=yylexer_yycleanup
+5 yylex=yylexer_yylex
+5 yyreset=yylexer_yyreset
+5 yysettextsize=yylexer_yysettextsize
+5 yysetunputsize=yylexer_yysetunputsize
+4 yylexer Service Member Functions
+5 yygetchar=yylexer_yygetchar
+5 yyinput=yylexer_yyinput
+5 yyoutput=yylexer_yyoutput
+5 yytextoverflow=yylexer_yytextoverflow
+5 yyunput=yylexer_yyunput
+5 yyunputoverflow=yylexer_yyunputoverflow
+5 yywrap=yylexer_yywrap
+4 yylexer Action Member Functions
+5 yybegin=yylexer_yybegin
+5 yyecho=yylexer_yyecho
+5 yyless=yylexer_yyless
+5 yymore=yylexer_yymore
+5 yynewline=yylexer_yynewline
+5 yyreject=yylexer_yyreject
+5 yyunputcount=yylexer_yyunputcount
+3 yyflexer
+4 yyflexer=yyflexer
+3 yyclexer
+4 yyclexer=yyclexer
+2 Functions
+3 Functions=functions
+3 Parser Instance Functions
+4 Parser Instance Functions=parser_instance_functions
+4 yymcreateparse=yymcreateparse
+4 yymdestroyparse=yymdestroyparse
+3 Parser General Functions
+4 Parser General Functions=parser_general_functions
+4 yycparse=yyparse
+4 yycwipe=yycwipe
+4 yycwork=yywork
+4 yydestructpop=yydestructpop
+4 yyparse=yyparse
+4 yyparsecleanup=yyparsecleanup
+4 yyparseinit=yyparseinit
+4 yysetstacksize=yysetstacksize
+4 yysetup=yysetup
+4 yywipe=yywipe
+4 yywork=yywork
+4 yymcparse=yymparse
+4 yymcwipe=yymcwipe
+4 yymcwork=yymwork
+4 yymdestructpop=yymdestructpop
+4 yymparse=yymparse
+4 yymparsecleanup=yymparsecleanup
+4 yymparseinit=yymparseinit
+4 yymsetstacksize=yymsetstacksize
+4 yymsetup=yymsetup
+4 yymwipe=yymwipe
+4 yymwork=yymwork
+3 Parser Service Functions
+4 Parser Service Functions=parser_service_functions
+4 yydiscard=yydiscard
+4 yyerror=yyerror
+4 yygettoken=yygettoken
+4 yystackoverflow=yystackoverflow
+4 yysyntaxerror=yysyntaxerror
+4 yymdiscard=yymdiscard
+4 yymerror=yymerror
+4 yymgettoken=yymgettoken
+4 yymstackoverflow=yymstackoverflow
+4 yymsyntaxerror=yymsyntaxerror
+3 Parser Action Functions
+4 Parser Action Functions=parser_action_functions
+4 yyabort=yyabort
+4 yyaccept=yyaccept
+4 yyclearin=yyclearin
+4 yycdestructclearin=yycdestructclearin
+4 yydestructclearin=yydestructclearin
+4 yyerrok=yyerrok
+4 yyexit=yyexit
+4 yyforceerror=yyforceerror
+4 yypopping=yypopping
+4 yyrecovering=yyrecovering
+4 yyretire=yyretire
+4 yysetin=yysetin
+4 yythrowerror=yythrowerror
+4 yyunclearin=yyunclearin
+4 yymcdestructclearin=yymcdestructclearin
+4 yymdestructclearin=yymdestructclearin
+4 yymabort=yymabort
+4 yymaccept=yymaccept
+4 yymclearin=yymclearin
+4 yymerrok=yymerrok
+4 yymexit=yymexit
+4 yymforceerror=yymforceerror
+4 yympopping=yympopping
+4 yymrecovering=yymrecovering
+4 yymretire=yymretire
+4 yymsetin=yymsetin
+4 yymthrowerror=yymthrowerror
+4 yymunclearin=yymunclearin
+3 Lexical Analyser Instance Functions
+4 Lexical Analyser Instance Functions=lexical_analyser_instance_functions
+4 yymcreatelex=yymcreatelex
+4 yymdestroylex=yymdestroylex
+3 Lexical Analyser General Functions
+4 Lexical Analyser General Functions=lexical_analyser_general_functions
+4 yyclex=yylex
+4 yylex=yylex
+4 yylexcleanup=yylexcleanup
+4 yylexinit=yylexinit
+4 yyreset=yyreset
+4 yysettextsize=yysettextsize
+4 yysetunputsize=yysetunputsize
+4 yymclex=yymlex
+4 yymlex=yymlex
+4 yymlexcleanup=yymlexcleanup
+4 yymlexinit=yymlexinit
+4 yymreset=yymreset
+4 yymsettextsize=yymsettextsize
+4 yymsetunputsize=yymsetunputsize
+3 Lexical Analyser Service Functions
+4 Lexical Analyser Service Functions=lexical_analyser_service_functions
+4 yygetchar=yygetchar
+4 yyinput=yyinput
+4 yyoutput=yyoutput
+4 yytextoverflow=yytextoverflow
+4 yyunput=yyunput
+4 yyunputoverflow=yyunputoverflow
+4 yywrap=yywrap
+4 yymgetchar=yymgetchar
+4 yyminput=yyminput
+4 yymoutput=yymoutput
+4 yymtextoverflow=yymtextoverflow
+4 yymunput=yymunput
+4 yymunputoverflow=yymunputoverflow
+4 yymwrap=yymwrap
+3 Lexical Analyser Action Functions
+4 Lexical Analyser Action Functions=lexical_analyser_action_functions
+4 yybegin=yybegin
+4 yyecho=yyecho
+4 yyless=yyless
+4 yymore=yymore
+4 yynewline=yynewline
+4 yyreject=yyreject
+4 yyunputcount=yyunputcount
+4 yymbegin=yymbegin
+4 yymecho=yymecho
+4 yymless=yymless
+4 yymmore=yymmore
+4 yymnewline=yymnewline
+4 yymreject=yymreject
+4 yymunputcount=yymunputcount
+2 Variables
+3 Variables=variables
+3 Parser Variables
+4 Parser Variables=parser_variables
+4 yychar=yychar
+4 yyerrorcount=yyerrorcount
+4 yylookahead=yylookahead
+4 yyparsedebug=yyparsedebug
+4 yyparsedebugflush=yyparsedebugflush
+4 yyparsedebugout=yyparsedebugout
+4 yyparsedebugstack=yyparsedebugstack
+4 yyparseerr=yyparseerr
+4 yystackgrow=yystackgrow
+4 yywipeflg=yywipeflg
+3 Lexical Analyser Variables
+4 Lexical Analyser Variables=lexical_analyser_variables
+4 yyin=yyin
+4 yyeol=yyeol
+4 yyleng=yyleng
+4 yylexdebug=yylexdebug
+4 yylexdebugflush=yylexdebugflush
+4 yylexdebugout=yylexdebugout
+4 yylexerr=yylexerr
+4 yylineno=yylineno
+4 yyout=yyout
+4 yystart=yystart
+4 yytext=yytext
+4 yytextgrow=yytextgrow
+4 yyunputgrow=yyunputgrow
+3 Common Variables
+4 Common Variables=common_variables
+4 yydebug=yydebug
+4 yydebugflush=yydebugflush
+4 yydebugstack=yydebugstack
+2 Types
+3 Types=types
+3 yymparse_t=yymparse_t
+3 yymlex_t=yymlex_t
+2 Constants
+3 Constants=constants
+2 Modifiers
+3 Modifiers=modifiers
+2 Flags
+3 Flags=flags
+2 Include Files
+3 Include Files=include_files
+1 License
+2 License=license
+2 License Agreement=license_agreement
+2 Ordering Information=ordering_information
+2 Parser Generator Order Form=parser_generator_order_form
