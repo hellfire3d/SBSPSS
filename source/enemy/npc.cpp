@@ -84,6 +84,18 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		128,
 	},
 
+	{	// NPC_DUST_DEVIL
+		NPC_INIT_DEFAULT,
+		NPC_SENSOR_NONE,
+		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_NONE,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
+
 	{	// NPC_SMALL_JELLYFISH_1
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_JELLYFISH_USER_CLOSE,
@@ -459,7 +471,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_FALLING_ITEM;
+	m_type = NPC_DUST_DEVIL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
