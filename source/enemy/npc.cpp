@@ -1636,8 +1636,8 @@ bool CNpcEnemy::processCoralBlowerMovement( int _frames, s32 xDist, s32 yDist, u
 
 	headingToTarget = ratan2( yDist, xDist ) & 4095;
 
-	s32 preShiftX = _frames * 5 * rcos( headingToTarget );
-	s32 preShiftY = _frames * 5 * rsin( headingToTarget );
+	s32 preShiftX = _frames * 6 * rcos( headingToTarget );
+	s32 preShiftY = _frames * 6 * rsin( headingToTarget );
 
 	moveX = preShiftX >> 12;
 	if ( !moveX && preShiftX )
