@@ -120,7 +120,7 @@ sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
 POLY_FT3		*TPrimPtr=(POLY_FT3*)PrimPtr;
 VECTOR			BlkPos;
-sOT				*ThisOT=OtPtr+LayerOT;
+//sOT				*ThisOT=OtPtr+LayerOT;
 sVtx			*P0,*P1,*P2;
 u32				T0,T1,T2;
 s32				ClipZ;
@@ -157,9 +157,8 @@ s32				ClipZ;
 				*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 				*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
-//				printf("%i\n",P0->vz>>4);
-//				int	ZP=P0->vz>>5*;
-//sOT				*ThisOT=OtPtr+(LayerOT+ZP);
+				int	ZP=P0->vz>>5;
+sOT				*ThisOT=OtPtr+(LayerOT+ZP);
 
 				TList++;
 				gte_nclip_b();
@@ -167,8 +166,8 @@ s32				ClipZ;
 				gte_stopz(&ClipZ);
 				if (ClipZ<=0)
 				{
-//					addPrimNoCheck(ThisOT,TPrimPtr);
-					addPrim(ThisOT,TPrimPtr);
+					addPrimNoCheck(ThisOT,TPrimPtr);
+//					addPrim(ThisOT,TPrimPtr);
 					TPrimPtr++;
 				}
 
