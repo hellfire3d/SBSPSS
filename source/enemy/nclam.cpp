@@ -166,7 +166,8 @@ void CNpcStaticClamEnemy::postInit()
 	platform->setGraphic( (u8) 0 );
 	platform->init( Pos );
 	platform->setTiltable( false );
-	platform->setBBox();
+	//platform->setBBox();
+	platform->postInit();
 }
 
 void CNpcStaticClamEnemy::processClose( int _frames )

@@ -33,8 +33,9 @@ void CNpcClamPlatform::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcClamPlatform::setBBox()
+/*void CNpcClamPlatform::setBBox()
 {
-	setCollisionSize( 54, PLATFORMCOLLISIONHEIGHT);
-	setCollisionCentreOffset( 0, -30 );
-}
+	//setCollisionSize( 54, PLATFORMCOLLISIONHEIGHT);
+	//setCollisionSize( 54, 10 );
+	setCollisionCentreOffset( 50, -100 );
+}*/

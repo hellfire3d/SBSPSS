@@ -22,7 +22,7 @@ class CNpcClamPlatform : public CNpcPlatform
 {
 public:
 	virtual void		render();
-	void				setBBox();
+	//void				setBBox();
 };
 
 #endif
