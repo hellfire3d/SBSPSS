@@ -2165,6 +2165,14 @@ SOURCE=..\..\..\source\triggers\trigger.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tsemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tteleprt.cpp
 # End Source File
 # Begin Source File

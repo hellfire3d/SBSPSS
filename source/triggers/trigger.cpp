@@ -79,6 +79,10 @@
 #include "triggers\tbgeyser.h"
 #endif
 
+#ifndef __TRIGGERS_TSEMIT_H__
+#include "triggers\tsemit.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -160,6 +164,11 @@ CTrigger	*trigger;
 		// Bubble geyser emitter
 		case TRIGGER_BUBBLE_GEYSER_EMITTER:
 			trigger=(CBubbleGeyserEmitterTrigger*)new( "BubbleGeyserEmitterTrigger") CBubbleGeyserEmitterTrigger();
+			break;
+
+		// Steam emitter
+		case TRIGGER_STEAM_EMITTER:
+			trigger=(CSteamEmitterTrigger*)new("SteamEmitterTrigger") CSteamEmitterTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:

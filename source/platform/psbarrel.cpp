@@ -140,16 +140,8 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		m_currentSpeed = 0;
 	}
 
-	if ( moveX > 0 )
-	{
-		m_rotation += 30 * _frames;
-		m_rotation &= 4095;
-	}
-	else if ( moveX < 0 )
-	{
-		m_rotation -= 30 * _frames;
-		m_rotation &= 4095;
-	}
+	m_rotation += ( m_currentSpeed * 30 * _frames ) >> 10;
+	m_rotation &= 4095;
 
 	if ( m_contact )
 	{
