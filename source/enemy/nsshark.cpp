@@ -678,7 +678,7 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 			{
 				case NPC_GENERIC_HIT_CHECK_HEALTH:
 				{
-					m_health -= 5;
+					m_health -= 3;
 
 					if ( m_health <= 0 )
 					{
