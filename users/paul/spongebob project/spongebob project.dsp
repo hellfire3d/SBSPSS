@@ -409,5 +409,49 @@ SOURCE=..\..\..\makefile.gaz
 SOURCE=..\..\..\makefile.gfx
 # End Source File
 # End Group
+# Begin Group "data"
+
+# PROP Default_Filter ""
+# Begin Group "text database"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\data\translations\text.dat
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\..\data\DataCache.scr
+# End Source File
+# End Group
+# Begin Group "out"
+
+# PROP Default_Filter ""
+# Begin Group "USA"
+
+# PROP Default_Filter ""
+# Begin Group "include"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\BigLump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ingamefx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\trans.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\UIGfx.h
+# End Source File
+# End Group
+# End Group
+# End Group
 # End Target
 # End Project
