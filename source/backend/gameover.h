@@ -79,6 +79,7 @@ private:
 		GAMEOVER_FONT_GROWSPEED=150,
 		GAMEOVER_FONT_GROWSPACING=900,
 		GAMEOVER_FONT_MAXSIN=1500,
+		GAMEOVER_DISPLAY_TIME=60*10,
 	};
 	void	initGameOver();
 	void	thinkGameOver(int _frames);

@@ -409,13 +409,11 @@ void	CGameOverScene::thinkGameOver(int _frames)
 {
 	if(!CFader::isFading())
 	{
-		if(!m_finishedGrowingText)
+		m_gameOverTimer+=_frames;
+
+		if(m_finishedGrowingText&&!m_readyToExit)
 		{
-			m_gameOverTimer+=_frames;
-		}
-		else
-		{
-			if(!m_readyToExit&&PadGetDown(0)&(PAD_START|PAD_CROSS))
+			if(PadGetDown(0)&(PAD_START|PAD_CROSS)||m_gameOverTimer>GAMEOVER_DISPLAY_TIME)
 			{
 				m_readyToExit=true;
 				CFader::setFadingOut();
