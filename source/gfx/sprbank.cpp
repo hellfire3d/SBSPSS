@@ -268,6 +268,7 @@ void SpriteBank::prepareFT4(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bool _xF
 
 		setXYWH(_ft4,_x,_y,W,H);
 		setUVTp(_fh,_ft4,_xFlip,_yFlip);
+//!!		CorrectAspect(_ft4);
 }
 
 /*----------------------------------------------------------------------
@@ -337,6 +338,7 @@ void SpriteBank::prepareFT4Scaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _x,int _y,bo
 
 	setXYWH(_ft4,_x,_y,W,H);
 	setUVTp(_fh,_ft4,_xFlip,_yFlip);
+//!!	CorrectAspect(_ft4);
 }
 
 
@@ -411,6 +413,8 @@ void SpriteBank::prepareFT4RotatedScaled(POLY_FT4 *_ft4,sFrameHdr *_fh,int _xCen
 	_ft4->tpage=_fh->TPage;
 	_ft4->clut=_fh->Clut;
 ////////////////////////////////	
+//!!	CorrectAspect(_ft4);
+
 }
 
 

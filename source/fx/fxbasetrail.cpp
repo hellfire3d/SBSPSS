@@ -83,7 +83,7 @@ DVECTOR	RenderPos;
 				RenderPos.vy+=ThisElem.Ofs.vy>>2;
 				if (ThisElem.Shade)
 				{
-					Ft4=SprBank->printRotatedScaledSprite(ThisElem.Frame,RenderPos.vx,RenderPos.vy,ThisElem.Scale,ThisElem.Scale,ThisElem.Angle,OtPos*0);
+					Ft4=SprBank->printRotatedScaledSprite(ThisElem.Frame,RenderPos.vx,RenderPos.vy,ThisElem.Scale,ThisElem.Scale,ThisElem.Angle,OtPos);
 					setShadeTex(Ft4,0);
 					setRGB0(Ft4,ThisElem.Shade,ThisElem.Shade,ThisElem.Shade);
 					setSemiTrans(Ft4,1);

@@ -86,7 +86,7 @@
 
 #include "gfx\actor.h"
 
-int			RenderZ=256;
+int			RenderZ=378;//256; Increased to make depth less, and SB more visible
 
 /*****************************************************************************/
 

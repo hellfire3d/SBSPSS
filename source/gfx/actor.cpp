@@ -61,12 +61,10 @@ int		SlotW=+32000,SlotH=+32000;
 
 		if (SlotList[Slot].Width<W) 
 		{
-//			DAVE_DBGMSG("Adjusted Slot Width from %i to %i\n",SlotList[Slot].Width,W);
 			SlotList[Slot].Width=W; 
 		}
 		if (SlotList[Slot].Height<H) 
 		{
-//			DAVE_DBGMSG("Adjusted Slot Height from %i to %i\n",SlotList[Slot].Height,H);
 			SlotList[Slot].Height=H;
 		}
 
@@ -256,9 +254,9 @@ sPoolNode	*List;
 				for (int X=0; X<W; X++)
 				{
 					int	U=(X*ThisSlot->Width);
-					int	V=Y*ThisSlot->Height;
-					int	TexX=CACHE_X+CurrentTPX+(U>>2);
-					int	TexY=CACHE_Y+V;
+					int	V=(Y*ThisSlot->Height);
+					int	TexX=(CACHE_X+CurrentTPX+(U>>2));
+					int	TexY=(CACHE_Y+V);
 
 					List->Frame=0;
 					List->DstRect.x=TexX;
@@ -654,12 +652,16 @@ int		dX,dY;
 int		CosAngle,SinAngle;
 int		CosX,CosY,SinX,SinY;
 sBBox	SBox,CBox;
-
+int		W=Ft4->x1-Ft4->x0;
+int		H=Ft4->y2-Ft4->y0;
 
 		Angle&=4095;	
 	
-		dX=(CurrentFrameGfx->W*XScale)>>(12+1);	// +1 for half
-		dY=(CurrentFrameGfx->H*YScale)>>(12);	
+//		dX=(CurrentFrameGfx->W*XScale)>>(12+1);	// +1 for half
+//		dY=(CurrentFrameGfx->H*YScale)>>(12);	
+
+		dX=(W*XScale)>>(12+1);	// +1 for half
+		dY=(H*YScale)>>(12);	
 
 		CosAngle=mcos(Angle);
 		SinAngle=msin(Angle);
@@ -727,9 +729,9 @@ u8		V=Node->V;
 			X-=CurrentFrame->XOfs;
 			X-=W;
 			Ft4->u0=U+W-1;
-			Ft4->u1=U;//-1;
+			Ft4->u1=U;//-1;//
 			Ft4->u2=U+W-1;
-	 		Ft4->u3=U;//-1;
+	 		Ft4->u3=U;//-1;//
 
 			}
 		else
@@ -748,8 +750,8 @@ u8		V=Node->V;
 			Y-=H;
 			Ft4->v0=V+H-1;
 			Ft4->v1=V+H-1;
-			Ft4->v2=V;//-1;
-			Ft4->v3=V;//-1;
+			Ft4->v2=V-1;//
+			Ft4->v3=V-1;//
 			}
 		else
 		{
@@ -761,6 +763,7 @@ u8		V=Node->V;
 		}
 
 		setXYWH(Ft4,X,Y,W,H);
+		CorrectAspect(Ft4);
 }
 
 

@@ -86,7 +86,7 @@ CFXBaseAnim::sFXAnim	FXFireData=
 		FRM__FIRE01,FRM__FIRE06,
 		1,
 		127,127,127,
-		CFXBaseAnim::FXANIM_FLAG_LOOP,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_TRANS,
 		{0,0},
 		0
 };

@@ -28,6 +28,7 @@ public:
 		FXANIM_FLAG_HAS_GRAVITY		=1<<2,
 		FXANIM_FLAG_INJURE_PLAYER	=1<<3,
 		FXANIM_FLAG_KILL_PLAYER		=1<<4,
+		FXANIM_FLAG_TRANS			=1<<5,
 	};
 
 virtual void		init(DVECTOR const &Pos);

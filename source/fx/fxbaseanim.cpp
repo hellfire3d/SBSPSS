@@ -104,13 +104,10 @@ DVECTOR	RenderPos;
 		if (!canRender() || !IsVisible) return;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
-
-//POLY_FT4	*Ft4=SprBank->printFT4Scaled(renderFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,CurrentScale>>4);
-POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderPos.vy,CurrentScaleX,CurrentScaleY,CurrentHeading,OtPos*0);
-			Ft4->u1--; Ft4->u3--;
-			Ft4->v2--; Ft4->v3--;
+POLY_FT4	*Ft4=SprBank->printRotatedScaledSprite(renderFrame,RenderPos.vx,RenderPos.vy,CurrentScaleX,CurrentScaleY,CurrentHeading,OtPos);
 			setShadeTex(Ft4,0);
 			setRGB0(Ft4,DataPtr->R,DataPtr->G,DataPtr->B);
+			setSemiTrans(Ft4,DataPtr->Flags & FXANIM_FLAG_TRANS);
 }
 
 /*****************************************************************************/

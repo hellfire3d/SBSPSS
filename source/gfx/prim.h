@@ -349,6 +349,31 @@ inline	void	GetFrameWH(sFrameHdr *Fr,u8 *W,u8 *H)				{*W=Fr->W; *H=Fr->H;}
 inline	int		GetFrameClut(sFrameHdr *Fr)							{return(Fr->Clut);}
 inline	int		GetFrameTPage(sFrameHdr *Fr)						{return(Fr->TPage);}
 
+const int		aspectX=4096+1024;//(512<<12)/320;
+//int		aspectY=(256<<12)/320;
+inline	void	CorrectAspect(POLY_FT4 *P)
+{
+int		W=P->x1-P->x0;
+int		aW=(W*aspectX)>>12;
+int		dW=(W-aW)>>1;
+
+		P->x0+=dW;
+		P->x1-=dW;
+		P->x2+=dW;
+		P->x3-=dW;
+}
+inline	void	CorrectAspect(POLY_GT4 *P)
+{
+int		W=P->x1-P->x0;
+int		aW=(W*aspectX)>>12;
+int		dW=(W-aW)>>1;
+
+		P->x0+=dW;
+		P->x1-=dW;
+		P->x2+=dW;
+		P->x3-=dW;
+}
+
 #endif
 
 
