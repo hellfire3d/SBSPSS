@@ -406,15 +406,6 @@ void	CGameScene::think(int _frames)
 			break;
 	}
 
-//
-#if defined (__USER_paul__)
-if(PadGetDown(0)&PAD_UP)
-{
-	s_justHitBossArenaTrigger=true;
-}
-#endif
-//
-
 
 #ifdef __VERSION_DEBUG__
 #if defined (__USER_paul__) || defined (__USER_daveo__) || defined (__USER_charles__)
