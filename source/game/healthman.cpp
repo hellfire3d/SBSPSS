@@ -159,7 +159,7 @@ sItem	*item=ItemList;
 int		mapHeight;
 
 	CLayerCollision	*ColLayer=CGameScene::getCollision();
-	mapHeight=GameScene.GetLevel().getMapSize().vy*16;
+	mapHeight=GameScene.GetLevel().getMapHeight16();
 
 		for (int i=0; i<ITEM_MAX; i++)
 		{

@@ -78,7 +78,14 @@ static CFmaScene::FMA_SCRIPT_NUMBER getFMAToFollow()						{return LvlTable[s_glo
 		sThingHazard	**getHazardList()						{return HazardList;}
 
 		CLayerCollision	*getCollisionLayer()					{return CollisionLayer;}
-		DVECTOR			getMapSize();
+
+		DVECTOR	 const	&getMapSize()							{return(MapSize);}
+		int				getMapWidth()							{return(MapSize.vx);}
+		int				getMapHeight()							{return(MapSize.vy);}
+
+		DVECTOR	 const	&getMapSize16()							{return(MapSize16);}
+		int				getMapWidth16()							{return(MapSize16.vx);}
+		int				getMapHeight16()						{return(MapSize16.vy);}
 
 		bool			GetNextLevel(int &Lvl);
 
@@ -132,6 +139,7 @@ static	int				s_playerFacing;
 static	u8				m_isBossRespawn;
 static	s32				m_bossHealth;
 
+		DVECTOR			MapSize,MapSize16;
 static	CNpcCheckpointHazard	*m_checkpoint;
 
 // Level Repair stuff

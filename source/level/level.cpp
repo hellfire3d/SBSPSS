@@ -381,6 +381,10 @@ void	CLevel::initLayers()
 			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(LevelHdr,Layer,m_RGBMap,m_RGBTable);
 			NewLayer->init(MapPos,0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
+			MapSize.vx=Layer->Width;
+			MapSize.vy=Layer->Height;
+			MapSize16.vx=Layer->Width*16;
+			MapSize16.vy=Layer->Height*16;
 		}
 // Collision
 
@@ -726,6 +730,7 @@ void	CLevel::think(int _frames)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/*
 DVECTOR	CLevel::getMapSize()
 {
 DVECTOR		size;
@@ -737,7 +742,7 @@ sLayerHdr	*layer;
 
 		return size;
 }
-
+*/
 
 /*****************************************************************************/
 /*****************************************************************************/

@@ -440,6 +440,8 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 	m_ThinkBBox.XMax=s_ThinkBBoxX1+CamPos.vx;
 	m_ThinkBBox.YMin=s_ThinkBBoxY0+CamPos.vy;
 	m_ThinkBBox.YMax=s_ThinkBBoxY1+CamPos.vy;
+CLevel	&Lvl=GameScene.GetLevel();
+DVECTOR	const &MapSize=Lvl.getMapSize16();
 
 	int		i;
 	CThing	*thing;
@@ -456,43 +458,52 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			CRECT	const *ThingRect= thing->getThinkBBox();
 			int		lastFlag=thing->getThinkFlag()<<1;
 			int		Flag=1;
-			// Will speed this up
-			if (!thing->alwaysThink())
-			{
-				if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=0;
-				if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=0;
-			}
-			thing->setThinkFlag(Flag);
-// Is in think zone
-			if (Flag)
-			{
-				thing->think(_frames);
-//				thing->updateCollisionArea();
-				if (thing->canCollide())
-				{
-					CThingManager::addToCollisionList(thing);
-				}
-			}
-			Flag|=lastFlag;
-// Handle enter/leave states (not sure of viabilty now)
-			switch (Flag)
-			{			// Last This
-				case 0: // 0    0
-					break;
-				case 1: // 0    1
-//					thing->enterThinkZone(_frames);
-					break;
-				case 2: // 1    0
-					thing->leftThinkZone(_frames);
-					break;
-				case 3: // 1    1
-					break;
-				default:
-					ASSERT("Invalid Think State");
-			}
+			DVECTOR	const &ThingPos=thing->getPos();
 
+			// Will speed this up
+			if (ThingPos.vx<0 || ThingPos.vx>=MapSize.vx || ThingPos.vy<0 || ThingPos.vy>=MapSize.vy)
+			{
+				thing->setToShutdown();
+				SYSTEM_DBGMSG("ThingOffMap: T:%i S:%i TXY%i %i, MWH%i %i\n",(int)thing->getThingType(),(int)thing->getThingSubType(),ThingPos.vx,ThingPos.vy,MapSize.vx,MapSize.vy);
+			}
+			else
+			{
+				if (!thing->alwaysThink())
+				{
+					if (ThingRect->x2<m_ThinkBBox.XMin || ThingRect->x1>m_ThinkBBox.XMax) Flag=0;
+					if (ThingRect->y2<m_ThinkBBox.YMin || ThingRect->y1>m_ThinkBBox.YMax) Flag=0;
+				}
+				thing->setThinkFlag(Flag);
+// Is in think zone
+				if (Flag)
+				{
+					thing->think(_frames);
+//					thing->updateCollisionArea();
+					if (thing->canCollide())
+					{
+						CThingManager::addToCollisionList(thing);
+					}
+				}
+				Flag|=lastFlag;
+// Handle enter/leave states (not sure of viabilty now)
+				switch (Flag)
+				{			// Last This
+					case 0: // 0    0
+						break;
+					case 1: // 0    1
+	//					thing->enterThinkZone(_frames);
+						break;
+					case 2: // 1    0
+						thing->leftThinkZone(_frames);
+						break;
+					case 3: // 1    1
+						break;
+					default:
+						ASSERT("Invalid Think State");
+				}
 /* THIS WILL NOT STAY HERE, THINGS MUST BE INITIALISED CORRECTLY */
-			thing->updateCollisionArea();
+				thing->updateCollisionArea();
+			}
 			thing=thing->m_nextListThing;
 		}
 	}

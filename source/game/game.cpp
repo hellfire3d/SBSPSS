@@ -812,7 +812,7 @@ void	CGameScene::initLevel()
 	{
 		m_player->setCanExitLevelNow();
 	}
-	DVECTOR				mapSize=Level.getMapSize();
+	DVECTOR	const &mapSize=Level.getMapSize();
 	CPlayer::CameraBox	camBox={0,0,mapSize.vx<<4,mapSize.vy<<4};
 	m_player->setCameraBox(camBox);
 
