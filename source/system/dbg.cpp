@@ -230,7 +230,7 @@ int __getNumberOfDbgLinesInLog()
 char *__getDbgLineFromLog(int _line)
 {
 #ifdef DBG_OUTPUT_TO_LOG
-	return s_logLines[_line];
+	return s_logLines[(s_logLinePtr+_line)%DBG_LOG_LINES];
 #else
 	return "Damn fool..";
 #endif
