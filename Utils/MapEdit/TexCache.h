@@ -11,12 +11,13 @@
 #include	<gl\glu.h>
 #include	<gl\glut.h>
 #include	<Vector>
+#include	"Utils.h"
 
 struct	sRGBData
 {
 	int		Width;
 	int		Height;
-	char	*RGB;
+	u8		*RGB;
 };
 
 struct	sTex

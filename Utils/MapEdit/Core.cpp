@@ -20,6 +20,8 @@
 #include	"LayerTile.h"
 #include	"utils.h"
 
+#include	"ExportAGB.h"
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -33,7 +35,6 @@ CCore::CCore()
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
 	Is3dFlag=TRUE;
-
 }
 
 /*****************************************************************************/
@@ -516,4 +517,20 @@ void	CCore::Toggle2d3d(CMapEditView *View)
 {
 		Is3dFlag=!Is3dFlag;
 		UpdateView(View);
+
+		Export();
+}
+
+/*****************************************************************************/
+void	CCore::Export()
+{
+int		LayerCount=Layer.size();
+CExportAGB	Exp("c:/temp/test.c");
+
+		for (int i=0;i<LayerCount;i++)
+		{
+			Layer[i]->Export(Exp);
+		}
+		Exp.ExportAll(this);
+	
 }

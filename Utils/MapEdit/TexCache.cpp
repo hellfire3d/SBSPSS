@@ -91,7 +91,7 @@ AUX_RGBImageRec *Aux;
 		Aux=auxDIBImageLoad(Filename);
 		RGBData.Width=Aux->sizeX;
 		RGBData.Height=Aux->sizeY;
-		RGBData.RGB=(char*)Aux->data;
+		RGBData.RGB=Aux->data;
 		free(Aux);	// Safe to free aux now, contents copied (I HATE AUX)
 }
 

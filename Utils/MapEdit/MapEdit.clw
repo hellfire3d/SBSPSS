@@ -24,7 +24,7 @@ Resource3=IDD_GFXTOOLBAR
 Resource4=IDD_DIALOGBAR (English (U.S.))
 Resource5=IDR_MAPEDITYPE (English (U.S.))
 Class8=CMultiBar
-Resource6=IDR_TOOLBAR (English (U.S.))
+Resource6=IDD_MAPSIZE
 Resource7=IDD_TILESET_DIALOG
 Class9=CLayerList
 Class10=CTileSetDlg
@@ -32,7 +32,7 @@ Resource8=IDR_MAINFRAME (English (U.S.))
 Class11=CGfxToolBar
 Resource9=IDD_LAYER_LIST_DIALOG
 Class12=CMapSizeDlg
-Resource10=IDD_MAPSIZE
+Resource10=IDR_TOOLBAR (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
@@ -79,7 +79,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_2D_3D_TOGGLE
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 

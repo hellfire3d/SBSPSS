@@ -15,6 +15,8 @@
 
 const	float	FileVersion=1.0f;
 
+//#define	UseLighting
+
 /*****************************************************************************/
 class	CMapEditView;
 class	CCore
@@ -37,6 +39,8 @@ public:
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);
+		void					Export();
+
 
 // Control
 		void					SetMode(int NewMode);
@@ -50,7 +54,7 @@ public:
 		void					UpdateTileView(CMapEditView *View,BOOL Toggle=FALSE);
 
 		CTileBank				&GetTileBank()					{return(TileBank);}
-		CTile					GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
+		CTile					&GetTile(int Bank,int TileNo)	{return(TileBank.GetTile(Bank,TileNo));}
 		void					TileBankLoad(char *Filename);
 		void					TileBankReload();
 		void					TileBankSet();

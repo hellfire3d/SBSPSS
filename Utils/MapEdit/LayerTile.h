@@ -33,6 +33,7 @@ public:
 		{
 			MouseFlagMirrorX=1<<0,
 			MouseFlagMirrorY=1<<1,
+			MouseFlagMirrorXY=MouseFlagMirrorX|MouseFlagMirrorY,
 		};
 
 		CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable);		// New Layer
@@ -56,6 +57,8 @@ public:
 
 		void			Load(CFile *File,float Version);
 		void			Save(CFile *File);
+
+		void			Export(CExport &Exp);
 
 // Functions
 		BOOL			SetMode(int NewMode);

@@ -19,6 +19,7 @@
 #include	"Layer.h"
 #include	"LayerTile.h"
 #include	"Utils.h"
+#include	"Export.h"
 
 
 /*****************************************************************************/
@@ -187,7 +188,9 @@ float	OverVal=0.5;
 		glDisable(GL_TEXTURE_2D);
 
 		glBegin(GL_LINES); 
+#ifdef	UseLighting
 			glNormal3f( 1,1,1);
+#endif
 			glColor3ub(255,255,255);
 			
 			for (int YLoop=0; YLoop<Height+1; YLoop++)
@@ -484,3 +487,8 @@ BOOL	CLayerTile::Paint(CMap &Blk,CPoint &CursorPos)
 
 }
 
+/*****************************************************************************/
+void	CLayerTile::Export(CExport &Exp)
+{
+		Exp.ExportTileMap(Name,Map);
+}

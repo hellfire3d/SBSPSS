@@ -33,37 +33,49 @@ char szBuf[256];
 void	BuildGLBox(float XMin,float XMax,float YMin,float YMax,float ZMin,float ZMax)
 {
 			// Bottom Face
+#ifdef	UseLighting
 			glNormal3f( 0.0f,-1.0f, 0.0f);
+#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMax, YMin, ZMin);
 			glVertex3f( XMax, YMin, ZMax);
 			glVertex3f( XMin, YMin, ZMax);
 			// Front Face
+#ifdef	UseLighting
 			glNormal3f( 0.0f, 0.0f, 1.0f);
+#endif
 			glVertex3f( XMin, YMin, ZMax);
 			glVertex3f( XMax, YMin, ZMax);
 			glVertex3f( XMax, YMax, ZMax);
 			glVertex3f( XMin, YMax, ZMax);
 			// Back Face
+#ifdef	UseLighting
 			glNormal3f( 0.0f, 0.0f,-1.0f);
+#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMin, YMax, ZMin);
 			glVertex3f( XMax, YMax, ZMin);
 			glVertex3f( XMax, YMin, ZMin);
 			// Right face
+#ifdef	UseLighting
 			glNormal3f( 1.0f, 0.0f, 0.0f);
+#endif
 			glVertex3f( XMax, YMin, ZMin);
 			glVertex3f( XMax, YMax, ZMin);
 			glVertex3f( XMax, YMax, ZMax);
 			glVertex3f( XMax, YMin, ZMax);
 			// Left Face
+#ifdef	UseLighting
 			glNormal3f(-1.0f, 0.0f, 0.0f);
+#endif
 			glVertex3f( XMin, YMin, ZMin);
 			glVertex3f( XMin, YMin, ZMax);
 			glVertex3f( XMin, YMax, ZMax);
 			glVertex3f( XMin, YMax, ZMin);
 			// Top Face
+#ifdef	UseLighting
 			glNormal3f( 0.0f, 1.0f, 0.0f);
+#endif
 			glVertex3f( XMin, YMax, ZMin);
 			glVertex3f( XMin, YMax, ZMax);
 			glVertex3f( XMax, YMax, ZMax);
@@ -109,7 +121,9 @@ void	BuildGLBoxNoNormals(float XMin,float XMax,float YMin,float YMax,float ZMin,
 void	BuildGLQuad(float XMin,float XMax,float YMin,float YMax,float Z)
 {
 			// Front Face
+#ifdef	UseLighting
 			glNormal3f( 0.0f, 0.0f, 1.0f);
+#endif
 			glVertex3f( XMin, YMin, Z);
 			glVertex3f( XMax, YMin, Z);
 			glVertex3f( XMax, YMax, Z);
@@ -176,67 +190,6 @@ int		ID;
 /**************************************************************************************/
 /**************************************************************************************/
 /**************************************************************************************/
-#if	0
-AUX_RGBImageRec *LoadBMP(char *Filename)
-{
-FILE	*File=NULL;
-
-	File=fopen(Filename,"r");
-
-	if (File)
-	{
-		fclose(File);
-		return auxDIBImageLoad(Filename);
-	}
-
-	return NULL;
-}
-
-/**************************************************************************************/
-void	FreeBMP(AUX_RGBImageRec *TextureImage)
-{
-	if (TextureImage)									// If Texture Exists
-	{
-		if (TextureImage->data)							// If Texture Image Exists
-		{
-			free(TextureImage->data);					// Free The Texture Image Memory
-		}
-
-		free(TextureImage);								// Free The Image Structure
-	}
-
-}
-
-/**************************************************************************************/
-int		LoadGLTexture(char *FileName, GLuint &Text,int &Width,int &Height)
-{
-AUX_RGBImageRec	*TextureImage;
-int				Status=FALSE;
-
-	memset(&TextureImage,0,sizeof(void *)*1);           // Init Buffer
-
-	// Load The Bitmap, Check For Errors, If Bitmap's Not Found Quit
-	if (TextureImage=LoadBMP(FileName))
-	{
-		Width=TextureImage->sizeX;
-		Height=TextureImage->sizeY;
-		Status=TRUE;									// Set The Status To TRUE
-
-		glGenTextures(1, &Text);						// Create The Texture
-
-		// Typical Texture Generation Using Data From The Bitmap
-		glBindTexture(GL_TEXTURE_2D, Text);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage->sizeX, TextureImage->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	FreeBMP(TextureImage);
-
-	return Status;										// Return The Status
-}
-#endif
 
 /**************************************************************************************/
 struct	sTgaHdr
@@ -257,7 +210,7 @@ struct	sTgaHdr
 
 
 
-void SaveTGA(char *Filename,int W,int H,char *Data)
+void SaveTGA(char *Filename,int W,int H,u8 *Data)
 {
 FILE			*File;
 sTgaHdr			FileHdr;
@@ -281,13 +234,13 @@ sTgaHdr			FileHdr;
 }
 
 /**************************************************************************************/
-void	BGR2RGB(int W,int H,char *Data)
+void	BGR2RGB(int W,int H,u8 *Data)
 {
 		for (int Y=0; Y<H; Y++)
 			{
 			for (int X=0; X<W; X++)
 				{
-				unsigned char	c0,c1;
+				u8	c0,c1;
 				c0=Data[0];
 				c1=Data[2];
 				Data[0]=c1;
@@ -295,4 +248,68 @@ void	BGR2RGB(int W,int H,char *Data)
 				Data+=3;
 				}
 			}
+}
+
+/**************************************************************************************/
+void SaveBmp(char *Filename,int Width,int Height,RGBQUAD *Pal,u8 *Image)
+{
+FILE				*File;
+BITMAPFILEHEADER	FileHdr;
+BITMAPINFOHEADER	ImageHdr;
+int					PaletteSize,ImageSize;
+
+		File=fopen(Filename,"wb");
+		
+		if (!Pal)
+		{
+			PaletteSize=0;
+			ImageSize=Width*Height*3;
+			ImageHdr.biBitCount=24;
+		}
+		else
+		{
+			PaletteSize=256*sizeof(RGBQUAD);
+			ImageSize=Width*Height;
+			ImageHdr.biBitCount=8;
+
+		}
+
+		FileHdr.bfType=19778;
+		FileHdr.bfSize=sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+PaletteSize+ImageSize;
+		FileHdr.bfReserved1=0;
+		FileHdr.bfReserved2=0;
+		FileHdr.bfOffBits=sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+PaletteSize;
+
+		ImageHdr.biSize=sizeof(BITMAPINFOHEADER);
+		ImageHdr.biWidth=Width;
+		ImageHdr.biHeight=Height;
+		ImageHdr.biPlanes=1;
+// Set Above		ImageHdr.biBitCount=8;	// 24
+		ImageHdr.biCompression=BI_RGB;
+		ImageHdr.biSizeImage=0;
+		ImageHdr.biXPelsPerMeter=0;
+		ImageHdr.biYPelsPerMeter=0;
+		ImageHdr.biClrUsed=0;
+		ImageHdr.biClrImportant=0;
+ 
+		fwrite(&FileHdr,sizeof(BITMAPFILEHEADER),1,File);
+		fwrite(&ImageHdr,sizeof(BITMAPINFOHEADER),1,File);
+
+		if (Pal) fwrite(Pal,sizeof(RGBQUAD),256,File);
+		
+		fwrite(Image,ImageSize,1,File);
+/*		
+		for (int Y=0;Y<Height;Y++)
+		{
+			for (int X=0;X<Width;X++)
+			{
+				TRACE1("%02d ",*Image++);
+
+			}
+			TRACE0("\n");
+		}
+*/
+		fclose(File);
+
+
 }

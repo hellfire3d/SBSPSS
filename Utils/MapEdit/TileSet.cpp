@@ -44,7 +44,7 @@ CTileBank::CTileBank()
 		SelStart=-1;
 		SelEnd=1;
 
-#ifdef _DEBUG
+#ifdef _DEBUGx
 	AddTileSet("c:/temp/rockp/rockp.gin");
 //	AddTileSet("c:/temp/3/test.gin");
 
@@ -397,7 +397,9 @@ int			SelFlag;
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glBegin(GL_QUADS); 
+#ifdef	UseLighting
 				glNormal3f( 1,1,1);
+#endif
 				switch(SelFlag)
 				{
 					case 1: // L
@@ -463,8 +465,9 @@ int		MaxTile=Tile.size();
 				glTranslatef(CamPos.x+X*(1+TileBrowserGap),CamPos.y-Y*(1+TileBrowserGap),CamPos.z);
 	
 				glBegin(GL_QUADS); 
+#ifdef	UseLighting
 				glNormal3f( 1,1,1);
-	
+#endif	
 				glColor4f(1,1,0,0.5);
 				BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
 				glEnd();
@@ -494,7 +497,9 @@ int			TileID=0;
 			glTranslatef(CamPos.x+Pos.x*(1+TileBrowserGap),CamPos.y-Pos.y*(1+TileBrowserGap),CamPos.z);
 
 			glBegin(GL_LINES); 
+#ifdef	UseLighting
 				glNormal3f( 1,1,1);
+#endif
 				glColor3ub(255,255,255);
 			
 				glVertex3f( TileBrowserX0,TileBrowserY0,0);

@@ -110,6 +110,55 @@ SOURCE=.\LayerTile.cpp
 SOURCE=.\LayerTile.h
 # End Source File
 # End Group
+# Begin Group "Export"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Export.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Export.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExportAGB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ExportAGB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Quantize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Quantize.h
+# End Source File
+# End Group
+# Begin Group "TestLevels"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\agbtypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\temp\test.c
+
+!IF  "$(CFG)" == "MapEdit - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "MapEdit - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\Core.cpp
