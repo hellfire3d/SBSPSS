@@ -307,7 +307,7 @@ protected:
 	enum NPC_SHOT_FUNC
 	{
 		NPC_SHOT_NONE = 0,
-		NPC_SHOT_GENERIC_DIE = 1,
+		NPC_SHOT_GENERIC = 1,
 	};
 
 	enum NPC_MOTHER_JELLYFISH_STATE
@@ -367,10 +367,12 @@ protected:
 		PUFFA_FISH_INFLATE,
 	};
 
-	enum NPC_GENERIC_DEATH_STATE
+	enum NPC_GENERIC_HIT_STATE
 	{
-		NPC_GENERIC_DEATH_START = 100,
-		NPC_GENERIC_DEATH_END = 101,
+		NPC_GENERIC_HIT_CHECK_HEALTH = 100,
+		NPC_GENERIC_HIT_RECOIL = 101,
+		NPC_GENERIC_HIT_DEATH_START,
+		NPC_GENERIC_HIT_DEATH_END,
 	};
 
 	enum
@@ -410,6 +412,7 @@ protected:
 		u16								moveAnim;
 		NPC_SHOT_FUNC					shotFunc;
 		u16								dieAnim;
+		u16								recoilAnim;
 	}
 	NPC_DATA;
 
