@@ -74,9 +74,11 @@ void 	CGameScene::init()
 
 		Level.init();
 
+#ifdef __USER_charles__		
 		C2dEnemy	*enemy;
 		enemy=new ("test enemy") C2dEnemy;
 		enemy->init();
+#endif
 
 		m_player=new ("player") CPlayer();
 		m_player->init();
