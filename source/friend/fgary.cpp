@@ -299,6 +299,8 @@ void CNpcGaryFriend::think( int _frames )
 		}
 	}
 
+	m_obstructed = false;
+
 	// sort out draw rotation
 
 	DVECTOR testPos1, testPos2;
@@ -307,8 +309,25 @@ void CNpcGaryFriend::think( int _frames )
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	testPos1.vy += CGameScene::getCollision()->getHeightFromGroundNonSB( testPos1.vx, testPos1.vy, 16 );
-	testPos2.vy += CGameScene::getCollision()->getHeightFromGroundNonSB( testPos2.vx, testPos2.vy, 16 );
+	int groundDist = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
+
+	if ( abs( groundDist ) > 15 )
+	{
+		m_drawRotation = 0;
+		return;
+	}
+
+	testPos1.vy += groundDist;
+
+	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
+
+	if ( abs( groundDist ) > 15 )
+	{
+		m_drawRotation = 0;
+		return;
+	}
+
+	testPos2.vy += groundDist;
 
 	s32 xDist = testPos2.vx - testPos1.vx;
 	s32 yDist = testPos2.vy - testPos1.vy;
@@ -316,8 +335,6 @@ void CNpcGaryFriend::think( int _frames )
 	s16 heading = ratan2( yDist, xDist );
 
 	m_drawRotation = heading;
-
-	m_obstructed = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -338,8 +338,6 @@ void CNpcSpiderCrabEnemy::processMovement(int _frames)
 
 void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange )
 {
-	int groundDist;
-
 	Pos.vx += distX;
 	Pos.vy += distY;
 
@@ -351,9 +349,9 @@ void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 	testPos1.vx -= 10;
 	testPos2.vx += 10;
 
-	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 12 );
+	int groundDist = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
 
-	if ( abs( groundDist ) > 12 )
+	if ( abs( groundDist ) > 15 )
 	{
 		m_drawRotation = 0;
 		return;
@@ -361,9 +359,9 @@ void CNpcSpiderCrabEnemy::processMovementModifier( int _frames, s32 distX, s32 d
 
 	testPos1.vy += groundDist;
 
-	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 12 );
+	groundDist = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
 
-	if ( abs( groundDist ) > 12 )
+	if ( abs( groundDist ) > 15 )
 	{
 		m_drawRotation = 0;
 		return;

@@ -217,24 +217,23 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 
 		u8 sensorDist = 16;
 
-		s32 yDiff;
+		s32 yDiff1, yDiff2;
 
-		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos1.vx, testPos1.vy, sensorDist + 1 );
+		yDiff1 = CGameScene::getCollision()->getHeightFromGroundCart( testPos1.vx, testPos1.vy, sensorDist + 1 );
 
-		if ( yDiff <= sensorDist )
+		if ( abs( yDiff1 ) <= sensorDist )
 		{
 			// only use if there is ground present
 
-			testPos1.vy += yDiff;
-		}
+			yDiff2 = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
 
-		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
+			if ( abs( yDiff2 ) <= sensorDist )
+			{
+				// only use if there is ground present
 
-		if ( yDiff <= sensorDist )
-		{
-			// only use if there is ground present
-
-			testPos2.vy += yDiff;
+				testPos1.vy += yDiff1;
+				testPos2.vy += yDiff2;
+			}
 		}
 
 		s32 xDist = testPos2.vx - testPos1.vx;
@@ -247,13 +246,13 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 		testPos2 = Pos;
 		testPos2.vx += 32;
 
-		yDiff = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
+		yDiff1 = CGameScene::getCollision()->getHeightFromGroundCart( testPos2.vx, testPos2.vy, sensorDist + 1 );
 
-		if ( yDiff <= sensorDist )
+		if ( yDiff1 <= sensorDist )
 		{
 			// only use if there is ground present
 
-			testPos2.vy += yDiff;
+			testPos2.vy += yDiff1;
 		}
 
 		switch ( CGameScene::getCollision()->getCollisionBlock( testPos2.vx, testPos2.vy - 8 ) & COLLISION_TYPE_MASK )
