@@ -207,7 +207,7 @@ struct	sLvlHdr
 	u32		MidLayer;
 	u32		ActionLayer;
 	u32		ForeLayer;
-	u32		Pad0;
+	u32		CollisionLayer;
 	u32		Pad1;
 	u32		Pad2;
 	u32		Pad3;
