@@ -49,11 +49,13 @@ private:
 		DEATH_TIMEOUT=5*60,		// SB respawns automatically after this long
 	};
 	int				m_deadTime;
+	int				m_deathAnim;
 
 	void			fall();
 	int				m_yVelocity;
 
 	int				m_killed;
+
 
 };
 

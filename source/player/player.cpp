@@ -2609,9 +2609,17 @@ int		CPlayer::moveVertical(int _moveDistance)
 		{
 			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0)
 			{
-				moveRequired[i]=colHeightAfter[i];
-				hitGround=true;
-				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
+				int	goingIntoThisBlock=blockAfter[i]&COLLISION_TYPE_MASK;
+				if(goingIntoThisBlock!=COLLISION_TYPE_FLAG_DEATH_FALL)
+				{
+					moveRequired[i]=colHeightAfter[i];
+					hitGround=true;
+				}
+				else
+				{
+					moveRequired[i]=0;
+				}
+				if(!hitThisSuspectBlock)hitThisSuspectBlock=goingIntoThisBlock;
 			}
 			else
 			{
@@ -2720,6 +2728,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 		// Stood on any important types of collision?
 		hitThisSuspectBlock=CGameScene::getCollision()->getCollisionBlock(pos.vx,pos.vy+_moveDistance);
 	}
+
 	pos.vy+=_moveDistance;
 	setPlayerPos(&pos);
 

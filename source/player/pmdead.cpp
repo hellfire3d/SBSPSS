@@ -53,6 +53,8 @@
 	Vars
 	---- */
 
+static int anim=0;
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -61,37 +63,34 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeDead::enter()
 {
-	int	deathAnim;
-
 	m_deadTime=0;
 	
 	switch(m_player->getDeathType())
 	{
 		default:
 		case DEATHTYPE__NORMAL:
-			deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
 			break;
 		case DEATHTYPE__DRYUP:
-			deathAnim=ANIM_SPONGEBOB_DEATHDRY;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHDRY;
 			break;
 		case DEATHTYPE__SQUASH:
-			deathAnim=ANIM_SPONGEBOB_DEATHSQUASH;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHSQUASH;
 			break;
 		case DEATHTYPE__LIQUID:
-			deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
+			m_deathAnim=ANIM_SPONGEBOB_DEATHFORWARDS;
 			break;
 		case DEATHTYPE__FALL_TO_DEATH:
-			deathAnim=-1;
+			m_deathAnim=-1;
 			break;
 	}
 
-	if(deathAnim!=-1)
+	if(m_deathAnim!=-1)
 	{
-		m_player->setAnimNo(deathAnim);
+		m_player->setAnimNo(m_deathAnim);
 	}
 
 	CSoundMediator::stopSpeech();
-
 
 	m_killed=false;
 }
@@ -107,23 +106,37 @@ void	CPlayerModeDead::think()
 	m_deadTime++;
 	if(m_player->getDeathType()!=DEATHTYPE__FALL_TO_DEATH)
 	{
-		if(m_deadTime<m_player->getAnimFrameCount())
+		int frameCount,frame;
+
+		if(m_deathAnim!=-1)
 		{
-			m_player->setAnimFrame(m_deadTime);
+			m_player->setAnimNo(m_deathAnim);
 		}
+		frameCount=m_player->getAnimFrameCount()-1;
+		if(m_deadTime<=frameCount)
+		{
+			frame=m_deadTime;
+		}
+		else
+		{
+			frame=frameCount;
+		}
+		m_player->setAnimFrame(frame);
 	}
 
 	m_player->moveVertical(5);
 
 	if(!m_killed)
-	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&(PI_JUMP|PI_FIRE))||
-	   m_deadTime>DEATH_TIMEOUT)
 	{
-		// Take a life off..
-		CGameSlotManager::getSlotData()->m_lives--;
+		if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&(PI_JUMP|PI_FIRE))||
+		   m_deadTime>DEATH_TIMEOUT)
+		{
+			// Take a life off..
+			CGameSlotManager::getSlotData()->m_lives--;
 
-		CGameScene::restartlevel();
-		m_killed=true;
+			CGameScene::restartlevel();
+			m_killed=true;
+		}
 	}
 }
 
