@@ -55,6 +55,21 @@ inline	void	SetIdentNoTrans(MATRIX *Mtx,VECTOR *S)								{SetIdentNoTrans(Mtx,	
 
 
 /*****************************************************************************/
+inline void CorrectMatrixScale(MATRIX *Mtx)
+{
+//const s32 scale = (512 << 12) / (320+128);
+//const s32 scale = ONE+ScaleXAspect+128;
+const s32 scale = ONE+2050+128;
+
+	for (u32 i = 0; i < 3; ++i)
+	{
+		Mtx->m[ 0 ][ i ] = ((s32)Mtx->m[ 0 ][ i ] * scale) >> 12;
+	}
+//	dont need, as zero'd 
+//	dst_mtx->t[ 0 ] = (dst_mtx->t[ 0 ] * scale) >> 12;
+}
+
+/*****************************************************************************/
 inline	void InverseMatrix(MATRIX *m, MATRIX &im)	//assumes no scale, just transformation and rotation
 {
 	TransposeMatrix(m, &im);

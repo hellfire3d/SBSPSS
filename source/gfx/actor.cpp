@@ -663,7 +663,6 @@ int		AspectX0,AspectX1;
 }
 
 /*****************************************************************************/
-
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode	*ThisNode=CacheFrame(Anim,Frame);
@@ -699,35 +698,17 @@ POLY_FT4	*CActorGfx::RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale
 {
 MATRIX	Mtx;
 VECTOR	Scale;
-int		ScaleInc=Angle&1023;
-int		Quad=0;
 
 		Angle&=4095;
-		if (Angle==0 && XScale==YScale==ONE) return(Ft4);
-		XScale+=ScaleXAspect;
-		Quad=Angle>>10;
-		switch(Quad)
-		{
-			case 0:
-				ScaleInc=+ScaleInc; 
-				break;
-			case 1:
-				ScaleInc=1023-ScaleInc; 
-				break;
-			case 2:
-				ScaleInc=+ScaleInc; 
-				break;
-			case 3:
-				ScaleInc=1023-ScaleInc; 
-				break;
-		}
+		if (Angle==0 && XScale==ONE && YScale==ONE) return(Ft4);
 
-		Scale.vx=XScale-(ScaleInc*2);
-		Scale.vy=YScale+(ScaleInc*2);
+		Scale.vx=XScale;
+		Scale.vy=YScale;
 		Scale.vz=ONE;
 		SetIdentNoTrans(&Mtx);
-		ScaleMatrix(&Mtx,&Scale);
 		RotMatrixZ(Angle,&Mtx);
+		ScaleMatrix(&Mtx,&Scale);
+		CorrectMatrixScale(&Mtx);
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&ZeroPos);
 
@@ -913,7 +894,6 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 
 		RenderPos.vx=(INGAME_SCREENOFS_X)+Pos.vx;
 		RenderPos.vy=(INGAME_SCREENOFS_Y)+Pos.vy;
-		
 		gte_SetRotMatrix(&Mtx);
 		CMX_SetTransMtxXY(&RenderPos);
 
