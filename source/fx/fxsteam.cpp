@@ -119,7 +119,7 @@ int		TotalLife=0;
 
 		if(m_soundId==NOT_PLAYING)
 		{
-			m_soundId=CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STEAM,true);
+			m_soundId=CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STEAM,true,true);
 		}
 		else
 		{

@@ -24,49 +24,6 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void	CSteamEmitterTrigger::init()
-{
-	CTrigger::init();
-
-	m_soundId = (int) NOT_PLAYING;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void	CSteamEmitterTrigger::think(int _frames)
-{
-	if ( m_soundId == NOT_PLAYING )
-	{
-		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STEAM, true );
-	}
-	else
-	{
-		if( !CSoundMediator::isSfxStillPlaying( (xmPlayingId) m_soundId ) )
-		{
-			// unlock sound if it has finished
-
-			CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
-			m_soundId = NOT_PLAYING;
-		}
-	}
-
-	CTrigger::think( _frames );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void	CSteamEmitterTrigger::shutdown()
-{
-	if ( m_soundId != NOT_PLAYING )
-	{
-		CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
-	}
-
-	CTrigger::shutdown();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void	CSteamEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 {
 	CTrigger::setPositionAndSize( _x, _y, _w, _h );

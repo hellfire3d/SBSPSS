@@ -44,9 +44,20 @@ void	CFXBaseAnim::think(int _frames)
 			MaxFrame=((BaseData->EndFrame-BaseData->StartFrame)<<BaseData->FrameShift)-1;
 			Flags|=BaseData->Flags;
 			renderFrame=BaseData->StartFrame;
-			if (BaseData->StartSnd)
+			if(m_soundId==NOT_PLAYING)
 			{
-				CSoundMediator::playSfx((CSoundMediator::SFXID)BaseData->StartSnd,false);
+				if (BaseData->StartSnd)
+				{
+					m_soundId=CSoundMediator::playSfx((CSoundMediator::SFXID)BaseData->StartSnd,true,true);
+				}
+			}
+			else
+			{
+				if(!CSoundMediator::isSfxStillPlaying(m_soundId))
+				{
+					CSoundMediator::stopAndUnlockSfx(m_soundId);
+					m_soundId=NOT_PLAYING;
+				}
 			}
 			EndSnd=BaseData->EndSnd;
 			HasInit=true;

@@ -43,9 +43,6 @@
 class CSteamEmitterTrigger : public CTrigger
 {
 public:
-	void				init();
-	void				think(int _frames);
-	void				shutdown();
 	virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
 protected:
 	CFX					*m_effect;

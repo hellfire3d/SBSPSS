@@ -431,7 +431,7 @@ void	CFX::killFX()
 	}
 	if (EndSnd)
 	{
-		CSoundMediator::playSfx( (CSoundMediator::SFXID)EndSnd,false);
+		CSoundMediator::playSfx( (CSoundMediator::SFXID)EndSnd,false,true);
 	}
 }
 
