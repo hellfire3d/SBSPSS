@@ -104,6 +104,30 @@ void CGUITextBox::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int CGUITextBox::getTextWidth()
+{
+	return getFontBank()->getStringWidth((char*)TranslationDatabase::getString(getTextId()));
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+int CGUITextBox::getTextHeight()
+{
+	return getFontBank()->getStringHeight((char*)TranslationDatabase::getString(getTextId()));
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CGUITextBox::recalc()
 {
 	FontBank	*fb;

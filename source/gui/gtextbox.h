@@ -43,9 +43,13 @@ public:
 
 	virtual void		render();
 
+	int					getTextWidth();
+	int					getTextHeight();
 
 protected:
 	void				recalc();
+
+	int					getTextId()									{return m_textId;}
 
 
 private:
@@ -53,9 +57,6 @@ private:
 	int					m_textY;
 
 };
-
-
-
 
 
 /*----------------------------------------------------------------------
