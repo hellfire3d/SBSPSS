@@ -70,7 +70,7 @@ BubicleEmitterData	s_fadeBubicleSpawner=
 		10,							// m_life
 		0,0,0,						// m_vx,m_vdx,m_vxmax
 		-200,0,0,					// m_vy,m_vdy,m_vymax
-		10,7,						// m_w,m_h
+		18,12,						// m_w,m_h
 		0,							// m_dvSizeChange
 		0,0,						// m_theta,m_vtheta
 		0,0,0,						// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth

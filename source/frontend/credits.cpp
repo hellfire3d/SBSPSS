@@ -30,10 +30,6 @@
 #include "gfx\fader.h"
 #endif
 
-#ifndef __PRIM_HEADER__
-#include "gfx\prim.h"
-#endif
-
 #ifndef __PAD_PADS_H__
 #include "pad\pads.h"
 #endif
@@ -130,17 +126,6 @@ void CFrontEndCredits::unselect()
   ---------------------------------------------------------------------- */
 void CFrontEndCredits::render()
 {
-	/*
-	POLY_G4	*g4;
-	
-	g4=GetPrimG4();
-	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,99,50,50);
-	setRGB1(g4,50,50,99);
-	setRGB2(g4,50,99,50);
-	setRGB3(g4,99,50,99);
-	AddPrimToList(g4,1001);
-	*/
 }
 
 /*----------------------------------------------------------------------

@@ -42,6 +42,10 @@
 #include "utils\utils.h"
 #endif
 
+#ifndef __PRIM_HEADER__
+#include "gfx\prim.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -85,6 +89,7 @@ void CFrontEndDemoMode::init()
 	m_smallFont=new ("Demomode SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
+	m_smallFont->setOt(500);
 }
 
 /*----------------------------------------------------------------------
@@ -151,6 +156,16 @@ void CFrontEndDemoMode::render()
 
 	m_smallFont->setColour(getRndRange(255),getRndRange(255),getRndRange(255));
 	m_smallFont->print(getRndRange(512),getRndRange(256),">DEMO MODE<");
+
+
+	POLY_G4	*g4;
+	g4=GetPrimG4();
+	setXYWH(g4,0,0,512,256);
+	setRGB0(g4,99,50,50);
+	setRGB1(g4,50,50,99);
+	setRGB2(g4,50,99,50);
+	setRGB3(g4,99,50,99);
+	AddPrimToList(g4,1001);
 }
 
 /*----------------------------------------------------------------------
