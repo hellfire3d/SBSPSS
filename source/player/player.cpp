@@ -2136,14 +2136,16 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	ft4=m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 	CThing	*platform;
 	platform=isOnPlatform();
-	if(platform)
+	if(!isDead())
 	{
-		if ( ( (CNpcPlatform *) platform )->isCart() )
+		if(platform)
 		{
-			m_actorGfx->RotateScale( ft4, *_pos, ( (CNpcPlatform *) platform )->getCollisionAngle() , ONE, ONE );
+			if ( ( (CNpcPlatform *) platform )->isCart() )
+			{
+				m_actorGfx->RotateScale( ft4, *_pos, ( (CNpcPlatform *) platform )->getCollisionAngle() , ONE, ONE );
+			}
 		}
 	}
-
 	setSemiTrans(ft4,trans);
 
 

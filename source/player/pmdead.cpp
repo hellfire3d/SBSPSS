@@ -93,6 +93,8 @@ void	CPlayerModeDead::enter()
 	CSoundMediator::stopSpeech();
 
 	m_killed=false;
+
+	m_player->clearPlatform();
 }
 
 /*----------------------------------------------------------------------
