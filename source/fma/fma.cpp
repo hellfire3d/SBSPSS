@@ -94,6 +94,7 @@ FX
 #include "actor_spongebob_anim.h"
 #endif
 #include "actor_spongebob_fma_anim.h"
+#include "actor_spongebob_fma_itemofs_anim.h"
 
 #ifndef	__ANIM_MERMAIDMAN_HEADER__
 #include "actor_mermaidman_anim.h"
@@ -254,10 +255,12 @@ struct	sFMAAnim
 {
 		s16	Bank;
 		s16	Anim;
+		s16	itemBank;
+		s16	itemAnim;
 };
 typedef struct
 {
-	FileEquate		m_file[2];
+	FileEquate		m_file[3];
 	DVECTOR			m_ItemOfs;
 	sFMAAnim		m_anims[FMA_NUM_ANIMS];
 
@@ -266,13 +269,14 @@ typedef struct
 // Actor data
 typedef struct
 {
-	CActorGfx	*m_gfx[2];
+	CActorGfx	*m_gfx[3];
 	u8			m_active;
 
 	s8			m_animState,m_animFrame;
 	s8			m_animLoop;
 	
 	DVECTOR		m_pos;
+	DVECTOR		m_ItemOfs;
 	
 	u16			m_startMoveFrame;
 	DVECTOR		m_startMovePos;
@@ -332,201 +336,201 @@ static CScene	*s_nextGameSceneTable[FMA_NUM_NEXT_SCENES]=
 static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 {
 	{ // SpongeBob
-		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK},{-48,-48},	
+		{ACTORS_SPONGEBOB_SBK,ACTORS_SPONGEBOB_FMA_SBK,ACTORS_SPONGEBOB_FMA_ITEMOFS_SBK},{-48,-48},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_SPONGEBOB_IDLEBREATH},
-/*FMA_ANIM_WALK*/				{0,ANIM_SPONGEBOB_RUN},
-/*FMA_ANIM_FIXTV*/				{1,ANIM_SPONGEBOB_FMA_FIXTV},
-/*FMA_ANIM_GIVEEND*/			{1,ANIM_SPONGEBOB_FMA_GIVEEND},
-/*FMA_ANIM_GIVESTART*/			{1,ANIM_SPONGEBOB_FMA_GIVESTART},
-/*FMA_ANIM_IDEA*/				{1,ANIM_SPONGEBOB_FMA_IDEA},
-/*FMA_ANIM_QUICKEXIT*/			{1,ANIM_SPONGEBOB_FMA_QUICKEXIT},
-/*FMA_ANIM_SHOUT*/				{1,ANIM_SPONGEBOB_FMA_SHOUT},
-/*FMA_ANIM_STUMBLE*/			{1,ANIM_SPONGEBOB_FMA_STUMBLE},
-/*FMA_ANIM_THROW*/				{1,ANIM_SPONGEBOB_FMA_THROW},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_SPONGEBOB_IDLEBREATH,		0,-1},
+/*FMA_ANIM_WALK*/				{0,ANIM_SPONGEBOB_RUN,				2,ANIM_SPONGEBOB_FMA_ITEMOFS_RUN},
+/*FMA_ANIM_FIXTV*/				{1,ANIM_SPONGEBOB_FMA_FIXTV,		0,-1},
+/*FMA_ANIM_GIVEEND*/			{1,ANIM_SPONGEBOB_FMA_GIVEEND,		0,-1},
+/*FMA_ANIM_GIVESTART*/			{1,ANIM_SPONGEBOB_FMA_GIVESTART,	0,-1},
+/*FMA_ANIM_IDEA*/				{1,ANIM_SPONGEBOB_FMA_IDEA,			0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{1,ANIM_SPONGEBOB_FMA_QUICKEXIT,	0,-1},
+/*FMA_ANIM_SHOUT*/				{1,ANIM_SPONGEBOB_FMA_SHOUT,		0,-1},
+/*FMA_ANIM_STUMBLE*/			{1,ANIM_SPONGEBOB_FMA_STUMBLE,		0,-1},
+/*FMA_ANIM_THROW*/				{1,ANIM_SPONGEBOB_FMA_THROW,		0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Barnicle Boy
-		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0},{-32,-48},	
+		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0,(FileEquate)0},{-32,-48},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_BARNACLEBOY_IDLE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,ANIM_BARNACLEBOY_GIVEEND},
-/*FMA_ANIM_GIVESTART*/			{0,ANIM_BARNACLEBOY_GIVESTART},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,ANIM_BARNACLEBOY_HIDE},
-/*FMA_ANIM_UNHIDE*/				{0,ANIM_BARNACLEBOY_UNHIDE},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,ANIM_BARNACLEBOY_UNHIDEIDLE},
-/*FMA_ANIM_SIT*/				{0,ANIM_BARNACLEBOY_SIT},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,ANIM_BARNACLEBOY_SITLOOKLEFT},
-/*FMA_ANIM_SITASLEEP*/			{0,ANIM_BARNACLEBOY_SITASLEEP},
-/*FMA_ANIM_RUBHEAD*/			{0,ANIM_BARNACLEBOY_RUBHEAD},
+/*FMA_ANIM_IDLE*/				{0,ANIM_BARNACLEBOY_IDLE,			0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,ANIM_BARNACLEBOY_GIVEEND,		0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,ANIM_BARNACLEBOY_GIVESTART,		0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,ANIM_BARNACLEBOY_HIDE,			0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,ANIM_BARNACLEBOY_UNHIDE,			0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,ANIM_BARNACLEBOY_UNHIDEIDLE,		0,-1},
+/*FMA_ANIM_SIT*/				{0,ANIM_BARNACLEBOY_SIT,			0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,ANIM_BARNACLEBOY_SITLOOKLEFT,	0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,ANIM_BARNACLEBOY_SITASLEEP,		0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,ANIM_BARNACLEBOY_RUBHEAD,		0,-1},
 		},
 	},
 	{ // Mermaid Man
-		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0},{-32,-64},	
+		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0,(FileEquate)0},{-32,-64},	
 		{	
-/*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,ANIM_MERMAIDMAN_HIDE},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,ANIM_MERMAIDMAN_SIT},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE,			0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,ANIM_MERMAIDMAN_HIDE,			0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,ANIM_MERMAIDMAN_SIT,				0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP,		0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Gary Da Snail
-		{ACTORS_GARY_SBK,		(FileEquate)0},{0,0},	
+		{ACTORS_GARY_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_GARY_IDLE},
-/*FMA_ANIM_WALK*/				{0,ANIM_GARY_IDLE},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_GARY_IDLE,					0,-1},
+/*FMA_ANIM_WALK*/				{0,ANIM_GARY_IDLE,					0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Plankton
-		{ACTORS_PLANKTON_SBK,		(FileEquate)0},{0,0},	
+		{ACTORS_PLANKTON_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_PLANKTON_IDLE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_PLANKTON_IDLE,				0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Patrick
-		{ACTORS_PATRICK_SBK,		(FileEquate)0},{0,0},	
+		{ACTORS_PATRICK_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_PATRICK_IDLEBREATHE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_PATRICK_IDLEBREATHE,		0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Krusty
-		{ACTORS_KRUSTY_SBK,			(FileEquate)0},{0,0},	
+		{ACTORS_KRUSTY_SBK,			(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_KRUSTY_IDLEBREATHE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_KRUSTY_IDLEBREATHE,			0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Squidward
-		{ACTORS_SQUIDWARD_SBK,		(FileEquate)0},{0,0},	
+		{ACTORS_SQUIDWARD_SBK,		(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_SQUIDWARD_IDLEBREATHE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_SQUIDWARD_IDLEBREATHE,		0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 	{ // Sandy
-		{ACTORS_SANDY_SBK,			(FileEquate)0},{0,0},	
+		{ACTORS_SANDY_SBK,			(FileEquate)0,(FileEquate)0},{0,0},	
 		{
-/*FMA_ANIM_IDLE*/				{0,ANIM_SANDY_IDLE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,-1},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,-1},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
+/*FMA_ANIM_IDLE*/				{0,ANIM_SANDY_IDLE,					0,-1},
+/*FMA_ANIM_WALK*/				{0,-1,								0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1,								0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1,								0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1,								0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1,								0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1,								0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1,								0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_THROW*/				{0,-1,								0,-1},
+/*FMA_ANIM_HIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDE*/				{0,-1,								0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1,								0,-1},
+/*FMA_ANIM_SIT*/				{0,-1,								0,-1},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1,								0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,-1,								0,-1},
+/*FMA_ANIM_RUBHEAD*/			{0,-1,								0,-1},
 		},
 	},
 };
@@ -1161,7 +1165,7 @@ static const int	*s_fmaScripts[CFmaScene::NUM_FMA_SCRIPTS]=
 
 
 
-int	s_chosenScript=CFmaScene::FMA_SCRIPT__PARTY;
+int	s_chosenScript=CFmaScene::FMA_SCRIPT__CH1FINISHED;
 
 
 /*----------------------------------------------------------------------
@@ -1190,7 +1194,7 @@ void	CFmaScene::init()
 	actor=m_actorData;
 	for(i=0;i<FMA_NUM_ACTORS;i++)
 	{
-		for (int b=0; b<2; b++)
+		for (int b=0; b<3; b++)
 		{ // Load banks
 			actor->m_gfx[b]=0;
 			if (s_actorGraphicsData[i].m_file[b]) 
@@ -1205,6 +1209,8 @@ void	CFmaScene::init()
 		actor->m_animFrame=0;
 		actor->m_pos.vx=0;
 		actor->m_pos.vy=0;
+		actor->m_ItemOfs.vx=0;
+		actor->m_ItemOfs.vy=0;
 		actor->m_moving=false;
 		actor->m_facing=0;
 		actor++;
@@ -1308,9 +1314,24 @@ void	CFmaScene::render()
 			DVECTOR	pos;
 			pos.vx=actor->m_pos.vx-m_cameraPos.vx;
 			pos.vy=actor->m_pos.vy-m_cameraPos.vy;
-			int	AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].Bank;
-			int	AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].Anim;
+			int	AnimNo,AnimBank;
+
+			ASSERT(s_actorGraphicsData[i].m_anims[actor->m_animState].Anim!=-1);
+			AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].Anim;
+			AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].Bank;
 			actor->m_gfx[AnimBank]->Render(pos,AnimNo,actor->m_animFrame,actor->m_facing);
+
+			// Is there an item anim for this anim?
+			AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].itemAnim;
+			if(AnimNo!=-1)
+			{
+				// Yeah.. grab the item offsets and remember them
+				int	x,y;
+				AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].itemBank;
+				actor->m_gfx[AnimBank]->getFrameOffsets(AnimNo,actor->m_animFrame,&x,&y);
+				actor->m_ItemOfs.vx=x;
+				actor->m_ItemOfs.vy=y;
+			}
 		}
 		actor++;
 	}
@@ -1497,13 +1518,13 @@ void	CFmaScene::think(int _frames)
 					item->m_facing=actor->m_facing;
 					if (item->m_facing)
 					{
-						item->m_Pos.vx-=actorGraphics->m_ItemOfs.vx;
+						item->m_Pos.vx-=/*actorGraphics->m_ItemOfs.vx+*/actor->m_ItemOfs.vx;
 					}
 					else
 					{
-						item->m_Pos.vx+=actorGraphics->m_ItemOfs.vx;
+						item->m_Pos.vx+=/*actorGraphics->m_ItemOfs.vx+*/actor->m_ItemOfs.vx;
 					}
-					item->m_Pos.vy+=actorGraphics->m_ItemOfs.vy;
+					item->m_Pos.vy+=/*actorGraphics->m_ItemOfs.vy+*/actor->m_ItemOfs.vy;
 				}
 			}
 

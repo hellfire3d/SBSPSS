@@ -773,6 +773,14 @@ SOURCE=..\..\..\source\game\gameslot.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\game\healthman.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\game\healthman.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\game\pause.cpp
 # End Source File
 # Begin Source File
@@ -3065,6 +3073,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_SPIKEYANENOME_Anim.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\ACTOR_SPONGEBOB_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SPONGEBOB_FMA_ITEMOFS_Anim.h
 # End Source File
 # Begin Source File
 
