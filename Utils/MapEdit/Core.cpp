@@ -281,7 +281,6 @@ BOOL	RedrawFlag=FALSE;
 /*****************************************************************************/
 void	CCore::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-		LastMousePos=point;
 }
 
 /*****************************************************************************/
@@ -324,7 +323,7 @@ void	CCore::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &pt)
 		if (zDelta>0) 
 			Zoom(View,+1.0f);
 		else
-			Zoom(View,+1.0f);
+			Zoom(View,-1.0f);
 }
 
 /*****************************************************************************/
@@ -336,23 +335,23 @@ Vector3	&ThisCam=GetCam();
 		Ofs.Zero();
 		if (theApp.GetCurrent()!=View->GetDocument()) return;
 
+		
 		CurrentMousePos=point;
 
 // Handle Drag Movement
-		if (nFlags & MK_MBUTTON)
+		if (nFlags & MK_MBUTTON || nFlags & MK_SHIFT)
 			{
 			float	XS,YS;
 			RECT	ThisRect;
 
 			View->GetWindowRect(&ThisRect);
-			XS=ThisCam.z*4;//*Layer[ActiveLayer]->GetLayerZPos();
-			YS=ThisCam.z*4;//*Layer[ActiveLayer]->GetLayerZPos();
+			XS=ThisCam.z*4;
+			YS=ThisCam.z*4;
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
 			Ofs.x=LastMousePos.x-CurrentMousePos.x;
 			Ofs.y=LastMousePos.y-CurrentMousePos.y;
-			LastMousePos=CurrentMousePos;
 	
 			Ofs.x*=XS;
 			Ofs.y*=YS;
@@ -382,7 +381,7 @@ Vector3	&ThisCam=GetCam();
 			}
 			View->Invalidate();	// Mouse still moved, so need to redraw windows, to get CursorPos (And pos render)
 		}
-
+		LastMousePos=CurrentMousePos;
 }
 
 

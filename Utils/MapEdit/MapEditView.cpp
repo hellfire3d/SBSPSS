@@ -180,4 +180,3 @@ void CMapEditView::OnActivebrushRight() 								{GetDocument()->ActiveBrushRight
 void CMapEditView::OnMapSetSize()			 							{GetDocument()->MapSetSize(this);}
 
 void CMapEditView::On2d3dToggle()										{GetDocument()->Toggle2d3d(this);}
-

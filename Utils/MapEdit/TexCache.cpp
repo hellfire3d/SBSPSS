@@ -3,11 +3,10 @@
 /*********************/
 
 #include	"stdafx.h"
-//#include	"gl3d.h"
 #include	<gl\gl.h>
 #include	<gl\glu.h>
 #include	<gl\glut.h>
-#include	<gl\glaux.h>		// Header File For The Glaux Library
+#include	<frame.hpp>
 #include	<Vector>
 
 #include	"TexCache.h"
@@ -80,14 +79,15 @@ int		CTexCache::AlignSize(int Size)
 /**************************************************************************************/
 void	CTexCache::LoadBMP(char *Filename,sRGBData &RGBData)
 {
-FILE			*File=NULL;
-AUX_RGBImageRec *Aux;
+Frame	ThisFrame;
 
-		Aux=auxDIBImageLoad(Filename);
-		RGBData.Width=Aux->sizeX;
-		RGBData.Height=Aux->sizeY;
-		RGBData.RGB=Aux->data;
-		free(Aux);	// Safe to free aux now, contents copied (I HATE AUX)
+		ThisFrame.LoadBMP(Filename);
+		
+		RGBData.Width=ThisFrame.GetWidth();
+		RGBData.Height=ThisFrame.GetHeight();
+		RGBData.RGB=(u8*)malloc(RGBData.Width*RGBData.Height*3);
+		ThisFrame.FlipY();
+		ThisFrame.MakeRGB(RGBData.RGB);
 }
 
 /**************************************************************************************/
@@ -95,14 +95,14 @@ void	CTexCache::FreeBMP(sRGBData &RGBData)
 {
 		if (RGBData.RGB)
 		{
-			free((unsigned char*)RGBData.RGB);
+			free(RGBData.RGB);
 		}
 }
 
 /**************************************************************************************/
 void	CTexCache::LoadTex(sTex &ThisTex,sRGBData *TexData)
 {
-std::vector<u8>	Buffer;
+u8		*Buffer;
 int		TexWidth=TexData->Width;
 int		TexHeight=TexData->Height;
 int		GLWidth=AlignSize(TexWidth);
@@ -111,7 +111,7 @@ u8		*Src,*Dst;
 
 // create RGB & alpha texture & ensuse texture is correct size for GL
 
-		Buffer.resize(GLWidth*GLHeight*4);
+		Buffer=(u8*)malloc(GLWidth*GLHeight*4);
 		Src=TexData->RGB;
 		Dst=&Buffer[0];
 		for (int Y=0; Y<TexHeight; Y++)
@@ -148,6 +148,7 @@ u8		*Src,*Dst;
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
+		free(Buffer);
 }
 
 /**************************************************************************************/

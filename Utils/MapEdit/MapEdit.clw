@@ -2,7 +2,7 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditDoc
+LastClass=CMapEditView
 LastTemplate=CDialog
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
@@ -77,7 +77,7 @@ Type=0
 BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
-LastObject=ID_ZOOM_OUT
+LastObject=CMapEditDoc
 Filter=N
 VirtualFilter=DC
 
@@ -86,7 +86,7 @@ Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_TOOLBAR_TILEPALETTE
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 
