@@ -59,12 +59,15 @@ private:
 
 		MAP_LEVEL_WIDTH=140,
 		MAP_LEVEL_HEIGHT=60,
-		MAP_LEVEL_TOP_BORDER=20,
 
-
-		MAP_INSTRUCTIONS_WIDTH=416,
-		MAP_INSTRUCTIONS_HEIGHT=32,
-		MAP_INSTRUCTIONS_BOTTOM_OFFSET=40,
+		MAP_INSTRUCTIONS_YSTART=173,
+		MAP_INSTRUCTIONS_BUTTON_Y_OFFSET=3,
+		MAP_INSTRUCTIONS_TEXT_R=128,
+		MAP_INSTRUCTIONS_TEXT_G=64,
+		MAP_INSTRUCTIONS_TEXT_B=64,
+		MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS=5,
+		MAP_INSTRUCTIONS_GAP_BETWEEN_BUTTONS_AND_TEXT=10,
+		MAP_INSTRUCTIONS_Y_SPACE_BETWEEN_LINES=15,
 
 		MAP_NUM_CHAPTERS=5,
 		MAP_NUM_LEVELS_PER_CHAPTER=5,
@@ -74,10 +77,14 @@ private:
 	{
 		int		m_mapFile;
 		int		m_globalLevelNumber;
-		int		m_spatularOrTokenCounts;
+		int		m_spatulaOrTokenCounts;
 		int		m_questItemFrame;
 		int		m_kelpWorldLevel;
 	} sMapLevelData;
+
+
+	void	renderPointer();
+	void	renderInstructions();
 
 	
 	void	generateMapScreenImage();
@@ -85,8 +92,6 @@ private:
 	DVECTOR	getPointerTargetPosition();
 	int		isLevelOpen(unsigned int _chapter,unsigned int _level);
 	int		getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level);
-	int		getSpatulaAvailableCount(unsigned int _chapter,unsigned int _level);
-	int		getKelpTokenAvailableCount(unsigned int _chapter,unsigned int _level);
 	int		hasQuestItemBeenCollected(unsigned int _chapter,unsigned int _level);
 
 
@@ -100,6 +105,7 @@ private:
 	DVECTOR				m_pointerPos;
 	DVECTOR				m_pointerTarget;
 	int					m_pointerSin;
+	int					m_pointerArrivedAtTarget;
 
 	static sMapLevelData	s_mapLevelData[MAP_NUM_CHAPTERS][MAP_NUM_LEVELS_PER_CHAPTER];
 	static DVECTOR			s_mapLevelPositions[MAP_NUM_LEVELS_PER_CHAPTER];

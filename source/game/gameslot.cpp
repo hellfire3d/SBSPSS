@@ -127,11 +127,20 @@ void CGameSlotManager::eraseGameSlot(unsigned int _slot)
 	slot->m_lives=INITIAL_LIVES;
 	slot->m_continues=INITIAL_CONTINUES;
 	slot->m_maxLevelCompleted=0;
-	for(i=0;i<NUM_CHAPTERS_WITH_SPATULAS*NUM_LEVELS_WITH_SPATULAS;i++)
+
+	for(i=0;i<NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS;i++)
 	{
-		for(j=0;j<8;j++)
+		for(j=0;j<16;j++)
 		{
 			slot->m_spatulaCollectedFlags[i][j]=0;
+		}
+	}
+
+	for(i=0;i<NUM_CHAPTERS;i++)
+	{
+		for(j=0;j<16;j++)
+		{
+			slot->m_kelpTokenCollectedFlags[i][j]=0;
 		}
 	}
 }

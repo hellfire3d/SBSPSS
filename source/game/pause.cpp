@@ -211,8 +211,8 @@ void CPauseMenu::select()
 	m_quitGameFlag=false;
 	m_guiFrame->select();
 
-	chapter=GameScene.getChapterNumber();
-	level=GameScene.getLevelNumber();
+	chapter=GameScene.getChapterNumber()-1;
+	level=GameScene.getLevelNumber()-1;
 	m_guiSpatReadout->setSpatCounts(CGameSlotManager::getSlotData()->getSpatulaCollectedCount(chapter,level),
 									GameScene.getTotalSpatCountForThisLevel());
 }

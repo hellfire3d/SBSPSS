@@ -16,6 +16,7 @@ struct	sLvlTab
 	u8						totalSpatCount;
 	FileEquate				LevelFilename,TexFilename;
 	int						songId;
+	u16						ChapterLoadingText,LevelLoadingText;
 };
 
 /*****************************************************************************/

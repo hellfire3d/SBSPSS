@@ -45,10 +45,8 @@ public:
 		
 		NUM_GAME_SLOTS=4,
 
-		NUM_CHAPTERS_WITH_SPATULAS=5,
+		NUM_CHAPTERS=5,
 		NUM_LEVELS_WITH_SPATULAS=4,
-		NUM_CHAPTERS_WITH_KELP_TOKENS=1,
-		NUM_LEVELS_WITH_KELP_TOKENS=5,
 	};
 	
 
@@ -58,13 +56,13 @@ public:
 		unsigned char	m_lives;
 		unsigned char	m_continues;
 		unsigned char	m_maxLevelCompleted;
-		unsigned char	m_spatulaCollectedFlags[NUM_CHAPTERS_WITH_SPATULAS*NUM_LEVELS_WITH_SPATULAS][16];			// Enuf space for 128 spats per level
-		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS_WITH_KELP_TOKENS*NUM_LEVELS_WITH_KELP_TOKENS][16];	// Same again..
+		unsigned char	m_spatulaCollectedFlags[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS][16];			// Enuf space for 128 spats per level
+		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Same again..
 
 		// Spat functions..
 		int				getSpatulaCollectedCount(unsigned int _chapter,unsigned int _level)
 		{
-			ASSERT(_chapter<=NUM_CHAPTERS_WITH_SPATULAS);
+			ASSERT(_chapter<=NUM_CHAPTERS);
 			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
 			int		i,j,count;
 			count=0;
@@ -81,14 +79,14 @@ public:
 		}
 		void			collectSpatula(unsigned int _chapter,unsigned int _level,unsigned int _spat)
 		{
-			ASSERT(_chapter<=NUM_CHAPTERS_WITH_SPATULAS);
+			ASSERT(_chapter<=NUM_CHAPTERS);
 			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_spat<=128);
 			m_spatulaCollectedFlags[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level][_spat>>3]|=1<<(_spat&7);
 		}
 		int				isSpatulaUncollected(unsigned int _chapter,unsigned int _level,unsigned int _spat)
 		{
-			ASSERT(_chapter<=NUM_CHAPTERS_WITH_SPATULAS);
+			ASSERT(_chapter<=NUM_CHAPTERS);
 			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
 			ASSERT(_spat<=128);
 			return (m_spatulaCollectedFlags[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level][_spat>>3]>>(_spat&7))&1?false:true;
@@ -97,13 +95,13 @@ public:
 		// Kelp Token functions..
 		int				getKelpTokenCollectedCount(unsigned int _chapter,unsigned int _level)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS_WITH_SPATULAS);
-			ASSERT(_level<=NUM_LEVELS_WITH_KELP_TOKENS);
+			ASSERT(_chapter==NUM_CHAPTERS);
+			ASSERT(_level==NUM_LEVELS_WITH_SPATULAS+1);
 			int		i,j,count;
 			count=0;
 			for(i=0;i<8;i++)
 			{
-				unsigned char	flags=m_kelpTokenCollectedFlags[(_chapter*NUM_LEVELS_WITH_KELP_TOKENS)+_level][i];
+				unsigned char	flags=m_kelpTokenCollectedFlags[_level][i];
 				for(j=0;j<8;j++)
 				{
 					if(flags&1)count++;
@@ -114,17 +112,17 @@ public:
 		}
 		void			collectKelpToken(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS_WITH_SPATULAS);
-			ASSERT(_level<=NUM_LEVELS_WITH_KELP_TOKENS);
+			ASSERT(_chapter==NUM_CHAPTERS);
+			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS+1);
 			ASSERT(_token<=128);
-			m_kelpTokenCollectedFlags[(_chapter*NUM_LEVELS_WITH_KELP_TOKENS)+_level][_token>>3]|=1<<(_token&7);
+			m_kelpTokenCollectedFlags[_level][_token>>3]|=1<<(_token&7);
 		}
 		int				isKelpTokenUncollected(unsigned int _chapter,unsigned int _level,unsigned int _token)
 		{
-			ASSERT(_chapter==NUM_CHAPTERS_WITH_SPATULAS);
-			ASSERT(_level<=NUM_LEVELS_WITH_KELP_TOKENS);
+			ASSERT(_chapter==NUM_CHAPTERS);
+			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS+1);
 			ASSERT(_token<=128);
-			return (m_kelpTokenCollectedFlags[(_chapter*NUM_LEVELS_WITH_KELP_TOKENS)+_level][_token>>3]>>(_token&7))&1?false:true;
+			return (m_kelpTokenCollectedFlags[_level][_token>>3]>>(_token&7))&1?false:true;
 		}
 	} GameSlot;
 

@@ -110,7 +110,7 @@ DVECTOR	CSpatulaPickup::getSizeForPlacement()
 void	CSpatulaPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
-	CGameSlotManager::getSlotData()->collectSpatula(GameScene.getChapterNumber(),GameScene.getLevelNumber(),m_spatulaNumber);
+	CGameSlotManager::getSlotData()->collectSpatula(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,m_spatulaNumber);
 }
 
 /*----------------------------------------------------------------------
