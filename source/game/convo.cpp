@@ -474,24 +474,29 @@ int CConversation::isActive()
   ---------------------------------------------------------------------- */
 void CConversation::setCharacterAndText(int _characterId,int _textId)
 {
+	char	buf[1024],*pBuf;
 	RECT	clipTextRegion;
+	int		i;
 
 	s_faceFrame=(s_characterIconFrames[_characterId].m_frame);
 	s_speechId=_textId;
-	s_textPageOffset=0;
+
+	sprintf(buf,TranslationDatabase::getString(s_speechId));
+	pBuf=buf;
 	clipTextRegion=getTextRegion();
 	s_textFontBank->setPrintArea(clipTextRegion.x,clipTextRegion.y,clipTextRegion.w,clipTextRegion.h);
-	s_maxTextPageOffset=(s_textFontBank->getStringHeight((char*)TranslationDatabase::getString(s_speechId))-s_textFontBank->getCharHeight())/(s_textFontBank->getCharHeight()*TEXTBOX_FONT_NUM_LINES_IN_BOX);
-	if(s_maxTextPageOffset<0)s_maxTextPageOffset=0;
-
-	for (int i=0; i<SpeechTableSize; i++)
+	i=0;
+	while(*pBuf)
 	{
-		if (SpeechTable[i].TextID==_textId)
-		{
-			CSoundMediator::playSpeech((SpeechEquate)SpeechTable[i].SpeechID);
-			break;
-		}
+		// yes.. i know it's gay but it works..
+		pBuf+=s_textFontBank->printTillEndOfLine(0,-50,pBuf);
+		i++;
 	}
+
+	s_maxTextPageOffset=i/TEXTBOX_FONT_NUM_LINES_IN_BOX;
+	s_textPageOffset=0;
+
+	PAUL_DBGMSG("calced height=%d",s_maxTextPageOffset);
 }
 
 
@@ -625,7 +630,6 @@ void CConversation::renderText()
 
 	clipTextRegion=getTextRegion();
 
-	PrimFullScreen(0);
 	sprintf(buf,TranslationDatabase::getString(s_speechId));
 	pBuf=buf;
 	for(i=0;i<s_textPageOffset*TEXTBOX_FONT_NUM_LINES_IN_BOX;i++)
@@ -637,7 +641,6 @@ void CConversation::renderText()
 	{
 		pBuf+=s_textFontBank->printTillEndOfLine(0,i*TEXTBOX_FONT_LINE_SPACING,pBuf);
 	}
-	PrimClip(&clipTextRegion,0);
 
 	// Render up/down button hints
 	if(s_textPageOffset!=0)
