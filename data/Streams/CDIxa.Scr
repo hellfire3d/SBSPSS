@@ -1,0 +1,35 @@
+Pack32ch(
+Track1.Ixa 	,TRUE,
+NULL.Dat  	,TRUE,1,4,	# 00 Tracking
+EBank0.XaB,TRUE,0,0,	# 01 -- Eng --
+EBank1.XaB,TRUE,0,0,	# 02
+EBank2.XaB,TRUE,0,0,	# 03
+EBank3.XaB,TRUE,0,0,	# 04
+EBank4.Xab,TRUE,0,0,	# 05
+EBank5.Xab,TRUE,0,0,	# 06
+EBank0.Xab,TRUE,0,0,	# 07 -- Fre --
+EBank0.Xab,TRUE,0,0,	# 08
+EBank0.Xab,TRUE,0,0,	# 09
+EBank0.Xab,TRUE,0,0,	# 10
+EBank0.Xab,TRUE,0,0,	# 11
+EBank0.Xab,TRUE,0,0,	# 12
+EBank0.Xab,TRUE,0,0,	# 13 -- Ger --
+EBank0.Xab,TRUE,0,0,	# 14
+EBank0.Xab,TRUE,0,0,	# 15
+EBank0.Xab,TRUE,0,0,	# 16
+EBank0.Xab,TRUE,0,0,	# 17
+EBank0.Xab,TRUE,0,0,	# 18
+EBank0.Xab,TRUE,0,0,	# 19 -- XXX --
+EBank0.Xab,TRUE,0,0,	# 20
+EBank0.Xab,TRUE,0,0,	# 21
+EBank0.Xab,TRUE,0,0,	# 22
+EBank0.Xab,TRUE,0,0,	# 23
+EBank0.Xab,TRUE,0,0,	# 24
+EBank0.Xab,TRUE,0,0,	# 25 -- XXX --
+EBank0.Xab,TRUE,0,0,	# 26
+EBank0.Xab,TRUE,0,0,	# 27
+EBank0.Xab,TRUE,0,0,	# 28
+EBank0.Xab,TRUE,0,0,	# 29
+EBank0.Xab,TRUE,0,0,	# 30
+EBank0.Xab,TRUE,0,0		# 31 -- PAD --
+);
