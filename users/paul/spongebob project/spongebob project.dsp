@@ -333,6 +333,14 @@ SOURCE=..\..\..\source\gfx\tpage.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\gui\gbubbles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\gui\gbubbles.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\gui\gbutton.cpp
 # End Source File
 # Begin Source File

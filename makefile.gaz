@@ -86,7 +86,8 @@ gfx_src :=			prim \
 #					anim \
 #					bilboard
 
-gui_src :=			gbutton \
+gui_src :=			gbubbles \
+					gbutton \
 					gfactory \
 					gframe \
 					greadout \

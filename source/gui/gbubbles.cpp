@@ -55,7 +55,7 @@ BubicleEmitterData CGUIBubbles::s_emitterData=
 		0,100,				// m_theta,m_vtheta
 		100,2,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
 		40,					// m_ot
-		{ 128,128,128,	}	// m_colour
+		{ 127,127,127,	}	// m_colour
 	},
 	{					// m_bubicleRange
 		100,				// m_life
@@ -66,7 +66,7 @@ BubicleEmitterData CGUIBubbles::s_emitterData=
 		4095,50,			// m_theta,m_vtheta
 		100,5,0,			// m_wobbleWidth,m_vwobbleWidth,m_vdwobbleWidth
 		0,					// m_ot
-		{   0, 64,127,	}	// m_colour
+		{   0,  0,  0,	}	// m_colour
 	}
 };
 
