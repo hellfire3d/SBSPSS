@@ -55,6 +55,10 @@
 #include "triggers\tggleft.h"
 #endif
 
+#ifndef __TRIGGERS_TGGRIGHT_H__
+#include "triggers\tggright.h"
+#endif
+
 #ifndef __TRIGGERS_TGSTOP_H__
 #include "triggers\tgstop.h"
 #endif
@@ -119,6 +123,11 @@ CTrigger	*trigger;
 		// Gary go left trigger
 		case TRIGGER_GARYGOLEFT:
 			trigger=(CGaryGoLeftTrigger*)new("GaryGoLeftTrigger") CGaryGoLeftTrigger();
+			break;
+
+		// Gary go right trigger
+		case TRIGGER_GARYGORIGHT:
+			trigger=(CGaryGoRightTrigger*)new("GaryGoRightTrigger") CGaryGoRightTrigger();
 			break;
 
 		case TRIGGER_INTERMITTENTFLAMEEMITTER:

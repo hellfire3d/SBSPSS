@@ -179,3 +179,13 @@ void CNpcGaryFriend::startLeft()
 	m_extension = EXTEND_LEFT;
 	m_reversed = true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcGaryFriend::startRight()
+{
+	start();
+
+	m_extension = EXTEND_RIGHT;
+	m_reversed = false;
+}

@@ -1,8 +1,8 @@
 /*=========================================================================
 
-	tfemit.h
+	tggright.h
 
-	Author:		PKG
+	Author:		Charles Blair
 	Created:	
 	Project:	Spongebob
 	Purpose:	
@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef	__TRIGGERS_TFEMIT_H__
-#define __TRIGGERS_TFEMIT_H__
+#ifndef	__TRIGGERS_TGGRIGHT_H__
+#define __TRIGGERS_TGGRIGHT_H__
 
 /*----------------------------------------------------------------------
 	Includes
@@ -22,11 +22,6 @@
 #include "thing/thing.h"
 #endif
 
-#ifndef __TRIGGER_TRIGGER_HEADER__
-#include "triggers\trigger.h"
-#endif
-
-#include "fx\fx.h"
 
 /*	Std Lib
 	------- */
@@ -39,13 +34,14 @@
 	Structure defintions
 	-------------------- */
 
-class CFlameEmitterTrigger : public CTrigger
+class CGaryGoRightTrigger : public CTrigger
 {
 public:
-	virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
+#if defined (__USER_art__) || defined (__USER_sbart__)
+	virtual void		render();
+#endif
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
-	CFX					*m_effect;
 };
 
 /*----------------------------------------------------------------------

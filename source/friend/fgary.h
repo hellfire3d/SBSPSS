@@ -28,6 +28,7 @@ public:
 	void				start()													{m_started = true;}
 	void				stop()													{m_started = false;}
 	void				startLeft();
+	void				startRight();
 	virtual void		render();
 
 protected:

@@ -299,6 +299,7 @@ triggers_src :=		trigger \
 					tfemit \
 					tifemit \
 					tggleft \
+					tggright \
 					tgstop
 
 utils_src :=		utils \
