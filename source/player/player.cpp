@@ -221,7 +221,7 @@ m_animFrame=0;
 
 	s_screenPos=128;
 
-m_skel.setAng(512);
+	m_skel.setAng(512);
 //m_skel.setAngInc(678);
 
 #ifdef _STATE_DEBUG_
@@ -232,7 +232,6 @@ m_skel.setAng(512);
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
 
-	m_skel.setAng(900);
 }
 
 /*----------------------------------------------------------------------
@@ -256,6 +255,8 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 int newmode=-1;
+DVECTOR asdf={9,-26};
+
 #ifdef _STATE_DEBUG_
 char posBuf[100];
 #endif
@@ -362,6 +363,9 @@ if(PadGetDown(0)&PAD_CIRCLE)
 	m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
 	m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
 
+m_playerScreenGeomPos.vx=asdf.vx+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
+m_playerScreenGeomPos.vy=asdf.vy+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
+
 	m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
 	m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
 
@@ -370,24 +374,28 @@ if(PadGetDown(0)&PAD_CIRCLE)
 	if(m_cameraPos.vx<0)
 	{
 		m_playerScreenPos.vx+=m_cameraPos.vx*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+m_playerScreenGeomPos.vx+=m_cameraPos.vx;
 		m_cameraPos.vx=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vx>m_mapCameraEdges.vx)
 	{
 		m_playerScreenPos.vx-=(m_mapCameraEdges.vx-m_cameraPos.vx)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
 		m_cameraPos.vx=m_mapCameraEdges.vx;
 		m_cameraScrollDir=0;
 	}
 	if(m_cameraPos.vy<0)
 	{
 		m_playerScreenPos.vy+=m_cameraPos.vy*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+m_playerScreenGeomPos.vy+=m_cameraPos.vy;
 		m_cameraPos.vy=0;
 		m_cameraScrollDir=0;
 	}
 	else if(m_cameraPos.vy>m_mapCameraEdges.vy)
 	{
 		m_playerScreenPos.vy-=(m_mapCameraEdges.vy-m_cameraPos.vy)*MAP3D_BLOCKSTEPSIZE/MAP2D_BLOCKSTEPSIZE;
+m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
 		m_cameraPos.vy=m_mapCameraEdges.vy;
 		m_cameraScrollDir=0;
 	}
@@ -591,6 +599,7 @@ int healthg=2;
 int livesx=162;
 int livesy=28;
 
+
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
 #endif
@@ -622,7 +631,9 @@ if(eyes!=-1)
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
 //DrawLine(xval+7,0,xval+7,255,0,128,255,0);
 
-		m_skel.setPos(m_playerScreenPos);
+//		int	gx,gy;
+		SetGeomOffset(248+m_playerScreenGeomPos.vx,129+m_playerScreenGeomPos.vy);
+//		m_skel.setPos(m_playerScreenPos);
 		if(panim!=-1)
 			m_skel.setAnimNo(panim);
 		else
@@ -630,6 +641,7 @@ if(eyes!=-1)
 		m_skel.setFrame(m_animFrame);
 		m_skel.Animate(this);
 		m_skel.Render(this);
+		SetGeomOffset(248,129);	//(pkg)
 	}
 
 
@@ -1150,8 +1162,8 @@ int invincibleSponge=false;		// NB: This is for debugging purposes only so don't
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage)
 {
-	if(!m_invincibleFrameCount||	// Don't take damage if still recovering from the last hit
-	   m_invinvibilityRingTimer)	// Or if we have the invincibility ring on
+	if(m_invincibleFrameCount==0&&	// Don't take damage if still recovering from the last hit
+	   m_invinvibilityRingTimer==0)	// Or if we have the invincibility ring on
 	{
 		int	ouchThatHurt=true;
 
