@@ -66,6 +66,10 @@ public:
 		void		SetActiveBrushL()					{ActiveBrush=LBrush;}
 		void		SetActiveBrushR()					{ActiveBrush=RBrush;}
 
+		void		Load(CFile *File,float Version);
+		void		Save(CFile *File);
+
+
 private:
 		BOOL		Select(int BrushID,BOOL DownFlag);
 		void		SetBrush(CMap &ThisBrush);

@@ -18,19 +18,19 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=10
-Resource1=IDR_MAINFRAME (English (U.S.))
-Resource2=IDD_TILESET_DIALOG
-Resource3=IDD_LAYER_LIST_DIALOG
+Resource1=IDD_LAYER_LIST_DIALOG
+Resource2=IDR_MAINFRAME (English (U.S.))
+Resource3=IDR_TOOLBAR (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
 Resource5=IDR_MAPEDITYPE (English (U.S.))
 Class8=CMultiBar
-Resource6=IDD_ABOUTBOX (English (U.S.))
-Resource7=IDR_TOOLBAR (English (U.S.))
+Resource6=IDD_TILESET_DIALOG
+Resource7=IDD_MULTIBAR (English (U.S.))
 Class9=CLayerList
 Class10=CTileSetDlg
-Resource8=IDD_MULTIBAR (English (U.S.))
+Resource8=IDD_GFXTOOLBAR
 Class11=CGfxToolBar
-Resource9=IDD_GFXTOOLBAR
+Resource9=IDD_ABOUTBOX (English (U.S.))
 Class12=CMapSizeDlg
 Resource10=IDD_MAPSIZE
 

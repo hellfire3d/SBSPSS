@@ -143,8 +143,8 @@ void CMapEditView::OnSetFocus(CWnd* pOldWnd)
 CMapEditDoc	*CurDoc=GetDocument();
 	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
-//	CurDoc->UpdateAll(this);
-	CurDoc->UpdateAllViews(this);
+	CurDoc->UpdateAll(this);
+//	CurDoc->UpdateAllViews(this);
 }
 
 /*********************************************************************************/

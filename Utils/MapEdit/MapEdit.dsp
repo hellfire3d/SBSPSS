@@ -316,6 +316,14 @@ SOURCE=.\LayerList.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\MapSizeDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MapSizeDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\MultiBar.cpp
 # End Source File
 # Begin Source File

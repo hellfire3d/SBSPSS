@@ -13,18 +13,27 @@
 #include	"TexCache.h"
 #include	"TileSet.h"
 
+const	float	FileVersion=1.0f;
 
 /*****************************************************************************/
 class	CMapEditView;
 class	CCore
 {
 public:
+	enum
+	{
+		LAYER_BACK=0,
+		LAYER_MID,
+		LAYER_ACTION,
+		LAYER_FORE,
+	};
 		CCore();
 		~CCore();
 
 		void					Init();
-		void					NewMap();
-		void					OpenMap();
+		void					New();
+		void					Load(CFile *File);
+		void					Save(CFile *File);
 		void					Render(CMapEditView *View,BOOL ForceRender=FALSE);
 		void					RenderLayers(CMapEditView *View);
 		void					RenderTileView(CMapEditView *View);
@@ -53,9 +62,9 @@ public:
 		void					UpdateParamBar();
 
 // Layers
-		void					SetActiveLayer(int Layer);
-		int						GetActiveLayer()				{return(ActiveLayer);}
-		CLayer					*GetLayer(int i)				{return(Layers[i]);}
+//		void					SetActiveLayer(int Layer);
+//		int						GetActiveLayer()				{return(ActiveLayer);}
+//		CLayer					*GetLayer(int i)				{return(Layer[i]);}
 
 // Grid
 		void					UpdateGrid(CMapEditView *View,BOOL Toggle=FALSE);
@@ -73,15 +82,15 @@ public:
 		CPoint					&GetCursorPos()					{return(CursorPos);}
 
 		void					SetMapSize(CMapEditView *View,int Width,int Height);
-		int						GetMapWidth()					{return(Layers[LAYER_TYPE_ACTION]->GetWidth());}
-		int						GetMapHeight()					{return(Layers[LAYER_TYPE_ACTION]->GetHeight());}
+		int						GetMapWidth()					{return(Layer[LAYER_ACTION]->GetWidth());}
+		int						GetMapHeight()					{return(Layer[LAYER_ACTION]->GetHeight());}
 
 private:
 		CPoint					CurrentMousePos,LastMousePos;
 		CPoint					CursorPos,LastCursorPos;
 		Vec						MapCam,TileCam;
 
-		CLayer					*Layers[LAYER_TYPE_MAX];
+		std::vector<CLayer*>	Layer;
 		int						ActiveLayer;
 
 		CTileBank				TileBank;

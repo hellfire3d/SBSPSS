@@ -18,11 +18,7 @@ SELECT_BUFFER_SIZE=16,
 /*****************************************************************************/
 enum LAYER_TYPE
 {
-	LAYER_TYPE_BACK=0,
-	LAYER_TYPE_MID,
-	LAYER_TYPE_ACTION,
-	LAYER_TYPE_FORE,
-
+	LAYER_TYPE_TILE=0,
 	LAYER_TYPE_MAX
 };
 
@@ -38,6 +34,7 @@ virtual	~CLayer(){};
 
 virtual	char			*GetName();
 virtual	void			SetName(char *_Name);
+virtual	int				GetType()=0;
 
 virtual	float			GetLayerZPosDiv()		{return(ZPosDiv);}
 
@@ -53,6 +50,9 @@ virtual	void			UpdateGUI(CCore *Core)=0;
 virtual	int				GetWidth()=0;
 virtual	int				GetHeight()=0;
 virtual	void			Resize(int Width,int Height)=0;
+
+virtual	void			Load(CFile *File,float Version)=0;
+virtual	void			Save(CFile *File)=0;
 
 // Functions
 virtual	BOOL			SetMode(int NewMode)=0;

@@ -39,7 +39,7 @@ BOOL CMapEditDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument()) return FALSE;
 	TRACE0("New Doc\n");
-	Core.NewMap();
+	Core.New();
 
 	return TRUE;
 }
@@ -61,12 +61,11 @@ void CMapEditDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
-   
+		Core.Save(ar.GetFile());
 	}
 	else
 	{
-		// TODO: add loading code here
+		Core.Load(ar.GetFile());
 	}
 }
 
@@ -98,6 +97,12 @@ void	CMapEditDoc::UpdateView(CMapEditView *View)
 void	CMapEditDoc::Render(CMapEditView *View)	
 {
 		Core.Render(View);
+}
+
+/*********************************************************************************/
+void	CMapEditDoc::UpdateAll(CMapEditView *View)
+{
+		Core.UpdateAll(View);
 }
 
 /*********************************************************************************/

@@ -13,6 +13,49 @@
 
 
 /*****************************************************************************/
+void	CMap::Load(CFile *File,float Version)
+{
+// Version 1
+int	Width;
+int	Height;
+
+		File->Read(&Width,sizeof(int));
+		File->Read(&Height,sizeof(int));
+
+		Delete();
+		SetSize(Width,Height);
+		for (int Y=0;Y<Height;Y++)
+		{
+			for (int X=0;X<Width;X++)
+			{
+				sMapElem	ThisElem;
+				File->Read(&ThisElem,sizeof(sMapElem));
+				Set(X,Y,ThisElem);
+			}
+		}
+
+}
+
+/*****************************************************************************/
+void	CMap::Save(CFile *File)
+{
+int	Width=GetWidth();
+int	Height=GetHeight();
+
+		File->Write(&Width,sizeof(int));
+		File->Write(&Height,sizeof(int));
+
+		for (int Y=0;Y<Height;Y++)
+		{
+			for (int X=0;X<Width;X++)
+			{
+				sMapElem	&ThisElem=Get(X,Y);
+				File->Write(&ThisElem,sizeof(sMapElem));
+			}
+		}
+}
+
+/*****************************************************************************/
 void	CMap::SetSize(int Width,int Height,BOOL ClearFlag)
 {
 	Map.resize(Width);

@@ -12,8 +12,8 @@
 /*****************************************************************************/
 enum	TileLayerEnum
 {
-	TileLayerDefaultWidth=3,
-	TileLayerDefaultHeight=2,
+	TileLayerDefaultWidth=30,
+	TileLayerDefaultHeight=20,
 };
 
 /*****************************************************************************/
@@ -36,8 +36,10 @@ public:
 		};
 
 		CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,BOOL Is3d,BOOL Resizable);		// New Layer
-		CLayerTile(char *_Name);																			// Load Layer
+		CLayerTile(CFile *File,int Version);																// Load Layer
 		~CLayerTile();
+
+		int				GetType()			{return(LAYER_TYPE_TILE);}
 
 		void			Render(CCore *Core,Vec &CamPos,BOOL Is3d);
 		void			RenderGrid(CCore *Core,Vec &CamPos);
@@ -52,6 +54,8 @@ public:
 		int				GetHeight()			{return(Map.GetHeight());}
 		void			Resize(int Width,int Height);
 
+		void			Load(CFile *File,float Version);
+		void			Save(CFile *File);
 
 // Functions
 		BOOL			SetMode(int NewMode);

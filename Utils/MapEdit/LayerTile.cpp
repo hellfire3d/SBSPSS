@@ -39,14 +39,42 @@ CLayerTile::CLayerTile(char *_Name,int Width,int Height,float MapDiv,float ZDiv,
 
 /*****************************************************************************/
 // Load Layer
-CLayerTile::CLayerTile(char *_Name)
+CLayerTile::CLayerTile(CFile *File,int Version)
 {
-	ASSERT(1);
+	Load(File,Version);
 }
 
 /*****************************************************************************/
 CLayerTile::~CLayerTile()
 {
+}
+
+/*****************************************************************************/
+void	CLayerTile::Load(CFile *File,float Version)
+{
+// Version 1
+		File->Read(Name,256);
+		File->Read(&Render3dFlag,sizeof(BOOL));
+		File->Read(&ZPosDiv,sizeof(float));
+		File->Read(&MapSizeDiv,sizeof(float));
+		File->Read(&ResizeFlag,sizeof(BOOL));
+		File->Read(&Mode,sizeof(MouseMode));
+		Map.Load(File,Version);
+}
+
+/*****************************************************************************/
+void	CLayerTile::Save(CFile *File)
+{
+// Always Save current version
+
+		File->Write(Name,256);
+		File->Write(&Render3dFlag,sizeof(BOOL));
+		File->Write(&ZPosDiv,sizeof(float));
+		File->Write(&MapSizeDiv,sizeof(float));
+		File->Write(&ResizeFlag,sizeof(BOOL));
+		File->Write(&Mode,sizeof(MouseMode));
+		Map.Save(File);
+
 }
 
 /*****************************************************************************/

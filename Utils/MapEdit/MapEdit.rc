@@ -277,8 +277,8 @@ END
 
 STRINGTABLE PRELOAD DISCARDABLE 
 BEGIN
-    IDR_MAINFRAME           "MapEdit"
-    IDR_MAPEDITYPE          "\nMapEdi\nMapEdi\n\n\nMapEdit.Document\nMapEdi Document"
+    IDR_MAINFRAME           "Map Editor"
+    IDR_MAPEDITYPE          "Map Edit Doc\n\n\nMapEdit Project (*.MEP)\n.Mep\n"
 END
 
 STRINGTABLE PRELOAD DISCARDABLE 

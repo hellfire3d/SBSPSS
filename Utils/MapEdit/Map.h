@@ -48,6 +48,10 @@ public:
 
 		BOOL		DoesContainTile(sMapElem &Tile);
 
+		void		Load(CFile *File,float Version);
+		void		Save(CFile *File);
+
+
 inline	void	operator=(CMap &Src)	
 {
 int		Width=Src.GetWidth();

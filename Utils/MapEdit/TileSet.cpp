@@ -44,7 +44,7 @@ CTileBank::CTileBank()
 		SelStart=-1;
 		SelEnd=1;
 
-#ifdef _DEBUG
+#ifdef _DEBUGx
 	AddTileSet("c:/temp/rockp/rockp.gin");
 
 int	W=3;
@@ -70,6 +70,49 @@ sMapElem	Blk;
 /*****************************************************************************/
 CTileBank::~CTileBank()
 {
+}
+
+/*****************************************************************************/
+void	CTileBank::Load(CFile *File,float Version)
+{
+int		ListSize;
+	
+	File->Read(&ListSize,sizeof(int));
+	File->Read(&CurrentSet,sizeof(int));
+	File->Read(&ActiveBrush,sizeof(int));
+	Brush[0].Load(File,Version);
+	Brush[1].Load(File,Version);
+
+	for (int i=0;i<ListSize;i++)
+	{
+		char	Filename[256+64];
+
+		File->Read(Filename,256+64);
+		AddTileSet(Filename);
+	}
+
+
+}
+
+/*****************************************************************************/
+void	CTileBank::Save(CFile *File)
+{
+int		ListSize=TileSet.size();
+
+	File->Write(&ListSize,sizeof(int));
+	File->Write(&CurrentSet,sizeof(int));
+	File->Write(&ActiveBrush,sizeof(int));
+	Brush[0].Save(File);
+	Brush[1].Save(File);
+
+	for (int i=0;i<ListSize;i++)
+	{
+		CTileSet	&ThisSet=TileSet[i];
+		char	Filename[256+64];
+
+		sprintf(Filename,"%s%s.%s",ThisSet.GetPath(),ThisSet.GetName(),"Gin");
+		File->Write(Filename,256+64);		
+	}
 }
 
 /*****************************************************************************/
@@ -456,54 +499,6 @@ int			TileID=0;
 		glEnable(GL_TEXTURE_2D);
 }
 
-/*
-void	CTileSet::RenderMisc(BOOL LTileFlag,BOOL RTileFlag,BOOL CursorFlag,BOOL GridFlag)
-{
-		glDisable(GL_TEXTURE_2D);
-
-		if (LTileFlag || RTileFlag || CursorFlag)
-		{
-			glBegin(GL_QUADS); 
-			glNormal3f( 1,1,1);
-
-			glColor3ub(255,255,0);
-
-			if (LTileFlag)
-			{
-				glColor3ub(255,0,0);
-			}
-			if (RTileFlag)
-			{
-				glColor3ub(0,0,255);
-			}
-			BuildGLQuad(TileBrowserX0,TileBrowserX1,TileBrowserY0,TileBrowserY1,0);
-			glEnd();
-		}
-
-		if (GridFlag)
-		{
-			glBegin(GL_LINES); 
-				glNormal3f( 1,1,1);
-				glColor3ub(255,255,255);
-			
-				glVertex3f( TileBrowserX0,TileBrowserY0,0);
-				glVertex3f( TileBrowserX1,TileBrowserY0,0);
-
-				glVertex3f( TileBrowserX0,TileBrowserY1,0);
-				glVertex3f( TileBrowserX1,TileBrowserY1,0);
-
-				glVertex3f( TileBrowserX0,TileBrowserY0,0);
-				glVertex3f( TileBrowserX0,TileBrowserY1,0);
-
-				glVertex3f( TileBrowserX1,TileBrowserY0,0);
-				glVertex3f( TileBrowserX1,TileBrowserY1,0);
-
-			glEnd();
-		}
-
-		glEnable(GL_TEXTURE_2D);
-}
-*/
 /*****************************************************************************/
 int		CTileSet::FindCursorPos(CCore *Core,CMapEditView *View,Vec &CamPos,CPoint &MousePos)
 {

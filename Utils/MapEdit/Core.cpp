@@ -24,8 +24,6 @@
 /*****************************************************************************/
 CCore::CCore()
 {
-	for (int i=0; i<LAYER_TYPE_MAX; i++) Layers[i]=0;
-
 	TileViewFlag=FALSE;
 	GridFlag=TRUE;
 	CurrentMousePos=CPoint(0,0);
@@ -39,7 +37,8 @@ CCore::CCore()
 /*****************************************************************************/
 CCore::~CCore()
 {
-	for (int i=0; i<LAYER_TYPE_MAX; i++) if (Layers[i]) delete Layers[i];
+int	ListSize=Layer.size();
+	for (int i=0; i<ListSize; i++) delete Layer[i];
 }
 
 /*****************************************************************************/
@@ -53,29 +52,96 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 			ParamBar->Add(Frm->GetLayerList(),IDD_LAYER_LIST_DIALOG,TRUE,TRUE);
 			ParamBar->Add(Frm->GetTileSetDlg(),IDD_TILESET_DIALOG,TRUE,TRUE);
 			UpdateParamBar();
-//			Layers[ActiveLayer]->InitGUI(this);
+//			Layer[ActiveLayer]->InitGUI(this);
 //			ParamBar->Update();
+			UpdateAll(NULL);
 }
 
 /*****************************************************************************/
-void	CCore::NewMap()
+void	CCore::New()
 {
 // Create Gfx Layers
-//												Name	Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
-	Layers[LAYER_TYPE_BACK]=	new CLayerTile(	"Back",	32,						32,						1.0f,	4.0f,	FALSE,	FALSE);
-	Layers[LAYER_TYPE_MID]=		new CLayerTile(	"Mid",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE);
-	Layers[LAYER_TYPE_ACTION]=	new CLayerTile(	"Action",TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE);
-	Layers[LAYER_TYPE_FORE]=	new CLayerTile(	"Fore",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE);
+//									Name	Width					Height					SizeDiv	ViewDiv	3d?		Resizable?
+	Layer.push_back(new CLayerTile(	"Back",	32,						32,						1.0f,	4.0f,	FALSE,	FALSE));
+	Layer.push_back(new CLayerTile(	"Mid",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	2.0f,	2.0f,	FALSE,	TRUE));
+	Layer.push_back(new CLayerTile(	"Action",TileLayerDefaultWidth,	TileLayerDefaultHeight,	1.0f,	1.0f,	TRUE,	TRUE));
+	Layer.push_back(new CLayerTile(	"Fore",	TileLayerDefaultWidth,	TileLayerDefaultHeight,	0.5f,	0.5f,	FALSE,	TRUE));
 
-	ActiveLayer=LAYER_TYPE_ACTION;
+	ActiveLayer=LAYER_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
 	Init();
 }
 
 /*****************************************************************************/
-void	CCore::OpenMap()
+void	CCore::Load(CFile *File)
 {
+float	Version;
+
+		File->Read(&Version,sizeof(float));
+
+		File->Read(&MapCam,sizeof(Vec));
+		File->Read(&TileCam,sizeof(Vec));
+
+		File->Read(&TileCam,sizeof(Vec));
+
+		File->Read(&TileViewFlag,sizeof(BOOL));
+		File->Read(&GridFlag,sizeof(BOOL));
+		File->Read(&Is3dFlag,sizeof(BOOL));
+
+
+// Layers
+int		LayerCount;
+		File->Read(&LayerCount,sizeof(int));
+		File->Read(&ActiveLayer,sizeof(int));
+
+		for (int i=0;i<LayerCount;i++)
+		{
+			int	Type;
+
+			File->Read(&Type,sizeof(int));
+			switch (Type)
+			{
+			case LAYER_TYPE_TILE:
+				Layer.push_back(new CLayerTile(File,Version));
+				break;
+
+			}
+		}
+	TileBank.Load(File,Version);
+	Init();
+
+}
+
+/*****************************************************************************/
+void	CCore::Save(CFile *File)
+{
+
+		File->Write(&FileVersion,sizeof(float));
+
+		File->Write(&MapCam,sizeof(Vec));
+		File->Write(&TileCam,sizeof(Vec));
+
+		File->Write(&TileCam,sizeof(Vec));
+
+		File->Write(&TileViewFlag,sizeof(BOOL));
+		File->Write(&GridFlag,sizeof(BOOL));
+		File->Write(&Is3dFlag,sizeof(BOOL));
+
+
+// Layers
+int		LayerCount=Layer.size();
+		File->Write(&LayerCount,sizeof(int));
+		File->Write(&ActiveLayer,sizeof(int));
+
+		for (int i=0;i<LayerCount;i++)
+		{
+			int	Type=Layer[i]->GetType();
+			File->Write(&Type,sizeof(int));
+			Layer[i]->Save(File);
+		}
+	TileBank.Save(File);
+
 }
 
 /*****************************************************************************/
@@ -101,18 +167,19 @@ void	CCore::Render(CMapEditView *View,BOOL ForceRender)
 void	CCore::RenderLayers(CMapEditView *View)
 {
 Vec		&ThisCam=GetCam();
+int		ListSize=Layer.size();
 		
-		for (int i=0;i<LAYER_TYPE_MAX;i++)
+		for (int i=0;i<ListSize;i++)
 		{
-			Layers[i]->Render(this,ThisCam,Is3dFlag);
+			Layer[i]->Render(this,ThisCam,Is3dFlag);
 		}
 		
-		Layers[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
-		if (GridFlag) Layers[ActiveLayer]->RenderGrid(this,ThisCam);
+		Layer[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
+		if (GridFlag) Layer[ActiveLayer]->RenderGrid(this,ThisCam);
 		
 // Get Cursor Pos
 		LastCursorPos=CursorPos;
-		Layers[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
+		Layer[ActiveLayer]->FindCursorPos(this,View,GetCam(),CurrentMousePos);
 }
 
 /*****************************************************************************/
@@ -134,7 +201,7 @@ void	CCore::SetMode(int NewMode)
 {
 BOOL	RedrawFlag=FALSE;
 
-		RedrawFlag=Layers[ActiveLayer]->SetMode(NewMode);
+		RedrawFlag=Layer[ActiveLayer]->SetMode(NewMode);
 		//if (RedrawFlag) View->Invalidate();
 }
 
@@ -152,7 +219,7 @@ BOOL	RedrawFlag=FALSE;
 		}
 		else
 		{
-			RedrawFlag=Layers[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			RedrawFlag=Layer[ActiveLayer]->LButtonControl(this,View,nFlags,CursorPos,DownFlag);
 		}
 		TileBank.SetActiveBrushL();
 
@@ -179,7 +246,7 @@ BOOL	RedrawFlag=FALSE;
 		}
 		else
 		{
-			RedrawFlag=Layers[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
+			RedrawFlag=Layer[ActiveLayer]->RButtonControl(this,View,nFlags,CursorPos,DownFlag);
 		}
 		TileBank.SetActiveBrushR();
 
@@ -213,8 +280,8 @@ Vec		&ThisCam=GetCam();
 			RECT	ThisRect;
 
 			View->GetWindowRect(&ThisRect);
-			XS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
-			YS=ThisCam.z*4;//*Layers[ActiveLayer]->GetLayerZPos();
+			XS=ThisCam.z*4;//*Layer[ActiveLayer]->GetLayerZPos();
+			YS=ThisCam.z*4;//*Layer[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
@@ -235,7 +302,7 @@ Vec		&ThisCam=GetCam();
 			}
 			else
 			{
-			Layers[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
+			Layer[ActiveLayer]->MouseMove(this,View,nFlags,CursorPos);
 			}
 		}
 
@@ -259,7 +326,7 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 			}
 			else
 			{
-				Layers[ActiveLayer]->InitGUI(this);
+				Layer[ActiveLayer]->InitGUI(this);
 			}
 			
 			ParamBar->Update();
@@ -267,11 +334,12 @@ CMultiBar	*ParamBar=Frm->GetParamBar();
 }
 
 /*****************************************************************************/
+/*
 void	CCore::SetActiveLayer(int i)
 {
 //	UpdateParamBar(NULL,ParamViewFlag);
 }
-
+*/
 /*****************************************************************************/
 /*** Grid ********************************************************************/
 /*****************************************************************************/
@@ -332,7 +400,7 @@ void	CCore::MirrorX(CMapEditView *View)
 {
 		if (!TileViewFlag) 
 		{
-			Layers[ActiveLayer]->MirrorX(this);
+			Layer[ActiveLayer]->MirrorX(this);
 			UpdateView(View);
 		}
 }
@@ -342,7 +410,7 @@ void	CCore::MirrorY(CMapEditView *View)
 {
 		if (!TileViewFlag) 
 		{
-			Layers[ActiveLayer]->MirrorY(this);
+			Layer[ActiveLayer]->MirrorY(this);
 			UpdateView(View);
 		}
 }
@@ -380,7 +448,7 @@ void	CCore::UpdateAll(CMapEditView *View)
 		UpdateGrid(View);
 
 		TileBank.UpdateGUI(this,TileViewFlag);
-		Layers[ActiveLayer]->UpdateGUI(this);
+		Layer[ActiveLayer]->UpdateGUI(this);
 
 }
 
@@ -400,11 +468,12 @@ void	CCore::SetMapSize(CMapEditView *View,int Width,int Height)
 {
 	if (Width==GetMapWidth() && Height==GetMapHeight()) return;
 
-	for (int i=0; i<LAYER_TYPE_MAX; i++) 
+int		ListSize=Layer.size();
+
+	for (int i=0; i<ListSize; i++) 
 	{
-//		Layers[i]->Resize(Width,Height);
+		Layer[i]->Resize(Width,Height);
 	}
-		Layers[LAYER_TYPE_ACTION]->Resize(Width,Height);
 
 	UpdateView(View);
 }
