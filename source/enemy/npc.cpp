@@ -62,6 +62,8 @@ void CNpc::init()
 	m_velocity = 0;
 	m_extension = 0;
 
+	m_extension = EXTEND_RIGHT;
+
 	Pos.vx = 100;
 	Pos.vy = 100;
 
