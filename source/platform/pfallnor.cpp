@@ -49,7 +49,7 @@ void CNpcFallingNoRespawnPlatform::processMovement( int _frames )
 	else
 	{
 		moveX = 0;
-		moveY = m_data[m_type].speed * _frames;
+		moveY = m_speed * _frames;
 
 		if ( heading == 3072 )
 		{

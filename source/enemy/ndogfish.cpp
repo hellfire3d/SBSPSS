@@ -174,7 +174,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 					m_frame = 0;
 				}
 
-				processWalkToUser( _frames, m_data[m_type].speed );
+				processWalkToUser( _frames, m_speed );
 			}
 			else
 			{
@@ -235,7 +235,7 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 					m_frame = 0;
 				}
 
-				processWalkToUser( _frames, m_data[m_type].speed );
+				processWalkToUser( _frames, m_speed );
 			}
 			else
 			{

@@ -28,7 +28,7 @@ void CNpcCircularPlatform::postInit()
 
 void CNpcCircularPlatform::processMovement( int _frames )
 {
-	m_rotation += m_data[m_type].speed;
+	m_rotation += m_speed;
 	m_rotation &= 4095;
 
 	Pos.vx = m_base.vx + ( ( m_extension * rcos( m_rotation ) ) >> 12 );

@@ -77,8 +77,8 @@ void CNpcLinearPlatform::processMovement( int _frames )
 		m_heading += moveDist;
 		m_heading &= 4095;
 
-		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
+		s32 preShiftX = _frames * m_speed * rcos( m_heading );
+		s32 preShiftY = _frames * m_speed * rsin( m_heading );
 
 		moveX = preShiftX >> 12;
 		if ( !moveX && preShiftX )

@@ -79,7 +79,7 @@ void CNpcFlamingSkullEnemy::processClose( int _frames )
 		}
 		else
 		{
-			processGenericGotoTarget( _frames, distX, distY, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, distX, distY, m_speed );
 		}
 	}
 	else
@@ -102,7 +102,7 @@ void CNpcFlamingSkullEnemy::processClose( int _frames )
 		}
 		else
 		{
-			processGenericGotoTarget( _frames, distX, distY, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, distX, distY, m_speed );
 		}
 	}
 }

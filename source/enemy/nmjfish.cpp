@@ -79,7 +79,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( xDistSqr + yDistSqr > 100 )
 			{
-				processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
+				processGenericGotoTarget( _frames, xDist, yDist, m_speed );
 			}
 			else
 			{
@@ -187,7 +187,7 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 			if ( xDistSqr + yDistSqr > 400 )
 			{
-				processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
+				processGenericGotoTarget( _frames, xDist, yDist, m_speed );
 			}
 			else
 			{

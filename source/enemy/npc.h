@@ -105,6 +105,7 @@ public:
 	bool				canBeCaughtByNet();
 	void				caughtWithNet();
 	virtual int			getFrameCount();
+	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
 	void				setupWaypoints( sThingActor *ThisActor );
@@ -294,6 +295,7 @@ protected:
 	u8					m_isCaught;
 	u8					m_isBlowerOn;
 	DVECTOR				m_caughtPos;
+	s16					m_speed;
 
 	s32				m_frame;
 	int				m_animNo;

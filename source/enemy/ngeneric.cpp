@@ -245,8 +245,8 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 		m_heading += *moveDist;
 		m_heading &= 4095;
 
-		s32 preShiftX = _frames * m_data[m_type].speed * rcos( m_heading );
-		s32 preShiftY = _frames * m_data[m_type].speed * rsin( m_heading );
+		s32 preShiftX = _frames * m_speed * rcos( m_heading );
+		s32 preShiftY = _frames * m_speed * rsin( m_heading );
 
 		*moveX = preShiftX >> 12;
 		if ( !(*moveX) && preShiftX )
@@ -298,7 +298,7 @@ void CNpcEnemy::processGenericFixedPathMove( int _frames, s32 *moveX, s32 *moveY
 			*moveY = 0;
 		}
 
-		*moveVel = ( _frames * m_data[m_type].speed ) << 8;
+		*moveVel = ( _frames * m_speed ) << 8;
 
 		//processGroundCollisionReverse( moveX, moveY );
 	}
@@ -346,7 +346,7 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 
 		distX = distX / abs( distX );
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_data[m_type].speed * _frames ), Pos.vy ) < -maxHeight )
+		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -362,7 +362,7 @@ void CNpcEnemy::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY
 			{
 				// groundHeight <= yMovement indicates either just above ground or on or below ground
 
-				*moveX = distX * m_data[m_type].speed * _frames;
+				*moveX = distX * m_speed * _frames;
 				*moveY = groundHeight;
 			}
 			else

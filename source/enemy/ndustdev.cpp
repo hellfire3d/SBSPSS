@@ -91,7 +91,7 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 
 		distX = distX / abs( distX );
 
-		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_data[m_type].speed * _frames ), Pos.vy ) < -maxHeight )
+		if ( m_layerCollision->getHeightFromGround( Pos.vx + ( distX * m_speed * _frames ), Pos.vy ) < -maxHeight )
 		{
 			// there is an obstacle in the way, increment the path point (hopefully this will resolve the problem)
 
@@ -107,7 +107,7 @@ void CNpcDustDevilEnemy::processMovement( int _frames )
 			{
 				// groundHeight <= yMovement indicates either just above ground or on or below ground
 
-				moveX = distX * m_data[m_type].speed * _frames;
+				moveX = distX * m_speed * _frames;
 				moveY = groundHeight;
 			}
 			else

@@ -117,7 +117,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		if ( ( xDistSqr + yDistSqr ) > 100 )
 		{
-			processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, xDist, yDist, m_speed );
 		}
 		else
 		{
@@ -138,7 +138,7 @@ void CNpcSubSharkEnemy::processMovement( int _frames )
 
 		if ( ( xDistSqr + yDistSqr ) > 100 )
 		{
-			processGenericGotoTarget( _frames, xDist, yDist, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, xDist, yDist, m_speed );
 		}
 		else
 		{
@@ -178,7 +178,7 @@ void CNpcSubSharkEnemy::processClose( int _frames )
 				m_frame = 0;
 			}
 
-			processGenericGotoTarget( _frames, playerXDist, 0, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, playerXDist, 0, m_speed );
 
 			if ( playerXDistSqr < 100 )
 			{

@@ -63,11 +63,11 @@ void CNpcSteerableBarrelPlatform::processMovement( int _frames )
 		{
 			// roll barrel right
 
-			moveX = m_data[m_type].speed * _frames;
+			moveX = m_speed * _frames;
 		}
 		else if ( playerX < -5 )
 		{
-			moveX = -m_data[m_type].speed * _frames;
+			moveX = -m_speed * _frames;
 		}
 
 		// check for collision

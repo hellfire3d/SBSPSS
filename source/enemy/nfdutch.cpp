@@ -65,7 +65,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 
 		if ( xDistSqr > 100 )
 		{
-			processGenericGotoTarget( _frames, xDist, 0, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, xDist, 0, m_speed );
 		}
 		else
 		{
@@ -76,7 +76,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 
 				if ( yDistSqr > 100 )
 				{
-					processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+					processGenericGotoTarget( _frames, 0, yDist, m_speed );
 				}
 				else
 				{
@@ -90,7 +90,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 
 				if ( yDistSqr > 100 )
 				{
-					processGenericGotoTarget( _frames, 0, yDist, m_data[m_type].speed );
+					processGenericGotoTarget( _frames, 0, yDist, m_speed );
 				}
 				else
 				{
@@ -134,7 +134,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 			m_frame = 0;
 		}
 
-		processGenericGotoTarget( _frames, 0, playerYDist, m_data[m_type].speed );
+		processGenericGotoTarget( _frames, 0, playerYDist, m_speed );
 	}
 	else
 	{

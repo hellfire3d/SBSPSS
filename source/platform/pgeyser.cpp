@@ -52,7 +52,7 @@ void CNpcGeyserPlatform::processMovement( int _frames )
 				}
 				else
 				{
-					s32 moveY = m_data[m_type].speed * _frames;
+					s32 moveY = m_speed * _frames;
 
 					if ( Pos.vy < ( minY + 64 ) )
 					{
@@ -86,7 +86,7 @@ void CNpcGeyserPlatform::processMovement( int _frames )
 				}
 				else
 				{
-					s32 moveY = m_data[m_type].speed * _frames;
+					s32 moveY = m_speed * _frames;
 
 					if ( Pos.vy < ( minY + 64 ) )
 					{

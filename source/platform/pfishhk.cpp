@@ -59,7 +59,7 @@ void CNpcFishHookPlatform::processMovement( int _frames )
 {
 	if ( m_isMoving )
 	{
-		Pos.vy -= m_data[m_type].speed * _frames;
+		Pos.vy -= m_speed * _frames;
 
 		if ( Pos.vy < 0 )
 		{

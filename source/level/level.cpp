@@ -473,6 +473,11 @@ void	CLevel::initThings(int _respawningLevel)
 						enemy->setLayerCollision( getCollisionLayer() );
 						enemy->setupWaypoints( ThisActor );
 						enemy->postInit();
+
+						if ( ThisActor->Speed )
+						{
+							enemy->setSpeed( ThisActor->Speed );
+						}
 					}
 					break;
 
@@ -501,6 +506,11 @@ void	CLevel::initThings(int _respawningLevel)
 			platform = CNpcPlatform::Create( ThisPlatform );
 			platform->setLayerCollision( getCollisionLayer() );
 			platform->postInit();
+
+			if ( ThisPlatform->Speed )
+			{
+				platform->setSpeed( ThisPlatform->Speed );
+			}
 		}
 	}
 

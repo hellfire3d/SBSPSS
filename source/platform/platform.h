@@ -112,6 +112,8 @@ public:
 	void				setToShutdown();
 	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 
+	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
+
 protected:
 	// NPC data structure definitions //
 
@@ -202,6 +204,7 @@ protected:
 	s32							m_tiltAngle;
 	s32							m_tiltVelocity;
 	bool						m_extendDir;
+	s16							m_speed;
 
 	CModelGfx					*m_modelGfx;
 	u8							m_isShuttingDown;

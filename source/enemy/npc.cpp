@@ -636,6 +636,7 @@ void CNpcEnemy::init()
 	m_drawRotation = 0;
 	m_isCaught = false;
 	m_isBlowerOn = false;
+	m_speed = m_data[m_type].speed;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -942,7 +943,7 @@ bool CNpcEnemy::processSensor()
 						if ( playerXDistSqr + playerYDistSqr < 10000 )
 						{
 							m_controlFunc = NPC_CONTROL_CLOSE;
-							m_velocity = m_data[m_type].speed;
+							m_velocity = m_speed;
 
 							return( true );
 						}
@@ -1241,7 +1242,7 @@ void CNpcEnemy::processClose(int _frames)
 	{
 		case NPC_CLOSE_GENERIC_USER_SEEK:
 		{
-			processGenericGotoTarget( _frames, playerXDist, playerYDist, m_data[m_type].speed );
+			processGenericGotoTarget( _frames, playerXDist, playerYDist, m_speed );
 
 			break;
 		}

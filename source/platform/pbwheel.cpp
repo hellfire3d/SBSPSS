@@ -24,7 +24,7 @@
 
 void CNpcBigWheelPlatform::processMovement( int _frames )
 {
-	m_rotation += m_data[m_type].speed * _frames;
+	m_rotation += m_speed * _frames;
 	m_rotation &= 4095;
 
 	Pos.vx = m_base.vx + ( ( m_extension * rcos( m_rotation ) ) >> 12 );

@@ -19,7 +19,7 @@
 
 void CNpcBubblePlatform::processMovement( int _frames )
 {
-	Pos.vy -= m_data[m_type].speed * _frames;
+	Pos.vy -= m_speed * _frames;
 
 	if ( Pos.vy < 0 )
 	{

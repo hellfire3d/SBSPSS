@@ -115,11 +115,11 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 
 	if ( waypointHeading == 0 )
 	{
-		moveX = m_data[m_type].speed * _frames;
+		moveX = m_speed * _frames;
 	}
 	else
 	{
-		moveX = -m_data[m_type].speed * _frames;
+		moveX = -m_speed * _frames;
 	}
 
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
