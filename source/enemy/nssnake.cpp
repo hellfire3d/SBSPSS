@@ -94,15 +94,17 @@ void CNpcSeaSnakeSegment::setCollisionSize(int _w,int _h)
 
 void CNpcSeaSnakeEnemy::postInit()
 {
+	int histLength;
+
 	m_npcPath.setPathType( CNpcPath::REPEATING_PATH );
 
-	s16 maxArraySize = NPC_SEA_SNAKE_LENGTH * NPC_SEA_SNAKE_SPACING;
+	s16 maxArraySize = NPC_SEA_SNAKE_LENGTH * NPC_SEA_SNAKE_SPACING * 2;
 
 	m_positionHistoryArray[0].pos = Pos;
 	m_positionHistoryArray[0].next = &m_positionHistoryArray[1];
 	m_positionHistoryArray[0].prev = &m_positionHistoryArray[maxArraySize - 1];
 
-	for ( int histLength = 1 ; histLength < maxArraySize - 1 ; histLength++ )
+	for ( histLength = 1 ; histLength < maxArraySize - 1 ; histLength++ )
 	{
 		m_positionHistoryArray[histLength].pos = Pos;
 		m_positionHistoryArray[histLength].next = &m_positionHistoryArray[histLength + 1];
@@ -114,6 +116,23 @@ void CNpcSeaSnakeEnemy::postInit()
 	m_positionHistoryArray[maxArraySize - 1].prev = &m_positionHistoryArray[maxArraySize - 2];
 
 	m_positionHistory = &m_positionHistoryArray[0];
+
+	m_spacingHistoryArray[0].spacing = 2;
+	m_spacingHistoryArray[0].next = &m_spacingHistoryArray[1];
+	m_spacingHistoryArray[0].prev = &m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1];
+
+	for ( histLength = 1 ; histLength < NPC_SEA_SNAKE_LENGTH - 1 ; histLength++ )
+	{
+		m_spacingHistoryArray[histLength].spacing = 2;
+		m_spacingHistoryArray[histLength].next = &m_spacingHistoryArray[histLength + 1];
+		m_spacingHistoryArray[histLength].prev = &m_spacingHistoryArray[histLength - 1];
+	}
+
+	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].spacing = 2;
+	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].next = &m_spacingHistoryArray[0];
+	m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 1].prev = &m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH - 2];
+
+	m_spacingHistory = &m_spacingHistoryArray[0];
 
 	u16 segScale;
 	int initLength = NPC_SEA_SNAKE_LENGTH / 3;
@@ -610,12 +629,44 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 	m_positionHistory = m_positionHistory->prev;
 	m_positionHistory->pos = oldPos;
 
+
 	CNpcPositionHistory *newPos;
 	newPos = m_positionHistory;
-	for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+
+	m_spacingHistory = m_spacingHistory->prev;
+
+	CNpcSpacingHistory *spaceHist;
+	spaceHist = m_spacingHistory;
+
+	m_spacingHistory->spacing = _frames;
+
+	int averageFrames = 0;
+
+	for ( int frameCheck = 0 ; frameCheck < NPC_SEA_SNAKE_LENGTH ; frameCheck++ )
+	{
+		averageFrames += m_spacingHistoryArray[frameCheck].spacing << 8;
+	}
+
+	averageFrames /= NPC_SEA_SNAKE_LENGTH;
+
+	int skipDist;
+
+	if ( averageFrames < ( 2 << 8 ) )
+	{
+		skipDist = NPC_SEA_SNAKE_SPACING + 4;
+	}
+	else
+	{
+		skipDist = NPC_SEA_SNAKE_SPACING;
+	}
+
+	//for ( skipCounter = 1 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+	for ( skipCounter = 1 ; skipCounter < skipDist ; skipCounter++ )
 	{
 		newPos = newPos->next;
 	}
+
+	spaceHist = spaceHist->next;
 
 	oldPos = Pos;
 
@@ -677,10 +728,13 @@ void CNpcSeaSnakeEnemy::updateTail( DVECTOR &oldPos, int _frames )
 		}
 		oldPos = sinPos;
 
-		for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+		//for ( skipCounter = 0 ; skipCounter < NPC_SEA_SNAKE_SPACING ; skipCounter++ )
+		for ( skipCounter = 0 ; skipCounter < skipDist ; skipCounter++ )
 		{
 			newPos = newPos->next;
 		}
+
+		spaceHist = spaceHist->next;
 
 		extension += 1024;
 		extension &= 4095;
@@ -1012,7 +1066,7 @@ void CNpcSeaSnakeEnemy::render()
 			DVECTOR &renderPos=getRenderPos();
 
 			SprFrame = m_actorGfx->Render(renderPos,m_animNo,( m_frame >> 8 ),0);
-			m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, 4096 );
+			m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, 4096, true );
 
 			sBBox boundingBox = m_actorGfx->GetBBox();
 			setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
@@ -1153,7 +1207,7 @@ void CNpcSeaSnakeSegment::render()
 	if ( renderFlag )
 	{
 		SprFrame = m_actorGfx->Render(renderPos,m_anim,0,0);
-		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale );
+		m_actorGfx->RotateScale( SprFrame, renderPos, m_heading, 4096, m_scale, true );
 
 		sBBox boundingBox = m_actorGfx->GetBBox();
 		setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );

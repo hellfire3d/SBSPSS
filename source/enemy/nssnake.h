@@ -100,11 +100,23 @@ protected:
 		CNpcPositionHistory			*prev;
 	};
 
+	class CNpcSpacingHistory
+	{
+	public:
+		u8							spacing;
+		CNpcSpacingHistory			*next;
+		CNpcSpacingHistory			*prev;
+	};
+
 	u8								m_segmentCount;
 	CNpcSeaSnakeSegment				m_segmentArray[NPC_SEA_SNAKE_LENGTH];
 
 	CNpcPositionHistory				*m_positionHistory;
-	CNpcPositionHistory				m_positionHistoryArray[NPC_SEA_SNAKE_SPACING * NPC_SEA_SNAKE_LENGTH];
+	CNpcPositionHistory				m_positionHistoryArray[NPC_SEA_SNAKE_SPACING * NPC_SEA_SNAKE_LENGTH * 2];
+
+	CNpcSpacingHistory				*m_spacingHistory;
+	CNpcSpacingHistory				m_spacingHistoryArray[NPC_SEA_SNAKE_LENGTH];
+
 	s32								m_collTimer;
 	s32								m_snapTimer;
 	//s32								m_openTimer;
