@@ -29,9 +29,8 @@ class	CNpc : public CThing
 public:
 	enum NPC_UNIT_TYPE
 	{
-		NPC_TEST_TYPE = 0,
-		NPC_SANDY_CHEEKS = 1,
-		NPC_SMALL_JELLYFISH_1,
+		NPC_SANDY_CHEEKS = 0,
+		NPC_SMALL_JELLYFISH_1 = 1,
 		NPC_SMALL_JELLYFISH_2,
 		NPC_LARGE_JELLYFISH,
 		NPC_ANEMONE_1,
@@ -57,6 +56,7 @@ public:
 		NPC_FLAMING_SKULL,
 		NPC_SHARK_MAN,
 		NPC_OIL_BLOB,
+		NPC_SKULL_STOMPER,
 		NPC_UNIT_TYPE_MAX,
 	};
 
@@ -76,6 +76,7 @@ protected:
 		NPC_INIT_SNAKE = 1,
 		NPC_INIT_ACID,
 		NPC_INIT_GHOST_PIRATE,
+		NPC_INIT_SKULL_STOMPER,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -98,6 +99,7 @@ protected:
 		NPC_SENSOR_OIL_BLOB_USER_CLOSE,
 		NPC_SENSOR_ANEMONE_USER_CLOSE,
 		NPC_SENSOR_EYEBALL_USER_CLOSE,
+		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
 	};
 
 	enum NPC_CLOSE_FUNC
@@ -112,6 +114,7 @@ protected:
 		NPC_CLOSE_ANEMONE_1_ATTACK,
 		NPC_CLOSE_ANEMONE_2_ATTACK,
 		NPC_CLOSE_EYEBALL_ATTACK,
+		NPC_CLOSE_SKULL_STOMPER_ATTACK,
 	};
 
 	enum NPC_MOVEMENT_FUNC
@@ -202,6 +205,10 @@ protected:
 	// eyeball functions
 
 	void				processCloseEyeballAttack( int _frames );
+
+	// skull stomper functions
+
+	void				processCloseSkullStomperAttack( int _frames );
 
 	// data
 

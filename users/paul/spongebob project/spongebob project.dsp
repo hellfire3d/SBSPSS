@@ -175,6 +175,10 @@ SOURCE=..\..\..\source\enemy\nshrkman.cpp
 
 SOURCE=..\..\..\source\enemy\nsjfish.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\enemy\nsstomp.cpp
+# End Source File
 # End Group
 # Begin Group "fileio"
 

@@ -128,8 +128,9 @@ void CNpc::processCloseSmallJellyfishEvade( int _frames )
 	else
 	{
 		bool pathComplete;
+		bool waypointChange;
 
-		s16 headingToTarget = m_npcPath.think( Pos, &pathComplete );
+		s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
 
 		if ( pathComplete )
 		{

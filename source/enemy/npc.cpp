@@ -48,18 +48,6 @@
 
 CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 {
-	{	// NPC_TEST_TYPE
-		NPC_INIT_DEFAULT,
-		NPC_SENSOR_JELLYFISH_USER_CLOSE,
-		NPC_MOVEMENT_FIXED_PATH,
-		NPC_MOVEMENT_MODIFIER_JELLYFISH,
-		NPC_CLOSE_JELLYFISH_EVADE,
-		NPC_TIMER_NONE,
-		false,
-		3,
-		128,
-	},
-
 	{	// NPC_SANDY_CHEEKS
 		NPC_INIT_DEFAULT,
 		NPC_SENSOR_NONE,
@@ -382,12 +370,24 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		3,
 		64,
 	},
+
+	{	// NPC_SKULL_STOMPER
+		NPC_INIT_SKULL_STOMPER,
+		NPC_SENSOR_SKULL_STOMPER_USER_CLOSE,
+		NPC_MOVEMENT_STATIC,
+		NPC_MOVEMENT_MODIFIER_NONE,
+		NPC_CLOSE_SKULL_STOMPER_ATTACK,
+		NPC_TIMER_NONE,
+		false,
+		3,
+		2048,
+	},
 };
 
 
 void CNpc::init()
 {
-	m_type = NPC_EYEBALL;
+	m_type = NPC_SKULL_STOMPER;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -406,6 +406,7 @@ void CNpc::init()
 	switch ( m_data[this->m_type].initFunc )
 	{
 		case NPC_INIT_DEFAULT:
+		{
 			m_npcPath.initPath();
 
 			DVECTOR newPos;
@@ -433,9 +434,35 @@ void CNpc::init()
 			m_npcPath.setPathType( REPEATING_PATH );
 
 			break;
+		}
 
 		case NPC_INIT_GHOST_PIRATE:
 			m_heading = m_fireHeading = 3072;
+
+			break;
+
+		case NPC_INIT_SKULL_STOMPER:
+		{
+			m_heading = m_fireHeading = 1024;
+			
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			newPos.vy = 100;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 100;
+			newPos.vy = 10;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( SINGLE_USE_PATH );
+
+			break;
+		}
 
 		default:
 
@@ -732,6 +759,21 @@ bool CNpc::processSensor()
 						}
 					}
 
+					case NPC_SENSOR_SKULL_STOMPER_USER_CLOSE:
+					{
+						if ( xDistSqr + yDistSqr < 40000 )
+						{
+							m_controlFunc = NPC_CONTROL_CLOSE;
+							m_npcPath.currentWaypoint = 0;
+
+							return( true );
+						}
+						else
+						{
+							return( false );
+						}
+					}
+
 					default:
 						return( false );
 				}
@@ -764,8 +806,9 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_FIXED_PATH:
 		{
 			bool pathComplete;
+			bool waypointChange;
 
-			s16 headingToTarget = m_npcPath.think( Pos, &pathComplete );
+			s16 headingToTarget = m_npcPath.think( Pos, &pathComplete, &waypointChange );
 
 			if ( !pathComplete )
 			{
@@ -931,6 +974,9 @@ void CNpc::processClose(int _frames)
 			processCloseEyeballAttack( _frames );
 
 			break;
+
+		case NPC_CLOSE_SKULL_STOMPER_ATTACK:
+			processCloseSkullStomperAttack( _frames );
 
 		default:
 			break;

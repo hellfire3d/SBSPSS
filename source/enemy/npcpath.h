@@ -41,16 +41,18 @@ class CNpcPath
 private:
 	CNpcWaypoint	waypoint[NPC_MAX_WAYPOINTS];
 	NPC_PATH_TYPE	pathType;
-	u8				currentWaypoint;
 	u8				waypointCount;
+	u8				lastWaypoint;
 	bool			reversePath;
 
 public:
+	u8				currentWaypoint;
+
 	void			initPath();
 	void			addWaypoint( DVECTOR newPos );
 	void			setPathType( NPC_PATH_TYPE newPathType );
 	bool			incPath();
-	s32				think( DVECTOR currentPos, bool *pathComplete );
+	s32				think( DVECTOR currentPos, bool *pathComplete, bool *waypointChange );
 	bool			getDistToNextWaypoint( DVECTOR currentPos, s32 *distX, s32 *distY );
 };
 
