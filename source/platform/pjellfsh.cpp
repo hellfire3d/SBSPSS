@@ -84,7 +84,7 @@ void CNpcJellyfishPlatform::collidedWith( CThing *_thisThing )
 				{
 					// shock player
 
-					player->takeDamage( DAMAGE__SHOCK_ENEMY, REACT__GET_DIRECTION_FROM_THING, _thisThing );
+					player->takeDamage( DAMAGE__SHOCK_ENEMY, REACT__GET_DIRECTION_FROM_THING, (CThing*)this );
 				}
 			}
 

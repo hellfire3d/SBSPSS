@@ -538,6 +538,10 @@ int CAMERA_SCROLLSPEED=1000;			// Speed of the scroll
 int	CAMERA_ACCURACYSHIFT=8;
 const int	CAMERA_TILESIZE=16;
 
+int	returnspeed=100;
+int returntimeout=100;
+int returntimeoutcount=0;
+int	returnsafespace=2*16;
 
 
 /*----------------------------------------------------------------------
@@ -655,6 +659,7 @@ void	CPlayer::think(int _frames)
 		}
 	}
 
+/*
 if(PadGetDown(0)&PAD_L1)
 {
 	oldmode=m_currentMode;
@@ -665,7 +670,7 @@ else if(oldmode!=-1&&!(PadGetHeld(0)&PAD_L1))
 	newmode=oldmode;
 	oldmode=-1;
 }
-
+*/
 
 #ifdef __USER_paul__
 if(PadGetHeld(0)&PAD_L1&&PadGetHeld(0)&PAD_L2)
@@ -748,6 +753,7 @@ if(newmode!=-1)
 					m_cameraXScrollDir=0;
 				}
 			}
+			returntimeoutcount=0;
 		}
 		else if(m_cameraXScrollDir==+1)
 		{
@@ -760,7 +766,40 @@ if(newmode!=-1)
 					m_cameraXScrollDir=0;
 				}
 			}
+			returntimeoutcount=0;
 		}
+// THISBIT
+		if(m_moveVelocity.vx==0)
+		{
+			m_cameraXScrollDir=0;
+			if(m_cameraXScrollPos<-returnsafespace||m_cameraXScrollPos>returnsafespace)
+			{
+				if(returntimeoutcount<returntimeout)
+				{
+					returntimeoutcount++;
+				}
+				else
+				{
+					if(m_cameraXScrollPos<0)
+					{
+						m_cameraXScrollPos+=returnspeed;
+						if(m_cameraXScrollPos>0)
+						{
+							m_cameraXScrollPos=0;
+						}
+					}
+					else if(m_cameraXScrollPos>0)
+					{
+						m_cameraXScrollPos-=returnspeed;
+						if(m_cameraXScrollPos<0)
+						{
+							m_cameraXScrollPos=0;
+						}
+					}
+				}
+			}
+		}
+// THISBIT
 
 		// Stop the player vanishing off the edge of the telly..
 		if(!m_lockCamera)
