@@ -3,13 +3,14 @@
 *
 *   'New' polygon types, and associated macros, for non-textured primitives (and 
 *   sprites) with per-poly ABR control. Also includes tpage control for sprites.
+*   
 *   Courtesty of Dead Ashton
 *
 *
 *************************************************************************************/
 
-#ifndef	__PRIMPLUS_H
-#define	__PRIMPLUS_H
+#ifndef	__PRIMPLUS_HEADER__
+#define	__PRIMPLUS_HEADER__
 
 //------------------------------------------------------------------------------------
 //	Defines
@@ -19,13 +20,13 @@
 #define	GPUCODE_MODE_SEMI_TRANS	(1<<1)
 
 // GPU Primitive codes. Please remember that 3 and 4 point lines require the pad field setting to 0x55555555.
-#define	GPUCODE_POLY_F3 		(0x20)
+#define	GPUCODE_POLY_F3			(0x20)
 #define	GPUCODE_POLY_FT3		(0x24)
-#define	GPUCODE_POLY_G3 		(0x30)
+#define	GPUCODE_POLY_G3			(0x30)
 #define	GPUCODE_POLY_GT3		(0x34)
-#define	GPUCODE_POLY_F4 		(0x28)
+#define	GPUCODE_POLY_F4			(0x28)
 #define	GPUCODE_POLY_FT4		(0x2c)
-#define	GPUCODE_POLY_G4 		(0x38)
+#define	GPUCODE_POLY_G4			(0x38)
 #define	GPUCODE_POLY_GT4		(0x3c)
 
 #define	GPUCODE_SPRT			(0x64)
@@ -43,15 +44,15 @@
 #define	GPUCODE_LINE_G3			(0x58)	
 #define	GPUCODE_LINE_F4			(0x4c)
 #define	GPUCODE_LINE_G4			(0x5c)
-											   
+
 // GPU Primitive sizes excluding the tag word. This is NOT the same as sizeof(<primitive type>)
-#define	GPUSIZE_POLY_F3 		(4)
+#define	GPUSIZE_POLY_F3			(4)
 #define	GPUSIZE_POLY_FT3		(7)
-#define	GPUSIZE_POLY_G3 		(6)
+#define	GPUSIZE_POLY_G3			(6)
 #define	GPUSIZE_POLY_GT3		(9)
-#define	GPUSIZE_POLY_F4 		(5)
+#define	GPUSIZE_POLY_F4			(5)
 #define	GPUSIZE_POLY_FT4		(9)
-#define	GPUSIZE_POLY_G4 		(8)
+#define	GPUSIZE_POLY_G4			(8)
 #define	GPUSIZE_POLY_GT4		(12)
 
 #define	GPUSIZE_SPRT			(4)
@@ -107,10 +108,10 @@
 #define	setTPolyG4(p)			setTDrawTPageSize((p), GPUSIZE_TPOLY_G4), setcode(&((p)->tag_poly), GPUCODE_POLY_G4), ((p)->tag_poly)=0
 
 #define	setTLineF2(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_F2), setcode(&((p)->tag_poly), GPUCODE_LINE_F2), ((p)->tag_poly)=0
-#define	setTLineG2(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_G2), setcode(&((p)->tag_poly), GPUCODE_LINE_G2), ((p)->tag_poly)=0
 #define	setTLineF3(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_F3), setcode(&((p)->tag_poly), GPUCODE_LINE_F3), ((p)->tag_poly)=0, ((p)->pad)=0x55555555
-#define	setTLineG3(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_G3), setcode(&((p)->tag_poly), GPUCODE_LINE_G3), ((p)->tag_poly)=0, ((p)->pad)=0x55555555
 #define	setTLineF4(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_F4), setcode(&((p)->tag_poly), GPUCODE_LINE_F4), ((p)->tag_poly)=0, ((p)->pad)=0x55555555
+#define	setTLineG2(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_G2), setcode(&((p)->tag_poly), GPUCODE_LINE_G2), ((p)->tag_poly)=0
+#define	setTLineG3(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_G3), setcode(&((p)->tag_poly), GPUCODE_LINE_G3), ((p)->tag_poly)=0, ((p)->pad)=0x55555555
 #define	setTLineG4(p)			setTDrawTPageSize((p), GPUSIZE_TLINE_G4), setcode(&((p)->tag_poly), GPUCODE_LINE_G4), ((p)->tag_poly)=0, ((p)->pad)=0x55555555
 
 #define	setTSprt(p)				setTDrawTPageSize((p), GPUSIZE_TSPRT),    setcode(&((p)->tag_poly), GPUCODE_SPRT),    ((p)->tag_poly)=0
@@ -134,128 +135,128 @@
 //	Structures
 //------------------------------------------------------------------------------------
 
-typedef struct	__tpoly_f3
+struct	TPOLY_F3				// Flat Triangle with ABR control 
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		short	x1,	y1;
 		short	x2,	y2;
-		}	TPOLY_F3;				// Flat Triangle with ABR control 
+		};				
 
-typedef struct	__tpoly_f4
+struct	TPOLY_F4				// Flat Quadrangle with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		short	x1,	y1;
 		short	x2,	y2;
 		short	x3,	y3;
-		}	TPOLY_F4;				// Flat Quadrangle with ABR control
+		};
 
-typedef struct	__tpoly_g3
+struct	TPOLY_G3				// Gouraud Triangle with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		u_char	r1, g1, b1, pad1;
 		short	x1,	y1;
 		u_char	r2, g2, b2, pad2;
 		short	x2,	y2;
-		}	TPOLY_G3;				// Gouraud Triangle with ABR control
+		};
 
-typedef struct	__tpoly_g4
+struct	TPOLY_G4				// Gouraud Quadrangle with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		u_char	r1, g1, b1, pad1;
 		short	x1,	y1;
 		u_char	r2, g2, b2, pad2;
 		short	x2,	y2;
 		u_char	r3, g3, b3, pad3;
 		short	x3,	y3;
-		}	TPOLY_G4;				// Gouraud Quadrangle with ABR control
+		};
 
 //
 // Line Primitive Definitions
 //
 
-typedef struct	__tline_f2
+struct	TLINE_F2				// Unconnected Flat Line with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		short	x1,	y1;
-		}	TLINE_F2;				// Unconnected Flat Line with ABR control
+		};
 
-typedef struct	__tline_g2
+struct	TLINE_G2				// Unconnected Gouraud Line with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		u_char	r1, g1, b1, p1;
 		short	x1,	y1;
-		}	TLINE_G2;				// Unconnected Gouraud Line with ABR control
+		};
 
-typedef struct	__tline_f3
+struct	TLINE_F3				// 2 connected Flat Line with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		short	x1,	y1;
 		short	x2,	y2;
 		u_long	pad;
-		}	TLINE_F3;				// 2 connected Flat Line with ABR control
+		};
 
-typedef struct	__tline_g3
+struct	TLINE_G3				// 2 connected Gouraud Line with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0,	y0;
 		u_char	r1, g1, b1, p1;
 		short	x1,	y1;
 		u_char	r2, g2, b2, p2;
 		short	x2,	y2;
 		u_long	pad;
-		}	TLINE_G3;				// 2 connected Gouraud Line with ABR control
+		};
 
-typedef struct	__tline_f4
+struct	TLINE_F4				// 3 connected Flat Line Quadrangle with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		short	x1,	y1;
 		short	x2,	y2;
 		short	x3,	y3;
 		u_long	pad;
-		}	TLINE_F4;				// 3 connected Flat Line Quadrangle with ABR control
+		};
 
-typedef struct	__tline_g4
+struct	TLINE_G4				// 3 connected Gouraud Line with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		u_char	r1, g1, b1, p1;
 		short	x1,	y1;
 		u_char	r2, g2, b2, p2;
@@ -263,82 +264,82 @@ typedef struct	__tline_g4
 		u_char	r3, g3, b3, p3;
 		short	x3,	y3;
 		u_long	pad;
-		}	TLINE_G4;				// 3 connected Gouraud Line with ABR control
+		};
 
 //
 // Sprite Primitive Definitions
 //
 
-typedef struct 	__tsprt
+struct 	TSPRT					// Free size Sprite with TPage/ABR control 
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		u_char	u0, v0;	u_short	clut;
 		short	w,	h;
-		}	TSPRT;					// Free size Sprite with TPage/ABR control 
+		};
 
-typedef struct	__tsprt_16
+struct	TSPRT_16				// 16x16 Sprite with TPage/ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		u_char	u0, v0;	u_short	clut;
-		}	TSPRT_16;				// 16x16 Sprite with TPage/ABR control
+		};
 	       
-typedef struct	__tsprt_8
+struct	TSPRT_8					// 8x8 Sprite with TPage/ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		u_char	u0, v0;	u_short	clut;
-		}	TSPRT_8;				// 8x8 Sprite with TPage/ABR control
+		};
 	       
 //
 // Tile Primitive Definitions
 //
 
-typedef struct	__ttile
+struct	TTILE					// free size Tile with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
+		short	x0, y0;
 		short	w,	h;
-		}	TTILE;					// free size Tile with ABR control
+		};
 	
-typedef struct	__ttile16
+struct	TTILE_16				// 16x16 Tile with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
-		}	TTILE_16;				// 16x16 Tile with ABR control
+		short	x0, y0;
+		};
 
-typedef struct	__ttile_8
+struct	TTILE_8					// 8x8 Tile with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
-		}	TTILE_8;				// 8x8 Tile with ABR control
+		short	x0, y0;
+		};
 
-typedef struct	__ttile_1
+struct	TTILE_1					// 1x1 Tile with ABR control
 		{
 		u_long	tag;
 		u_long	t_code[1];
 		u_long	tag_poly;
 		u_char	r0, g0, b0, code;
-		short	x0, 	y0;
-		}	TTILE_1;				// 1x1 Tile with ABR control
+		short	x0, y0;
+		};
 
 #endif

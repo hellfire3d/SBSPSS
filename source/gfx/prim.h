@@ -11,9 +11,12 @@
 #ifndef		__TPAGE_H__
 #include	"gfx\tpage.h"
 #endif
+#ifndef		__PRIMPLUS_HEADER__
+#include	"gfx\primplus.h"
+#endif
 
 #define	MAX_OT				(1024)
-#define	MAX_PRIMS			(1024)
+#define	MAX_PRIMS			(1024*2)
 
 #define	USE_NTAGS			1
 
@@ -213,6 +216,74 @@ typedef	u32	sOT;
 
 #define GetPrimLG4() 		GetPrim(LINE_G4);\
 							setLineG4(CurrPrim-sizeof(LINE_G4))
+
+#define GetPrimSPRT8() 		GetPrim(SPRT8);\
+							setSprt8(CurrPrim-sizeof(SPRT8))
+
+#define GetPrimSPRT16() 	GetPrim(SPRT16);\
+							setSprt16(CurrPrim-sizeof(SPRT16))
+
+#define GetPrimSPRT() 		GetPrim(SPRT);\
+							setSprt(CurrPrim-sizeof(SPRT))
+
+#define GetPrimTILE8() 		GetPrim(TILE8);\
+							setTile(CurrPrim-sizeof(TILE8))
+
+#define GetPrimTILE16() 	GetPrim(TILE16);\
+							setTile(CurrPrim-sizeof(TILE16))
+
+#define GetPrimTILE() 		GetPrim(TILE);\
+							setTile(CurrPrim-sizeof(TILE))
+
+// Extra prims :o)
+#define GetPrimTF3() 		GetPrim(TPOLY_F3);\
+				   			setTPolyF3(CurrPrim-sizeof(TPOLY_F3))
+
+#define GetPrimTF4() 		GetPrim(TPOLY_F4);\
+				   			setTPolyF4(CurrPrim-sizeof(TPOLY_F4))
+
+#define GetPrimTG3()		GetPrim(TPOLY_G3);\
+				   			setTPolyG3(CurrPrim-sizeof(TPOLY_G3))
+
+#define GetPrimTG4() 		GetPrim(TPOLY_G4);\
+				   			setTPolyG4(CurrPrim-sizeof(TPOLY_G4))
+
+#define GetPrimTLF2() 		GetPrim(TLINE_F2);  \
+							setTLineF2(CurrPrim-sizeof(TLINE_F2))
+
+#define GetPrimTLF3() 		GetPrim(TLINE_F3);\
+							setTLineF3(CurrPrim-sizeof(TLINE_F3))
+
+#define GetPrimTLF4() 		GetPrim(TLINE_F4);\
+							setTLineF4((TLINE_F4*)CurrPrim-1)
+
+#define GetPrimTLG2() 		GetPrim(TLINE_G2);\
+							setTLineG2(CurrPrim-sizeof(TLINE_G2))
+
+#define GetPrimTLG3() 		GetPrim(TLINE_G3);\
+							setTLineG3(CurrPrim-sizeof(TLINE_G3))
+
+#define GetPrimTLG4() 		GetPrim(TLINE_G4);\
+							setTLineG4(CurrPrim-sizeof(TLINE_G4))
+
+#define GetPrimTSPRT8() 	GetPrim(TSPRT8);\
+							setTSprt8(CurrPrim-sizeof(TSPRT8))
+
+#define GetPrimTSPRT16() 	GetPrim(TSPRT16);\
+							setTSprt16(CurrPrim-sizeof(TSPRT16))
+
+#define GetPrimTSPRT() 		GetPrim(TSPRT);\
+							setTSprt(CurrPrim-sizeof(TSPRT))
+
+#define GetPrimTTILE8() 	GetPrim(TTILE8);\
+							setTile(CurrPrim-sizeof(TTILE8))
+
+#define GetPrimTTILE16() 	GetPrim(TTILE16);\
+							setTile(CurrPrim-sizeof(TTILE16))
+
+#define GetPrimTTILE() 		GetPrim(TTILE);\
+							setTile(CurrPrim-sizeof(TTILE))
+
 
 /********************************************************************************************************/
 #define	OtInRange			(MAX_OT-1)

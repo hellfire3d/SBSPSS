@@ -6,28 +6,34 @@
 #include 	"fileio\fileio.h"
 #include 	"utils\utils.h"
 #include	"gfx\tpage.h"
+#include	"gfx\prim.h"
 #include	<DStructs.h>
 
 #include	"level\level.h"
 #include	"level\layer.h"
 #include	"level\layertile.h"
 
+#include	"pad\pads.h"
+
 /*****************************************************************************/
 CLevel::CLevel()
 {
-	for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
-	{
-		LayerList[i]=0;
-	}
+		for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
+		{
+			TileLayers[i]=0;
+		}
+		DAVE_DBGMSG("sizeof(POLY_FT4)=%i\n",sizeof(POLY_FT4));
+		DAVE_DBGMSG("sizeof(SPRT)=%i\n",sizeof(SPRT));
+		
 }
 
 /*****************************************************************************/
 CLevel::~CLevel()
 {
-	for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
-	{
-		if (LayerList[i]) delete LayerList[i];
-	}
+		for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
+		{
+			if (TileLayers[i]) delete TileLayers[i];
+		}
 }
 
 /*****************************************************************************/
@@ -36,50 +42,48 @@ void 	CLevel::init()
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(CHAPTER01_LEVEL01_LVL,"Level Data");
 		TPLoadTex(CHAPTER01_LEVEL01_TEX);
 
-		LevelHdr->TriList=(sTri*)MakePtr(LevelHdr,(int)LevelHdr->TriList);
-		LevelHdr->QuadList=(sQuad*)MakePtr(LevelHdr,(int)LevelHdr->QuadList);
-		LevelHdr->VtxList=(sVtx*)MakePtr(LevelHdr,(int)LevelHdr->VtxList);
-		LevelHdr->TileList=(sTile*)MakePtr(LevelHdr,(int)LevelHdr->TileList);
-		DAVE_DBGMSG("LayerCount=%i\n",GetLayerCount());
-		LoadLayers();
-
-		for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
-		{
-			if (LayerList[i]) LayerList[i]->init();
-		}
-
+		initLayers();
 }
 
 /*****************************************************************************/
-void	CLevel::LoadLayers()
+void	CLevel::initLayers()
 {
-int			LayerCount=GetLayerCount();
-int			*HdrOfs=(int*)MakePtr(LevelHdr,sizeof(sLvlHdr));
+sTri	*TriList=(sTri*)MakePtr(LevelHdr,LevelHdr->TriList);
+sQuad	*QuadList=(sQuad*)MakePtr(LevelHdr,LevelHdr->QuadList);
+sVtx	*VtxList=(sVtx*)MakePtr(LevelHdr,LevelHdr->VtxList);
+sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 
-		for (int i=0; i<LayerCount; i++)
+// Back
+		if (LevelHdr->BackLayer) 
 		{
-			sLayerHdr	*Hdr=(sLayerHdr*)MakePtr(LevelHdr,*HdrOfs++);
-			DAVE_DBGMSG("T:%i S:%i W:%i H:%i\n",Hdr->Type,Hdr->SubType,Hdr->Width,Hdr->Height);
-			int	LayerType=CLayer::GetLayerType(Hdr->Type,Hdr->SubType);
-			switch (LayerType)
-			{
-				case CLayer::LAYER_TYPE_TILE_BACK:
-					LayerList[LayerType]=new ("Back Layer") CLayerTile(Hdr,LevelHdr->TileList, LevelHdr->TriList, LevelHdr->QuadList, LevelHdr->VtxList);
-					break;
-				case CLayer::LAYER_TYPE_TILE_MID:
-					LayerList[LayerType]=new ("Mid Layer") CLayerTile(Hdr,LevelHdr->TileList, LevelHdr->TriList, LevelHdr->QuadList, LevelHdr->VtxList);
-					break;
-				case CLayer::LAYER_TYPE_TILE_ACTION:
-					LayerList[LayerType]=new ("Action Layer") CLayerTile(Hdr,LevelHdr->TileList, LevelHdr->TriList, LevelHdr->QuadList, LevelHdr->VtxList);
-					break;
-				case CLayer::LAYER_TYPE_TILE_FORE:
-					LayerList[LayerType]=new ("Fore Layer") CLayerTile(Hdr,LevelHdr->TileList, LevelHdr->TriList, LevelHdr->QuadList, LevelHdr->VtxList);
-					break;
-				default:
-					DAVE_DBGMSG("%i\n",LayerType);
-					ASSERT(!"Unknown Layer");
-					break;
-			}
+			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
+			CLayer *NewLayer=new ("Back Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
+			NewLayer->init();
+			TileLayers[CLayer::LAYER_TYPE_TILE_BACK]=NewLayer;
+		}
+// Mid
+		if (LevelHdr->MidLayer) 
+		{
+			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->MidLayer);
+			CLayer *NewLayer=new ("Mid Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
+			NewLayer->init();
+			TileLayers[CLayer::LAYER_TYPE_TILE_MID]=NewLayer;
+		}
+// Action
+		if (LevelHdr->ActionLayer) 
+		{
+			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
+			CLayer *NewLayer=new ("Action Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
+			NewLayer->init();
+			TileLayers[CLayer::LAYER_TYPE_TILE_ACTION]=NewLayer;
+		}
+// Fore
+		if (LevelHdr->ForeLayer) 
+		{
+			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ForeLayer);
+			CLayer *NewLayer=new ("Fore Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
+			NewLayer->init();
+			TileLayers[CLayer::LAYER_TYPE_TILE_FORE]=NewLayer;
 		}
 }
 
@@ -90,21 +94,35 @@ void	CLevel::shutdown()
 }
 
 /*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 void 	CLevel::render()
 {
-	for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
-	{
-		if (LayerList[i]) LayerList[i]->render();
-	}
+		for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
+		{
+			if (TileLayers[i]) TileLayers[i]->render();
+		}
 }
 
 /*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+extern int	MapX;
+extern int	MapY;
+
 void	CLevel::think(int _frames)
 {
-	for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
-	{
-		if (LayerList[i]) LayerList[i]->think(_frames);
-	}
+int		padh = PadGetHeld( 0 );
+
+		if (padh & PAD_LEFT)	MapX+=4;
+		if (padh & PAD_RIGHT)	MapX-=4;
+		if (padh & PAD_UP)		MapY+=4;
+		if (padh & PAD_DOWN)	MapY-=4;
+
+		for (int i=0; i<CLayer::LAYER_TYPE_MAX; i++)
+		{
+			if (TileLayers[i]) TileLayers[i]->think(_frames);
+		}
 }
 
 

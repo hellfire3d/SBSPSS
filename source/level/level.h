@@ -21,14 +21,13 @@ public:
 	void		render();
 	void		think(int _frames);
 
-	int			GetLayerCount()		{return(LevelHdr->LayerCount);}
-
-	
 private:
-	void		LoadLayers();
+	void		initLayers();
 
 	sLvlHdr		*LevelHdr;
-	CLayer		*LayerList[CLayer::LAYER_TYPE_MAX];
+
+// Tile Layers
+	CLayer		*TileLayers[CLayer::LAYER_TYPE_MAX];
 };
 
 /*****************************************************************************/

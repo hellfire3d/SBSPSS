@@ -22,8 +22,6 @@ public:
 		CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList);
 		~CLayerTile();
 
-static	int		GetLayerType(int SubType);
-
 		void	init();
 		void	shutdown();
 		void	render();
