@@ -144,7 +144,7 @@ float	StartX=MapPos.x/XYDiv;
 float	StartY=MapPos.y/XYDiv;
 
 		glGetIntegerv(GL_VIEWPORT, Viewport);
-		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );     
+		glSelectBuffer (SELECT_BUFFER_SIZE, SelectBuffer );
 		glRenderMode (GL_SELECT);
 
 	    glInitNames();
@@ -176,25 +176,20 @@ float	StartY=MapPos.y/XYDiv;
 		HitCount= glRenderMode (GL_RENDER);
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
 		CursorPos.x=CursorPos.y=-1;
-//		TRACE1("Hits %i\n",HitCount);
 
 // Process hits
 
-GLuint	*Ptr=SelectBuffer,*BestHit=0;
+GLuint	*HitPtr=SelectBuffer;
 
-		for (int H=0;H<HitCount;H++)
-			{
-			BestHit=Ptr;	// Fakeness for the mo
-			}
-		
-		if (BestHit)
+		if (HitCount)	// Just take 1st		
+
 		{
-			int	HitID=BestHit[3];
-			CursorPos.x=HitID%MapH;
+			int	HitID=HitPtr[3];
+			CursorPos.x=HitID%MapW;
 			CursorPos.y=HitID/MapW;
 		}
+		glMatrixMode(GL_MODELVIEW);	// <-- Prevent arse GL assert
 
 }
 

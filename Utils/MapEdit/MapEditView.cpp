@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 CMapEditView::CMapEditView()
 {
-CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-CDialogBar	*LayerBar=Frm->GetLayerBar();
-	
+//CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+//CDialogBar	*LayerBar=Frm->GetLayerBar();
+
 }
 
 CMapEditView::~CMapEditView()

@@ -2,13 +2,13 @@
 
 [General Info]
 Version=1
-LastClass=CMapEditView
+LastClass=CMapEditDoc
 LastTemplate=CFrameWnd
 NewFileInclude1=#include "stdafx.h"
 NewFileInclude2=#include "mapedit.h"
 LastPage=0
 
-ClassCount=9
+ClassCount=8
 Class1=CChildFrame
 Class2=CGLEnabledView
 Class3=CListBoxEx
@@ -20,11 +20,10 @@ Class8=CMapEditView
 
 ResourceCount=6
 Resource1=IDR_MAPEDITYPE (English (U.S.))
-Resource2=IDD_LAYERBAR (English (U.S.))
+Resource2=IDR_MAINFRAME (English (U.S.))
 Resource3=IDD_LAYERBAR1 (English (U.S.))
-Resource4=IDD_ABOUTBOX (English (U.S.))
-Resource5=IDR_MAINFRAME (English (U.S.))
-Class9=CTileWindow
+Resource4=IDD_LAYERBAR (English (U.S.))
+Resource5=IDD_ABOUTBOX (English (U.S.))
 Resource6=IDD_TILEBAR (English (U.S.))
 
 [CLS:CChildFrame]
@@ -32,7 +31,7 @@ Type=0
 BaseClass=CMDIChildWnd
 HeaderFile=ChildFrm.h
 ImplementationFile=ChildFrm.cpp
-LastObject=IDC_LAYERBAR_LIST
+LastObject=CChildFrame
 
 [CLS:CGLEnabledView]
 Type=0
@@ -77,13 +76,15 @@ BaseClass=CDocument
 HeaderFile=MapEditDoc.h
 ImplementationFile=MapEditDoc.cpp
 LastObject=CMapEditDoc
+Filter=N
+VirtualFilter=DC
 
 [CLS:CMapEditView]
 Type=0
 BaseClass=CGLEnabledView
 HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
-LastObject=ID_TOOLBAR_LAYERBAR
+LastObject=CMapEditView
 Filter=C
 VirtualFilter=VWC
 
@@ -184,15 +185,6 @@ Type=1
 Class=?
 ControlCount=1
 Control1=IDC_TILETOOLBAR_COMBO,combobox,1344340227
-
-[CLS:CTileWindow]
-Type=0
-HeaderFile=TileWindow.h
-ImplementationFile=TileWindow.cpp
-BaseClass=CFrameWnd
-Filter=C
-LastObject=CTileWindow
-VirtualFilter=fWC
 
 [DLG:IDD_LAYERBAR1 (English (U.S.))]
 Type=1

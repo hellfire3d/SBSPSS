@@ -37,6 +37,7 @@ BOOL CMapEditDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
+	TRACE0("New Doc\n");
 
 	// TODO: add reinitialization code here
 	// (SDI documents will reuse this document)
@@ -44,6 +45,17 @@ BOOL CMapEditDoc::OnNewDocument()
 	return TRUE;
 }
 
+BOOL CMapEditDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+{
+	if (!CDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+
+	TRACE1("Load Doc %s\n",lpszPathName);
+	
+	// TODO: Add your specialized creation code here
+	
+	return TRUE;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -75,5 +87,3 @@ void CMapEditDoc::Dump(CDumpContext& dc) const
 	CDocument::Dump(dc);
 }
 #endif //_DEBUG
-
-

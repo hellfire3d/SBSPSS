@@ -30,6 +30,7 @@ BOOL	Test3dFlag=TRUE;
 /*****************************************************************************/
 CCore::CCore()
 {
+	/*
 	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
 	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
 	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
@@ -37,6 +38,7 @@ CCore::CCore()
 
 	TileViewFlag=0;
 	LayerViewFlag=1;
+*/
 }
 
 /*****************************************************************************/
@@ -50,12 +52,22 @@ int	i;
 void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
+
+	RenderFlag=TRUE;
+	UpdateView();
+
+// To be loaded/created
+	Layers[LAYER_TYPE_BACK]=	new CLayerBack(this);
+	Layers[LAYER_TYPE_MID]=		new CLayerMid(this);
+	Layers[LAYER_TYPE_ACTION]=	new CLayerAction(this);
+	Layers[LAYER_TYPE_FORE]=	new CLayerFore(this);
+
+	TileViewFlag=0;
+	LayerViewFlag=1;
+
 	ActiveLayer=LAYER_TYPE_ACTION;
 	MapCam=Vec(0,0,0);
 	TileCam=Vec(0,0,0);
-	UpdateView();
-	RenderFlag=TRUE;
-
 	TileSet.push_back(CTileSet("c:/temp/3/test.gin",this));
 }
 
