@@ -19,6 +19,9 @@ public:
 			LAYER_TILE_SUBTYPE_MAX
 		};
 
+		CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList);
+		~CLayerTile();
+
 static	int		GetLayerType(int SubType);
 
 		void	init();
@@ -27,6 +30,11 @@ static	int		GetLayerType(int SubType);
 		void	think(int _frames);
 
 private:
+		sTile			*TileList;
+		sTri			*TriList;
+		sQuad			*QuadList;
+		sVtx			*VtxList;
+		sTileMapElem	*Map;
 
 };
 

@@ -5,11 +5,11 @@
 #ifndef __GAME_GAME_H__
 #define __GAME_GAME_H__
 
-#include "system\gstate.h"
-
+#include	"system\gstate.h"
+#include	"level\level.h"
 
 /*****************************************************************************/
-class FontBank;
+class	FontBank;
 
 class CGameScene : public CScene
 {
@@ -28,8 +28,9 @@ public:
 	
 private:
 
-	static FontBank			*s_genericFont;
-	static class SpriteBank	*s_sprites;
+		CLevel		Level;
+static	FontBank	*s_genericFont;
+//static	class SpriteBank	*s_sprites;	<-- Was causing compile error, sorry
 
 };
 

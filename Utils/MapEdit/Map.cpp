@@ -193,7 +193,7 @@ int		Height=GetHeight();
 			{
 				sMapElem	&ThisElem=Old.Get(X,Y);
 				ThisElem.Flags^=Flag;
-				Set((Width-1)-X,Y,ThisElem);
+				Set((Width-1)-X,Y,ThisElem,true);
 			}
 		}
 
@@ -213,7 +213,7 @@ int		Height=GetHeight();
 			{
 				sMapElem	&ThisElem=Old.Get(X,Y);
 				ThisElem.Flags^=Flag;
-				Set(X,(Height-1)-Y,ThisElem);
+				Set(X,(Height-1)-Y,ThisElem,true);
 			}
 		}
 

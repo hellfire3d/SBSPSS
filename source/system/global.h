@@ -25,21 +25,6 @@
 #define SCRATCH_RAM 		0x1f800000
 #define	FAST_STACK			(SCRATCH_RAM+0x3f0)
 
-enum
-{
-	FRACTION_SHIFT	= 8,
-};
-
-enum DRAW_TYPE
-{
-	DT_NORMAL,
-	DT_TRANSPARENT,
-	DT_SUBTRACT,
-	DT_ADDITION,
-	DT_MULTIPLY,
-};
-
-
 /*****************************************************************************/
 #include	"system\types.h"
 

@@ -7,9 +7,8 @@
 
 #include	"utils\mathmip.h"
 
-#ifndef __GLOBAL_STRUCTS_HEADER__
-#include "gstruct.h"
-#endif
+#include "Dstructs.h"
+
 #ifndef __MATHTABLE_HEADER__
 #include "utils\mathtab.h"
 #endif

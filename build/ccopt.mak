@@ -50,7 +50,7 @@ COMMON_CCFLAGS :=	-Werror \
 					-I$(DDX_INC_DIR)\
 					-I$(MOD_INC_DIR)\
 					-I$(SOURCE_DIR)\
-					-I$(GIN_INC_DIR) \
+					-I$(DATA_INC_DIR) \
 					-I$(GAME_DATA_DIR) \
 					-I$(INC_DIR)
 

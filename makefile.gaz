@@ -84,6 +84,11 @@ gui_src :=			gbutton \
 					gtextbox \
 					gui
 
+level_src :=		level \
+					layer \
+					layertile
+	
+
 locale_src :=		textdbase
 
 mem_src :=			memory

@@ -74,16 +74,13 @@ VLC_DIR :=				$(TOOL_DIR)/vlc
 VLC_INC_DIR :=			$(VLC_DIR)/include
 VLC_LIB_DIR :=			$(VLC_DIR)/lib
 
-#	GIN tools and includes
+#	Data tools and includes
 #	---------------------
-GIN_TOOL_DIR :=			$(TOOL_DIR)/gin
-GIN_BIN_DIR :=			$(GIN_TOOL_DIR)/bin
-GIN_INC_DIR :=			$(GIN_TOOL_DIR)/include
+DATA_TOOL_DIR :=		$(TOOL_DIR)/data
+DATA_BIN_DIR :=			$(DATA_TOOL_DIR)/bin
+DATA_INC_DIR :=			$(DATA_TOOL_DIR)/include
 
-GIN2MSH :=				$(GIN_BIN_DIR)/Gin2Msh -q
-GIN2ACT :=				$(GIN_BIN_DIR)/Gin2Act -q
-GIN2ANM :=				$(GIN_BIN_DIR)/Gin2Anm
-GIN2LVL :=				$(GIN_BIN_DIR)/Gin2Kdt -q
+MKLEVEL :=				$(DATA_BIN_DIR)/MkLevel -q
 
 # Cygwin
 # ------
