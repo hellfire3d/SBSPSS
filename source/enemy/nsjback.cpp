@@ -162,6 +162,14 @@ void CNpcSmallJellyfishBackgroundEnemy::processMovement( int _frames )
 	}*/
 
 	processMovementModifier( _frames, moveX, moveY, moveVel, moveDist );
+
+	CLevel &level = GameScene.GetLevel();
+	DVECTOR const &MapSize=level.getMapSize16();
+	if ( Pos.vx < 0 || Pos.vx >= MapSize.vx ||
+			Pos.vy < 0 || Pos.vy >= MapSize.vy )
+	{
+		setToShutdown();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -406,8 +406,9 @@ void CProjectile::think(int _frames)
 	}
 
 	CLevel &level = GameScene.GetLevel();
-	if ( Pos.vx < 0 || Pos.vx > ( level.getCollisionLayer()->getMapWidth() << 4 ) ||
-			Pos.vy < 0 || Pos.vy > ( level.getCollisionLayer()->getMapHeight() << 4 ) )
+	DVECTOR const &MapSize=level.getMapSize16();
+	if ( Pos.vx < 0 || Pos.vx >= MapSize.vx ||
+			Pos.vy < 0 || Pos.vy >= MapSize.vy )
 	{
 		setToShutdown();
 	}
@@ -733,8 +734,9 @@ void CPlayerProjectile::think(int _frames)
 	}
 
 	CLevel &level = GameScene.GetLevel();
-	if ( Pos.vx < 0 || Pos.vx > ( level.getCollisionLayer()->getMapWidth() << 4 ) ||
-			Pos.vy < 0 || Pos.vy > ( level.getCollisionLayer()->getMapHeight() << 4 ) )
+	DVECTOR const &MapSize=level.getMapSize16();
+	if ( Pos.vx < 0 || Pos.vx >= MapSize.vx ||
+			Pos.vy < 0 || Pos.vy >= MapSize.vy )
 	{
 		setToShutdown();
 	}
