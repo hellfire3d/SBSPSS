@@ -483,6 +483,7 @@ void	CGameScene::think(int _frames)
 
 
 #ifdef __VERSION_DEBUG__
+#if defined (__USER_paul__) || defined (__USER_daveo__) || defined (__USER_charles__)
 	char	buf[20];
 	sprintf(buf,"Frames: %d",_frames);
 	m_scalableFont->setTrans(0);
@@ -491,6 +492,8 @@ void	CGameScene::think(int _frames)
 	m_scalableFont->setScale(300);
 	m_scalableFont->print(40,200,buf);
 #endif
+#endif
+
 }
 
 /*****************************************************************************/
