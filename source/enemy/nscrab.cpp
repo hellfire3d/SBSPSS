@@ -87,7 +87,7 @@ bool CNpcSpiderCrabEnemy::processSensor()
 
 				m_attackDist = abs( playerXDist );
 
-				if ( abs( m_attackDist ) < 1 )
+				if ( m_attackDist < 1 )
 				{
 					m_attackDist = 1;
 				}
@@ -169,7 +169,10 @@ void CNpcSpiderCrabEnemy::processClose( int _frames )
 
 	// check for collision with ground
 
-	if ( CGameScene::getCollision()->getHeightFromGround( newPos.vx, newPos.vy ) < 0 )
+	s16 extensionDist = abs( newPos.vy - ( m_base.vy - SPIDER_CRAB_HEIGHT ) );
+	s16 groundHeight = CGameScene::getCollision()->getHeightFromGround( newPos.vx, m_base.vy - SPIDER_CRAB_HEIGHT, extensionDist );
+
+	if ( groundHeight < extensionDist )
 	{
 		// abort jump
 
@@ -180,6 +183,8 @@ void CNpcSpiderCrabEnemy::processClose( int _frames )
 
 		m_extension = 0;
 		completed = false;
+		Pos = newPos;
+		Pos.vy = m_base.vy - SPIDER_CRAB_HEIGHT + groundHeight;
 	}
 	else
 	{
