@@ -563,11 +563,13 @@ void drawSpeechBubbleBorder(int _x,int _y,int _w,int _h,int _ot,int _faceFrame)
 	}
 
 	// Background
+	/*
 	f4=GetPrimF4();
 	setXYWH(f4,0,0,512,256);
 	setRGB0(f4,  0,  0, 90);
 	setSemiTrans(f4,true);
 	AddPrimToList(f4,_ot);
+	*/
 }
 
 
