@@ -167,7 +167,7 @@ void CNpcJumpingClamEnemy::processClose( int _frames )
 		if ( !m_animPlaying )
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_CLAM_SNAPUP;
+			m_animNo = 0;//ANIM_CLAM_SNAPUP;
 			m_frame = 0;
 		}
 	}
