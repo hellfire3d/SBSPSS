@@ -149,7 +149,7 @@ int MAP3D_CENTRE_Y=500;
 int MAP3D_BLOCKSTEPSIZE=315;
 
 int MAP2D_CENTRE_X=-256;
-int MAP2D_CENTRE_Y=-136;
+int MAP2D_CENTRE_Y=-136-(4*16);
 int MAP2D_BLOCKSTEPSIZE=16;
 
 int CAMERA_SCROLLLIMIT=8;				// SB is this many tiles off centre at most

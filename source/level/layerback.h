@@ -13,7 +13,7 @@ public:
 		CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 		~CLayerBack();
 
-		void	init(DVECTOR &MapPos,int Shift,int Width,int Height);
+		void	init(DVECTOR &MapPos,int Shift);
 		void	shutdown();
 		void	think(DVECTOR &MapPos);
 		void	render();

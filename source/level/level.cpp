@@ -13,7 +13,6 @@
 #include	"level\level.h"
 #include	"level\layertile.h"
 #include	"level\layerback.h"
-#include	"level\layertilesolid.h"
 #include	"level\layertile3d.h"
 #include	"level\layercollision.h"
 

@@ -13,19 +13,15 @@ public:
 		CLayerTile3d(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 		~CLayerTile3d();
 
-		void			init(DVECTOR &MapPos,int Shift,int Width,int Height);
+		void			init(DVECTOR &MapPos,int Shift);
 		void			shutdown();
 		void			render();
 
+		sTileMapElem3d	*GetMapPos3d()		{return(((sTileMapElem3d*)Map)+GetMapOfs());}
+
 protected:
 		void			CreateRenderFlagTable();
-		void			UpdateRow(int MapX,int MapY);
-		void			UpdateColumn(int MapX,int MapY);
-
-		sPrimGridElem3d	*GetGridPos3d(int X,int Y);
-		sTileMapElem3d	*GetMapPos3d(int X,int Y);
-
-		void			RenderBlock(sPrimGridElem3d *Elem,s16 RenderFlags);
+		u8				*RenderBlock(sTile *Tile,s16 RenderFlags,u8 *PrimPtr);
 
 		s16				*RenderFlagTable;
 

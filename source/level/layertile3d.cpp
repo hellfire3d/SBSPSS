@@ -28,44 +28,17 @@ CLayerTile3d::~CLayerTile3d()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile3d::init(DVECTOR &MapPos,int Shift,int Width,int Height)
+
+void	CLayerTile3d::init(DVECTOR &MapPos,int Shift)
 {
-int		Size=Width*Height;
-
-		ASSERT(Width>=SCREEN_TILE_WIDTH);
-		ASSERT(Height>=SCREEN_TILE_HEIGHT);
-
-		MapXYShift=Shift;
-		PrimGridWidth=Width;
-		PrimGridHeight=Height;
-
-		PrimGrid=(sPrimGridElem3d*) MemAlloc(Size*sizeof(sPrimGridElem3d),"3d PrimGrid");
-		ASSERT(PrimGrid);
-		MapX=0;
-		MapY=0;
-		for (int Y=0; Y<PrimGridHeight; Y++)
-		{
-			for (int X=0; X<PrimGridWidth; X++)
-			{
-				sPrimGridElem3d	*ThisElem=GetGridPos3d(X,Y);
-// Tile prim
-				setTSprt16(&ThisElem->Prim);
-				setTSetShadeTex(&ThisElem->Prim,1);
-// Table			
-				ThisElem->Right=GetGridPos3d(X+1,Y);
-				ThisElem->Down=GetGridPos3d(X,Y+1);
-			}
-		}
-		UpdateWholeMap();		
+		CLayerTile::init(MapPos,Shift);
 		CreateRenderFlagTable();
-
 }
 
 /*****************************************************************************/
 void	CLayerTile3d::shutdown()
 {
 		MemFree(RenderFlagTable);
-		MemFree(PrimGrid);
 }
 
 /*****************************************************************************/
@@ -106,133 +79,62 @@ s16		*Ptr;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-
-// Get (wrapped) PrimGrid pos
-sPrimGridElem3d	*CLayerTile3d::GetGridPos3d(int X,int Y)
-{
-sPrimGridElem3d	*ThisGrid=(sPrimGridElem3d*)PrimGrid;
-int		Pos;
-
-/**/	X%=PrimGridWidth;
-/**/	Y%=PrimGridHeight;
-/**/	Pos=(X+(Y*PrimGridWidth));
-
-/**/	return(ThisGrid+Pos);
-}
-
-/*****************************************************************************/
-// Get (wrapped) Map pos
-sTileMapElem3d	*CLayerTile3d::GetMapPos3d(int X,int Y)
-{
-sTileMapElem3d	*ThisMap=(sTileMapElem3d*)Map;
-int		Pos;
-
-/**/	X%=MapWidth;
-/**/	Y%=MapHeight;
-/**/	Pos=(X+(Y*MapWidth));
-	
-/**/	return(ThisMap+Pos);
-
-}
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-void	CLayerTile3d::UpdateRow(int X,int Y)
-{
-sPrimGridElem3d	*Grid=GetGridPos3d(X,Y);
-sTileMapElem3d	*MapPtr=GetMapPos3d(X,Y);
-
-		for (int i=0; i<SCREEN_TILE_WIDTH; i++)
-		{
-// Tile prim
-			TSPRT_16	*Prim=&Grid->Prim;
-/**/		sTile		*Tile=&TileList[MapPtr->Tile];
-/**/		setTSprtTPage(Prim,Tile->TPage);
-			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-/**/		Grid->Tile=MapPtr->Tile;
-/**/		Grid->Flags=MapPtr->Flags;
-// Next Elem
-			MapPtr++;
-			Grid=(sPrimGridElem3d *)Grid->Right;
-		}
-
-}
-
-/*****************************************************************************/
-void	CLayerTile3d::UpdateColumn(int X,int Y)
-{
-sPrimGridElem3d	*Grid=GetGridPos3d(X,Y);
-sTileMapElem3d	*MapPtr=GetMapPos3d(X,Y);
-
-		for (int i=0; i<SCREEN_TILE_HEIGHT; i++)
-		{
-// Tile prim
-			TSPRT_16	*Prim=&Grid->Prim;
-/**/		sTile		*Tile=&TileList[MapPtr->Tile];
-/**/		setTSprtTPage(Prim,Tile->TPage);
-			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-/**/		Grid->Tile=MapPtr->Tile;
-/**/		Grid->Flags=MapPtr->Flags;
-// Next Elem
-			MapPtr+=MapWidth;
-			Grid=(sPrimGridElem3d *)Grid->Down;
-		}
-}
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
 #define	BLOCK_MULT	16
 
 void	CLayerTile3d::render()
 {
-sPrimGridElem3d	*Grid=GetGridPos3d(MapX,MapY);
+sTileMapElem3d	*MapPtr=GetMapPos3d();
+u8				*PrimPtr=GetPrimPtr();
 s16				TileX,TileY;
 VECTOR			BlkPos;
 s32				BlkXStore;
 sOT				*ThisOT=OtPtr+LayerOT;
 s16				*RenderFlags=RenderFlagTable;
 
-
 // Setup shift bits of pos
 		TileY=-ShiftY;
 		BlkPos.vx=((-15*TILE_WIDTH)-ShiftX)*BLOCK_MULT;
-//		BlkPos.vy=((-8*TILE_HEIGHT)-ShiftY)*BLOCK_MULT;
 		BlkPos.vy=((-7*TILE_HEIGHT)-ShiftY)*BLOCK_MULT;
 		BlkXStore=BlkPos.vx;
 
 // Render it!!
-		for (int Y=0; Y<SCREEN_TILE_HEIGHT; Y++)
+		for (int Y=0; Y<RenderH; Y++)
 		{
-			sPrimGridElem	*GridDown=(sPrimGridElem3d *)Grid->Down;
+			sTileMapElem3d	*MapRow=MapPtr;
 			TileX=-ShiftX;
 
-			for (int X=0; X<SCREEN_TILE_WIDTH; X++)
+			for (int X=0; X<RenderW; X++)
 			{
-				TSPRT_16	*Prim=&Grid->Prim;
-				if (Prim->clut)
-				{ // Has 2d Data
-/**/				Prim->x0=TileX;
-/**/				Prim->y0=TileY;
-					addPrimNoCheck(ThisOT,Prim);
+/**/			sTile		*Tile=&TileList[MapRow->Tile];
+
+				if (Tile->Clut)
+				{
+					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
+					setTSprt16(SprPtr);
+					setTSetShadeTex(SprPtr,1);
+/**/				SprPtr->x0=TileX;
+/**/				SprPtr->y0=TileY;
+/**/				setTSprtTPage(SprPtr,Tile->TPage);
+					*(u32*)&SprPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+					addPrimNoCheck(ThisOT,SprPtr);
+					PrimPtr+=sizeof(TSPRT_16);
 				}
-				if (Grid->Flags)
+				if (MapRow->Flags)
 				{ // Has 3d Data
-/**/				CMX_SetTransMtxXY(&BlkPos);
-/**/				RenderBlock(Grid,*RenderFlags);
+					CMX_SetTransMtxXY(&BlkPos);
+					PrimPtr=RenderBlock(Tile,MapRow->Flags & *RenderFlags,PrimPtr);
 				}
-				Grid=(sPrimGridElem3d *)Grid->Right;
+				MapRow++;
 				TileX+=TILE_WIDTH;
 				BlkPos.vx+=TILE_WIDTH*BLOCK_MULT;
 				RenderFlags++;
 			}
-			Grid=(sPrimGridElem3d *)GridDown;
+			MapPtr+=MapWidth;
 			TileY+=TILE_HEIGHT;
 			BlkPos.vx=BlkXStore;
 			BlkPos.vy+=TILE_HEIGHT*BLOCK_MULT;
 		}
-
+		SetPrimPtr(PrimPtr);
 }
 
 /*****************************************************************************/
@@ -240,19 +142,14 @@ s16				*RenderFlags=RenderFlagTable;
 // NOTE: Tiles are split into facing strips, to reduce overdraw :o)
 // NOTE: Matrix already setup for block
 
-void	CLayerTile3d::RenderBlock(sPrimGridElem3d *Elem,s16 RenderFlags)
+u8			*CLayerTile3d::RenderBlock(sTile *Tile,s16 RenderFlags,u8 *PrimPtr)
 {
-sTile		*Tile=&TileList[Elem->Tile];
-u32			Flags=Elem->Flags & RenderFlags;
 sVtx		*P0,*P1,*P2;
-POLY_FT3	*TPrimPtr=(POLY_FT3*)GetPrimPtr();
+POLY_FT3	*TPrimPtr=(POLY_FT3*)PrimPtr;
 u16			*TileTable=Tile->TileTable;
 u32			T0,T1,T2;
 sTri		*TList=TriList+Tile->TriStart;
 sOT			*ThisOT=OtPtr+LayerOT;
-
-			Flags=0xff & RenderFlags;
-//			Flags=0xff;// & RenderFlags;
 
 //--- Tris ---------------------------------------------------------------------------
 			
@@ -260,7 +157,7 @@ sOT			*ThisOT=OtPtr+LayerOT;
 			{
 				int		TriCount=*TileTable++;		// Get Tri Count
 				sTri	*NextList=TList+TriCount;
-//				if (Flags & 1)
+//				if (RenderFlags & 1)
 				{
 					while (TriCount--)
 						{
@@ -285,8 +182,8 @@ sOT			*ThisOT=OtPtr+LayerOT;
 						}
 					}
 				TList=NextList;
-				Flags>>=1;
+				RenderFlags>>=1;
 			}
-		SetPrimPtr((u8*)TPrimPtr);
-}
+		return((u8*)TPrimPtr);
 
+}

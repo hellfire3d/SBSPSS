@@ -1,6 +1,6 @@
-/******************************/
-/*** Solid Tile Layer Class ***/
-/******************************/
+/*************************/
+/*** Shade Layer Class ***/
+/*************************/
 
 #include 	"system\global.h"
 #include	<DStructs.h>
@@ -20,7 +20,6 @@ CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadL
 		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 
 		ASSERT(Data->Count<=LAYER_SHADE_RGB_MAX);
-		printf("%i Back Shades",Data->Count);
 		BandCount=Data->Count-1;
 }
 
@@ -33,11 +32,12 @@ CLayerBack::~CLayerBack()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerBack::init(DVECTOR &MapPos,int Shift,int Width,int Height)
+void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 {
 		MapXYShift=Shift;
 
-		BandHeight=(Height*16)/(BandCount);
+		BandHeight=(MapHeight*16)/(BandCount);
+		if (BandHeight>=512) BandHeight=511;
 
 		for (int i=0; i<BandCount; i++)
 		{
@@ -47,7 +47,6 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift,int Width,int Height)
 			setRGB2(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
 			setRGB3(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
 		}
-
 }
 
 /*****************************************************************************/
@@ -56,9 +55,11 @@ void	CLayerBack::shutdown()
 }
 
 /*****************************************************************************/
+extern	DVECTOR	TileMapOfs;
 void	CLayerBack::think(DVECTOR &MapPos)
 { 
 		YOfs=MapPos.vy>>MapXYShift;
+		YOfs+=TileMapOfs.vy;
 }
 
 /*****************************************************************************/

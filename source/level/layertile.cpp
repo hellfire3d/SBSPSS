@@ -15,6 +15,9 @@ const u32	YInc=16<<16;
 
 /*****************************************************************************/
 // Uses single buffer. Hopefully this will be adequate
+// Changed from strip scroll to whole map update (cos of camera)
+
+DVECTOR	TileMapOfs={0,4};	// To line layers up :oP
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -25,12 +28,12 @@ CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_Qu
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
+		printf("%i %i\n",MapWidth,MapHeight);
 		TileList=_TileList;
 		TriList=_TriList;
 		QuadList=_QuadList;
 		VtxList=_VtxList;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
-		PrimGrid=0;
 }
 
 /*****************************************************************************/
@@ -41,80 +44,15 @@ CLayerTile::~CLayerTile()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-void	CLayerTile::init(DVECTOR &MapPos,int Shift,int Width,int Height)
+void	CLayerTile::init(DVECTOR &MapPos,int Shift)
 {
-int			Size=Width*Height;
-
-		ASSERT(Width>=SCREEN_TILE_WIDTH);
-		ASSERT(Height>=SCREEN_TILE_HEIGHT);
-
 		MapXYShift=Shift;
-		PrimGridWidth=Width;
-		PrimGridHeight=Height;
-
-		PrimGrid=(sPrimGridElem*) MemAlloc(Size*sizeof(sPrimGridElem),"2d PrimGrid");
-		ASSERT(PrimGrid);
-		MapX=0;
-		MapY=0;
-		for (int Y=0; Y<PrimGridHeight; Y++)
-		{
-			for (int X=0; X<PrimGridWidth; X++)
-			{
-				sPrimGridElem	*ThisElem=GetGridPos(X,Y);
-// Tile prim
-				setTSprt16(&ThisElem->Prim);
-				setTSetShadeTex(&ThisElem->Prim,1);
-// Grid			
-				ThisElem->Right=GetGridPos(X+1,Y);
-				ThisElem->Down=GetGridPos(X,Y+1);
-			}
-		}
-		UpdateWholeMap();		
-}
-
-/*****************************************************************************/
-// AS not time critical, use row update routine for whole map
-void	CLayerTile::UpdateWholeMap()
-{
-		for (int Y=0; Y<PrimGridHeight; Y++)
-		{
-			UpdateRow(MapX,MapY+Y);
-		}
+		MapXY=MapPos;
 }
 
 /*****************************************************************************/
 void	CLayerTile::shutdown()
 {
-		if (PrimGrid) MemFree(PrimGrid);
-}
-
-/*****************************************************************************/
-// Get (wrapped) PrimGrid pos
-sPrimGridElem	*CLayerTile::GetGridPos(int X,int Y)
-{
-sPrimGridElem	*ThisGrid=(sPrimGridElem *)PrimGrid;
-int		Pos;
-
-/**/	X%=PrimGridWidth;
-/**/	Y%=PrimGridHeight;
-/**/	Pos=(X+(Y*PrimGridWidth));
-
-/**/	return(ThisGrid+Pos);
-}
-
-/*****************************************************************************/
-// Get (wrapped) Map pos
-sTileMapElem	*CLayerTile::GetMapPos(int X,int Y)
-{
-sTileMapElem	*ThisMap=(sTileMapElem *)Map;
-int		Pos;
-
-/**/	X%=MapWidth;
-/**/	Y%=MapHeight;
-/**/	Pos=(X+(Y*MapWidth));
-	
-/**/	return(ThisMap+Pos);
-
 }
 
 /*****************************************************************************/
@@ -122,86 +60,28 @@ int		Pos;
 /*****************************************************************************/
 void	CLayerTile::think(DVECTOR &MapPos)
 {
-// Update rows and Columns :o)
-// As these are on the borders, they 'shouldnt' alter any being rendered
 int			XPos=MapPos.vx>>MapXYShift;
 int			YPos=MapPos.vy>>MapXYShift;
-int			NewX=XPos>>4;
-int			NewY=YPos>>4;
+
+			MapXY.vx=XPos>>4;
+			MapXY.vy=YPos>>4;
+			
+/**/		MapXY.vx+=TileMapOfs.vx;
+/**/		MapXY.vy+=TileMapOfs.vy;
 
 			ShiftX=XPos & 15;
 			ShiftY=YPos & 15;
 
-//!!#ifdef __USER_paul__
-			MapX=NewX;
-			MapY=NewY;
-			UpdateWholeMap();
-/*
-#else
-			if (NewX>MapX)
-			{	// update right column
-				UpdateColumn(NewX+SCREEN_TILE_WIDTH-1,MapY);
-				MapX=NewX;
-			}
+			if (MapXY.vx+SCREEN_TILE_WIDTH<=MapWidth)
+				RenderW=SCREEN_TILE_WIDTH;
 			else
-			if (NewX<MapX)
-			{	// update left column
-				UpdateColumn(NewX,MapY);
-				MapX=NewX;
-			}
+				RenderW=MapWidth-MapXY.vx;
 
-			if (NewY>MapY)
-			{	// update bottom row
-				UpdateRow(MapX,NewY+SCREEN_TILE_HEIGHT-1);
-				MapY=NewY;
-			}
+			if (MapXY.vy+SCREEN_TILE_HEIGHT<=MapHeight)
+				RenderH=SCREEN_TILE_HEIGHT;
 			else
-			if (NewY<MapY)
-			{	// update top row
-				UpdateRow(MapX,NewY);
-				MapY=NewY;
-			}
-#endif
-*/
-}
+				RenderH=MapHeight-MapXY.vy;
 
-/*****************************************************************************/
-void	CLayerTile::UpdateRow(int X,int Y)
-{
-sPrimGridElem	*Grid=GetGridPos(X,Y);
-sTileMapElem	*MapPtr=GetMapPos(X,Y);
-
-		for (int i=0; i<SCREEN_TILE_WIDTH; i++)
-		{
-// Tile prim
-			TSPRT_16	*Prim=&Grid->Prim;
-/**/		sTile		*Tile=&TileList[MapPtr->Tile];
-/**/		setTSprtTPage(Prim,Tile->TPage);
-			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-// Next Elem
-			MapPtr++;
-			Grid=Grid->Right;
-		}
-
-}
-
-/*****************************************************************************/
-void	CLayerTile::UpdateColumn(int X,int Y)
-{
-sPrimGridElem	*Grid=GetGridPos(X,Y);
-sTileMapElem	*MapPtr=GetMapPos(X,Y);
-
-		for (int i=0; i<SCREEN_TILE_HEIGHT; i++)
-		{
-// Tile prim
-			TSPRT_16	*Prim=&Grid->Prim;
-/**/		sTile		*Tile=&TileList[MapPtr->Tile];
-/**/		setTSprtTPage(Prim,Tile->TPage);
-			*(u32*)&Prim->u0=*(u32*)&Tile->u0;	// copy uv AND clut
-// Next Elem
-			MapPtr+=MapWidth;
-			Grid=Grid->Down;
-		}
 }
 
 /*****************************************************************************/
@@ -209,32 +89,43 @@ sTileMapElem	*MapPtr=GetMapPos(X,Y);
 /*****************************************************************************/
 void	CLayerTile::render()
 {
-sPrimGridElem	*Grid=GetGridPos(MapX,MapY);
+sTileMapElem	*MapPtr=GetMapPos();
+u8				*PrimPtr=GetPrimPtr();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
+
 // Setup shift bits of pos
 		TileY=-ShiftY;
 
 // Render it!!
-		for (int Y=0; Y<SCREEN_TILE_HEIGHT; Y++)
+		for (int Y=0; Y<RenderH; Y++)
 		{
-			sPrimGridElem	*GridDown=Grid->Down;
+			sTileMapElem	*MapRow=MapPtr;
 			TileX=-ShiftX;
 
-			for (int X=0; X<SCREEN_TILE_WIDTH; X++)
+			for (int X=0; X<RenderW; X++)
 			{
-				TSPRT_16	*Prim=&Grid->Prim;
-				if (Prim->clut)
+/**/			sTile		*Tile=&TileList[MapRow->Tile];
+
+				if (Tile->Clut)
 				{
-/**/				Prim->x0=TileX;
-/**/				Prim->y0=TileY;
-					addPrimNoCheck(ThisOT,Prim);
+					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
+					setTSprt16(SprPtr);
+					setTSetShadeTex(SprPtr,1);
+/**/				SprPtr->x0=TileX;
+/**/				SprPtr->y0=TileY;
+/**/				setTSprtTPage(SprPtr,Tile->TPage);
+					*(u32*)&SprPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+					addPrimNoCheck(ThisOT,SprPtr);
+					PrimPtr+=sizeof(TSPRT_16);
 				}
-				Grid=Grid->Right;
+				MapRow++;
 				TileX+=TILE_WIDTH;
 			}
-			Grid=GridDown;
+			MapPtr+=MapWidth;
 			TileY+=TILE_HEIGHT;
 		}
+		SetPrimPtr(PrimPtr);
+
 }
 
