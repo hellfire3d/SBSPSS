@@ -365,7 +365,8 @@ cleandeps :
 # Boot strap stuff
 #----------------------------------------------------------------------------
 
-CD_DIR :=			CdBuild/$(TERRITORY)
+CD_BUILD_DIR :=		CdBuild/
+CD_DIR :=			$(CD_BUILD_DIR)/$(TERRITORY)
 BIGLUMP_FILE :=		$(VERSION_DIR)/BIGLUMP.BIN
 BIN_OUTFILE :=		SPONGEY.BIN
 BOOTSTRAP_DIR :=	source/psxboot/
@@ -381,21 +382,33 @@ EUR_BOOTSTRAP_OUT	:=$(CD_DIR)/BOOTEUR.EXE
 EUR_CPE2X_PARAM		:=/CE
 
 cddata:
-ifeq ($(USER_NAME),CDBUILD)
+#ifeq ($(USER_NAME),CDBUILD)
 	@$(MKDIR) -p $(CD_DIR)
 	@$(CPE2BIN) $(CPE_FILE) $(CD_DIR)/$(BIN_OUTFILE)
-	@$(CP) $(BIGLUMP_FILE) $(CD_DIR) -f
+	@$(CP) -u $(BIGLUMP_FILE) $(CD_DIR) -f
 	@$(TGA2GFX) graphics/screens/legal.tga $(CD_DIR)/LEGAL.GFX
+	@$(CP) -u Data/CdData/$(TERRITORY).cnf $(CD_DIR)/SYSTEM.CNF -f
+	@$(CP) -u Data/CdData/$(TERRITORY).ccs $(CD_BUILD_DIR)/$(TERRITORY).ccs
+	@PKUNZIP -n data/CDData/ZZZZZZZ.ZIP $(CD_DIR)
 
 # Compile bootstrap
 	@ccpsx -O2 -g $(BOOTSTRAP_IN) -c -Xo$801c0000 $(COMMON_CCFLAGS) -oPsxBoot.o
 	@slink -m -psx -c -v -z -o 0x801c0000 -cpemunge -we -wm -wo @$(BOOTSTRAP_DIR)/psxboot.ln,$(BOOTSTRAP_CPE),$(BOOTSTRAP_SYM),$(BOOTSTRAP_MAP)
 	@$(RM) PsxBoot.o
-	Cpe2Exe $($(TERRITORY)_CPE2X_PARAM) $(BOOTSTRAP_CPE)
-	@$(CP) $(BOOTSTRAP_EXE) $($(TERRITORY)_BOOTSTRAP_OUT) -f
-	@$(CP) Data/$(TERRITORY).cnf $(CD_DIR)/SYSTEM.CNF -f
-	@$(ECHO) $(TERRITORY) CD Built
-endif
+	@Cpe2Exe $($(TERRITORY)_CPE2X_PARAM) $(BOOTSTRAP_CPE)
+	@$(CP) -u $(BOOTSTRAP_EXE) $($(TERRITORY)_BOOTSTRAP_OUT) -f
+	@$(ECHO) $(TERRITORY) Psx CD Built
+
+# build iso
+	@tools\BUILDCD.EXE -i$(CD_BUILD_DIR)/psx.img -l data/cddata/$(TERRITORY).cti
+	@tools\STRIPISO.EXE s 2352 $(CD_BUILD_DIR)/psx.img $(CD_BUILD_DIR)/$(TERRITORY).iso
+#	tools\STRIPISO.EXE s 2336 $(CD_BUILD_DIR)/psx.img $(CD_BUILD_DIR)/$(TERRITORY).iso
+	$(RM) $(CD_BUILD_DIR)/psx.img
+	$(RM) CDW900E.toc
+	$(RM) QSheet.toc
+	@$(ECHO) $(TERRITORY) Iso Built
+
+#endif
 
 #----------------------------------------------------------------------------
 #	Main dependancy
