@@ -18,9 +18,9 @@
 [STR__OK]
 eng=OK
 [STR__YES]
-eng=Yes
+eng=YES
 [STR__NO]
-eng=No
+eng=NO
 [STR__ON]
 eng=ON
 [STR__OFF]
@@ -453,13 +453,15 @@ eng=I got it! Well, celebration time is over! Now back to Bikini Bottom to add t
 ; ---------------------------------------------------------------
 
 [STR__PAUSE_MENU__GAME_PAUSED]
-eng=GAME PAUSED
+eng=Game paused
 [STR__PAUSE_MENU__CONTINUE]
-eng=Continue
+eng=CONTINUE
 [STR__PAUSE_MENU__QUIT]
-eng=Quit
+eng=QUIT
 [STR__PAUSE_MENU__CONFIRM_QUIT]
-eng=CONFIRM QUIT?
+eng=Confirm quit?
+[STR__PAUSE_MENU__VIBRATION]
+eng=VIBRATION
 
 
 
