@@ -96,7 +96,6 @@ void CFrontEndScene::init()
 {
 	for(int i=0;i<MODE__NONE;i++)
 	{
-		if(s_modeCodes[i])		// temporary (PKG)
 		s_modeCodes[i]->init();
 	}
 
@@ -115,7 +114,6 @@ void CFrontEndScene::shutdown()
 {
 	for(int i=0;i<MODE__NONE;i++)
 	{
-		if(s_modeCodes[i])		// temporary (PKG)
 		s_modeCodes[i]->shutdown();
 	}
 }
