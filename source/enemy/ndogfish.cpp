@@ -631,6 +631,17 @@ void CNpcIronDogfishEnemy::renderOnMapScreen( DVECTOR drawPos )
 	SprFrame = NULL;
 
 	SprFrame = m_actorGfx->Render(drawPos,0,0,false);
+
+	// initialise some stuff so that boss is always to left when player reads description
+	m_state = IRON_DOGFISH_THUMP_1;
+	m_extendDir = EXTEND_RIGHT;
+	m_steamTimer = 0;
+	m_vulnerableTimer = 0;
+
+	s32 xMin, xMax;
+	m_npcPath.getPathXExtents( &xMin, &xMax );
+	Pos.vx = xMin;
+	m_npcPath.resetPath();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
