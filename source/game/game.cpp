@@ -338,6 +338,11 @@ void	CGameScene::initLevel()
 							PntList++;
 
 							enemy->addWaypoint( newXPos, newYPos );
+
+							if ( pointNum == 1 )
+							{
+								enemy->setHeading( newXPos, newYPos );
+							}
 						}
 					}
 
