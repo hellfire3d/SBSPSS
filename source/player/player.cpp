@@ -2094,7 +2094,7 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 	{
 		if ( ( (CNpcPlatform *) platform )->isCart() )
 		{
-			m_actorGfx->RotateScale( ft4, *_pos, ( (CNpcPlatform *) platform )->getCollisionAngle() >> 1, ONE, ONE );
+			m_actorGfx->RotateScale( ft4, *_pos, ( (CNpcPlatform *) platform )->getCollisionAngle() , ONE, ONE );
 		}
 	}
 
