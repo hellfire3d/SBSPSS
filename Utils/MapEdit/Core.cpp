@@ -178,8 +178,11 @@ int		ListSize=Layer.size();
 	
 		for (int i=0;i<ListSize;i++)
 		{
-			Layer[i]->Render(this,ThisCam,Is3dFlag);
-			if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
+			if (Layer[i]->IsVisible())
+				{
+				Layer[i]->Render(this,ThisCam,Is3dFlag);
+				if (GridFlag) Layer[i]->RenderGrid(this,ThisCam,i==ActiveLayer);
+				}
 		}
 		
 		Layer[ActiveLayer]->RenderCursor(this,ThisCam,Is3dFlag);
@@ -372,9 +375,19 @@ int			ListSize=Layer.size();
 }
 
 /*****************************************************************************/
-void		CCore::SetLayer(int Layer)
+void		CCore::SetLayer(int NewLayer)
 {
-		ActiveLayer=Layer;
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CMultiBar	*ParamBar=Frm->GetParamBar();
+CLayerList	*List=(CLayerList*)Frm->GetDialog(IDD_LAYER_LIST_DIALOG);
+
+		Layer[ActiveLayer]->SetVisible(List->ListBox.GetCheck(ActiveLayer));
+		if (ActiveLayer!=NewLayer)
+		{
+			ActiveLayer=NewLayer;
+			Layer[ActiveLayer]->SetVisible(List->ListBox.GetCheck(ActiveLayer));
+		}
+
 }
 
 /*****************************************************************************/
