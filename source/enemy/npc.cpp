@@ -90,6 +90,7 @@ void CNpcFriend::shutdown()
 {
 	//m_spriteBank->dump();		delete m_spriteBank;
 
+	delete m_actorGfx;
 	CNpcThing::shutdown();
 }
 
@@ -610,7 +611,9 @@ void CNpcEnemy::shutdown()
 
 	m_positionHistory = NULL;
 
+	delete m_actorGfx;
 	CEnemyThing::shutdown();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

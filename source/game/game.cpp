@@ -97,7 +97,7 @@ CGameScene	GameScene;
 
 /*****************************************************************************/
 void 	CGameScene::init()
-{
+{		
 		SetIdentNoTrans(&CamMtx);
 		CamMtx.t[2]=ZPos;
 
@@ -115,9 +115,8 @@ void 	CGameScene::init()
 		s_readyToExit=false;
 
 		CFader::setFadingIn();
-
 		initLevel();
-		CFileIO::EnableASync(true);
+//		CFileIO::EnableASync(true);
 
 }
 
@@ -141,7 +140,7 @@ int		CGameScene::canPause()
 
 void	CGameScene::shutdown()
 {
-		CFileIO::EnableASync(false);
+//		CFileIO::EnableASync(false);
 		shutdownLevel(true);
 		CSoundMediator::dumpSong();	
 
@@ -170,7 +169,7 @@ void	CGameScene::think(int _frames)
 //	}
 //#endif
 
-	CFileIO::LoadASyncFiles();
+//	CFileIO::LoadASyncFiles();
 
 	if(s_readyToExit)
 	{
@@ -182,7 +181,7 @@ void	CGameScene::think(int _frames)
 		s_globalLevelSelectThing=Level.GetNextLevel(s_globalLevelSelectThing);
 		shutdownLevel(s_globalLevelSelectThing%12==0);
 		initLevel();
-		s_levelFinished=false;
+	s_levelFinished=false;
 	}
 
 	
@@ -191,28 +190,29 @@ void	CGameScene::think(int _frames)
 		m_pauseMenu->select();
 	}
 
-	CConversation::think(_frames);
-	m_pauseMenu->think(_frames);
-	if(!CConversation::isActive()&&
-	   !m_pauseMenu->isActive())
+/*	if (!s_levelFinished) */CConversation::think(_frames);
+/*	if (!s_levelFinished) */m_pauseMenu->think(_frames);
+	if(!CConversation::isActive()&& !m_pauseMenu->isActive())
 	{
 		DVECTOR	camPos;
-		CThingManager::thinkAllThings(_frames);
-		camPos=m_player->getCameraPos();
+/*		if (!s_levelFinished) */CThingManager::thinkAllThings(_frames);
+/*		if (!s_levelFinished) */camPos=m_player->getCameraPos();
 //PKG
 //		if(camPos.vx<0){camPos.vx=0;PAUL_DBGMSG("cx<0");}
 //		if(camPos.vy<0){camPos.vy=0;PAUL_DBGMSG("cy<0");}
 //PKG		
-		CBubicleFactory::setMapOffset(&camPos);
-		Level.setCameraCentre(camPos);
-		Level.think(_frames);
+/*		if (!s_levelFinished) */CBubicleFactory::setMapOffset(&camPos);
+/*		if (!s_levelFinished) */Level.setCameraCentre(camPos);
+/*		if (!s_levelFinished) */Level.think(_frames);
 
 		if(PadGetDown(0)&PAD_R2)
 		{
 			levelFinished();
 		}
 	}
+//	s_levelFinished=false;
 }
+
 
 /*****************************************************************************/
 int		CGameScene::readyToShutdown()
@@ -237,6 +237,7 @@ void CGameScene::sendEvent( GAME_EVENT evt, CThing *sourceThing )
 /*****************************************************************************/
 void	CGameScene::initLevel()
 {
+	printf("InitLevel\n");
 	CThingManager::init();
 
 	CConversation::init();
@@ -375,12 +376,15 @@ void	CGameScene::initLevel()
 					platform->addWaypoint( newXPos, newYPos );
 				}
 			}
+
 		}
 	}
 
 	// Song is loaded/dumped by the level, and played from here. This just gives some
 	// better timing over when it starts (pkg)
 	CSoundMediator::playSong();
+	printf("InitLevelDone\n");
+
 }
 
 
