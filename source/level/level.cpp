@@ -695,7 +695,47 @@ DVECTOR		DP;
 				}
 			}
 }
+/*****************************************************************************/
+void	CLevel::destroyMapTile(DVECTOR const &Pos)
+{
+DVECTOR			MP=Pos;
+int				Width=CollisionLayer->getMapWidth();
+u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
+sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Pos.vx,Pos.vy);
 
+u8			ColT=*ColElem>>COLLISION_TYPE_FLAG_SHIFT;
+
+			while (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==ColT)
+			{
+				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,MP);
+				FX->SetTile(MapElem->Tile);
+				MapElem->Tile=0;
+				*ColElem=0;
+
+				MapElem+=Width;
+				ColElem+=Width;
+				MP.vy+=16;
+			}
+
+}
+/*
+void	CLevel::destroyMapTile(DVECTOR const &Pos)
+{
+u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
+sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Pos.vx,Pos.vy);
+
+			if (MapElem->Tile)
+			{
+				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,Pos);
+				FX->SetTile(MapElem->Tile);
+				MapElem->Tile=0;
+				*ColElem=0;
+
+			}
+
+}
+
+*/
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -747,19 +787,3 @@ DVECTOR		DP;
 			}
 }
 
-/*****************************************************************************/
-void	CLevel::destroyMapTile(DVECTOR const &Pos)
-{
-u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
-sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Pos.vx,Pos.vy);
-
-			if (MapElem->Tile)
-			{
-				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,Pos);
-				FX->SetTile(MapElem->Tile);
-				MapElem->Tile=0;
-				*ColElem=0;
-
-			}
-
-}
