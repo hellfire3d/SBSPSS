@@ -41,8 +41,12 @@ void	CFXGeyser::shutdown()
 /*****************************************************************************/
 void	CFXGeyser::think(int Frames)
 {
-		setCollisionCentreOffset(0,-512/2);
-		setCollisionSize(32,512);
+		if (getParent())
+		{ // make huge box
+			setCollisionCentreOffset(0,-512/2);
+			setCollisionSize(32,512);
+		}
+
 		CFX::think(Frames);
 		Pos=BasePos;
 		currentFrame++;
@@ -115,11 +119,13 @@ int			W;
 		}
 		
 
-//int		FrameW=Ft4->x1-Ft4->x0;
-//		setCollisionCentreOffset(FrameW>>1,-Height/2);
-//		setCollisionCentreOffset(0,-Height/2);
-//		setCollisionSize(FrameW,Height);
-
+		if (!Parent)
+		{
+			int		FrameW=Ft4->x1-Ft4->x0;
+			setCollisionCentreOffset(FrameW>>1,-Height/2);
+			setCollisionCentreOffset(0,-Height/2);
+			setCollisionSize(FrameW,Height);
+		}
 // Base
 		Ft4=SprBank->printFT4(FRM__GUSHBASE,RenderPos.vx-8,RenderPos.vy,currentFrame&2,0/*currentFrame&2*/,OtPos);
 		setShadeTex(Ft4,0);
