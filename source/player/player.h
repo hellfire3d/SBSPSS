@@ -261,6 +261,7 @@ private:
 	int				m_animNo;
 	CActorGfx		*m_actorGfx;
 
+	int				m_lockCamera;
 	DVECTOR			m_cameraPos;
 	DVECTOR			m_currentCamFocusPointTarget;
 	DVECTOR			m_currentCamFocusPoint;

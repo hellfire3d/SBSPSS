@@ -783,8 +783,11 @@ if(newmode!=-1)
 	yoff=m_cameraLookOffset+(m_ledgeLookOffset>>ledgeShift);
 	if(yoff<-lookmaxoffsetup)yoff=-lookmaxoffsetup;
 	else if(yoff>lookmaxoffsetdown)yoff=lookmaxoffsetdown;
-	m_cameraPos.vx=m_currentCamFocusPoint.vx;
-	m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
+	if(!m_lockCamera)
+	{
+		m_cameraPos.vx=m_currentCamFocusPoint.vx;
+		m_cameraPos.vy=m_currentCamFocusPoint.vy+yoff;
+	}
 
 	// Limit camera scroll to the edges of the map
 	if(m_cameraPos.vx<m_cameraPosLimitBox.x1)		m_cameraPos.vx=m_cameraPosLimitBox.x1;
@@ -1286,6 +1289,7 @@ void CPlayer::respawn()
 	Pos=m_respawnPos;
 	m_cameraLookOffset=0;
 
+	m_lockCamera=false;
 	m_leftRightScrollPosition=0;
 	calcCameraFocusPointTarget();
 	m_currentCamFocusPoint=m_currentCamFocusPointTarget;
@@ -1702,10 +1706,23 @@ int		CPlayer::moveVertical(int _moveDistance)
 		colHeightAfter=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
 		if(colHeightBefore>=0&&colHeightAfter<=0)
 		{
-			// Stick at ground level
-			pos.vy+=colHeightAfter+_moveDistance;
-			_moveDistance=0;
-			hitGround=true;
+			// About to hit a 'fall to death' block?
+			if((m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=(7<<COLLISION_TYPE_FLAG_SHIFT))
+			{
+				// Stick at ground level
+				pos.vy+=colHeightAfter+_moveDistance;
+				_moveDistance=0;
+				hitGround=true;
+			}
+			else
+			{
+				if(m_currentMode!=PLAYER_MODE_DEAD)
+				{
+					// Lock the camera, kill the player and let him fall to his death..
+					setMode(PLAYER_MODE_DEAD);
+					m_lockCamera=true;
+				}
+			}
 		}
 	}
 	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
