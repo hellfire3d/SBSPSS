@@ -192,15 +192,14 @@ void	CPlayerModeNet::think()
 				{
 					if(((CNpcEnemy*)thing)->canBeCaughtByNet())
 					{
-						((CNpcEnemy*)thing)->caughtWithNet();
-						m_RGB = ((CNpcEnemy*)thing)->getRGB();
 						m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
-						thing=NULL;
 						if(m_player->getJellyFishAmmo()==0)
 						{
 							m_netSin=0;
 						}
-						m_player->giveJellyFishAmmo();
+						m_player->giveJellyFishAmmo(((CNpcEnemy*)thing)->getRGB());
+						((CNpcEnemy*)thing)->caughtWithNet();
+						thing=NULL;
 					}
 					else
 					{
@@ -239,7 +238,7 @@ void	CPlayerModeNet::think()
 									5*60);
 
 				projectile->updateCollisionArea();
-				projectile->setRGB( m_RGB );
+				projectile->setRGB(m_player->getColourOfNextJellyfishAmmo());
 
 				m_netState=NET_STATE__JUST_LAUNCHED_SOMETHING;
 				m_player->useOneJellyFishAmmo();
@@ -289,11 +288,13 @@ void	CPlayerModeNet::think()
 		POLY_FT4	*ft4;
 
 		// Net has a jellyfish inside
-		int size=256+128+((msin(m_netSin)*npsize)>>12);
+		int	size=256+128+((msin(m_netSin)*npsize)>>12);
+		u32	colour;
 		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,size);
 		ft4=sb->printFT4Scaled(FRM__NETBLOB,CPlayer::POWERUPUI_ICONX+17,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,size);
 		setShadeTex(ft4,0);
-		setRGB0(ft4,255,128,255);
+		colour=m_player->getColourOfNextJellyfishAmmo();
+		setRGB0(ft4,(colour)&0xff,(colour>>8)&0x0ff,(colour>>16)&0xff);
 	}
 	else
 	{

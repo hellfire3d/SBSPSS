@@ -354,35 +354,39 @@ private:
 	{
 		SQUEAKY_BOOTS_TIME=60*10,
 		INVINCIBILITY_RING_TIME=60*10,
+		MAX_BUBBLE_BLOWER_AMMO=99,
+		MAX_JELLY_LAUNCHER_AMMO=99,
+		MAX_JELLFISH_IN_NET=5,
 	};
 public:
-	void			giveGlasses()				{m_glassesFlag=true;}
-	int				isWearingGlasses()			{return m_glassesFlag;}
-	void			giveSqueakyBoots()			{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
-	int				isWearingBoots()			{return m_squeakyBootsTimer;}
-	void			giveInvincibilityRing()		{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
-	void			giveDivingHelmet()			{m_divingHelmet=true;}
-	int				isWearingDivingHelmet()		{return m_divingHelmet;}
-
-	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;if(m_bubbleAmmo>99)m_bubbleAmmo=99;}
-	void			useOneBubble()				{m_bubbleAmmo--;}
-	int				getBubbleAmmo()				{return m_bubbleAmmo;}
-
-	void			giveJellyAmmo()				{m_jellyAmmo+=6;if(m_jellyAmmo>99)m_jellyAmmo=99;}
-	void			useOneJelly()				{m_jellyAmmo--;}
-	int				getJellyAmmo()				{return m_jellyAmmo;}
-
-	void			giveJellyFishAmmo()			{if(!isJellyFishAmmoFull())m_jellyfishAmmo++;}
-	void			useOneJellyFishAmmo()		{m_jellyfishAmmo--;}
-	int				isJellyFishAmmoFull()		{return m_jellyfishAmmo==5;}
-	int				getJellyFishAmmo()			{return m_jellyfishAmmo;}
+	void			giveGlasses()							{m_glassesFlag=true;}
+	int				isWearingGlasses()						{return m_glassesFlag;}
+	void			giveSqueakyBoots()						{m_squeakyBootsTimer=SQUEAKY_BOOTS_TIME;}
+	int				isWearingBoots()						{return m_squeakyBootsTimer;}
+	void			giveInvincibilityRing()					{m_invincibilityRingTimer=INVINCIBILITY_RING_TIME;}
+	void			giveDivingHelmet()						{m_divingHelmet=true;}
+	int				isWearingDivingHelmet()					{return m_divingHelmet;}
+															
+	void			giveBubbleAmmo()						{m_bubbleAmmo+=10;if(m_bubbleAmmo>MAX_BUBBLE_BLOWER_AMMO)m_bubbleAmmo=MAX_BUBBLE_BLOWER_AMMO;}
+	void			useOneBubble()							{m_bubbleAmmo--;}
+	int				getBubbleAmmo()							{return m_bubbleAmmo;}
+															
+	void			giveJellyAmmo()							{m_jellyAmmo+=6;if(m_jellyAmmo>MAX_JELLY_LAUNCHER_AMMO)m_jellyAmmo=MAX_JELLY_LAUNCHER_AMMO;}
+	void			useOneJelly()							{m_jellyAmmo--;}
+	int				getJellyAmmo()							{return m_jellyAmmo;}
+															
+	void			giveJellyFishAmmo(u32 _colour);
+	void			useOneJellyFishAmmo();
+	int				isJellyFishAmmoFull();
+	int				getJellyFishAmmo();
+	u32				getColourOfNextJellyfishAmmo();
 
 	void			setIsInWater(int _in)					{m_isInWater=_in;}
 	int				getIsInWater()							{return m_isInWater;}
 	int				getIsHealthFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
 	int				getIsHealthSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOACKUPLEVEL;}
 
-	int				isHoldingNet()				{return m_currentMode==PLAYER_MODE_NET;}
+	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
 	void			justButtBouncedABadGuy();	// Also fugly.. :/
 
@@ -393,7 +397,8 @@ private:
 	int				m_divingHelmet;
 	int				m_bubbleAmmo;
 	int				m_jellyAmmo;
-	int				m_jellyfishAmmo;
+	int				m_jellyfishAmmoCount;
+	u32				m_jellyfishAmmoColours[MAX_JELLFISH_IN_NET];
 	int				m_isInWater;
 
 	// Platforms

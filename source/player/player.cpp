@@ -1645,7 +1645,7 @@ void CPlayer::respawn()
 	m_invincibilityRingTimer=0;
 	m_bubbleAmmo=0;
 	m_jellyAmmo=0;
-	m_jellyfishAmmo=0;
+	m_jellyfishAmmoCount=0;
 
 	m_moveVelocity.vx=m_moveVelocity.vy=0;
 
@@ -1719,8 +1719,10 @@ void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 				}
 				else
 				{
+					u32	colour;
+					colour=getColourOfNextJellyfishAmmo();
 					ft4=addonGfx->Render(*_pos,addonAnimNo,_animFrame,m_facing==FACING_RIGHT?0:1);
-					setRGB0(ft4,255,128,255);
+					setRGB0(ft4,(colour)&0xff,(colour>>8)&0x0ff,(colour>>16)&0xff);
 					setSemiTrans(ft4,trans);
 				}
 			}
@@ -2074,6 +2076,45 @@ PLAYERINPUT CPlayer::readPadInput()
 }
 
 
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayer::giveJellyFishAmmo(u32 _colour)
+{
+	ASSERT(!isJellyFishAmmoFull());
+	m_jellyfishAmmoColours[m_jellyfishAmmoCount]=_colour;
+	m_jellyfishAmmoCount++;
+}
+void	CPlayer::useOneJellyFishAmmo()
+{
+	ASSERT(m_jellyfishAmmoCount!=0);
+
+	int	i;
+
+	m_jellyfishAmmoCount--;
+	for(i=0;i<m_jellyfishAmmoCount;i++)
+	{
+		m_jellyfishAmmoColours[i]=m_jellyfishAmmoColours[i+1];
+	}
+}
+int		CPlayer::isJellyFishAmmoFull()
+{
+	return m_jellyfishAmmoCount==MAX_JELLFISH_IN_NET;
+}
+int		CPlayer::getJellyFishAmmo()
+{
+	return m_jellyfishAmmoCount;
+}
+u32		CPlayer::getColourOfNextJellyfishAmmo()
+{
+	ASSERT(m_jellyfishAmmoCount!=0);
+	return m_jellyfishAmmoColours[0];
+}
 
 /*----------------------------------------------------------------------
 	Function:
