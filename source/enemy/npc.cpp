@@ -623,7 +623,7 @@ void CNpcEnemy::init()
 
 	m_npcPath.initPath();
 
-	m_isShuttingDown = false;
+//	m_isShuttingDown = false;
 	m_drawRotation = 0;
 	m_isCaught = false;
 	m_isBlowerOn = false;
@@ -680,13 +680,6 @@ void CNpcEnemy::shutdown()
 	if (m_actorGfx)	delete m_actorGfx;
 
 	CEnemyThing::shutdown();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcEnemy::setToShutdown()
-{
-	m_isShuttingDown = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -54,7 +54,8 @@ void	CFXFallingTile::think(int _frames)
 		Pos.vx+=Velocity.vx;
 		Pos.vy+=Velocity.vy;
 		Velocity.vy++;
-		if (Life) Life--;
+		Life--;
+		if (!Life) setToShutdown();
 }
 
 /*****************************************************************************/

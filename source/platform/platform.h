@@ -110,9 +110,6 @@ public:
 	static NPC_PLATFORM_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcPlatform	*Create(sThingPlatform *ThisPlatform);
 
-	void				setToShutdown();
-	u8					isSetToShutdown()										{return( m_isShuttingDown );}
-
 	void				setSpeed( s16 newSpeed )								{m_speed = newSpeed;}
 
 protected:

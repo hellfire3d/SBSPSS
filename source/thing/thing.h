@@ -105,7 +105,7 @@ public:
 		MAX_TYPE,
 	};
 //	TYPE;
-				CThing()	{;}
+				CThing()	{m_isShuttingDown=false;}
 virtual			~CThing()	{;}
 
 virtual	TYPE	getThingType()=0;
@@ -114,7 +114,8 @@ virtual	void	init();
 virtual	void	shutdown();
 virtual	void	think(int _frames);
 virtual	void	render();
-virtual u8		isSetToShutdown()										{return( false );}
+		void	setToShutdown()											{m_isShuttingDown = true;}
+		u8		isSetToShutdown()										{return( m_isShuttingDown);}
 virtual int		dontKillDuringLevelRespawn()							{return false;}
 
 // Linkage
@@ -193,6 +194,7 @@ private:
 
 		bool			m_renderFlag,m_thinkFlag;
 		DVECTOR			m_RenderPos;
+		bool			m_isShuttingDown;
 };
 
 /*---------------------------------------------------------------------- */

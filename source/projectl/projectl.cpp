@@ -46,6 +46,7 @@
 #ifndef	__ENEMY_NPC_H__
 #include "enemy\npc.h"
 #endif
+#include "gfx\otpos.h"
 
 
 /*****************************************************************************/
@@ -64,8 +65,8 @@ void CProjectile::init()
 	m_state = PROJECTILE_ATTACK;
 	m_turnSpeed = 256;
 	m_extension = 0;
-	m_isShuttingDown = false;
-	m_ot = 0;
+//	m_isShuttingDown = false;
+	m_ot = OTPOS__ACTOR_POS;
 	updateCollisionArea();
 }
 
@@ -97,11 +98,6 @@ void CProjectile::shutdown()
 	m_spriteBank->dump();		delete m_spriteBank;
 
 	CEnemyProjectileThing::shutdown();
-}
-
-void CProjectile::setToShutdown()
-{
-	m_isShuttingDown = true;
 }
 
 bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
@@ -411,7 +407,7 @@ void CPlayerProjectile::init()
 	m_extension = 0;
 	m_frame = 0;
 	m_reversed = 0;
-	m_isShuttingDown = false;
+//	m_isShuttingDown = false;
 }
 
 void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading )
@@ -447,11 +443,6 @@ void CPlayerProjectile::shutdown()
 	m_spriteBank->dump();		delete m_spriteBank;
 
 	CPlayerProjectileThing::shutdown();
-}
-
-void CPlayerProjectile::setToShutdown()
-{
-	m_isShuttingDown = true;
 }
 
 void CPlayerProjectile::setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType )

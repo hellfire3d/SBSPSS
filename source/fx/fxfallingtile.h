@@ -16,8 +16,6 @@ virtual void		init(DVECTOR const &Pos);
 virtual void		shutdown();
 virtual void		think(int _frames);
 virtual void		render();
-virtual u8			isSetToShutdown()				{return(Life<=0);}
-
 		void		SetTile(int T)		{Tile=T;}
 protected:
 

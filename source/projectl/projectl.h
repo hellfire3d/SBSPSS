@@ -48,8 +48,6 @@ public:
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType );
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
 	void				shutdown();
-	void				setToShutdown();
-	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 	void				think(int _frames);
 	void				setPos( DVECTOR newPos )								{Pos = newPos;}
 	virtual void		render();
@@ -79,7 +77,6 @@ protected:
 	PROJECTILE_LIFETIME_TYPE					m_lifetimeType;
 	PROJECTILE_STATE							m_state;
 	u16											m_turnSpeed;
-	u8											m_isShuttingDown;
 	u8											m_ot;
 };
 
@@ -104,8 +101,6 @@ public:
 	void				init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType );
 	void				init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTILE_MOVEMENT_TYPE initMoveType, PLAYER_PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
 	void				shutdown();
-	void				setToShutdown();
-	u8					isSetToShutdown()										{return( m_isShuttingDown );}
 	virtual void		think(int _frames);
 	virtual void		render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
@@ -133,7 +128,6 @@ protected:
 	int											m_frame;
 	POLY_FT4									*SprFrame;
 	u8											m_reversed;
-	u8											m_isShuttingDown;
 };
 
 

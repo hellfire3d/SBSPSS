@@ -115,9 +115,6 @@ public:
 
 	virtual int			canCollide();
 
-	void				setToShutdown();
-	u8					isSetToShutdown()										{return( m_isShuttingDown );}
-
 	bool				canBeSuckedUp();
 	bool				suckUp( DVECTOR *suckPos, int _frames );
 
@@ -307,8 +304,6 @@ protected:
 	POLY_FT4		*SprFrame;
 
 	virtual void		collidedWith(CThing *_thisThing);
-
-	u8					m_isShuttingDown;
 	s16					m_drawRotation;
 };
 

@@ -61,8 +61,6 @@ virtual void		think(int _frames);
 virtual void		render();
 
 virtual int			canCollide()					{return false;}
-virtual u8			isSetToShutdown()				{return( false );}
-
 virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
 
 protected:
