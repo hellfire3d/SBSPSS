@@ -299,7 +299,7 @@ CNpcPlatform::NPC_PLATFORM_DATA CNpcPlatform::m_data[NPC_PLATFORM_TYPE_MAX] =
 	},
 
 	{	// NPC_BUBBLE_GEYSER_GENERATOR
-		2,
+		4,
 		128,
 		true,
 		DAMAGE__NONE,
