@@ -19,11 +19,19 @@
 #include	"game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcFallingPlatform::postInit()
 {
 	m_npcPath.setPathType( CNpcPath::SINGLE_USE_PATH );
+
+	m_isActive = false;
+	m_timer = 4 * GameState::getOneSecondInFrames();
+	m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +47,7 @@ void CNpcFallingPlatform::processMovement( int _frames )
 	if ( pathComplete )
 	{
 		m_isActive = false;
-		m_timer = 4 * GameState::getOneSecondInFrames();
+		m_timer = getRnd() % ( 4 * GameState::getOneSecondInFrames() );
 		m_timerType = NPC_PLATFORM_TIMER_RESPAWN;
 	}
 	else
