@@ -46,6 +46,7 @@ BubicleEmitterData CGUIBubbles::s_emitterData=
 	200,200,312,25,		// m_x,m_y,m_w,m_h
 	4,1,				// m_birthRate,m_birthAmount
 	-1,					// m_life
+	false,				// m_applyMapOffsets
 	{					// m_bubicleBase
 		100,				// m_life
 		0,0,0,				// m_vx,m_vdx,m_vxmax
