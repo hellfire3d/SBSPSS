@@ -2691,8 +2691,16 @@ int		CPlayer::moveVertical(int _moveDistance)
 		for(i=0;i<+2;i++)
 		{
 			int x=pos.vx+((i==0?-checkx:+checkx));
-			colHeightBefore[i]=getHeightFromGround(x,y,16);
-			colHeightAfter[i]=getHeightFromGround(x,y+_moveDistance,16);
+//			if(!isOnPlatform())
+			{
+				colHeightBefore[i]=getHeightFromGround(x,y,16);
+				colHeightAfter[i]=getHeightFromGround(x,y+_moveDistance,16);
+			}
+//			else
+//			{
+//				colHeightBefore[i]=getHeightFromPlatformNoGround(x,y,16);
+//				colHeightAfter[i]=getHeightFromPlatformNoGround(x,y+_moveDistance,16);
+//			}
 			blockAfter[i]=CGameScene::getCollision()->getCollisionBlock(x,y+_moveDistance);
 		}
 
@@ -2733,7 +2741,7 @@ int		CPlayer::moveVertical(int _moveDistance)
 	setPlayerPos(&pos);
 
 
-	if(m_currentMode!=PLAYER_MODE_DEAD&&!isOnPlatform())
+	if(m_currentMode!=PLAYER_MODE_DEAD)
 	{
 		switch(hitThisSuspectBlock&COLLISION_TYPE_MASK)
 		{
@@ -2748,6 +2756,8 @@ int		CPlayer::moveVertical(int _moveDistance)
 				break;
 			case COLLISION_TYPE_FLAG_DEATH_LIQUID:
 				dieYouPorousFreak(DEATHTYPE__LIQUID);
+PAUL_DBGMSG("dead");
+PAUL_DBGMSG("onp %d",isOnPlatform()!=NULL);
 				break;
 			case COLLISION_TYPE_FLAG_DEATH_INSTANT:
 				dieYouPorousFreak(DEATHTYPE__NORMAL);
