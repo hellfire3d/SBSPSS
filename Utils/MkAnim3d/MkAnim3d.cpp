@@ -1,5 +1,5 @@
 /**********************************/
-/*** SpongeBob 3d Actor Creator ***/
+/*** SpongeBob 3d Anim Creator ***/
 /**********************************/
 
 #include "stdio.h"
@@ -10,19 +10,18 @@
 #include <PsxLib.h>
 #include <FaceStore.h>
 
-#include "MkActor3d.h"
+#include "MkAnim3d.h"
 
 using namespace std;
 
-//***************************************************************************
-int		TPBase=-1,TPWidth=-1,TPHeight=-1;
+int	QuatCount=0;
 
 //***************************************************************************
 
 char * CycleCommands(char *String,int Num)
 {
-char	Text[256],*TextPtr;
-int		Count;
+//char	Text[256],*TextPtr;
+//int		Count;
 
 	if (String[0]=='-' || String[0]=='/')
 		{
@@ -35,25 +34,6 @@ int		Count;
 				break;
 			case 'd':
 				DebugOn =true;
-				break;
-			case 's':
-				TpStr= CheckFileString(String);
-				Scale=atof(TpStr);
-				break;
-			case 't':
-				TpStr= CheckFileString(String);
-				TextPtr=Text;
-				strcpy(TextPtr,TpStr);
-				Count=ZeroAndCountCommas(TextPtr);
-				if (Count!=2)
-						GObject::Error(ERR_FATAL,"Problem with option %s\n",String);
-				TPBase=atol(TextPtr);
-				TextPtr+=strlen(TextPtr)+1;
-				TPWidth=atol(TextPtr);
-				TextPtr+=strlen(TextPtr)+1;
-				TPHeight=atol(TextPtr);
-			case 'q':
-				StripLength=4;
 				break;
 			default:
 				GObject::Error(ERR_FATAL,"Unknown switch %s",String);
@@ -73,176 +53,153 @@ int		Count;
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-CMkActor3d::CMkActor3d(GString const &In,GString const &Out,int TPBase,int TPW,int TPH)
+void	CMkAnim3d::Add(GString const &Filename)
 {
-GFName	File=In;
+CScene	Scene;
+int		ThisBoneCount;
 
-		InFilename=In;
-		InPath=File.Drive();
-		InPath+=File.Dir();
-		OutDir=Out;
-		OutDir.Append('\\');
+		printf("%s\n",Filename);		
+		Scene.Load(Filename);
+		ThisBoneCount=Scene.GetPruneTreeSize()-2;
 
-		Name=File.File();
-// Create Out Filename from inFilename and outdir
-		OutFile=OutDir+File.File();
-//		OutFile+=File.File(); 
-		
-		TPageBase=TPBase; 
-		TPageWidth=TPW ;
-		TPageHeight=TPH;
-}
-
-//***************************************************************************
-void	CMkActor3d::Load()
-{
-		Scene.Load(InFilename);
-//		Scene.PrintPruneTree();
-}
-
-//***************************************************************************
-void	CMkActor3d::Process()
-{
-		BuildSkin();
-		FaceList.SetTexBasePath(InPath);
-		FaceList.SetTexOut(OutFile+".Tex",TPageBase,TPageWidth,TPageHeight);
-		FaceList.SetTexDebugOut(OutFile+".Lbm");
-
-		FaceList.Process();
-}
-
-//***************************************************************************
-void	CMkActor3d::BuildSkin(int Idx)
-{
-CNode	&ThisNode=Scene.GetNode(Idx);
-vector<sGinTri> const	&NodeTriList =	ThisNode.GetTris();
-vector<Vector3> const	&NodeVtxList =	ThisNode.GetPts();
-vector<int>	const		&NodeMatList =	ThisNode.GetTriMaterial();
-vector<sUVTri> const	&NodeUVList =	ThisNode.GetUVTris();
-vector<GString> const	&SceneTexList=	Scene.GetTexList();
-vector<Material> const	&SceneMatList=	Scene.GetMaterials();
-
-int		TriCount=NodeTriList.size();
-	
-		for (int T=0; T<TriCount; T++)
+// Check Skeleton
+		if (BoneCount==-1)
 		{
-			int	Mat=NodeMatList[T];
-			Mat=SceneMatList[Mat].TexId;
-			if (Mat<0) Mat=0;
-			CFace &ThisFace=FaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], SceneTexList[Mat]);
+			BoneCount=ThisBoneCount;
+		}
+		else
+		{
+			if (BoneCount!=ThisBoneCount)
+			{
+				GObject::Error(ERR_FATAL,"Invalid skeleton\n");
+			}
 		}
 
-int		ChildCount=ThisNode.GetPruneChildCount();
-		for (int Loop=0;Loop<ChildCount ;Loop++) BuildSkin(ThisNode.PruneChildList[Loop]);
-
+// Process Anim
+sAnim	ThisAnim;
+		
+		ThisAnim.FrameCount=ProcessSkel(Scene,ThisAnim,1);
+		AnimList.push_back(ThisAnim);
 }
 
 //***************************************************************************
-void	CMkActor3d::Write()
+
+int		CMkAnim3d::ProcessSkel(CScene &Scene,sAnim &ThisAnim,int Idx)
 {
-GString	OutName=OutFile+".A3d";
-
-		File=fopen(OutName,"wb");
-
-// Write Dummy Hdr
-		fwrite(&FileHdr,1,sizeof(sActor3dHdr),File);
-
-// Write Skeleton
-		FileHdr.BoneCount=Scene.GetPruneTreeSize()-1-1;	// Skip Scene & skin
-		FileHdr.BoneList=(sBone*)ftell(File);
-		WriteBone(1);
-
-// Write Tris
-		FileHdr.TriCount=FaceList.GetTriFaceCount();
-		FileHdr.TriList=(sTri*)FaceList.WriteTriList(File);
-		printf("%i Tris\n",FileHdr.TriCount);
-// Write Quads
-		FileHdr.QuadCount=FaceList.GetQuadFaceCount();
-		FileHdr.QuadList=(sQuad*)FaceList.WriteQuadList(File);
-		printf("%i Quads\n",FileHdr.QuadCount);
-// Write WeightList
-		FileHdr.WeightCount=WeightList.size();
-		FileHdr.WeightList=(sWeight*)WriteWeightList();
-		printf("%i Weight\n",FileHdr.WeightCount);
-
-		printf("Size=%i\n",ftell(File));
-
-// Rewrite Header
-		fseek(File, 0, SEEK_SET);
-		fwrite(&FileHdr,1,sizeof(sActor3dHdr),File);
-
-
-}
-
-//***************************************************************************
-void	CMkActor3d::WriteBone(int Idx)
-{
-sBone		ThisBone;
-CNode		&ThisNode=Scene.GetNode(Idx);
+CNode					&ThisNode=Scene.GetNode(Idx);
+vector<sGinAnim> const	&NodeAnim=ThisNode.GetAnim();
+int						FrameCount=NodeAnim.size();
 
 			if (!ThisNode.Pts.size())		// Dont export Skin as bone
+			{
+				sBoneAnim	FrameList;
+				FrameList.Idx.resize(FrameCount);
+			
+				for (int i=0; i<FrameCount; i++)
 				{
-				BuildBoneOut(ThisBone,ThisNode);
-				ThisBone.WeightList=(sWeight*)WeightList.size();
-				fwrite(&ThisBone, sizeof(sBone), 1, File);
-
-// build Weight List
-				for (int Weight=0; Weight<ThisBone.WeightCount; Weight++)
-					{
-					sWeight	OutWeight;
-					BuildWeightOut(OutWeight,ThisNode.Weights[Weight]);
-					WeightList.push_back(OutWeight);
-					}
+					sGinAnim const	&InFrame=NodeAnim[i];
+					sQuat			ThisFrame;
+					ThisFrame.vx=round(InFrame.Ang.x*4096);
+					ThisFrame.vy=round(InFrame.Ang.y*4096);
+					ThisFrame.vz=round(InFrame.Ang.z*4096);
+					ThisFrame.vw=round(InFrame.Ang.w*4096);
+					FrameList.Idx[i]=QuatList.Add(ThisFrame);
+					QuatCount++;
 				}
-int		ChildCount=ThisNode.GetPruneChildCount();
-		for (int Loop=0;Loop<ChildCount;Loop++)	WriteBone(ThisNode.PruneChildList[Loop]);
+				ThisAnim.BoneAnim.push_back(FrameList);
+			}
+
+int			ChildCount=ThisNode.GetPruneChildCount();
+
+			for (int Loop=0;Loop<ChildCount;Loop++)	ProcessSkel(Scene,ThisAnim,ThisNode.PruneChildList[Loop]);
+
+		return(FrameCount);
 }
 
 //***************************************************************************
-void    CMkActor3d::BuildBoneOut(sBone &OutBone,CNode const &InNode)
+void	CMkAnim3d::Write(GString &Filename)
 {
-		OutBone.BoneSize.vx =round(InNode.Pos.x*Scale);
-		OutBone.BoneSize.vy =round(InNode.Pos.y*Scale);
-		OutBone.BoneSize.vz =round(InNode.Pos.z*Scale);
-		OutBone.Idx=InNode.PruneIdx-1;
-		OutBone.Parent=InNode.PruneParentIdx-1;
-		OutBone.WeightCount=InNode.Weights.size();
+int				Anim,AnimCount=AnimList.size();
+sAnim3dFileHdr	FileHdr;
+sAnim3dHdr		Hdr;
 
-int		x,y,z,w;
-		
-		x=round(InNode.Ang.x*4096);
-		y=round(InNode.Ang.y*4096);
-		z=round(InNode.Ang.z*4096);
-		w=round(InNode.Ang.w*4096);
+		File=fopen(Filename,"wb");
 
-//		printf("/*%i*/\t{%f,%f,%f,%f},\t/*%s*/\n",OutBone.Idx,InNode.Ang.x,InNode.Ang.y,InNode.Ang.z,InNode.Ang.w,InNode.Name);
-		printf("/*%i*/\t{%d,%d,%d,%d},\t/*%s*/\n",OutBone.Idx,x,y,z,w,InNode.Name);
+
+// Write Dummy FileHdr		
+		FileHdr.AnimCount=AnimCount;
+		FileHdr.BoneCount=BoneCount;
+		fwrite(&FileHdr,1,sizeof(sAnim3dFileHdr),File);
+
+// Write Dummy AnimHdrs
+
+		for (Anim=0; Anim<AnimCount; Anim++)
+		{
+			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
+		}
+// Write Anims
+		for (Anim=0; Anim<AnimCount; Anim++)
+		{
+			AnimList[Anim].FileOfs=WriteAnim(AnimList[Anim]);
+		}
+
+// Write QuatTable
+		FileHdr.QuatTable=(sQuat*)WriteQuatTable();
+	
+// ReWrite FileHdr
+		fseek(File, 0, SEEK_SET);
+		fwrite(&FileHdr,1,sizeof(sAnim3dFileHdr),File);
+
+// Rewrite Dummy AnimHdrs
+
+		for (Anim=0; Anim<AnimCount; Anim++)
+		{
+			Hdr.FrameCount=AnimList[Anim].FrameCount;
+			Hdr.Anim=(u16*)AnimList[Anim].FileOfs;
+			fwrite(&Hdr,1,sizeof(sAnim3dHdr),File);
+		}
+	
+		fclose(File);
+
 }
 
 //***************************************************************************
-void    CMkActor3d::BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight)
+int		CMkAnim3d::WriteAnim(sAnim const &ThisAnim)
 {
-		OutWeight.vx=round(InWeight.Pos.x*Scale);
-		OutWeight.vy=round(InWeight.Pos.y*Scale);
-		OutWeight.vz=round(InWeight.Pos.z*Scale);
-		OutWeight.VtxNo=InWeight.VertNo;
-}
-
-
-//***************************************************************************
-int		CMkActor3d::WriteWeightList()
-{
-int		ListSize=WeightList.size();
 int		Pos=ftell(File);
+
+		for (int Frame=0; Frame<ThisAnim.FrameCount; Frame++)
+		{
+//			printf("Frame %i/%i\r",Frame,ThisAnim.FrameCount);
+			for (int Bone=0; Bone<BoneCount; Bone++)
+			{
+				u16	ThisIdx=ThisAnim.BoneAnim[Bone].Idx[Frame];
+				fwrite(&ThisIdx,1,sizeof(u16),File);
+			}
+		}
+
+		return(Pos);
+}
+
+//***************************************************************************
+int		CMkAnim3d::WriteQuatTable()
+{
+int		Pos=ftell(File);
+int		ListSize=QuatList.size();
 
 		for (int i=0; i<ListSize; i++)
 		{
-			sWeight		&OutWeight=WeightList[i];
-			
-			fwrite(&OutWeight, sizeof(sWeight), 1, File);
+			sQuat	&ThisQuat=QuatList[i];
+			fwrite(&ThisQuat,1,sizeof(sQuat),File);
 		}
 
-		return (Pos);
+//------------	
+
+		printf("%i Anims\n",AnimList.size());
+		printf("QuatCount=%i\t=%i\n",QuatCount,QuatCount*sizeof(sQuat));
+		printf("ListSize=%i\t=%i\n",ListSize,(ListSize*sizeof(sQuat))+(QuatCount*sizeof(u16)));
+
+		return(Pos);
 }
 
 //***************************************************************************
@@ -251,36 +208,33 @@ int		Pos=ftell(File);
 
 void Usage(char *ErrStr)
 {
-	printf("\nMkActor3d: by Dave\n");
-	printf("Usage: MkActor3d <file> [ <file>.. ] [ switches.. ]\n");
+	printf("\nMkAnim3d: by Dave\n");
+	printf("Usage: MkAnim3d <file> [ <file>.. ] [ switches.. ]\n");
 	printf("Switches:\n");
-	printf("   -o:[FILE]       Set output Dir\n");
-	printf("   -s:nn           Set Scaling value\n");
-	printf("   -t:p,w,h        Set TPage No,Width,Height\n");
+	printf("   -o:[FILE]       Set output File\n");
 	printf("   -d:             Enable Debug output\n");
-	printf("   -q:             Enable Quadding\n");
 	GObject::Error(ERR_FATAL,ErrStr);
 }
 
 //***************************************************************************
-
 int	main (int argc, char *argv[])
 {
+CMkAnim3d	AnimBank;
+
 		CommandLine(argc,argv,CycleCommands);
 		if (OutStr.Empty()) Usage("No Output File Set\n");
-
-		if (TPBase==-1) Usage("No TPage Set\n");
 
 vector<GString> const &Files = MyFiles.GetFileInfoVector();
 
 		for (int Loop=0; Loop<Files.size(); Loop++) 
 		{
-			CMkActor3d	ThisActor(Files[Loop],OutStr,TPBase,TPWidth,TPHeight);
-
-			ThisActor.Load();
-			ThisActor.Process();
-			ThisActor.Write();
+			AnimBank.Add(Files[Loop]);
 		}
+
+		AnimBank.Write(OutStr);
+
 		return 0;
 }
-
+/*
+c:\spongebob\graphics\characters\spongebob\sbanim\buttbounce.gin c:\spongebob\graphics\characters\spongebob\sbanim\deathelectric.gin c:\spongebob\graphics\characters\spongebob\sbanim\deathfall.gin c:\spongebob\graphics\characters\spongebob\sbanim\electricshock.gin c:\spongebob\graphics\characters\spongebob\sbanim\fall.gin c:\spongebob\graphics\characters\spongebob\sbanim\fireaim.gin c:\spongebob\graphics\characters\spongebob\sbanim\firerecoill.gin c:\spongebob\graphics\characters\spongebob\sbanim\float.gin c:\spongebob\graphics\characters\spongebob\sbanim\getup.gin c:\spongebob\graphics\characters\spongebob\sbanim\hitground01.gin c:\spongebob\graphics\characters\spongebob\sbanim\hover.gin c:\spongebob\graphics\characters\spongebob\sbanim\idleboots.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlecoral.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlecoral01.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric01.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric02.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric03.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric04.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlegeneric05.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlelauncher.gin c:\spongebob\graphics\characters\spongebob\sbanim\idlenet.gin -o:\temp\anim.bnk
+*/

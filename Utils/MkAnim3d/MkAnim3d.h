@@ -1,44 +1,46 @@
-/**********************************/
-/*** SpongeBob 3d Actor Creator ***/
-/**********************************/
+/*********************************/
+/*** SpongeBob 3d Anim Creator ***/
+/*********************************/
 
 #include <Vector3.h>
 #include <List.h>
-#include <FaceStore.h>
 
-#include "..\mapedit\ExportPSXHdr.h"
 
 //***************************************************************************
-class	CMkActor3d
+struct	sBoneAnim
+{
+		vector<sQuat>		Quat;
+		vector<int>			Idx;
+};
+
+struct	sAnim
+{
+		int					FrameCount;
+		vector<sBoneAnim>	BoneAnim;
+		int					FileOfs;
+};
+
+//***************************************************************************
+class	CMkAnim3d
 {
 public:
-		CMkActor3d(GString const &In,GString const &Out,int TPBase,int TPW,int TPH);
+		CMkAnim3d()
+		{
+			BoneCount=-1;
+		}
 
-		void			Load();
-		void			Process();
-		void			Write();
+		void			Add(GString const &Filename);
+		void			Write(GString &Filename);
 
 private:
-		void			BuildSkin(int Idx=0);
-		void			WriteBone(int Idx);
-		void			BuildBoneOut(sBone &OutBone,CNode const &InNode);
-		void			BuildWeightOut(sWeight &OutWeight,sGinWeight const &InWeight);
-		int				WriteWeightList();
+		int				ProcessSkel(CScene &Scene,sAnim &ThisAnim,int Idx);
+		int				WriteAnim(sAnim const &ThisAnim);
+		int				WriteQuatTable();
 
-		GString			InFilename,InPath,Name,OutFile,OutDir;
-
-		CScene			Scene;
-
-		CFaceStore		FaceList;
-		vector<sWeight> WeightList;
-		CList<sTri>		OutTriList;
-		CList<sVtx>		OutVtxList;
-
-		sActor3dHdr		FileHdr;
+		int				BoneCount;
+		vector<sAnim>	AnimList;
+		CList<sQuat>	QuatList;
 		FILE			*File;
-
-		int				TPageBase;
-		int				TPageWidth,TPageHeight;
 
 };
 
