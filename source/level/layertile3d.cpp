@@ -112,8 +112,8 @@ sOT				*ThisOT;
 VECTOR			BlkPos;
 
 // Setup Trans Matrix
-		BlkPos.vx=RENDER_X_OFS-(ShiftX);
-		BlkPos.vy=RENDER_Y_OFS-(ShiftY);
+		BlkPos.vx=RENDER_X_OFS-(ShiftX)+RenderOfs.vx;
+		BlkPos.vy=RENDER_Y_OFS-(ShiftY)+RenderOfs.vy;
 
 		for (int Y=0; Y<RenderH; Y++)
 		{
