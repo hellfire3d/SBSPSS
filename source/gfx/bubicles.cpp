@@ -71,6 +71,8 @@ CBubicleEmitter	*CBubicleFactory::s_emitters;
 CBubicle		*CBubicleFactory::s_bubicles;
 SpriteBank		*CBubicleFactory::s_sprites;
 
+int s_numLiveBubicleEmitters=0;
+int s_numLiveBubicles=0;
 
 
 
@@ -122,7 +124,11 @@ void CBubicleEmitter::think(int _frames)
 	}
 
 	if(m_data.m_life!=-1&&m_frameCount>m_data.m_life)
+	{
 		m_active=false;
+		s_numLiveBubicleEmitters--;
+		ASSERT(s_numLiveBubicleEmitters>=0);	// Woah, something bad has happened!
+	}
 }
 
 
@@ -306,7 +312,11 @@ void CBubicle::think(int _frames)
 	m_frameCount+=_frames;
 
 	if(m_frameCount>m_data.m_life)
+	{
 		m_active=false;
+		s_numLiveBubicles--;
+		ASSERT(s_numLiveBubicles>=0);		// Woah, something bad has happened!
+	}
 }
 
 
@@ -398,22 +408,32 @@ void CBubicleFactory::think(int _frames)
 	ASSERT(s_initialised);
 
 	int				frames;
-	int				i;
+	int				i,count;
 	CBubicleEmitter	*emt;
 	CBubicle		*bub;
 
 	emt=s_emitters;
-	for(i=0;i<NUM_EMITTERS;i++,emt++)
+	count=s_numLiveBubicleEmitters;
+	for(i=0;i<count;i++)
 	{
-		if(emt->isActive())
-			emt->think(_frames);
+		while(!emt->isActive())
+		{
+			emt++;
+		}
+		emt->think(_frames);
+		emt++;
 	}
-
+	
 	bub=s_bubicles;
-	for(i=0;i<NUM_BUBICLES;i++,bub++)
+	count=s_numLiveBubicles;
+	for(i=0;i<count;i++)
 	{
-		if(bub->isActive())
-			bub->think(_frames);
+		while(!bub->isActive())
+		{
+			bub++;
+		}
+		bub->think(_frames);
+		bub++;
 	}
 }
 
@@ -468,6 +488,7 @@ CBubicleEmitter	*CBubicleFactory::spawnEmitter(BubicleEmitterData *_init)
 		if(!emt->isActive())
 		{
 			emt->init(_init);
+			s_numLiveBubicleEmitters++;
 			return emt;
 		}
 	}
@@ -523,7 +544,7 @@ CBubicle *CBubicleFactory::spawnParticle(BubicleEmitterData *_init)
 			newBubData.m_colour.m_b=_init->m_bubicleBase.m_colour.m_r+getRndRange(_init->m_bubicleRange.m_colour.m_b);
 
 			bub->init(&newBubData,x,y);
-
+			s_numLiveBubicles++;
 			return bub;
 		}
 	}
