@@ -16,7 +16,7 @@
 CActorCache	CActorPool::Cache;
 sActorPool	*CActorPool::ActorList,*CActorPool::LastActor;
 
-u8			CActorGfx::UnpackBuffer[CActorCache::MAX_ACTOR_SIZE];
+u8			*CActorCache::UnpackBuffer;
 
 /*****************************************************************************/
 /*** Cache *******************************************************************/
@@ -25,8 +25,10 @@ CActorCache::CActorCache()
 {
 		for (int i=0;i<CACHE_TYPE_MAX; i++)
 		{
-			SlotList[i].NodeList.List=0;
+			SlotList[i].ListMem=0;
 		}
+		UnpackBuffer=0;
+
 }
 
 /*****************************************************************************/
@@ -135,12 +137,16 @@ int		Slot=GetSlot(W,H);
 void	CActorCache::AllocCache()
 {
 int		TPW=CACHE_W/SlotCount;
+int		MaxW=0;
+int		MaxH=0;
 		
 		for (int i=0; i<SlotCount; i++)
 		{
-//			printf("Slot %i: (%i) %i %i=%i\n",i,SlotList[i].RefCount,SlotList[i].Width,SlotList[i].Height,SlotList[i].FrameCount);
+			if (MaxW<SlotList[i].Width)		MaxW=SlotList[i].Width;
+			if (MaxH<SlotList[i].Height)	MaxH=SlotList[i].Height;
 			InitCache(i,TPW);
 		}
+		UnpackBuffer=(u8*)MemAlloc(MaxW*MaxH,"UnpackBuffer");
 }
 
 /*****************************************************************************/
@@ -155,7 +161,8 @@ sPoolNode	*List;
 
 // Init List
 			
-			List=(sPoolNode*)MemAlloc(Total*sizeof(sPoolNode),"CacheNodeList");
+			ThisSlot->ListMem=(u8*)MemAlloc(Total*sizeof(sPoolNode),"CacheNodeList");
+			List=(sPoolNode*)ThisSlot->ListMem;
 
 // Create List Entries
 			for (int Y=0; Y<H; Y++)
@@ -187,7 +194,8 @@ void	CActorCache::Reset()
 // Free and init lists
 		for (int i=0;i<CACHE_TYPE_MAX; i++)
 		{
-			if (SlotList[i].NodeList.List) MemFree(SlotList[i].NodeList.List);
+			if (SlotList[i].ListMem) MemFree(SlotList[i].ListMem);
+			SlotList[i].ListMem=0;
 			SlotList[i].NodeList.List=0;
 			SlotList[i].NodeList.LastNode=0;
 			SlotList[i].RefCount=0;
@@ -195,15 +203,8 @@ void	CActorCache::Reset()
 			SlotList[i].Width=0;
 			SlotList[i].Height=0;
 		}
-
-// Init VRam Table
-		for (int Y=0; Y<CACHE_TABLE_H; Y++)
-		{
-			for (int X=0; X<CACHE_TABLE_W; X++)
-			{
-				SlotTable[X][Y]=0;
-			}
-		}
+		if (UnpackBuffer) MemFree(UnpackBuffer);
+		UnpackBuffer=0;
 
 		CurrentTPX=0;
 		CurrentPalette=0;
@@ -335,7 +336,7 @@ sActorPool	*CActorPool::LoadActor(FileEquate Filename)
 int		i;
 int		TotalFrames=0;
 
-sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename);
+sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
 
 //		printf("Add Actor %i\n",(int)Filename);
 		Spr->AnimList=(sSpriteAnim*)	MakePtr(Spr,(int)Spr->AnimList);
@@ -436,8 +437,6 @@ sPoolNode		*ThisNode;;
 POLY_FT4		*Ft4;
 
 // Is cached?
-//			if(this->PoolEntry->Filename==ACTORS_SPONGEBOB_SBK) return(0);
-
 			ThisNode=PoolEntry->ThisCache.List;
 			while (ThisNode)
 			{
@@ -454,12 +453,12 @@ POLY_FT4		*Ft4;
 				ThisNode->Anim=Anim;
 				ThisNode->Frame=Frame;
 
-				PAK_doUnpak(UnpackBuffer,FrameGfx->PAKSpr);
+				PAK_doUnpak(CActorCache::UnpackBuffer,FrameGfx->PAKSpr);
 				R.x=ThisNode->TexX;
 				R.y=ThisNode->TexY;
 				R.w=FrameGfx->W>>2;	// div 4 cos 16 color
 				R.h=FrameGfx->H;
-				LoadImage( &R, (u32*)UnpackBuffer);
+				LoadImage( &R, (u32*)CActorCache::UnpackBuffer);
 			}
 
 			Ft4=GetPrimFT4();
@@ -481,6 +480,14 @@ POLY_FT4		*Ft4;
 				setRGB0(sFt4,0,0,0);
 				AddPrimToList(sFt4,ActorOT);
 			}
+// Set BBox
+int			HalfW=FrameGfx->W>>1;
+int			HalfH=FrameGfx->H>>1;
+
+			BBox.XMin=-HalfW;
+			BBox.XMax=+HalfW;
+			BBox.YMin=-HalfH;
+			BBox.YMax=+HalfH;
 
 			return(Ft4);
 }

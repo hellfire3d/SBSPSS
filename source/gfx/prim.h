@@ -16,7 +16,7 @@
 #endif
 
 #define	MAX_OT				(16)
-#define	MAX_PRIMS			(1024*4)
+#define	MAX_PRIMS			(1024*2)
 
 //#define	USE_NTAGS			1
 

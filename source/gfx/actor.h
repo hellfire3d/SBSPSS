@@ -37,6 +37,7 @@ struct	sPoolSlot
 		u16			RefCount;
 		u16			FrameCount;
 		sNodeList	NodeList;
+		u8			*ListMem;
 };
 
 /*****************************************************************************/
@@ -69,14 +70,7 @@ public:
 			CACHE_PALW		=64,
 			CACHE_PALH		=1,
 
-			CACHE_TABLE_W	=(TPAGE_W*CACHE_W)/32,
-			CACHE_TABLE_H	=(TPAGE_H*CACHE_H)/32,
-
 			CACHE_TYPE_MAX	=8,
-
-			MAX_ACTOR_W		=128,
-			MAX_ACTOR_H		=128,
-			MAX_ACTOR_SIZE	=MAX_ACTOR_W*MAX_ACTOR_H,
 		};
 
 		CActorCache();
@@ -91,19 +85,19 @@ public:
 static	sPoolNode	*RemoveHeadNode(sNodeList *Root);
 static	void		RemoveNode(sPoolNode *Node,sNodeList *Root);
 static	void		AddNode(sPoolNode *Node,sNodeList *Root);
+static	u8			*UnpackBuffer;
 
 protected:
 		int			GetSlot(int W,int H);
 		void		InitCache(int Type,int Count);
 		int			GetSizeType(int Size);
 
-
-		u8			SlotTable[CACHE_TABLE_W][CACHE_TABLE_H];
 		sPoolSlot	SlotList[CACHE_TYPE_MAX];
 
 		int			CurrentTPX;
 		int			CurrentPalette;
 		int			SlotCount;
+
 };
 
 /*****************************************************************************/
@@ -136,7 +130,6 @@ public:
 		{
 			ShadowXOfs	=32,
 			ShadowYOfs	=32,
-
 		};
 
 		CActorGfx(sActorPool *ThisActor);
@@ -152,8 +145,7 @@ protected:
 		sSpriteFrame	*GetFrame(int Anim,int Frame);
 
 		sActorPool		*PoolEntry;
-
-static	u8				UnpackBuffer[CActorCache::MAX_ACTOR_SIZE];
+		sBBox			BBox;
 };
 
 /*****************************************************************************/
