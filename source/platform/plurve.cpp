@@ -18,7 +18,7 @@
 
 void CNpcLoveBoatPlatform::postInit()
 {
-	CNpcCartPlatform::postInit();
+	CNpcGhostTrainPlatform::postInit();
 
 	sBBox boundingBox = m_modelGfx->GetBBox();
 	boundingBox.YMin += 32;
