@@ -61,10 +61,16 @@ virtual void		render();
 
 virtual int			canCollide()					{return false;}
 virtual	void		SetOtPos(int Ot)				{OtPos=Ot;}
+virtual	void		setDie()						{DieOut=true;}
+virtual	void		setLife(int L)					{Life=L;}
 
 protected:
 		SpriteBank	*m_spriteBank;
 		s32			OtPos;
+
+		u8			DieOut;
+		s16			Life;
+
 };
 
 /*****************************************************************************/

@@ -12,11 +12,11 @@
 
 #include	"FX\FXSteam.h"
 
-static const int		Size=2;
-static const int		AngleInc=999;
-static const int		ShadeBase=255;
-static const int		ShadeDec=8;
-static const int		ShadeDieDec=24;
+static const	int		DefSize=4;
+static const	int		DefAngleInc=999;
+static const	int		DefShadeBase=255;
+static const	int		DefShadeDec=8;
+static const	int		DefShadeDieDec=24;
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -25,11 +25,10 @@ void	CFXSteam::init(DVECTOR const &_Pos)
 {
 		CFXTrail::init(_Pos);
 
-		Angle=0;
 		Trans=3;
-		ShadeDec=ShadeDec;
+		ShadeDec=DefShadeDec;
 		DieOut=false;
-		SetSize(Size);
+		SetSize(DefSize);
 }
 
 /*****************************************************************************/
@@ -49,14 +48,14 @@ void	CFXSteam::SetSize(int Size)
 /*****************************************************************************/
 void	CFXSteam::setDie()
 {
-	CFXTrail::setDie();
-	for (int i=0; i<LIST_SIZE; i++)
-	{ // Set drift off
-		sList	&ThisElem=List[i];
-		ThisElem.Vel.vx+=getRndRange(9)-4;	// give it x motion
-	}
-	ShadeDec=ShadeDieDec;
-	ScaleInc=0;
+		CFXTrail::setDie();
+		for (int i=0; i<LIST_SIZE; i++)
+		{ // Set drift off
+			sList	&ThisElem=List[i];
+			ThisElem.Vel.vx+=getRndRange(9)-4;	// give it x motion
+		}
+		ShadeDec=DefShadeDieDec;
+		ScaleInc=0;
 }
 
 /*****************************************************************************/
@@ -64,12 +63,8 @@ void	CFXSteam::setDie()
 /*****************************************************************************/
 void	CFXSteam::think(int _frames)
 {
-int		TotalLife=0;
-
 		CFX::think(_frames);
 
-		Angle+=AngleInc;
-		Angle&=4095;
 		if (!DieOut)
 		{ // Replace Head
 			DVECTOR	Vel=BaseVel;
@@ -79,13 +74,15 @@ int		TotalLife=0;
 			Head.Ofs=Vel;
 			Head.Vel=Vel;
 			Head.Frame=FRM__SMOKE;
-			Head.Shade=ShadeBase;
+			Head.Shade=DefShadeBase;
 			Head.Scale=ScaleInc;
 			Head.Angle=getRndRange(ONE);
 		}
 
 // Move em all
 int		Head=HeadIdx;
+int		TotalLife=0;
+
 		for (int i=0; i<ListCount; i++)
 		{
 			sList	&ThisElem=List[Head];
@@ -95,11 +92,9 @@ int		Head=HeadIdx;
 			ThisElem.Ofs.vx+=ThisElem.Vel.vx;
 			ThisElem.Ofs.vy+=ThisElem.Vel.vy;
 
-			ThisElem.Angle+=AngleInc;
+			ThisElem.Angle+=DefAngleInc;
 			ThisElem.Angle&=4095;
 			ThisElem.Scale+=ScaleInc;
-			if (ThisElem.Scale>ONE*2) ThisElem.Scale=ONE*2;
-					
 			ThisElem.Shade-=ShadeDec;
 			if (ThisElem.Shade<0) ThisElem.Shade=0;
 			TotalLife+=ThisElem.Shade;

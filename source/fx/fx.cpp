@@ -70,6 +70,8 @@ void	TestFX(DVECTOR Pos)
 		if (!TestFXPtr)
 		{
 			TestFXPtr=(CFXSteam*)CFX::Create(CFX::FX_TYPE_STEAM,Pos);
+			TestFXPtr->setLife(32);
+			TestFXPtr=0;
 		}
 		else
 		{
@@ -167,6 +169,8 @@ void	CFX::init()
 		m_spriteBank=new ("FX Sprite") SpriteBank();
 		m_spriteBank->load(SPRITES_SPRITES_SPR);
 		OtPos=OTPOS__ACTOR_POS;
+
+		Life=-1;
 }
 
 /*****************************************************************************/
@@ -180,6 +184,15 @@ void	CFX::shutdown()
 void	CFX::think(int _frames)
 {
 		CFXThing::think(_frames);
+		if (Life>0)
+		{
+			Life--;
+			if (Life==0 && !DieOut)
+			{
+				setDie();
+			}
+		}
+
 }
 
 /*****************************************************************************/
