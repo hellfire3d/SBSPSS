@@ -194,10 +194,17 @@ int		CPlayerMode::getPadInputDown()					{return m_player->getPadInputDown();}
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+extern int	checkx;
+
 int		CPlayerMode::getHeightFromGound()
 {
+	int				height[2];
 	DVECTOR	const &pos=getPlayerPos();
-	return m_player->getHeightFromGround(pos.vx,pos.vy);
+
+	height[0]=m_player->getHeightFromGround(pos.vx-checkx,pos.vy);
+	height[1]=m_player->getHeightFromGround(pos.vx+checkx,pos.vy);
+
+	return height[0]<height[1]?height[0]:height[1];
 }
 
 
