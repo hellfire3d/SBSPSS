@@ -60,6 +60,7 @@ void CNpcFallingPlatformGenerator::think( int _frames )
 		{
 			case NPC_OILDRUM_PLATFORM:
 			case NPC_CRATE_PLATFORM:
+			case NPC_VERTICAL_OILDRUM_PLATFORM:
 			{
 				newPlatform = new ("falling platform") CNpcFallingNoRespawnPlatform;
 				break;

@@ -255,6 +255,15 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_VERTICAL_OILDRUM_GENERATOR:
+		{
+			CNpcFallingPlatformGenerator *generator;
+			generator = new ("vertical oildrum generator") CNpcFallingPlatformGenerator;
+			generator->setTargetType( NPC_VERTICAL_OILDRUM_PLATFORM );
+			platform = generator;
+			break;
+		}
+
 		default:
 		{
 			ASSERT( 0 );
