@@ -108,8 +108,8 @@ ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
 ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net
-ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy 
-#						MermaidMan Patrick Plankton
+ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick
+#						MermaidMan Plankton
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
@@ -497,8 +497,8 @@ GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
 #----------------------------------------------------------------------------
 # Script stuff..
 #----------------------------------------------------------------------------
-SCRIPTS_LIST		:=	test \
-						speechtest
+SCRIPTS_LIST		:=	ch1l1_01 ch1l1_02 ch1l2_01 ch1l2_02 ch1l2_03 ch1l4_01 ch1l4_02 \
+						ch2l1_01 ch2l1_02 ch2l2_01 ch2l2_02 ch3l3_01 ch3l3_02 ch4l3_01 ch4l3_02
  
 SCRIPTS_IN_DIR		:=	$(GAME_DATA_DIR)/scripts
  

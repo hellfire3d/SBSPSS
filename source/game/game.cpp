@@ -297,7 +297,7 @@ void	CGameScene::initLevel()
 	CThingManager::init();
 
 	CConversation::init();
-	CConversation::registerConversationScript(SCRIPTS_SPEECHTEST_DAT);	// Register one script for testing..
+	CConversation::registerConversationLevelScripts( s_globalLevelSelectThing );
 
 	s_levelFinished=false;
 	Level.init(s_globalLevelSelectThing);
@@ -337,6 +337,7 @@ void	CGameScene::initLevel()
 						CNpcFriend *friendNpc;
 						friendNpc=CNpcFriend::Create(ThisActor);
 						friendNpc->setLayerCollision( Level.getCollisionLayer() );
+						friendNpc->postInit();
 					}
 					break;
 

@@ -426,5 +426,41 @@ void CConversation::dumpConversationScripts()
 }
 
 
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CConversation::registerConversationLevelScripts(int level)
+{
+	switch( level )
+	{
+		case 0:
+		{
+			CConversation::registerConversationScript(SCRIPTS_CH1L1_01_DAT);
+			CConversation::registerConversationScript(SCRIPTS_CH1L1_02_DAT);
+
+			// temporary
+			//CConversation::registerConversationScript(SCRIPTS_CH1L2_01_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH1L2_02_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH1L2_03_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH1L4_01_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH1L4_02_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH2L1_01_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH2L1_02_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH2L2_01_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH2L2_02_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH3L3_01_DAT);
+			//CConversation::registerConversationScript(SCRIPTS_CH3L3_02_DAT);
+			CConversation::registerConversationScript(SCRIPTS_CH4L3_01_DAT);
+			CConversation::registerConversationScript(SCRIPTS_CH4L3_02_DAT);
+			break;
+		}
+
+		default:
+			break;
+	}
+}
 /*===========================================================================
  end */

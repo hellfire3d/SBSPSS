@@ -27,6 +27,15 @@
 #include <ACTOR_SQUIDWARD_Anim.h>
 #endif
 
+#ifndef	__ANIM_SANDY_HEADER__
+#include <ACTOR_SANDY_Anim.h>
+#endif
+
+#ifndef	__ANIM_PATRICK_HEADER__
+#include <ACTOR_PATRICK_Anim.h>
+#endif
+
+
 CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 {
 	{	// NPC_FRIEND_BARNACLE_BOY
@@ -50,7 +59,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_FRIEND_KRUSTY
-		ACTORS_CLAM_SBK,
+		ACTORS_KRUSTY_SBK,
 		true,
 		3,
 		128,
@@ -70,7 +79,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_FRIEND_PATRICK
-		ACTORS_CLAM_SBK,
+		ACTORS_PATRICK_SBK,
 		true,
 		3,
 		128,
@@ -80,7 +89,7 @@ CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_FRIEND_SANDY_CHEEKS
-		ACTORS_CLAM_SBK,
+		ACTORS_SANDY_SBK,
 		true,
 		3,
 		128,

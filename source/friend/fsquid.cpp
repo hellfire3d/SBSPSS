@@ -19,10 +19,23 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef	__GAME_CONVO_H__
+#include "game\convo.h"
+#endif
+
 #ifndef	__ANIM_SQUIDWARD_HEADER__
 #include <ACTOR_SQUIDWARD_Anim.h>
 #endif
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSquidwardFriend::postInit()
+{
+	m_conversation = SCRIPTS_CH1L1_01_DAT;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcSquidwardFriend::think( int _frames )
 {
@@ -59,5 +72,23 @@ void CNpcSquidwardFriend::think( int _frames )
 
 		m_animPlaying = true;
 		m_frame = 0;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSquidwardFriend::startConderversation()
+{
+	if ( m_data[this->m_type].canTalk )
+	{
+		if( !CConversation::isActive() )
+		{
+			CConversation::trigger( m_conversation );
+
+			if ( m_conversation == SCRIPTS_CH1L1_01_DAT )
+			{
+				m_conversation = SCRIPTS_CH1L1_02_DAT;
+			}
+		}
 	}
 }

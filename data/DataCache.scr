@@ -2,8 +2,22 @@
 }
 sprites/sprites.spr
 
-scripts/test.dat
-scripts/speechtest.dat
+scripts/ch1l1_01.dat
+scripts/ch1l1_02.dat
+scripts/ch1l2_01.dat
+scripts/ch1l2_02.dat
+scripts/ch1l2_03.dat
+scripts/ch1l4_01.dat
+scripts/ch1l4_02.dat
+scripts/ch2l1_01.dat
+scripts/ch2l1_02.dat
+scripts/ch2l2_01.dat
+scripts/ch2l2_02.dat
+scripts/ch3l3_01.dat
+scripts/ch3l3_02.dat
+scripts/ch4l3_01.dat
+scripts/ch4l3_02.dat
+
 translations/swe.dat
 translations/dut.dat
 translations/ita.dat
@@ -149,6 +163,7 @@ actors/KRUSTY.SBK
 actors/SQUIDWARD.SBK
 actors/GARY.SBK
 actors/SANDY.SBK
+actors/PATRICK.SBK
 
 actors/ANENOME.SBK
 actors/BABYOCTOPUS.SBK

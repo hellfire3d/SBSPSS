@@ -19,6 +19,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __LEVEL_LEVEL_H__
+#include "level\level.h"
+#endif
+
 #ifndef	__GAME_CONVO_H__
 #include "game\convo.h"
 #endif
@@ -32,7 +36,26 @@
 
 void CNpcKrustyFriend::postInit()
 {
-	m_conversation = SCRIPTS_CH1L4_01_DAT;
+	switch( CLevel::getCurrentChapter() )
+	{
+		case 4:
+		{
+			m_conversation = SCRIPTS_CH4L3_01_DAT;
+			break;
+		}
+
+		case 2:
+		{
+			m_conversation = SCRIPTS_CH2L1_01_DAT;
+			break;
+		}
+
+		default:
+		{
+			m_conversation = SCRIPTS_CH1L4_01_DAT;
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,9 +68,37 @@ void CNpcKrustyFriend::startConderversation()
 		{
 			CConversation::trigger( m_conversation );
 
-			if ( m_conversation == SCRIPTS_CH1L4_01_DAT )
+			switch( CLevel::getCurrentChapter() )
 			{
-				m_conversation = SCRIPTS_CH1L4_02_DAT;
+				case 4:
+				{
+					if ( m_conversation == SCRIPTS_CH4L3_01_DAT )
+					{
+						m_conversation = SCRIPTS_CH4L3_02_DAT;
+					}
+
+					break;
+				}
+
+				case 2:
+				{
+					if ( m_conversation == SCRIPTS_CH2L1_01_DAT )
+					{
+						m_conversation = SCRIPTS_CH2L1_02_DAT;
+					}
+
+					break;
+				}
+
+				default:
+				{
+					if ( m_conversation == SCRIPTS_CH1L4_01_DAT )
+					{
+						m_conversation = SCRIPTS_CH1L4_02_DAT;
+					}
+
+					break;
+				}
 			}
 		}
 	}

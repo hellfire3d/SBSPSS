@@ -39,6 +39,7 @@ public:
 
 	void				init();
 	void				init( DVECTOR initPos );
+	virtual void		postInit();
 	void				shutdown();
 	virtual void		think(int _frames);
 	void				render();
@@ -74,7 +75,7 @@ protected:
 
 	static NPC_FRIEND_UNIT_TYPE mapEditConvertTable[NPC_FRIEND_UNIT_TYPE_MAX];
 
-	void						startConderversation();
+	virtual void		startConderversation();
 
 	virtual void		collidedWith(CThing *_thisThing);
 

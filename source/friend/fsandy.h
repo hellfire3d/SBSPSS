@@ -20,6 +20,8 @@
 
 class CNpcSandyFriend : public CNpcFriend
 {
+protected:
+	virtual void		startConderversation();
 };
 
 #endif

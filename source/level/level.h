@@ -34,6 +34,10 @@ public:
 	void					setCameraCentre(DVECTOR _pos)		{MapPos=_pos;}
 	static DVECTOR			getCameraPos()						{return MapPos;}
 	static DVECTOR			getPlayerSpawnPos()					{return s_playerSpawnPos;}
+
+	static int				getCurrentChapter();
+	static int				getCurrentChapterLevel();
+
 	int						getActorCount()						{return ActorCount;}
 	sThingActor				**getActorList()					{return ActorList;}
 	int						getPlatformCount()					{return PlatformCount;}

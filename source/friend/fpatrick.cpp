@@ -34,20 +34,20 @@ extern int s_globalLevelSelectThing;
 
 void CNpcPatrickFriend::postInit()
 {
-	switch( s_globalLevelSelectThing )
+	/*switch( CLevel::getCurrentChapter() )
 	{
-		/*case 5:
-		{
-			m_conversation = SCRIPTS_CH2L1_01_DAT;
-			break;
-		}*/
+		case 3:
+		{*/
+			m_conversation = SCRIPTS_CH3L3_01_DAT;
+			/*break;
+		}
 
 		default:
 		{
 			m_conversation = SCRIPTS_CH2L2_01_DAT;
 			break;
 		}
-	}
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,17 +60,17 @@ void CNpcPatrickFriend::startConderversation()
 		{
 			CConversation::trigger( m_conversation );
 
-			switch( s_globalLevelSelectThing )
+			/*switch( CLevel::getCurrentChapter() )
 			{
-				/*case 5:
-				{
-					if ( m_conversation == SCRIPTS_CH2L1_01_DAT )
+				case 3:
+				{*/
+					if ( m_conversation == SCRIPTS_CH3L3_01_DAT )
 					{
-						m_conversation = SCRIPTS_CH2L1_02_DAT;
+						m_conversation = SCRIPTS_CH3L3_02_DAT;
 					}
 
-					break;
-				}*/
+					/*break;
+				}
 
 				default:
 				{
@@ -81,7 +81,7 @@ void CNpcPatrickFriend::startConderversation()
 
 					break;
 				}
-			}
+			}*/
 		}
 	}
 }

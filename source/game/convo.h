@@ -43,6 +43,7 @@ public:
 	static void	think(int _frames);
 	static void	render();
 
+	static void registerConversationLevelScripts(int level);
 	static void	registerConversationScript(FileEquate _feScript);
 	static void	trigger(FileEquate _feScript);
 	static int	isActive();

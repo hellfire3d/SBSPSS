@@ -23,10 +23,6 @@
 #include "system\vid.h"
 #endif
 
-#ifndef	__GAME_CONVO_H__
-#include "game\convo.h"
-#endif
-
 #ifndef	__UTILS_HEADER__
 #include	"utils\utils.h"
 #endif
@@ -182,6 +178,12 @@ void CNpcFriend::init( DVECTOR initPos )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcFriend::postInit()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcFriend::shutdown()
 {
 	//m_spriteBank->dump();		delete m_spriteBank;
@@ -277,12 +279,4 @@ void CNpcFriend::collidedWith( CThing *_thisThing )
 void CNpcFriend::startConderversation()
 {
 	// I am 'avin a fayg
-
-	if ( m_data[this->m_type].canTalk )
-	{
-		if( !CConversation::isActive() )
-		{
-			CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
-		}
-	}
 }

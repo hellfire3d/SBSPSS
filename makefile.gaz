@@ -84,7 +84,10 @@ enemy_src :=		npc \
 friend_src :=		friend \
 					fdata \
 					fgary \
-					fsquid
+					fsquid \
+					fsandy \
+					fkrusty \
+					fpatrick
 
 platform_src :=		platform \
 					platdata \

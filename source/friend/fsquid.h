@@ -22,6 +22,11 @@ class CNpcSquidwardFriend : public CNpcFriend
 {
 public:
 	virtual void		think(int _frames);
+	virtual void		postInit();
+protected:
+	virtual void		startConderversation();
+
+	FileEquate			m_conversation;
 };
 
 #endif

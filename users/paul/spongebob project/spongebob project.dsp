@@ -417,11 +417,19 @@ SOURCE=..\..\..\source\friend\fgary.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\friend\fkrusty.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\friend\fkrusty.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\source\friend\fmman.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fpatrick.cpp
 # End Source File
 # Begin Source File
 
@@ -434,6 +442,10 @@ SOURCE=..\..\..\source\friend\friend.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\friend\friend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fsandy.cpp
 # End Source File
 # Begin Source File
 
@@ -1701,6 +1713,66 @@ SOURCE=..\..\..\data\scripts\defs\trans.scr
 # End Group
 # Begin Source File
 
+SOURCE=..\..\..\data\Scripts\ch1l1_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l1_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l2_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l2_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l2_03.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l4_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch1l4_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch2l1_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch2l1_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch2l2_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch2l2_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch3l3_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch3l3_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch4l3_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\Scripts\ch4l3_02.scr
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\data\scripts\speechtest.scr
 # End Source File
 # Begin Source File
@@ -1792,7 +1864,15 @@ SOURCE=..\..\..\out\USA\include\ACTOR_LRGJELLYFISH_Anim.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\ACTOR_PATRICK_Anim.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\ACTOR_PUFFAFISH_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SANDY_Anim.h
 # End Source File
 # Begin Source File
 
