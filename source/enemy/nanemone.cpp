@@ -149,7 +149,8 @@ void CNpc::processCloseAnemone3Attack( int _frames )
 
 	DVECTOR newPos = Pos;
 
-	newPos.vy -= 100;
+	newPos.vx += rcos( m_fireHeading ) >> 5;
+	newPos.vy += rsin( m_fireHeading ) >> 5;
 
 	projectile = new( "test projectile" ) CProjectile;
 	projectile->init(	newPos,
