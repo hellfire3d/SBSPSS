@@ -805,11 +805,17 @@ PLAYERINPUT CPlayer::getPadInputDown()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int slip=false;
 int CPlayer::isOnSlippySurface()
 {
-return false;
-//	return slip&&isOnSolidGround();
+	int	ret=false;
+
+	if(m_layerCollision->getHeightFromGround(Pos.vx,Pos.vy,5)==0&&
+	   m_layerCollision->getCollisionType(Pos.vx,Pos.vy)&COLLISION_TYPE_FLAG_SLIPPERY)
+	{
+		ret=true;
+	}
+
+	return ret;
 }
 
 

@@ -96,6 +96,35 @@ int			CLayerCollision::getHeightFromGround(int _x,int _y,int _maxHeight)
 
 
 /*****************************************************************************/
+int			CLayerCollision::getCollisionType(int _x,int _y)
+{
+	int	mapX,mapY,xFraction,yFraction;
+	int	distanceFromGround;
+	int	block,colHeight;
+	int	ret;
+
+	mapX=_x>>4;
+	mapY=(_y>>4)*MapWidth;
+	xFraction=_x&0x0f;
+	yFraction=16-(_y&0x0f);
+
+	block=Map[mapX+mapY];
+	colHeight=m_collisionTable[((block&COLLISION_MASK)*16)+xFraction];
+	if(colHeight==yFraction)
+	{
+		ret=block;
+	}
+	else
+	{
+		PAUL_DBGMSG("not on ground in getCollisionType()");
+		ret=0;
+	}
+
+	return ret;
+}
+
+
+/*****************************************************************************/
 #ifdef __SHOW_COLLISION__
 #include "gfx\prim.h"
 #include "pad\pads.h"
