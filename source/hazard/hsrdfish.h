@@ -22,7 +22,7 @@ class CNpcSwordfishHazard : public CNpcFireballHazard
 {
 public:
 	void				render();
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				setWaypoints( sThingHazard *ThisHazard );
 };
 
 #endif

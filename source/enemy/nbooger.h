@@ -17,8 +17,8 @@
 class CNpcBoogerMonsterEnemy : public CNpcEnemy
 {
 protected:
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
 
 	enum
 	{

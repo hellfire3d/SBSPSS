@@ -24,7 +24,7 @@ public:
 	void				init();
 	bool				alwaysThink()								{return(true);}
 protected:
-	virtual void		processTimer( int _frames );
+	void				processTimer( int _frames );
 	void				processMovement( int _frames );
 
 	enum SPIKES_STATE

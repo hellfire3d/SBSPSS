@@ -26,17 +26,17 @@
 class CNpcSubSharkEnemy : public CNpcBossEnemy
 {
 public:
-	virtual void		think( int _frames );
+	void				think( int _frames );
 	void				postInit();
 	void				render();
 	void				shutdown();
 protected:
 	//virtual void		processClose( int _frames );
-	virtual s32			getFrameShift( int _frames );
-	virtual void		processMovement( int _frames );
-	virtual void		processShot( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
-	virtual void		setupWaypoints( sThingActor *ThisActor );
+	s32					getFrameShift( int _frames );
+	void				processMovement( int _frames );
+	void				processShot( int _frames );
+	void				collidedWith(CThing *_thisThing);
+	void				setupWaypoints( sThingActor *ThisActor );
 
 	enum NPC_SUB_SHARK_STATE
 	{

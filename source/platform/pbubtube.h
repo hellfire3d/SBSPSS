@@ -22,11 +22,11 @@ class CNpcBubbleTubePlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
 protected:
-	virtual void		collidedWith(CThing *_thisThing);
-	virtual void		processMovement( int _frames );
-	virtual void		processTimer( int _frames );
+	void				collidedWith(CThing *_thisThing);
+	void				processMovement( int _frames );
+	void				processTimer( int _frames );
 
 	u8					m_isActivated;
 	u8					m_returning;

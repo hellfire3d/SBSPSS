@@ -22,9 +22,9 @@ class CNpcSmallJellyfish2BackgroundEnemy : public CNpcSmallJellyfishBackgroundEn
 {
 public:
 	void				postInit();
-	virtual void		render();
+	void				render();
 protected:
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 };
 
 #endif

@@ -17,9 +17,9 @@
 class CNpcSkeletalFishEnemy : public CNpcEnemy
 {
 protected:
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual s32			getFrameShift( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
+	s32					getFrameShift( int _frames );
 
 	s32					m_chargeTime;
 

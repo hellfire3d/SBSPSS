@@ -26,7 +26,7 @@ class CNpcSmallJellyfishProjectileEnemy : public CNpcSmallJellyfishEnemy
 {
 public:
 	void				postInit();
-	virtual void		think(int _frames);
+	void				think(int _frames);
 protected:
 	s32					m_lifetime;
 };

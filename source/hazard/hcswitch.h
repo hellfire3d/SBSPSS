@@ -21,12 +21,12 @@
 class CNpcConveyorSwitchHazard : public CNpcHazard
 {
 public:
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				setWaypoints( sThingHazard *ThisHazard );
 	void				init();
-	virtual void		render();
-	virtual void		trigger();
+	void				render();
+	void				trigger();
 protected:
-	virtual void		collidedWith(CThing *_thisThing)		{}
+	void				collidedWith(CThing *_thisThing)		{}
 
 	u8					m_reversed;
 	DVECTOR				m_conveyorPos;

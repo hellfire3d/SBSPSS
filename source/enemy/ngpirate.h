@@ -19,8 +19,8 @@ class CNpcGhostPirateEnemy : public CNpcEnemy
 public:
 	void				postInit();
 protected:
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
 };
 
 #endif

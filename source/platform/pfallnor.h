@@ -23,10 +23,10 @@ class CNpcFallingNoRespawnPlatform : public CNpcPlatform
 public:
 	void				postInit();
 	bool				alwaysThink()												{return(true);}
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
-	virtual void		render();
-	virtual void		processMovement( int _frames );
+	void				render();
+	void				processMovement( int _frames );
 
 	u8					m_spinFinish;
 	s16					m_rotation;

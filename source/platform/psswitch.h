@@ -26,10 +26,10 @@ class CNpcSteamSwitchPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
 protected:
-	virtual void		processMovement( int _frames );
-	virtual void		processTimer( int _frames );
+	void				processMovement( int _frames );
+	void				processTimer( int _frames );
 
 	enum NPC_STEAM_SWITCH_STATE
 	{

@@ -22,10 +22,10 @@ class CNpcSeesawPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		render();
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	void				render();
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 
 	s32					m_angularVelocity;
 	s32					m_currentAngle;

@@ -22,11 +22,11 @@ class CNpcBigWheelHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		render();
+	void				render();
 	bool				alwaysThink()								{return(true);}
 protected:
 	void				processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	s16					m_rotation;
 };

@@ -23,7 +23,7 @@ class CNpcCircularPlatform : public CNpcPlatform
 public:
 	void				postInit();
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 };
 
 #endif

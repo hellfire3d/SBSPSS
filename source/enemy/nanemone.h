@@ -24,8 +24,8 @@ public:
 	virtual void		postInit();
 	void				setHeading( s32 xPos, s32 yPos );
 protected:
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual bool		processSensor();
+	void				processEnemyCollision( CThing *thisThing );
+	bool				processSensor();
 
 	s32					m_fireHeading;
 };
@@ -33,7 +33,7 @@ protected:
 class	CNpcAnemone1Enemy : public CNpcAnemoneEnemy
 {
 protected:
-	virtual void		processClose( int _frames );
+	void				processClose( int _frames );
 };
 
 class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
@@ -41,12 +41,12 @@ class	CNpcAnemone2Enemy : public CNpcAnemoneEnemy
 public:
 	void				postInit();
 	void				shutdown();
-	virtual void		render();
+	void				render();
 protected:
-	virtual void		processClose( int _frames );
-	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
-	virtual void		processShotDeathStart( int _frames );
-	virtual void		processShotDeathEnd( int _frames );
+	void				processClose( int _frames );
+	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+	void				processShotDeathStart( int _frames );
+	void				processShotDeathEnd( int _frames );
 
 	u16					m_scaleX, m_scaleY;
 
@@ -62,7 +62,7 @@ protected:
 class	CNpcAnemone3Enemy : public CNpcAnemoneEnemy
 {
 protected:
-	virtual void		processClose( int _frames );
+	void				processClose( int _frames );
 };
 
 #endif

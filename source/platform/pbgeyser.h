@@ -22,10 +22,10 @@ class CNpcGeyserPlatformGenerator : public CNpcPlatform
 {
 public:
 	void				setTargetType( NPC_PLATFORM_UNIT_TYPE targetType )		{m_targetType = targetType;}
-	virtual void		render();
+	void				render();
 protected:
-	virtual void		think( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				think( int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	NPC_PLATFORM_UNIT_TYPE	m_targetType;
 };

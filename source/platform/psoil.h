@@ -21,7 +21,7 @@
 class CNpcSteerableOildrumPlatform : public CNpcSteerableBarrelPlatform
 {
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 };
 
 #endif

@@ -17,8 +17,8 @@
 class CNpcSharkManEnemy : public CNpcEnemy
 {
 protected:
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
 };
 
 #endif

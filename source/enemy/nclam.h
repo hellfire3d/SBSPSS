@@ -19,9 +19,9 @@ class CNpcClamEnemy : public CNpcEnemy
 public:
 	u8					canCollideWithEnemy()					{return( false );}
 protected:
-	virtual void		processUserCollision( CThing *thisThing );
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual bool		processSensor();
+	void				processUserCollision( CThing *thisThing );
+	void				processEnemyCollision( CThing *thisThing );
+	bool				processSensor();
 };
 
 class CNpcJumpingClamEnemy : public CNpcClamEnemy
@@ -29,8 +29,8 @@ class CNpcJumpingClamEnemy : public CNpcClamEnemy
 public:
 	void				postInit();
 protected:
-	virtual void		processClose( int _frames );
-	virtual void		setupWaypoints( sThingActor *ThisActor );
+	void				processClose( int _frames );
+	void				setupWaypoints( sThingActor *ThisActor );
 
 	s32					m_maxExtension;
 };
@@ -39,14 +39,14 @@ class CNpcStaticClamEnemy : public CNpcClamEnemy
 {
 public:
 	void				postInit();
-	virtual u8			hasBeenAttacked()						{return( false );}
-	virtual	CRECT const	*getThinkBBox()							{return( CThing::getThinkBBox() );}
+	u8					hasBeenAttacked()						{return( false );}
+	CRECT const			*getThinkBBox()							{return( CThing::getThinkBBox() );}
 protected:
-	virtual s32			getFrameShift( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
-	virtual void		processClose( int _frames );
-	virtual void		processCollision();
-	virtual void		processAnimFrames( int _frames );
+	s32					getFrameShift( int _frames );
+	void				collidedWith(CThing *_thisThing);
+	void				processClose( int _frames );
+	void				processCollision();
+	void				processAnimFrames( int _frames );
 
 	s32					m_isStunned;
 };

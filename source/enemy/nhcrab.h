@@ -23,9 +23,9 @@ class CNpcHermitCrabEnemy : public CNpcEnemy
 public:
 	void				postInit();
 protected:
-	virtual void		processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
+	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
+	bool				processSensor();
+	void				processClose( int _frames );
 
 	s32					m_jumpBase;
 

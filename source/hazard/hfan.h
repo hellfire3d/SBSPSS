@@ -22,7 +22,7 @@ class CNpcFanHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		render();
+	void				render();
 protected:
 	void				processMovement( int _frames );
 

@@ -23,7 +23,7 @@ class CNpcPatrickFriend : public CNpcFriend
 public:
 	void				postInit();
 protected:
-	virtual void		startConderversation();
+	void				startConderversation();
 
 	FileEquate			m_conversation;
 };

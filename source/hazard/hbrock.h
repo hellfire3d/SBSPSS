@@ -22,11 +22,11 @@ class CNpcBouncingRockHazard : public CNpcBouncingBarrelHazard
 {
 public:
 	void				init();
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
-	virtual void		trigger();
+	void				setWaypoints( sThingHazard *ThisHazard );
+	void				trigger();
 protected:
 	void				processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	u8					m_isTriggered;
 };

@@ -17,17 +17,17 @@
 class CNpcEyeballEnemy : public CNpcEnemy
 {
 public:
-	virtual void		render();
+	void				render();
 	void				postInit();
 	void				shutdown();
-	virtual int			getFrameCount()									{return( 1 );}
-	virtual void		processEvent( GAME_EVENT evt, CThing *sourceThing );
+	int					getFrameCount()									{return( 1 );}
+	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 protected:
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual void		processShotDeathStart( int _frames );
-	virtual void		processShotDeathEnd( int _frames );
+	void				processEnemyCollision( CThing *thisThing );
+	bool				processSensor();
+	void				processClose( int _frames );
+	void				processShotDeathStart( int _frames );
+	void				processShotDeathEnd( int _frames );
 
 	s32					m_fireHeading;
 

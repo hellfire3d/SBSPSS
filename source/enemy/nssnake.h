@@ -58,20 +58,20 @@ class CNpcSeaSnakeEnemy : public CNpcBossEnemy
 public:
 	void				postInit();
 	void				shutdown();
-	virtual void		render();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				render();
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
-	virtual s32			getFrameShift( int _frames );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
-	virtual void		processShot( int _frames );
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual void		processUserCollision( CThing *thisThing );
+	s32					getFrameShift( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
+	void				processShot( int _frames );
+	void				processEnemyCollision( CThing *thisThing );
+	void				processUserCollision( CThing *thisThing );
 	u8					processPathMove( int _frames, s32 *moveX, s32 *moveY, s32 *moveVel, s32 *moveDist );
 	u8					isSnakeStopped();
 	void				moveEntireSnake( DVECTOR newPos );
-	virtual void		addHealthMeter();
+	void				addHealthMeter();
 
 	enum
 	{

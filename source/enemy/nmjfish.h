@@ -30,12 +30,12 @@ public:
 	void				postInit();
 	void				render();
 	void				shutdown();
-	virtual void		setupWaypoints( sThingActor *ThisActor );
+	void				setupWaypoints( sThingActor *ThisActor );
 protected:
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
-	virtual void		processShot( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
+	void				processShot( int _frames );
+	void				collidedWith(CThing *_thisThing);
 	//void				spawnJellyfish( int _frames );
 	//virtual void		processUserCollision( CThing *thisThing );
 

@@ -22,10 +22,10 @@ class CNpcShellEnemy : public CNpcEnemy
 {
 public:
 	void				postInit();
-	virtual void		render();
-	virtual int			getFrameCount()							{return( 1 );}
-	virtual int			getFrame()								{return( m_shellType );}
-	virtual u8			hasBeenAttacked()						{return( false );}
+	void				render();
+	int					getFrameCount()							{return( 1 );}
+	int					getFrame()								{return( m_shellType );}
+	u8					hasBeenAttacked()						{return( false );}
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
 

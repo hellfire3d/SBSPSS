@@ -19,10 +19,10 @@ class CNpcSkullStomperEnemy : public CNpcEnemy
 public:
 	void				postInit();
 protected:
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				processEnemyCollision( CThing *thisThing );
+	bool				processSensor();
+	void				processClose( int _frames );
+	void				collidedWith(CThing *_thisThing);
 };
 
 #endif

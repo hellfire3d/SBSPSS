@@ -22,13 +22,13 @@ class CNpcRisingWeightHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		render();
+	void				render();
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				setTriggered()											{m_triggered = true;}
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
-	virtual void		processMovement( int _frames );
+	void				setWaypoints( sThingHazard *ThisHazard );
+	void				processMovement( int _frames );
 
 	s32					m_maxExtension;
 	DVECTOR				m_wheelPos;

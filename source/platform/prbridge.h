@@ -22,11 +22,11 @@ class CNpcRisingBridgePlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		trigger();
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	void				trigger();
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
 
 	s32					m_maxExtension;
 	u8					m_triggered;

@@ -25,7 +25,7 @@ public:
 	void				render();
 protected:
 	void				processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	DVECTOR				m_lastWaypoint;
 

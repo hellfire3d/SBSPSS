@@ -22,10 +22,10 @@ class CNpcBoatHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		render();
+	void				render();
 protected:
 	void				processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	u8					m_reversed;
 };

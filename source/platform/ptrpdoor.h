@@ -24,11 +24,11 @@ public:
 	void				postInit();
 	DVECTOR const		&getTriggerPos()										{return( m_triggerPos );}
 	void				setTriggered()											{m_triggered = true;}
-	virtual void		render();
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	void				render();
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
 
 	DVECTOR				m_triggerPos;
 	u8					m_triggered;

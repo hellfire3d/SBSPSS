@@ -21,10 +21,10 @@
 class CNpcSquidwardFriend : public CNpcFriend
 {
 public:
-	virtual void		think(int _frames);
+	void				think(int _frames);
 	void				postInit();
 protected:
-	virtual void		startConderversation();
+	void				startConderversation();
 
 	FileEquate			m_conversation;
 };

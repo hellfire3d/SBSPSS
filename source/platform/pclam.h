@@ -22,8 +22,8 @@ class CNpcClamPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		render();
-	virtual	CRECT const	*getThinkBBox()									{return( CThing::getThinkBBox() );}
+	void				render();
+	CRECT const			*getThinkBBox()									{return( CThing::getThinkBBox() );}
 	//void				setBBox();
 };
 

@@ -24,15 +24,15 @@ public:
 	void				setMaster( u8 isMaster );
 	void				setOtherPlatform( CNpcDualPlatform *other );
 	void				setMovement( DVECTOR move );
-	virtual u8			canDrop();
+	u8					canDrop();
 	void				setLineBase( DVECTOR base )							{m_lineBase = base;}
 	DVECTOR				getLineBase()										{return( m_lineBase );}
-	virtual void		render();
+	void				render();
 	void				setThinkArea( CRECT &newArea );
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	u8					m_isMaster;
 	CNpcDualPlatform	*m_otherPlatform;

@@ -22,11 +22,11 @@ class CNpcConveyorPlatform : public CNpcPlatform
 {
 public:
 	void				postInit();
-	virtual void		render();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				render();
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
-	virtual void		processMovement( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				processMovement( int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	u8					m_spinFinish;
 	s16					m_rotation;
@@ -35,10 +35,10 @@ protected:
 class CNpcConveyorPlatformGenerator : public CNpcPlatform
 {
 public:
-	virtual void		render();
+	void				render();
 protected:
-	virtual void		think( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				think( int _frames );
+	void				collidedWith(CThing *_thisThing);
 };
 
 #endif

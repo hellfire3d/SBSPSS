@@ -28,11 +28,11 @@ public:
 	void				init();
 	DVECTOR const		&getWheelPos()											{return( m_wheelPos );}
 	void				linkToWeight( CNpcRisingWeightHazard *weight )			{m_weight = weight;}
-	virtual void		render();
-	virtual	CRECT const	*getThinkBBox()											{return( CThing::getThinkBBox() );}
+	void				render();
+	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				setWaypoints( sThingHazard *ThisHazard );
+	void				collidedWith(CThing *_thisThing);
 
 	DVECTOR				m_wheelPos;
 	CNpcRisingWeightHazard		*m_weight;

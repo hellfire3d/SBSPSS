@@ -53,15 +53,15 @@ class CNpcParasiticWormEnemy : public CNpcEnemy
 public:
 	void				postInit();
 	void				shutdown();
-	virtual void		render();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	void				render();
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
-	virtual void		processShotDeathEnd( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
+	void				processShotDeathEnd( int _frames );
 	//void				resetParasiticWormHeadToTail();
-	virtual void		processEnemyCollision( CThing *thisThing );
+	void				processEnemyCollision( CThing *thisThing );
 
 	enum
 	{

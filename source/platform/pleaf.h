@@ -23,7 +23,7 @@ class CNpcLeafPlatform : public CNpcPlatform
 public:
 	void				postInit();
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 
 	u8					m_isActivated;
 };

@@ -22,12 +22,12 @@ class CNpcFallingHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				setWaypoints( sThingHazard *ThisHazard );
 	void				render();
 protected:
 	void				processMovement( int _frames );
 	void				processTimer( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	s32					m_movementTimer;
 	u8					m_bounceFinish;

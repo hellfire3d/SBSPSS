@@ -23,10 +23,10 @@ class CNpcBigWheelPlatform : public CNpcPlatform
 public:
 	bool				alwaysThink()								{return(true);}
 	void				postInit();
-	virtual int			getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
+	int					getHeightFromPlatformAtPosition(int _x,int _y, int offsetX = 0, int offsetY = 0);
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
 };
 
 #endif

@@ -26,12 +26,12 @@ class CNpcSmallJellyfishEnemy : public CNpcEnemy
 {
 public:
 	virtual void		postInit();
-	void				render();
+	virtual void		render();
 	int					getFrameCount()							{return( FRM_JELLYFISH1_SWIM7 - FRM_JELLYFISH1_SWIM1 + 1 );}
 	u8					canCollideWithEnemy()					{return( false );}
 	CRECT const			*getThinkBBox()							{return( CThing::getThinkBBox() );}
 protected:
-	bool				processSensor();
+	virtual bool		processSensor();
 	void				processClose( int _frames );
 	void				processMovementModifier( int _frames, s32 distX, s32 distY, s32 dist, s16 headingChange );
 	void				fireAsProjectile( s16 heading );

@@ -22,7 +22,7 @@ class CNpcLogHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
+	void				setWaypoints( sThingHazard *ThisHazard );
 protected:
 	void				processMovement( int _frames );
 

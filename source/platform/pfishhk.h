@@ -22,11 +22,11 @@ class CNpcFishHookPlatform : public CNpcPlatform
 {
 public:
 	virtual void		postInit();
-	virtual void		render();
-	virtual	CRECT const		*getThinkBBox();
+	void				render();
+	CRECT const			*getThinkBBox();
 protected:
-	virtual void		processLifetime( int _frames );
-	virtual void		processMovement( int _frames );
+	void				processLifetime( int _frames );
+	void				processMovement( int _frames );
 
 	u8					m_isMoving;
 	u8					m_isResetting;

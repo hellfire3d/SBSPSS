@@ -31,8 +31,8 @@ public:
 	bool				alwaysThink()											{return(true);}
 	//virtual void		render();
 protected:
-	virtual void		setWaypoints( sThingHazard *ThisHazard );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				setWaypoints( sThingHazard *ThisHazard );
+	void				collidedWith(CThing *_thisThing);
 
 	DVECTOR						m_triggerPos;
 	CNpcTrapdoorPlatform		*m_platform;

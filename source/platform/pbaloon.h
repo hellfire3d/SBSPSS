@@ -25,7 +25,7 @@ public:
 	void				render();
 	void				init();
 	void				shutdown();
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	int					checkCollisionAgainst(CThing *_thisThing, int _frames);
 protected:
 	DVECTOR							Pos;
 };
@@ -36,7 +36,7 @@ public:
 	void				postInit();
 	void				render();
 	void				shutdown();
-	virtual	CRECT const	*getThinkBBox()									{return( CThing::getThinkBBox() );}
+	CRECT const			*getThinkBBox()									{return( CThing::getThinkBBox() );}
 protected:
 	void				setWaypoints( sThingPlatform *ThisPlatform );
 	void				processMovement( int _frames );

@@ -21,12 +21,12 @@
 class CNpcBranchPlatform : public CNpcPlatform
 {
 public:
-	virtual void		postInit();
-	virtual void		render();
-	virtual	CRECT const	*getThinkBBox()												{return( CThing::getThinkBBox() );}
+	void				postInit();
+	void				render();
+	CRECT const			*getThinkBBox()												{return( CThing::getThinkBBox() );}
 protected:
-	virtual void		setWaypoints( sThingPlatform *ThisPlatform );
-	virtual void		processMovement( int _frames );
+	void				setWaypoints( sThingPlatform *ThisPlatform );
+	void				processMovement( int _frames );
 
 	s32					m_angularVelocity;
 	u8					m_reversed;

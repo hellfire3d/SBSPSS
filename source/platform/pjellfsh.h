@@ -22,9 +22,9 @@ class CNpcJellyfishPlatform : public CNpcLinearPlatform
 {
 public:
 	void				postInit();
-	virtual void		think( int _frames );
+	void				think( int _frames );
 protected:
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 
 	s32					m_vertScale;
 	u8					m_dipCount;

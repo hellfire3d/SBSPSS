@@ -22,17 +22,17 @@
 class CNpcFlyingDutchmanEnemy : public CNpcBossEnemy
 {
 public:
-	virtual void		think( int _frames );
+	void				think( int _frames );
 	void				postInit();
 	void				render();
 	void				shutdown();
-	virtual u8			hasBeenAttacked();
+	u8					hasBeenAttacked();
 protected:
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
-	virtual void		processShotRecoil( int _frames );
-	virtual void		processShotDeathEnd( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
+	void				processShotRecoil( int _frames );
+	void				processShotDeathEnd( int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	enum NPC_FLYING_DUTCHMAN_STATE
 	{

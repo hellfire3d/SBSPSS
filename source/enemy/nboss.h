@@ -27,7 +27,7 @@ public:
 	virtual void		postInit();
 	virtual void		shutdown();
 protected:
-	virtual void		addHealthMeter();
+	void				addHealthMeter();
 
 	bool				m_meterOn;
 	CFXNRGBar			*m_energyBar;

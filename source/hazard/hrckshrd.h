@@ -22,7 +22,7 @@ class CNpcRockShardHazard : public CNpcHazard
 {
 public:
 	void				init();
-	virtual	CRECT const		*getThinkBBox();
+	CRECT const			*getThinkBBox();
 //	virtual void		setWaypoints( sThingHazard *ThisHazard );
 protected:
 	void				processMovement( int _frames );

@@ -19,7 +19,7 @@ class CNpcBallBlobEnemy : public CNpcEnemy
 public:
 	void				postInit();
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 
 	DVECTOR				m_velocity;
 };

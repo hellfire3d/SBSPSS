@@ -21,7 +21,7 @@
 class CNpcDropPlatform : public CNpcPlatform
 {
 protected:
-	virtual void		processMovement( int _frames );
+	void				processMovement( int _frames );
 };
 
 #endif

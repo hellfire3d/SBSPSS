@@ -29,17 +29,17 @@ public:
 	void				render();
 	void				shutdown();
 protected:
-	virtual void		processTimer( int _frames );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
-	virtual void		processMovement( int _frames );
+	void				processTimer( int _frames );
+	bool				processSensor();
+	void				processClose( int _frames );
+	void				processMovement( int _frames );
 	void				processStandardIronDogfishAttack( int _frames );
 	void				processWalkToUser( int _frames, int speed );
-	virtual void		processCollision();
-	virtual void		processAttackCollision();
-	virtual void		hasBeenSteamed( DVECTOR &steamPos );
-	virtual void		processShotDeathEnd( int _frames );
-	virtual void		collidedWith(CThing *_thisThing);
+	void				processCollision();
+	void				processAttackCollision();
+	void				hasBeenSteamed( DVECTOR &steamPos );
+	void				processShotDeathEnd( int _frames );
+	void				collidedWith(CThing *_thisThing);
 
 	enum NPC_IRON_DOGFISH_STATE
 	{

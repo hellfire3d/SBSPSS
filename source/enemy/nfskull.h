@@ -18,9 +18,9 @@ class CNpcFlamingSkullEnemy : public CNpcEnemy
 {
 	void				postInit();
 protected:
-	virtual void		processEnemyCollision( CThing *thisThing );
-	virtual bool		processSensor();
-	virtual void		processClose( int _frames );
+	void				processEnemyCollision( CThing *thisThing );
+	bool				processSensor();
+	void				processClose( int _frames );
 
 	s32					m_fireHeading;
 

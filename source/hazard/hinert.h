@@ -21,9 +21,9 @@
 class CNpcInertHazard : public CNpcHazard
 {
 public:
-	virtual void		render();
+	void				render();
 protected:
-	virtual void		collidedWith(CThing *_thisThing);
+	void				collidedWith(CThing *_thisThing);
 };
 
 #endif

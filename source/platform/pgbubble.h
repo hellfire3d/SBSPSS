@@ -23,8 +23,8 @@ class CNpcGeyserBubblePlatform : public CNpcBubblePlatform
 public:
 	void				postInit();
 protected:
-	virtual void		processMovement( int _frames );
-	virtual void		processLifetime( int _frames );
+	void				processMovement( int _frames );
+	void				processLifetime( int _frames );
 };
 
 #endif
