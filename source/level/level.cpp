@@ -657,7 +657,7 @@ sLayerHdr	*layer;
 void	CLevel::destroyMapArea(DVECTOR const &Pos)
 {
 DVECTOR		TL,BR;
-const int			ColT=COLLISION_TYPE_STICKY;
+const int			ColT=COLLISION_TYPE_DESTRUCTABLE;
 
 
 			TL.vx=Pos.vx&-16;;
@@ -683,7 +683,7 @@ DVECTOR		DP;
 				{
 					u8	*ColElem=CollisionLayer->getMapPtr(DP.vx,DP.vy);
 
-					if (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==COLLISION_TYPE_STICKY)
+					if (*ColElem>>COLLISION_TYPE_FLAG_SHIFT==ColT)
 					{
 						sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(DP.vx,DP.vy);
 						CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,DP);
@@ -703,13 +703,12 @@ void	CLevel::destroyMapTile(DVECTOR const &Pos)
 u8				*ColElem=CollisionLayer->getMapPtr(Pos.vx,Pos.vy);
 sTileMapElem	*MapElem=TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]->getMapPtr(Pos.vx,Pos.vy);
 
-//			*ColElem=0;
-
 			if (MapElem->Tile)
 			{
 				CFXFallingTile	*FX=(CFXFallingTile*)CFX::Create(CFX::FX_TYPE_FALLINGTILE,Pos);
 				FX->SetTile(MapElem->Tile);
 				MapElem->Tile=0;
+				*ColElem=0;
 
 			}
 
