@@ -2755,6 +2755,9 @@ SOURCE=..\..\..\data\scripts\c5l3_celebrate.scr
 SOURCE=..\..\..\data\scripts\c5l4_celebrate.scr
 # End Source File
 # End Group
+# Begin Group "ingame"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\..\data\Scripts\ch1l1_01.scr
@@ -2823,14 +2826,103 @@ SOURCE=..\..\..\data\Scripts\ch4l3_01.scr
 
 SOURCE=..\..\..\data\Scripts\ch4l3_02.scr
 # End Source File
+# End Group
+# Begin Group "fmas"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\speechtest.scr
+SOURCE=..\..\..\data\scripts\fma_ch1_00.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\test.scr
+SOURCE=..\..\..\data\scripts\fma_ch1_01.scr
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch1_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch1_03.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch2_00.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch2_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch2_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch2_03.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch3_00.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch3_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch3_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch4_00.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch4_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch4_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch5_00.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch5_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch5_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch6_00.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch6_01.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch6_02.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_ch6_03.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_party.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\fma_plankton.scr
+# End Source File
+# End Group
 # End Group
 # Begin Source File
 
