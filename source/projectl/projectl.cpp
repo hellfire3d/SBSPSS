@@ -357,7 +357,22 @@ void CProjectile::think(int _frames)
 
 			if ( groundHeight < 0 )
 			{
-				moveY = groundHeight;
+				int		blockType;
+
+				blockType = CGameScene::getCollision()->getCollisionBlock( Pos.vx, Pos.vy + moveY ) & COLLISION_TYPE_MASK;
+
+				if ( blockType == COLLISION_TYPE_FLAG_DESTRUCTABLE_FLOOR )
+				{
+					DVECTOR newPos;
+					newPos.vx = Pos.vx;
+					newPos.vy = ( ( ( Pos.vy + moveY ) >> 4 ) + 1 ) << 4;
+
+					GameScene.GetLevel().destroyMapTile( newPos );
+				}
+				else
+				{
+					moveY = groundHeight;
+				}
 			}
 
 			Pos.vy += moveY;
