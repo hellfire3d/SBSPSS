@@ -59,7 +59,7 @@
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeJelly::enter()
+void	CPlayerModeJellyLauncher::enter()
 {
 	m_netting=false;
 	m_netState=NET_STATE__EMPTY;
@@ -72,7 +72,7 @@ void	CPlayerModeJelly::enter()
 	Returns:
   ---------------------------------------------------------------------- */
 //int netstate;
-void	CPlayerModeJelly::think()
+void	CPlayerModeJellyLauncher::think()
 {
 	// If we're netting then restore the 'real' anim number/frame before
 	// doing the think so that the rest of the code doesn't know what
@@ -123,7 +123,7 @@ void	CPlayerModeJelly::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeJelly::renderModeUi()
+void	CPlayerModeJellyLauncher::renderModeUi()
 {
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
@@ -147,13 +147,13 @@ void	CPlayerModeJelly::renderModeUi()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeJelly::setAnimNo(int _animNo)
+void	CPlayerModeJellyLauncher::setAnimNo(int _animNo)
 {
 	CPlayerModeBase::setAnimNo(_animNo);
 	m_savedAnimNo=_animNo;
 }
 
-void	CPlayerModeJelly::setAnimFrame(int _animFrame)
+void	CPlayerModeJellyLauncher::setAnimFrame(int _animFrame)
 {
 	CPlayerModeBase::setAnimFrame(_animFrame);
 	m_savedAnimFrame=_animFrame;
@@ -165,7 +165,7 @@ void	CPlayerModeJelly::setAnimFrame(int _animFrame)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int		CPlayerModeJelly::canSwingNetFromThisState()
+int		CPlayerModeJellyLauncher::canSwingNetFromThisState()
 {
 	int	ret=false;
 

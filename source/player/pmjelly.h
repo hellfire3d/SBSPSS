@@ -34,7 +34,7 @@
 	Structure defintions
 	-------------------- */
 
-class CPlayerModeJelly : public CPlayerModeBase
+class CPlayerModeJellyLauncher : public CPlayerModeBase
 {
 public:
 	virtual void				enter();

@@ -160,6 +160,7 @@ player_src :=		demoplay \
 					pmcoral \
 					pmdead \
 					pmfly \
+					pmjelly \
 					pmnet \
 					psbutt \
 					psduck \

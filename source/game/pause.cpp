@@ -129,6 +129,11 @@ void CPauseMenu::init()
 	xpos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__JELLYLAUNCHER_MODE,
+										&newmode,PLAYER_MODE_JELLY_LAUNCHER);
+	xpos+=TEXT_SPACING;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__DEAD_MODE,
 										&newmode,PLAYER_MODE_DEAD);
 	xpos+=TEXT_SPACING;

@@ -61,6 +61,10 @@
 #include "player\pmfly.h"
 #endif
 
+#ifndef	__PLAYER_PMJELLY_H__
+#include "player\pmjelly.h"
+#endif
+
 #ifndef __GFX_FONT_H__
 #include "gfx\font.h"
 #endif
@@ -163,6 +167,7 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"BUBBLE MIXTURE",
 	"NET",
 	"CORALBLOWER",
+	"JELLY LAUNCHER",
 	"DEAD",
 	"FLY",
 };
@@ -188,6 +193,7 @@ CPlayerModeBalloon			PLAYERMODEBALLOON;
 CPlayerModeBubbleMixture	PLAYERMODEBUBBLEMIXTURE;
 CPlayerModeNet				PLAYERMODENET;
 CPlayerModeCoralBlower		PLAYERMODECORALBLOWER;
+CPlayerModeJellyLauncher	PLAYERMODEJELLYLAUNCHER;
 CPlayerModeDead				PLAYERMODEDEAD;
 CPlayerModeFly				PLAYERMODEFLY;
 
@@ -199,6 +205,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEBUBBLEMIXTURE,	// PLAYER_MODE_BUBBLE_MIXTURE
 	&PLAYERMODENET,				// PLAYER_MODE_NET
 	&PLAYERMODECORALBLOWER,		// PLAYER_MODE_CORALBLOWER
+	&PLAYERMODEJELLYLAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
