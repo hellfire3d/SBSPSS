@@ -142,37 +142,69 @@ void CNpcRaftPlatform::processMovement( int _frames )
 	}
 
 	// sort out rotation
-
+	
 	DVECTOR testPos1, testPos2;
 
 	testPos1 = testPos2 = Pos;
-	testPos1.vx -= 20;
-	testPos2.vx += 20;
+	testPos1.vx -= 10;
+	testPos2.vx += 10;
 
 	s16 heightDiff;
+	bool levelOff = false;
 
-	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 32 );
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos1.vx, testPos1.vy, 16 );
 
-	if ( heightDiff == 32 )
+	if ( heightDiff == 16 )
 	{
-		return;
+		levelOff = true;
 	}
 
 	testPos1.vy += heightDiff;
 
-	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 32 );
+	heightDiff = CGameScene::getCollision()->getHeightFromGround( testPos2.vx, testPos2.vy, 16 );
 
-	if ( heightDiff == 32 )
+	if ( heightDiff == 16 )
 	{
-		return;
+		levelOff = true;
 	}
 
 	testPos2.vy += heightDiff;
 
-	s32 xDist = testPos2.vx - testPos1.vx;
-	s32 yDist = testPos2.vy - testPos1.vy;
+	s16 heading;
 
-	s16 heading = ratan2( yDist, xDist );
+	if ( levelOff )
+	{
+		heading = getCollisionAngle();
+
+		if ( heading )
+		{
+			groundHeight = CGameScene::getCollision()->getHeightFromGround( Pos.vx, Pos.vy, 56 );
+
+			if ( groundHeight < 32 && groundHeight > 4 )
+			{
+				int reverseAngle = -heading;
+				int maxRotate = 32 * _frames;
+
+				if ( reverseAngle > maxRotate )
+				{
+					reverseAngle = maxRotate;
+				}
+				else if ( reverseAngle < -maxRotate )
+				{
+					reverseAngle = -maxRotate;
+				}
+
+				heading += reverseAngle;
+			}
+		}
+	}
+	else
+	{
+		s32 xDist = testPos2.vx - testPos1.vx;
+		s32 yDist = testPos2.vy - testPos1.vy;
+
+		heading = ratan2( yDist, xDist );
+	}
 
 	/*if ( heading > 512 )
 	{
