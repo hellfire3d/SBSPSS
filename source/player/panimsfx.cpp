@@ -57,8 +57,23 @@ static const int	s_buttBounceEndCount=sizeof(s_buttBounceEndSfx)/sizeof(CPlayer:
 // ANIM_PLAYER_ANIM_ELECTRICSHOCK
 // ANIM_PLAYER_ANIM_ELECTRICSHOCKEND
 // ANIM_PLAYER_ANIM_ELECTRICSHOCKSTART
+
 // ANIM_PLAYER_ANIM_FACEBACK
+static const CPlayer::AnimFrameSfx s_faceBackSfx[]=
+{
+	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
+	{	7,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
+};
+static const int	s_faceBackCount=sizeof(s_faceBackSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 // ANIM_PLAYER_ANIM_FACEFRONT
+static const CPlayer::AnimFrameSfx s_faceFrontSfx[]=
+{
+	{	6,		CSoundMediator::SFX_SPONGEBOB_WALK_1	},
+	{	7,		CSoundMediator::SFX_SPONGEBOB_WALK_2	},
+};
+static const int	s_faceFrontCount=sizeof(s_faceFrontSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 // ANIM_PLAYER_ANIM_FALL
 // ANIM_PLAYER_ANIM_GETUP
 // ANIM_PLAYER_ANIM_GETUPRUN
@@ -133,8 +148,8 @@ const CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCK
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCKEND
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_ELECTRICSHOCKSTART
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_FACEBACK
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_FACEFRONT
+	{	s_faceBackCount,		s_faceBackSfx			},		// ANIM_PLAYER_ANIM_FACEBACK
+	{	s_faceFrontCount,		s_faceFrontSfx			},		// ANIM_PLAYER_ANIM_FACEFRONT
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_FALL
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_GETUP
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_GETUPRUN
