@@ -38,6 +38,7 @@ static const int	DeltaTableSizeX=SCREEN_TILE3D_WIDTH+1;
 static const int	DeltaTableSizeY=SCREEN_TILE3D_HEIGHT+1;
 
 /*****************************************************************************/
+// now uses a single delta table for front and back (interleaved) to reduce register use
 // 0 LUF
 // 1 RUF
 // 2 LDF
@@ -134,10 +135,8 @@ void	CLayerTile3d::shutdown()
 #endif
 		for (int i=0; i<16; i++)
 		{
-			MemFree(FTableX[i]);
-			MemFree(FTableY[i]);
-			MemFree(BTableX[i]);
-			MemFree(BTableY[i]);
+			MemFree(DeltaTableX[i]);
+			MemFree(DeltaTableY[i]);
 		}
 
 }
@@ -147,17 +146,14 @@ void	CLayerTile3d::CalcDelta()
 {
 VECTOR	BlkPos;
 SVECTOR	Pnt={-BLOCK_SIZE/2,-BLOCK_SIZE/2,-BLOCK_SIZE*4};
-s16		*FTab,*BTab;
+s16		*Tab;
 		CGameScene::setCameraMtx();
 
 		for (int i=0; i<16; i++)
 		{
-			FTab=(s16*)MemAlloc(DeltaTableSizeX*sizeof(s16),"FTableXTable");
-			BTab=(s16*)MemAlloc(DeltaTableSizeX*sizeof(s16),"BTableXTable");
-			FTableX[i]=FTab;
-			BTableX[i]=BTab;
-			ASSERT(FTab);
-			ASSERT(BTab);
+			Tab=(s16*)MemAlloc(DeltaTableSizeX*2*sizeof(s16),"DeltaTableXTable");
+			DeltaTableX[i]=Tab;
+			ASSERT(Tab);
 			BlkPos.vx=RENDER_X_OFS-i;
 			BlkPos.vy=RENDER_Y_OFS;
 			for (int x=0; x<DeltaTableSizeX; x++)
@@ -167,19 +163,16 @@ s16		*FTab,*BTab;
 				CMX_SetTransMtxXY(&BlkPos);
 				Pnt.vz=-BLOCK_SIZE*4;
 				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
-				FTab[x]=O.vx;
+				*Tab++=O.vx;
 				Pnt.vz=+BLOCK_SIZE*4;
 				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
-				BTab[x]=O.vx;
+				*Tab++=O.vx;
 				BlkPos.vx+=BLOCK_SIZE;
 			}
 
-			FTab=(s16*)MemAlloc(DeltaTableSizeY*sizeof(s16),"FTableYTable");
-			BTab=(s16*)MemAlloc(DeltaTableSizeY*sizeof(s16),"BTableYTable");
-			FTableY[i]=FTab;
-			BTableY[i]=BTab;
-			ASSERT(FTab);
-			ASSERT(BTab);
+			Tab=(s16*)MemAlloc(DeltaTableSizeY*2*sizeof(s16),"DeltaYTable");
+			DeltaTableY[i]=Tab;
+			ASSERT(Tab);
 			BlkPos.vx=RENDER_X_OFS;
 			BlkPos.vy=RENDER_Y_OFS-i;
 			for (int y=0; y<DeltaTableSizeY; y++)
@@ -189,15 +182,15 @@ s16		*FTab,*BTab;
 				CMX_SetTransMtxXY(&BlkPos);
 				Pnt.vz=-BLOCK_SIZE*4;
 				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
-				FTab[y]=O.vy;
+				*Tab++=O.vy;
 				Pnt.vz=+BLOCK_SIZE*4;
 				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
-				BTab[y]=O.vy;
+				*Tab++=O.vy;
 				BlkPos.vy+=BLOCK_SIZE;
 			}
 		}
-		DeltaF=FTableX[0][1]-FTableX[0][0];
-		DeltaB=BTableY[0][1]-BTableY[0][0];
+		DeltaF=DeltaTableX[0][(1*2)+0]-DeltaTableX[0][(0*2)+0];
+		DeltaB=DeltaTableY[0][(1*2)+1]-DeltaTableY[0][(0*2)+1];
 
 }
 
@@ -287,8 +280,7 @@ s32				ClipZ;
 sOT				*ThisOT;
 VECTOR			BlkPos;
 DVECTOR			*DP0,*DP1,*DP2,*DP3;
-s16				*DeltaFY=FTableY[ShiftY];
-s16				*DeltaBY=BTableY[ShiftY];
+s16				*DeltaTabY=DeltaTableY[ShiftY];
 
 #if		defined(_SHOW_POLYZ_)
 s16				TCount=0,QCount=0;
@@ -303,8 +295,7 @@ s16				TCount=0,QCount=0;
 			sTileMapElem	*MapRow=MapPtr;
 			u8				*RGBRow=RGBMapPtr;
 			s32				BlkXOld=BlkPos.vx;
-			s16				*DeltaFX=FTableX[ShiftX];
-			s16				*DeltaBX=BTableX[ShiftX];
+			s16				*DeltaTabX=DeltaTableX[ShiftX];
 
 			for (int X=0; X<RenderW; X++)
 			{
@@ -318,8 +309,8 @@ s16				TCount=0,QCount=0;
 
 				if (TriCount || QuadCount)	// Blank tiles rejected here, to prevent over processing (as no tri-count)
 				{
-					u8			*RGB=&RGBTable[RGBOfs*(16*4)];
 					sFlipTable	*FTab=&FlipTable[Tile&3];
+					u8			*RGB=&RGBTable[RGBOfs*(16*4)];
 
 					CMX_SetTransMtxXY(&BlkPos);
 					CMX_SetRotMatrixXY(&FTab->Mtx);
@@ -351,13 +342,12 @@ s16				TCount=0,QCount=0;
 								gte_ldv3(V0,V1,V2);
 								gte_stsxy3c(OutPtr);	// read XY back
 							}
-
 					}
 
-					s16	FL=DeltaFX[0]+DeltaFOfs.vx;
-					s16	FR=DeltaFX[1]+DeltaFOfs.vx;
-					s16	FU=DeltaFY[0]+DeltaFOfs.vy;
-					s16	FD=DeltaFY[1]+DeltaFOfs.vy;
+					s16	FL=DeltaTabX[(0*2)+0]+DeltaFOfs.vx;
+					s16	FR=DeltaTabX[(1*2)+0]+DeltaFOfs.vx;
+					s16	FU=DeltaTabY[(0*2)+0]+DeltaFOfs.vy;
+					s16	FD=DeltaTabY[(1*2)+0]+DeltaFOfs.vy;
 					DP0=FTab->DeltaTab[0];
 					DP1=FTab->DeltaTab[1];
 					DP2=FTab->DeltaTab[2];
@@ -371,10 +361,10 @@ s16				TCount=0,QCount=0;
 					DP3->vx=FR;
 					DP3->vy=FD;
 
-					s16	BL=DeltaBX[0]+DeltaBOfs.vx;
-					s16	BR=DeltaBX[1]+DeltaBOfs.vx;
-					s16	BU=DeltaBY[0]+DeltaBOfs.vy;
-					s16	BD=DeltaBY[1]+DeltaBOfs.vy;
+					s16	BL=DeltaTabX[(0*2)+1]+DeltaBOfs.vx;
+					s16	BR=DeltaTabX[(1*2)+1]+DeltaBOfs.vx;
+					s16	BU=DeltaTabY[(0*2)+1]+DeltaBOfs.vy;
+					s16	BD=DeltaTabY[(1*2)+1]+DeltaBOfs.vy;
 					DP0=FTab->DeltaTab[4];
 					DP1=FTab->DeltaTab[5];
 					DP2=FTab->DeltaTab[6];
@@ -418,7 +408,6 @@ s16				TCount=0,QCount=0;
 							*(u32*)&ThisPrim->u0=T0;	// Set UV0
 							*(u32*)&ThisPrim->u1=T1;	// Set UV1
 							*(u32*)&ThisPrim->u2=T2;	// Set UV2
-							addPrim(ThisOT,ThisPrim);
 							{ // lighting
 								T0=*(u32*)&RGB[TList->C0];
 								T1=*(u32*)&RGB[TList->C1];
@@ -431,7 +420,7 @@ s16				TCount=0,QCount=0;
 							if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0); TCount++;}	
 #endif
 							ThisPrim->code=TList->PolyCode;
-
+							addPrim(ThisOT,ThisPrim);
 							PrimPtr+=sizeof(POLY_GT3);
 						}
 						TList++;
@@ -446,13 +435,13 @@ s16				TCount=0,QCount=0;
 						T0=*(u32*)(XYList+QList->P0); 
 						T1=*(u32*)(XYList+QList->P1); 
 						T2=*(u32*)(XYList+QList->P2);
-						T3=*(u32*)(XYList+QList->P3);
 						gte_ldsxy0(T0);
 						gte_ldsxy1(T1);
 						gte_ldsxy2(T2);
 						
 						setlen(ThisPrim, GPU_PolyGT4Tag);
 						gte_nclip_b();	// 8 cycles
+						T3=*(u32*)(XYList+QList->P3);
 
 						*(u32*)&ThisPrim->x0=T0;	// Set XY0
 						*(u32*)&ThisPrim->x1=T1;	// Set XY1
@@ -495,13 +484,13 @@ s16				TCount=0,QCount=0;
 				}
 				MapRow++;
 				BlkPos.vx+=BLOCK_SIZE;
-				DeltaFX++; DeltaBX++;
+				DeltaTabX+=2;
 			}
 			MapPtr+=MapWidth;
 			RGBMapPtr+=MapWidth;
 			BlkPos.vx=BlkXOld;
 			BlkPos.vy+=BLOCK_SIZE;
-			DeltaFY++; DeltaBY++;
+			DeltaTabY+=2;
 		}
 
 		SetPrimPtr((u8*)PrimPtr);

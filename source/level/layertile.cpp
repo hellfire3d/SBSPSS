@@ -35,7 +35,13 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 		
 		PrimBankID=0;
+		PrimBank[0]=0; PrimBank[1]=0;
 
+		if (Hdr->SubType!=LAYER_TILE_TYPE_MID) return;
+//-----------------
+// anything below here is Mid layer only - how did I miss something like this, 104k WASTED!!
+
+// Create Mid Tile Prim Banks
 		for (int b=0; b<2; b++)
 		{
 			PrimBank[b]=(TSPRT*)MemAlloc(PrimMemSize,"Mid Polyz");
@@ -49,6 +55,17 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 				PrimPtr++;
 			}
 		}
+
+// precalc Mid tile offsets
+sTileMapElem	*MapPtr=Map;
+		for (int Y=0; Y<MapHeight; Y++)
+		{
+			for (int X=0; X<MapWidth; X++)
+			{
+				MapPtr->Tile*=sizeof(sElem2d);
+				MapPtr++;
+			}
+		}
 }
 
 /*****************************************************************************/
@@ -56,7 +73,7 @@ CLayerTile::~CLayerTile()
 {
 		for (int b=0; b<2; b++)
 		{
-			MemFree(PrimBank[b]);
+			if (PrimBank[b]) MemFree(PrimBank[b]);
 		}
 		
 }
@@ -121,6 +138,8 @@ sTileMapElem	*MapPtr=Map+GetMapOfs();
 s16				TileX,TileY;
 sOT				*ThisOT=OtPtr+LayerOT;
 TSPRT			*PrimPtr=PrimBank[PrimBankID];
+u8				*TileBank=(u8*)ElemBank2d;
+u32				T0,T1;
 
 			PrimBankID^=1;
 
@@ -139,11 +158,13 @@ TSPRT			*PrimPtr=PrimBank[PrimBankID];
 				int	ThisTile=MapRow->Tile;
 				if (ThisTile)
 				{
-					sElem2d		*Tile=&ElemBank2d[ThisTile];
+					sElem2d		*Tile=(sElem2d*)(TileBank+ThisTile);
 					PrimPtr->x0=TileX;
 					PrimPtr->y0=TileY;
-					setTSprtTPage(PrimPtr,Tile->TPage);
-					*(u32*)&PrimPtr->u0=*(u32*)&Tile->u0;	// copy uv AND clut
+					T0=Tile->TPage;
+					T1=*(u32*)&Tile->u0;
+					PrimPtr->t_code=T0;		//	pregen'd setTSprtTPage(PrimPtr,Tile->TPage);
+					*(u32*)&PrimPtr->u0=T1;	// copy uv AND clut
 					addPrim(ThisOT,PrimPtr);
 					PrimPtr++;
 				}

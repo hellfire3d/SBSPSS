@@ -50,10 +50,10 @@ protected:
 		u8				*RGBMap;
 		u8				*RGBTable;
 
-		s16				*FTableX[16];
-		s16				*FTableY[16];
-		s16				*BTableX[16];
-		s16				*BTableY[16];
+		s16				*DeltaTableX[16];
+		s16				*DeltaTableY[16];
+//		s16				*BTableX[16];
+//		s16				*BTableY[16];
 		DVECTOR			DeltaFOfs;
 		DVECTOR			DeltaBOfs;
 		s16				DeltaF,DeltaB;
