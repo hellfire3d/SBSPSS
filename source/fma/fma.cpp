@@ -1173,6 +1173,7 @@ void	CFmaScene::init()
 	ACTOR_DATA	*actor;
 
 	m_level=NULL;
+	m_party=NULL;
 
 	CThingManager::init();
 	CConversation::init();
