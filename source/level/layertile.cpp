@@ -14,22 +14,19 @@ const u32	XInc=16<<0;
 const u32	YInc=16<<16;
 
 /*****************************************************************************/
-// Uses single buffer. Hopefully this will be adequate
-// Changed from strip scroll to whole map update (cos of camera)
-
-DVECTOR	TileMapOfs={0,4};	// To line layers up :oP
+//DVECTOR	TileMapOfs={0,4};	// To line layers up :oP
 
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerTile::CLayerTile(sLayerHdr *Hdr,sTile *_TileBank)
+CLayerTile::CLayerTile(sLvlHdr *LvlHdr,sLayerHdr *Hdr)
 {
 		LayerHdr=Hdr;
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
 		printf("%i %i\n",MapWidth,MapHeight);
-		TileBank=_TileBank;
+		TileBank2d=LvlHdr->TileBank2d;
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 }
 
@@ -62,13 +59,12 @@ int			YPos=MapPos.vy>>MapXYShift;
 
 			MapXY.vx=XPos>>4;
 			MapXY.vy=YPos/12;
-#if	0			
-			if (LayerHdr->SubType==1)	// BODGE AND A HALF
+
+/*			if (LayerHdr->SubType==1)	// BODGE AND A HALF
 			{
-/**/			MapXY.vx+=TileMapOfs.vx;
-/**/			MapXY.vy+=TileMapOfs.vy;
+				MapXY.vx+=TileMapOfs.vx; MapXY.vy+=TileMapOfs.vy;
 			}
-#endif
+*/
 			ShiftX=XPos & 15;
 //			ShiftY=YPos & 15;
 			ShiftY=YPos%12;
@@ -88,9 +84,10 @@ int			YPos=MapPos.vy>>MapXYShift;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-#if	1
+#if	1	// FT4 version
 void	CLayerTile::render()
 {
+
 sTileMapElem	*MapPtr=GetMapPos();
 u8				*PrimPtr=GetPrimPtr();
 s16				TileX,TileY;
@@ -107,10 +104,11 @@ sOT				*ThisOT=OtPtr+LayerOT;
 
 			for (int X=0; X<RenderW; X++)
 			{
-				int	ThisTile=*MapRow++;
+				int	ThisTile=MapRow->Tile;
+				MapRow++;
 				if (ThisTile)
 				{
-					sTile		*Tile=&TileBank[ThisTile];
+					sTile2d		*Tile=&TileBank2d[ThisTile];
 					POLY_FT4	*Ft4=(POLY_FT4*)PrimPtr;
 					setPolyFT4(Ft4);
 					setShadeTex(Ft4,1);
@@ -118,7 +116,8 @@ sOT				*ThisOT=OtPtr+LayerOT;
 					setUVWH(Ft4,Tile->u0,Tile->v0,15,15);
 					Ft4->tpage=Tile->TPage;
 					Ft4->clut=Tile->Clut;
-					addPrimNoCheck(ThisOT,Ft4);
+//					addPrimNoCheck(ThisOT,Ft4);
+					addPrim(ThisOT,Ft4);
 					PrimPtr+=sizeof(POLY_FT4);
 				}
 				TileX+=TILE_WIDTH;
@@ -152,7 +151,7 @@ sOT				*ThisOT=OtPtr+LayerOT;
 				int	ThisTile=*MapRow++;
 				if (ThisTile)
 				{
-/**/				sTile		*Tile=&TileBank[ThisTile];
+/**/				sTile2d		*Tile=&TileBank2d[ThisTile];
 					TSPRT_16	*SprPtr=(TSPRT_16*)PrimPtr;
 					setTSprt16(SprPtr);
 					setTSetShadeTex(SprPtr,1);

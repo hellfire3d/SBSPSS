@@ -84,10 +84,11 @@ struct	sTri
 		u8			uv0[2];					//  2
 		u16			Clut;					//  2
 		u8			uv1[2];					//  2
-		u16			TPage;					//  2	(Or material)
+		u16			TPage;					//  2
 		u8			uv2[2];					//  2
 		u16			P2;						//  2
-};											// 16
+		u32			OTOfs;					//  4
+};											// 20
 
 //---------------------------------------------------------------------------
 struct	sQuad
@@ -99,18 +100,25 @@ struct	sQuad
 		u8			uv0[2];					//  2
 		u16			Clut;					//  2
 		u8			uv1[2];					//  2
-		u16			TPage;					//  2	(Or material)
+		u16			TPage;					//  2
 		u8			uv2[2];					//  2
 		u8			uv3[2];					//  2
-};											// 20
+		u32			OTOfs;					//  4
+};											// 24
 
 
 //***************************************************************************
 //*** Game Types and Headers ************************************************
 //***************************************************************************
 // Tiles 
-typedef	u16	sTileMapElem;	// Tile or Tri Start
+//typedef	u16	sTileMapElem;
 
+struct	sTileMapElem
+{
+		u16		Tile;
+//		u16		LightIdx;
+};
+/*
 struct	sTile
 {
 // 2d Tile
@@ -118,62 +126,26 @@ struct	sTile
 		u16		Clut;						// 2
 		u16		TPage;						// 2
 		u16		Pad;	// :o( need this?	// 2
-
+};											// 8
+*/
+struct	sTile2d
+{
+// 2d Tile
+		u8		u0,v0;						// 2
+		u16		Clut;						// 2
+		u16		TPage;						// 2
+		u16		Pad;	// :o( need this?	// 2
 };											// 8
 
-//---------------------------------------------------------------------------
-struct	sTileTri
+struct	sTile3d
 {
-		u16			P0;						//  2
-		u16			P1;						//  2
-		u16			P2;						//  2
-		u16			Mat;					//  2
-};											//  8
-
-//---------------------------------------------------------------------------
-struct	sTileTriMat
-{
-		u8			uv0[2];					//  2
-		u16			Clut;					//  2
-		u8			uv1[2];					//  2
-		u16			TPage;					//  2
-		u8			uv2[2];					//  2
-};											//  10
-
-//---------------------------------------------------------------------------
-struct	sTileQuad
-{
-		u16			P0;						//  2
-		u16			P1;						//  2
-		u16			P2;						//  2
-		u16			P3;						//  2
-		u16			Mat;					//  2
-};											//  10
-
-//---------------------------------------------------------------------------
-struct	sTileQuadMat
-{
-		u8			uv0[2];					//  2
-		u16			Clut;					//  2
-		u8			uv1[2];					//  2
-		u16			TPage;					//  2
-		u8			uv2[2];					//  2
-		u8			uv3[2];					//  2
-};											// 12
-
+// 3d Tile
+		u16		TriStart;
+		u16		TriCount;
+		u16		QuadStart;
+		u16		QuadCount;
+};											// 8
 //***************************************************************************
-// Level Info
-
-struct	sLevelInfo
-{
-		u32		MaxPakSize;
-		u32		MaxLvlSize;
-		u16		ActorCount;
-		u16		Pad;
-//		u16		ActorTypeList.....
-};
-
-//---------------------------------------------------------------------------
 // Layers
 struct	sLayerHdr
 {
@@ -183,19 +155,6 @@ struct	sLayerHdr
 	int		Height;
 
 	/*int	TileData[W][H];....*/
-};
-
-//---------------------------------------------------------------------------
-struct	sLayer3d
-{
-	u16		TriCount;
-	u16		QuadCount;
-	u16		VtxCount;
-	u16		Pad;
-
-	u32		TriList;
-	u32		QuadList;
-	u32		VtxList;
 };
 
 //---------------------------------------------------------------------------
@@ -236,9 +195,14 @@ struct	sLvlHdr
 	u32		PlatformList;
 	u32		TriggerList;
 	u32		FXList;
-	u32		Pad6;
-	u32		Pad7;
+
 	u16		PlayerStartX,PlayerStartY;
+
+	sTile2d	*TileBank2d;
+	sTile3d	*TileBank3d;
+	sTri	*TriList;
+	sQuad	*QuadList;
+	sVtx	*VtxList;
 };
 
 //***************************************************************************

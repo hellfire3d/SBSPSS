@@ -14,8 +14,8 @@
 // Nope.. it's shrunk again! :)
 struct	sLvlTab
 {
-	FileEquate				LevelInfo;
-	FileEquate				TileBank,Level,Tex;
+	u16						Chapter,Level;
+	FileEquate				LevelFilename,TexFilename;
 	int						songId;
 };
 
@@ -26,8 +26,8 @@ class CLevel
 public:
 	CLevel();
 // Scene Handlers
-	void		init();
-	void		shutdown(bool CleanUp);
+	void		init(int LevelNo);
+	void		shutdown();
 	void		render();
 	void		think(int _frames);
 
@@ -43,14 +43,11 @@ public:
 
 	int						GetNextLevel(int Lvl);
 private:
-	void		initLayers();
-	void		initNewLevel(sLvlTab *LevelDat);
-	void		DisplayLoadingScreen();
+	void					initLayers();
+	void					DisplayLoadingScreen(sLvlTab *lvlTab);
 
-	sLevelInfo		*LevelInfo;
-	u8				*PakBuffer,*LevelBuffer;
+	sLvlHdr			*LevelHdr;
 
-	sTile			*TileBank;
 	static DVECTOR	MapPos;
 	static DVECTOR	s_playerSpawnPos;
 

@@ -15,10 +15,10 @@
 #include	"gfx\primplus.h"
 #endif
 
-#define	MAX_OT				(1024/2)
+#define	MAX_OT				(16)
 #define	MAX_PRIMS			(1024*4)
 
-#define	USE_NTAGS			1
+//#define	USE_NTAGS			1
 
 
 /************************************************************************************/
@@ -149,6 +149,7 @@ inline void UnlinkNTagtoNTag(sOT *to, sOT *from, long count)
 typedef	u32	sOT;
 
 #undef	addPrim
+#define	AddPrim		addPrim
 #define	AddPrim		addPrim
 #define	addPrim( r0, r1 ) __asm__  (			\
 	"lwl	$12, 2( %0 );"						\

@@ -15,6 +15,7 @@
 /*****************************************************************************/
 class	FontBank;
 class	SpriteBank;
+class	CPlayer;
 class CGameScene : public CScene
 {
 public:
@@ -22,18 +23,17 @@ public:
 virtual			~CGameScene()	{;}
 
 
-		void	init();
-virtual	void	createPlayer();
-virtual	int		canPause();
-		void	shutdown();
-		void	render();
-		void	think(int _frames);
-		int		readyToShutdown();
-		char	*getSceneName()	{return "Game";}
+		void			init();
+virtual	void			createPlayer();
+virtual	int				canPause();
+		void			shutdown();
+		void			render();
+		void			think(int _frames);
+		int				readyToShutdown();
+		char			*getSceneName()	{return "Game";}
 
-//		static	MATRIX	*GetCamMtx()		{return(&CamMtx);}
-		class CPlayer	*getPlayer();
-		void	sendEvent( GAME_EVENT evt, class CThing *sourceThing );
+		CPlayer			*getPlayer();
+		void			sendEvent( GAME_EVENT evt, class CThing *sourceThing );
 
 		static void		setReadyToExit()	{s_readyToExit=true;}
 		static void		levelFinished()		{s_levelFinished=true;}
@@ -41,7 +41,7 @@ virtual	int		canPause();
 protected:
 
 		void			initLevel();
-		void			shutdownLevel(bool CleanUp);
+		void			shutdownLevel();
 
 		void			AspectCorrectCamera();
 

@@ -266,7 +266,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	F.setJustification( FontBank::JUST_CENTRE );
 	F.setOt( 0 );
 
-	ClearNTag(OtPtr, MAX_OT);
+	InitOTag(OtPtr, MAX_OT);
 	F.print( (512 >> 1), (256 >> 1), Text );
 
 	VSync(0);
@@ -274,7 +274,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	PrimDisplay();
 	while(DrawSync(1));
 
-	ClearNTag(OtPtr, MAX_OT);
+	InitOTag(OtPtr, MAX_OT);
 	F.print( (512 >> 1), (256 >> 1), Text );
 
 	VSync(0);

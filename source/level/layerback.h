@@ -50,7 +50,7 @@ public:
 			COLOR=1<<3,
 		};
 
-		CLayerBack(sLayerHdr *Hdr,sTile *TileBank);
+		CLayerBack(sLvlHdr *LvlHdr,sLayerHdr *Hdr);
 		~CLayerBack();
 
 		void	init(DVECTOR &MapPos,int Shift);

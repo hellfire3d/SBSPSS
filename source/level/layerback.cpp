@@ -37,7 +37,7 @@ sBackRGBTable	CLayerBack::BackRGBTable[]=
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-CLayerBack::CLayerBack(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,TileBank)
+CLayerBack::CLayerBack(sLvlHdr *LvlHdr,sLayerHdr *Hdr) : CLayerTile(LvlHdr,Hdr)
 {
 		Data=(sLayerShadeHdr*)MakePtr(Hdr,sizeof(sLayerHdr));
 
@@ -204,12 +204,12 @@ int	i;
 }
 
 /*****************************************************************************/
-extern	DVECTOR	TileMapOfs;
+//extern	DVECTOR	TileMapOfs;
 void	CLayerBack::think(DVECTOR &MapPos)
 { 
 int		_XOfs=MapPos.vx>>MapXYShift;
 int		_YOfs=MapPos.vy>>MapXYShift;
-		_YOfs+=TileMapOfs.vy;
+//		_YOfs+=TileMapOfs.vy;
 
 		PosDx=(_XOfs-XOfs)<<MOVE_SHIFT;
 		PosDy=(_YOfs-YOfs)<<MOVE_SHIFT;

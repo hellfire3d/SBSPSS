@@ -123,6 +123,7 @@ u32 	*Tag;
 		termPrim(StartOt);
 }
 
+#endif
 
 /*****************************************************************************/
 LINE_F2		*DrawLine(int _x0,int _y0,int _x1,int _y1,int _r,int _g,int _b,int _ot)
@@ -150,7 +151,3 @@ LINE_G2		*DrawGLine(int _x0,int _y0,int _x1,int _y1,int _r1,int _g1,int _b1,int 
 	AddPrimToList(lg2,_ot);
 	return lg2;
 }
-
-
-
-#endif

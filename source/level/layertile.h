@@ -34,7 +34,7 @@ public:
 			SCREEN_TILE_SIZE=SCREEN_TILE_WIDTH*SCREEN_TILE_HEIGHT
 		};
 
-		CLayerTile(sLayerHdr *Hdr,sTile *TileBank);
+		CLayerTile(sLvlHdr *LvlHdr,sLayerHdr *Hdr);
 virtual	~CLayerTile();
 
 virtual	void			init(DVECTOR &MapPos,int Shift);
@@ -46,9 +46,8 @@ virtual	void			render();
 virtual	sTileMapElem	*GetMapPos()		{return(Map+GetMapOfs());}
 protected:
 
-
 		sLayerHdr		*LayerHdr;
-		sTile			*TileBank;
+		sTile2d			*TileBank2d;
 
 		int				MapWidth,MapHeight,MapXYShift;
 		int				RenderW,RenderH;

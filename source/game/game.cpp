@@ -158,7 +158,7 @@ int		CGameScene::canPause()
 void	CGameScene::shutdown()
 {
 //		CFileIO::EnableASync(false);
-		shutdownLevel(true);
+		shutdownLevel();
 		CSoundMediator::dumpSong();	
 
 		m_pauseMenu->shutdown();	delete m_pauseMenu;
@@ -195,8 +195,8 @@ void	CGameScene::think(int _frames)
 	}
 	else if(s_levelFinished)
 	{
-		s_globalLevelSelectThing=Level.GetNextLevel(s_globalLevelSelectThing);
-		shutdownLevel(s_globalLevelSelectThing%12==0);
+		s_globalLevelSelectThing++;
+		shutdownLevel();
 		initLevel();
 	s_levelFinished=false;
 	}
@@ -285,7 +285,7 @@ void	CGameScene::initLevel()
 #endif
 
 	s_levelFinished=false;
-	Level.init();
+	Level.init(s_globalLevelSelectThing);
 
 	createPlayer();
 	m_player->setRespawnPos(Level.getPlayerSpawnPos());
@@ -411,11 +411,11 @@ void	CGameScene::initLevel()
 
 
 /*****************************************************************************/
-void	CGameScene::shutdownLevel(bool CleanUp)
+void	CGameScene::shutdownLevel()
 {
 	CConversation::shutdown();
 	CThingManager::shutdown();
-	Level.shutdown(CleanUp);
+	Level.shutdown();
 }
 
 /*****************************************************************************/
