@@ -1909,6 +1909,14 @@ SOURCE=..\..\..\source\thing\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tbemit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tbemit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tcamlock.cpp
 # End Source File
 # Begin Source File

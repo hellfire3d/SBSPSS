@@ -297,6 +297,7 @@ triggers_src :=		trigger \
 					tplatfrm \
 					tgarygo \
 					tfemit \
+					tbemit \
 					tifemit \
 					tggleft \
 					tggright \

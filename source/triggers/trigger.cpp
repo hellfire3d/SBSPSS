@@ -51,6 +51,10 @@
 #include "triggers\tifemit.h"
 #endif
 
+#ifndef __TRIGGERS_TBEMIT_H__
+#include "triggers\tbemit.h"
+#endif
+
 #ifndef __TRIGGERS_TGGLEFT_H__
 #include "triggers\tggleft.h"
 #endif
@@ -110,11 +114,6 @@ CTrigger	*trigger;
 			trigger=(CGaryStartTrigger*)new("GaryStartTrigger") CGaryStartTrigger();
 			break;
 
-		// Flame emitter
-		case TRIGGER_FLAMEEMITTER:
-			trigger=(CFlameEmitterTrigger*)new( "FlameEmitterTrigger") CFlameEmitterTrigger();
-			break;
-
 		// Gary stop trigger
 		case TRIGGER_GARYSTOP:
 			trigger=(CGaryStopTrigger*)new("GaryStopTrigger") CGaryStopTrigger();
@@ -130,8 +129,18 @@ CTrigger	*trigger;
 			trigger=(CGaryGoRightTrigger*)new("GaryGoRightTrigger") CGaryGoRightTrigger();
 			break;
 
+		// Flame emitter
+		case TRIGGER_FLAMEEMITTER:
+			trigger=(CFlameEmitterTrigger*)new( "FlameEmitterTrigger") CFlameEmitterTrigger();
+			break;
+
 		case TRIGGER_INTERMITTENTFLAMEEMITTER:
 			trigger=(CIntermittentFlameEmitterTrigger*)new( "IntermittentFlameEmitterTrigger") CIntermittentFlameEmitterTrigger();
+			break;
+
+		// Bubble emitter
+		case TRIGGER_BUBBLEEMITTER:
+			trigger=(CBubbleEmitterTrigger*)new( "BubbleEmitterTrigger") CBubbleEmitterTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:

@@ -2,7 +2,7 @@
 
 	tfemit.h
 
-	Author:		PKG
+	Author:		CRB
 	Created:	
 	Project:	Spongebob
 	Purpose:	
