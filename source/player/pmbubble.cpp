@@ -16,7 +16,14 @@
 	-------- */
 
 #include "player\pmbubble.h"
+
+#ifndef	__ENEMY_NPLATFRM_H__
 #include "enemy\nplatfrm.h"
+#endif
+
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
 
 
 /*	Std Lib
@@ -27,6 +34,10 @@
 
 #ifndef	__ANIM_SPONGEBOB_HEADER__
 #include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
 #endif
 
 
@@ -142,6 +153,28 @@ void	CPlayerModeBubbleMixture::setAnimFrame(int _animFrame)
 {
 	CPlayerModeBase::setAnimFrame(_animFrame);
 	m_savedAnimFrame=_animFrame;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeBubbleMixture::renderModeUi()
+{
+	SpriteBank	*sb;
+	sFrameHdr	*fh;
+	char		buf[4];
+	FontBank	*fb;
+
+	sb=m_player->getSpriteBank();
+	fh=sb->getFrameHeader(FRM__BUBBLEWAND);
+	sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+
+	fb=m_player->getFontBank();
+	sprintf(buf,"x%d",m_player->getBubbleAmmo());
+	fb->print(CPlayer::POWERUPUI_TEXTX,CPlayer::POWERUPUI_TEXTY-(fb->getCharHeight()/2),buf);
 }
 
 /*----------------------------------------------------------------------

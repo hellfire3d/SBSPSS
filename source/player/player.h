@@ -52,7 +52,7 @@ typedef enum
 	PLAYER_MODE_FULLUNARMED,
 	PLAYER_MODE_BALLOON,
 	PLAYER_MODE_BUBBLE_MIXTURE,
-//	PLAYER_MODE_NET,
+	PLAYER_MODE_NET,
 	PLAYER_MODE_CORALBLOWER,
 	//PLAYER_MODE_JELLY_LAUNCHER,
 
@@ -247,7 +247,7 @@ public:
 	void			giveInvinvibilityRing()		{m_invinvibilityRingTimer=INVINCIBILITY_RING_TIME;}
 	void			giveDivingHelmet()			{m_divingHelmet=true;}
 
-	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;}
+	void			giveBubbleAmmo()			{m_bubbleAmmo+=10;if(m_bubbleAmmo>99)m_bubbleAmmo=99;}
 	void			useOneBubble()				{m_bubbleAmmo--;}
 	int				getBubbleAmmo()				{return m_bubbleAmmo;}
 private:
@@ -275,6 +275,26 @@ private:
 
 private:
 	bool			m_hasPlatformCollided;
+
+
+	// Graphical resources
+public:
+	class FontBank		*getFontBank()					{return m_fontBank;}
+	class SpriteBank	*getSpriteBank()				{return m_spriteBank;}
+
+	enum
+	{
+		POWERUPUI_ICONX=40,
+		POWERUPUI_ICONY=200,
+		POWERUPUI_TEXTX=60,
+		POWERUPUI_TEXTY=200,
+		POWERUPUI_OT=5,
+	};
+
+private:
+	class FontBank		*m_fontBank;
+	class SpriteBank	*m_spriteBank;
+
 };
 
 

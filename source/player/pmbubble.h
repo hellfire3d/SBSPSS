@@ -39,6 +39,7 @@ class CPlayerModeBubbleMixture : public CPlayerModeBase
 public:
 	virtual void				enter();
 	virtual void				think();
+	virtual void				renderModeUi();
 
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);

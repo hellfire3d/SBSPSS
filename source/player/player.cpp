@@ -41,6 +41,10 @@
 #include "player\pmbubble.h"
 #endif
 
+#ifndef	__PLAYER_PMNET_H__
+#include "player\pmnet.h"
+#endif
+
 #ifndef	__PLAYER_PMCHOP_H__
 #include "player\pmchop.h"
 #endif
@@ -55,6 +59,14 @@
 
 #ifndef	__PLAYER_PMFLY_H__
 #include "player\pmfly.h"
+#endif
+
+#ifndef __GFX_FONT_H__
+#include "gfx\font.h"
+#endif
+
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
 #endif
 
 // to be removed
@@ -149,12 +161,11 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 	"FULLUNARMED",
 	"BALLOON",
 	"BUBBLE MIXTURE",
+	"NET",
 	"CORALBLOWER",
 	"DEAD",
 	"FLY",
 };
-#include "gfx\font.h"	
-FontBank	s_debugFont;
 #endif
 
 
@@ -183,6 +194,7 @@ CPlayerModeBase				PLAYERMODE;
 CPlayerModeChop				PLAYERMODECHOP;
 CPlayerModeBalloon			PLAYERMODEBALLOON;
 CPlayerModeBubbleMixture	PLAYERMODEBUBBLEMIXTURE;
+CPlayerModeNet				PLAYERMODENET;
 CPlayerModeCoralBlower		PLAYERMODECORALBLOWER;
 CPlayerModeDead				PLAYERMODEDEAD;
 CPlayerModeFly				PLAYERMODEFLY;
@@ -193,6 +205,7 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODECHOP,			// PLAYER_MODE_FULLUNARMED
 	&PLAYERMODEBALLOON,			// PLAYER_MODE_BALLOON
 	&PLAYERMODEBUBBLEMIXTURE,	// PLAYER_MODE_BUBBLE_MIXTURE
+	&PLAYERMODENET,				// PLAYER_MODE_NET
 	&PLAYERMODECORALBLOWER,		// PLAYER_MODE_CORALBLOWER
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
@@ -208,6 +221,13 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 void	CPlayer::init()
 {
 	CPlayerThing::init();
+
+	m_fontBank=new ("PlayerFont") FontBank();
+	m_fontBank->initialise(&standardFont);
+	m_fontBank->setOt(5);
+
+	m_spriteBank=new ("PlayerSprites") SpriteBank();
+	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
 
 	m_layerCollision=NULL;
 
@@ -242,11 +262,6 @@ m_animFrame=0;
 	m_skel.setAng(512);
 //m_skel.setAngInc(678);
 
-#ifdef _STATE_DEBUG_
-	s_debugFont.initialise(&standardFont);
-	s_debugFont.setJustification(FontBank::JUST_LEFT);
-#endif
-
 	setCollisionSize(25,50);
 	setCollisionCentreOffset(0,-25);
 
@@ -266,9 +281,9 @@ void	CPlayer::shutdown()
 		s_playerModes[i]->shutdown();
 	}
 
-#ifdef _STATE_DEBUG_
-	s_debugFont.dump();
-#endif
+	m_spriteBank->dump();	delete m_spriteBank;
+	m_fontBank->dump();		delete m_fontBank;
+
 	CPlayerThing::shutdown();
 }
 
@@ -433,7 +448,7 @@ void	CPlayer::render()
 	
 #ifdef _STATE_DEBUG_
 sprintf(posBuf,"%03d (%02d) ,%03d (%02d) = dfg:%+02d",Pos.vx,Pos.vx&0x0f,Pos.vy,Pos.vy&0x0f,getHeightFromGround(Pos.vx,Pos.vy));
-s_debugFont.print(40,40,posBuf);
+m_fontBank->print(40,40,posBuf);
 #endif
 
 	// Render
@@ -466,14 +481,13 @@ if(eyes!=-1)
 		m_skel.Render(this);
 		m_currentPlayerModeClass->render();
 		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
-
 	}
 
 
 #ifdef _STATE_DEBUG_
 	char	buf[128];
 	sprintf(buf,"MODE:  %s",s_modeText[m_currentMode]);
-	s_debugFont.print(40,210,buf);
+	m_fontBank->print(40,210,buf);
 #endif
 
 
@@ -507,8 +521,11 @@ if(eyes!=-1)
 	}
 	char lifebuf[5];
 	sprintf(lifebuf,"x%d",m_lives);
-	s_debugFont.print(livesx,livesy,lifebuf);
+	m_fontBank->print(livesx,livesy,lifebuf);
 #endif
+
+	// Mode specific ui
+	m_currentPlayerModeClass->renderModeUi();
 }
 
 

@@ -17,6 +17,10 @@
 
 #include "player\pmcoral.h"
 
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -26,6 +30,10 @@
 
 #ifndef	__ANIM_SPONGEBOB_HEADER__
 #include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
 #endif
 
 
@@ -103,9 +111,9 @@ void	CPlayerModeCoralBlower::think()
 			}
 			break;
 		case BLOWER_STATE__AIMING:
-			if(getState()==STATE_IDLE)
+			if(getState()!=STATE_IDLE)
 			{
-				m_blowerState=BLOWER_STATE__EMPTY;
+				m_blowerState=BLOWER_STATE__FULL;
 			}
 			if(!getPadInputHeld()&PI_ACTION)
 			{
@@ -115,6 +123,30 @@ void	CPlayerModeCoralBlower::think()
 			break;
 	}
 cbstate=m_blowerState;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeCoralBlower::renderModeUi()
+{
+	SpriteBank	*sb;
+	sFrameHdr	*fh;
+
+	sb=m_player->getSpriteBank();
+	fh=sb->getFrameHeader(FRM__BLOWER);
+	if(m_blowerState==BLOWER_STATE__FULL||m_blowerState==BLOWER_STATE__AIMING)
+	{
+		// Blower has a creature/object inside
+		sb->printFT4Scaled(FRM__BLOWER,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,256+128);
+	}
+	else
+	{
+		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+	}
 }
 
 /*----------------------------------------------------------------------

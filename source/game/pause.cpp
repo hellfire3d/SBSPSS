@@ -83,7 +83,7 @@ void CPauseMenu::init()
 	m_guiFrame->setOt(OT_POS);
 	m_guiFrame->setFlags(CGUIObject::FLAG_DRAWBORDER);
 
-	int xpos=TEXT_SPACING;
+	int xpos=TEXT_SPACING/2;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__CONTINUE,
@@ -93,7 +93,9 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__PAUSE_MENU__QUIT,
 										&m_quitGameFlag,true);
-	xpos+=TEXT_SPACING*2;
+
+	
+	xpos+=TEXT_SPACING+(TEXT_SPACING/2);
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BASICUNARMED_MODE,
@@ -105,11 +107,6 @@ void CPauseMenu::init()
 										&newmode,PLAYER_MODE_FULLUNARMED);
 	xpos+=TEXT_SPACING;
 #if defined(__USER_paul__) || defined(__USER_charles__)
-//	CGUIFactory::createValueButtonFrame(m_guiFrame,
-//										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
-//										STR__DEBUG__NET_MODE,
-//										&newmode,PLAYER_MODE_NET);
-//	xpos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BALLOON_MODE,
@@ -119,6 +116,11 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__BUBBLEMIXTURE_MODE,
 										&newmode,PLAYER_MODE_BUBBLE_MIXTURE);
+	xpos+=TEXT_SPACING;
+	CGUIFactory::createValueButtonFrame(m_guiFrame,
+										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
+										STR__DEBUG__NET_MODE,
+										&newmode,PLAYER_MODE_NET);
 	xpos+=TEXT_SPACING;
 	CGUIFactory::createValueButtonFrame(m_guiFrame,
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
@@ -135,7 +137,6 @@ void CPauseMenu::init()
 										(FRAME_WIDTH-TEXT_BOX_WIDTH)/2,xpos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT,
 										STR__DEBUG__FLY_MODE,
 										&newmode,PLAYER_MODE_FLY);
-	xpos+=TEXT_SPACING;
 
 	m_active=false;
 }

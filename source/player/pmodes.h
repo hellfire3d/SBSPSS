@@ -81,6 +81,7 @@ public:
 	virtual void	enter()								{;}
 	virtual void	think()								{;}
 	virtual void	render()							{;}
+	virtual void	renderModeUi()						{;}		// Ui specific to this mode (eg: ammo)
 
 	int				getPadInputHeld();
 	int				getPadInputDown();

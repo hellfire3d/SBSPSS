@@ -17,6 +17,10 @@
 
 #include "player\pmnet.h"
 
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -26,6 +30,10 @@
 
 #ifndef	__ANIM_SPONGEBOB_HEADER__
 #include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+#ifndef __SPR_INGAMEFX_H__
+#include <ingamefx.h>
 #endif
 
 
@@ -106,6 +114,30 @@ void	CPlayerModeNet::think()
 		}
 	}
 	netstate=m_netState;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeNet::renderModeUi()
+{
+	SpriteBank	*sb;
+	sFrameHdr	*fh;
+
+	sb=m_player->getSpriteBank();
+	fh=sb->getFrameHeader(FRM__NET);
+	if(m_netState==NET_STATE__FULL)
+	{
+		// Net has a jellyfish inside
+		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,256+128);
+	}
+	else
+	{
+		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+	}
 }
 
 /*----------------------------------------------------------------------

@@ -888,6 +888,14 @@ SOURCE=..\..\..\source\player\pmfly.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\player\pmnet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\player\pmnet.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\pmodes.cpp
 # End Source File
 # Begin Source File

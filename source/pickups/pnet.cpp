@@ -61,7 +61,7 @@
   ---------------------------------------------------------------------- */
 void	CNetPickup::collect(class CPlayer *_player)
 {
-//	_player->setMode(PLAYER_MODE_NET);
+	_player->setMode(PLAYER_MODE_NET);
 	CBasePickup::collect(_player);
 }
 
