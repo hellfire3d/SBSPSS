@@ -119,6 +119,10 @@
 #include "hazard\hcswitch.h"
 #endif
 
+#ifndef __HAZARD_HBROCK_H__
+#include "hazard\hbrock.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -146,6 +150,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_ROCKSHARD_HAZARD,
 	NPC_INERT_HAZARD,
 	NPC_CONVEYOR_SWITCH_HAZARD,
+	NPC_BOUNCING_ROCK_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,6 +292,12 @@ CNpcHazard *hazard;
 		case NPC_CONVEYOR_SWITCH_HAZARD:
 		{
 			hazard = new ("conveyor switch hazard") CNpcConveyorSwitchHazard;
+			break;
+		}
+
+		case NPC_BOUNCING_ROCK_HAZARD:
+		{
+			hazard = new ("bouncing rock hazard") CNpcBouncingRockHazard;
 			break;
 		}
 

@@ -841,6 +841,14 @@ SOURCE=..\..\..\source\hazard\hboat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hbrock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbrock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hbwheel.cpp
 # End Source File
 # Begin Source File
@@ -1986,6 +1994,14 @@ SOURCE=..\..\..\source\triggers\thazard.cpp
 # Begin Source File
 
 SOURCE=..\..\..\source\triggers\thazard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\thazwalk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\thazwalk.h
 # End Source File
 # Begin Source File
 

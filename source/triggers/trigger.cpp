@@ -71,6 +71,10 @@
 #include "triggers\thazard.h"
 #endif
 
+#ifndef __TRIGGERS_THAZWALK_H__
+#include "triggers\thazwalk.h"
+#endif
+
 #ifndef __TRIGGERS_TBGEYSER_H__
 #include "triggers\tbgeyser.h"
 #endif
@@ -164,6 +168,10 @@ CTrigger	*trigger;
 
 		case TRIGGER_HAZARD:
 			trigger = (CHazardTrigger*)new("HazardTrigger") CHazardTrigger();
+			break;
+
+		case TRIGGER_HAZARD_WALK:
+			trigger = (CHazardWalkTrigger*)new("HazardWalkTrigger") CHazardWalkTrigger();
 			break;
 
 		default:
