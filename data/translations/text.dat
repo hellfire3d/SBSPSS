@@ -461,22 +461,24 @@ eng=I got it! Well, celebration time is over! Now back to Bikini Bottom to add t
 ; Speech trigger texts
 ; ---------------------------------------------------------------
 
-[STR__INGAME__TRIGGERSPEECH_FIRSTNET]
-eng=Hey, I can use this net to catch jellyfish and throw them at those annoying critters.
-[STR__INGAME__TRIGGERSPEECH_FIRSTCORAL]
-eng=With this coral blower, I can suck up all of those sea shells laying around, and use them to break up the rock walls.
-[STR__INGAME__TRIGGERSPEECH_GARYCH2L1]
-eng=Hmmmm, using the coral blower on those rocks up there should cover up those spikes!
-[STR__INGAME__TRIGGERSPEECH_BUBBLEGEYSER]
+[STR__INGAME__TRIGGERSPEECH_151]
+eng=Hey, I can use this net to catch jellyfish and throw them at those annoying critters!
+[STR__INGAME__TRIGGERSPEECH_152]
+eng=With this coral blower, I can suck up all those sea shells laying around, and use them to break the rock walls!
+[STR__INGAME__TRIGGERSPEECH_153]
+eng=Hmmmm, using the coral blower on those rocks up there should cover up those spikes! Then Gary Can Walk over them. Te-heee-hee!
+[STR__INGAME__TRIGGERSPEECH_154]
+eng=The floor doesn’t look too stable. A good ol' butt bounce should do the trick.
+[STR__INGAME__TRIGGERSPEECH_155]
 eng=Bubbles! Hey, I wonder if I can jump on them...
-[STR__INGAME__TRIGGERSPEECH_FIRSTBUBBLE]
+[STR__INGAME__TRIGGERSPEECH_156]
+eng=This scale should help me get Gary across...
+[STR__INGAME__TRIGGERSPEECH_157]
 eng=I can make bubbles! And what do you know, I can jump on them!
-[STR__INGAME__TRIGGERSPEECH_BREAKFLOOR]
-eng=The floor doesn’t look too stable. A good ol butt bounce should do the trick.
-[STR__INGAME__TRIGGERSPEECH_USEBUBBLE]
+[STR__INGAME__TRIGGERSPEECH_158]
 eng=A few bubbles should get me up there...
-[STR__INGAME__TRIGGERSPEECH_WEIGHT]
-eng=I cant't lift that.. hmmmm. those pulleys should do the trick.
+[STR__INGAME__TRIGGERSPEECH_159]
+eng=I cant't lift that.. hmmmm. Those pulleys should do the trick.
 
 
 

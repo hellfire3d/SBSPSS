@@ -248,15 +248,15 @@ const sSpeechTable	SpeechTable[]=
 {SPEECH_148,-1},
 {SPEECH_149,-1},
 {SPEECH_150,-1},
-{SPEECH_151,SCRIPTS_TRIGGERSPEECH_FIRSTNET_DAT},
-{SPEECH_152,SCRIPTS_TRIGGERSPEECH_FIRSTCORAL_DAT},
-{SPEECH_153,SCRIPTS_TRIGGERSPEECH_GARYCH2L1_DAT},
-{SPEECH_154,SCRIPTS_TRIGGERSPEECH_BREAKFLOOR_DAT},
-{SPEECH_155,SCRIPTS_TRIGGERSPEECH_BUBBLEGEYSER_DAT},
-{SPEECH_156,-1},
-{SPEECH_157,SCRIPTS_TRIGGERSPEECH_USEBUBBLE_DAT},
-{SPEECH_158,SCRIPTS_TRIGGERSPEECH_FIRSTBUBBLE_DAT},
-{SPEECH_159,SCRIPTS_TRIGGERSPEECH_WEIGHT_DAT},
+{SPEECH_151,STR__INGAME__TRIGGERSPEECH_151},
+{SPEECH_152,STR__INGAME__TRIGGERSPEECH_152},
+{SPEECH_153,STR__INGAME__TRIGGERSPEECH_153},
+{SPEECH_154,STR__INGAME__TRIGGERSPEECH_154},
+{SPEECH_155,STR__INGAME__TRIGGERSPEECH_155},
+{SPEECH_156,STR__INGAME__TRIGGERSPEECH_156},
+{SPEECH_157,STR__INGAME__TRIGGERSPEECH_157},
+{SPEECH_158,STR__INGAME__TRIGGERSPEECH_158},
+{SPEECH_159,STR__INGAME__TRIGGERSPEECH_159},
 };
 const int	SpeechTableSize=sizeof(SpeechTable)/sizeof(sSpeechTable);
 
@@ -773,7 +773,7 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTNET_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_151_DAT);	// firstnet
 					registerConversationScript(SCRIPTS_CH1L1_01_DAT);
 					registerConversationScript(SCRIPTS_CH1L1_02_DAT);
 					registerConversationScript(SCRIPTS_C1L1_CELEBRATE_DAT);
@@ -816,8 +816,8 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTCORAL_DAT);
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_GARYCH2L1_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_152_DAT);	// firstcoral
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_153_DAT);	// garych2l1
 					registerConversationScript(SCRIPTS_CH2L1_01_DAT);
 					registerConversationScript(SCRIPTS_CH2L1_02_DAT);
 					registerConversationScript(SCRIPTS_C2L1_CELEBRATE_DAT);
@@ -826,7 +826,7 @@ void CConversation::registerConversationLevelScripts(int level)
 
 				case 2:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_BUBBLEGEYSER_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_155_DAT);	// bubblegeyser
 					registerConversationScript(SCRIPTS_CH2L2_01_DAT);
 					registerConversationScript(SCRIPTS_CH2L2_02_DAT);
 					registerConversationScript(SCRIPTS_C2L2_CELEBRATE_DAT);
@@ -835,7 +835,7 @@ void CConversation::registerConversationLevelScripts(int level)
 
 				case 3:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_FIRSTBUBBLE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_157_DAT);	// firstbubble
 					registerConversationScript(SCRIPTS_C2L3_CELEBRATE_DAT);
 					break;
 				}
@@ -859,7 +859,7 @@ void CConversation::registerConversationLevelScripts(int level)
 			{
 				case 1:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_BREAKFLOOR_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_154_DAT);	// breakfloor
 					registerConversationScript(SCRIPTS_CH4L3_01_DAT);
 					registerConversationScript(SCRIPTS_CH4L3_02_DAT);
 					registerConversationScript(SCRIPTS_C3L1_CELEBRATE_DAT);
@@ -875,7 +875,7 @@ void CConversation::registerConversationLevelScripts(int level)
 
 				case 3:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_USEBUBBLE_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_158_DAT);	// usebubble
 					registerConversationScript(SCRIPTS_CH3L3_01_DAT);
 					registerConversationScript(SCRIPTS_CH3L3_02_DAT);
 					registerConversationScript(SCRIPTS_C3L3_CELEBRATE_DAT);
@@ -958,20 +958,9 @@ void CConversation::registerConversationLevelScripts(int level)
 					break;
 				}
 
-				default:
-					break;
-			}
-
-			break;
-		}
-
-		case 6:
-		{
-			switch ( CLevel::getCurrentChapterLevel() )
-			{
 				case 5:
 				{
-					registerConversationScript(SCRIPTS_TRIGGERSPEECH_WEIGHT_DAT);
+					registerConversationScript(SCRIPTS_TRIGGERSPEECH_159_DAT);	// weight
 					break;
 				}
 

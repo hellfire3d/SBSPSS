@@ -2956,35 +2956,39 @@ SOURCE=..\..\..\data\scripts\fma_plankton.scr
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_breakfloor.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_151.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_bubblegeyser.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_152.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_firstbubble.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_153.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_firstcoral.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_154.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_firstnet.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_155.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_garych2l1.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_156.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_usebubble.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_157.scr
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\scripts\triggerspeech_weight.scr
+SOURCE=..\..\..\data\scripts\triggerspeech_158.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\triggerspeech_159.scr
 # End Source File
 # End Group
 # End Group
