@@ -732,6 +732,8 @@ void CNpcEnemy::init()
 	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
 
 	m_positionHistory = NULL;
+
+	m_isShuttingDown = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -777,33 +779,38 @@ void CNpcEnemy::reinit()
 
 void CNpcEnemy::shutdown()
 {
-	if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
-	// remove waypoints
-
-	m_npcPath.removeAllWaypoints();
-
-	// remove position history
-
-	CNpcPositionHistory *currentPosition;
-	CNpcPositionHistory *oldPosition;
-
-	currentPosition = m_positionHistory;
-
-	while( currentPosition )
+	if ( !m_isShuttingDown )
 	{
-		oldPosition = currentPosition;
-		currentPosition = currentPosition->next;
+		m_isShuttingDown = true;
 
-		delete oldPosition;
+		if (m_spriteBank) m_spriteBank->dump();		delete m_spriteBank;
+		// remove waypoints
+
+		m_npcPath.removeAllWaypoints();
+
+		// remove position history
+
+		CNpcPositionHistory *currentPosition;
+		CNpcPositionHistory *oldPosition;
+
+		currentPosition = m_positionHistory;
+
+		while( currentPosition )
+		{
+			oldPosition = currentPosition;
+			currentPosition = currentPosition->next;
+
+			delete oldPosition;
+		}
+
+		m_positionHistory = NULL;
+
+		if (m_actorGfx)	delete m_actorGfx;
+
+		deleteAllChild();
+
+		CEnemyThing::shutdown();
 	}
-
-	m_positionHistory = NULL;
-
-	if (m_actorGfx)	delete m_actorGfx;
-
-	deleteAllChild();
-
-	CEnemyThing::shutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

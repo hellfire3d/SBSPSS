@@ -75,6 +75,7 @@ protected:
 	PROJECTILE_LIFETIME_TYPE					m_lifetimeType;
 	PROJECTILE_STATE							m_state;
 	u16											m_turnSpeed;
+	u8											m_isShuttingDown;
 };
 
 /*****************************************************************************/
@@ -125,6 +126,7 @@ protected:
 	int											m_frame;
 	POLY_FT4									*SprFrame;
 	u8											m_reversed;
+	u8											m_isShuttingDown;
 };
 
 

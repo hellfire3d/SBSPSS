@@ -355,6 +355,8 @@ protected:
 
 	virtual void		collidedWith(CThing *_thisThing);
 
+	u8					m_isShuttingDown;
+
 	// position history stuff
 
 	class CNpcPositionHistory

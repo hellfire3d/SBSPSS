@@ -64,6 +64,7 @@ void CProjectile::init()
 	m_state = PROJECTILE_ATTACK;
 	m_turnSpeed = 256;
 	m_extension = 0;
+	m_isShuttingDown = false;
 }
 
 void CProjectile::init( DVECTOR initPos, s16 initHeading )
@@ -91,9 +92,14 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TY
 
 void CProjectile::shutdown()
 {
-	m_spriteBank->dump();		delete m_spriteBank;
+	if ( !m_isShuttingDown )
+	{
+		m_isShuttingDown = true;
 
-	CEnemyProjectileThing::shutdown();
+		m_spriteBank->dump();		delete m_spriteBank;
+
+		CEnemyProjectileThing::shutdown();
+	}
 }
 
 bool CProjectile::processTargetSeek( int _frames, DVECTOR targetPos )
@@ -237,7 +243,6 @@ void CProjectile::think(int _frames)
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				shutdown();
-				delete this;
 			}
 			else
 			{
@@ -298,7 +303,6 @@ void CProjectile::think(int _frames)
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				shutdown();
-				delete this;
 			}
 			else
 			{
@@ -317,7 +321,6 @@ void CProjectile::think(int _frames)
 		if ( m_lifetime <= 0 )
 		{
 			shutdown();
-			delete this;
 		}
 	}
 }
@@ -373,7 +376,6 @@ void CProjectile::collidedWith(CThing *_thisThing)
 			if ( m_lifetimeType != PROJECTILE_INFINITE_LIFE )
 			{
 				shutdown();
-				delete this;
 			}
 
 			break;
@@ -434,9 +436,14 @@ void CPlayerProjectile::init( DVECTOR initPos, s16 initHeading, PLAYER_PROJECTIL
 
 void CPlayerProjectile::shutdown()
 {
-	m_spriteBank->dump();		delete m_spriteBank;
+	if ( !m_isShuttingDown )
+	{
+		m_isShuttingDown = true;
 
-	CPlayerProjectileThing::shutdown();
+		m_spriteBank->dump();		delete m_spriteBank;
+
+		CPlayerProjectileThing::shutdown();
+	}
 }
 
 void CPlayerProjectile::setMovementType( PLAYER_PROJECTILE_MOVEMENT_TYPE moveType )
@@ -478,7 +485,6 @@ void CPlayerProjectile::think(int _frames)
 			if ( m_layerCollision->Get( Pos.vx >> 4, Pos.vy >> 4 ) )
 			{
 				shutdown();
-				delete this;
 			}
 			else
 			{
@@ -497,7 +503,6 @@ void CPlayerProjectile::think(int _frames)
 		if ( m_lifetime <= 0 )
 		{
 			shutdown();
-			delete this;
 		}
 	}
 }
