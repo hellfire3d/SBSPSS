@@ -78,18 +78,6 @@ static PlayerMetrics	s_playerMetrics=
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeBalloon::enter()
-{
-	CPlayerModeBase::enter();
-	CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_INFLATE);
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CPlayerModeBalloon::think()
 {
 	CPlayerModeBase::think();

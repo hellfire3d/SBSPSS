@@ -442,7 +442,6 @@ void	CPlayerModeBase::playerHasHitGround()
 		setState(STATE_HITGROUND);
 		m_player->takeDamage(DAMAGE__FALL);
 		m_moveVelocity.vx=0;
-		CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
 	}
 	else if(m_moveVelocity.vx)
 	{

@@ -37,7 +37,6 @@
 class CPlayerModeBalloon : public CPlayerModeBase
 {
 public:
-	virtual void	enter();
 	virtual void	think();
 	virtual void	render(DVECTOR *_pos);
 
