@@ -766,18 +766,21 @@ void CNpcSubSharkEnemy::collidedWith(CThing *_thisThing)
 
 				if(playerState==ATTACK_STATE__NONE)
 				{
-					CPlayer *player = GameScene.getPlayer();
-
-					if ( !player->isRecoveringFromHit() && !m_carryPlayer )
+					if ( !player->isRecoveringFromHit() )
 					{
-						player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
-					}
+						CPlayer *player = GameScene.getPlayer();
 
-					if ( m_state == SUB_SHARK_CHARGE && player->getMode() != PLAYER_MODE_SWALLOW )
-					{
-						m_carryPlayer = true;
-						m_oldPlayerMode = player->getMode();
-						player->setMode( PLAYER_MODE_SWALLOW );
+						if ( !player->isRecoveringFromHit() && !m_carryPlayer )
+						{
+							player->takeDamage( m_data[m_type].damageToUserType,REACT__GET_DIRECTION_FROM_THING,(CThing*)this );
+						}
+
+						if ( m_state == SUB_SHARK_CHARGE && player->getMode() != PLAYER_MODE_SWALLOW )
+						{
+							m_carryPlayer = true;
+							m_oldPlayerMode = player->getMode();
+							player->setMode( PLAYER_MODE_SWALLOW );
+						}
 					}
 				}
 				else if ( m_invulnerableTimer <= 0 )
