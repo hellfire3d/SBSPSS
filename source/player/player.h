@@ -30,6 +30,10 @@
 #include <dstructs.h>
 #endif
 
+#ifndef	__PLAYER_PSTATES_H__
+#include "player\pstates.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -38,58 +42,113 @@
 	Tyepdefs && Defines
 	------------------- */
 
+#define ANIM_IDLE_SHORT		0
+#define ANIM_IDLE_LONG		1
+#define ANIM_JUMP			0
+#define ANIM_RUNSTART		2
+#define ANIM_RUN			3
+#define ANIM_RUNSTOP		4
+
+typedef enum
+{
+	STATE_IDLE,
+	STATE_JUMP,
+	STATE_RUN,
+	STATE_FALL,
+	STATE_FALLFAR,
+		
+	NUM_STATES,
+}PLAYER_STATE;
+
+enum
+{
+	FACING_LEFT=+1,
+	FACING_RIGHT=-1,
+};
+
+
+extern int JUMP_VELOCITY;
+extern int MAX_JUMP_FRAMES;
+extern int MAX_SAFE_FALL_FRAMES;
+extern int GRAVITY_VALUE;
+extern int TERMINAL_VELOCITY;
+extern int MAX_RUN_VELOCITY;
+extern int RUN_SPEEDUP;
+extern int RUN_REVERSESLOWDOWN;
+extern int RUN_SLOWDOWN;
+extern int PSHIFT;
+
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
 
-class	CPlayer : public CThing
+class CPlayer : public CThing
 {
 public:
+	typedef enum
+	{
+		PM__JUMP_VELOCITY,
+		PM__MAX_JUMP_FRAMES,
+		PM__MAX_SAFE_FALL_FRAMES,
+		PM__GRAVITY_VALUE,
+		PM__TERMINAL_VELOCITY,
+		PM__MAX_RUN_VELOCITY,
+		PM__RUN_SPEEDUP,
+		PM__RUN_REVERSESLOWDOWN,
+		PM__RUN_SLOWDOWN,
+		PM__PSHIFT,
+		
+		NUM_PLAYER_METRICS
+	}PLAYER_METRIC;
+
+
 	void			init();
 	void			shutdown();
 	void			think(int _frames);
 	void			render();
 
 
-private:		
-	typedef enum
-	{
-		STATE_IDLE,
-		STATE_RUNSTART,
-		STATE_RUN,
-		STATE_RUNSTOP,
-			
-		NUM_STATES,
-	}PLAYER_STATE;
+protected:		
+	int				getPlayerMetric(PLAYER_METRIC _metric);
 
-	enum
-	{
-		MAX_RUN_VELOCITY=8,
-		RUN_SPEEDUP=4,
-		RUN_REVERSESLOWDOWN=2,
-		RUN_SLOWDOWN=1,
-	};
-
-	enum
-	{
-		FACING_LEFT=+1,
-		FACING_RIGHT=-1,
-	};
-	
 	void			setState(PLAYER_STATE _state);
+	int				getFacing();
 	void			setFacing(int _facing);
-	void			finishedAnim();
+	int				getAnimFrame();
+	void			setAnimFrame(int _animFrame);
+	int				getAnimFrameCount();
+	int				getAnimNo();
+	void			setAnimNo(int _animNo);
+	DVECTOR			getMoveVelocity();
+	void			setMoveVelocity(DVECTOR *_moveVel);
 	virtual int		getPadInput();
 
-	int				m_frame;
+	int				isOnSolidGround();
+
+	void moveLeft();
+	void moveRight();
+	void slowdown();
+	void jump();
+	void fall();
+
+friend class CPlayerState;
+
+
+
+private:
+
+	int				m_animFrame;
 	int				m_animNo;
 	PLAYER_STATE	m_state;
 	CSkel			m_skel;
 
-	int				m_runVel;
+	DVECTOR			m_moveVel;
 	int				m_facing;
 
-	static int		s_stateAnims[NUM_STATES];
+	static class CPlayerState	*s_states[NUM_STATES];
+
+	class CPlayerState	*m_currentState;
 
 };
 

@@ -123,7 +123,11 @@ pad_src :=			pads
 paul_src :=			paul \
 					scenesel
 
-player_src :=		player
+player_src :=		player \
+					psfall \
+					psjump \
+					psrun \
+					pstates
 
 script_src :=		script \
 					function

@@ -11,7 +11,6 @@
 
 ===========================================================================*/
 
-
 /*----------------------------------------------------------------------
 	Includes
 	-------- */
@@ -26,15 +25,9 @@
 #include "pad\pads.h"
 #endif
 
-#ifndef	__UTILS_HEADER__
-#include "utils\utils.h"
-#endif
-
 
 // to be removed
-//#include "fileio\fileio.h"
 #include "gfx\tpage.h"
-//#include "gfx\prim.h"
 
 
 /*	Std Lib
@@ -51,13 +44,6 @@
 	Structure defintions
 	-------------------- */
 
-#define ANIM_IDLE_SHORT		0
-#define ANIM_IDLE_LONG		0
-#define ANIM_RUNSTART		0
-#define ANIM_RUN			0
-#define ANIM_RUNSTOP		0
-
-
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -66,12 +52,35 @@
 	Vars
 	---- */
 
+int JUMP_VELOCITY=8;
+int MAX_JUMP_FRAMES=10;
+int MAX_SAFE_FALL_FRAMES=20;
+int GRAVITY_VALUE=4;
+int TERMINAL_VELOCITY=8;
+int MAX_RUN_VELOCITY=8;
+int RUN_SPEEDUP=4;
+int RUN_REVERSESLOWDOWN=2;
+int RUN_SLOWDOWN=1;
+int PSHIFT=2;
+
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+#include "player\pstates.h"
+#include "player\psjump.h"
+#include "player\psrun.h"
+#include "player\psfall.h"
+CPlayerStateIdle			testStateIdle;
+CPlayerStateJump			testStateJump;
+CPlayerStateRun				testStateRun;
+CPlayerStateFall			testStateFall;
+CPlayerStateFallFar			testStateFallFar;
+
 void	CPlayer::init()
 {
 	CThing::init();
@@ -81,9 +90,15 @@ void	CPlayer::init()
 	TPLoadTex(ACTORS_SPONGEBOB_TEX);
 	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
 
+m_animNo=0;
+m_animFrame=0;
 	setState(STATE_IDLE);
-	m_runVel=0;
+	m_moveVel.vx=0;
+	m_moveVel.vy=0;
 	setFacing(FACING_RIGHT);
+
+	Pos.vx=50;
+	Pos.vy=400;
 }
 
 /*----------------------------------------------------------------------
@@ -107,127 +122,40 @@ void	CPlayer::think(int _frames)
 {
 	CThing::think(_frames);
 
-	int	padInput;
+#ifndef __USER_paul__
+	int	padInput=PadGetHeld(0);
+	int	move=7*_frames;
+	if(padInput&PAD_UP)		Pos.vy-=move;
+	if(padInput&PAD_DOWN)	Pos.vy+=move;
+	if(padInput&PAD_LEFT)	Pos.vx-=move;
+	if(padInput&PAD_RIGHT)	Pos.vx+=move;
+#else
+	if(_frames>=3)_frames=2;
 
-if(_frames>=3)_frames=2;
-
-	padInput=getPadInput();
-
-	switch(m_state)
+	for(int i=0;i<_frames;i++)
 	{
-		case STATE_IDLE:
-			if(padInput&(PAD_LEFT|PAD_RIGHT))
-			{
-				if(padInput&PAD_LEFT)
-				{
-					setFacing(FACING_LEFT);
-				}
-				else
-				{
-					setFacing(FACING_RIGHT);
-				}
-				setState(STATE_RUNSTART);
-				m_runVel=RUN_SPEEDUP;
-			}
-			break;
+		// Think
+		m_currentState->think(this);
+		Pos.vx+=m_moveVel.vx>>PSHIFT;
+		Pos.vy+=m_moveVel.vy>>PSHIFT;
 
-		case STATE_RUNSTART:
-		case STATE_RUN:
-			if(padInput&(PAD_LEFT|PAD_RIGHT))
+		// Ground collision		
+		if(m_moveVel.vy&&isOnSolidGround())
+		{
+			if(m_moveVel.vx)
 			{
-				if(m_facing==FACING_LEFT)
-				{
-					// Running left
-					if(padInput&PAD_LEFT)
-					{
-						m_runVel+=RUN_SPEEDUP;
-						if(m_runVel>MAX_RUN_VELOCITY)
-						{
-							m_runVel=MAX_RUN_VELOCITY;
-						}
-					}	
-					else
-					{
-						m_runVel-=RUN_REVERSESLOWDOWN;
-						if(m_runVel<1)
-						{
-							m_runVel=0;
-							setFacing(FACING_RIGHT);
-						}
-					}
-				}
-				else
-				{
-					// Running right
-					if(padInput&PAD_RIGHT)
-					{
-						m_runVel+=RUN_SPEEDUP;
-						if(m_runVel>MAX_RUN_VELOCITY)
-						{
-							m_runVel=MAX_RUN_VELOCITY;
-						}
-					}	
-					else
-					{
-						m_runVel-=RUN_REVERSESLOWDOWN;
-						if(m_runVel<1)
-						{
-							m_runVel=0;
-							setFacing(FACING_LEFT);
-						}
-					}
-				}
+				setState(STATE_RUN);
 			}
 			else
 			{
-				m_runVel-=RUN_SLOWDOWN;
-				if(m_runVel<1)
-				{
-					m_runVel=0;
-					setState(STATE_RUNSTOP);
-				}
+				setState(STATE_IDLE);
 			}
-			break;
-
-		case STATE_RUNSTOP:
-			break;
-
-		case NUM_STATES:
-			break;
+			m_moveVel.vy=0;
+		}
 	}
-
-	Pos.vx-=m_runVel*m_facing*_frames;
+#endif
 	if(Pos.vx<0)Pos.vx=0;
-
-
-	// Animate
-	m_frame+=_frames;
-	if(m_frame>=m_skel.getFrameCount())
-	{
-		// PKG - Overlap..!?
-		m_frame=0;
-		finishedAnim();
-	}
-
-
-
-
-
-
-
-
-
-
-
-	if(padInput&PAD_UP)
-	{
-		Pos.vy-=5;
-	}
-	else if(padInput&PAD_DOWN)
-	{
-		Pos.vy+=5;
-	}
-	if(Pos.vy<0)Pos.vy=0;
+	if(Pos.vy<0)Pos.vy=500;
 }
 
 /*----------------------------------------------------------------------
@@ -236,39 +164,79 @@ if(_frames>=3)_frames=2;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int panim=-1;
 void	CPlayer::render()
 {
 	CThing::render();
 	
 	// Render
-	m_skel.setFrame(m_frame);
-	m_skel.setAnimNo(m_animNo);
+	m_skel.setFrame(m_animFrame);
+	if(panim!=-1)
+		m_skel.setAnimNo(panim);
+	else
+		m_skel.setAnimNo(m_animNo);
 	m_skel.Animate(this);
 	m_skel.Render(this);
 }
 
+
+
+
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int	CPlayer::s_stateAnims[NUM_STATES]=
+int metrics[CPlayer::NUM_PLAYER_METRICS]=
 {
-	ANIM_IDLE_SHORT,			// STATE_IDLE
-	ANIM_RUNSTART,				// STATE_RUNSTART
-	ANIM_RUN,					// STATE_RUN
-	ANIM_RUNSTOP,				// STATE_RUNSTOP
+	8,		// PM__JUMP_VELOCITY
+	10,		// PM__MAX_JUMP_FRAMES
+	20,		// PM__MAX_SAFE_FALL_FRAMES
+	4,		// PM__GRAVITY_VALUE
+	8,		// PM__TERMINAL_VELOCITY
+	8,		// PM__MAX_RUN_VELOCITY
+	4,		// PM__RUN_SPEEDUP
+	2,		// PM__RUN_REVERSESLOWDOWN
+	1,		// PM__RUN_SLOWDOWN
+	2,		// PM__PSHIFT
+};
+int CPlayer::getPlayerMetric(PLAYER_METRIC _metric)
+{
+	return metrics[_metric];
+}
+
+
+
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+CPlayerState *CPlayer::s_states[NUM_STATES]=
+{
+	&testStateIdle,				// STATE_IDLE
+	&testStateJump,				// STATE_JUMP
+	&testStateRun,				// STATE_RUN
+	&testStateFall,				// STATE_FALL
+	&testStateFallFar,			// STATE_FALLFAR
 };
 
-int panim=-1;
 void	CPlayer::setState(PLAYER_STATE _state)
 {
+	PAUL_DBGMSG("set state %d",_state);
+	m_currentState=s_states[_state];
+	m_currentState->enter(this);
 	m_state=_state;
-	m_animNo=s_stateAnims[_state];
-if(panim!=-1)m_animNo=panim;
-	m_frame=0;	
 }
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -276,63 +244,150 @@ if(panim!=-1)m_animNo=panim;
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int CPlayer::getFacing()
+{
+	  return m_facing;
+}
 void CPlayer::setFacing(int _facing)
 {
-	switch(_facing)
+	if(m_facing!=_facing)
 	{
-		case FACING_LEFT:
-			m_facing=FACING_LEFT;
-			m_skel.setAng(512);
-			break;
-		case FACING_RIGHT:
-			m_facing=FACING_RIGHT;
-			m_skel.setAng(3096+512);
-			break;
-		default:
-			ASSERT(0);
-			break;
+		switch(_facing)
+		{
+			case FACING_LEFT:
+				m_facing=FACING_LEFT;
+				m_skel.setAng(512);
+				break;
+			case FACING_RIGHT:
+				m_facing=FACING_RIGHT;
+				m_skel.setAng(3096+512);
+				break;
+			default:
+				ASSERT(0);
+				break;
+		}
 	}
 }
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayer::finishedAnim()
+int CPlayer::getAnimFrame()
 {
-	switch(m_state)
-	{
-		case STATE_IDLE:
-			if(getRndRange(100)<95)
-				m_animNo=ANIM_IDLE_SHORT;
-			else
-				m_animNo=ANIM_IDLE_LONG;
-			break;
-		case STATE_RUNSTART:
-			setState(STATE_RUN);
-			break;
-		case STATE_RUN:
-			break;
-		case STATE_RUNSTOP:
-			setState(STATE_IDLE);
-			break;
-		case NUM_STATES:
-			break;
-	}
+	return m_animFrame;
 }
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
+void CPlayer::setAnimFrame(int _animFrame)
+{
+	m_animFrame=_animFrame;
+}
+int CPlayer::getAnimFrameCount()
+{
+	return m_skel.getFrameCount();
+}
+int CPlayer::getAnimNo()
+{
+	return m_animNo;
+}
+void CPlayer::setAnimNo(int _animNo)
+{
+	m_animNo=_animNo;
+	m_animFrame=0;
+}
+DVECTOR CPlayer::getMoveVelocity()
+{
+	return m_moveVel;
+}
+void CPlayer::setMoveVelocity(DVECTOR *_moveVel)
+{
+	m_moveVel=*_moveVel;
+}
 int CPlayer::getPadInput()
 {
 	return PadGetHeld(0);
 }
+
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+
+
+
+
+
+
+
+int CPlayer::isOnSolidGround()
+{
+	return Pos.vy>400;
+}
+
+
+
+
+void CPlayer::moveLeft()
+{
+	setFacing(FACING_LEFT);
+	if(m_moveVel.vx<=0)
+	{
+		m_moveVel.vx-=RUN_SPEEDUP;
+		if(m_moveVel.vx<-MAX_RUN_VELOCITY<<PSHIFT)
+		{
+			m_moveVel.vx=-MAX_RUN_VELOCITY<<PSHIFT;
+//			setFacing(FACING_LEFT);
+		}
+	}
+	else
+	{
+		m_moveVel.vx-=RUN_REVERSESLOWDOWN;
+//		if(m_moveVel.vx<=0)
+//		{
+//			setFacing(FACING_LEFT);
+//		}
+	}
+}
+void CPlayer::moveRight()
+{
+	setFacing(FACING_RIGHT);
+	if(m_moveVel.vx>=0)
+	{
+		m_moveVel.vx+=RUN_SPEEDUP;
+		if(m_moveVel.vx>MAX_RUN_VELOCITY<<PSHIFT)
+		{
+			m_moveVel.vx=MAX_RUN_VELOCITY<<PSHIFT;
+//			setFacing(FACING_RIGHT);
+		}
+	}
+	else
+	{
+		m_moveVel.vx+=RUN_REVERSESLOWDOWN;
+//		if(m_moveVel.vx>=0)
+//		{
+//			setFacing(FACING_RIGHT);
+//		}
+	}
+}
+void CPlayer::slowdown()
+{
+	if(m_moveVel.vx<0)
+	{
+		m_moveVel.vx+=RUN_SLOWDOWN;
+		if(m_moveVel.vx>0)m_moveVel.vx=0;
+	}
+	else if(m_moveVel.vx>0)
+	{
+		m_moveVel.vx-=RUN_SLOWDOWN;
+		if(m_moveVel.vx<0)m_moveVel.vx=0;
+	}
+}
+
+void CPlayer::jump()
+{
+}
+void CPlayer::fall()
+{
+}
+
 
 /*===========================================================================
 end */
