@@ -63,7 +63,7 @@ void CNpcSmallJellyfishEnemy::render()
 			if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 			{
 				SprFrame = m_spriteBank->printRotatedScaledSprite( FRM_JELLYFISH1_SWIM1 + ( m_frame >> 8 ),renderPos.vx,renderPos.vy,4096,4096,m_drawRotation,10);
-				setRGB0( SprFrame, 255, 128, 255 );
+				setRGB0( SprFrame, 255, 128, 255 );			// Let me know if these change! ALso ket me know when the different coloured ones go in pls! (pkg)
 
 				// get xmax, xmin, ymax, ymin
 
