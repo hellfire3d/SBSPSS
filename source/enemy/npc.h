@@ -109,7 +109,7 @@ public:
 	void				setSpeed( s16 newSpeed )												{m_speed = newSpeed;}
 
 	static CNpcEnemy	*Create(sThingActor *ThisActor);
-	void				setupWaypoints( sThingActor *ThisActor );
+	virtual void		setupWaypoints( sThingActor *ThisActor );
 
 	virtual int			canCollide();
 

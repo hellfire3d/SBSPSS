@@ -166,3 +166,26 @@ void CNpcBoatHazard::render()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcBoatHazard::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
+		}
+	}
+}

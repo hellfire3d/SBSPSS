@@ -527,6 +527,11 @@ void	CLevel::initThings(int _respawningLevel)
 			CNpcHazard *hazard;
 			hazard = CNpcHazard::Create( ThisHazard );
 			hazard->setLayerCollision( getCollisionLayer() );
+
+			if ( ThisHazard->Respawn )
+			{
+				hazard->setRespawnRate( ThisHazard->Respawn );
+			}
 		}
 	}
 

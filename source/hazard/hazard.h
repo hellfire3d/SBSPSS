@@ -61,6 +61,7 @@ public:
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	virtual void		setWaypoints( sThingHazard *ThisHazard );
 	void				addWaypoint( s32 xPos, s32 yPos );
+	virtual void		setRespawnRate( s16 newRespawnRate )					{m_respawnRate=newRespawnRate;}
 
 	static NPC_HAZARD_UNIT_TYPE	getTypeFromMapEdit( u16 newType );
 	static CNpcHazard	*Create(sThingHazard *ThisHazard);
@@ -96,6 +97,7 @@ protected:
 	bool				m_extendDir;
 	s32					m_heading;
 	CModelGfx			*m_modelGfx;
+	s16					m_respawnRate;
 
 	CThing				*m_platform;
 

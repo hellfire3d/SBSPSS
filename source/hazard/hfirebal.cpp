@@ -40,7 +40,8 @@ void CNpcFireballHazard::init()
 
 	m_extension = 0;
 	m_velocity = 40;
-	m_timer = GameState::getOneSecondInFrames() * 3;
+
+	m_respawnRate = 4;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +76,7 @@ void CNpcFireballHazard::processMovement( int _frames )
 		m_extension = 0;
 		m_isActive = false;
 		m_timerActive = true;
-		m_timer = 3 * GameState::getOneSecondInFrames();
+		m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
 
 		return;
 	}

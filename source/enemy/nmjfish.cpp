@@ -27,6 +27,10 @@
 #include "system\vid.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include	"game\game.h"
 #endif
@@ -38,9 +42,6 @@
 #include "fx\fx.h"
 #include "fx\fxjfish.h"
 
-
-#define MJ_CYCLE_WIDTH			400
-#define MJ_HALF_CYCLE_WIDTH		( MJ_CYCLE_WIDTH >> 1 )
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +62,55 @@ void CNpcMotherJellyfishEnemy::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
+{
+	u16	*PntList=(u16*)MakePtr(ThisActor,sizeof(sThingActor));
+
+	u16 newXPos, newYPos;
+
+	s32 startX = 0;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	setStartPos( newXPos, newYPos );
+	addWaypoint( newXPos, newYPos );
+
+	if ( ThisActor->PointCount > 1 )
+	{
+		for (int pointNum = 1 ; pointNum < ThisActor->PointCount ; pointNum++ )
+		{
+			newXPos = (u16) *PntList;
+			PntList++;
+			newYPos = (u16) *PntList;
+			PntList++;
+
+			addWaypoint( newXPos, newYPos );
+
+			if ( pointNum == 1 )
+			{
+				setHeading( newXPos, newYPos );
+			}
+
+			if ( pointNum == ThisActor->PointCount - 2 )
+			{
+				startX = newXPos << 4;
+				m_base.vx = startX;
+				m_base.vy = newYPos << 4;
+			}
+			else if ( pointNum == ThisActor->PointCount - 1 )
+			{
+				m_cycleWidth = abs( startX - ( newXPos << 4 ) );
+				m_halfCycleWidth = m_cycleWidth >> 1;
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
 	s32 xDist, yDist;
@@ -72,7 +122,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 		case MOTHER_JELLYFISH_RETURN_TO_START_2:
 		case MOTHER_JELLYFISH_RETURN_TO_START_3:
 		{
-			xDist = m_base.vx - this->Pos.vx - MJ_HALF_CYCLE_WIDTH;
+			xDist = m_base.vx - this->Pos.vx - m_halfCycleWidth;
 			xDistSqr = xDist * xDist;
 			yDist = m_base.vy - this->Pos.vy;
 			yDistSqr = yDist * yDist;
@@ -87,7 +137,7 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 				m_movementTimer = GameState::getOneSecondInFrames() * 10;
 				m_state++;
-				m_extension = -MJ_HALF_CYCLE_WIDTH;
+				m_extension = -m_halfCycleWidth;
 				m_extendDir = EXTEND_RIGHT;
 			}
 
@@ -104,14 +154,14 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 
 			if ( m_extendDir == EXTEND_RIGHT )
 			{
-				if ( m_extension < MJ_HALF_CYCLE_WIDTH )
+				if ( m_extension < m_halfCycleWidth )
 				{
 					m_extension += 3 * _frames;
 
-					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+					xExtension = ( m_halfCycleWidth * rsin( ( m_extension << 10 ) / m_halfCycleWidth ) ) >> 12;
 
 					Pos.vx = m_base.vx + xExtension;
-					Pos.vy = m_base.vy - ( ( 50 * rsin( ( xExtension << 12 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+					Pos.vy = m_base.vy - ( ( 50 * rsin( ( xExtension << 12 ) / m_cycleWidth ) ) >> 12 );
 
 					m_heading = 0;
 				}
@@ -129,14 +179,14 @@ void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 			}
 			else
 			{
-				if ( m_extension > -MJ_HALF_CYCLE_WIDTH )
+				if ( m_extension > -m_halfCycleWidth )
 				{
 					m_extension -= 3 * _frames;
 
-					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+					xExtension = ( m_halfCycleWidth * rsin( ( m_extension << 10 ) / m_halfCycleWidth ) ) >> 12;
 
 					Pos.vx = m_base.vx + xExtension;
-					Pos.vy = m_base.vy + ( ( 50 * rsin( ( xExtension << 12 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+					Pos.vy = m_base.vy + ( ( 50 * rsin( ( xExtension << 12 ) / m_cycleWidth ) ) >> 12 );
 
 					m_heading = 2048;
 				}
@@ -206,14 +256,14 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 
 			if ( m_extendDir == EXTEND_RIGHT )
 			{
-				if ( m_extension < MJ_HALF_CYCLE_WIDTH )
+				if ( m_extension < m_halfCycleWidth )
 				{
 					m_extension += 3 * _frames;
 
-					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+					xExtension = ( m_halfCycleWidth * rsin( ( m_extension << 10 ) / m_halfCycleWidth ) ) >> 12;
 
 					Pos.vx = m_base.vx + xExtension;
-					Pos.vy = m_base.vy - ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+					Pos.vy = m_base.vy - ( ( 50 * rcos( ( xExtension << 11 ) / m_cycleWidth ) ) >> 12 );
 
 					m_heading = 0;
 
@@ -227,14 +277,14 @@ void CNpcMotherJellyfishEnemy::processClose( int _frames )
 			}
 			else
 			{
-				if ( m_extension > -MJ_HALF_CYCLE_WIDTH )
+				if ( m_extension > -m_halfCycleWidth )
 				{
 					m_extension -= 3 * _frames;
 
-					xExtension = ( MJ_HALF_CYCLE_WIDTH * rsin( ( m_extension << 10 ) / MJ_HALF_CYCLE_WIDTH ) ) >> 12;
+					xExtension = ( m_halfCycleWidth * rsin( ( m_extension << 10 ) / m_halfCycleWidth ) ) >> 12;
 
 					Pos.vx = m_base.vx + xExtension;
-					Pos.vy = m_base.vy + ( ( 50 * rcos( ( xExtension << 11 ) / MJ_CYCLE_WIDTH ) ) >> 12 );
+					Pos.vy = m_base.vy + ( ( 50 * rcos( ( xExtension << 11 ) / m_cycleWidth ) ) >> 12 );
 
 					m_heading = 2048;
 

@@ -25,6 +25,7 @@ public:
 	virtual void		render();
 protected:
 	void				processMovement( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 
 	u8					m_reversed;
 };

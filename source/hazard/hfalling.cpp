@@ -29,7 +29,9 @@ void CNpcFallingHazard::init()
 {
 	CNpcHazard::init();
 
-	m_movementTimer = 3 * GameState::getOneSecondInFrames();
+	m_movementTimer = 2 * GameState::getOneSecondInFrames();
+
+	m_respawnRate = 4;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +69,7 @@ void CNpcFallingHazard::processMovement( int _frames )
 
 			m_isActive = false;
 			m_timerActive = true;
-			m_timer = 3 * GameState::getOneSecondInFrames();
+			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
 		}
 		else
 		{
@@ -89,6 +91,6 @@ void CNpcFallingHazard::processTimer( int _frames )
 		m_timerActive = false;
 		m_isActive = true;
 		Pos = m_base;
-		m_movementTimer = 3 * GameState::getOneSecondInFrames();
+		m_movementTimer = 2 * GameState::getOneSecondInFrames();
 	}
 }

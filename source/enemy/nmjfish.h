@@ -20,6 +20,7 @@ public:
 	virtual void		postInit();
 	void				render();
 	virtual void		shutdown();
+	virtual void		setupWaypoints( sThingActor *ThisActor );
 protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
@@ -41,6 +42,8 @@ protected:
 
 	int					m_jellyfishCount;
 	s32					m_spawnTimer;
+	s32					m_cycleWidth;
+	s32					m_halfCycleWidth;
 };
 
 #endif
