@@ -41,10 +41,9 @@ public:
 			FX_TYPE_CASCADE,		
 			FX_TYPE_CASCADE_SPLASH,	
 			FX_TYPE_FIREBALL,
-			FX_TYPE_CLOUD,
 			FX_TYPE_STEAM,
-				FX_TYPE_CLOUD_SMOKE,
-				FX_TYPE_CLOUD_GAS,
+			FX_TYPE_SMOKE,
+			FX_TYPE_GAS,
 			FX_TYPE_FLAMES,
 			FX_TYPE_EXPLODE,
 			FX_TYPE_DEBRIS,
@@ -67,5 +66,10 @@ protected:
 		SpriteBank	*m_spriteBank;
 		s32			OtPos;
 };
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	TestFX(DVECTOR Pos);
 
 #endif

@@ -14,7 +14,6 @@
 #include	"FX\FX.h"
 #include	"FX\FXjfish.h"
 #include	"FX\FXfallingTile.h"
-#include	"FX\FXCloud.h"
 #include	"FX\FXSteam.h"
 /* FX
 
@@ -65,6 +64,21 @@ Level Effect Emitters
 */
 
 /*****************************************************************************/
+CFXSteam	*TestFXPtr=0;
+void	TestFX(DVECTOR Pos)
+{
+		if (!TestFXPtr)
+		{
+			TestFXPtr=(CFXSteam*)CFX::Create(CFX::FX_TYPE_STEAM,Pos);
+		}
+		else
+		{
+			TestFXPtr->setDie();
+			TestFXPtr=0;
+		}
+}
+
+/*****************************************************************************/
 CFX		*CFX::Create(const FX_TYPE Type)
 {
 CFX		*NewFX;
@@ -74,10 +88,7 @@ CFX		*NewFX;
 		case FX_TYPE_FALLINGTILE:
 			NewFX=new ("Falling Tile") CFXFallingTile();
 			break;
-		case FX_TYPE_CLOUD:
-			NewFX=new ("Cloud ") CFXCloud();
-			break;
-			case FX_TYPE_STEAM:
+		case FX_TYPE_STEAM:
 			NewFX=new ("Steam") CFXSteam();
 			break;
 
@@ -109,8 +120,8 @@ CFX		*NewFX;
 		case FX_TYPE_CASCADE:		
 		case FX_TYPE_CASCADE_SPLASH:	
 		case FX_TYPE_FIREBALL:
-			case FX_TYPE_CLOUD_SMOKE:
-			case FX_TYPE_CLOUD_GAS:
+			case FX_TYPE_SMOKE:
+			case FX_TYPE_GAS:
 		case FX_TYPE_FLAMES:
 		case FX_TYPE_EXPLODE:
 		case FX_TYPE_DEBRIS:

@@ -12,29 +12,21 @@
 
 #include	"FX\FXSteam.h"
 
-static	s16			SteamSize=1;
-const	s16			SteamAngleInc=1111;
+static	const s16	SteamSize=4;
+static	const s16	SteamAngleInc=999;
 
-int	SLife=64;
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 void	CFXSteam::init(DVECTOR const &_Pos)
 {
-		CFXCloud::init(_Pos);
-		Life=SLife;
+		CFXTrail::init(_Pos);
 
-		RBase=255;
-		GBase=255;
-		BBase=255;
-		RInc=-8;
-		GInc=-8;
-		BInc=-8;
-
+		ColBase=255;
+		ColInc=-8;
 		Trans=3;
-
+		DieOut=false;
 		SetSize(SteamSize);
-
 }
 
 /*****************************************************************************/
@@ -48,27 +40,55 @@ void	CFXSteam::SetSize(int Size)
 {
 		ScaleInc=(4096/LIST_SIZE)*Size;
 		AngleInc=SteamAngleInc;
-		Vel.vx=0;
-		Vel.vy=-Size;
+		BaseVel.vx=0;
+		BaseVel.vy=-Size;
+}
+
+/*****************************************************************************/
+void	CFXSteam::setDie()
+{
+	CFXTrail::setDie();
+	for (int i=0; i<LIST_SIZE; i++)
+	{
+		sList	&ThisElem=List[i];
+		ThisElem.Vel.vx+=getRndRange(9)-4;	// give is x motion
+		ThisElem.Vel.vy+=getRndRange(ThisElem.Vel.vy/2);	// Slow down y Inc
+	}
 }
 
 /*****************************************************************************/
 /*** Think *******************************************************************/
 /*****************************************************************************/
-int	LifeStart=32;
-
 void	CFXSteam::think(int _frames)
 {
-		SetSize(SteamSize);
-		CFXCloud::think(_frames);
+		CFX::think(_frames);
 
-		if (!DieOut)
+// Move em all
+int		Head=HeadIdx;
+		for (int i=0; i<LIST_SIZE; i++)
 		{
-			setHead(Vel,Vel,LifeStart);
+			sList	&ThisElem=List[Head];
+			Head++;
+			Head&=LIST_SIZE-1;
+
+			ThisElem.Ofs.vx+=ThisElem.Vel.vx;
+			ThisElem.Ofs.vy+=ThisElem.Vel.vy;
 		}
 
-		Life--;
-		if (!Life) DieOut=true;
+		if (DieOut)
+		{
+			int	Col;
+			Col=ColBase-16;
+			if (Col<0) Col=0;
+			ColBase=Col;
+		}
+		else
+		{
+			DVECTOR	Vel=BaseVel;
+			Vel.vx+=getRndRange(3)-1;
 
+			setHead(Vel,Vel,FRM__SMOKE,1);
+			if (ListCount<LIST_SIZE) ListCount++;
+		}
 }
 

@@ -140,8 +140,8 @@ hazard_src :=		hazard \
 					hbbarrel
 
 fx_src :=			fx \
+					fxtrail \
 					fxfallingtile \
-					fxcloud \
 					fxsteam
 
 
