@@ -137,8 +137,8 @@ FX
 enum
 {
 	FMA_ACTOR_SPONGEBOB,
-	FMA_ACTOR_MM,
 	FMA_ACTOR_BB,
+	FMA_ACTOR_MM,
 	FMA_ACTOR_GARY,
 	FMA_ACTOR_PLANKTON,
 	FMA_ACTOR_PATRICK,
@@ -352,28 +352,6 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 /*FMA_ANIM_RUBHEAD*/			{0,-1},
 		},
 	},
-	{ // Mermaid Man
-		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0},{-32,-64},	
-		{	
-/*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE},
-/*FMA_ANIM_WALK*/				{0,-1},
-/*FMA_ANIM_FIXTV*/				{0,-1},
-/*FMA_ANIM_GIVEEND*/			{0,-1},
-/*FMA_ANIM_GIVESTART*/			{0,-1},
-/*FMA_ANIM_IDEA*/				{0,-1},
-/*FMA_ANIM_QUICKEXIT*/			{0,-1},
-/*FMA_ANIM_SHOUT*/				{0,-1},
-/*FMA_ANIM_STUMBLE*/			{0,-1},
-/*FMA_ANIM_THROW*/				{0,-1},
-/*FMA_ANIM_HIDE*/				{0,ANIM_MERMAIDMAN_HIDE},
-/*FMA_ANIM_UNHIDE*/				{0,-1},
-/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
-/*FMA_ANIM_SIT*/				{0,ANIM_MERMAIDMAN_SIT},
-/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
-/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP},
-/*FMA_ANIM_RUBHEAD*/			{0,-1},
-		},
-	},
 	{ // Barnicle Boy
 		{ACTORS_BARNACLEBOY_SBK,	(FileEquate)0},{-32,-48},	
 		{
@@ -396,7 +374,28 @@ static const ACTOR_GRAPHICS_DATA	s_actorGraphicsData[FMA_NUM_ACTORS]=
 /*FMA_ANIM_RUBHEAD*/			{0,ANIM_BARNACLEBOY_RUBHEAD},
 		},
 	},
-
+	{ // Mermaid Man
+		{ACTORS_MERMAIDMAN_SBK,	(FileEquate)0},{-32,-64},	
+		{	
+/*FMA_ANIM_IDLE*/				{0,ANIM_MERMAIDMAN_IDLE},
+/*FMA_ANIM_WALK*/				{0,-1},
+/*FMA_ANIM_FIXTV*/				{0,-1},
+/*FMA_ANIM_GIVEEND*/			{0,-1},
+/*FMA_ANIM_GIVESTART*/			{0,-1},
+/*FMA_ANIM_IDEA*/				{0,-1},
+/*FMA_ANIM_QUICKEXIT*/			{0,-1},
+/*FMA_ANIM_SHOUT*/				{0,-1},
+/*FMA_ANIM_STUMBLE*/			{0,-1},
+/*FMA_ANIM_THROW*/				{0,-1},
+/*FMA_ANIM_HIDE*/				{0,ANIM_MERMAIDMAN_HIDE},
+/*FMA_ANIM_UNHIDE*/				{0,-1},
+/*FMA_ANIM_UNHIDEIDLE*/			{0,-1},
+/*FMA_ANIM_SIT*/				{0,ANIM_MERMAIDMAN_SIT},
+/*FMA_ANIM_SITLOOKLEFT*/		{0,-1},
+/*FMA_ANIM_SITASLEEP*/			{0,ANIM_MERMAIDMAN_SITASLEEP},
+/*FMA_ANIM_RUBHEAD*/			{0,-1},
+		},
+	},
 	{ // Gary Da Snail
 		{ACTORS_GARY_SBK,		(FileEquate)0},{0,0},	
 		{
@@ -1095,64 +1094,55 @@ static const int s_FMAPartyScript[]=
 
 	// Party scene
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SPONGEBOB,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,150,150,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SPONGEBOB,262,203,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SPONGEBOB,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SPONGEBOB,true,
-	SC_SET_ITEM,				0,FRM__SANDWICH,
-	SC_CARRY_ITEM,				0,FMA_ACTOR_SPONGEBOB,
 
-	/*
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_MM,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,175,150,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_MM,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_MM,188,216,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_MM,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_MM,true,
-	*/
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_BB,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,300,200,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_BB,155,218,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_BB,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_BB,true,
 
-	/*
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_GARY,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_GARY,225,150,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_GARY,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_GARY,88,233,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_GARY,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_GARY,true,
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_PLANKTON,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PLANKTON,250,150,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_PLANKTON,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PLANKTON,415,230,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_PLANKTON,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_PLANKTON,true,
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_PATRICK,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PATRICK,250,200,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_PATRICK,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_PATRICK,312,201,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_PATRICK,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_PATRICK,true,
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_KRABS,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_KRABS,275,200,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_KRABS,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_KRABS,460,224,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_KRABS,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_KRABS,true,
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SQUIDWARD,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SQUIDWARD,300,200,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SQUIDWARD,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SQUIDWARD,390,220,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SQUIDWARD,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SQUIDWARD,true,
 
 	SC_SET_ACTOR_ANIM_STATE,	FMA_ACTOR_SANDY,FMA_ANIM_IDLE,1,
-	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SANDY,325,150,
-	SC_SET_ACTOR_FACING,		FMA_ACTOR_SANDY,1,
+	SC_SET_ACTOR_POSITION,		FMA_ACTOR_SANDY,250,180,
+	SC_SET_ACTOR_FACING,		FMA_ACTOR_SANDY,0,
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SANDY,true,
-	*/
 
-	SC_WAIT_ON_TIMER,			240,
-
-	SC_THROW_ITEM_TO_ACTOR,		0,FMA_ACTOR_BB,0,120,
-	SC_WAIT_ON_THROWN_ITEM,		0,
+	SC_WAIT_ON_TIMER,			60*2,
 
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_PARTY_DAT,
-	SC_HIDE_ITEM,				0,
-	SC_WAIT_ON_TIMER,			60*600,
+
+	SC_WAIT_ON_TIMER,			60*10,
 
 	SC_STOP
 };
@@ -1205,7 +1195,6 @@ void	CFmaScene::init()
 				actor->m_gfx[b]=CActorPool::GetActor(s_actorGraphicsData[i].m_file[b]);
 			}
 		}
-			
 
 		actor->m_active=false;
 		actor->m_animState=FMA_ANIM_IDLE;
@@ -1324,27 +1313,8 @@ void	CFmaScene::render()
 		if(item->m_visible)
 		{
 			DVECTOR	pos;
-			if(item->m_TargetActor!=-1)
-			{
-				// Being thrown to an actor
-				pos.vx=item->m_Pos.vx-m_cameraPos.vx;
-				pos.vy=item->m_Pos.vy-m_cameraPos.vy;
-			}
-			if (item->m_Actor!=-1)
-			{
-				// Attached to an actor
-				pos.vx=item->m_Pos.vx-m_cameraPos.vx;
-				pos.vy=item->m_Pos.vy-m_cameraPos.vy;
-				if (item->m_facing)
-				{
-					pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
-				}
-				else
-				{
-					pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
-				}
-				pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
-			}
+			pos.vx=item->m_Pos.vx-m_cameraPos.vx;
+			pos.vy=item->m_Pos.vy-m_cameraPos.vy;
 			CGameScene::getSpriteBank()->printFT4(item->m_Frame,pos.vx,pos.vy,item->m_facing,0,OTPOS__PICKUP_POS-3);
 		}
 	}
@@ -1504,27 +1474,25 @@ void	CFmaScene::think(int _frames)
 						sin=((currentFrame*2048)/totalFrames);
 						yoff=-(msin(sin)*item->m_throwArcHeight)>>12;
 						item->m_Pos.vy+=yoff;
-///
-//item->m_Pos=item->m_TargetPos;
-///
 					}
 				}
 				else if (item->m_Actor!=-1)
 				{
 					// Being carried by an actor
-//					DVECTOR	&TargetPos=m_actorData[item->m_Actor].m_pos;
-//					DVECTOR	Move;
-//
-//					Move.vx=TargetPos.vx-item->m_Pos.vx;
-//					Move.vy=TargetPos.vy-item->m_Pos.vy;
-//
-//					item->m_Pos.vx+=Move.vx;
-//					item->m_Pos.vy+=Move.vy;
-//
-//					item->m_facing=m_actorData[item->m_Actor].m_facing;
-
 					item->m_Pos=m_actorData[item->m_Actor].m_pos;
 					item->m_facing=m_actorData[item->m_Actor].m_facing;
+
+					item->m_Pos.vx-=m_cameraPos.vx;
+					item->m_Pos.vy-=m_cameraPos.vy;
+					if (item->m_facing)
+					{
+						item->m_Pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+					}
+					else
+					{
+						item->m_Pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
+					}
+					item->m_Pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
 				}
 			}
 
@@ -1798,7 +1766,6 @@ void	CFmaScene::startNextScriptCommand()
 
 				// Calc the positions
 				item->m_TargetPos=m_actorData[item->m_TargetActor].m_pos;
-				/*
 				if(m_actorData[item->m_TargetActor].m_facing)
 				{
 					item->m_TargetPos.vx-=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
@@ -1808,22 +1775,8 @@ void	CFmaScene::startNextScriptCommand()
 					item->m_TargetPos.vx+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vx;
 				}
 				item->m_TargetPos.vy+=s_actorGraphicsData[item->m_TargetActor].m_ItemOfs.vy;
-				*/
 				item->m_startPos=item->m_Pos;
 			}
-/*
-pos.vx=item->m_Pos.vx-m_cameraPos.vx;
-pos.vy=item->m_Pos.vy-m_cameraPos.vy;
-if (item->m_facing)
-{
-	pos.vx-=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
-}
-else
-{
-	pos.vx+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vx;
-}
-pos.vy+=s_actorGraphicsData[item->m_Actor].m_ItemOfs.vy;
-*/
 			break;
 
 		case SC_START:					// 
