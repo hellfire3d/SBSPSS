@@ -110,6 +110,7 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	GameState::initialise();
 	CSoundMediator::initialise();
+	CSoundMediator::setSfxBank(CSoundMediator::SFX_INGAME);
 	initGUIStuff();
 	CGameSlotManager::init();
 

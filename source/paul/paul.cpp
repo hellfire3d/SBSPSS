@@ -121,8 +121,6 @@ void CPaulScene::init()
 {
 	s_fontBank.initialise(&standardFont);
 	s_fontBank.setColour(255,255,255);
-
-	CSoundMediator::setSfxBank(CSoundMediator::SFX_INGAME);
 }
 
 
