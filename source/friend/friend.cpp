@@ -74,9 +74,9 @@
 
 
 // These are temporary.. I'll clean them up when I can test them (pkg)
-int	strobespeed=20;
+int	strobespeed=500;
 int strobebase=300;
-int strobescale=100;
+int strobescale=200;
 // These are temporary.. I'll clean them up when I can test them (pkg)
 
 
@@ -308,8 +308,8 @@ void CNpcFriend::render()
 			fh=CGameScene::getSpriteBank()->getFrameHeader(map->m_iconFrame);
 			size=strobebase+((msin(m_iconStrobe)*strobescale)>>12);
 			iconPos=getRenderPos();
-			iconPos.vx-=(fh->W*size)>>(8+1);
-			iconPos.vy-=120;
+			iconPos.vx-=fh->W/2;
+			iconPos.vy-=getCollisionSize().vy+(fh->H*2);
 			CGameScene::getSpriteBank()->printFT4Scaled(fh,iconPos.vx,iconPos.vy,0,0,0,size);
 		}
 	}
