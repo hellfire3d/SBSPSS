@@ -402,6 +402,12 @@ if(ScreenClipBox==2)
 	int	fc=FrameCounter;
 	s_vblsThisFrame=fc-s_lastFrameCounter;
 	s_lastFrameCounter=fc;
+
+	// Can get 0 vbls during start up, and it breaks things
+	if(s_vblsThisFrame==0)
+	{
+		s_vblsThisFrame=1;
+	}
 }
 
 
