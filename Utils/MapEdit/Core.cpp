@@ -72,12 +72,8 @@ int		Width,Height;
 		Height=Dlg.m_Height;
 
 // Create Tile Layers
-//													Type					Width					Height		Scale	3d?		Resizable?
-//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_BACK,32,32);
-//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_MID,	Width, Height);
 		AddLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION, Width, Height);
 //		AddLayer(LAYER_TYPE_COLLISION,-1, Width, Height);
-//		AddLayer(LAYER_TYPE_TILE,LAYERTILE_FORE, Width, Height);
 
 		ActiveLayer=FindActionLayer();
 		MapCam.Zero();
