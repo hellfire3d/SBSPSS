@@ -22,7 +22,7 @@ using namespace std;
 //***************************************************************************
 vector<CMkActor>	ActorList;
 int			TPBase=-1,TPWidth=-1,TPHeight=-1;
-int			DupThresh;
+int			DupThresh=0;
 GString		TPOutStr;
 
 GString		RootPath;
