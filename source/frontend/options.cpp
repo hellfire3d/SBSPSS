@@ -419,13 +419,13 @@ void CFrontEndOptions::init()
 	m_loadModeConfirmFrame->setObjectXYWH(((512-OPTIONS_FRAME_W)/2)+X_BORDER,((256-OPTIONS_FRAME_H)/2)+OPTIONS_FRAME_H-Y_BORDER-40,OPTIONS_FRAME_W-(X_BORDER*2),40);
 	m_loadModeConfirmFrame->clearFlags(CGUIObject::FLAG_DRAWBORDER);
 		CGUIFactory::createValueButtonFrame(m_loadModeConfirmFrame,
-											0,0,OPTIONS_FRAME_W-(X_BORDER*2),20,
-											STR__YES,
-											&m_loadUserResponse,USERRESPONSE__YES);
-		CGUIFactory::createValueButtonFrame(m_loadModeConfirmFrame,
 											0,20,OPTIONS_FRAME_W-(X_BORDER*2),20,
 											STR__NO,
 											&m_loadUserResponse,USERRESPONSE__NO);
+		CGUIFactory::createValueButtonFrame(m_loadModeConfirmFrame,
+											0,0,OPTIONS_FRAME_W-(X_BORDER*2),20,
+											STR__YES,
+											&m_loadUserResponse,USERRESPONSE__YES);
 
 	m_loadModeOKFrame=new ("loadmodeokframe") CGUIControlFrame();
 	m_loadModeOKFrame->init(NULL);
