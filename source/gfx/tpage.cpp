@@ -288,6 +288,7 @@ int			ReadLeft;
 		Cache->TPageName=Filename;
 		Cache->XOfs=0;
 		Cache->YOfs=0;
+		Cache->AnimTexCount=0;
 		s_TPCache[TPage].Info[1].RefCount=-1;
 		}
 	

@@ -15,6 +15,10 @@
 #include "triggers\trigger.h"
 #endif
 
+#ifndef	__TRIGGERS_TLEVEXIT_H__
+#include "triggers\tlevexit.h"
+#endif
+
 #ifndef	__TRIGGERS_TRESTART_H__
 #include "triggers\trestart.h"
 #endif
@@ -143,7 +147,7 @@ CTrigger	*trigger;
 	{
 		// Exit trigger
 		case TRIGGER_EXIT:
-			ASSERT("EXIT TRIGGERS HAVE BEEN REMOVED - HOW DID YOU GET HERE ANYWAY!?");
+			trigger=(CTrigger*)new ("LevelExitTrigger") CLevelExitTrigger();
 			break;
 
 		// Level respawn trigger

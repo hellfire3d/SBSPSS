@@ -26,6 +26,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 #ifndef	__FRONTEND_FRONTEND_H__
 #include "frontend\frontend.h"
 #endif
@@ -125,6 +129,7 @@ void CPartyScene::init()
 	m_actorPatrick=CActorPool::GetActor(ACTORS_PATRICK_SBK);
 	m_actorPatrick->SetOtPos(5);
 	CActorPool::SetUpCache();
+	CActorPool::CleanUpCache();
 }
 
 
@@ -189,37 +194,28 @@ static PARTY_IMAGE images[]=
 };
 static const int numimages=sizeof(images)/sizeof(PARTY_IMAGE);
 
-static int itemsHeld[CShopScene::NUM_SHOP_ITEM_IDS]=
-{
-	true,		// SHOPITEM_BLOWER
-	true,		// SHOPITEM_CAKE
-	true,		// SHOPITEM_CUPCAKE
-	true,		// SHOPITEM_JELLY2
-	true,		// SHOPITEM_PARTYHAT
-	true,		// SHOPITEM_PREZZIE
-	true,		// SHOPITEM_SARNIE
-	true,		// SHOPITEM_TEDDY
-};
-DVECTOR	sbpos={200,195};
-int sbanim=1,sbfrm=0;
-DVECTOR	patpos={250,195};
+DVECTOR	sbpos={220,195};
+int sbanim=5,sbfrm=0;
+DVECTOR	patpos={300,200};
 int patanim=0,patfrm=0;
 void CPartyScene::render()
 {
-	int			i;
-	int			drawn[FRM_TOYCHEST+1];
-	PARTY_IMAGE	*pimage;
+	int							i;
+	int							drawn[FRM_TOYCHEST+1];
+	PARTY_IMAGE					*pimage;
+	CGameSlotManager::GameSlot	*gameSlot;
 	
 	for(i=0;i<FRM_TOYCHEST+1;i++)
 	{
 		drawn[i]=false;
 	}
 
+	gameSlot=CGameSlotManager::getSlotData();
 	pimage=images;
 	for(i=0;i<numimages;i++)
 	{
 		ASSERT(pimage->m_fh<=FRM_TOYCHEST);
-		if(itemsHeld[pimage->m_itemId]&&!drawn[pimage->m_fh])
+		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_fh])
 		{
 			m_sprites->printFT4(pimage->m_fh,pimage->m_xOffsetBroken*256,pimage->m_yOffsetBroken*256,0,0,pimage->m_ot);
 			drawn[pimage->m_fh]=true;
@@ -228,8 +224,9 @@ void CPartyScene::render()
 	}
 
 	// Actors
-//	m_actorSpongebob->Render(sbpos,sbanim,sbfrm,0,0);
-//	m_actorPatrick->Render(patpos,patanim,patfrm,0,0);
+	m_actorSpongebob->Render(sbpos,sbanim,sbfrm,0,0);
+	sbanim|=1;
+	m_actorPatrick->Render(patpos,patanim,patfrm,0,0);
 
 
 	CActorPool::CleanUpCache();

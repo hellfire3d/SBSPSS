@@ -74,6 +74,10 @@
 #include "map\map.h"
 #endif
 
+#ifndef	__BACKEND_PARTY_H__
+#include "backend\party.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -126,6 +130,8 @@ CShopScene::SHOPITEM	CShopScene::s_shopItems[NUM_SHOP_ITEM_IDS]=
 xmPlayingId	s_playId;
 
 CShopScene	ShopScene;
+
+static int	s_gotoPartyScreen=false;
 
 
 /*----------------------------------------------------------------------
@@ -355,7 +361,15 @@ void CShopScene::think(int _frames)
 		{
 			m_readyToExit=true;
 			CFader::setFadingOut();
-			GameState::setNextScene(&MapScene);
+			if(s_gotoPartyScreen)
+			{
+				s_gotoPartyScreen=false;
+				GameState::setNextScene(&PartyScene);
+			}
+			else
+			{
+				GameState::setNextScene(&MapScene);
+			}
 		}
 	
 		m_guiFrame->think(_frames);
@@ -420,6 +434,19 @@ void CShopScene::think(int _frames)
 int CShopScene::readyToShutdown()
 {
 	return m_readyToExit&&!CFader::isFading();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:	Makes the game go to the party scene rather than the map
+				scene after the shop has been exited
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CShopScene::setGotoPartyScreen()
+{
+	s_gotoPartyScreen=true;
 }
 
 

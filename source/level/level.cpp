@@ -407,8 +407,7 @@ void	CLevel::initThings(int _respawningLevel)
 		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
 		for(int i=0;i<TriggerCount;i++)
 		{
-			if (TriggerList[i].Type!=CTrigger::TRIGGER_CAMLOCK&&
-				TriggerList[i].Type!=CTrigger::TRIGGER_EXIT)
+			if (TriggerList[i].Type!=CTrigger::TRIGGER_CAMLOCK)
 			{
 				CTrigger::Create(&TriggerList[i]);
 			}

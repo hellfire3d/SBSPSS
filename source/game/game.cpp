@@ -79,6 +79,10 @@
 #include "map\map.h"
 #endif
 
+#ifndef __SHOP_SHOP_H__
+#include "shop\shop.h"
+#endif
+
 #ifndef __FMA_FMA_H__
 #include "fma\fma.h"
 #endif
@@ -257,6 +261,14 @@ void	CGameScene::think(int _frames)
 		if(getLevelNumber()==4)
 		{
 			GameState::setNextScene(&FmaScene);
+		}
+		else if(getLevelNumber()==5)
+		{
+			if(getChapterNumber()==5)
+			{
+				ShopScene.setGotoPartyScreen();
+			}
+			GameState::setNextScene(&ShopScene);
 		}
 		else
 		{

@@ -83,7 +83,7 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 		ThisTex->TexData=(u32*)MemAlloc(Size*sizeof(u16), "AnTx");
 		DrawSync(0);
 		StoreImage(&ThisTex->Rect,(u32*)ThisTex->TexData);
-
+PAUL_DBGMSG("1 added");
 }
 
 /*****************************************************************************/
@@ -103,6 +103,7 @@ CAnimTex	*PrevTex, *ThisTex, *NextTex;
 			if (PrevTex) PrevTex->NextTex=NextTex;
 			if (ThisTex==AnimTexList) AnimTexList=NextTex;
 			delete ThisTex;
+PAUL_DBGMSG("1 removed");
 			}
 		else
 			{
