@@ -156,7 +156,6 @@ void	CPointerIcon::setTarget(DVECTOR _target)
 		m_pointerTarget=_target;
 		m_pointerArrivedAtTarget=false;
 	}
-PAUL_DBGMSG("%d %d",_target.vx,_target.vy);
 }
 
 /*----------------------------------------------------------------------
