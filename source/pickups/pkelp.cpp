@@ -138,17 +138,20 @@ void	CKelpTokenPickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 void	CKelpTokenPickup::collidedWith(CThing *_thisThing)
 {
-	switch(_thisThing->getThingType())
+	if(!isSetToShutdown())
 	{
-		case TYPE_PLAYER:
-		case TYPE_NPC:
-			collect((CPlayer*)_thisThing);
-			CSoundMediator::playSfx(sfxToPlayWhenCollected());
-			break;
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			case TYPE_NPC:
+				collect((CPlayer*)_thisThing);
+				CSoundMediator::playSfx(sfxToPlayWhenCollected());
+				break;
 
-		default:
-			ASSERT(0);
-			break;
+			default:
+				ASSERT(0);
+				break;
+		}
 	}
 }
 
