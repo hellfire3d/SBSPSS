@@ -90,7 +90,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 		{
 			moveX = -4 * _frames;
 
-			m_vertSpeed += 192;
+			m_vertSpeed += 96 * _frames;
 
 			if ( m_vertSpeed > ( 8 << 8 ) )
 			{
@@ -158,7 +158,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 
 			if ( m_inJump )
 			{
-				m_vertSpeed += 192;
+				m_vertSpeed += 80 * _frames;
 
 				if ( m_vertSpeed > ( 5 << 8 ) )
 				{
@@ -262,7 +262,7 @@ void CNpcGhostTrainPlatform::processMovement( int _frames )
 			{
 				if ( !m_rebound )
 				{
-					m_vertSpeed = -8 << 8;
+					m_vertSpeed = -6 << 8;
 					m_rebound = true;
 					Pos.vy -= 8;
 				}
