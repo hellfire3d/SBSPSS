@@ -42,6 +42,7 @@ void CNpcFlyingDutchmanEnemy::postInit()
 
 	s32 minX, maxX;
 	m_npcPath.getPathXExtents( &minX, &maxX );
+	m_npcPath.getPathYExtents( &m_minY, &m_maxY );
 
 	m_extension = minX;
 }
@@ -70,7 +71,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 		{
 			if ( m_extendDir == EXTEND_UP )
 			{
-				s32 yDist = -10 - Pos.vy;
+				s32 yDist = m_minY - Pos.vy;
 				s32 yDistSqr = yDist * yDist;
 
 				if ( yDistSqr > 100 )
@@ -84,7 +85,7 @@ void CNpcFlyingDutchmanEnemy::processMovement( int _frames )
 			}
 			else
 			{
-				s32 yDist = 400 - Pos.vy;
+				s32 yDist = m_maxY - Pos.vy;
 				s32 yDistSqr = yDist * yDist;
 
 				if ( yDistSqr > 100 )

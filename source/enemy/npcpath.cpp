@@ -108,7 +108,8 @@ void CNpcPath::addWaypoint( DVECTOR newPos )
 
 		currentWaypoint = this->waypoint;
 
-		minX = maxX = minY = maxY = newPos.vx;
+		minX = maxX = newPos.vx;
+		minY = maxY = newPos.vy;
 	}
 }
 

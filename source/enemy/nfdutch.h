@@ -28,6 +28,8 @@ protected:
 		FLYING_DUTCHMAN_ATTACK_PLAYER_2 = 1,
 		FLYING_DUTCHMAN_ATTACK_PLAYER_3,
 	};
+
+	s32					m_minY, m_maxY;
 };
 
 #endif
