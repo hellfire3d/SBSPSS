@@ -160,7 +160,7 @@ bool CNpcSquidDartEnemy::processSensor()
 void CNpcSquidDartEnemy::processClose( int _frames )
 {
 	s32 movement;
-	s32 yAim = playerYDist - 20;
+	s32 yAim = playerYDist - 10;
 	s32 maxSpeed = 2 * m_data[m_type].speed * _frames;
 
 	if ( m_attack )
