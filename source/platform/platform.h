@@ -205,8 +205,6 @@ protected:
 	CModelGfx					*m_modelGfx;
 	u8							m_isShuttingDown;
 
-	u8							m_platformWidth;
-
 	int							m_graphicNum;
 
 	virtual void		collidedWith(CThing *_thisThing);

@@ -665,18 +665,21 @@ void CNpcPlatform::calculateBoundingBoxSize()
 
 	angle=getCollisionAngle();
 	centre=getCollisionCentre();
-	halfLength=m_platformWidth/2;
 
-	/*x1=-halfLength*mcos(angle&4095)>>12;
+	//halfLength=m_platformWidth/2;
+	sBBox boundingBox = m_modelGfx->GetBBox();
+	halfLength = ( boundingBox.XMax - boundingBox.XMin ) >> 1;
+
+	x1=-halfLength*mcos(angle&4095)>>12;
 	y1=-halfLength*msin(angle&4095)>>12;
 	x2=+halfLength*mcos(angle&4095)>>12;
 	y2=+halfLength*msin(angle&4095)>>12;
 
-	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);*/
+	setCollisionSize(abs(x2-x1),abs(y2-y1)+PLATFORMCOLLISIONHEIGHT);
 
-	sBBox boundingBox = m_modelGfx->GetBBox();
-	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
-	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
+	//sBBox boundingBox = m_modelGfx->GetBBox();
+	//setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
+	//setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 }
 
 
