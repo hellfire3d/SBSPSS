@@ -233,6 +233,7 @@ public:
 	void			buttFall();				//	"		"		"		"		"
 	virtual int		moveVertical(int _moveDistance);
 	virtual int		moveHorizontal(int _moveDistance);
+	void			forceFall();
 
 	int				isTryingToConversateWithFriend()					{return m_allowConversation;}
 

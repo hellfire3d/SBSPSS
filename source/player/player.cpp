@@ -2728,6 +2728,29 @@ void	CPlayer::setLockoutPlatform(CThing *_newPlatform)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CPlayer::forceFall()
+{
+	if(m_currentMode!=PLAYER_MODE_DEAD)
+	{
+		if ( m_currentPlayerModeClass->getState() != STATE_FALL )
+		{
+			m_currentPlayerModeClass->setState(STATE_FALL);
+			DVECTOR	moveVel;
+
+			moveVel=*getMoveVelocity();
+			moveVel.vy=0;
+			m_fallFrames=0;
+			setMoveVelocity(&moveVel);
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int		CPlayer::moveVertical(int _moveDistance)
 {
 	DVECTOR			pos;
@@ -2853,19 +2876,40 @@ int		CPlayer::moveVertical(int _moveDistance)
 			blockAfter[i+1]=CGameScene::getCollision()->getCollisionBlock(x,y+_moveDistance);
 		}
 
+		bool isGoingToFall = false;
+
 		// See if either side is about to go through the ground
 		for(i=0;i<3;i++)
 		{
 			if(colHeightBefore[i]>=0&&colHeightAfter[i]<=0&&((blockAfter[i]&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL))
 			{
-				//moveRequired[i]=16+colHeightAfter[i];
-				moveRequired[i]=colHeightAfter[i];
+				moveRequired[i]=16+colHeightAfter[i];
+				//moveRequired[i]=colHeightAfter[i];
 //				hitGround=true;
 
 				// do not call hitground code, because this will set it to STATE_IDLE for a frame
 				// instead, do the appropriate stuff for a fall
-
 				if(!hitThisSuspectBlock)hitThisSuspectBlock=blockAfter[i];
+
+				isGoingToFall = true;
+			}
+			else
+			{
+				moveRequired[i]=0;
+			}
+		}
+
+		if ( isGoingToFall )
+		{
+			// check where feet are
+
+			if ( getHeightFromGround(pos.vx, pos.vy, 16 ) == 0 )
+			{
+				// standing on ground, hence do not fall
+				hitGround = true;
+			}
+			else
+			{
 				m_currentPlayerModeClass->setState(STATE_FALL);
 				DVECTOR	moveVel;
 
@@ -2873,10 +2917,6 @@ int		CPlayer::moveVertical(int _moveDistance)
 				moveVel.vy=0;
 				m_fallFrames=0;
 				setMoveVelocity(&moveVel);
-			}
-			else
-			{
-				moveRequired[i]=0;
 			}
 		}
 
