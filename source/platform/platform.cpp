@@ -209,6 +209,12 @@ CNpcPlatform	*CNpcPlatform::Create(int Type)
 			break;
 		}
 
+		case NPC_COLLAPSING_ACRID_PLATFORM:
+		{
+			platform = new ("collapsing bubble platform") CNpcCollapsingAcridPlatform;
+			break;
+		}
+
 		case NPC_FISH_HOOK_PLATFORM:
 		{
 			platform = new ("fish hook platform") CNpcFishHookPlatform;

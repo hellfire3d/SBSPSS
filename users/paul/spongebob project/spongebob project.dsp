@@ -1317,6 +1317,10 @@ SOURCE=..\..\..\source\platform\pcart.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pcbubble.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pcbubble.h
 # End Source File
 # Begin Source File

@@ -20,6 +20,19 @@
 
 class CNpcCollapsingBubblePlatform : public CNpcPlatform
 {
+public:
+	virtual void		render();
+	virtual void		postInit();
+protected:
+	virtual void		processLifetime( int _frames );
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+	u8					m_pop;
+};
+
+class CNpcCollapsingAcridPlatform : public CNpcCollapsingBubblePlatform
+{
+public:
+	virtual void		render();
 };
 
 #endif
