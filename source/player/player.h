@@ -106,6 +106,22 @@ typedef enum
 }DAMAGE_TYPE;
 
 
+// The input from the control pad is remapped to this rather than keeping it in the
+// normal pad format. This allows us to store all input in one byte ( as opposed to
+// two bytes ) for demo recording and means that the player state codes don't have
+// to keep using CPadConfig to remap the controls internally.
+typedef enum
+{
+	PI_NONE			=0,
+	PI_UP			=1<<0,
+	PI_DOWN			=1<<1,
+	PI_LEFT			=1<<2,
+	PI_RIGHT		=1<<3,
+	PI_JUMP			=1<<4,
+	PI_ACTION		=1<<5,
+}PLAYERINPUT;
+
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -124,10 +140,10 @@ public:
 		VELOCITY_SHIFT=2
 	};
 
-	void			init();
-	void			shutdown();
-	void			think(int _frames);
-	void			render();
+	virtual void	init();
+	virtual void	shutdown();
+	virtual void	think(int _frames);
+	virtual void	render();
 
 	DVECTOR			getCameraPos();
 
@@ -161,8 +177,8 @@ protected:
 	DVECTOR			getMoveVelocity();
 	void			setMoveVelocity(DVECTOR *_moveVel);
 	DVECTOR			getPlayerPos();
-	int				getPadInputHeld();
-	int				getPadInputDown();
+	PLAYERINPUT		getPadInputHeld();
+	PLAYERINPUT		getPadInputDown();
 
 	// Collision
 	int				isOnSolidGround();
@@ -231,17 +247,19 @@ private:
 
 	int				m_lives;
 
-	DVECTOR			m_cameraOffsetTarget;
 	DVECTOR			m_cameraOffset;
 	int				m_cameraLookYOffset;
 	int				m_cameraLookTimer;
 
 	void			updatePadInput();
-	virtual int		readPadInput();
-	int				m_padInput;			// Controls that are being held down
-	int				m_lastPadInput;		// Last frames controls
-	int				m_padInputDown;		// Controls that were pressed this frame
+protected:
+	virtual PLAYERINPUT	readPadInput();
+private:
+	PLAYERINPUT			m_padInput;			// Controls that are being held down
+	PLAYERINPUT			m_lastPadInput;		// Last frames controls
+	PLAYERINPUT			m_padInputDown;		// Controls that were pressed this frame
 
+	
 	// Pointer to the collision layer for the current map
 	class CLayerCollision	*m_layerCollision;
 };

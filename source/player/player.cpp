@@ -56,6 +56,9 @@
 	Tyepdefs && Defines
 	------------------- */
 
+//#define _RECORD_DEMO_MODE_
+
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -68,8 +71,42 @@
 	Vars
 	---- */
 
+#ifdef _RECORD_DEMO_MODE_
+
+#include "player\demoplay.h"
+
+#define MAX_DEMO_SIZE			512			// So max size of a demo is 1k
+#define MAX_DEMO_TIME_IN_FRAMES	30*60		// Recorded demo will last 60 seconds
+
+static CDemoPlayer::demoPlayerControl s_demoControls[MAX_DEMO_SIZE]={{PI_NONE,0}};
+static int s_demoSize=0;
+static int s_demoFrameCount=0;
+
+static void writeDemoControls()
+{
+	char	filename[32];
+	int		fh;
+	int		fc=MAX_DEMO_TIME_IN_FRAMES;
+
+	sprintf(filename,"demo____.dmo");
+	fh=PCcreat((char *)filename,0);
+	ASSERT(fh!=-1);
+	PCwrite(fh,(char*)&fc,sizeof(fc));													// frame count
+	PCwrite(fh,(char*)&s_demoSize,sizeof(s_demoSize));									// demo size
+	for(int i=0;i<s_demoSize;i++)
+		PCwrite(fh,(char*)&s_demoControls[i],sizeof(CDemoPlayer::demoPlayerControl));	// control data
+	PCclose(fh);
+
+	SYSTEM_DBGMSG("Written demo file %s with %d frames",filename,s_demoSize);
+}
+#endif
+
+
+
 int s_health;
 int s_screenPos;
+int m_cameraScrollPos=0;
+int m_cameraScrollDir=0;
 
 
 int MAP3D_CENTRE_X=170;
@@ -80,10 +117,6 @@ int MAP2D_CENTRE_X=-256;
 int MAP2D_CENTRE_Y=-136;
 int MAP2D_BLOCKSTEPSIZE=16;
 
-
-int m_cameraScrollPos=0;
-int m_cameraScrollDir=0;
-
 int CAMERA_SCROLLLIMIT=8;
 int CAMERA_SCROLLTHRESHOLD=6;
 int CAMERA_SCROLLSPEED=60;
@@ -92,6 +125,9 @@ int CAMERA_STOPMOVETHRESHOLD=10;
 
 
 int angg=900;
+
+DVECTOR ppos={0,0};
+DVECTOR ofs={0,0};
 
 
 /*----------------------------------------------------------------------
@@ -131,14 +167,12 @@ m_animFrame=0;
 	Pos.vy=10;
 #endif
 
-	m_cameraOffsetTarget.vx=0;
-	m_cameraOffsetTarget.vy=0;
 	m_cameraOffset.vx=0;
 	m_cameraOffset.vy=0;
 	m_cameraLookYOffset=0;
 	m_cameraLookTimer=0;
 
-	m_lastPadInput=m_padInput=0;
+	m_lastPadInput=m_padInput=PI_NONE;
 
 	s_health=5;
 	s_screenPos=128;
@@ -165,13 +199,7 @@ void	CPlayer::shutdown()
 	Returns:
   ---------------------------------------------------------------------- */
 #ifdef __USER_paul__
-// -90,-136
-// -256,-136
-// -432,-136
-DVECTOR ofs={-256,-136};		// nearly -256,-128 ;)
 int newmode=-1;
-#else
-DVECTOR ofs={0,0}; //temporary
 #endif
 
 void	CPlayer::think(int _frames)
@@ -221,6 +249,7 @@ if(newmode!=-1)
 		// Horizontal movement
 		if(m_layerCollision->Get((Pos.vx+(m_moveVel.vx>>VELOCITY_SHIFT))>>4,(Pos.vy-1)>>4))
 		{
+			// Will hit a wall this frame - Do collision
 			// Move flush with the edge of the obstruction
 			int	dir,vx,cx,y,i;
 			if(m_moveVel.vx<0)
@@ -245,7 +274,7 @@ if(newmode!=-1)
 			}
 			Pos.vx=cx-dir;
 
-			// If running then idle, otherwise leave in same state
+			// If running then go to idle, otherwise leave in same state
 			if(m_currentState==STATE_RUN)
 			{
 				setState(STATE_IDLE);
@@ -254,13 +283,9 @@ if(newmode!=-1)
 		}
 		else
 		{
+			// No obstruction this frame - Do the movement
 			Pos.vx+=m_moveVel.vx>>VELOCITY_SHIFT;
 		}
-		if(m_currentState==STATE_IDLE&&isOnEdge())
-		{
-			setState(STATE_IDLETEETER);
-		}
-
 
 		// Vertical movement
 		Pos.vy+=m_moveVel.vy>>VELOCITY_SHIFT;
@@ -318,6 +343,12 @@ Pos.vy=((Pos.vy-16)&0xfffffff0)+colHeight;
 			m_invincibleFrameCount--;
 		}
 
+		// Teeter if on an edge
+		if(m_currentState==STATE_IDLE&&isOnEdge())
+		{
+			setState(STATE_IDLETEETER);
+		}
+
 		// Look around
 		int	pad=getPadInputHeld();
 if(getPadInputDown()&PAD_CIRCLE)
@@ -326,34 +357,31 @@ if(getPadInputDown()&PAD_CIRCLE)
 }
 
 
-
-	// Map scroll..
-	if(m_cameraScrollDir==-1)
-	{
-		//right
-		if(m_cameraScrollPos>-CAMERA_SCROLLLIMIT<<8)
+		// Camera scroll..
+		if(m_cameraScrollDir==-1)
 		{
-			m_cameraScrollPos-=CAMERA_SCROLLSPEED;
-			if(m_cameraScrollPos<-CAMERA_SCROLLLIMIT<<8)
+			if(m_cameraScrollPos>-CAMERA_SCROLLLIMIT<<8)
 			{
-				m_cameraScrollPos=-CAMERA_SCROLLLIMIT<<8;
-				m_cameraScrollDir=0;
+				m_cameraScrollPos-=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPos<-CAMERA_SCROLLLIMIT<<8)
+				{
+					m_cameraScrollPos=-CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollDir=0;
+				}
 			}
 		}
-	}
-	else if(m_cameraScrollDir==+1)
-	{
-		//left
-		if(m_cameraScrollPos<(CAMERA_SCROLLLIMIT<<8))
+		else if(m_cameraScrollDir==+1)
 		{
-			m_cameraScrollPos+=CAMERA_SCROLLSPEED;
-			if(m_cameraScrollPos>CAMERA_SCROLLLIMIT<<8)
+			if(m_cameraScrollPos<(CAMERA_SCROLLLIMIT<<8))
 			{
-				m_cameraScrollPos=CAMERA_SCROLLLIMIT<<8;
-				m_cameraScrollDir=0;
+				m_cameraScrollPos+=CAMERA_SCROLLSPEED;
+				if(m_cameraScrollPos>CAMERA_SCROLLLIMIT<<8)
+				{
+					m_cameraScrollPos=CAMERA_SCROLLLIMIT<<8;
+					m_cameraScrollDir=0;
+				}
 			}
 		}
-	}
 
 
 
@@ -417,29 +445,15 @@ if(getPadInputDown()&PAD_CIRCLE)
 
 #endif
 	// Move the camera offset
-m_cameraOffsetTarget=ofs;		
-m_cameraOffset=ofs;
-/*
-	for(i=0;i<_frames;i++)
-	{
-		int moveDelta;
-		moveDelta=(m_cameraOffset.vx-m_cameraOffsetTarget.vx);
-		if(moveDelta)
-		{
-		if(moveDelta<0)
-		{
-					moveDelta>>=2;
-					if(moveDelta==0)moveDelta=1;
-					}
-					else if(moveDelta>0)
-					{
-					moveDelta>>=2;
-					if(moveDelta==0)moveDelta=-1;
-					}
-					m_cameraOffset.vx+=moveDelta;
-					}
-	}
-*/
+ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos)>>8);
+ppos.vy=MAP3D_CENTRE_Y;
+ofs.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos))>>8);
+ofs.vy=MAP2D_CENTRE_Y;
+
+
+	
+	m_cameraOffset=ofs;
+
 	if(Pos.vx<0)Pos.vx=0;
 	if(Pos.vy<0)Pos.vy=0;
 }
@@ -451,11 +465,6 @@ m_cameraOffset=ofs;
 	Returns:
   ---------------------------------------------------------------------- */
 int panim=-1;
-// -3912,500
-// 130,500
-// 4172,500
-DVECTOR ppos={130,500};
-//int moff=0;
 
 #ifdef __USER_paul__
 int mouth=-1,eyes=-1;
@@ -479,12 +488,6 @@ if(eyes!=-1)
 	eyes=-1;
 }
 #endif
-
-ppos.vx=MAP3D_CENTRE_X+((MAP3D_BLOCKSTEPSIZE*m_cameraScrollPos)>>8);
-ppos.vy=MAP3D_CENTRE_Y;
-ofs.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos))>>8);
-ofs.vy=MAP2D_CENTRE_Y;
-
 
 //int xval=255-(MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos>>8));
 //DrawLine(xval-7,0,xval-7,255,0,128,255,0);
@@ -513,7 +516,7 @@ DVECTOR CPlayer::getCameraPos()
 {
 	DVECTOR	cameraPos;
 	cameraPos.vx=Pos.vx+m_cameraOffset.vx;
-	cameraPos.vy=Pos.vy+m_cameraOffset.vy;//+m_cameraLookYOffset;
+	cameraPos.vy=Pos.vy+m_cameraOffset.vy;
 	return cameraPos;
 }
 
@@ -678,11 +681,11 @@ DVECTOR CPlayer::getPlayerPos()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayer::getPadInputHeld()
+PLAYERINPUT CPlayer::getPadInputHeld()
 {
 	return m_padInput;
 }
-int CPlayer::getPadInputDown()
+PLAYERINPUT CPlayer::getPadInputDown()
 {
 	return m_padInputDown;
 }
@@ -905,7 +908,7 @@ void CPlayer::updatePadInput()
 {
 	m_lastPadInput=m_padInput;
 	m_padInput=readPadInput();
-	m_padInputDown=m_padInput&(m_lastPadInput^-1);
+	m_padInputDown=(PLAYERINPUT)(m_padInput&(m_lastPadInput^-1));
 }
 
 
@@ -915,9 +918,74 @@ void CPlayer::updatePadInput()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayer::readPadInput()
+PLAYERINPUT CPlayer::readPadInput()
 {
-	return PadGetHeld(0);
+	PLAYERINPUT	input;
+	int			pad;
+
+	input=PI_NONE;
+	pad=PadGetHeld(0);
+	
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_UP))
+	{
+		input=(PLAYERINPUT)(input|PI_UP);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	{
+		input=(PLAYERINPUT)(input|PI_DOWN);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	{
+		input=(PLAYERINPUT)(input|PI_LEFT);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	{
+		input=(PLAYERINPUT)(input|PI_RIGHT);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	{
+		input=(PLAYERINPUT)(input|PI_JUMP);
+	}
+	if(pad&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	{
+		input=(PLAYERINPUT)(input|PI_ACTION);
+	}
+
+
+#ifdef _RECORD_DEMO_MODE_
+	CDemoPlayer::demoPlayerControl	*crnt;
+	PLAYERINPUT						lastInput;
+	crnt=&s_demoControls[s_demoSize];
+	if(s_demoFrameCount==0)
+	{
+		crnt->m_inputValue=input;
+	}
+	lastInput=(PLAYERINPUT)crnt->m_inputValue;
+	if(crnt->m_length==255)
+	{
+		lastInput=(PLAYERINPUT)(input-1);
+	}
+	if(lastInput==input)
+	{
+		crnt->m_length++;
+	}
+	else
+	{
+		s_demoSize++;
+		ASSERT(s_demoSize<MAX_DEMO_SIZE);
+		crnt++;
+		crnt->m_inputValue=input;
+		crnt->m_length=1;
+	}
+	s_demoFrameCount++;
+	if(s_demoFrameCount==30*60)
+	{
+		writeDemoControls();
+		ASSERT(!"DEMO ENDED");
+	}
+#endif
+
+	return input;
 }
 
 

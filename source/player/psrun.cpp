@@ -78,11 +78,11 @@ void CPlayerStateRun::enter(CPlayer *_player)
 		setAnimNo(_player,ANIM_PLAYER_ANIM_RUNSTART);
 	}
 
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&PI_LEFT)
 	{
 		setFacing(_player,FACING_LEFT);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&PI_RIGHT)
 	{
 		setFacing(_player,FACING_RIGHT);
 	}
@@ -103,24 +103,24 @@ void CPlayerStateRun::think(CPlayer *_player)
 	controlDown=getPadInputDown(_player);
 	controlHeld=getPadInputHeld(_player);
 
-	if(controlDown&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	if(controlDown&PI_JUMP)
 	{
 		setState(_player,STATE_JUMP);
 	}
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	if(controlHeld&PI_DOWN)
 	{
 		setState(_player,STATE_DUCK);
 	}
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(controlHeld&PI_ACTION)
 	{
 		setState(_player,STATE_RUNATTACK);
 	}
 
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&PI_LEFT)
 	{
 		moveLeft(_player);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&PI_RIGHT)
 	{
 		moveRight(_player);
 	}

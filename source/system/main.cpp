@@ -13,6 +13,7 @@
 #include	"utils\utils.h"
 
 #include 	"system\gp.h"
+#include	"gfx\anim.h"
 
 // scenes
 #include "game\game.h"
@@ -115,6 +116,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	CGameSlotManager::init();
 
 	CBubicleFactory::init();
+
+	CAnimDB::LoadAnims();
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();

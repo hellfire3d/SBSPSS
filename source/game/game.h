@@ -27,6 +27,7 @@ virtual			~CGameScene()	{;}
 
 
 		void	init();
+virtual	void	createPlayer();
 		void	shutdown();
 		void	render();
 		void	think(int _frames);
@@ -37,7 +38,7 @@ virtual			~CGameScene()	{;}
 		class CPlayer	*getPlayer();
 		void	sendEvent( GAME_EVENT evt, CThing *sourceThing );
 	
-private:
+protected:
 
 		CLevel		Level;
 		class CPlayer	*m_player;

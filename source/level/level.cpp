@@ -38,7 +38,11 @@ CLevel::~CLevel()
 {
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
-			if (TileLayers[i]) delete TileLayers[i];
+			if (TileLayers[i])
+			{
+				TileLayers[i]->shutdown();
+				delete TileLayers[i];
+			}
 		}
 }
 
@@ -47,7 +51,7 @@ void 	CLevel::init()
 {
 		TileBankHdr=(sTileBankHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL04_TBK,"Tile Bank Data");
 		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVELS_CHAPTER02_LEVEL0401_LVL,"Level Data");
-		TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
+		m_levelTPage=TPLoadTex(LEVELS_CHAPTER02_LEVEL04_TEX);
 
 		initLayers();
 }
@@ -110,6 +114,9 @@ sTile	*TileList=(sTile*)MakePtr(TileBankHdr,TileBankHdr->TileList);
 /*****************************************************************************/
 void	CLevel::shutdown()
 {
+		TPFree(m_levelTPage);
+		CollisionLayer->shutdown();	MemFree(CollisionLayer);
+		MemFree(TileBankHdr);
 		MemFree(LevelHdr);
 }
 

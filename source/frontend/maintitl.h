@@ -100,6 +100,7 @@ private:
 	int						m_gotoCreditsFlag;
 
 	int						m_demoTimeout;
+	int						m_musicStarted;
 
 };
 

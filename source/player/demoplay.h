@@ -22,6 +22,10 @@
 #include "player/player.h"
 #endif
 
+#ifndef _FILEIO_HEADER_
+#include "fileio\fileio.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -43,9 +47,26 @@ public:
 		u8	m_length;
 	}demoPlayerControl;
 
+	void				loadControlData(FileEquate _fe);
+	int					getFramesLeft();
+
+	virtual void		shutdown();
+
+
 protected:
 	virtual PLAYERINPUT	readPadInput();
+
+
 private:
+	char				*m_demoData;
+	
+	demoPlayerControl	*m_controlData;
+	int					m_controlDataSize;
+	int					m_controlFrameCount;
+
+	int					m_currentControlFrame;
+	int					m_frameCount;
+	int					m_totalFrameCount;
 
 };
 

@@ -34,6 +34,8 @@ private:
 	sTileBankHdr	*TileBankHdr;
 	static DVECTOR	MapPos;
 
+	TPAGE_DESC		m_levelTPage;
+
 
 // Tile Layers
 	CLayerTile		*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];

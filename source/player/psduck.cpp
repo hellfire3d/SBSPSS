@@ -114,7 +114,7 @@ void CPlayerStateSoakUp::think(CPlayer *_player)
 	int	controlHeld;
 
 	controlHeld=getPadInputHeld(_player);
-	if(!(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN)))
+	if(!(controlHeld&PI_DOWN))
 	{
 		setState(_player,STATE_GETUP);
 	}

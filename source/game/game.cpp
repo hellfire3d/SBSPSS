@@ -21,6 +21,7 @@
 #ifndef __PLAYER_PLAYER_H__
 #include "player\player.h"
 #endif
+#include "player\demoplay.h"
 
 #ifndef __ENEMY_2DENEMY_H__
 #include "enemy\2denemy.h"
@@ -34,9 +35,6 @@
 #include "gfx\fader.h"
 #endif
 
-#include	"level\level.h"
-#include	"gfx\anim.h"
-
 #ifndef __GFX_BUBICLES__
 #include "gfx\bubicles.h"
 #endif
@@ -45,6 +43,9 @@
 #include <ingamefx.h>
 #endif
 
+#ifndef _ANIMTEX_HEADER_
+#include "gfx\animtex.h"
+#endif
 
 
 int		GX=248;
@@ -83,18 +84,25 @@ void 	CGameScene::init()
 		enemy->init();
 #endif
 
-		m_player=new ("player") CPlayer();
+		createPlayer();
 		m_player->init();
 		m_player->setLayerCollision(Level.getCollisionLayer());
-
-		CAnimDB::LoadAnims();
 
 		CFader::setFadingIn();
 
 		SetGeomOffset( GX, GY );
 		SetGeomScreen(GH);
-
 }
+
+/*****************************************************************************/
+// This is a seperate funtion ( and virtual ) so that we can overload it for
+// the demo mode (pkg)
+// NB: This function should *only* include the new function - Don't add anything else here!
+void	CGameScene::createPlayer()
+{
+		m_player=new ("player") CPlayer();
+}
+
 
 /*****************************************************************************/
 
@@ -121,12 +129,12 @@ void 	CGameScene::render()
 /*****************************************************************************/
 void	CGameScene::think(int _frames)
 {
-#ifdef __USER_paul__		
-	if(!CConversation::isActive()&&PadGetDown(0)&PAD_START)
-	{
-		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
-	}
-#endif
+//#ifdef __USER_paul__		
+//	if(!CConversation::isActive()&&PadGetDown(0)&PAD_START)
+//	{
+//		CConversation::trigger(SCRIPTS_SPEECHTEST_DAT);
+//	}
+//#endif
 
 	CConversation::think(_frames);
 	if(!CConversation::isActive())

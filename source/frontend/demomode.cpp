@@ -46,6 +46,10 @@
 #include "gfx\prim.h"
 #endif
 
+#ifndef	__PLAYER_DEMOPLAY_H__
+#include "player\demoplay.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -73,7 +77,25 @@
 /*----------------------------------------------------------------------
 	Vars
 	---- */
-static int count;
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void CDemoGameScene::createPlayer()
+{
+	m_player=new ("player") CDemoPlayer();
+	((CDemoPlayer*)m_player)->loadControlData(DEMO_DEMO_____DMO);	// Ooo
+}
+
+
+
+
+
+
+
 
 /*----------------------------------------------------------------------
 	Function:
@@ -87,6 +109,7 @@ void CFrontEndDemoMode::init()
 	m_smallFont->initialise(&standardFont);
 	m_smallFont->setJustification(FontBank::JUST_CENTRE);
 	m_smallFont->setOt(500);
+	m_smallFont->setWobble(true);
 }
 
 /*----------------------------------------------------------------------
@@ -108,9 +131,9 @@ void CFrontEndDemoMode::shutdown()
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::select()
 {
-	// LOAD UP DEMO AND DEMO LEVEL
+	m_gameScene=new ("Demo Game Scene") CDemoGameScene();
+	m_gameScene->init();
 	m_shuttingDown=false;
-count=0;
 	CFader::setFadingIn();
 }
 
@@ -122,7 +145,7 @@ count=0;
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::unselect()
 {
-	// DUMP DEMO AND LEVEL
+	m_gameScene->shutdown();	delete m_gameScene;
 }
 
 /*----------------------------------------------------------------------
@@ -135,6 +158,8 @@ void CFrontEndDemoMode::render()
 {
 	sFrameHdr	*fh;
 
+	m_gameScene->render();
+
 	// Game logo/title
 	CFrontEndScene::renderLogo();
 
@@ -143,20 +168,6 @@ void CFrontEndDemoMode::render()
 		m_smallFont->setColour(PRESS_START_TEXT_R,PRESS_START_TEXT_G,PRESS_START_TEXT_B);
 		m_smallFont->print(256,PRESS_START_TEXT_Y,STR__FRONTEND__PRESS_START);
 	}
-
-
-	m_smallFont->setColour(getRndRange(255),getRndRange(255),getRndRange(255));
-	m_smallFont->print(getRndRange(512),getRndRange(256),">DEMO MODE<");
-
-
-	POLY_G4	*g4;
-	g4=GetPrimG4();
-	setXYWH(g4,0,0,512,256);
-	setRGB0(g4,99,50,50);
-	setRGB1(g4,50,50,99);
-	setRGB2(g4,50,99,50);
-	setRGB3(g4,99,50,99);
-	AddPrimToList(g4,MAX_OT-1);
 }
 
 /*----------------------------------------------------------------------
@@ -167,10 +178,12 @@ void CFrontEndDemoMode::render()
   ---------------------------------------------------------------------- */
 void CFrontEndDemoMode::think(int _frames)
 {
+	m_gameScene->think(_frames);
+
 	if(!m_shuttingDown&&!CFader::isFading())
 	{
-	count+=_frames;	
-		if(PadGetDown(0)&PAD_START||count>60*20)		// OR DEMO ENDED
+		if(PadGetDown(0)&PAD_START||
+		   ((CDemoPlayer*)m_gameScene->getPlayer())->getFramesLeft()<FADE_OUT_FRAMES)
 		{
 			m_shuttingDown=true;
 			CFader::setFadingOut();

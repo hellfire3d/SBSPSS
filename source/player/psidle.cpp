@@ -71,25 +71,25 @@ void CPlayerStateBaseIdle::thinkControl(CPlayer *_player)
 	controlDown=getPadInputDown(_player);
 	controlHeld=getPadInputHeld(_player);
 
-	if(controlDown&CPadConfig::getButton(CPadConfig::PAD_CFG_JUMP))
+	if(controlDown&PI_JUMP)
 	{
 		setState(_player,STATE_JUMP);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	else if(controlHeld&PI_LEFT)
 	{
 		if(canMoveLeft(_player))
 			setState(_player,STATE_RUN);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&PI_RIGHT)
 	{
 		if(canMoveRight(_player))
 			setState(_player,STATE_RUN);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	else if(controlHeld&PI_ACTION)
 	{
 		setState(_player,STATE_ATTACK);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	else if(controlHeld&PI_DOWN)
 	{
 		setState(_player,STATE_DUCK);
 	}

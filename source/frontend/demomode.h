@@ -22,6 +22,10 @@
 #include "frontend\frontend.h"
 #endif
 
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -33,6 +37,13 @@
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
+
+class CDemoGameScene : public CGameScene
+{
+public:
+	void	createPlayer();
+};
+
 
 class CFrontEndDemoMode : public CFrontEndMode
 {
@@ -51,21 +62,20 @@ public:
 private:
 	enum
 	{
-		LOGO_CENTRE_Y=74,
-		GAME_TITLE_TEXT_CENTRE_Y=100,
-		GAME_TITLE_TEXT_R=128,
-		GAME_TITLE_TEXT_G=128,
-		GAME_TITLE_TEXT_B=128,
-
 		PRESS_START_TEXT_Y=180,
 		PRESS_START_TEXT_R=150,
 		PRESS_START_TEXT_G=100,
 		PRESS_START_TEXT_B=100,
+
+		// Fade-out to titles this many frames before end of demo
+		FADE_OUT_FRAMES=95,
 	};
 
 	class FontBank		*m_smallFont;
 
 	int					m_shuttingDown;
+
+	CDemoGameScene		*m_gameScene;
 };
 
 

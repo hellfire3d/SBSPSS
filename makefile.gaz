@@ -141,7 +141,8 @@ pad_src :=			pads
 paul_src :=			paul \
 					scenesel
 
-player_src :=		panimsfx \
+player_src :=		demoplay \
+					panimsfx \
 					player \
 					pmodes \
 					psbutt \

@@ -83,11 +83,11 @@ void CPlayerStateFall::think(CPlayer *_player)
 	metrics=getPlayerMetrics(_player);
 	controlHeld=getPadInputHeld(_player);
 
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&PI_LEFT)
 	{
 		moveLeft(_player);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&PI_RIGHT)
 	{
 		moveRight(_player);
 	}
@@ -98,11 +98,11 @@ void CPlayerStateFall::think(CPlayer *_player)
 
 	fall(_player);
 
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_ACTION))
+	if(controlHeld&PI_ACTION)
 	{
 		setState(_player,STATE_AIRATTACK);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_DOWN))
+	else if(controlHeld&PI_DOWN)
 	{
 		move.vx=0;
 		move.vy=0;
@@ -138,11 +138,11 @@ void CPlayerStateFallFar::think(CPlayer *_player)
 
 	controlHeld=getPadInputHeld(_player);
 
-	if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_LEFT))
+	if(controlHeld&PI_LEFT)
 	{
 		moveLeft(_player);
 	}
-	else if(controlHeld&CPadConfig::getButton(CPadConfig::PAD_CFG_RIGHT))
+	else if(controlHeld&PI_RIGHT)
 	{
 		moveRight(_player);
 	}

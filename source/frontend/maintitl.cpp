@@ -175,8 +175,8 @@ void CFrontEndMainTitles::select()
 	SetScreenImage(s_image);
 
 	CSoundMediator::setSong(CSoundMediator::SONG_TITLE);
-	CSoundMediator::playSong();
-	
+	m_musicStarted=false;
+
 	CFader::setFadingIn();
 }
 
@@ -305,6 +305,13 @@ else
 void CFrontEndMainTitles::think(int _frames)
 {
 	sval=(sval+(seaspeed*_frames))&4095;
+
+	// Wait until fade in has finished before starting music
+	if(!m_musicStarted&&!CFader::isFading())
+	{
+		CSoundMediator::playSong();
+		m_musicStarted=true;
+	}
 
 	switch(m_mode)
 	{

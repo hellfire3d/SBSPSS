@@ -30,6 +30,7 @@ music/sb-title.vh
 sfx/ingame.pxm
 sfx/ingame.vb
 sfx/ingame.vh
+demo/demo____.dmo
 backdrop/credits.gfx
 backdrop/sky.gfx
 memcard/memhead.bin
