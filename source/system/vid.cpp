@@ -114,7 +114,8 @@ void	StartLoad(int _loadX,int _loadY)
 /*****************************************************************************/
 void	StopLoad()
 {
-#if	!defined(__VERSION_DEBUG__)
+
+#if	defined(__USER_CDBUILD__)
 	while(LoadTime) 
 		{
 		VSync(0);
