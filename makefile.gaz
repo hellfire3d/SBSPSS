@@ -127,7 +127,6 @@ gui_src :=			gbubbles \
 level_src :=		level \
 					layertile \
 					layerback \
-					layertilesolid \
 					layertile3d \
 					layercollision
 
