@@ -152,24 +152,6 @@ void CNpc::init()
 			break;
 		}
 
-		case NPC_INIT_FALLING_ITEM:
-		{
-			m_heading = m_fireHeading = 1024;
-			
-			m_npcPath.initPath();
-
-			DVECTOR newPos;
-
-			newPos.vx = 100;
-			newPos.vy = 200;
-
-			m_npcPath.addWaypoint( newPos );
-
-			m_npcPath.setPathType( SINGLE_USE_PATH );
-
-			break;
-		}
-
 		case NPC_INIT_FISH_HOOK:
 		{
 			m_heading = m_fireHeading = 3072;
