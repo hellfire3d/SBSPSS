@@ -70,6 +70,7 @@ int		AInc=1024/Width;
 			int	dH=8-Ofs;
 			dH*=2;
 			if (dH>8) dH=8;
+			if (dH<2) dH=2;
 			HeightTable[H]=(s16)dH;
 //			printf("%i %i =%i\n",H,Ofs,HeightTable[H]);
 		}
