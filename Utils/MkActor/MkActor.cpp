@@ -29,7 +29,24 @@ GString		OutPath;
 GString		IncludePath;
 
 //***************************************************************************
+void	RepAlign(FILE *File,char *Txt=0)		
+{							
+/*
+int	Align=ftell(File)&3;
 
+	if (Align)
+	{
+		if (Txt)
+			printf("%s MisAlign %i\n",Txt,Align);
+		else
+			printf("%s MisAlign %i\n","File",Align);
+
+	}
+*/
+	PadFile(File);	
+}
+
+//***************************************************************************
 char * CycleCommands(char *String,int Num)
 {
 char	Text[2048],*TextPtr;
@@ -250,7 +267,7 @@ int			Error=0;
 			Filename=SpriteDir+Name+"_"+ThisAnim.Name+"*.bmp";
 			if( (FileHandle= _findfirst( Filename, &Find)) == -1L )
 			{
-				printf( "No files in current directory!\n" );
+				GObject::Error(ERR_WARNING,"Cant find Anim %s.\n",ThisAnim.Name);
 				return;
 			}
 
@@ -286,7 +303,7 @@ int		i,ListSize=AnimList.size();
 //***************************************************************************
 void	CMkActor::LoadFrame(sFrame &ThisFrame,bool VRamFlag)
 {
-			ThisFrame.FrameIdx=LoadBmp(ThisFrame.Filename,VRamFlag);
+		ThisFrame.FrameIdx=LoadBmp(ThisFrame.Filename,VRamFlag);
 }
 
 //***************************************************************************
@@ -361,6 +378,12 @@ FileInfo	ThisInfo;
 			NewBmp.VRamFlag=VRamFlag;
 
 			NewFrame.LoadBMP(Filename);
+int			ColorCount=NewFrame.GetNumOfCols();
+			if (ColorCount>16)
+			{
+				GObject::Error(ERR_WARNING,"%s has %i colors.\n",Name,ColorCount);
+			}
+
 
 #ifdef	CheckDups
 int			Size=NewFrame.GetWidth()*NewFrame.GetHeight();
@@ -486,17 +509,20 @@ void	CMkActor::Write()
 {
 GString			OutName=OutFile+".SBK";
 
-//		printf("Writing %s\n",Name);
 		File=fopen(OutName,"wb");
 
 // Write Dummy Hdr
 		fwrite(&FileHdr,1,sizeof(sSpriteAnimBank),File);
+		RepAlign(File,"MainHeader");
 // Write Palette
 		FileHdr.Palette=(u8*)WritePalette();
+		RepAlign(File,"PaletteHdr");
 // Write AnimList
 		FileHdr.AnimList=(sSpriteAnim*)WriteAnimList();
+		RepAlign(File,"AnimListHdr");
 // Write FrameList
 		FileHdr.FrameList=(sSpriteFrame*)WriteFrameList();
+//		RepAlign(File,"FrameHdr");
 
 // Rewrite Header
 		fseek(File, 0, SEEK_SET);
@@ -520,6 +546,11 @@ vector<u16>	OutPal;
 		PsxPalette.SetPlusColZero(true);
 
 		Count=PsxPalette.GetNumOfCols();
+		if (Count<16) Count=16;
+//		if (Count>16)
+//		{
+//			GObject::Error(ERR_WARNING,"Too Many Colors.\n");
+//		}
 		FileHdr.ColorCount=Count;
 		PsxPalette.MakePSXPal(OutPal);
 		for (i=0; i<Count; i++)
@@ -534,42 +565,46 @@ vector<u16>	OutPal;
 int		CMkActor::WriteAnimList()
 {
 int		Pos=ftell(File);
-int		i,ListSize=AnimList.size();
-vector<sSpriteAnim>	Out;
+int		i,AnimCount=AnimList.size();
+vector<sSpriteAnim>	Hdrs;
 
 // Write Dummy Hdrs
-		FileHdr.AnimCount=ListSize;
-		Out.resize(ListSize);
-		for (i=0; i<ListSize; i++)
+		FileHdr.AnimCount=AnimCount;
+		Hdrs.resize(AnimCount);
+		for (i=0; i<AnimCount; i++)
 		{
-			fwrite(&Out[i],1,sizeof(sSpriteAnim),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteAnim),File);
 		}
+		RepAlign(File,"AnimListHdr");
+		
 // Write Frame Lists
-		for (i=0; i<ListSize; i++)
+		for (i=0; i<AnimCount; i++)
 		{
 			sAnim	&ThisAnim=AnimList[i];
-			sSpriteAnim	&ThisOut=Out[i];
-
 			int		f,FrameCount=ThisAnim.Frames.size();
-			ThisOut.FrameCount=FrameCount;
-			ThisOut.Anim=(u16*)ftell(File);
+
+			Hdrs[i].FrameCount=FrameCount;
+			Hdrs[i].Anim=(u16*)ftell(File);
+
 			for (f=0; f<FrameCount; f++)
 			{
 				sFrame	&ThisFrame=ThisAnim.Frames[f];
 				u16	FrameNo=ThisFrame.FrameIdx;
 				fwrite(&FrameNo,1,sizeof(u16),File);
 			}
+			RepAlign(File,"AnimIdx");
+			
 		}
-int		SavePos=ftell(File);
 
-		fseek(File,Pos,SEEK_SET);
 // ReWrite Headers
-		for (i=0; i<ListSize; i++)
+int		SavePos=ftell(File);
+		fseek(File,Pos,SEEK_SET);
+		for (i=0; i<AnimCount; i++)
 		{
-			fwrite(&Out[i],1,sizeof(sSpriteAnim),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteAnim),File);
 		}
-
 		fseek(File,SavePos,SEEK_SET);
+
 		return(Pos);
 }
 
@@ -577,47 +612,49 @@ int		SavePos=ftell(File);
 int		CMkActor::WriteFrameList()
 {
 int		Pos=ftell(File);
-int		i,ListSize=BmpList.size();
-vector<sSpriteFrame>	Out;
+int		i,FrameCount=BmpList.size();
+vector<sSpriteFrame>	Hdrs;
 
 // Write Dummy Hdrs
-		FileHdr.FrameCount=ListSize;
-		Out.resize(ListSize);
-		for (i=0; i<ListSize; i++)
+		FileHdr.FrameCount=FrameCount;
+		Hdrs.resize(FrameCount);
+		for (i=0; i<FrameCount; i++)
 		{
-			fwrite(&Out[i],1,sizeof(sSpriteFrame),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteFrame),File);
 		}
+		RepAlign(File,"FrameListHdr");
+		
 // Write Frame Lists
-		for (i=0; i<ListSize; i++)
+		for (i=0; i<FrameCount; i++)
 		{
 			sBmp	&ThisBmp=BmpList[i];
 			if (ThisBmp.VRamFlag)
 			{ // VRam
-				Out[i].PAKSpr=0;
+				GObject::Error(ERR_FATAL,"VRam sprites not supported yet (%s)\n",ThisBmp.Bmp.GetName);
 			}
 			else
 			{ // Pak
-				Out[i].PAKSpr=(u8*)ftell(File);
-				Out[i].XOfs=-ThisBmp.Bmp.GetX();
-				Out[i].YOfs=-ThisBmp.Bmp.GetY();
-				Out[i].W=ThisBmp.Bmp.GetWidth();
-				Out[i].H=ThisBmp.Bmp.GetHeight();
-					
+				int	XOfs=ThisBmp.Bmp.GetX()-(ThisBmp.Bmp.GetOrigW()/2);
+				int	YOfs=ThisBmp.Bmp.GetY()-(ThisBmp.Bmp.GetOrigH());
+				Hdrs[i].PAKSpr=(u8*)ftell(File);
+				Hdrs[i].XOfs=XOfs;
+				Hdrs[i].YOfs=YOfs;
+				Hdrs[i].W=ThisBmp.Bmp.GetWidth();
+				Hdrs[i].H=ThisBmp.Bmp.GetHeight();
 				fwrite(ThisBmp.Pak,1,ThisBmp.PakSize,File);
-				PadFile(File);
 			}
 
-		}
-int		SavePos=ftell(File);
 
-		fseek(File,Pos,SEEK_SET);
+		}
 // ReWrite Headers
-		for (i=0; i<ListSize; i++)
+int		SavePos=ftell(File);
+		fseek(File,Pos,SEEK_SET);
+		for (i=0; i<FrameCount; i++)
 		{
-			fwrite(&Out[i],1,sizeof(sSpriteFrame),File);
+			fwrite(&Hdrs[i],1,sizeof(sSpriteFrame),File);
 		}
-
 		fseek(File,SavePos,SEEK_SET);
+
 		return(Pos);
 }
 
@@ -658,3 +695,4 @@ int		ListSize=AnimList.size();
 
 		fclose(File);
 }
+// 

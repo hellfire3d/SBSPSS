@@ -91,7 +91,7 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip,bool Shadow)
 {
 sSpriteFrame	*FrameGfx=GetFrame(Anim,Frame);
-
+		
 			PAK_doUnpak(CActorPool::UnpackBuffer,FrameGfx->PAKSpr);
 // Gfx
 RECT		Rect;
@@ -99,6 +99,7 @@ RECT		Rect;
 			Rect.y=TexY;
 			Rect.w=FrameGfx->W/4;
 			Rect.h=FrameGfx->H;
+
 			LoadImage( &Rect, (u32*)CActorPool::UnpackBuffer);
 
 POLY_FT4	*Ft4=GetPrimFT4();
@@ -125,52 +126,53 @@ POLY_FT4	*Ft4=GetPrimFT4();
 }
 
 /*****************************************************************************/
-void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *ThisFrame,int X,int Y,bool XFlip,bool YFlip)
+void	CActorGfx::SetUpFT4(POLY_FT4 *Ft4,sSpriteFrame *Frame,int X,int Y,bool XFlip,bool YFlip)
 {
 int		U=0;
 int		V=4;
-int		W=ThisFrame->W;
-int		H=ThisFrame->H;
+int		W=Frame->W;
+int		H=Frame->H;
 
 		if (XFlip)
-		{
+			{
+			X-=Frame->XOfs;
+			X-=W;
 			Ft4->u0=U+W-1;
-			Ft4->u1=U;
+			Ft4->u1=U;//-1;
 			Ft4->u2=U+W-1;
-	 		Ft4->u3=U;
-			X-=ThisFrame->XOfs;
-			X-=ThisFrame->W;
-		}
+	 		Ft4->u3=U;//-1;
+
+			}
 		else
 		{
+			X+=Frame->XOfs;
 			Ft4->u0=U;
 			Ft4->u1=U+W;
 			Ft4->u2=U;
  			Ft4->u3=U+W;
-			X+=ThisFrame->XOfs;
+
 		}
 
 		if (YFlip)
-		{
+			{
+			Y-=Frame->YOfs;
+			Y-=H;
 			Ft4->v0=V+H-1;
 			Ft4->v1=V+H-1;
-			Ft4->v2=V;
-			Ft4->v3=V;
-			Y-=ThisFrame->YOfs;
-			Y-=ThisFrame->H/2;
-		}
+			Ft4->v2=V;//-1;
+			Ft4->v3=V;//-1;
+			}
 		else
 		{
+			Y+=Frame->YOfs;
 			Ft4->v0=V;
 			Ft4->v1=V;
 			Ft4->v2=V+H;
 			Ft4->v3=V+H;
-			Y+=ThisFrame->YOfs;
 		}
 
 		setXYWH(Ft4,X,Y,W,H);
 }
-
 
 /*****************************************************************************/
 void	CActorGfx::Dump()
