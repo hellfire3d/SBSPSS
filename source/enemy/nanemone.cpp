@@ -145,16 +145,21 @@ void CNpc::processCloseAnemone2Attack( int _frames )
 void CNpc::processCloseAnemone3Attack( int _frames )
 {
 	CProjectile *projectile;
+	u8 lifetime = 8;
 
 	DVECTOR newPos = Pos;
 
 	newPos.vy -= 100;
 
 	projectile = new( "test projectile" ) CProjectile;
-	projectile->init( newPos, m_heading, CProjectile::PROJECTILE_GAS_CLOUD, CProjectile::PROJECTILE_FINITE_LIFE );
+	projectile->init(	newPos,
+						m_heading,
+						CProjectile::PROJECTILE_GAS_CLOUD,
+						CProjectile::PROJECTILE_FINITE_LIFE,
+						lifetime * GameState::getOneSecondInFrames() );
 
 	m_controlFunc = NPC_CONTROL_MOVEMENT;
 	m_timerFunc = NPC_TIMER_ATTACK_DONE;
-	m_timerTimer = 4 * GameState::getOneSecondInFrames();
+	m_timerTimer = ( lifetime + 4 ) * GameState::getOneSecondInFrames();
 	m_sensorFunc = NPC_SENSOR_NONE;
 }

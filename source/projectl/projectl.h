@@ -44,6 +44,7 @@ public:
 	void				init();
 	void				init( DVECTOR initPos, s16 initHeading );
 	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType );
+	void				init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime );
 	void				shutdown();
 	void				think(int _frames);
 	virtual void		render();

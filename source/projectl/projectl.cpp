@@ -75,6 +75,13 @@ void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TY
 	m_lifetimeType = initLifeType;
 }
 
+void CProjectile::init( DVECTOR initPos, s16 initHeading, PROJECTILE_MOVEMENT_TYPE initMoveType, PROJECTILE_LIFETIME_TYPE initLifeType, s32 initLifetime )
+{
+	init( initPos, initHeading, initMoveType, initLifeType );
+
+	m_lifetime = initLifetime;
+}
+
 void CProjectile::shutdown()
 {
 	m_spriteBank->dump();		delete m_spriteBank;
