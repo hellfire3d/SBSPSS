@@ -33,6 +33,9 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__UTILS_HEADER__
+#include	"utils\utils.h"
+#endif
 
 
 /*	Std Lib
@@ -66,6 +69,11 @@
 	Vars
 	---- */
 
+// Net pulse
+int	npspeed=150;
+int npsize=40;
+
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -84,7 +92,6 @@ void	CPlayerModeNet::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int netstate;
 DVECTOR	netLaunchPos={-10,-70};
 void	CPlayerModeNet::think()
 {
@@ -133,6 +140,7 @@ void	CPlayerModeNet::think()
 							((CNpcEnemy*)thing)->caughtWithNet();
 							m_netState=NET_STATE__JUST_CAUGHT_SOMETHING;
 							thing=NULL;
+							m_netSin=0;
 						}
 						else
 						{
@@ -197,7 +205,11 @@ void	CPlayerModeNet::think()
 			}
 		}
 	}
-	netstate=m_netState;
+
+	if(m_netState==NET_STATE__FULL)
+	{
+		m_netSin=(m_netSin+npspeed)&4095;
+	}
 }
 
 /*----------------------------------------------------------------------
@@ -213,15 +225,16 @@ void	CPlayerModeNet::renderModeUi()
 
 	sb=m_player->getSpriteBank();
 	fh=sb->getFrameHeader(FRM__NET);
-	if(m_netState==NET_STATE__FULL)
+//	if(m_netState==NET_STATE__FULL)
 	{
 		// Net has a jellyfish inside
-		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,256+128);
+		int size=256+128+((msin(m_netSin)*npsize)>>12);
+		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT,size);
 	}
-	else
-	{
-		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
-	}
+//	else
+//	{
+//		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX-(fh->W/2),CPlayer::POWERUPUI_ICONY-(fh->H/2),0,0,CPlayer::POWERUPUI_OT);
+//	}
 }
 
 /*----------------------------------------------------------------------

@@ -59,6 +59,7 @@ private:
 	int							m_netFrame;
 	int							m_netting;
 	NetState					m_netState;
+	int							m_netSin;
 
 };
 
