@@ -629,6 +629,10 @@ SOURCE=..\..\..\source\paul\scenesel.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\source\player\panimsfx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\player\player.cpp
 # End Source File
 # Begin Source File

@@ -5,7 +5,7 @@
 	Author:		PKG
 	Created: 
 	Project:	Spongebob
-	Purpose: 
+	Purpose:	Handles automatically generated sound effects based upon anim frames
 
 	Copyright (c) 2001 Climax Development Ltd
 
@@ -70,6 +70,7 @@ static const int	s_buttBounceEndCount=sizeof(s_buttBounceEndSfx)/sizeof(CPlayer:
 // ANIM_PLAYER_ANIM_IDLEHOOLA
 // ANIM_PLAYER_ANIM_IDLELOOK
 // ANIM_PLAYER_ANIM_IDLEWIGGLEARM
+
 // ANIM_PLAYER_ANIM_JUMPEND
 static CPlayer::AnimFrameSfx s_jumpEndSfx[]=
 {
@@ -78,7 +79,13 @@ static CPlayer::AnimFrameSfx s_jumpEndSfx[]=
 };
 static const int	s_jumpEndCount=sizeof(s_jumpEndSfx)/sizeof(CPlayer::AnimFrameSfx);
 
-// ANIM_PLAYER_ANIM_KARATE
+// ANIM_PLAYER_ANIM_KARATE			Might have to go into the CPlayerStateChop::enter code (PKG)
+static CPlayer::AnimFrameSfx s_chopSfx[]=
+{
+	{	1,	CSoundMediator::SFX_SPONGEBOB_KARATE_1,		},
+};
+static const int	s_chopCount=sizeof(s_chopSfx)/sizeof(CPlayer::AnimFrameSfx);
+
 // ANIM_PLAYER_ANIM_KNOCKBACK
 // ANIM_PLAYER_ANIM_KNOCKFORWARD
 
@@ -111,6 +118,9 @@ static const int	s_runStopCount=sizeof(s_runStopSfx)/sizeof(CPlayer::AnimFrameSf
 
 
 
+
+// This is the table that ties up anims to sfx
+// CPlayer::setAnimFrame() uses this table to generate sfx based upon anim frames
 CPlayer::AnimSfx CPlayer::s_animSfx[]=
 {
 	{	s_buttBounceEndCount,	s_buttBounceEndSfx		},		// ANIM_PLAYER_ANIM_BUTTBOUNCEEND
@@ -137,7 +147,7 @@ CPlayer::AnimSfx CPlayer::s_animSfx[]=
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLELOOK
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_IDLEWIGGLEARM
 	{	s_jumpEndCount,			s_jumpEndSfx			},		// ANIM_PLAYER_ANIM_JUMPEND
-	{	0,						NULL					},		// ANIM_PLAYER_ANIM_KARATE
+	{	s_chopCount,			s_chopSfx				},		// ANIM_PLAYER_ANIM_KARATE
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_KNOCKBACK
 	{	0,						NULL					},		// ANIM_PLAYER_ANIM_KNOCKFORWARD
 	{	s_runCount,				s_runSfx				},		// ANIM_PLAYER_ANIM_RUN

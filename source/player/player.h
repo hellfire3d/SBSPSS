@@ -34,6 +34,10 @@
 #include "player\pstates.h"
 #endif
 
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -162,14 +166,26 @@ friend class CPlayerState;
 
 
 private:
-
 	typedef struct
 	{
 		PlayerMetrics		m_metrics;
 		class CPlayerState	*m_states[NUM_STATES];
 	}PlayerMode;
 
-	
+
+public:
+	typedef struct
+	{
+		int						m_frame;
+		CSoundMediator::SFXID	m_sfxId;
+	} AnimFrameSfx;
+private:
+	typedef struct
+	{
+		int						m_numAnimFrameSfx;
+		struct AnimFrameSfx		*m_animFrameSfx;
+	} AnimSfx;
+	static AnimSfx	s_animSfx[];
 	int				m_animFrame;
 	int				m_animNo;
 	CSkel			m_skel;

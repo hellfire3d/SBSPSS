@@ -27,6 +27,10 @@
 #include "pad\pads.h"
 #endif
 
+#ifndef __SOUND_SOUND_H__
+#include "sound\sound.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -72,6 +76,8 @@ void CPlayerStateJump::enter(CPlayer *_player)
 	DVECTOR	move=getMoveVelocity(_player);
 	move.vy=-metrics->m_metric[PM__JUMP_VELOCITY]<<CPlayer::VELOCITY_SHIFT;
 	setMoveVelocity(_player,&move);
+
+	CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_JUMP);
 }
 
 

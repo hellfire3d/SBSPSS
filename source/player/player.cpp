@@ -438,13 +438,45 @@ void CPlayer::setFacing(int _facing)
 		m_skel.setDir(_facing);
 	}
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayer::getAnimFrame()
 {
 	return m_animFrame;
 }
 void CPlayer::setAnimFrame(int _animFrame)
 {
+	AnimSfx			*sfx;
+
 	m_animFrame=_animFrame;
+
+	// Are there any sfx for this frame?
+	sfx=&s_animSfx[m_animNo];
+	if(sfx->m_numAnimFrameSfx)
+	{
+		AnimFrameSfx	*frameSfx;
+		int				i;
+
+		frameSfx=sfx->m_animFrameSfx;
+		for(i=0;i<sfx->m_numAnimFrameSfx;i++)
+		{
+			if(m_animFrame==frameSfx->m_frame)
+			{
+				CSoundMediator::playSfx(frameSfx->m_sfxId);
+			}
+			if(m_animFrame<frameSfx->m_frame)
+			{
+				break;
+			}
+			frameSfx++;
+		}
+	}
 }
 int CPlayer::getAnimFrameCount()
 {
@@ -459,6 +491,14 @@ void CPlayer::setAnimNo(int _animNo)
 	m_animNo=_animNo;
 	m_animFrame=0;
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 DVECTOR CPlayer::getMoveVelocity()
 {
 	return m_moveVel;
@@ -471,6 +511,14 @@ DVECTOR CPlayer::getPlayerPos()
 {
 	return Pos;
 }
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 int CPlayer::getPadInputHeld()
 {
 	return m_padInput;
@@ -480,21 +528,12 @@ int CPlayer::getPadInputDown()
 	return m_padInputDown;
 }
 
-
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-
-
-
-
-
-
-
 int CPlayer::isOnSolidGround()
 {
 	return Pos.vy>23*16;//16*15;
