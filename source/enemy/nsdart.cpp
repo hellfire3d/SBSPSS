@@ -170,7 +170,7 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 	Pos.vx = m_circleCentre.vx + ( ( m_circleRadius * rcos( m_currentAngle ) ) >> 12 );
 	Pos.vy = m_circleCentre.vy + ( ( m_circleRadius * rsin( m_currentAngle ) ) >> 12 );
 
-	m_angularDistance += 64 * _frames;
+	m_angularDistance += 32 * _frames;
 
 	if ( m_angularDistance > 4095 )
 	{
@@ -179,4 +179,12 @@ void CNpcSquidDartEnemy::processClose( int _frames )
 		m_timerTimer = GameState::getOneSecondInFrames();
 		m_sensorFunc = NPC_SENSOR_NONE;
 	}
+
+	if ( !m_animPlaying )
+	{
+		m_frame = 0;
+		m_animNo = m_data[m_type].moveAnim;
+		m_animPlaying = true;
+	}
+
 }
