@@ -78,6 +78,14 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			if ( m_timer > 0 )
 			{
 				m_timer -= _frames;
+
+				if ( m_timer <= 0 )
+				{
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_RETRACTING_PLATFORM, true, true );
+					}
+				}
 			}
 			else
 			{
@@ -104,6 +112,14 @@ void CNpcRetractingPlatform::processTimer( int _frames )
 			if ( m_timer > 0 )
 			{
 				m_timer -= _frames;
+
+				if ( m_timer <= 0 )
+				{
+					if ( m_soundId == NOT_PLAYING )
+					{
+						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_RETRACTING_PLATFORM, true, true );
+					}
+				}
 			}
 			else
 			{
