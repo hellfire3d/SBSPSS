@@ -157,15 +157,18 @@ void	CBossText::think(int _frames)
 
 		if(pad&PAD_CROSS)
 		{
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__SELECT);
 			exit();
 		}
 		else if(pad&PAD_DOWN&&m_currentPage==0)
 		{
 			m_currentPage=1;
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
 		}
 		else if(pad&PAD_UP&&m_currentPage==1)
 		{
 			m_currentPage=0;
+			CSoundMediator::playSfx(CSoundMediator::SFX_FRONT_END__MOVE_CURSOR);
 		}
 	}
 }
