@@ -54,6 +54,7 @@
 void	CPlayerModeDead::enter()
 {
 	m_deadTime=0;
+	m_player->setAnimNo(ANIM_SPONGEBOB_DEATHSPIN);
 }
 
 /*----------------------------------------------------------------------
@@ -65,6 +66,11 @@ void	CPlayerModeDead::enter()
 void	CPlayerModeDead::think()
 {
 	m_deadTime++;
+	if(m_deadTime<m_player->getAnimFrameCount())
+	{
+		m_player->setAnimFrame(m_deadTime);
+	}
+
 	if((m_deadTime>DEATH_DELAY&&m_player->getPadInputDown()&PI_ACTION)||
 	   m_deadTime>DEATH_TIMEOUT)
 	{
@@ -90,6 +96,24 @@ void	CPlayerModeDead::render(DVECTOR *_pos)
 }
 */
 
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+/*
+void	CPlayerModeDead::fall()
+{
+	m_moveVelocity.vy+=getPlayerMetrics()->m_metric[DEFAULT_PLAYER_PLAYER_GRAVITY];
+	if(m_moveVelocity.vy>=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT)
+	{
+		m_moveVelocity.vy=metrics->m_metric[DEFAULT_PLAYER_TERMINAL_VELOCITY]<<VELOCITY_SHIFT;
+	}
+}
+*/
 
 /*===========================================================================
 end */
