@@ -12,12 +12,9 @@
 #include	"LayerTile.h"
 #include	"LayerBack.h"
 
-struct sBackRGBTable
-{
-		u8	R,G,B,P;
-};
+#include	<levelbackgfx.h>
 
-sBackRGBTable	BackRGBTable[]=
+sBackRGBTable	CLayerBack::BackRGBTable[]=
 {
 	{255,  0,  0,0},
 	{255,255,  0,0},
@@ -36,6 +33,15 @@ sBackRGBTable	BackRGBTable[]=
 };
 
 #define	BackRGBTableSize	sizeof(BackRGBTable)/sizeof(sBackRGBTable)
+
+sBackSpriteInfo	CLayerBack::InfoTab[]=
+{
+{FRM_FLOWER,0,0},
+{FRM_GHOST,0,3},
+{FRM_PUMPKIN,0,3},
+{FRM_BUBBLE,NO_SPIN | NO_SCALE | NO_COLOR,3 },
+{FRM_BUBBLESMALL,NO_SPIN | NO_SCALE | NO_COLOR,3},
+};
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -76,29 +82,6 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 			setRGB3(&Band[i],Data->Data[i+1].RGB[0],Data->Data[i+1].RGB[1],Data->Data[i+1].RGB[2]);
 		}
 
-		for (int i=0; i<SPRITE_MAX; i++)
-		{
-			POLY_GT4	*Gt4=&SpriteList[i].Poly;
-			sFrameHdr	*Frm=Sprites->getFrameHeader(SprFrame[i&1]);
-			Sprites->prepareGT4(Gt4,Frm,0,0,0,0);
-			SpriteList[i].W=Frm->W;
-			SpriteList[i].H=Frm->W;
-			setSemiTrans(Gt4,1);
-//			Gt4->tpage|=Tran<<5;
-			if (Frm->Rotated)
-			{
-				Gt4->u2--; 	Gt4->u3--;
-				Gt4->v0--; 	Gt4->v2--;
-			}
-			else
-			{
-				Gt4->u1--; 	Gt4->u3--;
-				Gt4->v2--; 	Gt4->v3--;
-			}
-			InitSprite(&SpriteList[i]);
-			SpriteList[i].Pos.vx=getRndRange(512<<MOVE_SHIFT);
-			SpriteList[i].Pos.vy=getRndRange(256<<MOVE_SHIFT);
-		}
 		PosDx=0;
 		PosDy=0;
 		XOfs=MapPos.vy;
@@ -106,11 +89,53 @@ void	CLayerBack::init(DVECTOR &MapPos,int Shift)
 }
 
 /*****************************************************************************/
-void	CLayerBack::SetFrames(int Frm0,int Frm1)
+void	CLayerBack::SetFrames(int Spr0,int Spr1)
 {
-		SprFrame[0]=Frm0;
-		SprFrame[1]=Frm1;
+int		Spr[2];
+		Spr[0]=Spr0;
+		Spr[1]=Spr1;
 
+
+		for (int i=0; i<SPRITE_MAX; i++)
+		{
+			int	Type=Spr[i&1];
+			POLY_GT4	*Gt4=&SpriteList[i].Poly;
+			sFrameHdr	*Frm=Sprites->getFrameHeader(InfoTab[Type].Frame);
+
+			SpriteList[i].Type=Type;
+			Sprites->prepareGT4(Gt4,Frm,0,0,0,0);
+			SpriteList[i].W=Frm->W;
+			SpriteList[i].H=Frm->W;
+			setSemiTrans(Gt4,1);
+			Gt4->tpage|=InfoTab[Type].Trans<<5;
+			if (Frm->Rotated)
+			{
+				Gt4->u2++; 	Gt4->u3++;
+				Gt4->v2++; 	Gt4->v3++;
+			}
+			else
+			{
+				Gt4->u1--; 	Gt4->u3--;
+				Gt4->v2--; 	Gt4->v3--;
+			}
+// Init all
+			setRGB0(Gt4,255,255,255);
+			setRGB1(Gt4,255,255,255);
+			setRGB2(Gt4,255,255,255);
+			setRGB3(Gt4,255,255,255);
+			SpriteList[i].Angle=0;
+			SpriteList[i].AngleInc=0;
+			SpriteList[i].PosInc.vx=0;
+			SpriteList[i].PosInc.vy=0;
+			SpriteList[i].Scale.vx=1024;
+			SpriteList[i].Scale.vy=1024;
+			SpriteList[i].ScaleInc.vx=0;
+			SpriteList[i].ScaleInc.vy=0;
+			
+			InitSprite(&SpriteList[i]);
+			SpriteList[i].Pos.vx=getRndRange(512<<MOVE_SHIFT);
+			SpriteList[i].Pos.vy=getRndRange(256<<MOVE_SHIFT);
+		}
 }
 
 /*****************************************************************************/
@@ -127,63 +152,75 @@ int		Pos=getRnd();
 int		XInc=(getRndRange((1<<((MOVE_SHIFT*2)/3))-1)+1)<<MOVE_SHIFT;
 int		YInc=(getRndRange((1<<((MOVE_SHIFT*2)/3))-1)+1)<<MOVE_SHIFT;
 
-		switch(StartPos&3)
+		if (!(InfoTab[SpritePtr->Type].Flags & NO_MOVE))
 		{
-			case 0:	// Left
-				SpritePtr->Pos.vx=-63;
-				SpritePtr->Pos.vy=(Pos%(256+128))-63;
-				SpritePtr->PosInc.vx=XInc;
-				if (XInc&1)
-					SpritePtr->PosInc.vy=+YInc;
-				else
-					SpritePtr->PosInc.vy=-YInc;
-				break;
+			switch(StartPos&3)
+			{
+				case 0:	// Left
+					SpritePtr->Pos.vx=-63;
+					SpritePtr->Pos.vy=(Pos%(256+128))-63;
+					SpritePtr->PosInc.vx=XInc;
+					if (XInc&1)
+						SpritePtr->PosInc.vy=+YInc;
+					else
+						SpritePtr->PosInc.vy=-YInc;
+					break;
 
-			case 1:	// Right
-				SpritePtr->Pos.vx=512+63;
-				SpritePtr->Pos.vy=(Pos%(256+128))-63;
-				SpritePtr->PosInc.vx=-XInc;
-				if (XInc&1)
-					SpritePtr->PosInc.vy=+YInc;
-				else
+				case 1:	// Right
+					SpritePtr->Pos.vx=512+63;
+					SpritePtr->Pos.vy=(Pos%(256+128))-63;
+					SpritePtr->PosInc.vx=-XInc;
+					if (XInc&1)
+						SpritePtr->PosInc.vy=+YInc;
+					else
+						SpritePtr->PosInc.vy=-YInc;
+					break;
+				case 2:	// Top
+					SpritePtr->Pos.vx=(Pos%(512+128))-63;
+					SpritePtr->Pos.vy=-63;
+					if (YInc&1)
+						SpritePtr->PosInc.vx=+XInc;
+					else
+						SpritePtr->PosInc.vx=-XInc;
+					SpritePtr->PosInc.vy=YInc;
+					break;
+				case 3:	// Bottom
+					SpritePtr->Pos.vx=(Pos%(512+128))-63;
+					SpritePtr->Pos.vy=256+63;
+					if (YInc&1)
+						SpritePtr->PosInc.vx=+XInc;
+					else
+						SpritePtr->PosInc.vx=-XInc;
 					SpritePtr->PosInc.vy=-YInc;
-				break;
-			case 2:	// Top
-				SpritePtr->Pos.vx=(Pos%(512+128))-63;
-				SpritePtr->Pos.vy=-63;
-				if (YInc&1)
-					SpritePtr->PosInc.vx=+XInc;
-				else
-					SpritePtr->PosInc.vx=-XInc;
-				SpritePtr->PosInc.vy=YInc;
-				break;
-			case 3:	// Bottom
-				SpritePtr->Pos.vx=(Pos%(512+128))-63;
-				SpritePtr->Pos.vy=256+63;
-				if (YInc&1)
-					SpritePtr->PosInc.vx=+XInc;
-				else
-					SpritePtr->PosInc.vx=-XInc;
-				SpritePtr->PosInc.vy=-YInc;
-				break;
+					break;
+			}
+			SpritePtr->Pos.vx<<=MOVE_SHIFT;
+			SpritePtr->Pos.vy<<=MOVE_SHIFT;
 		}
-		SpritePtr->Pos.vx<<=MOVE_SHIFT;
-		SpritePtr->Pos.vy<<=MOVE_SHIFT;
 		
-		SpritePtr->Scale.vx=getRndRange(4095);
-		SpritePtr->Scale.vy=getRndRange(4095);
-		SpritePtr->ScaleInc.vx=getRndRange(31)+31;
-		if (SpritePtr->ScaleInc.vx&1) SpritePtr->ScaleInc.vx=-SpritePtr->ScaleInc.vx;
-		SpritePtr->ScaleInc.vy=getRndRange(31)+31;
-		if (SpritePtr->ScaleInc.vy&1) SpritePtr->ScaleInc.vy=-SpritePtr->ScaleInc.vy;
-		SpritePtr->AngleInc=getRndRange(31)+31;
-		if (SpritePtr->AngleInc&1) SpritePtr->AngleInc=-SpritePtr->AngleInc;
+		if (!(InfoTab[SpritePtr->Type].Flags & NO_SCALE))
+		{
+			SpritePtr->Scale.vx=getRndRange(4095);
+			SpritePtr->Scale.vy=getRndRange(4095);
+			SpritePtr->ScaleInc.vx=getRndRange(31)+31;
+			if (SpritePtr->ScaleInc.vx&1) SpritePtr->ScaleInc.vx=-SpritePtr->ScaleInc.vx;
+			SpritePtr->ScaleInc.vy=getRndRange(31)+31;
+			if (SpritePtr->ScaleInc.vy&1) SpritePtr->ScaleInc.vy=-SpritePtr->ScaleInc.vy;
+		}
+		if (!(InfoTab[SpritePtr->Type].Flags & NO_SPIN))
+		{
+			SpritePtr->AngleInc=getRndRange(31)+31;
+			if (SpritePtr->AngleInc&1) SpritePtr->AngleInc=-SpritePtr->AngleInc;
+		}
 
+		if (!(InfoTab[SpritePtr->Type].Flags & NO_COLOR))
+		{
 int	i;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r0=BackRGBTable[i].R; SpritePtr->Poly.g0=BackRGBTable[i].G; SpritePtr->Poly.b0=BackRGBTable[i].B;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r1=BackRGBTable[i].R; SpritePtr->Poly.g1=BackRGBTable[i].G; SpritePtr->Poly.b1=BackRGBTable[i].B;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r2=BackRGBTable[i].R; SpritePtr->Poly.g2=BackRGBTable[i].G; SpritePtr->Poly.b2=BackRGBTable[i].B;
 		i=getRndRange(BackRGBTableSize-1); SpritePtr->Poly.r3=BackRGBTable[i].R; SpritePtr->Poly.g3=BackRGBTable[i].G; SpritePtr->Poly.b3=BackRGBTable[i].B;
+		}
 
 
 }

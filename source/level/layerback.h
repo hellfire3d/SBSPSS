@@ -7,13 +7,30 @@
 
 
 /*****************************************************************************/
+struct	sBackSpriteInfo
+{
+		int			Frame;
+		int			Flags;
+		u16			Trans;
+};
+
+enum	BackSpriteFlag
+{
+};
+
 struct	sBackSprite
 {
+		int			Type;
 		POLY_GT4	Poly;
 		DVECTOR		Pos,PosInc;
 		DVECTOR		Scale,ScaleInc;
 		int			W,H;
 		s16			Angle,AngleInc;
+};
+
+struct sBackRGBTable
+{
+		u8	R,G,B,P;
 };
 
 /*****************************************************************************/
@@ -26,13 +43,27 @@ public:
 		{
 			MOVE_SHIFT=4,
 			SPRITE_MAX=16,
+
+			NO_SPIN=1<<0,
+			NO_SCALE=1<<1,
+			NO_MOVE=1<<2,
+			NO_COLOR=1<<3,
+		};
+
+		enum	BackSpriteType
+		{
+			FLOWER=0,
+			GHOST,
+			PUMPKIN,
+			BUBBLE,
+			BUBBLESMALL,
 		};
 
 		CLayerBack(sLayerHdr *Hdr,sTile *TileBank);
 		~CLayerBack();
 
 		void	init(DVECTOR &MapPos,int Shift);
-		void	SetFrames(int Frm0,int Frm1);
+		void	SetFrames(int Spr0,int Spr1);
 		void	shutdown();
 		void	think(DVECTOR &MapPos);
 		void	render();
@@ -48,7 +79,10 @@ protected:
 
 		SpriteBank		*Sprites;
 		sBackSprite		SpriteList[SPRITE_MAX];
-		int				SprFrame[2];
+
+static	sBackRGBTable	BackRGBTable[];
+static	sBackSpriteInfo	InfoTab[];
+
 };
 
 
