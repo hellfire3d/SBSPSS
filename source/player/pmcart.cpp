@@ -61,6 +61,7 @@
   ---------------------------------------------------------------------- */
 void	CPlayerModeCart::enter()
 {
+	m_player->setCartCam(true);
 	setState( STATE_CART );
 }
 

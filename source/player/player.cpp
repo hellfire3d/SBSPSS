@@ -219,7 +219,6 @@ static const char *s_modeText[NUM_PLAYERMODES]=
 #endif
 
 
-int		s_screenPos;
 int		m_cameraLookOffset;
 
 int MAP2D_CENTRE_X=-(INGAME_SCREENW/2);
@@ -645,7 +644,7 @@ m_animFrame=0;
 
 	m_lastPadInput=m_padInput=PI_NONE;
 
-	s_screenPos=128;
+	setCartCam(false);
 
 	resetPlayerCollisionSizeToBase();
 
@@ -701,7 +700,6 @@ void	CPlayer::shutdown()
   ---------------------------------------------------------------------- */
 static int oldmode=-1;
 int newmode=-1;
-
 
 void	CPlayer::think(int _frames)
 {
@@ -907,6 +905,12 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		}
 
 		// Camera scroll..
+		if(m_cartCamActive)
+		{
+			// Just force the cam eo think we are running right so that the cam
+			// is always in the right place when in a cart
+			m_cameraXScrollDir=-1;
+		}
 		if(m_cameraXScrollDir==-1)
 		{
 			if(m_cameraXScrollPos>-(CAMERA_SCROLLLIMIT*CAMERA_TILESIZE)<<CAMERA_ACCURACYSHIFT)
