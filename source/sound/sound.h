@@ -211,6 +211,7 @@ public:
 	// Speech interface
 	static void			playSpeech(SpeechEquate _speech);
 	static void			stopSpeech();
+	static int			isSpeechPlaying();
 
 	// Control
 	static void			setVolume(VOLUMETYPE _type,int _val);

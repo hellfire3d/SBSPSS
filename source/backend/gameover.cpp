@@ -341,7 +341,7 @@ PAUL_DBGMSG("LETS TRY AGAIN!");
 		m_continueFontOffset-=move;
 		if(m_continueFontOffset<0)
 		{
-			if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME)
+			if(m_state==STATE__SPEECH_BEFORE_EXITING_TO_GAME&&!CSoundMediator::isSpeechPlaying())
 			{
 				m_readyToExit=true;
 				CFader::setFadingOut();

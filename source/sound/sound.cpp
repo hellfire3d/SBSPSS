@@ -724,6 +724,18 @@ void CSoundMediator::stopSpeech()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+int CSoundMediator::isSpeechPlaying()
+{
+	return CXAStream::IsPlaying();
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void CSoundMediator::setVolume(VOLUMETYPE _type,int _val)
 {
 	ASSERT(_val>=MIN_VOLUME&&_val<=MAX_VOLUME);
