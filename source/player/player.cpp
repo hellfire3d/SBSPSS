@@ -903,7 +903,7 @@ for(int i=0;i<NUM_LASTPOS;i++)
 		ygap=m_spriteBank->getFrameHeader(*frames)->H;
 		for(i=5;i>0;i--)
 		{
-			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,5);
+			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,0);
 			if(i>m_health)
 			{
 				setRGB0(ft4,healthr,healthg,healthb);

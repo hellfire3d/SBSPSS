@@ -226,7 +226,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXYWH(f4,x,y,16,16);
 						setRGB0(f4,colour->r,colour->g,colour->b);
 						setSemiTrans(f4,semiTrans);
-						AddPrimToList(f4,11);
+						AddPrimToList(f4,0);
 						break;
 
 					case 5:
@@ -236,7 +236,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x+16,y+8);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					case 6:
@@ -246,7 +246,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x,y+8);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					case 9:
@@ -257,7 +257,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x,y+16);
 						setRGB0(f4,colour->r,colour->g,colour->b);
 						setSemiTrans(f4,semiTrans);
-						AddPrimToList(f4,11);
+						AddPrimToList(f4,0);
 						break;
 
 					case 10:
@@ -268,7 +268,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x+16,y+16);
 						setRGB0(f4,colour->r,colour->g,colour->b);
 						setSemiTrans(f4,semiTrans);
-						AddPrimToList(f4,11);
+						AddPrimToList(f4,0);
 						break;
 
 					case 13:
@@ -278,7 +278,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x+16,y);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					case 14:
@@ -288,7 +288,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x,y);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					case 15:
@@ -298,7 +298,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x+16,y+16);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					case 16:
@@ -308,7 +308,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 								  x,y+16);
 						setRGB0(f3,colour->r,colour->g,colour->b);
 						setSemiTrans(f3,semiTrans);
-						AddPrimToList(f3,11);
+						AddPrimToList(f3,0);
 						break;
 
 					default:
@@ -316,7 +316,7 @@ void CLayerCollision::render(DVECTOR &MapPos)
 						setXYWH(f4,x,y,16,16);
 						setRGB0(f4,255,0,0);
 						setSemiTrans(f4,semiTrans);
-						AddPrimToList(f4,11);
+						AddPrimToList(f4,0);
 						break;
 				}
 				coll++;

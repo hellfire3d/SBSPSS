@@ -217,6 +217,7 @@ int		_YOfs=MapPos.vy>>MapXYShift;
 
 		XOfs=_XOfs;
 		YOfs=_YOfs;
+		if (YOfs<1) YOfs=1;
 }
 
 /*****************************************************************************/
@@ -273,6 +274,7 @@ sBox		Box;
 #endif	
 */
 // Render Back Shade
+
 		for (i=0; i<BandCount; i++)
 		{
 			setXYWH(&Band[i],0,ThisY,512,BandHeight*2);
