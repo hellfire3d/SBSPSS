@@ -1381,5 +1381,15 @@ bool CNpcPlatform::alwaysThink()
 	int chapter=GameScene.getChapterNumber();
 	int level=GameScene.getLevelNumber();
 
-	return( chapter == 1 && level == 5 );
+	if ( chapter == 1 )
+	{
+		if ( level == 5 )
+		{
+			return( true );
+		}
+	}
+
+	return( false );
+
+	//return( ( chapter == 1 ) && ( level == 5 ) );
 }

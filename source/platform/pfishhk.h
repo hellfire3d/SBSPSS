@@ -24,6 +24,7 @@ public:
 	virtual void		postInit();
 	void				render();
 	CRECT const			*getThinkBBox();
+	bool				alwaysThink()								{return(false);}
 protected:
 	void				processLifetime( int _frames );
 	void				processMovement( int _frames );
