@@ -21,8 +21,8 @@
 #include <gfname.hpp>
 #include <pcre.h>
 
-#include <ginio.h>
-#include <repread.h>
+//#include <ginio.h>
+//#include <repread.h>
 
 #include "sprset.h"
 
@@ -44,7 +44,7 @@ int	ListSize=AllFileInfos.size();
 /*----------------------------------------------------------------------
 	Function:	void AllFiles::FileCallback(char const * FName,int FileNum)
   ---------------------------------------------------------------------- */
-#include <gintex.h>
+//#include <gintex.h>
 #include <algorithm>
 
 void AllFiles::FileCallback(char const * FName,int FileNum)
@@ -58,7 +58,7 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 	GString		Ext(FileName.Ext());
 	
 	Ext.Lower();
-
+/*
 	if (Ext=="gin")
 		{
 		vector<GString> NonSharedTextures;
@@ -87,7 +87,7 @@ void AllFiles::FileCallback(char const * FName,int FileNum)
 		if (DebugFlag) cout<<"Read gin file *"<<FName<<"*"<<endl;
 		}
 	else
-		{
+*/		{
 		GFName	Name(FName);
 
 		if (Name.File()[0]=='+')
@@ -189,6 +189,7 @@ void AllFiles::SortOrder()
   ---------------------------------------------------------------------- */
 void AllFiles::ReadRepFile(char const * Name)
 {
+/*
 	vector<RepItem>		MyItems;
 
 	::readRepFile(Name,MyItems);
@@ -197,6 +198,7 @@ void AllFiles::ReadRepFile(char const * Name)
 		AllExternalSharedTextures.push_back(MyItems[f].m_texName);
 
 	if (DebugFlag) cout<<"Read report file "<<Name<<endl;
+*/
 }
 
 /*===========================================================================

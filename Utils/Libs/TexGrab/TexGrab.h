@@ -25,8 +25,8 @@
 #include <gfname.hpp>
 #include <pcre.h>
 
-#include <ginio.h>
-#include <repread.h>
+//#include <ginio.h>
+//#include <repread.h>
 
 #include "sprset.h"
 #include "allfiles.h"
