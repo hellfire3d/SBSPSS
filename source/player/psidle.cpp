@@ -210,8 +210,8 @@ static IdleAnims s_unarmedIdleAnims[]=
 	//	start frame						loop frame						end frame						loop count
 	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								4	},
 	{	-1,								ANIM_PLAYER_ANIM_IDLEBREATHE,	-1,								10	},
-	{	ANIM_PLAYER_ANIM_RUNSTART,		ANIM_PLAYER_ANIM_IDLEHOOLA,		ANIM_PLAYER_ANIM_RUNSTOP,		3	},
-	{	ANIM_PLAYER_ANIM_RUNSTART,		ANIM_PLAYER_ANIM_IDLEWIGGLEARM,	ANIM_PLAYER_ANIM_RUNSTOP,		3	},
+	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEHOOLA,		ANIM_PLAYER_ANIM_FACEBACK,		3	},
+	{	ANIM_PLAYER_ANIM_FACEFRONT,		ANIM_PLAYER_ANIM_IDLEWIGGLEARM,	ANIM_PLAYER_ANIM_FACEBACK,		3	},
 	{	-1,								ANIM_PLAYER_ANIM_IDLELOOK,		-1,								1	},
 };
 static int s_numUnarmedIdleAnims=sizeof(s_unarmedIdleAnims)/sizeof(IdleAnims);
