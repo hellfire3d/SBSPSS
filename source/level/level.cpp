@@ -588,7 +588,10 @@ void	CLevel::shutdown()
 		}
 
 		CSoundMediator::stopAllSound();
-		VSync(0);CSoundMediator::think(1);		// This is needed to let xmplay kill off the sounds properly (pkg)
+		for(int i=0;i<5;i++)
+		{
+			VSync(0);CSoundMediator::think(1);		// This is needed to let xmplay kill off the sounds properly (pkg)
+		}
 
 		if (ActorList) MemFree(ActorList);
 		if (PlatformList) MemFree(PlatformList);

@@ -170,21 +170,22 @@ void CXMPlaySound::think()
 			case SILENT:
 				if(!ch->m_locked)
 				{
-					do
+					if(XM_GetFeedback(ch->m_internalId,&fb))
 					{
-//PAUL_DBGMSG("freed channel %d  ( %d )",i,ch->m_playingId);
-						ch->m_useType=FREE;
-#ifdef __VERSION_DEBUG__
-						ch->m_internalId=0;
-						ch->m_playingId=NOT_PLAYING;
-						ch->m_priority=0;
-						ch->m_locked=false;
-						ch->m_vol=MIN_VOLUME;
-						ch->m_pan=PAN_CENTRE;
-#endif
-						ch++;
+///PAUL_DBGMSG("freeing channels:");
+///int j=i;
+						do
+						{
+///PAUL_DBGMSG(" %d (%d)",j++,ch->m_playingId);
+							ch->m_useType=FREE;
+							ch++;
+						}
+						while(ch->m_useType==CONTINUE);
 					}
-					while(ch->m_useType==CONTINUE);
+///	else
+///{
+///	PAUL_DBGMSG("channel %d not stopped",i);
+///}
 				}
 				break;
 
@@ -194,13 +195,12 @@ void CXMPlaySound::think()
 			case SFX:
 				if(XM_GetFeedback(ch->m_internalId,&fb))
 				{
-					do
-					{
-						// Just mark it as silent, if it's unlocked then it'll die next frame
-						ch->m_useType=SILENT;
-						ch++;
-					}
-					while(ch->m_useType==CONTINUE);
+					// Just mark it as silent, if it's unlocked then it'll die next frame
+					ch->m_useType=SILENT;
+
+					// And kill it in the player
+					XM_Quit(ch->m_internalId);
+///PAUL_DBGMSG("marked %d (%d) as silent",i,ch->m_internalId);
 				}
 				break;
 				
@@ -435,44 +435,41 @@ void CXMPlaySound::setStereo(int _stereo)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
 {
-//	int				i;
 	spuChannelUse	*ch;
 	int				vol;
 	
 	ch=&m_spuChannelUse[_playingId&0xff];
-//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	if(ch->m_playingId==_playingId)
 	{
-		if(ch->m_playingId==_playingId)
+		ASSERT(ch->m_locked!=false);			// Cant alter unlocked channels!
+		ch->m_vol=_volume;						// Update volume
+		switch(ch->m_useType)
 		{
-			ASSERT(ch->m_locked!=false);			// Cant alter unlocked channels!
-			ch->m_vol=_volume;						// Update volume
-			switch(ch->m_useType)
-			{
-				case SILENT:
-					break;
-					
-				case SONG:
-					vol=(_volume*m_masterSongVolume)>>8;
-					XM_SetMasterVol(ch->m_internalId,vol>>1);
-					break;
-					
-				case SFX:
-					vol=(_volume*m_masterSfxVolume)>>8;
-					XM_SetMasterVol(ch->m_internalId,vol>>1);
-					break;
-					
-				case LOOPINGSFX:
-					updateLoopingSfx(ch);
-					break;
+			case SILENT:
+				break;
+				
+			case SONG:
+				vol=(_volume*m_masterSongVolume)>>8;
+				XM_SetMasterVol(ch->m_internalId,vol>>1);
+				break;
+				
+			case SFX:
+				vol=(_volume*m_masterSfxVolume)>>8;
+				XM_SetMasterVol(ch->m_internalId,vol>>1);
+				break;
+				
+			case LOOPINGSFX:
+				updateLoopingSfx(ch);
+				break;
 
-				case FREE:
-				case CONTINUE:
-					ASSERT(0);
-					break;
-			}
-			return;
+			case FREE:
+			case CONTINUE:
+				ASSERT(0);
+				break;
 		}
+		return;
 	}
+
 	ASSERT(0);			// Couldn't find the sound to unlock it!
 }
 
@@ -485,41 +482,38 @@ void CXMPlaySound::setVolume(xmPlayingId _playingId,unsigned char _volume)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 {
-//	int				i;
 	spuChannelUse	*ch;
 	
 	ch=&m_spuChannelUse[_playingId&0xff];
-//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	if(ch->m_playingId==_playingId)
 	{
-		if(ch->m_playingId==_playingId)
+		ASSERT(ch->m_locked!=false);			// Cant alter unlocked channels!
+		ch->m_pan=_pan;							// Update pan
+		switch(ch->m_useType)
 		{
-			ASSERT(ch->m_locked!=false);			// Cant alter unlocked channels!
-			ch->m_pan=_pan;							// Update pan
-			switch(ch->m_useType)
-			{
-				case SILENT:
-					break;
-					
-				case SONG:
-					XM_SetMasterPan(ch->m_internalId,_pan-128);
-					break;
-					
-				case SFX:
-					XM_SetMasterPan(ch->m_internalId,_pan-128);
-					break;
-					
-				case LOOPINGSFX:
-					updateLoopingSfx(ch);
-					break;
+			case SILENT:
+				break;
+				
+			case SONG:
+				XM_SetMasterPan(ch->m_internalId,_pan-128);
+				break;
+				
+			case SFX:
+				XM_SetMasterPan(ch->m_internalId,_pan-128);
+				break;
+				
+			case LOOPINGSFX:
+				updateLoopingSfx(ch);
+				break;
 
-				case FREE:
-				case CONTINUE:
-					ASSERT(0);
-					break;
-			}
-			return;
+			case FREE:
+			case CONTINUE:
+				ASSERT(0);
+				break;
 		}
+		return;
 	}
+
 	ASSERT(0);			// Couldn't find the sound to unlock it!
 }
 
@@ -572,7 +566,6 @@ void CXMPlaySound::stopAndUnlockAllSound()
 		   ch->m_useType==LOOPINGSFX)
 		{
 			ch->m_locked=true;				// hmm.. not too ugly I suppose
-//			setVolume(ch->m_playingId,0);
 			stopPlayingId(ch->m_playingId);
 
 			// Need to unlock too
@@ -636,25 +629,22 @@ xmPlayingId CXMPlaySound::playSong(xmSampleId _sampleId,xmModId _modId,int _star
   ---------------------------------------------------------------------- */
 void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
 {
-//	int				i;
 	spuChannelUse	*ch;
 
 	ch=&m_spuChannelUse[_playingId&0xff];
-//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	if(ch->m_playingId==_playingId)
 	{
-		if(ch->m_playingId==_playingId)
+		//PAUL_DBGMSG("unlocking %d",_playingId);
+		ASSERT(ch->m_locked!=false);
+		do
 		{
-			//PAUL_DBGMSG("unlocking %d",_playingId);
-			ASSERT(ch->m_locked!=false);
-			do
-			{
-				ch->m_locked=false;
-				ch++;
-			}
-			while(ch->m_useType==CONTINUE);
-			return;
+			ch->m_locked=false;
+			ch++;
 		}
+		while(ch->m_useType==CONTINUE);
+		return;
 	}
+
 	ASSERT(0);			// Couldn't find the sound to unlock it!
 }
 
@@ -667,53 +657,45 @@ void CXMPlaySound::unlockPlayingId(xmPlayingId _playingId)
   ---------------------------------------------------------------------- */
 void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 {
-//	int				i;
 	spuChannelUse	*ch;
 	
 	ch=&m_spuChannelUse[_playingId&0xff];
-//	for(i=0;i<NUM_SPU_CHANNELS;i++,ch++)
+	if(ch->m_playingId==_playingId)
 	{
-		if(ch->m_playingId==_playingId)
+		ASSERT(ch->m_locked!=false);			// Cant stop unlocked channels!
+		switch(ch->m_useType)
 		{
-			ASSERT(ch->m_locked!=false);			// Cant stop unlocked channels!
-			switch(ch->m_useType)
-			{
-				case SONG:
-				case SFX:
-					{
-					XM_Feedback		fb;
-					do
-					{
-						XM_PlayStop(ch->m_internalId);
-						XM_GetFeedback(ch->m_internalId,&fb);
-					}
-					while(fb.Status!=XM_STOPPED);
-					XM_Quit(ch->m_internalId);
-					}
-					break;
+			case SONG:
+			case SFX:
+				{
+//				XM_Feedback		fb;
+//				do
+//				{
+					XM_PlayStop(ch->m_internalId);
+//					XM_GetFeedback(ch->m_internalId,&fb);
+//				}
+//				while(fb.Status!=XM_STOPPED);
+				XM_Quit(ch->m_internalId);
+				}
+				break;
 
-				case LOOPINGSFX:
-					XM_StopSample(ch->m_internalId);
-					break;
-					
-				case SILENT:
-					break;
+			case LOOPINGSFX:
+				XM_StopSample(ch->m_internalId);
+				break;
+				
+			case SILENT:
+				break;
 
-				case FREE:
-				case CONTINUE:
-					ASSERT(0);
-					break;
-			}
-
-			do
-			{
-				ch->m_useType=SILENT;
-				ch++;
-			}
-			while(ch->m_useType==CONTINUE);
-			return;
+			case FREE:
+			case CONTINUE:
+				ASSERT(0);
+				break;
 		}
+
+		ch->m_useType=SILENT;
+		return;
 	}
+
 	ASSERT(0);			// Couldn't find the sound to stop it!
 }
 
@@ -897,14 +879,6 @@ void CXMPlaySound::markChannelsAsActive(int _baseChannel,int _channelCount,CHANN
 	for(i=_baseChannel;i<_baseChannel+_channelCount-1;i++,ch++)
 	{
 		ch->m_useType=CONTINUE;
-#ifdef __VERSION_DEBUG__
-		ch->m_internalId=0;
-		ch->m_playingId=NOT_PLAYING;
-		ch->m_priority=0;
-		ch->m_locked=false;
-		ch->m_vol=MIN_VOLUME;
-		ch->m_pan=PAN_CENTRE;
-#endif
 	}
 }
 
