@@ -56,6 +56,8 @@ public:
 		~CTexGrab();
 
 		void	AddFile(char *Name);
+		void	AddMemFrame(char *Name,Frame &Frame);
+
 		void	Process();
 
 		void	CompressTpages(bool f)					{m_compressTpages=f;}
@@ -85,12 +87,15 @@ public:
 		void	MaxSize(int Size)						{MyFiles.SetMaxSize(Size);}
 		void	SetTPage(int Base,int W,int H)			{m_PageBase=Base; m_WidthPages=W; m_HeightPages=H; m_PagePlacements=true;}
 		void	ForceOffsets(int XOfs,int YOfs)			{MyFiles.SetXOff(XOfs); MyFiles.SetYOff(YOfs); MyFiles.SetForceOffsets(true);}
-
+		
+		std::vector<sTexOutInfo> &GetTexInfo()			{return(TexInfo);}
 
 
 protected:
 
 		AllFiles	MyFiles;
+		SprSet		MySprSet;
+
 
 		GString		m_OutFile;
 		GString		m_OutLbm;
@@ -109,6 +114,8 @@ protected:
 		bool		m_AnimatedHeadersOnly;
 		bool		m_DontOutputBoxes;
 		bool		m_AlignHeaders;
+		
+		std::vector<sTexOutInfo> TexInfo;
 
 };
 

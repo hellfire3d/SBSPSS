@@ -65,8 +65,6 @@ CTexGrab::~CTexGrab()
   ---------------------------------------------------------------------- */
 void	CTexGrab::Process()
 {
-SprSet	MySprSet;
-
 		MySprSet.setHalfTpage(m_useHalfTpage);
 		MySprSet.setAnimatedHeader(m_AnimatedHeadersOnly);
 		MySprSet.setDontOutputBoxes(m_DontOutputBoxes);
@@ -92,6 +90,7 @@ SprSet	MySprSet;
 			if (m_PagePlacements)
 				{
 				MySprSet.Write(m_OutFile,m_PageBase,m_WidthPages,m_HeightPages);
+				MySprSet.CreateTexInfo(TexInfo);
 
 				if (m_OutLbm)
 					MySprSet.WriteLBM(m_OutLbm);
@@ -127,6 +126,14 @@ GString	UpperName(Name);
 	Purpose:	
 	Params:		
   ---------------------------------------------------------------------- */
+void	CTexGrab::AddMemFrame(char *Name,Frame &Frame)
+{
+GString	UpperName(Name);
+			
+		UpperName.Upper();
+
+		MyFiles.AddMemFrame(UpperName,Frame);
+}
 
 /*
 

@@ -18,24 +18,24 @@ Class6=CMapEditDoc
 Class7=CMapEditView
 
 ResourceCount=11
-Resource1=IDD_MULTIBAR (English (U.S.))
-Resource2=IDD_NEWMAP
-Resource3=IDD_LAYERTILE_GUI
+Resource1=IDD_NEW_LAYER
+Resource2=IDD_LAYER_LIST_DIALOG
+Resource3=IDR_MAINFRAME (English (U.S.))
 Resource4=IDD_DIALOGBAR (English (U.S.))
-Resource5=IDD_NEW_LAYER
+Resource5=IDD_MULTIBAR (English (U.S.))
 Class8=CMultiBar
-Resource6=IDR_MAINFRAME (English (U.S.))
+Resource6=IDD_LAYERTILE_GUI
 Resource7=IDR_MAPEDITYPE (English (U.S.))
 Class9=CLayerList
 Class10=CMapSizeDlg
-Resource8=IDD_MAPSIZE
+Resource8=IDD_ABOUTBOX (English (U.S.))
 Class11=CGfxToolBar
 Class12=CLayerTileGUI
-Resource9=IDD_LAYER_LIST_DIALOG
-Resource10=IDR_TOOLBAR (English (U.S.))
+Resource9=IDD_NEWMAP
+Resource10=IDD_MAPSIZE
 Class13=CNewMapGUI
 Class14=CProgressDlg
-Resource11=IDD_ABOUTBOX (English (U.S.))
+Resource11=IDR_TOOLBAR (English (U.S.))
 
 [CLS:CChildFrame]
 Type=0
@@ -218,7 +218,7 @@ ImplementationFile=LayerList.cpp
 BaseClass=CDialog
 Filter=D
 VirtualFilter=dWC
-LastObject=IDC_LAYER_LIST
+LastObject=CLayerList
 
 [CLS:CGfxToolBar]
 Type=0

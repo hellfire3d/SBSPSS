@@ -127,12 +127,19 @@ void SprSet::AddFile(FileInfo const & ThisInfo)
 	GString Ext(FileName.Ext());
 	Ext.Upper();
 
-	if (Ext == "LBM" || Ext == "BMP")
-		AddLbm(ThisInfo);
-	else if (Ext == "ANM")
-		AddAnm(ThisInfo);
+	if (ThisInfo.getHasMemFrame())
+	{ // NEW!! Frames from memory :o) Dave
+		AddFrame(ThisInfo.getMemFrame(),ThisInfo);
+	}
 	else
-		Error(ERR_FATAL,"Don't deal with these sort of files : %s", FileName.FullName());
+	{
+		if (Ext == "LBM" || Ext == "BMP")
+			AddLbm(ThisInfo);
+		else if (Ext == "ANM")
+			AddAnm(ThisInfo);
+		else
+			Error(ERR_FATAL,"Don't deal with these sort of files : %s", FileName.FullName());
+	}
 }
 /*----------------------------------------------------------------------
 	Function:	
@@ -353,6 +360,47 @@ void SprSet::WriteReport(char const * File)
 		}
 	else
 		Error(ERR_FATAL,"Couldn't open file %s for output",(char const *)OutFileName);
+}
+
+/*----------------------------------------------------------------------
+	Function:	
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+#include <direct.h>
+
+void SprSet::CreateTexInfo(std::vector<sTexOutInfo> &TexInfo)
+{
+int			ListSize=AllSprFrames.size();
+const		int DirLen=1024;
+char		Dir[DirLen+1];
+GString		CurrDir;
+
+		CurrDir=getcwd(Dir,DirLen);
+		CurrDir.Upper();
+		CurrDir=CurrDir+"\\";
+
+		TexInfo.resize(ListSize);
+
+		for (int f=0;f<ListSize;f++)
+			{
+			SprFrame	&Frm =AllSprFrames[f];
+			sTexOutInfo	&ThisInfo=TexInfo[f];
+			GString		Name=Frm.GetFileInfo()->GetActualName();
+
+			
+			ThisInfo.Name=GFName::makerelative(CurrDir,Name,Dir);
+			ThisInfo.Clut=Frm.GetClut();
+			ThisInfo.Tpage=Frm.GetTpage();
+			ThisInfo.Rotated=Frm.IsRotated();
+			ThisInfo.u=Frm.GetTPRect().X;
+			ThisInfo.v=Frm.GetTPRect().Y;
+			ThisInfo.w=Frm.GetWidth();
+			ThisInfo.h=Frm.GetHeight();
+			ThisInfo.XOfs=Frm.GetX();
+			ThisInfo.XOfs=Frm.GetY();
+			}
 }
 
 /*----------------------------------------------------------------------

@@ -473,8 +473,8 @@ CTileBank	&TileBank=Core->GetTileBank();
 CMap		&LBrush=TileBank.GetLBrush();
 CMap		&RBrush=TileBank.GetRBrush();
 
-			LBrush.MirrorX(MouseFlagMirrorX);
-			RBrush.MirrorX(MouseFlagMirrorX);
+			LBrush.MirrorX(TILE_FLAG_MIRROR_X);
+			RBrush.MirrorX(TILE_FLAG_MIRROR_X);
 
 		return(TRUE);
 }
@@ -486,8 +486,8 @@ CTileBank	&TileBank=Core->GetTileBank();
 CMap		&LBrush=TileBank.GetLBrush();
 CMap		&RBrush=TileBank.GetRBrush();
 
-			LBrush.MirrorY(MouseFlagMirrorY);
-			RBrush.MirrorY(MouseFlagMirrorY);
+			LBrush.MirrorY(TILE_FLAG_MIRROR_Y);
+			RBrush.MirrorY(TILE_FLAG_MIRROR_Y);
 
 		return(TRUE);
 }

@@ -9,18 +9,12 @@
 //#include	"gl3d.h"
 #include	<Vector3.h>
 #include	"Map.h"
+#include	"LayerDef.h"
 
 /*****************************************************************************/
 enum	LAYER_ENUMS
 {
 SELECT_BUFFER_SIZE=16,
-};
-
-/*****************************************************************************/
-enum LAYER_TYPE
-{
-	LAYER_TYPE_TILE=0,
-	LAYER_TYPE_MAX
 };
 
 enum

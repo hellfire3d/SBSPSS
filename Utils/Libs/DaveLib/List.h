@@ -1,9 +1,11 @@
-/**********************/
-/*** Vtx List Class ***/
-/**********************/
+/******************/
+/*** List Class ***/
+/******************/
 
-#if !defined	__VTXLIST_CLASS_HEADER__
-#define			__VTXLIST_CLASS_HEADER__
+#pragma warning( disable : 4786 )
+
+#if !defined	__LIST_CLASS_HEADER__
+#define			__LIST_CLASS_HEADER__
 
 #include	<Vector>
 
@@ -41,10 +43,9 @@ public:
 		return(ListSize);
 	}
 
-	void	clear()
-	{
-		List.clear();
-	}
+	void	clear()					{List.clear();}
+	void	resize(int i)			{List.resize(i);}
+
 
 	int		size()					{return(List.size());}
 

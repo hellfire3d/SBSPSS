@@ -44,6 +44,15 @@
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
+struct	sTexOutInfo
+{
+	GString		Name;
+	u16			Clut;
+	u16			Tpage;
+	bool		Rotated;
+	int			u,v,w,h;
+	int			XOfs,YOfs;
+};
 
 /*	Encapsulates a file and all the infomation parkgrab needs to process it
 	----------------------------------------------------------------------- */
@@ -54,7 +63,6 @@ class FileInfo
 			{
 			CrossHair=false;
 			ForceOffsets=false;
-			MemFrame=0;
 			}
 
 		FileInfo(FileInfo const & Fi)	
@@ -122,7 +130,10 @@ class FileInfo
 			ShrinkToFit=NewShrinkToFit;
 			
 			m_allocateAs16Bit=allocateAs16Bit;
-			MemFrame=NewMemFrame;
+			if (NewMemFrame)
+			{
+				MemFrame=*NewMemFrame;
+			}
 			/*
 			if we're allocating on a 16 bit pixel boundary then
 			we don't want the texture to be rotated
@@ -177,6 +188,12 @@ class FileInfo
 		bool getAllocateAs16Bit(void) const
 			{return(m_allocateAs16Bit);}
 
+		bool getHasMemFrame(void) const
+			{return(MemFrame.SeeData!=0);}
+
+		Frame const &getMemFrame() const 
+			{return(MemFrame);}
+
 	char const * GetActualName(void) const
 		{return(ActualFileName);}
 
@@ -198,7 +215,7 @@ class FileInfo
 
 		int		XOff,YOff;
 
-		Frame	*MemFrame;
+		Frame	MemFrame;
 	};
 
 typedef std::vector<FileInfo> FIVec;
@@ -439,6 +456,26 @@ public:
 		{
 		return(MyFileInfo.getAllocateAs16Bit());
 		}
+	int		getX(void)	{return(X);}
+
+	int		getY(void)	{return(Y);}
+
+	int		getW(void)
+	{
+		if (MyFileInfo.GetMoveUVs() && Width && !MyFileInfo.getAllocateAs16Bit())
+			return(Width-1);
+		else
+			return(Width);
+	}
+	
+	int		getH(void)
+	{
+		if (MyFileInfo.GetMoveUVs() && Height && !MyFileInfo.getAllocateAs16Bit())
+			return(Height-1);
+		else
+			return(Height);
+	}
+
 protected:
 	void	ResizeAndReduce(Frame & Frm,int TargCols,float XPerc,float YPerc,bool ZeroSeeThrough);
 
@@ -484,6 +521,8 @@ public:
 		{MaxSize=New;}
 
 	void	AddFiles(FIVec const & FileList);
+
+	void	CreateTexInfo(std::vector<sTexOutInfo> &TexInfo);
 
 	void	Write(char const * FileName,int TpNumber,int WidthInTpages,int HeightInTpages);
 	void	WriteLBM(char const * FileName);

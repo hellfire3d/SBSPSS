@@ -3,6 +3,18 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "DaveLib"=..\LIBS\DaveLib\DaveLib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "GLib"=..\Libs\GLib\Glib.dsp - Package Owner=<4>
 
 Package=<5>
@@ -68,6 +80,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name TexGrab
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name maths
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name DaveLib
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -97,18 +115,6 @@ Package=<4>
 ###############################################################################
 
 Project: "maths"=..\Libs\Maths\maths.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mem"=..\Libs\mem\mem.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

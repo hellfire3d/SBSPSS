@@ -26,19 +26,6 @@ public:
 			MouseModePaint=0,
 			MouseModeSelect,
 		};
-		enum	MouseFlag
-		{
-			MouseFlagMirrorX=1<<0,
-			MouseFlagMirrorY=1<<1,
-			MouseFlagMirrorXY=MouseFlagMirrorX|MouseFlagMirrorY,
-		};
-		enum SubType
-		{
-			Back=0,
-			Mid,
-			Action,
-			Fore,
-		};
 
 		CLayerTile(int SubType,int Width,int Height,float Scale,BOOL Is3d,BOOL Resizable);					// New Layer
 		CLayerTile(CFile *File,int Version);																// Load Layer

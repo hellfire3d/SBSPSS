@@ -73,10 +73,10 @@ int		Width,Height;
 
 // Create Tile Layers
 //															Type					Width					Height		Scale	3d?		Resizable?
-		if (Dlg.m_Back)		Layer.push_back(new CLayerTile(	CLayerTile::Back,		32,						32,			4.0f,	FALSE,	FALSE));
-		if (Dlg.m_Mid)		Layer.push_back(new CLayerTile(	CLayerTile::Mid,		Width,					Height,		2.0f,	FALSE,	TRUE));
-							Layer.push_back(new CLayerTile(	CLayerTile::Action,		Width,					Height,		1.0f,	TRUE,	TRUE));
-		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	CLayerTile::Fore,		Width,					Height,		0.5f,	FALSE,	TRUE));
+		if (Dlg.m_Back)		Layer.push_back(new CLayerTile(	LAYERTILE_BACK,			32,						32,			4.0f,	FALSE,	FALSE));
+		if (Dlg.m_Mid)		Layer.push_back(new CLayerTile(	LAYERTILE_MID,			Width,					Height,		2.0f,	FALSE,	TRUE));
+							Layer.push_back(new CLayerTile(	LAYERTILE_ACTION,		Width,					Height,		1.0f,	TRUE,	TRUE));
+		if (Dlg.m_Fore)		Layer.push_back(new CLayerTile(	LAYERTILE_FORE,			Width,					Height,		0.5f,	FALSE,	TRUE));
 
 Vector3	CamOfs;
 		CamOfs.Zero();
@@ -631,7 +631,7 @@ int	ListSize=Layer.size();
 /*****************************************************************************/
 int		CCore::FindActionLayer()
 {
-int	Idx=FindLayer(LAYER_TYPE_TILE,CLayerTile::Action);
+int	Idx=FindLayer(LAYER_TYPE_TILE,LAYERTILE_ACTION);
 
 	return(Idx);
 }
@@ -676,7 +676,8 @@ char	ExportName[256];
 		
 		SetFileExt(Filename,ExportName,"PME");
 
-CExportPSX	Exp(ExportName);
+		LayerCount=1;
+CExportPSX	Exp(ExportName,LayerCount);
 
 /*		for (int i=0;i<LayerCount;i++)
 		{
