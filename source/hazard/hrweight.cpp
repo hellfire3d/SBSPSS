@@ -123,6 +123,13 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 		{
 			m_extension = m_maxExtension;
 		}
+		else
+		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_PULLEY, true, true );
+			}
+		}
 	}
 	else
 	{
@@ -131,6 +138,13 @@ void CNpcRisingWeightHazard::processMovement( int _frames )
 		if ( m_extension < 0 )
 		{
 			m_extension = 0;
+		}
+		else
+		{
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_PULLEY, true, true );
+			}
 		}
 	}
 
