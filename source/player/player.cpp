@@ -2611,8 +2611,8 @@ void CPlayer::shove( DVECTOR const &move )
 
 	while( xDist )
 	{
-		colHeight=CGameScene::getCollision()->getHeightFromGround(Pos.vx+xDist,Pos.vy,5);
-		if ( colHeight < 0 )
+		colHeight=CGameScene::getCollision()->getHeightFromGround(Pos.vx+xDist,Pos.vy-HEIGHT_FOR_HEAD_COLLISION,HEIGHT_FOR_HEAD_COLLISION+1);
+		if ( colHeight < HEIGHT_FOR_HEAD_COLLISION )
 		{
 			break;
 		}
@@ -2641,7 +2641,7 @@ void CPlayer::shove( DVECTOR const &move )
 		}
 	}
 
-	if(colHeight<0)
+	if(colHeight<HEIGHT_FOR_HEAD_COLLISION)
 	{
 		// Stop at the edge of the obstruction
 		int	dir,vx,cx,i;
@@ -2658,7 +2658,7 @@ void CPlayer::shove( DVECTOR const &move )
 		cx=Pos.vx;
 		for(i=0;i<vx;i++)
 		{
-			if(CGameScene::getCollision()->getHeightFromGround(cx,Pos.vy)<0)
+			if(CGameScene::getCollision()->getHeightFromGround(cx,Pos.vy-HEIGHT_FOR_HEAD_COLLISION,HEIGHT_FOR_HEAD_COLLISION+1)<HEIGHT_FOR_HEAD_COLLISION)
 			{
 				break;
 			}
