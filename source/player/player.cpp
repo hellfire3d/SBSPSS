@@ -175,7 +175,7 @@ void	CPlayer::init()
 
 	m_layerCollision=NULL;
 	
-	sActor3dHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
+	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
 	m_skel.Init(Hdr);
 	TPLoadTex(ACTORS_SPONGEBOB_TEX);
 	m_skel.setAnimDatabase(CAnimDB::GetPlayerAnimBank());
