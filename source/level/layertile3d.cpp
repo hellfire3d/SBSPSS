@@ -401,7 +401,7 @@ s16				TCount=0,QCount=0;
 
 						setShadeTex(ThisPrim,1);
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);}
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0);}
 #endif
 
 						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
@@ -447,7 +447,7 @@ s16				TCount=0,QCount=0;
 
 						setShadeTex(ThisPrim,1);
 #if		defined(_SHOW_POLYZ_)
-						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,127,0,0);}
+						if (ShowPolyz)	{setShadeTex(ThisPrim,0);setRGB0(ThisPrim,0,127,0);}
 #endif
 
 						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
