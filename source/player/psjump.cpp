@@ -96,7 +96,7 @@ void CPlayerStateJump::think(CPlayer *_player)
 	controlHeld=getPadInputHeld(_player);
 	controlDown=getPadInputDown(_player);
 
-	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&PI_JUMP)
+	if(m_jumpFrames<=metrics->m_metric[PM__MAX_JUMP_FRAMES]&&controlHeld&PI_JUMP)
 	{
 		m_jumpFrames++;
 	}
