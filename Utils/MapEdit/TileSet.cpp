@@ -90,6 +90,7 @@ void	CTileBank::Load(CFile *File,int Version)
 int		ListSize;
 GFName	RootPath=File->GetFilePath();
 GString	FilePath;
+char	FixPath[1024];
 
 		FilePath=RootPath.Drive();
 		FilePath+=RootPath.Dir();
@@ -117,6 +118,9 @@ GString	FilePath;
 				FullName.Append(c);
 			}
 			FullName.Upper();
+			_fullpath( FixPath, FullName, 1024);
+			FullName=FixPath;
+
 			CheckFilename(FullName);
 			AddTileSet(FullName);
 		}

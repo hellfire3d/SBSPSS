@@ -98,6 +98,7 @@ CView	*V=(CView*)View;
 /*********************************************************************************/
 void	CMapEditDoc::Render(CMapEditView *View)	
 {
+
 	if (View)
 		Core.Render(View);
 }
@@ -105,8 +106,10 @@ void	CMapEditDoc::Render(CMapEditView *View)
 /*********************************************************************************/
 void	CMapEditDoc::UpdateAll(CMapEditView *View)
 {
+
 	if (View)
 		Core.UpdateAll();
+
 }
 
 /*********************************************************************************/
@@ -116,7 +119,7 @@ CPoint	&XY=Core.GetCursorPos();
 CString XYStr;
 		pCmdUI->Enable();
 		if (XY.x!=-1 && XY.y!=-1)
-			XYStr.Format( "%d\t%d", XY.x,XY.y);
+			XYStr.Format( "%d   %d", XY.x,XY.y);
 		pCmdUI->SetText(XYStr); 
 }
 
@@ -144,7 +147,6 @@ void	CMapEditDoc::GUIChanged()
 {
 		Core.GUIChanged();
 		UpdateAllViews(NULL);
-//		theApp.GetMainWnd()->Invalidate();
 }
 
 /*********************************************************************************/
@@ -154,25 +156,25 @@ void	CMapEditDoc::GUIChanged()
 /*********************************************************************************/
 void	CMapEditDoc::LButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-	Core.LButtonControl(View,nFlags,point,DownFlag);
+		Core.LButtonControl(View,nFlags,point,DownFlag);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-	Core.MButtonControl(View,nFlags,point,DownFlag);
+		Core.MButtonControl(View,nFlags,point,DownFlag);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::RButtonControl(CMapEditView *View,UINT nFlags, CPoint &point,BOOL DownFlag)
 {
-	Core.RButtonControl(View,nFlags,point,DownFlag);
+		Core.RButtonControl(View,nFlags,point,DownFlag);
 }
 
 /*********************************************************************************/
 void	CMapEditDoc::MouseWheel(CMapEditView *View,UINT nFlags, short zDelta, CPoint &point)
 {
-	Core.MouseWheel(View,nFlags,zDelta,point);
+		Core.MouseWheel(View,nFlags,zDelta,point);
 }
 
 /*********************************************************************************/
