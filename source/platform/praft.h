@@ -26,6 +26,7 @@ protected:
 	virtual void		processMovement( int _frames );
 
 	u8					m_isActivated;
+	u8					m_isSinking;
 };
 
 #endif
