@@ -236,13 +236,13 @@ void CNpcSmallJellyfishEnemy::processMovementModifier( int _frames, s32 distX, s
 	s16 headingVal;
 
 	//u16 jellyfishData[5] = { 96, 192, 256, 192, 128, };
-	u16 jellyfishData[6] = { 256, 192, 96, 48, 96, 128, };
+	u16 jellyfishData[6] = { 256, 256, 96, 48, 96, 256, };
 
 	u32 dataPoint;
 
 	m_movementTimer += _frames;
 
-	if ( m_movementTimer > GameState::getOneSecondInFrames() )
+	if ( m_movementTimer > ( GameState::getOneSecondInFrames() >> 1 ) )
 	{
 		m_movementTimer = 0;
 	}
@@ -251,7 +251,7 @@ void CNpcSmallJellyfishEnemy::processMovementModifier( int _frames, s32 distX, s
 
 	if ( dataPoint != 0 )
 	{
-		dataPoint /= GameState::getOneSecondInFrames();
+		dataPoint /= ( GameState::getOneSecondInFrames() >> 1 );
 	}
 
 	m_frame = ( ( m_movementTimer * ( getFrameCount() - 1 ) << 8 ) ) / GameState::getOneSecondInFrames();
