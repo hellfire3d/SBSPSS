@@ -112,7 +112,7 @@ void CNpc::processGenericFixedPathWalk( int _frames, s32 *moveX, s32 *moveY, s32
 
 	// ignore y component of waypoint, since we are stuck to the ground
 
-	if ( m_npcPath.think2D( Pos, &distX, &distY, heading ) )
+	if ( m_npcPath.thinkFlat( Pos, &distX, &distY, heading ) )
 	{
 		// path has finished, waypoint has changed, or there are no waypoints - do not move horizontally
 
