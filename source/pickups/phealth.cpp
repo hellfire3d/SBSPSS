@@ -25,6 +25,10 @@
 #include "utils\mathtab.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -73,6 +77,7 @@ void	CBaseHealthPickup::init()
   ---------------------------------------------------------------------- */
 void	CBaseHealthPickup::collect(class CPlayer *_player)
 {
+	_player->addHealth(getHealthPoints());
 	CBasePickup::collect(_player);
 }
 
@@ -106,7 +111,6 @@ void	CBaseHealthPickup::renderPickup(DVECTOR *_pos)
 	angle=((msin(m_sin)*health_rotatescale)>>12)&4095;
 	sprites->printRotatedScaledSprite(fh,_pos->vx,_pos->vy,4096,4096,angle,PICKUPS_OT_POS);
 }
-
 
 
 
