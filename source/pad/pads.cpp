@@ -34,7 +34,11 @@ typedef struct
 	int	m_vibrationTurnedOn;
 	u8	m_intensityValue;
 } PadVibeData;
+#ifdef __USER_CDBUILD__
+static PadVibeData	s_padVibeData[2]={{true,0},{true,0}};
+#else
 static PadVibeData	s_padVibeData[2]={{false,0},{false,0}};
+#endif
 int					PadVibrationActive[2]={false,false};
 u8					PadVibrationIntensityValues[2];
 
