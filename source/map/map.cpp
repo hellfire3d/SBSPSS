@@ -469,6 +469,7 @@ void CMapScene::think(int _frames)
 			if(m_currentChapterSelection==3-1&&m_currentLevelSelection==1-1)
 			{
 				// Plankton FMA..
+				CFmaScene::selectFma(CFmaScene::FMA_SCRIPT__PLANKTON);
 				GameState::setNextScene(&FmaScene);
 			}
 			else
