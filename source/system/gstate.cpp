@@ -62,7 +62,7 @@ void GameState::think()
 			}
 		}
 	ASSERT(s_currentScene);
-	s_currentScene->think();
+	s_currentScene->think(getFramesSinceLast());
 }
 
 

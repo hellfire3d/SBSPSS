@@ -39,7 +39,7 @@ public:
 	void init();
 	void shutdown();
 	void render();
-	void think();
+	void think(int _frames);
 	char *getSceneName()			{return"PaulsScene";}
 };
 

@@ -93,9 +93,9 @@ char	*Str="Sponge\nBob\nSquare\nPants";
 }
 
 /*****************************************************************************/
-void	CGameScene::think()
+void	CGameScene::think(int _frames)
 {
-	for(int i=0;i<GameState::getFramesSinceLast();i++)
+	for(int i=0;i<_frames;i++)
 	{
 		X+=Dx; Y+=Dy;
 		if (X<0+64)		{X=0+64;	Dx=-Dx;}

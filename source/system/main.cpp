@@ -89,13 +89,17 @@ void	MainLoop()
 {
 	while (1)
 	{
+		int	frames;
+
+		frames=GameState::getFramesSinceLast();
+		
 		GameState::think();
 		GameState::render();
 
-		CSoundMediator::think(GameState::getTimeSinceLast());
+		CSoundMediator::think(frames);
 		
 #ifdef __USER_paul__
-		s_paulScene.think();
+		s_paulScene.think(frames);
 		s_paulScene.render();
 #endif
 
@@ -120,8 +124,7 @@ void	MainLoop()
 			if (PadGetDown(0) & PAD_START) SaveScreen(VidGetScreen()->Draw.clip);
 	#endif
 
-		// PKG - Moved vram viewer to SELECT on pad 2 for art dev machines
-			if (PadGetDown(0) & PAD_SELECT) VRamViewer();
+		if (PadGetDown(0) & PAD_SELECT) VRamViewer();
 #endif
 	}
 }

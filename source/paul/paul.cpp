@@ -159,7 +159,7 @@ int svol=255;
 VECTOR ppos;
 int psp=0;
 
-void CPaulScene::think()
+void CPaulScene::think(int _frames)
 {
 	int				pad;
 	int				sfxId=-1;
