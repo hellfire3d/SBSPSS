@@ -46,7 +46,7 @@ void CNpcPath::initPath()
 
 void CNpcPath::resetPath()
 {
-	currentWaypoint = NULL;
+	currentWaypoint = waypoint;
 }
 
 void CNpcPath::addWaypoint( DVECTOR newPos )

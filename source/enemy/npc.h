@@ -94,6 +94,7 @@ protected:
 		NPC_INIT_FISH_HOOK,
 		NPC_INIT_PENDULUM,
 		NPC_INIT_FIREBALL,
+		NPC_INIT_DUST_DEVIL,
 	};
 
 	enum NPC_CONTROL_FUNC
@@ -158,6 +159,7 @@ protected:
 		NPC_MOVEMENT_IRON_DOGFISH,
 		NPC_MOVEMENT_PENDULUM,
 		NPC_MOVEMENT_FIREBALL,
+		NPC_MOVEMENT_DUST_DEVIL,
 	};
 
 	enum NPC_MOVEMENT_MODIFIER_FUNC
@@ -308,6 +310,7 @@ protected:
 	void				processCloseFishHookRise( int _frames );
 	void				processPendulumMovement( int _frames );
 	void				processFireballMovement( int _frames );
+	void				processDustDevilMovement( int _frames );
 
 	// data
 

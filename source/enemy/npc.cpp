@@ -85,9 +85,9 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 	},
 
 	{	// NPC_DUST_DEVIL
-		NPC_INIT_DEFAULT,
+		NPC_INIT_DUST_DEVIL,
 		NPC_SENSOR_NONE,
-		NPC_MOVEMENT_FIXED_PATH,
+		NPC_MOVEMENT_DUST_DEVIL,
 		NPC_MOVEMENT_MODIFIER_NONE,
 		NPC_CLOSE_NONE,
 		NPC_TIMER_NONE,
@@ -495,7 +495,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 
 void CNpc::init()
 {
-	m_type = NPC_FIREBALL;
+	m_type = NPC_DUST_DEVIL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -665,6 +665,27 @@ void CNpc::init()
 			m_extension = 0;
 			m_velocity = m_data[m_type].speed;
 			m_timerTimer = GameState::getOneSecondInFrames() * 4;
+
+			break;
+		}
+
+		case NPC_INIT_DUST_DEVIL:
+		{
+			m_npcPath.initPath();
+
+			DVECTOR newPos;
+
+			newPos.vx = 100;
+			newPos.vy = 10;
+
+			m_npcPath.addWaypoint( newPos );
+
+			newPos.vx = 500;
+			newPos.vy = 10;
+
+			m_npcPath.addWaypoint( newPos );
+
+			m_npcPath.setPathType( SINGLE_USE_PATH );
 
 			break;
 		}
@@ -1180,6 +1201,13 @@ void CNpc::processMovement(int _frames)
 		case NPC_MOVEMENT_FIREBALL:
 		{
 			processFireballMovement( _frames );
+
+			break;
+		}
+
+		case NPC_MOVEMENT_DUST_DEVIL:
+		{
+			processDustDevilMovement( _frames );
 
 			break;
 		}
