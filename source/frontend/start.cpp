@@ -196,6 +196,9 @@ void CFrontEndStart::select()
 	m_state=STATE_SELECT;
 	m_selectedSlot=0;
 	m_slotDrawOffset=0;
+
+	CSoundMediator::setSong(CSoundMediator::SONG_MEMCARD2);
+	CSoundMediator::playSong();
 }
 
 /*----------------------------------------------------------------------
@@ -206,6 +209,7 @@ void CFrontEndStart::select()
   ---------------------------------------------------------------------- */
 void CFrontEndStart::unselect()
 {
+	CSoundMediator::dumpSong();
 }
 
 /*----------------------------------------------------------------------
