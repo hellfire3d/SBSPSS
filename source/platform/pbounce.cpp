@@ -94,6 +94,13 @@ void CNpcBouncePlatform::think( int _frames )
 		}
 	}
 
+	sBBox boundingBox = m_modelGfx->GetBBox();
+
+	s32 newCollisionHeight = ( ( ONE + m_vertScale ) * ( boundingBox.YMax - boundingBox.YMin ) ) >> 12;
+	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), newCollisionHeight - 2 );
+
+	calculateNonRotatedCollisionData();
+
 	CPlatformThing::think(_frames);
 }
 
