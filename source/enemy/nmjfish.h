@@ -29,6 +29,7 @@ protected:
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
 	virtual void		processShot( int _frames );
+	virtual void		collidedWith(CThing *_thisThing);
 	//void				spawnJellyfish( int _frames );
 	//virtual void		processUserCollision( CThing *thisThing );
 
@@ -44,7 +45,9 @@ protected:
 		MOTHER_JELLYFISH_CYCLE_3,
 		MOTHER_JELLYFISH_ATTACK_PLAYER_SHOCK,*/
 		MOTHER_JELLYFISH_CYCLE = 0,
-		MOTHER_JELLYFISH_ATTACK_PLAYER = 1,
+		MOTHER_JELLYFISH_BEGIN_CIRCLE = 1,
+		MOTHER_JELLYFISH_CIRCLE,
+		MOTHER_JELLYFISH_EXIT,
 	};
 
 	int					m_jellyfishCount;

@@ -81,9 +81,10 @@ void CNpcMotherJellyfishEnemy::postInit()
 
 	m_movementTimer = GameState::getOneSecondInFrames() * 5;
 	m_pulsateTimer = GameState::getOneSecondInFrames();
-	m_pauseTimer = m_maxPauseTimer = GameState::getOneSecondInFrames();
 
-	m_renderScale = 4096;
+	m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+	m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
+	m_pauseTimer = m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,156 +143,125 @@ void CNpcMotherJellyfishEnemy::setupWaypoints( sThingActor *ThisActor )
 
 void CNpcMotherJellyfishEnemy::processMovement( int _frames )
 {
-	if ( m_movementTimer <= 0 )
+	switch( m_state )
 	{
-		if ( m_pulsateTimer <= 0 )
+		case MOTHER_JELLYFISH_CYCLE:
 		{
-			if ( m_pauseTimer <= 0 )
+			if ( m_movementTimer <= 0 )
 			{
-				// fire at player
+				if ( m_pulsateTimer <= 0 )
+				{
+					if ( m_pauseTimer <= 0 )
+					{
+						// fire at player
 
-				s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
+						s16 heading = ratan2( playerYDist, playerXDist ) & 4095;
 
-				CProjectile *projectile;
-				projectile = CProjectile::Create();
-				DVECTOR newPos = Pos;
-				projectile->init( newPos, heading );
-				projectile->setGraphic( FRM__LIGHTNING2 );
+						CProjectile *projectile;
+						projectile = CProjectile::Create();
+						DVECTOR newPos = Pos;
+						projectile->init( newPos, heading );
+						projectile->setGraphic( FRM__LIGHTNING1 );
 
-				m_movementTimer = GameState::getOneSecondInFrames() * 5;
-				m_pulsateTimer = GameState::getOneSecondInFrames();
-				m_pauseTimer = m_maxPauseTimer;
+						m_movementTimer = GameState::getOneSecondInFrames() * 5;
+						m_pulsateTimer = GameState::getOneSecondInFrames();
+						m_pauseTimer = m_maxPauseTimer;
+					}
+					else
+					{
+						m_pauseTimer -= _frames;
+					}
+				}
+				else
+				{
+					m_pulsateTimer -= _frames;
+
+					m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
+					m_renderScale += ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
+				}
 			}
 			else
 			{
-				m_pauseTimer -= _frames;
+				m_movementTimer -= _frames;
+
+				s32 distX, distY;
+
+				distX = targetPos.vx - Pos.vx;
+				distY = targetPos.vy - Pos.vy;
+
+				if( abs( distX ) < 10 && abs( distY ) < 10 )
+				{
+					s32 minX, maxX, minY, maxY;
+
+					m_npcPath.getPathXExtents( &minX, &maxX );
+					m_npcPath.getPathYExtents( &minY, &maxY );
+
+					targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
+					targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+				}
+				else
+				{
+					processGenericGotoTarget( _frames, distX, distY, m_speed );
+				}
 			}
+
+			break;
 		}
-		else
-		{
-			m_pulsateTimer -= _frames;
 
-			m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
-			m_renderScale += ( ( 256 * rsin( ( ( m_pulsateTimer << 14 ) / GameState::getOneSecondInFrames() ) & 4095 ) ) >> 12 );
+		case MOTHER_JELLYFISH_BEGIN_CIRCLE:
+		{
+			s32 distX, distY;
+
+			distX = playerXDist + 70;
+			distY = playerYDist;
+
+			if ( abs( distX ) > 10 || abs( distY ) > 10 )
+			{
+				processGenericGotoTarget( _frames, distX, distY, m_speed );
+			}
+			else
+			{
+				m_state = MOTHER_JELLYFISH_CIRCLE;
+				m_extension = 0;
+			}
+
+			break;
 		}
-	}
-	else
-	{
-		m_movementTimer -= _frames;
 
-		s32 distX, distY;
-
-		distX = targetPos.vx - Pos.vx;
-		distY = targetPos.vy - Pos.vy;
-
-		if( abs( distX ) < 10 && abs( distY ) < 10 )
+		case MOTHER_JELLYFISH_CIRCLE:
 		{
-			s32 minX, maxX, minY, maxY;
+			m_extension += 64 * _frames;
 
-			m_npcPath.getPathXExtents( &minX, &maxX );
-			m_npcPath.getPathYExtents( &minY, &maxY );
+			if ( m_extension < 3072 )
+			{
+				CPlayer *player = GameScene.getPlayer();
 
-			targetPos.vx = minX + ( getRnd() % ( maxX - minX + 1 ) );
-			targetPos.vy = minY + ( getRnd() % ( maxY - minY + 1 ) );
+				DVECTOR playerPos = player->getPos();
+
+				Pos.vx = playerPos.vx + ( ( 70 * rcos( m_extension ) ) >> 12 );
+				Pos.vy = playerPos.vy + ( ( 70 * rsin( m_extension ) ) >> 12 );
+			}
+			else
+			{
+				m_state = MOTHER_JELLYFISH_EXIT;
+			}
+
+			break;
 		}
-		else
+
+		case MOTHER_JELLYFISH_EXIT:
 		{
-			s16 headingToTarget = ratan2( distY, distX );
-			s16 decDir, incDir;
-			s16 moveDist;
-			s16 maxTurnRate = m_data[m_type].turnSpeed;
-			s32 moveX, moveY;
+			Pos.vx += 8 * _frames;
 
-			decDir = m_heading - headingToTarget;
+			DVECTOR	offset = CLevel::getCameraPos();
 
-			if ( decDir < 0 )
+			if ( Pos.vx - offset.vx > VidGetScrW() )
 			{
-				decDir += ONE;
+				m_isActive = false;
+				setToShutdown();
 			}
 
-			incDir = headingToTarget - m_heading;
-
-			if ( incDir < 0 )
-			{
-				incDir += ONE;
-			}
-
-			if ( decDir < incDir )
-			{
-				moveDist = -decDir;
-			}
-			else
-			{
-				moveDist = incDir;
-			}
-
-			if ( moveDist < -maxTurnRate )
-			{
-				moveDist = -maxTurnRate;
-			}
-			else if ( moveDist > maxTurnRate )
-			{
-				moveDist = maxTurnRate;
-			}
-
-			m_heading += moveDist;
-			m_heading &= 4095;
-
-			s32 preShiftX = _frames * m_speed * rcos( m_heading );
-			s32 preShiftY = _frames * m_speed * rsin( m_heading );
-
-			moveX = preShiftX >> 12;
-			if ( !moveX && preShiftX )
-			{
-				moveX = preShiftX / abs( preShiftX );
-			}
-
-			if ( distX > 0 )
-			{
-				if ( moveX > distX )
-				{
-					moveX = distX;
-				}
-			}
-			else if ( distX < 0 )
-			{
-				if ( moveX < distX )
-				{
-					moveX = distX;
-				}
-			}
-			else
-			{
-				moveX = 0;
-			}
-
-			moveY = preShiftY >> 12;
-			if ( !moveY && preShiftY )
-			{
-				moveY = preShiftY / abs( preShiftY );
-			}
-
-			if ( distY > 0 )
-			{
-				if ( moveY > distY )
-				{
-					moveY = distY;
-				}
-			}
-			else if ( distY < 0 )
-			{
-				if ( moveY < distY )
-				{
-					moveY = distY;
-				}
-			}
-			else
-			{
-				moveY = 0;
-			}
-
-			Pos.vx += moveX;
-			Pos.vy += moveY;
+			break;
 		}
 	}
 
@@ -582,8 +552,6 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 	{
 		case NPC_GENERIC_HIT_CHECK_HEALTH:
 		{
-			// do not allow to die, must catch in net
-
 			if ( m_health > 0 )
 			{
 				m_health -= 5;
@@ -591,26 +559,27 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 				m_renderScale = 2048 + ( ( ( 4096 - 2048 ) * m_health ) / m_data[m_type].initHealth );
 				m_speed = m_data[m_type].speed + ( ( 3 * ( m_data[m_type].initHealth - m_health ) ) / m_data[m_type].initHealth );
 				m_maxPauseTimer = ( GameState::getOneSecondInFrames() * m_health ) / m_data[m_type].initHealth;
+
+				m_state = MOTHER_JELLYFISH_CYCLE;
 			}
-
-			m_state = NPC_GENERIC_HIT_RECOIL;
-
-			m_animPlaying = true;
-			m_animNo = m_data[m_type].recoilAnim;
-			m_frame = 0;
-
-			break;
-		}
-
-		case NPC_GENERIC_HIT_RECOIL:
-		{
-			if ( !m_animPlaying )
+			else
 			{
-				m_state = 0;
-				m_controlFunc = NPC_CONTROL_MOVEMENT;
+				m_state = MOTHER_JELLYFISH_BEGIN_CIRCLE;
 			}
+
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
 
 			break;
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcMotherJellyfishEnemy::collidedWith(CThing *_thisThing)
+{
+	if ( m_state == MOTHER_JELLYFISH_CYCLE )
+	{
+		CNpcEnemy::collidedWith( _thisThing );
 	}
 }
