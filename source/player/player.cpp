@@ -173,8 +173,8 @@ int s_health;
 int s_screenPos;
 DVECTOR	m_cameraScrollPos={0,600};
 
-int SCREEN_GEOM_CENTRE_X=248;
-int SCREEN_GEOM_CENTRE_Y=129;
+int SCREEN_GEOM_CENTRE_X=256;
+int SCREEN_GEOM_CENTRE_Y=107;
 int SCREEN_GEOM_PLAYER_OFS_X=9;
 int SCREEN_GEOM_PLAYER_OFS_Y=-26;
 
@@ -210,6 +210,8 @@ CPlayerMode	*CPlayer::s_playerModes[NUM_PLAYERMODES]=
 	&PLAYERMODEDEAD,			// PLAYER_MODE_DEAD
 	&PLAYERMODEFLY,				// PLAYER_MODE_FLY
 };
+
+int	sbanimspeed=1;
 
 
 /*----------------------------------------------------------------------
@@ -463,8 +465,12 @@ m_fontBank->print(40,40,posBuf);
 //!!		m_actorGfx.Render(this);
 //!!		m_currentPlayerModeClass->render();
 //!!		SetGeomOffset(SCREEN_GEOM_CENTRE_X,SCREEN_GEOM_CENTRE_Y);
-		DVECTOR	Pos={256,128};
-		m_actorGfx->Render(Pos,m_animNo,m_animFrame,0);
+		DVECTOR	Pos=
+		{
+			SCREEN_GEOM_CENTRE_X+m_playerScreenGeomPos.vx-m_actorGfx->getFrameWidth(m_animNo,m_animFrame/2),
+			SCREEN_GEOM_CENTRE_Y+m_playerScreenGeomPos.vy
+		};
+		m_actorGfx->Render(Pos,m_animNo,m_animFrame>>sbanimspeed,m_facing==FACING_RIGHT?0:1);
 		m_currentPlayerModeClass->render();
 	}
 
@@ -616,11 +622,7 @@ int CPlayer::getFacing()
 }
 void CPlayer::setFacing(int _facing)
 {
-	if(m_facing!=_facing)
-	{
-		m_facing=_facing;
-//!!		m_actorGfx.setDir(_facing);
-	}
+	m_facing=_facing;
 }
 
 
@@ -672,7 +674,7 @@ void CPlayer::setAnimFrame(int _animFrame)
 }
 int CPlayer::getAnimFrameCount()
 {
-	return m_actorGfx->getFrameCount(m_animNo);
+	return m_actorGfx->getFrameCount(m_animNo)<<sbanimspeed;
 }
 int CPlayer::getAnimNo()
 {
@@ -867,147 +869,6 @@ PLAYERINPUT CPlayer::readPadInput()
 
 	return input;
 }
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void CPlayer::clearPlatform()
-{
-	m_prevOnPlatform = m_onPlatform;
-	m_onPlatform = false;
-}
-*/
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-/*
-void CPlayer::setPlatform( CThing *newPlatform )
-{
-	int colHeight;
-	int platformHeight;
-	DVECTOR newPos;
-	DVECTOR testPos;
-
-	m_platform = newPlatform;
-	m_onPlatform = getCentreCollision();
-
-	if ( m_onPlatform )
-	{
-		newPos = getNewCollidedPos();
-
-		colHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
-
-		platformHeight = newPos.vy - Pos.vy;
-
-		if ( platformHeight > colHeight )
-		{
-			m_onPlatform = false;
-		}
-		else
-		{
-			colHeight = platformHeight;
-		}
-	}
-
-	if ( m_onPlatform )
-	{
-		// have collided with a platform
-
-		m_moveVel.vy=0;
-		Pos = newPos;
-
-		if ( !m_prevOnPlatform )
-		{
-//			if( m_currentMode != PLAYER_MODE_BALLOON )
-			{
-				m_fallFrames=0;
-
-				if(m_currentState==STATE_BUTTFALL)
-				{
-					// Landed from a butt bounce
-					setState(STATE_BUTTLAND);
-				}
-				else if(m_currentState==STATE_FALLFAR)
-				{
-					// Landed from a painfully long fall
-					setState(STATE_IDLE);
-					takeDamage(DAMAGE__FALL);
-					m_moveVel.vx=0;
-					CSoundMediator::playSfx(CSoundMediator::SFX_SPONGEBOB_LAND_AFTER_FALL);
-				}
-				else if(m_moveVel.vx)
-				{
-					// Landed from a jump with x movement
-					setState(STATE_RUN);
-				}
-				else
-				{
-					// Landed from a jump with no x movement
-					setState(STATE_IDLE);
-					setAnimNo(ANIM_SPONGEBOB_JUMPEND);
-				}
-			}
-		}
-		else
-		{
-			//Pos.vx += m_platform->getPos().vx - m_prevPlatformPos.vx;
-		}
-
-		// Move the camera offset
-		m_playerScreenGeomPos.vx=SCREEN_GEOM_PLAYER_OFS_X+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vx)>>8);
-		m_playerScreenGeomPos.vy=SCREEN_GEOM_PLAYER_OFS_Y+((MAP2D_BLOCKSTEPSIZE*m_cameraScrollPos.vy)>>8);
-		m_cameraOffset.vx=MAP2D_CENTRE_X+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vx))>>8);
-		m_cameraOffset.vy=MAP2D_CENTRE_Y+((MAP2D_BLOCKSTEPSIZE*(-m_cameraScrollPos.vy))>>8);
-
-
-		m_cameraPos.vx=Pos.vx+m_cameraOffset.vx;
-		m_cameraPos.vy=Pos.vy+m_cameraOffset.vy;
-
-
-		// Limit camera scroll to the edges of the map
-		if(m_cameraPos.vx<0)
-		{
-			m_playerScreenGeomPos.vx+=m_cameraPos.vx;
-			m_cameraPos.vx=0;
-			m_cameraScrollDir=0;
-		}
-		else if(m_cameraPos.vx>m_mapCameraEdges.vx)
-		{
-			m_playerScreenGeomPos.vx-=m_mapCameraEdges.vx-m_cameraPos.vx;
-			m_cameraPos.vx=m_mapCameraEdges.vx;
-			m_cameraScrollDir=0;
-		}
-		if(m_cameraPos.vy<0)
-		{
-			m_playerScreenGeomPos.vy+=m_cameraPos.vy;
-			m_cameraPos.vy=0;
-			m_cameraScrollDir=0;
-		}
-		else if(m_cameraPos.vy>m_mapCameraEdges.vy)
-		{
-			m_playerScreenGeomPos.vy-=m_mapCameraEdges.vy-m_cameraPos.vy;
-			m_cameraPos.vy=m_mapCameraEdges.vy;
-			m_cameraScrollDir=0;
-		}
-
-		this->updateCollisionArea();
-
-		m_prevPlatformPos = m_platform->getPos();
-	}
-	else
-	{
-		newPlatform->removeChild( this );
-	}
-}
-*/
 
 /*----------------------------------------------------------------------
 	Function:

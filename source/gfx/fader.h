@@ -36,6 +36,7 @@ public:
 	{
 		BUBBLE_FADE,
 		BLACK_FADE,
+		WHITE_FADE,
 	} FADE_STYLE;
 
 	static void			render();

@@ -16,12 +16,18 @@
 #include	"level\layertile3d.h"
 #include	"level\layercollision.h"
 
+#include "gfx\font.h"
+
 #ifndef	__TRIGGERS_TLEVEXIT_H__
 #include "triggers\tlevexit.h"
 #endif
 
 #ifndef	__SOUND_SOUND_H__
 #include "sound\sound.h"
+#endif
+
+#ifndef __VID_HEADER_
+#include "system\vid.h"
 #endif
 
 #include	"pad\pads.h"
@@ -384,6 +390,48 @@ void 	CLevel::init()
 			if (s_globalLevelSelectThing>=LvlTableSize) s_globalLevelSelectThing=0;
 		}
 
+		// Loading screen
+		if(s_globalLevelSelectThing%12==0)
+		{
+			FileEquate	loadingScreens[6]=
+			{
+				LOADINGSCREENS_PINEAPPLE_GFX,
+				LOADINGSCREENS_CULTURE_GFX,
+				LOADINGSCREENS_PICKLES_GFX,
+				LOADINGSCREENS_MONITOR_GFX,
+				LOADINGSCREENS_KARATE_GFX,
+				LOADINGSCREENS_PIZZA_GFX,
+			};
+			FontBank	font;
+			int			chapter,level;
+			char		buf[128];
+			u8			*s_image;
+			int			i;
+
+			font.initialise(&standardFont);
+			font.setJustification(FontBank::JUST_CENTRE);
+			chapter=s_globalLevelSelectThing/(12*4);
+			if(chapter>5)chapter=5;
+			level=((s_globalLevelSelectThing%(12*4))/12);
+			sprintf(buf,"LOADING CHAPTER %d LEVEL %d",chapter+1,level+1);
+			s_image=CFileIO::loadFile(loadingScreens[chapter]);
+			ASSERT(s_image);
+			SetScreenImage(s_image);
+			for(i=0;i<2;i++)
+			{
+				font.print(256,128,buf);
+				PrimDisplay();
+				VSync(0);
+				VidSwapDraw();
+			}
+			ClearScreenImage();
+			MemFree(s_image);
+			VSync(20);
+			font.dump();
+		}
+		
+		
+		
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
 			TileLayers[i]=0;

@@ -369,11 +369,11 @@ SOURCE=..\..\..\source\game\pause.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\source\gfx\actorpool.cpp
+SOURCE=..\..\..\source\gfx\actor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\gfx\actorpool.h
+SOURCE=..\..\..\source\gfx\actor.h
 # End Source File
 # Begin Source File
 
@@ -426,22 +426,6 @@ SOURCE=..\..\..\source\gfx\prim.h
 # Begin Source File
 
 SOURCE=..\..\..\source\gfx\primplus.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gfx\skel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gfx\skel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gfx\skelspng.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\source\gfx\skelspng.h
 # End Source File
 # Begin Source File
 

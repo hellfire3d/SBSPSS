@@ -142,6 +142,7 @@ void CFader::render()
 					}
 
 					case BLACK_FADE:
+					case WHITE_FADE:
 					{
 						POLY_F4		*f4;
 						POLY_FT3	*ft3;
@@ -155,7 +156,7 @@ void CFader::render()
 						setPolyFT3(ft3);
 						setShadeTex(ft3,1);
 						setSemiTrans(ft3,1);
-						ft3->tpage=(2<<5);
+						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1<<5);
 						setXY3(ft3,512,512,512,512,512,512);
 						AddPrimToList(ft3,0);
 						break;
@@ -199,6 +200,7 @@ void CFader::render()
 					}
 
 					case BLACK_FADE:
+					case WHITE_FADE:
 					{
 						POLY_F4		*f4;
 						POLY_FT3	*ft3;
@@ -214,7 +216,7 @@ void CFader::render()
 						setPolyFT3(ft3);
 						setShadeTex(ft3,1);
 						setSemiTrans(ft3,1);
-						ft3->tpage=(2<<5);
+						ft3->tpage=(s_fadeStyle==BLACK_FADE?2:1<<5);
 						setXY3(ft3,512,512,512,512,512,512);
 						AddPrimToList(ft3,0);
 						break;
@@ -236,6 +238,9 @@ void CFader::render()
 						break;
 					case BLACK_FADE:
 						setRGB0(f4,0,0,0);
+						break;
+					case WHITE_FADE:
+						setRGB0(f4,255,255,255);
 						break;
 				}
 				AddPrimToList(f4,0);
@@ -291,6 +296,7 @@ void CFader::think(int _frames)
 			}
 
 			case BLACK_FADE:
+			case WHITE_FADE:
 			{
 				if(s_fadeValue<0)
 				{
@@ -331,6 +337,7 @@ void CFader::setFadingOut(FADE_STYLE _style)
 			s_fadeValue=256+FADE_BORDER_SIZE;
 			break;
 		case BLACK_FADE:
+		case WHITE_FADE:
 			s_fadeValue=255;
 			break;
 	}
@@ -354,6 +361,7 @@ void CFader::setFadingIn(FADE_STYLE _style)
 			s_fadeValue=256+FADE_BORDER_SIZE;
 			break;
 		case BLACK_FADE:
+		case WHITE_FADE:
 			s_fadeValue=255;
 			break;
 	}
