@@ -122,7 +122,7 @@ void CFrontEndStart::render()
 	setRGB1(g4, 0, 0,50);
 	setRGB2(g4, 0,50, 0);
 	setRGB3(g4,50, 0,50);
-	AddPrimToList(g4,1001);
+	AddPrimToList(g4,MAX_OT-1);
 }
 
 /*----------------------------------------------------------------------
