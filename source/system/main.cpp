@@ -117,7 +117,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CBubicleFactory::init();
 
-	CAnimDB::LoadAnims();
+	CAnimDB::Init();
+	CAnimDB::Load(ANIMS_PLAYER_ABK);
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();
