@@ -54,7 +54,7 @@ s32 CNpc::playerYDistSqr;
 
 void CNpc::init()
 {
-	m_type = NPC_ANEMONE_3;
+	m_type = NPC_FLAMING_SKULL;
 
 	m_heading = m_fireHeading = 0;
 	m_movementTimer = 0;
@@ -339,7 +339,7 @@ void CNpc::think(int _frames)
 
 void CNpc::detectCollisionWithPlayer()
 {
-	if ( playerXDistSqr + playerYDistSqr < 400 )
+	if ( m_data[m_type].detectCollision && playerXDistSqr + playerYDistSqr < 400 )
 	{
 		// close enough for collision
 

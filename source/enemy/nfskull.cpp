@@ -56,6 +56,7 @@ void CNpc::processCloseFlamingSkullAttack( int _frames )
 		if ( distXSqr + distYSqr < 100 )
 		{
 			m_state = FLAMING_SKULL_ATTACK;
+			m_heading = m_fireHeading;
 
 			m_controlFunc = NPC_CONTROL_MOVEMENT;
 			m_timerFunc = NPC_TIMER_ATTACK_DONE;

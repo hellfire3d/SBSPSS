@@ -32,6 +32,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		true,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -45,6 +46,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -58,6 +60,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -71,6 +74,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -84,6 +88,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -97,6 +102,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		40,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -110,6 +116,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -123,6 +130,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -136,6 +144,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -149,6 +158,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -162,6 +172,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -175,6 +186,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -188,6 +200,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -200,6 +213,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		NPC_TIMER_NONE,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -213,6 +227,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		5,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -226,6 +241,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -239,6 +255,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		1,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -252,6 +269,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -265,6 +283,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -278,6 +297,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -291,6 +311,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		1,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -304,6 +325,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -317,6 +339,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -330,6 +353,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -343,6 +367,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -356,6 +381,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -369,6 +395,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		512,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -382,6 +409,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -395,6 +423,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		64,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -408,6 +437,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		2,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -421,6 +451,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		0,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -434,6 +465,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		128,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -447,6 +479,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -460,6 +493,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		64,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -473,6 +507,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -486,6 +521,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -499,6 +535,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -512,6 +549,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		256,
+		false,
 		DAMAGE__LAVA,
 	},
 
@@ -525,6 +563,7 @@ CNpc::NPC_DATA CNpc::m_data[NPC_UNIT_TYPE_MAX] =
 		false,
 		3,
 		2048,
+		false,
 		DAMAGE__LAVA,
 	},
 };

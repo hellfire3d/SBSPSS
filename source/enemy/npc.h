@@ -246,6 +246,7 @@ protected:
 		bool							canTalk;
 		u8								speed;
 		u16								turnSpeed;
+		bool							detectCollision;
 		DAMAGE_TYPE						damageToUserType;
 	}
 	NPC_DATA;
