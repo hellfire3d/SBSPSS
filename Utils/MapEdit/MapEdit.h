@@ -33,6 +33,7 @@ public:
 	{
 		return(CurrentDoc);
 	}
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CMapEditApp)

@@ -16,44 +16,6 @@
 #include	"Layer.h"
 #include	"Utils.h"
 
-/*
-Core Functionality
-
-Layers
-	Gfx Layers
-		Background Layer
-		Mid Layer
-		Action Layer
-		Fore Layer
-Tile Bank
-	Tile Set
-	Core
-	GUI
-
-Map Data
-	Core
-
-Project
-	Load Project
-	Save Project
-
-Output
-	PSX Data
-		Map Data
-			Level Data
-		Tile Data
-			Tile Blocks
-			Textures
-	AGB Data
-		Map Data
-			Level Data
-		Tile Data
-			Textures
-
-Edit Functions
-	Paint
-	Tile Mirror
-*/
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -70,19 +32,10 @@ CLayer::~CLayer()
 /*****************************************************************************/
 void	CLayer::Render(Vec &MapPos,BOOL Is3d)
 {
-
-/*
 	if (Is3d && CanRender3d())
 		Render3d(MapPos);
 		else
 		Render2d(MapPos);
-*/
-Vec		ZeroPos(0,0,0);
-	if (Is3d && CanRender3d())
-		Render3d(ZeroPos);
-		else
-		Render2d(ZeroPos);
-
 }
 
 /*****************************************************************************/
@@ -120,7 +73,6 @@ float	XYDiv=GetLayerZPosDiv();
 		asd+=0.5;
 
 		glCallList(TestTile);
-
 }
 
 

@@ -35,6 +35,8 @@ BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_TOOLBAR_LAYERBAR, OnToolbarLayerbar)
+	ON_COMMAND(ID_TOOLBAR_TILEPALETTE, OnToolbarTilepalette)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -44,7 +46,7 @@ END_MESSAGE_MAP()
 CMapEditView::CMapEditView()
 {
 CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
-			LayerBar=Frm->GetLayerBar();
+CDialogBar	*LayerBar=Frm->GetLayerBar();
 	
 }
 
@@ -69,7 +71,6 @@ void CMapEditView::OnCreateGL()
 		glClearDepth(1.0f);         // Depth Buffer Setup
 		glEnable(GL_DEPTH_TEST);       // Enables Depth Testing
 		glDepthFunc(GL_LEQUAL);        // The Type Of Depth Testing To Do
-//		glDepthRange(-100000,+100000);
 		glEnable(GL_LIGHT0);        // Quick And Dirty Lighting (Assumes Light0 Is SetUp)
 		glEnable(GL_LIGHTING);        // Enable Lighting
 		glEnable(GL_COLOR_MATERIAL);      // Enable Material Coloring
@@ -79,27 +80,6 @@ void CMapEditView::OnCreateGL()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void CMapEditView::OnSizeGL(int cx, int cy)
-{
-// set correspondence between window and OGL viewport
-		glViewport(0,0,cx,cy);
-
-}
-
-void	CMapEditView::UpdateCamera()
-{
-//Vec	&CamPos=Core
-// update the camera
- 		glPushMatrix();
-			glMatrixMode(GL_PROJECTION);
-				glLoadIdentity();
-				gluPerspective(40.0,m_dAspectRatio,0.1f, 10.0f);
-				glTranslatef(0.0f,0.0f,-4.f);
-			glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-
-}
 /////////////////////////////////////////////////////////////////////////////
 void CMapEditView::OnDrawGL()
 {
@@ -150,6 +130,8 @@ void CMapEditView::UpdateAll()
 /*********************************************************************************/
 void CMapEditView::UpdateLayerBar()
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CDialogBar	*LayerBar=Frm->GetLayerBar();
 CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 int			CurSel=Dlg->GetCurSel();
 
@@ -167,6 +149,8 @@ int			CurSel=Dlg->GetCurSel();
 /*********************************************************************************/
 int	CMapEditView::GetLayerCurSel()
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CDialogBar	*LayerBar=Frm->GetLayerBar();
 CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 		return(Dlg->GetCurSel());
 
@@ -175,6 +159,8 @@ CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 /*********************************************************************************/
 int	CMapEditView::GetLayerCount()
 {
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CDialogBar	*LayerBar=Frm->GetLayerBar();
 CListBox	*Dlg=(CListBox *)LayerBar->GetDlgItem(IDC_LAYERBAR_LIST);
 	return(Dlg->GetCount());
 
@@ -193,3 +179,13 @@ void CMapEditView::OnRButtonUp(UINT nFlags, CPoint point)				{Core.RButtonContro
 void CMapEditView::OnMouseMove(UINT nFlags, CPoint point)				{Core.MouseMove(nFlags, point);}
 
 
+
+void CMapEditView::OnToolbarLayerbar() 
+{
+	Core.ToggleLayerPalette();	
+}
+
+void CMapEditView::OnToolbarTilepalette() 
+{
+	Core.ToggleTileView();	
+}

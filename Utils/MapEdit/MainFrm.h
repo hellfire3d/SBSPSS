@@ -10,8 +10,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#include	"LayerBar.h"
-
 class CMainFrame : public CMDIFrameWnd
 {
 	DECLARE_DYNAMIC(CMainFrame)
@@ -20,7 +18,9 @@ public:
 
 // Attributes
 public:
+	CToolBar	*GetToolBar()	{return(&m_wndToolBar);}
 	CDialogBar	*GetLayerBar()	{return(&m_wndLayerBar);}
+	CDialogBar	*GetTileBar()	{return(&m_wndTileBar);}
 // Operations
 public:
 
@@ -42,14 +42,12 @@ protected:  // control bar embedded members
 	CStatusBar	m_wndStatusBar;
 	CToolBar	m_wndToolBar;
 	CDialogBar	m_wndLayerBar;
-
+	CDialogBar	m_wndTileBar;
 
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnToolbarLayerbar();
-	afx_msg void OnToolbarTilepalette();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -179,10 +179,19 @@ END
 IDD_LAYERBAR DIALOGEX 0, 0, 92, 92
 STYLE DS_MODALFRAME | WS_CHILD
 EXSTYLE WS_EX_TOOLWINDOW
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     LISTBOX         IDC_LAYERBAR_LIST,5,5,80,85,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_TILEBAR DIALOGEX 0, 0, 186, 12
+STYLE WS_CHILD
+EXSTYLE WS_EX_TOOLWINDOW
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_TILETOOLBAR_COMBO,0,0,170,14,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -252,8 +261,37 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 85
     END
+
+    IDD_TILEBAR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 5
+    END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_TILEBAR DLGINIT
+BEGIN
+    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
+0x0031, 
+    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
+0x0032, 
+    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
+0x0033, 
+    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
+0x0034, 
+    IDC_TILETOOLBAR_COMBO, 0x403, 2, 0
+0x0035, 
+    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////

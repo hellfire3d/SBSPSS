@@ -33,40 +33,51 @@ public:
 		CCore();
 		~CCore();
 // Control
-		void			LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-		void			MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-		void			RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
-		void			MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
-		void			MouseMove(UINT nFlags, CPoint &point);
+		void				LButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void				MButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void				RButtonControl(UINT nFlags, CPoint &point,BOOL DownFlag);
+		void				MouseWheel(UINT nFlags, short zDelta, CPoint &pt);
+		void				MouseMove(UINT nFlags, CPoint &point);
 
 // Blah
-		void			Init(CMapEditView *Wnd);
-		void			Render();
-		void			UpdateView(float XOfs,float YOfs,float ZOfs);
-		void			SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
+		void				Init(CMapEditView *Wnd);
+		void				Render();
+		void				UpdateView(float XOfs,float YOfs,float ZOfs);
+		void				SetMouseMode(MOUSE_MODE CurrentMode,MOUSE_MODE NewMode);		
 
-		Vec				&GetMapPos()	{return(MapPos);}
+		Vec					&GetCamPos()	{return(CamPos);}
+
+		void				SetTileView(BOOL f);
+		BOOL				GetTileView()				{return(TileViewFlag);}
+		void				ToggleTileView();
+
+		void				SetLayerPalette(BOOL f);
+		BOOL				GetLayerPalette()				{return(LayerPaletteFlag);}
+		void				ToggleLayerPalette();
 
 // Layers
-		void			LayerSetActive(int Layer);
-		int				LayerGetActive();
-		CLayer			*LayerGet(int i);
+		void				LayerSetActive(int Layer);
+		int					LayerGetActive();
+		CLayer				*LayerGet(int i);
 
 // Tex Cache
-		CTexCache		&GetTexCache()	{return(TexCache);}
+		CTexCache			&GetTexCache()	{return(TexCache);}
 
 
 private:
 		CMapEditView			*ParentWindow;	
 		MOUSE_MODE				MouseMode;
 		CPoint					CurrentMousePos,LastMousePos;
-		Vec						MapPos;
+		Vec						CamPos;
 
 		CLayer					*Layers[LAYER_TYPE_MAX];
 		int						ActiveLayer;
 
 		std::vector<CTileSet>	TileSet;
 		CTexCache				TexCache;
+
+		BOOL					TileViewFlag;
+		BOOL					LayerPaletteFlag;
 
 
 };

@@ -13,6 +13,7 @@
 #include	"MapEdit.h"
 #include	"MapEditDoc.h"
 #include	"MapEditView.h"
+#include	"MainFrm.h"
 
 #include	"Core.h"
 #include	"Layer.h"
@@ -48,9 +49,9 @@ void	CCore::Init(CMapEditView *Wnd)
 {
 	ParentWindow=Wnd;
 	ActiveLayer=0;
-	MapPos.x=MapPos.y=MapPos.z=0;
+	CamPos.x=CamPos.y=CamPos.z=0;
 	UpdateView(0,0,0);
-	CTileSet	NewSet("c:/temp/1/test.gin",this);
+	CTileSet	NewSet("c:/temp/2/test.gin",this);
 	TileSet.push_back(NewSet);
 }
 
@@ -61,24 +62,30 @@ void	CCore::Init(CMapEditView *Wnd)
 /*****************************************************************************/
 void	CCore::Render()
 {
-	
-	for (int i=0;i<LAYER_TYPE_MAX;i++)
+//	theApp.SetTileView(TRUE);
+	if (GetTileView())
 	{
-		if (i==LAYER_TYPE_ACTION)
-			glEnable(GL_DEPTH_TEST);
-
-		Layers[i]->Render(MapPos,Test3dFlag);
-		glDisable(GL_DEPTH_TEST);
 	}
-		ParentWindow->Invalidate();
+	else
+	{
+		for (int i=0;i<LAYER_TYPE_MAX;i++)
+		{
+			if (i==LAYER_TYPE_ACTION)
+				glEnable(GL_DEPTH_TEST);
+
+			Layers[i]->Render(CamPos,Test3dFlag);
+			glDisable(GL_DEPTH_TEST);
+		}
+	}
+//		ParentWindow->Invalidate();
 }
 
 
 /*****************************************************************************/
 void	CCore::UpdateView(float XOfs,float YOfs,float ZOfs)
 {
-		MapPos=MapPos+Vec(XOfs,YOfs,ZOfs);
-		if (MapPos.z>-1) MapPos.z=-1;
+		CamPos=CamPos+Vec(XOfs,YOfs,ZOfs);
+		if (CamPos.z>-1) CamPos.z=-1;
 
 		ParentWindow->Invalidate();
 }
@@ -130,8 +137,8 @@ float	YOfs=0;
 			RECT	ThisRect;
 
 			ParentWindow->GetWindowRect(&ThisRect);
-			XS=MapPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
-			YS=MapPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			XS=CamPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
+			YS=CamPos.z*2;//*Layers[ActiveLayer]->GetLayerZPos();
 			XS/=((ThisRect.right-ThisRect.left));
 			YS/=((ThisRect.bottom-ThisRect.top));
 	
@@ -171,5 +178,44 @@ CLayer	*CCore::LayerGet(int i)
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+void	CCore::SetTileView(BOOL f)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CToolBar	*ToolBar=Frm->GetToolBar();
 
+			TileViewFlag=f;
+			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_TILEPALETTE,TileViewFlag);
+	
+}
+
+/*****************************************************************************/
+void	CCore::ToggleTileView()
+{
+	SetTileView(!TileViewFlag);
+}
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+void	CCore::SetLayerPalette(BOOL f)
+{
+CMainFrame	*Frm=(CMainFrame*)AfxGetApp()->GetMainWnd();
+CToolBar	*ToolBar=Frm->GetToolBar();
+CDialogBar	*LayerPalette=Frm->GetLayerBar();
+
+			LayerPaletteFlag=f;
+			ToolBar->GetToolBarCtrl().PressButton(ID_TOOLBAR_LAYERBAR,LayerPaletteFlag);
+			Frm->ShowControlBar(LayerPalette, LayerPaletteFlag, FALSE);	
+}
+
+/*****************************************************************************/
+void	CCore::ToggleLayerPalette()
+{
+		SetLayerPalette(!LayerPaletteFlag);
+}
+
+/*****************************************************************************/
+
+	
 

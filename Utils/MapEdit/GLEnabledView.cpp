@@ -665,7 +665,7 @@ void CGLEnabledView::OnSizeGL(int cx, int cy)
  		glPushMatrix();
 			glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
-				gluPerspective(40.0,m_dAspectRatio,0.1f, 10.0f);
+				gluPerspective(40.0,m_dAspectRatio,0.1f, 100.0f);
 				glTranslatef(0.0f,0.0f,-4.f);
 			glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
