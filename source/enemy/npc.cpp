@@ -41,7 +41,6 @@
 #include "game\convo.h"
 #endif
 
-
 #include "Gfx\actor.h"
 
 #ifndef __VID_HEADER_
@@ -180,131 +179,6 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Friend NPCs
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFriend::init()
-{
-	CNpcThing::init();
-
-	Pos.vx = 100;
-	Pos.vy = 100;
-
-	m_extension = EXTEND_RIGHT;
-
-	// temporary
-	m_actorGfx=CActorPool::GetActor(ACTORS_CLAM_SBK);
-
-	//m_animPlaying = true;
-	m_animNo = 0;
-	m_frame = 0;
-	m_reversed = false;
-
-	DVECTOR ofs = getCollisionSize();
-
-	m_drawOffset.vx = 0;
-	m_drawOffset.vy = -( ofs.vy >> 1 );
-
-	setCollisionCentreOffset( 0, -( ofs.vy >> 1 ) );
-
-	//m_spriteBank=new ("enemy sprites") SpriteBank();
-	//m_spriteBank->load(UI_UIGFX_SPR);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFriend::shutdown()
-{
-	//m_spriteBank->dump();		delete m_spriteBank;
-
-	delete m_actorGfx;
-	CNpcThing::shutdown();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFriend::think(int _frames)
-{
-	CNpcThing::think(_frames);
-
-	switch( m_data[m_type].movementFunc )
-	{
-		case NPC_FRIEND_MOVEMENT_GARY:
-			processGaryMovement( _frames );
-
-			break;
-
-		case NPC_FRIEND_MOVEMENT_STATIC:
-		default:
-			break;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFriend::render()
-{
-	CNpcThing::render();
-
-	// Render
-	DVECTOR renderPos;
-	DVECTOR	offset = CLevel::getCameraPos();
-
-	renderPos.vx = Pos.vx - offset.vx;
-	renderPos.vy = Pos.vy - offset.vy;
-
-	if ( renderPos.vx >= 0 && renderPos.vx <= VidGetScrW() )
-	{
-		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
-		{
-			m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CNpcFriend::processEvent( GAME_EVENT evt, CThing *sourceThing )
-{
-	switch( evt )
-	{
-		case USER_REQUEST_TALK_EVENT:
-		{
-			if ( m_data[this->m_type].canTalk )
-			{
-				DVECTOR sourcePos;
-				s32 xDiffSqr, yDiffSqr;
-
-				// check talk distance
-
-				sourcePos = sourceThing->getPos();
-
-				xDiffSqr = this->Pos.vx - sourcePos.vx;
-				xDiffSqr *= xDiffSqr;
-
-				yDiffSqr = this->Pos.vy - sourcePos.vy;
-				yDiffSqr *= yDiffSqr;
-
-				if ( xDiffSqr + yDiffSqr < 10000 )
-				{
-					if( !CConversation::isActive() )
-					{
-						CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
-					}
-				}
-			}
-
-			break;
-		}
-
-		default:
-			// ignore
-
-			break;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Enemy NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -314,7 +188,6 @@ s32 CNpcEnemy::playerXDistSqr;
 s32 CNpcEnemy::playerYDistSqr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
 {
@@ -322,6 +195,7 @@ CNpcEnemy::NPC_UNIT_TYPE CNpcEnemy::getTypeFromMapEdit( u16 newType )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 CNpcEnemy	*CNpcEnemy::Create(sThingActor *ThisActor)
 {
 	CNpcEnemy *enemy;

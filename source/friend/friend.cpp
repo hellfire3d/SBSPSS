@@ -31,6 +31,10 @@
 #include	"utils\utils.h"
 #endif
 
+#ifndef __FRIEND_FSQUID_H__
+#include "friend\fsquid.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Friend NPCs
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +49,7 @@ CNpcFriend	*CNpcFriend::Create(sThingActor *ThisActor)
 	{
 		case CNpcFriend::NPC_FRIEND_SQUIDWARD:
 		{
-			friendNpc = new ("squidward") CNpcFriend;
+			friendNpc = new ("squidward") CNpcSquidwardFriend;
 			break;
 		}
 
@@ -97,8 +101,8 @@ void CNpcFriend::init()
 
 	m_actorGfx = CActorPool::GetActor( (FileEquate) m_data[m_type].skelType );
 
-	//m_animPlaying = true;
-	m_animNo = 0;
+	m_animPlaying = true;
+	m_animNo = m_data[m_type].idleAnim;
 	m_frame = 0;
 	m_reversed = false;
 
@@ -134,16 +138,53 @@ void CNpcFriend::think(int _frames)
 {
 	CNpcThing::think(_frames);
 
-	switch( m_data[m_type].movementFunc )
+	if ( m_animPlaying )
 	{
-		case NPC_FRIEND_MOVEMENT_GARY:
-			processGaryMovement( _frames );
+		s32 frameCount;
 
-			break;
+		frameCount = m_actorGfx->getFrameCount( m_animNo );
 
-		case NPC_FRIEND_MOVEMENT_STATIC:
-		default:
-			break;
+		s32 frameShift = ( _frames << 8 ) >> 1;
+
+		if ( ( frameCount << 8 ) - m_frame > frameShift )
+		{
+			m_frame += frameShift;
+		}
+		else
+		{
+			m_frame = ( frameCount - 1 ) << 8;
+			m_animPlaying = false;
+		}
+	}
+
+	s32 fallSpeed = 3;
+	s8 yMovement = fallSpeed * _frames;
+	s8 groundHeight;
+
+	// check vertical collision
+
+	groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, yMovement + 16 );
+
+	if ( groundHeight <= 0 )
+	{
+		// make sure we are on the ground, not below it
+
+		Pos.vy += groundHeight;
+	}
+	else
+	{
+		// above ground
+
+		if ( groundHeight < yMovement )
+		{
+			// colliding with ground
+
+			Pos.vy += groundHeight;
+		}
+		else
+		{
+			Pos.vy += yMovement;
+		}
 	}
 }
 
@@ -164,7 +205,7 @@ void CNpcFriend::render()
 	{
 		if ( renderPos.vy >= 0 && renderPos.vy <= VidGetScrH() )
 		{
-			m_actorGfx->Render(renderPos,m_animNo,m_frame,m_reversed);
+			m_actorGfx->Render(renderPos,m_animNo,(m_frame>>8),m_reversed);
 		}
 	}
 }

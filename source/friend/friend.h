@@ -40,7 +40,7 @@ public:
 	void				init();
 	void				init( DVECTOR initPos );
 	void				shutdown();
-	void				think(int _frames);
+	virtual void		think(int _frames);
 	void				render();
 	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
@@ -49,25 +49,19 @@ public:
 	static CNpcFriend	*Create(sThingActor *ThisActor);
 	static NPC_FRIEND_UNIT_TYPE		getTypeFromMapEdit( u16 newType );
 
-private:
+protected:
 	class CLayerCollision	*m_layerCollision;
 
 protected:
-	enum NPC_FRIEND_MOVEMENT_FUNC
-	{
-		NPC_FRIEND_MOVEMENT_STATIC = 0,
-		NPC_FRIEND_MOVEMENT_GARY = 1,
-	};
-
 	typedef struct NPC_FRIEND_DATA_TYPE
 	{
 		int								skelType;
-		NPC_FRIEND_MOVEMENT_FUNC		movementFunc;
 		bool							canTalk;
 		u8								speed;
 		u16								turnSpeed;
 		bool							detectCollision;
 		DAMAGE_TYPE						damageToUserType;
+		u16								idleAnim;
 	}
 	NPC_FRIEND_DATA;
 
@@ -96,6 +90,7 @@ protected:
 
 	int				m_frame;
 	int				m_animNo;
+	u8				m_animPlaying;
 	CActorGfx		*m_actorGfx;
 	DVECTOR			m_drawOffset;
 	bool			m_reversed;

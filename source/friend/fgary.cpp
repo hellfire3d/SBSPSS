@@ -11,8 +11,8 @@
 
 ===========================================================================*/
 
-#ifndef __FRIEND_FRIEND_H__
-#include "friend\friend.h"
+#ifndef __FRIEND_FGARY_H__
+#include "friend\fgary.h"
 #endif
 
 #ifndef __GAME_GAME_H__
@@ -20,8 +20,10 @@
 #endif
 
 
-void CNpcFriend::processGaryMovement( int _frames )
+void CNpcGaryFriend::think( int _frames )
 {
+	CNpcThing::think(_frames);
+
 	s8 multiplier = -1 + ( 2 * m_extension );
 	s32 maxHeight = 20;
 	s32 fallSpeed = 3;

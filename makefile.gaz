@@ -72,7 +72,6 @@ enemy_src :=		npc \
 					nocto \
 					nfskull \
 					nsklfish \
-					ngary \
 					nworm \
 					nhcrab \
 					nbblob \
@@ -81,6 +80,10 @@ enemy_src :=		npc \
 					nsdart \
 					ndustdev \
 					npbug
+
+friend_src :=		friend \
+					fdata \
+					fgary
 
 platform_src :=		platform \
 					platdata \

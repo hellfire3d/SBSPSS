@@ -15,76 +15,80 @@
 #include "friend\friend.h"
 #endif
 
+#ifndef	__ANIM_SQUIDWARD_HEADER__
+#include <ACTOR_SQUIDWARD_Anim.h>
+#endif
+
 CNpcFriend::NPC_FRIEND_DATA CNpcFriend::m_data[NPC_FRIEND_UNIT_TYPE_MAX] =
 {
 	{	// NPC_FRIEND_BARNACLE_BOY
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_GARY
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_KRUSTY
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_MERMAID_MAN
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_PATRICK
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_SANDY_CHEEKS
 		ACTORS_CLAM_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		0,
 	},
 
 	{	// NPC_FRIEND_SQUIDWARD
 		ACTORS_SQUIDWARD_SBK,
-		NPC_FRIEND_MOVEMENT_STATIC,
 		true,
 		3,
 		128,
 		false,
 		DAMAGE__HIT_ENEMY,
+		ANIM_SQUIDWARD_IDLEBREATHE,
 	},
 };
 

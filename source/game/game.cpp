@@ -27,6 +27,10 @@
 #include "enemy\npc.h"
 #endif
 
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
 #ifndef __PLATFORM_PLATFORM_H__
 #include "platform\platform.h"
 #endif
@@ -319,6 +323,14 @@ void	CGameScene::initLevel()
 						enemy->setLayerCollision( Level.getCollisionLayer() );
 						enemy->setupWaypoints( ThisActor );
 						enemy->postInit();
+					}
+					break;
+
+				case CGameScene::ACTOR_FRIEND_NPC:
+					{
+						CNpcFriend *friendNpc;
+						friendNpc=CNpcFriend::Create(ThisActor);
+						friendNpc->setLayerCollision( Level.getCollisionLayer() );
 					}
 					break;
 

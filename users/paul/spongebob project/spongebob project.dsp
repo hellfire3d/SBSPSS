@@ -193,10 +193,6 @@ SOURCE=..\..\..\source\enemy\nfskull.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\source\enemy\ngary.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\source\enemy\ngen.cpp
 # End Source File
 # Begin Source File
@@ -1544,6 +1540,34 @@ SOURCE=..\..\..\source\map\map.cpp
 SOURCE=..\..\..\source\map\map.h
 # End Source File
 # End Group
+# Begin Group "friend"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fdata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fgary.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fgary.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\friend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\friend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\friend\fsquid.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "makefiles"
 
@@ -1705,6 +1729,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_SPONGEBOB_Anim.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\ACTOR_SQUIDDART_Anim.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\ACTOR_SQUIDWARD_Anim.h
 # End Source File
 # Begin Source File
 
