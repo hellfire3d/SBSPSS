@@ -73,7 +73,7 @@ void CNpcRollingRockHazard::processMovement( int _frames )
 		{
 			// move along ground
 
-			s32 groundSpeed = 3 * _frames;
+			s32 groundSpeed = 4 * _frames;
 
 			moveX = distX;
 
