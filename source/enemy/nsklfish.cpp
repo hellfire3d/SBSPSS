@@ -140,6 +140,11 @@ void CNpcSkeletalFishEnemy::processClose( int _frames )
 		m_timerFunc = NPC_TIMER_ATTACK_DONE;
 		m_chargeTime = m_timerTimer = GameState::getOneSecondInFrames();
 	}
+
+	if ( m_soundId == NOT_PLAYING )
+	{
+		m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_FISH_FOLK_MOVE_2, true );
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
