@@ -190,6 +190,7 @@ void CFrontEndStart::think(int _frames)
 		   m_escapeToTitles||*/
 		   m_startGame)
 		{			
+			m_selectedSlot=0;
 			m_shuttingDown=true;
 			s_globalLevelSelectThing=m_level;
 			CFader::setFadingOut();
