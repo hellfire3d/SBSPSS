@@ -82,7 +82,7 @@ int			LegHeight=SprBank->getFrameHeight(FRM__LEG)-4;
 				ThisAngle&=CIRCLE_TAB_MASK;
 				H=LegHeight+(CircleTable[ThisAngle]>>5);
 
-				POLY_FT4	*Ft4=SprBank->printFT4(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos*0);
+				POLY_FT4	*Ft4=SprBank->printFT4(FRM__LEG,RenderPos.vx,RenderPos.vy,XFlip,0,OtPos);
 
 				if (!XFlip)
 				{
