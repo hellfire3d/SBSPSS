@@ -28,7 +28,7 @@ void	CSteamDownEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 	CSteamEmitterTrigger::setPositionAndSize( _x, _y, _w, _h );
 
 	CFXSteam *steam = (CFXSteam *) m_effect;
-	steam->SetSize( ( _h >> 4 ) * ONE );
+	steam->SetSize( ( _w >> 4 ) * ONE );
 	DVECTOR velocity;
 	velocity.vx = 0;
 	velocity.vy = _h >> 4;
