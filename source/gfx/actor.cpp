@@ -743,9 +743,9 @@ int			ShiftY=(Pos.vy & 15);
 		{
 			P0=&ModelVtxList[TList->P0]; P1=&ModelVtxList[TList->P1]; P2=&ModelVtxList[TList->P2];
 			gte_ldv3(P0,P1,P2);
-			setPolyFT3(TPrimPtr);
-			setShadeTex(TPrimPtr,1);
 			setlen(TPrimPtr, GPU_PolyFT3Tag);
+			TPrimPtr->code=TList->PolyCode;
+			setRGB0(TPrimPtr,128,128,128);
 			gte_rtpt_b();
 	
 			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage

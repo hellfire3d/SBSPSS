@@ -123,6 +123,14 @@ SOURCE=.\Layers\MkLevelLayerFX.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Layers\MkLevelLayerHazard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Layers\MkLevelLayerHazard.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Layers\MkLevelLayerItem.cpp
 # End Source File
 # Begin Source File

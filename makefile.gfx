@@ -53,7 +53,7 @@ LEVELS_CHAPTER03 :=			LEVEL01 LEVEL02 LEVEL03 LEVEL04
 LEVELS_CHAPTER04 :=			LEVEL01 LEVEL02 LEVEL03 LEVEL04
 LEVELS_CHAPTER05 :=			LEVEL01 LEVEL02 LEVEL03 LEVEL04
 LEVELS_CHAPTER06 :=			LEVEL01 LEVEL02 LEVEL03 LEVEL04 LEVEL05
-LEVELS_FMA :=				SHADYSHOALS SHADYEXTERIOR
+LEVELS_FMA :=				SHADYSHOALS
 
 LEVELS_MAKEFILES :=		$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)),$(LEVELS_MAKEFILE_DIR)/$(CHAPTER)_$(LEVEL).mak))
 
@@ -108,8 +108,8 @@ ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
 ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net
-ACTOR_NPC :=			BarnacleBoy Krusty Squidward
-#						BarnacleBoy Gary Krusty MermaidMan Patrick Plankton Sandy Squidward
+ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy 
+#						MermaidMan Patrick Plankton
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
 						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \

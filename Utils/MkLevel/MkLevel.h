@@ -17,13 +17,14 @@
 using namespace std;
 
 //***************************************************************************
+/*
 struct	sMkLevelTex
 {
 		int		Set;
 		int		XOfs,YOfs;
-		u8		*RGB;
+//		u8		*RGB;
 		int		Flags;
-		int		RChk,GChk,BChk;
+//		int		RChk,GChk,BChk;
 		int		TexID;
 
 bool	operator ==(sMkLevelTex const &v1)
@@ -35,7 +36,7 @@ bool	operator ==(sMkLevelTex const &v1)
 		return(true);
 		}
 };
-
+*/
 //***************************************************************************
 struct	sMkLevelModel
 {
@@ -72,10 +73,10 @@ public:
 
 		int				Create2dTex(int Tile,int Flags);
 		int				Create3dTile(sExpLayerTile &ThisTile);
-		int				FindRGBMatch(sMkLevelTex &ThisTex);
-		bool			IsRGBSame(const sMkLevelTex &Tile0,const sMkLevelTex &Tile1);
-		void			MakeTexName(sMkLevelTex &InTex,GString &OutStr);
-		int				BuildTileTex(sMkLevelTex &InTex);
+//		int				FindRGBMatch(sMkLevelTex &ThisTex);
+//		bool			IsRGBSame(const sMkLevelTex &Tile0,const sMkLevelTex &Tile1);
+		void			MakeTexName(sExpTile &SrcTile,int Flags,GString &OutStr);
+		int				BuildTileTex(sExpTile &SrcTile,int Flags);
 
 		char			*GetConfigStr(const char *Grp,const char *Key)	{return(Config.GetStr(Grp,Key));}
 		CIni			&GetConfig()									{return(Config);}
@@ -137,7 +138,7 @@ protected:
 
 		CList<sExpLayerTile>	Tile2dList;
 		CList<sExpLayerTile>	Tile3dList;
-		CList<sMkLevelTex>		Tex2dList;
+//		CList<sMkLevelTex>		Tex2dList;
 		CTexGrab				TexGrab;
 		CList<Frame>			BmpList;
 

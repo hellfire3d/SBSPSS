@@ -82,7 +82,21 @@ inline bool uvaprox( sUV &uv0, sUV &uv1 )
 }
 
 //***************************************************************************
-CFace	&CFaceStore::AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID,bool ProcessTexFlag )
+void	CFaceStore::SetTPageFlag(CFace &F,int MatFlag)
+{
+int		Trans=0;
+
+		switch (MatFlag>>3)
+		{
+//			case 0: Trans=2; break;	/* Subtractive */
+			case 1: Trans=1; break;	/* Additive */
+		}
+//	Trans=1;
+		F.TPageFlag=Trans<<5;
+}
+
+//***************************************************************************
+CFace	&CFaceStore::AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int MatFlag,bool ProcessTexFlag )
 {
 //int		ListSize = FaceList.size();
 //		FaceList.resize(ListSize+1);
@@ -101,9 +115,10 @@ CFace	F;
 			if (F.uvs[i].v < 0.f) F.uvs[i].v=0.f;
 			if (F.uvs[i].v > 1.f) F.uvs[i].v=1.f;
 		}
-
+		F.TPageFlag=0;
 		F.TexName=Tex;
 		F.Mat = -1;
+		SetTPageFlag(F,MatFlag);
 		return(AddFace(F,ProcessTexFlag));
 }
 
@@ -153,6 +168,7 @@ int		ListSize=Faces.GetFaceCount();
 }
 
 //***************************************************************************
+/*
 CFace	&CFaceStore::AddFace(sTriFace &Face,int ID)
 {
 int		ListSize = FaceList.size();
@@ -177,7 +193,7 @@ CFace	&F = FaceList[ListSize];
 	F.ID=ID;
 	return(F);
 }
-
+*/
 //***************************************************************************
 //*** Texture Stuff *********************************************************
 //***************************************************************************
@@ -367,8 +383,15 @@ int			V=ThisTex.v+H;
 		Out.uv1[0]=(uv1[0]-XOfs); Out.uv1[1]=(uv1[1]-YOfs);
 		Out.uv2[0]=(uv2[0]-XOfs); Out.uv2[1]=(uv2[1]-YOfs);
 
-		Out.TPage=ThisTex.Tpage;
+		Out.TPage=ThisTex.Tpage | In.TPageFlag;
 		Out.Clut=ThisTex.Clut;
+		Out.PolyCode=GPU_PolyFT3Code;
+
+		if (In.TPageFlag)
+		{
+			Out.PolyCode|=GPUCode_SemiTrans;
+		}
+
 }
 
 

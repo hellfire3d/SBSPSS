@@ -49,10 +49,10 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 
 	if ( !m_animPlaying && m_frame != 0 )
 	{
-		m_animNo = ANIM_BALLBLOB_WOBBLE;
+		m_animNo = ANIM_BALLBLOB_IDLE;
 		m_frame = 0;
 	}
-	else if ( m_animNo == ANIM_BALLBLOB_BOUNCE )
+	else if ( m_animNo == ANIM_BALLBLOB_IDLE )
 	{
 		moveX = 0;
 		moveY = 0;
@@ -85,14 +85,14 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 		{
 			m_velocity.vy = -m_velocity.vy;
 			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_BOUNCE;
+			m_animNo = ANIM_BALLBLOB_IDLE;
 			m_frame = 0;
 		}
 		else
 		{
 			m_velocity.vy = -( 5 << 8 );
 			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_BOUNCE;
+			m_animNo = ANIM_BALLBLOB_IDLE;
 			m_frame = 0;
 		}
 
@@ -105,10 +105,10 @@ void CNpcBallBlobEnemy::processMovement( int _frames )
 	
 	if ( m_npcPath.thinkFlat( Pos, &pathComplete, &waypointXDist, &waypointYDist, &waypointHeading ) )
 	{
-		if ( m_animNo != ANIM_BALLBLOB_BOUNCE )
+		if ( m_animNo != ANIM_BALLBLOB_IDLE)
 		{
 			m_animPlaying = true;
-			m_animNo = ANIM_BALLBLOB_WOBBLE;
+			m_animNo = ANIM_BALLBLOB_IDLE;
 			m_frame = 0;
 		}
 	}

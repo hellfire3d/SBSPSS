@@ -1,3 +1,2 @@
+Idle
 Bite
-Bounce
-Wobble

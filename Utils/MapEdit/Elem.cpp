@@ -99,7 +99,7 @@ GFName		Path=Filename;
 			Create2dTexture(TexCache,Path.File(),Node);
 			Build2dDrawList(TexCache,DrawList[ElemType2d]);
 			BlankFlag=false;
-			if (!ValidFlag)	SetInvalid();
+//			if (!ValidFlag)	SetInvalid();
 }
 
 /*****************************************************************************/
@@ -245,6 +245,7 @@ std::vector<int>	const	&NodeTriMat=ThisNode.GetTriMaterial();
 
 std::vector<GString> const	&SceneTexList=ThisScene.GetTexList();
 std::vector<int> const		&SceneUsedMatList=ThisScene.GetUsedMaterialIdx();
+std::vector<Material> const &SceneMatList=ThisScene.GetMaterials();
 int							TexCount=SceneTexList.size();
 
 int			TriCount=NodeTriList.size();
@@ -257,7 +258,7 @@ int			ListSize=TriList.size();
 				sUVTri	const	&ThisUV=NodeUVList[T];
 				sTriFace		&Tri=TriList[ListSize+T];
 				int				ThisMat=NodeTriMat[T];
-				int				TexID;
+				int				TexID,TexFlags;
 				
 
 // Sort Textures - Only add the ones that are used :o)
@@ -269,10 +270,12 @@ int			ListSize=TriList.size();
 					AfxMessageBox(mexstr,MB_OK | MB_ICONEXCLAMATION);
 					TexID=0;
 				}
-				else
+//				else
 				{
+				TexFlags=SceneMatList[TexID].Flags;
 				GString	ThisName;
 				GString	TexName=SceneTexList[TexID];
+				
 				ThisName=SetPath+TexName;
 				TRACE2("%i !%s!\n",TexID,ThisName);
 				TexID=TexCache.ProcessTexture(ThisName);
@@ -293,6 +296,7 @@ Matrix4x4		TransMtx;
 					Tri.uvs[p].u=ThisUV.p[p].u;
 					Tri.uvs[p].v=ThisUV.p[p].v;
 					Tri.Mat=TexID;
+					Tri.Flags=TexFlags;
 				}
 			}
 		for (int Child=0; Child<ChildCount; Child++) Build3dElem(TexCache,ThisScene,ThisNode.PruneChildList[Child]);
@@ -470,7 +474,7 @@ void	CElem::Purge()
 		for (int i=0; i<ElemTypeMax; i++)
 			glDeleteLists(DrawList[i],1);
 		CleanUp();
-		TriList.clear();
+//		TriList.clear();
 }
 
 /*****************************************************************************/

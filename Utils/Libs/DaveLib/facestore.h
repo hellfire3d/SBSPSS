@@ -35,8 +35,10 @@ public:
 	int				vis[4];
 	Vector3			Normal;
 	bool			Avail;
-	int				ID;
+//	int				ID;
 	GString			TexName;
+	int				TPageFlag;
+
 };
 
 /*
@@ -71,6 +73,7 @@ public:
 struct  sTriFace
 {
 	int			Mat;
+	int			Flags;
 	Vector3		vtx[3];
 	int			pts[3];
 	sUV			uvs[3];
@@ -86,7 +89,8 @@ public:
 		CFaceStore(int Max)		{MaxStrip=Max;TexGrab=&FaceStoreTexGrab;}
 		~CFaceStore(){};
 
-		CFace					&AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int ID=0,bool ProcessTexFlag=false);
+		void					SetTPageFlag(CFace &F,int MatFlag);
+		CFace					&AddFace(vector<Vector3> const &P, const sGinTri &T, const sUVTri &uv,GString const &Tex,int MatFlag=0,bool ProcessTexFlag=false);
 		CFace					&AddFace(CFace &F,bool TexFlag=true);
 		void					AddFaces(vector<CFace>&Faces,bool TexFlag=true);
 		void					AddFaces(CFaceStore &Faces,bool TexFlag=true);

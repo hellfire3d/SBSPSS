@@ -87,7 +87,9 @@ struct	sTri
 		u16			TPage;					//  2
 		u8			uv2[2];					//  2
 		u16			P2;						//  2
-		u32			OTOfs;					//  4
+		u16			OTOfs;					//  2
+		u8			PolyCode;				//  1
+		u8			Pad;					//  1
 };											// 20
 
 //---------------------------------------------------------------------------
@@ -103,7 +105,9 @@ struct	sQuad
 		u16			TPage;					//  2
 		u8			uv2[2];					//  2
 		u8			uv3[2];					//  2
-		u32			OTOfs;					//  4
+		u16			OTOfs;					//  2
+		u8			PolyCode;				//  1
+		u8			Pad;					//  1
 };											// 24
 
 

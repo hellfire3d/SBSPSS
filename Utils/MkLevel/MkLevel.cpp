@@ -156,6 +156,7 @@ vector<int>	const		&NodeMatList =	ThisNode.GetTriMaterial();
 vector<sUVTri> const	&NodeUVList =	ThisNode.GetUVTris();
 vector<GString> const	&SceneTexList=	Scene.GetTexList();
 vector<int> const		&SceneUsedMatList=Scene.GetUsedMaterialIdx();
+vector<Material> const	&SceneMaterials=Scene.GetMaterials();
 
 int						TriCount=NodeTriList.size();
 
@@ -165,7 +166,9 @@ int						TriCount=NodeTriList.size();
 				if (Mat>SceneTexList.size()) GObject::Error(ERR_FATAL,"Crap Material ID, wanted %i, only have %i\n",Mat,SceneTexList.size());
 				GString	TexName=RootPath+SceneTexList[Mat];
 				
-				ModelFaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], TexName,0,false);
+
+				CFace &F=ModelFaceList.AddFace( NodeVtxList, NodeTriList[T], NodeUVList[T], TexName,SceneMaterials[Mat].Flags,false);
+//				ModelFaceList.SetTPageFlag(F,SceneMaterials[Mat].Flags);
 			}
 
 int		ChildCount=ThisNode.GetPruneChildCount();
@@ -197,6 +200,7 @@ int				Idx;
 			CFace	F;
 
 			ExpTri2Face(ThisTri,F);
+			ModelFaceList.SetTPageFlag(F,ThisTri.Flags);
 			ModelFaceList.AddFace(F,false);
 		}
 
@@ -299,8 +303,9 @@ u8		*TilePtr=(u8*) &ByteHdr[FileHdr->TileOfs];
 			sExpTile	&InTile=InTileList[i];
 			
 			InTile=*ThisTilePtr;
-			InTile.RGB=(u8*)malloc(RGBSize);
-			memcpy(InTile.RGB,TilePtr+sizeof(sExpTile),RGBSize);
+//			InTile.RGB=(u8*)malloc(RGBSize);
+//			memcpy(InTile.RGB,TilePtr+sizeof(sExpTile),RGBSize);
+			InTile.RGB=0;
 			TilePtr+=RGBSize+sizeof(sExpTile);
 		}
 
@@ -532,6 +537,7 @@ void	CMkLevel::ExpTri2Face(sExpTri &ThisTri,CFace &F,bool ImportTex)
 			F.uvs[p].u=ThisTri.uv[p][0];
 			F.uvs[p].v=ThisTri.uv[p][1];
 		}
+		
 
 }
 //***************************************************************************
@@ -648,8 +654,7 @@ int				TileID=OutTile3dList.size();
 					F.uvs[0]=F.uvs[1];
 					F.uvs[1]=TmpUV;
 				}
-
-
+				OutFaceList.SetTPageFlag(F,ThisTri.Flags);
 				OutFaceList.AddFace(F,true);
 			}
 
@@ -663,66 +668,64 @@ int				TileID=OutTile3dList.size();
 int		CMkLevel::Create2dTex(int Tile,int Flags)
 {
 sExpTile	&SrcTile=InTileList[Tile];
-int			Idx;
-sMkLevelTex	InTex;
+//sMkLevelTex	InTex;
 
-		InTex.Set=SrcTile.Set;
-		InTex.Flags=Flags;
-		InTex.XOfs=SrcTile.XOfs;
-		InTex.YOfs=SrcTile.YOfs;
-		InTex.RGB=SrcTile.RGB;
-
-		Idx=Tex2dList.Find(InTex);
-		if (Idx!=-1) return(Idx);
+//		InTex.RGB=SrcTile.RGB;
 
 // Try and find RGB data match
-		Idx=FindRGBMatch(InTex);
-		if (Idx!=-1) return(Idx);
+// not working
+//		Idx=FindRGBMatch(InTex);
+//		if (Idx!=-1) return(Idx);
 
 // Must be new, add it
-		BuildTileTex(InTex);
-		Tex2dList.push_back(InTex);
-		return(InTex.TexID);
+//		InTex.Set=SrcTile.Set;
+//		InTex.Flags=Flags;
+//		InTex.XOfs=SrcTile.XOfs;
+//		InTex.YOfs=SrcTile.YOfs;
+
+int		TexID=BuildTileTex(SrcTile,Flags);
+//		Tex2dList.push_back(InTex);
+		return(TexID);
 }
 
 //***************************************************************************
-int		CMkLevel::BuildTileTex(sMkLevelTex &InTex)
+int		CMkLevel::BuildTileTex(sExpTile	&SrcTile,int Flags)
 {
-Frame			&InFrame=BmpList[InTex.Set];
+Frame			&InFrame=BmpList[SrcTile.Set];
 Frame			ThisFrame;
 Rect			ThisRect;
-GString			Name=GFName(InSetNameList[InTex.Set]).File();
+GString			Name=GFName(InSetNameList[SrcTile.Set]).File();
 GString			TexName;
 int				BmpW=InFrame.GetWidth();
 int				BmpH=InFrame.GetHeight();
-
+int				TexID;
 				TexGrab.ShrinkToFit(false);
 				TexGrab.AllowRotate(false);
 
-				if (InTex.XOfs*16>BmpW) 
+				if (SrcTile.XOfs*16>BmpW) 
 				{
-					printf("AARGH!!! %s(%i) wants X=%i,tile is only %i Wide\n",Name,InTex.Set,InTex.XOfs*16,BmpW);
-					InTex.XOfs=0;
+					printf("AARGH!!! %s(%i) wants X=%i,tile is only %i Wide\n",Name,SrcTile.Set,SrcTile.XOfs*16,BmpW);
+					SrcTile.XOfs=0;
 				}
-				if (InTex.YOfs*16>BmpH) 
+				if (SrcTile.YOfs*16>BmpH) 
 				{
-					printf("AARGH!!! %s(%i) wants Y=%i,tile is only %i High\n",Name,InTex.Set,InTex.YOfs*16,BmpH);
-					InTex.YOfs=0;
+					printf("AARGH!!! %s(%i) wants Y=%i,tile is only %i High\n",Name,SrcTile.Set,SrcTile.YOfs*16,BmpH);
+					SrcTile.YOfs=0;
 				}
 
-				MakeTexName(InTex,TexName);
+				MakeTexName(SrcTile,Flags,TexName);
 
-				ThisRect.X=InTex.XOfs*16;
-				ThisRect.Y=InTex.YOfs*16;
+				ThisRect.X=SrcTile.XOfs*16;
+				ThisRect.Y=SrcTile.YOfs*16;
 				ThisRect.W=16;
 				ThisRect.H=16;
 
 				ThisFrame.Grab(InFrame,ThisRect);
 
-				if (InTex.Flags& PC_TILE_FLAG_MIRROR_X)		ThisFrame.FlipX();
-				if (InTex.Flags & PC_TILE_FLAG_MIRROR_Y)	ThisFrame.FlipY();
+				if (Flags& PC_TILE_FLAG_MIRROR_X)		ThisFrame.FlipX();
+				if (Flags & PC_TILE_FLAG_MIRROR_Y)	ThisFrame.FlipY();
 				
-				InTex.TexID=TexGrab.AddMemFrame(TexName,ThisFrame);
+				TexID=TexGrab.AddMemFrame(TexName,ThisFrame);
 
 #ifdef	_DEBUG
 				if (0)
@@ -735,26 +738,28 @@ int				BmpH=InFrame.GetHeight();
 					}
 				}
 #endif
-			return(InTex.TexID);
+			return(TexID);
 }
 
 //***************************************************************************
-void	CMkLevel::MakeTexName(sMkLevelTex &InTex,GString &OutStr)
+void	CMkLevel::MakeTexName(sExpTile &SrcTile,int Flags,GString &OutStr)
 {
 char			NewName[256];
-GString			Name=GFName(InSetNameList[InTex.Set]).File();
+GString			Name=GFName(InSetNameList[SrcTile.Set]).File();
 			
-		sprintf(NewName,"%s_%02d_%02d_%01d_",Name,InTex.XOfs,InTex.YOfs,InTex.Flags&PC_TILE_FLAG_MIRROR_XY);
+		sprintf(NewName,"%s_%02d_%02d_%01d_",Name,SrcTile.XOfs,SrcTile.YOfs,Flags&PC_TILE_FLAG_MIRROR_XY);
 		OutStr=NewName;
 }
 
 //***************************************************************************
+/*
 int		CMkLevel::FindRGBMatch(sMkLevelTex &ThisTex)
 {
 int		i,ListSize=Tex2dList.size();
 int		Size=TileW*TileH;
 u8		*RGBPtr=ThisTex.RGB;
 
+		if (!RGBPtr) printf("HA HA\n");
 // Create Checksum for this tile
 		ThisTex.RChk=0;
 		ThisTex.GChk=0;
@@ -765,6 +770,7 @@ u8		*RGBPtr=ThisTex.RGB;
 			ThisTex.GChk+=*RGBPtr++;
 			ThisTex.BChk+=*RGBPtr++;
 		}
+
 // Check all others for match
 		for (i=0; i<ListSize; i++)
 		{
@@ -774,14 +780,31 @@ u8		*RGBPtr=ThisTex.RGB;
 // Checksum first
 				if (ThisTex.RChk==ChkTex.RChk && ThisTex.GChk==ChkTex.GChk && ThisTex.BChk==ChkTex.BChk) 
 				{
-					if (IsRGBSame(ThisTex,ChkTex)) return(i);
+					if (ThisTex.Flags==ChkTex.Flags)
+					{
+						if (IsRGBSame(ThisTex,ChkTex)) return(i);
+					}
 				}
 			}
 		}
 		return(-1);
 }
-
+*/
 //***************************************************************************
+/*
+bool	CMkLevel::IsRGBSame(const sMkLevelTex &Tex0,const sMkLevelTex &Tex1)
+{
+int		Size=TileW*TileH*3;
+int		H=TileH;
+u8		*RGB0=Tex0.RGB;
+u8		*RGB1=Tex1.RGB;
+
+int	Res=memcmp(RGB0,RGB1,Size);
+
+	return(Res==0);
+}
+*/
+/*
 bool	CMkLevel::IsRGBSame(const sMkLevelTex &Tex0,const sMkLevelTex &Tex1)
 {
 int		W=TileW;
@@ -818,6 +841,7 @@ u8		*RGB1=Tex1.RGB;
 		return(true);
 }
 
+*/
 //***************************************************************************
 //*** Write *****************************************************************
 //***************************************************************************
@@ -879,36 +903,49 @@ int		i,ListSize;
 
 
 //***************************************************************************
+int	ZMin=9999,ZMax=0;
 int		CMkLevel::WriteTriList()
 {
 vector<sTri>	&TriList=OutFaceList.GetOutTriList();
 vector<sVtx> const	&VtxList=OutFaceList.GetVtxList();
 int				ThisPos=ftell(File);
 int				i,ListSize=TriList.size();
+int				ZOfs=+4*Scale;
 
 		for (i=0;i<ListSize;i++)
 		{
 			sTri	&T=TriList[i];
-			int		Z[3];
 			int		OtOfs=0;
+			int		Z[3];
+
 // Calc OtOfs
-			Z[0]=abs(VtxList[T.P0].vz);
-			Z[1]=abs(VtxList[T.P1].vz);
-			Z[2]=abs(VtxList[T.P2].vz);
+			Z[0]=VtxList[T.P0].vz+ZOfs;
+			Z[1]=VtxList[T.P1].vz+ZOfs;
+			Z[2]=VtxList[T.P2].vz+ZOfs;
 			
 			for (int p=0; p<3; p++)
 			{
-				if (OtOfs<Z[p]) OtOfs=Z[p];
+				if (ZMin>Z[p]) ZMin=Z[p];
+				if (ZMax<Z[p]) ZMax=Z[p];
+				OtOfs+=Z[p]*Z[p];
 			}
-			OtOfs/=4;
+			OtOfs=(int)sqrt(OtOfs/3);
+			
+			OtOfs/=8;
+//			printf("%i\n",OtOfs);
 			if (MinOT>OtOfs) MinOT=OtOfs;
 			if (MaxOT<OtOfs) MaxOT=OtOfs;
 			if (OtOfs>15) OtOfs=15;
+			if (OtOfs<0) OtOfs=0;
+
+//			if (OtOfs>15) OtOfs=15;
+			T.OTOfs=OtOfs;
 
 // Write It			
 			fwrite(&T,1,sizeof(sTri),File);
 		}
 		printf("Tri %i\n",ListSize);
+		printf("ZMin %i ZMax %i\n",ZMin,ZMax);
 
 		return(ThisPos);
 
