@@ -59,6 +59,11 @@ void CNpcGeyserBubblePlatform::processMovement( int _frames )
 			{
 				m_lifetime = GameState::getOneSecondInFrames() >> 2;
 				m_pop = true;
+
+				if ( m_soundId == NOT_PLAYING )
+				{
+					m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BALLOON_POP, true );
+				}
 			}
 		}
 		else
@@ -67,6 +72,11 @@ void CNpcGeyserBubblePlatform::processMovement( int _frames )
 			{
 				m_lifetime = GameState::getOneSecondInFrames() >> 2;
 				m_pop = true;
+
+				if ( m_soundId == NOT_PLAYING )
+				{
+					m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BALLOON_POP, true );
+				}
 			}
 		}
 

@@ -115,6 +115,13 @@ void CNpcSkullStomperEnemy::processClose( int _frames )
 			{
 				// colliding with ground
 
+				if( m_soundId != NOT_PLAYING )
+				{
+					CSoundMediator::stopAndUnlockSfx( (xmPlayingId) m_soundId );
+				}
+
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__FALLING_ROCK_LAND, true );
+
 				Pos.vy += groundHeight;
 
 				// pause and change direction

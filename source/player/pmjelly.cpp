@@ -379,6 +379,8 @@ void	CPlayerModeJellyLauncher::launchProjectile()
 	int					fireHeading;
 	CPlayerProjectile	*projectile;
 
+	CSoundMediator::playSfx(CSoundMediator::SFX_JELLY_LAUNCHER);
+
 	playerFacing=m_player->getFacing();
 	launchPos=getPlayerPos();
 	launchPos.vx+=playerFacing*jellyLaunchPos.vx;

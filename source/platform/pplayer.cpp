@@ -43,6 +43,11 @@ void CNpcPlayerBubblePlatform::processLifetime( int _frames )
 		{
 			m_pop = true;
 
+			if ( m_soundId == NOT_PLAYING )
+			{
+				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_BALLOON_POP, true );
+			}
+
 			m_lifetime = GameState::getOneSecondInFrames() >> 2;
 		}
 		else if ( m_lifetime <= ( GameState::getOneSecondInFrames() >> 1 ) )
