@@ -292,7 +292,7 @@ struct	sThingPlatform
 	u16		Type;
 	u16		Speed;
 	u16		TurnRate;
-	u16		Pad;
+	u16		Param0;
 	u8		Flags;
 	u8		PointCount;
 	// Point List...
