@@ -104,15 +104,7 @@ gfx_src :=			prim \
 					fdata \
 					font \
 					bubicles \
-					skel \
-					skelspng \
-					actorpool
-
-#					camera \
-#					basemod \
-#					skel \
-#					anim \
-#					bilboard
+					actor
 
 gui_src :=			gbubbles \
 					gbutton \
@@ -195,10 +187,10 @@ thing_src :=		thing
 triggers_src :=		tlevexit
 
 utils_src :=		utils \
-					sincos
+					sincos \
+					pak
 
-utils_src_mip :=	quatmip \
-					mathmip \
+utils_src_mip :=	mathmip \
 					replace
 
 system_src_mip :=	except_a \

@@ -81,7 +81,7 @@ DATA_BIN_DIR :=			$(DATA_TOOL_DIR)/bin
 DATA_INC_DIR :=			$(DATA_TOOL_DIR)/include
 
 MKLEVEL :=				$(DATA_BIN_DIR)/MkLevel
-MKACTOR3D :=			$(DATA_BIN_DIR)/MkActor3d
+MKACTOR :=				$(DATA_BIN_DIR)/MkActor
 
 # Cygwin
 # ------
