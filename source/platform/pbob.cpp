@@ -90,16 +90,9 @@ void CNpcBobbingPlatform::processMovement( int _frames )
 			moveY = 0;
 		}
 
-		/*if ( Pos.vy + moveY < m_initPos.vy )
+		if ( m_soundId == NOT_PLAYING )
 		{
-			Pos.vy = m_initPos.vy;
-			m_velocity = 0;
-			m_state = NPC_BOB_STOP;
-			moveY = 0;
+			m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_SINKING_CRATE, true, true );
 		}
-		else
-		{
-			Pos.vy += moveY;
-		}*/
 	}
 }
