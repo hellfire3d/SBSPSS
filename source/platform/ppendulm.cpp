@@ -30,24 +30,23 @@ void CNpcPendulumPlatform::postInit()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	DVECTOR startPos;
+		DVECTOR pivotPos;
 void CNpcPendulumPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 {
 	int pointNum;
 
 	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
 
-	u16 initYPos, newXPos, newYPos;
+	u16 newXPos, newYPos;
 
 	newXPos = (u16) *PntList;
 	PntList++;
-	initYPos = newYPos = (u16) *PntList;
+	newYPos = (u16) *PntList;
 	PntList++;
 
-	DVECTOR startPos;
 	startPos.vx = newXPos << 4;
 	startPos.vy = newYPos << 4;
-
-	init( startPos );
 
 	if ( ThisPlatform->PointCount > 1 )
 	{
@@ -56,7 +55,16 @@ void CNpcPendulumPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 		newYPos = (u16) *PntList;
 		PntList++;
 
-		m_length = ( newYPos - initYPos ) << 4;
+		pivotPos.vx = newXPos << 4;
+		pivotPos.vy = newYPos << 4;
+
+		m_length = startPos.vy - pivotPos.vy;
+
+		init( pivotPos );
+	}
+	else
+	{
+		init( startPos );
 	}
 }
 
