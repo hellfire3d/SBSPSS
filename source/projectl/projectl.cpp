@@ -658,6 +658,8 @@ void CPlayerProjectile::think(int _frames)
 							m_bounceCount++;
 						}
 					}
+
+					CSoundMediator::playSfx( CSoundMediator::SFX_JELLYFISH_BOUNCE );
 				}
 				else
 				{
