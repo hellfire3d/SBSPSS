@@ -120,7 +120,7 @@
 
 static	CPlayerState	*s_stateTable[]=
 {
-	&s_stateNoAnimIdle,						// STATE_IDLE
+	&s_stateWeaponIdle,						// STATE_IDLE
 	&s_stateTeeterIdle,						// STATE_IDLETEETER
 	&s_stateJump,							// STATE_JUMP
 	&s_stateSpring,							// STATE_SPRINGUP
