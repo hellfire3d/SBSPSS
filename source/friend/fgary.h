@@ -34,6 +34,7 @@ public:
 	void				render();
 	void				setObstructed()											{m_obstructed = true;}
 	static void			setReachedDoor()										{m_hasReachedDoor = true;}
+	static void			clearReachedDoor()										{m_hasReachedDoor = false;}
 	static bool			hasReachedDoor()										{return( m_hasReachedDoor );}
 
 protected:
