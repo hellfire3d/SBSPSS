@@ -649,7 +649,7 @@ s32 CNpcEnemy::getFrameShift( int _frames )
 
 void CNpcEnemy::processAnimFrames( int _frames )
 {
-	if ( m_animPlaying && !m_isDying )
+	if ( m_animPlaying && ( ( m_isDying && m_data[m_type].playDeathAnim ) || !m_isDying ) )
 	{
 		s32 frameCount;
 
@@ -1058,8 +1058,11 @@ void CNpcEnemy::processMovementModifier(int _frames, s32 distX, s32 distY, s32 d
 
 u8 CNpcEnemy::hasBeenAttacked()
 {
-	m_controlFunc = NPC_CONTROL_SHOT;
-	m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+	if ( m_controlFunc != NPC_CONTROL_SHOT )
+	{
+		m_controlFunc = NPC_CONTROL_SHOT;
+		m_state = NPC_GENERIC_HIT_CHECK_HEALTH;
+	}
 
 	return( true );
 }
@@ -1088,6 +1091,7 @@ void CNpcEnemy::processShot( int _frames )
 					if ( m_health < 0 )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
+						m_isDying = true;
 					}
 					else
 					{
@@ -1118,13 +1122,13 @@ void CNpcEnemy::processShot( int _frames )
 					m_animNo = m_data[m_type].dieAnim;
 					m_frame = 0;
 					m_state = NPC_GENERIC_HIT_DEATH_END;
+					m_isDying = true;
 
 					if ( m_data[m_type].deathSfx < CSoundMediator::NUM_SFXIDS )
 					{
 						CSoundMediator::playSfx( m_data[m_type].deathSfx );
 					}
 
-					m_isDying = true;
 					m_speed = -5;
 
 					if (m_data[m_type].skelType)

@@ -235,6 +235,7 @@ protected:
 		u8								canCollideWithEnemy;
 		CSoundMediator::SFXID			deathSfx;
 		CSoundMediator::SFXID			moveSfx;
+		u8								playDeathAnim;
 	}
 	NPC_DATA;
 

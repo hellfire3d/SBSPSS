@@ -305,7 +305,7 @@ s32 CNpcStaticClamEnemy::getFrameShift( int _frames )
 
 void CNpcStaticClamEnemy::processAnimFrames( int _frames )
 {
-	if ( m_animPlaying && !m_isDying )
+	if ( m_animPlaying && ( ( m_isDying && m_data[m_type].playDeathAnim ) || !m_isDying ) )
 	{
 		s32 frameCount;
 
