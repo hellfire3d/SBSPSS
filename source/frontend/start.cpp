@@ -49,8 +49,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_FRONTEND_H__
-#include <frontend.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 

@@ -1,3 +1,7 @@
+{ SYSTEM_CACHE 4
+}
+sprites/sprites.spr
+
 scripts/test.dat
 scripts/speechtest.dat
 translations/swe.dat
@@ -128,7 +132,4 @@ actors/SPIKEYANENOME.SBK
 actors/SQUIDDART.SBK
 actors/STOMPER.SBK
 
-{ SYSTEM_CACHE 4
-}
-frontend/frontend.spr
-ingamefx/ingamefx.spr
+

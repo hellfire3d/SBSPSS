@@ -27,8 +27,8 @@
 #include <biglump.h>
 #endif
 
-#ifndef __SPR_INGAMEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 #ifndef __VID_HEADER_
@@ -55,7 +55,7 @@ void CProjectile::init()
 	CEnemyProjectileThing::init();
 
 	m_spriteBank=new ("projectile sprites") SpriteBank();
-	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 	m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;
@@ -389,7 +389,7 @@ void CPlayerProjectile::init()
 	CPlayerProjectileThing::init();
 
 	m_spriteBank=new ("projectile sprites") SpriteBank();
-	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 	m_heading = 0;
 	m_lifetime = GameState::getOneSecondInFrames() * 2;

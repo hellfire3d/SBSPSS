@@ -78,11 +78,13 @@ CPaulScene s_paulScene;
 
 
 /*****************************************************************************/
+static SpriteBank	GenericSpriteBank;
+
+/*****************************************************************************/
 
 void	SaveScreen(RECT R);
 
 /*****************************************************************************/
-
 void	InitSystem()	// reordered to reduce black screen (hope all is well
 {
 	ResetCallback();
@@ -120,11 +122,12 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 	CBubicleFactory::init();
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
+	GenericSpriteBank.load(SPRITES_SPRITES_SPR);
+
 
 #if defined(__DEBUG_MEM__)
 	DebugMemFontInit();
 #endif
-
 
 #ifdef __USER_paul__
 s_paulScene.init();

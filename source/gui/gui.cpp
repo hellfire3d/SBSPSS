@@ -37,8 +37,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_INGMAEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -422,7 +422,7 @@ void initGUIStuff()
 	ASSERT(!s_uiSpriteBank);
 
 	s_uiSpriteBank=new ("UI Sprites") SpriteBank();
-	s_uiSpriteBank->load(INGAMEFX_INGAMEFX_SPR);
+	s_uiSpriteBank->load(SPRITES_SPRITES_SPR);
 }
 
 

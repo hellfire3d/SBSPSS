@@ -77,8 +77,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_FRONTEND_H__
-#include <frontend.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -164,7 +164,7 @@ void CFrontEndScene::init()
 #endif
 
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
-	m_sprites->load(FRONTEND_FRONTEND_SPR);
+	m_sprites->load(SPRITES_SPRITES_SPR);
 	
 	m_font=new ("frontendfont") FontBank();
 	m_font->initialise(&standardFont);

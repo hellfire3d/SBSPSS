@@ -199,7 +199,7 @@ static signed short func_drawSprite(unsigned short *_args)
 	if(!sb)
 	{
 		sb=new ("sb") SpriteBank;
-		sb->load(INGAMEFX_INGAMEFX_SPR);
+		sb->load(SPRITES_SPRITES_SPR);
 	}
 	fh=sb->getFrameHeader(_args[0]);
 	sb->printFT4(_args[0],_args[1]-(fh->W/2),_args[2]-(fh->H/2),0,0,_args[3]);

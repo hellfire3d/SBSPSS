@@ -83,8 +83,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_INGAMEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -249,7 +249,7 @@ void	CPlayer::init()
 	m_fontBank->setOt(5);
 
 	m_spriteBank=new ("PlayerSprites") SpriteBank();
-	m_spriteBank->load(INGAMEFX_INGAMEFX_SPR);
+	m_spriteBank->load(SPRITES_SPRITES_SPR);
 
 	m_layerCollision=NULL;
 

@@ -109,11 +109,20 @@ ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 ACTOR_SPONGEBOB :=		SPONGEBOB
 ACTOR_NPC :=			
 #						BarnacleBoy Gary Krusty MermaidMan Patrick Plankton Sandy Squidward
+
 ACTOR_ENEMY :=			AnenomeLvl1 AnenomeLvl3 BabyOctopus Ballblob Caterpillar clam Dustdevil Eyeball \
-						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Jellyfish1 Lrgjellyfish \
-						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Squiddart Stomper
+						Flamingskull FlyingDutchman Ghost HermitCrab IronDogFish Lrgjellyfish \
+						PuffaFish Sharkman Skeletalfish SpiderCrab SpikeyAnenome Stomper \
+						Jellyfish1 Squiddart
+
 #						Boogermonster GiantWorm Jellyfish2 Motherjellyfish Nautilus Neptune SeaSnake SharkSub 
-#--- AnenomeLvl3 
+
+ACTOR_SPRITES :=		Jellyfish1 Squiddart
+
+ACTOR_SPR_LIST :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/$(ACTOR)_*.bmp)
+ACTOR_SPR_DEP :=		$(foreach ACTOR,$(ACTOR_SPRITES), $(ACTOR_IN_DIR)/$(ACTOR)/$(ACTOR_SPRITE_DIR)/*)
+ACTOR_SPR_IN :=			$(ACTOR_SPR_LIST)
+
 
 ACTOR_LIST :=			$(ACTOR_SPONGEBOB) $(ACTOR_NPC) $(ACTOR_ENEMY)
 
@@ -129,71 +138,24 @@ ACTOR_ALL_OUT :=		$(foreach ACTOR,$(ACTOR_LIST),$($(ACTOR)_OUT))
 GFX_DATA_OUT +=    		$(ACTOR_ALL_OUT)
 
 actors : $(ACTOR_ALL_OUT)
+	@$(ECHO) $(ACTOR_SPRITE_LIST)
 	@$(ECHO) Actors made
 
 cleanactors : 	
 	@$(RM) -f $(ACTOR_ALL_OUT)
 	@$(ECHO) Actors cleaned
 
+
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
-#	Text translations
+# Generic Sprite page
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
-.PHONY: translate cleantranslate
-
-LANGUAGES :=	swe \
-				dut \
-				ita \
-				ger
-
-
-TRANS_IN_DIR :=			$(GAME_DATA_DIR)/translations
-TRANS_OUT_DIR :=		$(DATA_OUT)/translations
-TRANS_LBM_OUT_DIR :=	$(REPORT_DIR)/translations
-
-TRANS_IN_ENG :=			$(TRANS_IN_DIR)/text.dat
-
-TRANS_FINAL_DAT_FILE :=	$(TRANS_OUT_DIR)/final.dat
-
-ALL_TRANS_OUT_DIRS :=	$(TRANS_OUT_DIR) \
-						$(TRANS_LBM_OUT_DIR)
-
-ALL_TRANS_IN_FILES :=	$(foreach FILE,$(LANGUAGES),$(TRANS_IN_DIR)/$(FILE).dat)
-
-TRANS_IN_FILES :=	$(TRANS_IN_ENG) $(ALL_TRANS_IN_FILES)
-
-TRANS_OUT_DAT :=	$(foreach FILE,	$(LANGUAGES),$(TRANS_OUT_DIR)/$(FILE).dat) $(TRANS_OUT_DIR)/id.dat $(TRANS_OUT_DIR)/eng.dat
-#$(TRANS_OUT_KANJI_TAB)
-TRANS_OUT_HDR :=	$(INC_DIR)/trans.h
-
-SCRIPT_TRANS_HDR :=	$(GAME_DATA_DIR)/scripts/defs/trans.scr
-
-TRANS_OUT_FILES :=	$(TRANS_OUT_HDR) $(TRANS_OUT_DAT) $(TRANS_OUT_LBM_LIST) $(TRANS_FINAL_DAT_FILE)
-
-$(TRANS_OUT_FILES) : $(TRANS_IN_FILES)
-	@perl tools/perl/pl/lang.pl $(TRANS_IN_ENG)  $(TRANS_FINAL_DAT_FILE) $(ALL_TRANS_IN_FILES)
-	@transtext $(LANG_OP) -h:$(TRANS_OUT_HDR) -o:$(TRANS_OUT_DIR) $(TRANS_FINAL_DAT_FILE)
-	@perl tools/perl/pl/text_extract.pl $(TRANS_OUT_HDR) $(SCRIPT_TRANS_HDR) STR__INGAME__
-
-translate : $(TRANS_OUT_FILES)
-	@$(ECHO) made translations
-
-cleantranslate:
-	@$(RM) -f $(TRANS_OUT_FILES)
-	@$(ECHO) Translations Cleaned
-
-GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
-
 
 #----------------------------------------------------------------------------
 # Ingame graphics and UI
 #----------------------------------------------------------------------------
-INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
-INGAMEFX_GFX_OUT_DIR :=		$(DATA_OUT)/ingamefx
-
-####
-
+INGAMEFX_GFX_NONTRANS_DIR :=$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_NONTRANS :=			
 INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_NONTRANS_DIR)/$(FILE))
 
@@ -208,10 +170,12 @@ PICKUP_GFX :=				+spatula +pants +health100 +health50 +health25 +glint1 +glint2 
 							+c5_l1_hammer +c5_l2_ariel +c5_l3_oilcan +c5_l4_wrench
 PICKUP_GFX_IN :=			$(foreach FILE,$(PICKUP_GFX),$(PICKUP_GFX_DIR)/$(FILE).bmp)
 
+INGAMEFX_GFX_DIR :=			$(GRAF_DIR)/ingamefx
 INGAMEFX_GFX_TRANS :=		+bubble_1 +bubble_2 +bubble_3 \
 							+health_full_1 +health_full_2 +health_full_3 +health_full_4 +health_full_5 \
 							+health_empty_1 +health_empty_2 +health_empty_3 +health_empty_4 +health_empty_5 \
 							+spike
+
 INGAMEFX_GFX_TRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_TRANS),$(INGAMEFX_GFX_DIR)/$(FILE).bmp)
 
 ####
@@ -262,42 +226,19 @@ UI_GFX_TRANS_IN :=			$(foreach FILE,$(UI_GFX_TRANS),$(UI_GFX_DIR)/$(FILE))
 
 ####
 
-INGAMEFX_GFX_TEX_IN :=		${INGAMEFX_GFX_NONTRANS_IN} ${INGAMEFX_GFX_TRANS_IN} ${PICKUP_GFX_IN} \
-							${UI_GFX_FONT_IN} ${UI_GFX_NONTRANS_IN} ${UI_GFX_TRANS_IN}
-INGAMEFX_GFX_TEX_OUT :=		$(INGAMEFX_GFX_OUT_DIR)/ingamefx.Spr
-INGAMEFX_GFX_REP_FILE :=	$(REPORT_DIR)/ingamefx.rep
-INGAMEFX_GFX_HDR_FILE :=	$(INC_DIR)/ingamefx.h
+INGAMEGFX_SPR_DEP :=		$(INGAMEFX_GFX_NONTRANS_IN) $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) \
+							$(UI_GFX_FONT_IN) $(UI_GFX_NONTRANS_IN) $(UI_GFX_TRANS_IN)
 
-####
-
-cleaningamefx :
-		@$(RM) -f $(INGAMEFX_GFX_TEX_OUT)
-		@$(ECHO) InGame GFx Cleaned
-
-ingamefx:		$(INGAMEFX_GFX_TEX_IN)
-
-####
-
-$(INGAMEFX_GFX_TEX_OUT) :	$(INGAMEFX_GFX_TEX_IN)
-		@parkgrab	-c+ -z+ ${INGAMEFX_GFX_TRANS_IN} ${PICKUP_GFX_IN} \
-					-c- -z- ${INGAMEFX_GFX_NONTRANS_IN} -b+ \
-					-c+ -z+ $(UI_GFX_FONT_IN) ${UI_GFX_TRANS_IN} \
-					-c- -z- ${UI_GFX_NONTRANS_IN} \
-					-t:14,2,1 -l:$(REPORT_DIR)/ingamefx.lbm -o:$(INGAMEFX_GFX_TEX_OUT) -k:$(INGAMEFX_GFX_REP_FILE)
-		@$(MV) -f $(INGAMEFX_GFX_OUT_DIR)/ingamefx.h $(INGAMEFX_GFX_HDR_FILE)
-
-####
-
-GFX_DATA_OUT		+=	$(UI_GFX_TEX_OUT)
-GRAF_DIRS_TO_MAKE	+=	$(INGAMEFX_GFX_OUT_DIR)
-GFX_DATA_OUT		+=	$(INGAMEFX_GFX_TEX_OUT)
-
+INGAMEGFX_SPR_IN :=			-c+ -z+ $(INGAMEFX_GFX_TRANS_IN) $(PICKUP_GFX_IN) \
+							-c- -z- $(INGAMEFX_GFX_NONTRANS_IN) -b+ \
+							-c+ -z+ $(UI_GFX_FONT_IN) $(UI_GFX_TRANS_IN) \
+							-c- -z- $(UI_GFX_NONTRANS_IN) \
 
 #----------------------------------------------------------------------------
 # Front end graphics
 #----------------------------------------------------------------------------
 FRONTEND_GFX_DIR :=			$(GRAF_DIR)/frontend
-FRONTEND_GFX_OUT_DIR :=		$(DATA_OUT)/frontend
+# FRONTEND_GFX_OUT_DIR :=		$(DATA_OUT)/frontend
 
 FRONTEND_GFX_NONTRANS :=	sky.bmp
 FRONTEND_GFX_NONTRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_NONTRANS),$(FRONTEND_GFX_DIR)/$(FILE))
@@ -308,24 +249,106 @@ FRONTEND_GFX_TRANS_IN :=	$(foreach FILE,$(FRONTEND_GFX_TRANS),$(FRONTEND_GFX_DIR
 FRONTEND_GFX_TRANS_NO_ROT :=		+island.bmp +sblogo.bmp
 FRONTEND_GFX_TRANS_NO_ROT_IN :=		$(foreach FILE,$(FRONTEND_GFX_TRANS_NO_ROT),$(FRONTEND_GFX_DIR)/$(FILE))
 
-FRONTEND_GFX_TEX_IN :=		${FRONTEND_GFX_NONTRANS_IN} ${FRONTEND_GFX_TRANS_IN}  ${FRONTEND_GFX_TRANS_NO_ROT_IN}
-FRONTEND_GFX_TEX_OUT :=		$(FRONTEND_GFX_OUT_DIR)/frontend.Spr
-FRONTEND_GFX_REP_FILE :=	$(REPORT_DIR)/frontend.rep
-FRONTEND_GFX_HDR_FILE :=	$(INC_DIR)/frontend.h
+####
 
-cleanfrontend :
-		@$(RM) -f $(FRONTEND_GFX_TEX_OUT)
-		@$(ECHO) Frontend Cleaned
+FRONTENDGFX_SPR_DEP :=		$(FRONTEND_GFX_NONTRANS_IN) $(FRONTEND_GFX_TRANS_IN)  $(FRONTEND_GFX_TRANS_NO_ROT_IN)
 
-frontend:	$(FRONTEND_GFX_TEX_IN)
+FRONTENDGFX_SPR_IN :=		-r- -z+ $(FRONTEND_GFX_TRANS_NO_ROT_IN) -r+ \
+							$(FRONTEND_GFX_TRANS_IN) \
+							-z- $(FRONTEND_GFX_NONTRANS_IN)
 
-$(FRONTEND_GFX_TEX_OUT) :	$(FRONTEND_GFX_TEX_IN)
-		@parkgrab -r- -z+ ${FRONTEND_GFX_TRANS_NO_ROT_IN} -r+ ${FRONTEND_GFX_TRANS_IN} -z- ${FRONTEND_GFX_NONTRANS_IN} -b+ -t:13,1,1 -l:$(REPORT_DIR)/frontend.lbm -o:$(FRONTEND_GFX_TEX_OUT) -k:$(FRONTEND_GFX_REP_FILE)
-		@$(MV) -f $(FRONTEND_GFX_OUT_DIR)/frontend.h $(FRONTEND_GFX_HDR_FILE)
+# cleanfrontend :
+#		@$(RM) -f $(FRONTEND_GFX_TEX_OUT)
+#		@$(ECHO) Frontend Cleaned
+#
+# frontend:	$(FRONTEND_GFX_TEX_IN)
+#
+# $(FRONTEND_GFX_TEX_OUT) :	$(FRONTEND_GFX_TEX_IN)
+# 		@parkgrab -r- -z+ $(FRONTEND_GFX_TRANS_NO_ROT_IN) -r+ $(FRONTEND_GFX_TRANS_IN) -z- $(FRONTEND_GFX_NONTRANS_IN) -b+ -t:13,1,1 -l:$(REPORT_DIR)/frontend.lbm -o:$(FRONTEND_GFX_TEX_OUT) -k:$(FRONTEND_GFX_REP_FILE)
+# 		@$(MV) -f $(FRONTEND_GFX_OUT_DIR)/frontend.h $(FRONTEND_GFX_HDR_FILE)
+#
+# GRAF_DIRS_TO_MAKE	+=		$(FRONTEND_GFX_OUT_DIR)
+# GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
 
-GRAF_DIRS_TO_MAKE	+=		$(FRONTEND_GFX_OUT_DIR)
-GFX_DATA_OUT		+=		$(FRONTEND_GFX_TEX_OUT)
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+SPRITES_OUT_DIR :=		$(DATA_OUT)/sprites
 
+SPRITES_ALL_DEP	:=		$(INGAMEGFX_SPR_DEP) \
+						$(FRONTENDGFX_SPR_DEP) \
+						$(ACTOR_SPR_DEP)
+ 
+SPRITES_ALL_IN :=		$(INGAMEGFX_SPR_IN) \
+ 						$(FRONTENDGFX_SPR_IN) \
+						$(ACTOR_SPR_IN)
+
+SPRITES_TEX_OUT :=		$(SPRITES_OUT_DIR)/Sprites.Spr
+
+SPRITES_HDR_OUT :=		$(INC_DIR)/Sprites.h
+
+cleansprites:
+		@$(RM) -f $(SPRITES_TEX_OUT)
+		@$(ECHO) Sprites Cleaned
+
+sprites:	$(SPRITES_ALL_DEP)
+
+$(SPRITES_TEX_OUT) : $(SPRITES_ALL_DEP)
+		@$(PARKGRAB) $(SPRITES_ALL_IN) -t:12,4,1 -l:$(SPRITES_OUT_DIR)/sprites.lbm -o:$(SPRITES_TEX_OUT)
+		@$(MV) -f $(SPRITES_OUT_DIR)/sprites.h $(SPRITES_HDR_OUT)
+		@$(ECHO) Sprites Made
+
+GRAF_DIRS_TO_MAKE	+=		$(SPRITES_OUT_DIR)
+GFX_DATA_OUT		+=		$(SPRITES_TEX_OUT)
+
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+#	Text translations
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+.PHONY: translate cleantranslate
+
+LANGUAGES :=	swe \
+				dut \
+				ita \
+				ger
+
+
+TRANS_IN_DIR :=			$(GAME_DATA_DIR)/translations
+TRANS_OUT_DIR :=		$(DATA_OUT)/translations
+TRANS_LBM_OUT_DIR :=	$(REPORT_DIR)/translations
+
+TRANS_IN_ENG :=			$(TRANS_IN_DIR)/text.dat
+
+TRANS_FINAL_DAT_FILE :=	$(TRANS_OUT_DIR)/final.dat
+
+ALL_TRANS_OUT_DIRS :=	$(TRANS_OUT_DIR) \
+						$(TRANS_LBM_OUT_DIR)
+
+ALL_TRANS_IN_FILES :=	$(foreach FILE,$(LANGUAGES),$(TRANS_IN_DIR)/$(FILE).dat)
+
+TRANS_IN_FILES :=	$(TRANS_IN_ENG) $(ALL_TRANS_IN_FILES)
+
+TRANS_OUT_DAT :=	$(foreach FILE,	$(LANGUAGES),$(TRANS_OUT_DIR)/$(FILE).dat) $(TRANS_OUT_DIR)/id.dat $(TRANS_OUT_DIR)/eng.dat
+#$(TRANS_OUT_KANJI_TAB)
+TRANS_OUT_HDR :=	$(INC_DIR)/trans.h
+
+SCRIPT_TRANS_HDR :=	$(GAME_DATA_DIR)/scripts/defs/trans.scr
+
+TRANS_OUT_FILES :=	$(TRANS_OUT_HDR) $(TRANS_OUT_DAT) $(TRANS_OUT_LBM_LIST) $(TRANS_FINAL_DAT_FILE)
+
+$(TRANS_OUT_FILES) : $(TRANS_IN_FILES)
+	@perl tools/perl/pl/lang.pl $(TRANS_IN_ENG)  $(TRANS_FINAL_DAT_FILE) $(ALL_TRANS_IN_FILES)
+	@transtext $(LANG_OP) -h:$(TRANS_OUT_HDR) -o:$(TRANS_OUT_DIR) $(TRANS_FINAL_DAT_FILE)
+	@perl tools/perl/pl/text_extract.pl $(TRANS_OUT_HDR) $(SCRIPT_TRANS_HDR) STR__INGAME__
+
+translate : $(TRANS_OUT_FILES)
+	@$(ECHO) made translations
+
+cleantranslate:
+	@$(RM) -f $(TRANS_OUT_FILES)
+	@$(ECHO) Translations Cleaned
+
+GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 
 #----------------------------------------------------------------------------
 # Big TGA backdrops
@@ -449,12 +472,12 @@ GFX_DATA_OUT		+=	$(MUSIC_ALL_OUT)
 #----------------------------------------------------------------------------
 SCRIPTS_LIST		:=	test \
 						speechtest
-
+ 
 SCRIPTS_IN_DIR		:=	$(GAME_DATA_DIR)/scripts
-
+ 
 SCRIPTS_OUT_DIR		:=	$(DATA_OUT)/scripts
 SCRIPTS_OUT			:=	$(foreach SCRIPT,$(SCRIPTS_LIST),$(SCRIPTS_OUT_DIR)/$(SCRIPT).dat)
-
+ 
 scripts : $(SCRIPTS_OUT)
 
 cleanscripts:
@@ -492,7 +515,6 @@ $(DEMO_ALL_OUT) : $(DEMO_ALL_IN)
 
 GRAF_DIRS_TO_MAKE	+=	$(DEMO_OUT_DIR)
 GFX_DATA_OUT		+=	$(DEMO_ALL_OUT)
-
 
 #----------------------------------------------------------------------------
 # Dirs to Make
@@ -541,6 +563,7 @@ $(BIGLUMP_OUT) : $(BIGLUMP_IN)
 all : 	dirs gdirs \
 		actors \
 		levels \
+		sprites \
 		biglump
 		@$(ECHO) Graphics made
 

@@ -116,6 +116,11 @@ sOT				*ThisOT;
 MATRIX			&CamMtx=CGameScene::GetCamMtx();
 VECTOR			BlkPos;
 
+extern int RenderZ;
+		SetGeomScreen(RenderZ);
+		CamMtx.t[2]=RenderZ;
+		SetTransMatrix(&CamMtx);		
+
 		SetIdentNoTrans(&CamMtx);
 		SetRotMatrix(&CamMtx);
 

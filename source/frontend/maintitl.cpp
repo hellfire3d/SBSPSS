@@ -73,8 +73,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_FRONTEND_H__
-#include <frontend.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -118,7 +118,7 @@ int sval=0;
 void CFrontEndMainTitles::init()
 {
 	m_sprites=new ("MainTitle Sprites") SpriteBank();
-	m_sprites->load(FRONTEND_FRONTEND_SPR);
+	m_sprites->load(SPRITES_SPRITES_SPR);
 
 	m_smallFont=new ("MainTitle SmallFont") FontBank();
 	m_smallFont->initialise(&standardFont);

@@ -103,8 +103,8 @@
 #include "gfx\bubicles.h"
 #endif
 
-#ifndef __SPR_INGAMEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 #ifndef _ANIMTEX_HEADER_
@@ -130,9 +130,6 @@
 
 #include "gfx\actor.h"
 
-
-//int		GX=512/2;
-//int		GY=256/;
 int			RenderZ=256;
 
 /*****************************************************************************/

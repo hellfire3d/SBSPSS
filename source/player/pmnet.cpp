@@ -45,8 +45,8 @@
 #include <ACTOR_SPONGEBOB_ANIM.h>
 #endif
 
-#ifndef __SPR_INGAMEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 

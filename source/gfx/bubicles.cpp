@@ -45,8 +45,8 @@
 /*	Data
 	---- */
 
-#ifndef __SPR_INGAMEFX_H__
-#include <ingamefx.h>
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -388,7 +388,7 @@ void CBubicleFactory::init()
 	CBubicle		*bub;
 
 	s_sprites=new ("Bubble Sprites") SpriteBank();
-	s_sprites->load(INGAMEFX_INGAMEFX_SPR);
+	s_sprites->load(SPRITES_SPRITES_SPR);
 
 	for(i=0;i<s_frameTabSize;i++)
 	{

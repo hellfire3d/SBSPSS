@@ -204,7 +204,7 @@ void CGUISpriteReadout::init(CGUIObject *_parent,GUIId _id)
 	m_lastValue=-1;
 	m_frame=0;
 	m_x=m_y=0;
-	setSpriteBank(INGAMEFX_INGAMEFX_SPR);
+	setSpriteBank(SPRITES_SPRITES_SPR);
 }
 
 
