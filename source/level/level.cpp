@@ -81,6 +81,8 @@ sLvlTab	LvlTable[]=
 	{6,3,LEVELS_CHAPTER06_LEVEL03_LVL,LEVELS_CHAPTER06_LEVEL03_TEX,	CSoundMediator::SONG_CHAPTER6_BIGWHEEL},
 	{6,4,LEVELS_CHAPTER06_LEVEL04_LVL,LEVELS_CHAPTER06_LEVEL04_TEX,	CSoundMediator::SONG_CHAPTER6_TUNNELOFLOVE},
 	{6,5,LEVELS_CHAPTER06_LEVEL05_LVL,LEVELS_CHAPTER06_LEVEL05_TEX,	CSoundMediator::SONG_CHAPTER6_TUNNELOFLOVE},
+// FMA
+	{6,99,LEVELS_FMA_SHADYSHOALS_LVL,LEVELS_FMA_SHADYSHOALS_TEX,		CSoundMediator::SONG_TITLE},
 
 };
 const	static int	LvlTableSize=sizeof(LvlTable)/sizeof(sLvlTab);
@@ -112,7 +114,7 @@ bool	Finished=false;
 // TMP
 		if (Lvl>=LvlTableSize) Lvl=0;
 // Skip Blanks
-		while (CFileIO::getFileSize(LvlTable[Lvl ].LevelFilename)<=4000)	// Dodgy blank level skip
+		while (CFileIO::getFileSize(LvlTable[Lvl ].LevelFilename)<=10000)	// Dodgy blank level skip
 		{
 			Lvl++;
 			if (Lvl>=LvlTableSize) Lvl=0;
