@@ -160,8 +160,6 @@ void CFrontEndMainTitles::select()
 {
 	m_mode=MODE__PRESS_START;
 
-	m_mainMenu->select();
-	
 	m_startGameFlag=false;
 	m_gotoOptionsFlag=false;
 	m_gotoCreditsFlag=false;
@@ -185,18 +183,18 @@ void CFrontEndMainTitles::unselect()
 {
 	ClearScreenImage();
 	MemFree(s_image);	s_image=NULL;
-
-	m_mainMenu->unselect();
 }
 
 
+// PKG - This is messy... can be fixed when the final art is in
+/*
 typedef struct
 {
 	int	x,y;
 }xy;
 xy pos[10]={{0,0},{3,0},{-3,0},{0,2},{0,-2}};
 int posnum=5;
-
+*/
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -305,6 +303,7 @@ void CFrontEndMainTitles::think(int _frames)
 			if(!CFader::isFading()&&PadGetDown(0)&PAD_START)
 			{
 				m_mode=MODE__SELECT_OPTION;
+				m_mainMenu->select();
 			}
 			break;
 
@@ -314,16 +313,19 @@ void CFrontEndMainTitles::think(int _frames)
 			{
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_CHOOSE_SLOT;
+				m_mainMenu->unselect();
 			}
 			else if(m_gotoOptionsFlag)
 			{
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_OPTIONS;
+				m_mainMenu->unselect();
 			}
 			else if(m_gotoCreditsFlag)
 			{
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_CREDITS;
+				m_mainMenu->unselect();
 			}
 			break;
 
@@ -340,6 +342,8 @@ void CFrontEndMainTitles::think(int _frames)
 			{
 				CFader::setFadingOut();
 				m_mode=MODE__GOTO_DEMO;
+				if(m_mainMenu->isSelected())
+					m_mainMenu->unselect();
 			}
 		}
 		else
