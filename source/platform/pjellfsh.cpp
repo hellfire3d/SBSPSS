@@ -41,6 +41,7 @@ void CNpcJellyfishPlatform::postInit()
 
 	m_vertScale = 0;
 	m_dipCount = 0;
+	m_dipOffset = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,15 +120,22 @@ void CNpcJellyfishPlatform::think( int _frames )
 		{
 			s16 sineVal = ( m_dipCount << 10 ) / GameState::getOneSecondInFrames();
 
-			Pos.vy += ( 3 * rcos( sineVal ) ) >> 12;
+			m_dipOffset = ( 4 * rcos( sineVal ) ) >> 12;
 
 			m_dipCount += _frames;
+		}
+		else
+		{
+			m_dipOffset = 0;
 		}
 	}
 	else
 	{
 		m_dipCount = 0;
+		m_dipOffset = 0;
 	}
+
+	Pos.vy += m_dipOffset;
 
 	CNpcLinearPlatform::think( _frames );
 }
@@ -143,6 +151,7 @@ void CNpcJellyfishPlatform::render()
 		if (canRender())
 		{
 			DVECTOR &renderPos=getRenderPos();
+			//renderPos.vy += m_dipOffset;
 			SVECTOR rotation;
 			rotation.vx = 0;
 			rotation.vy = 0;

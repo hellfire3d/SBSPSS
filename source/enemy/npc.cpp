@@ -1455,7 +1455,17 @@ void CNpcEnemy::processEnemyCollision( CThing *thisThing )
 	}
 
 	Pos.vx += otherDelta.vx;
-	Pos.vy += otherDelta.vy;
+
+	s32 groundHeight = m_layerCollision->getHeightFromGround( Pos.vx, Pos.vy, 16 );
+
+	if ( groundHeight < 8 )
+	{
+		Pos.vy += groundHeight;
+	}
+	else
+	{
+		Pos.vy += otherDelta.vy;
+	}
 
 	m_heading = headingFromTarget;
 

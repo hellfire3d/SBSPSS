@@ -29,6 +29,7 @@ protected:
 
 	s32					m_vertScale;
 	u8					m_dipCount;
+	s32					m_dipOffset;
 };
 
 #endif

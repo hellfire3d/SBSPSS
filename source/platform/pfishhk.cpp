@@ -165,3 +165,15 @@ void CNpcFishHookPlatform::render()
 	}
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CRECT *CNpcFishHookPlatform::getThinkBBox()
+{
+	CRECT objThinkBox = getCollisionArea();
+
+	sBBox &thinkBBox = CThingManager::getThinkBBox();
+	objThinkBox.y2 = thinkBBox.YMin + 1;
+
+	return &objThinkBox;
+}

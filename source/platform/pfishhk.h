@@ -23,6 +23,7 @@ class CNpcFishHookPlatform : public CNpcPlatform
 public:
 	virtual void		postInit();
 	virtual void		render();
+	virtual	CRECT const		*getThinkBBox();
 protected:
 	virtual void		processLifetime( int _frames );
 	virtual void		processMovement( int _frames );
