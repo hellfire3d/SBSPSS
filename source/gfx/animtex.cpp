@@ -9,13 +9,16 @@
 #include "gfx\animtex.h"
 #include "gfx\tpage.h"
 #include "utils\utils.h"
+#include "utils\pak.h"
 
 #ifndef __SYSTEM_GSTATE_H__
 #include 	"system\gstate.h"
 #endif
 
 CAnimTex	*AnimTexList=0;
-CMoveTex	CMoveTex::MoveTexList[CMoveTex::MOVETEX_MAX];
+CPakTex		CPakTex::PakTexList[CPakTex::PAKTEX_MAX];
+int			CPakTex::PakTexCount;
+u8			*CPakTex::UnpackBuffer;
 
 /*****************************************************************************/
 CAnimTex::CAnimTex()
@@ -144,43 +147,54 @@ int			Time = GameState::getFramesSinceLast();
 			ThisTex->Count%=(ThisTex->Rect.h<<2);
 			ThisTex=ThisTex->NextTex;
 			}
-		CMoveTex::MoveTex();
-
 }
 
 /*****************************************************************************/
 /*****************************************************************************/
+/*** Pak Tex Stuff ***********************************************************/
 /*****************************************************************************/
-/*
-void	CMoveTex::Add(sTexInfo &SrcFrame,sTexInfo &DstFrame)
+/*****************************************************************************/
+CPakTex::CPakTex()
 {
-int		Idx;
-
-		for (Idx=0; Idx<MOVETEX_MAX && MoveTexList[Idx].Src; Idx++);
-
-		ASSERT(Idx<MOVETEX_MAX);
-
-CMoveTex	&ThisTex=MoveTexList[Idx];
-
-		ThisTex.Src=&SrcFrame;
-		ThisTex.Dst=&DstFrame;
+		PakTexCount=0;
+		UnpackBuffer=0;
 }
-*/
-/*****************************************************************************/
-void	CMoveTex::MoveTex()
-{
-/*
-CMoveTex	*ThisTex=MoveTexList,*NextTex;
 
-		for (int Idx=0; Idx<MOVETEX_MAX; Idx++)
+/*****************************************************************************/
+void	CPakTex::Init(int MaxSize)
+{
+		ASSERT(UnpackBuffer==0);
+		UnpackBuffer=(u8*)MemAlloc(MaxSize,"CPakTex::UnpackBuffer");
+		PakTexCount=0;
+}
+		
+
+/*****************************************************************************/
+void	CPakTex::Shutdown()
+{
+		if (UnpackBuffer) MemFree(UnpackBuffer);
+		UnpackBuffer=0;
+}
+
+/*****************************************************************************/
+void	CPakTex::Add(u8 *PakSpr,RECT *DstRect)
+{
+		ASSERT(PakTexCount<PAKTEX_MAX);
+		PakTexList[PakTexCount].PakSpr=PakSpr;
+		PakTexList[PakTexCount].DstRect=DstRect;
+		PakTexCount++;
+}
+
+/*****************************************************************************/
+void	CPakTex::DMAPakTex()
+{
+		for (int i=0; i<PakTexCount; i++)
 		{
-			CMoveTex	&ThisTex=MoveTexList[Idx];
-			if (!ThisTex.Src) return;
-
-			MoveImage((RECT*)ThisTex.Src,ThisTex.Dst->x,ThisTex.Dst->y);
-			ThisTex.Src=0;
+			ASSERT(UnpackBuffer);
+			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
+			LoadImage( PakTexList[i].DstRect, (u32*)UnpackBuffer);
 		}
-*/
+		PakTexCount=0;
 }
 
 /*****************************************************************************/

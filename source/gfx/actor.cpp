@@ -6,18 +6,20 @@
 #include "mem\memory.h"
 #include "fileio\fileio.h"
 #include "utils\utils.h"
-#include "utils\pak.h"
+//#include "utils\pak.h"
 #include "gfx\prim.h"
 #include "gfx\actor.h"
 #include "gfx\otpos.h"
+#include "gfx\animtex.h"
 
 #include <dstructs.h>
 
 /*****************************************************************************/
+const int	BBOX_ADJ=4;
+
+/*****************************************************************************/
 CActorCache	CActorPool::Cache;
 sActorPool	*CActorPool::ActorList,*CActorPool::LastActor;
-
-u8			*CActorCache::UnpackBuffer;
 
 /*****************************************************************************/
 /*** Cache *******************************************************************/
@@ -28,30 +30,11 @@ CActorCache::CActorCache()
 		{
 			SlotList[i].ListMem=0;
 		}
-		UnpackBuffer=0;
-
 }
 
 /*****************************************************************************/
 CActorCache::~CActorCache()
 {
-}
-
-/*****************************************************************************/
-int		CActorCache::GetSizeType(int Size)
-{
-//		if (Size<= 16) return(16);
-//		if (Size<= 32) return(32);
-//		if (Size<= 64) return(64);
-//		if (Size<=128) return(128);
-//		if (Size<=256) return(256);
-		return((Size+15)&-16);
-//	Size>>=4;
-//	Size<<=4;
-//		return(Size);
-		ASSERT(!"SPRITE SIZE NOT SUPPORTED");
-
-		return(-1);
 }
 
 /*****************************************************************************/
@@ -248,7 +231,7 @@ int		MaxH=0;
 			if (MaxH<SlotList[i].Height)	MaxH=SlotList[i].Height;
 			InitCache(i,TPW);
 		}
-		UnpackBuffer=(u8*)MemAlloc(MaxW*MaxH,"UnpackBuffer");
+		CPakTex::Init(MaxW*MaxH);
 }
 
 /*****************************************************************************/
@@ -277,9 +260,9 @@ sPoolNode	*List;
 					int	TexX=CACHE_X+CurrentTPX+(U>>2);
 					int	TexY=CACHE_Y+V;
 
-					List->Actor=(FileEquate)0;
-					List->TexX=TexX;
-					List->TexY=TexY;
+					List->Frame=0;
+					List->DstRect.x=TexX;
+					List->DstRect.y=TexY;
 					List->U=U&255;
 					List->V=V&255;
 					List->TPage=getTPage(0,0,TexX,TexY);
@@ -306,8 +289,7 @@ void	CActorCache::Reset()
 			SlotList[i].Width=0;
 			SlotList[i].Height=0;
 		}
-		if (UnpackBuffer) MemFree(UnpackBuffer);
-		UnpackBuffer=0;
+		CPakTex::Shutdown();
 
 		CurrentTPX=0;
 		CurrentPalette=0;
@@ -513,13 +495,13 @@ sActorPool	*Actor=ActorList;
 			
 		while (Actor) 
 		{
-//			Actor->LastCache.Head=0;//Actor->LocalCache.Head;
-//			Actor->LastCache.Tail=0;//Actor->LocalCache.Tail;
+			Actor->LastCache.Head=Actor->LocalCache.Head;
+			Actor->LastCache.Tail=Actor->LocalCache.Tail;
 			CActorCache::AddNodeList(&Actor->LocalCache ,Actor->GlobalCache);
 			Actor->LocalCache.Head=0;
 			Actor->LocalCache.Tail=0;
-//			ASSERT(Actor->GlobalCache->Head);
-//			ASSERT(Actor->GlobalCache->Tail);
+			ASSERT(Actor->GlobalCache->Head);
+			ASSERT(Actor->GlobalCache->Tail);
 			Actor=Actor->Next;
 		}
 /*
@@ -567,7 +549,6 @@ u16				ThisFrame=ThisAnim->Anim[Frame];
 }
 
 /*****************************************************************************/
-const int		BBOX_ADJ=4;
 POLY_FT4	*CActorGfx::Render(DVECTOR &Pos,int Anim,int Frame,bool XFlip,bool YFlip)
 {
 sPoolNode		*ThisNode,*FindNode;
@@ -580,7 +561,7 @@ POLY_FT4		*Ft4;
 			FindNode=PoolEntry->LocalCache.Head;
 			while (FindNode)
 			{ // Try local Cache (From Head forward)
-				if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame) 
+				if (FindNode->Frame==CurrentFrame) 
 				{
 					ThisNode=FindNode;
 					break;
@@ -594,7 +575,7 @@ POLY_FT4		*Ft4;
 				FindNode=PoolEntry->LastCache.Head;
 				while (FindNode)
 				{
-					if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame) 
+					if (FindNode->Frame==CurrentFrame) 
 					{
 						ThisNode=FindNode;
 						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
@@ -613,7 +594,7 @@ POLY_FT4		*Ft4;
 				FindNode=PoolEntry->GlobalCache->Tail;
 				while (FindNode)
 				{
-					if (FindNode->Actor==PoolEntry->Filename && FindNode->Anim==Anim && FindNode->Frame==Frame)
+					if (FindNode->Frame==CurrentFrame) 
 					{
 						ThisNode=FindNode;
 						CActorCache::RemoveNode(ThisNode,PoolEntry->GlobalCache);
@@ -630,18 +611,12 @@ POLY_FT4		*Ft4;
 				ThisNode=CActorCache::RemoveHeadNode(PoolEntry->GlobalCache);
 				ASSERT(ThisNode);
 				CActorCache::AddNode(ThisNode,&PoolEntry->LocalCache);
-				RECT	R;
 
-				ThisNode->Actor=PoolEntry->Filename;
-				ThisNode->Anim=Anim;
-				ThisNode->Frame=Frame;
-
-				PAK_doUnpak(CActorCache::UnpackBuffer,CurrentFrame->PAKSpr);
-				R.x=ThisNode->TexX;
-				R.y=ThisNode->TexY;
-				R.w=CurrentFrame->W>>2;	// div 4 cos 16 color
-				R.h=CurrentFrame->H;
-				LoadImage( &R, (u32*)CActorCache::UnpackBuffer);
+				ThisNode->Frame=CurrentFrame;
+				
+				ThisNode->DstRect.w=CurrentFrame->W>>2;	// div 4 cos 16 color
+				ThisNode->DstRect.h=CurrentFrame->H;
+				CPakTex::Add(CurrentFrame->PAKSpr,&ThisNode->DstRect);
 			}
 
 			Ft4=GetPrimFT4();

@@ -13,16 +13,13 @@
 #endif
 
 /*****************************************************************************/
-// Pack together Actor anim & frame for quicker check later
 struct	sPoolNode
 {
-		FileEquate	Actor;
-		u16			Anim;
-		u16			Frame;
-		u16			TPage;
-		u16			TexX,TexY;
-		u8			U,V;
-		sPoolNode	*Prev,*Next;
+		sSpriteFrame	*Frame;
+		RECT			DstRect;
+		u16				TPage;
+		u8				U,V;
+		sPoolNode		*Prev,*Next;
 };
 
 struct	sNodeList
@@ -66,19 +63,14 @@ public:
 			CACHE_Y			=256,
 			CACHE_W			=8,
 			CACHE_H			=1,
-/*
-			CACHE_X			=512+256,
-			CACHE_Y			=256,
-			CACHE_W			=4,
-			CACHE_H			=1,
 
-*/
 			CACHE_PALX		=CACHE_X,
 			CACHE_PALY		=510,
 			CACHE_PALW		=64,
 			CACHE_PALH		=1,
 
 			CACHE_TYPE_MAX	=8,
+
 		};
 
 		CActorCache();
@@ -96,20 +88,18 @@ static	sPoolNode	*RemoveHeadNode(sNodeList *Root);
 static	void		RemoveNode(sPoolNode *Node,sNodeList *Root);
 static	void		AddNode(sPoolNode *Node,sNodeList *Root);
 static	void		AddNodeList(sNodeList *Src,sNodeList *Dst);
-static	u8			*UnpackBuffer;
 
 protected:
 		int			ReAllocSlot(int W,int H);
 		int			GetSlot(int W,int H);
 		void		InitCache(int Type,int Count);
-		int			GetSizeType(int Size);
+		int			GetSizeType(int Size)		{return((Size+15)&-16);}
 
 		sPoolSlot	SlotList[CACHE_TYPE_MAX];
 
 		int			CurrentTPX;
 		int			CurrentPalette;
 		int			SlotCount;
-
 };
 
 /*****************************************************************************/
@@ -133,6 +123,7 @@ static	void		AddActor(sActorPool *ThisActor);
 
 static	CActorCache	Cache;
 static	sActorPool	*ActorList,*LastActor;
+
 };
 
 /*****************************************************************************/

@@ -32,26 +32,28 @@ private:
 };
 
 /*****************************************************************************/
-class CMoveTex
+
+class CPakTex
 {
 public:
 		enum
 		{
-			MOVETEX_MAX=16,
+			PAKTEX_MAX=16,
 		};
 
-		CMoveTex()
-		{
-//			Src=0;
-		}
-		
-//static	void	Add(sTexInfo &SrcFrame,sTexInfo &DstFrame);
-static	void	MoveTex();
+		CPakTex();
 
+static	void	Init(int MaxSize);
+static	void	Shutdown();
+static	void	Add(u8 *PakSpr,RECT *DstRect);
+static	void	DMAPakTex();
+protected:
+		u8		*PakSpr;
+		RECT	*DstRect;
 private:
-//		sTexInfo	*Src,*Dst;
-
-static	CMoveTex	MoveTexList[];
+static	CPakTex	PakTexList[];
+static	int		PakTexCount;
+static	u8		*UnpackBuffer;
 };
 
 /*****************************************************************************/
