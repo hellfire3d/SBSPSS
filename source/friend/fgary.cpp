@@ -45,6 +45,7 @@ void CNpcGaryFriend::postInit()
 	m_started = false;
 	m_fallDeath = false;
 	m_drawRotation = 0;
+	m_obstructed = false;
 
 	m_soundId = (int) NOT_PLAYING;
 }
@@ -216,7 +217,7 @@ void CNpcGaryFriend::think( int _frames )
 						m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
 					}
 
-					if ( !conveyorOverride )
+					if ( !conveyorOverride && !m_obstructed )
 					{
 						Pos.vx += multiplier * 2 * _frames;
 					}
@@ -248,7 +249,7 @@ void CNpcGaryFriend::think( int _frames )
 							m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_GARY_DE_SNAIL, true );
 						}
 
-						if ( !conveyorOverride )
+						if ( !conveyorOverride && !m_obstructed )
 						{
 							Pos.vx += multiplier * 2 * _frames;
 						}
@@ -261,6 +262,8 @@ void CNpcGaryFriend::think( int _frames )
 			}
 		}
 	}
+
+	m_obstructed = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

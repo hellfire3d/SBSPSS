@@ -750,6 +750,26 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			thing1=thing1->m_nextCollisionThing;
 		}
 
+		// gary collision with hazards
+
+		thing2=s_CollisionLists[CThing::TYPE_NPC];
+		while(thing2)
+		{
+			if ( thing2->getThingSubType() == CNpcFriend::NPC_FRIEND_GARY )
+			{
+				thing1=s_CollisionLists[CThing::TYPE_HAZARD];
+				while(thing1)
+				{
+					if(thing1->checkCollisionAgainst(thing2, _frames))
+					{
+						thing1->collidedWith(thing2);
+					}
+					thing1=thing1->m_nextCollisionThing;
+				}
+			}
+			thing2=thing2->m_nextCollisionThing;
+		}
+
 		player->detectHazardousSurface();
 	}
 // Shut emm down, sh sh shut em down, we shutem down

@@ -32,6 +32,7 @@ public:
 	void				startLeft();
 	void				startRight();
 	void				render();
+	void				setObstructed()											{m_obstructed = true;}
 
 protected:
 	DVECTOR				m_triggerPos;
@@ -40,6 +41,7 @@ protected:
 	s16					m_speed;
 	s16					m_drawRotation;
 	int					m_soundId;
+	u8					m_obstructed;
 };
 
 #endif

@@ -58,6 +58,7 @@ public:
 	void				setPlatform( CNpcPlatform *platform )					{m_platform = platform;}
 	void				clearPlatform()											{m_platform = NULL;}
 	virtual void		setupWaypoints( sThingActor *ThisActor );
+	virtual void		setObstructed()											{}
 
 	static CNpcFriend	*Create(sThingActor *ThisActor);
 	static NPC_FRIEND_UNIT_TYPE		getTypeFromMapEdit( u16 newType );

@@ -27,6 +27,10 @@
 #include	"game\game.h"
 #endif
 
+#ifndef __FRIEND_FRIEND_H__
+#include "friend\friend.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -213,6 +217,42 @@ void CNpcRisingWeightHazard::render()
 			{
 				DrawLine( x1, y1, x2, y2, 0, 0, 0, 0 );
 			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcRisingWeightHazard::collidedWith( CThing *_thisThing )
+{
+	if ( m_isActive )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+			{
+				CPlayer *player = (CPlayer *) _thisThing;
+
+				if ( !player->isRecoveringFromHit() )
+				{
+					player->takeDamage( DAMAGE__HIT_ENEMY );
+				}
+
+				break;
+			}
+
+			case TYPE_NPC:
+			{
+				CNpcFriend *npcFriend = (CNpcFriend *) _thisThing;
+
+				npcFriend->setObstructed();
+
+				break;
+			}
+
+			default:
+				ASSERT(0);
+				break;
 		}
 	}
 }

@@ -27,6 +27,7 @@ public:
 	void				setTriggered()											{m_triggered = true;}
 	CRECT const			*getThinkBBox()											{return( CThing::getThinkBBox() );}
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
 	void				setWaypoints( sThingHazard *ThisHazard );
 	void				processMovement( int _frames );
 
