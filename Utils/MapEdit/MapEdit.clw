@@ -51,7 +51,7 @@ HeaderFile=MapEditView.h
 ImplementationFile=MapEditView.cpp
 Filter=W
 LastObject=CMapEditView
-BaseClass=CView
+BaseClass=CGLEnabledView
 VirtualFilter=VWC
 
 
@@ -70,7 +70,7 @@ Type=0
 HeaderFile=ChildFrm.h
 ImplementationFile=ChildFrm.cpp
 Filter=M
-LastObject=IDC_LAYERBAR_LIST
+LastObject=CChildFrame
 
 
 [CLS:CAboutDlg]

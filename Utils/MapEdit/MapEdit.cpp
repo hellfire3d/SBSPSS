@@ -1,13 +1,18 @@
 // MapEdit.cpp : Defines the class behaviors for the application.
 //
 
-#include "stdafx.h"
-#include "MapEdit.h"
+#include	"stdafx.h"
+#include	<gl\gl.h>
+#include	<gl\glu.h>
+#include	<gl\glut.h>
+#include	"GLEnabledView.h"
 
-#include "MainFrm.h"
-#include "ChildFrm.h"
-#include "MapEditDoc.h"
-#include "MapEditView.h"
+#include	"MapEdit.h"
+
+#include	"MainFrm.h"
+#include	"ChildFrm.h"
+#include	"MapEditDoc.h"
+#include	"MapEditView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

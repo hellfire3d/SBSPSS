@@ -85,6 +85,21 @@ LINK32=link.exe
 
 # Name "MapEdit - Win32 Release"
 # Name "MapEdit - Win32 Debug"
+# Begin Group "MapEditor"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Core.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Core.h
+# End Source File
+# End Group
+# Begin Group "Windows"
+
+# PROP Default_Filter ""
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -94,7 +109,19 @@ SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Core.cpp
+SOURCE=.\gl3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\glcam.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GLEnabledView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\glfrust.cpp
 # End Source File
 # Begin Source File
 
@@ -135,7 +162,19 @@ SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Core.h
+SOURCE=.\gl3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\glcam.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GLEnabledView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\glfrust.h
 # End Source File
 # Begin Source File
 
@@ -186,9 +225,6 @@ SOURCE=.\res\MapEditDoc.ico
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\ReadMe.txt
-# End Source File
+# End Group
 # End Target
 # End Project

@@ -1,11 +1,16 @@
 // MapEditView.cpp : implementation of the CMapEditView class
 //
 
-#include "stdafx.h"
-#include "MapEdit.h"
+#include	"stdafx.h"
+#include	<gl\gl.h>
+#include	<gl\glu.h>
+#include	<gl\glut.h>
+#include	"GLEnabledView.h"
 
-#include "MapEditDoc.h"
-#include "MapEditView.h"
+#include	"MapEdit.h"
+
+#include	"MapEditDoc.h"
+#include	"MapEditView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,16 +21,16 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CMapEditView
 
-IMPLEMENT_DYNCREATE(CMapEditView, CView)
+IMPLEMENT_DYNCREATE(CMapEditView, CGLEnabledView)
 
-BEGIN_MESSAGE_MAP(CMapEditView, CView)
+BEGIN_MESSAGE_MAP(CMapEditView, CGLEnabledView)
 	//{{AFX_MSG_MAP(CMapEditView)
 	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 	// Standard printing commands
-	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+	ON_COMMAND(ID_FILE_PRINT, CGLEnabledView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_DIRECT, CGLEnabledView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CGLEnabledView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -33,30 +38,13 @@ END_MESSAGE_MAP()
 
 CMapEditView::CMapEditView()
 {
+	TRACE0("Here");
 	// TODO: add construction code here
 
 }
 
 CMapEditView::~CMapEditView()
 {
-}
-
-BOOL CMapEditView::PreCreateWindow(CREATESTRUCT& cs)
-{
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
-
-	return CView::PreCreateWindow(cs);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// CMapEditView drawing
-
-void CMapEditView::OnDraw(CDC* pDC)
-{
-	CMapEditDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	// TODO: add draw code for native data here
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -84,12 +72,12 @@ void CMapEditView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 #ifdef _DEBUG
 void CMapEditView::AssertValid() const
 {
-	CView::AssertValid();
+	CGLEnabledView::AssertValid();
 }
 
 void CMapEditView::Dump(CDumpContext& dc) const
 {
-	CView::Dump(dc);
+	CGLEnabledView::Dump(dc);
 }
 
 CMapEditDoc* CMapEditView::GetDocument() // non-debug version is inline
@@ -104,12 +92,10 @@ CMapEditDoc* CMapEditView::GetDocument() // non-debug version is inline
 
 void CMapEditView::OnSetFocus(CWnd* pOldWnd) 
 {
+	
 CMapEditDoc	*CurDoc=GetDocument();
-	CView::OnSetFocus(pOldWnd);
+	CGLEnabledView::OnSetFocus(pOldWnd);
 	theApp.SetCurrent(CurDoc);
 
 	CurDoc->UpdateAll();	// woohoo, that was easy
-
-	// TODO: Add your message handler code here
-	
 }

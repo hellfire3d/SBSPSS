@@ -9,8 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
-class CMapEditView : public CView
+class CMapEditView : public CGLEnabledView
 {
 protected: // create from serialization only
 	CMapEditView();
@@ -26,9 +25,6 @@ public:
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CMapEditView)
-	public:
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
