@@ -69,6 +69,8 @@ public:
 		NPC_CRATE_PLATFORM,
 		NPC_BOUNCE_PLATFORM,
 		NPC_DUAL_PLATFORM,
+		NPC_OILDRUM_GENERATOR,
+		NPC_CRATE_GENERATOR,
 		NPC_PLAYER_BUBBLE_PLATFORM,
 		NPC_PLATFORM_TYPE_MAX,
 	};
@@ -78,9 +80,9 @@ public:
 	void				init( DVECTOR initPos, s32 initLifetime );
 	virtual void		postInit();
 	void				shutdown();
-	void				think(int _frames);
+	virtual void		think(int _frames);
 	virtual void		render();
-	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
+	void				setLayerCollision( class CLayerCollision *_layer );
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
 #ifdef REMOVETHIS
@@ -201,6 +203,8 @@ protected:
 	u8							m_isShuttingDown;
 
 	u8							m_platformWidth;
+
+	int							m_graphicNum;
 
 	virtual void		collidedWith(CThing *_thisThing);
 

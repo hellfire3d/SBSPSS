@@ -1153,6 +1153,22 @@ SOURCE=..\..\..\source\platform\pfalling.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pfallnor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfallnor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfgen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\platform\pfgen.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pfishhk.cpp
 # End Source File
 # Begin Source File

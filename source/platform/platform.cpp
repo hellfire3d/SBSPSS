@@ -107,6 +107,10 @@
 #include "platform\pplayer.h"
 #endif
 
+#ifndef __PLATFORM_PFGEN_H__
+#include "platform\pfgen.h"
+#endif
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,6 +231,24 @@ CNpcPlatform	*CNpcPlatform::Create(sThingPlatform *ThisPlatform)
 			break;
 		}
 
+		case NPC_OILDRUM_GENERATOR:
+		{
+			CNpcFallingPlatformGenerator *generator;
+			generator = new ("oildrum generator") CNpcFallingPlatformGenerator;
+			generator->setTargetType( NPC_OILDRUM_PLATFORM );
+			platform = generator;
+			break;
+		}
+
+		case NPC_CRATE_GENERATOR:
+		{
+			CNpcFallingPlatformGenerator *generator;
+			generator = new ("crate generator") CNpcFallingPlatformGenerator;
+			generator->setTargetType( NPC_CRATE_PLATFORM );
+			platform = generator;
+			break;
+		}
+
 		default:
 		{
 			ASSERT( 0 );
@@ -287,14 +309,16 @@ void CNpcPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 void CNpcPlatform::setGraphic( sThingPlatform *ThisPlatform )
 {
+	m_graphicNum = ThisPlatform->Gfx;
 	m_modelGfx = new ("ModelGfx") CModelGfx;
-	m_modelGfx->SetModel( ThisPlatform->Gfx );
+	m_modelGfx->SetModel( m_graphicNum );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPlatform::setGraphic( u8 graphicNum )
 {
+	m_graphicNum = graphicNum;
 	m_modelGfx = new ("ModelGfx") CModelGfx;
 	m_modelGfx->SetModel( graphicNum );
 }
@@ -1097,6 +1121,13 @@ void CNpcPlatform::addWaypoint( s32 xPos, s32 yPos )
 void CNpcPlatform::setTypeFromMapEdit( u16 newType )
 {
 	m_type = mapEditConvertTable[newType];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcPlatform::setLayerCollision( class CLayerCollision *_layer )
+{
+	m_layerCollision=_layer;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
