@@ -94,6 +94,8 @@ private:
 	int				m_tuneLoaded;
 	int				m_musicPlaying;
 
+	int				m_globalAnimationFlag;
+
 	int				m_readyToShutdown;
 };
 

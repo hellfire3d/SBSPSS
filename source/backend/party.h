@@ -36,10 +36,12 @@ public:
 	void	shutdown();
 	void	render();
 	void	think(int _frames);
+	void	setAnimation(int _flag)				{m_animationFlag=_flag;}
 
 private:
 	class SpriteBank		*m_sprites;
 	unsigned char			*m_image;
+	int						m_animationFlag;
 
 };
 

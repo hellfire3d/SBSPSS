@@ -210,6 +210,7 @@ typedef enum
 	SC_SET_ACTOR_FACING,		// actor,facing
 	SC_SET_ACTOR_ANIM_STATE,	// actor,state,loop
 	SC_WALK_ACTOR_TO_POSITION,	// actor,x,y,frames
+	SC_SET_GLOBAL_ANIMATION,	// on/off
 
 	SC_CREATE_FX,				// FxNo, X,Y, FXType
 	SC_KILL_FX,					// FxNo
@@ -1139,11 +1140,9 @@ static const int s_FMAPartyScript[]=
 	SC_SET_ACTOR_VISIBILITY,	FMA_ACTOR_SANDY,true,
 
 	SC_WAIT_ON_TIMER,			60*2,
-
 	SC_WAIT_ON_CONVERSATION,	SCRIPTS_FMA_PARTY_DAT,
-
+	SC_SET_GLOBAL_ANIMATION,	false,
 	SC_WAIT_ON_TIMER,			60*10,
-
 	SC_STOP
 };
 
@@ -1228,6 +1227,8 @@ void	CFmaScene::init()
 
 	m_musicPlaying=false;
 	m_tuneLoaded=false;
+
+	m_globalAnimationFlag=true;
 }
 
 
@@ -1405,21 +1406,24 @@ void	CFmaScene::think(int _frames)
 				}
 
 				// Anim
-				actor->m_animFrame++;
-				int	AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].Bank;
-				int	AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].Anim;
-				int	LastFrame=actor->m_gfx[AnimBank]->getFrameCount(AnimNo)-1;
-				if(actor->m_animFrame>=LastFrame)
+				if(m_globalAnimationFlag)
 				{
-					if (actor->m_animLoop)
-					{ // Loop anim
-						actor->m_animFrame=0;
+					actor->m_animFrame++;
+					int	AnimBank=s_actorGraphicsData[i].m_anims[actor->m_animState].Bank;
+					int	AnimNo=s_actorGraphicsData[i].m_anims[actor->m_animState].Anim;
+					int	LastFrame=actor->m_gfx[AnimBank]->getFrameCount(AnimNo)-1;
+					if(actor->m_animFrame>=LastFrame)
+					{
+						if (actor->m_animLoop)
+						{ // Loop anim
+							actor->m_animFrame=0;
+						}
+						else
+						{ // hold on last frame
+							actor->m_animFrame=LastFrame;
+						}
+						
 					}
-					else
-					{ // hold on last frame
-						actor->m_animFrame=LastFrame;
-					}
-					
 				}
 
 				actor++;
@@ -1701,6 +1705,16 @@ void	CFmaScene::startNextScriptCommand()
 			}
 			break;
 
+		case SC_SET_GLOBAL_ANIMATION:	// on/off
+			{
+				int	flag;
+				m_pc++;
+				flag=*(m_pc++);
+				m_globalAnimationFlag=flag;
+				if(m_party)m_party->setAnimation(flag);
+			}
+			break;
+
 		case SC_CREATE_FX:
 			{
 				int	FXNo;
@@ -1818,6 +1832,7 @@ void	CFmaScene::processCurrentScriptCommand()
 		case SC_SET_ACTOR_FACING:		// actor,facing
 		case SC_SET_ACTOR_ANIM_STATE:	// actor,state
 		case SC_WALK_ACTOR_TO_POSITION:	// actor,x,y,frames
+		case SC_SET_GLOBAL_ANIMATION:	// on/off
 		case SC_START:					// 
 		case SC_STOP:					// nextScene
 			ASSERT(!"Shouldn't be here..");

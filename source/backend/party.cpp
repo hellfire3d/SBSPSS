@@ -102,6 +102,8 @@ void CPartyScene::init()
 	s_leftBobSin=s_leftBob=s_rightBobSin=s_rightBob=0;
 
 	CSoundMediator::setSong(CSoundMediator::SONG_PARTY);
+
+	m_animationFlag=true;
 }
 
 
@@ -227,7 +229,7 @@ void CPartyScene::render()
 	for(i=0;i<numimages;i++)
 	{
 		ASSERT(pimage->m_fh<=FRM_TABLESIDE3);
-//		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_elementId])
+		if(gameSlot->isPartyItemHeld(pimage->m_itemId)&&!drawn[pimage->m_elementId])
 		{
 			int		x,y;
 			x=pimage->m_xOffsetBroken*256;
@@ -255,10 +257,13 @@ void CPartyScene::render()
   ---------------------------------------------------------------------- */
 void CPartyScene::think(int _frames)
 {
-	s_leftBobSin=(s_leftBobSin+(_frames*20))&4095;
-	s_rightBobSin=(s_rightBobSin+(_frames*16))&4095;
-	s_leftBob=(msin(s_leftBobSin)*2)>>12;
-	s_rightBob=(msin(s_rightBobSin)*2)>>12;
+	if(m_animationFlag)
+	{
+		s_leftBobSin=(s_leftBobSin+(_frames*20))&4095;
+		s_rightBobSin=(s_rightBobSin+(_frames*16))&4095;
+		s_leftBob=(msin(s_leftBobSin)*2)>>12;
+		s_rightBob=(msin(s_rightBobSin)*2)>>12;
+	}
 }
 
 
