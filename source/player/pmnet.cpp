@@ -235,7 +235,7 @@ void	CPlayerModeNet::think()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CPlayerModeNet::renderModeUi()
+ void	CPlayerModeNet::renderModeUi()
 {
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
@@ -244,9 +244,14 @@ void	CPlayerModeNet::renderModeUi()
 	fh=sb->getFrameHeader(FRM__NET);
 	if(m_netState==NET_STATE__FULL)
 	{
+		POLY_FT4	*ft4;
+
 		// Net has a jellyfish inside
 		int size=256+128+((msin(m_netSin)*npsize)>>12);
 		sb->printFT4Scaled(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,size);
+		ft4=sb->printFT4Scaled(FRM__NETBLOB,CPlayer::POWERUPUI_ICONX+17,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT,size);
+		setShadeTex(ft4,0);
+		setRGB0(ft4,255,128,255);
 	}
 	else
 	{
