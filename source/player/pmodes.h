@@ -161,8 +161,8 @@ public:
 	CPlayer						*getPlayer()							{ return( m_player ); }
 
 	int							getIsInWater()							{return m_player->getIsInWater();}
-	int							getIsHealthFullSoICanStopSoakingUp()	{return m_player->getIsHealthFullSoICanStopSoakingUp();}
-	int							getIsHealthSoFullThatIDontNeedToSoakUp(){return m_player->getIsHealthSoFullThatIDontNeedToSoakUp();}
+	int							getIsHelmetFullSoICanStopSoakingUp()	{return m_player->getIsHelmetFullSoICanStopSoakingUp();}
+	int							getIsHelmetSoFullThatIDontNeedToSoakUp(){return m_player->getIsHelmetSoFullThatIDontNeedToSoakUp();}
 
 	void						moveLeft();
 	void						moveRight();

@@ -68,8 +68,8 @@ public:
 		unsigned char	m_isInUse;
 		unsigned char	m_lives;
 		unsigned char	m_continues;
-		unsigned char	m_spatulaCollectedFlags[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS][16];			// Enuf space for 128 spats per level
-		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Same again..
+		unsigned char	m_spatulaCollectedCounts[NUM_CHAPTERS*NUM_LEVELS_WITH_SPATULAS];
+		unsigned char	m_kelpTokenCollectedFlags[NUM_CHAPTERS][16];								// Enuf space for 128 tokens per level
 		unsigned char	m_kelpTokensHeld;
 		unsigned char	m_partyItemsHeld[CShopScene::NUM_SHOP_ITEM_IDS];
 		unsigned char	m_levelCompletionState[NUM_CHAPTERS*(NUM_LEVELS_PER_CHAPTER_WITH_QUEST_ITEMS+NUM_BONUS_LEVELS_PER_CHAPTER)];
@@ -79,32 +79,22 @@ public:
 		{
 			ASSERT(_chapter<=NUM_CHAPTERS);
 			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
-			int		i,j,count;
-			count=0;
-			for(i=0;i<8;i++)
+			return m_spatulaCollectedCounts[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level];
+		}
+		void			setSpatulaCollectedCount(unsigned int _chapter,unsigned int _level,unsigned char _count,unsigned char _totalCount)
+		{
+			ASSERT(_chapter<=NUM_CHAPTERS);
+			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
+			m_spatulaCollectedCounts[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level]=_count;
+			
+			// Does this open up a bonus level?
+			int	percentRequired,percentAchieved;
+			percentRequired=(_chapter*10)+60;			// 60% on chapter 1 ... to ... 100% on chapter 5
+			percentAchieved=(_count*100)/_totalCount;
+			if(percentAchieved>=percentRequired)
 			{
-				unsigned char	flags=m_spatulaCollectedFlags[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level][i];
-				for(j=0;j<8;j++)
-				{
-					if(flags&1)count++;
-					flags>>=1;
-				}
+				levelIsNowOpen(_chapter,4);
 			}
-			return count;
-		}
-		void			collectSpatula(unsigned int _chapter,unsigned int _level,unsigned int _spat)
-		{
-			ASSERT(_chapter<=NUM_CHAPTERS);
-			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
-			ASSERT(_spat<=128);
-			m_spatulaCollectedFlags[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level][_spat>>3]|=1<<(_spat&7);
-		}
-		int				isSpatulaUncollected(unsigned int _chapter,unsigned int _level,unsigned int _spat)
-		{
-			ASSERT(_chapter<=NUM_CHAPTERS);
-			ASSERT(_level<=NUM_LEVELS_WITH_SPATULAS);
-			ASSERT(_spat<=128);
-			return (m_spatulaCollectedFlags[(_chapter*NUM_LEVELS_WITH_SPATULAS)+_level][_spat>>3]>>(_spat&7))&1?false:true;
 		}
 
 		// Kelp Token functions..

@@ -115,7 +115,7 @@ void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
 {
-	if(!_playerMode->getIsHealthFullSoICanStopSoakingUp())
+	if(!_playerMode->getIsHelmetFullSoICanStopSoakingUp())
 	{
 		if(m_breatheDelayFrames==0)
 		{

@@ -38,10 +38,6 @@
 #include "game\game.h"
 #endif
 
-#ifndef	__GAME_GAMESLOT_H__
-#include "game\gameslot.h"
-#endif
-
 
 /*	Std Lib
 	------- */
@@ -213,7 +209,7 @@ void CPauseMenu::select()
 
 	chapter=GameScene.getChapterNumber()-1;
 	level=GameScene.getLevelNumber()-1;
-	m_guiSpatReadout->setSpatCounts(CGameSlotManager::getSlotData()->getSpatulaCollectedCount(chapter,level),
+	m_guiSpatReadout->setSpatCounts(GameScene.getPlayer()->getSpatulasHeld(),
 									GameScene.getTotalSpatCountForThisLevel());
 }
 

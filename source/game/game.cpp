@@ -296,6 +296,7 @@ void	CGameScene::think(int _frames)
 		level=getLevelNumber();
 		chapter=getChapterNumber();
 
+		// Open next level?
 		gameSlot->levelHasBeenCompleted(chapter-1,level-1);
 		if(level!=5&&					// Don't open any levels after finishing a bonus level
 		   !(level==4&&chapter==5))		// Don't open any levels after finishing final level
@@ -314,6 +315,12 @@ void	CGameScene::think(int _frames)
 			}
 			gameSlot->levelIsNowOpen(chapterToOpen-1,levelToOpen-1);
 			CMapScene::setLevelToStartOn(chapterToOpen-1,levelToOpen-1);
+		}
+
+		// New hi-spatula-count?
+		if(m_player->getSpatulasHeld()>gameSlot->getSpatulaCollectedCount(chapter-1,level-1))
+		{
+			gameSlot->setSpatulaCollectedCount(chapter-1,level-1,m_player->getSpatulasHeld(),getTotalSpatCountForThisLevel());
 		}
 
 		// Level finished - go to map or fma

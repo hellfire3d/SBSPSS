@@ -431,15 +431,7 @@ void	CLevel::initThings(int _respawningLevel)
 
 				createThisPickup=true;
 				isNumberedItem=false;
-				if((PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA)
-				{
-					isNumberedItem=true;
-					if(CGameSlotManager::getSlotData()->isSpatulaUncollected(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,itemNumber)==false)
-					{
-						createThisPickup=false;
-					}
-				}
-				else if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
+				if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
 				{
 					isNumberedItem=true;
 					if(CGameSlotManager::getSlotData()->isKelpTokenUncollected(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,itemNumber)==false)
@@ -461,11 +453,7 @@ void	CLevel::initThings(int _respawningLevel)
 					newPickup=createPickup((PICKUP_TYPE)ItemList->Type,&pos);
 					if(isNumberedItem)
 					{
-						if((PICKUP_TYPE)ItemList->Type==PICKUP__SPATULA)
-						{
-							((CSpatulaPickup*)newPickup)->setSpatulaNumber(itemNumber);
-						}
-						else if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
+						if((PICKUP_TYPE)ItemList->Type==PICKUP__KELP_TOKEN)
 						{
 							((CKelpTokenPickup*)newPickup)->setTokenNumber(itemNumber);
 						}

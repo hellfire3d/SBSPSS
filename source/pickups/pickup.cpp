@@ -31,10 +31,6 @@
 
 // For the factory..
 
-#ifndef	__PICKUPS_PHEALTH_H__
-#include "pickups\phealth.h"
-#endif
-
 #ifndef	__PICKUPS_PLIFE_H__
 #include "pickups\plife.h"
 #endif
@@ -416,6 +412,58 @@ void	CBaseWeaponSimplePickup::renderPickup(DVECTOR *_pos)
 
 /*----------------------------------------------------------------------
 	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseBouncingPickup::init()
+{
+	CBasePickup::init();
+	m_timeTillVanish=TIME_TILL_VANISH;
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseBouncingPickup::render()
+{
+	if(m_timeTillVanish>FRAMES_TO_FLASH||m_timeTillVanish&3)
+	{
+		DVECTOR	ofs,pos;
+		int		visibilityRadius;
+		
+		CPickupThing::render();
+		
+		ofs=CLevel::getCameraPos();
+		pos.vx=Pos.vx-ofs.vx;
+		pos.vy=Pos.vy-ofs.vy;
+		visibilityRadius=getVisibilityRadius();
+		if(pos.vx>0-visibilityRadius&&pos.vx<512+visibilityRadius&&
+		   pos.vy>0-visibilityRadius&&pos.vy<256+visibilityRadius)
+		{
+			renderPickup(&pos);
+		}
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseBouncingPickup::collidedWith(CThing *_thisThing)
+{
+}
+
+
+
+
+/*----------------------------------------------------------------------
+	Function:
 	Purpose:	This is basically a factory method for making pickups :)
 	Params:
 	Returns:
@@ -430,13 +478,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 	switch(_type)
 	{
 		case PICKUP__BIG_HEALTH:
-			pickup=new ("LargeHealthPickup") CLargeHealthPickup();
-			break;
 		case PICKUP__MEDIUM_HEALTH:
-			pickup=new ("MediumHealthPickup") CMediumHealthPickup();
-			break;
 		case PICKUP__SMALL_HEALTH:
-			pickup=new ("SmallHealthPickup") CSmallHealthPickup();
+			ASSERT(!"HEALTH PICKUPS ARE NO LONGER IN THE GAME");
+return NULL;
 			break;
 
 		case PICKUP__LIFE:
@@ -488,7 +533,7 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 			break;
 
 		case PICKUP__BALLOON_AND_SPATULA:
-			pickup=new ("BalloonAndSpatulaPickup") CBalloonAndSpatulaPickup();
+			ASSERT(!"BALLOON AND SPATULA PICKUPS ARE NO LONGER IN THE GAME");
 			break;
 
 		case PICKUP__JELLY_LAUNCHER:
@@ -497,6 +542,10 @@ CBasePickup	*createPickup(const PICKUP_TYPE _type,const DVECTOR *_pos)
 
 		case PICKUP__KELP_TOKEN:
 			pickup=new ("KelpTokenPickup") CKelpTokenPickup();
+			break;
+
+		case PICKUP__BOUNCING_SPATULA:
+			pickup=new ("BouncingSpatulaPickup") CBouncingSpatulaPickup();
 			break;
 
 		default:

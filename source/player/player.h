@@ -182,13 +182,11 @@ class CPlayer : public CPlayerThing
 public:
 	enum
 	{
-		MAX_HEALTH=5,
 		MAX_LIVES=99,
 		
 		WATERLEVELSHIFT=5,
 		WATERMAXHEALTH=(255<<WATERLEVELSHIFT),
-		WATERHEALTHPART=WATERMAXHEALTH/(MAX_HEALTH+1),
-		WATERMINSOACKUPLEVEL=(245<<WATERLEVELSHIFT),					// SB won't auto soak unless water is lower than this
+		WATERMINSOAKUPLEVEL=(245<<WATERLEVELSHIFT),					// SB won't auto soak unless water is lower than this
 	};
 
 	typedef struct
@@ -228,8 +226,9 @@ public:
 
 	void			setLedgeLookAhead(int _lookAhead)					{m_ledgeLookAhead=_lookAhead;}
 
-	void			addHealth(int _health);
 	void			addLife();
+	void			addSpatula()										{m_numSpatulasHeld++;}
+	int				getSpatulasHeld()									{return m_numSpatulasHeld;}
 	ATTACK_STATE	getAttackState();
 	int				isRecoveringFromHit()								{return m_invincibleFrameCount!=0||m_currentMode==PLAYER_MODE_DEAD;}
 
@@ -331,9 +330,8 @@ public:
 
 private:
 	int				m_lives;
-	int				m_health;
+	int				m_numSpatulasHeld;
 	int				m_healthWaterLevel;
-	int				m_healthReactFrames;
 	int				m_helmetSoundTimer;			// Timer for breathing sound when using the helmet
 
 
@@ -393,8 +391,8 @@ public:
 
 	void			setIsInWater(int _in)					{m_isInWater=_in;m_helmetSoundTimer=0;}
 	int				getIsInWater()							{return m_isInWater;}
-	int				getIsHealthFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
-	int				getIsHealthSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOACKUPLEVEL;}
+	int				getIsHelmetFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
+	int				getIsHelmetSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOAKUPLEVEL;}
 
 	int				isHoldingNet()							{return m_currentMode==PLAYER_MODE_NET;}
 
@@ -444,16 +442,10 @@ public:
 
 	enum
 	{
-		HEALTH_ICONX=40,
-		HEALTH_ICONY=40,
-		POWERUPUI_ICONX=400,
-		POWERUPUI_ICONY=40,
-		POWERUPUI_TEXTX=440,
-		POWERUPUI_TEXTY=37,
-		POWERUPUI_OT=0,
-		COLLECTEDITEM_BASEX=110,
-		COLLECTEDITEM_BASEY=60,
-		COLLECTEDITEM_GAP=40,
+		SB_UI_XBASE=40,
+		SB_UI_YBASE=40,
+		SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS=50,
+		SB_UI_GAP_BETWEEN_ITEMS=5,
 	};
 
 private:

@@ -89,6 +89,10 @@
 #include "pickups\pickup.h"
 #endif
 
+#ifndef __MATHTABLE_HEADER__
+#include "utils\mathtab.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -702,15 +706,6 @@ if(newmode!=-1)
 
 	m_allowConversation=false;
 
-	if(m_healthReactFrames)
-	{
-		m_healthReactFrames-=_frames;
-		if(m_healthReactFrames<0)
-		{
-			m_healthReactFrames=0;
-		}
-	}
-
 	m_tryingToManuallyPickupWeapon=false;
 	m_tryingToAutomaticallyPickupWeapon=false;
 
@@ -720,6 +715,30 @@ if(newmode!=-1)
 #ifdef __USER_paul__
 if(PadGetDown(0)&PAD_TRIANGLE)
 {
+	DVECTOR	spawnBasePos;
+	int		angle,angleInc;
+	int		i;
+
+	spawnBasePos=Pos;
+	spawnBasePos.vy-=50;
+	angle=-1024;
+	angleInc=512;
+
+	for(i=0;i<5;i++)
+	{
+		DVECTOR				offset,spawnPos;
+		CBaseBouncingPickup *pickup;
+
+		angle&=4095;
+		offset.vx=((msin(angle)*25)>>12);
+		offset.vy=-((mcos(angle)*25)>>12);
+		spawnPos.vx=spawnBasePos.vx+offset.vx;
+		spawnPos.vy=spawnBasePos.vy+offset.vy;
+
+		pickup=(CBaseBouncingPickup*)createPickup(PICKUP__BOUNCING_SPATULA,&spawnPos);
+
+		angle+=angleInc;
+	}
 }
 #endif
 ///
@@ -1226,7 +1245,10 @@ if(drawlastpos)
 }
 #endif
 
-	// Render
+	SpriteBank	*sb=CGameScene::getSpriteBank();
+
+
+	// Render player
 	DVECTOR	sbPos=
 	{
 		Pos.vx-m_cameraPos.vx,
@@ -1236,91 +1258,58 @@ if(drawlastpos)
 	m_currentPlayerModeClass->render(&sbPos);
 
 
-	// Health
-	if(!isWearingDivingHelmet())
-	{
-		// In water - Use normal SB face for health
-		static int	s_fullHealthFrames[]=
-		{
-			FRM__HEALTH_FULL_1,
-			FRM__HEALTH_FULL_2,
-			FRM__HEALTH_FULL_3,
-			FRM__HEALTH_FULL_4,
-			FRM__HEALTH_FULL_5,
-		};
-		static int	s_emptyHealthFrames[]=
-		{
-			FRM__HEALTH_EMPTY_1,
-			FRM__HEALTH_EMPTY_2,
-			FRM__HEALTH_EMPTY_3,
-			FRM__HEALTH_EMPTY_4,
-			FRM__HEALTH_EMPTY_5,
-		};
-		int			i,x,y;
-		POLY_FT4	*ft4;
-		int			*frames;
+	// UI
+	char		spatCount[20];
+	int			x,y;
+	sFrameHdr	*fh;
 
-		x=HEALTH_ICONX;
-		y=HEALTH_ICONY;
-		if(m_health==0||m_healthReactFrames)
-		{
-			frames=s_emptyHealthFrames;
-		}
-		else
-		{
-			frames=s_fullHealthFrames;
-		}
+	// Spat count
+	sprintf(spatCount,"x%d",m_numSpatulasHeld);
+	x=SB_UI_XBASE;
+	y=SB_UI_YBASE;
+	fh=sb->getFrameHeader(FRM__SPATULA);
+	sb->printFT4(fh,x,y,0,0,0);
+	x+=fh->W;
+	m_fontBank->print(x,y,spatCount);
+	x+=SB_UI_GAP_FROM_SPAT_COUNT_TO_PICKUPS;
 
-		int	ygap;
-		ygap=CGameScene::getSpriteBank()->getFrameHeader(*frames)->H;
-		for(i=5;i>0;i--)
-		{
-			ft4=CGameScene::getSpriteBank()->printFT4(*frames++,x,y,0,0,0);
-			setSemiTrans(ft4,i>m_health);
-			y+=ygap;
-		}
-	}
-	else
+	if(isWearingDivingHelmet())
 	{
-		// Out of water - Use bowl of water
+		// Helmet
 		POLY_FT4	*ft4;
-		sFrameHdr	*fh;
 		int			V,W,H,partH;
 
-		ft4=CGameScene::getSpriteBank()->printFT4(FRM__WATERHILIGHT,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+		ft4=sb->printFT4(FRM__WATERHILIGHT,x,y,0,0,0);
 		setSemiTrans(ft4,true);
 
-		fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__WATER);
-		ft4=CGameScene::getSpriteBank()->printFT4(fh,0,0,0,0,0);
+		fh=sb->getFrameHeader(FRM__WATER);
+		ft4=sb->printFT4(fh,0,0,0,0,0);
 		setSemiTrans(ft4,true);
 		V=fh->V;
 		W=fh->W;
 		H=fh->H;
 		partH=(H*(255-(m_healthWaterLevel>>WATERLEVELSHIFT)))>>8;
 		if(partH>H)partH=H;
-		setXYWH(ft4,HEALTH_ICONX,HEALTH_ICONY+(partH),W,H-partH);
+		setXYWH(ft4,x,y+(partH),W,H-partH);
 		ft4->v0=V+(partH);
 		ft4->v1=V+(partH);
 
-		CGameScene::getSpriteBank()->printFT4(FRM__WATERMETER,HEALTH_ICONX,HEALTH_ICONY,0,0,0);
+		sb->printFT4(FRM__WATERMETER,x,y,0,0,0);
+
+		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS;
 	}
-
-
-	// Mode specific ui
-	int	itemX=COLLECTEDITEM_BASEX;
-
-	// Pickups
-	m_currentPlayerModeClass->renderModeUi();
 	if(isWearingBoots())
 	{
-		int			x,y;
-		sFrameHdr	*fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SHOE);
-		x=itemX-(fh->W/2);
-		y=COLLECTEDITEM_BASEY-(fh->H/2);
-		CGameScene::getSpriteBank()->printFT4(fh,x+2,y+2,0,0,0);
-		CGameScene::getSpriteBank()->printFT4(fh,x-2,y-2,0,0,0);
-		itemX+=COLLECTEDITEM_GAP;
+		// Boots
+		int			pickupX,pickupY;
+		sFrameHdr	*fh=sb->getFrameHeader(FRM__SHOE);
+		sb->printFT4(fh,x,y,0,0,0);
+		sb->printFT4(fh,x+4,y+4,0,0,0);
+		x+=fh->W+SB_UI_GAP_BETWEEN_ITEMS+4;
 	}
+
+	// Mode specific ui
+	m_currentPlayerModeClass->renderModeUi();
 }
 
 
@@ -1425,32 +1414,6 @@ int CPlayer::getHeightFromPlatformNoGround(int _x,int _y,int _maxHeight)
 int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
 {
 	return( CGameScene::getCollision()->getHeightFromGround(_x,_y,_maxHeight) );
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void CPlayer::addHealth(int _health)
-{
-	if(!isWearingDivingHelmet())
-	{
-		m_health+=_health;
-		if(m_health>MAX_HEALTH)
-		{
-			m_health=MAX_HEALTH;
-		}
-	}
-	else
-	{
-		m_healthWaterLevel+=WATERHEALTHPART*_health;
-		if(m_healthWaterLevel>WATERMAXHEALTH)
-		{
-			m_healthWaterLevel=WATERMAXHEALTH;
-		}
-	}
 }
 
 /*----------------------------------------------------------------------
@@ -1709,9 +1672,8 @@ void CPlayer::respawn()
 
 	m_allowConversation=false;
 
-	m_health=MAX_HEALTH;
+	m_numSpatulasHeld=0;
 	m_healthWaterLevel=WATERMAXHEALTH;
-	m_healthReactFrames=0;
 	m_invincibleFrameCount=INVINCIBLE_FRAMES__START;
 	m_helmetSoundTimer=0;
 	Pos=m_respawnPos;
@@ -1949,34 +1911,21 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 			}
 			else
 			{
-				if(!isWearingDivingHelmet())
+				if(ouchThatHurtSoMuchThatImJustGoingToDieNow||(getSpatulasHeld()==0&&m_currentMode!=PLAYER_MODE_NET))
 				{
-					if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
-					{
-						m_health--;
-					}
-					else
-					{
-						m_health=-1;
-					}
-					if(m_health<0)
-					{
-						died=true;
-					}
+					died=true;
 				}
 				else
 				{
-					if(!ouchThatHurtSoMuchThatImJustGoingToDieNow)
+					if(m_currentMode==PLAYER_MODE_NET)
 					{
-						m_healthWaterLevel-=WATERHEALTHPART;
+						// Launch net pickup
+						m_currentMode=PLAYER_MODE_FULLUNARMED;
 					}
 					else
 					{
-						m_health=-1;
-					}
-					if(m_healthWaterLevel<0)
-					{
-						died=true;
+						// Launch all spatulas!
+						m_numSpatulasHeld=0;
 					}
 				}
 			}
@@ -2005,8 +1954,6 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					if ( ( (CNpcPlatform *) platform )->isCart() )
 					{
 						m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
-						m_healthReactFrames=25;
-
 						return;
 					}
 				}
@@ -2043,7 +1990,6 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					m_currentPlayerModeClass->setState(STATE_JUMPBACK);
 				}
 				m_invincibleFrameCount=INVINCIBLE_FRAMES__HIT;
-				m_healthReactFrames=25;
 			}
 		}
 	}

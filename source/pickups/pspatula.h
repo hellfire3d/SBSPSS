@@ -60,18 +60,17 @@ private:
 	int					m_spatulaNumber;
 };
 
-class CBalloonAndSpatulaPickup : public CSpatulaPickup
+
+class CBouncingSpatulaPickup : public CBaseBouncingPickup
 {
 public:
-	virtual void		init();
+	virtual DVECTOR		getSizeForPlacement();
 
 protected:
-	virtual void		thinkPickup(int _frames);
 	virtual void		renderPickup(DVECTOR *_pos);
 
-private:
-	int					m_sin;
 };
+
 
 
 /*----------------------------------------------------------------------
