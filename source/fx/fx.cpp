@@ -351,6 +351,11 @@ void	CFX::setBaseData(void *Data)
 void	CFX::shutdown()
 {
 		CFXThing::shutdown();
+		if( m_soundId != NOT_PLAYING )
+		{
+			CSoundMediator::stopAndUnlockSfx(m_soundId);
+			m_soundId=NOT_PLAYING;
+		}
 }
 
 /*****************************************************************************/
