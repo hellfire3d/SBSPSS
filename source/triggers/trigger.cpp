@@ -83,6 +83,10 @@
 #include "triggers\tsemit.h"
 #endif
 
+#ifndef __TRIGGERS_TSSWITCH_H__
+#include "triggers\tsswitch.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -181,6 +185,11 @@ CTrigger	*trigger;
 
 		case TRIGGER_HAZARD_WALK:
 			trigger = (CHazardWalkTrigger*)new("HazardWalkTrigger") CHazardWalkTrigger();
+			break;
+
+		// Steam switch emitter
+		case TRIGGER_STEAM_SWITCH_EMITTER:
+			trigger=(CSteamSwitchEmitterTrigger*)new("SteamSwitchEmitterTrigger") CSteamSwitchEmitterTrigger();
 			break;
 
 		default:

@@ -46,7 +46,10 @@ public:
 	virtual void		setPositionAndSize(int _x,int _y,int _w,int _h);
 	void				toggleVisible();
 protected:
+	virtual void		collidedWith(CThing *_thisThing);
+
 	CFX					*m_effect;
+	u8					m_active;
 };
 
 /*----------------------------------------------------------------------

@@ -111,6 +111,7 @@ public:
 	void				setPathType( u8 newType )								{m_npcPath.setPathType( newType );}
 	void				setStartPos( s32 xPos, s32 yPos );
 	virtual u8			hasBeenAttacked();
+	virtual void		hasBeenSteamed( DVECTOR &steamPos )						{hasBeenAttacked();}
 	virtual u8			canBeCaughtByNet();
 	void				caughtWithNet();
 	virtual int			getFrameCount();
@@ -252,7 +253,7 @@ protected:
 	virtual void		processAttackCollision();
 	virtual void		processGraphicFlipping();
 	virtual void		processAnimFrames( int _frames );
-	void				processTimer( int _frames );
+	virtual void		processTimer( int _frames );
 	bool				isCollisionWithGround();
 
 	void				processGenericGotoTarget( int _frames, s32 xDist, s32 yDist, s32 speed );

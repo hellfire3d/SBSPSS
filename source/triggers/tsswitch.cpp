@@ -19,6 +19,10 @@
 #include	"game\game.h"
 #endif
 
+#ifndef __ENEMY_NPC_H__
+#include "enemy\npc.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +31,7 @@ void	CSteamSwitchEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 	CTrigger::setPositionAndSize( _x, _y, _w, _h );
 
 	m_effect = CFX::Create( CFX::FX_TYPE_STEAM, Pos );
+	m_active = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,4 +39,28 @@ void	CSteamSwitchEmitterTrigger::setPositionAndSize(int _x,int _y,int _w,int _h)
 void	CSteamSwitchEmitterTrigger::toggleVisible()
 {
 	m_effect->toggleVisible();
+	m_active = !m_active;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void	CSteamSwitchEmitterTrigger::collidedWith(CThing *_thisThing)
+{
+	if ( m_active )
+	{
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_ENEMY:
+			{
+				CNpcEnemy *enemy = (CNpcEnemy *) _thisThing;
+
+				enemy->hasBeenSteamed( Pos );
+
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
 }

@@ -19,12 +19,14 @@ class CNpcIronDogfishEnemy : public CNpcEnemy
 public:
 	virtual void		postInit();
 protected:
+	virtual void		processTimer( int _frames );
 	virtual bool		processSensor();
 	virtual void		processClose( int _frames );
 	virtual void		processMovement( int _frames );
 	void				processStandardIronDogfishAttack( int _frames );
 	void				processWalkToUser( int _frames, int speed );
 	virtual void		processAttackCollision();
+	virtual void		hasBeenSteamed( DVECTOR &steamPos );
 
 	enum NPC_IRON_DOGFISH_STATE
 	{
@@ -34,6 +36,8 @@ protected:
 		IRON_DOGFISH_ROLL,
 		IRON_DOGFISH_LASER_EYE_2,
 	};
+
+	s32					m_steamTimer;
 };
 
 #endif

@@ -35,12 +35,18 @@
 #include <ACTOR_IRONDOGFISH_ANIM.h>
 #endif
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcIronDogfishEnemy::postInit()
 {
 	m_state = IRON_DOGFISH_THUMP_1;
 	m_extendDir = EXTEND_RIGHT;
 	m_npcPath.setPathType( CNpcPath::PONG_PATH );
+	m_steamTimer = 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool CNpcIronDogfishEnemy::processSensor()
 {
@@ -66,6 +72,8 @@ bool CNpcIronDogfishEnemy::processSensor()
 
 	return( false );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcIronDogfishEnemy::processMovement( int _frames )
 {
@@ -94,6 +102,8 @@ void CNpcIronDogfishEnemy::processMovement( int _frames )
 		processStandardIronDogfishAttack( _frames );
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcIronDogfishEnemy::processWalkToUser( int _frames, int speed )
 {
@@ -148,6 +158,8 @@ void CNpcIronDogfishEnemy::processWalkToUser( int _frames, int speed )
 		Pos.vx += yMovement;
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 {
@@ -256,6 +268,8 @@ void CNpcIronDogfishEnemy::processStandardIronDogfishAttack( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcIronDogfishEnemy::processClose( int _frames )
 {
 	// swipe at player
@@ -275,6 +289,8 @@ void CNpcIronDogfishEnemy::processClose( int _frames )
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CNpcIronDogfishEnemy::processAttackCollision()
 {
 	switch( m_animNo )
@@ -293,4 +309,27 @@ void CNpcIronDogfishEnemy::processAttackCollision()
 		default:
 			break;
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::hasBeenSteamed( DVECTOR &steamPos )
+{
+	if ( m_steamTimer <= 0 )
+	{
+		hasBeenAttacked();
+		m_steamTimer = 4 * GameState::getOneSecondInFrames();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcIronDogfishEnemy::processTimer(int _frames)
+{
+	if ( m_steamTimer > 0 )
+	{
+		m_steamTimer -= _frames;
+	}
+
+	CNpcEnemy::processTimer( _frames );
 }

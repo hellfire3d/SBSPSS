@@ -2189,6 +2189,14 @@ SOURCE=..\..\..\source\triggers\tsemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tsswitch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tsswitch.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tteleprt.cpp
 # End Source File
 # Begin Source File

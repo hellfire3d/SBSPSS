@@ -559,6 +559,22 @@ DVECTOR	const	&CamPos=CLevel::getCameraPos();
 			thing1=thing1->m_nextCollisionThing;
 		}
 
+		// Enemy -> Trigger collision
+		thing1=s_CollisionLists[CThing::TYPE_TRIGGER];
+		while(thing1)
+		{
+			thing2=s_CollisionLists[CThing::TYPE_ENEMY];
+			while(thing2)
+			{
+				if(thing1->checkCollisionAgainst(thing2, _frames))
+				{
+					thing1->collidedWith(thing2);
+				}
+				thing2=thing2->m_nextCollisionThing;
+			}
+			thing1=thing1->m_nextCollisionThing;
+		}
+
 		// Enemy -> Player projectile collision
 		thing1=s_CollisionLists[CThing::TYPE_PLAYERPROJECTILE];
 		while(thing1)

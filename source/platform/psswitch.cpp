@@ -75,7 +75,23 @@ void CNpcSteamSwitchPlatform::processMovement( int _frames )
 			}
 			else
 			{
+				trigger->toggleVisible();
+
+				m_state = NPC_STEAM_SWITCH_OFF;
+				m_timer = GameState::getOneSecondInFrames();
+			}
+
+			break;
+		}
+
+		case NPC_STEAM_SWITCH_OFF:
+		{
+			if ( m_timer <= 0 )
+			{
+				trigger->toggleVisible();
+
 				m_state = NPC_STEAM_SWITCH_RETURN;
+				m_timer = 5 * GameState::getOneSecondInFrames();
 			}
 
 			break;
@@ -83,25 +99,28 @@ void CNpcSteamSwitchPlatform::processMovement( int _frames )
 
 		case NPC_STEAM_SWITCH_RETURN:
 		{
-			s32 extension = -m_extension;
-			s32 maxMove = m_speed * _frames;
+			if ( m_timer <= 0 )
+			{
+				s32 extension = -m_extension;
+				s32 maxMove = m_speed * _frames;
 
-			if ( extension > maxMove )
-			{
-				extension = maxMove;
-			}
-			else if ( extension < -maxMove )
-			{
-				extension = -maxMove;
-			}
+				if ( extension > maxMove )
+				{
+					extension = maxMove;
+				}
+				else if ( extension < -maxMove )
+				{
+					extension = -maxMove;
+				}
 
-			if ( extension )
-			{
-				m_extension += extension;
-			}
-			else
-			{
-				m_state = NPC_STEAM_SWITCH_STOP;
+				if ( extension )
+				{
+					m_extension += extension;
+				}
+				else
+				{
+					m_state = NPC_STEAM_SWITCH_STOP;
+				}
 			}
 
 			break;
@@ -115,6 +134,8 @@ void CNpcSteamSwitchPlatform::processMovement( int _frames )
 
 void CNpcSteamSwitchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 {
+	ASSERT( ThisPlatform->PointCount == 3 );
+
 	int pointNum;
 
 	u16	*PntList=(u16*)MakePtr(ThisPlatform,sizeof(sThingPlatform));
@@ -132,17 +153,29 @@ void CNpcSteamSwitchPlatform::setWaypoints( sThingPlatform *ThisPlatform )
 
 	init( startPos );
 
-	if ( ThisPlatform->PointCount > 1 )
-	{
-		newXPos = (u16) *PntList;
-		PntList++;
-		newYPos = (u16) *PntList;
-		PntList++;
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
 
-		m_maxExtension = ( ( newYPos << 4 ) + 16 ) - startPos.vy;
-	}
-	else
+	m_maxExtension = ( ( newYPos << 4 ) + 16 ) - startPos.vy;
+
+	newXPos = (u16) *PntList;
+	PntList++;
+	newYPos = (u16) *PntList;
+	PntList++;
+
+	trigger=(CSteamSwitchEmitterTrigger*)CTrigger::Create(CTrigger::TRIGGER_STEAM_SWITCH_EMITTER);
+	trigger->setPositionAndSize( ( newXPos << 4 ) + 8, ( newYPos << 4 ) + 16 - 50, 100, 100 );
+	trigger->toggleVisible();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNpcSteamSwitchPlatform::processTimer( int _frames )
+{
+	if ( m_timer > 0 )
 	{
-		m_maxExtension = 100;
+		m_timer -= _frames;
 	}
 }
