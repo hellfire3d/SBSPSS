@@ -1024,6 +1024,10 @@ SOURCE=..\..\..\data\DataCache.scr
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\..\out\USA\include\actor_spongebob.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\out\USA\include\BigLump.h
 # End Source File
 # Begin Source File
