@@ -59,7 +59,7 @@ void CNpcRockShardHazard::processMovement( int _frames )
 			Pos.vx = m_base.vx + ( -3 + ( getRnd() % 7 ) );
 			Pos.vy = m_base.vy + ( -3 + ( getRnd() % 7 ) );
 
-			if ( m_soundId == NOT_PLAYING )
+			if ( canRender() && m_soundId == NOT_PLAYING )
 			{
 				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_RATTLE, true, true );
 			}
@@ -81,7 +81,7 @@ void CNpcRockShardHazard::processMovement( int _frames )
 			m_timerActive = true;
 			m_timer = ( m_respawnRate - 1 ) * GameState::getOneSecondInFrames();
 
-			if ( m_soundId == NOT_PLAYING )
+			if ( canRender() && m_soundId == NOT_PLAYING )
 			{
 				m_soundId = (int) CSoundMediator::playSfx( CSoundMediator::SFX_HAZARD__STALACTITE_LAND, true );
 			}
