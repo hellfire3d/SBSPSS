@@ -56,8 +56,8 @@ static FILE	*s_fhOutput=NULL;
 
 CTreeNode	*s_baseTreeNode=NULL;
 
-static mylexer	s_lexer;
-static myparser	s_parser;
+mylexer		s_lexer;
+myparser	s_parser;
 
 
 

@@ -588,6 +588,18 @@ SOURCE=..\..\..\makefile.gfx
 SOURCE=..\..\..\data\translations\text.dat
 # End Source File
 # End Group
+# Begin Group "scripts"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\defs.scr
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\data\scripts\test.scr
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\..\data\DataCache.scr

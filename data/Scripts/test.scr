@@ -1,24 +1,25 @@
 // Crappy test program
 // Prints a number based upon another one ( eh? )
 
-#include defs.scr
+//#print	something..
+#include	data/scripts/defs.scr
 
 
 
 // No switch statements here..
-if($tmp1==1)
+if($tmp1==ONE)
 {
 	$tmp2=11;
 }
-else if($tmp1==2)
+else if($tmp1==TWO)
 {
 	$tmp2=22;
 }
-else if($tmp1==3)
+else if($tmp1==THREE)
 {
-	$tmp2=33;
+	$tmp2=30+3;
 }
-else if($tmp1==4)
+else if($tmp1==FOUR)
 {
 	// Stop here!
 	stop;
@@ -31,6 +32,6 @@ pause;
 if($tmp2!=0)
 	print($tmp2);
 else
-	print(12345);
+	print(5432);
 stop;
 

@@ -81,7 +81,7 @@ static PreproCmd s_preproCmds[]=
 };
 static int		s_numPreproCmds=sizeof(s_preproCmds)/sizeof(PreproCmd);
 
-
+// Macro list ( alphabetically sorted from lowest to highest )
 static Macro	*s_macros;
 
 static char	s_seps[]=" \t";
@@ -194,12 +194,13 @@ static int ppf_undefine(char *_cmd)
   ---------------------------------------------------------------------- */
 static int addMacro(char *_name,char *_replacement)
 {
-	Macro	*mac,*newMac;
+	Macro	*mac,*newMac,*prev;
 
+	// Is the macro already there?
 	mac=s_macros;
 	while(mac)
 	{
-		if(strcmp(_name,mac->m_name)==0)
+		if(strcmp(_name,mac->m_name)==0)		// pkg
 		{
 			printf("MACRO '%s' ALREADY DEFINED\n",_name);
 			return false;
@@ -207,13 +208,31 @@ static int addMacro(char *_name,char *_replacement)
 		mac=mac->m_next;
 	}
 
+	// Create new macro
 	newMac=(Macro*)malloc(sizeof(Macro));
 	newMac->m_name=(char*)malloc(strlen(_name)+1);
 	newMac->m_replacement=(char*)malloc(strlen(_replacement)+1);
 	strcpy(newMac->m_name,_name);
 	strcpy(newMac->m_replacement,_replacement);
-	newMac->m_next=s_macros;
-	s_macros=newMac;
+
+	// Insert it into the list
+	mac=s_macros;
+	prev=NULL;
+	while(mac&&strcmp(_name,mac->m_name)>0)
+	{
+		prev=mac;
+		mac=mac->m_next;
+	};
+	if(prev)
+	{
+		prev->m_next=newMac;
+		newMac->m_next=mac;
+	}
+	else
+	{
+		newMac->m_next=s_macros;
+		s_macros=newMac;
+	}
 
 	return true;
 }
@@ -228,12 +247,14 @@ static int addMacro(char *_name,char *_replacement)
 static int removeMacro(char *_name)
 {
 	Macro	*mac,*prev;
+	int		cmpResult;
 
 	mac=s_macros;
 	prev=NULL;
 	while(mac)
 	{
-		if(strcmp(_name,mac->m_name)==0)
+		cmpResult=strcmp(_name,mac->m_name);
+		if(cmpResult==0)
 		{
 			if(prev)
 			{
@@ -247,6 +268,10 @@ static int removeMacro(char *_name)
 			free(mac->m_replacement);
 			free(mac);
 			return true;
+		}
+		else if(cmpResult<0)
+		{
+			break;
 		}
 		prev=mac;
 		mac=mac->m_next;
@@ -263,8 +288,38 @@ static int removeMacro(char *_name)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-extern char *lookupMacro(char *_name)
+extern char *lookupMacro(char *_name,int *_result)
 {
+	Macro	*mac;
+	size_t	nameLength;
+	int		cmpResult;
+	
+	mac=s_macros;
+	nameLength=strlen(_name);
+	while(mac)
+	{
+		cmpResult=strncmp(_name,mac->m_name,nameLength);
+		if(cmpResult==0)
+		{
+			if(nameLength==strlen(mac->m_name))
+			{
+				*_result=KNOWN_MACRO;
+				return mac->m_replacement;
+			}
+			else
+			{
+				*_result=POSSIBLE_KNOWN_MACRO;
+				return NULL;
+			}
+		}
+		else if(cmpResult<0)
+		{
+			break;
+		}
+		mac=mac->m_next;
+	}
+
+	*_result=UNKNOWN_MACRO;	
 	return NULL;
 }
 

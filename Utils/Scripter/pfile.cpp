@@ -37,32 +37,6 @@
 	Structure defintions
 	-------------------- */
 
-class CPFile
-{
-public:
-				CPFile();
-
-	int			open(char *_filename);
-	int			close();
-
-	FILE		*getFh()						{return m_fh;}
-
-	static class CPFile		*getCurrentFile()	{return s_stack;}
-
-
-private:
-	FILE		*m_fh;
-	char		*m_filename;
-	int			m_charCount;
-	int			m_lineCount;
-	int			m_currentCharOnLine;
-	int			m_errorCount;
-
-	class CPFile			*m_next;
-	static class CPFile		*s_stack;
-};
-
-
 /*----------------------------------------------------------------------
 	Function Prototypes
 	------------------- */
@@ -105,26 +79,6 @@ extern int closePFile()
 }
 
 
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-extern FILE	*getPFileFh()
-{
-	CPFile*pf;
-
-	pf=CPFile::getCurrentFile();
-	if(pf)
-		return pf->getFh();
-	else
-		return NULL;
-}
-
-
-
-
 
 
 /*----------------------------------------------------------------------
@@ -154,10 +108,9 @@ int CPFile::open(char *_filename)
 {
 	int	ret;
 	
-	printf("Opening %s..\n",_filename);
 	if((m_fh=fopen(_filename,"rt"))==NULL)
 	{
-		printf("FATAL: Couldn't open file for reading\n");
+		printf("FATAL: Couldn't open %sfor reading\n",_filename);
 		ret=false;
 	}
 	else
@@ -181,7 +134,7 @@ int CPFile::open(char *_filename)
   ---------------------------------------------------------------------- */
 int CPFile::close()
 {
-	printf("Processed %d char(s), %d line(s) in file %s\n",m_charCount,m_lineCount,m_filename);
+	printf("Processed %d char(s) on %d line(s) in file %s\n",m_charCount,m_lineCount,m_filename);
 	if(m_errorCount)
 	{
 		printf("Found %d error(s) :(\n",m_errorCount);
@@ -199,6 +152,61 @@ int CPFile::close()
 	return true;
 }
 
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:		Returns ASCII code, or -1 for eof, as per yygetchar()
+	Returns:
+  ---------------------------------------------------------------------- */
+int CPFile::readChar()
+{
+	int		ret;
+	char	c;
+
+	if(fread(&c,sizeof(c),1,m_fh)==1)
+	{
+		m_charCount++;
+		m_currentCharOnLine++;
+		if(c=='\n')
+		{
+			m_lineCount++;
+			m_currentCharOnLine=0;
+		}
+		ret=c;
+	}
+	else
+	{
+		ret=-1;
+		if(ferror(m_fh))
+		{
+			printf("FATAL: Read error!\n");
+		}
+		else
+		{				
+			closePFile();
+			if(getCurrentFile())
+			{
+				return getCurrentFile()->readChar();
+			}
+		}
+	}
+
+	return ret;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:		Returns ASCII code, or -1 for eof, as per yygetchar()
+	Returns:
+  ---------------------------------------------------------------------- */
+void CPFile::error(FILE *_fh)
+{
+	fprintf(_fh,"ERROR IN %s LINE %d, COLUMN %d\n",m_filename,m_lineCount+1,m_currentCharOnLine);
+	m_errorCount++;
+}
 
 /*===========================================================================
  end */

@@ -82,8 +82,8 @@ void myparser::setBaseNode(class CTreeNode *_baseNode)
   ---------------------------------------------------------------------- */
 void myparser::yyerror(const char *_text)
 {
-	fprintf(yyparseerr,"ERROR: %s\n",_text);
-	fprintf(yyparseerr,"       line %d char %d\n",m_currentLexer->getCurrentLine(),m_currentLexer->getCurrentCharOnLine());
+	fprintf(yyparseerr,"PARSER ERROR: %s\n",_text);
+//	fprintf(yyparseerr,"       line %d char %d\n",m_currentLexer->getCurrentLine(),m_currentLexer->getCurrentCharOnLine());
 	m_currentLexer->error();
 }
 

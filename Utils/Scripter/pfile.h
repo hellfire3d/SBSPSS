@@ -32,6 +32,34 @@
 	Structure defintions
 	-------------------- */
 
+class CPFile
+{
+public:
+				CPFile();
+
+	int			open(char *_filename);
+	int			close();
+
+	static class CPFile		*getCurrentFile()	{return s_stack;}
+
+	int			readChar();
+
+	void		error(FILE *_fh);
+	int			getErrorCount()					{return m_errorCount;}
+
+private:
+	FILE		*m_fh;
+	char		*m_filename;
+	int			m_charCount;
+	int			m_lineCount;
+	int			m_currentCharOnLine;
+	int			m_errorCount;
+
+	class CPFile			*m_next;
+	static class CPFile		*s_stack;
+};
+
+
 /*----------------------------------------------------------------------
 	Globals
 	------- */
@@ -42,7 +70,6 @@
 
 extern int openPFile(char *_filename);
 extern int closePFile();
-extern FILE	*getPFileFh();
 
 
 /*---------------------------------------------------------------------- */

@@ -18,6 +18,10 @@
 
 #include "var.h"
 
+#ifndef _LEXER_H
+#include "lexer.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -65,6 +69,7 @@ static int s_numLocalVarNames=sizeof(s_localVarNames)/sizeof(char *);
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+extern mylexer s_lexer;
 extern int lookupVarName(char *_name)
 {
 	int	i,vnum;
@@ -90,7 +95,7 @@ extern int lookupVarName(char *_name)
 	}
 
 	printf("Unknown variable $%s\n",_name);
-//	s_errorCount++;
+	s_lexer.error();
 	return -1;
 }
 

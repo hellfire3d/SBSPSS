@@ -25,6 +25,14 @@
 	Tyepdefs && Defines
 	------------------- */
 
+// lookupMacro results
+enum
+{
+	UNKNOWN_MACRO,
+	POSSIBLE_KNOWN_MACRO,
+	KNOWN_MACRO,
+};
+
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
@@ -39,7 +47,7 @@
 
 extern int preprocessorCmd(char *_cmd);
 
-extern char *lookupMacro(char *_name);
+extern char *lookupMacro(char *_name,int *_result);
 
 
 /*---------------------------------------------------------------------- */

@@ -28,21 +28,15 @@ Date: 07 December 2000
 	void			setCurrentParser(class myparser *_parser)	{m_currentParser=_parser;}
 	class myparser	*getCurrentParser()							{return m_currentParser;}
 
-	int		getCurrentLine()		{return m_lineCount+1;}
-	int		getCurrentCharOnLine()	{return m_currentCharOnLine;}
-	int		getErrorCount()			{return m_errorCount;}
-
-	void	error();
+	void			error();
+	int				getErrorCount();
 
 	// Overridden lexer functions
-	int		yygetchar();
+	int				yygetchar();
 
 private:
-//	FILE	*m_fhInput;
-	int		m_charCount;
-	int		m_lineCount;
-	int		m_currentCharOnLine;
-	int		m_errorCount;
+	void			unexpectedChar();
+
 
 	class myparser	*m_currentParser;
 }
@@ -67,8 +61,8 @@ YYSTYPE& yylval = *(YYSTYPE*)yyparserptr->yylvalptr;
 
 // place your Lex rules here
 
-^#.*						{if(preprocessorCmd(yytext+1)!=true)error();}
-#							{printf("# commands must be at start of line! ( line %d )\n",getCurrentLine());error();}
+^#.*						{if(preprocessorCmd(yytext+1)!=(int)true)error();}
+#							{printf("# commands must be at start of line!\n");error();}
 
 stop						{return STOP;}
 if							{return IF;}
@@ -93,7 +87,7 @@ print						{return PRINT;}
 [ \t]+						{}
 \n							{}
 
-.							{printf("UNEXPECTED CHAR: '%s' in line %d ( char %d )\n",yytext,getCurrentLine(),getCurrentCharOnLine());error();}
+.							{unexpectedChar();}
 
 %%
 
