@@ -1349,6 +1349,14 @@ SOURCE=..\..\..\source\pickups\pglasses.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\pickups\pglove.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\pickups\pglove.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\pickups\phealth.cpp
 # End Source File
 # Begin Source File

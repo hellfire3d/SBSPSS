@@ -254,6 +254,7 @@ pickups_src :=		pickup \
 					pballoon \
 					pblower \
 					pbubmix \
+					pglove \
 					phelmet \
 					pjlammo \
 					pkelp \

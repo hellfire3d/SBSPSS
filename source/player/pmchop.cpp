@@ -17,6 +17,14 @@
 
 #include "player\pmchop.h"
 
+#ifndef __GFX_SPRBANK_H__
+#include "gfx\sprbank.h"
+#endif
+
+#ifndef __GAME_GAME_H__
+#include "game\game.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -26,6 +34,10 @@
 
 #ifndef	__ANIM_SPONGEBOB_HEADER__
 #include <ACTOR_SPONGEBOB_ANIM.h>
+#endif
+
+#ifndef __SPR_SPRITES_H__
+#include <sprites.h>
 #endif
 
 
@@ -55,6 +67,7 @@ void	CPlayerModeChop::enter()
 {
 	CPlayerModeBase::enter();
 	m_chopping=false;
+	m_timer=0;
 }
 
 /*----------------------------------------------------------------------
@@ -115,6 +128,31 @@ void	CPlayerModeChop::think()
 			m_chopping=false;
 			setPlayerCollisionSize(m_savedCSX,m_savedCSY,m_savedCSW,m_savedCSH);
 		}
+	}
+
+	if(++m_timer>CHOP_TIMEOUT)
+	{
+		m_player->setMode(PLAYER_MODE_BASICUNARMED);
+	}
+}
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CPlayerModeChop::renderModeUi()
+{
+	if(m_timer<CHOP_TIMEOUT-CHOP_FLASH_TIME||m_timer&2)
+	{
+		SpriteBank	*sb;
+		sFrameHdr	*fh;
+
+		sb=CGameScene::getSpriteBank();
+		fh=sb->getFrameHeader(FRM__GLOVE);
+
+		sb->printFT4(fh,CPlayer::POWERUPUI_ICONX,CPlayer::POWERUPUI_ICONY,0,0,CPlayer::POWERUPUI_OT);
 	}
 }
 

@@ -77,6 +77,10 @@
 #include "pickups\pkelp.h"
 #endif
 
+#ifndef	__PICKUPS_PGLOVE_H__
+#include "pickups\pglove.h"
+#endif
+
 #include	"game/game.h"
 
 /*	Std Lib
@@ -364,7 +368,7 @@ void	CBaseWeaponSimplePickup::init()
 
 	CBaseWeaponPickup::init();
 
-	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__NET);
+	fh=CGameScene::getSpriteBank()->getFrameHeader(getWeaponSpriteFrame());
 	setCollisionSize(fh->W,fh->H);
 }
 
@@ -406,51 +410,6 @@ void	CBaseWeaponSimplePickup::renderPickup(DVECTOR *_pos)
 
 
 
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBaseBouncingPickup::init()
-{
-	CBasePickup::init();
-	m_timeTillVanish=TIME_TILL_VANISH;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBaseBouncingPickup::render()
-{
-	if(m_timeTillVanish>FRAMES_TO_FLASH||m_timeTillVanish&3)
-	{
-		DVECTOR	ofs,pos;
-		int		visibilityRadius;
-		
-		CPickupThing::render();
-		if (canRender())
-		{
-			DVECTOR	&renderPos=getRenderPos();
-			renderPickup(&renderPos);
-		}
-	}
-
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBaseBouncingPickup::collidedWith(CThing *_thisThing)
-{
-}
 
 
 
@@ -537,9 +496,9 @@ return NULL;
 			pickup=new ("KelpTokenPickup") CKelpTokenPickup();
 			break;
 
-		case PICKUP__BOUNCING_SPATULA:
-			pickup=new ("BouncingSpatulaPickup") CBouncingSpatulaPickup();
-			break;
+		case PICKUP__GLOVE:
+			pickup=new ("GlovePickup") CGlovePickup();
+			break;				
 
 		default:
 			ASSERT(!"UNKNOWN PICKUP TYPE");

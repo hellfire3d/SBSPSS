@@ -104,7 +104,7 @@ void	CPlayerModeBalloon::think()
 		{
 			CSoundMediator::playSfx(CSoundMediator::SFX_BALLOON_POP);
 		}
-		m_player->setMode(PLAYER_MODE_FULLUNARMED);
+		m_player->setMode(PLAYER_MODE_BASICUNARMED);
 	}
 }
 

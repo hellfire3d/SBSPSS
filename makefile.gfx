@@ -185,7 +185,7 @@ PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +token +pants +glint1 +glint2 +glint3 +glint4 \
 							+questitemstar1 +questitemstar2 +questitemstar3 \
 							+jellyammo +bubblemixture +bubblewand +shoe +balloon +balloonburst +helmet \
-							+blower +launcher +net \
+							+blower +launcher +net +glove \
 							+c1_l1_quest_item +c1_l2_quest_item +c1_l3_quest_item +c1_l4_quest_item \
 							+c2_l1_quest_item +c2_l2_quest_item +c2_l3_quest_item +c2_l4_quest_item \
 							+c3_l1_quest_item +c3_l2_quest_item +c3_l3_quest_item +c3_l4_quest_item \

@@ -626,7 +626,7 @@ m_animNo=0;
 m_animFrame=0;
 	setFacing(FACING_RIGHT);
 	m_currentPlayerModeClass=NULL;
-	m_lastModeBeforeDeath=PLAYER_MODE_FULLUNARMED;	// Player will then respawn into this mode
+	m_lastModeBeforeDeath=PLAYER_MODE_BASICUNARMED;	// Player will then respawn into this mode
 	m_lives++;respawn();
 	m_canExitLevel=false;
 
@@ -772,8 +772,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 		updatePadInput();
 
 		// Weapon collect/drop/swap stuff..
-		if(m_currentMode==PLAYER_MODE_BASICUNARMED||
-		   m_currentMode==PLAYER_MODE_FULLUNARMED)
+		if(m_currentMode==PLAYER_MODE_BASICUNARMED)
 		{
 			// Always trying to pickup weapon if unarmed... means that when SB walks
 			// over an item whilst unarmed, he automatically picks it up
@@ -786,7 +785,6 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 
 			// If already armed then drop current weapon
 			if(m_currentMode!=PLAYER_MODE_BASICUNARMED&&
-			   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
 			   m_currentMode!=PLAYER_MODE_DEAD)
 			{
 				static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
@@ -814,7 +812,7 @@ if(PadGetDown(0)&PAD_TRIANGLE)
 					pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
 					pickup->setPos(&pickupPos);
 				}
-				setMode(PLAYER_MODE_FULLUNARMED);
+				setMode(PLAYER_MODE_BASICUNARMED);
 			}
 		}
 
@@ -2055,7 +2053,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 					if(m_currentMode==PLAYER_MODE_NET)
 					{
 						// Launch net pickup
-						setMode(PLAYER_MODE_FULLUNARMED);
+						setMode(PLAYER_MODE_BASICUNARMED);
 						DVECTOR	pickupPos;
 						CBasePickup	*pickup;
 						pickupPos.vx=Pos.vx;

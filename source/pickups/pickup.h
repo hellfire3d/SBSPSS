@@ -54,8 +54,7 @@ typedef enum
 	PICKUP__BALLOON_AND_SPATULA,
 	PICKUP__JELLY_LAUNCHER,
 	PICKUP__KELP_TOKEN,
-
-	PICKUP__BOUNCING_SPATULA,
+	PICKUP__GLOVE,
 
 	PICKUP__MAX
 }
@@ -148,28 +147,6 @@ protected:
 	virtual void		renderPickup(DVECTOR *_pos);
 
 	virtual int			getWeaponSpriteFrame()=0;
-
-};
-
-
-class CBaseBouncingPickup : public CBasePickup
-{
-public:
-	virtual void		init();
-	virtual void		render();
-
-protected:
-	enum
-	{
-		TIME_TILL_VANISH=5*55,
-		FRAMES_TO_FLASH=2*55,
-	};
-
-	virtual void		renderPickup(DVECTOR *_pos)=0;
-
-	virtual void		collidedWith(CThing *_thisThing);
-
-	int					m_timeTillVanish;
 
 };
 

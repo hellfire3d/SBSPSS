@@ -163,57 +163,5 @@ void	CSpatulaPickup::renderPickup(DVECTOR *_pos)
 }
 
 
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-DVECTOR	CBouncingSpatulaPickup::getSizeForPlacement()
-{
-	DVECTOR		size;
-	sFrameHdr	*fh;
-
-	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__SPATULA);
-	size.vx=fh->W;
-	size.vy=fh->H;
-	return size;
-}
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
-void	CBouncingSpatulaPickup::renderPickup(DVECTOR *_pos)
-{
-	SpriteBank	*sprites;
-	sFrameHdr	*fh;
-	int			x,y;
-
-	sprites=CGameScene::getSpriteBank();
-	fh=sprites->getFrameHeader(FRM__SPATULA);
-	x=_pos->vx-(fh->W/2);
-	y=_pos->vy-(fh->H/2);
-	sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
-
-	/*
-	if(m_glint<=spat_maxglint)
-	{
-		fh=sprites->getFrameHeader(spat_glintFrames[(m_glint>>spat_glintgrowspeed)&0x07]);
-		x=x+spat_gxy.vx;
-		y=y+spat_gxy.vy;
-		sprites->printRotatedScaledSprite(fh,x,y,4095,4095,m_glintRot,OTPOS__PICKUP_POS-1);
-	}
-	*/
-}
-
-
-
-
-
 /*===========================================================================
 end */

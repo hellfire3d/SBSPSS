@@ -39,6 +39,7 @@ class CPlayerModeChop : public CPlayerModeBase
 public:
 	virtual void				enter();
 	virtual void				think();
+	virtual void				renderModeUi();
 
 	virtual void				setAnimNo(int _animNo);
 	virtual void				setAnimFrame(int _animFrame);
@@ -52,6 +53,8 @@ private:
 	{
 		CHOP_ATTACK_START_FRAME=15,
 		CHOP_ATTACK_END_FRAME=21,
+		CHOP_TIMEOUT=10*60,
+		CHOP_FLASH_TIME=2*60,
 	};
 
 
@@ -60,6 +63,7 @@ private:
 	int							m_savedAnimNo,m_savedAnimFrame;
 	int							m_chopFrame;
 	int							m_chopping;
+	int							m_timer;
 
 	int							m_savedCSX,m_savedCSY,m_savedCSW,m_savedCSH;
 

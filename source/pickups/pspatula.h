@@ -61,18 +61,6 @@ private:
 };
 
 
-class CBouncingSpatulaPickup : public CBaseBouncingPickup
-{
-public:
-	virtual DVECTOR		getSizeForPlacement();
-
-protected:
-	virtual void		renderPickup(DVECTOR *_pos);
-
-};
-
-
-
 /*----------------------------------------------------------------------
 	Globals
 	------- */
