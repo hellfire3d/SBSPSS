@@ -18,6 +18,7 @@ class CNpcSkullStomperEnemy : public CNpcEnemy
 {
 public:
 	void				postInit();
+	u8					hasBeenAttacked()										{return(false);}
 protected:
 	void				processEnemyCollision( CThing *thisThing );
 	bool				processSensor();
