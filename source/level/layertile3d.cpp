@@ -13,6 +13,9 @@
 
 #include "gfx\font.h"	
 
+#if		defined(__USER_art__) || defined(__USER_daveo__)
+#define	_SHOW_POLYZ_	1
+#endif
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -28,7 +31,7 @@ CLayerTile3d::CLayerTile3d(sLayerHdr *Hdr,sTile *TileBank) : CLayerTile(Hdr,Tile
 	Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr)+sizeof(sLayer3d));
 
 	Font=0;
-#if		defined(__USER_ART__) || defined(__USER_daveo__)
+#if		defined(_SHOW_POLYZ_)
 	Font=new ("PrimFont") FontBank;
 	Font->initialise( &standardFont );
 	Font->setOt( 0 );
@@ -162,7 +165,7 @@ int		PolyCount=((u8*)TPrimPtr-PrimPtr)/sizeof(POLY_FT3);
 
 		SetPrimPtr((u8*)TPrimPtr);
 
-#if		defined(__USER_art__) || defined(__USER_daveo__)
+#if		defined(_SHOW_POLYZ_)
 char	Txt[256];
 sprintf(Txt,"Poly Count=%i",PolyCount);
 		Font->print( 32, 32, Txt);
