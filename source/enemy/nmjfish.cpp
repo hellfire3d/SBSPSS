@@ -778,7 +778,7 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 	{
 		case NPC_GENERIC_HIT_CHECK_HEALTH:
 		{
-			if ( m_health > 0 )
+			if ( m_health > 5 )
 			{
 				m_health -= 5;
 
@@ -790,6 +790,7 @@ void CNpcMotherJellyfishEnemy::processShot( int _frames )
 			}
 			else
 			{
+				m_health = 0;
 				m_state = MOTHER_JELLYFISH_BEGIN_CIRCLE;
 			}
 

@@ -220,13 +220,23 @@ CNpcEnemy	*CNpcEnemy::Create(int enemyType)
 	{
 		case CNpcEnemy::NPC_MOTHER_JELLYFISH:
 		case CNpcEnemy::NPC_SUB_SHARK:
-		case CNpcEnemy::NPC_SEA_SNAKE:
 		case CNpcEnemy::NPC_FLYING_DUTCHMAN:
 		case CNpcEnemy::NPC_IRON_DOGFISH:
 		{
 			if ( CLevel::getIsBossRespawn() )
 			{
-				if ( !CLevel::getBossHealth() )
+				if ( CLevel::getBossHealth() <= 0 )
+				{
+					return( NULL );
+				}
+			}
+		}
+
+		case CNpcEnemy::NPC_SEA_SNAKE:
+		{
+			if ( CLevel::getIsBossRespawn() )
+			{
+				if ( CLevel::getBossHealth() < 0 )
 				{
 					return( NULL );
 				}
@@ -1191,10 +1201,11 @@ void CNpcEnemy::processShot( int _frames )
 				{
 					m_health -= 5;
 
-					if ( m_health < 0 )
+					if ( m_health <= 0 )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 						m_isDying = true;
+						m_health = 0;
 					}
 					else
 					{

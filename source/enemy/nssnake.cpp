@@ -187,7 +187,7 @@ void CNpcSeaSnakeEnemy::shutdown()
 	}
 	else
 	{
-		CLevel::setBossHealth( 0 );
+		CLevel::setBossHealth( -1 );
 	}
 
 	// delete snake segments
@@ -1057,24 +1057,31 @@ void CNpcSeaSnakeEnemy::processShot( int _frames )
 {
 	if ( !m_segmentCount )
 	{
-		m_drawRotation += 64 * _frames;
-		m_drawRotation &= 4095;
-
-		Pos.vy += m_speed * _frames;
-
-		if ( m_speed < 5 )
+		if ( m_collTimer <= 0 )
 		{
-			m_speed++;
+			m_drawRotation += 64 * _frames;
+			m_drawRotation &= 4095;
+
+			Pos.vy += m_speed * _frames;
+
+			if ( m_speed < 5 )
+			{
+				m_speed++;
+			}
+
+			m_state = NPC_GENERIC_HIT_DEATH_END;
+
+			DVECTOR	offset = CLevel::getCameraPos();
+
+			if ( Pos.vy - offset.vy > VidGetScrH() )
+			{
+				setToShutdown();
+				CGameScene::setBossHasBeenKilled();
+			}
 		}
-
-		m_state = NPC_GENERIC_HIT_DEATH_END;
-
-		DVECTOR	offset = CLevel::getCameraPos();
-
-		if ( Pos.vy - offset.vy > VidGetScrH() )
+		else
 		{
-			setToShutdown();
-			CGameScene::setBossHasBeenKilled();
+			m_controlFunc = NPC_CONTROL_MOVEMENT;
 		}
 	}
 	else

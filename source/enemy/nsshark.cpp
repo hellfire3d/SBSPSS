@@ -680,7 +680,7 @@ void CNpcSubSharkEnemy::processShot( int _frames )
 				{
 					m_health -= 5;
 
-					if ( m_health < 0 )
+					if ( m_health <= 0 )
 					{
 						m_state = NPC_GENERIC_HIT_DEATH_START;
 						m_isDying = true;
