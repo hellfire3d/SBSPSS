@@ -2056,12 +2056,14 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 			}
 			else
 			{
-				if(ouchThatHurtSoMuchThatImJustGoingToDieNow||(getSpatulasHeld()==0&&m_currentMode!=PLAYER_MODE_NET))
+				if(ouchThatHurtSoMuchThatImJustGoingToDieNow||getSpatulasHeld()==0/*&&m_currentMode!=PLAYER_MODE_NET)*/)
 				{
 					died=true;
 				}
 				else
 				{
+					// NET REMOVED FROM HIT SYSTEM (PKG)
+					/*
 					if(m_currentMode==PLAYER_MODE_NET)
 					{
 						// Launch net pickup
@@ -2074,6 +2076,7 @@ void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CTh
 						pickup->setPos(&pickupPos);
 					}
 					else
+					*/
 					{
 						// Launch all spatulas!
 						GameScene.dropHealth(Pos,m_numSpatulasHeld,1);
