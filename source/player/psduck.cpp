@@ -27,6 +27,10 @@
 #include "player\pmodes.h"
 #endif
 
+#ifndef __GAME_GAMEBUBS_H__
+#include "game\gamebubs.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -99,7 +103,7 @@ void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
 	_playerMode->zeroMoveVelocity();	
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_SOAKUP);
 	_playerMode->setAnimFrame(_playerMode->getAnimFrameCount()-1);
-	_playerMode->setPlayerCollisionSize(0,-10,60,20);
+	m_breatheDelayFrames=0;
 }
 
 
@@ -111,16 +115,24 @@ void CPlayerStateSoakUp::enter(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateSoakUp::think(CPlayerModeBase *_playerMode)
 {
-	int	controlHeld;
-
-	controlHeld=_playerMode->getPadInputHeld();
-	if(!(controlHeld&PI_DOWN))
+	if(!_playerMode->getIsHealthFullSoICanStopSoakingUp())
 	{
-		_playerMode->setState(STATE_GETUP);
+		if(m_breatheDelayFrames==0)
+		{
+			DVECTOR	pos;
+			pos=_playerMode->getPlayerPos();
+			CGameBubicleFactory::spawnBubicles(pos.vx+BUBBLE_XOFF,pos.vy+BUBBLE_YOFF,BUBBLE_W,BUBBLE_H,CGameBubicleFactory::TYPE_SPONGEBOBSOAKUP);
+			m_breatheDelayFrames=0;
+		}
+		if(++m_breatheDelayFrames>BUBBLE_SPAWNDELAY)
+		{
+			m_breatheDelayFrames=0;
+		}
+		_playerMode->inSoakUpState();
 	}
 	else
 	{
-		_playerMode->inSoakUpState();
+		_playerMode->setState(STATE_GETUP);
 	}
 }
 

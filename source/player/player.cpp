@@ -1627,9 +1627,10 @@ int invincibleSponge=false;		// NB: This is for debugging purposes only so don't
 #endif
 void CPlayer::takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection,CThing *_thing)
 {
-	if(m_invincibleFrameCount==0&&			// Don't take damage if still recovering from the last hit
-	   m_invincibilityRingTimer==0&&		// Or if we have the invincibility ring on
-	   m_currentMode!=PLAYER_MODE_DEAD)		// Or already dead! :)
+	if(m_invincibleFrameCount==0&&								// Don't take damage if still recovering from the last hit
+	   m_invincibilityRingTimer==0&&							// Or if we have the invincibility ring on
+	   m_currentPlayerModeClass->getState()!=STATE_SOAKUP&&		// Or soaking up
+	   m_currentMode!=PLAYER_MODE_DEAD)							// Or already dead! :)
 	{
 		int	ouchThatHurt=true;
 		int	ouchThatHurtSoMuchThatImJustGoingToDieNow=false;
@@ -2079,12 +2080,14 @@ int		CPlayer::moveVertical(int _moveDistance)
 	else
 	{
 		// Stood on any important types of collision?
-		int	colType;
-
-		colType=m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK;
-		if(colType==COLLISION_TYPE_FLAG_DAMAGE)
+		switch(m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)
 		{
-			takeDamage(DAMAGE__COLLISION_DAMAGE);
+			case COLLISION_TYPE_FLAG_DAMAGE:
+				takeDamage(DAMAGE__COLLISION_DAMAGE);
+				break;
+
+			default:
+				break;
 		}
 	}
 	pos.vy+=_moveDistance;

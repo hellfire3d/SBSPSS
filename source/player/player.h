@@ -177,6 +177,7 @@ public:
 		WATERLEVELSHIFT=5,
 		WATERMAXHEALTH=(255<<WATERLEVELSHIFT),
 		WATERHEALTHPART=WATERMAXHEALTH/(MAX_HEALTH+1),
+		WATERMINSOACKUPLEVEL=(245<<WATERLEVELSHIFT),					// SB won't auto soak unless water is lower than this
 	};
 
 	typedef struct
@@ -357,8 +358,10 @@ public:
 	void			useOneJelly()				{m_jellyAmmo--;}
 	int				getJellyAmmo()				{return m_jellyAmmo;}
 
-	void			setIsInWater(int _in)		{m_isInWater=_in;}
-	int				getIsInWater()				{return m_isInWater;}
+	void			setIsInWater(int _in)					{m_isInWater=_in;}
+	int				getIsInWater()							{return m_isInWater;}
+	int				getIsHealthFullSoICanStopSoakingUp()	{return m_healthWaterLevel==WATERMAXHEALTH;}
+	int				getIsHealthSoFullThatIDontNeedToSoakUp(){return m_healthWaterLevel>=WATERMINSOACKUPLEVEL;}
 
 	int				isHoldingNet()				{return m_currentMode==PLAYER_MODE_NET;}
 

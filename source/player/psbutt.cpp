@@ -125,10 +125,12 @@ void CPlayerStateButtBounceFall::think(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceLand::enter(CPlayerModeBase *_playerMode)
 {
-//	DVECTOR	pos;
-//
-//	pos=_playerMode->getPlayerPos();
-//	CGameBubicleFactory::spawnBubicles(pos.vx,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+	if(_playerMode->getIsInWater())
+	{
+		DVECTOR	pos;
+		pos=_playerMode->getPlayerPos();
+		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+	}
 }
 
 
@@ -155,6 +157,13 @@ void CPlayerStateButtBounceLand::think(CPlayerModeBase *_playerMode)
   ---------------------------------------------------------------------- */
 void CPlayerStateButtBounceUp::enter(CPlayerModeBase *_playerMode)
 {
+	if(_playerMode->getIsInWater())
+	{
+		DVECTOR	pos;
+		pos=_playerMode->getPlayerPos();
+		CGameBubicleFactory::spawnBubicles(pos.vx-20,pos.vy,40,10,CGameBubicleFactory::TYPE_MEDIUM);
+	}
+
 	_playerMode->setAnimNo(ANIM_SPONGEBOB_BUTTBOUNCEEND);
 	m_bounceFrames=0;
 }

@@ -96,6 +96,7 @@ public:
 	virtual int		isJellyfishNetFull()				{ASSERT(0);return false;}		// Fugly..
 
 	virtual int		setState(int _state)				{return 0;}
+	virtual int		getState()							{return STATE_IDLE;}			// ARSE.. states need to go back in CPlayer! (pkg)
 
 	int				getPadInputHeld();
 	int				getPadInputDown();
@@ -103,9 +104,10 @@ public:
 	virtual ATTACK_STATE	getAttackState()			{return ATTACK_STATE__NONE;}
 
 
+public:
+	DVECTOR			getPlayerPos();						// Public so that the states can get the position for bubicle spawners
 protected:
-	DVECTOR			getPlayerPos();
-	void			setPlayerPos(DVECTOR *_pos);
+	void			setPlayerPos(DVECTOR *_pos);		// Private so that they cannot directly alter it
 
 	void			respawn();
 
@@ -140,7 +142,7 @@ public:
 	
 	virtual const struct PlayerMetrics	*getPlayerMetrics();
 	virtual int					setState(int _state);
-	int							getState()				{return m_currentState;}
+	virtual int					getState()				{return m_currentState;}
 	int							getFacing();
 	void						setFacing(int _facing);
 	virtual int					getAnimNo();
@@ -157,6 +159,10 @@ public:
 	int							canMoveRight();
 	virtual void				setPlayerCollisionSize(int _x,int _y,int _w,int _h);
 	virtual void				getPlayerCollisionSize(int *_x,int *_y,int *_w,int *_h);
+
+	int							getIsInWater()							{return m_player->getIsInWater();}
+	int							getIsHealthFullSoICanStopSoakingUp()	{return m_player->getIsHealthFullSoICanStopSoakingUp();}
+	int							getIsHealthSoFullThatIDontNeedToSoakUp(){return m_player->getIsHealthSoFullThatIDontNeedToSoakUp();}
 
 	void						moveLeft();
 	void						moveRight();

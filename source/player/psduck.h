@@ -47,6 +47,17 @@ public:
 	void			enter(class CPlayerModeBase *_playerMode);
 	void			think(class CPlayerModeBase *_playerMode);
 
+private:
+	enum
+	{
+		BUBBLE_SPAWNDELAY=20,
+		BUBBLE_XOFF=-10,
+		BUBBLE_YOFF=-35,
+		BUBBLE_W=20,
+		BUBBLE_H=10,
+	};
+
+	int				m_breatheDelayFrames;
 };
 
 

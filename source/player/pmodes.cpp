@@ -294,7 +294,17 @@ void	CPlayerModeBase::thinkVerticalMovement()
 {
 	if(m_player->moveVertical(m_player->getMoveVelocity()->vy>>VELOCITY_SHIFT))
 	{
+		DVECTOR	pos;
+
 		playerHasHitGround();
+		pos=m_player->getPlayerPos();
+		if(m_player->getHeightFromGround(pos.vx,pos.vy,5)==0&&
+		   (m_player->getLayerCollision()->getCollisionBlock(pos.vx,pos.vy)&COLLISION_TYPE_MASK)==COLLISION_TYPE_FLAG_WATER&&
+		   !m_player->getIsHealthSoFullThatIDontNeedToSoakUp())
+		{
+			// Hit water - Go into soakup mode
+			setState(STATE_SOAKUP);
+		}
 	}
 	else if(m_currentState!=STATE_FALL&&m_currentState!=STATE_FALLFAR&&				// Hmm.. (pkg)
 			m_currentState!=STATE_BUTTFALL&&m_currentState!=STATE_BUTTBOUNCE&&
