@@ -79,6 +79,10 @@
 #include "hazard\hdbarrel.h"
 #endif
 
+#ifndef __HAZARD_HBBARREL_H__
+#include "hazard\hbbarrel.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +100,7 @@ CNpcHazard::NPC_HAZARD_UNIT_TYPE CNpcHazard::mapEditConvertTable[NPC_HAZARD_TYPE
 	NPC_SPIKES_HAZARD,
 	NPC_BIG_WHEEL_HAZARD,
 	NPC_DUAL_PLATFORM_BARREL_HAZARD,
+	NPC_BOUNCING_BARREL_HAZARD,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +182,12 @@ CNpcHazard *CNpcHazard::Create(sThingHazard *ThisHazard)
 		case NPC_DUAL_PLATFORM_BARREL_HAZARD:
 		{
 			hazard = new ("dual platform barrel hazard") CNpcDualPlatformBarrelHazard;
+			break;
+		}
+
+		case NPC_BOUNCING_BARREL_HAZARD:
+		{
+			hazard = new ("bouncing barrel hazard") CNpcBouncingBarrelHazard;
 			break;
 		}
 

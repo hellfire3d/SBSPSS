@@ -785,6 +785,14 @@ SOURCE=..\..\..\source\hazard\hbarrel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\hazard\hbbarrel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\hazard\hbbarrel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\hazard\hboat.cpp
 # End Source File
 # Begin Source File

@@ -130,7 +130,8 @@ hazard_src :=		hazard \
 					hfan \
 					hspikes \
 					hbwheel \
-					hdbarrel
+					hdbarrel \
+					hbbarrel
 
 fx_src :=			fx \
 					fxjfish
