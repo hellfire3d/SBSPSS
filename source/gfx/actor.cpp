@@ -74,7 +74,11 @@ int		Slot=0;
 			Slot=SlotCount;
 			SlotList[Slot].Width=W;
 			SlotList[Slot].Height=H;
-			SlotCount++;
+/*bodge*/			
+			if (SlotCount<CACHE_W-1)
+			{
+				SlotCount++;
+			}
 		}
 		SlotList[Slot].RefCount++;
 
@@ -691,6 +695,7 @@ void	CModelGfx::SetData(sModel *Table,sTri *TList,sQuad *QList,sVtx *VList)
 		ModelTriList=TList;
 		ModelQuadList=QList;
 		ModelVtxList=VList;
+
 }
 
 /*****************************************************************************/
@@ -700,8 +705,6 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-//int	DX=1;
-//int	DY=1;
 const int	PXOfs=-16;
 const int	PYOfs=-6;
 
@@ -755,8 +758,17 @@ int			ShiftY=(Pos.vy & 15);
 			*(u32*)&TPrimPtr->u1=T1;	// Set UV1
 			*(u16*)&TPrimPtr->u2=T2;	// Set UV2
 
-			
-			ThisOT=OtPtr+TList->OTOfs;
+			if (TList->OTOfs>ActorOT)
+			{
+				ThisOT=OtPtr+(ActorOT+1);
+			}
+			else
+			{
+				ThisOT=OtPtr+(ActorOT-1);
+			}
+
+//			ThisOT=OtPtr+TList->OTOfs;
+
 
 			TList++;
 			gte_nclip_b();

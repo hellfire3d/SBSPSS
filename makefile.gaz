@@ -126,6 +126,7 @@ hazard_src :=		hazard \
 					hspikes
 
 fx_src :=			fx \
+					fxjfish
 
 projectl_src :=		projectl \
 					prnpc \
