@@ -20,6 +20,14 @@
 
 class CNpcPlayerBubblePlatform : public CNpcPlatform
 {
+public:
+	virtual void		postInit();
+	virtual void		render();
+	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+protected:
+	virtual void		processLifetime( int _frames );
+
+	u8					m_pop;
 };
 
 #endif

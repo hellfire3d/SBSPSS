@@ -127,7 +127,8 @@ platform_src :=		platform \
 					prbridge \
 					pbaloon \
 					ptrpdoor \
-					pconveyr
+					pconveyr \
+					pplayer
 
 hazard_src :=		hazard \
 					hfalling \

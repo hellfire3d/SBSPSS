@@ -1437,6 +1437,10 @@ SOURCE=..\..\..\source\platform\ppendulm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\platform\pplayer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\platform\pplayer.h
 # End Source File
 # Begin Source File
