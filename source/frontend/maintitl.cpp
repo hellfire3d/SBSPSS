@@ -123,7 +123,7 @@ void CFrontEndMainTitles::init()
 	// Create the main menu ( START GAME/OPTIONS/CREDITS )
 	m_mainMenu=new ("Main Menu GUI") CGUIControlFrame();
 	m_mainMenu->init(NULL);
-	m_mainMenu->setObjectXYWH(106,140,300,60);
+	m_mainMenu->setObjectXYWH(106,145,300,60);
 	m_mainMenu->clearFlags(CGUIObject::FLAG_DRAWBORDER);
 
 	CGUIFactory::createValueButtonFrame(m_mainMenu,
