@@ -40,10 +40,10 @@ virtual	void		SetScale(int S)			{CurrentScale=S;}
 
 protected:
 		sFXAnim		*DataPtr;
-
-		s16			Gravity;
+		s16			VelY;
 		s16			MaxFrame;
 		s16			CurrentFrame;
+		u16			renderFrame;
 		s16			CurrentScale;
 };
 

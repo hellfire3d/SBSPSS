@@ -157,6 +157,7 @@ fx_src :=			fx \
 					fxbaseanim \
 					fxbasetrail \
 					fxbaseemitter \
+					fxbubble \
 					fxnrgbar \
 					fxjfish \
 					fxfallingtile \

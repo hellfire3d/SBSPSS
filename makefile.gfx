@@ -163,7 +163,7 @@ SFX_GFX :=				+smoke.bmp \
 						+Star0001.bmp +Star0002.bmp +Star0003.bmp \
 						+Star20001.bmp +Star20002.bmp +Star20003.bmp \
 						+fire01.bmp +fire02.bmp +fire03.bmp +fire04.bmp +fire05.bmp +fire06.bmp \
-						+drip.bmp \
+						+drip.bmp +bubblepop.bmp\
 						+leg.bmp
 
 SFX_GFX_IN :=			$(foreach FILE,$(SFX_GFX),$(SFX_GFX_DIR)/$(FILE))

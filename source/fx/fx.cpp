@@ -17,6 +17,7 @@
 #include	"FX\FXBaseAnim.h"
 #include	"FX\FXBaseEmitter.h"
 
+#include	"FX\FXBubble.h"
 #include	"FX\FXfallingTile.h"
 #include	"FX\FXSteam.h"
 
@@ -107,7 +108,7 @@ CFXBaseAnim::sFXAnim	FXAcidDripData=
 		FRM__DRIP,FRM__DRIP,
 		1,
 		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
 		{0,1},
 		CFX::FX_TYPE_SPLASH_WATER
 };
@@ -117,7 +118,7 @@ CFXBaseAnim::sFXAnim	FXLavaDripData=
 		FRM__DRIP,FRM__DRIP,
 		1,
 		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
 		{0,1},
 		CFX::FX_TYPE_SPLASH_WATER
 };
@@ -127,8 +128,50 @@ CFXBaseAnim::sFXAnim	FXOilDripData=
 		FRM__DRIP,FRM__DRIP,
 		1,
 		127,127,255,
-		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL | CFXBaseAnim::FXANIM_FLAG_HAS_GRAVITY,
 		{0,1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+// Bubble
+CFXBaseAnim::sFXAnim	FXBubbleWaterData=
+{
+		ONE/2,
+		FRM__BUBBLE_2,FRM__BUBBLE_2,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,-1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+
+CFXBaseAnim::sFXAnim	FXBubbleAcidData=
+{
+		ONE/2,
+		FRM__BUBBLE_2,FRM__BUBBLE_2,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,-1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+CFXBaseAnim::sFXAnim	FXBubbleLavaData=
+{
+		ONE/2,
+		FRM__BUBBLE_2,FRM__BUBBLE_2,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,-1},
+		CFX::FX_TYPE_SPLASH_WATER
+};
+CFXBaseAnim::sFXAnim	FXBubbleOilData=
+{
+		ONE/2,
+		FRM__BUBBLE_2,FRM__BUBBLE_2,
+		1,
+		127,127,255,
+		CFXBaseAnim::FXANIM_FLAG_LOOP | CFXBaseAnim::FXANIM_FLAG_COLLIDE_KILL,
+		{0,-1},
 		CFX::FX_TYPE_SPLASH_WATER
 };
 
@@ -154,7 +197,7 @@ void	TestFX(DVECTOR Pos)
 }
 */
 /*****************************************************************************/
-int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_DROP_WATER;
+int	FXType=(CFX::FX_TYPE)CFX::FX_TYPE_BUBBLE_WATER;
 void	TestFX(DVECTOR Pos)
 {
 		CFX::Create((CFX::FX_TYPE)FXType,Pos);
@@ -217,6 +260,22 @@ CFX		*NewFX;
 			NewFX=new ("FXOilDrip") CFXBaseAnim();
 			NewFX->setData(&FXOilDripData);
 			break;
+		case FX_TYPE_BUBBLE_WATER:
+			NewFX=new ("FXBubbleWater") CFXBubble();
+			NewFX->setData(&FXBubbleWaterData);
+			break;
+		case FX_TYPE_BUBBLE_ACID:
+			NewFX=new ("FXBubbleAcid") CFXBubble();
+			NewFX->setData(&FXBubbleAcidData);
+			break;
+		case FX_TYPE_BUBBLE_LAVA:
+			NewFX=new ("FXBubbleLava") CFXBubble();
+			NewFX->setData(&FXBubbleLavaData);
+			break;
+		case FX_TYPE_BUBBLE_OIL:
+			NewFX=new ("FXBubbleOil") CFXBubble();
+			NewFX->setData(&FXBubbleOilData);
+			break;
 
 		case FX_TYPE_NRG_BAR:
 			NewFX=new ("NRG Bar") CFXNRGBar();
@@ -226,10 +285,6 @@ CFX		*NewFX;
 			NewFX=new ("JellyFish Legs") CFXJellyFishLegs();
 			break;
 
-		case FX_TYPE_BUBBLE_WATER:
-		case FX_TYPE_BUBBLE_ACID:
-		case FX_TYPE_BUBBLE_LAVA:
-		case FX_TYPE_BUBBLE_OIL:
 		case FX_TYPE_LIGHTNING_BOLT:
 		case FX_TYPE_LIGHTNING_SHEET:
 		case FX_TYPE_LIGHTNING_BLAST:
@@ -245,7 +300,6 @@ CFX		*NewFX;
 		case FX_TYPE_SMOKE:
 		case FX_TYPE_GAS:
 
-	
 		default:
 			ASSERT(!"UNKNOWN FX TYPE");
 			return NULL;

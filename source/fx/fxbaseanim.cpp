@@ -30,7 +30,8 @@ void	CFXBaseAnim::init(DVECTOR const &_Pos)
 			Life=MaxFrame;
 		}
 
-		Gravity=0;
+		VelY=0;
+		renderFrame=DataPtr->StartFrame;
 }
 
 /*****************************************************************************/
@@ -52,11 +53,14 @@ void	CFXBaseAnim::think(int _frames)
 			CurrentFrame=0;
 		}
 		Pos.vx+=DataPtr->Velocity.vx;
-		Pos.vy+=DataPtr->Velocity.vy+Gravity;
+		Pos.vy+=DataPtr->Velocity.vy+VelY;
+
+int		ThisFrame=CurrentFrame>>DataPtr->FrameShift;
+		renderFrame=DataPtr->StartFrame+ThisFrame;
 
 		if (DataPtr->Flags & FXANIM_FLAG_HAS_GRAVITY)
 		{ 
-			Gravity++;
+			VelY++;
 		}
 
 		if (DataPtr->Flags & FXANIM_FLAG_COLLIDE_KILL)
@@ -96,9 +100,7 @@ DVECTOR	RenderPos;
 
 SpriteBank	*SprBank=CGameScene::getSpriteBank();
 
-int			ThisFrame=CurrentFrame>>DataPtr->FrameShift;
-
-POLY_FT4	*Ft4=SprBank->printFT4Scaled(DataPtr->StartFrame+ThisFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,CurrentScale>>4);
+POLY_FT4	*Ft4=SprBank->printFT4Scaled(renderFrame,RenderPos.vx,RenderPos.vy,0,0,OtPos*0,CurrentScale>>4);
 			Ft4->u1--; Ft4->u3--;
 			Ft4->v2--; Ft4->v3--;
 			setShadeTex(Ft4,0);
