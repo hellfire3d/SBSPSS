@@ -250,42 +250,15 @@ void CNpcFriend::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CNpcFriend::processEvent( GAME_EVENT evt, CThing *sourceThing )
+void CNpcFriend::startConderversation()
 {
-	switch( evt )
+	// I am 'avin a fayg
+
+	if ( m_data[this->m_type].canTalk )
 	{
-		case USER_REQUEST_TALK_EVENT:
+		if( !CConversation::isActive() )
 		{
-			if ( m_data[this->m_type].canTalk )
-			{
-				DVECTOR sourcePos;
-				s32 xDiffSqr, yDiffSqr;
-
-				// check talk distance
-
-				sourcePos = sourceThing->getPos();
-
-				xDiffSqr = this->Pos.vx - sourcePos.vx;
-				xDiffSqr *= xDiffSqr;
-
-				yDiffSqr = this->Pos.vy - sourcePos.vy;
-				yDiffSqr *= yDiffSqr;
-
-				if ( xDiffSqr + yDiffSqr < 10000 )
-				{
-					if( !CConversation::isActive() )
-					{
-						CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
-					}
-				}
-			}
-
-			break;
+			CConversation::trigger( SCRIPTS_SPEECHTEST_DAT );
 		}
-
-		default:
-			// ignore
-
-			break;
 	}
 }

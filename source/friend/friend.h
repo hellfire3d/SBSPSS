@@ -42,7 +42,6 @@ public:
 	void				shutdown();
 	virtual void		think(int _frames);
 	void				render();
-	void				processEvent( GAME_EVENT evt, CThing *sourceThing );
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_FRIEND_UNIT_TYPE newType )					{m_type = newType;}
 
@@ -74,6 +73,8 @@ protected:
 	static NPC_FRIEND_DATA		m_data[NPC_FRIEND_UNIT_TYPE_MAX];
 
 	static NPC_FRIEND_UNIT_TYPE mapEditConvertTable[NPC_FRIEND_UNIT_TYPE_MAX];
+
+	void						startConderversation();
 
 	enum
 	{
