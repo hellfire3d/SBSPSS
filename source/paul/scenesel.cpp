@@ -63,6 +63,10 @@
 #include "map\map.h"
 #endif
 
+#ifndef __BACKEND_PARTY_H__
+#include "backend\party.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -99,6 +103,7 @@ CScene	*CSceneSelector::s_sceneList[]=
 	&FmaScene,
 	&MapScene,
 	&ShopScene,
+	&PartyScene,
 };
 int		CSceneSelector::s_sceneCount=sizeof(s_sceneList)/sizeof(CScene*);
 

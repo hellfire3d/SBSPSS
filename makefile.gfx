@@ -309,7 +309,6 @@ SHOP_GFX_TRANS_IN :=		$(foreach FILE,$(SHOP_GFX_TRANS),$(SHOP_GFX_DIR)/$(FILE).b
 SHOP_GFX_TEX_OUT :=			$(SHOP_GFX_OUT_DIR)/shop.spr
 
 SHOP_GFX_HDR_OUT :=			$(INC_DIR)/shop.h
-SHOP_GFX_REP_FILE :=		
 
 cleanshop:
 	@$(RM) -f $(SHOP_GFX_TEX_OUT)
@@ -322,6 +321,37 @@ $(SHOP_GFX_TEX_OUT) :	$(SHOP_GFX_TEX_IN)
 
 GRAF_DIRS_TO_MAKE	+=		$(SHOP_GFX_OUT_DIR)
 GFX_DATA_OUT		+=		$(SHOP_GFX_TEX_OUT)
+
+
+#----------------------------------------------------------------------------
+# Party pieces
+#----------------------------------------------------------------------------
+PARTY_GFX_DIR :=			$(GRAF_DIR)/party
+PARTY_GFX_OUT_DIR :=		$(DATA_OUT)/party
+
+PARTY_GFX_TRANS :=			balloon1 balloon2 banner1 banner2 banner3 banner4 \
+							bigcake jelly lefttable presents1 presents2 \
+							sandwiches smallcakes table2 \
+							toychest
+							# leave this as last item - some of the code needs it :(
+PARTY_GFX_TRANS_IN :=		$(foreach FILE,$(PARTY_GFX_TRANS),$(PARTY_GFX_DIR)/$(FILE).bmp)
+
+PARTY_GFX_TEX_OUT :=		$(PARTY_GFX_OUT_DIR)/party.spr
+
+PARTY_GFX_HDR_OUT :=		$(INC_DIR)/party.h
+PARTY_GFX_REP_FILE :=		$(PARTY_GFX_OUT_DIR)/rep.txt
+
+cleanparty:
+	@$(RM) -f $(PARTY_GFX_TEX_OUT)
+	@$(ECHO) Party Cleaned
+
+party:	$(PARTY_GFX_TEX_IN)
+$(PARTY_GFX_TEX_OUT) :	$(PARTY_GFX_TEX_IN)
+		@parkgrab -c- -z+ -r+ -q+ $(PARTY_GFX_TRANS_IN) -b+ -t:8,4,1 -l:$(REPORT_DIR)/party.lbm -o:$(PARTY_GFX_TEX_OUT) -k:$(PARTY_GFX_REP_FILE)
+		@$(MV) -f $(PARTY_GFX_OUT_DIR)/party.h $(PARTY_GFX_HDR_OUT)
+
+GRAF_DIRS_TO_MAKE	+=		$(PARTY_GFX_OUT_DIR)
+GFX_DATA_OUT		+=		$(PARTY_GFX_TEX_OUT)
 
 
 #----------------------------------------------------------------------------
@@ -411,7 +441,7 @@ GFX_DATA_OUT +=	$(TRANS_OUT_DAT)
 # Big TGA backdrops
 #----------------------------------------------------------------------------
 BACKDROPS_IN_DIR :=		$(GRAF_DIR)/backdrop
-BACKDROPS_IN :=			credits start1 start2 start3 start4 gameover shop
+BACKDROPS_IN :=			credits start1 start2 start3 start4 gameover shop partybackdrop
 
 BACKDROPS_OUT_DIR :=	$(DATA_OUT)/backdrop
 BACKDROPS_OUT :=		$(foreach SCREEN,$(BACKDROPS_IN),$(BACKDROPS_OUT_DIR)/$(SCREEN).gfx)

@@ -2,6 +2,7 @@
 }
 sprites/sprites.spr
 shop/shop.spr
+party/party.spr
 
 scripts/ch1l1_01.dat
 scripts/ch1l1_02.dat
@@ -58,6 +59,7 @@ backdrop/start3.gfx
 backdrop/start4.gfx
 backdrop/gameover.gfx
 backdrop/shop.gfx
+backdrop/partybackdrop.gfx
 loadingscreens/culture.gfx
 loadingscreens/karate.gfx
 loadingscreens/monitor.gfx

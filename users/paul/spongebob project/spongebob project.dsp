@@ -103,6 +103,14 @@ SOURCE=..\..\..\source\backend\gameover.cpp
 
 SOURCE=..\..\..\source\backend\gameover.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\party.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\backend\party.h
+# End Source File
 # End Group
 # Begin Group "enemy"
 
@@ -2649,6 +2657,10 @@ SOURCE=..\..\..\out\USA\include\ACTOR_STOMPER_Anim.h
 # Begin Source File
 
 SOURCE=..\..\..\out\USA\include\BigLump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\out\USA\include\party.h
 # End Source File
 # Begin Source File
 

@@ -623,6 +623,20 @@ void	CPlayerModeBase::jump()
 	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
 	setMoveVelocity(&moveVel);
 }
+int spr=2;
+void	CPlayerModeBase::spring()
+{
+	DVECTOR				moveVel;
+	moveVel=*m_player->getMoveVelocity();
+//	moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+	moveVel.vy-=spr;
+	if(moveVel.vy<-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT)
+	{
+		moveVel.vy=-getPlayerMetrics()->m_metric[PM__JUMP_VELOCITY]<<VELOCITY_SHIFT;
+	}
+	setMoveVelocity(&moveVel);
+PAUL_DBGMSG("%d",moveVel.vy);
+}
 void	CPlayerModeBase::jumpback()
 {
 	DVECTOR				moveVel;
