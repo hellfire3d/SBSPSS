@@ -10,6 +10,7 @@
 #include	<sprites.h>
 #include	"level\level.h"
 #include	"level\layertile3d.h"
+#include	"system\vid.h"
 
 #include	"FX\FXfallingTile.h"
 
@@ -36,6 +37,7 @@ sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 		Velocity.vy=FallingTile_DefVY;
 		Life=FallingTile_DefLife;
 		CSoundMediator::playSfx(CSoundMediator::SFX_ANY_OBJECT_FALLING,false);
+		Flags |=FX_FLAG_NO_THINK_KILL;
 }
 
 /*****************************************************************************/
@@ -52,9 +54,6 @@ void	CFXFallingTile::think(int _frames)
 /*****************************************************************************/
 /*** Render ******************************************************************/
 /*****************************************************************************/
-const int	PXOfs=-16*16;	// Must sort these out to be single global!
-const int	PYOfs=-8*16;
-
 void	CFXFallingTile::render()
 {
 		CFX::render();
@@ -73,8 +72,8 @@ VECTOR		ThisRenderPos;
 
 			SetIdentNoTrans(&Mtx);
 
-			ThisRenderPos.vx=PXOfs+RenderPos.vx;
-			ThisRenderPos.vy=PYOfs+RenderPos.vy;
+			ThisRenderPos.vx=(INGAME_SCREENOFS_X)+RenderPos.vx;
+			ThisRenderPos.vy=(INGAME_SCREENOFS_Y)+RenderPos.vy;
 
 			u16			TileIdx=Tile>>2;
 			u16			Flip=Tile&3;
