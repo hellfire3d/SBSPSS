@@ -1925,6 +1925,14 @@ SOURCE=..\..\..\source\triggers\tbemit.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\source\triggers\tbgeyser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tbgeyser.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\source\triggers\tcamlock.cpp
 # End Source File
 # Begin Source File

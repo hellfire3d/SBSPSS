@@ -71,6 +71,10 @@
 #include "triggers\thazard.h"
 #endif
 
+#ifndef __TRIGGERS_TBGEYSER_H__
+#include "triggers\tbgeyser.h"
+#endif
+
 #ifndef __GAME_GAME_H__
 #include "game\game.h"
 #endif
@@ -114,39 +118,44 @@ CTrigger	*trigger;
 			break;
 
 		// Gary start trigger
-		case TRIGGER_GARYSTART:
+		case TRIGGER_GARY_START:
 			trigger=(CGaryStartTrigger*)new("GaryStartTrigger") CGaryStartTrigger();
 			break;
 
 		// Gary stop trigger
-		case TRIGGER_GARYSTOP:
+		case TRIGGER_GARY_STOP:
 			trigger=(CGaryStopTrigger*)new("GaryStopTrigger") CGaryStopTrigger();
 			break;
 
 		// Gary go left trigger
-		case TRIGGER_GARYGOLEFT:
+		case TRIGGER_GARY_GO_LEFT:
 			trigger=(CGaryGoLeftTrigger*)new("GaryGoLeftTrigger") CGaryGoLeftTrigger();
 			break;
 
 		// Gary go right trigger
-		case TRIGGER_GARYGORIGHT:
+		case TRIGGER_GARY_GO_RIGHT:
 			trigger=(CGaryGoRightTrigger*)new("GaryGoRightTrigger") CGaryGoRightTrigger();
 			break;
 
 		// Flame emitter
-		case TRIGGER_FLAMEEMITTER:
+		case TRIGGER_FLAME_EMITTER:
 			trigger=(CFlameEmitterTrigger*)new( "FlameEmitterTrigger") CFlameEmitterTrigger();
 			break;
 
-		case TRIGGER_INTERMITTENTFLAMEEMITTER:
-		case TRIGGER_INTERMITTENTLEFTFLAMEEMITTER:
-		case TRIGGER_INTERMITTENTDOWNFLAMEEMITTER:
+		case TRIGGER_INTERMITTENT_FLAME_EMITTER:
+		case TRIGGER_INTERMITTENT_LEFT_FLAME_EMITTER:
+		case TRIGGER_INTERMITTENT_DOWN_FLAME_EMITTER:
 			trigger=(CIntermittentFlameEmitterTrigger*)new( "IntermittentFlameEmitterTrigger") CIntermittentFlameEmitterTrigger();
 			break;
 
 		// Bubble emitter
-		case TRIGGER_BUBBLEEMITTER:
+		case TRIGGER_BUBBLE_EMITTER:
 			trigger=(CBubbleEmitterTrigger*)new( "BubbleEmitterTrigger") CBubbleEmitterTrigger();
+			break;
+
+		// Bubble geyser emitter
+		case TRIGGER_BUBBLE_GEYSER_EMITTER:
+			trigger=(CBubbleGeyserEmitterTrigger*)new( "BubbleGeyserEmitterTrigger") CBubbleGeyserEmitterTrigger();
 			break;
 
 		case TRIGGER_PLATFORM:
@@ -178,7 +187,7 @@ CTrigger	*trigger=Create(ThisTrigger->Type);
 
 			switch( ThisTrigger->Type )
 			{
-				case TRIGGER_INTERMITTENTLEFTFLAMEEMITTER:
+				case TRIGGER_INTERMITTENT_LEFT_FLAME_EMITTER:
 				{
 					CIntermittentFlameEmitterTrigger *m_flameEmitter = (CIntermittentFlameEmitterTrigger *) trigger;
 
@@ -188,7 +197,7 @@ CTrigger	*trigger=Create(ThisTrigger->Type);
 					break;
 				}
 
-				case TRIGGER_INTERMITTENTDOWNFLAMEEMITTER:
+				case TRIGGER_INTERMITTENT_DOWN_FLAME_EMITTER:
 				{
 					CIntermittentFlameEmitterTrigger *m_flameEmitter = (CIntermittentFlameEmitterTrigger *) trigger;
 

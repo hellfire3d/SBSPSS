@@ -357,7 +357,7 @@ void		CThingManager::matchGaryTriggers()
 
 			while( trigger )
 			{
-				if ( trigger->getThingSubType() == CTrigger::TRIGGER_GARYSTART )
+				if ( trigger->getThingSubType() == CTrigger::TRIGGER_GARY_START )
 				{
 					CGaryStartTrigger *garyTrigger = (CGaryStartTrigger *) trigger;
 

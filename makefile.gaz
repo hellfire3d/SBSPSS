@@ -305,7 +305,8 @@ triggers_src :=		trigger \
 					tggleft \
 					tggright \
 					tgstop \
-					thazard
+					thazard \
+					tbgeyser
 
 utils_src :=		utils \
 					sincos \
