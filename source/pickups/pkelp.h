@@ -52,6 +52,7 @@ private:
 	virtual CSoundMediator::SFXID	sfxToPlayWhenCollected(){return CSoundMediator::SFX_ITEM__ANY_OTHER_ITEM;}//SFX_ITEM__SKILL_ITEM;}
 
 	int					m_tokenNumber;
+	int					m_collectedFlag;
 };
 
 

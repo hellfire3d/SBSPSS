@@ -80,6 +80,8 @@ void	CKelpTokenPickup::init()
 
 	fh=CGameScene::getSpriteBank()->getFrameHeader(FRM__TOKEN);
 	setCollisionSize(fh->W,fh->H);
+
+	m_collectedFlag=false;
 }
 
 /*----------------------------------------------------------------------
@@ -109,6 +111,7 @@ void	CKelpTokenPickup::collect(class CPlayer *_player)
 {
 	CBasePickup::collect(_player);
 	CGameSlotManager::getSlotData()->collectKelpToken(GameScene.getChapterNumber()-1,GameScene.getLevelNumber()-1,m_tokenNumber);
+	m_collectedFlag=true;
 }
 
 /*----------------------------------------------------------------------
@@ -138,7 +141,7 @@ void	CKelpTokenPickup::renderPickup(DVECTOR *_pos)
   ---------------------------------------------------------------------- */
 void	CKelpTokenPickup::collidedWith(CThing *_thisThing)
 {
-	if(!isSetToShutdown())
+	if(!m_collectedFlag)
 	{
 		switch(_thisThing->getThingType())
 		{
