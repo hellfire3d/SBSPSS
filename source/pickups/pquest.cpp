@@ -144,6 +144,8 @@ void	CQuestItemPickup::init()
 	{
 		m_hiddenUntilBossDead=false;
 	}
+	m_collected=false;
+	m_collectedFrameCount=0;
 
 	m_starSinRotate=0;
 	m_starSinRadius=0;
@@ -190,7 +192,20 @@ void	CQuestItemPickup::collidedWith(CThing *_thisThing)
 {
 	if(!m_hiddenUntilBossDead)
 	{
-		CBasePickup::collidedWith(_thisThing);
+		switch(_thisThing->getThingType())
+		{
+			case TYPE_PLAYER:
+//				collect((CPlayer*)_thisThing);
+				CSoundMediator::playSfx(sfxToPlayWhenCollected());
+				m_collected=true;
+				break;
+
+			case TYPE_NPC:
+				break;
+
+			default:
+				ASSERT(0);
+		}
 	}
 }
 
@@ -214,6 +229,14 @@ int		CQuestItemPickup::getVisibilityRadius()
   ---------------------------------------------------------------------- */
 void	CQuestItemPickup::thinkPickup(int _frames)
 {
+	if(m_collected)
+	{
+		m_collectedFrameCount+=_frames;
+		if(m_collectedFrameCount>100)
+		{
+			collect(NULL);
+		}
+	}
 	if(!m_hiddenUntilBossDead)
 	{
 		m_starSinRotate=(m_starSinRotate+(16*_frames))&4095;
@@ -231,11 +254,11 @@ void	CQuestItemPickup::thinkPickup(int _frames)
 
 /*----------------------------------------------------------------------
 	Function:
-	Purpose:	LOTS to optimise here.. (pkg)
+	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static const int s_questStarFrames[8]={FRM__QUESTITEMSTAR1,FRM__QUESTITEMSTAR2,FRM__QUESTITEMSTAR3,FRM__QUESTITEMSTAR4};
+static const int s_questStarFrames[8]={FRM__QUESTITEMSTAR1,FRM__QUESTITEMSTAR2,FRM__QUESTITEMSTAR3,FRM__QUESTITEMSTAR2};
 void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 {
 	if(!m_hiddenUntilBossDead)
@@ -251,44 +274,45 @@ void	CQuestItemPickup::renderPickup(DVECTOR *_pos)
 		sprites=CGameScene::getSpriteBank();
 
 		// Quest item graphic
-		fh=sprites->getFrameHeader(m_gfxFrame);
-		x=_pos->vx-(fh->W/2);
-		y=_pos->vy-(fh->H/2);
-		sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+		if(!m_collected)
+		{
+			fh=sprites->getFrameHeader(m_gfxFrame);
+			x=_pos->vx-(fh->W/2);
+			y=_pos->vy-(fh->H/2);
+			sprites->printFT4(fh,x,y,0,0,OTPOS__PICKUP_POS);
+		}
 
 		// Stars
 		angle=m_starSinRotate;
-		radius=((msin(m_starSinRadius)*20)>>12)+35;
+		radius=((msin(m_starSinRadius)*20)>>12)+40+(m_collectedFrameCount*2);
 		r=((msin(m_starSinR)*64)>>12)+128;
 		g=((msin(m_starSinG)*64)>>12)+128;
 		b=((msin(m_starSinB)*64)>>12)+128;
-		fh=sprites->getFrameHeader(s_questStarFrames[(m_starFrame>>2)&3]);
+		fh=sprites->getFrameHeader(s_questStarFrames[(m_starFrame>>3)&3]);
 		for(i=0;i<4;i++)
 		{
 			POLY_FT4	*ft4;
-			angle=(angle+1024)&4095;
-			x=_pos->vx+((msin(angle)*radius)>>12)-(fh->W/2);
-			y=_pos->vy+((mcos(angle)*radius)>>12)-(fh->H/2);
+			x=_pos->vx+((msin(angle)*radius)>>12);
+			y=_pos->vy+((mcos(angle)*radius)>>12);
 			ft4=sprites->printFT4(fh,x,y,0,0,0);
 			setRGB0(ft4,r,g,b);
-			setSemiTrans(ft4,true);
+			angle=(angle+1024)&4095;
 		}
 
-		angle=m_starSinRotate+512;
-		radius=((msin((m_starSinRadius+2048)&4095)*20)>>12)+35;
+		angle=(m_starSinRotate+512)&4095;
+		radius=((msin((m_starSinRadius+2048)&4095)*20)>>12)+40+(m_collectedFrameCount*2);
 		r=((msin((m_starSinR+2048)&4095)*64)>>12)+128;
 		g=((msin((m_starSinG+2048)&4095)*64)>>12)+128;
 		b=((msin((m_starSinB+2048)&4095)*64)>>12)+128;
-		fh=sprites->getFrameHeader(s_questStarFrames[((m_starFrame>>2)+2)&3]);
+		fh=sprites->getFrameHeader(s_questStarFrames[((m_starFrame>>3)+2)&3]);
 		for(i=0;i<4;i++)
 		{
 			POLY_FT4	*ft4;
-			angle=(angle+1024)&4095;
-			x=_pos->vx+((msin(angle)*radius)>>12)-(fh->W/2);
-			y=_pos->vy+((mcos(angle)*radius)>>12)-(fh->H/2);
+			x=_pos->vx+((msin(angle)*radius)>>12);
+			y=_pos->vy+((mcos(angle)*radius)>>12);
 			ft4=sprites->printFT4(fh,x,y,0,0,0);
 			setRGB0(ft4,r,g,b);
-			setSemiTrans(ft4,true);
+			angle=(angle+1024)&4095;
 		}
 	}
 }
