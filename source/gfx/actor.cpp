@@ -494,8 +494,8 @@ int			HalfW=CurrentFrame->W>>1;
 			BBox.YMax=0;
 
 //
-//			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
-//	Angle+=AngleInc;
+			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
+	Angle+=AngleInc;
 
 			return(Ft4);
 }
@@ -527,10 +527,47 @@ sBBox	SBox,CBox;
 		CBox.YMin=(CosAngle*-dY)>>12;
 		CBox.YMax=0;
 
-		Ft4->x0=Pos.vx+CBox.XMin-SBox.YMin; Ft4->y0=Pos.vy+SBox.XMin+CBox.YMin;
-		Ft4->x1=Pos.vx+CBox.XMax-SBox.YMin; Ft4->y1=Pos.vy+SBox.XMax+CBox.YMin;
-		Ft4->x2=Pos.vx+CBox.XMin+SBox.YMax; Ft4->y2=Pos.vy+SBox.XMin-CBox.YMax;
-		Ft4->x3=Pos.vx+CBox.XMax+SBox.YMax; Ft4->y3=Pos.vy+SBox.XMax-CBox.YMax;
+int		x0,x1,x2,x3;
+int		y0,y1,y2,y3;
+int		XMin,XMax;
+int		YMin,YMax;
+
+		x0=CBox.XMin-SBox.YMin; y0=SBox.XMin+CBox.YMin;
+		x1=CBox.XMax-SBox.YMin; y1=SBox.XMax+CBox.YMin;
+		x2=CBox.XMin+SBox.YMax; y2=SBox.XMin-CBox.YMax;
+		x3=CBox.XMax+SBox.YMax; y3=SBox.XMax-CBox.YMax;
+
+		XMin=x0;
+		if (XMin>x1) XMin=x1;
+		if (XMin>x2) XMin=x2;
+		if (XMin>x3) XMin=x3;
+		XMax=x0;
+		if (XMax<x1) XMax=x1;
+		if (XMax<x2) XMax=x2;
+		if (XMax<x3) XMax=x3;
+		YMin=y0;
+		if (YMin>y1) YMin=y1;
+		if (YMin>y2) YMin=y2;
+		if (YMin>y3) YMin=y3;
+		YMax=y0;
+		if (YMax<y1) YMax=y1;
+		if (YMax<y2) YMax=y2;
+		if (YMax<y3) YMax=y3;
+
+		BBox.XMin=XMin;
+		BBox.XMax=XMax;
+		BBox.YMin=YMin;
+		BBox.YMax=YMax;
+
+		Ft4->x0=Pos.vx+x0; Ft4->y0=Pos.vy+y0;
+		Ft4->x1=Pos.vx+x1; Ft4->y1=Pos.vy+y1;
+		Ft4->x2=Pos.vx+x2; Ft4->y2=Pos.vy+y2;
+		Ft4->x3=Pos.vx+x3; Ft4->y3=Pos.vy+y3;
+
+//		Ft4->x0=Pos.vx+CBox.XMin-SBox.YMin; Ft4->y0=Pos.vy+SBox.XMin+CBox.YMin;
+//		Ft4->x1=Pos.vx+CBox.XMax-SBox.YMin; Ft4->y1=Pos.vy+SBox.XMax+CBox.YMin;
+//		Ft4->x2=Pos.vx+CBox.XMin+SBox.YMax; Ft4->y2=Pos.vy+SBox.XMin-CBox.YMax;
+//		Ft4->x3=Pos.vx+CBox.XMax+SBox.YMax; Ft4->y3=Pos.vy+SBox.XMax-CBox.YMax;
 
 		return(Ft4);
 }
