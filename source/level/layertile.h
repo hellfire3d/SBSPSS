@@ -16,7 +16,8 @@ struct	sTileMap2dElem
 
 struct	sTileMap2d
 {
-	int				X,Y;
+	int				MapX,MapY;
+	u32				ShiftXY;
 	sTileMap2dElem	*List;
 };
 
@@ -43,22 +44,27 @@ public:
 		};
 
 
-		CLayerTile(sLayerHdr *Hdr,sTile *_TileList,sTri *_TriList,sQuad *_QuadList,sVtx *_VtxList);
+		CLayerTile(sLayerHdr *Hdr,sTile *TileList,sTri *TriList,sQuad *QuadList,sVtx *VtxList);
 virtual	~CLayerTile();
 
-virtual	void			init()=0;
-virtual	void			shutdown()=0;
-virtual	void			render()=0;
-virtual	void			think(int _frames)=0;
+virtual	void			init(VECTOR &MapPos,int Shift,int Width=SCREEN_TILE_WIDTH,int Height=SCREEN_TILE_HEIGHT);
+virtual	void			shutdown();
+virtual	void			think(VECTOR &MapPos);
+virtual	void			render();
 
-		void			InitTileMap2d(int X,int Y,int Width=SCREEN_TILE_WIDTH,int Height=SCREEN_TILE_HEIGHT);
-
-		int				GetWidth()		{return(LayerHdr->Width);}
-		int				GetHeight()		{return(LayerHdr->Height);}
+		void			SetMapShift(int Shift)	{MapShift=Shift;}
+		int				GetWidth()				{return(LayerHdr->Width);}
+		int				GetHeight()				{return(LayerHdr->Height);}
 
 
 protected:
-		void			RenderTileMap2d(int X,int Y);
+		sTileMap2d		&GetTileMap();
+		int				CalcTableOfs(int X,int Y);
+		int				CalcMapOfs(int X,int Y);
+		void			UpdateRow(int MapX,int MapY,sTileMap2d &ThisMap);
+		void			UpdateColumn(int MapX,int MapY,sTileMap2d &ThisMap);
+		
+		void			renderSolid();
 
 		sLayerHdr		*LayerHdr;
 		sTile			*TileList;
@@ -67,6 +73,7 @@ protected:
 		sVtx			*VtxList;
 		sTileMapElem	*Map;
 
+		int				MapShift;
 		int				TileMapWidth,TileMapHeight;
 		sTileMap2d		TileMap2d[2];			// Double Buffered
 };

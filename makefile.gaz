@@ -85,10 +85,10 @@ gui_src :=			gbutton \
 					gui
 
 level_src :=		level \
-					layer \
-					layertile
+					layertile \
+					layerback \
+					layeraction
 	
-
 locale_src :=		textdbase
 
 mem_src :=			memory
@@ -226,7 +226,7 @@ LINK_FILES_TO_MAKE :=	$(CPE_FILE) $(MAP_FILE) $(SYM_FILE)
 $(LINK_FILES_TO_MAKE) : $(LINK_FILE) $(ALL_LIBS_FULL) $(CODE_OBJS_TO_MAKE)
 	@$(LNK) $(LNK_FLAGS) @$(LINK_FILE),$(CPE_FILE),$(SYM_FILE),$(MAP_FILE)
 	symmunge $(SYM_FILE)
-ifeq ($(USER_NAME),daveo)
+ifeq ($(USER_NAME),daveox)
 	@cp stats.txt '$(SIZES_DIR)/$(shell $(DATE) '+%d-%m-%Y_%H-%M-%S')'
 endif
 

@@ -18,6 +18,13 @@ sfx/ingame.vb
 sfx/ingame.vh
 backdrop/credits.gfx
 backdrop/sky.gfx
+
+levels/chapter01/level01/level01.lvl
+levels/chapter01/level01/level01.tex
+
+levels/chapter01/level04/level04.lvl
+levels/chapter01/level04/level04.tex
+
 { SYSTEM_CACHE 4
 }
 ui/uigfx.spr

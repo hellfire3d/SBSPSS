@@ -25,6 +25,8 @@ private:
 	void		initLayers();
 
 	sLvlHdr		*LevelHdr;
+	VECTOR		MapPos;
+
 
 // Tile Layers
 	CLayerTile	*TileLayers[CLayerTile::LAYER_TILE_TYPE_MAX];

@@ -36,6 +36,37 @@ include $(BUILD_DIR)/outdirs.mak
 TEMP_FILE :=			$(TEMP_BUILD_DIR)/build.tmp
 
 #----------------------------------------------------------------------------
+#--- Levels -----------------------------------------------------------------
+#----------------------------------------------------------------------------
+LEVELS_OPTS :=				-t:8,2,1 -s:256
+LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
+LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
+
+LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05
+LEVELS_CHAPTER01 :=			LEVEL01 LEVEL04
+LEVELS_CHAPTER02 :=			
+LEVELS_CHAPTER03 :=			
+LEVELS_CHAPTER04 :=			
+LEVELS_CHAPTER05 :=			
+
+LEVELS_OUT_DIRS :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(LEVELS_OUT_DIR)/$(CHAPTER)/$(LEVEL) ))
+LEVELS_IN :=				$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(CHAPTER)/$(LEVEL)/$(LEVEL) ))
+
+LEVELS_OUT :=				$(foreach LEVEL,$(LEVELS_IN),$(LEVELS_OUT_DIR)/$(LEVEL).lvl)
+
+levels : $(LEVELS_OUT)
+
+cleanlevels :
+	@$(RM) -f $(LEVELS_OUT)
+	@$(ECHO) Cleaned levels
+
+$(LEVELS_OUT_DIR)/%.lvl : $(LEVELS_IN_DIR)/%.pme
+	@$(ECHO) Building $< $@
+	@$(MKLEVEL) $< -o:$(dir $(basename $@)) $(LEVELS_OPTS)
+
+GFX_DATA_OUT +=	$(LEVELS_OUT)
+
+#----------------------------------------------------------------------------
 #	Text translations
 #----------------------------------------------------------------------------
 .PHONY: translate cleantranslate
@@ -112,41 +143,6 @@ $(UI_GFX_TEX_OUT) :	$(UI_GFX_TEX_IN)
 		@$(MV) -f $(UI_GFX_OUT_DIR)/uigfx.h $(UI_GFX_HDR_FILE)
 
 GFX_DATA_OUT +=	$(UI_GFX_TEX_OUT)
-
-#----------------------------------------------------------------------------
-#--- Levels -----------------------------------------------------------------
-#----------------------------------------------------------------------------
-LEVELS_OPTS :=				-t:8,1,1 -s:256
-LEVELS_IN_DIR :=			$(GRAF_DIR)/levels
-LEVELS_OUT_DIR :=			$(DATA_OUT)/levels
-
-LEVELS_CHAPTERS :=			CHAPTER01 CHAPTER02 CHAPTER03 CHAPTER04 CHAPTER05
-LEVELS_CHAPTER01 :=			LEVEL01
-LEVELS_CHAPTER02 :=			
-LEVELS_CHAPTER03 :=			
-LEVELS_CHAPTER04 :=			
-LEVELS_CHAPTER05 :=			
-
-LEVELS_OUT_DIRS :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(LEVELS_OUT_DIR)/$(CHAPTER))
-
-LEVELS_ALL_LIST :=			$(foreach CHAPTER,$(LEVELS_CHAPTERS),$(foreach LEVEL,$(LEVELS_$(CHAPTER)), $(CHAPTER)/$(LEVEL)/$(LEVEL) ))
-
-LEVELS_LVL_IN :=			$(foreach LEVEL,$(LEVELS_ALL_LIST), $(LEVELS_IN_DIR)/$(LEVEL).pme )
-LEVELS_LVL_OUT :=			$(foreach LEVEL,$(LEVELS_ALL_LIST), $(LEVELS_OUT_DIR)/$(LEVEL).lvl )
-
-LEVELS_ALL_IN :=			$(LEVELS_LVL_IN)
-LEVELS_ALL_OUT :=			$(LEVELS_LVL_OUT)
-
-cleanlevels :
-		$(RM) -f $(LEVELS_ALL_OUT)
-
-levels: 		$(LEVELS_ALL_IN)
-
-$(LEVELS_ALL_OUT) :	$(LEVELS_ALL_IN)
-		$(MKLEVEL) $(LEVELS_ALL_IN) -o:$(LEVELS_OUT_DIR)/chapter01 $(LEVELS_OPTS)
-
-GFX_DATA_OUT +=	$(LEVELS_ALL_OUT)
-
 
 #----------------------------------------------------------------------------
 # Ingame graphic effects
@@ -310,8 +306,7 @@ cleanbiglump :
 	@$(GLECHO) Cleaned BigLump
 
 $(BIGLUMP_OUT) : $(BIGLUMP_IN)
-#	@$(MAKEDATA) -b:$(OUT_DIR)/Data/ -s:$(GAME_DATA_DIR)/DataCache.Scr -o:$(BIGLUMP_OUT) -i:$(BIGLUMP_INC)
-	@$(MAKEDATA) -b:$(OUT_DIR)/Data/ -s:$(GAME_DATA_DIR)/DataCache.Scr -o:$(BIGLUMP_OUT) -i:$(BIGLUMP_INC)x
+	@$(MAKEDATA) -b:$(OUT_DIR)/Data/ -s:$(GAME_DATA_DIR)/DataCache.Scr -o:$(BIGLUMP_OUT) -i:$(BIGLUMP_INC)
 
 #	@$(REDIR) $(TEMP_DIR)/BigLump.Scr $(BIGLUMP_IN)
 #	$(MAKEDATA) -b:$(OUT_DIR)/Data/ -s:$(GAME_DATA_DIR)/DataCache.Scr -s:$(TEMP_DIR)/BigLump.Scr -o:$(BIGLUMP_OUT) -i:$(BIGLUMP_INC)

@@ -1,9 +1,10 @@
-/*************************/
-/*** Global Structures ***/
-/*************************/
+/***********************/
+/*** Data Structures ***/
+/***********************/
 
-#ifndef		__GLOBAL_STRUCTS_HEADER__
-#define		__GLOBAL_STRUCTS_HEADER__
+#ifndef		__DATA_STRUCTS_HEADER__
+#define		__DATA_STRUCTS_HEADER__
+
 
 //***************************************************************************
 // biped bone IDs
@@ -52,9 +53,9 @@ struct sShortXYZ
 struct	sVtx
 {
 	s16	vx, vy, vz, pad;
-
-	bool	operator==(sVtx const &v1)	{return((vx==v1.vx) && (vy==v1.vy) && (vz==v1.vz));}
-
+#ifdef	WIN32
+bool	operator==(sVtx const &v1)	{return((vx==v1.vx) && (vy==v1.vy) && (vz==v1.vz));}
+#endif
 };
 
 #define	NormalScale	4096
@@ -82,11 +83,12 @@ struct	sMat
 struct	sTri
 {
 		u16			P0,P1,P2;				//  6
-		u16			Mat;					//  2
+		u16			TPage;					//  2
 		u8			uv0[2];					//  2
 		u8			uv1[2];					//  2
 		u8			uv2[2];					//  2
-};											// 14
+		u16			Clut;					//  2
+};											// 16
 
 //		u8			r0, g0, b0, code;		//  4
 //		u8			r1, g1, b1, Mat;		//  4
@@ -101,8 +103,8 @@ struct	sQuad
 		u8			uv1[2];					//  2
 		u8			uv2[2];					//  2
 		u8			uv3[2];					//  2
-		u16			Mat;					//  2
-		u16			Pad;					//  2
+		u16			TPage;					//  2
+		u16			Clut;					//  2
 };											// 20
 
 //		u8			r0, g0, b0, code;		//  4
@@ -131,27 +133,6 @@ struct sBone
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-struct	sLvlHdr
-{
-	sTri	*TriList;
-	sQuad	*QuadList;
-	sVtx	*VtxList;
-	sMat	*MatList;
-	int		LayerCount;
-	/*int	LayerOfs[LayerCount]...*/
-};
-
-struct	sLayerHdr
-{
-	int		Type;
-	int		SubType;
-	int		Width;
-	int		Height;
-
-	/*int	TileData[W][H];....*/
-};
-
-//---------------------------------------------------------------------------
 // Tiles
 
 struct	sTileMapElem
@@ -167,33 +148,82 @@ struct	sTile
 		u16		QuadList;
 		u16		QuadCount;
 // 2d Tile
-		u16		Mat2d;
-		s8		XOfs,YOfs;
-		u8		uv2d0[2];
-		u8		uv2d1[2];
-		u8		uv2d2[2];
-		u8		uv2d3[2];
+//		s16		Mat2d;
+//		s8		XOfs,YOfs;
+		u16		TPage;
+		u16		Clut;
+		u8		uv0[2];
+		u8		uv1[2];
+		u8		uv2[2];
+		u8		uv3[2];
 
-BOOL	operator==(sTile const &v1)	
+#ifdef	WIN32
+bool	operator==(sTile const &v1)	
 {
-	if (TriCount!=v1.TriCount) return(FALSE);
-	if (TriList!=v1.TriList) return(FALSE);
-//	if (QuadCount!=v1.QuadCount) return(FALSE);
-//	if (QuadList!=v1.QuadList) return(FALSE);
+	if (TriCount!=v1.TriCount) return(false);
+	if (TriList!=v1.TriList) return(false);
+//	if (QuadCount!=v1.QuadCount) return(false);
+//	if (QuadList!=v1.QuadList) return(false);
 
-	if (Mat2d!=v1.Mat2d) return(FALSE);
-	if (uv2d0[0]!=v1.uv2d0[0]) return(FALSE);
-	if (uv2d0[1]!=v1.uv2d0[1]) return(FALSE);
-	if (uv2d1[0]!=v1.uv2d1[0]) return(FALSE);
-	if (uv2d1[1]!=v1.uv2d1[1]) return(FALSE);
-	if (uv2d2[0]!=v1.uv2d2[0]) return(FALSE);
-	if (uv2d2[1]!=v1.uv2d2[1]) return(FALSE);
-	if (uv2d3[0]!=v1.uv2d3[0]) return(FALSE);
-	if (uv2d3[1]!=v1.uv2d3[1]) return(FALSE);
+	if (TPage!=v1.TPage) return(false);
+//	if (Mat!=v1.Mat) return(false);
+	if (uv0[0]!=v1.uv0[0]) return(false);
+	if (uv0[1]!=v1.uv0[1]) return(false);
+	if (uv1[0]!=v1.uv1[0]) return(false);
+	if (uv1[1]!=v1.uv1[1]) return(false);
+	if (uv2[0]!=v1.uv2[0]) return(false);
+	if (uv2[1]!=v1.uv2[1]) return(false);
+	if (uv3[0]!=v1.uv3[0]) return(false);
+	if (uv3[1]!=v1.uv3[1]) return(false);
 	return(TRUE);
 }
+#endif
+};
+
+//---------------------------------------------------------------------------
+// Layers
+struct	sLayerHdr
+{
+	int		Type;
+	int		SubType;
+	int		Width;
+	int		Height;
+
+	/*int	TileData[W][H];....*/
+};
+
+//---------------------------------------------------------------------------
+// Header
+struct	sLvlHdr
+{
+//	sTri	*TriList;
+//	sQuad	*QuadList;
+//	sVtx	*VtxList;
+//	sMat	*MatList;
+//	sTile	*TileList;
+//	int		LayerCount;
+	/*int	LayerOfs[LayerCount]...*/
+	u32		TriList;
+	u32		QuadList;
+	u32		VtxList;
+	u32		TileList;
+// Layers
+	u32		BackLayer;
+	u32		MidLayer;
+	u32		ActionLayer;
+	u32		ForeLayer;
+	u32		Pad0;
+	u32		Pad1;
+	u32		Pad2;
+	u32		Pad3;
+	u32		Pad4;
+	u32		Pad5;
+	u32		Pad6;
+	u32		Pad7;
 
 };
+
+
 
 
 #endif

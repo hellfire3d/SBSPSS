@@ -24,7 +24,8 @@ CLevel::CLevel()
 		}
 		DAVE_DBGMSG("sizeof(POLY_FT4)=%i",sizeof(POLY_FT4));
 		DAVE_DBGMSG("sizeof(TSPRT)=%i",sizeof(TSPRT));
-		
+		MapPos.vx=0;		
+		MapPos.vy=0;		
 }
 
 /*****************************************************************************/
@@ -39,10 +40,8 @@ CLevel::~CLevel()
 /*****************************************************************************/
 void 	CLevel::init()
 {
-//		LevelHdr=(sLvlHdr *)CFileIO::loadFile(CHAPTER01_LEVEL01_LVL,"Level Data");
-//		TPLoadTex(CHAPTER01_LEVEL01_TEX);
-		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL01_LEVEL01_LVL,"Level Data");
-		TPLoadTex(LEVEL01_LEVEL01_TEX);
+		LevelHdr=(sLvlHdr *)CFileIO::loadFile(LEVEL04_LEVEL04_LVL,"Level Data");
+		TPLoadTex(LEVEL04_LEVEL04_TEX);
 
 		initLayers();
 }
@@ -59,25 +58,27 @@ sTile	*TileList=(sTile*)MakePtr(LevelHdr,LevelHdr->TileList);
 		if (LevelHdr->BackLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
-			CLayerTile *NewLayer=new ("Back Layer") CLayerBack(Layer, TileList);
-			NewLayer->init();
+			CLayerTile *NewLayer=new ("Back Layer") CLayerBack(Layer,  TileList, TriList, QuadList, VtxList);
+			NewLayer->init(MapPos,3);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_BACK]=NewLayer;
 		}
-/*
+
 // Mid
 		if (LevelHdr->MidLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->MidLayer);
 			CLayerTile *NewLayer=new ("Mid Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
-			NewLayer->init();
+			NewLayer->init(MapPos,2);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_MID]=NewLayer;
 		}
+/*
 // Action
 		if (LevelHdr->ActionLayer) 
 		{
 			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
 			CLayerTile *NewLayer=new ("Action Layer") CLayerTile(Layer, TileList, TriList, QuadList, VtxList);
 			NewLayer->init();
+			NewLayer->SetMapShift(0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
 		}
 // Fore
@@ -111,24 +112,22 @@ void 	CLevel::render()
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-extern int	MapX;
-extern int	MapY;
 int	MapSpd=8;
 void	CLevel::think(int _frames)
 {
 int		padh = PadGetHeld( 0 );
 
-		if (padh & PAD_LEFT)	MapX-=MapSpd;
-		if (padh & PAD_RIGHT)	MapX+=MapSpd;
-		if (padh & PAD_UP)		MapY-=MapSpd;
-		if (padh & PAD_DOWN)	MapY+=MapSpd;
+		if (padh & PAD_LEFT)	MapPos.vx-=MapSpd;
+		if (padh & PAD_RIGHT)	MapPos.vx+=MapSpd;
+		if (padh & PAD_UP)		MapPos.vy-=MapSpd;
+		if (padh & PAD_DOWN)	MapPos.vy+=MapSpd;
 
-		if (MapX<0) MapX=0;
-		if (MapY<0) MapY=0;
+		if (MapPos.vx<0) MapPos.vx=0;
+		if (MapPos.vy<0) MapPos.vy=0;
 
 		for (int i=0; i<CLayerTile::LAYER_TILE_TYPE_MAX; i++)
 		{
-			if (TileLayers[i]) TileLayers[i]->think(_frames);
+			if (TileLayers[i]) TileLayers[i]->think(MapPos);
 		}
 }
 
