@@ -5,7 +5,6 @@
 #ifndef		__DATA_STRUCTS_HEADER__
 #define		__DATA_STRUCTS_HEADER__
 
-
 //***************************************************************************
 // biped bone IDs
 /*
@@ -88,6 +87,12 @@ struct	sMat
 };
 
 //***************************************************************************
+struct	sTexInfo	// Basically same as PSX RECT
+{
+		s16		x, y, w, h;
+};
+
+//***************************************************************************
 struct sWeight
 {
 		s16		vx,vy,vz,VtxNo;				//  8
@@ -97,10 +102,23 @@ struct sWeight
 struct sBone
 {
 		sVtx		BoneSize;				//  8
+		sQuat		BoneAng;				//  8
+		s16			Parent;					//  2
+//		s16			Idx;					//  2
+		s16			VtxCount;				//  2
+//		sVtx		*VtxList;				//  4
+		s16			TriStart;
+		s16			TriCount;
+};											// 20
+/*
+struct sBone
+{
+		sVtx		BoneSize;				//  8
 		s16			Parent,Idx;				//  4
 		s32			WeightCount;			//  4
 		sWeight		*WeightList;			//  4
 };											// 20
+*/
 
 //***************************************************************************
 //*** Poly Types ************************************************************
@@ -112,7 +130,7 @@ struct	sTri
 		u8			uv0[2];					//  2
 		u16			Clut;					//  2
 		u8			uv1[2];					//  2
-		u16			TPage;					//  2
+		u16			TPage;					//  2	(Or material)
 		u8			uv2[2];					//  2
 		u16			P2;						//  2
 };											// 16
@@ -127,7 +145,7 @@ struct	sQuad
 		u8			uv0[2];					//  2
 		u16			Clut;					//  2
 		u8			uv1[2];					//  2
-		u16			TPage;					//  2
+		u16			TPage;					//  2	(Or material)
 		u8			uv2[2];					//  2
 		u8			uv3[2];					//  2
 };											// 20
@@ -229,12 +247,15 @@ struct	sActor3dHdr
 	u16		BoneCount;
 	u16		TriCount;
 	u16		QuadCount;
-	u16		WeightCount;
+//	u16		WeightCount;
+	u16		VtxCount;
 
-	sBone	*BoneList;
-	sTri	*TriList;
-	sQuad	*QuadList;
-	sWeight	*WeightList;
+	sBone		*BoneList;
+	sTri		*TriList;
+	sQuad		*QuadList;
+//	sWeight		*WeightList;
+	sVtx		*VtxList;
+	sTexInfo	*TexInfo;
 };
 
 //***************************************************************************
