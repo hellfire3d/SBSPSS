@@ -370,7 +370,7 @@ void CGUIObjectWithSpriteBank::shutdown()
 
 	CGUIObject::shutdown();
 	m_spriteBank->dump();
-//	delete m_spriteBank;
+	delete m_spriteBank;
 	m_spriteBank=0;
 }
 
@@ -383,9 +383,8 @@ void CGUIObjectWithSpriteBank::shutdown()
   ---------------------------------------------------------------------- */
 void CGUIObjectWithSpriteBank::setSpriteBank(FileEquate _fe)
 {
-//	m_spriteBank=new ("spritebank") SpriteBank();
-//	m_spriteBank->load(_fe);
-	m_spriteBank=CGameScene::getSpriteBank();
+	m_spriteBank=new ("spritebank") SpriteBank();
+	m_spriteBank->load(_fe);
 }
 
 

@@ -107,7 +107,7 @@ ACTOR_OUT_DIR :=		$(DATA_OUT)/Actors
 ACTOR_MAKEFILE_DIR :=	$(TEMP_BUILD_DIR)/actor
 ACTOR_DIRS_TO_MAKE :=	$(ACTOR_MAKEFILE_DIR) $(ACTOR_OUT_DIR)
 
-ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net SpongeBob_Glove SpongeBob_Glasses SpongeBob_JellyFish
+ACTOR_SPONGEBOB :=		SpongeBob SpongeBob_CoralBlower SpongeBob_JellyLauncher SpongeBob_Net SpongeBob_Glove SpongeBob_Wand SpongeBob_Glasses SpongeBob_JellyFish
 ACTOR_NPC :=			BarnacleBoy Krusty Squidward Gary Sandy Patrick MermaidMan
 
 ACTOR_ENEMY :=			Anenome BabyOctopus Ballblob Caterpillar clam Dustdevil \
@@ -180,7 +180,7 @@ INGAMEFX_GFX_NONTRANS_IN :=	$(foreach FILE,$(INGAMEFX_GFX_NONTRANS),$(INGAMEFX_N
 
 PICKUP_GFX_DIR :=			$(GRAF_DIR)/pickups
 PICKUP_GFX :=				+spatula +pants +health100 +health50 +health25 +glint1 +glint2 +glint3 +glint4 \
-							+jellyammo +bubblemixture +bubblewand +glasses +shoe +balloon +helmet \
+							+jellyammo +bubblemixture +bubblewand +glasses +shoe +balloon +balloonburst +helmet \
 							+blower +launcher +net \
 							+c1_l1_jelly +c1_l2_seaweed +c1_l3_seanutbutter +c1_l4_breadslice \
 							+c2_l1_falseteeth +c2_l2_kelpkream +c2_l3_mudpack +c2_l4_sponge \
