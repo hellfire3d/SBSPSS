@@ -801,7 +801,23 @@ if(newmode!=-1)
 			m_allowConversation=true;
 		}
 
+		// Think for the current player mode
 		m_currentPlayerModeClass->think();
+
+		// Conveyor belt movement
+		if(getHeightFromGroundNoPlatform(Pos.vx,Pos.vy,5)==0)
+		{
+			int block;
+			block=CGameScene::getCollision()->getCollisionBlock(Pos.vx,Pos.vy)&COLLISION_TYPE_MASK;
+			if(block==COLLISION_TYPE_FLAG_MOVE_LEFT)
+			{
+				moveHorizontal(-1);
+			}
+			else if(block==COLLISION_TYPE_FLAG_MOVE_RIGHT)
+			{
+				moveHorizontal(+1);
+			}
+		}
 
 		// Powerups
 		if(m_squeakyBootsTimer)
@@ -1120,6 +1136,7 @@ typedef struct
 }POSMEM;
 static POSMEM	lastpos[NUM_LASTPOS];
 static int		lastposnum=0;
+int				drawlastpos=false;
 #endif
 
 #ifdef __USER_paul__
@@ -1168,25 +1185,28 @@ if(Pos.vx!=lastpos[lastposnum].vx||Pos.vy!=lastpos[lastposnum].vy)
 		p->h=getHeightFromGround(Pos.vx,Pos.vy,150);
 	}
 }
-POSMEM	*p=lastpos;
-for(int i=0;i<NUM_LASTPOS;i++)
+if(drawlastpos)
 {
-	int	x,y;
-	x=p->vx-m_cameraPos.vx;
-	y=p->vy-m_cameraPos.vy;
-	DrawLine(x-4,y-4,x+4,y+4,0,0,255,0);
-	DrawLine(x-4,y+4,x+4,y-4,0,0,255,0);
-	y=y+p->h;
-	if(p->onp)
+	POSMEM	*p=lastpos;
+	for(int i=0;i<NUM_LASTPOS;i++)
 	{
-		DrawLine(x-6,y,x+6,y,255,0,255,0);
-	}
-	else
-	{
-		DrawLine(x-6,y,x+6,y,128,0,255,0);
-	}
+		int	x,y;
+		x=p->vx-m_cameraPos.vx;
+		y=p->vy-m_cameraPos.vy;
+		DrawLine(x-4,y-4,x+4,y+4,0,0,255,0);
+		DrawLine(x-4,y+4,x+4,y-4,0,0,255,0);
+		y=y+p->h;
+		if(p->onp)
+		{
+			DrawLine(x-6,y,x+6,y,255,0,255,0);
+		}
+		else
+		{
+			DrawLine(x-6,y,x+6,y,128,0,255,0);
+		}
 
-	p++;
+		p++;
+	}
 }
 #endif
 
