@@ -20,3 +20,5 @@ GetHit
 CrouchDown
 CrouchUp
 LookUp
+IdleNet
+IdleWeapon

@@ -132,6 +132,8 @@ static	CPlayerState	*s_stateTable[]=
 	&s_stateLookUp,							// STATE_LOOKUP
 	&s_stateLookUpRelax,					// STATE_LOOKUPRELAX
 	&s_stateJumpBack,						// STATE_JUMPBACK
+	NULL,									// STATE_CART
+	NULL,									// STATE_FLOAT
 };
 
 

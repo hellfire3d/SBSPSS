@@ -30,3 +30,11 @@ CrouchUp
 LookUp
 IdleBigEye
 IdleFaceUpSideDown
+IdleBandAid
+IdleEyePop
+IdleInHat
+IdleMature
+IdleMoustache
+IdleNoFace
+IdleNet
+IdleZorro
