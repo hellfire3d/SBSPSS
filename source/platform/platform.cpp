@@ -1200,13 +1200,20 @@ void CNpcPlatform::setTiltable( bool isTiltable )
 int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y)
 {
 	DVECTOR	centre;
-	int		y;
+	int		angle;
 
-	// Rotate backwards to find height at current position
 	centre=getCollisionCentre();
-	y=(centre.vx-_x)*msin(-getCollisionAngle()&4095)>>12;
-
-	return (centre.vy-_y)+y;
+	angle=getCollisionAngle();
+	if(angle==0)
+	{
+		// Non-rotated platform
+		return centre.vy-_y;
+	}
+	else
+	{
+		// Rotate backwards to find height at current position
+		return (centre.vy-_y)+((centre.vx-_x)*msin(-angle&4095)>>12);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
