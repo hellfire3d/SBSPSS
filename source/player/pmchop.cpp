@@ -63,7 +63,7 @@ void	CPlayerModeChop::enter()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int chopcsx=0;
+int chopcsx=-25;
 int chopcsy=-30;
 int chopcsw=80;
 int chopcsh=60;
@@ -84,13 +84,18 @@ void	CPlayerModeChop::think()
 	{
 		m_chopFrame=0;
 		getPlayerCollisionSize(&m_savedCSX,&m_savedCSY,&m_savedCSW,&m_savedCSH);
-		setPlayerCollisionSize(chopcsx,chopcsy,chopcsw,chopcsh);
 		m_chopping=true;
 	}
 
 	// Chopping?
 	if(m_chopping)
 	{
+		int facing;
+		facing=getFacing();
+		m_chopping=false;	// Oops..
+		setPlayerCollisionSize(chopcsx*facing,chopcsy,chopcsw,chopcsh);
+		m_chopping=true;	// Oops..
+
 		m_player->setAnimNo(ANIM_SPONGEBOB_KARATE);
 		m_player->setAnimFrame(m_chopFrame);
 		m_chopFrame++;
