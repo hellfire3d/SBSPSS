@@ -33,6 +33,7 @@ protected:
 	u8					m_isActivated;
 	u8					m_inJump;
 	s32					m_vertSpeed;
+	u8					m_playerAttached;
 };
 
 #endif

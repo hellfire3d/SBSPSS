@@ -43,6 +43,8 @@ void CNpcCartPlatform::postInit()
 	setCollisionSize( ( boundingBox.XMax - boundingBox.XMin ), ( boundingBox.YMax - boundingBox.YMin ) );
 	setCollisionCentreOffset( ( boundingBox.XMax + boundingBox.XMin ) >> 1, ( boundingBox.YMax + boundingBox.YMin ) >> 1 );
 	calculateNonRotatedCollisionData();
+
+	m_playerAttached = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,6 +59,20 @@ void CNpcCartPlatform::processMovement( int _frames )
 	s32 moveY = 0;
 
 	bool pathComplete;
+
+	if ( !m_playerAttached )
+	{
+		m_playerAttached = true;
+		CPlayer *player = GameScene.getPlayer();
+
+		DVECTOR newPos = Pos;
+		CRECT collisionArea=getCollisionArea();
+		newPos.vy = collisionArea.y1;
+
+		player->setPos( newPos );
+		player->setPlatform( this );
+		m_contact = true;
+	}
 
 	if ( m_isActivated )
 	{
@@ -74,7 +90,7 @@ void CNpcCartPlatform::processMovement( int _frames )
 
 		if ( m_inJump )
 		{
-			m_vertSpeed += 64;
+			m_vertSpeed += 192;
 
 			if ( m_vertSpeed > ( 5 << 8 ) )
 			{
@@ -236,7 +252,7 @@ void CNpcCartPlatform::jump()
 	if ( !m_inJump )
 	{
 		m_inJump = true;
-		m_vertSpeed = -6 << 8;
+		m_vertSpeed = -8 << 8;
 	}
 }
 
