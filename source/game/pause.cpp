@@ -51,6 +51,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__GAME_GAMESLOT_H__
+#include "game\gameslot.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -355,21 +359,36 @@ void CPauseMenu::render()
   ---------------------------------------------------------------------- */
 void CPauseMenu::renderLives()
 {
-	int			x,y;
+	CGameSlotManager::GameSlot	*gameSlot;
+	int			x,y,textYOff;
 	SpriteBank	*sb;
 	sFrameHdr	*fh;
-	char		buf[5];
+	char		buf[10];
 
-	x=345;
-	y=140;
+	gameSlot=CGameSlotManager::getSlotData();
+
+	// Spat count
+	x=100;
+	y=137;
+	sb=GameScene.getSpriteBank();
+	fh=sb->getFrameHeader(FRM__SPATULA);
+	sb->printFT4(fh,x,y,0,0,0);
+	x+=fh->W;
+	sprintf(buf,"%d/%d",GameScene.getPlayer()->getSpatulasHeld(),GameScene.GetLevel().getTotalSpatCount());
+	textYOff=fh->H-m_fontBank->getStringHeight(buf);
+	y+=textYOff;
+	m_fontBank->print(x,y,buf);
+
+	// Lives
+	x=350;
+	y=137;
 	sb=GameScene.getSpriteBank();
 	fh=sb->getFrameHeader(FRM__PANTS);
 	sb->printFT4(fh,x,y,0,0,0);
 	x+=fh->W;
-	sprintf(buf,"x5");
-	y+=fh->H-m_fontBank->getStringHeight(buf);
+	sprintf(buf,"x%d",gameSlot->m_lives);
+	y+=textYOff;
 	m_fontBank->print(x,y,buf);
-
 }
 
 
