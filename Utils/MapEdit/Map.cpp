@@ -137,6 +137,11 @@ int		Height=GetHeight();
 		if ((X>=0 && X<Width) && (Y>=0 && Y<Height))
 		{
 			Map[X][Y]=Blk;
+			TRACE2("%i %i\n",Blk.Set,Blk.Tile);
+			if (Blk.Tile==0)
+			{ // Only use one zero tile
+				Map[X][Y].Set=0;
+			}
 		}
 }
 
@@ -222,7 +227,8 @@ int		Height=GetHeight();
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem	&ThisElem=Get(X,Y);
-				if (ThisElem.Set==Tile.Set && ThisElem.Tile==Tile.Tile) return(TRUE);
+				if (ThisElem.Tile==Tile.Tile)
+					if (ThisElem.Set==Tile.Set || Tile.Tile==0) return(TRUE);
 			}
 		}
 		return(FALSE);

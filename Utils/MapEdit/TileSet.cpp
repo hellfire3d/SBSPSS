@@ -211,7 +211,6 @@ BOOL	CTileBank::Select(int BrushID,BOOL DownFlag)
 				TRACE0("Selected Blank\n");
 
 			}
-//			TRACE3("Start %i=%i,%i\n",SelStart,SelStart%TileBrowserWidth,SelStart/TileBrowserWidth);
 		}
 		else
 		if (!DownFlag && SelStart!=-1)
@@ -234,11 +233,6 @@ int			BW=TileSet[CurrentSet].GetTileBrowserWidth();
 CPoint		S=IDToPoint(SelStart-1,BW);
 CPoint		E=IDToPoint(SelEnd-1,BW);
 
-
-//CPoint		Start=CPoint(min(S.x,E.x), min(S.y,E.y));
-//CPoint		End=CPoint(	 max(S.x,E.x), max(S.y,E.y));
-//int			Width=(End.x-Start.x)+1;
-//int			Height=(End.y-Start.y)+1;
 int			Width=abs(E.x-S.x)+1;
 int			Height=abs(E.y-S.y)+1;
 
@@ -257,7 +251,6 @@ int			MaxTile=TileSet[CurrentSet].GetTileCount();
 		{
 			for (int X=0; X<Width; X++)
 			{
-//				ThisElem.Tile=PointToID(CPoint(Start.x+X,Start.y+Y),BW);
 				ThisElem.Tile=SelStart+X+(Y*BW);
 				ThisBrush.Set(X,Y,ThisElem);
 			}
