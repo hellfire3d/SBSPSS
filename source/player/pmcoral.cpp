@@ -378,7 +378,6 @@ void	CPlayerModeCoralBlower::renderModeUi()
 			heading=((m_launchHeading+1024)*-facing+1024)&4095;
 
 			sb->printRotatedScaledSprite(FRM__AIM_ARROW,targetPos.vx,targetPos.vy,8192,8192,heading,0);
-			PAUL_DBGMSG("%d",heading);
 		}
 	}
 	else
