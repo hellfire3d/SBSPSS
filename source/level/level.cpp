@@ -96,6 +96,10 @@
 #include "locale\textdbase.h"
 #endif
 
+#ifndef _ANIMTEX_HEADER_
+#include "gfx\animtex.h"
+#endif
+
 #include	"fx\fx.h"
 #include	"fx\fxfallingtile.h"
 
@@ -221,6 +225,15 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 
 		m_isBossRespawn = false;
 		m_bossHealth = 0;
+
+		int level=GameScene.getLevelNumber();
+		int chapter=GameScene.getChapterNumber();
+
+		if ( chapter == 1 && level == 5 ||			// snail race
+				chapter == 5 && level == 4 )		// tuna canning
+		{
+			CAnimTex::SetSpeed( -4 );
+		}
 }
 
 /*****************************************************************************/
