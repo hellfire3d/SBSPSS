@@ -60,7 +60,8 @@ sExpLayerHdr	LayerHdr;
 int				Width=Map.GetWidth();
 int				Height=Map.GetHeight();
 int				ThisFilePos=ftell(File);
-sExpMapElem		BlankElem={0,0,0};
+CTileBank		&TileBank=Core->GetTileBank();
+sExpTile		BlankElem={0,0,0,0};
 
 		TRACE1("LayerTile Ofs %i\n",ThisFilePos);
 		LayerOfs.push_back(ThisFilePos);
@@ -78,14 +79,17 @@ sExpMapElem		BlankElem={0,0,0};
 			for (int X=0; X<Width; X++)
 			{
 				sMapElem		&MapElem=Map.Get(X,Y);
-				sExpMapElem		TileElem;
+				CTile			&ThisTile=Core->GetTile(MapElem.Set,MapElem.Tile);
 				sExpLayerTile	OutElem;
+				sExpTile		OutTile;
 
-				TileElem.Tile=MapElem.Tile;
-				TileElem.Set=MapElem.Set;
-				TileElem.Flags=MapElem.Flags;
+				OutTile.Set=MapElem.Set;
+				OutTile.Tile=MapElem.Tile;
+				OutTile.TriCount=0;
+				OutTile.XOfs=ThisTile.GetTexXOfs();
+				OutTile.YOfs=ThisTile.GetTexYOfs();
 				
-				OutElem.Tile=UsedTileList.Add(TileElem);
+				OutElem.Tile=UsedTileList.Add(OutTile);
 				OutElem.Flags=MapElem.Flags;
 				fwrite(&OutElem,sizeof(sExpLayerTile),1,File);
 			}
@@ -135,6 +139,9 @@ void	CExport::ExportTiles(CCore *Core)
 {
 int		ListSize,i;
 
+		FileHdr.TileW=Core->GetTile(1,0).GetPCTexW();
+		FileHdr.TileH=Core->GetTile(1,0).GetPCTexH();
+
 // Write Tiles
 		ListSize=UsedTileList.size();
 		FileHdr.TileCount=ListSize;
@@ -142,14 +149,7 @@ int		ListSize,i;
 
 		for (i=0; i<ListSize; i++)
 		{
-			sExpMapElem		&ThisElem=UsedTileList[i];
-			CTile			&ThisTile=Core->GetTile(ThisElem.Set,ThisElem.Tile);
-			sExpTile		OutTile;
-
-			OutTile.Flags=ThisElem.Flags;
-
-			TRACE3("%i %i %i\n",ThisElem.Set,ThisElem.Tile,ThisElem.Flags);
-			ExportTile(Core,ThisTile,OutTile);
+			ExportTile(Core,UsedTileList[i]);
 		}
 
 // Write Tris
@@ -158,20 +158,19 @@ int		ListSize,i;
 		FileHdr.TriOfs=ftell(File);
 		for (i=0; i<ListSize; i++)
 		{
-			fwrite(&TriList[i],sizeof(sTriFace),1,File);
+			fwrite(&TriList[i],sizeof(sExpTri),1,File);
 		}
-		TRACE1("TriCount=%i\n",ListSize);
 }
 
 /*****************************************************************************/
-void	CExport::ExportTile(CCore *Core,CTile &ThisTile,sExpTile &OutTile)
+void	CExport::ExportTile(CCore *Core,sExpTile &OutTile)
 {
+CTile		&ThisTile=Core->GetTile(OutTile.Set,OutTile.Tile);
+CTileBank	&TileBank=Core->GetTileBank();
 int			RGBW=ThisTile.GetPCTexW();
 int			RGBH=ThisTile.GetPCTexH();
 u8			*RGB=ThisTile.GetPCTexRGB();
-
-		OutTile.W=RGBW;
-		OutTile.H=RGBH;
+GString		SetName=TileBank.GetSet(OutTile.Set).GetFilename();
 
 		if (ThisTile.IsTile3d())
 		{
@@ -179,37 +178,20 @@ u8			*RGB=ThisTile.GetPCTexRGB();
 		}
 		else
 		{
-			ExportTile2d(Core,ThisTile,OutTile);
 		}
 
+// change set name to set mappping
+		if (OutTile.Set==0) 
+		{
+			SetName="BLANK";
+		}
+
+		OutTile.Set=SetNames.Add(SetName);
 		fwrite(&OutTile,sizeof(sExpTile),1,File);
+// Write RGB
+		ASSERT(RGBW==FileHdr.TileW);
+		ASSERT(RGBH==FileHdr.TileH);
 		fwrite(RGB,RGBW*RGBH*3,1,File);
-
-}
-
-/*****************************************************************************/
-void	CExport::ExportTile2d(CCore *Core,CTile &ThisTile,sExpTile &OutTile)
-{
-CTexCache	&TexCache=Core->GetTexCache();
-
-		OutTile.TriStart=-1;
-		OutTile.TriCount=0;
-		OutTile.XOfs=ThisTile.GetTexXOfs();
-		OutTile.YOfs=ThisTile.GetTexYOfs();
-		
-// Texture
-int		TexID=ThisTile.GetTexID();
-		if (TexID==-1)	// Blank Tile
-		{
-			OutTile.TexId=-1;
-		}
-		else
-		{
-			sExpTex	OutTex;
-			sTex	&ThisTex=TexCache.GetTex(TexID);
-			OutTex.Filename=ThisTex.Filename;
-			OutTile.TexId=TexList.Add(OutTex);
-		}
 
 }
 
@@ -223,51 +205,84 @@ int		TriCount=TileTriList.size();
 
 		OutTile.TriStart=TriList.size();
 		OutTile.TriCount=TriCount;
-		OutTile.XOfs=-1;
-		OutTile.YOfs=-1;
-		OutTile.TexId=-1;
+
+		for (int T=0; T<TriCount; T++)
+		{
+			sTriFace	&InTri=TileTriList[T];
+			sExpTri		OutTri;
+			GString		TexName=TexCache.GetTexName(InTri.Mat);
+			OutTri.TexID=TexNames.Add(TexName);
+
+			for (int p=0; p<3; p++) 
+			{
+				OutTri.vtx[p]=InTri.vtx[p];
+				OutTri.uv[p][0]=InTri.uvs[p].u;
+				OutTri.uv[p][1]=InTri.uvs[p].v;
+			}
+			TriList.push_back(OutTri);
+		}
+}
+
+/*
+void	CExport::ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile)
+{
+CTexCache				&TexCache=Core->GetTexCache();
+std::vector<sTriFace>	&TileTriList=ThisTile.GetTriList();
+
+int		TriCount=TileTriList.size();
+
+//		OutTile.TriStart=TriList.size();
+//		OutTile.TriCount=TriCount;
+//		OutTile.XOfs=-1;
+//		OutTile.YOfs=-1;
+//		OutTile.TexId=-1;
 
 		for (int T=0; T<TriCount; T++)
 		{
 			sTriFace	&TileTri=TileTriList[T];
 			sTriFace	OutTri;
-			sExpTex		OutTex;
+//			sExpTex		OutTex;
 
 			for (int p=0; p<3; p++) 
 			{
 				OutTri=TileTri;
 // Texture
-				sTex	&TriTex=TexCache.GetTex(TileTri.Mat);
-				OutTex.Filename=TriTex.Filename;
-				OutTri.Mat=TexList.Add(OutTex);
+//				sTex	&TriTex=TexCache.GetTex(TileTri.Mat);
+//				OutTex.Filename=TriTex.Filename;
+//				OutTri.Mat=TexList.Add(OutTex);
 			}
 			TriList.push_back(OutTri);
 		}
 //		return(TriCount);
+
 }
-
+*/
 /*****************************************************************************/
-/*** Textures ****************************************************************/
-/*****************************************************************************/
-
-void	CExport::ExportTexList(CCore *Core)
+void	CExport::ExportStrList(CCore *Core)
 {
-int		TexCount=TexList.size();
+int		ListSize,i;
 
-		FileHdr.TexCount=TexCount;
-		FileHdr.TexOfs=ftell(File);
+// Set List
+		ListSize=SetNames.size();
+		FileHdr.SetNameCount=ListSize;
+		FileHdr.SetNameOfs=ftell(File);
 
-		for (int i=0; i<TexCount; i++)
+		for (i=0; i<ListSize; i++)
 		{
-			sExpTex	&ThisTex=TexList[i];
-			char	TexFilename[256];
-
-			MakePathRel2App(ThisTex.Filename,TexFilename);
-
-			int	Len=strlen(TexFilename);
-			fwrite(TexFilename,Len+1,1,File);
-			TRACE2("%i:\t%s\n",i,TexFilename);
+			const char	*Str=SetNames[i];
+			fwrite(Str,strlen(Str)+1,1,File);
 		}
+// Tex List
+		ListSize=TexNames.size();
+		FileHdr.TexNameCount=ListSize;
+		FileHdr.TexNameOfs=ftell(File);
+
+		for (i=0; i<ListSize; i++)
+		{
+			const char	*Str=TexNames[i];
+			fwrite(Str,strlen(Str)+1,1,File);
+		}
+
 }
 
 /*****************************************************************************/

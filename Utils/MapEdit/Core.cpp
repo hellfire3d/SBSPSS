@@ -817,7 +817,7 @@ CExport	Exp(ExportName,LayerCount);
 		}
 
 		Exp.ExportTiles(this);
-		Exp.ExportTexList(this);
+		Exp.ExportStrList(this);
 
 }
 

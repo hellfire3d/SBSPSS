@@ -8,8 +8,6 @@
 #include	"stdafx.h"
 #include	"mapedit.h"
 #include	<Vector>
-//#include	"GinTex.h"
-//#include	"Tile.h"
 
 #include	<List.h>
 #include	"ExportHdr.h"
@@ -31,10 +29,10 @@ public:
 		void	ExportLayerCollision(CCore *Core,char *LayerName,int SubType,CMap &Map);
 
 		void	ExportTiles(CCore *Core);
-		void	ExportTexList(CCore *Core);
+		void	ExportStrList(CCore *Core);
 
 protected:
-		void	ExportTile(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
+		void	ExportTile(CCore *Core,sExpTile	&ThisElem);
 		void	ExportTile3d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
 		void	ExportTile2d(CCore *Core,CTile &ThisTile,sExpTile &OutTile);
 
@@ -43,14 +41,13 @@ protected:
 		int					LayerCount;
 		CList<int>			LayerOfs;
 
-		CList<sTriFace>		TriList;
-		CList<sExpTex>		TexList;
+		CList<sExpTri>		TriList;
 
-		CList<sExpMapElem>	UsedTileList;
+		CList<GString>		SetNames;
+		CList<GString>		TexNames;
 
-//		GString				Filename;
+		CList<sExpTile>		UsedTileList;
 		FILE				*File;
-//		int					Count;
 
 };
 

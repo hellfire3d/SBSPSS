@@ -454,22 +454,29 @@ GString	Ext=Filename.Ext();
 void	CTileSet::Load2d(CCore *Core)
 {
 CTexCache	&TexCache=Core->GetTexCache();
-GString		FullFilename;
 GString		ColTest;
+GString		Path,Name;
+
 		ColTest=Filename.File();
 		ColTest.Append('.');
 		ColTest+=Filename.Ext();
 
 		if (ColTest==ColFName)
 		{// Collision thing (sigh!)
-			FullFilename=Filename.FullName();
+			Path=Filename.Drive();
+			Path+=Filename.Dir();
+			Path.Append('\\');
+			Name=Filename.File();
+			Name.Append('.');
+			Name+=Filename.Ext();
 		}
 		else
 		{
-			MakeFullFilename(Filename.FullName(),FullFilename);
+			Path=GetWorkingPath();
+			Name=Filename.FullName();
 		}
 
-int		TexID=TexCache.ProcessTexture(FullFilename,0);
+int		TexID=TexCache.ProcessTexture(Path,Name,0);
 sTex	&ThisTex=TexCache.GetTex(TexID);
 
 int		Width=ThisTex.TexWidth/16;

@@ -11,6 +11,7 @@
 #include	<Vector>
 #include	"Utils.h"
 #include	"List.h"
+#include	<misc.hpp>
 
 struct	sRGBData
 {
@@ -21,14 +22,18 @@ struct	sRGBData
 
 struct	sTex
 {
-	char			Filename[_MAX_PATH];
+//	char			Filename[_MAX_PATH];
+	GString			FullFilename;
+	GString			Path;
+	GString			Name;
 	GLuint			TexID;
 	int				Flags;
 	int				TexWidth,TexHeight;
 	float			dW,dH;
 	bool			Loaded;
 
-	bool			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
+//	bool			operator==(sTex const &v1)		{return (!strcmp(Filename,v1.Filename) && Flags==v1.Flags);}
+	bool			operator==(sTex const &v1)		{return (FullFilename==v1.FullFilename && Flags==v1.Flags);}
 };
 
 const RGBQUAD	BlankRGB={255,0,255};
@@ -41,12 +46,12 @@ class	CTexCache
 public:
 	
 		int		GetTexIdx(sTex &Tex)						{return(TexList.Find(Tex));}
-		int		GetTexIdx(char *Filename,int Flags);
+//		int		GetTexIdx(const char *Filename,int Flags);
 
-		int		ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData=0);
+		int		ProcessTexture(const char *Path,const char *Name,int Flags,sRGBData *RGBData=0);
 		void	Purge();
 
-		bool	LoadBMP(char *Filename,sRGBData &RGBData);
+		bool	LoadBMP(const char *Filename,sRGBData &RGBData);
 		void	FreeBMP(sRGBData &RGBData);
 		void	FixBMP(sRGBData &RGBData);
 		bool	IsSizeOk(int Size);
@@ -54,8 +59,8 @@ public:
 
 		void	LoadTex(sTex &ThisTex,sRGBData *TexData);
 		
-
 		sTex	&GetTex(int Id)						{return(TexList[Id]);}
+		GString	&GetTexName(int Id)					{return(TexList[Id].Name);}
 		GLuint	GetTexGLId(int Id)					{return(TexList[Id].TexID);}
 
 

@@ -158,8 +158,6 @@ Vector3		Ofs;
 		Ofs.y=-(CursPos.y-(int)ThisCam.y);
 		ThisCam.x-=(int)ThisCam.x;
 		ThisCam.y-=(int)ThisCam.y;
-TRACE2("-> %f %f\n",Ofs.x,Ofs.y);
-
 
 		if (Is3d && Render3dFlag)
 		{

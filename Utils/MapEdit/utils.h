@@ -51,5 +51,6 @@ void	SetFileExt(char *InName,char *OutName,char *Ext);
 
 void	MakeFullFilename(const char *RelName,GString &Out);
 void	MakePathRel2App(const char* In,char *Out);
+GString	GetWorkingPath();
 		
 #endif

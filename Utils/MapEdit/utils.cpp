@@ -266,8 +266,6 @@ GString	Path;
 
 		Out=Path;
 		Out+=In;
-
-
 }
 
 /**************************************************************************************/
@@ -278,3 +276,15 @@ GString	RootPath=theApp.GetCurrent()->GetPathName();
 		GFName::makerelative(RootPath,In,Out);
 }
 
+/**************************************************************************************/
+GString	GetWorkingPath()
+{
+GFName	FullPath=theApp.GetCurrent()->GetPathName();
+GString	Path;
+
+		Path=FullPath.Drive();
+		Path+=FullPath.Dir();
+		Path.Append('\\');
+
+	return(Path);
+}

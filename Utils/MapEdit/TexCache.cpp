@@ -14,26 +14,28 @@
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-int		CTexCache::GetTexIdx(char *Filename,int Flags)
+/*
+int		CTexCache::GetTexIdx(const char *Filename,int Flags)
 {
 sTex	Tex;
-		strcpy(Tex.Filename,Filename);
+		Tex.Filename=Filename;
 		Tex.Flags=Flags;
 		return(TexList.Find(Tex));
 }
-
+*/
 /*****************************************************************************/
 // Checks loaded files for dups, assumes all passed RGB is unique
-int		CTexCache::ProcessTexture(const char *Filename,int Flags,sRGBData *RGBData)
+int		CTexCache::ProcessTexture(const char *Path,const char *Name,int Flags,sRGBData *RGBData)
 {
 int		ListSize=TexList.size();
 
 sTex		NewTex;
 sRGBData	ThisRGB;
 
-		strcpy(NewTex.Filename,Filename);
-		NewTex.Flags=Flags;
-
+//		strcpy(NewTex.Filename,Filename);
+		NewTex.Path=Path;
+		NewTex.Name=Name;
+		NewTex.FullFilename=NewTex.Path+NewTex.Name;
 		NewTex.Flags=Flags;
 
 		if (!RGBData)	// Need to load file
@@ -43,7 +45,7 @@ sRGBData	ThisRGB;
 
 //			TRACE1("Loading Texture %s\n",NewTex.Filename);
 			
-			if (!LoadBMP(NewTex.Filename,ThisRGB))
+			if (!LoadBMP(NewTex.FullFilename,ThisRGB))
 			{
 				exit(-1);
 				return(ListSize);
@@ -81,7 +83,7 @@ int		CTexCache::AlignSize(int Size)
 
 
 /**************************************************************************************/
-bool	CTexCache::LoadBMP(char *Filename,sRGBData &RGBData)
+bool	CTexCache::LoadBMP(const char *Filename,sRGBData &RGBData)
 {
 Frame	ThisFrame;
 FILE	*File;

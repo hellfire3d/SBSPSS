@@ -15,26 +15,42 @@
 struct	sExpFileHdr
 {
 		int		TileCount;
-//		int		TileW,TileH;
 		int		TileOfs;
+		int		TileW,TileH;
 		int		TriCount;
 		int		TriOfs;
-		int		TexCount;
-		int		TexOfs;
+		int		SetNameCount;
+		int		SetNameOfs;
+		int		TexNameCount;
+		int		TexNameOfs;
 		int		LayerCount;
 //		int		LayerOfs[n]
 };
 
 /*****************************************************************************/
-struct	sExpTile			//	2d	3d
+struct	sExpTile
 {
-		int		TriStart;	//	-1	n
-		int		TriCount;	//	-1	n
-		int		XOfs,YOfs;	//	 n	-1
-		int		TexId;		//	 n	-1
-		int		Flags;
-		int		W,H;
-		u8		*RGB;		// Used in MkLevel
+		int		Set;
+		int		Tile;
+		int		TriStart;
+		int		TriCount;
+		u16		XOfs,YOfs;
+		u8		*RGB;
+//		int		TexId;			//	 n	-1
+//		int		Flags;			//  Flip Flags
+
+bool	operator==(sExpTile const &v1)
+		{
+		return(Set==v1.Set && Tile==v1.Tile);
+		}
+};
+
+/*****************************************************************************/
+struct	sExpTri
+{
+		int			TexID;
+		Vector3		vtx[3];
+		float		uv[3][2];
 };
 
 /*****************************************************************************/
@@ -51,33 +67,34 @@ struct	sExpLayerHdr
 /*****************************************************************************/
 struct	sExpLayerTile
 {
-		int		Tile;
-		int		Flags;
-		BOOL	operator==(sExpLayerTile const &v1)	{return (Tile==v1.Tile);}
+		u16		Tile;
+		u16		Flags;
+//		bool	operator==(sExpLayerTile const &v1)	{return (Tile==v1.Tile);}
 };
 
 
 /*****************************************************************************/
+/*
 struct	sExpTex
 {
 	char			*Filename;
 
 	BOOL			operator==(sExpTex const &v1)		{return (!strcmp(Filename,v1.Filename));}
 };
-
+*/
+/*
 struct	sExpMapElem
 {
-	int		Set;
-	int		Tile;
-	int		Flags;
+	u16		Set;
+	u16		Tile;
+	u16		Flags;
 
-BOOL	operator==(sExpMapElem const &v1)	// Does Check flags
+BOOL	operator==(sExpMapElem const &v1)
 		{
 		return(Set==v1.Set && Tile==v1.Tile);
-//		return(Set==v1.Set && Tile==v1.Tile && Flags==v1.Flags);
 		}
 };
-
+*/
 /*****************************************************************************/
 #endif
 
