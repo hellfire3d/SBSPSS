@@ -41,6 +41,7 @@ sBackSpriteInfo	CLayerBack::InfoTab[]=
 {FRM_PUMPKIN,0,3},
 {FRM_BUBBLE,NO_SPIN | NO_SCALE | NO_COLOR,3 },
 {FRM_BUBBLESMALL,NO_SPIN | NO_SCALE | NO_COLOR,3},
+{FRM_FISHBONE,NO_COLOR,0},
 };
 
 /*****************************************************************************/
@@ -149,8 +150,8 @@ void	CLayerBack::InitSprite(sBackSprite *SpritePtr)
 int		StartPos=getRnd();
 int		Pos=getRnd();
 
-int		XInc=(getRndRange((1<<((MOVE_SHIFT*2)/3))-1)+1)<<MOVE_SHIFT;
-int		YInc=(getRndRange((1<<((MOVE_SHIFT*2)/3))-1)+1)<<MOVE_SHIFT;
+int		XInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
+int		YInc=(getRndRange((1<<((MOVE_SHIFT*1)/3))-1)+1)<<MOVE_SHIFT;
 
 		if (!(InfoTab[SpritePtr->Type].Flags & NO_MOVE))
 		{

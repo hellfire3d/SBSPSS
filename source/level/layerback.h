@@ -57,6 +57,7 @@ public:
 			PUMPKIN,
 			BUBBLE,
 			BUBBLESMALL,
+			FISHBONE,
 		};
 
 		CLayerBack(sLayerHdr *Hdr,sTile *TileBank);
