@@ -138,7 +138,7 @@ void CSceneSelector::render()
 		f4=GetPrimF4();
 		setXYWH(f4,0,0,512,256);
 		setRGB0(f4,10,20,30);
-		AddPrimToList(f4,20);
+		AddPrimToList(f4,15);
 
 		m_font->setColour(255,255,255);
 		m_font->print(256,80,"Select scene:");
