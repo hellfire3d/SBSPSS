@@ -833,8 +833,6 @@ void	CFmaScene::init()
 	m_pc=s_fmaScripts[s_chosenScript];
 
 	CFader::setFadingIn();
-
-	CSoundMediator::playSong();
 }
 
 
