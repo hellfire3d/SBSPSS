@@ -648,6 +648,18 @@ void CConversation::renderText()
 	{
 		s_sprites->printFT4(FRM__BUTD,clipTextRegion.x+TEXTBOX_BUTTONS_XOFF+TEXTBOX_BUTTONS_GAP,TEXTBOX_Y+TEXTBOX_BUTTONS_YOFF,0,0,0);
 	}
+
+	// Render X button hint
+	int xofs;
+	if(s_faceFrame!=-1)
+	{
+		xofs=clipTextRegion.x+TEXTBOX_BUTTONS_XOFF+TEXTBOX_WIDTH-TEXTBOX_XBUTTON_XOFFSET;
+	}
+	else
+	{
+		xofs=clipTextRegion.x+TEXTBOX_BUTTONS_XOFF+TEXTBOX_WIDTH_FOR_NARRATOR-TEXTBOX_XBUTTON_XOFFSET;
+	}
+	s_sprites->printFT4(FRM__BUTX,xofs,TEXTBOX_Y+TEXTBOX_BUTTONS_YOFF,0,0,0);
 }
 
 
