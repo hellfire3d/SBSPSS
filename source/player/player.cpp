@@ -81,6 +81,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef __PICKUPS_PICKUP_H__
+#include "pickups\pickup.h"
+#endif
+
 
 /*	Std Lib
 	------- */
@@ -675,9 +679,6 @@ void	CPlayer::shutdown()
 static int oldmode=-1;
 int newmode=-1;
 
-int	scmax=160;
-int scspeed=5;
-
 void	CPlayer::think(int _frames)
 {
 	int	i;
@@ -741,31 +742,55 @@ if(newmode!=-1)
 		}
 	}
 
-	m_tryingToPickupWeapon=false;
+	m_tryingToManuallyPickupWeapon=false;
+	m_tryingToAutomaticallyPickupWeapon=false;
 	for(i=0;i<_frames;i++)
 	{
-		// Think
 		updatePadInput();
-		if(!m_tryingToPickupWeapon)
+
+		// Weapon collect/drop/swap stuff..
+		if(m_currentMode==PLAYER_MODE_BASICUNARMED||
+		   m_currentMode==PLAYER_MODE_FULLUNARMED)
 		{
-			if(m_currentMode==PLAYER_MODE_BASICUNARMED||
-			   m_currentMode==PLAYER_MODE_FULLUNARMED)
+			// Always trying to pickup weapon if unarmed... means that when SB walks
+			// over an item whilst unarmed, he automatically picks it up
+			m_tryingToAutomaticallyPickupWeapon=true;
+		}
+		if(getPadInputDown()&PI_WEAPONCHANGE)
+		{
+			// Trying to pick up a weapon
+			m_tryingToManuallyPickupWeapon=true;
+
+			// If already armed then drop current weapon
+			if(m_currentMode!=PLAYER_MODE_BASICUNARMED&&
+			   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
+			   m_currentMode!=PLAYER_MODE_DEAD)
 			{
-				// Always trying to pickup weapon if unarmed... means that when SB walks
-				// over an item whilst unarmed, he automatically picks it up
-				m_tryingToPickupWeapon=true;
-			}
-			else if(getPadInputDown()&PI_WEAPONCHANGE)
-			{
-				if(!m_tryingToPickupWeapon&&
-				   m_currentMode!=PLAYER_MODE_BASICUNARMED&&
-				   m_currentMode!=PLAYER_MODE_FULLUNARMED&&
-				   m_currentMode!=PLAYER_MODE_DEAD)
+				static const int	s_pickupsToDrop[NUM_PLAYERMODES]=
 				{
-					// Drop current weapon
-					setMode(PLAYER_MODE_FULLUNARMED);
+					-1,						// PLAYER_MODE_BASICUNARMED,
+					-1,						// PLAYER_MODE_FULLUNARMED,
+					-1,						// PLAYER_MODE_BALLOON,
+					PICKUP__BUBBLE_WAND,	// PLAYER_MODE_BUBBLE_MIXTURE,
+					PICKUP__NET,			// PLAYER_MODE_NET,
+					PICKUP__CORAL_BLOWER,	// PLAYER_MODE_CORALBLOWER,
+					PICKUP__JELLY_LAUNCHER,	// PLAYER_MODE_JELLY_LAUNCHER,
+					-1,						// PLAYER_MODE_DEAD,
+					-1,						// PLAYER_MODE_FLY,
+				};
+
+				int	pickupToDrop;
+				pickupToDrop=s_pickupsToDrop[m_currentMode];
+				if(pickupToDrop!=-1)
+				{
+					DVECTOR	pickupPos;
+					CBasePickup	*pickup;
+					pickupPos.vx=Pos.vx;
+					pickupPos.vy=Pos.vy-30;
+					pickup=createPickup((PICKUP_TYPE)pickupToDrop,&pickupPos);
+					pickup->setPos(&pickupPos);
 				}
-				m_tryingToPickupWeapon=true;
+				setMode(PLAYER_MODE_FULLUNARMED);
 			}
 		}
 
@@ -1651,6 +1676,8 @@ void CPlayer::respawn()
 	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
 	m_ledgeLookOffset=0;
 	m_ledgeLookTimer=0;
+	m_tryingToManuallyPickupWeapon=false;
+	m_tryingToAutomaticallyPickupWeapon=false;
 
 	m_squeakyBootsTimer=0;
 	m_invincibilityRingTimer=0;
@@ -1828,7 +1855,7 @@ void	CPlayer::inSoakUpState()
 				_thing must point to the thing that caused the damage
 	Returns:
   ---------------------------------------------------------------------- */
-#if	defined(__USER_daveo__)
+#if	defined(__USER_daveo__) || defined(__USER_paul__)
 int invincibleSponge=true;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..
 #else
 int invincibleSponge=false;		// NB: This is for debugging purposes only so don't try and use it for a permenant cheat mode..

@@ -260,7 +260,8 @@ public:
 	void			setPlayerPos(DVECTOR *_pos)							{Pos=*_pos;}
 	PLAYERINPUT		getPadInputHeld()									{return m_padInput;}
 	PLAYERINPUT		getPadInputDown()									{return m_padInputDown;}
-	int				tryingToPickupWeapon()								{return m_tryingToPickupWeapon;}
+	int				tryingToManuallyPickupWeapon()						{return m_tryingToManuallyPickupWeapon;}
+	int				tryingToAutomaticallyPickupWeapon()					{return m_tryingToAutomaticallyPickupWeapon;}
 							
 	void			inSoakUpState();
 	void			takeDamage(DAMAGE_TYPE _damage,REACT_DIRECTION _reactDirection=REACT__UP,CThing *_thing=NULL);
@@ -338,7 +339,8 @@ private:
 	PLAYERINPUT			m_padInput;			// Controls that are being held down
 	PLAYERINPUT			m_lastPadInput;		// Last frames controls
 	PLAYERINPUT			m_padInputDown;		// Controls that were pressed this frame
-	int					m_tryingToPickupWeapon;
+	int					m_tryingToManuallyPickupWeapon;
+	int					m_tryingToAutomaticallyPickupWeapon;
 
 	
 	// Various info about the current map

@@ -113,8 +113,14 @@ private:
 
 class CBaseWeaponPickup : public CBasePickup
 {
+public:
+	virtual void		init();
+	virtual void		think(int _frames);
+
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
+	int					m_dontAutoPickUpUntilPlayerMovesOffMe;
+	int					m_collidedWithPlayer;
 
 };
 

@@ -287,14 +287,59 @@ void	CBaseRespawningPickup::collect(class CPlayer *_player)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
+void	CBaseWeaponPickup::init()
+{
+	CBasePickup::init();
+
+	m_dontAutoPickUpUntilPlayerMovesOffMe=true;
+	m_collidedWithPlayer=true;
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
+void	CBaseWeaponPickup::think(int _frames)
+{
+	CBasePickup::think(_frames);
+
+	if(!m_collidedWithPlayer)
+	{
+		m_dontAutoPickUpUntilPlayerMovesOffMe=false;
+	}
+	else
+	{
+		m_collidedWithPlayer=false;
+	}
+}
+
+
+/*----------------------------------------------------------------------
+	Function:
+	Purpose:
+	Params:
+	Returns:
+  ---------------------------------------------------------------------- */
 void	CBaseWeaponPickup::collidedWith(CThing *_thisThing)
 {
 	switch(_thisThing->getThingType())
 	{
 		case TYPE_PLAYER:
-			if(((CPlayer*)_thisThing)->tryingToPickupWeapon())
 			{
-				collect((CPlayer*)_thisThing);
+				CPlayer	*player;
+				player=(CPlayer*)_thisThing;
+				if(player->tryingToManuallyPickupWeapon()||
+				   (!m_dontAutoPickUpUntilPlayerMovesOffMe&&player->tryingToAutomaticallyPickupWeapon()))
+				{
+					collect(player);
+				}
+				else
+				{
+					m_collidedWithPlayer=true;
+				}
 			}
 			break;
 
