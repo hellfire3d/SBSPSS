@@ -34,7 +34,11 @@ void		CLayerCollision::shutdown()
 /*****************************************************************************/
 #ifdef __SHOW_COLLISION__
 #include "gfx\prim.h"
+#ifdef __USER_paul__
 int	showCollision=true;
+#else
+int	showCollision=false;
+#endif
 void CLayerCollision::render(DVECTOR &MapPos)
 {
 	if(showCollision)
