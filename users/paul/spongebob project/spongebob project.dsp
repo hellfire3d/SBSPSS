@@ -1072,6 +1072,18 @@ SOURCE=..\..\..\source\thing\thing.cpp
 SOURCE=..\..\..\source\thing\thing.h
 # End Source File
 # End Group
+# Begin Group "triggers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tlevexit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\source\triggers\tlevexit.h
+# End Source File
+# End Group
 # Begin Group "utils"
 
 # PROP Default_Filter ""

@@ -17,10 +17,6 @@
 
 #include "player\player.h"
 
-#ifndef __ANIM_HEADER__
-#include "gfx\anim.h"
-#endif
-
 #ifndef __PAD_PADS_H__
 #include "pad\pads.h"
 #endif
@@ -35,6 +31,10 @@
 
 #ifndef __LAYER_COLLISION_H__
 #include "level\collision.h"
+#endif
+
+#ifndef	__PLAYER_PMODES_H__
+#include "player\pmodes.h"
 #endif
 
 // to be removed
@@ -95,6 +95,8 @@ POWER-UPS
 //	render
 //	states	setState()
 //	metrics getMetrics()
+// override setAnimNo,setAnimFrame?
+
 
 /*----------------------------------------------------------------------
 	Function Prototypes
@@ -203,10 +205,8 @@ void	CPlayer::init()
 
 	m_layerCollision=NULL;
 	
-	sActorHdr	*Hdr=m_skel.Load(ACTORS_SPONGEBOB_A3D);		
-	m_skel.Init(Hdr);
+	m_skel.Init(ACTORS_SPONGEBOB_A3D);
 	TPLoadTex(ACTORS_ACTOR_SPONGEBOB_TEX);
-	m_skel.setAnimDatabase(CAnimDB::Load(ACTORS_SPONGEBOB_ABK));
 
 
 // Temporary default respawn pos... should realy be set with setRespawnPos() from the level (pkg)

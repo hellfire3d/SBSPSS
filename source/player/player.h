@@ -30,10 +30,6 @@
 #include <dstructs.h>
 #endif
 
-#ifndef	__PLAYER_PMODES_H__
-#include "player\pmodes.h"
-#endif
-
 #ifndef	__PLAYER_PSTATES_H__
 #include "player\pstates.h"
 #endif
