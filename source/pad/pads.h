@@ -64,6 +64,7 @@ typedef struct
 	u8		Send;
 	u8		IsAnalogue;
 	bool 	Active;
+	bool	CanVibrate;
 } sPadData;
 
 struct VIBE_DATA
@@ -89,6 +90,7 @@ u16			PadGetRepeat(int Port);
 
 
 int 		PadIsDualShock(int Port);
+int			PadCanVibrate(int Port);
 
 u16			PadGetPadAngle(u16 Pad, s16 angleAdjust);
 

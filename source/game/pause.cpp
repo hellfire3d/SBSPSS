@@ -149,6 +149,7 @@ void CPauseMenu::init()
 		CGUITextReadout		*tr;
 
 		fr=new ("frame") CGUIGroupFrame();
+		m_vibGUIOption=fr;
 		fr->init(m_pauseGuiFrame);
 		fr->setObjectXYWH((FRAME_WIDTH-TEXT_BOX_WIDTH)/2,ypos,TEXT_BOX_WIDTH,TEXT_BOX_HEIGHT);
 			tb=new ("textbox") CGUITextBox();
@@ -324,6 +325,24 @@ void CPauseMenu::think(int _frames)
 {
 	if(m_active)
 	{
+		if(m_pauseGuiFrame->isSelected())
+		{
+			// Hide the VIBRATION option if vibration not available
+			if(PadCanVibrate(0))
+			{
+				m_vibGUIOption->unhide();
+			}
+			else
+			{
+				if(m_vibGUIOption->isSelected())
+				{
+					m_pauseGuiFrame->selectPreviousItem();
+				}
+				m_vibGUIOption->hide();
+			}
+		}
+
+
 		if(PadGetDown(0)&PAD_START)
 		{
 			if(!m_padDebounce)

@@ -73,6 +73,7 @@ private:
 
 	class CGUIControlFrame	*m_pauseGuiFrame;
 	class CGUIControlFrame	*m_confirmQuitGuiFrame;
+	class CGUIObject		*m_vibGUIOption;
 
 	class FontBank			*m_fontBank;
 

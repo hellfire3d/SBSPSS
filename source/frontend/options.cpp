@@ -373,10 +373,10 @@ void CFrontEndOptions::init()
 		tb->init(fr);
 		tb->setObjectXYWH(176+26,45,150,15);
 		tb->setText(STR__FRONTEND__WEAPONCHANGE);
-	CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
-										X_BORDER,Y_BORDER+90,OPTIONS_FRAME_W-(X_BORDER*2),25,
-										STR__FRONTEND__VIBRATION,
-										&m_vibrationStatus,s_vibrationValues,s_vibrationReadoutText);
+	m_vibGUIOption=CGUIFactory::createCycleButtonFrame(m_modeMenus[MODE__CONTROL],
+													   X_BORDER,Y_BORDER+90,OPTIONS_FRAME_W-(X_BORDER*2),25,
+													   STR__FRONTEND__VIBRATION,
+													   &m_vibrationStatus,s_vibrationValues,s_vibrationReadoutText);
 
 
 	// Populate SCREEN menu
@@ -572,6 +572,21 @@ void CFrontEndOptions::think(int _frames)
 {
 	int		i,j,button;
 
+
+
+	// Hide the VIBRATION option if vibration not available
+	if(PadCanVibrate(0))
+	{
+		m_vibGUIOption->unhide();
+	}
+	else
+	{
+		if(m_vibGUIOption->isSelected())
+		{
+			m_modeMenus[MODE__CONTROL]->selectPreviousItem();
+		}
+		m_vibGUIOption->hide();
+	}
 
 	m_background->think(_frames);
 

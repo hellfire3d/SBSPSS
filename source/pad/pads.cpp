@@ -209,6 +209,12 @@ int 	PadIsDualShock(int Port)
 }
 
 /*****************************************************************************/
+int 	PadCanVibrate(int Port)
+{
+	return PadIsConnected(Port)&&PadData[Port].CanVibrate;
+}
+
+/*****************************************************************************/
 void	SetPadRescan()
 {
 		PadRescan=1;
@@ -293,6 +299,7 @@ int			intensity;
 	if (Pad->Status == PadStateFindPad)
 	{
 		Pad->Send = 0;
+		Pad->CanVibrate=false;
 	}
 	if ( Pad->Send==0 || PadRescan)
 		{
@@ -305,7 +312,11 @@ int			intensity;
 		}
 		if (Pad->Status == PadStateStable)
 			{
-			if (PadSetActAlign(PortShift,PadAlign)) Pad->Send = 1;
+			if (PadSetActAlign(PortShift,PadAlign))
+				{
+				Pad->Send = 1;
+				Pad->CanVibrate=true;
+				}
 			}
 		}
 

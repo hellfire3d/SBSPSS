@@ -151,6 +151,7 @@ private:
 	int							m_speechVolume;
 	int							m_controlStyle;
 	int							m_vibrationStatus,m_lastVibrationStatus;
+	class CGUIObject			*m_vibGUIOption;
 	int							m_screenXOff;
 	int							m_screenYOff;
 
