@@ -726,17 +726,19 @@ void	CThing::processEvent(GAME_EVENT _event,CThing *_sourceThing)
 	// do nothing by default - ignore event
 }
 
+
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-/*void	CThing::shove( DVECTOR move )
+void	CTriggerThing::setPositionAndSize(int _x,int _y,int _w,int _h)
 {
-	Pos.vx += move.vx;
-	Pos.vy += move.vy;
-}*/
+	Pos.vx=_x+(_w/2);
+	Pos.vy=_y+(_h/2);
+	setCollisionSize(_w,_h);
+}
 
 /*===========================================================================
 end */

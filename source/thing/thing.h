@@ -111,7 +111,6 @@ public:
 	DVECTOR			getPos()						{return Pos;}
 	void			setPos(DVECTOR newPos)			{Pos=newPos;}
 	DVECTOR			getPosDelta()					{return PosDelta;}
-	//virtual void	shove(DVECTOR move);
 	CThing			*getNext()						{return Next;}
 
 
@@ -213,6 +212,7 @@ class CTriggerThing : public CThing
 {
 public:
 	virtual TYPE	getThingType()					{return TYPE_TRIGGER;}
+	virtual void	setPositionAndSize(int _x,int _y,int _w,int _h);	// Wonder if this might be better in CThing? (pkg)
 };
 
 

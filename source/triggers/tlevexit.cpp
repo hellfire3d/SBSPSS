@@ -93,20 +93,6 @@ void	CLevelExitTrigger::render()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void	CLevelExitTrigger::setExitPosition(int _x,int _y,int _w,int _h)
-{
-	Pos.vx=_x+(_w/2);
-	Pos.vy=_y+(_h/2);
-	setCollisionSize(_w,_h);
-}
-
-
-/*----------------------------------------------------------------------
-	Function:
-	Purpose:
-	Params:
-	Returns:
-  ---------------------------------------------------------------------- */
 void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 {
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
@@ -115,7 +101,6 @@ void	CLevelExitTrigger::collidedWith(CThing *_thisThing)
 	CGameScene::levelFinished();
 #endif
 }
-
 
 /*===========================================================================
 end */

@@ -23,6 +23,10 @@
 #include "triggers\tlevexit.h"
 #endif
 
+#ifndef	__TRIGGERS_TLOOK_H__
+#include "triggers\tlook.h"
+#endif
+
 #ifndef __PICKUPS_PICKUP_H__
 #include "pickups\pickup.h"
 #endif
@@ -620,19 +624,22 @@ sLvlHdr	*LevelHdr=(sLvlHdr*)LevelBuffer;
 PAUL_DBGMSG("%d triggers",TriggerCount);
 			for(int i=0;i<TriggerCount;i++)
 			{
+				CTriggerThing	*trigger=NULL;		// I hate having to do this just to keep the compiler quiet :/ (pkg)
 				switch(TriggerList->Type)
 				{
 					// Exit trigger
 					case 0:
-						{
-						CLevelExitTrigger	*exit;
-						exit=new ("LevelExitTrigger") CLevelExitTrigger();
-						exit->init();
-						exit->setExitPosition(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
-											  TriggerList->Width<<4,TriggerList->Height<<4);
+						trigger=(CTriggerThing*)new ("LevelExitTrigger") CLevelExitTrigger();
 						break;
-						}
+
+					// Look down trigger
+					case 1:
+						trigger=(CTriggerThing*)new ("LookTrigger") CLookTrigger();
+						break;
 				}
+				trigger->init();
+				trigger->setPositionAndSize(TriggerList->Pos.X<<4,TriggerList->Pos.Y<<4,
+											TriggerList->Width<<4,TriggerList->Height<<4);
 				TriggerList++;
 			}
 		}

@@ -283,13 +283,15 @@ void	CPlayer::shutdown()
 
 
 int looktimeout=20;
-int	lookmaxoffsetup=3*16;
-int	lookmaxoffsetdown=6*16;
+int	lookmaxoffsetup=3*MAP2D_BLOCKSTEPSIZE;
+int	lookmaxoffsetdown=6*MAP2D_BLOCKSTEPSIZE;
 int	lookspeed=2;
 int lookreturnspeed=80;
 
-int ledgexsearch=4;
-int	ledgemaxylook=4;
+int ledgeTimer=25;
+int	ledgeSpeedIn=1;
+int ledgeSpeedOut=3;
+int	ledgeShift=2;
 
 /*----------------------------------------------------------------------
 	Function:
@@ -417,13 +419,64 @@ else if(Pos.vy>m_mapEdge.vy-64)Pos.vy=m_mapEdge.vy-64;
 		}
 	}
 
+	// Ledge look-ahead stuff
+	if(m_ledgeLookAhead&&m_ledgeLookAhead==m_lastLedgeLookAhead)
+	{
+		// timer..
+		if(m_ledgeLookTimer<ledgeTimer)
+		{
+			m_ledgeLookTimer+=ledgeSpeedIn*_frames;
+		}
+		else
+		{
+			int limit;
+			limit=(m_ledgeLookAhead*MAP2D_BLOCKSTEPSIZE)<<ledgeShift;
+			if(m_ledgeLookOffset<limit)
+			{
+				m_ledgeLookOffset+=_frames;
+				if(m_ledgeLookOffset>limit)
+				{
+					m_ledgeLookOffset=limit;
+				}
+			}
+		}
+	}
+	else
+	{
+		if(m_ledgeLookOffset>0)
+		{
+			m_ledgeLookOffset-=ledgeSpeedOut*_frames;
+			if(m_ledgeLookOffset<=0)
+			{
+				m_ledgeLookOffset=0;
+				m_ledgeLookTimer=0;
+			}
+		}
+		else if(m_ledgeLookOffset<0)
+		{
+			m_ledgeLookOffset+=ledgeSpeedOut*_frames;
+			if(m_ledgeLookOffset>=0)
+			{
+				m_ledgeLookOffset=0;
+				m_ledgeLookTimer=0;
+			}
+		}
+	}
+	m_lastLedgeLookAhead=m_ledgeLookAhead;
+	m_ledgeLookAhead=0;
+
+	
 	// Camera focus point stuff
 	m_currentCamFocusPointTarget.vx=Pos.vx+MAP2D_CENTRE_X;
-	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y;
-	m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
-	m_currentCamFocusPoint.vy+=(m_currentCamFocusPointTarget.vy-m_currentCamFocusPoint.vy)>>cammove;
+	m_currentCamFocusPointTarget.vy=Pos.vy+MAP2D_CENTRE_Y+(m_ledgeLookOffset>>ledgeShift);
+	for(i=0;i<_frames;i++)
+	{
+		m_currentCamFocusPoint.vx+=(m_currentCamFocusPointTarget.vx-m_currentCamFocusPoint.vx)>>cammove;
+		m_currentCamFocusPoint.vy+=(m_currentCamFocusPointTarget.vy-m_currentCamFocusPoint.vy)>>cammove;
+	}
 	m_cameraPos.vx=m_currentCamFocusPoint.vx;
 	m_cameraPos.vy=m_currentCamFocusPoint.vy+m_cameraLookOffset;
+
 
 	// Limit camera scroll to the edges of the map
 	if(m_cameraPos.vx<0)
@@ -762,6 +815,9 @@ void CPlayer::respawn()
 	m_currentCamFocusPoint.vx=Pos.vx+MAP2D_CENTRE_X;
 	m_currentCamFocusPoint.vy=Pos.vy+MAP2D_CENTRE_Y;
 	m_padLookAroundTimer=0;
+	m_ledgeLookAhead=m_lastLedgeLookAhead=0;
+	m_ledgeLookOffset=0;
+	m_ledgeLookTimer=0;
 
 	m_glassesFlag=0;
 	m_squeakyBootsTimer=0;

@@ -21,6 +21,10 @@
 #include "game\game.h"
 #endif
 
+#ifndef	__PLAYER_PLAYER_H__
+#include "player\player.h"
+#endif
+
 	
 /*	Std Lib
 	------- */
@@ -54,7 +58,7 @@ void	CLookTrigger::collidedWith(CThing *_thisThing)
 {
 	ASSERT(_thisThing->getThingType()==TYPE_PLAYER);
 
-
+	GameScene.getPlayer()->setLedgeLookAhead(+4);
 }
 
 /*===========================================================================

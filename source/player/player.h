@@ -161,6 +161,8 @@ public:
 	int				getHeightFromGround(int _x,int _y,int _maxHeight=32);
 	int				getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32);
 
+	void			setLedgeLookAhead(int _lookAhead)					{m_ledgeLookAhead=_lookAhead;}
+
 	void			addHealth(int _health);
 	void			addLife();
 	ATTACK_STATE	getAttackState();
@@ -210,6 +212,9 @@ private:
 	DVECTOR			m_currentCamFocusPoint;
 	int				m_facing;
 	int				m_padLookAroundTimer;
+	int				m_ledgeLookAhead,m_lastLedgeLookAhead;
+	int				m_ledgeLookOffset;
+	int				m_ledgeLookTimer;
 
 
 	enum

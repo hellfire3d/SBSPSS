@@ -40,7 +40,6 @@ public:
 #if defined (__USER_art__) || defined (__USER_sbart__)
 	virtual void		render();
 #endif
-	void				setExitPosition(int _x,int _y,int _w,int _h);
 
 protected:
 	virtual void		collidedWith(CThing *_thisThing);
