@@ -494,8 +494,8 @@ int			HalfW=CurrentFrame->W>>1;
 			BBox.YMax=0;
 
 //
-			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
-	Angle+=AngleInc;
+//			RotateScale(Ft4,Pos,Angle,ScaleX,ScaleY);
+//	Angle+=AngleInc;
 
 			return(Ft4);
 }
