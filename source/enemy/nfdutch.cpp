@@ -253,6 +253,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						case 0:
 						{
 							m_state = FLYING_DUTCHMAN_ATTACK_PLAYER;
+							CSoundMediator::playSpeech( SPEECH_143 );
 
 							break;
 						}
@@ -260,6 +261,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						case 1:
 						{
 							m_state = FLYING_DUTCHMAN_CHARGE_PLAYER_START;
+							CSoundMediator::playSpeech( SPEECH_144 );
 
 							break;
 						}
@@ -267,6 +269,7 @@ void CNpcFlyingDutchmanEnemy::processClose( int _frames )
 						case 2:
 						{
 							m_state = FLYING_DUTCHMAN_LEVEL_SHAKE;
+							CSoundMediator::playSpeech( SPEECH_145 );
 
 							break;
 						}
