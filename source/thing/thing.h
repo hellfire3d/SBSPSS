@@ -170,7 +170,6 @@ private:
 	CRECT			m_collisionArea;
 	DVECTOR			m_collisionCentre;
 	s16				m_collisionAngle;
-	bool			m_centreCollision;
 	DVECTOR			m_newCollidedPos;
 
 };

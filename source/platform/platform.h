@@ -68,8 +68,11 @@ public:
 	void				setLayerCollision( class CLayerCollision *_layer )		{m_layerCollision=_layer;}
 	void				setType( NPC_PLATFORM_UNIT_TYPE newType )				{m_type = newType;}
 	void				setTypeFromMapEdit( u16 newType );
-	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
+#ifdef REMOVETHIS
+//	virtual int			checkCollisionAgainst(CThing *_thisThing, int _frames);
 	virtual s32			getNewYPos( CThing *_thisThing );
+#endif
+	int					getHeightFromPlatformAtPosition(int _x,int _y);
 	void				setTiltable( bool isTiltable );
 	void				addWaypoint( s32 xPos, s32 yPos );
 	void				setGraphic( sThingPlatform *ThisPlatform );

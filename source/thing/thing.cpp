@@ -55,7 +55,6 @@
 CThing			*CThingManager::s_thingLists[CThing::MAX_TYPE]={NULL,NULL};
 int				CThingManager::s_initialised=false;
 
-
 /*----------------------------------------------------------------------
 	Function:
 	Purpose:
@@ -419,7 +418,6 @@ void	CThing::init()
 	setCollisionSize(20,20);	// Some temporary defaults.. (pkg)
 	setCollisionCentreOffset(0,0);
 	m_collisionAngle = 0;
-	m_centreCollision = false;
 }
 
 /*----------------------------------------------------------------------

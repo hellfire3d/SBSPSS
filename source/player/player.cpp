@@ -73,8 +73,13 @@
 #include "gfx\sprbank.h"
 #endif
 
+#ifndef	__PLATFORM_PLATFORM_H__
+#include "platform\platform.h"
+#endif
+
+
 // to be removed
-#include "gfx\tpage.h"
+//#include "gfx\tpage.h"
 
 
 /*	Std Lib
@@ -338,16 +343,23 @@ if(newmode!=-1)
 	newmode=-1;
 }
 
-	if(isOnPlatform())
+	CThing	*platform;
+	platform=isOnPlatform();
+	if(platform)
 	{
-		shove(m_platform->getPosDelta());
+		DVECTOR	posDelta;
+		posDelta=platform->getPosDelta();
+		if(((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(Pos.vx+posDelta.vx,Pos.vy+posDelta.vy)==0)
+		{
+			shove(posDelta);
+		}
 	}
+
+
 	for(i=0;i<_frames;i++)
 	{
 		// Think
 		updatePadInput();
-//		s_modes[m_currentMode].m_modeControl->think();
-//		m_currentStateClass->think(this);
 		m_currentPlayerModeClass->think();
 
 		// Powerups
@@ -647,6 +659,8 @@ for(int i=0;i<NUM_LASTPOS;i++)
 			frames=s_fullHealthFrames;
 		}
 
+		int	ygap;
+		ygap=m_spriteBank->getFrameHeader(*frames)->H;
 		for(i=5;i>0;i--)
 		{
 			ft4=m_spriteBank->printFT4(*frames++,x,y,0,0,5);
@@ -654,7 +668,7 @@ for(int i=0;i<NUM_LASTPOS;i++)
 			{
 				setRGB0(ft4,healthr,healthg,healthb);
 			}
-			y+=9;
+			y+=ygap;
 		}
 	}
 
@@ -688,25 +702,24 @@ void CPlayer::setMapSize(DVECTOR _mapSize)
 int CPlayer::getHeightFromGround(int _x,int _y,int _maxHeight)
 {
 	int	height;
-	DVECTOR	platformPos;
-	DVECTOR newPos;
-	if(isOnPlatform())
+	CThing *platform;
+
+	height=height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
+
+	platform=isOnPlatform();
+	if(platform)
 	{
-		CThing *platform = isOnPlatform();
-		height = platform->getNewYPos( this ) - Pos.vy;
+		int	platformHeight;
+		platformHeight=((CNpcPlatform*)platform)->getHeightFromPlatformAtPosition(_x,_y);
+		if(platformHeight>_maxHeight)platformHeight=_maxHeight;
+		else if(platformHeight<-_maxHeight)platformHeight=-_maxHeight;
 
-		int groundHeight = m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
-
-		if ( groundHeight < height )
+		if(height>platformHeight)
 		{
-			height = groundHeight;
-			clearPlatform();
+			height=platformHeight;
 		}
 	}
-	else
-	{
-		height=m_layerCollision->getHeightFromGround(_x,_y,_maxHeight);
-	}
+
 	return height;
 }
 
@@ -935,7 +948,7 @@ void CPlayer::respawn()
   ---------------------------------------------------------------------- */
 void CPlayer::renderSb(DVECTOR *_pos,int _animNo,int _animFrame)
 {
-	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
+//pkg	m_actorGfx->Render(*_pos,_animNo,_animFrame,m_facing==FACING_RIGHT?0:1);
 }
 
 
@@ -1212,7 +1225,6 @@ int		CPlayer::moveVertical(int _moveDistance)
 {
 	DVECTOR			pos;
 	int				hitGround;
-//	int				colHeight;
 
 	pos=Pos;
 	hitGround=false;
@@ -1233,81 +1245,23 @@ int		CPlayer::moveVertical(int _moveDistance)
 			hitGround=true;
 		}
 	}
-/*
-	}
 	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
 	{
 		// Must be below ground
 		// Are we jumping into an impassable block?
-		if(_moveDistance>0&&
-		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL)
+		if(_moveDistance<0&&
+		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+		   getHeightFromGround(pos.vx,pos.vy+_moveDistance)<=0)
 		{
 			pos.vy=(pos.vy&0xfff0);
 			_moveDistance=0;
 			hitGround=true;
 		}
-		else if(isOnPlatform()&&_moveDistance>=0)
-		{
-			pos.vy+=colHeight;
-			hitGround=true;
-		}
 	}
-*/
 	pos.vy+=_moveDistance;
 	setPlayerPos(&pos);
 
 	return hitGround;
-
-
-	/*
-	DVECTOR			pos;
-	int				hitGround;
-	int				colHeight;
-
-	pos=Pos;
-	hitGround=false;
-	colHeight=getHeightFromGround(pos.vx,pos.vy,1);
-	if(colHeight>=0)
-	{
-		// Above or on the ground
-		// Are we falling?
-		if(_moveDistance>0)
-		{
-			// Yes.. Check to see if we're about to hit/go through the ground
-			colHeight=getHeightFromGround(pos.vx,pos.vy+_moveDistance,16);
-
-			if(colHeight<=0)
-			{
-				// Stick at ground level
-				pos.vy+=colHeight+_moveDistance;
-				_moveDistance=0;
-				hitGround=true;
-			}
-		}
-	}
-	else// if(getHeightFromGround(pos.vx,pos.vy+_moveDistance,1))
-	{
-		// Must be below ground
-		// Are we jumping into an impassable block?
-		if(_moveDistance>0&&
-		   (m_layerCollision->getCollisionBlock(pos.vx,pos.vy+_moveDistance)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL)
-		{
-			pos.vy=(pos.vy&0xfff0);
-			_moveDistance=0;
-			hitGround=true;
-		}
-		else if(isOnPlatform()&&_moveDistance>=0)
-		{
-			pos.vy+=colHeight;
-			hitGround=true;
-		}
-	}
-
-	pos.vy+=_moveDistance;
-	setPlayerPos(&pos);
-
-	return hitGround;
-	*/
 }
 
 /*----------------------------------------------------------------------
@@ -1373,50 +1327,36 @@ int		CPlayer::moveHorizontal(int _moveDistance)
 				pos.vy+=colHeight;
 			}
 		}
-		else
+		else if(colHeight>0) // Lets you jump through platforms from below
 		{
-			// In the air
-			/*
-			if((getLayerCollision()->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)==(6<<COLLISION_TYPE_FLAG_SHIFT))
+			if((m_layerCollision->getCollisionBlock(pos.vx+_moveDistance,pos.vy)&COLLISION_TYPE_MASK)!=COLLISION_TYPE_FLAG_NORMAL&&
+			   getHeightFromGround(pos.vx+_moveDistance,pos.vy,5)<0)
 			{
-				// Hit an impassable block
-				pos.vx&=0xfff0;
-				if(_moveDistance>0)
+				// Stop at the edge of the obstruction
+				int	dir,vx,cx,i;
+				if(_moveDistance<0)
 				{
-					pos.vx+=15;
+					dir=-1;
+					vx=-_moveDistance;
 				}
+				else
+				{
+					dir=+1;
+					vx=_moveDistance;
+				}
+				cx=pos.vx;
+				for(i=0;i<vx;i++)
+				{
+					if(getHeightFromGround(cx,pos.vy)<0)
+					{
+						break;
+					}
+					cx+=dir;
+				}
+				if(i)
+					cx-=dir;
+				pos.vx=cx;
 				_moveDistance=0;
-			}
-			else */if(colHeight>=0) // Lets you jump through platforms from below
-			{
-				colHeight=getHeightFromGround(pos.vx+_moveDistance,pos.vy,5);
-				if(colHeight<0)
-				{
-					// Stop at the edge of the obstruction
-					int	dir,vx,cx,i;
-					if(_moveDistance<0)
-					{
-						dir=-1;
-						vx=_moveDistance;
-					}
-					else
-					{
-						dir=+1;
-						vx=_moveDistance;
-					}
-					cx=pos.vx;
-					for(i=0;i<vx;i++)
-					{
-						if(getHeightFromGround(cx,pos.vy)<0)
-						{
-							break;
-						}
-						cx+=dir;
-					}
-					if(i)
-						pos.vx=cx-dir;
-					_moveDistance=0;
-				}
 			}
 		}
 		pos.vx+=_moveDistance;

@@ -271,7 +271,7 @@ void CNpcPlatform::init()
 	m_tiltVelocity = 0;
 	m_tiltable = false;
 
-	setCollisionSize(80,40);
+	setCollisionSize(80,50);
 	//setCollisionSize( 200, 20 );
 
 	m_layerCollision = NULL;
@@ -462,6 +462,9 @@ void CNpcPlatform::think(int _frames)
 
 	processTimer( _frames );
 
+//pkg
+//
+
 	CPlatformThing::think(_frames);
 }
 
@@ -581,9 +584,16 @@ void CNpcPlatform::collidedWith( CThing *_thisThing )
 		{
 			if ( m_detectCollision && m_isActive )
 			{
-				CPlayer *player = (CPlayer *) _thisThing;
+				CPlayer *player;
+				DVECTOR	playerPos;
+				CRECT	collisionArea;
 
-				if ( player->getHasPlatformCollided() )
+				// Only interested in SBs feet colliding with the box (pkg)
+				player=(CPlayer*)_thisThing;
+				playerPos=player->getPos();
+				collisionArea=getCollisionArea();
+				if(playerPos.vx>=collisionArea.x1&&playerPos.vx<=collisionArea.x2&&
+				   playerPos.vy>=collisionArea.y1&&playerPos.vy<=collisionArea.y2)
 				{
 					player->setPlatform( this );
 
@@ -630,6 +640,31 @@ void CNpcPlatform::render()
 //				setXYWH(F4,renderPos.vx-32,renderPos.vy-32,64,16);
 //				setRGB0(F4,127,127,64);
 //				AddPrimToList(F4,2);
+
+#ifdef __USER_paul__
+	DVECTOR	centre;
+	CRECT	area;
+	int		halfLength;
+	int		x1,y1,x2,y2;
+
+	centre=getCollisionCentre();
+	area=getCollisionArea();
+	halfLength=(area.x2-area.x1)/2;
+	
+	x1=-halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y1=-halfLength*msin(getCollisionAngle()&4095)>>12;
+	x2=+halfLength*mcos(getCollisionAngle()&4095)>>12;
+	y2=+halfLength*msin(getCollisionAngle()&4095)>>12;
+	
+	centre.vx-=offset.vx;
+	centre.vy-=offset.vy;
+	x1+=centre.vx;
+	y1+=centre.vy;
+	x2+=centre.vx;
+	y2+=centre.vy;
+
+	DrawLine(x1,y1,x2,y2,0,255,0,0);
+#endif
 			}
 		}
 	}
@@ -637,6 +672,7 @@ void CNpcPlatform::render()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef REMOVETHIS
 s32	CNpcPlatform::getNewYPos(CThing *_thisThing)
 {
 	CRECT	thisRect;
@@ -742,9 +778,11 @@ s32	CNpcPlatform::getNewYPos(CThing *_thisThing)
 
 	return( highestY );
 }
+#endif // REMOVETHIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef REMOVETHIS
 int	CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 {
 	DVECTOR	pos,thisThingPos;
@@ -891,12 +929,27 @@ int	CNpcPlatform::checkCollisionAgainst(CThing *_thisThing, int _frames)
 
 	return collided;
 }
+#endif	// REMOVETHIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CNpcPlatform::setTiltable( bool isTiltable )
 {
 	m_tiltable = isTiltable;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int	CNpcPlatform::getHeightFromPlatformAtPosition(int _x,int _y)
+{
+	DVECTOR	centre;
+	int		y;
+
+	// Rotate backwards to find height
+	centre=getCollisionCentre();
+	y=(centre.vx-_x)*msin(-getCollisionAngle()&4095)>>12;
+
+	return (centre.vy-_y)+y;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
